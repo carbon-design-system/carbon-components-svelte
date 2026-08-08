@@ -26,6 +26,20 @@ describe("FileUploader", () => {
     input.dispatchEvent(new Event("change", { bubbles: true }));
   }
 
+  function simulatePaste(target: EventTarget, files: File[]) {
+    const dataTransfer = new DataTransfer();
+    for (const file of files) {
+      dataTransfer.items.add(file);
+    }
+
+    const event = new Event("paste", { bubbles: true, cancelable: true });
+    Object.defineProperty(event, "clipboardData", {
+      value: dataTransfer,
+      configurable: true,
+    });
+    target.dispatchEvent(event);
+  }
+
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1785
   it("should synchronize input.files when files are removed programmatically", async () => {
     const { component } = render(FileUploader);
@@ -1259,5 +1273,126 @@ describe("FileUploader", () => {
     expect(screen.getByText("Upload failed")).toBeInTheDocument();
     expect(screen.getByText("Please try again.")).toBeInTheDocument();
     expect(rows[1].querySelector(".bx--file-invalid")).toBeInTheDocument();
+  });
+
+  it("should add pasted files when pasteTarget is true", async () => {
+    const addHandler = vi.fn();
+    render(FileUploader, {
+      props: { pasteTarget: true, multiple: true, onAdd: addHandler },
+    });
+
+    const pasted = new File(["screenshot"], "paste.png", { type: "image/png" });
+    simulatePaste(document, [pasted]);
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("paste.png")).toBeInTheDocument();
+      expect(addHandler).toHaveBeenCalled();
+    });
+
+    expect(addHandler.mock.calls[0][0].detail[0].name).toBe("paste.png");
+  });
+
+  it("should reject oversized pasted files", async () => {
+    const rejectedHandler = vi.fn();
+    render(FileUploader, {
+      props: {
+        pasteTarget: true,
+        maxFileSize: 1000,
+        onRejected: rejectedHandler,
+      },
+    });
+
+    const largeFile = new File(["x".repeat(2000)], "large-paste.txt", {
+      type: "text/plain",
+    });
+    simulatePaste(document, [largeFile]);
+
+    await vi.waitFor(() => {
+      expect(rejectedHandler).toHaveBeenCalled();
+    });
+
+    expect(screen.queryByText("large-paste.txt")).not.toBeInTheDocument();
+    expect(rejectedHandler.mock.calls[0][0].detail[0].reason).toBe("size");
+  });
+
+  it("should reject duplicate pasted files when preventDuplicate is true", async () => {
+    const rejectedHandler = vi.fn();
+    const { component } = render(FileUploader, {
+      props: {
+        pasteTarget: true,
+        preventDuplicate: true,
+        multiple: true,
+        onRejected: rejectedHandler,
+      },
+    });
+
+    const file1 = new File(["content1"], "file1.txt", {
+      type: "text/plain",
+      lastModified: 1000,
+    });
+    assert(component.ref instanceof HTMLInputElement);
+    simulateFileSelection(component.ref, [file1]);
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("file1.txt")).toBeInTheDocument();
+    });
+
+    const duplicate = new File(["content1"], "file1.txt", {
+      type: "text/plain",
+      lastModified: 1000,
+    });
+    simulatePaste(document, [duplicate]);
+
+    await vi.waitFor(() => {
+      expect(rejectedHandler).toHaveBeenCalled();
+    });
+
+    expect(rejectedHandler.mock.calls[0][0].detail[0].reason).toBe("duplicate");
+    expect(screen.queryAllByText("file1.txt")).toHaveLength(1);
+  });
+
+  it("should ignore paste when disabled", async () => {
+    const addHandler = vi.fn();
+    render(FileUploader, {
+      props: {
+        pasteTarget: true,
+        disabled: true,
+        onAdd: addHandler,
+      },
+    });
+
+    const pasted = new File(["screenshot"], "paste.png", { type: "image/png" });
+    simulatePaste(document, [pasted]);
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("paste.png")).not.toBeInTheDocument();
+    });
+
+    expect(addHandler).not.toHaveBeenCalled();
+  });
+
+  it("should listen for paste on a custom pasteTarget element", async () => {
+    const form = document.createElement("form");
+    document.body.appendChild(form);
+
+    try {
+      render(FileUploader, {
+        props: { pasteTarget: form, multiple: true },
+      });
+
+      const pasted = new File(["shot"], "custom-target.png", {
+        type: "image/png",
+      });
+      simulatePaste(document, [pasted]);
+      expect(screen.queryByText("custom-target.png")).not.toBeInTheDocument();
+
+      simulatePaste(form, [pasted]);
+
+      await vi.waitFor(() => {
+        expect(screen.queryByText("custom-target.png")).toBeInTheDocument();
+      });
+    } finally {
+      form.remove();
+    }
   });
 });
