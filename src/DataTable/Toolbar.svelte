@@ -57,11 +57,13 @@
     overflowVisible,
     setOverflowVisible,
     batchActionsActive,
+    getRef: () => ref,
   });
 </script>
 
 <section
   bind:this={ref}
+  tabindex="-1"
   aria-label={ariaLabel}
   class:bx--table-toolbar={true}
   class:bx--table-toolbar--xs={effectiveSize === "xs"}

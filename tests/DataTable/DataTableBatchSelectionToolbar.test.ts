@@ -202,6 +202,36 @@ describe("DataTableBatchSelectionToolbar", () => {
     ).toHaveFocus();
   });
 
+  it("announces the selection count via a live region", () => {
+    const { container } = render(DataTableBatchSelectionToolbar, {
+      props: {
+        selectedRowIds: ["a", "b"],
+      },
+    });
+
+    const summary = container.querySelector(".bx--batch-summary__para");
+    expect(summary).toHaveAttribute("aria-live", "polite");
+    expect(summary).toHaveAttribute("aria-atomic", "true");
+  });
+
+  it("moves focus off the bar when Cancel closes it via the keyboard", async () => {
+    const { container } = render(DataTableBatchSelectionToolbar, {
+      props: {
+        selectedRowIds: ["a", "b"],
+      },
+    });
+
+    const cancelButton = screen.getByText("Cancel");
+    cancelButton.focus();
+    await user.keyboard("{Enter}");
+    await tick();
+
+    expect(document.activeElement).not.toBe(document.body);
+    expect(document.activeElement).toBe(
+      container.querySelector(".bx--table-toolbar"),
+    );
+  });
+
   it("applies inert to batch actions when no rows are selected", () => {
     const { container } = render(DataTableBatchSelectionToolbar, {
       props: {

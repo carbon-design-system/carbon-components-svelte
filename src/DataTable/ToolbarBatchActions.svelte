@@ -24,11 +24,13 @@
    */
   export let selectedIds = [];
 
-  import { createEventDispatcher, getContext, onMount } from "svelte";
+  import { createEventDispatcher, getContext, onMount, tick } from "svelte";
 
   import Button from "../Button/Button.svelte";
 
   let batchSelectedIds = [];
+  let wrapperRef = null;
+  let prevShowActions = false;
 
   const dispatch = createEventDispatcher();
 
@@ -74,6 +76,22 @@
     ctxToolbar.batchActionsActive.set(showActions);
   }
 
+  $: {
+    if (
+      prevShowActions &&
+      !showActions &&
+      wrapperRef?.contains(document.activeElement)
+    ) {
+      // The bar is about to go inert while it still contains focus (e.g.
+      // Cancel was just activated). Move focus to a stable element before
+      // the browser drops it to `document.body`.
+      tick().then(() => {
+        ctxToolbar?.getRef?.()?.focus();
+      });
+    }
+    prevShowActions = showActions;
+  }
+
   onMount(() => {
     return () => {
       unsubscribe?.();
@@ -84,13 +102,18 @@
 
 {#if !overflowVisible}
   <div
+    bind:this={wrapperRef}
     class:bx--batch-actions={true}
     class:bx--batch-actions--active={showActions}
     {...inertProps}
     {...$$restProps}
   >
     <div class:bx--batch-summary={true}>
-      <p class:bx--batch-summary__para={true}>
+      <p
+        class:bx--batch-summary__para={true}
+        aria-live="polite"
+        aria-atomic="true"
+      >
         <span> {formatTotalSelected(batchSelectedIds.length)} </span>
       </p>
     </div>
