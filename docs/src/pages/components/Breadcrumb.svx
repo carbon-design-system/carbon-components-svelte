@@ -1,5 +1,5 @@
 ---
-components: ["Breadcrumb", "BreadcrumbItem"]
+components: ["Breadcrumb", "BreadcrumbItem", "BreadcrumbSkeleton"]
 description: Breadcrumbs display a hierarchical navigation trail showing the user's location, with current-page indication and overflow handling.
 ---
 
