@@ -411,6 +411,63 @@ describe("UIShell", () => {
       );
     });
 
+    describe("Escape key (overlay mode)", () => {
+      const setViewportWidth = (width: number) => {
+        Object.defineProperty(window, "innerWidth", {
+          writable: true,
+          configurable: true,
+          value: width,
+        });
+        window.dispatchEvent(new Event("resize"));
+      };
+
+      afterEach(() => {
+        setViewportWidth(1024);
+      });
+
+      it("closes the overlay side nav and refocuses the hamburger trigger", async () => {
+        setViewportWidth(500); // Mobile viewport
+
+        const { component } = render(UiShell, {
+          props: { sideNavIsOpen: true },
+        });
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        const hamburgerButton = screen.getByRole("button", { name: /menu/i });
+
+        await user.keyboard("{Escape}");
+
+        expect(component.sideNavIsOpen).toBe(false);
+        expect(hamburgerButton).toHaveFocus();
+      });
+
+      it("does not close on Escape when fixed", async () => {
+        setViewportWidth(500); // Mobile viewport
+
+        const { component } = render(UiShell, {
+          props: { sideNavIsOpen: true, sideNavFixed: true },
+        });
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        await user.keyboard("{Escape}");
+
+        expect(component.sideNavIsOpen).toBe(true);
+      });
+
+      it("does not close on Escape on desktop viewport", async () => {
+        setViewportWidth(1200); // Desktop viewport
+
+        const { component } = render(UiShell, {
+          props: { sideNavIsOpen: true },
+        });
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        await user.keyboard("{Escape}");
+
+        expect(component.sideNavIsOpen).toBe(true);
+      });
+    });
+
     describe("body scroll lock", () => {
       const setViewportWidth = (width: number) => {
         Object.defineProperty(window, "innerWidth", {
