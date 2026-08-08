@@ -1,0 +1,39 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Tri-state checkbox control rendered in each node label when TreeView runs
+/// in `selectionMode="checkbox"`. Carbon v10's treeview ships no checkbox
+/// styling, so the control is a `bx--checkbox` reshaped to sit in a tree row.
+/// @access private
+/// @group components
+@mixin treeview-checkbox {
+  // `bx--form-item` stretches to fill its flex parent, which would push the
+  // node text to the end of the row.
+  .#{$prefix}--tree--checkbox
+    .#{$prefix}--tree-node__label
+    > .#{$prefix}--form-item.#{$prefix}--checkbox-wrapper {
+    position: relative;
+    flex: 0 0 auto;
+    margin-top: 0;
+    margin-right: $carbon--spacing-02;
+    margin-bottom: 0;
+
+    // The row already handles the click; the label must not forward it to the
+    // (decorative) input and toggle a second time.
+    pointer-events: none;
+  }
+
+  // Carbon pads the label to clear the ascender of the label text. There is no
+  // label text here, so the box centers on the row instead.
+  .#{$prefix}--tree--checkbox
+    .#{$prefix}--tree-node__label
+    > .#{$prefix}--checkbox-wrapper
+    .#{$prefix}--checkbox-label {
+    min-height: $carbon--spacing-06;
+    padding-top: 0;
+  }
+}
+
+@include exports("treeview-checkbox") {
+  @include treeview-checkbox;
+}

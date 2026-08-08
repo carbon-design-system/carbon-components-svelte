@@ -1,7 +1,7 @@
 <script>
   import { Stack, TreeView } from "carbon-components-svelte";
 
-  let selectedIds = [3];
+  let selectedIds = [1, 3];
   let indeterminateIds = [];
   let expandedIds = [1, 2, 7];
   let nodes = [
@@ -34,7 +34,8 @@
   <div>
     <TreeView
       selectionMode="checkbox"
-      labelText="Cloud Products"
+      conduct={false}
+      labelText="Cloud Products (independent)"
       {nodes}
       bind:selectedIds
       bind:indeterminateIds

@@ -94,6 +94,7 @@
   export let icon = /** @type {Icon} */ (undefined);
 
   import { getContext } from "svelte";
+  import Checkbox from "../Checkbox/Checkbox.svelte";
 
   let ref = null;
   let refLabel = null;
@@ -102,15 +103,30 @@
   const {
     activeNodeId,
     selectedIdsSetStore,
+    indeterminateIdsSetStore,
+    selectionModeStore,
     clickNode,
     selectNode,
     focusNode,
   } = getContext("carbon:TreeView");
+
+  /**
+   * Tri-state value for `aria-checked` on the row.
+   * @returns {"true" | "false" | "mixed"}
+   */
+  function toAriaChecked(isSelected, isIndeterminate) {
+    if (isIndeterminate) return "mixed";
+    return isSelected ? "true" : "false";
+  }
+
   function offset() {
     return computeTreeLeafDepth(refLabel) - 1 + (leaf && icon ? 2 : 2.5);
   }
 
   $: selected = $selectedIdsSetStore.has(id);
+  // Link rows navigate instead of selecting, so they render no checkbox.
+  $: isCheckboxMode = $selectionModeStore === "checkbox" && href === undefined;
+  $: indeterminate = isCheckboxMode && $indeterminateIdsSetStore.has(id);
   // Merge all props (including custom properties) with computed properties
   // Explicitly include disabled to ensure it's always present (has default value)
   // `level`/`posinset`/`setsize` are layout-only (drive `aria-*` attributes) and excluded from `node`.
@@ -217,7 +233,10 @@
     {id}
     tabindex={disabled ? undefined : -1}
     aria-current={id === $activeNodeId || undefined}
-    aria-selected={disabled ? undefined : selected}
+    aria-selected={isCheckboxMode || disabled ? undefined : selected}
+    aria-checked={isCheckboxMode
+      ? toAriaChecked(selected, indeterminate)
+      : undefined}
     aria-disabled={disabled}
     aria-level={level}
     aria-posinset={posinset}
@@ -267,6 +286,19 @@
     }}
   >
     <div bind:this={refLabel} class:bx--tree-node__label={true}>
+      {#if isCheckboxMode}
+        <!-- The row owns the checked-state semantics, so the input is
+             decorative and its label is empty to keep `textContent` (used by
+             type-ahead and accessible names) unchanged. -->
+        <Checkbox
+          decorative
+          hideLabel
+          labelText=""
+          {disabled}
+          {indeterminate}
+          checked={selected}
+        />
+      {/if}
       <svelte:component this={icon} class="bx--tree-node__icon" />
       <slot {node}> {text} </slot>
     </div>

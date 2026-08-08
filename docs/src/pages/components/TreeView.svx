@@ -65,9 +65,17 @@ Customize node rendering using the default slot with the `let:node` directive. T
 
 ### Checkbox
 
-Slot a checkbox component in each tree view node to create a tree with checkable items. The checkbox is wrapped in a container with `stopPropagation` to prevent tree node selection when checking items.
+Set `selectionMode` to `"checkbox"` to render a checkbox on every node. Checking a branch checks its descendants, and a branch whose descendants are only partly checked renders indeterminate.
+
+Bind to `indeterminateIds` to read which nodes are partially checked. The value is derived from the selection and read-only, so writes to it are overwritten. Checkbox mode carries its own multi-selection, so [Multi-select](#multi-select) is ignored. Link nodes navigate instead of selecting and render no checkbox.
 
 <FileSource src="/framed/TreeView/TreeViewCheckbox" />
+
+### Checkbox (independent)
+
+Set `conduct` to `false` to check each node on its own. Parents and children no longer follow each other, and no node is indeterminate.
+
+<FileSource src="/framed/TreeView/TreeViewCheckboxIndependent" />
 
 ### Inline editing
 
@@ -86,6 +94,8 @@ Use `on:toggle:change` and `on:select:change` to track every expansion or select
 ## Multi-select
 
 Set `multiselect` to allow more than one selected row; `multiselectMode` controls the unit each gesture applies to.
+
+For a selection that persists parent and child state instead of highlighting rows, see [Checkbox](#checkbox).
 
 ### Node
 
