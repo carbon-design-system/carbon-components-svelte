@@ -121,6 +121,27 @@
   }
 
   //--------------------------------------------------------------------------
+  // Interactive (button) avatars — shared by UserAvatar `interactive` and the
+  // group overflow chip. Reset native button chrome; keep a visible focus ring.
+  //--------------------------------------------------------------------------
+  button.#{$prefix}--user-avatar,
+  .#{$prefix}--user-avatar--interactive {
+    margin: 0;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+    font: inherit;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  button.#{$prefix}--user-avatar:focus,
+  .#{$prefix}--user-avatar--interactive:focus {
+    outline: 2px solid $focus;
+    outline-offset: 1px;
+  }
+
+  //--------------------------------------------------------------------------
   // Tooltip wrapper: strip the definition trigger's underline/padding so the
   // circle renders clean when `tooltipText` is set.
   //--------------------------------------------------------------------------

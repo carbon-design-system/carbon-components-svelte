@@ -32,6 +32,12 @@ Set `max` to limit how many avatars show. Everyone else goes into a "+N" overflo
 
 Set `max` to `0` to show every avatar without an overflow.
 
+### See all members
+
+The "+N" chip is a button. Listen for `click:overflow` or provide an `overflow` slot to open a popover, modal, or other see-all surface. The event detail includes `hidden` (the slotted avatars past `max`). Hover still shows the name tooltip.
+
+<FileSource src="/framed/UserAvatarGroup/UserAvatarGroupOverflowClick" />
+
 ### Large groups
 
 Every slotted avatar still mounts; CSS hides the ones past `max`. For large lists, render only the faces you need and set `total` to the real headcount so the "+N" chip gets the right number without mounting hundreds of nodes. Set `overflowTooltipText` when the hidden people are not slotted, since the default tooltip only lists mounted `name` values.

@@ -1,6 +1,18 @@
 <script>
   /**
+   * @typedef {Object} UserAvatarGroupHiddenItem
+   * @property {string} id
+   * @property {string} name
+   */
+
+  /**
    * Render a row of `UserAvatar` children. The group adds the "+N" overflow chip.
+   * The chip is a button: listen for `click:overflow` or provide an `overflow`
+   * slot to open a see-all members surface (popover, modal, etc.). Hover still
+   * shows the name tooltip.
+   *
+   * @event {{ hidden: UserAvatarGroupHiddenItem[] }} click:overflow - User clicks the "+N" overflow chip.
+   * @slot {{ hidden: UserAvatarGroupHiddenItem[] }} overflow - Optional see-all surface (popover, modal).
    * @restProps {div}
    */
 
@@ -52,10 +64,12 @@
    */
   export let overflowTooltipText = undefined;
 
-  import { setContext } from "svelte";
+  import { createEventDispatcher, setContext } from "svelte";
   import { writable } from "svelte/store";
   import Stack from "../Stack/Stack.svelte";
   import UserAvatarGroupOverflow from "./UserAvatarGroupOverflow.svelte";
+
+  const dispatch = createEventDispatcher();
 
   /** @type {import("svelte/store").Writable<Array<{ id: string; name: string; node?: HTMLElement }>>} */
   const items = writable([]);
@@ -138,11 +152,15 @@
   // Cap the label so it always fits the circle; counts above 99 read as "99+".
   $: overflowLabel = overflowCount > 99 ? "99+" : `+${overflowCount}`;
   // Names are known only for the slotted avatars past the visible ones.
-  $: hiddenNames = $items
+  $: hiddenItems = $items
     .slice(visibleCount)
-    .map((item) => item.name)
-    .filter(Boolean);
+    .map(({ id, name }) => ({ id, name }));
+  $: hiddenNames = hiddenItems.map((item) => item.name).filter(Boolean);
   $: overflowTooltip = overflowTooltipText ?? hiddenNames.join(", ");
+
+  function handleOverflowClick() {
+    dispatch("click:overflow", { hidden: hiddenItems });
+  }
 
   // Overlap (stacked) when no gap is set, or when a negative gap tightens the
   // stack; a positive gap switches to a spaced row.
@@ -195,6 +213,11 @@
 >
   <slot />
   {#if overflowCount > 0}
-    <UserAvatarGroupOverflow label={overflowLabel} names={overflowTooltip} />
+    <UserAvatarGroupOverflow
+      label={overflowLabel}
+      names={overflowTooltip}
+      on:trigger={handleOverflowClick}
+    />
   {/if}
+  <slot name="overflow" hidden={hiddenItems} />
 </Stack>
