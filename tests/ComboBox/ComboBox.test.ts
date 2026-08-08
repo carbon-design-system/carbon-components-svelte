@@ -250,6 +250,55 @@ describe("ComboBox", () => {
     expect(input.getAttribute("aria-activedescendant")).toMatch(/-0$/);
   });
 
+  it("should move the caret, not the highlight, on Home/End when the menu is closed", async () => {
+    render(ComboBox, {
+      props: { selectedId: "1", value: "Email" },
+    });
+
+    const input = getInput();
+    input.focus();
+    expect(input).toHaveAttribute("aria-expanded", "false");
+
+    await user.keyboard("{Home}");
+    expect(input.selectionStart).toBe(0);
+
+    await user.keyboard("{End}");
+    expect(input.selectionStart).toBe(5);
+    expect(input).toHaveAttribute("aria-expanded", "false");
+  });
+
+  it("should move the highlight to the last enabled item on End when the menu is open", async () => {
+    render(ComboBox);
+
+    const input = getInput();
+    input.focus();
+
+    await user.keyboard("{ArrowDown}");
+    await tick();
+    expect(input.getAttribute("aria-activedescendant")).toMatch(/-0$/);
+
+    await user.keyboard("{End}");
+    await tick();
+    // Fax (id="2") is the last enabled item.
+    expect(input.getAttribute("aria-activedescendant")).toMatch(/-2$/);
+  });
+
+  it("should move the highlight to the first enabled item on Home when the menu is open", async () => {
+    render(ComboBox);
+
+    const input = getInput();
+    input.focus();
+
+    await user.keyboard("{ArrowUp}");
+    await tick();
+    expect(input.getAttribute("aria-activedescendant")).toMatch(/-2$/);
+
+    await user.keyboard("{Home}");
+    await tick();
+    // Slack (id="0") is the first enabled item.
+    expect(input.getAttribute("aria-activedescendant")).toMatch(/-0$/);
+  });
+
   it("should set aria-activedescendant to the highlighted filtered item", async () => {
     render(ComboBox);
 
@@ -1733,6 +1782,29 @@ describe("ComboBox", () => {
       // A second ArrowRight has no ghost to accept; value is unchanged.
       await user.keyboard("{ArrowRight}");
       expect(input).toHaveValue("apple");
+    });
+
+    it("should move the highlight on End when there is no ghost to accept", async () => {
+      render(ComboBox, {
+        props: {
+          typeahead: true,
+          items: [
+            { id: "1", text: "Apple", price: 100 },
+            { id: "2", text: "Banana", price: 200 },
+          ],
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await tick();
+      expect(input).toHaveAttribute("aria-expanded", "true");
+
+      // Nothing typed, so there is no ghost completion for End to accept;
+      // it falls through to the highlight-navigation behavior instead.
+      await user.keyboard("{End}");
+      await tick();
+      expect(input.getAttribute("aria-activedescendant")).toMatch(/-2$/);
     });
 
     it("should not inline-complete when the top match is not a prefix", async () => {

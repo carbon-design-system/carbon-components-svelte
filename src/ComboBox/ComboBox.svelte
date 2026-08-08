@@ -790,6 +790,18 @@
             tick().then(() => {
               ref.setSelectionRange(value.length, value.length);
             });
+          } else if (open && (event.key === "Home" || event.key === "End")) {
+            // APG editable combobox: Home/End stay native caret keys while
+            // the menu is closed. Once open, they move the highlight to the
+            // first/last option instead, matching Carbon React's ComboBox
+            // (downshift's useCombobox gates the same jump on `isOpen`).
+            event.preventDefault();
+            const navigableItems = filteredItems?.length
+              ? filteredItems
+              : items;
+            highlightedIndex =
+              event.key === "Home" ? 0 : navigableItems.length - 1;
+            highlightOrigin = "keyboard";
           } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
             const step = event.key === "ArrowDown" ? 1 : -1;
             if (event.altKey) {
