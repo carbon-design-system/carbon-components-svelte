@@ -248,6 +248,8 @@
     if (disabled || readonly) return;
 
     if (event.key === "Home" || event.key === "End") {
+      // Prevent the browser from also scrolling to the top/bottom of the page.
+      event.preventDefault();
       if (activeHandle === "lower") {
         value = event.key === "Home" ? min : valueUpper;
       } else {
@@ -267,6 +269,8 @@
     };
     const dir = keys[event.key];
     if (!dir) return;
+    // Prevent the arrow keys from also scrolling the page.
+    event.preventDefault();
     const range = max - min;
     const delta =
       step * (event.shiftKey ? range / step / stepMultiplier : 1) * dir;
