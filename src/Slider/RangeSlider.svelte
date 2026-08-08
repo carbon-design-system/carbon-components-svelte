@@ -246,6 +246,18 @@
   /** @type {(e: KeyboardEvent) => void} */
   function onKeyDown(event) {
     if (disabled || readonly) return;
+
+    if (event.key === "Home" || event.key === "End") {
+      if (activeHandle === "lower") {
+        value = event.key === "Home" ? min : valueUpper;
+      } else {
+        valueUpper = event.key === "Home" ? value : max;
+      }
+      dispatch("input", { value, valueUpper });
+      dispatch("change", { value, valueUpper });
+      return;
+    }
+
     /** @type {Record<string, number>} */
     const keys = {
       ArrowDown: -1,

@@ -79,6 +79,19 @@ describe("Slider", () => {
     expect(consoleLog).toHaveBeenCalledWith("change", 0);
   });
 
+  it("should jump to min and max with Home and End", async () => {
+    render(Slider, { props: { value: 50, min: 0, max: 100 } });
+
+    const slider = screen.getByRole("slider");
+    slider.focus();
+
+    await user.keyboard("{End}");
+    expect(slider).toHaveAttribute("aria-valuenow", "100");
+
+    await user.keyboard("{Home}");
+    expect(slider).toHaveAttribute("aria-valuenow", "0");
+  });
+
   it("should handle custom range and step", () => {
     render(Slider, {
       props: {
