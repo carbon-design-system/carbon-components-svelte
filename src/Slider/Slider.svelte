@@ -271,6 +271,8 @@
           if (disabled || readonly) return;
 
           if (event.key === "Home" || event.key === "End") {
+            // Prevent the browser from also scrolling to the top/bottom of the page.
+            event.preventDefault();
             value = event.key === "Home" ? min : max;
             dispatch("input", value);
             dispatch("change", value);
@@ -284,6 +286,8 @@
             ArrowUp: 1,
           };
           if (keys[event.key]) {
+            // Prevent the arrow keys from also scrolling the page.
+            event.preventDefault();
             const delta =
               step *
               (event.shiftKey ? range / step / stepMultiplier : 1) *
