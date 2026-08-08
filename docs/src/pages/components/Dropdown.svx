@@ -168,6 +168,14 @@ By default, item height matches the menu row for each size: 24px (`xs`), 32px (`
 
 <FileSource src="/framed/Dropdown/VirtualizeItemHeight" />
 
+## Async options
+
+For async (for example, server-side) options, clear and replace `items` when the menu opens. Clear `items` while a request is in flight so the menu has no options.
+
+When the open menu has no options, the `empty` slot renders. Put loading UI, an error message, or a no-options string there. This example simulates a fetch on open with a short delay.
+
+<FileSource src="/framed/Dropdown/AsyncDropdown" />
+
 ## Multiple dropdowns
 
 Create multiple dropdowns that work together.

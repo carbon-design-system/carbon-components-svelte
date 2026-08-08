@@ -17,6 +17,7 @@
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }}
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }} icon
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }} iconRight
+   * @slot {{}} empty
    */
 
   /**
@@ -731,7 +732,16 @@
             ? `max-height: ${virtualConfig.containerHeight}px; overflow-y: auto;`
             : undefined}
       >
-        {#if virtualData?.isVirtualized}
+        {#if itemsToRender.length === 0}
+          <div
+            class:bx--list-box__menu-item={true}
+            class:bx--list-box__menu-item--empty={true}
+          >
+            <div class:bx--list-box__menu-item__option={true}>
+              <slot name="empty">No options</slot>
+            </div>
+          </div>
+        {:else if virtualData?.isVirtualized}
           <div style="height: {virtualData.totalHeight}px; position: relative;">
             <div style="transform: translateY({virtualData.offsetY}px);">
               {#each itemsToRender as item, index (item.id)}
