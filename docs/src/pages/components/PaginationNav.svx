@@ -30,6 +30,12 @@ Control the number of visible page numbers with `shown`.
 
 <PaginationNav total={100} shown={5} />
 
+## Overflow with many pages
+
+For large page counts, pages beyond `shown` collapse into an overflow menu. The overflow options recompute on every page change; once the hidden list grows past a threshold, options populate lazily on first interaction instead of mounting up front, avoiding needless DOM churn for a control the user may never open. Smaller overflow lists render immediately since the cost is negligible.
+
+<PaginationNav total={10000} shown={5} />
+
 ## Navigation buttons
 
 The forward and backward navigation buttons can be customized independently of the page numbers.
