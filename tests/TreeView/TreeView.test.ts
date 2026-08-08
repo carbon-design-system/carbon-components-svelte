@@ -981,6 +981,35 @@ describe("TreeView Props", () => {
     expect(disabledNode).not.toHaveAttribute("aria-selected", "true");
   });
 
+  it("shift+click range selection in shallow mode expands each ranged node to its direct children", async () => {
+    render(TreeViewMultiselect, {
+      multiselect: true,
+      multiselectMode: "shallow",
+      selectedIds: [],
+      expandedIds: [],
+    });
+
+    const aiItem = treeItemById(0);
+    const blockchainItem = treeItemById(7);
+
+    await user.click(aiItem);
+
+    await user.keyboard("{Shift>}");
+    await user.click(blockchainItem);
+    await user.keyboard("{/Shift}");
+
+    // Range covers AI (0), Analytics (1), Blockchain (7); each expands to
+    // itself plus its direct (non-disabled) children.
+    for (const id of [0, 1, 2, 5, 6, 7, 8]) {
+      expect(treeItemById(id)).toHaveAttribute("aria-selected", "true");
+    }
+
+    // Nodes outside the range are not selected, and shallow mode does not
+    // recurse past direct children (id 3 is a grandchild of Analytics).
+    expect(treeItemById(9)).toHaveAttribute("aria-selected", "false");
+    expect(treeItemById(3)).toHaveAttribute("aria-selected", "false");
+  });
+
   it("multiselect tree has bx--tree--multiselect class", () => {
     render(TreeViewMultiselect, {
       multiselect: true,
