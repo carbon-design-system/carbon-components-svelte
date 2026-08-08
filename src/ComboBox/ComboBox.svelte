@@ -162,7 +162,6 @@
    * When `typeahead` is enabled and no custom function is provided,
    * the default case-insensitive prefix matching is used.
    * When a custom function is provided, it is used even with `typeahead`.
-   * @default () => true
    * @type {(item: Item, value: string) => boolean}
    */
   function defaultShouldFilter() {
