@@ -4,6 +4,7 @@ import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import OverflowMenuAllDisabled from "./OverflowMenu.allDisabled.test.svelte";
+import OverflowMenuAutoAlign from "./OverflowMenu.autoAlign.test.svelte";
 import OverflowMenuDisabled from "./OverflowMenu.disabled.test.svelte";
 import OverflowMenuDisabledLink from "./OverflowMenu.disabledLink.test.svelte";
 import OverflowMenuDynamicItems from "./OverflowMenu.dynamicItems.test.svelte";
@@ -844,6 +845,148 @@ describe("OverflowMenu", () => {
         expect(portal).toHaveAttribute("data-floating-direction", "bottom");
       } finally {
         Element.prototype.getBoundingClientRect = original;
+      }
+    });
+  });
+
+  describe("autoAlign", () => {
+    const VIEWPORT_WIDTH = 1000;
+    const MENU_WIDTH = 200;
+    const TRIGGER_WIDTH = 40;
+
+    /**
+     * jsdom has no layout, so place the trigger and size the menu by hand.
+     * Returns a teardown that restores the real getters.
+     */
+    function stubLayout(triggerLeft: number) {
+      const originalRect = Element.prototype.getBoundingClientRect;
+
+      Element.prototype.getBoundingClientRect = function () {
+        if (this.classList?.contains("bx--overflow-menu")) {
+          return {
+            x: triggerLeft,
+            y: 100,
+            width: TRIGGER_WIDTH,
+            height: 32,
+            top: 100,
+            right: triggerLeft + TRIGGER_WIDTH,
+            bottom: 132,
+            left: triggerLeft,
+            toJSON() {
+              return this;
+            },
+          } as DOMRect;
+        }
+        return originalRect.call(this);
+      };
+
+      const offsetWidth = vi
+        .spyOn(HTMLElement.prototype, "offsetWidth", "get")
+        .mockImplementation(function (this: HTMLElement) {
+          return this.getAttribute("role") === "menu"
+            ? MENU_WIDTH
+            : TRIGGER_WIDTH;
+        });
+
+      Object.defineProperty(window, "innerWidth", {
+        writable: true,
+        configurable: true,
+        value: VIEWPORT_WIDTH,
+      });
+
+      return () => {
+        Element.prototype.getBoundingClientRect = originalRect;
+        offsetWidth.mockRestore();
+      };
+    }
+
+    afterEach(() => {
+      for (const portal of document.querySelectorAll(
+        "[data-floating-portal]",
+      )) {
+        portal.remove();
+      }
+    });
+
+    it("flips the menu when the trigger sits near the right edge", async () => {
+      const restore = stubLayout(VIEWPORT_WIDTH - 60);
+
+      try {
+        render(OverflowMenuAutoAlign);
+
+        await user.click(screen.getByRole("button"));
+
+        const menu = screen.getByRole("menu");
+        await waitFor(() => {
+          expect(menu).toHaveClass("bx--overflow-menu--flip");
+        });
+      } finally {
+        restore();
+      }
+    });
+
+    it("leaves the menu unflipped when there is room to the right", async () => {
+      const restore = stubLayout(100);
+
+      try {
+        render(OverflowMenuAutoAlign);
+
+        await user.click(screen.getByRole("button"));
+        await tick();
+
+        const menu = screen.getByRole("menu");
+        expect(menu).not.toHaveClass("bx--overflow-menu--flip");
+      } finally {
+        restore();
+      }
+    });
+
+    it("ignores autoAlign when portalMenu is explicitly false", async () => {
+      const restore = stubLayout(VIEWPORT_WIDTH - 60);
+
+      try {
+        render(OverflowMenuAutoAlign, { props: { portalMenu: false } });
+
+        await user.click(screen.getByRole("button"));
+        await tick();
+
+        const menu = screen.getByRole("menu");
+        expect(menu.closest("[data-floating-portal]")).not.toBeInTheDocument();
+        expect(menu).not.toHaveClass("bx--overflow-menu--flip");
+      } finally {
+        restore();
+      }
+    });
+
+    it("stops re-measuring on scroll and resize once the menu closes", async () => {
+      const restore = stubLayout(VIEWPORT_WIDTH - 60);
+      // `svelte:window` keeps its listeners attached and calls through to an
+      // `undefined` handler when closed, so assert on the scheduled work
+      // rather than on listener counts.
+      const raf = vi.spyOn(window, "requestAnimationFrame");
+
+      try {
+        render(OverflowMenuAutoAlign);
+
+        raf.mockClear();
+        window.dispatchEvent(new Event("scroll"));
+        expect(raf).not.toHaveBeenCalled();
+
+        await user.click(screen.getByRole("button"));
+
+        raf.mockClear();
+        window.dispatchEvent(new Event("scroll"));
+        expect(raf).toHaveBeenCalled();
+
+        await user.keyboard("{Escape}");
+
+        raf.mockClear();
+        window.dispatchEvent(new Event("scroll"));
+        window.dispatchEvent(new Event("resize"));
+        expect(raf).not.toHaveBeenCalled();
+      } finally {
+        raf.mockRestore();
+        restore();
       }
     });
   });

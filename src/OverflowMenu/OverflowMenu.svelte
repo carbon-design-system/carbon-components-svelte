@@ -47,6 +47,13 @@
   export let maxHeight = undefined;
 
   /**
+   * Set to `true` to align the menu to the button's other edge when the
+   * default placement would overflow the right edge of the viewport.
+   * Implies `portalMenu`; ignored when `portalMenu` is explicitly `false`.
+   */
+  export let autoAlign = false;
+
+  /**
    * Specify the menu options class.
    * @type {string}
    */
@@ -95,6 +102,7 @@
     afterUpdate,
     createEventDispatcher,
     getContext,
+    onDestroy,
     setContext,
   } from "svelte";
   import { derived, writable } from "svelte/store";
@@ -104,13 +112,16 @@
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
   import { keyBy } from "../utils/keyBy.js";
+  import { rafThrottle } from "../utils/rafThrottle.js";
   import { rovingFocus } from "../utils/rovingFocus.js";
+  import { shouldFlipHorizontally } from "../utils/shouldFlipHorizontally.js";
 
   const ctxBreadcrumbItem = getContext("carbon:BreadcrumbItem");
   const insideModal = getContext("carbon:Modal");
 
   $: effectivePortalMenu =
-    portalMenu === undefined ? !!insideModal : portalMenu;
+    portalMenu === undefined ? autoAlign || !!insideModal : portalMenu;
+  $: isAutoAligned = autoAlign && effectivePortalMenu;
 
   const dispatch = createEventDispatcher();
   /**
@@ -130,6 +141,35 @@
 
   let buttonWidth = undefined;
   let onMountAfterUpdate = true;
+  let autoFlipped = false;
+
+  $: effectiveFlipped = isAutoAligned ? autoFlipped : flipped;
+
+  /**
+   * Measure the trigger against the viewport and pick the edge the menu aligns
+   * to. Returns the side to use right now: `effectiveFlipped` only catches up
+   * on the next flush, and callers position the menu in the same pass.
+   */
+  function updateAutoAlign() {
+    if (isAutoAligned && buttonRef && menuRef) {
+      const { left, width } = buttonRef.getBoundingClientRect();
+
+      autoFlipped = shouldFlipHorizontally({
+        anchorLeft: left,
+        anchorWidth: width,
+        floatingWidth: menuRef.offsetWidth,
+        viewportWidth: window.innerWidth,
+      });
+    }
+
+    return isAutoAligned ? autoFlipped : flipped;
+  }
+
+  const scheduleAutoAlign = rafThrottle(updateAutoAlign);
+
+  onDestroy(() => {
+    scheduleAutoAlign.cancel();
+  });
 
   $: if (ctxBreadcrumbItem) {
     icon = OverflowMenuHorizontal;
@@ -217,6 +257,8 @@
         menuRef?.focus({ preventScroll: true });
       }
 
+      const isFlipped = updateAutoAlign();
+
       if (!effectivePortalMenu) {
         // Menu is a button sibling; position from offsetTop/offsetLeft.
         const { offsetTop, offsetLeft } = buttonRef;
@@ -227,7 +269,7 @@
           menuRef.style.top = `${offsetTop + height}px`;
         }
 
-        if (flipped) {
+        if (isFlipped) {
           menuRef.style.left = `${offsetLeft + width - menuRef.offsetWidth}px`;
         } else {
           menuRef.style.left = `${offsetLeft}px`;
@@ -237,14 +279,19 @@
           menuRef.style.top = `${offsetTop + height + 10}px`;
           menuRef.style.left = `${offsetLeft - 11}px`;
         }
-      } else if (flipped && menuRef) {
-        menuRef.style.marginLeft = `${width - menuRef.offsetWidth}px`;
+      } else if (menuRef) {
+        // Clear rather than skip: `autoAlign` can flip back mid-session.
+        menuRef.style.marginLeft = isFlipped
+          ? `${width - menuRef.offsetWidth}px`
+          : "";
       }
     }
 
     if (!open) {
       currentId.set(undefined);
       currentIndex.set(0);
+      autoFlipped = false;
+      scheduleAutoAlign.cancel();
     }
 
     onMountAfterUpdate = false;
@@ -275,6 +322,11 @@
     }
   }
 </script>
+
+<svelte:window
+  on:scroll|passive={open && isAutoAligned ? scheduleAutoAlign : undefined}
+  on:resize|passive={open && isAutoAligned ? scheduleAutoAlign : undefined}
+/>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <button
@@ -361,7 +413,7 @@
     aria-label={ariaLabel}
     data-floating-menu-direction={direction}
     class:bx--overflow-menu-options={true}
-    class:bx--overflow-menu--flip={flipped}
+    class:bx--overflow-menu--flip={effectiveFlipped}
     class:bx--overflow-menu-options--open={open}
     class:bx--overflow-menu-options--light={light}
     class:bx--overflow-menu-options--xs={size === "xs"}
@@ -410,7 +462,7 @@
       aria-label={ariaLabel}
       data-floating-menu-direction={portalDirection}
       class:bx--overflow-menu-options={true}
-      class:bx--overflow-menu--flip={flipped}
+      class:bx--overflow-menu--flip={effectiveFlipped}
       class:bx--overflow-menu-options--open={open}
       class:bx--overflow-menu-options--light={light}
       class:bx--overflow-menu-options--xs={size === "xs"}
