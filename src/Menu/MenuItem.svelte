@@ -269,6 +269,7 @@
       {labelText}
       on:keydown={(event) => {
         if (event.key === "ArrowLeft") {
+          event.preventDefault();
           event.stopPropagation();
           submenuOpen = false;
           ref?.focus({ preventScroll: true });

@@ -153,6 +153,24 @@ describe("MenuItem", () => {
       expect(screen.getByRole("menuitem", { name: "Export as" })).toHaveFocus();
     });
 
+    it("prevents ArrowLeft's default action (page scroll) when closing the submenu", async () => {
+      render(MenuItemFixture);
+
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+      screen.getByRole("menuitem", { name: "Export as" }).focus();
+      await user.keyboard("{ArrowRight}");
+
+      const submenuItem = screen.getByRole("menuitem", { name: "PDF" });
+      const event = new KeyboardEvent("keydown", {
+        key: "ArrowLeft",
+        bubbles: true,
+        cancelable: true,
+      });
+      submenuItem.dispatchEvent(event);
+
+      expect(event.defaultPrevented).toBe(true);
+    });
+
     it("skips a disabled nested item during arrow key navigation", async () => {
       render(MenuItemFixture);
 
