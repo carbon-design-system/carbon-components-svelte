@@ -343,8 +343,10 @@
 
     if (submenuOpen) {
       if (event.key === "ArrowLeft") {
+        event.stopPropagation();
         submenuOpen = false;
         focusIndex = 0;
+        ref?.focus({ preventScroll: true });
         return;
       }
 
