@@ -107,46 +107,11 @@
   }
 
   /**
-   * Finds sibling node IDs for a given node ID within a tree structure.
-   * @template {{ id: string | number; nodes?: TNode[] }} TNode
-   * @returns {Array<string | number>} Array of sibling IDs (excluding the node itself)
+   * Sentinel "parent id" used in `cachedParentIdById`/`cachedChildIdsByParentId`
+   * to represent the implicit parent of top-level tree roots (the forest itself).
+   * A Symbol is used so it can never collide with a real `Node["id"]`.
    */
-  function findSiblingIds(nodes, id) {
-    for (const node of nodes) {
-      if (node.id === id) {
-        const siblings = [];
-        for (const n of nodes) {
-          if (n.id !== id) {
-            siblings.push(n.id);
-          }
-        }
-        return siblings;
-      }
-    }
-
-    for (const node of nodes) {
-      if (Array.isArray(node.nodes)) {
-        for (const child of node.nodes) {
-          if (child.id === id) {
-            const siblings = [];
-            for (const n of node.nodes) {
-              if (n.id !== id) {
-                siblings.push(n.id);
-              }
-            }
-            return siblings;
-          }
-        }
-
-        const result = findSiblingIds(node.nodes, id);
-        if (result.length > 0) {
-          return result;
-        }
-      }
-    }
-
-    return [];
-  }
+  const ROOT_PARENT_ID = Symbol("tree-view-root-parent");
 
   /**
    * Finds a node by id across top-level tree roots.
@@ -561,6 +526,24 @@
   let cachedNodeIds = null;
   /** @type {Map<Node["id"], Node> | null} */
   let cachedNodeMap = null;
+  /** @type {Map<Node["id"], Node["id"] | typeof ROOT_PARENT_ID> | null} */
+  let cachedParentIdById = null;
+  /** @type {Map<Node["id"] | typeof ROOT_PARENT_ID, Array<Node["id"]>> | null} */
+  let cachedChildIdsByParentId = null;
+
+  /**
+   * Finds sibling node IDs for a given node ID using the precomputed
+   * parent/child-id caches (rebuilt alongside `cachedNodeMap` whenever
+   * `nodes` changes identity). O(1) map lookups plus the sibling count,
+   * instead of a fresh full-tree traversal per call.
+   * @type {(id: Node["id"]) => Array<Node["id"]>}
+   */
+  function getCachedSiblingIds(id) {
+    const parentId = cachedParentIdById?.get(id);
+    const childIds = cachedChildIdsByParentId?.get(parentId);
+    if (!childIds) return [];
+    return childIds.filter((childId) => childId !== id);
+  }
 
   /** @type {Node["id"] | null} */
   let anchorId = null;
@@ -686,7 +669,7 @@
   function expandNode(node, expanded) {
     if (expanded) {
       if (autoCollapse) {
-        const siblingIds = findSiblingIds(nodes, node.id);
+        const siblingIds = getCachedSiblingIds(node.id);
         for (const siblingId of siblingIds) {
           expandedIdsSet.delete(siblingId);
         }
@@ -936,6 +919,33 @@
     cachedNodeMap = new Map(
       cachedFlattenedNodes.map((node) => [node.id, node]),
     );
+
+    const parentIdById = new Map();
+    const childIdsByParentId = new Map();
+
+    // Top-level roots' implicit parent is the forest itself.
+    childIdsByParentId.set(
+      ROOT_PARENT_ID,
+      nodes.map((node) => node.id),
+    );
+    for (const node of nodes) {
+      parentIdById.set(node.id, ROOT_PARENT_ID);
+    }
+
+    for (const node of cachedFlattenedNodes) {
+      if (Array.isArray(node.nodes) && node.nodes.length > 0) {
+        childIdsByParentId.set(
+          node.id,
+          node.nodes.map((child) => child.id),
+        );
+        for (const child of node.nodes) {
+          parentIdById.set(child.id, node.id);
+        }
+      }
+    }
+
+    cachedParentIdById = parentIdById;
+    cachedChildIdsByParentId = childIdsByParentId;
   }
 
   $: multiselectStore.set(multiselect);
@@ -961,7 +971,7 @@
 
           // For each ancestor, collapse its siblings.
           for (const ancestorId of ancestorIds) {
-            const siblingIds = findSiblingIds(nodes, ancestorId);
+            const siblingIds = getCachedSiblingIds(ancestorId);
             for (const siblingId of siblingIds) {
               expandedIdsSet.delete(siblingId);
             }
