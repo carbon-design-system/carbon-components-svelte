@@ -14,6 +14,7 @@
   export let optionDisabled = false;
   export let labelText: ComponentProps<ContextMenu>["labelText"] = undefined;
   export let ariaLabel: string | undefined = undefined;
+  export let maxHeight: ComponentProps<ContextMenu>["maxHeight"] = undefined;
 </script>
 
 <div data-testid="target">Right click me</div>
@@ -25,6 +26,7 @@
   {y}
   {labelText}
   aria-label={ariaLabel}
+  {maxHeight}
   bind:ref
   on:open={(e) => {
     console.log("open", e.detail);

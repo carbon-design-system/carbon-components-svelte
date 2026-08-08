@@ -49,6 +49,14 @@
    */
   export let labelText = undefined;
 
+  /**
+   * Specify the maximum height of the menu.
+   * A number is treated as pixels; a string is used as a CSS length.
+   * The menu scrolls once its items exceed the height.
+   * @type {number | string}
+   */
+  export let maxHeight = undefined;
+
   import {
     afterUpdate,
     createEventDispatcher,
@@ -183,6 +191,8 @@
   $: level = ctx ? 2 : 1;
   $: currentIndex.set(focusIndex);
   $: menuAriaLabel = ($$props["aria-label"] ?? labelText) || undefined;
+  $: maxHeightStyle =
+    typeof maxHeight === "number" ? `${maxHeight}px` : maxHeight;
 
   function handleOutsideClick(event) {
     if (open && isOutsideClick(event, ref)) close("outside-click");
@@ -229,8 +239,10 @@
   class:bx--menu--open={open}
   class:bx--menu--invisible={open && x === 0 && y === 0}
   class:bx--menu--root={level === 1}
+  class:bx--menu--scrollable={!!maxHeight}
   style:left="{x}px"
   style:top="{y}px"
+  style:max-height={maxHeightStyle}
   {...$$restProps}
   aria-label={menuAriaLabel}
   on:click

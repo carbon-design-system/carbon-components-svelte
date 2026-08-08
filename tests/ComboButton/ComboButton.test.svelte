@@ -10,6 +10,7 @@
     undefined;
   export let iconDescription: ComponentProps<ComboButton>["iconDescription"] =
     undefined;
+  export let maxHeight: ComponentProps<ComboButton>["maxHeight"] = undefined;
 
   export let open = false;
 
@@ -23,6 +24,7 @@
   {direction}
   {tooltipPosition}
   {iconDescription}
+  {maxHeight}
   bind:open
   on:click={() => console.log("click")}
   on:click:trigger={() => console.log("click:trigger")}
