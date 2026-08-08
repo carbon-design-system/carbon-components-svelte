@@ -150,6 +150,25 @@ describe("TreeView select:change", () => {
     expect(detail.removed).toEqual([]);
   });
 
+  it("does not duplicate an already-selected id on Ctrl+A select-all", async () => {
+    const onSelectChange = vi.fn();
+    render(TreeViewSelectionChange, {
+      multiselect: true,
+      selectedIds: [0],
+      onSelectChange,
+    });
+
+    treeItemById(0).focus();
+    await user.keyboard("{Control>}a{/Control}");
+
+    await vi.waitFor(() => expect(onSelectChange).toHaveBeenCalledTimes(1));
+    const detail = lastDetail(onSelectChange);
+    expect([...detail.selectedIds].sort()).toEqual([0, 1, 7, 9]);
+    expect(detail.selectedIds.length).toBe(
+      new Set(detail.selectedIds).size,
+    );
+  });
+
   it("fires for Ctrl+Shift+End range-extend", async () => {
     const onSelectChange = vi.fn();
     render(TreeViewSelectionChange, {

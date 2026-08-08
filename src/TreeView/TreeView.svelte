@@ -880,7 +880,7 @@
         }
       }
 
-      setSelectedIds(selectedIds.concat(nodeIds));
+      setSelectedIds([...new Set(selectedIds.concat(nodeIds))]);
     }
 
     if (nextFocusNode && nextFocusNode !== treeItem) {
