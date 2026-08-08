@@ -220,18 +220,23 @@
    */
   export let nonExpandableRowIds = [];
 
-  /** Set to `true` for the radio selection variant */
+  /**
+   * Set to `true` for the radio selection variant.
+   * Row selection is enabled regardless of `selectable`.
+   */
   export let radio = false;
 
   /**
    * Set to `true` for the selectable variant.
-   * Automatically set to `true` if `radio` or `batchSelection` are `true`.
    * Shift-clicking a row checkbox extends selection to every row between it and the last row clicked (not supported with `radio`).
    * @bindable writable
    */
   export let selectable = false;
 
-  /** Set to `true` to enable batch selection */
+  /**
+   * Set to `true` to enable batch selection.
+   * Row selection is enabled regardless of `selectable`.
+   */
   export let batchSelection = false;
 
   /**
@@ -597,7 +602,7 @@
     expandable = true;
     expanded = expandedRowIds.length === expandableRowIds.length;
   }
-  $: if (radio || batchSelection) selectable = true;
+  $: isSelectionEnabled = selectable || radio || batchSelection;
 
   let tableCellsByRowId = {};
   let prevRows;
@@ -814,7 +819,7 @@
 
   // Calculate total columns for spacer rows and expanded row cells
   $: totalColumns =
-    (expandable ? 1 : 0) + (selectable ? 1 : 0) + visibleHeaders.length;
+    (expandable ? 1 : 0) + (isSelectionEnabled ? 1 : 0) + visibleHeaders.length;
 </script>
 
 <TableContainer {useStaticWidth} {...$$restProps}>
@@ -916,7 +921,7 @@
               {/if}
             </th>
           {/if}
-          {#if selectable && !batchSelection}
+          {#if isSelectionEnabled && !batchSelection}
             <th scope="col">
               <span class:bx--visually-hidden={true}>Select row</span>
             </th>
@@ -1121,7 +1126,7 @@
                   {/if}
                 </TableCell>
               {/if}
-              {#if selectable}
+              {#if isSelectionEnabled}
                 <td
                   class:bx--table-column-checkbox={true}
                   class:bx--table-column-radio={radio}
@@ -1353,7 +1358,7 @@
                   {/if}
                 </TableCell>
               {/if}
-              {#if selectable}
+              {#if isSelectionEnabled}
                 <td
                   class:bx--table-column-checkbox={true}
                   class:bx--table-column-radio={radio}
@@ -1485,7 +1490,7 @@
             {#if expandable}
               <td aria-hidden="true" class:bx--table-expand={true}></td>
             {/if}
-            {#if selectable}
+            {#if isSelectionEnabled}
               <td
                 aria-hidden="true"
                 class:bx--table-column-checkbox={true}
