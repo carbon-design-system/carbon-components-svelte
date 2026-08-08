@@ -453,8 +453,15 @@
       orientation: "horizontal",
       skipDisabled: true,
       getActiveIndex: () => (focusedIndex >= 0 ? focusedIndex : currentIndex),
-      onMove: (index) =>
-        activation === "manual" ? focusTab(index) : selectTab(index),
+      onMove: (index, event) => {
+        // Prevent the arrow keys from also scrolling the page.
+        event.preventDefault();
+        if (activation === "manual") {
+          focusTab(index);
+        } else {
+          selectTab(index);
+        }
+      },
     }}
     class:bx--tabs__nav={true}
     on:scroll={updateOverflow}
