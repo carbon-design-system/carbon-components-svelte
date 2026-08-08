@@ -42,6 +42,24 @@ describe("Tabs", () => {
     expect(tabsContainer).not.toHaveClass("bx--tabs--full-width");
   });
 
+  it("should link each tab to its panel via aria-controls", () => {
+    render(Tabs);
+
+    const tabs = screen.getAllByRole("tab");
+    const panels = screen.getAllByRole("tabpanel", { hidden: true });
+
+    expect(tabs).toHaveLength(3);
+    expect(panels).toHaveLength(3);
+
+    tabs.forEach((tab, index) => {
+      const panelId = tab.getAttribute("aria-controls");
+      assert(panelId);
+      expect(panelId).toBe(panels[index].id);
+      // The pairing holds in both directions.
+      expect(panels[index]).toHaveAttribute("aria-labelledby", tab.id);
+    });
+  });
+
   it("should not put a tabindex on the presentational <li> wrapper", () => {
     const { container } = render(Tabs);
 
