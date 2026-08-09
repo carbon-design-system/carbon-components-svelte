@@ -9,7 +9,7 @@ description: Copy buttons copy text to the clipboard as a standalone control, fo
 
 ## Basic
 
-Set `text` to the string to copy. By default, the copy button uses the native [Clipboard API](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText); pass a function to `copy` to replace it (see [Override](#override)). For code examples, use [CodeSnippet](/components/CodeSnippet); for content not ready at render time, see [Async copy](#async-copy).
+Set `text` to the string to copy. By default, the copy button uses the native [Clipboard API](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText), with a `document.execCommand("copy")` fallback when that API is unavailable or rejects (for example in an insecure context); pass a function to `copy` to replace it (see [Override](#override)). For code examples, use [CodeSnippet](/components/CodeSnippet); for content not ready at render time, see [Async copy](#async-copy).
 
 <CopyButton text="Carbon svelte" />
 
@@ -17,7 +17,7 @@ Set `text` to the string to copy. By default, the copy button uses the native [C
 
 Pass an async `copy` function when the text is not available at render time, for example markdown fetched on click. Feedback appears after `copy()` resolves.
 
-While `copy()` is pending, the button sets `aria-busy` and ignores clicks. On failure, skip feedback and listen for `copy:error`.
+While `copy()` is pending, the button sets `aria-busy` and ignores clicks. On failure, the button shows `errorFeedback` (default `"Failed to copy"`) and emits `copy:error`.
 
 Prefetch on hover with `on:mouseenter`.
 
@@ -57,7 +57,7 @@ Customize the message and icon shown after copying.
 
 ### Text
 
-Set `feedback` to customize the message shown after copying.
+Set `feedback` to customize the message shown after copying. Set `errorFeedback` to customize the message shown when copying fails (default `"Failed to copy"`).
 
 <CopyButton text="Carbon svelte" feedback="Copied to clipboard" />
 

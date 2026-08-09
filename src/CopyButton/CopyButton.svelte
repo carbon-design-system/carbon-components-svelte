@@ -1,10 +1,17 @@
 <script>
+  import { copyText } from "../utils/copyText.js";
+
   /**
    * @template [Icon=any]
+   * @event {null} copy
+   * @event {{ error: unknown }} copy:error
    */
 
   /** Set the feedback text shown after clicking the button */
   export let feedback = "Copied!";
+
+  /** Set the feedback text shown when copying fails */
+  export let errorFeedback = "Failed to copy";
 
   /** Set the timeout duration (ms) to display feedback text */
   export let feedbackTimeout = 2000;
@@ -40,14 +47,12 @@
   export let text = undefined;
 
   /**
-   * Override the default copy behavior (navigator.clipboard.writeText).
+   * Override the default copy behavior (`navigator.clipboard.writeText` with
+   * a `document.execCommand("copy")` fallback). Failures reject so the button
+   * can show `errorFeedback` and dispatch `copy:error`.
    * @type {(text: string) => void | Promise<void>}
    */
-  async function defaultCopy(text) {
-    await navigator.clipboard.writeText(text);
-  }
-
-  export let copy = defaultCopy;
+  export let copy = copyText;
 
   /**
    * Set how the "Copied!" feedback tooltip is rendered.
@@ -97,12 +102,16 @@
   let animation = undefined;
   let feedbackOpen = false;
   let copyPending = false;
+  let isCopyError = false;
 
   function syncCopyFeedback() {
     animation = copyFeedback.animation;
     feedbackOpen = copyFeedback.feedbackOpen;
     copyPending = copyFeedback.copyPending;
+    isCopyError = copyFeedback.isError;
   }
+
+  $: feedbackText = isCopyError ? errorFeedback : feedback;
 
   // Proactive hover/focus tooltip. Reuses the floating-portal `PortalTooltip`
   // and the shared `activeButtonTooltip` store, so a CopyButton coordinates
@@ -132,7 +141,7 @@
     $activeButtonTooltip === tooltipId;
   $: feedbackInPortal = feedbackPortalled && feedbackOpen;
   $: tooltipOpen = tooltipHoverActive || feedbackInPortal;
-  $: tooltipText = feedbackOpen ? feedback : iconDescription;
+  $: tooltipText = feedbackOpen ? feedbackText : iconDescription;
 
   function claimTooltip() {
     activeButtonTooltip.set(tooltipId);
@@ -233,7 +242,7 @@
   on:click={async () => {
     try {
       await copyFeedback.onClick(async () => {
-        if (copy === defaultCopy ? text !== undefined : true) {
+        if (copy === copyText ? text !== undefined : true) {
           await copy(text ?? "");
           dispatch("copy");
         }
@@ -266,7 +275,7 @@
       class:bx--assistive-text={true}
       class:bx--copy-btn__feedback={true}
     >
-      {feedback}
+      {feedbackText}
     </span>
   {/if}
 </button>
