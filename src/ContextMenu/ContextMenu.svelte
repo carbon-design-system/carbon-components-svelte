@@ -234,13 +234,6 @@
   {...$$restProps}
   aria-label={menuAriaLabel}
   on:click
-  on:click={(event) => {
-    const closestOption = event.target.closest("[tabindex]");
-
-    if (closestOption && closestOption.getAttribute("role") !== "menuitem") {
-      close("select");
-    }
-  }}
   on:keydown
   on:keydown={(event) => {
     if (open) event.preventDefault();
