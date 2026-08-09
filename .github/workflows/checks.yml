@@ -81,7 +81,7 @@ jobs:
               - '.github/**'
 
   test:
-    needs: [static-checks, changes]
+    needs: [changes]
     if: github.event_name == 'workflow_dispatch' || needs.changes.outputs.unit == 'true'
     runs-on: macos-15
     steps:
@@ -137,7 +137,7 @@ jobs:
         run: bunx playwright test --project=chromium
 
   test-svelte-compat:
-    needs: [static-checks, changes]
+    needs: [changes]
     if: github.event_name == 'workflow_dispatch' || needs.changes.outputs.unit == 'true'
     runs-on: macos-15
     strategy:
