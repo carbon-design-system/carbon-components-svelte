@@ -86,8 +86,6 @@
   import CaretRight from "../icons/CaretRight.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
   import { clampIndex } from "../utils/clampIndex.js";
-  import { dismiss } from "../utils/dismiss.js";
-  import { isInSafeTriangle as computeSafeTriangle } from "../utils/isInSafeTriangle.js";
   import ContextMenu from "./ContextMenu.svelte";
 
   const dispatch = createEventDispatcher();
@@ -110,7 +108,6 @@
   let submenuOpen = false;
   let submenuPosition = [0, 0];
   let menuOffsetX = 0;
-  let mousePosition = { x: 0, y: 0 };
   /** @type {HTMLUListElement | null} */
   let submenuRef = null;
 
@@ -121,18 +118,6 @@
   const unsubMenuOffsetX = ctx.menuOffsetX.subscribe((_menuOffsetX) => {
     menuOffsetX = _menuOffsetX;
   });
-
-  // True when the pointer is in the safe-transfer zone toward the submenu.
-  function isInSafeTriangle(mouseX, mouseY) {
-    if (!submenuOpen || !ref || !submenuRef) return false;
-
-    return computeSafeTriangle(
-      mouseX,
-      mouseY,
-      ref.getBoundingClientRect(),
-      submenuRef.getBoundingClientRect(),
-    );
-  }
 
   function handleClick(event, opts = {}) {
     if (disabled) return;
@@ -155,20 +140,6 @@
 
     if (shouldClose) {
       ctx.close("select");
-    }
-  }
-
-  function handleGlobalMouseMove(event) {
-    if (subOptions && submenuOpen) {
-      mousePosition = { x: event.clientX, y: event.clientY };
-
-      if (
-        isInSafeTriangle(event.clientX, event.clientY) &&
-        typeof timeoutClose === "number"
-      ) {
-        clearTimeout(timeoutClose);
-        timeoutClose = undefined;
-      }
     }
   }
 
@@ -244,12 +215,6 @@
 
 <li
   bind:this={ref}
-  use:dismiss={{
-    enabled: !!subOptions && submenuOpen,
-    type: "mousemove",
-    handler: handleGlobalMouseMove,
-    options: { passive: true },
-  }}
   {role}
   tabindex="-1"
   aria-disabled={disabled}
@@ -322,20 +287,13 @@
       }, moderate01);
     }
   }}
-  on:mousemove={(event) => {
-    if (subOptions && submenuOpen) {
-      mousePosition = { x: event.clientX, y: event.clientY };
-    }
-  }}
   on:mouseleave
   on:mouseleave={() => {
     if (subOptions) {
       if (typeof timeoutHover === "number") clearTimeout(timeoutHover);
 
       timeoutClose = setTimeout(() => {
-        if (!isInSafeTriangle(mousePosition.x, mousePosition.y)) {
-          submenuOpen = false;
-        }
+        submenuOpen = false;
       }, closeDelay);
     }
   }}

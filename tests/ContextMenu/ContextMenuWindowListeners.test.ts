@@ -1,5 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/svelte";
-import { tick } from "svelte";
+import { render } from "@testing-library/svelte";
 import ContextMenu from "./ContextMenu.test.svelte";
 
 /** dismiss() defers window listener registration by a macrotask; flush it before asserting. */
@@ -37,24 +36,6 @@ describe("ContextMenu window listeners", () => {
     await flush();
     expect(net(add, remove, "click")).toBe(1);
     expect(net(add, remove, "keydown")).toBe(1);
-
-    add.mockRestore();
-    remove.mockRestore();
-  });
-
-  test("submenu options register the hover mousemove listener only while open", async () => {
-    const add = vi.spyOn(window, "addEventListener");
-    const remove = vi.spyOn(window, "removeEventListener");
-
-    render(ContextMenu, { props: { open: true, withSubmenu: true } });
-    await flush();
-    // The parent option's global mousemove handler is idle until its submenu opens.
-    expect(net(add, remove, "mousemove")).toBe(0);
-
-    await fireEvent.click(screen.getByText("Option with submenu"));
-    await tick();
-    await flush();
-    expect(net(add, remove, "mousemove")).toBe(1);
 
     add.mockRestore();
     remove.mockRestore();
