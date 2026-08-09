@@ -137,10 +137,12 @@
   }
 
   $: {
-    if (!isInitialRender) {
-      dispatch(open ? "open" : "close");
-    }
+    const shouldDispatch = !isInitialRender;
+    const nextOpen = open;
     isInitialRender = false;
+    if (shouldDispatch) {
+      dispatch(nextOpen ? "open" : "close");
+    }
   }
 
   $: portalOpen =
