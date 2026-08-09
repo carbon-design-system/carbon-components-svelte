@@ -79,9 +79,13 @@ describe("HeaderAction", () => {
       await user.click(button);
       expect(screen.getByTestId("panel-content")).toBeInTheDocument();
 
-      // dismiss() defers window listener registration by a macrotask; flush
-      // it before Escape so the keydown isn't dispatched before the listener
-      // is attached.
+      // dismiss() registers window listeners on a macrotask after `enabled`
+      // flips true. On Svelte 3/4 that action update can itself land in a
+      // later macrotask than the click, so one `setTimeout(0)` can run
+      // before registration is even scheduled (and Escape is missed). Two
+      // flushes: (1) Svelte applies `enabled` and schedules add(), (2) add()
+      // attaches the listener.
+      await new Promise((resolve) => setTimeout(resolve, 0));
       await new Promise((resolve) => setTimeout(resolve, 0));
 
       await user.keyboard("{Escape}");
