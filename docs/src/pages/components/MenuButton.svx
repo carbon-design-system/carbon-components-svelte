@@ -192,19 +192,19 @@ Put a `MenuDivider` between groups.
 
 Wrap items in `MenuItemGroup` to make them checkboxes that hold state, such as which table columns are visible. Give every item an id, then bind `selectedIds` for the chosen ones. Set `selected` on an item to check it when the menu first opens, or set `selectable` on a single item outside a group for a standalone toggle.
 
-Choosing an item closes the menu. Call `event.preventDefault()` in an item's `on:click` handler to keep it open for a multi-select flow, then update the bound value yourself.
+Choosing an item closes the menu by default. See [Keep open on selection](#keep-open-on-selection) to change that.
 
 <FileSource src="/framed/MenuButton/MenuButtonSelectable" />
 
 ### Radio group
 
-Wrap items in `MenuItemRadioGroup` for a set where one choice is active at a time, such as row density. Bind `selectedId` for the active id; picking another item clears the previous one.
+Wrap items in `MenuItemRadioGroup` for a set where one choice is active at a time, such as row density. Bind `selectedId` for the active id; picking another item clears the previous one. Choosing an item closes the menu by default; see [Keep open on selection](#keep-open-on-selection) to change that.
 
 <FileSource src="/framed/MenuButton/MenuButtonRadioGroup" />
 
 ### Nested
 
-Set `labelText` on a `MenuItem` and nest child `MenuItem` rows to get a submenu. Open it with <DocKbd label="→" />, click, or hover (short delay). <DocKbd label="←" /> closes it and refocuses the parent. Picking a nested item closes the whole menu.
+Set `labelText` on a `MenuItem` and nest child `MenuItem` rows to get a submenu. Open it with <DocKbd label="→" />, click, or hover (short delay). <DocKbd label="←" /> closes it and refocuses the parent. Picking a nested item closes the whole menu, including open submenus. See [Keep open on selection](#keep-open-on-selection) to change that.
 
 <MenuButton labelText="Actions">
   <MenuItem on:click={() => console.log("Cut")}>Cut</MenuItem>
@@ -215,3 +215,9 @@ Set `labelText` on a `MenuItem` and nest child `MenuItem` rows to get a submenu.
     <MenuItem on:click={() => console.log("PNG")}>PNG</MenuItem>
   </MenuItem>
 </MenuButton>
+
+### Keep open on selection
+
+Choosing an item closes the menu by default, including any open submenus. Call `event.preventDefault()` in the item's `on:click` handler to keep the menu open. A selectable or radio item still updates its own state; only the close is canceled. Use this for multi-select, or for a radio choice in a submenu that should stay open after a pick.
+
+<FileSource src="/framed/MenuButton/MenuButtonKeepOpen" />
