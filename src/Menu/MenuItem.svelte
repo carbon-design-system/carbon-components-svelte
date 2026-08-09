@@ -1,5 +1,7 @@
 <script>
   /**
+   * Dispatched on selection. Cancelable: call `preventDefault()` to keep
+   * the menu open. A selectable or radio item's selection still updates.
    * @event {MouseEvent} click
    */
 
@@ -112,17 +114,18 @@
   function handleClick(event) {
     if (disabled) return;
 
-    const shouldContinue = dispatch("click", event, { cancelable: true });
+    // Selection runs first so preventDefault only skips the close.
+    if (ctxGroup) {
+      ctxGroup.toggleOption({ id });
+    } else if (ctxRadioGroup) {
+      ctxRadioGroup.setOption({ id });
+    } else if (isSelectable) {
+      selected = !selected;
+    }
 
-    if (shouldContinue) {
-      if (ctxGroup) {
-        ctxGroup.toggleOption({ id });
-      } else if (ctxRadioGroup) {
-        ctxRadioGroup.setOption({ id });
-      } else if (isSelectable) {
-        selected = !selected;
-      }
+    const shouldClose = dispatch("click", event, { cancelable: true });
 
+    if (shouldClose) {
       ctx.close("select");
     }
   }

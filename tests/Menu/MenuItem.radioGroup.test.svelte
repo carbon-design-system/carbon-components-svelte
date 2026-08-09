@@ -20,6 +20,20 @@
     <MenuItem id="compact" labelText="Compact" />
     <MenuItem id="comfortable" labelText="Comfortable" selected />
   </MenuItemRadioGroup>
+  <MenuItem labelText="View">
+    <MenuItemRadioGroup labelText="Theme" selectedId="light">
+      <MenuItem
+        id="light"
+        labelText="Light"
+        on:click={(e) => e.preventDefault()}
+      />
+      <MenuItem
+        id="dark"
+        labelText="Dark"
+        on:click={(e) => e.preventDefault()}
+      />
+    </MenuItemRadioGroup>
+  </MenuItem>
 </Menu>
 
 <div data-testid="selected-id">{selectedId}</div>

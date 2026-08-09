@@ -324,14 +324,14 @@ describe("MenuItem", () => {
       ).toHaveFocus();
     });
 
-    it("keeps the menu open when the click event is prevented", async () => {
+    it("keeps the menu open when click is prevented and still toggles selection", async () => {
       render(MenuItemSelectableFixture);
 
       await user.click(screen.getByRole("button", { name: "Trigger" }));
       await user.click(screen.getByRole("menuitemcheckbox", { name: "Date" }));
 
       expect(screen.getByRole("menu")).toBeInTheDocument();
-      expect(getSelectedIds()).toEqual(["size"]);
+      expect(getSelectedIds()).toEqual(["size", "date"]);
     });
   });
 
@@ -391,6 +391,24 @@ describe("MenuItem", () => {
       expect(
         screen.getByRole("menuitemradio", { name: "Compact" }),
       ).toHaveFocus();
+    });
+
+    it("keeps nested and root menus open when a radio click is prevented", async () => {
+      render(MenuItemRadioGroupFixture);
+
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+      await user.click(screen.getByRole("menuitem", { name: "View" }));
+      await user.click(screen.getByRole("menuitemradio", { name: "Dark" }));
+
+      expect(
+        screen.getByRole("menuitemradio", { name: "Dark" }),
+      ).toHaveAttribute("aria-checked", "true");
+      expect(
+        screen.getByRole("menuitemradio", { name: "Light" }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("menuitem", { name: "Plain" }),
+      ).toBeInTheDocument();
     });
   });
 });
