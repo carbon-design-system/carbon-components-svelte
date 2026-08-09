@@ -136,58 +136,39 @@ jobs:
       - name: E2E tests
         run: bunx playwright test --project=chromium
 
-  test-svelte3:
+  test-svelte-compat:
     needs: [static-checks, changes]
     if: github.event_name == 'workflow_dispatch' || needs.changes.outputs.unit == 'true'
     runs-on: macos-15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - dir: tests-svelte3
+            label: Svelte 3
+          - dir: tests-svelte4
+            label: Svelte 4 compat
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
       - run: bun ci
 
-      - name: Setup Svelte 3
+      - name: Setup ${{ matrix.label }}
         run: |
-          cd tests-svelte3
+          cd ${{ matrix.dir }}
           bun ci
 
       - name: Generate types
         run: bun run build:docs
 
-      - name: Test Svelte 3 Types
+      - name: Test types (${{ matrix.label }})
         run: |
-          cd tests-svelte3
+          cd ${{ matrix.dir }}
           bun run test:types
 
-      - name: Test Svelte 3
+      - name: Test (${{ matrix.label }})
         run: |
-          cd tests-svelte3
-          bun run test
-
-  test-svelte4:
-    needs: [static-checks, changes]
-    if: github.event_name == 'workflow_dispatch' || needs.changes.outputs.unit == 'true'
-    runs-on: macos-15
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
-      - run: bun ci
-
-      - name: Setup Svelte 4 compat
-        run: |
-          cd tests-svelte4
-          bun ci
-
-      - name: Generate types
-        run: bun run build:docs
-
-      - name: Test types (Svelte 4 compat)
-        run: |
-          cd tests-svelte4
-          bun run test:types
-
-      - name: Test (Svelte 4 compat)
-        run: |
-          cd tests-svelte4
+          cd ${{ matrix.dir }}
           bun run test
 
   deploy-docs:
