@@ -87,6 +87,7 @@
   import Checkmark from "../icons/Checkmark.svelte";
   import { clampIndex } from "../utils/clampIndex.js";
   import { dismiss } from "../utils/dismiss.js";
+  import { isInSafeTriangle as computeSafeTriangle } from "../utils/isInSafeTriangle.js";
   import ContextMenu from "./ContextMenu.svelte";
 
   const dispatch = createEventDispatcher();
@@ -121,71 +122,16 @@
     menuOffsetX = _menuOffsetX;
   });
 
-  function isPointInTriangle(px, py, x1, y1, x2, y2, x3, y3) {
-    const denominator = (y2 - y3) * (x1 - x3) + (x3 - x2) * (y1 - y3);
-    const a = ((y2 - y3) * (px - x3) + (x3 - x2) * (py - y3)) / denominator;
-    const b = ((y3 - y1) * (px - x3) + (x1 - x3) * (py - y3)) / denominator;
-    const c = 1 - a - b;
-
-    return a >= 0 && a <= 1 && b >= 0 && b <= 1 && c >= 0 && c <= 1;
-  }
-
-  // Utility function to check if mouse is in the
-  // safe triangle when transferring to the submenu.
+  // True when the pointer is in the safe-transfer zone toward the submenu.
   function isInSafeTriangle(mouseX, mouseY) {
     if (!submenuOpen || !ref || !submenuRef) return false;
 
-    const parentRect = ref.getBoundingClientRect();
-    const submenuRect = submenuRef.getBoundingClientRect();
-
-    // Magic number to make the triangle slightly larger
-    const buffer = 12;
-    const isSubmenuOnRight = submenuRect.left >= parentRect.right;
-
-    let trianglePoints;
-    if (isSubmenuOnRight) {
-      trianglePoints = {
-        x1: parentRect.right,
-        y1: parentRect.top - buffer,
-        x2: parentRect.right,
-        y2: parentRect.bottom + buffer,
-        x3: submenuRect.left,
-        y3: submenuRect.top + submenuRect.height / 2,
-      };
-    } else {
-      trianglePoints = {
-        x1: parentRect.left,
-        y1: parentRect.top - buffer,
-        x2: parentRect.left,
-        y2: parentRect.bottom + buffer,
-        x3: submenuRect.right,
-        y3: submenuRect.top + submenuRect.height / 2,
-      };
-    }
-
-    const inTopTriangle = isPointInTriangle(
+    return computeSafeTriangle(
       mouseX,
       mouseY,
-      trianglePoints.x1,
-      trianglePoints.y1,
-      isSubmenuOnRight ? trianglePoints.x3 : trianglePoints.x2,
-      submenuRect.top,
-      trianglePoints.x3,
-      trianglePoints.y3,
+      ref.getBoundingClientRect(),
+      submenuRef.getBoundingClientRect(),
     );
-
-    const inBottomTriangle = isPointInTriangle(
-      mouseX,
-      mouseY,
-      trianglePoints.x2,
-      trianglePoints.y2,
-      trianglePoints.x3,
-      trianglePoints.y3,
-      isSubmenuOnRight ? trianglePoints.x3 : trianglePoints.x1,
-      submenuRect.bottom,
-    );
-
-    return inTopTriangle || inBottomTriangle;
   }
 
   function handleClick(event, opts = {}) {
