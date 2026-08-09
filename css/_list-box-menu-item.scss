@@ -1,4 +1,5 @@
 @import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/typography";
 @import "carbon-components/scss/globals/scss/helper-mixins";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
@@ -38,4 +39,39 @@
 
 @include exports('list-box-menu-item-icon') {
   @include list-box-menu-item-icon;
+}
+
+/// Non-selectable group header rows for grouped list box menus (MultiSelect).
+/// Not part of Carbon v10; mirrors the visual weight of a native `optgroup`
+/// label.
+/// @access private
+/// @group components
+@mixin list-box-menu-item-group-header {
+  // Breathing room so the first header and last item don't sit flush against
+  // the menu edges. Only applied to grouped menus.
+  .#{$prefix}--list-box__menu--grouped {
+    padding-top: $carbon--spacing-03;
+    padding-bottom: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--list-box__menu-item--group-header {
+    @include type-style('label-01');
+    display: block;
+    // 0.5rem vertical + label-01's 1rem line-height = a 2rem (32px) row,
+    // matching the size-md menu item height. 0 1rem 0.5rem inline.
+    padding: $carbon--spacing-03 0 $carbon--spacing-03 $carbon--spacing-05;
+    color: $text-02;
+    cursor: default;
+    user-select: none;
+  }
+
+  // Separate consecutive groups. The first group's header sits flush against the
+  // top of the menu, so only subsequent headers get the spacing.
+  .#{$prefix}--list-box__menu-item--group-header:not(:first-child) {
+    margin-top: $carbon--spacing-05;
+  }
+}
+
+@include exports('list-box-menu-item-group-header') {
+  @include list-box-menu-item-group-header;
 }
