@@ -1,5 +1,6 @@
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
 /// Left/right icons for list box menu items (Dropdown, ComboBox).
@@ -36,6 +37,23 @@
   }
 }
 
-@include exports('list-box-menu-item-icon') {
+/// Non-option empty/placeholder row for ComboBox and MultiSelect menus.
+/// @access private
+/// @group components
+@mixin list-box-menu-item-empty {
+  .#{$prefix}--list-box__menu-item--empty {
+    @include type-style("body-short-01");
+
+    padding: to-rem(11px) $carbon--spacing-05;
+    color: $text-02;
+    cursor: default;
+  }
+}
+
+@include exports("list-box-menu-item-icon") {
   @include list-box-menu-item-icon;
+}
+
+@include exports("list-box-menu-item-empty") {
+  @include list-box-menu-item-empty;
 }

@@ -482,3 +482,11 @@ Set `readonly` to `true` to display non-editable values. The menu can still be o
     { id: "2", text: "Fax" },
   ]}
 />
+
+## Async results
+
+For async (for example, server-side) filtering, clear and replace `items` from an `on:input` handler. Debounce the fetch, then swap in the returned options. Set `filterItem` to always return `true` when the server already filtered the list.
+
+When the open menu has no options, the `empty` slot renders. Put loading, error, or "no matches" content there — MultiSelect does not model those states itself. Clear `items` while fetching so the slot appears. The default slot content is "No results".
+
+<FileSource src="/framed/MultiSelect/AsyncMultiSelect" />
