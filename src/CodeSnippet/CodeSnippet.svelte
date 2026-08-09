@@ -1,4 +1,6 @@
 <script>
+  import { copyText } from "../utils/copyText.js";
+
   /**
    * @template [Icon=any]
    */
@@ -33,18 +35,14 @@
   export let code = undefined;
 
   /**
-   * By default, this component uses `navigator.clipboard.writeText` API to copy text to the user's clipboard.
+   * By default, this component uses `navigator.clipboard.writeText` API to copy text to the user's clipboard,
+   * with a `document.execCommand("copy")` fallback. Failures reject so the component can show
+   * `errorFeedback` and dispatch `copy:error`.
    *
    * Provide a custom function to override this behavior.
    * @type {(code: string) => void | Promise<void>}
    */
-  export let copy = async (code) => {
-    try {
-      await navigator.clipboard.writeText(code);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  export let copy = copyText;
 
   /**
    * Set to `true` to expand a multi-line code snippet (type="multi").
@@ -93,6 +91,9 @@
 
   /** Specify the feedback text displayed when clicking the snippet */
   export let feedback = "Copied!";
+
+  /** Specify the feedback text displayed when copying fails */
+  export let errorFeedback = "Failed to copy";
 
   /** Set the timeout duration (ms) to display feedback text */
   export let feedbackTimeout = 2000;
@@ -232,6 +233,7 @@
   let animation = undefined;
   let feedbackOpen = false;
   let copyPending = false;
+  let isCopyError = false;
   let prevExpanded = expanded;
   let exceedsThreshold = false;
   let resizeObserver;
@@ -250,7 +252,10 @@
     animation = copyFeedback.animation;
     feedbackOpen = copyFeedback.feedbackOpen;
     copyPending = copyFeedback.copyPending;
+    isCopyError = copyFeedback.isError;
   }
+
+  $: feedbackText = isCopyError ? errorFeedback : feedback;
 
   function dismissFeedback() {
     copyFeedback.dismiss();
@@ -436,7 +441,7 @@
           class:bx--assistive-text={true}
           class:bx--copy-btn__feedback={true}
         >
-          {feedback}
+          {feedbackText}
         </span>
       {/if}
     </button>
@@ -445,7 +450,7 @@
       <PortalTooltip
         anchor={copyRef}
         open={feedbackOpen}
-        text={feedback}
+        text={feedbackText}
         direction={tooltipPosition}
         intrinsicAlign={tooltipAlignment}
         horizontalGapLeft={portalGaps.horizontalGapLeft}
@@ -497,6 +502,7 @@
         {copy}
         {disabled}
         {feedback}
+        {errorFeedback}
         {feedbackTimeout}
         {feedbackIcon}
         iconDescription={copyButtonDescription}
