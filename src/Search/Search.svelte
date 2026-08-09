@@ -96,8 +96,9 @@
   $: isFluid = !expandable && (fluid || !!formContext?.isFluid);
   $: if (expanded && ref) ref.focus();
   $: if (expanded !== prevExpanded) {
-    dispatch(expanded ? "expand" : "collapse");
+    const nextExpanded = expanded;
     prevExpanded = expanded;
+    dispatch(nextExpanded ? "expand" : "collapse");
   }
 </script>
 
