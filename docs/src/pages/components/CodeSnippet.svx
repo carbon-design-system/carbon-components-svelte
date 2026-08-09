@@ -10,7 +10,7 @@ description: Code snippets display and copy code examples, with single-line, mul
 
 ## Basic
 
-Display a single-line code snippet by default. By default, the copy button uses the native [Clipboard API](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText) to copy text. Pass a function to `copy` to replace it. See [Override](#override).
+Display a single-line code snippet by default. By default, the copy button uses the native [Clipboard API](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText) to copy text, with a `document.execCommand("copy")` fallback when that API is unavailable or rejects (for example in an insecure context). Pass a function to `copy` to replace it. See [Override](#override).
 
 <CodeSnippet code="npm i carbon-components-svelte" />
 
@@ -18,7 +18,7 @@ Display a single-line code snippet by default. By default, the copy button uses 
 
 Pass an async function to `copy` when clipboard text is not ready at render time, such as a longer install command fetched on click. The copy feedback text appears after `copy()` resolves.
 
-During the request, the copy control sets `aria-busy="true"` and ignores further clicks. A rejected copy skips the success message and emits `copy:error`.
+During the request, the copy control sets `aria-busy="true"` and ignores further clicks. A rejected copy shows `errorFeedback` (default `"Failed to copy"`) in the same tooltip slot as the success message and emits `copy:error`.
 
 Prefetch on hover with `on:mouseenter:copy-button` on the copy control. The example below shows async copy for each variant (`single`, `inline`, `multi`).
 
@@ -86,7 +86,7 @@ Customize the message and icon shown after copying.
 
 ### Text
 
-Set `feedback` to customize the copy button feedback text.
+Set `feedback` to customize the copy button feedback text. Set `errorFeedback` to customize the message shown when copying fails (default `"Failed to copy"`).
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetFeedback" />
 

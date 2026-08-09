@@ -15,6 +15,7 @@ import CodeSnippetCopyButtonMouseLeave from "./CodeSnippetCopyButtonMouseLeave.t
 import CodeSnippetCopyError from "./CodeSnippetCopyError.test.svelte";
 import CodeSnippetCopyRef from "./CodeSnippetCopyRef.test.svelte";
 import CodeSnippetCustomEvents from "./CodeSnippetCustomEvents.test.svelte";
+import CodeSnippetDefaultCopyError from "./CodeSnippetDefaultCopyError.test.svelte";
 import CodeSnippetDisabled from "./CodeSnippetDisabled.test.svelte";
 import CodeSnippetDoubleClick from "./CodeSnippetDoubleClick.test.svelte";
 import CodeSnippetExpandable from "./CodeSnippetExpandable.test.svelte";
@@ -166,7 +167,7 @@ yarn -v`,
   );
 
   it.each(snippetVariants)(
-    "async copy failure does not show feedback ($type)",
+    "async copy failure shows error feedback ($type)",
     async ({ type, label }) => {
       const error = new Error("copy failed");
       const copy = vi.fn().mockRejectedValue(error);
@@ -180,7 +181,13 @@ yarn -v`,
       await user.click(button);
 
       expect(onCopyError).toHaveBeenCalledWith({ error });
-      expect(button).not.toHaveClass("bx--copy-btn--fade-in");
+      expect(button).toHaveClass("bx--copy-btn--fade-in");
+
+      const portal = document.querySelector("[data-floating-portal]");
+      expect(
+        portal?.querySelector(".bx--tooltip-portal__content"),
+      ).toHaveTextContent("Failed to copy");
+      expect(screen.queryByText("Copied!")).toBeNull();
     },
   );
 
@@ -492,6 +499,45 @@ yarn -v`,
       await user.click(screen.getByLabelText(label));
 
       expect(onCopyError).toHaveBeenCalledWith({ error });
+      expect(screen.getByText("Failed to copy")).toBeInTheDocument();
+      expect(screen.queryByText("Copied!")).toBeNull();
+    },
+  );
+
+  it.each(snippetVariants)(
+    "default copy failure shows error feedback ($type)",
+    async ({ type, label }) => {
+      const onCopyError = vi.fn();
+      const originalClipboard = navigator.clipboard;
+      Object.defineProperty(navigator, "clipboard", {
+        configurable: true,
+        value: {
+          writeText: vi.fn().mockRejectedValue(new Error("denied")),
+        },
+      });
+      Object.defineProperty(document, "execCommand", {
+        configurable: true,
+        writable: true,
+        value: vi.fn().mockReturnValue(false),
+      });
+
+      render(CodeSnippetDefaultCopyError, {
+        props: { type, onCopyError },
+      });
+
+      await user.click(screen.getByLabelText(label));
+
+      expect(onCopyError).toHaveBeenCalledWith({
+        error: expect.any(Error),
+      });
+      expect(onCopyError.mock.calls[0][0].error.message).toBe("Failed to copy");
+      expect(screen.getByText("Failed to copy")).toBeInTheDocument();
+      expect(screen.queryByText("Copied!")).toBeNull();
+
+      Object.defineProperty(navigator, "clipboard", {
+        configurable: true,
+        value: originalClipboard,
+      });
     },
   );
 
@@ -576,6 +622,11 @@ yarn -v`,
   });
 
   test("should display custom copy text", async () => {
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: { writeText: vi.fn().mockResolvedValue(undefined) },
+    });
+
     render(CodeSnippetWithCustomCopyText);
 
     const copyButton = screen.getByLabelText("Copy to clipboard");
