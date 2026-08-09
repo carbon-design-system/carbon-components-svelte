@@ -34,6 +34,12 @@ Use the `labelChildren` slot to provide custom label content.
   <strong slot="labelChildren">User name</strong>
 </TextInput>
 
+## Maximum character count
+
+Specify the max character count with `maxCount`. A character counter appears to the right of the label. Use the native maxlength attribute instead if you prefer not to show a counter.
+
+<TextInput labelText="User name" placeholder="Enter user name..." maxCount={10} />
+
 ## Light
 
 Use the light variant for light-themed backgrounds with `light`.
