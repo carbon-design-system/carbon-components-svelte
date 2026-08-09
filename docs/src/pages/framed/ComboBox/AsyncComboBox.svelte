@@ -1,8 +1,8 @@
 <script>
-  import { ComboBox } from "carbon-components-svelte";
-  import { onMount } from "svelte";
+  import { ComboBox, InlineLoading } from "carbon-components-svelte";
 
   let items = [];
+  let status = "idle";
   let timeoutId;
   let inputValue = "";
 
@@ -32,24 +32,18 @@
     );
   }
 
-  onMount(() => {
-    // Fetch initial items.
-    fetchItems("")
-      .then((data) => {
-        items = data;
-      })
-      .catch(() => {});
-
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  });
-
-  $: {
+  function handleInput() {
     clearTimeout(timeoutId);
+    status = "loading";
+    items = [];
+
     timeoutId = setTimeout(async () => {
-      items = await fetchItems(inputValue);
-      // Debounce input value changes.
+      try {
+        items = await fetchItems(inputValue);
+        status = items.length ? "idle" : "empty";
+      } catch {
+        status = "error";
+      }
     }, 150);
   }
 </script>
@@ -59,4 +53,15 @@
   placeholder="Type to search..."
   bind:value={inputValue}
   {items}
-/>
+  on:input={handleInput}
+>
+  <svelte:fragment slot="empty">
+    {#if status === "loading"}
+      <InlineLoading status="active" description="Searching…" />
+    {:else if status === "error"}
+      Something went wrong
+    {:else}
+      No contacts found
+    {/if}
+  </svelte:fragment>
+</ComboBox>

@@ -249,7 +249,9 @@ The original value is automatically restored if you close the dropdown without m
 
 ### Async
 
-For async (for example, server-side) filtering, bind to `value` and update `items` when input changes. This example simulates async behavior with a debounced input value change.
+For async (for example, server-side) filtering, bind to `value` and update `items` when input changes. Clear `items` while a request is in flight so the menu has no options.
+
+When the open menu has no options, the `empty` slot renders. Put loading UI, an error message, or a no-matches string there. This example simulates async behavior with a debounced input value change.
 
 <FileSource src="/framed/ComboBox/AsyncComboBox" />
 
