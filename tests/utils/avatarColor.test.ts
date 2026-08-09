@@ -63,4 +63,11 @@ describe("getAvatarBackgroundColor", () => {
     const color = getAvatarBackgroundColor("anything", palette);
     expect(palette).toContain(color);
   });
+
+  test("falls back to the default palette for an empty palette", () => {
+    expect(AVATAR_BACKGROUND_COLORS).toContain(
+      getAvatarBackgroundColor("anything", []),
+    );
+    expect(getAvatarBackgroundColor("", [])).toBe(AVATAR_BACKGROUND_COLORS[0]);
+  });
 });

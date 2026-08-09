@@ -34,7 +34,8 @@ export function hashString(value) {
 
 /**
  * Pick a stable avatar background color from a string. Empty or falsy input
- * returns the first palette entry.
+ * returns the first palette entry. An empty `palette` falls back to the
+ * default palette so a `T` is always returned.
  *
  * @template {string} [T=AVATAR_BACKGROUND_COLORS[number]]
  * @param {string | null | undefined} value
@@ -45,6 +46,10 @@ export function getAvatarBackgroundColor(
   value,
   palette = /** @type {ReadonlyArray<T>} */ (AVATAR_BACKGROUND_COLORS),
 ) {
-  if (!value || palette.length === 0) return palette[0];
-  return palette[hashString(value) % palette.length];
+  const effectivePalette =
+    palette.length === 0
+      ? /** @type {ReadonlyArray<T>} */ (AVATAR_BACKGROUND_COLORS)
+      : palette;
+  if (!value) return effectivePalette[0];
+  return effectivePalette[hashString(value) % effectivePalette.length];
 }
