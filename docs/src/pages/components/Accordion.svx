@@ -7,6 +7,8 @@ description: Accordions stack expandable sections vertically to show or hide con
   import {
     Accordion,
     AccordionItem,
+    Stack,
+    Text,
   } from "carbon-components-svelte";
 </script>
 
@@ -136,16 +138,42 @@ panels where only one section should be expanded at a time. The default is
 
 ## Nested
 
-Put an `Accordion` inside an `AccordionItem`. Nested items keep their own
-open state. Opening the outer item leaves the inner one closed.
+Put an `Accordion` inside an `AccordionItem` to compose nested clusters.
+Nested items keep their own open state, independent of the parent.
 
 <Accordion>
-  <AccordionItem title="Outer item">
-    <Accordion>
-      <AccordionItem title="Inner item">
-        <p>Nested content.</p>
-      </AccordionItem>
-    </Accordion>
+  <AccordionItem open title="Watson NLP services">
+    <Stack orientation="horizontal" gap={6}>
+      <Accordion>
+        <AccordionItem open title="Natural Language Classifier">
+          <Stack gap={5}>
+            <Text type="body-long-01" color="secondary">
+              Uses advanced natural language processing and machine learning
+              techniques to create custom classification models. Users train
+              their data and the service predicts the appropriate category.
+            </Text>
+            <Stack gap={2}>
+              <Text type="label-01" color="secondary">Region</Text>
+              <Text type="body-short-01">us-south</Text>
+            </Stack>
+          </Stack>
+        </AccordionItem>
+      </Accordion>
+      <Accordion>
+        <AccordionItem open title="Natural Language Understanding">
+          <Stack gap={5}>
+            <Text type="body-long-01" color="secondary">
+              Analyzes text to extract meta-data from content such as
+              concepts, entities, emotion, relations, sentiment and more.
+            </Text>
+            <Stack gap={2}>
+              <Text type="label-01" color="secondary">Region</Text>
+              <Text type="body-short-01">eu-de</Text>
+            </Stack>
+          </Stack>
+        </AccordionItem>
+      </Accordion>
+    </Stack>
   </AccordionItem>
 </Accordion>
 
