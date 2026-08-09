@@ -64,11 +64,19 @@
     activeNodeId,
     selectedIdsSetStore,
     expandedIdsSetStore,
+    editableStore,
+    editingNodeId,
+    renameLabel,
     clickNode,
     selectNode,
     expandNode,
     focusNode,
     toggleNode,
+    isNodeEditable,
+    startEdit,
+    initEditInput,
+    handleEditKeyDown,
+    handleEditBlur,
   } = getContext("carbon:TreeView");
 
   function offset() {
@@ -113,6 +121,8 @@
 
     prevActiveId = $activeNodeId;
   }
+  $: canEdit = $editableStore && isNodeEditable(node);
+  $: isEditing = $editingNodeId === id;
   $: if (refLabel) {
     refLabel.style.marginLeft = `-${offset()}rem`;
     refLabel.style.paddingLeft = `${offset()}rem`;
@@ -173,6 +183,12 @@
       clickNode(node, event);
     }}
     on:keydown={(event) => {
+      if (event.key === "F2") {
+        event.preventDefault();
+        if (canEdit) startEdit(node);
+        return;
+      }
+
       if (
         event.key === "ArrowUp" ||
         event.key === "ArrowDown" ||
@@ -254,8 +270,28 @@
       </span>
       <span class:bx--tree-node__label__details={true}>
         <svelte:component this={icon} class="bx--tree-node__icon" />
-        <span id="{treeId}-{id}__label" class:bx--tree-node__label__text={true}>
-          <slot {node} />
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
+        <span
+          id="{treeId}-{id}__label"
+          class:bx--tree-node__label__text={true}
+          on:dblclick={() => {
+            if (canEdit) startEdit(node);
+          }}
+        >
+          {#if isEditing}
+            <input
+              class:bx--tree-node__rename={true}
+              aria-label={$renameLabel}
+              value={text}
+              use:initEditInput
+              on:click|stopPropagation
+              on:dblclick|stopPropagation
+              on:keydown|stopPropagation={handleEditKeyDown}
+              on:blur={handleEditBlur}
+            >
+          {:else}
+            <slot {node} />
+          {/if}
         </span>
       </span>
     </div>
