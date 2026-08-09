@@ -192,8 +192,10 @@
     }
   }
   $: {
-    if (prevOpen !== undefined) dispatch(open ? "open" : "close");
+    const shouldDispatch = prevOpen !== undefined;
+    const nextOpen = open;
     prevOpen = open;
+    if (shouldDispatch) dispatch(nextOpen ? "open" : "close");
   }
 
   onMount(() => {
