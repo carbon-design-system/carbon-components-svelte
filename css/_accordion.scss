@@ -1,0 +1,28 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Carbon v10 toggles accordion content and arrow visibility from an
+/// ancestor `bx--accordion__item--active` selector. A closed item nested
+/// inside an open one still looks open. This higher-specificity `:not()`
+/// rule restores the closed state. v11 fixed the upstream selectors with
+/// `>` in https://github.com/carbon-design-system/carbon/pull/7329. v10 is
+/// pinned, so the patch lives here. Skip `--collapsing` so the close
+/// animation still plays.
+/// @access private
+/// @group components
+@mixin accordion-nested {
+  .#{$prefix}--accordion__item:not(.#{$prefix}--accordion__item--active):not(.#{$prefix}--accordion__item--collapsing)
+    > .#{$prefix}--accordion__content {
+    display: none;
+  }
+
+  .#{$prefix}--accordion__item:not(.#{$prefix}--accordion__item--active)
+    > .#{$prefix}--accordion__heading
+    .#{$prefix}--accordion__arrow {
+    transform: rotate(-270deg) #{"/*rtl:ignore*/"};
+  }
+}
+
+@include exports("accordion-nested") {
+  @include accordion-nested;
+}
