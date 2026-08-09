@@ -134,6 +134,21 @@ panels where only one section should be expanded at a time. The default is
   </AccordionItem>
 </Accordion>
 
+## Nested
+
+Put an `Accordion` inside an `AccordionItem`. Nested items keep their own
+open state. Opening the outer item leaves the inner one closed.
+
+<Accordion>
+  <AccordionItem title="Outer item">
+    <Accordion>
+      <AccordionItem title="Inner item">
+        <p>Nested content.</p>
+      </AccordionItem>
+    </Accordion>
+  </AccordionItem>
+</Accordion>
+
 ## Programmatic example
 
 Programmatically control the accordion items with the `bind:open` directive,
