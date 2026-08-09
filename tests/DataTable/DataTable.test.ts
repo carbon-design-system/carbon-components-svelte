@@ -2823,6 +2823,160 @@ describe("DataTable", () => {
     expect(overlap).toHaveLength(0);
   });
 
+  describe("pinned columns", () => {
+    const PINNED_START = "bx--table-column--pinned-start";
+    const PINNED_BOUNDARY = "bx--table-column--pinned-boundary";
+
+    const pinnedHeaders = [
+      { key: "name", value: "Name", pinned: "start" },
+      { key: "protocol", value: "Protocol" },
+      { key: "port", value: "Port" },
+      { key: "rule", value: "Rule" },
+    ] as const;
+
+    /** Body rows, excluding virtualization spacer rows. */
+    const getDataRows = () =>
+      screen
+        .getAllByRole("row")
+        .filter((row) => row.closest("tbody") !== null)
+        .filter((row) => !row.getAttribute("style")?.includes("height:"));
+
+    it("pins the header cell and every body cell in that column", () => {
+      render(DataTable, { props: { headers: pinnedHeaders, rows } });
+
+      const columnHeaders = screen.getAllByRole("columnheader");
+      expect(columnHeaders[0]).toHaveClass(PINNED_START);
+      expect(columnHeaders[0].getAttribute("style")).toContain(
+        "inset-inline-start",
+      );
+      for (const columnHeader of columnHeaders.slice(1)) {
+        expect(columnHeader).not.toHaveClass(PINNED_START);
+      }
+
+      const dataRows = getDataRows();
+      expect(dataRows).toHaveLength(rows.length);
+      for (const row of dataRows) {
+        const cells = within(row).getAllByRole("cell");
+        expect(cells[0]).toHaveClass(PINNED_START);
+        expect(cells[0].getAttribute("style")).toContain("inset-inline-start");
+        for (const cell of cells.slice(1)) {
+          expect(cell).not.toHaveClass(PINNED_START);
+        }
+      }
+    });
+
+    it("pins the selection column alongside the first start column", () => {
+      render(DataTable, {
+        props: { headers: pinnedHeaders, rows, selectable: true },
+      });
+
+      const [selectionHeader, nameHeader] = screen.getAllByRole("columnheader");
+      expect(selectionHeader).toHaveClass(PINNED_START);
+      expect(selectionHeader.getAttribute("style")).toContain(
+        "inset-inline-start",
+      );
+      expect(nameHeader).toHaveClass(PINNED_START);
+
+      for (const row of getDataRows()) {
+        const [selectionCell, nameCell] = within(row).getAllByRole("cell");
+        expect(selectionCell).toHaveClass(PINNED_START);
+        expect(nameCell).toHaveClass(PINNED_START);
+      }
+    });
+
+    it("ignores a pin that is not contiguous with its edge", () => {
+      const { container } = render(DataTable, {
+        props: {
+          headers: [
+            { key: "name", value: "Name" },
+            { key: "protocol", value: "Protocol", pinned: "start" },
+            { key: "port", value: "Port" },
+            { key: "rule", value: "Rule" },
+          ],
+          rows,
+        },
+      });
+
+      expect(container.querySelectorAll(`.${PINNED_START}`)).toHaveLength(0);
+    });
+
+    it("marks only the last start column as the boundary", () => {
+      render(DataTable, {
+        props: {
+          headers: [
+            { key: "name", value: "Name", pinned: "start" },
+            { key: "protocol", value: "Protocol", pinned: "start" },
+            { key: "port", value: "Port" },
+            { key: "rule", value: "Rule" },
+          ],
+          rows,
+        },
+      });
+
+      const columnHeaders = screen.getAllByRole("columnheader");
+      expect(columnHeaders[0]).not.toHaveClass(PINNED_BOUNDARY);
+      expect(columnHeaders[1]).toHaveClass(PINNED_BOUNDARY);
+
+      for (const row of getDataRows()) {
+        const cells = within(row).getAllByRole("cell");
+        expect(cells[0]).not.toHaveClass(PINNED_BOUNDARY);
+        expect(cells[1]).toHaveClass(PINNED_BOUNDARY);
+      }
+    });
+
+    it("ignores pinned columns when stickyHeader is set", () => {
+      const { container } = render(DataTable, {
+        props: { headers: pinnedHeaders, rows, stickyHeader: true },
+      });
+
+      expect(container.querySelectorAll(`.${PINNED_START}`)).toHaveLength(0);
+      expect(
+        container.querySelector("table")?.hasAttribute("data-pinned-columns"),
+      ).toBe(false);
+    });
+
+    it("pins rendered rows but not spacer rows when virtualized", () => {
+      const virtualizedRows = Array.from({ length: 500 }, (_, i) => ({
+        id: String(i),
+        name: `Load Balancer ${i + 1}`,
+        protocol: "HTTP",
+        port: 3000 + i,
+        rule: "Round robin",
+      }));
+
+      render(DataTable, {
+        props: {
+          headers: pinnedHeaders,
+          rows: virtualizedRows,
+          virtualize: true,
+        },
+      });
+
+      const bodyRows = screen
+        .getAllByRole("row")
+        .filter((row) => row.closest("tbody") !== null);
+      const spacerRows = bodyRows.filter((row) =>
+        row.getAttribute("style")?.includes("height:"),
+      );
+      const dataRows = bodyRows.filter(
+        (row) => !row.getAttribute("style")?.includes("height:"),
+      );
+
+      expect(spacerRows.length).toBeGreaterThan(0);
+      expect(dataRows.length).toBeGreaterThan(0);
+      expect(dataRows.length).toBeLessThan(virtualizedRows.length);
+
+      for (const row of dataRows) {
+        expect(within(row).getAllByRole("cell")[0]).toHaveClass(PINNED_START);
+      }
+      for (const row of spacerRows) {
+        for (const cell of within(row).getAllByRole("cell")) {
+          expect(cell).not.toHaveClass(PINNED_START);
+        }
+      }
+    });
+  });
+
   describe("virtualization", () => {
     const createLargeRowList = (count: number) => {
       return Array.from({ length: count }, (_, i) => ({
