@@ -335,8 +335,9 @@
   $: showExpandButton = showMoreLess && type === "multi" && exceedsThreshold;
 
   $: if (type === "multi" && prevExpanded !== expanded) {
-    dispatch(expanded ? "expand" : "collapse");
+    const nextExpanded = expanded;
     prevExpanded = expanded;
+    dispatch(nextExpanded ? "expand" : "collapse");
   }
 
   let disconnectModalObserver = () => {};
