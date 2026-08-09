@@ -128,7 +128,7 @@ describe("createCopyFeedbackState", () => {
     expect(state.feedbackOpen).toBe(true);
   });
 
-  test("rejected performCopy resets state and allows retry", async () => {
+  test("rejected performCopy shows error feedback then allows retry after dismiss", async () => {
     const state = createCopyFeedbackState();
     const performCopy = vi
       .fn()
@@ -139,13 +139,22 @@ describe("createCopyFeedbackState", () => {
       "copy failed",
     );
 
-    expect(state.animation).toBeUndefined();
-    expect(state.feedbackOpen).toBe(false);
+    expect(state.animation).toBe("fade-in");
+    expect(state.feedbackOpen).toBe(true);
+    expect(state.isError).toBe(true);
     expect(state.copyPending).toBe(false);
+
+    // Error feedback still holds copyActive, so a retry is blocked until dismiss.
+    await state.onClick(performCopy, 2000);
+    expect(performCopy).toHaveBeenCalledTimes(1);
+
+    state.dismiss();
+    expect(state.isError).toBe(false);
 
     await state.onClick(performCopy, 2000);
 
     expect(performCopy).toHaveBeenCalledTimes(2);
     expect(state.animation).toBe("fade-in");
+    expect(state.isError).toBe(false);
   });
 });
