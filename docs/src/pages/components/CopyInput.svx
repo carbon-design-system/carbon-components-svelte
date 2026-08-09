@@ -25,7 +25,7 @@ Set `selectOnFocus` to select the full value when the field receives focus.
 
 Pass an async `copy` function when the text is not available at render time, for example a token fetched on click. Feedback appears after `copy()` resolves.
 
-While `copy()` is pending, the copy button shows a busy state and ignores clicks. On failure, skip feedback and listen for `copy:error`.
+While `copy()` is pending, the copy button shows a busy state and ignores clicks. On failure, the button shows `errorFeedback` (default `"Failed to copy"`) and emits `copy:error`.
 
 Prefetch on hover with `on:mouseenter:copy-button`.
 
@@ -84,7 +84,7 @@ Customize the message and icon shown after copying.
 
 ### Text
 
-Set `feedback` to customize the message shown after copying.
+Set `feedback` to customize the message shown after copying. Set `errorFeedback` to customize the message shown when copying fails (default `"Failed to copy"`).
 
 <CopyInput labelText="Repository" value="git@github.com:carbon-design-system/carbon-components-svelte.git" feedback="Copied to clipboard" />
 
