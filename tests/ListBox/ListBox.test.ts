@@ -59,10 +59,24 @@ describe("ListBox", () => {
 
   test.each([
     ["sm", "bx--list-box--sm"],
+    ["lg", "bx--list-box--lg"],
     ["xl", "bx--list-box--xl"],
   ] as const)("should handle size variants", (size, className) => {
     const { container } = render(ListBox, { props: { size } });
     expect(getRoot(container)).toHaveClass(className);
+  });
+
+  it("should render md size the same as the default, unclassed size", () => {
+    const { container } = render(ListBox, { props: { size: "md" } });
+
+    for (const className of [
+      "bx--list-box--xs",
+      "bx--list-box--sm",
+      "bx--list-box--lg",
+      "bx--list-box--xl",
+    ]) {
+      expect(getRoot(container)).not.toHaveClass(className);
+    }
   });
 
   it("should handle invalid state", () => {

@@ -1,7 +1,9 @@
 <script>
   /**
-   * Specify the size of the input.
-   * @type {"sm" | "xl"}
+   * Specify the size of the input. `"md"` (the default, unclassed size) and
+   * `"lg"` are Carbon React's v11 names for the same steps `"xl"` already
+   * renders (48px); `"xl"` remains supported.
+   * @type {"sm" | "md" | "lg" | "xl"}
    */
   export let size = undefined;
 
@@ -208,6 +210,7 @@
       class:bx--time-picker--warn={warn}
       class:bx--time-picker--readonly={readonly}
       class:bx--time-picker--sm={size === "sm"}
+      class:bx--time-picker--lg={size === "lg"}
       class:bx--time-picker--xl={size === "xl"}
       class:bx--select--light={light}
     >

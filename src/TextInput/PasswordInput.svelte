@@ -1,7 +1,9 @@
 <script>
   /**
-   * Set the size of the input.
-   * @type {"xs" | "sm" | "xl"}
+   * Set the size of the input. `"md"` (the default, unclassed size) and
+   * `"lg"` are Carbon React's v11 names for the same steps `"xl"` already
+   * renders (48px); `"xl"` remains supported.
+   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
    */
   export let size = undefined;
 
@@ -154,6 +156,7 @@
       class:bx--label--inline={inline}
       class:bx--label--inline--xs={inline && size === "xs"}
       class:bx--label--inline--sm={inline && size === "sm"}
+      class:bx--label--inline--lg={inline && size === "lg"}
       class:bx--label--inline--xl={inline && size === "xl"}
       class:bx--label--slotted={isFluid && $$slots.labelChildren}
     >
@@ -179,6 +182,7 @@
       class:bx--label--inline={inline}
       class:bx--label--inline--xs={inline && size === "xs"}
       class:bx--label--inline--sm={inline && size === "sm"}
+      class:bx--label--inline--lg={inline && size === "lg"}
       class:bx--label--inline--xl={inline && size === "xl"}
       class:bx--label--slotted={isFluid && $$slots.labelChildren}
     >
@@ -230,6 +234,7 @@
         class:bx--text-input--warning={showWarn}
         class:bx--text-input--xs={size === "xs"}
         class:bx--text-input--sm={size === "sm"}
+        class:bx--text-input--lg={size === "lg"}
         class:bx--text-input--xl={size === "xl"}
         {...$$restProps}
         on:change

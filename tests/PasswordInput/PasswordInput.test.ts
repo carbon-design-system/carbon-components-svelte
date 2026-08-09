@@ -188,6 +188,28 @@ describe("PasswordInput", () => {
       const input = screen.getByLabelText("Password");
       expect(input).toHaveClass("bx--text-input--xl");
     });
+
+    it("should render in large size (Carbon React's v11 alias for xl)", () => {
+      render(PasswordInput, { labelText: "Password", size: "lg" });
+
+      const input = screen.getByLabelText("Password");
+      expect(input).toHaveClass("bx--text-input--lg");
+      expect(input).not.toHaveClass("bx--text-input--xl");
+    });
+
+    it("should render md size the same as the default, unclassed size", () => {
+      render(PasswordInput, { labelText: "Password", size: "md" });
+
+      const input = screen.getByLabelText("Password");
+      for (const className of [
+        "bx--text-input--xs",
+        "bx--text-input--sm",
+        "bx--text-input--lg",
+        "bx--text-input--xl",
+      ]) {
+        expect(input).not.toHaveClass(className);
+      }
+    });
   });
 
   describe("Label handling", () => {

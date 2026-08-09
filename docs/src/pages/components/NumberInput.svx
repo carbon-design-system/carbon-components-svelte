@@ -150,6 +150,12 @@ detail includes the current value, direction, and original FocusEvent.
 
 `size` sets the input height. The default is `"md"`.
 
+### Large
+
+Use the large size for prominent inputs by setting `size` to `"lg"` (Carbon React's name for this step) or `"xl"` - both render identically.
+
+<NumberInput size="lg" labelText="Clusters" value={0} />
+
 ### Extra-large
 
 Use the extra-large size for prominent inputs by setting `size` to `"xl"`.

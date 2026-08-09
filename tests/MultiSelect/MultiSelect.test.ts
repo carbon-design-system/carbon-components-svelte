@@ -1246,6 +1246,17 @@ describe("MultiSelect", () => {
       expect(listBox).toHaveClass("bx--list-box--light");
     });
 
+    it.each([
+      ["sm", "bx--list-box--sm"],
+      ["lg", "bx--list-box--lg"],
+      ["xl", "bx--list-box--xl"],
+    ] as const)("should handle size variants", (size, className) => {
+      const { container } = render(MultiSelect, { props: { items, size } });
+      expect(container.querySelector(".bx--multi-select")).toHaveClass(
+        className,
+      );
+    });
+
     it("renders in inline variant", () => {
       render(MultiSelect, {
         props: {

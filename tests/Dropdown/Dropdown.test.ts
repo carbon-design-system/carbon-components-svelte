@@ -147,6 +147,20 @@ describe("Dropdown", () => {
 
     await rerender({ items, selectedId: "0", size: "xl" });
     expect(button.closest(".bx--dropdown")).toHaveClass("bx--dropdown--xl");
+
+    // Carbon React's v11 name for the same 48px step as "xl".
+    await rerender({ items, selectedId: "0", size: "lg" });
+    expect(button.closest(".bx--dropdown")).toHaveClass("bx--dropdown--lg");
+    expect(button.closest(".bx--dropdown")).not.toHaveClass("bx--dropdown--xl");
+
+    await rerender({ items, selectedId: "0", size: "md" });
+    for (const className of [
+      "bx--dropdown--sm",
+      "bx--dropdown--lg",
+      "bx--dropdown--xl",
+    ]) {
+      expect(button.closest(".bx--dropdown")).not.toHaveClass(className);
+    }
   });
 
   it("should handle invalid state", () => {

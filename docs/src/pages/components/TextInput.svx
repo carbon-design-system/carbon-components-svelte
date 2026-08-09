@@ -108,6 +108,12 @@ Use the `labelChildren` slot to provide custom inline label content.
 
 Set `size` to control input height. The default is `md`.
 
+### Large
+
+Use the large size for more prominent inputs by setting `size` to `"lg"` (Carbon React's name for this step) or `"xl"` - both render identically.
+
+<TextInput size="lg" labelText="User name" placeholder="Enter user name..." />
+
 ### Extra-large
 
 Use the extra-large size for more prominent inputs by setting `size` to `"xl"`.

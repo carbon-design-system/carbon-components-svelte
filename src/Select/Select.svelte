@@ -12,8 +12,10 @@
   export let selected = undefined;
 
   /**
-   * Set the size of the select input.
-   * @type {"xs" | "sm" | "xl"}
+   * Set the size of the select input. `"md"` (the default, unclassed size)
+   * and `"lg"` are Carbon React's v11 names for the same steps `"xl"`
+   * already renders (48px); `"xl"` remains supported.
+   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
    */
   export let size = undefined;
 
@@ -240,6 +242,7 @@
             class:bx--select-input={true}
             class:bx--select-input--xs={size === "xs"}
             class:bx--select-input--sm={size === "sm"}
+            class:bx--select-input--lg={size === "lg"}
             class:bx--select-input--xl={size === "xl"}
             {...$$restProps}
             on:change={handleChange}
@@ -306,6 +309,7 @@
           class:bx--select-input={true}
           class:bx--select-input--xs={size === "xs"}
           class:bx--select-input--sm={size === "sm"}
+          class:bx--select-input--lg={size === "lg"}
           class:bx--select-input--xl={size === "xl"}
           {...$$restProps}
           on:change={handleChange}
