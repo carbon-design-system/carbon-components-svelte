@@ -14,9 +14,21 @@
   <ContextMenuDivider />
   <ContextMenuOption labelText="View as">
     <ContextMenuRadioGroup bind:selectedId labelText="View mode">
-      <ContextMenuOption id="list" labelText="List" />
-      <ContextMenuOption id="grid" labelText="Grid" />
-      <ContextMenuOption id="compact" labelText="Compact" />
+      <ContextMenuOption
+        id="list"
+        labelText="List"
+        on:click={(e) => e.preventDefault()}
+      />
+      <ContextMenuOption
+        id="grid"
+        labelText="Grid"
+        on:click={(e) => e.preventDefault()}
+      />
+      <ContextMenuOption
+        id="compact"
+        labelText="Compact"
+        on:click={(e) => e.preventDefault()}
+      />
     </ContextMenuRadioGroup>
   </ContextMenuOption>
 </ContextMenu>

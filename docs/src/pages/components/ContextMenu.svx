@@ -43,7 +43,7 @@ Submenus can contain:
 | Selectable group | A nested `ContextMenuGroup` with an accessible label; options act as checkboxes and share `bind:selectedIds`. See [Selectable (nested)](#selectable-nested); the **Export as** branch in this example shows the same pattern alongside plain items.                                                                                                            |
 | Radio group      | A nested `ContextMenuRadioGroup` with `bind:selectedId` so only one choice is active. See [Radio group (nested)](#radio-group-nested).                                                                                                                                                                                                                           |
 
-Toggling a checkbox or radio item in a nested submenu leaves that flyout open so you can change several choices; the root menu still closes when you pick a plain action row or click outside.
+Selecting an option closes only that option's own menu level. At the root, that closes the whole menu. Inside a submenu, it closes just that flyout and leaves the rest open. Call `event.preventDefault()` to keep a flyout open across several picks; see [Prevent menu from closing](#prevent-menu-from-closing).
 
 <FileSource src="/framed/ContextMenu/ContextMenuNested" />
 
@@ -77,7 +77,7 @@ Use selectable for a single toggle item, or wrap options in ContextMenuGroup wit
 
 ### Selectable (nested)
 
-Put ContextMenuGroup inside a parent ContextMenuOption to show the checkbox-style group in a flyout submenu. Use `bind:selectedIds` for the chosen values. See also [Nested menu](#nested-menu) for a full submenu example that includes both plain options and grouped selection.
+Put ContextMenuGroup inside a parent ContextMenuOption to show the checkbox-style group in a flyout submenu. Use `bind:selectedIds` for the chosen values. See [Nested menu](#nested-menu) for a full submenu example, and [Prevent menu from closing](#prevent-menu-from-closing) to keep the flyout open while changing several checkboxes.
 
 <FileSource src="/framed/ContextMenu/ContextMenuSelectableNested" />
 
@@ -91,10 +91,12 @@ Use ContextMenuRadioGroup to organize related options as a radio set: only one o
 
 Put ContextMenuRadioGroup inside a parent ContextMenuOption to show the radio set in a flyout submenu, similar to the nested checkbox group in [Nested menu](#nested-menu). Use `bind:selectedId` for the active choice.
 
+Selecting an option closes that flyout. Call `event.preventDefault()` in the option's `on:click` handler to leave it open; `selectedId` still updates. See [Prevent menu from closing](#prevent-menu-from-closing).
+
 <FileSource src="/framed/ContextMenu/ContextMenuRadioGroupNested" />
 
 ## Prevent menu from closing
 
-Use `preventDefault()` on individual context menu option click events to prevent the menu from closing when that option is clicked. Use this to keep the menu open after performing an action.
+An option's `click` event is cancelable. Call `event.preventDefault()` in its `on:click` handler to keep the menu open. For a selectable or radio option, selection still updates; only the close is canceled. That is how you leave a nested submenu open while changing several choices. See [Radio group (nested)](#radio-group-nested).
 
 <FileSource src="/framed/ContextMenu/ContextMenuPreventDefault" />
