@@ -1,29 +1,4 @@
 <script context="module">
-  /**
-   * Depth-first search to find a node by id; returns an array
-   * of nodes from the initial node to the matching leaf.
-   * @template {{ id: string | number; nodes?: TNode[] }} TNode
-   * @returns {null | TNode[]}
-   */
-  function findNodeById(node, id) {
-    if (node === null) return null;
-    if (node.id === id) return [node];
-    if (!Array.isArray(node.nodes)) {
-      return null;
-    }
-
-    for (const child of node.nodes) {
-      const nodes = findNodeById(child, id);
-
-      if (Array.isArray(nodes)) {
-        nodes.unshift(node);
-        return nodes;
-      }
-    }
-
-    return null;
-  }
-
   function isUnderCollapsedSubtree(el) {
     return Boolean(el.closest("ul.bx--tree-node--hidden"));
   }
@@ -72,46 +47,137 @@
   }
 
   /**
-   * Recursively flattens a tree of nodes into a single array
-   * @template {object} Node
-   * @returns {Array<Node>}
+   * Sentinel parent id for top-level roots in
+   * `cachedParentIdById` / `cachedChildIdsByParentId`.
+   * Symbol so it cannot collide with a real `Node["id"]`.
+   */
+  const ROOT_PARENT_ID = Symbol("tree-view-root-parent");
+
+  /**
+   * Pre-order flatten of every node via an explicit stack.
+   * @template {{ id: string | number; nodes?: TNode[] }} TNode
+   * @param {ReadonlyArray<TNode>} nodes
+   * @returns {Array<TNode>}
    */
   function traverse(nodes) {
-    return nodes.reduce((acc, node) => {
-      acc.push(node);
+    const out = [];
+    /** @type {TNode[]} */
+    const stack = [];
+    for (let i = nodes.length - 1; i >= 0; i--) {
+      stack.push(nodes[i]);
+    }
+    while (stack.length > 0) {
+      const node = stack.pop();
+      out.push(node);
       if (Array.isArray(node.nodes) && node.nodes.length > 0) {
-        acc.push(...traverse(node.nodes));
+        for (let i = node.nodes.length - 1; i >= 0; i--) {
+          stack.push(node.nodes[i]);
+        }
       }
-      return acc;
-    }, []);
+    }
+    return out;
   }
 
   /**
-   * Like `traverse` but only descends into expanded nodes.
-   * Used for Shift+Click range selection (only visible nodes).
-   * @template {object} Node
-   * @returns {Array<Node>}
+   * Like `traverse`, but only into expanded nodes.
+   * Used for Shift+Click range selection over visible rows.
+   * @template {{ id: string | number; nodes?: TNode[] }} TNode
+   * @param {ReadonlyArray<TNode>} nodes
+   * @param {Set<string | number>} expandedIdsSet
+   * @returns {Array<TNode>}
    */
   function traverseVisible(nodes, expandedIdsSet) {
-    return nodes.reduce((acc, node) => {
-      acc.push(node);
+    const out = [];
+    /** @type {Array<{ list: ReadonlyArray<TNode>; index: number }>} */
+    const stack = [{ list: nodes, index: 0 }];
+    while (stack.length > 0) {
+      const frame = stack[stack.length - 1];
+      if (frame.index >= frame.list.length) {
+        stack.pop();
+        continue;
+      }
+      const node = frame.list[frame.index++];
+      out.push(node);
       if (
         Array.isArray(node.nodes) &&
         node.nodes.length > 0 &&
         expandedIdsSet.has(node.id)
       ) {
-        acc.push(...traverseVisible(node.nodes, expandedIdsSet));
+        stack.push({ list: node.nodes, index: 0 });
       }
-      return acc;
-    }, []);
+    }
+    return out;
   }
 
   /**
-   * Sentinel "parent id" used in `cachedParentIdById`/`cachedChildIdsByParentId`
-   * to represent the implicit parent of top-level tree roots (the forest itself).
-   * A Symbol is used so it can never collide with a real `Node["id"]`.
+   * Build node, parent, and child-id maps in one walk.
+   * Leaves the flat array to `ensureFlatIndex`.
+   * @template {{ id: string | number; nodes?: TNode[] }} TNode
+   * @param {ReadonlyArray<TNode>} nodes
+   * @returns {{
+   *   nodeMap: Map<TNode["id"], TNode>,
+   *   parentIdById: Map<TNode["id"], TNode["id"] | typeof ROOT_PARENT_ID>,
+   *   childIdsByParentId: Map<TNode["id"] | typeof ROOT_PARENT_ID, Array<TNode["id"]>>,
+   * }}
    */
-  const ROOT_PARENT_ID = Symbol("tree-view-root-parent");
+  function buildTreeMaps(nodes) {
+    /** @type {Map<TNode["id"], TNode>} */
+    const nodeMap = new Map();
+    /** @type {Map<TNode["id"], TNode["id"] | typeof ROOT_PARENT_ID>} */
+    const parentIdById = new Map();
+    /** @type {Map<TNode["id"] | typeof ROOT_PARENT_ID, Array<TNode["id"]>>} */
+    const childIdsByParentId = new Map();
+
+    const rootIds = [];
+    for (const node of nodes) {
+      rootIds.push(node.id);
+    }
+    childIdsByParentId.set(ROOT_PARENT_ID, rootIds);
+
+    /** @type {Array<{ node: TNode; parentId: TNode["id"] | typeof ROOT_PARENT_ID }>} */
+    const stack = [];
+    for (let i = nodes.length - 1; i >= 0; i--) {
+      stack.push({ node: nodes[i], parentId: ROOT_PARENT_ID });
+    }
+    while (stack.length > 0) {
+      const { node, parentId } = stack.pop();
+      nodeMap.set(node.id, node);
+      parentIdById.set(node.id, parentId);
+      if (Array.isArray(node.nodes) && node.nodes.length > 0) {
+        const childIds = [];
+        for (const child of node.nodes) {
+          childIds.push(child.id);
+        }
+        childIdsByParentId.set(node.id, childIds);
+        for (let i = node.nodes.length - 1; i >= 0; i--) {
+          stack.push({ node: node.nodes[i], parentId: node.id });
+        }
+      }
+    }
+
+    return { nodeMap, parentIdById, childIdsByParentId };
+  }
+
+  /**
+   * Ancestor ids from forest root to the parent of `id`.
+   * Omits `id`. Empty for top-level roots and unknown ids.
+   * @template {string | number} Id
+   * @param {Id} id
+   * @param {Map<Id, Id | typeof ROOT_PARENT_ID> | null} parentIdById
+   * @returns {Id[]}
+   */
+  function getAncestorIds(id, parentIdById) {
+    if (!parentIdById) return [];
+    /** @type {Id[]} */
+    const ancestors = [];
+    let parentId = parentIdById.get(id);
+    while (parentId != null && parentId !== ROOT_PARENT_ID) {
+      ancestors.push(/** @type {Id} */ (parentId));
+      parentId = parentIdById.get(/** @type {Id} */ (parentId));
+    }
+    ancestors.reverse();
+    return ancestors;
+  }
 
   /**
    * IDs to select for multiselect expansion from `node` (non-disabled only).
@@ -296,7 +362,8 @@
    * ```
    */
   export function expandAll() {
-    expandedIdsSet = new Set(nodeIds);
+    ensureFlatIndex();
+    expandedIdsSet = new Set(cachedNodeIds);
     expandedIds = Array.from(expandedIdsSet);
     lastExpandedIdsRef = expandedIds;
   }
@@ -330,7 +397,8 @@
    * ```
    */
   export function expandNodes(filterNode = () => true) {
-    const nodesToExpand = flattenedNodes
+    ensureFlatIndex();
+    const nodesToExpand = cachedFlattenedNodes
       .filter(
         (node) =>
           filterNode(node) ||
@@ -358,7 +426,8 @@
    * ```
    */
   export function collapseNodes(filterNode = () => true) {
-    for (const node of flattenedNodes) {
+    ensureFlatIndex();
+    for (const node of cachedFlattenedNodes) {
       if (expandedIdsSet.has(node.id) && filterNode(node)) {
         expandedIdsSet.delete(node.id);
       }
@@ -385,47 +454,37 @@
    */
   export function showNode(id, options = {}) {
     const { expand = true, select = true, focus = true } = options;
+    // cachedNodeMap rebuilds only when `nodes` identity changes.
+    // In-place mutations stay invisible until then.
+    const targetNode = cachedNodeMap?.get(id);
+    if (!targetNode) return;
 
-    for (const child of nodes) {
-      const path = findNodeById(child, id);
-
-      if (path) {
-        const ids = path.map((node) => node.id);
-        const lastId = ids[ids.length - 1];
-
-        if (expand) {
-          const ancestorIds = ids.slice(0, -1);
-          for (const ancestorId of ancestorIds) {
-            expandedIdsSet.add(ancestorId);
-          }
-          expandedIds = Array.from(expandedIdsSet);
-          lastExpandedIdsRef = expandedIds;
-        }
-
-        if (select) {
-          activeId = lastId;
-          const targetNode = path[path.length - 1];
-          if (selectionMode === "checkbox") {
-            checkedIds = toggleCheckboxNode(nodes, checkedIds, lastId, true, {
-              cascade: checkMode !== "node",
-            });
-          } else if (isMultiselect && multiselectMode !== "node") {
-            setSelectedIds(
-              multiselectExpansionIds(targetNode, multiselectMode),
-            );
-          } else {
-            setSelectedIds([lastId]);
-          }
-        }
-
-        if (focus) {
-          tick().then(() => {
-            ref?.querySelector(`[id="${CSS.escape(lastId)}"]`)?.focus();
-          });
-        }
-
-        break;
+    if (expand) {
+      const ancestorIds = getAncestorIds(id, cachedParentIdById);
+      for (const ancestorId of ancestorIds) {
+        expandedIdsSet.add(ancestorId);
       }
+      expandedIds = Array.from(expandedIdsSet);
+      lastExpandedIdsRef = expandedIds;
+    }
+
+    if (select) {
+      activeId = id;
+      if (selectionMode === "checkbox") {
+        checkedIds = toggleCheckboxNode(nodes, checkedIds, id, true, {
+          cascade: checkMode !== "node",
+        });
+      } else if (isMultiselect && multiselectMode !== "node") {
+        setSelectedIds(multiselectExpansionIds(targetNode, multiselectMode));
+      } else {
+        setSelectedIds([id]);
+      }
+    }
+
+    if (focus) {
+      tick().then(() => {
+        ref?.querySelector(`[id="${CSS.escape(String(id))}"]`)?.focus();
+      });
     }
   }
 
@@ -592,6 +651,16 @@
     const childIds = cachedChildIdsByParentId?.get(parentId);
     if (!childIds) return [];
     return childIds.filter((childId) => childId !== id);
+  }
+
+  /**
+   * Build `cachedFlattenedNodes` and `cachedNodeIds` when expand APIs
+   * need them. The `nodes` reactive path only builds maps.
+   */
+  function ensureFlatIndex() {
+    if (cachedFlattenedNodes != null) return;
+    cachedFlattenedNodes = traverse(nodes);
+    cachedNodeIds = cachedFlattenedNodes.map((node) => node.id);
   }
 
   /** @type {Node["id"] | null} */
@@ -969,6 +1038,7 @@
 
       if (isSelectAll) {
         event.preventDefault();
+        ensureFlatIndex();
         const visibleEls = new Map(
           Array.from(
             ref?.querySelectorAll(
@@ -976,7 +1046,7 @@
             ) ?? [],
           ).map((el) => [el.id, el]),
         );
-        for (const n of flattenedNodes) {
+        for (const n of cachedFlattenedNodes) {
           if (n.disabled) continue;
           const el = visibleEls.get(String(n.id));
           if (!el || isUnderCollapsedSubtree(el)) continue;
@@ -1026,44 +1096,17 @@
 
   $: if (nodes !== cachedNodes) {
     cachedNodes = nodes;
-    cachedFlattenedNodes = traverse(nodes);
-    cachedNodeIds = cachedFlattenedNodes.map((node) => node.id);
-    cachedNodeMap = new Map(
-      cachedFlattenedNodes.map((node) => [node.id, node]),
-    );
-
-    const parentIdById = new Map();
-    const childIdsByParentId = new Map();
-
-    // Top-level roots' implicit parent is the forest itself.
-    childIdsByParentId.set(
-      ROOT_PARENT_ID,
-      nodes.map((node) => node.id),
-    );
-    for (const node of nodes) {
-      parentIdById.set(node.id, ROOT_PARENT_ID);
-    }
-
-    for (const node of cachedFlattenedNodes) {
-      if (Array.isArray(node.nodes) && node.nodes.length > 0) {
-        childIdsByParentId.set(
-          node.id,
-          node.nodes.map((child) => child.id),
-        );
-        for (const child of node.nodes) {
-          parentIdById.set(child.id, node.id);
-        }
-      }
-    }
-
-    cachedParentIdById = parentIdById;
-    cachedChildIdsByParentId = childIdsByParentId;
+    const maps = buildTreeMaps(nodes);
+    cachedNodeMap = maps.nodeMap;
+    cachedParentIdById = maps.parentIdById;
+    cachedChildIdsByParentId = maps.childIdsByParentId;
+    // Flat list stays null until expandAll / expandNodes / collapseNodes / Ctrl+A.
+    cachedFlattenedNodes = null;
+    cachedNodeIds = null;
   }
 
   $: multiselectStore.set(isMultiselect);
   $: selectionModeStore.set(selectionMode);
-  $: flattenedNodes = cachedFlattenedNodes ?? [];
-  $: nodeIds = cachedNodeIds ?? [];
 
   /** @type {ReadonlyArray<Node["id"]>} */
   let lastIndeterminateIdsPushed = indeterminateIds;
@@ -1137,24 +1180,20 @@
     if (autoCollapse && activeId !== prevActiveIdForAutoCollapse) {
       prevActiveIdForAutoCollapse = activeId;
 
-      for (const child of nodes) {
-        const path = findNodeById(child, activeId);
-        if (path) {
-          const ancestorIds = path.slice(0, -1).map((n) => n.id);
+      if (cachedNodeMap?.has(activeId)) {
+        const ancestorIds = getAncestorIds(activeId, cachedParentIdById);
 
-          // For each ancestor, collapse its siblings.
-          for (const ancestorId of ancestorIds) {
-            const siblingIds = getCachedSiblingIds(ancestorId);
-            for (const siblingId of siblingIds) {
-              expandedIdsSet.delete(siblingId);
-            }
-            expandedIdsSet.add(ancestorId);
+        // For each ancestor, collapse its siblings.
+        for (const ancestorId of ancestorIds) {
+          const siblingIds = getCachedSiblingIds(ancestorId);
+          for (const siblingId of siblingIds) {
+            expandedIdsSet.delete(siblingId);
           }
-
-          expandedIds = Array.from(expandedIdsSet);
-          lastExpandedIdsRef = expandedIds;
-          break;
+          expandedIdsSet.add(ancestorId);
         }
+
+        expandedIds = Array.from(expandedIdsSet);
+        lastExpandedIdsRef = expandedIds;
       }
     }
 
