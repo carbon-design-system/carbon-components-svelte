@@ -51,7 +51,7 @@
   <PaginationItem
     page={fromIndex + 1}
     on:click={() => {
-      dispatch("select", { index: fromIndex });
+      dispatch("select", { index: fromIndex + 1 });
     }}
   >
     Page
