@@ -19,6 +19,12 @@ export function getVisibleRange({
   overscan = 3,
   maxItems = undefined,
 }) {
+  // A non-positive (or NaN) itemHeight can't be virtualized; the math below
+  // divides by it and yields NaN indices, so fall back to the full range.
+  if (!(itemHeight > 0)) {
+    return { startIndex: 0, endIndex: itemCount };
+  }
+
   const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
   let endIndex = Math.min(
     itemCount,

@@ -514,6 +514,15 @@ describe("getVisibleRange", () => {
       endIndex: 5,
     });
   });
+
+  test("falls back to the full range for a non-positive or NaN itemHeight", () => {
+    for (const itemHeight of [0, -1, Number.NaN]) {
+      expect(getVisibleRange({ ...base, itemHeight, scrollTop: 100 })).toEqual({
+        startIndex: 0,
+        endIndex: base.itemCount,
+      });
+    }
+  });
 });
 
 describe("getBoundedScrollTop", () => {
