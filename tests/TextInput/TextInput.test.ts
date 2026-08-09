@@ -60,6 +60,26 @@ describe("TextInput", () => {
     );
   });
 
+  it("should show the character counter when maxCount is set", () => {
+    render(TextInput, {
+      props: { maxCount: 100, value: "Test text" },
+    });
+
+    expect(screen.getByText("9/100")).toBeInTheDocument();
+  });
+
+  it("should not show the character counter when maxCount is unset", () => {
+    render(TextInput, { props: { value: "Test text" } });
+
+    expect(screen.queryByText(/^9\//)).not.toBeInTheDocument();
+  });
+
+  it("should set maxlength when maxCount is set", () => {
+    render(TextInput, { props: { maxCount: 100 } });
+
+    expect(screen.getByRole("textbox")).toHaveAttribute("maxlength", "100");
+  });
+
   it("should handle invalid state", () => {
     render(TextInput, {
       props: { invalid: true, invalidText: "Invalid input" },
