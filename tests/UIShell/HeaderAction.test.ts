@@ -79,6 +79,11 @@ describe("HeaderAction", () => {
       await user.click(button);
       expect(screen.getByTestId("panel-content")).toBeInTheDocument();
 
+      // dismiss() defers window listener registration by a macrotask; flush
+      // it before Escape so the keydown isn't dispatched before the listener
+      // is attached.
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
       await user.keyboard("{Escape}");
 
       await waitFor(() =>
