@@ -54,7 +54,8 @@
         if (!(node instanceof Element)) return NodeFilter.FILTER_SKIP;
         if (
           node.classList.contains("bx--tree-node--disabled") ||
-          node.classList.contains("bx--tree-node--hidden")
+          node.classList.contains("bx--tree-node--hidden") ||
+          node.classList.contains("bx--tree-node--filtered-out")
         ) {
           return NodeFilter.FILTER_REJECT;
         }
@@ -169,8 +170,8 @@
    * @property {ReadonlyArray<Id>} selectedIds - The full set of selected node ids after the change
    * @property {Array<Id>} added - Node ids selected since the previous change
    * @property {Array<Id>} removed - Node ids deselected since the previous change
-   * @slot {{ node: Node & { expanded: boolean; leaf: boolean; selected: boolean; } }}
-   * @slot {{ node: Node & { expanded: boolean; leaf: boolean; selected: boolean; } }} childNodes
+   * @slot {{ node: Node & { expanded: boolean; leaf: boolean; selected: boolean; match: [number, number] | null; } }}
+   * @slot {{ node: Node & { expanded: boolean; leaf: boolean; selected: boolean; match: [number, number] | null; } }} childNodes
    * @event select
    * @type {Node & { expanded: boolean; leaf: boolean; selected: boolean }}
    * @event toggle
@@ -243,6 +244,15 @@
    * @type {'node' | 'shallow' | 'deep'}
    */
   export let multiselectMode = "node";
+
+  /**
+   * Filter rows by a case-insensitive substring match on node text.
+   * Non-matching rows are hidden in place instead of unmounted, and the
+   * ancestors of a match expand automatically until the filter clears.
+   * An empty string means no filtering.
+   * @type {string}
+   */
+  export let filterText = "";
 
   /**
    * Programmatically expand all nodes
@@ -422,6 +432,8 @@
     tick,
   } from "svelte";
   import { writable } from "svelte/store";
+  import { matchTreeNodes } from "../utils/matchTreeNodes";
+  import TreeViewLabel from "./TreeViewLabel.svelte";
   import TreeViewNodeList from "./TreeViewNodeList.svelte";
 
   const dispatch = createEventDispatcher();
@@ -441,6 +453,13 @@
   const selectedIdsSetStore = writable(new Set(selectedIds));
   /** @type {import("svelte/store").Writable<Set<Node["id"]>>} */
   const expandedIdsSetStore = writable(new Set(expandedIds));
+  /**
+   * Ids hidden by `filterText`. Empty whenever no filter is active.
+   * @type {import("svelte/store").Writable<Set<Node["id"]>>}
+   */
+  const filteredOutIdsSetStore = writable(new Set());
+  /** @type {import("svelte/store").Writable<Map<Node["id"], [number, number]>>} */
+  const matchesStore = writable(new Map());
 
   /** @type {HTMLElement | null} */
   let ref = null;
@@ -552,6 +571,23 @@
   /** @type {ReadonlyArray<Node["id"]>} */
   let lastExpandedIdsPushed = expandedIds;
 
+  /** @type {ReadonlyArray<Node> | null} */
+  let cachedFilterNodes = null;
+  /** @type {string | null} */
+  let cachedFilterText = null;
+  /**
+   * The consumer's `expandedIds` as of the moment filtering began, restored
+   * when the filter clears. `null` while no filter is active.
+   * @type {Set<Node["id"]> | null}
+   */
+  let preFilterExpandedIds = null;
+  /**
+   * Ids expanded by the filter itself, as opposed to by the consumer or by a
+   * manual expansion made while filtering.
+   * @type {Set<Node["id"]>}
+   */
+  let filterExpandedIds = new Set();
+
   /**
    * @returns {boolean}
    */
@@ -559,6 +595,19 @@
     if (a.length !== b.length) return false;
     for (let i = 0; i < a.length; i++) {
       if (a[i] !== b[i]) return false;
+    }
+    return true;
+  }
+
+  /**
+   * @param {Set<Node["id"]>} a
+   * @param {Set<Node["id"]>} b
+   * @returns {boolean}
+   */
+  function idSetsEqual(a, b) {
+    if (a.size !== b.size) return false;
+    for (const id of a) {
+      if (!b.has(id)) return false;
     }
     return true;
   }
@@ -689,6 +738,77 @@
     lastExpandedIdsRef = expandedIds;
   }
 
+  /**
+   * Expand the ancestors of the current matches, remembering which ids the
+   * filter opened so clearing it can put them back.
+   * @param {Set<Node["id"]>} ancestorIds
+   * @returns {Set<Node["id"]> | null} The next expanded set, or `null` when unchanged.
+   */
+  function expandFilterAncestors(ancestorIds) {
+    if (preFilterExpandedIds === null) {
+      preFilterExpandedIds = new Set(expandedIdsSet);
+    }
+
+    const next = new Set(expandedIdsSet);
+    for (const id of ancestorIds) {
+      if (next.has(id)) continue;
+      next.add(id);
+      filterExpandedIds.add(id);
+    }
+
+    return next.size === expandedIdsSet.size ? null : next;
+  }
+
+  /**
+   * Undo the filter's expansions, keeping any node the consumer expanded by
+   * hand while the filter was active.
+   * @returns {Set<Node["id"]> | null} The next expanded set, or `null` when unchanged.
+   */
+  function restoreFilterExpansion() {
+    if (preFilterExpandedIds === null) return null;
+
+    const next = new Set(preFilterExpandedIds);
+    for (const id of expandedIdsSet) {
+      if (!filterExpandedIds.has(id)) next.add(id);
+    }
+
+    preFilterExpandedIds = null;
+    filterExpandedIds = new Set();
+
+    return idSetsEqual(next, expandedIdsSet) ? null : next;
+  }
+
+  /**
+   * Recompute which rows the filter hides and which matches to highlight.
+   * @param {ReadonlyArray<Node>} sourceNodes
+   * @param {Array<Node>} allNodes - `sourceNodes` flattened.
+   * @param {string} text
+   * @returns {Set<Node["id"]> | null} The next expanded set, or `null` when unchanged.
+   */
+  function resolveFilter(sourceNodes, allNodes, text) {
+    if (text.trim() === "") {
+      filteredOutIdsSetStore.set(new Set());
+      matchesStore.set(new Map());
+      return restoreFilterExpansion();
+    }
+
+    const { visibleIds, ancestorIds, matches } = matchTreeNodes(
+      sourceNodes,
+      text,
+    );
+
+    /** @type {Set<Node["id"]>} */
+    const filteredOutIds = new Set();
+    for (const node of allNodes) {
+      if (!visibleIds.has(node.id)) filteredOutIds.add(node.id);
+    }
+
+    filteredOutIdsSetStore.set(filteredOutIds);
+    matchesStore.set(matches);
+
+    return expandFilterAncestors(ancestorIds);
+  }
+
   /** @type {(node: Node) => void} */
   function focusNode(node) {
     dispatch("focus", withLiveState(node));
@@ -706,6 +826,8 @@
     expandedNodeIds,
     selectedIdsSetStore,
     expandedIdsSetStore,
+    filteredOutIdsSetStore,
+    matchesStore,
     multiselectStore,
     clickNode,
     selectNode,
@@ -868,7 +990,7 @@
         const visibleEls = new Map(
           Array.from(
             ref?.querySelectorAll(
-              '[role="treeitem"]:not(.bx--tree-node--hidden)',
+              '[role="treeitem"]:not(.bx--tree-node--hidden):not(.bx--tree-node--filtered-out)',
             ) ?? [],
           ).map((el) => [el.id, el]),
         );
@@ -894,14 +1016,21 @@
 
   /** @type {ReadonlyArray<Node> | null} */
   let prevNodesForFirstTab = null;
+  let prevFilterTextForFirstTab = filterText;
 
   afterUpdate(() => {
     if (!ref) return;
-    if (nodes === prevNodesForFirstTab) return;
+    const filterChanged = filterText !== prevFilterTextForFirstTab;
+    if (nodes === prevNodesForFirstTab && !filterChanged) return;
     prevNodesForFirstTab = nodes;
+    prevFilterTextForFirstTab = filterText;
+
+    // A filter change can hide the row currently holding the roving tabindex,
+    // so re-seed from scratch rather than leaving a hidden tab stop behind.
+    if (filterChanged) resetNodeTabIndices(ref);
 
     const firstFocusableNode = ref.querySelector(
-      ".bx--tree-node:not(.bx--tree-node--disabled):not(.bx--tree-node--hidden)",
+      ".bx--tree-node:not(.bx--tree-node--disabled):not(.bx--tree-node--hidden):not(.bx--tree-node--filtered-out)",
     );
 
     if (firstFocusableNode instanceof HTMLElement) {
@@ -959,6 +1088,25 @@
   $: multiselectStore.set(multiselect);
   $: flattenedNodes = cachedFlattenedNodes ?? [];
   $: nodeIds = cachedNodeIds ?? [];
+
+  $: {
+    if (nodes !== cachedFilterNodes || filterText !== cachedFilterText) {
+      cachedFilterNodes = nodes;
+      cachedFilterText = filterText;
+
+      const nextExpandedIdsSet = resolveFilter(
+        nodes,
+        flattenedNodes,
+        filterText,
+      );
+
+      if (nextExpandedIdsSet) {
+        expandedIdsSet = nextExpandedIdsSet;
+        expandedIds = Array.from(expandedIdsSet);
+        lastExpandedIdsRef = expandedIds;
+      }
+    }
+  }
 
   let prevActiveIdForAutoCollapse = activeId;
 
@@ -1071,7 +1219,9 @@
   on:keydown|stopPropagation={handleKeyDown}
 >
   <TreeViewNodeList root {nodes} let:node>
-    <slot {node}> {node.text} </slot>
+    <slot {node}>
+      <TreeViewLabel text={node.text} match={node.match} />
+    </slot>
     <svelte:fragment slot="childNodes" let:node>
       <slot name="childNodes" {node} />
     </svelte:fragment>
