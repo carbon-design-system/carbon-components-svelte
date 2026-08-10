@@ -80,6 +80,7 @@
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import CaretRight from "../icons/CaretRight.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
+  import { createSubmenuHoverIntent } from "../utils/submenuHoverIntent.js";
   import { uniqueId } from "../utils/uniqueId.js";
   import Menu from "./Menu.svelte";
 
@@ -94,8 +95,12 @@
   const ctxRadioGroup = getContext("carbon:MenuItemRadioGroup");
 
   let submenuOpen = false;
-  let hoverTimeout;
-  let closeTimeout;
+  const hoverIntent = createSubmenuHoverIntent(
+    (value) => {
+      submenuOpen = value;
+    },
+    { openDelay: HOVER_DELAY_MS, closeDelay: HOVER_DELAY_MS },
+  );
   // `selected` implies the checkbox variant. Latch it instead of writing back
   // to `selectable` so deselecting the item keeps its role and indentation.
   let hasBeenSelected = false;
@@ -133,28 +138,20 @@
 
   function openSubmenu() {
     if (disabled) return;
-    clearTimeout(hoverTimeout);
-    clearTimeout(closeTimeout);
-    submenuOpen = true;
+    hoverIntent.open();
   }
 
   function scheduleOpenSubmenu() {
     if (disabled) return;
-    clearTimeout(closeTimeout);
-    clearTimeout(hoverTimeout);
-    hoverTimeout = setTimeout(openSubmenu, HOVER_DELAY_MS);
+    hoverIntent.scheduleOpen();
   }
 
   function scheduleCloseSubmenu() {
-    clearTimeout(hoverTimeout);
-    clearTimeout(closeTimeout);
-    closeTimeout = setTimeout(() => {
-      submenuOpen = false;
-    }, HOVER_DELAY_MS);
+    hoverIntent.scheduleClose();
   }
 
   function cancelCloseSubmenu() {
-    clearTimeout(closeTimeout);
+    hoverIntent.cancelClose();
   }
 
   onMount(() => {
@@ -173,8 +170,7 @@
     }
 
     return () => {
-      clearTimeout(hoverTimeout);
-      clearTimeout(closeTimeout);
+      hoverIntent.cancel();
       unsubscribe?.();
     };
   });
