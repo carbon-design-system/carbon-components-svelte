@@ -353,6 +353,35 @@
   export let indeterminateIds = [];
 
   /**
+   * Enable virtualization for large trees. Virtualization renders only the
+   * rows currently visible in the viewport, improving performance for large
+   * datasets.
+   *
+   * Virtualization is opt-in. TreeView cannot tell from `nodes` alone whether
+   * the tree will stay small or grow through expansion, so it does not
+   * auto-enable based on row count. Set `virtualize={true}` to enable with
+   * default settings, or pass a configuration object to customize. Leave
+   * `undefined` for the default recursive rendering.
+   *
+   * Row height is derived from `size` (32px default, 24px compact).
+   *
+   * @type {undefined | boolean | {
+   *   maxVisibleRows?: number,
+   *   containerHeight?: number | string,
+   *   overscan?: number,
+   * }}
+   */
+  export let virtualize = undefined;
+
+  /**
+   * Reference to the scrollable container when `virtualize` is enabled.
+   * `null` otherwise.
+   * @type {null | HTMLElement}
+   * @bindable readonly
+   */
+  export let scrollContainerRef = null;
+
+  /**
    * Programmatically expand all expandable nodes (those with loaded children
    * or `hasChildren: true`). Leaf ids are omitted — they do not affect
    * expansion.
@@ -478,9 +507,11 @@
     if (select) {
       activeId = id;
       if (selectionMode === "checkbox") {
-        checkedIds = toggleCheckboxNode(nodes, checkedIds, id, true, {
-          cascade: checkMode !== "node",
-        });
+        setCheckedIds(
+          toggleCheckboxNode(nodes, checkedIds, id, true, {
+            cascade: checkMode !== "node",
+          }),
+        );
       } else if (isMultiselect && multiselectMode !== "node") {
         setSelectedIds(multiselectExpansionIds(targetNode, multiselectMode));
       } else {
@@ -490,6 +521,10 @@
 
     if (focus) {
       tick().then(() => {
+        if (virtualConfig && scrollContainerRef) {
+          focusVirtualRowById(id);
+          return;
+        }
         ref?.querySelector(`[id="${CSS.escape(String(id))}"]`)?.focus();
       });
     }
@@ -534,12 +569,20 @@
     tick,
   } from "svelte";
   import { writable } from "svelte/store";
-  import { isExpandableNode } from "../utils/isExpandableNode.js";
   import {
     resolveCheckboxState,
     toggleCheckboxNode,
   } from "../utils/treeCheckboxState.js";
+  import {
+    createTreeVirtualIndex,
+    isExpandableNode,
+  } from "../utils/treeVirtualIndex.js";
+  import {
+    getVisibleRange,
+    scrollHighlightedIntoView,
+  } from "../utils/virtualize.js";
   import TreeViewNodeList from "./TreeViewNodeList.svelte";
+  import TreeViewNodeVirtual from "./TreeViewNodeVirtual.svelte";
 
   const dispatch = createEventDispatcher();
   const labelId = `label-${Math.random().toString(36)}`;
@@ -679,6 +722,14 @@
   let selectedIdsSet = new Set(selectedIds);
   /** @type {ReadonlyArray<Node["id"]>} */
   let lastSelectedIdsRef = selectedIds;
+  /** @type {Set<Node["id"]>} */
+  let checkedIdsSet = new Set(checkedIds);
+  /** @type {ReadonlyArray<Node["id"]>} */
+  let lastCheckedIdsRef = checkedIds;
+  /** @type {Set<Node["id"]>} */
+  let indeterminateIdsSet = new Set(indeterminateIds);
+  /** @type {ReadonlyArray<Node["id"]>} */
+  let lastIndeterminateIdsRef = indeterminateIds;
   /** @type {Node["id"]} */
   let lastActiveIdPushed = activeId;
   /** @type {ReadonlyArray<Node["id"]>} */
@@ -710,8 +761,8 @@
       ...node,
       expanded: expandedIdsSet.has(node.id),
       selected: selectedIdsSet.has(node.id),
-      checked: checkedIds.includes(node.id),
-      indeterminate: indeterminateIds.includes(node.id),
+      checked: checkedIdsSet.has(node.id),
+      indeterminate: indeterminateIdsSet.has(node.id),
     };
   }
 
@@ -727,6 +778,16 @@
     selectedIds = next;
     selectedIdsSet = new Set(next);
     lastSelectedIdsRef = next;
+  }
+
+  /**
+   * Same sync-mirror pattern as `setSelectedIds` for checkbox state.
+   * @type {(next: ReadonlyArray<Node["id"]>) => void}
+   */
+  function setCheckedIds(next) {
+    checkedIds = next;
+    checkedIdsSet = new Set(next);
+    lastCheckedIdsRef = next;
   }
 
   /** @type {(node: Node, event?: Event) => void} */
@@ -757,12 +818,14 @@
 
       if (!clickedCheckbox) return;
 
-      checkedIds = toggleCheckboxNode(
-        nodes,
-        checkedIds,
-        node.id,
-        !checkedIds.includes(node.id),
-        { cascade: checkMode !== "node" },
+      setCheckedIds(
+        toggleCheckboxNode(
+          nodes,
+          checkedIds,
+          node.id,
+          !checkedIdsSet.has(node.id),
+          { cascade: checkMode !== "node" },
+        ),
       );
       dispatch("check", withLiveState(node));
       return;
@@ -874,6 +937,7 @@
 
   /** @type {(node: Node) => void} */
   function focusNode(node) {
+    if (virtualConfig) virtualFocusedId = node.id;
     dispatch("focus", withLiveState(node));
   }
 
@@ -1104,6 +1168,7 @@
     return () => {
       setMultiselectKeyListeners(false);
       if (typeAheadTimeoutId) clearTimeout(typeAheadTimeoutId);
+      resizeObserver?.disconnect();
     };
   });
 
@@ -1137,13 +1202,28 @@
         },
       );
       if (!arrayIdsEqual(checkboxState.checkedIds, checkedIds)) {
-        checkedIds = checkboxState.checkedIds;
+        setCheckedIds(checkboxState.checkedIds);
       }
       if (!arrayIdsEqual(checkboxState.indeterminateIds, indeterminateIds)) {
         indeterminateIds = checkboxState.indeterminateIds;
+        indeterminateIdsSet = new Set(indeterminateIds);
+        lastIndeterminateIdsRef = indeterminateIds;
       }
     } else if (indeterminateIds.length > 0) {
       indeterminateIds = [];
+      indeterminateIdsSet = new Set();
+      lastIndeterminateIdsRef = indeterminateIds;
+    }
+
+    // External `bind:checkedIds` / `bind:indeterminateIds` updates that
+    // bypass `setCheckedIds` still need the sync mirrors refreshed.
+    if (checkedIds !== lastCheckedIdsRef) {
+      checkedIdsSet = new Set(checkedIds);
+      lastCheckedIdsRef = checkedIds;
+    }
+    if (indeterminateIds !== lastIndeterminateIdsRef) {
+      indeterminateIdsSet = new Set(indeterminateIds);
+      lastIndeterminateIdsRef = indeterminateIds;
     }
 
     if (!arrayIdsEqual(indeterminateIds, lastIndeterminateIdsPushed)) {
@@ -1170,6 +1250,466 @@
           indeterminateIds: nextIndeterminateIds,
         });
       });
+    }
+  }
+
+  let scrollTop = 0;
+
+  /** Row id that currently owns keyboard focus in the virtual path.
+   * Kept separate from `activeId` so arrow moves match non-virtual
+   * (focus only) while still anchoring tabindex across remounts. */
+  let virtualFocusedId = undefined;
+
+  /** Pixel height of the scroll container, measured from the DOM when
+   * `containerHeight` is set to a non-numeric value (e.g. `"80%"`).
+   * Falls back to a derived px value otherwise. */
+  let measuredContainerHeight = 0;
+
+  $: virtualConfig = virtualize
+    ? {
+        maxVisibleRows: 10,
+        containerHeight: undefined,
+        overscan: 3,
+        ...(typeof virtualize === "object" ? virtualize : {}),
+        itemHeight: size === "compact" ? 24 : 32,
+      }
+    : null;
+
+  // Derive from `expandedIds` (reassigned synchronously at every mutation
+  // site) rather than `$expandedIdsSetStore`. The store is only `.set()` from
+  // inside a reactive block, which Svelte 3/4 doesn't track as an assignment
+  // for reactive ordering — so subscribers re-run a flush late and the
+  // rendered window lags one `tick()` behind expand/collapse. Reading
+  // `expandedIds` keeps the index in the same flush as the change.
+  //
+  // Prefer the live `expandedIdsSet` mirror when it is already in sync with
+  // `expandedIds` (expandNode / expandAll). Fall back to a temporary Set when
+  // an external `bind:expandedIds` update has not been mirrored yet (this
+  // reactive block runs before the sync block later in the file).
+  $: virtualIndex = virtualConfig
+    ? createTreeVirtualIndex(
+        nodes,
+        expandedIds === lastExpandedIdsRef
+          ? expandedIdsSet
+          : new Set(expandedIds),
+      )
+    : null;
+
+  /** CSS height value applied to the scroll container. Strings pass through;
+   * numbers/undefined become px. */
+  $: containerHeightStyle = virtualConfig
+    ? typeof virtualConfig.containerHeight === "string"
+      ? virtualConfig.containerHeight
+      : `${virtualConfig.containerHeight ?? virtualConfig.maxVisibleRows * virtualConfig.itemHeight}px`
+    : undefined;
+
+  /** Pixel height used for windowing math. */
+  function getVirtualContainerHeight() {
+    if (!virtualConfig) return 0;
+    if (typeof virtualConfig.containerHeight === "number") {
+      return virtualConfig.containerHeight;
+    }
+    if (typeof virtualConfig.containerHeight === "string") {
+      return (
+        measuredContainerHeight ||
+        virtualConfig.maxVisibleRows * virtualConfig.itemHeight
+      );
+    }
+    return virtualConfig.maxVisibleRows * virtualConfig.itemHeight;
+  }
+
+  // If the visible list shrinks (e.g. filter removed rows the user had
+  // scrolled past, or many parents collapsed), the previous scrollTop can
+  // exceed the new max — leaving the windowing math with `startIndex` past
+  // the end of the list and the tree appearing blank. Clamp back to the
+  // last valid scroll position.
+  $: if (virtualConfig && virtualIndex && scrollContainerRef) {
+    const containerHeight = getVirtualContainerHeight();
+    const maxTop = Math.max(
+      0,
+      virtualIndex.totalCount * virtualConfig.itemHeight - containerHeight,
+    );
+    if (scrollTop > maxTop) {
+      scrollTop = maxTop;
+      scrollContainerRef.scrollTop = maxTop;
+    }
+  }
+
+  $: virtualData = (() => {
+    if (!virtualConfig || !virtualIndex) return null;
+    const itemHeight = virtualConfig.itemHeight;
+    const containerHeight = getVirtualContainerHeight();
+    const totalHeight = virtualIndex.totalCount * itemHeight;
+    const maxScroll = Math.max(0, totalHeight - containerHeight);
+    const clampedScrollTop = Math.min(Math.max(0, scrollTop), maxScroll);
+    const { startIndex, endIndex } = getVisibleRange({
+      scrollTop: clampedScrollTop,
+      itemHeight,
+      containerHeight,
+      itemCount: virtualIndex.totalCount,
+      overscan: virtualConfig.overscan,
+    });
+    return {
+      visibleItems: virtualIndex.collectRows(startIndex, endIndex),
+      startIndex,
+      endIndex,
+      offsetY: startIndex * itemHeight,
+      totalHeight,
+    };
+  })();
+
+  /** Observe the scroll container so percentage / relative heights
+   * (`containerHeight: "80%"`) translate into a usable pixel value for
+   * windowing math. Disconnect when virtualization is off or height is
+   * no longer a relative string. */
+  let resizeObserver = null;
+  $: if (
+    virtualConfig &&
+    typeof virtualConfig.containerHeight === "string" &&
+    scrollContainerRef
+  ) {
+    if (typeof ResizeObserver === "undefined") {
+      measuredContainerHeight = scrollContainerRef.clientHeight;
+    } else {
+      resizeObserver?.disconnect();
+      resizeObserver = new ResizeObserver((entries) => {
+        const entry = entries[0];
+        if (entry) measuredContainerHeight = entry.contentRect.height;
+      });
+      resizeObserver.observe(scrollContainerRef);
+    }
+  } else {
+    resizeObserver?.disconnect();
+    resizeObserver = null;
+    if (!virtualConfig) measuredContainerHeight = 0;
+  }
+
+  /** Tabindex anchor: prefer the focused row when it is currently mounted
+   * and enabled; otherwise the first enabled row in the window. */
+  $: virtualTabAnchorId = (() => {
+    if (!virtualConfig || !virtualIndex || !virtualData) return undefined;
+    const visible = virtualData.visibleItems;
+    if (
+      virtualFocusedId !== undefined &&
+      virtualFocusedId !== "" &&
+      virtualFocusedId != null
+    ) {
+      for (const row of visible) {
+        if (row.node.id === virtualFocusedId && !row.node.disabled) {
+          return virtualFocusedId;
+        }
+      }
+    }
+    for (const row of visible) {
+      if (!row.node.disabled) return row.node.id;
+    }
+    return undefined;
+  })();
+
+  /**
+   * Set both the DOM scrollTop and the reactive mirror so the windowed
+   * slice updates synchronously (the browser's scroll event is async, and
+   * jsdom doesn't fire one at all on programmatic assignment).
+   * @param {number} top
+   */
+  function virtualSetScrollTop(top) {
+    if (!scrollContainerRef) return;
+    scrollContainerRef.scrollTop = top;
+    scrollTop = top;
+  }
+
+  /**
+   * If the focused virtual row unmounted (mouse/scrollbar scroll), park
+   * focus on the scroll container so the next Arrow key still works.
+   */
+  function preserveVirtualFocusAfterScroll() {
+    if (!scrollContainerRef) return;
+    const active = document.activeElement;
+    if (!(active instanceof HTMLElement)) return;
+    if (!scrollContainerRef.contains(active)) {
+      // Focus already left the tree (e.g. body after unmount).
+      if (
+        active === document.body ||
+        !document.body.contains(active) ||
+        !active.isConnected
+      ) {
+        scrollContainerRef.focus({ preventScroll: true });
+      }
+      return;
+    }
+    // Still inside the tree but might be a detached orphan in some envs.
+    if (!active.isConnected) {
+      scrollContainerRef.focus({ preventScroll: true });
+    }
+  }
+
+  /** @param {Event & { currentTarget: HTMLElement }} e */
+  function handleVirtualScroll(e) {
+    scrollTop = e.currentTarget.scrollTop;
+    // Only recover focus when the tree already owned it at scroll start.
+    // Otherwise incidental wheel scroll would steal focus from body / elsewhere.
+    const active = document.activeElement;
+    const hadTreeFocus =
+      active instanceof HTMLElement &&
+      scrollContainerRef != null &&
+      (active === scrollContainerRef || scrollContainerRef.contains(active));
+    if (!hadTreeFocus) return;
+    // Wait a microtask so Svelte can unmount off-window rows first.
+    tick().then(preserveVirtualFocusAfterScroll);
+  }
+
+  /**
+   * Scroll a virtual row into view and focus it. Callers schedule this on a
+   * `tick`, so the virtual index already reflects the ancestors `showNode` expanded.
+   * @param {string | number} targetId
+   */
+  function focusVirtualRowById(targetId) {
+    if (!virtualConfig || !virtualIndex || !scrollContainerRef) return;
+
+    const index = virtualIndex.findIndexById(targetId);
+    if (index < 0) return;
+
+    virtualFocusedId = targetId;
+
+    const nextScrollTop = scrollHighlightedIntoView({
+      highlightedIndex: index,
+      currentScrollTop: scrollTop,
+      itemCount: virtualIndex.totalCount,
+      itemHeight: virtualConfig.itemHeight,
+      containerHeight: getVirtualContainerHeight(),
+      // Overscan rows are mounted but offscreen, so require true visibility.
+      overscan: 0,
+    });
+    if (nextScrollTop !== null) virtualSetScrollTop(nextScrollTop);
+
+    tick().then(() => {
+      scrollContainerRef
+        ?.querySelector(`[data-tree-row-id="${CSS.escape(String(targetId))}"]`)
+        ?.focus();
+    });
+  }
+
+  /** Cancels stale focus from overlapping async `virtualMoveTo` calls
+   * (e.g. multi-character type-ahead). */
+  let virtualMoveGen = 0;
+
+  /** @param {number} idx */
+  async function virtualMoveTo(idx) {
+    if (
+      !virtualConfig ||
+      !virtualIndex ||
+      idx < 0 ||
+      idx >= virtualIndex.totalCount
+    )
+      return;
+    const target = virtualIndex.getRowAt(idx);
+    if (!target) return;
+    const gen = ++virtualMoveGen;
+    // Match non-virtual arrows: move focus only, do not mutate activeId.
+    virtualFocusedId = target.node.id;
+    const top = idx * virtualConfig.itemHeight;
+    if (top < scrollTop) {
+      virtualSetScrollTop(top);
+    } else if (
+      top + virtualConfig.itemHeight >
+      scrollTop + getVirtualContainerHeight()
+    ) {
+      virtualSetScrollTop(
+        top + virtualConfig.itemHeight - getVirtualContainerHeight(),
+      );
+    }
+    await tick();
+    if (gen !== virtualMoveGen) return;
+    scrollContainerRef
+      ?.querySelector(
+        `[data-tree-row-id="${CSS.escape(String(target.node.id))}"]`,
+      )
+      ?.focus();
+  }
+
+  /**
+   * Type-ahead against the virtual index. Off-window rows match on
+   * `node.text` (DOM textContent is unavailable when unmounted).
+   * @param {KeyboardEvent} event
+   * @param {number} activeIdx
+   * @returns {boolean}
+   */
+  function handleVirtualTypeAhead(event, activeIdx) {
+    if (!virtualIndex || !isTypeAheadKey(event)) return false;
+
+    if (typeAheadTimeoutId) clearTimeout(typeAheadTimeoutId);
+    typeAheadBuffer += event.key.toLowerCase();
+    typeAheadTimeoutId = setTimeout(() => {
+      typeAheadBuffer = "";
+    }, typeAheadTimeoutMs);
+
+    const isRepeatedChar =
+      typeAheadBuffer.length > 1 &&
+      [...typeAheadBuffer].every((c) => c === typeAheadBuffer[0]);
+    const query = isRepeatedChar ? typeAheadBuffer[0] : typeAheadBuffer;
+    const count = virtualIndex.totalCount;
+    if (count === 0) return true;
+
+    const startIndex = Math.max(activeIdx, 0);
+    for (let offset = 1; offset <= count; offset++) {
+      const idx = (startIndex + offset) % count;
+      const row = virtualIndex.getRowAt(idx);
+      if (!row || row.node.disabled) continue;
+      const label = String(row.node.text ?? "")
+        .trim()
+        .toLowerCase();
+      if (label.startsWith(query)) {
+        virtualMoveTo(idx);
+        break;
+      }
+    }
+    return true;
+  }
+
+  /** @param {KeyboardEvent} e */
+  function handleVirtualKeyDown(e) {
+    if (!virtualConfig || !virtualIndex) return;
+
+    // When focus sits on the scroll container after a row unmounted, resume
+    // from virtualFocusedId / first enabled row.
+    let rowEl =
+      e.target instanceof Element
+        ? e.target.closest("[data-tree-row-id]")
+        : null;
+    let activeIdx = -1;
+    if (rowEl) {
+      const id = rowEl.getAttribute("data-tree-row-id");
+      activeIdx = virtualIndex.findIndexById(/** @type {string} */ (id));
+    } else if (e.target === scrollContainerRef) {
+      if (virtualFocusedId != null && virtualFocusedId !== "") {
+        activeIdx = virtualIndex.findIndexById(virtualFocusedId);
+      }
+      if (activeIdx < 0) {
+        for (let i = 0; i < virtualIndex.totalCount; i++) {
+          const row = virtualIndex.getRowAt(i);
+          if (row && !row.node.disabled) {
+            activeIdx = i;
+            break;
+          }
+        }
+      }
+    }
+    if (activeIdx < 0) return;
+    const item = virtualIndex.getRowAt(activeIdx);
+    if (!item) return;
+
+    if (handleVirtualTypeAhead(e, activeIdx)) {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+
+    /** @param {number} from @param {1 | -1} dir */
+    const nextEnabled = (from, dir) => {
+      let i = from;
+      while (i >= 0 && i < virtualIndex.totalCount) {
+        const row = virtualIndex.getRowAt(i);
+        if (row && !row.node.disabled) return i;
+        i += dir;
+      }
+      return -1;
+    };
+
+    const isHomeOrEnd = e.key === "Home" || e.key === "End";
+    const isSelectAll =
+      (e.code === "KeyA" || e.key === "a" || e.key === "A") && e.ctrlKey;
+
+    if (isHomeOrEnd || isSelectAll) {
+      /** @type {Array<string | number>} */
+      const nodeIds = [];
+
+      if (isHomeOrEnd) {
+        e.preventDefault();
+        e.stopPropagation();
+        const targetIdx =
+          e.key === "Home"
+            ? nextEnabled(0, 1)
+            : nextEnabled(virtualIndex.totalCount - 1, -1);
+        if (isMultiselect && e.shiftKey && e.ctrlKey && targetIdx >= 0) {
+          const from = Math.min(activeIdx, targetIdx);
+          const to = Math.max(activeIdx, targetIdx);
+          for (let i = from; i <= to; i++) {
+            const row = virtualIndex.getRowAt(i);
+            if (row && !row.node.disabled) nodeIds.push(row.node.id);
+          }
+          setSelectedIds([...new Set(selectedIds.concat(nodeIds))]);
+        }
+        if (targetIdx >= 0) virtualMoveTo(targetIdx);
+        return;
+      }
+
+      if (isSelectAll) {
+        e.preventDefault();
+        e.stopPropagation();
+        for (let i = 0; i < virtualIndex.totalCount; i++) {
+          const row = virtualIndex.getRowAt(i);
+          if (row && !row.node.disabled) nodeIds.push(row.node.id);
+        }
+        setSelectedIds([...new Set(selectedIds.concat(nodeIds))]);
+        return;
+      }
+    }
+
+    switch (e.key) {
+      case "ArrowDown": {
+        e.preventDefault();
+        e.stopPropagation();
+        const next = nextEnabled(activeIdx + 1, 1);
+        if (next >= 0) virtualMoveTo(next);
+        break;
+      }
+      case "ArrowUp": {
+        e.preventDefault();
+        e.stopPropagation();
+        const prev = nextEnabled(activeIdx - 1, -1);
+        if (prev >= 0) virtualMoveTo(prev);
+        break;
+      }
+      case "ArrowRight": {
+        if (!item.hasChildren) break;
+        e.preventDefault();
+        e.stopPropagation();
+        if ($expandedIdsSetStore.has(item.node.id)) {
+          // Already expanded: focus first child (next row).
+          const next = nextEnabled(activeIdx + 1, 1);
+          if (next >= 0) virtualMoveTo(next);
+        } else {
+          expandNode(item.node, true);
+          toggleNode(item.node);
+        }
+        break;
+      }
+      case "ArrowLeft": {
+        e.preventDefault();
+        e.stopPropagation();
+        if (item.hasChildren && $expandedIdsSetStore.has(item.node.id)) {
+          expandNode(item.node, false);
+          toggleNode(item.node);
+        } else if (item.parentId != null) {
+          const parentIdx = virtualIndex.findIndexById(item.parentId);
+          if (parentIdx >= 0) virtualMoveTo(parentIdx);
+        }
+        break;
+      }
+      case "Enter":
+      case " ": {
+        if (item.node.disabled) break;
+        e.preventDefault();
+        e.stopPropagation();
+        // Match recursive TreeViewNodeList: Space only activates (check /
+        // select); Enter also toggles expansion on parents.
+        if (e.key === "Enter" && item.hasChildren) {
+          expandNode(item.node, !$expandedIdsSetStore.has(item.node.id));
+          toggleNode(item.node);
+        }
+        clickNode(item.node, e);
+        break;
+      }
     }
   }
 
@@ -1261,30 +1801,77 @@
   </label>
 {/if}
 
-<!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
-<ul
-  {...$$restProps}
-  role="tree"
-  bind:this={ref}
-  class:bx--tree={true}
-  class:bx--tree--default={size === "default"}
-  class:bx--tree--compact={size === "compact"}
-  class:bx--tree--multiselect={isMultiselect}
-  class:bx--tree--checkbox={isCheckboxMode}
-  class:bx--tree--multiselect-modifier={isMultiselect &&
-    multiselectModifierActive}
-  aria-label={hideLabel ? labelText : undefined}
-  aria-labelledby={hideLabel ? undefined : labelId}
-  aria-multiselectable={isMultiselect || isCheckboxMode || undefined}
-  on:mousedown|capture={syncModifierFromTreeMouseDown}
-  on:selectstart|capture={handleMultiselectSelectStart}
-  on:keydown
-  on:keydown|stopPropagation={handleKeyDown}
->
-  <TreeViewNodeList root {nodes} let:node>
-    <slot {node}> {node.text} </slot>
-    <svelte:fragment slot="childNodes" let:node>
-      <slot name="childNodes" {node} />
-    </svelte:fragment>
-  </TreeViewNodeList>
-</ul>
+{#if virtualConfig}
+  <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
+  <ul
+    {...$$restProps}
+    role="tree"
+    bind:this={scrollContainerRef}
+    tabindex="-1"
+    class:bx--tree={true}
+    class:bx--tree--default={size === "default"}
+    class:bx--tree--compact={size === "compact"}
+    class:bx--tree--multiselect={isMultiselect}
+    class:bx--tree--checkbox={isCheckboxMode}
+    class:bx--tree--multiselect-modifier={isMultiselect &&
+      multiselectModifierActive}
+    style="height: {containerHeightStyle}; overflow-y: auto;"
+    aria-label={hideLabel ? labelText : undefined}
+    aria-labelledby={hideLabel ? undefined : labelId}
+    aria-multiselectable={isMultiselect || isCheckboxMode || undefined}
+    on:mousedown|capture={syncModifierFromTreeMouseDown}
+    on:selectstart|capture={handleMultiselectSelectStart}
+    on:scroll={handleVirtualScroll}
+    on:keydown
+    on:keydown|stopPropagation={handleVirtualKeyDown}
+  >
+    {#if virtualData.offsetY > 0}
+      <li aria-hidden="true" style:height="{virtualData.offsetY}px"></li>
+    {/if}
+    {#each virtualData.visibleItems as row (row.node.id)}
+      <TreeViewNodeVirtual
+        item={row}
+        itemHeight={virtualConfig.itemHeight}
+        isTabAnchor={row.node.id === virtualTabAnchorId}
+        let:node
+      >
+        <slot {node}>{node.text}</slot>
+      </TreeViewNodeVirtual>
+    {/each}
+    {#if virtualData.endIndex < virtualIndex.totalCount}
+      <li
+        aria-hidden="true"
+        style:height="{virtualData.totalHeight -
+          virtualData.endIndex * virtualConfig.itemHeight}px"
+      ></li>
+    {/if}
+  </ul>
+{:else}
+  <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
+  <ul
+    {...$$restProps}
+    role="tree"
+    bind:this={ref}
+    class:bx--tree={true}
+    class:bx--tree--default={size === "default"}
+    class:bx--tree--compact={size === "compact"}
+    class:bx--tree--multiselect={isMultiselect}
+    class:bx--tree--checkbox={isCheckboxMode}
+    class:bx--tree--multiselect-modifier={isMultiselect &&
+      multiselectModifierActive}
+    aria-label={hideLabel ? labelText : undefined}
+    aria-labelledby={hideLabel ? undefined : labelId}
+    aria-multiselectable={isMultiselect || isCheckboxMode || undefined}
+    on:mousedown|capture={syncModifierFromTreeMouseDown}
+    on:selectstart|capture={handleMultiselectSelectStart}
+    on:keydown
+    on:keydown|stopPropagation={handleKeyDown}
+  >
+    <TreeViewNodeList root {nodes} let:node>
+      <slot {node}> {node.text} </slot>
+      <svelte:fragment slot="childNodes" let:node>
+        <slot name="childNodes" {node} />
+      </svelte:fragment>
+    </TreeViewNodeList>
+  </ul>
+{/if}
