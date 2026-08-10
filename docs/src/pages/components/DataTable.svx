@@ -4,7 +4,7 @@ description: Data tables display structured data in rows and columns, with sorti
 ---
 
 <script>
-  import { DataTable, DataTableSkeleton, Pagination, Toolbar, ToolbarContent, ToolbarSearch, ToolbarMenu, ToolbarMenuItem, Button, Link, OverflowMenu, OverflowMenuItem } from "carbon-components-svelte";
+  import { DataTable, DataTableSkeleton, Pagination, Toolbar, ToolbarContent, ToolbarSearch, ToolbarMenu, ToolbarMenuItem, Button, Link, Tooltip, OverflowMenu, OverflowMenuItem } from "carbon-components-svelte";
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";
 </script>
 
@@ -134,7 +134,12 @@ Use the `cell` slot to customize cell content. Access row and cell data through 
   </svelte:fragment>
   <svelte:fragment slot="cell" let:row let:cell>
     {#if cell.key === 'rule' && cell.value === 'Round robin'}
-      <Link icon={Launch} href="https://en.wikipedia.org/wiki/Round-robin_DNS" target="_blank">{cell.value}</Link>
+      <Tooltip triggerText={cell.value}>
+        <p>
+          Distributes requests evenly across servers.
+          <Link icon={Launch} href="https://en.wikipedia.org/wiki/Round-robin_DNS" target="_blank">Read more on Wikipedia</Link>
+        </p>
+      </Tooltip>
     {:else}
       {cell.value}
     {/if}
