@@ -7,7 +7,6 @@
  * @returns {boolean}
  */
 export function isExpandableNode(node) {
-  const hasLoadedChildren =
-    Array.isArray(node.nodes) && node.nodes.length > 0;
+  const hasLoadedChildren = Array.isArray(node.nodes) && node.nodes.length > 0;
   return hasLoadedChildren || node.hasChildren === true;
 }

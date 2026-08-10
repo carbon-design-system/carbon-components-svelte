@@ -534,11 +534,11 @@
     tick,
   } from "svelte";
   import { writable } from "svelte/store";
+  import { isExpandableNode } from "../utils/isExpandableNode.js";
   import {
     resolveCheckboxState,
     toggleCheckboxNode,
   } from "../utils/treeCheckboxState.js";
-  import { isExpandableNode } from "../utils/isExpandableNode.js";
   import TreeViewNodeList from "./TreeViewNodeList.svelte";
 
   const dispatch = createEventDispatcher();
@@ -638,8 +638,6 @@
   let cachedNodes = null;
   /** @type {Array<Node> | null} */
   let cachedFlattenedNodes = null;
-  /** @type {Array<Node["id"]> | null} */
-  let cachedNodeIds = null;
   /** @type {Map<Node["id"], Node> | null} */
   let cachedNodeMap = null;
   /** @type {Map<Node["id"], Node["id"] | typeof ROOT_PARENT_ID> | null} */
@@ -662,13 +660,12 @@
   }
 
   /**
-   * Build `cachedFlattenedNodes` and `cachedNodeIds` when expand APIs
-   * need them. The `nodes` reactive path only builds maps.
+   * Build `cachedFlattenedNodes` when expand APIs need them. The `nodes`
+   * reactive path only builds maps.
    */
   function ensureFlatIndex() {
     if (cachedFlattenedNodes != null) return;
     cachedFlattenedNodes = traverse(nodes);
-    cachedNodeIds = cachedFlattenedNodes.map((node) => node.id);
   }
 
   /** @type {Node["id"] | null} */
@@ -1118,7 +1115,6 @@
     cachedChildIdsByParentId = maps.childIdsByParentId;
     // Flat list stays null until expandAll / expandNodes / collapseNodes / Ctrl+A.
     cachedFlattenedNodes = null;
-    cachedNodeIds = null;
   }
 
   $: multiselectStore.set(isMultiselect);
