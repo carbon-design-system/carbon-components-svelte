@@ -1,11 +1,13 @@
 <script>
+  import { uniqueId } from "../utils/uniqueId.js";
+
   /**
    * Specify the label describing the value (for example, "Plan" or "Location").
    * @type {string}
    */
   export let label = undefined;
 
-  const id = `ccs-${Math.random().toString(36)}`;
+  const id = uniqueId();
 </script>
 
 <div class:bx--profile-menu__detail={true}>

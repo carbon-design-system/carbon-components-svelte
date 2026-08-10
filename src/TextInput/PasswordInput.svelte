@@ -82,7 +82,7 @@
   export let fluid = false;
 
   /** Set an id for the input element */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /**
    * Specify a name attribute for the input.
@@ -110,6 +110,7 @@
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const ctx = getContext("carbon:Form");
   const insideModal = getContext("carbon:Modal");

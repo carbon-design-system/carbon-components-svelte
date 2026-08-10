@@ -74,7 +74,7 @@
   export let title = undefined;
 
   /** Set an id for the input label */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /**
    * Set the tabindex for the input element.
@@ -103,6 +103,7 @@
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { overflowTitle } from "../utils/overflowTitle.js";
+  import { uniqueId } from "../utils/uniqueId.js";
   import CheckboxSkeleton from "./CheckboxSkeleton.svelte";
 
   const dispatch = createEventDispatcher();

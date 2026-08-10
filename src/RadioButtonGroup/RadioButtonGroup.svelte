@@ -70,6 +70,7 @@
 
   import { createEventDispatcher, onMount, setContext } from "svelte";
   import { readonly as readOnly, writable } from "svelte/store";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const dispatch = createEventDispatcher();
   /**
@@ -79,7 +80,7 @@
   const groupName = writable(name);
   const groupRequired = writable(required);
   const groupReadonly = writable(readonly);
-  const fallbackHelperId = `ccs-${Math.random().toString(36)}`;
+  const fallbackHelperId = uniqueId();
   /** @type {import("svelte/store").Writable<string | undefined>} */
   const helperId = writable(undefined);
   let isInitialRender = true;

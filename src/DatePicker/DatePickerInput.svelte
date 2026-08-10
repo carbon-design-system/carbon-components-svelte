@@ -32,7 +32,7 @@
   export let iconDescription = "";
 
   /** Set an id for the input element */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /** Specify the label text */
   export let labelText = "";
@@ -68,6 +68,7 @@
   import Calendar from "../icons/Calendar.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const REGEX_SPECIAL_CHARS = /[/\\^$*+?.()|[\]{}]/g;
 

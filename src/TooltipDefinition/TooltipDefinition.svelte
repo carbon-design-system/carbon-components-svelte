@@ -26,7 +26,7 @@
   export let direction = "bottom";
 
   /** Set an id for the tooltip div element */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /**
    * By default, the tooltip is opened on hover or focus.
@@ -64,6 +64,7 @@
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { dismiss } from "../utils/dismiss.js";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const insideModal = getContext("carbon:Modal");
 

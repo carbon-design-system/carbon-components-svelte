@@ -74,7 +74,7 @@
    * Specify the id.
    * It's recommended to provide an id as a value to bind to within a selectable/radio menu group.
    */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /**
    * Obtain a reference to the list item HTML element.
@@ -86,6 +86,7 @@
   import CaretRight from "../icons/CaretRight.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
   import { clampIndex } from "../utils/clampIndex.js";
+  import { uniqueId } from "../utils/uniqueId.js";
   import ContextMenu from "./ContextMenu.svelte";
 
   const dispatch = createEventDispatcher();

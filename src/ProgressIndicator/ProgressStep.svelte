@@ -24,7 +24,7 @@
   export let secondaryLabel = "";
 
   /** Set an id for the top-level element */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   import { getContext, onMount } from "svelte";
   import { writable } from "svelte/store";
@@ -32,6 +32,7 @@
   import CircleDash from "../icons/CircleDash.svelte";
   import Incomplete from "../icons/Incomplete.svelte";
   import Warning from "../icons/Warning.svelte";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   let step = {};
 

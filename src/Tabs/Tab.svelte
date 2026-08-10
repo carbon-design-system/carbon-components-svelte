@@ -35,7 +35,7 @@
    * Set an id for the top-level element.
    * Use a stable value with `Tabs` `selectedId` when tabs are added or removed dynamically.
    */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /**
    * Specify an optional secondary label.
@@ -78,6 +78,7 @@
   import { get } from "svelte/store";
   import Close from "../icons/Close.svelte";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const {
     selectedTab,

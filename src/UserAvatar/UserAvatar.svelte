@@ -117,6 +117,7 @@
   import User from "../icons/User.svelte";
   import TooltipDefinition from "../TooltipDefinition/TooltipDefinition.svelte";
   import { getAvatarBackgroundColor } from "../utils/avatarColor.js";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const dispatch = createEventDispatcher();
 
@@ -124,9 +125,7 @@
   // count avatars and hide those beyond its `max`. The group context is absent
   // for a standalone avatar, in which case none of this applies.
   const userAvatarGroup = getContext("carbon:UserAvatarGroup");
-  const groupItemId = userAvatarGroup
-    ? `cua-${Math.random().toString(36).slice(2)}`
-    : undefined;
+  const groupItemId = userAvatarGroup ? uniqueId("cua") : undefined;
   const groupItems = userAvatarGroup?.items ?? readable([]);
   const groupMax = userAvatarGroup?.max ?? readable(0);
   const groupSize = userAvatarGroup?.size ?? readable(undefined);

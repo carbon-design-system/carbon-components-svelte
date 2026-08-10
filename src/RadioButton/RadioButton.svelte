@@ -34,7 +34,7 @@
   export let hideLabel = false;
 
   /** Set an id for the input element */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /**
    * Specify a name attribute for the radio button input.
@@ -52,6 +52,7 @@
 
   import { getContext, onMount } from "svelte";
   import { readable } from "svelte/store";
+  import { uniqueId } from "../utils/uniqueId.js";
   import {
     registerRadioButton,
     updateGroupSelection,

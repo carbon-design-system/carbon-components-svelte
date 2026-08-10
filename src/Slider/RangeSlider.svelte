@@ -75,7 +75,7 @@
   export let fullWidth = false;
 
   /** Set an id for the slider div element */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /** Set to `true` to indicate an invalid state */
   export let invalid = false;
@@ -127,6 +127,7 @@
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { dismiss } from "../utils/dismiss.js";
   import { resolveSliderMarks } from "../utils/resolveSliderMarks.js";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   /** @typedef {{ value: number; valueUpper: number }} RangeSliderChangeDetail */
   /** @typedef {"lower" | "upper"} ActiveHandle */

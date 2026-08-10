@@ -74,7 +74,7 @@
   export let icon = /** @type {Icon} */ (IconSearch);
 
   /** Set an id for the input element */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /**
    * Obtain a reference to the input HTML element.
@@ -85,6 +85,7 @@
   import { createEventDispatcher, getContext } from "svelte";
   import Close from "../icons/Close.svelte";
   import IconSearch from "../icons/IconSearch.svelte";
+  import { uniqueId } from "../utils/uniqueId.js";
   import SearchSkeleton from "./SearchSkeleton.svelte";
 
   const dispatch = createEventDispatcher();

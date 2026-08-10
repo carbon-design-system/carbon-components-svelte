@@ -71,7 +71,7 @@
   export let helperText = "";
 
   /** Set an id for the input element */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /**
    * Specify a name attribute for the input.
@@ -134,6 +134,7 @@
 
   import { createEventDispatcher, getContext } from "svelte";
   import CopyButton from "../CopyButton/CopyButton.svelte";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const dispatch = createEventDispatcher();
   const ctx = getContext("carbon:Form");

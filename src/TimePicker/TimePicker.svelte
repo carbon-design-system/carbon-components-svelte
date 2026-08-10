@@ -52,7 +52,7 @@
   export let helperText = "";
 
   /** Set an id for the input element */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /**
    * Specify a name attribute for the input.
@@ -78,6 +78,7 @@
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import Stack from "../Stack/Stack.svelte";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const formContext = getContext("carbon:Form");
   const selectCount = writable(0);

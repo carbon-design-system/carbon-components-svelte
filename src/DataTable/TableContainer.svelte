@@ -13,9 +13,10 @@
 
   import { setContext } from "svelte";
   import { writable } from "svelte/store";
+  import { uniqueId } from "../utils/uniqueId.js";
 
-  const titleId = `ccs-${Math.random().toString(36)}`;
-  const descriptionId = `ccs-${Math.random().toString(36)}`;
+  const titleId = uniqueId();
+  const descriptionId = uniqueId();
   const hasTitle = writable(!!title);
   const hasDescription = writable(!!description);
 

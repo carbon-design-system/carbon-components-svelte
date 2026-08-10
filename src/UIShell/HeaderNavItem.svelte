@@ -33,8 +33,9 @@
 
   import { getContext, onMount } from "svelte";
   import { moveIndex } from "../utils/moveIndex.js";
+  import { uniqueId } from "../utils/uniqueId.js";
 
-  const id = `ccs-${Math.random().toString(36)}`;
+  const id = uniqueId();
   const ctx = getContext("carbon:HeaderNavMenu");
 
   let selectedItemIds = [];

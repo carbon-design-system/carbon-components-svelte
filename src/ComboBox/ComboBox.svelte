@@ -185,7 +185,7 @@
   export let translateWithIdSelection = undefined;
 
   /** Set an id for the list box component */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /**
    * Specify a name attribute for the input.
@@ -250,6 +250,7 @@
   import { isOutsideClick } from "../utils/isOutsideClick.js";
   import { createScrollEndTracker } from "../utils/isScrollNearEnd.js";
   import { moveIndex } from "../utils/moveIndex.js";
+  import { uniqueId } from "../utils/uniqueId.js";
   import {
     resetVirtualScrollOnClose,
     scrollHighlightedIntoView,

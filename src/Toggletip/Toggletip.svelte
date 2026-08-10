@@ -68,9 +68,10 @@
   import { observeModalClose } from "../Portal/portal-utils.js";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const dispatch = createEventDispatcher();
-  const contentId = `ccs-${Math.random().toString(36)}`;
+  const contentId = uniqueId();
   const insideModal = getContext("carbon:Modal");
 
   // Space (px) reserved for the caret between the anchor and the content.

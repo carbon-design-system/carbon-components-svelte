@@ -131,7 +131,7 @@
     `of ${total.toLocaleString()} page${total === 1 ? "" : "s"}`;
 
   /** Set an id for the top-level element */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /**
    * Specify the size of the pagination.
@@ -145,6 +145,7 @@
   import CaretRight from "../icons/CaretRight.svelte";
   import Select from "../Select/Select.svelte";
   import SelectItem from "../Select/SelectItem.svelte";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const dispatch = createEventDispatcher();
 

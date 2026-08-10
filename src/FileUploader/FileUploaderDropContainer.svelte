@@ -68,7 +68,7 @@
   export let tabindex = "0";
 
   /** Set an id for the input element */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /** Specify a name attribute for the input */
   export let name = "";
@@ -81,6 +81,7 @@
 
   import { createEventDispatcher } from "svelte";
   import { filterIncomingFiles } from "../utils/filterIncomingFiles.js";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const dispatch = createEventDispatcher();
 

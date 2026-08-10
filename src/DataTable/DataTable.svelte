@@ -142,7 +142,7 @@
    * When the table is inside a form, this name will
    * be included in the form data on submit.
    */
-  export let inputName = `ccs-${Math.random().toString(36)}`;
+  export let inputName = uniqueId();
 
   /** Set to `true` to use zebra styles */
   export let zebra = false;
@@ -328,6 +328,7 @@
   import InlineCheckbox from "../Checkbox/InlineCheckbox.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
   import RadioButton from "../RadioButton/RadioButton.svelte";
+  import { uniqueId } from "../utils/uniqueId.js";
   import { virtualize as virtualizeUtil } from "../utils/virtualize.js";
   import {
     compareValues,
@@ -417,7 +418,7 @@
 
   // Internal ID prefix for radio buttons, checkboxes, etc.
   // since there may be multiple `DataTable` instances that have overlapping row ids.
-  const id = `ccs-${Math.random().toString(36)}`;
+  const id = uniqueId();
 
   // Label the table with its title/description. Only when the default
   // heading markup renders (not overridden via the titleChildren /

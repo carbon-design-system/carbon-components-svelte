@@ -125,7 +125,7 @@
   export let hideCloseButton = false;
 
   /** Set an id for the top-level element */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /**
    * Obtain a reference to the top-level HTML element.
@@ -141,6 +141,7 @@
   import { initialFocus, restoreFocus } from "../utils/focus.js";
   import { createOutsideDismiss } from "../utils/outsideDismiss.js";
   import { trapFocus } from "../utils/trapFocus.js";
+  import { uniqueId } from "../utils/uniqueId.js";
   import { trackModal } from "./modalStore";
 
   const dispatch = createEventDispatcher();

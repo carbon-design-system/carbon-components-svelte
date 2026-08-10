@@ -72,7 +72,7 @@
   export let preventCloseOnClickOutside = false;
 
   /** Set an id for the trigger button element. Also used to label the panel. */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   import { createEventDispatcher } from "svelte";
   import { slide } from "svelte/transition";
@@ -80,6 +80,7 @@
   import Switcher from "../icons/Switcher.svelte";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const dispatch = createEventDispatcher();
 

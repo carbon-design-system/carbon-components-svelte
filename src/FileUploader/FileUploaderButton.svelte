@@ -53,7 +53,7 @@
   export let labelText = "Add file";
 
   /** Set an id for the input element */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /** Specify a name attribute for the input */
   export let name = "";
@@ -97,6 +97,7 @@
   export let hideTooltip = false;
 
   import { createEventDispatcher } from "svelte";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const dispatch = createEventDispatcher();
 

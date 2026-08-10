@@ -53,13 +53,13 @@
    * Set an id for the tooltip.
    * @type {string}
    */
-  export let tooltipId = `ccs-${Math.random().toString(36)}`;
+  export let tooltipId = uniqueId();
 
   /**
    * Set an id for the tooltip button.
    * @type {string}
    */
-  export let triggerId = `ccs-${Math.random().toString(36)}`;
+  export let triggerId = uniqueId();
 
   /** Set the tooltip button text */
   export let triggerText = "";
@@ -112,6 +112,7 @@
   import { writable } from "svelte/store";
   import Information from "../icons/Information.svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const insideModal = getContext("carbon:Modal");
 

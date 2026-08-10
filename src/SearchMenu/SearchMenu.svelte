@@ -97,7 +97,7 @@
   export let searchClass = "";
 
   /** Set an id for the search input */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /**
    * Obtain a reference to the input HTML element.
@@ -121,6 +121,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import { fuzzyMatch } from "../utils/fuzzyMatch.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const dispatch = createEventDispatcher();
 

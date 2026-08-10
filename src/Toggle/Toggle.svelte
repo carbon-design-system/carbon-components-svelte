@@ -31,7 +31,7 @@
   export let hideLabel = false;
 
   /** Set an id for the input element */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /** Set to `true` to use the read-only variant */
   export let readonly = false;
@@ -49,6 +49,7 @@
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const dispatch = createEventDispatcher();
 </script>

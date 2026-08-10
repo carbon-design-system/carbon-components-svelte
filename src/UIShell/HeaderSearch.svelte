@@ -117,10 +117,11 @@
   import { dismiss } from "../utils/dismiss.js";
   import { fuzzyMatch } from "../utils/fuzzyMatch.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const dispatch = createEventDispatcher();
 
-  const id = `ccs-${Math.random().toString(36)}`;
+  const id = uniqueId();
   const inputId = `${id}-input`;
   const labelId = `${id}-label`;
   const menuId = `${id}-menu`;

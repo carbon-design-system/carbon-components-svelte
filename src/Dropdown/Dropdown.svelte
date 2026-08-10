@@ -189,7 +189,7 @@
   export let portalMenu = undefined;
 
   /** Set an id for the list box component */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /**
    * Specify a name attribute for the list box.
@@ -237,6 +237,7 @@
   import { createScrollEndTracker } from "../utils/isScrollNearEnd.js";
   import { moveIndex } from "../utils/moveIndex.js";
   import { typeaheadIndex } from "../utils/typeahead.js";
+  import { uniqueId } from "../utils/uniqueId.js";
   import {
     resetVirtualScrollOnClose,
     scrollHighlightedIntoView,
