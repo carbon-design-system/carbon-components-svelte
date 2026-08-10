@@ -1,4 +1,6 @@
 // @ts-check
+import { BoundedFifoCache } from "../utils/boundedFifoCache.js";
+
 /**
  * Deep equality check for values (nested objects and arrays).
  * @param {*} a - First value to compare
@@ -152,8 +154,8 @@ export function shouldIgnoreRowClick(target) {
 
 const PATH_SPLIT_REGEX = /[.[\]'"]/;
 const MAX_PATH_CACHE_SIZE = 1000;
-/** @type {Map<string, string[]>} */
-const pathCache = new Map();
+/** @type {BoundedFifoCache<string, string[]>} */
+const pathCache = new BoundedFifoCache(MAX_PATH_CACHE_SIZE);
 
 /**
  * Resolves a nested property path in an object.
@@ -170,12 +172,6 @@ export function resolvePath(object, path) {
   if (!segments) {
     segments = path.split(PATH_SPLIT_REGEX).filter((p) => p);
     if (segments.length > 1) {
-      if (pathCache.size >= MAX_PATH_CACHE_SIZE) {
-        const firstKey = pathCache.keys().next().value;
-        if (firstKey !== undefined) {
-          pathCache.delete(firstKey);
-        }
-      }
       pathCache.set(path, segments);
     }
   }
