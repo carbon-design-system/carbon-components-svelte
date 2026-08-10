@@ -1,5 +1,5 @@
 ---
-description: A tree view displays hierarchical data in a collapsible tree structure. It supports node selection, expansion, icons, and programmatic control of the tree state.
+description: A tree view displays hierarchical data in a collapsible tree structure. It supports node selection, expansion, icons, programmatic control of the tree state, and virtualization for large trees.
 ---
 
 ## Basic
@@ -67,7 +67,7 @@ Customize node rendering using the default slot with the `let:node` directive. T
 
 ### Checkbox
 
-Set `selectionMode` to `"checkbox"` to render a checkbox on every node. Checking a branch checks its descendants, and a branch whose descendants are only partly checked renders indeterminate.
+Set `selectionMode` to `"checkbox"` to render a checkbox on every node. Checking a branch checks its descendants, and a branch whose descendants are only partly checked renders indeterminate. Checkbox mode also works with [Virtualization](#virtualization).
 
 Bind to `checkedIds` to read and set which nodes are checked. That is separate from `selectedIds`, which tracks row highlighting and is unused in checkbox mode. Bind to `indeterminateIds` to read which nodes are partially checked; it is derived from `checkedIds` and read-only, so writes are overwritten. Checkbox mode carries its own multi-selection, so [Multi-select](#multi-select) is ignored. Link nodes navigate instead of checking and render no checkbox.
 
@@ -202,6 +202,28 @@ Set `hasChildren` on a node to render it as an expandable branch before its `nod
 While `hasChildren` is `true` and `nodes` is empty, the `childNodes` slot renders in place of the (empty) subtree, receiving the same `node` as the default slot. TreeView has no built-in concept of "loading" or "error" — the slot is generic, so you decide what to render (a spinner, an error message with retry, or nothing) based on whatever fields you put on the node yourself.
 
 <FileSource src="/framed/TreeView/TreeViewLazyLoad" />
+
+## Virtualization
+
+Virtualization renders only the rows currently visible in the scroll viewport, improving performance for large trees (for example, file trees and log explorers). Set `virtualize` to enable it. The tree still tracks the full `nodes` dataset; only the on-screen slice is mounted in the DOM.
+
+Row height is fixed and comes from `size` (32px default, 24px compact). Rows do not grow to fit their content, so keep slot content to a single line. Pass `true` for defaults, or an object to customize:
+
+| Field             | Default                       | Description                                                                 |
+| ----------------- | ----------------------------- | --------------------------------------------------------------------------- |
+| `containerHeight` | `maxVisibleRows * itemHeight` | Scroll viewport height. Pass a number (pixels) or a CSS string (`"80%"`, `"100%"`, `"calc(...)"`) when the parent sets height. |
+| `maxVisibleRows`  | `10`                          | Rows visible at once when `containerHeight` is not set.                     |
+| `overscan`        | `3`                           | Extra rows rendered above and below the viewport during scroll.             |
+
+`expandAll` and `expandedIds` only need expandable nodes (those with loaded `nodes` or `hasChildren: true`). Leaf ids in `expandedIds` are ignored for expansion.
+
+<FileSource src="/framed/TreeView/TreeViewVirtualize" />
+
+### With lazy loading
+
+Combine `virtualize` with `hasChildren` to fetch children on expand. This example starts with the same project-folder roots as [Virtualization](#virtualization), but each subtree loads on demand (including nested folders). The virtualized path does not render the `childNodes` slot, so the demo inserts a temporary disabled "Loading…" child while the request is in flight, then replaces it with the fetched nodes.
+
+<FileSource src="/framed/TreeView/TreeViewVirtualizeLazy" />
 
 ## Flat data
 
