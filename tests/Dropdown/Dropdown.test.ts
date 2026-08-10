@@ -11,6 +11,7 @@ import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { isSvelte5 } from "../utils/svelte-version";
 import { user } from "../utils/user";
+import DropdownEmpty from "./Dropdown.empty.test.svelte";
 import DropdownFluidForm from "./Dropdown.fluidForm.test.svelte";
 import DropdownFluidSkeleton from "./Dropdown.fluidSkeleton.test.svelte";
 import DropdownFluidSlot from "./Dropdown.fluidSlot.test.svelte";
@@ -844,6 +845,84 @@ describe("Dropdown", () => {
     } else {
       expect(button).toHaveTextContent("undefined");
     }
+  });
+
+  describe("empty slot", () => {
+    it("shows default No options when the open menu has no items", async () => {
+      render(Dropdown, {
+        props: {
+          items: [],
+          labelText: "Contact",
+          label: "Choose a contact method",
+        },
+      });
+
+      await user.click(screen.getByLabelText("Contact"));
+
+      expect(screen.getByText("No options")).toBeInTheDocument();
+      expect(screen.queryByRole("option")).not.toBeInTheDocument();
+      expect(
+        document.querySelector(".bx--list-box__menu-item--empty"),
+      ).toBeInTheDocument();
+    });
+
+    it("does not show the empty slot when options are present", async () => {
+      render(Dropdown, {
+        props: { items, labelText: "Contact", selectedId: "0" },
+      });
+
+      await user.click(screen.getByLabelText("Contact"));
+
+      expect(screen.queryByText("No options")).not.toBeInTheDocument();
+      expect(screen.getAllByRole("option").length).toBeGreaterThan(0);
+      expect(
+        document.querySelector(".bx--list-box__menu-item--empty"),
+      ).not.toBeInTheDocument();
+    });
+
+    it("renders a custom empty slot for loading and error states", () => {
+      const { unmount } = render(DropdownEmpty, {
+        props: { items: [], open: true, emptyContent: "loading" },
+      });
+
+      expect(screen.getByTestId("empty-loading")).toHaveTextContent("Loading…");
+      expect(screen.queryByText("No options")).not.toBeInTheDocument();
+      expect(screen.queryByRole("option")).not.toBeInTheDocument();
+
+      unmount();
+
+      render(DropdownEmpty, {
+        props: { items: [], open: true, emptyContent: "error" },
+      });
+
+      expect(screen.getByTestId("empty-error")).toHaveTextContent(
+        "Something went wrong",
+      );
+      expect(screen.queryByTestId("empty-loading")).not.toBeInTheDocument();
+    });
+
+    it("does not treat the empty row as a selectable option", async () => {
+      render(Dropdown, {
+        props: {
+          items: [],
+          labelText: "Contact",
+          label: "Choose a contact method",
+        },
+      });
+
+      const button = screen.getByLabelText("Contact");
+      await user.click(button);
+
+      expect(screen.getByText("No options")).toBeInTheDocument();
+      expect(screen.queryByRole("option")).not.toBeInTheDocument();
+      expect(button.getAttribute("aria-activedescendant")).toBe("");
+
+      await user.keyboard("{ArrowDown}");
+      expect(button.getAttribute("aria-activedescendant")).toBe("");
+
+      await user.keyboard("{Enter}");
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    });
   });
 
   it("should handle translateWithId prop", () => {
