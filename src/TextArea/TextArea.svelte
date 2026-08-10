@@ -81,6 +81,7 @@
   import { getContext } from "svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import { graphemeCount } from "../utils/graphemeCount.js";
 
   const formContext = getContext("carbon:Form");
 
@@ -136,7 +137,7 @@
           class:bx--label--disabled={disabled}
           class:bx--text-area__label-counter={true}
         >
-          {(value ?? "").length}/{maxCount}
+          {graphemeCount(value ?? "")}/{maxCount}
         </div>
       {/if}
     </div>
