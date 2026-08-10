@@ -8,6 +8,7 @@
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import { get } from "svelte/store";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
+  import { createDelayedSetter } from "../utils/delayedSetter.js";
   import { dismiss } from "../utils/dismiss.js";
   import { uniqueId } from "../utils/uniqueId.js";
   import { activeTooltipIcon } from "./tooltip-icon-store.js";
@@ -86,19 +87,14 @@
 
   let isInitialRender = true;
   let clicked = false;
-  let openTimeout;
+
+  const scheduleOpen = createDelayedSetter();
 
   function setOpenDelayed(value, delay = 0) {
-    clearTimeout(openTimeout);
-    if (delay > 0) {
-      openTimeout = setTimeout(() => {
-        if (value) show();
-        else hide();
-      }, delay);
-    } else {
+    scheduleOpen(delay, () => {
       if (value) show();
       else hide();
-    }
+    });
   }
 
   const insideModal = getContext("carbon:Modal");
@@ -188,7 +184,7 @@
 
   onMount(() => {
     return () => {
-      clearTimeout(openTimeout);
+      scheduleOpen.cancel();
       if (get(activeTooltipIcon) === tooltipId) {
         activeTooltipIcon.set(null);
       }
@@ -244,31 +240,22 @@
     hidden = false;
     // If immediately hovering over another tooltip icon, skip the delay.
     const warmHandoff = $activeTooltipIcon !== null;
+    const delay = warmHandoff ? 0 : enterDelayMs;
     if (effectivePortalTooltip) {
-      clearTimeout(openTimeout);
-      if (!warmHandoff && enterDelayMs > 0) {
-        openTimeout = setTimeout(() => {
-          hovered = true;
-        }, enterDelayMs);
-      } else {
+      scheduleOpen(delay, () => {
         hovered = true;
-      }
+      });
     } else {
-      setOpenDelayed(true, warmHandoff ? 0 : enterDelayMs);
+      setOpenDelayed(true, delay);
     }
   }}
   on:mouseleave
   on:mouseleave={() => {
     if (clicked) return;
     if (effectivePortalTooltip) {
-      clearTimeout(openTimeout);
-      if (leaveDelayMs > 0) {
-        openTimeout = setTimeout(() => {
-          hovered = false;
-        }, leaveDelayMs);
-      } else {
+      scheduleOpen(leaveDelayMs, () => {
         hovered = false;
-      }
+      });
     } else {
       setOpenDelayed(false, leaveDelayMs);
     }

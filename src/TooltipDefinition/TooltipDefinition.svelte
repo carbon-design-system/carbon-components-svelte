@@ -63,6 +63,7 @@
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
+  import { createDelayedSetter } from "../utils/delayedSetter.js";
   import { dismiss } from "../utils/dismiss.js";
   import { uniqueId } from "../utils/uniqueId.js";
 
@@ -76,17 +77,12 @@
 
   const dispatch = createEventDispatcher();
 
-  let openTimeout;
+  const scheduleOpen = createDelayedSetter();
 
   function setOpenDelayed(value, delay = 0) {
-    clearTimeout(openTimeout);
-    if (delay > 0) {
-      openTimeout = setTimeout(() => {
-        open = value;
-      }, delay);
-    } else {
+    scheduleOpen(delay, () => {
       open = value;
-    }
+    });
   }
 
   function hide() {
@@ -114,7 +110,7 @@
 
   onMount(() => {
     return () => {
-      clearTimeout(openTimeout);
+      scheduleOpen.cancel();
     };
   });
   function handleEscape(event) {

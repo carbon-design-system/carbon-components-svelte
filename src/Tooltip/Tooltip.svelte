@@ -112,6 +112,7 @@
   import { writable } from "svelte/store";
   import Information from "../icons/Information.svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
+  import { createDelayedSetter } from "../utils/delayedSetter.js";
   import { uniqueId } from "../utils/uniqueId.js";
 
   const insideModal = getContext("carbon:Modal");
@@ -130,7 +131,6 @@
   const openedByHover = writable(false);
 
   let prevOpen = undefined;
-  let openTimeout;
   let focusByMouse = false;
 
   $: effectivePortalTooltip =
@@ -138,24 +138,19 @@
 
   setContext("carbon:Tooltip", { tooltipOpen, openedByHover });
 
-  function setOpenDelayed(value, delay = 0) {
-    clearTimeout(openTimeout);
-    if (delay > 0) {
-      openTimeout = setTimeout(() => {
-        open = value;
-      }, delay);
-    } else {
-      open = value;
-    }
-  }
+  const scheduleOpen = createDelayedSetter();
 
   function onMouseEnter() {
     openedByHover.set(true);
-    setOpenDelayed(true, enterDelayMs);
+    scheduleOpen(enterDelayMs, () => {
+      open = true;
+    });
   }
 
   function onMouseLeave() {
-    setOpenDelayed(false, leaveDelayMs);
+    scheduleOpen(leaveDelayMs, () => {
+      open = false;
+    });
   }
 
   function onKeydown(event) {
@@ -186,7 +181,7 @@
 
   onMount(() => {
     return () => {
-      clearTimeout(openTimeout);
+      scheduleOpen.cancel();
     };
   });
 
