@@ -1,0 +1,26 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// `Tooltip` uses the inverse (dark) link color since it sits on a dark
+/// popover surface. `DataTable` row hover overrides `.bx--link` color at
+/// equal or higher specificity, so a `Tooltip` inside a hovered row loses its
+/// inverse link color and becomes unreadable. Re-assert the inverse color at
+/// higher specificity for links inside a tooltip.
+/// @access private
+/// @group components
+@mixin data-table-tooltip-link {
+  .#{$prefix}--data-table tr:hover .#{$prefix}--tooltip .#{$prefix}--link,
+  .#{$prefix}--data-table tr:hover .#{$prefix}--tooltip .#{$prefix}--link:visited {
+    color: $inverse-link;
+  }
+
+  .#{$prefix}--data-table tr:hover .#{$prefix}--tooltip .#{$prefix}--link:active,
+  .#{$prefix}--data-table tr:hover .#{$prefix}--tooltip .#{$prefix}--link:active:visited,
+  .#{$prefix}--data-table tr:hover .#{$prefix}--tooltip .#{$prefix}--link:active:visited:hover {
+    color: $inverse-01;
+  }
+}
+
+@include exports("data-table-tooltip-link") {
+  @include data-table-tooltip-link;
+}
