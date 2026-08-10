@@ -86,6 +86,7 @@
   import CaretRight from "../icons/CaretRight.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
   import { clampIndex } from "../utils/clampIndex.js";
+  import { createSubmenuHoverIntent } from "../utils/submenuHoverIntent.js";
   import { uniqueId } from "../utils/uniqueId.js";
   import ContextMenu from "./ContextMenu.svelte";
 
@@ -100,8 +101,6 @@
 
   let unsubCurrentIds = undefined;
   let unsubCurrentId = undefined;
-  let timeoutHover = undefined;
-  let timeoutClose = undefined;
   let rootMenuPosition = [0, 0];
   let focusIndex = 0;
   let options = [];
@@ -111,6 +110,13 @@
   let menuOffsetX = 0;
   /** @type {HTMLUListElement | null} */
   let submenuRef = null;
+
+  const hoverIntent = createSubmenuHoverIntent(
+    (value) => {
+      submenuOpen = value;
+    },
+    { openDelay: moderate01, closeDelay },
+  );
 
   const unsubPosition = ctx.position.subscribe((position) => {
     rootMenuPosition = position;
@@ -164,8 +170,7 @@
       unsubMenuOffsetX();
       if (unsubCurrentIds) unsubCurrentIds();
       if (unsubCurrentId) unsubCurrentId();
-      if (typeof timeoutHover === "number") clearTimeout(timeoutHover);
-      if (typeof timeoutClose === "number") clearTimeout(timeoutClose);
+      hoverIntent.cancel();
     };
   });
 
@@ -278,24 +283,13 @@
   on:mouseenter
   on:mouseenter={() => {
     if (subOptions && !disabled) {
-      if (typeof timeoutClose === "number") {
-        clearTimeout(timeoutClose);
-        timeoutClose = undefined;
-      }
-
-      timeoutHover = setTimeout(() => {
-        submenuOpen = true;
-      }, moderate01);
+      hoverIntent.scheduleOpen();
     }
   }}
   on:mouseleave
   on:mouseleave={() => {
     if (subOptions) {
-      if (typeof timeoutHover === "number") clearTimeout(timeoutHover);
-
-      timeoutClose = setTimeout(() => {
-        submenuOpen = false;
-      }, closeDelay);
+      hoverIntent.scheduleClose();
     }
   }}
   on:click={(event) => {
