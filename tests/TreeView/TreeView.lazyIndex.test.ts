@@ -28,7 +28,11 @@ describe("TreeView lazy flat index", () => {
     );
 
     await user.click(screen.getByTestId("expand-all"));
+    // expandAll only includes expandable (parent) ids, not leaves.
     expect(screen.getByTestId("expanded-count").textContent).toBe(
+      screen.getByTestId("expandable-count").textContent,
+    );
+    expect(screen.getByTestId("expanded-count").textContent).not.toBe(
       screen.getByTestId("total-count").textContent,
     );
   });
