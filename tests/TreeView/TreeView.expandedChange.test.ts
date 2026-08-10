@@ -50,7 +50,7 @@ describe("TreeView toggle:change", () => {
     expect(onToggle).toHaveBeenCalledTimes(2);
   });
 
-  it("expandAll() emits exactly once with every id added", async () => {
+  it("expandAll() emits exactly once with expandable ids added", async () => {
     const onToggleChange = vi.fn();
     render(TreeViewExpandedChange, { onToggleChange });
 
@@ -58,13 +58,14 @@ describe("TreeView toggle:change", () => {
     await waitFor(() => expect(onToggleChange).toHaveBeenCalledTimes(1));
 
     const detail = lastDetail(onToggleChange);
-    // `expandAll` marks every node id (parents and leaves) as expanded.
-    const allIds = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+    // Only expandable nodes (loaded children or hasChildren) — leaves are
+    // no-ops for descent and are omitted to keep large trees cheap.
+    const expandableIds = [1, 2, 7, 9];
     expect(
       [...detail.expandedIds].sort((a, b) => Number(a) - Number(b)),
-    ).toEqual(allIds);
+    ).toEqual(expandableIds);
     expect([...detail.added].sort((a, b) => Number(a) - Number(b))).toEqual(
-      allIds,
+      expandableIds,
     );
     expect(detail.removed).toEqual([]);
   });

@@ -353,7 +353,9 @@
   export let indeterminateIds = [];
 
   /**
-   * Programmatically expand all nodes
+   * Programmatically expand all expandable nodes (those with loaded children
+   * or `hasChildren: true`). Leaf ids are omitted — they do not affect
+   * expansion.
    * @type {() => void}
    * @example
    * ```svelte
@@ -363,8 +365,14 @@
    */
   export function expandAll() {
     ensureFlatIndex();
-    expandedIdsSet = new Set(cachedNodeIds);
-    expandedIds = Array.from(expandedIdsSet);
+    // Only expandable ids affect descent; leaf ids are no-ops and waste
+    // memory on large trees.
+    const expandableIds = [];
+    for (const node of cachedFlattenedNodes) {
+      if (isExpandableNode(node)) expandableIds.push(node.id);
+    }
+    expandedIdsSet = new Set(expandableIds);
+    expandedIds = expandableIds;
     lastExpandedIdsRef = expandedIds;
   }
 
@@ -398,15 +406,14 @@
    */
   export function expandNodes(filterNode = () => true) {
     ensureFlatIndex();
-    const nodesToExpand = cachedFlattenedNodes
-      .filter(
-        (node) =>
-          filterNode(node) ||
-          node.nodes?.some((child) => filterNode(child) && child.nodes),
-      )
-      .map((node) => node.id);
-    for (const id of nodesToExpand) {
-      expandedIdsSet.add(id);
+    const nodesToExpand = cachedFlattenedNodes.filter(
+      (node) =>
+        isExpandableNode(node) &&
+        (filterNode(node) ||
+          node.nodes?.some((child) => filterNode(child) && child.nodes)),
+    );
+    for (const node of nodesToExpand) {
+      expandedIdsSet.add(node.id);
     }
     expandedIds = Array.from(expandedIdsSet);
     lastExpandedIdsRef = expandedIds;
@@ -527,6 +534,7 @@
     tick,
   } from "svelte";
   import { writable } from "svelte/store";
+  import { isExpandableNode } from "../utils/isExpandableNode.js";
   import {
     resolveCheckboxState,
     toggleCheckboxNode,
@@ -630,8 +638,6 @@
   let cachedNodes = null;
   /** @type {Array<Node> | null} */
   let cachedFlattenedNodes = null;
-  /** @type {Array<Node["id"]> | null} */
-  let cachedNodeIds = null;
   /** @type {Map<Node["id"], Node> | null} */
   let cachedNodeMap = null;
   /** @type {Map<Node["id"], Node["id"] | typeof ROOT_PARENT_ID> | null} */
@@ -654,13 +660,12 @@
   }
 
   /**
-   * Build `cachedFlattenedNodes` and `cachedNodeIds` when expand APIs
-   * need them. The `nodes` reactive path only builds maps.
+   * Build `cachedFlattenedNodes` when expand APIs need them. The `nodes`
+   * reactive path only builds maps.
    */
   function ensureFlatIndex() {
     if (cachedFlattenedNodes != null) return;
     cachedFlattenedNodes = traverse(nodes);
-    cachedNodeIds = cachedFlattenedNodes.map((node) => node.id);
   }
 
   /** @type {Node["id"] | null} */
@@ -845,17 +850,25 @@
   /** @type {(node: Node, expanded: boolean) => void} */
   function expandNode(node, expanded) {
     if (expanded) {
+      let removedSibling = false;
       if (autoCollapse) {
         const siblingIds = getCachedSiblingIds(node.id);
         for (const siblingId of siblingIds) {
-          expandedIdsSet.delete(siblingId);
+          if (expandedIdsSet.delete(siblingId)) removedSibling = true;
         }
       }
-      expandedIdsSet.add(node.id);
+      const added = !expandedIdsSet.has(node.id);
+      if (added) expandedIdsSet.add(node.id);
+      if (!added && !removedSibling) return;
+      // Bulk sibling collapse needs a full copy; single-id toggles append.
+      expandedIds = removedSibling
+        ? Array.from(expandedIdsSet)
+        : [...expandedIds, node.id];
     } else {
+      if (!expandedIdsSet.has(node.id)) return;
       expandedIdsSet.delete(node.id);
+      expandedIds = expandedIds.filter((id) => id !== node.id);
     }
-    expandedIds = Array.from(expandedIdsSet);
     lastExpandedIdsRef = expandedIds;
   }
 
@@ -1102,7 +1115,6 @@
     cachedChildIdsByParentId = maps.childIdsByParentId;
     // Flat list stays null until expandAll / expandNodes / collapseNodes / Ctrl+A.
     cachedFlattenedNodes = null;
-    cachedNodeIds = null;
   }
 
   $: multiselectStore.set(isMultiselect);

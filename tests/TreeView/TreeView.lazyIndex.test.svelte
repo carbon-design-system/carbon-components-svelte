@@ -70,4 +70,5 @@
 </button>
 
 <span data-testid="expanded-count">{expandedIds.length}</span>
+<span data-testid="expandable-count">{totalRoots}</span>
 <span data-testid="total-count">{totalRoots * (childrenPerRoot + 1)}</span>
