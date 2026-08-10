@@ -1,5 +1,5 @@
 // White theme
-@import "carbon-components/scss/globals/scss/vendor/@carbon/themes/scss";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/themes/themes";
 
 $carbon--theme: $carbon--theme--white;
 @include carbon--theme();
