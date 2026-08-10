@@ -45,6 +45,7 @@
 
   import { afterUpdate, createEventDispatcher, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
+  import { clampIndex } from "../utils/clampIndex.js";
   import { rovingFocus } from "../utils/rovingFocus.js";
   import { syncDomOrder } from "../utils/syncDomOrder.js";
 
@@ -134,7 +135,7 @@
 
     if (switches.length === 0) return;
 
-    selectedIndex = Math.min(Math.max(selectedIndex, 0), switches.length - 1);
+    selectedIndex = clampIndex(selectedIndex, 0, switches.length);
     selectedId = switches[selectedIndex]?.id;
   }
 

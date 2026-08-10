@@ -27,6 +27,7 @@
 
   import { createEventDispatcher, setContext } from "svelte";
   import { derived, writable } from "svelte/store";
+  import { clampIndex } from "../utils/clampIndex.js";
   import { keyBy } from "../utils/keyBy.js";
 
   const dispatch = createEventDispatcher();
@@ -118,7 +119,7 @@
 
     if ($steps.length === 0) return;
 
-    currentIndex = Math.min(Math.max(currentIndex, 0), $steps.length - 1);
+    currentIndex = clampIndex(currentIndex, 0, $steps.length);
     selectedId = $steps[currentIndex]?.id;
   }
 
