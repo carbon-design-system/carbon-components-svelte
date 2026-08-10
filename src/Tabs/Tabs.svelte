@@ -69,6 +69,7 @@
   import { derived, get, writable } from "svelte/store";
   import ChevronLeft from "../icons/ChevronLeft.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
+  import { clampIndex } from "../utils/clampIndex.js";
   import { keyBy } from "../utils/keyBy.js";
   import { rovingFocus } from "../utils/rovingFocus.js";
   import { syncDomOrder } from "../utils/syncDomOrder.js";
@@ -234,7 +235,7 @@
 
     if ($tabs.length === 0) return;
 
-    currentIndex = Math.min(Math.max(currentIndex, 0), $tabs.length - 1);
+    currentIndex = clampIndex(currentIndex, 0, $tabs.length);
     selectedId = $tabs[currentIndex].id;
   }
 
