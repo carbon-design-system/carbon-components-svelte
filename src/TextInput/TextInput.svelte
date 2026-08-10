@@ -92,6 +92,7 @@
   import EditOff from "../icons/EditOff.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import { graphemeCount } from "../utils/graphemeCount.js";
 
   const ctx = getContext("carbon:Form");
   const dispatch = createEventDispatcher();
@@ -158,7 +159,7 @@
               class:bx--label--disabled={disabled}
               class:bx--text-input__label-counter={true}
             >
-              {(value ?? "").toString().length}/{maxCount}
+              {graphemeCount((value ?? "").toString())}/{maxCount}
             </div>
           {/if}
         </div>
@@ -194,7 +195,7 @@
           class:bx--label--disabled={disabled}
           class:bx--text-input__label-counter={true}
         >
-          {(value ?? "").toString().length}/{maxCount}
+          {graphemeCount((value ?? "").toString())}/{maxCount}
         </div>
       {/if}
     </div>
