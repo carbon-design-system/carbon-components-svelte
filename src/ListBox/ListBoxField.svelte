@@ -15,7 +15,7 @@
   export let tabindex = "-1";
 
   /** Set an id for the top-level element */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /**
    * Obtain a reference to the top-level HTML element.
@@ -24,6 +24,7 @@
   export let ref = null;
 
   import { getContext } from "svelte";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const ctx = getContext("carbon:MultiSelect");
 

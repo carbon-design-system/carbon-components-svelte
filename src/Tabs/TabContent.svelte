@@ -3,7 +3,7 @@
    * Set an id for the top-level element.
    * Prefer a stable value when pairing panels with dynamic tabs.
    */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /**
    * Set to `true` to defer mounting panel content until this tab is first selected
@@ -16,6 +16,7 @@
   export let unmountOnHide = false;
 
   import { getContext, onMount } from "svelte";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const { selectedContent, addContent, removeContent, tabs, contentById } =
     getContext("carbon:Tabs");

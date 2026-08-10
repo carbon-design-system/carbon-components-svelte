@@ -39,7 +39,7 @@
   export let tabindex = "0";
 
   /** Set an id for the top-level div element */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /**
    * Set to `true` if the tile contains interactive content
@@ -57,6 +57,7 @@
 
   import { afterUpdate, onMount } from "svelte";
   import ChevronDown from "../icons/ChevronDown.svelte";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   let refAbove = null;
   let resizeObserver;

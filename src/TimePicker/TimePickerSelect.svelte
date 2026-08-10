@@ -19,7 +19,7 @@
   export let labelText = "";
 
   /** Set an id for the select element */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /**
    * Specify a name attribute for the select element.
@@ -36,6 +36,7 @@
   import { getContext, onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const formContext = getContext("carbon:Form");
   const timePickerContext = getContext("carbon:TimePicker");

@@ -39,7 +39,7 @@
   export let tooltipAlignment = "center";
 
   /** Set an id for the button element */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /**
    * Obtain a reference to the button HTML element.
@@ -50,6 +50,7 @@
   import { getContext, onMount } from "svelte";
   import { get } from "svelte/store";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const ctx = getContext("carbon:ContentSwitcher");
   const activeTooltip = ctx.activeTooltip;

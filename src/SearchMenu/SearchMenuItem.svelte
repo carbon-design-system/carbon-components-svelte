@@ -52,11 +52,12 @@
   export let filter = undefined;
 
   /** Set an id for the item element */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import { readable } from "svelte/store";
   import { highlightSegments } from "../utils/fuzzyMatch.js";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const dispatch = createEventDispatcher();
   const menu = getContext("carbon:SearchMenu");

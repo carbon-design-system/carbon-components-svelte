@@ -69,7 +69,7 @@
    * It's recommended to provide an id as a value to bind to
    * within a selectable or radio menu group.
    */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /**
    * Obtain a reference to the list item HTML element.
@@ -80,6 +80,7 @@
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import CaretRight from "../icons/CaretRight.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
+  import { uniqueId } from "../utils/uniqueId.js";
   import Menu from "./Menu.svelte";
 
   // "moderate-01" duration (ms) from Carbon motion recommended for small

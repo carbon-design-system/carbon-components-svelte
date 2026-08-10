@@ -27,7 +27,7 @@
   export let disabled = false;
 
   /** Set an id for the select element */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /**
    * Specify a name attribute for the select element.
@@ -90,6 +90,7 @@
   import ChevronDown from "../icons/ChevronDown.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const dispatch = createEventDispatcher();
   const formContext = getContext("carbon:Form");

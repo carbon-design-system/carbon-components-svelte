@@ -70,6 +70,7 @@
   import { readonly as readOnly, writable } from "svelte/store";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const dispatch = createEventDispatcher();
   /**
@@ -125,9 +126,9 @@
   $: showInvalid = invalid && !disabled && !readonly;
   $: showWarn = warn && !invalid && !disabled && !readonly;
 
-  const fallbackHelperId = `ccs-${Math.random().toString(36)}`;
-  const fallbackErrorId = `ccs-${Math.random().toString(36)}`;
-  const fallbackWarnId = `ccs-${Math.random().toString(36)}`;
+  const fallbackHelperId = uniqueId();
+  const fallbackErrorId = uniqueId();
+  const fallbackWarnId = uniqueId();
   $: helperId = id ? `helper-${id}` : fallbackHelperId;
   $: errorId = id ? `error-${id}` : fallbackErrorId;
   $: warnId = id ? `warn-${id}` : fallbackWarnId;

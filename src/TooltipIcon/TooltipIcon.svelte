@@ -9,6 +9,7 @@
   import { get } from "svelte/store";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { dismiss } from "../utils/dismiss.js";
+  import { uniqueId } from "../utils/uniqueId.js";
   import { activeTooltipIcon } from "./tooltip-icon-store.js";
 
   /**
@@ -52,7 +53,7 @@
   export let direction = "bottom";
 
   /** Set an id for the span element */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /**
    * Specify the duration in milliseconds to delay before displaying the tooltip.

@@ -1,6 +1,6 @@
 <script>
   /** Set an id for the top-level element */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /**
    * Obtain a reference to the HTML element.
@@ -44,6 +44,7 @@
   export let portalHostClass = undefined;
 
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
+  import { uniqueId } from "../utils/uniqueId.js";
 </script>
 
 {#if portal}

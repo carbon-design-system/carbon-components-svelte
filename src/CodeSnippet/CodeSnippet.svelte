@@ -173,7 +173,7 @@
   export let minExpandedNumberOfRows = 16;
 
   /** Set an id for the code element */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /**
    * Obtain a reference to the pre HTML element.
@@ -213,6 +213,7 @@
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
   import { createCopyFeedbackState } from "../utils/copyFeedback.js";
+  import { uniqueId } from "../utils/uniqueId.js";
   import CodeSnippetSkeleton from "./CodeSnippetSkeleton.svelte";
 
   const dispatch = createEventDispatcher();

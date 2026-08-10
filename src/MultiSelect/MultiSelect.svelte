@@ -179,7 +179,7 @@
   export let hideLabel = false;
 
   /** Set an id for the list box component */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /** Set to `true` to use the read-only variant */
   export let readonly = false;
@@ -318,6 +318,7 @@
   import { isOutsideClick } from "../utils/isOutsideClick.js";
   import { createScrollEndTracker } from "../utils/isScrollNearEnd.js";
   import { moveIndex } from "../utils/moveIndex.js";
+  import { uniqueId } from "../utils/uniqueId.js";
   import {
     resetVirtualScrollOnClose,
     scrollHighlightedIntoView,

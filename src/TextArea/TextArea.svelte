@@ -64,7 +64,7 @@
   export let fluid = false;
 
   /** Set an id for the textarea element */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /**
    * Specify a name attribute for the input.
@@ -82,6 +82,7 @@
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { graphemeCount } from "../utils/graphemeCount.js";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const formContext = getContext("carbon:Form");
 

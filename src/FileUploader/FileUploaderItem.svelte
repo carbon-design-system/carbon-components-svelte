@@ -33,12 +33,13 @@
   export let errorBody = "";
 
   /** Set an id for the top-level element */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /** Specify the file uploader name */
   export let name = "";
 
   import { createEventDispatcher } from "svelte";
+  import { uniqueId } from "../utils/uniqueId.js";
   import Filename from "./Filename.svelte";
 
   const dispatch = createEventDispatcher();

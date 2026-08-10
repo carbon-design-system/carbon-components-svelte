@@ -577,6 +577,7 @@
     createTreeVirtualIndex,
     isExpandableNode,
   } from "../utils/treeVirtualIndex.js";
+  import { uniqueId } from "../utils/uniqueId.js";
   import {
     getVisibleRange,
     scrollHighlightedIntoView,
@@ -585,8 +586,8 @@
   import TreeViewNodeVirtual from "./TreeViewNodeVirtual.svelte";
 
   const dispatch = createEventDispatcher();
-  const labelId = `label-${Math.random().toString(36)}`;
-  const treeId = `tree-${Math.random().toString(36)}`;
+  const labelId = uniqueId("label");
+  const treeId = uniqueId("tree");
 
   /** @type {import("svelte/store").Writable<boolean>} */
   const multiselectStore = writable(multiselect);

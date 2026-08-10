@@ -56,7 +56,7 @@
   export let icon = /** @type {Icon} */ (undefined);
 
   /** Set an id for the filterable tag */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /**
    * Obtain a reference to the outer HTML element.
@@ -69,6 +69,7 @@
   import { readable } from "svelte/store";
   import Close from "../icons/Close.svelte";
   import TooltipDefinition from "../TooltipDefinition/TooltipDefinition.svelte";
+  import { uniqueId } from "../utils/uniqueId.js";
   import TagSkeleton from "./TagSkeleton.svelte";
 
   const dispatch = createEventDispatcher();
@@ -78,9 +79,7 @@
   // group context is absent for a standalone tag, in which case none of this
   // applies.
   const tagSet = getContext("carbon:TagSet");
-  const groupItemId = tagSet
-    ? `ctag-${Math.random().toString(36).slice(2)}`
-    : undefined;
+  const groupItemId = tagSet ? uniqueId("ctag") : undefined;
   const groupOverflowIds = tagSet?.overflowIds ?? readable(new Set());
   const groupSize = tagSet?.size ?? readable(undefined);
 

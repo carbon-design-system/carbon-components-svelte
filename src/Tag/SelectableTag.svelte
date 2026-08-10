@@ -30,9 +30,10 @@
   export let icon = /** @type {Icon} */ (undefined);
 
   /** Set an id for the tag */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   import { createEventDispatcher } from "svelte";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const dispatch = createEventDispatcher();
 

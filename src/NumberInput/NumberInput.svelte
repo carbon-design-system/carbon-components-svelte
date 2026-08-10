@@ -153,7 +153,7 @@
   };
 
   /** Set an id for the input element */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /**
    * Specify a name attribute for the input.
@@ -180,6 +180,7 @@
     parseLocaleValue,
     roundToStep,
   } from "../utils/numericFormat.js";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const defaultTranslations = {
     [translationIds.increment]: "Increment number",

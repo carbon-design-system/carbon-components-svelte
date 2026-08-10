@@ -44,6 +44,7 @@
 
   import { getContext, onMount } from "svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   let initialDisabled = disabled;
 
@@ -54,7 +55,7 @@
   });
 
   const id = {};
-  const contentId = `ccs-${Math.random().toString(36)}`;
+  const contentId = uniqueId();
 
   const unsubscribeOpenId = ctx.openId.subscribe((openItemId) => {
     if (openItemId !== null && openItemId !== id) {

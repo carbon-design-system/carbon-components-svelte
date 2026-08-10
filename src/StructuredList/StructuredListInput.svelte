@@ -19,7 +19,7 @@
   export let value = "value";
 
   /** Set an id for the input element */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /** Specify a name attribute for the input */
   export let name = "";
@@ -38,6 +38,7 @@
 
   import { getContext } from "svelte";
   import { writable } from "svelte/store";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const initialChecked = checked;
   const ctx = getContext("carbon:StructuredListWrapper");

@@ -89,7 +89,7 @@
   export let portalMenu = undefined;
 
   /** Set an id for the date picker element */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /**
    * Override the options passed to the Flatpickr instance.
@@ -117,6 +117,7 @@
   } from "svelte";
   import { derived, writable } from "svelte/store";
   import { dismiss } from "../utils/dismiss.js";
+  import { uniqueId } from "../utils/uniqueId.js";
   import { createCalendar, resolveLocale } from "./createCalendar";
   import {
     getTopLayerAncestor,

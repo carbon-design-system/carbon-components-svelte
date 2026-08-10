@@ -80,7 +80,7 @@
   export let requireTitle = true;
 
   /** Set an id for the top-level element */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /**
    * Obtain a reference to the HTML element.
@@ -95,6 +95,7 @@
     onMount,
   } from "svelte";
   import { scrollIntoViewWithinMenu } from "../utils/scrollIntoViewWithinMenu.js";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const dispatch = createEventDispatcher();
   const { focusedId, add, remove, update, itemsById } = getContext(

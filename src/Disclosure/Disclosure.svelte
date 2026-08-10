@@ -32,10 +32,11 @@
 
   import { createEventDispatcher } from "svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const dispatch = createEventDispatcher();
 
-  const contentId = `ccs-${Math.random().toString(36)}`;
+  const contentId = uniqueId();
 
   let animation = undefined;
 

@@ -48,6 +48,7 @@
   import { initialFocus, restoreFocus } from "../utils/focus.js";
   import { createOutsideDismiss } from "../utils/outsideDismiss.js";
   import { trapFocus } from "../utils/trapFocus.js";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const dispatch = createEventDispatcher();
   const label = writable(undefined);
@@ -56,7 +57,7 @@
 
   // Ids for ModalHeader's label/title headings, so ModalBody (when
   // `hasScrollingContent`) can name its region via `aria-labelledby`.
-  const modalId = `ccs-${Math.random().toString(36)}`;
+  const modalId = uniqueId();
   const labelId = `${modalId}-label`;
   const titleId = `${modalId}-title`;
 

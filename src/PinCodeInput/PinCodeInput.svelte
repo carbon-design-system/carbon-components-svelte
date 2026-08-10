@@ -151,7 +151,7 @@
   export let selectTextOnFocus = false;
 
   /** Set an id for the input group */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /**
    * Obtain a reference to the outer element.
@@ -163,6 +163,7 @@
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const dispatch = createEventDispatcher();
   const formContext = getContext("carbon:Form");

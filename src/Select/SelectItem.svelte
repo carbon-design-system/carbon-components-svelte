@@ -37,8 +37,9 @@
   export let style = undefined;
 
   import { getContext, onMount } from "svelte";
+  import { uniqueId } from "../utils/uniqueId.js";
 
-  const id = `ccs-${Math.random().toString(36)}`;
+  const id = uniqueId();
   const ctx =
     getContext("carbon:Select") || getContext("carbon:TimePickerSelect");
 

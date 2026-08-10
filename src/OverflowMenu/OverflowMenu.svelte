@@ -69,7 +69,7 @@
   export let iconDescription = "Open and close list of options";
 
   /** Set an id for the button element */
-  export let id = `ccs-${Math.random().toString(36)}`;
+  export let id = uniqueId();
 
   /**
    * Obtain a reference to the trigger button element.
@@ -105,6 +105,7 @@
   import { isOutsideClick } from "../utils/isOutsideClick.js";
   import { keyBy } from "../utils/keyBy.js";
   import { rovingFocus } from "../utils/rovingFocus.js";
+  import { uniqueId } from "../utils/uniqueId.js";
 
   const ctxBreadcrumbItem = getContext("carbon:BreadcrumbItem");
   const insideModal = getContext("carbon:Modal");
