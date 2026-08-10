@@ -67,6 +67,9 @@ describe("theme entry files", () => {
       const dir = join(path, "..");
       const base = path.slice(dir.length + 1);
       return [
+        // Legacy `@import` prefers the `.import.scss` variant when present.
+        join(dir, `${base}.import.scss`),
+        join(dir, `_${base}.import.scss`),
         join(dir, `${base}.scss`),
         join(dir, `_${base}.scss`),
         join(path, "index.scss"),

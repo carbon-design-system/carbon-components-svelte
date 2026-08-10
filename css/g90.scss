@@ -1,5 +1,5 @@
 // Gray 90 theme
-@import "carbon-components/scss/globals/scss/vendor/@carbon/themes/scss";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/themes/themes";
 
 $carbon--theme: $carbon--theme--g90;
 @include carbon--theme();

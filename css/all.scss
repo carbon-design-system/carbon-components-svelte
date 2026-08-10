@@ -15,7 +15,7 @@ $css--reset: true;
 $css--default-type: true;
 $css--plex: true;
 
-@import "carbon-components/scss/globals/scss/vendor/@carbon/themes/scss";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/themes/themes";
 @import "carbon-components/scss/globals/scss/component-tokens";
 @import "carbon-components/scss/components/tag/tag";
 @import "carbon-components/scss/components/notification/inline-notification";

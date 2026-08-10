@@ -11,6 +11,15 @@ these prunings relative to upstream:
   `data-table/_data-table-action.scss`)
 - `scss/components/pagination/_unstable_pagination.scss` — unrendered
 - `scss/components/data-table-v2/` — never imported
+- every file the six theme compiles never load (measured with sass-embedded's
+  `loadedUrls`), mostly `vendor/@carbon/*` packages recursively re-vendoring
+  each other
+- the standalone `vendor/@carbon/themes` package — byte-identical to the copy
+  inside `vendor/@carbon/elements/scss/themes`, which the theme entry files
+  now import instead
+
+To use an upstream file that is not vendored, restore it from
+`carbon-components@10.58.15` on npm.
 
 `scripts/build-css.ts` resolves `@import "carbon-components/..."` here via its
 sass `loadPaths`, so theme entry files and `css/_*.scss` partials did not
