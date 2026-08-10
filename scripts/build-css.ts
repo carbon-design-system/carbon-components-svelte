@@ -30,7 +30,9 @@ function postprocessCss(css: string, outFile: string): Uint8Array {
 const SASS_OPTIONS = {
   style: "compressed" as const,
   sourceMap: false,
-  loadPaths: ["node_modules"],
+  // Resolves `@import "carbon-components/..."` to the vendored tree in
+  // css/vendor (inlined from carbon-components@10.58.15).
+  loadPaths: ["css/vendor"],
   quietDeps: true,
   silenceDeprecations: [
     "import",
@@ -54,10 +56,23 @@ async function readPartialContents(): Promise<string> {
   ).join("\0");
 }
 
+async function vendorHash(): Promise<string> {
+  const vendorGlob = new Glob("vendor/**/*.scss");
+  const files = Array.from(vendorGlob.scanSync({ cwd: "css" })).sort();
+  const contents = await Promise.all(
+    files.map((file) => readFile(`css/${file}`)),
+  );
+  const hash = createHash("sha256");
+  files.forEach((file, i) => {
+    hash.update(file);
+    hash.update(contents[i]);
+  });
+  return hash.digest("hex");
+}
+
 async function sharedInputs(): Promise<string> {
   const packageJson = JSON.parse(await readFile("package.json", "utf8")) as {
     devDependencies?: {
-      "carbon-components"?: string;
       lightningcss?: string;
       browserslist?: string;
     };
@@ -65,7 +80,7 @@ async function sharedInputs(): Promise<string> {
 
   return [
     await readPartialContents(),
-    packageJson.devDependencies?.["carbon-components"] ?? "",
+    await vendorHash(),
     packageJson.devDependencies?.lightningcss ?? "",
     packageJson.devDependencies?.browserslist ?? "",
     BROWSERSLIST.join(","),

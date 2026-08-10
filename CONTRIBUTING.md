@@ -410,7 +410,7 @@ The menu closes from the trigger, <DocKbd label="Escape" />, or an outside click
 
 ### Custom styles (patching Carbon v10)
 
-The library pins `carbon-components` to v10 (`10.58.x`). When a style fix or feature from newer Carbon is missing from the v10 SCSS, or when the Svelte components need a tweak Carbon does not provide, put the patch in a hand-authored SCSS partial under `css/`. These compile into the shipped theme stylesheets. Use them instead of per-component `<style>` blocks for anything that should be themeable.
+The library vendors the Carbon v10 SCSS (inlined from `carbon-components@10.58.15` under [`css/vendor/carbon-components/`](css/vendor/carbon-components/README.md); it is no longer an npm dependency, and `@import "carbon-components/..."` resolves there via the build's sass load path). When a style fix or feature from newer Carbon is missing from the v10 SCSS, or when the Svelte components need a tweak Carbon does not provide, put the patch in a hand-authored SCSS partial under `css/`. These compile into the shipped theme stylesheets. Use them instead of per-component `<style>` blocks for anything that should be themeable.
 
 #### Anatomy of a partial
 

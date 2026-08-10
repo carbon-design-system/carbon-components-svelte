@@ -54,6 +54,30 @@ describe("theme entry files", () => {
     }
   });
 
+  it("every carbon-components import resolves to the vendored tree", () => {
+    const specifiers = new Set(
+      readdirSync(CSS_DIR)
+        .filter((file) => file.endsWith(".scss"))
+        .flatMap(importsOf)
+        .filter((specifier) => specifier.startsWith("carbon-components/")),
+    );
+    // Sass import resolution against the build's `loadPaths: ["css/vendor"]`.
+    const resolves = (specifier: string) => {
+      const path = join(CSS_DIR, "vendor", specifier);
+      const dir = join(path, "..");
+      const base = path.slice(dir.length + 1);
+      return [
+        join(dir, `${base}.scss`),
+        join(dir, `_${base}.scss`),
+        join(path, "index.scss"),
+        join(path, "_index.scss"),
+      ].some(existsSync);
+    };
+    for (const specifier of specifiers) {
+      expect(resolves(specifier), specifier).toBe(true);
+    }
+  });
+
   it("every css partial is registered in a theme entry file", () => {
     const registered = new Set(
       ["all.scss", ...THEME_ENTRIES]
