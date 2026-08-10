@@ -1,0 +1,71 @@
+// Itemized replacement for `carbon-components/scss/globals/scss/styles`,
+// shared by all six theme entry files so the Carbon import list stays in sync.
+// Mirrors that file's import order, but omits component partials whose markup
+// this library never renders:
+//   - components/toolbar: deprecated v9 `bx--toolbar`; the DataTable toolbar
+//     is styled by data-table/_data-table-action.scss
+//   - components/pagination/unstable_pagination: `bx--unstable-pagination`
+// Audit a partial's `bx--` class roots against `src/**/*.svelte` before
+// removing or re-adding an import here.
+
+@import "carbon-components/scss/globals/scss/feature-flags";
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/colors";
+@import "carbon-components/scss/globals/scss/theme";
+@import "carbon-components/scss/globals/scss/mixins";
+@import "carbon-components/scss/globals/scss/layout";
+@import "carbon-components/scss/globals/scss/layer";
+@import "carbon-components/scss/globals/scss/spacing";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/css--reset";
+@import "carbon-components/scss/globals/scss/css--font-face";
+@import "carbon-components/scss/globals/scss/css--helpers";
+@import "carbon-components/scss/globals/scss/css--body";
+@import "carbon-components/scss/globals/grid/grid";
+
+@import "carbon-components/scss/components/accordion/accordion";
+@import "carbon-components/scss/components/breadcrumb/breadcrumb";
+@import "carbon-components/scss/components/button/button";
+@import "carbon-components/scss/components/checkbox/checkbox";
+@import "carbon-components/scss/components/code-snippet/code-snippet";
+@import "carbon-components/scss/components/combo-box/combo-box";
+@import "carbon-components/scss/components/content-switcher/content-switcher";
+@import "carbon-components/scss/components/copy-button/copy-button";
+@import "carbon-components/scss/components/data-table/data-table";
+@import "carbon-components/scss/components/date-picker/date-picker";
+@import "carbon-components/scss/components/dropdown/dropdown";
+@import "carbon-components/scss/components/file-uploader/file-uploader";
+@import "carbon-components/scss/components/form/form";
+@import "carbon-components/scss/components/inline-loading/inline-loading";
+@import "carbon-components/scss/components/link/link";
+@import "carbon-components/scss/components/list-box/list-box";
+@import "carbon-components/scss/components/list/list";
+@import "carbon-components/scss/components/loading/loading";
+@import "carbon-components/scss/components/menu/menu";
+@import "carbon-components/scss/components/modal/modal";
+@import "carbon-components/scss/components/multi-select/multi-select";
+@import "carbon-components/scss/components/notification/inline-notification";
+@import "carbon-components/scss/components/notification/toast-notification";
+@import "carbon-components/scss/components/number-input/number-input";
+@import "carbon-components/scss/components/overflow-menu/overflow-menu";
+@import "carbon-components/scss/components/pagination-nav/pagination-nav";
+@import "carbon-components/scss/components/pagination/pagination";
+@import "carbon-components/scss/components/progress-bar/progress-bar";
+@import "carbon-components/scss/components/progress-indicator/progress-indicator";
+@import "carbon-components/scss/components/radio-button/radio-button";
+@import "carbon-components/scss/components/search/search";
+@import "carbon-components/scss/components/select/select";
+@import "carbon-components/scss/components/skeleton/skeleton";
+@import "carbon-components/scss/components/slider/slider";
+@import "carbon-components/scss/components/structured-list/structured-list";
+@import "carbon-components/scss/components/tabs/tabs";
+@import "carbon-components/scss/components/tag/tag";
+@import "carbon-components/scss/components/text-area/text-area";
+@import "carbon-components/scss/components/text-input/text-input";
+@import "carbon-components/scss/components/tile/tile";
+@import "carbon-components/scss/components/time-picker/time-picker";
+@import "carbon-components/scss/components/toggle/toggle";
+@import "carbon-components/scss/components/tooltip/tooltip";
+@import "carbon-components/scss/components/ui-shell/ui-shell";
+@import "carbon-components/scss/components/treeview/treeview";

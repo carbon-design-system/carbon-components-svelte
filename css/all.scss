@@ -90,7 +90,7 @@ $css--plex: true;
 @import "carbon-components/scss/globals/scss/_css--body";
 @import "carbon-components/scss/globals/grid/grid";
 
-@import "carbon-components/scss/globals/scss/styles";
+@import "./carbon-styles";
 
 // Overrides (after Carbon base styles; same order as white/g10/etc.)
 @import "./data-table-toolbar";
