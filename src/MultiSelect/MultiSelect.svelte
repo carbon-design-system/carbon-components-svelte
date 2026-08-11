@@ -67,7 +67,10 @@
 
   /**
    * Specify the direction of the multiselect dropdown menu.
-   * @type {"bottom" | "top"}
+   * `"auto"` prefers bottom and flips when the menu would clip the viewport.
+   * Pair with `portalMenu` (or leave `portalMenu` unset) so placement uses
+   * FloatingPortal measurement.
+   * @type {"bottom" | "top" | "auto"}
    */
   export let direction = "bottom";
 
@@ -266,7 +269,8 @@
   /**
    * Set to `true` to render the dropdown menu in a portal,
    * allowing it to escape containers with `overflow: hidden`.
-   * When inside a Modal, defaults to `true` unless explicitly set to `false`.
+   * When inside a Modal or when `direction` is `"auto"`, defaults to `true`
+   * unless explicitly set to `false`.
    * @type {boolean | undefined}
    */
   export let portalMenu = undefined;
@@ -304,6 +308,7 @@
   import { isOutsideClick } from "../utils/isOutsideClick.js";
   import { createScrollEndTracker } from "../utils/isScrollNearEnd.js";
   import { moveIndex } from "../utils/moveIndex.js";
+  import { resolveListBoxDirection } from "../utils/resolveListBoxDirection.js";
   import {
     resetVirtualScrollOnClose,
     scrollHighlightedIntoView,
@@ -317,7 +322,55 @@
   const insideModal = getContext("carbon:Modal");
 
   $: effectivePortalMenu =
-    portalMenu === undefined ? !!insideModal : portalMenu;
+    portalMenu === undefined
+      ? direction === "auto" || !!insideModal
+      : portalMenu;
+
+  /** @type {"bottom" | "top"} */
+  let autoDirection = "bottom";
+  let autoDirectionLocked = false;
+
+  $: if (!open || direction !== "auto") {
+    const nextDirection = direction === "top" ? "top" : "bottom";
+    if (autoDirection !== nextDirection) {
+      autoDirection = nextDirection;
+    }
+    if (autoDirectionLocked) {
+      autoDirectionLocked = false;
+    }
+  }
+
+  $: menuDirection =
+    direction === "auto"
+      ? autoDirection
+      : direction === "top"
+        ? "top"
+        : "bottom";
+
+  $: if (
+    open &&
+    direction === "auto" &&
+    !effectivePortalMenu &&
+    fieldRef &&
+    listRef &&
+    !autoDirectionLocked
+  ) {
+    tick().then(() => {
+      if (!open || !fieldRef || !listRef || autoDirectionLocked) return;
+      const nextDirection = resolveListBoxDirection("auto", {
+        anchorRect: fieldRef.getBoundingClientRect(),
+        floatingRect: listRef.getBoundingClientRect(),
+        viewport: {
+          innerWidth: window.innerWidth,
+          innerHeight: window.innerHeight,
+        },
+      });
+      if (autoDirection !== nextDirection) {
+        autoDirection = nextDirection;
+      }
+      autoDirectionLocked = true;
+    });
+  }
 
   let fieldFocused = false;
   let highlightedIndex = -1;
@@ -768,7 +821,7 @@
 
   $: multiSelectListBoxClass = [
     "bx--multi-select",
-    direction === "top" && "bx--list-box--up",
+    menuDirection === "top" && "bx--list-box--up",
     filterable && "bx--combo-box",
     filterable && "bx--multi-select--filterable",
     showInvalid && "bx--multi-select--invalid",
