@@ -818,6 +818,18 @@ describe("DatePicker", () => {
       expect(calendar.querySelectorAll(".flatpickr-day")).toHaveLength(0);
     });
 
+    it("marks the current month with the today class and aria-current", async () => {
+      render(DatePicker, { datePickerType: "month", dateFormat: "F Y" });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+
+      const months = calendar.querySelectorAll(".flatpickr-monthSelect-month");
+      const currentMonth = months[new Date().getMonth()];
+      expect(currentMonth).toHaveClass("today");
+      expect(currentMonth).toHaveAttribute("aria-current", "date");
+    });
+
     // Regression test: SCSS scopes the shorter calendar height to month mode
     // via this marker class instead of `:has()` (unsupported at the Svelte 5
     // browser baseline).

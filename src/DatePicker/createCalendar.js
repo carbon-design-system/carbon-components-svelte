@@ -107,6 +107,31 @@ function markDisabledDayAriaState(_dObj, _dStr, _fp, dayElem) {
 }
 
 /**
+ * flatpickr's bundled monthSelect plugin has no concept of "today"; mark
+ * the current year's current month the same way flatpickr core marks the
+ * current day, since the month cells persist (and their `dateObj` year is
+ * mutated in place) across `onYearChange` instead of being rebuilt.
+ *
+ * @param {FlatpickrInstance} instance
+ */
+function markTodayMonth(instance) {
+  const now = new Date();
+  for (const node of instance.rContainer?.querySelectorAll(
+    ".flatpickr-monthSelect-month",
+  ) ?? []) {
+    const isToday =
+      node.dateObj.getFullYear() === now.getFullYear() &&
+      node.dateObj.getMonth() === now.getMonth();
+    node.classList.toggle("today", isToday);
+    if (isToday) {
+      node.setAttribute("aria-current", "date");
+    } else {
+      node.removeAttribute("aria-current");
+    }
+  }
+}
+
+/**
  * @param {FlatpickrInstance} instance
  */
 function updateMonthNode(instance) {
@@ -207,6 +232,17 @@ export async function createCalendar({ options, base, input, dispatch }) {
         updateMonthNode(instance);
       }
     },
+    onYearChange: (
+      /** @type {any} */ _s,
+      /** @type {any} */ _d,
+      /** @type {FlatpickrInstance} */ instance,
+    ) => {
+      // The monthSelect plugin mutates its month cells' `dateObj` in place
+      // on year change rather than rebuilding them, so re-mark "today" here.
+      if (options.mode === "month") {
+        markTodayMonth(instance);
+      }
+    },
     onOpen: (
       /** @type {any} */ _s,
       /** @type {any} */ _d,
@@ -219,6 +255,9 @@ export async function createCalendar({ options, base, input, dispatch }) {
       });
       if (options.mode !== "month" && options.mode !== "year") {
         updateMonthNode(instance);
+      }
+      if (options.mode === "month") {
+        markTodayMonth(instance);
       }
     },
     ...options,
