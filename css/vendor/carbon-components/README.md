@@ -21,6 +21,14 @@ these prunings relative to upstream:
 To use an upstream file that is not vendored, restore it from
 `carbon-components@10.58.15` on npm.
 
+Some component files additionally carry this library's own patches, appended
+at the end under `// carbon-components-svelte patch (formerly css/_*.scss)`
+banners. Everything above such a banner is upstream code; everything below is
+hand-authored. A patch may live here only when emitting at the component's
+position is order-safe — it must not rely on out-emitting a later component's
+equal-specificity rules. Patches that need to emit after all base styles stay
+in `css/_*.scss`, registered in the six theme entry files.
+
 `scripts/build-css.ts` resolves `@import "carbon-components/..."` here via its
 sass `loadPaths`, so theme entry files and `css/_*.scss` partials did not
 change specifiers when the dependency was inlined.

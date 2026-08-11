@@ -260,3 +260,81 @@ $css--helpers: true;
 @include exports('pagination') {
   @include pagination;
 }
+
+// ---------------------------------------------------------------------------
+// carbon-components-svelte patch (formerly css/_pagination.scss)
+// ---------------------------------------------------------------------------
+// Extra-small (xs, 24px) pagination. v10 ships sm/lg only; upstream carbon#21695.
+// v11 sizes from layout.height; at xs that is 24px ($size-xs / 1.5rem in v10).
+// Simple mode: compact prev/next + status for toolbars and cards.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/layout/scss/generated/size";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Extra-small pagination (Carbon size="xs", 24px)
+/// @access private
+/// @group components
+@mixin pagination-xs {
+  .#{$prefix}--pagination--xs {
+    min-height: $size-xs;
+  }
+
+  .#{$prefix}--pagination--xs .#{$prefix}--select-input {
+    line-height: $size-xs;
+  }
+
+  .#{$prefix}--pagination--xs .#{$prefix}--pagination__button,
+  .#{$prefix}--pagination--xs
+    .#{$prefix}--btn--ghost.#{$prefix}--pagination__button {
+    width: $size-xs;
+    height: $size-xs;
+    min-height: $size-xs;
+  }
+}
+
+/// Compact pagination for toolbars and cards
+/// @access private
+/// @group components
+@mixin pagination-simple {
+  .#{$prefix}--pagination--simple {
+    width: auto;
+    justify-content: flex-end;
+    border-top: 0;
+    background-color: transparent;
+  }
+
+  .#{$prefix}--pagination--simple .#{$prefix}--pagination__right {
+    margin-left: 0;
+  }
+
+  .#{$prefix}--pagination--simple
+    .#{$prefix}--pagination__right
+    > .#{$prefix}--pagination__text {
+    margin-left: $spacing-05;
+    margin-right: $spacing-05;
+  }
+
+  // Keep status text and buttons visible below the md breakpoint.
+  // Upstream mobile rules hide all `__right` children except control wrappers.
+  @include carbon--breakpoint-down(md) {
+    .#{$prefix}--pagination--simple .#{$prefix}--pagination__right > * {
+      display: flex;
+    }
+
+    .#{$prefix}--pagination--simple
+      .#{$prefix}--pagination__right
+      > .#{$prefix}--pagination__text {
+      display: inline-block;
+    }
+  }
+}
+
+@include exports("pagination-xs") {
+  @include pagination-xs;
+}
+
+@include exports("pagination-simple") {
+  @include pagination-simple;
+}
