@@ -19,7 +19,7 @@
    * Specify the icon to render when the action panel is closed.
    * @type {Icon}
    */
-  export let icon = /** @type {Icon} */ (Switcher);
+  export let icon = /** @type {Icon} */ (SwitcherIcon);
 
   /**
    * Specify the icon to render when the action panel is open.
@@ -77,7 +77,7 @@
   import { createEventDispatcher } from "svelte";
   import { slide } from "svelte/transition";
   import Close from "../icons/Close.svelte";
-  import Switcher from "../icons/Switcher.svelte";
+  import SwitcherIcon from "../icons/SwitcherIcon.svelte";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
 
