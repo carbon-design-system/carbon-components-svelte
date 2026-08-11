@@ -124,6 +124,7 @@ function yearSelectPlugin(pluginConfig) {
 
         if (year === new Date().getFullYear()) {
           yearEl.classList.add("today");
+          yearEl.setAttribute("aria-current", "date");
         }
 
         if (
