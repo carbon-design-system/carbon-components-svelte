@@ -1,6 +1,6 @@
 ---
 components: ["TagSet"]
-description: Displays a row of tags that collapses to fit the available width, moving hidden tags into an overflow indicator with a tooltip.
+description: Displays a row of tags that collapses to fit the available width, with a tooltip preview and a clickable overflow popover for the hidden tags.
 ---
 
 <script>
@@ -39,7 +39,7 @@ Set `align` to change how the visible tags are positioned within the row when th
 
 ## Overflow
 
-Once the row runs out of space, the remaining tags collapse into a "+N" indicator. Hovering it shows the hidden labels in a tooltip.
+Once the row runs out of space, the remaining tags collapse into a "+N" indicator. Hovering it shows the hidden labels in a tooltip. Clicking it opens a popover that lists the overflow tags.
 
 There is no fixed number of tags that triggers this. `TagSet` measures the actual pixel width available and fits as many tags as space allows, so the count that overflows depends on the container's width and each tag's label length, not a set threshold.
 
@@ -106,6 +106,12 @@ Set `overflowDirection` to show the tooltip above the indicator instead of below
 Set `filter` on a `Tag` to render it as closable. `TagSet` dispatches `close:tag` with `{ tag, index }` instead of taking a per-tag handler: remove the tag from your own state in response.
 
 <FileSource src="/framed/TagSet/TagSetDismissible" />
+
+## Overflow disclosure
+
+In a constrained filter bar, click "+N" to open the overflow popover and dismiss hidden filter tags without resizing the row. Hover still shows the label preview tooltip.
+
+<FileSource src="/framed/TagSet/TagSetOverflowDisclosure" />
 
 ## Custom overflow tooltip
 

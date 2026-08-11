@@ -12,11 +12,13 @@
 
   /**
    * Render a row of `Tag` children. `TagSet` measures the available width and
-   * collapses whatever no longer fits into a "+N" overflow indicator, with a
-   * hover tooltip listing the hidden labels by default. Override the tooltip
-   * content with the `overflowTooltip` slot, for example to add a link.
+   * collapses whatever no longer fits into a "+N" overflow indicator. Hover
+   * shows a tooltip listing the hidden labels by default; click opens a
+   * popover of the overflow tags (including dismissible close controls).
+   * Override the tooltip content with the `overflowTooltip` slot, for example
+   * to add a link.
    *
-   * @event {{ tag: TagSetItem; index: number }} close:tag - User clicks the close icon on a dismissible (`filter`) tag.
+   * @event {{ tag: TagSetItem; index: number }} close:tag - User clicks the close icon on a dismissible (`filter`) tag, including tags listed in the overflow popover.
    * @event {{ count: number }} click:overflow - User clicks the "+N" indicator.
    * @event {{ count: number }} overflow:change - Dispatched when the number of overflowing tags changes, from a resize, a slotted-children change, or a `maxVisible` change.
    * @slot {{ tags: TagSetItem[]; count: number }} overflowTooltip - Override the "+N" indicator's tooltip content. Defaults to a comma-separated list of the hidden labels.
@@ -202,6 +204,11 @@
   function handleTriggerClick() {
     dispatch("click:overflow", { count: overflowCount });
   }
+
+  /** @param {CustomEvent<TagSetItem>} event */
+  function handleOverflowTagClose(event) {
+    handleTagClose(event.detail);
+  }
 </script>
 
 <div bind:this={wrapperRef} class:bx--tag-set={true} {...$$restProps}>
@@ -226,6 +233,7 @@
       {overflowDirection}
       {size}
       on:trigger={handleTriggerClick}
+      on:close:tag={handleOverflowTagClose}
     >
       <svelte:fragment slot="tooltip" let:tags let:count>
         <slot name="overflowTooltip" {tags} {count}>
