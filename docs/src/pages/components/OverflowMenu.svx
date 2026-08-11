@@ -44,6 +44,14 @@ Set `flipped` to `true` to position the menu to the left of the button.
   <OverflowMenuItem danger text="Delete service" />
 </OverflowMenu>
 
+### Auto align
+
+Set `autoAlign` to `true` and the menu aligns itself to the trigger's other edge when the default placement would overflow the viewport. Each trigger below sits at the right edge of its row, so the menu opens inward instead of off-screen. The side is re-evaluated on scroll and resize.
+
+Auto alignment measures the menu in a portal, so `autoAlign` turns on portalling unless you set `portalMenu` to `false`. Use [Flipped](#flipped) to pin the menu to one side yourself.
+
+<FileSource src="/framed/OverflowMenu/OverflowMenuAutoAlign" />
+
 ### Direction
 
 Set `direction` to `"top"` to position the menu above the button.
