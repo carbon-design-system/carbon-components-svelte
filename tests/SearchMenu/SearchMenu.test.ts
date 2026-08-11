@@ -250,6 +250,66 @@ describe("SearchMenu", () => {
   });
 });
 
+describe("SearchMenu debounce / search event", () => {
+  function getSearches() {
+    return JSON.parse(screen.getByTestId("searches").textContent ?? "[]");
+  }
+
+  function delay(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  it("does not dispatch search when debounce is unset", async () => {
+    const { rerender } = render(SearchMenu);
+    await rerender({ value: "ab" });
+    await delay(50);
+    expect(getSearches()).toEqual([]);
+  });
+
+  it("dispatches search after the debounce delay", async () => {
+    const { rerender } = render(SearchMenu, { props: { debounce: 50 } });
+    // Drain the initial empty-value search scheduled on mount.
+    await vi.waitFor(() => {
+      expect(getSearches()).toEqual([""]);
+    });
+
+    await rerender({ debounce: 50, value: "ab", searches: [] });
+    expect(getSearches()).toEqual([]);
+    // bind:value stays immediate while search is still pending.
+    expect(screen.getByRole("combobox")).toHaveValue("ab");
+    await vi.waitFor(() => {
+      expect(getSearches()).toEqual(["ab"]);
+    });
+  });
+
+  it("collapses rapid value changes into one search", async () => {
+    const { rerender } = render(SearchMenu, { props: { debounce: 50 } });
+    await vi.waitFor(() => {
+      expect(getSearches()).toEqual([""]);
+    });
+
+    await rerender({ debounce: 50, value: "a", searches: [] });
+    await delay(15);
+    await rerender({ debounce: 50, value: "ab", searches: [] });
+    await delay(15);
+    await rerender({ debounce: 50, value: "abc", searches: [] });
+    expect(getSearches()).toEqual([]);
+    await vi.waitFor(() => {
+      expect(getSearches()).toEqual(["abc"]);
+    });
+  });
+
+  it("dispatches search immediately when debounce is 0", async () => {
+    const { rerender } = render(SearchMenu, { props: { debounce: 0 } });
+    expect(getSearches()).toEqual([""]);
+
+    await rerender({ debounce: 0, value: "a", searches: [] });
+    expect(getSearches()).toEqual(["a"]);
+    await rerender({ debounce: 0, value: "ab", searches: ["a"] });
+    expect(getSearches()).toEqual(["a", "ab"]);
+  });
+});
+
 describe("SearchMenu sizes", () => {
   it("defaults the input and menu to the xl size", async () => {
     render(SearchMenu);

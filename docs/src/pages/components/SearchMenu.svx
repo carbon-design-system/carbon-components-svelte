@@ -129,13 +129,13 @@ Provide a `noResults` slot to render an empty state when the search value matche
 
 ### Async results
 
-Combine an async data source with client-side highlighting. Bind to `value`, fetch on input (debounced here), and render the returned items. Because filtering happens on the server (`shouldFilter={false}`), the menu shows exactly what the server returns while the client-side matcher still highlights the query. Set `loading` to render a skeleton menu while fetching (customize the rows with `skeletonCount` or the `loading` slot), and use the `noResults` slot for the empty state.
+Combine an async data source with client-side highlighting. Set `debounce` (milliseconds) so the `search` event fires after typing pauses; `bind:value` stays immediate. Listen to `search` to fetch, set `loading` while the request is in flight, and render the returned items. Because filtering happens on the server (`shouldFilter={false}`), the menu shows exactly what the server returns while the client-side matcher still highlights the query. Customize skeleton rows with `skeletonCount` or the `loading` slot, and use the `noResults` slot for the empty state.
 
 <FileSource src="/framed/SearchMenu/AsyncResults" />
 
 ## Events
 
-The `select` event fires when an item is activated, carrying the `value`, the `item`, and the originating `event`. The `submit` event fires when pressing <DocKbd label="Enter" /> without an active item, carrying the current `value`. The `close` event fires when the menu closes, with a `trigger` of `"escape-key"`, `"outside-click"`, `"select"`, or `"blur"`.
+The `select` event fires when an item is activated, carrying the `value`, the `item`, and the originating `event`. The `submit` event fires when pressing <DocKbd label="Enter" /> without an active item, carrying the current `value`. The `search` event fires when `debounce` is set, carrying the current `value` after the delay (`0` means immediately on every value change; unset means no `search` event). The `close` event fires when the menu closes, with a `trigger` of `"escape-key"`, `"outside-click"`, `"select"`, or `"blur"`.
 
 ### Result links
 
