@@ -94,7 +94,8 @@
   ],
   "files": [
     "src",
-    "css",
+    "css/*.css",
+    "css/css.d.ts",
     "telemetry.yml"
   ],
   "maintainers": [
