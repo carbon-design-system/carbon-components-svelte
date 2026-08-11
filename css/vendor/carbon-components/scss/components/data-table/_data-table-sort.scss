@@ -79,18 +79,6 @@
     justify-content: space-between;
   }
 
-  // V11: Remove compact, short, tall
-  .#{$prefix}--data-table--sort:not(.#{$prefix}--data-table--compact):not(.#{$prefix}--data-table--short):not(.#{$prefix}--data-table--tall):not(.#{$prefix}--data-table--xs):not(.#{$prefix}--data-table--sm):not(.#{$prefix}--data-table--md):not(.#{$prefix}--data-table--xl)
-    th
-    .#{$prefix}--table-sort__flex {
-    /* IE11 workaround for align-items: center and min-height
-        https://github.com/philipwalton/flexbugs/issues/231 */
-    @media screen and (-ms-high-contrast: active),
-      screen and (-ms-high-contrast: none) {
-      height: 2.99rem;
-    }
-  }
-
   // V11: remove compact
   .#{$prefix}--data-table--compact.#{$prefix}--data-table--sort
     th
