@@ -104,6 +104,24 @@
       color: $text-04;
     }
 
+    &.today:not(.selected) {
+      position: relative;
+      color: $link-01;
+      font-weight: 600;
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: 0.4375rem;
+        left: 50%;
+        display: block;
+        width: 0.25rem;
+        height: 0.25rem;
+        background-color: $link-01;
+        transform: translateX(-50%);
+      }
+    }
+
     &.disabled {
       color: $disabled-02;
       cursor: not-allowed;
