@@ -106,9 +106,10 @@
       background-color: transparent;
     }
 
-    // The matched-text highlight otherwise forces text-01; keep it disabled.
+    // The matched-text highlight otherwise forces a background and text-01; keep it disabled.
     .#{$prefix}--search-menu-item__highlight {
       color: $disabled-02;
+      background-color: transparent;
     }
   }
 
@@ -132,8 +133,15 @@
     text-overflow: ellipsis;
   }
 
+  // $highlight (carbon-components/scss .../themes/generated/_tokens.scss) never
+  // resolves to a theme-mapped value in this Carbon version -- none of the
+  // white/g10/g90/g100 theme maps define a 'highlight' key, so it always falls
+  // back to the light-theme default (#d0e2ff) regardless of theme. Derive from
+  // $link-01 instead, which does invert per theme, to get a matching-but-dark
+  // tint on g90/g100.
   .#{$prefix}--search-menu-item__highlight {
     color: $text-01;
+    background-color: rgba($link-01, 0.16);
     font-weight: 600;
   }
 
