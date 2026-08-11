@@ -341,6 +341,12 @@ When inside a [Modal](/components/Modal#modal-with-dropdowns), `portalMenu` defa
 
 <FileSource src="/framed/ComboBox/ComboBoxPortalMenu" />
 
+### Custom max height
+
+Set `maxHeight` to override the size-based default height of a portaled menu. A number is treated as pixels; a string is used as any CSS length, such as `"20rem"`. The menu scrolls once its items exceed the height.
+
+<FileSource src="/framed/ComboBox/ComboBoxMaxHeight" />
+
 ## Light
 
 Set `light` to `true` to use the light color scheme.

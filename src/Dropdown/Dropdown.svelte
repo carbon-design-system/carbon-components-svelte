@@ -172,6 +172,14 @@
    */
   export let portalMenu = undefined;
 
+  /**
+   * Specify the maximum height of the menu.
+   * A number is treated as pixels; a string is used as a CSS length.
+   * The menu scrolls once its items exceed the height.
+   * @type {number | string}
+   */
+  export let maxHeight = undefined;
+
   /** Set an id for the list box component */
   export let id = `ccs-${Math.random().toString(36)}`;
 
@@ -309,7 +317,7 @@
       ? false
       : virtualize !== undefined || items.length > 100;
 
-  $: menuMaxHeight = getMenuMaxHeight(size);
+  $: resolvedMenuMaxHeight = maxHeight ?? getMenuMaxHeight(size);
 
   // Fluid (non-condensed) menu items are 64px tall (see css/_fluid-list-box.scss).
   // Portaled menus render outside the fluid wrapper, so they keep default heights.
@@ -731,13 +739,12 @@
           highlightOrigin = null;
         }}
         bind:ref={listRef}
-        style={effectivePortalMenu
-          ? `max-height: ${virtualConfig
-              ? `${virtualConfig.containerHeight}px; overflow-y: auto`
-              : menuMaxHeight};`
-          : virtualConfig
-            ? `max-height: ${virtualConfig.containerHeight}px; overflow-y: auto;`
-            : undefined}
+        style={virtualConfig
+          ? `max-height: ${virtualConfig.containerHeight}px; overflow-y: auto;`
+          : undefined}
+        maxHeight={!virtualConfig && effectivePortalMenu
+          ? resolvedMenuMaxHeight
+          : undefined}
       >
         {#if virtualData?.isVirtualized}
           <div style="height: {virtualData.totalHeight}px; position: relative;">

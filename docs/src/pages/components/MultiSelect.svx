@@ -399,6 +399,12 @@ When inside a [Modal](/components/Modal#modal-with-dropdowns), portalMenu defaul
 
 <FileSource src="/framed/MultiSelect/MultiSelectPortalMenu" />
 
+### Custom max height
+
+Set `maxHeight` to override the size-based default height of a portaled menu. A number is treated as pixels; a string is used as any CSS length, such as `"20rem"`. The menu scrolls once its items exceed the height.
+
+<FileSource src="/framed/MultiSelect/MultiSelectMaxHeight" />
+
 ## States
 
 Surface validation and interaction states. Invalid and warning states each have a filterable counterpart.
