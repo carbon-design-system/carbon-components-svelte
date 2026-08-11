@@ -87,6 +87,14 @@
   }
 
   .#{$prefix}--pin-code-input--fluid
+    .#{$prefix}--pin-code-input__group-separator {
+    align-self: flex-end;
+    margin-inline: $spacing-03;
+    margin-block-end: to-rem(10px);
+    color: $text-02;
+  }
+
+  .#{$prefix}--pin-code-input--fluid
     .#{$prefix}--pin-code-input__field
     + .#{$prefix}--pin-code-input__field {
     margin-inline-start: 0;
