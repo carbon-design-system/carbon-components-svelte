@@ -140,6 +140,52 @@ describe("MultiSelect", () => {
         "selection-test-multiselect helper-test-multiselect",
       );
     });
+
+    it.each([{ filterable: false }, { filterable: true }])(
+      "resolves aria-describedby to the non-fluid error text when %o",
+      ({ filterable }) => {
+        render(MultiSelect, {
+          props: {
+            id: "test-multiselect",
+            items,
+            labelText: "Contact methods",
+            filterable,
+            invalid: true,
+            invalidText: "Invalid selection",
+          },
+        });
+
+        expect(screen.getByRole("combobox")).toHaveAttribute(
+          "aria-describedby",
+          "error-test-multiselect",
+        );
+
+        const description = document.querySelector("#error-test-multiselect");
+        expect(description).toHaveTextContent("Invalid selection");
+        expect(description).toHaveClass("bx--form-requirement");
+      },
+    );
+
+    it("resolves aria-describedby to the non-fluid warning text", () => {
+      render(MultiSelect, {
+        props: {
+          id: "test-multiselect",
+          items,
+          labelText: "Contact methods",
+          warn: true,
+          warnText: "Warning message",
+        },
+      });
+
+      expect(screen.getByRole("combobox")).toHaveAttribute(
+        "aria-describedby",
+        "warn-test-multiselect",
+      );
+
+      const description = document.querySelector("#warn-test-multiselect");
+      expect(description).toHaveTextContent("Warning message");
+      expect(description).toHaveClass("bx--form-requirement");
+    });
   });
 
   it("renders default slot", () => {
