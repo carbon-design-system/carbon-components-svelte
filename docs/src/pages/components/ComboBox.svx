@@ -271,6 +271,14 @@ Set `allowCustomValue` to `true` to let users enter custom text that is not in t
 
 <FileSource src="/framed/ComboBox/AllowCustomValue" />
 
+### Create option
+
+Set `allowCustomValue` to `true` and listen to `create` to persist a new option. `allowCustomValue` keeps typed text when the menu closes; the menu also shows a trailing create row whenever the query is novel (no case-insensitive `itemToString` match), even if partial matches remain. Handle `create` to append to `items` and set `value` / `selectedId`. The combobox does not mutate `items` on its own.
+
+Override the row label with `createOptionText` — a string, or a function of the current query. The default label is `Create "…"` with the query inserted.
+
+<FileSource src="/framed/ComboBox/CreateOption" />
+
 ### Select text on focus
 
 Set `selectTextOnFocus` to `true` to select all text in the input when it receives focus (for example, on tab or click). Users can replace the value by typing without manually selecting first.
