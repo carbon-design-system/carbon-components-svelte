@@ -839,11 +839,13 @@
     {disabled}
     invalid={showInvalid}
     invalidText={isFluid ? "" : invalidText}
+    invalidId={errorId}
     {open}
     {light}
     {size}
     warn={showWarn}
     warnText={isFluid ? "" : warnText}
+    {warnId}
     class={multiSelectListBoxClass}
   >
     {#if showInvalid}

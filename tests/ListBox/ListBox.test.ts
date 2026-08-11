@@ -97,6 +97,47 @@ describe("ListBox", () => {
     );
   });
 
+  it("should render no id on the form-requirement text by default", () => {
+    render(ListBox, {
+      props: {
+        invalid: true,
+        invalidText: "Invalid selection",
+      },
+    });
+
+    expect(screen.getByText("Invalid selection")).not.toHaveAttribute("id");
+  });
+
+  it("should set invalidId on the invalid text", () => {
+    render(ListBox, {
+      props: {
+        invalid: true,
+        invalidText: "Invalid selection",
+        invalidId: "custom-error-id",
+      },
+    });
+
+    expect(screen.getByText("Invalid selection")).toHaveAttribute(
+      "id",
+      "custom-error-id",
+    );
+  });
+
+  it("should set warnId on the warning text", () => {
+    render(ListBox, {
+      props: {
+        warn: true,
+        warnText: "Warning message",
+        warnId: "custom-warn-id",
+      },
+    });
+
+    expect(screen.getByText("Warning message")).toHaveAttribute(
+      "id",
+      "custom-warn-id",
+    );
+  });
+
   it("should prioritize invalid over warning", () => {
     const { container } = render(ListBox, {
       props: {

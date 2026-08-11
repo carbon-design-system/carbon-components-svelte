@@ -9,8 +9,10 @@
   export let disabled: ComponentProps<ListBox>["disabled"] = false;
   export let invalid: ComponentProps<ListBox>["invalid"] = false;
   export let invalidText: ComponentProps<ListBox>["invalidText"] = "";
+  export let invalidId: ComponentProps<ListBox>["invalidId"] = undefined;
   export let warn: ComponentProps<ListBox>["warn"] = false;
   export let warnText: ComponentProps<ListBox>["warnText"] = "";
+  export let warnId: ComponentProps<ListBox>["warnId"] = undefined;
   export let slotContent = "";
   export let onkeydown: ((event: KeyboardEvent) => void) | undefined =
     undefined;
@@ -25,8 +27,10 @@
   {disabled}
   {invalid}
   {invalidText}
+  {invalidId}
   {warn}
   {warnText}
+  {warnId}
   on:keydown={(e) => onkeydown?.(e)}
   on:click={(e) => onclick?.(e)}
   {...$$restProps}

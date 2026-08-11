@@ -26,11 +26,23 @@
   /** Specify the invalid state text */
   export let invalidText = "";
 
+  /**
+   * Specify an id for the invalid state text
+   * @type {string}
+   */
+  export let invalidId = undefined;
+
   /** Set to `true` to indicate a warning state */
   export let warn = false;
 
   /** Specify the warning state text */
   export let warnText = "";
+
+  /**
+   * Specify an id for the warning state text
+   * @type {string}
+   */
+  export let warnId = undefined;
 </script>
 
 <div
@@ -58,8 +70,8 @@
   <slot />
 </div>
 {#if invalid && invalidText}
-  <div class:bx--form-requirement={true}>{invalidText}</div>
+  <div id={invalidId} class:bx--form-requirement={true}>{invalidText}</div>
 {/if}
 {#if !invalid && warn && warnText}
-  <div class:bx--form-requirement={true}>{warnText}</div>
+  <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
 {/if}
