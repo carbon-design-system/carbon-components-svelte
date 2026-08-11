@@ -224,3 +224,135 @@
 @include exports('content-switcher') {
   @include content-switcher;
 }
+
+// ---------------------------------------------------------------------------
+// carbon-components-svelte patch (formerly css/_content-switcher-low-contrast.scss)
+// ---------------------------------------------------------------------------
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Low contrast content switcher (Carbon React lowContrast).
+/// v10 has no low-contrast tokens. Selected segment becomes an outlined card;
+/// unselected buttons stay transparent. Light themes use a gray container;
+/// dark themes use a transparent container with a raised selected card ($ui-02).
+///
+/// Single-theme builds detect light/dark from background lightness. `all.css`
+/// uses CSS custom properties, so lightness() fails; default to light and
+/// override via `[theme="g80"|"g90"|"g100"]`.
+/// @access private
+/// @group components
+@mixin content-switcher-low-contrast {
+  $custom-props: feature-flag-enabled("enable-css-custom-properties");
+  $is-light-theme: true;
+  @if not $custom-props {
+    $is-light-theme: lightness($ui-background) > 50%;
+  }
+
+  .#{$prefix}--content-switcher--low-contrast {
+    background-color: if($is-light-theme, $ui-03, transparent);
+
+    .#{$prefix}--content-switcher-btn {
+      border-color: $ui-04;
+      color: $text-secondary;
+
+      &::before {
+        background-color: $border-strong;
+      }
+
+      &::after {
+        border-radius: to-rem(4px);
+        background-color: $ui-02;
+        box-shadow: inset 0 0 0 to-rem(1px) $border-inverse;
+      }
+
+      &:hover,
+      &:active {
+        background-color: $hover-selected-ui;
+        color: $text-primary;
+      }
+
+      // `background-color` must be re-asserted so a disabled switch does not
+      // keep the hover fill (the `:hover`/`:disabled` rules are equal
+      // specificity; this resets it).
+      &:disabled {
+        background-color: transparent;
+        color: $text-disabled;
+      }
+
+      // Carbon's first/last disabled rules set `border-color` at equal
+      // specificity and win by source order, so re-assert the disabled border
+      // for every position. v10 `$border-disabled` is lighter than the
+      // container (invisible); `$disabled-02` matches React's v11
+      // `border-disabled` (gray 30).
+      &:disabled,
+      &:disabled:first-child,
+      &:disabled:last-child {
+        border-color: $disabled-02;
+      }
+    }
+
+    .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher--selected {
+      background-color: transparent;
+      color: $text-primary;
+      font-weight: 600;
+
+      &:focus {
+        box-shadow: none;
+      }
+
+      &:focus::after {
+        box-shadow: inset 0 0 0 to-rem(2px) $focus;
+        clip-path: none;
+      }
+
+      &:disabled {
+        border: to-rem(1px) solid $disabled-02;
+        border-radius: to-rem(4px);
+        color: $text-disabled;
+
+        &::after {
+          box-shadow: none;
+        }
+      }
+    }
+
+    // The active card carries its own outline, so suppress the dividers on both
+    // sides of it (its own and the next sibling's). The resting `&::before` rule
+    // above outranks Carbon's selected resets, so they must be re-asserted here
+    // at higher specificity.
+    .#{$prefix}--content-switcher--selected::before,
+    .#{$prefix}--content-switcher--selected
+      + .#{$prefix}--content-switcher-btn::before {
+      background-color: transparent;
+    }
+
+    // Unselected icon-only switches use $icon-secondary (Carbon React lowContrast).
+    &.#{$prefix}--content-switcher--icon-only
+      .#{$prefix}--content-switcher-btn
+      svg {
+      fill: $icon-secondary;
+    }
+
+    // Selected icon-only switches use $icon-primary on the light card
+    // (overrides the $icon-secondary fill above).
+    &.#{$prefix}--content-switcher--icon-only
+      .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher--selected
+      svg {
+      fill: $icon-primary;
+    }
+  }
+
+  @if $custom-props {
+    @each $dark-theme in ("g80", "g90", "g100") {
+      [theme="#{$dark-theme}"] .#{$prefix}--content-switcher--low-contrast {
+        background-color: transparent;
+      }
+    }
+  }
+}
+
+@include exports("content-switcher-low-contrast") {
+  @include content-switcher-low-contrast;
+}

@@ -138,3 +138,45 @@
 @include exports('menu') {
   @include menu;
 }
+
+// ---------------------------------------------------------------------------
+// carbon-components-svelte patch (formerly css/_menu.scss)
+// ---------------------------------------------------------------------------
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Scrollable menu, paired with the inline `max-height` the `maxHeight` prop
+/// sets on the menu list.
+/// @access private
+/// @group components
+@mixin menu-scrollable {
+  .#{$prefix}--menu--scrollable {
+    overflow-y: auto;
+  }
+}
+
+@include exports("menu-scrollable") {
+  @include menu-scrollable;
+}
+
+// ---------------------------------------------------------------------------
+// carbon-components-svelte patch (formerly css/_menu-xs.scss)
+// ---------------------------------------------------------------------------
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Extra-small menu (Carbon React size="xs", 24px). v10 only ships sm/md/lg
+/// for `.bx--menu`; mirrors the same v10-lacks-xs situation as OverflowMenu.
+/// @access private
+/// @group components
+@mixin menu-xs {
+  .#{$prefix}--menu--xs .#{$prefix}--menu-option {
+    height: to-rem(24px);
+  }
+}
+
+@include exports("menu-xs") {
+  @include menu-xs;
+}

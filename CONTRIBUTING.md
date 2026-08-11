@@ -449,9 +449,13 @@ Document the mixin with SassDoc (`/// @access private`, `/// @group components`)
 
 Token utility partials (`css/_type.scss`, `css/_box.scss`, …) emit `bx--type-*` and `bx--box-*` classes. Map v11 token names in docs and props to v10 theme variables in SCSS where needed (for example `layer-01` → `$ui-01`). Share spacing scale values through [`css/_spacing-scale.scss`](css/_spacing-scale.scss) when multiple partials use the same rem steps.
 
+#### Where a patch lives
+
+Component-scoped patches sit at the end of the vendored component file itself (for example `css/vendor/carbon-components/scss/components/accordion/_accordion.scss`), below a `// carbon-components-svelte patch` banner — see the [vendored tree's README](css/vendor/carbon-components/README.md). This is only safe when the patch does not depend on emitting after a _later_ component's equal-specificity rules; patches that must win such source-order ties (and any partial with no single component home) stay as `css/_*.scss` partials instead.
+
 #### Registering a partial
 
-A partial ships only after a theme entry file imports it. Add `@import "./name";` to the custom component overrides block, which comes _after_ Carbon's own `globals/scss/styles`, in all six entry files. Keep import order identical across them:
+A `css/_*.scss` partial ships only after a theme entry file imports it. Add `@import "./name";` to the custom component overrides block, which comes _after_ the itemized Carbon base imports (`css/_carbon-styles.scss`), in all six entry files. Keep import order identical across them:
 
 - `css/all.scss`
 - `css/white.scss`
