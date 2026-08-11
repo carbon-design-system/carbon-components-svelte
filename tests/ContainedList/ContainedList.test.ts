@@ -3,6 +3,8 @@ import type ContainedListItemComponent from "carbon-components-svelte/ContainedL
 import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
 import ContainedListLabelChildren from "./ContainedList.labelChildren.test.svelte";
+import ContainedListSearch from "./ContainedList.search.test.svelte";
+import ContainedListSearchAction from "./ContainedList.searchAction.test.svelte";
 import ContainedList from "./ContainedList.test.svelte";
 import ContainedListItemAction from "./ContainedListItem.action.test.svelte";
 import ContainedListItemHref from "./ContainedListItem.href.test.svelte";
@@ -125,6 +127,36 @@ describe("ContainedList", () => {
 
     const search = screen.getByRole("searchbox");
     expect(search).toBeInTheDocument();
+  });
+
+  it("should render search slot below the header", () => {
+    const { container } = render(ContainedListSearch);
+
+    const search = screen.getByRole("searchbox");
+    expect(search).toBeInTheDocument();
+
+    const searchRegion = container.querySelector(".bx--contained-list__search");
+    expect(searchRegion).toBeInTheDocument();
+    expect(searchRegion?.contains(search)).toBe(true);
+
+    const list = screen.getByRole("list");
+    expect(list.contains(search)).toBe(false);
+
+    const header = container.querySelector(".bx--contained-list__header");
+    expect(header?.nextElementSibling).toBe(searchRegion);
+  });
+
+  it("should render action and search slots together", () => {
+    const { container } = render(ContainedListSearchAction);
+
+    expect(screen.getByRole("button", { name: "Action" })).toBeInTheDocument();
+    expect(screen.getByRole("searchbox")).toBeInTheDocument();
+    expect(
+      container.querySelector(".bx--contained-list__action"),
+    ).toBeInTheDocument();
+    expect(
+      container.querySelector(".bx--contained-list__search"),
+    ).toBeInTheDocument();
   });
 
   it("should render list items", () => {
