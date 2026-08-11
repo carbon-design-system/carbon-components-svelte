@@ -162,23 +162,11 @@
     }
   }
 
-  .#{$prefix}--search-button {
-    flex-shrink: 0;
-    margin-left: $carbon--spacing-01;
-    background-color: $field-01;
-
-    svg {
-      fill: currentColor;
-      vertical-align: middle;
-    }
-  }
-
   .#{$prefix}--search-close svg {
     fill: inherit;
   }
 
-  .#{$prefix}--search-close,
-  .#{$prefix}--search-button {
+  .#{$prefix}--search-close {
     display: flex;
     width: to-rem(40px);
     height: to-rem(40px);
@@ -244,7 +232,6 @@
 
   .#{$prefix}--search--sm {
     .#{$prefix}--search-close,
-    ~ .#{$prefix}--search-button,
     &.#{$prefix}--search--expandable,
     &.#{$prefix}--search--expandable .#{$prefix}--search-magnifier {
       width: to-rem(32px);
@@ -259,7 +246,6 @@
   // V11: change lg to md
   .#{$prefix}--search--lg {
     .#{$prefix}--search-close,
-    ~ .#{$prefix}--search-button,
     &.#{$prefix}--search--expandable,
     &.#{$prefix}--search--expandable .#{$prefix}--search-magnifier {
       width: to-rem(40px);
@@ -274,7 +260,6 @@
   // V11: change xl to lg
   .#{$prefix}--search--xl {
     .#{$prefix}--search-close,
-    ~ .#{$prefix}--search-button,
     &.#{$prefix}--search--expandable,
     &.#{$prefix}--search--expandable .#{$prefix}--search-magnifier {
       width: to-rem(48px);

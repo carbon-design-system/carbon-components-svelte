@@ -88,10 +88,6 @@
     cursor: pointer;
   }
 
-  .#{$prefix}--structured-list-row.#{$prefix}--structured-list-row--selected {
-    background-color: $selected-ui;
-  }
-
   .#{$prefix}--structured-list-row.#{$prefix}--structured-list-row--header-row {
     border-bottom: 1px solid $selected-ui;
     cursor: inherit;
@@ -104,8 +100,6 @@
   }
   .#{$prefix}--structured-list--selection
     .#{$prefix}--structured-list-row:hover:not(.#{$prefix}--structured-list-row--header-row)
-    > .#{$prefix}--structured-list-td,
-  .#{$prefix}--structured-list-row.#{$prefix}--structured-list-row--selected
     > .#{$prefix}--structured-list-td {
     color: $text-01;
   }

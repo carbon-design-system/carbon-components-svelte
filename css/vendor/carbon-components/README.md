@@ -26,6 +26,18 @@ these prunings relative to upstream:
   now import instead
 - legacy `-ms-high-contrast` media queries (IE / old Edge); modern
   `prefers-contrast` / `forced-colors` kept
+- dead CSS emission pruned from vendored component SCSS (this library never
+  renders the matching markup): legacy tooltip definition/icon mixins; unused
+  `tabs--scrollable__nav-link` / `--selected` / `--disabled` / `--light`
+  rules; native `dropdown-list` / `dropdown-item` / `dropdown-link` menu
+  styles; `side-nav--fixed`, switcher/select/title, collapse/expand icon, and
+  positive `side-nav__item--active` rules; code-snippet overflow indicators,
+  `snippet-button`, and `btn--copy__feedback`; progress-indicator overflow
+  tooltip chrome; DataTable `--xs`/`--sm`/`--xl` size aliases (compact/short/
+  tall kept); `overflow-menu--lg`; `skeleton-icon`;
+  `structured-list-row--selected`; `pagination-nav__page--direction`;
+  `data-table--visible-overflow-menu`; `multi-select--invalid--focused`;
+  exclusive `search-button` rules
 
 To use an upstream file that is not vendored, restore it from
 `carbon-components@10.58.15` on npm.

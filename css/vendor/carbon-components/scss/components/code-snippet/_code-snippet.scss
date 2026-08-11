@@ -232,68 +232,6 @@
     transition: all $duration--fast-01 motion(standard, productive);
   }
 
-  .#{$prefix}--snippet-button {
-    @include reset;
-
-    position: absolute;
-    top: 0;
-    right: 0;
-    display: flex;
-    overflow: visible;
-    width: $carbon--spacing-08;
-    height: $carbon--spacing-08;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    border: none;
-    background-color: $field-01;
-    cursor: pointer;
-    outline: none;
-
-    &:focus {
-      @include focus-outline('outline');
-
-      outline-color: $focus;
-    }
-  }
-
-  .#{$prefix}--snippet--multi .#{$prefix}--snippet-button {
-    top: $spacing-03;
-    right: $spacing-03;
-    width: $carbon--spacing-07;
-    height: $carbon--spacing-07;
-  }
-
-  .#{$prefix}--snippet-button:hover {
-    background: $hover-ui;
-  }
-
-  .#{$prefix}--snippet-button:active {
-    background-color: $copy-active;
-  }
-
-  .#{$prefix}--btn--copy__feedback {
-    @include type-style('body-short-01');
-    // Override one in code snippet
-    @include carbon--font-family('sans');
-
-    z-index: z('overlay');
-    top: 0.75rem;
-    right: 1.25rem;
-    left: inherit;
-    font-weight: 400;
-  }
-
-  .#{$prefix}--btn--copy__feedback::before,
-  .#{$prefix}--btn--copy__feedback::after {
-    background: $copy-btn-feedback;
-  }
-
-  .#{$prefix}--btn--copy__feedback::after {
-    border: none;
-  }
-
-  // TODO: remove copy button styles above
   .#{$prefix}--snippet .#{$prefix}--copy-btn {
     position: absolute;
     top: 0;
@@ -360,14 +298,12 @@
 
   // Light version
   .#{$prefix}--snippet--light,
-  .#{$prefix}--snippet--light .#{$prefix}--snippet-button,
   .#{$prefix}--snippet--light .#{$prefix}--btn.#{$prefix}--snippet-btn--expand,
   .#{$prefix}--snippet--light .#{$prefix}--copy-btn {
     background-color: $field-02;
   }
 
   .#{$prefix}--snippet--light.#{$prefix}--snippet--inline:hover,
-  .#{$prefix}--snippet--light .#{$prefix}--snippet-button:hover,
   .#{$prefix}--snippet--light
     .#{$prefix}--btn.#{$prefix}--snippet-btn--expand:hover,
   .#{$prefix}--snippet--light .#{$prefix}--copy-btn:hover {
@@ -375,7 +311,6 @@
   }
 
   .#{$prefix}--snippet--light.#{$prefix}--snippet--inline:active,
-  .#{$prefix}--snippet--light .#{$prefix}--snippet-button:active,
   .#{$prefix}--snippet--light
     .#{$prefix}--btn.#{$prefix}--snippet-btn--expand:active,
   .#{$prefix}--snippet--light .#{$prefix}--copy-btn:active {
@@ -396,121 +331,12 @@
     height: 100%;
   }
 
-  .#{$prefix}--snippet-button .#{$prefix}--btn--copy__feedback {
-    // (The height of button) + (The height of the tooltip's triangle) + 4px
-    top: to-rem(50.8px);
-    right: auto;
-    left: 50%;
-
-    &::before {
-      top: 0;
-    }
-
-    &::after {
-      top: to-rem(-4px);
-    }
-  }
-
   .#{$prefix}--snippet--multi .#{$prefix}--copy-btn {
     z-index: 10;
     top: $carbon--spacing-03;
     right: $carbon--spacing-03;
     width: $carbon--spacing-07;
     height: $carbon--spacing-07;
-  }
-
-  .#{$prefix}--snippet--multi
-    .#{$prefix}--snippet-button
-    .#{$prefix}--btn--copy__feedback {
-    // (The height of button) + (The height of the tooltip's triangle) + 4px
-    top: to-rem(42.8px);
-  }
-
-  .#{$prefix}--snippet--inline .#{$prefix}--btn--copy__feedback {
-    // TODO: use updated global tooltip mixins under the hood
-    // since all of the positioning values for the copy button tooltip are arbitrary hard coded rem values, we need this arbitrary 4px offset to keep the proper tooltip spacing according to the spec
-    top: calc(100% - #{to-rem(4px)});
-    right: auto;
-    left: 50%;
-  }
-
-  // Overflow Indicator
-  .#{$prefix}--snippet__overflow-indicator--left,
-  .#{$prefix}--snippet__overflow-indicator--right {
-    z-index: 1;
-    width: $carbon--spacing-05;
-    flex: 1 0 auto;
-  }
-
-  .#{$prefix}--snippet__overflow-indicator--left {
-    order: 0;
-    margin-right: -$carbon--spacing-05;
-    background-image: linear-gradient(to left, transparent, $field-01);
-  }
-
-  .#{$prefix}--snippet__overflow-indicator--right {
-    order: 2;
-    margin-left: -$carbon--spacing-05;
-    background-image: linear-gradient(to right, transparent, $field-01);
-  }
-
-  .#{$prefix}--snippet--single .#{$prefix}--snippet__overflow-indicator--right,
-  .#{$prefix}--snippet--single .#{$prefix}--snippet__overflow-indicator--left {
-    position: absolute;
-    width: $carbon--spacing-07;
-    height: calc(100% - #{$carbon--spacing-02});
-  }
-
-  .#{$prefix}--snippet--single .#{$prefix}--snippet__overflow-indicator--right {
-    right: $carbon--spacing-08;
-  }
-
-  .#{$prefix}--snippet--single.#{$prefix}--snippet--no-copy
-    .#{$prefix}--snippet__overflow-indicator--right {
-    right: 0;
-  }
-
-  .#{$prefix}--snippet--single
-    .#{$prefix}--snippet-container:focus
-    ~ .#{$prefix}--snippet__overflow-indicator--right {
-    right: calc(#{$carbon--spacing-08} + #{to-rem(2px)});
-  }
-
-  .#{$prefix}--snippet--single
-    .#{$prefix}--snippet-container:focus
-    + .#{$prefix}--snippet__overflow-indicator--left {
-    left: to-rem(2px);
-  }
-
-  .#{$prefix}--snippet--light .#{$prefix}--snippet__overflow-indicator--left {
-    background-image: linear-gradient(to left, transparent, $field-02);
-  }
-
-  .#{$prefix}--snippet--light .#{$prefix}--snippet__overflow-indicator--right {
-    background-image: linear-gradient(to right, transparent, $field-02);
-  }
-
-  // Safari-only media query
-  // since fades won't appear correctly with CSS custom properties
-  // see: tabs, code snippet, and modal overflow indicators
-  @media not all and (min-resolution: 0.001dpcm) {
-    @supports (-webkit-appearance: none) and (stroke-color: transparent) {
-      .#{$prefix}--snippet__overflow-indicator--left {
-        background-image: linear-gradient(
-          to left,
-          rgba($field-01, 0),
-          $field-01
-        );
-      }
-
-      .#{$prefix}--snippet__overflow-indicator--right {
-        background-image: linear-gradient(
-          to right,
-          rgba($field-01, 0),
-          $field-01
-        );
-      }
-    }
   }
 
   .#{$prefix}--snippet--multi.#{$prefix}--skeleton {

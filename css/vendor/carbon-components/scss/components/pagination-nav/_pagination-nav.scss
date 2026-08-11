@@ -150,15 +150,6 @@
     }
   }
 
-  .#{$prefix}--pagination-nav__page--direction {
-    display: flex;
-    width: $button-direction-size;
-    height: $button-direction-size;
-    align-items: center;
-    justify-content: center;
-    line-height: 0;
-  }
-
   .#{$prefix}--pagination-nav__select {
     position: relative;
   }

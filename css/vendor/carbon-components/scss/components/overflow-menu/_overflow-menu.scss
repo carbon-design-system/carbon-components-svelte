@@ -52,8 +52,7 @@
   }
 
   // TODO V11: Remove xl selector
-  .#{$prefix}--overflow-menu--xl,
-  .#{$prefix}--overflow-menu--lg {
+  .#{$prefix}--overflow-menu--xl {
     width: to-rem(48px);
     height: to-rem(48px);
   }

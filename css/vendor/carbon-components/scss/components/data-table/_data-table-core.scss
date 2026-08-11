@@ -198,10 +198,6 @@
     opacity: 1;
   }
 
-  .#{$prefix}--data-table.#{$prefix}--data-table--visible-overflow-menu
-    td.#{$prefix}--table-column-menu
-    .#{$prefix}--overflow-menu
-    .#{$prefix}--overflow-menu__icon,
   .#{$prefix}--data-table
     td.#{$prefix}--table-column-menu
     .#{$prefix}--overflow-menu:hover
@@ -249,17 +245,14 @@
 
   // V11: Remove compact, short styles
   .#{$prefix}--data-table--compact td.#{$prefix}--table-column-menu,
-  .#{$prefix}--data-table--xs td.#{$prefix}--table-column-menu,
-  .#{$prefix}--data-table--short td.#{$prefix}--table-column-menu,
-  .#{$prefix}--data-table--sm td.#{$prefix}--table-column-menu {
+  .#{$prefix}--data-table--short td.#{$prefix}--table-column-menu {
     height: to-rem(24px);
     padding-top: 0;
     padding-bottom: 0;
   }
 
   // V11: Remove short styles
-  .#{$prefix}--data-table--short td.#{$prefix}--table-column-menu,
-  .#{$prefix}--data-table--sm td.#{$prefix}--table-column-menu {
+  .#{$prefix}--data-table--short td.#{$prefix}--table-column-menu {
     height: to-rem(32px);
   }
 
@@ -268,8 +261,7 @@
   }
 
   // V11: Remove tall styles
-  .#{$prefix}--data-table--tall .#{$prefix}--table-column-menu,
-  .#{$prefix}--data-table--xl .#{$prefix}--table-column-menu {
+  .#{$prefix}--data-table--tall .#{$prefix}--table-column-menu {
     padding-top: $spacing-03;
   }
 
@@ -328,10 +320,6 @@
   .#{$prefix}--data-table--compact
     .#{$prefix}--table-column-checkbox
     .#{$prefix}--checkbox:focus
-    + .#{$prefix}--checkbox-label::before,
-  .#{$prefix}--data-table--xs
-    .#{$prefix}--table-column-checkbox
-    .#{$prefix}--checkbox:focus
     + .#{$prefix}--checkbox-label::before {
     //make checkbox match expansion button focus size
     outline-offset: to-rem(2px);
@@ -360,9 +348,7 @@
 
   // V11: Remove compact
   .#{$prefix}--data-table--compact thead th.#{$prefix}--table-expand,
-  .#{$prefix}--data-table--compact tbody td.#{$prefix}--table-expand,
-  .#{$prefix}--data-table--xs thead th.#{$prefix}--table-expand,
-  .#{$prefix}--data-table--xs tbody td.#{$prefix}--table-expand {
+  .#{$prefix}--data-table--compact tbody td.#{$prefix}--table-expand {
     width: to-rem(24px);
     height: to-rem(24px);
     padding: 0 0 0 0.5rem;
@@ -370,9 +356,7 @@
 
   // V11: remove short
   .#{$prefix}--data-table--short thead th.#{$prefix}--table-expand,
-  .#{$prefix}--data-table--short tbody td.#{$prefix}--table-expand,
-  .#{$prefix}--data-table--sm thead th.#{$prefix}--table-expand,
-  .#{$prefix}--data-table--sm tbody td.#{$prefix}--table-expand {
+  .#{$prefix}--data-table--short tbody td.#{$prefix}--table-expand {
     width: to-rem(32px);
     height: to-rem(32px);
     padding: 0;
@@ -388,23 +372,19 @@
 
   // V11: remove tall
   .#{$prefix}--data-table--tall thead th.#{$prefix}--table-expand,
-  .#{$prefix}--data-table--tall tbody td.#{$prefix}--table-expand,
-  .#{$prefix}--data-table--xl thead th.#{$prefix}--table-expand,
-  .#{$prefix}--data-table--xl tbody td.#{$prefix}--table-expand {
+  .#{$prefix}--data-table--tall tbody td.#{$prefix}--table-expand {
     height: to-rem(64px);
     padding-top: to-rem(10px);
     padding-bottom: to-rem(22px);
   }
 
   // V11: remove tall
-  .#{$prefix}--data-table--tall .#{$prefix}--table-column-checkbox,
-  .#{$prefix}--data-table--xl .#{$prefix}--table-column-checkbox {
+  .#{$prefix}--data-table--tall .#{$prefix}--table-column-checkbox {
     padding-top: to-rem(13px);
   }
 
   // V11: remove tall
-  .#{$prefix}--data-table--tall .#{$prefix}--table-column-radio,
-  .#{$prefix}--data-table--xl .#{$prefix}--table-column-radio {
+  .#{$prefix}--data-table--tall .#{$prefix}--table-column-radio {
     padding-top: $spacing-05;
   }
 
@@ -553,45 +533,6 @@
     min-height: to-rem(23px);
   }
 
-  //----------------------------------------------------------------------------
-  // Extra Small
-  //----------------------------------------------------------------------------
-  .#{$prefix}--data-table--xs thead tr,
-  .#{$prefix}--data-table--xs tbody tr,
-  .#{$prefix}--data-table--xs tbody tr th {
-    height: to-rem(24px);
-  }
-
-  .#{$prefix}--data-table--xs .#{$prefix}--table-header-label {
-    padding-top: to-rem(2px);
-    padding-bottom: to-rem(2px);
-  }
-
-  .#{$prefix}--data-table--xs td,
-  .#{$prefix}--data-table--xs tbody tr th {
-    padding-top: to-rem(2px);
-    padding-bottom: to-rem(2px);
-  }
-
-  .#{$prefix}--data-table--xs .#{$prefix}--overflow-menu {
-    width: to-rem(32px);
-    height: calc(100% + 1px);
-  }
-
-  .#{$prefix}--data-table.#{$prefix}--data-table--xs
-    .#{$prefix}--table-column-checkbox {
-    padding-top: 0;
-    padding-bottom: 0;
-  }
-
-  .#{$prefix}--data-table.#{$prefix}--data-table--xs
-    .#{$prefix}--table-column-checkbox
-    .#{$prefix}--checkbox-label {
-    height: to-rem(23px);
-    // 24px row - 1px border
-    min-height: to-rem(23px);
-  }
-
   // V11: Remove this short block
   //----------------------------------------------------------------------------
   // Short
@@ -621,36 +562,6 @@
 
   .#{$prefix}--data-table--short .#{$prefix}--overflow-menu {
     height: 100%;
-  }
-
-  //----------------------------------------------------------------------------
-  // Small
-  //----------------------------------------------------------------------------
-  .#{$prefix}--data-table--sm thead tr,
-  .#{$prefix}--data-table--sm tbody tr,
-  .#{$prefix}--data-table--sm tbody tr th {
-    height: to-rem(32px);
-  }
-
-  .#{$prefix}--data-table--sm .#{$prefix}--table-header-label {
-    padding-top: to-rem(7px);
-    padding-bottom: to-rem(7px);
-  }
-
-  .#{$prefix}--data-table--sm td,
-  .#{$prefix}--data-table--sm tbody tr th {
-    padding-top: to-rem(7px);
-    padding-bottom: to-rem(6px);
-  }
-
-  .#{$prefix}--data-table.#{$prefix}--data-table--sm
-    .#{$prefix}--table-column-checkbox {
-    padding-top: to-rem(3px);
-    padding-bottom: to-rem(3px);
-  }
-
-  .#{$prefix}--data-table--sm .#{$prefix}--overflow-menu {
-    height: calc(100% + 1px);
   }
 
   //----------------------------------------------------------------------------
@@ -710,34 +621,6 @@
   }
 
   .#{$prefix}--data-table--tall .#{$prefix}--data-table--cell-secondary-text {
-    @include type-style('label-01');
-  }
-
-  //----------------------------------------------------------------------------
-  // Extra Large
-  //----------------------------------------------------------------------------
-  .#{$prefix}--data-table--xl thead tr,
-  .#{$prefix}--data-table--xl tbody tr,
-  .#{$prefix}--data-table--xl tbody tr th {
-    height: to-rem(64px);
-  }
-
-  .#{$prefix}--data-table--xl .#{$prefix}--table-header-label {
-    padding-top: $spacing-05;
-    padding-bottom: $spacing-05;
-  }
-
-  .#{$prefix}--data-table--xl td,
-  .#{$prefix}--data-table--xl tbody tr th {
-    padding-top: 1rem;
-  }
-
-  .#{$prefix}--data-table--xl th,
-  .#{$prefix}--data-table--xl td {
-    vertical-align: top;
-  }
-
-  .#{$prefix}--data-table--xl .#{$prefix}--data-table--cell-secondary-text {
     @include type-style('label-01');
   }
 
@@ -817,7 +700,7 @@
     }
 
     // V11: remove compact, tall, and short
-    &:not(.#{$prefix}--data-table--compact):not(.#{$prefix}--data-table--xs):not(.#{$prefix}--data-table--tall):not(.#{$prefix}--data-table--xl):not(.#{$prefix}--data-table--short):not(.#{$prefix}--data-table--sm)
+    &:not(.#{$prefix}--data-table--compact):not(.#{$prefix}--data-table--tall):not(.#{$prefix}--data-table--short)
       td:not(.#{$prefix}--table-column-menu):not(.#{$prefix}--table-column-checkbox) {
       padding-top: to-rem(14px);
     }
@@ -848,9 +731,7 @@
 
     // V11: remove tall
     &.#{$prefix}--data-table--tall thead th.#{$prefix}--table-column-checkbox,
-    &.#{$prefix}--data-table--xl thead th.#{$prefix}--table-column-checkbox,
-    &.#{$prefix}--data-table--tall td.#{$prefix}--table-column-checkbox,
-    &.#{$prefix}--data-table--xl td.#{$prefix}--table-column-checkbox {
+    &.#{$prefix}--data-table--tall td.#{$prefix}--table-column-checkbox {
       align-items: flex-start;
     }
 
@@ -896,45 +777,37 @@
 
     // V11: remove compact, short, tall
     &.#{$prefix}--data-table--compact tr:not(.#{$prefix}--expandable-row),
-    &.#{$prefix}--data-table--xs tr:not(.#{$prefix}--expandable-row),
     &.#{$prefix}--data-table--short tr:not(.#{$prefix}--expandable-row),
-    &.#{$prefix}--data-table--sm tr:not(.#{$prefix}--expandable-row),
-    &.#{$prefix}--data-table--tall tr:not(.#{$prefix}--expandable-row),
-    &.#{$prefix}--data-table--xl tr:not(.#{$prefix}--expandable-row) {
+    &.#{$prefix}--data-table--tall tr:not(.#{$prefix}--expandable-row) {
       height: auto;
     }
 
     // Compact
     // V11: remove compact
-    &.#{$prefix}--data-table--compact tr:not(.#{$prefix}--expandable-row),
-    &.#{$prefix}--data-table--xs tr:not(.#{$prefix}--expandable-row) {
+    &.#{$prefix}--data-table--compact tr:not(.#{$prefix}--expandable-row) {
       min-height: to-rem(24px);
     }
 
     // Short
     // V11: remove short
-    &.#{$prefix}--data-table--short tr:not(.#{$prefix}--expandable-row),
-    &.#{$prefix}--data-table--sm tr:not(.#{$prefix}--expandable-row) {
+    &.#{$prefix}--data-table--short tr:not(.#{$prefix}--expandable-row) {
       min-height: to-rem(32px);
     }
 
     // Tall
     // V11: remove tall
-    &.#{$prefix}--data-table--tall tr:not(.#{$prefix}--expandable-row),
-    &.#{$prefix}--data-table--xl tr:not(.#{$prefix}--expandable-row) {
+    &.#{$prefix}--data-table--tall tr:not(.#{$prefix}--expandable-row) {
       min-height: to-rem(64px);
     }
 
     // Expansion overrides
     // V11: remove compact
-    &.#{$prefix}--data-table--compact tr td.#{$prefix}--table-expand,
-    &.#{$prefix}--data-table--xs tr td.#{$prefix}--table-expand {
+    &.#{$prefix}--data-table--compact tr td.#{$prefix}--table-expand {
       padding-top: to-rem(4px);
     }
 
     // V11: remove short
-    &.#{$prefix}--data-table--short tr td.#{$prefix}--table-expand,
-    &.#{$prefix}--data-table--sm tr td.#{$prefix}--table-expand {
+    &.#{$prefix}--data-table--short tr td.#{$prefix}--table-expand {
       padding-top: to-rem(8px);
     }
 
@@ -949,28 +822,24 @@
     }
 
     // V11: remove compact
-    &.#{$prefix}--data-table--compact th .#{$prefix}--table-header-label,
-    &.#{$prefix}--data-table--xs th .#{$prefix}--table-header-label {
+    &.#{$prefix}--data-table--compact th .#{$prefix}--table-header-label {
       padding-top: to-rem(3px);
       padding-bottom: 0;
     }
 
     // V11: remove short
-    &.#{$prefix}--data-table--short th .#{$prefix}--table-header-label,
-    &.#{$prefix}--data-table--sm th .#{$prefix}--table-header-label {
+    &.#{$prefix}--data-table--short th .#{$prefix}--table-header-label {
       padding-top: to-rem(8px);
       padding-bottom: 0;
     }
 
     // V11: remove tall
-    &.#{$prefix}--data-table--tall th .#{$prefix}--table-header-label,
-    &.#{$prefix}--data-table--xl th .#{$prefix}--table-header-label {
+    &.#{$prefix}--data-table--tall th .#{$prefix}--table-header-label {
       padding-top: 1rem;
     }
 
     // V11: remove tall
-    &.#{$prefix}--data-table--tall th.#{$prefix}--table-expand,
-    &.#{$prefix}--data-table--xl th.#{$prefix}--table-expand {
+    &.#{$prefix}--data-table--tall th.#{$prefix}--table-expand {
       display: flex;
       align-items: flex-start;
     }
@@ -981,12 +850,6 @@
       tr.#{$prefix}--parent-row
       .#{$prefix}--table-column-checkbox,
     &.#{$prefix}--data-table--short
-      tr.#{$prefix}--parent-row
-      .#{$prefix}--table-column-checkbox,
-    &.#{$prefix}--data-table--xs
-      tr.#{$prefix}--parent-row
-      .#{$prefix}--table-column-checkbox,
-    &.#{$prefix}--data-table--sm
       tr.#{$prefix}--parent-row
       .#{$prefix}--table-column-checkbox {
       align-items: flex-start;
@@ -1007,10 +870,6 @@
   .#{$prefix}--data-table--short
     .#{$prefix}--form-item.#{$prefix}--checkbox-wrapper:last-of-type,
   .#{$prefix}--data-table--compact
-    .#{$prefix}--form-item.#{$prefix}--checkbox-wrapper:last-of-type,
-  .#{$prefix}--data-table--xs
-    .#{$prefix}--form-item.#{$prefix}--checkbox-wrapper:last-of-type,
-  .#{$prefix}--data-table--sm
     .#{$prefix}--form-item.#{$prefix}--checkbox-wrapper:last-of-type {
     margin: to-rem(-3px) 0;
   }
