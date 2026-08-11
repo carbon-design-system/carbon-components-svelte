@@ -173,4 +173,66 @@ describe("TagSet", () => {
     const row = container.querySelector(".bx--tag-set__space");
     expect(row).toHaveStyle({ gap: "2rem" });
   });
+
+  it("moves focus to the next close button after keyboard dismiss", async () => {
+    const { container } = render(TagSetFixture, { dismissible: true });
+
+    const closeButtons = within(container).getAllByTitle("Clear filter");
+    closeButtons[1].focus();
+    expect(closeButtons[1]).toHaveFocus();
+
+    await user.keyboard("{Enter}");
+    await tick();
+
+    const remaining = within(container).getAllByTitle("Clear filter");
+    expect(remaining).toHaveLength(3);
+    // Former index 2 ("Tag 3") is now at index 1.
+    expect(remaining[1]).toHaveFocus();
+    expect(remaining[1].closest(".bx--tag")?.textContent?.trim()).toBe("Tag 3");
+  });
+
+  it("moves focus to the previous close button when dismissing the last tag", async () => {
+    const { container } = render(TagSetFixture, { dismissible: true });
+
+    const closeButtons = within(container).getAllByTitle("Clear filter");
+    closeButtons[3].focus();
+    await user.keyboard("{Enter}");
+    await tick();
+
+    const remaining = within(container).getAllByTitle("Clear filter");
+    expect(remaining).toHaveLength(3);
+    expect(remaining[2]).toHaveFocus();
+    expect(remaining[2].closest(".bx--tag")?.textContent?.trim()).toBe("Tag 3");
+  });
+
+  it("announces the removed filter in a polite live region", async () => {
+    const { container } = render(TagSetFixture, { dismissible: true });
+
+    const liveRegion = container.querySelector("[aria-live='polite']");
+    expect.assert(liveRegion instanceof HTMLElement);
+    expect(liveRegion).toHaveClass("bx--visually-hidden");
+    expect(liveRegion).toHaveTextContent("");
+
+    const closeButtons = within(container).getAllByTitle("Clear filter");
+    closeButtons[0].focus();
+    await user.keyboard("{Enter}");
+    await tick();
+
+    expect(liveRegion).toHaveTextContent("Filter Tag 1 removed");
+  });
+
+  it("does not move focus when manageFocusOnClose is false", async () => {
+    const { container } = render(TagSetFixture, {
+      dismissible: true,
+      manageFocusOnClose: false,
+    });
+
+    const closeButtons = within(container).getAllByTitle("Clear filter");
+    closeButtons[1].focus();
+    await user.keyboard("{Enter}");
+    await tick();
+
+    expect(within(container).getAllByTitle("Clear filter")).toHaveLength(3);
+    expect(document.activeElement).not.toHaveAttribute("title", "Clear filter");
+  });
 });
