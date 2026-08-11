@@ -897,6 +897,19 @@ describe("DatePicker", () => {
       expect(calendar.querySelectorAll(".flatpickr-day")).toHaveLength(0);
     });
 
+    it("marks the current year with the today class and aria-current", async () => {
+      render(DatePicker, { datePickerType: "year", dateFormat: "Y" });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+
+      const currentYear = calendar.querySelector(
+        `.flatpickr-yearSelect-year[data-year="${new Date().getFullYear()}"]`,
+      );
+      expect(currentYear).toHaveClass("today");
+      expect(currentYear).toHaveAttribute("aria-current", "date");
+    });
+
     it("labels the range to match the first and last rendered year", async () => {
       render(DatePicker, { datePickerType: "year", dateFormat: "Y" });
 
