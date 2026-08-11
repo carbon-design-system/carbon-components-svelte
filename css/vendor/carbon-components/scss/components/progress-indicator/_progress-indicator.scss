@@ -11,7 +11,6 @@
 @import '../../globals/scss/typography';
 @import '../../globals/scss/vendor/@carbon/elements/scss/import-once/import-once';
 @import '../button/button';
-@import '../tooltip/tooltip';
 
 /// Progress indicator styles
 /// @access private
@@ -31,10 +30,6 @@
     width: to-rem(128px);
     min-width: 7rem;
     flex-direction: row;
-
-    .#{$prefix}--tooltip__label {
-      display: block;
-    }
   }
 
   .#{$prefix}--progress--space-equal .#{$prefix}--progress-step {
@@ -108,47 +103,6 @@
     color: $interactive;
   }
 
-  //OVERFLOW STYLING
-  .#{$prefix}--progress-label-overflow:hover ~ .#{$prefix}--tooltip,
-  .#{$prefix}--progress-label-overflow:focus ~ .#{$prefix}--tooltip {
-    visibility: inherit;
-  }
-
-  .#{$prefix}--progress-step .#{$prefix}--tooltip .#{$prefix}--tooltip__caret {
-    margin-left: to-rem(10px);
-  }
-
-  .#{$prefix}--tooltip__text {
-    padding: 0;
-    margin: 0;
-    font-weight: normal;
-  }
-
-  //single line tooltip
-  .#{$prefix}--progress-step .#{$prefix}--tooltip {
-    @include type-style('body-long-01');
-
-    display: block;
-    width: to-rem(125px);
-
-    min-width: to-rem(115px);
-    min-height: $carbon--spacing-06;
-    padding: $carbon--spacing-03 $carbon--spacing-05;
-    margin-top: to-rem(40px);
-    margin-left: to-rem(22px);
-    color: $inverse-01;
-    visibility: hidden;
-  }
-
-  //multiline tooltip
-  .#{$prefix}--progress-step .#{$prefix}--tooltip_multi {
-    @include type-style('body-long-01');
-
-    width: to-rem(150px);
-    height: auto;
-    color: $inverse-01;
-  }
-
   //OPTIONAL HELPER TEXT STYLING
   .#{$prefix}--progress-optional {
     @include type-style('label-01');
@@ -207,13 +161,6 @@
     cursor: default;
   }
 
-  .#{$prefix}--progress-step-button--unclickable
-    .#{$prefix}--tooltip__label:hover {
-    box-shadow: 0 to-rem(1px) $link-01;
-    color: $link-01;
-    cursor: pointer;
-  }
-
   //DISABLED STYLING
   .#{$prefix}--progress-step--disabled {
     cursor: not-allowed;
@@ -239,12 +186,6 @@
 
     .#{$prefix}--progress-line {
       cursor: not-allowed;
-    }
-
-    .#{$prefix}--progress-label-overflow:hover
-      ~ .#{$prefix}--tooltip--definition
-      .#{$prefix}--tooltip--definition__bottom {
-      display: none;
     }
   }
 
@@ -297,12 +238,6 @@
     margin: 0;
     vertical-align: top;
     white-space: initial;
-  }
-
-  .#{$prefix}--progress--vertical
-    .#{$prefix}--progress-step
-    .#{$prefix}--tooltip {
-    margin-top: 0.5rem;
   }
 
   .#{$prefix}--progress--vertical .#{$prefix}--progress-optional {

@@ -189,21 +189,18 @@
     color: $text-primary;
   }
 
-  .#{$prefix}--data-table--compact tfoot td,
-  .#{$prefix}--data-table--xs tfoot td {
+  .#{$prefix}--data-table--compact tfoot td {
     padding-top: to-rem(2px);
     padding-bottom: to-rem(2px);
   }
 
   .#{$prefix}--data-table--short tfoot td,
-  .#{$prefix}--data-table--sm tfoot td,
   .#{$prefix}--data-table--md tfoot td {
     padding-top: to-rem(7px);
     padding-bottom: to-rem(6px);
   }
 
-  .#{$prefix}--data-table--tall tfoot td,
-  .#{$prefix}--data-table--xl tfoot td {
+  .#{$prefix}--data-table--tall tfoot td {
     padding-top: $spacing-05;
     vertical-align: top;
   }

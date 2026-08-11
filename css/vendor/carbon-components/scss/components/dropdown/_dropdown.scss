@@ -98,10 +98,6 @@
   .#{$prefix}--dropdown--invalid {
     @include focus-outline('invalid');
 
-    .#{$prefix}--dropdown-text {
-      padding-right: to-rem(56px);
-    }
-
     + .#{$prefix}--form-requirement {
       display: inline-block;
       max-height: to-rem(200px);
@@ -125,14 +121,6 @@
     outline: 1px solid transparent;
   }
 
-  .#{$prefix}--dropdown--open .#{$prefix}--dropdown-list {
-    @include box-shadow;
-
-    // 40px item height * 5.5 items shown
-    max-height: to-rem(220px);
-    transition: max-height $duration--fast-02 motion(entrance, productive);
-  }
-
   // V11: Possibly deprecate
   .#{$prefix}--dropdown--light {
     background-color: $field-02;
@@ -140,10 +128,6 @@
     &:hover {
       background-color: $hover-light-ui;
     }
-  }
-
-  .#{$prefix}--dropdown--up .#{$prefix}--dropdown-list {
-    bottom: 2rem;
   }
 
   .#{$prefix}--dropdown__arrow {
@@ -156,192 +140,8 @@
     transition: transform $duration--fast-02 motion(standard, productive);
   }
 
-  button.#{$prefix}--dropdown-text {
-    width: 100%;
-    border: none;
-    // button-reset mixin contradicts with bx--dropdown-text styles
-    background: none;
-    color: $text-primary;
-    text-align: left;
-
-    &:focus {
-      @include focus-outline('outline');
-    }
-  }
-
-  .#{$prefix}--dropdown-text {
-    @include type-style('body-short-01');
-
-    display: block;
-    overflow: hidden;
-    // Account for the border in `.bx--dropdown`
-    height: calc(100% + 1px);
-    // 2rem + SVG width
-    padding-right: to-rem(42px);
-    padding-left: $carbon--spacing-05;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .#{$prefix}--dropdown-list {
-    @include reset;
-    @include focus-outline('reset');
-    @include box-shadow;
-    @include type-style('body-short-01');
-
-    position: absolute;
-    z-index: z('dropdown');
-    display: flex;
-    width: 100%;
-    max-height: 0;
-    flex-direction: column;
-    background-color: $layer;
-    list-style: none;
-    // NOTE: IE, Edge, and Safari do not support two value `overflow` shorthand.
-    overflow-x: hidden;
-    overflow-y: auto;
-    transition: max-height $duration--fast-02 motion(standard, productive);
-  }
-
-  // V11: Possibly deprecate
-  .#{$prefix}--dropdown--light .#{$prefix}--dropdown-list {
-    background-color: $field-02;
-  }
-
-  .#{$prefix}--dropdown:not(.#{$prefix}--dropdown--open)
-    .#{$prefix}--dropdown-item {
-    visibility: hidden;
-  }
-
-  .#{$prefix}--dropdown-item {
-    position: relative;
-    opacity: 0;
-    transition: visibility $duration--fast-01 motion(standard, productive),
-      opacity $duration--fast-01 motion(standard, productive),
-      background-color $duration--fast-01 motion(standard, productive);
-    visibility: inherit;
-
-    &:hover {
-      background-color: $layer-hover;
-
-      + .#{$prefix}--dropdown-item .#{$prefix}--dropdown-link {
-        border-color: transparent;
-      }
-    }
-
-    &:active {
-      background-color: $layer-selected;
-    }
-
-    &:first-of-type .#{$prefix}--dropdown-link {
-      border-top-color: transparent;
-    }
-  }
-
-  .#{$prefix}--dropdown-item:last-of-type .#{$prefix}--dropdown-link {
-    border-bottom: none;
-  }
-
-  .#{$prefix}--dropdown-link {
-    @include focus-outline('reset');
-
-    display: block;
-    overflow: hidden;
-    height: to-rem(40px);
-    padding: to-rem(11px) 0;
-    border: 1px solid transparent;
-    border-top-color: $border-subtle;
-    margin: 0 $carbon--spacing-05;
-    color: $text-secondary;
-    font-weight: normal;
-    line-height: 1rem;
-    text-decoration: none;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-
-    &:hover {
-      border-color: transparent;
-      color: $text-01;
-    }
-  }
-
-  // V11: Possibly deprecate
-  .#{$prefix}--dropdown--light .#{$prefix}--dropdown-link {
-    border-top-color: $decorative-01;
-  }
-
-  .#{$prefix}--dropdown--sm .#{$prefix}--dropdown-link {
-    height: to-rem(32px);
-    padding-top: to-rem(7px);
-    padding-bottom: to-rem(7px);
-  }
-
-  .#{$prefix}--dropdown--xl .#{$prefix}--dropdown-link {
-    height: to-rem(48px);
-    padding-top: to-rem(15px);
-    padding-bottom: to-rem(15px);
-  }
-
-  .#{$prefix}--dropdown--focused,
-  .#{$prefix}--dropdown-link:focus {
-    @include focus-outline('outline');
-
-    padding: to-rem(11px) to-rem(16px);
-    margin: 0;
-  }
-
-  // We don't want to apply focus styles via focus selector when using the aria-activedescendant structure
-  .#{$prefix}--dropdown-list[aria-activedescendant]
-    .#{$prefix}--dropdown-link:focus {
-    // Copied from .bx--dropdown-link styles
-    padding: to-rem(11px) 0;
-    margin: 0 $carbon--spacing-05;
-    outline: none;
-  }
-
-  // Need added weight for item that is :focused and .bx--dropdown--focused
-  .#{$prefix}--dropdown-list[aria-activedescendant]
-    .#{$prefix}--dropdown--focused:focus {
-    // copied from default focus styles
-    @include focus-outline('outline');
-
-    padding: to-rem(11px) to-rem(16px);
-    margin: 0;
-  }
-
-  // Don't want to allow multiple elements have a "selected" style. Not sure why active
-  // had unique styles initially but creating an overwrite for the latest HTML markup for
-  // backwards compatibility. For the next major release it would be possible to clean up
-  // the HTML structure to prevent the user of :active and :focus styles which is creating
-  // these duplicated styles in the list. The Carbon 10 version of dropdown is already
-  // supporting 2 very different HTML structures.
-  .#{$prefix}--dropdown-list[aria-activedescendant]
-    .#{$prefix}--dropdown-item:active {
-    background-color: inherit;
-  }
-
-  .#{$prefix}--dropdown-item:hover .#{$prefix}--dropdown-link {
-    border-bottom-color: $layer-hover;
-  }
-
   .#{$prefix}--dropdown--open .#{$prefix}--dropdown__arrow {
     transform: rotate(-180deg);
-  }
-
-  .#{$prefix}--dropdown--open.#{$prefix}--dropdown--xl
-    .#{$prefix}--dropdown-list {
-    // 48px item height * 5.5 items shown
-    max-height: to-rem(264px);
-  }
-
-  .#{$prefix}--dropdown--open.#{$prefix}--dropdown--sm
-    .#{$prefix}--dropdown-list {
-    // 32px item height * 5.5 items shown
-    max-height: to-rem(176px);
-  }
-
-  .#{$prefix}--dropdown--open .#{$prefix}--dropdown-item {
-    opacity: 1;
   }
 
   .#{$prefix}--dropdown--disabled {
@@ -356,7 +156,6 @@
     }
 
     // TODO: remove in v11
-    .#{$prefix}--dropdown-text,
     .#{$prefix}--list-box__label {
       color: $text-disabled;
     }
@@ -409,63 +208,9 @@
     background-color: transparent;
   }
 
-  .#{$prefix}--dropdown--inline .#{$prefix}--dropdown-text {
-    display: inline-block;
-    overflow: visible;
-    height: to-rem(32px);
-    padding: to-rem(7px) $carbon--spacing-07 to-rem(7px) $carbon--spacing-04;
-    color: $text-primary;
-  }
-
-  .#{$prefix}--dropdown--inline.#{$prefix}--dropdown--disabled
-    .#{$prefix}--dropdown-text {
-    color: $text-disabled;
-  }
-
-  .#{$prefix}--dropdown--inline.#{$prefix}--dropdown--disabled:focus
-    .#{$prefix}--dropdown-text {
-    outline: 0;
-  }
-
   .#{$prefix}--dropdown--inline.#{$prefix}--dropdown--invalid
     .#{$prefix}--dropdown__invalid-icon {
     right: to-rem(32px);
-  }
-
-  .#{$prefix}--dropdown--inline.#{$prefix}--dropdown--invalid
-    .#{$prefix}--dropdown-text {
-    padding-right: to-rem(56px);
-  }
-
-  .#{$prefix}--dropdown--inline.#{$prefix}--dropdown--open:focus
-    .#{$prefix}--dropdown-list {
-    @include box-shadow;
-  }
-
-  .#{$prefix}--dropdown--inline .#{$prefix}--dropdown-link {
-    font-weight: normal;
-  }
-
-  .#{$prefix}--dropdown--show-selected .#{$prefix}--dropdown--selected {
-    display: block;
-    background-color: $layer-hover;
-    color: $text-primary;
-
-    &:hover {
-      background-color: $layer-selected;
-    }
-
-    .#{$prefix}--dropdown-link {
-      border-top-color: transparent;
-    }
-
-    + .#{$prefix}--dropdown-item .#{$prefix}--dropdown-link {
-      border-top-color: transparent;
-    }
-
-    .#{$prefix}--list-box__menu-item__selected-icon {
-      display: block;
-    }
   }
 
   // Skeleton State
