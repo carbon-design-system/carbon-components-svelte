@@ -4,6 +4,7 @@
    * @template [Icon=any]
    * @event {null} expand
    * @event {null} collapse
+   * @event {{ value: T }} submit
    * @restProps {input}
    */
 
@@ -64,6 +65,16 @@
   /** Specify the close button label text */
   export let closeButtonLabelText = "Clear search input";
 
+  /**
+   * Set to `true` to show a trailing submit button.
+   * Clicking the button dispatches `submit`. Pressing Enter also
+   * dispatches `submit`, with or without the button.
+   */
+  export let showSubmitButton = false;
+
+  /** Specify the submit button label text */
+  export let submitButtonLabelText = "Search";
+
   /** Specify the label text */
   export let labelText = "";
 
@@ -92,6 +103,11 @@
 
   let searchRef = null;
   let prevExpanded = expanded;
+
+  function submit() {
+    if (disabled) return;
+    dispatch("submit", { value });
+  }
 
   $: isFluid = !expandable && (fluid || !!formContext?.isFluid);
   $: if (expanded && ref) ref.focus();
@@ -126,6 +142,7 @@
     class:bx--search--expandable={expandable}
     class:bx--search--expanded={expanded}
     class:bx--search--fluid={isFluid}
+    class:bx--search--with-submit={showSubmitButton}
     class={searchClass}
   >
     <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -177,6 +194,8 @@
         if (event.key === "Escape") {
           value = "";
           dispatch("clear");
+        } else if (event.key === "Enter") {
+          submit();
         }
       }}
       on:keyup
@@ -197,5 +216,17 @@
     >
       <svelte:component this={Close} size={size === "xl" ? 20 : 16} />
     </button>
+    {#if showSubmitButton}
+      <button
+        type="button"
+        aria-label={submitButtonLabelText}
+        {disabled}
+        class:bx--search-button={true}
+        on:click
+        on:click={submit}
+      >
+        <svelte:component this={IconSearch} size={size === "xl" ? 20 : 16} />
+      </button>
+    {/if}
   </div>
 {/if}
