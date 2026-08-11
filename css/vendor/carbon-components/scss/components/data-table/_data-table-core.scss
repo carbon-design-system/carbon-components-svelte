@@ -182,9 +182,7 @@
     outline: none;
   }
 
-  @media screen and (hover: hover),
-    (-ms-high-contrast: active),
-    (-ms-high-contrast: none) {
+  @media screen and (hover: hover) {
     .#{$prefix}--data-table
       td.#{$prefix}--table-column-menu
       .#{$prefix}--overflow-menu

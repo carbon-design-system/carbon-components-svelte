@@ -141,10 +141,6 @@
     display: block;
   }
 
-  .flatpickr-calendar.hasWeeks {
-    width: auto;
-  }
-
   .dayContainer {
     display: flex;
     flex-wrap: wrap;
@@ -152,26 +148,6 @@
     height: to-rem(246px);
     padding: 0;
     outline: 0;
-  }
-
-  .flatpickr-calendar .hasWeeks .dayContainer,
-  .flatpickr-calendar .hasTime .dayContainer {
-    border-bottom: 0;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
-  }
-
-  .flatpickr-calendar .hasWeeks .dayContainer {
-    border-left: 0;
-  }
-
-  .flatpickr-calendar.showTimeInput.hasTime .flatpickr-time {
-    height: to-rem(40px);
-    border-top: 1px solid #e6e6e6;
-  }
-
-  .flatpickr-calendar.noCalendar.hasTime .flatpickr-time {
-    height: auto;
   }
 
   .flatpickr-calendar:focus {

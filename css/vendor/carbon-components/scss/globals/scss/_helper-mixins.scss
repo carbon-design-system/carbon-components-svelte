@@ -252,13 +252,14 @@
   }
 }
 
-/// High Contrast Mode mixin for Windows and macOS
+/// High Contrast Mode mixin (forced-colors / modern HCM).
+/// Legacy `-ms-high-contrast` dropped — outside the Svelte 5 browserslist.
 /// @access public
 /// @example @include high-contrast-mode;
 /// @group global-helpers
 /// We should set HCM styles at the end of each file to ensure they are not overridden
 @mixin high-contrast-mode($type: '') {
-  @media screen and (-ms-high-contrast: active), (forced-colors: active) {
+  @media (forced-colors: active) {
     @if ($type == 'icon-fill') {
       fill: ButtonText;
     }

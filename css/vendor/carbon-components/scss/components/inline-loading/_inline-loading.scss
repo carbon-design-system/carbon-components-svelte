@@ -77,20 +77,6 @@
   .#{$prefix}--loading--small .#{$prefix}--inline-loading__svg {
     stroke: $interactive-04;
   }
-  /* If IE11 Don't show check animation */
-  @media screen and (-ms-high-contrast: active),
-    screen and (-ms-high-contrast: none) {
-    .#{$prefix}--inline-loading__checkmark-container {
-      top: 1px;
-      right: 0.5rem;
-    }
-
-    .#{$prefix}--inline-loading__checkmark {
-      animation: none;
-      stroke-dasharray: 0;
-      stroke-dashoffset: 0;
-    }
-  }
 }
 
 @include exports('inline-loading') {
