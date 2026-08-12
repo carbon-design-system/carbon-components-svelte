@@ -104,8 +104,24 @@
   /**
    * Set to `true` to show a clear button when an item is selected.
    * Clears `selectedId` and dispatches a `clear` event.
+   * Also enables clearing the selection with Delete/Backspace.
    */
   export let clearable = false;
+
+  /**
+   * Specify the assistive text advertising the keyboard shortcut that clears
+   * the selection. Appended to the field's description whenever there is a
+   * selection to clear. Only used when `clearable` is `true`.
+   */
+  export let clearSelectionText =
+    "To clear the selection, press Delete or Backspace";
+
+  /**
+   * Specify the assistive text announced through the status live region when
+   * the selection is cleared via the keyboard or the clear button. Only used
+   * when `clearable` is `true`.
+   */
+  export let selectionClearedText = "Selection cleared";
 
   /**
    * Set to `true` to use the fluid variant.
@@ -247,6 +263,8 @@
   let prevOpen = false;
   let fieldFocused = false;
   let itemsById = new Map();
+  /** Text content of the visually-hidden status live region. */
+  let statusText = "";
 
   const TYPEAHEAD_DELAY = 500;
 
@@ -272,9 +290,24 @@
   $: helperId = `helper-${id}`;
   $: errorId = `error-${id}`;
   $: warnId = `warn-${id}`;
+  $: selectionId = `selection-${id}`;
   // Invalid/warn states are suppressed when the dropdown is disabled or read-only.
   $: showInvalid = invalid && !disabled && !readonly;
   $: showWarn = warn && !invalid && !disabled && !readonly;
+  $: hasSelectionDescription =
+    clearable && !readonly && selectedId !== undefined;
+  $: statusDescribedById =
+    showInvalid && invalidText
+      ? errorId
+      : showWarn && warnText
+        ? warnId
+        : !inline && !isFluid && !showInvalid && !showWarn && helperText
+          ? helperId
+          : undefined;
+  $: fieldDescribedById =
+    [hasSelectionDescription ? selectionId : null, statusDescribedById]
+      .filter(Boolean)
+      .join(" ") || undefined;
   $: isFluid = !inline && (fluid || !!formContext?.isFluid);
   $: showFieldFocus = isFluid && (fieldFocused || open);
   // Scope the option id with the instance `id` so multiple Dropdowns on a
@@ -468,10 +501,23 @@
     });
   }
 
+  /**
+   * Announce a message through the visually-hidden status region. The text is
+   * reset first so announcing the same message twice still mutates the DOM —
+   * live regions only fire on an actual text change.
+   * @param {string} text
+   */
+  async function announceStatus(text) {
+    statusText = "";
+    await tick();
+    statusText = text;
+  }
+
   function clearSelection() {
-    if (readonly) return;
+    if (readonly || selectedId === undefined) return;
     selectedId = undefined;
     open = false;
+    announceStatus(selectionClearedText);
   }
 
   /**
@@ -602,13 +648,7 @@
         aria-haspopup="listbox"
         aria-activedescendant={highlightedId ?? ""}
         aria-controls={open ? menuId : undefined}
-        aria-describedby={showInvalid && invalidText
-          ? errorId
-          : showWarn && warnText
-            ? warnId
-            : !inline && !isFluid && !showInvalid && !showWarn && helperText
-              ? helperId
-              : undefined}
+        aria-describedby={fieldDescribedById}
         on:focus={() => {
           if (isFluid) fieldFocused = true;
         }}
@@ -664,6 +704,16 @@
           highlightOrigin = "keyboard";
         } else if (event.key === "Escape") {
           close("escape-key");
+        } else if (
+          clearable &&
+          selectedId !== undefined &&
+          (event.key === "Delete" || event.key === "Backspace")
+        ) {
+          // Clear the selection from the keyboard, menu open or closed,
+          // matching the click-to-clear button. Only wired when `clearable`
+          // is set, since that is what makes clearing possible at all.
+          event.preventDefault();
+          clearSelection();
         } else if (
           open &&
           event.key.length === 1 &&
@@ -886,4 +936,14 @@
       {helperText}
     </div>
   {/if}
+  {#if hasSelectionDescription}
+    <span id={selectionId} class:bx--visually-hidden={true}
+      >{clearSelectionText}</span
+    >
+  {/if}
+  <!-- Live region for selection announcements. Always rendered (even while
+       empty) so assistive tech registers the region before its text changes. -->
+  <span role="status" aria-live="polite" class:bx--visually-hidden={true}
+    >{statusText}</span
+  >
 </div>
