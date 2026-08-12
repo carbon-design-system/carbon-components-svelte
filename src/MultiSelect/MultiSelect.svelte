@@ -925,6 +925,7 @@
             } else if (event.key === "Tab") {
               open = false;
             } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+              event.preventDefault();
               const step = event.key === "ArrowDown" ? 1 : -1;
               if (event.altKey) {
                 // APG combobox pattern: Alt+ArrowDown opens a closed menu
