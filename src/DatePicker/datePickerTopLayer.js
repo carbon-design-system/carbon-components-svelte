@@ -45,7 +45,8 @@ export function positionFlatpickrCalendarFixed(
     inputBounds.top +
     (showOnTop ? -calendarHeight - 2 : positionElement.offsetHeight + 2);
   const left = inputBounds.left;
-  const rightMost = left + calendarWidth > window.innerWidth;
+  const viewportWidth = document.documentElement.clientWidth;
+  const rightMost = left + calendarWidth > viewportWidth;
 
   calendarContainer.classList.toggle("arrowTop", !showOnTop);
   calendarContainer.classList.toggle("arrowBottom", showOnTop);
@@ -58,7 +59,7 @@ export function positionFlatpickrCalendarFixed(
   calendarContainer.style.top = `${top}px`;
   if (rightMost) {
     calendarContainer.style.left = "auto";
-    calendarContainer.style.right = `${window.innerWidth - inputBounds.right}px`;
+    calendarContainer.style.right = `${viewportWidth - inputBounds.right}px`;
   } else {
     calendarContainer.style.left = `${left}px`;
     calendarContainer.style.right = "auto";
