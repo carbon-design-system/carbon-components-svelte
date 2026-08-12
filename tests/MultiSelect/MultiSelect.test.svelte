@@ -22,6 +22,10 @@
   export let readonly = false;
   export let readonlyText: ComponentProps<MultiSelect>["readonlyText"] =
     undefined;
+  export let clearSelectionText: ComponentProps<MultiSelect>["clearSelectionText"] =
+    undefined;
+  export let selectionClearedText: ComponentProps<MultiSelect>["selectionClearedText"] =
+    undefined;
   export let selectionFeedback: ComponentProps<MultiSelect>["selectionFeedback"] =
     "top-after-reopen";
   export let maxSelectedItems: ComponentProps<MultiSelect>["maxSelectedItems"] =
@@ -65,6 +69,8 @@
   {disabled}
   {readonly}
   {readonlyText}
+  {clearSelectionText}
+  {selectionClearedText}
   {selectionFeedback}
   {maxSelectedItems}
   {translateWithIdSelection}

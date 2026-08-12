@@ -3378,6 +3378,192 @@ describe("MultiSelect", () => {
       expect(options[1]).toHaveAttribute("aria-selected", "false");
       expect(options[2]).toHaveAttribute("aria-selected", "false");
     });
+
+    it("announces the cleared selection through the status region", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          filterable: true,
+          placeholder: "Filter...",
+          selectedIds: ["0", "1"],
+        },
+      });
+
+      expect(screen.getByRole("status")).toHaveTextContent("");
+
+      await user.click(screen.getByPlaceholderText("Filter..."));
+      await user.keyboard("{Backspace}");
+
+      await waitFor(() =>
+        expect(screen.getByRole("status")).toHaveTextContent(
+          "All items cleared",
+        ),
+      );
+    });
+  });
+
+  describe("non-filterable: Delete/Backspace clears selection (with announcement)", () => {
+    it("Delete clears the selection while the menu is closed and announces it", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          labelText: "Contact methods",
+          selectedIds: ["0", "1"],
+        },
+      });
+
+      const combobox = screen.getByRole("combobox");
+      combobox.focus();
+      expect(combobox).toHaveAttribute("aria-expanded", "false");
+      expect(screen.getByRole("status")).toHaveTextContent("");
+
+      await user.keyboard("{Delete}");
+
+      await waitFor(() =>
+        expect(screen.getByRole("status")).toHaveTextContent(
+          "All items cleared",
+        ),
+      );
+
+      // Open the menu to verify every option was unchecked.
+      await user.click(combobox);
+      for (const option of screen.getAllByRole("option")) {
+        expect(option).toHaveAttribute("aria-selected", "false");
+      }
+    });
+
+    it("Backspace clears the selection while the menu is open and keeps it open", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          labelText: "Contact methods",
+          selectedIds: ["0"],
+        },
+      });
+
+      const combobox = screen.getByRole("combobox");
+      combobox.focus();
+      await user.keyboard("{ArrowDown}");
+      await tick();
+      expect(combobox).toHaveAttribute("aria-expanded", "true");
+
+      await user.keyboard("{Backspace}");
+
+      expect(combobox).toHaveAttribute("aria-expanded", "true");
+      for (const option of screen.getAllByRole("option")) {
+        expect(option).toHaveAttribute("aria-selected", "false");
+      }
+      await waitFor(() =>
+        expect(screen.getByRole("status")).toHaveTextContent(
+          "All items cleared",
+        ),
+      );
+    });
+
+    it("Delete with nothing selected announces nothing", async () => {
+      render(MultiSelect, {
+        props: { items, labelText: "Contact methods" },
+      });
+
+      const combobox = screen.getByRole("combobox");
+      combobox.focus();
+      await user.keyboard("{Delete}");
+      await tick();
+
+      expect(screen.getByRole("status")).toHaveTextContent("");
+    });
+
+    it("does not clear the selection when read-only", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          labelText: "Contact methods",
+          readonly: true,
+          selectedIds: ["0", "1"],
+        },
+      });
+
+      const combobox = screen.getByRole("combobox");
+      await user.click(combobox);
+      await user.keyboard("{Delete}");
+      await user.keyboard("{Backspace}");
+      await tick();
+
+      const options = screen.getAllByRole("option");
+      expect(options[0]).toHaveAttribute("aria-selected", "true");
+      expect(options[1]).toHaveAttribute("aria-selected", "true");
+      expect(screen.getByRole("status")).toHaveTextContent("");
+    });
+
+    it("announces when the selection is cleared with the clear button", async () => {
+      const { container } = render(MultiSelect, {
+        props: {
+          items,
+          labelText: "Contact methods",
+          selectedIds: ["0"],
+        },
+      });
+
+      const closeIcon = container.querySelector(".bx--tag__close-icon");
+      assert(closeIcon);
+      await user.click(closeIcon);
+
+      await waitFor(() =>
+        expect(screen.getByRole("status")).toHaveTextContent(
+          "All items cleared",
+        ),
+      );
+    });
+
+    it("advertises the clear shortcut in the field description only while there is a selection", async () => {
+      render(MultiSelect, {
+        props: {
+          id: "test-multiselect",
+          items,
+          labelText: "Contact methods",
+          selectedIds: ["0"],
+        },
+      });
+
+      const description = document.querySelector("#selection-test-multiselect");
+      expect(description).toHaveTextContent(
+        "1 selected. To clear the selection, press Delete or Backspace",
+      );
+
+      screen.getByRole("combobox").focus();
+      await user.keyboard("{Delete}");
+      await tick();
+
+      // The existing "omits the selection count description when nothing is
+      // selected" behavior removes the shortcut hint along with the count.
+      expect(
+        document.querySelector("#selection-test-multiselect"),
+      ).not.toBeInTheDocument();
+    });
+
+    it("supports overriding the shortcut hint and cleared announcement", async () => {
+      render(MultiSelect, {
+        props: {
+          id: "test-multiselect",
+          items,
+          labelText: "Contact methods",
+          selectedIds: ["0"],
+          clearSelectionText: "Press Delete to reset",
+          selectionClearedText: "Selection reset",
+        },
+      });
+
+      expect(
+        document.querySelector("#selection-test-multiselect"),
+      ).toHaveTextContent("1 selected. Press Delete to reset");
+
+      screen.getByRole("combobox").focus();
+      await user.keyboard("{Delete}");
+
+      await waitFor(() =>
+        expect(screen.getByRole("status")).toHaveTextContent("Selection reset"),
+      );
+    });
   });
 
   describe("readonly", () => {

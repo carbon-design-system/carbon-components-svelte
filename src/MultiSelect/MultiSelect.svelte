@@ -198,6 +198,20 @@
   export let maxSelectedText = "Maximum items selected";
 
   /**
+   * Specify the assistive text advertising the keyboard shortcut that clears
+   * the selection. Appended to the field's visually-hidden description
+   * whenever there is a selection to clear.
+   */
+  export let clearSelectionText =
+    "To clear the selection, press Delete or Backspace";
+
+  /**
+   * Specify the assistive text announced through the status live region when
+   * the selection is cleared via the keyboard or the clear button.
+   */
+  export let selectionClearedText = "All items cleared";
+
+  /**
    * Specify a name attribute for the select.
    * @type {string}
    */
@@ -330,6 +344,8 @@
   let internalSelectedIdsRef = selectedIds;
   /** Anchor item id for shift+click range selection; cleared when selection is reset entirely. */
   let lastSelectedItemId = null;
+  /** Text content of the visually-hidden status live region. */
+  let statusText = "";
 
   /**
    * @type {(data: { key: "field" | "selection"; ref: HTMLDivElement | HTMLButtonElement }) => void}
@@ -477,6 +493,31 @@
     applyTopSelectionFeedback();
 
     return true;
+  }
+
+  /**
+   * Announce a message through the visually-hidden status region. The text is
+   * reset first so announcing the same message twice still mutates the DOM —
+   * live regions only fire on an actual text change.
+   * @param {string} text
+   */
+  async function announceStatus(text) {
+    statusText = "";
+    await tick();
+    statusText = text;
+  }
+
+  /**
+   * Clear every selected item and announce it. Shared by the clear button and
+   * the Delete/Backspace shortcuts in both field variants. No-op when nothing
+   * is selected so a bare Delete press does not announce a phantom clear.
+   */
+  function clearSelection() {
+    if (selectionCount === 0) return;
+    selectedIds = [];
+    lastSelectedItemId = null;
+    sortedItems = sortedItems.map((item) => ({ ...item, checked: false }));
+    announceStatus(selectionClearedText);
   }
 
   afterUpdate(() => {
@@ -871,14 +912,7 @@
             <ListBoxSelection
               {selectionCount}
               on:clear
-              on:clear={() => {
-              selectedIds = [];
-              lastSelectedItemId = null;
-              sortedItems = sortedItems.map((item) => ({
-                ...item,
-                checked: false,
-              }));
-            }}
+              on:clear={clearSelection}
               translateWithId={translateWithIdSelection}
               {disabled}
               {readonly}
@@ -945,24 +979,10 @@
               if (readonly) event.preventDefault();
               if (!open) open = true;
             } else if (event.key === "Backspace" && value === "") {
-              selectedIds = [];
-              lastSelectedItemId = null;
-              sortedItems = sortedItems.map((item) => ({
-                ...item,
-                checked: false,
-              }));
+              clearSelection();
             } else if (event.key === "Delete") {
-              if (open) {
-                value = "";
-              } else {
-                value = "";
-                selectedIds = [];
-                lastSelectedItemId = null;
-                sortedItems = sortedItems.map((item) => ({
-                  ...item,
-                  checked: false,
-                }));
-              }
+              value = "";
+              if (!open) clearSelection();
             }
           }}
             on:input
@@ -1092,6 +1112,13 @@
             highlightedIndex =
               event.key === "Home" ? 0 : navigableItems.length - 1;
             highlightOrigin = "keyboard";
+          } else if (event.key === "Delete" || event.key === "Backspace") {
+            // Clear the whole selection from the keyboard, menu open or
+            // closed, matching the filterable variant. Read-only reviews the
+            // menu but never changes the selection.
+            if (readonly) return;
+            event.preventDefault();
+            clearSelection();
           }
         }}
           on:blur={(event) => {
@@ -1106,14 +1133,7 @@
             <ListBoxSelection
               {selectionCount}
               on:clear
-              on:clear={() => {
-              selectedIds = [];
-              lastSelectedItemId = null;
-              sortedItems = sortedItems.map((item) => ({
-                ...item,
-                checked: false,
-              }));
-            }}
+              on:clear={clearSelection}
               translateWithId={translateWithIdSelection}
               {disabled}
               {readonly}
@@ -1352,7 +1372,12 @@
   {#if hasSelectionDescription}
     <span id={selectionId} class:bx--visually-hidden={true}
       >{selectionCount}
-      selected</span
+      selected. {clearSelectionText}</span
     >
   {/if}
+  <!-- Live region for selection announcements. Always rendered (even while
+       empty) so assistive tech registers the region before its text changes. -->
+  <span role="status" aria-live="polite" class:bx--visually-hidden={true}
+    >{statusText}</span
+  >
 </div>
