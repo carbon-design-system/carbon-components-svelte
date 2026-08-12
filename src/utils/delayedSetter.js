@@ -30,5 +30,3 @@ export function createDelayedSetter() {
 
   return schedule;
 }
-
-export default createDelayedSetter;

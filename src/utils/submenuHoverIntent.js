@@ -40,5 +40,3 @@ export function createSubmenuHoverIntent(setOpen, delays) {
 
   return { open, scheduleOpen, scheduleClose, cancelClose, cancel };
 }
-
-export default createSubmenuHoverIntent;

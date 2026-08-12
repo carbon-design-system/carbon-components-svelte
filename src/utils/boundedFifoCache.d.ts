@@ -11,5 +11,3 @@ export class BoundedFifoCache<K, V> {
   set(key: K, value: V): void;
   get size(): number;
 }
-
-export default BoundedFifoCache;

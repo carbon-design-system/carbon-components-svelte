@@ -11,5 +11,3 @@ export function createSubmenuHoverIntent(
   setOpen: (open: boolean) => void,
   delays: { openDelay: number; closeDelay: number },
 ): SubmenuHoverIntent;
-
-export default createSubmenuHoverIntent;

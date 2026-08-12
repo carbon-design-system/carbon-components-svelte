@@ -41,5 +41,3 @@ export class BoundedFifoCache {
     return this.map.size;
   }
 }
-
-export default BoundedFifoCache;
