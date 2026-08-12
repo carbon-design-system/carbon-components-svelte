@@ -27,6 +27,10 @@
   export let translateWithIdSelection: ComponentProps<Dropdown>["translateWithIdSelection"] =
     undefined;
   export let clearable: ComponentProps<Dropdown>["clearable"] = false;
+  export let clearSelectionText: ComponentProps<Dropdown>["clearSelectionText"] =
+    undefined;
+  export let selectionClearedText: ComponentProps<Dropdown>["selectionClearedText"] =
+    undefined;
   export let id: ComponentProps<Dropdown>["id"] = "test-dropdown";
   export let name: ComponentProps<Dropdown>["name"] = undefined;
   export let ref: ComponentProps<Dropdown>["ref"] = null;
@@ -59,6 +63,8 @@
   {translateWithId}
   {translateWithIdSelection}
   {clearable}
+  {clearSelectionText}
+  {selectionClearedText}
   {id}
   {name}
   bind:ref

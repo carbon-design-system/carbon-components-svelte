@@ -300,6 +300,179 @@ describe("Dropdown", () => {
     ).toBeInTheDocument();
   });
 
+  describe("clearable: Delete/Backspace clears selection (with announcement)", () => {
+    it("Delete clears the selection while the menu is closed and announces it", async () => {
+      render(Dropdown, {
+        props: {
+          items,
+          selectedId: "0",
+          labelText: "Contact",
+          clearable: true,
+        },
+      });
+
+      const combobox = screen.getByRole("combobox");
+      combobox.focus();
+      expect(combobox).toHaveAttribute("aria-expanded", "false");
+      expect(screen.getByRole("status")).toHaveTextContent("");
+
+      await user.keyboard("{Delete}");
+
+      await waitFor(() =>
+        expect(screen.getByRole("status")).toHaveTextContent(
+          "Selection cleared",
+        ),
+      );
+      expect(within(combobox).queryByText("Slack")).not.toBeInTheDocument();
+    });
+
+    it("Backspace clears the selection while the menu is open", async () => {
+      render(Dropdown, {
+        props: {
+          items,
+          selectedId: "0",
+          labelText: "Contact",
+          clearable: true,
+        },
+      });
+
+      const combobox = screen.getByRole("combobox");
+      await user.click(combobox);
+      expect(combobox).toHaveAttribute("aria-expanded", "true");
+
+      await user.keyboard("{Backspace}");
+
+      expect(within(combobox).queryByText("Slack")).not.toBeInTheDocument();
+      await waitFor(() =>
+        expect(screen.getByRole("status")).toHaveTextContent(
+          "Selection cleared",
+        ),
+      );
+    });
+
+    it("does not clear the selection when clearable is false", async () => {
+      render(Dropdown, {
+        props: {
+          items,
+          selectedId: "0",
+          labelText: "Contact",
+          clearable: false,
+        },
+      });
+
+      const combobox = screen.getByRole("combobox");
+      combobox.focus();
+      await user.keyboard("{Delete}");
+      await user.keyboard("{Backspace}");
+
+      expect(within(combobox).getByText("Slack")).toBeInTheDocument();
+      expect(screen.getByRole("status")).toHaveTextContent("");
+    });
+
+    it("does not clear the selection when read-only", async () => {
+      render(Dropdown, {
+        props: {
+          items,
+          selectedId: "0",
+          labelText: "Contact",
+          clearable: true,
+          readonly: true,
+        },
+      });
+
+      const combobox = screen.getByRole("combobox");
+      combobox.focus();
+      await user.keyboard("{Delete}");
+      await user.keyboard("{Backspace}");
+
+      expect(within(combobox).getByText("Slack")).toBeInTheDocument();
+      expect(screen.getByRole("status")).toHaveTextContent("");
+    });
+
+    it("Delete with nothing selected announces nothing", async () => {
+      render(Dropdown, {
+        props: { items, labelText: "Contact", clearable: true },
+      });
+
+      const combobox = screen.getByRole("combobox");
+      combobox.focus();
+      await user.keyboard("{Delete}");
+
+      expect(screen.getByRole("status")).toHaveTextContent("");
+    });
+
+    it("announces when the selection is cleared with the clear button", async () => {
+      render(Dropdown, {
+        props: {
+          items,
+          selectedId: "0",
+          labelText: "Contact",
+          clearable: true,
+        },
+      });
+
+      const clearButton = screen.getByRole("button", {
+        name: "Clear selected item",
+      });
+      await user.click(clearButton);
+
+      await waitFor(() =>
+        expect(screen.getByRole("status")).toHaveTextContent(
+          "Selection cleared",
+        ),
+      );
+    });
+
+    it("advertises the clear shortcut in the field description only while there is a selection", async () => {
+      render(Dropdown, {
+        props: {
+          id: "test-dropdown",
+          items,
+          selectedId: "0",
+          labelText: "Contact",
+          clearable: true,
+        },
+      });
+
+      const description = document.querySelector("#selection-test-dropdown");
+      expect(description).toHaveTextContent(
+        "To clear the selection, press Delete or Backspace",
+      );
+
+      screen.getByRole("combobox").focus();
+      await user.keyboard("{Delete}");
+
+      expect(
+        document.querySelector("#selection-test-dropdown"),
+      ).not.toBeInTheDocument();
+    });
+
+    it("supports overriding the shortcut hint and cleared announcement", async () => {
+      render(Dropdown, {
+        props: {
+          id: "test-dropdown",
+          items,
+          selectedId: "0",
+          labelText: "Contact",
+          clearable: true,
+          clearSelectionText: "Press Delete to reset",
+          selectionClearedText: "Selection reset",
+        },
+      });
+
+      expect(
+        document.querySelector("#selection-test-dropdown"),
+      ).toHaveTextContent("Press Delete to reset");
+
+      screen.getByRole("combobox").focus();
+      await user.keyboard("{Delete}");
+
+      await waitFor(() =>
+        expect(screen.getByRole("status")).toHaveTextContent("Selection reset"),
+      );
+    });
+  });
+
   it("should handle helper text", () => {
     render(Dropdown, {
       props: {
