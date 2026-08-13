@@ -3566,6 +3566,142 @@ describe("MultiSelect", () => {
     });
   });
 
+  describe("filterable: announces filter result counts", () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    // Keep in sync with the `announceFilterResults` debounce delay in
+    // MultiSelect.svelte.
+    const DEBOUNCE_MS = 800;
+
+    // user-event stalls under fake timers, so these tests drive the input
+    // with fireEvent. An input event both sets `value` and opens the menu.
+    const renderFiltered = (
+      props: Partial<ComponentProps<MultiSelectComponent>> = {},
+    ) => {
+      render(MultiSelect, {
+        props: { items, filterable: true, placeholder: "Filter...", ...props },
+      });
+      return screen.getByPlaceholderText("Filter...");
+    };
+
+    it("announces the match count once typing pauses", async () => {
+      const input = renderFiltered();
+
+      await fireEvent.input(input, { target: { value: "sl" } });
+      expect(screen.getByRole("status")).toHaveTextContent("");
+
+      await vi.advanceTimersByTimeAsync(DEBOUNCE_MS);
+      expect(screen.getByRole("status")).toHaveTextContent(
+        "1 result available",
+      );
+    });
+
+    it("announces only the final count of a typing burst", async () => {
+      const input = renderFiltered();
+
+      await fireEvent.input(input, { target: { value: "a" } });
+      await vi.advanceTimersByTimeAsync(DEBOUNCE_MS - 100);
+      expect(screen.getByRole("status")).toHaveTextContent("");
+
+      await fireEvent.input(input, { target: { value: "ax" } });
+      await vi.advanceTimersByTimeAsync(DEBOUNCE_MS);
+      expect(screen.getByRole("status")).toHaveTextContent(
+        "1 result available",
+      );
+    });
+
+    it("announces no results and pluralizes counts", async () => {
+      const input = renderFiltered();
+
+      await fireEvent.input(input, { target: { value: "zzz" } });
+      await vi.advanceTimersByTimeAsync(DEBOUNCE_MS);
+      expect(screen.getByRole("status")).toHaveTextContent("No results");
+
+      await fireEvent.input(input, { target: { value: "a" } });
+      await vi.advanceTimersByTimeAsync(DEBOUNCE_MS);
+      expect(screen.getByRole("status")).toHaveTextContent(
+        "3 results available",
+      );
+    });
+
+    it("skips the announcement when the count has not changed, supports a custom message", async () => {
+      const filterResultsText = vi.fn((count: number) => `${count} matches`);
+      const input = renderFiltered({ filterResultsText });
+
+      await fireEvent.input(input, { target: { value: "sl" } });
+      await vi.advanceTimersByTimeAsync(DEBOUNCE_MS);
+      expect(screen.getByRole("status")).toHaveTextContent("1 matches");
+      expect(filterResultsText).toHaveBeenCalledTimes(1);
+
+      await fireEvent.input(input, { target: { value: "sla" } });
+      await vi.advanceTimersByTimeAsync(DEBOUNCE_MS);
+      expect(filterResultsText).toHaveBeenCalledTimes(1);
+    });
+
+    it("clears the region when the menu closes and announces again on reopen", async () => {
+      const input = renderFiltered();
+
+      await fireEvent.input(input, { target: { value: "sl" } });
+      await vi.advanceTimersByTimeAsync(DEBOUNCE_MS);
+      expect(screen.getByRole("status")).toHaveTextContent(
+        "1 result available",
+      );
+
+      await fireEvent.keyDown(input, { key: "Escape" });
+      await tick();
+      expect(screen.getByRole("status")).toHaveTextContent("");
+
+      // Reopening resets the "last announced" count: the same count announces
+      // again, since the region was cleared on close.
+      await fireEvent.input(input, { target: { value: "sl" } });
+      await vi.advanceTimersByTimeAsync(DEBOUNCE_MS);
+      expect(screen.getByRole("status")).toHaveTextContent(
+        "1 result available",
+      );
+    });
+
+    it("drops a pending announcement when the menu closes mid-debounce", async () => {
+      const input = renderFiltered();
+
+      await fireEvent.input(input, { target: { value: "sl" } });
+      await vi.advanceTimersByTimeAsync(DEBOUNCE_MS / 2);
+      await fireEvent.keyDown(input, { key: "Escape" });
+      await vi.advanceTimersByTimeAsync(DEBOUNCE_MS * 2);
+
+      expect(screen.getByRole("status")).toHaveTextContent("");
+    });
+
+    it("does not announce when the filter text is emptied", async () => {
+      const input = renderFiltered();
+
+      await fireEvent.input(input, { target: { value: "sl" } });
+      await vi.advanceTimersByTimeAsync(DEBOUNCE_MS / 2);
+      await fireEvent.input(input, { target: { value: "" } });
+      await vi.advanceTimersByTimeAsync(DEBOUNCE_MS * 2);
+
+      expect(screen.getByRole("status")).toHaveTextContent("");
+    });
+
+    it("excludes the select-all pseudo-item from the count", async () => {
+      const input = renderFiltered({
+        items: [{ id: "all", text: "Select all", isSelectAll: true }, ...items],
+      });
+
+      await fireEvent.input(input, { target: { value: "zzz" } });
+      await vi.advanceTimersByTimeAsync(DEBOUNCE_MS);
+
+      // The select-all item always survives filtering; it must not count as a
+      // result.
+      expect(screen.getByRole("status")).toHaveTextContent("No results");
+    });
+  });
+
   describe("readonly", () => {
     it("should apply readonly class on the listbox", () => {
       const { container } = render(MultiSelect, {
