@@ -969,7 +969,6 @@
             aria-disabled={disabled || undefined}
             aria-readonly={readonly || undefined}
             aria-controls={open ? menuId : undefined}
-            aria-owns={open ? menuId : undefined}
             aria-describedby={fieldDescribedById}
             class:bx--text-input={true}
             class:bx--text-input--empty={value === ""}
@@ -1083,7 +1082,6 @@
           aria-expanded={open}
           aria-activedescendant={activeDescendantId}
           aria-controls={open ? menuId : undefined}
-          aria-owns={open ? menuId : undefined}
           aria-describedby={fieldDescribedById}
           on:focus={() => {
           fieldFocused = true;
@@ -1254,11 +1252,11 @@
                       selectItem(item);
                     }
                     lastSelectedItemId = item.id;
-                    if (filterable) {
-                      inputRef?.focus();
-                    } else {
-                      fieldRef?.focus();
-                    }
+                  }}
+                  on:mousedown={(event) => {
+                    // Keep focus on the field so screen readers don't
+                    // re-announce it on every option click.
+                    event.preventDefault();
                   }}
                   on:mouseenter={() => {
                     if (itemDisabled) return;
@@ -1336,11 +1334,11 @@
                   selectItem(item);
                 }
                 lastSelectedItemId = item.id;
-                if (filterable) {
-                  inputRef?.focus();
-                } else {
-                  fieldRef?.focus();
-                }
+              }}
+              on:mousedown={(event) => {
+                // Keep focus on the field so screen readers don't
+                // re-announce it on every option click.
+                event.preventDefault();
               }}
               on:mouseenter={() => {
                 if (itemDisabled) return;

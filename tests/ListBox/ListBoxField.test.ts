@@ -98,7 +98,7 @@ describe("ListBoxField", () => {
     });
 
     const field = screen.getByText("ID test").closest(".bx--list-box__field");
-    expect(field).toHaveAttribute("aria-owns", "menu-test-field");
+    expect(field).not.toHaveAttribute("aria-owns");
     expect(field).toHaveAttribute("aria-controls", "menu-test-field");
   });
 
