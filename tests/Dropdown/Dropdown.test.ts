@@ -623,6 +623,40 @@ describe("Dropdown", () => {
     expect(screen.getByRole("listbox")).toBeVisible();
   });
 
+  it("keeps focus on the field while clicking an option", async () => {
+    render(Dropdown, { props: { items } });
+
+    const button = screen.getByRole("combobox");
+    await user.click(button);
+    expect(button).toHaveFocus();
+
+    // Focus must never move to the option — a focus bounce makes screen
+    // readers re-announce the entire field on every click.
+    const option = screen.getByRole("option", { name: "Email" });
+    await user.click(option);
+
+    expect(button).toHaveTextContent("Email");
+    expect(button).toHaveFocus();
+  });
+
+  it("keeps focus on the field while clicking virtualized options", async () => {
+    const largeItems = Array.from({ length: 500 }, (_, i) => ({
+      id: String(i),
+      text: `Item ${i + 1}`,
+    }));
+    render(Dropdown, { props: { items: largeItems, virtualize: true } });
+
+    const button = screen.getByRole("combobox");
+    await user.click(button);
+    expect(button).toHaveFocus();
+
+    const option = screen.getByRole("option", { name: "Item 1" });
+    await user.click(option);
+
+    expect(button).toHaveTextContent("Item 1");
+    expect(button).toHaveFocus();
+  });
+
   it("should open the menu on ArrowDown and highlight the first enabled item", async () => {
     render(Dropdown, { props: { items } });
 
@@ -2489,6 +2523,9 @@ describe("Dropdown", () => {
     await user.click(button);
     const menu = screen.getByRole("listbox");
     expect(button).toHaveAttribute("aria-controls", menu.id);
+    // ARIA 1.2 comboboxes reference the popup via aria-controls only;
+    // aria-owns restructures the accessibility tree and can double-read.
+    expect(button).not.toHaveAttribute("aria-owns");
 
     await user.click(button);
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
