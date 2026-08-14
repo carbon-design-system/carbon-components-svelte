@@ -1533,6 +1533,9 @@ describe("MultiSelect", () => {
 
       expect(combobox).toHaveAttribute("aria-expanded", "true");
       expect(combobox).toHaveAttribute("aria-controls");
+      // ARIA 1.2 comboboxes reference the popup via aria-controls only;
+      // aria-owns restructures the accessibility tree and can double-read.
+      expect(combobox).not.toHaveAttribute("aria-owns");
       const menuId = combobox.getAttribute("aria-controls");
       expect(screen.getByRole("listbox")).toHaveAttribute("id", menuId);
     });
@@ -1551,6 +1554,70 @@ describe("MultiSelect", () => {
       await user.click(screen.getByText("Contact methods"));
 
       expect(combobox).toHaveAttribute("aria-expanded", "true");
+      expect(combobox).toHaveFocus();
+    });
+
+    it("keeps focus on the field while clicking options (non-filterable)", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          labelText: "Contact methods",
+        },
+      });
+
+      const combobox = screen.getByRole("combobox");
+      await user.click(combobox);
+      expect(combobox).toHaveFocus();
+
+      // Focus must never move to the option — a focus bounce makes screen
+      // readers re-announce the entire field on every click.
+      const option = screen.getByRole("option", { name: "Email" });
+      await user.click(option);
+
+      expect(option).toHaveAttribute("aria-checked", "true");
+      expect(combobox).toHaveFocus();
+    });
+
+    it("keeps focus on the input while clicking options (filterable)", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          filterable: true,
+          placeholder: "Filter...",
+        },
+      });
+
+      const combobox = screen.getByRole("combobox");
+      await user.click(combobox);
+      expect(combobox).toHaveFocus();
+
+      const option = screen.getByRole("option", { name: "Email" });
+      await user.click(option);
+
+      expect(option).toHaveAttribute("aria-checked", "true");
+      expect(combobox).toHaveFocus();
+    });
+
+    it("keeps focus on the field while clicking virtualized options", async () => {
+      const largeItems = Array.from({ length: 500 }, (_, i) => ({
+        id: String(i),
+        text: `Item ${i + 1}`,
+      }));
+      render(MultiSelect, {
+        props: {
+          items: largeItems,
+          virtualize: true,
+        },
+      });
+
+      const combobox = screen.getByRole("combobox");
+      await user.click(combobox);
+      expect(combobox).toHaveFocus();
+
+      const option = screen.getByRole("option", { name: "Item 1" });
+      await user.click(option);
+
+      expect(option).toHaveAttribute("aria-checked", "true");
       expect(combobox).toHaveFocus();
     });
 
@@ -1587,6 +1654,7 @@ describe("MultiSelect", () => {
 
       expect(combobox).toHaveAttribute("aria-expanded", "true");
       expect(combobox).toHaveAttribute("aria-controls");
+      expect(combobox).not.toHaveAttribute("aria-owns");
       const menuId = combobox.getAttribute("aria-controls");
       expect(screen.getByRole("listbox")).toHaveAttribute("id", menuId);
     });

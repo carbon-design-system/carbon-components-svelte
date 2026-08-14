@@ -42,7 +42,6 @@
   {id}
   {role}
   aria-expanded={ariaExpanded}
-  aria-owns={(ariaExpanded && menuId) || undefined}
   aria-controls={(ariaExpanded && menuId) || undefined}
   aria-disabled={disabled}
   aria-readonly={readonly || undefined}
