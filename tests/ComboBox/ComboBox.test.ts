@@ -348,6 +348,33 @@ describe("ComboBox", () => {
     expect(input).toHaveValue("");
   });
 
+  it("should not set aria-owns on the combobox", async () => {
+    render(ComboBox);
+
+    const input = getInput();
+    await user.click(input);
+    expect(input).toHaveAttribute("aria-controls");
+    // ARIA 1.2 comboboxes reference the popup via aria-controls only;
+    // aria-owns restructures the accessibility tree and can double-read.
+    expect(input).not.toHaveAttribute("aria-owns");
+  });
+
+  it("keeps focus on the field while clicking an option", async () => {
+    render(ComboBox);
+
+    const input = getInput();
+    await user.click(input);
+    expect(input).toHaveFocus();
+
+    // Focus must never move to the option — a focus bounce makes screen
+    // readers re-announce the entire field on every click.
+    const emailOption = screen.getByRole("option", { name: "Email" });
+    await user.click(emailOption);
+
+    expect(input).toHaveValue("Email");
+    expect(input).toHaveFocus();
+  });
+
   it("should set aria-activedescendant only when an item is highlighted", async () => {
     render(ComboBox, { props: { shouldFilterItem: () => true } });
 
@@ -2449,6 +2476,26 @@ describe("ComboBox", () => {
       // Selected item should be visible and marked as active
       const selectedOption = screen.getByRole("option", { name: "Item 251" });
       expect(selectedOption).toHaveAttribute("aria-selected", "true");
+    });
+
+    it("keeps focus on the field while clicking virtualized options", async () => {
+      const largeItems = createLargeItemList(500);
+      render(ComboBox, {
+        props: {
+          items: largeItems,
+          virtualize: true,
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      expect(input).toHaveFocus();
+
+      const option = screen.getByRole("option", { name: "Item 1" });
+      await user.click(option);
+
+      expect(input).toHaveValue("Item 1");
+      expect(input).toHaveFocus();
     });
 
     it("should handle keyboard navigation with virtualization", async () => {
