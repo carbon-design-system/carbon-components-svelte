@@ -681,7 +681,6 @@
           aria-disabled={disabled || readonly}
           aria-readonly={readonly || undefined}
           aria-controls={open ? menuId : undefined}
-          aria-owns={open ? menuId : undefined}
           aria-describedby={showInvalid && invalidText
           ? errorId
           : showWarn && warnText
@@ -919,6 +918,8 @@
                   {highlighted}
                   disabled={item.disabled}
                   hasLeftIcon={Boolean($$slots.icon || item.icon)}
+                  aria-setsize={filteredItems.length}
+                  aria-posinset={actualIndex + 1}
                   on:click={(event) => {
                     if (item.disabled) {
                       event.stopPropagation();
@@ -931,6 +932,11 @@
                     if (filteredItems[actualIndex]) {
                       value = itemToString(filteredItems[actualIndex]);
                     }
+                  }}
+                  on:mousedown={(event) => {
+                    // Keep focus on the field so screen readers don't
+                    // re-announce it on every option click.
+                    event.preventDefault();
                   }}
                   on:mouseenter={() => {
                     if (item.disabled) return;
@@ -999,6 +1005,11 @@
                 if (filteredItems[index]) {
                   value = itemToString(filteredItems[index]);
                 }
+              }}
+              on:mousedown={(event) => {
+                // Keep focus on the field so screen readers don't
+                // re-announce it on every option click.
+                event.preventDefault();
               }}
               on:mouseenter={() => {
                 if (item.disabled) return;
