@@ -240,6 +240,12 @@
             "noRestrictedImports": {
               "level": "error",
               "options": {
+                "paths": {
+                  "svelte": {
+                    "importNames": ["onDestroy"],
+                    "message": "Use the return function from onMount instead of onDestroy."
+                  }
+                },
                 "patterns": [
                   {
                     "group": ["carbon-icons-svelte", "carbon-icons-svelte/**"],
