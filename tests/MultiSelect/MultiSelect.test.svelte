@@ -26,6 +26,8 @@
     undefined;
   export let selectionClearedText: ComponentProps<MultiSelect>["selectionClearedText"] =
     undefined;
+  export let filterResultsText: ComponentProps<MultiSelect>["filterResultsText"] =
+    undefined;
   export let selectionFeedback: ComponentProps<MultiSelect>["selectionFeedback"] =
     "top-after-reopen";
   export let maxSelectedItems: ComponentProps<MultiSelect>["maxSelectedItems"] =
@@ -71,6 +73,7 @@
   {readonlyText}
   {clearSelectionText}
   {selectionClearedText}
+  {filterResultsText}
   {selectionFeedback}
   {maxSelectedItems}
   {translateWithIdSelection}

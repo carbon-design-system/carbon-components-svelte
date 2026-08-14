@@ -212,6 +212,17 @@
   export let selectionClearedText = "All items cleared";
 
   /**
+   * Build the assistive message announced through the status live region when
+   * typing in the filterable variant changes how many options match.
+   * The count excludes any "select all" item.
+   * @type {(count: number) => string}
+   */
+  export let filterResultsText = (count) =>
+    count === 0
+      ? "No results"
+      : `${count} result${count === 1 ? "" : "s"} available`;
+
+  /**
    * Specify a name attribute for the select.
    * @type {string}
    */
@@ -296,6 +307,7 @@
     afterUpdate,
     createEventDispatcher,
     getContext,
+    onDestroy,
     setContext,
     tick,
   } from "svelte";
@@ -314,6 +326,7 @@
     getMenuItemHeight,
     getMenuMaxHeight,
   } from "../ListBox/list-box-utils.js";
+  import { debounce } from "../utils/debounce.js";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
   import { createScrollEndTracker } from "../utils/isScrollNearEnd.js";
@@ -520,6 +533,17 @@
     sortedItems = sortedItems.map((item) => ({ ...item, checked: false }));
     announceStatus(selectionClearedText);
   }
+
+  /** Filter result count last announced; null when the menu is closed so reopening announces again. */
+  let announcedFilterCount = null;
+
+  const announceFilterResults = debounce((count) => {
+    if (count === announcedFilterCount) return;
+    announcedFilterCount = count;
+    announceStatus(filterResultsText(count));
+  }, 800);
+
+  onDestroy(() => announceFilterResults.cancel());
 
   afterUpdate(() => {
     // Compare by length, not by IDs. This is intentional: `on:select`
@@ -777,6 +801,18 @@
           (item) => item.isSelectAll || filterItem(item, value),
         )
       : [];
+  $: filterResultCount = filteredItems.filter(
+    (item) => !item.isSelectAll,
+  ).length;
+  $: if (filterable && open && value?.length > 0) {
+    announceFilterResults(filterResultCount);
+  } else {
+    announceFilterResults.cancel();
+  }
+  $: if (!open) {
+    announcedFilterCount = null;
+    statusText = "";
+  }
   $: highlightedId =
     highlightedIndex > -1
       ? ((filterable ? filteredItems : sortedItems)[highlightedIndex]?.id ??
