@@ -307,7 +307,7 @@
     afterUpdate,
     createEventDispatcher,
     getContext,
-    onDestroy,
+    onMount,
     setContext,
     tick,
   } from "svelte";
@@ -543,7 +543,7 @@
     announceStatus(filterResultsText(count));
   }, 800);
 
-  onDestroy(() => announceFilterResults.cancel());
+  onMount(() => announceFilterResults.cancel);
 
   afterUpdate(() => {
     // Compare by length, not by IDs. This is intentional: `on:select`
