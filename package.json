@@ -35,6 +35,7 @@
   "scripts": {
     "setup": "bun ci && bun build:docs && bun build:css && cd docs && bun ci",
     "test": "vitest",
+    "bench": "vitest run --config vite.bench.config.ts",
     "test:src-types": "tsgo --project tsconfig.types.json",
     "test:package-exports": "tsgo --project tsconfig.package-exports.json",
     "test:types": "svelte-check --workspace tests --tsgo --fail-on-warnings",
@@ -71,6 +72,7 @@
     "culls": "^0.2.0",
     "jsdom": "^30.0.1",
     "lightningcss": "^1.33.0",
+    "mitata": "^1.0.34",
     "sass-embedded": "^1.100.0",
     "sveld": "^0.36.7",
     "svelte": "^5.56.8",

@@ -703,6 +703,41 @@ For components that hide content with CSS (for example ComposedModal), `toBeVisi
 
 Add a link to `e2e/fixtures/index.html` so the fixture is reachable from the index page.
 
+### Performance benchmarks
+
+[mitata](https://github.com/evanwashere/mitata) benchmarks live in `bench/`, split into two tiers by filename convention.
+
+**Pure-logic tier** (`bench/*.bench.ts`) benches a standalone util module directly — no Svelte, no DOM. Run it straight under bun, with no vitest involved:
+
+```sh
+# Whole file
+bun run bench/treeCheckboxState.bench.ts
+
+# Only case(s) whose declared name matches a pattern — much faster while
+# iterating on one new case in a file with many
+bun run bench/treeCheckboxState.bench.ts "no cascade"
+```
+
+The filter pattern matches the case's title as written in `bench(...)`. For a `.range()`/`.args()` case that title still contains the literal `$size` placeholder (mitata substitutes it per data point only for display), so filter by something in the case name — a function, shape, or variant — not a specific resolved size like `"10000"`; a match still runs every range point for that case.
+
+Numbers from this tier are representative of real-browser V8 behavior (no jsdom involved), so it's the right tier for validating algorithmic or data-structure choices — proving a `Set`-over-`Array` change actually helps, or that a function stays O(n) instead of drifting to O(n²), with real measurements instead of a guess.
+
+**Component tier** (`bench/*.dom.bench.ts`) mounts a real component through the same vitest+jsdom+Svelte-plugin harness the unit tests use. Run the whole tier:
+
+```sh
+bun run bench
+```
+
+jsdom has no layout or paint, so treat this tier as a same-harness regression detector (did this change make mount/interaction meaningfully slower than before), not a real-browser latency number.
+
+A new bench file, either tier, follows the same shape as an existing one — copy the closest match (for example `bench/treeCheckboxState.bench.ts` for pure-logic, `bench/dropdown.dom.bench.ts` for component) rather than starting from scratch. A few conventions and gotchas to carry over:
+
+- Use mitata's generator form for a parametrized sweep: `bench(name, function* (state) { const size = state.get("size"); /* setup */ yield () => work(size); }).range("size", 100, 10_000)`. Setup code before `yield` runs once per size value (unmeasured); only the returned closure is timed.
+- Pure-logic files call `runWithFilter()` (from `bench/run-with-filter.ts`) instead of mitata's bare `run()` — that's what wires up the CLI filter pattern above.
+- Component-tier files wrap `bench()`/`run()` calls inside an `it()` block with an explicit longer timeout (vitest errors on a test file with zero registered tests, and mitata's warmup + sampling exceeds vitest's 5s default) and call `cleanup()` from `@testing-library/svelte` inside the benched closure so DOM nodes don't pile up across thousands of iterations.
+- Add `.gc("inner")` to any **pure-logic** case whose closure allocates non-trivially per call (sorting or copying an array, building objects). Without it, mitata's default batching (many calls back-to-back with no GC in between) can mis-calibrate and report numbers inflated by 20-60x. Cross-check a surprising absolute number against a plain `performance.now()` loop before trusting it.
+- Do **not** add `.gc("inner")` to a **component-tier** (DOM) bench. Forcing a real GC after every iteration over a large jsdom DOM object graph is far more expensive than over plain JS objects, and can trip real thermal throttling that silently inflates every number in the same run — including unrelated cases in the same file. If a bench's printed `clk: ~X GHz` header looks abnormally low, treat the whole run as suspect.
+
 ## Commit messages
 
 Use [Conventional Commits](https://www.conventionalcommits.org/):
