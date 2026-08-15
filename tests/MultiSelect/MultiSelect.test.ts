@@ -1243,6 +1243,23 @@ describe("MultiSelect", () => {
       expect(nthRenderedOptionText(0)).toBe("Alpha");
     });
 
+    it("sorts numeric-aware by default (Item 2 before Item 10)", async () => {
+      render(MultiSelect, {
+        props: {
+          items: [
+            { id: "0", text: "Item 10" },
+            { id: "1", text: "Item 2" },
+            { id: "2", text: "Item 1" },
+          ],
+        },
+      });
+
+      await openMenu();
+      expect(nthRenderedOptionText(0)).toBe("Item 1");
+      expect(nthRenderedOptionText(1)).toBe("Item 2");
+      expect(nthRenderedOptionText(2)).toBe("Item 10");
+    });
+
     it("exposes sortedItems via bind", async () => {
       const { component } = render(MultiSelect, {
         props: {
