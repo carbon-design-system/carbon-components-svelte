@@ -134,8 +134,7 @@
    * The default sorting compare the item text value.
    * @type {((a: Item, b: Item) => number) | (() => void)}
    */
-  export let sortItem = (a, b) =>
-    a.text.localeCompare(b.text, locale, { numeric: true });
+  export let sortItem = (a, b) => getSortCollator().compare(a.text, b.text);
 
   /**
    * Override the chevron icon label based on the open state.
@@ -346,6 +345,16 @@
 
   $: effectivePortalMenu =
     portalMenu === undefined ? !!insideModal : portalMenu;
+
+  let sortCollatorLocale;
+  let sortCollator;
+  function getSortCollator() {
+    if (!sortCollator || sortCollatorLocale !== locale) {
+      sortCollatorLocale = locale;
+      sortCollator = new Intl.Collator(locale, { numeric: true });
+    }
+    return sortCollator;
+  }
 
   let fieldFocused = false;
   let highlightedIndex = -1;
