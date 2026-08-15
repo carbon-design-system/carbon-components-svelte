@@ -350,19 +350,14 @@ describe.each(testCases)("$name", ({ component }) => {
 
     const firstItem = treeItemById(0);
     const analytics = treeItemById(1);
-    const ibmEngine = treeItemById(2); // descendant of collapsed Analytics
-    const apacheSpark = treeItemById(3); // leaf, descendant of collapsed IBM Engine
 
-    // Both descendants stay in the DOM but inside `ul.bx--tree-node--hidden`.
-    expect(ibmEngine.closest("ul.bx--tree-node--hidden")).not.toBeNull();
-    expect(apacheSpark.closest("ul.bx--tree-node--hidden")).not.toBeNull();
+    expect(document.getElementById("2")).toBeNull();
+    expect(document.getElementById("3")).toBeNull();
 
     firstItem.focus();
     await user.keyboard("{ArrowDown}");
 
     expect(analytics).toHaveFocus();
-    expect(ibmEngine).not.toHaveFocus();
-    expect(apacheSpark).not.toHaveFocus();
   });
 
   it("End key moves focus to the last non-disabled treeitem", async () => {
@@ -733,7 +728,7 @@ describe("TreeView Props", () => {
   });
 
   it("multiselectMode shallow selects parent and direct children only", async () => {
-    render(TreeViewMultiselect, {
+    const { component } = render(TreeViewMultiselect, {
       multiselect: true,
       multiselectMode: "shallow",
       selectedIds: [],
@@ -756,7 +751,8 @@ describe("TreeView Props", () => {
     expect(sqlItem).toHaveAttribute("aria-selected", "true");
     expect(db2Item).toHaveAttribute("aria-selected", "true");
 
-    expect(treeItemById(3)).toHaveAttribute("aria-selected", "false");
+    expect(document.getElementById("3")).toBeNull();
+    expect(component.selectedIds).not.toContain(3);
   });
 
   it("multiselectMode deep selects all descendants", async () => {
@@ -839,7 +835,7 @@ describe("TreeView Props", () => {
   });
 
   it("shift+click range only includes visible (expanded) nodes", async () => {
-    render(TreeViewMultiselect, {
+    const { component } = render(TreeViewMultiselect, {
       multiselect: true,
       multiselectMode: "node",
       selectedIds: [],
@@ -861,7 +857,8 @@ describe("TreeView Props", () => {
 
     // Children of collapsed parents should NOT be selected
     // (e.g., id=2 "IBM Analytics Engine" is a child of collapsed Analytics)
-    expect(treeItemById(2)).toHaveAttribute("aria-selected", "false");
+    expect(document.getElementById("2")).toBeNull();
+    expect(component.selectedIds).not.toContain(2);
   });
 
   it("shift+click range includes children when parent is expanded", async () => {
@@ -1014,7 +1011,7 @@ describe("TreeView Props", () => {
   });
 
   it("shift+click range selection in shallow mode expands each ranged node to its direct children", async () => {
-    render(TreeViewMultiselect, {
+    const { component } = render(TreeViewMultiselect, {
       multiselect: true,
       multiselectMode: "shallow",
       selectedIds: [],
@@ -1032,14 +1029,18 @@ describe("TreeView Props", () => {
 
     // Range covers AI (0), Analytics (1), Blockchain (7); each expands to
     // itself plus its direct (non-disabled) children.
-    for (const id of [0, 1, 2, 5, 6, 7, 8]) {
+    for (const id of [0, 1, 7]) {
       expect(treeItemById(id)).toHaveAttribute("aria-selected", "true");
     }
+    expect(component.selectedIds).toEqual(
+      expect.arrayContaining([0, 1, 2, 5, 6, 7, 8]),
+    );
 
     // Nodes outside the range are not selected, and shallow mode does not
     // recurse past direct children (id 3 is a grandchild of Analytics).
     expect(treeItemById(9)).toHaveAttribute("aria-selected", "false");
-    expect(treeItemById(3)).toHaveAttribute("aria-selected", "false");
+    expect(component.selectedIds).not.toContain(9);
+    expect(component.selectedIds).not.toContain(3);
   });
 
   it("multiselect tree has bx--tree--multiselect class", () => {
@@ -1333,6 +1334,13 @@ describe("TreeView Generics", () => {
       render(TreeViewGenerics, { props: { onselect } });
 
       await user.click(treeItemById("electronics"));
+
+      const toggle = treeItemById("electronics").querySelector(
+        ".bx--tree-parent-node__toggle",
+      );
+      expect.assert(toggle instanceof HTMLElement);
+      await user.click(toggle);
+
       await user.click(treeItemById("laptop"));
 
       expect(onselect).toHaveBeenLastCalledWith(

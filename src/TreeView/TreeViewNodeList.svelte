@@ -31,7 +31,7 @@
    */
   export let icon = /** @type {Icon} */ (undefined);
 
-  import { getContext } from "svelte";
+  import { getContext, tick } from "svelte";
   import Checkbox from "../Checkbox/Checkbox.svelte";
   import CaretDown from "../icons/CaretDown.svelte";
   import TreeViewNode, {
@@ -73,7 +73,10 @@
     expandNode,
     focusNode,
     toggleNode,
+    isInitialRender,
   } = getContext("carbon:TreeView");
+
+  let subtreeRendered = isInitialRender() && $expandedIdsSetStore.has(id);
 
   /**
    * Tri-state value for `aria-checked` on the row.
@@ -98,6 +101,16 @@
 
   $: parent = Array.isArray(nodes);
   $: expanded = $expandedIdsSetStore.has(id);
+  const SYNC_REVEAL_LEVELS = 16;
+  $: if (expanded && !subtreeRendered) {
+    if (level % SYNC_REVEAL_LEVELS === 0) {
+      tick().then(() => {
+        if (expanded) subtreeRendered = true;
+      });
+    } else {
+      subtreeRendered = true;
+    }
+  }
   $: selected = $selectedIdsSetStore.has(id);
   $: checked = $checkedIdsSetStore.has(id);
   $: isCheckboxMode = $selectionModeStore === "checkbox";
@@ -305,36 +318,38 @@
       class:bx--tree-node__children={true}
       class:bx--tree-node--hidden={!expanded}
     >
-      {#if hasChildren && nodes.length === 0}
-        <slot name="childNodes" {node} />
-      {:else}
-        {#each nodes as child, index (child.id)}
-          {#if Array.isArray(child.nodes) || child.hasChildren}
-            <Self
-              {...child}
-              level={level + 1}
-              posinset={index + 1}
-              setsize={nodes.length}
-              let:node
-            >
-              <slot {node} />
-              <svelte:fragment slot="childNodes" let:node>
-                <slot name="childNodes" {node} />
-              </svelte:fragment>
-            </Self>
-          {:else}
-            <TreeViewNode
-              leaf
-              {...child}
-              level={level + 1}
-              posinset={index + 1}
-              setsize={nodes.length}
-              let:node
-            >
-              <slot {node}>{node.text}</slot>
-            </TreeViewNode>
-          {/if}
-        {/each}
+      {#if subtreeRendered}
+        {#if hasChildren && nodes.length === 0}
+          <slot name="childNodes" {node} />
+        {:else}
+          {#each nodes as child, index (child.id)}
+            {#if Array.isArray(child.nodes) || child.hasChildren}
+              <Self
+                {...child}
+                level={level + 1}
+                posinset={index + 1}
+                setsize={nodes.length}
+                let:node
+              >
+                <slot {node} />
+                <svelte:fragment slot="childNodes" let:node>
+                  <slot name="childNodes" {node} />
+                </svelte:fragment>
+              </Self>
+            {:else}
+              <TreeViewNode
+                leaf
+                {...child}
+                level={level + 1}
+                posinset={index + 1}
+                setsize={nodes.length}
+                let:node
+              >
+                <slot {node}>{node.text}</slot>
+              </TreeViewNode>
+            {/if}
+          {/each}
+        {/if}
       {/if}
     </ul>
   </li>

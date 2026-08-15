@@ -1,3 +1,5 @@
+<svelte:options accessors />
+
 <script lang="ts">
   import TreeView from "carbon-components-svelte/TreeView/TreeView.svelte";
   import type { ComponentProps } from "svelte";

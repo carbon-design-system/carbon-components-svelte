@@ -495,8 +495,8 @@
     const targetNode = cachedNodeMap?.get(id);
     if (!targetNode) return;
 
+    const ancestorIds = expand ? getAncestorIds(id, cachedParentIdById) : [];
     if (expand) {
-      const ancestorIds = getAncestorIds(id, cachedParentIdById);
       for (const ancestorId of ancestorIds) {
         expandedIdsSet.add(ancestorId);
       }
@@ -520,12 +520,19 @@
     }
 
     if (focus) {
-      tick().then(() => {
+      tick().then(async () => {
         if (virtualConfig && scrollContainerRef) {
           focusVirtualRowById(id);
           return;
         }
-        ref?.querySelector(`[id="${CSS.escape(String(id))}"]`)?.focus();
+        const selector = `[id="${CSS.escape(String(id))}"]`;
+        let el = ref?.querySelector(selector);
+        for (let i = 0; !el && i < ancestorIds.length * 2 + 2; i++) {
+          // biome-ignore lint/performance/noAwaitInLoops: each tick waits for the next reveal flush
+          await tick();
+          el = ref?.querySelector(selector);
+        }
+        el?.focus();
       });
     }
   }
@@ -947,6 +954,8 @@
     dispatch("toggle", withLiveState(node));
   }
 
+  let initialRenderComplete = false;
+
   setContext("carbon:TreeView", {
     treeId,
     activeNodeId,
@@ -963,6 +972,7 @@
     expandNode,
     focusNode,
     toggleNode,
+    isInitialRender: () => !initialRenderComplete,
   });
 
   /** @param {HTMLElement | null} root */
@@ -1162,6 +1172,8 @@
   });
 
   onMount(() => {
+    initialRenderComplete = true;
+
     if (ref && !treeWalker) {
       treeWalker = createTreeWalkerInstance(ref);
     }
