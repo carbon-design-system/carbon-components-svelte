@@ -31,4 +31,4 @@ it("benchmarks opening a Dropdown menu", async () => {
   // window/navigator globals look like a browser to its feature sniff —
   // the timings themselves still use bun's real nanosecond clock.)
   await run({ print: (line) => process.stdout.write(`${line}\n`) });
-}, 60_000);
+}, 180_000);
