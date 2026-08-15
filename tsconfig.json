@@ -19,5 +19,5 @@
       "carbon-components-svelte/*": ["./src/*"]
     }
   },
-  "include": ["src", "tests"]
+  "include": ["src", "tests", "bench"]
 }
