@@ -112,6 +112,24 @@ bench(
   .range("size", 100, 10_000)
   .gc("inner");
 
+// Bushy tree, match root only, with includeChildren and includeAncestors.
+// Matching the root with includeChildren deep-clones the entire subtree via cloneNode,
+// so a single match near the root approaches match-all cost — this is the worst-case allocation path.
+bench(
+  "filterTreeNodes bushy, match root only, includeChildren, $size nodes",
+  function* (state) {
+    const size = state.get("size");
+    const tree = buildBushyTree(size);
+    yield () =>
+      filterTreeNodes(tree, (n: TreeNode) => n.id === 0, {
+        includeChildren: true,
+        includeAncestors: true,
+      });
+  },
+)
+  .range("size", 100, 10_000)
+  .gc("inner");
+
 // Chain tree, match-few predicate, default options.
 // Tests filterTreeNodes on deep/narrow structure (opposite of bushy).
 bench("filterTreeNodes chain, match few, $size nodes", function* (state) {
