@@ -1,7 +1,7 @@
 <script>
   /**
-   * @event {string} select
-   * @event {string} deselect
+   * @event {string} "select"
+   * @event {string} "deselect"
    */
 
   /**

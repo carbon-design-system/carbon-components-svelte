@@ -2,7 +2,7 @@
   /**
    * @template [Icon=any]
    * @restProps {button}
-   * @event {{ selected: boolean }} change
+   * @event {{ selected: boolean }} "change"
    */
 
   /**
