@@ -282,6 +282,10 @@
    *   attribute, preserving focus, inputs, and open menus.
    *
    * `"hide"` falls back to `"remove"` when `pageSize` is set or `virtualize` is enabled.
+   *
+   * Because `"hide"` keeps every row mounted, each keystroke re-renders all
+   * rows, not just matching ones. For large row counts (hundreds or more),
+   * prefer `"remove"`, pagination, or virtualization.
    * @type {"remove" | "hide"}
    */
   export let filterMode = "remove";
