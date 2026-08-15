@@ -38,6 +38,7 @@ function buildBushyTree(totalNodes: number, branching = 10): TreeNode[] {
 // Module-level fixtures: build trees once, reuse across iterations
 const tree10k = buildBushyTree(10_000);
 const tree1k = buildBushyTree(1_000);
+const checkedIds50 = Array.from({ length: 50 }, (_, i) => i * 200);
 
 it("benchmarks TreeView filtering during search keystroke", async () => {
   // No `.gc("inner")` on DOM benches: forcing GC after every iteration over
@@ -95,6 +96,46 @@ it("benchmarks TreeView filtering during search keystroke", async () => {
       yield async () => {
         const filtered = predicateCount++ % 2 === 0 ? filteredA : filteredB;
         result.rerender({ nodes: filtered, labelText: "Tree" });
+        await tick();
+      };
+
+      cleanup();
+    },
+  );
+
+  bench(
+    "filter keystroke, TreeView 10000 nodes (virtualized, checkbox mode)",
+    function* () {
+      const fullTree = tree10k;
+      const predicateA = (node: TreeNode) => node.text.includes("1");
+      const predicateB = (node: TreeNode) => node.text.includes("2");
+
+      const filteredA = filterTreeNodes(fullTree, predicateA);
+      const filteredB = filterTreeNodes(fullTree, predicateB);
+
+      let predicateCount = 0;
+
+      // Checkbox mode runs resolveCheckboxState on every nodes change,
+      // this case measures that delta vs the plain virtualized case.
+      const result = render(TreeView, {
+        props: {
+          nodes: filteredA,
+          labelText: "Tree",
+          virtualize: true,
+          selectionMode: "checkbox",
+          checkedIds: checkedIds50,
+        },
+      });
+
+      yield async () => {
+        const filtered = predicateCount++ % 2 === 0 ? filteredA : filteredB;
+        result.rerender({
+          nodes: filtered,
+          labelText: "Tree",
+          virtualize: true,
+          selectionMode: "checkbox",
+          checkedIds: checkedIds50,
+        });
         await tick();
       };
 

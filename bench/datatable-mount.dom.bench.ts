@@ -59,4 +59,4 @@ it("benchmarks mounting a large DataTable, virtualized vs not", async () => {
   // mitata defaults `print` to console.log, which vitest swallows for
   // passing tests. process.stdout.write always reaches the terminal.
   await run({ print: (line) => process.stdout.write(`${line}\n`) });
-}, 60_000);
+}, 180_000);
