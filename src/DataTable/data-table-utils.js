@@ -221,6 +221,20 @@ export function formatHeaderWidth(header) {
   return styles.join(";");
 }
 
+// Cached collator for compareValues' string fast path. localeCompare(str,
+// locale, options) rebuilds the full ICU collator on every call when an
+// options object is passed — reusing one Intl.Collator's .compare() instead
+// is ~30x faster at scale. Locale is undefined so it defaults to the user's
+// locale, matching localeCompare's prior behavior.
+const collator = new Intl.Collator(undefined, {
+  // Enable numeric sorting for strings that look like numbers
+  // E.g., "10" should come after "2"
+  numeric: true,
+  // Comparison is case- and accent-insensitive
+  // E.g., "apple" == "Apple", "café" == "cafe"
+  sensitivity: "base",
+});
+
 /**
  * Compares two values for sorting in a data table.
  * Handles numbers, strings, null/undefined values, and custom sort functions.
@@ -251,19 +265,7 @@ export function compareValues(itemA, itemB, ascending, customSort) {
     } else if (!itemB && itemB !== 0) {
       result = -1;
     } else {
-      result = String(itemA).localeCompare(
-        String(itemB),
-        // Use undefined to default to user's locale
-        undefined,
-        {
-          // Enable numeric sorting for strings that look like numbers
-          // E.g., "10" should come after "2"
-          numeric: true,
-          // Comparison is case- and accent-insensitive
-          // E.g., "apple" == "Apple", "café" == "cafe"
-          sensitivity: "base",
-        },
-      );
+      result = collator.compare(String(itemA), String(itemB));
     }
   }
 
