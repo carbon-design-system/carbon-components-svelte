@@ -5,8 +5,11 @@
  *
  * Complexity (after build):
  * - build: O(n) time and one size entry per node
- * - getRowAt / findIndexById: O(siblings along the path) — flat/wide lists
- *   are O(index), not O(depth)
+ * - getRowAt: O(siblings along the path) — flat/wide lists are O(index),
+ *   not O(depth)
+ * - findIndexById: O(n) worst case — a linear document-order search with no
+ *   reverse id→index map, so unlike getRowAt/collectRows it can't use
+ *   sizeById to skip a subtree before finding the id inside it
  * - collectRows: one cursor walk — O(path-to-start + window), not
  *   O(width × window) from independent getRowAt calls
  */
