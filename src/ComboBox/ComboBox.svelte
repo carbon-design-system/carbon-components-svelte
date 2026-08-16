@@ -728,11 +728,12 @@
           aria-disabled={disabled || readonly}
           aria-readonly={readonly || undefined}
           aria-controls={open ? menuId : undefined}
-          aria-describedby={showInvalid && invalidText
-          ? errorId
+          aria-errormessage={showInvalid && invalidText ? errorId : undefined}
+          aria-describedby={showInvalid
+          ? undefined
           : showWarn && warnText
             ? warnId
-            : !isFluid && !showInvalid && !showWarn && helperText
+            : !isFluid && !showWarn && helperText
               ? helperId
               : undefined}
           {disabled}
