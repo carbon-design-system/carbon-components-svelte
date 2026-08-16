@@ -21,7 +21,8 @@ test.describe("Search a11y", () => {
       .analyze();
     expect(withValueResults.violations).toEqual([]);
 
-    await page.getByTestId("search-expandable").focus();
+    const expandable = page.locator(".bx--search--expandable");
+    await expandable.locator(".bx--search-magnifier").click();
     await expect(page.getByTestId("search-expandable")).toBeFocused();
 
     const expandedResults = await new AxeBuilder({ page })

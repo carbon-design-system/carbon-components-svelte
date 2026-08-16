@@ -82,7 +82,7 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher, getContext } from "svelte";
+  import { createEventDispatcher, getContext, tick } from "svelte";
   import Close from "../icons/Close.svelte";
   import IconSearch from "../icons/IconSearch.svelte";
   import { uniqueId } from "../utils/uniqueId.js";
@@ -95,7 +95,11 @@
   let prevExpanded = expanded;
 
   $: isFluid = !expandable && (fluid || !!formContext?.isFluid);
-  $: if (expanded && ref) ref.focus();
+  $: if (expanded && ref) {
+    tick().then(() => {
+      if (expanded) ref?.focus();
+    });
+  }
   $: if (expanded !== prevExpanded) {
     const nextExpanded = expanded;
     prevExpanded = expanded;
@@ -161,6 +165,8 @@
       {id}
       {placeholder}
       {...$$restProps}
+      tabindex={expandable && !expanded ? -1 : $$restProps.tabindex}
+      inert={expandable && !expanded ? true : $$restProps.inert}
       on:change
       on:input
       on:focus
