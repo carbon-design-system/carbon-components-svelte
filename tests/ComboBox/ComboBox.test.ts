@@ -1440,6 +1440,29 @@ describe("ComboBox", () => {
       expect(input.selectionEnd).toBe(5);
     });
 
+    it("should skip a disabled item when suggesting and completing a typeahead match on Tab", async () => {
+      render(ComboBox, {
+        props: {
+          typeahead: true,
+          items: [
+            { id: "ibm-cloud", text: "IBM Cloud", price: 0, disabled: true },
+            { id: "ibm-quantum", text: "IBM Quantum", price: 0 },
+            { id: "ibm-z", text: "IBM Z", price: 0 },
+          ],
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "IBM ");
+
+      expect(input).toHaveValue("IBM Quantum");
+
+      await user.keyboard("{Tab}");
+
+      expect(input).toHaveValue("IBM Quantum");
+    });
+
     it("should filter items using prefix matching when typeahead is enabled", async () => {
       render(ComboBox, {
         props: {
