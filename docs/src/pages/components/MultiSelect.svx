@@ -63,23 +63,29 @@ Hide the label visually by setting `hideLabel` to `true`. The label remains avai
 
 ### Checkbox values
 
-Customize checkbox attributes using the `itemToInput` prop. This example sets a consistent name for all checkboxes.
+`MultiSelect` mounts a hidden `<input>` for every selected item, derived
+from the current selection -- not from what's rendered in the dropdown. This
+keeps native form submission (`FormData`) working while the menu is closed,
+while filtering, and with `virtualize`.
 
-Use itemToInput to customize the user-selectable checkbox values.
-This will also override the underlying hidden inputs used for form submission.
+By default, each hidden input uses `name={item.id}` and an empty `value`,
+matching the option checkbox's own defaults. Use `itemToInput` to override
+`name`/`value` per item, or set the `name` prop to give every hidden input a
+shared group name (unless `itemToInput` returns its own `name`). `name` is
+only used for the hidden inputs -- with `filterable`, the visible text input
+is a query box and is never included in `FormData`.
 
 ```js
 itemToInput={(item) => {
   return {
-    name: `Contact_${item.id}`,
+    name: 'contact',
     value: item.id
   }
 }}
 ```
 
-The above function sets the name attribute to
-Contact_0 (respective to each item's id) for every hidden input that
-renders, along with each respective item's id set to the value attribute.
+The above function sets every hidden input's name to `contact` and its value
+to the respective item's id, so a submission looks like `contact=0&contact=1`.
 
 <MultiSelect
   itemToInput={(item) => ({name: 'contact', value: item.id})}
@@ -91,6 +97,26 @@ renders, along with each respective item's id set to the value attribute.
     {id: "2", text: "Fax"}
   ]}"
 />
+
+```svelte
+<script>
+  import { Form, MultiSelect, Button } from "carbon-components-svelte";
+</script>
+
+<Form method="POST" action="?/subscribe">
+  <MultiSelect
+    name="contact"
+    labelText="Contact"
+    label="Select contact methods..."
+    items={[
+      {id: "0", text: "Slack"},
+      {id: "1", text: "Email"},
+      {id: "2", text: "Fax"}
+    ]}
+  />
+  <Button type="submit">Save</Button>
+</Form>
+```
 
 ## Selection
 
