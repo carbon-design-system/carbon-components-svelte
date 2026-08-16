@@ -240,6 +240,7 @@ describe("DatePicker", () => {
     expect(input).toHaveAttribute("aria-errormessage", invalidText.id);
     expect(input).not.toHaveAttribute("aria-describedby");
     expect(input).toHaveAttribute("aria-invalid", "true");
+    expect(invalidText).toHaveAttribute("role", "alert");
   });
 
   it("associates warning text with the input via aria-describedby", () => {
