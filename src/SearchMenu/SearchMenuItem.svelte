@@ -149,58 +149,55 @@
     menu.selectItem(detail);
   }
 
-  $: if (highlighted && ref && !ref.matches(":hover")) {
+  $: if (shouldRender && highlighted && ref && !ref.matches(":hover")) {
     ref.scrollIntoView({ block: "nearest" });
   }
 </script>
 
-{#if shouldRender}
-  <!-- svelte-ignore a11y-no-static-element-interactions -->
-  <svelte:element
-    this={href ? "a" : "div"}
-    bind:this={ref}
-    {id}
-    href={href || undefined}
-    role="option"
-    tabindex="-1"
-    aria-selected={highlighted}
-    aria-disabled={disabled || undefined}
-    data-search-menu-filterable={isFilterable || undefined}
-    class:bx--search-menu-item={true}
-    class:bx--search-menu-item--highlighted={highlighted}
-    class:bx--search-menu-item--disabled={disabled}
-    class:bx--search-menu-item--link={Boolean(href)}
-    {...$$restProps}
-    on:click
-    on:click={handleClick}
-    on:mousedown|preventDefault
-    on:mouseenter={() => {
-      if (!disabled) menu.setActiveId(id);
-    }}
-  >
-    {#if icon}
-      <span class="bx--search-menu-item__icon">
-        <svelte:component this={icon} />
-      </span>
-    {/if}
-    <span class="bx--search-menu-item__label">
-      {#if $$slots.default}
-        <slot
-          query={$queryStore}
-          matched={matchResult.matched}
-          indices={matchResult.indices}
-          {segments}
-        />
-      {:else}
-        {@html labelHtml}
-      {/if}
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<svelte:element
+  this={href ? "a" : "div"}
+  bind:this={ref}
+  {id}
+  href={href || undefined}
+  hidden={shouldRender ? undefined : true}
+  role="option"
+  tabindex="-1"
+  aria-selected={highlighted}
+  aria-disabled={disabled || undefined}
+  data-search-menu-filterable={isFilterable || undefined}
+  class:bx--search-menu-item={true}
+  class:bx--search-menu-item--highlighted={highlighted}
+  class:bx--search-menu-item--disabled={disabled}
+  class:bx--search-menu-item--link={Boolean(href)}
+  {...$$restProps}
+  on:click
+  on:click={handleClick}
+  on:mousedown|preventDefault
+  on:mouseenter={() => {
+    if (!disabled && shouldRender) menu.setActiveId(id);
+  }}
+>
+  {#if icon}
+    <span class="bx--search-menu-item__icon">
+      <svelte:component this={icon} />
     </span>
-    {#if iconRight}
-      <span
-        class="bx--search-menu-item__icon bx--search-menu-item__icon--right"
-      >
-        <svelte:component this={iconRight} />
-      </span>
+  {/if}
+  <span class="bx--search-menu-item__label">
+    {#if $$slots.default}
+      <slot
+        query={$queryStore}
+        matched={matchResult.matched}
+        indices={matchResult.indices}
+        {segments}
+      />
+    {:else}
+      {@html labelHtml}
     {/if}
-  </svelte:element>
-{/if}
+  </span>
+  {#if iconRight}
+    <span class="bx--search-menu-item__icon bx--search-menu-item__icon--right">
+      <svelte:component this={iconRight} />
+    </span>
+  {/if}
+</svelte:element>
