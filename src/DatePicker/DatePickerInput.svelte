@@ -132,7 +132,7 @@
   $: warnId = `warn-${id}`;
   $: helperId = `helper-${id}`;
   $: describedBy = showInvalid
-    ? errorId
+    ? undefined
     : showWarn
       ? warnId
       : helperText
@@ -169,6 +169,7 @@
       bind:this={ref}
       data-invalid={showInvalid || undefined}
       aria-invalid={showInvalid || undefined}
+      aria-errormessage={showInvalid ? errorId : undefined}
       aria-describedby={describedBy}
       {id}
       {name}
