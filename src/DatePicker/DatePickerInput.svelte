@@ -128,6 +128,16 @@
   $: showInvalid = invalid && !disabled && !readonly;
   $: showWarn = warn && !invalid && !disabled && !readonly;
   $: setValidation(id, showInvalid, showWarn);
+  $: errorId = `error-${id}`;
+  $: warnId = `warn-${id}`;
+  $: helperId = `helper-${id}`;
+  $: describedBy = showInvalid
+    ? errorId
+    : showWarn
+      ? warnId
+      : helperText
+        ? helperId
+        : undefined;
 </script>
 
 <div
@@ -158,6 +168,8 @@
     <input
       bind:this={ref}
       data-invalid={showInvalid || undefined}
+      aria-invalid={showInvalid || undefined}
+      aria-describedby={describedBy}
       {id}
       {name}
       {placeholder}
@@ -215,15 +227,16 @@
     {/if}
   </div>
   {#if showInvalid}
-    <div class:bx--form-requirement={true}>{invalidText}</div>
+    <div class:bx--form-requirement={true} id={errorId}>{invalidText}</div>
   {/if}
   {#if showWarn}
-    <div class:bx--form-requirement={true}>{warnText}</div>
+    <div class:bx--form-requirement={true} id={warnId}>{warnText}</div>
   {/if}
   {#if !showInvalid && !showWarn && helperText}
     <div
       class:bx--form__helper-text={true}
       class:bx--form__helper-text--disabled={disabled}
+      id={helperId}
     >
       {helperText}
     </div>

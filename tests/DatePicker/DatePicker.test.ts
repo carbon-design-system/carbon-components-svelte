@@ -217,6 +217,28 @@ describe("DatePicker", () => {
     expect(screen.getByText("Helper message")).toBeInTheDocument();
   });
 
+  it("associates helper text with the input via aria-describedby", () => {
+    render(DatePicker, { helperText: "Helper message" });
+    const input = screen.getByLabelText("Date");
+    const helperText = screen.getByText("Helper message");
+    expect(input).toHaveAttribute("aria-describedby", helperText.id);
+  });
+
+  it("associates invalid text with the input and marks it aria-invalid", () => {
+    render(DatePicker, { invalid: true, invalidText: "Invalid date" });
+    const input = screen.getByLabelText("Date");
+    const invalidText = screen.getByText("Invalid date");
+    expect(input).toHaveAttribute("aria-describedby", invalidText.id);
+    expect(input).toHaveAttribute("aria-invalid", "true");
+  });
+
+  it("associates warning text with the input via aria-describedby", () => {
+    render(DatePicker, { warn: true, warnText: "Warning message" });
+    const input = screen.getByLabelText("Date");
+    const warnText = screen.getByText("Warning message");
+    expect(input).toHaveAttribute("aria-describedby", warnText.id);
+  });
+
   it("handles hidden label", () => {
     render(DatePicker, { hideLabel: true });
     const input = screen.getByLabelText("Date");
