@@ -1235,6 +1235,36 @@ describe("ComboBox", () => {
     expect(input).toHaveValue("Custom Value");
   });
 
+  it("should not dispatch select with an empty selectedId on blur when allowCustomValue input is empty", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(ComboBox, { props: { allowCustomValue: true } });
+
+    const input = getInput();
+    await user.click(input);
+    await user.click(document.body);
+
+    expect(consoleLog).not.toHaveBeenCalledWith("select", expect.anything());
+  });
+
+  it("should not dispatch select with an empty selectedId after clearing a prior selection then blurring", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(ComboBox, { props: { allowCustomValue: true } });
+
+    const input = getInput();
+    await user.click(input);
+    await user.click(screen.getByText("Email"));
+    consoleLog.mockClear();
+
+    await user.click(input);
+    await user.clear(input);
+    await user.click(document.body);
+
+    const calls = consoleLog.mock.calls.filter(([type]) => type === "select");
+    for (const [, detail] of calls) {
+      expect(detail.selectedId).not.toBe("");
+    }
+  });
+
   it("should preserve custom value when allowCustomValue is true and menu closes", async () => {
     render(ComboBox, { props: { allowCustomValue: true } });
 
@@ -1253,6 +1283,24 @@ describe("ComboBox", () => {
     await user.type(input, "Custom Value");
     await user.click(document.body);
     expect(input).toHaveValue("");
+  });
+
+  it("should keep an externally-updated selection after the menu closes", async () => {
+    const { rerender } = render(ComboBox, { props: { selectedId: "0" } });
+
+    const input = getInput();
+    expect(input).toHaveValue("Slack");
+
+    // Simulate an external (controlled) update to selectedId, as if a
+    // parent component reacted to something other than this ComboBox.
+    await rerender({ selectedId: "2" });
+    expect(input).toHaveValue("Fax");
+
+    // Open then dismiss the menu without making a new selection.
+    await user.click(input);
+    await user.click(document.body);
+
+    expect(input).toHaveValue("Fax");
   });
 
   it("should restore the initial controlled selection's label on blur with a non-matching value", async () => {
@@ -1480,6 +1528,28 @@ describe("ComboBox", () => {
       expect(input).toHaveValue("Apple");
       expect(input.selectionStart).toBe(2);
       expect(input.selectionEnd).toBe(5);
+    });
+
+    it("should not commit a typeahead selection on Tab after the menu is closed via Escape", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ComboBox, {
+        props: {
+          typeahead: true,
+          items: [
+            { id: "1", text: "Apple", price: 100 },
+            { id: "2", text: "Apricot", price: 200 },
+          ],
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "Ap");
+      await user.keyboard("{Escape}");
+
+      await user.keyboard("{Tab}");
+
+      expect(consoleLog).not.toHaveBeenCalledWith("select", expect.anything());
     });
 
     it("should skip a disabled item when suggesting and completing a typeahead match on Tab", async () => {
