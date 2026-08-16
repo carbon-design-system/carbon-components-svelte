@@ -35,7 +35,7 @@
    * is used to calculate the number of pages in the native
    * select dropdown. This value creates a small window of
    * pages rendered around the current page. By default,
-   * a maximum of 1000 select items are rendered.
+   * a maximum of 1000 page `<option>` elements are rendered.
    */
   export let pageWindow = 1000;
 
@@ -262,19 +262,27 @@
         {/if}
       </span>
     {:else if !pageInputDisabled}
+      <!-- Native <option>s instead of SelectItem: a SelectItem
+           registers a store subscriber per page (pageWindow, default
+           1000). Coerce on:update to Number — without SelectItem,
+           Select keeps option values as strings. -->
       <Select
         id="bx--pagination-select-{id}-pages"
         class="bx--select__page-number"
         labelText="Page number, of {totalPages} pages"
         inline
         hideLabel
+        selected={page}
         on:update={(event) => {
-          dispatch("change", { page: event.detail });
+          const next = Number(event.detail);
+          page = next;
+          dispatch("change", { page: next });
         }}
-        bind:selected={page}
       >
-        {#each selectItems as size, index (size)}
-          <SelectItem value={size} text={size.toString()} />
+        {#each selectItems as pageNumber (pageNumber)}
+          <option class="bx--select-option" value={pageNumber}>
+            {pageNumber}
+          </option>
         {/each}
       </Select>
       <span class:bx--pagination__text={true}>
