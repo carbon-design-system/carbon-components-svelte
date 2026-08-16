@@ -233,6 +233,12 @@ Enable filtering to let users search through the options.
 
 <FileSource src="/framed/ComboBox/FilterableComboBox" />
 
+### Filter mode
+
+By default (`filterMode="remove"`), filtering unmounts non-matching options and recreates them when they match again.
+
+Set `filterMode` to `"hide"` to keep every option mounted and hide non-matching ones with the `hidden` attribute. Keyboard navigation, `aria-setsize`, and `aria-posinset` still follow the matching items only. `"hide"` falls back to `"remove"` when virtualization is enabled. For typical ComboBox lists, `"remove"` is faster per keystroke because it only updates matching option nodes.
+
 ### Custom label
 
 Set `itemToString` to customize how items display in the filterable combobox.
