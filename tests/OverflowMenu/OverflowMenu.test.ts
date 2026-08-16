@@ -15,6 +15,7 @@ import OverflowMenuTriggerClose from "./OverflowMenu.triggerClose.test.svelte";
 import OverflowMenuInBreadcrumb from "./OverflowMenuInBreadcrumb.test.svelte";
 import OverflowMenuInModal from "./OverflowMenuInModal.test.svelte";
 import OverflowMenuItemIcons from "./OverflowMenuItem.icons.test.svelte";
+import OverflowMenuPrimaryFocus from "./OverflowMenuPrimaryFocus.test.svelte";
 
 describe("OverflowMenu", () => {
   // Regression: ?? for aria-label so empty string is used (not fallback)
@@ -946,6 +947,16 @@ describe("OverflowMenu", () => {
       expect(menu).not.toHaveClass("bx--overflow-menu-options--scrollable");
       expect(menu.style.maxHeight).toBe("");
     });
+  });
+
+  it("focuses the primaryFocus item, not the first item, when opened", async () => {
+    render(OverflowMenuPrimaryFocus);
+
+    await user.click(screen.getByRole("button"));
+
+    const menuItems = screen.getAllByRole("menuitem");
+    expect(menuItems[1]).toHaveTextContent("API documentation");
+    expect(menuItems[1]).toHaveFocus();
   });
 
   describe("Generics", () => {
