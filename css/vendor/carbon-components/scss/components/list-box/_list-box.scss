@@ -881,6 +881,12 @@ $list-box-menu-width: to-rem(300px);
   .#{$prefix}--list-box__menu-item__option--icon-left {
     padding-left: $carbon--spacing-06;
   }
+
+  // ComboBox `filterMode="hide"` uses the `hidden` attribute. Be explicit in
+  // case a later display rule beats the UA stylesheet, same as DataTable rows.
+  .#{$prefix}--list-box__menu-item[hidden] {
+    display: none;
+  }
 }
 
 @include exports('list-box-menu-item-icon') {
