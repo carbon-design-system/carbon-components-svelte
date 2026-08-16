@@ -210,8 +210,9 @@
         data-invalid={showInvalid || undefined}
         aria-invalid={showInvalid || undefined}
         data-warn={showWarn || undefined}
+        aria-errormessage={showInvalid ? errorId : undefined}
         aria-describedby={showInvalid
-          ? errorId
+          ? undefined
           : showWarn
             ? warnId
             : helperText && !isFluid
