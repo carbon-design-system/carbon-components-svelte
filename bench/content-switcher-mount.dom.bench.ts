@@ -1,21 +1,21 @@
 import { cleanup, render } from "@testing-library/svelte";
 import { bench, run } from "mitata";
+import { tick } from "svelte";
 import ContentSwitcherBench from "./fixtures/ContentSwitcherBench.svelte";
 
-// ContentSwitcher.add() reassigns the shared `switches` array on every child's
-// onMount: `switches = [...switches, {...}]`, preceded by an O(n)
-// `switches.some(id match)` dedupe check, and every reassignment retriggers
-// the `$: iconOnly = switches.every(...)` reactive recompute over the whole
-// array. N children registering one at a time makes mount itself sum to
-// O(n^2) — the same class of registration trap that TreeView's eager-mount
-// finding came from. This checks whether it's actually visible at realistic
-// sizes (a ContentSwitcher rarely has more than a handful of switches in
-// practice, unlike TreeView/DataTable row counts).
+// ContentSwitcher.add() used to reassign the shared `switches` array on
+// every child's script body: `switches = [...switches, {...}]`, preceded by
+// an O(n) `switches.some(id match)` dedupe, retriggering `$: iconOnly =
+// switches.every(...)` each time. N children registering one at a time
+// made mount O(n²). Registration now goes through `batchStoreUpdates` so
+// those N copies flush once, matching Tabs / OverflowMenu / ProgressIndicator.
+// Time through `tick()` so the measurement includes that microtask flush.
 it("benchmarks mounting ContentSwitcher with various switch counts", async () => {
   bench("mount ContentSwitcher, $size switches", function* (state) {
     const size = state.get("size");
-    yield () => {
+    yield async () => {
       render(ContentSwitcherBench, { props: { count: size } });
+      await tick();
       cleanup();
     };
   }).range("size", 10, 1000);
