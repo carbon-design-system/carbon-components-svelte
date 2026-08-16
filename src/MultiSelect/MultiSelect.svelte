@@ -35,7 +35,11 @@
   export let itemToString = (item) => item.text ?? item.id;
 
   /**
-   * Override the item name, title, labelText, or value passed to the user-selectable checkbox input as well as the hidden inputs.
+   * Override `name`/`value` for the hidden inputs that mirror the current
+   * selection for native form submission, and `title`/`labelText` for the
+   * visible option checkbox. `name`/`value` do not reach the option
+   * checkbox itself -- it is decorative and excluded from form
+   * participation, even while the menu is open.
    * @type {(item: Item) => { name?: string; labelText?: any; title?: string; value?: string }}
    */
   export let itemToInput = (_item) => {};
@@ -222,7 +226,10 @@
       : `${count} result${count === 1 ? "" : "s"} available`;
 
   /**
-   * Specify a name attribute for the select.
+   * Default group name for the hidden inputs that mirror the current
+   * selection for native form submission (`FormData`). Used per item
+   * unless `itemToInput` returns its own `name`. Not applied to the
+   * filterable text input, which is a query box, not the form value.
    * @type {string}
    */
   export let name = undefined;
@@ -786,6 +793,17 @@
   $: hasSelectAll = items.some((item) => item.isSelectAll);
   $: checked = sortedItems.filter((item) => item.checked);
   $: unchecked = sortedItems.filter((item) => !item.checked);
+  // Native form participation, decoupled from what's rendered: derived from
+  // `items` + `selectedIds` directly (in `items` order), never
+  // `sortedItems`/`checked` (whose order shifts with `selectionFeedback`),
+  // `filteredItems`, or the virtual window. Excludes the isSelectAll
+  // pseudo-item and disabled items (matching native disabled checkboxes,
+  // which never submit).
+  $: selectedIdsSet = new Set(selectedIds);
+  $: formItems = items.filter(
+    (item) =>
+      !item.isSelectAll && !item.disabled && selectedIdsSet.has(item.id),
+  );
   $: selectableItems = sortedItems.filter(
     (item) => !item.disabled && !item.isSelectAll,
   );
@@ -910,6 +928,14 @@
   class:bx--list-box__wrapper--fluid--condensed={isFluid && condensed}
   class:bx--multi-select--filterable__wrapper={isFluid && filterable}
 >
+  {#each formItems as item (item.id)}
+    {@const itemInput = itemToInput(item) ?? {}}
+    <input
+      type="hidden"
+      name={itemInput.name ?? name ?? item.id}
+      value={itemInput.value ?? ""}
+    >
+  {/each}
   {#if labelText || $$slots.labelChildren}
     <label
       for={id}
@@ -1049,7 +1075,6 @@
             {readonly}
             {placeholder}
             {id}
-            {name}
           >
           {#if value}
             <ListBoxSelection
@@ -1280,9 +1305,9 @@
                 >
                   <HighlightSlot {optionId} let:highlighted>
                     <Checkbox
-                      name={item.id}
                       title={useTitleInItem ? itemToString(item) : undefined}
                       {...itemToInput(item)}
+                      name={undefined}
                       tabindex="-1"
                       decorative
                       id="checkbox-{id}-{item.id}"
@@ -1364,9 +1389,9 @@
             >
               <HighlightSlot {optionId} let:highlighted>
                 <Checkbox
-                  name={item.id}
                   title={useTitleInItem ? itemToString(item) : undefined}
                   {...itemToInput(item)}
+                  name={undefined}
                   tabindex="-1"
                   decorative
                   id="checkbox-{id}-{item.id}"

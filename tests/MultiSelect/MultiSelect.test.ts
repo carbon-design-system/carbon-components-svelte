@@ -1751,7 +1751,10 @@ describe("MultiSelect", () => {
       await openMenu();
       const option = screen.getByRole("option", { name: "Slack" });
       const checkbox = option.querySelector('input[type="checkbox"]');
-      expect(checkbox).toHaveAttribute("name", "contact_0");
+      // The option checkbox is decorative and excluded from native form
+      // participation; itemToInput's `name` targets the always-mounted
+      // hidden inputs instead (see MultiSelect.form.test.ts).
+      expect(checkbox).not.toHaveAttribute("name", "contact_0");
       expect(checkbox).toHaveAttribute("value", "slack");
     });
   });
