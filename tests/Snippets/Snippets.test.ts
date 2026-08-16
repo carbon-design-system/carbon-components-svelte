@@ -189,8 +189,9 @@ describe("Svelte 5 Snippets", () => {
   });
 
   describe("ProgressStep icon", () => {
-    it("should render icon snippet with complete, current, and invalid arguments", () => {
+    it("should render icon snippet with complete, current, and invalid arguments", async () => {
       render(Snippets);
+      await tick();
 
       const icon1 = screen.getByTestId("progress-step-icon-1");
       expect(icon1).toHaveAttribute("data-complete", "true");
