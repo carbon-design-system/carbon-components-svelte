@@ -222,6 +222,12 @@
     }
     handleClick(event);
   }}
+  on:mousedown={(event) => {
+    // A `tabindex="-1"` element still receives focus by default on click.
+    // Disabled items should not, since handleClick returns early and
+    // never moves focus elsewhere itself.
+    if (disabled) event.preventDefault();
+  }}
   on:mouseenter={() => {
     if (hasSubmenu) scheduleOpenSubmenu();
   }}
