@@ -11,13 +11,11 @@ import { bench, run } from "mitata";
 // been benched at the component tier — only its filtering (structurally
 // identical to fuzzyMatch, already covered).
 //
-// Unlike MultiSelect/Dropdown (menu items mount up front behind
-// display:none), ComboBox gates its whole item list behind `{#if open}`
-// (ComboBox.svelte:883) — same as OverflowMenu (see
-// bench/fixtures/OverflowMenuBench.svelte's comment). A closed ComboBox
-// never mounts item nodes regardless of item count, so cases below open the
-// menu (either as part of the timed closure, or via `open: true` from the
-// start) instead of measuring a closed mount.
+// ComboBox and MultiSelect both gate the item list behind `{#if open}`
+// (same as OverflowMenu). A closed ComboBox never mounts item nodes
+// regardless of item count, so cases below open the menu (either as part
+// of the timed closure, or via `open: true` from the start) instead of
+// measuring a closed mount.
 function buildItems(count: number) {
   const items = [];
   for (let i = 0; i < count; i++) {

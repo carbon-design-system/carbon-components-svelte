@@ -25,8 +25,8 @@ const user = userEvent.setup();
 
 it("benchmarks mounting MultiSelect with various item counts and virtualization modes", async () => {
   // 100 items is at the auto-virtualization cutoff (virtualize kicks in above
-  // 100), so this mounts every menu item — the closed menu is display:none
-  // gated but still rendered.
+  // 100). The menu is gated behind `{#if open}`, so a closed mount does not
+  // create option nodes regardless of item count.
   bench("mount MultiSelect, 100 items", () => {
     render(MultiSelect, {
       props: { items: items100, label: "Options", labelText: "Options" },

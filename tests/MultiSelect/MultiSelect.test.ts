@@ -188,8 +188,9 @@ describe("MultiSelect", () => {
     });
   });
 
-  it("renders default slot", () => {
+  it("renders default slot", async () => {
     render(MultiSelectSlot, { items });
+    await openMenu();
     expect(screen.getByText("1 Email 0")).toBeInTheDocument();
     expect(screen.getByText("2 Fax 1")).toBeInTheDocument();
     expect(screen.getByText("0 Slack 2")).toBeInTheDocument();
@@ -1723,7 +1724,7 @@ describe("MultiSelect", () => {
   });
 
   describe("custom formatting", () => {
-    it("handles custom itemToString", () => {
+    it("handles custom itemToString", async () => {
       const props = {
         items,
         selectedIds: ["0"],
@@ -1732,6 +1733,7 @@ describe("MultiSelect", () => {
 
       render(MultiSelect, { props });
 
+      await openMenu();
       expect(screen.getByText("Slack (0)")).toBeInTheDocument();
     });
 
