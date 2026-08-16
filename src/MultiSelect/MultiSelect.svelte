@@ -321,6 +321,7 @@
     ListBoxMenuItem,
     ListBoxSelection,
   } from "../ListBox";
+  import HighlightSlot from "../ListBox/HighlightSlot.svelte";
   import {
     getMenuItemHeight,
     getMenuMaxHeight,
@@ -1197,6 +1198,8 @@
         {open}
         anchor={fieldRef}
         {direction}
+        highlightedId={activeDescendantId}
+        highlightScroll={highlightOrigin !== "pointer"}
         aria-multiselectable="true"
         aria-readonly={readonly || undefined}
         on:scroll
@@ -1221,6 +1224,7 @@
             <div style="transform: translateY({virtualData.offsetY}px);">
               {#each itemsToRender as item, index (item.id)}
                 {@const actualIndex = virtualData.startIndex + index}
+                {@const optionId = `${id}-${item.id}`}
                 {@const itemDisabled =
                   item.disabled ||
                   (hasMaxSelectedItems && !!item.isSelectAll) ||
@@ -1231,7 +1235,7 @@
                   !item.disabled &&
                   !item.isSelectAll}
                 <ListBoxMenuItem
-                  id="{id}-{item.id}"
+                  id={optionId}
                   role="option"
                   aria-labelledby="checkbox-{id}-{item.id}"
                   aria-describedby={capDisabled ? maxSelectedId : undefined}
@@ -1244,7 +1248,6 @@
                   aria-setsize={itemsToUse.length}
                   aria-posinset={actualIndex + 1}
                   active={item.isSelectAll ? false : item.checked}
-                  highlighted={highlightedIndex === actualIndex}
                   disabled={itemDisabled}
                   on:click={(event) => {
                     if (itemDisabled) {
@@ -1275,36 +1278,39 @@
                     highlightOrigin = "pointer";
                   }}
                 >
-                  <Checkbox
-                    name={item.id}
-                    title={useTitleInItem ? itemToString(item) : undefined}
-                    {...itemToInput(item)}
-                    tabindex="-1"
-                    decorative
-                    id="checkbox-{id}-{item.id}"
-                    checked={item.isSelectAll ? allSelected : item.checked}
-                    indeterminate={item.isSelectAll
-                      ? selectAllIndeterminate
-                      : false}
-                    disabled={itemDisabled}
-                    {readonly}
-                  >
-                    <slot
-                      slot="labelChildren"
-                      {item}
-                      index={actualIndex}
-                      selected={item.isSelectAll ? allSelected : item.checked}
-                      highlighted={highlightedIndex === actualIndex}
+                  <HighlightSlot {optionId} let:highlighted>
+                    <Checkbox
+                      name={item.id}
+                      title={useTitleInItem ? itemToString(item) : undefined}
+                      {...itemToInput(item)}
+                      tabindex="-1"
+                      decorative
+                      id="checkbox-{id}-{item.id}"
+                      checked={item.isSelectAll ? allSelected : item.checked}
+                      indeterminate={item.isSelectAll
+                        ? selectAllIndeterminate
+                        : false}
+                      disabled={itemDisabled}
+                      {readonly}
                     >
-                      {itemToString(item)}
-                    </slot>
-                  </Checkbox>
+                      <slot
+                        slot="labelChildren"
+                        {item}
+                        index={actualIndex}
+                        selected={item.isSelectAll ? allSelected : item.checked}
+                        {highlighted}
+                      >
+                        {itemToString(item)}
+                      </slot>
+                    </Checkbox>
+                  </HighlightSlot>
                 </ListBoxMenuItem>
               {/each}
             </div>
           </div>
         {:else}
           {#each itemsToRender as item, index (item.id)}
+            {@const optionId = `${id}-${item.id}`}
             {@const itemDisabled =
               item.disabled ||
               (hasMaxSelectedItems && !!item.isSelectAll) ||
@@ -1315,7 +1321,7 @@
               !item.disabled &&
               !item.isSelectAll}
             <ListBoxMenuItem
-              id="{id}-{item.id}"
+              id={optionId}
               role="option"
               aria-labelledby="checkbox-{id}-{item.id}"
               aria-describedby={capDisabled ? maxSelectedId : undefined}
@@ -1326,7 +1332,6 @@
                   : allSelected
                 : item.checked}
               active={item.isSelectAll ? false : item.checked}
-              highlighted={highlightedIndex === index}
               disabled={itemDisabled}
               on:click={(event) => {
                 if (itemDisabled) {
@@ -1357,30 +1362,32 @@
                 highlightOrigin = "pointer";
               }}
             >
-              <Checkbox
-                name={item.id}
-                title={useTitleInItem ? itemToString(item) : undefined}
-                {...itemToInput(item)}
-                tabindex="-1"
-                decorative
-                id="checkbox-{id}-{item.id}"
-                checked={item.isSelectAll ? allSelected : item.checked}
-                indeterminate={item.isSelectAll
-                  ? selectAllIndeterminate
-                  : false}
-                disabled={itemDisabled}
-                {readonly}
-              >
-                <slot
-                  slot="labelChildren"
-                  {item}
-                  {index}
-                  selected={item.isSelectAll ? allSelected : item.checked}
-                  highlighted={highlightedIndex === index}
+              <HighlightSlot {optionId} let:highlighted>
+                <Checkbox
+                  name={item.id}
+                  title={useTitleInItem ? itemToString(item) : undefined}
+                  {...itemToInput(item)}
+                  tabindex="-1"
+                  decorative
+                  id="checkbox-{id}-{item.id}"
+                  checked={item.isSelectAll ? allSelected : item.checked}
+                  indeterminate={item.isSelectAll
+                    ? selectAllIndeterminate
+                    : false}
+                  disabled={itemDisabled}
+                  {readonly}
                 >
-                  {itemToString(item)}
-                </slot>
-              </Checkbox>
+                  <slot
+                    slot="labelChildren"
+                    {item}
+                    {index}
+                    selected={item.isSelectAll ? allSelected : item.checked}
+                    {highlighted}
+                  >
+                    {itemToString(item)}
+                  </slot>
+                </Checkbox>
+              </HighlightSlot>
             </ListBoxMenuItem>
           {/each}
         {/if}
