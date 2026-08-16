@@ -77,7 +77,7 @@
     {disabled}
     aria-disabled={disabled}
     aria-current={current ? "step" : undefined}
-    tabindex={!current && !disabled ? "0" : "-1"}
+    tabindex={disabled ? "-1" : "0"}
     class:bx--progress-step-button={true}
     class:bx--progress-step-button--unclickable={current ||
       $preventChangeOnClick}
@@ -106,10 +106,10 @@
     </slot>
     <div class:bx--progress-text={true}>
       <slot props={{ class: "bx--progress-label" }}>
-        <p class:bx--progress-label={true}>{label}</p>
+        <span class:bx--progress-label={true}>{label}</span>
       </slot>
       {#if secondaryLabel}
-        <p class:bx--progress-optional={true}>{secondaryLabel}</p>
+        <span class:bx--progress-optional={true}>{secondaryLabel}</span>
       {/if}
     </div>
     {#if stateSuffix}
