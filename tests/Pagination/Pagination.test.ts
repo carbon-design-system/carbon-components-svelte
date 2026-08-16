@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/svelte";
+import { fireEvent, render, screen, within } from "@testing-library/svelte";
 import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
 import Pagination from "./Pagination.test.svelte";
@@ -447,6 +447,67 @@ describe("Pagination", () => {
     render(Pagination, { props });
 
     expect(screen.getByText(/1–10 of 100000/)).toBeInTheDocument();
+  });
+
+  describe("nav button tooltip position", () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it("defaults nav button tooltips to the top position", async () => {
+      render(Pagination, { props: { totalItems: 102, page: 2 } });
+
+      const prevButton = screen.getByRole("button", { name: "Previous page" });
+      await fireEvent.mouseEnter(prevButton);
+      await vi.advanceTimersByTimeAsync(100);
+      expect(document.querySelector("[data-direction]")).toHaveAttribute(
+        "data-direction",
+        "top",
+      );
+      await fireEvent.mouseLeave(prevButton);
+      await vi.advanceTimersByTimeAsync(300);
+
+      const nextButton = screen.getByRole("button", { name: "Next page" });
+      await fireEvent.mouseEnter(nextButton);
+      await vi.advanceTimersByTimeAsync(100);
+      expect(document.querySelector("[data-direction]")).toHaveAttribute(
+        "data-direction",
+        "top",
+      );
+    });
+
+    it("allows overriding the backward and forward tooltip positions independently", async () => {
+      render(Pagination, {
+        props: {
+          totalItems: 102,
+          page: 2,
+          backwardTextTooltipPosition: "bottom",
+          forwardTextTooltipPosition: "right",
+        },
+      });
+
+      const prevButton = screen.getByRole("button", { name: "Previous page" });
+      await fireEvent.mouseEnter(prevButton);
+      await vi.advanceTimersByTimeAsync(100);
+      expect(document.querySelector("[data-direction]")).toHaveAttribute(
+        "data-direction",
+        "bottom",
+      );
+      await fireEvent.mouseLeave(prevButton);
+      await vi.advanceTimersByTimeAsync(300);
+
+      const nextButton = screen.getByRole("button", { name: "Next page" });
+      await fireEvent.mouseEnter(nextButton);
+      await vi.advanceTimersByTimeAsync(100);
+      expect(document.querySelector("[data-direction]")).toHaveAttribute(
+        "data-direction",
+        "right",
+      );
+    });
   });
 
   it("should dispatch change event with new value, not previous value", async () => {
