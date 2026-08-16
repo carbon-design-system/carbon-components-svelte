@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
 import Calendar from "../../src/icons/Calendar.svelte";
 import { user } from "../utils/user";
 import TabsVertical from "./TabsVertical.test.svelte";
@@ -16,8 +17,9 @@ describe("TabsVertical", () => {
     vi.restoreAllMocks();
   });
 
-  it("should render with default props", () => {
+  it("should render with default props", async () => {
     render(TabsVertical);
+    await tick();
 
     expect(screen.getByRole("navigation")).toHaveClass("bx--tabs--vertical");
 
@@ -29,8 +31,9 @@ describe("TabsVertical", () => {
     expect(screen.getByText("Content 2")).not.toBeVisible();
   });
 
-  it("should link each tab to its panel via aria-controls", () => {
+  it("should link each tab to its panel via aria-controls", async () => {
     render(TabsVertical);
+    await tick();
 
     const tabs = screen.getAllByRole("tab");
     const panels = screen.getAllByRole("tabpanel", { hidden: true });
@@ -69,8 +72,9 @@ describe("TabsVertical", () => {
     );
   });
 
-  it("should select the initial tab from the selected prop", () => {
+  it("should select the initial tab from the selected prop", async () => {
     render(TabsVertical, { props: { selected: 2 } });
+    await tick();
 
     expect(screen.getByRole("tab", { name: "Tab 3" })).toHaveAttribute(
       "aria-selected",
@@ -173,6 +177,7 @@ describe("TabsVertical", () => {
     render(TabsVerticalSelectedId, {
       props: { selectedId: "tab-b", showTabA: true },
     });
+    await tick();
 
     expect(screen.getByRole("tab", { name: "Tab B" })).toHaveAttribute(
       "aria-selected",
@@ -182,6 +187,7 @@ describe("TabsVertical", () => {
     expect(screen.getByTestId("selected-index")).toHaveTextContent("1");
 
     await user.click(screen.getByTestId("toggle-tab-a"));
+    await tick();
 
     expect(
       screen.queryByRole("tab", { name: "Tab A" }),
