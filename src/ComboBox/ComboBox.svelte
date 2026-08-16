@@ -607,6 +607,29 @@
   }
 
   /**
+   * Normalize the input text: restore the selected item's label, or clear
+   * a non-matching custom value. Called directly from the Tab handler
+   * (not only from the `afterUpdate` "open" watcher) because Tab moves
+   * focus to the next element asynchronously relative to the `close()`
+   * call that flips `open`, so by the time `afterUpdate` runs it can
+   * still see the input as focused and skip the restore.
+   */
+  function normalizeValue() {
+    // Resolve from `selectedId` directly rather than reading the reactive
+    // `selectedItem` variable: a handler earlier in the same synchronous
+    // event (e.g. accepting a typeahead suggestion) may have just set
+    // `selectedId`, and the `$:` block deriving `selectedItem` from it
+    // hasn't re-run yet within this tick.
+    const currentSelectedItem =
+      selectedId === undefined ? undefined : itemsById.get(selectedId);
+    if (currentSelectedItem) {
+      value = itemToString(currentSelectedItem);
+    } else if (!allowCustomValue) {
+      value = "";
+    }
+  }
+
+  /**
    * Close the dropdown and surface the dismissal cause.
    * Guarded on `open` so redundant assignments don't double-fire the event.
    * @param {"escape-key" | "outside-click" | "select"} trigger
@@ -708,7 +731,11 @@
           }
 
           if (!value.length) {
-            clear();
+            // Don't call `clear()` here: it would drop `selectedId`, losing
+            // the controlled selection to restore to if the user blurs
+            // without typing a match (see the `afterUpdate` restore below).
+            highlightedIndex = -1;
+            highlightOrigin = null;
             open = true;
           }
         }}
@@ -767,9 +794,11 @@
             highlightedIndex = -1;
             highlightOrigin = null;
           } else if (event.key === "Tab") {
-            // Accept the inline suggestion before focus moves to the next
-            // control. Tab is not prevented, so focus still advances normally.
+            // Accept the inline typeahead suggestion before focus moves to
+            // the next control. Tab is not prevented, so focus still
+            // advances normally.
             const accepted = acceptTypeaheadSuggestion();
+            if (!accepted) normalizeValue();
             close(accepted ? "select" : "escape-key");
           } else if (
             typeahead &&
