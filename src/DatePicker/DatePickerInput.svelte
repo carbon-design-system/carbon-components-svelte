@@ -228,7 +228,9 @@
     {/if}
   </div>
   {#if showInvalid}
-    <div class:bx--form-requirement={true} id={errorId}>{invalidText}</div>
+    <div class:bx--form-requirement={true} id={errorId} role="alert">
+      {invalidText}
+    </div>
   {/if}
   {#if showWarn}
     <div class:bx--form-requirement={true} id={warnId}>{warnText}</div>
