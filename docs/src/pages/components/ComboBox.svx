@@ -557,3 +557,30 @@ items={[
 Display a loading skeleton for the fluid combo box variant.
 
 <FluidComboBoxSkeleton />
+
+## Form name
+
+Set `name` so the combo box participates in native form submission (for
+example SvelteKit form actions and `FormData`). Unlike [Dropdown](/components/Dropdown#form-name),
+`name` lands directly on the always-mounted text input, so it submits
+the displayed text (`value`), not `selectedId`, empty string when
+nothing is selected.
+
+```svelte
+<script>
+  import { Form, ComboBox, Button } from "carbon-components-svelte";
+</script>
+
+<Form method="POST" action="?/contact">
+  <ComboBox
+    name="contactMethod"
+    labelText="Contact"
+    items={[
+      { id: "0", text: "Slack" },
+      { id: "1", text: "Email" },
+      { id: "2", text: "Fax" },
+    ]}
+  />
+  <Button type="submit">Submit</Button>
+</Form>
+```
