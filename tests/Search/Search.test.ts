@@ -96,6 +96,24 @@ describe("Search", () => {
     expect(searchWrapper).toHaveClass("bx--search--expanded");
   });
 
+  it("hides the collapsed expandable input from assistive tech", async () => {
+    render(SearchExpandable);
+
+    const search = getSearchInput("Expandable search");
+    expect(search).toHaveAttribute("inert");
+    expect(search).toHaveAttribute("tabindex", "-1");
+
+    const searchWrapper = search.closest(".bx--search");
+    assert(searchWrapper);
+    const magnifier = searchWrapper.querySelector(".bx--search-magnifier");
+    assert(magnifier);
+    await user.click(magnifier);
+
+    expect(search).not.toHaveAttribute("inert");
+    expect(search).not.toHaveAttribute("tabindex", "-1");
+    expect(search).toHaveFocus();
+  });
+
   it("renders skeleton states", () => {
     render(SearchSkeleton);
 
