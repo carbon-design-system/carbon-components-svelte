@@ -245,10 +245,9 @@ describe("TextArea", () => {
       const message = screen.getByText("Invalid input");
       expect(message).toHaveClass("bx--form-requirement");
       expect(message.closest(".bx--text-area__wrapper")).not.toBeNull();
-      expect(screen.getByLabelText("App description")).toHaveAttribute(
-        "aria-describedby",
-        "error-ccs-test",
-      );
+      const textarea = screen.getByLabelText("App description");
+      expect(textarea).toHaveAttribute("aria-errormessage", "error-ccs-test");
+      expect(textarea).not.toHaveAttribute("aria-describedby");
     });
 
     it("renders the warning message inside the input wrapper", () => {
