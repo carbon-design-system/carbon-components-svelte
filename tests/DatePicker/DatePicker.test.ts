@@ -128,6 +128,15 @@ describe("DatePicker", () => {
       expect(calendar).not.toHaveClass("open");
     });
 
+    it("keeps native tab order when readonly (no calendar hijack)", async () => {
+      render(DatePicker, { datePickerType: "single", readonly: true });
+      const input = screen.getByLabelText("Date");
+      input.focus();
+      await user.tab();
+      expect(input).not.toHaveFocus();
+      expect(document.activeElement).not.toHaveClass("flatpickr-day");
+    });
+
     it("forwards the readonly attribute to both inputs in range mode", async () => {
       render(DatePickerRange, { readonly: true });
       // Wait for flatpickr (including the range plugin's onReady) to finish.
@@ -708,6 +717,28 @@ describe("DatePicker", () => {
       expect(typeof instance.open).toBe("function");
       expect(typeof instance.close).toBe("function");
     });
+  });
+
+  it("does not clear the input when value is an epoch (0) timestamp", async () => {
+    render(DatePicker, { datePickerType: "single", value: 0 });
+    const input = screen.getByLabelText("Date") as HTMLInputElement;
+    await vi.waitFor(() => expect(input.value).not.toBe(""));
+  });
+
+  it("moves focus to an outside element on the first click after Enter on the end date input", async () => {
+    render(DatePickerRange);
+    const outside = document.createElement("input");
+    outside.setAttribute("aria-label", "Outside input");
+    document.body.appendChild(outside);
+
+    const end = screen.getByLabelText("End date");
+    await user.click(end);
+    await user.type(end, "02/15/2026{enter}");
+
+    await user.click(outside);
+    expect(document.activeElement).toBe(outside);
+
+    document.body.removeChild(outside);
   });
 
   describe("portalMenu", () => {

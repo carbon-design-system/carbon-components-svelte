@@ -5,7 +5,7 @@
 
   export let datePickerType: ComponentProps<DatePicker>["datePickerType"] =
     "simple";
-  export let value = "";
+  export let value: ComponentProps<DatePicker>["value"] = "";
   export let valueFrom = "";
   export let valueTo = "";
   export let dateFormat = "m/d/Y";
