@@ -85,4 +85,24 @@ describe("createCalendar", () => {
     const config = flatpickr.mock.calls.at(-1)?.[1];
     expect(config?.plugins).toHaveLength(0);
   });
+
+  it("defaults ariaDateFormat to include the weekday", async () => {
+    const { createCalendar } = await import(
+      "../../src/DatePicker/createCalendar.js"
+    );
+    const base = document.createElement("div");
+    const input = document.createElement("input");
+    const dispatch = vi.fn();
+
+    await createCalendar({
+      options: { mode: "single" },
+      base,
+      input,
+      dispatch,
+    });
+
+    const flatpickr = vi.mocked((await import("flatpickr")).default);
+    const config = flatpickr.mock.calls.at(-1)?.[1];
+    expect(config?.ariaDateFormat).toBe("l, F j, Y");
+  });
 });
