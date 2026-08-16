@@ -401,6 +401,7 @@ describe("TextInput", () => {
     const input = screen.getByRole("textbox");
     expect(input).toHaveAttribute("aria-errormessage", "error-test-input");
     expect(input).not.toHaveAttribute("aria-describedby");
+    expect(screen.getByText("Invalid input")).toHaveAttribute("role", "alert");
   });
 
   it("should set aria-describedby to warning id when warn", () => {
