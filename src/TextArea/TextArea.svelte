@@ -94,10 +94,11 @@
   $: showWarn = warn && !invalid && !disabled && !readonly;
   $: isFluid = fluid || !!formContext?.isFluid;
   $: showCounter = !!maxCount && !!(labelText || $$slots.labelChildren);
+  $: errorMessageId = showInvalid ? errorId : undefined;
   $: describedBy =
     [
       showInvalid
-        ? errorId
+        ? null
         : showWarn && !isFluid
           ? warnId
           : helperText && !isFluid
@@ -163,6 +164,7 @@
       bind:this={ref}
       bind:value
       aria-invalid={showInvalid || undefined}
+      aria-errormessage={errorMessageId}
       aria-describedby={describedBy}
       data-warn={showWarn || undefined}
       {disabled}
