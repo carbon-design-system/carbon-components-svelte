@@ -225,8 +225,8 @@ describe("ProgressIndicator", () => {
         "bx--progress-step-button--unclickable",
       );
 
-      // Current step button should be unclickable
-      expect(buttons[1]).toHaveAttribute("tabindex", "-1");
+      // Current step is unclickable but stays in tab order.
+      expect(buttons[1]).toHaveAttribute("tabindex", "0");
       expect(buttons[1]).toHaveAttribute("aria-disabled", "false");
       expect(buttons[1]).toHaveClass("bx--progress-step-button--unclickable");
 
@@ -255,6 +255,18 @@ describe("ProgressIndicator", () => {
       expect(disabledButton).toHaveAttribute("disabled");
       expect(disabledButton).toHaveAttribute("aria-disabled", "true");
       expect(disabledButton).toHaveAttribute("tabindex", "-1");
+    });
+
+    // <button> cannot contain block-level <p>.
+    it("renders the label and secondary label as spans, not paragraphs", () => {
+      const { container } = render(ProgressStepStandalone);
+
+      const label = container.querySelector(".bx--progress-label");
+      const secondary = container.querySelector(".bx--progress-optional");
+      assert(label);
+      assert(secondary);
+      expect(label.tagName).toBe("SPAN");
+      expect(secondary.tagName).toBe("SPAN");
     });
 
     it("should forward focus and blur events from step button", () => {
