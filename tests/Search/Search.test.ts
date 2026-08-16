@@ -53,6 +53,17 @@ describe("Search", () => {
     expect(consoleLog).toHaveBeenCalledTimes(1);
   });
 
+  it("gives the search landmark a unique accessible name per instance", () => {
+    render(Search);
+
+    expect(
+      screen.getByRole("search", { name: "Default search" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("search", { name: "Disabled search" }),
+    ).toBeInTheDocument();
+  });
+
   it("renders disabled state", () => {
     render(Search);
 
