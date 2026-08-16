@@ -1081,6 +1081,19 @@
               on:clear={() => {
               value = "";
               open = false;
+              // `bind:value` sets the DOM value directly, so typing's
+              // native "input" event (forwarded to consumers via the
+              // bare `on:input` below) never fires from this
+              // programmatic clear. Dispatch one so clearing via this
+              // button is observable the same way typing is. Set the
+              // DOM value first: Svelte's own `bind:value` listener
+              // reads `event.target.value` on "input", and the DOM
+              // node hasn't been synced to the reactive `value` above
+              // yet (that update flushes after this handler returns).
+              if (inputRef) {
+                inputRef.value = "";
+                inputRef.dispatchEvent(new Event("input", { bubbles: true }));
+              }
             }}
               translateWithId={translateWithIdSelection}
               {disabled}
