@@ -1203,11 +1203,12 @@ describe("ComboBox", () => {
     expect(screen.getByText("Warn")).toHaveAttribute("id", "warn-cb");
   });
 
-  it("should describe the input by invalidText when invalid is true", () => {
+  it("should reference invalidText via aria-errormessage when invalid is true", () => {
     render(ComboBoxReal, {
       props: { id: "cb", invalid: true, invalidText: "Bad" },
     });
-    expect(getInput()).toHaveAttribute("aria-describedby", "error-cb");
+    expect(getInput()).toHaveAttribute("aria-errormessage", "error-cb");
+    expect(getInput()).not.toHaveAttribute("aria-describedby");
     expect(screen.getByText("Bad")).toHaveAttribute("id", "error-cb");
   });
 
@@ -3375,9 +3376,10 @@ describe("ComboBox", () => {
         "bx--list-box__wrapper--fluid--invalid",
       );
       expect(getInput()).toHaveAttribute(
-        "aria-describedby",
+        "aria-errormessage",
         "error-test-combobox",
       );
+      expect(getInput()).not.toHaveAttribute("aria-describedby");
     });
 
     it("renders the warning message inside the fluid wrapper", () => {
