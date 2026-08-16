@@ -374,7 +374,7 @@ describe("PasswordInput", () => {
       expect(message).toHaveClass("bx--form-requirement");
       expect(message.closest(".bx--text-input__field-wrapper")).not.toBeNull();
       expect(screen.getByLabelText("Password")).toHaveAttribute(
-        "aria-describedby",
+        "aria-errormessage",
         "error-test-password",
       );
     });
