@@ -233,11 +233,12 @@ describe("DatePicker", () => {
     expect(input).toHaveAttribute("aria-describedby", helperText.id);
   });
 
-  it("associates invalid text with the input and marks it aria-invalid", () => {
+  it("associates invalid text with the input via aria-errormessage and marks it aria-invalid", () => {
     render(DatePicker, { invalid: true, invalidText: "Invalid date" });
     const input = screen.getByLabelText("Date");
     const invalidText = screen.getByText("Invalid date");
-    expect(input).toHaveAttribute("aria-describedby", invalidText.id);
+    expect(input).toHaveAttribute("aria-errormessage", invalidText.id);
+    expect(input).not.toHaveAttribute("aria-describedby");
     expect(input).toHaveAttribute("aria-invalid", "true");
   });
 
