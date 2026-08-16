@@ -116,9 +116,9 @@ describe("TextArea", () => {
     const textarea = screen.getByRole("textbox");
     expect(textarea).toHaveClass("bx--text-area--invalid");
     expect(textarea).toHaveAttribute("aria-invalid", "true");
-    expect(screen.getByText("Invalid input")).toHaveClass(
-      "bx--form-requirement",
-    );
+    const message = screen.getByText("Invalid input");
+    expect(message).toHaveClass("bx--form-requirement");
+    expect(message).toHaveAttribute("role", "alert");
   });
 
   it("should handle hidden label", () => {
@@ -244,11 +244,11 @@ describe("TextArea", () => {
 
       const message = screen.getByText("Invalid input");
       expect(message).toHaveClass("bx--form-requirement");
+      expect(message).toHaveAttribute("role", "alert");
       expect(message.closest(".bx--text-area__wrapper")).not.toBeNull();
-      expect(screen.getByLabelText("App description")).toHaveAttribute(
-        "aria-describedby",
-        "error-ccs-test",
-      );
+      const textarea = screen.getByLabelText("App description");
+      expect(textarea).toHaveAttribute("aria-errormessage", "error-ccs-test");
+      expect(textarea).not.toHaveAttribute("aria-describedby");
     });
 
     it("renders the warning message inside the input wrapper", () => {

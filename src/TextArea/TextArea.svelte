@@ -94,10 +94,11 @@
   $: showWarn = warn && !invalid && !disabled && !readonly;
   $: isFluid = fluid || !!formContext?.isFluid;
   $: showCounter = !!maxCount && !!(labelText || $$slots.labelChildren);
+  $: errorMessageId = showInvalid ? errorId : undefined;
   $: describedBy =
     [
       showInvalid
-        ? errorId
+        ? null
         : showWarn && !isFluid
           ? warnId
           : helperText && !isFluid
@@ -163,6 +164,7 @@
       bind:this={ref}
       bind:value
       aria-invalid={showInvalid || undefined}
+      aria-errormessage={errorMessageId}
       aria-describedby={describedBy}
       data-warn={showWarn || undefined}
       {disabled}
@@ -190,7 +192,7 @@
     {#if isFluid}
       <hr class:bx--text-area__divider={true}>
       {#if showInvalid}
-        <div id={errorId} class:bx--form-requirement={true}>
+        <div id={errorId} class:bx--form-requirement={true} role="alert">
           {invalidText}
           <WarningFilled class="bx--text-area__invalid-icon" />
         </div>
@@ -216,7 +218,9 @@
     </div>
   {/if}
   {#if !isFluid && showInvalid}
-    <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
+    <div id={errorId} class:bx--form-requirement={true} role="alert">
+      {invalidText}
+    </div>
   {/if}
   {#if !isFluid && showWarn}
     <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
