@@ -75,6 +75,22 @@ describe("ComboBox", () => {
     expect(input).toHaveValue("Slack");
   });
 
+  it("should commit a keyboard-highlighted item on Tab, same as Enter", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(ComboBox);
+
+    const input = getInput();
+    await user.click(input);
+    await user.keyboard("{ArrowDown}");
+    await user.keyboard("{Tab}");
+
+    expect(input).toHaveValue("Slack");
+    expect(consoleLog).toHaveBeenCalledWith("select", {
+      selectedId: "0",
+      selectedItem: { id: "0", text: "Slack", price: 100 },
+    });
+  });
+
   it("should open the menu on ArrowDown and highlight the first enabled item", async () => {
     render(ComboBox);
 
