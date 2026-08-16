@@ -171,6 +171,18 @@
   export let shouldFilterItem = defaultShouldFilter;
 
   /**
+   * Set the filtering strategy used while the menu is open.
+   * - `"remove"`: unmount non-matching options and recreate them when they
+   *   match again.
+   * - `"hide"`: keep all options mounted and hide non-matching ones with the
+   *   `hidden` attribute.
+   *
+   * `"hide"` falls back to `"remove"` when virtualization is enabled.
+   * @type {"remove" | "hide"}
+   */
+  export let filterMode = "remove";
+
+  /**
    * Override the chevron icon label based on the open state.
    * Defaults to "Open menu" when closed and "Close menu" when open.
    * @type {(id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId) => string}
@@ -326,6 +338,27 @@
     const navigableItems = filteredItems?.length ? filteredItems : items;
     highlightedIndex = moveIndex(highlightedIndex, step, navigableItems.length);
     highlightOrigin = "keyboard";
+  }
+
+  /**
+   * @param {Item} item
+   */
+  function selectItem(item) {
+    selectedId = item.id;
+    close("select");
+    valueBeforeOpen = "";
+    value = itemToString(item);
+  }
+
+  /**
+   * @param {Item} item
+   */
+  function highlightItem(item) {
+    if (item.disabled) return;
+    const matchIndex = filteredIndexById.get(item.id);
+    if (matchIndex === undefined) return;
+    highlightedIndex = matchIndex;
+    highlightOrigin = "pointer";
   }
 
   /**
@@ -492,22 +525,26 @@
   // Fluid (non-condensed) menu items are 64px tall (see css/_fluid-list-box.scss).
   // Portaled menus render outside the fluid wrapper, so they keep default heights.
   $: hasFluidMenuItems = isFluid && !condensed && !effectivePortalMenu;
+  $: shouldVirtualize =
+    virtualize === false
+      ? false
+      : virtualize !== undefined || items.length > 100;
+  $: hideMode = filterMode === "hide" && !shouldVirtualize;
   $: filteredItems = open ? items.filter((item) => filterFn(item, value)) : [];
+  $: filteredIndexById = new Map(
+    filteredItems.map((item, index) => [item.id, index]),
+  );
+  $: menuItems = hideMode && open ? items : filteredItems;
   $: scrollEndTracker.noteItemCount(filteredItems.length);
   $: highlightedId =
     filteredItems[highlightedIndex] == null
       ? undefined
       : `${id}-${filteredItems[highlightedIndex].id}`;
 
-  $: shouldVirtualize =
-    virtualize === false
-      ? false
-      : virtualize !== undefined || items.length > 100;
-
   $: menuMaxHeight = getMenuMaxHeight(size);
 
   $: virtualState = virtualListState({
-    items: filteredItems,
+    items: menuItems,
     scrollTop: listScrollTop,
     shouldVirtualize,
     virtualize,
@@ -927,24 +964,14 @@
                       event.stopPropagation();
                       return;
                     }
-                    selectedId = item.id;
-                    close("select");
-                    valueBeforeOpen = "";
-
-                    if (filteredItems[actualIndex]) {
-                      value = itemToString(filteredItems[actualIndex]);
-                    }
+                    selectItem(item);
                   }}
                   on:mousedown={(event) => {
                     // Keep focus on the field so screen readers don't
                     // re-announce it on every option click.
                     event.preventDefault();
                   }}
-                  on:mouseenter={() => {
-                    if (item.disabled) return;
-                    highlightedIndex = actualIndex;
-                    highlightOrigin = "pointer";
-                  }}
+                  on:mouseenter={() => highlightItem(item)}
                 >
                   {#if $$slots.icon}
                     <span
@@ -1007,34 +1034,29 @@
           {#each itemsToRender as item, index (item.id)}
             {@const selected = selectedItem?.id === item.id}
             {@const optionId = `${id}-${item.id}`}
+            {@const matchIndex = filteredIndexById.get(item.id)}
+            {@const slotIndex = matchIndex ?? index}
             <ListBoxMenuItem
               id={optionId}
               active={selectedId === item.id}
               disabled={item.disabled}
               hasLeftIcon={Boolean($$slots.icon || item.icon)}
+              hidden={hideMode && matchIndex === undefined ? true : undefined}
+              aria-setsize={filteredItems.length}
+              aria-posinset={matchIndex === undefined ? undefined : matchIndex + 1}
               on:click={(event) => {
                 if (item.disabled) {
                   event.stopPropagation();
                   return;
                 }
-                selectedId = item.id;
-                close("select");
-                valueBeforeOpen = "";
-
-                if (filteredItems[index]) {
-                  value = itemToString(filteredItems[index]);
-                }
+                selectItem(item);
               }}
               on:mousedown={(event) => {
                 // Keep focus on the field so screen readers don't
                 // re-announce it on every option click.
                 event.preventDefault();
               }}
-              on:mouseenter={() => {
-                if (item.disabled) return;
-                highlightedIndex = index;
-                highlightOrigin = "pointer";
-              }}
+              on:mouseenter={() => highlightItem(item)}
             >
               {#if $$slots.icon}
                 <span
@@ -1042,7 +1064,13 @@
                   class:bx--list-box__menu-item__icon--left={true}
                 >
                   <HighlightSlot {optionId} let:highlighted>
-                    <slot name="icon" {item} {index} {selected} {highlighted} />
+                    <slot
+                      name="icon"
+                      {item}
+                      index={slotIndex}
+                      {selected}
+                      {highlighted}
+                    />
                   </HighlightSlot>
                 </span>
               {:else if item.icon}
@@ -1055,7 +1083,7 @@
               {/if}
               {#if $$slots.default}
                 <HighlightSlot {optionId} let:highlighted>
-                  <slot {item} {index} {selected} {highlighted} />
+                  <slot {item} index={slotIndex} {selected} {highlighted} />
                 </HighlightSlot>
               {:else}
                 {itemToString(item)}
@@ -1069,7 +1097,7 @@
                     <slot
                       name="iconRight"
                       {item}
-                      {index}
+                      index={slotIndex}
                       {selected}
                       {highlighted}
                     />

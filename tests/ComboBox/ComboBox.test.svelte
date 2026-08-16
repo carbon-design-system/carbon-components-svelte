@@ -42,6 +42,7 @@
   export let typeahead = false;
   export let autoHighlight: ComponentProps<ComboBox>["autoHighlight"] = "none";
   export let virtualize: ComponentProps<ComboBox>["virtualize"] = undefined;
+  export let filterMode: ComponentProps<ComboBox>["filterMode"] = undefined;
   export let portalMenu: ComponentProps<ComboBox>["portalMenu"] = false;
   export let ariaLabel: ComponentProps<ComboBox>["aria-label"] = undefined;
   export let fluid: ComponentProps<ComboBox>["fluid"] = false;
@@ -79,6 +80,7 @@
   {typeahead}
   {autoHighlight}
   {virtualize}
+  {filterMode}
   {portalMenu}
   on:select={(e) => {
     console.log("select", e.detail);

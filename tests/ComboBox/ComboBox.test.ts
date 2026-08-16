@@ -649,6 +649,48 @@ describe("ComboBox", () => {
     expect(screen.queryByRole("option")).not.toBeInTheDocument();
   });
 
+  it("omits the hidden attribute on open options when filterMode is remove", async () => {
+    const { container } = render(ComboBox);
+
+    await user.click(getInput());
+
+    expect(container.querySelectorAll('[role="option"]')).toHaveLength(3);
+    expect(container.querySelectorAll('[role="option"][hidden]')).toHaveLength(
+      0,
+    );
+  });
+
+  it("keeps unmatched options mounted and hidden when filterMode is hide", async () => {
+    const { container } = render(ComboBox, {
+      props: { filterMode: "hide" },
+    });
+
+    const input = getInput();
+    await user.click(input);
+    await user.type(input, "em");
+
+    expect(screen.getAllByRole("option")).toHaveLength(1);
+    expect(container.querySelectorAll('[role="option"]')).toHaveLength(3);
+    expect(container.querySelectorAll('[role="option"][hidden]')).toHaveLength(
+      2,
+    );
+    expect(screen.getByRole("option")).toHaveAttribute("aria-setsize", "1");
+    expect(screen.getByRole("option")).toHaveAttribute("aria-posinset", "1");
+  });
+
+  it("unmounts unmatched options when filterMode is remove", async () => {
+    const { container } = render(ComboBox, {
+      props: { filterMode: "remove" },
+    });
+
+    const input = getInput();
+    await user.click(input);
+    await user.type(input, "em");
+
+    expect(screen.getAllByRole("option")).toHaveLength(1);
+    expect(container.querySelectorAll('[role="option"]')).toHaveLength(1);
+  });
+
   it("should clear input when clicking clear button", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(ComboBox, { props: { selectedId: "1" } });
