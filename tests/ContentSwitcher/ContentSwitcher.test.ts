@@ -1,4 +1,5 @@
 import { render, screen, within } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { user } from "../utils/user";
 import ContentSwitcherCustom from "./ContentSwitcher.custom.test.svelte";
 import ContentSwitcherDisabled from "./ContentSwitcher.disabled.test.svelte";
@@ -13,9 +14,18 @@ import ContentSwitcherSelectionMode from "./ContentSwitcher.selectionMode.test.s
 import ContentSwitcherSize from "./ContentSwitcher.size.test.svelte";
 import ContentSwitcher from "./ContentSwitcher.test.svelte";
 
+/** Child registration flushes on a microtask (`batchStoreUpdates`). */
+async function renderSwitcher(
+  ...args: Parameters<typeof render>
+): Promise<ReturnType<typeof render>> {
+  const result = render(...args);
+  await tick();
+  return result;
+}
+
 describe("ContentSwitcher", () => {
-  it("renders with default props", () => {
-    render(ContentSwitcher);
+  it("renders with default props", async () => {
+    await renderSwitcher(ContentSwitcher);
 
     const tablist = screen.getByRole("tablist");
     expect(tablist).toHaveClass("bx--content-switcher");
@@ -75,8 +85,8 @@ describe("ContentSwitcher", () => {
     expect(tablists[1]).not.toHaveClass("bx--content-switcher--low-contrast");
   });
 
-  it("combines the low contrast and icon-only modifiers", () => {
-    render(ContentSwitcherLowContrastIconOnly);
+  it("combines the low contrast and icon-only modifiers", async () => {
+    await renderSwitcher(ContentSwitcherLowContrastIconOnly);
 
     // Both modifiers must coexist on the tablist; this is the precondition for
     // the low-contrast rule that recolors the selected icon to `$icon-primary`
@@ -86,8 +96,8 @@ describe("ContentSwitcher", () => {
     expect(tablist).toHaveClass("bx--content-switcher--icon-only");
   });
 
-  it("renders with selectedIndex prop", () => {
-    render(ContentSwitcherSelectedIndex);
+  it("renders with selectedIndex prop", async () => {
+    await renderSwitcher(ContentSwitcherSelectedIndex);
 
     const tabs = screen.getAllByRole("tab");
     expect(tabs).toHaveLength(3);
@@ -105,18 +115,18 @@ describe("ContentSwitcher", () => {
     expect(tabs[2]).toHaveAttribute("tabindex", "-1");
   });
 
-  it("does not dispatch change event on initial render", () => {
+  it("does not dispatch change event on initial render", async () => {
     const consoleLog = vi.spyOn(console, "log");
-    render(ContentSwitcher);
+    await renderSwitcher(ContentSwitcher);
 
     expect(consoleLog.mock.calls.some(([event]) => event === "change")).toBe(
       false,
     );
   });
 
-  it("does not dispatch change event on initial render with selectedIndex", () => {
+  it("does not dispatch change event on initial render with selectedIndex", async () => {
     const consoleLog = vi.spyOn(console, "log");
-    render(ContentSwitcher, { props: { selectedIndex: 1 } });
+    await renderSwitcher(ContentSwitcher, { props: { selectedIndex: 1 } });
 
     expect(consoleLog.mock.calls.some(([event]) => event === "change")).toBe(
       false,
@@ -124,7 +134,7 @@ describe("ContentSwitcher", () => {
   });
 
   it("updates when selectedIndex changes", async () => {
-    const { rerender } = render(ContentSwitcherSelectedIndex);
+    const { rerender } = await renderSwitcher(ContentSwitcherSelectedIndex);
 
     let tabs = screen.getAllByRole("tab");
     expect(tabs[1]).toHaveClass("bx--content-switcher--selected");
@@ -139,7 +149,7 @@ describe("ContentSwitcher", () => {
   });
 
   it("handles click events", async () => {
-    render(ContentSwitcher);
+    await renderSwitcher(ContentSwitcher);
 
     const tabs = screen.getAllByRole("tab");
     expect(tabs[0]).toHaveClass("bx--content-switcher--selected");
@@ -170,7 +180,7 @@ describe("ContentSwitcher", () => {
   });
 
   it("handles keyboard navigation", async () => {
-    render(ContentSwitcher);
+    await renderSwitcher(ContentSwitcher);
 
     const tabs = screen.getAllByRole("tab");
     expect(tabs[0]).toHaveClass("bx--content-switcher--selected");
@@ -200,7 +210,7 @@ describe("ContentSwitcher", () => {
   });
 
   it("ignores nested [role='tab'] elements inside switch slots when navigating", async () => {
-    render(ContentSwitcherNested);
+    await renderSwitcher(ContentSwitcherNested);
 
     const tablist = screen.getByRole("tablist");
     const switchTabs = within(tablist).getAllByRole("tab", {
@@ -506,7 +516,7 @@ describe("ContentSwitcher", () => {
 
   describe('selectionMode="manual"', () => {
     it("arrow keys move focus without changing selection", async () => {
-      render(ContentSwitcherSelectionMode);
+      await renderSwitcher(ContentSwitcherSelectionMode);
 
       const tabs = screen.getAllByRole("tab");
       expect(tabs[0]).toHaveClass("bx--content-switcher--selected");
@@ -567,7 +577,7 @@ describe("ContentSwitcher", () => {
     });
 
     it("click selects a tab", async () => {
-      render(ContentSwitcherSelectionMode);
+      await renderSwitcher(ContentSwitcherSelectionMode);
 
       const tabs = screen.getAllByRole("tab");
       expect(tabs[0]).toHaveClass("bx--content-switcher--selected");
@@ -626,7 +636,7 @@ describe("ContentSwitcher", () => {
 
   describe("selectedId", () => {
     it("keeps selectedId on the same logical switch when a prior switch is removed", async () => {
-      render(ContentSwitcherSelectedId, {
+      await renderSwitcher(ContentSwitcherSelectedId, {
         props: { selectedId: "switch-b", showSwitchA: true },
       });
 
@@ -668,7 +678,7 @@ describe("ContentSwitcher", () => {
     });
 
     it("uses the index API when selectedId is unset", async () => {
-      render(ContentSwitcherSelectedId, {
+      await renderSwitcher(ContentSwitcherSelectedId, {
         props: { selectedIndex: 2, selectedId: undefined },
       });
 
@@ -689,8 +699,8 @@ describe("ContentSwitcher", () => {
       expect(screen.getByTestId("selected-id")).toHaveTextContent("");
     });
 
-    it("lets selectedId win over selectedIndex", () => {
-      render(ContentSwitcherSelectedId, {
+    it("lets selectedId win over selectedIndex", async () => {
+      await renderSwitcher(ContentSwitcherSelectedId, {
         props: { selectedIndex: 0, selectedId: "switch-c" },
       });
 
