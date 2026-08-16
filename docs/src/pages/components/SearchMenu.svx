@@ -106,7 +106,7 @@ To customize how matched characters render, use the default slot with `let:segme
 
 ## Filtering
 
-The `shouldFilter` prop toggles client-side filtering. Client-side matching (the default) and server-side filtering can each be used on their own or combined.
+The `shouldFilter` prop toggles client-side filtering. Client-side matching (the default) and server-side filtering can each be used on their own or combined. Unmatched items stay mounted and are hidden, so later keystrokes only punch visibility and update highlight marks.
 
 ### Server-side results
 
