@@ -192,7 +192,7 @@
     {#if isFluid}
       <hr class:bx--text-area__divider={true}>
       {#if showInvalid}
-        <div id={errorId} class:bx--form-requirement={true}>
+        <div id={errorId} class:bx--form-requirement={true} role="alert">
           {invalidText}
           <WarningFilled class="bx--text-area__invalid-icon" />
         </div>
@@ -218,7 +218,9 @@
     </div>
   {/if}
   {#if !isFluid && showInvalid}
-    <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
+    <div id={errorId} class:bx--form-requirement={true} role="alert">
+      {invalidText}
+    </div>
   {/if}
   {#if !isFluid && showWarn}
     <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
