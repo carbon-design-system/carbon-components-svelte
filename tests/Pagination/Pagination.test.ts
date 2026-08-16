@@ -2,6 +2,7 @@ import { fireEvent, render, screen, within } from "@testing-library/svelte";
 import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
 import Pagination from "./Pagination.test.svelte";
+import PaginationPageSelectSlot from "./PaginationPageSelectSlot.test.svelte";
 
 describe("Pagination", () => {
   beforeEach(() => {
@@ -706,5 +707,71 @@ describe("Pagination", () => {
         call[0] === "update" && call[1].pageSize === 15 && call[1].page === 3,
     );
     expect(updateCalls.length).toBe(1);
+  });
+
+  describe("pageSelect slot", () => {
+    it("replaces the default page select and exposes slot props", () => {
+      render(PaginationPageSelectSlot, {
+        props: { totalItems: 40, pageSizes: [10] },
+      });
+
+      expect(
+        screen.queryByRole("combobox", { name: /Page number/ }),
+      ).not.toBeInTheDocument();
+      expect(screen.getByTestId("page-select-label")).toHaveTextContent(
+        "Page number, of 4 pages",
+      );
+      expect(screen.getByTestId("current-page")).toHaveTextContent("1");
+      expect(screen.getByTestId("total-pages")).toHaveTextContent("4");
+      expect(screen.getByTestId("current-page-size")).toHaveTextContent("10");
+    });
+
+    it("calls onSetPage to navigate and dispatches change", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(PaginationPageSelectSlot, {
+        props: { totalItems: 40, pageSizes: [10] },
+      });
+
+      await user.click(screen.getByText("Go to 3"));
+
+      expect(screen.getByTestId("current-page")).toHaveTextContent("3");
+      expect(consoleLog).toHaveBeenCalledWith("change", { page: 3 });
+    });
+
+    it("ignores onSetPage when disabled", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(PaginationPageSelectSlot, {
+        props: { totalItems: 40, pageSizes: [10], disabled: true },
+      });
+
+      await user.click(screen.getByText("Go to 3"));
+
+      expect(screen.getByTestId("current-page")).toHaveTextContent("1");
+      expect(consoleLog).not.toHaveBeenCalledWith("change", expect.anything());
+    });
+
+    it("ignores onSetPage with a non-numeric page", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(PaginationPageSelectSlot, {
+        props: { totalItems: 40, pageSizes: [10] },
+      });
+
+      await user.click(screen.getByText("Go to invalid"));
+
+      expect(screen.getByTestId("current-page")).toHaveTextContent("1");
+      expect(consoleLog).not.toHaveBeenCalledWith("change", expect.anything());
+    });
+
+    it("clamps onSetPage to the last page when it exceeds totalPages", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(PaginationPageSelectSlot, {
+        props: { totalItems: 15, pageSizes: [10] },
+      });
+
+      await user.click(screen.getByText("Go to 3"));
+
+      expect(screen.getByTestId("current-page")).toHaveTextContent("2");
+      expect(consoleLog).toHaveBeenCalledWith("change", { page: 2 });
+    });
   });
 });
