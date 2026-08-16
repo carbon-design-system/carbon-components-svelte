@@ -19,6 +19,8 @@
   export let pageText: ComponentProps<Pagination>["pageText"] = undefined;
   export let pageRangeText: ComponentProps<Pagination>["pageRangeText"] =
     undefined;
+  export let pageSelectLabelText: ComponentProps<Pagination>["pageSelectLabelText"] =
+    undefined;
   export let itemRangeText: ComponentProps<Pagination>["itemRangeText"] =
     undefined;
   export let id: ComponentProps<Pagination>["id"] = undefined;
@@ -47,6 +49,7 @@
   {pagesUnknown}
   {pageText}
   {pageRangeText}
+  {pageSelectLabelText}
   {itemRangeText}
   {id}
   {size}

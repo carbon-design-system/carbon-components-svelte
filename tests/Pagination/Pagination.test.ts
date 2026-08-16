@@ -470,6 +470,21 @@ describe("Pagination", () => {
     expect(screen.getByText(/1 of 10000/)).toBeInTheDocument();
   });
 
+  it("handles custom page select label text", () => {
+    const props = {
+      totalItems: 40,
+      pageSizes: [10, 20],
+      pageSize: 10,
+      page: 2,
+      pageSelectLabelText: (total: number) =>
+        `Página de ${total} ${total === 1 ? "página" : "páginas"}`,
+    } satisfies ComponentProps<Pagination>;
+
+    render(Pagination, { props });
+
+    expect(screen.getByLabelText("Página de 4 páginas")).toBeInTheDocument();
+  });
+
   it("handles custom item range text", () => {
     const props = {
       totalItems: 100_000,
