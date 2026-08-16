@@ -43,8 +43,33 @@
    */
   export let portalHostClass = undefined;
 
+  /**
+   * DOM id of the highlighted option (`{instanceId}-{item.id}`).
+   * Applied as a two-node class change so `{#each}` does not re-run
+   * every `ListBoxMenuItem` on ArrowDown.
+   * @type {undefined | null | string}
+   */
+  export let highlightedId = undefined;
+
+  /**
+   * When `false`, skip scrolling the highlighted option into view
+   * (pointer hover already has the item on screen).
+   * @type {boolean}
+   */
+  export let highlightScroll = true;
+
+  import { setContext } from "svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { uniqueId } from "../utils/uniqueId.js";
+  import {
+    createHighlightCursor,
+    HIGHLIGHT_CURSOR_KEY,
+  } from "./highlightCursor.js";
+
+  const highlightCursor = createHighlightCursor();
+  setContext(HIGHLIGHT_CURSOR_KEY, highlightCursor);
+
+  $: highlightCursor.set(highlightedId, { scroll: highlightScroll });
 </script>
 
 {#if portal}
