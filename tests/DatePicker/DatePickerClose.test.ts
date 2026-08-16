@@ -11,7 +11,7 @@ function ariaLabelForDayInCurrentMonth(day: number) {
   const now = new Date();
   return new Date(now.getFullYear(), now.getMonth(), day).toLocaleDateString(
     "en-US",
-    { month: "long", day: "numeric", year: "numeric" },
+    { weekday: "long", month: "long", day: "numeric", year: "numeric" },
   );
 }
 
