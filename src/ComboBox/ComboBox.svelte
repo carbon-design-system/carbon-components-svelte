@@ -557,7 +557,8 @@
   $: itemsToRender = virtualState.itemsToRender;
 
   $: if (typeahead) {
-    const topItemText = filteredItems[0] ? itemToString(filteredItems[0]) : "";
+    const topItem = filteredItems.find((item) => !item.disabled);
+    const topItemText = topItem ? itemToString(topItem) : "";
     // Inline completion only makes sense when the top match starts with the
     // typed text. A custom (fuzzy/contains) filter can surface items that do
     // not, where appending the untyped tail would produce a nonsense value
