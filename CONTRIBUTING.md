@@ -753,7 +753,9 @@ function register(item) {
 - Put every mutator for that store on the same queue. A direct `store.update()` in the same mount pass can read an array that is still missing a not-yet-flushed batch.
 - `batchStoreUpdates` flushes on a `Promise.resolve().then()` microtask, not `afterUpdate`. A comment that warns against deferring work because of `afterUpdate` does not apply.
 - `afterUpdate` still runs once right after initial mount, before the batched flush, while the store is empty. A one-shot flag set in `register()` itself gets consumed by that empty call. Set it inside the batched update function, as `Tabs.svelte` does with `needsDomSync`.
+- Inside the batched updater, dedup and patch against the updater's own accumulator, not a `derived` store from outer scope. The derived store is the last flushed value, so a same-batch id looks unregistered. See `add()` in `ProgressIndicator.svelte`.
 - Component-bench a new group or list's mount at a few sizes before shipping. A `performance.now()` loop around `render()` is enough to catch this.
+- Matching `register()` code can still measure differently. If the consumer runs behind `tick()`, a synchronous `render()` never waits for that work. `TagSet` and `UserAvatarGroup` share a `sortByDomOrder` register shape. Only the avatar group's `$:` block runs synchronously, so only that one showed the cost.
 
 ## Commit messages
 
