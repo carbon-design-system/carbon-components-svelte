@@ -45,8 +45,30 @@
 
   let ref = null;
 
+  // A DatePicker nested in this popover may portal its flatpickr calendar to
+  // `document.body` (outside `ref`), so a click on it looks like an outside
+  // click. Flatpickr stamps the input with `_flatpickr`; walk the popover's
+  // own inputs to check whether the clicked calendar belongs to one of them.
+  function isDatePickerCalendarClick(target) {
+    if (!ref || !(target instanceof Element)) return false;
+    const calendar = target.closest(".flatpickr-calendar");
+    if (!calendar) return false;
+    for (const input of ref.querySelectorAll("input")) {
+      if (
+        /** @type {any} */ (input)._flatpickr?.calendarContainer === calendar
+      ) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   function handleOutsideClick(event) {
-    if (open && isOutsideClick(event, ref)) {
+    if (
+      open &&
+      isOutsideClick(event, ref) &&
+      !isDatePickerCalendarClick(event.target)
+    ) {
       dispatch("click:outside", { target: event.target });
       if (closeOnOutsideClick) {
         open = false;
