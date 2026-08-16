@@ -645,6 +645,29 @@
   }
 
   /**
+   * Select the keyboard-highlighted item the same way Enter does.
+   * Without this, Tab discards the highlight instead of selecting it.
+   * @returns {boolean} Whether an item was committed.
+   */
+  function commitHighlightedItem() {
+    const item = filteredItems[highlightedIndex];
+    if (
+      open &&
+      highlightOrigin === "keyboard" &&
+      highlightedIndex > -1 &&
+      item &&
+      !item.disabled &&
+      item.id !== selectedId
+    ) {
+      value = itemToString(item);
+      selectedItem = item;
+      selectedId = item.id;
+      return true;
+    }
+    return false;
+  }
+
+  /**
    * Restore the selected item's label, or clear a non-matching custom value.
    * The Tab handler calls this itself. Tab moves focus after `close()`
    * flips `open`, so the `afterUpdate` open watcher can still see the
@@ -827,10 +850,10 @@
             highlightedIndex = -1;
             highlightOrigin = null;
           } else if (event.key === "Tab") {
-            // Accept the inline typeahead suggestion before focus moves to
-            // the next control. Tab is not prevented, so focus still
-            // advances normally.
-            const accepted = acceptTypeaheadSuggestion();
+            // Commit a keyboard highlight or typeahead suggestion first.
+            // Tab is not prevented, so focus still advances.
+            const committed = commitHighlightedItem();
+            const accepted = committed || acceptTypeaheadSuggestion();
             if (!accepted) normalizeValue();
             close(accepted ? "select" : "escape-key");
           } else if (
