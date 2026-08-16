@@ -15,6 +15,15 @@ describe("TextInput", () => {
     expect(screen.getByLabelText("User name")).toBeInTheDocument();
   });
 
+  it("should not render a stray helper element or aria-describedby for an empty-string helperText", () => {
+    const { container } = render(TextInput, { props: { helperText: "" } });
+
+    expect(
+      container.querySelector(".bx--form__helper-text"),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole("textbox")).not.toHaveAttribute("aria-describedby");
+  });
+
   it("should handle placeholder text", () => {
     render(TextInput, {
       props: { placeholder: "Enter user name..." },
@@ -313,7 +322,7 @@ describe("TextInput", () => {
       expect(message).toHaveClass("bx--form-requirement");
       expect(message.closest(".bx--text-input__field-wrapper")).not.toBeNull();
       expect(screen.getByLabelText("User name")).toHaveAttribute(
-        "aria-describedby",
+        "aria-errormessage",
         "error-test-input",
       );
     });
@@ -380,7 +389,7 @@ describe("TextInput", () => {
     });
   });
 
-  it("should set aria-describedby to error id when invalid", () => {
+  it("should set aria-errormessage (not aria-describedby) to the error id when invalid", () => {
     render(TextInput, {
       props: {
         id: "test-input",
@@ -390,7 +399,8 @@ describe("TextInput", () => {
     });
 
     const input = screen.getByRole("textbox");
-    expect(input).toHaveAttribute("aria-describedby", "error-test-input");
+    expect(input).toHaveAttribute("aria-errormessage", "error-test-input");
+    expect(input).not.toHaveAttribute("aria-describedby");
   });
 
   it("should set aria-describedby to warning id when warn", () => {
