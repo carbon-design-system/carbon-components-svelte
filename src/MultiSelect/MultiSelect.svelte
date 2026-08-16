@@ -1055,6 +1055,15 @@
               on:clear={() => {
               value = "";
               open = false;
+              // `bind:value` writes the DOM value without firing "input",
+              // so the `on:input` below would miss this clear. Set the
+              // node first, then dispatch. Svelte's `bind:value` listener
+              // reads `event.target.value`, and the reactive assignment
+              // above has not flushed yet.
+              if (inputRef) {
+                inputRef.value = "";
+                inputRef.dispatchEvent(new Event("input", { bubbles: true }));
+              }
             }}
               translateWithId={translateWithIdSelection}
               {disabled}

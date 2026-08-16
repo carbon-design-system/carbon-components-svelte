@@ -1638,6 +1638,26 @@ describe("MultiSelect", () => {
       expect(combobox).toHaveFocus();
     });
 
+    it("forwards a native input event when the filter text is cleared via the clear button", async () => {
+      render(MultiSelect, {
+        props: { items, filterable: true, placeholder: "Filter..." },
+      });
+
+      const input = screen.getByRole("combobox") as HTMLInputElement;
+      await user.click(input);
+      await user.type(input, "Em");
+      expect(input).toHaveValue("Em");
+
+      const inputSpy = vi.fn();
+      input.addEventListener("input", inputSpy);
+
+      const clearButton = screen.getByRole("button", { name: /clear/i });
+      await user.click(clearButton);
+
+      expect(input).toHaveValue("");
+      expect(inputSpy).toHaveBeenCalled();
+    });
+
     it("filterable variant has correct ARIA attributes", () => {
       render(MultiSelect, {
         props: {
