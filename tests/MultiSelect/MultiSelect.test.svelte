@@ -6,6 +6,7 @@
 
   export let items: ComponentProps<MultiSelect>["items"] = [];
   export let selectedIds: ComponentProps<MultiSelect>["selectedIds"] = [];
+  export let value: ComponentProps<MultiSelect>["value"] = "";
   export let filterable = false;
   export let filterItem: ComponentProps<MultiSelect>["filterItem"] = undefined;
   export let placeholder = "";
@@ -56,6 +57,7 @@
   aria-label={ariaLabel}
   {items}
   {selectedIds}
+  {value}
   {filterable}
   {filterItem}
   {placeholder}

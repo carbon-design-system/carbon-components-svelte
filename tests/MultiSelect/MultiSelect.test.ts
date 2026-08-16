@@ -1681,6 +1681,41 @@ describe("MultiSelect", () => {
       ).toBeInTheDocument();
     });
 
+    it("moves focus directly to the next control when tabbing away with the menu open", async () => {
+      render(MultiSelect, { props: { items } });
+      const nextInput = document.createElement("input");
+      nextInput.setAttribute("aria-label", "Next control");
+      document.body.appendChild(nextInput);
+
+      const combobox = screen.getByRole("combobox");
+      combobox.focus();
+      await user.keyboard(" ");
+      expect(combobox).toHaveAttribute("aria-expanded", "true");
+
+      await user.tab();
+
+      expect(document.activeElement).toBe(nextInput);
+      expect(combobox).toHaveAttribute("aria-expanded", "false");
+
+      document.body.removeChild(nextInput);
+    });
+
+    it("re-filters options when the filter value is updated externally, not just by typing", async () => {
+      const { rerender } = render(MultiSelect, {
+        props: { items, filterable: true, placeholder: "Filter..." },
+      });
+
+      await openMenu();
+      expect(screen.getAllByRole("option")).toHaveLength(3);
+
+      // Simulate an external (controlled) update to `value`, as if a
+      // parent reassigned a `bind:value`d variable.
+      await rerender({ items, filterable: true, value: "Email" });
+
+      expect(screen.getAllByRole("option")).toHaveLength(1);
+      expect(screen.getByRole("option", { name: "Email" })).toBeInTheDocument();
+    });
+
     it("filterable variant has correct ARIA attributes", () => {
       render(MultiSelect, {
         props: {
