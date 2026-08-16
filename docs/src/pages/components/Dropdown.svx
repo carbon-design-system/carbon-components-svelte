@@ -363,6 +363,32 @@ When inside a [Modal](/components/Modal#modal-with-dropdowns), `portalMenu` defa
 
 <FileSource src="/framed/Dropdown/DropdownPortalMenu" />
 
+## Form name
+
+Set `name` so the selection participates in native form submission (for
+example SvelteKit form actions and `FormData`). A hidden input mirrors
+`selectedId`, submitting an empty string when nothing is selected or when
+the selected item is disabled.
+
+```svelte
+<script>
+  import { Form, Dropdown, Button } from "carbon-components-svelte";
+</script>
+
+<Form method="POST" action="?/contact">
+  <Dropdown
+    name="contactMethod"
+    labelText="Contact"
+    items={[
+      { id: "0", text: "Slack" },
+      { id: "1", text: "Email" },
+      { id: "2", text: "Fax" },
+    ]}
+  />
+  <Button type="submit">Submit</Button>
+</Form>
+```
+
 ## Skeleton
 
 Display a loading state using the dropdown skeleton.
