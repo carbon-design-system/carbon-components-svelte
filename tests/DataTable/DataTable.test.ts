@@ -3203,6 +3203,43 @@ describe("DataTable", () => {
       scrollContainer.scrollTop = 100;
       expect(scrollContainer.scrollTop).toBe(100);
     });
+
+    it("renders newly painted cell values after virtualized scroll", async () => {
+      const largeRows = Array.from({ length: 200 }, (_, i) => ({
+        id: String(i),
+        name: `Load Balancer ${i + 1}`,
+        protocol: "HTTP",
+        port: 3000,
+        rule: "Round robin",
+      }));
+
+      render(DataTable, {
+        props: {
+          headers,
+          rows: largeRows,
+          virtualize: {
+            itemHeight: 48,
+            maxVisibleRows: 10,
+            overscan: 3,
+            threshold: 100,
+          },
+          stickyHeader: false,
+        },
+      });
+
+      await tick();
+      expect(screen.getByText("Load Balancer 1")).toBeInTheDocument();
+
+      const table = screen.getByRole("table");
+      const scrollContainer = table.parentElement;
+      expect.assert(scrollContainer instanceof HTMLElement);
+      scrollContainer.scrollTop = 48 * 40;
+      scrollContainer.dispatchEvent(new Event("scroll"));
+      await tick();
+
+      expect(screen.queryByText("Load Balancer 1")).not.toBeInTheDocument();
+      expect(screen.getByText("Load Balancer 38")).toBeInTheDocument();
+    });
   });
 
   describe("footer", () => {
