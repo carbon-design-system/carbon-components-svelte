@@ -766,11 +766,12 @@
           aria-disabled={disabled || readonly}
           aria-readonly={readonly || undefined}
           aria-controls={open ? menuId : undefined}
-          aria-describedby={showInvalid && invalidText
-          ? errorId
+          aria-errormessage={showInvalid && invalidText ? errorId : undefined}
+          aria-describedby={showInvalid
+          ? undefined
           : showWarn && warnText
             ? warnId
-            : !isFluid && !showInvalid && !showWarn && helperText
+            : !isFluid && !showWarn && helperText
               ? helperId
               : undefined}
           {disabled}
@@ -1170,7 +1171,9 @@
     <hr class:bx--list-box__divider={true}>
   {/if}
   {#if showInvalid && invalidText}
-    <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
+    <div id={errorId} class:bx--form-requirement={true} role="alert">
+      {invalidText}
+    </div>
   {/if}
   {#if showWarn && warnText}
     <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
