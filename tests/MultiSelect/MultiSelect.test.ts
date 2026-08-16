@@ -1658,6 +1658,29 @@ describe("MultiSelect", () => {
       expect(inputSpy).toHaveBeenCalled();
     });
 
+    it("uses the singular clear label when exactly one item is selected", () => {
+      render(MultiSelect, {
+        props: { items, selectedIds: ["0"] },
+      });
+
+      expect(
+        screen.getByRole("button", { name: "Clear selected item" }),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByRole("button", { name: "Clear all selected items" }),
+      ).not.toBeInTheDocument();
+    });
+
+    it("uses the plural clear label when more than one item is selected", () => {
+      render(MultiSelect, {
+        props: { items, selectedIds: ["0", "1"] },
+      });
+
+      expect(
+        screen.getByRole("button", { name: "Clear all selected items" }),
+      ).toBeInTheDocument();
+    });
+
     it("filterable variant has correct ARIA attributes", () => {
       render(MultiSelect, {
         props: {
