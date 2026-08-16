@@ -101,6 +101,7 @@
   import OverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
   import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
+  import { batchStoreUpdates } from "../utils/batchStoreUpdates.js";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
   import { keyBy } from "../utils/keyBy.js";
@@ -136,11 +137,14 @@
     icon = OverflowMenuHorizontal;
   }
 
+  // Items mount only while open, so they re-register on every open.
+  const batchedItemsUpdate = batchStoreUpdates(items);
+
   /**
    * @type {(data: { id: string; text: string; primaryFocus: boolean; disabled: boolean }) => void}
    */
   function add({ id, text, primaryFocus, disabled }) {
-    items.update((_) => {
+    batchedItemsUpdate((_) => {
       if (primaryFocus) {
         currentIndex.set(_.length);
       }
@@ -151,7 +155,7 @@
 
   /** @type {(id: string) => void} */
   function remove(id) {
-    items.update((_) => _.filter((item) => item.id !== id));
+    batchedItemsUpdate((_) => _.filter((item) => item.id !== id));
   }
 
   /**
