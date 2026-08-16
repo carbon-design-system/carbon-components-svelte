@@ -55,6 +55,7 @@
   import { setContext } from "svelte";
   import { writable } from "svelte/store";
   import Stack from "../Stack/Stack.svelte";
+  import { batchStoreUpdates } from "../utils/batchStoreUpdates.js";
   import UserAvatarGroupOverflow from "./UserAvatarGroupOverflow.svelte";
 
   /** @type {import("svelte/store").Writable<Array<{ id: string; name: string; node?: HTMLElement }>>} */
@@ -95,8 +96,8 @@
   // conditionally rendered. Each registers from its own `onMount`, so its node
   // is already in the DOM; sort the registry by document position right then to
   // keep the visible avatars and overflow names tracking the rendered layout.
-  // This stays synchronous (no `afterUpdate`) so the order is correct in the
-  // same flush, across Svelte versions.
+  // Sorting after a batched flush matches sorting after each registration.
+  // compareDocumentPosition reads live DOM position.
   function sortByDomOrder(list) {
     return [...list].sort((a, b) => {
       if (!a.node || !b.node) return 0;
@@ -107,23 +108,28 @@
     });
   }
 
+  // Route register, unregister, and updateName through the same batched
+  // queue. Mixing in a direct items.update() would read a stale array
+  // still missing not-yet-flushed registrations.
+  const batchedItemsUpdate = batchStoreUpdates(items);
+
   setContext("carbon:UserAvatarGroup", {
     items,
     max: maxStore,
     size: sizeStore,
     activeTooltip,
     register: ({ id, name, node }) => {
-      items.update((current) =>
+      batchedItemsUpdate((current) =>
         current.some((item) => item.id === id)
           ? current
           : sortByDomOrder([...current, { id, name, node }]),
       );
     },
     unregister: (id) => {
-      items.update((current) => current.filter((item) => item.id !== id));
+      batchedItemsUpdate((current) => current.filter((item) => item.id !== id));
     },
     updateName: (id, name) => {
-      items.update((current) =>
+      batchedItemsUpdate((current) =>
         current.map((item) => (item.id === id ? { ...item, name } : item)),
       );
     },
