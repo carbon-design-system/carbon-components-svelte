@@ -192,7 +192,10 @@
   export let id = uniqueId();
 
   /**
-   * Specify a name attribute for the list box.
+   * Specify a name attribute for native form submission.
+   * Mounts a hidden input whose value mirrors `selectedId`
+   * (empty string when nothing is selected, or when the
+   * selected item is disabled).
    * @type {string}
    */
   export let name = undefined;
@@ -320,6 +323,10 @@
       ? `${id}-${items[highlightedIndex].id}`
       : undefined;
   $: selectedItem = itemsById.get(selectedId);
+  // Mirrors native `<select><option value>`: a disabled selection is not a
+  // successful control, so it serializes as empty like nothing being selected.
+  $: hiddenInputValue =
+    selectedId === undefined || selectedItem?.disabled ? "" : selectedId;
   $: if (!open) {
     highlightedIndex = -1;
     highlightOrigin = null;
@@ -609,10 +616,12 @@
       <slot name="labelChildren"> {labelText} </slot>
     </label>
   {/if}
+  {#if name}
+    <input type="hidden" {name} value={hiddenInputValue}>
+  {/if}
   <ListBox
     {type}
     {size}
-    {name}
     aria-label={$$props["aria-label"]}
     class={dropdownListBoxClass}
     on:click={(event) => {
