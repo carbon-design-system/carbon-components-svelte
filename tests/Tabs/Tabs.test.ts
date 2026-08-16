@@ -342,6 +342,30 @@ describe("Tabs", () => {
     expect(next).toHaveClass("bx--tab--overflow-nav-button--hidden");
   });
 
+  it("does not show the overflow button for a 1px scrollWidth/clientWidth difference", async () => {
+    const { container } = render(Tabs);
+
+    const nav = screen.getByRole("tablist");
+    Object.defineProperty(nav, "scrollWidth", {
+      configurable: true,
+      value: 101,
+    });
+    Object.defineProperty(nav, "clientWidth", {
+      configurable: true,
+      value: 100,
+    });
+    Object.defineProperty(nav, "scrollLeft", {
+      configurable: true,
+      writable: true,
+      value: 0,
+    });
+    await fireEvent.scroll(nav);
+
+    expect(
+      container.querySelector(".bx--tab--overflow-nav-button"),
+    ).not.toBeInTheDocument();
+  });
+
   it("should apply custom class", () => {
     render(Tabs, {
       props: { customClass: "custom-tabs" },
