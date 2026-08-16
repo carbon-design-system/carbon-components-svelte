@@ -69,7 +69,7 @@ Because the component cannot detect the last page, bind to `page` and toggle `fo
 
 ## Page window
 
-The number of native select items is derived from totalItems. For large datasets, this can impact performance. Use `pageWindow` to limit rendered items.
+The page-number dropdown uses native `<option>` elements, derived from `totalItems`. For large datasets, use `pageWindow` to cap how many options are rendered (default 1000).
 
 <FileSource src="/framed/Pagination/PageWindow" />
 
