@@ -104,6 +104,27 @@ describe("Menu", () => {
     expect(itemFocusCall?.[0]).toEqual({ preventScroll: true });
   });
 
+  it("does not steal focus back from an outside element on an unrelated rerender while open", async () => {
+    const { rerender } = render(MenuFixture);
+
+    await user.click(screen.getByRole("button", { name: "Trigger" }));
+    const items = screen.getAllByRole("menuitem");
+    expect(items[0]).toHaveFocus();
+
+    const outsideInput = document.createElement("input");
+    outsideInput.setAttribute("aria-label", "Outside input");
+    document.body.appendChild(outsideInput);
+    outsideInput.focus();
+    expect(outsideInput).toHaveFocus();
+
+    // Trigger a rerender unrelated to `open` itself (menu stays open).
+    await rerender({ size: "lg" });
+
+    expect(outsideInput).toHaveFocus();
+
+    document.body.removeChild(outsideInput);
+  });
+
   it("navigates items with arrow keys without wrapping", async () => {
     render(MenuFixture);
 
@@ -190,6 +211,19 @@ describe("Menu", () => {
 
     expect(consoleLog).not.toHaveBeenCalledWith("click", "First");
     expect(screen.getByRole("menu")).toBeInTheDocument();
+  });
+
+  it("does not move focus onto a disabled item when clicked", async () => {
+    render(MenuFixture, { props: { disabledIndex: 1 } });
+
+    await user.click(screen.getByRole("button", { name: "Trigger" }));
+    const items = screen.getAllByRole("menuitem");
+    // Focus starts on the first (non-disabled) item.
+    expect(items[0]).toHaveFocus();
+
+    await user.click(items[1]);
+
+    expect(items[1]).not.toHaveFocus();
   });
 
   it("closes and returns focus to the anchor on Escape", async () => {
