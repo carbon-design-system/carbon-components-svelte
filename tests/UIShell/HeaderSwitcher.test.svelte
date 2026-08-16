@@ -27,6 +27,7 @@
       <HeaderPanelLinks>
         <HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>
         <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
+        <HeaderPanelDivider />
         <HeaderPanelDivider>Switcher subject 2</HeaderPanelDivider>
         <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
         <HeaderPanelLink>Switcher item 2</HeaderPanelLink>
