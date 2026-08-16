@@ -160,7 +160,7 @@ The table rebuilds cells only when the rows array reference changes. After an in
 
 <FileSource src="/framed/DataTable/DataTableEditableCells" />
 
-When you edit multiple rows in place, call `refreshCells()` once to update derived columns for every row.
+When you edit multiple painted rows in place, call `refreshCells()` once to rebuild derived columns for the visible window. Offscreen rows are computed when they scroll into view.
 
 <FileSource src="/framed/DataTable/DataTableEditableCellsRefreshCells" />
 
