@@ -227,6 +227,7 @@
     ListBoxMenuItem,
     ListBoxSelection,
   } from "../ListBox";
+  import HighlightSlot from "../ListBox/HighlightSlot.svelte";
   import {
     getMenuItemHeight,
     getMenuMaxHeight,
@@ -773,6 +774,8 @@
         {open}
         anchor={ref}
         {direction}
+        {highlightedId}
+        highlightScroll={highlightOrigin !== "pointer"}
         on:scroll
         on:scroll={handleMenuScroll}
         on:mouseleave={() => {
@@ -796,11 +799,10 @@
               {#each itemsToRender as item, index (item.id)}
                 {@const actualIndex = virtualData.startIndex + index}
                 {@const selected = selectedId === item.id}
-                {@const highlighted = highlightedIndex === actualIndex}
+                {@const optionId = `${id}-${item.id}`}
                 <ListBoxMenuItem
-                  id="{id}-{item.id}"
+                  id={optionId}
                   active={selectedId === item.id}
-                  {highlighted}
                   disabled={item.disabled}
                   hasLeftIcon={Boolean($$slots.icon || item.icon)}
                   aria-setsize={items.length}
@@ -825,37 +827,55 @@
                     highlightOrigin = "pointer";
                   }}
                 >
-                  {#if $$slots.icon || item.icon}
+                  {#if $$slots.icon}
                     <span
                       class:bx--list-box__menu-item__icon={true}
                       class:bx--list-box__menu-item__icon--left={true}
                     >
-                      <slot
-                        name="icon"
-                        {item}
-                        index={actualIndex}
-                        {selected}
-                        {highlighted}
-                      >
-                        <svelte:component this={item.icon} />
-                      </slot>
+                      <HighlightSlot {optionId} let:highlighted>
+                        <slot
+                          name="icon"
+                          {item}
+                          index={actualIndex}
+                          {selected}
+                          {highlighted}
+                        />
+                      </HighlightSlot>
                     </span>
-                  {/if}
-                  <slot {item} index={actualIndex} {selected} {highlighted}>
-                    {itemToString(item)}
-                  </slot>
-                  {#if $$slots.iconRight}
+                  {:else if item.icon}
                     <span
                       class:bx--list-box__menu-item__icon={true}
-                      class:bx--list-box__menu-item__icon--right={true}
+                      class:bx--list-box__menu-item__icon--left={true}
                     >
+                      <svelte:component this={item.icon} />
+                    </span>
+                  {/if}
+                  {#if $$slots.default}
+                    <HighlightSlot {optionId} let:highlighted>
                       <slot
-                        name="iconRight"
                         {item}
                         index={actualIndex}
                         {selected}
                         {highlighted}
                       />
+                    </HighlightSlot>
+                  {:else}
+                    {itemToString(item)}
+                  {/if}
+                  {#if $$slots.iconRight}
+                    <span
+                      class:bx--list-box__menu-item__icon={true}
+                      class:bx--list-box__menu-item__icon--right={true}
+                    >
+                      <HighlightSlot {optionId} let:highlighted>
+                        <slot
+                          name="iconRight"
+                          {item}
+                          index={actualIndex}
+                          {selected}
+                          {highlighted}
+                        />
+                      </HighlightSlot>
                     </span>
                   {:else if selected}
                     <Checkmark class="bx--list-box__menu-item__selected-icon" />
@@ -867,11 +887,10 @@
         {:else}
           {#each itemsToRender as item, index (item.id)}
             {@const selected = selectedId === item.id}
-            {@const highlighted = highlightedIndex === index}
+            {@const optionId = `${id}-${item.id}`}
             <ListBoxMenuItem
-              id="{id}-{item.id}"
+              id={optionId}
               active={selectedId === item.id}
-              {highlighted}
               disabled={item.disabled}
               hasLeftIcon={Boolean($$slots.icon || item.icon)}
               on:click={(event) => {
@@ -894,31 +913,44 @@
                 highlightOrigin = "pointer";
               }}
             >
-              {#if $$slots.icon || item.icon}
+              {#if $$slots.icon}
                 <span
                   class:bx--list-box__menu-item__icon={true}
                   class:bx--list-box__menu-item__icon--left={true}
                 >
-                  <slot name="icon" {item} {index} {selected} {highlighted}>
-                    <svelte:component this={item.icon} />
-                  </slot>
+                  <HighlightSlot {optionId} let:highlighted>
+                    <slot name="icon" {item} {index} {selected} {highlighted} />
+                  </HighlightSlot>
+                </span>
+              {:else if item.icon}
+                <span
+                  class:bx--list-box__menu-item__icon={true}
+                  class:bx--list-box__menu-item__icon--left={true}
+                >
+                  <svelte:component this={item.icon} />
                 </span>
               {/if}
-              <slot {item} {index} {selected} {highlighted}>
+              {#if $$slots.default}
+                <HighlightSlot {optionId} let:highlighted>
+                  <slot {item} {index} {selected} {highlighted} />
+                </HighlightSlot>
+              {:else}
                 {itemToString(item)}
-              </slot>
+              {/if}
               {#if $$slots.iconRight}
                 <span
                   class:bx--list-box__menu-item__icon={true}
                   class:bx--list-box__menu-item__icon--right={true}
                 >
-                  <slot
-                    name="iconRight"
-                    {item}
-                    {index}
-                    {selected}
-                    {highlighted}
-                  />
+                  <HighlightSlot {optionId} let:highlighted>
+                    <slot
+                      name="iconRight"
+                      {item}
+                      {index}
+                      {selected}
+                      {highlighted}
+                    />
+                  </HighlightSlot>
                 </span>
               {:else if selected}
                 <Checkmark class="bx--list-box__menu-item__selected-icon" />
