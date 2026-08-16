@@ -24,6 +24,9 @@ describe("SearchMenu", () => {
     expect(screen.getByRole("listbox")).toBeInTheDocument();
     expect(input).toHaveAttribute("aria-expanded", "true");
     expect(screen.getAllByRole("option")).toHaveLength(4);
+    expect(document.querySelectorAll('[role="option"][hidden]')).toHaveLength(
+      0,
+    );
   });
 
   it("fuzzy-filters items by the search value", async () => {
@@ -34,6 +37,18 @@ describe("SearchMenu", () => {
     const options = screen.getAllByRole("option");
     expect(options).toHaveLength(1);
     expect(options[0]).toHaveTextContent("Data Store for Memcache");
+  });
+
+  it("keeps unmatched items mounted and hidden while filtering", async () => {
+    render(SearchMenu);
+    const input = screen.getByRole("combobox");
+    await user.click(input);
+    await user.type(input, "memcache");
+    expect(screen.getAllByRole("option")).toHaveLength(1);
+    expect(document.querySelectorAll('[role="option"]')).toHaveLength(4);
+    expect(document.querySelectorAll('[role="option"][hidden]')).toHaveLength(
+      3,
+    );
   });
 
   it("highlights the matched portion of each item", async () => {

@@ -26,7 +26,11 @@
    */
   export let open = false;
 
-  /** Set to `true` to filter items by the search value using fuzzy matching */
+  /**
+   * Set to `true` to filter items by the search value using fuzzy matching.
+   * Unmatched items stay mounted and are hidden so later keystrokes do not
+   * recreate option nodes.
+   */
   export let shouldFilter = true;
 
   /**
@@ -224,9 +228,9 @@
 
   function getOptionElements() {
     if (!menuRef) return [];
-    return Array.from(menuRef.querySelectorAll('[role="option"]')).filter(
-      (el) => el.getAttribute("aria-disabled") !== "true",
-    );
+    return Array.from(
+      menuRef.querySelectorAll('[role="option"]:not([hidden])'),
+    ).filter((el) => el.getAttribute("aria-disabled") !== "true");
   }
 
   function moveActive(step) {

@@ -92,6 +92,11 @@
     &:hover {
       background-color: $hover-ui;
     }
+
+    // `display: flex` above beats the UA `[hidden] { display: none }`.
+    &[hidden] {
+      display: none;
+    }
   }
 
   .#{$prefix}--search-menu-item--highlighted {
