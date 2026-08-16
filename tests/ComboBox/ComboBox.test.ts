@@ -1197,6 +1197,20 @@ describe("ComboBox", () => {
     expect(input).toHaveValue("");
   });
 
+  it("should restore the initial controlled selection's label on blur with a non-matching value", async () => {
+    render(ComboBox, { props: { selectedId: "1", allowCustomValue: false } });
+
+    const input = getInput();
+    expect(input).toHaveValue("Email");
+
+    await user.click(input);
+    await user.clear(input);
+    await user.type(input, "no-match");
+    await user.keyboard("{Tab}");
+
+    expect(input).toHaveValue("Email");
+  });
+
   it("should preserve custom value when allowCustomValue is true and Enter is pressed", async () => {
     render(ComboBox, { props: { allowCustomValue: true } });
 

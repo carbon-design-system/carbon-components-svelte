@@ -607,6 +607,25 @@
   }
 
   /**
+   * Restore the selected item's label, or clear a non-matching custom value.
+   * The Tab handler calls this itself. Tab moves focus after `close()`
+   * flips `open`, so the `afterUpdate` open watcher can still see the
+   * input as focused and skip the restore.
+   */
+  function normalizeValue() {
+    // Read `selectedId` from `itemsById`, not the reactive `selectedItem`.
+    // A handler earlier in this same event may have just set `selectedId`,
+    // and the `$:` block that derives `selectedItem` has not re-run yet.
+    const currentSelectedItem =
+      selectedId === undefined ? undefined : itemsById.get(selectedId);
+    if (currentSelectedItem) {
+      value = itemToString(currentSelectedItem);
+    } else if (!allowCustomValue) {
+      value = "";
+    }
+  }
+
+  /**
    * Close the dropdown and surface the dismissal cause.
    * Guarded on `open` so redundant assignments don't double-fire the event.
    * @param {"escape-key" | "outside-click" | "select"} trigger
@@ -708,7 +727,10 @@
           }
 
           if (!value.length) {
-            clear();
+            // Skip `clear()`. It drops `selectedId`, so a later unmatched blur
+            // has nothing to restore.
+            highlightedIndex = -1;
+            highlightOrigin = null;
             open = true;
           }
         }}
@@ -767,9 +789,11 @@
             highlightedIndex = -1;
             highlightOrigin = null;
           } else if (event.key === "Tab") {
-            // Accept the inline suggestion before focus moves to the next
-            // control. Tab is not prevented, so focus still advances normally.
+            // Accept the inline typeahead suggestion before focus moves to
+            // the next control. Tab is not prevented, so focus still
+            // advances normally.
             const accepted = acceptTypeaheadSuggestion();
+            if (!accepted) normalizeValue();
             close(accepted ? "select" : "escape-key");
           } else if (
             typeahead &&
