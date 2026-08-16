@@ -45,6 +45,7 @@
 
   import { afterUpdate, createEventDispatcher, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
+  import { batchStoreUpdates } from "../utils/batchStoreUpdates.js";
   import { clampIndex } from "../utils/clampIndex.js";
   import { rovingFocus } from "../utils/rovingFocus.js";
   import { syncDomOrder } from "../utils/syncDomOrder.js";
@@ -63,7 +64,17 @@
 
   let currentIndex = -1;
   let focusedIndex = -1;
-  let switches = [];
+  /**
+   * @type {import("svelte/store").Writable<Array<{ id: string; text: string; selected: boolean; icon: boolean }>>}
+   */
+  const switchesStore = writable([]);
+  // Batch child registration. Leave afterUpdate's syncDomOrder unbatched
+  // so DOM-order correction stays synchronous.
+  //
+  // Set needsDomSync inside the batched update. afterUpdate runs once
+  // after mount before this flush, while switches is still [].
+  const batchedSwitchesUpdate = batchStoreUpdates(switchesStore);
+  $: switches = $switchesStore;
 
   // Inferred when every registered switch provides an `icon`.
   $: iconOnly = switches.length > 0 && switches.every((s) => s.icon);
@@ -87,24 +98,28 @@
    * @type {(data: { id: string; text: string; selected: boolean; icon: boolean }) => void}
    */
   function add({ id, text, selected, icon }) {
-    if (switches.some((s) => s.id === id)) {
-      return;
-    }
+    batchedSwitchesUpdate((current) => {
+      if (current.some((s) => s.id === id)) {
+        return current;
+      }
 
-    if (selectedId === undefined && selected) {
-      selectedIndex = switches.length;
-    }
+      if (selectedId === undefined && selected) {
+        selectedIndex = current.length;
+      }
 
-    needsDomSync = true;
-    switches = [...switches, { id, text, selected, icon }];
+      needsDomSync = true;
+      return [...current, { id, text, selected, icon }];
+    });
   }
 
   /**
    * @type {(id: string) => void}
    */
   function remove(id) {
-    needsDomSync = true;
-    switches = switches.filter((s) => s.id !== id);
+    batchedSwitchesUpdate((current) => {
+      needsDomSync = true;
+      return current.filter((s) => s.id !== id);
+    });
   }
 
   /**
@@ -195,14 +210,18 @@
       needsDomSync = false;
 
       const preservedId = switches[selectedIndex]?.id;
-      switches = syncDomOrder({
-        root: ref,
-        selector: "[role='tab']",
-        items: switches,
+      let next = switches;
+      switchesStore.update((current) => {
+        next = syncDomOrder({
+          root: ref,
+          selector: "[role='tab']",
+          items: current,
+        });
+        return next;
       });
 
       if (preservedId !== undefined) {
-        const nextIndex = switches.findIndex((s) => s.id === preservedId);
+        const nextIndex = next.findIndex((s) => s.id === preservedId);
         if (nextIndex > -1) {
           selectedIndex = nextIndex;
         }
