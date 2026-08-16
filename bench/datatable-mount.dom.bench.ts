@@ -56,6 +56,31 @@ it("benchmarks mounting a large DataTable, virtualized vs not", async () => {
     };
   }).range("size", 100, 3000);
 
+  // Cell records used to be built for every `rows` entry, even when
+  // virtualize/pagination only painted a window. Wide tables make that
+  // rows×columns allocation visible at mount.
+  const wideHeaders = Array.from({ length: 20 }, (_, i) => ({
+    key: `col${i}`,
+    value: `Col ${i}`,
+  }));
+  const wideRows3000 = Array.from({ length: 3000 }, (_, i) => {
+    const row: Record<string, string> = { id: String(i) };
+    for (let c = 0; c < 20; c++) row[`col${c}`] = `${i}-${c}`;
+    return row;
+  });
+
+  bench("mount DataTable, 3000 rows × 20 cols, virtualized", () => {
+    render(DataTable, {
+      props: {
+        headers: wideHeaders,
+        rows: wideRows3000,
+        virtualize: true,
+        stickyHeader: true,
+      },
+    });
+    cleanup();
+  });
+
   // mitata defaults `print` to console.log, which vitest swallows for
   // passing tests. process.stdout.write always reaches the terminal.
   await run({ print: (line) => process.stdout.write(`${line}\n`) });
