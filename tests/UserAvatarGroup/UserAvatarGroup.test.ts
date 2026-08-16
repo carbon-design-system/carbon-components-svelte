@@ -1,4 +1,5 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { user } from "../utils/user";
 import UserAvatarGroup from "./UserAvatarGroup.test.svelte";
 
@@ -20,8 +21,9 @@ function visibleAvatar(root: HTMLElement): HTMLElement {
 }
 
 describe("UserAvatarGroup", () => {
-  it("renders every avatar and no overflow when under max", () => {
+  it("renders every avatar and no overflow when under max", async () => {
     render(UserAvatarGroup);
+    await tick();
 
     const root = groupRoot("under-max");
     expect(root.querySelectorAll(".bx--user-avatar")).toHaveLength(3);
@@ -29,16 +31,18 @@ describe("UserAvatarGroup", () => {
     expect(root).not.toHaveTextContent("+");
   });
 
-  it("applies the overlap modifier by default", () => {
+  it("applies the overlap modifier by default", async () => {
     render(UserAvatarGroup);
+    await tick();
 
     expect(groupRoot("under-max")).toHaveClass(
       "bx--user-avatar-group--overlap",
     );
   });
 
-  it("hides avatars past max and renders a +N overflow avatar", () => {
+  it("hides avatars past max and renders a +N overflow avatar", async () => {
     render(UserAvatarGroup);
+    await tick();
 
     const root = groupRoot("overflow");
     // Two of the four slotted avatars are hidden as overflow.
@@ -50,24 +54,27 @@ describe("UserAvatarGroup", () => {
     ).toBeInTheDocument();
   });
 
-  it("treats max of 0 as no limit", () => {
+  it("treats max of 0 as no limit", async () => {
     render(UserAvatarGroup);
+    await tick();
 
     const root = groupRoot("no-limit");
     expect(root.querySelectorAll('[data-overflow="true"]')).toHaveLength(0);
     expect(root).not.toHaveTextContent("+");
   });
 
-  it("spaces avatars apart when a gap is set", () => {
+  it("spaces avatars apart when a gap is set", async () => {
     render(UserAvatarGroup);
+    await tick();
 
     const root = groupRoot("spaced");
     expect(root).not.toHaveClass("bx--user-avatar-group--overlap");
     expect(root).toHaveClass("bx--stack-scale-3");
   });
 
-  it("tightens the overlap with a negative gap", () => {
+  it("tightens the overlap with a negative gap", async () => {
     render(UserAvatarGroup);
+    await tick();
 
     const root = groupRoot("tighter");
     expect(root).toHaveClass("bx--user-avatar-group--overlap");
@@ -76,8 +83,9 @@ describe("UserAvatarGroup", () => {
     );
   });
 
-  it("uses total for the overflow without rendering the hidden avatars", () => {
+  it("uses total for the overflow without rendering the hidden avatars", async () => {
     render(UserAvatarGroup);
+    await tick();
 
     const root = groupRoot("total");
     // Only the three slotted avatars render (plus the overflow avatar); the
@@ -90,8 +98,9 @@ describe("UserAvatarGroup", () => {
     ).toHaveTextContent("99+");
   });
 
-  it("cascades its size to avatars that do not set their own", () => {
+  it("cascades its size to avatars that do not set their own", async () => {
     render(UserAvatarGroup);
+    await tick();
 
     const root = groupRoot("cascade");
     // First avatar inherits the group size; the second keeps its own.
@@ -107,6 +116,7 @@ describe("UserAvatarGroup", () => {
 
   it("uses overflowTooltipText for the overflow chip tooltip", async () => {
     render(UserAvatarGroup);
+    await tick();
 
     const overflow = groupRoot("overflow-tooltip").querySelector(
       ".bx--user-avatar-group__overflow",
@@ -122,8 +132,9 @@ describe("UserAvatarGroup", () => {
     });
   });
 
-  it("reverses the stacking order so the first avatar paints on top, even when tooltipText wraps it", () => {
+  it("reverses the stacking order so the first avatar paints on top, even when tooltipText wraps it", async () => {
     render(UserAvatarGroup);
+    await tick();
 
     const root = groupRoot("stack-first");
     expect(root).toHaveClass("bx--user-avatar-group--stack-first");
@@ -156,6 +167,7 @@ describe("UserAvatarGroup", () => {
 
   it("re-sorts to DOM order when an avatar is inserted ahead of others", async () => {
     render(UserAvatarGroup);
+    await tick();
 
     const root = groupRoot("resync");
     // Only Bob and Cara are mounted; Bob is the single visible avatar.
