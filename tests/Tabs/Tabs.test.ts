@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import type TabComponent from "carbon-components-svelte/Tabs/Tab.svelte";
 import type { ComponentProps } from "svelte";
+import { tick } from "svelte";
 import Calendar from "../../src/icons/Calendar.svelte";
 import Settings from "../../src/icons/Settings.svelte";
 import { user } from "../utils/user";
@@ -28,8 +29,9 @@ describe("Tabs", () => {
     vi.restoreAllMocks();
   });
 
-  it("should render with default props", () => {
+  it("should render with default props", async () => {
     render(Tabs);
+    await tick();
 
     expect(screen.getByRole("tab", { name: "Tab 1" })).toBeInTheDocument();
     expect(screen.getByRole("tab", { name: "Tab 2" })).toBeInTheDocument();
@@ -42,8 +44,9 @@ describe("Tabs", () => {
     expect(tabsContainer).not.toHaveClass("bx--tabs--full-width");
   });
 
-  it("should link each tab to its panel via aria-controls", () => {
+  it("should link each tab to its panel via aria-controls", async () => {
     render(Tabs);
+    await tick();
 
     const tabs = screen.getAllByRole("tab");
     const panels = screen.getAllByRole("tabpanel", { hidden: true });
@@ -74,6 +77,7 @@ describe("Tabs", () => {
 
   it("should pass selected to the Tab default slot", async () => {
     render(TabSlot);
+    await tick();
 
     expect(screen.getByTestId("tab-0")).toHaveAttribute(
       "data-selected",
@@ -96,8 +100,9 @@ describe("Tabs", () => {
     );
   });
 
-  it("should select initial tab based on selected prop", () => {
+  it("should select initial tab based on selected prop", async () => {
     render(Tabs, { props: { selected: 2 } });
+    await tick();
 
     const tab3 = screen.getByRole("tab", { name: "Tab 3" });
     expect(tab3).toHaveAttribute("aria-selected", "true");
@@ -450,6 +455,7 @@ describe("Tabs", () => {
     render(TabsSelectedId, {
       props: { selectedId: "tab-b", showTabA: true },
     });
+    await tick();
 
     expect(screen.getByRole("tab", { name: "Tab B" })).toHaveAttribute(
       "aria-selected",
@@ -460,6 +466,7 @@ describe("Tabs", () => {
     expect(screen.getByText("Content B")).toBeVisible();
 
     await user.click(screen.getByTestId("toggle-tab-a"));
+    await tick();
 
     expect(
       screen.queryByRole("tab", { name: "Tab A" }),
@@ -477,8 +484,10 @@ describe("Tabs", () => {
     render(TabsSelectedId, {
       props: { selectedId: "tab-b", showTabA: true, showTabB: true },
     });
+    await tick();
 
     await user.click(screen.getByTestId("toggle-tab-b"));
+    await tick();
 
     expect(
       screen.queryByRole("tab", { name: "Tab B" }),
@@ -495,6 +504,7 @@ describe("Tabs", () => {
     render(TabsSelectedId, {
       props: { selected: 2, selectedId: undefined },
     });
+    await tick();
 
     expect(screen.getByRole("tab", { name: "Tab C" })).toHaveAttribute(
       "aria-selected",
@@ -514,10 +524,11 @@ describe("Tabs", () => {
     expect(screen.getByTestId("selected-id")).toHaveTextContent("");
   });
 
-  it("lets selectedId win over selected", () => {
+  it("lets selectedId win over selected", async () => {
     render(TabsSelectedId, {
       props: { selected: 0, selectedId: "tab-c" },
     });
+    await tick();
 
     expect(screen.getByRole("tab", { name: "Tab C" })).toHaveAttribute(
       "aria-selected",
@@ -805,8 +816,9 @@ describe("Container tabs with icon", () => {
 });
 
 describe("Container tabs with icons and secondary label", () => {
-  it("should render container type with icon and secondary label on each tab", () => {
+  it("should render container type with icon and secondary label on each tab", async () => {
     const { container } = render(TabIconSecondaryLabel);
+    await tick();
 
     const tabsContainer = screen.getByRole("navigation");
     expect(tabsContainer).toHaveClass("bx--tabs--container");
@@ -828,8 +840,9 @@ describe("Container tabs with icons and secondary label", () => {
     expect(iconWrappers).toHaveLength(3);
   });
 
-  it("should have label wrapper and secondary label when tab has icon and secondaryLabel", () => {
+  it("should have label wrapper and secondary label when tab has icon and secondaryLabel", async () => {
     const { container } = render(TabIconSecondaryLabel);
+    await tick();
 
     const navItems = container.querySelectorAll(".bx--tabs__nav-item");
     const calendarTab = navItems[0];
@@ -869,30 +882,34 @@ describe("Container tabs with icons and secondary label", () => {
 });
 
 describe("Container tabs with secondary label", () => {
-  it("should render container with tall class when any tab has secondary label", () => {
+  it("should render container with tall class when any tab has secondary label", async () => {
     render(TabSecondaryLabel);
+    await tick();
 
     const tabsContainer = screen.getByRole("navigation");
     expect(tabsContainer).toHaveClass("bx--tabs--container");
     expect(tabsContainer).toHaveClass("bx--tabs--tall");
   });
 
-  it("should render secondary label via prop", () => {
+  it("should render secondary label via prop", async () => {
     render(TabSecondaryLabel);
+    await tick();
 
     expect(screen.getByRole("tab", { name: /Engage/ })).toBeInTheDocument();
     expect(screen.getByText("(21/25)")).toBeInTheDocument();
   });
 
-  it("should render secondary label via slot", () => {
+  it("should render secondary label via slot", async () => {
     render(TabSecondaryLabel);
+    await tick();
 
     expect(screen.getByRole("tab", { name: /Analyze/ })).toBeInTheDocument();
     expect(screen.getByText("(12/16)")).toBeInTheDocument();
   });
 
-  it("should have label wrapper and secondary label element for tab with prop", () => {
+  it("should have label wrapper and secondary label element for tab with prop", async () => {
     const { container } = render(TabSecondaryLabel);
+    await tick();
 
     const navItems = container.querySelectorAll(".bx--tabs__nav-item");
     const engageTab = navItems[0];
@@ -908,8 +925,9 @@ describe("Container tabs with secondary label", () => {
     expect(secondaryLabel).toHaveTextContent("(21/25)");
   });
 
-  it("should have label wrapper and secondary label element for tab with slot", () => {
+  it("should have label wrapper and secondary label element for tab with slot", async () => {
     const { container } = render(TabSecondaryLabel);
+    await tick();
 
     const navItems = container.querySelectorAll(".bx--tabs__nav-item");
     const analyzeTab = navItems[1];
@@ -925,8 +943,9 @@ describe("Container tabs with secondary label", () => {
     expect(secondaryLabel).toHaveTextContent("(12/16)");
   });
 
-  it("should render label wrapper and empty spacer for tab without secondary label (for alignment)", () => {
+  it("should render label wrapper and empty spacer for tab without secondary label (for alignment)", async () => {
     const { container } = render(TabSecondaryLabel);
+    await tick();
 
     const navItems = container.querySelectorAll(".bx--tabs__nav-item");
     const plainTab = navItems[2];
@@ -1058,8 +1077,9 @@ describe("TabsSkeleton", () => {
   });
 
   describe("TabContent lazy and unmountOnHide", () => {
-    it("keeps unselected content in the DOM with the hidden attribute by default", () => {
+    it("keeps unselected content in the DOM with the hidden attribute by default", async () => {
       render(TabsLazy);
+      await tick();
 
       expect(screen.getByText("Content 1")).toBeVisible();
       expect(screen.getByText("Content 2")).not.toBeVisible();
@@ -1072,6 +1092,7 @@ describe("TabsSkeleton", () => {
 
     it("does not mount lazy content until the tab is first selected", async () => {
       render(TabsLazy, { props: { lazy: true } });
+      await tick();
 
       expect(screen.getByText("Content 1")).toBeInTheDocument();
       expect(screen.queryByText("Content 2")).not.toBeInTheDocument();
@@ -1090,6 +1111,7 @@ describe("TabsSkeleton", () => {
 
     it("unmounts content when deselected with unmountOnHide", async () => {
       render(TabsLazy, { props: { unmountOnHide: true } });
+      await tick();
 
       expect(screen.getByText("Content 1")).toBeVisible();
       expect(screen.queryByText("Content 2")).not.toBeInTheDocument();
@@ -1105,8 +1127,9 @@ describe("TabsSkeleton", () => {
       expect(screen.queryByText("Content 2")).not.toBeInTheDocument();
     });
 
-    it("mounts lazy content on the initially selected tab", () => {
+    it("mounts lazy content on the initially selected tab", async () => {
       render(TabsLazy, { props: { selected: 1, lazy: true } });
+      await tick();
 
       expect(screen.queryByText("Content 1")).not.toBeInTheDocument();
       expect(screen.getByText("Content 2")).toBeVisible();

@@ -1,4 +1,5 @@
 import { render, screen, within } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { user } from "../utils/user";
 import Snippets from "./Snippets.test.svelte";
 
@@ -209,8 +210,9 @@ describe("Svelte 5 Snippets", () => {
   });
 
   describe("Tabs secondary label", () => {
-    it("should render container tabs with secondary label via prop", () => {
+    it("should render container tabs with secondary label via prop", async () => {
       render(Snippets);
+      await tick();
 
       const tabsContainer = screen.getByTestId("tabs-secondary-label-snippet");
       expect(tabsContainer).toBeInTheDocument();
@@ -220,8 +222,9 @@ describe("Svelte 5 Snippets", () => {
       expect(screen.getByText("(21/25)")).toBeInTheDocument();
     });
 
-    it("should render secondary label via secondaryChildren snippet", () => {
+    it("should render secondary label via secondaryChildren snippet", async () => {
       render(Snippets);
+      await tick();
 
       const snippetContent = screen.getByTestId("tab-secondary-label-snippet");
       expect(snippetContent).toBeInTheDocument();
