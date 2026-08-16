@@ -1189,7 +1189,7 @@
         </ListBoxField>
       </div>
     {/if}
-    <div style:display={open || effectivePortalMenu ? "block" : "none"}>
+    {#if open}
       <ListBoxMenu
         aria-label={ariaLabel}
         {id}
@@ -1392,7 +1392,7 @@
           {/each}
         {/if}
       </ListBoxMenu>
-    </div>
+    {/if}
   </ListBox>
   {#if isFluid}
     <hr class:bx--list-box__divider={true}>
