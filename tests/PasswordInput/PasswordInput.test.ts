@@ -372,6 +372,7 @@ describe("PasswordInput", () => {
 
       const message = screen.getByText("Invalid password");
       expect(message).toHaveClass("bx--form-requirement");
+      expect(message).toHaveAttribute("role", "alert");
       expect(message.closest(".bx--text-input__field-wrapper")).not.toBeNull();
       expect(screen.getByLabelText("Password")).toHaveAttribute(
         "aria-errormessage",
