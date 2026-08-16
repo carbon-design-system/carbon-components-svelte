@@ -1,4 +1,5 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { user } from "../utils/user";
 import ProgressIndicator from "./ProgressIndicator.test.svelte";
 import ProgressIndicatorConditional from "./ProgressIndicatorConditional.test.svelte";
@@ -43,7 +44,7 @@ describe("ProgressIndicator", () => {
       );
     });
 
-    it("should expose current, complete, and invalid state to assistive tech", () => {
+    it("should expose current, complete, and invalid state to assistive tech", async () => {
       render(ProgressIndicator, {
         currentIndex: 1,
         steps: [
@@ -57,6 +58,7 @@ describe("ProgressIndicator", () => {
           },
         ],
       });
+      await tick();
 
       const buttons = screen.getAllByRole("button");
 
@@ -203,7 +205,7 @@ describe("ProgressIndicator", () => {
   });
 
   describe("Accessibility", () => {
-    it("should have correct button attributes for different states", () => {
+    it("should have correct button attributes for different states", async () => {
       render(ProgressIndicator, {
         currentIndex: 1,
         steps: [
@@ -212,6 +214,7 @@ describe("ProgressIndicator", () => {
           { label: "Step 3", description: "Third step", complete: false },
         ],
       });
+      await tick();
 
       const buttons = screen.getAllByRole("button");
 
@@ -343,6 +346,7 @@ describe("ProgressIndicator", () => {
         showOptional: true,
         currentIndex: 2,
       });
+      await tick();
 
       let listItems = screen.getAllByRole("listitem");
       expect(listItems[2]).toHaveTextContent("Step 3");
@@ -375,8 +379,9 @@ describe("ProgressIndicator", () => {
   });
 
   describe("Icon slot", () => {
-    it("should render custom icon slot content with state props", () => {
+    it("should render custom icon slot content with state props", async () => {
       render(ProgressStepIconSlot);
+      await tick();
 
       const icon1 = screen.getByTestId("icon-1");
       expect(icon1).toHaveTextContent("c:true|cur:false|inv:false");
@@ -452,6 +457,7 @@ describe("ProgressIndicator", () => {
       render(ProgressIndicatorSelectedId, {
         props: { selectedId: "step-b", showStepA: true },
       });
+      await tick();
 
       let listItems = screen.getAllByRole("listitem");
       expect(listItems[1]).toHaveTextContent("Step B");
@@ -490,10 +496,11 @@ describe("ProgressIndicator", () => {
       expect(screen.getByTestId("current-index")).toHaveTextContent("0");
     });
 
-    it("uses the index API when selectedId is unset", () => {
+    it("uses the index API when selectedId is unset", async () => {
       render(ProgressIndicatorSelectedId, {
         props: { currentIndex: 2, selectedId: undefined },
       });
+      await tick();
 
       const listItems = screen.getAllByRole("listitem");
       expect(listItems[2]).toHaveClass("bx--progress-step--current");
@@ -501,10 +508,11 @@ describe("ProgressIndicator", () => {
       expect(screen.getByTestId("selected-id")).toHaveTextContent("");
     });
 
-    it("lets selectedId win over currentIndex", () => {
+    it("lets selectedId win over currentIndex", async () => {
       render(ProgressIndicatorSelectedId, {
         props: { currentIndex: 0, selectedId: "step-c" },
       });
+      await tick();
 
       const listItems = screen.getAllByRole("listitem");
       expect(listItems[2]).toHaveClass("bx--progress-step--current");

@@ -27,6 +27,7 @@
 
   import { createEventDispatcher, setContext } from "svelte";
   import { derived, writable } from "svelte/store";
+  import { batchStoreUpdates } from "../utils/batchStoreUpdates.js";
   import { clampIndex } from "../utils/clampIndex.js";
   import { keyBy } from "../utils/keyBy.js";
 
@@ -48,16 +49,21 @@
     subscribe: preventChangeOnClickStore.subscribe,
   };
 
+  // Batch child registration. Dedup and patch against `_` (this batch's
+  // accumulator), not `$stepsById`. The derived store is the last flushed
+  // value, so a same-batch id looks unregistered if you check it there.
+  const batchedStepsUpdate = batchStoreUpdates(steps);
+
   /**
    * @type {(step: { id: string; complete: boolean; disabled: boolean }) => void}
    */
   function add(step) {
-    steps.update((_) => {
-      if (step.id in $stepsById) {
-        return _.map((_step) => {
-          if (_step.id === step.id) return { ..._step, ...step };
-          return _step;
-        });
+    batchedStepsUpdate((_) => {
+      const index = _.findIndex((_step) => _step.id === step.id);
+      if (index !== -1) {
+        return _.map((_step, i) =>
+          i === index ? { ..._step, ...step } : _step,
+        );
       }
 
       return [
@@ -76,7 +82,7 @@
    * @type {(id: string) => void}
    */
   function remove(id) {
-    steps.update((_) =>
+    batchedStepsUpdate((_) =>
       _.filter((step) => step.id !== id).map((step, i) => ({
         ...step,
         index: i,
