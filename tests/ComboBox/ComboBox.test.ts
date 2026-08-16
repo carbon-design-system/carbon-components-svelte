@@ -1210,6 +1210,7 @@ describe("ComboBox", () => {
     expect(getInput()).toHaveAttribute("aria-errormessage", "error-cb");
     expect(getInput()).not.toHaveAttribute("aria-describedby");
     expect(screen.getByText("Bad")).toHaveAttribute("id", "error-cb");
+    expect(screen.getByText("Bad")).toHaveAttribute("role", "alert");
   });
 
   it("should not set aria-describedby when no message is shown", () => {
