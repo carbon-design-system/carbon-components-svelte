@@ -130,6 +130,12 @@
   export let pageRangeText = (_current, total) =>
     `of ${total.toLocaleString()} page${total === 1 ? "" : "s"}`;
 
+  /**
+   * Override the accessible label for the page number select.
+   * @type {(total: number) => string}
+   */
+  export let pageSelectLabelText = (total) => `Page number, of ${total} pages`;
+
   /** Set an id for the top-level element */
   export let id = uniqueId();
 
@@ -286,7 +292,7 @@
       <Select
         id="bx--pagination-select-{id}-pages"
         class="bx--select__page-number"
-        labelText="Page number, of {totalPages} pages"
+        labelText={pageSelectLabelText(totalPages)}
         inline
         hideLabel
         selected={page}
