@@ -69,6 +69,7 @@
   import { derived, get, writable } from "svelte/store";
   import ChevronLeft from "../icons/ChevronLeft.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
+  import { batchStoreUpdates } from "../utils/batchStoreUpdates.js";
   import { clampIndex } from "../utils/clampIndex.js";
   import { keyBy } from "../utils/keyBy.js";
   import { rovingFocus } from "../utils/rovingFocus.js";
@@ -172,36 +173,52 @@
    */
   const useIconOnly = writable(iconOnly);
 
+  // Batch child registration. Leave afterUpdate's syncDomOrder unbatched
+  // so DOM-order correction stays synchronous.
+  //
+  // Set needsDomSync inside the batched update. afterUpdate runs once
+  // after mount before this flush, while tabs is still [].
+  const batchedTabsUpdate = batchStoreUpdates(tabs);
+  const batchedContentUpdate = batchStoreUpdates(content);
+
   /**
    * @type {(data: { id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean }) => void}
    */
   function add(data) {
-    needsDomSync = true;
-    tabs.update((_) => [..._, { ...data, index: _.length }]);
+    batchedTabsUpdate((_) => {
+      needsDomSync = true;
+      return [..._, { ...data, index: _.length }];
+    });
   }
 
   /**
    * @type {(id: string) => void}
    */
   function remove(id) {
-    needsDomSync = true;
-    tabs.update((_) => _.filter((tab) => tab.id !== id));
+    batchedTabsUpdate((_) => {
+      needsDomSync = true;
+      return _.filter((tab) => tab.id !== id);
+    });
   }
 
   /**
    * @type {(data: { id: string }) => void}
    */
   function addContent(data) {
-    needsDomSync = true;
-    content.update((_) => [..._, { ...data, index: _.length }]);
+    batchedContentUpdate((_) => {
+      needsDomSync = true;
+      return [..._, { ...data, index: _.length }];
+    });
   }
 
   /**
    * @type {(id: string) => void}
    */
   function removeContent(id) {
-    needsDomSync = true;
-    content.update((_) => _.filter((item) => item.id !== id));
+    batchedContentUpdate((_) => {
+      needsDomSync = true;
+      return _.filter((item) => item.id !== id);
+    });
   }
 
   /**
@@ -213,7 +230,10 @@
       selectedId = id;
       return;
     }
-    currentIndex = $tabsById[id].index;
+    // Ignore clicks that land before this tab's batched registration flushes.
+    const tab = $tabsById[id];
+    if (!tab) return;
+    currentIndex = tab.index;
   }
 
   /**
