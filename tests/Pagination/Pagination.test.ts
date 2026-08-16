@@ -297,6 +297,59 @@ describe("Pagination", () => {
     });
   });
 
+  it("resets pageSize and page when an updated pageSizes array drops the current pageSize", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    const { rerender } = render(Pagination, {
+      props: {
+        page: 2,
+        totalItems: 6,
+        pageSize: 2,
+        pageSizes: [2, 4],
+      },
+    });
+
+    expect(screen.getByText("3–4 of 6 items")).toBeInTheDocument();
+    consoleLog.mockClear();
+
+    await rerender({ pageSizes: [3] });
+
+    const select = screen.getByRole("combobox", { name: "Items per page:" });
+    expect(select).toHaveValue("3");
+    expect(screen.getByText("1–3 of 6 items")).toBeInTheDocument();
+    expect(consoleLog).toHaveBeenCalledWith("update", { pageSize: 3, page: 1 });
+  });
+
+  it("keeps pageSize as-is when it remains valid in an updated pageSizes array", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    const { rerender } = render(Pagination, {
+      props: {
+        totalItems: 102,
+        pageSize: 15,
+        pageSizes: [10, 15, 20],
+      },
+    });
+
+    consoleLog.mockClear();
+
+    await rerender({ pageSizes: [10, 15] });
+
+    const select = screen.getByRole("combobox", { name: "Items per page:" });
+    expect(select).toHaveValue("15");
+    expect(consoleLog).not.toHaveBeenCalledWith("update", expect.anything());
+  });
+
+  it("keeps an initial pageSize that is not in pageSizes", () => {
+    render(Pagination, {
+      props: {
+        totalItems: 10,
+        pageSize: 5,
+        pageSizeInputDisabled: true,
+      },
+    });
+
+    expect(screen.getByText("1–5 of 10 items")).toBeInTheDocument();
+  });
+
   it("should handle edge cases", () => {
     render(Pagination, {
       props: {

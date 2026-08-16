@@ -151,6 +151,7 @@
 
   let prevPage = page;
   let prevPageSize = pageSize;
+  let prevPageSizesKey;
 
   /**
    * Returns a subset of page numbers centered around the current page to prevent
@@ -185,6 +186,25 @@
     return filtered.length ? filtered : sizes.slice(0, 1);
   }
 
+  $: effectivePageSizes = dynamicPageSizes
+    ? getFilteredPageSizes(pageSizes, totalItems)
+    : pageSizes;
+  // After the available sizes change, if the current size is gone, use the
+  // first remaining size and reset to page 1. Skip the initial run so a
+  // bound pageSize that isn't in the default `pageSizes` stays put.
+  $: {
+    const nextPageSizesKey = effectivePageSizes.join(",");
+    if (
+      prevPageSizesKey !== undefined &&
+      nextPageSizesKey !== prevPageSizesKey &&
+      effectivePageSizes.length &&
+      !effectivePageSizes.includes(pageSize)
+    ) {
+      pageSize = effectivePageSizes[0];
+      page = 1;
+    }
+    prevPageSizesKey = nextPageSizesKey;
+  }
   $: totalPages = Math.max(Math.ceil(totalItems / pageSize), 1);
   $: if (!pagesUnknown && page > totalPages) page = totalPages;
   $: if (prevPage !== page || prevPageSize !== pageSize) {
@@ -193,9 +213,6 @@
     prevPageSize = pageSize;
   }
   $: selectItems = getWindowedPages(page, totalPages, pageWindow);
-  $: effectivePageSizes = dynamicPageSizes
-    ? getFilteredPageSizes(pageSizes, totalItems)
-    : pageSizes;
   $: internalBackButtonDisabled =
     backButtonDisabled ?? (disabled || page === 1);
   $: internalForwardButtonDisabled =
