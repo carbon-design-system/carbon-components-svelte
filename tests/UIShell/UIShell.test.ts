@@ -358,6 +358,21 @@ describe("UIShell", () => {
       ).toBeInTheDocument();
     });
 
+    // A bare <hr> cannot be a direct child of <ul>.
+    it("wraps a contentless HeaderPanelDivider's hr in an li", async () => {
+      const { container } = render(HeaderSwitcher);
+
+      const trigger = container.querySelector(
+        'button.bx--header__action[aria-haspopup="true"]',
+      );
+      assert(trigger);
+      await user.click(trigger);
+
+      const hr = container.querySelector("hr.bx--switcher__item--divider");
+      assert(hr);
+      expect(hr.parentElement?.tagName).toBe("LI");
+    });
+
     it("renders HeaderUtilities fixture", () => {
       const { container } = render(HeaderUtilities);
 
