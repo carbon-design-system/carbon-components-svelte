@@ -129,6 +129,55 @@ describe("MenuItem", () => {
       ).toBeInTheDocument();
     });
 
+    it("flips the submenu to the left when there is no room on the right", async () => {
+      render(MenuItemFixture);
+
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+
+      const parent = screen.getByRole("menuitem", { name: "Export as" });
+      // Sit the parent item near the right edge of the viewport, as if the
+      // root menu opened flush against the window's right side, and give
+      // every other element (notably the submenu's own <ul>, which does
+      // not exist until this click creates it) a realistic width. jsdom
+      // otherwise reports 0x0 for unmocked elements, so the flip check's
+      // "does the floating content fit" math is always trivially true.
+      vi.spyOn(Element.prototype, "getBoundingClientRect").mockImplementation(
+        function (this: Element) {
+          if (this === parent) {
+            return {
+              top: 100,
+              bottom: 130,
+              left: window.innerWidth - 10,
+              right: window.innerWidth,
+              width: 10,
+              height: 30,
+              x: window.innerWidth - 10,
+              y: 100,
+              toJSON: () => {},
+            } as DOMRect;
+          }
+          return {
+            top: 0,
+            bottom: 200,
+            left: 0,
+            right: 200,
+            width: 200,
+            height: 200,
+            x: 0,
+            y: 0,
+            toJSON: () => {},
+          } as DOMRect;
+        },
+      );
+
+      await user.click(parent);
+
+      const submenu = screen.getByRole("menu", { name: "Export as" });
+      expect(submenu).toHaveAttribute("data-floating-menu-direction", "left");
+
+      vi.restoreAllMocks();
+    });
+
     it("opens the submenu with ArrowRight and focuses the first item", async () => {
       render(MenuItemFixture);
 
@@ -236,6 +285,35 @@ describe("MenuItem", () => {
 
         expect(
           screen.getByRole("menuitem", { name: "PDF" }),
+        ).toBeInTheDocument();
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+
+    it("closes only the submenu, keeping the root menu open, when the submenu is left", async () => {
+      vi.useFakeTimers();
+      try {
+        render(MenuItemFixture);
+
+        await fireEvent.click(screen.getByRole("button", { name: "Trigger" }));
+        const parent = screen.getByRole("menuitem", { name: "Export as" });
+        await fireEvent.mouseEnter(parent);
+        await vi.advanceTimersByTimeAsync(HOVER_DELAY_MS);
+        expect(
+          screen.getByRole("menuitem", { name: "PDF" }),
+        ).toBeInTheDocument();
+
+        // Leave the parent item without re-entering the submenu.
+        await fireEvent.mouseLeave(parent);
+        await vi.advanceTimersByTimeAsync(HOVER_DELAY_MS);
+
+        expect(
+          screen.queryByRole("menuitem", { name: "PDF" }),
+        ).not.toBeInTheDocument();
+        // Root menu (its own item) is still open.
+        expect(
+          screen.getByRole("menuitem", { name: "Add item" }),
         ).toBeInTheDocument();
       } finally {
         vi.useRealTimers();
