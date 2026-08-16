@@ -73,6 +73,7 @@
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
   import Stack from "../Stack/Stack.svelte";
+  import { batchStoreUpdates } from "../utils/batchStoreUpdates.js";
   import { rafThrottle } from "../utils/rafThrottle.js";
   import { getVisibleTagCount } from "../utils/tagOverflow.js";
   import TagSetOverflow from "./TagSetOverflow.svelte";
@@ -104,22 +105,27 @@
     dispatch("close:tag", { tag: item, index: $items.indexOf(item) });
   }
 
+  // Route register, unregister, and update through the same batched queue.
+  // Mixing in a direct items.update() would read a stale array still
+  // missing not-yet-flushed registrations.
+  const batchedItemsUpdate = batchStoreUpdates(items);
+
   setContext("carbon:TagSet", {
     items,
     overflowIds,
     size: sizeStore,
     register: (item) => {
-      items.update((current) =>
+      batchedItemsUpdate((current) =>
         current.some((existing) => existing.id === item.id)
           ? current
           : sortByDomOrder([...current, item]),
       );
     },
     unregister: (id) => {
-      items.update((current) => current.filter((item) => item.id !== id));
+      batchedItemsUpdate((current) => current.filter((item) => item.id !== id));
     },
     update: (id, patch) => {
-      items.update((current) =>
+      batchedItemsUpdate((current) =>
         current.map((item) => (item.id === id ? { ...item, ...patch } : item)),
       );
     },
