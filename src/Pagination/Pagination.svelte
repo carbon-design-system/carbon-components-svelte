@@ -45,8 +45,20 @@
   /** Specify the forward button text */
   export let forwardText = "Next page";
 
+  /**
+   * Specify the tooltip position for the forward button.
+   * @type {"top" | "right" | "bottom" | "left"}
+   */
+  export let forwardTextTooltipPosition = "top";
+
   /** Specify the backward button text */
   export let backwardText = "Previous page";
+
+  /**
+   * Specify the tooltip position for the backward button.
+   * @type {"top" | "right" | "bottom" | "left"}
+   */
+  export let backwardTextTooltipPosition = "top";
 
   /** Specify the items per page text */
   export let itemsPerPageText = "Items per page:";
@@ -333,7 +345,7 @@
       bind:ref={backBtnRef}
       kind="ghost"
       tooltipAlignment="center"
-      tooltipPosition="top"
+      tooltipPosition={backwardTextTooltipPosition}
       portalTooltip
       icon={CaretLeft}
       iconDescription={backwardText}
@@ -352,7 +364,7 @@
       bind:ref={forwardBtnRef}
       kind="ghost"
       tooltipAlignment="end"
-      tooltipPosition="top"
+      tooltipPosition={forwardTextTooltipPosition}
       portalTooltip
       icon={CaretRight}
       iconDescription={forwardText}

@@ -7,6 +7,10 @@
   export let disabled = false;
   export let forwardText = "Next page";
   export let backwardText = "Previous page";
+  export let backwardTextTooltipPosition: ComponentProps<Pagination>["backwardTextTooltipPosition"] =
+    undefined;
+  export let forwardTextTooltipPosition: ComponentProps<Pagination>["forwardTextTooltipPosition"] =
+    undefined;
   export let itemsPerPageText = "Items per page:";
   export let pageInputDisabled = false;
   export let pageSizeInputDisabled = false;
@@ -36,6 +40,8 @@
   {disabled}
   {forwardText}
   {backwardText}
+  {backwardTextTooltipPosition}
+  {forwardTextTooltipPosition}
   {itemsPerPageText}
   {pageInputDisabled}
   {pageSizeInputDisabled}
