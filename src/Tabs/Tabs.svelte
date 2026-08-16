@@ -141,9 +141,10 @@
     if (!refTabList) return;
     const { scrollLeft, scrollWidth, clientWidth } = refTabList;
     canScrollBackward = scrollLeft > 0;
-    // Round up to absorb sub-pixel widths so the forward button hides cleanly
-    // when the list is scrolled to the end.
-    canScrollForward = Math.ceil(scrollLeft + clientWidth) < scrollWidth;
+    // Round up for sub-pixel widths. Firefox can report scrollWidth 1px
+    // larger than clientWidth with nowhere to scroll; ignore that gap so
+    // the forward button does not flicker in.
+    canScrollForward = Math.ceil(scrollLeft + clientWidth) + 1 < scrollWidth;
   }
 
   /**
