@@ -250,6 +250,10 @@
   on:keydown={(event) => {
     if (open) {
       if (event.key === "Escape") {
+        // Stop stacked (DOM-nested) modals from also closing: this
+        // handler is on each modal's own root and Escape bubbles from
+        // the focused (innermost, topmost) modal up through ancestors.
+        event.stopPropagation();
         close("escape-key");
       } else if (event.key === "Tab") {
         trapFocus({ container: ref, event });
