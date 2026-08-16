@@ -67,7 +67,7 @@ Patterns:
 - Keep small, component-specific helpers inline in the `<script>` block. Extract to `src/utils/` only when the logic is shared across components or complex enough to unit-test in isolation. See [`debounce.js`](src/utils/debounce.js) and [`isOutsideClick.js`](src/utils/isOutsideClick.js). Token primitives such as [`Text.svelte`](src/Text/Text.svelte) and [`Box.svelte`](src/Box/Box.svelte) map props to utility classes and inline styles directly; their themeable rules live in `css/_type.scss`, `css/_box.scss`, and related partials.
 - Forward DOM events with bare `on:click` / `on:focus` (no handler) on the underlying element ([`Button.svelte`](src/Button/Button.svelte)).
 - Interpolate attribute values with Svelte's attribute syntax, not template literals: `id="{treeId}-{id}-subtree"`, not ``id={`${treeId}-${id}-subtree`}``. Keep template literals only when a value needs nested quotes or logic the shorthand can't express (see `aria-label` in [`PinCodeInput.svelte`](src/PinCodeInput/PinCodeInput.svelte)).
-- Compound components use `setContext` / `getContext` with `carbon:` keys ([`CheckboxGroup.svelte`](src/Checkbox/CheckboxGroup.svelte)). For a group whose children register themselves, expose `{ items, register(item), unregister(id), update(id, patch) }` on the context, where `items` is a `writable` store of registered entries. Sort by `Node.compareDocumentPosition` at registration time, not mount order, since children can mount out of DOM order when conditionally rendered. See `UserAvatarGroup` / `UserAvatar` and `TagSet` / `Tag`. When a child needs to trigger a group-level action, such as a close button the group must react to, add a `notify*` method to the context and call it in addition to the child's own local dispatch, so the component still works standalone outside the group.
+- Compound components use `setContext` / `getContext` with `carbon:` keys ([`CheckboxGroup.svelte`](src/Checkbox/CheckboxGroup.svelte)). For a group whose children register themselves, expose `{ items, register(item), unregister(id), update(id, patch) }` on the context, where `items` is a `writable` store of registered entries. Sort by `Node.compareDocumentPosition` at registration time, not mount order, since children can mount out of DOM order when conditionally rendered. See `UserAvatarGroup` / `UserAvatar` and `TagSet` / `Tag`. When a child needs to trigger a group-level action, such as a close button the group must react to, add a `notify*` method to the context and call it in addition to the child's own local dispatch, so the component still works standalone outside the group. Route every mutator (`register`, `unregister`, `update`) through [`batchStoreUpdates`](src/utils/batchStoreUpdates.js). Mixing a direct `items.update(...)` with a batched call can read a stale array. See [Batching child registration](#batching-child-registration).
 - Prefer a data-array prop (`items`, `tags`) plus a per-item slot when the collection needs bulk operations that only make sense on structured data: search, filtering, virtualization, reordering (`ComboBox`, `MultiSelect`, `TreeView`). Prefer child composition, real component instances as `<slot />` children, when items are simple, independently-styled elements a consumer would reach for standalone (`Tag`, `UserAvatar`); `UserAvatarGroup` / `TagSet` register those children via context instead of taking a data array.
 - Default element IDs use `ccs-${Math.random().toString(36)}`.
 - Key `{#each}` blocks, for example `(item.id ?? index)` (see [`RecursiveList.svelte`](src/RecursiveList/RecursiveList.svelte)).
@@ -737,6 +737,23 @@ A new bench file, either tier, follows the same shape as an existing one — cop
 - Component-tier files wrap `bench()`/`run()` calls inside an `it()` block with an explicit longer timeout (vitest errors on a test file with zero registered tests, and mitata's warmup + sampling exceeds vitest's 5s default) and call `cleanup()` from `@testing-library/svelte` inside the benched closure so DOM nodes don't pile up across thousands of iterations.
 - Add `.gc("inner")` to any **pure-logic** case whose closure allocates non-trivially per call (sorting or copying an array, building objects). Without it, mitata's default batching (many calls back-to-back with no GC in between) can mis-calibrate and report numbers inflated by 20-60x. Cross-check a surprising absolute number against a plain `performance.now()` loop before trusting it.
 - Do **not** add `.gc("inner")` to a **component-tier** (DOM) bench. Forcing a real GC after every iteration over a large jsdom DOM object graph is far more expensive than over plain JS objects, and can trip real thermal throttling that silently inflates every number in the same run — including unrelated cases in the same file. If a bench's printed `clk: ~X GHz` header looks abnormally low, treat the whole run as suspect.
+
+#### Batching child registration
+
+Each child that calls `store.update()` during mount copies the whole registry. N children means N copies. Every `derived` or `$: ... $store` subscriber re-runs on each one. `Tabs`, `OverflowMenu`, and `UserAvatarGroup` all hit this. Wrap the update with [`batchStoreUpdates`](src/utils/batchStoreUpdates.js) so those N calls flush once.
+
+```js
+const batchedUpdate = batchStoreUpdates(store);
+
+function register(item) {
+  batchedUpdate((current) => [...current, item]);
+}
+```
+
+- Put every mutator for that store on the same queue. A direct `store.update()` in the same mount pass can read an array that is still missing a not-yet-flushed batch.
+- `batchStoreUpdates` flushes on a `Promise.resolve().then()` microtask, not `afterUpdate`. A comment that warns against deferring work because of `afterUpdate` does not apply.
+- `afterUpdate` still runs once right after initial mount, before the batched flush, while the store is empty. A one-shot flag set in `register()` itself gets consumed by that empty call. Set it inside the batched update function, as `Tabs.svelte` does with `needsDomSync`.
+- Component-bench a new group or list's mount at a few sizes before shipping. A `performance.now()` loop around `render()` is enough to catch this.
 
 ## Commit messages
 
