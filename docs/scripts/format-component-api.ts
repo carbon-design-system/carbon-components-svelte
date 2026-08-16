@@ -1,12 +1,32 @@
+import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { format } from "prettier";
 import plugin from "prettier/plugins/typescript";
-import componentApi from "../src/COMPONENT_API.json" with { type: "json" };
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const outFile = path.join(__dirname, "../src/COMPONENT_API.json");
+const cacheFile = path.join(__dirname, "../src/.COMPONENT_API_FORMAT_CACHE");
+
+const hash = (value: string) => createHash("sha1").update(value).digest("hex");
+
+const cachedHash = fs.existsSync(cacheFile)
+  ? fs.readFileSync(cacheFile, "utf8").trim()
+  : null;
+
+if (
+  cachedHash !== null &&
+  hash(fs.readFileSync(outFile, "utf8")) === cachedHash
+) {
+  // COMPONENT_API.json hasn't changed since it was last formatted;
+  // re-running the prettier pass on every `dev` startup is pure overhead.
+  process.exit(0);
+}
+
+const { default: componentApi } = await import("../src/COMPONENT_API.json", {
+  with: { type: "json" },
+});
 
 const WHITESPACE_REGEX = /\s{2,}/;
 const TRAILING_SEMICOLON_REGEX = /;\s*$/;
@@ -151,6 +171,8 @@ const modified = {
   ),
 };
 
-fs.writeFileSync(outFile, JSON.stringify(modified, null, 2));
+const output = JSON.stringify(modified, null, 2);
+fs.writeFileSync(outFile, output);
+fs.writeFileSync(cacheFile, hash(output));
 
 console.timeEnd("formatComponentApi");
