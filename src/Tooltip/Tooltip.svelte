@@ -161,8 +161,16 @@
     }
   }
 
-  function onBlur(event) {
-    if (refTooltip && !refTooltip.contains(event.relatedTarget)) {
+  // Bound to both the trigger and the tooltip content (which can hold
+  // interactive elements, e.g. a `Link` or `TooltipFooter` button). Using
+  // `focusout` instead of `blur` lets a single listener on the content
+  // wrapper catch focus leaving any of its descendants, since `blur` doesn't
+  // bubble. Without this, tabbing out of content past the trigger's own
+  // blur never closes the tooltip, leaving it open indefinitely.
+  function onFocusOut(event) {
+    const next = event.relatedTarget;
+    const stillInside = ref?.contains(next) || refTooltip?.contains(next);
+    if (!stillInside) {
       open = false;
     }
     focusByMouse = false;
@@ -296,7 +304,7 @@
         on:mouseenter={onMouseEnter}
         on:mousedown={onMouseDown}
         on:focus={onFocus}
-        on:blur={onBlur}
+        on:focusout={onFocusOut}
         on:keydown={onKeydown}
       >
         <slot name="icon">
@@ -313,7 +321,7 @@
       on:mouseenter={onMouseEnter}
       on:mousedown={onMouseDown}
       on:focus={onFocus}
-      on:blur={onBlur}
+      on:focusout={onFocusOut}
       on:keydown={onKeydown}
     >
       <slot name="triggerText">{triggerText}</slot>
@@ -334,7 +342,9 @@
       class:bx--tooltip--align-center={align === "center"}
       class:bx--tooltip--align-start={align === "start"}
       class:bx--tooltip--align-end={align === "end"}
+      style:width="max-content"
       on:mouseenter={onMouseEnter}
+      on:focusout={onFocusOut}
       on:keydown={onKeydown}
     >
       <span class:bx--tooltip__caret={true}></span>
@@ -384,6 +394,7 @@
         class:bx--tooltip--align-end={align === "end"}
         style="position: relative; transform: none; display: block; left: auto; margin-top: 0;"
         on:mouseenter={onMouseEnter}
+        on:focusout={onFocusOut}
         on:keydown={onKeydown}
       >
         <span class:bx--tooltip__caret={true}></span>

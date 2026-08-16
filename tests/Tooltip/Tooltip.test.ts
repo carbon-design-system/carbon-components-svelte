@@ -15,6 +15,7 @@ import TooltipHideIcon from "./TooltipHideIcon.test.svelte";
 import TooltipNoLabel from "./TooltipNoLabel.test.svelte";
 import TooltipOpen from "./TooltipOpen.test.svelte";
 import TooltipPortalDirections from "./TooltipPortalDirections.test.svelte";
+import TooltipTwoInstancesFocus from "./TooltipTwoInstancesFocus.test.svelte";
 
 describe("Tooltip", () => {
   beforeEach(() => {
@@ -280,6 +281,32 @@ describe("Tooltip", () => {
 
     expect(screen.getByRole("dialog")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Learn more" })).not.toHaveFocus();
+  });
+
+  test("should close when focus tabs out of its content into another tooltip's trigger", async () => {
+    render(TooltipTwoInstancesFocus);
+
+    const trigger1 = screen.getByRole("button", { name: "First" });
+    await fireEvent.focus(trigger1);
+    expect(
+      screen.getByRole("link", { name: "Learn more" }),
+    ).toBeInTheDocument();
+
+    // Focus moves from the trigger into the link inside its own tooltip content.
+    const link = screen.getByRole("link", { name: "Learn more" });
+    await fireEvent.focusOut(trigger1, { relatedTarget: link });
+    await fireEvent.focus(link);
+    expect(
+      screen.getByRole("link", { name: "Learn more" }),
+    ).toBeInTheDocument();
+
+    // Focus then leaves the content for the second tooltip's trigger.
+    const trigger2 = screen.getByRole("button", { name: "Second" });
+    await fireEvent.focusOut(link, { relatedTarget: trigger2 });
+
+    expect(
+      screen.queryByRole("link", { name: "Learn more" }),
+    ).not.toBeInTheDocument();
   });
 
   test("should have a non-empty accessible name with no props set", () => {
