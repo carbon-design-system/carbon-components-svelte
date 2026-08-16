@@ -612,6 +612,7 @@
   let tableCellsByRowId = {};
   let prevRows;
   let prevVisibleHeaders;
+  let prevRowsToRender;
 
   const alignClasses = {
     start: "bx--table-column--align-start",
@@ -662,7 +663,8 @@
   }
 
   /**
-   * Rebuild cells for every row after batch in-place edits to `rows`.
+   * Rebuild cells for currently painted rows after batch in-place edits to
+   * `rows`. Offscreen rows are computed when they enter the window.
    * @type {() => void}
    * @example
    * ```svelte
@@ -671,18 +673,32 @@
    * ```
    */
   export function refreshCells() {
-    const next = {};
-    for (const row of rows) next[row.id] = computeRowCells(row);
-    tableCellsByRowId = next;
+    tableCellsByRowId = buildCellsForPaintedRows(rowsToRender ?? [], {});
   }
 
-  // Compare against `visibleHeaders`, not `headers`: it is a fresh array on every
-  // `headers` invalidation, so toggling `columnHidden` in place still rebuilds the cells.
-  $: if (rows !== prevRows || visibleHeaders !== prevVisibleHeaders) {
-    const next = {};
+  /**
+   * @param {ReadonlyArray<Row> | undefined} a
+   * @param {ReadonlyArray<Row> | undefined} b
+   */
+  function paintedRowListChanged(a, b) {
+    if (a === b) return false;
+    if (!a || !b || a.length !== b.length) return true;
+    for (let i = 0; i < a.length; i++) {
+      if (a[i].id !== b[i].id) return true;
+    }
+    return false;
+  }
 
-    for (const row of rows) {
-      const prevCells = tableCellsByRowId[row.id];
+  /**
+   * Build cell records for the painted row list, reusing cached cell objects
+   * when the resolved values are unchanged.
+   * @param {ReadonlyArray<Row>} paintedRows
+   * @param {Record<string, ReturnType<typeof computeRowCells>>} cache
+   */
+  function buildCellsForPaintedRows(paintedRows, cache) {
+    const next = {};
+    for (const row of paintedRows) {
+      const prevCells = cache[row.id];
       const newCells = computeRowCells(row);
 
       if (prevCells && prevCells.length === newCells.length) {
@@ -708,10 +724,7 @@
         next[row.id] = newCells;
       }
     }
-
-    tableCellsByRowId = next;
-    prevRows = rows;
-    prevVisibleHeaders = visibleHeaders;
+    return next;
   }
 
   $: ascending = sortDirection === "ascending";
@@ -800,6 +813,25 @@
   $: rowsToRender = virtualData?.isVirtualized
     ? virtualData.visibleItems
     : rowsToVirtualize;
+
+  // Walk the painted window, not `rows`. Virtualized and paginated tables
+  // otherwise allocate cell records for every row on each `rows`/headers
+  // invalidation. Compare against `visibleHeaders`, not `headers`: it is a
+  // fresh array on every `headers` invalidation, so toggling `columnHidden`
+  // in place still rebuilds the cells.
+  $: if (
+    rows !== prevRows ||
+    visibleHeaders !== prevVisibleHeaders ||
+    paintedRowListChanged(rowsToRender, prevRowsToRender)
+  ) {
+    tableCellsByRowId = buildCellsForPaintedRows(
+      rowsToRender ?? [],
+      tableCellsByRowId,
+    );
+    prevRows = rows;
+    prevVisibleHeaders = visibleHeaders;
+    prevRowsToRender = rowsToRender;
+  }
 
   // In "hide" mode hidden rows still occupy `:nth-child` positions, which breaks
   // Carbon's CSS zebra striping. Recompute parity over the visible (matched) rows and
