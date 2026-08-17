@@ -1,0 +1,188 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/typography";
+
+/// InlineEdit styles. Ported from Carbon React's EditInPlace
+/// (`packages/styles/scss/components/EditInPlace`), mapped from v11 tokens
+/// to this repo's v10 equivalents, with two deliberate departures from
+/// upstream: the one `:has()` in the upstream stylesheet (showing the focus
+/// outline only while the input itself has focus) is replaced with
+/// `:focus-within`, which this library's Safari 14 baseline supports
+/// natively; and the toolbar is a constant width (room for both the save
+/// and cancel buttons) instead of animating wider on focus, so this
+/// component doesn't resize its own column when used in a DataTable cell.
+/// @access public
+/// @group inline-edit
+@mixin inline-edit {
+  $block-class: #{$prefix}--edit-in-place;
+  $carbon-input: #{$prefix}--text-input;
+
+  .#{$block-class} {
+    --#{$block-class}--size: #{$carbon--spacing-07};
+
+    display: flex;
+    align-items: center;
+    // Always reserve the invalid-state border width, toggling only its
+    // color (below), so gaining/losing that state or the focus outline
+    // never resizes the box.
+    border: 2px solid transparent;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  // Matches DataTable's compact row height, for use in a DataTable cell.
+  .#{$block-class}--xs {
+    --#{$block-class}--size: #{$carbon--spacing-06};
+  }
+
+  .#{$block-class}--sm {
+    --#{$block-class}--size: #{$carbon--spacing-08};
+  }
+
+  .#{$block-class}--md {
+    --#{$block-class}--size: #{$carbon--spacing-09};
+  }
+
+  .#{$block-class}--lg {
+    --#{$block-class}--size: #{$carbon--spacing-10};
+  }
+
+  // Readonly and disabled fields don't invite interaction the way an
+  // editable one does (there's no click-to-edit affordance), matching this
+  // library's other readonly/disabled inputs, which don't change on hover
+  // either.
+  .#{$block-class}:not(.#{$block-class}--readonly):not(.#{$block-class}--disabled):hover {
+    background: $field-01;
+  }
+
+  .#{$block-class}--disabled {
+    color: $text-disabled;
+    cursor: not-allowed;
+  }
+
+  .#{$block-class}:hover .#{$block-class}__btn-edit,
+  .#{$block-class}__btn-edit.#{$block-class}__btn-edit--always-visible {
+    visibility: visible;
+  }
+
+  .#{$block-class}__btn-edit {
+    visibility: hidden;
+  }
+
+  .#{$block-class}--invalid {
+    border-color: $support-01;
+  }
+
+  .#{$block-class}--focused {
+    background: $field-01;
+  }
+
+  // Show the outline on the whole component only while the input itself
+  // has focus.
+  .#{$block-class}--focused:focus-within {
+    outline: 2px solid $focus;
+  }
+
+  // Hide the red border ring while focused, so it doesn't clash with the
+  // outline. Toggling color (not width, as upstream does) keeps the box
+  // the same size in every state.
+  .#{$block-class}--invalid.#{$block-class}--focused {
+    border-color: transparent;
+  }
+
+  .#{$block-class}__text-input {
+    flex: 1;
+    block-size: var(--#{$block-class}--size);
+  }
+
+  .#{$block-class}--inherit-type .#{$block-class}__text-input {
+    font-size: inherit;
+    font-weight: inherit;
+    letter-spacing: inherit;
+    line-height: inherit;
+  }
+
+  .#{$block-class}__warning-icon {
+    margin: auto $carbon--spacing-03;
+    color: $support-01;
+    inline-size: $carbon--spacing-05;
+  }
+
+  .#{$block-class}__warning-text {
+    @include type-style("label-01");
+
+    color: $support-01;
+
+    margin-block-start: $carbon--spacing-03;
+  }
+
+  // Overrides: strip the text input's own chrome, this component draws it.
+  .#{$block-class}__text-input.#{$carbon-input} {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    outline: none;
+  }
+
+  // Remove the outline when not in edit mode.
+  .#{$block-class}:not(.#{$block-class}--focused)
+    .#{$block-class}__text-input.#{$carbon-input}:focus,
+  .#{$block-class}:not(.#{$block-class}--focused)
+    .#{$block-class}__text-input.#{$carbon-input}:active {
+    outline: none;
+  }
+
+  // Comes after the override above so it wins the tie (same specificity,
+  // later wins): a disabled field is never a pointer, editable or not.
+  .#{$block-class}--disabled .#{$block-class}__text-input.#{$carbon-input} {
+    cursor: not-allowed;
+  }
+
+  // Always room for two icon buttons (save + cancel), so entering or
+  // leaving edit mode never changes the toolbar's width. A table cell
+  // sizes its column to its widest rendered content, so a toolbar that
+  // grew on focus grew the whole column with it.
+  .#{$block-class}__toolbar {
+    display: inline-flex;
+    align-self: stretch;
+    justify-content: flex-end;
+    inline-size: calc(2 * var(--#{$block-class}--size));
+  }
+
+  // Width of the invalid icon is always spacing-07 (spacing-05 + 2 * spacing-03 margin).
+  .#{$block-class}--invalid .#{$block-class}__toolbar {
+    inline-size: calc(
+      2 * var(--#{$block-class}--size) + #{$carbon--spacing-07}
+    );
+  }
+
+  // Match button heights to input height for each size, and make them
+  // square. The buttons are wider than their icon at md/lg, so re-center
+  // it explicitly: Carbon's own tooltip-trigger mixin sets align-items but
+  // not justify-content, since it never expects a fixed-width button wider
+  // than its content.
+  .#{$block-class}__toolbar .#{$prefix}--btn.#{$prefix}--btn--icon-only {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    min-block-size: unset;
+    block-size: var(--#{$block-class}--size);
+    inline-size: var(--#{$block-class}--size);
+  }
+
+  // The readonly mode trigger is a Toggletip button, not a Button, so it
+  // needs its own matching size rule.
+  .#{$block-class}__toolbar .#{$prefix}--toggletip-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    block-size: var(--#{$block-class}--size);
+    inline-size: var(--#{$block-class}--size);
+  }
+}
+
+@include exports("inline-edit") {
+  @include inline-edit;
+}
