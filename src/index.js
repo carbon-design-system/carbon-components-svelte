@@ -113,6 +113,7 @@ export { default as Heading } from "./Heading/Heading.svelte";
 export { default as Section } from "./Heading/Section.svelte";
 export { default as IconIndicator } from "./IconIndicator/IconIndicator.svelte";
 export { default as ImageLoader } from "./ImageLoader/ImageLoader.svelte";
+export { default as InlineEdit } from "./InlineEdit/InlineEdit.svelte";
 export { default as InlineLoading } from "./InlineLoading/InlineLoading.svelte";
 export { default as InputGroup } from "./InputGroup/InputGroup.svelte";
 export { default as InterstitialScreen } from "./InterstitialScreen/InterstitialScreen.svelte";

@@ -200,6 +200,7 @@ test.describe("forced colors", () => {
       ".bx--tag--disabled",
       ".bx--tile--clickable.bx--link--disabled",
       ".bx--tile--selectable.bx--tile--disabled",
+      ".bx--edit-in-place--disabled .bx--edit-in-place__text-input",
     ]) {
       // biome-ignore lint/performance/noAwaitInLoops: hover moves one pointer
       await page.hover(selector, { force: true });
@@ -343,6 +344,7 @@ test.describe("forced colors", () => {
       undefined,
       "Highlight",
     ],
+    ["#inline-edit", ".bx--edit-in-place--focused", undefined, "CanvasText"],
   ];
 
   test("focus rings stay visible in a contrasting system color", async ({
@@ -522,6 +524,13 @@ test.describe("forced colors", () => {
     expect
       .soft((await style(page, enabled, "::before")).borderColor, enabled)
       .toBe(system.CanvasText);
+  });
+
+  // Forced colors draw the reserved border on every InlineEdit, so the
+  // red invalid border reads like the resting one. The icon carries it.
+  test("an invalid InlineEdit keeps its warning icon", async ({ page }) => {
+    const icon = ".bx--edit-in-place--invalid .bx--edit-in-place__warning-icon";
+    expect.soft((await style(page, icon)).fill, icon).toBe(system.CanvasText);
   });
 
   test("the Toggletip icon reads ButtonText, also open and on hover", async ({

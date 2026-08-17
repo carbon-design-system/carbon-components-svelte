@@ -14,6 +14,7 @@
     HeaderPanelLink,
     HeaderPanelLinks,
     HeaderUtilities,
+    InlineEdit,
     Menu,
     MenuItem,
     Meter,
@@ -201,6 +202,32 @@
     <SearchMenuItem text="Disabled result" disabled />
     <SearchMenuItem text="Other result" />
   </SearchMenu>
+
+  <InlineEdit
+    id="inline-edit"
+    labelText="Inline edit"
+    editLabel="Edit"
+    saveLabel="Save"
+    cancelLabel="Cancel"
+    value="Editable"
+  />
+  <InlineEdit
+    labelText="Invalid inline edit"
+    editLabel="Edit"
+    saveLabel="Save"
+    cancelLabel="Cancel"
+    value="Invalid"
+    invalid
+    invalidText="Required"
+  />
+  <InlineEdit
+    labelText="Disabled inline edit"
+    editLabel="Edit"
+    saveLabel="Save"
+    cancelLabel="Cancel"
+    value="Disabled"
+    disabled
+  />
 
   <div style="height: 8rem;">
     <Toggletip labelText="Toggletip">Closed</Toggletip>
