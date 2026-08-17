@@ -53,8 +53,13 @@
   on:keydown
   on:keydown={(event) => {
     if (disabled) return;
-    if (event.key === " " || event.key === "Enter") {
-      clicked = !clicked;
+    // A focused <a href> already fires a native click on Enter, and the
+    // on:click handler above picks that up. Space never does, and Enter
+    // does not without href. Dispatch click only in those cases so Enter
+    // with href does not toggle `clicked` twice.
+    if (event.key === " " || (event.key === "Enter" && !href)) {
+      event.preventDefault();
+      ref?.click();
     }
   }}
   on:keyup

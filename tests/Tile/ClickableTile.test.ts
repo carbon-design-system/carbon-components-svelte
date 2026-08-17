@@ -50,6 +50,28 @@ describe("ClickableTile", () => {
     expect(tile).not.toHaveClass("bx--tile--is-clicked");
   });
 
+  it("should fire the click handler on Space, not just toggle clicked state", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(ClickableTile);
+
+    const tile = screen.getByTestId("click-test");
+    tile.focus();
+    await user.keyboard(" ");
+
+    expect(consoleLog).toHaveBeenCalledWith("clicked");
+  });
+
+  it("should fire the click handler on Enter", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(ClickableTile);
+
+    const tile = screen.getByTestId("click-test");
+    tile.focus();
+    await user.keyboard("{Enter}");
+
+    expect(consoleLog).toHaveBeenCalledWith("clicked");
+  });
+
   it("should respect disabled state", () => {
     render(ClickableTile);
 
