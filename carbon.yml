@@ -609,6 +609,20 @@ assets:
       - shell
       - media
       - media
+  inline-edit:
+    name: Inline edit
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/inline-edit.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/InlineEdit
+    tags:
+      - input-control
   inline-loading:
     status: stable
     framework: svelte

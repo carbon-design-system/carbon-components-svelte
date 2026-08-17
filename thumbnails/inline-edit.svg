@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>inline-edit</title>
+    <g id="inline-edit" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="hover-band" fill="var(--cds-field-01, #f4f4f4)" x="76" y="74" width="168" height="32"></rect>
+        <rect id="value" fill="var(--cds-layer-accent-active, #a8a8a8)" x="88" y="86" width="90" height="8"></rect>
+        <g id="edit-icon" transform="translate(220, 82) scale(0.5)" fill="var(--cds-icon-primary, #161616)">
+            <path d="M2 26H30V28H2z"></path>
+            <path d="M25.4,9c0.8-0.8,0.8-2,0-2.8l-3.6-3.6c-0.8-0.8-2-0.8-2.8,0l-15,15V24h6.4L25.4,9z M20.4,4L24,7.6l-3,3L17.4,7L20.4,4z M6,22v-3.6l10-10l3.6,3.6l-10,10H6z"></path>
+        </g>
+    </g>
+</svg>
