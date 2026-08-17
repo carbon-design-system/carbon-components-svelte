@@ -23,4 +23,11 @@ describe("ButtonSet", () => {
     expect(buttons[0]).toHaveTextContent("Cancel");
     expect(buttons[1]).toHaveTextContent("Submit");
   });
+
+  it("binds a reference to the outer element", () => {
+    const { component } = render(ButtonSet);
+
+    expect(component.ref).toBeInstanceOf(HTMLDivElement);
+    expect(component.ref).toBe(screen.getByTestId("button-set"));
+  });
 });

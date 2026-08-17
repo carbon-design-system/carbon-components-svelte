@@ -20,9 +20,11 @@
   /**
    * Specify the size of button.
    * When the `badge` slot is used, size is set to `lg` per Carbon design guidelines.
+   * Falls back to the size set by an ancestor `ActionSet` when unset.
    * @type {"default" | "field" | "small" | "lg" | "xl"}
+   * @default "default"
    */
-  export let size = "default";
+  export let size = undefined;
 
   /** Set to `true` to use Carbon's expressive typesetting */
   export let expressive = false;
@@ -132,6 +134,7 @@
 
   const ctx = getContext("carbon:ComposedModal");
   const insideModal = getContext("carbon:Modal");
+  const actionSetSize = getContext("carbon:ActionSet")?.size;
 
   $: if (ctx && ref) {
     ctx.declareRef(ref);
@@ -293,7 +296,9 @@
   });
 
   $: isDisabled = Boolean(disabled);
-  $: effectiveSize = $$slots.badge ? "lg" : size;
+  $: effectiveSize = $$slots.badge
+    ? "lg"
+    : (size ?? $actionSetSize ?? "default");
   $: iconProps = {
     "aria-hidden": "true",
     class: "bx--btn__icon",
