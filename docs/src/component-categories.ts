@@ -29,6 +29,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "AspectRatio",
       "Accordion",
       "Disclosure",
+      "Resizer",
     ],
   },
   {

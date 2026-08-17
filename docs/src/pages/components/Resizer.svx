@@ -1,0 +1,28 @@
+---
+components: ["Resizer"]
+description: A draggable, keyboard-operable handle placed between two elements that resizes them by dragging, arrow keys, or a double-click reset.
+---
+
+## Basic
+
+Place a `Resizer` between two sibling elements and set `orientation` to `"vertical"` (resize left/right) or `"horizontal"` (resize up/down). By default it resizes its DOM siblings directly: drag it, use arrow keys (hold <DocKbd label="Shift" /> for a larger step), press <DocKbd label="Home" /> or <DocKbd label="End" /> to collapse a side fully, or double-click to reset both sides to their size when the page loaded.
+
+<FileSource src="/framed/Resizer/ResizerBasic" />
+
+## Orientation
+
+Set `orientation` to `"horizontal"` to stack panels vertically and resize up/down instead.
+
+<FileSource src="/framed/Resizer/ResizerHorizontal" />
+
+## Controlled
+
+Call `event.preventDefault()` in `on:resize` to take over sizing yourself — the component then leaves its DOM siblings alone, and only reports the drag/key delta.
+
+<FileSource src="/framed/Resizer/ResizerControlled" />
+
+## Custom handle content
+
+Pass content to the default slot to render inside the handle, for example a drag-grip icon.
+
+<FileSource src="/framed/Resizer/ResizerCustomHandle" />
