@@ -1,0 +1,60 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/motion";
+
+/// Resizer styles. Ported from Carbon React's own (not yet wired into its
+/// bundle) `packages/styles/scss/components/resizer`, mapped from v11
+/// tokens to this repo's v10 equivalents. Drops the `:focus-visible`/
+/// `:focus:not(:focus-visible)` split upstream uses to show the ring only
+/// on keyboard focus: like `:has()`, `:focus-visible` exceeds this
+/// library's Safari 14 baseline (shipped in Safari 15.4), so every focus
+/// shows the ring here.
+/// @access public
+/// @group resizer
+@mixin resizer {
+  .#{$prefix}--resizer {
+    position: relative;
+    flex: none;
+    background-color: $ui-03;
+  }
+
+  .#{$prefix}--resizer:hover {
+    @media (prefers-reduced-motion: no-preference) {
+      background-color: $interactive-01;
+      transition: background-color $duration--moderate-01;
+    }
+  }
+
+  .#{$prefix}--resizer:focus {
+    outline: 2px solid $focus;
+    outline-offset: -2px;
+    background-color: $interactive-01;
+  }
+
+  .#{$prefix}--resizer:active {
+    background-color: $interactive-01;
+  }
+
+  .#{$prefix}--resizer--horizontal {
+    cursor: ns-resize;
+  }
+
+  .#{$prefix}--resizer--vertical {
+    cursor: ew-resize;
+  }
+
+  // Optional utility: add to a Resizer's resizable siblings for a smooth
+  // size transition (for example on a programmatic or double-click reset).
+  // Not applied automatically, since a transition during an active drag
+  // would lag behind the pointer.
+  .#{$prefix}--smooth-resize {
+    @media (prefers-reduced-motion: no-preference) {
+      transition: all $duration--moderate-01 linear;
+    }
+  }
+}
+
+@include exports("resizer") {
+  @include resizer;
+}
