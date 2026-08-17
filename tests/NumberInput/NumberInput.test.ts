@@ -271,6 +271,22 @@ describe("NumberInput", () => {
     expect(input).toHaveAttribute("aria-readonly", "true");
   });
 
+  it("should not change value via arrow keys when readonly in text mode", async () => {
+    render(NumberInput, {
+      props: { readonly: true, allowDecimal: true, value: 50 },
+    });
+
+    const input = screen.getByRole("textbox");
+    expect(input).toHaveValue("50");
+
+    input.focus();
+    await user.keyboard("{ArrowUp}");
+    expect(input).toHaveValue("50");
+
+    await user.keyboard("{ArrowDown}");
+    expect(input).toHaveValue("50");
+  });
+
   it("should handle hidden steppers", () => {
     render(NumberInput, { props: { hideSteppers: true } });
 

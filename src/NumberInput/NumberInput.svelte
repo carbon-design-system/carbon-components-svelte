@@ -378,7 +378,12 @@
   }
 
   function onKeyDown(event) {
-    if (useTextMode && (event.key === "ArrowUp" || event.key === "ArrowDown")) {
+    if (
+      useTextMode &&
+      !readonly &&
+      !disabled &&
+      (event.key === "ArrowUp" || event.key === "ArrowDown")
+    ) {
       event.preventDefault();
       updateValue(event.key === "ArrowUp");
     }
