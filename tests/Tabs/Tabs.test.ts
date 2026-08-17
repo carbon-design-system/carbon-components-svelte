@@ -263,6 +263,47 @@ describe("Tabs", () => {
     expect(tabsContainer).toHaveClass("bx--tabs--container");
   });
 
+  it("should not apply a layout size class by default", () => {
+    render(Tabs);
+
+    const nav = screen.getByRole("navigation");
+    for (const size of ["sm", "md", "lg", "xl"]) {
+      expect(nav).not.toHaveClass(`bx--layout--size-${size}`);
+    }
+  });
+
+  it("should apply the layout size class for the size prop", () => {
+    render(Tabs, { props: { size: "sm" } });
+
+    const nav = screen.getByRole("navigation");
+    expect(nav).toHaveClass("bx--layout--size-sm");
+  });
+
+  it("should clamp an out-of-range size to the max for line tabs", () => {
+    render(Tabs, { props: { type: "default", size: "xl" } });
+
+    const nav = screen.getByRole("navigation");
+    expect(nav).toHaveClass("bx--layout--size-lg");
+    expect(nav).not.toHaveClass("bx--layout--size-xl");
+  });
+
+  it("should allow the full size range for container tabs", () => {
+    render(Tabs, { props: { type: "container", size: "xl" } });
+
+    const nav = screen.getByRole("navigation");
+    expect(nav).toHaveClass("bx--layout--size-xl");
+  });
+
+  it("should ignore an invalid size value", () => {
+    // @ts-expect-error - exercising the runtime fallback for an invalid value
+    render(Tabs, { props: { size: "invalid" } });
+
+    const nav = screen.getByRole("navigation");
+    for (const size of ["sm", "md", "lg", "xl"]) {
+      expect(nav).not.toHaveClass(`bx--layout--size-${size}`);
+    }
+  });
+
   it("should support auto width", () => {
     render(Tabs, {
       props: { autoWidth: true },

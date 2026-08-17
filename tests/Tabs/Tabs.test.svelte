@@ -9,6 +9,7 @@
   export let type: ComponentProps<Tabs>["type"] = "default";
   export let autoWidth = false;
   export let fullWidth = false;
+  export let size: ComponentProps<Tabs>["size"] = undefined;
   export let customClass = "";
   export let ariaLabel = "";
 </script>
@@ -19,6 +20,7 @@
   {type}
   {autoWidth}
   {fullWidth}
+  {size}
   class={customClass}
   aria-label={ariaLabel === undefined ? undefined : ariaLabel}
   on:change={({ detail }) => {
