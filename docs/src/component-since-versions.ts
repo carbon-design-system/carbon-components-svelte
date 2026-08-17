@@ -8,6 +8,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   Breakpoint: "0.40.0",
   Button: "0.2.0",
   ButtonSet: "0.9.2",
+  Card: "0.112.0",
   Checkbox: "0.2.0",
   ClickableTile: "0.2.0",
   CodeSnippet: "0.2.0",
