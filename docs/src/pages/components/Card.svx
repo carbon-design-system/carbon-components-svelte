@@ -1,0 +1,209 @@
+---
+components: ["Card", "CardHeader", "CardBody", "CardFooter", "CardTitle", "CardMedia", "CardHeaderMedia", "CardTitleMedia", "CardActions", "CardAction"]
+description: Cards group related content and actions into a single composable container, built from Header, Body, Footer, and Media regions.
+---
+
+<script>
+  import {
+    Card,
+    CardHeader,
+    CardBody,
+    CardFooter,
+    CardTitle,
+    CardMedia,
+    CardActions,
+    CardAction,
+    Button,
+    Tag,
+  } from "carbon-components-svelte";
+  import Star from "carbon-icons-svelte/lib/Star.svelte";
+  import OverflowMenuVertical from "carbon-icons-svelte/lib/OverflowMenuVertical.svelte";
+</script>
+
+## Basic
+
+Compose a card from `CardHeader`, `CardBody`, and `CardFooter`, the same way as [ComposedModal](/components/ComposedModal).
+
+<Card>
+  <CardHeader>
+    <CardTitle>Quarterly report</CardTitle>
+  </CardHeader>
+  <CardBody>
+    Review performance metrics and key highlights from the past quarter.
+  </CardBody>
+  <CardFooter>
+    <Button kind="ghost" size="sm">View report</Button>
+  </CardFooter>
+</Card>
+
+## Clickable
+
+Set `clickable` to `true` to make the entire card interactive, with hover, focus, and active styles. A clickable card needs an accessible name: pass `aria-label` or `aria-labelledby`.
+
+### Navigation
+
+Set `href` for a navigation card. It renders as an anchor with native keyboard handling, and shows a built-in footer arrow affordance.
+
+<Card clickable href="/components/Card" aria-label="View Card documentation">
+  <CardHeader>
+    <CardTitle>Card</CardTitle>
+  </CardHeader>
+  <CardBody>Composable card container with header, body, and footer regions.</CardBody>
+</Card>
+
+### Action
+
+Without `href`, a clickable card renders as a `role="button"` div. Enter and <DocKbd label="Space" /> both activate it.
+
+<Card
+  clickable
+  aria-label="Open project settings"
+  on:click={() => console.log("card clicked")}
+>
+  <CardHeader>
+    <CardTitle>Project settings</CardTitle>
+  </CardHeader>
+  <CardBody>Manage members, permissions, and integrations.</CardBody>
+</Card>
+
+## Density
+
+Set `density` to `"expressive"` for larger title typography. The default is `"productive"`.
+
+<Card density="expressive">
+  <CardHeader>
+    <CardTitle>Quarterly report</CardTitle>
+  </CardHeader>
+  <CardBody>
+    Review performance metrics and key highlights from the past quarter.
+  </CardBody>
+</Card>
+
+## Media
+
+Pass a `CardMedia` to the `media` slot. Outside `horizontal` layout it maintains an aspect ratio, set with `ratio`.
+
+<Card>
+  <CardMedia slot="media" ratio="16x9">
+    <img
+      src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg"
+      alt="IBM logo"
+    />
+  </CardMedia>
+  <CardHeader>
+    <CardTitle>Media card</CardTitle>
+  </CardHeader>
+  <CardBody>The media slot maintains its aspect ratio as the card resizes.</CardBody>
+</Card>
+
+### Horizontal
+
+Set `horizontal` to `true` to render the `media` slot beside the content instead of above it. Set `mediaPosition` to `"end"` to place it on the other side.
+
+<Card horizontal>
+  <CardMedia slot="media" mediaWidth="40%">
+    <img
+      src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg"
+      alt="IBM logo"
+    />
+  </CardMedia>
+  <CardHeader>
+    <CardTitle>Horizontal card</CardTitle>
+  </CardHeader>
+  <CardBody>Media stretches to the full card height instead of keeping an aspect ratio.</CardBody>
+</Card>
+
+## Title
+
+`CardTitle` takes optional `label` and `description` slots above and below the title text, and `titleStart`/`titleEnd` slots for icons.
+
+<Card>
+  <CardHeader>
+    <CardTitle>
+      <svelte:fragment slot="label">Project</svelte:fragment>
+      Quarterly report
+      <svelte:fragment slot="description">Updated 2 hours ago</svelte:fragment>
+    </CardTitle>
+  </CardHeader>
+</Card>
+
+### Truncate
+
+Set `titleTruncate` to `true` for single-line truncation, or a number for multi-line clamping. Pair with `maxWidth` to control where it truncates.
+
+<Card>
+  <CardHeader>
+    <CardTitle titleTruncate maxWidth="12rem">
+      A quarterly report title long enough to truncate
+    </CardTitle>
+  </CardHeader>
+</Card>
+
+## Actions
+
+Add `CardActions` with `CardAction` children to the header for quick actions.
+
+<Card>
+  <CardHeader>
+    <CardTitle>Quarterly report</CardTitle>
+    <CardActions>
+      <CardAction>
+        <Button kind="ghost" size="sm" icon={Star} iconDescription="Favorite" />
+      </CardAction>
+    </CardActions>
+  </CardHeader>
+  <CardBody>
+    Review performance metrics and key highlights from the past quarter.
+  </CardBody>
+</Card>
+
+### Footer action set
+
+Set `actionSet` on `CardFooter` when composing `CardAction` children: it removes footer padding, adds a top border, and stretches text actions to fill the row. Set `iconOnly` on a `CardAction` wrapping an icon-only button to keep it fixed-width instead.
+
+<Card>
+  <CardHeader>
+    <CardTitle>Delete this item?</CardTitle>
+  </CardHeader>
+  <CardBody>This action cannot be undone.</CardBody>
+  <CardFooter actionSet>
+    <CardAction>
+      <Button kind="secondary">Cancel</Button>
+    </CardAction>
+    <CardAction>
+      <Button kind="danger">Delete</Button>
+    </CardAction>
+    <CardAction iconOnly>
+      <Button
+        kind="ghost"
+        icon={OverflowMenuVertical}
+        iconDescription="More options"
+      />
+    </CardAction>
+  </CardFooter>
+</Card>
+
+## Decorator
+
+Use the `decorator` slot for supplementary content, typically an AI-label badge, rendered top-right of the card.
+
+<Card>
+  <svelte:fragment slot="decorator">
+    <Tag type="purple" size="sm">AI</Tag>
+  </svelte:fragment>
+  <CardHeader>
+    <CardTitle>Smart summary</CardTitle>
+  </CardHeader>
+  <CardBody>Generated automatically from your latest activity.</CardBody>
+</Card>
+
+## Disabled
+
+Set `disabled` to `true` to disable the card and all interactive content.
+
+<Card disabled clickable aria-label="Archived report">
+  <CardHeader>
+    <CardTitle>Quarterly report</CardTitle>
+  </CardHeader>
+  <CardBody>This report has been archived and can no longer be opened.</CardBody>
+</Card>
