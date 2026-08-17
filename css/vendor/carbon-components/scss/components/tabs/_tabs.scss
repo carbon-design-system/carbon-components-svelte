@@ -493,3 +493,126 @@
 @include exports('tabs') {
   @include tabs;
 }
+
+// carbon-components-svelte patch (formerly the `tabs-size` portion of css/_tabs.scss)
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/layout/scss/generated/size";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+$tabs-sizes: (
+  sm: $size-sm,
+  md: $size-md,
+  lg: $size-lg,
+  xl: $size-xl,
+);
+
+/// Line and container tabs size variants (Carbon React `size` on `TabList`).
+/// Unlike vertical tabs, line/container tabs stay a horizontal row at every
+/// breakpoint (see `tabs-overflow` in `css/_tabs.scss`), so a single set of
+/// rules covers both. `Tabs.svelte` clamps the requested size to each type's
+/// own range (line: sm-lg, container: sm-xl) before applying the class, so
+/// the CSS itself does not need to gate by `bx--tabs--container`.
+///
+/// The base link's height comes from fixed padding + line-height, not the
+/// nav item's own block-size, so just resizing the nav item leaves the link
+/// (and the selected/focus indicators drawn on it) at its original height —
+/// clipped by the now-shorter item and misaligned with its bottom edge. The
+/// link is flexed to fill and center within the sized item instead, the
+/// same technique `tabs-vertical-size` (`css/_tabs.scss`) already uses,
+/// rather than hand-tuning padding/line-height per size and per state
+/// (selected, hover, focus, container).
+///
+/// Separately, the root element itself carries its own `min-height` from
+/// Carbon's base styles above (40px for line, 48px for container) — a floor
+/// meant for the unsized default, not aware of a smaller requested size. At
+/// `sm` (32px) or `md` (40px, container only) that floor is taller than the
+/// now-sized nav items, leaving slack space below the row. Reset per size so
+/// the root never reserves more height than its items need.
+///
+/// This patch lives here, appended after the upstream rules above, rather
+/// than in `css/_tabs.scss` with the other Tabs overrides: those override
+/// partials load before this file and need extra `:not()`/element-selector
+/// padding just to out-specify equal-shaped upstream rules; appended here,
+/// each selector only needs to add the `bx--layout--size-*` class actually
+/// carrying new meaning.
+/// @access private
+/// @group components
+@mixin tabs-size {
+  @each $size, $size-value in $tabs-sizes {
+    .#{$prefix}--tabs.#{$prefix}--layout--size-#{$size} {
+      min-block-size: $size-value;
+
+      .#{$prefix}--tabs__nav-item {
+        block-size: $size-value;
+      }
+
+      .#{$prefix}--tabs__nav-link,
+      .#{$prefix}--tabs__nav-link:focus,
+      .#{$prefix}--tabs__nav-link:active {
+        display: flex;
+        align-items: center;
+        block-size: 100%;
+        padding-block: 0;
+      }
+
+      // Line (non-container, non-vertical) tabs only: every underline/
+      // indicator state (default, hover, selected, disabled) is drawn with
+      // a real `border-bottom`, which is a box-model side that only eats
+      // space from the bottom of the link. That biases the label — now
+      // flex-centered above — above the item's true vertical center, most
+      // visible once a focus outline frames the tab. Container and vertical
+      // tabs already dodge this by painting their indicator as an inset
+      // `box-shadow` instead (not part of the box model); give sized line
+      // tabs the same treatment so centering holds regardless of which
+      // indicator is showing.
+      &:not(.#{$prefix}--tabs--container):not(.#{$prefix}--tabs--vertical) {
+        .#{$prefix}--tabs__nav-link,
+        .#{$prefix}--tabs__nav-link:focus,
+        .#{$prefix}--tabs__nav-link:active {
+          border-bottom: none;
+          // `box-shadow` isn't in the base link's `transition: border,
+          // outline` list, so without this the indicator swap on mousedown
+          // (:active, which fires before the click/selection commits) snaps
+          // instantly instead of easing like the border-based indicator did
+          // on unsized tabs, reading as the highlight jumping ahead of the
+          // actual click.
+          transition: box-shadow $duration--fast-01
+            motion(standard, productive);
+          box-shadow: inset 0 -2px 0 0 $ui-03;
+        }
+
+        .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled)
+          .#{$prefix}--tabs__nav-link {
+          box-shadow: inset 0 -2px 0 0 $ui-04;
+        }
+
+        .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled) {
+          .#{$prefix}--tabs__nav-link,
+          .#{$prefix}--tabs__nav-link:focus,
+          .#{$prefix}--tabs__nav-link:active {
+            box-shadow: inset 0 -2px 0 0 $interactive-04;
+          }
+        }
+
+        .#{$prefix}--tabs__nav-item--disabled .#{$prefix}--tabs__nav-link {
+          box-shadow: inset 0 -2px 0 0 $disabled-01;
+        }
+
+        // Focused/active (not selected, not disabled): Carbon shows the
+        // focus outline instead of the underline here, so drop the
+        // indicator entirely rather than repaint it.
+        .#{$prefix}--tabs__nav-item:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled) {
+          .#{$prefix}--tabs__nav-link:focus,
+          .#{$prefix}--tabs__nav-link:active {
+            box-shadow: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+@include exports('tabs-size') {
+  @include tabs-size;
+}

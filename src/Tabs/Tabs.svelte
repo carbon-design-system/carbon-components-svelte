@@ -59,6 +59,15 @@
    */
   export let iconSize = "default";
 
+  /**
+   * Specify the size of the tabs. Unset by default, which preserves the
+   * original unsized height. Line tabs (`type="default"`) support up to
+   * `"lg"`; container tabs support the full range up to `"xl"` — an
+   * out-of-range value clamps to the type's max.
+   * @type {"sm" | "md" | "lg" | "xl"}
+   */
+  export let size = undefined;
+
   import {
     afterUpdate,
     createEventDispatcher,
@@ -76,6 +85,8 @@
   import { syncDomOrder } from "../utils/syncDomOrder.js";
 
   const dispatch = createEventDispatcher();
+
+  const SIZE_SCALE = ["sm", "md", "lg", "xl"];
 
   /**
    * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean; index: number }>>}
@@ -445,6 +456,18 @@
   $: useFullWidth.set(fullWidth);
   $: useDismissible.set(dismissible);
   $: useIconOnly.set(iconOnly);
+
+  // Line tabs support up to `lg`; container tabs support the full range up
+  // to `xl`. An out-of-range value clamps to the type's max, mirroring
+  // Carbon's own `layout.use($min, $max)` clamping. An unrecognized value is
+  // ignored (no class), same as leaving `size` unset.
+  $: maxSizeIndex = type === "container" ? 3 : 2;
+  $: resolvedSize = (() => {
+    if (!size) return undefined;
+    const index = SIZE_SCALE.indexOf(size);
+    if (index === -1) return undefined;
+    return SIZE_SCALE[Math.min(index, maxSizeIndex)];
+  })();
 </script>
 
 <div
@@ -459,6 +482,10 @@
   class:bx--tabs__icon--lg={iconOnly && iconSize === "lg"}
   class:bx--tabs--scrollable={isOverflow}
   class:bx--tabs--scrollable--container={isOverflow && type === "container"}
+  class:bx--layout--size-sm={resolvedSize === "sm"}
+  class:bx--layout--size-md={resolvedSize === "md"}
+  class:bx--layout--size-lg={resolvedSize === "lg"}
+  class:bx--layout--size-xl={resolvedSize === "xl"}
   {...$$restProps}
 >
   {#if isOverflow}
