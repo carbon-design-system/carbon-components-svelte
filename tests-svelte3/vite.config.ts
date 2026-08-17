@@ -26,6 +26,7 @@ export default defineConfig({
     // `svelte/server` only exists in Svelte 5.
     exclude: [
       "../tests/Snippets/**",
+      "../tests/**/*.svelte5.test.ts",
       "../tests/**/*.ssr.test.ts",
       "../tests/utils/ssr.test.ts",
       // Compiled SCSS does not depend on the Svelte version; the root harness

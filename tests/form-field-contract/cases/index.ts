@@ -26,6 +26,7 @@ import Toggle from "carbon-components-svelte/Toggle/Toggle.svelte";
 import type { Exemptions, FieldCase } from "../contract";
 import CheckboxGroupField from "../fixtures/CheckboxGroupField.test.svelte";
 import DatePickerField from "../fixtures/DatePickerField.test.svelte";
+import InlineEditField from "../fixtures/InlineEditField.test.svelte";
 import RadioButtonGroupField from "../fixtures/RadioButtonGroupField.test.svelte";
 
 const textInputSkeleton = {
@@ -140,6 +141,12 @@ export const cases: FieldCase[] = [
       className: "bx--text-area--fluid__skeleton",
       field: "bx--text-area",
     },
+  },
+  {
+    name: "InlineEdit",
+    component: InlineEditField,
+    control: () => screen.getByRole("textbox"),
+    selectOnFocus: { value: "hello world" },
   },
   {
     name: "NumberInput",

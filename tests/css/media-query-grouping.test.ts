@@ -43,10 +43,12 @@ describe("any-hover media query grouping", () => {
     // hover rules), and _calendar.scss has one fewer than _flatpickr.scss.
     // Raised again from 70 to 71 for ChatButton's quick-action hover block
     // (_chat-button.scss).
+    // Raised again from 71 to 72 for InlineEdit's one hover block
+    // (_inline-edit.scss).
     // Whitespace-tolerant so the count holds for expanded and compressed
     // output; the lower bound fails the test if the pattern stops matching.
     const blocks = css.match(/@media\s*\(any-hover:\s*hover\)\s*\{/g) ?? [];
     expect(blocks.length).toBeGreaterThan(0);
-    expect(blocks.length).toBeLessThanOrEqual(71);
+    expect(blocks.length).toBeLessThanOrEqual(72);
   }, 30_000);
 });

@@ -1,0 +1,191 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/typography";
+
+/// InlineEdit styles. Ported from Carbon React's EditInPlace
+/// (`packages/styles/scss/components/EditInPlace`), with the same v11
+/// tokens and two deliberate departures from upstream: the one `:has()`
+/// in the upstream stylesheet (showing the focus outline only while the
+/// input itself has focus) is replaced with `:focus-within`, which this
+/// library's Safari 14 baseline supports natively; and the toolbar is a
+/// constant width (room for both the save and cancel buttons) instead of
+/// animating wider on focus, so this component doesn't resize its own
+/// column when used in a DataTable cell.
+/// @access private
+/// @group components
+@mixin inline-edit {
+  .#{$prefix}--edit-in-place {
+    --#{$prefix}--edit-in-place--size: #{$carbon--spacing-07};
+
+    display: flex;
+    align-items: center;
+    // Always reserve the invalid-state border width, toggling only its
+    // color (below), so gaining/losing that state or the focus outline
+    // never resizes the box.
+    border: 2px solid transparent;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  // Matches DataTable's compact row height, for use in a DataTable cell.
+  .#{$prefix}--edit-in-place--xs {
+    --#{$prefix}--edit-in-place--size: #{$carbon--spacing-06};
+  }
+
+  .#{$prefix}--edit-in-place--sm {
+    --#{$prefix}--edit-in-place--size: #{$carbon--spacing-08};
+  }
+
+  .#{$prefix}--edit-in-place--md {
+    --#{$prefix}--edit-in-place--size: #{$carbon--spacing-09};
+  }
+
+  .#{$prefix}--edit-in-place--lg {
+    --#{$prefix}--edit-in-place--size: #{$carbon--spacing-10};
+  }
+
+  // Readonly and disabled fields don't invite interaction the way an
+  // editable one does (there's no click-to-edit affordance), matching this
+  // library's other readonly/disabled inputs, which don't change on hover
+  // either. Hover only where a pointer can hover, so a tap does not leave
+  // it stuck.
+  @media (any-hover: hover) {
+    .#{$prefix}--edit-in-place:not(.#{$prefix}--edit-in-place--readonly):not(.#{$prefix}--edit-in-place--disabled):hover {
+      background: $field;
+    }
+
+    .#{$prefix}--edit-in-place:hover .#{$prefix}--edit-in-place__btn-edit {
+      visibility: visible;
+    }
+  }
+
+  .#{$prefix}--edit-in-place--disabled {
+    color: $text-disabled;
+    cursor: not-allowed;
+  }
+
+  .#{$prefix}--edit-in-place__btn-edit.#{$prefix}--edit-in-place__btn-edit--always-visible {
+    visibility: visible;
+  }
+
+  .#{$prefix}--edit-in-place__btn-edit {
+    visibility: hidden;
+  }
+
+  .#{$prefix}--edit-in-place--invalid {
+    border-color: $support-error;
+  }
+
+  .#{$prefix}--edit-in-place--focused {
+    background: $field;
+  }
+
+  // Show the outline on the whole component only while the input itself
+  // has focus.
+  .#{$prefix}--edit-in-place--focused:focus-within {
+    outline: 2px solid $focus;
+  }
+
+  // Hide the red border ring while focused, so it doesn't clash with the
+  // outline. Toggling color (not width, as upstream does) keeps the box
+  // the same size in every state.
+  .#{$prefix}--edit-in-place--invalid.#{$prefix}--edit-in-place--focused {
+    border-color: transparent;
+  }
+
+  .#{$prefix}--edit-in-place__text-input {
+    flex: 1;
+    block-size: var(--#{$prefix}--edit-in-place--size);
+  }
+
+  .#{$prefix}--edit-in-place--inherit-type .#{$prefix}--edit-in-place__text-input {
+    font-size: inherit;
+    font-weight: inherit;
+    letter-spacing: inherit;
+    line-height: inherit;
+  }
+
+  .#{$prefix}--edit-in-place__warning-icon {
+    margin: auto $carbon--spacing-03;
+    color: $support-error;
+    inline-size: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--edit-in-place__warning-text {
+    @include type-style("label-01");
+
+    color: $support-error;
+
+    margin-block-start: $carbon--spacing-03;
+  }
+
+  // Overrides: strip the text input's own chrome, this component draws it.
+  .#{$prefix}--edit-in-place__text-input.#{$prefix}--text-input {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    outline: none;
+  }
+
+  // Remove the outline when not in edit mode.
+  .#{$prefix}--edit-in-place:not(.#{$prefix}--edit-in-place--focused)
+    .#{$prefix}--edit-in-place__text-input.#{$prefix}--text-input:focus,
+  .#{$prefix}--edit-in-place:not(.#{$prefix}--edit-in-place--focused)
+    .#{$prefix}--edit-in-place__text-input.#{$prefix}--text-input:active {
+    outline: none;
+  }
+
+  // Comes after the override above so it wins the tie (same specificity,
+  // later wins): a disabled field is never a pointer, editable or not.
+  .#{$prefix}--edit-in-place--disabled .#{$prefix}--edit-in-place__text-input.#{$prefix}--text-input {
+    cursor: not-allowed;
+  }
+
+  // Always room for two icon buttons (save + cancel), so entering or
+  // leaving edit mode never changes the toolbar's width. A table cell
+  // sizes its column to its widest rendered content, so a toolbar that
+  // grew on focus grew the whole column with it.
+  .#{$prefix}--edit-in-place__toolbar {
+    display: inline-flex;
+    align-self: stretch;
+    justify-content: flex-end;
+    inline-size: calc(2 * var(--#{$prefix}--edit-in-place--size));
+  }
+
+  // Width of the invalid icon is always spacing-07 (spacing-05 + 2 * spacing-03 margin).
+  .#{$prefix}--edit-in-place--invalid .#{$prefix}--edit-in-place__toolbar {
+    inline-size: calc(
+      2 * var(--#{$prefix}--edit-in-place--size) + #{$carbon--spacing-07}
+    );
+  }
+
+  // Match button heights to input height for each size, and make them
+  // square. The buttons are wider than their icon at md/lg, so re-center
+  // it explicitly: Carbon's own tooltip-trigger mixin sets align-items but
+  // not justify-content, since it never expects a fixed-width button wider
+  // than its content.
+  .#{$prefix}--edit-in-place__toolbar .#{$prefix}--btn.#{$prefix}--btn--icon-only {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    min-block-size: unset;
+    block-size: var(--#{$prefix}--edit-in-place--size);
+    inline-size: var(--#{$prefix}--edit-in-place--size);
+  }
+
+  // The readonly mode trigger is a Toggletip button, not a Button, so it
+  // needs its own matching size rule.
+  .#{$prefix}--edit-in-place__toolbar .#{$prefix}--toggletip-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    block-size: var(--#{$prefix}--edit-in-place--size);
+    inline-size: var(--#{$prefix}--edit-in-place--size);
+  }
+}
+
+@include exports("inline-edit") {
+  @include inline-edit;
+}

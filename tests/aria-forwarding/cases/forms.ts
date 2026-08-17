@@ -11,6 +11,7 @@ import FileUploaderButton from "carbon-components-svelte/FileUploader/FileUpload
 import FileUploaderDropContainer from "carbon-components-svelte/FileUploader/FileUploaderDropContainer.svelte";
 import FormGroup from "carbon-components-svelte/FormGroup/FormGroup.svelte";
 import FormRequirement from "carbon-components-svelte/FormRequirement/FormRequirement.svelte";
+import InlineEdit from "carbon-components-svelte/InlineEdit/InlineEdit.svelte";
 import InputGroup from "carbon-components-svelte/InputGroup/InputGroup.svelte";
 import ListBoxField from "carbon-components-svelte/ListBox/ListBoxField.svelte";
 import ListBoxMenu from "carbon-components-svelte/ListBox/ListBoxMenu.svelte";
@@ -160,6 +161,21 @@ export const forms: AriaEntry[] = [
     name: "FormRequirement",
     render: (attrs) => render(FormRequirement, { props: attrs }),
     target: () => screen.getByRole("alert"),
+  },
+  {
+    name: "InlineEdit",
+    render: (attrs) =>
+      render(InlineEdit, {
+        props: {
+          value: "Ada",
+          labelText: "Name",
+          editLabel: "Edit",
+          saveLabel: "Save",
+          cancelLabel: "Cancel",
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("textbox"),
   },
   {
     name: "ListBox",
