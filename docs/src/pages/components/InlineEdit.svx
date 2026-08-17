@@ -1,0 +1,148 @@
+---
+components: ["InlineEdit"]
+description: Inline text editing with save and cancel affordances. Click or focus to enter edit mode; blur saves a real change or cancels an unchanged one.
+---
+
+<script>
+  import { InlineEdit } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Click the text, or the edit button that appears on hover, to start editing. <DocKbd label="Enter" /> saves and keeps editing, <DocKbd label="Escape" /> reverts and exits, and moving focus away saves a real change or cancels an unchanged one.
+
+<InlineEdit
+  labelText="Project name"
+  editLabel="Edit project name"
+  saveLabel="Save"
+  cancelLabel="Cancel"
+  value="Q3 roadmap"
+/>
+
+## Always visible
+
+By default the edit button only appears on hover. Set `editAlwaysVisible` to `true` to keep it visible.
+
+<InlineEdit
+  editAlwaysVisible
+  labelText="Project name"
+  editLabel="Edit project name"
+  saveLabel="Save"
+  cancelLabel="Cancel"
+  value="Q3 roadmap"
+/>
+
+## Select text on focus
+
+Set `selectTextOnFocus` to `true` to select the input's text when entering edit mode, so typing immediately replaces it.
+
+<InlineEdit
+  selectTextOnFocus
+  labelText="Project name"
+  editLabel="Edit project name"
+  saveLabel="Save"
+  cancelLabel="Cancel"
+  value="Q3 roadmap"
+/>
+
+## Sizes
+
+Set `size` to control the vertical size of the control. The default is `"sm"`.
+
+### Extra small
+
+`"xs"` matches the row height of a `compact` [DataTable](/components/DataTable), for use in a table cell.
+
+<InlineEdit
+  size="xs"
+  labelText="Project name"
+  editLabel="Edit project name"
+  saveLabel="Save"
+  cancelLabel="Cancel"
+  value="Q3 roadmap"
+/>
+
+### Medium
+
+<InlineEdit
+  size="md"
+  labelText="Project name"
+  editLabel="Edit project name"
+  saveLabel="Save"
+  cancelLabel="Cancel"
+  value="Q3 roadmap"
+/>
+
+### Large
+
+<InlineEdit
+  size="lg"
+  labelText="Project name"
+  editLabel="Edit project name"
+  saveLabel="Save"
+  cancelLabel="Cancel"
+  value="Q3 roadmap"
+/>
+
+## Inherit typography
+
+Set `inheritTypography` to `true` for the input to inherit the surrounding container's font settings, useful when editing a heading in place. `size` still clamps the input's vertical size.
+
+<h3 style="margin: 0;">
+  <InlineEdit
+    inheritTypography
+    labelText="Page title"
+    editLabel="Edit page title"
+    saveLabel="Save"
+    cancelLabel="Cancel"
+    value="Quarterly planning"
+  />
+</h3>
+
+## Invalid
+
+Set `invalid` to `true` and provide `invalidText` to show a validation message. Save stays disabled while invalid, even with a change.
+
+<InlineEdit
+  invalid
+  invalidText="Project name is required"
+  labelText="Project name"
+  editLabel="Edit project name"
+  saveLabel="Save"
+  cancelLabel="Cancel"
+  value=""
+/>
+
+## Readonly
+
+Set `readonly` to `true` to disable editing while keeping the field focusable. The edit button is replaced with a toggletip explaining why, set through `readonlyLabel` and `readonlyToggletipText`.
+
+<InlineEdit
+  readonly
+  readonlyLabel="Edit off"
+  readonlyToggletipText="You don't have permission to edit this field"
+  labelText="Project name"
+  editLabel="Edit project name"
+  saveLabel="Save"
+  cancelLabel="Cancel"
+  value="Q3 roadmap"
+/>
+
+## Disabled
+
+Set `disabled` to `true` to turn off the field entirely: no edit affordance, and the input itself isn't focusable. Use `readonly` instead when the field should stay visible and focusable with an explanation.
+
+<InlineEdit
+  disabled
+  labelText="Project name"
+  editLabel="Edit project name"
+  saveLabel="Save"
+  cancelLabel="Cancel"
+  value="Q3 roadmap"
+/>
+
+## DataTable cells
+
+Use the `cell` slot to render `InlineEdit` for inline editing of a row field, the same way as other form inputs. Bind to the row field, then call `refreshRow(id)` from `on:save` so columns that derive from other fields on the same row (like `Total` below) stay in sync — `on:save` only fires on a real commit, unlike an input's `on:input`.
+
+<FileSource src="/framed/InlineEdit/InlineEditDataTableCell" />
