@@ -997,3 +997,33 @@
 @include exports('tabs-vertical-size') {
   @include tabs-vertical-size;
 }
+
+/// Line and container tabs size variants (Carbon React `size` on `TabList`).
+/// Unlike vertical tabs, line/container tabs stay a horizontal row at every
+/// breakpoint (see `tabs-overflow` above), so a single set of rules covers
+/// both. `Tabs.svelte` clamps the requested size to each type's own range
+/// (line: sm-lg, container: sm-xl) before applying the class, so the CSS
+/// itself does not need to gate by `bx--tabs--container`.
+/// @access private
+/// @group components
+@mixin tabs-size {
+  .#{$prefix}--tabs.#{$prefix}--layout--size-sm .#{$prefix}--tabs__nav-item {
+    block-size: $size-sm;
+  }
+
+  .#{$prefix}--tabs.#{$prefix}--layout--size-md .#{$prefix}--tabs__nav-item {
+    block-size: $size-md;
+  }
+
+  .#{$prefix}--tabs.#{$prefix}--layout--size-lg .#{$prefix}--tabs__nav-item {
+    block-size: $size-lg;
+  }
+
+  .#{$prefix}--tabs.#{$prefix}--layout--size-xl .#{$prefix}--tabs__nav-item {
+    block-size: $size-xl;
+  }
+}
+
+@include exports('tabs-size') {
+  @include tabs-size;
+}
