@@ -90,6 +90,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "Modal",
       "ComposedModal",
       "Popover",
+      "SidePanel",
       "Toggletip",
       "Tooltip",
       "TooltipDefinition",

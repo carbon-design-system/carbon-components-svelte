@@ -162,6 +162,7 @@ export { default as SelectItemGroup } from "./Select/SelectItemGroup.svelte";
 export { default as SelectSkeleton } from "./Select/SelectSkeleton.svelte";
 export { default as SessionStorage } from "./SessionStorage/SessionStorage.svelte";
 export { default as ShapeIndicator } from "./ShapeIndicator/ShapeIndicator.svelte";
+export { default as SidePanel } from "./SidePanel/SidePanel.svelte";
 export { default as SkeletonIcon } from "./SkeletonIcon/SkeletonIcon.svelte";
 export { default as SkeletonPlaceholder } from "./SkeletonPlaceholder/SkeletonPlaceholder.svelte";
 export { default as SkeletonText } from "./SkeletonText/SkeletonText.svelte";

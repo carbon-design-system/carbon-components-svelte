@@ -99,6 +99,61 @@ if (typeof DataTransfer === "undefined") {
   globalThis.DataTransfer = DataTransferMock as unknown as typeof DataTransfer;
 }
 
+// jsdom has no Web Animations API, but Svelte's built-in transitions
+// (fly, fade, slide, ...) call `element.animate()` directly. Without a stub,
+// mounting any component that uses `transition:`/`in:`/`out:` throws
+// "element.animate is not a function".
+if (typeof Element !== "undefined" && !Element.prototype.animate) {
+  class AnimationMock extends EventTarget {
+    onfinish: (() => void) | null = null;
+    oncancel: (() => void) | null = null;
+    playbackRate = 1;
+    currentTime = 0;
+    finished: Promise<AnimationMock>;
+    private resolveFinished!: (animation: AnimationMock) => void;
+    private timeoutId: ReturnType<typeof setTimeout>;
+
+    constructor(duration: number) {
+      super();
+      this.finished = new Promise((resolve) => {
+        this.resolveFinished = resolve;
+      });
+      this.timeoutId = setTimeout(() => this.finish(), duration);
+    }
+
+    finish() {
+      clearTimeout(this.timeoutId);
+      this.onfinish?.();
+      this.dispatchEvent(new Event("finish"));
+      this.resolveFinished(this);
+    }
+
+    cancel() {
+      clearTimeout(this.timeoutId);
+      this.oncancel?.();
+      this.dispatchEvent(new Event("cancel"));
+    }
+
+    play() {}
+    pause() {}
+  }
+
+  Element.prototype.animate = (
+    _keyframes: unknown,
+    options?: number | KeyframeAnimationOptions,
+  ) => {
+    const duration =
+      typeof options === "number" ? options : (options?.duration ?? 0);
+    return new AnimationMock(
+      typeof duration === "number" ? duration : 0,
+    ) as unknown as Animation;
+  };
+}
+
+if (typeof Element !== "undefined" && !Element.prototype.getAnimations) {
+  Element.prototype.getAnimations = () => [];
+}
+
 // jsdom reflects the `open` attribute but does not implement showModal()/show()/close().
 // https://github.com/jsdom/jsdom/issues/3294
 if (
