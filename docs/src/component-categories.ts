@@ -67,6 +67,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "CopyInput",
       "DatePicker",
       "FileUploader",
+      "InlineEdit",
       "NumberInput",
       "PasswordInput",
       "PinCodeInput",
