@@ -48,6 +48,26 @@ describe("parseLocaleValue", () => {
     expect(parseLocaleValue("", ".", ",")).toBe(null);
     expect(parseLocaleValue("-", ".", ",")).toBe(null);
   });
+
+  test("normalizes Arabic-Indic digits to ASCII before parsing", () => {
+    // new Intl.NumberFormat("ar-EG").formatToParts(12345.6) yields these separators,
+    // and format() renders digits using Arabic-Indic glyphs (١٢٣٤٥ etc).
+    expect(parseLocaleValue("١٬٢٣٤٫٥", "٬", "٫")).toBe(1234.5);
+  });
+
+  test("normalizes Extended Arabic-Indic (Persian) digits to ASCII before parsing", () => {
+    // new Intl.NumberFormat("fa-IR") renders digits using Extended Arabic-Indic glyphs (۱۲۳۴۵ etc).
+    expect(parseLocaleValue("۱٬۲۳۴٫۵", "٬", "٫")).toBe(1234.5);
+  });
+
+  test("normalizes Bengali digits to ASCII before parsing", () => {
+    // new Intl.NumberFormat("bn-BD") renders digits using Bengali glyphs (১২৩৪৫ etc).
+    expect(parseLocaleValue("১,২৩৪.৫", ",", ".")).toBe(1234.5);
+  });
+
+  test("normalizes fullwidth digits to ASCII before parsing", () => {
+    expect(parseLocaleValue("１，２３４．５", "，", "．")).toBe(1234.5);
+  });
 });
 
 describe("getDefaultValue", () => {

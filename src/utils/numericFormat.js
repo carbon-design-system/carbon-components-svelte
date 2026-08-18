@@ -7,13 +7,44 @@ const RE_DOT = /\./g;
 const RE_COMMA = /[,٫]/g;
 
 /**
+ * Non-Western decimal digit ranges that `Intl.NumberFormat` renders for some
+ * locales (e.g. "ar-EG" formats using Arabic-Indic ٠-٩), mapped to their
+ * Unicode codepoint offset from the localized "0".
+ */
+const DIGIT_RANGES = [
+  [0x0660, 0x0669], // Arabic-Indic
+  [0x06f0, 0x06f9], // Extended Arabic-Indic (Persian)
+  [0x0966, 0x096f], // Devanagari
+  [0x09e6, 0x09ef], // Bengali
+  [0xff10, 0xff19], // Fullwidth
+];
+
+/**
+ * Replace non-Western digit glyphs with ASCII `0`-`9` so `Number()` can parse them.
+ *
+ * @param {string} raw
+ * @returns {string}
+ */
+function normalizeDigits(raw) {
+  let result = "";
+  for (const char of raw) {
+    const code = char.codePointAt(0);
+    const range = DIGIT_RANGES.find(
+      ([start, end]) => code >= start && code <= end,
+    );
+    result += range ? String(code - range[0]) : char;
+  }
+  return result;
+}
+
+/**
  * Replace comma and ٫ with `.`. Use while the user is still typing, before blur.
  *
  * @param {string} raw
  * @returns {string}
  */
 function replaceDecimalSeparators(raw) {
-  return raw.replace(RE_COMMA, ".");
+  return normalizeDigits(raw).replace(RE_COMMA, ".");
 }
 
 /**
@@ -25,17 +56,21 @@ function replaceDecimalSeparators(raw) {
  * @returns {string}
  */
 function normalizeLocale(raw) {
-  const lastComma = Math.max(raw.lastIndexOf(","), raw.lastIndexOf("٫"));
-  const lastDot = raw.lastIndexOf(".");
+  const normalized = normalizeDigits(raw);
+  const lastComma = Math.max(
+    normalized.lastIndexOf(","),
+    normalized.lastIndexOf("٫"),
+  );
+  const lastDot = normalized.lastIndexOf(".");
 
   if (lastComma !== -1 && lastDot !== -1) {
     if (lastComma > lastDot) {
-      return raw.replace(RE_DOT, "").replace(RE_COMMA, ".");
+      return normalized.replace(RE_DOT, "").replace(RE_COMMA, ".");
     }
-    return raw.replace(RE_COMMA, "");
+    return normalized.replace(RE_COMMA, "");
   }
 
-  return replaceDecimalSeparators(raw);
+  return replaceDecimalSeparators(normalized);
 }
 
 /**
@@ -71,7 +106,7 @@ export function parseLocaleValue(raw, groupSeparator, decimalSeparator) {
   if (decimalSeparator !== ".") {
     normalized = normalized.replace(decimalSeparator, ".");
   }
-  const num = Number(normalized);
+  const num = Number(normalizeDigits(normalized));
   return Number.isNaN(num) ? null : num;
 }
 

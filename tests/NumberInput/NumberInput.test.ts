@@ -1736,6 +1736,21 @@ describe("NumberInput", () => {
       expect(screen.getByTestId("value").textContent).toBe("1234.5");
     });
 
+    it("should parse Arabic-Indic digits typed with an Arabic locale", async () => {
+      // Regression test: locales like "ar-EG" render/expect Arabic-Indic digit
+      // glyphs (١٢٣٤٥ etc), which JS's `Number()` can't parse directly.
+      render(NumberInput, {
+        props: { locale: "ar-EG", value: null, allowEmpty: true },
+      });
+
+      const input = screen.getByRole("textbox");
+      expect.assert(input instanceof HTMLInputElement);
+      await user.type(input, "١٢٣٤٫٥");
+      await user.tab();
+
+      expect(screen.getByTestId("value").textContent).toBe("1234.5");
+    });
+
     it("should fall back to standard parsing when locale is removed", async () => {
       const { rerender } = render(NumberInput, {
         props: { locale: "de-DE", value: 1234.5, allowEmpty: true },
