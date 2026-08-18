@@ -57,6 +57,7 @@ describe("Link", () => {
     const iconWrapper = link.querySelector(".bx--link__icon");
     assert(iconWrapper);
     expect(iconWrapper.querySelector("svg")).toBeInTheDocument();
+    expect(iconWrapper.tagName).toBe("SPAN");
   });
 
   it("supports icon slot", () => {
@@ -122,6 +123,18 @@ describe("Link", () => {
     expect(link).toHaveClass("bx--link--disabled");
     expect(link).toHaveAttribute("aria-disabled", "true");
     expect(link).toHaveAttribute("role", "link");
+  });
+
+  it("does not call onClick when disabled", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Link);
+    const links = screen.getAllByRole("link", { name: "Carbon Design System" });
+    const link = links.find((l) => l.getAttribute("aria-disabled") === "true");
+    assert(link);
+
+    await user.click(link);
+
+    expect(consoleLog).not.toHaveBeenCalledWith("disabled-click");
   });
 
   it("supports muted variant", () => {
