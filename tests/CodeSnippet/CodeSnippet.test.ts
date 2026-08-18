@@ -702,6 +702,14 @@ yarn -v`,
     expect(snippet).not.toHaveAttribute("tabindex");
   });
 
+  test("respects disabled on the inline variant's copy button", () => {
+    const { container } = render(CodeSnippetDisabled, {
+      props: { type: "inline" },
+    });
+    const button = container.querySelector("button");
+    expect(button).toBeDisabled();
+  });
+
   test.each([
     { type: "inline" as const, expectedClass: "bx--snippet--inline" },
     { type: "single" as const, expectedClass: "bx--copy-btn" },
