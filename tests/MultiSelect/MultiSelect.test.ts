@@ -7,6 +7,7 @@ import {
 } from "@testing-library/svelte";
 import type MultiSelectComponent from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import type { MultiSelectItem } from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
+import MultiSelectReal from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import { fuzzyMatch } from "carbon-components-svelte/utils/fuzzyMatch";
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
@@ -59,6 +60,14 @@ describe("MultiSelect", () => {
       "aria-expanded",
       "false",
     );
+  });
+
+  it("forwards a maxlength attribute to the filterable input via restProps", () => {
+    render(MultiSelectReal, {
+      props: { items: [], filterable: true, maxlength: 10 },
+    });
+
+    expect(screen.getByRole("combobox")).toHaveAttribute("maxlength", "10");
   });
 
   describe("field accessible name and description", () => {
