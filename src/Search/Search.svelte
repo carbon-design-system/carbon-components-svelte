@@ -156,8 +156,7 @@
     <input
       bind:this={ref}
       bind:value
-      type="text"
-      role="searchbox"
+      type="search"
       class:bx--search-input={true}
       autofocus={autofocus === true ? true : undefined}
       {autocomplete}
