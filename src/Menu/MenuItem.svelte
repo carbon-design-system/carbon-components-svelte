@@ -184,6 +184,7 @@
   aria-checked={isIndented ? selected : undefined}
   aria-haspopup={hasSubmenu ? true : undefined}
   aria-expanded={hasSubmenu ? submenuOpen : undefined}
+  title={labelText}
   class:bx--menu-option={true}
   class:bx--menu-option--disabled={disabled}
   class:bx--menu-option--active={hasSubmenu && submenuOpen}
@@ -244,10 +245,7 @@
         <svelte:component this={displayIcon} />
       </div>
     {/if}
-    <span
-      class:bx--menu-option__label={true}
-      title={hasSubmenu ? labelText : undefined}
-    >
+    <span class:bx--menu-option__label={true}>
       {#if labelText !== undefined}
         <slot name="labelChildren">{labelText}</slot>
       {:else}
