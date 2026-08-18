@@ -204,6 +204,7 @@ export { default as TooltipIcon } from "./TooltipIcon/TooltipIcon.svelte";
 export { default as TreeView } from "./TreeView/TreeView.svelte";
 export { default as Truncate } from "./Truncate/Truncate.svelte";
 export { truncate } from "./Truncate/truncate";
+export { default as TruncatedText } from "./TruncatedText/TruncatedText.svelte";
 export { default as Content } from "./UIShell/Content.svelte";
 export { default as Header } from "./UIShell/Header.svelte";
 export { default as HeaderAction } from "./UIShell/HeaderAction.svelte";
