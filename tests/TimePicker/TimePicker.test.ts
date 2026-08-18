@@ -284,6 +284,31 @@ describe("TimePicker", () => {
     );
   });
 
+  it.each([{ disabled: true }, { readonly: true }])(
+    "suppresses invalid and warn states when %o",
+    (props) => {
+      render(TimePicker, {
+        props: {
+          invalid: true,
+          invalidText: "Invalid time",
+          warn: true,
+          warnText: "Warning message",
+          ...props,
+        },
+      });
+
+      const input = screen.getByRole("textbox");
+      expect(input).not.toHaveClass("bx--text-input--invalid");
+      expect(input).not.toHaveClass("bx--text-input--warning");
+      expect(input).not.toHaveAttribute("data-invalid");
+      expect(input).not.toHaveAttribute("aria-invalid");
+      expect(screen.queryByText("Invalid time")).not.toBeInTheDocument();
+      expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
+      expect(document.querySelector(".bx--time-picker--invalid")).toBeNull();
+      expect(document.querySelector(".bx--time-picker--warn")).toBeNull();
+    },
+  );
+
   it("should handle label text slot", () => {
     render(TimePickerCustom);
 
@@ -377,6 +402,15 @@ describe("TimePicker", () => {
         "aria-describedby",
         "error-fluid-time",
       );
+    });
+
+    it("does not render an icon when neither invalid nor warn", () => {
+      render(TimePicker, { fluid: true });
+
+      expect(
+        document.querySelector(".bx--time-picker__icon--invalid"),
+      ).toBeNull();
+      expect(document.querySelector(".bx--time-picker__icon--warn")).toBeNull();
     });
 
     it("renders the warning message inside the fluid container", () => {
