@@ -53,10 +53,7 @@
   /** Set to `true` to hide the copy button */
   export let hideCopyButton = false;
 
-  /**
-   * Set to `true` for the disabled variant.
-   * Only applies to the "single", "multi" types.
-   */
+  /** Set to `true` for the disabled variant. */
   export let disabled = false;
 
   /**
@@ -397,6 +394,7 @@
     <button
       bind:this={copyRef}
       type="button"
+      {disabled}
       aria-live="polite"
       aria-busy={copyPending || undefined}
       class:bx--copy={true}

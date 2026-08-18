@@ -1,0 +1,30 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Disabled treatment for the inline code snippet variant. Carbon's vendored
+/// v10.58 CSS only styles `.bx--snippet--disabled` on the single/multi
+/// container; the inline variant renders as a bare button with no disabled
+/// styling at all, so a disabled inline snippet kept its pointer cursor and
+/// hover/active backgrounds even though clicks are natively suppressed.
+/// @access private
+/// @group components
+@mixin code-snippet-inline-disabled {
+  .#{$prefix}--snippet--inline:disabled {
+    background-color: $disabled-01;
+    color: $disabled-02;
+    cursor: not-allowed;
+
+    &:hover,
+    &:active,
+    &:focus {
+      background-color: $disabled-01;
+      border-color: transparent;
+      cursor: not-allowed;
+    }
+  }
+}
+
+@include exports("code-snippet-inline-disabled") {
+  @include code-snippet-inline-disabled;
+}
