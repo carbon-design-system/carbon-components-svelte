@@ -598,6 +598,41 @@ describe("Dropdown", () => {
     expect(button).toHaveTextContent("Slack");
   });
 
+  it("preserves the selected item when the menu closes via blur without a new selection", async () => {
+    const selectHandler = vi.fn();
+    render(Dropdown, {
+      props: { items, selectedId: "0", onselect: selectHandler },
+    });
+
+    const button = screen.getByRole("combobox");
+    await user.click(button);
+    expect(screen.getByRole("listbox")).toBeVisible();
+
+    await user.keyboard("{ArrowDown}");
+    fireEvent.blur(button);
+    await tick();
+
+    expect(selectHandler).not.toHaveBeenCalled();
+    expect(button).toHaveTextContent("Slack");
+  });
+
+  it("preserves the selected item when the menu closes via Tab without a new selection", async () => {
+    const selectHandler = vi.fn();
+    render(Dropdown, {
+      props: { items, selectedId: "0", onselect: selectHandler },
+    });
+
+    const button = screen.getByRole("combobox");
+    await user.click(button);
+    expect(screen.getByRole("listbox")).toBeVisible();
+
+    await user.keyboard("{ArrowDown}");
+    await user.keyboard("{Tab}");
+
+    expect(selectHandler).not.toHaveBeenCalled();
+    expect(button).toHaveTextContent("Slack");
+  });
+
   // Regression: the Space keydown must cancel its default action so the
   // browser does not scroll the page (and does not synthesize a click)
   // before the keyup handler opens the menu.
