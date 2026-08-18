@@ -296,6 +296,29 @@ describe("CheckboxGroup", () => {
     );
   });
 
+  it("propagates group invalid state to child checkboxes that don't set their own", () => {
+    render(CheckboxGroupComponent, {
+      props: { invalid: true, invalidText: "Select at least one option" },
+    });
+
+    const option1 = screen.getByRole("checkbox", { name: "Option 1" });
+    expect(option1.closest(".bx--checkbox-wrapper")).toHaveClass(
+      "bx--checkbox-wrapper--invalid",
+    );
+    expect(option1).toHaveAttribute("aria-invalid", "true");
+  });
+
+  it("propagates group warn state to child checkboxes that don't set their own", () => {
+    render(CheckboxGroupComponent, {
+      props: { warn: true, warnText: "Heads up" },
+    });
+
+    const option1 = screen.getByRole("checkbox", { name: "Option 1" });
+    expect(option1.closest(".bx--checkbox-wrapper")).toHaveClass(
+      "bx--checkbox-wrapper--warning",
+    );
+  });
+
   it("should support multiple selections", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(CheckboxGroupComponent);
