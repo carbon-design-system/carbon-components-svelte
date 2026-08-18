@@ -484,6 +484,7 @@
         <input
           bind:this={ref}
           type="number"
+          inputmode="decimal"
           aria-describedby={hasErrorMessage
             ? errorId
             : showWarn
