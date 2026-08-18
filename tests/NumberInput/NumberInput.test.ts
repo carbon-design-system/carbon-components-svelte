@@ -552,6 +552,13 @@ describe("NumberInput", () => {
     expect(input).not.toHaveAttribute("pattern");
   });
 
+  it("should default inputmode to decimal on type=number input", () => {
+    render(NumberInput);
+
+    const input = screen.getByRole("spinbutton");
+    expect(input).toHaveAttribute("inputmode", "decimal");
+  });
+
   it("should support aria-label override via restProps", () => {
     render(NumberInput, {
       props: {
