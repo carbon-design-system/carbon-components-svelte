@@ -115,12 +115,16 @@
     groupName,
     groupRequired,
     readonly: groupReadonly,
+    invalid: groupInvalid,
+    warn: groupWarn,
     update: ctxUpdate,
   } = ctx ?? {
     selectedValues: readable([]),
     groupName: readable(undefined),
     groupRequired: readable(undefined),
     readonly: readable(false),
+    invalid: readable(false),
+    warn: readable(false),
   };
 
   $: useGroup = !ctx && Array.isArray(group);
@@ -130,8 +134,11 @@
   $: effectiveName = ctx ? ($groupName ?? name) : name;
   $: effectiveRequired = ctx ? ($groupRequired ?? required) : required;
   $: effectiveReadonly = $groupReadonly || readonly;
-  $: showInvalid = invalid && !disabled && !effectiveReadonly;
-  $: showWarn = warn && !invalid && !disabled && !effectiveReadonly;
+  $: effectiveInvalid = $groupInvalid || invalid;
+  $: effectiveWarn = $groupWarn || warn;
+  $: showInvalid = effectiveInvalid && !disabled && !effectiveReadonly;
+  $: showWarn =
+    effectiveWarn && !effectiveInvalid && !disabled && !effectiveReadonly;
 
   // Track previous checked value to avoid duplicate dispatches in Svelte 5
   // The reactive statement will only dispatch when checked changes externally (e.g., via bind:checked)

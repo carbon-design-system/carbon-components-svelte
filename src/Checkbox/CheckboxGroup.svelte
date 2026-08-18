@@ -80,6 +80,8 @@
   const groupName = writable(name);
   const groupRequired = writable(required);
   const groupReadonly = writable(readonly);
+  const groupInvalid = writable(invalid);
+  const groupWarn = writable(warn);
   let isInitialRender = true;
 
   /**
@@ -100,6 +102,8 @@
     groupName: readOnly(groupName),
     groupRequired: readOnly(groupRequired),
     readonly: readOnly(groupReadonly),
+    invalid: readOnly(groupInvalid),
+    warn: readOnly(groupWarn),
     update,
   });
 
@@ -123,6 +127,8 @@
   $: $groupName = name;
   $: $groupRequired = required;
   $: $groupReadonly = readonly;
+  $: $groupInvalid = invalid;
+  $: $groupWarn = warn;
   $: showInvalid = invalid && !disabled && !readonly;
   $: showWarn = warn && !invalid && !disabled && !readonly;
 
