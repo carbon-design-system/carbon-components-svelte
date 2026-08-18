@@ -528,12 +528,21 @@
   });
 
   $: dateFormatStore.set(dateFormat);
+  $: mode.set(datePickerType);
   $: inputValue.set(value);
   $: value = $inputValue;
   $: inputValueFrom.set(valueFrom);
   $: valueFrom = $inputValueFrom;
   $: inputValueTo.set(valueTo);
   $: valueTo = $inputValueTo;
+  $: if (!$hasCalendar && calendar) {
+    // datePickerType switched away from a calendar-having type; the
+    // flatpickr instance is otherwise only torn down on unmount.
+    detachFixedRepositionListeners();
+    calendar.destroy();
+    calendar = null;
+    lastAppliedOptions = {};
+  }
   $: if ($hasCalendar && inputRef) {
     initCalendar({
       dateFormat,
