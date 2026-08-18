@@ -583,6 +583,12 @@
     );
   }
 
+  // A scrollable modal can mask the pointerdown target so the matching
+  // `click` fires on an outside element (e.g. document.body) even though the
+  // interaction started inside the calendar. Track that origin so such a
+  // click doesn't get misread as an outside dismiss.
+  let pointerDownInside = false;
+
   /**
    * flatpickr closes on document `mousedown` before our `click` handler runs.
    * Set `closeTrigger` in capture phase so single-mode outside dismiss is not
@@ -591,13 +597,19 @@
    * @type {(event: Event) => void}
    */
   function handleOutsidePointerDown(event) {
-    if (isOutsideCalendarTarget(event)) closeTrigger = "outside-click";
+    const outside = isOutsideCalendarTarget(event);
+    pointerDownInside = !outside;
+    if (outside) closeTrigger = "outside-click";
   }
 
   /**
    * @type {(event: Event) => void}
    */
   function handleOutsideClick(event) {
+    if (pointerDownInside) {
+      pointerDownInside = false;
+      return;
+    }
     if (isOutsideCalendarTarget(event)) dismissCalendar("outside-click");
   }
 </script>
