@@ -27,6 +27,7 @@
     aria-current={isSelected ? "page" : undefined}
     {href}
     class:bx--side-nav__link={true}
+    class:bx--side-nav__link--current={isSelected}
     {...$$restProps}
     on:click
   >
