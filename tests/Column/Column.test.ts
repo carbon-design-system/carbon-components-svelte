@@ -9,6 +9,13 @@ describe("Column", () => {
     expect(column).toHaveClass("bx--col");
   });
 
+  it("should expose ref to the rendered element", () => {
+    const { component } = render(Column);
+
+    expect(component.ref).toBeInstanceOf(HTMLDivElement);
+    expect(component.ref).toHaveClass("bx--col");
+  });
+
   it("should render with custom element when as is true", () => {
     render(Column, { props: { as: true } });
     const column = screen.getByTestId("content").parentElement;
