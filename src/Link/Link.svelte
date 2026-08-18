@@ -60,7 +60,10 @@
     class:bx--link--visited={visited}
     class:bx--link--muted={muted}
     {...$$restProps}
-    on:click
+    on:click={(event) => {
+      event.preventDefault();
+      event.stopPropagation();
+    }}
     on:mouseover
     on:mouseenter
     on:mouseleave
@@ -71,9 +74,9 @@
   >
     <slot />
     {#if !inline && ($$slots.icon || icon)}
-      <div class:bx--link__icon={true}>
+      <span class:bx--link__icon={true}>
         <slot name="icon"> <svelte:component this={icon} /> </slot>
-      </div>
+      </span>
     {/if}
   </a>
 {:else}
@@ -100,9 +103,9 @@
   >
     <slot />
     {#if !inline && ($$slots.icon || icon)}
-      <div class:bx--link__icon={true}>
+      <span class:bx--link__icon={true}>
         <slot name="icon"> <svelte:component this={icon} /> </slot>
-      </div>
+      </span>
     {/if}
   </a>
 {/if}
