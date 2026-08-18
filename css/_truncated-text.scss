@@ -1,0 +1,46 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// TruncatedText styles. Ported from Carbon React's own (not yet part of its
+/// public API — its export is commented out upstream) `packages/styles/scss/
+/// components/truncated-text`. Drops the `:focus-visible` upstream uses for
+/// the expand toggle's focus ring: like elsewhere in this library,
+/// `:focus-visible` exceeds this library's Safari 14 baseline (shipped in
+/// Safari 15.4), so every focus shows the ring here. No `__tooltip-trigger`
+/// styles are ported: the tooltip variant reuses this repo's own
+/// `TooltipDefinition`, which already resets its own trigger button.
+/// @access public
+/// @group truncated-text
+@mixin truncated-text {
+  .#{$prefix}--truncated-text__text-content {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    // The tooltip variant nests this inside TooltipDefinition's <button>
+    // trigger; buttons default to a centered text-align, which is
+    // inherited here since text-align isn't otherwise set. Reset
+    // explicitly so multi-line content stays left-aligned regardless of
+    // which variant (tooltip, expand, or plain) wraps it.
+    text-align: start;
+    line-height: initial;
+    text-overflow: clip;
+  }
+
+  .#{$prefix}--truncated-text__expand-toggle {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: $link-primary;
+    cursor: pointer;
+    font: inherit;
+  }
+
+  .#{$prefix}--truncated-text__expand-toggle:focus {
+    outline: 2px solid $focus;
+    outline-offset: 2px;
+  }
+}
+
+@include exports("truncated-text") {
+  @include truncated-text;
+}
