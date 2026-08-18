@@ -136,6 +136,36 @@ describe("Pagination", () => {
     expect(nextButton).toBeDisabled();
   });
 
+  it("moves focus to the forward button when the backward button becomes disabled", async () => {
+    render(Pagination, {
+      props: { page: 2, totalItems: 20, pageSize: 10 },
+    });
+
+    const prevButton = screen.getByRole("button", { name: "Previous page" });
+    const nextButton = screen.getByRole("button", { name: "Next page" });
+
+    prevButton.focus();
+    await user.click(prevButton);
+
+    expect(prevButton).toBeDisabled();
+    expect(nextButton).toHaveFocus();
+  });
+
+  it("moves focus to the backward button when the forward button becomes disabled", async () => {
+    render(Pagination, {
+      props: { page: 1, totalItems: 20, pageSize: 10 },
+    });
+
+    const prevButton = screen.getByRole("button", { name: "Previous page" });
+    const nextButton = screen.getByRole("button", { name: "Next page" });
+
+    nextButton.focus();
+    await user.click(nextButton);
+
+    expect(nextButton).toBeDisabled();
+    expect(prevButton).toHaveFocus();
+  });
+
   it("should handle custom button text", () => {
     render(Pagination, {
       props: {
