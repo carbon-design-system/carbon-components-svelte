@@ -1,3 +1,5 @@
+<svelte:options accessors />
+
 <script lang="ts">
   import Column from "carbon-components-svelte/Grid/Column.svelte";
   import type { ComponentProps } from "svelte";
@@ -13,6 +15,7 @@
   export let lg: ComponentProps<Column>["lg"] = undefined;
   export let xlg: ComponentProps<Column>["xlg"] = undefined;
   export let max: ComponentProps<Column>["max"] = undefined;
+  export let ref: ComponentProps<Column>["ref"] = null;
 </script>
 
 <Column
@@ -27,6 +30,7 @@
   {lg}
   {xlg}
   {max}
+  bind:ref
 >
   <div data-testid="content">Column Content</div>
 </Column>

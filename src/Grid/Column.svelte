@@ -73,6 +73,13 @@
    */
   export let max = undefined;
 
+  /**
+   * Obtain a reference to the top-level HTML element.
+   * `null` when `as` is `true`, since the element is then rendered by the consumer.
+   * @bindable readonly
+   */
+  export let ref = null;
+
   const breakpoints = ["sm", "md", "lg", "xlg", "max"];
 
   $: columnClass = [sm, md, lg, xlg, max]
@@ -123,5 +130,5 @@
 {#if as}
   <slot {props} />
 {:else}
-  <div {...props}><slot /></div>
+  <div bind:this={ref} {...props}><slot /></div>
 {/if}
