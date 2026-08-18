@@ -69,6 +69,44 @@ describe("DatePicker", () => {
     expect(weekdays).toEqual(["S", "M", "T", "W", "Th", "F", "S"]);
   });
 
+  it("renders month before year in the calendar header for locale='en'", async () => {
+    const { container } = render(DatePicker, {
+      datePickerType: "single",
+      locale: "en",
+    });
+
+    await user.click(screen.getByLabelText("Date"));
+    await screen.findByLabelText("calendar-container");
+
+    const header = container.querySelector(".flatpickr-current-month");
+    const month = header?.querySelector(".cur-month");
+    const year = header?.querySelector(".numInputWrapper");
+    expect(month).toBeTruthy();
+    expect(year).toBeTruthy();
+    expect(month?.compareDocumentPosition(year as Element)).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    );
+  });
+
+  it("renders year before month in the calendar header for locale='ja'", async () => {
+    const { container } = render(DatePicker, {
+      datePickerType: "single",
+      locale: "ja",
+    });
+
+    await user.click(screen.getByLabelText("Date"));
+    await screen.findByLabelText("calendar-container");
+
+    const header = container.querySelector(".flatpickr-current-month");
+    const month = header?.querySelector(".cur-month");
+    const year = header?.querySelector(".numInputWrapper");
+    expect(month).toBeTruthy();
+    expect(year).toBeTruthy();
+    expect(year?.compareDocumentPosition(month as Element)).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    );
+  });
+
   it("renders range mode", async () => {
     const { container } = render(DatePickerRange);
 

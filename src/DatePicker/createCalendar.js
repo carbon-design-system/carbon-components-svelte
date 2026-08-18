@@ -132,20 +132,55 @@ function markTodayMonth(instance) {
 }
 
 /**
- * @param {FlatpickrInstance} instance
+ * Whether `locale` orders the month before the year (e.g. "January 2000"),
+ * as opposed to year before month (e.g. "2000年1月" in Japanese).
+ *
+ * @param {unknown} locale
+ * @returns {boolean}
  */
-function updateMonthNode(instance) {
-  const monthText = instance.l10n.months.longhand[instance.currentMonth];
-  const staticMonthNode = instance.monthNav.querySelector(".cur-month");
+function isMonthFirst(locale) {
+  if (typeof locale !== "string") return true;
+  try {
+    const parts = new Intl.DateTimeFormat(locale, {
+      year: "numeric",
+      month: "long",
+    }).formatToParts(new Date(2000, 0, 1));
+    const monthIndex = parts.findIndex((part) => part.type === "month");
+    const yearIndex = parts.findIndex((part) => part.type === "year");
+    return monthIndex < yearIndex;
+  } catch {
+    return true;
+  }
+}
 
-  if (staticMonthNode) {
-    staticMonthNode.textContent = monthText;
+/**
+ * @param {FlatpickrInstance} instance
+ * @param {unknown} locale
+ */
+function updateMonthNode(instance, locale) {
+  const monthText = instance.l10n.months.longhand[instance.currentMonth];
+  let monthNode = instance.monthNav.querySelector(".cur-month");
+
+  if (monthNode) {
+    monthNode.textContent = monthText;
   } else {
     const monthSelectNode = instance.monthsDropdownContainer;
     const span = document.createElement("span");
     span.setAttribute("class", "cur-month");
     span.textContent = monthText;
     monthSelectNode.parentNode?.replaceChild(span, monthSelectNode);
+    monthNode = span;
+  }
+
+  // Depending on the locale, toggle the order of the month and year.
+  const yearWrapper = monthNode.parentNode?.querySelector(".numInputWrapper");
+  if (!yearWrapper) return;
+  if (isMonthFirst(locale)) {
+    if (monthNode.nextSibling !== yearWrapper) {
+      yearWrapper.parentNode?.insertBefore(monthNode, yearWrapper);
+    }
+  } else if (yearWrapper.nextSibling !== monthNode) {
+    yearWrapper.insertAdjacentElement("afterend", monthNode);
   }
 }
 
@@ -230,7 +265,7 @@ export async function createCalendar({ options, base, input, dispatch }) {
       // The monthSelect / yearSelect plugins remove the month-label node, so
       // there is nothing for updateMonthNode to patch.
       if (options.mode !== "month" && options.mode !== "year") {
-        updateMonthNode(instance);
+        updateMonthNode(instance, options.locale);
       }
     },
     onYearChange: (
@@ -255,7 +290,7 @@ export async function createCalendar({ options, base, input, dispatch }) {
         isYear: options.mode === "year",
       });
       if (options.mode !== "month" && options.mode !== "year") {
-        updateMonthNode(instance);
+        updateMonthNode(instance, options.locale);
       }
       if (options.mode === "month") {
         markTodayMonth(instance);
