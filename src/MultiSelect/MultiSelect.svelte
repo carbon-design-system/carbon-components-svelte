@@ -431,13 +431,25 @@
   function syncSelectAllItem() {
     if (!hasSelectAll) return;
 
-    const newSelectableChecked = sortedItems.filter(
-      (sortedItem) =>
-        !sortedItem.disabled && !sortedItem.isSelectAll && sortedItem.checked,
+    // Recomputed fresh from `sortedItems`/`value` (plain reads) rather than
+    // the `$:`-derived `selectAllScope`/`selectableItems`, which haven't
+    // picked up the mutation callers make to `sortedItems` just before
+    // calling this (reactive statements only re-run on the next tick).
+    const scope =
+      filterable && open
+        ? sortedItems.filter(
+            (sortedItem) =>
+              sortedItem.isSelectAll || filterItem(sortedItem, value),
+          )
+        : sortedItems;
+    const selectable = scope.filter(
+      (sortedItem) => !sortedItem.disabled && !sortedItem.isSelectAll,
+    );
+    const newSelectableChecked = selectable.filter(
+      (sortedItem) => sortedItem.checked,
     ).length;
     const newAllSelected =
-      selectableItems.length > 0 &&
-      newSelectableChecked === selectableItems.length;
+      selectable.length > 0 && newSelectableChecked === selectable.length;
     const selectAllIndex = sortedItems.findIndex(
       (sortedItem) => sortedItem.isSelectAll,
     );
@@ -473,7 +485,9 @@
     if (item.isSelectAll) {
       const target = !allSelected;
       sortedItems = sortedItems.map((sortedItem) =>
-        sortedItem.disabled || sortedItem.checked === target
+        !selectAllScopeIds.has(sortedItem.id) ||
+        sortedItem.disabled ||
+        sortedItem.checked === target
           ? sortedItem
           : { ...sortedItem, checked: target },
       );
@@ -804,7 +818,11 @@
     (item) =>
       !item.isSelectAll && !item.disabled && selectedIdsSet.has(item.id),
   );
-  $: selectableItems = sortedItems.filter(
+  // Scope select-all to the currently visible (filtered) items, so it
+  // doesn't check/uncheck items hidden by an active filter.
+  $: selectAllScope = filterable && open ? filteredItems : sortedItems;
+  $: selectAllScopeIds = new Set(selectAllScope.map((item) => item.id));
+  $: selectableItems = selectAllScope.filter(
     (item) => !item.disabled && !item.isSelectAll,
   );
   $: selectableCheckedCount = selectableItems.filter(

@@ -625,6 +625,54 @@ describe("MultiSelect", () => {
       expect(consoleLog.mock.calls[0][1].unselected).toHaveLength(4);
     });
 
+    it("scopes select-all to the currently filtered items, not the whole list", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(MultiSelect, {
+        props: {
+          items: itemsWithSelectAll,
+          labelText: "Roles",
+          filterable: true,
+          placeholder: "Filter...",
+        },
+      });
+
+      const input = screen.getByRole("combobox");
+      await user.click(input);
+      await user.type(input, "Ed");
+      await toggleOption("All roles");
+
+      expect(consoleLog).toHaveBeenCalledWith("select", {
+        selectedIds: ["editor"],
+        selected: [expect.objectContaining({ id: "editor", checked: true })],
+        unselected: expect.arrayContaining([
+          expect.objectContaining({ id: "owner", checked: false }),
+          expect.objectContaining({ id: "reader", checked: false }),
+          expect.objectContaining({ id: "uploader", checked: false }),
+        ]),
+      });
+      expect(consoleLog.mock.calls[0][1].unselected).toHaveLength(3);
+    });
+
+    it("does not indicate select-all as checked when unfiltered items remain unselected", async () => {
+      render(MultiSelect, {
+        props: {
+          items: itemsWithSelectAll,
+          labelText: "Roles",
+          filterable: true,
+          placeholder: "Filter...",
+        },
+      });
+
+      const input = screen.getByRole("combobox");
+      await user.click(input);
+      await user.type(input, "Ed");
+      await toggleOption("All roles");
+
+      await user.clear(input);
+      const selectAllOption = screen.getByRole("option", { name: "All roles" });
+      expect(selectAllOption).toHaveAttribute("aria-selected", "false");
+    });
+
     it("select event excludes isSelectAll item from selectedIds and selected/unselected", async () => {
       const consoleLog = vi.spyOn(console, "log");
       render(MultiSelect, {
