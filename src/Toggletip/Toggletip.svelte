@@ -170,10 +170,6 @@
     if (open && isOutsideClick(event, insideElements)) close();
   }
 
-  function handleWindowBlur() {
-    if (open) close();
-  }
-
   // Close when an ancestor modal closes so the portalled content does not linger.
   $: {
     disconnectModalObserver();
@@ -223,10 +219,7 @@ whitespace gap; the label's `margin-right` is then the only spacing. -->
     class:bx--toggletip--open={open}
     use:dismiss={{
       enabled: listenersEnabled,
-      listeners: [
-        { type: "click", handler: handleOutsideClick },
-        { type: "blur", handler: handleWindowBlur },
-      ],
+      listeners: [{ type: "click", handler: handleOutsideClick }],
     }}
     on:keydown={onKeydown}
     on:focusout={onFocusOut}
