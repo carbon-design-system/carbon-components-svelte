@@ -520,6 +520,42 @@ describe("DataTable", () => {
     ).toHaveTextContent("Load Balancer 3");
   });
 
+  it("allows a header to opt into sorting when the table itself is not sortable", async () => {
+    const customHeaders = [
+      { key: "name", value: "Name", isSortable: true },
+      { key: "protocol", value: "Protocol" },
+    ];
+
+    render(DataTable, {
+      props: {
+        sortable: false,
+        headers: customHeaders,
+        rows,
+      },
+    });
+
+    // Protocol has no per-header override, so it stays non-interactive.
+    expect(screen.getByText("Protocol").closest("th")).not.toHaveAttribute(
+      "aria-sort",
+    );
+
+    // Name opted in via isSortable, so it renders as a sortable header and
+    // can be clicked even though the table-level `sortable` is false.
+    const nameHeader = screen.getByText("Name");
+    expect(nameHeader.closest("th")).toHaveAttribute("aria-sort", "none");
+
+    await user.click(nameHeader);
+
+    expect(nameHeader.closest("th")).toHaveAttribute("aria-sort", "ascending");
+
+    const tableRows = screen
+      .getAllByRole("row")
+      .filter((row) => row.closest("tbody") !== null);
+    expect(
+      within(tableRows[0]).getByRole("cell", { name: "Load Balancer 1" }),
+    ).toBeInTheDocument();
+  });
+
   it("handles table with numeric sorting", async () => {
     const numericRows = [
       { id: "a", value: 10 },
