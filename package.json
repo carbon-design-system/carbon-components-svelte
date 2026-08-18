@@ -58,7 +58,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.12.1",
-    "@biomejs/biome": "2.5.8",
+    "@biomejs/biome": "2.5.9",
     "@playwright/test": "1.61.1",
     "@sveltejs/vite-plugin-svelte": "^7.2.0",
     "@testing-library/jest-dom": "^7.0.0",
