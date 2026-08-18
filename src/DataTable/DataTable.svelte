@@ -1036,13 +1036,7 @@
                 on:click={(event) => {
                   dispatch("click", { header });
 
-                  if (!isHeaderSortable(header)) {
-                    dispatch("click:header", {
-                      header,
-                      target: event.target,
-                      currentTarget: event.currentTarget,
-                    });
-                  } else {
+                  if (isHeaderSortable(header)) {
                     const currentSortDirection =
                       sortKey === header.key ? sortDirection : "none";
                     const effectiveSortAlways =
@@ -1076,6 +1070,12 @@
                     dispatch("click:header", {
                       header,
                       sortDirection: nextSortDirection,
+                      target: event.target,
+                      currentTarget: event.currentTarget,
+                    });
+                  } else {
+                    dispatch("click:header", {
+                      header,
                       target: event.target,
                       currentTarget: event.currentTarget,
                     });
