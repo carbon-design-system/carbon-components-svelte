@@ -146,6 +146,7 @@
   import Close from "../icons/Close.svelte";
   import { initialFocus, restoreFocus } from "../utils/focus.js";
   import { createOutsideDismiss } from "../utils/outsideDismiss.js";
+  import { scrollIntoViewWithinMenu } from "../utils/scrollIntoViewWithinMenu.js";
   import { trapFocus } from "../utils/trapFocus.js";
   import { uniqueId } from "../utils/uniqueId.js";
   import { trackModal } from "./modalStore";
@@ -363,6 +364,13 @@
       role={hasScrollingContent ? "region" : undefined}
       aria-label={hasScrollingContent ? ariaLabel : undefined}
       aria-labelledby={modalLabel ? modalLabelId : modalHeadingId}
+      on:focusin={(event) => {
+        // Keep a newly-focused element (e.g. via Tab) from being hidden
+        // under the scroll gradient at the bottom of the content area.
+        if (event.target instanceof HTMLElement) {
+          scrollIntoViewWithinMenu(event.target, ".bx--modal-content");
+        }
+      }}
     >
       <slot />
     </div>
