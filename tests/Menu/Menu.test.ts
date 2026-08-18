@@ -242,6 +242,22 @@ describe("Menu", () => {
     });
   });
 
+  it("closes and returns focus to the anchor on Tab", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(MenuFixture);
+
+    const trigger = screen.getByRole("button", { name: "Trigger" });
+    await user.click(trigger);
+
+    await user.keyboard("{Tab}");
+
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+    expect(trigger).toHaveFocus();
+    expect(consoleLog).toHaveBeenCalledWith("close", {
+      trigger: "escape-key",
+    });
+  });
+
   it("closes on outside click without returning focus", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(MenuFixture);

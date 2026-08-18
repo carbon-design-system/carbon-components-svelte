@@ -172,8 +172,15 @@
     if (target instanceof Element && target.closest("[role='menu']")) return;
     if (isOutsideClick(event, [anchor, ref])) close("outside-click");
   }
+  
   function handleEscape(event) {
-    if (open && event.key === "Escape") close("escape-key");
+    if (!open) return;
+    // Tab is treated like Escape: without this, focus would leave the
+    // (possibly portaled) menu for whatever happens to be next in the DOM.
+    if (event.key === "Escape" || event.key === "Tab") {
+      event.preventDefault();
+      close("escape-key");
+    }
   }
 </script>
 
