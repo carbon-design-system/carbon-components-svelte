@@ -8,7 +8,8 @@
   export let open: ComponentProps<ComposedModal>["open"] = false;
   export let size: ComponentProps<ComposedModal>["size"] = undefined;
   export let danger: ComponentProps<ComposedModal>["danger"] = false;
-  export let preventCloseOnClickOutside: ComponentProps<ComposedModal>["preventCloseOnClickOutside"] = false;
+  export let preventCloseOnClickOutside: ComponentProps<ComposedModal>["preventCloseOnClickOutside"] =
+    undefined;
   export let containerClass: ComponentProps<ComposedModal>["containerClass"] =
     "";
   export let selectorPrimaryFocus: ComponentProps<ComposedModal>["selectorPrimaryFocus"] =

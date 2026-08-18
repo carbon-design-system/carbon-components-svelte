@@ -192,6 +192,76 @@ describe("ComposedModal", () => {
     expect(consoleLog).not.toHaveBeenCalledWith("close");
   });
 
+  describe("outside click behavior", () => {
+    function backdropOf(container: HTMLElement) {
+      const backdrop = container.querySelector('[role="presentation"]');
+      assert(backdrop);
+      return backdrop;
+    }
+
+    it("does not close a modal with a ModalFooter on outside click by default", async () => {
+      const closeHandler = vi.fn();
+      const { container } = render(ComposedModalTest, {
+        props: {
+          open: true,
+          headerTitle: "Transactional",
+          footerPrimaryButtonText: "Save",
+          footerSecondaryButtonText: "Cancel",
+          onclose: closeHandler,
+        },
+      });
+
+      await user.click(backdropOf(container));
+      expect(closeHandler).not.toHaveBeenCalled();
+    });
+
+    it("closes a modal with a ModalFooter on outside click when preventCloseOnClickOutside is explicitly false", async () => {
+      const closeHandler = vi.fn();
+      const { container } = render(ComposedModalTest, {
+        props: {
+          open: true,
+          headerTitle: "Transactional",
+          footerPrimaryButtonText: "Save",
+          footerSecondaryButtonText: "Cancel",
+          preventCloseOnClickOutside: false,
+          onclose: closeHandler,
+        },
+      });
+
+      await user.click(backdropOf(container));
+      expect(closeHandler).toHaveBeenCalledTimes(1);
+    });
+
+    it("closes a modal without a ModalFooter on outside click by default", async () => {
+      const closeHandler = vi.fn();
+      const { container } = render(ComposedModalTest, {
+        props: {
+          open: true,
+          headerTitle: "Passive",
+          onclose: closeHandler,
+        },
+      });
+
+      await user.click(backdropOf(container));
+      expect(closeHandler).toHaveBeenCalledTimes(1);
+    });
+
+    it("does not close a modal without a ModalFooter on outside click when preventCloseOnClickOutside is explicitly true", async () => {
+      const closeHandler = vi.fn();
+      const { container } = render(ComposedModalTest, {
+        props: {
+          open: true,
+          headerTitle: "Passive",
+          preventCloseOnClickOutside: true,
+          onclose: closeHandler,
+        },
+      });
+
+      await user.click(backdropOf(container));
+      expect(closeHandler).not.toHaveBeenCalled();
+    });
+  });
+
   it("should render header with title and label", () => {
     render(ComposedModalTest, {
       props: {

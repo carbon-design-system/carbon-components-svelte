@@ -24,8 +24,15 @@
   /** Set to `true` to remove the modal body padding so content spans edge to edge */
   export let fullWidth = false;
 
-  /** Set to `true` to prevent the modal from closing when clicking outside */
-  export let preventCloseOnClickOutside = false;
+  /**
+   * Set to prevent (or force-allow) closing the modal on an outside click.
+   * A modal without a `ModalFooter` (passive) closes on an outside click
+   * unless this is explicitly `true`. A modal with a `ModalFooter`
+   * (non-passive) never closes on an outside click unless this is
+   * explicitly `false`.
+   * @type {boolean | undefined}
+   */
+  export let preventCloseOnClickOutside = undefined;
 
   /** Specify a class for the inner modal */
   export let containerClass = "";
@@ -64,6 +71,9 @@
   let buttonRef = null;
   let innerModal = null;
   let closeDispatched = false;
+  // Set by ModalFooter registering itself; a modal without a footer is
+  // considered passive, same distinction as Modal's `passiveModal` prop.
+  let hasFooter = false;
 
   function close(trigger) {
     closeDispatched = true;
@@ -76,7 +86,10 @@
   }
 
   const outsideDismiss = createOutsideDismiss(() => {
-    if (!preventCloseOnClickOutside) close("outside-click");
+    const shouldClose = hasFooter
+      ? preventCloseOnClickOutside === false
+      : preventCloseOnClickOutside !== true;
+    if (shouldClose) close("outside-click");
   });
 
   /**
@@ -115,6 +128,13 @@
     title.set(value);
   }
 
+  /**
+   * @type {() => void}
+   */
+  function registerFooter() {
+    hasFooter = true;
+  }
+
   setContext("carbon:Modal", {});
   setContext("carbon:ComposedModal", {
     closeModal,
@@ -126,6 +146,7 @@
     titleId,
     label,
     title,
+    registerFooter,
   });
 
   function focus(element) {

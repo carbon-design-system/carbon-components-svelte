@@ -60,7 +60,10 @@
   import InlineLoading from "../InlineLoading/InlineLoading.svelte";
 
   const dispatch = createEventDispatcher();
-  const { closeModal, submit } = getContext("carbon:ComposedModal");
+  const { closeModal, submit, registerFooter } = getContext(
+    "carbon:ComposedModal",
+  );
+  registerFooter();
 
   function handlePrimaryClick() {
     if (primaryButtonLoading) return;
