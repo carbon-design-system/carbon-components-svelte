@@ -53,6 +53,12 @@ describe("Search", () => {
     expect(consoleLog).toHaveBeenCalledTimes(1);
   });
 
+  it("uses a native type=search input", () => {
+    render(Search);
+
+    expect(getSearchInput("Default search")).toHaveAttribute("type", "search");
+  });
+
   it("gives the search landmark a unique accessible name per instance", () => {
     render(Search);
 
