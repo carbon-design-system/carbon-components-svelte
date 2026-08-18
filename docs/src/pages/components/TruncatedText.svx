@@ -1,0 +1,70 @@
+---
+components: ["TruncatedText"]
+description: Multi-line text that clamps to a maximum number of lines and offers a way to reveal the rest — a tooltip on hover, or an inline expand/collapse toggle — only when the text is actually truncated at the current width.
+---
+
+<script>
+  import { TruncatedText } from "carbon-components-svelte";
+</script>
+
+Unlike [Truncate](/components/Truncate), which just clamps text with CSS, `TruncatedText` measures the rendered content and only shows a reveal affordance (tooltip or expand toggle) when the text is actually overflowing at the current width — resize the examples below to see the affordance appear and disappear.
+
+## Basic
+
+By default (`type="tooltip"`), truncated text is wrapped in a tooltip trigger that reveals the full text on hover or focus.
+
+<div style="max-width: 20rem;">
+  <TruncatedText>
+    Carbon Components Svelte is a Svelte component library that implements the Carbon Design System, an open source design system by IBM.
+  </TruncatedText>
+</div>
+
+## Expand and collapse
+
+Set `type` to `"expand"` for a "Read more"/"Read less" toggle instead of a tooltip. Customize the labels with `expandLabel` and `collapseLabel`.
+
+<div style="max-width: 20rem;">
+  <TruncatedText type="expand" expandLabel="Read more" collapseLabel="Read less">
+    Carbon Components Svelte is a Svelte component library that implements the Carbon Design System, an open source design system by IBM.
+  </TruncatedText>
+</div>
+
+## Lines
+
+Set `lines` to control how many lines show before truncating. Defaults to `2`.
+
+<div style="max-width: 20rem;">
+  <TruncatedText lines={3} type="expand" expandLabel="Read more" collapseLabel="Read less">
+    Carbon Components Svelte is a Svelte component library that implements the Carbon Design System, an open source design system by IBM. It is maintained by the open source community and is available on npm.
+  </TruncatedText>
+</div>
+
+## No reveal
+
+Set `type` to `"none"` for plain ellipsis truncation with no tooltip or toggle.
+
+<div style="max-width: 20rem;">
+  <TruncatedText type="none">
+    Carbon Components Svelte is a Svelte component library that implements the Carbon Design System, an open source design system by IBM.
+  </TruncatedText>
+</div>
+
+## Tooltip placement
+
+Position the tooltip with `align` and `direction`, the same as [TooltipDefinition](/components/TooltipDefinition).
+
+<div style="max-width: 20rem;">
+  <TruncatedText direction="top" align="start">
+    Carbon Components Svelte is a Svelte component library that implements the Carbon Design System, an open source design system by IBM.
+  </TruncatedText>
+</div>
+
+## Not truncated
+
+When the content fits within `lines` at the current width, it renders as plain text with no reveal affordance, regardless of `type`.
+
+<div style="max-width: 20rem;">
+  <TruncatedText type="expand" expandLabel="Read more" collapseLabel="Read less">
+    Short text.
+  </TruncatedText>
+</div>
