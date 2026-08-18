@@ -807,6 +807,21 @@ describe("Slider", () => {
     expect(consoleLog).toHaveBeenCalledWith("input", 1);
   });
 
+  it("should not accumulate floating-point drift with decimal steps", async () => {
+    render(Slider, { props: { min: 0, max: 1, step: 0.1, value: 0 } });
+
+    const slider = screen.getByRole("slider");
+    await user.tab();
+    expect(slider).toHaveFocus();
+
+    for (let i = 0; i < 4; i++) {
+      // biome-ignore lint/performance/noAwaitInLoops: sequential execution is intentional
+      await user.keyboard("{ArrowRight}");
+    }
+
+    expect(slider).toHaveAttribute("aria-valuenow", "0.4");
+  });
+
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1219
   it("should round shift+arrow values to valid steps", async () => {
     const consoleLog = vi.spyOn(console, "log");

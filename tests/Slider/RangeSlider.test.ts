@@ -186,6 +186,18 @@ describe("RangeSlider", () => {
     });
   });
 
+  it("should allow the upper handle to reach max via keyboard when step doesn't evenly divide the range", async () => {
+    render(RangeSlider, {
+      props: { value: 0, valueUpper: 400, min: 0, max: 435, step: 50 },
+    });
+
+    const [, upperThumb] = screen.getAllByRole("slider");
+    upperThumb.focus();
+    await user.keyboard("{ArrowRight}");
+
+    expect(upperThumb).toHaveAttribute("aria-valuenow", "435");
+  });
+
   it("should not dispatch change on programmatic value updates", async () => {
     const consoleLog = vi.spyOn(console, "log");
     const { rerender } = render(RangeSlider, {
