@@ -46,4 +46,14 @@ describe("Toggletip", () => {
 
     expect(onClose).not.toHaveBeenCalled();
   });
+
+  it("should set aria-describedby on the trigger so content is announced the first time it opens", async () => {
+    render(Toggletip, { props: { open: false } });
+
+    const trigger = screen.getByRole("button", { name: "Information" });
+    expect(trigger).not.toHaveAttribute("aria-describedby");
+
+    await user.click(trigger);
+    expect(trigger).toHaveAttribute("aria-describedby");
+  });
 });
