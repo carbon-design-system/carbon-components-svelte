@@ -168,7 +168,7 @@ Set `readonly` to `true` on CheckboxGroup to display non-editable values. Unlike
 
 ### Invalid
 
-Set `invalid` to `true` and provide `invalidText` to show a validation error for the group. The group's state takes precedence over any invalid/warn state set on an individual checkbox.
+Set `invalid` to `true` and provide `invalidText` to show a validation error for the group. The group's invalid state propagates to every checkbox in the group, so each one is styled as invalid and marked with `aria-invalid` without setting the prop individually.
 
 <CheckboxGroup invalid invalidText="Select at least one notification preference" legendText="Notification preferences" name="prefs-invalid">
 <Checkbox value="email" labelText="Email" />
@@ -178,10 +178,22 @@ Set `invalid` to `true` and provide `invalidText` to show a validation error for
 
 ### Warning
 
-Set `warn` to `true` and provide `warnText` to show a warning message for the group.
+Set `warn` to `true` and provide `warnText` to show a warning message for the group. Like `invalid`, the group's warning state propagates to every checkbox in the group.
 
 <CheckboxGroup warn warnText="Push notifications may be delayed" legendText="Notification preferences" name="prefs-warn" selected={["email"]}>
 <Checkbox value="email" labelText="Email" />
 <Checkbox value="sms" labelText="SMS" />
 <Checkbox value="push" labelText="Push notifications" />
+</CheckboxGroup>
+
+### Validation within a group
+
+Set validation on the group rather than on individual checkboxes. Carbon hides a checkbox's own `invalidText` and `warnText` inside a group and resets its invalid styling unless the group itself is invalid, so the group owns the validation message for all of its checkboxes.
+
+Disabled and read-only checkboxes are exempt from the group's validation styling.
+
+<CheckboxGroup invalid invalidText="Select at least one notification preference" legendText="Notification preferences" name="prefs-invalid-suppressed" selected={["push"]}>
+<Checkbox value="email" labelText="Email (disabled)" disabled />
+<Checkbox value="sms" labelText="SMS" />
+<Checkbox value="push" labelText="Push notifications (read-only)" readonly />
 </CheckboxGroup>
