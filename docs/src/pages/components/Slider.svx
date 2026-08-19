@@ -29,11 +29,29 @@ Hide the label visually by setting `hideLabel` to `true`. The label remains avai
 
 <Slider labelText="Instances" hideLabel value={0} />
 
+### Custom label
+
+Use the `labelChildren` slot to provide custom label content.
+
+<Slider labelText="" value={0}>
+  <strong slot="labelChildren">Instances</strong>
+</Slider>
+
 ### Hidden text input
 
 Set `hideTextInput` to `true` to hide the numeric input while keeping the slider.
 
 <Slider labelText="Instances" hideTextInput value={0} />
+
+### Input type
+
+Set `inputType` to change the native `type` attribute of the text input—for example, `"text"` to avoid the browser's built-in number spinner controls. The bound `value` stays numeric regardless of `inputType`.
+
+<Slider inputType="text" labelText="Instances" value={0} />
+
+## Range and steps
+
+Control the allowed values and increment.
 
 ### Custom range
 
@@ -46,6 +64,16 @@ Set `min`, `max`, `minLabel`, and `maxLabel` to customize the range.
 Set `step` to control increment size.
 
 <Slider labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100} step={10} />
+
+### Step multiplier
+
+Set `stepMultiplier` to control how far Shift + Arrow key presses move the value. Holding Shift while pressing an arrow key moves the value by `(max - min) / stepMultiplier`, rounded to the nearest `step`, instead of a single step. Defaults to `4`.
+
+<Slider labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100} step={10} stepMultiplier={2} />
+
+## Formatting
+
+Control how range labels and `aria-valuetext` are displayed.
 
 ### Formatted values
 
@@ -85,6 +113,19 @@ Set `marks` to `true` to place a tick at every `step`.
 Use the light variant for light backgrounds.
 
 <Slider light labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100} step={10} />
+
+## Events
+
+Respond to value changes as the user drags the handle, uses the keyboard, or edits the text input.
+
+Use `on:input` to listen for every value while dragging or pressing an arrow key, and `on:change` to listen for committed changes—when the drag ends, an arrow key is pressed, or the text input is committed. Both events dispatch the numeric value directly as `event.detail`.
+
+<Slider
+  on:input={(e) => console.log(e.detail)} // number
+  on:change={(e) => console.log(e.detail)} // number
+  labelText="Instances"
+  value={0}
+/>
 
 ## States
 
@@ -162,6 +203,24 @@ Set `marks` the same way as on `Slider` for tick marks and optional labels.
     { value: 2, label: "Med" },
     { value: 3, label: "High" },
   ]}
+/>
+
+### Handle labels
+
+Set `ariaLabelInput` and `ariaLabelInputUpper` to distinguish the lower and upper bound handles for screen reader users. Defaults to `"Lower bound"` and `"Upper bound"`.
+
+<RangeSlider ariaLabelInput="Minimum price" ariaLabelInputUpper="Maximum price" labelText="Price range" value={20} valueUpper={80} />
+
+### Events
+
+Use `on:input` and `on:change` the same way as `Slider`. Both events dispatch `{ value, valueUpper }` as `event.detail`.
+
+<RangeSlider
+  on:input={(e) => console.log(e.detail)} // { value: number; valueUpper: number }
+  on:change={(e) => console.log(e.detail)} // { value: number; valueUpper: number }
+  labelText="Range"
+  value={10}
+  valueUpper={90}
 />
 
 ### Invalid
