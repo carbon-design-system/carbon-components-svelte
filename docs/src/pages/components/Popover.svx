@@ -17,7 +17,11 @@ Create a basic popover with absolute positioning.
     </Popover>
 </div>
 
-## Relative position
+## Placement
+
+Position the popover relative to its trigger.
+
+### Relative position
 
 Position the popover relative to its parent with `relative`.
 
@@ -28,18 +32,7 @@ Position the popover relative to its parent with `relative`.
     </Popover>
 </div>
 
-## Close on outside click
-
-Close the popover when clicking outside with `closeOnOutsideClick`.
-
-<div>
-    Parent
-    <Popover open closeOnOutsideClick on:click:outside={() => {console.log('on:click:outside')}}>
-        Content
-    </Popover>
-</div>
-
-## Alignment
+### Alignment
 
 Customize popover alignment with `align`. Valid values include `"top"`, `"top-left"`, `"top-right"`, `"bottom"`, `"bottom-left"`, `"bottom-right"`, `"left"`, `"left-bottom"`, `"left-top"`, `"right"`, `"right-bottom"`, and `"right-top"`.
 
@@ -127,7 +120,7 @@ Add a caret indicator with `caret`.
 
 ### Custom alignment
 
-By default, the caret aligns to top. See the alignment section above for all valid values.
+By default, the caret aligns to top. See [Alignment](#alignment) for all valid values.
 
 <div>
     Parent
@@ -158,6 +151,37 @@ Enable the high contrast variant for improved visibility.
 <div>
     Parent
     <Popover highContrast open>
+        Content
+    </Popover>
+</div>
+
+## Dismissal
+
+Close the popover automatically, and listen for outside-click interactions.
+
+### Close on outside click
+
+Close the popover when clicking outside with `closeOnOutsideClick`.
+
+<div>
+    Parent
+    <Popover open closeOnOutsideClick on:click:outside={() => {console.log('on:click:outside')}}>
+        Content
+    </Popover>
+</div>
+
+### Events
+
+`on:click:outside` fires whenever a click lands outside the popover, with `event.detail.target` set to the clicked element—regardless of whether `closeOnOutsideClick` is set. `on:close` fires only when the popover closes itself in response to `closeOnOutsideClick`, with `event.detail.trigger` set to `"outside-click"`.
+
+<div>
+    Parent
+    <Popover
+      open
+      closeOnOutsideClick
+      on:click:outside={(e) => console.log('on:click:outside', e.detail)}
+      on:close={(e) => console.log('on:close', e.detail)}
+    >
         Content
     </Popover>
 </div>
