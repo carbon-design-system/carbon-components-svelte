@@ -41,6 +41,17 @@
       pointer-events: none;
     }
   }
+
+  // Stretch to the side-nav / header-nav link width when wrapping nav entries.
+  .#{$prefix}--side-nav__item > .#{$prefix}--btn__badge-wrapper,
+  .#{$prefix}--side-nav__menu-item > .#{$prefix}--btn__badge-wrapper,
+  .#{$prefix}--header__nav
+    li
+    > .#{$prefix}--btn__badge-wrapper {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+  }
 }
 
 @include exports("badge-indicator") {

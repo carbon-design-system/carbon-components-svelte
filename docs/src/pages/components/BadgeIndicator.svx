@@ -1,6 +1,6 @@
 ---
-components: ["BadgeIndicator", "Button", "HeaderGlobalAction"]
-description: Badge indicators draw attention to unread counts and new activity on icon-only buttons.
+components: ["BadgeIndicator", "Button", "HeaderGlobalAction", "SideNavLink", "HeaderNavItem"]
+description: Badge indicators draw attention to unread counts and new activity on icon-only buttons and navigation entries.
 ---
 
 <script>
@@ -56,6 +56,10 @@ Pass a string to count to override the built-in numeric display. String values b
 
 ## In UI Shell
 
-Use the [UI Shell](/components/UIShell) for header notifications and other utility indicators.
+Use the [UI Shell](/components/UIShell) for header notifications, nav entry badges, and other utility indicators.
 
 <FileSource src="/framed/UIShell/HeaderUtilities" />
+
+Compose `BadgeIndicator` in the `badge` slot on `SideNavLink`, `SideNavMenuItem`, and `HeaderNavItem`.
+
+<FileSource src="/framed/UIShell/SideNavBadges" />

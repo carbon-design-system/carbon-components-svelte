@@ -84,6 +84,12 @@ Set `rail` on the side nav to use the rail variant. Expanded side nav menu items
 
 <FileSource src="/framed/UIShell/HeaderNavRail" />
 
+### Badges
+
+Compose [BadgeIndicator](/components/BadgeIndicator) in the `badge` slot on `SideNavLink`, `SideNavMenuItem`, and `HeaderNavItem` for unread counts or new-activity dots.
+
+<FileSource src="/framed/UIShell/SideNavBadges" />
+
 ### Persisted hamburger
 
 Create a header with a persistent hamburger menu state.

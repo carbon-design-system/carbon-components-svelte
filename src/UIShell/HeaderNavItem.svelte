@@ -1,6 +1,9 @@
 <script>
   /**
    * @template [Icon=any]
+   * @slot {{}}
+   * @slot {{}} icon
+   * @slot {{}} badge - Compose a `BadgeIndicator` overlaid on the link.
    */
 
   /**
@@ -51,6 +54,45 @@
 
   $: ctx?.updateSelectedItems({ id, isSelected });
 
+  function handleKeydown(event) {
+    if (!ctx) return;
+
+    const currentIndex = menuItems.indexOf(ref);
+    if (currentIndex === -1) return;
+
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      // Move to next item, wrap to first
+      menuItems[moveIndex(currentIndex, 1, menuItems.length)]?.focus();
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      // Move to previous item, wrap to last
+      menuItems[moveIndex(currentIndex, -1, menuItems.length)]?.focus();
+    } else if (event.key === "Home") {
+      event.preventDefault();
+      // Focus first item
+      menuItems[0]?.focus();
+    } else if (event.key === "End") {
+      event.preventDefault();
+      // Focus last item
+      menuItems[menuItems.length - 1]?.focus();
+    } else if (event.key === "Escape") {
+      event.preventDefault();
+      ctx.closeMenu("escape-key");
+    }
+  }
+
+  function handleBlur(event) {
+    // Only close menu if blur is moving focus outside the menu
+    // (not when navigating between menu items with arrow keys)
+    if (
+      selectedItemIds.indexOf(id) === selectedItemIds.length - 1 &&
+      (!event.relatedTarget || !menuItems.includes(event.relatedTarget))
+    ) {
+      ctx?.closeMenu("blur");
+    }
+  }
+
   onMount(() => {
     if (ctx && ref) {
       ctx.registerMenuItem(ref);
@@ -66,67 +108,68 @@
 </script>
 
 <li role="none">
-  <a
-    bind:this={ref}
-    role="menuitem"
-    tabindex="0"
-    {href}
-    rel={$$restProps.target === "_blank" ? "noopener noreferrer" : undefined}
-    class:bx--header__menu-item={true}
-    class:bx--header__menu-item--icon={icon || $$slots.icon}
-    aria-current={isSelected ? "page" : undefined}
-    {...$$restProps}
-    on:click
-    on:mouseover
-    on:mouseenter
-    on:mouseleave
-    on:keyup
-    on:keydown
-    on:keydown={(event) => {
-      if (!ctx) return;
-
-      const currentIndex = menuItems.indexOf(ref);
-      if (currentIndex === -1) return;
-
-      if (event.key === "ArrowDown") {
-        event.preventDefault();
-        // Move to next item, wrap to first
-        menuItems[moveIndex(currentIndex, 1, menuItems.length)]?.focus();
-      } else if (event.key === "ArrowUp") {
-        event.preventDefault();
-        // Move to previous item, wrap to last
-        menuItems[moveIndex(currentIndex, -1, menuItems.length)]?.focus();
-      } else if (event.key === "Home") {
-        event.preventDefault();
-        // Focus first item
-        menuItems[0]?.focus();
-      } else if (event.key === "End") {
-        event.preventDefault();
-        // Focus last item
-        menuItems[menuItems.length - 1]?.focus();
-      } else if (event.key === "Escape") {
-        event.preventDefault();
-        ctx.closeMenu("escape-key");
-      }
-    }}
-    on:focus
-    on:blur
-    on:blur={(event) => {
-      // Only close menu if blur is moving focus outside the menu
-      // (not when navigating between menu items with arrow keys)
-      if (
-        selectedItemIds.indexOf(id) === selectedItemIds.length - 1 &&
-        (!event.relatedTarget || !menuItems.includes(event.relatedTarget))
-      ) {
-        ctx?.closeMenu("blur");
-      }
-    }}
-  >
-    <span class:bx--text-truncate--end={true}><slot>{text}</slot></span>
-    {#if icon || $$slots.icon}
-      <slot name="icon">
-        <svelte:component this={icon} size={16} />
-      </slot>
-    {/if}
-  </a>
+  {#if $$slots.badge}
+    <div class="bx--btn__badge-wrapper">
+      <a
+        bind:this={ref}
+        role="menuitem"
+        tabindex="0"
+        {href}
+        rel={$$restProps.target === "_blank"
+          ? "noopener noreferrer"
+          : undefined}
+        class:bx--header__menu-item={true}
+        class:bx--header__menu-item--icon={icon || $$slots.icon}
+        aria-current={isSelected ? "page" : undefined}
+        {...$$restProps}
+        on:click
+        on:mouseover
+        on:mouseenter
+        on:mouseleave
+        on:keyup
+        on:keydown
+        on:keydown={handleKeydown}
+        on:focus
+        on:blur
+        on:blur={handleBlur}
+      >
+        <span class:bx--text-truncate--end={true}><slot>{text}</slot></span>
+        {#if icon || $$slots.icon}
+          <slot name="icon">
+            <svelte:component this={icon} size={16} />
+          </slot>
+        {/if}
+      </a>
+      <slot name="badge" />
+    </div>
+  {:else}
+    <a
+      bind:this={ref}
+      role="menuitem"
+      tabindex="0"
+      {href}
+      rel={$$restProps.target === "_blank" ? "noopener noreferrer" : undefined}
+      class:bx--header__menu-item={true}
+      class:bx--header__menu-item--icon={icon || $$slots.icon}
+      aria-current={isSelected ? "page" : undefined}
+      {...$$restProps}
+      on:click
+      on:mouseover
+      on:mouseenter
+      on:mouseleave
+      on:keyup
+      on:keydown
+      on:keydown={handleKeydown}
+      on:focus
+      on:blur
+      on:blur={handleBlur}
+    >
+      <span class:bx--text-truncate--end={true}><slot>{text}</slot></span>
+      {#if icon || $$slots.icon}
+        <slot name="icon">
+          <svelte:component this={icon} size={16} />
+        </slot>
+      {/if}
+    </a>
+  {/if}
 </li>

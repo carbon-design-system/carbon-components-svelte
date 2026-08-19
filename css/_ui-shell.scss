@@ -887,6 +887,9 @@
     > .#{$prefix}--side-nav__submenu.#{$prefix}--side-nav__submenu:hover,
   .#{$prefix}--side-nav__item.#{$prefix}--side-nav__item:not(.#{$prefix}--side-nav__item--active.#{$prefix}--side-nav__item--active)
     > .#{$prefix}--side-nav__link.#{$prefix}--side-nav__link:hover,
+  .#{$prefix}--side-nav__item.#{$prefix}--side-nav__item:not(.#{$prefix}--side-nav__item--active.#{$prefix}--side-nav__item--active)
+    > .#{$prefix}--btn__badge-wrapper
+    > .#{$prefix}--side-nav__link.#{$prefix}--side-nav__link:hover,
   .#{$prefix}--side-nav__menu.#{$prefix}--side-nav__menu
     a.#{$prefix}--side-nav__link.#{$prefix}--side-nav__link:not(.#{$prefix}--side-nav__link--current.#{$prefix}--side-nav__link--current):not([aria-current='page']):hover,
   .#{$prefix}--side-nav.#{$prefix}--side-nav
@@ -901,7 +904,16 @@
     > .#{$prefix}--side-nav__link.#{$prefix}--side-nav__link:hover
     > span,
   .#{$prefix}--side-nav__item.#{$prefix}--side-nav__item:not(.#{$prefix}--side-nav__item--active.#{$prefix}--side-nav__item--active)
+    > .#{$prefix}--btn__badge-wrapper
+    > .#{$prefix}--side-nav__link.#{$prefix}--side-nav__link:hover
+    > span,
+  .#{$prefix}--side-nav__item.#{$prefix}--side-nav__item:not(.#{$prefix}--side-nav__item--active.#{$prefix}--side-nav__item--active)
     .#{$prefix}--side-nav__menu-item.#{$prefix}--side-nav__menu-item
+    > .#{$prefix}--side-nav__link.#{$prefix}--side-nav__link:hover
+    > span,
+  .#{$prefix}--side-nav__item.#{$prefix}--side-nav__item:not(.#{$prefix}--side-nav__item--active.#{$prefix}--side-nav__item--active)
+    .#{$prefix}--side-nav__menu-item.#{$prefix}--side-nav__menu-item
+    > .#{$prefix}--btn__badge-wrapper
     > .#{$prefix}--side-nav__link.#{$prefix}--side-nav__link:hover
     > span {
     color: $text-primary;
