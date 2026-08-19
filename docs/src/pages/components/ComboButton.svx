@@ -11,7 +11,7 @@ description: ComboButton pairs a primary action with a menu of related secondary
 
 ## Basic
 
-Wrap `MenuItem` components in `ComboButton` and set `labelText` for the primary action button. Use the `labelChildren` slot for custom button content. Clicking the label fires `on:click`; clicking the chevron trigger opens the menu and fires the separate `on:click:trigger` event. The trigger's other native events (`mousedown`, `focus`, `blur`, `mouseover`, `mouseenter`, `mouseleave`) dispatch the same way, each with a `:trigger`-suffixed counterpart alongside the shared, unscoped event.
+Wrap `MenuItem` components in `ComboButton` and set `labelText` for the primary action button. Clicking the label fires `on:click`; clicking the chevron trigger opens the menu. See [Events](#events) for the trigger's other events and the menu's `close` event.
 
 <ComboButton labelText="Save">
   <MenuItem on:click={() => console.log("Save as")}>Save as</MenuItem>
@@ -19,7 +19,27 @@ Wrap `MenuItem` components in `ComboButton` and set `labelText` for the primary 
   <MenuItem on:click={() => console.log("Save and close")}>Save and close</MenuItem>
 </ComboButton>
 
-## Icon description
+## Reactive example
+
+Control the menu state programmatically by binding to `open`.
+
+<FileSource src="/framed/ComboButton/ComboButtonReactive" />
+
+## Label children
+
+Use the `labelChildren` slot for custom content in the primary action button. `labelText` is still used as the accessible name in that case.
+
+<ComboButton labelText="Save document">
+  <strong slot="labelChildren">Save</strong>
+  <MenuItem on:click={() => console.log("Save as")}>Save as</MenuItem>
+  <MenuItem on:click={() => console.log("Save a copy")}>Save a copy</MenuItem>
+</ComboButton>
+
+## Trigger
+
+Customize the icon-only chevron button that opens the menu.
+
+### Icon description
 
 The icon-only trigger needs its own accessible label, since it has no visible text. Override `iconDescription` to change it; the default is `"Additional actions"`.
 
@@ -145,4 +165,27 @@ Set `labelText` on a `MenuItem` and nest child `MenuItem` rows to get a submenu.
     <MenuItem on:click={() => console.log("JPG")}>JPG</MenuItem>
     <MenuItem on:click={() => console.log("PNG")}>PNG</MenuItem>
   </MenuItem>
+</ComboButton>
+
+## Events
+
+### Trigger events
+
+Clicking the chevron trigger fires `on:click:trigger`, separate from the primary action's `on:click`. The trigger's other native events (`mousedown`, `focus`, `blur`, `mouseover`, `mouseenter`, `mouseleave`) dispatch the same way, each with a `:trigger`-suffixed counterpart alongside the shared, unscoped event.
+
+<ComboButton labelText="Save" on:click:trigger={() => console.log("Trigger clicked")}>
+  <MenuItem on:click={() => console.log("Save as")}>Save as</MenuItem>
+  <MenuItem on:click={() => console.log("Save a copy")}>Save a copy</MenuItem>
+</ComboButton>
+
+### Close event
+
+Use `on:close` to respond to every close attempt, regardless of cause. The event detail's `trigger` is `"escape-key"`, `"outside-click"`, or `"select"`.
+
+<ComboButton
+  labelText="Save"
+  on:close={(e) => console.log(e.detail.trigger)}
+>
+  <MenuItem on:click={() => console.log("Save as")}>Save as</MenuItem>
+  <MenuItem on:click={() => console.log("Save a copy")}>Save a copy</MenuItem>
 </ComboButton>
