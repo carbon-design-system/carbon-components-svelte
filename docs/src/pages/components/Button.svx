@@ -4,10 +4,11 @@ description: Buttons trigger actions like submitting a form or navigating, with 
 ---
 
 <script>
-  import { Button, Stack } from "carbon-components-svelte";
+  import { BadgeIndicator, Button, Stack } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
   import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
   import Login from "carbon-icons-svelte/lib/Login.svelte";
+  import Notification from "carbon-icons-svelte/lib/Notification.svelte";
 </script>
 
 ## Kinds
@@ -72,6 +73,15 @@ Add an icon to the button using the `icon` prop.
 
 <Button icon={Add}>With icon</Button>
 
+### Custom icon
+
+Use the `icon` named slot to render custom icon markup instead of, or with different props than, the `icon` prop.
+
+<Button>
+  <Add slot="icon" size={20} />
+  Custom icon
+</Button>
+
 ### Icon-only
 
 Omit the label and provide an `iconDescription` for accessibility. This text is used as the button's tooltip and screen reader label.
@@ -126,23 +136,31 @@ When multiple icon-only buttons are placed next to each other, only one tooltip 
 
 <FileSource src="/framed/Button/AdjacentIconOnlyButtons" />
 
-## Link
+### Badge
+
+Compose a `BadgeIndicator` in the `badge` slot to overlay a badge on an icon-only button. Size is set to `lg` automatically. See [BadgeIndicator](/components/BadgeIndicator) for the full set of examples.
+
+<Button kind="ghost" icon={Notification} iconDescription="Notifications">
+  <BadgeIndicator slot="badge" />
+</Button>
+
+## Element
+
+By default, the button renders a `button` or `a` element. Set `href` to render an anchor, or `as` to render a fully custom element.
+
+### Link
 
 Set `href` to render an [anchor element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a) instead of a button element.
 
 <Button href="#">Link button</Button>
 
-### With icon
-
-Similarly, link buttons can have icons.
+Link buttons can also have icons.
 
 <Button href="#" icon={Add}>Link button with icon</Button>
 
-## Custom element
+### Custom element
 
-By default, the button renders either a button or anchor element.
-
-To render a different element, set `as` to `true` and spread `let:props` to the element.
+Set `as` to `true` and spread `let:props` to the element.
 
 <Button as let:props>
   <p {...props}>Custom element</p>
@@ -150,7 +168,7 @@ To render a different element, set `as` to `true` and spread `let:props` to the 
 
 ## Sizes
 
-Set the `size` prop. The default is medium.
+Set the `size` prop. The default is `"default"`.
 
 ### Field
 
