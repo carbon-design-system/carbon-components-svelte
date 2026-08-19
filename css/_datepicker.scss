@@ -1,4 +1,5 @@
 @import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
 @mixin date-picker-input-wrapper {
@@ -238,4 +239,57 @@
 
 @include exports('datepicker-year-select-height') {
   @include date-picker-year-select-height;
+}
+
+// Range preset shortcuts (side rail) — not in Carbon v10 flatpickr styles.
+@mixin date-picker-presets {
+  .flatpickr-calendar.open.#{$prefix}--date-picker__calendar--with-presets {
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: flex-start;
+    width: auto;
+    height: auto;
+    max-height: none;
+  }
+
+  .#{$prefix}--date-picker__calendar-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: to-rem(288px);
+  }
+
+  .#{$prefix}--date-picker__presets {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-01;
+    min-width: to-rem(120px);
+    padding: $spacing-03 $spacing-03 $spacing-03 $spacing-05;
+    border-right: 1px solid $ui-03;
+    text-align: left;
+  }
+
+  .#{$prefix}--date-picker__preset {
+    @include button-reset(true);
+
+    padding: $spacing-02 $spacing-03;
+    color: $link-01;
+    cursor: pointer;
+    text-align: left;
+    white-space: nowrap;
+
+    &:hover {
+      background-color: $hover-ui;
+      color: $link-01;
+    }
+
+    &:focus {
+      outline: 1px solid $focus;
+      outline-offset: -1px;
+    }
+  }
+}
+
+@include exports('datepicker-presets') {
+  @include date-picker-presets;
 }

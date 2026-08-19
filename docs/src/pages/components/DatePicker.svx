@@ -20,9 +20,15 @@ Set `datePickerType` to `"range"` for a start and end date. Provide two DatePick
 
 <FileSource src="/framed/DatePicker/DatePickerRange" />
 
+### Presets
+
+Pass `presets` for quick range shortcuts beside the calendar—useful for analytics filters such as Today or Last 7 days. Each item has a label and a `range` function that returns the start and end dates when clicked. Applying a preset updates `valueFrom` / `valueTo` and dispatches `change` like a normal selection. Presets are ignored when `datePickerType` is not `"range"`.
+
+<FileSource src="/framed/DatePicker/DatePickerPresets" />
+
 ### Programmatic
 
-Use `bind:valueFrom` and `bind:valueTo` to update the range from outside the component, such as preset buttons or filters.
+Use `bind:valueFrom` and `bind:valueTo` to update the range from outside the component, such as external filter controls.
 
 <FileSource src="/framed/DatePicker/DatePickerProgrammatic" />
 

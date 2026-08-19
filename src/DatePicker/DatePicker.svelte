@@ -1,5 +1,11 @@
 <script>
   /**
+   * @typedef {object} DatePickerPreset
+   * @property {string} label Display label for the preset shortcut.
+   * @property {() => [Date, Date]} range Returns the start and end dates when applied.
+   */
+
+  /**
    * @event {string | { selectedDates: [dateFrom: Date, dateTo?: Date]; dateStr: string | { from: string; to: string; } }} change
    */
 
@@ -99,6 +105,13 @@
   export let flatpickrProps = { static: true };
 
   /**
+   * Specify quick-select range presets shown beside the calendar.
+   * Only used when `datePickerType` is `"range"`.
+   * @type {ReadonlyArray<DatePickerPreset>}
+   */
+  export let presets = [];
+
+  /**
    * Bind to the Flatpickr calendar instance for programmatic control.
    * Only available when `datePickerType` is `"single"`, `"range"`, `"month"`,
    * or `"year"`.
@@ -186,6 +199,10 @@
   let onCalendarReposition = null;
   /** @type {HTMLElement | null} */
   let topLayerAncestor = null;
+  /** @type {HTMLElement | null} */
+  let presetsRailEl = null;
+  /** @type {HTMLElement | null} */
+  let calendarMainEl = null;
   // Set from onOpen/onClose. Outside-click listener attaches only while open.
   let calendarOpen = false;
   // flatpickr onClose has no reason; explicit handlers set closeTrigger, else
@@ -393,6 +410,88 @@
     ).focus();
   }
 
+  function removePresetsRail() {
+    presetsRailEl?.remove();
+    presetsRailEl = null;
+    if (calendarMainEl && calendar?.calendarContainer) {
+      while (calendarMainEl.firstChild) {
+        calendar.calendarContainer.appendChild(calendarMainEl.firstChild);
+      }
+      calendarMainEl.remove();
+      calendarMainEl = null;
+    }
+    calendar?.calendarContainer?.classList.remove(
+      "bx--date-picker__calendar--with-presets",
+    );
+  }
+
+  /**
+   * @param {HTMLElement} container
+   */
+  function ensureCalendarMain(container) {
+    if (calendarMainEl?.parentNode === container) return calendarMainEl;
+
+    calendarMainEl = document.createElement("div");
+    calendarMainEl.className = "bx--date-picker__calendar-main";
+    while (container.firstChild) {
+      calendarMainEl.appendChild(container.firstChild);
+    }
+    container.appendChild(calendarMainEl);
+    return calendarMainEl;
+  }
+
+  /**
+   * @param {DatePickerPreset} preset
+   */
+  function applyPreset(preset) {
+    if (datePickerType !== "range" || !calendar) return;
+
+    const [from, to] = preset.range();
+    calendar.setDate([from, to], true);
+    if (calendar.config.closeOnSelect !== false) {
+      calendar.close();
+    }
+  }
+
+  function syncPresetsRail() {
+    if (!calendar?.calendarContainer) return;
+
+    const shouldShow = datePickerType === "range" && presets.length > 0;
+    if (!shouldShow) {
+      removePresetsRail();
+      return;
+    }
+
+    const container = calendar.calendarContainer;
+    const main = ensureCalendarMain(container);
+    container.classList.add("bx--date-picker__calendar--with-presets");
+
+    if (!presetsRailEl) {
+      presetsRailEl = document.createElement("div");
+      presetsRailEl.className = "bx--date-picker__presets";
+      presetsRailEl.setAttribute("role", "group");
+      presetsRailEl.setAttribute("aria-label", "Date range presets");
+    }
+
+    if (presetsRailEl.parentNode !== container) {
+      container.insertBefore(presetsRailEl, main);
+    }
+
+    presetsRailEl.replaceChildren();
+    for (const preset of presets) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "bx--date-picker__preset";
+      button.textContent = preset.label;
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        applyPreset(preset);
+      });
+      presetsRailEl.appendChild(button);
+    }
+  }
+
   setContext("carbon:DatePicker", {
     range,
     inputValue,
@@ -494,12 +593,19 @@
   onMount(() => {
     return () => {
       detachFixedRepositionListeners();
+      removePresetsRail();
       if (calendar) {
         calendar.destroy();
         calendar = null;
       }
     };
   });
+
+  $: if (calendar) {
+    presets;
+    datePickerType;
+    syncPresetsRail();
+  }
 
   afterUpdate(() => {
     if (calendar) {
