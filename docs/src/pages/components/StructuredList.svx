@@ -190,6 +190,46 @@ Allow selecting more than one row with `multiple`. Selected becomes an array of 
 
 <FileSource src="/framed/StructuredList/StructuredListMultiSelect" />
 
+## Sorting
+
+Let users sort rows by a column.
+
+### Basic
+
+Set `sortable` on a header `StructuredListCell` and listen for `sort` to update the active column and direction. Set `active` and `sortDirection` to reflect the current state; the header renders `aria-sort` from these props.
+
+<FileSource src="/framed/StructuredList/StructuredListSortable" />
+
+### Initial sort
+
+Set `active` and `sortDirection` to their sorted values up front to start the table pre-sorted, without waiting for a click.
+
+<FileSource src="/framed/StructuredList/StructuredListSortableInitial" />
+
+### Always sorted
+
+Set `sortAlways` to skip the unsorted state and toggle only between ascending and descending.
+
+<FileSource src="/framed/StructuredList/StructuredListSortableAlways" />
+
+### One sortable column
+
+Omit `sortable` on any header cell to exclude that column from sorting.
+
+<FileSource src="/framed/StructuredList/StructuredListSortableSingleColumn" />
+
+### Condensed
+
+Combine `sortable` with `condensed` for compact sortable headers.
+
+<FileSource src="/framed/StructuredList/StructuredListSortableCondensed" />
+
+### With selection
+
+Combine `sortable` header cells with `selection` to let users sort and select rows in the same list.
+
+<FileSource src="/framed/StructuredList/StructuredListSortableSelection" />
+
 ## Events
 
 ### Selection change
