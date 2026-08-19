@@ -81,6 +81,14 @@ Stack multiple modals for complex workflows. Each modal maintains its own state 
 
 <FileSource src="/framed/Modal/ModalMultiple" />
 
+## Nested
+
+Nest a modal inside another modal's content to stack a confirmation dialog on top of it. Each modal tracks its own `open` state, and <DocKbd label="Escape" /> only closes the topmost (innermost) modal.
+
+Wrap the nested modal in [Portal](/components/Portal) so it renders outside the outer modal's DOM. The outer modal's container has its own transform and `overflow: hidden`, so an unportaled nested modal would be sized and clipped to that container instead of covering the full screen.
+
+<FileSource src="/framed/Modal/ModalNested" />
+
 ## Multiple secondary buttons
 
 Add up to two secondary actions with `secondaryButtons`, which replaces the single secondary button text option. Each entry needs display text; set `kind` and `disabled` per button when actions should differ in weight or availability.
