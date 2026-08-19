@@ -31,7 +31,17 @@ Multiple standalone radio buttons sharing the same name automatically form a gro
 
 <FileSource src="/framed/RadioButton/RadioButtonImplicitGroup" />
 
-## Hidden legend
+## Reactive
+
+Bind and update the selected value programmatically.
+
+<FileSource src="/framed/RadioButton/RadioButtonReactive" />
+
+## Labels and legend
+
+Control the visibility and content of individual radio button labels and the group legend.
+
+### Hidden legend
 
 Hide the legend visually by setting `hideLegend` to `true`. The legend remains available to screen readers.
 
@@ -41,9 +51,15 @@ Hide the legend visually by setting `hideLegend` to `true`. The legend remains a
   <RadioButton labelText="Pro (128 GB)" value="pro" />
 </RadioButtonGroup>
 
-## Custom label
+### Hidden label
 
-Use the `labelChildren` slot for custom label content instead of plain label text.
+Hide an individual radio button's label text by setting `hideLabel` to `true` on `RadioButton`. The label remains available to screen readers.
+
+<RadioButton labelText="Label text" hideLabel />
+
+### Custom label
+
+Use the `legendChildren` slot to provide custom legend content instead of `legendText`.
 
 <RadioButtonGroup name="plan-legend-slot" selected="standard">
   <Stack slot="legendChildren" orientation="horizontal">
@@ -59,13 +75,11 @@ Use the `labelChildren` slot for custom label content instead of plain label tex
   <RadioButton labelText="Pro (128 GB)" value="pro" />
 </RadioButtonGroup>
 
-## Reactive example
+## Layout
 
-Bind and update the selected value programmatically.
+Control the position and orientation of radio buttons within a group.
 
-<FileSource src="/framed/RadioButton/RadioButtonReactive" />
-
-## Left-aligned label
+### Left-aligned label
 
 Position labels to the left of the radio buttons.
 
@@ -73,6 +87,26 @@ Position labels to the left of the radio buttons.
   <RadioButton labelText="Free (1 GB)" value="free" />
   <RadioButton labelText="Standard (10 GB)" value="standard" />
   <RadioButton labelText="Pro (128 GB)" value="pro" />
+</RadioButtonGroup>
+
+### Vertical
+
+Display radio buttons in a vertical layout.
+
+<RadioButtonGroup orientation="vertical" legendText="Storage tier (disk)" name="plan-vertical" selected="standard">
+  <RadioButton labelText="Free (1 GB)" value="free" />
+  <RadioButton labelText="Standard (10 GB)" value="standard" />
+  <RadioButton labelText="Pro (128 GB)" value="pro" />
+</RadioButtonGroup>
+
+## Helper text
+
+Use `helperText` to provide additional context below the radio button group.
+
+<RadioButtonGroup legendText="Notification preferences" name="plan-helper" selected="email" helperText="You can change this setting at any time">
+  <RadioButton labelText="Email" value="email" />
+  <RadioButton labelText="SMS" value="sms" />
+  <RadioButton labelText="Push notifications" value="push" />
 </RadioButtonGroup>
 
 ## States
@@ -104,26 +138,6 @@ Disable all radio buttons in the group with `disabled` on RadioButtonGroup. Thei
 Display non-editable values with `readonly` on RadioButtonGroup.
 
 <RadioButtonGroup readonly labelPosition="left" legendText="Storage tier (disk)" name="plan-readonly" selected="standard">
-  <RadioButton labelText="Free (1 GB)" value="free" />
-  <RadioButton labelText="Standard (10 GB)" value="standard" />
-  <RadioButton labelText="Pro (128 GB)" value="pro" />
-</RadioButtonGroup>
-
-## Helper text
-
-Use `helperText` to provide additional context below the radio button group.
-
-<RadioButtonGroup legendText="Notification preferences" name="plan-helper" selected="email" helperText="You can change this setting at any time">
-  <RadioButton labelText="Email" value="email" />
-  <RadioButton labelText="SMS" value="sms" />
-  <RadioButton labelText="Push notifications" value="push" />
-</RadioButtonGroup>
-
-## Vertical
-
-Display radio buttons in a vertical layout.
-
-<RadioButtonGroup orientation="vertical" legendText="Storage tier (disk)" name="plan-vertical" selected="standard">
   <RadioButton labelText="Free (1 GB)" value="free" />
   <RadioButton labelText="Standard (10 GB)" value="standard" />
   <RadioButton labelText="Pro (128 GB)" value="pro" />
