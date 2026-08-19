@@ -1279,6 +1279,27 @@ When a sortable header is clicked, the table dispatches a cancelable `sort` even
   on:sort={(e) => console.log(e.detail.key, e.detail.direction)}
 />
 
+### Per-column opt-in
+
+`sort` also works the other way: set `sort: true` on individual headers to opt them into sorting when the table itself is not `sortable`, rather than setting table-level `sortable` and disabling every other column with `sort: false`.
+
+In this incident table, row order reflects severity and should not be disturbed by sorting most columns, but "Last updated" still benefits from a sortable column to find the most (or least) recently touched incident.
+
+<DataTable
+  headers="{[
+    { key: 'id', value: 'Incident' },
+    { key: 'severity', value: 'Severity' },
+    { key: 'owner', value: 'Owner' },
+    { key: 'updated', value: 'Last updated', sort: true }
+  ]}"
+  rows="{[
+    { id: 'INC-142', severity: 'Critical', owner: 'Priya', updated: '2025-03-05' },
+    { id: 'INC-139', severity: 'High', owner: 'Marcus', updated: '2025-03-04' },
+    { id: 'INC-137', severity: 'High', owner: 'Priya', updated: '2025-03-02' },
+    { id: 'INC-128', severity: 'Medium', owner: 'Jae', updated: '2025-02-28' }
+  ]}"
+/>
+
 ### Server-side
 
 When rows and sort order come from an API, the canonical order is usually defined on the server (collation, nullable fields, joined columns, security filters).
