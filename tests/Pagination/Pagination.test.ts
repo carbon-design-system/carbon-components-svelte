@@ -136,6 +136,24 @@ describe("Pagination", () => {
     expect(nextButton).toBeDisabled();
   });
 
+  it("should disable the items-per-page select when disabled", () => {
+    render(Pagination, {
+      props: { disabled: true, totalItems: 102, pageSizes: [10, 20] },
+    });
+
+    const select = screen.getByRole("combobox", { name: "Items per page:" });
+    expect(select).toBeDisabled();
+  });
+
+  it("should disable the page-number select when disabled", () => {
+    render(Pagination, {
+      props: { disabled: true, totalItems: 102 },
+    });
+
+    const select = screen.getByLabelText(/Page number, of \d+ pages/);
+    expect(select).toBeDisabled();
+  });
+
   it("moves focus to the forward button when the backward button becomes disabled", async () => {
     render(Pagination, {
       props: { page: 2, totalItems: 20, pageSize: 10 },
