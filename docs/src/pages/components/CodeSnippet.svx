@@ -14,33 +14,11 @@ Display a single-line code snippet by default. By default, the copy button uses 
 
 <CodeSnippet code="npm i carbon-components-svelte" />
 
-## Async copy
+## Light
 
-Pass an async function to `copy` when clipboard text is not ready at render time, such as a longer install command fetched on click. The copy feedback text appears after `copy()` resolves.
+Set `light` to `true` for the light variant, for use on white or light-gray backgrounds.
 
-During the request, the copy control sets `aria-busy="true"` and ignores further clicks. A rejected copy shows `errorFeedback` (default `"Failed to copy"`) in the same tooltip slot as the success message and emits `copy:error`.
-
-Prefetch on hover with `on:mouseenter:copy-button` on the copy control. The example below shows async copy for each variant (`single`, `inline`, `multi`).
-
-<FileSource src="/framed/CodeSnippet/CodeSnippetAsync" />
-
-## Copy behavior
-
-Replace or disable the default clipboard behavior.
-
-### Override
-
-Pass a custom function to `copy` to override the default copy behavior.
-
-This example uses [clipboard-copy](https://github.com/feross/clipboard-copy) to copy the text instead of the default Clipboard API.
-
-<FileSource src="/framed/CodeSnippet/CodeSnippetOverride" />
-
-### Prevent
-
-Pass a no-op function to `copy` to disable copying.
-
-<CodeSnippet code="npm i carbon-components-svelte" copy={() => {}} />
+<CodeSnippet light code="npm i carbon-components-svelte" />
 
 ## Inline
 
@@ -68,21 +46,75 @@ Set `maxCollapsedNumberOfRows` to shorten the collapsed preview. Each row is 16p
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetRowCounts" />
 
-## Expanded by default
+### Custom show more/less text
+
+Set `showMoreText` and `showLessText` to customize the expand/collapse button text.
+
+<FileSource src="/framed/CodeSnippet/CodeSnippetCustomText" />
+
+### Wrapped text
+
+By default, the code snippet preserves text formatting and does not wrap text. Set `wrapText` to `true` to wrap long lines instead of scrolling horizontally.
+
+<FileSource src="/framed/CodeSnippet/CodeSnippetWrapText" />
+
+### Expanded by default
 
 Set `expanded` to `true` to show the full multi-line code snippet.
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetExpanded" />
 
-## Reactive example
+### Events
 
-The multi-line code snippet dispatches "expand" and "collapse" events.
+Dispatches `expand` and `collapse` events when the snippet is toggled open and closed.
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetReactive" />
 
+### Dynamic code
+
+Use `code` instead of the default slot for dynamically updated code.
+
+<FileSource src="/framed/CodeSnippet/DynamicCodeSnippet" />
+
+### Hidden content
+
+The "Show more" button relies on the element's computed height. For hidden content, the button won't appear because the height is `0`.
+
+Re-render the component to fix this issue.
+
+<FileSource src="/framed/CodeSnippet/HiddenCodeSnippet" />
+
+## Copy behavior
+
+Customize, replace, or disable the default clipboard behavior.
+
+### Async
+
+Pass an async function to `copy` when clipboard text is not ready at render time, such as a longer install command fetched on click. The copy feedback text appears after `copy()` resolves.
+
+During the request, the copy control sets `aria-busy="true"` and ignores further clicks. A rejected copy shows `errorFeedback` (default `"Failed to copy"`) in the same tooltip slot as the success message and emits `copy:error`.
+
+Prefetch on hover with `on:mouseenter:copy-button` on the copy control. The example below shows async copy for each variant (`single`, `inline`, `multi`).
+
+<FileSource src="/framed/CodeSnippet/CodeSnippetAsync" />
+
+### Override
+
+Pass a custom function to `copy` to override the default copy behavior.
+
+This example uses [clipboard-copy](https://github.com/feross/clipboard-copy) to copy the text instead of the default Clipboard API.
+
+<FileSource src="/framed/CodeSnippet/CodeSnippetOverride" />
+
+### Prevent
+
+Pass a no-op function to `copy` to disable copying.
+
+<CodeSnippet code="npm i carbon-components-svelte" copy={() => {}} />
+
 ## Custom feedback
 
-Customize the message and icon shown after copying.
+Customize the message, icon, and duration shown after copying.
 
 ### Text
 
@@ -96,6 +128,34 @@ Set `feedbackIcon` to swap the copy button icon during the feedback window. Appl
 to `"single"` and `"multi"` types; has no effect on `"inline"`.
 
 <CodeSnippet code="npm i carbon-components-svelte" feedbackIcon={Checkmark} />
+
+### Duration
+
+Set `feedbackTimeout` to change how long the feedback stays visible, in milliseconds. Defaults to `2000`.
+
+<CodeSnippet code="npm i carbon-components-svelte" feedbackTimeout={5000} />
+
+## Custom labels
+
+Customize the ARIA labels used for accessibility. Which prop applies depends on `type`.
+
+### Copy label
+
+Set `copyLabel` to customize the ARIA label of the copy control. Applies to `"inline"` only; single and multi-line snippets use `codeLabel` and `copyButtonDescription` instead.
+
+<CodeSnippet type="inline" code="rm -rf node_modules/" copyLabel="Delete node_modules" />
+
+### Code label
+
+Set `codeLabel` to customize the ARIA label of the code container (default `"Code snippet"`). Applies to `"single"` and `"multi"` only; inline snippets have no separate container.
+
+<CodeSnippet code="npm i carbon-components-svelte" codeLabel="npm install command" />
+
+### Copy button description
+
+Set `copyButtonDescription` to customize the ARIA label of the copy button. It also shows as a proactive tooltip on hover or focus, before the button is clicked. Applies to `"single"` and `"multi"` only.
+
+<CodeSnippet code="npm i carbon-components-svelte" copyButtonDescription="Copy install command" />
 
 ## Hidden buttons
 
@@ -119,12 +179,6 @@ Hide both the copy and expand/collapse buttons.
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetHideButtons" />
 
-## Custom show more/less text
-
-Set `showMoreText` and `showLessText` to customize the expand/collapse button text.
-
-<FileSource src="/framed/CodeSnippet/CodeSnippetCustomText" />
-
 ## Disabled
 
 Set `disabled` to `true` to disable interaction.
@@ -141,44 +195,25 @@ Set `disabled` to `true` to disable interaction.
 
 <CodeSnippet disabled type="inline" code="rm -rf node_modules/" />
 
-## Wrapped text
-
-By default, the code snippet preserves text formatting and does not wrap text.
-
-Set `wrapText` to `true` to wrap long lines in multi-line snippets.
-
-<FileSource src="/framed/CodeSnippet/CodeSnippetWrapText" />
-
 ## Syntax highlighting
 
 CodeSnippet does not ship a syntax highlighter. Pass the plain source to `code` so copy uses unstyled text, and render highlighted HTML from Prism, Shiki, or another highlighter in the default slot with `{@html}`. Load language grammars and token theme CSS in your app.
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetSyntaxHighlight" />
 
-## Dynamic multi-line code
+## Tooltip
 
-Use `code` instead of the default slot for dynamically updated code.
+The copy button shows a tooltip: a proactive hint on hover or focus for single and multi-line snippets (see [Copy button description](#copy-button-description)), and copy feedback for every variant, including inline. Both render in the same floating portal.
 
-<FileSource src="/framed/CodeSnippet/DynamicCodeSnippet" />
+### Position
 
-## Hidden multi-line code
-
-The "Show more" button relies on the element's computed height. For hidden content, the button won't appear because the height is `0`.
-
-Re-render the component to fix this issue.
-
-<FileSource src="/framed/CodeSnippet/HiddenCodeSnippet" />
-
-## Tooltip position
-
-Set `tooltipPosition` to place the feedback tooltip relative to the copy button.
-It applies to every variant, including the inline snippet.
+Set `tooltipPosition` to place the tooltip relative to the copy button. Applies to every variant, including the inline snippet.
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetTooltipPosition" />
 
-## Tooltip alignment
+### Alignment
 
-Set `tooltipAlignment` to align the feedback tooltip relative to the copy button.
+Set `tooltipAlignment` to align the tooltip relative to the copy button.
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetTooltipAlignment" />
 
