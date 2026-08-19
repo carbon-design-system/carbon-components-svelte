@@ -320,6 +320,7 @@ describe("TextInput", () => {
 
       const message = screen.getByText("Invalid input");
       expect(message).toHaveClass("bx--form-requirement");
+      expect(message).toHaveAttribute("role", "alert");
       expect(message.closest(".bx--text-input__field-wrapper")).not.toBeNull();
       expect(screen.getByLabelText("User name")).toHaveAttribute(
         "aria-errormessage",
