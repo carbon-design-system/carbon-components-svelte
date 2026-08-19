@@ -175,8 +175,8 @@
     <Stack gap={2}>
       {#if performanceInfo.generate > 0}
         <div>
-          Tree Generation: {performanceInfo.generate.toFixed(4)}ms
-          ({nodeCount.toLocaleString()} nodes)
+          Tree Generation: {performanceInfo.generate.toFixed(4)}ms ({nodeCount.toLocaleString()}
+          nodes)
         </div>
       {/if}
       {#if performanceInfo.expandAll > 0}
