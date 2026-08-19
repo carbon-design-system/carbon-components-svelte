@@ -50,6 +50,19 @@ describe("HeaderNavMenu close event", () => {
     });
   });
 
+  it("collapses when clicking a link menu item", async () => {
+    const onClose = vi.fn();
+    render(HeaderNavMenuClose, { props: { onClose } });
+
+    const menuTrigger = screen.getByRole("menuitem", { name: "Menu" });
+    menuTrigger.focus();
+    await user.keyboard(" ");
+    expect(menuTrigger).toHaveAttribute("aria-expanded", "true");
+
+    await user.click(screen.getByRole("menuitem", { name: "Menu Item 1" }));
+    expect(menuTrigger).toHaveAttribute("aria-expanded", "false");
+  });
+
   it("does not dispatch close on outside clicks while collapsed", async () => {
     const onClose = vi.fn();
     render(HeaderNavMenuClose, { props: { onClose } });
