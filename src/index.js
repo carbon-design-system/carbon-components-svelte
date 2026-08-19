@@ -163,6 +163,7 @@ export { default as StructuredListInput } from "./StructuredList/StructuredListI
 export { default as StructuredListRow } from "./StructuredList/StructuredListRow.svelte";
 export { default as StructuredListSkeleton } from "./StructuredList/StructuredListSkeleton.svelte";
 export { default as Table } from "./Table/Table.svelte";
+export { default as TableSkeleton } from "./Table/TableSkeleton.svelte";
 export { default as Tab } from "./Tabs/Tab.svelte";
 export { default as TabContent } from "./Tabs/TabContent.svelte";
 export { default as Tabs } from "./Tabs/Tabs.svelte";

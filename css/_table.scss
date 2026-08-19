@@ -87,6 +87,22 @@
     font-weight: inherit;
     text-decoration: underline;
   }
+
+  // TableSkeleton: header cells stay plain text (or empty); body cells always
+  // render a shimmering placeholder bar, mirroring DataTableSkeleton.
+  .#{$prefix}--simple-table.#{$prefix}--skeleton th,
+  .#{$prefix}--simple-table.#{$prefix}--skeleton td {
+    vertical-align: middle;
+  }
+
+  .#{$prefix}--simple-table.#{$prefix}--skeleton th span,
+  .#{$prefix}--simple-table.#{$prefix}--skeleton td span {
+    @include skeleton;
+
+    display: block;
+    width: to-rem(64px);
+    height: to-rem(16px);
+  }
 }
 
 @include exports("table") {

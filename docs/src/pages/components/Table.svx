@@ -1,10 +1,10 @@
 ---
-components: ["Table"]
+components: ["Table", "TableSkeleton"]
 description: Tables display structured data in rows and columns, without sorting, selection, or virtualization.
 ---
 
 <script>
-  import { Table, CodeSnippet } from "carbon-components-svelte";
+  import { CodeSnippet, Table, TableSkeleton } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -164,3 +164,37 @@ Use the `cell` and `cellHeader` slots to render content beyond plain text, such 
 Table always wraps its content in a horizontally scrollable container, so a table wider than its surrounding layout scrolls instead of overflowing the page.
 
 <FileSource src="/framed/Table/TableOverflow" />
+
+## Skeleton
+
+Show a loading state with `TableSkeleton`.
+
+### Loading state
+
+Use the table skeleton to show a loading state.
+
+<TableSkeleton />
+
+### Headers and rows
+
+Specify headers and row count for the skeleton.
+
+<TableSkeleton headers={["Name", "Protocol", "Port"]} rows={10} />
+
+### Object headers
+
+Pass header objects to customize the skeleton, matching the shape used by `Table`.
+
+<TableSkeleton headers={[{ value: "Name" }, { value: "Protocol" }, { value: "Port" }]} rows={10} />
+
+### Compact
+
+<TableSkeleton size="compact" headers={["Name", "Protocol"]} rows={5} />
+
+### Short
+
+<TableSkeleton size="short" headers={["Name", "Protocol"]} rows={5} />
+
+### Tall
+
+<TableSkeleton size="tall" headers={["Name", "Protocol"]} rows={5} />
