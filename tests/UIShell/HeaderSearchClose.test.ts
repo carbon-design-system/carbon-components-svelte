@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import { flushDismiss } from "../utils/flushDismiss";
 import { user } from "../utils/user";
 import HeaderSearchClose from "./HeaderSearchClose.test.svelte";
 
@@ -21,9 +22,7 @@ describe("HeaderSearch close event", () => {
     const onClose = vi.fn();
     render(HeaderSearchClose, { props: { active: true, onClose } });
 
-    // dismiss() defers window listener registration by a macrotask; flush
-    // it before the outside click so that click is not missed.
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await flushDismiss();
 
     const outside = document.createElement("div");
     document.body.appendChild(outside);
@@ -90,7 +89,7 @@ describe("HeaderSearch close event", () => {
     });
 
     component.active = false;
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await flushDismiss();
 
     expect(onClose).not.toHaveBeenCalled();
   });

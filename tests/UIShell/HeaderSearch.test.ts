@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/svelte";
 import type HeaderSearchComponent from "carbon-components-svelte/UIShell/HeaderSearch.svelte";
 import type { HeaderSearchResult } from "carbon-components-svelte/UIShell/HeaderSearch.svelte";
 import type { ComponentProps } from "svelte";
+import { flushDismiss } from "../utils/flushDismiss";
 import { user } from "../utils/user";
 import HeaderSearchTest from "./HeaderSearch.test.svelte";
 import HeaderSearchIconTest from "./HeaderSearchIcon.test.svelte";
@@ -551,9 +552,7 @@ describe("HeaderSearch", () => {
     it("should deactivate when clicking outside", async () => {
       render(HeaderSearchTest, { props: { active: true } });
 
-      // dismiss() defers window listener registration by a macrotask; flush
-      // it before the outside click so that click is not missed.
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await flushDismiss();
 
       // Click outside the search component
       const outsideElement = document.createElement("div");

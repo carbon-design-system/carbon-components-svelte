@@ -1,8 +1,6 @@
 import { render } from "@testing-library/svelte";
+import { flushDismiss } from "../utils/flushDismiss";
 import Popover from "./Popover.test.svelte";
-
-/** dismiss() defers window listener registration by a macrotask; flush it before asserting. */
-const flush = () => new Promise((resolve) => setTimeout(resolve));
 
 const netClick = (
   add: ReturnType<typeof vi.spyOn>,
@@ -28,7 +26,7 @@ describe("Popover window listeners", () => {
     const remove = vi.spyOn(window, "removeEventListener");
 
     render(Popover, { props: { open: true } });
-    await flush();
+    await flushDismiss();
     expect(netClick(add, remove)).toBe(1);
 
     add.mockRestore();

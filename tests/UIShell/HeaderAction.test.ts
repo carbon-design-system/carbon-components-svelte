@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
 import type HeaderActionComponent from "carbon-components-svelte/UIShell/HeaderAction.svelte";
 import type { ComponentProps } from "svelte";
+import { flushDismiss } from "../utils/flushDismiss";
 import { user } from "../utils/user";
 import HeaderActionOutsideClick from "./HeaderAction.outsideClick.test.svelte";
 import HeaderActionSlot from "./HeaderAction.slot.test.svelte";
@@ -79,10 +80,7 @@ describe("HeaderAction", () => {
       await user.click(button);
       expect(screen.getByTestId("panel-content")).toBeInTheDocument();
 
-      // dismiss() defers window listener registration by a macrotask; flush
-      // it before Escape so the keydown isn't dispatched before the listener
-      // is attached.
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await flushDismiss();
 
       await user.keyboard("{Escape}");
 

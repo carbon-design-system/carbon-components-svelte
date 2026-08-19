@@ -1,8 +1,6 @@
 import { render } from "@testing-library/svelte";
+import { flushDismiss } from "../utils/flushDismiss";
 import ContextMenu from "./ContextMenu.test.svelte";
-
-/** dismiss() defers window listener registration by a macrotask; flush it before asserting. */
-const flush = () => new Promise((resolve) => setTimeout(resolve));
 
 const net = (
   add: ReturnType<typeof vi.spyOn>,
@@ -33,7 +31,7 @@ describe("ContextMenu window listeners", () => {
     const remove = vi.spyOn(window, "removeEventListener");
 
     render(ContextMenu, { props: { open: true } });
-    await flush();
+    await flushDismiss();
     expect(net(add, remove, "click")).toBe(1);
     expect(net(add, remove, "keydown")).toBe(1);
 
