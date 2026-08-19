@@ -122,7 +122,11 @@ Place the search as a direct child (not in the action slot) for a persistent fil
 
 <FileSource src="/framed/ContainedList/PersistentSearch" />
 
-## Interactive items
+## Clickable items
+
+Make items respond to interaction with `interactive` for in-page actions or `href` for navigation. Both produce a clickable item; add trailing controls to either with the `action` slot.
+
+### Interactive
 
 Set `interactive` on a list item to render it as a clickable button with keyboard support. Combine with `disabled` to prevent interaction.
 
@@ -155,7 +159,7 @@ Use the `action` slot on an item for trailing controls such as buttons or icons.
   </ContainedListItem>
 </ContainedList>
 
-## Link items
+### Link items
 
 Set `href` to render a list item as an anchor with clickable styles. Prefer this for navigation so links support middle-click and SEO. `href` takes precedence over `interactive`. Pass `target` and `rel` through rest props on the item.
 
