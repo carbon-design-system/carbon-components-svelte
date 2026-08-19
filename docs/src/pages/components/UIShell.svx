@@ -42,6 +42,12 @@ Duplicate those items in `HeaderSideNavItems` so the links stay in the side nav 
 
 <FileSource src="/framed/UIShell/HeaderNavExternalLinks" />
 
+### Hover menus
+
+Set `openOnHover` to `true` on `HeaderNavMenu` to open the submenu after a short delay when the pointer enters, and close it when the pointer leaves. Click and keyboard behavior are unchanged.
+
+<FileSource src="/framed/UIShell/HeaderNavHover" />
+
 ## Side navigation
 
 Pair the header with a `SideNav`. It collapses behind a hamburger menu by default and also supports responsive, fixed, and rail layouts.
