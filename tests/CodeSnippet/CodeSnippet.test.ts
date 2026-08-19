@@ -28,6 +28,7 @@ import CodeSnippetNullishAriaLabel from "./CodeSnippetNullishAriaLabel.test.svel
 import CodeSnippetRestPropsButton from "./CodeSnippetRestPropsButton.test.svelte";
 import CodeSnippetRestPropsSingle from "./CodeSnippetRestPropsSingle.test.svelte";
 import CodeSnippetRestPropsSpan from "./CodeSnippetRestPropsSpan.test.svelte";
+import CodeSnippetSkeletonForwardedEvents from "./CodeSnippetSkeleton.forwarded-events.test.svelte";
 import CodeSnippetWithCustomCopyText from "./CodeSnippetWithCustomCopyText.test.svelte";
 import CodeSnippetWithHideShowMore from "./CodeSnippetWithHideShowMore.test.svelte";
 import CodeSnippetWithWrapText from "./CodeSnippetWithWrapText.test.svelte";
@@ -768,5 +769,20 @@ yarn -v`,
     });
     const snippet = container.querySelector(".bx--snippet-container");
     expect(snippet).toHaveAttribute("aria-label", "Code snippet");
+  });
+
+  it("should not forward click on CodeSnippetSkeleton", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(CodeSnippetSkeletonForwardedEvents);
+
+    const skeleton = document.querySelector(".bx--skeleton.bx--snippet");
+    assert(skeleton);
+
+    // Click should not fire
+    await user.click(skeleton);
+    const clickCalls = consoleLog.mock.calls.filter(
+      (call) => call[0] === "click",
+    );
+    expect(clickCalls).toHaveLength(0);
   });
 });

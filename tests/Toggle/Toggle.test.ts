@@ -4,6 +4,7 @@ import ToggleReadonly from "./Toggle.readonly.test.svelte";
 import Toggle from "./Toggle.test.svelte";
 import ToggleNullishAriaLabel from "./ToggleNullishAriaLabel.test.svelte";
 import ToggleSkeletonSlot from "./ToggleSkeleton.slot.test.svelte";
+import ToggleSkeletonEvents from "./ToggleSkeletonEvents.test.svelte";
 import ToggleSkeletonNullishAriaLabel from "./ToggleSkeletonNullishAriaLabel.test.svelte";
 
 describe("Toggle", () => {
@@ -375,5 +376,25 @@ describe("Toggle", () => {
     render(ToggleSkeletonNullishAriaLabel, { props: { ariaLabel: "" } });
     const label = document.querySelector("label[aria-label]");
     expect(label).toHaveAttribute("aria-label", "");
+  });
+
+  it("ToggleSkeleton does not forward click but forwards mouse events", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(ToggleSkeletonEvents);
+
+    const skeleton = screen.getByTestId("skeleton");
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.click(skeleton);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.hover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+    expect(consoleLog).toHaveBeenCalledWith("mouseenter");
+
+    await user.unhover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+
+    consoleLog.mockRestore();
   });
 });

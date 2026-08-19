@@ -1081,6 +1081,25 @@ describe("TabsSkeleton", () => {
     expect(navItems).toHaveLength(20);
   });
 
+  it("does not forward click but forwards mouse events", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    const { container } = render(TabsSkeleton);
+
+    const skeleton = container.querySelector(".bx--tabs");
+    if (!skeleton) {
+      throw new Error("Skeleton not found");
+    }
+
+    await user.click(skeleton);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.hover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+
+    await user.unhover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+  });
+
   describe("Tab Generics", () => {
     it("should support custom Icon types with generics", () => {
       type CustomIcon = new (...args: unknown[]) => unknown;

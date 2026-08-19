@@ -6,6 +6,7 @@ import { expectInlineStyle } from "../utils/inline-style";
 import { user } from "../utils/user";
 import Tag from "./Tag.test.svelte";
 import TagMaxWidth from "./TagMaxWidth.test.svelte";
+import TagSkeleton from "./TagSkeleton.test.svelte";
 
 describe("Tag", () => {
   afterEach(() => {
@@ -339,6 +340,59 @@ describe("Tag", () => {
 
       // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
       expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
+    });
+  });
+
+  describe("TagSkeleton", () => {
+    let consoleLog: Console["log"];
+
+    beforeEach(() => {
+      consoleLog = vi.spyOn(console, "log");
+    });
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    it("should render with default props", () => {
+      const { container } = render(TagSkeleton);
+
+      const skeleton = container.querySelector(".bx--tag");
+      expect(skeleton).toBeInTheDocument();
+      expect(skeleton).toHaveClass("bx--skeleton");
+      expect(skeleton).toHaveClass("bx--tag");
+    });
+
+    it("should render with sm size", () => {
+      const { container } = render(TagSkeleton, { props: { size: "sm" } });
+
+      const skeleton = container.querySelector(".bx--tag");
+      expect(skeleton).toHaveClass("bx--tag--sm");
+    });
+
+    it("should render with lg size", () => {
+      const { container } = render(TagSkeleton, { props: { size: "lg" } });
+
+      const skeleton = container.querySelector(".bx--tag");
+      expect(skeleton).toHaveClass("bx--tag--lg");
+    });
+
+    it("does not forward click but forwards mouse events", async () => {
+      const { container } = render(TagSkeleton);
+
+      const skeleton = container.querySelector(".bx--tag");
+      if (!skeleton) {
+        throw new Error("Skeleton not found");
+      }
+
+      await user.click(skeleton);
+      expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+      await user.hover(skeleton);
+      expect(consoleLog).toHaveBeenCalledWith("mouseover");
+
+      await user.unhover(skeleton);
+      expect(consoleLog).toHaveBeenCalledWith("mouseleave");
     });
   });
 });

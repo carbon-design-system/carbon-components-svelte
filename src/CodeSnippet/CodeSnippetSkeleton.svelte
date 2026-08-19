@@ -14,7 +14,6 @@
   class:bx--snippet--single={type === "single"}
   class:bx--snippet--multi={type === "multi"}
   {...$$restProps}
-  on:click
   on:mouseover
   on:mouseenter
   on:mouseleave

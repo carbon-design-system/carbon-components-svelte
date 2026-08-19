@@ -21,7 +21,6 @@
   class:bx--breadcrumb--no-trailing-slash={noTrailingSlash}
   class:bx--breadcrumb--sm={size === "sm"}
   {...$$restProps}
-  on:click
   on:mouseover
   on:mouseenter
   on:mouseleave

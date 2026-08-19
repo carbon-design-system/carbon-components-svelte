@@ -202,6 +202,16 @@ describe("TabsVertical", () => {
 });
 
 describe("TabsVerticalSkeleton", () => {
+  let consoleLog: Console["log"];
+
+  beforeEach(() => {
+    consoleLog = vi.spyOn(console, "log");
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it("should render the vertical skeleton with the default count", () => {
     const { container } = render(TabsVerticalSkeleton);
 
@@ -221,5 +231,23 @@ describe("TabsVerticalSkeleton", () => {
     const { container } = render(TabsVerticalSkeleton, { props: { count: 0 } });
 
     expect(container.querySelectorAll(".bx--tabs__nav-item")).toHaveLength(0);
+  });
+
+  it("does not forward click but forwards mouse events", async () => {
+    const { container } = render(TabsVerticalSkeleton);
+
+    const skeleton = container.querySelector(".bx--tabs--vertical");
+    if (!skeleton) {
+      throw new Error("Skeleton not found");
+    }
+
+    await user.click(skeleton);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.hover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+
+    await user.unhover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
   });
 });

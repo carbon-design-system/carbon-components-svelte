@@ -5,6 +5,7 @@ import { user } from "../utils/user";
 import Button from "./Button.test.svelte";
 import ButtonInModal from "./ButtonInModal.test.svelte";
 import ButtonPortalAdjacent from "./ButtonPortalAdjacent.test.svelte";
+import ButtonSkeletonForwardedEvents from "./ButtonSkeleton.forwarded-events.test.svelte";
 import HeaderGlobalActionPortal from "./HeaderGlobalActionPortal.test.svelte";
 
 describe("Button", () => {
@@ -413,5 +414,23 @@ describe("Button", () => {
       // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
       expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
     });
+  });
+
+  it("does not forward click but forwards mouse events on ButtonSkeleton (div branch)", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    const { container } = render(ButtonSkeletonForwardedEvents);
+
+    const skeleton = container.querySelector(".bx--skeleton.bx--btn");
+    assert(skeleton);
+    expect(skeleton.tagName).toBe("DIV");
+
+    await user.click(skeleton);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.hover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+
+    await user.unhover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
   });
 });

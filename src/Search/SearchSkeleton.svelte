@@ -18,7 +18,6 @@
   class:bx--search--lg={size === "lg"}
   class:bx--search--xl={size === "xl"}
   {...$$restProps}
-  on:click
   on:mouseover
   on:mouseenter
   on:mouseleave

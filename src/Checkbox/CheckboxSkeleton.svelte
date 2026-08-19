@@ -5,7 +5,6 @@
   class:bx--checkbox-wrapper={true}
   class:bx--checkbox-label={true}
   {...$$restProps}
-  on:click
   on:mouseover
   on:mouseenter
   on:mouseleave

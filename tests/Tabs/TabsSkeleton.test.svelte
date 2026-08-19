@@ -6,4 +6,19 @@
   export let type: ComponentProps<TabsSkeleton>["type"] = "default";
 </script>
 
-<TabsSkeleton {count} {type} />
+<TabsSkeleton
+  {count}
+  {type}
+  on:click={() => {
+    console.log("click");
+  }}
+  on:mouseover={() => {
+    console.log("mouseover");
+  }}
+  on:mouseenter={() => {
+    console.log("mouseenter");
+  }}
+  on:mouseleave={() => {
+    console.log("mouseleave");
+  }}
+/>

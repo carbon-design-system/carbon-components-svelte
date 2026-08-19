@@ -38,7 +38,6 @@
   class:bx--accordion--xl={size === "xl"}
   class:bx--accordion--flush={flush && align !== "start"}
   {...$$restProps}
-  on:click
   on:mouseover
   on:mouseenter
   on:mouseleave
