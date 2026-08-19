@@ -1577,7 +1577,7 @@ Set `empty: true` in a header to create an empty column—for overflow menus wit
 
 ## Highlighted row
 
-Pass row ids in `highlightedRowIds` to keep a row visually highlighted. Bind each overflow menu open state to track which row is open. Highlighted rows use the bx--data-table--highlighted-row class, styled with the same theme tokens as row hover.
+Pass row ids in `highlightedRowIds` to keep a row visually highlighted. Bind each overflow menu open state to track which row is open. Highlighted rows use the `bx--data-table--highlighted-row` class, styled with the same theme tokens as row hover. This is purely cosmetic — no `aria-*` attribute is added, so it isn't announced to screen readers. For a selection state that's also exposed to assistive technology, see [Selectable rows](#selectable-rows).
 
 <FileSource src="/framed/DataTable/DataTableHighlightedRow" />
 
