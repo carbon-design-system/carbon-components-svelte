@@ -73,7 +73,7 @@ describe("PasswordInput", () => {
 
       expect(
         screen.getByText("Password must be at least 8 characters"),
-      ).toBeInTheDocument();
+      ).toHaveAttribute("role", "alert");
       const wrapper = screen
         .getByLabelText("Password")
         .closest(".bx--text-input__field-wrapper");
