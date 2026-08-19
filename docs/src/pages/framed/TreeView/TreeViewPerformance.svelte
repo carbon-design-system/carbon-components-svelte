@@ -7,10 +7,15 @@
     Switch,
     TreeView,
   } from "carbon-components-svelte";
-  import { tick } from "svelte";
+  import { onMount, tick } from "svelte";
 
   let treeview = null;
-  let performanceInfo = { expandAll: 0, collapseAll: 0, showNode: 0 };
+  let performanceInfo = {
+    generate: 0,
+    expandAll: 0,
+    collapseAll: 0,
+    showNode: 0,
+  };
 
   function generateLargeTree() {
     const nodes = [];
@@ -43,7 +48,7 @@
       });
     }
 
-    return nodes;
+    return { nodes, count: idCounter };
   }
 
   function generateDeepTree() {
@@ -65,42 +70,60 @@
     }
 
     const rootNode = createNestedNode(0, 100);
-    return { nodes: [rootNode], lastId };
+    return { nodes: [rootNode], count: idCounter, lastId };
   }
 
-  let nodes = generateLargeTree();
+  let genStart = performance.now();
+  let initialTree = generateLargeTree();
+  let nodes = initialTree.nodes;
+  let nodeCount = initialTree.count;
   let treeType = "large";
   let lastDeepNodeId = null;
   let selectedIndex = 0;
+
+  $: hasTiming =
+    performanceInfo.generate > 0 ||
+    performanceInfo.expandAll > 0 ||
+    performanceInfo.collapseAll > 0 ||
+    performanceInfo.showNode > 0;
+
+  onMount(async () => {
+    await tick();
+    const end = performance.now();
+    performanceInfo.generate = end - genStart;
+    performanceInfo = performanceInfo;
+  });
 
   async function handleTreeSwitch(event) {
     const index = event.detail;
     selectedIndex = index;
 
-    performanceInfo = { expandAll: 0, collapseAll: 0, showNode: 0 };
+    performanceInfo = {
+      generate: 0,
+      expandAll: 0,
+      collapseAll: 0,
+      showNode: 0,
+    };
 
     const start = performance.now();
     if (index === 0) {
-      nodes = generateLargeTree();
+      const result = generateLargeTree();
+      nodes = result.nodes;
+      nodeCount = result.count;
       treeType = "large";
       lastDeepNodeId = null;
     } else {
-      const { nodes: deepNodes, lastId } = generateDeepTree();
-      nodes = deepNodes;
-      lastDeepNodeId = lastId;
+      const result = generateDeepTree();
+      nodes = result.nodes;
+      nodeCount = result.count;
+      lastDeepNodeId = result.lastId;
       treeType = "deep";
     }
 
     await tick();
-    setTimeout(() => {
-      const end = performance.now();
-      console.log(
-        (index === 0 ? "Large" : "Deep") +
-          " tree generation: " +
-          (end - start).toFixed(2) +
-          "ms",
-      );
-    }, 0);
+    const end = performance.now();
+    performanceInfo.generate = end - start;
+    performanceInfo = performanceInfo;
   }
 
   function handleExpandAll() {
@@ -148,11 +171,23 @@
     <Button on:click={handleShowNode}>Show Deep Node</Button>
   </ButtonSet>
 
-  {#if performanceInfo.expandAll > 0 || performanceInfo.collapseAll > 0 || performanceInfo.showNode > 0}
+  {#if hasTiming}
     <Stack gap={2}>
-      <div>Expand All: {performanceInfo.expandAll.toFixed(2)}ms</div>
-      <div>Collapse All: {performanceInfo.collapseAll.toFixed(2)}ms</div>
-      <div>Show Node: {performanceInfo.showNode.toFixed(2)}ms</div>
+      {#if performanceInfo.generate > 0}
+        <div>
+          Tree Generation: {performanceInfo.generate.toFixed(4)}ms
+          ({nodeCount.toLocaleString()} nodes)
+        </div>
+      {/if}
+      {#if performanceInfo.expandAll > 0}
+        <div>Expand All: {performanceInfo.expandAll.toFixed(4)}ms</div>
+      {/if}
+      {#if performanceInfo.collapseAll > 0}
+        <div>Collapse All: {performanceInfo.collapseAll.toFixed(4)}ms</div>
+      {/if}
+      {#if performanceInfo.showNode > 0}
+        <div>Show Node: {performanceInfo.showNode.toFixed(4)}ms</div>
+      {/if}
     </Stack>
   {/if}
   <div>
