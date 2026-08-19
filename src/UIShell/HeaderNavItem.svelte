@@ -74,6 +74,7 @@
     rel={$$restProps.target === "_blank" ? "noopener noreferrer" : undefined}
     class:bx--header__menu-item={true}
     class:bx--header__menu-item--icon={icon || $$slots.icon}
+    class:bx--header__menu-item--current={isSelected}
     aria-current={isSelected ? "page" : undefined}
     {...$$restProps}
     on:click
