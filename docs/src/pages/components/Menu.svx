@@ -1,5 +1,5 @@
 ---
-components: ["Menu", "MenuItem", "MenuDivider"]
+components: ["Menu", "MenuItem", "MenuDivider", "MenuItemGroup", "MenuItemRadioGroup"]
 description: Menu positions a list of actions next to an anchor element you control. Keyboard navigation and outside-click dismissal are built in.
 ---
 
@@ -18,6 +18,12 @@ The root element has `role="menu"`. Set `labelText` or `aria-label` on Menu so a
 
 Set `size` to control each item's row height. The default is `"sm"`.
 
+### Extra small
+
+`"xs"` has no Carbon v10 equivalent; it's a compact row height hand-authored for this library.
+
+<FileSource src="/framed/Menu/MenuSizeExtraSmall" />
+
 ### Medium
 
 <FileSource src="/framed/Menu/MenuSizeMedium" />
@@ -28,7 +34,7 @@ Set `size` to control each item's row height. The default is `"sm"`.
 
 ## Menu items
 
-`MenuItem` takes an `icon`, `kind="danger"` for destructive rows, and nested children for submenus. Use `MenuDivider` between groups. Items can also hold checkbox or radio state; see [MenuButton selectable](/components/MenuButton#selectable).
+`MenuItem` takes an `icon`, `kind="danger"` for destructive rows, and nested children for submenus. Use `MenuDivider` between groups.
 
 ### Icons
 
@@ -54,15 +60,27 @@ Put a `MenuDivider` between groups.
 
 <FileSource src="/framed/Menu/MenuItemDividers" />
 
+### Selectable
+
+Wrap items in `MenuItemGroup` to make them checkboxes that hold state, such as which table columns are visible. Set `labelText` on `MenuItemGroup` for the group's accessible name. Give every item an `id`, then bind `selectedIds` for the chosen ones. Set `selected` on an item to check it when the menu first opens, or set `selectable` on a single item outside a group for a standalone toggle. See [MenuButton selectable](/components/MenuButton#selectable) for how this interacts with keeping the menu open on selection.
+
+<FileSource src="/framed/Menu/MenuItemSelectable" />
+
+### Radio group
+
+Wrap items in `MenuItemRadioGroup` for a set where one choice is active at a time, such as row density. Set `labelText` on `MenuItemRadioGroup` for the group's accessible name. Bind `selectedId` for the active id; picking another item clears the previous one.
+
+<FileSource src="/framed/Menu/MenuItemRadioGroup" />
+
 ### Nested
 
-Set `labelText` on a `MenuItem` and nest child `MenuItem` rows to get a submenu. See [MenuButton menu items](/components/MenuButton#menu-items) for keyboard and hover behavior.
+Set `labelText` on a `MenuItem` and nest child `MenuItem` rows to get a submenu. Use the `labelChildren` slot instead of plain text to customize the label's content; `labelText` is still used as the accessible name and title in that case. See [MenuButton menu items](/components/MenuButton#menu-items) for keyboard and hover behavior.
 
 <FileSource src="/framed/Menu/MenuItemNested" />
 
 ## Keyboard interactions
 
-Once open, arrow keys move focus between items without wrapping past the first or last item. <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the first and last enabled item, skipping disabled ones. The menu closes from an item selection, <DocKbd label="Escape" />, or an outside click; <DocKbd label="Escape" /> also returns focus to the anchor. An item's `click` event is cancelable. Call `event.preventDefault()` in its handler to keep the menu open after selection. See [MenuButton keep open on selection](/components/MenuButton#keep-open-on-selection).
+Once open, arrow keys move focus between items without wrapping past the first or last item. <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the first and last enabled item, skipping disabled ones. <DocKbd label="Escape" /> closes the menu and returns focus to the anchor. See [Events](#events) for the full set of ways the menu can close, and how to keep it open after selection.
 
 ## Scrollable
 
@@ -103,3 +121,17 @@ By default, the menu mounts into the anchor's nearest `<dialog>` or `[popover]` 
 ### Z-index
 
 Set `zIndex` to change the menu's stacking order. The default is `9200`.
+
+## Events
+
+Menu dispatches `open` once it finishes opening and focus moves to the first item, and `close` on every close attempt.
+
+<FileSource src="/framed/Menu/MenuEvents" />
+
+### Open event
+
+`open`'s detail is the `anchor` element.
+
+### Close event
+
+Use `on:close` to respond to every close attempt, regardless of cause. The event detail's `trigger` is `"escape-key"`, `"outside-click"`, or `"select"`. An item's `click` event is separately cancelable: call `event.preventDefault()` in a `MenuItem`'s `on:click` handler to keep the menu open after that particular selection. See [MenuButton keep open on selection](/components/MenuButton#keep-open-on-selection).
