@@ -188,6 +188,43 @@ Allow selecting more than one row with `multiple`. Selected becomes an array of 
 
 <FileSource src="/framed/StructuredList/StructuredListMultiSelect" />
 
+## Events
+
+### Selection change
+
+`StructuredList` dispatches a `change` event whenever the selected row changes. The event detail is the selected value—or an array of values when `multiple` is `true`.
+
+<StructuredList
+  selection
+  selected="postgresql-value"
+  on:change={(e) => console.log(e.detail)}
+>
+  <StructuredListHead>
+    <StructuredListRow head>
+      <StructuredListCell head>Name</StructuredListCell>
+      <StructuredListCell head>Type</StructuredListCell>
+    </StructuredListRow>
+  </StructuredListHead>
+  <StructuredListBody>
+    {#each [
+      { id: "postgresql", name: "PostgreSQL", type: "Relational" },
+      { id: "mongodb", name: "MongoDB", type: "Document" },
+      { id: "redis", name: "Redis", type: "Key-value" },
+    ] as db}
+      <StructuredListRow label for="event-{db.id}">
+        <StructuredListCell>{db.name}</StructuredListCell>
+        <StructuredListCell>{db.type}</StructuredListCell>
+        <StructuredListInput
+          id="event-{db.id}"
+          value="{db.id}-value"
+          title="{db.name} option"
+          name="database-event"
+        />
+      </StructuredListRow>
+    {/each}
+  </StructuredListBody>
+</StructuredList>
+
 ## Skeleton
 
 Show a loading state with the skeleton variant.
