@@ -19,6 +19,12 @@ Control notification visibility by binding to `open` to show, hide, and reuse th
 
 <FileSource src="/framed/InlineNotification/InlineNotificationReusable" />
 
+## Autoclose
+
+Automatically close the notification after a specified duration (in milliseconds) with `timeout`. Set `pauseOnHover` to pause the timeout while the pointer is over the notification so users can finish reading (opt-in).
+
+<FileSource src="/framed/InlineNotification/InlineNotificationTimeout" />
+
 ## Title and subtitle
 
 Both the title and subtitle are optional and can be customized with slots.
@@ -89,6 +95,12 @@ The component is controlled, so you can prevent the default close behavior with 
   e.preventDefault();
   // custom close logic (e.g., transitions)
 }} />
+
+## ARIA role
+
+Specify the ARIA `role` for the notification container to control how screen readers announce it. Defaults to `"alert"` for interruptive announcements. Use `"status"` for polite live-region updates, or `"log"` for a running log of messages.
+
+<InlineNotification role="status" kind="success" title="Success:" subtitle="Your settings have been saved." />
 
 ## Variants
 
