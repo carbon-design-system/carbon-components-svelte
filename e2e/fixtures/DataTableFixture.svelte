@@ -74,6 +74,19 @@
   </DataTable>
 </div>
 
+<div data-testid="data-table-expand-selectable">
+  <DataTable
+    expandable
+    batchSelection
+    headers={expandHeaders}
+    rows={expandRows}
+  >
+    <svelte:fragment slot="expandedRow" let:row>
+      <p data-testid="expand-selectable-detail">Extra row: {row.name}</p>
+    </svelte:fragment>
+  </DataTable>
+</div>
+
 <div data-testid="data-table-batch">
   <DataTable batchSelection headers={batchHeaders} rows={batchRows} />
 </div>
