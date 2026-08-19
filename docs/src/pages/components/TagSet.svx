@@ -4,7 +4,7 @@ description: Displays a row of tags that collapses to fit the available width, m
 ---
 
 <script>
-  import { Tag, TagSet } from "carbon-components-svelte";
+  import { Stack, Tag, TagSet } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -57,39 +57,81 @@ Set `multiline` to wrap every tag onto multiple lines instead of collapsing into
 
 <FileSource src="/framed/TagSet/TagSetMultiline" />
 
-## Tooltip alignment
+### Measurement offset
+
+Set `measurementOffset` to subtract a fixed amount from the measured available width before fitting tags — useful when other content shares the same row and should be reserved space.
+
+<Stack gap={5}>
+  <div>
+    <div>measurementOffset={0} (default)</div>
+    <div style="max-width: 14rem;">
+      <TagSet>
+        <Tag type="red">Angular</Tag>
+        <Tag type="blue">React</Tag>
+        <Tag type="purple">Svelte</Tag>
+        <Tag type="green">Vue</Tag>
+        <Tag type="magenta">Ember</Tag>
+      </TagSet>
+    </div>
+  </div>
+  <div>
+    <div>measurementOffset={80}</div>
+    <div style="max-width: 14rem;">
+      <TagSet measurementOffset={80}>
+        <Tag type="red">Angular</Tag>
+        <Tag type="blue">React</Tag>
+        <Tag type="purple">Svelte</Tag>
+        <Tag type="green">Vue</Tag>
+        <Tag type="magenta">Ember</Tag>
+      </TagSet>
+    </div>
+  </div>
+</Stack>
+
+### Custom measurement target
+
+Set `containingElement` to measure a different element instead of `TagSet`'s own wrapper — useful when the width `TagSet` should fit within isn't its own box, for example when matching the width of another element on the page.
+
+<FileSource src="/framed/TagSet/TagSetContainingElement" />
+
+## Overflow tooltip
+
+Control the content and positioning of the tooltip shown by the "+N" indicator.
+
+### Alignment
 
 Set `overflowAlign` to align the tooltip relative to the "+N" indicator.
 
-### Align start
+<Stack gap={5}>
+  <div>
+    <div>overflowAlign="start"</div>
+    <div style="max-width: 12rem;">
+      <TagSet overflowAlign="start">
+        <Tag type="red">Angular</Tag>
+        <Tag type="blue">React</Tag>
+        <Tag type="purple">Svelte</Tag>
+        <Tag type="green">Vue</Tag>
+        <Tag type="magenta">Ember</Tag>
+      </TagSet>
+    </div>
+  </div>
+  <div>
+    <div>overflowAlign="end"</div>
+    <div style="max-width: 12rem;">
+      <TagSet overflowAlign="end">
+        <Tag type="red">Angular</Tag>
+        <Tag type="blue">React</Tag>
+        <Tag type="purple">Svelte</Tag>
+        <Tag type="green">Vue</Tag>
+        <Tag type="magenta">Ember</Tag>
+      </TagSet>
+    </div>
+  </div>
+</Stack>
 
-<div style="max-width: 12rem;">
-  <TagSet overflowAlign="start">
-    <Tag type="red">Angular</Tag>
-    <Tag type="blue">React</Tag>
-    <Tag type="purple">Svelte</Tag>
-    <Tag type="green">Vue</Tag>
-    <Tag type="magenta">Ember</Tag>
-  </TagSet>
-</div>
+### Direction
 
-### Align end
-
-<div style="max-width: 12rem;">
-  <TagSet overflowAlign="end">
-    <Tag type="red">Angular</Tag>
-    <Tag type="blue">React</Tag>
-    <Tag type="purple">Svelte</Tag>
-    <Tag type="green">Vue</Tag>
-    <Tag type="magenta">Ember</Tag>
-  </TagSet>
-</div>
-
-## Tooltip direction
-
-Set `overflowDirection` to show the tooltip above the indicator instead of below.
-
-### Direction top
+Set `overflowDirection` to `"top"` to show the tooltip above the indicator instead of below.
 
 <div style="max-width: 12rem;">
   <TagSet overflowDirection="top">
@@ -101,17 +143,49 @@ Set `overflowDirection` to show the tooltip above the indicator instead of below
   </TagSet>
 </div>
 
+### Custom content
+
+Override the `overflowTooltip` slot to replace the default plain-text tooltip with custom content.
+
+<FileSource src="/framed/TagSet/TagSetCustomOverflowTooltip" />
+
 ## Dismissible
 
 Set `filter` on a `Tag` to render it as closable. `TagSet` dispatches `close:tag` with `{ tag, index }` instead of taking a per-tag handler: remove the tag from your own state in response.
 
 <FileSource src="/framed/TagSet/TagSetDismissible" />
 
-## Custom overflow tooltip
+## Events
 
-Override the `overflowTooltip` slot to replace the default plain-text tooltip with custom content.
+Respond to interactions with the "+N" overflow indicator.
 
-<FileSource src="/framed/TagSet/TagSetCustomOverflowTooltip" />
+### Overflow click
+
+Use `on:click:overflow` to listen for clicks on the "+N" indicator. The event detail includes the current overflow count.
+
+<div style="max-width: 12rem;">
+  <TagSet on:click:overflow={(e) => console.log(e.detail.count)}>
+    <Tag type="red">Angular</Tag>
+    <Tag type="blue">React</Tag>
+    <Tag type="purple">Svelte</Tag>
+    <Tag type="green">Vue</Tag>
+    <Tag type="magenta">Ember</Tag>
+  </TagSet>
+</div>
+
+### Overflow count change
+
+Use `on:overflow:change` to listen for changes to the overflow count, whether from a resize, a slotted-children change, or a `maxVisible` change. The event detail includes the new count.
+
+<div style="max-width: 12rem;">
+  <TagSet on:overflow:change={(e) => console.log(e.detail.count)}>
+    <Tag type="red">Angular</Tag>
+    <Tag type="blue">React</Tag>
+    <Tag type="purple">Svelte</Tag>
+    <Tag type="green">Vue</Tag>
+    <Tag type="magenta">Ember</Tag>
+  </TagSet>
+</div>
 
 ## Sizes
 
