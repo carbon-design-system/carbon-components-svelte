@@ -211,7 +211,7 @@ Invalid and warning states are not displayed while the input is disabled.
 
 Invalid and warning states are not displayed while the input is read-only.
 
-<NumberInput fluid readonly warn warnText="The number of clusters is read-only." labelText="Clusters" value={0} />
+<NumberInput fluid readonly labelText="Clusters" value={0} />
 
 ### Skeleton
 
