@@ -151,6 +151,14 @@ Disabled links render as plain text while remaining accessible.
   Disabled link
 </Link>
 
+### Disabled with icon
+
+The icon still renders when the link is disabled.
+
+<Link disabled href="https://www.carbondesignsystem.com/" icon={Carbon}>
+  Disabled link
+</Link>
+
 ### Visited
 
 Show visited state styling with `visited`.
