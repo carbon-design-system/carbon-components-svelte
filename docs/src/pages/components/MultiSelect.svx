@@ -61,6 +61,16 @@ Hide the label visually by setting `hideLabel` to `true`. The label remains avai
     {id: "2", text: "Fax"}]}"
   />
 
+### Title attribute
+
+Set `useTitleInItem` to `true` to add a native `title` attribute to each option, using the resolved `itemToString` text. This surfaces a browser tooltip when an item's label is truncated by the field width.
+
+<MultiSelect useTitleInItem labelText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
 ### Checkbox values
 
 `MultiSelect` mounts a hidden `<input>` for every selected item, derived
@@ -166,6 +176,16 @@ The select-all option is styled differently from regular options (with a separat
 Bind to `sortedItems` to read the resolved list after sorting and selection feedback is applied. This avoids recomputing the order from items, selectedIds, and sortItem in consumer code.
 
 <FileSource src="/framed/MultiSelect/MultiSelectSortedItems" />
+
+### Locale
+
+Set `locale` to a BCP 47 language tag to control how the default `sortItem` orders items. The default sort uses `Intl.Collator` with numeric-aware comparison, so locale affects the ordering of accented characters and numbers embedded in text. Only used when `sortItem` is left at its default -- a custom `sortItem` ignores `locale`.
+
+<MultiSelect locale="de-DE" labelText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Öl"},
+    {id: "1", text: "Apfel"},
+    {id: "2", text: "Zebra"}]}"
+  />
 
 ### No alphabetical ordering
 
@@ -287,11 +307,7 @@ Use the extra-large size for prominent selections by setting `size` to `"xl"`.
     {id: "2", text: "Fax"}]}"
   />
 
-## Variants
-
-Alternate presentations for different surfaces and layouts.
-
-### Light
+## Light
 
 Use the light variant for dark backgrounds by setting `light` to `true`.
 
@@ -301,7 +317,7 @@ Use the light variant for dark backgrounds by setting `light` to `true`.
     {id: "2", text: "Fax"}]}"
   />
 
-### Inline
+## Inline
 
 Display the dropdown inline with other content by setting `type` to `"inline"`. This removes the background and border.
 
