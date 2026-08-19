@@ -15,6 +15,7 @@
 <Menu {anchor} bind:open labelText="Example menu">
   <MenuItem icon={Add}>Add item</MenuItem>
   <MenuItem>Plain</MenuItem>
+  <MenuItem labelText="Standalone label" />
   <MenuItem shortcutText="⌘S">Save</MenuItem>
   <MenuItem labelText="Export as">
     <MenuItem on:click={() => console.log("select", "PDF")}>PDF</MenuItem>

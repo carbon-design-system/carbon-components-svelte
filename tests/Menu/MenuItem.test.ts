@@ -329,10 +329,20 @@ describe("MenuItem", () => {
       const parent = screen.getByRole("menuitem", {
         name: "Custom label content",
       });
-      expect(parent.querySelector(".bx--menu-option__label")).toHaveAttribute(
-        "title",
-        "Export as",
-      );
+      // On the interactive element (the <li>), not the label span: the label
+      // truncates with an ellipsis, so the title needs to be reachable by
+      // hovering anywhere in the row, not just the label text itself.
+      expect(parent).toHaveAttribute("title", "Export as");
+    });
+
+    it("sets the title on a non-submenu item that uses labelText, since its label can also truncate", async () => {
+      render(MenuItemFixture);
+
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+
+      expect(
+        screen.getByRole("menuitem", { name: "Standalone label" }),
+      ).toHaveAttribute("title", "Standalone label");
     });
   });
 
