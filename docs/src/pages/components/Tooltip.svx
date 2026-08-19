@@ -18,13 +18,38 @@ Display a tooltip triggered by the default information icon.
   </p>
 </Tooltip>
 
-## With trigger text
+## Custom labels
 
-Use custom trigger text instead of the default icon.
+Customize the tooltip's visible trigger text and the icon button's accessible name.
+
+### Trigger text
+
+Use custom trigger text instead of the default icon with `triggerText`.
 
 <Tooltip triggerText="Resource list">
   <p>
     Resources are provisioned based on your account's organization.
+  </p>
+</Tooltip>
+
+### Trigger text slot
+
+Alternatively, use the `"triggerText"` slot for custom markup.
+
+<Tooltip>
+  <span slot="triggerText"><strong>Resource list</strong></span>
+  <p>
+    Resources are provisioned based on your account's organization.
+  </p>
+</Tooltip>
+
+### Accessible label
+
+Set the button's ARIA label with `iconDescription`. It defaults to `"Show information"`.
+
+<Tooltip iconDescription="Additional information">
+  <p>
+    The button has a custom ARIA label.
   </p>
 </Tooltip>
 
@@ -33,6 +58,12 @@ Use custom trigger text instead of the default icon.
 Control the tooltip state programmatically.
 
 <FileSource src="/framed/Tooltip/TooltipReactive" />
+
+## Dispatched events
+
+The component dispatches `open` and `close` events.
+
+<FileSource src="/framed/Tooltip/TooltipEvents" />
 
 ## Placement
 
@@ -71,7 +102,7 @@ Add interactive elements like links and buttons using the tooltip footer.
 
 ## Custom icon
 
-Replace the default icon via prop or slot.
+Customize or hide the default trigger icon.
 
 ### Component
 
@@ -94,6 +125,16 @@ Customize the icon using the `icon` slot for more flexibility.
   </p>
 </Tooltip>
 
+### Hidden icon
+
+Hide the trigger icon while keeping tooltip behavior with `hideIcon`.
+
+<Tooltip hideIcon triggerText="Resource list">
+  <p>
+    Resources are provisioned based on your account's organization.
+  </p>
+</Tooltip>
+
 ## Custom delay
 
 Customize the enter and leave delay with `enterDelayMs` and `leaveDelayMs`. Defaults are 100ms and 300ms.
@@ -101,16 +142,6 @@ Customize the enter and leave delay with `enterDelayMs` and `leaveDelayMs`. Defa
 <Tooltip triggerText="Slow open" enterDelayMs={500} leaveDelayMs={200}>
   <p>
     This tooltip has a 500ms enter delay and a 200ms leave delay.
-  </p>
-</Tooltip>
-
-## Hidden icon
-
-Hide the trigger icon while keeping tooltip behavior with `hideIcon`.
-
-<Tooltip hideIcon triggerText="Resource list">
-  <p>
-    Resources are provisioned based on your account's organization.
   </p>
 </Tooltip>
 
