@@ -22,7 +22,9 @@ Create a basic select menu with select item components. The first item's value i
 
 ## Reactive
 
-Bind to `selected` for reactive updates.
+Bind to `selected` for reactive updates, or listen for the `update` event
+directly—Select dispatches it whenever the selected value changes, which is
+what powers the two-way binding.
 
 <FileSource src="/framed/Select/SelectReactive" />
 
@@ -78,9 +80,41 @@ Hide the label visually by setting `hideLabel` to `true`. The label remains avai
   <SelectItem value="g100" text="Gray 100" />
 </Select>
 
+### Custom label
+
+Use the `labelChildren` slot to provide custom label content.
+
+<Select labelText="">
+  <strong slot="labelChildren">Carbon theme</strong>
+  <SelectItem value="white" text="White" />
+  <SelectItem value="g10" text="Gray 10" />
+  <SelectItem value="g80" text="Gray 80" />
+  <SelectItem value="g90" text="Gray 90" />
+  <SelectItem value="g100" text="Gray 100" />
+</Select>
+
+### Remove label
+
+Set `noLabel` to `true` to omit the label element entirely. Unlike
+`hideLabel`, which keeps the label available to screen readers, `noLabel`
+removes it from the DOM. Provide an accessible name some other way, such
+as `aria-label` (forwarded through to the select element), when using
+`noLabel`.
+
+<Select noLabel labelText="Carbon theme" selected="g10" aria-label="Carbon theme">
+  <SelectItem value="white" text="White" />
+  <SelectItem value="g10" text="Gray 10" />
+  <SelectItem value="g80" text="Gray 80" />
+  <SelectItem value="g90" text="Gray 90" />
+  <SelectItem value="g100" text="Gray 100" />
+</Select>
+
 ### Item groups
 
-Group related options using select item group components.
+Group related options using select item group components. The example below
+also combines `disabled` and `hidden` on the first `SelectItem` to create a
+non-selectable placeholder that appears as the initial value but is absent
+from the open option list.
 
 <Select labelText="Carbon theme" selected="0">
   <SelectItem value="0" text="Select a theme" disabled hidden />
@@ -89,6 +123,22 @@ Group related options using select item group components.
     <SelectItem value="g10" text="Gray 10" />
   </SelectItemGroup>
   <SelectItemGroup label="Dark theme">
+    <SelectItem value="g80" text="Gray 80" />
+    <SelectItem value="g90" text="Gray 90" />
+    <SelectItem value="g100" text="Gray 100" />
+  </SelectItemGroup>
+</Select>
+
+### Disabled group
+
+Set `disabled` on `SelectItemGroup` to disable every item within a group.
+
+<Select labelText="Carbon theme" selected="white">
+  <SelectItemGroup label="Light theme">
+    <SelectItem value="white" text="White" />
+    <SelectItem value="g10" text="Gray 10" />
+  </SelectItemGroup>
+  <SelectItemGroup label="Dark theme" disabled>
     <SelectItem value="g80" text="Gray 80" />
     <SelectItem value="g90" text="Gray 90" />
     <SelectItem value="g100" text="Gray 100" />
@@ -281,6 +331,18 @@ Disable the select menu to prevent interaction.
 
 <Select disabled labelText="Carbon theme" selected="g10" >
   <SelectItem value="white" text="White" />
+  <SelectItem value="g10" text="Gray 10" />
+  <SelectItem value="g80" text="Gray 80" />
+  <SelectItem value="g90" text="Gray 90" />
+  <SelectItem value="g100" text="Gray 100" />
+</Select>
+
+### Disabled option
+
+Mark individual items with `disabled` on `SelectItem` for finer control over available selections.
+
+<Select labelText="Carbon theme" selected="g10">
+  <SelectItem value="white" text="White" disabled />
   <SelectItem value="g10" text="Gray 10" />
   <SelectItem value="g80" text="Gray 80" />
   <SelectItem value="g90" text="Gray 90" />
