@@ -263,6 +263,7 @@
           hideLabel
           noLabel
           inline
+          disabled={pageSizeInputDisabled || disabled}
           on:update={(event) => {
             dispatch("change", { pageSize: event.detail });
           }}
@@ -306,6 +307,7 @@
         labelText="Page number, of {totalPages} pages"
         inline
         hideLabel
+        disabled={pageInputDisabled || disabled}
         selected={page}
         on:update={(event) => {
           const next = Number(event.detail);
