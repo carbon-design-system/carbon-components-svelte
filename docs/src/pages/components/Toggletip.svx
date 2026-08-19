@@ -22,25 +22,33 @@ Control the toggletip state programmatically by binding to `open`.
 
 <FileSource src="/framed/Toggletip/ToggletipReactive" />
 
-## Label
+## Custom labels
 
-Render an inline label beside the button.
+Customize the toggletip's visible label and the button's accessible name.
 
-### Prop
+### Label prop
 
-Use the `labelText` prop.
+Render an inline label beside the button using the `labelText` prop.
 
 <Toggletip labelText="Setting">
   This setting controls how items are displayed.
 </Toggletip>
 
-### Slot
+### Label slot
 
 Alternatively, use the `"labelText"` slot for custom markup.
 
 <Toggletip>
   <span slot="labelText"><strong>Setting</strong></span>
   This setting controls how items are displayed.
+</Toggletip>
+
+### Accessible label
+
+Set the button's ARIA label with `iconDescription`. It defaults to `"Show information"`.
+
+<Toggletip iconDescription="Additional information">
+  The button has a custom ARIA label.
 </Toggletip>
 
 ## Actions
@@ -72,14 +80,6 @@ Alternatively, use the `"icon"` slot.
 <Toggletip iconDescription="Add">
   <Add slot="icon" />
   The button renders a custom icon.
-</Toggletip>
-
-## Accessible label
-
-Set the button's ARIA label with `iconDescription`. It defaults to `"Show information"`.
-
-<Toggletip iconDescription="Additional information">
-  The button has a custom ARIA label.
 </Toggletip>
 
 ## Placement
