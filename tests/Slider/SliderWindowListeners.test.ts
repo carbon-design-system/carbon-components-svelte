@@ -1,9 +1,6 @@
 import { fireEvent, render } from "@testing-library/svelte";
-import { tick } from "svelte";
+import { flushDismiss } from "../utils/flushDismiss";
 import Slider from "./Slider.test.svelte";
-
-/** dismiss() defers window listener registration by a macrotask; flush it before asserting. */
-const flush = () => new Promise((resolve) => setTimeout(resolve));
 
 const net = (
   add: ReturnType<typeof vi.spyOn>,
@@ -44,8 +41,7 @@ describe("Slider window listeners", () => {
     const sliderA = containers[0].querySelector(".bx--slider");
     assert(sliderA instanceof HTMLElement);
     await fireEvent.mouseDown(sliderA);
-    await tick();
-    await flush();
+    await flushDismiss();
 
     expect(net(add, remove, "mousemove")).toBe(1);
     expect(net(add, remove, "touchmove")).toBe(1);
@@ -55,14 +51,12 @@ describe("Slider window listeners", () => {
     const sliderB = containers[1].querySelector(".bx--slider");
     assert(sliderB instanceof HTMLElement);
     await fireEvent.mouseDown(sliderB);
-    await tick();
-    await flush();
+    await flushDismiss();
     expect(net(add, remove, "mousemove")).toBe(1);
 
     // Releasing both ends the drag and tears the shared listeners down.
     await fireEvent.mouseUp(window);
-    await tick();
-    await flush();
+    await flushDismiss();
     for (const type of ["mousemove", "touchmove", "mouseup", "touchend"]) {
       expect(net(add, remove, type)).toBe(0);
     }
@@ -78,8 +72,7 @@ describe("Slider window listeners", () => {
     const slider = container.querySelector(".bx--slider");
     assert(slider instanceof HTMLElement);
     await fireEvent.mouseDown(slider);
-    await tick();
-    await flush();
+    await flushDismiss();
 
     const moveCall = add.mock.calls.find(
       (c: unknown[]) => c[0] === "mousemove",

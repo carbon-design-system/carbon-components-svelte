@@ -1,19 +1,18 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { flushDismiss } from "../utils/flushDismiss";
 import { user } from "../utils/user";
 import Toggletip from "./ToggletipDispatchGuard.test.svelte";
 import ToggletipWithInteractiveContent from "./ToggletipWithInteractiveContent.test.svelte";
 
 /**
- * Listeners are enabled on the animation frame after opening; that state
- * change needs a Svelte `tick()` to reach the `dismiss` action's `update()`,
- * which itself defers the actual window listener registration by a further
- * macrotask. Flush all three before asserting.
+ * Listeners are enabled on the animation frame after opening, on top of the
+ * `dismiss` action's own deferred registration. Wait for that frame before
+ * flushing the `dismiss` action.
  */
 const flush = async () => {
   await new Promise((resolve) => requestAnimationFrame(resolve));
-  await tick();
-  await new Promise((resolve) => setTimeout(resolve));
+  await flushDismiss();
 };
 
 describe("Toggletip", () => {

@@ -1,9 +1,6 @@
 import { fireEvent, render } from "@testing-library/svelte";
-import { tick } from "svelte";
+import { flushDismiss } from "../utils/flushDismiss";
 import RangeSlider from "./RangeSlider.test.svelte";
-
-/** dismiss() defers window listener registration by a macrotask; flush it before asserting. */
-const flush = () => new Promise((resolve) => setTimeout(resolve));
 
 const net = (
   add: ReturnType<typeof vi.spyOn>,
@@ -38,16 +35,14 @@ describe("RangeSlider window listeners", () => {
     const slider = container.querySelector(".bx--slider");
     assert(slider instanceof HTMLElement);
     await fireEvent.mouseDown(slider);
-    await tick();
-    await flush();
+    await flushDismiss();
 
     expect(net(add, remove, "mousemove")).toBe(1);
     expect(net(add, remove, "touchmove")).toBe(1);
     expect(net(add, remove, "mouseup")).toBe(1);
 
     await fireEvent.mouseUp(window);
-    await tick();
-    await flush();
+    await flushDismiss();
     for (const type of ["mousemove", "touchmove", "mouseup", "touchend"]) {
       expect(net(add, remove, type)).toBe(0);
     }

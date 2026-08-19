@@ -1,8 +1,6 @@
 import { render } from "@testing-library/svelte";
+import { flushDismiss } from "../utils/flushDismiss";
 import TooltipIcon from "./TooltipIcon.test.svelte";
-
-/** dismiss() defers window listener registration by a macrotask; flush it before asserting. */
-const flush = () => new Promise((resolve) => setTimeout(resolve));
 
 const net = (
   add: ReturnType<typeof vi.spyOn>,
@@ -29,7 +27,7 @@ describe("TooltipIcon window listeners", () => {
     const remove = vi.spyOn(window, "removeEventListener");
 
     render(TooltipIcon, { props: { open: true } });
-    await flush();
+    await flushDismiss();
     expect(net(add, remove, "keydown")).toBe(1);
 
     add.mockRestore();
