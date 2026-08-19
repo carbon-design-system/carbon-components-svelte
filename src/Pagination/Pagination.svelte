@@ -139,7 +139,7 @@
    */
   export let size = "md";
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, tick } from "svelte";
   import Button from "../Button/Button.svelte";
   import CaretLeft from "../icons/CaretLeft.svelte";
   import CaretRight from "../icons/CaretRight.svelte";
@@ -152,6 +152,23 @@
   let prevPage = page;
   let prevPageSize = pageSize;
   let prevPageSizesKey;
+  let backBtnRef = null;
+  let forwardBtnRef = null;
+
+  /**
+   * When a nav button becomes disabled as a result of its own click, the
+   * browser blurs it (moving focus to the body). Refocus the other button
+   * so keyboard/AT users don't lose their place.
+   * @param {HTMLElement | null} clickedRef
+   * @param {HTMLElement | null} otherRef
+   */
+  async function refocusIfDisabled(clickedRef, otherRef) {
+    const wasFocused = document.activeElement === clickedRef;
+    await tick();
+    if (wasFocused && clickedRef?.disabled && otherRef) {
+      otherRef.focus();
+    }
+  }
 
   /**
    * Returns a subset of page numbers centered around the current page to prevent
@@ -311,6 +328,7 @@
       </span>
     {/if}
     <Button
+      bind:ref={backBtnRef}
       kind="ghost"
       tooltipAlignment="center"
       tooltipPosition="top"
@@ -325,9 +343,11 @@
         page--;
         dispatch("click:button--previous", { page });
         dispatch("change", { page });
+        refocusIfDisabled(backBtnRef, forwardBtnRef);
       }}
     />
     <Button
+      bind:ref={forwardBtnRef}
       kind="ghost"
       tooltipAlignment="end"
       tooltipPosition="top"
@@ -342,6 +362,7 @@
         page++;
         dispatch("click:button--next", { page });
         dispatch("change", { page });
+        refocusIfDisabled(forwardBtnRef, backBtnRef);
       }}
     />
   </div>
