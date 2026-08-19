@@ -125,19 +125,29 @@ Set `maxWidth` to a CSS length to ellipsis long labels. A tooltip with the full 
   </div>
 </Stack>
 
+### Close button label
+
+Set `title` to customize the accessible name and hover tooltip of the close button. Defaults to `"Clear filter"`.
+
+<Tag filter title="Remove filter" on:close>carbon-components</Tag>
+
 ## Custom icon
 
 Add a custom icon to the tag. Note: custom icons cannot be used with the filterable variant.
 
 <Tag icon={IbmCloud}>IBM Cloud</Tag>
 
-## Interactive
+## Clickable variants
+
+Render the tag as a native interactive element instead of a `div`.
+
+### Interactive
 
 Set `interactive` to render a button element instead of a div for clickable tags.
 
 <Tag interactive>Machine learning</Tag>
 
-## Link
+### Link
 
 Set `href` to render the tag as an anchor. Link tags reuse interactive styles. Do not wrap a `Tag` in an `<a>`; pass `href` on the tag itself. `href` is mutually exclusive with `filter`; when both are set, `filter` takes precedence.
 
@@ -174,7 +184,7 @@ Embed a tooltip within a tag to provide additional context.
 
 ## Selectable
 
-Use `SelectableTag` to create a tag that toggles between selected and unselected states.
+Use `SelectableTag` to create a tag that toggles between selected and unselected states. Toggling dispatches `change` with `{ selected }`.
 
 <FileSource src="/framed/Tag/SelectableTagReactive" />
 
@@ -183,6 +193,12 @@ Use `SelectableTag` to create a tag that toggles between selected and unselected
 Combine `SelectableTag` with a custom icon.
 
 <FileSource src="/framed/Tag/SelectableTagIconReactive" />
+
+### Type
+
+Combine `SelectableTag` with a color `type`, matching the color types available on `Tag`.
+
+<SelectableTag type="blue">Machine learning</SelectableTag>
 
 ### Disabled
 
