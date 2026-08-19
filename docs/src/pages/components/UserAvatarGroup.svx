@@ -179,3 +179,25 @@ Photos, icons, and initials work the same as on a lone `UserAvatar`.
   <UserAvatar backgroundColor="auto" name="Bertram Gilfoyle" tooltipText="Bertram Gilfoyle" />
   <UserAvatar backgroundColor="auto" name="Jared Dunn" tooltipText="Jared Dunn" />
 </UserAvatarGroup>
+
+## Background colors
+
+Every example on this page sets `backgroundColor="auto"` on each `UserAvatar`, which hashes a stable color from `name` (or `initials`) — the same name always gets the same color. See [UserAvatar's background colors section](/components/UserAvatar#background-colors) for the full palette and the other `backgroundColor` values.
+
+### Exported `getAvatarBackgroundColor` utility
+
+Import `getAvatarBackgroundColor` to compute the same color outside a `UserAvatar`, for example to match a name's avatar color in a legend or a custom rendering.
+
+```html
+<script context="module">
+  import { getAvatarBackgroundColor } from "carbon-components-svelte/src/utils/avatarColor.js";
+
+  getAvatarBackgroundColor("Richard Hendricks"); // "teal"
+</script>
+```
+
+## Tooltips
+
+Set `tooltipText` on each avatar to show its name on hover or focus, the same as a standalone [UserAvatar](/components/UserAvatar#tooltip). Within a group, only one avatar's tooltip stays open at a time — hovering a new avatar closes the previous one immediately, whether it's a slotted avatar or the "+N" overflow chip.
+
+Moving the pointer directly from one avatar to a neighbor whose tooltip is already open skips the usual enter delay, so the tooltip swaps in immediately instead of waiting again. Hover across the avatars in the examples above to feel this.
