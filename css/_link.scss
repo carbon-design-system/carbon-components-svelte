@@ -55,3 +55,24 @@
 @include exports("link-muted") {
   @include link-muted;
 }
+
+/// The `visited` prop lets a consumer force the visited color regardless of
+/// the browser's actual `:visited` state (e.g. to preview it, or because the
+/// consumer tracks visited state themselves). v10 only styles the real
+/// `:visited` pseudo-class, so the prop alone had no visual effect on an
+/// unvisited link.
+/// @access private
+/// @group components
+@mixin link-visited {
+  .#{$prefix}--link.#{$prefix}--link--visited {
+    color: $visited-link;
+  }
+
+  .#{$prefix}--link.#{$prefix}--link--visited:hover {
+    color: $hover-primary-text;
+  }
+}
+
+@include exports("link-visited") {
+  @include link-visited;
+}
