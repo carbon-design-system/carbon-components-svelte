@@ -35,23 +35,23 @@ Set `size` to `"lg"` for a large pagination.
 
 <Pagination size="lg" totalItems={102} pageSizes={[10, 15, 20]} />
 
-## Current page
+## Page and page size
+
+Configure the current page, and the available and default page sizes.
+
+### Current page
 
 Set the current page with `page`.
 
 <Pagination totalItems={102} page={4} />
 
-## Page sizes
-
-Configure the selectable page-size options.
-
-### Custom
+### Custom sizes
 
 Specify custom page sizes and set a default page size.
 
 <Pagination totalItems={102} pageSizes={[16, 36, 99]} pageSize={36} />
 
-### Dynamic
+### Dynamic sizes
 
 Set `dynamicPageSizes` to hide page sizes larger than needed to display all items on one page.
 
@@ -63,13 +63,25 @@ For example, with 9 total items and page sizes of `[5, 10, 15]`, only 5 and 10 a
 
 Set `pagesUnknown` when the total page count is unknown, such as with cursor-based APIs. The item range renders without a total, and the forward button is not constrained by totalItems.
 
-Because the component cannot detect the last page, bind to `page` and toggle `forwardButtonDisabled` when there is no more data to load.
+Because the component cannot detect the last page, bind to `page` and toggle `forwardButtonDisabled` when there is no more data to load. The back button is disabled automatically once `page` reaches `1`; override `backButtonDisabled` the same way if the consumer needs equivalent manual control over the back button.
 
 <FileSource src="/framed/Pagination/PaginationUnknown" />
+
+### Custom item and page text
+
+Because the total is unknown, this mode falls back to `itemText` and `pageText` instead of `itemRangeText` and `pageRangeText`, since there's no total to describe. Override either to change the wording.
+
+<Pagination
+  pagesUnknown
+  itemText={(min, max) => `Showing ${min}–${max}`}
+  pageText={(page) => `Page ${page}`}
+/>
 
 ## Page window
 
 The page-number dropdown uses native `<option>` elements, derived from `totalItems`. For large datasets, use `pageWindow` to cap how many options are rendered (default 1000).
+
+This example also overrides `itemRangeText` and `pageRangeText` to format the item and page counts compactly (for example, `100k` instead of `100,000`).
 
 <FileSource src="/framed/Pagination/PageWindow" />
 
@@ -77,11 +89,25 @@ The page-number dropdown uses native `<option>` elements, derived from `totalIte
 
 Set `simple` for a compact previous/next control with page status text. Useful in toolbars and cards.
 
+The example below also overrides `pageText` to show only the page number, omitting the default `"page "` prefix.
+
 <Toolbar size="sm">
   <ToolbarContent>
     <Pagination simple size="sm" totalItems={102} pageText={(page) => `${page.toLocaleString()}`} />
   </ToolbarContent>
 </Toolbar>
+
+## Custom text
+
+Override the button tooltips and items-per-page label independently of the total and item text overrides above.
+
+<Pagination
+  totalItems={102}
+  pageSizes={[10, 15, 20]}
+  forwardText="Next"
+  backwardText="Previous"
+  itemsPerPageText="Rows per page:"
+/>
 
 ## Hidden controls
 
@@ -101,9 +127,42 @@ Disable the page size selector with `pageSizeInputDisabled`.
 
 ## Disabled
 
-Set `disabled` to disable the entire pagination, including the nav buttons and both selects.
+Set `disabled` to `true` to disable the entire pagination, including the nav buttons and both selects.
 
 <Pagination disabled totalItems={102} pageSizes={[10, 15, 20]} />
+
+## Events
+
+### Change
+
+Use `on:change` to listen for direct user interaction—the previous/next buttons, or the page and page-size selects. The event detail includes whichever value changed.
+
+<Pagination
+  totalItems={102}
+  pageSizes={[10, 15, 20]}
+  on:change={(e) => console.log(e.detail)} // { page: number } | { pageSize: number }
+/>
+
+### Update
+
+Use `on:update` to listen for every change to `page` or `pageSize`, including programmatic updates from outside the component (for example, through `bind:page`). Unlike `change`, this fires regardless of whether the update came from user interaction, and the detail always includes both values.
+
+<Pagination
+  totalItems={102}
+  pageSizes={[10, 15, 20]}
+  on:update={(e) => console.log(e.detail)} // { page: number, pageSize: number }
+/>
+
+### Button clicks
+
+Use `on:click:button--previous` and `on:click:button--next` to listen specifically for previous and next button clicks, separate from the page and page-size selects. Both dispatch the resulting page number.
+
+<Pagination
+  totalItems={102}
+  pageSizes={[10, 15, 20]}
+  on:click:button--previous={(e) => console.log(e.detail)} // { page: number }
+  on:click:button--next={(e) => console.log(e.detail)} // { page: number }
+/>
 
 ## Skeleton
 
