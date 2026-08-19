@@ -10,7 +10,7 @@
 
   /**
    * Set the size of the data table.
-   * @type {"compact" | "short" | "tall"}
+   * @type {"compact" | "short" | "medium" | "tall"}
    */
   export let size = undefined;
 
@@ -69,6 +69,7 @@
     class:bx--data-table={true}
     class:bx--data-table--compact={size === "compact"}
     class:bx--data-table--short={size === "short"}
+    class:bx--data-table--md={size === "medium"}
     class:bx--data-table--tall={size === "tall"}
     class:bx--data-table--zebra={zebra}
     on:click
