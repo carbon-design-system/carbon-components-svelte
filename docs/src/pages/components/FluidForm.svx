@@ -15,8 +15,10 @@ description: Fluid forms provide a full-width form layout that adapts to their c
     FluidTextInputSkeleton,
     MultiSelect,
     NumberInput,
+    PinCodeInput,
     TextInput,
     PasswordInput,
+    Search,
     TextArea,
     Select,
     SelectItem,
@@ -28,7 +30,7 @@ description: Fluid forms provide a full-width form layout that adapts to their c
 ## Basic
 
 Create a fluid-width form layout using the fluid form component. This example
-shows an application registration form with required fields. Supported inputs include text inputs, copy inputs, text areas, number inputs, selects, dropdowns, combo boxes, multi-selects, date pickers, and time pickers. Note that inline input variants cannot be used within a fluid form.
+shows an application registration form with required fields. Supported inputs include text inputs, copy inputs, text areas, number inputs, search inputs, pin code inputs, selects, dropdowns, combo boxes, multi-selects, date pickers, and time pickers. Note that inline input variants cannot be used within a fluid form.
 
 <FluidForm>
   <TextInput
@@ -100,7 +102,13 @@ shows an application registration form with required fields. Supported inputs in
   </TimePicker>
 </FluidForm>
 
-## Standalone fluid inputs
+## Supported inputs
+
+Fluid inputs can be used standalone outside a fluid form, custom inputs can
+opt into the same fluid behavior, and each supported input ships a dedicated
+skeleton for loading states.
+
+### Standalone
 
 Fluid inputs do not require a fluid form. Set `fluid` on a supported component to use the fluid variant standalone.
 
@@ -148,6 +156,8 @@ Fluid inputs do not require a fluid form. Set `fluid` on a supported component t
   ]}"
 />
 
+<Search fluid labelText="Search catalog" placeholder="Search services..." />
+
 <TextArea
   fluid
   labelText="Description"
@@ -158,6 +168,8 @@ Fluid inputs do not require a fluid form. Set `fluid` on a supported component t
 <CopyInput fluid labelText="API key" value="a1b2c3d4-e5f6-7890-abcd-ef1234567890" />
 
 <NumberInput fluid labelText="Clusters" value={0} />
+
+<PinCodeInput fluid labelText="Verification code" />
 
 Fluid time pickers use percentage-based columns (25% / 25% / 50% with two
 selects, 50% / 50% with one). Set a parent width so those ratios resolve as
@@ -176,6 +188,49 @@ intended.
   </TimePicker>
 </div>
 
+### Custom fluid-aware inputs
+
+FluidForm publishes context under the key `"carbon:Form"` so custom inputs
+can opt into the fluid variant automatically, the same way built-in inputs
+like `TextInput` and `NumberInput` do. Read `isFluid` from the context to
+adapt a custom component's rendering when it is placed inside a fluid form.
+
+```svelte
+<script>
+  import { getContext } from "svelte";
+
+  const formContext = getContext("carbon:Form");
+
+  $: isFluid = !!formContext?.isFluid;
+</script>
+```
+
+### Loading skeletons
+
+Each fluid input ships a dedicated skeleton component for loading states:
+`FluidTextInputSkeleton`, `FluidNumberInputSkeleton`, `FluidSearchSkeleton`,
+`FluidTextAreaSkeleton`, `FluidSelectSkeleton`, `FluidDropdownSkeleton`,
+`FluidComboBoxSkeleton`, `FluidMultiSelectSkeleton`, `FluidDatePickerSkeleton`,
+`FluidTimePickerSkeleton`, `FluidCopyInputSkeleton`, and
+`FluidPinCodeInputSkeleton`. Compose them to mirror a fluid form while data
+loads.
+
+<FluidTextInputSkeleton />
+<FluidSelectSkeleton />
+<FluidDatePickerSkeleton />
+
+## Invalid
+
+Handle form validation and display error states with `invalid` and `invalidText` on form inputs.
+
+<FileSource src="/framed/FluidForm/FluidFormInvalid" />
+
+## Inside a modal
+
+Place a fluid form inside a [modal](/components/Modal#full-width) to keep inputs flush with the modal edges. Set `fullWidth` on the modal to remove body padding so the form spans edge to edge.
+
+<FileSource src="/framed/FluidForm/FluidFormModal" />
+
 ## SvelteKit enhance
 
 Set `actions` to apply SvelteKit's `enhance` (or any other action) to the
@@ -193,28 +248,3 @@ usage details.
   <Button type="submit">Save</Button>
 </FluidForm>
 ```
-
-## Invalid
-
-Handle form validation and display error states with `invalid` and `invalidText` on form inputs.
-
-<FileSource src="/framed/FluidForm/FluidFormInvalid" />
-
-## Inside a modal
-
-Place a fluid form inside a [modal](/components/Modal#full-width) to keep inputs flush with the modal edges. Set `fullWidth` on the modal to remove body padding so the form spans edge to edge.
-
-<FileSource src="/framed/FluidForm/FluidFormModal" />
-
-## Loading skeletons
-
-Each fluid input ships a dedicated skeleton component for loading states:
-`FluidTextInputSkeleton`, `FluidNumberInputSkeleton`, `FluidSearchSkeleton`,
-`FluidTextAreaSkeleton`, `FluidSelectSkeleton`, `FluidDropdownSkeleton`,
-`FluidComboBoxSkeleton`, `FluidMultiSelectSkeleton`, `FluidDatePickerSkeleton`,
-and `FluidTimePickerSkeleton`. Compose them to mirror a fluid form while data
-loads.
-
-<FluidTextInputSkeleton />
-<FluidSelectSkeleton />
-<FluidDatePickerSkeleton />
