@@ -27,11 +27,25 @@ Set `indeterminate` to `true` to show a mixed state, typically used in parent ch
 
 <Checkbox labelText="Label text" indeterminate />
 
-## Hidden label
+## Labels
+
+Control the visibility and content of the checkbox label.
+
+### Hidden label
 
 Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
 
 <Checkbox labelText="Label text" hideLabel />
+
+### Custom label
+
+Use the `labelChildren` slot to provide custom label content instead of `labelText`.
+
+<Checkbox labelText="Fallback label">
+  <span slot="labelChildren">
+    I agree to the <strong>terms and conditions</strong>
+  </span>
+</Checkbox>
 
 ## Helper text
 
@@ -68,6 +82,15 @@ Set `warn` to `true` and provide `warnText` to show a warning message. `invalid`
 
 <Checkbox labelText="Subscribe to promotional emails" warn warnText="You may receive fewer updates about your account" />
 
+## Decorative
+
+Set `decorative` to `true` to hide the checkbox from the accessibility tree using CSS, rather than just `tabindex`/`aria-hidden` (which axe-core's nested-interactive check doesn't treat as sufficient). Use this when the checkbox is nested inside another interactive, widget-role element that already owns the checked-state semantics, such as a custom listbox option.
+
+<div role="option" aria-checked="true">
+  <Checkbox decorative checked labelText="Option A" hideLabel />
+  Option A
+</div>
+
 ## Reactive
 
 Bind to track and update the checkbox state.
@@ -85,6 +108,15 @@ Bind an array to `group` so each checkbox adds or removes its value when toggled
 When using `bind:group`, the checked state is derived from the group array: use `bind:group` (not `bind:checked`) to control selection, since updating checked directly will be overwritten.
 
 <FileSource src="/framed/Checkbox/MultipleCheckboxes" />
+
+## Events
+
+Use `on:check` to listen for changes to a standalone checkbox. The event dispatches the new checked state as `event.detail`.
+
+<Checkbox
+  labelText="Label text"
+  on:check={(e) => console.log(e.detail)} // boolean
+/>
 
 ## Skeleton
 
@@ -120,7 +152,7 @@ Hide the legend visually by setting `hideLegend` to `true`. The legend remains a
 
 ### Custom label
 
-Use the `legendChildren` slot to provide custom label content instead of `legendText`.
+Use the `legendChildren` slot to provide custom legend content instead of `legendText`.
 
 <CheckboxGroup name="prefs-legend-slot" selected={["email"]}>
   <Stack slot="legendChildren" orientation="horizontal">
@@ -196,4 +228,19 @@ Disabled and read-only checkboxes are exempt from the group's validation styling
 <Checkbox value="email" labelText="Email (disabled)" disabled />
 <Checkbox value="sms" labelText="SMS" />
 <Checkbox value="push" labelText="Push notifications (read-only)" readonly />
+</CheckboxGroup>
+
+### Events
+
+Use `on:change` to listen for changes to the group's selected values. The event dispatches the updated array as `event.detail`.
+
+<CheckboxGroup
+  legendText="Notification preferences"
+  name="prefs-events"
+  selected={["email"]}
+  on:change={(e) => console.log(e.detail)} // Array<string | number>
+>
+<Checkbox value="email" labelText="Email" />
+<Checkbox value="sms" labelText="SMS" />
+<Checkbox value="push" labelText="Push notifications" />
 </CheckboxGroup>
