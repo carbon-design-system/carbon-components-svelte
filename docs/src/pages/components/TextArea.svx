@@ -50,6 +50,13 @@ Set `fluid` to embed the label inside the field. Fluid text areas work
 standalone or inside [FluidForm](/components/FluidForm), which applies the
 variant automatically.
 
+<TextArea fluid labelText="App description" placeholder="Enter a description..." />
+
+### Maximum character count
+
+The character counter sits at the trailing edge of the field, opposite the
+embedded label.
+
 <TextArea fluid labelText="App description" placeholder="Enter a description..." maxCount={100} />
 
 ### Custom label
