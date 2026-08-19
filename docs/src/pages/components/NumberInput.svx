@@ -33,6 +33,14 @@ Hide the label visually by setting `hideLabel` to `true`. The label remains avai
 
 <NumberInput hideLabel labelText="Clusters" value={0} />
 
+## Custom label
+
+Use the `labelChildren` slot to provide custom label content.
+
+<NumberInput labelText="" value={0}>
+  <strong slot="labelChildren">Clusters</strong>
+</NumberInput>
+
 ## Range and steps
 
 Control the allowed values and increment.
@@ -100,9 +108,36 @@ string and optional locale. Return `false` to mark invalid, `true` to force vali
 
 <NumberInput validate={(raw) => { const num = Number(raw); return Number.isNaN(num) ? undefined : num % 2 === 0; }} invalidText="Must be an even number" labelText="Even number" value={0} />
 
+## Stepper controls
+
+Control the stepper buttons and scroll-wheel interaction.
+
+### Hidden steppers
+
+Hide the increment and decrement controls by setting `hideSteppers` to `true`.
+
+<NumberInput hideSteppers labelText="Clusters" value={0} />
+
+### Disable wheel
+
+Prevent the scroll wheel from changing the input value by setting `disableWheel` to `true`. This is useful in forms where accidental scroll changes are undesirable.
+
+<NumberInput disableWheel labelText="Clusters" value={0} />
+
 ## Events
 
 Respond to value changes and stepper interactions.
+
+### Value change
+
+Use `on:input` to listen for every keystroke, and `on:change` to listen for
+committed changes—on blur, or immediately after a stepper click or arrow key
+press. Both events dispatch the parsed value directly as `event.detail`.
+
+<NumberInput
+  on:input={(e) => console.log(e.detail)} // number | null
+  on:change={(e) => console.log(e.detail)} // number | null
+/>
 
 ### Blur
 
@@ -246,18 +281,6 @@ Disable the input by setting `disabled` to `true`.
 Make the input read-only by setting `readonly` to `true`. This allows viewing but prevents editing.
 
 <NumberInput readonly labelText="Clusters" value={0} />
-
-## Hidden steppers
-
-Hide the increment and decrement controls by setting `hideSteppers` to `true`.
-
-<NumberInput hideSteppers labelText="Clusters" value={0} />
-
-## Disable wheel
-
-Prevent the scroll wheel from changing the input value by setting `disableWheel` to `true`. This is useful in forms where accidental scroll changes are undesirable.
-
-<NumberInput disableWheel labelText="Clusters" value={0} />
 
 ## Skeleton
 
