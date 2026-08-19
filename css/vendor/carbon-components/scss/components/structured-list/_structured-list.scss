@@ -303,3 +303,30 @@
 @include exports("structured-list-input-focusable") {
   @include structured-list-input-focusable;
 }
+
+// ---------------------------------------------------------------------------
+// carbon-components-svelte patch
+// ---------------------------------------------------------------------------
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+// `.bx--structured-list-th` above sets a fixed `height: to-rem(40px)`
+// unconditionally. The condensed variant only shrinks padding
+// (`padding-td--condensed`: 8px all sides, instead of 16px top/8px sides and
+// bottom), so condensed header content comes out to roughly 34px -- 6px
+// short of that floor. Because the cell is `vertical-align: top`, the row
+// still renders at 40px and the leftover 6px shows as visible whitespace
+// below the header text, before the row's bottom border.
+// `.bx--structured-list-td` has no fixed height and already hugs its
+// (equally short) condensed content correctly; give `-th` the same
+// content-driven height under `--condensed`.
+@mixin structured-list-condensed-header-height {
+  .#{$prefix}--structured-list.#{$prefix}--structured-list--condensed
+    .#{$prefix}--structured-list-th {
+    height: auto;
+  }
+}
+
+@include exports("structured-list-condensed-header-height") {
+  @include structured-list-condensed-header-height;
+}
