@@ -1,0 +1,94 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Table: a simple, non-interactive table. Deliberately does not reuse
+/// `bx--data-table` — that visual language (heavier borders, dense header
+/// shading) is for DataTable's sortable/selectable data grid. This mirrors
+/// the lighter table styling docs uses for its own prose content
+/// (`docs/src/global.css` `.prose > table`), scoped to `.bx--simple-table`.
+/// @access private
+/// @group components
+@mixin table {
+  .#{$prefix}--simple-table-container {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .#{$prefix}--simple-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .#{$prefix}--simple-table th,
+  .#{$prefix}--simple-table td {
+    padding: $spacing-03 $spacing-04;
+    text-align: start;
+    vertical-align: top;
+    border: 1px solid $ui-03;
+  }
+
+  .#{$prefix}--simple-table th {
+    background-color: $field-01;
+  }
+
+  // Row heights match DataTable's size scale (see
+  // _data-table-core.scss): compact 24px, short 32px, medium 40px,
+  // tall 64px. Height is set on the row explicitly, same as DataTable,
+  // since padding alone does not reliably reproduce those pixel values
+  // across different type styles.
+  .#{$prefix}--simple-table tr {
+    height: to-rem(40px);
+  }
+
+  .#{$prefix}--simple-table--compact tr {
+    height: to-rem(24px);
+  }
+
+  .#{$prefix}--simple-table--compact th,
+  .#{$prefix}--simple-table--compact td {
+    padding-top: to-rem(2px);
+    padding-bottom: to-rem(2px);
+  }
+
+  .#{$prefix}--simple-table--short tr {
+    height: to-rem(32px);
+  }
+
+  .#{$prefix}--simple-table--short th,
+  .#{$prefix}--simple-table--short td {
+    padding-top: to-rem(7px);
+    padding-bottom: to-rem(6px);
+  }
+
+  .#{$prefix}--simple-table--tall tr {
+    height: to-rem(64px);
+  }
+
+  .#{$prefix}--simple-table--tall th,
+  .#{$prefix}--simple-table--tall td {
+    padding-top: $spacing-05;
+    padding-bottom: $spacing-05;
+  }
+
+  .#{$prefix}--simple-table td code,
+  .#{$prefix}--simple-table th code {
+    padding: 0 $spacing-02;
+    background-color: $field-01;
+    border-radius: 4px;
+  }
+
+  // bx--link uses body-short-01; inherit caption-01 / label-01 metrics from the cell.
+  .#{$prefix}--simple-table td .#{$prefix}--link,
+  .#{$prefix}--simple-table th .#{$prefix}--link {
+    font-size: inherit;
+    line-height: inherit;
+    letter-spacing: inherit;
+    font-weight: inherit;
+    text-decoration: underline;
+  }
+}
+
+@include exports("table") {
+  @include table;
+}

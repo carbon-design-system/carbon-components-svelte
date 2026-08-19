@@ -40,8 +40,8 @@ export { default as CopyInputSkeleton } from "./CopyInput/CopyInputSkeleton.svel
 export { default as FluidCopyInputSkeleton } from "./CopyInput/FluidCopyInputSkeleton.svelte";
 export { default as DataTable } from "./DataTable/DataTable.svelte";
 export { default as DataTableSkeleton } from "./DataTable/DataTableSkeleton.svelte";
+export { default as DataTableTable } from "./DataTable/DataTableTable.svelte";
 export { toCsv } from "./DataTable/data-table-utils";
-export { default as Table } from "./DataTable/Table.svelte";
 export { default as TableBody } from "./DataTable/TableBody.svelte";
 export { default as TableCell } from "./DataTable/TableCell.svelte";
 export { default as TableContainer } from "./DataTable/TableContainer.svelte";
@@ -162,6 +162,7 @@ export { default as StructuredListHead } from "./StructuredList/StructuredListHe
 export { default as StructuredListInput } from "./StructuredList/StructuredListInput.svelte";
 export { default as StructuredListRow } from "./StructuredList/StructuredListRow.svelte";
 export { default as StructuredListSkeleton } from "./StructuredList/StructuredListSkeleton.svelte";
+export { default as Table } from "./Table/Table.svelte";
 export { default as Tab } from "./Tabs/Tab.svelte";
 export { default as TabContent } from "./Tabs/TabContent.svelte";
 export { default as Tabs } from "./Tabs/Tabs.svelte";
