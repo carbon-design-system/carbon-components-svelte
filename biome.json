@@ -7,7 +7,6 @@
     "defaultBranch": "master"
   },
   "formatter": {
-    "enabled": true,
     "indentStyle": "space"
   },
   "html": {
@@ -26,7 +25,6 @@
     ]
   },
   "linter": {
-    "enabled": true,
     "rules": {
       "preset": "recommended",
       "performance": {
@@ -39,7 +37,6 @@
         "useTopLevelRegex": "error"
       },
       "correctness": {
-        "noUnreachable": "error",
         "noUnusedFunctionParameters": "error",
         "noUnusedImports": "error",
         "noUnusedLabels": "error",
@@ -71,7 +68,6 @@
         "noImplicitBoolean": "error",
         "noNegationElse": "error",
         "noParameterAssign": "error",
-        "noRestrictedGlobals": "error",
         "noRestrictedImports": {
           "level": "error",
           "options": {
@@ -86,7 +82,6 @@
         "noUnusedTemplateLiteral": "error",
         "useDefaultParameterLast": "error",
         "useExponentiationOperator": "error",
-        "useNamingConvention": "off",
         "useNodejsImportProtocol": "error",
         "useNumberNamespace": "error",
         "useSingleVarDeclarator": "error",
@@ -96,14 +91,9 @@
       }
     }
   },
-  "javascript": {
-    "formatter": {
-      "quoteStyle": "double"
-    }
-  },
   "overrides": [
     {
-      "includes": ["css/*.css", "css/*.scss"],
+      "includes": ["css/*.scss"],
       "formatter": { "enabled": false },
       "linter": { "enabled": false }
     },
@@ -124,11 +114,8 @@
           "a11y": {
             "noAutofocus": "off",
             "noSvgWithoutTitle": "off",
-            "useAltText": "off",
             "useAnchorContent": "off",
             "useAriaPropsForRole": "off",
-            "useValidAriaRole": "off",
-            "useValidAriaValues": "off",
             "noLabelWithoutControl": "off",
             "useSemanticElements": "off",
             "useValidAnchor": "off",
@@ -152,31 +139,11 @@
       }
     },
     {
-      "includes": ["**/*.test.ts"],
+      "includes": ["**/*.test.ts", "**/*.test.svelte", "docs/**/*.svelte"],
       "linter": {
         "rules": {
           "performance": {
             "useTopLevelRegex": "off"
-          }
-        }
-      }
-    },
-    {
-      "includes": ["**/*.test.svelte", "docs/**/*.svelte"],
-      "linter": {
-        "rules": {
-          "performance": {
-            "useTopLevelRegex": "off"
-          }
-        }
-      }
-    },
-    {
-      "includes": ["src/ImageLoader/ImageLoader.svelte"],
-      "linter": {
-        "rules": {
-          "style": {
-            "noRestrictedGlobals": "off"
           }
         }
       }
