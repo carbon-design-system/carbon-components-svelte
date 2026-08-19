@@ -172,7 +172,7 @@
     if (target instanceof Element && target.closest("[role='menu']")) return;
     if (isOutsideClick(event, [anchor, ref])) close("outside-click");
   }
-  
+
   function handleEscape(event) {
     if (!open) return;
     // Tab is treated like Escape: without this, focus would leave the
