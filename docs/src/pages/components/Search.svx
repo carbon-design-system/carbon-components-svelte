@@ -35,9 +35,25 @@ The `clear` event fires when clicking the clear button or pressing <DocKbd label
 
 <Search value="Cloud functions" on:clear={() => console.log('clear')}/>
 
+## Custom labels
+
+Customize the ARIA labels used for accessibility.
+
+### Landmark label
+
+The outer element has `role="search"`, and its accessible name comes from `labelText` via `aria-labelledby`, not a static `aria-label`. The label is visually hidden by default — see [Fluid](#fluid) for the variant with a visible label. Always set a descriptive `labelText`, especially when a page has more than one search region, so screen reader users can distinguish each landmark by name.
+
+<Search labelText="Search catalog" />
+
+### Close button label
+
+Set `closeButtonLabelText` to customize the accessible label of the clear button (default `"Clear search input"`).
+
+<Search value="Cloud functions" closeButtonLabelText="Clear catalog search" />
+
 ## Expandable
 
-Enable the expandable variant to show a compact search icon that expands on focus.
+Enable the expandable variant to show a compact search icon that expands on focus. While collapsed, the input is marked `inert` and removed from the tab order, hiding it from assistive technology until it expands — only the search icon button is reachable.
 
 <FileSource src="/framed/Search/SearchExpandableReactive" />
 
