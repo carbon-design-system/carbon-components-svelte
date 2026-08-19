@@ -8,49 +8,61 @@ description: Date pickers collect dates through simple typed fields, single cale
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
-## Single calendar
+## Calendar types
+
+DatePicker supports five `datePickerType` values: `"simple"` (default, no calendar), `"single"`, `"range"`, `"month"`, and `"year"`.
+
+### Simple
+
+The default `datePickerType` renders a text field without a dropdown calendar.
+
+<DatePicker>
+  <DatePickerInput labelText="Date of birth" placeholder="mm/dd/yyyy" />
+</DatePicker>
+
+### Single
 
 Set `datePickerType` to `"single"` for one date with a dropdown calendar. Use a single DatePickerInput; clicking the field or calendar icon opens the calendar to pick one day. Bind `value` to read or set the formatted date string.
 
 <FileSource src="/framed/DatePicker/DatePickerSingle" />
 
-## Range calendar
+### Range
 
 Set `datePickerType` to `"range"` for a start and end date. Provide two DatePickerInput components in order—start, then end—and bind `valueFrom` and `valueTo`. Both fields share one calendar: the user selects a span, and the start and end inputs update together.
 
 <FileSource src="/framed/DatePicker/DatePickerRange" />
 
-### Programmatic
+#### Programmatic
 
 Use `bind:valueFrom` and `bind:valueTo` to update the range from outside the component, such as preset buttons or filters.
 
 <FileSource src="/framed/DatePicker/DatePickerProgrammatic" />
 
-## Month calendar
+### Month
 
 Set `datePickerType` to `"month"` to select a month instead of a day. The calendar shows a 12-month grid for the current year; use the year stepper to change years. Pair it with a `dateFormat` that omits the day, such as `"F Y"` (for example, "January 2026").
 
 <FileSource src="/framed/DatePicker/DatePickerMonth" />
 
-### Custom format
+#### Custom format
 
 Pass a numeric `dateFormat`, such as `"Y-m"`, along with a matching `placeholder` for a compact "yyyy-mm" input.
 
 <FileSource src="/framed/DatePicker/DatePickerMonthCustomFormat" />
 
-### Programmatic
+#### Programmatic
 
 Use `bind:value` to update the selected month from outside the component, such as a "previous month" button.
 
 <FileSource src="/framed/DatePicker/DatePickerMonthProgrammatic" />
 
-## Year calendar
+### Year
 
 Set `datePickerType` to `"year"` to select a year instead of a day. The calendar shows a decade grid; use the prev/next controls to move between decades. Pair it with a year-only `dateFormat` such as `"Y"` (for example, "2026").
 
 <FileSource src="/framed/DatePicker/DatePickerYear" />
 
-### Programmatic
+#### Programmatic
 
 Use `bind:value` to select a year from outside the component, or `bind:calendar` to move the displayed decade—such as jumping to the current year or paging forward—without changing the selection.
 
@@ -142,11 +154,23 @@ When the date picker is inside an open element with a [popover](https://develope
 
 <FileSource src="/framed/DatePicker/DatePickerPopover" />
 
-## Simple
+## Events
 
-Create a simple date picker without a dropdown calendar.
+Listen for calendar interactions.
 
-<DatePicker>
+### Change
+
+Listen for `on:change` to respond to value updates. For the `"simple"` date picker type (no calendar), `event.detail` is the input's string value. For calendar types (`"single"`, `"range"`, `"month"`, `"year"`), `event.detail` is an object with `selectedDates` (an array of `Date`) and `dateStr` (a string, or `{ from, to }` for `"range"`).
+
+<DatePicker datePickerType="single" on:change={(e) => console.log(e.detail)}>
+  <DatePickerInput labelText="Date of birth" placeholder="mm/dd/yyyy" />
+</DatePicker>
+
+### Close
+
+Listen for `on:close` to know when the calendar closes and why. This event is only dispatched for calendar types (not `"simple"`). `event.detail.trigger` is `"escape-key"`, `"outside-click"`, or `"select"`; the detail also includes `selectedDates` and `dateStr`.
+
+<DatePicker datePickerType="single" on:close={(e) => console.log(e.detail.trigger)}>
   <DatePickerInput labelText="Date of birth" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
@@ -281,6 +305,14 @@ Display a loading skeleton for the fluid date picker variant. Set `range` to `tr
 ## Sizes
 
 Set `size` on DatePickerInput. The default is `md`.
+
+### Short
+
+Set `short` to `true` on DatePicker for a narrower field. It only changes the field width for the default `"simple"` date picker type.
+
+<DatePicker short>
+  <DatePickerInput labelText="Date of birth" placeholder="mm/dd/yyyy" />
+</DatePicker>
 
 ### Extra-large
 
