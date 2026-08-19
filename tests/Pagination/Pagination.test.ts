@@ -1,7 +1,8 @@
-import { render, screen, within } from "@testing-library/svelte";
+import { fireEvent, render, screen, within } from "@testing-library/svelte";
 import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
 import Pagination from "./Pagination.test.svelte";
+import PaginationPageSelectSlot from "./PaginationPageSelectSlot.test.svelte";
 
 describe("Pagination", () => {
   beforeEach(() => {
@@ -422,6 +423,21 @@ describe("Pagination", () => {
     expect(screen.getByText(/1 of 10000/)).toBeInTheDocument();
   });
 
+  it("handles custom page select label text", () => {
+    const props = {
+      totalItems: 40,
+      pageSizes: [10, 20],
+      pageSize: 10,
+      page: 2,
+      pageSelectLabelText: (total: number) =>
+        `Página de ${total} ${total === 1 ? "página" : "páginas"}`,
+    } satisfies ComponentProps<Pagination>;
+
+    render(Pagination, { props });
+
+    expect(screen.getByLabelText("Página de 4 páginas")).toBeInTheDocument();
+  });
+
   it("handles custom item range text", () => {
     const props = {
       totalItems: 100_000,
@@ -432,6 +448,67 @@ describe("Pagination", () => {
     render(Pagination, { props });
 
     expect(screen.getByText(/1–10 of 100000/)).toBeInTheDocument();
+  });
+
+  describe("nav button tooltip position", () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it("defaults nav button tooltips to the top position", async () => {
+      render(Pagination, { props: { totalItems: 102, page: 2 } });
+
+      const prevButton = screen.getByRole("button", { name: "Previous page" });
+      await fireEvent.mouseEnter(prevButton);
+      await vi.advanceTimersByTimeAsync(100);
+      expect(document.querySelector("[data-direction]")).toHaveAttribute(
+        "data-direction",
+        "top",
+      );
+      await fireEvent.mouseLeave(prevButton);
+      await vi.advanceTimersByTimeAsync(300);
+
+      const nextButton = screen.getByRole("button", { name: "Next page" });
+      await fireEvent.mouseEnter(nextButton);
+      await vi.advanceTimersByTimeAsync(100);
+      expect(document.querySelector("[data-direction]")).toHaveAttribute(
+        "data-direction",
+        "top",
+      );
+    });
+
+    it("allows overriding the backward and forward tooltip positions independently", async () => {
+      render(Pagination, {
+        props: {
+          totalItems: 102,
+          page: 2,
+          backwardTextTooltipPosition: "bottom",
+          forwardTextTooltipPosition: "right",
+        },
+      });
+
+      const prevButton = screen.getByRole("button", { name: "Previous page" });
+      await fireEvent.mouseEnter(prevButton);
+      await vi.advanceTimersByTimeAsync(100);
+      expect(document.querySelector("[data-direction]")).toHaveAttribute(
+        "data-direction",
+        "bottom",
+      );
+      await fireEvent.mouseLeave(prevButton);
+      await vi.advanceTimersByTimeAsync(300);
+
+      const nextButton = screen.getByRole("button", { name: "Next page" });
+      await fireEvent.mouseEnter(nextButton);
+      await vi.advanceTimersByTimeAsync(100);
+      expect(document.querySelector("[data-direction]")).toHaveAttribute(
+        "data-direction",
+        "right",
+      );
+    });
   });
 
   it("should dispatch change event with new value, not previous value", async () => {
@@ -630,5 +707,71 @@ describe("Pagination", () => {
         call[0] === "update" && call[1].pageSize === 15 && call[1].page === 3,
     );
     expect(updateCalls.length).toBe(1);
+  });
+
+  describe("pageSelect slot", () => {
+    it("replaces the default page select and exposes slot props", () => {
+      render(PaginationPageSelectSlot, {
+        props: { totalItems: 40, pageSizes: [10] },
+      });
+
+      expect(
+        screen.queryByRole("combobox", { name: /Page number/ }),
+      ).not.toBeInTheDocument();
+      expect(screen.getByTestId("page-select-label")).toHaveTextContent(
+        "Page number, of 4 pages",
+      );
+      expect(screen.getByTestId("current-page")).toHaveTextContent("1");
+      expect(screen.getByTestId("total-pages")).toHaveTextContent("4");
+      expect(screen.getByTestId("current-page-size")).toHaveTextContent("10");
+    });
+
+    it("calls onSetPage to navigate and dispatches change", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(PaginationPageSelectSlot, {
+        props: { totalItems: 40, pageSizes: [10] },
+      });
+
+      await user.click(screen.getByText("Go to 3"));
+
+      expect(screen.getByTestId("current-page")).toHaveTextContent("3");
+      expect(consoleLog).toHaveBeenCalledWith("change", { page: 3 });
+    });
+
+    it("ignores onSetPage when disabled", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(PaginationPageSelectSlot, {
+        props: { totalItems: 40, pageSizes: [10], disabled: true },
+      });
+
+      await user.click(screen.getByText("Go to 3"));
+
+      expect(screen.getByTestId("current-page")).toHaveTextContent("1");
+      expect(consoleLog).not.toHaveBeenCalledWith("change", expect.anything());
+    });
+
+    it("ignores onSetPage with a non-numeric page", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(PaginationPageSelectSlot, {
+        props: { totalItems: 40, pageSizes: [10] },
+      });
+
+      await user.click(screen.getByText("Go to invalid"));
+
+      expect(screen.getByTestId("current-page")).toHaveTextContent("1");
+      expect(consoleLog).not.toHaveBeenCalledWith("change", expect.anything());
+    });
+
+    it("clamps onSetPage to the last page when it exceeds totalPages", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(PaginationPageSelectSlot, {
+        props: { totalItems: 15, pageSizes: [10] },
+      });
+
+      await user.click(screen.getByText("Go to 3"));
+
+      expect(screen.getByTestId("current-page")).toHaveTextContent("2");
+      expect(consoleLog).toHaveBeenCalledWith("change", { page: 2 });
+    });
   });
 });

@@ -21,6 +21,12 @@
    */
 
   /**
+   * Override the page-selection control.
+   * Falls back to the default page number `Select` when unset.
+   * @slot {{ currentPage: number; totalPages: number; currentPageSize: number; selectLabelText: string; onSetPage: (page: number | string) => void; }} pageSelect
+   */
+
+  /**
    * Specify the current page index.
    * @bindable writable
    */
@@ -45,8 +51,20 @@
   /** Specify the forward button text */
   export let forwardText = "Next page";
 
+  /**
+   * Specify the tooltip position for the forward button.
+   * @type {"top" | "right" | "bottom" | "left"}
+   */
+  export let forwardTextTooltipPosition = "top";
+
   /** Specify the backward button text */
   export let backwardText = "Previous page";
+
+  /**
+   * Specify the tooltip position for the backward button.
+   * @type {"top" | "right" | "bottom" | "left"}
+   */
+  export let backwardTextTooltipPosition = "top";
 
   /** Specify the items per page text */
   export let itemsPerPageText = "Items per page:";
@@ -130,6 +148,12 @@
   export let pageRangeText = (_current, total) =>
     `of ${total.toLocaleString()} page${total === 1 ? "" : "s"}`;
 
+  /**
+   * Override the accessible label for the page number select.
+   * @type {(total: number) => string}
+   */
+  export let pageSelectLabelText = (total) => `Page number, of ${total} pages`;
+
   /** Set an id for the top-level element */
   export let id = uniqueId();
 
@@ -184,6 +208,20 @@
       if (size >= total) break;
     }
     return filtered.length ? filtered : sizes.slice(0, 1);
+  }
+
+  /**
+   * Sets the active page from the `pageSelect` slot.
+   * @param {number | string} nextPage
+   */
+  function setPageFromSlot(nextPage) {
+    if (disabled || pageInputDisabled) return;
+    const numericPage = Number(nextPage);
+    if (!Number.isInteger(numericPage)) return;
+    const clamped = Math.min(Math.max(numericPage, 1), totalPages);
+    if (clamped === page) return;
+    page = clamped;
+    dispatch("change", { page: clamped });
   }
 
   $: effectivePageSizes = dynamicPageSizes
@@ -279,29 +317,38 @@
         {/if}
       </span>
     {:else if !pageInputDisabled}
-      <!-- Native <option>s instead of SelectItem: a SelectItem
-           registers a store subscriber per page (pageWindow, default
-           1000). Coerce on:update to Number — without SelectItem,
-           Select keeps option values as strings. -->
-      <Select
-        id="bx--pagination-select-{id}-pages"
-        class="bx--select__page-number"
-        labelText="Page number, of {totalPages} pages"
-        inline
-        hideLabel
-        selected={page}
-        on:update={(event) => {
-          const next = Number(event.detail);
-          page = next;
-          dispatch("change", { page: next });
-        }}
+      <slot
+        name="pageSelect"
+        currentPage={page}
+        {totalPages}
+        currentPageSize={pageSize}
+        selectLabelText={pageSelectLabelText(totalPages)}
+        onSetPage={setPageFromSlot}
       >
-        {#each selectItems as pageNumber (pageNumber)}
-          <option class="bx--select-option" value={pageNumber}>
-            {pageNumber}
-          </option>
-        {/each}
-      </Select>
+        <!-- Native <option>s instead of SelectItem: a SelectItem
+             registers a store subscriber per page (pageWindow, default
+             1000). Coerce on:update to Number — without SelectItem,
+             Select keeps option values as strings. -->
+        <Select
+          id="bx--pagination-select-{id}-pages"
+          class="bx--select__page-number"
+          labelText={pageSelectLabelText(totalPages)}
+          inline
+          hideLabel
+          selected={page}
+          on:update={(event) => {
+            const next = Number(event.detail);
+            page = next;
+            dispatch("change", { page: next });
+          }}
+        >
+          {#each selectItems as pageNumber (pageNumber)}
+            <option class="bx--select-option" value={pageNumber}>
+              {pageNumber}
+            </option>
+          {/each}
+        </Select>
+      </slot>
       <span class:bx--pagination__text={true}>
         {#if pagesUnknown}
           {pageText(page)}
@@ -313,7 +360,7 @@
     <Button
       kind="ghost"
       tooltipAlignment="center"
-      tooltipPosition="top"
+      tooltipPosition={backwardTextTooltipPosition}
       portalTooltip
       icon={CaretLeft}
       iconDescription={backwardText}
@@ -330,7 +377,7 @@
     <Button
       kind="ghost"
       tooltipAlignment="end"
-      tooltipPosition="top"
+      tooltipPosition={forwardTextTooltipPosition}
       portalTooltip
       icon={CaretRight}
       iconDescription={forwardText}
