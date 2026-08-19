@@ -55,6 +55,13 @@ automatically. The fluid variant cannot be combined with the inline variant.
 
 <TextInput fluid labelText="User name" placeholder="Enter user name..." />
 
+### Maximum character count
+
+The character counter sits at the trailing edge of the field, opposite the
+embedded label.
+
+<TextInput fluid labelText="User name" placeholder="Enter user name..." maxCount={10} />
+
 ### Custom label
 
 Use the `labelChildren` slot to render custom label content, such as a

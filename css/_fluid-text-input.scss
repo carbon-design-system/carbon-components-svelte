@@ -33,9 +33,15 @@
     inset-inline-start: $spacing-05;
   }
 
-  .#{$prefix}--text-input--fluid.#{$prefix}--text-input-wrapper--readonly
-    .#{$prefix}--text-input__field-wrapper
-    .#{$prefix}--text-input {
+  // The maxCount counter is a second `.bx--label` in the same wrapper, so
+  // without this it inherits the label's own coordinates and the two overlap.
+  // Carbon has no fluid counter to port from.
+  .#{$prefix}--text-input--fluid .#{$prefix}--label.#{$prefix}--text-input__label-counter {
+    inset-inline-end: $spacing-05;
+    inset-inline-start: auto;
+  }
+
+  .#{$prefix}--text-input--fluid.#{$prefix}--text-input-wrapper--readonly .#{$prefix}--text-input__field-wrapper .#{$prefix}--text-input {
     color: $text-02;
   }
 
@@ -50,8 +56,7 @@
     white-space: nowrap;
   }
 
-  .#{$prefix}--text-input--fluid
-    .#{$prefix}--label.#{$prefix}--label--slotted {
+  .#{$prefix}--text-input--fluid .#{$prefix}--label.#{$prefix}--label--slotted {
     gap: $spacing-03;
     overflow: visible;
   }
@@ -70,10 +75,8 @@
     display: none;
   }
 
-  .#{$prefix}--text-input--fluid
-    .#{$prefix}--text-input__field-wrapper[data-invalid],
-  .#{$prefix}--text-input--fluid
-    .#{$prefix}--text-input__field-wrapper--warning {
+  .#{$prefix}--text-input--fluid .#{$prefix}--text-input__field-wrapper[data-invalid],
+  .#{$prefix}--text-input--fluid .#{$prefix}--text-input__field-wrapper--warning {
     display: block;
   }
 
@@ -84,20 +87,14 @@
   // The error/warn message is rendered inside the input wrapper in the
   // fluid variant. The base v10 styles only reveal a message that is a
   // sibling of the wrapper.
-  .#{$prefix}--text-input--fluid
-    .#{$prefix}--text-input__field-wrapper[data-invalid]
-    .#{$prefix}--form-requirement,
-  .#{$prefix}--text-input--fluid
-    .#{$prefix}--text-input__field-wrapper--warning
-    .#{$prefix}--form-requirement {
+  .#{$prefix}--text-input--fluid .#{$prefix}--text-input__field-wrapper[data-invalid] .#{$prefix}--form-requirement,
+  .#{$prefix}--text-input--fluid .#{$prefix}--text-input__field-wrapper--warning .#{$prefix}--form-requirement {
     display: block;
     overflow: visible;
     max-block-size: 100%;
   }
 
-  .#{$prefix}--text-input--fluid
-    .#{$prefix}--text-input__field-wrapper[data-invalid]
-    .#{$prefix}--form-requirement {
+  .#{$prefix}--text-input--fluid .#{$prefix}--text-input__field-wrapper[data-invalid] .#{$prefix}--form-requirement {
     color: $text-error;
   }
 
@@ -111,12 +108,8 @@
     border-block-end: none;
   }
 
-  .#{$prefix}--text-input--fluid
-    .#{$prefix}--text-input--invalid
-    ~ .#{$prefix}--text-input__divider,
-  .#{$prefix}--text-input--fluid
-    .#{$prefix}--text-input--warning
-    ~ .#{$prefix}--text-input__divider {
+  .#{$prefix}--text-input--fluid .#{$prefix}--text-input--invalid~.#{$prefix}--text-input__divider,
+  .#{$prefix}--text-input--fluid .#{$prefix}--text-input--warning~.#{$prefix}--text-input__divider {
     display: block;
     border-style: solid;
     border-color: $ui-03;
@@ -128,53 +121,38 @@
     inset-block-start: to-rem(80px);
   }
 
-  .#{$prefix}--text-input--fluid
-    .#{$prefix}--text-input__field-wrapper[data-invalid]
-    > .#{$prefix}--text-input--invalid,
-  .#{$prefix}--text-input--fluid
-    .#{$prefix}--text-input__field-wrapper--warning
-    > .#{$prefix}--text-input--warning {
+  .#{$prefix}--text-input--fluid .#{$prefix}--text-input__field-wrapper[data-invalid]>.#{$prefix}--text-input--invalid,
+  .#{$prefix}--text-input--fluid .#{$prefix}--text-input__field-wrapper--warning>.#{$prefix}--text-input--warning {
     outline: none;
   }
 
-  .#{$prefix}--text-input--fluid
-    .#{$prefix}--text-input__field-wrapper--warning {
+  .#{$prefix}--text-input--fluid .#{$prefix}--text-input__field-wrapper--warning {
     border-block-end: 1px solid $ui-04;
   }
 
-  .#{$prefix}--text-input--fluid
-    .#{$prefix}--text-input__field-wrapper[data-invalid]:not(:focus-within) {
+  .#{$prefix}--text-input--fluid .#{$prefix}--text-input__field-wrapper[data-invalid]:not(:focus-within) {
     @include focus-outline("invalid");
   }
 
-  .#{$prefix}--text-input--fluid
-    .#{$prefix}--text-input__field-wrapper[data-invalid]:focus-within,
-  .#{$prefix}--text-input--fluid
-    .#{$prefix}--text-input__field-wrapper--warning:focus-within {
+  .#{$prefix}--text-input--fluid .#{$prefix}--text-input__field-wrapper[data-invalid]:focus-within,
+  .#{$prefix}--text-input--fluid .#{$prefix}--text-input__field-wrapper--warning:focus-within {
     @include focus-outline("outline");
   }
 
-  .#{$prefix}--text-input--fluid
-    .#{$prefix}--text-input__field-wrapper[data-invalid]
-    > .#{$prefix}--text-input--invalid:focus,
-  .#{$prefix}--text-input--fluid
-    .#{$prefix}--text-input__field-wrapper--warning
-    > .#{$prefix}--text-input--warning:focus {
+  .#{$prefix}--text-input--fluid .#{$prefix}--text-input__field-wrapper[data-invalid]>.#{$prefix}--text-input--invalid:focus,
+  .#{$prefix}--text-input--fluid .#{$prefix}--text-input__field-wrapper--warning>.#{$prefix}--text-input--warning:focus {
     outline: none;
   }
 
-  .#{$prefix}--text-input--fluid
-    .#{$prefix}--text-input.#{$prefix}--password-input {
+  .#{$prefix}--text-input--fluid .#{$prefix}--text-input.#{$prefix}--password-input {
     padding-inline-end: $spacing-08;
   }
 
-  .#{$prefix}--text-input--fluid.#{$prefix}--password-input-wrapper
-    .#{$prefix}--text-input__invalid-icon {
+  .#{$prefix}--text-input--fluid.#{$prefix}--password-input-wrapper .#{$prefix}--text-input__invalid-icon {
     inset-inline-end: $spacing-05;
   }
 
-  .#{$prefix}--text-input--fluid
-    .#{$prefix}--btn.#{$prefix}--text-input--password__visibility__toggle.#{$prefix}--tooltip__trigger {
+  .#{$prefix}--text-input--fluid .#{$prefix}--btn.#{$prefix}--text-input--password__visibility__toggle.#{$prefix}--tooltip__trigger {
     block-size: to-rem(32px);
     inline-size: to-rem(32px);
     inset-block-start: to-rem(26px);
