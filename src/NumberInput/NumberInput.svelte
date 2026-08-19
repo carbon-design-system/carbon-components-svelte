@@ -113,6 +113,11 @@
    * ```svelte
    * <NumberInput validate={(raw) => Number(raw) % 2 === 0} invalidText="Must be even" />
    * ```
+   * @example
+   * ```svelte
+   * <!-- import { validateNumberSeparators } from "carbon-components-svelte"; -->
+   * <NumberInput locale="de-DE" validate={validateNumberSeparators} />
+   * ```
    */
   export let validate = undefined;
 
