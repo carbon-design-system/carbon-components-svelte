@@ -20,6 +20,7 @@
    * @event {{ trigger: "escape-key" | "outside-click" }} close
    * @event {{ scrollTop: number; scrollHeight: number; clientHeight: number }} scrollend
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }}
+   * @restProps {input | button}
    */
 
   /**
@@ -1139,6 +1140,7 @@
           : showFieldFocus}
       >
         <ListBoxField
+          {...$$restProps}
           role="combobox"
           tabindex="0"
           aria-expanded={open}

@@ -23,6 +23,7 @@ import MultiSelectGenerics from "./MultiSelectGenerics.test.svelte";
 import MultiSelectInModal from "./MultiSelectInModal.test.svelte";
 import MultiSelectItemSlot from "./MultiSelectItemSlot.test.svelte";
 import MultiSelectItemToStringId from "./MultiSelectItemToStringId.test.svelte";
+import MultiSelectRestProps from "./MultiSelectRestProps.test.svelte";
 import MultiSelectSlot from "./MultiSelectSlot.test.svelte";
 
 const items = [
@@ -68,6 +69,27 @@ describe("MultiSelect", () => {
     });
 
     expect(screen.getByRole("combobox")).toHaveAttribute("maxlength", "10");
+  });
+
+  describe("rest props", () => {
+    it.each([
+      { filterable: false, fieldClass: "bx--list-box__field" },
+      { filterable: true, fieldClass: "bx--text-input" },
+    ])(
+      "forwards rest props to the trigger when filterable is $filterable",
+      ({ filterable, fieldClass }) => {
+        render(MultiSelectRestProps, {
+          props: { items, labelText: "Contact methods", filterable },
+        });
+
+        const trigger = screen.getByRole("combobox");
+        expect(trigger).toHaveAttribute("aria-invalid", "true");
+        expect(trigger).toHaveAttribute("aria-required", "true");
+        expect(trigger).toHaveAttribute("data-custom", "passthrough");
+        expect(trigger).toHaveClass(fieldClass);
+        expect(trigger).toHaveClass("custom-class");
+      },
+    );
   });
 
   describe("field accessible name and description", () => {
