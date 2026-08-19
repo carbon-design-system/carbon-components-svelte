@@ -88,6 +88,32 @@ Use `LinkDownload` to trigger a client-side file download instead of navigating 
 
 <FileSource src="/framed/Link/LinkDownloadCsv" />
 
+### Events
+
+Listen for `download`, dispatched after the file downloads successfully, and `download:error`, dispatched if the download throws, with the error at `event.detail.error`.
+
+<LinkDownload
+  data="id,name{'\n'}1,Alpha{'\n'}2,Bravo"
+  filename="items.csv"
+  type="text/csv;charset=utf-8"
+  on:download={() => console.log("downloaded")}
+  on:download:error={(e) => console.log(e.detail.error)}
+>
+  Download CSV
+</LinkDownload>
+
+### Custom download behavior
+
+Override the default download behavior by passing a function to `download`. It receives `(data, filename, type)` and can return a promise; use it to upload the payload, show a confirmation step, or otherwise replace the built-in Blob download.
+
+<LinkDownload
+  data="id,name{'\n'}1,Alpha{'\n'}2,Bravo"
+  filename="items.csv"
+  download={(data, filename, type) => console.log(data, filename, type)}
+>
+  Download CSV
+</LinkDownload>
+
 ## Icons
 
 Add an icon with the `icon` prop. Inline must be false when using icons.
@@ -98,6 +124,18 @@ Add an icon with the `icon` prop. Inline must be false when using icons.
   Visit the
   <Link href="https://www.carbondesignsystem.com/" icon={Carbon}>
     Carbon Design System
+  </Link>.
+</div>
+
+### Custom icon
+
+Use the `icon` named slot to render custom icon markup instead of, or with different props than, the `icon` prop.
+
+<div>
+  Visit the
+  <Link href="https://www.carbondesignsystem.com/">
+    Carbon Design System
+    <Carbon slot="icon" size={24} />
   </Link>.
 </div>
 
@@ -123,17 +161,15 @@ Set `size` to control link size. The default is medium (`"md"`).
   Small link
 </Link>
 
-## Size with icon
+### Large with icon
 
 Combine `size` and `icon`. The icon scales to match the link size. Inline must be false.
-
-### Large
 
 <Link size="lg" href="https://www.carbondesignsystem.com/" icon={Carbon}>
   Large link
 </Link>
 
-### Small
+### Small with icon
 
 <Link size="sm" href="https://www.carbondesignsystem.com/" icon={Carbon}>
   Small link
@@ -145,7 +181,7 @@ Reflect interaction and navigation history.
 
 ### Disabled
 
-Disabled links render as plain text while remaining accessible.
+Set `disabled` to `true` to disable the link. Native `<a>` elements have no `disabled` attribute, so the link instead renders with `role="link"` and `aria-disabled="true"`, and drops its `href`, remaining focusable and readable by assistive technology while looking and behaving like plain text. Clicks are also blocked outright—`event.preventDefault()` and `event.stopPropagation()` run before any forwarded `on:click` listener, so neither the link nor an ancestor element receives the click.
 
 <Link disabled href="https://www.carbondesignsystem.com/">
   Disabled link
