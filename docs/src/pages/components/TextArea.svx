@@ -14,17 +14,27 @@ Create a basic textarea with a label and placeholder text.
 
 <TextArea labelText="App description" placeholder="Enter a description..." />
 
+## Rows and columns
+
+Control the visible size of the textarea.
+
+### Rows
+
+Adjust visible rows with `rows`. The default is `4`.
+
+<TextArea rows={10} labelText="App description" placeholder="Enter a description..." />
+
+### Columns
+
+Adjust visible columns with `cols`. Setting `cols` disables the default resize handle; override this with the `resize` style property.
+
+<TextArea cols={40} labelText="App description" placeholder="Enter a description..." />
+
 ## Maximum character count
 
 Specify the max character count with `maxCount`. A character counter appears to the right of the label. Use the native maxlength attribute instead if you prefer not to show a counter.
 
 <TextArea labelText="App description" placeholder="Enter a description..." maxCount={100} />
-
-## Custom rows
-
-Adjust visible rows with `rows`. The default is 4.
-
-<TextArea rows={10} labelText="App description" placeholder="Enter a description..." />
 
 ## Helper text
 
@@ -37,6 +47,14 @@ Add helper text below the textarea to provide additional context or instructions
 Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
 
 <TextArea hideLabel labelText="App description" placeholder="Enter a description..." />
+
+## Custom label
+
+Use the `labelChildren` slot to provide custom label content.
+
+<TextArea labelText="" placeholder="Enter a description...">
+  <strong slot="labelChildren">App description</strong>
+</TextArea>
 
 ## Light
 
