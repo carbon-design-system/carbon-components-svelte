@@ -33,13 +33,23 @@ Create a horizontal progress indicator with four steps.
   />
 </ProgressIndicator>
 
-## Selected by id
+## Step selection
+
+Control which step is active, and how clicking a step affects that selection.
+
+### Selected by id
 
 For dynamic step sets, bind `selectedId` and give each `ProgressStep` a stable `id`. Selection stays on the same logical step when steps before it are added or removed. When set, `selectedId` takes precedence over `currentIndex`.
 
 <FileSource src="/framed/ProgressIndicator/ProgressIndicatorSelectedId" />
 
-## Prevent change on click
+### Programmatic usage
+
+Update the current step programmatically while maintaining step completion rules. Bind to a step's `current` prop to read whether it's the active step.
+
+<FileSource src="/framed/ProgressIndicator/ProgrammaticProgressIndicator" />
+
+### Prevent change on click
 
 Disable automatic step selection when clicking completed steps.
 
@@ -62,13 +72,9 @@ Disable automatic step selection when clicking completed steps.
   />
 </ProgressIndicator>
 
-## Programmatic usage
+## Step states
 
-Update the current step programmatically while maintaining step completion rules.
-
-<FileSource src="/framed/ProgressIndicator/ProgrammaticProgressIndicator" />
-
-## Invalid step
+### Invalid step
 
 Mark a step as invalid to indicate an error state.
 
@@ -87,7 +93,7 @@ Mark a step as invalid to indicate an error state.
   />
 </ProgressIndicator>
 
-## Disabled steps
+### Disabled steps
 
 Disable specific steps to prevent user interaction.
 
@@ -106,9 +112,13 @@ Disable specific steps to prevent user interaction.
   />
 </ProgressIndicator>
 
-## Custom step icon (slot)
+## Step content
 
-Override the default step icon using the icon named slot. The slot exposes complete, current, invalid, and description so the override can mirror the step state.
+Customize what renders inside a step, beyond the default label and icon.
+
+### Icon (slot)
+
+Override the default step icon using the `icon` named slot. The slot exposes complete, current, invalid, and description so the override can mirror the step state.
 
 <ProgressIndicator currentIndex={1}>
   <ProgressStep complete label="Step 1" description="Completed step">
@@ -120,6 +130,36 @@ Override the default step icon using the icon named slot. The slot exposes compl
   <ProgressStep label="Step 3" description="Upcoming step">
     <Circle slot="icon" />
   </ProgressStep>
+</ProgressIndicator>
+
+### Label (slot)
+
+Override the default label using the default slot instead of `label`. The slot exposes `props`, which includes the `class` needed to keep the label styled correctly.
+
+<ProgressIndicator currentIndex={1}>
+  <ProgressStep complete let:props description="Completed step">
+    <strong class={props.class}>Step 1</strong>
+  </ProgressStep>
+  <ProgressStep let:props description="Current step">
+    <strong class={props.class}>Step 2</strong>
+  </ProgressStep>
+  <ProgressStep let:props description="Upcoming step">
+    <strong class={props.class}>Step 3</strong>
+  </ProgressStep>
+</ProgressIndicator>
+
+### Secondary label
+
+Set `secondaryLabel` to display supplementary text after the label, such as marking a step as optional.
+
+<ProgressIndicator currentIndex={1}>
+  <ProgressStep complete label="Step 1" description="Completed step" />
+  <ProgressStep
+    label="Step 2"
+    description="Current step"
+    secondaryLabel="Optional"
+  />
+  <ProgressStep label="Step 3" description="Upcoming step" />
 </ProgressIndicator>
 
 ## Layout
@@ -164,6 +204,30 @@ Display steps in a vertical layout.
   />
 </ProgressIndicator>
 
+## Events
+
+Respond to step selection changes.
+
+Use `on:change` to listen for the step becoming active, either from a completed step being clicked or from `currentIndex`/`selectedId` being updated. The event dispatches the new step index as `event.detail`.
+
+<ProgressIndicator
+  currentIndex={0}
+  on:change={(e) => console.log(e.detail)} // number
+>
+  <ProgressStep complete
+    label="Step 1"
+    description="The progress indicator will listen for clicks on the steps"
+  />
+  <ProgressStep complete
+    label="Step 2"
+    description="The progress indicator will listen for clicks on the steps"
+  />
+  <ProgressStep
+    label="Step 3"
+    description="The progress indicator will listen for clicks on the steps"
+  />
+</ProgressIndicator>
+
 ## Skeleton
 
 Show a loading state with the specified number of steps.
@@ -181,3 +245,9 @@ Show a vertical loading state with the specified number of steps.
 Show a loading state with steps distributed evenly across the available space.
 
 <ProgressIndicatorSkeleton spaceEqually />
+
+### Step count
+
+Set `count` to change the number of skeleton steps rendered. Defaults to `4`.
+
+<ProgressIndicatorSkeleton count={6} />
