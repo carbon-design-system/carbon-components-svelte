@@ -41,6 +41,12 @@ describe("ComboBox", () => {
     expect(getInput()).toHaveAttribute("placeholder", "Select contact method");
   });
 
+  it("forwards a maxlength attribute to the input via restProps", () => {
+    render(ComboBoxReal, { props: { items: [], maxlength: 10 } });
+
+    expect(getInput()).toHaveAttribute("maxlength", "10");
+  });
+
   it("should open menu on click", async () => {
     render(ComboBox);
 
@@ -62,6 +68,30 @@ describe("ComboBox", () => {
       selectedItem: { id: "1", text: "Email", price: 200 },
     });
     expect(getInput()).toHaveValue("Email");
+  });
+
+  it("should not re-dispatch select when clicking an already-selected item again", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(ComboBox, { props: { selectedId: "1" } });
+
+    await user.click(getInput());
+    await user.click(screen.getByText("Email"));
+
+    expect(consoleLog).not.toHaveBeenCalledWith("select", expect.anything());
+    expect(getInput()).toHaveValue("Email");
+  });
+
+  it("should not re-dispatch select when re-confirming an already-selected item with Enter", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(ComboBox, { props: { selectedId: "1" } });
+
+    const input = getInput();
+    await user.click(input);
+    // Opening the menu already highlights the current selection (Email).
+    await user.keyboard("{Enter}");
+
+    expect(consoleLog).not.toHaveBeenCalledWith("select", expect.anything());
+    expect(input).toHaveValue("Email");
   });
 
   it("should handle keyboard navigation", async () => {
