@@ -11,18 +11,20 @@ description: Context menus display contextual actions on right-click, with neste
 In the examples, right click anywhere within the iframe. The context menu appears when right-clicking anywhere in the window. Use ContextMenuOption for menu items and ContextMenuDivider for visual separation.
 
 The root element has `role="menu"`. Set `labelText` or `aria-label` on ContextMenu so assistive technologies get a meaningful name. This matters most for the default window-wide behavior (target unset), where there is no visible trigger to label the menu with `aria-labelledby`.
-  
+
+`open`, `x`, and `y` are also bindable, letting you trigger the menu from something other than a right-click; see [Programmatic position](#programmatic-position).
+
 <FileSource src="/framed/ContextMenu/ContextMenu" />
 
-## Context menu options
+## Menu items
 
 `ContextMenuOption` supports the following props:
 
 | Prop            | Description                                                                                                                                                                                                                                                                                    |
 | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `labelText`     | Primary label (or use the `labelChildren` slot; see the API reference).                                                                                                                                                                                                                        |
-| `shortcutText`  | Keyboard hint shown on the right, with or without an icon. Pass the shortcut as a string, for example `"⌘C"`.                                                                                                                                                                                  |
-| `icon`          | Carbon icon component to the left of the label. When an icon is set, the option is indented automatically so rows align; you do not need to pass `indented` for icon rows.                                                                                                                     |
+| `shortcutText`  | Keyboard hint shown on the right, with or without an icon. Pass the shortcut as a string, for example `"⌘C"`, or use the `shortcutText` slot for custom content. The hint is display-only; it does not register a keybinding.                                                                |
+| `icon`          | Carbon icon component to the left of the label, or use the `icon` slot for custom content in its place. When an icon is set, the option is indented automatically so rows align; you do not need to pass `indented` for icon rows.                                                            |
 | `indented`      | Indent the label without an icon, for example to align with submenu parents or nested items (see [Nested menu](#nested-menu), [Custom target](#custom-target), and [Multiple targets](#multiple-targets)).                                                                                     |
 | `disabled`      | Non-interactive, dimmed row.                                                                                                                                                                                                                                                                   |
 | `kind`          | `"default"` or `"danger"` for destructive actions.                                                                                                                                                                                                                                               |
@@ -31,7 +33,7 @@ For options inside `ContextMenuGroup`, see [Selectable](#selectable), [Selectabl
 
 <FileSource src="/framed/ContextMenu/ContextMenuOptionProps" />
 
-## Nested menu
+### Nested menu
 
 Put children inside a parent `ContextMenuOption` to open a flyout submenu. Use `indented` on the parent when it has no icon so the label aligns with other rows.
 
@@ -46,28 +48,6 @@ Submenus can contain:
 Selecting an option closes only that option's own menu level. At the root, that closes the whole menu. Inside a submenu, it closes just that flyout and leaves the rest open. Call `event.preventDefault()` to keep a flyout open across several picks; see [Prevent menu from closing](#prevent-menu-from-closing).
 
 <FileSource src="/framed/ContextMenu/ContextMenuNested" />
-
-## Targets
-
-Control which element triggers the menu.
-
-### Custom target
-
-By default, the context menu triggers when you right-click anywhere in the window.
-
-Set `target` to specify which element triggers the context menu.
-
-<FileSource src="/framed/ContextMenu/ContextMenuTarget" />
-
-### Multiple targets
-
-Set `target` to an array of elements to trigger the context menu from multiple sources.
-
-<FileSource src="/framed/ContextMenu/ContextMenuTargets" />
-
-## Selection
-
-Let options act as checkboxes or radios, standalone or grouped.
 
 ### Selectable
 
@@ -95,7 +75,47 @@ Selecting an option closes that flyout. Call `event.preventDefault()` in the opt
 
 <FileSource src="/framed/ContextMenu/ContextMenuRadioGroupNested" />
 
-## Prevent menu from closing
+## Triggering
+
+Control which element triggers the menu, or open it programmatically without a right-click at all.
+
+### Custom target
+
+By default, the context menu triggers when you right-click anywhere in the window.
+
+Set `target` to specify which element triggers the context menu.
+
+<FileSource src="/framed/ContextMenu/ContextMenuTarget" />
+
+### Multiple targets
+
+Set `target` to an array of elements to trigger the context menu from multiple sources.
+
+<FileSource src="/framed/ContextMenu/ContextMenuTargets" />
+
+### Programmatic position
+
+`open`, `x`, and `y` are bindable, so you can open the menu from something other than a right-click, such as a "..." overflow button. Compute a position (for example, from the trigger element's bounding rectangle) and set `x` and `y` before setting `open` to `true`.
+
+This does not replace the right-click behavior described above; if `target` is left unset, the window-wide right-click trigger from [Basic](#basic) still applies alongside the button. Set `target` if you want the button to be the only way to open the menu.
+
+<FileSource src="/framed/ContextMenu/ContextMenuProgrammatic" />
+
+## Events
+
+ContextMenu dispatches `open` once it finishes opening, and `close` on every close attempt.
+
+<FileSource src="/framed/ContextMenu/ContextMenuEvents" />
+
+### Open event
+
+`open`'s detail is the DOM element that was right-clicked. When the menu is opened programmatically instead (see [Programmatic position](#programmatic-position)), the detail is `null` unless a prior right-click already populated it.
+
+### Close event
+
+`close`'s detail contains `trigger`, one of `"escape-key"`, `"outside-click"`, or `"select"`, describing why the menu closed.
+
+### Prevent menu from closing
 
 An option's `click` event is cancelable. Call `event.preventDefault()` in its `on:click` handler to keep the menu open. For a selectable or radio option, selection still updates; only the close is canceled. That is how you leave a nested submenu open while changing several choices. See [Radio group (nested)](#radio-group-nested).
 
