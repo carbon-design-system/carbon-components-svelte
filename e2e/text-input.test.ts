@@ -39,4 +39,33 @@ test.describe("TextInput", () => {
   test("shows invalid state", async ({ page }) => {
     await expect(page.getByText("This field is required")).toBeVisible();
   });
+
+  test("fluid maxCount counter does not overlap the label", async ({
+    page,
+  }) => {
+    const wrapper = page.getByTestId("text-input-fluid-counter-case");
+    const label = wrapper.locator(
+      ".bx--label:not(.bx--text-input__label-counter)",
+    );
+    const counter = wrapper.locator(".bx--text-input__label-counter");
+
+    await expect(counter).toHaveText("3/10");
+
+    const labelBox = await label.boundingBox();
+    const counterBox = await counter.boundingBox();
+    const fieldBox = await wrapper
+      .locator(".bx--text-input--fluid")
+      .boundingBox();
+    if (!labelBox || !counterBox || !fieldBox) {
+      throw new Error("expected label, counter, and field to be laid out");
+    }
+
+    // Both are absolutely positioned `.bx--label` elements in the same
+    // containing block; without the counter's own inset rules they stack on
+    // the label's coordinates.
+    expect(counterBox.x).toBeGreaterThan(labelBox.x + labelBox.width);
+    expect(
+      fieldBox.x + fieldBox.width - (counterBox.x + counterBox.width),
+    ).toBeLessThan(24);
+  });
 });

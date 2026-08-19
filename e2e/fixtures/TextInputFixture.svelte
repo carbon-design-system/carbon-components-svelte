@@ -25,3 +25,7 @@
   invalid={true}
   invalidText="This field is required"
 />
+
+<div data-testid="text-input-fluid-counter-case">
+  <TextInput fluid labelText="Nickname" maxCount={10} value="abc" />
+</div>
