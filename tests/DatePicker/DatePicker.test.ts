@@ -418,6 +418,32 @@ describe("DatePicker", () => {
     expect(setDateSpy).not.toHaveBeenCalled();
   });
 
+  it("reinitializes the calendar when datePickerType changes after mount", async () => {
+    const { rerender } = render(DatePicker, {
+      props: { datePickerType: "simple" },
+    });
+
+    expect(screen.queryByLabelText("calendar-container")).toBeNull();
+
+    await rerender({ datePickerType: "single" });
+    await tick();
+
+    expect(await screen.findByLabelText("calendar-container")).toBeTruthy();
+  });
+
+  it("removes the calendar when datePickerType changes to simple after mount", async () => {
+    const { rerender } = render(DatePicker, {
+      props: { datePickerType: "single" },
+    });
+
+    await screen.findByLabelText("calendar-container");
+
+    await rerender({ datePickerType: "simple" });
+    await tick();
+
+    expect(screen.queryByLabelText("calendar-container")).toBeNull();
+  });
+
   it("supports custom label slot for DatePickerInput", () => {
     render(DatePickerInputSlot);
 
