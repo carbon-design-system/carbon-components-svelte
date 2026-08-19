@@ -83,6 +83,12 @@ Prevent the default close behavior using `e.preventDefault()` in the `on:close` 
   // custom close logic (e.g., transitions)
 }} />
 
+## ARIA role
+
+Specify the ARIA `role` for the notification container to control how screen readers announce it. Defaults to `"alert"` for interruptive announcements. Use `"status"` for polite live-region updates, or `"log"` for a running log of messages.
+
+<ToastNotification role="status" kind="success" title="Success" subtitle="Your settings have been saved." caption="{new Date().toLocaleString()}" />
+
 ## Variants
 
 The component supports different notification types.
