@@ -26,6 +26,27 @@ export function setupTocScrollSpy(page: ParentNode): () => void {
 
   let currentActiveId = "";
 
+  // Mirrors the side nav's `scrollIntoView({ block: "center" })` on the
+  // current page item: keep the active TOC entry visible in its own scroll
+  // container (`.table__scroll`) as the page scrolls through many headings,
+  // without disturbing an entry that's already in view.
+  function scrollTocLinkIntoViewIfNeeded(link: HTMLAnchorElement) {
+    // Skip the hidden mobile/desktop clone; only the rendered copy has a box.
+    if (link.offsetParent === null) return;
+
+    const container = link.closest<HTMLElement>(".table__scroll");
+    if (!container) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const linkRect = link.getBoundingClientRect();
+
+    const inView =
+      linkRect.top >= containerRect.top &&
+      linkRect.bottom <= containerRect.bottom;
+
+    if (!inView) link.scrollIntoView({ block: "center" });
+  }
+
   function setActive(activeId: string) {
     if (activeId === currentActiveId) return;
     currentActiveId = activeId;
@@ -35,8 +56,12 @@ export function setupTocScrollSpy(page: ParentNode): () => void {
 
       for (const link of links) {
         link.classList.toggle("is-active", active);
-        if (active) link.setAttribute("aria-current", "location");
-        else link.removeAttribute("aria-current");
+        if (active) {
+          link.setAttribute("aria-current", "location");
+          scrollTocLinkIntoViewIfNeeded(link);
+        } else {
+          link.removeAttribute("aria-current");
+        }
       }
     }
   }
