@@ -63,11 +63,20 @@
   }
 
   tr.#{$prefix}--parent-row.#{$prefix}--expandable-row + tr[data-child-row] td {
-    padding-left: 4rem;
+    padding-left: 3.5rem;
     border-bottom: 1px solid $border-subtle;
     transition: padding-bottom $duration--fast-02 motion(standard, productive),
       transform $duration--fast-02 motion(standard, productive),
       background-color $duration--fast-02 motion(standard, productive);
+  }
+
+  // A checkbox or radio selection column pushes the parent row's own text
+  // past the 3.5rem baseline indent, so the child row needs to reach
+  // further to still land under it.
+  tr.#{$prefix}--parent-row.#{$prefix}--expandable-row.#{$prefix}--expandable-row--with-selection
+    + tr[data-child-row]
+    td {
+    padding-left: 5.5rem;
   }
 
   tr.#{$prefix}--parent-row.#{$prefix}--expandable-row
@@ -75,6 +84,8 @@
     td
     .#{$prefix}--child-row-inner-container {
     max-height: 100%;
+    padding-top: 1rem;
+    padding-bottom: 1.5rem;
   }
 
   // bottom border overrides

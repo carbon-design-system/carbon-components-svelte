@@ -54,6 +54,43 @@ test.describe("DataTable", () => {
     );
   });
 
+  test("expandable: expanded content has block padding, not flush against row edges", async ({
+    page,
+  }) => {
+    const expand = page.getByTestId("data-table-expand");
+    await expand
+      .getByRole("button", { name: "Expand current row" })
+      .first()
+      .click();
+
+    const container = expand.locator(".bx--child-row-inner-container").first();
+    await expect(container).toHaveCSS("padding-top", "16px");
+    await expect(container).toHaveCSS("padding-bottom", "24px");
+  });
+
+  test("expandable: with a checkbox column, expanded content aligns under the row's own text", async ({
+    page,
+  }) => {
+    const table = page.getByTestId("data-table-expand-selectable");
+    await table
+      .getByRole("button", { name: "Expand current row" })
+      .first()
+      .click();
+
+    const nameCell = table.locator("tr.bx--parent-row td").nth(2);
+    const detail = table.getByTestId("expand-selectable-detail");
+
+    const [nameBox, detailBox] = await Promise.all([
+      nameCell.boundingBox(),
+      detail.boundingBox(),
+    ]);
+    const namePaddingLeft = await nameCell.evaluate((el) =>
+      Number.parseFloat(getComputedStyle(el).paddingLeft),
+    );
+
+    expect(detailBox.x).toBeCloseTo(nameBox.x + namePaddingLeft, 0);
+  });
+
   test("expandable: supports row ids matching object prototype properties", async ({
     page,
   }) => {

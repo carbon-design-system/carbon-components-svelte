@@ -1099,7 +1099,10 @@
                 : ''} {isExpanded ? 'bx--expandable-row' : ''} {expandable ? 'bx--parent-row' : ''} {expandable &&
               parentRowId === row.id
                 ? 'bx--expandable-row--hover'
-                : ''} {isHighlighted ? 'bx--data-table--highlighted-row' : ''} {rowClassValue ?? ''}"
+                : ''} {isHighlighted ? 'bx--data-table--highlighted-row' : ''} {expandable &&
+              isSelectionEnabled
+                ? 'bx--expandable-row--with-selection'
+                : ''} {rowClassValue ?? ''}"
               on:click={(event) => {
                 // forgo "click", "click:row" events if target
                 // resembles an overflow menu, a checkbox, or radio button
@@ -1333,7 +1336,10 @@
                 ? 'bx--parent-row'
                 : ''} {expandable && parentRowId === row.id
                 ? 'bx--expandable-row--hover'
-                : ''} {isHighlighted ? 'bx--data-table--highlighted-row' : ''} {rowClassValue ?? ''}"
+                : ''} {isHighlighted ? 'bx--data-table--highlighted-row' : ''} {expandable &&
+              isSelectionEnabled
+                ? 'bx--expandable-row--with-selection'
+                : ''} {rowClassValue ?? ''}"
               on:click={(event) => {
                 // forgo "click", "click:row" events if target
                 // resembles an overflow menu, a checkbox, or radio button
