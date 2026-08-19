@@ -4,6 +4,7 @@ import {
   parse,
   parseLocaleValue,
   roundToStep,
+  validateNumberSeparators,
 } from "../../src/utils/numericFormat.js";
 
 describe("parse", () => {
@@ -71,6 +72,28 @@ describe("clamp", () => {
 
   test("ignores undefined bounds", () => {
     expect(clamp(5, undefined, undefined)).toBe(5);
+  });
+});
+
+describe("validateNumberSeparators", () => {
+  test("allows an empty string", () => {
+    expect(validateNumberSeparators("", "de-DE")).toBe(true);
+  });
+
+  test("validates plain digits without a locale", () => {
+    expect(validateNumberSeparators("1234", undefined)).toBe(true);
+    expect(validateNumberSeparators("12a4", undefined)).toBe(false);
+  });
+
+  test("accepts correctly-separated input for the given locale", () => {
+    expect(validateNumberSeparators("1.234,5", "de-DE")).toBe(true);
+    expect(validateNumberSeparators("1,234.5", "en-US")).toBe(true);
+  });
+
+  test("rejects input using the wrong locale's separators", () => {
+    // "de-DE" expects "." as the group separator and "," as decimal;
+    // this string mixes both incorrectly (two decimal-style separators).
+    expect(validateNumberSeparators("1,234,5", "de-DE")).toBe(false);
   });
 });
 
