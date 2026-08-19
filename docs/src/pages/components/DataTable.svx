@@ -1960,6 +1960,12 @@ Combine `batchExpansion` and `batchSelection` for expandable, selectable tables.
 
 <FileSource src="/framed/DataTable/DataTableExpandableSelectable" />
 
+### With radio selection
+
+Combine `batchExpansion` and `radio` for expandable tables with single-row selection.
+
+<FileSource src="/framed/DataTable/DataTableExpandableRadioSelectable" />
+
 ## Skeleton
 
 Show a loading state with `DataTableSkeleton`.
