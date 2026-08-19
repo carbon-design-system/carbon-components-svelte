@@ -28,7 +28,11 @@ By default, the tile is collapsed. Use the above and below slots to define conte
   <div slot="below">Below the fold content here</div>
 </ExpandableTile>
 
-## Reactive (two-way binding)
+## Expanded state
+
+Control whether the tile is expanded, either reactively or by default.
+
+### Reactive (two-way binding)
 
 Bind to `expanded` to control and read the tile state outside the component.
 Grow the above-the-fold content while collapsed to see the resize observer remeasure
@@ -36,7 +40,7 @@ and update the tile height.
 
 <FileSource src="/framed/ExpandableTile/ExpandableTileReactive" />
 
-## Expanded
+### Expanded by default
 
 Display the tile expanded by default with `expanded`.
 
@@ -54,9 +58,11 @@ Use the light variant on dark backgrounds with `light`.
   <div slot="below">Below the fold content here</div>
 </ExpandableTile>
 
-## Customization
+## Content height
 
-### Heights
+Control how the tile measures and displays its collapsed height.
+
+### CSS dimensions
 
 Set custom heights for the tile content using CSS to control the exact dimensions
 of the visible and hidden content.
@@ -66,11 +72,42 @@ of the visible and hidden content.
   <div slot="below" style="height: 10rem">Below the fold content here</div>
 </ExpandableTile>
 
-### Labels
+### Manual height override
+
+By default, the tile measures the above-the-fold content's height and its own
+padding automatically with a resize observer. Set `tileMaxHeight` and
+`tilePadding` (in pixels) to override the measured values—for example, to fix
+the collapsed height ahead of time instead of relying on the observer.
+
+<ExpandableTile tileMaxHeight={64} tilePadding={32}>
+  <div slot="above">Above the fold content here</div>
+  <div slot="below">Below the fold content here</div>
+</ExpandableTile>
+
+## Labels
+
+Customize the chevron's visible label text and the tile's accessible tooltip text.
+
+### Chevron label
 
 Customize expand/collapse button labels with `tileExpandedLabel` and `tileCollapsedLabel`.
 
 <ExpandableTile tileExpandedLabel="View less" tileCollapsedLabel="View more">
+  <div slot="above">Above the fold content here</div>
+  <div slot="below">Below the fold content here</div>
+</ExpandableTile>
+
+### Accessible text
+
+Customize the accessible name announced for the expand/collapse control with
+`tileCollapsedIconText` and `tileExpandedIconText`. These render as the
+`title` attribute on the tile, or as the `aria-label`/`title` on the chevron
+button when `hasInteractiveContent` is set.
+
+<ExpandableTile
+  tileCollapsedIconText="Show more details"
+  tileExpandedIconText="Show fewer details"
+>
   <div slot="above">Above the fold content here</div>
   <div slot="below">Below the fold content here</div>
 </ExpandableTile>
