@@ -99,6 +99,12 @@ Disable the page size selector with `pageSizeInputDisabled`.
 
 <Pagination totalItems={102} pageSizeInputDisabled />
 
+## Disabled
+
+Set `disabled` to disable the entire pagination, including the nav buttons and both selects.
+
+<Pagination disabled totalItems={102} pageSizes={[10, 15, 20]} />
+
 ## Skeleton
 
 Use the pagination skeleton to show a loading state.
