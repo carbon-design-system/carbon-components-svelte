@@ -12,7 +12,7 @@ description: MenuButton is a labeled button that opens a dropdown of actions, in
 
 ## Basic
 
-Wrap `MenuItem` components in `MenuButton` and set `labelText` for the trigger label. Use the `labelChildren` slot for custom trigger content. Unlike [Menu](/components/Menu), `MenuButton` includes the trigger; you don't pass an anchor. 
+Wrap `MenuItem` components in `MenuButton` and set `labelText` for the trigger label. Use the `labelChildren` slot for custom trigger content. Unlike [Menu](/components/Menu), `MenuButton` includes the trigger; you don't pass an anchor. See [Events](#events) for the menu's `close` event.
 
 <MenuButton labelText="Actions">
   <MenuItem on:click={() => console.log("Cut")}>Cut</MenuItem>
@@ -20,6 +20,12 @@ Wrap `MenuItem` components in `MenuButton` and set `labelText` for the trigger l
   <MenuItem on:click={() => console.log("Paste")}>Paste</MenuItem>
   <MenuItem disabled>Delete</MenuItem>
 </MenuButton>
+
+## Reactive example
+
+Control the menu state programmatically by binding to `open`.
+
+<FileSource src="/framed/MenuButton/MenuButtonReactive" />
 
 ## Kind
 
@@ -81,7 +87,7 @@ Set `size` to scale the trigger button and each menu item's row height together.
 
 ## Icon-only
 
-Set `iconOnly` for an icon-only trigger. `labelText` is no longer rendered, but it remains the trigger's accessible name. Pass `icon` to swap the glyph. Use this trigger for overflow menus that need submenus, which [OverflowMenu](/components/OverflowMenu) does not support.
+Set `iconOnly` for an icon-only trigger. `labelText` is no longer rendered, but it remains the trigger's accessible name. Use this trigger for overflow menus that need submenus, which [OverflowMenu](/components/OverflowMenu) does not support.
 
 <MenuButton iconOnly labelText="Row actions">
   <MenuItem on:click={() => console.log("Rename")}>Rename</MenuItem>
@@ -90,6 +96,26 @@ Set `iconOnly` for an icon-only trigger. `labelText` is no longer rendered, but 
     <MenuItem on:click={() => console.log("CSV")}>CSV</MenuItem>
   </MenuItem>
   <MenuDivider />
+  <MenuItem icon={TrashCan} kind="danger" on:click={() => console.log("Delete")}>
+    Delete
+  </MenuItem>
+</MenuButton>
+
+### Custom icon
+
+Pass `icon` to swap the glyph. The default is the overflow (kebab) icon.
+
+<MenuButton iconOnly labelText="Copy options" icon={Copy}>
+  <MenuItem on:click={() => console.log("Copy")}>Copy</MenuItem>
+  <MenuItem on:click={() => console.log("Copy as reference")}>Copy as reference</MenuItem>
+</MenuButton>
+
+### Icon description
+
+The icon-only trigger needs its own accessible label, since it has no visible text. Override `iconDescription` to change it; the default is `labelText`.
+
+<MenuButton iconOnly labelText="Row actions" iconDescription="More row actions">
+  <MenuItem on:click={() => console.log("Rename")}>Rename</MenuItem>
   <MenuItem icon={TrashCan} kind="danger" on:click={() => console.log("Delete")}>
     Delete
   </MenuItem>
@@ -221,3 +247,14 @@ Set `labelText` on a `MenuItem` and nest child `MenuItem` rows to get a submenu.
 Choosing an item closes the menu by default, including any open submenus. Call `event.preventDefault()` in the item's `on:click` handler to keep the menu open. A selectable or radio item still updates its own state; only the close is canceled. Use this for multi-select, or for a radio choice in a submenu that should stay open after a pick.
 
 <FileSource src="/framed/MenuButton/MenuButtonKeepOpen" />
+
+## Events
+
+### Close event
+
+Use `on:close` to respond to every close attempt, regardless of cause. The event detail's `trigger` is `"escape-key"`, `"outside-click"`, or `"select"`.
+
+<MenuButton labelText="Actions" on:close={(e) => console.log(e.detail.trigger)}>
+  <MenuItem on:click={() => console.log("Cut")}>Cut</MenuItem>
+  <MenuItem on:click={() => console.log("Copy")}>Copy</MenuItem>
+</MenuButton>
