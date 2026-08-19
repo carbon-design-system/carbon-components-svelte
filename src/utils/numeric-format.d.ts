@@ -12,6 +12,12 @@ export function parseLocaleValue(
   decimalSeparator: string,
 ): number | null;
 
+/** Validate that `input`'s digits/separators are consistent with `locale`. */
+export function validateNumberSeparators(
+  input: string,
+  locale: string | undefined,
+): boolean;
+
 /** First step when empty: `stepStartValue`, else `min`, else 0. */
 export function getDefaultValue(
   stepStartValue: number | undefined,
