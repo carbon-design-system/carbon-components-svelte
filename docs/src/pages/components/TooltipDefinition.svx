@@ -18,7 +18,7 @@ Display a basic definition tooltip with the default bottom-center alignment.
 
 Position the tooltip with direction and alignment.
 
-### Direction
+### Directions
 
 By default, the tooltip is positioned to the bottom.
 
@@ -47,7 +47,11 @@ Center
 End
 </TooltipDefinition>
 
-## Click to open
+## Open behavior
+
+Control how and when the tooltip opens.
+
+### Click to open
 
 Open the tooltip on click instead of hover with `clickToOpen`.
 
@@ -55,7 +59,7 @@ Open the tooltip on click instead of hover with `clickToOpen`.
   Armonk
 </TooltipDefinition>
 
-## Open by default
+### Open by default
 
 Open the tooltip by default with `open`.
 
@@ -63,7 +67,7 @@ Open the tooltip by default with `open`.
   Armonk
 </TooltipDefinition>
 
-## Programmatic usage
+## Reactive example
 
 Control tooltip state programmatically with `bind:open`.
 
@@ -102,7 +106,7 @@ Set `portalTooltip` to render the tooltip in a portal so it is not clipped by ov
   Armonk
 </TooltipDefinition>
 
-### Direction
+### Directions
 
 Definition tooltips support top and bottom directions only. With portalling, direction behaves the same as the default CSS path.
 
