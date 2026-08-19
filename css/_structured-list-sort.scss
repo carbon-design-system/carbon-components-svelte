@@ -1,0 +1,131 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+// Carbon does not ship a sortable structured list upstream (sorting is a
+// DataTable-only feature there). `StructuredListCell` renders this button in
+// place of its plain header markup when `sortable` is set.
+//
+// The click/hover/focus target is the button, so it needs to fill the full
+// header cell -- not just wrap its text. Rather than stretch the button to
+// 100% width/height of a still-padded cell (percentage heights inside a
+// content-sized table-cell are unreliable), the cell's own padding is zeroed
+// and the same padding values move onto the button. The button's padding box
+// then *is* the cell's visual box, sized by ordinary content flow.
+/// @access private
+/// @group components
+@mixin structured-list-sort {
+  .#{$prefix}--structured-list-th--sortable {
+    padding: 0;
+  }
+
+  .#{$prefix}--structured-list-sort {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: $carbon--spacing-03;
+    padding: $carbon--spacing-05 $carbon--spacing-03 $carbon--spacing-03
+      $carbon--spacing-03;
+    border: none;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  // Matches the `:first-of-type` inset every other header/body cell gets
+  // (see `_structured-list.scss`), moved from the cell onto the button so
+  // the extra space stays part of the clickable target. That base rule is
+  // nested under `.bx--structured-list`, so the override needs the same
+  // ancestor to match its specificity -- a bare `.bx--structured-list-row
+  // .bx--structured-list-th--sortable:first-of-type` loses the tie and the
+  // cell keeps its own 1rem inset alongside the button's.
+  .#{$prefix}--structured-list
+    .#{$prefix}--structured-list-row
+    .#{$prefix}--structured-list-th--sortable:first-of-type {
+    padding-left: 0;
+  }
+
+  .#{$prefix}--structured-list-row
+    .#{$prefix}--structured-list-th--sortable:first-of-type
+    .#{$prefix}--structured-list-sort {
+    padding-left: 1rem;
+  }
+
+  // Same specificity concern for the condensed and flush variants: their
+  // cell padding rules are nested under `.bx--structured-list` too.
+  .#{$prefix}--structured-list.#{$prefix}--structured-list--condensed
+    .#{$prefix}--structured-list-th--sortable {
+    padding: 0;
+  }
+
+  .#{$prefix}--structured-list.#{$prefix}--structured-list--condensed
+    .#{$prefix}--structured-list-sort {
+    padding: $structured-list-padding * 0.25;
+  }
+
+  .#{$prefix}--structured-list.#{$prefix}--structured-list--flush
+    .#{$prefix}--structured-list-row
+    .#{$prefix}--structured-list-th--sortable,
+  .#{$prefix}--structured-list.#{$prefix}--structured-list--flush
+    .#{$prefix}--structured-list-row
+    .#{$prefix}--structured-list-th--sortable:first-of-type {
+    padding: 0;
+  }
+
+  .#{$prefix}--structured-list.#{$prefix}--structured-list--flush
+    .#{$prefix}--structured-list-row
+    .#{$prefix}--structured-list-sort {
+    padding-right: 1rem;
+    padding-left: 0;
+  }
+
+  .#{$prefix}--structured-list-sort:hover,
+  .#{$prefix}--structured-list-sort.#{$prefix}--structured-list-sort--active {
+    color: $text-01;
+  }
+
+  .#{$prefix}--structured-list-sort:focus {
+    @include focus-outline("outline");
+    outline-offset: -2px;
+  }
+
+  .#{$prefix}--structured-list-sort__icon-unsorted {
+    fill: $icon-01;
+    opacity: 0;
+  }
+
+  .#{$prefix}--structured-list-sort:hover
+    .#{$prefix}--structured-list-sort__icon-unsorted,
+  .#{$prefix}--structured-list-sort:focus
+    .#{$prefix}--structured-list-sort__icon-unsorted {
+    opacity: 0.6;
+  }
+
+  .#{$prefix}--structured-list-sort__icon {
+    display: none;
+    fill: $icon-01;
+    transform: rotate(0);
+    transition: transform $duration--fast-02 motion(standard, productive);
+  }
+
+  .#{$prefix}--structured-list-sort--active
+    .#{$prefix}--structured-list-sort__icon {
+    display: block;
+  }
+
+  .#{$prefix}--structured-list-sort--active
+    .#{$prefix}--structured-list-sort__icon-unsorted {
+    display: none;
+  }
+
+  .#{$prefix}--structured-list-sort--ascending
+    .#{$prefix}--structured-list-sort__icon {
+    transform: rotate(180deg);
+  }
+}
+
+@include exports("structured-list-sort") {
+  @include structured-list-sort;
+}
