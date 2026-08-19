@@ -10,6 +10,7 @@ description: Accordions stack expandable sections vertically to show or hide con
     Stack,
     Text,
   } from "carbon-components-svelte";
+  import Notification from "carbon-icons-svelte/lib/Notification.svelte";
 </script>
 
 ## Basic
@@ -32,7 +33,12 @@ By default, the chevron icon is on the right side of the accordion item.
   </AccordionItem>
 </Accordion>
 
-## Left-aligned chevron
+## Layout
+
+Adjust chevron alignment and container spacing. The two interact: flush has
+no effect when the chevron is left-aligned.
+
+### Left-aligned chevron
 
 Align the chevron icon to the left side of the accordion item by setting `align` to `"start"`.
 
@@ -49,7 +55,7 @@ Align the chevron icon to the left side of the accordion item by setting `align`
   </AccordionItem>
 </Accordion>
 
-## Flush
+### Flush
 
 Set `flush` to remove the accordion's gutter, aligning it flush with the
 edges of its container. This works well in full-bleed layouts and side
@@ -68,7 +74,11 @@ panels. `flush` has no effect when `align` is `"start"`.
   </AccordionItem>
 </Accordion>
 
-## Custom title slot
+## Title
+
+Customize the item heading content and its accessible name.
+
+### Custom title slot
 
 Customize the title content with the title slot instead of the title prop for
 more complex layouts with multiple elements.
@@ -98,7 +108,27 @@ more complex layouts with multiple elements.
   </AccordionItem>
 </Accordion>
 
-## First item open
+### Accessible label
+
+Set `ariaLabel` to give the item's heading button an accessible name that's
+independent of its visible content. This matters when the title slot doesn't
+render readable text, such as an icon-only title, since screen readers would
+otherwise have nothing to announce for the control.
+
+<Accordion>
+  <AccordionItem ariaLabel="Notifications">
+    <svelte:fragment slot="title">
+      <Notification />
+    </svelte:fragment>
+    <p>You have no new notifications.</p>
+  </AccordionItem>
+</Accordion>
+
+## Open state
+
+Control which items are open by default, exclusively, or programmatically.
+
+### First item open
 
 Set `open` on an item to have it expanded by default when the
 accordion is first rendered.
@@ -116,7 +146,7 @@ accordion is first rendered.
   </AccordionItem>
 </Accordion>
 
-## Single-open
+### Single-open
 
 Set `type` to `"single"` so that opening an item automatically closes any
 other open item. This is useful for FAQs, step-by-step wizards, or settings
@@ -135,6 +165,13 @@ panels where only one section should be expanded at a time. The default is
     <p>Translate text, documents, and websites from one language to another. Create industry or region-specific translations via the service's customization capability.</p>
   </AccordionItem>
 </Accordion>
+
+### Programmatic example
+
+Programmatically control the accordion items with the `bind:open` directive,
+expanding and collapsing items based on user interactions or application state.
+
+<FileSource src="/framed/Accordion/ExpandableAccordion" />
 
 ## Nested
 
@@ -177,12 +214,25 @@ Nested items keep their own open state, independent of the parent.
   </AccordionItem>
 </Accordion>
 
-## Programmatic example
+## Lazy loading
 
-Programmatically control the accordion items with the `bind:open` directive,
-expanding and collapsing items based on user interactions or application state.
+Set `lazy` on an accordion item to defer mounting its panel content until the
+item first opens. Use it for panels with heavy content, such as API-fetched
+data or charts, so they mount only when needed. The content stays mounted
+after the item collapses.
 
-<FileSource src="/framed/Accordion/ExpandableAccordion" />
+<Accordion>
+  <AccordionItem lazy title="Natural Language Classifier">
+   <p>Natural Language Classifier uses advanced natural language processing and machine learning techniques to create custom classification models. Users train their data and the service predicts the appropriate category for the inputted text.
+   </p>
+  </AccordionItem>
+  <AccordionItem lazy title="Natural Language Understanding">
+    <p>Analyze text to extract meta-data from content such as concepts, entities, emotion, relations, sentiment and more.</p>
+  </AccordionItem>
+  <AccordionItem lazy title="Language Translator">
+    <p>Translate text, documents, and websites from one language to another. Create industry or region-specific translations via the service's customization capability.</p>
+  </AccordionItem>
+</Accordion>
 
 ## Sizes
 
@@ -312,25 +362,3 @@ Set `size` to `"sm"` for a small skeleton.
 Set `flush` to remove the skeleton's gutter, matching the flush variant.
 
 <Accordion skeleton flush />
-
-## Lazy loading
-
-Set `lazy` on an accordion item to defer mounting its panel content until the
-item first opens. Use it for panels with heavy content, such as API-fetched
-data or charts, so they mount only when needed. The content stays mounted
-after the item collapses.
-
-<Accordion>
-  <AccordionItem lazy title="Natural Language Classifier">
-   <p>Natural Language Classifier uses advanced natural language processing and machine learning techniques to create custom classification models. Users train their data and the service predicts the appropriate category for the inputted text.
-   </p>
-  </AccordionItem>
-  <AccordionItem lazy title="Natural Language Understanding">
-    <p>Analyze text to extract meta-data from content such as concepts, entities, emotion, relations, sentiment and more.</p>
-  </AccordionItem>
-  <AccordionItem lazy title="Language Translator">
-    <p>Translate text, documents, and websites from one language to another. Create industry or region-specific translations via the service's customization capability.</p>
-  </AccordionItem>
-</Accordion>
-
-
