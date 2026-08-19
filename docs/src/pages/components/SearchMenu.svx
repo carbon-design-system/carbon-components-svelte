@@ -4,8 +4,9 @@ description: Search menus filter and highlight typeahead suggestions as users ty
 ---
 
 <script>
-  import { SearchMenu, SearchMenuItem } from "carbon-components-svelte";
+  import { SearchMenu, SearchMenuItem, SearchMenuGroup } from "carbon-components-svelte";
   import ArrowRight from "carbon-icons-svelte/lib/ArrowRight.svelte";
+  import Query from "carbon-icons-svelte/lib/Query.svelte";
 </script>
 
 ## Basic
@@ -48,6 +49,32 @@ Set `menuSize` to size the results menu independently of the input. By default t
 
 <FileSource src="/framed/SearchMenu/SizeDecoupled" />
 
+## Light
+
+Set `light` to `true` for search menus on dark backgrounds.
+
+<SearchMenu light labelText="Search" placeholder="Search...">
+  <SearchMenuItem text="Databases for TestSQL" />
+  <SearchMenuItem text="Data Store for Memcache" />
+</SearchMenu>
+
+## Custom icon
+
+Replace the default search icon with a custom one.
+
+<SearchMenu icon={Query} labelText="Search" placeholder="Search...">
+  <SearchMenuItem text="Databases for TestSQL" />
+  <SearchMenuItem text="Data Store for Memcache" />
+</SearchMenu>
+
+## Close button label
+
+Set `closeButtonLabelText` to customize the accessible label of the clear button (default `"Clear search input"`).
+
+<SearchMenu closeButtonLabelText="Clear catalog search" labelText="Search" placeholder="Search..." value="Cloud functions">
+  <SearchMenuItem text="Cloud functions" />
+</SearchMenu>
+
 ## Grouping
 
 Compose `SearchMenuGroup` and `SearchMenuItem` for grouped results, recent searches, and footer actions.
@@ -64,6 +91,18 @@ Set `filter` to `false` on a group to show its items regardless of the search va
 
 <FileSource src="/framed/SearchMenu/RecentSearches" />
 
+### Item filter override
+
+Set `filter` on a `SearchMenuItem` to override the group's `filter` (or the menu's `shouldFilter`) for that one item, for example to pin a suggestion inside an otherwise-filtered group.
+
+<SearchMenu labelText="Search" placeholder="Search..." value="test">
+  <SearchMenuGroup label="Results">
+    <SearchMenuItem text="Databases for TestSQL" />
+    <SearchMenuItem text="Data Store for Memcache" />
+    <SearchMenuItem text="Pinned: Getting started guide" filter={false} />
+  </SearchMenuGroup>
+</SearchMenu>
+
 ## Layout
 
 ### Leading dropdown
@@ -71,6 +110,28 @@ Set `filter` to `false` on a group to show its items regardless of the search va
 Use the `before` slot to render content to the left of the input within a joined bar, for example a [Dropdown](/components/Dropdown) that scopes the search. Bind to the dropdown selection to update the placeholder and filter results. Compose a [Stack](/components/Stack) with a 1px separator between the dropdown and the search input. The results menu matches the search input width, and opening the dropdown closes the search menu.
 
 <FileSource src="/framed/SearchMenu/LeadingDropdown" />
+
+## Menu positioning
+
+Control where and how the results menu renders relative to the input.
+
+### Top direction
+
+Set `direction` to `"top"` to open the results menu above the input. Useful when space below is limited.
+
+<SearchMenu direction="top" labelText="Search" placeholder="Search...">
+  <SearchMenuItem text="Databases for TestSQL" />
+  <SearchMenuItem text="Data Store for Memcache" />
+</SearchMenu>
+
+### Portal menu
+
+By default, the results menu renders in a floating portal so it can escape parent containers with `overflow: hidden` or z-index stacking contexts. Set it to `false` for the menu to render within the parent container.
+
+<SearchMenu portal={false} labelText="Search" placeholder="Search...">
+  <SearchMenuItem text="Databases for TestSQL" />
+  <SearchMenuItem text="Data Store for Memcache" />
+</SearchMenu>
 
 ## Matching
 
