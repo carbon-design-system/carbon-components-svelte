@@ -334,6 +334,7 @@
   import RadioButton from "../RadioButton/RadioButton.svelte";
   import { uniqueId } from "../utils/uniqueId.js";
   import { virtualize as virtualizeUtil } from "../utils/virtualize.js";
+  import DataTableTable from "./DataTableTable.svelte";
   import {
     compareValues,
     formatHeaderWidth,
@@ -341,7 +342,6 @@
     resolvePath,
     shouldIgnoreRowClick,
   } from "./data-table-utils.js";
-  import Table from "./Table.svelte";
   import TableBody from "./TableBody.svelte";
   import TableCell from "./TableCell.svelte";
   import TableContainer from "./TableContainer.svelte";
@@ -895,7 +895,7 @@
       ? (event) => { tableBodyScrollTop = event.target.scrollTop || 0; }
       : undefined}
   >
-    <Table
+    <DataTableTable
       bind:ref={tableRef}
       zebra={zebra && !hideMode}
       {size}
@@ -1542,6 +1542,6 @@
           </TableRow>
         </TableFoot>
       {/if}
-    </Table>
+    </DataTableTable>
   </div>
 </TableContainer>
