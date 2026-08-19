@@ -289,7 +289,9 @@
       }
       case "Escape":
         if (open) {
-          // Close the menu without letting Search clear the value.
+          // Close the menu without letting Search (or the native
+          // type="search" clear-on-Escape affordance) clear the value.
+          event.preventDefault();
           event.stopImmediatePropagation();
           close("escape-key");
           dismissed = true;
