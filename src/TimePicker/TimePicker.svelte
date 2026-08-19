@@ -195,7 +195,7 @@
         <WarningFilled
           class="bx--time-picker__icon bx--time-picker__icon--invalid"
         />
-      {:else}
+      {:else if showWarn}
         <WarningAltFilled
           class="bx--time-picker__icon bx--time-picker__icon--warn"
         />
@@ -205,8 +205,8 @@
     <div
       class:bx--time-picker={true}
       class:bx--time-picker--light={light}
-      class:bx--time-picker--invalid={invalid}
-      class:bx--time-picker--warn={warn}
+      class:bx--time-picker--invalid={showInvalid}
+      class:bx--time-picker--warn={showWarn}
       class:bx--time-picker--readonly={readonly}
       class:bx--time-picker--sm={size === "sm"}
       class:bx--time-picker--xl={size === "xl"}
@@ -226,15 +226,15 @@
         {/if}
         <Stack orientation="horizontal" gap={0}>
           <div
-            data-invalid={invalid || undefined}
-            data-warn={!invalid && warn ? true : undefined}
+            data-invalid={showInvalid || undefined}
+            data-warn={showWarn || undefined}
             class:bx--text-input__field-wrapper={true}
-            class:bx--text-input__field-wrapper--warning={!invalid && warn}
+            class:bx--text-input__field-wrapper--warning={showWarn}
             style:width="auto"
           >
-            {#if invalid}
+            {#if showInvalid}
               <WarningFilled class="bx--text-input__invalid-icon" />
-            {:else if warn}
+            {:else if showWarn}
               <WarningAltFilled
                 class="bx--text-input__invalid-icon bx--text-input__invalid-icon--warning"
               />
@@ -243,11 +243,11 @@
               bind:this={ref}
               bind:value
               type="text"
-              data-invalid={invalid || undefined}
-              aria-invalid={invalid || undefined}
-              aria-describedby={invalid
+              data-invalid={showInvalid || undefined}
+              aria-invalid={showInvalid || undefined}
+              aria-describedby={showInvalid
                 ? errorId
-                : warn
+                : showWarn
                   ? warnId
                   : helperText
                     ? helperId
@@ -263,8 +263,8 @@
               class:bx--time-picker__input-field={true}
               class:bx--text-input={true}
               class:bx--text-input--light={light}
-              class:bx--text-input--invalid={invalid}
-              class:bx--text-input--warning={!invalid && warn}
+              class:bx--text-input--invalid={showInvalid}
+              class:bx--text-input--warning={showWarn}
               on:change
               on:input
               on:keydown
@@ -278,9 +278,9 @@
         </Stack>
       </div>
     </div>
-    {#if invalid}
+    {#if showInvalid}
       <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
-    {:else if warn}
+    {:else if showWarn}
       <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
     {:else if helperText}
       <div
