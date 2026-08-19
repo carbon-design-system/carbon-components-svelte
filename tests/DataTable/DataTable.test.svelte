@@ -17,7 +17,7 @@
     columnAlign?: "start" | "end";
     display?: (value: string | number | boolean) => string;
     sort?:
-      | false
+      | boolean
       | ((
           a: DataTableSortValue<BaseRow>,
           b: DataTableSortValue<BaseRow>,

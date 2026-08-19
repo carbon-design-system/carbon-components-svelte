@@ -20,7 +20,7 @@
    * @property {DataTableKey<Row> | (string & {})} key
    * @property {true} empty - Whether the header is empty
    * @property {(item: DataTableValue, row: Row) => DataTableValue} [display]
-   * @property {false | ((a: DataTableSortValue<Row>, b: DataTableSortValue<Row>) => number)} [sort]
+   * @property {boolean | ((a: DataTableSortValue<Row>, b: DataTableSortValue<Row>) => number)} [sort] - `false` disables sorting for this column even when the table is sortable; `true` enables it even when the table is not; a comparator both enables sorting and provides it. Unset inherits the table-level `sortable`.
    * @property {boolean} [sortAlways] - Override table-level sortAlways for this column
    * @property {boolean} [columnMenu] - Whether the column menu is enabled
    * @property {boolean} [columnHidden] - Whether the column is skipped in render while remaining in `headers`
@@ -31,7 +31,7 @@
    * @property {false} [empty]
    * @property {DataTableValue} value
    * @property {(item: DataTableValue, row: Row) => DataTableValue} [display]
-   * @property {false | ((a: DataTableSortValue<Row>, b: DataTableSortValue<Row>) => number)} [sort]
+   * @property {boolean | ((a: DataTableSortValue<Row>, b: DataTableSortValue<Row>) => number)} [sort] - `false` disables sorting for this column even when the table is sortable; `true` enables it even when the table is not; a comparator both enables sorting and provides it. Unset inherits the table-level `sortable`.
    * @property {boolean} [sortAlways] - Override table-level sortAlways for this column
    * @property {boolean} [columnMenu] - Whether the column menu is enabled
    * @property {boolean} [columnHidden] - Whether the column is skipped in render while remaining in `headers`
@@ -147,7 +147,7 @@
   /** Set to `true` to use zebra styles */
   export let zebra = false;
 
-  /** Set to `true` for the sortable variant */
+  /** Set to `true` for the sortable variant. Individual columns can opt out (or, if this is `false`, opt in) via `header.sort`. */
   export let sortable = false;
 
   /**
@@ -623,6 +623,19 @@
     return alignClasses[columnAlign];
   }
 
+  /**
+   * Resolve whether a header is sortable. `header.sort` overrides the
+   * table-level `sortable` in either direction (`false` opts out, `true` or
+   * a comparator opts in); unset inherits `sortable`.
+   */
+  function isHeaderSortable(header) {
+    if (header.sort === false) return false;
+    if (header.sort === true || typeof header.sort === "function") {
+      return true;
+    }
+    return sortable;
+  }
+
   /** Build cell objects for one row. Always new objects so `display` columns re-run. */
   function computeRowCells(row) {
     const cells = [];
@@ -728,8 +741,10 @@
   }
 
   $: ascending = sortDirection === "ascending";
-  $: sorting = sortable && sortKey != null;
   $: sortingHeader = headers.find((header) => header.key === sortKey);
+  $: sorting =
+    sortKey != null &&
+    (sortingHeader ? isHeaderSortable(sortingHeader) : sortable);
   $: sortedRows =
     sorting && sortDirection !== "none"
       ? [...$tableRows].sort((a, b) => {
@@ -737,7 +752,7 @@
           const itemB = resolvePath(b, sortKey);
           const headerSort = sortingHeader?.sort;
 
-          if (headerSort) {
+          if (typeof headerSort === "function") {
             return compareValues(itemA, itemB, ascending, headerSort);
           }
 
@@ -1011,7 +1026,7 @@
                 id="{id}-{header.key}"
                 class={formatAlignClass(header.columnAlign)}
                 style={formatHeaderWidth(header)}
-                sortable={sortable && header.sort !== false}
+                sortable={isHeaderSortable(header)}
                 sortDirection={sortKey === header.key ? sortDirection : "none"}
                 active={sortKey === header.key}
                 {...(tableHeaderTranslateWithId
@@ -1020,13 +1035,7 @@
                 on:click={(event) => {
                   dispatch("click", { header });
 
-                  if (header.sort === false) {
-                    dispatch("click:header", {
-                      header,
-                      target: event.target,
-                      currentTarget: event.currentTarget,
-                    });
-                  } else {
+                  if (isHeaderSortable(header)) {
                     const currentSortDirection =
                       sortKey === header.key ? sortDirection : "none";
                     const effectiveSortAlways =
@@ -1060,6 +1069,12 @@
                     dispatch("click:header", {
                       header,
                       sortDirection: nextSortDirection,
+                      target: event.target,
+                      currentTarget: event.currentTarget,
+                    });
+                  } else {
+                    dispatch("click:header", {
+                      header,
                       target: event.target,
                       currentTarget: event.currentTarget,
                     });
