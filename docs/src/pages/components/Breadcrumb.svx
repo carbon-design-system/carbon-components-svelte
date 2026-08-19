@@ -31,7 +31,11 @@ Remove the trailing slash from the last item with `noTrailingSlash`.
   <BreadcrumbItem href="/profile" isCurrentPage>Profile</BreadcrumbItem>
 </Breadcrumb>
 
-## Overflow menu
+## Overflow and sizing
+
+Handle long breadcrumb trails with an overflow menu, a compact size, or both together.
+
+### Overflow menu
 
 Add an overflow menu to handle long breadcrumb trails. Use overflow menu item components for menu options.
 
@@ -49,7 +53,7 @@ Add an overflow menu to handle long breadcrumb trails. Use overflow menu item co
   </BreadcrumbItem>
 </Breadcrumb>
 
-## Small
+### Small
 
 Use `size="sm"` for a compact breadcrumb. This pairs with an overflow menu when space is tight.
 
@@ -73,7 +77,11 @@ Build a full breadcrumb trail with multiple items and a current page indicator.
 
 <FileSource src="/framed/Breadcrumbs/Breadcrumbs" />
 
-## Custom link element
+## Accessibility
+
+Preserve ARIA semantics when rendering custom link elements or renaming the nav's accessible label.
+
+### Custom link element
 
 Omit href and use `let:props` to render a custom link element (for example, a router link). Spread props onto the element to apply the Carbon link class and forward aria-current when isCurrentPage is set.
 
@@ -87,6 +95,15 @@ Omit href and use `let:props` to render a custom link element (for example, a ro
   <BreadcrumbItem isCurrentPage let:props>
     <a {...props} href="/reports/2019">2019</a>
   </BreadcrumbItem>
+</Breadcrumb>
+
+### Accessible label
+
+Set `labelText` to change the nav's accessible name from the default `"Breadcrumb"`. This is useful when a page has more than one breadcrumb trail and each needs a distinguishable landmark label for assistive technology.
+
+<Breadcrumb labelText="Secondary breadcrumb">
+  <BreadcrumbItem href="/">Home</BreadcrumbItem>
+  <BreadcrumbItem href="/settings" isCurrentPage>Settings</BreadcrumbItem>
 </Breadcrumb>
 
 ## Skeleton
