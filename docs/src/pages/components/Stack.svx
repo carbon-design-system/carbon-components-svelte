@@ -10,22 +10,22 @@ description: Stacks arrange elements vertically or horizontally with a consisten
 
 Stacks are vertical by default. Set `orientation` to `"horizontal"` for a row. Use `gap` to pick a spacing step from 0–13, or pass a custom value such as `"22px"`. A gap of 0 omits spacing entirely; the default is step 1 (2px). Drag the slider below to preview each step.
 
-| Gap   | Size              |
-| ----- | ----------------- |
-| **0** | 0 (no gap)        |
-| **1** | 0.125rem (2px)    |
-| **2** | 0.25rem (4px)     |
-| **3** | 0.5rem (8px)      |
-| **4** | 0.75rem (12px)    |
-| **5** | 1rem (16px)       |
-| **6** | 1.5rem (24px)     |
-| **7** | 2rem (32px)       |
-| **8** | 2.5rem (40px)     |
-| **9** | 3rem (48px)       |
-| **10** | 4rem (64px)       |
-| **11** | 5rem (80px)       |
-| **12** | 6rem (96px)       |
-| **13** | 10rem (160px)     |
+| Gap    | Size           |
+| ------ | -------------- |
+| **0**  | 0 (no gap)     |
+| **1**  | 0.125rem (2px) |
+| **2**  | 0.25rem (4px)  |
+| **3**  | 0.5rem (8px)   |
+| **4**  | 0.75rem (12px) |
+| **5**  | 1rem (16px)    |
+| **6**  | 1.5rem (24px)  |
+| **7**  | 2rem (32px)    |
+| **8**  | 2.5rem (40px)  |
+| **9**  | 3rem (48px)    |
+| **10** | 4rem (64px)    |
+| **11** | 5rem (80px)    |
+| **12** | 6rem (96px)    |
+| **13** | 10rem (160px)  |
 
 ### Vertical
 
@@ -35,17 +35,7 @@ Stacks are vertical by default. Set `orientation` to `"horizontal"` for a row. U
 
 <FileSource src="/framed/Stack/StackHorizontalGap" />
 
-## Inline
-
-Set `inline` to use inline-flex so the stack shrinks to its content width instead of spanning the full container.
-
-<Stack inline gap={3}>
-  <div>Item 1</div>
-  <div>Item 2</div>
-  <div>Item 3</div>
-</Stack>
-
-## Custom value
+## Custom gap value
 
 Use an arbitrary `gap` value (for example, `"22px"`) instead of the scale.
 
@@ -65,102 +55,78 @@ Use an arbitrary `gap` value (for example, `"22px"`) instead of the scale.
   <div>Item 3</div>
 </Stack>
 
-## Custom element
+## Alignment
 
-The stack renders a div by default. Set `tag` to use a different element.
+Set `align` to position items along the cross-axis. For horizontal stacks, the cross-axis is vertical; for vertical stacks, it's horizontal. The default is stretch, which fills the container along that axis.
 
-### Vertical
-
-<Stack tag="ul" gap={3}>
-  <li>Item 1</li>
-  <li>Item 2</li>
-  <li>Item 3</li>
-</Stack>
-
-### Horizontal
-
-<Stack orientation="horizontal" tag="ul" gap={3}>
-  <li>Item 1</li>
-  <li>Item 2</li>
-  <li>Item 3</li>
-</Stack>
-
-## Align (horizontal)
-
-Set `align` to position items along the cross-axis. For horizontal stacks, this is the vertical axis. The default is stretch, which fills the container height.
-
-### Start
+### Start (horizontal)
 
 Aligns items to the top.
 
 <Stack orientation="horizontal" align="start" gap={2} style="height: 120px">
-  <div  style="height: 40px">Short</div>
-  <div  style="height: 80px">Taller item</div>
-  <div  style="height: 50px">Short</div>
+  <div style="height: 40px">Short</div>
+  <div style="height: 80px">Taller item</div>
+  <div style="height: 50px">Short</div>
 </Stack>
 
-### Center
+### Center (horizontal)
 
 Centers items vertically.
 
 <Stack orientation="horizontal" align="center" gap={2} style="height: 120px">
-  <div  style="height: 40px; min-width: 60px">Short</div>
-  <div  style="height: 80px; min-width: 80px">Taller item</div>
-  <div  style="height: 50px; min-width: 60px">Short</div>
+  <div style="height: 40px; min-width: 60px">Short</div>
+  <div style="height: 80px; min-width: 80px">Taller item</div>
+  <div style="height: 50px; min-width: 60px">Short</div>
 </Stack>
 
-### End
+### End (horizontal)
 
 Aligns items to the bottom.
 
 <Stack orientation="horizontal" align="end" gap={2} style="height: 120px">
-  <div  style="height: 40px">Short</div>
-  <div  style="height: 80px">Taller item</div>
-  <div  style="height: 50px">Short</div>
+  <div style="height: 40px">Short</div>
+  <div style="height: 80px">Taller item</div>
+  <div style="height: 50px">Short</div>
 </Stack>
 
-### Baseline
+### Baseline (horizontal)
 
 Aligns items along their text baseline.
 
 <Stack orientation="horizontal" align="baseline" gap={2}>
-  <div  style="font-size: 2rem; line-height: 1">Large</div>
-  <div  style="font-size: 1rem; line-height: 1">Medium</div>
-  <div  style="font-size: 0.75rem; line-height: 1">Small</div>
+  <div style="font-size: 2rem; line-height: 1">Large</div>
+  <div style="font-size: 1rem; line-height: 1">Medium</div>
+  <div style="font-size: 0.75rem; line-height: 1">Small</div>
 </Stack>
 
-## Align (vertical)
-
-For vertical stacks, `align` positions items along the horizontal cross-axis.
-
-### Start
+### Start (vertical)
 
 Aligns items to the left.
 
 <Stack orientation="vertical" align="start" gap={2}>
-  <div  style="width: 80px">Narrow</div>
-  <div  style="width: 150px">Wider item</div>
-  <div  style="width: 100px">Medium</div>
+  <div style="width: 80px">Narrow</div>
+  <div style="width: 150px">Wider item</div>
+  <div style="width: 100px">Medium</div>
 </Stack>
 
-### Center
+### Center (vertical)
 
 Centers items horizontally.
 
 <Stack orientation="vertical" align="center" gap={2}>
-  <div  style="width: 80px">Narrow</div>
-  <div  style="width: 150px">Wider item</div>
-  <div  style="width: 100px">Medium</div>
+  <div style="width: 80px">Narrow</div>
+  <div style="width: 150px">Wider item</div>
+  <div style="width: 100px">Medium</div>
 </Stack>
 
-### End
+### End (vertical)
 
 Aligns items to the right.
 
 <Stack orientation="vertical" align="end" gap={2}>
-  <div  style="width: 80px">Narrow</div>
-  <div  style="width: 150px">Wider item</div>
-  <div  style="width: 100px">Medium</div>
+  <div style="width: 80px">Narrow</div>
+  <div style="width: 150px">Wider item</div>
+  <div style="width: 100px">Medium</div>
 </Stack>
 
 ## Justify
@@ -172,9 +138,9 @@ Set `justify` to distribute items along the main axis. The default is start.
 Aligns items to the center of the main axis.
 
 <Stack orientation="horizontal" justify="center" gap={2}>
-  <div >Item 1</div>
-  <div >Item 2</div>
-  <div >Item 3</div>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ### End
@@ -182,9 +148,9 @@ Aligns items to the center of the main axis.
 Aligns items to the end of the main axis.
 
 <Stack orientation="horizontal" justify="end" gap={2}>
-  <div >Item 1</div>
-  <div >Item 2</div>
-  <div >Item 3</div>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ### Space between
@@ -192,9 +158,9 @@ Aligns items to the end of the main axis.
 Distributes items evenly with the first item at the start and the last item at the end.
 
 <Stack orientation="horizontal" justify="space-between">
-  <div >Item 1</div>
-  <div >Item 2</div>
-  <div >Item 3</div>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ### Space around
@@ -202,9 +168,9 @@ Distributes items evenly with the first item at the start and the last item at t
 Distributes items evenly with equal space around each item.
 
 <Stack orientation="horizontal" justify="space-around">
-  <div >Item 1</div>
-  <div >Item 2</div>
-  <div >Item 3</div>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
 </Stack>
 
 ### Space evenly
@@ -215,6 +181,15 @@ Distributes items evenly with equal space between each item.
   <div>Item 1</div>
   <div>Item 2</div>
   <div>Item 3</div>
+</Stack>
+
+## Combined align and justify
+
+Use both `align` and `justify` to center content on both axes.
+
+<Stack align="center" justify="center" gap={4}>
+  <div>Centered</div>
+  <div>Content</div>
 </Stack>
 
 ## Wrap
@@ -247,11 +222,32 @@ Set `wrap` to `"wrap-reverse"` to wrap items in the reverse cross-axis direction
   <div>Item 6</div>
 </Stack>
 
-## Combined align and justify
+## Inline
 
-Use both `align` and `justify` to center content on both axes.
+Set `inline` to use inline-flex so the stack shrinks to its content width instead of spanning the full container.
 
-<Stack align="center" justify="center" gap={4}>
-  <div >Centered</div>
-  <div >Content</div>
+<Stack inline gap={3}>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
+</Stack>
+
+## Custom element
+
+The stack renders a div by default. Set `tag` to use a different element.
+
+### Vertical
+
+<Stack tag="ul" gap={3}>
+  <li>Item 1</li>
+  <li>Item 2</li>
+  <li>Item 3</li>
+</Stack>
+
+### Horizontal
+
+<Stack orientation="horizontal" tag="ul" gap={3}>
+  <li>Item 1</li>
+  <li>Item 2</li>
+  <li>Item 3</li>
 </Stack>
