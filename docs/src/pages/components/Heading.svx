@@ -15,7 +15,17 @@ A top-level heading inside a section renders as an h1 element, a semantic starti
   <Heading>Heading 1</Heading>
 </Section>
 
-## Nested sections
+## Standalone heading
+
+A `Heading` used without a `Section` ancestor also defaults to h1. Wrap headings in `Section` when you need automatic level management as content nests.
+
+<Heading>Standalone Heading</Heading>
+
+## Heading levels
+
+`Heading` reads its semantic level (h1–h6) from the nearest `Section` context. Levels advance automatically as sections nest, and can be given a custom starting point.
+
+### Nested sections
 
 As you nest sections, heading levels automatically increment to maintain proper hierarchy. Each nested section increases the heading level by one (h1 → h2 → h3, and so on). Heading levels cap at h6 to ensure valid HTML structure, even when nested deeper than six levels.
 
@@ -41,7 +51,7 @@ As you nest sections, heading levels automatically increment to maintain proper 
   </Section>
 </Section>
 
-## Custom level
+### Custom starting level
 
 Set a custom starting heading level with `level` on the section. Child sections continue to increment from this level.
 
