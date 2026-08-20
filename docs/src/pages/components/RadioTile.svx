@@ -37,6 +37,23 @@ Bind to `selected` for simpler state management.
 
 <FileSource src="/framed/RadioTile/RadioTileReactive" />
 
+## Legend
+
+Use the `legendChildren` slot on `TileGroup` to provide custom legend content instead of `legendText`.
+
+<TileGroup name="plan-legend-slot" selected="standard">
+  <strong slot="legendChildren">Service pricing tiers</strong>
+  <RadioTile value="lite">
+    Lite plan
+  </RadioTile>
+  <RadioTile value="standard">
+    Standard plan
+  </RadioTile>
+  <RadioTile value="plus">
+    Plus plan
+  </RadioTile>
+</TileGroup>
+
 ## Light
 
 Use the light variant for light backgrounds.
@@ -55,6 +72,10 @@ Use the light variant for light backgrounds.
 
 ## Disabled
 
+Disable specific tiles, or the entire group, to prevent selection.
+
+### Individual tiles
+
 Disable specific tiles to prevent selection.
 
 <TileGroup legendText="Service pricing tiers" name="plan-disabled" selected="standard">
@@ -65,6 +86,38 @@ Disable specific tiles to prevent selection.
     Standard plan
   </RadioTile>
   <RadioTile value="plus" disabled>
+    Plus plan
+  </RadioTile>
+</TileGroup>
+
+### Entire group
+
+Disable every tile at once by setting `disabled` on `TileGroup`. This prevents selection natively through the underlying `fieldset`, but doesn't apply the muted disabled tile styling shown above—set `disabled` on each `RadioTile` too for the visual state.
+
+<TileGroup legendText="Service pricing tiers" name="plan-disabled-group" selected="standard" disabled>
+  <RadioTile value="lite">
+    Lite plan
+  </RadioTile>
+  <RadioTile value="standard">
+    Standard plan
+  </RadioTile>
+  <RadioTile value="plus">
+    Plus plan
+  </RadioTile>
+</TileGroup>
+
+## Checkmark label
+
+Customize the ARIA label announced for a tile's checkmark icon with `iconDescription`. Defaults to `"Tile checkmark"`.
+
+<TileGroup legendText="Service pricing tiers" name="plan-checkmark-label" selected="standard">
+  <RadioTile value="lite">
+    Lite plan
+  </RadioTile>
+  <RadioTile value="standard" iconDescription="Standard plan selected">
+    Standard plan
+  </RadioTile>
+  <RadioTile value="plus">
     Plus plan
   </RadioTile>
 </TileGroup>
