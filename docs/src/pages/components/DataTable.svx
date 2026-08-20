@@ -499,6 +499,10 @@ The example below shows 10,000 rows with a filterable toolbar; only visible rows
 
 <FileSource src="/framed/DataTable/VirtualizedDataTable" />
 
+Pass an object instead of `true` to customize behavior further. Besides the options below, `threshold` (default 100) sets the minimum row count before virtualization activates—smaller tables render normally—and `maxItems` caps how many rows are ever rendered, regardless of dataset size.
+
+When `stickyHeader` is `false`, bind `scrollContainerRef` to obtain the scrolling element and control its position programmatically, for example resetting scroll to the top after the row data changes.
+
 ### Custom overscan
 
 Overscanning renders extra rows above and below the viewport for smoother scrolling. The default overscan is 3. Set `overscan` to control how many extra rows are rendered.
@@ -1605,7 +1609,7 @@ Use `selectedRowIds` to specify initially selected rows.
 
 ### Actions toolbar
 
-Add a toolbar for batch actions when rows are selected.
+Add a toolbar for batch actions when rows are selected. Override the "N items selected" label with `formatTotalSelected` on `ToolbarBatchActions`.
 
 <FileSource src="/framed/DataTable/DataTableBatchSelectionToolbar" />
 
@@ -1966,6 +1970,49 @@ Combine `batchExpansion` and `radio` for expandable tables with single-row selec
 
 <FileSource src="/framed/DataTable/DataTableExpandableRadioSelectable" />
 
+## Events
+
+Listen for clicks and hovers on headers, rows, and cells—for example, to open a detail view when a row is clicked. For the sortable header's cancelable `sort` event, see [Sorting](#sortable-columns).
+
+### Row and cell clicks
+
+`click:row` fires when a row is clicked and `click:cell` fires for the specific cell, with `event.detail.target`/`currentTarget` identifying what was clicked. `click:header` fires for header cells. A generic `click` event also fires alongside each of these, with whichever of `header`, `row`, or `cell` applies to that click.
+
+<DataTable
+  headers={[
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+  ]}
+  rows={[
+    { id: "a", name: "Load Balancer 3", protocol: "HTTP", port: 3000 },
+    { id: "b", name: "Load Balancer 1", protocol: "HTTP", port: 443 },
+    { id: "c", name: "Load Balancer 2", protocol: "HTTP", port: 80 },
+  ]}
+  on:click:row={(e) => console.log("click:row", e.detail.row)}
+  on:click:cell={(e) => console.log("click:cell", e.detail.cell)}
+  on:click:header={(e) => console.log("click:header", e.detail.header)}
+/>
+
+### Row hover
+
+`mouseenter:row` and `mouseleave:row` fire when the pointer enters or leaves a row, with the row data as `event.detail`.
+
+<DataTable
+  headers={[
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+  ]}
+  rows={[
+    { id: "a", name: "Load Balancer 3", protocol: "HTTP", port: 3000 },
+    { id: "b", name: "Load Balancer 1", protocol: "HTTP", port: 443 },
+    { id: "c", name: "Load Balancer 2", protocol: "HTTP", port: 80 },
+  ]}
+  on:mouseenter:row={(e) => console.log("mouseenter:row", e.detail)}
+  on:mouseleave:row={(e) => console.log("mouseleave:row", e.detail)}
+/>
+
 ## Skeleton
 
 Show a loading state with `DataTableSkeleton`.
@@ -1999,6 +2046,12 @@ Add an empty header column with `empty: true`.
 Hide the header and toolbar in the skeleton.
 
 <DataTableSkeleton showHeader={false} showToolbar={false} />
+
+### Medium
+
+Set `size="medium"` to explicitly match the default `DataTable` row height.
+
+<DataTableSkeleton showHeader={false} showToolbar={false} size="medium" />
 
 ### Tall
 
