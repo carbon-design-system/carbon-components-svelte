@@ -20,6 +20,12 @@ Control tooltip state programmatically with `bind:open`.
 
 <FileSource src="/framed/TooltipIcon/TooltipIconReactive" />
 
+## Dispatched events
+
+The component dispatches `open` and `close` events.
+
+<FileSource src="/framed/TooltipIcon/TooltipIconEvents" />
+
 ## Sizes
 
 Set icon size with `size`. Carbon icons use a 16/20/24/32 scale, but any pixel value works.
@@ -29,14 +35,30 @@ Set icon size with `size`. Carbon icons use a 16/20/24/32 scale, but any pixel v
 <TooltipIcon tooltipText="24px" icon={Carbon} size={24} />
 <TooltipIcon tooltipText="32px" icon={Carbon} size={32} />
 
-## Directions
+## Placement
 
-Position the tooltip with `direction` and `align`.
+Position the tooltip with direction and alignment.
 
-<TooltipIcon tooltipText="Top start" direction="top" align="start" icon={Filter} />
-<TooltipIcon tooltipText="Right end" direction="right" align="end" icon={Filter} />
-<TooltipIcon tooltipText="Bottom start" direction="bottom" align="start" icon={Filter} />
-<TooltipIcon tooltipText="Left start" direction="left" align="start" icon={Filter} />
+### Directions
+
+By default, the tooltip is positioned to the bottom.
+
+Position the tooltip with `direction`.
+
+<TooltipIcon tooltipText="Top" direction="top" icon={Filter} />
+<TooltipIcon tooltipText="Right" direction="right" icon={Filter} />
+<TooltipIcon tooltipText="Bottom" direction="bottom" icon={Filter} />
+<TooltipIcon tooltipText="Left" direction="left" icon={Filter} />
+
+### Alignment
+
+By default, the tooltip is aligned to the center.
+
+Align the tooltip content with `align`.
+
+<TooltipIcon tooltipText="Start" align="start" icon={Filter} />
+<TooltipIcon tooltipText="Center" align="center" icon={Filter} />
+<TooltipIcon tooltipText="End" align="end" icon={Filter} />
 
 ## Custom tooltip text
 
@@ -44,6 +66,14 @@ Use the `tooltipText` slot to customize the tooltip content with additional styl
 
 <TooltipIcon icon={Carbon}>
   <span slot="tooltipText" style="color: red">Carbon is an open source design system by IBM.</span>
+</TooltipIcon>
+
+## Custom icon
+
+Use the default slot to fully customize the trigger content, replacing what the `icon` prop would otherwise render.
+
+<TooltipIcon tooltipText="Custom icon content">
+  <div style="width: 1rem; height: 1rem; outline: 1px solid red;"></div>
 </TooltipIcon>
 
 ## Custom delay
@@ -64,7 +94,7 @@ Set `portalTooltip` to render the tooltip in a portal so it is not clipped by ov
 
 <TooltipIcon portalTooltip tooltipText="Carbon is an open source design system by IBM." icon={Carbon} />
 
-### Direction
+### Directions
 
 Icon tooltips support top, right, bottom, and left. With portalling, direction behaves the same as the default CSS path.
 
