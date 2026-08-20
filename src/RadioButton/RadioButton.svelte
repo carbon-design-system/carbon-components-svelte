@@ -196,7 +196,10 @@
   <label class:bx--radio-button__label={true} for={id}>
     <span class:bx--radio-button__appearance={true}></span>
     {#if labelText || $$slots.labelChildren}
-      <span class:bx--visually-hidden={hideLabel}>
+      <span
+        class:bx--radio-button__label-text={true}
+        class:bx--visually-hidden={hideLabel}
+      >
         <slot name="labelChildren"> {labelText} </slot>
       </span>
     {/if}
