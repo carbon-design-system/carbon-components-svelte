@@ -19,7 +19,8 @@ toggle the floating content and drag the tile to move the anchor.
 
 ## Placement
 
-Control how floating content is positioned.
+Control how floating content is positioned, how flips are resolved, and how
+that content is sized and stacked.
 
 ### Direction
 
@@ -30,6 +31,40 @@ space (for example, top flips to bottom, right flips to left).
 The default direction is `"bottom"`.
 
 <FileSource src="/framed/FloatingPortal/FloatingPortalDirection" />
+
+### Locking the resolved direction
+
+By default (`lockDirection="none"`), the flip check re-runs on every position
+update, so the resolved direction can change as the anchor scrolls, the
+viewport resizes, or the floating content's own size changes.
+
+Set `lockDirection` to change this:
+
+- `"after-flip"`: once the content flips away from the preferred `direction`,
+  that side stays locked for the rest of the open session. This keeps a
+  flipped tooltip stable when its content resizes (for example, text that
+  changes to something narrower) instead of snapping back to the preferred
+  side mid-session. [Tooltip](/components/Tooltip) and other portalled
+  tooltips use this mode.
+- `"always"`: whichever side the initial open settles on—flipped or
+  not—stays locked for the rest of the session, so later scroll or resize
+  updates only reposition along that side instead of re-running the flip
+  check. [Menu](/components/Menu) uses this mode so an open menu does not
+  jump sides while scrolling.
+
+```svelte
+<FloatingPortal {anchor} {open} lockDirection="after-flip">
+  <div>Content</div>
+</FloatingPortal>
+```
+
+### Reading the resolved direction
+
+Use the `direction` slot prop to read the actual rendered direction—after
+auto-flipping and after any `lockDirection` lock takes effect—for conditional
+logic, like styles.
+
+<FileSource src="/framed/FloatingPortal/FloatingPortalSlotDirection" />
 
 ### Intrinsic width
 
@@ -76,35 +111,37 @@ uses them when portalTooltip is true;
 [TooltipDefinition](/components/TooltipDefinition) apply small built-in gaps when
 portalled so spacing matches the non-portal Carbon tooltips.
 
-## Escaping overflow
+### Z-index
+
+Set `zIndex` to change the floating content's stacking order. The default is
+`9200`, which supersedes the z-index used by [Modal](/components/Modal)
+(`9000`) and list box menus (`9100`).
+
+```svelte
+<FloatingPortal {anchor} {open} zIndex={2000}>
+  <div>Content</div>
+</FloatingPortal>
+```
+
+## Portal target
+
+Control which DOM node the floating content is mounted into. Positioning is
+always driven by `anchor`; the target only changes which DOM subtree the
+floating content lives in.
+
+### Escaping overflow
 
 Because the floating content is rendered into document.body, it escapes parent
 containers with overflow hidden.
 
 <FileSource src="/framed/FloatingPortal/FloatingPortalOverflow" />
 
-## Slot direction
-
-By default, the floating content is rendered below the anchor element. However,
-if there is not enough space below the anchor element, the component automatically
-flips to the opposite direction.
-
-Use the direction slot prop to read the actual rendered direction after
-auto-flipping for conditional logic, like styles.
-
-<FileSource src="/framed/FloatingPortal/FloatingPortalSlotDirection" />
-
-## Custom target
+### Custom target
 
 Use `target` to mount the floating content into a specific DOM element instead of
-document.body. Positioning is always driven by anchor, so target only changes
-which DOM subtree the floating content lives in. See the
+document.body. See the
 [Portal custom target example](/components/Portal#custom-target) for typical use
 cases.
-
-## Inside
-
-Use floating portals inside native top-layer elements.
 
 ### Native dialog
 
