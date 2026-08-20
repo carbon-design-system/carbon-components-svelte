@@ -23,6 +23,106 @@ Create a time picker with period (AM/PM) and timezone selectors.
   </TimePickerSelect>
 </TimePicker>
 
+## Formatting
+
+Customize input validation to match a different time notation.
+
+### 24-hour clock
+
+The default `pattern` validates a 12-hour `h:mm` or `hh:mm` value. Override
+`pattern` (and update `helperText` or `placeholder` to match) to accept a
+24-hour clock instead. A 24-hour field typically drops the AM/PM select.
+
+<TimePicker pattern="([01][0-9]|2[0-3]):[0-5][0-9]" labelText="Cron job" placeholder="hh:mm" helperText="24-hour clock, e.g. 14:30" value="14:30">
+  <TimePickerSelect value="pdt">
+    <SelectItem value="pdt" text="PDT" />
+    <SelectItem value="gmt" text="GMT" />
+  </TimePickerSelect>
+</TimePicker>
+
+### Seconds
+
+Update `pattern` and increase `maxlength` together to accept a `hh:mm:ss`
+value. The default `maxlength` (5) only fits `hh:mm`.
+
+<TimePicker pattern="(1[012]|[1-9]):[0-5][0-9]:[0-5][0-9]" maxlength={8} labelText="Cron job" placeholder="hh:mm:ss" value="2:15:30">
+  <TimePickerSelect value="pm">
+    <SelectItem value="am" text="AM" />
+    <SelectItem value="pm" text="PM" />
+  </TimePickerSelect>
+</TimePicker>
+
+## Events
+
+Respond to edits on the time field and to period/timezone selection.
+
+### Change
+
+`on:change` and `on:input` forward the native input events from the time
+field. Read the current value from `event.target.value`, or use `bind:value`
+for two-way binding.
+
+<TimePicker labelText="Cron job" placeholder="hh:mm" on:change={(e) => console.log(e.target.value)}>
+  <TimePickerSelect value="pm">
+    <SelectItem value="am" text="AM" />
+    <SelectItem value="pm" text="PM" />
+  </TimePickerSelect>
+</TimePicker>
+
+### Period and timezone change
+
+`TimePickerSelect` forwards `on:change` from its native select element the
+same way.
+
+<TimePicker labelText="Cron job" placeholder="hh:mm">
+  <TimePickerSelect value="pm" on:change={(e) => console.log(e.target.value)}>
+    <SelectItem value="am" text="AM" />
+    <SelectItem value="pm" text="PM" />
+  </TimePickerSelect>
+</TimePicker>
+
+## Select icon label
+
+Set `iconDescription` on `TimePickerSelect` to change the chevron icon's ARIA
+label and native tooltip. It defaults to `"Open list of options"`.
+
+<TimePicker labelText="Cron job" placeholder="hh:mm">
+  <TimePickerSelect iconDescription="Choose AM or PM" value="pm">
+    <SelectItem value="am" text="AM" />
+    <SelectItem value="pm" text="PM" />
+  </TimePickerSelect>
+  <TimePickerSelect iconDescription="Choose timezone" value="pdt">
+    <SelectItem value="pdt" text="PDT" />
+    <SelectItem value="gmt" text="GMT" />
+  </TimePickerSelect>
+</TimePicker>
+
+## Helper text
+
+Add helper text to provide additional context or formatting instructions.
+
+<TimePicker labelText="Cron job" placeholder="hh:mm" helperText="24-hour, e.g. 14:30">
+  <TimePickerSelect value="pm">
+    <SelectItem value="am" text="AM" />
+    <SelectItem value="pm" text="PM" />
+  </TimePickerSelect>
+  <TimePickerSelect value="pdt">
+    <SelectItem value="pdt" text="PDT" />
+    <SelectItem value="gmt" text="GMT" />
+  </TimePickerSelect>
+</TimePicker>
+
+## Hidden label
+
+Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
+
+<TimePicker hideLabel labelText="Cron job" placeholder="hh:mm">
+  <TimePickerSelect value="pm">
+    <SelectItem value="am" text="AM" />
+    <SelectItem value="pm" text="PM" />
+  </TimePickerSelect>
+</TimePicker>
+
 ## Light
 
 Enable the light variant with `light`.
@@ -202,32 +302,6 @@ Use the small size for more compact time pickers by setting `size` to `"sm"`.
   <TimePickerSelect value="pdt">
     <SelectItem value="pdt" text="PDT" />
     <SelectItem value="gmt" text="GMT" />
-  </TimePickerSelect>
-</TimePicker>
-
-## Helper text
-
-Add helper text to provide additional context or formatting instructions.
-
-<TimePicker labelText="Cron job" placeholder="hh:mm" helperText="24-hour, e.g. 14:30">
-  <TimePickerSelect value="pm">
-    <SelectItem value="am" text="AM" />
-    <SelectItem value="pm" text="PM" />
-  </TimePickerSelect>
-  <TimePickerSelect value="pdt">
-    <SelectItem value="pdt" text="PDT" />
-    <SelectItem value="gmt" text="GMT" />
-  </TimePickerSelect>
-</TimePicker>
-
-## Hidden label
-
-Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
-
-<TimePicker hideLabel labelText="Cron job" placeholder="hh:mm">
-  <TimePickerSelect value="pm">
-    <SelectItem value="am" text="AM" />
-    <SelectItem value="pm" text="PM" />
   </TimePickerSelect>
 </TimePicker>
 
