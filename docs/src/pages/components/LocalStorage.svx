@@ -12,6 +12,8 @@ See how the component maintains state across page reloads. Toggle the switch and
 
 The component listens for the [storage event](https://developer.mozilla.org/en-US/docs/Web/API/Window/storage_event), so changes made in one browser tab are automatically synchronized to other tabs with the same key. Cross-tab updates dispatch `on:update` with a payload shaped like `{ prevValue, value }`. When another tab removes the key, the bound value resets to undefined so the next local write does not re-persist stale data.
 
+The example below logs both `on:save` and `on:update` as they fire; see [Events](#events) for what each one means.
+
 <FileSource src="/framed/LocalStorage/LocalStorage" />
 
 ## Persisting objects and arrays
@@ -54,8 +56,40 @@ The component provides methods to manage stored data:
 | `clearItem`  | Remove a specific key-value pair.   |
 | `clearAll`   | Remove all stored data.             |
 
-Use `bind:this` to access these methods. They only clear browser storage in the current tab; they do not reset the bound value. Other tabs with the same key will reset their bound value when they receive the storage event. To clear both storage and the bound value in the current tab, reset the value yourself after calling clearItem or clearAll.
+Use `bind:this` to access these methods. They only clear browser storage in the current tab; they do not reset the bound value. Other tabs with the same key will reset their bound value when they receive the storage event. To clear both storage and the bound value in the current tab, reset the value yourself after calling clearItem or clearAll — if you don't, the next mutation to `value` persists as normal and silently rewrites the key you just cleared, since clearing storage doesn't change the component's own record of what `value` currently is.
 
 In this example, try toggling the switch, refreshing the page, then clearing the storage.
 
 <FileSource src="/framed/LocalStorage/LocalStorageClear" />
+
+## Events
+
+The component dispatches three events: `save`, `update`, and `error`.
+
+### Update
+
+Fires whenever the persisted value changes — after your own `bind:value` write, or when another tab or window writes the same key while `sync` is `"on"` (the default). The payload is `{ prevValue, value }`.
+
+```svelte
+<LocalStorage
+  key="dark-mode"
+  bind:value
+  on:update={({ detail }) => console.log(detail)} // { prevValue, value }
+/>
+```
+
+### Save
+
+Fires once, when the component mounts, if the key does not already exist in storage — this is the component's own first write to initialize that key. Switching to a different key afterward (see [Reactive key](#reactive-key)) does not dispatch `save`, even if the new key has no stored value yet.
+
+### Error
+
+Fires when a write to storage fails, for example when the storage quota is exceeded or storage access is denied (such as private browsing modes that disable storage). The payload is `{ error }`.
+
+```svelte
+<LocalStorage
+  key="my-key"
+  bind:value
+  on:error={({ detail }) => console.error(detail.error)}
+/>
+```
