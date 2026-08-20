@@ -25,7 +25,6 @@ components: ["Header",
 "SideNavDivider",
 "Content",
 "SkipToContent",
-"HamburgerMenu",
 "HeaderGlobalAction"]
 description: The UI shell provides components for building application shells and navigation — header, side navigation, and content areas.
 ---
