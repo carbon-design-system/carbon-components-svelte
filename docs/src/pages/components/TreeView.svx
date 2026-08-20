@@ -2,6 +2,10 @@
 description: A tree view displays hierarchical data in a collapsible tree structure. It supports node selection, expansion, icons, programmatic control of the tree state, and virtualization for large trees.
 ---
 
+<script>
+  import { TreeView } from "carbon-components-svelte";
+</script>
+
 ## Basic
 
 Create a basic tree view using the `nodes` prop. Each node needs a unique id and display text; icons, disabled state, and nested children are optional.
@@ -15,6 +19,35 @@ By default, only one node is selected at a time. For multiple selection, see Mul
 Use the compact variant by setting `size` to `"compact"`.
 
 <FileSource src="/framed/TreeView/TreeViewCompact" />
+
+## Hidden label
+
+Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
+
+<TreeView
+  hideLabel
+  labelText="Cloud Products"
+  nodes={[
+    { id: 0, text: "AI / Machine learning" },
+    { id: 1, text: "Analytics" },
+    { id: 2, text: "Databases" },
+  ]}
+/>
+
+## Custom label
+
+Use the `labelChildren` slot to provide custom label content instead of `labelText`.
+
+<TreeView
+  labelText=""
+  nodes={[
+    { id: 0, text: "AI / Machine learning" },
+    { id: 1, text: "Analytics" },
+    { id: 2, text: "Databases" },
+  ]}
+>
+  <strong slot="labelChildren">Cloud Products</strong>
+</TreeView>
 
 ## Initial state
 
@@ -175,19 +208,23 @@ Use `TreeView.collapseNodes` to collapse specific nodes based on a condition. Ca
 
 <FileSource src="/framed/TreeView/TreeViewCollapseNodes" />
 
-## Show a node
+## Node access
+
+Programmatically reveal or query specific nodes by id.
+
+### Show a node
 
 Use `TreeView.showNode` to expand, select, and focus a specific node.
 
 <FileSource src="/framed/TreeView/TreeViewShowNode" />
 
-### With options
+#### With options
 
 Configure `TreeView.showNode` behavior using optional parameters. By default, all three actions occur (`expand`, `select`, `focus`), but you can disable any combination. This is useful for expanding nodes without selecting them, or selecting without expanding.
 
 <FileSource src="/framed/TreeView/TreeViewShowNodeOptions" />
 
-## Node lookup
+### Node lookup
 
 Use `TreeView.getNode` to resolve a node's text or metadata from its id, useful for a breadcrumb or detail pane driven by `activeId`. Unmatched ids return `null`.
 
@@ -195,7 +232,11 @@ Use `TreeView.getNodes` to resolve multiple ids at once, such as `selectedIds`. 
 
 <FileSource src="/framed/TreeView/TreeViewGetNode" />
 
-## Lazy loading
+## Performance
+
+Scale to large trees by loading, rendering, and measuring only what's needed.
+
+### Lazy loading
 
 Set `hasChildren` on a node to render it as an expandable branch before its `nodes` are known. Expanding it fires `toggle` as usual; the handler can fetch and assign `nodes` asynchronously.
 
@@ -203,14 +244,14 @@ While `hasChildren` is `true` and `nodes` is empty, the `childNodes` slot render
 
 <FileSource src="/framed/TreeView/TreeViewLazyLoad" />
 
-## Virtualization
+### Virtualization
 
 Virtualization renders only the rows currently visible in the scroll viewport, improving performance for large trees (for example, file trees and log explorers). Set `virtualize` to enable it. The tree still tracks the full `nodes` dataset; only the on-screen slice is mounted in the DOM.
 
 Row height is fixed and comes from `size` (32px default, 24px compact). Rows do not grow to fit their content, so keep slot content to a single line. Pass `true` for defaults, or an object to customize:
 
 | Field             | Default                       | Description                                                                 |
-| ----------------- | ----------------------------- | --------------------------------------------------------------------------- |
+| ----------------- | ------------------------------ | --------------------------------------------------------------------------- |
 | `containerHeight` | `maxVisibleRows * itemHeight` | Scroll viewport height. Pass a number (pixels) or a CSS string (`"80%"`, `"100%"`, `"calc(...)"`) when the parent sets height. |
 | `maxVisibleRows`  | `10`                          | Rows visible at once when `containerHeight` is not set.                     |
 | `overscan`        | `3`                           | Extra rows rendered above and below the viewport during scroll.             |
@@ -219,42 +260,46 @@ Row height is fixed and comes from `size` (32px default, 24px compact). Rows do 
 
 <FileSource src="/framed/TreeView/TreeViewVirtualize" />
 
-### With lazy loading
+#### With lazy loading
 
 Combine `virtualize` with `hasChildren` to fetch children on expand. This example starts with the same project-folder roots as [Virtualization](#virtualization), but each subtree loads on demand (including nested folders). The virtualized path does not render the `childNodes` slot, so the demo inserts a temporary disabled "Loading…" child while the request is in flight, then replaces it with the fetched nodes.
 
 <FileSource src="/framed/TreeView/TreeViewVirtualizeLazy" />
 
-## Flat data
+### Large and deep trees
+
+The tree view is optimized to handle large datasets efficiently, as shown here with a large tree (1000+ nodes) and a deeply nested tree (100 levels deep).
+
+<FileSource src="/framed/TreeView/TreeViewPerformance" />
+
+## Data utilities
+
+Transform and filter node data using standalone utility functions.
+
+### Flat data
 
 Convert flat data to a hierarchical structure using the `toHierarchy` utility.
 
 <FileSource src="/framed/TreeView/TreeViewFlatArray" />
 
-## Filtering
+### Filtering
 
 Filter nodes with the built-in helpers.
 
-### By text
+#### By text
 
 Combine a search input with `filterTreeByText` to create an interactive searchable tree. Type to filter nodes by name (case-insensitive substring matching). By default, matching nodes and their ancestors are included to maintain valid tree structure.
 
 <FileSource src="/framed/TreeView/TreeViewFilter" />
 
-### By ID
+#### By ID
 
 Use `filterTreeById` to filter nodes by their ID. Accepts either a single ID or an array of IDs. Click the buttons to filter by a single ID or multiple IDs. Matching nodes and their ancestors are included by default.
 
 <FileSource src="/framed/TreeView/TreeViewFilterById" />
 
-### Custom predicate
+#### Custom predicate
 
 Use `filterTreeNodes` with a predicate function to implement custom filtering logic. The example demonstrates filtering by file extension, filtering leaf nodes only, and using the `includeChildren` option to include all descendants of matching nodes. By default, matching nodes and their ancestors are included.
 
 <FileSource src="/framed/TreeView/TreeViewFilterNodes" />
-
-## Large and deep trees
-
-The tree view is optimized to handle large datasets efficiently, as shown here with a large tree (1000+ nodes) and a deeply nested tree (100 levels deep).
-
-<FileSource src="/framed/TreeView/TreeViewPerformance" />
