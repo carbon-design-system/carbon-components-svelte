@@ -44,7 +44,26 @@ for dense data displays.
 
 <FileSource src="/framed/Grid/CondensedGrid" />
 
-## Responsive
+### Per-row
+
+`condensed`, `narrow`, `noGutter`, and `padding` are also available directly on
+`Row`, so you can mix densities within a single grid instead of applying a
+variant to every row.
+
+```svelte
+<Grid>
+  <Row condensed>
+    <Column>Condensed row</Column>
+    <Column>Condensed row</Column>
+  </Row>
+  <Row>
+    <Column>Default row</Column>
+    <Column>Default row</Column>
+  </Row>
+</Grid>
+```
+
+## Columns
 
 Build responsive layouts by setting a different column width per breakpoint.
 Each breakpoint has a different total column count, so scale spans
@@ -70,28 +89,73 @@ proportionally.
 <Column sm={4} md={2} lg={5} />
 ```
 
+### Extra-large and max breakpoints
+
+`lg`, `xlg`, and `max` all share the same 16-column grid, but the viewport
+keeps growing past `lg`. Set `xlg` and `max` independently when a layout needs
+a different span on very wide screens instead of stretching the `lg` value.
+
+```svelte
+<Column sm={4} md={8} lg={8} xlg={6} max={4} />
+```
+
 <FileSource src="/framed/Grid/ResponsiveGrid" />
 
-## Offset columns
+### Offset
 
 Create space between columns using the offset feature for more flexible layouts
 without empty columns.
 
 <FileSource src="/framed/Grid/OffsetColumns" />
 
-## Aspect ratio columns
+### Aspect ratio
 
 Maintain consistent column heights using aspect ratio columns. This ensures
 content alignment across different column widths.
 
 <FileSource src="/framed/Grid/AspectRatioColumns" />
 
-## Padding
+## Spacing
+
+Control vertical rhythm and horizontal gutters at the grid, row, or column
+level.
+
+### Padding
 
 Add vertical padding (top/bottom) with `padding`. Apply it at the grid, row, or column level to control spacing between rows
 of content. This is useful for creating vertical rhythm without manually adding margins.
 
 <FileSource src="/framed/Grid/PaddedGrid" />
+
+### Gutter
+
+Remove the horizontal gutter with `noGutter`, or remove just one side with
+`noGutterLeft` / `noGutterRight`. These props are available on `Grid`, `Row`,
+and `Column`, so you can drop the gutter globally or flush a single column
+against an edge or divider.
+
+<FileSource src="/framed/Grid/NoGutterColumns" />
+
+## Custom element
+
+Set `as` to `true` on `Grid`, `Row`, or `Column` to render a semantic element
+instead of the default `<div>`. Props are destructured as `props` in the
+default slot and must be spread onto the custom element to keep the Carbon
+grid classes.
+
+```svelte
+<Grid as let:props>
+  <main {...props}>
+    <Row as let:props>
+      <section {...props}>
+        <Column as let:props>
+          <article {...props}>Content</article>
+        </Column>
+      </section>
+    </Row>
+  </main>
+</Grid>
+```
 
 ## Breakpoints reference
 
