@@ -15,6 +15,10 @@ Use `bind:this` to get a queue reference, then call `add()` to show notification
 
 ## Positioning
 
+Configure where the queue and its notifications render on screen.
+
+### Screen position
+
 Configure queue position with the `position` prop. Supported values are `top-left`, `top-center`, `top-right` (default), `bottom-left`, `bottom-center`, and `bottom-right`.
 
 The top-right position assumes usage of the [UIShell](/components/UIShell) component. Use left or center placements when a side panel would otherwise cover toasts. Customize placement with [offset props](#custom-offsets).
@@ -27,7 +31,21 @@ Customize queue placement with `offsetTop`, `offsetBottom`, `offsetLeft`, and `o
 
 <FileSource src="/framed/NotificationQueue/NotificationQueueOffsets" />
 
-## Deduplication
+### Z-index
+
+Specify the stacking order of the queue with `zIndex`. Defaults to `9000`, matching the z-index used by [Modal](/components/Modal), so notifications render above dialog content by default.
+
+```svelte
+<NotificationQueue zIndex={2000} />
+```
+
+Lower the value if the queue should render behind other fixed UI instead.
+
+## Managing notifications
+
+The queue tracks notifications by id, so `add`, `update`, `remove`, and the `maxNotifications` limit all key off the same identifier.
+
+### Deduplication
 
 By default, id is optional; a unique id is generated for each notification. The queue [keys](https://svelte.dev/docs/svelte/each#Keyed-each-blocks) notifications by id for performance.
 
@@ -35,7 +53,7 @@ Notifications are deduplicated by id. Adding a notification with an id that alre
 
 <FileSource src="/framed/NotificationQueue/NotificationQueueDeduplication" />
 
-## Update
+### Update
 
 Use `update(id, patch)` to change an existing notification in place. The patch merges into the matching notification, useful for reflecting progress (for example, transitioning a loading toast to success without removing and re-adding it).
 
@@ -43,7 +61,7 @@ Use `update(id, patch)` to change an existing notification in place. The patch m
 
 <FileSource src="/framed/NotificationQueue/NotificationQueueUpdate" />
 
-## Max notifications
+### Max notifications
 
 By default, the queue displays a maximum of 3 notifications. When the limit is exceeded, the oldest notification is removed automatically.
 
@@ -51,7 +69,7 @@ Customize the limit with `maxNotifications`.
 
 <FileSource src="/framed/NotificationQueue/NotificationQueueMax" />
 
-## Remove and clear
+### Remove and clear
 
 Use `remove(id)` to programmatically remove a specific notification, or `clear()` to remove all notifications at once.
 
