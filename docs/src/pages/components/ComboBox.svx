@@ -24,12 +24,6 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
-## Reactive
-
-See how the combobox responds to user input and selection changes.
-
-<FileSource src="/framed/ComboBox/ReactiveComboBox" />
-
 ## Content
 
 Customize how items render and how the label and helper text appear.
@@ -87,7 +81,13 @@ items={[
 
 ## Selection
 
-Pre-select items, clear the current selection, and coordinate multiple combo boxes.
+Bind to the selection, pre-select items, clear the current selection, and coordinate multiple combo boxes.
+
+### Reactive
+
+See how the combobox responds to user input and selection changes.
+
+<FileSource src="/framed/ComboBox/ReactiveComboBox" />
 
 ### Initial selection
 
@@ -128,11 +128,11 @@ See how to manage multiple comboboxes in a form.
 
 <FileSource src="/framed/ComboBox/MultipleComboBox" />
 
-## Auto-highlight
+## Typeahead and auto-highlight
 
-By default, no item is automatically highlighted when typing. Set `autoHighlight` to `"first-match"` to highlight the first matching item as you type.
+Auto-highlight and typeahead both assist users while typing. Auto-highlight highlights a matching item as you type so it can be selected with <DocKbd label="Enter" /> alone. Typeahead completes the input inline with the untyped portion of a match. They work independently or together.
 
-### First match
+### Auto-highlight
 
 Set `autoHighlight` to `"first-match"` to automatically highlight the first matching item as you type. Select it by pressing <DocKbd label="Enter" /> without using arrow keys.
 
@@ -177,7 +177,21 @@ items={[
   {id: "9", text: "Pineapple"},
   ]}  />
 
-### With typeahead
+### Typeahead
+
+Set `typeahead` to `true` to enable autocomplete. As users type, the input suggests and completes matching items.
+
+By default, typeahead uses case-insensitive prefix matching. When a match is found, the suggestion shows the untyped portion highlighted so users can accept it or keep typing.
+
+Pressing <DocKbd label="Enter" /> or <DocKbd label="Tab" /> accepts the suggestion: it selects the matching item, normalizes the value to the item's casing, and closes the dropdown. <DocKbd label="Tab" /> still moves focus to the next control. Clicking away accepts the suggestion the same way. When the typed text matches no item, the suggestion is not committed.
+
+Pressing <DocKbd label="→" /> or <DocKbd label="End" /> accepts the inline suggestion in place: it commits the completed text into the value (keeping your casing) and collapses the cursor to the end, but keeps focus in the input and leaves the dropdown open so you can continue editing. Unlike <DocKbd label="Enter" /> and <DocKbd label="Tab" />, it does not select an item or close the menu.
+
+You can provide a custom `shouldFilterItem` to change the filtering logic. See the [fuzzy filter](#fuzzy-filter) example below.
+
+<FileSource src="/framed/ComboBox/TypeaheadComboBox" />
+
+### Combined with auto-highlight
 
 Combine `typeahead` and `autoHighlight="first-match"` for the full autocomplete experience: the input text is completed and the matching item is visually highlighted.
 
@@ -194,20 +208,6 @@ items={[
   {id: "8", text: "Mango"},
   {id: "9", text: "Pineapple"},
   ]}  />
-
-## Typeahead
-
-Set `typeahead` to `true` to enable autocomplete. As users type, the input suggests and completes matching items.
-
-By default, typeahead uses case-insensitive prefix matching. When a match is found, the suggestion shows the untyped portion highlighted so users can accept it or keep typing.
-
-Pressing <DocKbd label="Enter" /> or <DocKbd label="Tab" /> accepts the suggestion: it selects the matching item, normalizes the value to the item's casing, and closes the dropdown. <DocKbd label="Tab" /> still moves focus to the next control. Clicking away accepts the suggestion the same way. When the typed text matches no item, the suggestion is not committed.
-
-Pressing <DocKbd label="→" /> or <DocKbd label="End" /> accepts the inline suggestion in place: it commits the completed text into the value (keeping your casing) and collapses the cursor to the end, but keeps focus in the input and leaves the dropdown open so you can continue editing. Unlike <DocKbd label="Enter" /> and <DocKbd label="Tab" />, it does not select an item or close the menu.
-
-You can provide a custom `shouldFilterItem` to change the filtering logic. See the [fuzzy filter](#fuzzy-filter) example below.
-
-<FileSource src="/framed/ComboBox/TypeaheadComboBox" />
 
 ### Fuzzy filter
 
@@ -238,6 +238,13 @@ Enable filtering to let users search through the options.
 By default (`filterMode="remove"`), filtering unmounts non-matching options and recreates them when they match again.
 
 Set `filterMode` to `"hide"` to keep every option mounted and hide non-matching ones with the `hidden` attribute. Keyboard navigation, `aria-setsize`, and `aria-posinset` still follow the matching items only. `"hide"` falls back to `"remove"` when virtualization is enabled. For typical ComboBox lists, `"remove"` is faster per keystroke because it only updates matching option nodes.
+
+<ComboBox filterMode="hide" labelText="Contact" placeholder="Select contact method"
+items={[
+  {id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}
+  ]}  />
 
 ### Custom label
 
@@ -296,6 +303,8 @@ items={[
 
 Virtualization renders only the items currently visible in the viewport, improving performance for large lists. By default, the combo box virtualizes lists with more than 100 items.
 
+Besides the options shown below, `virtualize` also accepts `containerHeight` (the maximum height in pixels of the dropdown container, default 300) and `maxItems` (a cap on the number of items rendered, default unlimited) for further tuning.
+
 ### Large lists
 
 In the example below, 10,000 items are provided to the combobox but only 11 items (8 visible items + 3 overscan items) are rendered in the DOM.
@@ -328,7 +337,51 @@ By default, item height matches the menu row for each size: 24px (`xs`), 32px (`
 
 <FileSource src="/framed/ComboBox/VirtualizeItemHeight" />
 
-## Top direction
+## Events
+
+Listen for selection, dismissal, and clear interactions. The `scrollend` load-more event is documented separately; see [Load more](#load-more).
+
+### Select
+
+Listen for `on:select` to know when an item is selected. `event.detail` includes `selectedId` and `selectedItem`.
+
+<ComboBox labelText="Contact" placeholder="Select contact method"
+on:select={(e) => console.log(e.detail.selectedId, e.detail.selectedItem)}
+items={[
+  {id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}
+  ]}  />
+
+### Close
+
+Listen for `on:close` to know when the dropdown menu closes and why. `event.detail.trigger` is `"escape-key"`, `"outside-click"`, or `"select"`.
+
+<ComboBox labelText="Contact" placeholder="Select contact method"
+on:close={(e) => console.log(e.detail.trigger)}
+items={[
+  {id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}
+  ]}  />
+
+### Clear
+
+Listen for `on:clear` to know when the user activates the clear ("x") button that appears once there is a selection, whether by click or by keyboard. `event.detail` is the originating `KeyboardEvent` or `MouseEvent`. This is distinct from calling the [imperative `clear()` method](#clear-selection) directly, which does not dispatch `clear`.
+
+<ComboBox selectedId="1" labelText="Contact" placeholder="Select contact method"
+on:clear={(e) => console.log(e.type)}
+items={[
+  {id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}
+  ]}  />
+
+## Menu placement
+
+Control where and how the dropdown menu renders relative to the input.
+
+### Direction
 
 Set `direction` to `"top"` to make the dropdown menu appear above the input.
 
@@ -339,13 +392,19 @@ items={[
   {id: "2", text: "Fax"}
   ]}  />
 
-## Portal menu
+### Portal menu
 
 Set `portalMenu` to `true` to render the dropdown menu in a floating portal. This prevents the menu from being clipped by parent containers with `overflow: hidden` or z-index stacking contexts. Without `portalMenu`, the dropdown in the example below would be clipped by its container's hidden overflow.
 
 When inside a [Modal](/components/Modal#modal-with-dropdowns), `portalMenu` defaults to `true` unless explicitly set to `false`.
 
 <FileSource src="/framed/ComboBox/ComboBoxPortalMenu" />
+
+### Programmatic access
+
+Bind to `open` to control the dropdown menu programmatically, such as opening it from an external trigger.
+
+<FileSource src="/framed/ComboBox/ComboBoxOpenBinding" />
 
 ## Light
 
