@@ -18,15 +18,17 @@ Bind to `page` for the current page number.
 
 <FileSource src="/framed/PaginationNav/PaginationNavReactive" />
 
-## Total pages
+## Page count
+
+### Total pages
 
 Specify the total number of pages with `total`.
 
 <PaginationNav total={3} />
 
-## Visible pages
+### Visible pages
 
-Control the number of visible page numbers with `shown`.
+Control the number of visible page numbers with `shown`. Pages that don't fit collapse into an overflow menu.
 
 <PaginationNav total={100} shown={5} />
 
@@ -36,7 +38,7 @@ The forward and backward navigation buttons can be customized independently of t
 
 ### Loop
 
-Enable circular navigation between pages with `loop`.
+Enable circular navigation between pages with `loop`. When enabled, clicking "Next" from the last page wraps to the first page, and clicking "Previous" from the first page wraps to the last page.
 
 <PaginationNav total={3} loop />
 
@@ -54,3 +56,24 @@ Customize navigation button text with `forwardText` and `backwardText`.
 Set tooltip position relative to the navigation buttons with `tooltipPosition`.
 
 <PaginationNav tooltipPosition="outside" total={3} loop />
+
+## Events
+
+### Change
+
+Use `on:change` to listen for every user interaction—clicking a page number, an overflow menu item, or the previous/next buttons. The event detail includes the resulting page.
+
+<PaginationNav
+  total={5}
+  on:change={(e) => console.log(e.detail)} // { page: number }
+/>
+
+### Button clicks
+
+Use `on:click:button--previous` and `on:click:button--next` to listen specifically for previous and next button clicks, separate from the page numbers and overflow menu. Both dispatch the resulting page number.
+
+<PaginationNav
+  total={5}
+  on:click:button--previous={(e) => console.log(e.detail)} // { page: number }
+  on:click:button--next={(e) => console.log(e.detail)} // { page: number }
+/>
