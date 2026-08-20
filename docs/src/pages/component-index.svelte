@@ -18,9 +18,6 @@
     Tag,
     Text,
   } from "carbon-components-svelte";
-  import ArrowDown from "carbon-icons-svelte/lib/ArrowDown.svelte";
-  import ArrowsVertical from "carbon-icons-svelte/lib/ArrowsVertical.svelte";
-  import ArrowUp from "carbon-icons-svelte/lib/ArrowUp.svelte";
   import Catalog from "carbon-icons-svelte/lib/Catalog.svelte";
   import { onMount } from "svelte";
   import { COMPONENT_CATEGORIES } from "../component-categories";
@@ -153,9 +150,9 @@
     since: "desc",
   };
 
-  function toggleSort(key: SortKey) {
+  function handleSort(key: SortKey, direction: "ascending" | "descending") {
     if (sortKey === key) {
-      sortDirection = sortDirection === "asc" ? "desc" : "asc";
+      sortDirection = direction === "ascending" ? "asc" : "desc";
     } else {
       sortKey = key;
       sortDirection = defaultDirection[key];
@@ -227,35 +224,17 @@
                   {#each columns as column (column.key)}
                     <StructuredListCell
                       head
-                      aria-sort={sortKey === column.key
-                      ? sortDirection === "asc"
-                        ? "ascending"
-                        : "descending"
-                      : "none"}
+                      sortable
+                      sortAlways
+                      active={sortKey === column.key}
+                      sortDirection={sortDirection === "asc"
+                      ? "ascending"
+                      : "descending"}
+                      on:sort={(e) => handleSort(column.key, e.detail.direction)}
                     >
-                      <button
-                        type="button"
-                        class="sort-header"
-                        class:is-active={sortKey === column.key}
-                        on:click={() => toggleSort(column.key)}
-                      >
-                        <span class="sort-header__title">
-                          {column.key === "name"
-                          ? `Component (${visible.length})`
-                          : column.label}
-                          {#if sortKey === column.key}
-                            <svelte:component
-                              this={sortDirection === "asc" ? ArrowUp : ArrowDown}
-                              size={16}
-                            />
-                          {:else}
-                            <ArrowsVertical
-                              size={16}
-                              class="sort-header__idle-icon"
-                            />
-                          {/if}
-                        </span>
-                      </button>
+                      {column.key === "name"
+                      ? `Component (${visible.length})`
+                      : column.label}
                     </StructuredListCell>
                   {/each}
                   <StructuredListCell head class="links-cell" />
@@ -418,45 +397,6 @@
 
   :global(.links-cell) {
     text-align: right;
-  }
-
-  .sort-header {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 100%;
-    padding: 0;
-    border: none;
-    background: none;
-    cursor: pointer;
-    color: var(--cds-text-02, #525252);
-    font: inherit;
-    text-align: left;
-  }
-
-  .sort-header__title {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--cds-spacing-03);
-  }
-
-  .sort-header:hover,
-  .sort-header.is-active {
-    color: var(--cds-text-01, #161616);
-  }
-
-  .sort-header:focus-visible {
-    outline: 2px solid var(--cds-focus, #0f62fe);
-    outline-offset: -2px;
-  }
-
-  .sort-header :global(.sort-header__idle-icon) {
-    opacity: 0;
-    transition: opacity 70ms;
-  }
-
-  .sort-header:hover :global(.sort-header__idle-icon) {
-    opacity: 0.6;
   }
 
   :global(.component-name-cell) {
