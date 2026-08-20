@@ -38,41 +38,63 @@ For example, primary buttons use `interactive-01` for background, with separate 
 
 <FileSource src="/framed/Theme/ThemeTokens" />
 
-## Toggle
+## Controls
+
+Render a built-in control instead of managing `theme` yourself. Set `render` to `"toggle"`, `"select"`, or `"dropdown"`.
+
+### Toggle
 
 Set `render` to `"toggle"` to display a toggle switch for switching between two themes. By default, it toggles between "white" and "g100" themes.
 
 <FileSource src="/framed/Theme/ThemeToggle" />
 
-### Custom
+#### Custom
 
 Customize themes, labels, and other toggle options with `toggle`.
 
 <FileSource src="/framed/Theme/ThemeToggleCustom" />
 
-## Select
+### Select
 
 Set `render` to `"select"` to display a dropdown menu for selecting from all available themes.
 
 <FileSource src="/framed/Theme/ThemeSelect" />
 
-### Custom
+#### Custom
 
 Choose which themes to include, customize labels, and adjust other select options with `select`.
 
 <FileSource src="/framed/Theme/ThemeSelectCustom" />
 
-## Dropdown
+### Dropdown
 
 Set `render` to `"dropdown"` to display a Dropdown component for selecting from all available themes.
 
 <FileSource src="/framed/Theme/ThemeDropdown" />
 
-### Custom
+#### Custom
 
 Choose which themes to include, customize labels, and adjust other dropdown options with `dropdown`.
 
 <FileSource src="/framed/Theme/ThemeDropdownCustom" />
+
+## Events
+
+Theme dispatches an `update` event whenever `theme` changes, whether from a built-in control or a bound value updated elsewhere in your app. The initial theme on mount does not dispatch `update`.
+
+```svelte
+<Theme render="toggle" on:update={(e) => console.log(e.detail.theme)} />
+```
+
+## Slot
+
+Use the default slot to access the current `theme` value with `let:theme`, without duplicating local state.
+
+```svelte
+<Theme render="select" let:theme>
+  <p>Current theme: {theme}</p>
+</Theme>
+```
 
 ## Exported themes constant
 
