@@ -15,6 +15,18 @@ Set `value` to the string to show and copy. For install commands, see [CodeSnipp
 
 <CopyInput labelText="API endpoint" value="https://api.example.com/v1" />
 
+## Custom label
+
+Use the `labelChildren` slot to render custom label content, such as a
+tooltip icon.
+
+<CopyInput labelText="API token" value="sk-1234567890abcdef">
+  <svelte:fragment slot="labelChildren">
+    API token
+    <TooltipIcon tooltipText="Use this token to authenticate API requests." icon={Information} />
+  </svelte:fragment>
+</CopyInput>
+
 ## Select on focus
 
 Set `selectOnFocus` to select the full value when the field receives focus.
@@ -27,7 +39,7 @@ Pass an async `copy` function when the text is not available at render time, for
 
 While `copy()` is pending, the copy button shows a busy state and ignores clicks. On failure, the button shows `errorFeedback` (default `"Failed to copy"`) and emits `copy:error`.
 
-Prefetch on hover with `on:mouseenter:copy-button`.
+Prefetch on hover with `on:mouseenter:copy-button`; `on:mouseleave:copy-button` fires when the pointer leaves the button.
 
 <FileSource src="/framed/CopyInput/CopyInputAsync" />
 
@@ -64,6 +76,12 @@ Long values truncate with an ellipsis when the field is narrower than the text. 
   helperText="Use this ID when contacting support."
 />
 
+## Hidden label
+
+Set `hideLabel` to visually hide the label text. The label remains available to screen readers.
+
+<CopyInput hideLabel labelText="API token" value="sk-1234567890abcdef" />
+
 ## Sizes
 
 Set `size` to `"sm"` or `"xl"`.
@@ -77,6 +95,16 @@ Set `size` to `"sm"` or `"xl"`.
 ## Inline label
 
 <CopyInput inline labelText="Token" value="sk-1234567890abcdef" />
+
+## Disabled
+
+Set `disabled` to disable the input and copy button.
+
+<CopyInput disabled labelText="API token" value="sk-1234567890abcdef" />
+
+## Light
+
+<CopyInput light labelText="API endpoint" value="https://api.example.com/v1" />
 
 ## Custom feedback
 
@@ -94,9 +122,29 @@ Set `feedbackIcon` to show a different icon while feedback is visible. The copy 
 
 <CopyInput labelText="API endpoint" value="https://api.example.com/v1" feedbackIcon={Checkmark} />
 
-## Light
+### Duration
 
-<CopyInput light labelText="API endpoint" value="https://api.example.com/v1" />
+Set `feedbackTimeout` to change how long the feedback stays visible, in milliseconds. Defaults to `2000`.
+
+<CopyInput labelText="API endpoint" value="https://api.example.com/v1" feedbackTimeout={5000} />
+
+## Copy behavior
+
+Replace or disable the default clipboard behavior.
+
+### Override
+
+Pass a function to `copy` to replace the default Clipboard API behavior.
+
+This example uses the [clipboard-copy](https://github.com/feross/clipboard-copy) package instead of the Clipboard API.
+
+<FileSource src="/framed/CopyInput/CopyInputOverride" />
+
+### Prevent
+
+Set `copy` to a no-op function to disable copying.
+
+<CopyInput labelText="Read-only value" value="This value should not be copied" copy={() => {}} />
 
 ## Tooltip
 
