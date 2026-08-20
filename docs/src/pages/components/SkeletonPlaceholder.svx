@@ -35,3 +35,9 @@ Use `width` and `height` for different dimensions.
 Number values default to pixels.
 
 <SkeletonPlaceholder width={320} height={160} />
+
+### Override a single dimension
+
+`width` and `height` each take precedence over `size` independently, so you can set `size` as a base and override just one dimension.
+
+<SkeletonPlaceholder size="4rem" height="10rem" />
