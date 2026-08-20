@@ -3,38 +3,54 @@ description: Progress bars visually indicate the progress of operations like fil
 ---
 
 <script>
-  import { ProgressBar } from "carbon-components-svelte";
+  import { ProgressBar, TooltipIcon } from "carbon-components-svelte";
+  import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
 ## Basic
 
-Create an indeterminate progress bar that continuously animates.
+Create an indeterminate progress bar that continuously animates. A progress bar is indeterminate when `value` is left `undefined` while `status` is `"active"`.
 
 <ProgressBar helperText="Loading..." />
 
-## Percentage
+## Value
+
+### Percentage
 
 Display progress as a percentage with `value`.
 
 <ProgressBar value={40} labelText="Upload status" helperText="40 MB of 100 MB" />
 
-## Custom max value
+### Custom max value
 
 Set a custom maximum value for the progress bar.
 
 <ProgressBar value={40} max={200} labelText="Upload status" helperText="40 MB of 200 MB" />
 
-## Small
+## Label
 
-Use the small size variant for compact layouts.
-
-<ProgressBar size="sm" helperText="Loading..." />
-
-## Hidden label
+### Hidden label
 
 Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
 
 <ProgressBar hideLabel value={40} labelText="Upload status" helperText="40 MB of 100 MB" />
+
+### Custom label content
+
+Use the `labelChildren` slot to render custom label content, such as a tooltip icon.
+
+<ProgressBar value={40} helperText="40 MB of 100 MB">
+  <svelte:fragment slot="labelChildren">
+    Upload status
+    <TooltipIcon tooltipText="Files are scanned before upload completes." icon={Information} />
+  </svelte:fragment>
+</ProgressBar>
+
+## Size
+
+Use the small size variant for compact layouts.
+
+<ProgressBar size="sm" helperText="Loading..." />
 
 ## Status
 
