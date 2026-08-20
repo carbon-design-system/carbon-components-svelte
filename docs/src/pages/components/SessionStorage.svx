@@ -7,7 +7,9 @@ description: Session storage provides a reactive wrapper around the sessionStora
 
 See how the component maintains state within a session. Toggle the switch and refresh the page to see the persisted state. State is cleared when the tab is closed. Unlike [LocalStorage](/components/LocalStorage), data is isolated per tab.
 
-The component listens for the [storage event](https://developer.mozilla.org/en-US/docs/Web/API/Window/storage_event) so updates from another same-origin document in the same tab (for example, an iframe) stay in sync. Session storage is isolated per tab, so this event does not propagate across tabs or windows. Cross-document updates dispatch `on:update` with a payload shaped like `{ prevValue, value }`. When the key is removed from a shared session context, the bound value resets to undefined so the next local write does not re-persist stale data.
+The component listens for the [storage event](https://developer.mozilla.org/en-US/docs/Web/API/Window/storage_event) so updates from another same-origin document in the same tab (for example, an iframe) stay in sync. Session storage is isolated per tab, so this event does not propagate across tabs or windows. When the key is removed from a shared session context, the bound value resets to undefined so the next local write does not re-persist stale data.
+
+This example logs the `save` and `update` events as they fire — see [Events](#events) for what each one means and its payload shape.
 
 <FileSource src="/framed/SessionStorage/SessionStorage" />
 
@@ -28,7 +30,7 @@ The storage key is also reactive — set `key` to switch between contexts, usefu
 
 In this example, each user has their own theme preference stored under a separate key. When you switch users, the component automatically loads that user's saved preference.
 
-Switching keys only hydrates the bound value from storage; it does not dispatch `on:update`. The event log below should stay empty when you change users and only record entries when you change the theme.
+Switching keys only hydrates the bound value from storage; it does not dispatch [`update`](#update). The event log below should stay empty when you change users and only record entries when you change the theme.
 
 <FileSource src="/framed/SessionStorage/SessionStorageReactiveKey" />
 
@@ -46,13 +48,43 @@ Session storage is already per tab, so this matters mainly when an iframe shares
 
 The component provides methods to manage stored data:
 
-| Method       | Description                         |
-| ------------ | ----------------------------------- |
-| `clearItem`  | Remove a specific key-value pair.   |
-| `clearAll`   | Remove all stored data.             |
+| Method      | Description                       |
+| ----------- | ---------------------------------- |
+| `clearItem` | Remove a specific key-value pair. |
+| `clearAll`  | Remove all stored data.           |
 
 Use `bind:this` to access these methods. They only clear browser storage in the current tab; they do not reset the bound value. To clear both storage and the bound value, reset the value yourself after calling clearItem or clearAll.
 
-In this example, try toggling the switch, refreshing the page, then clearing the storage.
+In this example, toggle the switch and refresh the page to confirm the value persists, then try either button to clear storage.
 
 <FileSource src="/framed/SessionStorage/SessionStorageClear" />
+
+## Events
+
+Respond to storage writes, cross-document updates, and write failures.
+
+### Save
+
+Dispatched once on mount, when `key` is not already present in storage — right after the component seeds storage with the current `value`. The payload is always `null`.
+
+This fires the first time a key is used in the current session, and again after storage is cleared and the page is refreshed (see [Clear item, clear all](#clear-item-clear-all)). The [Basic](#basic) example above logs this event.
+
+### Update
+
+Dispatched whenever the stored value changes: after a local bound-value write, or after `sync` picks up a matching write from another same-origin document in this tab (see [Disabling sync](#disabling-sync)). The payload is `{ prevValue, value }`; `prevValue` is a snapshot taken before the change, not a live reference to the current value.
+
+Switching `key` hydrates the bound value from storage but does not dispatch this event (see [Reactive key](#reactive-key)).
+
+The [Basic](#basic), [Persisting objects and arrays](#persisting-objects-and-arrays), and [Reactive key](#reactive-key) examples above all log this event.
+
+### Error
+
+Dispatched when a write to session storage fails — for example, when storage quota is exceeded, or access is denied such as in a private browsing mode that blocks Web Storage. The payload is `{ error }`, where `error` is the value thrown by the underlying `sessionStorage.setItem` call.
+
+```svelte
+<SessionStorage
+  key="draft"
+  bind:value
+  on:error={({ detail }) => console.error("Failed to persist:", detail.error)}
+/>
+```
