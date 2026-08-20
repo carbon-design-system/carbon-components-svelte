@@ -7,11 +7,18 @@
 // place of its plain header markup when `sortable` is set.
 //
 // The click/hover/focus target is the button, so it needs to fill the full
-// header cell -- not just wrap its text. Rather than stretch the button to
-// 100% width/height of a still-padded cell (percentage heights inside a
-// content-sized table-cell are unreliable), the cell's own padding is zeroed
-// and the same padding values move onto the button. The button's padding box
-// then *is* the cell's visual box, sized by ordinary content flow.
+// header cell -- not just wrap its text. The cell's own padding is zeroed
+// and the same values move onto the button, so the button's padding box
+// covers what used to be dead (unclickable) padding space around the text.
+//
+// That alone sizes the button correctly under normal conditions, since the
+// moved padding sums to the same total the cell used to reserve. It falls
+// short under `--condensed`: Carbon's `.bx--structured-list-th` carries an
+// unconditional `height: to-rem(40px)` that the condensed variant's shrunk
+// padding no longer reaches, so the cell renders taller than the button's
+// own content. `height: 100%` on the button closes that gap -- percentage
+// heights resolve reliably against a table-cell's final row height, fixed
+// or content-driven, so this works regardless of which one produced it.
 /// @access private
 /// @group components
 @mixin structured-list-sort {
@@ -22,6 +29,7 @@
   .#{$prefix}--structured-list-sort {
     display: flex;
     width: 100%;
+    height: 100%;
     align-items: center;
     gap: $carbon--spacing-03;
     padding: $carbon--spacing-05 $carbon--spacing-03 $carbon--spacing-03
