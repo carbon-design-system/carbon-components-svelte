@@ -33,9 +33,9 @@ Add links to list items by wrapping them in link components.
   </ListItem>
 </UnorderedList>
 
-## Nested
+## Nested lists
 
-Create nested lists by setting `nested` on child unordered list components.
+Create hierarchical lists by setting `nested` on a child unordered list component.
 
 <UnorderedList>
   <ListItem>
