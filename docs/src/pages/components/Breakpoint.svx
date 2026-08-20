@@ -3,7 +3,7 @@ description: Breakpoint declaratively reports the current Carbon responsive brea
 ---
 
 <script>
-  import { hideAtBreakpoint } from "carbon-components-svelte";
+  import { Breakpoint, hideAtBreakpoint } from "carbon-components-svelte";
 </script>
 
 ## Breakpoints
@@ -22,9 +22,18 @@ The Carbon Design System [grid implementation](https://carbondesignsystem.com/gu
 
 Bind to `size` to determine the current breakpoint. Possible values include `"sm"`, `"md"`, `"lg"`, `"xlg"`, and `"max"`.
 
-The on:change event fires when the size is initially determined and when a breakpoint change occurs (for example, when the browser is resized).
+The on:change event fires when the size is initially determined and when a breakpoint change occurs (for example, when the browser is resized). `event.detail` includes `size` and the matching `breakpointValue` in pixels.
 
 <FileSource src="/framed/Breakpoint/Breakpoint" />
+
+### Slot props
+
+Use the default slot to access `size` and `sizes` without binding a variable. `sizes` is also available as a bindable prop; it provides the same information as `size` but as an object of booleans keyed by breakpoint (`sm`, `md`, `lg`, `xlg`, `max`), which is convenient for `{#if sizes.lg}`-style checks.
+
+<Breakpoint let:size let:sizes>
+  <p>Current size: {size}</p>
+  <p>Large or up: {sizes.lg || sizes.xlg || sizes.max}</p>
+</Breakpoint>
 
 ## Store and breakpoint values
 
