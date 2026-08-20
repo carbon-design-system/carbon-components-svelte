@@ -8,7 +8,7 @@ description: Aspect ratios maintain consistent proportions for content like imag
 
 ## Basic
 
-Display a 2:1 aspect ratio container by default.
+Display a 2:1 aspect ratio container by default. The container fills the width of its parent, and its height is derived from the ratio.
 
 <AspectRatio>
   2x1
@@ -16,7 +16,7 @@ Display a 2:1 aspect ratio container by default.
 
 ## Ratios
 
-Supported aspect ratios include `2x1`, `2x3`, `16x9`, `4x3`, `1x1`, `3x4`, `3x2`, `9x16`, and `1x2`.
+Set `ratio` to change the aspect ratio. Supported values include `2x1`, `2x3`, `16x9`, `4x3`, `1x1`, `3x4`, `3x2`, `9x16`, and `1x2`.
 
 ### 2x3
 
@@ -82,10 +82,18 @@ Display content with a 1:2 aspect ratio.
   1x2
 </AspectRatio>
 
-## Tile (16x9)
+## Usage
 
-Wrap a tile or other content in an aspect ratio container to maintain proportions.
+Wrap content like tiles, images, or videos in an aspect ratio container to maintain consistent proportions across screen sizes.
+
+### Tile
+
+Wrap a tile or other content in an aspect ratio container to maintain proportions. Content that should fill the container, like a `Tile`, needs `height: 100%` since the container's own height is derived from padding rather than a fixed size.
 
 <AspectRatio ratio="16x9">
   <Tile style="height: 100%">Content</Tile>
 </AspectRatio>
+
+### Grid columns
+
+To keep column heights consistent within a `Grid`, use the `aspectRatio` prop on `Column` instead—see [Grid: Aspect ratio](/components/Grid#aspect-ratio) for aligning columns of differing content across a row.
