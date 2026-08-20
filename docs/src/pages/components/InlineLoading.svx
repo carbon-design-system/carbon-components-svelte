@@ -35,6 +35,23 @@ The component supports different status states to indicate progress:
 <InlineLoading status="finished" description="Success" />
 <InlineLoading status="error" description="An error occurred" />
 
+### Icon description
+
+Set `iconDescription` to override the accessible label announced for the status icon. For the `"finished"` and `"error"` states, it defaults to the `status` value if not set.
+
+<InlineLoading status="error" iconDescription="Upload failed" description="An error occurred" />
+
+## Events
+
+Listen for `on:success`, dispatched `successDelay` milliseconds (default `1500`) after `status` is set to `"finished"`.
+
+<InlineLoading
+  status="finished"
+  description="Success"
+  successDelay={1000}
+  on:success={() => console.log("success")}
+/>
+
 ## UX example
 
 See how to integrate the loading indicator in a real-world scenario.
