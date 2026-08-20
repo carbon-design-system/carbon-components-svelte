@@ -6,6 +6,10 @@ description: Image loaders load images with built-in loading and error states, a
     import { ImageLoader, Button, InlineLoading } from "carbon-components-svelte";
 
     let key = 0;
+
+    let loading = false;
+    let loaded = false;
+    let imageError = false;
 </script>
 
 ## Basic
@@ -15,7 +19,35 @@ process automatically.
 
 <ImageLoader src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" />
 
-## Slots
+## Alt text
+
+Set `alt` to provide alternative text for the image.
+
+<ImageLoader alt="IBM logo" src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" />
+
+## Aspect ratio
+
+Maintain consistent image dimensions using aspect ratios. The component uses
+[AspectRatio](/components/AspectRatio) to constrain the image.
+
+Supported aspect ratios include `"2x1"`, `"2x3"`, `"16x9"`, `"4x3"`, `"1x1"`,
+`"3x4"`, `"3x2"`, `"9x16"` and `"1x2"`.
+
+<ImageLoader ratio="16x9" src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" />
+
+## Fade in
+
+Enable a smooth fade-in animation when the image loads successfully.
+
+<Button kind="ghost" on:click="{() => { key++;}}">Reload image</Button>
+{#key key}<ImageLoader fadeIn ratio="16x9" src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" />{/key}
+
+## Loading and error states
+
+ImageLoader tracks its own loading, loaded, and error state internally. Customize
+the UI shown at each stage, read the state directly, or listen for events.
+
+### Slots
 
 Customize the loading and error states using named slots.
 
@@ -28,30 +60,38 @@ Customize the loading and error states using named slots.
     </svelte:fragment>
 </ImageLoader>
 
-## With aspect ratio
+### Bindable state
 
-Maintain consistent image dimensions using aspect ratios. The component uses
-[AspectRatio](/components/AspectRatio) to constrain the image.
+Bind to `loading`, `loaded`, and `error` to read the image's state. All three
+props are readonly outside the component and are set automatically as the
+image loads.
 
-Supported aspect ratios include `"2x1"`, `"2x3"`, `"16x9"`, `"4x3"`, `"1x1"`,
-`"3x4"`, `"3x2"`, `"9x16"` and `"1x2"`.
-  
-<ImageLoader ratio="16x9" src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" />
+<ImageLoader bind:loading bind:loaded bind:error={imageError} src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" />
+<p>loading: {loading} · loaded: {loaded} · error: {imageError}</p>
 
-## Fade in
+### Events
 
-Enable a smooth fade-in animation when the image loads successfully.
+Dispatches `load` when the image loads successfully, and `error` when it
+fails to load.
 
-<Button kind="ghost" on:click="{() => { key++;}}">Reload image</Button>
-{#key key}<ImageLoader fadeIn ratio="16x9" src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" />{/key}
+<ImageLoader
+  on:load={() => console.log("loaded")}
+  on:error={() => console.log("error")}
+  src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg"
+/>
 
-## Programmatic usage
+## Updating the image source
+
+Change the image displayed by the same ImageLoader instance, either
+imperatively or by reacting to a changing `src` value.
+
+### Programmatic
 
 Control image loading programmatically using component references.
 
 <FileSource src="/framed/ImageLoader/ProgrammaticImageLoader" />
 
-## Dynamic image source
+### Dynamic
 
 Update the image source dynamically using the same image loader instance for
 smooth transitions between images.
