@@ -37,7 +37,12 @@ for more complex layouts with multiple elements.
   <p>Orders ship within 2 business days and arrive in 3-5 business days.</p>
 </Disclosure>
 
-## Open by default
+## Open state
+
+Control whether the disclosure starts open, and read or drive its state
+programmatically.
+
+### Open by default
 
 Set `open` to `true` to render the disclosure expanded.
 
@@ -45,7 +50,7 @@ Set `open` to `true` to render the disclosure expanded.
   <p>Orders ship within 2 business days and arrive in 3-5 business days.</p>
 </Disclosure>
 
-## Reactive (two-way binding)
+### Reactive (two-way binding)
 
 Bind to `open` to control and read the disclosure state outside the component.
 Listen for `toggle` to react to state changes, such as when the trigger is
