@@ -33,9 +33,13 @@ Add interactive elements like link components within list items.
   </ListItem>
 </OrderedList>
 
-## Nested
+## Nested lists
 
-Create nested lists with `nested` for proper indentation and numbering.
+Create hierarchical lists with support for the browser's native numbering style.
+
+### Standard
+
+Set `nested` on a child ordered list for proper indentation and numbering.
 
 <OrderedList>
   <ListItem>
@@ -55,13 +59,9 @@ Create nested lists with `nested` for proper indentation and numbering.
   <ListItem>Ordered list level 1</ListItem>
 </OrderedList>
 
-## Styles
+### Native styles
 
-Alternate rendering styles for the list.
-
-### Native
-
-Enable native browser list styles with `native`. Useful for large lists where the list number may overlap with the list item text.
+Set `native` to `true` to use the browser's native list styles. Useful for large lists where the list number may overlap with the list item text.
 
 <OrderedList native>
   <ListItem>
@@ -81,7 +81,7 @@ Enable native browser list styles with `native`. Useful for large lists where th
   <ListItem>Ordered list level 1</ListItem>
 </OrderedList>
 
-### Expressive
+## Expressive styles
 
 Use Carbon's expressive typesetting with `expressive`.
 
