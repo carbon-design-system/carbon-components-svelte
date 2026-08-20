@@ -1,5 +1,6 @@
 export type OutsideDismiss = {
   pressInside: () => void;
+  pressOutside: () => void;
   release: () => void;
 };
 
