@@ -1,0 +1,77 @@
+---
+components: ["ActionSet"]
+description: A row of action buttons for a modal or panel footer that automatically stacks vertically at small sizes or with more than two actions.
+---
+
+<script>
+  import { ActionSet, Button, InlineLoading } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Compose `ActionSet` from ordinary `Button` children, the same way as [ButtonSet](/components/ButtonSet). `size` cascades to every child button that doesn't set its own `size`.
+
+<ActionSet>
+  <Button kind="secondary">Cancel</Button>
+  <Button>Save</Button>
+</ActionSet>
+
+## Kinds
+
+Buttons are ordered automatically by `kind`: ghost and `"danger-ghost"` first, primary and danger last. Reversed when the set stacks, so the primary action stays closest to the reading direction's end in both layouts. DOM order does not matter.
+
+<ActionSet>
+  <Button kind="secondary">Cancel</Button>
+  <Button kind="danger">Delete</Button>
+  <Button kind="ghost">Learn more</Button>
+</ActionSet>
+
+## Sizes
+
+Set `size` to control the layout. `"sm"` always stacks; `"md"` stacks once there are more than two actions; `"lg"`, `"xl"`, and `"2xl"` never stack and give actions progressively more room.
+
+### Small
+
+<ActionSet size="sm">
+  <Button kind="secondary">Cancel</Button>
+  <Button>Save</Button>
+</ActionSet>
+
+### Large
+
+<ActionSet size="lg">
+  <Button kind="secondary">Cancel</Button>
+  <Button kind="danger">Delete</Button>
+  <Button>Save</Button>
+</ActionSet>
+
+### Extra large
+
+<ActionSet size="2xl">
+  <Button kind="ghost">Learn more</Button>
+  <Button kind="secondary">Cancel</Button>
+  <Button kind="danger">Delete</Button>
+  <Button>Save</Button>
+</ActionSet>
+
+## Disable stacking
+
+Set `disableStacking` to `true` to force a horizontal layout even at a size that would normally stack.
+
+<ActionSet size="sm" disableStacking>
+  <Button kind="secondary">Cancel</Button>
+  <Button kind="danger">Delete</Button>
+  <Button>Save</Button>
+</ActionSet>
+
+## Loading
+
+`Button` has no built-in loading state, so show one with an `InlineLoading` child and disable the button while it runs.
+
+<ActionSet>
+  <Button kind="secondary">Cancel</Button>
+  <Button disabled>
+    Saving...
+    <InlineLoading />
+  </Button>
+</ActionSet>

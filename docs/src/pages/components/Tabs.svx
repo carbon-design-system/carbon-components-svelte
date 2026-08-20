@@ -31,6 +31,49 @@ Create a basic tab interface with labels and content.
   </svelte:fragment>
 </Tabs>
 
+## Sizes
+
+Set `size` to change the tab height. Line tabs support `"sm"`, `"md"`, and `"lg"`; `size` is unset by default, which preserves the original unsized height. An out-of-range value (for example `"xl"` on line tabs) clamps to the type's max — see [Container sizes](#sizes-1) for the full range on container tabs.
+
+### Small
+
+<Tabs size="sm">
+  <Tab label="Tab label 1" />
+  <Tab label="Tab label 2" />
+  <Tab label="Tab label 3" />
+  <svelte:fragment slot="content">
+    <TabContent>Content 1</TabContent>
+    <TabContent>Content 2</TabContent>
+    <TabContent>Content 3</TabContent>
+  </svelte:fragment>
+</Tabs>
+
+### Medium
+
+<Tabs size="md">
+  <Tab label="Tab label 1" />
+  <Tab label="Tab label 2" />
+  <Tab label="Tab label 3" />
+  <svelte:fragment slot="content">
+    <TabContent>Content 1</TabContent>
+    <TabContent>Content 2</TabContent>
+    <TabContent>Content 3</TabContent>
+  </svelte:fragment>
+</Tabs>
+
+### Large
+
+<Tabs size="lg">
+  <Tab label="Tab label 1" />
+  <Tab label="Tab label 2" />
+  <Tab label="Tab label 3" />
+  <svelte:fragment slot="content">
+    <TabContent>Content 1</TabContent>
+    <TabContent>Content 2</TabContent>
+    <TabContent>Content 3</TabContent>
+  </svelte:fragment>
+</Tabs>
+
 ## Reactive
 
 Use `bind:selected` for a two-way binding with the selected tab index, so you can programmatically control the selected tab and react to tab changes.
@@ -377,6 +420,62 @@ Use the container type for a more prominent tab interface. By default, container
 ### Basic
 
 <Tabs type="container">
+  <Tab label="Tab label 1" />
+  <Tab label="Tab label 2" />
+  <Tab label="Tab label 3" />
+  <svelte:fragment slot="content">
+    <TabContent>Content 1</TabContent>
+    <TabContent>Content 2</TabContent>
+    <TabContent>Content 3</TabContent>
+  </svelte:fragment>
+</Tabs>
+
+### Sizes
+
+Container tabs support the full size range: `"sm"`, `"md"`, `"lg"`, and `"xl"`. `size` is unset by default, which preserves the original unsized height (48px, matching `"lg"`).
+
+#### Small
+
+<Tabs type="container" size="sm">
+  <Tab label="Tab label 1" />
+  <Tab label="Tab label 2" />
+  <Tab label="Tab label 3" />
+  <svelte:fragment slot="content">
+    <TabContent>Content 1</TabContent>
+    <TabContent>Content 2</TabContent>
+    <TabContent>Content 3</TabContent>
+  </svelte:fragment>
+</Tabs>
+
+#### Medium
+
+<Tabs type="container" size="md">
+  <Tab label="Tab label 1" />
+  <Tab label="Tab label 2" />
+  <Tab label="Tab label 3" />
+  <svelte:fragment slot="content">
+    <TabContent>Content 1</TabContent>
+    <TabContent>Content 2</TabContent>
+    <TabContent>Content 3</TabContent>
+  </svelte:fragment>
+</Tabs>
+
+#### Large
+
+<Tabs type="container" size="lg">
+  <Tab label="Tab label 1" />
+  <Tab label="Tab label 2" />
+  <Tab label="Tab label 3" />
+  <svelte:fragment slot="content">
+    <TabContent>Content 1</TabContent>
+    <TabContent>Content 2</TabContent>
+    <TabContent>Content 3</TabContent>
+  </svelte:fragment>
+</Tabs>
+
+#### Extra large
+
+<Tabs type="container" size="xl">
   <Tab label="Tab label 1" />
   <Tab label="Tab label 2" />
   <Tab label="Tab label 3" />

@@ -1,0 +1,240 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/motion";
+
+// Matches carbon-components' own $z-indexes map (globals/scss/_layout.scss),
+// not re-imported here since no other partial in this package pulls it in.
+$side-panel-z-index: 9000;
+$side-panel-overlay-z-index: 6000;
+
+$side-panel-sizes: (
+  xs: 16rem,
+  sm: 20rem,
+  md: 30rem,
+  lg: 40rem,
+  xl: 65rem,
+  2xl: 80rem,
+);
+
+/// SidePanel styles. Ported from Carbon React's own (not yet wired into its
+/// bundle) `packages/styles/scss/components/side-panel`, mapped from v11
+/// tokens to this repo's v10 equivalents, with the entrance/exit animation
+/// dropped entirely: `SidePanel.svelte` uses a Svelte `transition:`
+/// (fly/fade) instead of upstream's `@starting-style`/`animation`/
+/// `@property` CSS, which also removes the need to track an
+/// `--is-closing`-style class. The scroll-driven title-collapse system
+/// (`--scroll-animation-progress`, the collapsed title, the divider fade)
+/// is out of scope for this port and is not implemented, so its styles are
+/// dropped too. Every upstream `:has()` selector is replaced: the two
+/// resizer grid-column reservations become an explicit
+/// `--resizable`-gated grid (justified because `SidePanel.svelte` only
+/// ever applies `--resizable` when the `Resizer` child actually renders,
+/// so no introspection is needed), and the header's
+/// back-button/toolbar-presence selectors become the `--on-detail-step`/
+/// marker classes the component already computes in JS.
+/// @access public
+/// @group side-panel
+@mixin side-panel {
+  .#{$prefix}--side-panel {
+    position: fixed;
+    z-index: $side-panel-z-index;
+    display: grid;
+    box-sizing: border-box;
+    grid-template-rows: auto 1fr auto;
+    grid-template-columns: 1fr;
+    background-color: $ui-01;
+    block-size: calc(100% - #{$carbon--spacing-09});
+    color: $text-primary;
+    inset-block-start: $carbon--spacing-09;
+    max-inline-size: 100%;
+    min-inline-size: map-get($side-panel-sizes, xs);
+  }
+
+  @media (min-width: 672px) {
+    .#{$prefix}--side-panel {
+      max-inline-size: 75vw;
+    }
+  }
+
+  @each $size, $size-value in $side-panel-sizes {
+    .#{$prefix}--side-panel--#{$size} {
+      inline-size: $size-value;
+    }
+  }
+
+  .#{$prefix}--side-panel--right-placement {
+    border-inline-start: 1px solid $ui-03;
+    inset-inline-end: 0;
+  }
+
+  .#{$prefix}--side-panel--left-placement {
+    border-inline-end: 1px solid $ui-03;
+    inset-inline-start: 0;
+  }
+
+  .#{$prefix}--side-panel:not(.#{$prefix}--side-panel--has-overlay) {
+    box-shadow: 0 $carbon--spacing-01 $carbon--spacing-02 $overlay;
+  }
+
+  .#{$prefix}--side-panel--slide-in {
+    box-shadow: none;
+  }
+
+  .#{$prefix}--side-panel--has-decorator {
+    border: 1px solid $interactive-01;
+  }
+
+  // Reserve a column for the resizer handle, only applied when the
+  // `Resizer` child is actually rendered (see the mixin doc comment).
+  .#{$prefix}--side-panel--resizable.#{$prefix}--side-panel--right-placement {
+    grid-template-columns: auto 1fr;
+  }
+
+  .#{$prefix}--side-panel--resizable.#{$prefix}--side-panel--left-placement {
+    grid-template-columns: 1fr auto;
+  }
+
+  .#{$prefix}--side-panel--resizable.#{$prefix}--side-panel--right-placement
+    .#{$prefix}--side-panel__resizer {
+    grid-column: 1;
+    grid-row: 1 / -1;
+  }
+
+  .#{$prefix}--side-panel--resizable.#{$prefix}--side-panel--left-placement
+    .#{$prefix}--side-panel__resizer {
+    grid-column: 2;
+    grid-row: 1 / -1;
+  }
+
+  .#{$prefix}--side-panel--resizable.#{$prefix}--side-panel--right-placement
+    .#{$prefix}--side-panel__header,
+  .#{$prefix}--side-panel--resizable.#{$prefix}--side-panel--right-placement
+    .#{$prefix}--side-panel__inner-content,
+  .#{$prefix}--side-panel--resizable.#{$prefix}--side-panel--right-placement
+    .#{$prefix}--side-panel__actions-container {
+    grid-column: 2;
+  }
+
+  .#{$prefix}--side-panel--resizable.#{$prefix}--side-panel--left-placement
+    .#{$prefix}--side-panel__header,
+  .#{$prefix}--side-panel--resizable.#{$prefix}--side-panel--left-placement
+    .#{$prefix}--side-panel__inner-content,
+  .#{$prefix}--side-panel--resizable.#{$prefix}--side-panel--left-placement
+    .#{$prefix}--side-panel__actions-container {
+    grid-column: 1;
+  }
+
+  // ─── Header ────────────────────────────────────────────────────────────
+
+  .#{$prefix}--side-panel__header {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: $carbon--spacing-03;
+    padding: $carbon--spacing-05;
+    border-block-end: 1px solid $ui-03;
+    background-color: $ui-01;
+  }
+
+  .#{$prefix}--side-panel__header--on-detail-step {
+    padding-block-start: $carbon--spacing-07;
+  }
+
+  .#{$prefix}--side-panel__label-text,
+  .#{$prefix}--side-panel__title-text,
+  .#{$prefix}--side-panel__subtitle-text {
+    padding-inline-end: $carbon--spacing-08;
+  }
+
+  .#{$prefix}--side-panel__label-text {
+    @include type-style("label-01");
+
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--side-panel__title-text {
+    @include type-style("productive-heading-03");
+  }
+
+  .#{$prefix}--side-panel__subtitle-text {
+    @include type-style("body-short-01");
+
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--side-panel__decorator-and-close {
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: $carbon--spacing-02;
+    inset-block-start: $carbon--spacing-05;
+    inset-inline-end: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--btn.#{$prefix}--side-panel__navigation-back-button,
+  .#{$prefix}--btn.#{$prefix}--side-panel__close-button {
+    &:hover {
+      background-color: $background-hover;
+    }
+  }
+
+  .#{$prefix}--side-panel__action-toolbar {
+    display: flex;
+    align-items: center;
+    gap: $carbon--spacing-03;
+  }
+
+  // ─── Body ──────────────────────────────────────────────────────────────
+
+  .#{$prefix}--side-panel__inner-content {
+    overflow: auto;
+    padding: $carbon--spacing-05;
+  }
+
+  // Form fields nested in the panel should pick up the elevated field
+  // background, matching how they render inside a Modal.
+  .#{$prefix}--side-panel .#{$prefix}--text-input,
+  .#{$prefix}--side-panel .#{$prefix}--text-area,
+  .#{$prefix}--side-panel .#{$prefix}--search-input,
+  .#{$prefix}--side-panel .#{$prefix}--select-input,
+  .#{$prefix}--side-panel .#{$prefix}--multi-select,
+  .#{$prefix}--side-panel .#{$prefix}--dropdown,
+  .#{$prefix}--side-panel .#{$prefix}--dropdown-list,
+  .#{$prefix}--side-panel .#{$prefix}--number input[type="number"],
+  .#{$prefix}--side-panel .#{$prefix}--date-picker__input {
+    background-color: $field-02;
+  }
+
+  // ─── Actions ───────────────────────────────────────────────────────────
+
+  .#{$prefix}--side-panel__actions-container {
+    position: sticky;
+    inset-block-end: 0;
+    padding: $carbon--spacing-05;
+    border-block-start: 1px solid $ui-03;
+    background-color: $ui-01;
+    min-block-size: $carbon--spacing-10;
+  }
+
+  .#{$prefix}--side-panel__actions-container--condensed {
+    padding: $carbon--spacing-03 $carbon--spacing-05;
+    min-block-size: $carbon--spacing-09;
+  }
+
+  // ─── Overlay ───────────────────────────────────────────────────────────
+
+  .#{$prefix}--side-panel__overlay {
+    position: fixed;
+    z-index: $side-panel-overlay-z-index;
+    inset: 0;
+    background-color: $overlay;
+  }
+}
+
+@include exports("side-panel") {
+  @include side-panel;
+}

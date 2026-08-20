@@ -1,0 +1,70 @@
+---
+components: ["SidePanel"]
+description: A docked panel that slides in from the left or right edge of the screen for supplementary content, forms, or multi-step flows.
+---
+
+SidePanel pairs well with the [UI Shell](/components/UIShell#sidepanel) for inspecting or editing a record without navigating away from the page underneath the header. The examples below wrap each panel in a minimal header for that context.
+
+## Focus behavior
+
+When the panel opens, focus is set using the following priority:
+
+1. The element matching `selectorPrimaryFocus`
+2. The first input, textarea, or select
+3. The close button
+
+After closing the panel, focus is returned to the element that triggered it.
+
+## Basic
+
+Set `bind:open` to control visibility. Use the `actions` slot for footer buttons, typically an [ActionSet](/components/ActionSet).
+
+<FileSource src="/framed/SidePanel/SidePanelBasic" />
+
+## Placement
+
+Set `placement` to `"left"` or `"right"` (default) to control which screen edge the panel docks to.
+
+<FileSource src="/framed/SidePanel/SidePanelPlacement" />
+
+## Sizes
+
+Set `size` to `"xs"`, `"sm"`, `"lg"`, `"xl"`, or `"2xl"`. The default is `"md"`.
+
+<FileSource src="/framed/SidePanel/SidePanelSizes" />
+
+## Slide-in
+
+Set `slideIn` to `true` and `selectorPageContent` to a CSS selector for the page's main content element. Instead of overlaying the page, the panel shrinks that element to make room for itself. Escape-to-close and `resizable` are disabled in this mode.
+
+<FileSource src="/framed/SidePanel/SidePanelSlideIn" />
+
+## Resizable
+
+Set `resizable` to `true` to let the panel be resized by dragging its edge, using arrow keys, or double-clicking the handle to reset. Has no effect when `slideIn` is `true`, or on narrow (768px and under) viewports.
+
+<FileSource src="/framed/SidePanel/SidePanelResizable" />
+
+## Multi-step
+
+Set `currentStep` to a value greater than `0` to show a back button in the header. Listen for `on:back` to navigate to the previous step.
+
+<FileSource src="/framed/SidePanel/SidePanelMultiStep" />
+
+## Decorator
+
+Use the `decorator` slot for supplementary content, typically an AI-label badge, rendered top-right of the header.
+
+<FileSource src="/framed/SidePanel/SidePanelDecorator" />
+
+## Toolbar
+
+Use the `toolbar` slot for secondary header-row actions, typically icon-only buttons.
+
+<FileSource src="/framed/SidePanel/SidePanelToolbar" />
+
+## Transition
+
+The panel does not animate by default. Set `transition` to a [fly](https://svelte.dev/docs/svelte/svelte-transition#fly) params object (e.g. `{ duration: 240 }`) to enable the slide-in/out transition.
+
+<FileSource src="/framed/SidePanel/SidePanelTransition" />

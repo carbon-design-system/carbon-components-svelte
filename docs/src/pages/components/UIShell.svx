@@ -180,6 +180,12 @@ Integrate toasts with the UI Shell. This example triggers a toast, which appears
 
 <FileSource src="/framed/UIShell/HeaderWithToast" />
 
+### SidePanel
+
+[SidePanel](/components/SidePanel) pairs well with the UI Shell for inspecting or editing a record without navigating away from the page underneath the header.
+
+<FileSource src="/framed/UIShell/HeaderWithSidePanel" />
+
 ## Classic theme
 
 Before version 0.105.0, the UI Shell defaulted to a mixed theme: **Gray 100** header and **White** side navigation. Now it follows the active theme (`white`, `g10`, `g80`, `g90`, `g100`).

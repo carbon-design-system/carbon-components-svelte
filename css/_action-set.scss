@@ -1,0 +1,164 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/typography";
+
+/// ActionSet renders real `Button` children over `ButtonSet`'s flex/divider
+/// base (`.bx--btn-set`), then overrides its fixed 196px button cap with
+/// per-count flex-basis percentages so 1-4 actions fill the row evenly.
+/// Ordering and ghost/expressive treatment key off `Button`'s own native
+/// `bx--btn--{kind}` classes directly, no extra marker class needed. Ported
+/// from Carbon React's `ActionSet`
+/// (`packages/styles/scss/components/action-set`), mapped from v11
+/// spacing/type tokens to this repo's v10 equivalents.
+/// @access private
+/// @group components
+@mixin action-set {
+  .#{$prefix}--action-set .#{$prefix}--btn {
+    @include type-style('body-short-01');
+
+    align-items: center;
+    margin: 0;
+    order: 3;
+  }
+
+  .#{$prefix}--action-set .#{$prefix}--btn.#{$prefix}--btn--expressive {
+    height: $carbon--spacing-10;
+    padding-top: $carbon--spacing-05;
+    padding-bottom: $carbon--spacing-07;
+  }
+
+  .#{$prefix}--action-set.#{$prefix}--btn-set .#{$prefix}--btn {
+    max-width: none;
+  }
+
+  .#{$prefix}--action-set:not(.#{$prefix}--action-set--stacking)
+    .#{$prefix}--btn--ghost,
+  .#{$prefix}--action-set:not(.#{$prefix}--action-set--stacking)
+    .#{$prefix}--btn--danger-ghost {
+    padding-left: $carbon--spacing-05;
+  }
+
+  // Order: ghost/danger-ghost first, tertiary next, danger then primary
+  // last. Reversed when stacking, so the primary action stays closest to
+  // the top (reading order) in both layouts.
+  .#{$prefix}--action-set .#{$prefix}--btn--ghost,
+  .#{$prefix}--action-set .#{$prefix}--btn--danger-ghost {
+    order: 1;
+  }
+
+  .#{$prefix}--action-set .#{$prefix}--btn--tertiary,
+  .#{$prefix}--action-set .#{$prefix}--btn--danger-tertiary {
+    order: 2;
+  }
+
+  .#{$prefix}--action-set .#{$prefix}--btn--danger {
+    order: 4;
+  }
+
+  .#{$prefix}--action-set .#{$prefix}--btn--primary {
+    order: 5;
+  }
+
+  .#{$prefix}--action-set--stacking .#{$prefix}--btn--ghost,
+  .#{$prefix}--action-set--stacking .#{$prefix}--btn--danger-ghost {
+    order: 5;
+  }
+
+  .#{$prefix}--action-set--stacking .#{$prefix}--btn--tertiary,
+  .#{$prefix}--action-set--stacking .#{$prefix}--btn--danger-tertiary {
+    order: 4;
+  }
+
+  .#{$prefix}--action-set--stacking .#{$prefix}--btn--danger {
+    order: 2;
+  }
+
+  .#{$prefix}--action-set--stacking .#{$prefix}--btn--primary {
+    order: 1;
+  }
+
+  // For row-single in medium,
+  // or for ghosts in row-single,
+  // buttons are 100% width
+  .#{$prefix}--action-set.#{$prefix}--action-set--row-single.#{$prefix}--action-set--md
+    .#{$prefix}--btn,
+  .#{$prefix}--action-set.#{$prefix}--action-set--row-single
+    .#{$prefix}--btn--ghost,
+  .#{$prefix}--action-set.#{$prefix}--action-set--row-single
+    .#{$prefix}--btn--danger-ghost {
+    flex: 0 0 100%;
+  }
+
+  // For ghosts in row-double,
+  // buttons are 75% width and expand to use any remaining space
+  .#{$prefix}--action-set.#{$prefix}--action-set--row-double
+    .#{$prefix}--btn--ghost,
+  .#{$prefix}--action-set.#{$prefix}--action-set--row-double
+    .#{$prefix}--btn--danger-ghost {
+    flex: 1 1 75%;
+  }
+
+  // For row-single in large (non-ghost),
+  // or row-double in medium or large,
+  // buttons are 50% width
+  .#{$prefix}--action-set.#{$prefix}--action-set--row-single.#{$prefix}--action-set--lg
+    .#{$prefix}--btn:not(.#{$prefix}--btn--ghost):not(.#{$prefix}--btn--danger-ghost),
+  .#{$prefix}--action-set.#{$prefix}--action-set--row-double.#{$prefix}--action-set--md
+    .#{$prefix}--btn,
+  .#{$prefix}--action-set.#{$prefix}--action-set--row-double.#{$prefix}--action-set--lg
+    .#{$prefix}--btn,
+  .#{$prefix}--action-set.#{$prefix}--action-set--row-triple
+    .#{$prefix}--btn--ghost,
+  .#{$prefix}--action-set.#{$prefix}--action-set--row-triple
+    .#{$prefix}--btn--danger-ghost {
+    flex: 0 1 50%;
+  }
+
+  // For ghosts in row-triple,
+  // buttons are 50% width and expand to use any remaining space
+  .#{$prefix}--action-set.#{$prefix}--action-set--row-triple
+    .#{$prefix}--btn--ghost,
+  .#{$prefix}--action-set.#{$prefix}--action-set--row-triple
+    .#{$prefix}--btn--danger-ghost {
+    flex: 1 1 50%;
+  }
+
+  // For row-triple in large (non-ghost),
+  // or any non-ghosts in extra large or 2xl,
+  // or row-quadruple (non-ghost),
+  // buttons are 25% width with a max of 232px
+  .#{$prefix}--action-set.#{$prefix}--btn-set.#{$prefix}--action-set--row-triple.#{$prefix}--action-set--lg
+    .#{$prefix}--btn:not(.#{$prefix}--btn--ghost):not(.#{$prefix}--btn--danger-ghost),
+  .#{$prefix}--action-set.#{$prefix}--btn-set.#{$prefix}--action-set--xl
+    .#{$prefix}--btn:not(.#{$prefix}--btn--ghost):not(.#{$prefix}--btn--danger-ghost),
+  .#{$prefix}--action-set.#{$prefix}--btn-set.#{$prefix}--action-set--2xl
+    .#{$prefix}--btn:not(.#{$prefix}--btn--ghost):not(.#{$prefix}--btn--danger-ghost),
+  .#{$prefix}--action-set.#{$prefix}--btn-set.#{$prefix}--action-set--row-quadruple
+    .#{$prefix}--btn:not(.#{$prefix}--btn--ghost):not(.#{$prefix}--btn--danger-ghost) {
+    flex: 0 1 25%;
+
+    max-width: to-rem(232px);
+  }
+
+  .#{$prefix}--action-set.#{$prefix}--btn-set.#{$prefix}--action-set--row-quadruple
+    .#{$prefix}--btn--ghost,
+  .#{$prefix}--action-set.#{$prefix}--btn-set.#{$prefix}--action-set--row-quadruple
+    .#{$prefix}--btn--danger-ghost {
+    flex: 1 1 25%;
+  }
+
+  // Center the loading spinner vertically within the button; it is
+  // absolutely positioned so it doesn't shift button layout/width.
+  .#{$prefix}--action-set .#{$prefix}--btn .#{$prefix}--inline-loading {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    width: $carbon--spacing-07;
+    transform: translateY(-50%);
+  }
+}
+
+@include exports("action-set") {
+  @include action-set;
+}
