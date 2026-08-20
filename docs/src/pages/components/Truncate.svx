@@ -6,7 +6,11 @@ description: Truncate handles single-line and multiline text overflow, as a comp
   import { Truncate, truncate } from "carbon-components-svelte";
 </script>
 
-## Basic
+Truncate offers two ways to clip overflowing text: the `Truncate` component, which wraps content in a `<p>`, and the `truncate` action, which applies the same clipping to any element. For truncating text that also needs a specific Carbon type style, see [Text](/components/Text#truncate).
+
+## Component
+
+### Basic
 
 The default component wraps text in a paragraph and truncates at the end of the line.
 
@@ -14,36 +18,43 @@ The default component wraps text in a paragraph and truncates at the end of the 
   Carbon Components Svelte is a Svelte component library that implements the Carbon Design System, an open source design system by IBM.
 </Truncate>
 
-## Clamp front
+### Clamp front
 
-Set `clamp` to `"front"` to keep the end of the text visible.
+Set `clamp` to `"front"` to keep the end of the text visible. `clamp` only takes effect when `lines` is `1`.
 
 <Truncate clamp="front" style="max-width: 20rem">
   Carbon Components Svelte is a Svelte component library that implements the Carbon Design System, an open source design system by IBM.
 </Truncate>
 
-## Multiline
+### Multiline
 
-Set lines above 1 to limit how many lines show. Multiline mode only clamps from the end.
+Set `lines` above 1 to limit how many lines show. Multiline mode always clamps from the end, regardless of `clamp`.
 
 <Truncate lines={3} style="max-width: 20rem">
   Carbon Components Svelte is a Svelte component library that implements the Carbon Design System, an open source design system by IBM. It is maintained by the open source community and is available on npm.
 </Truncate>
 
-## use:truncate
+## Action
 
-Use the `truncate` action on any element.
+Use the `truncate` action on any element for the same behavior without the `Truncate` component's wrapping `<p>`.
+
+### Basic
 
 <h4 use:truncate style="max-width: 20rem">
   Carbon Components Svelte is a Svelte component library that implements the Carbon Design System, an open source design system by IBM.
 </h4>
+
+### Clamp front
+
+Pass `clamp: "front"` to keep the end of the text visible.
+
 <h4 use:truncate={{ clamp: "front" }} style="max-width: 20rem">
   Carbon Components Svelte is a Svelte component library that implements the Carbon Design System, an open source design system by IBM.
 </h4>
 
 ### Multiline
 
-Pass lines for multiline truncation.
+Pass `lines` for multiline truncation.
 
 <p use:truncate={{ lines: 3 }} style="max-width: 20rem">
   Carbon Components Svelte is a Svelte component library that implements the Carbon Design System, an open source design system by IBM. It is maintained by the open source community and is available on npm.
