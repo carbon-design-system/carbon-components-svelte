@@ -37,7 +37,26 @@ Bind to `selected` for simpler state management.
 
 <FileSource src="/framed/SelectableTile/SelectableTileReactive" />
 
-## Hidden legend
+## Legend
+
+### Custom content
+
+Use the `legendChildren` slot on `SelectableTileGroup` to provide custom legend content instead of `legendText`.
+
+<SelectableTileGroup name="options-legend-slot" selected={["option1", "option2"]}>
+  <strong slot="legendChildren">Select options</strong>
+  <SelectableTile value="option1">
+    Multi-select Tile
+  </SelectableTile>
+  <SelectableTile value="option2">
+    Multi-select Tile
+  </SelectableTile>
+  <SelectableTile value="option3">
+    Multi-select Tile
+  </SelectableTile>
+</SelectableTileGroup>
+
+### Hidden
 
 Hide the legend visually by setting `hideLegend` to `true`. The legend remains available to screen readers.
 
@@ -71,6 +90,10 @@ Use the light variant for light backgrounds.
 
 ## Disabled
 
+Disable specific tiles, or the entire group, to prevent selection.
+
+### Individual tiles
+
 Disable specific tiles to prevent interaction.
 
 <SelectableTileGroup legendText="Select options" name="options-disabled" selected={["option1"]}>
@@ -81,6 +104,38 @@ Disable specific tiles to prevent interaction.
     Multi-select Tile
   </SelectableTile>
   <SelectableTile disabled value="option3">
+    Multi-select Tile
+  </SelectableTile>
+</SelectableTileGroup>
+
+### Entire group
+
+Disable every tile at once by setting `disabled` on `SelectableTileGroup`. This prevents selection natively through the underlying `fieldset`, but doesn't apply the muted disabled tile styling shown above—set `disabled` on each `SelectableTile` too for the visual state.
+
+<SelectableTileGroup legendText="Select options" name="options-disabled-group" selected={["option1", "option2"]} disabled>
+  <SelectableTile value="option1">
+    Multi-select Tile
+  </SelectableTile>
+  <SelectableTile value="option2">
+    Multi-select Tile
+  </SelectableTile>
+  <SelectableTile value="option3">
+    Multi-select Tile
+  </SelectableTile>
+</SelectableTileGroup>
+
+## Checkmark label
+
+Customize the ARIA label announced for a tile's checkmark icon with `iconDescription`. Defaults to `"Tile checkmark"`.
+
+<SelectableTileGroup legendText="Select options" name="options-checkmark-label" selected={["option1"]}>
+  <SelectableTile iconDescription="Option 1 selected" value="option1">
+    Multi-select Tile
+  </SelectableTile>
+  <SelectableTile value="option2">
+    Multi-select Tile
+  </SelectableTile>
+  <SelectableTile value="option3">
     Multi-select Tile
   </SelectableTile>
 </SelectableTileGroup>
