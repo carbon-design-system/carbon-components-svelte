@@ -14,7 +14,7 @@ Render content in a portal — useful for modals, tooltips, and menus that need 
 
 ## Multiple portals
 
-Each portal instance is independent and creates its own element in document.body. Each portal is automatically cleaned up when removed.
+Each portal instance is independent, creating its own element in document.body, and is automatically cleaned up when removed.
 
 <FileSource src="/framed/Portal/MultiplePortals" />
 
