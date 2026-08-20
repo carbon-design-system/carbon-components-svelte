@@ -86,7 +86,7 @@ Set `warn` to `true` and provide `warnText` to show a warning message. `invalid`
 
 Set `decorative` to `true` to hide the checkbox from the accessibility tree using CSS, rather than just `tabindex`/`aria-hidden` (which axe-core's nested-interactive check doesn't treat as sufficient). Use this when the checkbox is nested inside another interactive, widget-role element that already owns the checked-state semantics, such as a custom listbox option.
 
-<div role="option" aria-checked="true">
+<div role="option" aria-selected="true" aria-checked="true">
   <Checkbox decorative checked labelText="Option A" hideLabel />
   Option A
 </div>

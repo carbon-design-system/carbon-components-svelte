@@ -100,7 +100,7 @@ Use `bind:this` to obtain a ToolbarSearch reference and call `clear()` to reset 
 
 ### Clear event
 
-Listen for `on:clear` to know when the user clears the field—by clicking the built-in clear icon or pressing <kbd>Escape</kbd> while focused. This is distinct from calling the exported `clear()` method yourself, which updates `value` and `expanded` directly without dispatching the event.
+Listen for `on:clear` to know when the user clears the field—by clicking the built-in clear icon or pressing <DocKbd label="Escape" /> while focused. This is distinct from calling the exported `clear()` method yourself, which updates `value` and `expanded` directly without dispatching the event.
 
 <Toolbar>
   <ToolbarContent>
