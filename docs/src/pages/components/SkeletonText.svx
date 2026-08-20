@@ -30,8 +30,14 @@ Specify the number of lines with `lines`.
 
 <SkeletonText paragraph lines={8} />
 
-### Max width
+## Width
 
-Set a custom width with `width`.
+Set a custom width with `width`, as a percentage or pixel value. This works with any variant, not just paragraph.
+
+<SkeletonText width="50%" />
+
+### Paragraph
+
+In paragraph mode, each line's width varies around the `width` value instead of using it uniformly, for a more natural look.
 
 <SkeletonText paragraph width="50%" />
