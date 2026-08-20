@@ -18,7 +18,7 @@ Place buttons side by side in a horizontal layout.
 
 ## Stacked
 
-Stack buttons vertically with `stacked`.
+Set `stacked` to `true` to stack the buttons vertically instead of side by side.
 
 <ButtonSet stacked>
   <Button icon={Login}>Log in</Button>
