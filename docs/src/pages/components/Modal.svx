@@ -6,7 +6,17 @@ description: Modals provide a focused dialog for user interactions, confirmation
 
 The modal is an all-in-one component configured through props, making it ideal for standard modal dialogs. For more complex layouts or fine-grained control, use [ComposedModal](/components/ComposedModal) instead.
 
-## Focus behavior
+## Basic
+
+Display a modal dialog with a header, content area, and footer. Use primary and secondary actions for confirmations or input. Neither button closes the modal automatically — wire up `on:submit` and `on:click:button--secondary` to set `open` to `false` yourself; see [Events](#events).
+
+<FileSource src="/framed/Modal/Modal" />
+
+## Focus
+
+Control how focus moves when the modal opens, and override the default target when needed.
+
+### Focus behavior
 
 When the modal opens, focus is set using the following priority:
 
@@ -17,33 +27,23 @@ When the modal opens, focus is set using the following priority:
 
 After closing the modal, focus is returned to the element that triggered the modal.
 
-## Basic
-
-Display a modal dialog with a header, content area, and footer. Use primary and secondary actions for confirmations or input.
-
-<FileSource src="/framed/Modal/Modal" />
-
-## With portal
-
-Wrap the modal in a portal to escape parent containers with `overflow: hidden` or z-index stacking contexts. This ensures the modal appears above all content and isn't clipped by parent boundaries.
-
-<FileSource src="/framed/Portal/ModalPortal" />
-
-## Modal with dropdowns
-
-Components with menus — such as a combo box, dropdown, multi-select, date picker, or overflow menu — automatically render their menus in a floating portal when used inside a modal. The menus are positioned relative to their trigger and are not clipped by the modal's overflow or z-index stacking.
-
-Set `portalMenu={false}` on these components to opt out. In this example, the modal itself is wrapped in a portal.
-
-<FileSource src="/framed/Modal/ModalWithDropdowns" />
-
-## Custom focus
+### Custom focus
 
 Use `selectorPrimaryFocus` to override the default and target a specific element when the automatic first-input focus is not desired.
 
 <FileSource src="/framed/Modal/ModalCustomFocus" />
 
-## Danger
+## Alert mode
+
+Set `alert` to `true` to mark the modal as time-sensitive or requiring immediate attention. This changes the ARIA `role` from `"dialog"` to `"alertdialog"` (or `"alert"` when combined with `passiveModal`), which prompts assistive technology to announce the modal as soon as it opens. When not `passiveModal`, the body content is also linked with `aria-describedby` so screen readers include it in the announcement.
+
+<FileSource src="/framed/Modal/ModalAlert" />
+
+## Variants
+
+Change the modal's tone and purpose.
+
+### Danger
 
 Display critical actions or destructive operations with the danger variant. This style emphasizes the severity of the action.
 
@@ -51,37 +51,73 @@ By default, the cancel button receives focus instead of the critical button to p
 
 <FileSource src="/framed/Modal/DangerModal" />
 
-## Passive
+### Passive
 
 Create a non-interactive modal for displaying information. This variant lacks action buttons and focuses on content presentation. Since there is no primary button, the close button will receive focus when the modal opens.
 
 <FileSource src="/framed/Modal/PassiveModal" />
 
-## With form submission
+## Content
+
+Customize the modal's heading, label, and body content.
+
+### Custom heading and label
+
+Override the plain-text `modalHeading` and `modalLabel` with the `heading` and `label` slots when you need richer markup, such as a status tag next to the title.
+
+<FileSource src="/framed/Modal/ModalCustomHeading" />
+
+### With form submission
 
 Connect the modal's primary button to a form with `formId`. This enables native form submission even though the button is outside the form element. Clicking the primary button or pressing <DocKbd label="Enter" /> will trigger the form's submit event.
 
 <FileSource src="/framed/Modal/ModalWithForm" />
 
-## Primary button loading
-
-Set `primaryButtonLoading` while an async submit is in progress. The primary button shows an [InlineLoading](/components/InlineLoading) spinner, becomes non-interactive, and suppresses `submit` until loading finishes. The modal stays open.
-
-<FileSource src="/framed/Modal/ModalPrimaryButtonLoading" />
-
-## Has scrolling content
+### Has scrolling content
 
 Enable vertical scrolling for modals with lengthy content. This ensures all content remains accessible while maintaining a reasonable modal height.
 
 <FileSource src="/framed/Modal/ModalScrollingContent" />
 
-## Multiple modals
+### Full width
+
+Set `fullWidth` to remove the modal body padding so content spans edge to edge. Use it for content that supplies its own layout, such as a table or fluid form.
+
+<FileSource src="/framed/Modal/FullWidthModal" />
+
+## Buttons
+
+Configure the footer actions.
+
+### Multiple secondary buttons
+
+Add up to two secondary actions with `secondaryButtons`, which replaces the single secondary button text option. Each entry needs display text; set `kind` and `disabled` per button when actions should differ in weight or availability.
+
+<FileSource src="/framed/Modal/3ButtonModal" />
+
+### Button with icon
+
+Enhance modal buttons with icons for better visual context and clarity.
+
+<FileSource src="/framed/Modal/ModalButtonWithIcon" />
+
+### Primary button loading
+
+Set `primaryButtonLoading` while an async submit is in progress. The primary button shows an [InlineLoading](/components/InlineLoading) spinner, becomes non-interactive, and suppresses `submit` until loading finishes. The modal stays open.
+
+<FileSource src="/framed/Modal/ModalPrimaryButtonLoading" />
+
+## Stacking modals
+
+Show more than one modal at a time.
+
+### Multiple modals
 
 Stack multiple modals for complex workflows. Each modal maintains its own state and focus management.
 
 <FileSource src="/framed/Modal/ModalMultiple" />
 
-## Nested
+### Nested
 
 Nest a modal inside another modal's content to stack a confirmation dialog on top of it. Each modal tracks its own `open` state, and <DocKbd label="Escape" /> only closes the topmost (innermost) modal.
 
@@ -89,11 +125,23 @@ Wrap the nested modal in [Portal](/components/Portal) so it renders outside the 
 
 <FileSource src="/framed/Modal/ModalNested" />
 
-## Multiple secondary buttons
+## Portal and dropdowns
 
-Add up to two secondary actions with `secondaryButtons`, which replaces the single secondary button text option. Each entry needs display text; set `kind` and `disabled` per button when actions should differ in weight or availability.
+Render the modal — or components inside it — outside normal DOM boundaries.
 
-<FileSource src="/framed/Modal/3ButtonModal" />
+### With portal
+
+Wrap the modal in a portal to escape parent containers with `overflow: hidden` or z-index stacking contexts. This ensures the modal appears above all content and isn't clipped by parent boundaries.
+
+<FileSource src="/framed/Portal/ModalPortal" />
+
+### Modal with dropdowns
+
+Components with menus — such as a combo box, dropdown, multi-select, date picker, or overflow menu — automatically render their menus in a floating portal when used inside a modal. The menus are positioned relative to their trigger and are not clipped by the modal's overflow or z-index stacking.
+
+Set `portalMenu={false}` on these components to opt out. In this example, the modal itself is wrapped in a portal.
+
+<FileSource src="/framed/Modal/ModalWithDropdowns" />
 
 ## Sizes
 
@@ -117,19 +165,13 @@ Use the large size for complex content by setting `size` to `"lg"`.
 
 <FileSource src="/framed/Modal/ModalLarge" />
 
-## Full width
-
-Set `fullWidth` to remove the modal body padding so content spans edge to edge. Use it for content that supplies its own layout, such as a table or fluid form.
-
-<FileSource src="/framed/Modal/FullWidthModal" />
-
 ## Closing
 
 Control how the modal can be dismissed.
 
 ### Prevent default
 
-The modal dispatches a cancelable `close` event. Call `e.preventDefault()` to keep the modal open. The event includes a `trigger` property indicating what triggered the close attempt: `"escape-key"` (<DocKbd label="Escape" />), `"outside-click"`, or `"close-button"`.
+The modal dispatches a cancelable `close` event. Call `e.preventDefault()` to keep the modal open. The event includes a `trigger` property indicating what triggered the close attempt: `"escape-key"` (<DocKbd label="Escape" />), `"outside-click"`, `"close-button"`, or `"programmatic"` (the `open` prop was set to `false` from outside the component, for example through `bind:open`, rather than through one of the modal's own dismiss controls).
 
 <FileSource src="/framed/Modal/ModalPreventClose" />
 
@@ -145,8 +187,41 @@ Set `hideCloseButton` to `true` to remove the header close button. Use this for 
 
 <FileSource src="/framed/Modal/ModalHideCloseButton" />
 
-## Button with icon
+## Events
 
-Enhance modal buttons with icons for better visual context and clarity.
+Modal dispatches events for its lifecycle and button interactions. Only the close button, <DocKbd label="Escape" />, and (by default) an outside click close the modal automatically — see [Closing](#closing) above. Every other action leaves `open` untouched; handle the event and set `open` to `false` yourself when the action should dismiss the dialog.
 
-<FileSource src="/framed/Modal/ModalButtonWithIcon" />
+### Open
+
+Listen for `on:open` to know when the modal has become visible and focus has moved into it.
+
+```svelte
+<Modal bind:open on:open={() => console.log("opened")}>
+```
+
+### Submit and button clicks
+
+The primary button dispatches both `submit` and `click:button--primary` when clicked. Secondary buttons dispatch `click:button--secondary` with the button's `text`.
+
+```svelte
+<Modal
+  bind:open
+  primaryButtonText="Confirm"
+  secondaryButtonText="Cancel"
+  on:click:button--secondary={() => (open = false)}
+  on:submit={() => (open = false)}
+>
+```
+
+When `shouldSubmitOnEnter` is `true` (the default), pressing <DocKbd label="Enter" /> also dispatches `submit` and `click:button--primary`, unless focus is on a button, textarea, select, or contenteditable element. Set `shouldSubmitOnEnter` to `false` to disable this.
+
+### Transition end
+
+Listen for `on:transitionend` to know when the modal's open or close animation finishes. `event.detail.open` reflects the modal's state at the end of the transition.
+
+```svelte
+<Modal
+  bind:open
+  on:transitionend={(e) => console.log("open:", e.detail.open)}
+>
+```
