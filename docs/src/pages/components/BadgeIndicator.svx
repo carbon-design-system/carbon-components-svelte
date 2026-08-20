@@ -10,7 +10,7 @@ description: Badge indicators draw attention to unread counts and new activity o
 
 ## Basic
 
-Omit count to render an empty dot that signals presence without a number.
+Compose a `BadgeIndicator` in the `badge` slot of an icon-only [Button](/components/Button) to overlay a badge on it. Omit `count`, or set it to `0`, to render an empty dot that signals presence without a number.
 
 <Button
   kind="ghost"
@@ -22,7 +22,11 @@ Omit count to render an empty dot that signals presence without a number.
 
 ## Count
 
-Set count to a number. Values greater than 999 display as 999+.
+Control the badge content with `count`.
+
+### Numeric
+
+Set `count` to a number. Values greater than `999` display as `999+`.
 
 <Stack orientation="horizontal" gap={7}>
   <Button
@@ -48,9 +52,9 @@ Set count to a number. Values greater than 999 display as 999+.
   </Button>
 </Stack>
 
-## Formatted count
+### Formatted
 
-Pass a string to count to override the built-in numeric display. String values bypass the 999+ cap.
+Pass a string to `count` to override the built-in numeric display. String values bypass the `999+` cap.
 
 <FileSource src="/framed/BadgeIndicator/FormattedCount" />
 
