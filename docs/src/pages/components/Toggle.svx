@@ -19,18 +19,6 @@ Display the toggle in its on state with `toggled`.
 
 <Toggle labelText="Push notifications" toggled />
 
-## Reactive example
-
-Use two-way binding to control the toggle state programmatically.
-
-<FileSource src="/framed/Toggle/ToggleReactive" />
-
-## on:toggle event
-
-Listen for state changes with `on:toggle`.
-
-<Toggle labelText="Push notifications" on:toggle={e => console.log(e.detail)} />
-
 ## Labels
 
 Customize or hide the toggle labels.
@@ -56,6 +44,16 @@ Use slots to customize the toggle labels with additional styling or content.
   <span slot="labelB" style="color: green">Yes</span>
 </Toggle>
 
+### Custom label
+
+Use the `labelChildren` slot to provide custom label content instead of `labelText`.
+
+<Toggle labelText="Fallback label">
+  <span slot="labelChildren">
+    Push notifications <strong>(recommended)</strong>
+  </span>
+</Toggle>
+
 ## States
 
 Reflect interaction states.
@@ -77,6 +75,18 @@ Display a non-editable value with `readonly`.
 Use the small size variant by setting `size` to `"sm"`.
 
 <Toggle size="sm" labelText="Push notifications" />
+
+## Reactive
+
+Use two-way binding with `bind:toggled` to track and update the toggle state programmatically.
+
+<FileSource src="/framed/Toggle/ToggleReactive" />
+
+## Events
+
+Use `on:toggle` to listen for state changes. The event dispatches `{ toggled: boolean }` as `event.detail`.
+
+<Toggle labelText="Push notifications" on:toggle={e => console.log(e.detail)} />
 
 ## Skeleton
 
