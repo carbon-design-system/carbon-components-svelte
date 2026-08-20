@@ -5,6 +5,7 @@ description: User avatars display a photo, a custom icon, or initials derived fr
 
 <script>
   import { UserAvatar } from "carbon-components-svelte";
+  import CheckmarkFilled from "carbon-icons-svelte/lib/CheckmarkFilled.svelte";
   import UserAvatarFilledAlt from "carbon-icons-svelte/lib/UserAvatarFilledAlt.svelte";
 </script>
 
@@ -115,6 +116,23 @@ Do not set `interactive` when slotting the avatar into [ProfileMenu](/components
 Set `href` to render an anchor, for example a profile page link. `href` takes priority over `interactive`.
 
 <UserAvatar href="/profile" name="Richard Hendricks" backgroundColor="blue" />
+
+## Status
+
+Set `status` to show a presence indicator at the bottom-right of the avatar. Use `"online"`, `"away"`, `"busy"`, or `"offline"`.
+
+<UserAvatar name="Monica" status="online" />
+<UserAvatar name="Richard Hendricks" status="away" />
+<UserAvatar name="Dinesh Chugtai" status="busy" />
+<UserAvatar name="Bertram Gilfoyle" status="offline" />
+
+### Custom badge
+
+Use the `badge` slot to replace the status indicator with custom overlay content. The slot sits at the bottom-right with a ring in the surrounding background color.
+
+<UserAvatar name="Jared Dunn" status="online">
+  <CheckmarkFilled slot="badge" size={8} />
+</UserAvatar>
 
 ## Tooltip
 
