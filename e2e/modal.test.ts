@@ -68,6 +68,27 @@ test.describe("Modal", () => {
     await expect(modal).toHaveClass(/is-visible/);
   });
 
+  test("does not close when clicking a native select inside the modal (#3710)", async ({
+    page,
+  }) => {
+    await page.getByTestId("open-modal").click();
+    const modal = page.locator(".bx--modal");
+    await expect(modal).toHaveClass(/is-visible/);
+
+    const select = page.getByTestId("modal-select");
+    await select.click();
+    // Chromium fires a second, unpaired `mouseup` on a native <select> when its
+    // (browser-native, not in the DOM) options popup closes — confirmed via
+    // direct event instrumentation: mousedown -> mouseup -> click -> mouseup.
+    // That extra mouseup is racy to trigger organically through a plain click
+    // in headless mode, so dispatch it directly for a deterministic test.
+    await select.evaluate((el) => {
+      el.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+    });
+
+    await expect(modal).toHaveClass(/is-visible/);
+  });
+
   test("fires the secondary event when pressing Enter on the focused secondary button", async ({
     page,
   }) => {

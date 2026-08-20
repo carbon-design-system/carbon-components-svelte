@@ -5,6 +5,8 @@
     ModalBody,
     ModalFooter,
     ModalHeader,
+    Select,
+    SelectItem,
   } from "carbon-components-svelte";
 
   let open = false;
@@ -30,6 +32,10 @@
       data-testid="modal-primary-focus"
       aria-label="Primary focus input"
     >
+    <Select data-testid="modal-select" labelText="Contact method">
+      <SelectItem value="slack" text="Slack" />
+      <SelectItem value="email" text="Email" />
+    </Select>
   </ModalBody>
   <ModalFooter>
     <!-- The footer "Close" closes via app code (sets `open = false`), not a

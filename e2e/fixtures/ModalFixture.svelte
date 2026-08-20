@@ -1,5 +1,5 @@
 <script>
-  import { Modal } from "carbon-components-svelte";
+  import { Modal, Select, SelectItem } from "carbon-components-svelte";
 
   let open = false;
   let events = [];
@@ -24,6 +24,10 @@
   on:close={(e) => (closeEvents = [...closeEvents, e.detail?.trigger ?? "null"])}
 >
   <p data-testid="modal-body">Modal content</p>
+  <Select data-testid="modal-select" labelText="Contact method">
+    <SelectItem value="slack" text="Slack" />
+    <SelectItem value="email" text="Email" />
+  </Select>
   <!-- Custom in-modal control that closes via app code (sets `open = false`),
        not the built-in close affordance — exercises the "programmatic" trigger. -->
   <button
