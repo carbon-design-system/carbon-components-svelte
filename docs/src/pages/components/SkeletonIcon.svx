@@ -25,3 +25,9 @@ SkeletonIcon wraps [SkeletonPlaceholder](/components/SkeletonPlaceholder) for ic
 ### 32px
 
 <SkeletonIcon size={32} />
+
+## Custom width and height
+
+SkeletonIcon also accepts `width` and `height`, forwarded to the underlying [SkeletonPlaceholder](/components/SkeletonPlaceholder), for a non-square placeholder instead of `size`.
+
+<SkeletonIcon width="2rem" height="1rem" />
