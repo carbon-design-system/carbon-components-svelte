@@ -142,6 +142,8 @@ Set modifier props alongside a type style.
   <Text type="body-long-01" italic>Italic body text</Text>
   <Text type="body-long-01" family="mono">IBM Plex Mono</Text>
   <Text type="body-long-01" family="serif">IBM Plex Serif</Text>
+  <Text type="body-long-01" family="sans-condensed">IBM Plex Sans Condensed</Text>
+  <Text type="body-long-01" family="sans-hebrew">IBM Plex Sans Hebrew</Text>
   <Text tag="h2" type="productive-heading-04" balance maxWidth="20rem">Balanced heading across multiple lines</Text>
 </Stack>
 
@@ -185,9 +187,27 @@ Set `fullWidth` when the row should span its container (`width: 100%`). A block 
   </Text>
 </Box>
 
-## Truncate (multiline)
+## Truncate
 
-Set `lines` to truncate overflow while keeping the Carbon type style. Values above 1 use multiline mode (end clamp only). See also [Truncate](/components/Truncate) for wrapping inline text, or the truncate action on native elements.
+Set `lines` to truncate overflow while keeping the Carbon type style. See also [Truncate](/components/Truncate) for wrapping inline text, or the truncate action on native elements.
+
+### Single line
+
+Set `lines` to `1` to truncate a single line with an ellipsis. Pair with `maxWidth` (or a constrained container) so there is a boundary to truncate against.
+
+<Text type="body-short-01" maxWidth="16rem" lines={1}>
+  Carbon Components Svelte is a Svelte component library that implements the Carbon Design System.
+</Text>
+
+Set `clamp` to `"front"` to truncate from the start instead of the end. `clamp` only takes effect when `lines` is `1`; multiline mode always clamps at the end.
+
+<Text type="body-short-01" maxWidth="16rem" lines={1} clamp="front">
+  Carbon Components Svelte is a Svelte component library that implements the Carbon Design System.
+</Text>
+
+### Multiline
+
+Values of `lines` above `1` use multiline mode (end clamp only).
 
 <Text type="body-long-01" maxWidth="20rem" lines={3}>
   Carbon Components Svelte is a Svelte component library that implements the Carbon Design System, an open source design system by IBM. It is maintained by the open source community and is available on npm.
