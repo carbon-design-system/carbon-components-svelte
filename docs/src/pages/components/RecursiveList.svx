@@ -12,6 +12,12 @@ Create a hierarchical list using the `nodes` prop. Each node can contain text, l
 
 <FileSource src="/framed/RecursiveList/RecursiveList" />
 
+## Link attributes
+
+Set `target` on a node to control where a link opens. When `target` is `"_blank"`, `rel` defaults to `"noopener noreferrer"`; supply `rel` explicitly to override it.
+
+<FileSource src="/framed/RecursiveList/RecursiveListLinkAttributes" />
+
 ## Ordered
 
 Set `type` to `"ordered"` for numbered lists with proper indentation.
