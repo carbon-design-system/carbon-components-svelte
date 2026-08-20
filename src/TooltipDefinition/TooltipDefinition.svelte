@@ -61,6 +61,14 @@
    */
   export let portalTooltip = undefined;
 
+  /**
+   * Extra class names applied to the trigger button. Use when the trigger
+   * itself should carry visual component classes (for example an interactive
+   * avatar chip) instead of wrapping a nested interactive child.
+   * @type {string | undefined}
+   */
+  export let triggerClass = undefined;
+
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { createDelayedSetter } from "../utils/delayedSetter.js";
@@ -131,6 +139,7 @@
     bind:this={ref}
     type="button"
     aria-describedby={id}
+    class={triggerClass}
     class:bx--tooltip--portal-active={effectivePortalTooltip}
     class:bx--tooltip--a11y={!effectivePortalTooltip}
     class:bx--tooltip__trigger={true}
