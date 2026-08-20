@@ -41,6 +41,14 @@ Set `clearable` to `true` to show a clear button when an item is selected. Clear
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
+### Clear button text
+
+Override the assistive text for the clear interaction with `clearSelectionText` (appended to the field's description whenever there is a selection to clear) and `selectionClearedText` (announced through the status live region after clearing). Both only apply when `clearable` is `true`.
+
+<Dropdown clearable clearSelectionText="Press Escape twice to clear" selectionClearedText="Contact method cleared" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
 ### Initial selection
 
 Set `selectedId` to pre-select an item when the dropdown first renders. The trigger shows that item's label in the closed state.
@@ -119,6 +127,34 @@ available to screen readers.
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
+## Menu
+
+Control the menu's position, portalling, and open state.
+
+### Top direction
+
+Set `direction` to `"top"` to open the menu above the input. Useful when space below is limited.
+
+<Dropdown direction="top" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
+### Portal menu
+
+Set `portalMenu` to `true` to render the dropdown menu in a floating portal. This prevents the menu from being clipped by parent containers with `overflow: hidden` or z-index stacking contexts. Without `portalMenu`, the dropdown in the example below would be clipped by its container's hidden overflow.
+
+When inside a [Modal](/components/Modal#modal-with-dropdowns), `portalMenu` defaults to `true` unless explicitly set to `false`.
+
+<FileSource src="/framed/Dropdown/DropdownPortalMenu" />
+
+### Open by default
+
+Set `open` to `true` to render the dropdown already expanded. The prop is bindable (`bind:open`), so you can also drive it externally, such as from a trigger elsewhere on the page.
+
+<Dropdown open labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
 ## Virtualization
 
 Virtualization renders only the items currently visible in the viewport, improving performance for large lists.
@@ -168,19 +204,81 @@ By default, item height matches the menu row for each size: 24px (`xs`), 32px (`
 
 <FileSource src="/framed/Dropdown/VirtualizeItemHeight" />
 
+### Custom container height
+
+The virtualized menu's scrollable container defaults to a maximum height of 300px. Set `containerHeight` within the `virtualize` object to change it. Providing any `virtualize` object (even with a short list, as below) activates the sizing behavior, though items only get windowed once the list reaches `threshold`.
+
+<Dropdown virtualize={{ containerHeight: 150 }} labelText="Contact" items={[
+  { id: "0", text: "Slack" },
+  { id: "1", text: "Email" },
+  { id: "2", text: "Fax" },
+  { id: "3", text: "Phone" },
+  { id: "4", text: "Mail" },
+  { id: "5", text: "SMS" },
+  { id: "6", text: "WhatsApp" },
+  { id: "7", text: "Teams" },
+  { id: "8", text: "Zoom" },
+  { id: "9", text: "In person" },
+]} />
+
+Set `maxItems` within the same object to cap the number of items rendered in the DOM window at once, independent of `overscan`. This only takes effect once the list is windowed (at or above `threshold`), and is rarely needed outside of extreme item counts or very expensive item templates—set it too low and items can appear to go blank near the scroll edges.
+
 ## Multiple dropdowns
 
 Create multiple dropdowns that work together.
 
 <FileSource src="/framed/Dropdown/MultipleDropdown" />
 
-## Top direction
+## Events
 
-Set `direction` to `"top"` to open the menu above the input. Useful when space below is limited.
+Respond to selection, clearing, and menu-close interactions.
 
-<Dropdown direction="top" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
-  {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}]}" />
+### Select
+
+Use `on:select` to listen for a new selection. The event detail includes the selected item's id and the full item.
+
+<Dropdown
+  labelText="Contact"
+  items={[
+    { id: "0", text: "Slack" },
+    { id: "1", text: "Email" },
+    { id: "2", text: "Fax" },
+  ]}
+  on:select={(e) => {
+    console.log(e.detail.selectedId);
+    console.log(e.detail.selectedItem);
+  }}
+/>
+
+### Clear
+
+Use `on:clear` to listen for the selection being cleared, either via the clear button or the Delete/Backspace shortcut. Only fires when `clearable` is `true`. The event detail is the original `KeyboardEvent` or `MouseEvent`.
+
+<Dropdown
+  clearable
+  selectedId="0"
+  labelText="Contact"
+  items={[
+    { id: "0", text: "Slack" },
+    { id: "1", text: "Email" },
+    { id: "2", text: "Fax" },
+  ]}
+  on:clear={(e) => console.log(e)}
+/>
+
+### Close
+
+Use `on:close` to know when the menu closes and why. `event.detail.trigger` is `"escape-key"`, `"outside-click"`, or `"select"`.
+
+<Dropdown
+  labelText="Contact"
+  items={[
+    { id: "0", text: "Slack" },
+    { id: "1", text: "Email" },
+    { id: "2", text: "Fax" },
+  ]}
+  on:close={(e) => console.log(e.detail.trigger)}
+/>
 
 ## Sizes
 
@@ -354,14 +452,6 @@ Invalid and warning states are not displayed while the dropdown is read-only.
 Display a loading skeleton for the fluid dropdown variant.
 
 <FluidDropdownSkeleton />
-
-## Portal menu
-
-Set `portalMenu` to `true` to render the dropdown menu in a floating portal. This prevents the menu from being clipped by parent containers with `overflow: hidden` or z-index stacking contexts. Without `portalMenu`, the dropdown in the example below would be clipped by its container's hidden overflow.
-
-When inside a [Modal](/components/Modal#modal-with-dropdowns), `portalMenu` defaults to `true` unless explicitly set to `false`.
-
-<FileSource src="/framed/Dropdown/DropdownPortalMenu" />
 
 ## Form name
 
