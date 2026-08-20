@@ -14,6 +14,10 @@ Create a clickable tile with an href to link to another page.
 Carbon Design System
 </ClickableTile>
 
+## Keyboard interaction
+
+Focus the tile and press <DocKbd label="Enter" /> or <DocKbd label="Space" /> to activate it. Both keys fire the same `on:click` handler as a mouse click and toggle `clicked`, whether or not `href` is set.
+
 ## Reactive example
 
 Bind to `clicked` to read whether the tile has been activated.
