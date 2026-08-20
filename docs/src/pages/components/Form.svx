@@ -64,7 +64,12 @@ shows a form with checkboxes, radio buttons, and a select menu.
   <Button type="submit">Submit</Button>
 </Form>
 
-## Disabled
+## Form group
+
+Use `FormGroup` to wrap related controls in a `fieldset`, with an optional
+`legend` rendered from `legendText`.
+
+### Disabled
 
 Set `disabled` on FormGroup to disable the fieldset and nested native form
 controls. Labels are visually muted via Carbon's `fieldset[disabled]` styles.
@@ -84,7 +89,45 @@ of those components directly.
   <Button type="submit">Submit</Button>
 </Form>
 
-## Prevent default behavior
+### No margin
+
+Set `noMargin` to `true` to remove the default bottom margin below a fieldset,
+useful when stacking form groups without extra spacing between them.
+
+<Form>
+  <FormGroup legendText="Default spacing">
+    <Checkbox id="checkbox-margin-0" labelText="Checkbox Label" />
+  </FormGroup>
+  <FormGroup legendText="No margin" noMargin>
+    <Checkbox id="checkbox-margin-1" labelText="Checkbox Label" />
+  </FormGroup>
+</Form>
+
+### Validation
+
+Set `invalid` to `true` to mark the fieldset invalid via the `data-invalid`
+attribute. Set `message` to `true` with `messageText` to render a requirement
+below the fieldset's controls.
+
+<Form>
+  <FormGroup
+    legendText="Contact preferences"
+    invalid
+    message
+    messageText="Select at least one contact method"
+  >
+    <Checkbox id="checkbox-contact-0" labelText="Email" />
+    <Checkbox id="checkbox-contact-1" labelText="SMS" />
+  </FormGroup>
+  <Button type="submit">Submit</Button>
+</Form>
+
+## Submission
+
+Handle form submission, including preventing the default browser behavior and
+integrating with SvelteKit's form actions.
+
+### Prevent default behavior
 
 Handle form submission by preventing the default browser behavior. Use
 `e.preventDefault()` to stop the native form submission and handle the event
@@ -98,7 +141,7 @@ programmatically.
   <Button type="submit">Submit</Button>
 </Form>
 
-## SvelteKit enhance
+### SvelteKit enhance
 
 Svelte's `use:` directive cannot target components. Set `actions` to apply
 SvelteKit's `enhance` (or any other action) to the underlying form element.
