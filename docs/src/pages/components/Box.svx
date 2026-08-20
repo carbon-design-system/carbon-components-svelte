@@ -14,7 +14,7 @@ The default component renders a `<div>` with no modifiers.
 
 ## Tokens
 
-Apply Carbon fill, inset, and border tokens.
+Apply Carbon fill and border tokens.
 
 ### Fill
 
@@ -44,12 +44,29 @@ Nested fills stack Carbon layer surfaces. Contrast depends on the active theme: 
   </Box>
 </Box>
 
-### Inset
+### Border
 
-Set inset and margin props using the shared layout scale 1–13 (same values as [Stack](/components/Stack) gap). Pass a string for any CSS length.
+Set `border` to a Carbon border token. Each utility applies `1px solid`.
 
-| Scale | Size   |
-| ----- | ------ |
+| Token         | Description                |
+| ------------- | --------------------------- |
+| `subtle`      | Subtle divider border      |
+| `strong`      | Strong divider border      |
+| `interactive` | Interactive element border |
+| `disabled`    | Disabled element border    |
+
+<Stack gap={3}>
+  <Box fill="layer-01" padding={5} border="subtle">subtle</Box>
+  <Box fill="layer-01" padding={5} border="strong">strong</Box>
+  <Box fill="layer-01" padding={5} border="interactive">interactive</Box>
+</Stack>
+
+## Spacing
+
+Set padding and margin using the shared layout scale 1–13 (same values as [Stack](/components/Stack) gap). Pass a string for any CSS length.
+
+| Scale | Size          |
+| ----- | ------------- |
 | 1     | 0.125rem (2px)  |
 | 2     | 0.25rem (4px)   |
 | 3     | 0.5rem (8px)    |
@@ -64,33 +81,37 @@ Set inset and margin props using the shared layout scale 1–13 (same values as 
 | 12    | 6rem (96px)     |
 | 13    | 10rem (160px)   |
 
+### Padding
+
+Use `padding` for all sides, or `paddingX`/`paddingY` to target an axis.
+
 <Stack gap={5}>
   <Box fill="layer-01" padding={5}>Scale padding (5)</Box>
   <Box fill="layer-01" padding="2rem">Custom padding (`2rem`)</Box>
   <Box fill="layer-01" paddingX={6} paddingY={3}>Axis padding</Box>
-  <Box fill="layer-01" padding={5} marginY={5}>Vertical margin</Box>
 </Stack>
 
-### Border
+### Margin
 
-Set `border` to a Carbon border token. Each utility applies `1px solid`.
+Use `margin` for all sides, or `marginX`/`marginY` to target an axis.
 
-| Token         | Description                |
-| ------------- | -------------------------- |
-| `subtle`      | Subtle divider border      |
-| `strong`      | Strong divider border      |
-| `interactive` | Interactive element border |
-| `disabled`    | Disabled element border    |
-
-<Stack gap={3}>
-  <Box fill="layer-01" padding={5} border="subtle">subtle</Box>
-  <Box fill="layer-01" padding={5} border="strong">strong</Box>
-  <Box fill="layer-01" padding={5} border="interactive">interactive</Box>
+<Stack gap={5}>
+  <Box fill="layer-01" padding={5} margin={5}>All-side margin</Box>
+  <Box fill="layer-01" padding={5} marginX={6}>Horizontal margin</Box>
+  <Box fill="layer-01" padding={5} marginY={5}>Vertical margin</Box>
 </Stack>
 
 ## Width
 
-Set width, maxWidth, or minWidth to any CSS length. Numbers are treated as pixels. Use `fullWidth` to span the container (`width: 100%`).
+Set `width`, `maxWidth`, or `minWidth` to any CSS length. Numbers are treated as pixels. Use `fullWidth` to span the container (`width: 100%`).
+
+### Fixed width
+
+<Box fill="layer-01" padding={5} width="16rem">
+  Fixed width (`16rem`).
+</Box>
+
+### Max width
 
 <Stack gap={5}>
   <Box fill="layer-01" padding={5} maxWidth="20rem">
@@ -101,11 +122,29 @@ Set width, maxWidth, or minWidth to any CSS length. Numbers are treated as pixel
   </Box>
 </Stack>
 
+### Min width
+
+<div style="width: 100%; overflow-x: auto;">
+  <Box fill="layer-01" padding={5} minWidth="30rem">
+    Min width in rem (`30rem`); scroll if the container is narrower.
+  </Box>
+</div>
+
+### Full width
+
 <div style="width: 100%;">
   <Box fill="layer-01" padding={5} fullWidth maxWidth="24rem">
     Full width up to a custom max width.
   </Box>
 </div>
+
+## Custom element
+
+The box renders a `<div>` by default. Set `tag` to use a different element.
+
+<Box tag="section" fill="layer-01" padding={5} border="subtle">
+  Rendered as a `section`.
+</Box>
 
 ## Composition
 
