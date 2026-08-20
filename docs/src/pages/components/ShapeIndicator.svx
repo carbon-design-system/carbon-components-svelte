@@ -9,7 +9,7 @@ description: Shape indicator pairs a status shape with a label to communicate th
 
 ## Basic
 
-Create a shape indicator with `kind` and `label`.
+Create a shape indicator with `kind` and `label`. For a version that pairs a status icon with more visual weight instead of a shape, see [IconIndicator](/components/IconIndicator).
 
 <ShapeIndicator kind="stable" label="Stable" />
 
