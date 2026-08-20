@@ -283,6 +283,9 @@
     }
   }}
   on:click
+  on:mousedown={(event) => {
+    if (event.target === event.currentTarget) outsideDismiss.pressOutside();
+  }}
   on:mouseup={outsideDismiss.release}
   on:mouseover
   on:mouseenter
