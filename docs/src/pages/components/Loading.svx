@@ -24,3 +24,15 @@ Show a loading indicator without the overlay, allowing interaction with the unde
 Display a more compact loading indicator.
 
 <Loading withOverlay={false} small />
+
+## Description
+
+Customize the text announced to screen readers by setting `description`. Defaults to `"loading"`.
+
+<Loading description="Loading metrics..." withOverlay={false} />
+
+## Stop state
+
+Set `active` to `false` to play the spinner's end-of-loading animation and mark it inactive for screen readers (`aria-live="off"`). Useful when transitioning out of a loading state before removing the component.
+
+<Loading active={false} withOverlay={false} />
