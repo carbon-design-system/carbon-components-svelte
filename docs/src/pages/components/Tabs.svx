@@ -31,17 +31,57 @@ Create a basic tab interface with labels and content.
   </svelte:fragment>
 </Tabs>
 
-## Reactive
+## Selection
+
+Control which tab is active by index, by a stable id, or by changing how arrow keys move the selection.
+
+### Reactive
 
 Use `bind:selected` for a two-way binding with the selected tab index, so you can programmatically control the selected tab and react to tab changes.
 
 <FileSource src="/framed/Tabs/TabsReactive" />
 
-## Selected by id
+### Selected by id
 
 For dynamic tab sets, bind `selectedId` and give each `Tab` a stable `id`. Selection stays on the same logical tab when tabs before it are added or removed. When set, `selectedId` takes precedence over `selected`.
 
 <FileSource src="/framed/Tabs/TabsSelectedId" />
+
+### Manual activation
+
+By default, tabs use automatic activation: arrow keys move focus and select the
+tab. Set `activation` to `"manual"` so arrow keys only move focus. Press <DocKbd label="Enter" /> or <DocKbd label="Space" /> to select.
+Use manual activation when switching panels is expensive.
+
+<Tabs activation="manual">
+  <Tab label="Tab label 1" />
+  <Tab label="Tab label 2" />
+  <Tab label="Tab label 3" />
+  <svelte:fragment slot="content">
+    <TabContent>Content 1</TabContent>
+    <TabContent>Content 2</TabContent>
+    <TabContent>Content 3</TabContent>
+  </svelte:fragment>
+</Tabs>
+
+## Events
+
+Listen for tab selection changes.
+
+### Change
+
+Listen for `on:change` to know when the selected tab index changes, whether from a click, keyboard navigation, or a `selected`/`selectedId` update. `event.detail` is the new selected index. For the dismiss event, see [Dismissible](#dismissible).
+
+<Tabs on:change={(e) => console.log(e.detail)}>
+  <Tab label="Tab label 1" />
+  <Tab label="Tab label 2" />
+  <Tab label="Tab label 3" />
+  <svelte:fragment slot="content">
+    <TabContent>Content 1</TabContent>
+    <TabContent>Content 2</TabContent>
+    <TabContent>Content 3</TabContent>
+  </svelte:fragment>
+</Tabs>
 
 ## Overflow
 
@@ -72,23 +112,6 @@ When the tabs exceed the available width, the list scrolls horizontally and back
 Below the medium breakpoint, vertical tabs collapse into the same horizontal, scrollable row with overflow buttons. Resize the viewport to see them.
 
 <FileSource src="/framed/Tabs/TabsVerticalOverflow" />
-
-## Manual activation
-
-By default, tabs use automatic activation: arrow keys move focus and select the
-tab. Set `activation` to `"manual"` so arrow keys only move focus. Press <DocKbd label="Enter" /> or <DocKbd label="Space" /> to select.
-Use manual activation when switching panels is expensive.
-
-<Tabs activation="manual">
-  <Tab label="Tab label 1" />
-  <Tab label="Tab label 2" />
-  <Tab label="Tab label 3" />
-  <svelte:fragment slot="content">
-    <TabContent>Content 1</TabContent>
-    <TabContent>Content 2</TabContent>
-    <TabContent>Content 3</TabContent>
-  </svelte:fragment>
-</Tabs>
 
 ## Disabled tabs
 
@@ -229,6 +252,10 @@ the route to the console instead of navigating.
 
 ## Icons
 
+Add an icon next to the tab label, or render compact tabs that show only an icon.
+
+### With label
+
 Add an icon next to the tab label with `icon`. The icon renders to the right of
 the label by default and shifts left when dismissible is enabled.
 
@@ -243,13 +270,13 @@ the label by default and shifts left when dismissible is enabled.
   </svelte:fragment>
 </Tabs>
 
-## Icon-only
+### Icon-only
 
 Set `iconOnly` on Tabs to render compact, square tabs that display only an icon.
 Set icon and label on each Tab; the label is the accessible name and the tooltip
 shown on hover and focus.
 
-### Basic
+#### Basic
 
 <Tabs iconOnly>
   <Tab label="Search" icon={Search} />
@@ -264,7 +291,7 @@ shown on hover and focus.
   </svelte:fragment>
 </Tabs>
 
-### Large
+#### Large
 
 Set `iconSize` to `"lg"` for large icon-only tabs. The tabs and their icons are enlarged to the large scale.
 
@@ -281,7 +308,7 @@ Set `iconSize` to `"lg"` for large icon-only tabs. The tabs and their icons are 
   </svelte:fragment>
 </Tabs>
 
-### Tooltip placement
+#### Tooltip placement
 
 The tooltip renders below the tab by default. Use `tooltipDirection` and
 `tooltipAlignment` to control placement. The tooltip automatically flips to the
@@ -300,7 +327,7 @@ opposite side if there is not enough space.
   </svelte:fragment>
 </Tabs>
 
-### Container
+#### Container
 
 Icon-only tabs also work with the container type.
 
@@ -322,7 +349,7 @@ Icon-only tabs also work with the container type.
 Set `dismissible` on Tabs to render a close button on each tab. Handle the
 dismiss event to remove the tab from your data. Bind `selectedId` with a stable
 `id` on each Tab so selection stays coherent without manual index math. The
-event detail includes `{ id, label, disabled, index }`. Press
+event detail includes `{ id, label, disabled, hasSecondaryLabel, index }`. Press
 <DocKbd label="Delete" /> on the focused tab to dismiss it.
 
 ### Basic
@@ -520,7 +547,7 @@ Show a loading state for the container tab variant.
 Use TabsVertical for a tab list beside the panel. Compose it with the same Tab and
 TabContent components. From the medium breakpoint up, tabs stack in a vertical column.
 On narrower screens, the list becomes a horizontal row with overflow scrolling.
-`activation` works the same as on Tabs (see [Manual activation](#manual-activation)).
+`selected`, `selectedId`, and `activation` all work the same as on Tabs (see [Selection](#selection)).
 
 <TabsVertical>
   <Tab label="Dashboard" />
@@ -583,8 +610,8 @@ height.
 
 ### Selected
 
-Set selected to control the active tab index. Bind to selected to update the
-index as users switch tabs.
+Set `selected` to control the active tab index on mount. As with `Tabs`, bind
+`selected` or `selectedId` for two-way updates (see [Selection](#selection)).
 
 <TabsVertical selected={1}>
   <Tab label="Dashboard" />
