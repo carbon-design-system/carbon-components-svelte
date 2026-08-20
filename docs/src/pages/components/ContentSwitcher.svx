@@ -21,7 +21,11 @@ Create a content switcher with switch components. Each switch needs a text label
   <Switch text="Trending" />
 </ContentSwitcher>
 
-## Initial selected index
+## Selection
+
+Control which switch is selected by index, by a stable id, or by changing how arrow keys move the selection.
+
+### Initial selected index
 
 Set `selectedIndex` to pre-select a switch when the content switcher loads.
 
@@ -31,7 +35,7 @@ Set `selectedIndex` to pre-select a switch when the content switcher loads.
   <Switch text="Recommended" />
 </ContentSwitcher>
 
-## Selected by id
+### Selected by id
 
 For dynamic switch sets, bind `selectedId` and give each `Switch` a stable
 `id`. Selection stays on the same logical switch when switches before it are
@@ -40,7 +44,7 @@ added or removed. When set, `selectedId` takes precedence over
 
 <FileSource src="/framed/ContentSwitcher/ContentSwitcherSelectedId" />
 
-## Manual selection mode
+### Manual selection mode
 
 By default, the content switcher changes the selection when the user moves focus with the arrow keys.
 
@@ -52,13 +56,27 @@ Set `selectionMode` to `"manual"` so that arrow keys only move focus without cha
   <Switch text="Recommended" />
 </ContentSwitcher>
 
-## Reactive example
+### Reactive
 
 Programmatically control the content switcher with the `bind:selectedIndex`
 directive, updating the selected index based on user interactions or application
 state.
 
 <FileSource src="/framed/ContentSwitcher/ContentSwitcherReactive" />
+
+## Events
+
+Listen for content switcher selection changes.
+
+### Change
+
+Listen for `on:change` to know when the selected switch index changes, whether from a click, keyboard navigation, or a `selectedIndex`/`selectedId` update. `event.detail` is the new selected index.
+
+<ContentSwitcher on:change={(e) => console.log(e.detail)}>
+  <Switch text="Latest news" />
+  <Switch text="Trending" />
+  <Switch text="Recommended" />
+</ContentSwitcher>
 
 ## Conditional switches
 
@@ -93,7 +111,7 @@ Set `icon` on every switch for compact, icon-only controls. The switcher becomes
   <Switch icon={List} text="List" />
 </ContentSwitcher>
 
-### Custom tooltip alignment
+### Tooltip alignment
 
 Pass `tooltipAlignment` to individual icon-only switches to adjust tooltip alignment.
 
@@ -102,6 +120,12 @@ Pass `tooltipAlignment` to individual icon-only switches to adjust tooltip align
   <Switch icon={Dashboard} text="Dashboard" />
   <Switch icon={List} text="List" tooltipAlignment="end" />
 </ContentSwitcher>
+
+### Tooltip behavior
+
+Within a content switcher, only one switch's tooltip stays open at a time — hovering or focusing a new switch closes the previous one immediately.
+
+Moving the pointer directly from one icon-only switch to a neighbor whose tooltip is already open skips the usual enter delay, so the tooltip swaps in immediately instead of waiting again. Hover across the icon-only switches in the examples above to feel this.
 
 ## Low contrast
 
@@ -155,7 +179,7 @@ Combine low contrast with icon-only switches.
   <Switch icon={List} text="List" />
 </ContentSwitcher>
 
-### Icon-only (custom tooltip alignment)
+### Icon-only (tooltip alignment)
 
 Pass `tooltipAlignment` to individual icon-only switches to adjust tooltip alignment.
 
