@@ -18,6 +18,18 @@ When the dialog opens, focus moves into it (native modal focus trap). When it cl
 
 <FileSource src="/framed/Dialog/ModalDialog" />
 
+## Events
+
+`Dialog` dispatches `open` once the dialog becomes visible (after `show()`/`showModal()` runs and focus moves in). Pair it with `close` — see [Closing](#closing) below — to track the dialog's full lifecycle.
+
+```svelte
+<Dialog
+  bind:open
+  on:open={() => console.log("open")}
+  on:close={(e) => console.log("close", e.detail)}
+>
+```
+
 ## Closing
 
 The `close` event includes a `trigger` property indicating what dismissed the dialog: `"escape-key"` (<DocKbd label="Escape" />), `"backdrop"`, `"close-button"` (for example a `<form method="dialog">` submit), or `"programmatic"` (when `open` is set to `false`).
