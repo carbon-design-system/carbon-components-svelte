@@ -40,6 +40,31 @@ Specify the max character count with `maxCount`. A character counter appears to 
 
 <TextInput labelText="User name" placeholder="Enter user name..." maxCount={10} />
 
+## Events
+
+Respond to value changes.
+
+### Value change
+
+Use `on:input` to listen for every keystroke, and `on:change` to listen for
+committed changes on blur. Both events dispatch the current value directly as
+`event.detail`.
+
+<TextInput
+  labelText="User name"
+  placeholder="Enter user name..."
+  on:input={(e) => console.log(e.detail)} // string | null
+  on:change={(e) => console.log(e.detail)} // string | null
+/>
+
+### Numeric values
+
+Set the native `type` attribute to `"number"` to parse `value` as a number.
+The bound value—and the event detail dispatched by `on:input` and `on:change`—is
+`null` when the input is empty, otherwise a `number`.
+
+<TextInput type="number" labelText="Age" placeholder="Enter age..." />
+
 ## Light
 
 Use the light variant for light-themed backgrounds with `light`.
