@@ -10,7 +10,7 @@ description: User avatars display a photo, a custom icon, or initials derived fr
 
 ## Content
 
-The avatar renders the first available of an image, a custom icon, initials, or the default user icon. It is designed for the UI Shell [profile menu](/components/UIShell#profile-menu).
+The avatar renders the first available of custom slotted content, an image, a custom icon, initials, or the default user icon. It is designed for the UI Shell [profile menu](/components/UIShell#profile-menu).
 
 ### Fallback icon
 
@@ -35,6 +35,12 @@ Set `icon` to render a custom icon instead of the default user icon.
 
 <UserAvatar icon={UserAvatarFilledAlt} />
 
+### Custom content
+
+Use the default slot to render arbitrary content, such as a status badge, instead of the computed image, icon, or initials. Slotted content takes priority over `image`, `icon`, and `initials`.
+
+<UserAvatar backgroundColor="cyan">99+</UserAvatar>
+
 ## Image
 
 Set `image` to render a photo. Provide `imageDescription` for the alternative text. The image fills the circle (`object-fit: cover`) and takes priority over the icon and initials.
@@ -58,7 +64,7 @@ Pass HTML attributes to the image with `imageAttributes`. Use this for values su
   imageAttributes={{ loading: "lazy" }}
 />
 
-### Sizes
+## Sizes
 
 Set `size` to one of `"sm"`, `"md"` (default), `"lg"`, or `"xl"`. The size applies to any content; the image fills the frame at every size.
 
@@ -92,7 +98,11 @@ Set `backgroundColor` to `"auto"` to pick a color from `name` (or `initials`). T
 <UserAvatar backgroundColor="auto" name="Bertram Gilfoyle" />
 <UserAvatar backgroundColor="auto" name="Jared Dunn" />
 
-## Interactive
+## Clickable avatar
+
+Render the avatar as an interactive element instead of a static `span` — a `button` for a custom control, or an anchor for a link.
+
+### Interactive
 
 Set `interactive` to render a `button` instead of a `span` when the avatar is a clickable control, such as a custom profile menu trigger. The button receives a focus ring. `name` is used as the accessible name when `aria-label` is not set.
 
@@ -100,7 +110,7 @@ Do not set `interactive` when slotting the avatar into [ProfileMenu](/components
 
 <UserAvatar interactive name="Richard Hendricks" backgroundColor="purple" />
 
-## Link
+### Link
 
 Set `href` to render an anchor, for example a profile page link. `href` takes priority over `interactive`.
 
@@ -108,11 +118,26 @@ Set `href` to render an anchor, for example a profile page link. `href` takes pr
 
 ## Tooltip
 
-Set `tooltipText` to show the display name on hover or focus. Use `align` and `direction` to position the tooltip. The tooltip closes on <DocKbd label="Escape" />.
+Set `tooltipText` to show the display name on hover or focus. The tooltip closes on <DocKbd label="Escape" />.
 
 Setting `tooltipText` wraps the avatar in a focusable button. Do not combine it with `interactive` or `href`, and do not set it when slotting the avatar into the `ProfileMenu` trigger.
 
 <UserAvatar name="Richard Hendricks" tooltipText="Richard Hendricks" />
+
+### Position
+
+Set `direction` to `"top"` or `"bottom"` to position the tooltip relative to the avatar.
+
+<UserAvatar name="Richard Hendricks" tooltipText="Richard Hendricks" direction="top" />
+<UserAvatar name="Richard Hendricks" tooltipText="Richard Hendricks" direction="bottom" />
+
+### Alignment
+
+Set `align` to `"start"`, `"center"`, or `"end"` to align the tooltip relative to the avatar.
+
+<UserAvatar name="Richard Hendricks" tooltipText="Richard Hendricks" align="start" />
+<UserAvatar name="Richard Hendricks" tooltipText="Richard Hendricks" align="center" />
+<UserAvatar name="Richard Hendricks" tooltipText="Richard Hendricks" align="end" />
 
 ### Inline tooltip
 
