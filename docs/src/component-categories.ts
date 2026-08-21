@@ -12,6 +12,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
     label: "Data & lists",
     components: [
       "DataTable",
+      "Table",
       "TreeView",
       "StructuredList",
       "ContainedList",

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Table from "carbon-components-svelte/DataTable/Table.svelte";
+  import DataTableTable from "carbon-components-svelte/DataTable/DataTableTable.svelte";
   import TableBody from "carbon-components-svelte/DataTable/TableBody.svelte";
   import TableCell from "carbon-components-svelte/DataTable/TableCell.svelte";
   import TableContainer from "carbon-components-svelte/DataTable/TableContainer.svelte";
@@ -11,11 +11,11 @@
 </script>
 
 <TableContainer {title} {description}>
-  <Table>
+  <DataTableTable>
     <TableBody>
       <TableRow>
         <TableCell>Cell</TableCell>
       </TableRow>
     </TableBody>
-  </Table>
+  </DataTableTable>
 </TableContainer>

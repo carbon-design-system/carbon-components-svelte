@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Table from "carbon-components-svelte/DataTable/Table.svelte";
+  import DataTableTable from "carbon-components-svelte/DataTable/DataTableTable.svelte";
   import TableBody from "carbon-components-svelte/DataTable/TableBody.svelte";
   import TableCell from "carbon-components-svelte/DataTable/TableCell.svelte";
   import TableContainer from "carbon-components-svelte/DataTable/TableContainer.svelte";
@@ -9,21 +9,22 @@
   import type { ComponentProps } from "svelte";
 
   export let testComponent:
-    | "Table"
+    | "DataTableTable"
     | "TableBody"
     | "TableCell"
     | "TableRow"
     | "TableHead"
     | "TableFoot"
-    | "TableContainer" = "Table";
+    | "TableContainer" = "DataTableTable";
 
-  // Table props
-  export let size: ComponentProps<Table>["size"] = undefined;
-  export let zebra: ComponentProps<Table>["zebra"] = false;
-  export let useStaticWidth: ComponentProps<Table>["useStaticWidth"] = false;
-  export let sortable: ComponentProps<Table>["sortable"] = false;
-  export let stickyHeader: ComponentProps<Table>["stickyHeader"] = false;
-  export let tableStyle: ComponentProps<Table>["tableStyle"] = undefined;
+  // DataTableTable props
+  export let size: ComponentProps<DataTableTable>["size"] = undefined;
+  export let zebra: ComponentProps<DataTableTable>["zebra"] = false;
+  export let useStaticWidth: ComponentProps<DataTableTable>["useStaticWidth"] = false;
+  export let sortable: ComponentProps<DataTableTable>["sortable"] = false;
+  export let stickyHeader: ComponentProps<DataTableTable>["stickyHeader"] = false;
+  export let tableStyle: ComponentProps<DataTableTable>["tableStyle"] =
+    undefined;
 
   // TableContainer props
   export let title: ComponentProps<TableContainer>["title"] = "";
@@ -32,8 +33,8 @@
   export let slotContent = "";
 </script>
 
-{#if testComponent === "Table"}
-  <Table
+{#if testComponent === "DataTableTable"}
+  <DataTableTable
     {size}
     {zebra}
     {useStaticWidth}
@@ -46,7 +47,7 @@
       {slotContent}
     {/if}
     <slot />
-  </Table>
+  </DataTableTable>
 {:else if testComponent === "TableBody"}
   <TableBody {...$$restProps}>
     {#if slotContent}

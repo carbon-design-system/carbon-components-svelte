@@ -1,6 +1,6 @@
 export { default as DataTable } from "./DataTable.svelte";
 export { default as DataTableSkeleton } from "./DataTableSkeleton.svelte";
-export { default as Table } from "./Table.svelte";
+export { default as DataTableTable } from "./DataTableTable.svelte";
 export { default as TableBody } from "./TableBody.svelte";
 export { default as TableCell } from "./TableCell.svelte";
 export { default as TableContainer } from "./TableContainer.svelte";

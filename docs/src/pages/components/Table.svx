@@ -1,0 +1,200 @@
+---
+components: ["Table", "TableSkeleton"]
+description: Tables display structured data in rows and columns, without sorting, selection, or virtualization.
+---
+
+<script>
+  import { CodeSnippet, Table, TableSkeleton } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Create a table using `headers` and `rows`. Match each header `key` with the corresponding row property. Every header needs a unique `key` and every row a unique `id`.
+
+Use [DataTable](/components/DataTable) instead for interactive use cases such as sorting, selection, or virtualization.
+
+<Table
+  headers={[
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+  ]}
+  rows={[
+    { id: "a", name: "Load Balancer 1", protocol: "HTTP", port: "80" },
+    { id: "b", name: "Load Balancer 2", protocol: "HTTP", port: "80" },
+    { id: "c", name: "Load Balancer 3", protocol: "HTTP", port: "80" },
+  ]}
+/>
+
+## Row headers
+
+Set `rowHeader` on a header to render that column as `<th scope="row">` instead of `<td>` — useful for key/value tables where the first column names the row.
+
+<Table
+  headers={[
+    { key: "name", value: "Name", rowHeader: true },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+  ]}
+  rows={[
+    { id: "a", name: "Load Balancer 1", protocol: "HTTP", port: "80" },
+    { id: "b", name: "Load Balancer 2", protocol: "HTTP", port: "80" },
+    { id: "c", name: "Load Balancer 3", protocol: "HTTP", port: "80" },
+  ]}
+/>
+
+## Column alignment
+
+Set `columnAlign` on a header to `"start"`, `"center"`, or `"end"`. Values are logical, so `"end"` is the right edge in LTR and the left edge in RTL.
+
+<Table
+  headers={[
+    { key: "name", value: "Name", rowHeader: true },
+    { key: "cpu", value: "CPU %", columnAlign: "center" },
+    { key: "cost", value: "Cost", columnAlign: "end" },
+  ]}
+  rows={[
+    { id: "a", name: "Load Balancer 1", cpu: "42%", cost: "$12.40" },
+    { id: "b", name: "Load Balancer 2", cpu: "58%", cost: "$18.10" },
+    { id: "c", name: "Load Balancer 3", cpu: "31%", cost: "$9.75" },
+  ]}
+/>
+
+## Sizes
+
+Set `size` to `"compact"`, `"short"`, `"medium"`, or `"tall"` to control row density.
+
+### Compact
+
+<Table
+  size="compact"
+  headers={[
+    { key: "name", value: "Name", rowHeader: true },
+    { key: "protocol", value: "Protocol" },
+  ]}
+  rows={[
+    { id: "a", name: "Load Balancer 1", protocol: "HTTP" },
+    { id: "b", name: "Load Balancer 2", protocol: "HTTP" },
+  ]}
+/>
+
+### Short
+
+<Table
+  size="short"
+  headers={[
+    { key: "name", value: "Name", rowHeader: true },
+    { key: "protocol", value: "Protocol" },
+  ]}
+  rows={[
+    { id: "a", name: "Load Balancer 1", protocol: "HTTP" },
+    { id: "b", name: "Load Balancer 2", protocol: "HTTP" },
+  ]}
+/>
+
+### Medium (default)
+
+<Table
+  headers={[
+    { key: "name", value: "Name", rowHeader: true },
+    { key: "protocol", value: "Protocol" },
+  ]}
+  rows={[
+    { id: "a", name: "Load Balancer 1", protocol: "HTTP" },
+    { id: "b", name: "Load Balancer 2", protocol: "HTTP" },
+  ]}
+/>
+
+### Tall
+
+<Table
+  size="tall"
+  headers={[
+    { key: "name", value: "Name", rowHeader: true },
+    { key: "protocol", value: "Protocol" },
+  ]}
+  rows={[
+    { id: "a", name: "Load Balancer 1", protocol: "HTTP" },
+    { id: "b", name: "Load Balancer 2", protocol: "HTTP" },
+  ]}
+/>
+
+## Column widths
+
+Set `width` or `minWidth` on a header to size that column. Setting either on any header switches the table to `table-layout: fixed`; without them the table uses the browser default (`table-layout: auto`), sizing columns to their content.
+
+<Table
+  headers={[
+    { key: "name", value: "Name", rowHeader: true, width: "50%" },
+    { key: "protocol", value: "Protocol", minWidth: "8rem" },
+    { key: "port", value: "Port" },
+  ]}
+  rows={[
+    { id: "a", name: "Load Balancer 1", protocol: "HTTP", port: "80" },
+    { id: "b", name: "Load Balancer 2", protocol: "HTTP", port: "80" },
+    { id: "c", name: "Load Balancer 3", protocol: "HTTP", port: "80" },
+  ]}
+/>
+
+## Custom cell content
+
+Use the `cell` and `cellHeader` slots to render content beyond plain text, such as inline code or links. Both slots receive the `header` object; `cell` also receives `row`, `rowIndex`, and `cellIndex`.
+
+<Table
+  headers={[
+    { key: "name", value: "Name", rowHeader: true },
+    { key: "endpoint", value: "Endpoint" },
+  ]}
+  rows={[
+    { id: "a", name: "Load Balancer 1", endpoint: "10.0.0.1:80" },
+    { id: "b", name: "Load Balancer 2", endpoint: "10.0.0.2:80" },
+  ]}
+>
+  <svelte:fragment slot="cell" let:row let:header>
+    {#if header.key === "endpoint"}
+      <CodeSnippet type="inline" code={row.endpoint} />
+    {:else}
+      {row[header.key]}
+    {/if}
+  </svelte:fragment>
+</Table>
+
+## Wide tables
+
+Table always wraps its content in a horizontally scrollable container, so a table wider than its surrounding layout scrolls instead of overflowing the page.
+
+<FileSource src="/framed/Table/TableOverflow" />
+
+## Skeleton
+
+Show a loading state with `TableSkeleton`.
+
+### Loading state
+
+Use the table skeleton to show a loading state.
+
+<TableSkeleton />
+
+### Headers and rows
+
+Specify headers and row count for the skeleton.
+
+<TableSkeleton headers={["Name", "Protocol", "Port"]} rows={10} />
+
+### Object headers
+
+Pass header objects to customize the skeleton, matching the shape used by `Table`.
+
+<TableSkeleton headers={[{ value: "Name" }, { value: "Protocol" }, { value: "Port" }]} rows={10} />
+
+### Compact
+
+<TableSkeleton size="compact" headers={["Name", "Protocol"]} rows={5} />
+
+### Short
+
+<TableSkeleton size="short" headers={["Name", "Protocol"]} rows={5} />
+
+### Tall
+
+<TableSkeleton size="tall" headers={["Name", "Protocol"]} rows={5} />

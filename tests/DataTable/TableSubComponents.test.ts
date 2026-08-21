@@ -4,10 +4,10 @@ import TableContainerWithTable from "./TableContainerWithTable.test.svelte";
 import TableSubComponents from "./TableSubComponents.test.svelte";
 
 describe("Table Sub-Components", () => {
-  describe("Table", () => {
+  describe("DataTableTable", () => {
     it("should render with default props", () => {
       const { container } = render(TableSubComponents, {
-        props: { testComponent: "Table", slotContent: "Content" },
+        props: { testComponent: "DataTableTable", slotContent: "Content" },
       });
 
       const table = container.querySelector("table");
@@ -17,7 +17,7 @@ describe("Table Sub-Components", () => {
 
     it("should not set aria-labelledby without a TableContainer ancestor", () => {
       render(TableSubComponents, {
-        props: { testComponent: "Table", slotContent: "Content" },
+        props: { testComponent: "DataTableTable", slotContent: "Content" },
       });
 
       const table = screen.getByRole("table");
@@ -50,7 +50,7 @@ describe("Table Sub-Components", () => {
 
       for (const size of sizes) {
         const { container, unmount } = render(TableSubComponents, {
-          props: { testComponent: "Table", size },
+          props: { testComponent: "DataTableTable", size },
         });
 
         const table = container.querySelector("table");
@@ -63,7 +63,7 @@ describe("Table Sub-Components", () => {
 
     it("should handle zebra prop", () => {
       const { container } = render(TableSubComponents, {
-        props: { testComponent: "Table", zebra: true },
+        props: { testComponent: "DataTableTable", zebra: true },
       });
 
       const table = container.querySelector("table");
@@ -72,7 +72,7 @@ describe("Table Sub-Components", () => {
 
     it("should handle useStaticWidth prop", () => {
       const { container } = render(TableSubComponents, {
-        props: { testComponent: "Table", useStaticWidth: true },
+        props: { testComponent: "DataTableTable", useStaticWidth: true },
       });
 
       const table = container.querySelector("table");
@@ -81,7 +81,7 @@ describe("Table Sub-Components", () => {
 
     it("should handle sortable prop", () => {
       const { container } = render(TableSubComponents, {
-        props: { testComponent: "Table", sortable: true },
+        props: { testComponent: "DataTableTable", sortable: true },
       });
 
       const table = container.querySelector("table");
@@ -90,7 +90,7 @@ describe("Table Sub-Components", () => {
 
     it("should handle stickyHeader prop", () => {
       const { container } = render(TableSubComponents, {
-        props: { testComponent: "Table", stickyHeader: true },
+        props: { testComponent: "DataTableTable", stickyHeader: true },
       });
 
       const table = container.querySelector("table");
@@ -102,7 +102,7 @@ describe("Table Sub-Components", () => {
 
     it("should handle tableStyle prop", () => {
       const { container } = render(TableSubComponents, {
-        props: { testComponent: "Table", tableStyle: "width: 100%;" },
+        props: { testComponent: "DataTableTable", tableStyle: "width: 100%;" },
       });
 
       const table = container.querySelector("table");
