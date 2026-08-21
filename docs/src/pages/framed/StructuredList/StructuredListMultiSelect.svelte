@@ -45,7 +45,7 @@
   </StructuredListHead>
   <StructuredListBody>
     {#each databases as db}
-      <StructuredListRow label for="multi-{db.id}">
+      <StructuredListRow label for="multi-{db.id}" value="{db.id}-value">
         <StructuredListCell>{db.name}</StructuredListCell>
         <StructuredListCell>{db.type}</StructuredListCell>
         <StructuredListCell>{db.description}</StructuredListCell>

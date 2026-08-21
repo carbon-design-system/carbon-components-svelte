@@ -122,6 +122,8 @@ Let users select one or more rows.
 
 Enable row selection with `selection` and structured list input components. The selection icon column is rendered automatically for each selectable row.
 
+Pass the same `value` to `StructuredListRow` as its nested `StructuredListInput` so the row can tell it's the current selection. This suppresses the hover highlight on an already-selected row.
+
 <StructuredList selection selected="postgresql-value">
   <StructuredListHead>
     <StructuredListRow head>
@@ -136,7 +138,7 @@ Enable row selection with `selection` and structured list input components. The 
       { id: "mongodb", name: "MongoDB", type: "Document", description: "Document-oriented NoSQL database designed for flexible schemas and horizontal scaling across distributed clusters." },
       { id: "redis", name: "Redis", type: "Key-value", description: "In-memory key-value store used as a cache, message broker, and real-time data platform with sub-millisecond latency." },
     ] as db}
-      <StructuredListRow label for={db.id}>
+      <StructuredListRow label for={db.id} value="{db.id}-value">
         <StructuredListCell>{db.name}</StructuredListCell>
         <StructuredListCell>{db.type}</StructuredListCell>
         <StructuredListCell>{db.description}</StructuredListCell>
@@ -168,7 +170,7 @@ Customize the selection icon with the `icon` prop on `StructuredList`.
       { id: "mongodb", name: "MongoDB", type: "Document" },
       { id: "redis", name: "Redis", type: "Key-value" },
     ] as db}
-      <StructuredListRow label for="icon-{db.id}">
+      <StructuredListRow label for="icon-{db.id}" value="{db.id}-value">
         <StructuredListCell>{db.name}</StructuredListCell>
         <StructuredListCell>{db.type}</StructuredListCell>
         <StructuredListInput
@@ -211,7 +213,7 @@ Allow selecting more than one row with `multiple`. Selected becomes an array of 
       { id: "mongodb", name: "MongoDB", type: "Document" },
       { id: "redis", name: "Redis", type: "Key-value" },
     ] as db}
-      <StructuredListRow label for="event-{db.id}">
+      <StructuredListRow label for="event-{db.id}" value="{db.id}-value">
         <StructuredListCell>{db.name}</StructuredListCell>
         <StructuredListCell>{db.type}</StructuredListCell>
         <StructuredListInput
