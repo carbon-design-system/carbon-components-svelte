@@ -468,12 +468,26 @@
     background: $border-subtle;
   }
 
+  // The vendored rule vertically centers text with fixed padding against
+  // the type style's line-height, which drifts a few px off-center in
+  // practice. Flexbox centers it exactly regardless of line-height.
   .#{$prefix}--switcher__item-link.#{$prefix}--switcher__item-link {
+    display: flex;
+    align-items: center;
     color: $text-secondary;
   }
 
   .#{$prefix}--switcher__item-link.#{$prefix}--switcher__item-link:hover:not(.#{$prefix}--switcher__item-link--selected.#{$prefix}--switcher__item-link--selected) {
     background: $background-hover;
+    color: $text-primary;
+  }
+
+  // Overrides the vendored rule's hardcoded dark background/text
+  // ($shell-panel-bg-04/$shell-panel-text-02, from _theme.scss), which
+  // never adapts to the page theme. $layer-selected matches the token
+  // SideNavLink's [aria-current='page'] state already uses.
+  .#{$prefix}--switcher__item-link--selected.#{$prefix}--switcher__item-link--selected {
+    background: $layer-selected;
     color: $text-primary;
   }
 

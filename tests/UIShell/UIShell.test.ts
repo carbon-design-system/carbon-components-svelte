@@ -373,6 +373,29 @@ describe("UIShell", () => {
       expect(hr.parentElement?.tagName).toBe("LI");
     });
 
+    it("marks a HeaderPanelLink as selected", async () => {
+      const { container } = render(HeaderSwitcher);
+
+      const trigger = container.querySelector(
+        'button.bx--header__action[aria-haspopup="true"]',
+      );
+      assert(trigger);
+      await user.click(trigger);
+
+      const selected = container.querySelector(
+        ".bx--switcher__item-link--selected",
+      );
+      assert(selected);
+      expect(selected).toHaveAttribute("aria-current", "page");
+
+      const links = container.querySelectorAll(".bx--switcher__item-link");
+      for (const link of links) {
+        if (link !== selected) {
+          expect(link).not.toHaveAttribute("aria-current");
+        }
+      }
+    });
+
     it("renders HeaderUtilities fixture", () => {
       const { container } = render(HeaderUtilities);
 
