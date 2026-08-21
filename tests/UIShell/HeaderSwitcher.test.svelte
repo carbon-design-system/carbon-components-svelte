@@ -29,7 +29,7 @@
         <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
         <HeaderPanelDivider />
         <HeaderPanelDivider>Switcher subject 2</HeaderPanelDivider>
-        <HeaderPanelLink>Switcher item 1</HeaderPanelLink>
+        <HeaderPanelLink isSelected>Switcher item 1</HeaderPanelLink>
         <HeaderPanelLink>Switcher item 2</HeaderPanelLink>
         <HeaderPanelLink>Switcher item 3</HeaderPanelLink>
         <HeaderPanelLink>Switcher item 4</HeaderPanelLink>
