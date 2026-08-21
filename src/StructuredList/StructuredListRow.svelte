@@ -1,9 +1,22 @@
 <script>
+  /**
+   * @template {string} [Value=string]
+   */
+
   /** Set to `true` to use as a header */
   export let head = false;
 
   /** Set to `true` to render a label slot */
   export let label = false;
+
+  /**
+   * Specify the value of the nested `StructuredListInput`, so a selectable
+   * row can reflect its own selected state (e.g. suppressing the hover
+   * highlight when already selected). Only relevant when `selection` is
+   * `true` on the parent `StructuredList`.
+   * @type {Value}
+   */
+  export let value = undefined;
 
   /**
    * Specify the tabindex.
@@ -15,12 +28,22 @@
   export const tabindex = "0";
 
   import { getContext } from "svelte";
+  import { writable } from "svelte/store";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import StructuredListCell from "./StructuredListCell.svelte";
 
   const ctx = getContext("carbon:StructuredListWrapper");
   const selection = ctx?.selection ?? false;
   const icon = ctx?.icon ?? CheckmarkFilled;
+  const multiple = ctx?.multiple ?? false;
+  // Standalone (no wrapper context) never matches, same as StructuredListInput.
+  const selectedValue = ctx?.selectedValue ?? writable(undefined);
+
+  $: isSelected =
+    value !== undefined &&
+    (multiple
+      ? Array.isArray($selectedValue) && $selectedValue.includes(value)
+      : $selectedValue === value);
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -30,6 +53,7 @@
   <label
     class:bx--structured-list-row={true}
     class:bx--structured-list-row--header-row={head}
+    class:bx--structured-list-row--selected={isSelected}
     {...$$restProps}
     on:click
     on:mouseover
@@ -49,6 +73,7 @@
     role={selection ? undefined : "row"}
     class:bx--structured-list-row={true}
     class:bx--structured-list-row--header-row={head}
+    class:bx--structured-list-row--selected={isSelected}
     {...$$restProps}
     on:click
     on:mouseover

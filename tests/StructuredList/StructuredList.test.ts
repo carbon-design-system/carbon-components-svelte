@@ -122,6 +122,23 @@ describe("StructuredList", () => {
     ).toHaveTextContent("Row 2");
   });
 
+  it("should apply the selected class only to the selected row", async () => {
+    const { container } = render(StructuredList, {
+      props: { selection: true, selected: "row-1-value" },
+    });
+
+    const rows = container.querySelectorAll(".bx--structured-list-row");
+    // rows[0] is the header row
+    expect(rows[1]).toHaveClass("bx--structured-list-row--selected");
+    expect(rows[2]).not.toHaveClass("bx--structured-list-row--selected");
+    expect(rows[3]).not.toHaveClass("bx--structured-list-row--selected");
+
+    await user.click(screen.getAllByRole("radio")[1]);
+
+    expect(rows[1]).not.toHaveClass("bx--structured-list-row--selected");
+    expect(rows[2]).toHaveClass("bx--structured-list-row--selected");
+  });
+
   it("should handle selection change", async () => {
     render(StructuredList, { props: { selection: true } });
 
