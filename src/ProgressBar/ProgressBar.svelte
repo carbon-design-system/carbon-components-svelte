@@ -78,7 +78,9 @@
     class:bx--progress-bar__label={true}
     class:bx--visually-hidden={hideLabel}
   >
-    <slot name="labelChildren"> {labelText} </slot>
+    <span class:bx--progress-bar__label-text={true}>
+      <slot name="labelChildren"> {labelText} </slot>
+    </span>
     {#if status === "error" || status === "finished"}
       <svelte:component
         this={statusIcons[status]}
