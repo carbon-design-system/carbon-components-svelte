@@ -9,6 +9,9 @@
    */
   export let expanded = false;
 
+  /** Set to `true` to use the large variant */
+  export let large = false;
+
   /**
    * Specify the text.
    * @type {string}
@@ -35,7 +38,11 @@
   }
 </script>
 
-<li class:bx--side-nav__item={true} class:bx--side-nav__item--icon={icon}>
+<li
+  class:bx--side-nav__item={true}
+  class:bx--side-nav__item--icon={icon}
+  class:bx--side-nav__item--large={large}
+>
   <button
     type="button"
     bind:this={ref}

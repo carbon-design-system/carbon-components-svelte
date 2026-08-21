@@ -4,7 +4,9 @@ import type HeaderComponent from "carbon-components-svelte/UIShell/Header.svelte
 import type HeaderActionLinkComponent from "carbon-components-svelte/UIShell/HeaderActionLink.svelte";
 import type HeaderGlobalActionComponent from "carbon-components-svelte/UIShell/HeaderGlobalAction.svelte";
 import type SideNavLinkComponent from "carbon-components-svelte/UIShell/SideNavLink.svelte";
+import SideNavLink from "carbon-components-svelte/UIShell/SideNavLink.svelte";
 import type SideNavMenuComponent from "carbon-components-svelte/UIShell/SideNavMenu.svelte";
+import SideNavMenu from "carbon-components-svelte/UIShell/SideNavMenu.svelte";
 import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
 import HeaderSlot from "./Header.slot.test.svelte";
@@ -978,6 +980,26 @@ describe("UIShell", () => {
     });
 
     describe("SideNavLink", () => {
+      it("should apply the large class when large is true", () => {
+        const { container } = render(SideNavLink, {
+          props: { href: "#", text: "Link", large: true },
+        });
+
+        expect(container.querySelector(".bx--side-nav__item")).toHaveClass(
+          "bx--side-nav__item--large",
+        );
+      });
+
+      it("should not apply the large class by default", () => {
+        const { container } = render(SideNavLink, {
+          props: { href: "#", text: "Link" },
+        });
+
+        expect(container.querySelector(".bx--side-nav__item")).not.toHaveClass(
+          "bx--side-nav__item--large",
+        );
+      });
+
       it("should support custom Icon types with generics", () => {
         type CustomIcon = new (...args: unknown[]) => unknown;
 
@@ -997,6 +1019,26 @@ describe("UIShell", () => {
     });
 
     describe("SideNavMenu", () => {
+      it("should apply the large class when large is true", () => {
+        const { container } = render(SideNavMenu, {
+          props: { text: "Menu", large: true },
+        });
+
+        expect(container.querySelector(".bx--side-nav__item")).toHaveClass(
+          "bx--side-nav__item--large",
+        );
+      });
+
+      it("should not apply the large class by default", () => {
+        const { container } = render(SideNavMenu, {
+          props: { text: "Menu" },
+        });
+
+        expect(container.querySelector(".bx--side-nav__item")).not.toHaveClass(
+          "bx--side-nav__item--large",
+        );
+      });
+
       it("should support custom Icon types with generics", () => {
         type CustomIcon = new (...args: unknown[]) => unknown;
 
