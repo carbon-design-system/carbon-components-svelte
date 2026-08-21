@@ -126,6 +126,12 @@ Set `rail` on the side nav to use the rail variant. Expanded side nav menu items
 
 <FileSource src="/framed/UIShell/HeaderNavRail" />
 
+### Fixed rail
+
+Combine `rail` with `fixed` to keep the rail at its narrow width even on hover, instead of temporarily expanding.
+
+<FileSource src="/framed/UIShell/HeaderNavRailFixed" />
+
 ### Persisted hamburger
 
 Create a header with a persistent hamburger menu state.
