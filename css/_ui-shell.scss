@@ -528,6 +528,21 @@
     overflow-y: auto;
   }
 
+  // At the rail's narrow (48px) width, an overflowing item list needs to
+  // scroll, but an OS scrollbar (particularly an overlay one, as on macOS)
+  // renders directly on top of the icon column with no room to spare.
+  // Keep scrolling but hide the scrollbar chrome, same technique the
+  // sticky-header data table uses for the same reason.
+  .#{$prefix}--side-nav--rail:not(:hover):not(.#{$prefix}--side-nav--expanded)
+    .#{$prefix}--side-nav__items.#{$prefix}--side-nav__items {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
   .#{$prefix}--side-nav__divider.#{$prefix}--side-nav__divider {
     margin: 0.5rem 1rem; // $spacing-03 $spacing-05
     background-color: $border-subtle;

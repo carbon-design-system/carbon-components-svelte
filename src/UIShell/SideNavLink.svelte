@@ -6,6 +6,9 @@
   /** Set to `true` to select the current link */
   export let isSelected = false;
 
+  /** Set to `true` to use the large variant */
+  export let large = false;
+
   /**
    * Specify the `href` attribute.
    * @type {string}
@@ -31,7 +34,7 @@
   export let ref = null;
 </script>
 
-<li class:bx--side-nav__item={true}>
+<li class:bx--side-nav__item={true} class:bx--side-nav__item--large={large}>
   <a
     bind:this={ref}
     aria-current={isSelected ? "page" : undefined}
