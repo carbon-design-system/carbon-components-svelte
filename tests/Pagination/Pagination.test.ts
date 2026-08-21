@@ -56,6 +56,28 @@ describe("Pagination", () => {
     expect(screen.getByText("1–10 of 102 items")).toBeInTheDocument();
   });
 
+  // The `bx--pagination__items-count` and `bx--pagination__control-buttons`
+  // classes are exempted from the CSS rule that hides every other control
+  // below the `md` breakpoint, so mobile pagination isn't left empty.
+  it("keeps an items-count element and a control-buttons group in the DOM for mobile", () => {
+    const { container } = render(Pagination, {
+      props: { totalItems: 102 },
+    });
+
+    const itemsCount = container.querySelector(".bx--pagination__items-count");
+    expect(itemsCount).toHaveTextContent("1–10 of 102 items");
+
+    const controlButtons = container.querySelector(
+      ".bx--pagination__control-buttons",
+    );
+    expect(controlButtons).toContainElement(
+      screen.getByRole("button", { name: "Previous page" }),
+    );
+    expect(controlButtons).toContainElement(
+      screen.getByRole("button", { name: "Next page" }),
+    );
+  });
+
   it("should handle custom page sizes", () => {
     render(Pagination, {
       props: {

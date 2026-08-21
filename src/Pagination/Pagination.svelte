@@ -253,6 +253,13 @@
   $: internalForwardButtonDisabled =
     forwardButtonDisabled ??
     (disabled || (!pagesUnknown && page === totalPages));
+  $: itemsCountText = pagesUnknown
+    ? itemText(pageSize * (page - 1) + 1, page * pageSize)
+    : itemRangeText(
+        Math.min(pageSize * (page - 1) + 1, totalItems),
+        Math.min(page * pageSize, totalItems),
+        totalItems,
+      );
 </script>
 
 <div
@@ -292,16 +299,11 @@
           {/each}
         </Select>
       {/if}
-      <span class:bx--pagination__text={!pageSizeInputDisabled}>
-        {#if pagesUnknown}
-          {itemText(pageSize * (page - 1) + 1, page * pageSize)}
-        {:else}
-          {itemRangeText(
-            Math.min(pageSize * (page - 1) + 1, totalItems),
-            Math.min(page * pageSize, totalItems),
-            totalItems,
-          )}
-        {/if}
+      <span
+        class:bx--pagination__text={!pageSizeInputDisabled}
+        class:bx--pagination__items-count={true}
+      >
+        {itemsCountText}
       </span>
     </div>
   {/if}
@@ -347,43 +349,45 @@
         {/if}
       </span>
     {/if}
-    <Button
-      bind:ref={backBtnRef}
-      kind="ghost"
-      tooltipAlignment="center"
-      tooltipPosition={backwardTextTooltipPosition}
-      portalTooltip
-      icon={CaretLeft}
-      iconDescription={backwardText}
-      disabled={internalBackButtonDisabled}
-      class="bx--pagination__button bx--pagination__button--backward {internalBackButtonDisabled
-        ? 'bx--pagination__button--no-index'
-        : ''}"
-      on:click={() => {
-        page--;
-        dispatch("click:button--previous", { page });
-        dispatch("change", { page });
-        refocusIfDisabled(backBtnRef, forwardBtnRef);
-      }}
-    />
-    <Button
-      bind:ref={forwardBtnRef}
-      kind="ghost"
-      tooltipAlignment="end"
-      tooltipPosition={forwardTextTooltipPosition}
-      portalTooltip
-      icon={CaretRight}
-      iconDescription={forwardText}
-      disabled={internalForwardButtonDisabled}
-      class="bx--pagination__button bx--pagination__button--forward {internalForwardButtonDisabled
-        ? 'bx--pagination__button--no-index'
-        : ''}"
-      on:click={() => {
-        page++;
-        dispatch("click:button--next", { page });
-        dispatch("change", { page });
-        refocusIfDisabled(forwardBtnRef, backBtnRef);
-      }}
-    />
+    <div class:bx--pagination__control-buttons={true}>
+      <Button
+        bind:ref={backBtnRef}
+        kind="ghost"
+        tooltipAlignment="center"
+        tooltipPosition={backwardTextTooltipPosition}
+        portalTooltip
+        icon={CaretLeft}
+        iconDescription={backwardText}
+        disabled={internalBackButtonDisabled}
+        class="bx--pagination__button bx--pagination__button--backward {internalBackButtonDisabled
+          ? 'bx--pagination__button--no-index'
+          : ''}"
+        on:click={() => {
+          page--;
+          dispatch("click:button--previous", { page });
+          dispatch("change", { page });
+          refocusIfDisabled(backBtnRef, forwardBtnRef);
+        }}
+      />
+      <Button
+        bind:ref={forwardBtnRef}
+        kind="ghost"
+        tooltipAlignment="end"
+        tooltipPosition={forwardTextTooltipPosition}
+        portalTooltip
+        icon={CaretRight}
+        iconDescription={forwardText}
+        disabled={internalForwardButtonDisabled}
+        class="bx--pagination__button bx--pagination__button--forward {internalForwardButtonDisabled
+          ? 'bx--pagination__button--no-index'
+          : ''}"
+        on:click={() => {
+          page++;
+          dispatch("click:button--next", { page });
+          dispatch("change", { page });
+          refocusIfDisabled(forwardBtnRef, backBtnRef);
+        }}
+      />
+    </div>
   </div>
 </div>
