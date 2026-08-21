@@ -38,7 +38,7 @@
     "bench": "vitest run --config vite.bench.config.ts",
     "test:src-types": "tsgo --project tsconfig.types.json",
     "test:package-exports": "tsgo --project tsconfig.package-exports.json",
-    "test:types": "svelte-check --workspace tests --tsgo --fail-on-warnings",
+    "test:types": "svelte-fast-check --project tests/tsconfig.json --incremental",
     "test:svelte3": "cd tests-svelte3 && bunx vitest",
     "test:types:svelte3": "cd tests-svelte3 && bun run test:types",
     "test:svelte4": "cd tests-svelte4 && bunx vitest",
@@ -76,7 +76,7 @@
     "sass-embedded": "^1.100.0",
     "sveld": "^0.36.8",
     "svelte": "^5.56.8",
-    "svelte-check": "^4.7.3",
+    "svelte-fast-check": "^0.4.5",
     "typescript": "^6.0.3",
     "vite": "^8.2.0",
     "vitest": "^4.1.10"

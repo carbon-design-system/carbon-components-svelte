@@ -163,7 +163,7 @@ Whenever you add, remove, or retype an exported prop, slot, or event (including 
 
 ```sh
 bun build:docs   # sveld: types + COMPONENT_API.json
-bun test:types   # svelte-check on tests/
+bun test:types   # svelte-fast-check on tests/
 ```
 
 `bun setup` already runs `build:docs` once. Repeat `build:docs` only when the component API changes.
@@ -519,7 +519,7 @@ The full suite (`bun run test`) is slow and can hit unrelated flaky UIShell focu
 Types and E2E:
 
 - `bun test:src-types` type-checks `src/` (uses `tsconfig.types.json`)
-- `bun test:types` runs `svelte-check` on `*.svelte` and `.ts` files in `tests/`
+- `bun test:types` runs `svelte-fast-check` on `*.svelte` and `.ts` files in `tests/`
 - `bunx playwright test --grep "Breakpoint"` runs a focused E2E pattern (see [E2E testing](#e2e-testing-with-playwright)); `bun run test:e2e` runs the full E2E suite
 
 ## Testing
