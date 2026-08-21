@@ -46,7 +46,9 @@
     <HeaderAction bind:isOpen transition={transitions[selected].value}>
       <HeaderPanelLinks>
         <HeaderPanelDivider>Switch product</HeaderPanelDivider>
-        <HeaderPanelLink href="/cloud">Cloud console</HeaderPanelLink>
+        <HeaderPanelLink href="/cloud" isSelected
+          >Cloud console</HeaderPanelLink
+        >
         <HeaderPanelLink href="/watson-studio">Watson Studio</HeaderPanelLink>
         <HeaderPanelLink href="/maximo"
           >Maximo Application Suite</HeaderPanelLink

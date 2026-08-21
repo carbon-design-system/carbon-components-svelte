@@ -169,6 +169,8 @@ Control tooltip alignment with `tooltipAlignment`. Providing button text overrid
 
 Compose the panel content from `HeaderPanelLinks`, `HeaderPanelDivider`, and `HeaderPanelLink`, as shown in both examples above. `HeaderPanelLinks` renders the list wrapper; `HeaderPanelDivider` renders a labelled separator (or a plain rule when it has no content) between groups of links; `HeaderPanelLink` renders each item. The same three components compose the notification and help panels in the multiple-switchers example — panel composition is not specific to the app switcher icon.
 
+Set `isSelected` on `HeaderPanelLink` to mark the current selection — see "Cloud console" in the app switcher example above. It adds `aria-current="page"` and a persistent highlight style, the same pattern used by `isSelected` on `HeaderNavItem`, `SideNavLink`, and `SideNavMenuItem`.
+
 ### Events
 
 `HeaderAction` dispatches `open` and `close` as the panel toggles, with `event.detail.trigger` set to `"toggle"`, `"outside-click"`, or `"escape-key"`. Set `preventCloseOnClickOutside` to keep the panel open when the user clicks elsewhere on the page — useful when the panel hosts its own dismiss controls.
