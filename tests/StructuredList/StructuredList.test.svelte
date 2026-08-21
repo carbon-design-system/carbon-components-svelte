@@ -46,6 +46,7 @@
       <StructuredListRow
         label={selection}
         for={selection ? `row-${item}` : undefined}
+        value={selection ? `row-${item}-value` : undefined}
       >
         <StructuredListCell noWrap>Row {item}</StructuredListCell>
         <StructuredListCell>Row {item}</StructuredListCell>
