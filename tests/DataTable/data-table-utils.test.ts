@@ -1,7 +1,9 @@
 import {
   compareValues,
+  createColumnFilterPredicate,
   formatHeaderWidth,
   getDisplayedRows,
+  isColumnFilterActive,
   resolvePath,
   rowsEqual,
   shouldIgnoreRowClick,
@@ -1127,6 +1129,80 @@ describe("getDisplayedRows", () => {
     const result = getDisplayedRows(rows, 1, 5);
     expect(result[0]).toBe(rows[0]);
     expect(result[4]).toBe(rows[4]);
+  });
+});
+
+describe("column filters", () => {
+  const row = { id: "a", name: "Zebra", status: "active" };
+
+  describe("isColumnFilterActive", () => {
+    it("treats undefined, null, blank strings, and empty arrays as inactive", () => {
+      expect(isColumnFilterActive(undefined)).toBe(false);
+      expect(isColumnFilterActive(null)).toBe(false);
+      expect(isColumnFilterActive("")).toBe(false);
+      expect(isColumnFilterActive("   ")).toBe(false);
+      expect(isColumnFilterActive([])).toBe(false);
+    });
+
+    it("treats any other value as active", () => {
+      expect(isColumnFilterActive("active")).toBe(true);
+      expect(isColumnFilterActive(["HTTP"])).toBe(true);
+      expect(isColumnFilterActive(0)).toBe(true);
+      expect(isColumnFilterActive(false)).toBe(true);
+    });
+  });
+
+  describe("createColumnFilterPredicate", () => {
+    it("matches a trimmed, case-insensitive substring for a string value", () => {
+      const predicate = createColumnFilterPredicate("  ZEB  ");
+      expect(predicate("Zebra", row)).toBe(true);
+      expect(predicate("Alpha", row)).toBe(false);
+    });
+
+    it("stringifies number cell values for a string value", () => {
+      const predicate = createColumnFilterPredicate("30");
+      expect(predicate(3000, row)).toBe(true);
+      expect(predicate(80, row)).toBe(false);
+    });
+
+    it("does not match cell values that are neither strings nor numbers", () => {
+      const predicate = createColumnFilterPredicate("true");
+      expect(predicate(true, row)).toBe(false);
+      expect(predicate(null, row)).toBe(false);
+      expect(predicate(undefined, row)).toBe(false);
+    });
+
+    it("matches membership for an array value", () => {
+      const predicate = createColumnFilterPredicate(["HTTP", "FTP"]);
+      expect(predicate("FTP", row)).toBe(true);
+      expect(predicate("HTTPS", row)).toBe(false);
+    });
+
+    it("matches strict equality for any other value", () => {
+      expect(createColumnFilterPredicate(3000)(3000, row)).toBe(true);
+      expect(createColumnFilterPredicate(3000)("3000", row)).toBe(false);
+      expect(createColumnFilterPredicate(false)(false, row)).toBe(true);
+      expect(createColumnFilterPredicate(false)(0, row)).toBe(false);
+    });
+
+    it("prefers the header predicate and passes it the cell value, filter value, and row", () => {
+      const headerFilter = vi.fn(() => true);
+      const predicate = createColumnFilterPredicate("active", headerFilter);
+
+      expect(predicate("inactive", row)).toBe(true);
+      expect(headerFilter).toHaveBeenCalledWith("inactive", "active", row);
+    });
+
+    it("coerces a truthy header predicate result to a boolean", () => {
+      const predicate = createColumnFilterPredicate(
+        "active",
+        // biome-ignore lint/suspicious/noExplicitAny: predicate returning a non-boolean
+        ((value: unknown) => value) as any,
+      );
+
+      expect(predicate("active", row)).toBe(true);
+      expect(predicate("", row)).toBe(false);
+    });
   });
 });
 

@@ -236,6 +236,56 @@ const collator = new Intl.Collator(undefined, {
 });
 
 /**
+ * Returns true when a column filter value should narrow the rows.
+ * `undefined`, `null`, a blank string, and an empty array leave the column unfiltered.
+ * @param {unknown} filterValue - A value from the `filters` map
+ * @returns {boolean}
+ */
+export function isColumnFilterActive(filterValue) {
+  if (filterValue == null) return false;
+  if (Array.isArray(filterValue)) return filterValue.length > 0;
+  if (typeof filterValue === "string") return filterValue.trim().length > 0;
+  return true;
+}
+
+/**
+ * Builds the predicate for one active column filter. Called once per filter pass so
+ * per-value work (lowercasing a needle, building a membership set) stays out of the
+ * row loop.
+ *
+ * `headerFilter` wins when the column defines one. Otherwise an array `filterValue`
+ * matches cell values that are members of it, a string matches a case-insensitive
+ * substring of a string or number cell value (what the toolbar search does), and any
+ * other value matches by strict equality.
+ * @template {Record<string, unknown>} Row
+ * @param {unknown} filterValue - A value from the `filters` map
+ * @param {(value: any, filterValue: any, row: Row) => boolean} [headerFilter] - Per-column predicate override
+ * @returns {(cellValue: unknown, row: Row) => boolean}
+ */
+export function createColumnFilterPredicate(filterValue, headerFilter) {
+  if (typeof headerFilter === "function") {
+    return (cellValue, row) => !!headerFilter(cellValue, filterValue, row);
+  }
+
+  if (Array.isArray(filterValue)) {
+    const allowed = new Set(filterValue);
+    return (cellValue) => allowed.has(cellValue);
+  }
+
+  if (typeof filterValue === "string") {
+    const value = filterValue.trim().toLowerCase();
+    return (cellValue) => {
+      if (typeof cellValue !== "string" && typeof cellValue !== "number") {
+        return false;
+      }
+      return `${cellValue}`.toLowerCase().includes(value);
+    };
+  }
+
+  return (cellValue) => cellValue === filterValue;
+}
+
+/**
  * Compares two values for sorting in a data table.
  * Handles numbers, strings, null/undefined values, and custom sort functions.
  * @template T

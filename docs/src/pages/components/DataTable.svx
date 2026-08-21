@@ -876,6 +876,20 @@ Pass a function to `shouldFilterRows` to implement custom filtering logic.
 
 <FileSource src="/framed/DataTable/DataTableFilterCustom" />
 
+### Per-column
+
+Bind to `filters` for per-column filtering. Each entry is keyed by `header.key`; a blank value, `null`, or an empty array leaves that column unfiltered. A string value matches a case-insensitive substring, an array matches any of its members, and a header can supply its own predicate through `filter` to compare values another way.
+
+Column filters combine with the toolbar search, and `filteredRowIds` reflects both. Bind to it on `DataTable` rather than on `ToolbarSearch` when column filters are in play.
+
+<FileSource src="/framed/DataTable/DataTableColumnFilters" />
+
+### Server-side filtering
+
+There is no built-in filter UI, so `filter` fires whenever a column filter value changes. It is cancelable in the same way as the [sort event](#server-side): call `preventDefault()` to take the change and skip local filtering, read `event.detail.filters` as your query parameters, then assign the rows the server returns.
+
+<FileSource src="/framed/DataTable/DataTableFilterPreventDefault" />
+
 ### Strategy
 
 By default (`filterMode="remove"`), filtering unmounts non-matching rows, resetting focus, draft inputs, and open menus. This keeps the DOM small for large tables.
@@ -1264,6 +1278,8 @@ When rows and sort order come from an API, the canonical order is usually define
 Client-side sorting on the same payload can disagree with that behavior or waste work on large datasets. In those cases, call `preventDefault()` on the `sort` event so the table does not reorder rows or apply its own sort for that click. Use event.detail.key and event.detail.direction as your sort parameters (query string, GraphQL variables, RPC args), wait for the response, then assign the new rows. The sort indicators should match what the server applied: bind sortKey and sortDirection from the parent and set them after the response (as in the example), or pass them as one-way props if you do not need child-to-parent sync.
 
 The framed example uses setTimeout to simulate a network request; `preventDefault()` runs first, then simulated sorted rows replace rows and the bound sort props update the header.
+
+The `filter` event works the same way for column filters; see [Server-side filtering](#server-side-filtering).
 
 <FileSource src="/framed/DataTable/DataTableSortPreventDefault" />
 
