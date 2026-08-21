@@ -609,6 +609,9 @@ describe("UIShell", () => {
 
       const overlay = container.querySelector(".bx--side-nav__overlay");
       expect(overlay).not.toBeInTheDocument();
+
+      const nav = container.querySelector(".bx--side-nav");
+      expect(nav).toHaveClass("bx--side-nav--fixed");
     });
 
     it("should render rail variant", () => {

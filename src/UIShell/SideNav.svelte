@@ -141,6 +141,7 @@
     : isOpen}
   class:bx--side-nav--collapsed={winWidth !== undefined && !isOpen && !rail}
   class:bx--side-nav--rail={rail}
+  class:bx--side-nav--fixed={fixed}
   class:bx--side-nav--ui-shell-classic={theme === "classic"}
   style:visibility={winWidth !== undefined && !isOpen && !rail
     ? "hidden"
