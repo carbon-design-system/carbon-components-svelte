@@ -6,6 +6,9 @@ description: User avatars display a photo, a custom icon, or initials derived fr
 <script>
   import { UserAvatar } from "carbon-components-svelte";
   import UserAvatarFilledAlt from "carbon-icons-svelte/lib/UserAvatarFilledAlt.svelte";
+  import Bot from "carbon-icons-svelte/lib/Bot.svelte";
+  import Password from "carbon-icons-svelte/lib/Password.svelte";
+  import Group from "carbon-icons-svelte/lib/Group.svelte";
 </script>
 
 ## Content
@@ -31,9 +34,17 @@ Set `initials` to override the derived initials while keeping `name` for display
 
 ### Custom icon
 
-Set `icon` to render a custom icon instead of the default user icon.
+Set `icon` to render a custom icon instead of the default user icon, such as an icon from [carbon-icons-svelte](https://github.com/carbon-design-system/carbon-icons-svelte).
 
 <UserAvatar icon={UserAvatarFilledAlt} />
+<UserAvatar icon={Bot} backgroundColor="purple" />
+<UserAvatar icon={Password} backgroundColor="teal" />
+<UserAvatar icon={Group} backgroundColor="cool-gray" />
+
+<UserAvatar size="sm" icon={Bot} backgroundColor="purple" />
+<UserAvatar size="md" icon={Bot} backgroundColor="purple" />
+<UserAvatar size="lg" icon={Bot} backgroundColor="purple" />
+<UserAvatar size="xl" icon={Bot} backgroundColor="purple" />
 
 ### Custom content
 
