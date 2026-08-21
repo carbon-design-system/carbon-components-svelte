@@ -67,7 +67,9 @@ describe("ProgressBar", () => {
     render(ProgressBar);
 
     const label = screen.getByText("Hidden label");
-    expect(label).toHaveClass("bx--visually-hidden");
+    expect(label.closest(".bx--progress-bar__label")).toHaveClass(
+      "bx--visually-hidden",
+    );
   });
 
   it("should cap values appropriately", () => {
@@ -90,7 +92,10 @@ describe("ProgressBar", () => {
     const progressBar = within(screen.getByTestId("progress-40%")).getByRole(
       "progressbar",
     );
-    const label = screen.getByText("Progress 40%");
+    const label = screen
+      .getByText("Progress 40%")
+      .closest(".bx--progress-bar__label");
+    if (label === null) throw new Error("label not found");
     expect(progressBar).toHaveAttribute("aria-labelledby", label.id);
     expect(label).toHaveClass("bx--progress-bar__label");
     expect(progressBar).not.toHaveAttribute("for");
