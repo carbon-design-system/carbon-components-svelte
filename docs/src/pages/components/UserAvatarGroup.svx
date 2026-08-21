@@ -5,6 +5,9 @@ description: A row of overlapping or spaced user avatars. Extras fold into a "+N
 
 <script>
   import { UserAvatar, UserAvatarGroup } from "carbon-components-svelte";
+  import Bot from "carbon-icons-svelte/lib/Bot.svelte";
+  import Password from "carbon-icons-svelte/lib/Password.svelte";
+  import Group from "carbon-icons-svelte/lib/Group.svelte";
 </script>
 
 ## Basic
@@ -178,6 +181,16 @@ Photos, icons, and initials work the same as on a lone `UserAvatar`.
   <UserAvatar image="https://i.pravatar.cc/150?img=33" imageDescription="Dinesh Chugtai" tooltipText="Dinesh Chugtai" />
   <UserAvatar backgroundColor="auto" name="Bertram Gilfoyle" tooltipText="Bertram Gilfoyle" />
   <UserAvatar backgroundColor="auto" name="Jared Dunn" tooltipText="Jared Dunn" />
+</UserAvatarGroup>
+
+## Icons
+
+Set `icon` on each avatar to render a custom icon, such as one from [carbon-icons-svelte](https://github.com/carbon-design-system/carbon-icons-svelte), instead of a photo or initials.
+
+<UserAvatarGroup>
+  <UserAvatar icon={Bot} backgroundColor="purple" tooltipText="Bot" />
+  <UserAvatar icon={Password} backgroundColor="teal" tooltipText="Password" />
+  <UserAvatar icon={Group} backgroundColor="cool-gray" tooltipText="Group" />
 </UserAvatarGroup>
 
 ## Background colors
