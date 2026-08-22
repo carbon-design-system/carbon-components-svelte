@@ -1486,6 +1486,27 @@ describe("DataTable", () => {
     });
   });
 
+  describe("horizontal scroll wrapper", () => {
+    it("wraps the table in a bx--data-table-content element", () => {
+      render(DataTable, { props: { headers, rows } });
+
+      const table = screen.getByRole("table");
+      const wrapper = table.parentElement;
+      expect(wrapper).toHaveClass("bx--data-table-content");
+      expect(wrapper).not.toHaveAttribute("tabindex");
+    });
+
+    it("does not add the wrapper when stickyHeader is enabled", () => {
+      const { container } = render(DataTable, {
+        props: { headers, rows, stickyHeader: true },
+      });
+
+      expect(
+        container.querySelector(".bx--data-table-content"),
+      ).not.toBeInTheDocument();
+    });
+  });
+
   it("handles static width", () => {
     const { container } = render(DataTable, {
       props: {
@@ -2850,8 +2871,10 @@ describe("DataTable", () => {
       const tbody = container.querySelector("tbody");
       expect(tbody).toBeInTheDocument();
 
-      // When not using sticky header, the scroll container (table's parent) has max-height
-      const scrollContainer = table.parentElement;
+      // When not using sticky header, the scroll container (table's
+      // grandparent — the parent is Table's own `bx--data-table-content`
+      // horizontal-scroll wrapper) has max-height
+      const scrollContainer = table.parentElement?.parentElement;
       if (
         scrollContainer &&
         !container.querySelector(".bx--data-table_inner-container")
@@ -3195,7 +3218,9 @@ describe("DataTable", () => {
       await tick();
 
       const table = screen.getByRole("table");
-      const scrollContainer = table.parentElement;
+      // The table's direct parent is Table's own `bx--data-table-content`
+      // horizontal-scroll wrapper; the scroll container is one level up.
+      const scrollContainer = table.parentElement?.parentElement;
       expect(scrollContainer).toBeInstanceOf(HTMLElement);
       expect(scrollContainer?.style.overflowY).toBe("auto");
       expect(scrollContainer?.style.maxHeight).toBeDefined();
@@ -3231,7 +3256,7 @@ describe("DataTable", () => {
       expect(screen.getByText("Load Balancer 1")).toBeInTheDocument();
 
       const table = screen.getByRole("table");
-      const scrollContainer = table.parentElement;
+      const scrollContainer = table.parentElement?.parentElement;
       expect.assert(scrollContainer instanceof HTMLElement);
       scrollContainer.scrollTop = 48 * 40;
       scrollContainer.dispatchEvent(new Event("scroll"));
