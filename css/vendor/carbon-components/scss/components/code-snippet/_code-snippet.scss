@@ -48,7 +48,6 @@
     @include type-style('code-01');
   }
 
-  // Inline Code Snippet
   .#{$prefix}--snippet--inline {
     @include reset;
 
@@ -129,7 +128,6 @@
     cursor: auto;
   }
 
-  // Single Line Snippet
   .#{$prefix}--snippet--single {
     @include bx--snippet;
 
@@ -172,7 +170,6 @@
     white-space: pre;
   }
 
-  // Multi Line Snippet
   .#{$prefix}--snippet--multi {
     @include bx--snippet;
 
@@ -180,7 +177,6 @@
     padding: $carbon--spacing-05;
   }
 
-  //collapsed snippet container
   .#{$prefix}--snippet--multi .#{$prefix}--snippet-container {
     position: relative;
     min-height: 100%;
@@ -196,7 +192,6 @@
     }
   }
 
-  // expanded snippet container
   .#{$prefix}--snippet--multi.#{$prefix}--snippet--expand
     .#{$prefix}--snippet-container {
     padding-bottom: $spacing-05;
@@ -208,7 +203,6 @@
     word-wrap: break-word;
   }
 
-  // collapsed pre
   .#{$prefix}--snippet--multi .#{$prefix}--snippet-container pre {
     padding-right: $carbon--spacing-08;
     padding-bottom: to-rem(24px);
@@ -224,7 +218,6 @@
     overflow: hidden;
   }
 
-  //Copy Button
   .#{$prefix}--snippet__icon {
     width: to-rem(16px);
     height: to-rem(16px);
@@ -241,7 +234,6 @@
     @include carbon--font-family('sans');
   }
 
-  // Show more / less button
   .#{$prefix}--snippet-btn--expand {
     @include type-style('body-short-01');
     @include carbon--font-family('sans');
@@ -296,7 +288,6 @@
     transition: transform $transition--expansion;
   }
 
-  // Light version
   .#{$prefix}--snippet--light,
   .#{$prefix}--snippet--light .#{$prefix}--btn.#{$prefix}--snippet-btn--expand,
   .#{$prefix}--snippet--light .#{$prefix}--copy-btn {
@@ -325,7 +316,6 @@
     background-image: linear-gradient(to right, rgba($field-02, 0), $field-02);
   }
 
-  // Skeleton State
   .#{$prefix}--snippet.#{$prefix}--skeleton .#{$prefix}--snippet-container {
     width: 100%;
     height: 100%;
@@ -394,9 +384,7 @@
   @include snippet;
 }
 
-// ---------------------------------------------------------------------------
 // carbon-components-svelte patch (formerly css/_code-snippet.scss)
-// ---------------------------------------------------------------------------
 @import "carbon-components/scss/globals/scss/vars";
 
 /// Edge fade for code snippets (Carbon React v11 parity). v10 uses

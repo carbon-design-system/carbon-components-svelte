@@ -5,9 +5,6 @@
 // LICENSE file in the root directory of this source tree.
 //
 
-//-----------------------------
-// Text
-//-----------------------------
 @import '../../globals/scss/vars';
 @import '../../globals/scss/css--reset';
 @import '../../globals/scss/helper-mixins';
@@ -75,9 +72,6 @@
     background-color: $field-02;
   }
 
-  //-----------------------------
-  // Disabled & Error icon spacing
-  //-----------------------------
   .#{$prefix}--text-input__field-wrapper {
     position: relative;
     display: flex;
@@ -201,9 +195,6 @@
     }
   }
 
-  //-----------------------------
-  // Disabled
-  //-----------------------------
   .#{$prefix}--text-input:disabled {
     @include focus-outline('reset');
 
@@ -225,9 +216,6 @@
     opacity: 1;
   }
 
-  //-----------------------------
-  // Error
-  //-----------------------------
   .#{$prefix}--text-input--invalid {
     @include focus-outline('invalid');
 
@@ -240,16 +228,10 @@
     }
   }
 
-  //-----------------------------
-  // Skeleton
-  //-----------------------------
   .#{$prefix}--skeleton.#{$prefix}--text-input {
     @include skeleton;
   }
 
-  //-----------------------------
-  // Fluid Text Input
-  //-----------------------------
   .#{$prefix}--form--fluid .#{$prefix}--text-input-wrapper {
     position: relative;
     background: $field-01;
@@ -322,9 +304,6 @@
     @include focus-outline('outline');
   }
 
-  //-----------------------------
-  // Inline Text Input
-  //-----------------------------
 
   .#{$prefix}--text-input-wrapper.#{$prefix}--text-input-wrapper--inline {
     flex-flow: row wrap;
@@ -372,9 +351,6 @@
     flex-direction: column;
   }
 
-  //-----------------------------
-  // Readonly
-  //-----------------------------
 
   .#{$prefix}--form--fluid .#{$prefix}--text-input-wrapper--readonly,
   .#{$prefix}--text-input-wrapper--readonly .#{$prefix}--text-input {
@@ -395,9 +371,7 @@
   @include text-input;
 }
 
-// ---------------------------------------------------------------------------
 // carbon-components-svelte patch (formerly css/_text-input.scss)
-// ---------------------------------------------------------------------------
 // Extends the v10 text input with the extra-small (`xs`) size added in
 // newer Carbon (React `size="xs"`, 24px height). v10 only ships sm/md/lg.
 

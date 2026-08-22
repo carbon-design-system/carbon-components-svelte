@@ -13,26 +13,22 @@
 /// @access public
 /// @group @carbon/type
 @mixin carbon--type-classes {
-  // Font families
   @each $name, $value in $carbon--font-families {
     .#{$prefix}--type-#{$name} {
       font-family: $value;
     }
   }
 
-  // Font weights
   @each $name, $value in $carbon--font-weights {
     .#{$prefix}--type-#{$name} {
       font-weight: $value;
     }
   }
 
-  // Font styles
   .#{$prefix}--type-italic {
     font-style: italic;
   }
 
-  // Type styles
   @each $name, $value in $tokens {
     .#{$prefix}--type-#{$name} {
       @include carbon--type-style($name, map-has-key($value, breakpoints));

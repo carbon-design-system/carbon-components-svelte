@@ -41,7 +41,6 @@
     border-spacing: 0;
     overflow-x: auto;
 
-    // Condensed list
     &.#{$prefix}--structured-list--condensed .#{$prefix}--structured-list-td,
     &.#{$prefix}--structured-list--condensed .#{$prefix}--structured-list-th {
       @include padding-td--condensed;
@@ -57,7 +56,6 @@
       // 8px side padding between col creates 16 px, with exception of 1st col, which needs an override to be 16px
     }
 
-    // Flush list
     &.#{$prefix}--structured-list--flush
       .#{$prefix}--structured-list-row
       .#{$prefix}--structured-list-td,
@@ -174,7 +172,6 @@
     fill: $icon-01;
   }
 
-  // Skeleton State
   .#{$prefix}--structured-list.#{$prefix}--skeleton {
     .#{$prefix}--structured-list-th {
       &:first-child {
@@ -221,9 +218,7 @@
   @include structured-list;
 }
 
-// ---------------------------------------------------------------------------
 // carbon-components-svelte patch (formerly css/_structured-list-input-focusable.scss)
-// ---------------------------------------------------------------------------
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/helper-mixins";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";

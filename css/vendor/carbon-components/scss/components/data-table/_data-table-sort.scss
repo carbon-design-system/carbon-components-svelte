@@ -13,9 +13,6 @@
 /// @access private
 /// @group data-table
 @mixin data-table-sort {
-  // -------------------------------------
-  // Sortable table
-  // -------------------------------------
   .#{$prefix}--data-table--sort th,
   .#{$prefix}--data-table th[aria-sort] {
     height: $spacing-09;
@@ -24,9 +21,6 @@
     border-bottom: none;
   }
 
-  // -------------------------------------
-  // Th > Button
-  // -------------------------------------
   .#{$prefix}--table-sort {
     @include button-reset(false);
 
@@ -67,9 +61,6 @@
     padding-left: $spacing-05;
   }
 
-  // -------------------------------------
-  // Th > Button > Span (span required for flex bugs in Safari)
-  // -------------------------------------
   th .#{$prefix}--table-sort__flex {
     display: flex;
     width: 100%;
@@ -107,10 +98,6 @@
     align-items: flex-start;
   }
 
-  // -------------------------------------
-  //Th > Button > Svg (Sort Icons)
-  // -------------------------------------
-  // inactive icons
   .#{$prefix}--table-sort .#{$prefix}--table-sort__icon-inactive {
     display: block;
   }
@@ -132,7 +119,6 @@
     background: $data-table-column-hover;
   }
 
-  // active icons
   .#{$prefix}--table-sort.#{$prefix}--table-sort--active
     .#{$prefix}--table-sort__icon-unsorted {
     display: none;
@@ -159,28 +145,21 @@
     transition: transform $transition--base $carbon--standard-easing;
   }
 
-  //----------------------------------------------------------------------------
-  // Compact, Short, Tall Sortable
-  //----------------------------------------------------------------------------
-  // Sortable compact
   // V11: remove compact
   .#{$prefix}--data-table--compact.#{$prefix}--data-table--sort th {
     height: to-rem(24px);
   }
 
-  // Sortable Short
   // V11: remove short
   .#{$prefix}--data-table--short.#{$prefix}--data-table--sort th {
     height: to-rem(32px);
   }
 
-  // Sortable Medium
   // V11: remove short
   .#{$prefix}--data-table--md.#{$prefix}--data-table--sort th {
     height: to-rem(40px);
   }
 
-  // Sortable Tall
   // V11: remove tall
   .#{$prefix}--data-table--tall.#{$prefix}--data-table--sort th {
     height: to-rem(64px);

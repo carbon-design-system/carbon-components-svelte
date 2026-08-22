@@ -145,7 +145,7 @@
     inset-block-start: to-rem(20px);
   }
 
-  // Invalid / warning states. The wrapper-level ring replaces the field-level
+  // The wrapper-level ring replaces the field-level
   // outline that v10 renders for the non-fluid variants. A ::after overlay
   // paints above child backgrounds (including input-cell hover) so the ring
   // stays visible until focus moves to the field.
@@ -290,7 +290,7 @@
     inset-block-end: $spacing-10;
   }
 
-  // Focus styles. The outline renders on the field wrapper (not the fluid
+  // The outline renders on the field wrapper (not the fluid
   // wrapper) so the open menu, a sibling of the field, does not paint over
   // the bottom edge. `outline-offset: 0` on the outer wrapper is clipped by
   // adjacent fluid-form cells; the mixin's -2px inset offset stays visible

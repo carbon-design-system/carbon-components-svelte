@@ -181,8 +181,7 @@
     transition: none;
   }
 
-  // Focus styles. Declared after invalid styles so the focus outline
-  // wins while the textarea is focused.
+  // Declared after invalid styles so the focus outline wins while the textarea is focused.
   .#{$prefix}--text-area--fluid
     .#{$prefix}--text-area__wrapper[data-invalid]:focus-within,
   .#{$prefix}--text-area--fluid .#{$prefix}--text-area__wrapper:focus-within {

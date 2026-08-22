@@ -103,7 +103,6 @@
     color: $interactive;
   }
 
-  //OPTIONAL HELPER TEXT STYLING
   .#{$prefix}--progress-optional {
     @include type-style('label-01');
 
@@ -115,14 +114,12 @@
     text-align: start;
   }
 
-  //CURRENT STYLING
   .#{$prefix}--progress-step--current {
     .#{$prefix}--progress-line {
       background-color: $interactive-04;
     }
   }
 
-  //INCOMPLETE STYLING
   .#{$prefix}--progress-step--incomplete {
     svg {
       fill: $ui-05;
@@ -133,14 +130,12 @@
     }
   }
 
-  //COMPLETED STYLING
   .#{$prefix}--progress-step--complete {
     .#{$prefix}--progress-line {
       background-color: $interactive-04;
     }
   }
 
-  //interactive button
   .#{$prefix}--progress-step-button {
     @include button-reset();
 
@@ -148,7 +143,6 @@
     text-align: left;
   }
 
-  //unclickable button
   .#{$prefix}--progress-step-button--unclickable {
     cursor: default;
     outline: none;
@@ -161,7 +155,6 @@
     cursor: default;
   }
 
-  //DISABLED STYLING
   .#{$prefix}--progress-step--disabled {
     cursor: not-allowed;
     pointer-events: none;
@@ -189,12 +182,10 @@
     }
   }
 
-  // ERROR STYLING
   .#{$prefix}--progress__warning > * {
     fill: $support-01;
   }
 
-  // Skeleton State
   .#{$prefix}--progress.#{$prefix}--skeleton .#{$prefix}--progress-label {
     @include skeleton;
 
@@ -203,7 +194,6 @@
     margin-top: 0.625rem;
   }
 
-  // Vertical Variant
 
   .#{$prefix}--progress--vertical {
     display: flex;

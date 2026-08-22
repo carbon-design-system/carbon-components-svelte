@@ -17,9 +17,6 @@
 /// @access private
 /// @group ui-shell
 @mixin carbon-header-panel {
-  //----------------------------------------------------------------------------
-  // Header Panel
-  //----------------------------------------------------------------------------
   .#{$prefix}--header-panel {
     @include carbon--motion(exit, productive);
 

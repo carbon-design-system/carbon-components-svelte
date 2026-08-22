@@ -12,18 +12,12 @@
 /// @access private
 /// @group ui-shell
 @mixin profile-menu {
-  //--------------------------------------------------------------------------
-  // Trigger
-  //--------------------------------------------------------------------------
   .#{$prefix}--profile-menu__trigger.#{$prefix}--profile-menu__trigger {
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
-  //--------------------------------------------------------------------------
-  // Avatar (shared frame; sized per context)
-  //--------------------------------------------------------------------------
   .#{$prefix}--profile-menu__avatar {
     display: flex;
     flex-shrink: 0;
@@ -54,9 +48,6 @@
     height: 2.5rem;
   }
 
-  //--------------------------------------------------------------------------
-  // Card
-  //--------------------------------------------------------------------------
   .#{$prefix}--profile-menu.#{$prefix}--profile-menu {
     position: absolute;
     top: 3rem;
@@ -75,9 +66,6 @@
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15);
   }
 
-  //--------------------------------------------------------------------------
-  // Header block ("View profile")
-  //--------------------------------------------------------------------------
   .#{$prefix}--profile-menu__header {
     display: flex;
     flex-direction: column;
@@ -128,18 +116,12 @@
     color: $text-primary;
   }
 
-  //--------------------------------------------------------------------------
-  // List (compact group of items with even top/bottom padding)
-  //--------------------------------------------------------------------------
   .#{$prefix}--profile-menu__list {
     display: flex;
     flex-direction: column;
     padding: $spacing-03 0;
   }
 
-  //--------------------------------------------------------------------------
-  // Item (link or button)
-  //--------------------------------------------------------------------------
   .#{$prefix}--profile-menu__item.#{$prefix}--profile-menu__item {
     display: flex;
     align-items: center;
@@ -173,9 +155,6 @@
     fill: $icon-primary;
   }
 
-  //--------------------------------------------------------------------------
-  // Detail row (label / value / trailing action)
-  //--------------------------------------------------------------------------
   .#{$prefix}--profile-menu__detail {
     display: flex;
     align-items: flex-end;
@@ -222,9 +201,6 @@
     outline-offset: -2px;
   }
 
-  //--------------------------------------------------------------------------
-  // Divider
-  //--------------------------------------------------------------------------
   .#{$prefix}--profile-menu__divider.#{$prefix}--profile-menu__divider {
     height: 1px;
     margin: 0;

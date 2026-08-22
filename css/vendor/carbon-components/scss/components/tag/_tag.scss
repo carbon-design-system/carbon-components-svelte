@@ -162,7 +162,6 @@
     cursor: pointer;
   }
 
-  // tags used for filtering
   .#{$prefix}--tag--filter {
     padding-top: 0;
     padding-right: 0;
@@ -239,7 +238,6 @@
     fill: $disabled-02;
   }
 
-  // small tags
   .#{$prefix}--tag--sm {
     min-height: to-rem(18px);
     padding: 0 $carbon--spacing-03;
@@ -255,7 +253,6 @@
     margin-left: to-rem(5px);
   }
 
-  // Skeleton state
   .#{$prefix}--tag.#{$prefix}--skeleton {
     @include skeleton;
     @include tag-theme($bg-color: $skeleton-01, $text-color: $text-01);

@@ -12,7 +12,6 @@
 }
 
 // Readonly date picker (v11 backport).
-
 @mixin date-picker-readonly {
   .#{$prefix}--date-picker__input[readonly] {
     background: transparent;

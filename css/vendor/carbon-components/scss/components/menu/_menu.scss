@@ -139,9 +139,7 @@
   @include menu;
 }
 
-// ---------------------------------------------------------------------------
 // carbon-components-svelte patch (formerly css/_menu.scss)
-// ---------------------------------------------------------------------------
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/helper-mixins";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
@@ -160,9 +158,7 @@
   @include menu-scrollable;
 }
 
-// ---------------------------------------------------------------------------
 // carbon-components-svelte patch (formerly css/_menu-xs.scss)
-// ---------------------------------------------------------------------------
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/helper-mixins";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";

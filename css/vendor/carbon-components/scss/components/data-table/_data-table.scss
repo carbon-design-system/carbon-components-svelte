@@ -11,9 +11,7 @@
 @import 'data-table-sort';
 @import 'data-table-skeleton';
 
-// ---------------------------------------------------------------------------
 // carbon-components-svelte patch (formerly css/_data-table-zebra-hidden.scss)
-// ---------------------------------------------------------------------------
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
@@ -39,9 +37,7 @@
   @include data-table-zebra-hidden;
 }
 
-// ---------------------------------------------------------------------------
 // carbon-components-svelte patch (formerly css/_data-table-highlighted-row.scss)
-// ---------------------------------------------------------------------------
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
@@ -98,9 +94,7 @@
   @include data-table-highlighted-row;
 }
 
-// ---------------------------------------------------------------------------
 // carbon-components-svelte patch (formerly css/_data-table-tooltip-link.scss)
-// ---------------------------------------------------------------------------
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
@@ -128,9 +122,7 @@
   @include data-table-tooltip-link;
 }
 
-// ---------------------------------------------------------------------------
 // carbon-components-svelte patch (formerly css/_data-table-sticky-column-menu.scss)
-// ---------------------------------------------------------------------------
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
@@ -160,9 +152,7 @@
   @include data-table-sticky-column-menu;
 }
 
-// ---------------------------------------------------------------------------
 // carbon-components-svelte patch (formerly css/_data-table-footer.scss)
-// ---------------------------------------------------------------------------
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/typography";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
@@ -233,9 +223,7 @@
   @include data-table-footer;
 }
 
-// ---------------------------------------------------------------------------
 // carbon-components-svelte patch (formerly css/_data-table-align.scss)
-// ---------------------------------------------------------------------------
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 

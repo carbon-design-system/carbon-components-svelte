@@ -5,22 +5,17 @@
 // LICENSE file in the root directory of this source tree.
 //
 
-//-------------------------
-// Animations - Loading
-//-------------------------
 @import '../../globals/scss/vars';
 
 /// @access private
 /// @group loading
 @mixin animation__loading--spin {
-  // Animate the container
   animation-duration: 690ms;
   animation-fill-mode: forwards;
   animation-iteration-count: infinite;
   animation-name: rotate;
   animation-timing-function: linear;
 
-  // Animate the stroke
   svg circle {
     animation-duration: 10ms;
     animation-name: init-stroke;
@@ -35,11 +30,9 @@
 /// @access private
 /// @group loading
 @mixin animation__loading--stop {
-  // Animate the container
   animation: rotate-end-p1 700ms $carbon--ease-out forwards,
     rotate-end-p2 700ms $carbon--ease-out 700ms forwards;
 
-  // Animate the stroke
   svg circle {
     animation-delay: 700ms;
     animation-duration: 700ms;

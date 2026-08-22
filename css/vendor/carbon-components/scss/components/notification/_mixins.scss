@@ -5,10 +5,6 @@
 // LICENSE file in the root directory of this source tree.
 //
 
-//----------------------------------------------
-// Inline Notification
-// ---------------------------------------------
-
 /// @access private
 /// @group notification
 @mixin inline-notification--color($color) {
@@ -19,10 +15,6 @@
     fill: $color;
   }
 }
-
-//----------------------------------------------
-// Toast Notification
-// ---------------------------------------------
 
 /// @access private
 /// @group notification

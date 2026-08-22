@@ -4,9 +4,7 @@
 // This source code is licensed under the Apache-2.0 license found in the
 // LICENSE file in the root directory of this source tree.
 //
-//-------------------------------------------
 // Compatibility notes (*.import.scss)
-// ------------------------------------------
 //
 // This file is intended to be consumed and processed with dart-sass.
 // It is incompatible with node-sass/libsass as it contains sass language features
@@ -28,9 +26,6 @@
 @import '../layout/breakpoint';
 @import 'prefix';
 
-// -----------------------------------------------------------------------------
-// Columns
-// -----------------------------------------------------------------------------
 
 /// Used to initialize the default properties for a column class, most notably
 /// for setting width and default gutters when a column's breakpoint has not been
@@ -140,7 +135,6 @@
     }
 
     @include carbon--breakpoint($breakpoint, $breakpoints) {
-      // Provide basic `.col-{bp}` classes for equal-width flexbox columns
       .#{$prefix}--col,
       .#{$prefix}--col#{$infix} {
         max-width: 100%;
@@ -173,9 +167,6 @@
   }
 }
 
-// -----------------------------------------------------------------------------
-// Rows
-// -----------------------------------------------------------------------------
 
 /// Define the properties for a selector assigned to a row in the grid system.
 /// @param {Number} $gutter [$carbon--grid-gutter] - The gutter in the grid system
@@ -188,9 +179,6 @@
   margin-left: -1 * $gutter * 0.5;
 }
 
-// -----------------------------------------------------------------------------
-// No gutter
-// -----------------------------------------------------------------------------
 
 /// Add `no-gutter` and `no-gutter--{start,end}` classes to the output CSS. These
 /// classes are useful for dropping the gutter in fluid situations.
@@ -225,9 +213,6 @@
   }
 }
 
-// -----------------------------------------------------------------------------
-// Hang
-// -----------------------------------------------------------------------------
 
 /// Add `hang--start` and `hang--end` classes for a given gutter. These classes are
 /// used alongside `no-gutter--start` and `no-gutter--end` to "hang" type.
@@ -253,9 +238,6 @@
   }
 }
 
-// -----------------------------------------------------------------------------
-// Aspect ratio
-// -----------------------------------------------------------------------------
 
 /// The aspect ratios that are used to generate corresponding aspect ratio
 /// classes in code
@@ -328,9 +310,6 @@ $carbon--aspect-ratios: (
   }
 }
 
-// -----------------------------------------------------------------------------
-// Grid
-// -----------------------------------------------------------------------------
 
 /// Create the container for a grid. Will cause full-bleed for the grid unless
 /// max-width properties are added with `make-container-max-widths`

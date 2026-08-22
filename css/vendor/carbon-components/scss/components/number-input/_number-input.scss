@@ -256,7 +256,6 @@
     }
   }
 
-  // rule divider styles
   .#{$prefix}--number__controls
     .#{$prefix}--number__rule-divider:first-of-type {
     left: 0;
@@ -382,7 +381,6 @@
     background-color: $hover-light-ui;
   }
 
-  // Size Variant styles
   // TODO V11: Remove xl selector
   .#{$prefix}--number--xl input[type='number'],
   .#{$prefix}--number--lg input[type='number'] {
@@ -425,14 +423,12 @@
     }
   }
 
-  //No label positioning adjustment
   .#{$prefix}--number--nolabel
     .#{$prefix}--label
     + .#{$prefix}--form__helper-text {
     margin-top: 0;
   }
 
-  // No steppers
   .#{$prefix}--number--nosteppers input[type='number'] {
     padding-right: to-rem(48px);
   }
@@ -441,7 +437,6 @@
     right: to-rem(16px);
   }
 
-  // Readonly
   .#{$prefix}--number--readonly input[type='number'] {
     background: transparent;
   }
@@ -455,7 +450,6 @@
     right: to-rem(16px);
   }
 
-  // Skeleton State
   .#{$prefix}--number.#{$prefix}--skeleton {
     @include skeleton;
 

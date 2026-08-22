@@ -5,9 +5,6 @@
 // LICENSE file in the root directory of this source tree.
 //
 
-//-----------------------------
-// Dropdown
-//-----------------------------
 
 @import '../../globals/scss/vars';
 @import '../../globals/scss/helper-mixins';
@@ -213,7 +210,6 @@
     right: to-rem(32px);
   }
 
-  // Skeleton State
   .#{$prefix}--dropdown-v2.#{$prefix}--skeleton,
   .#{$prefix}--dropdown.#{$prefix}--skeleton {
     @include skeleton;

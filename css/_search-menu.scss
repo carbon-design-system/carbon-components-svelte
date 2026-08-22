@@ -205,8 +205,6 @@
     @include type-style("body-short-01");
   }
 
-  // Flush-left alignment: result text and group headers share the search input
-  // text inset; leading icons sit in the magnifier gutter, centered per size.
   @each $size, $inset in $search-menu-insets {
     $text-inset: nth($inset, 1);
     $icon-left: nth($inset, 2);

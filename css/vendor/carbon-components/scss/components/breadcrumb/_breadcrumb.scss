@@ -74,7 +74,6 @@
     }
   }
 
-  // Overflow Menu overrides
   .#{$prefix}--breadcrumb-item .#{$prefix}--overflow-menu {
     position: relative;
     width: to-rem(20px);
@@ -144,7 +143,6 @@
     background: transparent;
   }
 
-  // Skeleton State
   .#{$prefix}--breadcrumb.#{$prefix}--skeleton .#{$prefix}--link {
     @include skeleton;
 

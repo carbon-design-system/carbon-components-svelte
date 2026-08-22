@@ -5,9 +5,6 @@
 // LICENSE file in the root directory of this source tree.
 //
 
-//-----------------------------
-// Text area
-//-----------------------------
 
 @import '../../globals/scss/vars';
 @import '../../globals/scss/typography';
@@ -70,9 +67,6 @@
     fill: $support-01;
   }
 
-  //-----------------------------
-  // Disabled
-  //-----------------------------
   .#{$prefix}--text-area:disabled {
     border-bottom: 1px solid transparent;
     background-color: $disabled-01;
@@ -89,7 +83,6 @@
     background-color: $field-02;
   }
 
-  // Skeleton State
   .#{$prefix}--text-area.#{$prefix}--skeleton {
     @include skeleton;
 

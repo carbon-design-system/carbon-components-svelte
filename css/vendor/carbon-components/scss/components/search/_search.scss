@@ -5,9 +5,6 @@
 // LICENSE file in the root directory of this source tree.
 //
 
-//-----------------------------
-// Search
-//-----------------------------
 
 @import '../../globals/scss/vars';
 @import '../../globals/scss/helper-mixins';
@@ -79,7 +76,6 @@
     background: $field-02;
   }
 
-  // Small styles
   .#{$prefix}--search--sm .#{$prefix}--search-input,
   .#{$prefix}--search--sm.#{$prefix}--search--expandable.#{$prefix}--search--expanded
     .#{$prefix}--search-input {
@@ -92,7 +88,6 @@
     left: to-rem(8px);
   }
 
-  // Large styles
   // V11: change lg to md
   .#{$prefix}--search--lg .#{$prefix}--search-input,
   .#{$prefix}--search--lg.#{$prefix}--search--expandable.#{$prefix}--search--expanded

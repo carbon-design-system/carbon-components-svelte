@@ -5,9 +5,6 @@
 // LICENSE file in the root directory of this source tree.
 //
 
-//-----------------------------
-// Tabs
-//-----------------------------
 
 @import '../../globals/scss/vars';
 @import '../../globals/scss/helper-mixins';
@@ -77,9 +74,6 @@
     }
   }
 
-  //-----------------------------
-  // Item
-  //-----------------------------
   .#{$prefix}--tabs__nav-item {
     @include reset;
 
@@ -124,9 +118,6 @@
       outline $duration--fast-01 motion(standard, productive);
   }
 
-  //-----------------------------
-  // Item Hover
-  //-----------------------------
   .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--selected) {
     @include carbon--breakpoint(md) {
       background: transparent;
@@ -153,9 +144,6 @@
     }
   }
 
-  //---------------------------------------------
-  // Item Disabled
-  //---------------------------------------------
   .#{$prefix}--tabs__nav-item--disabled,
   .#{$prefix}--tabs__nav-item--disabled:hover {
     cursor: not-allowed;
@@ -180,9 +168,6 @@
     }
   }
 
-  //-----------------------------
-  // Item Selected
-  //-----------------------------
   .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled) {
     display: none;
     border: none;
@@ -224,9 +209,6 @@
     }
   }
 
-  //-----------------------------
-  // Link
-  //-----------------------------
   a.#{$prefix}--tabs__nav-link {
     @include focus-outline('reset');
 
@@ -280,9 +262,6 @@
     }
   }
 
-  //-----------------------------
-  //  Link Hover
-  //-----------------------------
   .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled)
     .#{$prefix}--tabs__nav-link {
     color: $text-01;
@@ -300,9 +279,6 @@
     }
   }
 
-  //-----------------------------
-  //  Link Disabled
-  //-----------------------------
   .#{$prefix}--tabs__nav-item--disabled .#{$prefix}--tabs__nav-link {
     border-bottom: $tab-underline-disabled;
     color: $tab-text-disabled;
@@ -320,9 +296,6 @@
     outline: none;
   }
 
-  //-----------------------------
-  //  Link Focus
-  //-----------------------------
   .#{$prefix}--tabs__nav-item:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled):not(.#{$prefix}--tabs__nav-item--selected)
     .#{$prefix}--tabs__nav-link:focus,
   .#{$prefix}--tabs__nav-item:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled):not(.#{$prefix}--tabs__nav-item--selected)
@@ -330,9 +303,6 @@
     color: $text-02;
   }
 
-  //-----------------------------
-  //  Tab Content Container
-  //-----------------------------
   .#{$prefix}--tab-content {
     padding: $carbon--spacing-05;
 
@@ -341,9 +311,6 @@
     }
   }
 
-  //-----------------------------
-  // Skeleton state
-  //-----------------------------
   .#{$prefix}--tabs.#{$prefix}--skeleton {
     cursor: default;
     pointer-events: none;
@@ -404,9 +371,6 @@
       }
     }
 
-    //-----------------------------
-    // Overflow Nav Buttons
-    //-----------------------------
     .#{$prefix}--tabs__overflow-indicator--left,
     .#{$prefix}--tabs__overflow-indicator--right {
       z-index: 1;
@@ -496,9 +460,6 @@
       fill: $icon-01;
     }
 
-    //-----------------------------
-    // Item
-    //-----------------------------
     .#{$prefix}--tabs--scrollable__nav-item {
       @include reset;
 
@@ -527,24 +488,15 @@
       box-shadow: to-rem(-1px) 0 0 0 $ui-04;
     }
 
-    //-----------------------------
-    // Item Hover
-    //-----------------------------
     &.#{$prefix}--tabs--scrollable--container
       .#{$prefix}--tabs--scrollable__nav-item:hover {
       background-color: $hover-selected-ui;
     }
 
-    //-----------------------------
-    //  Tab Content Container
-    //-----------------------------
     .#{$prefix}--tab-content {
       padding: $carbon--spacing-05;
     }
 
-    //-----------------------------
-    // Skeleton state
-    //-----------------------------
     .#{$prefix}--tabs.#{$prefix}--skeleton {
       cursor: default;
       pointer-events: none;
