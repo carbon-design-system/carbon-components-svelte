@@ -76,7 +76,7 @@
     "lightningcss": "^1.33.0",
     "mitata": "^1.0.34",
     "sass-embedded": "^1.100.0",
-    "sveld": "^0.36.8",
+    "sveld": "^0.36.9",
     "svelte": "^5.56.8",
     "svelte-check": "^4.7.3",
     "typescript": "^6.0.3",
