@@ -239,6 +239,7 @@
   <div
     class:bx--menu-option__content={true}
     class:bx--menu-option__content--disabled={disabled}
+    class:bx--menu-option__content--indented={isIndented}
   >
     {#if isIndented || icon}
       <div class:bx--menu-option__icon={true}>

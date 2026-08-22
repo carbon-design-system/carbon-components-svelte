@@ -19,6 +19,17 @@ describe("MenuItem", () => {
     expect(icon).toBeInTheDocument();
   });
 
+  it("does not apply the indented content modifier to a plain icon item", async () => {
+    render(MenuItemFixture);
+
+    await user.click(screen.getByRole("button", { name: "Trigger" }));
+
+    const item = screen.getByRole("menuitem", { name: "Add item" });
+    expect(item.querySelector(".bx--menu-option__content")).not.toHaveClass(
+      "bx--menu-option__content--indented",
+    );
+  });
+
   it("does not render an icon wrapper when icon is unset", async () => {
     render(MenuItemFixture);
 
@@ -367,6 +378,17 @@ describe("MenuItem", () => {
       expect(getSelectedIds()).toEqual(["size"]);
     });
 
+    it("applies the indented content modifier to checkbox items", async () => {
+      render(MenuItemSelectableFixture);
+
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+
+      const item = screen.getByRole("menuitemcheckbox", { name: "Name" });
+      expect(item.querySelector(".bx--menu-option__content")).toHaveClass(
+        "bx--menu-option__content--indented",
+      );
+    });
+
     it("toggles aria-checked and the bound selectedIds on click", async () => {
       render(MenuItemSelectableFixture);
 
@@ -441,6 +463,17 @@ describe("MenuItem", () => {
         screen.getByRole("menuitemradio", { name: "Comfortable" }),
       ).toHaveAttribute("aria-checked", "true");
       expect(getSelectedId()).toBe("comfortable");
+    });
+
+    it("applies the indented content modifier to radio items", async () => {
+      render(MenuItemRadioGroupFixture);
+
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+
+      const item = screen.getByRole("menuitemradio", { name: "Compact" });
+      expect(item.querySelector(".bx--menu-option__content")).toHaveClass(
+        "bx--menu-option__content--indented",
+      );
     });
 
     it("unchecks the previous item when another one is selected", async () => {
