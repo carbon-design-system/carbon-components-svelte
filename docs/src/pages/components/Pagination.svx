@@ -85,6 +85,12 @@ This example also overrides `itemRangeText` and `pageRangeText` to format the it
 
 <FileSource src="/framed/Pagination/PageWindow" />
 
+## Custom page select
+
+Use the `pageSelect` slot to replace the default page-number `Select` with your own control. The slot exposes `currentPage`, `totalPages`, `currentPageSize`, and `selectLabelText` for display; bind `page` on `Pagination` itself and set it from within the slot to navigate.
+
+<FileSource src="/framed/Pagination/PaginationPageSelect" />
+
 ## Simple
 
 Set `simple` for a compact previous/next control with page status text. Useful in toolbars and cards.
