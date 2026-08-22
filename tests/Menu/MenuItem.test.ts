@@ -19,26 +19,24 @@ describe("MenuItem", () => {
     expect(icon).toBeInTheDocument();
   });
 
-  it("does not apply the indented content modifier to a plain icon item", async () => {
+  it("does not reserve a checkmark column when no item in the menu is selectable or radio", async () => {
     render(MenuItemFixture);
 
     await user.click(screen.getByRole("button", { name: "Trigger" }));
 
     const item = screen.getByRole("menuitem", { name: "Add item" });
-    expect(item.querySelector(".bx--menu-option__content")).not.toHaveClass(
-      "bx--menu-option__content--indented",
-    );
+    expect(
+      item.querySelector(".bx--menu-option__selection-icon"),
+    ).not.toBeInTheDocument();
   });
 
-  it("does not render an icon wrapper when icon is unset", async () => {
+  it("reserves an icon column for a sibling without its own icon, so its label lines up with icon items", async () => {
     render(MenuItemFixture);
 
     await user.click(screen.getByRole("button", { name: "Trigger" }));
 
     const item = screen.getByRole("menuitem", { name: "Plain" });
-    expect(
-      item.querySelector(".bx--menu-option__icon"),
-    ).not.toBeInTheDocument();
+    expect(item.querySelector(".bx--menu-option__icon")).toBeInTheDocument();
   });
 
   it("renders shortcutText in the info region", async () => {
@@ -378,26 +376,40 @@ describe("MenuItem", () => {
       expect(getSelectedIds()).toEqual(["size"]);
     });
 
-    it("applies the indented content modifier to checkbox items", async () => {
+    it("reserves a checkmark column for checkbox items", async () => {
       render(MenuItemSelectableFixture);
 
       await user.click(screen.getByRole("button", { name: "Trigger" }));
 
       const item = screen.getByRole("menuitemcheckbox", { name: "Name" });
-      expect(item.querySelector(".bx--menu-option__content")).toHaveClass(
-        "bx--menu-option__content--indented",
-      );
+      expect(
+        item.querySelector(".bx--menu-option__selection-icon"),
+      ).toBeInTheDocument();
     });
 
-    it("indents a plain sibling's content so its label stays aligned with checkbox items", async () => {
+    it("renders a checked item's own icon alongside its checkmark, in separate columns", async () => {
+      render(MenuItemSelectableFixture);
+
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+
+      const item = screen.getByRole("menuitemcheckbox", { name: "Size" });
+      const selectionIcon = item.querySelector(
+        ".bx--menu-option__selection-icon svg",
+      );
+      const icon = item.querySelector(".bx--menu-option__icon svg");
+      expect(selectionIcon).toBeInTheDocument();
+      expect(icon).toBeInTheDocument();
+    });
+
+    it("reserves a checkmark column for a plain sibling so its label stays aligned with checkbox items", async () => {
       render(MenuItemSelectableFixture);
 
       await user.click(screen.getByRole("button", { name: "Trigger" }));
 
       const plainItem = screen.getByRole("menuitem", { name: "Plain" });
-      expect(plainItem.querySelector(".bx--menu-option__content")).toHaveClass(
-        "bx--menu-option__content--indented",
-      );
+      expect(
+        plainItem.querySelector(".bx--menu-option__selection-icon"),
+      ).toBeInTheDocument();
     });
 
     it("toggles aria-checked and the bound selectedIds on click", async () => {
@@ -476,15 +488,15 @@ describe("MenuItem", () => {
       expect(getSelectedId()).toBe("comfortable");
     });
 
-    it("applies the indented content modifier to radio items", async () => {
+    it("reserves a checkmark column for radio items", async () => {
       render(MenuItemRadioGroupFixture);
 
       await user.click(screen.getByRole("button", { name: "Trigger" }));
 
       const item = screen.getByRole("menuitemradio", { name: "Compact" });
-      expect(item.querySelector(".bx--menu-option__content")).toHaveClass(
-        "bx--menu-option__content--indented",
-      );
+      expect(
+        item.querySelector(".bx--menu-option__selection-icon"),
+      ).toBeInTheDocument();
     });
 
     it("unchecks the previous item when another one is selected", async () => {

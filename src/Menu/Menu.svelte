@@ -131,38 +131,48 @@
     dispatch("close", { trigger });
   }
 
-  // Carbon indents every item's label when the menu has any
-  // selectable/radio sibling, so the whole column stays aligned instead of
-  // just the indented rows shifting right on their own. Items register by
-  // an internal id (not the consumer-facing `id` prop) since a plain item
-  // never registers and multiple items may share no `id` at all.
-  const indentedIds = writable(/** @type {Set<string>} */ (new Set()));
-  const hasIndentedItems = derived(indentedIds, (_) => _.size > 0);
-  const batchedIndentedUpdate = batchStoreUpdates(indentedIds);
+  /**
+   * A menu-wide "does any item need this column" registry: a selectable/
+   * radio sibling reserves the checkmark column for every item, and an
+   * icon-bearing sibling reserves the icon column for every item, so the
+   * whole menu keeps both columns aligned instead of just the row that
+   * needs them shifting its own label over. Items register by an internal
+   * id (not the consumer-facing `id` prop), since a plain item never
+   * registers and multiple items may share no `id` at all.
+   * @returns {{ hasAny: import("svelte/store").Readable<boolean>, register: (id: string) => void, unregister: (id: string) => void }}
+   */
+  function createColumnRegistry() {
+    const ids = writable(/** @type {Set<string>} */ (new Set()));
+    const hasAny = derived(ids, (_) => _.size > 0);
+    const batchedUpdate = batchStoreUpdates(ids);
 
-  /** @type {(id: string) => void} */
-  function registerIndented(id) {
-    batchedIndentedUpdate((_) => {
-      if (_.has(id)) return _;
-      return new Set(_).add(id);
-    });
+    return {
+      hasAny,
+      register(id) {
+        batchedUpdate((_) => (_.has(id) ? _ : new Set(_).add(id)));
+      },
+      unregister(id) {
+        batchedUpdate((_) => {
+          if (!_.has(id)) return _;
+          const next = new Set(_);
+          next.delete(id);
+          return next;
+        });
+      },
+    };
   }
 
-  /** @type {(id: string) => void} */
-  function unregisterIndented(id) {
-    batchedIndentedUpdate((_) => {
-      if (!_.has(id)) return _;
-      const next = new Set(_);
-      next.delete(id);
-      return next;
-    });
-  }
+  const indentedColumn = createColumnRegistry();
+  const iconColumn = createColumnRegistry();
 
   setContext("carbon:Menu", {
     close,
-    registerIndented,
-    unregisterIndented,
-    hasIndentedItems,
+    registerIndented: indentedColumn.register,
+    unregisterIndented: indentedColumn.unregister,
+    hasIndentedItems: indentedColumn.hasAny,
+    registerIcon: iconColumn.register,
+    unregisterIcon: iconColumn.unregister,
+    hasIconItems: iconColumn.hasAny,
   });
 
   $: {

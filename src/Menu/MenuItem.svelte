@@ -115,16 +115,23 @@
     : isSelectable
       ? "menuitemcheckbox"
       : "menuitem";
-  $: displayIcon = isIndented ? (selected ? Checkmark : undefined) : icon;
-
-  // A selectable/radio sibling widens every row's label gap so the whole
-  // column of labels stays aligned, not just this item's own.
+  // A selectable/radio sibling reserves the checkmark column for every
+  // item, and an icon-bearing sibling reserves the icon column for every
+  // item, so both stay aligned across the whole menu instead of just the
+  // row that needs them shifting its own label over.
   const indentRegId = uniqueId();
+  const iconRegId = uniqueId();
   const hasIndentedSiblings = ctx.hasIndentedItems;
+  const hasIconSiblings = ctx.hasIconItems;
   $: if (isIndented) {
     ctx.registerIndented(indentRegId);
   } else {
     ctx.unregisterIndented(indentRegId);
+  }
+  $: if (icon) {
+    ctx.registerIcon(iconRegId);
+  } else {
+    ctx.unregisterIcon(iconRegId);
   }
 
   function handleClick(event) {
@@ -183,6 +190,7 @@
       hoverIntent.cancel();
       unsubscribe?.();
       ctx.unregisterIndented(indentRegId);
+      ctx.unregisterIcon(iconRegId);
     };
   });
 </script>
@@ -250,11 +258,17 @@
   <div
     class:bx--menu-option__content={true}
     class:bx--menu-option__content--disabled={disabled}
-    class:bx--menu-option__content--indented={$hasIndentedSiblings}
   >
-    {#if isIndented || icon || $hasIndentedSiblings}
+    {#if isIndented || $hasIndentedSiblings}
+      <div class:bx--menu-option__selection-icon={true}>
+        {#if isIndented && selected}
+          <Checkmark />
+        {/if}
+      </div>
+    {/if}
+    {#if icon || $hasIconSiblings}
       <div class:bx--menu-option__icon={true}>
-        <svelte:component this={displayIcon} />
+        <svelte:component this={icon} />
       </div>
     {/if}
     <span class:bx--menu-option__label={true}>
