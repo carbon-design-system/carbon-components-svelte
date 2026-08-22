@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
-import { access, mkdir, readFile, writeFile } from "node:fs/promises";
+import { watch } from "node:fs";
+import { access, mkdir, readFile, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import browserslist from "browserslist";
 import { Glob } from "bun";
@@ -8,6 +9,7 @@ import { initAsyncCompiler } from "sass-embedded";
 
 const PARTIAL_FILE_REGEX = /^_/;
 const CACHE_DIR = ".cache/build-css";
+const WATCH = process.argv.includes("--watch");
 // Svelte 5 minimum browsers — https://svelte.dev/docs/svelte/browser-support
 const BROWSERSLIST = [
   "Chrome >= 87",
@@ -16,6 +18,14 @@ const BROWSERSLIST = [
   "Edge >= 87",
 ] as const;
 const targets = browserslistToTargets(browserslist([...BROWSERSLIST]));
+
+function minifyEnabled(): boolean {
+  if (process.env.BUILD_CSS_MINIFY === "0") return false;
+  if (process.env.BUILD_CSS_MINIFY === "1") return true;
+  return process.env.CI === "true";
+}
+
+const MINIFY = minifyEnabled();
 
 function postprocessCss(css: string, outFile: string): Uint8Array {
   const { code } = transform({
@@ -42,32 +52,32 @@ const SASS_OPTIONS = {
   ],
 };
 
-const glob = new Glob("*.scss");
-const scss = Array.from(glob.scanSync({ cwd: "css" }))
-  .filter((file) => !PARTIAL_FILE_REGEX.test(file))
-  .sort()
-  .map((file) => path.parse(file));
-
-async function readPartialContents(): Promise<string> {
-  const partialGlob = new Glob("_*.scss");
-  const partials = Array.from(partialGlob.scanSync({ cwd: "css" })).sort();
-  return (
-    await Promise.all(partials.map((file) => readFile(`css/${file}`, "utf8")))
-  ).join("\0");
+function themeEntries() {
+  return Array.from(new Glob("*.scss").scanSync({ cwd: "css" }))
+    .filter((file) => !PARTIAL_FILE_REGEX.test(file))
+    .sort()
+    .map((file) => path.parse(file));
 }
 
-async function vendorHash(): Promise<string> {
-  const vendorGlob = new Glob("vendor/**/*.scss");
-  const files = Array.from(vendorGlob.scanSync({ cwd: "css" })).sort();
-  const contents = await Promise.all(
-    files.map((file) => readFile(`css/${file}`)),
-  );
+async function hashPathStats(files: string[], cwd: string): Promise<string> {
   const hash = createHash("sha256");
+  const stats = await Promise.all(
+    files.map((file) => stat(path.join(cwd, file))),
+  );
   files.forEach((file, i) => {
     hash.update(file);
-    hash.update(contents[i]);
+    hash.update("\0");
+    hash.update(String(stats[i].mtimeMs));
+    hash.update("\0");
+    hash.update(String(stats[i].size));
+    hash.update("\0");
   });
   return hash.digest("hex");
+}
+
+async function hashGlob(pattern: string, cwd: string): Promise<string> {
+  const files = Array.from(new Glob(pattern).scanSync({ cwd })).sort();
+  return await hashPathStats(files, cwd);
 }
 
 async function sharedInputs(): Promise<string> {
@@ -79,18 +89,19 @@ async function sharedInputs(): Promise<string> {
   };
 
   return [
-    await readPartialContents(),
-    await vendorHash(),
+    await hashGlob("_*.scss", "css"),
+    await hashGlob("vendor/**/*.scss", "css"),
     packageJson.devDependencies?.lightningcss ?? "",
     packageJson.devDependencies?.browserslist ?? "",
     BROWSERSLIST.join(","),
-    "lightningcss-single-pass",
+    MINIFY ? "lightningcss-single-pass" : "sass-compressed",
+    "stat-cache-v1",
   ].join("\0");
 }
 
-function inputHash(entryContents: string, shared: string): string {
+function inputHash(entryMtimeSize: string, shared: string): string {
   const hash = createHash("sha256");
-  hash.update(entryContents);
+  hash.update(entryMtimeSize);
   hash.update(shared);
   return hash.digest("hex");
 }
@@ -108,56 +119,134 @@ async function isCached(name: string, hash: string): Promise<boolean> {
   }
 }
 
-console.time("[build-css]");
+function ms(started: number): string {
+  return `${Math.round(performance.now() - started)}ms`;
+}
 
-await mkdir(CACHE_DIR, { recursive: true });
+type Compiler = Awaited<ReturnType<typeof initAsyncCompiler>>;
 
-const shared = await sharedInputs();
-const entryContents = await Promise.all(
-  scss.map(async ({ base }) => ({
-    base,
-    contents: await readFile(`css/${base}`, "utf8"),
-  })),
-);
+async function build(compiler: Compiler): Promise<void> {
+  const started = performance.now();
+  await mkdir(CACHE_DIR, { recursive: true });
 
-const compiler = await initAsyncCompiler();
+  const keyStarted = performance.now();
+  const shared = await sharedInputs();
+  const scss = themeEntries();
+  const entryStats = await Promise.all(
+    scss.map(async ({ base }) => ({
+      base,
+      stamp: await hashPathStats([base], "css"),
+    })),
+  );
+  console.log("[build-css] cache keys", ms(keyStarted));
 
-try {
+  let compiled = 0;
+  let cached = 0;
+  const workStarted = performance.now();
+
   await Promise.all(
     scss.map(async ({ name, base }) => {
       const file = `css/${base}`;
       const outFile = `css/${name}.css`;
-      const contents =
-        entryContents.find((entry) => entry.base === base)?.contents ?? "";
-      const hash = inputHash(contents, shared);
+      const stamp =
+        entryStats.find((entry) => entry.base === base)?.stamp ?? "";
+      const hash = inputHash(stamp, shared);
 
       if (await isCached(name, hash)) {
+        cached += 1;
         console.log("[build-css]", file, "-->", outFile, "(cached)");
         return;
       }
 
       console.log("[build-css]", file, "-->", outFile);
+      compiled += 1;
 
       const { css } = await compiler.compileAsync(file, SASS_OPTIONS);
-
-      console.time("[build-css] prefix");
-      const code = postprocessCss(css, outFile);
-      console.timeEnd("[build-css] prefix");
+      const code = MINIFY ? postprocessCss(css, outFile) : css;
 
       await Bun.write(outFile, code);
       await writeFile(`${CACHE_DIR}/${name}.hash`, `${hash}\n`);
     }),
   );
-} finally {
-  await compiler.dispose();
+
+  const cssTypes = `${scss
+    .map(
+      ({ name }) =>
+        `declare module "carbon-components-svelte/css/${name}.css";`,
+    )
+    .join("\n")}\n`;
+  const previousTypes = await readFile("css/css.d.ts", "utf8").catch(() => "");
+  if (previousTypes !== cssTypes) {
+    await Bun.write("css/css.d.ts", cssTypes);
+  }
+
+  console.log(
+    [
+      "[build-css]",
+      `${compiled} compiled`,
+      `${cached} cached`,
+      MINIFY ? "minify on" : "minify off",
+      compiled ? `compile ${ms(workStarted)}` : "",
+      `total ${ms(started)}`,
+    ]
+      .filter(Boolean)
+      .join(" "),
+  );
 }
 
-const cssTypes = scss
-  .map(
-    ({ name }) => `declare module "carbon-components-svelte/css/${name}.css";`,
-  )
-  .join("\n");
+function isScssChange(filename: string | null): boolean {
+  if (!filename) return true;
+  return filename.endsWith(".scss");
+}
 
-await Bun.write("css/css.d.ts", `${cssTypes}\n`);
+const compiler = await initAsyncCompiler();
+let keepAlive = false;
 
-console.timeEnd("[build-css]");
+try {
+  await build(compiler);
+
+  if (WATCH) {
+    keepAlive = true;
+    console.log("[build-css] watching css/**/*.scss");
+    let pending: ReturnType<typeof setTimeout> | undefined;
+    let running = false;
+    let rerun = false;
+
+    const kick = () => {
+      if (running) {
+        rerun = true;
+        return;
+      }
+      running = true;
+      build(compiler)
+        .catch((error: unknown) => {
+          console.error(error);
+        })
+        .finally(() => {
+          running = false;
+          if (rerun) {
+            rerun = false;
+            kick();
+          }
+        });
+    };
+
+    watch("css", { recursive: true }, (_event, filename) => {
+      if (!isScssChange(filename)) return;
+      clearTimeout(pending);
+      pending = setTimeout(kick, 150);
+    });
+
+    await new Promise<void>((resolve) => {
+      const stop = () => {
+        compiler.dispose().finally(() => resolve());
+      };
+      process.once("SIGINT", stop);
+      process.once("SIGTERM", stop);
+    });
+  }
+} finally {
+  if (!keepAlive) {
+    await compiler.dispose();
+  }
+}
