@@ -375,3 +375,25 @@
 @include exports("modal-full-width") {
   @include modal-full-width;
 }
+
+// carbon-components-svelte patch (modal overflow indicator)
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Overflow fade uses `rgba($ui-01, 0)`, which compiles to invalid
+/// `rgba(var(--cds-ui-01), 0)` when CSS custom properties are enabled
+/// (`css/all.scss`). Fill with `$ui-01` and mask the alpha instead so the
+/// fade follows the active theme.
+/// @access private
+/// @group components
+@mixin modal-overflow-indicator {
+  .#{$prefix}--modal-content--overflow-indicator {
+    background-color: $ui-01;
+    background-image: none;
+    mask-image: linear-gradient(to bottom, transparent, $black-100);
+  }
+}
+
+@include exports("modal-overflow-indicator") {
+  @include modal-overflow-indicator;
+}
