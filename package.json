@@ -48,6 +48,7 @@
     "lint:changed": "biome check --write --changed --since=master --no-errors-on-unmatched .",
     "build:css": "bun scripts/build-css",
     "build:css:watch": "bun scripts/build-css --watch",
+    "build:css:themes": "bun scripts/build-css --themes",
     "build:docs": "bun scripts/build-docs",
     "postinstall": "ibmtelemetry --config=telemetry.yml",
     "release": "bun scripts/release-changelog",
