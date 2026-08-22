@@ -2,7 +2,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { svelte, vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 import { defineConfig } from "vitest/config";
-import { testConfig } from "./tests/utils";
+import { testConfig } from "./tests/utils.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
