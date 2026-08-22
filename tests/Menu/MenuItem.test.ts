@@ -389,6 +389,17 @@ describe("MenuItem", () => {
       );
     });
 
+    it("indents a plain sibling's content so its label stays aligned with checkbox items", async () => {
+      render(MenuItemSelectableFixture);
+
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+
+      const plainItem = screen.getByRole("menuitem", { name: "Plain" });
+      expect(plainItem.querySelector(".bx--menu-option__content")).toHaveClass(
+        "bx--menu-option__content--indented",
+      );
+    });
+
     it("toggles aria-checked and the bound selectedIds on click", async () => {
       render(MenuItemSelectableFixture);
 
