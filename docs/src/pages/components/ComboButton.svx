@@ -68,7 +68,7 @@ Set `iconDescription` to an empty string to render the trigger without Carbon's 
 
 ## Size
 
-Set `size` to scale both buttons and each menu item's row height together. The default is `"md"`. `ComboButton` only supports the `"primary"` kind, matching Carbon React.
+Set `size` to scale both buttons and each menu item's row height together. The default is `"md"`. `ComboButton` only supports the `"primary"` kind.
 
 ### Extra small
 

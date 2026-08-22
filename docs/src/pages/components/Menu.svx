@@ -20,7 +20,7 @@ Set `size` to control each item's row height. The default is `"sm"`.
 
 ### Extra small
 
-`"xs"` has no Carbon v10 equivalent; it's a compact row height hand-authored for this library.
+`"xs"` is a compact row height for dense layouts.
 
 <FileSource src="/framed/Menu/MenuSizeExtraSmall" />
 
