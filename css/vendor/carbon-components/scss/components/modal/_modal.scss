@@ -105,10 +105,6 @@
     @include carbon--breakpoint(xlg) {
       width: 48%;
     }
-
-    .#{$prefix}--modal-container-body {
-      display: contents;
-    }
   }
 
   .#{$prefix}--modal-content {
@@ -133,10 +129,8 @@
     }
   }
 
-  //TO-DO: remove .#{$prefix}--modal-content__regular-content in v11 since hasForm has been deprecated
   // text/p gets 20% right padding
-  .#{$prefix}--modal-content > p,
-  .#{$prefix}--modal-content__regular-content {
+  .#{$prefix}--modal-content > p {
     padding-right: 20%;
     @include type-style('body-long-01');
   }
@@ -171,10 +165,6 @@
 
   .#{$prefix}--modal-container--xs {
     //text always spans full width in xs modals
-    .#{$prefix}--modal-content__regular-content {
-      padding-right: $spacing-05;
-    }
-
     .#{$prefix}--modal-content > p {
       //.#{$prefix}--modal-content already has 16px padding so this doesn't need any
       padding-right: 0;
@@ -196,10 +186,6 @@
 
   .#{$prefix}--modal-container--sm {
     //text spans full width in sm modals below 1056
-    .#{$prefix}--modal-content__regular-content {
-      padding-right: $spacing-05;
-    }
-
     .#{$prefix}--modal-content > p {
       //.#{$prefix}--modal-content already has 16px padding so this doesn't need any
       padding-right: 0;
@@ -213,8 +199,7 @@
       width: 42%;
       max-height: 72%;
 
-      .#{$prefix}--modal-content > p,
-      .#{$prefix}--modal-content__regular-content {
+      .#{$prefix}--modal-content > p {
         padding-right: 20%;
       }
     }

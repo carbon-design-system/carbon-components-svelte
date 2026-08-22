@@ -60,20 +60,6 @@
     }
   }
 
-  .#{$prefix}--tabs__nav--hidden {
-    overflow: hidden;
-    max-height: 0;
-    transition: max-height $duration--fast-01 motion(standard, productive);
-
-    @include carbon--breakpoint(md) {
-      display: flex;
-      max-width: 100%;
-      max-height: none;
-      overflow-x: auto;
-      transition: inherit;
-    }
-  }
-
   .#{$prefix}--tabs__nav-item {
     @include reset;
 

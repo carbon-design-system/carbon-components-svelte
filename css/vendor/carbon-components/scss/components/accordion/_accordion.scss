@@ -73,8 +73,7 @@
   }
 
   // TODO V11: Remove xl selector
-  .#{$prefix}--accordion--xl .#{$prefix}--accordion__heading,
-  .#{$prefix}--accordion--lg .#{$prefix}--accordion__heading {
+  .#{$prefix}--accordion--xl .#{$prefix}--accordion__heading {
     min-height: to-rem(48px);
   }
 
@@ -195,8 +194,8 @@
     }
   }
 
-  .#{$prefix}--accordion.#{$prefix}--skeleton .#{$prefix}--accordion__heading,
-  .#{$prefix}--accordion.#{$prefix}--skeleton .#{$prefix}--accordion__button {
+  // Skeleton state
+  .#{$prefix}--accordion.#{$prefix}--skeleton .#{$prefix}--accordion__heading {
     cursor: default;
   }
 

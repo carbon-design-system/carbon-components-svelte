@@ -27,8 +27,7 @@
   }
 
   // TODO V11: Remove xl selector
-  .#{$prefix}--content-switcher--xl,
-  .#{$prefix}--content-switcher--lg {
+  .#{$prefix}--content-switcher--xl {
     height: to-rem(48px);
   }
 
@@ -172,26 +171,12 @@
     background-color: transparent;
   }
 
-  .#{$prefix}--content-switcher__icon {
-    fill: $icon-secondary;
-    transition: fill $duration--fast-01 motion(standard, productive);
-  }
-
-  .#{$prefix}--content-switcher__icon + span {
-    margin-left: $carbon--spacing-03;
-  }
-
   .#{$prefix}--content-switcher__label {
     z-index: 1;
     overflow: hidden;
     max-width: 100%;
     text-overflow: ellipsis;
     white-space: nowrap;
-  }
-
-  .#{$prefix}--content-switcher-btn:hover .#{$prefix}--content-switcher__icon,
-  .#{$prefix}--content-switcher-btn:focus .#{$prefix}--content-switcher__icon {
-    fill: $icon-primary;
   }
 
   .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher--selected {
@@ -207,11 +192,6 @@
       background-color: $layer-selected-disabled;
       color: $text-disabled;
     }
-  }
-
-  .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher--selected
-    .#{$prefix}--content-switcher__icon {
-    fill: $icon-inverse;
   }
 
   // Windows HCM fix

@@ -58,10 +58,6 @@
     margin-left: $carbon--spacing-03;
   }
 
-  .#{$prefix}--tooltip__label--bold {
-    font-weight: 600;
-  }
-
   .#{$prefix}--tooltip {
     @include box-shadow;
     @include reset;
@@ -235,12 +231,6 @@
     &[data-floating-menu-direction='bottom'] {
       margin-top: $spacing-03;
     }
-  }
-
-  .#{$prefix}--tooltip__heading {
-    @include carbon--type-style('productive-heading-01');
-
-    margin-bottom: $spacing-03;
   }
 
   .#{$prefix}--tooltip--shown {

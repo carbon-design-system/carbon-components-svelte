@@ -87,10 +87,6 @@
     color: $text-disabled;
   }
 
-  .#{$prefix}--menu-option__content--indented .#{$prefix}--menu-option__label {
-    margin-left: $spacing-05;
-  }
-
   .#{$prefix}--menu-option__label {
     @include type-style('body-short-01');
 
