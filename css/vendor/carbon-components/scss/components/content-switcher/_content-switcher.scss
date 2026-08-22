@@ -225,9 +225,7 @@
   @include content-switcher;
 }
 
-// ---------------------------------------------------------------------------
 // carbon-components-svelte patch (formerly css/_content-switcher-low-contrast.scss)
-// ---------------------------------------------------------------------------
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/functions";
 @import "carbon-components/scss/globals/scss/typography";

@@ -88,9 +88,6 @@
     }
   }
 
-  //--------------------------------------------------------------------------
-  // Header - Name
-  //--------------------------------------------------------------------------
   a.#{$prefix}--header__name {
     @include type-style('body-short-01');
 
@@ -126,9 +123,6 @@
     padding-left: to-rem(8px);
   }
 
-  //--------------------------------------------------------------------------
-  // Header - Navigation
-  //--------------------------------------------------------------------------
   .#{$prefix}--header__nav {
     position: relative;
     display: none;
@@ -163,19 +157,15 @@
   a.#{$prefix}--header__menu-item {
     position: relative;
     display: flex;
-    // Used for links that are directly in the menubar to span the full height
     height: 100%;
     align-items: center;
     padding: 0 mini-units(2);
-    // Used for focus styles
     border: 2px solid transparent;
     color: $shell-header-text-02;
-    // Text styles
     font-size: to-rem(14px);
     font-weight: 400;
     letter-spacing: 0;
     line-height: 1.125rem;
-    // Reset link styles and make sure the text isn't selectable
     text-decoration: none;
     transition: background-color $duration--fast-02,
       border-color $duration--fast-02, color $duration--fast-02;
@@ -205,7 +195,6 @@
     fill: $shell-header-icon-01;
   }
 
-  // Styles for selected state
 
   a.#{$prefix}--header__menu-item[aria-current='page']::after,
   .#{$prefix}--header__menu-item--current::after {
@@ -317,9 +306,6 @@
     transition: transform $duration--fast-02, fill $duration--fast-02;
   }
 
-  //--------------------------------------------------------------------------
-  // Header - Global
-  //--------------------------------------------------------------------------
   .#{$prefix}--header__global {
     display: flex;
     height: 100%;
@@ -327,9 +313,6 @@
     justify-content: flex-end;
   }
 
-  //--------------------------------------------------------------------------
-  // Header - Skip to content
-  //--------------------------------------------------------------------------
   .#{$prefix}--skip-to-content {
     position: absolute;
     overflow: hidden;

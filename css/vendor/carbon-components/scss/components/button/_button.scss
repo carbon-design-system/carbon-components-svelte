@@ -440,7 +440,6 @@
     padding: $button-padding-field;
   }
 
-  //expressive styles
   .#{$prefix}--btn--expressive {
     @include carbon--type-style('body-short-02');
 
@@ -449,7 +448,6 @@
 
   .#{$prefix}--btn--icon-only.#{$prefix}--btn--expressive {
     padding: 12px 13px;
-    //default size 48px
   }
 
   .#{$prefix}--btn.#{$prefix}--btn--expressive .#{$prefix}--btn__icon {
@@ -461,14 +459,12 @@
     max-width: to-rem(320px);
   }
 
-  // Skeleton State
   .#{$prefix}--btn.#{$prefix}--skeleton {
     @include skeleton;
 
     width: to-rem(150px);
   }
 
-  // button set styles
   .#{$prefix}--btn-set {
     display: flex;
   }

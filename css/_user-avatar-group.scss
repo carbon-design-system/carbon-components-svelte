@@ -14,9 +14,6 @@
     display: none;
   }
 
-  //--------------------------------------------------------------------------
-  // Overlapping (stacked) layout
-  //--------------------------------------------------------------------------
   .#{$prefix}--user-avatar-group--overlap > * {
     // Stacking context so a hovered avatar can lift above its neighbors.
     position: relative;

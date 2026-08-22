@@ -153,7 +153,7 @@
 /// @access private
 /// @group components
 @mixin tabs-overflow {
-  // (1) The legacy nav is an absolutely-positioned dropdown overlay by default;
+  // The legacy nav is an absolutely-positioned dropdown overlay by default;
   // keep it in flow and horizontally scrollable at every breakpoint.
   .#{$prefix}--tabs .#{$prefix}--tabs__nav {
     position: static;
@@ -199,7 +199,7 @@
     inline-size: auto;
   }
 
-  // (2) Below `md`, render the inline desktop tab appearance instead of Carbon's
+  // Below `md`, render the inline desktop tab appearance instead of Carbon's
   // mobile-first dropdown rows. Values mirror Carbon's own `min-width: 42rem`
   // tab rules so the tabs look identical above and below the breakpoint.
   // Override partials emit before Carbon base, so every rule here carries a

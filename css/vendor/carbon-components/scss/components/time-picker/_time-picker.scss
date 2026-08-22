@@ -5,9 +5,6 @@
 // LICENSE file in the root directory of this source tree.
 //
 
-//-----------------------------
-// Time Picker
-//-----------------------------
 
 @import '../../globals/scss/vars';
 @import '../../globals/scss/helper-mixins';
@@ -96,9 +93,7 @@
   @include time-picker;
 }
 
-// ---------------------------------------------------------------------------
 // carbon-components-svelte patch (formerly css/_time-picker.scss)
-// ---------------------------------------------------------------------------
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/helper-mixins";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";

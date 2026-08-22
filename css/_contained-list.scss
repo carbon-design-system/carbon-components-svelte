@@ -125,7 +125,6 @@
     height: 4.5rem;
   }
 
-  // Disclosed variant
   .#{$prefix}--contained-list--disclosed .#{$prefix}--contained-list__header {
     @include type-style('label-01');
 

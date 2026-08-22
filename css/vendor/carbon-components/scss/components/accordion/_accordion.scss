@@ -72,7 +72,6 @@
     }
   }
 
-  // Size styles
   // TODO V11: Remove xl selector
   .#{$prefix}--accordion--xl .#{$prefix}--accordion__heading,
   .#{$prefix}--accordion--lg .#{$prefix}--accordion__heading {
@@ -84,7 +83,6 @@
     padding: to-rem(5px) 0;
   }
 
-  // Disabled styles
   .#{$prefix}--accordion__heading[disabled] {
     color: $disabled-02;
     cursor: not-allowed;
@@ -134,7 +132,6 @@
     display: none;
     padding-right: $carbon--spacing-05;
     padding-left: $carbon--spacing-05;
-    // Transition property for when the accordion closes
     transition: padding motion(standard, productive) $duration--fast-02;
 
     // Custom breakpoints based on issue #4993
@@ -152,12 +149,10 @@
   }
 
   .#{$prefix}--accordion--start .#{$prefix}--accordion__heading {
-    // Reverse `$accordion-flex-direction` token:
     flex-direction: row;
   }
 
   .#{$prefix}--accordion--start .#{$prefix}--accordion__arrow {
-    // Alters `$accordion-arrow-margin` token:
     margin: 2px 0 0 $carbon--spacing-05;
   }
 
@@ -190,7 +185,6 @@
       display: block;
       padding-top: $spacing-03;
       padding-bottom: $carbon--spacing-06;
-      // Transition property for when the accordion opens
       transition: padding-top motion(entrance, productive) $duration--fast-02,
         padding-bottom motion(entrance, productive) $duration--fast-02;
     }
@@ -201,7 +195,6 @@
     }
   }
 
-  // Skeleton state
   .#{$prefix}--accordion.#{$prefix}--skeleton .#{$prefix}--accordion__heading,
   .#{$prefix}--accordion.#{$prefix}--skeleton .#{$prefix}--accordion__button {
     cursor: default;
@@ -254,9 +247,7 @@
   @include accordion;
 }
 
-// ---------------------------------------------------------------------------
 // carbon-components-svelte patch (formerly css/_accordion.scss)
-// ---------------------------------------------------------------------------
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
@@ -286,9 +277,7 @@
   @include accordion-nested;
 }
 
-// ---------------------------------------------------------------------------
 // carbon-components-svelte patch (formerly css/_accordion-flush.scss)
-// ---------------------------------------------------------------------------
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/helper-mixins";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";

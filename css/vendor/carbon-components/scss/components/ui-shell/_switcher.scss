@@ -17,9 +17,6 @@
 /// @access private
 /// @group ui-shell
 @mixin carbon-switcher {
-  //----------------------------------------------------------------------------
-  // Header Switcher
-  //----------------------------------------------------------------------------
   .#{$prefix}--switcher {
     display: flex;
     flex-direction: column;

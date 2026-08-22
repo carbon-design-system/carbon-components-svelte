@@ -5,24 +5,6 @@
 // LICENSE file in the root directory of this source tree.
 //
 
-//-------------------------------------------
-// 📑 Layer
-// ------------------------------------------
-//
-//   Layer                 ||  Elevation
-//   ==========================================
-//   0 - Base              ||  0
-//   1 - Flat              ||  1
-//   2 - Raised            ||  2
-//   3 - Overlay           ||  8
-//   4 - Pop-out           ||  24
-//   ==========================================
-//   Custom: Left Nav      ||  16
-//   Custom: Global Header ||  12
-//
-
-// Box shadow variables
-
 /// Box shadow color
 /// @access private
 /// @type Value
@@ -59,8 +41,6 @@ $box-shadow--temporary-nav: 0 2px 6px 0 $box-shadow;
 /// @type Value
 /// @group global-layer
 $box-shadow--pop-out: 0 2px 6px 0 $box-shadow;
-
-// Layer box-shadow map
 
 /// Map of box shadows used in the `layer()` mixin
 /// @access private

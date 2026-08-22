@@ -62,9 +62,6 @@
 /// @access private
 /// @group ui-shell
 @mixin carbon-side-nav {
-  //----------------------------------------------------------------------------
-  // Side-nav > Panel
-  //----------------------------------------------------------------------------.
   .#{$prefix}--side-nav {
     position: fixed;
     z-index: z('header');
@@ -91,13 +88,6 @@
     }
   }
 
-  //----------------------------------------------------------------------------
-  // Rail
-  //---------------------------------------------------------------------------
-  // Used for rendering the actual side rail. There are two states that we have
-  // to style for, namely for when the rail is collapsed and expanded. When
-  // collapsed, the rail is intended to expand on mouse over. When expanded, it
-  // should have the same dimensions as when expanded on mouse over
 
   .#{$prefix}--side-nav--rail {
     width: mini-units(6);
@@ -147,18 +137,12 @@
     transform: translateX(mini-units(-32));
   }
 
-  //----------------------------------------------------------------------------
-  // Side-nav > Navigation
-  //----------------------------------------------------------------------------
   .#{$prefix}--side-nav__navigation {
     display: flex;
     height: 100%;
     flex-direction: column;
   }
 
-  //----------------------------------------------------------------------------
-  // Side-nav > Navigation > Header
-  //----------------------------------------------------------------------------
   .#{$prefix}--side-nav__header {
     display: flex;
     width: 100%;
@@ -175,9 +159,6 @@
     height: auto;
   }
 
-  //----------------------------------------------------------------------------
-  // Side-nav > Navigation > Header > Details
-  //----------------------------------------------------------------------------
   .#{$prefix}--side-nav__details {
     display: flex;
     min-width: 0;
@@ -195,9 +176,6 @@
     visibility: inherit;
   }
 
-  //----------------------------------------------------------------------------
-  // Side-nav > Navigation > Footer
-  //----------------------------------------------------------------------------
   .#{$prefix}--side-nav__footer {
     width: 100%;
     flex: 0 0 to-rem(48px);
@@ -218,9 +196,6 @@
     @include focus-outline('outline');
   }
 
-  //----------------------------------------------------------------------------
-  // Side-nav > Navigation > Item(s)
-  //----------------------------------------------------------------------------
   .#{$prefix}--side-nav__items {
     overflow: hidden;
     flex: 1 1 0%;
@@ -275,18 +250,12 @@
     height: mini-units(6);
   }
 
-  //----------------------------------------------------------------------------
-  // Side-nav > Navigation > Divider
-  //----------------------------------------------------------------------------
   .#{$prefix}--side-nav__divider {
     height: 1px;
     margin: $spacing-03 $spacing-05;
     background-color: $ibm-color__gray-20;
   }
 
-  //----------------------------------------------------------------------------
-  // Side-nav > Navigation > {Menu,Submenu}
-  //----------------------------------------------------------------------------
   .#{$prefix}--side-nav__submenu {
     @include button-reset($width: true);
     @include type-style('productive-heading-01');
@@ -374,9 +343,6 @@
     }
   }
 
-  //----------------------------------------------------------------------------
-  // Side-nav > Link
-  //----------------------------------------------------------------------------
   a.#{$prefix}--side-nav__link,
   .#{$prefix}--side-nav a.#{$prefix}--header__menu-item,
   .#{$prefix}--side-nav
@@ -440,9 +406,6 @@
     content: '';
   }
 
-  //----------------------------------------------------------------------------
-  // Side-nav > Icons
-  //----------------------------------------------------------------------------
   .#{$prefix}--side-nav__icon {
     display: flex;
     // Helpful in flex containers so the icon does not have less than the
@@ -462,9 +425,6 @@
     fill: $shell-side-nav-icon-01;
   }
 
-  //----------------------------------------------------------------------------
-  // Variants - Header Nav Links in Side Nav
-  //----------------------------------------------------------------------------
   .#{$prefix}--side-nav .#{$prefix}--header__nav {
     @include carbon--breakpoint-down('lg') {
       display: block;
@@ -491,7 +451,6 @@
     content: '';
   }
 
-  //header menu items overrides
   .#{$prefix}--side-nav a.#{$prefix}--header__menu-item {
     justify-content: space-between;
     color: $shell-side-nav-text-01;

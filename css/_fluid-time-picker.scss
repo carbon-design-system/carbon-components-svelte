@@ -59,7 +59,6 @@
     inline-size: 100%;
   }
 
-  // Time input cell uses fluid text input layout.
   .#{$prefix}--time-picker--fluid
     .#{$prefix}--time-picker__input
     .#{$prefix}--text-input-wrapper {

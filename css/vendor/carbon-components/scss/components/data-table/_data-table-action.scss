@@ -13,9 +13,6 @@
 /// @access private
 /// @group data-table
 @mixin data-table-v2-action {
-  //-------------------------------------------------
-  //TOOLBAR
-  //-------------------------------------------------
   .#{$prefix}--table-toolbar {
     // Need for batch actions
     position: relative;
@@ -44,9 +41,6 @@
     background-color: transparent;
   }
 
-  //-------------------------------------------------
-  //DEPRECATED v10/v9 search behavior
-  //-------------------------------------------------
   .#{$prefix}--batch-actions ~ .#{$prefix}--toolbar-search-container {
     display: flex;
     align-items: center;
@@ -54,9 +48,6 @@
     transition: opacity 110ms;
   }
 
-  //-------------------------------------------------
-  //HIDDEN SEARCH - DEFAULT TOOLBAR
-  //-------------------------------------------------
   .#{$prefix}--toolbar-content
     .#{$prefix}--toolbar-search-container-expandable {
     position: relative;
@@ -125,9 +116,6 @@
     background-color: $focus;
   }
 
-  //-------------------------------------------------
-  //ACTIVE SEARCH - DEFAULT TOOLBAR
-  //-------------------------------------------------
 
   .#{$prefix}--toolbar-search-container-active.#{$prefix}--search {
     width: 100%;
@@ -168,9 +156,6 @@
     outline: none;
   }
 
-  //-------------------------------------------------
-  //SEARCH CLOSE BUTTON
-  //-------------------------------------------------
   .#{$prefix}--toolbar-search-container-persistent .#{$prefix}--search-close,
   .#{$prefix}--toolbar-search-container-persistent
     .#{$prefix}--search-close:hover,
@@ -185,9 +170,6 @@
     display: none;
   }
 
-  //-------------------------------------------------
-  //TOOLBAR BUTTONS
-  //-------------------------------------------------
   .#{$prefix}--overflow-menu.#{$prefix}--toolbar-action {
     @include button-reset;
 
@@ -247,9 +229,6 @@
     height: $spacing-09;
   }
 
-  //-------------------------------------------------
-  //TOOLBAR BUTTON ICONS
-  //-------------------------------------------------
   .#{$prefix}--toolbar-action__icon {
     width: auto;
     max-width: $spacing-05;
@@ -257,9 +236,6 @@
     fill: $icon-primary;
   }
 
-  //-------------------------------------------------
-  //PERSISTENT SEARCH - OPTIONAL TOOLBAR
-  //-------------------------------------------------
   .#{$prefix}--toolbar-search-container-persistent {
     position: relative;
     width: 100%;
@@ -318,9 +294,6 @@
       clip-path $duration--fast-02 motion(standard, productive);
   }
 
-  //-------------------------------------------------
-  //BATCH ACTIONS
-  //-------------------------------------------------
   .#{$prefix}--batch-actions {
     position: absolute;
     right: 0;
@@ -350,7 +323,6 @@
     transform: translate3d(0, 0, 0);
   }
 
-  //btns container
   .#{$prefix}--action-list {
     display: flex;
     align-items: center;
@@ -384,7 +356,6 @@
     padding: to-rem(1px);
   }
 
-  // Override btn styles
   .#{$prefix}--action-list .#{$prefix}--btn--primary:focus::before,
   .#{$prefix}--action-list .#{$prefix}--btn--primary::before,
   .#{$prefix}--action-list .#{$prefix}--btn--primary:focus::after,
@@ -397,7 +368,6 @@
     outline-offset: to-rem(-2px);
   }
 
-  // cancel btn pseudo element
   .#{$prefix}--action-list
     .#{$prefix}--btn--primary:nth-child(3):hover
     + .#{$prefix}--btn--primary.#{$prefix}--batch-summary__cancel::before,
@@ -427,7 +397,6 @@
     transition: opacity $transition--base $carbon--standard-easing;
   }
 
-  // items selected text
   .#{$prefix}--batch-summary {
     position: sticky;
     z-index: 100000;
@@ -449,9 +418,6 @@
     @include type-style('body-short-01');
   }
 
-  //-------------------------------------------------
-  //SMALL TOOLBAR
-  //-------------------------------------------------
   // V11: remove --small
   .#{$prefix}--table-toolbar--small,
   .#{$prefix}--table-toolbar--sm {
@@ -495,7 +461,6 @@
       left: $spacing-03;
     }
 
-    //hidden
     .#{$prefix}--toolbar-search-container-expandable {
       width: to-rem(32px);
     }
@@ -506,7 +471,6 @@
       padding: 0 $spacing-09;
     }
 
-    //active
     .#{$prefix}--toolbar-search-container-active {
       flex: auto;
       transition: flex 175ms $carbon--standard-easing;
@@ -557,9 +521,6 @@
     background-color: transparent;
   }
 
-  //-------------------------------------------------
-  // SMALL BATCH ACTIONS
-  //-------------------------------------------------
   // V11: remove --small selector block
   .#{$prefix}--table-toolbar--small
     .#{$prefix}--batch-actions

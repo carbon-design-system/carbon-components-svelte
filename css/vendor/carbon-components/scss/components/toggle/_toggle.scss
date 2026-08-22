@@ -5,9 +5,6 @@
 // LICENSE file in the root directory of this source tree.
 //
 
-//-----------------------------
-// Toggle
-//-----------------------------
 
 @import '../../globals/scss/vars';
 @import '../../globals/scss/helper-mixins';
@@ -140,7 +137,6 @@
       fill: $button-disabled;
     }
 
-    // HCM
 
     .#{$prefix}--toggle__switch,
     .#{$prefix}--toggle__switch::before {
@@ -184,7 +180,6 @@
       width: to-rem(48px);
       height: to-rem(24px);
 
-      // Toggle background oval
       &::before {
         position: absolute;
         top: 0;
@@ -207,7 +202,6 @@
         }
       }
 
-      // Toggle circle
       &::after {
         position: absolute;
         top: to-rem(3px);
@@ -280,9 +274,6 @@
       }
     }
 
-    //----------------------------------------------
-    // Focus
-    // ---------------------------------------------
     .#{$prefix}--toggle
       + .#{$prefix}--toggle__label
       .#{$prefix}--toggle__appearance::before {
@@ -297,9 +288,6 @@
       box-shadow: 0 0 0 1px $ui-03, 0 0 0 3px $focus;
     }
 
-    //----------------------------------------------
-    // Disabled
-    // ---------------------------------------------
     .#{$prefix}--toggle:disabled + .#{$prefix}--toggle__label {
       cursor: not-allowed;
     }
@@ -347,9 +335,6 @@
       fill: $disabled-02;
     }
 
-    //----------------------------------------------
-    // Small toggle
-    // ---------------------------------------------
 
     .#{$prefix}--toggle--small
       + .#{$prefix}--toggle__label
@@ -395,10 +380,7 @@
       }
     }
 
-    // -----------------------------------------------------
-    // new accessible toggle
     // TODO: deprecate styles above this line
-    // -----------------------------------------------------
 
     .#{$prefix}--toggle-input {
       @include hidden;
@@ -426,7 +408,6 @@
       align-items: center;
       cursor: pointer;
 
-      // Toggle background oval
       &::before {
         position: absolute;
         top: 0;
@@ -448,7 +429,6 @@
         }
       }
 
-      // Toggle circle
       &::after {
         position: absolute;
         top: to-rem(3px);
@@ -481,9 +461,6 @@
       white-space: nowrap;
     }
 
-    //----------------------------------------------
-    // Checked
-    // ---------------------------------------------
     .#{$prefix}--toggle-input:checked
       + .#{$prefix}--toggle-input__label
       > .#{$prefix}--toggle__switch
@@ -508,9 +485,6 @@
       }
     }
 
-    //----------------------------------------------
-    // Focus and active
-    // ---------------------------------------------
     .#{$prefix}--toggle-input:focus
       + .#{$prefix}--toggle-input__label
       > .#{$prefix}--toggle__switch::before,
@@ -520,9 +494,6 @@
       box-shadow: 0 0 0 1px $ui-02, 0 0 0 3px $focus;
     }
 
-    //----------------------------------------------
-    // Disabled
-    // ---------------------------------------------
     .#{$prefix}--toggle-input:disabled + .#{$prefix}--toggle-input__label {
       color: $disabled;
       cursor: not-allowed;
@@ -558,9 +529,6 @@
       box-shadow: none;
     }
 
-    //----------------------------------------------
-    // Small toggle
-    // ---------------------------------------------
     .#{$prefix}--toggle-input--small + .#{$prefix}--toggle-input__label {
       > .#{$prefix}--toggle__switch {
         width: to-rem(32px);
@@ -602,10 +570,6 @@
       fill: $disabled-01;
     }
 
-    //----------------------------------------------
-    // Skeleton
-    // ---------------------------------------------
-    //md toggle input
     .#{$prefix}--toggle.#{$prefix}--skeleton
       + .#{$prefix}--toggle-input__label
       .#{$prefix}--toggle__switch {
@@ -615,7 +579,6 @@
       margin-top: 0.5rem;
     }
 
-    //md skeleton label text
     .#{$prefix}--toggle.#{$prefix}--skeleton
       + .#{$prefix}--toggle-input__label
       > div {
@@ -629,7 +592,6 @@
       @include skeleton;
     }
 
-    //small toggle input
     .#{$prefix}--toggle-input--small.#{$prefix}--skeleton
       + .#{$prefix}--toggle-input__label
       .#{$prefix}--toggle__switch {
@@ -639,7 +601,6 @@
       margin-top: 0.5rem;
     }
 
-    //sm skeleton label text
     .#{$prefix}--toggle-input--small.#{$prefix}--skeleton
       + .#{$prefix}--toggle-input__label
       > div {
@@ -653,7 +614,6 @@
       @include skeleton;
     }
 
-    // on/off text skeleton
     .#{$prefix}--toggle.#{$prefix}--skeleton
       + .#{$prefix}--toggle-input__label
       .#{$prefix}--toggle__switch
@@ -672,7 +632,6 @@
       left: 2rem;
     }
 
-    //pseudo "toggle" button
     .#{$prefix}--toggle.#{$prefix}--skeleton
       + .#{$prefix}--toggle-input__label
       .#{$prefix}--toggle__switch::after,
@@ -685,7 +644,6 @@
       display: none;
     }
 
-    //make it square
     .#{$prefix}--toggle.#{$prefix}--skeleton
       + .#{$prefix}--toggle-input__label
       .#{$prefix}--toggle__switch::before {

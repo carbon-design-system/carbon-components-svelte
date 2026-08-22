@@ -87,7 +87,6 @@
     display: none;
   }
 
-  // Thumb wrapper — positions each handle along the track.
   .#{$prefix}--slider__thumb-wrapper {
     position: absolute;
     z-index: 3;
@@ -198,7 +197,6 @@
     fill: $interactive-01;
   }
 
-  // When either handle is focused, recolor the filled track.
   .#{$prefix}--slider__thumb-wrapper:focus-within
     ~ .#{$prefix}--slider__filled-track {
     background-color: $interactive-04;

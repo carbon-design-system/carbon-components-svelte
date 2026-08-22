@@ -31,7 +31,6 @@
     }
   }
 
-  // Re-emitted after token rules so modifiers win when combined.
   @each $name, $value in $carbon--font-families {
     .#{$prefix}--type-#{$name} {
       font-family: $value;

@@ -95,9 +95,7 @@
   }
 }
 
-// ---------------------------------------------------------------------------
 // carbon-components-svelte patch (formerly css/_copy-button-portal.scss)
-// ---------------------------------------------------------------------------
 // Hide Carbon's `::before` feedback caret when using a portalled tooltip.
 // `_tooltip.scss` loads before `carbon-components/.../styles`, so Carbon's
 // `.bx--copy-btn.bx--copy-btn--animating::before { display: block }` was
@@ -128,9 +126,7 @@
   @include copy-button-portal;
 }
 
-// ---------------------------------------------------------------------------
 // carbon-components-svelte patch (formerly css/_copy-button.scss)
-// ---------------------------------------------------------------------------
 // CopyButton variants: a `ghost` kind and a set of square sizes that mirror
 // `Button`. Carbon ships a single, fixed-size `bx--copy-btn` (a 2.5rem square
 // with a `$layer` fill), so these modifiers extend it to match the `Button`
@@ -149,9 +145,6 @@
 /// @access private
 /// @group copy-button
 @mixin copy-button {
-  //--------------------------------------------------------------------------
-  // Ghost kind (mirrors Button's ghost theme)
-  //--------------------------------------------------------------------------
   .#{$prefix}--copy-btn.#{$prefix}--copy-btn--ghost {
     background-color: transparent;
   }
@@ -168,10 +161,8 @@
     fill: $icon-01;
   }
 
-  //--------------------------------------------------------------------------
   // Sizes (square dimensions matching Button's small/lg/xl heights;
   // `default` keeps Carbon's native 2.5rem)
-  //--------------------------------------------------------------------------
   .#{$prefix}--copy-btn.#{$prefix}--copy-btn--sm {
     width: 2rem;
     height: 2rem;

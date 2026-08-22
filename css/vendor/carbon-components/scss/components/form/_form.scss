@@ -65,7 +65,6 @@
     @include type-style('label-01');
   }
 
-  // Skeleton State
   .#{$prefix}--label.#{$prefix}--skeleton {
     @include skeleton;
 
@@ -129,7 +128,6 @@
     }
   }
 
-  //Fluid Form
   .#{$prefix}--form--fluid .#{$prefix}--text-input__field-wrapper[data-invalid],
   .#{$prefix}--form--fluid .#{$prefix}--text-input__field-wrapper--warning {
     display: block;

@@ -5,9 +5,6 @@
 // LICENSE file in the root directory of this source tree.
 //
 
-//-----------------------------
-// Select
-//-----------------------------
 
 @import '../../globals/scss/vars';
 @import '../../globals/scss/css--reset';
@@ -251,7 +248,6 @@
     }
   }
 
-  //Skeleton State
   .#{$prefix}--select.#{$prefix}--skeleton {
     @include skeleton;
 
@@ -274,9 +270,7 @@
   @include select;
 }
 
-// ---------------------------------------------------------------------------
 // carbon-components-svelte patch (formerly css/_select.scss)
-// ---------------------------------------------------------------------------
 // Extends the v10 select with the extra-small (`xs`) size added in newer
 // Carbon (React `size="xs"`, 24px height). v10 only ships sm/md/lg.
 

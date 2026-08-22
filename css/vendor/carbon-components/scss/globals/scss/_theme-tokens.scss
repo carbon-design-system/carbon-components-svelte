@@ -48,8 +48,6 @@ $focus: $ibm-color__blue-60 !default;
 /// @group global-themes
 $inverse-focus-ui: $ibm-color__white-0 !default;
 
-// Link
-
 /// @type Color
 /// @access public
 /// @group link
@@ -62,14 +60,10 @@ $link-visited: $visited-link !default;
 /// @group link
 $link-inverse-color: #6ea6ff !default;
 
-// Tooltip
-
 /// @type Color
 /// @access public
 /// @group tooltip
 $tooltip-background-color: $inverse-02 !default;
-
-// Button
 
 /// @type Number
 /// @access public
@@ -151,8 +145,6 @@ $button-outline-offset: -5px !default;
 /// @deprecated
 $button-outline: 1px solid $ibm-color__white-0 !default;
 
-// Accordion
-
 /// @type Value
 /// @access public
 /// @group accordion
@@ -178,14 +170,10 @@ $accordion-title-margin: 0 0 0 $carbon--spacing-05 !default;
 /// @group accordion
 $accordion-content-padding: 0 0 0 $carbon--spacing-05 !default;
 
-// Checkbox
-
 /// @type Number
 /// @access public
 /// @group checkbox
 $checkbox-border-width: 2px !default;
-
-// Code Snippet
 
 /// @type Color
 /// @access public
@@ -198,8 +186,6 @@ $snippet-background-color: $field-01 !default;
 /// @group code-snippet
 /// TODO: Define for experimental
 $snippet-border-color: $ui-03 !default;
-
-// Content Switcher
 
 /// @type Number
 /// @access public
@@ -215,8 +201,6 @@ $content-switcher-option-border: 1px solid $brand-01 !default;
 /// @access public
 /// @group content-switcher
 $content-switcher-divider: $ui-03 !default;
-
-// Data Table
 
 /// @type Value
 /// @access public
@@ -243,15 +227,11 @@ $data-table-zebra-color: $ui-02 !default;
 /// @group data-table
 $data-table-column-hover: $hover-selected-ui !default;
 
-// Date Picker
-
 /// @type Color
 /// @access public
 /// @group date-picker
 /// @deprecated
 $date-picker-in-range-background-color: $ibm-color__blue-20 !default;
-
-// Modal
 
 /// @type Color
 /// @access public
@@ -263,8 +243,6 @@ $modal-border-top: $brand-01 4px solid !default;
 /// @group modal
 /// @deprecated
 $modal-footer-background-color: $ui-03 !default;
-
-// Notification
 
 /// @type Color
 /// @access public
@@ -294,8 +272,6 @@ $notification-warning-background-color: mix(
 /// @deprecated
 $notification-success-background-color: $ibm-color__green-10 !default;
 
-// Progress Indicator
-
 /// @type Value
 /// @access public
 /// @group progress-indicator
@@ -311,8 +287,6 @@ $progress-indicator-stroke-width: 5 !default;
 /// @group progress-indicator
 $progress-indicator-line-offset: 0.625rem !default;
 
-// Copy Button
-
 /// @type Color
 /// @access public
 /// @group copy-button
@@ -323,14 +297,10 @@ $copy-active: $active-ui !default;
 /// @group copy-button
 $copy-btn-feedback: $inverse-02 !default;
 
-// Radio Button
-
 /// @type Number
 /// @access public
 /// @group radio-button
 $radio-border-width: 1px !default;
-
-// Structured List
 
 /// @type Number
 /// @access public
@@ -341,8 +311,6 @@ $structured-list-padding: 2rem !default;
 /// @access public
 /// @group structured-list
 $structured-list-text-transform: none !default;
-
-// Tabs
 
 /// @type Value
 /// @access public
@@ -364,15 +332,11 @@ $tab-text-disabled: $disabled-02 !default;
 /// @group tabs
 $tab-underline-disabled: 2px solid $disabled-01 !default;
 
-// Skeleton Loading
-
 /// @type Color
 /// @access public
 /// @group skeleton
 /// TODO: Remove this in next major release
 $skeleton: $skeleton-01 !default;
-
-// Light UI
 
 // Determine the "light" color for a given token.
 /// @param {String} $token The theme token.

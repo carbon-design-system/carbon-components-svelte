@@ -5,9 +5,6 @@
 // LICENSE file in the root directory of this source tree.
 //
 
-//-----------------------------
-// Slider
-//-----------------------------
 
 @import '../../globals/scss/vars';
 @import '../../globals/scss/helper-mixins';
@@ -136,7 +133,6 @@
     background-color: $interactive-04;
   }
 
-  // Disabled state
   .#{$prefix}--label--disabled
     ~ .#{$prefix}--slider-container
     > .#{$prefix}--slider__range-label {
@@ -194,7 +190,6 @@
     }
   }
 
-  // Skeleton state
   .#{$prefix}--slider-container.#{$prefix}--skeleton
     .#{$prefix}--slider__range-label {
     @include skeleton;

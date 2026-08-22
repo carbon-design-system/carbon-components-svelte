@@ -5,9 +5,6 @@
 // LICENSE file in the root directory of this source tree.
 //
 
-//-----------------------------
-// List Box
-//-----------------------------
 
 @import '../../globals/scss/vars';
 @import '../../globals/scss/css--helpers';
@@ -41,8 +38,6 @@ $list-box-menu-width: to-rem(300px);
 /// @access private
 /// @group list-box
 @mixin listbox {
-  // The overall container element for a `list-box`. Has two variants,
-  // `disabled` and `inline`.
   .#{$prefix}--list-box__wrapper--inline {
     display: inline-grid;
     align-items: center;
@@ -116,7 +111,6 @@ $list-box-menu-width: to-rem(300px);
     height: 100%;
   }
 
-  // invalid states
   .#{$prefix}--list-box__invalid-icon {
     position: absolute;
     top: 50%;
@@ -146,7 +140,6 @@ $list-box-menu-width: to-rem(300px);
     padding-right: carbon--mini-units(7);
   }
 
-  // Light variation for 'list-box'
   .#{$prefix}--list-box--light {
     background-color: $field-02;
 
@@ -167,7 +160,6 @@ $list-box-menu-width: to-rem(300px);
     border-bottom-color: transparent;
   }
 
-  // Disabled state for `list-box`
   .#{$prefix}--list-box--disabled:hover {
     background-color: $field-01;
   }
@@ -212,7 +204,6 @@ $list-box-menu-width: to-rem(300px);
     cursor: not-allowed;
   }
 
-  // disabled && invalid
   .#{$prefix}--list-box--disabled.#{$prefix}--list-box[data-invalid]
     .#{$prefix}--list-box__field {
     padding-right: $carbon--spacing-09;
@@ -223,7 +214,6 @@ $list-box-menu-width: to-rem(300px);
     padding-right: carbon--mini-units(4);
   }
 
-  // Inline variant for a `list-box`
   .#{$prefix}--list-box.#{$prefix}--list-box--inline {
     border-width: 0;
     background-color: transparent;
@@ -282,7 +272,6 @@ $list-box-menu-width: to-rem(300px);
     max-width: to-rem(480px);
   }
 
-  // The field we use for input, showing selection, etc.
   .#{$prefix}--list-box__field {
     @include button-reset;
 
@@ -309,12 +298,10 @@ $list-box-menu-width: to-rem(300px);
     outline: none;
   }
 
-  // populated input field
   .#{$prefix}--list-box__field .#{$prefix}--text-input {
     padding-right: carbon--mini-units(9);
   }
 
-  // invalid && populated input field
   .#{$prefix}--list-box[data-invalid]
     .#{$prefix}--list-box__field
     .#{$prefix}--text-input,
@@ -337,12 +324,10 @@ $list-box-menu-width: to-rem(300px);
     right: to-rem(66px);
   }
 
-  // empty input field
   .#{$prefix}--list-box__field .#{$prefix}--text-input--empty {
     padding-right: $carbon--spacing-09;
   }
 
-  // invalid && empty input field
   .#{$prefix}--list-box[data-invalid]
     .#{$prefix}--list-box__field
     .#{$prefix}--text-input--empty,
@@ -364,7 +349,6 @@ $list-box-menu-width: to-rem(300px);
     right: to-rem(40px);
   }
 
-  // Label for a `list-box__field`
   .#{$prefix}--list-box__label {
     @include type-style('body-short-01');
 
@@ -375,7 +359,6 @@ $list-box-menu-width: to-rem(300px);
     white-space: nowrap;
   }
 
-  // Menu status inside of a `list-box__field`
   .#{$prefix}--list-box__menu-icon {
     @include button-reset($width: false);
 
@@ -401,7 +384,6 @@ $list-box-menu-width: to-rem(300px);
     transform: rotate(180deg);
   }
 
-  // Selection indicator for a `list-box__field`
   .#{$prefix}--list-box__selection {
     @include button-reset($width: false);
 
@@ -487,7 +469,6 @@ $list-box-menu-width: to-rem(300px);
     outline: none;
   }
 
-  // Descendant of a `list-box` that displays a list of options to select
   .#{$prefix}--list-box__menu {
     @include box-shadow();
 
@@ -532,7 +513,6 @@ $list-box-menu-width: to-rem(300px);
     max-height: to-rem(176px);
   }
 
-  // Descendant of a `list-box__menu` that represents a selection for a control
   .#{$prefix}--list-box__menu-item {
     @include type-style('body-short-01');
 
@@ -776,7 +756,6 @@ $list-box-menu-width: to-rem(300px);
     white-space: nowrap;
   }
 
-  // Dropdown top orientation modifiers
   .#{$prefix}--list-box--up .#{$prefix}--list-box__menu {
     bottom: 2.5rem;
   }
@@ -806,7 +785,6 @@ $list-box-menu-width: to-rem(300px);
     bottom: 3rem;
   }
 
-  // Tweaks for descendants
   // When handling input, we need to target nodes that specifically opt-in to
   // the type text in order to make sure the text input is styled
   // correctly.
@@ -842,9 +820,7 @@ $list-box-menu-width: to-rem(300px);
   @include listbox;
 }
 
-// ---------------------------------------------------------------------------
 // carbon-components-svelte patch (formerly css/_list-box-menu-item.scss)
-// ---------------------------------------------------------------------------
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/helper-mixins";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
@@ -893,9 +869,7 @@ $list-box-menu-width: to-rem(300px);
   @include list-box-menu-item-icon;
 }
 
-// ---------------------------------------------------------------------------
 // carbon-components-svelte patch (formerly css/_list-box-xs.scss)
-// ---------------------------------------------------------------------------
 // xs (24px) list-box heights for Dropdown, ComboBox, and MultiSelect.
 // carbon-components v10 stops at sm; backported from
 // https://github.com/carbon-design-system/carbon/pull/22439

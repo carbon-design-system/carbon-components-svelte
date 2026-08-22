@@ -5,9 +5,6 @@
 // LICENSE file in the root directory of this source tree.
 //
 
-//-----------------------------
-// Radio
-//-----------------------------
 
 @import '../../globals/scss/vars';
 @import '../../globals/scss/typography';
@@ -33,7 +30,6 @@
     margin-top: 0;
   }
 
-  // vertical radio button
   .#{$prefix}--radio-button-group--vertical {
     flex-direction: column;
     align-items: flex-start;
@@ -122,7 +118,6 @@
     }
   }
 
-  // Focus
 
   .#{$prefix}--radio-button:focus
     + .#{$prefix}--radio-button__label
@@ -131,7 +126,6 @@
     outline-offset: 1.5px;
   }
 
-  // Skeleton State
   .#{$prefix}--radio-button__label.#{$prefix}--skeleton {
     @include skeleton;
 

@@ -49,7 +49,6 @@
     }
   }
 
-  // Disabled styles
   .#{$prefix}--tooltip__trigger:not(.#{$prefix}--btn--icon-only)[disabled] svg {
     fill: $icon-disabled;
   }
@@ -249,7 +248,6 @@
     margin-top: 0;
   }
 
-  // Tooltip Definition
   .#{$prefix}--tooltip--definition.#{$prefix}--tooltip--a11y {
     // Wrapping element set to inline since the tooltip isn't contained within the trigger (affects center and end alignments)
     // Also allows for Definition Tooltip to be used within a paragraph of text as defined in the usage guidelines
@@ -261,7 +259,6 @@
     margin: 0;
   }
 
-  // Definition CSS only tooltip
   .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition {
     @include type-style('label-01');
 
@@ -308,8 +305,6 @@
     }
   }
 
-  // Tooltip Icon
-  // Icon CSS only tooltip
   .#{$prefix}--tooltip__trigger {
     &:hover,
     &:focus {
