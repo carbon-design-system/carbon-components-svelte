@@ -40,13 +40,6 @@
   .#{$prefix}--inline-loading__checkmark-container {
     fill: $support-02;
 
-    // For deprecated older markup
-    &.#{$prefix}--inline-loading__svg {
-      position: absolute;
-      top: 0.75rem;
-      width: 0.75rem;
-    }
-
     &[hidden] {
       display: none;
     }
@@ -74,9 +67,6 @@
     }
   }
 
-  .#{$prefix}--loading--small .#{$prefix}--inline-loading__svg {
-    stroke: $interactive-04;
-  }
 }
 
 @include exports('inline-loading') {

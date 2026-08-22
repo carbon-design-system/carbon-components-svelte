@@ -107,12 +107,7 @@
     }
   }
 
-  .#{$prefix}--slider__input {
-    display: none;
-  }
-
-  .#{$prefix}--slider-text-input,
-  .#{$prefix}-slider-text-input {
+  .#{$prefix}--slider-text-input {
     width: to-rem(64px);
     height: to-rem(40px);
     -moz-appearance: textfield;

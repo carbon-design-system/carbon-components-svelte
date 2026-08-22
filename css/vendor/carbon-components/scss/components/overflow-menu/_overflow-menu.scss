@@ -18,8 +18,7 @@
 /// @access private
 /// @group overflow-menu
 @mixin overflow-menu {
-  .#{$prefix}--overflow-menu,
-  .#{$prefix}--overflow-menu__trigger {
+  .#{$prefix}--overflow-menu {
     @include button-reset;
     @include reset;
     @include focus-outline('reset');
@@ -54,27 +53,14 @@
     height: to-rem(48px);
   }
 
-  // Overwrite Icon Tooltip focus styles
-  .#{$prefix}--overflow-menu__trigger.#{$prefix}--tooltip--a11y.#{$prefix}--tooltip__trigger:focus {
-    @include focus-outline('outline');
-
-    svg {
-      outline: none;
-    }
-  }
-
-  .#{$prefix}--overflow-menu.#{$prefix}--overflow-menu--open,
-  .#{$prefix}--overflow-menu.#{$prefix}--overflow-menu--open
-    .#{$prefix}--overflow-menu__trigger {
+  .#{$prefix}--overflow-menu.#{$prefix}--overflow-menu--open {
     @include box-shadow;
 
     background-color: $field-01;
     transition: none;
   }
 
-  .#{$prefix}--overflow-menu--light.#{$prefix}--overflow-menu--open,
-  .#{$prefix}--overflow-menu--light.#{$prefix}--overflow-menu--open
-    .#{$prefix}--overflow-menu__trigger {
+  .#{$prefix}--overflow-menu--light.#{$prefix}--overflow-menu--open {
     background-color: $field-02;
   }
 
@@ -170,8 +156,7 @@
   }
 
   // TODO V11: Remove xl selector
-  .#{$prefix}--overflow-menu-options--xl.#{$prefix}--overflow-menu-options,
-  .#{$prefix}--overflow-menu-options--lg.#{$prefix}--overflow-menu-options {
+  .#{$prefix}--overflow-menu-options--xl.#{$prefix}--overflow-menu-options {
     &[data-floating-menu-direction='bottom']::after,
     &[data-floating-menu-direction='top']::after {
       width: to-rem(48px);
@@ -222,8 +207,6 @@
 
   // TODO V11: Remove xl selector
   .#{$prefix}--overflow-menu-options--xl
-    .#{$prefix}--overflow-menu-options__option,
-  .#{$prefix}--overflow-menu-options--lg
     .#{$prefix}--overflow-menu-options__option {
     height: to-rem(48px);
   }
@@ -338,10 +321,6 @@
     &::before {
       left: 145px;
     }
-  }
-
-  .#{$prefix}--overflow-menu__container {
-    display: inline-block;
   }
 
   // Windows HCM fix

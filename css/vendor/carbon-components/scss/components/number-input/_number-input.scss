@@ -75,8 +75,7 @@
   }
 
   // TODO V11: Remove xl selector
-  .#{$prefix}--number--xl.#{$prefix}--number input[type='number'],
-  .#{$prefix}--number--lg.#{$prefix}--number input[type='number'] {
+  .#{$prefix}--number--xl.#{$prefix}--number input[type='number'] {
     padding-right: to-rem(144px);
   }
 
@@ -301,8 +300,7 @@
   }
 
   // TODO V11: Remove xl selector
-  .#{$prefix}--number--xl .#{$prefix}--number__invalid,
-  .#{$prefix}--number--lg .#{$prefix}--number__invalid {
+  .#{$prefix}--number--xl .#{$prefix}--number__invalid {
     right: to-rem(112px);
   }
 
@@ -317,9 +315,6 @@
 
   // TODO V11: Remove xl selector
   .#{$prefix}--number--xl
-    .#{$prefix}--number__invalid
-    + .#{$prefix}--number__rule-divider,
-  .#{$prefix}--number--lg
     .#{$prefix}--number__invalid
     + .#{$prefix}--number__rule-divider {
     right: to-rem(96px);
@@ -382,20 +377,17 @@
   }
 
   // TODO V11: Remove xl selector
-  .#{$prefix}--number--xl input[type='number'],
-  .#{$prefix}--number--lg input[type='number'] {
+  .#{$prefix}--number--xl input[type='number'] {
     height: to-rem(48px);
   }
 
   // TODO V11: Remove xl selector
-  .#{$prefix}--number--xl .#{$prefix}--number__controls,
-  .#{$prefix}--number--lg .#{$prefix}--number__controls {
+  .#{$prefix}--number--xl .#{$prefix}--number__controls {
     width: to-rem(96px);
   }
 
   // TODO V11: Remove xl selector
-  .#{$prefix}--number--xl .#{$prefix}--number__control-btn,
-  .#{$prefix}--number--lg .#{$prefix}--number__control-btn {
+  .#{$prefix}--number--xl .#{$prefix}--number__control-btn {
     width: to-rem(48px);
 
     &::before,
@@ -443,11 +435,6 @@
 
   .#{$prefix}--number--readonly .#{$prefix}--number__controls {
     display: none;
-  }
-
-  .#{$prefix}--number__readonly-icon {
-    position: absolute;
-    right: to-rem(16px);
   }
 
   .#{$prefix}--number.#{$prefix}--skeleton {

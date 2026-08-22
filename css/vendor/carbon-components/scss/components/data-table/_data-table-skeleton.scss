@@ -39,10 +39,6 @@
     }
   }
 
-  .#{$prefix}--data-table.#{$prefix}--skeleton .#{$prefix}--table-sort-v2 {
-    pointer-events: none;
-  }
-
   .#{$prefix}--data-table.#{$prefix}--skeleton th span {
     background: $skeleton-element;
   }

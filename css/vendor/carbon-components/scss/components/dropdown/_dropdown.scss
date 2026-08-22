@@ -67,25 +67,14 @@
   }
 
   // TODO V11: Remove xl selector
-  .#{$prefix}--dropdown--xl,
-  .#{$prefix}--dropdown--lg {
+  .#{$prefix}--dropdown--xl {
     height: to-rem(48px);
     max-height: to-rem(48px);
-  }
-
-  // TODO V11: Remove xl selector
-  .#{$prefix}--dropdown--xl .#{$prefix}--dropdown__arrow,
-  .#{$prefix}--dropdown--lg .#{$prefix}--dropdown__arrow {
-    top: to-rem(16px);
   }
 
   .#{$prefix}--dropdown--sm {
     height: to-rem(32px);
     max-height: to-rem(32px);
-  }
-
-  .#{$prefix}--dropdown--sm .#{$prefix}--dropdown__arrow {
-    top: to-rem(8px);
   }
 
   .#{$prefix}--dropdown--open {
@@ -100,14 +89,6 @@
       max-height: to-rem(200px);
       color: $text-error;
     }
-  }
-
-  .#{$prefix}--dropdown__invalid-icon {
-    position: absolute;
-    top: 50%;
-    right: $spacing-08;
-    fill: $support-error;
-    transform: translateY(-50%);
   }
 
   .#{$prefix}--dropdown--open:hover {
@@ -127,20 +108,6 @@
     }
   }
 
-  .#{$prefix}--dropdown__arrow {
-    position: absolute;
-    top: to-rem(13px);
-    right: 1rem;
-    fill: $icon-primary;
-    pointer-events: none;
-    transform-origin: 50% 45%;
-    transition: transform $duration--fast-02 motion(standard, productive);
-  }
-
-  .#{$prefix}--dropdown--open .#{$prefix}--dropdown__arrow {
-    transform: rotate(-180deg);
-  }
-
   .#{$prefix}--dropdown--disabled {
     border-bottom-color: transparent;
 
@@ -158,7 +125,6 @@
     }
 
     // TODO: remove in v11
-    .#{$prefix}--dropdown__arrow,
     .#{$prefix}--list-box__menu-icon svg {
       fill: $icon-disabled;
     }
@@ -172,11 +138,6 @@
   .#{$prefix}--dropdown--disabled .#{$prefix}--list-box__field,
   .#{$prefix}--dropdown--disabled .#{$prefix}--list-box__menu-icon {
     cursor: not-allowed;
-  }
-
-  .#{$prefix}--dropdown--auto-width {
-    width: auto;
-    max-width: to-rem(400px);
   }
 
   .#{$prefix}--dropdown--inline {
@@ -194,20 +155,10 @@
     &.#{$prefix}--dropdown--disabled {
       background-color: transparent;
     }
-
-    .#{$prefix}--dropdown__arrow {
-      top: to-rem(8px);
-      right: to-rem(8px);
-    }
   }
 
   .#{$prefix}--dropdown--inline.#{$prefix}--dropdown--open {
     background-color: transparent;
-  }
-
-  .#{$prefix}--dropdown--inline.#{$prefix}--dropdown--invalid
-    .#{$prefix}--dropdown__invalid-icon {
-    right: to-rem(32px);
   }
 
   .#{$prefix}--dropdown-v2.#{$prefix}--skeleton,

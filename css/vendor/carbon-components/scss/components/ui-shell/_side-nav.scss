@@ -93,10 +93,6 @@
     width: mini-units(6);
   }
 
-  .#{$prefix}--side-nav--hidden {
-    width: 0;
-  }
-
   .#{$prefix}--side-nav.#{$prefix}--side-nav--rail:not(.#{$prefix}--side-nav--fixed):hover,
   .#{$prefix}--side-nav--expanded {
     width: mini-units(32);
@@ -159,43 +155,6 @@
     height: auto;
   }
 
-  .#{$prefix}--side-nav__details {
-    display: flex;
-    min-width: 0;
-    // Necessary for text truncation in title
-    // https://css-tricks.com/flexbox-truncated-text/#article-header-id-3
-    flex: 1;
-    flex-direction: column;
-    padding-right: mini-units(2);
-
-    @include expanded($opacity: true, $visibility: true);
-  }
-
-  .#{$prefix}--side-nav--ux .#{$prefix}--side-nav__details {
-    opacity: 1;
-    visibility: inherit;
-  }
-
-  .#{$prefix}--side-nav__footer {
-    width: 100%;
-    flex: 0 0 to-rem(48px);
-    background-color: $shell-side-nav-bg-01;
-  }
-
-  .#{$prefix}--side-nav__toggle {
-    @include focus-outline('reset');
-    @include button-reset($width: true);
-
-    height: 100%;
-    padding-left: mini-units(2);
-    text-align: left;
-    transition: outline $duration--fast-02;
-  }
-
-  .#{$prefix}--side-nav__toggle:focus {
-    @include focus-outline('outline');
-  }
-
   .#{$prefix}--side-nav__items {
     overflow: hidden;
     flex: 1 1 0%;
@@ -244,10 +203,6 @@
     > .#{$prefix}--side-nav__link:hover
     > span {
     color: $ibm-color__gray-100;
-  }
-
-  .#{$prefix}--side-nav__item--large {
-    height: mini-units(6);
   }
 
   .#{$prefix}--side-nav__divider {
@@ -305,10 +260,6 @@
     transform: rotate(180deg);
   }
 
-  .#{$prefix}--side-nav__item--large .#{$prefix}--side-nav__submenu {
-    height: mini-units(6);
-  }
-
   .#{$prefix}--side-nav__menu {
     display: block;
     max-height: 0;
@@ -361,14 +312,7 @@
       outline $duration--fast-02;
   }
 
-  .#{$prefix}--side-nav__item--large a.#{$prefix}--side-nav__link {
-    height: mini-units(6);
-  }
-
-  a.#{$prefix}--side-nav__link > .#{$prefix}--side-nav__link-text,
-  .#{$prefix}--side-nav
-    a.#{$prefix}--header__menu-item
-    .#{$prefix}--text-truncate-end {
+  a.#{$prefix}--side-nav__link > .#{$prefix}--side-nav__link-text {
     @include text-overflow();
 
     color: $shell-side-nav-text-01;

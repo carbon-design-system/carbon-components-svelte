@@ -155,9 +155,7 @@
     margin-bottom: $carbon--spacing-03;
   }
 
-  .#{$prefix}--radio-button-group--label-right .#{$prefix}--radio-button__label,
-  .#{$prefix}--radio-button-wrapper.#{$prefix}--radio-button-wrapper--label-right
-    .#{$prefix}--radio-button__label {
+  .#{$prefix}--radio-button-group--label-right .#{$prefix}--radio-button__label {
     flex-direction: row;
   }
 

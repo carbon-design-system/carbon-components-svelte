@@ -43,8 +43,7 @@
   }
 
   // TODO V11: Remove xl selector
-  .#{$prefix}--text-input--xl,
-  .#{$prefix}--text-input--lg {
+  .#{$prefix}--text-input--xl {
     height: to-rem(48px);
   }
 
@@ -58,10 +57,6 @@
 
   .#{$prefix}--text-input--sm.#{$prefix}--password-input {
     padding-right: $carbon--spacing-07;
-  }
-
-  .#{$prefix}--text-input--lg.#{$prefix}--password-input {
-    padding-right: $carbon--spacing-09;
   }
 
   .#{$prefix}--text-input::placeholder {
@@ -129,11 +124,6 @@
   .#{$prefix}--text-input--sm
     + .#{$prefix}--btn.#{$prefix}--text-input--password__visibility__toggle.#{$prefix}--tooltip__trigger {
     width: to-rem(32px);
-  }
-
-  .#{$prefix}--text-input--lg
-    + .#{$prefix}--btn.#{$prefix}--text-input--password__visibility__toggle.#{$prefix}--tooltip__trigger {
-    width: to-rem(48px);
   }
 
   .#{$prefix}--btn.#{$prefix}--text-input--password__visibility__toggle.#{$prefix}--tooltip__trigger
@@ -321,8 +311,7 @@
   }
 
   // TODO V11: Remove xl selector
-  .#{$prefix}--text-input-wrapper .#{$prefix}--label--inline--xl,
-  .#{$prefix}--text-input-wrapper .#{$prefix}--label--inline--lg {
+  .#{$prefix}--text-input-wrapper .#{$prefix}--label--inline--xl {
     margin-top: to-rem(17px);
   }
 

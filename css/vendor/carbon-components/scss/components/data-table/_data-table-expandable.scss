@@ -17,12 +17,6 @@
     border-top: 1px solid $border-subtle;
   }
 
-  .#{$prefix}--expandable-row--hidden td {
-    width: auto;
-    padding: $spacing-05;
-    border-top: 0;
-  }
-
   tr.#{$prefix}--parent-row:not(.#{$prefix}--expandable-row)
     + tr[data-child-row] {
     height: 0;

@@ -204,11 +204,6 @@
     cursor: not-allowed;
   }
 
-  .#{$prefix}--toolbar-action[disabled] .#{$prefix}--toolbar-action__icon {
-    cursor: not-allowed;
-    fill: $icon-disabled;
-  }
-
   .#{$prefix}--toolbar-action:focus:not([disabled]),
   .#{$prefix}--toolbar-action:active:not([disabled]) {
     @include focus-outline('outline');
@@ -223,17 +218,6 @@
     max-width: none;
     margin: 0;
     white-space: nowrap;
-  }
-
-  .#{$prefix}--overflow-menu--data-table {
-    height: $spacing-09;
-  }
-
-  .#{$prefix}--toolbar-action__icon {
-    width: auto;
-    max-width: $spacing-05;
-    height: $spacing-05;
-    fill: $icon-primary;
   }
 
   .#{$prefix}--toolbar-search-container-persistent {
@@ -351,11 +335,6 @@
     fill: none;
   }
 
-  .#{$prefix}--batch-download {
-    //makes it smaller to match other icons
-    padding: to-rem(1px);
-  }
-
   .#{$prefix}--action-list .#{$prefix}--btn--primary:focus::before,
   .#{$prefix}--action-list .#{$prefix}--btn--primary::before,
   .#{$prefix}--action-list .#{$prefix}--btn--primary:focus::after,
@@ -408,10 +387,6 @@
     background-color: $background-brand;
 
     color: $text-on-color;
-  }
-
-  .#{$prefix}--batch-summary__scroll {
-    box-shadow: 0.5px 0 0.2px $hover-primary-text;
   }
 
   .#{$prefix}--batch-summary__para {
