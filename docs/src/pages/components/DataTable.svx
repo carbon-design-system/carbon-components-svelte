@@ -376,6 +376,28 @@ Set `columnAlign` in `headers` to align a column's header and cells. Values are 
   ]}
 />
 
+### Horizontal scroll
+
+When a table's columns need more space than its container, the table becomes horizontally scrollable.
+
+<DataTable
+  headers={[
+    { key: "id", value: "ID" },
+    { key: "name", value: "Name" },
+    { key: "email", value: "Email" },
+    { key: "department", value: "Department" },
+    { key: "role", value: "Role" },
+    { key: "location", value: "Location" },
+    { key: "status", value: "Status" },
+    { key: "lastActive", value: "Last active" },
+  ]}
+  rows={[
+    { id: "1", name: "Aiko Tanaka", email: "aiko.tanaka@example.com", department: "Engineering", role: "Senior Software Engineer", location: "Tokyo, Japan", status: "Active", lastActive: "2 minutes ago" },
+    { id: "2", name: "Marcus Johnson", email: "marcus.johnson@example.com", department: "Product Management", role: "Principal Product Manager", location: "Austin, Texas", status: "Active", lastActive: "1 hour ago" },
+    { id: "3", name: "Fatima Al-Sayed", email: "fatima.alsayed@example.com", department: "Customer Success", role: "Customer Success Lead", location: "Dubai, UAE", status: "Away", lastActive: "Yesterday" },
+  ]}
+/>
+
 ## Column visibility
 
 Control which columns render without editing the `headers` definition.
