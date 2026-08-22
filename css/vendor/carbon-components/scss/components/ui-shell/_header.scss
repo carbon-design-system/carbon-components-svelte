@@ -82,12 +82,6 @@
     justify-content: center;
   }
 
-  .#{$prefix}--header__menu-toggle__hidden {
-    @include carbon--breakpoint('lg') {
-      display: none;
-    }
-  }
-
   a.#{$prefix}--header__name {
     @include type-style('body-short-01');
 

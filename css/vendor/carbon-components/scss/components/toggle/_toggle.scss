@@ -104,18 +104,6 @@
       transform: translateX(to-rem(16px));
     }
 
-    .#{$prefix}--toggle__check {
-      position: absolute;
-      top: to-rem(6px);
-      right: to-rem(5px);
-      fill: $support-success;
-      visibility: hidden;
-    }
-
-    .#{$prefix}--toggle__switch--checked .#{$prefix}--toggle__check {
-      visibility: visible;
-    }
-
     .#{$prefix}--toggle--disabled .#{$prefix}--toggle__appearance {
       cursor: not-allowed;
     }
@@ -132,11 +120,6 @@
         background-color: $icon-on-color-disabled;
       }
     }
-
-    .#{$prefix}--toggle--disabled .#{$prefix}--toggle__check {
-      fill: $button-disabled;
-    }
-
 
     .#{$prefix}--toggle__switch,
     .#{$prefix}--toggle__switch::before {
@@ -216,18 +199,6 @@
         cursor: pointer;
         transition: transform $duration--fast-01 motion(exit, productive);
       }
-    }
-
-    .#{$prefix}--toggle__check {
-      position: absolute;
-      z-index: 1;
-      top: to-rem(6px);
-      left: to-rem(6px);
-      width: to-rem(6px);
-      height: to-rem(5px);
-      fill: $icon-03;
-      transform: scale(0.2);
-      transition: $duration--fast-01 motion(exit, productive);
     }
 
     .#{$prefix}--toggle__text--left,
@@ -329,12 +300,6 @@
       box-shadow: none;
     }
 
-    .#{$prefix}--toggle:disabled
-      + .#{$prefix}--toggle__label
-      .#{$prefix}--toggle__check {
-      fill: $disabled-02;
-    }
-
 
     .#{$prefix}--toggle--small
       + .#{$prefix}--toggle__label
@@ -356,13 +321,6 @@
         width: to-rem(10px);
         height: to-rem(10px);
       }
-    }
-
-    .#{$prefix}--toggle--small:checked
-      + .#{$prefix}--toggle__label
-      .#{$prefix}--toggle__check {
-      fill: $support-02;
-      transform: scale(1) translateX(to-rem(16px));
     }
 
     .#{$prefix}--toggle--small
@@ -557,17 +515,6 @@
       > .#{$prefix}--toggle__switch::after {
         transform: translateX(to-rem(17px));
       }
-
-      .#{$prefix}--toggle__check {
-        fill: $support-02;
-        transform: scale(1) translateX(to-rem(16px));
-      }
-    }
-
-    .#{$prefix}--toggle-input--small:disabled:checked
-      + .#{$prefix}--toggle-input__label
-      .#{$prefix}--toggle__check {
-      fill: $disabled-01;
     }
 
     .#{$prefix}--toggle.#{$prefix}--skeleton

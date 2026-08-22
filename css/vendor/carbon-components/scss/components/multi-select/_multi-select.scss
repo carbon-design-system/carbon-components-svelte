@@ -85,7 +85,6 @@
     outline: none;
   }
 
-  .#{$prefix}--multi-select--filterable--input-focused,
   .#{$prefix}--multi-select
     .#{$prefix}--list-box__field--wrapper--input-focused {
     @include focus-outline('outline');

@@ -135,11 +135,8 @@
   }
 
   .#{$prefix}--checkbox:focus + .#{$prefix}--checkbox-label::before,
-  .#{$prefix}--checkbox-label__focus::before,
   .#{$prefix}--checkbox:checked:focus + .#{$prefix}--checkbox-label::before,
-  .#{$prefix}--checkbox-label[data-contained-checkbox-state='true'].#{$prefix}--checkbox-label__focus::before,
-  .#{$prefix}--checkbox:indeterminate:focus + .#{$prefix}--checkbox-label::before,
-  .#{$prefix}--checkbox-label[data-contained-checkbox-state='mixed'].#{$prefix}--checkbox-label__focus::before {
+  .#{$prefix}--checkbox:indeterminate:focus + .#{$prefix}--checkbox-label::before {
     outline: 2px solid $focus;
     outline-offset: 1px;
   }

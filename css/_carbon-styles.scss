@@ -7,6 +7,13 @@
 //   - components/pagination/unstable_pagination: `bx--unstable-pagination`
 // Audit a partial's `bx--` class roots against `src/**/*.svelte` before
 // removing or re-adding an import here.
+//
+// Selector-level pruning has also been applied *within* several of the
+// imported partials below (and within the `css/_*.scss` override files),
+// removing individual rules/selectors for classes the library never renders
+// (v10.58 forward-compat `--lg` aliases, never-ported v10 features, and
+// markup this library structures differently). See `git log --grep
+// "prune selectors"` for the commit with the full class list.
 
 @import "carbon-components/scss/globals/scss/feature-flags";
 @import "carbon-components/scss/globals/scss/vars";
