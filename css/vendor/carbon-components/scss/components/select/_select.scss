@@ -97,8 +97,7 @@
   }
 
   // TODO V11: Remove xl selector
-  .#{$prefix}--select-input--xl,
-  .#{$prefix}--select-input--lg {
+  .#{$prefix}--select-input--xl {
     height: to-rem(48px);
     max-height: to-rem(48px);
   }

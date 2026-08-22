@@ -202,25 +202,13 @@
     opacity: 1;
   }
 
-  .#{$prefix}--table-row--menu-option
-    .#{$prefix}--overflow-menu-options__btn
-    .#{$prefix}--overflow-menu-options__option-content
-    svg {
-    position: relative;
-    // Used to center svg without setting display flex //display block needed for overflow text truncation
-    top: to-rem(3px);
-    margin-right: $spacing-03;
-  }
-
-  .#{$prefix}--data-table .#{$prefix}--overflow-menu,
-  .#{$prefix}--data-table .#{$prefix}--overflow-menu__trigger {
+  .#{$prefix}--data-table .#{$prefix}--overflow-menu {
     &:hover {
       background-color: $layer-selected-hover;
     }
   }
 
-  .#{$prefix}--data-table--selected .#{$prefix}--overflow-menu,
-  .#{$prefix}--data-table--selected .#{$prefix}--overflow-menu__trigger {
+  .#{$prefix}--data-table--selected .#{$prefix}--overflow-menu {
     &:hover {
       background-color: $layer-hover;
     }
@@ -581,10 +569,9 @@
     vertical-align: top;
   }
 
-  .#{$prefix}--data-table--tall .#{$prefix}--data-table--cell-secondary-text {
-    @include type-style('label-01');
-  }
-
+  //----------------------------------------------------------------------------
+  // Static
+  //----------------------------------------------------------------------------
   .#{$prefix}--data-table--static {
     width: auto;
   }

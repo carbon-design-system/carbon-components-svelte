@@ -345,11 +345,6 @@
     background-color: $background-hover;
   }
 
-  .#{$prefix}--header-search-button--hidden {
-    opacity: 0;
-    display: none;
-  }
-
   .#{$prefix}--header-search-menu {
     position: absolute;
     z-index: 10000;
@@ -533,8 +528,6 @@
 
   .#{$prefix}--side-nav--ux.#{$prefix}--side-nav--ux
     .#{$prefix}--side-nav__items.#{$prefix}--side-nav__items,
-  .#{$prefix}--side-nav--fixed.#{$prefix}--side-nav--fixed
-    .#{$prefix}--side-nav__items.#{$prefix}--side-nav__items,
   .#{$prefix}--side-nav--expanded.#{$prefix}--side-nav--expanded
     .#{$prefix}--side-nav__items.#{$prefix}--side-nav__items,
   .#{$prefix}--side-nav.#{$prefix}--side-nav:hover
@@ -593,47 +586,6 @@
     .#{$prefix}--side-nav__submenu-chevron.#{$prefix}--side-nav__submenu-chevron
     > svg {
     transform: rotate(180deg);
-  }
-
-  .#{$prefix}--side-nav__item--large.#{$prefix}--side-nav__item--large
-    .#{$prefix}--side-nav__submenu.#{$prefix}--side-nav__submenu {
-    height: 3rem; // mini-units(6) = 3rem
-  }
-
-  .#{$prefix}--side-nav__item--active.#{$prefix}--side-nav__item--active
-    .#{$prefix}--side-nav__submenu.#{$prefix}--side-nav__submenu:hover {
-    background-color: $layer-selected;
-    color: $text-primary;
-  }
-
-  .#{$prefix}--side-nav__item--active.#{$prefix}--side-nav__item--active
-    .#{$prefix}--side-nav__submenu.#{$prefix}--side-nav__submenu[aria-expanded='false'] {
-    position: relative;
-    background-color: $layer-selected;
-    color: $text-primary;
-  }
-
-  .#{$prefix}--side-nav__item--active.#{$prefix}--side-nav__item--active
-    .#{$prefix}--side-nav__submenu.#{$prefix}--side-nav__submenu[aria-expanded='false']::before {
-    position: absolute;
-    background-color: $border-interactive;
-    content: '';
-    width: 3px;
-    top: 0;
-    bottom: 0;
-    left: 0;
-  }
-
-  .#{$prefix}--side-nav__item--active.#{$prefix}--side-nav__item--active
-    .#{$prefix}--side-nav__submenu-title.#{$prefix}--side-nav__submenu-title {
-    color: $text-primary;
-    font-weight: 600;
-  }
-
-  .#{$prefix}--side-nav__item--active.#{$prefix}--side-nav__item--active
-    .#{$prefix}--side-nav__icon.#{$prefix}--side-nav__icon
-    > svg {
-    fill: $icon-primary;
   }
 
   .#{$prefix}--side-nav__menu.#{$prefix}--side-nav__menu {
@@ -699,16 +651,8 @@
       outline 0.11s cubic-bezier(0.2, 0, 0.38, 0.9);
   }
 
-  .#{$prefix}--side-nav__item--large.#{$prefix}--side-nav__item--large
-    a.#{$prefix}--side-nav__link.#{$prefix}--side-nav__link {
-    height: 3rem; // mini-units(6) = 3rem
-  }
-
   a.#{$prefix}--side-nav__link.#{$prefix}--side-nav__link
-    > .#{$prefix}--side-nav__link-text.#{$prefix}--side-nav__link-text,
-  .#{$prefix}--side-nav.#{$prefix}--side-nav
-    a.#{$prefix}--header__menu-item.#{$prefix}--header__menu-item
-    .#{$prefix}--text-truncate-end.#{$prefix}--text-truncate-end {
+    > .#{$prefix}--side-nav__link-text.#{$prefix}--side-nav__link-text {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -764,37 +708,6 @@
     width: 1rem; // mini-units(2) = 1rem
     height: 1rem; // mini-units(2) = 1rem
     fill: $icon-secondary;
-  }
-
-  .#{$prefix}--side-nav__icon.#{$prefix}--side-nav__icon
-    > svg.#{$prefix}--side-nav-collapse-icon.#{$prefix}--side-nav-collapse-icon {
-    display: none;
-  }
-
-  .#{$prefix}--side-nav--expanded.#{$prefix}--side-nav--expanded
-    .#{$prefix}--side-nav__icon.#{$prefix}--side-nav__icon
-    > svg.#{$prefix}--side-nav-expand-icon.#{$prefix}--side-nav-expand-icon {
-    display: none;
-  }
-
-  .#{$prefix}--side-nav--expanded.#{$prefix}--side-nav--expanded
-    .#{$prefix}--side-nav__icon.#{$prefix}--side-nav__icon
-    > svg.#{$prefix}--side-nav-collapse-icon.#{$prefix}--side-nav-collapse-icon {
-    display: block;
-  }
-
-  .#{$prefix}--side-nav--fixed.#{$prefix}--side-nav--fixed
-    a.#{$prefix}--side-nav__link.#{$prefix}--side-nav__link,
-  .#{$prefix}--side-nav--fixed.#{$prefix}--side-nav--fixed
-    .#{$prefix}--side-nav__submenu.#{$prefix}--side-nav__submenu {
-    padding-left: 1rem; // mini-units(2) = 1rem
-  }
-
-  .#{$prefix}--side-nav--fixed.#{$prefix}--side-nav--fixed
-    .#{$prefix}--side-nav__item.#{$prefix}--side-nav__item:not(.#{$prefix}--side-nav__item--icon.#{$prefix}--side-nav__item--icon)
-    .#{$prefix}--side-nav__menu.#{$prefix}--side-nav__menu
-    a.#{$prefix}--side-nav__link.#{$prefix}--side-nav__link {
-    padding-left: 2rem; // mini-units(4) = 2rem
   }
 
   .#{$prefix}--side-nav.#{$prefix}--side-nav

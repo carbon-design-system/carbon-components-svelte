@@ -58,10 +58,6 @@
     }
   }
 
-  .#{$prefix}--number--lg.#{$prefix}--number input[type='text'] {
-    padding-right: to-rem(144px);
-  }
-
   .#{$prefix}--number--sm.#{$prefix}--number input[type='text'] {
     padding-right: to-rem(112px);
   }
@@ -147,10 +143,6 @@
 
   .#{$prefix}--number--light input[type='text']:disabled {
     background-color: $field-02;
-  }
-
-  .#{$prefix}--number--lg input[type='text'] {
-    height: to-rem(48px);
   }
 
   .#{$prefix}--number--sm input[type='text'] {

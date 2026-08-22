@@ -255,10 +255,6 @@
     top: to-rem(-1px);
   }
 
-  .#{$prefix}--snippet-btn--expand--hide.#{$prefix}--snippet-btn--expand {
-    display: none;
-  }
-
   .#{$prefix}--snippet-btn--expand .#{$prefix}--icon-chevron--down {
     margin-left: $spacing-03;
     fill: $icon-primary;
