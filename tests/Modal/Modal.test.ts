@@ -305,6 +305,31 @@ describe("Modal", () => {
     expect(modalBody).toHaveClass("bx--modal-scroll-content");
   });
 
+  it("scrolls a newly-focused element out from under the scroll gradient", () => {
+    render(ModalTest, {
+      props: {
+        open: true,
+        hasScrollingContent: true,
+        modalHeading: "Scrolling Modal",
+      },
+    });
+
+    const modalContent = screen.getByRole("region");
+    Object.defineProperty(modalContent, "clientHeight", { value: 100 });
+    Object.defineProperty(modalContent, "scrollHeight", { value: 300 });
+    modalContent.scrollTop = 50;
+    modalContent.getBoundingClientRect = () =>
+      ({ top: 0, bottom: 100 }) as DOMRect;
+
+    const input = screen.getByTestId("test-focus");
+    input.getBoundingClientRect = () => ({ top: 110, bottom: 130 }) as DOMRect;
+
+    input.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+
+    // scrollTop += itemBottom(130) - containerBottom(100) => 50 + 30 = 80
+    expect(modalContent.scrollTop).toBe(80);
+  });
+
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2671
   it("should focus primary button when open (not close button)", () => {
     render(ModalTest, {
@@ -478,6 +503,78 @@ describe("Modal", () => {
     expect(screen.getByRole("button", { name: "Delete" })).toHaveFocus();
   });
 
+  describe("outside click behavior", () => {
+    function backdropOf(container: HTMLElement) {
+      const backdrop = container.querySelector('[role="presentation"]');
+      assert(backdrop);
+      return backdrop;
+    }
+
+    it("does not close a non-passive modal on outside click by default", async () => {
+      const closeHandler = vi.fn();
+      const { container } = render(ModalTest, {
+        props: {
+          open: true,
+          modalHeading: "Transactional",
+          primaryButtonText: "Save",
+          secondaryButtonText: "Cancel",
+          onclose: closeHandler,
+        },
+      });
+
+      await user.click(backdropOf(container));
+      expect(closeHandler).not.toHaveBeenCalled();
+    });
+
+    it("closes a non-passive modal on outside click when preventCloseOnClickOutside is explicitly false", async () => {
+      const closeHandler = vi.fn();
+      const { container } = render(ModalTest, {
+        props: {
+          open: true,
+          modalHeading: "Transactional",
+          primaryButtonText: "Save",
+          secondaryButtonText: "Cancel",
+          preventCloseOnClickOutside: false,
+          onclose: closeHandler,
+        },
+      });
+
+      await user.click(backdropOf(container));
+      expect(closeHandler).toHaveBeenCalledTimes(1);
+    });
+
+    it("closes a passive modal on outside click by default", async () => {
+      const closeHandler = vi.fn();
+      const { container } = render(ModalTest, {
+        props: {
+          open: true,
+          passiveModal: true,
+          modalHeading: "Passive",
+          onclose: closeHandler,
+        },
+      });
+
+      await user.click(backdropOf(container));
+      expect(closeHandler).toHaveBeenCalledTimes(1);
+    });
+
+    it("does not close a passive modal on outside click when preventCloseOnClickOutside is explicitly true", async () => {
+      const closeHandler = vi.fn();
+      const { container } = render(ModalTest, {
+        props: {
+          open: true,
+          passiveModal: true,
+          modalHeading: "Passive",
+          preventCloseOnClickOutside: true,
+          onclose: closeHandler,
+        },
+      });
+
+      await user.click(backdropOf(container));
+      expect(closeHandler).not.toHaveBeenCalled();
+    });
+  });
+
   it("prevents closing when clicking outside if configured", async () => {
     render(ModalTest, {
       props: {
@@ -563,6 +660,7 @@ describe("Modal", () => {
     const { container } = render(ModalTest, {
       props: {
         open: true,
+        passiveModal: true,
         modalHeading: "Outside Click Test",
         onclose: closeHandler,
       },
@@ -721,6 +819,7 @@ describe("Modal", () => {
     const { container } = render(ModalTest, {
       props: {
         open: true,
+        passiveModal: true,
         modalHeading: "Prevent Close Test",
         onclose: closeHandler,
       },

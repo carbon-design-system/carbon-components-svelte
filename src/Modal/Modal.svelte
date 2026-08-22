@@ -115,8 +115,14 @@
   /** Specify a selector to be focused when opening the modal */
   export let selectorPrimaryFocus = "[data-modal-primary-focus]";
 
-  /** Set to `true` to prevent the modal from closing when clicking outside */
-  export let preventCloseOnClickOutside = false;
+  /**
+   * Set to prevent (or force-allow) closing the modal on an outside click.
+   * Passive modals close on an outside click unless this is explicitly
+   * `true`. Non-passive modals never close on an outside click unless this
+   * is explicitly `false`.
+   * @type {boolean | undefined}
+   */
+  export let preventCloseOnClickOutside = undefined;
 
   /**
    * Set to `true` to hide the header close button.
@@ -140,6 +146,7 @@
   import Close from "../icons/Close.svelte";
   import { initialFocus, restoreFocus } from "../utils/focus.js";
   import { createOutsideDismiss } from "../utils/outsideDismiss.js";
+  import { scrollIntoViewWithinMenu } from "../utils/scrollIntoViewWithinMenu.js";
   import { trapFocus } from "../utils/trapFocus.js";
   import { uniqueId } from "../utils/uniqueId.js";
   import { trackModal } from "./modalStore";
@@ -179,7 +186,10 @@
   }
 
   const outsideDismiss = createOutsideDismiss(() => {
-    if (!preventCloseOnClickOutside) close("outside-click");
+    const shouldClose = passiveModal
+      ? preventCloseOnClickOutside !== true
+      : preventCloseOnClickOutside === false;
+    if (shouldClose) close("outside-click");
   });
 
   const openStore = writable(open);
@@ -357,6 +367,13 @@
       role={hasScrollingContent ? "region" : undefined}
       aria-label={hasScrollingContent ? ariaLabel : undefined}
       aria-labelledby={modalLabel ? modalLabelId : modalHeadingId}
+      on:focusin={(event) => {
+        // Keep a newly-focused element (e.g. via Tab) from being hidden
+        // under the scroll gradient at the bottom of the content area.
+        if (event.target instanceof HTMLElement) {
+          scrollIntoViewWithinMenu(event.target, ".bx--modal-content");
+        }
+      }}
     >
       <slot />
     </div>

@@ -192,6 +192,76 @@ describe("ComposedModal", () => {
     expect(consoleLog).not.toHaveBeenCalledWith("close");
   });
 
+  describe("outside click behavior", () => {
+    function backdropOf(container: HTMLElement) {
+      const backdrop = container.querySelector('[role="presentation"]');
+      assert(backdrop);
+      return backdrop;
+    }
+
+    it("does not close a modal with a ModalFooter on outside click by default", async () => {
+      const closeHandler = vi.fn();
+      const { container } = render(ComposedModalTest, {
+        props: {
+          open: true,
+          headerTitle: "Transactional",
+          footerPrimaryButtonText: "Save",
+          footerSecondaryButtonText: "Cancel",
+          onclose: closeHandler,
+        },
+      });
+
+      await user.click(backdropOf(container));
+      expect(closeHandler).not.toHaveBeenCalled();
+    });
+
+    it("closes a modal with a ModalFooter on outside click when preventCloseOnClickOutside is explicitly false", async () => {
+      const closeHandler = vi.fn();
+      const { container } = render(ComposedModalTest, {
+        props: {
+          open: true,
+          headerTitle: "Transactional",
+          footerPrimaryButtonText: "Save",
+          footerSecondaryButtonText: "Cancel",
+          preventCloseOnClickOutside: false,
+          onclose: closeHandler,
+        },
+      });
+
+      await user.click(backdropOf(container));
+      expect(closeHandler).toHaveBeenCalledTimes(1);
+    });
+
+    it("closes a modal without a ModalFooter on outside click by default", async () => {
+      const closeHandler = vi.fn();
+      const { container } = render(ComposedModalTest, {
+        props: {
+          open: true,
+          headerTitle: "Passive",
+          onclose: closeHandler,
+        },
+      });
+
+      await user.click(backdropOf(container));
+      expect(closeHandler).toHaveBeenCalledTimes(1);
+    });
+
+    it("does not close a modal without a ModalFooter on outside click when preventCloseOnClickOutside is explicitly true", async () => {
+      const closeHandler = vi.fn();
+      const { container } = render(ComposedModalTest, {
+        props: {
+          open: true,
+          headerTitle: "Passive",
+          preventCloseOnClickOutside: true,
+          onclose: closeHandler,
+        },
+      });
+
+      await user.click(backdropOf(container));
+      expect(closeHandler).not.toHaveBeenCalled();
+    });
+  });
+
   it("should render header with title and label", () => {
     render(ComposedModalTest, {
       props: {
@@ -260,6 +330,31 @@ describe("ComposedModal", () => {
     const modalBody = screen.getByRole("region");
     expect(modalBody).toHaveClass("bx--modal-scroll-content");
     expect(modalBody).toHaveAttribute("tabindex", "0");
+  });
+
+  it("scrolls a newly-focused element out from under the scroll gradient", () => {
+    render(ComposedModalTest, {
+      props: {
+        open: true,
+        headerTitle: "Test Modal",
+        bodyHasScrollingContent: true,
+      },
+    });
+
+    const modalContent = screen.getByRole("region");
+    Object.defineProperty(modalContent, "clientHeight", { value: 100 });
+    Object.defineProperty(modalContent, "scrollHeight", { value: 300 });
+    modalContent.scrollTop = 50;
+    modalContent.getBoundingClientRect = () =>
+      ({ top: 0, bottom: 100 }) as DOMRect;
+
+    const input = screen.getByTestId("test-focus");
+    input.getBoundingClientRect = () => ({ top: 110, bottom: 130 }) as DOMRect;
+
+    input.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+
+    // scrollTop += itemBottom(130) - containerBottom(100) => 50 + 30 = 80
+    expect(modalContent.scrollTop).toBe(80);
   });
 
   it("should handle form content", () => {

@@ -8,7 +8,7 @@
 </script>
 
 <button type="button" on:click={() => (open = true)}>Open Modal</button>
-<ComposedModal bind:open>
+<ComposedModal bind:open preventCloseOnClickOutside={false}>
   <ModalHeader title="Focus Return Test" />
   <ModalBody />
   <ModalFooter primaryButtonText="Save" secondaryButtonText="Cancel" />

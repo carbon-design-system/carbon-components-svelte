@@ -10,4 +10,5 @@
   modalHeading="Focus Return Test"
   primaryButtonText="Save"
   secondaryButtonText="Cancel"
+  preventCloseOnClickOutside={false}
 />
