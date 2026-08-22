@@ -117,6 +117,16 @@
       : "menuitem";
   $: displayIcon = isIndented ? (selected ? Checkmark : undefined) : icon;
 
+  // A selectable/radio sibling widens every row's label gap so the whole
+  // column of labels stays aligned, not just this item's own.
+  const indentRegId = uniqueId();
+  const hasIndentedSiblings = ctx.hasIndentedItems;
+  $: if (isIndented) {
+    ctx.registerIndented(indentRegId);
+  } else {
+    ctx.unregisterIndented(indentRegId);
+  }
+
   function handleClick(event) {
     if (disabled) return;
 
@@ -172,6 +182,7 @@
     return () => {
       hoverIntent.cancel();
       unsubscribe?.();
+      ctx.unregisterIndented(indentRegId);
     };
   });
 </script>
@@ -239,9 +250,9 @@
   <div
     class:bx--menu-option__content={true}
     class:bx--menu-option__content--disabled={disabled}
-    class:bx--menu-option__content--indented={isIndented}
+    class:bx--menu-option__content--indented={$hasIndentedSiblings}
   >
-    {#if isIndented || icon}
+    {#if isIndented || icon || $hasIndentedSiblings}
       <div class:bx--menu-option__icon={true}>
         <svelte:component this={displayIcon} />
       </div>

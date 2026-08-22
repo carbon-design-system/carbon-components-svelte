@@ -98,7 +98,9 @@
   export let target = null;
 
   import { createEventDispatcher, setContext, tick } from "svelte";
+  import { derived, writable } from "svelte/store";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
+  import { batchStoreUpdates } from "../utils/batchStoreUpdates.js";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
   import { rovingFocus } from "../utils/rovingFocus.js";
@@ -129,7 +131,39 @@
     dispatch("close", { trigger });
   }
 
-  setContext("carbon:Menu", { close });
+  // Carbon indents every item's label when the menu has any
+  // selectable/radio sibling, so the whole column stays aligned instead of
+  // just the indented rows shifting right on their own. Items register by
+  // an internal id (not the consumer-facing `id` prop) since a plain item
+  // never registers and multiple items may share no `id` at all.
+  const indentedIds = writable(/** @type {Set<string>} */ (new Set()));
+  const hasIndentedItems = derived(indentedIds, (_) => _.size > 0);
+  const batchedIndentedUpdate = batchStoreUpdates(indentedIds);
+
+  /** @type {(id: string) => void} */
+  function registerIndented(id) {
+    batchedIndentedUpdate((_) => {
+      if (_.has(id)) return _;
+      return new Set(_).add(id);
+    });
+  }
+
+  /** @type {(id: string) => void} */
+  function unregisterIndented(id) {
+    batchedIndentedUpdate((_) => {
+      if (!_.has(id)) return _;
+      const next = new Set(_);
+      next.delete(id);
+      return next;
+    });
+  }
+
+  setContext("carbon:Menu", {
+    close,
+    registerIndented,
+    unregisterIndented,
+    hasIndentedItems,
+  });
 
   $: {
     if (open && !prevOpen) {
