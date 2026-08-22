@@ -18,7 +18,7 @@ Apply Carbon fill and border tokens.
 
 ### Fill
 
-Set `fill` to a Carbon background token. Tokens use v11 names and resolve through the active theme.
+Set `fill` to a Carbon background token. Tokens resolve through the active theme.
 
 | Token        | Description                          |
 | ------------ | ------------------------------------ |
