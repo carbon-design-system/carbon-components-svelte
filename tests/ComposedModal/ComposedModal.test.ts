@@ -262,6 +262,31 @@ describe("ComposedModal", () => {
     expect(modalBody).toHaveAttribute("tabindex", "0");
   });
 
+  it("scrolls a newly-focused element out from under the scroll gradient", () => {
+    render(ComposedModalTest, {
+      props: {
+        open: true,
+        headerTitle: "Test Modal",
+        bodyHasScrollingContent: true,
+      },
+    });
+
+    const modalContent = screen.getByRole("region");
+    Object.defineProperty(modalContent, "clientHeight", { value: 100 });
+    Object.defineProperty(modalContent, "scrollHeight", { value: 300 });
+    modalContent.scrollTop = 50;
+    modalContent.getBoundingClientRect = () =>
+      ({ top: 0, bottom: 100 }) as DOMRect;
+
+    const input = screen.getByTestId("test-focus");
+    input.getBoundingClientRect = () => ({ top: 110, bottom: 130 }) as DOMRect;
+
+    input.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+
+    // scrollTop += itemBottom(130) - containerBottom(100) => 50 + 30 = 80
+    expect(modalContent.scrollTop).toBe(80);
+  });
+
   it("should handle form content", () => {
     render(ComposedModalTest, {
       props: {
