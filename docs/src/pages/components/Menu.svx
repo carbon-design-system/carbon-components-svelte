@@ -72,6 +72,12 @@ Wrap items in `MenuItemRadioGroup` for a set where one choice is active at a tim
 
 <FileSource src="/framed/Menu/MenuItemRadioGroup" />
 
+### Indent alignment
+
+A selectable or radio item reserves space on the left for its checkmark, then adds extra spacing before the label so the checkmark doesn't crowd the text. This menu mixes plain icon items with a checkbox group to show the difference: "Cut", "Copy", and "Paste" sit close to their icons, while "Bold" and "Italic" get the wider gap.
+
+<FileSource src="/framed/Menu/MenuItemIndentAlignment" />
+
 ### Nested
 
 Set `labelText` on a `MenuItem` and nest child `MenuItem` rows to get a submenu. Use the `labelChildren` slot instead of plain text to customize the label's content; `labelText` is still used as the accessible name and title in that case. See [MenuButton menu items](/components/MenuButton#menu-items) for keyboard and hover behavior.
