@@ -74,7 +74,7 @@ Wrap items in `MenuItemRadioGroup` for a set where one choice is active at a tim
 
 ### Indent alignment
 
-A selectable or radio item reserves space on the left for its checkmark, then adds extra spacing before the label so the checkmark doesn't crowd the text. This menu mixes plain icon items with a checkbox group to show the difference: "Cut", "Copy", and "Paste" sit close to their icons, while "Bold" and "Italic" get the wider gap.
+A selectable or radio item's checkmark and a `MenuItem`'s own `icon` sit in separate columns: the checkmark column reserves space for every item once any item in the menu is selectable or radio, and the icon column reserves space for every item once any item sets `icon`. This keeps every label in one column, whether or not that particular row has a checkmark, an icon, both, or neither.
 
 <FileSource src="/framed/Menu/MenuItemIndentAlignment" />
 
