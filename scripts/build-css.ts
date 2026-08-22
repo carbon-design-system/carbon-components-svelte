@@ -10,6 +10,7 @@ import { initAsyncCompiler } from "sass-embedded";
 const PARTIAL_FILE_REGEX = /^_/;
 const CACHE_DIR = ".cache/build-css";
 const WATCH = process.argv.includes("--watch");
+const FULL_THEMES = process.argv.includes("--themes");
 // Svelte 5 minimum browsers — https://svelte.dev/docs/svelte/browser-support
 const BROWSERSLIST = [
   "Chrome >= 87",
@@ -57,6 +58,16 @@ function themeEntries() {
     .filter((file) => !PARTIAL_FILE_REGEX.test(file))
     .sort()
     .map((file) => path.parse(file));
+}
+
+function compileEntries() {
+  const entries = themeEntries();
+  if (FULL_THEMES) return entries;
+  const all = entries.find((entry) => entry.name === "all");
+  if (!all) {
+    throw new Error("css/all.scss is required for the default CSS build");
+  }
+  return [all];
 }
 
 async function hashPathStats(files: string[], cwd: string): Promise<string> {
@@ -131,7 +142,7 @@ async function build(compiler: Compiler): Promise<void> {
 
   const keyStarted = performance.now();
   const shared = await sharedInputs();
-  const scss = themeEntries();
+  const scss = compileEntries();
   const entryStats = await Promise.all(
     scss.map(async ({ base }) => ({
       base,
@@ -169,7 +180,7 @@ async function build(compiler: Compiler): Promise<void> {
     }),
   );
 
-  const cssTypes = `${scss
+  const cssTypes = `${themeEntries()
     .map(
       ({ name }) =>
         `declare module "carbon-components-svelte/css/${name}.css";`,
@@ -185,6 +196,7 @@ async function build(compiler: Compiler): Promise<void> {
       "[build-css]",
       `${compiled} compiled`,
       `${cached} cached`,
+      FULL_THEMES ? "all themes" : "all.css only",
       MINIFY ? "minify on" : "minify off",
       compiled ? `compile ${ms(workStarted)}` : "",
       `total ${ms(started)}`,
