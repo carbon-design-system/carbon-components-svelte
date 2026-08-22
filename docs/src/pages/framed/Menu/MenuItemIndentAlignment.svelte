@@ -9,6 +9,8 @@
   import Copy from "carbon-icons-svelte/lib/Copy.svelte";
   import Cut from "carbon-icons-svelte/lib/Cut.svelte";
   import Paste from "carbon-icons-svelte/lib/Paste.svelte";
+  import TextBold from "carbon-icons-svelte/lib/TextBold.svelte";
+  import TextItalic from "carbon-icons-svelte/lib/TextItalic.svelte";
 
   let anchor;
   let open = false;
@@ -33,7 +35,7 @@
   </MenuItem>
   <MenuDivider />
   <MenuItemGroup labelText="Style" bind:selectedIds>
-    <MenuItem id="bold" shortcutText="⌘B">Bold</MenuItem>
-    <MenuItem id="italic" shortcutText="⌘I">Italic</MenuItem>
+    <MenuItem id="bold" icon={TextBold} shortcutText="⌘B">Bold</MenuItem>
+    <MenuItem id="italic" icon={TextItalic} shortcutText="⌘I">Italic</MenuItem>
   </MenuItemGroup>
 </Menu>
