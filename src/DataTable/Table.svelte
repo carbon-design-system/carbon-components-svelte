@@ -94,21 +94,23 @@
     </table>
   </section>
 {:else}
-  <table
-    aria-labelledby={ariaLabelledby}
-    aria-describedby={ariaDescribedby}
-    class:bx--data-table={true}
-    class:bx--data-table--compact={size === "compact"}
-    class:bx--data-table--short={size === "short"}
-    class:bx--data-table--tall={size === "tall"}
-    class:bx--data-table--md={size === "medium"}
-    class:bx--data-table--sort={sortable}
-    class:bx--data-table--zebra={zebra}
-    class:bx--data-table--static={useStaticWidth}
-    class:bx--data-table--sticky-header={stickyHeader}
-    {...$$restProps}
-    style={tableStyle}
-  >
-    <slot />
-  </table>
+  <div class:bx--data-table-content={true}>
+    <table
+      aria-labelledby={ariaLabelledby}
+      aria-describedby={ariaDescribedby}
+      class:bx--data-table={true}
+      class:bx--data-table--compact={size === "compact"}
+      class:bx--data-table--short={size === "short"}
+      class:bx--data-table--tall={size === "tall"}
+      class:bx--data-table--md={size === "medium"}
+      class:bx--data-table--sort={sortable}
+      class:bx--data-table--zebra={zebra}
+      class:bx--data-table--static={useStaticWidth}
+      class:bx--data-table--sticky-header={stickyHeader}
+      {...$$restProps}
+      style={tableStyle}
+    >
+      <slot />
+    </table>
+  </div>
 {/if}
