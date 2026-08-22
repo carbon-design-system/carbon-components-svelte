@@ -79,6 +79,12 @@ Enable vertical scrolling for modals with lengthy content. This ensures all cont
 
 <FileSource src="/framed/Modal/ModalScrollingContent" />
 
+### Scrolling form
+
+When `hasScrollingContent` is set, a gradient overlays the bottom of the body while more content remains below. Tabbing to a field near that edge scrolls it into view so it isn't hidden under the gradient. Use <DocKbd label="Tab" /> to move through the fields; the fade recedes once you reach the last field.
+
+<FileSource src="/framed/Modal/ModalScrollingForm" />
+
 ### Full width
 
 Set `fullWidth` to remove the modal body padding so content spans edge to edge. Use it for content that supplies its own layout, such as a table or fluid form.
