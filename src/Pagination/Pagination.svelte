@@ -21,6 +21,13 @@
    */
 
   /**
+   * Override the page-selection control.
+   * Falls back to the default page number `Select` when unset.
+   * Use the bound `page` prop to navigate from within the slot.
+   * @slot {{ currentPage: number; totalPages: number; currentPageSize: number; selectLabelText: string; }} pageSelect
+   */
+
+  /**
    * Specify the current page index.
    * @bindable writable
    */
@@ -317,30 +324,38 @@
         {/if}
       </span>
     {:else if !pageInputDisabled}
-      <!-- Native <option>s instead of SelectItem: a SelectItem
-           registers a store subscriber per page (pageWindow, default
-           1000). Coerce on:update to Number — without SelectItem,
-           Select keeps option values as strings. -->
-      <Select
-        id="bx--pagination-select-{id}-pages"
-        class="bx--select__page-number"
-        labelText={pageSelectLabelText(totalPages)}
-        inline
-        hideLabel
-        disabled={pageInputDisabled || disabled}
-        selected={page}
-        on:update={(event) => {
-          const next = Number(event.detail);
-          page = next;
-          dispatch("change", { page: next });
-        }}
+      <slot
+        name="pageSelect"
+        currentPage={page}
+        {totalPages}
+        currentPageSize={pageSize}
+        selectLabelText={pageSelectLabelText(totalPages)}
       >
-        {#each selectItems as pageNumber (pageNumber)}
-          <option class="bx--select-option" value={pageNumber}>
-            {pageNumber}
-          </option>
-        {/each}
-      </Select>
+        <!-- Native <option>s instead of SelectItem: a SelectItem
+             registers a store subscriber per page (pageWindow, default
+             1000). Coerce on:update to Number — without SelectItem,
+             Select keeps option values as strings. -->
+        <Select
+          id="bx--pagination-select-{id}-pages"
+          class="bx--select__page-number"
+          labelText={pageSelectLabelText(totalPages)}
+          inline
+          hideLabel
+          disabled={pageInputDisabled || disabled}
+          selected={page}
+          on:update={(event) => {
+            const next = Number(event.detail);
+            page = next;
+            dispatch("change", { page: next });
+          }}
+        >
+          {#each selectItems as pageNumber (pageNumber)}
+            <option class="bx--select-option" value={pageNumber}>
+              {pageNumber}
+            </option>
+          {/each}
+        </Select>
+      </slot>
       <span class:bx--pagination__text={true}>
         {#if pagesUnknown}
           {pageText(page)}

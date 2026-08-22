@@ -2,6 +2,7 @@ import { fireEvent, render, screen, within } from "@testing-library/svelte";
 import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
 import Pagination from "./Pagination.test.svelte";
+import PaginationPageSelectSlot from "./PaginationPageSelectSlot.test.svelte";
 
 describe("Pagination", () => {
   beforeEach(() => {
@@ -776,5 +777,42 @@ describe("Pagination", () => {
         call[0] === "update" && call[1].pageSize === 15 && call[1].page === 3,
     );
     expect(updateCalls.length).toBe(1);
+  });
+
+  describe("pageSelect slot", () => {
+    it("replaces the default page select and exposes slot props", () => {
+      render(PaginationPageSelectSlot, {
+        props: { totalItems: 40, pageSizes: [10] },
+      });
+
+      expect(
+        screen.queryByRole("combobox", { name: /Page number/ }),
+      ).not.toBeInTheDocument();
+      expect(screen.getByTestId("page-select-label")).toHaveTextContent(
+        "Page number, of 4 pages",
+      );
+      expect(screen.getByTestId("current-page")).toHaveTextContent("1");
+      expect(screen.getByTestId("total-pages")).toHaveTextContent("4");
+      expect(screen.getByTestId("current-page-size")).toHaveTextContent("10");
+    });
+
+    it("navigates when the slot sets the bound page prop", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(PaginationPageSelectSlot, {
+        props: { totalItems: 40, pageSizes: [10] },
+      });
+
+      await user.click(screen.getByText("Go to 3"));
+
+      expect(screen.getByTestId("current-page")).toHaveTextContent("3");
+      expect(consoleLog).toHaveBeenCalledWith("update", {
+        pageSize: 10,
+        page: 3,
+      });
+      // The pageSelect slot owns its own control, so Pagination has no
+      // interaction handler to fire "change" from; only "update" reflects
+      // the bound page prop changing.
+      expect(consoleLog).not.toHaveBeenCalledWith("change", expect.anything());
+    });
   });
 });
