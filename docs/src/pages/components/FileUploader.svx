@@ -24,12 +24,25 @@ Enable multiple file selection by setting `multiple` to `true`.
 
 ### Prevent duplicate
 
-Set `preventDuplicate` to `true` to skip re-selected files that match an
-already-selected file by name, size, and last modified. Only applies when
-`multiple` is `true`. For richer behavior with rejection events, see
-[Duplicate detection](#duplicate-detection).
+Set `preventDuplicate` to `true` to reject re-selected files that match an
+already-selected file by name, size, and last modified. Rejected duplicates are
+reported via `rejected` with `{ file, reason: "duplicate" }`.
 
-<FileUploaderButton multiple preventDuplicate labelText="Add files" />
+Only applies when `multiple` is `true`, since a single-file input replaces its
+selection rather than adding to it.
+
+<FileSource src="/framed/FileUploader/FileUploaderButtonPreventDuplicate" />
+
+### File size limit
+
+Limit selected file size with `maxFileSize`. Files exceeding the limit (in
+bytes) are automatically filtered out.
+
+This example accepts files up to 1 MB (1,048,576 bytes). Files over the limit
+are not added, and a `rejected` event fires with `{ file, reason: "size" }` for
+each rejected file.
+
+<FileSource src="/framed/FileUploader/FileUploaderButtonMaxFileSize" />
 
 ### Custom kind and size
 
