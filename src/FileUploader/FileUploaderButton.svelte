@@ -2,6 +2,8 @@
   /**
    * @template [Icon=any]
    * @event {ReadonlyArray<File>} change
+   * @event {Array<{ file: File; reason: "size" | "duplicate" }>} rejected
+   * @restProps {input}
    */
 
   /**
@@ -21,10 +23,14 @@
   export let multiple = false;
 
   /**
-   * Set to `true` to skip files that match an already-selected file
-   * (by name, size, and lastModified). Only applies when `multiple` is `true`.
-   * For richer behavior (rejection reporting via the `rejected` event),
-   * see `FileUploader`'s `preventDuplicate` prop.
+   * Specify the maximum file size in bytes.
+   * @type {number | undefined}
+   */
+  export let maxFileSize = undefined;
+
+  /**
+   * Set to `true` to reject files that match an already-selected file
+   * (by name, size, and lastModified).
    */
   export let preventDuplicate = false;
 
@@ -97,6 +103,7 @@
   export let hideTooltip = false;
 
   import { createEventDispatcher } from "svelte";
+  import { filterIncomingFiles } from "../utils/filterIncomingFiles.js";
   import { uniqueId } from "../utils/uniqueId.js";
 
   const dispatch = createEventDispatcher();
@@ -129,6 +136,24 @@
     } catch {
       // Fail open if DataTransfer API is not supported.
     }
+  }
+  /** @param {ReadonlyArray<File>} incoming */
+  function processIncoming(incoming) {
+    const { accepted, rejected } = filterIncomingFiles(incoming, {
+      maxFileSize,
+      preventDuplicate: preventDuplicate && multiple,
+      existingFiles: files,
+    });
+
+    if (rejected.length > 0) dispatch("rejected", rejected);
+
+    files = multiple ? [...files, ...accepted] : accepted;
+
+    if (files.length > 0 && !disableLabelChanges) {
+      labelText = files.length > 1 ? `${files.length} files` : files[0].name;
+    }
+
+    dispatch("change", files);
   }
 </script>
 
@@ -201,26 +226,7 @@
   class:bx--visually-hidden={true}
   {...$$restProps}
   on:change|stopPropagation={(event) => {
-    if (multiple) {
-      let incoming = [...event.target.files];
-      if (preventDuplicate) {
-        const existingKeys = new Set(
-          files.map((f) => `${f.name}\0${f.size}\0${f.lastModified}`),
-        );
-        incoming = incoming.filter(
-          (f) => !existingKeys.has(`${f.name}\0${f.size}\0${f.lastModified}`),
-        );
-      }
-      files = [...files, ...incoming];
-    } else {
-      files = [...event.target.files];
-    }
-
-    if (files && files.length > 0 && !disableLabelChanges) {
-      labelText = files.length > 1 ? `${files.length} files` : files[0].name;
-    }
-
-    dispatch("change", files);
+    processIncoming([...event.target.files]);
   }}
   on:click
   on:click={(event) => {

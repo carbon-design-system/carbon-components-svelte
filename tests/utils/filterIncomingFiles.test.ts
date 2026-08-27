@@ -44,6 +44,16 @@ describe("filterIncomingFiles", () => {
     expect(rejected).toEqual([]);
   });
 
+  test("honors a maxFileSize of 0", () => {
+    const empty = makeFile("empty.txt", 0);
+    const nonEmpty = makeFile("a.txt", 1);
+    const { accepted, rejected } = filterIncomingFiles([empty, nonEmpty], {
+      maxFileSize: 0,
+    });
+    expect(accepted).toEqual([empty]);
+    expect(rejected).toEqual([{ file: nonEmpty, reason: "size" }]);
+  });
+
   test("rejects duplicates against existing files", () => {
     const existing = makeFile("dup.txt", 10, 5);
     const duplicate = makeFile("dup.txt", 10, 5);

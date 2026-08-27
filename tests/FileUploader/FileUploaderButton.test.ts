@@ -528,6 +528,252 @@ describe("FileUploaderButton", () => {
     expect(clickSpy).toHaveBeenCalled();
   });
 
+  describe("maxFileSize", () => {
+    it("should reject oversized files and report them", async () => {
+      const changeHandler = vi.fn();
+      const rejectedHandler = vi.fn();
+      const { container } = render(FileUploaderButton, {
+        props: {
+          multiple: true,
+          maxFileSize: 4,
+          onchange: changeHandler,
+          onrejected: rejectedHandler,
+        },
+      });
+
+      const input = container.querySelector('input[type="file"]');
+      assert(input instanceof HTMLInputElement);
+
+      const small = new File(["ab"], "small.txt", { type: "text/plain" });
+      const large = new File(["abcdefgh"], "large.txt", {
+        type: "text/plain",
+      });
+      simulateFileSelection(input, [small, large]);
+
+      await vi.waitFor(() => {
+        expect(changeHandler).toHaveBeenCalledTimes(1);
+      });
+
+      expect(changeHandler.mock.calls[0][0].detail).toEqual([small]);
+      expect(rejectedHandler).toHaveBeenCalledTimes(1);
+      expect(rejectedHandler.mock.calls[0][0].detail).toEqual([
+        { file: large, reason: "size" },
+      ]);
+    });
+
+    it("should not dispatch rejected when every file fits", async () => {
+      const changeHandler = vi.fn();
+      const rejectedHandler = vi.fn();
+      const { container } = render(FileUploaderButton, {
+        props: {
+          maxFileSize: 1024,
+          onchange: changeHandler,
+          onrejected: rejectedHandler,
+        },
+      });
+
+      const input = container.querySelector('input[type="file"]');
+      assert(input instanceof HTMLInputElement);
+
+      simulateFileSelection(input, [
+        new File(["ab"], "small.txt", { type: "text/plain" }),
+      ]);
+
+      await vi.waitFor(() => {
+        expect(changeHandler).toHaveBeenCalledTimes(1);
+      });
+      expect(rejectedHandler).not.toHaveBeenCalled();
+    });
+
+    it("should clear the selection and restore the label when the only file is rejected", async () => {
+      const rejectedHandler = vi.fn();
+      const { container } = render(FileUploaderButton, {
+        props: { maxFileSize: 4, onrejected: rejectedHandler },
+      });
+
+      const input = container.querySelector('input[type="file"]');
+      assert(input instanceof HTMLInputElement);
+
+      simulateFileSelection(input, [
+        new File(["abcdefgh"], "large.txt", { type: "text/plain" }),
+      ]);
+
+      await vi.waitFor(() => {
+        expect(rejectedHandler).toHaveBeenCalledTimes(1);
+      });
+      expect(screen.getByRole("button")).toHaveTextContent("Add file");
+    });
+
+    it("should not add rejected files to the bound files array", async () => {
+      const changeHandler = vi.fn();
+      const { component, container } = render(FileUploaderButton, {
+        props: { multiple: true, maxFileSize: 4, onchange: changeHandler },
+      });
+
+      const input = container.querySelector('input[type="file"]');
+      assert(input instanceof HTMLInputElement);
+
+      const small = new File(["ab"], "small.txt", { type: "text/plain" });
+      const large = new File(["abcdefgh"], "large.txt", {
+        type: "text/plain",
+      });
+      simulateFileSelection(input, [small, large]);
+
+      await vi.waitFor(() => {
+        expect(changeHandler).toHaveBeenCalledTimes(1);
+      });
+      expect(component.files).toEqual([small]);
+    });
+
+    it("should clear an existing selection when a later single-file pick is rejected", async () => {
+      const changeHandler = vi.fn();
+      const { component, container } = render(FileUploaderButton, {
+        props: { maxFileSize: 4, onchange: changeHandler },
+      });
+
+      const input = container.querySelector('input[type="file"]');
+      assert(input instanceof HTMLInputElement);
+
+      const small = new File(["ab"], "small.txt", { type: "text/plain" });
+      simulateFileSelection(input, [small]);
+
+      await vi.waitFor(() => {
+        expect(changeHandler).toHaveBeenCalledTimes(1);
+      });
+      expect(screen.getByRole("button")).toHaveTextContent("small.txt");
+
+      // A single-file input replaces its selection, so a rejected pick leaves
+      // nothing behind. This matches `FileUploaderDropContainer`.
+      simulateFileSelection(input, [
+        new File(["abcdefgh"], "large.txt", { type: "text/plain" }),
+      ]);
+
+      await vi.waitFor(() => {
+        expect(changeHandler).toHaveBeenCalledTimes(2);
+      });
+      expect(changeHandler.mock.calls[1][0].detail).toEqual([]);
+      expect(component.files).toEqual([]);
+      expect(screen.getByRole("button")).toHaveTextContent("Add file");
+    });
+  });
+
+  describe("maxFileSize with preventDuplicate", () => {
+    it("should report size and duplicate rejections in a single event", async () => {
+      const changeHandler = vi.fn();
+      const rejectedHandler = vi.fn();
+      const { component, container } = render(FileUploaderButton, {
+        props: {
+          multiple: true,
+          maxFileSize: 4,
+          preventDuplicate: true,
+          onchange: changeHandler,
+          onrejected: rejectedHandler,
+        },
+      });
+
+      const input = container.querySelector('input[type="file"]');
+      assert(input instanceof HTMLInputElement);
+
+      const lastModified = 1700000000000;
+      const props = { type: "text/plain", lastModified };
+      const fileA = new File(["a"], "a.txt", props);
+      simulateFileSelection(input, [fileA]);
+
+      await vi.waitFor(() => {
+        expect(changeHandler).toHaveBeenCalledTimes(1);
+      });
+      expect(rejectedHandler).not.toHaveBeenCalled();
+
+      const fileADup = new File(["a"], "a.txt", props);
+      const large = new File(["abcdefgh"], "large.txt", props);
+      const fileB = new File(["b"], "b.txt", props);
+      simulateFileSelection(input, [fileADup, large, fileB]);
+
+      await vi.waitFor(() => {
+        expect(rejectedHandler).toHaveBeenCalledTimes(1);
+      });
+      expect(rejectedHandler.mock.calls[0][0].detail).toEqual([
+        { file: large, reason: "size" },
+        { file: fileADup, reason: "duplicate" },
+      ]);
+      expect(component.files).toEqual([fileA, fileB]);
+    });
+  });
+
+  describe("rejected duplicates", () => {
+    it("should report deduped files when preventDuplicate and multiple are true", async () => {
+      const changeHandler = vi.fn();
+      const rejectedHandler = vi.fn();
+      const { container } = render(FileUploaderButton, {
+        props: {
+          multiple: true,
+          preventDuplicate: true,
+          onchange: changeHandler,
+          onrejected: rejectedHandler,
+        },
+      });
+
+      const input = container.querySelector('input[type="file"]');
+      assert(input instanceof HTMLInputElement);
+
+      const lastModified = 1700000000000;
+      const fileA = new File(["a"], "a.txt", {
+        type: "text/plain",
+        lastModified,
+      });
+      simulateFileSelection(input, [fileA]);
+
+      await vi.waitFor(() => {
+        expect(changeHandler).toHaveBeenCalledTimes(1);
+      });
+      expect(rejectedHandler).not.toHaveBeenCalled();
+
+      const fileADup = new File(["a"], "a.txt", {
+        type: "text/plain",
+        lastModified,
+      });
+      simulateFileSelection(input, [fileADup]);
+
+      await vi.waitFor(() => {
+        expect(rejectedHandler).toHaveBeenCalledTimes(1);
+      });
+      expect(rejectedHandler.mock.calls[0][0].detail).toEqual([
+        { file: fileADup, reason: "duplicate" },
+      ]);
+    });
+
+    it("should not dedupe in single-file mode", async () => {
+      const changeHandler = vi.fn();
+      const rejectedHandler = vi.fn();
+      const { container } = render(FileUploaderButton, {
+        props: {
+          preventDuplicate: true,
+          onchange: changeHandler,
+          onrejected: rejectedHandler,
+        },
+      });
+
+      const input = container.querySelector('input[type="file"]');
+      assert(input instanceof HTMLInputElement);
+
+      const lastModified = 1700000000000;
+      const props = { type: "text/plain", lastModified };
+      simulateFileSelection(input, [new File(["a"], "a.txt", props)]);
+      await vi.waitFor(() => {
+        expect(changeHandler).toHaveBeenCalledTimes(1);
+      });
+
+      const reselected = new File(["a"], "a.txt", props);
+      simulateFileSelection(input, [reselected]);
+
+      await vi.waitFor(() => {
+        expect(changeHandler).toHaveBeenCalledTimes(2);
+      });
+      expect(changeHandler.mock.calls[1][0].detail).toEqual([reselected]);
+      expect(rejectedHandler).not.toHaveBeenCalled();
+    });
+  });
+
   describe("Generics", () => {
     it("should support custom Icon types with generics", () => {
       type CustomIcon = new (...args: unknown[]) => unknown;
