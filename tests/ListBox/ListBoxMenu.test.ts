@@ -183,4 +183,55 @@ describe("ListBoxMenu", () => {
       expect(wrapper?.parentElement).toHaveAttribute("data-floating-portal");
     });
   });
+  describe("wrapOptions", () => {
+    it("should not mark the menu by default", () => {
+      render(ListBoxMenu, { props: { slotContent: "Plain menu" } });
+
+      expect(
+        screen.getByText("Plain menu").closest(".bx--list-box__menu"),
+      ).not.toHaveClass("bx--list-box__menu--wrap-options");
+    });
+
+    it("should mark the menu so option wrap styles reach its options", () => {
+      render(ListBoxMenu, {
+        props: { slotContent: "Wrapping menu", wrapOptions: true },
+      });
+
+      expect(
+        screen.getByText("Wrapping menu").closest(".bx--list-box__menu"),
+      ).toHaveClass("bx--list-box__menu--wrap-options");
+    });
+
+    it("should mark the menu alongside a consumer class, not instead of it", () => {
+      render(ListBoxMenu, {
+        props: {
+          slotContent: "Both classes",
+          wrapOptions: true,
+          class: "consumer-class",
+        },
+      });
+
+      const menu = screen
+        .getByText("Both classes")
+        .closest(".bx--list-box__menu");
+      expect(menu).toHaveClass("bx--list-box__menu--wrap-options");
+      expect(menu).toHaveClass("consumer-class");
+    });
+
+    it("should mark a portaled menu, which a class on the component root could not reach", async () => {
+      render(ListBoxMenu, {
+        props: {
+          slotContent: "Portaled wrapping menu",
+          wrapOptions: true,
+          portal: true,
+          open: true,
+        },
+      });
+
+      const menu = await screen.findByText("Portaled wrapping menu");
+      expect(menu.closest(".bx--list-box__menu")).toHaveClass(
+        "bx--list-box__menu--wrap-options",
+      );
+    });
+  });
 });

@@ -38,3 +38,12 @@ export declare function getMenuItemHeight(
   size?: "xs" | "sm" | "md" | "lg" | "xl",
   options?: { fluid?: boolean },
 ): number;
+
+/**
+ * Whether a listbox menu's options should be windowed.
+ */
+export declare function shouldVirtualizeMenu(options: {
+  /** The consumer's own items, not the filtered subset. */
+  items: ArrayLike<unknown>;
+  virtualize: boolean | object | undefined;
+}): boolean;

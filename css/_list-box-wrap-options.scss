@@ -1,0 +1,91 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Option wrapping, reached by the `bx--list-box__menu--wrap-options` marker
+/// class that a listbox component's `wrapOptions` prop puts on its menu.
+/// `Dropdown`, `ComboBox`, and `MultiSelect` share the option markup, so they
+/// share this.
+///
+/// Carbon confines an option to one fixed-height line and truncates the
+/// overflow with an ellipsis. At the WCAG 1.4.10 Reflow test condition
+/// (320x256 CSS px) that loses text with no way to reach it, so this releases
+/// the height and lets the label take as many lines as it needs.
+///
+/// Unbounded on purpose: any line limit brings back the loss of information
+/// wrapping exists to remove. `overflow-wrap: break-word` reflows a single long
+/// unbroken token instead of forcing horizontal scroll, while ordinary words
+/// still break at their boundaries. `word-break: break-all`, which this rule
+/// carried first, breaks every word at the line edge, which reads badly and
+/// splits a highlighted match mid-word. `overflow-wrap: anywhere` would work
+/// too but needs Safari 15.4, past this library's Safari 14 baseline
+/// (`BROWSERSLIST` in `scripts/build-css.ts`).
+///
+/// The marker class sits on the menu rather than the component root, since the
+/// menu can be portaled out of that root's subtree.
+///
+/// Nothing here declares a color, so every shipped theme renders a wrapped
+/// option the way it renders an unwrapped one.
+/// @access private
+/// @group list-box
+@mixin list-box-wrap-options {
+  .#{$prefix}--list-box__menu--wrap-options .#{$prefix}--list-box__menu-item {
+    block-size: auto;
+  }
+
+  // Fluid (non-condensed) menu items are given a taller fixed height by a
+  // three-class selector in _fluid-list-box.scss, which outranks the rule
+  // above. Match its specificity so a fluid option grows too.
+  .#{$prefix}--list-box__wrapper--fluid
+    .#{$prefix}--list-box__menu--wrap-options
+    .#{$prefix}--list-box__menu-item {
+    block-size: auto;
+  }
+
+  .#{$prefix}--list-box__menu--wrap-options
+    .#{$prefix}--list-box__menu-item__option {
+    block-size: auto;
+    white-space: normal;
+    overflow-wrap: break-word;
+  }
+
+  // `MultiSelect` renders each option as a checkbox whose label carries the
+  // text, and that label is confined to one line twice over: on the label by
+  // `_multi-select.scss`, and on the text span inside it by `_list-box.scss`.
+  // The rule above reaches both only by inheritance, which loses to a
+  // declaration on the element, so each is released by name. The first matches
+  // the specificity of the rule it outranks and wins on order, this partial
+  // being imported last; the second outranks its two-class rule outright.
+  .#{$prefix}--list-box__menu--wrap-options
+    .#{$prefix}--list-box__menu-item__option
+    .#{$prefix}--checkbox-label,
+  .#{$prefix}--list-box__menu--wrap-options
+    .#{$prefix}--list-box__menu-item
+    .#{$prefix}--checkbox-label-text {
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+  }
+
+  // The text span carries the gap between the checkbox and the words. Inline
+  // padding is drawn once at the start of the whole inline box rather than at
+  // the start of every line it breaks into, so on one line it reads as the gap
+  // and on three as a first-line indent with the rest hanging 6px to its left.
+  // A block box puts every line at the same left edge.
+  //
+  // `block` and not `inline-block`: an inline-block is sized shrink-to-fit,
+  // never narrower than the content's minimum, and `overflow-wrap: break-word`,
+  // unlike `anywhere`, does not lower that minimum for an unbreakable token. So
+  // an inline-block grows to the width of a long unbroken identifier, which
+  // stops it wrapping and pushes the option into overflow, bringing back both
+  // the reflow failure and the `title` tooltip. A block box takes the width it
+  // is given and lets the token break inside it.
+  .#{$prefix}--list-box__menu--wrap-options
+    .#{$prefix}--list-box__menu-item
+    .#{$prefix}--checkbox-label-text {
+    display: block;
+  }
+}
+
+@include exports("list-box-wrap-options") {
+  @include list-box-wrap-options;
+}
