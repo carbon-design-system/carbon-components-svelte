@@ -286,7 +286,7 @@
    * Set `virtualize={true}` to explicitly enable virtualization with default settings.
    *
    * Provide an object to customize virtualization behavior:
-   * - `itemHeight` (default: size-based, or 64px for fluid unless `condensed`): Height of each item in pixels. Override when custom slots change row height.
+   * - `itemHeight` (default: size-based, or 64px for fluid unless `condensed`): Height of each item in pixels. Override when custom slots change row height. Under `wrapOptions`, heights are measured from the rendered options and this serves as the starting estimate for ones not yet measured.
    * - `containerHeight` (default: 300): The maximum height in pixels of the dropdown container.
    * - `overscan` (default: 3): The number of extra items to render above and below the viewport for smoother scrolling. Higher values may cause more flickering during very fast scrolling.
    * - `threshold` (default: 100): The minimum number of items required before virtualization activates. Lists with fewer items will render all items normally without virtualization.
@@ -294,6 +294,13 @@
    * @type {undefined | boolean | { itemHeight?: number, containerHeight?: number, overscan?: number, threshold?: number, maxItems?: number }}
    */
   export let virtualize = undefined;
+
+  /**
+   * Set to `true` to let an option's label wrap onto as many lines as it needs
+   * instead of being truncated with an ellipsis.
+   * @type {boolean}
+   */
+  export let wrapOptions = false;
 
   /**
    * Set to `true` to render the dropdown menu in a portal,
@@ -330,22 +337,15 @@
     ListBoxSelection,
   } from "../ListBox";
   import HighlightSlot from "../ListBox/HighlightSlot.svelte";
-  import {
-    getMenuItemHeight,
-    getMenuMaxHeight,
-  } from "../ListBox/list-box-utils.js";
+  import { shouldVirtualizeMenu } from "../ListBox/list-box-utils.js";
+  import { createMenuWindow } from "../ListBox/menuWindow.js";
   import { debounce } from "../utils/debounce.js";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
   import { createScrollEndTracker } from "../utils/isScrollNearEnd.js";
   import { moveIndex } from "../utils/moveIndex.js";
   import { uniqueId } from "../utils/uniqueId.js";
-  import {
-    resetVirtualScrollOnClose,
-    scrollHighlightedIntoView,
-    scrollSelectedIntoView,
-    virtualListState,
-  } from "../utils/virtualize.js";
+  import { resetVirtualScrollOnClose } from "../utils/virtualize.js";
 
   const dispatch = createEventDispatcher();
   const scrollEndTracker = createScrollEndTracker();
@@ -378,6 +378,18 @@
   let lastSelectedItemId = null;
   /** Text content of the visually-hidden status live region. */
   let statusText = "";
+  /** @type {import("../ListBox/menuWindow.js").MenuWindowState} */
+  let menuState;
+
+  const menuWindow = createMenuWindow({
+    getContainer: () => listRef,
+    onScrollTop: (scrollTop) => {
+      listScrollTop = scrollTop;
+    },
+    onState: (state) => {
+      menuState = state;
+    },
+  });
 
   /**
    * @type {(data: { key: "field" | "selection"; ref: HTMLDivElement | HTMLButtonElement }) => void}
@@ -575,7 +587,12 @@
     announceStatus(filterResultsText(count));
   }, 800);
 
-  onMount(() => announceFilterResults.cancel);
+  onMount(() => {
+    return () => {
+      announceFilterResults.cancel();
+      menuWindow.destroy();
+    };
+  });
 
   afterUpdate(() => {
     // Compare by length, not by IDs. This is intentional: `on:select`
@@ -613,27 +630,14 @@
     if (
       open &&
       shouldVirtualize &&
-      virtualConfig &&
       highlightedIndex !== prevHighlightedIndex &&
       highlightedIndex >= 0 &&
       listRef
     ) {
       tick().then(() => {
-        if (listRef && virtualConfig && highlightedIndex >= 0) {
-          const nextScrollTop = scrollHighlightedIntoView({
-            highlightedIndex,
-            currentScrollTop: listRef.scrollTop ?? listScrollTop,
-            itemCount: itemsToUse.length,
-            itemHeight: virtualConfig.itemHeight,
-            containerHeight: virtualConfig.containerHeight,
-            overscan: virtualConfig.overscan ?? 3,
-            maxItems: virtualConfig.maxItems,
-          });
-          if (nextScrollTop !== null) {
-            listScrollTop = nextScrollTop;
-            listRef.scrollTop = nextScrollTop;
-          }
-        }
+        if (!listRef || highlightedIndex < 0) return;
+        if (highlightOrigin === "pointer") return;
+        menuWindow.scrollIntoView(highlightedIndex, "nearest");
       });
       prevHighlightedIndex = highlightedIndex;
     }
@@ -642,31 +646,19 @@
     const wasJustOpened = open && !prevOpen;
     if (wasJustOpened && shouldVirtualize && listRef) {
       tick().then(() => {
-        if (listRef && virtualConfig) {
-          // Find the index of the first selected item in the itemsToUse array
-          // (the actual rendered list, which may be sorted/filtered).
-          const selectedIndex =
-            selectedIds && selectedIds.length > 0
-              ? itemsToUse.findIndex((item) => item.id === selectedIds[0])
-              : -1;
-          const nextScrollTop = scrollSelectedIntoView({
-            selectedIndex,
-            itemCount: itemsToUse.length,
-            itemHeight: virtualConfig.itemHeight,
-            containerHeight: virtualConfig.containerHeight,
-          });
-
-          listScrollTop = nextScrollTop;
-          // Use requestAnimationFrame to ensure DOM is ready
-          requestAnimationFrame(() => {
-            if (listRef) {
-              listRef.scrollTop = nextScrollTop;
-            }
-          });
-        }
+        if (!listRef) return;
+        // Against `itemsToUse`, the rendered list, which sorting and filtering
+        // can order differently from `items`.
+        const selectedIndex =
+          selectedIds && selectedIds.length > 0
+            ? itemsToUse.findIndex((item) => item.id === selectedIds[0])
+            : -1;
+        menuWindow.scrollIntoView(selectedIndex, "top");
       });
     }
     prevOpen = open;
+
+    menuWindow.sync();
 
     // Reset scroll position when menu closes
     if (!open && prevOpen && shouldVirtualize) {
@@ -677,6 +669,7 @@
     }
     if (!open) {
       scrollEndTracker.reset();
+      menuWindow.reset();
     }
   });
 
@@ -686,6 +679,7 @@
   function handleMenuScroll(event) {
     const target = /** @type {HTMLElement} */ (event.target);
     listScrollTop = target.scrollTop;
+    menuWindow.noteScroll(target.scrollTop);
     const detail = scrollEndTracker.observe({
       scrollTop: target.scrollTop,
       scrollHeight: target.scrollHeight,
@@ -868,28 +862,32 @@
   $: activeDescendantId =
     highlightedId == null ? null : `${id}-${highlightedId}`;
 
-  $: shouldVirtualize =
-    virtualize === false
-      ? false
-      : virtualize !== undefined || items.length > 100;
+  $: shouldVirtualize = shouldVirtualizeMenu({ items, virtualize });
 
   $: itemsToUse = filterable ? filteredItems : sortedItems;
   $: scrollEndTracker.noteItemCount(itemsToUse.length);
 
-  $: menuMaxHeight = getMenuMaxHeight(size);
-
-  $: virtualState = virtualListState({
+  $: menuState = menuWindow.update({
     items: itemsToUse,
-    scrollTop: listScrollTop,
+
+    getKey: (item) => item.id,
     shouldVirtualize,
     virtualize,
-    defaults: {
-      itemHeight: getMenuItemHeight(size, { fluid: hasFluidMenuItems }),
-    },
+    wrapOptions,
+    size,
+    fluid: hasFluidMenuItems,
+    scrollTop: listScrollTop,
   });
-  $: virtualConfig = virtualState.config;
-  $: virtualData = virtualState.data;
-  $: itemsToRender = virtualState.itemsToRender;
+  $: ({
+    itemsToRender,
+    isVirtualized,
+    startIndex,
+    offsetY,
+    totalHeight,
+    menuMaxHeight,
+    isWindowed,
+    isMeasured,
+  } = menuState);
 
   $: multiSelectListBoxClass = [
     "bx--multi-select",
@@ -1253,6 +1251,7 @@
         anchor={fieldRef}
         {direction}
         highlightedId={activeDescendantId}
+        {wrapOptions}
         highlightScroll={highlightOrigin !== "pointer"}
         aria-multiselectable="true"
         aria-readonly={readonly || undefined}
@@ -1265,19 +1264,17 @@
           highlightOrigin = null;
         }}
         bind:ref={listRef}
-        style={effectivePortalMenu
-          ? `max-height: ${virtualConfig
-              ? `${virtualConfig.containerHeight}px; overflow-y: auto`
-              : menuMaxHeight};`
-          : virtualConfig
-            ? `max-height: ${virtualConfig.containerHeight}px; overflow-y: auto;`
+        style={isWindowed
+          ? `max-height: ${menuMaxHeight}; overflow-y: auto;`
+          : effectivePortalMenu
+            ? `max-height: ${menuMaxHeight};`
             : undefined}
       >
-        {#if virtualData?.isVirtualized}
-          <div style="height: {virtualData.totalHeight}px; position: relative;">
-            <div style="transform: translateY({virtualData.offsetY}px);">
+        {#if isVirtualized}
+          <div style:height="{totalHeight}px" style:position="relative">
+            <div style:transform="translateY({offsetY}px)">
               {#each itemsToRender as item, index (item.id)}
-                {@const actualIndex = virtualData.startIndex + index}
+                {@const actualIndex = startIndex + index}
                 {@const optionId = `${id}-${item.id}`}
                 {@const itemDisabled =
                   item.disabled ||
@@ -1301,6 +1298,7 @@
                     : item.checked}
                   aria-setsize={itemsToUse.length}
                   aria-posinset={actualIndex + 1}
+                  data-virtual-index={isMeasured ? actualIndex : undefined}
                   active={item.isSelectAll ? false : item.checked}
                   disabled={itemDisabled}
                   on:click={(event) => {
@@ -1385,6 +1383,7 @@
                   ? "mixed"
                   : allSelected
                 : item.checked}
+              data-virtual-index={isMeasured ? index : undefined}
               active={item.isSelectAll ? false : item.checked}
               disabled={itemDisabled}
               on:click={(event) => {

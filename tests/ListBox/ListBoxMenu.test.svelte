@@ -12,6 +12,7 @@
   export let anchor: ComponentProps<ListBoxMenu>["anchor"] = null;
   export let direction: ComponentProps<ListBoxMenu>["direction"] = "bottom";
   export let open: ComponentProps<ListBoxMenu>["open"] = false;
+  export let wrapOptions: ComponentProps<ListBoxMenu>["wrapOptions"] = false;
 </script>
 
 <div data-testid="anchor" bind:this={anchor}>Anchor</div>
@@ -23,6 +24,7 @@
   {anchor}
   {direction}
   {open}
+  {wrapOptions}
   on:scroll={(e) => onscroll?.(e)}
   {...$$restProps}
 >

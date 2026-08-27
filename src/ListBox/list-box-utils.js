@@ -49,3 +49,31 @@ export function getMenuItemHeight(size = "md", { fluid = false } = {}) {
   if (fluid) return FLUID_MENU_ITEM_HEIGHT;
   return MENU_ITEM_HEIGHT[size] ?? MENU_ITEM_HEIGHT.md;
 }
+
+/**
+ * Item count past which a menu windows itself without being asked. Matches
+ * `virtualize.js`'s own `threshold` default.
+ */
+const VIRTUALIZE_ITEM_COUNT_THRESHOLD = 100;
+
+/**
+ * Whether a listbox menu's options should be windowed. `virtualize={false}`
+ * refuses however long the list runs, supplying the prop at all asks for it,
+ * and with no prop a long enough list opts itself in.
+ *
+ * Separate from the windowing update because `ComboBox` needs the answer before
+ * it can work out which options that update receives.
+ *
+ * @param {Object} options
+ * @param {ArrayLike<unknown>} options.items The consumer's own items rather
+ * than the filtered subset, windowing being a property of the collection
+ * supplied and not of what a keystroke narrows it to.
+ * @param {boolean | object | undefined} options.virtualize
+ * @returns {boolean}
+ */
+export function shouldVirtualizeMenu({ items, virtualize }) {
+  if (virtualize === false) return false;
+  return (
+    virtualize !== undefined || items.length > VIRTUALIZE_ITEM_COUNT_THRESHOLD
+  );
+}

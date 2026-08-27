@@ -177,7 +177,10 @@
    * - `"hide"`: keep all options mounted and hide non-matching ones with the
    *   `hidden` attribute.
    *
-   * `"hide"` falls back to `"remove"` when virtualization is enabled.
+   * `"hide"` falls back to `"remove"` when virtualization is enabled, which
+   * also keeps `wrapOptions` correct on a windowed list: a hidden option has no
+   * rendered height, so measuring one would put a zero into offsets it does not
+   * occupy.
    * @type {"remove" | "hide"}
    */
   export let filterMode = "remove";
@@ -228,7 +231,7 @@
    * Set `virtualize={true}` to explicitly enable virtualization with default settings.
    *
    * Provide an object to customize virtualization behavior:
-   * - `itemHeight` (default: size-based, or 64px for fluid unless `condensed`): Height of each item in pixels. Override when custom slots change row height.
+   * - `itemHeight` (default: size-based, or 64px for fluid unless `condensed`): Height of each item in pixels. Override when custom slots change row height. Under `wrapOptions`, heights are measured from the rendered options and this serves as the starting estimate for ones not yet measured.
    * - `containerHeight` (default: 300): The maximum height in pixels of the dropdown container.
    * - `overscan` (default: 3): The number of extra items to render above and below the viewport for smoother scrolling. Higher values may cause more flickering during very fast scrolling.
    * - `threshold` (default: 100): The minimum number of items required before virtualization activates. Lists with fewer items will render all items normally without virtualization.
@@ -238,6 +241,13 @@
   export let virtualize = undefined;
 
   /**
+   * Set to `true` to let an option's label wrap onto as many lines as it needs
+   * instead of being truncated with an ellipsis.
+   * @type {boolean}
+   */
+  export let wrapOptions = false;
+
+  /**
    * Set to `true` to render the dropdown menu in a portal,
    * allowing it to escape containers with `overflow: hidden`.
    * When inside a Modal, defaults to `true` unless explicitly set to `false`.
@@ -245,7 +255,13 @@
    */
   export let portalMenu = undefined;
 
-  import { afterUpdate, createEventDispatcher, getContext, tick } from "svelte";
+  import {
+    afterUpdate,
+    createEventDispatcher,
+    getContext,
+    onMount,
+    tick,
+  } from "svelte";
   import Checkmark from "../icons/Checkmark.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
@@ -255,21 +271,14 @@
   import ListBoxMenuIcon from "../ListBox/ListBoxMenuIcon.svelte";
   import ListBoxMenuItem from "../ListBox/ListBoxMenuItem.svelte";
   import ListBoxSelection from "../ListBox/ListBoxSelection.svelte";
-  import {
-    getMenuItemHeight,
-    getMenuMaxHeight,
-  } from "../ListBox/list-box-utils.js";
+  import { shouldVirtualizeMenu } from "../ListBox/list-box-utils.js";
+  import { createMenuWindow } from "../ListBox/menuWindow.js";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
   import { createScrollEndTracker } from "../utils/isScrollNearEnd.js";
   import { moveIndex } from "../utils/moveIndex.js";
   import { uniqueId } from "../utils/uniqueId.js";
-  import {
-    resetVirtualScrollOnClose,
-    scrollHighlightedIntoView,
-    scrollSelectedIntoView,
-    virtualListState,
-  } from "../utils/virtualize.js";
+  import { resetVirtualScrollOnClose } from "../utils/virtualize.js";
 
   const dispatch = createEventDispatcher();
   const scrollEndTracker = createScrollEndTracker();
@@ -292,6 +301,25 @@
 
   /** @type {null | HTMLDivElement} */
   let fieldRef = null;
+
+  /** @type {import("../ListBox/menuWindow.js").MenuWindowState} */
+  let menuState;
+
+  const menuWindow = createMenuWindow({
+    getContainer: () => listRef,
+    onScrollTop: (scrollTop) => {
+      listScrollTop = scrollTop;
+    },
+    onState: (state) => {
+      menuState = state;
+    },
+  });
+
+  onMount(() => {
+    return () => {
+      menuWindow.destroy();
+    };
+  });
 
   /**
    * @returns {boolean}
@@ -319,6 +347,7 @@
   function handleMenuScroll(event) {
     const target = /** @type {HTMLElement} */ (event.target);
     listScrollTop = target.scrollTop;
+    menuWindow.noteScroll(target.scrollTop);
     const detail = scrollEndTracker.observe({
       scrollTop: target.scrollTop,
       scrollHeight: target.scrollHeight,
@@ -395,27 +424,14 @@
     if (
       open &&
       shouldVirtualize &&
-      virtualConfig &&
       highlightedIndex !== prevHighlightedIndex &&
       highlightedIndex >= 0 &&
       listRef
     ) {
       tick().then(() => {
-        if (listRef && virtualConfig && highlightedIndex >= 0) {
-          const nextScrollTop = scrollHighlightedIntoView({
-            highlightedIndex,
-            currentScrollTop: listRef.scrollTop ?? listScrollTop,
-            itemCount: filteredItems.length,
-            itemHeight: virtualConfig.itemHeight,
-            containerHeight: virtualConfig.containerHeight,
-            overscan: virtualConfig.overscan ?? 3,
-            maxItems: virtualConfig.maxItems,
-          });
-          if (nextScrollTop !== null) {
-            listScrollTop = nextScrollTop;
-            listRef.scrollTop = nextScrollTop;
-          }
-        }
+        if (!listRef || highlightedIndex < 0) return;
+        if (highlightOrigin === "pointer") return;
+        menuWindow.scrollIntoView(highlightedIndex, "nearest");
       });
       prevHighlightedIndex = highlightedIndex;
     }
@@ -436,23 +452,17 @@
     // Scroll to selected item when menu opens with virtualization
     if (wasJustOpened && shouldVirtualize && listRef) {
       tick().then(() => {
-        if (listRef && virtualConfig) {
-          const selectedIndex =
-            selectedId !== undefined && selectedItem
-              ? filteredItems.findIndex((item) => item.id === selectedId)
-              : -1;
-          const nextScrollTop = scrollSelectedIntoView({
-            selectedIndex,
-            itemCount: filteredItems.length,
-            itemHeight: virtualConfig.itemHeight,
-            containerHeight: virtualConfig.containerHeight,
-          });
-          listScrollTop = nextScrollTop;
-          listRef.scrollTop = nextScrollTop;
-        }
+        if (!listRef) return;
+        const selectedIndex =
+          selectedId !== undefined && selectedItem
+            ? filteredItems.findIndex((item) => item.id === selectedId)
+            : -1;
+        menuWindow.scrollIntoView(selectedIndex, "top");
       });
     }
     prevOpen = open;
+
+    menuWindow.sync();
 
     if (open) {
       ref.focus();
@@ -468,6 +478,7 @@
         listScrollTop = resetVirtualScrollOnClose();
       }
       scrollEndTracker.reset();
+      menuWindow.reset();
       highlightedIndex = -1;
       highlightOrigin = null;
       prevHighlightedIndex = -1;
@@ -525,10 +536,7 @@
   // Fluid (non-condensed) menu items are 64px tall (see css/_fluid-list-box.scss).
   // Portaled menus render outside the fluid wrapper, so they keep default heights.
   $: hasFluidMenuItems = isFluid && !condensed && !effectivePortalMenu;
-  $: shouldVirtualize =
-    virtualize === false
-      ? false
-      : virtualize !== undefined || items.length > 100;
+  $: shouldVirtualize = shouldVirtualizeMenu({ items, virtualize });
   $: hideMode = filterMode === "hide" && !shouldVirtualize;
   $: filteredItems = open ? items.filter((item) => filterFn(item, value)) : [];
   $: filteredIndexById = new Map(
@@ -541,20 +549,25 @@
       ? undefined
       : `${id}-${filteredItems[highlightedIndex].id}`;
 
-  $: menuMaxHeight = getMenuMaxHeight(size);
-
-  $: virtualState = virtualListState({
+  $: menuState = menuWindow.update({
     items: menuItems,
-    scrollTop: listScrollTop,
     shouldVirtualize,
     virtualize,
-    defaults: {
-      itemHeight: getMenuItemHeight(size, { fluid: hasFluidMenuItems }),
-    },
+    wrapOptions,
+    size,
+    fluid: hasFluidMenuItems,
+    scrollTop: listScrollTop,
   });
-  $: virtualConfig = virtualState.config;
-  $: virtualData = virtualState.data;
-  $: itemsToRender = virtualState.itemsToRender;
+  $: ({
+    itemsToRender,
+    isVirtualized,
+    startIndex,
+    offsetY,
+    totalHeight,
+    menuMaxHeight,
+    isWindowed,
+    isMeasured,
+  } = menuState);
 
   $: if (typeahead) {
     const topItem = filteredItems.find((item) => !item.disabled);
@@ -976,6 +989,7 @@
         anchor={fieldRef}
         {direction}
         {highlightedId}
+        {wrapOptions}
         highlightScroll={highlightOrigin !== "pointer"}
         on:scroll
         on:scroll={handleMenuScroll}
@@ -986,19 +1000,17 @@
           highlightOrigin = null;
         }}
         bind:ref={listRef}
-        style={effectivePortalMenu
-          ? `max-height: ${virtualConfig
-              ? `${virtualConfig.containerHeight}px; overflow-y: auto`
-              : menuMaxHeight};`
-          : virtualConfig
-            ? `max-height: ${virtualConfig.containerHeight}px; overflow-y: auto;`
+        style={isWindowed
+          ? `max-height: ${menuMaxHeight}; overflow-y: auto;`
+          : effectivePortalMenu
+            ? `max-height: ${menuMaxHeight};`
             : undefined}
       >
-        {#if virtualData?.isVirtualized}
-          <div style="height: {virtualData.totalHeight}px; position: relative;">
-            <div style="transform: translateY({virtualData.offsetY}px);">
+        {#if isVirtualized}
+          <div style:height="{totalHeight}px" style:position="relative">
+            <div style:transform="translateY({offsetY}px)">
               {#each itemsToRender as item, index (item.id)}
-                {@const actualIndex = virtualData.startIndex + index}
+                {@const actualIndex = startIndex + index}
                 {@const selected = selectedItem?.id === item.id}
                 {@const optionId = `${id}-${item.id}`}
                 <ListBoxMenuItem
@@ -1008,6 +1020,7 @@
                   hasLeftIcon={Boolean($$slots.icon || item.icon)}
                   aria-setsize={filteredItems.length}
                   aria-posinset={actualIndex + 1}
+                  data-virtual-index={isMeasured ? actualIndex : undefined}
                   on:click={(event) => {
                     if (item.disabled) {
                       event.stopPropagation();
@@ -1093,6 +1106,7 @@
               hidden={hideMode && matchIndex === undefined ? true : undefined}
               aria-setsize={filteredItems.length}
               aria-posinset={matchIndex === undefined ? undefined : matchIndex + 1}
+              data-virtual-index={isMeasured ? matchIndex : undefined}
               on:click={(event) => {
                 if (item.disabled) {
                   event.stopPropagation();

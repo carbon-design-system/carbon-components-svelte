@@ -44,6 +44,13 @@
   export let portalHostClass = undefined;
 
   /**
+   * Set to `true` to let an option's label wrap onto as many lines as it
+   * needs instead of being truncated with an ellipsis.
+   * @type {boolean}
+   */
+  export let wrapOptions = false;
+
+  /**
    * DOM id of the highlighted option (`{instanceId}-{item.id}`).
    * Applied as a two-node class change so `{#each}` does not re-run
    * every `ListBoxMenuItem` on ArrowDown.
@@ -80,6 +87,7 @@
         role="listbox"
         id="menu-{id}"
         class:bx--list-box__menu={true}
+        class:bx--list-box__menu--wrap-options={wrapOptions}
         style="position: static; {$$restProps.style || ''}"
         {...$$restProps}
         on:scroll
@@ -95,6 +103,7 @@
     role="listbox"
     id="menu-{id}"
     class:bx--list-box__menu={true}
+    class:bx--list-box__menu--wrap-options={wrapOptions}
     {...$$restProps}
     on:scroll
     on:mouseleave
