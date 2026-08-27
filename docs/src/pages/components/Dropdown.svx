@@ -155,6 +155,16 @@ Set `open` to `true` to render the dropdown already expanded. The prop is bindab
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
+### Wrapped options
+
+Option labels are truncated to one line. At a 320px viewport, that hides text and can leave two options looking identical, a WCAG 1.4.10 Reflow failure.
+
+Set `wrapOptions` to let a label take as many lines as it needs. Lines break between words, and mid-word only when a word is too long to fit a line by itself. A [custom slot](#custom-slot) wraps with the label.
+
+It defaults to `false` because wrapping changes option heights.
+
+<FileSource src="/framed/Dropdown/WrapOptions" />
+
 ## Virtualization
 
 Virtualization renders only the items currently visible in the viewport, improving performance for large lists.

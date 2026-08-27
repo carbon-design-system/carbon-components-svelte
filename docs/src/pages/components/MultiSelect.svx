@@ -273,6 +273,16 @@ By default, item height matches the menu row for each size: 24px (xs), 32px (sm)
 
 <FileSource src="/framed/MultiSelect/VirtualizeItemHeight" />
 
+## Wrapped options
+
+Option labels are truncated to one line. At a 320px viewport, that hides text and can leave two options looking identical, a WCAG 1.4.10 Reflow failure.
+
+Set `wrapOptions` to let a label take as many lines as it needs. Lines break between words, and mid-word only when a word is too long to fit a line by itself. Default slot markup wraps with the label: a [highlighted match](#highlight-matches) stays marked across the break it is split by.
+
+It defaults to `false` because wrapping changes option heights.
+
+<FileSource src="/framed/MultiSelect/WrapOptions" />
+
 ## Sizes
 
 The `size` prop sets the field height. The default is medium.

@@ -400,6 +400,16 @@ When inside a [Modal](/components/Modal#modal-with-dropdowns), `portalMenu` defa
 
 <FileSource src="/framed/ComboBox/ComboBoxPortalMenu" />
 
+### Wrapped options
+
+Option labels are truncated to one line. At a 320px viewport, that hides text and can leave two options looking identical, a WCAG 1.4.10 Reflow failure.
+
+Set `wrapOptions` to let a label take as many lines as it needs. Lines break between words, and mid-word only when a word is too long to fit a line by itself. Default slot markup wraps with the label: a [highlighted match](#highlight-matches) stays marked across the break it is split by.
+
+It defaults to `false` because wrapping changes option heights.
+
+<FileSource src="/framed/ComboBox/WrapOptions" />
+
 ### Programmatic access
 
 Bind to `open` to control the dropdown menu programmatically, such as opening it from an external trigger.
