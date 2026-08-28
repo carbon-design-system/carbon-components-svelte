@@ -67,7 +67,13 @@ export function readMenuMetrics(page: Page) {
   return page.getByRole("listbox").evaluate((el) => ({
     clientHeight: el.clientHeight,
     scrollHeight: el.scrollHeight,
+    scrollTop: el.scrollTop,
   }));
+}
+
+/** Where the menu is scrolled to, which is what "the menu moved" means. */
+export async function readMenuScrollTop(page: Page) {
+  return (await readMenuMetrics(page)).scrollTop;
 }
 
 /** Every rendered option's box, in the order they are laid out. */
@@ -122,6 +128,31 @@ export async function stepDown(
   await field.press("ArrowDown");
   await page.waitForTimeout(60);
   return isFullyInView(highlighted);
+}
+
+/** The option the highlight is on, by the text it renders. */
+export async function readHighlightedOption(page: Page) {
+  const text = await page
+    .locator(".bx--list-box__menu-item--highlighted")
+    .first()
+    .textContent();
+  return text?.trim() ?? "";
+}
+
+/**
+ * Put the pointer on whatever option the menu's bottom edge runs through,
+ * which is the option a hover would move the menu for: measured placement asks
+ * whether an option is fully visible rather than merely rendered, so a clipped
+ * one would be pulled out from under the pointer.
+ *
+ * A mouse move rather than a locator hover, because hovering a locator scrolls
+ * it into view first, which is the very thing being judged.
+ */
+export async function hoverBottomEdge(page: Page) {
+  const box = await page.getByRole("listbox").boundingBox();
+  expect(box).not.toBeNull();
+  if (!box) return;
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height - 3);
 }
 
 /** Options must abut one another: no blank gap, no overlap. */

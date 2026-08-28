@@ -119,8 +119,8 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
    */
   let pending = null;
   /**
-   * Position last written here, to tell a scroll the reader drove from one this
-   * caused.
+   * The position this last vouched for: written here, or read from a container
+   * this left where it was. Anything else is the reader's.
    */
   let lastWrittenScrollTop = -1;
 
@@ -192,7 +192,8 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
     }
 
     const next = measuredPosition(index, align, container.scrollTop, config);
-    if (next !== null) scrollTo(next);
+    if (next === null) lastWrittenScrollTop = container.scrollTop;
+    else scrollTo(next);
     pending = {
       index,
       align,
@@ -249,6 +250,11 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
     const container = getContainer();
     if (!isMeasuredWindow || !config || !container) return;
 
+    // Read where the reader left the menu before the correction below writes
+    // to it. After that write, the position on the container is one this made,
+    // and a scroll the reader had made would be indistinguishable from it.
+    noteScroll(container.scrollTop);
+
     const correction = getMeasuredScrollCorrection({
       scrollTop: container.scrollTop,
       itemCount,
@@ -273,6 +279,11 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
   function settle() {
     const container = getContainer();
     if (!pending || !isMeasuredWindow || !config || !container) return;
+
+    // Read rather than wait: a scroll event and the measurer's own frame are
+    // not ordered against each other.
+    noteScroll(container.scrollTop);
+    if (!pending) return;
 
     if (pending.heights !== heights) {
       const previousScrollTop = pending.scrollTop;
@@ -470,14 +481,29 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
   }
 
   /**
-   * Note a scroll event. A position other than the one last written came from
-   * the reader, whose intent is more recent, so it supersedes any request.
+   * Note where the menu is scrolled to. A position other than the one last
+   * written here is the reader's, and the reader's intent is more recent than
+   * an outstanding request, so it supersedes one.
+   *
+   * Called from the scroll handler, and called directly by the paths that read
+   * the container themselves, where waiting for the event would be too late.
+   *
    * @param {number} scrollTop
    */
   function noteScroll(scrollTop) {
     if (Math.abs(scrollTop - lastWrittenScrollTop) > 1) {
       pending = null;
     }
+  }
+
+  /**
+   * Drop the outstanding request, keeping everything measured for it. For a
+   * caller that knows the request is spent when no scroll position says so:
+   * a pointer landing on another option takes the highlight away from the one
+   * that asked, and moves nothing this could read.
+   */
+  function cancelRequest() {
+    pending = null;
   }
 
   /**
@@ -503,5 +529,13 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
     measurer.disconnect();
   }
 
-  return { update, scrollIntoView, sync, noteScroll, reset, destroy };
+  return {
+    update,
+    scrollIntoView,
+    sync,
+    noteScroll,
+    cancelRequest,
+    reset,
+    destroy,
+  };
 }
