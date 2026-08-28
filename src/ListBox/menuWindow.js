@@ -21,21 +21,6 @@ import { getMenuItemHeight, getMenuMaxHeight } from "./list-box-utils.js";
  */
 
 /**
- * Whether two collections hold the same entries in the same positions.
- *
- * @param {ArrayLike<unknown>} a
- * @param {ArrayLike<unknown>} b
- * @returns {boolean}
- */
-function isSameSequence(a, b) {
-  if (a.length !== b.length) return false;
-  for (let index = 0; index < a.length; index++) {
-    if (a[index] !== b[index]) return false;
-  }
-  return true;
-}
-
-/**
  * The consumer's `virtualize` prop with any `measured` key dropped.
  *
  * `wrapOptions` is the only thing that turns measuring on.
@@ -320,12 +305,30 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
    * @param {((item: any, index: number) => unknown) | undefined} getKey
    */
   function noteCollection(items, getKey) {
-    const keys = getKey ? Array.from(items, getKey) : items;
-    if (keys === knownKeys) return;
+    if (isSameCollection(items, getKey)) return;
+    knownKeys = getKey ? Array.from(items, getKey) : items;
+    reset();
+  }
 
-    const isChanged = !isSameSequence(knownKeys, keys);
-    knownKeys = keys;
-    if (isChanged) reset();
+  /**
+   * Whether the keys held still describe the options the menu renders, asked
+   * without materialising a key per option: `update` runs on every scroll
+   * event, and a long list would allocate an array per event to learn nothing.
+   *
+   * @param {ArrayLike<unknown>} items
+   * @param {((item: any, index: number) => unknown) | undefined} getKey
+   * @returns {boolean}
+   */
+  function isSameCollection(items, getKey) {
+    if (knownKeys === items) return true;
+    if (knownKeys.length !== items.length) return false;
+
+    for (let index = 0; index < items.length; index++) {
+      const key = getKey ? getKey(items[index], index) : items[index];
+      if (knownKeys[index] !== key) return false;
+    }
+
+    return true;
   }
 
   /**
