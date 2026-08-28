@@ -4,7 +4,9 @@ import {
   getMenuMaxHeight,
   MENU_ITEM_HEIGHT,
   MENU_MAX_HEIGHT,
+  shouldVirtualizeMenu,
 } from "../../src/ListBox/list-box-utils.js";
+import { DEFAULT_VIRTUAL_LIST_CONFIG } from "../../src/utils/virtualize.js";
 
 describe("getMenuMaxHeight", () => {
   it("returns default when size is undefined (optional size guard)", () => {
@@ -64,5 +66,42 @@ describe("getMenuItemHeight", () => {
   it("uses size-based heights when fluid is false", () => {
     expect(getMenuItemHeight("sm", { fluid: false })).toBe(32);
     expect(getMenuItemHeight("lg", { fluid: false })).toBe(48);
+  });
+});
+
+describe("shouldVirtualizeMenu", () => {
+  const items = (count: number) =>
+    Array.from({ length: count }, (_, id) => ({ id }));
+
+  it("refuses however long the list runs", () => {
+    expect(
+      shouldVirtualizeMenu({ items: items(5000), virtualize: false }),
+    ).toBe(false);
+  });
+
+  it("takes the prop as the ask, whatever the length", () => {
+    expect(shouldVirtualizeMenu({ items: items(3), virtualize: true })).toBe(
+      true,
+    );
+    expect(shouldVirtualizeMenu({ items: items(3), virtualize: {} })).toBe(
+      true,
+    );
+  });
+
+  it("windows a list of its own past the threshold, not at it", () => {
+    const { threshold } = DEFAULT_VIRTUAL_LIST_CONFIG;
+
+    // `virtualize.js` windows *at* its threshold where this gate windows
+    // *past* it. This gate decides first, so this is what a list with no prop
+    // gets, and it is what the components did before the gate was extracted.
+    expect(
+      shouldVirtualizeMenu({ items: items(threshold), virtualize: undefined }),
+    ).toBe(false);
+    expect(
+      shouldVirtualizeMenu({
+        items: items(threshold + 1),
+        virtualize: undefined,
+      }),
+    ).toBe(true);
   });
 });
