@@ -58,6 +58,10 @@ export type MenuWindow<
   sync(): void | Promise<void>;
   /** Note a scroll event, so the reader supersedes an outstanding request. */
   noteScroll(scrollTop: number): void;
+  /**
+   * Drop the outstanding request, keeping what was measured for it.
+   */
+  cancelRequest(): void;
   /** Forget the measurements on close; the estimate they averaged to survives. */
   reset(): void;
   /** Stop observing for good. */

@@ -908,6 +908,19 @@ describe("createMenuWindow: closing and teardown", () => {
     expect(placeFifthOption(harness)).toBeCloseTo(PLACED_ON_ESTIMATE, 6);
   });
 
+  test("withdrawing a request keeps the heights it was placed against", async () => {
+    const observer = installManualResizeObserver();
+    const harness = setup();
+    const items = buildItems(300);
+
+    await measure(harness, observer, items);
+    harness.menu.cancelRequest();
+
+    // Withdrawing is not closing. The reader is still reading this menu, so
+    // the heights measured for it still describe what is on screen.
+    expect(placeFifthOption(harness)).toBe(PLACED_ON_MEASURED);
+  });
+
   test("has nothing to say about an unmeasured list on close", () => {
     const harness = setup();
     const items = buildItems(300);
@@ -1088,6 +1101,29 @@ describe("createMenuWindow: the measured scroll position", () => {
     expect(container.scrollTop).toBe(100);
   });
 
+  test("a reader's move supersedes a request, reported or not", async () => {
+    const observer = installManualResizeObserver();
+    const { container, menu, render } = setupPlaced({
+      optionHeights: { 2: 320 },
+    });
+    render();
+
+    menu.scrollIntoView(2, "nearest");
+    await menu.sync();
+    expect(container.scrollTop).toBe(100);
+
+    // A position the reader took that no scroll event has reported yet. A
+    // scroll event and the measurer's own frame are not ordered against each
+    // other, so waiting to be told leaves a batch free to arrive first and
+    // place the option against a position the reader has already left.
+    container.scrollTop = 4000;
+    render();
+    await menu.sync();
+    await observer.deliverAll();
+
+    expect(container.scrollTop).toBe(4000);
+  });
+
   test("keeps a request through the scroll event its own write produced", async () => {
     installManualResizeObserver();
     const { container, menu, render } = setupPlaced({
@@ -1100,6 +1136,22 @@ describe("createMenuWindow: the measured scroll position", () => {
     await menu.sync();
 
     expect(container.scrollTop).toBe(100);
+  });
+
+  test("a withdrawn request is not placed later", async () => {
+    installManualResizeObserver();
+    const { container, menu, render } = setupPlaced({
+      optionHeights: { 2: 320 },
+    });
+    render();
+
+    menu.scrollIntoView(2, "nearest");
+    // The caller has learned the reader moved on, which nothing here can see:
+    // a pointer landing on another option moves no scroll position.
+    menu.cancelRequest();
+    await menu.sync();
+
+    expect(container.scrollTop).toBe(0);
   });
 
   test("a close drops the request so nothing re-places the option", async () => {

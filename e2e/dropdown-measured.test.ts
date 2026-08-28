@@ -1,8 +1,11 @@
 import { expect, test } from "@playwright/test";
 import {
   expectMenuReadsContinuously,
+  hoverBottomEdge,
   isFullyInView,
+  readHighlightedOption,
   readMenuMetrics,
+  readMenuScrollTop,
   readOptionBoxes,
   SLACK,
   scrollToEnd,
@@ -57,6 +60,48 @@ test.describe("Dropdown measured item heights", () => {
     await expectMenuReadsContinuously(page);
   });
 
+  test("hovering the option the bottom edge cuts off leaves the menu alone", async ({
+    page,
+  }) => {
+    const held = await readMenuScrollTop(page);
+
+    await hoverBottomEdge(page);
+    await page.waitForTimeout(200);
+
+    // The pointer highlights whatever it lands on. Bringing a clipped option
+    // fully into view would scroll the list out from under the reader.
+    expect(await readMenuScrollTop(page)).toBe(held);
+  });
+
+  test("a hover ends the request the keyboard left behind", async ({
+    page,
+  }) => {
+    // `End` reaches the far end of the list in one jump, which the other two
+    // components' filterable fields read as a caret key. The menu window is
+    // shared, so proving it here proves it for the three.
+    await page.getByRole("combobox", { name: "Items" }).press("End");
+    await page.waitForTimeout(200);
+    const placed = await readHighlightedOption(page);
+
+    // The pointer takes the highlight off the option the keyboard placed. No
+    // scroll position moves, so nothing but this tells the menu that the
+    // request which placed it is spent.
+    await hoverBottomEdge(page);
+    await page.waitForTimeout(200);
+
+    // Every option grows, as a web font swapping in or the reader changing
+    // zoom would grow them, and no render pass says so. That carries the
+    // option the keyboard placed off the end of the menu, and a request still
+    // standing would fetch it back.
+    await page.evaluate(() => {
+      document.documentElement.style.fontSize = "200%";
+    });
+    await page.waitForTimeout(300);
+
+    await expect(
+      page.getByRole("option").filter({ hasText: placed }),
+    ).toHaveCount(0);
+  });
   test("stays correctly laid out when option heights change with the menu open", async ({
     page,
   }) => {
