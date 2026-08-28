@@ -1,3 +1,5 @@
+import { DEFAULT_VIRTUAL_LIST_CONFIG } from "../utils/virtualize.js";
+
 /**
  * Max height values for listbox/dropdown menus by size.
  * @type {Readonly<{ xs: string; sm: string; md: string; lg: string; xl: string }>}
@@ -51,12 +53,6 @@ export function getMenuItemHeight(size = "md", { fluid = false } = {}) {
 }
 
 /**
- * Item count past which a menu windows itself without being asked. Matches
- * `virtualize.js`'s own `threshold` default.
- */
-const VIRTUALIZE_ITEM_COUNT_THRESHOLD = 100;
-
-/**
  * Whether a listbox menu's options should be windowed. `virtualize={false}`
  * refuses however long the list runs, supplying the prop at all asks for it,
  * and with no prop a long enough list opts itself in.
@@ -74,6 +70,7 @@ const VIRTUALIZE_ITEM_COUNT_THRESHOLD = 100;
 export function shouldVirtualizeMenu({ items, virtualize }) {
   if (virtualize === false) return false;
   return (
-    virtualize !== undefined || items.length > VIRTUALIZE_ITEM_COUNT_THRESHOLD
+    virtualize !== undefined ||
+    items.length > DEFAULT_VIRTUAL_LIST_CONFIG.threshold
   );
 }
