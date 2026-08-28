@@ -367,6 +367,7 @@
 
   $: menuState = menuWindow.update({
     items,
+    getKey: (item) => item.id,
     shouldVirtualize,
     virtualize,
     wrapOptions,
