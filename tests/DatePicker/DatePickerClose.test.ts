@@ -1,4 +1,10 @@
-import { cleanup, render, screen, waitFor } from "@testing-library/svelte";
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import DatePickerClose from "./DatePickerClose.test.svelte";
@@ -32,6 +38,54 @@ describe("DatePicker close event", () => {
     expect(calendar).not.toHaveClass("open");
     expect(onClose).toHaveBeenCalledTimes(1);
     expect(onClose.mock.calls[0][0].detail.trigger).toBe("select");
+  });
+
+  it("keeps the calendar open when a click bubbles from outside after a mousedown inside (e.g. modal scroll/blur)", async () => {
+    const onClose = vi.fn();
+    render(DatePickerClose, { props: { onClose } });
+
+    await user.click(screen.getByLabelText("Date"));
+    const calendar = await screen.findByLabelText("calendar-container");
+    expect(calendar).toHaveClass("open");
+
+    fireEvent.pointerDown(calendar);
+    document.body.dispatchEvent(
+      new MouseEvent("click", { bubbles: true, cancelable: true }),
+    );
+
+    expect(calendar).toHaveClass("open");
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
+  it("keeps the calendar open while tabbing between range inputs, closes on tabbing out", async () => {
+    const onClose = vi.fn();
+    const { container } = render(DatePickerClose, {
+      props: { onClose, datePickerType: "range" },
+    });
+    // A focusable element after the date picker so tabbing past the end
+    // input has a real next target (a null relatedTarget on blur means
+    // focus left the document entirely, which blurInput deliberately
+    // ignores to avoid replaying the open animation on tab-away/tab-back).
+    const nextButton = document.createElement("button");
+    nextButton.textContent = "next";
+    container.appendChild(nextButton);
+
+    const startInput = screen.getByLabelText("Start date");
+    const endInput = screen.getByLabelText("End date");
+
+    await user.click(startInput);
+    const calendar = await screen.findByLabelText("calendar-container");
+    expect(calendar).toHaveClass("open");
+
+    await user.tab();
+    expect(endInput).toHaveFocus();
+    expect(onClose).not.toHaveBeenCalled();
+    expect(calendar).toHaveClass("open");
+
+    await user.tab();
+    expect(nextButton).toHaveFocus();
+    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(calendar).not.toHaveClass("open");
   });
 
   it('dispatches close with trigger "escape-key" when Escape is pressed', async () => {
