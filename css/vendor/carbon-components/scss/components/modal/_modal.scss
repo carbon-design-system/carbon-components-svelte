@@ -269,7 +269,7 @@
     grid-row: -1/-1;
   }
 
-  .#{$prefix}--modal-footer .#{$prefix}--btn {
+  .#{$prefix}--modal-footer > .#{$prefix}--btn {
     max-width: none;
     height: to-rem(64px);
     flex: 0 1 50%;
@@ -278,7 +278,7 @@
     margin: 0;
   }
 
-  .#{$prefix}--modal-footer--three-button .#{$prefix}--btn {
+  .#{$prefix}--modal-footer--three-button > .#{$prefix}--btn {
     flex: 0 1 25%;
     align-items: flex-start;
   }
