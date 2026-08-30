@@ -125,6 +125,7 @@
       {/if}
       <slot />
     </div>
+    <slot name="actions" />
     {#if !hideCloseButton}
       <NotificationButton
         iconDescription={closeButtonDescription}

@@ -1,6 +1,6 @@
 ---
-components: ["ToastNotification"]
-description: Toast notifications are non-modal, time-based messages that appear briefly and dismiss automatically. They support multiple types and custom content.
+components: ["ToastNotification", "NotificationActionButton"]
+description: Toast notifications are non-modal, time-based messages that appear briefly and dismiss automatically. They support multiple types, custom content, and actions.
 ---
 
 <script>
@@ -53,6 +53,12 @@ Customize the notification content using slots for more flexibility.
   <strong slot="subtitleChildren">An internal server error occurred.</strong>
   <strong slot="captionChildren">{new Date().toLocaleString()}</strong>
 </ToastNotification>
+
+## Actions
+
+Add interactive elements with the actions slot. Use [NotificationActionButton](InlineNotification#actions) for undo or retry after a destructive action.
+
+<FileSource src="/framed/ToastNotification/ToastNotificationUndo" />
 
 ## Close button
 
