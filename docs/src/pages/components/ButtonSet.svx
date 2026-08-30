@@ -7,6 +7,8 @@ description: Group related buttons together with consistent spacing and alignmen
   import Login from "carbon-icons-svelte/lib/Login.svelte";
 </script>
 
+For a custom modal or panel footer that needs size-aware stacking (one to four actions, ordered automatically by `kind`), use [ActionSet](/components/ActionSet) instead, which wraps `ButtonSet` with that behavior built in. [Modal](/components/Modal) builds its footer from props.
+
 ## Basic
 
 Place buttons side by side in a horizontal layout.
