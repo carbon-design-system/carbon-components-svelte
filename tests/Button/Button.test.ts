@@ -3,6 +3,7 @@ import type ButtonComponent from "carbon-components-svelte/Button/Button.svelte"
 import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
 import Button from "./Button.test.svelte";
+import ButtonInActionSetContext from "./ButtonInActionSetContext.test.svelte";
 import ButtonInModal from "./ButtonInModal.test.svelte";
 import ButtonPortalAdjacent from "./ButtonPortalAdjacent.test.svelte";
 import HeaderGlobalActionPortal from "./HeaderGlobalActionPortal.test.svelte";
@@ -392,6 +393,20 @@ describe("Button", () => {
     const container = screen.getByTestId("badge-size-override");
     const button = container.querySelector("button");
 
+    expect(button).toHaveClass("bx--btn--lg");
+    expect(button).not.toHaveClass("bx--btn--sm");
+  });
+
+  it("falls back to the size from an ancestor `carbon:ActionSet` context", () => {
+    render(ButtonInActionSetContext);
+
+    expect(screen.getByRole("button")).toHaveClass("bx--btn--sm");
+  });
+
+  it("does not override a Button's own size with the ActionSet context", () => {
+    render(ButtonInActionSetContext, { size: "lg" });
+
+    const button = screen.getByRole("button");
     expect(button).toHaveClass("bx--btn--lg");
     expect(button).not.toHaveClass("bx--btn--sm");
   });
