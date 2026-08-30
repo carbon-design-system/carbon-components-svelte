@@ -207,6 +207,7 @@
           API documentation is
           <Link
             inline
+            size="lg"
             href="https://github.com/carbon-design-system/sveld"
             target="_blank"
           >
