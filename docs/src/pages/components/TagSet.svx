@@ -153,6 +153,8 @@ Override the `overflowTooltip` slot to replace the default plain-text tooltip wi
 
 Set `filter` on a `Tag` to render it as closable. `TagSet` dispatches `close:tag` with `{ tag, index }` instead of taking a per-tag handler: remove the tag from your own state in response.
 
+After you remove the tag, `TagSet` moves focus to the next close button when dismiss came from that control (for example <DocKbd label="Enter" /> or <DocKbd label="Space" /> on the close icon, or a pointer click on it). If there is no next close button, focus moves to the previous one, or to the "+N" overflow trigger when present. A visually hidden polite live region announces "Filter X removed". Set `manageFocusOnClose` to `false` to keep focus management under your own control.
+
 <FileSource src="/framed/TagSet/TagSetDismissible" />
 
 ## Events

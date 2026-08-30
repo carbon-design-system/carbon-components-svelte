@@ -70,6 +70,14 @@
    */
   export let gap = 3;
 
+  /**
+   * Move focus to a neighboring close button (or the "+N" overflow trigger)
+   * after a filter tag is dismissed via its close button. Set to `false` to
+   * opt out. Focus is only moved when the close button (or its tag) held
+   * focus at dismiss time — pointer activity elsewhere is left alone.
+   */
+  export let manageFocusOnClose = true;
+
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
   import Stack from "../Stack/Stack.svelte";
@@ -87,6 +95,9 @@
   const sizeStore = writable(size);
   $: sizeStore.set(size);
 
+  /** Visually hidden polite live region text after a filter tag is dismissed. */
+  let liveAnnouncement = "";
+
   // Tags register in mount order, which differs from DOM order when they are
   // conditionally rendered. Sort by document position right at registration
   // time so the fit calculation and overflow tooltip track the rendered
@@ -101,8 +112,58 @@
     });
   }
 
+  /** Visible (non-overflow) filter-tag close buttons, in DOM order. */
+  function getVisibleCloseButtons() {
+    if (!wrapperRef) return [];
+    return Array.from(
+      wrapperRef.querySelectorAll(
+        '.bx--tag-set__space > .bx--tag:not([data-overflow="true"]) .bx--tag__close-icon:not([disabled])',
+      ),
+    );
+  }
+
+  function focusNeighborAfterClose(index) {
+    const closeButtons = getVisibleCloseButtons();
+    const next = closeButtons[index] ?? closeButtons[index - 1];
+    if (next instanceof HTMLElement) {
+      next.focus();
+      return;
+    }
+
+    const overflowTrigger = wrapperRef?.querySelector(
+      ".bx--tag-set-overflow:not(.bx--tag-set-overflow--empty) .bx--tooltip__trigger",
+    );
+    if (overflowTrigger instanceof HTMLElement) {
+      overflowTrigger.focus();
+    }
+  }
+
   function handleTagClose(item) {
-    dispatch("close:tag", { tag: item, index: $items.indexOf(item) });
+    const index = $items.indexOf(item);
+    const label = item.label;
+    const active =
+      typeof document === "undefined" ? null : document.activeElement;
+    // Only move focus when dismiss came from the close button / its tag
+    // (keyboard or pointer on that control). Do not steal focus if something
+    // else was focused when close fired.
+    const shouldManageFocus =
+      manageFocusOnClose &&
+      item.node != null &&
+      active instanceof Node &&
+      item.node.contains(active);
+
+    liveAnnouncement = label ? `Filter ${label} removed` : "Filter removed";
+    dispatch("close:tag", { tag: item, index });
+
+    if (!shouldManageFocus) return;
+
+    const closedId = item.id;
+    tick().then(() => {
+      // Consumer must remove the tag for focus to move; if it is still
+      // registered, leave focus alone.
+      if ($items.some((tag) => tag.id === closedId)) return;
+      focusNeighborAfterClose(index);
+    });
   }
 
   // Route register, unregister, and update through the same batched queue.
@@ -240,4 +301,7 @@
       </svelte:fragment>
     </TagSetOverflow>
   </Stack>
+  <div aria-live="polite" aria-atomic="true" class:bx--visually-hidden={true}>
+    {liveAnnouncement}
+  </div>
 </div>
