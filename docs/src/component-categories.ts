@@ -34,6 +34,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
   {
     label: "Actions",
     components: [
+      "ActionSet",
       "Button",
       "ButtonSet",
       "Toolbar",
