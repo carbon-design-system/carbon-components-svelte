@@ -8,7 +8,7 @@ The modal is an all-in-one component configured through props, making it ideal f
 
 ## Basic
 
-Display a modal dialog with a header, content area, and footer. Use primary and secondary actions for confirmations or input. Neither button closes the modal automatically — wire up `on:submit` and `on:click:button--secondary` to set `open` to `false` yourself; see [Events](#events).
+Display a modal dialog with a header, content area, and footer. Use primary and secondary actions for confirmations or input. Neither button closes the modal automatically. Wire up `on:submit` and `on:click:button--secondary` to set `open` to `false` yourself; see [Events](#events).
 
 <FileSource src="/framed/Modal/Modal" />
 
@@ -101,6 +101,10 @@ Add up to two secondary actions with `secondaryButtons`, which replaces the sing
 
 <FileSource src="/framed/Modal/3ButtonModal" />
 
+### Custom footer with ActionSet
+
+Modal builds its footer from `primaryButtonText` and `secondaryButtons` and has no footer slot. For a custom footer composed from `Button`s, use [ActionSet](/components/ActionSet) in [ComposedModal](/components/ComposedModal#custom-footer-with-actionset)'s `ModalFooter`.
+
 ### Button with icon
 
 Enhance modal buttons with icons for better visual context and clarity.
@@ -133,7 +137,7 @@ Wrap the nested modal in [Portal](/components/Portal) so it renders outside the 
 
 ## Portal and dropdowns
 
-Render the modal — or components inside it — outside normal DOM boundaries.
+Render the modal, or components inside it, outside normal DOM boundaries.
 
 ### With portal
 
@@ -143,7 +147,7 @@ Wrap the modal in a portal to escape parent containers with `overflow: hidden` o
 
 ### Modal with dropdowns
 
-Components with menus — such as a combo box, dropdown, multi-select, date picker, or overflow menu — automatically render their menus in a floating portal when used inside a modal. The menus are positioned relative to their trigger and are not clipped by the modal's overflow or z-index stacking.
+Components with menus, such as a combo box, dropdown, multi-select, date picker, or overflow menu, automatically render their menus in a floating portal when used inside a modal. The menus are positioned relative to their trigger and are not clipped by the modal's overflow or z-index stacking.
 
 Set `portalMenu={false}` on these components to opt out. In this example, the modal itself is wrapped in a portal.
 
@@ -189,13 +193,13 @@ Disable closing the modal when clicking outside with `preventCloseOnClickOutside
 
 ### Hide close button
 
-Set `hideCloseButton` to `true` to remove the header close button. Use this for forced-choice dialogs such as auth walls or terms acceptance. Always provide an alternative dismiss path — typically footer actions — and pair with `preventCloseOnClickOutside` when outside clicks should not dismiss the dialog. <DocKbd label="Escape" /> still closes the modal unless you cancel the `close` event.
+Set `hideCloseButton` to `true` to remove the header close button. Use this for forced-choice dialogs such as auth walls or terms acceptance. Always provide an alternative dismiss path, typically footer actions, and pair with `preventCloseOnClickOutside` when outside clicks should not dismiss the dialog. <DocKbd label="Escape" /> still closes the modal unless you cancel the `close` event.
 
 <FileSource src="/framed/Modal/ModalHideCloseButton" />
 
 ## Events
 
-Modal dispatches events for its lifecycle and button interactions. Only the close button, <DocKbd label="Escape" />, and (by default) an outside click close the modal automatically — see [Closing](#closing) above. Every other action leaves `open` untouched; handle the event and set `open` to `false` yourself when the action should dismiss the dialog.
+Modal dispatches events for its lifecycle and button interactions. Only the close button, <DocKbd label="Escape" />, and (by default) an outside click close the modal automatically. See [Closing](#closing) above. Every other action leaves `open` untouched; handle the event and set `open` to `false` yourself when the action should dismiss the dialog.
 
 ### Open
 
