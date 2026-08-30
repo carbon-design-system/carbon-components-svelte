@@ -136,6 +136,12 @@ Import the corresponding locale module from `flatpickr/dist/l10n/<key>` and pass
 
 <FileSource src="/framed/DatePicker/DatePickerNonEnglishLocale" />
 
+### Locale with year-first order
+
+For locales where `Intl.DateTimeFormat` orders the year before the month (for example Japanese), the calendar header automatically reorders to match—"2000年1月" instead of "January 2000".
+
+<FileSource src="/framed/DatePicker/DatePickerYearFirstLocale" />
+
 ## Portal
 
 Set `portalMenu` to `true` to render the calendar in a floating portal. This prevents the calendar from being clipped by parent containers with `overflow: hidden` or z-index stacking contexts. Inside a [Modal](/components/Modal), `portalMenu` defaults to `true` unless explicitly set to `false`.
