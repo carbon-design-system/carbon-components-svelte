@@ -4,7 +4,6 @@
   let value = "";
   let results = [];
   let loading = false;
-  let timeout;
 
   const database = [
     "Databases for PostgreSQL",
@@ -28,32 +27,30 @@
     });
   }
 
-  // Debounce input, then fetch. `shouldFilter={false}` defers filtering to the
-  // server; the client still highlights the query within each returned result.
-  $: queryResults(value);
-
-  function queryResults(query) {
-    clearTimeout(timeout);
-    const trimmed = query.trim();
-    if (trimmed === "") {
+  // `debounce` delays the `search` event; `bind:value` stays immediate.
+  // `shouldFilter={false}` defers filtering to the server; the client still
+  // highlights the query within each returned result.
+  async function handleSearch(event) {
+    const query = event.detail.value.trim();
+    if (query === "") {
       results = [];
       loading = false;
       return;
     }
     loading = true;
-    timeout = setTimeout(async () => {
-      results = await fetchResults(trimmed);
-      loading = false;
-    }, 300);
+    results = await fetchResults(query);
+    loading = false;
   }
 </script>
 
 <SearchMenu
   bind:value
   {loading}
+  debounce={300}
   shouldFilter={false}
   labelText="Search"
   placeholder="Search..."
+  on:search={handleSearch}
 >
   {#each results as result (result)}
     <SearchMenuItem text={result} />
