@@ -94,6 +94,12 @@ In the [rail](#rail) variant, an expanded `SideNavMenu` automatically collapses 
 
 Set `isSelected` on `SideNavLink` or `SideNavMenuItem` to mark the current page — see "Dashboard" in the example above. It adds `aria-current="page"` and a persistent highlight style so the current location stays visible even while hovering other items.
 
+### Large
+
+Set `large` on `SideNavLink` or `SideNavMenu` to increase the item's height from 32px to 48px — useful for a top-level item that should stand out, or for larger touch targets. Not available on `SideNavMenuItem` (nested items). Composes with `icon` on both components.
+
+<FileSource src="/framed/UIShell/HeaderNavLarge" />
+
 ### Responsive
 
 On smaller screens, header links belong in the side nav, above the regular side nav items.
@@ -131,6 +137,12 @@ Set `rail` on the side nav to use the rail variant. Expanded side nav menu items
 Combine `rail` with `fixed` to keep the rail at its narrow width even on hover, instead of temporarily expanding.
 
 <FileSource src="/framed/UIShell/HeaderNavRailFixed" />
+
+### Rail + large
+
+`large` composes with `rail`, including its narrow, icon-only state.
+
+<FileSource src="/framed/UIShell/HeaderNavRailLarge" />
 
 ### Persisted hamburger
 
