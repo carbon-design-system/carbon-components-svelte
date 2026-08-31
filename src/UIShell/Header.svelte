@@ -163,19 +163,21 @@
       ariaLabel={hamburgerAriaLabel}
     />
   {/if}
-  <a
-    {href}
-    class:bx--header__name={true}
-    bind:this={ref}
-    {...$$restProps}
-    on:click
-  >
-    {#if companyName || $$slots.company}
-      <span class:bx--header__name--prefix={true}
-        ><slot name="company">{companyName}&nbsp;</slot></span
-      >
-    {/if}
-    <slot name="platform">{platformName}</slot>
-  </a>
+  {#if companyName || platformName || $$slots.company || $$slots.platform}
+    <a
+      {href}
+      class:bx--header__name={true}
+      bind:this={ref}
+      {...$$restProps}
+      on:click
+    >
+      {#if companyName || $$slots.company}
+        <span class:bx--header__name--prefix={true}
+          ><slot name="company">{companyName}&nbsp;</slot></span
+        >
+      {/if}
+      <slot name="platform">{platformName}</slot>
+    </a>
+  {/if}
   <slot />
 </header>
