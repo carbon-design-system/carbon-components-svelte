@@ -1,5 +1,8 @@
 <script>
-  /** @template [Icon=any] */
+  /**
+   * @template [Icon=any]
+   * @slot {{}} avatar - Leading avatar rendered before the label. The label truncates to make room for it.
+   */
 
   /**
    * Specify the `href` attribute to render an anchor.
@@ -21,6 +24,45 @@
    * @type {null | HTMLAnchorElement | HTMLButtonElement}
    */
   export let ref = null;
+
+  import { getContext, onMount } from "svelte";
+  import { moveIndex } from "../utils/moveIndex.js";
+
+  const ctx = getContext("carbon:ProfileMenu");
+
+  let menuItems = [];
+  const unsubMenuItems = ctx?.menuItems.subscribe((_menuItems) => {
+    menuItems = _menuItems;
+  });
+
+  onMount(() => {
+    if (ctx && ref) ctx.registerMenuItem(ref);
+    return () => {
+      unsubMenuItems?.();
+      if (ctx && ref) ctx.unregisterMenuItem(ref);
+    };
+  });
+
+  function handleKeydown(event) {
+    if (!ctx) return;
+
+    const currentIndex = menuItems.indexOf(ref);
+    if (currentIndex === -1) return;
+
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      menuItems[moveIndex(currentIndex, 1, menuItems.length)]?.focus();
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      menuItems[moveIndex(currentIndex, -1, menuItems.length)]?.focus();
+    } else if (event.key === "Home") {
+      event.preventDefault();
+      menuItems[0]?.focus();
+    } else if (event.key === "End") {
+      event.preventDefault();
+      menuItems[menuItems.length - 1]?.focus();
+    }
+  }
 </script>
 
 {#if href}
@@ -31,8 +73,17 @@
     class:bx--profile-menu__item={true}
     {...$$restProps}
     on:click
+    on:keydown
+    on:keydown={handleKeydown}
   >
-    <span class:bx--profile-menu__item-label={true}><slot /></span>
+    <span class:bx--profile-menu__item-label={true}>
+      {#if $$slots.avatar}
+        <span class:bx--profile-menu__item-avatar={true}
+          ><slot name="avatar" /></span
+        >
+      {/if}
+      <span class:bx--profile-menu__item-text={true}><slot /></span>
+    </span>
     {#if $$slots.icon || icon}
       <slot name="icon"><svelte:component this={icon} size={16} /></slot>
     {/if}
@@ -44,8 +95,17 @@
     class:bx--profile-menu__item={true}
     {...$$restProps}
     on:click
+    on:keydown
+    on:keydown={handleKeydown}
   >
-    <span class:bx--profile-menu__item-label={true}><slot /></span>
+    <span class:bx--profile-menu__item-label={true}>
+      {#if $$slots.avatar}
+        <span class:bx--profile-menu__item-avatar={true}
+          ><slot name="avatar" /></span
+        >
+      {/if}
+      <span class:bx--profile-menu__item-text={true}><slot /></span>
+    </span>
     {#if $$slots.icon || icon}
       <slot name="icon"><svelte:component this={icon} size={16} /></slot>
     {/if}
