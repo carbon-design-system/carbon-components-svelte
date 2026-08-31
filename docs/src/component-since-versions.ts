@@ -33,6 +33,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   Heading: "0.98.0",
   IconIndicator: "0.110.0",
   ImageLoader: "0.30.0",
+  InlineEdit: "0.112.0",
   InlineLoading: "0.2.0",
   InlineNotification: "0.2.0",
   Link: "0.2.0",
