@@ -17,6 +17,7 @@ components: ["Header",
 "ProfileMenuItem",
 "ProfileMenuDetail",
 "ProfileMenuDivider",
+"HeaderSwitcher",
 "SideNav",
 "SideNavItems",
 "SideNavLink",
@@ -304,6 +305,52 @@ Add `ProfileMenuDetail` for labelled values with a trailing action, and pass an 
 >
   <ProfileMenuList>...</ProfileMenuList>
 </ProfileMenu>
+```
+
+## Account switcher
+
+Use `HeaderSwitcher` in place of the header logo to let users switch between accounts or workspaces. The trigger shows the active account name; the chevron rotates to indicate the open state.
+
+_Prototype — pending review._
+
+<FileSource src="/framed/UIShell/HeaderSwitcherWorkspace" />
+
+Compose the dropdown from [`ProfileMenuList`](#profile-menu) and `ProfileMenuItem`, as shown above. Pass an `icon` to `ProfileMenuItem` to mark the active account, and use its `avatar` slot for a leading avatar. The label truncates with an ellipsis when the name overflows the menu width, as shown by the last item.
+
+The trigger's `text` truncates with an ellipsis past `maxWidth`, defaulting to `"10rem"`, so a long account name does not push the header wider. Set `maxWidth` to a different CSS length, or to `"none"` to let the trigger grow with the text instead.
+
+<DocKbd label="ArrowDown" /> and <DocKbd label="ArrowUp" /> from the trigger open the menu and move focus to the first or last item. Once inside, <DocKbd label="ArrowDown" />/<DocKbd label="ArrowUp" /> move between items (wrapping at either end), <DocKbd label="Home" />/<DocKbd label="End" /> jump to the first or last item, and <DocKbd label="Escape" /> closes the menu and returns focus to the trigger.
+
+### No avatar
+
+Neither `HeaderSwitcher` nor `ProfileMenuItem` renders a default avatar — the `avatar` slot is empty unless you provide one. Omit it on both for a text-only trigger and menu.
+
+<FileSource src="/framed/UIShell/HeaderSwitcherNoAvatar" />
+
+### Without a logo
+
+Omit `companyName` and `platformName` on `Header` to make `HeaderSwitcher` the only brand element.
+
+<FileSource src="/framed/UIShell/HeaderSwitcherNoLogo" />
+
+### Icon avatar
+
+Use the `avatar` slot to render a plain icon instead of a `UserAvatar`, for example a fixed brand icon rather than a per-account photo.
+
+<FileSource src="/framed/UIShell/HeaderSwitcherIconAvatar" />
+
+### Events
+
+`HeaderSwitcher` dispatches `open` and `close` as the menu toggles, with `event.detail.trigger` set to `"toggle"`, `"outside-click"`, or `"escape-key"` (`close` only):
+
+```svelte
+<HeaderSwitcher
+  bind:isOpen
+  on:open={(event) => console.log(event.detail.trigger)}
+  on:close={(event) => console.log(event.detail.trigger)}
+>
+  <ProfileMenuList>...</ProfileMenuList>
+</HeaderSwitcher>
 ```
 
 ## Integrations
