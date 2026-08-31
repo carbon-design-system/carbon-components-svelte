@@ -127,7 +127,8 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    min-height: 2rem;
+    // Tall enough to fit a leading `sm` (1.5rem) avatar with breathing room.
+    min-height: 2.5rem;
     margin: 0;
     padding: 0 $spacing-05;
     color: $text-secondary;
@@ -154,6 +155,32 @@
     flex-shrink: 0;
     fill: $icon-primary;
   }
+
+  // `min-width: 0` lets this flex child shrink below its content size, which
+  // `.#{$prefix}--profile-menu__item-text` needs in order to truncate instead
+  // of forcing the row (and the menu) wider.
+  .#{$prefix}--profile-menu__item-label {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    min-width: 0;
+    gap: $spacing-03;
+  }
+
+  .#{$prefix}--profile-menu__item-avatar {
+    display: flex;
+    flex-shrink: 0;
+  }
+
+  .#{$prefix}--profile-menu__item-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  //--------------------------------------------------------------------------
+  // Detail row (label / value / trailing action)
+  //--------------------------------------------------------------------------
 
   .#{$prefix}--profile-menu__detail {
     display: flex;
