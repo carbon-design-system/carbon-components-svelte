@@ -54,6 +54,19 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Accordion
+  action-set:
+    name: Action set
+    description: A row of action buttons for a custom modal or panel footer that automatically stacks vertically at small sizes or with more than two actions.
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/action-set.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/ActionSet
   aspect-ratio:
     status: stable
     framework: svelte
