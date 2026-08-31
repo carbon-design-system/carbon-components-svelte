@@ -1,0 +1,105 @@
+// HeaderSwitcher: a header trigger (avatar + text + chevron) that opens an
+// anchored dropdown for switching between workspaces or accounts. The menu
+// anchors to the trigger itself, not the header edge, since the trigger can
+// sit anywhere in the header (unlike ProfileMenu, which assumes the
+// right-most position). Colors come from theme tokens; see _profile-menu.scss.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// HeaderSwitcher component styles (trigger layout, chevron, anchored menu).
+/// @access private
+/// @group ui-shell
+@mixin header-switcher {
+  .#{$prefix}--header-switcher {
+    position: relative;
+    display: inline-flex;
+  }
+
+  // Sized to match `UserAvatar` `size="sm"` exactly (both `$spacing-06`) so a
+  // slotted `UserAvatar` fills the frame flush, with no halo of
+  // `$background-hover` showing around it. A plain icon in the `avatar` slot
+  // keeps its own (default 16px) size, centered by `align-items`/
+  // `justify-content` below — see the `svg` rule note.
+  .#{$prefix}--header-switcher__avatar {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 50%;
+    background-color: $background-hover;
+    color: $icon-primary;
+    width: $spacing-06;
+    height: $spacing-06;
+  }
+
+  // Only stretch a raw `img` (a photo slotted without `UserAvatar`) to fill
+  // the frame. A plain icon must NOT match this — stretching a 16px glyph to
+  // the full 24px frame renders oversized and blurry.
+  .#{$prefix}--header-switcher__avatar > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  // `min-width: 0` overrides the flex item's default `auto` minimum, which
+  // would otherwise let the text's intrinsic content width win over
+  // `max-width` (set via the `maxWidth` prop) and defeat truncation.
+  // `text-align: left` overrides the browser's default centered text-align
+  // on `<button>`, which otherwise centers a second line if the text ever
+  // wraps (for example `maxWidth="none"` inside a width-constrained header).
+  .#{$prefix}--header-switcher__text {
+    overflow: hidden;
+    min-width: 0;
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // `.#{$prefix}--header__action-text`'s `margin-left` assumes a preceding
+  // icon/avatar. Without one (no `avatar` slot), that margin is a stray gap
+  // before the text — cancel it.
+  .#{$prefix}--header-switcher__text--flush.#{$prefix}--header-switcher__text--flush {
+    margin-left: 0;
+  }
+
+  .#{$prefix}--header-switcher__chevron {
+    display: flex;
+    flex-shrink: 0;
+    margin-left: $spacing-03;
+    transition: transform 110ms cubic-bezier(0.2, 0, 0.38, 0.9);
+  }
+
+  .#{$prefix}--header-switcher__chevron > svg {
+    fill: $icon-primary;
+  }
+
+  .#{$prefix}--header-switcher__chevron--open {
+    transform: rotate(180deg);
+  }
+
+  // Reserve the full focus border-width at rest (transparent) so `:focus`
+  // only swaps the border color instead of growing the border, which would
+  // otherwise shift this auto-width trigger's content by a couple of pixels.
+  .#{$prefix}--header-switcher__trigger.#{$prefix}--header-switcher__trigger {
+    border-width: $button-border-width;
+    border-color: transparent;
+    // Offset the reserved border so the avatar lands at the same inset as
+    // `.#{$prefix}--profile-menu__item`'s avatar (padding only, no border)
+    // in the menu below, keeping both flush with the same left edge.
+    padding-left: calc(#{$spacing-05} - #{$button-border-width});
+  }
+
+  .#{$prefix}--header-switcher__menu.#{$prefix}--header-switcher__menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: auto;
+    width: 16rem;
+  }
+}
+
+@include exports("header-switcher") {
+  @include header-switcher;
+}
