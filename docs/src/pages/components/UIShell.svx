@@ -277,6 +277,8 @@ When the `avatar` slot is empty, a default [UserAvatar](/components/UserAvatar) 
 
 <FileSource src="/framed/UIShell/ProfileMenuDefaultAvatar" />
 
+From the trigger, <DocKbd label="ArrowDown" />/<DocKbd label="ArrowUp" /> open the menu and move focus to the first or last `ProfileMenuItem`. Once inside, <DocKbd label="ArrowDown" />/<DocKbd label="ArrowUp" /> move between items (wrapping at either end), and <DocKbd label="Home" />/<DocKbd label="End" /> jump to the first or last item.
+
 ### Composed menu
 
 Render the avatar with [UserAvatar](/components/UserAvatar) in the `avatar` slot, and compose the card from `ProfileMenuHeader`, `ProfileMenuList`, `ProfileMenuItem`, and `ProfileMenuDivider`.
