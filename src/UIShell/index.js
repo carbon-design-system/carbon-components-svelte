@@ -11,6 +11,7 @@ export { default as HeaderPanelLink } from "./HeaderPanelLink.svelte";
 export { default as HeaderPanelLinks } from "./HeaderPanelLinks.svelte";
 export { default as HeaderSearch } from "./HeaderSearch.svelte";
 export { default as HeaderSideNavItems } from "./HeaderSideNavItems.svelte";
+export { default as HeaderSwitcher } from "./HeaderSwitcher.svelte";
 export { default as HeaderUtilities } from "./HeaderUtilities.svelte";
 export { default as ProfileMenu } from "./ProfileMenu.svelte";
 export { default as ProfileMenuDetail } from "./ProfileMenuDetail.svelte";

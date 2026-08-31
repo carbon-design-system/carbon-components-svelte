@@ -217,6 +217,7 @@ export { default as HeaderPanelLink } from "./UIShell/HeaderPanelLink.svelte";
 export { default as HeaderPanelLinks } from "./UIShell/HeaderPanelLinks.svelte";
 export { default as HeaderSearch } from "./UIShell/HeaderSearch.svelte";
 export { default as HeaderSideNavItems } from "./UIShell/HeaderSideNavItems.svelte";
+export { default as HeaderSwitcher } from "./UIShell/HeaderSwitcher.svelte";
 export { default as HeaderUtilities } from "./UIShell/HeaderUtilities.svelte";
 export { default as ProfileMenu } from "./UIShell/ProfileMenu.svelte";
 export { default as ProfileMenuDetail } from "./UIShell/ProfileMenuDetail.svelte";
