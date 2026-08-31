@@ -34,7 +34,8 @@
   /** Set to `true` to prevent the menu from closing when clicking outside */
   export let preventCloseOnClickOutside = false;
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, setContext, tick } from "svelte";
+  import { get, writable } from "svelte/store";
   import { slide } from "svelte/transition";
   import UserAvatar from "../UserAvatar/UserAvatar.svelte";
   import { dismiss } from "../utils/dismiss.js";
@@ -43,6 +44,23 @@
   const dispatch = createEventDispatcher();
 
   let refMenu = null;
+
+  /** @type {import("svelte/store").Writable<ReadonlyArray<HTMLElement>>} */
+  const menuItems = writable([]);
+
+  function registerMenuItem(element) {
+    menuItems.update((items) => [...items, element]);
+  }
+
+  function unregisterMenuItem(element) {
+    menuItems.update((items) => items.filter((item) => item !== element));
+  }
+
+  setContext("carbon:ProfileMenu", {
+    menuItems,
+    registerMenuItem,
+    unregisterMenuItem,
+  });
 
   function close() {
     isOpen = false;
@@ -65,6 +83,23 @@
       ref?.focus();
     }
   }
+
+  async function handleTriggerKeydown(event) {
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault();
+      if (!isOpen) {
+        isOpen = true;
+        dispatch("open");
+      }
+      await tick();
+      const items = get(menuItems);
+      if (event.key === "ArrowDown") {
+        items[0]?.focus();
+      } else {
+        items[items.length - 1]?.focus();
+      }
+    }
+  }
 </script>
 
 <button
@@ -85,10 +120,16 @@
   class:bx--profile-menu__trigger={true}
   {...$$restProps}
   on:click
-  on:click|stopPropagation={() => {
+  on:click|stopPropagation={async (event) => {
+    const wasOpen = isOpen;
     isOpen = !isOpen;
     dispatch(isOpen ? "open" : "close");
+    if (!wasOpen && isOpen && event.detail === 0) {
+      await tick();
+      get(menuItems)[0]?.focus();
+    }
   }}
+  on:keydown={handleTriggerKeydown}
 >
   <span class:bx--profile-menu__avatar={true}>
     <slot name="avatar"><UserAvatar size="md" /></slot>
