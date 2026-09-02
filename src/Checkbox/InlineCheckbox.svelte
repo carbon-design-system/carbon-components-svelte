@@ -59,7 +59,6 @@
   <label
     for={id}
     {title}
-    aria-label={$$props["aria-label"]}
     class:bx--checkbox-label={true}
     on:click={handleLabelClick}
   ></label>
