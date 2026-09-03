@@ -343,8 +343,7 @@ describe("Theme", () => {
 
       expectTypeOf<Props["tokens"]>().toEqualTypeOf<
         // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
-        Record<string, any> | undefined
-      >();
+        Record<string, any> | undefined>();
     });
 
     it("should work with index signature token types", () => {
