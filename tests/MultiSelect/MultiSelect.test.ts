@@ -2690,8 +2690,7 @@ describe("MultiSelect", () => {
 
         expectTypeOf<Props["selectedIds"]>().toEqualTypeOf<
           // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
-          readonly any[] | undefined
-        >();
+          readonly any[] | undefined>();
 
         type SelectEvent = Events["select"];
         type SelectEventDetail =

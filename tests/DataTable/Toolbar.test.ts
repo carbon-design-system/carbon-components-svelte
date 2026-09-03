@@ -259,8 +259,7 @@ describe("DataTable Toolbar", () => {
 
         expectTypeOf<Props["selectedIds"]>().toEqualTypeOf<
           // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
-          ReadonlyArray<any> | undefined
-        >();
+          ReadonlyArray<any> | undefined>();
       });
 
       it("should work with 'as const' for type inference", () => {
