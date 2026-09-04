@@ -52,15 +52,24 @@
     }
   }
 
-  .#{$prefix}--menu-option--active,
-  .#{$prefix}--menu-option:hover {
+  .#{$prefix}--menu-option--active {
     background-color: $layer-hover;
   }
 
-  .#{$prefix}--menu-option--danger:hover,
   .#{$prefix}--menu-option--danger:focus {
     background-color: $button-danger-primary;
     color: $text-on-color;
+  }
+
+  @media (any-hover: hover) {
+    .#{$prefix}--menu-option:hover {
+      background-color: $layer-hover;
+    }
+
+    .#{$prefix}--menu-option--danger:hover {
+      background-color: $button-danger-primary;
+      color: $text-on-color;
+    }
   }
 
   .#{$prefix}--menu-option > .#{$prefix}--menu {

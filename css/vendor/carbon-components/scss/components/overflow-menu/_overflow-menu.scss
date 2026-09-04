@@ -37,8 +37,10 @@
       @include focus-outline('outline');
     }
 
-    &:hover {
-      background-color: $hover-ui;
+    @media (any-hover: hover) {
+      &:hover {
+        background-color: $hover-ui;
+      }
     }
   }
 
@@ -99,8 +101,10 @@
     }
   }
 
-  .#{$prefix}--overflow-menu.#{$prefix}--overflow-menu--open:hover {
-    background-color: $field-01;
+  @media (any-hover: hover) {
+    .#{$prefix}--overflow-menu.#{$prefix}--overflow-menu--open:hover {
+      background-color: $field-01;
+    }
   }
 
   .#{$prefix}--overflow-menu-options--light {
@@ -111,8 +115,10 @@
     }
   }
 
-  .#{$prefix}--overflow-menu.#{$prefix}--overflow-menu--light.#{$prefix}--overflow-menu--open:hover {
-    background-color: $field-02;
+  @media (any-hover: hover) {
+    .#{$prefix}--overflow-menu.#{$prefix}--overflow-menu--light.#{$prefix}--overflow-menu--open:hover {
+      background-color: $field-02;
+    }
   }
 
   .#{$prefix}--overflow-menu-options[data-floating-menu-direction='bottom']::after {
@@ -247,8 +253,10 @@
       background-color $duration--fast-02 motion(entrance, productive),
       color $duration--fast-02 motion(entrance, productive);
 
-    &:hover {
-      color: $text-01;
+    @media (any-hover: hover) {
+      &:hover {
+        color: $text-01;
+      }
     }
 
     &:focus {
@@ -264,8 +272,10 @@
     fill: $icon-02;
   }
 
-  .#{$prefix}--overflow-menu-options__btn:hover svg {
-    fill: $icon-01;
+  @media (any-hover: hover) {
+    .#{$prefix}--overflow-menu-options__btn:hover svg {
+      fill: $icon-01;
+    }
   }
 
   .#{$prefix}--overflow-menu-options__option-content {
@@ -274,12 +284,12 @@
     white-space: nowrap;
   }
 
-  .#{$prefix}--overflow-menu-options__option:hover {
-    background-color: $hover-ui;
+  @media (any-hover: hover) {
+    .#{$prefix}--overflow-menu-options__option:hover {
+      background-color: $hover-ui;
+    }
   }
 
-  .#{$prefix}--overflow-menu-options__option--danger
-    .#{$prefix}--overflow-menu-options__btn:hover,
   .#{$prefix}--overflow-menu-options__option--danger
     .#{$prefix}--overflow-menu-options__btn:focus {
     background-color: $danger-01;
@@ -290,9 +300,16 @@
     }
   }
 
-  .#{$prefix}--overflow-menu-options__option--disabled:hover {
-    background-color: $ui-01;
-    cursor: not-allowed;
+  @media (any-hover: hover) {
+    .#{$prefix}--overflow-menu-options__option--danger
+      .#{$prefix}--overflow-menu-options__btn:hover {
+      background-color: $danger-01;
+      color: $text-04;
+
+      svg {
+        fill: currentColor;
+      }
+    }
   }
 
   .#{$prefix}--overflow-menu-options__option--disabled
@@ -300,12 +317,27 @@
     color: $disabled-02;
     pointer-events: none;
 
-    &:hover,
     &:active,
     &:focus {
       @include focus-outline('reset');
 
       background-color: $ui-01;
+    }
+  }
+
+  @media (any-hover: hover) {
+    .#{$prefix}--overflow-menu-options__option--disabled:hover {
+      background-color: $ui-01;
+      cursor: not-allowed;
+    }
+
+    .#{$prefix}--overflow-menu-options__option--disabled
+      .#{$prefix}--overflow-menu-options__btn {
+      &:hover {
+        @include focus-outline('reset');
+
+        background-color: $ui-01;
+      }
     }
   }
 
