@@ -108,8 +108,10 @@
       color: $text-disabled;
     }
 
-    &:disabled:hover {
-      border-bottom: 1px solid transparent;
+    @media (any-hover: hover) {
+      &:disabled:hover {
+        border-bottom: 1px solid transparent;
+      }
     }
 
     &::placeholder {
