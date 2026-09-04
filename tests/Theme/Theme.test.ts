@@ -22,7 +22,6 @@ describe("Theme", () => {
   };
   let consoleLog: Console["log"];
   let localStorageMock: Record<string, string>;
-  let originalLocalStorage: Storage;
 
   beforeEach(() => {
     documentMock = {
@@ -38,10 +37,9 @@ describe("Theme", () => {
       },
     };
     consoleLog = vi.spyOn(console, "log");
-    originalLocalStorage = globalThis.localStorage;
     localStorageMock = {};
 
-    globalThis.localStorage = {
+    vi.stubGlobal("localStorage", {
       getItem: vi.fn((key) => localStorageMock[key] || null),
       setItem: vi.fn((key, value) => {
         localStorageMock[key] = value;
@@ -54,13 +52,12 @@ describe("Theme", () => {
       }),
       length: 0,
       key: vi.fn(),
-    };
+    });
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
-    globalThis.localStorage = originalLocalStorage;
-    localStorage.clear();
+    vi.unstubAllGlobals();
     localStorageMock = {};
   });
 

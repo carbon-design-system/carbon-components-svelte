@@ -2,12 +2,10 @@
 
 export const setupLocalStorageMock = () => {
   let localStorageMock: { [key: string]: string } = {};
-  let originalLocalStorage: Storage;
 
   beforeEach(() => {
-    originalLocalStorage = globalThis.localStorage;
     localStorageMock = {};
-    globalThis.localStorage = {
+    vi.stubGlobal("localStorage", {
       getItem: vi.fn((key) => localStorageMock[key] || null),
       setItem: vi.fn((key, value) => {
         localStorageMock[key] = value;
@@ -20,12 +18,11 @@ export const setupLocalStorageMock = () => {
       }),
       length: 0,
       key: vi.fn(),
-    };
+    });
   });
 
   afterEach(() => {
-    globalThis.localStorage = originalLocalStorage;
-    localStorage.clear();
+    vi.unstubAllGlobals();
     vi.restoreAllMocks();
     localStorageMock = {};
   });
@@ -40,12 +37,10 @@ export const setupLocalStorageMock = () => {
 
 export const setupSessionStorageMock = () => {
   let sessionStorageMock: { [key: string]: string } = {};
-  let originalSessionStorage: Storage;
 
   beforeEach(() => {
-    originalSessionStorage = globalThis.sessionStorage;
     sessionStorageMock = {};
-    globalThis.sessionStorage = {
+    vi.stubGlobal("sessionStorage", {
       getItem: vi.fn((key) => sessionStorageMock[key] || null),
       setItem: vi.fn((key, value) => {
         sessionStorageMock[key] = value;
@@ -58,12 +53,11 @@ export const setupSessionStorageMock = () => {
       }),
       length: 0,
       key: vi.fn(),
-    };
+    });
   });
 
   afterEach(() => {
-    globalThis.sessionStorage = originalSessionStorage;
-    sessionStorage.clear();
+    vi.unstubAllGlobals();
     vi.restoreAllMocks();
     sessionStorageMock = {};
   });
@@ -82,15 +76,13 @@ export const setupSessionStorageMock = () => {
  */
 export const setupSessionStorageEventMock = () => {
   let sessionStorageMock: Record<string, string> = {};
-  let originalSessionStorage: Storage;
   let storageEventListeners: ((event: StorageEvent) => void)[] = [];
 
   beforeEach(() => {
-    originalSessionStorage = globalThis.sessionStorage;
     sessionStorageMock = {};
     storageEventListeners = [];
 
-    globalThis.sessionStorage = {
+    vi.stubGlobal("sessionStorage", {
       getItem: vi.fn((key) => sessionStorageMock[key] || null),
       setItem: vi.fn((key, value) => {
         sessionStorageMock[key] = value;
@@ -103,7 +95,7 @@ export const setupSessionStorageEventMock = () => {
       }),
       length: 0,
       key: vi.fn(),
-    };
+    });
 
     const originalAddEventListener = window.addEventListener;
     vi.spyOn(window, "addEventListener").mockImplementation(
@@ -118,8 +110,7 @@ export const setupSessionStorageEventMock = () => {
   });
 
   afterEach(() => {
-    globalThis.sessionStorage = originalSessionStorage;
-    sessionStorage.clear();
+    vi.unstubAllGlobals();
     vi.restoreAllMocks();
     sessionStorageMock = {};
     storageEventListeners = [];
@@ -154,15 +145,13 @@ export const setupSessionStorageEventMock = () => {
  */
 export const setupStorageEventMock = () => {
   let localStorageMock: Record<string, string> = {};
-  let originalLocalStorage: Storage;
   let storageEventListeners: ((event: StorageEvent) => void)[] = [];
 
   beforeEach(() => {
-    originalLocalStorage = globalThis.localStorage;
     localStorageMock = {};
     storageEventListeners = [];
 
-    globalThis.localStorage = {
+    vi.stubGlobal("localStorage", {
       getItem: vi.fn((key) => localStorageMock[key] || null),
       setItem: vi.fn((key, value) => {
         localStorageMock[key] = value;
@@ -175,7 +164,7 @@ export const setupStorageEventMock = () => {
       }),
       length: 0,
       key: vi.fn(),
-    };
+    });
 
     const originalAddEventListener = window.addEventListener;
     vi.spyOn(window, "addEventListener").mockImplementation(
@@ -190,8 +179,7 @@ export const setupStorageEventMock = () => {
   });
 
   afterEach(() => {
-    globalThis.localStorage = originalLocalStorage;
-    localStorage.clear();
+    vi.unstubAllGlobals();
     vi.restoreAllMocks();
     localStorageMock = {};
     storageEventListeners = [];
