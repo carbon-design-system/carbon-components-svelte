@@ -1,7 +1,7 @@
 import { cleanup, render } from "@testing-library/svelte";
 import { userEvent } from "@testing-library/user-event";
 import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
-import { bench, run } from "mitata";
+import { task } from "ostia";
 
 function buildItems(count: number) {
   const items = [];
@@ -23,47 +23,41 @@ const items1000 = buildItems(1000);
 // of setting up userEvent.
 const user = userEvent.setup();
 
-it("benchmarks mounting MultiSelect with various item counts and virtualization modes", async () => {
-  // 100 items is at the auto-virtualization cutoff (virtualize kicks in above
-  // 100). The menu is gated behind `{#if open}`, so a closed mount does not
-  // create option nodes regardless of item count.
-  bench("mount MultiSelect, 100 items", () => {
-    render(MultiSelect, {
-      props: { items: items100, label: "Options", labelText: "Options" },
-    });
-    cleanup();
+// 100 items is at the auto-virtualization cutoff (virtualize kicks in above
+// 100). The menu is gated behind `{#if open}`, so a closed mount does not
+// create option nodes regardless of item count.
+task("mount MultiSelect, 100 items", () => {
+  render(MultiSelect, {
+    props: { items: items100, label: "Options", labelText: "Options" },
+  });
+  cleanup();
+});
+
+task("mount MultiSelect, 1000 items (virtualized default)", () => {
+  render(MultiSelect, {
+    props: { items: items1000, label: "Options", labelText: "Options" },
+  });
+  cleanup();
+});
+
+task("mount MultiSelect, 1000 items, virtualize disabled", () => {
+  render(MultiSelect, {
+    props: {
+      items: items1000,
+      label: "Options",
+      labelText: "Options",
+      virtualize: false,
+    },
+  });
+  cleanup();
+});
+
+task("mount + open MultiSelect, 1000 items", async () => {
+  const { getByRole } = render(MultiSelect, {
+    props: { items: items1000, label: "Options", labelText: "Options" },
   });
 
-  bench("mount MultiSelect, 1000 items (virtualized default)", () => {
-    render(MultiSelect, {
-      props: { items: items1000, label: "Options", labelText: "Options" },
-    });
-    cleanup();
-  });
+  await user.click(getByRole("combobox"));
 
-  bench("mount MultiSelect, 1000 items, virtualize disabled", () => {
-    render(MultiSelect, {
-      props: {
-        items: items1000,
-        label: "Options",
-        labelText: "Options",
-        virtualize: false,
-      },
-    });
-    cleanup();
-  });
-
-  bench("mount + open MultiSelect, 1000 items", async () => {
-    const { getByRole } = render(MultiSelect, {
-      props: { items: items1000, label: "Options", labelText: "Options" },
-    });
-
-    await user.click(getByRole("combobox"));
-
-    cleanup();
-  });
-
-  // mitata defaults `print` to console.log, which vitest swallows for
-  // passing tests. process.stdout.write always reaches the terminal.
-  await run({ print: (line) => process.stdout.write(`${line}\n`) });
-}, 120_000);
+  cleanup();
+});

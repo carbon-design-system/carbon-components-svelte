@@ -1,6 +1,6 @@
-import { cleanup, fireEvent, render } from "@testing-library/svelte";
+import { fireEvent, render } from "@testing-library/svelte";
 import TreeView from "carbon-components-svelte/TreeView/TreeView.svelte";
-import { bench, run } from "mitata";
+import { task } from "ostia";
 import { tick } from "svelte";
 
 type TreeNode = { id: number; text: string; nodes?: TreeNode[] };
@@ -39,51 +39,46 @@ function buildBushyTree(totalNodes: number, branching = 10): TreeNode[] {
 const treeA = buildBushyTree(1_000);
 const treeB = buildBushyTree(1_000);
 
-it("benchmarks TreeView toggle expand/collapse cost", async () => {
-  // No `.gc("inner")` on DOM benches: forcing GC after every iteration over
-  // a large jsdom DOM object graph can induce thermal throttling that
-  // invalidates all numbers (including unrelated cases in the same run).
-  // See CONTRIBUTING.md for details.
+// No forced GC on DOM benches: forcing GC after every iteration over a
+// large jsdom DOM object graph can induce thermal throttling that
+// invalidates all numbers (including unrelated cases in the same run). See
+// CONTRIBUTING.md for details.
+//
+// Both instances persist for the whole file's run (ostia's suite files
+// register every task up front; there's no per-task teardown hook the way
+// mitata's run() drove one generator to completion, with its own cleanup(),
+// before the next started). Each case's query is scoped to its own
+// `result.container`, so having both TreeView instances mounted
+// simultaneously doesn't create any query ambiguity.
 
-  bench(
-    "toggle root expand/collapse, TreeView 1000 nodes (not virtualized)",
-    function* () {
-      const result = render(TreeView, {
-        props: { nodes: treeA, labelText: "Tree" },
-      });
+const resultA = render(TreeView, {
+  props: { nodes: treeA, labelText: "Tree" },
+});
 
-      yield async () => {
-        // Each iteration alternates expand/collapse by clicking the toggle
-        const toggle = result.container.querySelector(
-          ".bx--tree-parent-node__toggle",
-        );
-        await fireEvent.click(toggle);
-        await tick();
-      };
+task(
+  "toggle root expand/collapse, TreeView 1000 nodes (not virtualized)",
+  async () => {
+    // Each iteration alternates expand/collapse by clicking the toggle
+    const toggle = resultA.container.querySelector(
+      ".bx--tree-parent-node__toggle",
+    );
+    await fireEvent.click(toggle);
+    await tick();
+  },
+);
 
-      cleanup();
-    },
-  );
+const resultB = render(TreeView, {
+  props: { nodes: treeB, labelText: "Tree", virtualize: true },
+});
 
-  bench(
-    "toggle root expand/collapse, TreeView 1000 nodes (virtualized)",
-    function* () {
-      const result = render(TreeView, {
-        props: { nodes: treeB, labelText: "Tree", virtualize: true },
-      });
-
-      yield async () => {
-        // Each iteration alternates expand/collapse by clicking the toggle
-        const toggle = result.container.querySelector(
-          ".bx--tree-parent-node__toggle",
-        );
-        await fireEvent.click(toggle);
-        await tick();
-      };
-
-      cleanup();
-    },
-  );
-
-  await run({ print: (line) => process.stdout.write(`${line}\n`) });
-}, 180_000);
+task(
+  "toggle root expand/collapse, TreeView 1000 nodes (virtualized)",
+  async () => {
+    // Each iteration alternates expand/collapse by clicking the toggle
+    const toggle = resultB.container.querySelector(
+      ".bx--tree-parent-node__toggle",
+    );
+    await fireEvent.click(toggle);
+    await tick();
+  },
+);

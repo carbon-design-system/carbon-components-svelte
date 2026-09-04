@@ -1,10 +1,9 @@
-// Pure-logic benchmark: no jsdom, no Svelte, run directly via bun (`bun run bench/<this file>.bench.ts`, optionally filtered — see CONTRIBUTING.md).
+// Pure-logic benchmark: no jsdom, no Svelte, run directly via bun (`bunx ostia bench bench/<this file>.bench.ts`, optionally filtered — see CONTRIBUTING.md).
 // fuzzyMatch backs SearchMenu/HeaderSearch filtering — called once per item,
 // once per keystroke. The realistic cost that matters is filtering a whole
 // list on one keystroke, not a single fuzzyMatch() call in isolation.
-import { bench } from "mitata";
+import { group, range, task } from "ostia";
 import { fuzzyMatch } from "../src/utils/fuzzyMatch.js";
-import { runWithFilter } from "./run-with-filter.js";
 
 // A mix of items that resolve via each of fuzzyMatch's two internal paths:
 // a contiguous-substring hit (cheap, single indexOf pass) and a scattered
@@ -21,11 +20,11 @@ function buildItems(count: number): string[] {
   return items;
 }
 
-bench("fuzzyMatch, filter $size items, one keystroke", function* (state) {
-  const size = state.get("size");
-  const items = buildItems(size);
-  yield () =>
-    items.filter((text) => fuzzyMatch(text, "settings email").matched);
-}).range("size", 100, 10_000);
-
-await runWithFilter();
+group("fuzzyMatch, filter items, one keystroke", () => {
+  for (const size of range(100, 10_000)) {
+    const items = buildItems(size);
+    task(`${size} items`, () =>
+      items.filter((text) => fuzzyMatch(text, "settings email").matched),
+    );
+  }
+});
