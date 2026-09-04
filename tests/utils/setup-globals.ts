@@ -99,6 +99,35 @@ if (typeof DataTransfer === "undefined") {
   globalThis.DataTransfer = DataTransferMock as unknown as typeof DataTransfer;
 }
 
+// jsdom's native `HTMLInputElement.files` setter enforces that the assigned
+// value is a genuine jsdom-internal FileList, which our DataTransfer mock's
+// `.files` (used to sync a drop container's input, e.g. FileUploaderDropContainer)
+// can never satisfy. Fall back to a plain property override, matching what
+// browsers actually let `input.files = dataTransfer.files` achieve.
+{
+  const nativeFilesDescriptor = Object.getOwnPropertyDescriptor(
+    HTMLInputElement.prototype,
+    "files",
+  );
+  if (nativeFilesDescriptor?.set && nativeFilesDescriptor?.get) {
+    Object.defineProperty(HTMLInputElement.prototype, "files", {
+      get: nativeFilesDescriptor.get,
+      configurable: true,
+      set(value: FileList) {
+        try {
+          nativeFilesDescriptor.set?.call(this, value);
+        } catch {
+          Object.defineProperty(this, "files", {
+            value,
+            writable: true,
+            configurable: true,
+          });
+        }
+      },
+    });
+  }
+}
+
 // jsdom reflects the `open` attribute but does not implement showModal()/show()/close().
 // https://github.com/jsdom/jsdom/issues/3294
 if (

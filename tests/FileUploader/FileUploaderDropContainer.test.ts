@@ -235,6 +235,61 @@ describe("FileUploaderDropContainer", () => {
     expect(event.detail).toHaveLength(2);
   });
 
+  it("should sync dropped files to the native input's files property", async () => {
+    const changeHandler = vi.fn();
+    const { container } = render(FileUploaderDropContainer, {
+      props: { multiple: true, onchange: changeHandler },
+    });
+
+    const dropDiv = container.querySelector(".bx--file");
+    assert(dropDiv instanceof HTMLElement);
+
+    const input = container.querySelector('input[type="file"]');
+    assert(input instanceof HTMLInputElement);
+
+    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
+    const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
+    dropDiv.dispatchEvent(createDragEvent("drop", [file1, file2]));
+
+    await vi.waitFor(() => {
+      expect(changeHandler).toHaveBeenCalled();
+    });
+
+    expect(input.files).toHaveLength(2);
+    expect(Array.from(input.files as FileList).map((f) => f.name)).toEqual([
+      "file1.txt",
+      "file2.txt",
+    ]);
+  });
+
+  it("should not include rejected files in the native input's files property", async () => {
+    const changeHandler = vi.fn();
+    const { container } = render(FileUploaderDropContainer, {
+      props: { multiple: true, maxFileSize: 1000, onchange: changeHandler },
+    });
+
+    const dropDiv = container.querySelector(".bx--file");
+    assert(dropDiv instanceof HTMLElement);
+
+    const input = container.querySelector('input[type="file"]');
+    assert(input instanceof HTMLInputElement);
+
+    const smallFile = new File(["x".repeat(500)], "small.txt", {
+      type: "text/plain",
+    });
+    const largeFile = new File(["x".repeat(2000)], "large.txt", {
+      type: "text/plain",
+    });
+    dropDiv.dispatchEvent(createDragEvent("drop", [smallFile, largeFile]));
+
+    await vi.waitFor(() => {
+      expect(changeHandler).toHaveBeenCalled();
+    });
+
+    expect(input.files).toHaveLength(1);
+    expect((input.files as FileList)[0].name).toBe("small.txt");
+  });
+
   it("should not handle drag events when disabled", () => {
     const { container } = render(FileUploaderDropContainer, {
       props: { disabled: true },
