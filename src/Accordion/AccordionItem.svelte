@@ -110,11 +110,6 @@
     on:mouseenter
     on:mouseleave
     on:keydown
-    on:keydown={(event) => {
-      if (open && event.key === "Escape") {
-        open = false;
-      }
-    }}
   >
     <ChevronRight class="bx--accordion__arrow" />
     <div class:bx--accordion__title={true}>
