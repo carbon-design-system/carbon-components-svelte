@@ -29,6 +29,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "AspectRatio",
       "Accordion",
       "Disclosure",
+      "Resizer",
     ],
   },
   {
@@ -67,6 +68,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "CopyInput",
       "DatePicker",
       "FileUploader",
+      "InlineEdit",
       "NumberInput",
       "PasswordInput",
       "PinCodeInput",
@@ -88,6 +90,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "Modal",
       "ComposedModal",
       "Popover",
+      "SidePanel",
       "Toggletip",
       "Tooltip",
       "TooltipDefinition",
@@ -122,6 +125,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
   {
     label: "Tiles",
     components: [
+      "Card",
       "Tile",
       "ClickableTile",
       "ExpandableTile",
@@ -140,6 +144,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "SessionStorage",
       "ImageLoader",
       "Truncate",
+      "TruncatedText",
     ],
   },
   {

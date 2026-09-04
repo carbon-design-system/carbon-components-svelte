@@ -997,3 +997,66 @@
 @include exports('tabs-vertical-size') {
   @include tabs-vertical-size;
 }
+
+$tabs-sizes: (
+  sm: $size-sm,
+  md: $size-md,
+  lg: $size-lg,
+  xl: $size-xl,
+);
+
+/// Line and container tabs size variants (Carbon React `size` on `TabList`).
+/// Unlike vertical tabs, line/container tabs stay a horizontal row at every
+/// breakpoint (see `tabs-overflow` above), so a single set of rules covers
+/// both. `Tabs.svelte` clamps the requested size to each type's own range
+/// (line: sm-lg, container: sm-xl) before applying the class, so the CSS
+/// itself does not need to gate by `bx--tabs--container`.
+///
+/// The base link's height comes from fixed padding + line-height, not the
+/// nav item's own block-size, so just resizing the nav item leaves the link
+/// (and the selected/focus indicators drawn on it) at its original height —
+/// clipped by the now-shorter item and misaligned with its bottom edge. The
+/// link is flexed to fill and center within the sized item instead, the
+/// same technique `tabs-vertical-size` above already uses, rather than
+/// hand-tuning padding/line-height per size and per state (selected, hover,
+/// focus, container).
+///
+/// Separately, the root element itself carries its own `min-height` from
+/// Carbon's base styles (40px for line, 48px for container) — a floor meant
+/// for the unsized default, not aware of a smaller requested size. At `sm`
+/// (32px) or `md` (40px, container only) that floor is taller than the now
+/// -sized nav items, leaving slack space below the row. Reset per size so
+/// the root never reserves more height than its items need.
+/// @access private
+/// @group components
+@mixin tabs-size {
+  @each $size, $size-value in $tabs-sizes {
+    .#{$prefix}--tabs.#{$prefix}--layout--size-#{$size} {
+      min-block-size: $size-value;
+    }
+
+    .#{$prefix}--tabs.#{$prefix}--layout--size-#{$size}
+      .#{$prefix}--tabs__nav-item {
+      block-size: $size-value;
+    }
+
+    .#{$prefix}--tabs.#{$prefix}--layout--size-#{$size}
+      .#{$prefix}--tabs__nav-item
+      a.#{$prefix}--tabs__nav-link,
+    .#{$prefix}--tabs.#{$prefix}--layout--size-#{$size}
+      .#{$prefix}--tabs__nav-item
+      a.#{$prefix}--tabs__nav-link:focus,
+    .#{$prefix}--tabs.#{$prefix}--layout--size-#{$size}
+      .#{$prefix}--tabs__nav-item
+      a.#{$prefix}--tabs__nav-link:active {
+      display: flex;
+      align-items: center;
+      block-size: 100%;
+      padding-block: 0;
+    }
+  }
+}
+
+@include exports('tabs-size') {
+  @include tabs-size;
+}

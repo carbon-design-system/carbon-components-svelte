@@ -4,7 +4,7 @@ description: A row of action buttons for a custom modal or panel footer that aut
 ---
 
 <script>
-  import { ActionSet, Button } from "carbon-components-svelte";
+  import { ActionSet, Button, InlineLoading } from "carbon-components-svelte";
 </script>
 
 Use `ActionSet` for custom footers you compose yourself, typically [ComposedModal](/components/ComposedModal#custom-footer-with-actionset)'s `ModalFooter` slot. [Modal](/components/Modal) builds its footer from props and has no footer slot.
@@ -64,4 +64,16 @@ Set `disableStacking` to `true` to force a horizontal layout even at a size that
   <Button kind="secondary">Cancel</Button>
   <Button kind="danger">Delete</Button>
   <Button>Save</Button>
+</ActionSet>
+
+## Loading
+
+`Button` has no built-in loading state, so show one with an `InlineLoading` child and disable the button while it runs.
+
+<ActionSet>
+  <Button kind="secondary">Cancel</Button>
+  <Button disabled>
+    Saving...
+    <InlineLoading />
+  </Button>
 </ActionSet>
