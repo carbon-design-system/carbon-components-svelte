@@ -286,6 +286,12 @@ describe("StructuredList", () => {
     expect(() => render(StructuredListInputStandalone)).not.toThrow();
   });
 
+  it("does not render a title attribute by default", () => {
+    const { container } = render(StructuredListInputStandalone);
+    const input = container.querySelector("input");
+    expect(input).not.toHaveAttribute("title");
+  });
+
   it("should emit change event on selection", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(StructuredList, { props: { selection: true } });
