@@ -141,8 +141,10 @@
   .#{$prefix}--tag--interactive.#{$prefix}--tag--disabled {
     @include tag-theme($disabled-01, $disabled-02);
 
-    &:hover {
-      cursor: not-allowed;
+    @media (any-hover: hover) {
+      &:hover {
+        cursor: not-allowed;
+      }
     }
   }
 
@@ -158,8 +160,10 @@
     outline: none;
   }
 
-  .#{$prefix}--tag--interactive:hover {
-    cursor: pointer;
+  @media (any-hover: hover) {
+    .#{$prefix}--tag--interactive:hover {
+      cursor: pointer;
+    }
   }
 
   .#{$prefix}--tag--filter {
@@ -168,8 +172,10 @@
     padding-bottom: 0;
     cursor: pointer;
 
-    &:hover {
-      outline: none;
+    @media (any-hover: hover) {
+      &:hover {
+        outline: none;
+      }
     }
   }
 
@@ -229,9 +235,11 @@
     box-shadow: inset 0 0 0 1px $inverse-focus-ui;
   }
 
-  .#{$prefix}--tag--filter.#{$prefix}--tag--disabled
-    .#{$prefix}--tag__close-icon:hover {
-    background-color: transparent;
+  @media (any-hover: hover) {
+    .#{$prefix}--tag--filter.#{$prefix}--tag--disabled
+      .#{$prefix}--tag__close-icon:hover {
+      background-color: transparent;
+    }
   }
 
   .#{$prefix}--tag--filter.#{$prefix}--tag--disabled svg {

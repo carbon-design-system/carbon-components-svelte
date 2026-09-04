@@ -13,8 +13,10 @@
 
   &.#{$prefix}--tag--interactive,
   .#{$prefix}--tag__close-icon {
-    &:hover {
-      background-color: $filter-hover-color;
+    @media (any-hover: hover) {
+      &:hover {
+        background-color: $filter-hover-color;
+      }
     }
   }
 }
