@@ -89,9 +89,11 @@
       background $duration--fast-02 motion(standard, productive),
       box-shadow $duration--fast-02 motion(standard, productive);
 
-    &:hover {
-      // 20px / 14px = 1.4286
-      transform: translate(-50%, -50%) scale(1.4286);
+    @media (any-hover: hover) {
+      &:hover {
+        // 20px / 14px = 1.4286
+        transform: translate(-50%, -50%) scale(1.4286);
+      }
     }
 
     &:focus {
@@ -141,9 +143,11 @@
   .#{$prefix}--slider--disabled .#{$prefix}--slider__thumb {
     background-color: $ui-03;
 
-    &:hover {
-      cursor: not-allowed;
-      transform: translate(-50%, -50%);
+    @media (any-hover: hover) {
+      &:hover {
+        cursor: not-allowed;
+        transform: translate(-50%, -50%);
+      }
     }
 
     &:focus {
@@ -178,10 +182,16 @@
     transition: none;
 
     &:active,
-    &:focus,
-    &:hover {
+    &:focus {
       color: $disabled-02;
       outline: none;
+    }
+
+    @media (any-hover: hover) {
+      &:hover {
+        color: $disabled-02;
+        outline: none;
+      }
     }
   }
 
