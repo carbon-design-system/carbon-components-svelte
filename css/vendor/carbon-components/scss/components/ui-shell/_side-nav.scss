@@ -46,7 +46,6 @@
     visibility: hidden;
   }
 
-  .#{$prefix}--side-nav:hover &,
   .#{$prefix}--side-nav--expanded & {
     @if $visibility == true {
       visibility: inherit;
@@ -55,6 +54,18 @@
       opacity: 1;
     }
     @content;
+  }
+
+  @media (any-hover: hover) {
+    .#{$prefix}--side-nav:hover & {
+      @if $visibility == true {
+        visibility: inherit;
+      }
+      @if $opacity == true {
+        opacity: 1;
+      }
+      @content;
+    }
   }
 }
 
@@ -93,9 +104,14 @@
     width: mini-units(6);
   }
 
-  .#{$prefix}--side-nav.#{$prefix}--side-nav--rail:not(.#{$prefix}--side-nav--fixed):hover,
   .#{$prefix}--side-nav--expanded {
     width: mini-units(32);
+  }
+
+  @media (any-hover: hover) {
+    .#{$prefix}--side-nav.#{$prefix}--side-nav--rail:not(.#{$prefix}--side-nav--fixed):hover {
+      width: mini-units(32);
+    }
   }
 
   .#{$prefix}--side-nav__overlay {
@@ -180,29 +196,31 @@
     height: auto;
   }
 
-  .#{$prefix}--side-nav__item:not(.#{$prefix}--side-nav__item--active):hover
+  @media (any-hover: hover) {
+    .#{$prefix}--side-nav__item:not(.#{$prefix}--side-nav__item--active):hover
+      .#{$prefix}--side-nav__item:not(.#{$prefix}--side-nav__item--active)
+      > .#{$prefix}--side-nav__submenu:hover,
     .#{$prefix}--side-nav__item:not(.#{$prefix}--side-nav__item--active)
-    > .#{$prefix}--side-nav__submenu:hover,
-  .#{$prefix}--side-nav__item:not(.#{$prefix}--side-nav__item--active)
-    > .#{$prefix}--side-nav__link:hover,
-  .#{$prefix}--side-nav__menu
-    a.#{$prefix}--side-nav__link:not(.#{$prefix}--side-nav__link--current):not([aria-current='page']):hover,
-  .#{$prefix}--side-nav a.#{$prefix}--header__menu-item:hover,
-  .#{$prefix}--side-nav
-    .#{$prefix}--header__menu-title[aria-expanded='true']:hover {
-    // TODO: sync color
-    background-color: $shell-side-nav-bg-04;
-    color: $ibm-color__gray-100;
-  }
+      > .#{$prefix}--side-nav__link:hover,
+    .#{$prefix}--side-nav__menu
+      a.#{$prefix}--side-nav__link:not(.#{$prefix}--side-nav__link--current):not([aria-current='page']):hover,
+    .#{$prefix}--side-nav a.#{$prefix}--header__menu-item:hover,
+    .#{$prefix}--side-nav
+      .#{$prefix}--header__menu-title[aria-expanded='true']:hover {
+      // TODO: sync color
+      background-color: $shell-side-nav-bg-04;
+      color: $ibm-color__gray-100;
+    }
 
-  .#{$prefix}--side-nav__item:not(.#{$prefix}--side-nav__item--active)
-    > .#{$prefix}--side-nav__link:hover
-    > span,
-  .#{$prefix}--side-nav__item:not(.#{$prefix}--side-nav__item--active)
-    .#{$prefix}--side-nav__menu-item
-    > .#{$prefix}--side-nav__link:hover
-    > span {
-    color: $ibm-color__gray-100;
+    .#{$prefix}--side-nav__item:not(.#{$prefix}--side-nav__item--active)
+      > .#{$prefix}--side-nav__link:hover
+      > span,
+    .#{$prefix}--side-nav__item:not(.#{$prefix}--side-nav__item--active)
+      .#{$prefix}--side-nav__menu-item
+      > .#{$prefix}--side-nav__link:hover
+      > span {
+      color: $ibm-color__gray-100;
+    }
   }
 
   .#{$prefix}--side-nav__item--large {
@@ -231,9 +249,11 @@
     user-select: none;
   }
 
-  .#{$prefix}--side-nav__submenu:hover {
-    background-color: $shell-side-nav-bg-04;
-    color: $ibm-color__gray-100;
+  @media (any-hover: hover) {
+    .#{$prefix}--side-nav__submenu:hover {
+      background-color: $shell-side-nav-bg-04;
+      color: $ibm-color__gray-100;
+    }
   }
 
   .#{$prefix}--side-nav__submenu:focus {
@@ -436,9 +456,11 @@
       font-weight: 400;
     }
 
-    a.#{$prefix}--header__menu-item:hover {
-      background-color: $shell-side-nav-bg-04;
-      color: $ibm-color__gray-100;
+    @media (any-hover: hover) {
+      a.#{$prefix}--header__menu-item:hover {
+        background-color: $shell-side-nav-bg-04;
+        color: $ibm-color__gray-100;
+      }
     }
   }
 
@@ -449,25 +471,36 @@
   }
 
   .#{$prefix}--side-nav
-    a.#{$prefix}--header__menu-item:hover
-    .#{$prefix}--header__menu-arrow,
-  .#{$prefix}--side-nav
     a.#{$prefix}--header__menu-item:focus
     .#{$prefix}--header__menu-arrow,
   .#{$prefix}--side-nav .#{$prefix}--header__menu-arrow {
     fill: $shell-side-nav-text-01;
   }
 
+  @media (any-hover: hover) {
+    .#{$prefix}--side-nav
+      a.#{$prefix}--header__menu-item:hover
+      .#{$prefix}--header__menu-arrow {
+      fill: $shell-side-nav-text-01;
+    }
+  }
+
   // Windows HCM fix
   .#{$prefix}--side-nav__icon > svg,
-  .#{$prefix}--side-nav
-    a.#{$prefix}--header__menu-item:hover
-    .#{$prefix}--header__menu-arrow,
   .#{$prefix}--side-nav
     a.#{$prefix}--header__menu-item:focus
     .#{$prefix}--header__menu-arrow,
   .#{$prefix}--side-nav .#{$prefix}--header__menu-arrow {
     @include high-contrast-mode('icon-fill');
+  }
+
+  // Windows HCM fix
+  @media (any-hover: hover) {
+    .#{$prefix}--side-nav
+      a.#{$prefix}--header__menu-item:hover
+      .#{$prefix}--header__menu-arrow {
+      @include high-contrast-mode('icon-fill');
+    }
   }
 }
 
