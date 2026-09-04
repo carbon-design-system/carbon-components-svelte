@@ -450,7 +450,7 @@ Set `stickyHeader` to fix the header in place while the body scrolls.
 
 ### Scrolling
 
-Set `stickyHeader` to `true` to fix the header in place. This adds a maximum height to force scrolling.
+Set `stickyHeader` to `true` to fix the header in place. This adds a maximum height to force scrolling. If the table's content is also wider than its container, scrolling horizontally moves the header and body together, with a scrollbar on the table's container.
 
 <DataTable
   stickyHeader

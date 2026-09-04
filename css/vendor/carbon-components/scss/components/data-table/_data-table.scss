@@ -152,6 +152,55 @@
   @include data-table-sticky-column-menu;
 }
 
+// carbon-components-svelte patch (formerly css/_data-table-sticky-header-scroll.scss)
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Sync horizontal scroll between `thead` and `tbody` for a DataTable
+/// `stickyHeader`. Upstream gives `thead` and `tbody` their own
+/// `overflow(-x): scroll`, so a wide table scrolls them as two independent
+/// regions with no JS keeping `scrollLeft` in sync: scrolling the body
+/// desyncs its columns from the header's.
+///
+/// `thead`/`tbody` drop their own scroll regions so they move together as
+/// plain children instead of independently. For that to work, the `table`
+/// itself (`.bx--data-table--sticky-header`) must be free to grow to its
+/// content's natural width rather than stay clamped to the container
+/// (`width: fit-content` floored by `min-width: 100%`, mirroring
+/// carbon-design-system/carbon PR #21732) — otherwise `thead`/`tbody` still
+/// overflow the clamped `table` box with nothing left to scroll them.
+/// Once the `table` can grow past its container, `.bx--data-table_inner-
+/// container` (the direct parent, unique to `stickyHeader`) must clip and
+/// scroll that overflow itself, or it leaks past the container to the page
+/// instead of staying scrollable inside the table's own box. Upstream's
+/// vendored SCSS has no equivalent rule; verified against a live page here
+/// (not just the compiled selectors) since this repo has no Storybook-style
+/// harness that might otherwise mask the gap.
+/// @access private
+/// @group components
+@mixin data-table-sticky-header-scroll {
+  .#{$prefix}--data-table--sticky-header {
+    width: fit-content;
+    min-width: 100%;
+  }
+
+  .#{$prefix}--data-table--sticky-header thead {
+    overflow: visible;
+  }
+
+  .#{$prefix}--data-table--sticky-header tbody {
+    overflow-x: visible;
+  }
+
+  .#{$prefix}--data-table_inner-container {
+    overflow-x: auto;
+  }
+}
+
+@include exports("data-table-sticky-header-scroll") {
+  @include data-table-sticky-header-scroll;
+}
+
 // carbon-components-svelte patch (formerly css/_data-table-footer.scss)
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/typography";
