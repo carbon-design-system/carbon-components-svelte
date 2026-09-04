@@ -417,6 +417,13 @@ describe("Accordion", () => {
     expect(screen.getByText("Custom Title")).toBeInTheDocument();
   });
 
+  it("does not render a literal 'title' heading by default", () => {
+    const { container } = render(Accordion, { props: { noTitle: true } });
+
+    const heading = container.querySelector(".bx--accordion__title");
+    expect(heading?.textContent?.trim()).toBe("");
+  });
+
   it("should forward Escape keydown without closing the item", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(Accordion);

@@ -2,6 +2,7 @@
   /**
    * Specify the title of the accordion item heading.
    * Alternatively, use the "title" slot.
+   * @type {string | undefined}
    * @example
    * ```svelte
    * <AccordionItem>
@@ -9,7 +10,7 @@
    * </AccordionItem>
    * ```
    */
-  export let title = "title";
+  export let title = undefined;
 
   /**
    * Set to `true` to open the first accordion item.
