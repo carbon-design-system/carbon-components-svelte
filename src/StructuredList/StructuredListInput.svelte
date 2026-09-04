@@ -9,8 +9,11 @@
    */
   export let checked = false;
 
-  /** Specify the title of the input */
-  export let title = "title";
+  /**
+   * Specify the title of the input.
+   * @type {string | undefined}
+   */
+  export let title = undefined;
 
   /**
    * Specify the value of the input.
