@@ -79,11 +79,13 @@
     transition: background-color $duration--fast-02 motion(standard, productive);
   }
 
-  .#{$prefix}--structured-list--selection
-    .#{$prefix}--structured-list-row:hover:not(.#{$prefix}--structured-list-row--header-row):not(.#{$prefix}--structured-list-row--selected) {
-    border-bottom: 1px solid $hover-row;
-    background-color: $hover-row;
-    cursor: pointer;
+  @media (any-hover: hover) {
+    .#{$prefix}--structured-list--selection
+      .#{$prefix}--structured-list-row:hover:not(.#{$prefix}--structured-list-row--header-row):not(.#{$prefix}--structured-list-row--selected) {
+      border-bottom: 1px solid $hover-row;
+      background-color: $hover-row;
+      cursor: pointer;
+    }
   }
 
   .#{$prefix}--structured-list-row.#{$prefix}--structured-list-row--header-row {
@@ -96,19 +98,21 @@
       @include focus-outline('outline');
     }
   }
-  .#{$prefix}--structured-list--selection
-    .#{$prefix}--structured-list-row:hover:not(.#{$prefix}--structured-list-row--header-row)
-    > .#{$prefix}--structured-list-td {
-    color: $text-01;
-  }
+  @media (any-hover: hover) {
+    .#{$prefix}--structured-list--selection
+      .#{$prefix}--structured-list-row:hover:not(.#{$prefix}--structured-list-row--header-row)
+      > .#{$prefix}--structured-list-td {
+      color: $text-01;
+    }
 
-  .#{$prefix}--structured-list--selection
-    .#{$prefix}--structured-list-row:hover:not(.#{$prefix}--structured-list-row--header-row)
-    > .#{$prefix}--structured-list-td {
-    @if feature-flag-enabled('enable-v11-release') {
-      border-top: 1px solid $border-subtle;
-    } @else {
-      border-top: 1px solid $ui-01;
+    .#{$prefix}--structured-list--selection
+      .#{$prefix}--structured-list-row:hover:not(.#{$prefix}--structured-list-row--header-row)
+      > .#{$prefix}--structured-list-td {
+      @if feature-flag-enabled('enable-v11-release') {
+        border-top: 1px solid $border-subtle;
+      } @else {
+        border-top: 1px solid $ui-01;
+      }
     }
   }
 
@@ -271,10 +275,12 @@
   // where the wrapper sits. Giving the wrapper the identical
   // conditional border keeps every column's top edge resolving the same
   // way, hover or not.
-  .#{$prefix}--structured-list--selection
-    .#{$prefix}--structured-list-row:hover:not(.#{$prefix}--structured-list-row--header-row)
-    > .#{$prefix}--structured-list-input-wrapper {
-    border-top: 1px solid $ui-01;
+  @media (any-hover: hover) {
+    .#{$prefix}--structured-list--selection
+      .#{$prefix}--structured-list-row:hover:not(.#{$prefix}--structured-list-row--header-row)
+      > .#{$prefix}--structured-list-input-wrapper {
+      border-top: 1px solid $ui-01;
+    }
   }
 
   // Carbon's base CSS fills the selection icon via
