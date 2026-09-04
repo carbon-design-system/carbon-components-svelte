@@ -11,6 +11,7 @@
   export let customClass = "";
   export let itemClass = "";
   export let useSlot = false;
+  export let noTitle = false;
   export let ariaLabel: ComponentProps<AccordionItem>["ariaLabel"] = undefined;
   export let ref: ComponentProps<AccordionItem>["ref"] = null;
 </script>
@@ -38,6 +39,8 @@
       <div slot="title">Custom Title</div>
       Slot content
     </AccordionItem>
+  {:else if noTitle}
+    <AccordionItem>No title content</AccordionItem>
   {:else}
     <AccordionItem title="Natural Language Classifier" bind:ref
       >1</AccordionItem
