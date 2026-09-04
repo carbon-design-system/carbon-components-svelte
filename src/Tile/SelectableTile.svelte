@@ -16,8 +16,11 @@
   /** Set to `true` to disable the tile */
   export let disabled = false;
 
-  /** Specify the title of the selectable tile */
-  export let title = "title";
+  /**
+   * Specify the title of the selectable tile.
+   * @type {string | undefined}
+   */
+  export let title = undefined;
 
   /** Specify the value of the selectable tile */
   export let value = "value";

@@ -53,6 +53,12 @@ describe("SelectableTile", () => {
     }
   });
 
+  it("does not render a title attribute by default", () => {
+    const { container } = render(SelectableTileStandalone);
+    const input = container.querySelector('input[type="checkbox"]');
+    expect(input).not.toHaveAttribute("title");
+  });
+
   it("renders with custom title and value", () => {
     const { container } = render(SelectableTileTest, {
       title: "Custom Title",
