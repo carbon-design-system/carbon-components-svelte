@@ -142,11 +142,16 @@
     @include focus-outline('outline');
   }
 
-  .#{$prefix}--btn.#{$prefix}--text-input--password__visibility__toggle.#{$prefix}--tooltip__trigger:hover
-    svg,
   .#{$prefix}--btn.#{$prefix}--text-input--password__visibility__toggle.#{$prefix}--tooltip__trigger:focus
     svg {
     fill: $icon-primary;
+  }
+
+  @media (any-hover: hover) {
+    .#{$prefix}--btn.#{$prefix}--text-input--password__visibility__toggle.#{$prefix}--tooltip__trigger:hover
+      svg {
+      fill: $icon-primary;
+    }
   }
 
   .#{$prefix}--text-input--invalid,
@@ -180,8 +185,10 @@
     cursor: not-allowed;
     fill: $disabled-02;
 
-    &:hover {
-      fill: $disabled-02;
+    @media (any-hover: hover) {
+      &:hover {
+        fill: $disabled-02;
+      }
     }
   }
 
@@ -349,10 +356,16 @@
   // Windows HCM fix
   .#{$prefix}--text-input--password__visibility,
     // TODO: remove selector above
-  .#{$prefix}--btn.#{$prefix}--btn--icon-only.#{$prefix}--text-input--password__visibility__toggle.#{$prefix}--tooltip__trigger svg,
-    .#{$prefix}--btn.#{$prefix}--btn--icon-only.#{$prefix}--text-input--password__visibility__toggle.#{$prefix}--tooltip__trigger:hover
-    svg {
+  .#{$prefix}--btn.#{$prefix}--btn--icon-only.#{$prefix}--text-input--password__visibility__toggle.#{$prefix}--tooltip__trigger svg {
     @include high-contrast-mode('icon-fill');
+  }
+
+  // Windows HCM fix
+  @media (any-hover: hover) {
+    .#{$prefix}--btn.#{$prefix}--btn--icon-only.#{$prefix}--text-input--password__visibility__toggle.#{$prefix}--tooltip__trigger:hover
+      svg {
+      @include high-contrast-mode('icon-fill');
+    }
   }
 }
 
