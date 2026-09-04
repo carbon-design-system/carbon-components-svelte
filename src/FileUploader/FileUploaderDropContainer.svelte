@@ -136,6 +136,13 @@
     if (!disabled) {
       over = false;
       processIncoming([...event.dataTransfer.files]);
+      if (ref) {
+        const dataTransfer = new DataTransfer();
+        for (const file of files) {
+          dataTransfer.items.add(file);
+        }
+        ref.files = dataTransfer.files;
+      }
     }
   }}
 >
