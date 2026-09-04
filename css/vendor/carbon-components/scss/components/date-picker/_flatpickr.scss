@@ -189,8 +189,10 @@
     fill: $icon-01;
     user-select: none;
 
-    &:hover {
-      background-color: $hover-ui;
+    @media (any-hover: hover) {
+      &:hover {
+        background-color: $hover-ui;
+      }
     }
   }
 
@@ -200,9 +202,11 @@
     fill: $ui-05;
   }
 
-  .flatpickr-next-month.disabled:hover svg,
-  .flatpickr-prev-month.disabled:hover svg {
-    fill: $ui-05;
+  @media (any-hover: hover) {
+    .flatpickr-next-month.disabled:hover svg,
+    .flatpickr-prev-month.disabled:hover svg {
+      fill: $ui-05;
+    }
   }
 
   .flatpickr-current-month {
@@ -219,8 +223,10 @@
     margin-right: $carbon--spacing-02;
     margin-left: $carbon--spacing-02;
 
-    &:hover {
-      background-color: $hover-ui;
+    @media (any-hover: hover) {
+      &:hover {
+        background-color: $hover-ui;
+      }
     }
   }
 
@@ -228,8 +234,10 @@
     position: relative;
     width: to-rem(60px);
 
-    &:hover {
-      background-color: $hover-ui;
+    @media (any-hover: hover) {
+      &:hover {
+        background-color: $hover-ui;
+      }
     }
   }
 
@@ -259,11 +267,18 @@
       @include focus-outline('border');
     }
 
-    &[disabled],
-    &[disabled]:hover {
+    &[disabled] {
       color: $disabled-02;
       background-color: $ui-01;
       pointer-events: none;
+    }
+
+    @media (any-hover: hover) {
+      &[disabled]:hover {
+        color: $disabled-02;
+        background-color: $ui-01;
+        pointer-events: none;
+      }
     }
   }
 
@@ -305,9 +320,11 @@
       content: '';
     }
 
-    &:hover::after {
-      border-top-color: $interactive-01;
-      border-bottom-color: $interactive-01;
+    @media (any-hover: hover) {
+      &:hover::after {
+        border-top-color: $interactive-01;
+        border-bottom-color: $interactive-01;
+      }
     }
 
     &:active::after {
@@ -324,14 +341,16 @@
     border-top-color: $disabled-02;
   }
 
-  .numInputWrapper:hover .arrowUp,
-  .numInputWrapper:hover .arrowDown {
-    opacity: 1;
-  }
+  @media (any-hover: hover) {
+    .numInputWrapper:hover .arrowUp,
+    .numInputWrapper:hover .arrowDown {
+      opacity: 1;
+    }
 
-  .numInputWrapper:hover .numInput[disabled] ~ .arrowUp,
-  .numInputWrapper:hover .numInput[disabled] ~ .arrowDown {
-    opacity: 0;
+    .numInputWrapper:hover .numInput[disabled] ~ .arrowUp,
+    .numInputWrapper:hover .numInput[disabled] ~ .arrowDown {
+      opacity: 0;
+    }
   }
 
   .flatpickr-weekdays {
@@ -395,8 +414,10 @@
     cursor: pointer;
     transition: all $duration--fast-01 motion(standard, productive);
 
-    &:hover {
-      background: $hover-ui;
+    @media (any-hover: hover) {
+      &:hover {
+        background: $hover-ui;
+      }
     }
 
     &:focus {
@@ -469,11 +490,13 @@
     background: $ui-01;
   }
 
-  .flatpickr-day.endRange:hover {
-    @include focus-outline('outline');
+  @media (any-hover: hover) {
+    .flatpickr-day.endRange:hover {
+      @include focus-outline('outline');
 
-    color: $text-01;
-    background: $ui-01;
+      color: $text-01;
+      background: $ui-01;
+    }
   }
 
   .flatpickr-day.endRange.inRange.selected {
@@ -485,8 +508,10 @@
     color: $disabled-02;
     cursor: not-allowed;
 
-    &:hover {
-      background-color: transparent;
+    @media (any-hover: hover) {
+      &:hover {
+        background-color: transparent;
+      }
     }
   }
 
