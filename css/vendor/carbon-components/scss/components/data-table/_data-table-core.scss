@@ -76,24 +76,26 @@
     transition: background-color $duration--fast-01 motion(entrance, productive);
   }
 
-  .#{$prefix}--data-table tbody tr:hover {
-    background: $layer-hover;
-  }
+  @media (any-hover: hover) {
+    .#{$prefix}--data-table tbody tr:hover {
+      background: $layer-hover;
+    }
 
-  .#{$prefix}--data-table tbody tr:hover td,
-  .#{$prefix}--data-table tbody tr:hover th {
-    border-top: 1px solid $layer-hover;
-    border-bottom: 1px solid $layer-hover;
-    background: $layer-hover;
-    color: $text-primary;
-  }
+    .#{$prefix}--data-table tbody tr:hover td,
+    .#{$prefix}--data-table tbody tr:hover th {
+      border-top: 1px solid $layer-hover;
+      border-bottom: 1px solid $layer-hover;
+      background: $layer-hover;
+      color: $text-primary;
+    }
 
-  .#{$prefix}--data-table tr:hover .#{$prefix}--link {
-    color: $link-secondary;
-  }
+    .#{$prefix}--data-table tr:hover .#{$prefix}--link {
+      color: $link-secondary;
+    }
 
-  .#{$prefix}--data-table tr:hover .#{$prefix}--link--disabled {
-    color: $disabled-02;
+    .#{$prefix}--data-table tr:hover .#{$prefix}--link--disabled {
+      color: $disabled-02;
+    }
   }
 
   .#{$prefix}--data-table th,
@@ -188,29 +190,34 @@
 
   .#{$prefix}--data-table
     td.#{$prefix}--table-column-menu
-    .#{$prefix}--overflow-menu:hover
-    .#{$prefix}--overflow-menu__icon,
-  .#{$prefix}--data-table
-    td.#{$prefix}--table-column-menu
     .#{$prefix}--overflow-menu:focus
-    .#{$prefix}--overflow-menu__icon,
-  .#{$prefix}--data-table
-    tr:hover
-    td.#{$prefix}--table-column-menu
-    .#{$prefix}--overflow-menu
     .#{$prefix}--overflow-menu__icon {
     opacity: 1;
   }
 
-  .#{$prefix}--data-table .#{$prefix}--overflow-menu {
-    &:hover {
-      background-color: $layer-selected-hover;
+  @media (any-hover: hover) {
+    .#{$prefix}--data-table
+      td.#{$prefix}--table-column-menu
+      .#{$prefix}--overflow-menu:hover
+      .#{$prefix}--overflow-menu__icon,
+    .#{$prefix}--data-table
+      tr:hover
+      td.#{$prefix}--table-column-menu
+      .#{$prefix}--overflow-menu
+      .#{$prefix}--overflow-menu__icon {
+      opacity: 1;
     }
-  }
 
-  .#{$prefix}--data-table--selected .#{$prefix}--overflow-menu {
-    &:hover {
-      background-color: $layer-hover;
+    .#{$prefix}--data-table .#{$prefix}--overflow-menu {
+      &:hover {
+        background-color: $layer-selected-hover;
+      }
+    }
+
+    .#{$prefix}--data-table--selected .#{$prefix}--overflow-menu {
+      &:hover {
+        background-color: $layer-hover;
+      }
     }
   }
 
@@ -258,13 +265,15 @@
     background-color: $data-table-zebra-color;
   }
 
-  .#{$prefix}--data-table--zebra
-    tbody
-    tr:not(.#{$prefix}--parent-row):hover
-    td {
-    border-top: 1px solid $layer-hover;
-    border-bottom: 1px solid $layer-hover;
-    background-color: $layer-hover;
+  @media (any-hover: hover) {
+    .#{$prefix}--data-table--zebra
+      tbody
+      tr:not(.#{$prefix}--parent-row):hover
+      td {
+      border-top: 1px solid $layer-hover;
+      border-bottom: 1px solid $layer-hover;
+      background-color: $layer-hover;
+    }
   }
 
   .#{$prefix}--table-column-checkbox .#{$prefix}--checkbox-label {
@@ -358,26 +367,28 @@
     padding-top: $spacing-05;
   }
 
-  // Disabled radio button, checkbox fix #10913
-  tr.#{$prefix}--data-table--selected:hover
-    .#{$prefix}--radio-button[disabled]
-    + .#{$prefix}--radio-button__label,
-  tr.#{$prefix}--data-table--selected:hover
-    .#{$prefix}--checkbox[disabled]
-    + .#{$prefix}--checkbox-label,
-  tr.#{$prefix}--data-table--selected:hover .#{$prefix}--link--disabled {
-    color: $disabled-03;
-  }
+  @media (any-hover: hover) {
+    // Disabled radio button, checkbox fix #10913
+    tr.#{$prefix}--data-table--selected:hover
+      .#{$prefix}--radio-button[disabled]
+      + .#{$prefix}--radio-button__label,
+    tr.#{$prefix}--data-table--selected:hover
+      .#{$prefix}--checkbox[disabled]
+      + .#{$prefix}--checkbox-label,
+    tr.#{$prefix}--data-table--selected:hover .#{$prefix}--link--disabled {
+      color: $disabled-03;
+    }
 
-  // Disabled radio button, checkbox fix #10913
-  tr.#{$prefix}--data-table--selected:hover
-    .#{$prefix}--radio-button[disabled]
-    + .#{$prefix}--radio-button__label
-    .#{$prefix}--radio-button__appearance,
-  tr.#{$prefix}--data-table--selected:hover
-    .#{$prefix}--checkbox[disabled]
-    + .#{$prefix}--checkbox-label:before {
-    border-color: $disabled-03;
+    // Disabled radio button, checkbox fix #10913
+    tr.#{$prefix}--data-table--selected:hover
+      .#{$prefix}--radio-button[disabled]
+      + .#{$prefix}--radio-button__label
+      .#{$prefix}--radio-button__appearance,
+    tr.#{$prefix}--data-table--selected:hover
+      .#{$prefix}--checkbox[disabled]
+      + .#{$prefix}--checkbox-label:before {
+      border-color: $disabled-03;
+    }
   }
 
   .#{$prefix}--table-column-radio {
@@ -430,22 +441,24 @@
     border-bottom: 1px solid $layer-active;
   }
 
-  .#{$prefix}--data-table--zebra
-    tbody
-    tr:nth-child(even).#{$prefix}--data-table--selected:hover
-    td {
-    border-bottom: 1px solid $data-table-column-hover;
-  }
+  @media (any-hover: hover) {
+    .#{$prefix}--data-table--zebra
+      tbody
+      tr:nth-child(even).#{$prefix}--data-table--selected:hover
+      td {
+      border-bottom: 1px solid $data-table-column-hover;
+    }
 
-  .#{$prefix}--data-table--zebra
-    tbody
-    tr:nth-child(odd).#{$prefix}--data-table--selected:hover
-    td,
-  .#{$prefix}--data-table tbody .#{$prefix}--data-table--selected:hover td {
-    border-top: 1px solid $data-table-column-hover;
-    border-bottom: 1px solid $data-table-column-hover;
-    background: $data-table-column-hover;
-    color: $text-primary;
+    .#{$prefix}--data-table--zebra
+      tbody
+      tr:nth-child(odd).#{$prefix}--data-table--selected:hover
+      td,
+    .#{$prefix}--data-table tbody .#{$prefix}--data-table--selected:hover td {
+      border-top: 1px solid $data-table-column-hover;
+      border-bottom: 1px solid $data-table-column-hover;
+      background: $data-table-column-hover;
+      color: $text-primary;
+    }
   }
 
   .#{$prefix}--data-table--selected
@@ -649,10 +662,12 @@
 
     // Taken from L125 _data-table-expandable
     // Used to hide white line when parent row is hovered when child is expanded
-    tr.#{$prefix}--parent-row.#{$prefix}--expandable-row:hover
-      + tr[data-child-row]
-      td {
-      border-top: 1px solid $layer-hover;
+    @media (any-hover: hover) {
+      tr.#{$prefix}--parent-row.#{$prefix}--expandable-row:hover
+        + tr[data-child-row]
+        td {
+        border-top: 1px solid $layer-hover;
+      }
     }
 
     tr.#{$prefix}--expandable-row:last-of-type {
