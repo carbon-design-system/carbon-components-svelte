@@ -417,7 +417,7 @@ describe("Accordion", () => {
     expect(screen.getByText("Custom Title")).toBeInTheDocument();
   });
 
-  it("should handle Escape key to close item", async () => {
+  it("should forward Escape keydown without closing the item", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(Accordion);
 
@@ -429,7 +429,7 @@ describe("Accordion", () => {
     await user.keyboard("{Escape}");
     expect(consoleLog).toHaveBeenCalledWith("item-keydown", "Escape");
 
-    itemIsCollapsed(/Language Translator/);
+    itemIsExpanded(/Language Translator/);
   });
 
   it("should expose ref to the heading button", () => {
