@@ -4,13 +4,11 @@ import LocalStorageObject from "./LocalStorageObject.test.svelte";
 
 describe("LocalStorage - Object Values", () => {
   let localStorageMock: { [key: string]: string };
-  let originalLocalStorage: Storage;
 
   beforeEach(() => {
-    originalLocalStorage = globalThis.localStorage;
     localStorageMock = {};
 
-    globalThis.localStorage = {
+    vi.stubGlobal("localStorage", {
       getItem: vi.fn((key) => localStorageMock[key] || null),
       setItem: vi.fn((key, value) => {
         localStorageMock[key] = value;
@@ -23,12 +21,11 @@ describe("LocalStorage - Object Values", () => {
       }),
       length: 0,
       key: vi.fn(),
-    };
+    });
   });
 
   afterEach(() => {
-    globalThis.localStorage = originalLocalStorage;
-    localStorage.clear();
+    vi.unstubAllGlobals();
     vi.restoreAllMocks();
     localStorageMock = {};
   });

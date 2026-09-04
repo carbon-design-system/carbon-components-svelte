@@ -4,13 +4,11 @@ import SessionStorageObject from "./SessionStorageObject.test.svelte";
 
 describe("SessionStorage - Object Values", () => {
   let sessionStorageMock: { [key: string]: string };
-  let originalSessionStorage: Storage;
 
   beforeEach(() => {
-    originalSessionStorage = globalThis.sessionStorage;
     sessionStorageMock = {};
 
-    globalThis.sessionStorage = {
+    vi.stubGlobal("sessionStorage", {
       getItem: vi.fn((key) => sessionStorageMock[key] || null),
       setItem: vi.fn((key, value) => {
         sessionStorageMock[key] = value;
@@ -23,12 +21,11 @@ describe("SessionStorage - Object Values", () => {
       }),
       length: 0,
       key: vi.fn(),
-    };
+    });
   });
 
   afterEach(() => {
-    globalThis.sessionStorage = originalSessionStorage;
-    sessionStorage.clear();
+    vi.unstubAllGlobals();
     vi.restoreAllMocks();
     sessionStorageMock = {};
   });
