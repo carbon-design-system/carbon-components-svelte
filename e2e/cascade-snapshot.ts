@@ -25,6 +25,7 @@
  *          --only <substring>   capture a subset of fixtures
  *          --no-states          skip forced pseudo states (faster)
  *          --url <base>         use a running server instead of spawning vite
+ *          --viewport WxH       default 1280x900; use 320x640 for below-md rules
  */
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
@@ -48,6 +49,9 @@ const ONLY = opt("only");
 const STATES = !rest.includes("--no-states");
 const URL = opt("url");
 const MAX_STATE_ELEMENTS = 80;
+const [VIEW_W, VIEW_H] = (opt("viewport") ?? "1280x900")
+  .split("x")
+  .map((n) => Number(n));
 
 const INTERACTIVE =
   "a, button, input, select, textarea, [tabindex], [role], label, li, tr, td, th, summary";
@@ -254,7 +258,7 @@ async function capture(outDir: string): Promise<void> {
   }
   const browser = await chromium.launch();
   const context = await browser.newContext({
-    viewport: { width: 1280, height: 900 },
+    viewport: { width: VIEW_W, height: VIEW_H },
     reducedMotion: "reduce",
   });
   const page = await context.newPage();
