@@ -42,13 +42,30 @@ these prunings relative to upstream:
 To use an upstream file that is not vendored, restore it from
 `carbon-components@10.58.15` on npm.
 
-Some component files additionally carry this library's own patches, appended
-at the end under `// carbon-components-svelte patch (formerly css/_*.scss)`
-banners. Everything above such a banner is upstream code; everything below is
-hand-authored. A patch may live here only when emitting at the component's
-position is order-safe — it must not rely on out-emitting a later component's
-equal-specificity rules. Patches that need to emit after all base styles stay
-in `css/_*.scss`, registered in the six theme entry files.
+This library also edits the vendored SCSS directly. Two forms:
+
+- **In-place edits** to upstream rules, each marked with a trailing
+  `// ccs: <reason>` comment on the changed declaration or selector. Prefer
+  this over shadowing: change the value, or add the modifier branch right
+  after the rule it refines with the same selector shape plus the one class
+  that carries meaning. Never out-weigh an upstream rule with doubled
+  classes, element qualifiers, or order-only `:not()` guards — the rule is
+  editable.
+- **Appended patches** under a `// carbon-components-svelte patch (...)`
+  banner at the end of a component file, for additive blocks (new variants)
+  that do not fight any upstream rule.
+
+A rule that must beat a *later* component's equal-specificity rule (e.g. a
+readonly field inside a modal) belongs in that later component's file, next
+to the rule it beats, not padded here.
+
+Guards: `bun run check:css --base <ref>` (compiled-rule cascade diff),
+`bun run lint:css` (specificity-padding ratchet), and
+`bun e2e/cascade-snapshot.ts` (computed-style snapshot of the e2e fixtures);
+see each script's header.
+
+`css/_*.scss` still holds v11 backports with no v10 base (fluid-*, popover,
+stack, ...) and utilities, registered in the theme entry files.
 
 `scripts/build-css.ts` resolves `@import "carbon-components/..."` here via its
 sass `loadPaths`, so theme entry files and `css/_*.scss` partials did not
