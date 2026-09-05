@@ -1,0 +1,72 @@
+---
+components: ["InterstitialScreen", "InterstitialScreenHeader", "InterstitialScreenBody", "InterstitialScreenFooter", "InterstitialScreenView"]
+description: Interstitial screens walk a user through a multi-step onboarding or setup flow, hosted in a modal or as a full-screen takeover.
+---
+
+<script>
+</script>
+
+## Basic
+
+Build an interstitial screen from `InterstitialScreenHeader`, `InterstitialScreenBody`, `InterstitialScreenFooter`, and one or more `InterstitialScreenView` steps. With a single view, the footer shows only a "Get Started" button. Bind an element to `launcherButtonRef` to return focus to it once the screen closes.
+
+<FileSource src="/framed/InterstitialScreen/Basic" />
+
+## Steps
+
+Slot more than one `InterstitialScreenView` into `InterstitialScreenBody` to switch into a step-by-step, carousel-style flow.
+
+### Multiple steps
+
+With more than one view, `InterstitialScreenHeader` shows a `ProgressIndicator` built from each view's `stepTitle`, and `InterstitialScreenFooter` shows Skip/Back/Next, switching to "Get Started" on the final step.
+
+<FileSource src="/framed/InterstitialScreen/MultiStep" />
+
+## Hosting
+
+By default, `InterstitialScreen` renders as a modal, reusing `ComposedModal`/`ModalHeader`/`ModalBody`/`ModalFooter` directly (see [Basic](#basic) above).
+
+### Full screen
+
+Set `isFullScreen` to render a full-screen takeover instead. `InterstitialScreenHeader`/`InterstitialScreenBody`/`InterstitialScreenFooter` render their own bare elements in this mode rather than delegating to `ModalHeader`/`ModalBody`/`ModalFooter`, and <DocKbd label="Escape" /> is handled directly since there is no modal to own it.
+
+<FileSource src="/framed/InterstitialScreen/FullScreen" />
+
+## Actions
+
+`InterstitialScreenFooter` dispatches a cancelable `action` event on every Skip/Back/Next/Get-Started press, before its default behavior (navigating a step, or closing the screen) runs.
+
+### Take over a button press
+
+Call `event.preventDefault()` on the `action` event to block a button's default behavior, for example to require an acknowledgment before advancing.
+
+<FileSource src="/framed/InterstitialScreen/TakeOverAction" />
+
+### Async loading state
+
+Bind `loadingAction` to the action name you're handling to show that button's `InlineLoading` state and disable the rest of the footer while async work runs, then advance or close the screen yourself when it resolves.
+
+<FileSource src="/framed/InterstitialScreen/AsyncAction" />
+
+## Closing
+
+`InterstitialScreen` dispatches a cancelable `close` event whenever the screen is about to close: from the header close button, <DocKbd label="Escape" />, or the footer's final Skip/Get-Started action (Back/Next never close).
+
+### Prevent default
+
+Call `event.preventDefault()` on the `close` event to keep the screen open, for example behind a confirmation.
+
+<FileSource src="/framed/InterstitialScreen/CancelableClose" />
+
+### Returning focus to a launcher
+
+Bind an element to `launcherButtonRef` to return focus to it once the screen closes, as in [Basic](#basic) above.
+
+## Events
+
+| Component                  | Event    | Payload                          | Cancelable |
+| --------------------------- | -------- | --------------------------------- | :--------: |
+| `InterstitialScreen`        | `close`  | `{ actionType }`                  |    Yes     |
+| `InterstitialScreenFooter`  | `action` | `{ actionType }`                  |    Yes     |
+
+`actionType` is one of `"close"`, `"start"`, `"skip"`, `"back"`, or `"next"` on `close`, and `"start"`, `"skip"`, `"back"`, or `"next"` on `action`.

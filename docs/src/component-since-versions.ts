@@ -35,6 +35,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   ImageLoader: "0.30.0",
   InlineLoading: "0.2.0",
   InlineNotification: "0.2.0",
+  InterstitialScreen: "0.112.0",
   Link: "0.2.0",
   Loading: "0.2.0",
   LocalStorage: "0.30.0",
