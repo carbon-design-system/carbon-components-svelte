@@ -64,25 +64,26 @@
     text-decoration: none;
   }
 
-  .#{$prefix}--link.#{$prefix}--link--visited:visited {
+  .#{$prefix}--link--visited:visited { // ccs: flatten
     color: $visited-link;
   }
 
-  .#{$prefix}--link.#{$prefix}--link--visited:visited:hover {
+  .#{$prefix}--link--visited:visited:hover { // ccs: flatten
     color: $hover-primary-text;
   }
 
-  .#{$prefix}--link.#{$prefix}--link--inline {
+  .#{$prefix}--link--disabled.#{$prefix}--link--inline {
+    text-decoration: underline;
+  }
+
+  // After the disabled variant so `:focus` / `:visited` still win by order.
+  .#{$prefix}--link--inline { // ccs: flatten
     text-decoration: underline;
 
     &:focus,
     &:visited {
       text-decoration: none;
     }
-  }
-
-  .#{$prefix}--link--disabled.#{$prefix}--link--inline {
-    text-decoration: underline;
   }
 
   .#{$prefix}--link--sm {
@@ -96,6 +97,12 @@
   .#{$prefix}--link__icon {
     display: inline-flex;
     align-self: center;
+    // Narrower than upstream's $spacing-03 for the default and sm sizes; lg
+    // restores it below (formerly css/_link.scss).
+    margin-left: $spacing-02; // ccs: value
+  }
+
+  .#{$prefix}--link--lg .#{$prefix}--link__icon { // ccs: flatten
     margin-left: $spacing-03;
   }
 }
@@ -107,20 +114,15 @@
 // carbon-components-svelte patch (formerly css/_link.scss)
 /// Scale the Link icon to match the link size.
 /// carbon-components v10 ships no icon scaling — `.bx--link__icon` only sets a
-/// fixed `$spacing-03` gap, so the icon stays 16px at every size and looks
-/// oversized on `sm` links. Size the icon optically to the link text: smaller
-/// for `sm`, larger for `lg`. The default (medium) link keeps the 16px icon.
-/// Also tighten the icon-to-text gap on the smaller sizes, where Carbon's
-/// `$spacing-03` is too wide. Targets the rendered `svg` so the scaling applies
-/// to both the `icon` prop and the `icon` slot.
+/// fixed gap, so the icon stays 16px at every size and looks oversized on
+/// `sm` links. Size the icon optically to the link text: smaller for `sm`,
+/// larger for `lg`. The default (medium) link keeps the 16px icon. (The
+/// icon-to-text gap is set on `.bx--link__icon` itself, above.) Targets the
+/// rendered `svg` so the scaling applies to both the `icon` prop and the
+/// `icon` slot.
 /// @access private
 /// @group components
 @mixin link-icon {
-  // Default (md) and sm: narrower than Carbon's fixed $spacing-03. lg keeps it.
-  .#{$prefix}--link:not(.#{$prefix}--link--lg) .#{$prefix}--link__icon {
-    margin-left: $spacing-02;
-  }
-
   .#{$prefix}--link--sm .#{$prefix}--link__icon svg {
     width: to-rem(14px);
     height: to-rem(14px);
@@ -167,11 +169,11 @@
 /// @access private
 /// @group components
 @mixin link-visited {
-  .#{$prefix}--link.#{$prefix}--link--visited {
+  .#{$prefix}--link--visited {
     color: $visited-link;
   }
 
-  .#{$prefix}--link.#{$prefix}--link--visited:hover {
+  .#{$prefix}--link--visited:hover {
     color: $hover-primary-text;
   }
 }

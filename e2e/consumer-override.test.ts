@@ -66,8 +66,6 @@ test.describe("consumer override", () => {
     });
 
     test("inline link text-decoration", async ({ page }) => {
-      // loses to `.bx--link.bx--link--inline` (0,2,0)
-      test.fail();
       await expect(page.getByTestId("link-inline")).toHaveCSS(
         "text-decoration-line",
         "none",
