@@ -296,3 +296,98 @@
 @include exports('tags') {
   @include tags;
 }
+
+// carbon-components-svelte patch (formerly css/_tag.scss)
+@mixin tag-lg {
+  .#{$prefix}--tag--lg {
+    min-height: to-rem(32px);
+    padding: 0 $carbon--spacing-04;
+  }
+
+  .#{$prefix}--tag--lg.#{$prefix}--tag--filter {
+    padding-right: 0;
+  }
+}
+
+/// Inline tag without default outer margin
+/// @access private
+/// @group components
+@mixin tag-inline {
+  .#{$prefix}--tag--inline {
+    margin: 0;
+  }
+}
+
+/// Truncation tooltip inside a capped-width tag. The trigger itself is
+/// restyled in tooltip/_tooltip.scss, which emits after this file.
+/// @access private
+/// @group components
+@mixin tag-truncate {
+  .#{$prefix}--tag--truncate {
+    min-width: 0;
+  }
+
+  .#{$prefix}--tag__label-tooltip {
+    display: block;
+    min-width: 0;
+    max-width: 100%;
+  }
+}
+
+@include exports("tag-lg") {
+  @include tag-lg;
+}
+
+@include exports("tag-inline") {
+  @include tag-inline;
+}
+
+@include exports("tag-truncate") {
+  @include tag-truncate;
+}
+
+// carbon-components-svelte patch (formerly css/_selectable-tag.scss)
+@import '../../globals/scss/helper-mixins';
+
+@mixin selectable-tag {
+  .#{$prefix}--tag--selectable {
+    border: 1px solid $border-inverse;
+    background-color: $ui-01;
+    color: $text-01;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $hover-ui;
+      outline: none;
+    }
+
+    &:focus {
+      outline: 2px solid $focus;
+      outline-offset: 1px;
+    }
+  }
+
+  .#{$prefix}--tag--selectable-selected {
+    background-color: $layer-selected-inverse;
+    color: $text-inverse;
+
+    &:hover {
+      background-color: $layer-selected-inverse;
+    }
+  }
+
+  .#{$prefix}--tag--selectable.#{$prefix}--tag--disabled {
+    border: 1px solid $disabled-02;
+    background-color: $ui-01;
+    color: $disabled-02;
+
+    &:hover {
+      background-color: $ui-01;
+      cursor: not-allowed;
+    }
+  }
+}
+
+@include exports('selectable-tag') {
+  @include selectable-tag;
+}
