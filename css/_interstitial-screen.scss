@@ -1,0 +1,99 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/layout";
+
+/// InterstitialScreen has no v10 SCSS to port (Carbon React only shipped it
+/// in v11, `packages/styles/scss/components/InterstitialScreen`). Modal-hosted
+/// mode reuses `ComposedModal`/`ModalHeader`/`ModalBody`/`ModalFooter`
+/// directly, so those get their styles for free; full-screen mode reuses the
+/// same `.#{$prefix}--modal-header`/`.#{$prefix}--modal-footer` classes on
+/// its own bare elements for the same reason, which is why this file is only
+/// concerned with the full-screen takeover shell, the progress row, and the
+/// step body.
+/// @access private
+/// @group components
+@mixin interstitial-screen {
+  .#{$prefix}--interstitial-screen--full-screen {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: z("modal");
+    background-color: $ui-01;
+  }
+
+  .#{$prefix}--interstitial-screen--full-screen
+    .#{$prefix}--interstitial-screen__container {
+    display: flex;
+    flex-direction: column;
+    block-size: 100%;
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--interstitial-screen--full-screen .#{$prefix}--modal-header {
+    flex: 0 0 auto;
+  }
+
+  .#{$prefix}--interstitial-screen__subtitle {
+    @include type-style("body-short-01");
+
+    margin-top: $carbon--spacing-03;
+    color: $text-02;
+  }
+
+  .#{$prefix}--interstitial-screen__progress {
+    padding: 0 $carbon--spacing-05 $carbon--spacing-05;
+  }
+
+  .#{$prefix}--interstitial-screen--full-screen
+    .#{$prefix}--interstitial-screen__progress {
+    flex: 0 0 auto;
+    padding-top: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--interstitial-screen__body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .#{$prefix}--interstitial-screen--full-screen
+    .#{$prefix}--interstitial-screen__body {
+    flex: 1 1 auto;
+    min-block-size: 0;
+  }
+
+  .#{$prefix}--interstitial-screen-view {
+    padding: $carbon--spacing-05;
+  }
+
+  // Below `md`, every footer button shares the row equally; at/above `md`,
+  // Skip hugs the trailing edge while Back/Next/Get-Started take a fixed
+  // width, matching the v11 upstream breakpoint behavior.
+  .#{$prefix}--interstitial-screen__footer {
+    justify-content: flex-end;
+  }
+
+  .#{$prefix}--interstitial-screen__footer .#{$prefix}--btn {
+    flex: 1 1 0;
+  }
+
+  @include carbon--breakpoint(md) {
+    .#{$prefix}--interstitial-screen__footer .#{$prefix}--btn {
+      flex: 0 1 auto;
+      max-width: to-rem(240px);
+    }
+
+    .#{$prefix}--interstitial-screen__footer .#{$prefix}--btn--ghost {
+      flex: 1 1 auto;
+      max-width: none;
+      margin-right: auto;
+    }
+  }
+}
+
+@include exports("interstitial-screen") {
+  @include interstitial-screen;
+}
