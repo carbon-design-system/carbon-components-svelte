@@ -2,23 +2,15 @@ import { createHash } from "node:crypto";
 import { watch } from "node:fs";
 import { access, mkdir, readFile, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
-import browserslist from "browserslist";
 import { Glob } from "bun";
-import { browserslistToTargets, transform } from "lightningcss";
+import { transform } from "lightningcss";
 import { initAsyncCompiler } from "sass-embedded";
+import { BROWSERSLIST, targets } from "./lib/css-targets";
 
 const PARTIAL_FILE_REGEX = /^_/;
 const CACHE_DIR = ".cache/build-css";
 const WATCH = process.argv.includes("--watch");
 const FULL_THEMES = process.argv.includes("--themes");
-// Svelte 5 minimum browsers — https://svelte.dev/docs/svelte/browser-support
-const BROWSERSLIST = [
-  "Chrome >= 87",
-  "Firefox >= 83",
-  "Safari >= 14",
-  "Edge >= 87",
-] as const;
-const targets = browserslistToTargets(browserslist([...BROWSERSLIST]));
 
 function minifyEnabled(): boolean {
   if (process.env.BUILD_CSS_MINIFY === "0") return false;

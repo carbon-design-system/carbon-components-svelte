@@ -15,8 +15,12 @@
  *    ties they now win or lose as a review section. These do not fail the
  *    run: the static model cannot tell whether both selectors ever match one
  *    element, so e2e/cascade-snapshot.ts is the gate for them.
- * 4. Prints a specificity profile (selectors with >= 4 classes, max) so the
- *    number is visible per PR.
+ * 4. Prints a specificity histogram (selectors per class tier, element-
+ *    qualified compounds, max) with the top source files by weight, attributed
+ *    through the sass source map, and the minified + gzipped size of the
+ *    entry, so every commit shows its movement against the objective. A
+ *    selector emitted by a mixin is attributed to the mixin's file (e.g.
+ *    globals/scss/_tooltip.scss for every tooltip trigger), not its includer.
  *
  * Co-matchability is a heuristic on the subject (last) compound: two
  * selectors can match the same element when their pseudo-elements agree,
@@ -33,18 +37,23 @@ import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { $ } from "bun";
+import { transform } from "lightningcss";
 import { initAsyncCompiler } from "sass-embedded";
+import { SourceMapConsumer } from "source-map-js";
 import {
   candidates,
   coMatchable,
-  compareSpecificity,
   conflictingProps,
+  type Histogram,
+  histogram,
+  histogramByFile,
   indexBySubject,
   parseRules,
   type Rule,
   type Specificity,
   wins,
 } from "./lib/css-cascade";
+import { targets } from "./lib/css-targets";
 
 const args = process.argv.slice(2);
 function flag(name: string, fallback: string): string {
@@ -60,30 +69,67 @@ const ROOT_SPLIT_RE = /__|--/;
 // ---------------------------------------------------------------------------
 // Compile
 
-async function compileAt(cssDir: string): Promise<string> {
+interface Compiled {
+  rules: Rule[];
+  /** Source file (relative to css/) of a rule, via the sass source map. */
+  fileOf: (rule: Rule) => string | undefined;
+  /** Bytes after sass compressed + lightningcss minify, and gzipped. */
+  size: { min: number; gzip: number };
+}
+
+const SASS_OPTIONS = {
+  quietDeps: true,
+  silenceDeprecations: [
+    "import",
+    "global-builtin",
+    "color-functions",
+    "if-function",
+  ],
+} as const;
+
+// `file:///tmp/x/css/vendor/a.scss` -> `vendor/a.scss`
+function relativeToCss(source: string): string {
+  const p = decodeURIComponent(new URL(source).pathname);
+  const i = p.indexOf("/css/");
+  return i >= 0 ? p.slice(i + "/css/".length) : p;
+}
+
+async function compileAt(cssDir: string): Promise<Compiled> {
   const compiler = await initAsyncCompiler();
   try {
-    const { css } = await compiler.compileAsync(
-      path.join(cssDir, `${ENTRY}.scss`),
-      {
+    const entry = path.join(cssDir, `${ENTRY}.scss`);
+    const opts = { ...SASS_OPTIONS, loadPaths: [path.join(cssDir, "vendor")] };
+    const [expanded, compressed] = await Promise.all([
+      compiler.compileAsync(entry, {
+        ...opts,
         style: "expanded",
-        loadPaths: [path.join(cssDir, "vendor")],
-        quietDeps: true,
-        silenceDeprecations: [
-          "import",
-          "global-builtin",
-          "color-functions",
-          "if-function",
-        ],
-      },
+        sourceMap: true,
+      }),
+      compiler.compileAsync(entry, { ...opts, style: "compressed" }),
+    ]);
+    const rules = parseRules(expanded.css, true);
+    const map = new SourceMapConsumer(
+      expanded.sourceMap as ConstructorParameters<typeof SourceMapConsumer>[0],
     );
-    return css;
+    const fileOf = (rule: Rule): string | undefined => {
+      if (!rule.loc) return undefined;
+      const { source } = map.originalPositionFor(rule.loc);
+      return source ? relativeToCss(source) : undefined;
+    };
+    const { code } = transform({
+      filename: `${ENTRY}.css`,
+      code: Buffer.from(compressed.css, "utf8"),
+      targets,
+      minify: true,
+    });
+    const size = { min: code.byteLength, gzip: Bun.gzipSync(code).byteLength };
+    return { rules, fileOf, size };
   } finally {
     await compiler.dispose();
   }
 }
 
-async function compileRef(ref: string): Promise<string> {
+async function compileRef(ref: string): Promise<Compiled> {
   const dir = await mkdtemp(path.join(tmpdir(), "ccs-cascade-"));
   try {
     await $`git archive ${ref} css | tar -x -C ${dir}`.quiet();
@@ -100,12 +146,12 @@ function fmtSpec(s: Specificity): string {
   return `(${s.join(",")})`;
 }
 
-const [baseCss, headCss] = await Promise.all([
+const [baseCompiled, headCompiled] = await Promise.all([
   compileRef(BASE_REF),
   compileAt("css"),
 ]);
-const base = parseRules(baseCss);
-const head = parseRules(headCss);
+const base = baseCompiled.rules;
+const head = headCompiled.rules;
 
 // 1. Multiset delta ---------------------------------------------------------
 const count = (rules: Rule[]) => {
@@ -272,26 +318,51 @@ for (const rule of changedHead) {
 }
 
 // 3. Specificity profile ----------------------------------------------------
-function profile(rules: Rule[]) {
-  let heavy = 0;
-  let max: Specificity = [0, 0, 0];
-  for (const r of rules) {
-    if (r.specificity[1] >= 4) heavy++;
-    if (compareSpecificity(r.specificity, max) > 0) max = r.specificity;
-  }
-  return { selectors: rules.length, heavy, max };
-}
-const pb = profile(base);
-const ph = profile(head);
+const pb = histogram(base);
+const ph = histogram(head);
+const filesBase = histogramByFile(base, baseCompiled.fileOf);
+const filesHead = histogramByFile(head, headCompiled.fileOf);
+// Weight of a file: selectors at three or more classes.
+const weight = (h: Histogram | undefined) =>
+  h ? h.classes[3] + h.classes[4] : 0;
+const topFiles = [...new Set([...filesBase.keys(), ...filesHead.keys()])]
+  .map((file) => ({
+    file,
+    base: weight(filesBase.get(file)),
+    head: weight(filesHead.get(file)),
+  }))
+  .sort((a, b) => b.head - a.head || b.base - a.base)
+  .slice(0, 10);
 
 // Report -------------------------------------------------------------------
 const lines: string[] = [];
+const delta = (a: number, b: number) =>
+  a === b ? `${b}` : `${a} -> ${b} (${b > a ? "+" : ""}${b - a})`;
+const kb = (n: number) => `${(n / 1024).toFixed(1)}kB`;
 lines.push(`base: ${BASE_REF}  head: working tree  entry: css/${ENTRY}.scss`);
 lines.push(
-  `selectors: ${pb.selectors} -> ${ph.selectors}  ` +
-    `>=4 classes: ${pb.heavy} -> ${ph.heavy}  ` +
+  `selectors: ${delta(pb.selectors, ph.selectors)}  ` +
     `max: ${fmtSpec(pb.max)} -> ${fmtSpec(ph.max)}`,
 );
+lines.push(
+  `classes  1: ${delta(pb.classes[1], ph.classes[1])}  ` +
+    `2: ${delta(pb.classes[2], ph.classes[2])}  ` +
+    `3: ${delta(pb.classes[3], ph.classes[3])}  ` +
+    `>=4: ${delta(pb.classes[4], ph.classes[4])}  ` +
+    `element-qualified: ${delta(pb.qualified, ph.qualified)}`,
+);
+lines.push(
+  `size (min / gzip): ${kb(baseCompiled.size.min)} / ${kb(baseCompiled.size.gzip)}` +
+    ` -> ${kb(headCompiled.size.min)} / ${kb(headCompiled.size.gzip)}` +
+    `  (${delta(baseCompiled.size.min, headCompiled.size.min)} B min, ` +
+    `${delta(baseCompiled.size.gzip, headCompiled.size.gzip)} B gzip)`,
+);
+lines.push("top files by selectors at >=3 classes (base -> head):");
+for (const f of topFiles) {
+  lines.push(
+    `  ${String(f.head).padStart(4)}  ${delta(f.base, f.head).padEnd(18)} ${f.file}`,
+  );
+}
 lines.push(
   `removed: ${removed.length}  added: ${added.length}  ` +
     `rewrites (same decls, new selector): ${rewrites.size}  ` +
