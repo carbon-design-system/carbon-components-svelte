@@ -251,6 +251,7 @@ export {
   filterTreeNodes,
 } from "./utils/filterTreeNodes";
 export { fuzzyMatch, highlightSegments } from "./utils/fuzzyMatch";
+export { validateNumberSeparators } from "./utils/numericFormat";
 export { toHierarchy } from "./utils/toHierarchy";
 export {
   resolveCheckboxState,

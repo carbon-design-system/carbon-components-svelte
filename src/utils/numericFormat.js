@@ -111,6 +111,26 @@ export function parseLocaleValue(raw, groupSeparator, decimalSeparator) {
 }
 
 /**
+ * Validate that `input` uses digits and separators consistent with `locale`
+ * (or plain ASCII digits/separators when `locale` is undefined). Intended for
+ * use as a `NumberInput` `validate` function.
+ *
+ * @param {string} input
+ * @param {string | undefined} locale
+ * @returns {boolean}
+ */
+export function validateNumberSeparators(input, locale) {
+  if (input === "" || input === "-") return true;
+  if (locale === undefined) return parse(input) !== null;
+
+  const parts = new Intl.NumberFormat(locale).formatToParts(12345.6);
+  const groupSeparator = parts.find((p) => p.type === "group")?.value ?? "";
+  const decimalSeparator =
+    parts.find((p) => p.type === "decimal")?.value ?? ".";
+  return parseLocaleValue(input, groupSeparator, decimalSeparator) !== null;
+}
+
+/**
  * First step value when the field is empty: `stepStartValue` if set, else `min`,
  * else 0.
  *
