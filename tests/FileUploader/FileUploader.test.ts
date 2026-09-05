@@ -532,6 +532,47 @@ describe("FileUploader", () => {
     });
   });
 
+  it("should manage focus after removing a file with the keyboard", async () => {
+    const { component } = render(FileUploader);
+
+    const file1 = new File(["content1"], "file1.txt", { type: "text/plain" });
+    const file2 = new File(["content2"], "file2.txt", { type: "text/plain" });
+    assert(component.ref instanceof HTMLInputElement);
+    simulateFileSelection(component.ref, [file1, file2]);
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("file1.txt")).toBeInTheDocument();
+      expect(screen.queryByText("file2.txt")).toBeInTheDocument();
+    });
+
+    const closeButtons = () =>
+      Array.from(
+        document.querySelectorAll<HTMLElement>(
+          ".bx--file__state-container .bx--file-close",
+        ),
+      );
+
+    closeButtons()[0].focus();
+    await user.keyboard("{Enter}");
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("file1.txt")).not.toBeInTheDocument();
+    });
+
+    // Focus moves to the remaining file's remove button.
+    expect(closeButtons()).toHaveLength(1);
+    expect(closeButtons()[0]).toHaveFocus();
+
+    await user.keyboard("{Enter}");
+
+    await vi.waitFor(() => {
+      expect(screen.queryByText("file2.txt")).not.toBeInTheDocument();
+    });
+
+    // Focus moves to the upload trigger once the list is empty.
+    expect(screen.getByRole("button", { name: "Add files" })).toHaveFocus();
+  });
+
   it("should accept files under maxFileSize limit", async () => {
     const { component } = render(FileUploader, {
       props: { maxFileSize: 1000 },

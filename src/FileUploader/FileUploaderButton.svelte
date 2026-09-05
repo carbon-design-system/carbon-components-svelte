@@ -71,6 +71,12 @@
   export let ref = null;
 
   /**
+   * Obtain a reference to the button HTML element.
+   * @bindable readonly
+   */
+  export let triggerRef = null;
+
+  /**
    * Specify the icon to render.
    * @type {Icon}
    */
@@ -158,6 +164,7 @@
 </script>
 
 <button
+  bind:this={triggerRef}
   type="button"
   on:click={() => ref?.click()}
   {disabled}
