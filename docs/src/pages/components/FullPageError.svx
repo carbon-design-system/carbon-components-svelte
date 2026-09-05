@@ -1,0 +1,78 @@
+---
+components: ["FullPageError"]
+description: Display a full-page error when the requested page is unavailable to the user, typically caused by issues with the requested URL or access permissions.
+---
+
+<script>
+  import { FullPageError, Button, Link } from "carbon-components-svelte";
+  import { Robot } from "carbon-pictograms-svelte";
+</script>
+
+## Basic
+
+Create a full-page error with `labelText`, `title`, and `description`.
+
+<FullPageError
+  labelText="Error"
+  title="Something went wrong"
+  description="An unexpected error occurred while loading this page."
+/>
+
+## 403
+
+Set `kind` to `"403"` to display the forbidden access illustration.
+
+<FullPageError
+  kind="403"
+  labelText="Error 403"
+  title="Access denied"
+  description="You don't have permission to view this page."
+/>
+
+## 404
+
+Set `kind` to `"404"` to display the not found illustration.
+
+<FullPageError
+  kind="404"
+  labelText="Error 404"
+  title="Page not found"
+  description="The page you're looking for doesn't exist or has been moved."
+/>
+
+## With action
+
+Use the default slot to add extra body content below the description, such as a button to navigate back home.
+
+<FullPageError
+  labelText="Error"
+  title="Something went wrong"
+  description="An unexpected error occurred while loading this page."
+>
+  <Button>Go home</Button>
+</FullPageError>
+
+## Slottable label, title, and description
+
+Use the `labelChildren`, `titleChildren`, and `descriptionChildren` slots to render custom markup instead of plain text.
+
+<FullPageError>
+  <span slot="labelChildren">
+    Error <code>500</code>
+  </span>
+  <svelte:fragment slot="titleChildren">Internal server error</svelte:fragment>
+  <svelte:fragment slot="descriptionChildren">
+    Try again, or <Link size="lg" href="#">contact support</Link> if the problem persists.
+  </svelte:fragment>
+</FullPageError>
+
+## Custom illustration
+
+Use the `illustration` slot to replace the default kind-based SVG. Pictograms from [carbon-pictograms-svelte](https://github.com/carbon-design-system/carbon-pictograms-svelte) work well here.
+
+<FullPageError
+  labelText="Error"
+  title="Something went wrong"
+>
+  <Robot slot="illustration" />
+</FullPageError>
