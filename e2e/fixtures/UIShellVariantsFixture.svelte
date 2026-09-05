@@ -60,7 +60,11 @@
     <HeaderActionLink href="#" icon={Launch} />
     <HeaderActionLink href="#" icon={Launch} linkIsActive />
     <HeaderAction icon={UserAvatarFilledAlt} text="Account" />
-    <HeaderAction bind:isOpen={panelOpen} icon={UserAvatarFilledAlt} transition={false}>
+    <HeaderAction
+      bind:isOpen={panelOpen}
+      icon={UserAvatarFilledAlt}
+      transition={false}
+    >
       <HeaderPanelLinks>
         <HeaderPanelDivider>Switcher</HeaderPanelDivider>
         <HeaderPanelLink href="#">Link 1</HeaderPanelLink>
