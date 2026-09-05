@@ -145,18 +145,25 @@
     }
   }
 
-  .#{$prefix}--btn.#{$prefix}--btn--icon-only.#{$prefix}--tooltip__trigger {
-    @include tooltip--trigger('icon', 'bottom');
-
-    svg,
-    &:hover svg,
-    &:focus svg {
+  // The trigger mixin itself is emitted by the position blocks below
+  // (`.bx--tooltip__trigger.bx--btn--icon-only--*`) and, for triggers using the
+  // tooltip partial's `bx--tooltip--*` position classes, by that partial. Every
+  // icon-only trigger this library renders carries one of those, so the
+  // position-agnostic include upstream had here was a duplicate. // ccs: dedupe
+  .#{$prefix}--btn--icon-only.#{$prefix}--tooltip__trigger { // ccs: flatten
+    // Outranks the ghost icon-only fill below
+    // (`.bx--btn--ghost.bx--btn--icon-only .bx--btn__icon`, (0,3,0)) and the
+    // tooltip partial's `.bx--tooltip__trigger:hover svg`.
+    &.#{$prefix}--btn svg { // ccs: specificity
       fill: currentColor;
     }
 
-    &.#{$prefix}--btn--disabled.#{$prefix}--tooltip--a11y::before,
-    &.#{$prefix}--btn--disabled.#{$prefix}--tooltip--a11y::after,
-    &.#{$prefix}--btn--disabled .#{$prefix}--assistive-text {
+    // Outranks the `:hover` / `:focus` reveal of every position block, both
+    // the `bx--btn--icon-only--*` ones below and the tooltip partial's
+    // `bx--tooltip--*` ones, which emit later at (0,4,x).
+    &.#{$prefix}--btn.#{$prefix}--btn--disabled.#{$prefix}--tooltip--a11y::before, // ccs: specificity
+    &.#{$prefix}--btn.#{$prefix}--btn--disabled.#{$prefix}--tooltip--a11y::after, // ccs: specificity
+    &.#{$prefix}--btn.#{$prefix}--btn--disabled .#{$prefix}--assistive-text { // ccs: specificity
       overflow: hidden;
       margin: -1px;
       clip: rect(0, 0, 0, 0);
@@ -164,28 +171,19 @@
     }
   }
 
-  // Allow pointer events on tooltip when tooltip is visible
-  .#{$prefix}--btn.#{$prefix}--btn--icon-only:not(.#{$prefix}--tooltip--hidden)
-    .#{$prefix}--assistive-text {
-    pointer-events: all;
-  }
+  // Upstream's `:focus { border-color: $focus }` for the trigger is gone: every
+  // kind sets it in button-theme, and the one kind-less trigger
+  // (PasswordInput's toggle) has `border: 0`. // ccs: dedupe
 
-  .#{$prefix}--btn.#{$prefix}--btn--icon-only.#{$prefix}--tooltip__trigger:focus {
-    border-color: $focus;
-  }
-
-  .#{$prefix}--btn.#{$prefix}--btn--icon-only.#{$prefix}--tooltip__trigger:active:not([disabled]) {
+  // Scoped to triggers: icon-only buttons without one (pagination) keep their
+  // own border while active.
+  .#{$prefix}--btn--icon-only.#{$prefix}--tooltip__trigger:active:not([disabled]) { // ccs: flatten
     border-color: transparent;
   }
 
-  .#{$prefix}--btn.#{$prefix}--btn--icon-only.#{$prefix}--tooltip__trigger:focus
-    svg {
-    outline-color: transparent;
-  }
-
-  .#{$prefix}--btn.#{$prefix}--btn--icon-only.#{$prefix}--tooltip__trigger[disabled]:hover,
-  .#{$prefix}--btn.#{$prefix}--btn--icon-only.#{$prefix}--tooltip__trigger[disabled]:focus,
-  .#{$prefix}--btn.#{$prefix}--btn--icon-only.#{$prefix}--tooltip__trigger[disabled]:active {
+  .#{$prefix}--btn--icon-only.#{$prefix}--tooltip__trigger[disabled]:hover, // ccs: flatten
+  .#{$prefix}--btn--icon-only.#{$prefix}--tooltip__trigger[disabled]:focus, // ccs: flatten
+  .#{$prefix}--btn--icon-only.#{$prefix}--tooltip__trigger[disabled]:active { // ccs: flatten
     cursor: not-allowed;
     fill: $disabled-03;
   }
@@ -258,6 +256,15 @@
     }
   }
 
+  // Outranks the `:focus svg` outline of every position block, including
+  // the tooltip partial's `bx--tooltip--*` ones that emit later at (0,3,1).
+  // (Upstream's `pointer-events: all` rule for the visible tooltip is gone:
+  // the tooltip partial's `.bx--tooltip__trigger:not(.bx--tooltip--hidden)
+  // .bx--assistive-text` covers every trigger.) // ccs: dedupe
+  .#{$prefix}--btn.#{$prefix}--btn--icon-only.#{$prefix}--tooltip__trigger:focus svg { // ccs: specificity
+    outline-color: transparent;
+  }
+
   .#{$prefix}--btn--icon-only {
     padding-right: to-rem(15px);
     padding-left: to-rem(15px);
@@ -291,13 +298,13 @@
     .#{$prefix}--btn__icon
     path:not([data-icon-path]):not([fill='none']),
   .#{$prefix}--btn--ghost.#{$prefix}--btn--icon-only[disabled]
-    .#{$prefix}--btn__icon,
-  .#{$prefix}--btn.#{$prefix}--btn--icon-only.#{$prefix}--btn--ghost[disabled]:hover
     .#{$prefix}--btn__icon {
     fill: $disabled-03;
   }
 
-  .#{$prefix}--btn--ghost.#{$prefix}--btn--icon-only[disabled] {
+  // Outranks the position blocks' `cursor: pointer` (0,2,0) for a disabled
+  // ghost trigger at rest; `.bx--btn:disabled` (0,2,0) emits before them.
+  .#{$prefix}--btn--ghost.#{$prefix}--btn--icon-only[disabled] { // ccs: specificity
     cursor: not-allowed;
   }
 
@@ -450,13 +457,9 @@
     padding: 12px 13px;
   }
 
-  .#{$prefix}--btn.#{$prefix}--btn--expressive .#{$prefix}--btn__icon {
+  .#{$prefix}--btn--expressive .#{$prefix}--btn__icon { // ccs: flatten
     width: to-rem(20px);
     height: to-rem(20px);
-  }
-
-  .#{$prefix}--btn-set .#{$prefix}--btn.#{$prefix}--btn--expressive {
-    max-width: to-rem(320px);
   }
 
   .#{$prefix}--btn.#{$prefix}--skeleton {
@@ -485,6 +488,11 @@
     &:first-of-type:not(:focus) {
       box-shadow: inherit;
     }
+  }
+
+  // After `.bx--btn-set .bx--btn` so the wider max-width wins by order.
+  .#{$prefix}--btn-set .#{$prefix}--btn--expressive { // ccs: flatten
+    max-width: to-rem(320px);
   }
 
   .#{$prefix}--btn-set .#{$prefix}--btn:focus + .#{$prefix}--btn {
