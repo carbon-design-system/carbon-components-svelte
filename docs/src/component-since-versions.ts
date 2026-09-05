@@ -57,6 +57,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   RadioButton: "0.2.0",
   RadioTile: "0.2.0",
   RecursiveList: "0.39.0",
+  ScrollGradient: "0.112.0",
   Search: "0.2.0",
   SearchMenu: "0.110.0",
   Select: "0.2.0",

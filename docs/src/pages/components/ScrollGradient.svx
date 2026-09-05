@@ -1,0 +1,47 @@
+---
+description: ScrollGradient overlays a fading gradient at the edges of a scrollable container to hint that there's more content, hiding each edge's gradient once it's scrolled into view.
+---
+
+<script>
+  import { ScrollGradient } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Wrap scrollable content in `ScrollGradient`. Set a height on the component so the content overflows vertically. The top gradient appears once the content is scrolled past its start, and the bottom gradient hides once it's scrolled to the end.
+
+<ScrollGradient style="height: 12rem">
+  {#each Array(20) as _, i}
+    <p>Item {i + 1}</p>
+  {/each}
+</ScrollGradient>
+
+## Horizontal
+
+Gradients appear independently for each axis. Set a width to overflow horizontally.
+
+<ScrollGradient style="width: 100%; height: 6rem">
+  <div style="display: flex; gap: 1rem; width: max-content">
+    {#each Array(20) as _, i}
+      <div style="width: 6rem; height: 4rem; background: var(--cds-layer-accent, #e0e0e0); display: flex; align-items: center; justify-content: center">
+        {i + 1}
+      </div>
+    {/each}
+  </div>
+</ScrollGradient>
+
+## Custom color
+
+Set `color` to override the gradient color. Defaults to the `layer` theme token.
+
+<ScrollGradient color="cornflowerblue" style="height: 12rem">
+  {#each Array(20) as _, i}
+    <p>Item {i + 1}</p>
+  {/each}
+</ScrollGradient>
+
+## Reactive example
+
+Toggling content demonstrates that the gradients update as the container's overflow changes.
+
+<FileSource src="/framed/ScrollGradient/ReactiveScrollGradient" />
