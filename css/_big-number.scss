@@ -1,0 +1,83 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Big number (absent from v10; ported from `carbon-for-ibm-products`).
+/// A dashboard stat widget: a label, a large numeric value, and optional
+/// fraction/percentage/trend adornments.
+/// @access private
+/// @group components
+@mixin big-number {
+  .#{$prefix}--big-number {
+    margin: 0;
+  }
+
+  .#{$prefix}--big-number__label {
+    display: flex;
+    align-items: center;
+    gap: $carbon--spacing-02;
+    margin-block-end: $carbon--spacing-02;
+    color: $text-secondary;
+
+    @include type-style("body-short-01");
+  }
+
+  .#{$prefix}--big-number__value-row {
+    display: flex;
+    align-items: baseline;
+    gap: $carbon--spacing-02;
+    color: $text-primary;
+
+    @include type-style("productive-heading-05");
+  }
+
+  .#{$prefix}--big-number--lg .#{$prefix}--big-number__value-row {
+    @include type-style("productive-heading-06");
+  }
+
+  .#{$prefix}--big-number--xl .#{$prefix}--big-number__value-row {
+    @include type-style("productive-heading-07");
+  }
+
+  // The tooltip icon has no trigger text next to it, so the vendor
+  // text-to-icon spacing and its block-level wrapper (sized by the
+  // inherited line-height rather than the icon) are both unwanted here.
+  .#{$prefix}--big-number__tooltip {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .#{$prefix}--big-number__tooltip .#{$prefix}--tooltip__trigger {
+    margin-left: 0;
+  }
+
+  // Tooltip's own `top`-direction offset math bakes in a 1px fudge tuned
+  // for its default (text + icon) trigger; with an icon-only trigger the
+  // caret lands 1px left of the icon's true center.
+  .#{$prefix}--big-number__tooltip .#{$prefix}--tooltip--top {
+    transform: translateX(1px);
+  }
+
+  .#{$prefix}--big-number__denominator {
+    color: $text-secondary;
+
+    @include type-style("body-short-01");
+  }
+
+  .#{$prefix}--big-number__trend-icon {
+    align-self: center;
+  }
+
+  .#{$prefix}--big-number__trend-icon--success {
+    fill: $support-success;
+  }
+
+  .#{$prefix}--big-number__trend-icon--error {
+    fill: $support-error;
+  }
+}
+
+@include exports("big-number") {
+  @include big-number;
+}
