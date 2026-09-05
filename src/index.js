@@ -4,6 +4,8 @@ export { default as AccordionSkeleton } from "./Accordion/AccordionSkeleton.svel
 export { default as ActionSet } from "./ActionSet/ActionSet.svelte";
 export { default as AspectRatio } from "./AspectRatio/AspectRatio.svelte";
 export { default as BadgeIndicator } from "./BadgeIndicator/BadgeIndicator.svelte";
+export { default as BigNumber } from "./BigNumber/BigNumber.svelte";
+export { default as BigNumberSkeleton } from "./BigNumber/BigNumberSkeleton.svelte";
 export { default as Box } from "./Box/Box.svelte";
 export { default as Breadcrumb } from "./Breadcrumb/Breadcrumb.svelte";
 export { default as BreadcrumbItem } from "./Breadcrumb/BreadcrumbItem.svelte";
