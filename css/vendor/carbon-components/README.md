@@ -59,8 +59,7 @@ A rule that must beat a *later* component's equal-specificity rule (e.g. a
 readonly field inside a modal) belongs in that later component's file, next
 to the rule it beats, not padded here.
 
-Guards: `bun run check:css --base <ref>` (compiled-rule cascade diff),
-`bun run lint:css` (specificity-padding ratchet), and
+Guards: `bun run check:css --base <ref>` (compiled-rule cascade diff) and
 `bun e2e/cascade-snapshot.ts` (computed-style snapshot of the e2e fixtures);
 see each script's header.
 
