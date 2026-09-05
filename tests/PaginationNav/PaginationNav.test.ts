@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/svelte";
+import { fireEvent, render, screen, within } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import PaginationNav from "./PaginationNav.test.svelte";
 
@@ -185,6 +185,8 @@ describe("PaginationNav", () => {
     const overflowIndicator = screen.getByLabelText("Select Page number");
     expect(overflowIndicator).toBeInTheDocument();
 
+    await user.click(overflowIndicator);
+
     await user.selectOptions(overflowIndicator, "4");
 
     expect(consoleLog).toHaveBeenCalledWith("change", { page: 4 });
@@ -193,5 +195,45 @@ describe("PaginationNav", () => {
     await user.selectOptions(overflowIndicator, "50");
     expect(consoleLog).toHaveBeenCalledWith("change", { page: 50 });
     expect(consoleLog).toHaveBeenCalledTimes(2);
+  });
+
+  it("should populate overflow options lazily on first interaction", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(PaginationNav, {
+      props: { total: 2000, shown: 5 },
+    });
+
+    const overflowIndicator = screen.getByLabelText("Select Page number");
+
+    // Before any interaction, only the hidden placeholder option should exist
+    // in the DOM -- the ~1990 hidden page options (above the eager-render
+    // threshold) must not be mounted yet.
+    // The placeholder itself is `hidden`, so it's excluded from the
+    // accessible role tree; query the raw <option> elements instead.
+    expect(overflowIndicator.querySelectorAll("option")).toHaveLength(1);
+
+    // A keyboard-originated interaction (focus) must populate the full list
+    // so the native picker isn't empty on first open.
+    await fireEvent.focus(overflowIndicator);
+
+    const options = overflowIndicator.querySelectorAll("option");
+    expect(options.length).toBeGreaterThan(1);
+
+    await user.selectOptions(overflowIndicator, "4");
+    expect(consoleLog).toHaveBeenCalledWith("change", { page: 4 });
+  });
+
+  it("should eagerly render overflow options below the lazy-populate threshold", () => {
+    render(PaginationNav, {
+      props: { total: 50, shown: 10 },
+    });
+
+    const overflowIndicator = screen.getByLabelText("Select Page number");
+
+    // A small overflow list (below the threshold) is cheap enough to render
+    // up front, without requiring focus/mousedown first.
+    expect(overflowIndicator.querySelectorAll("option").length).toBeGreaterThan(
+      1,
+    );
   });
 });
