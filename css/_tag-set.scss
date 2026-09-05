@@ -45,15 +45,6 @@
     pointer-events: none;
   }
 
-  // `TooltipDefinition`'s definition-tooltip trigger draws a dotted
-  // underline by default (dictionary-term styling) — not appropriate for a
-  // tag-styled trigger. The extra class here outweighs the base rule's
-  // equal specificity, since this partial's rules emit before Carbon's own.
-  .#{$prefix}--tag-set-overflow
-    .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition {
-    border-bottom: none;
-  }
-
   .#{$prefix}--tag-set-overflow__popover-trigger {
     min-width: auto;
     padding: 0 $carbon--spacing-03;

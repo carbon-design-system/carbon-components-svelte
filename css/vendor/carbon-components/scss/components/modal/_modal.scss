@@ -62,6 +62,13 @@
       background-color: $field-02;
     }
 
+    // ccs: readonly date inputs stay transparent on the modal layer too
+    // (date-picker/_date-picker.scss `date-picker-readonly`); that rule
+    // loads before this file and would otherwise lose the tie.
+    .#{$prefix}--date-picker__input[readonly] {
+      background-color: transparent;
+    }
+
     .#{$prefix}--number__rule-divider {
       background-color: $decorative-01;
     }

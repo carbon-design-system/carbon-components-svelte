@@ -26,6 +26,7 @@
     right: 0;
     bottom: 0;
     overflow: hidden;
+    overflow-y: auto; // ccs: long panels scroll
     width: 0;
     border: none;
     background-color: $shell-panel-bg-01;

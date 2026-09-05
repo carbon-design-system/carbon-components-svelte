@@ -15,6 +15,9 @@
 /// Number input styles
 /// @access private
 /// @group number-input
+// ccs: every `input[type='number']` selector below also lists
+// `input[type='text']`. NumberInput renders `type="text"` when `allowDecimal`
+// is set and must style identically (formerly the css/_number-input.scss clone).
 @mixin number-input {
   .#{$prefix}--number {
     @include reset;
@@ -25,7 +28,8 @@
     flex-direction: column;
   }
 
-  .#{$prefix}--number input[type='number'] {
+  .#{$prefix}--number input[type='number'],
+  .#{$prefix}--number input[type='text'] {
     @include type-style('code-01');
     @include focus-outline('reset');
 
@@ -75,15 +79,18 @@
   }
 
   // TODO V11: Remove xl selector
-  .#{$prefix}--number--xl.#{$prefix}--number input[type='number'] {
+  .#{$prefix}--number--xl.#{$prefix}--number input[type='number'],
+  .#{$prefix}--number--xl.#{$prefix}--number input[type='text'] {
     padding-right: to-rem(144px);
   }
 
-  .#{$prefix}--number--sm.#{$prefix}--number input[type='number'] {
+  .#{$prefix}--number--sm.#{$prefix}--number input[type='number'],
+  .#{$prefix}--number--sm.#{$prefix}--number input[type='text'] {
     padding-right: to-rem(112px);
   }
 
-  .#{$prefix}--number input[type='number']:disabled {
+  .#{$prefix}--number input[type='number']:disabled,
+  .#{$prefix}--number input[type='text']:disabled {
     border-bottom-color: transparent;
     background-color: $disabled-01;
     color: $disabled;
@@ -193,6 +200,10 @@
   .#{$prefix}--number
     input[type='number']:focus
     ~ .#{$prefix}--number__controls
+    .#{$prefix}--number__control-btn,
+  .#{$prefix}--number
+    input[type='text']:focus
+    ~ .#{$prefix}--number__controls
     .#{$prefix}--number__control-btn {
     border-bottom-width: 0;
 
@@ -206,6 +217,10 @@
   .#{$prefix}--number
     input[type='number'][data-invalid]
     ~ .#{$prefix}--number__controls
+    .#{$prefix}--number__control-btn,
+  .#{$prefix}--number
+    input[type='text'][data-invalid]
+    ~ .#{$prefix}--number__controls
     .#{$prefix}--number__control-btn {
     border-bottom-width: 0;
   }
@@ -214,6 +229,10 @@
   .#{$prefix}--number
     input[type='number'][data-invalid]:not(:focus)
     ~ .#{$prefix}--number__controls
+    .#{$prefix}--number__control-btn:hover,
+  .#{$prefix}--number
+    input[type='text'][data-invalid]:not(:focus)
+    ~ .#{$prefix}--number__controls
     .#{$prefix}--number__control-btn:hover {
     @include focus-outline('invalid');
   }
@@ -221,12 +240,20 @@
   .#{$prefix}--number
     input[type='number']:focus
     ~ .#{$prefix}--number__controls
+    .#{$prefix}--number__control-btn.up-icon::after,
+  .#{$prefix}--number
+    input[type='text']:focus
+    ~ .#{$prefix}--number__controls
     .#{$prefix}--number__control-btn.up-icon::after {
     background-color: transparent;
   }
 
   .#{$prefix}--number
     input[type='number'][data-invalid]
+    ~ .#{$prefix}--number__controls
+    .#{$prefix}--number__control-btn.up-icon::after,
+  .#{$prefix}--number
+    input[type='text'][data-invalid]
     ~ .#{$prefix}--number__controls
     .#{$prefix}--number__control-btn.up-icon::after {
     background-color: $support-01;
@@ -237,7 +264,15 @@
     ~ .#{$prefix}--number__controls
     .#{$prefix}--number__control-btn.up-icon::after,
   .#{$prefix}--number
+    input[type='text'][data-invalid]:focus
+    ~ .#{$prefix}--number__controls
+    .#{$prefix}--number__control-btn.up-icon::after,
+  .#{$prefix}--number
     input[type='number'][data-invalid]
+    ~ .#{$prefix}--number__controls
+    .#{$prefix}--number__control-btn.up-icon:focus::after,
+  .#{$prefix}--number
+    input[type='text'][data-invalid]
     ~ .#{$prefix}--number__controls
     .#{$prefix}--number__control-btn.up-icon:focus::after {
     background-color: $focus;
@@ -278,12 +313,20 @@
   .#{$prefix}--number
     input[type='number']:disabled
     + .#{$prefix}--number__controls
+    .#{$prefix}--number__rule-divider:first-of-type,
+  .#{$prefix}--number
+    input[type='text']:disabled
+    + .#{$prefix}--number__controls
     .#{$prefix}--number__rule-divider:first-of-type {
     background-color: transparent;
   }
 
   .#{$prefix}--number
     input[type='number']:disabled
+    + .#{$prefix}--number__controls
+    .#{$prefix}--number__rule-divider,
+  .#{$prefix}--number
+    input[type='text']:disabled
     + .#{$prefix}--number__controls
     .#{$prefix}--number__rule-divider {
     background-color: $disabled-02;
@@ -346,12 +389,14 @@
     opacity: 1;
   }
 
-  .#{$prefix}--number--light input[type='number'] {
+  .#{$prefix}--number--light input[type='number'],
+  .#{$prefix}--number--light input[type='text'] {
     background-color: $field-02;
   }
 
   // V11: Possibly deprecate
-  .#{$prefix}--number--light input[type='number']:disabled {
+  .#{$prefix}--number--light input[type='number']:disabled,
+  .#{$prefix}--number--light input[type='text']:disabled {
     background-color: $field-02;
   }
 
@@ -377,7 +422,8 @@
   }
 
   // TODO V11: Remove xl selector
-  .#{$prefix}--number--xl input[type='number'] {
+  .#{$prefix}--number--xl input[type='number'],
+  .#{$prefix}--number--xl input[type='text'] {
     height: to-rem(48px);
   }
 
@@ -397,7 +443,8 @@
     }
   }
 
-  .#{$prefix}--number--sm input[type='number'] {
+  .#{$prefix}--number--sm input[type='number'],
+  .#{$prefix}--number--sm input[type='text'] {
     height: to-rem(32px);
   }
 
@@ -421,7 +468,8 @@
     margin-top: 0;
   }
 
-  .#{$prefix}--number--nosteppers input[type='number'] {
+  .#{$prefix}--number--nosteppers input[type='number'],
+  .#{$prefix}--number--nosteppers input[type='text'] {
     padding-right: to-rem(48px);
   }
 
@@ -429,7 +477,8 @@
     right: to-rem(16px);
   }
 
-  .#{$prefix}--number--readonly input[type='number'] {
+  .#{$prefix}--number--readonly input[type='number'],
+  .#{$prefix}--number--readonly input[type='text'] {
     background: transparent;
   }
 
@@ -443,7 +492,8 @@
     width: 100%;
     height: 2.5rem;
 
-    input[type='number'] {
+    input[type='number'],
+    input[type='text'] {
       display: none;
     }
   }
