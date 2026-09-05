@@ -1,0 +1,124 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// ScrollGradient component
+/// @access private
+/// @group components
+@mixin scroll-gradient {
+  .#{$prefix}--scroll-gradient {
+    --cds-scroll-gradient-color: #{$layer};
+
+    position: relative;
+  }
+
+  .#{$prefix}--scroll-gradient__scroll-element {
+    height: 100%;
+    overflow: auto;
+    // Fixed to the theme background, independent of `--cds-scroll-gradient-color`:
+    // a custom `color` should only retint the fade, not repaint the content area.
+    background-color: $layer;
+  }
+
+  .#{$prefix}--scroll-gradient__content {
+    position: relative;
+    display: inline-block;
+    min-width: 100%;
+  }
+
+  .#{$prefix}--scroll-gradient__sentinel {
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--scroll-gradient__content--v-scrollable
+    > .#{$prefix}--scroll-gradient__sentinel:nth-child(1) {
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+  }
+
+  .#{$prefix}--scroll-gradient__content--v-scrollable
+    > .#{$prefix}--scroll-gradient__sentinel:nth-child(2) {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+  }
+
+  .#{$prefix}--scroll-gradient__content--h-scrollable
+    > .#{$prefix}--scroll-gradient__sentinel:nth-child(3) {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 1px;
+  }
+
+  .#{$prefix}--scroll-gradient__content--h-scrollable
+    > .#{$prefix}--scroll-gradient__sentinel:nth-child(4) {
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 1px;
+  }
+
+  .#{$prefix}--scroll-gradient__gradient {
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--scroll-gradient__gradient--top,
+  .#{$prefix}--scroll-gradient__gradient--bottom {
+    left: 0;
+    right: 0;
+    height: $spacing-09;
+  }
+
+  .#{$prefix}--scroll-gradient__gradient--left,
+  .#{$prefix}--scroll-gradient__gradient--right {
+    top: 0;
+    bottom: 0;
+    width: $spacing-09;
+  }
+
+  .#{$prefix}--scroll-gradient__gradient--top {
+    top: 0;
+    background-image: linear-gradient(
+      to bottom,
+      var(--cds-scroll-gradient-color),
+      transparent
+    );
+  }
+
+  .#{$prefix}--scroll-gradient__gradient--bottom {
+    bottom: 0;
+    background-image: linear-gradient(
+      to top,
+      var(--cds-scroll-gradient-color),
+      transparent
+    );
+  }
+
+  .#{$prefix}--scroll-gradient__gradient--left {
+    left: 0;
+    background-image: linear-gradient(
+      to right,
+      var(--cds-scroll-gradient-color),
+      transparent
+    );
+  }
+
+  .#{$prefix}--scroll-gradient__gradient--right {
+    right: 0;
+    background-image: linear-gradient(
+      to left,
+      var(--cds-scroll-gradient-color),
+      transparent
+    );
+  }
+}
+
+@include scroll-gradient;
