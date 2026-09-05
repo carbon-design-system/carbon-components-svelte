@@ -202,6 +202,49 @@ describe("Filename", () => {
     expect(keydownHandler).toHaveBeenCalled();
   });
 
+  it("should render an empty status live region on initial render", () => {
+    const { container } = render(Filename, {
+      props: { status: "uploading", fileName: "report.csv" },
+    });
+
+    const status = container.querySelector('[role="status"]');
+    assert(status);
+    expect(status).toHaveTextContent("");
+  });
+
+  it("should announce upload complete when status transitions to complete", async () => {
+    const { container, rerender } = render(Filename, {
+      props: { status: "uploading", fileName: "report.csv" },
+    });
+
+    await rerender({ status: "complete", fileName: "report.csv" });
+
+    const status = container.querySelector('[role="status"]');
+    expect(status).toHaveTextContent("report.csv upload complete");
+  });
+
+  it("should announce invalid when a file becomes invalid", async () => {
+    const { container, rerender } = render(Filename, {
+      props: { status: "edit", fileName: "report.csv", invalid: false },
+    });
+
+    await rerender({ status: "edit", fileName: "report.csv", invalid: true });
+
+    const status = container.querySelector('[role="status"]');
+    expect(status).toHaveTextContent("report.csv invalid");
+  });
+
+  it("should not re-announce when status changes without a completion or invalid transition", async () => {
+    const { container, rerender } = render(Filename, {
+      props: { status: "uploading", fileName: "report.csv" },
+    });
+
+    await rerender({ status: "edit", fileName: "report.csv" });
+
+    const status = container.querySelector('[role="status"]');
+    expect(status).toHaveTextContent("");
+  });
+
   it("should be focusable when status is edit", () => {
     const { container } = render(Filename, {
       props: { status: "edit" },
