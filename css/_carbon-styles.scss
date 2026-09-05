@@ -8,16 +8,15 @@
 //   1. tag + notification, first of all: the theme entry files need their
 //      component-token maps before the theme blocks, and their CSS has
 //      always emitted at the top.
-//   2. pre-base library partials: written to load before Carbon and to
-//      out-weigh it. Each is being folded into its vendored component file
-//      (see `bun run check:css`); the list shrinks as that lands.
-//   3. Carbon globals and the component partials this library renders.
+//   2. Carbon globals and the component partials this library renders,
+//      with this library's own components slotted right after the Carbon
+//      partial they build on.
 //      Omits components/toolbar (deprecated v9 `bx--toolbar`; the DataTable
 //      toolbar is styled by data-table/_data-table-action.scss) and
 //      pagination/unstable_pagination (`bx--unstable-pagination`). Audit a
 //      partial's `bx--` class roots against `src/**/*.svelte` before removing
 //      or re-adding an import here.
-//   4. post-base library partials: v11 backports with no v10 base plus a few
+//   3. post-base library partials: v11 backports with no v10 base plus a few
 //      overrides that must emit after every component.
 //
 // Selector-level pruning has also been applied within several imported
@@ -34,18 +33,8 @@ $ccs-theme-switching: false !default;
 @import "carbon-components/scss/components/notification/inline-notification";
 @import "carbon-components/scss/components/notification/toast-notification";
 
-// 2. pre-base library partials
-@import "./popover";
-@import "./stack";
-@import "./contained-list";
-@import "./pin-code-input";
-@import "./fluid-pin-code-input";
-@import "./ui-shell-classic";
-@import "./tooltip";
-@import "./toggletip";
-@import "./scroll-gradient";
-
-// 3. Carbon globals and components
+// 2. Carbon globals and components, with this library's own components
+//    slotted after the Carbon partial they build on
 @import "carbon-components/scss/globals/scss/feature-flags";
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/colors";
@@ -101,14 +90,19 @@ $ccs-theme-switching: false !default;
 @import "carbon-components/scss/components/tag/tag";
 @import "carbon-components/scss/components/text-area/text-area";
 @import "carbon-components/scss/components/text-input/text-input";
+@import "./pin-code-input";
 @import "carbon-components/scss/components/tile/tile";
 @import "carbon-components/scss/components/time-picker/time-picker";
 @import "carbon-components/scss/components/toggle/toggle";
 @import "carbon-components/scss/components/tooltip/tooltip";
+@import "./tooltip";
+@import "./popover";
+@import "./toggletip";
 @import "carbon-components/scss/components/ui-shell/ui-shell";
+@import "./ui-shell-classic";
 @import "carbon-components/scss/components/treeview/treeview";
 
-// 4. post-base library partials
+// 3. post-base library partials
 @import "./selectable-tag";
 @import "./tag";
 @import "./tag-set";
@@ -120,6 +114,7 @@ $ccs-theme-switching: false !default;
 @import "./fluid-combo-box";
 @import "./fluid-multiselect";
 @import "./fluid-text-input";
+@import "./fluid-pin-code-input";
 @import "./fluid-number-input";
 @import "./fluid-select";
 @import "./fluid-time-picker";
@@ -144,3 +139,6 @@ $ccs-theme-switching: false !default;
 @import "./action-set";
 @import "./interstitial-screen";
 @import "./full-page-error";
+@import "./stack";
+@import "./contained-list";
+@import "./scroll-gradient";
