@@ -29,6 +29,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   FileUploader: "0.2.0",
   FloatingPortal: "0.101.0",
   FluidForm: "0.15.0",
+  FullPageError: "0.112.0",
   Form: "0.2.0",
   Grid: "0.8.4",
   Heading: "0.98.0",
