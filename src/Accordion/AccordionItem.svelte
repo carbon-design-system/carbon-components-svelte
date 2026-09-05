@@ -114,7 +114,7 @@
   >
     <ChevronRight class="bx--accordion__arrow" />
     <div class:bx--accordion__title={true}>
-      <slot name="title">{title}</slot>
+      <slot name="title">{title ?? ""}</slot>
     </div>
   </button>
   <div id={contentId} class:bx--accordion__content={true}>
