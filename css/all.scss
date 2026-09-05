@@ -15,22 +15,16 @@ $css--reset: true;
 $css--default-type: true;
 $css--plex: true;
 
+$ccs-theme-switching: true;
+
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/themes/themes";
 @import "carbon-components/scss/globals/scss/component-tokens";
-@import "carbon-components/scss/components/tag/tag";
-@import "carbon-components/scss/components/notification/inline-notification";
-@import "carbon-components/scss/components/notification/toast-notification";
-@import "./popover";
-@import "./stack";
-@import "./contained-list";
-@import "./pin-code-input";
-@import "./fluid-pin-code-input";
-@import "./ui-shell";
-@import "./ui-shell-classic";
-@import "./tabs";
-@import "./tooltip";
-@import "./toggletip";
-@import "./scroll-gradient";
+// Token maps only (no CSS) for the theme blocks below; the tag and
+// notification CSS itself emits at the top of `_carbon-styles.scss`.
+@import "carbon-components/scss/components/tag/tokens";
+@import "carbon-components/scss/components/notification/tokens";
+
+@import "./carbon-styles";
 
 // Default: white
 :root {
@@ -71,48 +65,3 @@ $css--plex: true;
     @include emit-component-tokens($notification-colors);
   }
 }
-
-@import "carbon-components/scss/globals/scss/_css--reset";
-@import "carbon-components/scss/globals/scss/_css--font-face";
-@import "carbon-components/scss/globals/scss/_css--helpers";
-@import "carbon-components/scss/globals/scss/_css--body";
-@import "carbon-components/scss/globals/grid/grid";
-
-@import "./carbon-styles";
-
-// Overrides (after Carbon base styles; same order as white/g10/etc.)
-@import "./selectable-tag";
-@import "./tag";
-@import "./tag-set";
-@import "./fluid-date-picker";
-@import "./copy-input";
-@import "./code-snippet";
-@import "./combo-button";
-@import "./fluid-list-box";
-@import "./fluid-combo-box";
-@import "./fluid-multiselect";
-@import "./fluid-text-input";
-@import "./fluid-number-input";
-@import "./fluid-select";
-@import "./fluid-time-picker";
-@import "./fluid-search";
-@import "./search-menu";
-@import "./menu-button";
-@import "./fluid-text-area";
-@import "./truncate-multiline";
-@import "./badge-indicator";
-@import "./big-number";
-@import "./icon-indicator";
-@import "./shape-indicator";
-@import "./type";
-@import "./box";
-@import "./dialog";
-@import "./profile-menu";
-@import "./header-switcher";
-@import "./user-avatar";
-@import "./user-avatar-group";
-@import "./disclosure";
-@import "./list-box-wrap-options";
-@import "./action-set";
-@import "./interstitial-screen";
-@import "./full-page-error";

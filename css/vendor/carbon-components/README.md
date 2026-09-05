@@ -65,7 +65,8 @@ Guards: `bun run check:css --base <ref>` (compiled-rule cascade diff),
 see each script's header.
 
 `css/_*.scss` still holds v11 backports with no v10 base (fluid-*, popover,
-stack, ...) and utilities, registered in the theme entry files.
+stack, ...) and utilities, registered in `css/_carbon-styles.scss`, the
+single style manifest every theme entry file imports.
 
 `scripts/build-css.ts` resolves `@import "carbon-components/..."` here via its
 sass `loadPaths`, so theme entry files and `css/_*.scss` partials did not
