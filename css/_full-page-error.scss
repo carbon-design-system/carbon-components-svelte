@@ -1,0 +1,84 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// FullPageError (absent from v10)
+/// @access private
+/// @group components
+@mixin full-page-error {
+  .#{$prefix}--full-page-error {
+    block-size: inherit;
+  }
+
+  .#{$prefix}--full-page-error__container {
+    margin: 0 $carbon--spacing-06;
+    block-size: 100%;
+  }
+
+  .#{$prefix}--full-page-error__grid {
+    block-size: 100%;
+    padding-block: $carbon--spacing-07;
+  }
+
+  .#{$prefix}--full-page-error__column {
+    padding: 0;
+  }
+
+  .#{$prefix}--full-page-error__illustration {
+    padding: 0;
+  }
+
+  @media (min-width: 66rem) {
+    .#{$prefix}--full-page-error__column {
+      padding: 0 $carbon--spacing-07 0 0;
+    }
+  }
+
+  .#{$prefix}--full-page-error__svg-container {
+    display: flex;
+    padding-block: $carbon--spacing-03 $carbon--spacing-11;
+    block-size: 100%;
+  }
+
+  .#{$prefix}--full-page-error__label,
+  .#{$prefix}--full-page-error__title {
+    @include type-style("expressive-heading-05", true);
+  }
+
+  .#{$prefix}--full-page-error__label {
+    display: block;
+    color: $text-error;
+  }
+
+  .#{$prefix}--full-page-error__title {
+    margin-block-end: $carbon--spacing-09;
+  }
+
+  .#{$prefix}--full-page-error__description {
+    @include type-style("body-long-02");
+
+    margin-block-end: $carbon--spacing-07;
+  }
+
+  .#{$prefix}--full-page-error__body {
+    @include type-style("body-long-02");
+  }
+
+  // safari rendering fix
+  .#{$prefix}--full-page-error__svg-container
+    svg.#{$prefix}--full-page-error__svg {
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--full-page-error__svg-container
+    svg.#{$prefix}--full-page-error__svg
+    path {
+    fill: $background;
+    stroke: $border-inverse;
+  }
+}
+
+@include exports("full-page-error") {
+  @include full-page-error;
+}

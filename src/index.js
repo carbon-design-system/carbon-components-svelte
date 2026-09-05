@@ -78,6 +78,7 @@ export { default as Form } from "./Form/Form.svelte";
 export { default as FormGroup } from "./FormGroup/FormGroup.svelte";
 export { default as FormItem } from "./FormItem/FormItem.svelte";
 export { default as FormLabel } from "./FormLabel/FormLabel.svelte";
+export { default as FullPageError } from "./FullPageError/FullPageError.svelte";
 export { default as Column } from "./Grid/Column.svelte";
 export { default as Grid } from "./Grid/Grid.svelte";
 export { default as Row } from "./Grid/Row.svelte";
