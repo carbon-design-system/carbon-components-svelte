@@ -39,8 +39,6 @@ test.describe("consumer override", () => {
     });
 
     test("icon-only focus border", async ({ page }) => {
-      // loses to `.bx--btn.bx--btn--icon-only.bx--tooltip__trigger:focus` (0,4,0)
-      test.fail();
       const btn = page.getByTestId("icon-btn");
       await btn.focus();
       await expect(btn).toHaveCSS("border-top-color", RED);
