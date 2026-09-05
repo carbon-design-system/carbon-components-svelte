@@ -5,6 +5,12 @@
   /** Set to `true` if the modal contains scrolling content */
   export let hasScrollingContent = false;
 
+  /**
+   * Obtain a reference to the top-level HTML element.
+   * @bindable readonly
+   */
+  export let ref = null;
+
   import { getContext } from "svelte";
   import { writable } from "svelte/store";
   import { scrollIntoViewWithinMenu } from "../utils/scrollIntoViewWithinMenu.js";
@@ -27,6 +33,7 @@
 
 <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 <div
+  bind:this={ref}
   tabindex={hasScrollingContent ? "0" : undefined}
   role={hasScrollingContent ? "region" : undefined}
   aria-labelledby={hasScrollingContent ? regionLabelledby : undefined}
