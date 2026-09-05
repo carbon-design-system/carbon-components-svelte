@@ -1,0 +1,42 @@
+/*
+ * Consumer stylesheet for e2e/consumer-override.test.ts, loaded after
+ * all.css. Every rule is one consumer class, plus at most a state
+ * pseudo-class or one element for a child the consumer cannot class. The
+ * spec asserts each one wins; a rule that loses is a library selector a
+ * consumer has to out-weigh to restyle the component.
+ */
+.my-btn {
+  background-color: rgb(200, 0, 0);
+}
+.my-btn:hover {
+  background-color: rgb(150, 0, 0);
+}
+.my-btn:disabled {
+  background-color: rgb(100, 100, 100);
+}
+.my-icon-btn:focus {
+  border-color: rgb(200, 0, 0);
+}
+.my-icon-btn svg {
+  fill: rgb(200, 0, 0);
+}
+.my-link {
+  color: rgb(200, 0, 0);
+  text-decoration: none;
+}
+.my-link:hover {
+  color: rgb(150, 0, 0);
+}
+.my-tag {
+  border: 1px solid rgb(200, 0, 0);
+  background-color: rgb(255, 230, 230);
+}
+.my-row td {
+  background-color: rgb(255, 230, 230);
+}
+.my-row:hover td {
+  background-color: rgb(255, 200, 200);
+}
+.my-tab a {
+  border-bottom-color: rgb(200, 0, 0);
+}
