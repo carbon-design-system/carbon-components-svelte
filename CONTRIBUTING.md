@@ -711,38 +711,41 @@ Add a link to `e2e/fixtures/index.html` so the fixture is reachable from the ind
 
 ### Performance benchmarks
 
-[mitata](https://github.com/evanwashere/mitata) benchmarks live in `bench/`, split into two tiers by filename convention.
+Benchmarks live in `bench/`, split into two tiers by filename convention. Both tiers run on [ostia](https://github.com/metonym/ostia) (Bun-native) — no vitest, no mitata.
 
-**Pure-logic tier** (`bench/*.bench.ts`) benches a standalone util module directly — no Svelte, no DOM. Run it straight under bun, with no vitest involved:
+**Pure-logic tier** (`bench/*.bench.ts`) benches a standalone util module directly — no Svelte, no DOM. Run it straight under bun via the `ostia` CLI:
 
 ```sh
 # Whole file
-bun run bench/treeCheckboxState.bench.ts
+bunx ostia bench bench/treeCheckboxState.bench.ts
 
-# Only case(s) whose declared name matches a pattern — much faster while
+# Only task(s) whose "group/name" id matches a substring — much faster while
 # iterating on one new case in a file with many
-bun run bench/treeCheckboxState.bench.ts "no cascade"
+bunx ostia bench bench/treeCheckboxState.bench.ts --filter "no cascade"
 ```
-
-The filter pattern matches the case's title as written in `bench(...)`. For a `.range()`/`.args()` case that title still contains the literal `$size` placeholder (mitata substitutes it per data point only for display), so filter by something in the case name — a function, shape, or variant — not a specific resolved size like `"10000"`; a match still runs every range point for that case.
 
 Numbers from this tier are representative of real-browser V8 behavior (no jsdom involved), so it's the right tier for validating algorithmic or data-structure choices — proving a `Set`-over-`Array` change actually helps, or that a function stays O(n) instead of drifting to O(n²), with real measurements instead of a guess.
 
-**Component tier** (`bench/*.dom.bench.ts`) mounts a real component through the same vitest+jsdom+Svelte-plugin harness the unit tests use. Run the whole tier:
+**Component tier** (`bench/*.dom.bench.ts`) mounts a real component. ostia itself is Bun-native and has no jsdom or `.svelte`-compile support built in, so this tier supplies both itself via `--preload ./bench/dom-preload.ts` (see that file) — a script that installs jsdom globals (`document`, `window`, the same `matchMedia`/`ResizeObserver`/etc. mocks `tests/utils/setup-globals.ts` uses for the unit-test suite) and registers a `Bun.plugin()` loader that compiles `.svelte` files with the Svelte compiler directly (stripping `<script lang="ts">` via `Bun.Transpiler` first, where used — `bench/fixtures/*.svelte` all use it, `src/**/*.svelte` doesn't). `ostia.config.json`'s `bench` section points at this tier's suites/preload/jobs defaults, so running the whole tier is just:
 
 ```sh
 bun run bench
+```
+
+`bench/*.dom.bench.ts` also needs `svelte`'s package.json `exports` to resolve to its `browser` condition (the client runtime) instead of `default` (the server-rendering build, which throws `lifecycle_function_unavailable` on `mount()`) — that's what the `bench` script's `--bun-flags="--conditions=browser"` is for (`ostia.config.json` doesn't cover `bunFlags` yet, so it stays on the CLI invocation). Running a single file directly needs the same flag, since a suite file given on the command line replaces the config's `suites` list (though `preload`/`jobs` still apply from config):
+
+```sh
+bunx ostia bench --bun-flags="--conditions=browser" bench/dropdown.dom.bench.ts
 ```
 
 jsdom has no layout or paint, so treat this tier as a same-harness regression detector (did this change make mount/interaction meaningfully slower than before), not a real-browser latency number.
 
 A new bench file, either tier, follows the same shape as an existing one — copy the closest match (for example `bench/treeCheckboxState.bench.ts` for pure-logic, `bench/dropdown.dom.bench.ts` for component) rather than starting from scratch. A few conventions and gotchas to carry over:
 
-- Use mitata's generator form for a parametrized sweep: `bench(name, function* (state) { const size = state.get("size"); /* setup */ yield () => work(size); }).range("size", 100, 10_000)`. Setup code before `yield` runs once per size value (unmeasured); only the returned closure is timed.
-- Pure-logic files call `runWithFilter()` (from `bench/run-with-filter.ts`) instead of mitata's bare `run()` — that's what wires up the CLI filter pattern above.
-- Component-tier files wrap `bench()`/`run()` calls inside an `it()` block with an explicit longer timeout (vitest errors on a test file with zero registered tests, and mitata's warmup + sampling exceeds vitest's 5s default) and call `cleanup()` from `@testing-library/svelte` inside the benched closure so DOM nodes don't pile up across thousands of iterations.
-- Add `.gc("inner")` to any **pure-logic** case whose closure allocates non-trivially per call (sorting or copying an array, building objects). Without it, mitata's default batching (many calls back-to-back with no GC in between) can mis-calibrate and report numbers inflated by 20-60x. Cross-check a surprising absolute number against a plain `performance.now()` loop before trusting it.
-- Do **not** add `.gc("inner")` to a **component-tier** (DOM) bench. Forcing a real GC after every iteration over a large jsdom DOM object graph is far more expensive than over plain JS objects, and can trip real thermal throttling that silently inflates every number in the same run — including unrelated cases in the same file. If a bench's printed `clk: ~X GHz` header looks abnormally low, treat the whole run as suspect.
+- Pure-logic files don't have a `.range()`/`.args()` bench-registration equivalent (mitata's old parameterized-sweep API) — `task()` takes a fixed name and zero-arg fn. Loop over ostia's built-in `range(start, end, multiplier?)` and call `task(`${size} nodes`, () => work(size))` per point, all inside one `group(name, () => { ... })` so the printed table's `Relative` column compares sizes within that case. Setup code before the `task()` call in the loop body runs once per size value (unmeasured); only the closure passed to `task()` is timed.
+- Pass `{ gc: true }` as the third argument to a **pure-logic** `group(...)`/`task(...)` call whose case(s) allocate non-trivially per call (sorting or copying an array, building objects) — check the file's top-of-file comment for which groups need it. Without it, Bun's default batching (many calls back-to-back with no GC in between) can mis-calibrate and report numbers inflated by 20-60x. Cross-check a surprising absolute number against a plain `performance.now()` loop before trusting it. Set it per group (or per task, for a standalone `task()` outside any group) rather than the suite-wide `--gc` CLI flag, so a single suite file can freely mix gc-needing and gc-free cases (see `bench/virtualize.bench.ts`, which does both).
+- Do **not** add `{ gc: true }` to a **component-tier** (DOM) bench. Forcing a real GC after every iteration over a large jsdom DOM object graph is far more expensive than over plain JS objects, and can trip real thermal throttling that silently inflates every number in the same run — including unrelated cases in the same file (this happened during initial mitata benchmarking and is why the component tier has never used it).
+- Component-tier files call `cleanup()` from `@testing-library/svelte` inside the benched closure so DOM nodes don't pile up across thousands of samples of the *same* task. There's no per-task teardown hook across *different* tasks in one suite file, though — every `group()`/`task()` call in a file registers (and, for module-scope setup code, runs) up front, unlike mitata's `run()`, which drove one bench's generator (setup → sampling → any code after its `yield`) to completion before starting the next. A file with several cases that each need their own persistent, freshly-opened component instance (not just a fixed prop set) should scope every query through `within(instance.container)` (see `bench/dropdown-highlight.dom.bench.ts`, `bench/multiselect-toggle.dom.bench.ts`) rather than an instance-global `getByRole`/`getByText` — the latter queries the whole document and throws "found multiple elements" once a second instance is mounted, since both now coexist for the file's entire run instead of one at a time.
 - Time the dimension that actually scales. A 3000-row × 4-column mount will not catch a rows×columns cell rebuild. Operator actions (select-all, ArrowDown, filter keystroke) need their own case if that is the claim. A `performance.now()` loop around the click or key plus `tick()` is enough.
 - A Carbon React (or other sibling) perf PR is a hypothesis for this tree. Carbon React's select-all fix was O(N²) `includes`. This DataTable already assigns `selectedRowIds = selectableRowIds` and membership is a `Set`. Isolated click cost was sub-millisecond on a virtualized table; a sentinel-plus-exceptions model was slower. Measure the operator here before changing the model.
 

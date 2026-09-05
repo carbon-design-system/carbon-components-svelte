@@ -1,12 +1,11 @@
-// Pure-logic benchmark: no jsdom, no Svelte, run directly via bun (`bun run bench/<this file>.bench.ts`, optionally filtered — see CONTRIBUTING.md).
+// Pure-logic benchmark: no jsdom, no Svelte, run directly via bun (`bunx ostia bench bench/<this file>.bench.ts`, optionally filtered — see CONTRIBUTING.md).
 // resolveCheckboxState walks the whole tree on every checkedIds change (see its
 // docstring), so it's the hottest path for a large TreeView with checkboxes.
-import { bench } from "mitata";
+import { group, range, task } from "ostia";
 import {
   resolveCheckboxState,
   toggleCheckboxNode,
 } from "../src/utils/treeCheckboxState.js";
-import { runWithFilter } from "./run-with-filter.js";
 
 type Node = {
   id: number;
@@ -49,38 +48,48 @@ function pickCheckedIds(totalNodes: number): number[] {
   return ids;
 }
 
-bench("resolveCheckboxState (cascade), $size nodes", function* (state) {
-  const size = state.get("size");
-  const nodes = buildTree(size);
-  const checkedIds = pickCheckedIds(size);
-  yield () => resolveCheckboxState(nodes, checkedIds);
-}).range("size", 100, 10_000);
+group("resolveCheckboxState (cascade)", () => {
+  for (const size of range(100, 10_000)) {
+    const nodes = buildTree(size);
+    const checkedIds = pickCheckedIds(size);
+    task(`${size} nodes`, () => resolveCheckboxState(nodes, checkedIds));
+  }
+});
 
-bench("resolveCheckboxState (no cascade), $size nodes", function* (state) {
-  const size = state.get("size");
-  const nodes = buildTree(size);
-  const checkedIds = pickCheckedIds(size);
-  yield () => resolveCheckboxState(nodes, checkedIds, { cascade: false });
-}).range("size", 100, 10_000);
+group("resolveCheckboxState (no cascade)", () => {
+  for (const size of range(100, 10_000)) {
+    const nodes = buildTree(size);
+    const checkedIds = pickCheckedIds(size);
+    task(`${size} nodes`, () =>
+      resolveCheckboxState(nodes, checkedIds, { cascade: false }),
+    );
+  }
+});
 
-bench("toggleCheckboxNode (cascade check), $size nodes", function* (state) {
-  const size = state.get("size");
-  const nodes = buildTree(size);
-  const checkedIds = pickCheckedIds(size);
-  const targetId = Math.floor(size / 2);
-  yield () => toggleCheckboxNode(nodes, checkedIds, targetId, true);
-}).range("size", 100, 10_000);
+group("toggleCheckboxNode (cascade check)", () => {
+  for (const size of range(100, 10_000)) {
+    const nodes = buildTree(size);
+    const checkedIds = pickCheckedIds(size);
+    const targetId = Math.floor(size / 2);
+    task(`${size} nodes`, () =>
+      toggleCheckboxNode(nodes, checkedIds, targetId, true),
+    );
+  }
+});
 
 // Unchecking walks the target's subtree plus every ancestor (a different
 // code path than checking — see toggleCheckboxNode's docstring), so it gets
 // its own case rather than assuming symmetric cost with the check above.
-bench("toggleCheckboxNode (cascade uncheck), $size nodes", function* (state) {
-  const size = state.get("size");
-  const nodes = buildTree(size);
-  const checkedIds = pickCheckedIds(size);
-  const targetId = Math.floor(size / 2);
-  yield () => toggleCheckboxNode(nodes, checkedIds, targetId, false);
-}).range("size", 100, 10_000);
+group("toggleCheckboxNode (cascade uncheck)", () => {
+  for (const size of range(100, 10_000)) {
+    const nodes = buildTree(size);
+    const checkedIds = pickCheckedIds(size);
+    const targetId = Math.floor(size / 2);
+    task(`${size} nodes`, () =>
+      toggleCheckboxNode(nodes, checkedIds, targetId, false),
+    );
+  }
+});
 
 // Every case above uses a bushy tree (branching=4). walk/findPath/cascadableIds/
 // subtreeIds are all recursive, so cost could in principle track *depth* rather
@@ -88,38 +97,32 @@ bench("toggleCheckboxNode (cascade uncheck), $size nodes", function* (state) {
 // isolate that: a chain (branching=1, depth == node count) and a flat tree
 // (branching == node count, depth 2). Confirmed safe to 20k depth with no
 // stack overflow (see stack-check probe) before picking this range.
-bench(
-  "resolveCheckboxState (cascade), $size nodes — deep/narrow (chain)",
-  function* (state) {
-    const size = state.get("size");
+group("resolveCheckboxState (cascade) — deep/narrow (chain)", () => {
+  for (const size of range(100, 10_000)) {
     const nodes = buildTree(size, 1);
     const checkedIds = pickCheckedIds(size);
-    yield () => resolveCheckboxState(nodes, checkedIds);
-  },
-).range("size", 100, 10_000);
+    task(`${size} nodes`, () => resolveCheckboxState(nodes, checkedIds));
+  }
+});
 
-bench(
-  "resolveCheckboxState (cascade), $size nodes — wide/shallow (flat)",
-  function* (state) {
-    const size = state.get("size");
+group("resolveCheckboxState (cascade) — wide/shallow (flat)", () => {
+  for (const size of range(100, 10_000)) {
     const nodes = buildTree(size, size);
     const checkedIds = pickCheckedIds(size);
-    yield () => resolveCheckboxState(nodes, checkedIds);
-  },
-).range("size", 100, 10_000);
+    task(`${size} nodes`, () => resolveCheckboxState(nodes, checkedIds));
+  }
+});
 
 // findPath walks root-to-target, so a chain forces it to scan the full depth
 // to reach a mid-chain target — the shape most likely to expose a cost
 // difference from the bushy case's shallow findPath.
-bench(
-  "toggleCheckboxNode (cascade check), $size nodes — deep/narrow (chain)",
-  function* (state) {
-    const size = state.get("size");
+group("toggleCheckboxNode (cascade check) — deep/narrow (chain)", () => {
+  for (const size of range(100, 10_000)) {
     const nodes = buildTree(size, 1);
     const checkedIds = pickCheckedIds(size);
     const targetId = Math.floor(size / 2);
-    yield () => toggleCheckboxNode(nodes, checkedIds, targetId, true);
-  },
-).range("size", 100, 10_000);
-
-await runWithFilter();
+    task(`${size} nodes`, () =>
+      toggleCheckboxNode(nodes, checkedIds, targetId, true),
+    );
+  }
+});

@@ -1,6 +1,6 @@
-import { cleanup, render } from "@testing-library/svelte";
+import { render } from "@testing-library/svelte";
 import TreeView from "carbon-components-svelte/TreeView/TreeView.svelte";
-import { bench, run } from "mitata";
+import { task } from "ostia";
 import { tick } from "svelte";
 import { filterTreeNodes } from "../src/utils/filterTreeNodes.js";
 
@@ -40,108 +40,100 @@ const tree10k = buildBushyTree(10_000);
 const tree1k = buildBushyTree(1_000);
 const checkedIds50 = Array.from({ length: 50 }, (_, i) => i * 200);
 
-it("benchmarks TreeView filtering during search keystroke", async () => {
-  // No `.gc("inner")` on DOM benches: forcing GC after every iteration over
-  // a large jsdom DOM object graph can induce thermal throttling that
-  // invalidates all numbers (including unrelated cases in the same run).
-  // See CONTRIBUTING.md for details.
+// No forced GC on DOM benches: forcing GC after every iteration over a
+// large jsdom DOM object graph can induce thermal throttling that
+// invalidates all numbers (including unrelated cases in the same run). See
+// CONTRIBUTING.md for details.
+//
+// All three instances persist for the whole file's run — each case only
+// calls `result.rerender(...)` on its own component instance, so there's no
+// query-ambiguity concern the way there would be with a DOM query spanning
+// multiple instances (see dropdown-highlight.dom.bench.ts).
 
-  bench("filter keystroke, TreeView 10000 nodes (virtualized)", function* () {
-    const fullTree = tree10k;
-    const predicateA = (node: TreeNode) => node.text.includes("1");
-    const predicateB = (node: TreeNode) => node.text.includes("2");
+{
+  const fullTree = tree10k;
+  const predicateA = (node: TreeNode) => node.text.includes("1");
+  const predicateB = (node: TreeNode) => node.text.includes("2");
 
-    // Pre-compute both filtered variants to measure only component update cost,
-    // not filterTreeNodes cost
-    const filteredA = filterTreeNodes(fullTree, predicateA);
-    const filteredB = filterTreeNodes(fullTree, predicateB);
+  // Pre-compute both filtered variants to measure only component update cost,
+  // not filterTreeNodes cost
+  const filteredA = filterTreeNodes(fullTree, predicateA);
+  const filteredB = filterTreeNodes(fullTree, predicateB);
 
-    // Alternating predicates guarantee the prop genuinely changes every
-    // iteration — without this, the framework might short-circuit updates.
-    let predicateCount = 0;
+  // Alternating predicates guarantee the prop genuinely changes every
+  // iteration — without this, the framework might short-circuit updates.
+  let predicateCount = 0;
 
-    const result = render(TreeView, {
-      props: { nodes: filteredA, labelText: "Tree", virtualize: true },
+  const result = render(TreeView, {
+    props: { nodes: filteredA, labelText: "Tree", virtualize: true },
+  });
+
+  task("filter keystroke, TreeView 10000 nodes (virtualized)", async () => {
+    const filtered = predicateCount++ % 2 === 0 ? filteredA : filteredB;
+    result.rerender({
+      nodes: filtered,
+      labelText: "Tree",
+      virtualize: true,
     });
+    await tick();
+  });
+}
 
-    yield async () => {
+{
+  const fullTree = tree1k;
+  const predicateA = (node: TreeNode) => node.text.includes("1");
+  const predicateB = (node: TreeNode) => node.text.includes("2");
+
+  const filteredA = filterTreeNodes(fullTree, predicateA);
+  const filteredB = filterTreeNodes(fullTree, predicateB);
+
+  let predicateCount = 0;
+
+  const result = render(TreeView, {
+    props: { nodes: filteredA, labelText: "Tree" },
+  });
+
+  task("filter keystroke, TreeView 1000 nodes (not virtualized)", async () => {
+    const filtered = predicateCount++ % 2 === 0 ? filteredA : filteredB;
+    result.rerender({ nodes: filtered, labelText: "Tree" });
+    await tick();
+  });
+}
+
+{
+  const fullTree = tree10k;
+  const predicateA = (node: TreeNode) => node.text.includes("1");
+  const predicateB = (node: TreeNode) => node.text.includes("2");
+
+  const filteredA = filterTreeNodes(fullTree, predicateA);
+  const filteredB = filterTreeNodes(fullTree, predicateB);
+
+  let predicateCount = 0;
+
+  // Checkbox mode runs resolveCheckboxState on every nodes change,
+  // this case measures that delta vs the plain virtualized case.
+  const result = render(TreeView, {
+    props: {
+      nodes: filteredA,
+      labelText: "Tree",
+      virtualize: true,
+      selectionMode: "checkbox",
+      checkedIds: checkedIds50,
+    },
+  });
+
+  task(
+    "filter keystroke, TreeView 10000 nodes (virtualized, checkbox mode)",
+    async () => {
       const filtered = predicateCount++ % 2 === 0 ? filteredA : filteredB;
       result.rerender({
         nodes: filtered,
         labelText: "Tree",
         virtualize: true,
+        selectionMode: "checkbox",
+        checkedIds: checkedIds50,
       });
       await tick();
-    };
-
-    cleanup();
-  });
-
-  bench(
-    "filter keystroke, TreeView 1000 nodes (not virtualized)",
-    function* () {
-      const fullTree = tree1k;
-      const predicateA = (node: TreeNode) => node.text.includes("1");
-      const predicateB = (node: TreeNode) => node.text.includes("2");
-
-      const filteredA = filterTreeNodes(fullTree, predicateA);
-      const filteredB = filterTreeNodes(fullTree, predicateB);
-
-      let predicateCount = 0;
-
-      const result = render(TreeView, {
-        props: { nodes: filteredA, labelText: "Tree" },
-      });
-
-      yield async () => {
-        const filtered = predicateCount++ % 2 === 0 ? filteredA : filteredB;
-        result.rerender({ nodes: filtered, labelText: "Tree" });
-        await tick();
-      };
-
-      cleanup();
     },
   );
-
-  bench(
-    "filter keystroke, TreeView 10000 nodes (virtualized, checkbox mode)",
-    function* () {
-      const fullTree = tree10k;
-      const predicateA = (node: TreeNode) => node.text.includes("1");
-      const predicateB = (node: TreeNode) => node.text.includes("2");
-
-      const filteredA = filterTreeNodes(fullTree, predicateA);
-      const filteredB = filterTreeNodes(fullTree, predicateB);
-
-      let predicateCount = 0;
-
-      // Checkbox mode runs resolveCheckboxState on every nodes change,
-      // this case measures that delta vs the plain virtualized case.
-      const result = render(TreeView, {
-        props: {
-          nodes: filteredA,
-          labelText: "Tree",
-          virtualize: true,
-          selectionMode: "checkbox",
-          checkedIds: checkedIds50,
-        },
-      });
-
-      yield async () => {
-        const filtered = predicateCount++ % 2 === 0 ? filteredA : filteredB;
-        result.rerender({
-          nodes: filtered,
-          labelText: "Tree",
-          virtualize: true,
-          selectionMode: "checkbox",
-          checkedIds: checkedIds50,
-        });
-        await tick();
-      };
-
-      cleanup();
-    },
-  );
-
-  await run({ print: (line) => process.stdout.write(`${line}\n`) });
-}, 180_000);
+}

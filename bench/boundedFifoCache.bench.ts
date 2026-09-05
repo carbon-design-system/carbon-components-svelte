@@ -1,4 +1,4 @@
-// Pure-logic benchmark: no jsdom, no Svelte, run directly via bun (`bun run bench/<this file>.bench.ts`, optionally filtered — see CONTRIBUTING.md).
+// Pure-logic benchmark: no jsdom, no Svelte, run directly via bun (`bunx ostia bench bench/<this file>.bench.ts`, optionally filtered — see CONTRIBUTING.md).
 // BoundedFifoCache backs DataTable's resolvePath path-segment cache (see
 // dataTableSort.bench.ts) and is a Map wrapper with `.keys().next().value`
 // eviction — expected O(1) per set() regardless of cache size. A naive FIFO
@@ -18,36 +18,32 @@
 // cache-hit gets — evictions are rare, not back-to-back), the single-call
 // number is the more representative one, and even that is negligible
 // (sub-microsecond) at this scale.
-import { bench } from "mitata";
+import { group, range, task } from "ostia";
 import { BoundedFifoCache } from "../src/utils/boundedFifoCache.js";
-import { runWithFilter } from "./run-with-filter.js";
 
-// Cache held at capacity (maxSize == $size), so every set() past warmup
+// Cache held at capacity (maxSize == size), so every set() past warmup
 // evicts — the worst case for eviction cost, not the empty-cache case.
-bench(
-  "BoundedFifoCache set() at capacity, single call, $size maxSize",
-  function* (state) {
-    const size = state.get("size");
+group("BoundedFifoCache set() at capacity, single call", () => {
+  for (const size of range(100, 10_000)) {
     const cache = new BoundedFifoCache<number, number>(size);
     for (let i = 0; i < size; i++) cache.set(i, i);
     let next = size;
-    yield () => cache.set(next++, next);
-  },
-).range("size", 100, 10_000);
+    task(`${size} maxSize`, () => cache.set(next++, next));
+  }
+});
 
 const AMORTIZE_COUNT = 1000;
 
-bench(
-  `BoundedFifoCache set() at capacity, amortized over ${AMORTIZE_COUNT} calls, $size maxSize`,
-  function* (state) {
-    const size = state.get("size");
-    const cache = new BoundedFifoCache<number, number>(size);
-    for (let i = 0; i < size; i++) cache.set(i, i);
-    let next = size;
-    yield () => {
-      for (let i = 0; i < AMORTIZE_COUNT; i++) cache.set(next++, next);
-    };
+group(
+  `BoundedFifoCache set() at capacity, amortized over ${AMORTIZE_COUNT} calls`,
+  () => {
+    for (const size of range(100, 10_000)) {
+      const cache = new BoundedFifoCache<number, number>(size);
+      for (let i = 0; i < size; i++) cache.set(i, i);
+      let next = size;
+      task(`${size} maxSize`, () => {
+        for (let i = 0; i < AMORTIZE_COUNT; i++) cache.set(next++, next);
+      });
+    }
   },
-).range("size", 100, 10_000);
-
-await runWithFilter();
+);

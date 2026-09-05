@@ -1,4 +1,4 @@
-// Pure-logic benchmark: no jsdom, no Svelte, run directly via bun (`bun run bench/<this file>.bench.ts`, optionally filtered — see CONTRIBUTING.md).
+// Pure-logic benchmark: no jsdom, no Svelte, run directly via bun (`bunx ostia bench bench/<this file>.bench.ts`, optionally filtered — see CONTRIBUTING.md).
 // TreeView's own virtualization index (src/utils/treeVirtualIndex.js) documents
 // specific complexity claims in its module docstring:
 //   - build: O(n)
@@ -9,9 +9,8 @@
 // This verifies those claims empirically rather than trusting the comment,
 // and directly validates the collectRows optimization against the naive
 // per-row alternative it's documented as improving on.
-import { bench } from "mitata";
+import { group, range, task } from "ostia";
 import { createTreeVirtualIndex } from "../src/utils/treeVirtualIndex.js";
-import { runWithFilter } from "./run-with-filter.js";
 
 type Node = {
   id: number;
@@ -64,32 +63,26 @@ const SHAPES: Array<[string, (size: number) => number]> = [
   ["flat", (size) => size],
 ];
 
-bench(
-  "createTreeVirtualIndex build, $size nodes — bushy, all expanded",
-  function* (state) {
-    const size = state.get("size");
+group("createTreeVirtualIndex build — bushy, all expanded", () => {
+  for (const size of range(100, 10_000)) {
     const nodes = buildTree(size, 4);
     const expandedIds = allIds(nodes);
-    yield () => createTreeVirtualIndex(nodes, expandedIds);
-  },
-).range("size", 100, 10_000);
+    task(`${size} nodes`, () => createTreeVirtualIndex(nodes, expandedIds));
+  }
+});
 
 for (const [shapeName, branchingFor] of SHAPES) {
-  bench(
-    `getRowAt(last index), $size nodes — ${shapeName}, all expanded`,
-    function* (state) {
-      const size = state.get("size");
+  group(`getRowAt(last index) — ${shapeName}, all expanded`, () => {
+    for (const size of range(100, 10_000)) {
       const nodes = buildTree(size, branchingFor(size));
       const expandedIds = allIds(nodes);
       const index = createTreeVirtualIndex(nodes, expandedIds);
-      yield () => index.getRowAt(index.totalCount - 1);
-    },
-  ).range("size", 100, 10_000);
+      task(`${size} nodes`, () => index.getRowAt(index.totalCount - 1));
+    }
+  });
 
-  bench(
-    `findIndexById(last id), $size nodes — ${shapeName}, all expanded`,
-    function* (state) {
-      const size = state.get("size");
+  group(`findIndexById(last id) — ${shapeName}, all expanded`, () => {
+    for (const size of range(100, 10_000)) {
       const nodes = buildTree(size, branchingFor(size));
       const expandedIds = allIds(nodes);
       const index = createTreeVirtualIndex(nodes, expandedIds);
@@ -99,9 +92,9 @@ for (const [shapeName, branchingFor] of SHAPES) {
       // order id from getRowAt so both benches target the same node.
       const lastRow = index.getRowAt(index.totalCount - 1);
       const targetId = lastRow ? lastRow.node.id : size;
-      yield () => index.findIndexById(targetId);
-    },
-  ).range("size", 100, 10_000);
+      task(`${size} nodes`, () => index.findIndexById(targetId));
+    }
+  });
 }
 
 const WINDOW_SIZE = 30;
@@ -114,39 +107,39 @@ const WINDOW_SIZE = 30;
 for (const [shapeName, branchingFor] of SHAPES) {
   // The optimization: one cursor walk collects a 30-row window near the end
   // of the tree in a single pass.
-  bench(
-    `collectRows, 30-row window near end, $size nodes — ${shapeName}, all expanded`,
-    function* (state) {
-      const size = state.get("size");
-      const nodes = buildTree(size, branchingFor(size));
-      const expandedIds = allIds(nodes);
-      const index = createTreeVirtualIndex(nodes, expandedIds);
-      const start = index.totalCount - WINDOW_SIZE;
-      yield () => index.collectRows(start, index.totalCount);
+  group(
+    `collectRows, 30-row window near end — ${shapeName}, all expanded`,
+    () => {
+      for (const size of range(100, 10_000)) {
+        const nodes = buildTree(size, branchingFor(size));
+        const expandedIds = allIds(nodes);
+        const index = createTreeVirtualIndex(nodes, expandedIds);
+        const start = index.totalCount - WINDOW_SIZE;
+        task(`${size} nodes`, () => index.collectRows(start, index.totalCount));
+      }
     },
-  ).range("size", 100, 10_000);
+  );
 
   // The naive alternative collectRows replaces: calling getRowAt
   // independently for each row in the same window. Same window, same tree,
   // same shape — isolates the win from batching into one walk vs. `window`
   // separate calls.
-  bench(
-    `getRowAt loop (naive), 30-row window near end, $size nodes — ${shapeName}, all expanded`,
-    function* (state) {
-      const size = state.get("size");
-      const nodes = buildTree(size, branchingFor(size));
-      const expandedIds = allIds(nodes);
-      const index = createTreeVirtualIndex(nodes, expandedIds);
-      const start = index.totalCount - WINDOW_SIZE;
-      yield () => {
-        const rows = [];
-        for (let i = start; i < index.totalCount; i++) {
-          rows.push(index.getRowAt(i));
-        }
-        return rows;
-      };
+  group(
+    `getRowAt loop (naive), 30-row window near end — ${shapeName}, all expanded`,
+    () => {
+      for (const size of range(100, 10_000)) {
+        const nodes = buildTree(size, branchingFor(size));
+        const expandedIds = allIds(nodes);
+        const index = createTreeVirtualIndex(nodes, expandedIds);
+        const start = index.totalCount - WINDOW_SIZE;
+        task(`${size} nodes`, () => {
+          const rows = [];
+          for (let i = start; i < index.totalCount; i++) {
+            rows.push(index.getRowAt(i));
+          }
+          return rows;
+        });
+      }
     },
-  ).range("size", 100, 10_000);
+  );
 }
-
-await runWithFilter();

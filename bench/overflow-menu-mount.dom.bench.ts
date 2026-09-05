@@ -1,5 +1,5 @@
 import { cleanup, render } from "@testing-library/svelte";
-import { bench, run } from "mitata";
+import { group, range, task } from "ostia";
 import OverflowMenuBench from "./fixtures/OverflowMenuBench.svelte";
 
 // OverflowMenu.add() (called synchronously from each OverflowMenuItem's own
@@ -18,22 +18,17 @@ import OverflowMenuBench from "./fixtures/OverflowMenuBench.svelte";
 // fixture renders with `open` already true so registration happens as part
 // of the initial render this bench times (see
 // bench/fixtures/OverflowMenuBench.svelte).
-it("benchmarks mounting an open OverflowMenu with various item counts", async () => {
-  // Range capped at 100, not wider: same mitata-calibration-vs-expensive-
-  // closure issue as user-avatar-group-mount.dom.bench.ts and
-  // tabs-mount.dom.bench.ts — a manual performance.now() spot-check (see
-  // .context/perf/overflow-menu-registration-followup.md) already confirms
-  // ~O(n^2) growth up to 200 items (10.4s), so a wide mitata range wasn't
-  // attempted.
-  bench("mount open OverflowMenu, $size items", function* (state) {
-    const size = state.get("size");
-    yield () => {
+//
+// Range capped at 100, not wider: same calibration-vs-expensive-closure
+// issue as user-avatar-group-mount.dom.bench.ts and tabs-mount.dom.bench.ts
+// — a manual performance.now() spot-check (see
+// .context/perf/overflow-menu-registration-followup.md) already confirms
+// ~O(n^2) growth up to 200 items (10.4s), so a wide range wasn't attempted.
+group("mount open OverflowMenu", () => {
+  for (const size of range(10, 100)) {
+    task(`${size} items`, () => {
       render(OverflowMenuBench, { props: { count: size } });
       cleanup();
-    };
-  }).range("size", 10, 100);
-
-  // mitata defaults `print` to console.log, which vitest swallows for
-  // passing tests. process.stdout.write always reaches the terminal.
-  await run({ print: (line) => process.stdout.write(`${line}\n`) });
-}, 120_000);
+    });
+  }
+});

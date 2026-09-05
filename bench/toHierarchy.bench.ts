@@ -1,11 +1,10 @@
-// Pure-logic benchmark: no jsdom, no Svelte, run directly via bun (`bun run bench/<this file>.bench.ts`, optionally filtered — see CONTRIBUTING.md).
+// Pure-logic benchmark: no jsdom, no Svelte, run directly via bun (`bunx ostia bench bench/<this file>.bench.ts`, optionally filtered — see CONTRIBUTING.md).
 // toHierarchy converts a flat array into a hierarchical tree by assigning item.nodes.
 // IMPORTANT: toHierarchy mutates its input by assigning `item.nodes`. Each benchmark
 // closure must operate on a fresh shallow clone to avoid cross-iteration state pollution.
 // The "clone only" baseline lets us subtract clone overhead from the real measurements.
-import { bench } from "mitata";
+import { group, range, task } from "ostia";
 import { toHierarchy } from "../src/utils/toHierarchy.js";
-import { runWithFilter } from "./run-with-filter.js";
 
 type Node = {
   id: number;
@@ -45,59 +44,73 @@ const bushyParent = (i: number) => (i === 0 ? null : Math.floor((i - 1) / 10));
 const chainParent = (i: number) => (i === 0 ? null : i - 1);
 
 // Baseline: clone overhead only (no toHierarchy call).
-// `.gc("inner")` forces GC before/after every sample instead of batching calls
-// with no GC in between. Without it, the clone + toHierarchy allocation-heavy
-// operations mis-calibrate and report numbers inflated by 20-60x. See
-// CONTRIBUTING.md and dataTableSort.bench.ts for details.
-bench("clone only, $size nodes", function* (state) {
-  const size = state.get("size");
-  const flat = buildFlatNodes(size, flatParent);
-  yield () => flat.map((n) => ({ ...n }));
-})
-  .range("size", 100, 10_000)
-  .gc("inner");
+// `{ gc: true }` on every group forces `Bun.gc(true)` between trials —
+// mitata's per-bench `.gc("inner")` equivalent (see CONTRIBUTING.md). Without
+// it, the clone + toHierarchy allocation-heavy operations mis-calibrate and
+// report numbers inflated by 20-60x. See CONTRIBUTING.md and
+// dataTableSort.bench.ts for details.
+group(
+  "clone only",
+  () => {
+    for (const size of range(100, 10_000)) {
+      const flat = buildFlatNodes(size, flatParent);
+      task(`${size} nodes`, () => flat.map((n) => ({ ...n })));
+    }
+  },
+  { gc: true },
+);
 
 // Flat tree: every node a root. Tree has height 1, width = size.
 // Exercises the root-only path in toHierarchy.
-bench("toHierarchy flat, $size nodes", function* (state) {
-  const size = state.get("size");
-  const flat = buildFlatNodes(size, flatParent);
-  yield () =>
-    toHierarchy(
-      flat.map((n) => ({ ...n })),
-      (n) => n.pid,
-    );
-})
-  .range("size", 100, 10_000)
-  .gc("inner");
+group(
+  "toHierarchy flat",
+  () => {
+    for (const size of range(100, 10_000)) {
+      const flat = buildFlatNodes(size, flatParent);
+      task(`${size} nodes`, () =>
+        toHierarchy(
+          flat.map((n) => ({ ...n })),
+          (n) => n.pid,
+        ),
+      );
+    }
+  },
+  { gc: true },
+);
 
 // Bushy tree: 10 children per node, roughly breadth-first fill.
 // Exercises parent-child linking in the typical case.
-bench("toHierarchy bushy, $size nodes", function* (state) {
-  const size = state.get("size");
-  const flat = buildFlatNodes(size, bushyParent);
-  yield () =>
-    toHierarchy(
-      flat.map((n) => ({ ...n })),
-      (n) => n.pid,
-    );
-})
-  .range("size", 100, 10_000)
-  .gc("inner");
+group(
+  "toHierarchy bushy",
+  () => {
+    for (const size of range(100, 10_000)) {
+      const flat = buildFlatNodes(size, bushyParent);
+      task(`${size} nodes`, () =>
+        toHierarchy(
+          flat.map((n) => ({ ...n })),
+          (n) => n.pid,
+        ),
+      );
+    }
+  },
+  { gc: true },
+);
 
 // Chain tree: node i's parent is i - 1, so every node has exactly one child.
 // Tree has height = size, width 1. Exercises deep recursion-like behavior
 // in data structure with linear parent-child chains.
-bench("toHierarchy chain, $size nodes", function* (state) {
-  const size = state.get("size");
-  const flat = buildFlatNodes(size, chainParent);
-  yield () =>
-    toHierarchy(
-      flat.map((n) => ({ ...n })),
-      (n) => n.pid,
-    );
-})
-  .range("size", 100, 10_000)
-  .gc("inner");
-
-await runWithFilter();
+group(
+  "toHierarchy chain",
+  () => {
+    for (const size of range(100, 10_000)) {
+      const flat = buildFlatNodes(size, chainParent);
+      task(`${size} nodes`, () =>
+        toHierarchy(
+          flat.map((n) => ({ ...n })),
+          (n) => n.pid,
+        ),
+      );
+    }
+  },
+  { gc: true },
+);

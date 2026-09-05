@@ -1,7 +1,7 @@
 import { cleanup, render } from "@testing-library/svelte";
 import { userEvent } from "@testing-library/user-event";
 import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
-import { bench, run } from "mitata";
+import { task } from "ostia";
 
 // Mirrors multiselect-mount.dom.bench.ts: ComboBox shares the same
 // `virtualize.js` util (already proven O(1) in item count at the pure-logic
@@ -35,46 +35,40 @@ const items1000 = buildItems(1000);
 // of setting up userEvent.
 const user = userEvent.setup();
 
-it("benchmarks mounting an open ComboBox with various item counts and virtualization modes", async () => {
-  // 100 items is at the auto-virtualization cutoff (virtualize kicks in
-  // above 100), so this mounts every menu item.
-  bench("mount open ComboBox, 100 items", () => {
-    render(ComboBox, {
-      props: { items: items100, placeholder: "Options", open: true },
-    });
-    cleanup();
+// 100 items is at the auto-virtualization cutoff (virtualize kicks in
+// above 100), so this mounts every menu item.
+task("mount open ComboBox, 100 items", () => {
+  render(ComboBox, {
+    props: { items: items100, placeholder: "Options", open: true },
+  });
+  cleanup();
+});
+
+task("mount open ComboBox, 1000 items (virtualized default)", () => {
+  render(ComboBox, {
+    props: { items: items1000, placeholder: "Options", open: true },
+  });
+  cleanup();
+});
+
+task("mount open ComboBox, 1000 items, virtualize disabled", () => {
+  render(ComboBox, {
+    props: {
+      items: items1000,
+      placeholder: "Options",
+      open: true,
+      virtualize: false,
+    },
+  });
+  cleanup();
+});
+
+task("mount + click-open ComboBox, 1000 items", async () => {
+  const { getByRole } = render(ComboBox, {
+    props: { items: items1000, placeholder: "Options" },
   });
 
-  bench("mount open ComboBox, 1000 items (virtualized default)", () => {
-    render(ComboBox, {
-      props: { items: items1000, placeholder: "Options", open: true },
-    });
-    cleanup();
-  });
+  await user.click(getByRole("combobox"));
 
-  bench("mount open ComboBox, 1000 items, virtualize disabled", () => {
-    render(ComboBox, {
-      props: {
-        items: items1000,
-        placeholder: "Options",
-        open: true,
-        virtualize: false,
-      },
-    });
-    cleanup();
-  });
-
-  bench("mount + click-open ComboBox, 1000 items", async () => {
-    const { getByRole } = render(ComboBox, {
-      props: { items: items1000, placeholder: "Options" },
-    });
-
-    await user.click(getByRole("combobox"));
-
-    cleanup();
-  });
-
-  // mitata defaults `print` to console.log, which vitest swallows for
-  // passing tests. process.stdout.write always reaches the terminal.
-  await run({ print: (line) => process.stdout.write(`${line}\n`) });
-}, 120_000);
+  cleanup();
+});
