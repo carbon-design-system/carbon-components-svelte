@@ -37,6 +37,7 @@
   import TreeViewNode, {
     computeTreeLeafDepth,
     findParentTreeNode,
+    preventTreeItemFocusOnSlottedControl,
   } from "./TreeViewNode.svelte";
   // `<svelte:fragment>` (used to forward the `childNodes` slot without adding
   // a DOM wrapper) can only target a `Component`, not `<svelte:self>` — so
@@ -152,6 +153,13 @@
     refLabel.style.marginLeft = `-${offset()}rem`;
     refLabel.style.paddingLeft = `${offset()}rem`;
   }
+
+  /** @param {MouseEvent} event */
+  function handleSlottedControlMouseDown(event) {
+    preventTreeItemFocusOnSlottedControl(event, refLabel, {
+      ignoreToggle: true,
+    });
+  }
 </script>
 
 {#if root}
@@ -213,6 +221,7 @@
       if (isCheckboxMode) event.preventDefault();
       clickNode(node, event);
     }}
+    on:mousedown={handleSlottedControlMouseDown}
     on:keydown={(event) => {
       if (
         event.key === "ArrowUp" ||
