@@ -146,6 +146,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "SessionStorage",
       "ImageLoader",
       "Truncate",
+      "TruncatedText",
     ],
   },
   {
