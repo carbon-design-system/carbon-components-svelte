@@ -5,6 +5,7 @@
  * rule instead of editing it:
  *
  *   doubled-class      `.#{$prefix}--x.#{$prefix}--x` / `.bx--x.bx--x`
+ *   base-plus-modifier `.#{$prefix}--x.#{$prefix}--x--mod`
  *   element-qualified  `button.#{$prefix}--x`, `a.bx--x`, `li.`, `svg.`...
  *   order-not          `:not(.x)` on a line (or the line above) whose comment
  *                      cites specificity / order / outrank / win / beat
@@ -35,6 +36,11 @@ const PATTERNS: Record<string, RegExp> = {
   "element-qualified": new RegExp(
     String.raw`(?:^|[\s,>+~(])(?:${ELEMENTS})\.${CLASS}`,
   ),
+  // `.bx--x.bx--x--mod`: the block class restated next to its own modifier,
+  // which only ever adds weight (the modifier already implies the block).
+  "base-plus-modifier": new RegExp(
+    String.raw`\.${CLASS}([a-z0-9_-]+)\.${CLASS}\1--[a-z0-9_-]+`,
+  ),
 };
 const ORDER_WORDS = /specific|order|outrank|out-?weigh|\bwin\b|wins|beat|tie/i;
 const EXEMPT = /\/\/\s*ccs:\s*(element|specificity)/;
@@ -48,6 +54,7 @@ const LIST = args.includes("--list") ? args[args.indexOf("--list") + 1] : null;
 type Hit = { file: string; line: number; text: string };
 const hits: Record<string, Hit[]> = {
   "doubled-class": [],
+  "base-plus-modifier": [],
   "element-qualified": [],
   "order-not": [],
 };

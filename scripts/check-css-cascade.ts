@@ -10,7 +10,12 @@
  *    rewritten or genuinely new rule, checks whether its winner/loser
  *    relationship against any co-matchable rule with a conflicting property
  *    flipped between base and head. A flip is a cascade regression candidate.
- * 3. Prints a specificity profile (selectors with >= 4 classes, max) so the
+ * 3. Finds rules whose key is unchanged but whose position moved (a partial
+ *    relocated to its component's slot) and lists the equal-specificity
+ *    ties they now win or lose as a review section. These do not fail the
+ *    run: the static model cannot tell whether both selectors ever match one
+ *    element, so e2e/cascade-snapshot.ts is the gate for them.
+ * 4. Prints a specificity profile (selectors with >= 4 classes, max) so the
  *    number is visible per PR.
  *
  * Co-matchability is a heuristic on the subject (last) compound: two
@@ -49,6 +54,8 @@ function flag(name: string, fallback: string): string {
 const BASE_REF = flag("base", "HEAD");
 const ENTRY = flag("entry", "all");
 const VERBOSE = args.includes("--verbose");
+const PREFIX_RE = /^[a-z]+--/;
+const ROOT_SPLIT_RE = /__|--/;
 
 // ---------------------------------------------------------------------------
 // Compile
@@ -127,9 +134,17 @@ for (const [key, list] of headByKey) {
 const rewrites = new Map<Rule, Rule>(); // head rule -> base rule
 const unmatchedAdded: Rule[] = [];
 const removedPool = [...removed];
+const shareClass = (a: Rule, b: Rule): boolean => {
+  for (const c of a.subject.allClasses)
+    if (b.subject.allClasses.has(c)) return true;
+  return false;
+};
 for (const a of added) {
   const i = removedPool.findIndex(
-    (r) => r.declBlock === a.declBlock && r.context === a.context,
+    (r) =>
+      r.declBlock === a.declBlock &&
+      r.context === a.context &&
+      shareClass(r, a),
   );
   if (i >= 0) {
     rewrites.set(a, removedPool[i]);
@@ -163,22 +178,91 @@ interface Flip {
   after: string;
 }
 const flips: Flip[] = [];
+const moveFlips: Flip[] = [];
 const reviews: { rule: Rule; other: Rule; prop: string; result: string }[] = [];
 
-const changedHead = new Set<Rule>([...rewrites.keys(), ...unmatchedAdded]);
+// `bx--slider__thumb--lower` -> `slider`; used to skip pairing a moved rule
+// with rules from components it shares no class root with.
+const rootOf = (cls: string): string =>
+  cls.replace(PREFIX_RE, "").split(ROOT_SPLIT_RE)[0];
+const roots = (r: Rule): Set<string> =>
+  new Set([...r.subject.allClasses].map(rootOf));
+const shareRoot = (a: Rule, b: Rule): boolean => {
+  const ra = roots(a);
+  for (const r of roots(b)) if (ra.has(r)) return true;
+  return false;
+};
+
+// Rules whose key is unchanged but whose position moved relative to the
+// others (a partial relocated to its component's slot). Found as the
+// complement of the longest common subsequence of shared keys, so only the
+// rules that actually jumped are checked, not everything after them.
+const movedHead = new Set<Rule>();
+{
+  const headPos: number[] = [];
+  const headRules: Rule[] = [];
+  for (const b of base) {
+    const h = baseToHead.get(b);
+    if (!h) continue;
+    headPos.push(head.indexOf(h));
+    headRules.push(h);
+  }
+  // Longest increasing subsequence over head positions (patience sorting).
+  const tails: number[] = [];
+  const tailIdx: number[] = [];
+  const prev: number[] = new Array(headPos.length).fill(-1);
+  for (let i = 0; i < headPos.length; i++) {
+    let lo = 0;
+    let hi = tails.length;
+    while (lo < hi) {
+      const mid = (lo + hi) >> 1;
+      if (tails[mid] < headPos[i]) lo = mid + 1;
+      else hi = mid;
+    }
+    tails[lo] = headPos[i];
+    tailIdx[lo] = i;
+    prev[i] = lo > 0 ? tailIdx[lo - 1] : -1;
+  }
+  const stable = new Set<number>();
+  for (
+    let i = tailIdx[tails.length - 1];
+    i !== undefined && i >= 0;
+    i = prev[i]
+  ) {
+    stable.add(i);
+  }
+  headRules.forEach((h, i) => {
+    if (!stable.has(i)) movedHead.add(h);
+  });
+}
+
+const changedHead = new Set<Rule>([
+  ...rewrites.keys(),
+  ...unmatchedAdded,
+  ...movedHead,
+]);
 for (const rule of changedHead) {
   const ruleBase = headToBase.get(rule);
-  for (const other of candidates(rule, headIndex, head)) {
+  for (const other of candidates(rule, headIndex)) {
     if (!coMatchable(rule, other)) continue;
     const props = conflictingProps(rule, other);
     if (props.length === 0) continue;
     const otherBase = headToBase.get(other);
+    const isMoveOnly = movedHead.has(rule) && !rewrites.has(rule);
+    if (isMoveOnly && !shareRoot(rule, other)) continue;
     for (const prop of props) {
       const after = wins(rule, other, prop) ? "wins" : "loses";
       if (ruleBase && otherBase) {
         const before = wins(ruleBase, otherBase, prop) ? "wins" : "loses";
         if (before !== after) {
-          flips.push({ rule, other, otherBase, prop, before, after });
+          (isMoveOnly ? moveFlips : flips).push({
+            rule,
+            other,
+            otherBase,
+            prop,
+            before,
+            after,
+          });
         }
       } else if (VERBOSE) {
         reviews.push({ rule, other, prop, result: after });
@@ -211,7 +295,8 @@ lines.push(
 lines.push(
   `removed: ${removed.length}  added: ${added.length}  ` +
     `rewrites (same decls, new selector): ${rewrites.size}  ` +
-    `new rules: ${unmatchedAdded.length}  dropped rules: ${removedPool.length}`,
+    `new rules: ${unmatchedAdded.length}  dropped rules: ${removedPool.length}  ` +
+    `moved rules: ${movedHead.size}`,
 );
 
 const section = (title: string, items: string[]) => {
@@ -253,6 +338,34 @@ section(
       `\n    (before: ${f.before})`,
   ),
 );
+// Moved rules only change order, so these are equal-specificity ties whose
+// winner now depends on the new position. The static model cannot tell
+// whether both selectors ever match one element; confirm with the snapshot.
+{
+  const byRule = new Map<Rule, Flip[]>();
+  for (const f of moveFlips) {
+    const list = byRule.get(f.rule);
+    if (list) list.push(f);
+    else byRule.set(f.rule, [f]);
+  }
+  section(
+    "order-tie flips from moved rules (review; confirm with e2e/cascade-snapshot.ts)",
+    [...byRule].map(([rule, list]) => {
+      const others = [...new Set(list.map((f) => f.other.selector))];
+      const props = [...new Set(list.map((f) => f.prop))];
+      return (
+        `  ${rule.selector} ${fmtSpec(rule.specificity)} now ${list[0].after} [${props.join(", ")}] vs
+` +
+        others
+          .slice(0, 4)
+          .map((o) => `    ${o}`)
+          .join("\n") +
+        (others.length > 4 ? `\n    (+${others.length - 4} more)` : "")
+      );
+    }),
+  );
+}
+
 if (VERBOSE) {
   section(
     "review: new rules vs co-matchable conflicting rules",

@@ -56,6 +56,8 @@ describe("coMatchable", () => {
 
   test("a negated class excludes the other's required class", () => {
     expect(coMatchable(r(".x:not(.y)"), r(".x.y"))).toBe(false);
+    expect(coMatchable(r(".x:not(.d) ~ .y"), r(".x.d ~ .y"))).toBe(false);
+    expect(coMatchable(r(".x:not(.d) ~ .y"), r(".x ~ .y"))).toBe(true);
   });
 
   test("pseudo-elements and media contexts must agree", () => {
@@ -66,8 +68,12 @@ describe("coMatchable", () => {
     expect(coMatchable(a, b)).toBe(false);
   });
 
-  test("type-only subjects match anything", () => {
-    expect(coMatchable(r("tr"), r(".x"))).toBe(true);
+  test("type-only subjects pair only on same type and a shared class", () => {
+    expect(coMatchable(r("tr"), r(".x"))).toBe(false);
+    expect(coMatchable(r("tr"), r("tbody tr"))).toBe(true);
+    expect(coMatchable(r(".a svg"), r(".a:hover > svg"))).toBe(true);
+    expect(coMatchable(r(".a svg"), r(".b svg"))).toBe(false);
+    expect(coMatchable(r(".a svg"), r(".a path"))).toBe(false);
   });
 });
 

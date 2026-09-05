@@ -154,3 +154,50 @@
 @include exports('breadcrumb') {
   @include breadcrumb;
 }
+
+// carbon-components-svelte patch (formerly css/_breadcrumb.scss)
+@import "carbon-components/scss/globals/scss/typography";
+
+/// Small breadcrumb (Carbon React size="sm")
+/// @access private
+/// @group components
+@mixin breadcrumb-sm {
+  .#{$prefix}--breadcrumb--sm {
+    @include type-style('label-01');
+  }
+
+  .#{$prefix}--breadcrumb--sm .#{$prefix}--link {
+    font: inherit;
+  }
+
+  .#{$prefix}--breadcrumb--sm .#{$prefix}--breadcrumb-item {
+    margin-right: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--breadcrumb--sm .#{$prefix}--breadcrumb-item .#{$prefix}--link {
+    justify-content: center;
+    min-width: $carbon--spacing-04;
+  }
+
+  .#{$prefix}--breadcrumb--sm .#{$prefix}--breadcrumb-item::after {
+    margin-left: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--breadcrumb--sm
+    .#{$prefix}--breadcrumb-item
+    .#{$prefix}--overflow-menu {
+    width: $carbon--spacing-05;
+    height: $carbon--spacing-05;
+    min-height: $carbon--spacing-05;
+
+    // Carbon shifts this icon down 4px inside breadcrumb items. At 1rem trigger
+    // size the icon is already centered, so reset `transform`.
+    .#{$prefix}--overflow-menu__icon {
+      transform: none;
+    }
+  }
+}
+
+@include exports('breadcrumb-sm') {
+  @include breadcrumb-sm;
+}

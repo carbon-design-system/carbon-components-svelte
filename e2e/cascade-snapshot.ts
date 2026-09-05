@@ -160,15 +160,36 @@ async function capturePage(
   url: string,
   theme: string,
 ): Promise<Snapshot> {
+  // The theme attribute must be present before first paint: setting it after
+  // load makes every token-driven color transition, and a capture taken
+  // mid-transition records intermediate values.
+  await page.addInitScript((t) => {
+    const apply = () => document.documentElement.setAttribute("theme", t);
+    if (document.documentElement) {
+      apply();
+      return;
+    }
+    const observer = new MutationObserver(() => {
+      if (!document.documentElement) return;
+      apply();
+      observer.disconnect();
+    });
+    observer.observe(document, { childList: true });
+  }, theme);
   await page.goto(url, { waitUntil: "networkidle" });
-  await page.evaluate(
-    (t) => document.documentElement.setAttribute("theme", t),
-    theme,
-  );
   await page.evaluate(PAGE_HELPERS);
-  await page.waitForTimeout(50);
+  // Longest Carbon motion token is 400ms; let any load-time transition settle.
+  await page.waitForTimeout(500);
   const snap: Snapshot = await page.evaluate("window.__ccs.snapshot()");
   if (!STATES) return snap;
+
+  // Forced states are read immediately, so freeze transitions first or the
+  // capture records a color halfway between the two states. The static
+  // snapshot above already recorded the real transition declarations.
+  await page.addStyleTag({
+    content:
+      "*, *::before, *::after { transition: none !important; animation: none !important; }",
+  });
 
   const n: number = await page.evaluate(
     ([sel, max]) =>
