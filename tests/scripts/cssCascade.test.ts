@@ -1,6 +1,8 @@
 import {
   coMatchable,
   conflictingProps,
+  histogram,
+  histogramByFile,
   parseRules,
   wins,
 } from "../../scripts/lib/css-cascade";
@@ -43,6 +45,48 @@ describe("parseRules", () => {
     expect([...r.subject.classes]).toEqual(["b"]);
     expect([...r.subject.negated]).toEqual(["c"]);
     expect(r.subject.pseudoElement).toBe("after");
+  });
+
+  test("flags a type-qualified class compound anywhere in the selector", () => {
+    const r = (sel: string) => one(`${sel} { color: red }`).subject.qualified;
+    expect(r("a.x")).toBe(true);
+    expect(r("tr.x td")).toBe(true);
+    expect(r(".x a")).toBe(false);
+    expect(r(".x > .y")).toBe(false);
+    expect(r("*.x")).toBe(false);
+  });
+
+  test("records selector positions on request", () => {
+    const [a, b] = parseRules(
+      ".a { color: red }\n  .b,\n.c { color: blue }",
+      true,
+    );
+    expect(a.loc).toEqual({ line: 1, column: 0 });
+    expect(b.loc).toEqual({ line: 2, column: 2 });
+    expect(one(".a { color: red }").loc).toBeUndefined();
+  });
+});
+
+describe("histogram", () => {
+  const css =
+    ".a, .a.b, a.a.b.c, .a.b.c.d:hover, .a .b .c .d .e { color: red }";
+
+  test("buckets by class tier and counts qualified compounds", () => {
+    const h = histogram(rules(css));
+    expect(h.selectors).toBe(5);
+    expect(h.classes).toEqual([0, 1, 1, 1, 2]);
+    expect(h.qualified).toBe(1);
+    expect(h.max).toEqual([0, 5, 0]);
+  });
+
+  test("groups by source file, unplaced rules under ?", () => {
+    const list = rules(css);
+    const byFile = histogramByFile(list, (r) =>
+      r.selector.startsWith(".a.b") ? "x.scss" : undefined,
+    );
+    expect([...byFile.keys()]).toEqual(["?", "x.scss"]);
+    expect(byFile.get("x.scss")?.selectors).toBe(2);
+    expect(byFile.get("?")?.selectors).toBe(3);
   });
 });
 
