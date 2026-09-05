@@ -34,11 +34,14 @@
   .#{$prefix}--header__action {
     @include button-reset();
 
+    display: flex; // ccs: centre the icon
     width: mini-units(6);
     height: mini-units(6);
+    align-items: center; // ccs
+    justify-content: center; // ccs
+    padding-bottom: $spacing-01; // ccs: optical centring
     border: to-rem(1px) solid transparent;
-    transition: background-color $duration--fast-02,
-      border-color $duration--fast-02;
+    transition: none; // ccs: global actions set their own, see the patch below
   }
 
   .#{$prefix}--header__action:hover {
@@ -47,11 +50,13 @@
 
   .#{$prefix}--header__action--active {
     border-right: 1px solid $shell-header-border-01;
-    border-bottom: 1px solid $shell-header-bg-01;
+    border-bottom: 1px solid transparent; // ccs: sits on the panel layer
     border-left: 1px solid $shell-header-border-01;
+    background: $layer; // ccs
   }
 
   .#{$prefix}--header__action:focus {
+    border-width: $button-border-width; // ccs
     border-color: $shell-header-focus;
     outline: none;
   }
@@ -69,7 +74,7 @@
   }
 
   .#{$prefix}--header__menu-trigger > svg {
-    fill: $shell-header-icon-01;
+    fill: $shell-header-icon-02; // ccs: same as every other header action
   }
 
   .#{$prefix}--header__menu-trigger:hover {
@@ -155,6 +160,7 @@
     align-items: center;
     padding: 0 mini-units(2);
     border: 2px solid transparent;
+    background-color: $shell-header-bg-01; // ccs
     color: $shell-header-text-02;
     font-size: to-rem(14px);
     font-weight: 400;
@@ -189,6 +195,12 @@
     fill: $shell-header-icon-01;
   }
 
+
+  // ccs
+  a.#{$prefix}--header__menu-item[aria-current='page'],
+  .#{$prefix}--header__menu-item--current {
+    color: $shell-header-text-01;
+  }
 
   a.#{$prefix}--header__menu-item[aria-current='page']::after,
   .#{$prefix}--header__menu-item--current::after {
@@ -244,7 +256,7 @@
     // the next level.
     z-index: #{z('header') + 1};
     background-color: $shell-header-bg-06;
-    color: $shell-header-focus;
+    color: $shell-header-text-02; // ccs: was the focus colour (white)
   }
 
   .#{$prefix}--header__menu-title[aria-expanded='true']
@@ -273,16 +285,26 @@
     transform: translateY(100%);
   }
 
+  // ccs: submenu items sit on the `$layer` surface, so they and their
+  // states use the layer tokens rather than the header's background tokens.
+  .#{$prefix}--header__menu-title[aria-expanded='true']
+    + .#{$prefix}--header__menu
+    .#{$prefix}--header__menu-item {
+    background-color: $shell-header-bg-06;
+  }
+
   .#{$prefix}--header__menu-title[aria-expanded='true']
     + .#{$prefix}--header__menu
     .#{$prefix}--header__menu-item:hover {
-    background-color: $shell-header-bg-04;
+    background-color: $layer-hover;
+    color: $shell-header-text-01;
   }
 
   .#{$prefix}--header__menu-title[aria-expanded='true']
     + .#{$prefix}--header__menu
     .#{$prefix}--header__menu-item:active {
-    background-color: $shell-header-bg-03;
+    background-color: $layer-active;
+    color: $shell-header-text-01;
   }
 
   .#{$prefix}--header__menu .#{$prefix}--header__menu-item {
@@ -290,7 +312,7 @@
   }
 
   .#{$prefix}--header__menu .#{$prefix}--header__menu-item:hover {
-    background-color: $shell-header-bg-06;
+    background-color: $layer-hover; // ccs
     color: $shell-header-text-01;
   }
 
@@ -329,7 +351,7 @@
     height: 3rem;
     align-items: center;
     padding: 0 1rem;
-    border: 4px solid $ibm-color__blue-60;
+    border: 4px solid $shell-header-focus; // ccs
     background-color: $shell-header-bg-01;
     clip: auto;
     color: $shell-header-text-01;

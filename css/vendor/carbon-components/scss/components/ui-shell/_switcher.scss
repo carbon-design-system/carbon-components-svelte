@@ -46,8 +46,11 @@
   .#{$prefix}--switcher__item-link {
     @include carbon--type-style('productive-heading-01');
 
-    display: block;
+    // ccs: flex centres the label exactly; the fixed padding drifted a few
+    // px against the type style's line-height.
+    display: flex;
     height: $spacing-07;
+    align-items: center;
     padding: to-rem(6px) $spacing-05;
     color: $shell-panel-text-01;
     text-decoration: none;
@@ -69,6 +72,13 @@
       background: $shell-panel-bg-03;
       color: $shell-panel-text-02;
     }
+  }
+
+  // ccs: the selected item uses the same token as SideNavLink's
+  // `[aria-current='page']` state.
+  .#{$prefix}--switcher__item-link--selected {
+    background: $shell-panel-bg-04;
+    color: $shell-panel-text-02;
   }
 
 }
