@@ -25,7 +25,7 @@
         "culls": "^0.2.0",
         "jsdom": "^30.0.1",
         "lightningcss": "^1.33.0",
-        "ostia": "^0.1.7",
+        "ostia": "^0.2.0",
         "sass-embedded": "^1.103.1",
         "sveld": "^0.36.10",
         "svelte": "^5.57.0",
@@ -363,7 +363,7 @@
 
     "obug": ["obug@2.1.4", "", {}, "sha512-4a+OsYv9UktOJKE+l1A4OufDgdRF9PifWj+tJnHURo/P+WOxpG4GzUFL9qCalmWauao6ogiG+QvnCovwPoyAWA=="],
 
-    "ostia": ["ostia@0.1.7", "", { "bin": { "ostia": "cli.js" } }, "sha512-TVrDTh9H/1xzROyNYQONNfIyT9w8Ki/1RDhJ3Awj8KB0tN8Qbnktqwt0cdElQLiP3TFuq6sTJ4XjTZS05PIDhg=="],
+    "ostia": ["ostia@0.2.0", "", { "bin": { "ostia": "cli.js" } }, "sha512-X+kqTYBmK7r0RgLLy5kqXFxrg0drR39ldOW9+i4H2Nnz4xU1dozsrqaz6pxm6wvlcAoSMIGKWFCYMWMkH+4rmA=="],
 
     "parse5": ["parse5@8.0.1", "", { "dependencies": { "entities": "^8.0.0" } }, "sha512-z1e/HMG90obSGeidlli3hj7cbocou0/wa5HacvI3ASx34PecNjNQeaHNo5WIZpWofN9kgkqV1q5YvXe3F0FoPw=="],
 
