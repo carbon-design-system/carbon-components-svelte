@@ -48,3 +48,32 @@
 @include exports('combo-box') {
   @include combo-box;
 }
+
+// carbon-components-svelte patch (formerly css/_combobox-readonly.scss)
+/// Readonly combobox styles
+/// @access private
+/// @group combobox
+@mixin combobox-readonly {
+  .#{$prefix}--combo-box--readonly,
+  .#{$prefix}--combo-box--readonly:hover {
+    background-color: transparent;
+  }
+
+  .#{$prefix}--combo-box--readonly .#{$prefix}--text-input {
+    border-block-end-color: $border-subtle;
+  }
+
+  .#{$prefix}--combo-box--readonly .#{$prefix}--list-box__menu-icon,
+  .#{$prefix}--combo-box--readonly .#{$prefix}--list-box__selection {
+    cursor: default;
+  }
+
+  .#{$prefix}--combo-box--readonly .#{$prefix}--list-box__menu-icon svg,
+  .#{$prefix}--combo-box--readonly .#{$prefix}--list-box__selection svg {
+    fill: $icon-disabled;
+  }
+}
+
+@include exports("combobox-readonly") {
+  @include combobox-readonly;
+}

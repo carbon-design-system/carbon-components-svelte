@@ -103,3 +103,48 @@
 @include exports('text-area') {
   @include text-area;
 }
+
+// carbon-components-svelte patch (formerly css/_text-area-readonly.scss)
+/// Readonly textarea styles
+/// @access private
+/// @group text-area
+@mixin text-area-readonly {
+  .#{$prefix}--text-area__wrapper--readonly .#{$prefix}--text-area {
+    background: transparent;
+    border-block-end-color: $border-subtle;
+  }
+}
+
+@include exports("text-area-readonly") {
+  @include text-area-readonly;
+}
+
+// carbon-components-svelte patch (formerly css/_text-area-warn.scss)
+/// Textarea warning styles
+/// @access private
+/// @group text-area
+@mixin text-area-warn {
+  .#{$prefix}--text-area--warning {
+    padding-right: $carbon--spacing-08;
+  }
+
+  .#{$prefix}--text-area__invalid-icon--warning {
+    fill: $support-warning;
+  }
+
+  .#{$prefix}--text-area__invalid-icon--warning path[fill] {
+    fill: $inverse-01;
+    opacity: 1;
+  }
+
+  .#{$prefix}--text-area__wrapper[data-warn]~.#{$prefix}--form-requirement {
+    display: block;
+    overflow: visible;
+    max-height: rem(200px);
+    font-weight: 400;
+  }
+}
+
+@include exports('text-area-warn') {
+  @include text-area-warn;
+}
