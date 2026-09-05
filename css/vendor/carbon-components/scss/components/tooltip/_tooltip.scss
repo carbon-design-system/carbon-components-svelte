@@ -261,6 +261,26 @@
     border-bottom-color: $interactive-04;
   }
 
+  // ccs: definition tooltips hosted by a Tag. The dotted dictionary-term
+  // underline does not suit a tag-styled trigger; a truncating tag's trigger
+  // also has to fill the tag and clip like the label it replaces. Same
+  // compound as the rules around it so these win the hover/placement ties.
+  .#{$prefix}--tag-set-overflow
+    .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition {
+    border-bottom: none;
+  }
+
+  .#{$prefix}--tag__label-tooltip
+    .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    border-bottom: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition.#{$prefix}--tooltip--top {
     @include tooltip--trigger('definition', 'top');
     @include tooltip--placement('definition', 'top', 'start');

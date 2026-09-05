@@ -27,13 +27,7 @@
 // that need `--cds-*` custom properties (ui-shell-classic).
 $ccs-theme-switching: false !default;
 
-// 1. component-token partials
-@import "carbon-components/scss/globals/scss/component-tokens";
-@import "carbon-components/scss/components/tag/tag";
-@import "carbon-components/scss/components/notification/inline-notification";
-@import "carbon-components/scss/components/notification/toast-notification";
-
-// 2. Carbon globals and components, with this library's own components
+// 1. Carbon globals and components, with this library's own components
 //    slotted after the Carbon partial they build on
 @import "carbon-components/scss/globals/scss/feature-flags";
 @import "carbon-components/scss/globals/scss/vars";
@@ -66,6 +60,10 @@ $ccs-theme-switching: false !default;
 @import "carbon-components/scss/components/form/form";
 @import "carbon-components/scss/components/inline-loading/inline-loading";
 @import "carbon-components/scss/components/link/link";
+// tag precedes list-box, multi-select, and contained-list, which restyle
+// tags at equal specificity and rely on emitting after it.
+@import "carbon-components/scss/components/tag/tag";
+@import "./tag-set";
 @import "carbon-components/scss/components/list-box/list-box";
 @import "carbon-components/scss/components/list/list";
 @import "carbon-components/scss/components/loading/loading";
@@ -87,7 +85,6 @@ $ccs-theme-switching: false !default;
 @import "carbon-components/scss/components/slider/slider";
 @import "carbon-components/scss/components/structured-list/structured-list";
 @import "carbon-components/scss/components/tabs/tabs";
-@import "carbon-components/scss/components/tag/tag";
 @import "carbon-components/scss/components/text-area/text-area";
 @import "carbon-components/scss/components/text-input/text-input";
 @import "./pin-code-input";
@@ -102,10 +99,7 @@ $ccs-theme-switching: false !default;
 @import "./ui-shell-classic";
 @import "carbon-components/scss/components/treeview/treeview";
 
-// 3. post-base library partials
-@import "./selectable-tag";
-@import "./tag";
-@import "./tag-set";
+// 2. post-base library partials
 @import "./fluid-date-picker";
 @import "./copy-input";
 @import "./code-snippet";
