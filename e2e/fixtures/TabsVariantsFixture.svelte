@@ -25,7 +25,9 @@
       <Tab {label} icon={icons[i]} disabled={i === 3} />
     {/each}
     <svelte:fragment slot="content">
-      {#each labels as label}<TabContent>{label} content</TabContent>{/each}
+      {#each labels as label}
+        <TabContent>{label} content</TabContent>
+      {/each}
     </svelte:fragment>
   </Tabs>
 </section>
@@ -44,10 +46,17 @@
 <section data-testid="container">
   <Tabs type="container">
     {#each labels as label, i}
-      <Tab {label} icon={icons[i]} secondaryLabel="({i + 1}/4)" disabled={i === 3} />
+      <Tab
+        {label}
+        icon={icons[i]}
+        secondaryLabel="({i + 1}/4)"
+        disabled={i === 3}
+      />
     {/each}
     <svelte:fragment slot="content">
-      {#each labels as label}<TabContent>{label} content</TabContent>{/each}
+      {#each labels as label}
+        <TabContent>{label} content</TabContent>
+      {/each}
     </svelte:fragment>
   </Tabs>
 </section>
@@ -94,10 +103,14 @@
 
 <section data-testid="overflow" style="inline-size: 320px">
   <Tabs>
-    {#each Array.from({ length: 8 }) as _, i}<Tab label="Tab label {i + 1}" />{/each}
+    {#each Array.from({ length: 8 }) as _, i}
+      <Tab label="Tab label {i + 1}" />
+    {/each}
   </Tabs>
   <Tabs type="container">
-    {#each Array.from({ length: 8 }) as _, i}<Tab label="Tab label {i + 1}" />{/each}
+    {#each Array.from({ length: 8 }) as _, i}
+      <Tab label="Tab label {i + 1}" />
+    {/each}
   </Tabs>
 </section>
 
@@ -107,12 +120,15 @@
       <Tab {label} icon={icons[i % 3]} disabled={i === 3} />
     {/each}
     <svelte:fragment slot="content">
-      {#each labels as label}<TabContent>{label} content</TabContent>{/each}
+      {#each labels as label}
+        <TabContent>{label} content</TabContent>
+      {/each}
     </svelte:fragment>
   </TabsVertical>
   {#each ["sm", "md", "lg"] as size}
     <TabsVertical {size}>
-      <Tab label="A long label that wraps onto a second line" /><Tab label="Two" />
+      <Tab label="A long label that wraps onto a second line" />
+      <Tab label="Two" />
     </TabsVertical>
   {/each}
 </section>
