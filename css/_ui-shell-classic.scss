@@ -2,6 +2,10 @@
 
 @import "carbon-components/scss/globals/scss/vars";
 
+// Requires all.css (CSS custom properties), so this only emits when the
+// entry file sets `$ccs-theme-switching`.
+@if $ccs-theme-switching {
+
 .#{$prefix}--header.#{$prefix}--header--ui-shell-classic {
   @include carbon--theme($carbon--theme--g100, true) {
     @include emit-component-tokens($tag-colors);
@@ -27,4 +31,5 @@
     @include emit-component-tokens($tag-colors);
     @include emit-component-tokens($notification-colors);
   }
+}
 }

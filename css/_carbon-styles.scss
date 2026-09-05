@@ -1,20 +1,53 @@
-// Itemized replacement for `carbon-components/scss/globals/scss/styles`,
-// shared by all six theme entry files so the Carbon import list stays in sync.
-// Mirrors that file's import order, but omits component partials whose markup
-// this library never renders:
-//   - components/toolbar: deprecated v9 `bx--toolbar`; the DataTable toolbar
-//     is styled by data-table/_data-table-action.scss
-//   - components/pagination/unstable_pagination: `bx--unstable-pagination`
-// Audit a partial's `bx--` class roots against `src/**/*.svelte` before
-// removing or re-adding an import here.
+// Single style manifest shared by all six theme entry files. Replaces
+// `carbon-components/scss/globals/scss/styles` and, since the theme files
+// used to duplicate it six times, this library's own partial list too.
 //
-// Selector-level pruning has also been applied *within* several of the
-// imported partials below (and within the `css/_*.scss` override files),
-// removing individual rules/selectors for classes the library never renders
-// (v10.58 forward-compat `--lg` aliases, never-ported v10 features, and
-// markup this library structures differently). See `git log --grep
-// "prune selectors"` for the commit with the full class list.
+// Emission order is load-bearing (equal-specificity ties resolve by order),
+// so the sections below are in the order they have always emitted:
+//
+//   1. tag + notification, first of all: the theme entry files need their
+//      component-token maps before the theme blocks, and their CSS has
+//      always emitted at the top.
+//   2. pre-base library partials: written to load before Carbon and to
+//      out-weigh it. Each is being folded into its vendored component file
+//      (see `bun run check:css`); the list shrinks as that lands.
+//   3. Carbon globals and the component partials this library renders.
+//      Omits components/toolbar (deprecated v9 `bx--toolbar`; the DataTable
+//      toolbar is styled by data-table/_data-table-action.scss) and
+//      pagination/unstable_pagination (`bx--unstable-pagination`). Audit a
+//      partial's `bx--` class roots against `src/**/*.svelte` before removing
+//      or re-adding an import here.
+//   4. post-base library partials: v11 backports with no v10 base plus a few
+//      overrides that must emit after every component.
+//
+// Selector-level pruning has also been applied within several imported
+// partials, removing rules for classes the library never renders. See
+// `git log --grep "prune selectors"` for the full class list.
 
+// Set by css/all.scss, the client-side theme-switching build. Guards rules
+// that need `--cds-*` custom properties (ui-shell-classic).
+$ccs-theme-switching: false !default;
+
+// 1. component-token partials
+@import "carbon-components/scss/globals/scss/component-tokens";
+@import "carbon-components/scss/components/tag/tag";
+@import "carbon-components/scss/components/notification/inline-notification";
+@import "carbon-components/scss/components/notification/toast-notification";
+
+// 2. pre-base library partials
+@import "./popover";
+@import "./stack";
+@import "./contained-list";
+@import "./pin-code-input";
+@import "./fluid-pin-code-input";
+@import "./ui-shell";
+@import "./ui-shell-classic";
+@import "./tabs";
+@import "./tooltip";
+@import "./toggletip";
+@import "./scroll-gradient";
+
+// 3. Carbon globals and components
 @import "carbon-components/scss/globals/scss/feature-flags";
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/colors";
@@ -76,3 +109,40 @@
 @import "carbon-components/scss/components/tooltip/tooltip";
 @import "carbon-components/scss/components/ui-shell/ui-shell";
 @import "carbon-components/scss/components/treeview/treeview";
+
+// 4. post-base library partials
+@import "./selectable-tag";
+@import "./tag";
+@import "./tag-set";
+@import "./fluid-date-picker";
+@import "./copy-input";
+@import "./code-snippet";
+@import "./combo-button";
+@import "./fluid-list-box";
+@import "./fluid-combo-box";
+@import "./fluid-multiselect";
+@import "./fluid-text-input";
+@import "./fluid-number-input";
+@import "./fluid-select";
+@import "./fluid-time-picker";
+@import "./fluid-search";
+@import "./search-menu";
+@import "./menu-button";
+@import "./fluid-text-area";
+@import "./truncate-multiline";
+@import "./badge-indicator";
+@import "./big-number";
+@import "./icon-indicator";
+@import "./shape-indicator";
+@import "./type";
+@import "./box";
+@import "./dialog";
+@import "./profile-menu";
+@import "./header-switcher";
+@import "./user-avatar";
+@import "./user-avatar-group";
+@import "./disclosure";
+@import "./list-box-wrap-options";
+@import "./action-set";
+@import "./interstitial-screen";
+@import "./full-page-error";
