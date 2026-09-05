@@ -153,3 +153,52 @@
 @include exports('multiselect-selectall') {
   @include multiselect-selectall;
 }
+
+// carbon-components-svelte patch (formerly css/_multiselect-readonly.scss)
+/// Readonly multiselect styles
+/// @access private
+/// @group multiselect
+@mixin multiselect-readonly {
+  .#{$prefix}--multi-select--readonly,
+  .#{$prefix}--multi-select--readonly:hover {
+    background-color: transparent;
+    border-block-end-color: $border-subtle;
+  }
+
+  .#{$prefix}--multi-select--readonly
+    .#{$prefix}--list-box__menu-icon
+    svg {
+    fill: $icon-disabled;
+  }
+
+  .#{$prefix}--multi-select--readonly
+    .#{$prefix}--tag--filter,
+  .#{$prefix}--multi-select--readonly
+    .#{$prefix}--tag__close-icon:hover {
+    background-color: transparent;
+    color: $text-primary;
+    cursor: default;
+  }
+
+  .#{$prefix}--multi-select--readonly
+    .#{$prefix}--tag--filter {
+    box-shadow: 0 0 0 1px $border-subtle;
+  }
+
+  .#{$prefix}--multi-select--readonly
+    .#{$prefix}--tag--filter
+    svg {
+    fill: $icon-disabled;
+  }
+
+  .#{$prefix}--multi-select--readonly
+    .#{$prefix}--list-box__field,
+  .#{$prefix}--multi-select--readonly
+    .#{$prefix}--list-box__menu-icon {
+    cursor: default;
+  }
+}
+
+@include exports("multiselect-readonly") {
+  @include multiselect-readonly;
+}

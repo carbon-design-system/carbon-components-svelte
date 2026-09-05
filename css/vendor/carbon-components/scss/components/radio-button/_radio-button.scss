@@ -177,3 +177,30 @@
 @include exports('radio-button') {
   @include radio-button;
 }
+
+// carbon-components-svelte patch (formerly css/_radiobutton-readonly.scss)
+/// Readonly radiobutton styles
+/// @access private
+/// @group radiobutton
+@mixin radiobutton-readonly {
+  .#{$prefix}--radio-button-group--readonly
+    .#{$prefix}--radio-button
+    + .#{$prefix}--radio-button__label
+    .#{$prefix}--radio-button__appearance {
+    border-color: $icon-disabled;
+  }
+
+  .#{$prefix}--radio-button-group--readonly .#{$prefix}--radio-button__label {
+    cursor: default;
+  }
+
+  .#{$prefix}--radio-button-group--readonly
+    .#{$prefix}--radio-button__label-text {
+    cursor: text;
+    user-select: text;
+  }
+}
+
+@include exports("radiobutton-readonly") {
+  @include radiobutton-readonly;
+}

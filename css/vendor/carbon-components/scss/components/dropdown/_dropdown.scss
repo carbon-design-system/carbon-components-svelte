@@ -186,3 +186,33 @@
 @include exports('dropdown') {
   @include dropdown;
 }
+
+// carbon-components-svelte patch (formerly css/_dropdown-readonly.scss)
+/// Readonly dropdown styles
+/// @access private
+/// @group dropdown
+@mixin dropdown-readonly {
+  .#{$prefix}--dropdown--readonly,
+  .#{$prefix}--dropdown--readonly:hover {
+    background-color: transparent;
+    border-block-end-color: $border-subtle;
+  }
+
+  .#{$prefix}--dropdown--inline.#{$prefix}--dropdown--readonly,
+  .#{$prefix}--dropdown--inline.#{$prefix}--dropdown--readonly:hover {
+    border-block-end-color: transparent;
+  }
+
+  .#{$prefix}--dropdown--readonly .#{$prefix}--list-box__field,
+  .#{$prefix}--dropdown--readonly .#{$prefix}--list-box__menu-icon {
+    cursor: default;
+  }
+
+  .#{$prefix}--dropdown--readonly .#{$prefix}--list-box__menu-icon svg {
+    fill: $icon-disabled;
+  }
+}
+
+@include exports("dropdown-readonly") {
+  @include dropdown-readonly;
+}
