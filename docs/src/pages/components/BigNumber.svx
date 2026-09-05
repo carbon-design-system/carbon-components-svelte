@@ -1,0 +1,107 @@
+---
+components: ["BigNumber", "BigNumberSkeleton"]
+description: Big number displays a single prominent statistic, such as a dashboard metric or KPI, alongside an optional fraction, percentage, or trend indicator.
+---
+
+<script>
+  import { Stack, BigNumber } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Create a big number with `labelText` and `value`.
+
+<BigNumber labelText="Deployments" value={1240} />
+
+## Sizes
+
+Set `size` to control the visual weight of the value.
+
+### Default
+
+<BigNumber labelText="Deployments" value={1240} />
+
+### Large
+
+<BigNumber labelText="Deployments" value={1240} size="lg" />
+
+### Extra large
+
+<BigNumber labelText="Deployments" value={1240} size="xl" />
+
+## Custom label
+
+Use the `labelChildren` slot for custom label content instead of `labelText`.
+
+<BigNumber labelText="Deployments" value={1240}>
+  <strong slot="labelChildren">Custom label</strong>
+</BigNumber>
+
+## With total
+
+Set `total` to render `value` as the numerator of a "value / total" fraction. The denominator is hidden when it equals `value`, or when its truncated display would look identical to `value`'s. Set `forceShowTotal` to `true` to always render it.
+
+<Stack gap={5}>
+  <BigNumber labelText="Tickets resolved" value={42} total={120} />
+  <BigNumber labelText="Same after truncation" value={42} total={42} forceShowTotal />
+</Stack>
+
+## Percentage
+
+Set `percentage` to `true` to append a percent sign after `value` instead of rendering `total` as a fraction.
+
+<BigNumber labelText="Uptime" value={99.8} percentage />
+
+## Trending
+
+Set `trend` to `"up"` or `"down"` to render a trend indicator next to the value.
+
+### Default color
+
+By default, an upward trend is green and a downward trend is red.
+
+<Stack gap={5}>
+  <BigNumber labelText="Revenue" value={128000} trend="up" />
+  <BigNumber labelText="Uptime" value={99.8} percentage trend="down" />
+</Stack>
+
+### Overriding color
+
+A trend's direction and its meaning aren't always the same: more failed builds is bad even though the number is trending up, and a falling error rate is good even though it's trending down. Set `trendColor` to decouple the indicator's color from its direction.
+
+<Stack gap={5}>
+  <BigNumber labelText="Failed builds" value={12} trend="up" trendColor="error" />
+  <BigNumber
+    labelText="Error rate"
+    value={0.4}
+    percentage
+    trend="down"
+    trendColor="success"
+  />
+</Stack>
+
+## Truncation
+
+`value` and `total` abbreviate large numbers by default (for example, `12,400` becomes `12.4K`). Set `fullNumber` to `true` to render the full number instead, and `fractionDigits` to control the number of fraction digits used when formatting.
+
+<Stack gap={5}>
+  <BigNumber labelText="Abbreviated" value={12400} />
+  <BigNumber labelText="Full number" value={12400} fullNumber />
+</Stack>
+
+## Tooltip
+
+Set `tooltipDescription` to render an information icon next to `labelText` with additional context.
+
+<BigNumber
+  labelText="Error rate"
+  value={0.4}
+  percentage
+  tooltipDescription="Percentage of requests that returned a 5xx status in the last 24 hours."
+/>
+
+## Skeleton
+
+Set `loading` to `true` to render the skeleton state in place of the value.
+
+<BigNumber labelText="Deployments" value={1240} loading />

@@ -3,6 +3,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   ActionSet: "0.112.0",
   AspectRatio: "0.17.0",
   BadgeIndicator: "0.109.0",
+  BigNumber: "0.112.0",
   Box: "0.109.0",
   Breadcrumb: "0.2.0",
   Breakpoint: "0.40.0",

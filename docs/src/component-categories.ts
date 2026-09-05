@@ -109,6 +109,10 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
     components: ["IconIndicator", "ShapeIndicator"],
   },
   {
+    label: "Data visualization",
+    components: ["BigNumber"],
+  },
+  {
     label: "Loading",
     components: [
       "Loading",
