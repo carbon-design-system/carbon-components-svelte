@@ -281,6 +281,42 @@ yarn -v`,
     expect(screen.getByText(/node -v/)).toBeInTheDocument();
   });
 
+  test("should fade only the scroll edges with more content", async () => {
+    const { container } = render(CodeSnippetMultiline);
+    const snippetContainer = container.querySelector(".bx--snippet-container");
+    assert(snippetContainer);
+
+    // jsdom never lays out text, so scrollHeight/clientHeight always read 0.
+    // Fake an overflowing container: 300px of content in a 100px viewport.
+    Object.defineProperty(snippetContainer, "scrollHeight", {
+      configurable: true,
+      value: 300,
+    });
+    Object.defineProperty(snippetContainer, "clientHeight", {
+      configurable: true,
+      value: 100,
+    });
+
+    // At the top: nothing above to fade, but more content below.
+    await fireEvent.scroll(snippetContainer);
+    expect(snippetContainer).not.toHaveClass("bx--snippet-container--fade-top");
+    expect(snippetContainer).toHaveClass("bx--snippet-container--fade-bottom");
+
+    // Scrolled to the middle: both edges still have more content.
+    snippetContainer.scrollTop = 100;
+    await fireEvent.scroll(snippetContainer);
+    expect(snippetContainer).toHaveClass("bx--snippet-container--fade-top");
+    expect(snippetContainer).toHaveClass("bx--snippet-container--fade-bottom");
+
+    // Scrolled to the bottom: nothing left below to fade.
+    snippetContainer.scrollTop = 200;
+    await fireEvent.scroll(snippetContainer);
+    expect(snippetContainer).toHaveClass("bx--snippet-container--fade-top");
+    expect(snippetContainer).not.toHaveClass(
+      "bx--snippet-container--fade-bottom",
+    );
+  });
+
   test("should expand and collapse expandable snippet", async () => {
     mockSnippetOverflowHeight();
     const { container } = render(CodeSnippetExpandable);

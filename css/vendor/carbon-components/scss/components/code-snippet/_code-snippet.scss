@@ -404,23 +404,35 @@
     }
   }
 
-  // Expanded multi-line adds padding-bottom: $spacing-05, so the bottom fade
-  // offset matches that padding when content no longer scrolls.
+  // Top/bottom fade only appear once there's scrolled-past content in that
+  // direction (ScrollGradient parity), toggled via these custom properties so
+  // JS only needs to flip a class rather than rewrite the whole mask.
   .#{$prefix}--snippet--multi .#{$prefix}--snippet-container {
+    --snippet-scroll-fade-top: #{$black-100}, #{$black-100};
+    --snippet-scroll-fade-bottom: #{$black-100}, #{$black-100};
+
     mask-image: linear-gradient(
         90deg,
         $black-100 calc(100% - #{$carbon--spacing-07}),
         transparent 100%
       ),
-      linear-gradient(
-        $black-100 calc(100% - #{$spacing-05}),
-        transparent 100%
-      );
+      linear-gradient(var(--snippet-scroll-fade-top)),
+      linear-gradient(to top, var(--snippet-scroll-fade-bottom));
     mask-composite: intersect;
 
     &:focus {
       mask-image: none;
     }
+  }
+
+  .#{$prefix}--snippet--multi
+    .#{$prefix}--snippet-container.#{$prefix}--snippet-container--fade-top {
+    --snippet-scroll-fade-top: transparent, #{$black-100} #{$spacing-05};
+  }
+
+  .#{$prefix}--snippet--multi
+    .#{$prefix}--snippet-container.#{$prefix}--snippet-container--fade-bottom {
+    --snippet-scroll-fade-bottom: transparent, #{$black-100} #{$spacing-05};
   }
 }
 

@@ -236,6 +236,11 @@
   let exceedsThreshold = false;
   let resizeObserver;
 
+  let containerRef = null;
+  let yScrollable = false;
+  let atTop = true;
+  let atBottom = true;
+
   /** Carbon row height used to convert row-count props to pixels. */
   const rowHeightInPixels = 16;
 
@@ -287,6 +292,18 @@
     if (!exceedsThreshold && expanded) expanded = false;
   }
 
+  function updateScrollState() {
+    if (!containerRef) return;
+    yScrollable = containerRef.scrollHeight > containerRef.clientHeight;
+    atTop = containerRef.scrollTop <= 0;
+    atBottom =
+      containerRef.scrollTop + containerRef.clientHeight >=
+      containerRef.scrollHeight - 1;
+  }
+
+  $: showTopFade = type === "multi" && yScrollable && !atTop;
+  $: showBottomFade = type === "multi" && yScrollable && !atBottom;
+
   $: expandText = expanded ? showLessText : showMoreText;
 
   // Multi-line min/max heights come from row-count props (16px per row).
@@ -321,7 +338,8 @@
   }
 
   // Re-measure whenever the snippet resizes (font load, content change, width
-  // change causing reflow), so the expand button only shows on real overflow.
+  // change causing reflow, expand/collapse transition), so the expand button
+  // and scroll fades only reflect real overflow.
   $: if (resizeObserver) {
     resizeObserver.disconnect();
     if (type === "multi" && showMoreLess && ref) {
@@ -332,6 +350,14 @@
       measureHeight();
     } else {
       exceedsThreshold = false;
+    }
+    if (type === "multi" && containerRef) {
+      resizeObserver.observe(containerRef);
+      updateScrollState();
+    } else {
+      yScrollable = false;
+      atTop = true;
+      atBottom = true;
     }
   }
 
@@ -355,7 +381,10 @@
   }
 
   onMount(() => {
-    resizeObserver = new ResizeObserver(() => measureHeight());
+    resizeObserver = new ResizeObserver(() => {
+      measureHeight();
+      updateScrollState();
+    });
 
     return () => {
       resizeObserver.disconnect();
@@ -488,10 +517,14 @@
       aria-multiline={type === "multi" ? "true" : undefined}
       aria-label={$$restProps["aria-label"] ?? codeLabel}
       class:bx--snippet-container={true}
+      class:bx--snippet-container--fade-top={showTopFade}
+      class:bx--snippet-container--fade-bottom={showBottomFade}
       style:width="100%"
       style:min-height={minHeight == null ? undefined : `${minHeight}px`}
       style:max-height={maxHeight}
       style:overflow-y={overflowY}
+      bind:this={containerRef}
+      on:scroll={updateScrollState}
     >
       <pre bind:this={ref}><code><slot>{code}</slot></code></pre>
     </div>
