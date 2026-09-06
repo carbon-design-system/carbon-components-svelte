@@ -95,8 +95,6 @@ test.describe("consumer override", () => {
     });
 
     test("selected row background", async ({ page }) => {
-      // loses to `tr.bx--data-table--selected td` (0,1,2)
-      test.fail();
       await expect(cell(page, 1)).toHaveCSS("background-color", PINK);
     });
 

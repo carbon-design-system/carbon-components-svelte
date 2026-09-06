@@ -47,12 +47,12 @@
 /// @access private
 /// @group components
 @mixin data-table-highlighted-row {
-  .#{$prefix}--data-table tbody tr.#{$prefix}--data-table--highlighted-row {
+  .#{$prefix}--data-table tbody tr.#{$prefix}--data-table--highlighted-row { // ccs: element
     background: $layer-hover;
   }
 
   .#{$prefix}--data-table tbody tr.#{$prefix}--data-table--highlighted-row td,
-  .#{$prefix}--data-table tbody tr.#{$prefix}--data-table--highlighted-row th {
+  .#{$prefix}--data-table tbody tr.#{$prefix}--data-table--highlighted-row th { // ccs: element
     border-top: 1px solid $layer-hover;
     border-bottom: 1px solid $layer-hover;
     background: $layer-hover;
@@ -82,7 +82,7 @@
   .#{$prefix}--data-table
     tbody
     tr.#{$prefix}--data-table--selected.#{$prefix}--data-table--highlighted-row
-    td {
+    td { // ccs: element
     border-top: 1px solid $data-table-column-hover;
     border-bottom: 1px solid $data-table-column-hover;
     background: $data-table-column-hover;
@@ -138,8 +138,7 @@
 /// @access private
 /// @group components
 @mixin data-table-sticky-column-menu {
-  .#{$prefix}--data-table--sticky-header thead th.#{$prefix}--table-column-menu,
-  .#{$prefix}--data-table--sticky-header tbody td.#{$prefix}--table-column-menu {
+  .#{$prefix}--data-table--sticky-header .#{$prefix}--table-column-menu { // ccs: flatten
     width: $spacing-09;
     min-width: $spacing-09;
     max-width: $spacing-09;
@@ -255,13 +254,13 @@
     flex-direction: column;
   }
 
-  .#{$prefix}--data-table--sticky-header tfoot td.#{$prefix}--table-expand {
+  .#{$prefix}--data-table--sticky-header tfoot .#{$prefix}--table-expand { // ccs: flatten
     max-width: to-rem(48px);
   }
 
   .#{$prefix}--data-table--sticky-header
     tfoot
-    td.#{$prefix}--table-column-checkbox {
+    .#{$prefix}--table-column-checkbox { // ccs: flatten
     width: to-rem(36px);
     min-width: to-rem(36px);
     align-items: center;
@@ -294,21 +293,18 @@
   );
 
   @each $align, $justify in $alignments {
-    .#{$prefix}--data-table th.#{$prefix}--table-column--align-#{$align},
-    .#{$prefix}--data-table td.#{$prefix}--table-column--align-#{$align} {
+    .#{$prefix}--data-table .#{$prefix}--table-column--align-#{$align} { // ccs: flatten
       text-align: $align;
     }
 
     .#{$prefix}--data-table
-      th.#{$prefix}--table-column--align-#{$align}
-      .#{$prefix}--table-sort {
+      .#{$prefix}--table-column--align-#{$align}
+      .#{$prefix}--table-sort { // ccs: flatten
       text-align: inherit;
     }
 
     .#{$prefix}--data-table--sticky-header
-      th.#{$prefix}--table-column--align-#{$align},
-    .#{$prefix}--data-table--sticky-header
-      td.#{$prefix}--table-column--align-#{$align} {
+      .#{$prefix}--table-column--align-#{$align} { // ccs: flatten
       justify-content: $justify;
     }
   }
@@ -317,8 +313,8 @@
   // label pushed to the opposite edge by the base `space-between` layout,
   // rather than wedged between the icon and the edge.
   .#{$prefix}--data-table
-    th.#{$prefix}--table-column--align-end
-    .#{$prefix}--table-sort {
+    .#{$prefix}--table-column--align-end
+    .#{$prefix}--table-sort { // ccs: flatten
     flex-direction: row-reverse;
     padding-right: $spacing-05;
     padding-left: 0;

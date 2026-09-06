@@ -280,10 +280,10 @@
     padding-left: 0;
   }
 
-  .#{$prefix}--data-table th.#{$prefix}--table-column-checkbox {
+  .#{$prefix}--data-table th.#{$prefix}--table-column-checkbox { // ccs: element
     // Do not use `position: relative`, as its behavior is undefined for many table elements: https://www.w3.org/TR/CSS21/visuren.html#propdef-position
     position: static;
-    width: to-rem(32px);
+    // (upstream's `width: 32px` here never won: the 2.5rem below outranked it) // ccs: dedupe
     background: $layer-accent;
     transition: background-color $duration--fast-01 motion(entrance, productive);
   }
@@ -304,54 +304,52 @@
     outline-offset: to-rem(2px);
   }
 
-  .#{$prefix}--data-table thead th.#{$prefix}--table-column-checkbox,
-  .#{$prefix}--data-table tbody td.#{$prefix}--table-column-checkbox,
-  .#{$prefix}--data-table thead th.#{$prefix}--table-expand,
-  .#{$prefix}--data-table tbody td.#{$prefix}--table-expand {
+  // `bx--table-column-checkbox` / `bx--table-expand` sit on `th` and `td`
+  // only, and these rules applied to both; the qualifiers are dropped.
+  .#{$prefix}--data-table .#{$prefix}--table-column-checkbox,
+  .#{$prefix}--data-table .#{$prefix}--table-expand { // ccs: flatten
     min-width: 0;
   }
 
-  .#{$prefix}--data-table thead th.#{$prefix}--table-column-checkbox,
-  .#{$prefix}--data-table tbody td.#{$prefix}--table-column-checkbox {
+  .#{$prefix}--data-table .#{$prefix}--table-column-checkbox { // ccs: flatten
     width: 2.5rem;
     // spacing between checkbox / chevron and next cell should be 8px / 0.5rem
     padding-right: to-rem(4px);
     padding-left: 1rem;
   }
 
-  .#{$prefix}--data-table thead th.#{$prefix}--table-expand,
-  .#{$prefix}--data-table tbody td.#{$prefix}--table-expand {
+  .#{$prefix}--data-table .#{$prefix}--table-expand { // ccs: flatten
     width: to-rem(32px);
     height: to-rem(32px);
+    // Moved here from _data-table-expandable so the size variants below
+    // refine it by order rather than by `thead th` / `tbody td` weight.
+    padding: 0.5rem; // ccs: moved
+    padding-right: 0; // ccs: moved
   }
 
   // V11: Remove compact
-  .#{$prefix}--data-table--compact thead th.#{$prefix}--table-expand,
-  .#{$prefix}--data-table--compact tbody td.#{$prefix}--table-expand {
+  .#{$prefix}--data-table--compact .#{$prefix}--table-expand { // ccs: flatten
     width: to-rem(24px);
     height: to-rem(24px);
     padding: 0 0 0 0.5rem;
   }
 
   // V11: remove short
-  .#{$prefix}--data-table--short thead th.#{$prefix}--table-expand,
-  .#{$prefix}--data-table--short tbody td.#{$prefix}--table-expand {
+  .#{$prefix}--data-table--short .#{$prefix}--table-expand { // ccs: flatten
     width: to-rem(32px);
     height: to-rem(32px);
     padding: 0;
     padding-left: 0.5rem;
   }
 
-  .#{$prefix}--data-table--md thead th.#{$prefix}--table-expand,
-  .#{$prefix}--data-table--md tbody td.#{$prefix}--table-expand {
+  .#{$prefix}--data-table--md .#{$prefix}--table-expand { // ccs: flatten
     width: to-rem(40px);
     height: to-rem(40px);
     padding: to-rem(4px) 0 to-rem(4px) to-rem(8px);
   }
 
   // V11: remove tall
-  .#{$prefix}--data-table--tall thead th.#{$prefix}--table-expand,
-  .#{$prefix}--data-table--tall tbody td.#{$prefix}--table-expand {
+  .#{$prefix}--data-table--tall .#{$prefix}--table-expand { // ccs: flatten
     height: to-rem(64px);
     padding-top: to-rem(10px);
     padding-bottom: to-rem(22px);
@@ -369,24 +367,25 @@
 
   @media (any-hover: hover) {
     // Disabled radio button, checkbox fix #10913
-    tr.#{$prefix}--data-table--selected:hover
+    .#{$prefix}--data-table--selected:hover
       .#{$prefix}--radio-button[disabled]
       + .#{$prefix}--radio-button__label,
-    tr.#{$prefix}--data-table--selected:hover
+    .#{$prefix}--data-table--selected:hover
       .#{$prefix}--checkbox[disabled]
       + .#{$prefix}--checkbox-label,
-    tr.#{$prefix}--data-table--selected:hover .#{$prefix}--link--disabled {
+    // `tr.` kept: ties `.bx--data-table tr:hover .bx--link--disabled` above.
+    tr.#{$prefix}--data-table--selected:hover .#{$prefix}--link--disabled { // ccs: element
       color: $disabled-03;
     }
 
     // Disabled radio button, checkbox fix #10913
-    tr.#{$prefix}--data-table--selected:hover
+    .#{$prefix}--data-table--selected:hover
       .#{$prefix}--radio-button[disabled]
       + .#{$prefix}--radio-button__label
       .#{$prefix}--radio-button__appearance,
-    tr.#{$prefix}--data-table--selected:hover
+    .#{$prefix}--data-table--selected:hover
       .#{$prefix}--checkbox[disabled]
-      + .#{$prefix}--checkbox-label:before {
+      + .#{$prefix}--checkbox-label:before { // ccs: flatten
       border-color: $disabled-03;
     }
   }
@@ -403,7 +402,7 @@
     tbody
     tr:nth-child(odd).#{$prefix}--data-table--selected
     td,
-  tr.#{$prefix}--data-table--selected td {
+  .#{$prefix}--data-table--selected td { // ccs: flatten
     border-top: 1px solid $layer-selected;
     // Bottom border acts as separator from other rows
     border-bottom: 1px solid $layer-active;
@@ -415,7 +414,7 @@
     tbody
     tr:first-of-type:nth-child(odd).#{$prefix}--data-table--selected
     td,
-  tr.#{$prefix}--data-table--selected:first-of-type td {
+  .#{$prefix}--data-table--selected:first-of-type td { // ccs: flatten
     // Top border acts as separator from thead
     border-top: 1px solid $layer-active;
   }
@@ -428,7 +427,7 @@
     tbody
     tr:last-of-type:nth-child(even).#{$prefix}--data-table--selected
     td,
-  tr.#{$prefix}--data-table--selected:last-of-type td {
+  .#{$prefix}--data-table--selected:last-of-type td { // ccs: flatten
     // Doesn't need separators
     border-top: 1px solid $layer-selected;
     border-bottom: 1px solid $layer-selected;
@@ -633,12 +632,12 @@
       will-change: transform;
     }
 
-    tr.#{$prefix}--parent-row.#{$prefix}--expandable-row {
+    .#{$prefix}--parent-row.#{$prefix}--expandable-row { // ccs: flatten
       height: auto;
       min-height: 3rem;
     }
 
-    tr.#{$prefix}--expandable-row:not(.#{$prefix}--parent-row) {
+    .#{$prefix}--expandable-row:not(.#{$prefix}--parent-row) { // ccs: flatten
       height: auto;
     }
 
@@ -663,36 +662,34 @@
     // Taken from L125 _data-table-expandable
     // Used to hide white line when parent row is hovered when child is expanded
     @media (any-hover: hover) {
-      tr.#{$prefix}--parent-row.#{$prefix}--expandable-row:hover
+      .#{$prefix}--parent-row.#{$prefix}--expandable-row:hover
         + tr[data-child-row]
-        td {
+        td { // ccs: flatten
         border-top: 1px solid $layer-hover;
       }
     }
 
-    tr.#{$prefix}--expandable-row:last-of-type {
+    .#{$prefix}--expandable-row:last-of-type { // ccs: flatten
       overflow: hidden;
     }
 
-    tr.#{$prefix}--data-table--selected:first-of-type td {
+    .#{$prefix}--data-table--selected:first-of-type td { // ccs: flatten
       border-top: none;
     }
 
-    thead th.#{$prefix}--table-column-checkbox,
-    tbody tr td.#{$prefix}--table-column-checkbox {
+    .#{$prefix}--table-column-checkbox { // ccs: flatten
       width: to-rem(36px);
       min-width: to-rem(36px);
       align-items: center;
     }
 
     // V11: remove tall
-    &.#{$prefix}--data-table--tall thead th.#{$prefix}--table-column-checkbox,
-    &.#{$prefix}--data-table--tall td.#{$prefix}--table-column-checkbox {
+    &.#{$prefix}--data-table--tall .#{$prefix}--table-column-checkbox { // ccs: flatten
       align-items: flex-start;
     }
 
     /* When using sticky header, with a selection element in the first column, we need to set the last item to a fixed width to match the table body. We only want this to happen when the last table header does not have any text */
-    th.#{$prefix}--table-column-checkbox ~ th:last-of-type:empty {
+    .#{$prefix}--table-column-checkbox ~ th:last-of-type:empty { // ccs: flatten
       max-width: to-rem(64px);
     }
 
@@ -752,12 +749,12 @@
     }
 
     // V11: remove compact
-    &.#{$prefix}--data-table--compact tr td.#{$prefix}--table-expand {
+    &.#{$prefix}--data-table--compact td.#{$prefix}--table-expand { // ccs: element
       padding-top: to-rem(4px);
     }
 
     // V11: remove short
-    &.#{$prefix}--data-table--short tr td.#{$prefix}--table-expand {
+    &.#{$prefix}--data-table--short td.#{$prefix}--table-expand { // ccs: element
       padding-top: to-rem(8px);
     }
 
@@ -796,11 +793,11 @@
 
     // V11: remove compact, short
     &.#{$prefix}--data-table--compact
-      tr.#{$prefix}--parent-row
+      .#{$prefix}--parent-row
       .#{$prefix}--table-column-checkbox,
     &.#{$prefix}--data-table--short
-      tr.#{$prefix}--parent-row
-      .#{$prefix}--table-column-checkbox {
+      .#{$prefix}--parent-row
+      .#{$prefix}--table-column-checkbox { // ccs: flatten
       align-items: flex-start;
     }
   }
