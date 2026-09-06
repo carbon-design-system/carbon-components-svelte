@@ -225,7 +225,8 @@
     border-top: 1px solid $decorative-01;
   }
 
-  a.#{$prefix}--overflow-menu-options__btn::before {
+  // `a.`: OverflowMenuItem renders a `<button>` or, with `href`, an `<a>`.
+  a.#{$prefix}--overflow-menu-options__btn::before { // ccs: element
     display: inline-block;
     height: 100%;
     content: '';

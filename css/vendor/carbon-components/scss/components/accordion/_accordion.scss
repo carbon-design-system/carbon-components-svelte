@@ -100,7 +100,8 @@
     border-top: 1px solid $disabled-01;
   }
 
-  li.#{$prefix}--accordion__item--disabled:last-of-type {
+  // After `.bx--accordion__item:last-child`; wins by order.
+  .#{$prefix}--accordion__item--disabled:last-of-type { // ccs: flatten
     border-bottom: 1px solid $disabled-01;
   }
 

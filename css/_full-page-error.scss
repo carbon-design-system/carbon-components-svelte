@@ -67,13 +67,13 @@
 
   // safari rendering fix
   .#{$prefix}--full-page-error__svg-container
-    svg.#{$prefix}--full-page-error__svg {
+    .#{$prefix}--full-page-error__svg { // ccs: flatten
     inline-size: 100%;
   }
 
   .#{$prefix}--full-page-error__svg-container
-    svg.#{$prefix}--full-page-error__svg
-    path {
+    .#{$prefix}--full-page-error__svg
+    path { // ccs: flatten
     fill: $background;
     stroke: $border-inverse;
   }
