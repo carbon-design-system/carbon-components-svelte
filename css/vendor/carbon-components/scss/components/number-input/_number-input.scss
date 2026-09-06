@@ -67,10 +67,6 @@
       fill: $disabled;
     }
 
-    // IE: Hide "clear-field" `x` button on input field
-    &::-ms-clear {
-      display: none;
-    }
 
     // Safari: Hide number spinner
     &::-webkit-inner-spin-button {
