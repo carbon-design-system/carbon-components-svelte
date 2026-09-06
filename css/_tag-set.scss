@@ -33,12 +33,7 @@
 
   // A tag past the fit count. Kept in the DOM (not `display: none`) so its
   // `offsetWidth` stays measurable if the container grows and it fits again.
-  .#{$prefix}--tag-set__space [data-overflow="true"] {
-    position: absolute;
-    visibility: hidden;
-    pointer-events: none;
-  }
-
+  .#{$prefix}--tag-set__space [data-overflow="true"],
   .#{$prefix}--tag-set-overflow--empty {
     position: absolute;
     visibility: hidden;

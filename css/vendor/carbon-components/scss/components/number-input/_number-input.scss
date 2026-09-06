@@ -385,19 +385,13 @@
     opacity: 1;
   }
 
-  .#{$prefix}--number--light input[type='number'],
-  .#{$prefix}--number--light input[type='text'] {
-    background-color: $field-02;
-  }
-
   // V11: Possibly deprecate
+  .#{$prefix}--number--light input[type='number'],
+  .#{$prefix}--number--light input[type='text'],
   .#{$prefix}--number--light input[type='number']:disabled,
-  .#{$prefix}--number--light input[type='text']:disabled {
-    background-color: $field-02;
-  }
-
+  .#{$prefix}--number--light input[type='text']:disabled,
   .#{$prefix}--number--light .#{$prefix}--number__control-btn::before,
-  .#{$prefix}--number--light .#{$prefix}--number__control-btn::after {
+  .#{$prefix}--number--light .#{$prefix}--number__control-btn::after { // ccs: dedupe
     background-color: $field-02;
   }
 

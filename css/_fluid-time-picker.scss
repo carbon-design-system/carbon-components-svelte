@@ -37,10 +37,7 @@
     flex-basis: 25%;
   }
 
-  .#{$prefix}--time-picker--fluid__wrapper > *:last-child:not(:only-child) {
-    flex-basis: 50%;
-  }
-
+  .#{$prefix}--time-picker--fluid__wrapper > *:last-child:not(:only-child),
   .#{$prefix}--time-picker--equal-width
     .#{$prefix}--time-picker--fluid__wrapper
     > * {

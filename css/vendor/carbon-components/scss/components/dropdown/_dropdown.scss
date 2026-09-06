@@ -152,13 +152,10 @@
       background-color: $field-hover;
     }
 
-    &.#{$prefix}--dropdown--disabled {
+    &.#{$prefix}--dropdown--disabled,
+    &.#{$prefix}--dropdown--open { // ccs: dedupe
       background-color: transparent;
     }
-  }
-
-  .#{$prefix}--dropdown--inline.#{$prefix}--dropdown--open {
-    background-color: transparent;
   }
 
   .#{$prefix}--dropdown-v2.#{$prefix}--skeleton,

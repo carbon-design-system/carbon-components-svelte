@@ -65,11 +65,8 @@
     }
   }
 
-  .#{$prefix}--search--light .#{$prefix}--search-input {
-    background: $field-02;
-  }
-
-  .#{$prefix}--search--light .#{$prefix}--search-close::before {
+  .#{$prefix}--search--light .#{$prefix}--search-input,
+  .#{$prefix}--search--light .#{$prefix}--search-close::before { // ccs: dedupe
     background: $field-02;
   }
 

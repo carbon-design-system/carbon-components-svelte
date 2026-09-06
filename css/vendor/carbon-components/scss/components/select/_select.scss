@@ -308,12 +308,9 @@
   }
 
   .#{$prefix}--select--readonly.#{$prefix}--select--inline
-    .#{$prefix}--select-input:hover {
-    background-color: transparent;
-  }
-
+    .#{$prefix}--select-input:hover,
   .#{$prefix}--select--readonly.#{$prefix}--select--light
-    .#{$prefix}--select-input:hover {
+    .#{$prefix}--select-input:hover { // ccs: dedupe
     background-color: transparent;
   }
 }

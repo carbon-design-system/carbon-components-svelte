@@ -69,12 +69,9 @@
     justify-content: center;
   }
 
-  .#{$prefix}--header__action > svg {
+  .#{$prefix}--header__action > svg,
+  .#{$prefix}--header__menu-trigger > svg { // ccs: same as every other header action
     fill: $shell-header-icon-02;
-  }
-
-  .#{$prefix}--header__menu-trigger > svg {
-    fill: $shell-header-icon-02; // ccs: same as every other header action
   }
 
   .#{$prefix}--header__menu-trigger:hover {

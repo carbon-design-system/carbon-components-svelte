@@ -37,14 +37,8 @@
     @include type-style("body-short-01");
   }
 
-  .#{$prefix}--shape-indicator--failed {
-    fill: $status-red;
-  }
-
-  .#{$prefix}--shape-indicator--critical {
-    fill: $status-red;
-  }
-
+  .#{$prefix}--shape-indicator--failed,
+  .#{$prefix}--shape-indicator--critical,
   .#{$prefix}--shape-indicator--high {
     fill: $status-red;
   }

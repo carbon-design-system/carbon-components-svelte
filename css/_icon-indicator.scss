@@ -65,26 +65,14 @@
     fill: $status-green;
   }
 
-  .#{$prefix}--icon-indicator--normal {
-    fill: $status-blue;
-  }
-
-  .#{$prefix}--icon-indicator--in-progress {
-    fill: $status-blue;
-  }
-
+  .#{$prefix}--icon-indicator--normal,
+  .#{$prefix}--icon-indicator--in-progress,
   .#{$prefix}--icon-indicator--incomplete {
     fill: $status-blue;
   }
 
-  .#{$prefix}--icon-indicator--not-started {
-    fill: $status-gray;
-  }
-
-  .#{$prefix}--icon-indicator--pending {
-    fill: $status-gray;
-  }
-
+  .#{$prefix}--icon-indicator--not-started,
+  .#{$prefix}--icon-indicator--pending,
   .#{$prefix}--icon-indicator--unknown {
     fill: $status-gray;
   }
