@@ -101,11 +101,11 @@
     gap: $spacing-03;
   }
 
-  // `a.` outranks header's `a.bx--header__menu-item:hover > svg` icon fill.
-  a.#{$prefix}--header__menu-item--icon > svg, // ccs: element
-  a.#{$prefix}--header__menu-item--icon:hover > svg, // ccs: element
-  a.#{$prefix}--header__menu-item--icon:active > svg, // ccs: element
-  a.#{$prefix}--header__menu-item--icon:focus > svg { // ccs: element
+  // Same shape as header's `.bx--header__menu-item:hover > svg`; wins by order.
+  .#{$prefix}--header__menu-item--icon > svg,
+  .#{$prefix}--header__menu-item--icon:hover > svg,
+  .#{$prefix}--header__menu-item--icon:active > svg,
+  .#{$prefix}--header__menu-item--icon:focus > svg { // ccs: flatten
     flex-shrink: 0;
     // Track the text color across default/hover/active/focus states.
     fill: currentColor;
