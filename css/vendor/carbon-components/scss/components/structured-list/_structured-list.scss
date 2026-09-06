@@ -41,36 +41,39 @@
     border-spacing: 0;
     overflow-x: auto;
 
-    &.#{$prefix}--structured-list--condensed .#{$prefix}--structured-list-td,
-    &.#{$prefix}--structured-list--condensed .#{$prefix}--structured-list-th {
-      @include padding-td--condensed;
-      //8px padding all over
-    }
+  }
 
-    .#{$prefix}--structured-list-row
-      .#{$prefix}--structured-list-td:first-of-type,
-    .#{$prefix}--structured-list-row
-      .#{$prefix}--structured-list-th:first-of-type {
-      padding-left: 1rem;
-      // specs require 16px spacing between columns
-      // 8px side padding between col creates 16 px, with exception of 1st col, which needs an override to be 16px
-    }
+  // Keeps the block class: outranks `.bx--structured-list--selection
+  // .bx--structured-list-td:first-child` (0,3,0) below by order.
+  .#{$prefix}--structured-list.#{$prefix}--structured-list--condensed .#{$prefix}--structured-list-td,
+  .#{$prefix}--structured-list.#{$prefix}--structured-list--condensed .#{$prefix}--structured-list-th { // ccs: specificity
+    @include padding-td--condensed;
+    //8px padding all over
+  }
 
-    &.#{$prefix}--structured-list--flush
-      .#{$prefix}--structured-list-row
-      .#{$prefix}--structured-list-td,
-    &.#{$prefix}--structured-list--flush
-      .#{$prefix}--structured-list-row
-      .#{$prefix}--structured-list-th,
-    &.#{$prefix}--structured-list--flush
-      .#{$prefix}--structured-list-row
-      .#{$prefix}--structured-list-td:first-of-type,
-    &.#{$prefix}--structured-list--flush
-      .#{$prefix}--structured-list-row
-      .#{$prefix}--structured-list-th:first-of-type {
-      padding-right: 1rem;
-      padding-left: 0;
-    }
+  .#{$prefix}--structured-list-row
+    .#{$prefix}--structured-list-td:first-of-type,
+  .#{$prefix}--structured-list-row
+    .#{$prefix}--structured-list-th:first-of-type { // ccs: flatten
+    padding-left: 1rem;
+    // specs require 16px spacing between columns
+    // 8px side padding between col creates 16 px, with exception of 1st col, which needs an override to be 16px
+  }
+
+  .#{$prefix}--structured-list--flush
+    .#{$prefix}--structured-list-row
+    .#{$prefix}--structured-list-td,
+  .#{$prefix}--structured-list--flush
+    .#{$prefix}--structured-list-row
+    .#{$prefix}--structured-list-th,
+  .#{$prefix}--structured-list--flush
+    .#{$prefix}--structured-list-row
+    .#{$prefix}--structured-list-td:first-of-type,
+  .#{$prefix}--structured-list--flush
+    .#{$prefix}--structured-list-row
+    .#{$prefix}--structured-list-th:first-of-type { // ccs: flatten
+    padding-right: 1rem;
+    padding-left: 0;
   }
 
   .#{$prefix}--structured-list-row {
