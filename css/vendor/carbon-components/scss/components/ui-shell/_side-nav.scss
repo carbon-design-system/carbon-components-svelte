@@ -204,10 +204,10 @@
     .#{$prefix}--side-nav__item:not(.#{$prefix}--side-nav__item--active)
       > .#{$prefix}--side-nav__link:hover,
     .#{$prefix}--side-nav__menu
-      a.#{$prefix}--side-nav__link:not(.#{$prefix}--side-nav__link--current):not([aria-current='page']):hover,
-    .#{$prefix}--side-nav a.#{$prefix}--header__menu-item:hover,
+      .#{$prefix}--side-nav__link:not(.#{$prefix}--side-nav__link--current):not([aria-current='page']):hover,
+    .#{$prefix}--side-nav .#{$prefix}--header__menu-item:hover,
     .#{$prefix}--side-nav
-      .#{$prefix}--header__menu-title[aria-expanded='true']:hover {
+      .#{$prefix}--header__menu-title[aria-expanded='true']:hover { // ccs: flatten
       // TODO: sync color
       background-color: $shell-side-nav-bg-04;
       color: $text-primary;
@@ -308,7 +308,7 @@
     visibility: inherit;
   }
 
-  .#{$prefix}--side-nav__menu a.#{$prefix}--side-nav__link {
+  .#{$prefix}--side-nav__menu .#{$prefix}--side-nav__link { // ccs: flatten
     height: mini-units(4);
     min-height: mini-units(4);
     padding-left: mini-units(4);
@@ -316,12 +316,12 @@
   }
 
   .#{$prefix}--side-nav__item.#{$prefix}--side-nav__item--icon
-    a.#{$prefix}--side-nav__link {
+    .#{$prefix}--side-nav__link { // ccs: flatten
     padding-left: mini-units(9);
   }
-  .#{$prefix}--side-nav__menu a.#{$prefix}--side-nav__link--current,
-  .#{$prefix}--side-nav__menu a.#{$prefix}--side-nav__link[aria-current='page'],
-  a.#{$prefix}--side-nav__link--current {
+  .#{$prefix}--side-nav__menu .#{$prefix}--side-nav__link--current,
+  .#{$prefix}--side-nav__menu .#{$prefix}--side-nav__link[aria-current='page'],
+  .#{$prefix}--side-nav__link--current { // ccs: flatten
     background-color: $layer-selected; // ccs
 
     > span {
@@ -330,11 +330,11 @@
     }
   }
 
-  a.#{$prefix}--side-nav__link,
-  .#{$prefix}--side-nav a.#{$prefix}--header__menu-item,
+  .#{$prefix}--side-nav__link,
+  .#{$prefix}--side-nav .#{$prefix}--header__menu-item,
   .#{$prefix}--side-nav
     .#{$prefix}--header__menu-title[aria-expanded='true']
-    + .#{$prefix}--header__menu {
+    + .#{$prefix}--header__menu { // ccs: flatten
     @include focus-outline('reset');
     @include type-style('productive-heading-01');
 
@@ -350,11 +350,11 @@
       outline $duration--fast-02 motion(standard, productive);
   }
 
-  .#{$prefix}--side-nav__item--large a.#{$prefix}--side-nav__link {
+  .#{$prefix}--side-nav__item--large .#{$prefix}--side-nav__link { // ccs: flatten
     height: mini-units(6);
   }
 
-  a.#{$prefix}--side-nav__link > .#{$prefix}--side-nav__link-text {
+  .#{$prefix}--side-nav__link > .#{$prefix}--side-nav__link-text { // ccs: flatten
     @include text-overflow();
 
     color: $shell-side-nav-text-01;
@@ -364,25 +364,25 @@
     user-select: none;
   }
 
-  a.#{$prefix}--side-nav__link:focus,
-  .#{$prefix}--side-nav a.#{$prefix}--header__menu-item:focus {
+  .#{$prefix}--side-nav__link:focus,
+  .#{$prefix}--side-nav .#{$prefix}--header__menu-item:focus { // ccs: flatten
     @include focus-outline('outline');
   }
 
-  a.#{$prefix}--side-nav__link[aria-current='page'],
-  a.#{$prefix}--side-nav__link--current {
+  .#{$prefix}--side-nav__link[aria-current='page'],
+  .#{$prefix}--side-nav__link--current { // ccs: flatten
     background-color: $layer-selected; // ccs
     font-weight: 600;
   }
 
-  a.#{$prefix}--side-nav__link[aria-current='page']
+  .#{$prefix}--side-nav__link[aria-current='page']
     .#{$prefix}--side-nav__link-text,
-  a.#{$prefix}--side-nav__link--current .#{$prefix}--side-nav__link-text {
+  .#{$prefix}--side-nav__link--current .#{$prefix}--side-nav__link-text { // ccs: flatten
     color: $text-primary;
   }
 
-  a.#{$prefix}--side-nav__link[aria-current='page']::before,
-  a.#{$prefix}--side-nav__link--current::before {
+  .#{$prefix}--side-nav__link[aria-current='page']::before,
+  .#{$prefix}--side-nav__link--current::before { // ccs: flatten
     position: absolute;
     top: 0;
     bottom: 0;
@@ -437,7 +437,7 @@
     content: '';
   }
 
-  .#{$prefix}--side-nav a.#{$prefix}--header__menu-item {
+  .#{$prefix}--side-nav .#{$prefix}--header__menu-item { // ccs: flatten
     justify-content: space-between;
     color: $shell-side-nav-text-01;
     white-space: nowrap;
@@ -461,19 +461,19 @@
       width: 100%;
     }
 
-    a.#{$prefix}--header__menu-item {
+    .#{$prefix}--header__menu-item { // ccs: flatten
       padding-left: 4.25rem;
       font-weight: 400;
     }
 
     @media (any-hover: hover) {
-      a.#{$prefix}--header__menu-item:hover {
+      .#{$prefix}--header__menu-item:hover { // ccs: flatten
         background-color: $shell-side-nav-bg-04;
         color: $text-primary;
       }
 
       // ccs: a current item keeps its selected surface on hover
-      a.#{$prefix}--header__menu-item--current:hover {
+      .#{$prefix}--header__menu-item--current:hover { // ccs: flatten
         background-color: $layer-selected-hover;
       }
     }
@@ -481,21 +481,21 @@
 
   .#{$prefix}--side-nav
     .#{$prefix}--header__menu
-    a.#{$prefix}--header__menu-item {
+    .#{$prefix}--header__menu-item { // ccs: flatten
     height: inherit;
   }
 
   .#{$prefix}--side-nav
-    a.#{$prefix}--header__menu-item:focus
+    .#{$prefix}--header__menu-item:focus
     .#{$prefix}--header__menu-arrow,
-  .#{$prefix}--side-nav .#{$prefix}--header__menu-arrow {
+  .#{$prefix}--side-nav .#{$prefix}--header__menu-arrow { // ccs: flatten
     fill: $shell-side-nav-text-01;
   }
 
   @media (any-hover: hover) {
     .#{$prefix}--side-nav
-      a.#{$prefix}--header__menu-item:hover
-      .#{$prefix}--header__menu-arrow {
+      .#{$prefix}--header__menu-item:hover
+      .#{$prefix}--header__menu-arrow { // ccs: flatten
       fill: $shell-side-nav-text-01;
     }
   }
@@ -503,17 +503,17 @@
   // Windows HCM fix
   .#{$prefix}--side-nav__icon > svg,
   .#{$prefix}--side-nav
-    a.#{$prefix}--header__menu-item:focus
+    .#{$prefix}--header__menu-item:focus
     .#{$prefix}--header__menu-arrow,
-  .#{$prefix}--side-nav .#{$prefix}--header__menu-arrow {
+  .#{$prefix}--side-nav .#{$prefix}--header__menu-arrow { // ccs: flatten
     @include high-contrast-mode('icon-fill');
   }
 
   // Windows HCM fix
   @media (any-hover: hover) {
     .#{$prefix}--side-nav
-      a.#{$prefix}--header__menu-item:hover
-      .#{$prefix}--header__menu-arrow {
+      .#{$prefix}--header__menu-item:hover
+      .#{$prefix}--header__menu-arrow { // ccs: flatten
       @include high-contrast-mode('icon-fill');
     }
   }

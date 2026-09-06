@@ -87,7 +87,7 @@
     justify-content: center;
   }
 
-  a.#{$prefix}--header__name {
+  .#{$prefix}--header__name { // ccs: flatten
     @include type-style('body-short-01');
 
     display: flex;
@@ -104,7 +104,7 @@
     user-select: none;
   }
 
-  a.#{$prefix}--header__name:focus {
+  .#{$prefix}--header__name:focus { // ccs: flatten
     border-color: $shell-header-focus;
   }
 
@@ -112,8 +112,8 @@
     font-weight: 400;
   }
 
-  a.#{$prefix}--header__name,
-  a.#{$prefix}--header__name:hover {
+  .#{$prefix}--header__name,
+  .#{$prefix}--header__name:hover { // ccs: flatten
     color: $shell-header-text-01;
   }
 
@@ -153,7 +153,7 @@
     list-style: none;
   }
 
-  a.#{$prefix}--header__menu-item {
+  .#{$prefix}--header__menu-item { // ccs: flatten
     position: relative;
     display: flex;
     height: 100%;
@@ -172,38 +172,49 @@
     user-select: none;
   }
 
-  a.#{$prefix}--header__menu-item:hover {
+  // Emits before the `:hover` / `:active` / `:focus` rules below, which it
+  // ties at (0,2,0) now that they no longer carry `a.`, so those states
+  // still win on an expanded title. // ccs: moved
+  .#{$prefix}--header__menu-title[aria-expanded='true'] {
+    // Note: needs to be higher than menu. Adding 1 here instead of moving to
+    // the next level.
+    z-index: #{z('header') + 1};
+    background-color: $shell-header-bg-06;
+    color: $shell-header-text-02; // ccs: was the focus colour (white)
+  }
+
+  .#{$prefix}--header__menu-item:hover { // ccs: flatten
     background-color: $shell-header-bg-02;
     color: $shell-header-text-01;
   }
 
   .#{$prefix}--header__action:active,
-  a.#{$prefix}--header__menu-item:active {
+  .#{$prefix}--header__menu-item:active { // ccs: flatten
     background-color: $shell-header-bg-03;
     color: $shell-header-text-01;
   }
 
-  a.#{$prefix}--header__menu-item:focus {
+  .#{$prefix}--header__menu-item:focus { // ccs: flatten
     border-color: $shell-header-focus;
     color: $shell-header-text-01;
     outline: none;
   }
 
-  a.#{$prefix}--header__menu-item:hover > svg,
-  a.#{$prefix}--header__menu-item:active > svg,
-  a.#{$prefix}--header__menu-item:focus > svg {
+  .#{$prefix}--header__menu-item:hover > svg,
+  .#{$prefix}--header__menu-item:active > svg,
+  .#{$prefix}--header__menu-item:focus > svg { // ccs: flatten
     fill: $shell-header-icon-01;
   }
 
 
   // ccs
-  a.#{$prefix}--header__menu-item[aria-current='page'],
-  .#{$prefix}--header__menu-item--current {
+  .#{$prefix}--header__menu-item[aria-current='page'],
+  .#{$prefix}--header__menu-item--current { // ccs: flatten
     color: $shell-header-text-01;
   }
 
-  a.#{$prefix}--header__menu-item[aria-current='page']::after,
-  .#{$prefix}--header__menu-item--current::after {
+  .#{$prefix}--header__menu-item[aria-current='page']::after,
+  .#{$prefix}--header__menu-item--current::after { // ccs: flatten
     position: absolute;
     top: 0;
     right: 0;
@@ -214,13 +225,13 @@
     content: '';
   }
 
-  a.#{$prefix}--header__menu-item[aria-current='page']:focus::after,
-  .#{$prefix}--header__menu-item--current:focus::after {
+  .#{$prefix}--header__menu-item[aria-current='page']:focus::after,
+  .#{$prefix}--header__menu-item--current:focus::after { // ccs: flatten
     border: 0;
   }
 
-  a.#{$prefix}--header__menu-item[aria-current='page']:focus,
-  a.#{$prefix}--header__menu-item.#{$prefix}--header__menu-item--current:focus {
+  .#{$prefix}--header__menu-item[aria-current='page']:focus,
+  .#{$prefix}--header__menu-item.#{$prefix}--header__menu-item--current:focus { // ccs: flatten
     border: 2px solid $shell-header-focus;
   }
 
@@ -249,14 +260,6 @@
 
   .#{$prefix}--header__menu-title[aria-haspopup='true'] {
     position: relative;
-  }
-
-  .#{$prefix}--header__menu-title[aria-expanded='true'] {
-    // Note: needs to be higher than menu. Adding 1 here instead of moving to
-    // the next level.
-    z-index: #{z('header') + 1};
-    background-color: $shell-header-bg-06;
-    color: $shell-header-text-02; // ccs: was the focus colour (white)
   }
 
   .#{$prefix}--header__menu-title[aria-expanded='true']
