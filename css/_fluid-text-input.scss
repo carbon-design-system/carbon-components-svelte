@@ -50,7 +50,6 @@
   }
 
   .#{$prefix}--text-input--fluid .#{$prefix}--label {
-    -ms-overflow-style: none;
     overflow-x: scroll;
     scrollbar-width: none;
     white-space: nowrap;

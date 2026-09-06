@@ -60,10 +60,6 @@
       background-color: $hover-ui;
     }
 
-    // Hide default select arrow in IE10+
-    &::-ms-expand {
-      display: none;
-    }
 
     // Select text renders a little high on Firefox
     @-moz-document url-prefix() {

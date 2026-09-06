@@ -615,8 +615,6 @@
       top: 0;
       overflow: scroll;
       width: 100%;
-      // Hides ie scrollbar
-      -ms-overflow-style: none;
       will-change: transform;
     }
 
@@ -626,8 +624,6 @@
 
     tbody {
       flex-direction: column;
-      // Hides ie scrollbar
-      -ms-overflow-style: none;
       overflow-x: scroll;
       will-change: transform;
     }
