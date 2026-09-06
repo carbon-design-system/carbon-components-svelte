@@ -18,6 +18,10 @@ const PINK_HOVER = "rgb(255, 200, 200)";
 test.describe("consumer override", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/consumer-override.html");
+    // The pointer starts at (0,0), on top of the first button, so its hover
+    // rule would win the static assertions. Park it in empty space.
+    const size = page.viewportSize() ?? { width: 1280, height: 720 };
+    await page.mouse.move(size.width - 1, size.height - 1);
   });
 
   test.describe("button", () => {
