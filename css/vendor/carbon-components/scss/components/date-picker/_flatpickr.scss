@@ -11,13 +11,11 @@
 @keyframes fpFadeInDown {
   from {
     transform: translate3d(0, -20px, 0);
-    opacity: 0;
   }
   to {
     transform: translate3d(0, 0, 0);
-    opacity: 1;
   }
-}
+} // ccs: opacity fade blended selected-day text/bg against the page during the transition, sampling below 4.5:1 mid-animation; transform-only keeps colors solid throughout
 
 @keyframes fpSlideLeft {
   from {
