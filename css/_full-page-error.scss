@@ -21,10 +21,7 @@
     padding-block: $carbon--spacing-07;
   }
 
-  .#{$prefix}--full-page-error__column {
-    padding: 0;
-  }
-
+  .#{$prefix}--full-page-error__column,
   .#{$prefix}--full-page-error__illustration {
     padding: 0;
   }

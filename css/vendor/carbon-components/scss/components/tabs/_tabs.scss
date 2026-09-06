@@ -619,10 +619,7 @@
 /// @group components
 @mixin tabs-tall {
   @include carbon--breakpoint(md) {
-    .#{$prefix}--tabs--tall.#{$prefix}--tabs--container {
-      min-height: 4rem;
-    }
-
+    .#{$prefix}--tabs--tall.#{$prefix}--tabs--container,
     .#{$prefix}--tabs--tall .#{$prefix}--tabs__nav-item {
       min-height: 4rem;
     }

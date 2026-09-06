@@ -107,12 +107,9 @@
     }
   }
 
-  .#{$prefix}--overflow-menu-options--light {
+  .#{$prefix}--overflow-menu-options--light,
+  .#{$prefix}--overflow-menu-options--light::after { // ccs: dedupe
     background-color: $field-02;
-
-    &::after {
-      background-color: $field-02;
-    }
   }
 
   @media (any-hover: hover) {

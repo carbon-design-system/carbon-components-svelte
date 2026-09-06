@@ -254,10 +254,7 @@
   }
 
   .#{$prefix}--toolbar-search-container-persistent
-    .#{$prefix}--search-input:hover:not([disabled]) {
-    background-color: $field-hover;
-  }
-
+    .#{$prefix}--search-input:hover:not([disabled]), // ccs: dedupe
   .#{$prefix}--toolbar-search-container-persistent
     .#{$prefix}--search-input:active:not([disabled]),
   .#{$prefix}--toolbar-search-container-persistent
@@ -400,12 +397,9 @@
     min-height: to-rem(32px);
 
     .#{$prefix}--toolbar-search-container-expandable,
-    .#{$prefix}--toolbar-search-container-persistent {
-      height: to-rem(32px);
-    }
-
+    .#{$prefix}--toolbar-search-container-persistent,
     .#{$prefix}--toolbar-search-container-expandable .#{$prefix}--search-input,
-    .#{$prefix}--toolbar-search-container-persistent .#{$prefix}--search-input {
+    .#{$prefix}--toolbar-search-container-persistent .#{$prefix}--search-input { // ccs: dedupe
       height: to-rem(32px);
     }
 
@@ -560,12 +554,9 @@
     min-height: $spacing-06;
 
     .#{$prefix}--toolbar-search-container-expandable,
-    .#{$prefix}--toolbar-search-container-persistent {
-      height: $spacing-06;
-    }
-
+    .#{$prefix}--toolbar-search-container-persistent,
     .#{$prefix}--toolbar-search-container-expandable .#{$prefix}--search-input,
-    .#{$prefix}--toolbar-search-container-persistent .#{$prefix}--search-input {
+    .#{$prefix}--toolbar-search-container-persistent .#{$prefix}--search-input { // ccs: dedupe
       height: $spacing-06;
     }
 

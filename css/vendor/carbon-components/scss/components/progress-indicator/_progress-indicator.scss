@@ -195,11 +195,7 @@
   }
 
 
-  .#{$prefix}--progress--vertical {
-    display: flex;
-    flex-direction: column;
-  }
-
+  // (upstream repeated `.bx--progress--vertical` alone just above) // ccs: dedupe
   .#{$prefix}--progress--vertical,
   .#{$prefix}--progress-text {
     display: flex;

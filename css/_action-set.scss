@@ -56,10 +56,7 @@
     order: 4;
   }
 
-  .#{$prefix}--action-set .#{$prefix}--btn--primary {
-    order: 5;
-  }
-
+  .#{$prefix}--action-set .#{$prefix}--btn--primary,
   .#{$prefix}--action-set--stacking .#{$prefix}--btn--ghost,
   .#{$prefix}--action-set--stacking .#{$prefix}--btn--danger-ghost {
     order: 5;

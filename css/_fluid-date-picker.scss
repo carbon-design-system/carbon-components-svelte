@@ -61,11 +61,7 @@
   }
 
   // Stretch every layer so underline and warn divider span the full field.
-  .#{$prefix}--date-picker--fluid .#{$prefix}--date-picker-container {
-    inline-size: 100%;
-    width: 100%;
-  }
-
+  .#{$prefix}--date-picker--fluid .#{$prefix}--date-picker-container,
   .#{$prefix}--date-picker--fluid .#{$prefix}--date-picker-input__wrapper {
     inline-size: 100%;
     width: 100%;
