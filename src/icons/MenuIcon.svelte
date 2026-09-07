@@ -1,3 +1,4 @@
+<!-- Named "Menu" in carbon-icons-svelte; renamed here to avoid a sveld glob name clash with src/Menu/Menu.svelte -->
 <script>
   export let size = 16;
 
