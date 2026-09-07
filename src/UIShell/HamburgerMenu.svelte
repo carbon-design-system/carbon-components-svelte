@@ -29,7 +29,7 @@
 
   import { onMount } from "svelte";
   import Close from "../icons/Close.svelte";
-  import Menu from "../icons/Menu.svelte";
+  import Menu from "../icons/MenuIcon.svelte";
   import { hamburgerMenuRef } from "./nav-store.js";
 
   $: hamburgerMenuRef.set(ref);
