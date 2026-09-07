@@ -98,7 +98,7 @@
   export let theme = undefined;
 
   import Close from "../icons/Close.svelte";
-  import Menu from "../icons/Menu.svelte";
+  import Menu from "../icons/MenuIcon.svelte";
   import HamburgerMenu from "./HamburgerMenu.svelte";
   import { shouldRenderHamburgerMenu } from "./nav-store";
 
