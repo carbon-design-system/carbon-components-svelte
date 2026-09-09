@@ -1373,6 +1373,29 @@ describe("DataTable", () => {
     expect(protocolHeader).toHaveStyle({ "min-width": "100px" });
   });
 
+  // Regression: table-layout: fixed strictly enforces the expand column's
+  // CSS width (32px), clipping the chevron that auto layout otherwise grows
+  // to fit (40px). Pin the expand column width so it matches auto layout.
+  it("marks the table fixed-layout when a header has a custom width, so CSS can keep the expand column stable", () => {
+    const customHeaders = [
+      { key: "name", value: "Name" },
+      { key: "protocol", value: "Protocol" },
+      { key: "port", value: "Port", width: "72px" },
+      { key: "rule", value: "Rule" },
+    ] as const;
+
+    render(DataTable, {
+      props: {
+        expandable: true,
+        headers: customHeaders,
+        rows,
+      },
+    });
+
+    const table = screen.getByRole("table");
+    expect(table).toHaveClass("bx--data-table--fixed-layout");
+  });
+
   describe("column alignment", () => {
     const alignedHeaders = [
       { key: "name", value: "Name" },

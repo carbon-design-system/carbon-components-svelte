@@ -324,3 +324,29 @@
 @include exports("data-table-align") {
   @include data-table-align;
 }
+
+// carbon-components-svelte patch (DataTable fixed layout)
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Fixed layout for `DataTable` when a header specifies an explicit
+/// `width`/`minWidth` (`Table`'s `fixedLayout` prop, which also sets
+/// `table-layout: fixed` on the `table` element inline). Fixed layout takes a
+/// column's CSS `width` as its exact rendered size; auto layout instead treats
+/// it as a floor and grows the column to fit content. The expand column's
+/// `width: 32px` is one such floor: the expand button's padding and icon need
+/// 40px, so auto layout already renders it at 40px. Fixed layout enforces the
+/// bare 32px instead, visibly shrinking the chevron. Re-declare the column at
+/// the size auto layout already renders it so both layouts agree.
+/// See https://github.com/carbon-design-system/carbon-components-svelte/issues/3777
+/// @access private
+/// @group components
+@mixin data-table-fixed-layout {
+  .#{$prefix}--data-table--fixed-layout .#{$prefix}--table-expand { // ccs: flatten
+    width: to-rem(40px);
+  }
+}
+
+@include exports("data-table-fixed-layout") {
+  @include data-table-fixed-layout;
+}
