@@ -1739,6 +1739,46 @@ Set `expandable` to `true` to make rows expandable. Use `expandedRow` to customi
   </svelte:fragment>
 </DataTable>
 
+### Custom widths
+
+Setting `width` on a header keeps the expand column at its usual size.
+
+<DataTable expandable
+  headers="{[
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port", width: "72px" },
+    { key: "rule", value: "Rule" }
+  ]}"
+  rows="{[
+    {
+      id: "a",
+      name: "Load Balancer 3",
+      protocol: "HTTP",
+      port: 3000,
+      rule: "Round robin"
+    },
+    {
+      id: "b",
+      name: "Load Balancer 1",
+      protocol: "HTTP",
+      port: 443,
+      rule: "Round robin"
+    },
+    {
+      id: "c",
+      name: "Load Balancer 2",
+      protocol: "HTTP",
+      port: 80,
+      rule: "DNS delegation"
+    },
+  ]}"
+>
+  <svelte:fragment slot="expandedRow" let:row>
+    <pre>{JSON.stringify(row, null, 2)}</pre>
+  </svelte:fragment>
+</DataTable>
+
 ### Custom icon
 
 Use the `expandIcon` slot to customize the expand/collapse icon. The slot receives expanded (whether the row is expanded), row (the row data, or undefined for the header expand-all button), and props (with aria-hidden and class to spread onto your icon).
