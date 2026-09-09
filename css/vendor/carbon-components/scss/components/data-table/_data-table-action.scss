@@ -25,7 +25,7 @@
   .#{$prefix}--toolbar-content {
     display: flex;
     width: 100%;
-    height: $spacing-09;
+    min-height: $spacing-09; // ccs: grow for a taller (lg/xl) button instead of clipping it
     justify-content: flex-end;
     transform: translate3d(0, 0, 0);
     transition: transform $duration--fast-02 motion(standard, productive),
@@ -404,8 +404,7 @@
   // V11: remove --small
   .#{$prefix}--table-toolbar--small,
   .#{$prefix}--table-toolbar--sm {
-    height: to-rem(32px);
-    min-height: to-rem(32px);
+    min-height: to-rem(32px); // ccs: grow for a taller (lg/xl) button instead of clipping it
 
     .#{$prefix}--toolbar-search-container-expandable,
     .#{$prefix}--toolbar-search-container-persistent,
@@ -493,7 +492,7 @@
     }
 
     .#{$prefix}--toolbar-content {
-      height: to-rem(32px);
+      min-height: to-rem(32px); // ccs: grow for a taller (lg/xl) button instead of clipping it
     }
   }
 
@@ -520,8 +519,8 @@
   }
 
   // V11: remove --small selector block
-  .#{$prefix}--table-toolbar--small .#{$prefix}--btn, // ccs: resize every button kind, not only primary
-  .#{$prefix}--table-toolbar--sm .#{$prefix}--btn {
+  .#{$prefix}--table-toolbar--small .#{$prefix}--btn:not(.#{$prefix}--btn--lg, .#{$prefix}--btn--xl), // ccs: resize every button kind, not only primary; leave an explicit lg/xl size alone
+  .#{$prefix}--table-toolbar--sm .#{$prefix}--btn:not(.#{$prefix}--btn--lg, .#{$prefix}--btn--xl) {
     height: to-rem(32px);
     min-height: auto;
     padding-top: calc(0.375rem - 3px);
@@ -561,8 +560,7 @@
 // carbon-components-svelte patch (formerly css/_data-table-toolbar.scss)
 @mixin data-table-toolbar-xs {
   .#{$prefix}--table-toolbar--xs {
-    height: $spacing-06;
-    min-height: $spacing-06;
+    min-height: $spacing-06; // ccs: grow for a taller (lg/xl) button instead of clipping it
 
     .#{$prefix}--toolbar-search-container-expandable,
     .#{$prefix}--toolbar-search-container-persistent,
@@ -655,7 +653,7 @@
     }
 
     .#{$prefix}--toolbar-content {
-      height: $spacing-06;
+      min-height: $spacing-06; // ccs: grow for a taller (lg/xl) button instead of clipping it
     }
   }
 
@@ -671,8 +669,8 @@
     padding: $spacing-02 0;
   }
 
-  // ccs: resize every button kind, not only primary
-  .#{$prefix}--table-toolbar--xs .#{$prefix}--btn {
+  // ccs: resize every button kind, not only primary; leave an explicit lg/xl size alone
+  .#{$prefix}--table-toolbar--xs .#{$prefix}--btn:not(.#{$prefix}--btn--lg, .#{$prefix}--btn--xl) {
     height: $spacing-06;
     min-height: auto;
     padding-top: 0;
