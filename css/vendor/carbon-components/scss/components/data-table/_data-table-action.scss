@@ -58,8 +58,10 @@
     transition: width $transition--expansion $carbon--standard-easing,
       background-color $duration--fast-02 motion(entrance, productive);
 
-    &:hover {
-      background-color: $field-hover;
+    @media (any-hover: hover) {
+      &:hover {
+        background-color: $field-hover;
+      }
     }
   }
 
@@ -148,12 +150,19 @@
   .#{$prefix}--toolbar-search-container-active
     .#{$prefix}--search-magnifier-icon:focus,
   .#{$prefix}--toolbar-search-container-active
-    .#{$prefix}--search-magnifier-icon:active,
-  .#{$prefix}--toolbar-search-container-active
-    .#{$prefix}--search-magnifier-icon:hover {
+    .#{$prefix}--search-magnifier-icon:active {
     border: none;
     background-color: transparent;
     outline: none;
+  }
+
+  @media (any-hover: hover) {
+    .#{$prefix}--toolbar-search-container-active
+      .#{$prefix}--search-magnifier-icon:hover {
+      border: none;
+      background-color: transparent;
+      outline: none;
+    }
   }
 
   .#{$prefix}--toolbar-search-container-persistent .#{$prefix}--search-close,
@@ -192,12 +201,14 @@
     transition: background $duration--fast-02 motion(entrance, productive);
   }
 
-  .#{$prefix}--toolbar-action:hover:not([disabled]) {
-    background-color: $field-hover;
-  }
+  @media (any-hover: hover) {
+    .#{$prefix}--toolbar-action:hover:not([disabled]) {
+      background-color: $field-hover;
+    }
 
-  .#{$prefix}--toolbar-action:hover[aria-expanded='true'] {
-    background-color: $layer;
+    .#{$prefix}--toolbar-action:hover[aria-expanded='true'] {
+      background-color: $layer;
+    }
   }
 
   .#{$prefix}--toolbar-action[disabled] {
