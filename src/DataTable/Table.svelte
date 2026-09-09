@@ -18,6 +18,11 @@
   export let stickyHeader = false;
 
   /**
+   * Set to `true` to use a fixed table layout, typically when headers specify an explicit `width`/`minWidth`.
+   */
+  export let fixedLayout = false;
+
+  /**
    * Set the style attribute on the `table` element.
    * @type {string}
    */
@@ -88,6 +93,7 @@
       class:bx--data-table--zebra={zebra}
       class:bx--data-table--static={useStaticWidth}
       class:bx--data-table--sticky-header={stickyHeader}
+      class:bx--data-table--fixed-layout={fixedLayout}
       style={tableStyle}
     >
       <slot />
@@ -107,6 +113,7 @@
       class:bx--data-table--zebra={zebra}
       class:bx--data-table--static={useStaticWidth}
       class:bx--data-table--sticky-header={stickyHeader}
+      class:bx--data-table--fixed-layout={fixedLayout}
       {...$$restProps}
       style={tableStyle}
     >

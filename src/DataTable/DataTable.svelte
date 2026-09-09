@@ -917,6 +917,7 @@
       {stickyHeader}
       {sortable}
       {useStaticWidth}
+      fixedLayout={hasCustomHeaderWidth}
       labelledBy={hasTitle ? titleId : undefined}
       describedBy={hasDescription ? descriptionId : undefined}
       tableStyle={[
