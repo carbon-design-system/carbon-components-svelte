@@ -139,7 +139,7 @@
       bind:this={searchRef}
       class:bx--search-magnifier={true}
       on:click={() => {
-        if (expandable) expanded = true;
+        if (expandable && !disabled) expanded = true;
       }}
     >
       <svelte:component this={icon} class="bx--search-magnifier-icon" />
@@ -170,7 +170,7 @@
       on:input
       on:focus
       on:focus={() => {
-        if (expandable) expanded = true;
+        if (expandable && !disabled) expanded = true;
       }}
       on:blur
       on:blur={() => {

@@ -113,6 +113,20 @@ describe("Search", () => {
     expect(searchWrapper).toHaveClass("bx--search--expanded");
   });
 
+  it("does not expand a disabled expandable search on magnifier click", async () => {
+    render(SearchExpandable, { props: { disabled: true } });
+
+    const search = getSearchInput("Expandable search");
+    const searchWrapper = search.closest(".bx--search");
+    assert(searchWrapper);
+
+    const magnifier = searchWrapper.querySelector(".bx--search-magnifier");
+    assert(magnifier);
+
+    await user.click(magnifier);
+    expect(searchWrapper).not.toHaveClass("bx--search--expanded");
+  });
+
   it("hides the collapsed expandable input from assistive tech", async () => {
     render(SearchExpandable);
 
