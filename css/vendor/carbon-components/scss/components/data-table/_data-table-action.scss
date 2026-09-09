@@ -520,8 +520,8 @@
   }
 
   // V11: remove --small selector block
-  .#{$prefix}--table-toolbar--small .#{$prefix}--btn--primary,
-  .#{$prefix}--table-toolbar--sm .#{$prefix}--btn--primary {
+  .#{$prefix}--table-toolbar--small .#{$prefix}--btn, // ccs: resize every button kind, not only primary
+  .#{$prefix}--table-toolbar--sm .#{$prefix}--btn {
     height: to-rem(32px);
     min-height: auto;
     padding-top: calc(0.375rem - 3px);
@@ -671,7 +671,8 @@
     padding: $spacing-02 0;
   }
 
-  .#{$prefix}--table-toolbar--xs .#{$prefix}--btn--primary {
+  // ccs: resize every button kind, not only primary
+  .#{$prefix}--table-toolbar--xs .#{$prefix}--btn {
     height: $spacing-06;
     min-height: auto;
     padding-top: 0;
