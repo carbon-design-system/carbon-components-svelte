@@ -719,6 +719,35 @@ Buttons of every kind resize to match the small toolbar, not only `kind="primary
   </Toolbar>
 </DataTable>
 
+### Small (large button)
+
+A `size="short"` toolbar grows to fit an explicit `size="lg"` or `size="xl"` `Button`, instead of clipping it down to the toolbar's height.
+
+<DataTable size="short" title="Load balancers" description="Your organization's active load balancers."
+  headers="{[
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+    { key: "rule", value: "Rule" }
+  ]}"
+  rows="{[
+    {
+      id: "a",
+      name: "Load Balancer 3",
+      protocol: "HTTP",
+      port: 3000,
+      rule: "Round robin"
+    },
+  ]}"
+>
+  <Toolbar>
+    <ToolbarContent>
+      <Button size="lg">Large</Button>
+      <Button size="xl">Extra large</Button>
+    </ToolbarContent>
+  </Toolbar>
+</DataTable>
+
 ### Size override
 
 Set `size` on the toolbar to override the size inherited from the DataTable. Here, `size="tall"` on the table pairs with `size="sm"` on the toolbar.
