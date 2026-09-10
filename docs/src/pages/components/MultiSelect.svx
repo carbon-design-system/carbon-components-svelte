@@ -198,6 +198,24 @@ Prevent automatic alphabetical ordering by passing a no-op function to `sortItem
     sortItem="{() => {}}"
   />
 
+### Clear selection
+
+Use `bind:this` to access the component instance and call `MultiSelect.clear()` to clear the selection. Pass `focus: false` in the options to prevent re-focusing the field.
+
+<FileSource src="/framed/MultiSelect/MultiSelectClear" />
+
+### Open on clear
+
+By default, the menu stays as-is after clearing the selection (open if it was open, closed if it was closed).
+
+Set `openOnClear` to `true` to open the menu after clearing the selection via the clear button or the Delete/Backspace shortcut. This lets users immediately browse all available items without needing to click the field again.
+
+<MultiSelect openOnClear selectedIds="{["0", "1"]}" labelText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
 ## Filterable
 
 Enable filtering by setting `filterable` to `true`. This example includes a placeholder text for the filter input.
