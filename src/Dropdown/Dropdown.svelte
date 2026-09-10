@@ -124,6 +124,13 @@
   export let selectionClearedText = "Selection cleared";
 
   /**
+   * Set to `true` to reopen the dropdown menu after clearing the selection.
+   * This allows users to immediately see all available items after clearing.
+   * Only used when `clearable` is `true`.
+   */
+  export let openOnClear = false;
+
+  /**
    * Set to `true` to use the fluid variant.
    * Inherited from the parent `FluidForm` context,
    * so it does not need to be set when used inside `FluidForm`.
@@ -528,11 +535,25 @@
     statusText = text;
   }
 
-  function clearSelection() {
+  /**
+   * Clear the dropdown selection programmatically.
+   * By default, focuses the dropdown after clearing. Set `options.focus` to `false` to prevent focusing.
+   * Set `options.open` to `true` to open the dropdown menu after clearing.
+   * @type {(options?: { focus?: boolean; open?: boolean; }) => Promise<void>}
+   * @example
+   * ```svelte
+   * <Dropdown bind:this={dropdown} items={items} />
+   * <button on:click={() => dropdown.clear()}>Clear</button>
+   * ```
+   */
+  export async function clear(options = {}) {
     if (readonly || selectedId === undefined) return;
     selectedId = undefined;
     open = false;
     announceStatus(selectionClearedText);
+    await tick();
+    if (options?.open === true) open = true;
+    if (options?.focus !== false) ref?.focus();
   }
 
   /**
@@ -731,7 +752,7 @@
           // matching the click-to-clear button. Only wired when `clearable`
           // is set, since that is what makes clearing possible at all.
           event.preventDefault();
-          clearSelection();
+          clear({ open: openOnClear });
         } else if (
           open &&
           event.key.length === 1 &&
@@ -765,7 +786,7 @@
         {#if clearable && selectedId !== undefined}
           <ListBoxSelection
             on:clear
-            on:clear={clearSelection}
+            on:clear={() => clear({ open: openOnClear })}
             translateWithId={translateWithIdSelection}
             {disabled}
             {readonly}

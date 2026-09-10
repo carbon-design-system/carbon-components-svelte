@@ -16,6 +16,7 @@ import DropdownFluidSkeleton from "./Dropdown.fluidSkeleton.test.svelte";
 import DropdownFluidSlot from "./Dropdown.fluidSlot.test.svelte";
 import DropdownLabelChildren from "./Dropdown.slot.test.svelte";
 import Dropdown from "./Dropdown.test.svelte";
+import DropdownCustom from "./DropdownCustom.test.svelte";
 import DropdownDuplicateIds from "./DropdownDuplicateIds.test.svelte";
 import DropdownGenerics from "./DropdownGenerics.test.svelte";
 import DropdownIconSlots from "./DropdownIconSlots.test.svelte";
@@ -495,6 +496,103 @@ describe("Dropdown", () => {
       await waitFor(() =>
         expect(screen.getByRole("status")).toHaveTextContent("Selection reset"),
       );
+    });
+  });
+
+  describe("openOnClear", () => {
+    it("keeps the menu closed after clearing by default", async () => {
+      render(Dropdown, {
+        props: {
+          items,
+          selectedId: "0",
+          labelText: "Contact",
+          clearable: true,
+        },
+      });
+
+      const clearButton = screen.getByRole("button", {
+        name: "Clear selected item",
+      });
+      await user.click(clearButton);
+
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    });
+
+    it("reopens the menu after clicking the clear button when true", async () => {
+      render(Dropdown, {
+        props: {
+          items,
+          selectedId: "0",
+          labelText: "Contact",
+          clearable: true,
+          openOnClear: true,
+        },
+      });
+
+      const clearButton = screen.getByRole("button", {
+        name: "Clear selected item",
+      });
+      await user.click(clearButton);
+
+      expect(screen.getByRole("listbox")).toBeVisible();
+    });
+
+    it("reopens the menu after clearing with Delete when true", async () => {
+      render(Dropdown, {
+        props: {
+          items,
+          selectedId: "0",
+          labelText: "Contact",
+          clearable: true,
+          openOnClear: true,
+        },
+      });
+
+      const combobox = screen.getByRole("combobox");
+      combobox.focus();
+      await user.keyboard("{Delete}");
+
+      expect(screen.getByRole("listbox")).toBeVisible();
+    });
+  });
+
+  describe("programmatic clear()", () => {
+    it("clears the selection and focuses the field by default", async () => {
+      render(DropdownCustom, { props: { selectedId: "0" } });
+
+      const button = screen.getByRole("combobox");
+      await user.click(screen.getByText("Clear"));
+
+      expect(within(button).queryByText("Slack")).not.toBeInTheDocument();
+      expect(button).toHaveFocus();
+    });
+
+    it("does not focus the field when options.focus is false", async () => {
+      render(DropdownCustom, { props: { selectedId: "0" } });
+
+      const button = screen.getByRole("combobox");
+      await user.click(screen.getByText("Clear (no focus)"));
+
+      expect(within(button).queryByText("Slack")).not.toBeInTheDocument();
+      expect(button).not.toHaveFocus();
+    });
+
+    it("reopens the menu when options.open is true", async () => {
+      render(DropdownCustom, { props: { selectedId: "0" } });
+
+      await user.click(screen.getByText("Clear (reopen)"));
+
+      expect(screen.getByRole("listbox")).toBeVisible();
+    });
+
+    it("is a no-op when nothing is selected", async () => {
+      render(DropdownCustom);
+
+      const button = screen.getByRole("combobox");
+      await user.click(screen.getByText("Clear"));
+
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+      expect(button).not.toHaveFocus();
     });
   });
 
