@@ -53,6 +53,22 @@ Override the assistive text for the clear interaction with `clearSelectionText` 
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
+### Clear selection
+
+Use `bind:this` to access the component instance and call `Dropdown.clear()` to clear the selection. Pass `focus: false` in the options to prevent re-focusing the field.
+
+<FileSource src="/framed/Dropdown/DropdownClear" />
+
+### Open on clear
+
+By default, the menu is closed after clearing the selection.
+
+Set `openOnClear` to `true` to reopen the menu after clearing the selection. This lets users immediately browse all available items without needing to click the field again.
+
+<Dropdown openOnClear clearable labelText="Contact" label="Choose a contact method" selectedId="0" items="{[{id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Fax"}]}" />
+
 ### Initial selection
 
 Set `selectedId` to pre-select an item when the dropdown first renders. The trigger shows that item's label in the closed state.

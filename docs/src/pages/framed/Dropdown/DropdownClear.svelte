@@ -1,0 +1,22 @@
+<script>
+  import { Button, Dropdown } from "carbon-components-svelte";
+
+  let ref;
+</script>
+
+<Dropdown
+  clearable
+  labelText="Contact"
+  label="Choose a contact method"
+  selectedId="1"
+  bind:this={ref}
+  items={[
+    { id: "0", text: "Slack" },
+    { id: "1", text: "Email" },
+    { id: "2", text: "Fax" },
+  ]}
+/>
+<br>
+<Button on:click={() => ref.clear()}>Clear</Button>
+<Button on:click={() => ref.clear({ focus: false })}>Clear (no focus)</Button>
+<Button on:click={() => ref.clear({ open: true })}>Clear (reopen menu)</Button>
