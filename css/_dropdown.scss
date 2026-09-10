@@ -1,0 +1,20 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// `.bx--list-box__field`'s base padding-right reserves room for one
+/// absolutely-positioned icon (the menu chevron). `Dropdown`'s clearable
+/// selection button is a second icon of the same size, positioned to the
+/// chevron's left, so it needs the same 24px + 8px gap the chevron already
+/// gets. Without this, a long selected label's ellipsis cutoff sits under
+/// the clear button instead of stopping short of it.
+/// @access private
+/// @group components
+@mixin dropdown-clearable {
+  .#{$prefix}--list-box__field.#{$prefix}--list-box__field--clearable {
+    padding-right: to-rem(72px);
+  }
+}
+
+@include exports("dropdown-clearable") {
+  @include dropdown-clearable;
+}
