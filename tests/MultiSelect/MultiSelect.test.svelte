@@ -23,6 +23,7 @@
   export let readonly = false;
   export let readonlyText: ComponentProps<MultiSelect>["readonlyText"] =
     undefined;
+  export let openOnClear: ComponentProps<MultiSelect>["openOnClear"] = false;
   export let clearSelectionText: ComponentProps<MultiSelect>["clearSelectionText"] =
     undefined;
   export let selectionClearedText: ComponentProps<MultiSelect>["selectionClearedText"] =
@@ -74,6 +75,7 @@
   {disabled}
   {readonly}
   {readonlyText}
+  {openOnClear}
   {clearSelectionText}
   {selectionClearedText}
   {filterResultsText}

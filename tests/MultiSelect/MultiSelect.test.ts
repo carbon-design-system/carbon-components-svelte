@@ -18,6 +18,7 @@ import MultiSelectFluidSlot from "./MultiSelect.fluidSlot.test.svelte";
 import MultiSelectLabelSlot from "./MultiSelect.slot.test.svelte";
 import MultiSelect from "./MultiSelect.test.svelte";
 import MultiSelectBindValue from "./MultiSelectBindValue.test.svelte";
+import MultiSelectCustom from "./MultiSelectCustom.test.svelte";
 import MultiSelectDuplicateIds from "./MultiSelectDuplicateIds.test.svelte";
 import MultiSelectGenerics from "./MultiSelectGenerics.test.svelte";
 import MultiSelectInModal from "./MultiSelectInModal.test.svelte";
@@ -3808,6 +3809,107 @@ describe("MultiSelect", () => {
       await waitFor(() =>
         expect(screen.getByRole("status")).toHaveTextContent("Selection reset"),
       );
+    });
+  });
+
+  describe("openOnClear", () => {
+    it("does not open the menu after clearing by default", async () => {
+      const { container } = render(MultiSelect, {
+        props: { items, labelText: "Contact methods", selectedIds: ["0"] },
+      });
+
+      const closeIcon = container.querySelector(".bx--tag__close-icon");
+      assert(closeIcon);
+      await user.click(closeIcon);
+
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    });
+
+    it("opens the menu after clicking the clear button when true", async () => {
+      const { container } = render(MultiSelect, {
+        props: {
+          items,
+          labelText: "Contact methods",
+          selectedIds: ["0"],
+          openOnClear: true,
+        },
+      });
+
+      const closeIcon = container.querySelector(".bx--tag__close-icon");
+      assert(closeIcon);
+      await user.click(closeIcon);
+
+      expect(screen.getByRole("listbox")).toBeVisible();
+    });
+
+    it("opens the menu after clearing with Delete when true", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          labelText: "Contact methods",
+          selectedIds: ["0"],
+          openOnClear: true,
+        },
+      });
+
+      const combobox = screen.getByRole("combobox");
+      combobox.focus();
+      await user.keyboard("{Delete}");
+
+      expect(screen.getByRole("listbox")).toBeVisible();
+    });
+  });
+
+  describe("programmatic clear()", () => {
+    it("clears the selection and focuses the field by default", async () => {
+      render(MultiSelectCustom, { props: { selectedIds: ["0", "1"] } });
+
+      const combobox = screen.getByRole("combobox");
+      await user.click(screen.getByText("Clear"));
+
+      await user.click(combobox);
+      for (const option of screen.getAllByRole("option")) {
+        expect(option).toHaveAttribute("aria-selected", "false");
+      }
+      expect(combobox).toHaveFocus();
+    });
+
+    it("does not focus the field when options.focus is false", async () => {
+      render(MultiSelectCustom, { props: { selectedIds: ["0", "1"] } });
+
+      const combobox = screen.getByRole("combobox");
+      await user.click(screen.getByText("Clear (no focus)"));
+
+      expect(combobox).not.toHaveFocus();
+    });
+
+    it("opens the menu when options.open is true", async () => {
+      render(MultiSelectCustom, { props: { selectedIds: ["0", "1"] } });
+
+      await user.click(screen.getByText("Clear (reopen)"));
+
+      expect(screen.getByRole("listbox")).toBeVisible();
+    });
+
+    it("focuses the filter input, not the field, when filterable", async () => {
+      render(MultiSelectCustom, {
+        props: { selectedIds: ["0", "1"], filterable: true },
+      });
+
+      const combobox = screen.getByRole("combobox");
+      await user.click(screen.getByText("Clear"));
+
+      expect(combobox).toHaveFocus();
+    });
+
+    it("is a no-op when nothing is selected", async () => {
+      render(MultiSelectCustom);
+
+      const combobox = screen.getByRole("combobox");
+      await user.click(screen.getByText("Clear"));
+
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+      expect(combobox).not.toHaveFocus();
     });
   });
 
