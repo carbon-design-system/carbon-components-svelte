@@ -37,9 +37,13 @@ Omit `selectedId` to render the dropdown with no item selected. The label appear
 
 Set `clearable` to `true` to show a clear button when an item is selected. Clearing resets `selectedId` and dispatches a `clear` event. The clear button is hidden when there is no selection.
 
-<Dropdown clearable labelText="Contact" selectedId="0" label="Choose a contact method" items="{[{id: "0", text: "Slack"},
-  {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}]}" />
+A long selected label truncates with an ellipsis before the clear button instead of running underneath it.
+
+<Dropdown clearable labelText="Contact" selectedId="1" label="Choose a contact method" items={[
+  { id: "0", text: "Slack" },
+  { id: "1", text: "A very long contact method name that fills the field" },
+  { id: "2", text: "Fax" },
+]} />
 
 ### Clear button text
 
