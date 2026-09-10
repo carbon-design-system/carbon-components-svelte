@@ -257,6 +257,31 @@ describe("Dropdown", () => {
     ).not.toBeInTheDocument();
   });
 
+  it("should reserve extra field padding for the clear button only when it renders", async () => {
+    const { rerender } = render(Dropdown, {
+      props: {
+        items,
+        labelText: "Contact",
+        clearable: true,
+      },
+    });
+
+    expect(screen.getByRole("combobox")).not.toHaveClass(
+      "bx--list-box__field--clearable",
+    );
+
+    await rerender({
+      items,
+      selectedId: "0",
+      labelText: "Contact",
+      clearable: true,
+    });
+
+    expect(screen.getByRole("combobox")).toHaveClass(
+      "bx--list-box__field--clearable",
+    );
+  });
+
   it("should clear the selection and dispatch clear when clicking the clear button", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(Dropdown, {

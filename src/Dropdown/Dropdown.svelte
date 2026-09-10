@@ -658,6 +658,7 @@
         type="button"
         role="combobox"
         class:bx--list-box__field={true}
+        class:bx--list-box__field--clearable={clearable && selectedId !== undefined}
         tabindex="0"
         aria-expanded={open}
         aria-disabled={readonly || undefined}
