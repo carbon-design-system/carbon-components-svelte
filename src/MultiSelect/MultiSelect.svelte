@@ -216,6 +216,12 @@
   export let selectionClearedText = "All items cleared";
 
   /**
+   * Set to `true` to reopen the dropdown menu after clearing the selection.
+   * This allows users to immediately see all available items after clearing.
+   */
+  export let openOnClear = false;
+
+  /**
    * Build the assistive message announced through the status live region when
    * typing in the filterable variant changes how many options match.
    * The count excludes any "select all" item.
@@ -566,16 +572,25 @@
   }
 
   /**
-   * Clear every selected item and announce it. Shared by the clear button and
-   * the Delete/Backspace shortcuts in both field variants. No-op when nothing
-   * is selected so a bare Delete press does not announce a phantom clear.
+   * Clear the multiselect selection programmatically.
+   * By default, focuses the multiselect after clearing. Set `options.focus` to `false` to prevent focusing.
+   * Set `options.open` to `true` to open the dropdown menu after clearing.
+   * @type {(options?: { focus?: boolean; open?: boolean; }) => Promise<void>}
+   * @example
+   * ```svelte
+   * <MultiSelect bind:this={multiSelect} items={items} />
+   * <button on:click={() => multiSelect.clear()}>Clear</button>
+   * ```
    */
-  function clearSelection() {
-    if (selectionCount === 0) return;
+  export async function clear(options = {}) {
+    if (readonly || selectionCount === 0) return;
     selectedIds = [];
     lastSelectedItemId = null;
     sortedItems = sortedItems.map((item) => ({ ...item, checked: false }));
     announceStatus(selectionClearedText);
+    await tick();
+    if (options?.open === true) open = true;
+    if (options?.focus !== false) (filterable ? inputRef : fieldRef)?.focus();
   }
 
   /** Filter result count last announced; null when the menu is closed so reopening announces again. */
@@ -1008,7 +1023,7 @@
             <ListBoxSelection
               {selectionCount}
               on:clear
-              on:clear={clearSelection}
+              on:clear={() => clear({ open: openOnClear })}
               translateWithId={translateWithIdSelection}
               {disabled}
               {readonly}
@@ -1074,10 +1089,10 @@
               if (readonly) event.preventDefault();
               if (!open) open = true;
             } else if (event.key === "Backspace" && value === "") {
-              clearSelection();
+              clear({ open: openOnClear });
             } else if (event.key === "Delete") {
               value = "";
-              if (!open) clearSelection();
+              if (!open) clear({ open: openOnClear });
             }
           }}
             on:input
@@ -1221,7 +1236,7 @@
             // menu but never changes the selection.
             if (readonly) return;
             event.preventDefault();
-            clearSelection();
+            clear({ open: openOnClear });
           }
         }}
           on:blur={(event) => {
@@ -1236,7 +1251,7 @@
             <ListBoxSelection
               {selectionCount}
               on:clear
-              on:clear={clearSelection}
+              on:clear={() => clear({ open: openOnClear })}
               translateWithId={translateWithIdSelection}
               {disabled}
               {readonly}
