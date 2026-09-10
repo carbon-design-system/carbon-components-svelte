@@ -60,7 +60,11 @@
     if (!node) return;
     if (highlightCursor) {
       if (optionId) {
-        unregisterHighlight = highlightCursor.register(optionId, node);
+        unregisterHighlight = highlightCursor.register(
+          optionId,
+          node,
+          isActive,
+        );
       }
       return;
     }

@@ -5,7 +5,6 @@ import { scrollIntoViewWithinMenu } from "../utils/scrollIntoViewWithinMenu.js";
 export const HIGHLIGHT_CURSOR_KEY = "carbon:ListBoxHighlight";
 
 const HIGHLIGHT_CLASS = "bx--list-box__menu-item--highlighted";
-const ACTIVE_CLASS = "bx--list-box__menu-item--active";
 
 /**
  * Two-node highlight cursor for listbox options.
@@ -14,11 +13,14 @@ const ACTIVE_CLASS = "bx--list-box__menu-item--active";
  * instead of passing `highlighted` through the `{#each}` so Svelte does not
  * invalidate every `ListBoxMenuItem` (and re-run `overflowTitle`) per key.
  *
- * Selected options keep the highlight class via `ListBoxMenuItem`'s `active`
- * class directive; this cursor will not strip it from an `--active` node.
+ * Selected options keep the highlight class while `active`; this cursor
+ * tracks active ids itself instead of reading the `--active` class back off
+ * the DOM, since that class is written by `ListBoxMenuItem`'s own `class:`
+ * directive and is not guaranteed to have been patched onto the node yet by
+ * the time this cursor runs in the same update cycle.
  *
  * @returns {{
- *   register: (id: string, node: HTMLElement) => () => void;
+ *   register: (id: string, node: HTMLElement, isActive?: boolean) => () => void;
  *   set: (id: string | null | undefined, options?: { scroll?: boolean }) => void;
  *   highlightedId: { subscribe: import("svelte/store").Readable<string | null>["subscribe"] };
  * }}
@@ -26,33 +28,39 @@ const ACTIVE_CLASS = "bx--list-box__menu-item--active";
 export function createHighlightCursor() {
   /** @type {Map<string, HTMLElement>} */
   const nodes = new Map();
+  /** @type {Set<string>} */
+  const activeIds = new Set();
   /** @type {string | null} */
   let currentId = null;
   const highlightedId = writable(/** @type {string | null} */ (null));
 
   /**
    * @param {HTMLElement} node
-   * @param {boolean} on
+   * @param {boolean} isCurrent
+   * @param {boolean} isActive
    */
-  function applyClass(node, on) {
-    if (on || node.classList.contains(ACTIVE_CLASS)) {
-      node.classList.add(HIGHLIGHT_CLASS);
-      return;
-    }
-    node.classList.remove(HIGHLIGHT_CLASS);
+  function applyClass(node, isCurrent, isActive) {
+    node.classList.toggle(HIGHLIGHT_CLASS, isCurrent || isActive);
   }
 
   /**
    * @param {string} id
    * @param {HTMLElement} node
+   * @param {boolean} [isActive]
    * @returns {() => void}
    */
-  function register(id, node) {
+  function register(id, node, isActive = false) {
     if (!id) return () => {};
     nodes.set(id, node);
-    applyClass(node, currentId === id);
+    if (isActive) {
+      activeIds.add(id);
+    } else {
+      activeIds.delete(id);
+    }
+    applyClass(node, currentId === id, isActive);
     return () => {
       if (nodes.get(id) === node) nodes.delete(id);
+      activeIds.delete(id);
     };
   }
 
@@ -66,9 +74,9 @@ export function createHighlightCursor() {
 
     const prev = currentId ? nodes.get(currentId) : undefined;
     const next = nextId ? nodes.get(nextId) : undefined;
-    if (prev) applyClass(prev, false);
+    if (prev) applyClass(prev, false, activeIds.has(currentId));
     if (next) {
-      applyClass(next, true);
+      applyClass(next, true, true);
       if (scroll && !next.matches(":hover")) {
         const inner = next.querySelector(".bx--list-box__menu-item__option");
         scrollIntoViewWithinMenu(inner instanceof HTMLElement ? inner : next);
