@@ -11,6 +11,7 @@ const PROD = NODE_ENV === "production";
 
 /** @type {import("webpack").Configuration} */
 export default {
+  target: "web",
   entry: { "build/bundle": ["./src/index.js"] },
   resolve: {
     extensions: [".mjs", ".js", ".svelte"],
