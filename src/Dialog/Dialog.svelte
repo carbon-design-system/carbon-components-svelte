@@ -42,8 +42,8 @@
    * on the element's own `open` state stops `dispatch("open")` from firing
    * again on a redundant re-run while the dialog is already open.
    */
-  function dialogAction(node, params) {
-    sync(params);
+  function dialogAction(node, options) {
+    sync(options);
 
     return {
       update: sync,
