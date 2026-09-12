@@ -104,13 +104,13 @@
   }
 
   /** @type {(e: Event) => void} */
-  function onInput(event) {
+  function handleInput(event) {
     value = parse(event.target.value);
     dispatch("input", value);
   }
 
   /** @type {(e: Event) => void} */
-  function onChange(event) {
+  function handleChange(event) {
     dispatch("change", parse(event.target.value));
   }
 
@@ -253,8 +253,8 @@
         class:bx--text-input--xl={size === "xl"}
         maxlength={maxCount ?? undefined}
         {...$$restProps}
-        on:change={onChange}
-        on:input={onInput}
+        on:change={handleChange}
+        on:input={handleInput}
         on:keydown
         on:keyup
         on:focus
