@@ -85,7 +85,7 @@
   const dispatch = createEventDispatcher();
   const tooltipId = {};
 
-  let isInitialRender = true;
+  let initialRender = true;
   let clicked = false;
 
   const scheduleOpen = createDelayedSetter();
@@ -134,9 +134,9 @@
   }
 
   $: {
-    const shouldDispatch = !isInitialRender;
+    const shouldDispatch = !initialRender;
     const nextOpen = open;
-    isInitialRender = false;
+    initialRender = false;
     if (shouldDispatch) {
       dispatch(nextOpen ? "open" : "close");
     }
@@ -191,7 +191,7 @@
     };
   });
 
-  function handleEscape(event) {
+  function handleKeydown(event) {
     if (event.key === "Escape") {
       hide();
     }
@@ -200,7 +200,7 @@
 
 <button
   bind:this={ref}
-  use:dismiss={{ enabled: open, type: "keydown", handler: handleEscape }}
+  use:dismiss={{ enabled: open, type: "keydown", handler: handleKeydown }}
   {disabled}
   type="button"
   aria-describedby={id}
