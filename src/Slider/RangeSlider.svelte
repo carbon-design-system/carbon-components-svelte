@@ -245,7 +245,7 @@
   }
 
   /** @type {(e: KeyboardEvent) => void} */
-  function onKeyDown(event) {
+  function handleKeydown(event) {
     if (disabled || readonly) return;
 
     if (event.key === "Home" || event.key === "End") {
@@ -431,7 +431,7 @@
           aria-describedby={invalid ? errorId : warn ? warnId : undefined}
           aria-invalid={invalid || undefined}
           on:focus={() => (activeHandle = "lower")}
-          on:keydown={onKeyDown}
+          on:keydown={handleKeydown}
           {id}
         >
           <svg
@@ -478,7 +478,7 @@
           aria-describedby={invalid ? errorId : warn ? warnId : undefined}
           aria-invalid={invalid || undefined}
           on:focus={() => (activeHandle = "upper")}
-          on:keydown={onKeyDown}
+          on:keydown={handleKeydown}
         >
           <svg
             class="bx--slider__thumb-icon bx--slider__thumb-icon--upper"
