@@ -6,7 +6,14 @@
  *
  * Usage: `bun biome/check-fixtures.ts`
  */
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import {
+  cpSync,
+  mkdtempSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+  statSync,
+} from "node:fs";
 import { join, relative } from "node:path";
 
 const ROOT = join(import.meta.dirname, "..");
@@ -71,93 +78,117 @@ function main() {
     return;
   }
 
-  // Biome 2.5.13 reports a spurious "nested root configuration" error when
-  // the lint target is a descendant of the directory holding the config
-  // file passed via --config-path, while the invocation's cwd is an
-  // ancestor that also has its own (unrelated) root biome.json — which is
-  // exactly the shape of `<repo root>/biome/{biome.json,fixtures/}`.
-  // Running with cwd set to `biome/` itself, using paths relative to that
-  // cwd, avoids the bug (see biome/README.md).
-  const proc = Bun.spawnSync(
-    [
-      BIOME_BIN,
-      "lint",
-      "--config-path=lint-style.json",
-      "--reporter=json",
-      "fixtures",
-    ],
-    { cwd: BIOME_DIR, stdout: "pipe", stderr: "pipe" },
-  );
-
-  const stdout = proc.stdout.toString("utf-8");
-  let report: LintReport;
+  // The root biome.json excludes `biome/fixtures` from `files.includes` so
+  // the deliberately-bad naming patterns in the fixtures never trip the real
+  // lint run (`bun lint`, `bun lint:changed`, `biome ci`). Biome 2.5.13
+  // applies that exclude to explicitly-passed CLI paths too (confirmed
+  // directly: `biome lint biome/fixtures` reports "these paths were
+  // provided but ignored" even with `--files-ignore-unknown=true`), so
+  // there's no CLI flag that un-ignores an explicit target under an
+  // excluded directory. The workaround: copy the fixtures to a scratch
+  // directory that isn't excluded, then lint that copy with the repo's own
+  // root config (no `--config-path` override, no second config file).
+  //
+  // The scratch directory also has to live under `src/`, not the OS temp
+  // directory: the plugins are declared under an `overrides` entry scoped to
+  // `"includes": ["src/**"]` (see biome/README.md), not the top-level
+  // `plugins` array, so they only fire for paths under `src/`. `--only=plugin`
+  // restricts the report to plugin diagnostics only, so the fixtures'
+  // deliberately-odd code doesn't also trip unrelated built-in rules
+  // (verified: with `--only=plugin`, every diagnostic's `category` is
+  // `"plugin"`).
+  const scratchDir = mkdtempSync(join(ROOT, "src", "biome-fixture-check-"));
 
   try {
-    report = JSON.parse(stdout);
-  } catch {
-    console.error("biome/check-fixtures: could not parse biome JSON output.");
-    console.error("--- stdout ---");
-    console.error(stdout);
-    console.error("--- stderr ---");
-    console.error(proc.stderr.toString("utf-8"));
-    process.exit(1);
-  }
+    cpSync(FIXTURES_DIR, scratchDir, { recursive: true });
 
-  const actualByFile = new Map<string, Set<number>>();
+    const proc = Bun.spawnSync(
+      [
+        BIOME_BIN,
+        "lint",
+        "--config-path",
+        join(ROOT, "biome.json"),
+        "--only=plugin",
+        "--reporter=json",
+        scratchDir,
+      ],
+      { stdout: "pipe", stderr: "pipe" },
+    );
 
-  for (const diagnostic of report.diagnostics) {
-    const path = diagnostic.location?.path;
-    const line = diagnostic.location?.start?.line;
+    const stdout = proc.stdout.toString("utf-8");
+    let report: LintReport;
 
-    if (!path || line === undefined) continue;
+    try {
+      report = JSON.parse(stdout);
+    } catch {
+      console.error("biome/check-fixtures: could not parse biome JSON output.");
+      console.error("--- stdout ---");
+      console.error(stdout);
+      console.error("--- stderr ---");
+      console.error(proc.stderr.toString("utf-8"));
+      process.exit(1);
+    }
 
-    // Diagnostic paths are relative to BIOME_DIR (e.g. "fixtures/a.js").
-    const absolutePath = join(BIOME_DIR, path);
+    const actualByFile = new Map<string, Set<number>>();
 
-    if (!actualByFile.has(absolutePath))
-      actualByFile.set(absolutePath, new Set());
-    actualByFile.get(absolutePath)?.add(line);
-  }
+    for (const diagnostic of report.diagnostics) {
+      const path = diagnostic.location?.path;
+      const line = diagnostic.location?.start?.line;
 
-  let hasMismatch = false;
+      if (!path || line === undefined) continue;
 
-  for (const fixtureFile of fixtureFiles) {
-    const expected = getExpectedLines(fixtureFile);
-    const actual = actualByFile.get(fixtureFile) ?? new Set<number>();
+      // Diagnostic paths come back absolute (the scratch dir target was
+      // passed as an absolute path). Map them back to the corresponding
+      // file under `biome/fixtures`.
+      const absolutePath = join(FIXTURES_DIR, relative(scratchDir, path));
 
-    const missing = [...expected]
-      .filter((line) => !actual.has(line))
-      .sort((a, b) => a - b);
-    const unexpected = [...actual]
-      .filter((line) => !expected.has(line))
-      .sort((a, b) => a - b);
+      if (!actualByFile.has(absolutePath))
+        actualByFile.set(absolutePath, new Set());
+      actualByFile.get(absolutePath)?.add(line);
+    }
 
-    if (missing.length > 0 || unexpected.length > 0) {
-      hasMismatch = true;
-      console.error(`biome/check-fixtures: ${relative(ROOT, fixtureFile)}`);
+    let hasMismatch = false;
 
-      if (missing.length > 0) {
-        console.error(
-          `  expected diagnostics on lines [${missing.join(", ")}] but got none`,
-        );
-      }
+    for (const fixtureFile of fixtureFiles) {
+      const expected = getExpectedLines(fixtureFile);
+      const actual = actualByFile.get(fixtureFile) ?? new Set<number>();
 
-      if (unexpected.length > 0) {
-        console.error(
-          `  unexpected diagnostics on lines [${unexpected.join(", ")}]`,
-        );
+      const missing = [...expected]
+        .filter((line) => !actual.has(line))
+        .sort((a, b) => a - b);
+      const unexpected = [...actual]
+        .filter((line) => !expected.has(line))
+        .sort((a, b) => a - b);
+
+      if (missing.length > 0 || unexpected.length > 0) {
+        hasMismatch = true;
+        console.error(`biome/check-fixtures: ${relative(ROOT, fixtureFile)}`);
+
+        if (missing.length > 0) {
+          console.error(
+            `  expected diagnostics on lines [${missing.join(", ")}] but got none`,
+          );
+        }
+
+        if (unexpected.length > 0) {
+          console.error(
+            `  unexpected diagnostics on lines [${unexpected.join(", ")}]`,
+          );
+        }
       }
     }
-  }
 
-  if (hasMismatch) {
-    console.error("biome/check-fixtures: FAILED");
-    process.exit(1);
-  }
+    if (hasMismatch) {
+      console.error("biome/check-fixtures: FAILED");
+      process.exit(1);
+    }
 
-  console.log(
-    `biome/check-fixtures: OK (${fixtureFiles.length} fixture file${fixtureFiles.length === 1 ? "" : "s"})`,
-  );
+    console.log(
+      `biome/check-fixtures: OK (${fixtureFiles.length} fixture file${fixtureFiles.length === 1 ? "" : "s"})`,
+    );
+  } finally {
+    rmSync(scratchDir, { recursive: true, force: true });
+  }
 }
 
 main();

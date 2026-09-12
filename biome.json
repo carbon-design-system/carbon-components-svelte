@@ -202,6 +202,15 @@
     },
     {
       "includes": ["src/**"],
+      "plugins": [
+        "./biome/rules/no-arrow-function-binding.grit",
+        "./biome/rules/handler-naming.grit",
+        "./biome/rules/element-ref-naming.grit",
+        "./biome/rules/prev-naming.grit",
+        "./biome/rules/boolean-naming.grit",
+        "./biome/rules/param-naming.grit",
+        "./biome/rules/store-naming.grit"
+      ],
       "linter": {
         "rules": {
           "correctness": {

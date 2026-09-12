@@ -1,75 +1,95 @@
 # Biome GritQL plugins for the `src/` style rules
 
-This directory holds a self-contained Biome config and a set of GritQL plugins that check the
-naming/shape conventions documented for `src/`. It is **not** wired into the root `biome.json` or
-CI; it is a separate, opt-in lint pass.
+This directory holds the GritQL plugins that check the naming/shape conventions documented for
+`src/`. The plugins are registered in the root `biome.json`, under an `overrides` entry scoped to
+`src/**` (not the top-level `plugins` array — see "Why the plugins are scoped to `src/**`" below),
+so they run as ordinary (error-severity) diagnostics under `bun lint`, `bun lint:changed`, and
+`bunx biome ci` — the same three commands that run every other rule in the repo.
 
 ## Layout
 
 ```
 biome/
-  lint-style.json      # standalone Biome config (see "Why not biome.json" below)
   check-fixtures.ts     # asserts each fixture flags exactly its `// flag` lines
-  rules/*.grit          # one GritQL plugin file per rule, rule id = file name
+  rules/*.grit          # one GritQL plugin file per rule, referenced from the root biome.json
   fixtures/*.svelte, *.js  # one fixture per rule: lines that must fire and lines that must not
 ```
 
 ## Running
 
-- `bun run lint:style` — lints `src/` with only the plugins in this directory (all built-in rules
-  are disabled; only the checks below can report).
-- `bun run lint:style:fixtures` — the test suite for this directory. Runs Biome against
-  `biome/fixtures` and asserts, per fixture file, that diagnostics land on exactly the lines
-  marked with a trailing `// flag` comment and no others. This must pass before every commit in
-  this task from the first rule onward.
+- `bun run lint`, `bun run lint:changed`, or `bunx biome ci` — lints the whole repo, including
+  these plugins, via the root `biome.json`.
+- `bun run lint:style:fixtures` — the test suite for these plugins. Runs Biome against a scratch
+  copy of `biome/fixtures` and asserts, per fixture file, that diagnostics land on exactly the
+  lines marked with a trailing `// flag` comment and no others. This must pass before every commit
+  that touches a rule.
 
-## Why not `biome.json`, and why not `extends`
+## History: why these plugins used to live in a separate config
 
-The task sketch called for `biome/biome.json` extending the root config
-(`"extends": ["../biome.json"]`), invoked as `biome lint --config-path=biome src`. Neither survived
-contact with Biome 2.5.13; both are genuine tool bugs, verified by bisection, not misconfiguration:
+Earlier in this effort the plugins lived behind a standalone `biome/lint-style.json`, invoked via
+`bun run lint:style` as a separate, opt-in pass, specifically to work around two Biome 2.5.13 bugs
+that made folding the plugins into the root `biome.json` (or even `extends`-ing it) impossible at
+the time:
 
-1. **A file named `biome.json`/`biome.jsonc` anywhere under the repo breaks whole-repo Biome
+1. **A file named `biome.json`/`biome.jsonc` anywhere under the repo broke whole-repo Biome
    invocations, full stop.** As soon as `biome/biome.json` existed on disk, `bun lint` and
-   `bun lint:changed` (i.e. plain `biome check .` from the repo root) failed with:
-   ```
-   Found a nested root configuration, but there's already a root configuration.
-   ```
-   This happens regardless of the nested file's own `"root"` value (tried `true`, `false`, and
-   omitted) and regardless of `files.includes` excludes on the root config (tried `"!biome/**"`
-   and the normalized `"!biome"` — no effect). Biome's nested-root scan for files literally named
-   `biome.json`/`biome.jsonc` runs before `files.includes` filtering is applied. The fix is to
-   name the file something else; `biome/lint-style.json` works. The root `biome.json` still
-   excludes `biome/` via `"!biome"` in `files.includes`, so `bun lint`/`bun lint:changed` never
-   try to format or lint anything in here, but the exclude is belt-and-braces — the rename is
-   what actually fixes the crash.
+   `bun lint:changed` failed with `Found a nested root configuration, but there's already a root
+   configuration.`, regardless of the nested file's own `"root"` value or any `files.includes`
+   exclude on the root config. The fix at the time was to name the file `biome/lint-style.json`
+   instead.
 
-2. **`extends` of the real root config fails the same way, independent of the rename, because of
-   one specific rule.** With `biome/lint-style.json` containing `"extends": ["../biome.json"]`
-   and invoked via `--config-path`, linting `src/Accordion` raised the identical "nested root
-   configuration" error. Bisecting the entire root config down rule-by-rule isolated the trigger
-   to a single line: `"complexity": { "useArrayFind": "error" }`. Any config that reaches that
-   rule setting through an `extends` chain while also being passed via `--config-path` hits this
-   bug — with or without `"root": false`, with or without `vcs` settings copied or disabled. Since
-   the root `biome.json` cannot be edited to drop `useArrayFind` just to accommodate this task,
-   `extends` is not viable here. `biome/lint-style.json` is fully self-contained instead:
-   `"vcs": { "enabled": false }` and `"linter": { "rules": { "recommended": false } }`, so only
-   plugin diagnostics can fire — which is actually what `bun run lint:style` wants anyway (a
-   count of plugin hits, not a rerun of the main lint rules).
+2. **`extends` of the real root config failed the same way**, independent of the rename, because
+   of one specific rule: any config that reached `"complexity": { "useArrayFind": "error" }`
+   through an `extends` chain while also being passed via `--config-path` hit the identical
+   "nested root configuration" error. Since the root config couldn't be edited to drop that rule
+   just to accommodate the plugins, `biome/lint-style.json` was fully self-contained instead
+   (`"vcs": { "enabled": false }`, `"linter": { "rules": { "recommended": false } }`) with no
+   `extends`.
 
-3. **`check-fixtures.ts` cannot invoke Biome with `cwd` at the repo root and a target of
-   `biome/fixtures`.** That shape — an ancestor `cwd` that has its own root `biome.json`, and a
-   lint target that is a descendant of the directory holding the `--config-path` config — hits
-   the same false-positive "nested root configuration" error a third time, again unaffected by
-   `files.includes`. The fix: the script spawns Biome with `cwd` set to `biome/` itself, and both
-   `--config-path` and the target path relative to that `cwd` (`lint-style.json` and `fixtures`).
-   `bun run lint:style` is unaffected by this because its target (`src`) is a *sibling* of
-   `biome/`, not a descendant of it, invoked from the repo root as usual.
+Neither bug applies anymore: there is now exactly one `biome.json` in the repo (the root one), the
+plugins are declared in it (via a scoped `overrides` entry, see below), and nothing `extends`
+anything. `bun run lint:style` and `biome/lint-style.json` no longer exist.
 
-Net effect: `biome/lint-style.json` is a flat, standalone config (no `extends`), named so Biome's
-ambient discovery never trips over it, and `check-fixtures.ts` runs from inside `biome/` to dodge
-the same discovery bug for its own fixtures. None of this touches the root `biome.json` beyond the
-one `"!biome"` files-includes exclude, and the root config never references these plugins.
+## Why the plugins are scoped to `src/**`
+
+The plugins are declared under an `overrides` entry (`"includes": ["src/**"]`), not the top-level
+`plugins` array. The top-level array applies to every file `files.includes` lets through, and these
+plugins are unaffordably slow outside `src/`: a single 522-line `e2e/date-picker.test.ts` took
+~9 seconds on its own with the plugins active repo-wide (versus ~0.1s/file averaged over all of
+`src/`, and instant once scoped away from it). The likely cause, per the `element-ref-naming`
+"known limitation" above, is that Grit's `` `$x` `` snippets visit every AST node and test the full
+node-text regex against each one; deeply-nested test files (many `describe`/`it`/`test` callbacks)
+have both far more nodes and larger per-node text spans than a typical `src/` component's `<script>`
+block, so the same dotall/greedy regexes cost much more there. `overrides[].plugins` (a real, if
+under-documented, Biome 2.5.13 config field) runs the plugins only for files matching that override's
+`includes`, which keeps the cost bounded to `src/` and avoids the blowup entirely. A `bunx biome ci`
+over the whole repo (`src/`, `tests/`, `e2e/`, `docs/`, etc.) completes in under 200ms of actual
+check time with this scoping, versus not completing within many minutes without it.
+
+Scoping the plugins to `src/**` this way also gave them access to Biome's full HTML/Svelte parsing
+(`html.experimentalFullSupportEnabled: true`, set at the root), which the old standalone
+`biome/lint-style.json` never had. That surfaced one previously-invisible real hit — a `param-naming`
+violation inside a `use:action={{ ... }}` attribute expression in `ContentSwitcher.svelte` — that the
+standalone config's more limited Svelte parsing couldn't see, because attribute-expression JS isn't
+fully analyzed without that flag. The baseline counts in the table below, taken under the standalone
+config, are a floor for the same reason `TreeView.svelte`'s second `<script>` block was: this is
+another blind spot the standalone harness had that the root config does not.
+
+## `check-fixtures.ts` and the `files.includes` exclude
+
+The root `biome.json` excludes `biome/fixtures` from `files.includes` so the fixtures'
+deliberately-bad naming patterns never trip the real lint run. Biome 2.5.13 applies that exclude to
+explicitly-passed CLI paths too — `biome lint biome/fixtures` (with or without
+`--files-ignore-unknown=true`) reports `these paths were provided but ignored`, and there is no CLI
+flag that un-ignores an explicitly-targeted path once `files.includes` excludes it. `check-fixtures.ts`
+works around this by copying `biome/fixtures` to a scratch directory outside the excluded path and
+linting the copy with the repo's own root config (`--config-path` pointing at the real
+`biome.json`, no second config file). The scratch directory is created under `src/` itself
+(`src/biome-fixture-check-<random>/`, removed immediately after) rather than the OS temp directory,
+because the plugins only apply to `src/**` (see above) — a copy anywhere else would be linted with
+no plugins active at all and the check would vacuously pass. It also passes `--only=plugin` so the
+fixtures' intentionally odd code doesn't also trip unrelated built-in rules (verified: with
+`--only=plugin`, every diagnostic's `category` is `"plugin"`).
 
 ## Rules
 

@@ -3,5 +3,5 @@ language js
 `$x` where {
   $x <: r"(?s)let\s+((?:last|previous|old)[A-Z]\w*)\s*=.*;"($n),
   not $x <: within r"export\s[^;]*;" ,
-  register_diagnostic(span=$x, message="Use `prev<Name>` for the previous value of `<name>`.", severity="warn")
+  register_diagnostic(span=$x, message="Use `prev<Name>` for the previous value of `<name>`.")
 }
