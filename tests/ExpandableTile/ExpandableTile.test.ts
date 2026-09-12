@@ -213,6 +213,30 @@ describe("ExpandableTile", () => {
     await user.unhover(tile);
   });
 
+  it("does not recompute padding on every re-render", async () => {
+    const getComputedStyle = vi.spyOn(window, "getComputedStyle");
+    render(ExpandableTile);
+    // Query before taking the baseline: `getByRole` and user-event both call
+    // getComputedStyle themselves, which would pollute the count.
+    const tile = screen.getByRole("button");
+    await tick();
+    await tick();
+    const afterMount = getComputedStyle.mock.calls.length;
+    expect(afterMount).toBeGreaterThan(0);
+
+    tile.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+    await tick();
+    tile.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    await tick();
+    tile.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    await tick();
+    tile.dispatchEvent(new MouseEvent("mouseleave", { bubbles: true }));
+    await tick();
+
+    expect(getComputedStyle.mock.calls.length).toBe(afterMount);
+    getComputedStyle.mockRestore();
+  });
+
   it("should handle max height and padding", async () => {
     render(ExpandableTile, {
       props: {
