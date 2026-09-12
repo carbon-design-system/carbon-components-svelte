@@ -1,4 +1,4 @@
-import { isExpandableNode } from "./isExpandableNode.js";
+import { isExpandableNode } from "./is-expandable-node.js";
 
 type TreeNodeLike = {
   id: string | number;

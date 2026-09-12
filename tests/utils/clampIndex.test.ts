@@ -1,4 +1,4 @@
-import { clampIndex } from "../../src/utils/clampIndex.js";
+import { clampIndex } from "../../src/utils/clamp-index.js";
 
 describe("clampIndex", () => {
   test("moves forward and backward within range", () => {

@@ -19,7 +19,7 @@
 // number is the more representative one, and even that is negligible
 // (sub-microsecond) at this scale.
 import { group, range, task } from "ostia";
-import { BoundedFifoCache } from "../src/utils/boundedFifoCache.js";
+import { BoundedFifoCache } from "../src/utils/bounded-fifo-cache.js";
 
 // Cache held at capacity (maxSize == size), so every set() past warmup
 // evicts — the worst case for eviction cost, not the empty-cache case.

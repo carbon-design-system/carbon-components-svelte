@@ -139,11 +139,11 @@
   import InlineLoading from "../InlineLoading/InlineLoading.svelte";
   import Close from "../icons/Close.svelte";
   import { initialFocus, restoreFocus } from "../utils/focus.js";
-  import { createOutsideDismiss } from "../utils/outsideDismiss.js";
-  import { scrollIntoViewWithinMenu } from "../utils/scrollIntoViewWithinMenu.js";
-  import { trapFocus } from "../utils/trapFocus.js";
-  import { uniqueId } from "../utils/uniqueId.js";
-  import { trackModal } from "./modalStore";
+  import { createOutsideDismiss } from "../utils/outside-dismiss.js";
+  import { scrollIntoViewWithinMenu } from "../utils/scroll-into-view-within-menu.js";
+  import { trapFocus } from "../utils/trap-focus.js";
+  import { uniqueId } from "../utils/unique-id.js";
+  import { trackModal } from "./modal-store";
 
   const dispatch = createEventDispatcher();
   const focusReturn = restoreFocus();

@@ -1,4 +1,4 @@
-import { rovingFocus } from "../../src/utils/rovingFocus.js";
+import { rovingFocus } from "../../src/utils/roving-focus.js";
 
 type Options = Parameters<typeof rovingFocus>[1];
 

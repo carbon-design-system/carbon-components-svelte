@@ -1,4 +1,4 @@
-import { copyText } from "../../src/utils/copyText.js";
+import { copyText } from "../../src/utils/copy-text.js";
 
 describe("copyText", () => {
   afterEach(() => {

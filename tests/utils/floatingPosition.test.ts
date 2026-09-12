@@ -1,7 +1,7 @@
 import {
   floatingPosition,
   type RectLike,
-} from "../../src/utils/floatingPosition.js";
+} from "../../src/utils/floating-position.js";
 
 /** Build a RectLike from x/y/width/height (right/bottom derived). */
 function rect(x: number, y: number, width: number, height: number): RectLike {

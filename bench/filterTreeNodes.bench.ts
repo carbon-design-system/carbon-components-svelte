@@ -2,7 +2,7 @@
 // filterTreeNodes filters a hierarchical tree by a predicate function, with options
 // to include/exclude children and ancestors of matching nodes.
 import { group, range, task } from "ostia";
-import { filterTreeNodes } from "../src/utils/filterTreeNodes.js";
+import { filterTreeNodes } from "../src/utils/filter-tree-nodes.js";
 
 type TreeNode = {
   id: number;

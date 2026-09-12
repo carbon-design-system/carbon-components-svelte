@@ -162,7 +162,7 @@
   export let ref = null;
 
   import { createEventDispatcher, tick } from "svelte";
-  import { filterIncomingFiles } from "../utils/filterIncomingFiles.js";
+  import { filterIncomingFiles } from "../utils/filter-incoming-files.js";
   import Filename from "./Filename.svelte";
   import FileUploaderButton from "./FileUploaderButton.svelte";
 

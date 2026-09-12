@@ -34,7 +34,7 @@
   export let download = downloadFile;
 
   import { createEventDispatcher } from "svelte";
-  import { downloadFile } from "../utils/downloadFile.js";
+  import { downloadFile } from "../utils/download-file.js";
   import Link from "./Link.svelte";
 
   const dispatch = createEventDispatcher();

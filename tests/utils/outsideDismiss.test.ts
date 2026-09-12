@@ -1,4 +1,4 @@
-import { createOutsideDismiss } from "../../src/utils/outsideDismiss.js";
+import { createOutsideDismiss } from "../../src/utils/outside-dismiss.js";
 
 describe("createOutsideDismiss", () => {
   test("does not dismiss when the press began inside", () => {

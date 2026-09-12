@@ -100,11 +100,11 @@
   import { createEventDispatcher, setContext, tick } from "svelte";
   import { derived, writable } from "svelte/store";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
-  import { batchStoreUpdates } from "../utils/batchStoreUpdates.js";
+  import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { dismiss } from "../utils/dismiss.js";
-  import { isOutsideClick } from "../utils/isOutsideClick.js";
-  import { rovingFocus } from "../utils/rovingFocus.js";
-  import { scrollIntoViewWithinMenu } from "../utils/scrollIntoViewWithinMenu.js";
+  import { isOutsideClick } from "../utils/is-outside-click.js";
+  import { rovingFocus } from "../utils/roving-focus.js";
+  import { scrollIntoViewWithinMenu } from "../utils/scroll-into-view-within-menu.js";
 
   // Selectable and radio items carry their own roles, so navigation and
   // initial focus must match all three.

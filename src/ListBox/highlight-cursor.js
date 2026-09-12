@@ -1,6 +1,6 @@
 // @ts-check
 import { writable } from "svelte/store";
-import { scrollIntoViewWithinMenu } from "../utils/scrollIntoViewWithinMenu.js";
+import { scrollIntoViewWithinMenu } from "../utils/scroll-into-view-within-menu.js";
 
 export const HIGHLIGHT_CURSOR_KEY = "carbon:ListBoxHighlight";
 

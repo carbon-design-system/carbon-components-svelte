@@ -4,7 +4,7 @@ import {
   parse,
   parseLocaleValue,
   roundToStep,
-} from "../../src/utils/numericFormat.js";
+} from "../../src/utils/numeric-format.js";
 
 describe("parse", () => {
   test("returns null for empty or partial input", () => {

@@ -1,4 +1,4 @@
-import { iconTooltipPortalGaps } from "carbon-components-svelte/Portal/iconTooltipPortalGaps.js";
+import { iconTooltipPortalGaps } from "carbon-components-svelte/Portal/icon-tooltip-portal-gaps.js";
 
 describe("iconTooltipPortalGaps", () => {
   test("vertical placements only add a top/bottom gap", () => {

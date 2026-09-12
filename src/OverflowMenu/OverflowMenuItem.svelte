@@ -94,8 +94,8 @@
     getContext,
     onMount,
   } from "svelte";
-  import { scrollIntoViewWithinMenu } from "../utils/scrollIntoViewWithinMenu.js";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { scrollIntoViewWithinMenu } from "../utils/scroll-into-view-within-menu.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
   const { focusedId, add, remove, update, itemsById } = getContext(

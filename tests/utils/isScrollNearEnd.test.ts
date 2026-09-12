@@ -2,7 +2,7 @@ import {
   createScrollEndTracker,
   DEFAULT_SCROLL_END_THRESHOLD,
   isScrollNearEnd,
-} from "../../src/utils/isScrollNearEnd.js";
+} from "../../src/utils/is-scroll-near-end.js";
 
 describe("isScrollNearEnd", () => {
   test("false when content does not overflow", () => {

@@ -81,8 +81,8 @@
   import { getContext } from "svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
-  import { graphemeCount } from "../utils/graphemeCount.js";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { graphemeCount } from "../utils/grapheme-count.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const formContext = getContext("carbon:Form");
 

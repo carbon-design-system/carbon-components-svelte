@@ -46,7 +46,7 @@
   import {
     acquireBodyScrollLock,
     releaseBodyScrollLock,
-  } from "../utils/bodyScrollLock.js";
+  } from "../utils/body-scroll-lock.js";
   import { dismiss } from "../utils/dismiss.js";
   import {
     hamburgerMenuRef,

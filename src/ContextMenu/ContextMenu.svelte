@@ -58,8 +58,8 @@
   } from "svelte";
   import { writable } from "svelte/store";
   import { dismiss } from "../utils/dismiss.js";
-  import { isOutsideClick } from "../utils/isOutsideClick.js";
-  import { rovingFocus } from "../utils/rovingFocus.js";
+  import { isOutsideClick } from "../utils/is-outside-click.js";
+  import { rovingFocus } from "../utils/roving-focus.js";
 
   const dispatch = createEventDispatcher();
   /**

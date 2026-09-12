@@ -45,10 +45,10 @@
 
   import { afterUpdate, createEventDispatcher, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
-  import { batchStoreUpdates } from "../utils/batchStoreUpdates.js";
-  import { clampIndex } from "../utils/clampIndex.js";
-  import { rovingFocus } from "../utils/rovingFocus.js";
-  import { syncDomOrder } from "../utils/syncDomOrder.js";
+  import { batchStoreUpdates } from "../utils/batch-store-updates.js";
+  import { clampIndex } from "../utils/clamp-index.js";
+  import { rovingFocus } from "../utils/roving-focus.js";
+  import { syncDomOrder } from "../utils/sync-dom-order.js";
 
   const dispatch = createEventDispatcher();
   /**

@@ -1,7 +1,7 @@
 import {
   acquireBodyScrollLock,
   releaseBodyScrollLock,
-} from "../../src/utils/bodyScrollLock.js";
+} from "../../src/utils/body-scroll-lock.js";
 
 const CLASS = "bx--body--with-modal-open";
 

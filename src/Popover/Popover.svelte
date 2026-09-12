@@ -39,7 +39,7 @@
 
   import { createEventDispatcher } from "svelte";
   import { dismiss } from "../utils/dismiss.js";
-  import { isOutsideClick } from "../utils/isOutsideClick.js";
+  import { isOutsideClick } from "../utils/is-outside-click.js";
 
   const dispatch = createEventDispatcher();
 

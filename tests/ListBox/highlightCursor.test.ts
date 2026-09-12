@@ -1,4 +1,4 @@
-import { createHighlightCursor } from "../../src/ListBox/highlightCursor.js";
+import { createHighlightCursor } from "../../src/ListBox/highlight-cursor.js";
 
 const HIGHLIGHT = "bx--list-box__menu-item--highlighted";
 

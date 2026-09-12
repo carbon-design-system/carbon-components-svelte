@@ -179,8 +179,8 @@
     parse,
     parseLocaleValue,
     roundToStep,
-  } from "../utils/numericFormat.js";
-  import { uniqueId } from "../utils/uniqueId.js";
+  } from "../utils/numeric-format.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const defaultTranslations = {
     [translationIds.increment]: "Increment number",

@@ -25,7 +25,7 @@
   import {
     fuzzyMatch,
     highlightSegments,
-  } from "carbon-components-svelte/src/utils/fuzzyMatch.js";
+  } from "carbon-components-svelte/src/utils/fuzzy-match.js";
   import Code from "carbon-icons-svelte/lib/Code.svelte";
   import Document from "carbon-icons-svelte/lib/Document.svelte";
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";

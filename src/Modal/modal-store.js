@@ -3,7 +3,7 @@ import { get, writable } from "svelte/store";
 import {
   acquireBodyScrollLock,
   releaseBodyScrollLock,
-} from "../utils/bodyScrollLock.js";
+} from "../utils/body-scroll-lock.js";
 
 /** A set of stores indicating whether a modal is open. */
 const stores = new Set();

@@ -3,7 +3,7 @@
   export let stepTitle = "";
 
   import { getContext, onMount } from "svelte";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const id = uniqueId();
   const ctx = getContext("carbon:InterstitialScreen");

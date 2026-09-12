@@ -1,7 +1,7 @@
 import {
   resolveCheckboxState,
   toggleCheckboxNode,
-} from "../../src/utils/treeCheckboxState.js";
+} from "../../src/utils/tree-checkbox-state.js";
 
 type Node = {
   id: string;

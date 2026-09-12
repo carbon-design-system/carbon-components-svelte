@@ -2,7 +2,7 @@ import {
   filterTreeById,
   filterTreeByText,
   filterTreeNodes,
-} from "carbon-components-svelte/utils/filterTreeNodes";
+} from "carbon-components-svelte/utils/filter-tree-nodes";
 
 describe("filterTreeNodes", () => {
   const sampleTree = [

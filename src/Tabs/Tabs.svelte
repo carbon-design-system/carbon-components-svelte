@@ -78,11 +78,11 @@
   import { derived, get, writable } from "svelte/store";
   import ChevronLeft from "../icons/ChevronLeft.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
-  import { batchStoreUpdates } from "../utils/batchStoreUpdates.js";
-  import { clampIndex } from "../utils/clampIndex.js";
-  import { keyBy } from "../utils/keyBy.js";
-  import { rovingFocus } from "../utils/rovingFocus.js";
-  import { syncDomOrder } from "../utils/syncDomOrder.js";
+  import { batchStoreUpdates } from "../utils/batch-store-updates.js";
+  import { clampIndex } from "../utils/clamp-index.js";
+  import { keyBy } from "../utils/key-by.js";
+  import { rovingFocus } from "../utils/roving-focus.js";
+  import { syncDomOrder } from "../utils/sync-dom-order.js";
 
   const dispatch = createEventDispatcher();
 

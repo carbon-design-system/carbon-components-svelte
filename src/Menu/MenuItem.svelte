@@ -80,8 +80,8 @@
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import CaretRight from "../icons/CaretRight.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
-  import { createSubmenuHoverIntent } from "../utils/submenuHoverIntent.js";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { createSubmenuHoverIntent } from "../utils/submenu-hover-intent.js";
+  import { uniqueId } from "../utils/unique-id.js";
   import Menu from "./Menu.svelte";
 
   // "moderate-01" duration (ms) from Carbon motion recommended for small

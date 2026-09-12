@@ -52,11 +52,11 @@
 
   import { getContext, onMount } from "svelte";
   import { readable } from "svelte/store";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { uniqueId } from "../utils/unique-id.js";
   import {
     registerRadioButton,
     updateGroupSelection,
-  } from "./RadioButtonRegistry.js";
+  } from "./radio-button-registry.js";
 
   const ctx = getContext("carbon:RadioButtonGroup");
 

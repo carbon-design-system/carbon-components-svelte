@@ -85,7 +85,7 @@ export type CreateMenuWindowOptions<
  * outlives them, scroll placement, and the menu's maximum height.
  *
  * Builds on the offset arithmetic in `src/utils/virtualize.js` and the DOM
- * height observation in `src/utils/heightMeasurer.js`.
+ * height observation in `src/utils/height-measurer.js`.
  */
 export declare function createMenuWindow<
   Item extends Record<string, unknown> = Record<string, unknown>,

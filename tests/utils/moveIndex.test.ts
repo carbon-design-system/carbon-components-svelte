@@ -1,4 +1,4 @@
-import { moveIndex, nextEnabledIndex } from "../../src/utils/moveIndex.js";
+import { moveIndex, nextEnabledIndex } from "../../src/utils/move-index.js";
 
 describe("moveIndex", () => {
   test("moves forward and backward within range", () => {

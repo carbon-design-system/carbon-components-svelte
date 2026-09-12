@@ -27,9 +27,9 @@
 
   import { createEventDispatcher, setContext } from "svelte";
   import { derived, writable } from "svelte/store";
-  import { batchStoreUpdates } from "../utils/batchStoreUpdates.js";
-  import { clampIndex } from "../utils/clampIndex.js";
-  import { keyBy } from "../utils/keyBy.js";
+  import { batchStoreUpdates } from "../utils/batch-store-updates.js";
+  import { clampIndex } from "../utils/clamp-index.js";
+  import { keyBy } from "../utils/key-by.js";
 
   const dispatch = createEventDispatcher();
   /**

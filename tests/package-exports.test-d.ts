@@ -5,7 +5,7 @@ import type {
   breakpoints,
   fuzzyMatch,
 } from "carbon-components-svelte";
-import type breakpointObserverDefault from "carbon-components-svelte/src/Breakpoint/breakpointObserver.js";
+import type breakpointObserverDefault from "carbon-components-svelte/src/Breakpoint/breakpoint-observer.js";
 import type { BreakpointSize } from "carbon-components-svelte/src/Breakpoint/breakpoints.js";
 import type Button from "carbon-components-svelte/src/Button/Button.svelte";
 import type DataTable from "carbon-components-svelte/src/DataTable/DataTable.svelte";

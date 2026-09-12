@@ -1,9 +1,9 @@
 <script>
   import { getContext, onMount } from "svelte";
   import { noop } from "../utils/noop.js";
-  import { overflowTitle } from "../utils/overflowTitle.js";
-  import { scrollIntoViewWithinMenu } from "../utils/scrollIntoViewWithinMenu.js";
-  import { HIGHLIGHT_CURSOR_KEY } from "./highlightCursor.js";
+  import { overflowTitle } from "../utils/overflow-title.js";
+  import { scrollIntoViewWithinMenu } from "../utils/scroll-into-view-within-menu.js";
+  import { HIGHLIGHT_CURSOR_KEY } from "./highlight-cursor.js";
 
   /** Set to `true` to enable the active state */
   export let active = false;

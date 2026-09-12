@@ -1,4 +1,4 @@
-import { keyBy } from "../../src/utils/keyBy.js";
+import { keyBy } from "../../src/utils/key-by.js";
 
 describe("keyBy", () => {
   test("indexes items by their id by default", () => {

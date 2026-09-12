@@ -8,7 +8,7 @@ vi.mock("flatpickr", (importee) => ({
 describe("createCalendar", () => {
   it("resolves without throw when mode is not range (RangePlugin guard)", async () => {
     const { createCalendar } = await import(
-      "../../src/DatePicker/createCalendar.js"
+      "../../src/DatePicker/create-calendar.js"
     );
     const base = document.createElement("div");
     const input = document.createElement("input");
@@ -26,7 +26,7 @@ describe("createCalendar", () => {
 
   it("loads the monthSelect plugin when mode is month", async () => {
     const { createCalendar } = await import(
-      "../../src/DatePicker/createCalendar.js"
+      "../../src/DatePicker/create-calendar.js"
     );
     const base = document.createElement("div");
     const input = document.createElement("input");
@@ -47,7 +47,7 @@ describe("createCalendar", () => {
 
   it("loads the yearSelect plugin when mode is year", async () => {
     const { createCalendar } = await import(
-      "../../src/DatePicker/createCalendar.js"
+      "../../src/DatePicker/create-calendar.js"
     );
     const base = document.createElement("div");
     const input = document.createElement("input");
@@ -68,7 +68,7 @@ describe("createCalendar", () => {
 
   it("does not load a plugin when mode is single", async () => {
     const { createCalendar } = await import(
-      "../../src/DatePicker/createCalendar.js"
+      "../../src/DatePicker/create-calendar.js"
     );
     const base = document.createElement("div");
     const input = document.createElement("input");
@@ -88,7 +88,7 @@ describe("createCalendar", () => {
 
   it("defaults ariaDateFormat to include the weekday", async () => {
     const { createCalendar } = await import(
-      "../../src/DatePicker/createCalendar.js"
+      "../../src/DatePicker/create-calendar.js"
     );
     const base = document.createElement("div");
     const input = document.createElement("input");

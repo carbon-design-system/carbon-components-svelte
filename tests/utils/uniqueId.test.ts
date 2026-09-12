@@ -1,4 +1,4 @@
-import { uniqueId } from "../../src/utils/uniqueId.js";
+import { uniqueId } from "../../src/utils/unique-id.js";
 
 describe("uniqueId", () => {
   test("defaults to a 'ccs-' prefix", () => {

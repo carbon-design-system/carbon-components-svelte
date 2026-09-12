@@ -68,7 +68,7 @@
   import Calendar from "../icons/Calendar.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const REGEX_SPECIAL_CHARS = /[/\\^$*+?.()|[\]{}]/g;
 

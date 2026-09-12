@@ -32,7 +32,7 @@
 
   import { createEventDispatcher } from "svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
 

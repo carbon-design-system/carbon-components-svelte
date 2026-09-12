@@ -1,4 +1,4 @@
-import { isInSafeTriangle } from "../../src/utils/isInSafeTriangle.js";
+import { isInSafeTriangle } from "../../src/utils/is-in-safe-triangle.js";
 
 describe("isInSafeTriangle", () => {
   test("true for a point crossing diagonally toward a floating element on the right", () => {

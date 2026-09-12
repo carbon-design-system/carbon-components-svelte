@@ -1,5 +1,5 @@
 // @ts-check
-import { BoundedFifoCache } from "../utils/boundedFifoCache.js";
+import { BoundedFifoCache } from "../utils/bounded-fifo-cache.js";
 
 /**
  * Deep equality check for values (nested objects and arrays).

@@ -583,12 +583,12 @@
   import {
     resolveCheckboxState,
     toggleCheckboxNode,
-  } from "../utils/treeCheckboxState.js";
+  } from "../utils/tree-checkbox-state.js";
   import {
     createTreeVirtualIndex,
     isExpandableNode,
-  } from "../utils/treeVirtualIndex.js";
-  import { uniqueId } from "../utils/uniqueId.js";
+  } from "../utils/tree-virtual-index.js";
+  import { uniqueId } from "../utils/unique-id.js";
   import {
     getVisibleRange,
     scrollHighlightedIntoView,

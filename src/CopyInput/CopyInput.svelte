@@ -1,5 +1,5 @@
 <script>
-  import { copyText } from "../utils/copyText.js";
+  import { copyText } from "../utils/copy-text.js";
 
   /**
    * @template [Icon=any]
@@ -134,7 +134,7 @@
 
   import { createEventDispatcher, getContext } from "svelte";
   import CopyButton from "../CopyButton/CopyButton.svelte";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
   const ctx = getContext("carbon:Form");

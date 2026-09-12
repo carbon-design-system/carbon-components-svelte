@@ -1,4 +1,4 @@
-import { resolveSliderMarks } from "../../src/utils/resolveSliderMarks.js";
+import { resolveSliderMarks } from "../../src/utils/resolve-slider-marks.js";
 
 describe("resolveSliderMarks", () => {
   test("returns empty array for falsy marks", () => {

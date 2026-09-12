@@ -33,7 +33,7 @@
   export let id = uniqueId();
 
   import { createEventDispatcher } from "svelte";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
 

@@ -12,14 +12,14 @@
  * no measurement and is applied synchronously.
  *
  * @param {HTMLElement} node Element that gets the `title` attribute.
- * @param {import("./overflowTitle.js").OverflowTitleParams} [params]
- * @returns {{ update: (params?: import("./overflowTitle.js").OverflowTitleParams) => void, destroy: () => void }}
+ * @param {import("./overflow-title.js").OverflowTitleParams} [params]
+ * @returns {{ update: (params?: import("./overflow-title.js").OverflowTitleParams) => void, destroy: () => void }}
  * @example
  * <div use:overflowTitle>{text}</div>
  * <label use:overflowTitle={{ title, measure: labelText }}>...</label>
  */
 export function overflowTitle(node, params = {}) {
-  /** @type {import("./overflowTitle.js").OverflowTitleParams} */
+  /** @type {import("./overflow-title.js").OverflowTitleParams} */
   let latest = params;
   let scheduled = false;
   let destroyed = false;

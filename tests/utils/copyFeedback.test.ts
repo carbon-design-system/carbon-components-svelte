@@ -1,4 +1,4 @@
-import { createCopyFeedbackState } from "../../src/utils/copyFeedback.js";
+import { createCopyFeedbackState } from "../../src/utils/copy-feedback.js";
 
 describe("createCopyFeedbackState", () => {
   beforeEach(() => {

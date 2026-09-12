@@ -126,8 +126,8 @@
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { dismiss } from "../utils/dismiss.js";
-  import { resolveSliderMarks } from "../utils/resolveSliderMarks.js";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { resolveSliderMarks } from "../utils/resolve-slider-marks.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   /** @typedef {{ value: number; valueUpper: number }} RangeSliderChangeDetail */
   /** @typedef {"lower" | "upper"} ActiveHandle */

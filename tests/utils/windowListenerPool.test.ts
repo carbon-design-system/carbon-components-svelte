@@ -1,4 +1,4 @@
-import { addPooledListener } from "../../src/utils/windowListenerPool.js";
+import { addPooledListener } from "../../src/utils/window-listener-pool.js";
 
 describe("addPooledListener", () => {
   test("registers immediately and shares one listener across consumers", () => {

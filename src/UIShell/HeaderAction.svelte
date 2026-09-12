@@ -79,8 +79,8 @@
   import Close from "../icons/Close.svelte";
   import Switcher from "../icons/Switcher.svelte";
   import { dismiss } from "../utils/dismiss.js";
-  import { isOutsideClick } from "../utils/isOutsideClick.js";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { isOutsideClick } from "../utils/is-outside-click.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
 

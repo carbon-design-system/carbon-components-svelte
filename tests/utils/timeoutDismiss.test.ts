@@ -1,4 +1,4 @@
-import { createTimeoutDismiss } from "../../src/utils/timeoutDismiss.js";
+import { createTimeoutDismiss } from "../../src/utils/timeout-dismiss.js";
 
 describe("createTimeoutDismiss", () => {
   beforeEach(() => {

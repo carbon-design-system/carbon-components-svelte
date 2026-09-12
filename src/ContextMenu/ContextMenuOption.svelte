@@ -85,9 +85,9 @@
   import { createEventDispatcher, getContext, onMount, tick } from "svelte";
   import CaretRight from "../icons/CaretRight.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
-  import { clampIndex } from "../utils/clampIndex.js";
-  import { createSubmenuHoverIntent } from "../utils/submenuHoverIntent.js";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { clampIndex } from "../utils/clamp-index.js";
+  import { createSubmenuHoverIntent } from "../utils/submenu-hover-intent.js";
+  import { uniqueId } from "../utils/unique-id.js";
   import ContextMenu from "./ContextMenu.svelte";
 
   const dispatch = createEventDispatcher();

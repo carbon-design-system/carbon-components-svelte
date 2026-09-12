@@ -56,8 +56,8 @@
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import { readable } from "svelte/store";
-  import { highlightSegments } from "../utils/fuzzyMatch.js";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { highlightSegments } from "../utils/fuzzy-match.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
   const menu = getContext("carbon:SearchMenu");

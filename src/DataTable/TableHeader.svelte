@@ -35,7 +35,7 @@
 
   import ArrowsVertical from "../icons/ArrowsVertical.svelte";
   import ArrowUp from "../icons/ArrowUp.svelte";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const defaultTranslations = {
     [translationIds.columnSortAscending]:
