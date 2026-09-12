@@ -979,14 +979,26 @@
     isInitialRender: () => !initialRenderComplete,
   });
 
-  /** @param {HTMLElement | null} root */
-  function resetNodeTabIndices(root) {
-    if (!root) return;
-    const items = root.querySelectorAll('[tabindex="0"]');
-    for (let i = 0; i < items.length; i++) {
-      const el = items[i];
-      if (el instanceof HTMLElement) el.tabIndex = -1;
+  /**
+   * Elements this component set to `tabindex="0"`. Every row renders
+   * `tabindex="-1"`, so these are the only tab stops in the tree and the
+   * roving reset can clear them directly instead of querying the whole tree
+   * on every arrow key.
+   * @type {Set<HTMLElement>}
+   */
+  const rovingTabStops = new Set();
+
+  function resetNodeTabIndices() {
+    for (const el of rovingTabStops) {
+      if (el.isConnected) el.tabIndex = -1;
     }
+    rovingTabStops.clear();
+  }
+
+  /** @param {HTMLElement} el */
+  function setRovingTabStop(el) {
+    el.tabIndex = 0;
+    rovingTabStops.add(el);
   }
 
   function getTreeItemFromTarget(target) {
@@ -1046,9 +1058,9 @@
       const candidate = items[(startIndex + offset) % items.length];
       const label = (candidate.textContent ?? "").trim().toLowerCase();
       if (label.startsWith(query)) {
-        resetNodeTabIndices(ref);
+        resetNodeTabIndices();
         if (candidate instanceof HTMLElement) {
-          candidate.tabIndex = 0;
+          setRovingTabStop(candidate);
           candidate.focus();
         }
         break;
@@ -1150,9 +1162,9 @@
     }
 
     if (nextFocusNode && nextFocusNode !== treeItem) {
-      resetNodeTabIndices(ref);
+      resetNodeTabIndices();
       if (nextFocusNode instanceof HTMLElement) {
-        nextFocusNode.tabIndex = 0;
+        setRovingTabStop(nextFocusNode);
         nextFocusNode.focus();
       }
     }
@@ -1171,7 +1183,7 @@
     );
 
     if (firstFocusableNode instanceof HTMLElement) {
-      firstFocusableNode.tabIndex = 0;
+      setRovingTabStop(firstFocusableNode);
     }
   });
 

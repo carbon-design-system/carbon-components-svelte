@@ -318,6 +318,28 @@ describe.each(testCases)("$name", ({ component }) => {
     expect(nextItem).toHaveFocus();
   });
 
+  it("moves the roving tab stop without querying the whole tree", async () => {
+    render(component);
+
+    const firstItem = treeItemById(0);
+    firstItem.focus();
+    const tree = screen.getByRole("tree");
+    const querySelectorAll = vi.spyOn(Element.prototype, "querySelectorAll");
+
+    await user.keyboard("{ArrowDown}");
+    await user.keyboard("{ArrowDown}");
+
+    const tabStopQueries = querySelectorAll.mock.calls.filter(([selector]) =>
+      String(selector).includes("tabindex"),
+    );
+    querySelectorAll.mockRestore();
+    expect(tabStopQueries).toHaveLength(0);
+    const focused = document.activeElement;
+    expect(focused).not.toBe(firstItem);
+    expect(tree.querySelectorAll('[tabindex="0"]')).toHaveLength(1);
+    expect(tree.querySelector('[tabindex="0"]')).toBe(focused);
+  });
+
   it("navigates with ArrowUp key", async () => {
     render(component);
 
