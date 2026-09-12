@@ -1634,7 +1634,7 @@
     }
 
     /** @param {number} from @param {1 | -1} dir */
-    const nextEnabled = (from, dir) => {
+    function nextEnabled(from, dir) {
       let i = from;
       while (i >= 0 && i < virtualIndex.totalCount) {
         const row = virtualIndex.getRowAt(i);
@@ -1642,7 +1642,7 @@
         i += dir;
       }
       return -1;
-    };
+    }
 
     const isHomeOrEnd = e.key === "Home" || e.key === "End";
     const isSelectAll =

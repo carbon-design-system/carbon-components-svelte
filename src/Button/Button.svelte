@@ -129,9 +129,9 @@
   import { get } from "svelte/store";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
+  import { noop } from "../utils/noop.js";
   import ButtonSkeleton from "./ButtonSkeleton.svelte";
   import { activeButtonTooltip } from "./button-tooltip-store.js";
-  import { noop } from "../utils/noop.js";
 
   const ctx = getContext("carbon:ComposedModal");
   const insideModal = getContext("carbon:Modal");
