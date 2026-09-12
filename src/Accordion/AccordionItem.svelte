@@ -69,9 +69,9 @@
   }
 
   let animation = undefined;
-  let hasOpened = open;
+  let openedOnce = open;
 
-  $: if (open) hasOpened = true;
+  $: if (open) openedOnce = true;
 
   onMount(() => {
     return () => {
@@ -118,7 +118,7 @@
     </div>
   </button>
   <div id={contentId} class:bx--accordion__content={true}>
-    {#if !lazy || hasOpened}
+    {#if !lazy || openedOnce}
       <slot />
     {/if}
   </div>
