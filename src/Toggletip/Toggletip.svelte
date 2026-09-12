@@ -68,6 +68,7 @@
   import { observeModalClose } from "../Portal/portal-utils.js";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/isOutsideClick.js";
+  import { noop } from "../utils/noop.js";
   import { uniqueId } from "../utils/uniqueId.js";
 
   const dispatch = createEventDispatcher();
@@ -109,7 +110,7 @@
   let toggletipRef = null;
   let portalRef = null;
   let prevOpen = undefined;
-  let disconnectModalObserver = () => {};
+  let disconnectModalObserver = noop;
 
   $: effectivePortalTooltip =
     portalTooltip === undefined ? !!insideModal : portalTooltip;

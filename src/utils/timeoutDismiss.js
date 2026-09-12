@@ -1,5 +1,7 @@
 // @ts-check
 
+import { noop } from "./noop.js";
+
 /**
  * Auto-close timer for notifications with a `timeout` prop.
  * `sync()` clears any pending timer and calls `setTimeout` when `open` and `timeout` > 0.
@@ -18,7 +20,7 @@ export function createTimeoutDismiss() {
   /** @type {ReturnType<typeof setTimeout> | undefined} */
   let timeoutId;
   /** @type {() => void} */
-  let onTimeout = () => {};
+  let onTimeout = noop;
   let remaining = 0;
   let startedAt = 0;
   let active = false;

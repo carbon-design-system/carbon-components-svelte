@@ -88,6 +88,7 @@
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
   import { createCopyFeedbackState } from "../utils/copyFeedback.js";
+  import { noop } from "../utils/noop.js";
 
   const dispatch = createEventDispatcher();
 
@@ -202,7 +203,7 @@
     dismissTooltip();
   }
 
-  let disconnectModalObserver = () => {};
+  let disconnectModalObserver = noop;
 
   $: {
     disconnectModalObserver();
