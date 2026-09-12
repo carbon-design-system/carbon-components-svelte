@@ -462,12 +462,13 @@
   // Carbon's own `layout.use($min, $max)` clamping. An unrecognized value is
   // ignored (no class), same as leaving `size` unset.
   $: maxSizeIndex = type === "container" ? 3 : 2;
-  $: resolvedSize = (() => {
+  function resolveSize(size, maxSizeIndex) {
     if (!size) return undefined;
     const index = SIZE_SCALE.indexOf(size);
     if (index === -1) return undefined;
     return SIZE_SCALE[Math.min(index, maxSizeIndex)];
-  })();
+  }
+  $: resolvedSize = resolveSize(size, maxSizeIndex);
 </script>
 
 <div

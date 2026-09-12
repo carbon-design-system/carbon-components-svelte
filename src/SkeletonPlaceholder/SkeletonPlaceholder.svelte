@@ -20,7 +20,9 @@
    */
   export let height = undefined;
 
-  $: toStyle = (value) => (typeof value === "number" ? `${value}px` : value);
+  function toStyle(value) {
+    return typeof value === "number" ? `${value}px` : value;
+  }
 
   $: resolvedWidth =
     width == null ? (size == null ? undefined : toStyle(size)) : toStyle(width);

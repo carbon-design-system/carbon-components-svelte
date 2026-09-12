@@ -40,7 +40,7 @@
   /** Set to `true` to indicate an invalid state */
   export let invalid = false;
 
-  $: resolvedIconLabel = (() => {
+  function resolveIconLabel(file, fileName, status, invalid, iconDescription) {
     /** @type {FilenameIconDescriptionContext} */
     const ctx = { file, fileName, status, invalid };
     const raw =
@@ -51,7 +51,14 @@
       return `${raw}`.trim();
     }
     return null;
-  })();
+  }
+  $: resolvedIconLabel = resolveIconLabel(
+    file,
+    fileName,
+    status,
+    invalid,
+    iconDescription,
+  );
 
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import Close from "../icons/Close.svelte";

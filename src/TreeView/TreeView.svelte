@@ -1364,7 +1364,7 @@
     }
   }
 
-  $: virtualData = (() => {
+  function resolveVirtualData(virtualConfig, virtualIndex, scrollTop) {
     if (!virtualConfig || !virtualIndex) return null;
     const itemHeight = virtualConfig.itemHeight;
     const containerHeight = getVirtualContainerHeight();
@@ -1385,7 +1385,8 @@
       offsetY: startIndex * itemHeight,
       totalHeight,
     };
-  })();
+  }
+  $: virtualData = resolveVirtualData(virtualConfig, virtualIndex, scrollTop);
 
   /** Observe the scroll container so percentage / relative heights
    * (`containerHeight: "80%"`) translate into a usable pixel value for
@@ -1415,7 +1416,12 @@
 
   /** Tabindex anchor: prefer the focused row when it is currently mounted
    * and enabled; otherwise the first enabled row in the window. */
-  $: virtualTabAnchorId = (() => {
+  function resolveVirtualTabAnchorId(
+    virtualConfig,
+    virtualIndex,
+    virtualData,
+    virtualFocusedId,
+  ) {
     if (!virtualConfig || !virtualIndex || !virtualData) return undefined;
     const visible = virtualData.visibleItems;
     if (
@@ -1433,7 +1439,13 @@
       if (!row.node.disabled) return row.node.id;
     }
     return undefined;
-  })();
+  }
+  $: virtualTabAnchorId = resolveVirtualTabAnchorId(
+    virtualConfig,
+    virtualIndex,
+    virtualData,
+    virtualFocusedId,
+  );
 
   /**
    * Set both the DOM scrollTop and the reactive mirror so the windowed
