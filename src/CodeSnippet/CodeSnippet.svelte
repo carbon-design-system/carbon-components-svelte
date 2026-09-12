@@ -1,5 +1,5 @@
 <script>
-  import { copyText } from "../utils/copyText.js";
+  import { copyText } from "../utils/copy-text.js";
 
   /**
    * @template [Icon=any]
@@ -206,12 +206,12 @@
   import Button from "../Button/Button.svelte";
   import CopyButton from "../CopyButton/CopyButton.svelte";
   import ChevronDown from "../icons/ChevronDown.svelte";
-  import { iconTooltipPortalGaps } from "../Portal/iconTooltipPortalGaps.js";
+  import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
-  import { createCopyFeedbackState } from "../utils/copyFeedback.js";
+  import { createCopyFeedbackState } from "../utils/copy-feedback.js";
   import { noop } from "../utils/noop.js";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { uniqueId } from "../utils/unique-id.js";
   import CodeSnippetSkeleton from "./CodeSnippetSkeleton.svelte";
 
   const dispatch = createEventDispatcher();

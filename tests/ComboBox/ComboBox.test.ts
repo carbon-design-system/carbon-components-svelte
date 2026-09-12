@@ -2,7 +2,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
 import type ComboBoxComponent from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import type { ComboBoxItem } from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import ComboBoxReal from "carbon-components-svelte/ComboBox/ComboBox.svelte";
-import { fuzzyMatch } from "carbon-components-svelte/utils/fuzzyMatch";
+import { fuzzyMatch } from "carbon-components-svelte/utils/fuzzy-match";
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";

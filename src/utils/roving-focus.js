@@ -1,7 +1,7 @@
 // @ts-check
 
-import { clampIndex } from "./clampIndex.js";
-import { moveIndex, nextEnabledIndex } from "./moveIndex.js";
+import { clampIndex } from "./clamp-index.js";
+import { moveIndex, nextEnabledIndex } from "./move-index.js";
 
 /**
  * @typedef {"horizontal" | "vertical" | "both"} RovingFocusOrientation

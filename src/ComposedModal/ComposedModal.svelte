@@ -44,11 +44,11 @@
 
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
-  import { trackModal } from "../Modal/modalStore";
+  import { trackModal } from "../Modal/modal-store";
   import { initialFocus, restoreFocus } from "../utils/focus.js";
-  import { createOutsideDismiss } from "../utils/outsideDismiss.js";
-  import { trapFocus } from "../utils/trapFocus.js";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { createOutsideDismiss } from "../utils/outside-dismiss.js";
+  import { trapFocus } from "../utils/trap-focus.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
   const label = writable(undefined);

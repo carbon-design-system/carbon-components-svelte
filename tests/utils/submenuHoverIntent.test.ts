@@ -1,4 +1,4 @@
-import { createSubmenuHoverIntent } from "../../src/utils/submenuHoverIntent.js";
+import { createSubmenuHoverIntent } from "../../src/utils/submenu-hover-intent.js";
 
 describe("createSubmenuHoverIntent", () => {
   beforeEach(() => {

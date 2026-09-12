@@ -1,7 +1,7 @@
 import {
   createHeightMeasurer,
   VIRTUAL_INDEX_ATTRIBUTE,
-} from "../../src/utils/heightMeasurer.js";
+} from "../../src/utils/height-measurer.js";
 
 /** A rendered window: one element per item index, inside a scroll container. */
 function buildWindow(indices: number[]) {

@@ -73,9 +73,9 @@
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
   import Stack from "../Stack/Stack.svelte";
-  import { batchStoreUpdates } from "../utils/batchStoreUpdates.js";
-  import { rafThrottle } from "../utils/rafThrottle.js";
-  import { getVisibleTagCount } from "../utils/tagOverflow.js";
+  import { batchStoreUpdates } from "../utils/batch-store-updates.js";
+  import { rafThrottle } from "../utils/raf-throttle.js";
+  import { getVisibleTagCount } from "../utils/tag-overflow.js";
   import TagSetOverflow from "./TagSetOverflow.svelte";
 
   const dispatch = createEventDispatcher();

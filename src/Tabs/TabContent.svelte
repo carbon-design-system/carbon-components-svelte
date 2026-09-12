@@ -16,7 +16,7 @@
   export let unmountOnHide = false;
 
   import { getContext, onMount } from "svelte";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const { selectedContent, addContent, removeContent, tabs, contentById } =
     getContext("carbon:Tabs");

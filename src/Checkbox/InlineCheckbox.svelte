@@ -1,5 +1,5 @@
 <script>
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   /** Specify whether the checkbox is checked */
   export let checked = false;

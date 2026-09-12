@@ -36,7 +36,7 @@
   import { getContext, onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const formContext = getContext("carbon:Form");
   const timePickerContext = getContext("carbon:TimePicker");

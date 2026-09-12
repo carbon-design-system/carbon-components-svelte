@@ -203,7 +203,7 @@ Import `getAvatarBackgroundColor` to compute the same color outside a `UserAvata
 
 ```html
 <script context="module">
-  import { getAvatarBackgroundColor } from "carbon-components-svelte/src/utils/avatarColor.js";
+  import { getAvatarBackgroundColor } from "carbon-components-svelte/src/utils/avatar-color.js";
 
   getAvatarBackgroundColor("Richard Hendricks"); // "teal"
 </script>

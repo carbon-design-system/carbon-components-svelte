@@ -2,7 +2,7 @@ import { render } from "@testing-library/svelte";
 import TreeView from "carbon-components-svelte/TreeView/TreeView.svelte";
 import { task } from "ostia";
 import { tick } from "svelte";
-import { filterTreeNodes } from "../src/utils/filterTreeNodes.js";
+import { filterTreeNodes } from "../src/utils/filter-tree-nodes.js";
 
 type TreeNode = { id: number; text: string; nodes?: TreeNode[] };
 

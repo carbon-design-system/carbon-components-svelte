@@ -272,12 +272,12 @@
   import ListBoxMenuItem from "../ListBox/ListBoxMenuItem.svelte";
   import ListBoxSelection from "../ListBox/ListBoxSelection.svelte";
   import { shouldVirtualizeMenu } from "../ListBox/list-box-utils.js";
-  import { createMenuWindow } from "../ListBox/menuWindow.js";
+  import { createMenuWindow } from "../ListBox/menu-window.js";
   import { dismiss } from "../utils/dismiss.js";
-  import { isOutsideClick } from "../utils/isOutsideClick.js";
-  import { createScrollEndTracker } from "../utils/isScrollNearEnd.js";
-  import { moveIndex } from "../utils/moveIndex.js";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { isOutsideClick } from "../utils/is-outside-click.js";
+  import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
+  import { moveIndex } from "../utils/move-index.js";
+  import { uniqueId } from "../utils/unique-id.js";
   import { resetVirtualScrollOnClose } from "../utils/virtualize.js";
 
   const dispatch = createEventDispatcher();
@@ -302,7 +302,7 @@
   /** @type {null | HTMLDivElement} */
   let fieldRef = null;
 
-  /** @type {import("../ListBox/menuWindow.js").MenuWindowState} */
+  /** @type {import("../ListBox/menu-window.js").MenuWindowState} */
   let menuState;
 
   const menuWindow = createMenuWindow({

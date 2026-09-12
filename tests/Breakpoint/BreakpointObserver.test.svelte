@@ -1,5 +1,5 @@
 <script lang="ts">
-  import breakpointObserver from "carbon-components-svelte/Breakpoint/breakpointObserver";
+  import breakpointObserver from "carbon-components-svelte/Breakpoint/breakpoint-observer";
 
   export let smallerThanMd = false;
   export let largerThanMd = false;

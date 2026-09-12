@@ -80,8 +80,8 @@
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";
-  import { filterIncomingFiles } from "../utils/filterIncomingFiles.js";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { filterIncomingFiles } from "../utils/filter-incoming-files.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
 

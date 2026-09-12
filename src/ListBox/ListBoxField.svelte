@@ -24,7 +24,7 @@
   export let ref = null;
 
   import { getContext } from "svelte";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const ctx = getContext("carbon:MultiSelect");
 

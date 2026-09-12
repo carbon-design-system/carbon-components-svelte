@@ -78,7 +78,7 @@
   import { get } from "svelte/store";
   import Close from "../icons/Close.svelte";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const {
     selectedTab,

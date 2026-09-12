@@ -1,4 +1,4 @@
-import { scrollIntoViewWithinMenu } from "../../src/utils/scrollIntoViewWithinMenu.js";
+import { scrollIntoViewWithinMenu } from "../../src/utils/scroll-into-view-within-menu.js";
 
 /**
  * Build a container with a single item, stubbing the layout jsdom does not

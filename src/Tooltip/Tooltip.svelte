@@ -112,8 +112,8 @@
   import { writable } from "svelte/store";
   import Information from "../icons/Information.svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
-  import { createDelayedSetter } from "../utils/delayedSetter.js";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { createDelayedSetter } from "../utils/delayed-setter.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const insideModal = getContext("carbon:Modal");
 

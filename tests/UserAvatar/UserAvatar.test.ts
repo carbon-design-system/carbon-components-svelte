@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
 import type UserAvatarComponent from "carbon-components-svelte/UserAvatar/UserAvatar.svelte";
 import type { ComponentProps } from "svelte";
-import { getAvatarBackgroundColor } from "../../src/utils/avatarColor.js";
+import { getAvatarBackgroundColor } from "../../src/utils/avatar-color.js";
 import { user } from "../utils/user";
 import UserAvatar from "./UserAvatar.test.svelte";
 import UserAvatarImageError from "./UserAvatarImageError.test.svelte";

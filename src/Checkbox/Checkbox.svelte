@@ -102,8 +102,8 @@
   import { readable } from "svelte/store";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
-  import { overflowTitle } from "../utils/overflowTitle.js";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { overflowTitle } from "../utils/overflow-title.js";
+  import { uniqueId } from "../utils/unique-id.js";
   import CheckboxSkeleton from "./CheckboxSkeleton.svelte";
 
   const dispatch = createEventDispatcher();

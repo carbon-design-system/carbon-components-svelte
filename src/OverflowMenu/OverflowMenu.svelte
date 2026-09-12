@@ -101,12 +101,12 @@
   import OverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
   import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
-  import { batchStoreUpdates } from "../utils/batchStoreUpdates.js";
+  import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { dismiss } from "../utils/dismiss.js";
-  import { isOutsideClick } from "../utils/isOutsideClick.js";
-  import { keyBy } from "../utils/keyBy.js";
-  import { rovingFocus } from "../utils/rovingFocus.js";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { isOutsideClick } from "../utils/is-outside-click.js";
+  import { keyBy } from "../utils/key-by.js";
+  import { rovingFocus } from "../utils/roving-focus.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const ctxBreadcrumbItem = getContext("carbon:BreadcrumbItem");
   const insideModal = getContext("carbon:Modal");
