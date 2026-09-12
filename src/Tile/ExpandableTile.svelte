@@ -70,10 +70,30 @@
   let measuredMaxHeight = 0;
   let measuredPadding = 0;
 
+  /**
+   * Read the tile's vertical padding. `getComputedStyle` forces a style
+   * recalc, so this runs when the tile mounts or resizes rather than in
+   * `afterUpdate`, which fired on every re-render (hover, slot content).
+   */
+  function measurePadding() {
+    if (!ref) return;
+    const style = getComputedStyle(ref);
+    measuredPadding =
+      (Number.parseInt(style.getPropertyValue("padding-top"), 10) || 0) +
+      (Number.parseInt(style.getPropertyValue("padding-bottom"), 10) || 0);
+  }
+
   onMount(() => {
-    resizeObserver = new ResizeObserver(([elem]) => {
-      measuredMaxHeight = elem.contentRect.height;
+    resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.target === refAbove) {
+          measuredMaxHeight = entry.contentRect.height;
+        } else if (entry.target === ref) {
+          measurePadding();
+        }
+      }
     });
+    measurePadding();
 
     return () => {
       resizeObserver.disconnect();
@@ -83,20 +103,13 @@
   $: if (resizeObserver) {
     resizeObserver.disconnect();
     if (refAbove) resizeObserver.observe(refAbove);
+    if (ref) resizeObserver.observe(ref);
   }
 
   afterUpdate(() => {
-    if (!ref) return;
-
     if (measuredMaxHeight === 0 && refAbove) {
       measuredMaxHeight = refAbove.getBoundingClientRect().height;
     }
-
-    const style = getComputedStyle(ref);
-
-    measuredPadding =
-      (Number.parseInt(style.getPropertyValue("padding-top"), 10) || 0) +
-      (Number.parseInt(style.getPropertyValue("padding-bottom"), 10) || 0);
   });
 </script>
 
