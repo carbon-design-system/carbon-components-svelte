@@ -42,5 +42,3 @@ export function hideAtBreakpoint(node, options = {}) {
     destroy: cleanup,
   };
 }
-
-export default hideAtBreakpoint;

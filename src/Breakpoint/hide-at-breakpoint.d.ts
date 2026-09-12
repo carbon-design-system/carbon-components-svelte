@@ -20,5 +20,3 @@ export function hideAtBreakpoint(
   update: (options?: HideAtBreakpointOptions) => void;
   destroy: () => void;
 };
-
-export default hideAtBreakpoint;

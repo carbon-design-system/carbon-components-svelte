@@ -18,5 +18,3 @@ export function keyBy(items, getKey) {
   }
   return result;
 }
-
-export default keyBy;

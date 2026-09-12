@@ -5,7 +5,6 @@ import type {
   breakpoints,
   fuzzyMatch,
 } from "carbon-components-svelte";
-import type breakpointObserverDefault from "carbon-components-svelte/src/Breakpoint/breakpoint-observer.js";
 import type { BreakpointSize } from "carbon-components-svelte/src/Breakpoint/breakpoints.js";
 import type Button from "carbon-components-svelte/src/Button/Button.svelte";
 import type DataTable from "carbon-components-svelte/src/DataTable/DataTable.svelte";
@@ -27,7 +26,6 @@ import "carbon-components-svelte/css/white.css";
 type _BarrelButton = BarrelButton;
 type _BarrelDataTable = BarrelDataTable;
 type _BreakpointObserver = ReturnType<typeof breakpointObserver>;
-type _BreakpointObserverDefault = typeof breakpointObserverDefault;
 type _BreakpointSize = BreakpointSize;
 type _Breakpoints = typeof breakpoints;
 type _Button = Button;
