@@ -21,6 +21,16 @@ export function trapFocus({ container, event }) {
   const tabbable = /** @type {HTMLElement[]} */ (
     Array.from(container.querySelectorAll(selectorTabbable))
   ).filter((el) => {
+    // One call answers display/visibility for the element and its ancestors
+    // without materialising a computed-style object per candidate.
+    if (typeof el.checkVisibility === "function") {
+      return el.checkVisibility({
+        visibilityProperty: true,
+        // Older name of the same option (Chrome 105 to 120).
+        checkVisibilityCSS: true,
+      });
+    }
+
     // Cheap geometry check first, so the (layout/style-recalc-forcing)
     // `getComputedStyle` call below is only reached for elements not
     // already excluded by it. `offsetParent` is `null` both when the

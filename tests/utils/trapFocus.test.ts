@@ -177,4 +177,32 @@ describe("trapFocus", () => {
     // Only one tabbable candidate (`visible`), so Tab wraps back to itself.
     expect(document.activeElement).toBe(visible);
   });
+
+  test("uses checkVisibility when available instead of computed styles", () => {
+    const { container, buttons } = setup(3);
+    const getComputedStyle = vi.spyOn(window, "getComputedStyle");
+    for (const [index, button] of buttons.entries()) {
+      Object.defineProperty(button, "checkVisibility", {
+        configurable: true,
+        value: vi.fn(() => index !== 1),
+      });
+    }
+    buttons[0].focus();
+    const { event } = tabEvent();
+
+    trapFocus({ container, event });
+
+    // buttons[1] reports itself hidden, so Tab skips to buttons[2].
+    expect(document.activeElement).toBe(buttons[2]);
+    expect(getComputedStyle).not.toHaveBeenCalled();
+    for (const button of buttons) {
+      expect(
+        (button as unknown as { checkVisibility: ReturnType<typeof vi.fn> })
+          .checkVisibility,
+      ).toHaveBeenCalledWith(
+        expect.objectContaining({ visibilityProperty: true }),
+      );
+    }
+    getComputedStyle.mockRestore();
+  });
 });
