@@ -25,4 +25,12 @@ describe("DataTableSkeleton", () => {
 
     expect(screen.getByRole("table")).toHaveClass("bx--data-table--tall");
   });
+
+  it("wraps the table in a scrollable container", () => {
+    render(DataTableSkeleton);
+
+    expect(screen.getByRole("table").parentElement).toHaveClass(
+      "bx--data-table-content",
+    );
+  });
 });

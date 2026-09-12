@@ -62,40 +62,42 @@
       </div>
     </section>
   {/if}
-  <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-  <table
-    class:bx--skeleton={true}
-    class:bx--data-table={true}
-    class:bx--data-table--compact={size === "compact"}
-    class:bx--data-table--short={size === "short"}
-    class:bx--data-table--md={size === "medium"}
-    class:bx--data-table--tall={size === "tall"}
-    class:bx--data-table--zebra={zebra}
-    on:click
-    on:mouseover
-    on:mouseenter
-    on:mouseleave
-  >
-    <thead>
-      <tr>
-        {#each cols as col (col)}
-          {#if typeof values[col] === "object" && values[col].empty === true}
-            <th></th>
-          {:else}
-            <th>{values[col] || ""}</th>
-          {/if}
-        {/each}
-      </tr>
-    </thead>
-    <tbody>
-      {#each Array.from({ length: rows }, (_, i) => i) as row (row)}
+  <div class:bx--data-table-content={true}>
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+    <table
+      class:bx--skeleton={true}
+      class:bx--data-table={true}
+      class:bx--data-table--compact={size === "compact"}
+      class:bx--data-table--short={size === "short"}
+      class:bx--data-table--md={size === "medium"}
+      class:bx--data-table--tall={size === "tall"}
+      class:bx--data-table--zebra={zebra}
+      on:click
+      on:mouseover
+      on:mouseenter
+      on:mouseleave
+    >
+      <thead>
         <tr>
           {#each cols as col (col)}
-            <td><span></span></td>
+            {#if typeof values[col] === "object" && values[col].empty === true}
+              <th></th>
+            {:else}
+              <th>{values[col] || ""}</th>
+            {/if}
           {/each}
         </tr>
-      {/each}
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        {#each Array.from({ length: rows }, (_, i) => i) as row (row)}
+          <tr>
+            {#each cols as col (col)}
+              <td><span></span></td>
+            {/each}
+          </tr>
+        {/each}
+      </tbody>
+    </table>
+  </div>
 </div>
