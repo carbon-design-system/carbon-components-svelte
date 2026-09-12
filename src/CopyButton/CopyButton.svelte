@@ -103,16 +103,16 @@
   let animation = undefined;
   let feedbackOpen = false;
   let copyPending = false;
-  let isCopyError = false;
+  let copyFailed = false;
 
   function syncCopyFeedback() {
     animation = copyFeedback.animation;
     feedbackOpen = copyFeedback.feedbackOpen;
     copyPending = copyFeedback.copyPending;
-    isCopyError = copyFeedback.isError;
+    copyFailed = copyFeedback.isError;
   }
 
-  $: feedbackText = isCopyError ? errorFeedback : feedback;
+  $: feedbackText = copyFailed ? errorFeedback : feedback;
 
   // Proactive hover/focus tooltip. Reuses the floating-portal `PortalTooltip`
   // and the shared `activeButtonTooltip` store, so a CopyButton coordinates
