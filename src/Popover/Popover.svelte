@@ -43,17 +43,17 @@
 
   const dispatch = createEventDispatcher();
 
-  let ref = null;
+  let popoverRef = null;
 
   // A DatePicker nested in this popover may portal its flatpickr calendar to
-  // `document.body` (outside `ref`), so a click on it looks like an outside
+  // `document.body` (outside `popoverRef`), so a click on it looks like an outside
   // click. Flatpickr stamps the input with `_flatpickr`; walk the popover's
   // own inputs to check whether the clicked calendar belongs to one of them.
   function isDatePickerCalendarClick(target) {
-    if (!ref || !(target instanceof Element)) return false;
+    if (!popoverRef || !(target instanceof Element)) return false;
     const calendar = target.closest(".flatpickr-calendar");
     if (!calendar) return false;
-    for (const input of ref.querySelectorAll("input")) {
+    for (const input of popoverRef.querySelectorAll("input")) {
       if (
         /** @type {any} */ (input)._flatpickr?.calendarContainer === calendar
       ) {
@@ -66,7 +66,7 @@
   function handleOutsideClick(event) {
     if (
       open &&
-      isOutsideClick(event, ref) &&
+      isOutsideClick(event, popoverRef) &&
       !isDatePickerCalendarClick(event.target)
     ) {
       dispatch("click:outside", { target: event.target });
@@ -79,7 +79,7 @@
 </script>
 
 <div
-  bind:this={ref}
+  bind:this={popoverRef}
   use:dismiss={{ enabled: open, type: "click", handler: handleOutsideClick }}
   class:bx--popover={true}
   class:bx--popover--caret={caret}
