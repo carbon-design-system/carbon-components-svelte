@@ -52,13 +52,14 @@ export function registerConsumer(spec) {
   let pool = pools.get(key);
   if (!pool) {
     const consumers = /** @type {Set<Consumer>} */ (new Set());
-    const listener = (/** @type {Event} */ event) => {
+    /** @param {Event} event */
+    function listener(event) {
       // Copy before iterating. Handlers may add or remove consumers mid-dispatch;
       // removed consumers should not run, same as native listeners.
       for (const consumer of [...consumers]) {
         if (consumers.has(consumer)) consumer.handler(event);
       }
-    };
+    }
     pool = { type: spec.type, options: spec.options, listener, consumers };
     pools.set(key, pool);
     window.addEventListener(spec.type, listener, spec.options);
