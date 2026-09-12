@@ -41,7 +41,9 @@
    * Override the display of a combobox item.
    * @type {(item: Item) => string}
    */
-  export let itemToString = (item) => item.text ?? item.id;
+  export let itemToString = function itemToString(item) {
+    return item.text ?? item.id;
+  };
 
   /**
    * Set the selected item by value id.
