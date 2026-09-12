@@ -54,17 +54,26 @@ export function initCarousel(container, config = {}) {
   function measureMaxHeight() {
     if (!useMaxHeight || views.length === 0) return;
 
-    let max = 0;
+    // Write every view into a measurable state, read all heights, then
+    // restore. Interleaving write/read/write per view forced one layout per
+    // view; batching the phases forces one for the whole set.
+    const wasHidden = views.map((view) => view.hidden);
     for (const view of views) {
-      const wasHidden = view.hidden;
       view.hidden = false;
       view.style.position = "absolute";
       view.style.visibility = "hidden";
+    }
+
+    let max = 0;
+    for (const view of views) {
       max = Math.max(max, view.scrollHeight);
+    }
+
+    views.forEach((view, index) => {
       view.style.position = "";
       view.style.visibility = "";
-      view.hidden = wasHidden;
-    }
+      view.hidden = wasHidden[index];
+    });
     container.style.minBlockSize = max ? `${max}px` : "";
   }
 
