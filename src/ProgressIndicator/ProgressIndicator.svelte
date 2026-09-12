@@ -40,13 +40,13 @@
    * @type {import("svelte/store").Readable<Record<string, { id: string; complete: boolean; disabled: boolean; index: number; current: boolean }>>}
    */
   const stepsById = derived(steps, (steps) => keyBy(steps));
-  const preventChangeOnClickStore = writable(preventChangeOnClick);
+  const sharedPreventChangeOnClick = writable(preventChangeOnClick);
 
   /**
    * @type {import("svelte/store").Readable<boolean>}
    */
   const preventChangeOnClickReadable = {
-    subscribe: preventChangeOnClickStore.subscribe,
+    subscribe: sharedPreventChangeOnClick.subscribe,
   };
 
   // Batch child registration. Dedup and patch against `_` (this batch's
@@ -157,7 +157,7 @@
       })),
     );
   }
-  $: preventChangeOnClickStore.set(preventChangeOnClick);
+  $: sharedPreventChangeOnClick.set(preventChangeOnClick);
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
