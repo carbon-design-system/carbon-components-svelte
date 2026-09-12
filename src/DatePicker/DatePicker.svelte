@@ -117,6 +117,7 @@
   } from "svelte";
   import { derived, writable } from "svelte/store";
   import { dismiss } from "../utils/dismiss.js";
+  import { rafThrottle } from "../utils/rafThrottle.js";
   import { uniqueId } from "../utils/uniqueId.js";
   import { createCalendar, resolveLocale } from "./createCalendar";
   import {
@@ -183,7 +184,9 @@
   let prevValueTo = valueTo;
   let lastAppliedOptions = {};
   let calendarUsesFixedPositioning = false;
+  /** @type {(ReturnType<typeof rafThrottle> & { cancel: () => void }) | null} */
   let onCalendarReposition = null;
+  const SCROLL_LISTENER_OPTIONS = { capture: true, passive: true };
   /** @type {HTMLElement | null} */
   let topLayerAncestor = null;
   // Set from onOpen/onClose. Outside-click listener attaches only while open.
@@ -282,15 +285,26 @@
 
   function attachFixedRepositionListeners() {
     if (!calendar || onCalendarReposition) return;
-    onCalendarReposition = () => positionFlatpickrCalendarFixed(calendar);
-    window.addEventListener("scroll", onCalendarReposition, true);
-    window.addEventListener("resize", onCalendarReposition);
+    // Repositioning reads the calendar's children and the input's rect, so
+    // coalesce to one pass per frame. Capture catches scroll on any ancestor;
+    // passive tells the browser the handler never blocks scrolling.
+    const reposition = rafThrottle(() => {
+      if (calendar) positionFlatpickrCalendarFixed(calendar);
+    });
+    onCalendarReposition = reposition;
+    window.addEventListener("scroll", reposition, SCROLL_LISTENER_OPTIONS);
+    window.addEventListener("resize", reposition, { passive: true });
   }
 
   function detachFixedRepositionListeners() {
     if (!onCalendarReposition) return;
-    window.removeEventListener("scroll", onCalendarReposition, true);
+    window.removeEventListener(
+      "scroll",
+      onCalendarReposition,
+      SCROLL_LISTENER_OPTIONS,
+    );
     window.removeEventListener("resize", onCalendarReposition);
+    onCalendarReposition.cancel();
     onCalendarReposition = null;
   }
 
