@@ -210,6 +210,7 @@
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
   import { createCopyFeedbackState } from "../utils/copyFeedback.js";
+  import { noop } from "../utils/noop.js";
   import { uniqueId } from "../utils/uniqueId.js";
   import CodeSnippetSkeleton from "./CodeSnippetSkeleton.svelte";
 
@@ -343,7 +344,7 @@
     dispatch(nextExpanded ? "expand" : "collapse");
   }
 
-  let disconnectModalObserver = () => {};
+  let disconnectModalObserver = noop;
 
   $: {
     const el = copyRef || ref;
