@@ -144,7 +144,7 @@
     open = false;
   }
 
-  function onKeydown(event) {
+  function handleKeydown(event) {
     if (open && event.key === "Escape") {
       event.stopPropagation();
       close();
@@ -157,10 +157,10 @@
   $: insideElements = [toggletipRef, portalRef];
 
   function containsTarget(target) {
-    return insideElements.some((el) => el?.contains(target));
+    return insideElements.some((node) => node?.contains(target));
   }
 
-  function onFocusOut(event) {
+  function handleFocusout(event) {
     // Keep open when focus moves to the toggletip content itself (relatedTarget
     // is null on some browsers when clicking non-focusable content).
     if (open && event.relatedTarget === null) return;
@@ -222,8 +222,8 @@ whitespace gap; the label's `margin-right` is then the only spacing. -->
       enabled: listenersEnabled,
       listeners: [{ type: "click", handler: handleOutsideClick }],
     }}
-    on:keydown={onKeydown}
-    on:focusout={onFocusOut}
+    on:keydown={handleKeydown}
+    on:focusout={handleFocusout}
     {...$$restProps}
   >
     <button
@@ -283,7 +283,7 @@ whitespace gap; the label's `margin-right` is then the only spacing. -->
       )}"
     >
       <!-- svelte-ignore a11y-no-static-element-interactions -->
-      <div class:bx--toggletip-content={true} on:keydown={onKeydown}>
+      <div class:bx--toggletip-content={true} on:keydown={handleKeydown}>
         <slot />
       </div>
     </Popover>
