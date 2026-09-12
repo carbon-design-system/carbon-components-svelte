@@ -217,7 +217,7 @@ export async function createCalendar({ options, base, input, dispatch }) {
 
   if (options.mode === "year") {
     const importee = await import("./year-select-plugin.js");
-    yearSelectPlugin = importee.default;
+    yearSelectPlugin = importee.yearSelectPlugin;
   }
 
   const plugins = [

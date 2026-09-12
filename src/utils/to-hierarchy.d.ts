@@ -12,5 +12,3 @@ export function toHierarchy<
   flatArray: T[] | readonly T[],
   getParentId: (node: T) => T[K] | null,
 ): (T & { nodes?: (T & { nodes?: T[] })[] })[];
-
-export default toHierarchy;

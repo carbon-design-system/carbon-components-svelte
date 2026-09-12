@@ -112,5 +112,3 @@ export function filterTreeByText(tree, text, options) {
     options,
   );
 }
-
-export default filterTreeNodes;

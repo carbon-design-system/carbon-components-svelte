@@ -16,5 +16,3 @@ export function truncate(
 ): {
   update: (options?: TruncateOptions) => void;
 };
-
-export default truncate;

@@ -36,5 +36,3 @@ export function truncate(node, options = {}) {
 
   return { update };
 }
-
-export default truncate;
