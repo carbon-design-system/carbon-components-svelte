@@ -171,7 +171,7 @@
   /** @type {HTMLInputElement[]} */
   let inputs = [];
   let mounted = false;
-  let wasComplete = false;
+  let prevComplete = false;
   let hadValue = false;
   let skipSelectOnFocus = false;
   /** @type {number} */
@@ -183,7 +183,7 @@
   }
 
   // Capture the seeded state so events only fire from user interaction.
-  wasComplete = count > 0 && code.length === count && code.every(Boolean);
+  prevComplete = count > 0 && code.length === count && code.every(Boolean);
   hadValue = code.some(Boolean);
 
   /** @type {RegExp} */
@@ -224,11 +224,11 @@
         : undefined;
 
   // Emit "complete" once when all segments fill, "clear" once when emptied.
-  $: if (mounted && complete && !wasComplete) {
-    wasComplete = true;
+  $: if (mounted && complete && !prevComplete) {
+    prevComplete = true;
     dispatch("complete", { value, code });
   }
-  $: if (mounted && !complete) wasComplete = false;
+  $: if (mounted && !complete) prevComplete = false;
   $: anyValue = code.some(Boolean);
   $: if (mounted && !anyValue && hadValue) {
     hadValue = false;
@@ -416,16 +416,16 @@
    * @param {{ selectTextOnFocus?: boolean }} [options]
    */
   export function focusNext(options = {}) {
-    let activeIndex = inputs.indexOf(
+    let focusedInputIndex = inputs.indexOf(
       /** @type {HTMLInputElement} */ (document.activeElement),
     );
-    if (activeIndex === -1) activeIndex = focusedIndex;
-    if (activeIndex === -1) {
+    if (focusedInputIndex === -1) focusedInputIndex = focusedIndex;
+    if (focusedInputIndex === -1) {
       focusInput(0, options);
       return;
     }
-    if (activeIndex < count - 1) {
-      focusInput(activeIndex + 1, options);
+    if (focusedInputIndex < count - 1) {
+      focusInput(focusedInputIndex + 1, options);
     }
   }
 
