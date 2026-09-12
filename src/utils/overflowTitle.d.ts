@@ -10,6 +10,6 @@ export interface OverflowTitleParams {
 export function overflowTitle(
   node: HTMLElement,
   params?: OverflowTitleParams,
-): { update: (params?: OverflowTitleParams) => void };
+): { update: (params?: OverflowTitleParams) => void; destroy: () => void };
 
 export default overflowTitle;
