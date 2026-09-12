@@ -232,7 +232,7 @@
   let animation = undefined;
   let feedbackOpen = false;
   let copyPending = false;
-  let isCopyError = false;
+  let copyFailed = false;
   let prevExpanded = expanded;
   let exceedsThreshold = false;
   let resizeObserver;
@@ -256,10 +256,10 @@
     animation = copyFeedback.animation;
     feedbackOpen = copyFeedback.feedbackOpen;
     copyPending = copyFeedback.copyPending;
-    isCopyError = copyFeedback.isError;
+    copyFailed = copyFeedback.isError;
   }
 
-  $: feedbackText = isCopyError ? errorFeedback : feedback;
+  $: feedbackText = copyFailed ? errorFeedback : feedback;
 
   function dismissFeedback() {
     copyFeedback.dismiss();
@@ -373,11 +373,11 @@
   let disconnectModalObserver = noop;
 
   $: {
-    const el = copyRef || ref;
+    const node = copyRef || ref;
     disconnectModalObserver();
     disconnectModalObserver =
-      effectivePortalTooltip && el
-        ? observeModalClose(el, dismissFeedback)
+      effectivePortalTooltip && node
+        ? observeModalClose(node, dismissFeedback)
         : () => {};
   }
 
