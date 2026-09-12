@@ -34,8 +34,8 @@
 
   const dispatch = createEventDispatcher();
 
-  const isFullScreenStore = writable(isFullScreen);
-  $: isFullScreenStore.set(isFullScreen);
+  const sharedIsFullScreen = writable(isFullScreen);
+  $: sharedIsFullScreen.set(isFullScreen);
 
   /**
    * @type {import("svelte/store").Writable<number>}
@@ -102,7 +102,7 @@
   }
 
   setContext("carbon:InterstitialScreen", {
-    isFullScreen: isFullScreenStore,
+    isFullScreen: sharedIsFullScreen,
     progStep,
     views,
     addView,
