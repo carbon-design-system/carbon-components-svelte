@@ -120,6 +120,41 @@ describe("OverflowMenu", () => {
     expect(spy).toHaveBeenCalledWith("close", { trigger: "escape-key" });
   });
 
+  it("measures the trigger when opening, not on every keypress", async () => {
+    const descriptor = Object.getOwnPropertyDescriptor(
+      HTMLElement.prototype,
+      "offsetWidth",
+    );
+    assert(descriptor?.get);
+    let reads = 0;
+    Object.defineProperty(HTMLElement.prototype, "offsetWidth", {
+      configurable: true,
+      get() {
+        reads += 1;
+        return descriptor.get?.call(this);
+      },
+    });
+
+    try {
+      render(OverflowMenu);
+      const menuButton = screen.getByRole("button");
+      await user.click(menuButton);
+      await tick();
+      const afterOpen = reads;
+      expect(afterOpen).toBeGreaterThan(0);
+
+      await user.keyboard("{ArrowDown}");
+      await user.keyboard("{ArrowDown}");
+      await user.keyboard("{ArrowUp}");
+      await tick();
+
+      expect(screen.getAllByRole("menuitem")[1]).toHaveFocus();
+      expect(reads).toBe(afterOpen);
+    } finally {
+      Object.defineProperty(HTMLElement.prototype, "offsetWidth", descriptor);
+    }
+  });
+
   it("does not infinite-loop when all items are disabled", async () => {
     render(OverflowMenuAllDisabled);
 

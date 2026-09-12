@@ -133,6 +133,23 @@
   let buttonWidth = undefined;
   let onMountAfterUpdate = true;
 
+  /**
+   * Everything the menu's position depends on. `afterUpdate` re-measures only
+   * when this changes; it used to re-read offset dimensions on every update
+   * while open (each arrow key, hover).
+   */
+  $: positionKey = open
+    ? `${direction}|${flipped}|${size}|${effectivePortalMenu}|${menuRef ? 1 : 0}`
+    : null;
+
+  /**
+   * Key last measured against. Read and written only in `afterUpdate`.
+   * The menu's `style` uses directives rather than a `style="..."` string so
+   * a re-render (e.g. `buttonWidth` settling) never wipes the `top`/`left`
+   * written here.
+   */
+  let measuredPositionKey = null;
+
   $: if (ctxBreadcrumbItem) {
     icon = OverflowMenuHorizontal;
   }
@@ -212,15 +229,16 @@
   };
 
   afterUpdate(() => {
-    if (open) {
+    if (open && !onMountAfterUpdate && $currentIndex < 0) {
+      menuRef?.focus({ preventScroll: true });
+    }
+
+    if (open && positionKey !== measuredPositionKey && buttonRef) {
+      measuredPositionKey = positionKey;
       const width = buttonRef.offsetWidth;
       const height = buttonRef.offsetHeight;
 
       buttonWidth = width;
-
-      if (!onMountAfterUpdate && $currentIndex < 0) {
-        menuRef?.focus({ preventScroll: true });
-      }
 
       if (!effectivePortalMenu) {
         // Menu is a button sibling; position from offsetTop/offsetLeft.
@@ -254,6 +272,7 @@
     }
 
     if (!open) {
+      measuredPositionKey = null;
       currentId.set(undefined);
       currentIndex.set(0);
     }
@@ -381,7 +400,7 @@
     class:bx--overflow-menu-options--scrollable={!!maxHeight}
     class:bx--breadcrumb-menu-options={!!ctxBreadcrumbItem}
     class={menuOptionsClass}
-    style="--overflow-menu-options-after-width: {overflowMenuOptionsAfterWidth}"
+    style:--overflow-menu-options-after-width={overflowMenuOptionsAfterWidth}
     style:max-height={maxHeightStyle}
     on:keydown={(e) => {
       if (["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(e.key)) {
@@ -430,7 +449,10 @@
       class:bx--overflow-menu-options--scrollable={!!maxHeight}
       class:bx--breadcrumb-menu-options={!!ctxBreadcrumbItem}
       class={menuOptionsClass}
-      style="position: relative; top: auto; left: auto; --overflow-menu-options-after-width: {overflowMenuOptionsAfterWidth}"
+      style:position="relative"
+      style:top="auto"
+      style:left="auto"
+      style:--overflow-menu-options-after-width={overflowMenuOptionsAfterWidth}
       style:max-height={maxHeightStyle}
       on:keydown={(event) => {
         if (["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(event.key)) {
