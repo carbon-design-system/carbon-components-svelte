@@ -140,20 +140,20 @@
 
   const scheduleOpen = createDelayedSetter();
 
-  function onMouseEnter() {
+  function handleMouseenter() {
     openedByHover.set(true);
     scheduleOpen(enterDelayMs, () => {
       open = true;
     });
   }
 
-  function onMouseLeave() {
+  function handleMouseleave() {
     scheduleOpen(leaveDelayMs, () => {
       open = false;
     });
   }
 
-  function onKeydown(event) {
+  function handleKeydown(event) {
     if (event.key === "Escape") {
       event.stopPropagation();
       refIcon?.focus();
@@ -167,7 +167,7 @@
   // wrapper catch focus leaving any of its descendants, since `blur` doesn't
   // bubble. Without this, tabbing out of content past the trigger's own
   // blur never closes the tooltip, leaving it open indefinitely.
-  function onFocusOut(event) {
+  function handleFocusout(event) {
     const next = event.relatedTarget;
     const stillInside = ref?.contains(next) || refTooltip?.contains(next);
     if (!stillInside) {
@@ -176,14 +176,14 @@
     focusByMouse = false;
   }
 
-  function onFocus() {
+  function handleFocus() {
     if (!focusByMouse) {
       openedByHover.set(false);
       open = true;
     }
   }
 
-  function onMouseDown() {
+  function handleMousedown() {
     focusByMouse = true;
   }
 
@@ -291,7 +291,7 @@
   style:position="relative"
   style:z-index={open ? 1 : undefined}
   {...$$restProps}
-  on:mouseleave={onMouseLeave}
+  on:mouseleave={handleMouseleave}
 >
   {#if !hideIcon}
     <div bind:this={ref} id={triggerId} class:bx--tooltip__label={true}>
@@ -301,11 +301,11 @@
         bind:this={refIcon}
         {...buttonProps}
         aria-describedby={tooltipId}
-        on:mouseenter={onMouseEnter}
-        on:mousedown={onMouseDown}
-        on:focus={onFocus}
-        on:focusout={onFocusOut}
-        on:keydown={onKeydown}
+        on:mouseenter={handleMouseenter}
+        on:mousedown={handleMousedown}
+        on:focus={handleFocus}
+        on:focusout={handleFocusout}
+        on:keydown={handleKeydown}
       >
         <slot name="icon">
           <svelte:component this={icon} name={iconName} />
@@ -318,11 +318,11 @@
       bind:this={ref}
       {...buttonProps}
       aria-describedby={tooltipId}
-      on:mouseenter={onMouseEnter}
-      on:mousedown={onMouseDown}
-      on:focus={onFocus}
-      on:focusout={onFocusOut}
-      on:keydown={onKeydown}
+      on:mouseenter={handleMouseenter}
+      on:mousedown={handleMousedown}
+      on:focus={handleFocus}
+      on:focusout={handleFocusout}
+      on:keydown={handleKeydown}
     >
       <slot name="triggerText">{triggerText}</slot>
     </div>
@@ -343,9 +343,9 @@
       class:bx--tooltip--align-start={align === "start"}
       class:bx--tooltip--align-end={align === "end"}
       style:width="max-content"
-      on:mouseenter={onMouseEnter}
-      on:focusout={onFocusOut}
-      on:keydown={onKeydown}
+      on:mouseenter={handleMouseenter}
+      on:focusout={handleFocusout}
+      on:keydown={handleKeydown}
     >
       <span class:bx--tooltip__caret={true}></span>
       <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -393,9 +393,9 @@
         class:bx--tooltip--align-start={align === "start"}
         class:bx--tooltip--align-end={align === "end"}
         style="position: relative; transform: none; display: block; left: auto; margin-top: 0;"
-        on:mouseenter={onMouseEnter}
-        on:focusout={onFocusOut}
-        on:keydown={onKeydown}
+        on:mouseenter={handleMouseenter}
+        on:focusout={handleFocusout}
+        on:keydown={handleKeydown}
       >
         <span class:bx--tooltip__caret={true}></span>
         <!-- svelte-ignore a11y-click-events-have-key-events -->

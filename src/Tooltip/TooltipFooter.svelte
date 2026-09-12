@@ -4,7 +4,7 @@
 
   import { getContext, onMount } from "svelte";
 
-  let ref = null;
+  let footerRef = null;
   let open = false;
   let openedByHover = false;
 
@@ -26,10 +26,10 @@
   // Move focus into the footer only when the tooltip was opened via keyboard or
   // programmatically. Focusing on mouse hover would yank focus away from a user
   // who is only pointing at the trigger.
-  $: if (open && !openedByHover && ref) {
-    const node = ref.querySelector(selectorPrimaryFocus);
+  $: if (open && !openedByHover && footerRef) {
+    const node = footerRef.querySelector(selectorPrimaryFocus);
     if (node) node.focus();
   }
 </script>
 
-<div bind:this={ref} class:bx--tooltip__footer={true}><slot /></div>
+<div bind:this={footerRef} class:bx--tooltip__footer={true}><slot /></div>
