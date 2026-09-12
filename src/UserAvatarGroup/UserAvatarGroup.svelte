@@ -60,8 +60,8 @@
 
   /** @type {import("svelte/store").Writable<Array<{ id: string; name: string; node?: HTMLElement }>>} */
   const items = writable([]);
-  const maxStore = writable(0);
-  const sizeStore = writable(size);
+  const sharedMax = writable(0);
+  const sharedSize = writable(size);
   // Tracks which avatar's tooltip is open so only one shows at a time. Scoped
   // per group instance.
   /** @type {import("svelte/store").Writable<string | null>} */
@@ -76,21 +76,21 @@
   // the group's `> *` overlap/stacking CSS targets. Walk up to that direct
   // child so the stacking custom property lands where the CSS reads it.
   function overlapTarget(node) {
-    let el = node;
+    let current = node;
     while (
-      el?.parentElement &&
-      !el.parentElement.classList.contains("bx--user-avatar-group")
+      current?.parentElement &&
+      !current.parentElement.classList.contains("bx--user-avatar-group")
     ) {
-      el = el.parentElement;
+      current = current.parentElement;
     }
-    return el ?? null;
+    return current ?? null;
   }
 
   // `max` of 0 (or non-positive) means "no limit"; mirror that as 0 in the
   // store so registered avatars never mark themselves as overflow.
   $: hasLimit = Number.isFinite(max) && max > 0;
-  $: maxStore.set(hasLimit ? max : 0);
-  $: sizeStore.set(size);
+  $: sharedMax.set(hasLimit ? max : 0);
+  $: sharedSize.set(size);
 
   // Avatars register in mount order, which differs from DOM order when they are
   // conditionally rendered. Each registers from its own `onMount`, so its node
@@ -115,8 +115,8 @@
 
   setContext("carbon:UserAvatarGroup", {
     items,
-    max: maxStore,
-    size: sizeStore,
+    max: sharedMax,
+    size: sharedSize,
     activeTooltip,
     register: ({ id, name, node }) => {
       batchedItemsUpdate((current) =>
