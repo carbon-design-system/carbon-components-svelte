@@ -1,5 +1,5 @@
 <script>
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   /** Set an id to be used by the label element */
   export let id = uniqueId();

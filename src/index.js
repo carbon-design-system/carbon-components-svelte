@@ -11,9 +11,9 @@ export { default as Breadcrumb } from "./Breadcrumb/Breadcrumb.svelte";
 export { default as BreadcrumbItem } from "./Breadcrumb/BreadcrumbItem.svelte";
 export { default as BreadcrumbSkeleton } from "./Breadcrumb/BreadcrumbSkeleton.svelte";
 export { default as Breakpoint } from "./Breakpoint/Breakpoint.svelte";
-export { default as breakpointObserver } from "./Breakpoint/breakpointObserver";
+export { default as breakpointObserver } from "./Breakpoint/breakpoint-observer";
 export { default as breakpoints } from "./Breakpoint/breakpoints";
-export { hideAtBreakpoint } from "./Breakpoint/hideAtBreakpoint";
+export { hideAtBreakpoint } from "./Breakpoint/hide-at-breakpoint";
 export { default as Button } from "./Button/Button.svelte";
 export { default as ButtonSet } from "./Button/ButtonSet.svelte";
 export { default as ButtonSkeleton } from "./Button/ButtonSkeleton.svelte";
@@ -244,15 +244,15 @@ export { default as SkipToContent } from "./UIShell/SkipToContent.svelte";
 export { default as UnorderedList } from "./UnorderedList/UnorderedList.svelte";
 export { default as UserAvatar } from "./UserAvatar/UserAvatar.svelte";
 export { default as UserAvatarGroup } from "./UserAvatarGroup/UserAvatarGroup.svelte";
-export { downloadFile } from "./utils/downloadFile";
+export { downloadFile } from "./utils/download-file";
 export {
   filterTreeById,
   filterTreeByText,
   filterTreeNodes,
-} from "./utils/filterTreeNodes";
-export { fuzzyMatch, highlightSegments } from "./utils/fuzzyMatch";
-export { toHierarchy } from "./utils/toHierarchy";
+} from "./utils/filter-tree-nodes";
+export { fuzzyMatch, highlightSegments } from "./utils/fuzzy-match";
+export { toHierarchy } from "./utils/to-hierarchy";
 export {
   resolveCheckboxState,
   toggleCheckboxNode,
-} from "./utils/treeCheckboxState";
+} from "./utils/tree-checkbox-state";

@@ -1,4 +1,4 @@
-import { positionFlatpickrCalendarFixed } from "../../src/DatePicker/datePickerTopLayer.js";
+import { positionFlatpickrCalendarFixed } from "../../src/DatePicker/date-picker-top-layer.js";
 
 /**
  * Reproduces the scrollbar-gutter regression: `window.innerWidth` includes the

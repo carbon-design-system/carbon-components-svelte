@@ -55,7 +55,7 @@
   import { setContext } from "svelte";
   import { writable } from "svelte/store";
   import Stack from "../Stack/Stack.svelte";
-  import { batchStoreUpdates } from "../utils/batchStoreUpdates.js";
+  import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import UserAvatarGroupOverflow from "./UserAvatarGroupOverflow.svelte";
 
   /** @type {import("svelte/store").Writable<Array<{ id: string; name: string; node?: HTMLElement }>>} */

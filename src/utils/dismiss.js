@@ -4,11 +4,11 @@ import {
   poolKey,
   registerConsumer,
   unregisterConsumer,
-} from "./windowListenerPool.js";
+} from "./window-listener-pool.js";
 
 /**
  * @typedef {{ handler: (event: Event) => void }} Consumer
- * @typedef {import("./windowListenerPool.js").Pool} Pool
+ * @typedef {import("./window-listener-pool.js").Pool} Pool
  */
 
 /**

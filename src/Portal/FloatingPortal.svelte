@@ -115,10 +115,10 @@
   export let target = null;
 
   import { onMount, tick } from "svelte";
-  import { floatingPosition } from "../utils/floatingPosition.js";
-  import { getScrollableAncestors } from "../utils/getScrollableAncestors.js";
-  import { rafThrottle } from "../utils/rafThrottle.js";
-  import { addPooledListener } from "../utils/windowListenerPool.js";
+  import { floatingPosition } from "../utils/floating-position.js";
+  import { getScrollableAncestors } from "../utils/get-scrollable-ancestors.js";
+  import { rafThrottle } from "../utils/raf-throttle.js";
+  import { addPooledListener } from "../utils/window-listener-pool.js";
   import Portal from "./Portal.svelte";
 
   let mounted = true;

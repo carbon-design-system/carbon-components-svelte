@@ -1,4 +1,4 @@
-import { BoundedFifoCache } from "../../src/utils/boundedFifoCache.js";
+import { BoundedFifoCache } from "../../src/utils/bounded-fifo-cache.js";
 
 describe("BoundedFifoCache", () => {
   test("stores and retrieves values", () => {

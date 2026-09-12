@@ -69,7 +69,7 @@
   import { readable } from "svelte/store";
   import Close from "../icons/Close.svelte";
   import TooltipDefinition from "../TooltipDefinition/TooltipDefinition.svelte";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { uniqueId } from "../utils/unique-id.js";
   import TagSkeleton from "./TagSkeleton.svelte";
 
   const dispatch = createEventDispatcher();

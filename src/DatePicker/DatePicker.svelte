@@ -117,14 +117,14 @@
   } from "svelte";
   import { derived, writable } from "svelte/store";
   import { dismiss } from "../utils/dismiss.js";
-  import { rafThrottle } from "../utils/rafThrottle.js";
-  import { uniqueId } from "../utils/uniqueId.js";
-  import { createCalendar, resolveLocale } from "./createCalendar";
+  import { rafThrottle } from "../utils/raf-throttle.js";
+  import { uniqueId } from "../utils/unique-id.js";
+  import { createCalendar, resolveLocale } from "./create-calendar";
   import {
     getTopLayerAncestor,
     isEventTargetInsidePortaledCalendar,
     positionFlatpickrCalendarFixed,
-  } from "./datePickerTopLayer";
+  } from "./date-picker-top-layer";
 
   const dispatch = createEventDispatcher();
   const insideModal = getContext("carbon:Modal");

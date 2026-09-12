@@ -3,8 +3,8 @@ import { tick } from "svelte";
 import {
   createHeightMeasurer,
   VIRTUAL_INDEX_ATTRIBUTE,
-} from "../utils/heightMeasurer.js";
-import { scrollIntoViewWithinMenu } from "../utils/scrollIntoViewWithinMenu.js";
+} from "../utils/height-measurer.js";
+import { scrollIntoViewWithinMenu } from "../utils/scroll-into-view-within-menu.js";
 import {
   getBoundedScrollTop,
   getMeasuredAverage,
@@ -352,7 +352,7 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
    * @param {boolean} [options.fluid] Whether menu items render at the fluid
    * height.
    * @param {number} options.scrollTop The menu's current scroll position.
-   * @returns {import("./menuWindow.js").MenuWindowState}
+   * @returns {import("./menu-window.js").MenuWindowState}
    */
   function update(options) {
     lastOptions = options;

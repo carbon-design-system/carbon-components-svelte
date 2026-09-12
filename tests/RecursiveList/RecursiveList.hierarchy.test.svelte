@@ -1,6 +1,6 @@
 <script lang="ts">
   import RecursiveList from "carbon-components-svelte/RecursiveList/RecursiveList.svelte";
-  import { toHierarchy } from "carbon-components-svelte/utils/toHierarchy";
+  import { toHierarchy } from "carbon-components-svelte/utils/to-hierarchy";
 
   let nodes = toHierarchy(
     [

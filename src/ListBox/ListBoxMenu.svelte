@@ -67,11 +67,11 @@
 
   import { setContext } from "svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { uniqueId } from "../utils/unique-id.js";
   import {
     createHighlightCursor,
     HIGHLIGHT_CURSOR_KEY,
-  } from "./highlightCursor.js";
+  } from "./highlight-cursor.js";
 
   const highlightCursor = createHighlightCursor();
   setContext(HIGHLIGHT_CURSOR_KEY, highlightCursor);

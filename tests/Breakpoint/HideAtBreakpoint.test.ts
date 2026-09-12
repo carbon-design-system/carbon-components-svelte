@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
-import { hideAtBreakpoint } from "../../src/Breakpoint/hideAtBreakpoint.js";
+import { hideAtBreakpoint } from "../../src/Breakpoint/hide-at-breakpoint.js";
 import HideAtBreakpoint from "./HideAtBreakpoint.test.svelte";
 
 type Size = "sm" | "md" | "lg" | "xlg" | "max";

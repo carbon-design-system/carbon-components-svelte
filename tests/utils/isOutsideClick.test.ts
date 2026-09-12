@@ -1,4 +1,4 @@
-import { isOutsideClick } from "../../src/utils/isOutsideClick.js";
+import { isOutsideClick } from "../../src/utils/is-outside-click.js";
 
 afterEach(() => {
   document.body.innerHTML = "";

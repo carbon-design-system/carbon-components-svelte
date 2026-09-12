@@ -53,7 +53,7 @@
   export let open = true;
 
   import { createEventDispatcher, onMount } from "svelte";
-  import { createTimeoutDismiss } from "../utils/timeoutDismiss.js";
+  import { createTimeoutDismiss } from "../utils/timeout-dismiss.js";
   import NotificationButton from "./NotificationButton.svelte";
   import NotificationIcon from "./NotificationIcon.svelte";
 

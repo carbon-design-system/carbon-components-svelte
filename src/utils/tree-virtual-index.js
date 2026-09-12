@@ -14,7 +14,7 @@
  *   O(width × window) from independent getRowAt calls
  */
 
-export { isExpandableNode } from "./isExpandableNode.js";
+export { isExpandableNode } from "./is-expandable-node.js";
 
 /**
  * @template {{ id: string | number; nodes?: T[]; hasChildren?: boolean }} T

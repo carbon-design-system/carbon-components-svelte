@@ -92,8 +92,8 @@
   import EditOff from "../icons/EditOff.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
-  import { graphemeCount } from "../utils/graphemeCount.js";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { graphemeCount } from "../utils/grapheme-count.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const ctx = getContext("carbon:Form");
   const dispatch = createEventDispatcher();

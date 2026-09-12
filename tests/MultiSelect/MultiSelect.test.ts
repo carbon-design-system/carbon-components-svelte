@@ -8,7 +8,7 @@ import {
 import type MultiSelectComponent from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import type { MultiSelectItem } from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import MultiSelectReal from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
-import { fuzzyMatch } from "carbon-components-svelte/utils/fuzzyMatch";
+import { fuzzyMatch } from "carbon-components-svelte/utils/fuzzy-match";
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
@@ -2691,7 +2691,8 @@ describe("MultiSelect", () => {
 
         expectTypeOf<Props["selectedIds"]>().toEqualTypeOf<
           // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
-          readonly any[] | undefined>();
+          readonly any[] | undefined
+        >();
 
         type SelectEvent = Events["select"];
         type SelectEventDetail =

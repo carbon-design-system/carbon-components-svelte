@@ -5,7 +5,7 @@ import {
   type RadioGroup,
   registerRadioButton,
   updateGroupSelection,
-} from "../../src/RadioButton/RadioButtonRegistry";
+} from "../../src/RadioButton/radio-button-registry";
 
 describe("RadioButtonRegistry", () => {
   beforeEach(() => {

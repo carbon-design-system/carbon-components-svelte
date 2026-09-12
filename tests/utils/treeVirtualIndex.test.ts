@@ -2,7 +2,7 @@ import {
   createTreeVirtualIndex,
   flattenVisibleRows,
   isExpandableNode,
-} from "../../src/utils/treeVirtualIndex.js";
+} from "../../src/utils/tree-virtual-index.js";
 
 describe("treeVirtualIndex", () => {
   const nodes = [

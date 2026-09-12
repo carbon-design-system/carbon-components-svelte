@@ -46,7 +46,7 @@
   import { getContext } from "svelte";
   import { readable } from "svelte/store";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   // aria attributes should go to the input element, not the label.
   $: ariaDescribedBy = $$restProps["aria-describedby"];

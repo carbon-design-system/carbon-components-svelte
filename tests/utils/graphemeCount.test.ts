@@ -1,4 +1,4 @@
-import { graphemeCount } from "../../src/utils/graphemeCount.js";
+import { graphemeCount } from "../../src/utils/grapheme-count.js";
 
 describe("graphemeCount", () => {
   test("counts plain ASCII characters", () => {

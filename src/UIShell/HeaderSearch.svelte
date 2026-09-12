@@ -115,9 +115,9 @@
   import IconSearch from "../icons/IconSearch.svelte";
   import SkeletonText from "../SkeletonText/SkeletonText.svelte";
   import { dismiss } from "../utils/dismiss.js";
-  import { fuzzyMatch } from "../utils/fuzzyMatch.js";
-  import { isOutsideClick } from "../utils/isOutsideClick.js";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { fuzzyMatch } from "../utils/fuzzy-match.js";
+  import { isOutsideClick } from "../utils/is-outside-click.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
 

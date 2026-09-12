@@ -2,7 +2,7 @@ import {
   AVATAR_BACKGROUND_COLORS,
   getAvatarBackgroundColor,
   hashString,
-} from "../../src/utils/avatarColor.js";
+} from "../../src/utils/avatar-color.js";
 
 describe("hashString", () => {
   test("is deterministic for the same input", () => {
