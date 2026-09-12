@@ -131,6 +131,7 @@
   import { observeModalClose } from "../Portal/portal-utils.js";
   import ButtonSkeleton from "./ButtonSkeleton.svelte";
   import { activeButtonTooltip } from "./button-tooltip-store.js";
+  import { noop } from "../utils/noop.js";
 
   const ctx = getContext("carbon:ComposedModal");
   const insideModal = getContext("carbon:Modal");
@@ -188,7 +189,7 @@
 
   // Re-attach the portal observer so the tooltip dismisses when an
   // ancestor modal closes (mirrors CopyButton).
-  let disconnectModalObserver = () => {};
+  let disconnectModalObserver = noop;
 
   $: {
     disconnectModalObserver();

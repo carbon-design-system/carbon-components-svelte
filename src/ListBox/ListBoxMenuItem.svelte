@@ -1,5 +1,6 @@
 <script>
   import { getContext, onMount } from "svelte";
+  import { noop } from "../utils/noop.js";
   import { overflowTitle } from "../utils/overflowTitle.js";
   import { scrollIntoViewWithinMenu } from "../utils/scrollIntoViewWithinMenu.js";
   import { HIGHLIGHT_CURSOR_KEY } from "./highlightCursor.js";
@@ -34,7 +35,7 @@
 
   let optionEl = null;
   let ref = null;
-  let unregisterHighlight = () => {};
+  let unregisterHighlight = noop;
 
   $: if (!highlightCursor && highlighted && ref && !ref.matches(":hover")) {
     // Scroll highlighted item into view if using keyboard navigation.
@@ -56,7 +57,7 @@
    */
   function bindCursor(node, optionId, isActive, isHighlighted) {
     unregisterHighlight();
-    unregisterHighlight = () => {};
+    unregisterHighlight = noop;
     if (!node) return;
     if (highlightCursor) {
       if (optionId) {
