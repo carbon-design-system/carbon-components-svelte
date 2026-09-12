@@ -205,13 +205,13 @@
     $activeButtonTooltip !== null &&
     $activeButtonTooltip !== tooltipId;
 
-  function handleMouseEnter() {
+  function handleMouseenter() {
     if (hasTooltip) {
       claimActiveTooltip();
     }
   }
 
-  function handleMouseLeave() {
+  function handleMouseleave() {
     if (usePortal) return;
     releaseActiveTooltip();
   }
@@ -373,10 +373,10 @@
         on:blur={handlePortalBlur}
         on:mouseover
         on:mouseenter
-        on:mouseenter={handleMouseEnter}
+        on:mouseenter={handleMouseenter}
         on:mouseenter={handlePortalMouseEnter}
         on:mouseleave
-        on:mouseleave={handleMouseLeave}
+        on:mouseleave={handleMouseleave}
         on:mouseleave={handlePortalMouseLeave}
       >
         {#if hasIconOnly && iconDescription}
@@ -415,10 +415,10 @@
       on:blur={handlePortalBlur}
       on:mouseover
       on:mouseenter
-      on:mouseenter={handleMouseEnter}
+      on:mouseenter={handleMouseenter}
       on:mouseenter={handlePortalMouseEnter}
       on:mouseleave
-      on:mouseleave={handleMouseLeave}
+      on:mouseleave={handleMouseleave}
       on:mouseleave={handlePortalMouseLeave}
     >
       {#if hasIconOnly && iconDescription}
@@ -456,10 +456,10 @@
       on:blur={handlePortalBlur}
       on:mouseover
       on:mouseenter
-      on:mouseenter={handleMouseEnter}
+      on:mouseenter={handleMouseenter}
       on:mouseenter={handlePortalMouseEnter}
       on:mouseleave
-      on:mouseleave={handleMouseLeave}
+      on:mouseleave={handleMouseleave}
       on:mouseleave={handlePortalMouseLeave}
     >
       {#if hasIconOnly && iconDescription}
@@ -497,10 +497,10 @@
     on:blur={handlePortalBlur}
     on:mouseover
     on:mouseenter
-    on:mouseenter={handleMouseEnter}
+    on:mouseenter={handleMouseenter}
     on:mouseenter={handlePortalMouseEnter}
     on:mouseleave
-    on:mouseleave={handleMouseLeave}
+    on:mouseleave={handleMouseleave}
     on:mouseleave={handlePortalMouseLeave}
   >
     {#if hasIconOnly && iconDescription}
