@@ -62,7 +62,7 @@
   const titleId = `${modalId}-title`;
 
   let buttonRef = null;
-  let innerModal = null;
+  let innerModalRef = null;
   let closeDispatched = false;
 
   function close(trigger) {
@@ -97,8 +97,8 @@
   /**
    * @type {(ref: HTMLButtonElement) => void}
    */
-  function declareRef(ref) {
-    buttonRef = ref;
+  function declareRef(node) {
+    buttonRef = node;
   }
 
   /**
@@ -128,9 +128,9 @@
     title,
   });
 
-  function focus(element) {
-    const container = element || innerModal;
-    const node = initialFocus({
+  function focus(node) {
+    const container = node || innerModalRef;
+    const target = initialFocus({
       container,
       selectorPrimaryFocus,
       fallbacks: [
@@ -140,15 +140,15 @@
         container?.querySelector(".bx--modal-close"),
       ],
     });
-    node?.focus();
+    target?.focus();
   }
 
-  let opened = false;
+  let prevOpen = false;
   $: didOpen = open;
 
-  const openStore = writable(open);
-  $: $openStore = open;
-  trackModal(openStore);
+  const sharedOpen = writable(open);
+  $: $sharedOpen = open;
+  trackModal(sharedOpen);
 
   onMount(() => {
     tick().then(() => {
@@ -157,9 +157,9 @@
   });
 
   $: {
-    if (opened) {
+    if (prevOpen) {
       if (!open) {
-        opened = false;
+        prevOpen = false;
         if (!closeDispatched) {
           tick().then(() => {
             dispatch("close", { trigger: "programmatic" });
@@ -168,7 +168,7 @@
         closeDispatched = false;
       }
     } else if (open) {
-      opened = true;
+      prevOpen = true;
       dispatch("open");
     }
   }
@@ -222,7 +222,7 @@
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <!-- svelte-ignore a11y_interactive_supports_focus -->
   <div
-    bind:this={innerModal}
+    bind:this={innerModalRef}
     role="dialog"
     aria-modal="true"
     aria-label={$$props["aria-label"] ?? ($label || $title || undefined)}
