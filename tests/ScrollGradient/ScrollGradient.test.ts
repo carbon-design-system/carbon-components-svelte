@@ -89,6 +89,25 @@ function getObserverFor(scrollElement: Element) {
 }
 
 describe("ScrollGradient", () => {
+  it("observes the scroll element and its content instead of mutations", async () => {
+    const observe = vi.spyOn(ResizeObserver.prototype, "observe");
+    const MutationObserverSpy = vi.fn();
+    vi.stubGlobal("MutationObserver", MutationObserverSpy);
+
+    const { container } = render(ScrollGradient);
+    await tick();
+
+    const scrollElement = container.querySelector(
+      ".bx--scroll-gradient__scroll-element",
+    );
+    const content = container.querySelector(".bx--scroll-gradient__content");
+    const observed = observe.mock.calls.map(([element]) => element);
+    expect(observed).toContain(scrollElement);
+    expect(observed).toContain(content);
+    expect(MutationObserverSpy).not.toHaveBeenCalled();
+    observe.mockRestore();
+  });
+
   it("shows no gradients when content does not overflow", async () => {
     const { container } = render(ScrollGradient);
     await tick();
