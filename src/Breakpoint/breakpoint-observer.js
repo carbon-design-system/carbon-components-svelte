@@ -38,7 +38,7 @@ export function observeBreakpoint(callback) {
   const size = entry?.[0];
   if (size !== undefined) callback(/** @type {BreakpointSize} */ (size));
 
-  /** @type {(e: MediaQueryListEvent) => void} */
+  /** @type {(event: MediaQueryListEvent) => void} */
   function handleChange({ matches, media }) {
     const raw = sizeByMedia[media];
     if (matches && raw !== undefined) {
