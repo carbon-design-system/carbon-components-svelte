@@ -1,5 +1,5 @@
 <script>
-  import truncate from "../Truncate/truncate.js";
+  import { truncate } from "../Truncate/truncate.js";
 
   /**
    * @restProps {any}

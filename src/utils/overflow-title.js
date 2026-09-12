@@ -58,5 +58,3 @@ export function overflowTitle(node, params = {}) {
     },
   };
 }
-
-export default overflowTitle;

@@ -32,5 +32,3 @@ export function filterTreeByText<T extends NodeLike>(
   text: string,
   options?: FilterOptions,
 ): T[];
-
-export default filterTreeNodes;

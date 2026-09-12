@@ -27,7 +27,7 @@ function getEventTarget(event) {
  * @param {YearSelectPluginConfig} [pluginConfig]
  * @returns {(fp: any) => object}
  */
-function yearSelectPlugin(pluginConfig) {
+export function yearSelectPlugin(pluginConfig) {
   const config = { ...defaultConfig, ...pluginConfig };
 
   return (fp) => {
@@ -276,5 +276,3 @@ function yearSelectPlugin(pluginConfig) {
     };
   };
 }
-
-export default yearSelectPlugin;
