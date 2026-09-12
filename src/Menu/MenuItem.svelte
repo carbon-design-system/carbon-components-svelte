@@ -103,11 +103,11 @@
   );
   // `selected` implies the checkbox variant. Latch it instead of writing back
   // to `selectable` so deselecting the item keeps its role and indentation.
-  let hasBeenSelected = false;
+  let selectedOnce = false;
 
   $: hasSubmenu = labelText !== undefined && $$slots.default;
-  $: if (selected) hasBeenSelected = true;
-  $: isSelectable = !!ctxGroup || selectable || hasBeenSelected;
+  $: if (selected) selectedOnce = true;
+  $: isSelectable = !!ctxGroup || selectable || selectedOnce;
   $: isRadio = !!ctxRadioGroup;
   $: isIndented = isSelectable || isRadio;
   $: role = isRadio
