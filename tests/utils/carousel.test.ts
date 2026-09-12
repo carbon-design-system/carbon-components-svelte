@@ -135,4 +135,35 @@ describe("initCarousel", () => {
 
     expect(views.every((view) => !view.hidden)).toBe(true);
   });
+
+  test("useMaxHeight reads every height after all views are made measurable", () => {
+    const container = buildContainer(3);
+    const views = Array.from(container.children) as HTMLElement[];
+    const heights = [30, 80, 50];
+    // Whether every sibling was already in its measuring state at read time.
+    const allMeasurableAtRead: boolean[] = [];
+    views.forEach((view, index) => {
+      Object.defineProperty(view, "scrollHeight", {
+        configurable: true,
+        get() {
+          allMeasurableAtRead.push(
+            views.every(
+              (sibling) =>
+                !sibling.hidden && sibling.style.position === "absolute",
+            ),
+          );
+          return heights[index];
+        },
+      });
+    });
+
+    initCarousel(container, { useMaxHeight: true });
+
+    expect(container.style.minBlockSize).toBe("80px");
+    expect(allMeasurableAtRead).toEqual([true, true, true]);
+    // Restored: only the active view visible, measuring styles cleared.
+    expect(views.map((view) => view.hidden)).toEqual([false, true, true]);
+    expect(views.every((view) => view.style.position === "")).toBe(true);
+    expect(views.every((view) => view.style.visibility === "")).toBe(true);
+  });
 });
