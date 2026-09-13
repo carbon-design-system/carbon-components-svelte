@@ -5,6 +5,6 @@
 
 <CopyInput
   labelText="API endpoint"
-  value="https://api.example.com/v1"
+  value="https://api.acme.io/v1"
   copy={(text) => copy(text)}
 />
