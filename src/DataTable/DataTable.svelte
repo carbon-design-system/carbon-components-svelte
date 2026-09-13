@@ -437,22 +437,22 @@
   $: visibleHeaders = headers.filter((header) => !header.columnHidden);
 
   // Store a copy of the original rows for filter restoration.
-  let prevRows_ref = rows;
+  let prevFilterRows = rows;
   let originalRows = [...rows];
   // Row ids that match the active filter. In "hide" mode this toggles `hidden` on rows
   // instead of shrinking `tableRows`.
   let matchedRowIdsSet = new Set(originalRows.map((row) => row.id));
   // Last filter applied via `filterRows`, replayed when `rows` changes so
   // an active search is not silently dropped on row reassignment.
-  let lastSearchValue = "";
-  let lastCustomFilter = undefined;
+  let prevSearchValue = "";
+  let prevCustomFilter = undefined;
 
   /**
    * @type {(searchValue: string, customFilter?: (row: Row, value: string) => boolean) => ReadonlyArray<Row["id"]>}
    */
   function filterRows(searchValue, customFilter) {
-    lastSearchValue = searchValue;
-    lastCustomFilter = customFilter;
+    prevSearchValue = searchValue;
+    prevCustomFilter = customFilter;
     const value = searchValue.trim().toLowerCase();
 
     if (value.length === 0) {
@@ -498,11 +498,11 @@
     return ids;
   }
 
-  $: if (rows !== prevRows_ref) {
+  $: if (rows !== prevFilterRows) {
     originalRows = [...rows];
-    prevRows_ref = rows;
-    if (lastSearchValue.trim().length > 0) {
-      filterRows(lastSearchValue, lastCustomFilter);
+    prevFilterRows = rows;
+    if (prevSearchValue.trim().length > 0) {
+      filterRows(prevSearchValue, prevCustomFilter);
     } else {
       matchedRowIdsSet = new Set(rows.map((row) => row.id));
       $tableRows = rows;
@@ -512,11 +512,11 @@
   // Replay the active filter when the strategy flips so the rendered set and the
   // matched ids stay consistent (for example switching to "remove" must re-shrink
   // `tableRows`, and switching to "hide" must restore the full mounted set).
-  let prevHideModeRef = hideMode;
-  $: if (hideMode !== prevHideModeRef) {
-    prevHideModeRef = hideMode;
-    if (lastSearchValue.trim().length > 0) {
-      filterRows(lastSearchValue, lastCustomFilter);
+  let prevHideMode = hideMode;
+  $: if (hideMode !== prevHideMode) {
+    prevHideMode = hideMode;
+    if (prevSearchValue.trim().length > 0) {
+      filterRows(prevSearchValue, prevCustomFilter);
     }
   }
 
@@ -526,11 +526,11 @@
   function resetSelectedRowIds() {
     selectAll = false;
     selectedRowIds = [];
-    lastSelectedRowId = null;
+    rangeAnchorRowId = null;
   }
 
   /** Anchor row id for shift+click range selection; cleared when the anchor no longer exists in the current row order. */
-  let lastSelectedRowId = null;
+  let rangeAnchorRowId = null;
 
   /**
    * Apply `checked` to every selectable row between the anchor row and `targetIndex` (inclusive),
@@ -540,7 +540,7 @@
    */
   function selectRowRange(targetIndex, checked) {
     const anchorIndex = rowsToVirtualize.findIndex(
-      (row) => row.id === lastSelectedRowId,
+      (row) => row.id === rangeAnchorRowId,
     );
     if (anchorIndex === -1) return false;
 
@@ -1214,7 +1214,7 @@
                           const checked = event.target.checked;
                           const usedRange =
                             event.shiftKey &&
-                            lastSelectedRowId !== null &&
+                            rangeAnchorRowId !== null &&
                             selectRowRange(actualIndex, checked);
 
                           if (!usedRange) {
@@ -1227,7 +1227,7 @@
                             selectedRowIds = [...next];
                           }
 
-                          lastSelectedRowId = row.id;
+                          rangeAnchorRowId = row.id;
                           dispatch("click:row--select", { row, selected: checked });
                         }}
                       />
@@ -1446,7 +1446,7 @@
                           const checked = event.target.checked;
                           const usedRange =
                             event.shiftKey &&
-                            lastSelectedRowId !== null &&
+                            rangeAnchorRowId !== null &&
                             selectRowRange(index, checked);
 
                           if (!usedRange) {
@@ -1459,7 +1459,7 @@
                             selectedRowIds = [...next];
                           }
 
-                          lastSelectedRowId = row.id;
+                          rangeAnchorRowId = row.id;
                           dispatch("click:row--select", { row, selected: checked });
                         }}
                       />
