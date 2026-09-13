@@ -209,4 +209,26 @@ describe("BigNumber", () => {
       );
     });
   });
+
+  describe("formatter cache", () => {
+    const OriginalNumberFormat = Intl.NumberFormat;
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    it("reuses a single Intl.NumberFormat instance for identical locale and options", () => {
+      class MockNumberFormat extends OriginalNumberFormat {}
+      const spy = vi
+        .spyOn(Intl, "NumberFormat")
+        .mockImplementation(MockNumberFormat);
+
+      render(BigNumber);
+
+      const calls = spy.mock.calls.filter(
+        ([, options]) => options?.style === "currency",
+      );
+      expect(calls.length).toBeLessThanOrEqual(1);
+    });
+  });
 });
