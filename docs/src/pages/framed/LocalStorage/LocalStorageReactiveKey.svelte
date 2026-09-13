@@ -6,11 +6,11 @@
     Stack,
   } from "carbon-components-svelte";
 
-  let selectedUser = "user-1";
+  let selectedUser = "morgan-lee";
   let theme = "white";
   let events = [];
 
-  $: storageKey = `local-storage-reactive-example-${selectedUser}`;
+  $: storageKey = `theme-preference-${selectedUser}`;
 </script>
 
 <Stack gap={6}>
@@ -26,9 +26,9 @@
     }}
   />
   <RadioButtonGroup legendText="Select user" bind:selected={selectedUser}>
-    <RadioButton labelText="User 1" value="user-1" />
-    <RadioButton labelText="User 2" value="user-2" />
-    <RadioButton labelText="User 3" value="user-3" />
+    <RadioButton labelText="Morgan Lee" value="morgan-lee" />
+    <RadioButton labelText="Priya Nair" value="priya-nair" />
+    <RadioButton labelText="Sam Okafor" value="sam-okafor" />
   </RadioButtonGroup>
   <RadioButtonGroup legendText="Theme preference" bind:selected={theme}>
     <RadioButton labelText="White" value="white" />

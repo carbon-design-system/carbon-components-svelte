@@ -88,7 +88,7 @@ Fires when a write to storage fails, for example when the storage quota is excee
 
 ```svelte
 <LocalStorage
-  key="my-key"
+  key="workspace-settings"
   bind:value
   on:error={({ detail }) => console.error(detail.error)}
 />

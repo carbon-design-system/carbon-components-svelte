@@ -9,13 +9,16 @@
   // A nested object value. Editing a nested field — either through a two-way
   // binding or an explicit in-place mutation signalled with `value = value` —
   // is persisted because the component compares the serialized form.
-  let settings = { profile: { name: "Ada", role: "Engineer" }, visits: 0 };
+  let settings = {
+    profile: { name: "Priya Nair", role: "Site Reliability Engineer" },
+    sessionCount: 0,
+  };
   let events = [];
 </script>
 
 <Stack gap={6}>
   <LocalStorage
-    key="local-storage-object-example"
+    key="admin-user-profile"
     bind:value={settings}
     on:update={({ detail }) => {
       events = [...events, { event: "on:update", detail }];
@@ -41,11 +44,11 @@
   <Button
     size="small"
     on:click={() => {
-      settings.visits += 1; // in-place mutation
+      settings.sessionCount += 1; // in-place mutation
       settings = settings; // signal the change to Svelte
     }}
   >
-    Increment visits ({settings.visits})
+    Increment session count ({settings.sessionCount})
   </Button>
 
   <div>
