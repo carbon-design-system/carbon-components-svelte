@@ -4,7 +4,7 @@ description: Checkboxes let users select one or more options from a list, for mu
 ---
 
 <script>
-  import { Checkbox, CheckboxGroup, Stack, Tooltip } from "carbon-components-svelte";
+  import { Checkbox, CheckboxGroup, CheckboxSkeleton, Stack, Tooltip } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -120,9 +120,9 @@ Use `on:check` to listen for changes to a standalone checkbox. The event dispatc
 
 ## Skeleton
 
-Set `skeleton` to `true` to show a loading state.
+Use `CheckboxSkeleton` to show a loading state.
 
-<Checkbox skeleton />
+<CheckboxSkeleton />
 
 ## CheckboxGroup
 

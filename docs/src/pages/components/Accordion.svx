@@ -7,6 +7,7 @@ description: Accordions stack expandable sections vertically to show or hide con
   import {
     Accordion,
     AccordionItem,
+    AccordionSkeleton,
     Stack,
     Text,
   } from "carbon-components-svelte";
@@ -320,44 +321,44 @@ item for finer control over which items are interactive.
 
 ## Skeleton
 
-Set `skeleton` to show a loading state while content loads.
+Use `AccordionSkeleton` to show a loading state while content loads.
 
-<Accordion skeleton />
+<AccordionSkeleton />
 
 ### Left-aligned chevron
 
-Combine skeleton state with left-aligned chevron by enabling `skeleton` and setting `align` to `"start"`.
+Align the chevron icon to the left side by setting `align` to `"start"`.
 
-<Accordion skeleton align="start" />
+<AccordionSkeleton align="start" />
 
 ### Custom count
 
-By default, the skeleton state displays 4 items. Set `count` to specify
+By default, the skeleton displays 4 items. Set `count` to specify
 the number of skeleton items to display.
 
-<Accordion skeleton count={3} />
+<AccordionSkeleton count={3} />
 
 ### Closed
 
 By default, the first skeleton item is open. Set `open={false}` to render the
 skeleton collapsed.
 
-<Accordion skeleton open={false} />
+<AccordionSkeleton open={false} />
 
 ### Extra-large
 
 Set `size` to `"xl"` for an extra-large skeleton.
 
-<Accordion skeleton size="xl" />
+<AccordionSkeleton size="xl" />
 
 ### Small
 
 Set `size` to `"sm"` for a small skeleton.
 
-<Accordion skeleton size="sm" />
+<AccordionSkeleton size="sm" />
 
 ### Flush
 
 Set `flush` to remove the skeleton's gutter, matching the flush variant.
 
-<Accordion skeleton flush />
+<AccordionSkeleton flush />

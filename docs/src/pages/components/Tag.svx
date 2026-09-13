@@ -4,7 +4,7 @@ description: Tags categorize content with a keyword or label, with various style
 ---
 
 <script>
-  import { Stack, Tag, SelectableTag, TooltipDefinition } from "carbon-components-svelte";
+  import { Stack, Tag, SelectableTag, TagSkeleton, TooltipDefinition } from "carbon-components-svelte";
   import IbmCloud from "carbon-icons-svelte/lib/IbmCloud.svelte";
 </script>
 
@@ -214,18 +214,18 @@ Use the small size variant for selectable tags.
 
 ## Skeleton
 
-Show a loading state with the default skeleton variant.
+Use `TagSkeleton` to show a loading state with the default size.
 
-<Tag skeleton />
+<TagSkeleton />
 
 ### Small
 
-Show a loading state with the small skeleton variant.
+Set `size` to `"sm"` on `TagSkeleton` for a small loading state.
 
-<Tag size="sm" skeleton />
+<TagSkeleton size="sm" />
 
 ### Large
 
-Show a loading state with the large skeleton variant.
+Set `size` to `"lg"` on `TagSkeleton` for a large loading state.
 
-<Tag size="lg" skeleton />
+<TagSkeleton size="lg" />

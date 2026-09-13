@@ -4,7 +4,7 @@ description: Buttons trigger actions like submitting a form or navigating, with 
 ---
 
 <script>
-  import { BadgeIndicator, Button, Stack } from "carbon-components-svelte";
+  import { BadgeIndicator, Button, ButtonSkeleton, Stack } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
   import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
   import Login from "carbon-icons-svelte/lib/Login.svelte";
@@ -241,13 +241,13 @@ Set `expressive` to `true` to use Carbon's expressive typesetting. Use expressiv
 
 ## Skeleton
 
-Set `skeleton` to show a loading state.
+Use `ButtonSkeleton` to show a loading state.
 
-<Button size="xl" skeleton />
-<Button size="lg" skeleton />
-<Button skeleton />
-<Button skeleton size="field" />
-<Button skeleton size="small" />
+<ButtonSkeleton size="xl" />
+<ButtonSkeleton size="lg" />
+<ButtonSkeleton />
+<ButtonSkeleton size="field" />
+<ButtonSkeleton size="small" />
 
 ## Programmatic focus
 

@@ -7,6 +7,7 @@ description: Breadcrumbs display a hierarchical navigation trail showing the use
   import {
     Breadcrumb,
     BreadcrumbItem,
+    BreadcrumbSkeleton,
     OverflowMenu,
     OverflowMenuItem
   } from "carbon-components-svelte";
@@ -108,12 +109,12 @@ Set `labelText` to change the nav's accessible name from the default `"Breadcrum
 
 ## Skeleton
 
-Show a loading state with `skeleton`. Use `count` to specify the number of items.
+Use `BreadcrumbSkeleton` to show a loading state. Use `count` to specify the number of items.
 
-<Breadcrumb noTrailingSlash skeleton count={3} />
+<BreadcrumbSkeleton noTrailingSlash count={3} />
 
 ### Small
 
-Use `skeleton` with `size="sm"` for a compact loading state.
+Set `size` to `"sm"` on `BreadcrumbSkeleton` for a compact loading state.
 
-<Breadcrumb skeleton size="sm" count={3} />
+<BreadcrumbSkeleton size="sm" count={3} />

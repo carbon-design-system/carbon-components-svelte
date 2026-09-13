@@ -4,7 +4,7 @@ description: Big number displays a single prominent statistic, such as a dashboa
 ---
 
 <script>
-  import { Stack, BigNumber } from "carbon-components-svelte";
+  import { Stack, BigNumber, BigNumberSkeleton } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -102,6 +102,6 @@ Set `tooltipDescription` to render an information icon next to `labelText` with 
 
 ## Skeleton
 
-Set `loading` to `true` to render the skeleton state in place of the value.
+Use `BigNumberSkeleton` to render a loading state in place of the value.
 
-<BigNumber labelText="Deployments" value={1240} loading />
+<BigNumberSkeleton />
