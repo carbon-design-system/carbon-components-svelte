@@ -7,7 +7,7 @@
   $: document.documentElement.setAttribute("theme", toggled ? "g100" : "white");
 </script>
 
-<LocalStorage bind:this={storage} bind:value={toggled} />
+<LocalStorage key="dark-mode" bind:this={storage} bind:value={toggled} />
 
 <Toggle size="sm" labelText="Dark mode" bind:toggled />
 
