@@ -78,21 +78,21 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
   /** How many options the last `update` was given. */
   let itemCount = 0;
   /** Whether that update resolved to measured heights. */
-  let isMeasured = false;
+  let measured = false;
   /**
    * Whether the list it resolved them for is also windowed. Every measured
    * scroll path gates on this: a list under the threshold is laid out by the
    * browser, so it has no place to hold and no request to satisfy.
    */
-  let isMeasuredWindow = false;
+  let measuredWindow = false;
   /** Set while `resolve` runs, which the caller reads from the return value. */
-  let isUpdating = false;
+  let updating = false;
   /**
    * The arguments `update` was last given, so measurement can resolve the state
    * again without asking the caller to re-supply them.
    * @type {Parameters<typeof update>[0] | null}
    */
-  let lastOptions = null;
+  let prevOptions = null;
   /**
    * The outstanding request.
    * @type {null | {
@@ -107,14 +107,14 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
    * The position this last vouched for: written here, or read from a container
    * this left where it was. Anything else is the reader's.
    */
-  let lastWrittenScrollTop = -1;
+  let prevWrittenScrollTop = -1;
 
   const measurer = createHeightMeasurer({ onMeasure: handleMeasured });
 
   /** Hand the caller a state resolved again, unless it is about to be told. */
   function notifyChange() {
-    if (isUpdating || !lastOptions) return;
-    onState?.(resolve(lastOptions));
+    if (updating || !prevOptions) return;
+    onState?.(resolve(prevOptions));
   }
 
   /**
@@ -125,8 +125,8 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
     const container = getContainer();
     if (!container) return;
     container.scrollTop = next;
-    lastWrittenScrollTop = container.scrollTop;
-    onScrollTop(lastWrittenScrollTop);
+    prevWrittenScrollTop = container.scrollTop;
+    onScrollTop(prevWrittenScrollTop);
   }
 
   /**
@@ -168,7 +168,7 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
    */
   function requestMeasured(index, align) {
     const container = getContainer();
-    if (!isMeasuredWindow || !config || !container) return;
+    if (!measuredWindow || !config || !container) return;
 
     if (index < 0) {
       pending = null;
@@ -177,7 +177,7 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
     }
 
     const next = measuredPosition(index, align, container.scrollTop, config);
-    if (next === null) lastWrittenScrollTop = container.scrollTop;
+    if (next === null) prevWrittenScrollTop = container.scrollTop;
     else scrollTo(next);
     pending = {
       index,
@@ -233,7 +233,7 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
     if (next.length === 0) return;
 
     const container = getContainer();
-    if (!isMeasuredWindow || !config || !container) return;
+    if (!measuredWindow || !config || !container) return;
 
     // Read where the reader left the menu before the correction below writes
     // to it. After that write, the position on the container is one this made,
@@ -263,7 +263,7 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
    */
   function settle() {
     const container = getContainer();
-    if (!pending || !isMeasuredWindow || !config || !container) return;
+    if (!pending || !measuredWindow || !config || !container) return;
 
     // Read rather than wait: a scroll event and the measurer's own frame are
     // not ordered against each other.
@@ -355,7 +355,7 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
    * @returns {import("./menu-window.js").MenuWindowState}
    */
   function update(options) {
-    lastOptions = options;
+    prevOptions = options;
     return resolve(options);
   }
 
@@ -374,7 +374,7 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
     fluid = false,
     scrollTop,
   }) {
-    isUpdating = true;
+    updating = true;
     try {
       if (shouldVirtualize && wrapOptions) noteCollection(items, getKey);
 
@@ -393,8 +393,8 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
 
       config = state.config;
       itemCount = items.length;
-      isMeasured = Boolean(config?.measured);
-      isMeasuredWindow = isMeasured && Boolean(state.data?.isVirtualized);
+      measured = Boolean(config?.measured);
+      measuredWindow = measured && Boolean(state.data?.isVirtualized);
 
       return {
         itemsToRender: state.itemsToRender,
@@ -406,10 +406,10 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
           ? `${config.containerHeight}px`
           : getMenuMaxHeight(size),
         isWindowed: Boolean(config),
-        isMeasured,
+        isMeasured: measured,
       };
     } finally {
-      isUpdating = false;
+      updating = false;
     }
   }
 
@@ -422,8 +422,8 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
   function scrollIntoView(index, align) {
     if (!config) return;
 
-    if (isMeasured) {
-      if (isMeasuredWindow) {
+    if (measured) {
+      if (measuredWindow) {
         requestMeasured(index, align);
         return;
       }
@@ -470,7 +470,7 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
    * @returns {void | Promise<void>}
    */
   function sync() {
-    if (isMeasured) return tick().then(syncMeasurement);
+    if (measured) return tick().then(syncMeasurement);
     syncMeasurement();
   }
 
@@ -479,7 +479,7 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
    * outstanding request.
    */
   function syncMeasurement() {
-    measurer.sync(isMeasuredWindow ? getContainer() : null);
+    measurer.sync(measuredWindow ? getContainer() : null);
     settle();
   }
 
@@ -494,7 +494,7 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
    * @param {number} scrollTop
    */
   function noteScroll(scrollTop) {
-    if (Math.abs(scrollTop - lastWrittenScrollTop) > 1) {
+    if (Math.abs(scrollTop - prevWrittenScrollTop) > 1) {
       pending = null;
     }
   }
