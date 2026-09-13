@@ -31,7 +31,8 @@
 
   /**
    * The number to render after the slash (the "denominator" of a fraction).
-   * Hidden if it's the same as `value` or if `percentage` is `true`; see `forceShowTotal`.
+   * Hidden when it formats identically to `value`, or when `percentage` is `true`;
+   * see `forceShowTotal`.
    * @type {number}
    */
   export let total = undefined;
@@ -135,8 +136,7 @@
     : undefined;
   $: showDenominator =
     hasTotal &&
-    (forceShowTotal ||
-      (!percentage && total > value && formattedValue !== formattedTotal));
+    (forceShowTotal || (!percentage && formattedValue !== formattedTotal));
   $: displayValue = `${formattedValue ?? DASH}${percentage ? "%" : ""}`;
   $: resolvedTrendColor = trendColor ?? (trend === "up" ? "success" : "error");
 </script>
