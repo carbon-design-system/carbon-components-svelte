@@ -10,19 +10,19 @@
 
   const items = [
     {
-      title: "Natural Language Classifier",
+      title: "Billing and invoices",
       description:
-        "Natural Language Classifier uses advanced natural language processing and machine learning techniques to create custom classification models. Users train their data and the service predicts the appropriate category for the inputted text.",
+        "Manage payment methods, view invoice history, and download receipts for your organization's subscription.",
     },
     {
-      title: "Natural Language Understanding",
+      title: "API access",
       description:
-        "Analyze text to extract meta-data from content such as concepts, entities, emotion, relations, sentiment and more.",
+        "Generate and manage API keys, set rate limits, and configure webhook endpoints for programmatic access.",
     },
     {
-      title: "Language Translator",
+      title: "Team permissions",
       description:
-        "Translate text, documents, and websites from one language to another. Create industry or region-specific translations via the service's customization capability.",
+        "Assign roles and control which team members can view, edit, or administer workspace resources.",
     },
   ];
 
