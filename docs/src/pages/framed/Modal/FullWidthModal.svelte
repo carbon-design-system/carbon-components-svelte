@@ -4,36 +4,36 @@
   let open = false;
 </script>
 
-<Button on:click={() => (open = true)}>Open full-width modal</Button>
+<Button on:click={() => (open = true)}>View database instances</Button>
 
 <Modal
   fullWidth
   bind:open
-  modalLabel="An example of a modal with no padding"
-  modalHeading="Full Width Modal"
-  primaryButtonText="Add"
+  modalLabel="Cloudant"
+  modalHeading="Database instances"
+  primaryButtonText="Add instance"
   secondaryButtonText="Cancel"
   hasScrollingContent
   on:click:button--secondary={() => (open = false)}
 >
   <DataTable
     headers={[
-      { key: "a", value: "Column A" },
-      { key: "b", value: "Column B" },
-      { key: "c", value: "Column C" },
+      { key: "resource", value: "Resource" },
+      { key: "region", value: "Region" },
+      { key: "status", value: "Status" },
     ]}
     rows={[
       {
         id: "1",
-        a: "Row 1",
-        b: "Row 1",
-        c: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        resource: "prod-db-01",
+        region: "us-south",
+        status: "Provisioning replicas across three availability zones to meet the 99.99% SLA.",
       },
       {
         id: "2",
-        a: "Row 2",
-        b: "Row 2",
-        c: "Nunc dui magna, finibus id tortor sed, aliquet bibendum augue.",
+        resource: "staging-db-02",
+        region: "eu-de",
+        status: "Backup snapshot completed; 30-day retention policy applied.",
       },
     ]}
   />

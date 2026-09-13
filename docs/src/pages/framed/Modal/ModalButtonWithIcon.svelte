@@ -5,14 +5,14 @@
   let open = false;
 </script>
 
-<Button on:click={() => (open = true)}>Create database</Button>
+<Button on:click={() => (open = true)}>Invite teammate</Button>
 
 <Modal
   bind:open
-  modalHeading="Invite someone"
+  modalHeading="Invite teammate"
   primaryButtonText="Send invitation"
   primaryButtonIcon={Send}
   secondaryButtonText="Cancel"
 >
-  <p>Do you really want to invite someone?</p>
+  <p>An email invitation with a link to join the workspace will be sent.</p>
 </Modal>
