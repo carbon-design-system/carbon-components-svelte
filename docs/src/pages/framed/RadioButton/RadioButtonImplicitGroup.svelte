@@ -2,9 +2,9 @@
   import { RadioButton, Stack } from "carbon-components-svelte";
 
   const options = [
-    { value: "option1", label: "Option 1" },
-    { value: "option2", label: "Option 2" },
-    { value: "option3", label: "Option 3" },
+    { value: "immediately", label: "Immediately" },
+    { value: "daily", label: "Daily digest" },
+    { value: "weekly", label: "Weekly digest" },
   ];
 
   let checked = options.map(() => false);
