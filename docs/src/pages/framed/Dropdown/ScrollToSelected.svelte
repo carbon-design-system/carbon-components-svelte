@@ -3,10 +3,10 @@
 
   const items = Array.from({ length: 50 }, (_, i) => ({
     id: i,
-    text: `Item ${i + 1}`,
+    text: `Ticket #${10000 + i}`,
   }));
 
   let selectedId = 42;
 </script>
 
-<Dropdown labelText="Items" {items} bind:selectedId />
+<Dropdown labelText="Support ticket" {items} bind:selectedId />

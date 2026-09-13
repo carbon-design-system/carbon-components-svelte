@@ -3,7 +3,7 @@
 
   const items = Array.from({ length: 10_000 }, (_, i) => ({
     id: i,
-    text: `Item ${i + 1}`,
+    text: `Ticket #${10000 + i}`,
   }));
 
   let selectedId = 1000;
@@ -12,7 +12,7 @@
 
 <Stack gap={5}>
   <Dropdown
-    labelText="Virtualized Dropdown (10,000 items)"
+    labelText="Virtualized dropdown (10,000 support tickets)"
     {items}
     bind:selectedId
   />
