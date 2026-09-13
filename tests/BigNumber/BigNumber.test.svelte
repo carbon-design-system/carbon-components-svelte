@@ -107,3 +107,25 @@
 >
   <strong slot="labelChildren">Custom label content</strong>
 </BigNumber>
+
+<BigNumber
+  labelText="Currency"
+  value={1250000}
+  locale="en-US"
+  formatOptions={{ style: "currency", currency: "USD" }}
+  data-testid="format-currency"
+/>
+<BigNumber
+  labelText="Unit"
+  value={340}
+  locale="en-US"
+  fullNumber
+  formatOptions={{ style: "unit", unit: "millisecond", unitDisplay: "short" }}
+  data-testid="format-unit"
+/>
+<BigNumber
+  labelText="Custom format"
+  value={7}
+  format={(v) => `${v}h`}
+  data-testid="format-custom"
+/>

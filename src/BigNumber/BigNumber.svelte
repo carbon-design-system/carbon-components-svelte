@@ -68,6 +68,24 @@
   /** Set to `true` to render the loading skeleton in place of the value. */
   export let loading = false;
 
+  /**
+   * Additional options merged into the `Intl.NumberFormat` options used to format
+   * `value` and `total`. Consumer keys take precedence over the component's defaults.
+   * @type {Intl.NumberFormatOptions}
+   * @example
+   * `{ style: "currency", currency: "USD" }`
+   * @example
+   * `{ style: "unit", unit: "millisecond" }`
+   */
+  export let formatOptions = undefined;
+
+  /**
+   * Provide a custom formatter for `value` and `total`, replacing Intl formatting
+   * entirely. Non-number inputs still render the dash.
+   * @type {(value: number) => string}
+   */
+  export let format = undefined;
+
   import ArrowDown from "../icons/ArrowDown.svelte";
   import ArrowUp from "../icons/ArrowUp.svelte";
   import Tooltip from "../Tooltip/Tooltip.svelte";
@@ -77,11 +95,13 @@
 
   function formatNumber(num, digits, doTruncate) {
     if (typeof num !== "number" || Number.isNaN(num)) return undefined;
+    if (format) return format(num);
     const options = { maximumFractionDigits: digits };
     if (doTruncate) {
       options.notation = "compact";
       options.compactDisplay = "short";
     }
+    Object.assign(options, formatOptions);
     return new Intl.NumberFormat(locale, options).format(num);
   }
 

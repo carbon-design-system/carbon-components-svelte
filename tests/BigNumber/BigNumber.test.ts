@@ -180,4 +180,33 @@ describe("BigNumber", () => {
     expect(screen.getByText("Custom label content")).toBeInTheDocument();
     expect(el).not.toHaveTextContent("Default label");
   });
+
+  describe("formatOptions and format", () => {
+    it("formats the value as currency", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("format-currency");
+      expect(el.querySelector(".bx--big-number__value")).toHaveTextContent(
+        /^\$1\.[23]M$/,
+      );
+    });
+
+    it("formats the value as a unit", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("format-unit");
+      expect(el.querySelector(".bx--big-number__value")).toHaveTextContent(
+        "340 ms",
+      );
+    });
+
+    it("uses a custom format function", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("format-custom");
+      expect(el.querySelector(".bx--big-number__value")).toHaveTextContent(
+        "7h",
+      );
+    });
+  });
 });
