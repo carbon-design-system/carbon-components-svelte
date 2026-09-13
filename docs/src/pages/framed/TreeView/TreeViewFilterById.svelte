@@ -10,45 +10,45 @@
   const allNodes = [
     {
       id: "1",
-      text: "Documents",
+      text: "Engineering",
       nodes: [
         {
           id: "1-1",
-          text: "Work",
+          text: "Runbooks",
           nodes: [
-            { id: "1-1-1", text: "Report.docx" },
-            { id: "1-1-2", text: "Presentation.pptx" },
-            { id: "1-1-3", text: "Budget.xlsx" },
+            { id: "1-1-1", text: "Incident Response.md" },
+            { id: "1-1-2", text: "Deployment Playbook.md" },
+            { id: "1-1-3", text: "On-Call Rotation.md" },
           ],
         },
         {
           id: "1-2",
-          text: "Personal",
+          text: "Architecture",
           nodes: [
-            { id: "1-2-1", text: "Resume.pdf" },
-            { id: "1-2-2", text: "Cover Letter.pdf" },
+            { id: "1-2-1", text: "System Design.pdf" },
+            { id: "1-2-2", text: "API Contracts.pdf" },
           ],
         },
       ],
     },
     {
       id: "2",
-      text: "Pictures",
+      text: "Finance",
       nodes: [
-        { id: "2-1", text: "Vacation.jpg" },
-        { id: "2-2", text: "Family.jpg" },
+        { id: "2-1", text: "Q1-Invoice.pdf" },
+        { id: "2-2", text: "Q2-Invoice.pdf" },
       ],
     },
     {
       id: "3",
-      text: "Music",
+      text: "Support",
       nodes: [
         {
           id: "3-1",
-          text: "Rock",
+          text: "Tier 1",
           nodes: [
-            { id: "3-1-1", text: "Song1.mp3" },
-            { id: "3-1-2", text: "Song2.mp3" },
+            { id: "3-1-1", text: "Ticket-1042.md" },
+            { id: "3-1-2", text: "Ticket-1043.md" },
           ],
         },
       ],
@@ -83,6 +83,6 @@
     <Button size="small" kind="tertiary" on:click={resetFilter}>Reset</Button>
   </ButtonSet>
   <div>
-    <TreeView labelText="File System" nodes={filteredNodes} {expandedIds} />
+    <TreeView labelText="Shared Drive" nodes={filteredNodes} {expandedIds} />
   </div>
 </Stack>
