@@ -13,10 +13,10 @@ description: Contained lists display items within a labeled container, with supp
 
 Display a basic contained list with a header label and list items. The default size is medium.
 
-<ContainedList labelText="List title">
-  <ContainedListItem>Item 1</ContainedListItem>
-  <ContainedListItem>Item 2</ContainedListItem>
-  <ContainedListItem>Item 3</ContainedListItem>
+<ContainedList labelText="Team members">
+  <ContainedListItem>Jane Cooper</ContainedListItem>
+  <ContainedListItem>Devon Lane</ContainedListItem>
+  <ContainedListItem>Esther Howard</ContainedListItem>
 </ContainedList>
 
 ## Custom label
@@ -24,10 +24,10 @@ Display a basic contained list with a header label and list items. The default s
 Use the `labelChildren` slot for custom label content instead of plain label text.
 
 <ContainedList>
-  <span slot="labelChildren" style:font-weight="normal">Custom label</span>
-  <ContainedListItem>Item 1</ContainedListItem>
-  <ContainedListItem>Item 2</ContainedListItem>
-  <ContainedListItem>Item 3</ContainedListItem>
+  <span slot="labelChildren" style:font-weight="normal">Team members</span>
+  <ContainedListItem>Jane Cooper</ContainedListItem>
+  <ContainedListItem>Devon Lane</ContainedListItem>
+  <ContainedListItem>Esther Howard</ContainedListItem>
 </ContainedList>
 
 ## Sizes
@@ -38,40 +38,40 @@ The default size is medium. See variants below for compact and larger layouts.
 
 Use the small size variant for more compact list items with reduced padding and height.
 
-<ContainedList labelText="List title" size="sm">
-  <ContainedListItem>Item 1</ContainedListItem>
-  <ContainedListItem>Item 2</ContainedListItem>
-  <ContainedListItem>Item 3</ContainedListItem>
+<ContainedList labelText="API keys" size="sm">
+  <ContainedListItem>Production key</ContainedListItem>
+  <ContainedListItem>Staging key</ContainedListItem>
+  <ContainedListItem>CI/CD key</ContainedListItem>
 </ContainedList>
 
 ### Large
 
 Use the large size variant for larger list items with increased padding and height.
 
-<ContainedList labelText="List title" size="lg">
-  <ContainedListItem>Item 1</ContainedListItem>
-  <ContainedListItem>Item 2</ContainedListItem>
-  <ContainedListItem>Item 3</ContainedListItem>
+<ContainedList labelText="API keys" size="lg">
+  <ContainedListItem>Production key</ContainedListItem>
+  <ContainedListItem>Staging key</ContainedListItem>
+  <ContainedListItem>CI/CD key</ContainedListItem>
 </ContainedList>
 
 ### Extra-large
 
 Use the extra-large size variant for the largest list items with maximum padding and height.
 
-<ContainedList labelText="List title" size="xl">
-  <ContainedListItem>Item 1</ContainedListItem>
-  <ContainedListItem>Item 2</ContainedListItem>
-  <ContainedListItem>Item 3</ContainedListItem>
+<ContainedList labelText="API keys" size="xl">
+  <ContainedListItem>Production key</ContainedListItem>
+  <ContainedListItem>Staging key</ContainedListItem>
+  <ContainedListItem>CI/CD key</ContainedListItem>
 </ContainedList>
 
 ## Inset rulers
 
 Set `inset` to inset divider lines from the edges for a more refined appearance.
 
-<ContainedList labelText="List title" inset>
-  <ContainedListItem>Item 1</ContainedListItem>
-  <ContainedListItem>Item 2</ContainedListItem>
-  <ContainedListItem>Item 3</ContainedListItem>
+<ContainedList labelText="Connected integrations" inset>
+  <ContainedListItem>Slack</ContainedListItem>
+  <ContainedListItem>GitHub</ContainedListItem>
+  <ContainedListItem>PagerDuty</ContainedListItem>
 </ContainedList>
 
 ## Disclosed
@@ -79,14 +79,14 @@ Set `inset` to inset divider lines from the edges for a more refined appearance.
 Set `kind` to `"disclosed"` for a compact header that sticks while scrolling. In long lists, the header stays visible at the top of the container.
 
 <div style:height="200px" style:overflow-y="auto">
-  <ContainedList labelText="List title 1" kind="disclosed">
-    {#each Array.from({ length: 6 }) as i}
-      <ContainedListItem>Item</ContainedListItem>
+  <ContainedList labelText="Audit log — Today" kind="disclosed">
+    {#each ["User jane.cooper@acme.com signed in", "API key rotated for billing-service", "Role updated: admin granted to devon.lane", "Webhook endpoint added", "Deployment to production completed", "Password reset requested"] as entry}
+      <ContainedListItem>{entry}</ContainedListItem>
     {/each}
   </ContainedList>
-  <ContainedList labelText="List title 2" kind="disclosed">
-    {#each Array.from({ length: 6 }) as i}
-      <ContainedListItem>Item</ContainedListItem>
+  <ContainedList labelText="Audit log — Yesterday" kind="disclosed">
+    {#each ["User esther.howard@acme.com signed in", "API key revoked for legacy-service", "Role updated: viewer granted to marcus.chen", "Webhook endpoint removed", "Deployment to staging completed", "Two-factor authentication enabled"] as entry}
+      <ContainedListItem>{entry}</ContainedListItem>
     {/each}
   </ContainedList>
 </div>
@@ -95,10 +95,10 @@ Set `kind` to `"disclosed"` for a compact header that sticks while scrolling. In
 
 Add icons using the `icon` prop. Icons appear to the left of each item.
 
-<ContainedList labelText="List title">
-  <ContainedListItem icon={Add}>Item 1</ContainedListItem>
-  <ContainedListItem icon={Add}>Item 2</ContainedListItem>
-  <ContainedListItem icon={Add}>Item 3</ContainedListItem>
+<ContainedList labelText="Quick actions">
+  <ContainedListItem icon={Add}>Invite team member</ContainedListItem>
+  <ContainedListItem icon={Add}>Connect integration</ContainedListItem>
+  <ContainedListItem icon={Add}>Generate API key</ContainedListItem>
 </ContainedList>
 
 ## Search
@@ -109,11 +109,11 @@ Add a search input to filter list items.
 
 Use the `action` slot on the list to add an expandable search control in the header.
 
-<ContainedList labelText="List title">
+<ContainedList labelText="Team members">
   <Search slot="action" expandable />
-  <ContainedListItem>Item 1</ContainedListItem>
-  <ContainedListItem>Item 2</ContainedListItem>
-  <ContainedListItem>Item 3</ContainedListItem>
+  <ContainedListItem>Jane Cooper</ContainedListItem>
+  <ContainedListItem>Devon Lane</ContainedListItem>
+  <ContainedListItem>Esther Howard</ContainedListItem>
 </ContainedList>
 
 ### Persistent
@@ -130,21 +130,21 @@ Make items respond to interaction with `interactive` for in-page actions or `hre
 
 Set `interactive` on a list item to render it as a clickable button with keyboard support. Combine with `disabled` to prevent interaction.
 
-<ContainedList labelText="List title">
+<ContainedList labelText="Notifications">
   <ContainedListItem interactive on:click={() => console.log('click')}>
-    Item 1
+    Deployment to production succeeded
   </ContainedListItem>
-  <ContainedListItem interactive disabled>Item 2</ContainedListItem>
-  <ContainedListItem interactive>Item 3</ContainedListItem>
+  <ContainedListItem interactive disabled>New comment on PR #482</ContainedListItem>
+  <ContainedListItem interactive>Build #1042 failed</ContainedListItem>
 </ContainedList>
 
 ### With actions
 
 Use the `action` slot on an item for trailing controls such as buttons or icons. Actions sit on the trailing edge and do not block the item click target.
 
-<ContainedList labelText="List title">
+<ContainedList labelText="Notifications">
   <ContainedListItem interactive on:click={() => console.log('click')}>
-    Item 1
+    Deployment to production succeeded
     <Button
       slot="action"
       kind="ghost"
@@ -153,9 +153,9 @@ Use the `action` slot on an item for trailing controls such as buttons or icons.
       on:click={() => console.log('click close')}
     />
   </ContainedListItem>
-  <ContainedListItem interactive disabled>Item 2</ContainedListItem>
+  <ContainedListItem interactive disabled>New comment on PR #482</ContainedListItem>
   <ContainedListItem interactive>
-    Item 3
+    Build #1042 failed
   </ContainedListItem>
 </ContainedList>
 
