@@ -30,5 +30,5 @@ export type Carousel = {
  */
 export function initCarousel(
   container: HTMLElement,
-  config?: CarouselConfig,
+  options?: CarouselConfig,
 ): Carousel;

@@ -5,10 +5,10 @@
  * the latest arguments. Exposes `cancel()`.
  *
  * @template {(...args: unknown[]) => void} Fn
- * @param {Fn} fn
+ * @param {Fn} callback
  * @returns {((...args: Parameters<Fn>) => void) & { cancel: () => void }}
  */
-export function rafThrottle(fn) {
+export function rafThrottle(callback) {
   /** @type {number | null} */
   let rafId = null;
   /** @type {Parameters<Fn> | undefined} */
@@ -22,7 +22,7 @@ export function rafThrottle(fn) {
       rafId = null;
       const args = pendingArgs;
       pendingArgs = undefined;
-      if (args) fn(...args);
+      if (args) callback(...args);
     });
   }
 

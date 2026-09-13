@@ -47,13 +47,13 @@ export function createTimeoutDismiss() {
     /**
      * @param {boolean} open
      * @param {number} timeout
-     * @param {() => void} onTimeoutCb
+     * @param {() => void} callback
      */
-    sync(open, timeout, onTimeoutCb) {
+    sync(open, timeout, callback) {
       clearTimeout(timeoutId);
       timeoutId = undefined;
       paused = false;
-      onTimeout = onTimeoutCb;
+      onTimeout = callback;
       active = typeof window !== "undefined" && open && timeout > 0;
       if (active) {
         schedule(timeout);

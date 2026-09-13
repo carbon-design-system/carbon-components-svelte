@@ -1,4 +1,4 @@
-export type DelayedSetter = ((delay: number, fn: () => void) => void) & {
+export type DelayedSetter = ((delay: number, callback: () => void) => void) & {
   cancel: () => void;
 };
 
