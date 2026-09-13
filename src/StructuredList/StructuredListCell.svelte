@@ -47,7 +47,9 @@
    * Only used when `sortable` is `true`.
    * @type {(id: StructuredListCellTranslationId) => string}
    */
-  export let translateWithId = (id) => defaultTranslations[id];
+  export let translateWithId = function translateWithId(id) {
+    return defaultTranslations[id];
+  };
 
   import { createEventDispatcher, getContext } from "svelte";
   import ArrowsVertical from "../icons/ArrowsVertical.svelte";
