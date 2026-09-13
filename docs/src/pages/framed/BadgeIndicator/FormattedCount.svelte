@@ -1,5 +1,6 @@
 <script>
   import { BadgeIndicator, Button, Stack } from "carbon-components-svelte";
+  import Email from "carbon-icons-svelte/lib/Email.svelte";
   import Notification from "carbon-icons-svelte/lib/Notification.svelte";
 
   const notifications = 1200;
@@ -22,7 +23,7 @@
   >
     <BadgeIndicator slot="badge" count={formatCount(notifications)} />
   </Button>
-  <Button kind="ghost" icon={Notification} iconDescription="Notifications">
+  <Button kind="ghost" icon={Email} iconDescription="Messages">
     <BadgeIndicator slot="badge" count={formatCount(messages)} />
   </Button>
   <Button kind="ghost" icon={Notification} iconDescription="Notifications">
