@@ -4,14 +4,18 @@
   let open = false;
 </script>
 
-<Button on:click={() => (open = true)}>Open modal</Button>
+<Button on:click={() => (open = true)}>Reset password</Button>
 
 <Modal
   bind:open
-  modalHeading="Sign in"
-  primaryButtonText="Submit"
+  modalHeading="Reset password"
+  primaryButtonText="Reset password"
   secondaryButtonText="Cancel"
   on:click:button--secondary={() => (open = false)}
 >
-  <PasswordInput labelText="Password" placeholder="Enter password..." />
+  <PasswordInput
+    labelText="New password"
+    placeholder="Enter new password..."
+    helperText="Must be at least 12 characters and include a number and symbol."
+  />
 </Modal>
