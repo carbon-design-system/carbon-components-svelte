@@ -59,6 +59,8 @@ Set tooltip position relative to the navigation buttons with `tooltipPosition`.
 
 ## Events
 
+Respond to page changes and button clicks.
+
 ### Change
 
 Use `on:change` to listen for every user interaction—clicking a page number, an overflow menu item, or the previous/next buttons. The event detail includes the resulting page.

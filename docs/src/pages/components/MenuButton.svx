@@ -250,6 +250,8 @@ Choosing an item closes the menu by default, including any open submenus. Call `
 
 ## Events
 
+Respond to menu close attempts.
+
 ### Close event
 
 Use `on:close` to respond to every close attempt, regardless of cause. The event detail's `trigger` is `"escape-key"`, `"outside-click"`, or `"select"`.

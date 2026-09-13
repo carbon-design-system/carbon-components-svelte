@@ -232,6 +232,8 @@ Combine `sortable` header cells with `selection` to let users sort and select ro
 
 ## Events
 
+Respond to row selection changes.
+
 ### Selection change
 
 `StructuredList` dispatches a `change` event whenever the selected row changes. The event detail is the selected value—or an array of values when `multiple` is `true`.
