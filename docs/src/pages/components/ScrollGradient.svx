@@ -4,6 +4,29 @@ description: ScrollGradient overlays a fading gradient at the edges of a scrolla
 
 <script>
   import { ScrollGradient } from "carbon-components-svelte";
+
+  const auditLogEntries = [
+    "Signed in from new device",
+    "Updated API key",
+    "Revoked session token",
+    "Created service account",
+    "Modified IAM role: viewer → editor",
+    "Exported audit log (CSV)",
+    "Enabled MFA",
+    "Disabled webhook endpoint",
+    "Rotated database credentials",
+    "Added user to Engineering group",
+    "Removed user from Billing group",
+    "Updated SSO configuration",
+    "Approved access request #482",
+    "Denied access request #483",
+    "Archived project 'legacy-api'",
+    "Restored project 'legacy-api'",
+    "Updated rate limit policy",
+    "Deployed hotfix to production",
+    "Scaled worker pool to 12 nodes",
+    "Rotated TLS certificate",
+  ];
 </script>
 
 ## Basic
@@ -11,8 +34,8 @@ description: ScrollGradient overlays a fading gradient at the edges of a scrolla
 Wrap scrollable content in `ScrollGradient`. Set a height on the component so the content overflows vertically. The top gradient appears once the content is scrolled past its start, and the bottom gradient hides once it's scrolled to the end.
 
 <ScrollGradient style="height: 12rem">
-  {#each Array(20) as _, i}
-    <p>Item {i + 1}</p>
+  {#each auditLogEntries as entry}
+    <p>{entry}</p>
   {/each}
 </ScrollGradient>
 
@@ -35,8 +58,8 @@ Gradients appear independently for each axis. Set a width to overflow horizontal
 Set `color` to override the gradient color. Defaults to the `layer` theme token.
 
 <ScrollGradient color="cornflowerblue" style="height: 12rem">
-  {#each Array(20) as _, i}
-    <p>Item {i + 1}</p>
+  {#each auditLogEntries as entry}
+    <p>{entry}</p>
   {/each}
 </ScrollGradient>
 

@@ -27,7 +27,7 @@
   <Checkbox labelText="Hide start gradient" bind:checked={hideStartGradient} />
   <ScrollGradient {hideStartGradient} style="height: 8rem">
     {#each Array(itemCount) as _, i}
-      <p>Item {i + 1}</p>
+      <p>Export job #{i + 1}</p>
     {/each}
   </ScrollGradient>
 </Stack>
