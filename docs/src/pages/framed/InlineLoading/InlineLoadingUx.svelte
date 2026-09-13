@@ -4,7 +4,7 @@
 
   const descriptionMap = {
     active: "Submitting...",
-    finished: "Success",
+    finished: "Changes saved",
     inactive: "Cancelling...",
   };
 

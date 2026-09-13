@@ -32,14 +32,14 @@ The component supports different status states to indicate progress:
 
 <InlineLoading status="active" description="Submitting..." />
 <InlineLoading status="inactive" description="Cancelling..." />
-<InlineLoading status="finished" description="Success" />
-<InlineLoading status="error" description="An error occurred" />
+<InlineLoading status="finished" description="Changes saved" />
+<InlineLoading status="error" description="Failed to save changes" />
 
 ### Icon description
 
 Set `iconDescription` to override the accessible label announced for the status icon. For the `"finished"` and `"error"` states, it defaults to the `status` value if not set.
 
-<InlineLoading status="error" iconDescription="Upload failed" description="An error occurred" />
+<InlineLoading status="error" iconDescription="Upload failed" description="Failed to upload file" />
 
 ## Events
 
@@ -47,7 +47,7 @@ Listen for `on:success`, dispatched `successDelay` milliseconds (default `1500`)
 
 <InlineLoading
   status="finished"
-  description="Success"
+  description="Changes saved"
   successDelay={1000}
   on:success={() => console.log("success")}
 />
