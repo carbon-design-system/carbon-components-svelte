@@ -34,18 +34,18 @@ Use the large size variant for more prominent layouts.
 
 Choose from a variety of color types to match your design system.
 
-<Tag type="red">red</Tag>
-<Tag type="magenta">magenta</Tag>
-<Tag type="purple">purple</Tag>
-<Tag type="blue">blue</Tag>
-<Tag type="cyan">cyan</Tag>
-<Tag type="teal">teal</Tag>
-<Tag type="green">green</Tag>
-<Tag type="gray">gray</Tag>
-<Tag type="cool-gray">cool-gray</Tag>
-<Tag type="warm-gray">warm-gray</Tag>
-<Tag type="high-contrast">high-contrast</Tag>
-<Tag type="outline">outline</Tag>
+<Tag type="red">Critical</Tag>
+<Tag type="magenta">Security</Tag>
+<Tag type="purple">Beta</Tag>
+<Tag type="blue">Info</Tag>
+<Tag type="cyan">Preview</Tag>
+<Tag type="teal">Verified</Tag>
+<Tag type="green">Healthy</Tag>
+<Tag type="gray">Inactive</Tag>
+<Tag type="cool-gray">Archived</Tag>
+<Tag type="warm-gray">Deprecated</Tag>
+<Tag type="high-contrast">Featured</Tag>
+<Tag type="outline">Draft</Tag>
 
 ## Inline
 
@@ -151,18 +151,18 @@ Set `interactive` to render a button element instead of a div for clickable tags
 
 Set `href` to render the tag as an anchor. Link tags reuse interactive styles. Do not wrap a `Tag` in an `<a>`; pass `href` on the tag itself. `href` is mutually exclusive with `filter`; when both are set, `filter` takes precedence.
 
-<Tag href="/components/Tag" type="red">red</Tag>
-<Tag href="/components/Tag" type="magenta">magenta</Tag>
-<Tag href="/components/Tag" type="purple">purple</Tag>
-<Tag href="/components/Tag" type="blue">blue</Tag>
-<Tag href="/components/Tag" type="cyan">cyan</Tag>
-<Tag href="/components/Tag" type="teal">teal</Tag>
-<Tag href="/components/Tag" type="green">green</Tag>
-<Tag href="/components/Tag" type="gray">gray</Tag>
-<Tag href="/components/Tag" type="cool-gray">cool-gray</Tag>
-<Tag href="/components/Tag" type="warm-gray">warm-gray</Tag>
-<Tag href="/components/Tag" type="high-contrast">high-contrast</Tag>
-<Tag href="/components/Tag" type="outline">outline</Tag>
+<Tag href="/components/Tag" type="red">Critical</Tag>
+<Tag href="/components/Tag" type="magenta">Security</Tag>
+<Tag href="/components/Tag" type="purple">Beta</Tag>
+<Tag href="/components/Tag" type="blue">Info</Tag>
+<Tag href="/components/Tag" type="cyan">Preview</Tag>
+<Tag href="/components/Tag" type="teal">Verified</Tag>
+<Tag href="/components/Tag" type="green">Healthy</Tag>
+<Tag href="/components/Tag" type="gray">Inactive</Tag>
+<Tag href="/components/Tag" type="cool-gray">Archived</Tag>
+<Tag href="/components/Tag" type="warm-gray">Deprecated</Tag>
+<Tag href="/components/Tag" type="high-contrast">Featured</Tag>
+<Tag href="/components/Tag" type="outline">Draft</Tag>
 
 ## Disabled
 
@@ -210,7 +210,7 @@ Disable a selectable tag to prevent interaction.
 
 Use the small size variant for selectable tags.
 
-<SelectableTag size="sm">Small tag</SelectableTag>
+<SelectableTag size="sm">Compliant</SelectableTag>
 
 ## Skeleton
 
