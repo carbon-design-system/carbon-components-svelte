@@ -8,9 +8,12 @@
   <div>Open: <strong>{open}</strong></div>
   <Disclosure
     bind:open
-    summary="Show shipping details"
+    summary="Show deployment details"
     on:toggle={(e) => console.log("toggle", e.detail)}
   >
-    <p>Orders ship within 2 business days and arrive in 3-5 business days.</p>
+    <p>
+      Build #4213 deployed to production at 2:14 PM UTC. Rollback available for
+      the next 24 hours.
+    </p>
   </Disclosure>
 </Stack>
