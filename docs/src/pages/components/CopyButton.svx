@@ -11,7 +11,7 @@ description: Copy buttons copy text to the clipboard as a standalone control, fo
 
 Set `text` to the string to copy. By default, the copy button uses the native [Clipboard API](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText), with a `document.execCommand("copy")` fallback when that API is unavailable or rejects (for example in an insecure context); pass a function to `copy` to replace it (see [Override](#override)). For code examples, use [CodeSnippet](/components/CodeSnippet); for content not ready at render time, see [Async copy](#async-copy).
 
-<CopyButton text="Carbon svelte" />
+<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" />
 
 ## Async copy
 
@@ -27,7 +27,7 @@ Prefetch on hover with `on:mouseenter`.
 
 Set `kind` to `"ghost"` to render a transparent button that matches a [Button](/components/Button) with `kind="ghost"`. The default `kind` (`"primary"`) keeps Carbon's filled square.
 
-<CopyButton text="Carbon svelte" kind="ghost" />
+<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" kind="ghost" />
 
 ## Sizes
 
@@ -35,21 +35,21 @@ Set `size` to scale the square. Sizes align with the heights used by [Button](/c
 
 ### Small
 
-<CopyButton text="Carbon svelte" size="sm" />
+<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" size="sm" />
 
 ### Medium
 
 The default size (`md`) matches Carbon's native copy button.
 
-<CopyButton text="Carbon svelte" />
+<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" />
 
 ### Large
 
-<CopyButton text="Carbon svelte" size="lg" />
+<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" size="lg" />
 
 ### Extra large
 
-<CopyButton text="Carbon svelte" size="xl" />
+<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" size="xl" />
 
 ## Custom feedback
 
@@ -59,19 +59,19 @@ Customize the message and icon shown after copying.
 
 Set `feedback` to customize the message shown after copying. Set `errorFeedback` to customize the message shown when copying fails (default `"Failed to copy"`).
 
-<CopyButton text="Carbon svelte" feedback="Copied to clipboard" />
+<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" feedback="Copied to clipboard" />
 
 ### Icon
 
 Set `feedbackIcon` to show a different icon while feedback is visible. The copy icon returns when feedback closes.
 
-<CopyButton text="Carbon svelte" feedbackIcon={Checkmark} />
+<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" feedbackIcon={Checkmark} />
 
 ### Duration
 
 Set `feedbackTimeout` to change how long the feedback stays visible, in milliseconds. Defaults to `2000`.
 
-<CopyButton text="Carbon svelte" feedbackTimeout={5000} />
+<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" feedbackTimeout={5000} />
 
 ## Copy behavior
 
@@ -99,18 +99,18 @@ On hover or focus, the button shows a proactive tooltip with the `iconDescriptio
 
 Set `tooltipPosition` to place the tooltip relative to the button.
 
-<CopyButton text="Carbon svelte" iconDescription="Top" tooltipPosition="top" />
-<CopyButton text="Carbon svelte" iconDescription="Right" tooltipPosition="right" />
-<CopyButton text="Carbon svelte" iconDescription="Bottom" tooltipPosition="bottom" />
-<CopyButton text="Carbon svelte" iconDescription="Left" tooltipPosition="left" />
+<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" iconDescription="Top" tooltipPosition="top" />
+<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" iconDescription="Right" tooltipPosition="right" />
+<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" iconDescription="Bottom" tooltipPosition="bottom" />
+<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" iconDescription="Left" tooltipPosition="left" />
 
 ### Alignment
 
 Set `tooltipAlignment` to align the tooltip relative to the button.
 
-<CopyButton text="Carbon svelte" iconDescription="Start" tooltipAlignment="start" />
-<CopyButton text="Carbon svelte" iconDescription="Center" tooltipAlignment="center" />
-<CopyButton text="Carbon svelte" iconDescription="End" tooltipAlignment="end" />
+<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" iconDescription="Start" tooltipAlignment="start" />
+<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" iconDescription="Center" tooltipAlignment="center" />
+<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" iconDescription="End" tooltipAlignment="end" />
 
 ## Portal tooltip
 

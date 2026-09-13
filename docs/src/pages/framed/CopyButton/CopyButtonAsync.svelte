@@ -1,7 +1,7 @@
 <script>
   import { CopyButton } from "carbon-components-svelte";
 
-  const content = "Text fetched on demand";
+  const content = "api_9f2b41c9d8e34a1b8c6f2e0a1d9b3c47";
   let cachedContent = null;
 
   async function prefetchContent() {

@@ -13,5 +13,5 @@
   secondaryButtonText="Cancel"
   on:click:button--secondary={() => (open = false)}
 >
-  <CopyButton text="Carbon svelte" />
+  <CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" />
 </Modal>

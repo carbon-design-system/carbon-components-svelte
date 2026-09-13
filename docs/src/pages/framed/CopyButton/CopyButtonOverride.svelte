@@ -4,7 +4,7 @@
 </script>
 
 <CopyButton
-  text="Carbon svelte"
+  text="https://api.acme.io/webhooks/incoming/f8a2c91d"
   copy={(text) => copy(text)}
   tooltipAlignment="start"
 />
