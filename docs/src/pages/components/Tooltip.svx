@@ -47,9 +47,9 @@ Alternatively, use the `"triggerText"` slot for custom markup.
 
 Set the button's ARIA label with `iconDescription`. It defaults to `"Show information"`.
 
-<Tooltip iconDescription="Additional information">
+<Tooltip iconDescription="View resource details">
   <p>
-    The button has a custom ARIA label.
+    Resources are provisioned based on your account's organization.
   </p>
 </Tooltip>
 
