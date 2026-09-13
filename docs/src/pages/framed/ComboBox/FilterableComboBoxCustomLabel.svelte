@@ -4,7 +4,7 @@
   const translation = {
     Slack: 'Custom label for "Slack"',
     Email: 'Custom label for "Email"',
-    Fax: 'Custom label for "Fax"',
+    Webhook: 'Custom label for "Webhook"',
   };
 
   function itemToString(item) {
@@ -22,12 +22,12 @@
 </script>
 
 <ComboBox
-  labelText="Contact"
-  placeholder="Select contact method"
+  labelText="Alert channel"
+  placeholder="Select alert channel"
   items={[
     { id: "0", key: "Slack" },
     { id: "1", key: "Email" },
-    { id: "2", key: "Fax" },
+    { id: "2", key: "Webhook" },
   ]}
   {shouldFilterItem}
   {itemToString}

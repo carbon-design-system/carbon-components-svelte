@@ -13,12 +13,12 @@
   <ComboBox
     portalMenu
     light
-    labelText="Contact method"
-    placeholder="Select contact method"
+    labelText="Alert channel"
+    placeholder="Select alert channel"
     items={[
       { id: "0", text: "Slack" },
       { id: "1", text: "Email" },
-      { id: "2", text: "Fax" },
+      { id: "2", text: "Webhook" },
     ]}
   />
 </Stack>

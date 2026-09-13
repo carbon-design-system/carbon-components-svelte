@@ -8,16 +8,16 @@
 <Stack gap={2}>
   <ComboBox
     allowCustomValue
-    labelText="Favorite fruit"
-    placeholder="Select or enter a fruit"
-    helperText="You can select from the list or type your own"
+    labelText="Deployment region"
+    placeholder="Select or enter a region"
+    helperText="Select a common region or enter a custom one"
     bind:selectedId
     bind:value
     items={[
-    { id: "0", text: "Apple" },
-    { id: "1", text: "Banana" },
-    { id: "2", text: "Orange" },
-    { id: "3", text: "Strawberry" },
+    { id: "0", text: "us-east-1" },
+    { id: "1", text: "us-west-2" },
+    { id: "2", text: "eu-west-1" },
+    { id: "3", text: "ap-southeast-1" },
     ]}
     shouldFilterItem={(item, value) => {
     if (!value) return true;

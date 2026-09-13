@@ -4,7 +4,7 @@
   const items = [
     { id: "0", text: "Slack" },
     { id: "1", text: "Email" },
-    { id: "2", text: "Fax" },
+    { id: "2", text: "Webhook" },
   ];
 
   let comboBox1_selectedId = undefined;
@@ -20,15 +20,15 @@
 <Stack gap={4}>
   <ComboBox
     bind:selectedId={comboBox1_selectedId}
-    labelText="Primary contact"
-    placeholder="Select primary contact method"
+    labelText="Primary alert channel"
+    placeholder="Select primary alert channel"
     {items}
   />
   <div>Primary: {primary}</div>
   <ComboBox
     bind:selectedId={comboBox2_selectedId}
-    labelText="Secondary contact"
-    placeholder="Select secondary contact method"
+    labelText="Secondary alert channel"
+    placeholder="Select secondary alert channel"
     {items}
   />
   <div>Secondary: {secondary}</div>
