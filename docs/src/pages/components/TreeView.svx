@@ -1,5 +1,5 @@
 ---
-description: A tree view displays hierarchical data in a collapsible tree structure. It supports node selection, expansion, icons, programmatic control of the tree state, and virtualization for large trees.
+description: A tree view displays hierarchical data in a collapsible structure, with node selection, expansion, icons, and virtualization for large trees.
 ---
 
 <script>

@@ -1,5 +1,5 @@
 ---
-description: ScrollGradient overlays a fading gradient at the edges of a scrollable container to hint that there's more content, hiding each edge's gradient once it's scrolled into view.
+description: ScrollGradient overlays a fading edge on a scrollable container to hint at more content, and hides once that edge is scrolled into view.
 ---
 
 <script>
