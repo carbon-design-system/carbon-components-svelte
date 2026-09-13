@@ -55,7 +55,6 @@
     translateWithId?.(translationId) ?? defaultTranslations[translationId];
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if sortable}
   <th
     {id}

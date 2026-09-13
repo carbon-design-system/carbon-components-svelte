@@ -291,8 +291,6 @@
     </span>
   </TooltipDefinition>
 {:else}
-  <!-- svelte-ignore a11y-no-static-element-interactions -->
-  <!-- svelte-ignore a11y-missing-attribute -->
   <svelte:element
     this={avatarTag}
     bind:this={ref}

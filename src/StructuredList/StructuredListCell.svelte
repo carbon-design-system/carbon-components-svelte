@@ -90,7 +90,6 @@
 </script>
 
 {#if head && sortable}
-  <!-- svelte-ignore a11y-mouse-events-have-key-events -->
   <div
     role={selection ? undefined : "columnheader"}
     aria-sort={active ? sortDirection : "none"}
@@ -124,7 +123,6 @@
     </button>
   </div>
 {:else}
-  <!-- svelte-ignore a11y-mouse-events-have-key-events -->
   <div
     role={selection ? undefined : head ? "columnheader" : "cell"}
     class:bx--structured-list-th={head}

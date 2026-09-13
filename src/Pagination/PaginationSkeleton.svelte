@@ -8,8 +8,6 @@
   import SkeletonText from "../SkeletonText/SkeletonText.svelte";
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
-<!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
   class:bx--pagination={true}
   class:bx--pagination--xs={size === "xs"}

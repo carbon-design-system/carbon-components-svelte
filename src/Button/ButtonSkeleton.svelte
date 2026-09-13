@@ -12,7 +12,6 @@
   export let size = "default";
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if href}
   <a
     {href}
@@ -35,7 +34,6 @@
     {""}
   </a>
 {:else}
-  <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div
     class:bx--skeleton={true}
     class:bx--btn={true}

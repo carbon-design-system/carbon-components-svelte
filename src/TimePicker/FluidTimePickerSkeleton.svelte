@@ -6,8 +6,6 @@
   export let isOnlyTwo = false;
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
-<!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
   class:bx--time-picker--fluid--skeleton={true}
   class:bx--time-picker--equal-width={isOnlyTwo}

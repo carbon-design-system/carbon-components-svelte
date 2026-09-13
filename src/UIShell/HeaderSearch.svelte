@@ -443,7 +443,6 @@
   </div>
 
   {#if richMenu && active}
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div
       bind:this={menuRef}
       id={menuId}
@@ -473,7 +472,6 @@
       {/if}
     </div>
   {:else if active && results.length > 0}
-    <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
     <ul
       aria-labelledby={labelId}
       role="menu"

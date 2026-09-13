@@ -54,8 +54,6 @@
   const dispatch = createEventDispatcher();
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
-<!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
   class:bx--form-item={true}
   class:bx--toggle--readonly={readonly}
@@ -66,7 +64,6 @@
   on:mouseenter
   on:mouseleave
 >
-  <!-- svelte-ignore a11y-role-has-required-aria-props -->
   <input
     bind:this={ref}
     role="switch"

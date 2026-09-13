@@ -21,7 +21,6 @@
 {#if count > 1}
   <li class:bx--pagination-nav__list-item={true}>
     <div class:bx--pagination-nav__select={true}>
-      <!-- svelte-ignore a11y-no-onchange -->
       <select
         aria-label="Select Page number"
         {value}

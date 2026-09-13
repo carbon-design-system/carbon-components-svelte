@@ -341,7 +341,6 @@
   };
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if skeleton}
   <ButtonSkeleton
     {href}
@@ -360,8 +359,6 @@
 {:else if href && !isDisabled}
   {#if $$slots.badge}
     <div class="bx--btn__badge-wrapper">
-      <!-- svelte-ignore a11y-missing-attribute -->
-      <!-- svelte-ignore a11y-no-static-element-interactions -->
       <a
         bind:this={ref}
         {...buttonProps}
@@ -402,8 +399,6 @@
       <slot name="badge" />
     </div>
   {:else}
-    <!-- svelte-ignore a11y-missing-attribute -->
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
     <a
       bind:this={ref}
       {...buttonProps}

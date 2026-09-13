@@ -44,12 +44,7 @@
   export let ref = null;
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
-<!-- svelte-ignore a11y-missing-attribute -->
-<!-- svelte-ignore a11y-no-redundant-roles -->
-<!-- svelte-ignore a11y-interactive-supports-focus -->
 {#if disabled}
-  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <a
     bind:this={ref}
     role="link"

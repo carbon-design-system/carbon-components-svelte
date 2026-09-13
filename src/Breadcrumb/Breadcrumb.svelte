@@ -19,7 +19,6 @@
   import BreadcrumbSkeleton from "./BreadcrumbSkeleton.svelte";
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if skeleton}
   <BreadcrumbSkeleton
     {noTrailingSlash}
@@ -31,7 +30,6 @@
     on:mouseleave
   />
 {:else}
-  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <nav
     aria-label={labelText}
     {...$$restProps}

@@ -245,7 +245,6 @@
   lockDirection="always"
   let:direction={portalDirection}
 >
-  <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
   <ul
     bind:this={ref}
     use:rovingFocus={{

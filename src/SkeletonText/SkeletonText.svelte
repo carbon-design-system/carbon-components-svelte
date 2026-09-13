@@ -17,9 +17,7 @@
   $: widthPx = width.includes("px");
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if paragraph}
-  <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div
     aria-hidden="true"
     {...$$restProps}
@@ -43,7 +41,6 @@
     {/each}
   </div>
 {:else}
-  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <p
     aria-hidden="true"
     class:bx--skeleton__text={true}

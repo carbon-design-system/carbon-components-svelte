@@ -395,7 +395,6 @@
   });
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if skeleton}
   <CodeSnippetSkeleton
     {type}
@@ -493,7 +492,6 @@
     {/if}
   {/if}
 {:else}
-  <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div
     class:bx--snippet={true}
     class:bx--snippet--expand={expanded}
@@ -509,7 +507,6 @@
     on:mouseenter
     on:mouseleave
   >
-    <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
     <div
       {id}
       role="textbox"

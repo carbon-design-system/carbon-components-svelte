@@ -44,7 +44,6 @@
   }
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <button
   type="button"
   aria-pressed={selected}
