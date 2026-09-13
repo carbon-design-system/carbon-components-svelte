@@ -11,6 +11,7 @@
     HeaderPanelLinks,
     HeaderSearch,
     HeaderUtilities,
+    ScrollGradient,
     SearchMenuGroup,
     SearchMenuItem,
     SideNav,
@@ -338,42 +339,48 @@
   </Header>
 
   <SideNav class="docs-sidenav" bind:isOpen={isSideNavOpen}>
-    <SideNavItems>
-      <SideNavLink
-        text="Introduction"
-        href={$url("/")}
-        isSelected={$isActive($url("/"), {}, { recursive: false })}
-      />
-      <SideNavLink
-        text="Quick start"
-        href={$url("/quick-start")}
-        isSelected={$isActive($url("/quick-start"))}
-      />
-      <SideNavLink
-        text="Component index"
-        href={$url("/component-index")}
-        isSelected={$isActive($url("/component-index"))}
-      />
-      <SideNavDivider />
-      {#each groupedNav as group, groupIndex (group.label)}
-        <Text
-          tag="li"
-          type="label-01"
-          color="secondary"
-          class={subheadingClass(groupIndex)}
-        >
-          {group.label}
-        </Text>
-        {#each group.children as child (child.path)}
-          <SideNavLink
-            text={child.name}
-            href={$url(child.path)}
-            isSelected={$isActive($url(child.path))}
-          />
+    <ScrollGradient
+      color="var(--cds-background)"
+      hideStartGradient
+      style="height: 100%"
+    >
+      <SideNavItems>
+        <SideNavLink
+          text="Introduction"
+          href={$url("/")}
+          isSelected={$isActive($url("/"), {}, { recursive: false })}
+        />
+        <SideNavLink
+          text="Quick start"
+          href={$url("/quick-start")}
+          isSelected={$isActive($url("/quick-start"))}
+        />
+        <SideNavLink
+          text="Component index"
+          href={$url("/component-index")}
+          isSelected={$isActive($url("/component-index"))}
+        />
+        <SideNavDivider />
+        {#each groupedNav as group, groupIndex (group.label)}
+          <Text
+            tag="li"
+            type="label-01"
+            color="secondary"
+            class={subheadingClass(groupIndex)}
+          >
+            {group.label}
+          </Text>
+          {#each group.children as child (child.path)}
+            <SideNavLink
+              text={child.name}
+              href={$url(child.path)}
+              isSelected={$isActive($url(child.path))}
+            />
+          {/each}
         {/each}
-      {/each}
-      <li class="sidenav-bottom-spacer" aria-hidden="true"></li>
-    </SideNavItems>
+        <li class="sidenav-bottom-spacer" aria-hidden="true"></li>
+      </SideNavItems>
+    </ScrollGradient>
   </SideNav>
   <slot />
 </Theme>
@@ -459,6 +466,11 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  :global(.docs-sidenav > .bx--scroll-gradient) {
+    flex: 1 1 0%;
+    min-height: 0;
   }
 
   :global(.bx--side-nav__items .bx--side-nav__divider) {
