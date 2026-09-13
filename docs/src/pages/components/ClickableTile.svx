@@ -40,7 +40,7 @@ Handle the `click` event to override default link behavior. Call `e.preventDefau
 
 ## Light
 
-Use the light color scheme with `light`.
+Use the light variant for light backgrounds.
 
 <ClickableTile light href="/services/object-storage">
 Object storage
