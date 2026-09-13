@@ -199,7 +199,7 @@ Use the small size for compact layouts by setting `size` to `"sm"`. This is idea
 
 ## Light
 
-Use the light variant for dark backgrounds by setting `light` to `true`.
+Use the light variant for light backgrounds.
 
 <NumberInput light labelText="Clusters" value={0} />
 

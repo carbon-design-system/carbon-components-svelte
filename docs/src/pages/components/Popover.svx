@@ -135,7 +135,7 @@ Appearance variants for different backgrounds.
 
 ### Light
 
-Enable the light variant for use on dark backgrounds.
+Use the light variant for light backgrounds.
 
 <div>
     Parent

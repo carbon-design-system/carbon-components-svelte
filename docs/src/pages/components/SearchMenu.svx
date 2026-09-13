@@ -51,7 +51,7 @@ Set `menuSize` to size the results menu independently of the input. By default t
 
 ## Light
 
-Set `light` to `true` for search menus on dark backgrounds.
+Use the light variant for light backgrounds.
 
 <SearchMenu light labelText="Search" placeholder="Search...">
   <SearchMenuItem text="Databases for TestSQL" />
