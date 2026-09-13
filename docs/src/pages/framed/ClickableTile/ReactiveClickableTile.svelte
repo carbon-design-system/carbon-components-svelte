@@ -5,6 +5,6 @@
 </script>
 
 <Stack gap={5}>
-  <div>Clicked: <strong>{clicked}</strong></div>
-  <ClickableTile bind:clicked>Click this tile</ClickableTile>
+  <div>Acknowledged: <strong>{clicked}</strong></div>
+  <ClickableTile bind:clicked>Acknowledge incident</ClickableTile>
 </Stack>
