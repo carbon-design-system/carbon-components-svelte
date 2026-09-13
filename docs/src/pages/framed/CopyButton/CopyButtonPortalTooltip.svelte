@@ -12,12 +12,12 @@
   style="overflow: hidden; border: 1px dashed var(--cds-border-subtle); padding: 1rem; max-height: 120px;"
 >
   <CopyButton
-    text="Carbon svelte"
+    text="https://api.acme.io/webhooks/incoming/f8a2c91d"
     feedback="Portalled (default)"
     tooltipAlignment="start"
   />
   <CopyButton
-    text="Carbon svelte"
+    text="https://api.acme.io/webhooks/incoming/f8a2c91d"
     feedback="Inline caret"
     portalTooltip={false}
     tooltipAlignment="start"
