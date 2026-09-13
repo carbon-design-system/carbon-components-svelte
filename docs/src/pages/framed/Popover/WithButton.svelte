@@ -6,7 +6,7 @@
 </script>
 
 <div bind:this={ref} style:position="relative">
-  <Button on:click={() => (open = !open)}>Toggle popover</Button>
+  <Button on:click={() => (open = !open)}>Quick settings</Button>
   <Popover
     bind:open
     align="bottom-left"
@@ -15,6 +15,6 @@
       open = ref.contains(detail.target);
     }}
   >
-    Content
+    Adjust table density and default sort order for this workspace.
   </Popover>
 </div>
