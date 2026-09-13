@@ -10,16 +10,16 @@ description: Tiles provide a container for displaying content in a structured, c
 
 Create a basic tile container for your content.
 
-<Tile>Content</Tile>
+<Tile>Payments API — Operational, 99.98% uptime</Tile>
 
 ## Light
 
 Use the light variant for light-themed backgrounds by setting `light` to `true`.
 
-<Tile light>Content</Tile>
+<Tile light>Object storage — 82% capacity used</Tile>
 
 ## Custom interaction
 
 The tile forwards `on:click`, `on:mouseover`, `on:mouseenter`, and `on:mouseleave` for custom interactions. Unlike `ClickableTile`, a plain tile has no `tabindex` and doesn't respond to <DocKbd label="Enter" /> or <DocKbd label="Space" />—use `ClickableTile` if you need built-in keyboard accessibility.
 
-<Tile on:click={() => console.log("clicked")}>Content</Tile>
+<Tile on:click={() => console.log("clicked")}>Storage cluster — 3 nodes degraded</Tile>
