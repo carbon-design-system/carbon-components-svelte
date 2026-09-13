@@ -37,11 +37,13 @@ describe("BigNumber", () => {
       expect(el.querySelector(".bx--big-number__denominator")).toBeNull();
     });
 
-    it("hides the denominator when total is less than value", () => {
+    it("shows the denominator when total is less than value", () => {
       render(BigNumber);
 
       const el = screen.getByTestId("total-less");
-      expect(el.querySelector(".bx--big-number__denominator")).toBeNull();
+      expect(
+        el.querySelector(".bx--big-number__denominator"),
+      ).toHaveTextContent("/ 3");
     });
 
     it("hides the denominator when its truncated display matches the value's", () => {
