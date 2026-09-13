@@ -11,38 +11,35 @@
   let open = false;
 </script>
 
-<Button on:click={() => (open = true)}>Open full-width modal</Button>
+<Button on:click={() => (open = true)}>View webhook deliveries</Button>
 
 <ComposedModal fullWidth bind:open>
-  <ModalHeader
-    label="An example of a modal with no padding"
-    title="Full Width Modal"
-  />
+  <ModalHeader label="Webhooks" title="Delivery history" />
   <ModalBody hasScrollingContent>
     <DataTable
       headers={[
-        { key: "a", value: "Column A" },
-        { key: "b", value: "Column B" },
-        { key: "c", value: "Column C" },
+        { key: "endpoint", value: "Endpoint" },
+        { key: "event", value: "Event" },
+        { key: "status", value: "Status" },
       ]}
       rows={[
         {
           id: "1",
-          a: "Row 1",
-          b: "Row 1",
-          c: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+          endpoint: "https://hooks.example.com/deploy",
+          event: "deployment.succeeded",
+          status: "Delivered in 214ms; response 200 OK.",
         },
         {
           id: "2",
-          a: "Row 2",
-          b: "Row 2",
-          c: "Nunc dui magna, finibus id tortor sed, aliquet bibendum augue.",
+          endpoint: "https://hooks.example.com/alerts",
+          event: "incident.created",
+          status: "Retrying after timeout; next attempt in 5 minutes.",
         },
       ]}
     />
   </ModalBody>
   <ModalFooter
-    primaryButtonText="Add"
+    primaryButtonText="Add endpoint"
     secondaryButtonText="Cancel"
     on:click:button--secondary={() => (open = false)}
   />
