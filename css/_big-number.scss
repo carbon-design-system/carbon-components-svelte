@@ -104,6 +104,10 @@
   .#{$prefix}--big-number__delta-label {
     color: $text-secondary;
   }
+
+  .#{$prefix}--big-number__footer {
+    margin-block-start: $carbon--spacing-03;
+  }
 }
 
 @include exports("big-number") {

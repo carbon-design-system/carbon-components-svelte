@@ -134,6 +134,11 @@
 />
 <BigNumber labelText="No delta" value={128000} data-testid="no-delta" />
 
+<BigNumber labelText="Footer" value={42} data-testid="footer">
+  <span>Footer content</span>
+</BigNumber>
+<BigNumber labelText="No footer" value={42} data-testid="no-footer" />
+
 <BigNumber labelText="Loading" value={42} loading data-testid="loading" />
 
 <BigNumber
