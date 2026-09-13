@@ -24,10 +24,10 @@ export function positionFlatpickrCalendarFixed(
   instance,
   customPositionElement,
 ) {
-  const positionElement =
+  const anchor =
     customPositionElement || instance._positionElement || instance._input;
   const calendarContainer = instance.calendarContainer;
-  if (!calendarContainer || !positionElement) return;
+  if (!calendarContainer || !anchor) return;
 
   const calendarHeight = Array.prototype.reduce.call(
     calendarContainer.children,
@@ -36,14 +36,14 @@ export function positionFlatpickrCalendarFixed(
     0,
   );
   const calendarWidth = calendarContainer.offsetWidth;
-  const inputBounds = positionElement.getBoundingClientRect();
+  const inputBounds = anchor.getBoundingClientRect();
   const distanceFromBottom = window.innerHeight - inputBounds.bottom;
   const showOnTop =
     distanceFromBottom < calendarHeight && inputBounds.top > calendarHeight;
 
   const top =
     inputBounds.top +
-    (showOnTop ? -calendarHeight - 2 : positionElement.offsetHeight + 2);
+    (showOnTop ? -calendarHeight - 2 : anchor.offsetHeight + 2);
   const left = inputBounds.left;
   const viewportWidth = document.documentElement.clientWidth;
   const rightMost = left + calendarWidth > viewportWidth;
