@@ -77,17 +77,17 @@ export function yearSelectPlugin(pluginConfig) {
     }
 
     function addListeners() {
-      fp._bind(fp.prevMonthNav, "click", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
+      fp._bind(fp.prevMonthNav, "click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
         // Rebuilding the grid happens in the `onYearChange` hook below, so
         // it also fires for programmatic `fp.changeYear()` calls.
         fp.changeYear(decadeStart() - 10);
       });
 
-      fp._bind(fp.nextMonthNav, "click", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
+      fp._bind(fp.nextMonthNav, "click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
         fp.changeYear(decadeStart() + 10);
       });
     }
@@ -114,29 +114,29 @@ export function yearSelectPlugin(pluginConfig) {
       for (let i = 0; i < 12; i++) {
         const year = start + i;
         /** @type {YearElement} */
-        const yearEl = fp._createElement("span", "flatpickr-yearSelect-year");
-        yearEl.dateObj = new Date(year, 0, 1);
-        yearEl.$i = i;
-        yearEl.textContent = String(year);
-        yearEl.tabIndex = -1;
-        yearEl.setAttribute("data-year", String(year));
-        yearEl.addEventListener("click", selectYear);
+        const yearCell = fp._createElement("span", "flatpickr-yearSelect-year");
+        yearCell.dateObj = new Date(year, 0, 1);
+        yearCell.$i = i;
+        yearCell.textContent = String(year);
+        yearCell.tabIndex = -1;
+        yearCell.setAttribute("data-year", String(year));
+        yearCell.addEventListener("click", selectYear);
 
         if (year === new Date().getFullYear()) {
-          yearEl.classList.add("today");
-          yearEl.setAttribute("aria-current", "date");
+          yearCell.classList.add("today");
+          yearCell.setAttribute("aria-current", "date");
         }
 
         if (
           (fp.config.minDate &&
-            yearEl.dateObj.getFullYear() < fp.config.minDate.getFullYear()) ||
+            yearCell.dateObj.getFullYear() < fp.config.minDate.getFullYear()) ||
           (fp.config.maxDate &&
-            yearEl.dateObj.getFullYear() > fp.config.maxDate.getFullYear())
+            yearCell.dateObj.getFullYear() > fp.config.maxDate.getFullYear())
         ) {
-          yearEl.classList.add("disabled");
+          yearCell.classList.add("disabled");
         }
 
-        self.yearsContainer.appendChild(yearEl);
+        self.yearsContainer.appendChild(yearCell);
       }
 
       const firstYear = start;
@@ -172,12 +172,12 @@ export function yearSelectPlugin(pluginConfig) {
     }
 
     /**
-     * @param {Event} e
+     * @param {Event} event
      */
-    function selectYear(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      const eventTarget = getEventTarget(e);
+    function selectYear(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      const eventTarget = getEventTarget(event);
       if (
         eventTarget instanceof Element &&
         !eventTarget.classList.contains("disabled")
@@ -206,11 +206,11 @@ export function yearSelectPlugin(pluginConfig) {
      * @param {any} _
      * @param {any} __
      * @param {any} ___
-     * @param {KeyboardEvent} e
+     * @param {KeyboardEvent} event
      */
-    function onKeyDown(_, __, ___, e) {
-      const shouldMove = shifts[e.keyCode] !== undefined;
-      if (!shouldMove && e.keyCode !== 13) return;
+    function handleKeydown(_, __, ___, event) {
+      const shouldMove = shifts[event.keyCode] !== undefined;
+      if (!shouldMove && event.keyCode !== 13) return;
       if (!fp.rContainer || !self.yearsContainer) return;
 
       const currentlySelected = fp.rContainer.querySelector(
@@ -230,10 +230,12 @@ export function yearSelectPlugin(pluginConfig) {
 
       if (shouldMove) {
         /** @type {HTMLElement} */ (
-          self.yearsContainer.children[(12 + index + shifts[e.keyCode]) % 12]
+          self.yearsContainer.children[
+            (12 + index + shifts[event.keyCode]) % 12
+          ]
         ).focus();
       } else if (
-        e.keyCode === 13 &&
+        event.keyCode === 13 &&
         self.yearsContainer.contains(document.activeElement)
       ) {
         setYear(/** @type {YearElement} */ (document.activeElement).dateObj);
@@ -255,7 +257,7 @@ export function yearSelectPlugin(pluginConfig) {
         fp.config.enableTime = false;
       },
       onValueUpdate: setCurrentlySelected,
-      onKeyDown,
+      onKeyDown: handleKeydown,
       onYearChange: () => {
         buildYears();
         updateRangeLabel();

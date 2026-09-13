@@ -7,5 +7,6 @@ declare module "flatpickr/dist/esm/plugins/monthSelect" {
   }
 
   const monthSelectPlugin: (config?: MonthSelectPluginConfig) => unknown;
-  export default monthSelectPlugin;
+
+  export { monthSelectPlugin as default };
 }

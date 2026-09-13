@@ -5,5 +5,6 @@ declare module "flatpickr/dist/esm/plugins/rangePlugin" {
   }
 
   const rangePlugin: new (config: RangePluginConfig) => unknown;
-  export default rangePlugin;
+
+  export { rangePlugin as default };
 }
