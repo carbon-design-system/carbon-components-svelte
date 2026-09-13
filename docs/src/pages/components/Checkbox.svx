@@ -13,19 +13,19 @@ Create a checkbox with a label using `labelText`.
 
 By default, the checkbox is unchecked.
 
-<Checkbox labelText="Label text" />
+<Checkbox labelText="Sync data automatically" />
 
 ## Checked
 
 Set `checked` to `true` to pre-select the checkbox.
 
-<Checkbox labelText="Label text" checked />
+<Checkbox labelText="Remember this device" checked />
 
 ## Indeterminate
 
 Set `indeterminate` to `true` to show a mixed state, typically used in parent checkboxes with some children selected.
 
-<Checkbox labelText="Label text" indeterminate />
+<Checkbox labelText="Select all permissions" indeterminate />
 
 ## Labels
 
@@ -35,7 +35,7 @@ Control the visibility and content of the checkbox label.
 
 Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
 
-<Checkbox labelText="Label text" hideLabel />
+<Checkbox labelText="Select row" hideLabel />
 
 ### Custom label
 
@@ -61,14 +61,14 @@ Reflect interaction states.
 
 Set `disabled` to `true` to prevent user interaction.
 
-<Checkbox labelText="Label text" disabled />
+<Checkbox labelText="Enable single sign-on (SSO)" disabled />
 
 ### Read-only
 
 Set `readonly` to `true` to make the checkbox non-interactive while keeping the label text readable. Unlike disabled, the readonly state is intended for displaying checkbox values that can only be changed programmatically.
 
-<Checkbox labelText="Label text (unchecked)" readonly />
-<Checkbox labelText="Label text (checked)" checked readonly />
+<Checkbox labelText="Require multi-factor authentication (unchecked)" readonly />
+<Checkbox labelText="Require multi-factor authentication (checked)" checked readonly />
 
 ### Invalid
 
@@ -114,7 +114,7 @@ When using `bind:group`, the checked state is derived from the group array: use 
 Use `on:check` to listen for changes to a standalone checkbox. The event dispatches the new checked state as `event.detail`.
 
 <Checkbox
-  labelText="Label text"
+  labelText="Enable audit logging"
   on:check={(e) => console.log(e.detail)} // boolean
 />
 
