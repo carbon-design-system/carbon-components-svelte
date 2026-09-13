@@ -11,7 +11,7 @@ description: Progress bars visually indicate the progress of operations like fil
 
 Create an indeterminate progress bar that continuously animates. A progress bar is indeterminate when `value` is left `undefined` while `status` is `"active"`.
 
-<ProgressBar helperText="Loading..." />
+<ProgressBar helperText="Checking for updates..." />
 
 ## Value
 
@@ -25,7 +25,7 @@ Display progress as a percentage with `value`.
 
 Set a custom maximum value for the progress bar.
 
-<ProgressBar value={40} max={200} labelText="Upload status" helperText="40 MB of 200 MB" />
+<ProgressBar value={40} max={200} labelText="Storage used" helperText="40 GB of 200 GB" />
 
 ## Label
 
@@ -50,7 +50,7 @@ Use the `labelChildren` slot to render custom label content, such as a tooltip i
 
 Use the small size variant for compact layouts.
 
-<ProgressBar size="sm" helperText="Loading..." />
+<ProgressBar size="sm" helperText="Refreshing table data..." />
 
 ## Status
 
@@ -76,19 +76,19 @@ Change layout with `kind`.
 
 Use the inline variant to display progress without helper text.
 
-<ProgressBar kind="inline" value={40} labelText="Upload status" helperText="40 MB of 100 MB" />
+<ProgressBar kind="inline" value={40} labelText="Sync progress" helperText="40 of 100 records synced" />
 
 ### Indented
 
 Use the indented variant for a more compact layout.
 
-<ProgressBar kind="indented" value={40} labelText="Upload status" helperText="40 MB of 100 MB" />
+<ProgressBar kind="indented" value={40} labelText="Provision resources" helperText="40 of 100 nodes provisioned" />
 
 ### Indented (status)
 
 Combine the indented variant with status indicators.
 
-<ProgressBar kind="indented" status="finished" value={40} labelText="Upload file" helperText="Upload complete" />
+<ProgressBar kind="indented" status="finished" value={40} labelText="Provision resources" helperText="Provisioning complete" />
 
 ## UX example
 
