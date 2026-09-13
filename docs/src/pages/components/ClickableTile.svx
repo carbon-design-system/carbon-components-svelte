@@ -10,8 +10,8 @@ description: Clickable tiles are interactive content areas that link to another 
 
 Create a clickable tile with an href to link to another page.
 
-<ClickableTile href="https://www.carbondesignsystem.com/">
-Carbon Design System
+<ClickableTile href="https://cloud.ibm.com/docs/api-gateway/">
+API documentation
 </ClickableTile>
 
 ## Keyboard interaction
@@ -29,27 +29,27 @@ Bind to `clicked` to read whether the tile has been activated.
 Handle the `click` event to override default link behavior. Call `e.preventDefault()` to stop navigation.
 
 <ClickableTile
-  href="/"
+  href="/incidents/new"
   on:click={(e) => {
     e.preventDefault();
     // custom behavior
   }}
 >
-  Carbon Design System
+  Create incident
 </ClickableTile>
 
 ## Light
 
 Use the light color scheme with `light`.
 
-<ClickableTile light href="https://www.carbondesignsystem.com/">
-Carbon Design System
+<ClickableTile light href="/services/object-storage">
+Object storage
 </ClickableTile>
 
 ## Disabled
 
 Prevent interaction with `disabled`.
 
-<ClickableTile disabled href="https://www.carbondesignsystem.com/">
-Carbon Design System
+<ClickableTile disabled href="/audit-logs">
+Audit logs
 </ClickableTile>
