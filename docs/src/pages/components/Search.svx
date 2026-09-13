@@ -136,19 +136,19 @@ Show a loading state with the skeleton variant.
 
 ### Large
 
-Display a loading state for the large search variant.
+Show a loading state for the large search variant.
 
 <Search size="lg" skeleton />
 
 ### Small
 
-Display a loading state for the small search variant.
+Show a loading state for the small search variant.
 
 <Search size="sm" skeleton />
 
 ### Extra-small
 
-Display a loading state for the extra-small search variant.
+Show a loading state for the extra-small search variant.
 
 <Search size="xs" skeleton />
 

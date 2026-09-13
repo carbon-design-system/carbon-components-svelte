@@ -178,18 +178,18 @@ Show a loading state with the pagination skeleton.
 
 ### Extra-small
 
-Display a loading state for the extra small pagination variant.
+Show a loading state for the extra small pagination variant.
 
 <PaginationSkeleton size="xs" />
 
 ### Small
 
-Display a loading state for the small pagination variant.
+Show a loading state for the small pagination variant.
 
 <PaginationSkeleton size="sm" />
 
 ### Large
 
-Display a loading state for the large pagination variant.
+Show a loading state for the large pagination variant.
 
 <PaginationSkeleton size="lg" />
