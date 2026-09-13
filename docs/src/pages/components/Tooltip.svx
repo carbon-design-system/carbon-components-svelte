@@ -176,6 +176,6 @@ Position portalled tooltips in different directions.
 
 ## Inside a modal
 
-When a tooltip is used inside a [Modal](/components/Modal), it is automatically portalled so it is not clipped by the modal overflow or z-index stacking. No need to set `portalTooltip` in this case.
+When a tooltip is used inside a [Modal](/components/Modal), it is automatically portalled so it is not clipped by the modal overflow or z-index stacking. Set `portalTooltip` to override this behavior.
 
 <FileSource src="/framed/Tooltip/TooltipModal" />

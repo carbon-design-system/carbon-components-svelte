@@ -141,6 +141,6 @@ Portalled content supports every `align` value.
 
 ## Inside a modal
 
-When a toggletip is used inside a [Modal](/components/Modal), the content is portalled by default so it is not clipped by the modal overflow or z-index stacking. There is no need to set `portalTooltip`.
+When a toggletip is used inside a [Modal](/components/Modal), the content is portalled by default so it is not clipped by the modal overflow or z-index stacking. Set `portalTooltip` to override this behavior.
 
 <FileSource src="/framed/Toggletip/ToggletipModal" />
