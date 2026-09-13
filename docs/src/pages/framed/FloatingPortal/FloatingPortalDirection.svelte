@@ -120,7 +120,7 @@
       </Tile>
     </div>
     <FloatingPortal anchor={anchorBottom} open={openBottom} direction="bottom">
-      <Tile>Content</Tile>
+      <Tile>Instance i-0a1b2c3d: 3 of 4 health checks passing</Tile>
     </FloatingPortal>
   </div>
 
@@ -147,7 +147,7 @@
       </Tile>
     </div>
     <FloatingPortal anchor={anchorTop} open={openTop} direction="top">
-      <Tile>Content</Tile>
+      <Tile>Instance i-0a1b2c3d: 3 of 4 health checks passing</Tile>
     </FloatingPortal>
   </div>
 </Stack>

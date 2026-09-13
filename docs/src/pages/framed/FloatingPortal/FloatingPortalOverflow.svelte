@@ -76,10 +76,12 @@
       title="Drag to move, click to toggle"
     >
       <Tile>
-        <Button on:click={() => (open = !open)}>Toggle floating content</Button>
+        <Button on:click={() => (open = !open)}>View instance details</Button>
       </Tile>
     </div>
   </div>
 </Stack>
 
-<FloatingPortal {anchor} {open}> <Tile>Content</Tile> </FloatingPortal>
+<FloatingPortal {anchor} {open}>
+  <Tile>Instance i-0a1b2c3d: 3 of 4 health checks passing</Tile>
+</FloatingPortal>

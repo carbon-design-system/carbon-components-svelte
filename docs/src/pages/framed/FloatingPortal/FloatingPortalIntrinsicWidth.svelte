@@ -68,7 +68,7 @@
     title="Drag to move, click to toggle"
   >
     <Tile>
-      <Button on:click={() => (open = !open)}>Toggle floating content</Button>
+      <Button on:click={() => (open = !open)}>View instance details</Button>
     </Tile>
   </div>
 </div>
