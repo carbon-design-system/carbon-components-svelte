@@ -21,15 +21,15 @@ items.
 By default, the chevron icon is on the right side of the accordion item.
 
 <Accordion>
-  <AccordionItem title="Natural Language Classifier">
-   <p>Natural Language Classifier uses advanced natural language processing and machine learning techniques to create custom classification models. Users train their data and the service predicts the appropriate category for the inputted text.
+  <AccordionItem title="Billing and invoices">
+   <p>Manage payment methods, view invoice history, and download receipts for your organization's subscription.
    </p>
   </AccordionItem>
-  <AccordionItem title="Natural Language Understanding">
-    <p>Analyze text to extract meta-data from content such as concepts, entities, emotion, relations, sentiment and more.</p>
+  <AccordionItem title="API access">
+    <p>Generate and manage API keys, set rate limits, and configure webhook endpoints for programmatic access.</p>
   </AccordionItem>
-  <AccordionItem title="Language Translator">
-    <p>Translate text, documents, and websites from one language to another. Create industry or region-specific translations via the service's customization capability.</p>
+  <AccordionItem title="Team permissions">
+    <p>Assign roles and control which team members can view, edit, or administer workspace resources.</p>
   </AccordionItem>
 </Accordion>
 
@@ -43,15 +43,15 @@ no effect when the chevron is left-aligned.
 Align the chevron icon to the left side of the accordion item by setting `align` to `"start"`.
 
 <Accordion align="start">
-  <AccordionItem title="Natural Language Classifier">
-   <p>Natural Language Classifier uses advanced natural language processing and machine learning techniques to create custom classification models. Users train their data and the service predicts the appropriate category for the inputted text.
+  <AccordionItem title="Billing and invoices">
+   <p>Manage payment methods, view invoice history, and download receipts for your organization's subscription.
    </p>
   </AccordionItem>
-  <AccordionItem title="Natural Language Understanding">
-    <p>Analyze text to extract meta-data from content such as concepts, entities, emotion, relations, sentiment and more.</p>
+  <AccordionItem title="API access">
+    <p>Generate and manage API keys, set rate limits, and configure webhook endpoints for programmatic access.</p>
   </AccordionItem>
-  <AccordionItem title="Language Translator">
-    <p>Translate text, documents, and websites from one language to another. Create industry or region-specific translations via the service's customization capability.</p>
+  <AccordionItem title="Team permissions">
+    <p>Assign roles and control which team members can view, edit, or administer workspace resources.</p>
   </AccordionItem>
 </Accordion>
 
@@ -62,15 +62,15 @@ edges of its container. This works well in full-bleed layouts and side
 panels. `flush` has no effect when `align` is `"start"`.
 
 <Accordion flush>
-  <AccordionItem title="Natural Language Classifier">
-   <p>Natural Language Classifier uses advanced natural language processing and machine learning techniques to create custom classification models. Users train their data and the service predicts the appropriate category for the inputted text.
+  <AccordionItem title="Billing and invoices">
+   <p>Manage payment methods, view invoice history, and download receipts for your organization's subscription.
    </p>
   </AccordionItem>
-  <AccordionItem title="Natural Language Understanding">
-    <p>Analyze text to extract meta-data from content such as concepts, entities, emotion, relations, sentiment and more.</p>
+  <AccordionItem title="API access">
+    <p>Generate and manage API keys, set rate limits, and configure webhook endpoints for programmatic access.</p>
   </AccordionItem>
-  <AccordionItem title="Language Translator">
-    <p>Translate text, documents, and websites from one language to another. Create industry or region-specific translations via the service's customization capability.</p>
+  <AccordionItem title="Team permissions">
+    <p>Assign roles and control which team members can view, edit, or administer workspace resources.</p>
   </AccordionItem>
 </Accordion>
 
@@ -86,25 +86,25 @@ more complex layouts with multiple elements.
 <Accordion>
   <AccordionItem>
     <svelte:fragment slot="title">
-      <h5>Natural Language Classifier</h5>
-      <div>AI / Machine Learning</div>
+      <h5>Billing and invoices</h5>
+      <div>Finance</div>
     </svelte:fragment>
-   <p>Natural Language Classifier uses advanced natural language processing and machine learning techniques to create custom classification models. Users train their data and the service predicts the appropriate category for the inputted text.
+   <p>Manage payment methods, view invoice history, and download receipts for your organization's subscription.
    </p>
   </AccordionItem>
   <AccordionItem>
   <svelte:fragment slot="title">
-      <h5>Natural Language Understanding</h5>
-      <div>AI / Machine Learning</div>
+      <h5>API access</h5>
+      <div>Developer tools</div>
     </svelte:fragment>
-    <p>Analyze text to extract meta-data from content such as concepts, entities, emotion, relations, sentiment and more.</p>
+    <p>Generate and manage API keys, set rate limits, and configure webhook endpoints for programmatic access.</p>
   </AccordionItem>
   <AccordionItem>
   <svelte:fragment slot="title">
-      <h5>Language Translator</h5>
-      <div>AI / Machine Learning</div>
+      <h5>Team permissions</h5>
+      <div>Access control</div>
     </svelte:fragment>
-    <p>Translate text, documents, and websites from one language to another. Create industry or region-specific translations via the service's customization capability.</p>
+    <p>Assign roles and control which team members can view, edit, or administer workspace resources.</p>
   </AccordionItem>
 </Accordion>
 
@@ -134,15 +134,15 @@ Set `open` on an item to have it expanded by default when the
 accordion is first rendered.
 
 <Accordion>
-  <AccordionItem open title="Natural Language Classifier">
-   <p>Natural Language Classifier uses advanced natural language processing and machine learning techniques to create custom classification models. Users train their data and the service predicts the appropriate category for the inputted text.
+  <AccordionItem open title="Billing and invoices">
+   <p>Manage payment methods, view invoice history, and download receipts for your organization's subscription.
    </p>
   </AccordionItem>
-  <AccordionItem title="Natural Language Understanding">
-    <p>Analyze text to extract meta-data from content such as concepts, entities, emotion, relations, sentiment and more.</p>
+  <AccordionItem title="API access">
+    <p>Generate and manage API keys, set rate limits, and configure webhook endpoints for programmatic access.</p>
   </AccordionItem>
-  <AccordionItem title="Language Translator">
-    <p>Translate text, documents, and websites from one language to another. Create industry or region-specific translations via the service's customization capability.</p>
+  <AccordionItem title="Team permissions">
+    <p>Assign roles and control which team members can view, edit, or administer workspace resources.</p>
   </AccordionItem>
 </Accordion>
 
@@ -154,15 +154,15 @@ panels where only one section should be expanded at a time. The default is
 `"multiple"`, which allows any number of items to be open simultaneously.
 
 <Accordion type="single">
-  <AccordionItem open title="Natural Language Classifier">
-   <p>Natural Language Classifier uses advanced natural language processing and machine learning techniques to create custom classification models. Users train their data and the service predicts the appropriate category for the inputted text.
+  <AccordionItem open title="Billing and invoices">
+   <p>Manage payment methods, view invoice history, and download receipts for your organization's subscription.
    </p>
   </AccordionItem>
-  <AccordionItem title="Natural Language Understanding">
-    <p>Analyze text to extract meta-data from content such as concepts, entities, emotion, relations, sentiment and more.</p>
+  <AccordionItem title="API access">
+    <p>Generate and manage API keys, set rate limits, and configure webhook endpoints for programmatic access.</p>
   </AccordionItem>
-  <AccordionItem title="Language Translator">
-    <p>Translate text, documents, and websites from one language to another. Create industry or region-specific translations via the service's customization capability.</p>
+  <AccordionItem title="Team permissions">
+    <p>Assign roles and control which team members can view, edit, or administer workspace resources.</p>
   </AccordionItem>
 </Accordion>
 
@@ -179,33 +179,32 @@ Put an `Accordion` inside an `AccordionItem` to compose nested clusters.
 Nested items keep their own open state, independent of the parent.
 
 <Accordion>
-  <AccordionItem open title="Watson NLP services">
+  <AccordionItem open title="Platform services">
     <Stack orientation="horizontal" gap={6}>
       <Accordion>
-        <AccordionItem open title="Natural Language Classifier">
+        <AccordionItem open title="Authentication service">
           <Stack gap={5}>
             <Text type="body-long-01" color="secondary">
-              Uses advanced natural language processing and machine learning
-              techniques to create custom classification models. Users train
-              their data and the service predicts the appropriate category.
+              Handles user login, session tokens, and single sign-on across
+              all connected applications.
             </Text>
             <Stack gap={2}>
               <Text type="label-01" color="secondary">Region</Text>
-              <Text type="body-short-01">us-south</Text>
+              <Text type="body-short-01">us-east-1</Text>
             </Stack>
           </Stack>
         </AccordionItem>
       </Accordion>
       <Accordion>
-        <AccordionItem open title="Natural Language Understanding">
+        <AccordionItem open title="Notification service">
           <Stack gap={5}>
             <Text type="body-long-01" color="secondary">
-              Analyzes text to extract meta-data from content such as
-              concepts, entities, emotion, relations, sentiment and more.
+              Delivers email, SMS, and in-app alerts triggered by workflow
+              events.
             </Text>
             <Stack gap={2}>
               <Text type="label-01" color="secondary">Region</Text>
-              <Text type="body-short-01">eu-de</Text>
+              <Text type="body-short-01">eu-west-1</Text>
             </Stack>
           </Stack>
         </AccordionItem>
@@ -222,15 +221,15 @@ data or charts, so they mount only when needed. The content stays mounted
 after the item collapses.
 
 <Accordion>
-  <AccordionItem lazy title="Natural Language Classifier">
-   <p>Natural Language Classifier uses advanced natural language processing and machine learning techniques to create custom classification models. Users train their data and the service predicts the appropriate category for the inputted text.
+  <AccordionItem lazy title="Billing and invoices">
+   <p>Manage payment methods, view invoice history, and download receipts for your organization's subscription.
    </p>
   </AccordionItem>
-  <AccordionItem lazy title="Natural Language Understanding">
-    <p>Analyze text to extract meta-data from content such as concepts, entities, emotion, relations, sentiment and more.</p>
+  <AccordionItem lazy title="API access">
+    <p>Generate and manage API keys, set rate limits, and configure webhook endpoints for programmatic access.</p>
   </AccordionItem>
-  <AccordionItem lazy title="Language Translator">
-    <p>Translate text, documents, and websites from one language to another. Create industry or region-specific translations via the service's customization capability.</p>
+  <AccordionItem lazy title="Team permissions">
+    <p>Assign roles and control which team members can view, edit, or administer workspace resources.</p>
   </AccordionItem>
 </Accordion>
 
@@ -243,15 +242,15 @@ Set `size` to control row height. The default is `md`.
 Display the accordion in an extra-large size by setting `size` to `"xl"`.
 
 <Accordion size="xl">
-  <AccordionItem title="Natural Language Classifier">
-   <p>Natural Language Classifier uses advanced natural language processing and machine learning techniques to create custom classification models. Users train their data and the service predicts the appropriate category for the inputted text.
+  <AccordionItem title="Billing and invoices">
+   <p>Manage payment methods, view invoice history, and download receipts for your organization's subscription.
    </p>
   </AccordionItem>
-  <AccordionItem title="Natural Language Understanding">
-    <p>Analyze text to extract meta-data from content such as concepts, entities, emotion, relations, sentiment and more.</p>
+  <AccordionItem title="API access">
+    <p>Generate and manage API keys, set rate limits, and configure webhook endpoints for programmatic access.</p>
   </AccordionItem>
-  <AccordionItem title="Language Translator">
-    <p>Translate text, documents, and websites from one language to another. Create industry or region-specific translations via the service's customization capability.</p>
+  <AccordionItem title="Team permissions">
+    <p>Assign roles and control which team members can view, edit, or administer workspace resources.</p>
   </AccordionItem>
 </Accordion>
 
@@ -261,15 +260,15 @@ Set `size` to `"sm"` for a smaller accordion in compact layouts or
 when space is limited.
 
 <Accordion size="sm">
-  <AccordionItem title="Natural Language Classifier">
-   <p>Natural Language Classifier uses advanced natural language processing and machine learning techniques to create custom classification models. Users train their data and the service predicts the appropriate category for the inputted text.
+  <AccordionItem title="Billing and invoices">
+   <p>Manage payment methods, view invoice history, and download receipts for your organization's subscription.
    </p>
   </AccordionItem>
-  <AccordionItem title="Natural Language Understanding">
-    <p>Analyze text to extract meta-data from content such as concepts, entities, emotion, relations, sentiment and more.</p>
+  <AccordionItem title="API access">
+    <p>Generate and manage API keys, set rate limits, and configure webhook endpoints for programmatic access.</p>
   </AccordionItem>
-  <AccordionItem title="Language Translator">
-    <p>Translate text, documents, and websites from one language to another. Create industry or region-specific translations via the service's customization capability.</p>
+  <AccordionItem title="Team permissions">
+    <p>Assign roles and control which team members can view, edit, or administer workspace resources.</p>
   </AccordionItem>
 </Accordion>
 
@@ -283,15 +282,15 @@ Set `disabled` on the accordion to disable all items at once. Users can no
 longer expand or collapse any item.
 
 <Accordion disabled>
-  <AccordionItem title="Natural Language Classifier">
-   <p>Natural Language Classifier uses advanced natural language processing and machine learning techniques to create custom classification models. Users train their data and the service predicts the appropriate category for the inputted text.
+  <AccordionItem title="Billing and invoices">
+   <p>Manage payment methods, view invoice history, and download receipts for your organization's subscription.
    </p>
   </AccordionItem>
-  <AccordionItem title="Natural Language Understanding">
-    <p>Analyze text to extract meta-data from content such as concepts, entities, emotion, relations, sentiment and more.</p>
+  <AccordionItem title="API access">
+    <p>Generate and manage API keys, set rate limits, and configure webhook endpoints for programmatic access.</p>
   </AccordionItem>
-  <AccordionItem title="Language Translator">
-    <p>Translate text, documents, and websites from one language to another. Create industry or region-specific translations via the service's customization capability.</p>
+  <AccordionItem title="Team permissions">
+    <p>Assign roles and control which team members can view, edit, or administer workspace resources.</p>
   </AccordionItem>
 </Accordion>
 
@@ -307,15 +306,15 @@ Disable an individual item by setting `disabled` on a specific accordion
 item for finer control over which items are interactive.
 
 <Accordion>
-  <AccordionItem disabled title="Natural Language Classifier">
-   <p>Natural Language Classifier uses advanced natural language processing and machine learning techniques to create custom classification models. Users train their data and the service predicts the appropriate category for the inputted text.
+  <AccordionItem disabled title="Billing and invoices">
+   <p>Manage payment methods, view invoice history, and download receipts for your organization's subscription.
    </p>
   </AccordionItem>
-  <AccordionItem title="Natural Language Understanding">
-    <p>Analyze text to extract meta-data from content such as concepts, entities, emotion, relations, sentiment and more.</p>
+  <AccordionItem title="API access">
+    <p>Generate and manage API keys, set rate limits, and configure webhook endpoints for programmatic access.</p>
   </AccordionItem>
-  <AccordionItem title="Language Translator">
-    <p>Translate text, documents, and websites from one language to another. Create industry or region-specific translations via the service's customization capability.</p>
+  <AccordionItem title="Team permissions">
+    <p>Assign roles and control which team members can view, edit, or administer workspace resources.</p>
   </AccordionItem>
 </Accordion>
 
