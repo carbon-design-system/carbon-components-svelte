@@ -4,7 +4,7 @@ description: Code snippets display and copy code examples, with single-line, mul
 ---
 
 <script>
-  import { CodeSnippet } from "carbon-components-svelte";
+  import { CodeSnippet, CodeSnippetSkeleton } from "carbon-components-svelte";
   import Checkmark from "carbon-icons-svelte/lib/Checkmark.svelte";
 </script>
 
@@ -234,12 +234,12 @@ Because the feedback tooltip is portalled by default, it is not clipped inside a
 
 ## Skeleton
 
-Set `skeleton` to `true` to show a loading state. Defaults to `"single"` type.
+Use `CodeSnippetSkeleton` to show a loading state. Defaults to `"single"` type.
 
-<CodeSnippet skeleton />
+<CodeSnippetSkeleton />
 
 ### Multi-line
 
-Set `type="multi"` with `skeleton` to show a multi-line loading state.
+Set `type="multi"` on `CodeSnippetSkeleton` to show a multi-line loading state.
 
-<CodeSnippet type="multi" skeleton />
+<CodeSnippetSkeleton type="multi" />
