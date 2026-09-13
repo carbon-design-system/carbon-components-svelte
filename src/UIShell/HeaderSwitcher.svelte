@@ -67,12 +67,12 @@
   /** @type {import("svelte/store").Writable<ReadonlyArray<HTMLElement>>} */
   const menuItems = writable([]);
 
-  function registerMenuItem(element) {
-    menuItems.update((items) => [...items, element]);
+  function registerMenuItem(node) {
+    menuItems.update((items) => [...items, node]);
   }
 
-  function unregisterMenuItem(element) {
-    menuItems.update((items) => items.filter((item) => item !== element));
+  function unregisterMenuItem(node) {
+    menuItems.update((items) => items.filter((item) => item !== node));
   }
 
   setContext("carbon:ProfileMenu", {
