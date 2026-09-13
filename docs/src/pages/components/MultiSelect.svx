@@ -228,7 +228,7 @@ Enable filtering by setting `filterable` to `true`. This example includes a plac
 
 ### Fuzzy filter
 
-Provide a custom `filterItem` to override the default substring matching. This example reuses the built-in `fuzzyMatch` utility, exported from `carbon-components-svelte`, as the predicate. It matches items whose text contains the typed characters in order (for example, "bl" matches "Blueberry" and "Blackberry"). Only the `matched` boolean is used here; the `score` and `indices` it also returns rank and highlight matches, as shown in [Highlight matches](#highlight-matches) below.
+Provide a custom `filterItem` to override the default substring matching. This example reuses the built-in `fuzzyMatch` utility, exported from `carbon-components-svelte`, as the predicate. It matches items whose text contains the typed characters in order (for example, "pr" matches "Production" and "Preview"). Only the `matched` boolean is used here; the `score` and `indices` it also returns rank and highlight matches, as shown in [Highlight matches](#highlight-matches) below.
 
 <FileSource src="/framed/MultiSelect/MultiSelectFuzzyFilter" />
 

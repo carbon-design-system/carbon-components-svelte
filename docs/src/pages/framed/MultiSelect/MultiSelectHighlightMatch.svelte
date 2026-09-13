@@ -8,16 +8,16 @@
   let value = "";
 
   const items = [
-    { id: "0", text: "Apple" },
-    { id: "1", text: "Apricot" },
-    { id: "2", text: "Banana" },
-    { id: "3", text: "Blueberry" },
-    { id: "4", text: "Blackberry" },
-    { id: "5", text: "Cherry" },
-    { id: "6", text: "Cranberry" },
-    { id: "7", text: "Grape" },
-    { id: "8", text: "Mango" },
-    { id: "9", text: "Pineapple" },
+    { id: "0", text: "Production" },
+    { id: "1", text: "Staging" },
+    { id: "2", text: "Development" },
+    { id: "3", text: "Sandbox" },
+    { id: "4", text: "QA" },
+    { id: "5", text: "Canary" },
+    { id: "6", text: "Preview" },
+    { id: "7", text: "Local" },
+    { id: "8", text: "Demo" },
+    { id: "9", text: "Integration" },
   ];
 
   // One matcher drives filtering and highlighting. `filterItem` keeps the
@@ -31,8 +31,8 @@
   bind:value
   filterable
   {filterItem}
-  labelText="Item"
-  placeholder="Filter items..."
+  labelText="Environment"
+  placeholder="Filter environments..."
   {items}
   let:item
 >
