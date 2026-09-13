@@ -9,7 +9,7 @@
   <div>
     <TooltipIcon
       bind:open
-      tooltipText="Carbon is an open source design system by IBM."
+      tooltipText="Metrics are aggregated across every workspace in your organization."
       icon={Carbon}
       align="start"
     />

@@ -12,7 +12,7 @@ description: Tooltip icons show contextual information on hover or focus of an i
 
 Display a tooltip with the default bottom-center alignment.
 
-<TooltipIcon tooltipText="Carbon is an open source design system by IBM." icon={Carbon} />
+<TooltipIcon tooltipText="Metrics are aggregated across every workspace in your organization." icon={Carbon} />
 
 ## Reactive example
 
@@ -65,7 +65,7 @@ Align the tooltip content with `align`.
 Use the `tooltipText` slot to customize the tooltip content with additional styling.
 
 <TooltipIcon icon={Carbon}>
-  <span slot="tooltipText" style="color: red">Carbon is an open source design system by IBM.</span>
+  <span slot="tooltipText" style="color: red">Metrics are aggregated across every workspace in your organization.</span>
 </TooltipIcon>
 
 ## Custom icon
@@ -86,13 +86,13 @@ Customize hover delays with `enterDelayMs` and `leaveDelayMs`. Defaults are 100m
 
 Prevent interaction with `disabled`.
 
-<TooltipIcon disabled tooltipText="Carbon is an open source design system by IBM." icon={Carbon} />
+<TooltipIcon disabled tooltipText="Metrics are aggregated across every workspace in your organization." icon={Carbon} />
 
 ## Portal
 
 Set `portalTooltip` to render the tooltip in a portal so it is not clipped by overflow containers. This is enabled automatically inside a Modal. Direction and alignment match the non-portal path.
 
-<TooltipIcon portalTooltip tooltipText="Carbon is an open source design system by IBM." icon={Carbon} />
+<TooltipIcon portalTooltip tooltipText="Metrics are aggregated across every workspace in your organization." icon={Carbon} />
 
 ### Directions
 

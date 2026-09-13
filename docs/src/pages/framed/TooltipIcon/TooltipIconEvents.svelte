@@ -7,7 +7,7 @@
 
 <Stack gap={4}>
   <TooltipIcon
-    tooltipText="Carbon is an open source design system by IBM."
+    tooltipText="Metrics are aggregated across every workspace in your organization."
     icon={Carbon}
     on:open={() => (events = [...events, "open"])}
     on:close={() => (events = [...events, "close"])}
