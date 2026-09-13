@@ -33,7 +33,9 @@
    * Override the display of a multiselect item.
    * @type {(item: Item) => string | Item["id"]}
    */
-  export let itemToString = (item) => item.text ?? item.id;
+  export let itemToString = function itemToString(item) {
+    return item.text ?? item.id;
+  };
 
   /**
    * Override `name`/`value` for the hidden inputs that mirror the current
@@ -43,7 +45,7 @@
    * participation, even while the menu is open.
    * @type {(item: Item) => { name?: string; labelText?: any; title?: string; value?: string }}
    */
-  export let itemToInput = (_item) => {};
+  export let itemToInput = function itemToInput(_item) {};
 
   /**
    * Set the selected ids.
@@ -101,8 +103,9 @@
    * The default filtering is an exact string comparison.
    * @type {(item: Item, value: string) => boolean}
    */
-  export let filterItem = (item, value) =>
-    item.text.toLowerCase().includes(value.trim().toLowerCase());
+  export let filterItem = function filterItem(item, value) {
+    return item.text.toLowerCase().includes(value.trim().toLowerCase());
+  };
 
   /**
    * Set to `true` to open the dropdown.
@@ -139,7 +142,9 @@
    * The default sorting compare the item text value.
    * @type {((a: Item, b: Item) => number) | (() => void)}
    */
-  export let sortItem = (a, b) => getSortCollator().compare(a.text, b.text);
+  export let sortItem = function sortItem(a, b) {
+    return getSortCollator().compare(a.text, b.text);
+  };
 
   /**
    * Override the chevron icon label based on the open state.
@@ -227,10 +232,11 @@
    * The count excludes any "select all" item.
    * @type {(count: number) => string}
    */
-  export let filterResultsText = (count) =>
-    count === 0
+  export let filterResultsText = function filterResultsText(count) {
+    return count === 0
       ? "No results"
       : `${count} result${count === 1 ? "" : "s"} available`;
+  };
 
   /**
    * Default group name for the hidden inputs that mirror the current
@@ -376,12 +382,12 @@
   let highlightOrigin = /** @type {"keyboard" | "pointer" | null} */ (null);
   let prevHighlightedIndex = -1;
   let prevChecked = [];
-  let isInitialRender = true;
+  let initialRender = true;
   let listScrollTop = 0;
   let prevOpen = false;
-  let internalSelectedIdsRef = selectedIds;
+  let prevSelectedIds = selectedIds;
   /** Anchor item id for shift+click range selection; cleared when selection is reset entirely. */
-  let lastSelectedItemId = null;
+  let prevSelectedItemId = null;
   /** Text content of the visually-hidden status live region. */
   let statusText = "";
   /** @type {import("../ListBox/menu-window.js").MenuWindowState} */
@@ -490,7 +496,7 @@
     selectedIds = sortedItems
       .filter((sortedItem) => sortedItem.checked && !sortedItem.isSelectAll)
       .map((sortedItem) => sortedItem.id);
-    internalSelectedIdsRef = selectedIds;
+    prevSelectedIds = selectedIds;
     sortedItems = sort();
   }
 
@@ -534,7 +540,7 @@
     if (readonly) return false;
 
     const anchorIndex = itemsToUse.findIndex(
-      (item) => item.id === lastSelectedItemId,
+      (item) => item.id === prevSelectedItemId,
     );
     if (anchorIndex === -1) return false;
 
@@ -585,7 +591,7 @@
   export async function clear(options = {}) {
     if (readonly || selectionCount === 0) return;
     selectedIds = [];
-    lastSelectedItemId = null;
+    prevSelectedItemId = null;
     sortedItems = sortedItems.map((item) => ({ ...item, checked: false }));
     announceStatus(selectionClearedText);
     await tick();
@@ -620,8 +626,8 @@
       selectedIds = checked
         .filter((item) => !item.isSelectAll)
         .map((item) => item.id);
-      internalSelectedIdsRef = selectedIds;
-      if (!isInitialRender) {
+      prevSelectedIds = selectedIds;
+      if (!initialRender) {
         dispatch("select", {
           selectedIds,
           selected: checked.filter((item) => !item.isSelectAll),
@@ -629,7 +635,7 @@
         });
       }
     }
-    isInitialRender = false;
+    initialRender = false;
 
     if (!open) {
       highlightedIndex = -1;
@@ -757,7 +763,7 @@
   }
 
   sortedItems = sort();
-  let prevItemsRef = items;
+  let prevItems = items;
 
   $: menuId = `menu-${id}`;
   $: comboId = `combo-${id}`;
@@ -808,17 +814,17 @@
   $: showInvalid = invalid && !disabled && !readonly;
   $: showWarn = warn && !invalid && !disabled && !readonly;
   $: ariaLabel = $$props["aria-label"] ?? "Choose an item";
-  $: if (items !== prevItemsRef) {
-    prevItemsRef = items;
+  $: if (items !== prevItems) {
+    prevItems = items;
     sortedItems = sort();
     prevChecked = sortedItems.filter((item) => item.checked);
   }
   $: if (
     selectedIds &&
-    ((selectionFeedback === "top" && selectedIds !== internalSelectedIdsRef) ||
+    ((selectionFeedback === "top" && selectedIds !== prevSelectedIds) ||
       (selectionFeedback === "top-after-reopen" && open === false))
   ) {
-    internalSelectedIdsRef = selectedIds;
+    prevSelectedIds = selectedIds;
     sortedItems = sort();
   }
   $: hasSelectAll = items.some((item) => item.isSelectAll);
@@ -1332,13 +1338,13 @@
                     event.preventDefault();
                     const usedRange =
                       event.shiftKey &&
-                      lastSelectedItemId !== null &&
+                      prevSelectedItemId !== null &&
                       !item.isSelectAll &&
                       selectItemRange(actualIndex, !item.checked);
                     if (!usedRange) {
                       selectItem(item);
                     }
-                    lastSelectedItemId = item.id;
+                    prevSelectedItemId = item.id;
                   }}
                   on:mousedown={(event) => {
                     // Keep focus on the field so screen readers don't
@@ -1417,13 +1423,13 @@
                 event.preventDefault();
                 const usedRange =
                   event.shiftKey &&
-                  lastSelectedItemId !== null &&
+                  prevSelectedItemId !== null &&
                   !item.isSelectAll &&
                   selectItemRange(index, !item.checked);
                 if (!usedRange) {
                   selectItem(item);
                 }
-                lastSelectedItemId = item.id;
+                prevSelectedItemId = item.id;
               }}
               on:mousedown={(event) => {
                 // Keep focus on the field so screen readers don't
