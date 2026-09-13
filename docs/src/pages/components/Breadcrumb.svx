@@ -28,7 +28,7 @@ Remove the trailing slash from the last item with `noTrailingSlash`.
 
 <Breadcrumb noTrailingSlash>
   <BreadcrumbItem href="/">Home</BreadcrumbItem>
-  <BreadcrumbItem href="/profile" isCurrentPage>Profile</BreadcrumbItem>
+  <BreadcrumbItem href="/account-settings" isCurrentPage>Account settings</BreadcrumbItem>
 </Breadcrumb>
 
 ## Overflow and sizing
@@ -103,7 +103,7 @@ Set `labelText` to change the nav's accessible name from the default `"Breadcrum
 
 <Breadcrumb labelText="Secondary breadcrumb">
   <BreadcrumbItem href="/">Home</BreadcrumbItem>
-  <BreadcrumbItem href="/settings" isCurrentPage>Settings</BreadcrumbItem>
+  <BreadcrumbItem href="/team-management" isCurrentPage>Team management</BreadcrumbItem>
 </Breadcrumb>
 
 ## Skeleton
