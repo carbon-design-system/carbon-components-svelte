@@ -3,8 +3,8 @@
 
   const items = Array.from({ length: 10_000 }, (_, i) => ({
     id: i,
-    text: `Item ${i + 1}`,
-    description: `Description for item ${i + 1}`,
+    text: `Ticket #${10000 + i}`,
+    description: `Priority: ${["Low", "Medium", "High", "Critical"][i % 4]}`,
   }));
 
   let selectedId = 1000;
@@ -12,7 +12,7 @@
 
 <Dropdown
   virtualize={{ itemHeight: 60 }}
-  labelText="Custom item height (60px)"
+  labelText="Custom item height (support tickets, 60px)"
   {items}
   bind:selectedId
   let:item
