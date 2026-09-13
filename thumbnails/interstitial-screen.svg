@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>interstitial-screen</title>
+    <g id="interstitial-screen" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="panel" fill="var(--cds-ui-02, #ffffff)" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="1" x="70" y="36" width="180" height="108"></rect>
+        <rect id="title" fill="var(--cds-text-secondary, #525252)" x="86" y="50" width="60" height="8"></rect>
+        <line id="progress-track" x1="90" y1="68" x2="220" y2="68" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="1"></line>
+        <circle id="progress-step-1" cx="90" cy="68" r="5" fill="var(--cds-interactive-01, #0f62fe)"></circle>
+        <circle id="progress-step-2" cx="133" cy="68" r="5" fill="var(--cds-interactive-01, #0f62fe)"></circle>
+        <circle id="progress-step-3" cx="177" cy="68" r="5" fill="var(--cds-ui-02, #ffffff)" stroke="var(--cds-interactive-01, #0f62fe)" stroke-width="1.5"></circle>
+        <circle id="progress-step-4" cx="220" cy="68" r="5" fill="var(--cds-ui-02, #ffffff)" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="1.5"></circle>
+        <rect id="body-1" fill="var(--cds-text-placeholder, #a8a8a8)" x="86" y="84" width="140" height="6"></rect>
+        <rect id="body-2" fill="var(--cds-text-placeholder, #a8a8a8)" x="86" y="98" width="100" height="6"></rect>
+        <rect id="back-label" fill="var(--cds-text-secondary, #525252)" x="86" y="121" width="32" height="7"></rect>
+        <rect id="next-button" fill="var(--cds-interactive-01, #0f62fe)" x="184" y="112" width="60" height="20"></rect>
+        <rect id="next-label" fill="var(--cds-ui-02, #ffffff)" x="199" y="119" width="30" height="6"></rect>
+    </g>
+</svg>
