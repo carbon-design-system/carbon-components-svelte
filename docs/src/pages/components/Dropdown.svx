@@ -397,7 +397,7 @@ Set `readonly` to `true` to display a non-editable value.
 
 ## Light
 
-Set `light` to `true` for dropdowns on dark backgrounds.
+Use the light variant for light backgrounds.
 
 <Dropdown light labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},

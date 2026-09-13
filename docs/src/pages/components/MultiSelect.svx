@@ -337,7 +337,7 @@ Use the extra-large size for prominent selections by setting `size` to `"xl"`.
 
 ## Light
 
-Use the light variant for dark backgrounds by setting `light` to `true`.
+Use the light variant for light backgrounds.
 
 <MultiSelect light labelText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
@@ -347,7 +347,7 @@ Use the light variant for dark backgrounds by setting `light` to `true`.
 
 ## Inline
 
-Display the dropdown inline with other content by setting `type` to `"inline"`. This removes the background and border.
+Set `type` to `"inline"` to display the dropdown inline with other content. This variant removes the background and border.
 
 <MultiSelect type="inline" labelText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},

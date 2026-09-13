@@ -51,7 +51,7 @@ Display the tile expanded by default with `expanded`.
 
 ## Light
 
-Use the light variant on dark backgrounds with `light`.
+Use the light variant for light backgrounds.
 
 <ExpandableTile light>
   <div slot="above">Payments API — Operational, 99.98% uptime over the last 30 days</div>
