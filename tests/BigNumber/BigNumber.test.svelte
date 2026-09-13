@@ -103,6 +103,13 @@
   trendColor="error"
   data-testid="trend-flat-error"
 />
+<BigNumber
+  labelText="Trend description override"
+  value={42}
+  trend="up"
+  trendDescription="Up 12% week over week"
+  data-testid="trend-description"
+/>
 
 <BigNumber labelText="Loading" value={42} loading data-testid="loading" />
 
