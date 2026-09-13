@@ -83,7 +83,7 @@ Patterns:
 - Share one observer instance across multiple targets. `ResizeObserver`, `IntersectionObserver`, and `MutationObserver` all support calling `.observe()` more than once on the same instance; do not instantiate a second observer of the same type in one component just because it watches a different element for a related purpose. Besides the redundant object, each instance typically gets its own reactive disconnect/reconnect block, and Svelte does not order independent `$:` statements, so one block's `.disconnect()` can race the other's `.observe()`. See the single `intersectionObserver` watching four sentinels in [`ScrollGradient.svelte`](src/ScrollGradient/ScrollGradient.svelte), the single `observer` watching both `wrapperRef` and `containingElement` in [`TagSet.svelte`](src/TagSet/TagSet.svelte), and the single `resizeObserver` watching both the measured `<pre>` and the scrollable container in [`CodeSnippet.svelte`](src/CodeSnippet/CodeSnippet.svelte).
 - `{#if open}` vs `display: none` is a form-participation contract, not only a layout choice. Unmounted controls drop out of `FormData`; CSS-hidden ones do not. MultiSelect used CSS hide so option checkboxes survived native POST ([#1742](https://github.com/carbon-design-system/carbon-components-svelte/issues/1742)); the closed menu now unmounts like ComboBox. If you unmount a closed overlay that used to serialize, put always-mounted fields on the selection, not on the option list. Do not restore CSS hide to get form POST back.
 - Do not clobber external props. Never write internal or measured values back into an exported prop. A consumer may `bind:` to a prop to control behavior, and overwriting it silently breaks that control. Measure into an internal fallback and fall back to it only when the public prop is unset. See `measuredMaxHeight` / `measuredPadding` in [`ExpandableTile.svelte`](src/Tile/ExpandableTile.svelte) and the `showMoreLess` handling in [`CodeSnippet.svelte`](src/CodeSnippet/CodeSnippet.svelte). This is the prop-facing counterpart to the `afterUpdate` guidance above.
-- Name booleans and predicates with an `is` prefix. Use `is<Verb>` / `is<Adjective>` for boolean state and predicate functions. See the [`isOutsideClick`](src/utils/is-outside-click.js) util, `isSelected` / `isExpanded` in [`DataTable.svelte`](src/DataTable/DataTable.svelte), and `isFluid` in [`TextInput.svelte`](src/TextInput/TextInput.svelte).
+- Name internal boolean state as a bare adjective or participle (`open`, `focused`, `truncated`, `initialRender`), not with an `is`/`has` prefix. Reserve `is`/`has` for predicate functions, such as the [`isOutsideClick`](src/utils/is-outside-click.js) util, and for exported props that already use them (public API, unchanged), such as `isSelected` / `isExpanded` in [`DataTable.svelte`](src/DataTable/DataTable.svelte) and `isFluid` in [`TextInput.svelte`](src/TextInput/TextInput.svelte).
 - Prefer enums over booleans for props. When a prop selects among mutually exclusive variants, or the set of variants may grow, use a string-union prop instead of several boolean flags. It keeps states exclusive and extensible. See `kind` and `size` in [`Button.svelte`](src/Button/Button.svelte). Keep booleans for genuinely binary, independent toggles such as `disabled` and `open`.
 - Apply classes with the `class:` directive, not string concatenation or template literals. Use `class:bx--name={true}` for classes that are always present and `class:bx--name--modifier={condition}` for conditional ones. This keeps each class on its own line and the toggling logic readable. See [`TextInput.svelte`](src/TextInput/TextInput.svelte): `class:bx--form-item={true}` (always) alongside `class:bx--text-input-wrapper--inline={inline}` (conditional).
 - Forward `$$restProps` to the most important element. When a component has a clear primary element with the most customizable props, such as the `<input>` or `<button>`, spread `{...$$restProps}` onto it so consumers can set attributes like `name`, `placeholder`, or `data-*` on the element they care about. See the `<input>` in [`TextInput.svelte`](src/TextInput/TextInput.svelte). Only when there is no such element does it go to the wrapper (top-level element), as in [`Tile.svelte`](src/Tile/Tile.svelte).
@@ -92,6 +92,22 @@ Patterns:
 - Set dynamic styles with the `style:` directive, not inline `style` strings or template literals: `style:left="{x}px"`. See [`ContextMenu.svelte`](src/ContextMenu/ContextMenu.svelte) and the thumb position in [`Slider.svelte`](src/Slider/Slider.svelte).
 
 The `{#if skeleton}` early-return pattern is being phased out. Follow it only when maintaining existing skeleton code.
+
+#### Naming conventions
+
+1. Helper files are `kebab-case.js` with a mirrored `kebab-case.d.ts`; components stay
+   `PascalCase.svelte`.
+2. Named exports only; no `export default` in helpers.
+3. Relative imports carry their extension.
+4. Functions are declared with `function`; arrows only inline as arguments/property values.
+5. Handlers are `handle<Event>` with DOM casing.
+6. Component-level DOM refs end in `Ref`; no `El`/`Element` suffix; never `*Ref` for non-DOM values.
+7. Previous-value trackers are `prev<Name>`.
+8. Internal booleans are bare adjectives.
+9. Stores are bare-named; `shared<Prop>` on collision, exposed under the bare context key.
+10. Params: `node`, `options`, `callback`, `event`, `index`.
+11. Active-item state: `highlighted*` (focus stays on the trigger), `focused*` (item receives DOM
+    focus), `selected*` (committed).
 
 API, docs, and workflow:
 
