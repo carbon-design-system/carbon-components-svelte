@@ -111,6 +111,29 @@
   data-testid="trend-description"
 />
 
+<BigNumber
+  labelText="Delta percentage with label"
+  value={128000}
+  delta={4.2}
+  deltaPercentage
+  deltaLabel="vs last week"
+  trend="up"
+  data-testid="delta-percentage"
+/>
+<BigNumber
+  labelText="Delta absolute negative"
+  value={128000}
+  delta={-120}
+  data-testid="delta-negative"
+/>
+<BigNumber
+  labelText="Delta zero"
+  value={128000}
+  delta={0}
+  data-testid="delta-zero"
+/>
+<BigNumber labelText="No delta" value={128000} data-testid="no-delta" />
+
 <BigNumber labelText="Loading" value={42} loading data-testid="loading" />
 
 <BigNumber
