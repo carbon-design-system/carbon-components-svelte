@@ -1,0 +1,21 @@
+language js
+
+or {
+  `const $n = writable($v)` where {
+    $n <: r"^\w+Store\z",
+    register_diagnostic(span=$n, message="Stores use a bare name (`query`, `match`). If it collides with a prop, use `shared<Prop>` and expose it on the context under the bare key.")
+  },
+  `const $n = readable($v)` where {
+    $n <: r"^\w+Store\z",
+    register_diagnostic(span=$n, message="Stores use a bare name (`query`, `match`). If it collides with a prop, use `shared<Prop>` and expose it on the context under the bare key.")
+  },
+  `const $n = derived($v)` where {
+    $n <: r"^\w+Store\z",
+    register_diagnostic(span=$n, message="Stores use a bare name (`query`, `match`). If it collides with a prop, use `shared<Prop>` and expose it on the context under the bare key.")
+  },
+  `$x` where {
+    $x <: r"(?s)let\s+(\w+Store)\s*=.*;"($n),
+    not $x <: within r"export\s[^;]*;" ,
+    register_diagnostic(span=$x, message="Stores use a bare name (`query`, `match`). If it collides with a prop, use `shared<Prop>` and expose it on the context under the bare key.")
+  }
+}

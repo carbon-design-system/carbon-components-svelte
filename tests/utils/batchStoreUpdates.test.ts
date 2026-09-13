@@ -1,5 +1,5 @@
 import { writable } from "svelte/store";
-import { batchStoreUpdates } from "../../src/utils/batchStoreUpdates.js";
+import { batchStoreUpdates } from "../../src/utils/batch-store-updates.js";
 
 describe("batchStoreUpdates", () => {
   test("collapses synchronous calls into a single store update", async () => {

@@ -69,7 +69,7 @@
   import { readable } from "svelte/store";
   import Close from "../icons/Close.svelte";
   import TooltipDefinition from "../TooltipDefinition/TooltipDefinition.svelte";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { uniqueId } from "../utils/unique-id.js";
   import TagSkeleton from "./TagSkeleton.svelte";
 
   const dispatch = createEventDispatcher();
@@ -84,7 +84,7 @@
   const groupSize = tagSet?.size ?? readable(undefined);
 
   let labelRef = null;
-  let isTruncated = false;
+  let truncated = false;
   let truncationLabel = "";
   let measureToken = 0;
 
@@ -93,9 +93,8 @@
 
   // Interactive tags are already buttons — wrapping the label in
   // `TooltipDefinition` would nest buttons. Use the native `title` instead.
-  $: showTruncationTooltip = isTruncated && !interactive;
-  $: interactiveTitle =
-    isTruncated && interactive ? truncationLabel : undefined;
+  $: showTruncationTooltip = truncated && !interactive;
+  $: interactiveTitle = truncated && interactive ? truncationLabel : undefined;
 
   async function measureTruncation() {
     const token = ++measureToken;
@@ -103,15 +102,15 @@
     if (token !== measureToken) return;
 
     if (!maxWidth || !labelRef) {
-      isTruncated = false;
+      truncated = false;
       truncationLabel = "";
       return;
     }
 
     const text = labelRef.textContent?.trim() ?? "";
-    const truncated = labelRef.scrollWidth > labelRef.clientWidth;
-    isTruncated = truncated;
-    truncationLabel = truncated ? text : "";
+    const overflowing = labelRef.scrollWidth > labelRef.clientWidth;
+    truncated = overflowing;
+    truncationLabel = overflowing ? text : "";
   }
 
   $: if (maxWidth != null && !skeleton) {
@@ -122,7 +121,7 @@
     void resolvedSize;
     measureTruncation();
   } else if (maxWidth == null) {
-    isTruncated = false;
+    truncated = false;
     truncationLabel = "";
   }
 

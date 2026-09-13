@@ -1,5 +1,5 @@
 // Pure-logic benchmark: no jsdom, no Svelte, run directly via bun (`bunx ostia bench bench/<this file>.bench.ts`, optionally filtered — see CONTRIBUTING.md).
-// TreeView's own virtualization index (src/utils/treeVirtualIndex.js) documents
+// TreeView's own virtualization index (src/utils/tree-virtual-index.js) documents
 // specific complexity claims in its module docstring:
 //   - build: O(n)
 //   - getRowAt / findIndexById: O(siblings along the path) — flat/wide lists
@@ -10,7 +10,7 @@
 // and directly validates the collectRows optimization against the naive
 // per-row alternative it's documented as improving on.
 import { group, range, task } from "ostia";
-import { createTreeVirtualIndex } from "../src/utils/treeVirtualIndex.js";
+import { createTreeVirtualIndex } from "../src/utils/tree-virtual-index.js";
 
 type Node = {
   id: number;

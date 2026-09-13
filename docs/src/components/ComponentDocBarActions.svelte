@@ -6,7 +6,7 @@
     OverflowMenuItem,
     Stack,
   } from "carbon-components-svelte";
-  import { createCopyFeedbackState } from "carbon-components-svelte/src/utils/copyFeedback.js";
+  import { createCopyFeedbackState } from "carbon-components-svelte/src/utils/copy-feedback.js";
   import ArrowUpRight from "carbon-icons-svelte/lib/ArrowUpRight.svelte";
   import Code from "carbon-icons-svelte/lib/Code.svelte";
   import Copy from "carbon-icons-svelte/lib/Copy.svelte";

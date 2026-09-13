@@ -30,6 +30,7 @@ jobs:
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
       - run: bun ci
       - run: bunx biome ci --error-on-warnings
+      - run: bun run lint:style:fixtures
 
       - name: Build docs
         run: bun run build:docs

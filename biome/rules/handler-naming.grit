@@ -1,0 +1,20 @@
+language js
+
+or {
+  `function $n($a) { $b }` where {
+    $n <: r"on[A-Z]\w*",
+    register_diagnostic(span=$n, message="Name handlers `handle<Event>` with the DOM event name lower-cased after the first letter: `handleKeydown`, `handleMouseenter`, `handleFocusout`.")
+  },
+  `const $n = $v` where {
+    $n <: r"on[A-Z]\w*",
+    register_diagnostic(span=$n, message="Name handlers `handle<Event>` with the DOM event name lower-cased after the first letter: `handleKeydown`, `handleMouseenter`, `handleFocusout`.")
+  },
+  `function $n($a) { $b }` where {
+    $n <: r"handle(?:Key|Mouse|Focus|Pointer|Touch|Animation|Transition)[A-Z]\w*",
+    register_diagnostic(span=$n, message="Name handlers `handle<Event>` with the DOM event name lower-cased after the first letter: `handleKeydown`, `handleMouseenter`, `handleFocusout`.")
+  },
+  `const $n = $v` where {
+    $n <: r"handle(?:Key|Mouse|Focus|Pointer|Touch|Animation|Transition)[A-Z]\w*",
+    register_diagnostic(span=$n, message="Name handlers `handle<Event>` with the DOM event name lower-cased after the first letter: `handleKeydown`, `handleMouseenter`, `handleFocusout`.")
+  }
+}

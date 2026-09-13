@@ -6,7 +6,7 @@
 // document (rather than the delta) already a real cost even before
 // considering algorithmic complexity.
 import { group, range, task } from "ostia";
-import { graphemeCount } from "../src/utils/graphemeCount.js";
+import { graphemeCount } from "../src/utils/grapheme-count.js";
 
 // Mixed ASCII + multi-code-point emoji (each emoji is 1 grapheme cluster
 // but 2+ UTF-16 code units) so the count differs meaningfully from

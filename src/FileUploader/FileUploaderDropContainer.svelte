@@ -50,7 +50,9 @@
    * By default, files are not validated.
    * @type {(files: ReadonlyArray<File>) => ReadonlyArray<File>}
    */
-  export let validateFiles = (files) => files;
+  export let validateFiles = function validateFiles(files) {
+    return files;
+  };
 
   /** Specify the label text */
   export let labelText = "Add file";
@@ -80,8 +82,8 @@
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";
-  import { filterIncomingFiles } from "../utils/filterIncomingFiles.js";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { filterIncomingFiles } from "../utils/filter-incoming-files.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
 

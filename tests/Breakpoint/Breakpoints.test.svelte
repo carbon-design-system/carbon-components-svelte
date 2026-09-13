@@ -1,5 +1,5 @@
 <script lang="ts">
-  import breakpoints from "carbon-components-svelte/Breakpoint/breakpoints";
+  import { breakpoints } from "carbon-components-svelte/Breakpoint/breakpoints";
 </script>
 
 <div data-testid="sm">{breakpoints.sm}</div>

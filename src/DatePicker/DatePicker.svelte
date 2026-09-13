@@ -117,14 +117,14 @@
   } from "svelte";
   import { derived, writable } from "svelte/store";
   import { dismiss } from "../utils/dismiss.js";
-  import { rafThrottle } from "../utils/rafThrottle.js";
-  import { uniqueId } from "../utils/uniqueId.js";
-  import { createCalendar, resolveLocale } from "./createCalendar";
+  import { rafThrottle } from "../utils/raf-throttle.js";
+  import { uniqueId } from "../utils/unique-id.js";
+  import { createCalendar, resolveLocale } from "./create-calendar.js";
   import {
     getTopLayerAncestor,
     isEventTargetInsidePortaledCalendar,
     positionFlatpickrCalendarFixed,
-  } from "./datePickerTopLayer";
+  } from "./date-picker-top-layer.js";
 
   const dispatch = createEventDispatcher();
   const insideModal = getContext("carbon:Modal");
@@ -148,8 +148,8 @@
   );
   const invalidAny = derived(inputs, (_) => _.some(({ invalid }) => invalid));
   const warnAny = derived(inputs, (_) => _.some(({ warn }) => warn));
-  const isFluidStore = writable(false);
-  $: isFluidStore.set(isFluid);
+  const sharedFluid = writable(false);
+  $: sharedFluid.set(isFluid);
   /**
    * @type {import("svelte/store").Writable<number | string>}
    */
@@ -163,7 +163,7 @@
    */
   const inputValueTo = writable(valueTo);
   const mode = writable(datePickerType);
-  const dateFormatStore = writable(dateFormat);
+  const sharedDateFormat = writable(dateFormat);
   /**
    * @type {import("svelte/store").Readable<boolean>}
    */
@@ -182,7 +182,7 @@
   let prevValue = value;
   let prevValueFrom = valueFrom;
   let prevValueTo = valueTo;
-  let lastAppliedOptions = {};
+  let prevAppliedOptions = {};
   let calendarUsesFixedPositioning = false;
   /** @type {(ReturnType<typeof rafThrottle> & { cancel: () => void }) | null} */
   let onCalendarReposition = null;
@@ -414,8 +414,8 @@
     inputValueTo,
     inputIds,
     hasCalendar,
-    dateFormat: dateFormatStore,
-    isFluid: isFluidStore,
+    dateFormat: sharedDateFormat,
+    isFluid: sharedFluid,
     add,
     setReadonly,
     setValidation,
@@ -427,9 +427,9 @@
   });
 
   function applyOptionIfChanged(optionKey, value, appliedValue = value) {
-    if (lastAppliedOptions[optionKey] !== value) {
+    if (prevAppliedOptions[optionKey] !== value) {
       calendar.set(optionKey, appliedValue);
-      lastAppliedOptions[optionKey] = value;
+      prevAppliedOptions[optionKey] = value;
     }
   }
 
@@ -541,7 +541,7 @@
     }
   });
 
-  $: dateFormatStore.set(dateFormat);
+  $: sharedDateFormat.set(dateFormat);
   $: inputValue.set(value);
   $: value = $inputValue;
   $: inputValueFrom.set(valueFrom);

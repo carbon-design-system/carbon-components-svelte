@@ -139,25 +139,25 @@
   import InlineLoading from "../InlineLoading/InlineLoading.svelte";
   import Close from "../icons/Close.svelte";
   import { initialFocus, restoreFocus } from "../utils/focus.js";
-  import { createOutsideDismiss } from "../utils/outsideDismiss.js";
-  import { scrollIntoViewWithinMenu } from "../utils/scrollIntoViewWithinMenu.js";
-  import { trapFocus } from "../utils/trapFocus.js";
-  import { uniqueId } from "../utils/uniqueId.js";
-  import { trackModal } from "./modalStore";
+  import { createOutsideDismiss } from "../utils/outside-dismiss.js";
+  import { scrollIntoViewWithinMenu } from "../utils/scroll-into-view-within-menu.js";
+  import { trapFocus } from "../utils/trap-focus.js";
+  import { uniqueId } from "../utils/unique-id.js";
+  import { trackModal } from "./modal-store.js";
 
   const dispatch = createEventDispatcher();
   const focusReturn = restoreFocus();
 
   let buttonRef = null;
   let primaryButtonRef = null;
-  let innerModal = null;
-  let opened = false;
+  let innerModalRef = null;
+  let prevOpen = false;
   let closeDispatched = false;
   let mounted = false;
 
-  function focus(element) {
-    const container = element || innerModal;
-    const node = initialFocus({
+  function focus(node) {
+    const container = node || innerModalRef;
+    const target = initialFocus({
       container,
       selectorPrimaryFocus,
       fallbacks: [
@@ -166,7 +166,7 @@
         buttonRef,
       ],
     });
-    node?.focus();
+    target?.focus();
   }
 
   function close(trigger) {
@@ -183,16 +183,16 @@
     if (!preventCloseOnClickOutside) close("outside-click");
   });
 
-  const openStore = writable(open);
-  $: $openStore = open;
-  trackModal(openStore);
+  const sharedOpen = writable(open);
+  $: $sharedOpen = open;
+  trackModal(sharedOpen);
 
   setContext("carbon:Modal", {});
 
   // Initial mount already runs the reactive block below, which handles
-  // dispatching "open" and the `opened`/`focusReturn.save()` bookkeeping.
+  // dispatching "open" and the `prevOpen`/`focusReturn.save()` bookkeeping.
   // What it can't do is focus the modal: reactive statements run *before*
-  // the DOM is committed, so `innerModal` isn't attached yet. `onMount`
+  // the DOM is committed, so `innerModalRef` isn't attached yet. `onMount`
   // runs after mount, so the DOM is already in place — no `tick()` needed.
   onMount(() => {
     mounted = true;
@@ -202,9 +202,9 @@
   });
 
   $: {
-    if (opened) {
+    if (prevOpen) {
       if (!open) {
-        opened = false;
+        prevOpen = false;
         if (!closeDispatched) {
           tick().then(() => {
             dispatch("close", { trigger: "programmatic" });
@@ -213,7 +213,7 @@
         closeDispatched = false;
       }
     } else if (open) {
-      opened = true;
+      prevOpen = true;
       // Reading `document.activeElement` doesn't depend on this modal's own
       // DOM, so it's safe (and race-free) to capture it synchronously here.
       focusReturn.save();
@@ -299,7 +299,7 @@
   }}
 >
   <div
-    bind:this={innerModal}
+    bind:this={innerModalRef}
     tabindex="-1"
     role={alert ? (passiveModal ? "alert" : "alertdialog") : "dialog"}
     aria-describedby={alert && !passiveModal ? modalBodyId : undefined}

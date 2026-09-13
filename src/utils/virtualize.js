@@ -257,22 +257,22 @@ export function getVisibleRange({
  * unless `measured` is set, in which case offsets come from `heights`.
  *
  * @template {Record<string, unknown>} Item
- * @param {Object} config
- * @param {Item[]} config.items
- * @param {number} config.itemHeight
- * @param {number} config.containerHeight
- * @param {number} config.scrollTop
- * @param {number} [config.overscan=3]
- * @param {number} [config.maxItems]
- * @param {number} [config.threshold=100]
- * @param {boolean} [config.measured=false] Derive offsets from `heights`
+ * @param {Object} options
+ * @param {Item[]} options.items
+ * @param {number} options.itemHeight
+ * @param {number} options.containerHeight
+ * @param {number} options.scrollTop
+ * @param {number} [options.overscan=3]
+ * @param {number} [options.maxItems]
+ * @param {number} [options.threshold=100]
+ * @param {boolean} [options.measured=false] Derive offsets from `heights`
  * instead of applying `itemHeight` to every option. Read only while the list
  * is windowed; below `threshold` the browser lays the options out itself.
- * The config-level opt-in. The standalone helpers here (`getVisibleRange`,
+ * The options-level opt-in. The standalone helpers here (`getVisibleRange`,
  * `getBoundedScrollTop`, `scrollSelectedIntoView`, `scrollHighlightedIntoView`)
- * take no config and go measured whenever `heights` is supplied, so a caller
+ * take no options and go measured whenever `heights` is supplied, so a caller
  * that opts in must pass `heights` to all of them.
- * @param {ItemHeights} [config.heights] Per-option heights,
+ * @param {ItemHeights} [options.heights] Per-option heights,
  * indexed by item. Options with no entry take an estimated height.
  * @returns {{
  *   visibleItems: Item[],

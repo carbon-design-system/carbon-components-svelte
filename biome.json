@@ -21,7 +21,8 @@
       "**",
       "!!**/.*/**/*",
       "!!**/docs/src/pages/index.svelte",
-      "!**/*.svg"
+      "!**/*.svg",
+      "!biome/fixtures"
     ]
   },
   "linter": {
@@ -201,8 +202,20 @@
     },
     {
       "includes": ["src/**"],
+      "plugins": [
+        "./biome/rules/no-arrow-function-binding.grit",
+        "./biome/rules/handler-naming.grit",
+        "./biome/rules/element-ref-naming.grit",
+        "./biome/rules/prev-naming.grit",
+        "./biome/rules/boolean-naming.grit",
+        "./biome/rules/param-naming.grit",
+        "./biome/rules/store-naming.grit"
+      ],
       "linter": {
         "rules": {
+          "correctness": {
+            "useImportExtensions": "error"
+          },
           "style": {
             "noRestrictedImports": {
               "level": "error",
@@ -219,6 +232,29 @@
                     "message": "Use the local icon in src/icons instead of importing from carbon-icons-svelte."
                   }
                 ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "src/**/*.js",
+        "src/**/*.d.ts",
+        "!src/**/*.svelte.d.ts",
+        "!src/**/index.js",
+        "!src/**/index.d.ts"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "useFilenamingConvention": {
+              "level": "error",
+              "options": {
+                "strictCase": true,
+                "requireAscii": true,
+                "filenameCases": ["kebab-case"]
               }
             }
           }

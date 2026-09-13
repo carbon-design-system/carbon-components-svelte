@@ -1,8 +1,9 @@
 <script>
   import { getContext, onMount } from "svelte";
-  import { overflowTitle } from "../utils/overflowTitle.js";
-  import { scrollIntoViewWithinMenu } from "../utils/scrollIntoViewWithinMenu.js";
-  import { HIGHLIGHT_CURSOR_KEY } from "./highlightCursor.js";
+  import { noop } from "../utils/noop.js";
+  import { overflowTitle } from "../utils/overflow-title.js";
+  import { scrollIntoViewWithinMenu } from "../utils/scroll-into-view-within-menu.js";
+  import { HIGHLIGHT_CURSOR_KEY } from "./highlight-cursor.js";
 
   /** Set to `true` to enable the active state */
   export let active = false;
@@ -32,9 +33,9 @@
   const HIGHLIGHT_CLASS = "bx--list-box__menu-item--highlighted";
   const highlightCursor = getContext(HIGHLIGHT_CURSOR_KEY);
 
-  let optionEl = null;
+  let optionRef = null;
   let ref = null;
-  let unregisterHighlight = () => {};
+  let unregisterHighlight = noop;
 
   $: if (!highlightCursor && highlighted && ref && !ref.matches(":hover")) {
     // Scroll highlighted item into view if using keyboard navigation.
@@ -46,7 +47,7 @@
   // Do not put `--highlighted` on a `class:` directive when the listbox owns
   // a cursor. Svelte 3 removes that class on every update if the expression
   // is false, which undoes the cursor's classList write.
-  $: bindCursor(optionEl, id, active, highlighted);
+  $: bindCursor(optionRef, id, active, highlighted);
 
   /**
    * @param {HTMLElement | null} node
@@ -56,7 +57,7 @@
    */
   function bindCursor(node, optionId, isActive, isHighlighted) {
     unregisterHighlight();
-    unregisterHighlight = () => {};
+    unregisterHighlight = noop;
     if (!node) return;
     if (highlightCursor) {
       if (optionId) {
@@ -75,7 +76,7 @@
 </script>
 
 <div
-  bind:this={optionEl}
+  bind:this={optionRef}
   {id}
   hidden={hidden ? true : undefined}
   role="option"

@@ -1,0 +1,12 @@
+language js
+
+or {
+  `function $name($args) { $body }` where {
+    $args <: r"(?s).*\b(?:opts|cfg|config|params|fn|cb|e|evt|idx|el|element)\b(?:\s*=[^,]*)?(?:,.*)?",
+    register_diagnostic(span=$args, message="Parameter names: `node` (DOM element), `options` (bag), `callback` (function), `event`, `index`.")
+  },
+  `($p) => $b` where {
+    $p <: r"^(?:e|evt|idx|el)\z",
+    register_diagnostic(span=$p, message="Parameter names: `node` (DOM element), `options` (bag), `callback` (function), `event`, `index`.")
+  }
+}

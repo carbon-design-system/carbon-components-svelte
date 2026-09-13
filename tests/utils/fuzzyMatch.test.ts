@@ -1,4 +1,4 @@
-import { fuzzyMatch, highlightSegments } from "../../src/utils/fuzzyMatch.js";
+import { fuzzyMatch, highlightSegments } from "../../src/utils/fuzzy-match.js";
 
 describe("fuzzyMatch", () => {
   test("empty query matches with no highlighted indices", () => {

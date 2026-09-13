@@ -32,8 +32,8 @@
   export let ref = null;
 
   import { getContext, onMount } from "svelte";
-  import { moveIndex } from "../utils/moveIndex.js";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { moveIndex } from "../utils/move-index.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const id = uniqueId();
   const ctx = getContext("carbon:HeaderNavMenu");

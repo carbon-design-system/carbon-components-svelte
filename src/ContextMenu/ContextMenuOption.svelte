@@ -85,9 +85,9 @@
   import { createEventDispatcher, getContext, onMount, tick } from "svelte";
   import CaretRight from "../icons/CaretRight.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
-  import { clampIndex } from "../utils/clampIndex.js";
-  import { createSubmenuHoverIntent } from "../utils/submenuHoverIntent.js";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { clampIndex } from "../utils/clamp-index.js";
+  import { createSubmenuHoverIntent } from "../utils/submenu-hover-intent.js";
+  import { uniqueId } from "../utils/unique-id.js";
   import ContextMenu from "./ContextMenu.svelte";
 
   const dispatch = createEventDispatcher();
@@ -126,7 +126,7 @@
     menuOffsetX = _menuOffsetX;
   });
 
-  function handleClick(event, opts = {}) {
+  function handleClick(event, options = {}) {
     if (disabled) return;
     if (subOptions) return;
 
@@ -134,8 +134,8 @@
     if (ctxGroup) {
       ctxGroup.toggleOption({ id });
     } else if (ctxRadioGroup) {
-      if (opts.fromKeyboard) {
-        ctxRadioGroup.setOption({ id: opts.id });
+      if (options.fromKeyboard) {
+        ctxRadioGroup.setOption({ id: options.id });
       } else {
         ctxRadioGroup.setOption({ id });
       }

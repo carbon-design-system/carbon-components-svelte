@@ -74,15 +74,17 @@
    * Override the item text.
    * @type {(min: number, max: number) => string}
    */
-  export let itemText = (min, max) =>
-    `${min.toLocaleString()}–${max.toLocaleString()} item${max === 1 ? "" : "s"}`;
+  export let itemText = function itemText(min, max) {
+    return `${min.toLocaleString()}–${max.toLocaleString()} item${max === 1 ? "" : "s"}`;
+  };
 
   /**
    * Override the item range text.
    * @type {(min: number, max: number, total: number) => string}
    */
-  export let itemRangeText = (min, max, total) =>
-    `${min.toLocaleString()}–${max.toLocaleString()} of ${total.toLocaleString()} item${max === 1 ? "" : "s"}`;
+  export let itemRangeText = function itemRangeText(min, max, total) {
+    return `${min.toLocaleString()}–${max.toLocaleString()} of ${total.toLocaleString()} item${max === 1 ? "" : "s"}`;
+  };
 
   /** Set to `true` to disable the page input */
   export let pageInputDisabled = false;
@@ -140,20 +142,25 @@
    * Override the page text.
    * @type {(page: number) => string}
    */
-  export let pageText = (page) => `page ${page.toLocaleString()}`;
+  export let pageText = function pageText(page) {
+    return `page ${page.toLocaleString()}`;
+  };
 
   /**
    * Override the page range text.
    * @type {(current: number, total: number) => string}
    */
-  export let pageRangeText = (_current, total) =>
-    `of ${total.toLocaleString()} page${total === 1 ? "" : "s"}`;
+  export let pageRangeText = function pageRangeText(_current, total) {
+    return `of ${total.toLocaleString()} page${total === 1 ? "" : "s"}`;
+  };
 
   /**
    * Override the accessible label for the page number select.
    * @type {(total: number) => string}
    */
-  export let pageSelectLabelText = (total) => `Page number, of ${total} pages`;
+  export let pageSelectLabelText = function pageSelectLabelText(total) {
+    return `Page number, of ${total} pages`;
+  };
 
   /** Set an id for the top-level element */
   export let id = uniqueId();
@@ -170,7 +177,7 @@
   import CaretRight from "../icons/CaretRight.svelte";
   import Select from "../Select/Select.svelte";
   import SelectItem from "../Select/SelectItem.svelte";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
 

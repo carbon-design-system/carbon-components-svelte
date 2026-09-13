@@ -1,4 +1,4 @@
-import { getScrollableAncestors } from "../../src/utils/getScrollableAncestors.js";
+import { getScrollableAncestors } from "../../src/utils/get-scrollable-ancestors.js";
 
 /** Nested divs (outermost first) with optional styles, plus an unstyled leaf. */
 function buildChain(styles: Array<Partial<CSSStyleDeclaration>>): HTMLElement {

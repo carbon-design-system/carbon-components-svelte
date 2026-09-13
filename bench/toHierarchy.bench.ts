@@ -4,7 +4,7 @@
 // closure must operate on a fresh shallow clone to avoid cross-iteration state pollution.
 // The "clone only" baseline lets us subtract clone overhead from the real measurements.
 import { group, range, task } from "ostia";
-import { toHierarchy } from "../src/utils/toHierarchy.js";
+import { toHierarchy } from "../src/utils/to-hierarchy.js";
 
 type Node = {
   id: number;

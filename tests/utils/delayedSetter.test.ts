@@ -1,4 +1,4 @@
-import { createDelayedSetter } from "../../src/utils/delayedSetter.js";
+import { createDelayedSetter } from "../../src/utils/delayed-setter.js";
 
 describe("createDelayedSetter", () => {
   beforeEach(() => {

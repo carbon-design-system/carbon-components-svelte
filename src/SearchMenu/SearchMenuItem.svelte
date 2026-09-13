@@ -56,8 +56,8 @@
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import { readable } from "svelte/store";
-  import { highlightSegments } from "../utils/fuzzyMatch.js";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { highlightSegments } from "../utils/fuzzy-match.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
   const menu = getContext("carbon:SearchMenu");
@@ -67,23 +67,23 @@
     throw new Error("SearchMenuItem must be used within a SearchMenu.");
   }
 
-  const queryStore = menu.query;
-  const shouldFilterStore = menu.shouldFilter;
-  const matchStore = menu.match;
-  const activeIdStore = menu.activeId;
-  const groupFilterStore = group?.filter ?? readable(undefined);
+  const query = menu.query;
+  const shouldFilter = menu.shouldFilter;
+  const match = menu.match;
+  const highlightedId = menu.highlightedId;
+  const groupFilter = group?.filter ?? readable(undefined);
 
   let ref = null;
   let registered = false;
 
-  $: effectiveFilter = filter ?? $groupFilterStore ?? $shouldFilterStore;
+  $: effectiveFilter = filter ?? $groupFilter ?? $shouldFilter;
   $: matchResult = text
-    ? normalizeMatch($matchStore(text, $queryStore))
+    ? normalizeMatch($match(text, $query))
     : { matched: true, indices: [] };
   $: isFilterable = Boolean(text) && effectiveFilter && !persistent;
   $: shouldRender =
     !text || persistent || !effectiveFilter || matchResult.matched;
-  $: highlighted = $activeIdStore === id;
+  $: highlighted = $highlightedId === id;
   $: segments = text ? highlightSegments(text, matchResult.indices) : [];
   $: labelHtml = text ? segmentsToHtml(segments) : "";
 
@@ -186,7 +186,7 @@
   <span class="bx--search-menu-item__label">
     {#if $$slots.default}
       <slot
-        query={$queryStore}
+        query={$query}
         matched={matchResult.matched}
         indices={matchResult.indices}
         {segments}

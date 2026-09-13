@@ -39,7 +39,7 @@
   export let name = "";
 
   import { createEventDispatcher } from "svelte";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { uniqueId } from "../utils/unique-id.js";
   import Filename from "./Filename.svelte";
 
   const dispatch = createEventDispatcher();

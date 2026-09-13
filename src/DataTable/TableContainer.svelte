@@ -13,7 +13,7 @@
 
   import { setContext } from "svelte";
   import { writable } from "svelte/store";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const titleId = uniqueId();
   const descriptionId = uniqueId();

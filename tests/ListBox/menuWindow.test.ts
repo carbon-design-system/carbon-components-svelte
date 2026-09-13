@@ -1,6 +1,6 @@
 import { tick } from "svelte";
-import { createMenuWindow } from "../../src/ListBox/menuWindow.js";
-import { VIRTUAL_INDEX_ATTRIBUTE } from "../../src/utils/heightMeasurer.js";
+import { createMenuWindow } from "../../src/ListBox/menu-window.js";
+import { VIRTUAL_INDEX_ATTRIBUTE } from "../../src/utils/height-measurer.js";
 
 type Item = { id: number; text: string };
 

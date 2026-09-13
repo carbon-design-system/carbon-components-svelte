@@ -1,0 +1,7 @@
+language js
+
+`$x` where {
+  $x <: r"(?s)let\s+((?:is|has|should)[A-Z]\w*)\s*=.*;"($n),
+  not $x <: within r"export\s[^;]*;" ,
+  register_diagnostic(span=$x, message="Internal boolean state is a bare adjective/participle (`open`, `focused`, `truncated`, `initialRender`); reserve `is`/`has` for predicate functions.")
+}

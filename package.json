@@ -46,6 +46,7 @@
     "test:e2e": "playwright test",
     "lint": "biome check --write .",
     "lint:changed": "biome check --write --changed --since=master --no-errors-on-unmatched .",
+    "lint:style:fixtures": "bun biome/check-fixtures.ts",
     "build:css": "bun scripts/build-css",
     "build:css:watch": "bun scripts/build-css --watch",
     "build:css:themes": "bun scripts/build-css --themes",

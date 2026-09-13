@@ -73,9 +73,9 @@
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
   import Stack from "../Stack/Stack.svelte";
-  import { batchStoreUpdates } from "../utils/batchStoreUpdates.js";
-  import { rafThrottle } from "../utils/rafThrottle.js";
-  import { getVisibleTagCount } from "../utils/tagOverflow.js";
+  import { batchStoreUpdates } from "../utils/batch-store-updates.js";
+  import { rafThrottle } from "../utils/raf-throttle.js";
+  import { getVisibleTagCount } from "../utils/tag-overflow.js";
   import TagSetOverflow from "./TagSetOverflow.svelte";
 
   const dispatch = createEventDispatcher();
@@ -84,8 +84,8 @@
   const items = writable([]);
   /** @type {import("svelte/store").Writable<Set<string>>} */
   const overflowIds = writable(new Set());
-  const sizeStore = writable(size);
-  $: sizeStore.set(size);
+  const sharedSize = writable(size);
+  $: sharedSize.set(size);
 
   // Tags register in mount order, which differs from DOM order when they are
   // conditionally rendered. Sort by document position right at registration
@@ -113,7 +113,7 @@
   setContext("carbon:TagSet", {
     items,
     overflowIds,
-    size: sizeStore,
+    size: sharedSize,
     register: (item) => {
       batchedItemsUpdate((current) =>
         current.some((existing) => existing.id === item.id)
@@ -196,10 +196,10 @@
     if (wrapperRef) tick().then(measure);
   }
 
-  let lastDispatchedOverflowCount = 0;
-  $: if (overflowCount !== lastDispatchedOverflowCount) {
+  let prevDispatchedOverflowCount = 0;
+  $: if (overflowCount !== prevDispatchedOverflowCount) {
     const next = overflowCount;
-    lastDispatchedOverflowCount = next;
+    prevDispatchedOverflowCount = next;
     tick().then(() => {
       dispatch("overflow:change", { count: next });
     });

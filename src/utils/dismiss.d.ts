@@ -17,5 +17,5 @@ export interface DismissParams {
 /** Adds `window` listeners only while `enabled` is true. SSR-safe. */
 export function dismiss(
   node: unknown,
-  params: DismissParams,
-): { update: (params: DismissParams) => void; destroy: () => void };
+  options: DismissParams,
+): { update: (options: DismissParams) => void; destroy: () => void };

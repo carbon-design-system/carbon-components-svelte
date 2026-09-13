@@ -72,7 +72,7 @@ export function getVisibleRange(options: GetVisibleRangeOptions): {
 /** Render only the visible slice of a fixed-height list. */
 export function virtualize<
   Item extends Record<string, unknown> = Record<string, unknown>,
->(config: VirtualizeConfig<Item>): VirtualizeResult<Item>;
+>(options: VirtualizeConfig<Item>): VirtualizeResult<Item>;
 
 export type VirtualListConfig = {
   itemHeight: number;

@@ -129,6 +129,7 @@
   import { get } from "svelte/store";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
+  import { noop } from "../utils/noop.js";
   import ButtonSkeleton from "./ButtonSkeleton.svelte";
   import { activeButtonTooltip } from "./button-tooltip-store.js";
 
@@ -188,7 +189,7 @@
 
   // Re-attach the portal observer so the tooltip dismisses when an
   // ancestor modal closes (mirrors CopyButton).
-  let disconnectModalObserver = () => {};
+  let disconnectModalObserver = noop;
 
   $: {
     disconnectModalObserver();
@@ -204,13 +205,13 @@
     $activeButtonTooltip !== null &&
     $activeButtonTooltip !== tooltipId;
 
-  function handleMouseEnter() {
+  function handleMouseenter() {
     if (hasTooltip) {
       claimActiveTooltip();
     }
   }
 
-  function handleMouseLeave() {
+  function handleMouseleave() {
     if (usePortal) return;
     releaseActiveTooltip();
   }
@@ -372,10 +373,10 @@
         on:blur={handlePortalBlur}
         on:mouseover
         on:mouseenter
-        on:mouseenter={handleMouseEnter}
+        on:mouseenter={handleMouseenter}
         on:mouseenter={handlePortalMouseEnter}
         on:mouseleave
-        on:mouseleave={handleMouseLeave}
+        on:mouseleave={handleMouseleave}
         on:mouseleave={handlePortalMouseLeave}
       >
         {#if hasIconOnly && iconDescription}
@@ -414,10 +415,10 @@
       on:blur={handlePortalBlur}
       on:mouseover
       on:mouseenter
-      on:mouseenter={handleMouseEnter}
+      on:mouseenter={handleMouseenter}
       on:mouseenter={handlePortalMouseEnter}
       on:mouseleave
-      on:mouseleave={handleMouseLeave}
+      on:mouseleave={handleMouseleave}
       on:mouseleave={handlePortalMouseLeave}
     >
       {#if hasIconOnly && iconDescription}
@@ -455,10 +456,10 @@
       on:blur={handlePortalBlur}
       on:mouseover
       on:mouseenter
-      on:mouseenter={handleMouseEnter}
+      on:mouseenter={handleMouseenter}
       on:mouseenter={handlePortalMouseEnter}
       on:mouseleave
-      on:mouseleave={handleMouseLeave}
+      on:mouseleave={handleMouseleave}
       on:mouseleave={handlePortalMouseLeave}
     >
       {#if hasIconOnly && iconDescription}
@@ -496,10 +497,10 @@
     on:blur={handlePortalBlur}
     on:mouseover
     on:mouseenter
-    on:mouseenter={handleMouseEnter}
+    on:mouseenter={handleMouseenter}
     on:mouseenter={handlePortalMouseEnter}
     on:mouseleave
-    on:mouseleave={handleMouseLeave}
+    on:mouseleave={handleMouseleave}
     on:mouseleave={handlePortalMouseLeave}
   >
     {#if hasIconOnly && iconDescription}

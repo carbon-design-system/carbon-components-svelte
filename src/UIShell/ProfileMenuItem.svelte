@@ -26,7 +26,7 @@
   export let ref = null;
 
   import { getContext, onMount } from "svelte";
-  import { moveIndex } from "../utils/moveIndex.js";
+  import { moveIndex } from "../utils/move-index.js";
 
   const ctx = getContext("carbon:ProfileMenu");
 

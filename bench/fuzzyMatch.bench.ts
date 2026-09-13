@@ -3,7 +3,7 @@
 // once per keystroke. The realistic cost that matters is filtering a whole
 // list on one keystroke, not a single fuzzyMatch() call in isolation.
 import { group, range, task } from "ostia";
-import { fuzzyMatch } from "../src/utils/fuzzyMatch.js";
+import { fuzzyMatch } from "../src/utils/fuzzy-match.js";
 
 // A mix of items that resolve via each of fuzzyMatch's two internal paths:
 // a contiguous-substring hit (cheap, single indexOf pass) and a scattered

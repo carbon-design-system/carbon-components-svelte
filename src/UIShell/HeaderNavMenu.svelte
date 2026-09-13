@@ -31,7 +31,7 @@
   import { writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import { dismiss } from "../utils/dismiss.js";
-  import { isOutsideClick } from "../utils/isOutsideClick.js";
+  import { isOutsideClick } from "../utils/is-outside-click.js";
 
   const dispatch = createEventDispatcher();
 
@@ -57,17 +57,17 @@
   }
 
   /**
-   * @type {(element: HTMLElement) => void}
+   * @type {(node: HTMLElement) => void}
    */
-  function registerMenuItem(element) {
-    menuItems.update((items) => [...items, element]);
+  function registerMenuItem(node) {
+    menuItems.update((items) => [...items, node]);
   }
 
   /**
-   * @type {(element: HTMLElement) => void}
+   * @type {(node: HTMLElement) => void}
    */
-  function unregisterMenuItem(element) {
-    menuItems.update((items) => items.filter((item) => item !== element));
+  function unregisterMenuItem(node) {
+    menuItems.update((items) => items.filter((item) => item !== node));
   }
 
   /**

@@ -4,11 +4,11 @@ import {
   poolKey,
   registerConsumer,
   unregisterConsumer,
-} from "./windowListenerPool.js";
+} from "./window-listener-pool.js";
 
 /**
  * @typedef {{ handler: (event: Event) => void }} Consumer
- * @typedef {import("./windowListenerPool.js").Pool} Pool
+ * @typedef {import("./window-listener-pool.js").Pool} Pool
  */
 
 /**
@@ -17,12 +17,12 @@ import {
  * Handler updates in place without re-registering. SSR-safe.
  *
  * @param {unknown} _node Host element (unused; listeners attach to `window`).
- * @param {import("./dismiss.js").DismissParams} params
- * @returns {{ update: (params: import("./dismiss.js").DismissParams) => void, destroy: () => void }}
+ * @param {import("./dismiss.js").DismissParams} options
+ * @returns {{ update: (options: import("./dismiss.js").DismissParams) => void, destroy: () => void }}
  */
-export function dismiss(_node, params) {
-  let specs = normalize(params);
-  let enabled = !!params.enabled;
+export function dismiss(_node, options) {
+  let specs = normalize(options);
+  let enabled = !!options.enabled;
   let destroyed = false;
   let addScheduled = false;
 
@@ -90,25 +90,25 @@ export function dismiss(_node, params) {
 }
 
 /**
- * @param {import("./dismiss.js").DismissParams} params
+ * @param {import("./dismiss.js").DismissParams} options
  * @returns {Array<{ type: string, handler: (event: Event) => void, options: boolean | AddEventListenerOptions | undefined }>}
  */
-function normalize(params) {
-  if (params.listeners) {
-    return params.listeners.map((l) => ({
+function normalize(options) {
+  if (options.listeners) {
+    return options.listeners.map((l) => ({
       type: l.type,
       handler: l.handler,
       options: l.options,
     }));
   }
-  const types = Array.isArray(params.type)
-    ? params.type
-    : params.type == null
+  const types = Array.isArray(options.type)
+    ? options.type
+    : options.type == null
       ? []
-      : [params.type];
+      : [options.type];
   return types.map((type) => ({
     type,
-    handler: /** @type {(event: Event) => void} */ (params.handler),
-    options: params.options,
+    handler: /** @type {(event: Event) => void} */ (options.handler),
+    options: options.options,
   }));
 }

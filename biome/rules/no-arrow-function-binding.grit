@@ -1,0 +1,23 @@
+language js
+
+or {
+  `const $n = ($a) => $b` where {
+    register_diagnostic(span=$n, message="Declare functions with `function name() {}`; do not assign arrow functions to bindings.")
+  },
+  `const $n = async ($a) => $b` where {
+    register_diagnostic(span=$n, message="Declare functions with `function name() {}`; do not assign arrow functions to bindings.")
+  },
+  `$x` where {
+    $x <: r"(?s)let\s+\w+\s*=\s*(?:async\s+)?(?:\([^)]*\)|\w+)\s*=>.*;",
+    not $x <: within r"export\s[^;]*;" ,
+    register_diagnostic(span=$x, message="Declare functions with `function name() {}`; do not assign arrow functions to bindings.")
+  },
+  `$x` where {
+    $x <: r"(?s)\$:\s*\w+\s*=\s*\(\s*(?:async\s+)?\(\)\s*=>.*\)\s*\(\)\s*;",
+    register_diagnostic(span=$x, message="Declare functions with `function name() {}`; do not assign arrow functions to bindings.")
+  },
+  `$x` where {
+    $x <: r"(?s)\$:\s*\w+\s*=\s*(?:\([^)]*\)|\w+)\s*=>.*;",
+    register_diagnostic(span=$x, message="Declare functions with `function name() {}`; do not assign arrow functions to bindings.")
+  }
+}

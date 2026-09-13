@@ -1,5 +1,5 @@
 <script>
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   /**
    * Specify the toggle size.
