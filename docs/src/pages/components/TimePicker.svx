@@ -149,8 +149,8 @@ Fluid time pickers fill their container using percentage-based columns (25% /
 width so those ratios resolve as intended.
 
 <div style:width="350px">
-  <TimePicker fluid labelText="Time" placeholder="hh:mm">
-    <TimePickerSelect labelText="Clock" value="am">
+  <TimePicker fluid labelText="Standup time" placeholder="hh:mm">
+    <TimePickerSelect labelText="Period" value="am">
       <SelectItem value="am" text="AM" />
       <SelectItem value="pm" text="PM" />
     </TimePickerSelect>
@@ -164,8 +164,8 @@ width so those ratios resolve as intended.
 With a single period selector, the time input and select share equal width.
 
 <div style:width="350px">
-  <TimePicker fluid labelText="Time" placeholder="hh:mm">
-    <TimePickerSelect labelText="Clock" value="am">
+  <TimePicker fluid labelText="Standup time" placeholder="hh:mm">
+    <TimePickerSelect labelText="Period" value="am">
       <SelectItem value="am" text="AM" />
       <SelectItem value="pm" text="PM" />
     </TimePickerSelect>
@@ -178,14 +178,14 @@ Use the `labelChildren` slot to render custom label content, such as a
 tooltip icon.
 
 <div style:width="350px">
-  <TimePicker fluid labelText="Time" placeholder="hh:mm">
+  <TimePicker fluid labelText="Standup time" placeholder="hh:mm">
     <svelte:fragment slot="labelChildren">
-      Time
-      <TooltipIcon tooltipText="Enter time in hh:mm format." icon={Information} />
+      Standup time
+      <TooltipIcon tooltipText="Enter the standup time in hh:mm format." icon={Information} />
     </svelte:fragment>
-    <TimePickerSelect labelText="Clock" value="am">
+    <TimePickerSelect labelText="Period" value="am">
       <svelte:fragment slot="labelChildren">
-        Clock
+        Period
         <TooltipIcon tooltipText="Select AM or PM." icon={Information} />
       </svelte:fragment>
       <SelectItem value="am" text="AM" />
@@ -200,8 +200,8 @@ Fluid time pickers display the error message inside the field boundary. Long
 messages wrap to multiple lines.
 
 <div style:width="350px">
-  <TimePicker fluid invalid invalidText="A valid time is required. Enter the hour and minute in hh:mm format using a 12-hour clock, for example 09:30 or 2:15." labelText="Time" placeholder="hh:mm">
-    <TimePickerSelect labelText="Clock" value="am">
+  <TimePicker fluid invalid invalidText="A valid standup time is required. Enter the hour and minute in hh:mm format using a 12-hour clock, for example 09:30 or 2:15." labelText="Standup time" placeholder="hh:mm">
+    <TimePickerSelect labelText="Period" value="am">
       <SelectItem value="am" text="AM" />
       <SelectItem value="pm" text="PM" />
     </TimePickerSelect>
@@ -215,8 +215,8 @@ messages wrap to multiple lines.
 ### Warning
 
 <div style:width="350px">
-  <TimePicker fluid warn warnText="The selected time is outside business hours" labelText="Time" placeholder="hh:mm">
-    <TimePickerSelect labelText="Clock" value="am">
+  <TimePicker fluid warn warnText="The selected standup time is outside business hours" labelText="Standup time" placeholder="hh:mm">
+    <TimePickerSelect labelText="Period" value="am">
       <SelectItem value="am" text="AM" />
       <SelectItem value="pm" text="PM" />
     </TimePickerSelect>
@@ -232,8 +232,8 @@ messages wrap to multiple lines.
 Invalid and warning states are not displayed while the time picker is disabled.
 
 <div style:width="350px">
-  <TimePicker fluid disabled invalid invalidText="A valid time is required" labelText="Time" placeholder="hh:mm">
-    <TimePickerSelect labelText="Clock" value="am" disabled>
+  <TimePicker fluid disabled invalid invalidText="A valid standup time is required" labelText="Standup time" placeholder="hh:mm">
+    <TimePickerSelect labelText="Period" value="am" disabled>
       <SelectItem value="am" text="AM" />
       <SelectItem value="pm" text="PM" />
     </TimePickerSelect>
@@ -249,8 +249,8 @@ Invalid and warning states are not displayed while the time picker is disabled.
 Invalid and warning states are not displayed while the time picker is read-only.
 
 <div style:width="350px">
-  <TimePicker fluid readonly warn warnText="The selected time is outside business hours" labelText="Time" placeholder="hh:mm" value="10:30">
-    <TimePickerSelect labelText="Clock" readonly value="am">
+  <TimePicker fluid readonly warn warnText="The selected standup time is outside business hours" labelText="Standup time" placeholder="hh:mm" value="10:30">
+    <TimePickerSelect labelText="Period" readonly value="am">
       <SelectItem value="am" text="AM" />
       <SelectItem value="pm" text="PM" />
     </TimePickerSelect>
