@@ -33,7 +33,7 @@
   const HIGHLIGHT_CLASS = "bx--list-box__menu-item--highlighted";
   const highlightCursor = getContext(HIGHLIGHT_CURSOR_KEY);
 
-  let optionEl = null;
+  let optionRef = null;
   let ref = null;
   let unregisterHighlight = noop;
 
@@ -47,7 +47,7 @@
   // Do not put `--highlighted` on a `class:` directive when the listbox owns
   // a cursor. Svelte 3 removes that class on every update if the expression
   // is false, which undoes the cursor's classList write.
-  $: bindCursor(optionEl, id, active, highlighted);
+  $: bindCursor(optionRef, id, active, highlighted);
 
   /**
    * @param {HTMLElement | null} node
@@ -76,7 +76,7 @@
 </script>
 
 <div
-  bind:this={optionEl}
+  bind:this={optionRef}
   {id}
   hidden={hidden ? true : undefined}
   role="option"

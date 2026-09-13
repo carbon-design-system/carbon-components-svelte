@@ -13,7 +13,9 @@
    * Override the default translation ids.
    * @type {(id: ListBoxMenuIconTranslationId) => string}
    */
-  export let translateWithId = (id) => defaultTranslations[id];
+  export let translateWithId = function translateWithId(id) {
+    return defaultTranslations[id];
+  };
 
   import ChevronDown from "../icons/ChevronDown.svelte";
 

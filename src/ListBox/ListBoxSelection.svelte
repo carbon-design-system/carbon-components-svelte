@@ -29,7 +29,9 @@
    * Override the default translation ids.
    * @type {(id: ListBoxSelectionTranslationId) => string}
    */
-  export let translateWithId = (id) => defaultTranslations[id];
+  export let translateWithId = function translateWithId(id) {
+    return defaultTranslations[id];
+  };
 
   /**
    * Obtain a reference to the top-level HTML element.
