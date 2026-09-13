@@ -41,7 +41,9 @@
    * Override the display of a dropdown item.
    * @type {(item: Item) => string}
    */
-  export let itemToString = (item) => item.text ?? item.id;
+  export let itemToString = function itemToString(item) {
+    return item.text ?? item.id;
+  };
 
   /**
    * Specify the selected item id.
@@ -443,12 +445,12 @@
     ) {
       tick().then(() => {
         if (!listRef) return;
-        const selectedEl = listRef.querySelector('[aria-selected="true"]');
-        if (!selectedEl) return;
+        const selectedOption = listRef.querySelector('[aria-selected="true"]');
+        if (!selectedOption) return;
         // Adjust the menu's own scrollTop instead of scrollIntoView,
         // which would also scroll the document.
         listRef.scrollTop +=
-          selectedEl.getBoundingClientRect().top -
+          selectedOption.getBoundingClientRect().top -
           listRef.getBoundingClientRect().top;
       });
     }
