@@ -141,7 +141,9 @@
    * Override the default translation ids.
    * @type {(id: NumberInputTranslationId) => string}
    */
-  export let translateWithId = (id) => defaultTranslations[id];
+  export let translateWithId = function translateWithId(id) {
+    return defaultTranslations[id];
+  };
 
   /**
    * Default translation ids.
@@ -267,13 +269,15 @@
     typeof validate === "function"
       ? validate(useTextMode ? inputValue : String(value ?? ""), locale)
       : undefined;
+  function computeEffectiveInvalid(isInvalid, isCustomValid, isAutoInvalid) {
+    if (isInvalid) return true;
+    if (isCustomValid === false) return true;
+    if (isCustomValid === true) return false;
+    return isAutoInvalid;
+  }
+
   $: effectiveInvalid =
-    (() => {
-      if (invalid) return true;
-      if (customValid === false) return true;
-      if (customValid === true) return false;
-      return autoInvalid;
-    })() && !readonly;
+    computeEffectiveInvalid(invalid, customValid, autoInvalid) && !readonly;
   // Invalid/warn states are suppressed when the input is disabled or read-only.
   // `effectiveInvalid` already excludes read-only.
   $: showInvalid = effectiveInvalid && !disabled;
@@ -289,7 +293,7 @@
 
   // Only use inputValue tracking in text mode (allowDecimal or locale).
   // During user typing, don't interfere with inputValue — formatting
-  // happens on blur (onChange) and programmatic changes only.
+  // happens on blur (handleChange) and programmatic changes only.
   $: if (useTextMode) {
     const valueChanged = value !== prevValue;
     prevValue = value;
@@ -313,7 +317,7 @@
     }
   }
 
-  function onInput(event) {
+  function handleInput(event) {
     if (useTextMode) {
       userInputActive = true;
       inputValue = event.target.value;
@@ -336,7 +340,7 @@
     dispatch("input", value);
   }
 
-  function onChange(event) {
+  function handleChange(event) {
     userInputActive = false;
     let parsedValue = locale
       ? parseLocaleValue(event.target.value, groupSeparator, decimalSeparator)
@@ -377,7 +381,7 @@
     dispatch("change", value);
   }
 
-  function onKeyDown(event) {
+  function handleKeydown(event) {
     if (
       useTextMode &&
       !readonly &&
@@ -467,9 +471,9 @@
           {step}
           {readonly}
           {...$$restProps}
-          on:change={onChange}
-          on:input={onInput}
-          on:keydown={onKeyDown}
+          on:change={handleChange}
+          on:input={handleInput}
+          on:keydown={handleKeydown}
           on:keydown
           on:keyup
           on:focus={handleInputFocus}
@@ -505,9 +509,9 @@
           value={value ?? ""}
           {readonly}
           {...$$restProps}
-          on:change={onChange}
-          on:input={onInput}
-          on:keydown={onKeyDown}
+          on:change={handleChange}
+          on:input={handleInput}
+          on:keydown={handleKeydown}
           on:keydown
           on:keyup
           on:focus={handleInputFocus}
