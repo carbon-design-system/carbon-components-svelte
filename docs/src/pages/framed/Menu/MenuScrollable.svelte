@@ -4,10 +4,28 @@
   let anchor;
   let open = false;
 
-  const actions = Array.from(
-    { length: 20 },
-    (_, index) => `Action ${index + 1}`,
-  );
+  const actions = [
+    "Assign to me",
+    "Assign to team",
+    "Change priority",
+    "Change status",
+    "Add label",
+    "Remove label",
+    "Add to sprint",
+    "Remove from sprint",
+    "Duplicate",
+    "Convert to task",
+    "Link related issue",
+    "Move to project",
+    "Watch",
+    "Stop watching",
+    "Export as CSV",
+    "Export as JSON",
+    "Print",
+    "Archive",
+    "Restore",
+    "Delete",
+  ];
 </script>
 
 <Button bind:ref={anchor} on:click={() => (open = !open)}>Actions</Button>
