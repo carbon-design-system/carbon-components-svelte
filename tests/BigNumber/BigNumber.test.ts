@@ -235,6 +235,23 @@ describe("BigNumber", () => {
     });
   });
 
+  describe("footer slot", () => {
+    it("renders slotted content inside the footer", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("footer");
+      const footer = el.querySelector(".bx--big-number__footer");
+      expect(footer).toHaveTextContent("Footer content");
+    });
+
+    it("renders no footer element without slot content", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("no-footer");
+      expect(el.querySelector(".bx--big-number__footer")).toBeNull();
+    });
+  });
+
   it("renders the skeleton instead of the value when loading", () => {
     render(BigNumber);
 
