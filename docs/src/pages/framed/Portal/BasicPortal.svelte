@@ -3,7 +3,7 @@
 </script>
 
 <div>
-  <div>This is rendered inside the div</div>
+  <div>Rendered inside the dashboard panel</div>
   <br>
-  <Portal>This is rendered outside of the div</Portal>
+  <Portal>Rendered outside the panel, directly in document.body</Portal>
 </div>
