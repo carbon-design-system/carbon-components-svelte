@@ -34,7 +34,7 @@ Set `size` to control the visual weight of the value.
 Use the `labelChildren` slot for custom label content instead of `labelText`.
 
 <BigNumber labelText="Deployments" value={1240}>
-  <strong slot="labelChildren">Custom label</strong>
+  <strong slot="labelChildren">Deployments (staging)</strong>
 </BigNumber>
 
 ## With total
@@ -43,7 +43,7 @@ Set `total` to render `value` as the numerator of a "value / total" fraction. Th
 
 <Stack gap={5}>
   <BigNumber labelText="Tickets resolved" value={42} total={120} />
-  <BigNumber labelText="Same after truncation" value={42} total={42} forceShowTotal />
+  <BigNumber labelText="Sprint tasks completed" value={42} total={42} forceShowTotal />
 </Stack>
 
 ## Percentage
@@ -85,8 +85,8 @@ A trend's direction and its meaning aren't always the same: more failed builds i
 `value` and `total` abbreviate large numbers by default (for example, `12,400` becomes `12.4K`). Set `fullNumber` to `true` to render the full number instead, and `fractionDigits` to control the number of fraction digits used when formatting.
 
 <Stack gap={5}>
-  <BigNumber labelText="Abbreviated" value={12400} />
-  <BigNumber labelText="Full number" value={12400} fullNumber />
+  <BigNumber labelText="Page views" value={12400} />
+  <BigNumber labelText="Page views" value={12400} fullNumber />
 </Stack>
 
 ## Tooltip
