@@ -3,12 +3,12 @@
   import Prism from "prismjs";
   import "prismjs/components/prism-typescript";
 
-  const code = `export function add(a: number, b: number) {
-  return a + b;
+  const code = `export function isAdmin(role: string) {
+  return role === 'admin';
 }
 
-export function subtract(a: number, b: number) {
-  return a - b;
+export function isExpired(expiresAt: number) {
+  return Date.now() > expiresAt;
 }`;
 
   const highlighted = Prism.highlight(

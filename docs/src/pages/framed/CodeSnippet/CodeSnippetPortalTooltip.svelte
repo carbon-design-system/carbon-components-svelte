@@ -2,7 +2,7 @@
   import { CodeSnippet, Stack } from "carbon-components-svelte";
 
   let multiCode =
-    "export function add(a, b) {\n  return a + b;\n}\n\nexport function subtract(a, b) {\n  return a - b;\n}";
+    "export function isAdmin(role) {\n  return role === 'admin';\n}\n\nexport function isExpired(expiresAt) {\n  return Date.now() > expiresAt;\n}";
 </script>
 
 <!--
