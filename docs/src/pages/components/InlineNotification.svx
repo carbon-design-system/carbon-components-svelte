@@ -89,7 +89,7 @@ Translate the close button label via `closeButtonDescription`.
 
 ### Prevent default
 
-The component is controlled, so you can prevent the default close behavior with `e.preventDefault()`.
+Prevent the default close behavior using `e.preventDefault()` in the `on:close` event handler.
 
 <InlineNotification title="Delete failed" subtitle="This resource is still in use by another service." on:close={(e) => {
   e.preventDefault();
