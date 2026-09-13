@@ -154,7 +154,6 @@
   }
 </script>
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
 <svelte:element
   this={href ? "a" : "div"}
   bind:this={ref}

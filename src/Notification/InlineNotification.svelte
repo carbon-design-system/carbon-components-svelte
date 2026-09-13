@@ -78,7 +78,6 @@
   onMount(() => () => dismiss.clear());
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if open}
   <div
     {role}

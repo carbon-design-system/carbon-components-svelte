@@ -164,8 +164,6 @@
   {...$$restProps}
 >
   {#if href}
-    <!-- svelte-ignore a11y-missing-attribute -->
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
     <a bind:this={ref} {...buttonProps} on:click={handleClick} on:keydown>
       {#if $$slots.icon || icon}
         <div

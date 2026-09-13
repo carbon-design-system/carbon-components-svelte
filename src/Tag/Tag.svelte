@@ -156,7 +156,6 @@
   }
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if skeleton}
   <TagSkeleton
     size={resolvedSize}
@@ -167,7 +166,6 @@
     on:mouseleave
   />
 {:else if filter}
-  <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div
     bind:this={ref}
     aria-label={title}
@@ -230,8 +228,6 @@
     </button>
   </div>
 {:else if href}
-  <!-- svelte-ignore a11y-missing-attribute -->
-  <!-- svelte-ignore a11y-no-redundant-roles -->
   <a
     bind:this={ref}
     href={disabled ? undefined : href}
@@ -315,7 +311,6 @@
     <span bind:this={labelRef} class:bx--tag__label={true}> <slot /> </span>
   </button>
 {:else}
-  <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div
     bind:this={ref}
     {id}

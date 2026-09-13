@@ -306,7 +306,6 @@
   }
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <button
   bind:this={buttonRef}
   use:dismiss={{ enabled: open, type: "click", handler: handleOutsideClick }}
@@ -381,7 +380,6 @@
 </button>
 
 {#if open && !effectivePortalMenu}
-  <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
   <ul
     bind:this={menuRef}
     use:rovingFocus={menuRovingFocus}
@@ -430,7 +428,6 @@
     {open}
     let:direction={portalDirection}
   >
-    <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
     <ul
       bind:this={menuRef}
       use:rovingFocus={menuRovingFocus}

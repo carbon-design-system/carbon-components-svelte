@@ -58,7 +58,6 @@
   setContext("carbon:Accordion", { disableItems, openId, notifyOpen });
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if skeleton}
   <AccordionSkeleton
     {...$$restProps}
@@ -71,7 +70,6 @@
     on:mouseleave
   />
 {:else}
-  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <ul
     class:bx--accordion={true}
     class:bx--accordion--start={align === "start"}

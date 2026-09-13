@@ -13,8 +13,6 @@
   const widths = ["75%", "90%", "65%", "80%"];
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
-<!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
   class="bx--search-menu__menu bx--search-menu__menu--inline bx--search-menu__menu--{size}"
   {...$$restProps}

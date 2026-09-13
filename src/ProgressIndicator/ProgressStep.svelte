@@ -62,7 +62,6 @@
   });
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <li
   {id}
   class:bx--progress-step={true}

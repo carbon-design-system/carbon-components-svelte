@@ -158,7 +158,6 @@
   $: warnId = `warn-${id}`;
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if skeleton}
   <CheckboxSkeleton
     {...$$restProps}
@@ -168,7 +167,6 @@
     on:mouseleave
   />
 {:else}
-  <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div
     class:bx--form-item={true}
     class:bx--checkbox-wrapper={true}

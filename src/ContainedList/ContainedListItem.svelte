@@ -44,7 +44,6 @@
   class:bx--contained-list-item--with-icon="{icon}"
   class:bx--contained-list-item--with-action="{$$slots.action}"
 >
-  <!-- svelte-ignore a11y-no-static-element-interactions -->
   <svelte:element
     this="{tag}"
     {...props}

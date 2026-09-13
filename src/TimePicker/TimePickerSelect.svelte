@@ -55,8 +55,6 @@
   $: isFluid = !!timePickerContext?.isFluid || !!formContext?.isFluid;
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
-<!-- svelte-ignore a11y-no-static-element-interactions -->
 {#if isFluid}
   <div class:bx--form-item={true} class:bx--select--fluid={true}>
     <div
@@ -81,7 +79,6 @@
         </label>
       {/if}
       <div class:bx--select-input__wrapper={true}>
-        <!-- svelte-ignore a11y-no-onchange -->
         <select
           bind:this={ref}
           {id}
@@ -140,7 +137,6 @@
         <slot name="labelChildren"> {labelText} </slot>
       </label>
     {/if}
-    <!-- svelte-ignore a11y-no-onchange -->
     <select
       bind:this={ref}
       {id}

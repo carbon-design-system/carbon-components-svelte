@@ -1837,14 +1837,12 @@
 </script>
 
 {#if !hideLabel}
-  <!-- svelte-ignore a11y-label-has-associated-control -->
   <label id={labelId} class:bx--label={true}>
     <slot name="labelChildren">{labelText}</slot>
   </label>
 {/if}
 
 {#if virtualConfig}
-  <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
   <ul
     {...$$restProps}
     role="tree"
@@ -1889,7 +1887,6 @@
     {/if}
   </ul>
 {:else}
-  <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
   <ul
     {...$$restProps}
     role="tree"

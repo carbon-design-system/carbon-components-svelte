@@ -96,7 +96,6 @@
   }
 </script>
 
-<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <dialog
   class:bx--dialog={true}
   class:bx--dialog--modal={modal}

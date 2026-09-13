@@ -29,7 +29,6 @@
     translateWithId?.(translationId) ?? defaultTranslations[translationId];
 </script>
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
   class:bx--list-box__menu-icon={true}
   class:bx--list-box__menu-icon--open={open}

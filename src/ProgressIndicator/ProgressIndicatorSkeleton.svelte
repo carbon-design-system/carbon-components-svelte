@@ -9,8 +9,6 @@
   export let count = 4;
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
-<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <ul
   class:bx--progress={true}
   class:bx--progress--vertical={vertical}

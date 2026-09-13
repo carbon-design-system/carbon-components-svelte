@@ -8,8 +8,6 @@
   $: cols = Array.from({ length: columns }, (_, i) => i);
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
-<!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
   class:bx--skeleton={true}
   class:bx--structured-list={true}

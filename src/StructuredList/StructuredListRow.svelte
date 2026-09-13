@@ -46,10 +46,7 @@
       : $selectedValue === value);
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if label}
-  <!-- svelte-ignore a11y-label-has-associated-control -->
-  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <label
     class:bx--structured-list-row={true}
     class:bx--structured-list-row--header-row={head}
@@ -68,7 +65,6 @@
     {/if}
   </label>
 {:else}
-  <!-- svelte-ignore a11y-interactive-supports-focus -->
   <div
     role={selection ? undefined : "row"}
     class:bx--structured-list-row={true}

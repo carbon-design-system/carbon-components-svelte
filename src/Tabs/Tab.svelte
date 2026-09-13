@@ -168,7 +168,6 @@
   $: panelId = $contentByIndex[$tabsById[id]?.index];
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <li
   role="presentation"
   class:bx--tabs__nav-item={true}
