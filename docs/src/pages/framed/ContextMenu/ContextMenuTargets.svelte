@@ -20,8 +20,8 @@
   <ContextMenuOption indented labelText="Export as">
     <ContextMenuGroup labelText="Export options">
       <ContextMenuOption id="pdf" labelText="PDF" />
-      <ContextMenuOption id="txt" labelText="TXT" />
-      <ContextMenuOption id="mp3" labelText="MP3" />
+      <ContextMenuOption id="png" labelText="PNG" />
+      <ContextMenuOption id="svg" labelText="SVG" />
     </ContextMenuGroup>
   </ContextMenuOption>
   <ContextMenuDivider />

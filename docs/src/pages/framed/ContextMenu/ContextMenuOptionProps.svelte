@@ -10,18 +10,13 @@
 </script>
 
 <ContextMenu>
-  <ContextMenuOption labelText="Plain label" />
-  <ContextMenuOption labelText="With shortcut" shortcutText="⌘K" />
+  <ContextMenuOption labelText="View details" />
+  <ContextMenuOption labelText="Search" shortcutText="⌘K" />
   <ContextMenuOption labelText="Copy" shortcutText="⌘C" icon={CopyFile} />
   <ContextMenuDivider />
-  <ContextMenuOption indented labelText="Indented without icon" />
+  <ContextMenuOption indented labelText="Rename" />
   <ContextMenuDivider />
-  <ContextMenuOption
-    disabled
-    labelText="Disabled"
-    shortcutText="⌘D"
-    icon={Cut}
-  />
+  <ContextMenuOption disabled labelText="Cut" shortcutText="⌘X" icon={Cut} />
   <ContextMenuDivider />
   <ContextMenuOption kind="danger" labelText="Delete" icon={TrashCan} />
 </ContextMenu>

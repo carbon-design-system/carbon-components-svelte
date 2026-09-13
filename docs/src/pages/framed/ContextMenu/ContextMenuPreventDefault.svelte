@@ -15,7 +15,9 @@
     if (copying) return;
     copying = true;
     copied = false;
-    await navigator.clipboard.writeText("Sample text to copy");
+    await navigator.clipboard.writeText(
+      "https://app.example.com/tickets/48213",
+    );
     copied = true;
     setTimeout(() => {
       copied = false;
