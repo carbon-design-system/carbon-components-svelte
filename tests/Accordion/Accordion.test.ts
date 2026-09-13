@@ -411,6 +411,18 @@ describe("Accordion", () => {
     expect(consoleLog).toHaveBeenCalledWith("item-click");
   });
 
+  it("should forward focus and blur from the heading button", () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Accordion);
+
+    const button = screen.getByRole("button", { name: /Language Translator/ });
+    button.focus();
+    expect(consoleLog).toHaveBeenCalledWith("item-focus");
+
+    button.blur();
+    expect(consoleLog).toHaveBeenCalledWith("item-blur");
+  });
+
   it("should render title slot", () => {
     render(Accordion, { props: { useSlot: true } });
 

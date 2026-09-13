@@ -54,6 +54,12 @@
       on:click={() => {
         console.log("item-click");
       }}
+      on:focus={() => {
+        console.log("item-focus");
+      }}
+      on:blur={() => {
+        console.log("item-blur");
+      }}
       on:keydown={(e) => {
         console.log("item-keydown", e.key);
       }}
