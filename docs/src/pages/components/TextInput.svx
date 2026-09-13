@@ -182,7 +182,7 @@ Indicate a warning state with a message by setting `warn` and providing `warnTex
 
 ### Disabled
 
-Disable the input to prevent user interaction with `disabled`.
+Set `disabled` to `true` to prevent user interaction.
 
 <TextInput disabled labelText="Workspace name" placeholder="Enter workspace name..." />
 

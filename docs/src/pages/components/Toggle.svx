@@ -90,7 +90,7 @@ Use `on:toggle` to listen for state changes. The event dispatches `{ toggled: bo
 
 ## Skeleton
 
-Display a loading state using the skeleton component.
+Show a loading state with the skeleton component.
 
 <ToggleSkeleton />
 

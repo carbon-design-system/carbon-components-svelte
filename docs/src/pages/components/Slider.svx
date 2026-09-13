@@ -129,7 +129,7 @@ Use `on:input` to listen for every value while dragging or pressing an arrow key
 
 ## States
 
-Communicate validation and interaction states.
+Reflect validation and interaction states.
 
 ### Invalid
 

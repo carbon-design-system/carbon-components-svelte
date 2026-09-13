@@ -429,7 +429,7 @@ items={[
 
 ## Sizes
 
-The `size` prop sets the height. The default is `medium`.
+Set `size` to control the height. The default is `medium`.
 
 ### Extra-small
 
@@ -469,7 +469,7 @@ items={[
 
 ## States
 
-Surface validation, warning, disabled, and read-only states.
+Reflect validation and interaction states.
 
 ### Invalid
 

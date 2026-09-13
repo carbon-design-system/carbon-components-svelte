@@ -284,7 +284,7 @@ Make the input read-only by setting `readonly` to `true`. This allows viewing bu
 
 ## Skeleton
 
-Show a loading state using the number input skeleton. This is useful while data is being fetched.
+Show a loading state with the number input skeleton. This is useful while data is being fetched.
 
 <NumberInputSkeleton />
 

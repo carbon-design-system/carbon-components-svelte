@@ -55,7 +55,7 @@ Use `helperText` to provide additional context or instructions below the checkbo
 
 ## States
 
-Reflect interaction states.
+Reflect validation and interaction states.
 
 ### Disabled
 

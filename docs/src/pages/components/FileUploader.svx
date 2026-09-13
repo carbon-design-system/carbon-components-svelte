@@ -331,7 +331,7 @@ programmatically.
 
 ## Skeleton
 
-Display a loading state using the file uploader skeleton.
+Show a loading state with the file uploader skeleton.
 
 <FileUploaderSkeleton />
 

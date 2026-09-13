@@ -108,7 +108,7 @@ Set `labelText` to change the nav's accessible name from the default `"Breadcrum
 
 ## Skeleton
 
-Display a loading state with `skeleton`. Use `count` to specify the number of items.
+Show a loading state with `skeleton`. Use `count` to specify the number of items.
 
 <Breadcrumb noTrailingSlash skeleton count={3} />
 

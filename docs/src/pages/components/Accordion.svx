@@ -320,7 +320,7 @@ item for finer control over which items are interactive.
 
 ## Skeleton
 
-Set `skeleton` to show a loading placeholder while content loads.
+Set `skeleton` to show a loading state while content loads.
 
 <Accordion skeleton />
 

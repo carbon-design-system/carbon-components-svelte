@@ -147,7 +147,7 @@ Set `disabled` on `SelectItemGroup` to disable every item within a group.
 
 ## Sizes
 
-The `size` prop sets the height. The default is medium.
+Set `size` to control the height. The default is medium.
 
 ### Extra-small
 
@@ -293,13 +293,13 @@ Invalid and warning states are not displayed while the select is read-only.
 
 ### Skeleton
 
-Display a loading state for the fluid select variant.
+Display a loading skeleton for the fluid select variant.
 
 <FluidSelectSkeleton />
 
 ## States
 
-Communicate validation and interactivity using the invalid, warning, disabled, and read-only states.
+Reflect validation and interaction states.
 
 ### Invalid
 
@@ -327,7 +327,7 @@ Show warnings using the warning state.
 
 ### Disabled
 
-Disable the select menu to prevent interaction.
+Set `disabled` to `true` to prevent interaction.
 
 <Select disabled labelText="Account plan" selected="starter" >
   <SelectItem value="free" text="Free" />
@@ -363,7 +363,7 @@ Use the read-only state to display the selected value while preventing changes.
 
 ## Skeleton
 
-Display a loading state using the skeleton variant.
+Show a loading state with the skeleton variant.
 
 ### With label
 
