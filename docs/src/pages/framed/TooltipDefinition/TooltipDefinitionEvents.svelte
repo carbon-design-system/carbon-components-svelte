@@ -6,7 +6,7 @@
 
 <TooltipDefinition
   align="start"
-  tooltipText="IBM Corporate Headquarters is based in Armonk, New York."
+  tooltipText="Single sign-on: one login for all connected applications."
   on:open={() => (events = [...events, "open"])}
   on:close={() => (events = [...events, "close"])}
 >

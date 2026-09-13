@@ -22,15 +22,15 @@
   >
     <TooltipDefinition
       direction="top"
-      tooltipText="IBM Corporate Headquarters is based in Armonk, New York."
+      tooltipText="Single sign-on: one login for all connected applications."
     >
-      Armonk (top)
+      SSO (top)
     </TooltipDefinition>
     <TooltipDefinition
       direction="bottom"
-      tooltipText="IBM Corporate Headquarters is based in Armonk, New York."
+      tooltipText="Single sign-on: one login for all connected applications."
     >
-      Armonk (bottom)
+      SSO (bottom)
     </TooltipDefinition>
   </Modal>
 </Portal>
