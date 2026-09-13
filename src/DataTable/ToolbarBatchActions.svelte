@@ -8,8 +8,9 @@
    * Override the total items selected text.
    * @type {(totalSelected: number) => string}
    */
-  export let formatTotalSelected = (totalSelected) =>
-    `${totalSelected} item${totalSelected === 1 ? "" : "s"} selected`;
+  export let formatTotalSelected = function formatTotalSelected(totalSelected) {
+    return `${totalSelected} item${totalSelected === 1 ? "" : "s"} selected`;
+  };
 
   /**
    * Use a boolean to show or hide the toolbar.
