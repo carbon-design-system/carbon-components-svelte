@@ -63,6 +63,16 @@ Set `color` to override the gradient color. Defaults to the `layer` theme token.
   {/each}
 </ScrollGradient>
 
+## Transparent background
+
+Set `background` to override the content area's background color, independent of `color` (which only retints the gradient). Defaults to the `layer` theme token. For example, set it to `"transparent"` to let the parent's own background show through instead of repainting it.
+
+<ScrollGradient background="transparent" style="height: 12rem">
+  {#each auditLogEntries as entry}
+    <p>{entry}</p>
+  {/each}
+</ScrollGradient>
+
 ## Reactive example
 
 Toggling content demonstrates that the gradients update as the container's overflow changes.
