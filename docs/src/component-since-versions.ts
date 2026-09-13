@@ -71,6 +71,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   SkeletonPlaceholder: "0.2.0",
   SkeletonText: "0.2.0",
   Slider: "0.2.0",
+  Sparkline: "0.113.0",
   Stack: "0.93.0",
   StructuredList: "0.2.0",
   Tabs: "0.2.0",
