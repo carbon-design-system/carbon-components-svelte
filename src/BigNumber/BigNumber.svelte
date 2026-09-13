@@ -111,6 +111,18 @@
    */
   export let trendDescription = undefined;
 
+  /**
+   * The signed change in `value` since the last period.
+   * @type {number}
+   */
+  export let delta = undefined;
+
+  /** Set to `true` to format `delta` as a percentage instead of a plain number. */
+  export let deltaPercentage = false;
+
+  /** Trailing context rendered after the formatted `delta`, such as "vs last week". */
+  export let deltaLabel = "";
+
   import ArrowDown from "../icons/ArrowDown.svelte";
   import ArrowUp from "../icons/ArrowUp.svelte";
   import Subtract from "../icons/Subtract.svelte";
@@ -137,6 +149,25 @@
     return 16;
   }
 
+  function formatDelta(num, digits, doTruncate) {
+    if (typeof num !== "number" || Number.isNaN(num)) return undefined;
+    if (format) {
+      const formatted = format(num);
+      return num > 0 ? `+${formatted}` : formatted;
+    }
+    const options = {
+      signDisplay: "exceptZero",
+      maximumFractionDigits: digits,
+    };
+    if (doTruncate) {
+      options.notation = "compact";
+      options.compactDisplay = "short";
+    }
+    if (deltaPercentage) return `${getFormatter(locale, options).format(num)}%`;
+    Object.assign(options, formatOptions);
+    return getFormatter(locale, options).format(num);
+  }
+
   $: hasTotal = typeof total === "number";
   $: formattedValue = formatNumber(value, fractionDigits, !fullNumber);
   $: fullValue = formatNumber(value, fractionDigits, false);
@@ -152,6 +183,8 @@
   $: resolvedTrendDescription =
     trendDescription ??
     { up: "Trending up", down: "Trending down", flat: "No change" }[trend];
+  $: formattedDelta = formatDelta(delta, fractionDigits, !fullNumber);
+  $: deltaColor = trend ? resolvedTrendColor : "neutral";
 </script>
 
 {#if loading}
@@ -215,5 +248,19 @@
         </span>
       {/if}
     </div>
+    {#if typeof delta === "number"}
+      <div class:bx--big-number__delta={true}>
+        <span
+          class:bx--big-number__delta-value={true}
+          class:bx--big-number__delta-value--success={deltaColor === "success"}
+          class:bx--big-number__delta-value--error={deltaColor === "error"}
+          class:bx--big-number__delta-value--neutral={deltaColor === "neutral"}
+          >{formattedDelta}</span
+        >
+        {#if deltaLabel}
+          <span class:bx--big-number__delta-label={true}>{deltaLabel}</span>
+        {/if}
+      </div>
+    {/if}
   </figure>
 {/if}
