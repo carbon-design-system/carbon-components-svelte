@@ -31,9 +31,9 @@ description: ScrollGradient overlays a fading edge on a scrollable container to 
 
 ## Basic
 
-Wrap scrollable content in `ScrollGradient`. Set a height on the component so the content overflows vertically. The top gradient appears once the content is scrolled past its start, and the bottom gradient hides once it's scrolled to the end.
+Wrap scrollable content in `ScrollGradient`. Set `height` so the content overflows vertically — it accepts any CSS length, with autocomplete for common presets like `"100%"` and `"100vh"`. The top gradient appears once the content is scrolled past its start, and the bottom gradient hides once it's scrolled to the end.
 
-<ScrollGradient style="height: 12rem">
+<ScrollGradient height="12rem">
   {#each auditLogEntries as entry}
     <p>{entry}</p>
   {/each}
