@@ -46,7 +46,7 @@
   );
 
   let prevSelectedValue = $selectedValue;
-  let isInitialRender = true;
+  let initialRender = true;
 
   /**
    * @type {(value: Value) => void}
@@ -73,12 +73,12 @@
   });
 
   onMount(() => {
-    isInitialRender = false;
+    initialRender = false;
   });
 
   $: selected = $selectedValue;
   $: {
-    if (!isInitialRender && prevSelectedValue !== $selectedValue) {
+    if (!initialRender && prevSelectedValue !== $selectedValue) {
       dispatch("change", $selectedValue);
     }
     prevSelectedValue = $selectedValue;
