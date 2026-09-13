@@ -1,4 +1,4 @@
-import { getVisibleTagCount } from "../../src/utils/tagOverflow.js";
+import { getVisibleTagCount } from "../../src/utils/tag-overflow.js";
 
 describe("getVisibleTagCount", () => {
   test("returns 0 for an empty tagWidths list", () => {

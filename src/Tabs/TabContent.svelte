@@ -16,7 +16,7 @@
   export let unmountOnHide = false;
 
   import { getContext, onMount } from "svelte";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const { selectedContent, addContent, removeContent, tabs, contentById } =
     getContext("carbon:Tabs");
@@ -29,13 +29,13 @@
     };
   });
 
-  let hasBeenSelected = false;
+  let selectedOnce = false;
 
   $: selected = $selectedContent === id;
-  $: if (selected) hasBeenSelected = true;
+  $: if (selected) selectedOnce = true;
   $: index = $contentById[id]?.index ?? 0;
   $: tabId = $tabs[index]?.id;
-  $: shouldMount = unmountOnHide ? selected : lazy ? hasBeenSelected : true;
+  $: shouldMount = unmountOnHide ? selected : lazy ? selectedOnce : true;
 </script>
 
 <div

@@ -126,8 +126,8 @@
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { dismiss } from "../utils/dismiss.js";
-  import { resolveSliderMarks } from "../utils/resolveSliderMarks.js";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { resolveSliderMarks } from "../utils/resolve-slider-marks.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   /** @typedef {{ value: number; valueUpper: number }} RangeSliderChangeDetail */
   /** @typedef {"lower" | "upper"} ActiveHandle */
@@ -245,7 +245,7 @@
   }
 
   /** @type {(e: KeyboardEvent) => void} */
-  function onKeyDown(event) {
+  function handleKeydown(event) {
     if (disabled || readonly) return;
 
     if (event.key === "Home" || event.key === "End") {
@@ -431,7 +431,7 @@
           aria-describedby={invalid ? errorId : warn ? warnId : undefined}
           aria-invalid={invalid || undefined}
           on:focus={() => (activeHandle = "lower")}
-          on:keydown={onKeyDown}
+          on:keydown={handleKeydown}
           {id}
         >
           <svg
@@ -478,7 +478,7 @@
           aria-describedby={invalid ? errorId : warn ? warnId : undefined}
           aria-invalid={invalid || undefined}
           on:focus={() => (activeHandle = "upper")}
-          on:keydown={onKeyDown}
+          on:keydown={handleKeydown}
         >
           <svg
             class="bx--slider__thumb-icon bx--slider__thumb-icon--upper"

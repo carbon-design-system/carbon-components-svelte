@@ -1,4 +1,4 @@
 export { default as Breakpoint } from "./Breakpoint.svelte";
-export { breakpointObserver } from "./breakpointObserver";
-export { breakpoints } from "./breakpoints";
-export { hideAtBreakpoint } from "./hideAtBreakpoint";
+export { breakpointObserver } from "./breakpoint-observer.js";
+export { breakpoints } from "./breakpoints.js";
+export { hideAtBreakpoint } from "./hide-at-breakpoint.js";

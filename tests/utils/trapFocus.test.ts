@@ -1,4 +1,4 @@
-import { trapFocus } from "../../src/utils/trapFocus.js";
+import { trapFocus } from "../../src/utils/trap-focus.js";
 
 /**
  * jsdom has no layout engine, so `offsetParent`/`offsetWidth`/`offsetHeight`

@@ -1,7 +1,7 @@
 import {
   fileIdentityKey,
   filterIncomingFiles,
-} from "../../src/utils/filterIncomingFiles.js";
+} from "../../src/utils/filter-incoming-files.js";
 
 function makeFile(name: string, size: number, lastModified = 1) {
   const file = new File(["x".repeat(size)], name, { type: "text/plain" });

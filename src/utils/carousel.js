@@ -40,11 +40,11 @@ const activeClass = "carousel__view--active";
  * nothing else in this repo needs it.
  *
  * @param {HTMLElement} container
- * @param {CarouselConfig} [config]
+ * @param {CarouselConfig} [options]
  * @returns {Carousel}
  */
-export function initCarousel(container, config = {}) {
-  const { onViewChangeStart, onViewChangeEnd, useMaxHeight = false } = config;
+export function initCarousel(container, options = {}) {
+  const { onViewChangeStart, onViewChangeEnd, useMaxHeight = false } = options;
 
   /** @type {HTMLElement[]} */
   const views = /** @type {HTMLElement[]} */ (Array.from(container.children));
@@ -88,12 +88,12 @@ export function initCarousel(container, config = {}) {
 
   /**
    * @param {number} index
-   * @param {number} previousIndex
+   * @param {number} prevIndex
    */
-  function response(index, previousIndex) {
+  function response(index, prevIndex) {
     return {
       currentIndex: index,
-      previousIndex,
+      previousIndex: prevIndex,
       totalViews: views.length,
     };
   }
@@ -107,11 +107,11 @@ export function initCarousel(container, config = {}) {
     const clamped = Math.max(0, Math.min(index, views.length - 1));
     if (clamped === currentIndex) return;
 
-    const previousIndex = currentIndex;
-    onViewChangeStart?.(response(clamped, previousIndex));
+    const prevIndex = currentIndex;
+    onViewChangeStart?.(response(clamped, prevIndex));
     currentIndex = clamped;
     applyVisibility();
-    onViewChangeEnd?.(response(currentIndex, previousIndex));
+    onViewChangeEnd?.(response(currentIndex, prevIndex));
   }
 
   function next() {

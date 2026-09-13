@@ -1,5 +1,5 @@
 // @ts-check
-import { BoundedFifoCache } from "../utils/boundedFifoCache.js";
+import { BoundedFifoCache } from "../utils/bounded-fifo-cache.js";
 
 /**
  * Deep equality check for values (nested objects and arrays).
@@ -148,8 +148,8 @@ const RE_IGNORE_ROW_CLICK = /^bx--(overflow-menu|checkbox|radio-button)/;
  */
 export function shouldIgnoreRowClick(target) {
   if (!target || !("classList" in target)) return false;
-  const el = /** @type {HTMLElement} */ (target);
-  return [...el.classList].some((name) => RE_IGNORE_ROW_CLICK.test(name));
+  const element = /** @type {HTMLElement} */ (target);
+  return [...element.classList].some((name) => RE_IGNORE_ROW_CLICK.test(name));
 }
 
 const PATH_SPLIT_REGEX = /[.[\]'"]/;

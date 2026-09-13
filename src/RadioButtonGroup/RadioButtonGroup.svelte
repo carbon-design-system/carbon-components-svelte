@@ -70,7 +70,7 @@
 
   import { createEventDispatcher, onMount, setContext } from "svelte";
   import { readonly as readOnly, writable } from "svelte/store";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
   /**
@@ -83,7 +83,7 @@
   const fallbackHelperId = uniqueId();
   /** @type {import("svelte/store").Writable<string | undefined>} */
   const helperId = writable(undefined);
-  let isInitialRender = true;
+  let initialRender = true;
 
   /**
    * @type {(data: { checked: boolean; value: Value }) => void}
@@ -117,14 +117,14 @@
   const unsubscribe = selectedValue.subscribe((value) => {
     if (readonly) return;
     selected = value;
-    if (!isInitialRender) {
+    if (!initialRender) {
       dispatch("change", value);
     }
   });
 
   onMount(() => {
     $selectedValue = selected;
-    isInitialRender = false;
+    initialRender = false;
     return unsubscribe;
   });
 

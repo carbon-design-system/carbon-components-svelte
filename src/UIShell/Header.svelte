@@ -100,7 +100,7 @@
   import Close from "../icons/Close.svelte";
   import Menu from "../icons/MenuIcon.svelte";
   import HamburgerMenu from "./HamburgerMenu.svelte";
-  import { shouldRenderHamburgerMenu } from "./nav-store";
+  import { shouldRenderHamburgerMenu } from "./nav-store.js";
 
   /** @type {undefined | number} */
   let winWidth = undefined;

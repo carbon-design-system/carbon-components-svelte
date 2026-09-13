@@ -25,9 +25,9 @@
     throw new Error("SearchMenuGroup must be used within a SearchMenu.");
   }
 
-  const filterStore = writable(filter);
+  const sharedFilter = writable(filter);
 
-  $: filterStore.set(filter);
+  $: sharedFilter.set(filter);
 
   let childIds = new Set();
 
@@ -37,7 +37,7 @@
 
   setContext("carbon:SearchMenuGroup", {
     divider,
-    filter: filterStore,
+    filter: sharedFilter,
     registerItem(id) {
       childIds.add(id);
       childIds = childIds;

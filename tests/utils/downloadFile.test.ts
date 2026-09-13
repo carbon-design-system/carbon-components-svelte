@@ -1,4 +1,4 @@
-import { downloadFile } from "../../src/utils/downloadFile.js";
+import { downloadFile } from "../../src/utils/download-file.js";
 
 describe("downloadFile", () => {
   let createObjectURL: ReturnType<typeof vi.fn>;

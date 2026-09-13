@@ -57,7 +57,7 @@
 
   import { afterUpdate, onMount } from "svelte";
   import ChevronDown from "../icons/ChevronDown.svelte";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   let refAbove = null;
   let resizeObserver;

@@ -101,12 +101,12 @@
   import OverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
   import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
-  import { batchStoreUpdates } from "../utils/batchStoreUpdates.js";
+  import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { dismiss } from "../utils/dismiss.js";
-  import { isOutsideClick } from "../utils/isOutsideClick.js";
-  import { keyBy } from "../utils/keyBy.js";
-  import { rovingFocus } from "../utils/rovingFocus.js";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { isOutsideClick } from "../utils/is-outside-click.js";
+  import { keyBy } from "../utils/key-by.js";
+  import { rovingFocus } from "../utils/roving-focus.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const ctxBreadcrumbItem = getContext("carbon:BreadcrumbItem");
   const insideModal = getContext("carbon:Modal");
@@ -128,7 +128,7 @@
    * @type {import("svelte/store").Writable<string | undefined>}
    */
   const focusedId = writable(undefined);
-  const currentIndex = writable(-1);
+  const focusedIndex = writable(-1);
 
   let buttonWidth = undefined;
   let onMountAfterUpdate = true;
@@ -163,7 +163,7 @@
   function add({ id, text, primaryFocus, disabled }) {
     batchedItemsUpdate((_) => {
       if (primaryFocus) {
-        currentIndex.set(_.length);
+        focusedIndex.set(_.length);
       }
 
       return [..._, { id, text, primaryFocus, disabled, index: _.length }];
@@ -193,13 +193,13 @@
 
   function first() {
     const index = $items.findIndex((_) => !_.disabled);
-    if (index >= 0) currentIndex.set(index);
+    if (index >= 0) focusedIndex.set(index);
   }
 
   function last() {
     for (let index = $items.length - 1; index >= 0; index--) {
       if (!$items[index].disabled) {
-        currentIndex.set(index);
+        focusedIndex.set(index);
         return;
       }
     }
@@ -217,19 +217,19 @@
   });
 
   // Roving focus over the registry (`$items`), not the DOM: the focused item
-  // is the one whose id matches `focusedId`, set reactively from `currentIndex`.
+  // is the one whose id matches `focusedId`, set reactively from `focusedIndex`.
   const menuRovingFocus = {
     selector: "[role='menuitem']",
     orientation: /** @type {const} */ ("vertical"),
     skipDisabled: true,
     getItems: () => $items,
     isDisabled: (item) => item.disabled,
-    getActiveIndex: () => $currentIndex,
-    onMove: (index) => currentIndex.set(index),
+    getActiveIndex: () => $focusedIndex,
+    onMove: (index) => focusedIndex.set(index),
   };
 
   afterUpdate(() => {
-    if (open && !onMountAfterUpdate && $currentIndex < 0) {
+    if (open && !onMountAfterUpdate && $focusedIndex < 0) {
       menuRef?.focus({ preventScroll: true });
     }
 
@@ -274,7 +274,7 @@
     if (!open) {
       measuredPositionKey = null;
       currentId.set(undefined);
-      currentIndex.set(0);
+      focusedIndex.set(0);
     }
 
     onMountAfterUpdate = false;
@@ -282,8 +282,8 @@
 
   $: menuId = `menu-${id}`;
   $: ariaLabel = $$props["aria-label"] ?? "menu";
-  $: if ($items[$currentIndex]) {
-    focusedId.set($items[$currentIndex].id);
+  $: if ($items[$focusedIndex]) {
+    focusedId.set($items[$focusedIndex].id);
   }
   // Use CSS custom properties instead of dynamic style injection for better
   // performance. The previous approach created individual `style` tags per
@@ -402,11 +402,11 @@
     class={menuOptionsClass}
     style:--overflow-menu-options-after-width={overflowMenuOptionsAfterWidth}
     style:max-height={maxHeightStyle}
-    on:keydown={(e) => {
-      if (["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(e.key)) {
-        e.preventDefault();
-      } else if (e.key === "Escape") {
-        e.stopPropagation();
+    on:keydown={(event) => {
+      if (["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(event.key)) {
+        event.preventDefault();
+      } else if (event.key === "Escape") {
+        event.stopPropagation();
         const shouldContinue = dispatch(
           "close",
           { trigger: "escape-key" },

@@ -31,7 +31,7 @@
   export let ref = null;
 
   import ChevronDown from "../icons/ChevronDown.svelte";
-  import { isSideNavCollapsed, isSideNavRail } from "./nav-store";
+  import { isSideNavCollapsed, isSideNavRail } from "./nav-store.js";
 
   $: if ($isSideNavRail && $isSideNavCollapsed) {
     expanded = false;

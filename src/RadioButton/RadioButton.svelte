@@ -52,11 +52,11 @@
 
   import { getContext, onMount } from "svelte";
   import { readable } from "svelte/store";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { uniqueId } from "../utils/unique-id.js";
   import {
     registerRadioButton,
     updateGroupSelection,
-  } from "./RadioButtonRegistry.js";
+  } from "./radio-button-registry.js";
 
   const ctx = getContext("carbon:RadioButtonGroup");
 
@@ -85,13 +85,13 @@
 
   // Registry state for standalone mode with name
   /** @type {import("svelte/store").Writable<{} | undefined> | null} */
-  let registryStore = null;
+  let registry = null;
   /** @type {(() => void) | null} */
   let unregister = null;
   /** @type {(() => void) | null} */
   let registryUnsubscribe = null;
   /** @type {string | undefined} */
-  let previousName = undefined;
+  let prevName = undefined;
 
   /**
    * Initialize registry for standalone mode with name.
@@ -102,19 +102,19 @@
 
     if (isStandalone && radioName) {
       const registration = registerRadioButton(radioName, instanceKey, checked);
-      registryStore = registration.selectedKey;
+      registry = registration.selectedKey;
       unregister = registration.unregister;
 
       // Subscribe to uncheck this radio when a sibling is selected.
       // Only set checked=false when another instance is selected, not checked=true for self.
       // This allows parent components (like DataTable) to control the checked state.
-      registryUnsubscribe = registryStore.subscribe((selectedKey) => {
+      registryUnsubscribe = registry.subscribe((selectedKey) => {
         if (selectedKey !== undefined && selectedKey !== instanceKey) {
           checked = false;
         }
       });
 
-      previousName = radioName;
+      prevName = radioName;
     }
   }
 
@@ -127,12 +127,12 @@
       unregister();
       unregister = null;
     }
-    registryStore = null;
-    previousName = undefined;
+    registry = null;
+    prevName = undefined;
   }
 
   // Handle name prop changes reactively
-  $: if (isStandalone && name !== previousName) {
+  $: if (isStandalone && name !== prevName) {
     initRegistry(name);
   }
 
@@ -182,7 +182,7 @@
       if (update) {
         // Inside RadioButtonGroup - use context
         update(value);
-      } else if (name && registryStore) {
+      } else if (name && registry) {
         // Standalone with name - update local checked and notify siblings via registry
         checked = event.currentTarget.checked;
         updateGroupSelection(name, instanceKey);

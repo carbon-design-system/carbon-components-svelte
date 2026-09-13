@@ -116,8 +116,8 @@
   import { get, readable } from "svelte/store";
   import User from "../icons/User.svelte";
   import TooltipDefinition from "../TooltipDefinition/TooltipDefinition.svelte";
-  import { getAvatarBackgroundColor } from "../utils/avatarColor.js";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { getAvatarBackgroundColor } from "../utils/avatar-color.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
 

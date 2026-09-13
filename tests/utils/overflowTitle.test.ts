@@ -1,4 +1,4 @@
-import { overflowTitle } from "../../src/utils/overflowTitle.js";
+import { overflowTitle } from "../../src/utils/overflow-title.js";
 
 function mockSize(node: HTMLElement, offsetWidth: number, scrollWidth: number) {
   Object.defineProperty(node, "offsetWidth", {

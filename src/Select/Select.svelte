@@ -90,7 +90,7 @@
   import ChevronDown from "../icons/ChevronDown.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
   const formContext = getContext("carbon:Form");
@@ -142,7 +142,7 @@
   const selectReadOnlyKeys = ["ArrowDown", "ArrowUp", " "];
 
   /** @type {(e: MouseEvent) => void} */
-  function onMouseDown(event) {
+  function handleMousedown(event) {
     if (readonly) {
       event.preventDefault();
       event.currentTarget.focus();
@@ -150,7 +150,7 @@
   }
 
   /** @type {(e: KeyboardEvent) => void} */
-  function onKeyDown(event) {
+  function handleKeydown(event) {
     if (readonly && selectReadOnlyKeys.includes(event.key)) {
       event.preventDefault();
     }
@@ -248,8 +248,8 @@
             on:input
             on:focus
             on:blur
-            on:mousedown={onMouseDown}
-            on:keydown={onKeyDown}
+            on:mousedown={handleMousedown}
+            on:keydown={handleKeydown}
           >
             <slot />
           </select>
@@ -314,8 +314,8 @@
           on:input
           on:focus
           on:blur
-          on:mousedown={onMouseDown}
-          on:keydown={onKeyDown}
+          on:mousedown={handleMousedown}
+          on:keydown={handleKeydown}
         >
           <slot />
         </select>

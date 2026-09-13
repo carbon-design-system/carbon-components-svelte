@@ -53,7 +53,7 @@
   export let open = true;
 
   import { createEventDispatcher, onMount } from "svelte";
-  import { createTimeoutDismiss } from "../utils/timeoutDismiss.js";
+  import { createTimeoutDismiss } from "../utils/timeout-dismiss.js";
   import NotificationButton from "./NotificationButton.svelte";
   import NotificationIcon from "./NotificationIcon.svelte";
 
@@ -74,11 +74,11 @@
     }
   }
 
-  function onMouseEnter() {
+  function handleMouseenter() {
     if (pauseOnHover) dismiss.pause();
   }
 
-  function onMouseLeave() {
+  function handleMouseleave() {
     if (pauseOnHover) dismiss.resume();
   }
 
@@ -104,9 +104,9 @@
     on:click
     on:mouseover
     on:mouseenter
-    on:mouseenter={onMouseEnter}
+    on:mouseenter={handleMouseenter}
     on:mouseleave
-    on:mouseleave={onMouseLeave}
+    on:mouseleave={handleMouseleave}
   >
     <NotificationIcon {kind} />
     <div class:bx--toast-notification__details={true}>

@@ -63,9 +63,9 @@
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
-  import { createDelayedSetter } from "../utils/delayedSetter.js";
+  import { createDelayedSetter } from "../utils/delayed-setter.js";
   import { dismiss } from "../utils/dismiss.js";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const insideModal = getContext("carbon:Modal");
 
@@ -97,12 +97,12 @@
     open = !open;
   }
 
-  let isInitialRender = true;
+  let initialRender = true;
 
   $: {
-    const shouldDispatch = !isInitialRender;
+    const shouldDispatch = !initialRender;
     const nextOpen = open;
-    isInitialRender = false;
+    initialRender = false;
     if (shouldDispatch) {
       dispatch(nextOpen ? "open" : "close");
     }
@@ -113,14 +113,14 @@
       scheduleOpen.cancel();
     };
   });
-  function handleEscape(event) {
+  function handleKeydown(event) {
     if (event.key === "Escape") hide();
   }
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <span
-  use:dismiss={{ enabled: open, type: "keydown", handler: handleEscape }}
+  use:dismiss={{ enabled: open, type: "keydown", handler: handleKeydown }}
   class:bx--tooltip--definition={true}
   class:bx--tooltip--a11y={true}
   {...$$restProps}

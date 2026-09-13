@@ -1,6 +1,6 @@
 <script context="module">
-  function isUnderCollapsedSubtree(el) {
-    return Boolean(el.closest("ul.bx--tree-node--hidden"));
+  function isUnderCollapsedSubtree(node) {
+    return Boolean(node.closest("ul.bx--tree-node--hidden"));
   }
 
   /**
@@ -406,7 +406,7 @@
     }
     expandedIdsSet = new Set(expandableIds);
     expandedIds = expandableIds;
-    lastExpandedIdsRef = expandedIds;
+    prevExpandedIds = expandedIds;
   }
 
   /**
@@ -421,7 +421,7 @@
   export function collapseAll() {
     expandedIdsSet.clear();
     expandedIds = [];
-    lastExpandedIdsRef = expandedIds;
+    prevExpandedIds = expandedIds;
   }
 
   /**
@@ -449,7 +449,7 @@
       expandedIdsSet.add(node.id);
     }
     expandedIds = Array.from(expandedIdsSet);
-    lastExpandedIdsRef = expandedIds;
+    prevExpandedIds = expandedIds;
   }
 
   /**
@@ -473,7 +473,7 @@
       }
     }
     expandedIds = Array.from(expandedIdsSet);
-    lastExpandedIdsRef = expandedIds;
+    prevExpandedIds = expandedIds;
   }
 
   /**
@@ -505,7 +505,7 @@
         expandedIdsSet.add(ancestorId);
       }
       expandedIds = Array.from(expandedIdsSet);
-      lastExpandedIdsRef = expandedIds;
+      prevExpandedIds = expandedIds;
     }
 
     if (select) {
@@ -530,13 +530,13 @@
           return;
         }
         const selector = `[id="${CSS.escape(String(id))}"]`;
-        let el = ref?.querySelector(selector);
-        for (let i = 0; !el && i < ancestorIds.length * 2 + 2; i++) {
+        let target = ref?.querySelector(selector);
+        for (let i = 0; !target && i < ancestorIds.length * 2 + 2; i++) {
           // biome-ignore lint/performance/noAwaitInLoops: each tick waits for the next reveal flush
           await tick();
-          el = ref?.querySelector(selector);
+          target = ref?.querySelector(selector);
         }
-        el?.focus();
+        target?.focus();
       });
     }
   }
@@ -583,12 +583,12 @@
   import {
     resolveCheckboxState,
     toggleCheckboxNode,
-  } from "../utils/treeCheckboxState.js";
+  } from "../utils/tree-checkbox-state.js";
   import {
     createTreeVirtualIndex,
     isExpandableNode,
-  } from "../utils/treeVirtualIndex.js";
-  import { uniqueId } from "../utils/uniqueId.js";
+  } from "../utils/tree-virtual-index.js";
+  import { uniqueId } from "../utils/unique-id.js";
   import {
     getVisibleRange,
     scrollHighlightedIntoView,
@@ -601,9 +601,9 @@
   const treeId = uniqueId("tree");
 
   /** @type {import("svelte/store").Writable<boolean>} */
-  const multiselectStore = writable(multiselect);
+  const sharedMultiselect = writable(multiselect);
   /** @type {import("svelte/store").Writable<"highlight" | "checkbox">} */
-  const selectionModeStore = writable(selectionMode);
+  const sharedSelectionMode = writable(selectionMode);
 
   /** @type {import("svelte/store").Writable<Node["id"]>} */
   const activeNodeId = writable(activeId);
@@ -612,13 +612,13 @@
   /** @type {import("svelte/store").Writable<ReadonlyArray<Node["id"]>>} */
   const expandedNodeIds = writable(expandedIds);
   /** @type {import("svelte/store").Writable<Set<Node["id"]>>} */
-  const selectedIdsSetStore = writable(new Set(selectedIds));
+  const selectedIdSet = writable(new Set(selectedIds));
   /** @type {import("svelte/store").Writable<Set<Node["id"]>>} */
-  const checkedIdsSetStore = writable(new Set(checkedIds));
+  const checkedIdSet = writable(new Set(checkedIds));
   /** @type {import("svelte/store").Writable<Set<Node["id"]>>} */
-  const expandedIdsSetStore = writable(new Set(expandedIds));
+  const expandedIdSet = writable(new Set(expandedIds));
   /** @type {import("svelte/store").Writable<Set<Node["id"]>>} */
-  const indeterminateIdsSetStore = writable(new Set(indeterminateIds));
+  const indeterminateIdSet = writable(new Set(indeterminateIds));
 
   /** @type {HTMLElement | null} */
   let ref = null;
@@ -655,7 +655,7 @@
     }
   }
 
-  function onDocumentVisibilityChange() {
+  function handleVisibilitychange() {
     if (document.visibilityState === "hidden") {
       clearMultiselectModifierKeys();
     }
@@ -669,16 +669,13 @@
       window.addEventListener("keydown", syncModifierFromKeyboard, true);
       window.addEventListener("keyup", syncModifierFromKeyboard, true);
       window.addEventListener("blur", clearMultiselectModifierKeys);
-      document.addEventListener("visibilitychange", onDocumentVisibilityChange);
+      document.addEventListener("visibilitychange", handleVisibilitychange);
       multiselectKeyListenersAttached = true;
     } else if (!want && multiselectKeyListenersAttached) {
       window.removeEventListener("keydown", syncModifierFromKeyboard, true);
       window.removeEventListener("keyup", syncModifierFromKeyboard, true);
       window.removeEventListener("blur", clearMultiselectModifierKeys);
-      document.removeEventListener(
-        "visibilitychange",
-        onDocumentVisibilityChange,
-      );
+      document.removeEventListener("visibilitychange", handleVisibilitychange);
       multiselectKeyListenersAttached = false;
       multiselectModifierActive = false;
     }
@@ -729,25 +726,25 @@
   /** @type {Set<Node["id"]>} */
   let expandedIdsSet = new Set(expandedIds);
   /** @type {ReadonlyArray<Node["id"]>} */
-  let lastExpandedIdsRef = expandedIds;
+  let prevExpandedIds = expandedIds;
   /** @type {Set<Node["id"]>} */
   let selectedIdsSet = new Set(selectedIds);
   /** @type {ReadonlyArray<Node["id"]>} */
-  let lastSelectedIdsRef = selectedIds;
+  let prevSelectedIds = selectedIds;
   /** @type {Set<Node["id"]>} */
   let checkedIdsSet = new Set(checkedIds);
   /** @type {ReadonlyArray<Node["id"]>} */
-  let lastCheckedIdsRef = checkedIds;
+  let prevCheckedIds = checkedIds;
   /** @type {Set<Node["id"]>} */
   let indeterminateIdsSet = new Set(indeterminateIds);
   /** @type {ReadonlyArray<Node["id"]>} */
-  let lastIndeterminateIdsRef = indeterminateIds;
+  let prevIndeterminateIds = indeterminateIds;
   /** @type {Node["id"]} */
-  let lastActiveIdPushed = activeId;
+  let prevActiveIdPushed = activeId;
   /** @type {ReadonlyArray<Node["id"]>} */
-  let lastSelectedIdsPushed = selectedIds;
+  let prevSelectedIdsPushed = selectedIds;
   /** @type {ReadonlyArray<Node["id"]>} */
-  let lastExpandedIdsPushed = expandedIds;
+  let prevExpandedIdsPushed = expandedIds;
 
   /**
    * @returns {boolean}
@@ -780,7 +777,7 @@
 
   /**
    * Reassign `selectedIds` and keep `selectedIdsSet` (used for O(1) lookups
-   * in `withLiveState`) synchronously in sync. `selectedIdsSetStore` is only
+   * in `withLiveState`) synchronously in sync. `selectedIdSet` is only
    * refreshed reactively (see below), which lags behind handlers that mutate
    * `selectedIds` and dispatch in the same synchronous call, so it can't be
    * used for `withLiveState`.
@@ -789,7 +786,7 @@
   function setSelectedIds(next) {
     selectedIds = next;
     selectedIdsSet = new Set(next);
-    lastSelectedIdsRef = next;
+    prevSelectedIds = next;
   }
 
   /**
@@ -799,7 +796,7 @@
   function setCheckedIds(next) {
     checkedIds = next;
     checkedIdsSet = new Set(next);
-    lastCheckedIdsRef = next;
+    prevCheckedIds = next;
   }
 
   /** @type {(node: Node, event?: Event) => void} */
@@ -944,7 +941,7 @@
       expandedIdsSet.delete(node.id);
       expandedIds = expandedIds.filter((id) => id !== node.id);
     }
-    lastExpandedIdsRef = expandedIds;
+    prevExpandedIds = expandedIds;
   }
 
   /** @type {(node: Node) => void} */
@@ -965,12 +962,12 @@
     activeNodeId,
     selectedNodeIds,
     expandedNodeIds,
-    selectedIdsSetStore,
-    checkedIdsSetStore,
-    expandedIdsSetStore,
-    indeterminateIdsSetStore,
-    multiselectStore,
-    selectionModeStore,
+    selectedIdSet,
+    checkedIdSet,
+    expandedIdSet,
+    indeterminateIdSet,
+    multiselect: sharedMultiselect,
+    selectionMode: sharedSelectionMode,
     clickNode,
     selectNode,
     expandNode,
@@ -989,16 +986,16 @@
   const rovingTabStops = new Set();
 
   function resetNodeTabIndices() {
-    for (const el of rovingTabStops) {
-      if (el.isConnected) el.tabIndex = -1;
+    for (const element of rovingTabStops) {
+      if (element.isConnected) element.tabIndex = -1;
     }
     rovingTabStops.clear();
   }
 
-  /** @param {HTMLElement} el */
-  function setRovingTabStop(el) {
-    el.tabIndex = 0;
-    rovingTabStops.add(el);
+  /** @param {HTMLElement} node */
+  function setRovingTabStop(node) {
+    node.tabIndex = 0;
+    rovingTabStops.add(node);
   }
 
   function getTreeItemFromTarget(target) {
@@ -1070,7 +1067,7 @@
     return true;
   }
 
-  function handleKeyDown(event) {
+  function handleKeydown(event) {
     event.stopPropagation();
 
     if (
@@ -1148,12 +1145,12 @@
             ref?.querySelectorAll(
               '[role="treeitem"]:not(.bx--tree-node--hidden)',
             ) ?? [],
-          ).map((el) => [el.id, el]),
+          ).map((element) => [element.id, element]),
         );
         for (const n of cachedFlattenedNodes) {
           if (n.disabled) continue;
-          const el = visibleEls.get(String(n.id));
-          if (!el || isUnderCollapsedSubtree(el)) continue;
+          const element = visibleEls.get(String(n.id));
+          if (!element || isUnderCollapsedSubtree(element)) continue;
           nodeIds.push(n.id);
         }
       }
@@ -1211,13 +1208,13 @@
     cachedFlattenedNodes = null;
   }
 
-  $: multiselectStore.set(isMultiselect);
-  $: selectionModeStore.set(selectionMode);
+  $: sharedMultiselect.set(isMultiselect);
+  $: sharedSelectionMode.set(selectionMode);
 
   /** @type {ReadonlyArray<Node["id"]>} */
-  let lastIndeterminateIdsPushed = indeterminateIds;
+  let prevIndeterminateIdsPushed = indeterminateIds;
   /** @type {ReadonlyArray<Node["id"]>} */
-  let lastCheckedIdsPushed = checkedIds;
+  let prevCheckedIdsPushed = checkedIds;
 
   // Depend on `cachedNodes` so this runs after the cache refresh, and write
   // `checkedIds` so the sync block below sees the settled state.
@@ -1236,41 +1233,41 @@
       if (!arrayIdsEqual(checkboxState.indeterminateIds, indeterminateIds)) {
         indeterminateIds = checkboxState.indeterminateIds;
         indeterminateIdsSet = new Set(indeterminateIds);
-        lastIndeterminateIdsRef = indeterminateIds;
+        prevIndeterminateIds = indeterminateIds;
       }
     } else if (indeterminateIds.length > 0) {
       indeterminateIds = [];
       indeterminateIdsSet = new Set();
-      lastIndeterminateIdsRef = indeterminateIds;
+      prevIndeterminateIds = indeterminateIds;
     }
 
     // External `bind:checkedIds` / `bind:indeterminateIds` updates that
     // bypass `setCheckedIds` still need the sync mirrors refreshed.
-    if (checkedIds !== lastCheckedIdsRef) {
+    if (checkedIds !== prevCheckedIds) {
       checkedIdsSet = new Set(checkedIds);
-      lastCheckedIdsRef = checkedIds;
+      prevCheckedIds = checkedIds;
     }
-    if (indeterminateIds !== lastIndeterminateIdsRef) {
+    if (indeterminateIds !== prevIndeterminateIds) {
       indeterminateIdsSet = new Set(indeterminateIds);
-      lastIndeterminateIdsRef = indeterminateIds;
+      prevIndeterminateIds = indeterminateIds;
     }
 
-    if (!arrayIdsEqual(indeterminateIds, lastIndeterminateIdsPushed)) {
-      lastIndeterminateIdsPushed = indeterminateIds;
-      indeterminateIdsSetStore.set(new Set(indeterminateIds));
+    if (!arrayIdsEqual(indeterminateIds, prevIndeterminateIdsPushed)) {
+      prevIndeterminateIdsPushed = indeterminateIds;
+      indeterminateIdSet.set(new Set(indeterminateIds));
     }
 
-    if (!arrayIdsEqual(checkedIds, lastCheckedIdsPushed)) {
-      const prevCheckedIds = lastCheckedIdsPushed;
-      lastCheckedIdsPushed = checkedIds;
-      checkedIdsSetStore.set(new Set(checkedIds));
+    if (!arrayIdsEqual(checkedIds, prevCheckedIdsPushed)) {
+      const wasCheckedIds = prevCheckedIdsPushed;
+      prevCheckedIdsPushed = checkedIds;
+      checkedIdSet.set(new Set(checkedIds));
 
       const nextCheckedIds = checkedIds.slice();
       const nextIndeterminateIds = indeterminateIds.slice();
-      const prevSet = new Set(prevCheckedIds);
+      const prevSet = new Set(wasCheckedIds);
       const nextSet = new Set(nextCheckedIds);
       const added = nextCheckedIds.filter((id) => !prevSet.has(id));
-      const removed = prevCheckedIds.filter((id) => !nextSet.has(id));
+      const removed = wasCheckedIds.filter((id) => !nextSet.has(id));
       tick().then(() => {
         dispatch("check:change", {
           checkedIds: nextCheckedIds,
@@ -1305,7 +1302,7 @@
     : null;
 
   // Derive from `expandedIds` (reassigned synchronously at every mutation
-  // site) rather than `$expandedIdsSetStore`. The store is only `.set()` from
+  // site) rather than `$expandedIdSet`. The store is only `.set()` from
   // inside a reactive block, which Svelte 3/4 doesn't track as an assignment
   // for reactive ordering — so subscribers re-run a flush late and the
   // rendered window lags one `tick()` behind expand/collapse. Reading
@@ -1318,9 +1315,7 @@
   $: virtualIndex = virtualConfig
     ? createTreeVirtualIndex(
         nodes,
-        expandedIds === lastExpandedIdsRef
-          ? expandedIdsSet
-          : new Set(expandedIds),
+        expandedIds === prevExpandedIds ? expandedIdsSet : new Set(expandedIds),
       )
     : null;
 
@@ -1364,7 +1359,7 @@
     }
   }
 
-  $: virtualData = (() => {
+  function resolveVirtualData(virtualConfig, virtualIndex, scrollTop) {
     if (!virtualConfig || !virtualIndex) return null;
     const itemHeight = virtualConfig.itemHeight;
     const containerHeight = getVirtualContainerHeight();
@@ -1385,7 +1380,8 @@
       offsetY: startIndex * itemHeight,
       totalHeight,
     };
-  })();
+  }
+  $: virtualData = resolveVirtualData(virtualConfig, virtualIndex, scrollTop);
 
   /** Observe the scroll container so percentage / relative heights
    * (`containerHeight: "80%"`) translate into a usable pixel value for
@@ -1415,7 +1411,12 @@
 
   /** Tabindex anchor: prefer the focused row when it is currently mounted
    * and enabled; otherwise the first enabled row in the window. */
-  $: virtualTabAnchorId = (() => {
+  function resolveVirtualTabAnchorId(
+    virtualConfig,
+    virtualIndex,
+    virtualData,
+    virtualFocusedId,
+  ) {
     if (!virtualConfig || !virtualIndex || !virtualData) return undefined;
     const visible = virtualData.visibleItems;
     if (
@@ -1433,7 +1434,13 @@
       if (!row.node.disabled) return row.node.id;
     }
     return undefined;
-  })();
+  }
+  $: virtualTabAnchorId = resolveVirtualTabAnchorId(
+    virtualConfig,
+    virtualIndex,
+    virtualData,
+    virtualFocusedId,
+  );
 
   /**
    * Set both the DOM scrollTop and the reactive mirror so the windowed
@@ -1472,9 +1479,9 @@
     }
   }
 
-  /** @param {Event & { currentTarget: HTMLElement }} e */
-  function handleVirtualScroll(e) {
-    scrollTop = e.currentTarget.scrollTop;
+  /** @param {Event & { currentTarget: HTMLElement }} event */
+  function handleVirtualScroll(event) {
+    scrollTop = event.currentTarget.scrollTop;
     // Only recover focus when the tree already owned it at scroll start.
     // Otherwise incidental wheel scroll would steal focus from body / elsewhere.
     const active = document.activeElement;
@@ -1522,21 +1529,21 @@
    * (e.g. multi-character type-ahead). */
   let virtualMoveGen = 0;
 
-  /** @param {number} idx */
-  async function virtualMoveTo(idx) {
+  /** @param {number} index */
+  async function virtualMoveTo(index) {
     if (
       !virtualConfig ||
       !virtualIndex ||
-      idx < 0 ||
-      idx >= virtualIndex.totalCount
+      index < 0 ||
+      index >= virtualIndex.totalCount
     )
       return;
-    const target = virtualIndex.getRowAt(idx);
+    const target = virtualIndex.getRowAt(index);
     if (!target) return;
     const gen = ++virtualMoveGen;
     // Match non-virtual arrows: move focus only, do not mutate activeId.
     virtualFocusedId = target.node.id;
-    const top = idx * virtualConfig.itemHeight;
+    const top = index * virtualConfig.itemHeight;
     if (top < scrollTop) {
       virtualSetScrollTop(top);
     } else if (
@@ -1581,35 +1588,35 @@
 
     const startIndex = Math.max(activeIdx, 0);
     for (let offset = 1; offset <= count; offset++) {
-      const idx = (startIndex + offset) % count;
-      const row = virtualIndex.getRowAt(idx);
+      const candidateIndex = (startIndex + offset) % count;
+      const row = virtualIndex.getRowAt(candidateIndex);
       if (!row || row.node.disabled) continue;
       const label = String(row.node.text ?? "")
         .trim()
         .toLowerCase();
       if (label.startsWith(query)) {
-        virtualMoveTo(idx);
+        virtualMoveTo(candidateIndex);
         break;
       }
     }
     return true;
   }
 
-  /** @param {KeyboardEvent} e */
-  function handleVirtualKeyDown(e) {
+  /** @param {KeyboardEvent} event */
+  function handleVirtualKeydown(event) {
     if (!virtualConfig || !virtualIndex) return;
 
     // When focus sits on the scroll container after a row unmounted, resume
     // from virtualFocusedId / first enabled row.
-    let rowEl =
-      e.target instanceof Element
-        ? e.target.closest("[data-tree-row-id]")
+    let rowTarget =
+      event.target instanceof Element
+        ? event.target.closest("[data-tree-row-id]")
         : null;
     let activeIdx = -1;
-    if (rowEl) {
-      const id = rowEl.getAttribute("data-tree-row-id");
+    if (rowTarget) {
+      const id = rowTarget.getAttribute("data-tree-row-id");
       activeIdx = virtualIndex.findIndexById(/** @type {string} */ (id));
-    } else if (e.target === scrollContainerRef) {
+    } else if (event.target === scrollContainerRef) {
       if (virtualFocusedId != null && virtualFocusedId !== "") {
         activeIdx = virtualIndex.findIndexById(virtualFocusedId);
       }
@@ -1627,14 +1634,14 @@
     const item = virtualIndex.getRowAt(activeIdx);
     if (!item) return;
 
-    if (handleVirtualTypeAhead(e, activeIdx)) {
-      e.preventDefault();
-      e.stopPropagation();
+    if (handleVirtualTypeAhead(event, activeIdx)) {
+      event.preventDefault();
+      event.stopPropagation();
       return;
     }
 
     /** @param {number} from @param {1 | -1} dir */
-    const nextEnabled = (from, dir) => {
+    function nextEnabled(from, dir) {
       let i = from;
       while (i >= 0 && i < virtualIndex.totalCount) {
         const row = virtualIndex.getRowAt(i);
@@ -1642,24 +1649,30 @@
         i += dir;
       }
       return -1;
-    };
+    }
 
-    const isHomeOrEnd = e.key === "Home" || e.key === "End";
+    const isHomeOrEnd = event.key === "Home" || event.key === "End";
     const isSelectAll =
-      (e.code === "KeyA" || e.key === "a" || e.key === "A") && e.ctrlKey;
+      (event.code === "KeyA" || event.key === "a" || event.key === "A") &&
+      event.ctrlKey;
 
     if (isHomeOrEnd || isSelectAll) {
       /** @type {Array<string | number>} */
       const nodeIds = [];
 
       if (isHomeOrEnd) {
-        e.preventDefault();
-        e.stopPropagation();
+        event.preventDefault();
+        event.stopPropagation();
         const targetIdx =
-          e.key === "Home"
+          event.key === "Home"
             ? nextEnabled(0, 1)
             : nextEnabled(virtualIndex.totalCount - 1, -1);
-        if (isMultiselect && e.shiftKey && e.ctrlKey && targetIdx >= 0) {
+        if (
+          isMultiselect &&
+          event.shiftKey &&
+          event.ctrlKey &&
+          targetIdx >= 0
+        ) {
           const from = Math.min(activeIdx, targetIdx);
           const to = Math.max(activeIdx, targetIdx);
           for (let i = from; i <= to; i++) {
@@ -1673,8 +1686,8 @@
       }
 
       if (isSelectAll) {
-        e.preventDefault();
-        e.stopPropagation();
+        event.preventDefault();
+        event.stopPropagation();
         for (let i = 0; i < virtualIndex.totalCount; i++) {
           const row = virtualIndex.getRowAt(i);
           if (row && !row.node.disabled) nodeIds.push(row.node.id);
@@ -1684,26 +1697,26 @@
       }
     }
 
-    switch (e.key) {
+    switch (event.key) {
       case "ArrowDown": {
-        e.preventDefault();
-        e.stopPropagation();
+        event.preventDefault();
+        event.stopPropagation();
         const next = nextEnabled(activeIdx + 1, 1);
         if (next >= 0) virtualMoveTo(next);
         break;
       }
       case "ArrowUp": {
-        e.preventDefault();
-        e.stopPropagation();
+        event.preventDefault();
+        event.stopPropagation();
         const prev = nextEnabled(activeIdx - 1, -1);
         if (prev >= 0) virtualMoveTo(prev);
         break;
       }
       case "ArrowRight": {
         if (!item.hasChildren) break;
-        e.preventDefault();
-        e.stopPropagation();
-        if ($expandedIdsSetStore.has(item.node.id)) {
+        event.preventDefault();
+        event.stopPropagation();
+        if ($expandedIdSet.has(item.node.id)) {
           // Already expanded: focus first child (next row).
           const next = nextEnabled(activeIdx + 1, 1);
           if (next >= 0) virtualMoveTo(next);
@@ -1714,9 +1727,9 @@
         break;
       }
       case "ArrowLeft": {
-        e.preventDefault();
-        e.stopPropagation();
-        if (item.hasChildren && $expandedIdsSetStore.has(item.node.id)) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (item.hasChildren && $expandedIdSet.has(item.node.id)) {
           expandNode(item.node, false);
           toggleNode(item.node);
         } else if (item.parentId != null) {
@@ -1728,15 +1741,15 @@
       case "Enter":
       case " ": {
         if (item.node.disabled) break;
-        e.preventDefault();
-        e.stopPropagation();
+        event.preventDefault();
+        event.stopPropagation();
         // Match recursive TreeViewNodeList: Space only activates (check /
         // select); Enter also toggles expansion on parents.
-        if (e.key === "Enter" && item.hasChildren) {
-          expandNode(item.node, !$expandedIdsSetStore.has(item.node.id));
+        if (event.key === "Enter" && item.hasChildren) {
+          expandNode(item.node, !$expandedIdSet.has(item.node.id));
           toggleNode(item.node);
         }
-        clickNode(item.node, e);
+        clickNode(item.node, event);
         break;
       }
     }
@@ -1745,16 +1758,16 @@
   let prevActiveIdForAutoCollapse = activeId;
 
   $: {
-    if (expandedIds !== lastExpandedIdsRef) {
+    if (expandedIds !== prevExpandedIds) {
       expandedIdsSet = new Set(expandedIds);
-      lastExpandedIdsRef = expandedIds;
+      prevExpandedIds = expandedIds;
     }
 
     // Catches `selectedIds` reassignments that didn't go through
     // `setSelectedIds` (e.g. an external `bind:selectedIds` update).
-    if (selectedIds !== lastSelectedIdsRef) {
+    if (selectedIds !== prevSelectedIds) {
       selectedIdsSet = new Set(selectedIds);
-      lastSelectedIdsRef = selectedIds;
+      prevSelectedIds = selectedIds;
     }
 
     // `autoCollapse` should also be triggered when activeId changes programmatically.
@@ -1774,25 +1787,25 @@
         }
 
         expandedIds = Array.from(expandedIdsSet);
-        lastExpandedIdsRef = expandedIds;
+        prevExpandedIds = expandedIds;
       }
     }
 
-    if (activeId !== lastActiveIdPushed) {
-      lastActiveIdPushed = activeId;
+    if (activeId !== prevActiveIdPushed) {
+      prevActiveIdPushed = activeId;
       activeNodeId.set(activeId);
     }
-    if (!arrayIdsEqual(selectedIds, lastSelectedIdsPushed)) {
-      const prevSelectedIds = lastSelectedIdsPushed;
-      lastSelectedIdsPushed = selectedIds;
-      selectedIdsSetStore.set(new Set(selectedIds));
+    if (!arrayIdsEqual(selectedIds, prevSelectedIdsPushed)) {
+      const wasSelectedIds = prevSelectedIdsPushed;
+      prevSelectedIdsPushed = selectedIds;
+      selectedIdSet.set(new Set(selectedIds));
       selectedNodeIds.set(selectedIds);
 
       const nextSelectedIds = selectedIds.slice();
-      const prevSet = new Set(prevSelectedIds);
+      const prevSet = new Set(wasSelectedIds);
       const nextSet = new Set(nextSelectedIds);
       const added = nextSelectedIds.filter((id) => !prevSet.has(id));
-      const removed = prevSelectedIds.filter((id) => !nextSet.has(id));
+      const removed = wasSelectedIds.filter((id) => !nextSet.has(id));
       tick().then(() => {
         dispatch("select:change", {
           selectedIds: nextSelectedIds,
@@ -1801,17 +1814,17 @@
         });
       });
     }
-    if (!arrayIdsEqual(expandedIds, lastExpandedIdsPushed)) {
-      const prevExpandedIds = lastExpandedIdsPushed;
-      lastExpandedIdsPushed = expandedIds;
-      expandedIdsSetStore.set(expandedIdsSet);
+    if (!arrayIdsEqual(expandedIds, prevExpandedIdsPushed)) {
+      const wasExpandedIds = prevExpandedIdsPushed;
+      prevExpandedIdsPushed = expandedIds;
+      expandedIdSet.set(expandedIdsSet);
       expandedNodeIds.set(expandedIds);
 
       const nextExpandedIds = expandedIds.slice();
-      const prevSet = new Set(prevExpandedIds);
+      const prevSet = new Set(wasExpandedIds);
       const nextSet = new Set(nextExpandedIds);
       const added = nextExpandedIds.filter((id) => !prevSet.has(id));
-      const removed = prevExpandedIds.filter((id) => !nextSet.has(id));
+      const removed = wasExpandedIds.filter((id) => !nextSet.has(id));
       tick().then(() => {
         dispatch("toggle:change", {
           expandedIds: nextExpandedIds,
@@ -1852,7 +1865,7 @@
     on:selectstart|capture={handleMultiselectSelectStart}
     on:scroll={handleVirtualScroll}
     on:keydown
-    on:keydown|stopPropagation={handleVirtualKeyDown}
+    on:keydown|stopPropagation={handleVirtualKeydown}
   >
     {#if virtualData.offsetY > 0}
       <li aria-hidden="true" style:height="{virtualData.offsetY}px"></li>
@@ -1894,7 +1907,7 @@
     on:mousedown|capture={syncModifierFromTreeMouseDown}
     on:selectstart|capture={handleMultiselectSelectStart}
     on:keydown
-    on:keydown|stopPropagation={handleKeyDown}
+    on:keydown|stopPropagation={handleKeydown}
   >
     <TreeViewNodeList root {nodes} let:node>
       <slot {node}> {node.text} </slot>

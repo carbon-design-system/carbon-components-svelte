@@ -1,5 +1,5 @@
 <script>
-  import { copyText } from "../utils/copyText.js";
+  import { copyText } from "../utils/copy-text.js";
 
   /**
    * @template [Icon=any]
@@ -206,11 +206,12 @@
   import Button from "../Button/Button.svelte";
   import CopyButton from "../CopyButton/CopyButton.svelte";
   import ChevronDown from "../icons/ChevronDown.svelte";
-  import { iconTooltipPortalGaps } from "../Portal/iconTooltipPortalGaps.js";
+  import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
-  import { createCopyFeedbackState } from "../utils/copyFeedback.js";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { createCopyFeedbackState } from "../utils/copy-feedback.js";
+  import { noop } from "../utils/noop.js";
+  import { uniqueId } from "../utils/unique-id.js";
   import CodeSnippetSkeleton from "./CodeSnippetSkeleton.svelte";
 
   const dispatch = createEventDispatcher();
@@ -231,7 +232,7 @@
   let animation = undefined;
   let feedbackOpen = false;
   let copyPending = false;
-  let isCopyError = false;
+  let copyFailed = false;
   let prevExpanded = expanded;
   let exceedsThreshold = false;
   let resizeObserver;
@@ -255,10 +256,10 @@
     animation = copyFeedback.animation;
     feedbackOpen = copyFeedback.feedbackOpen;
     copyPending = copyFeedback.copyPending;
-    isCopyError = copyFeedback.isError;
+    copyFailed = copyFeedback.isError;
   }
 
-  $: feedbackText = isCopyError ? errorFeedback : feedback;
+  $: feedbackText = copyFailed ? errorFeedback : feedback;
 
   function dismissFeedback() {
     copyFeedback.dismiss();
@@ -369,14 +370,14 @@
     dispatch(nextExpanded ? "expand" : "collapse");
   }
 
-  let disconnectModalObserver = () => {};
+  let disconnectModalObserver = noop;
 
   $: {
-    const el = copyRef || ref;
+    const node = copyRef || ref;
     disconnectModalObserver();
     disconnectModalObserver =
-      effectivePortalTooltip && el
-        ? observeModalClose(el, dismissFeedback)
+      effectivePortalTooltip && node
+        ? observeModalClose(node, dismissFeedback)
         : () => {};
   }
 

@@ -102,8 +102,8 @@
   import { readable } from "svelte/store";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
-  import { overflowTitle } from "../utils/overflowTitle.js";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { overflowTitle } from "../utils/overflow-title.js";
+  import { uniqueId } from "../utils/unique-id.js";
   import CheckboxSkeleton from "./CheckboxSkeleton.svelte";
 
   const dispatch = createEventDispatcher();
@@ -142,16 +142,16 @@
 
   // Track previous checked value to avoid duplicate dispatches in Svelte 5
   // The reactive statement will only dispatch when checked changes externally (e.g., via bind:checked)
-  let previousChecked = checked;
+  let prevChecked = checked;
   $: {
-    const hasChanged = previousChecked !== checked;
+    const hasChanged = prevChecked !== checked;
     if (hasChanged) {
-      previousChecked = checked;
+      prevChecked = checked;
       dispatch("check", checked);
     }
   }
 
-  let refLabel = null;
+  let labelRef = null;
 
   $: helperId = `helper-${id}`;
   $: errorId = `error-${id}`;
@@ -222,7 +222,7 @@
             : [...group, value];
         } else {
           const newChecked = !checked;
-          previousChecked = newChecked;
+          prevChecked = newChecked;
           checked = newChecked;
           // Dispatch directly for user-initiated changes to avoid duplicate events in Svelte 5
           dispatch("check", newChecked);
@@ -234,11 +234,11 @@
     >
     <label
       for={id}
-      use:overflowTitle={{ title, measure: refLabel }}
+      use:overflowTitle={{ title, measure: labelRef }}
       class:bx--checkbox-label={true}
     >
       <span
-        bind:this={refLabel}
+        bind:this={labelRef}
         class:bx--checkbox-label-text={true}
         class:bx--visually-hidden={hideLabel}
       >

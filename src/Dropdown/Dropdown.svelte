@@ -41,7 +41,9 @@
    * Override the display of a dropdown item.
    * @type {(item: Item) => string}
    */
-  export let itemToString = (item) => item.text ?? item.id;
+  export let itemToString = function itemToString(item) {
+    return item.text ?? item.id;
+  };
 
   /**
    * Specify the selected item id.
@@ -237,23 +239,23 @@
   import Checkmark from "../icons/Checkmark.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import HighlightSlot from "../ListBox/HighlightSlot.svelte";
   import {
     ListBox,
     ListBoxMenu,
     ListBoxMenuIcon,
     ListBoxMenuItem,
     ListBoxSelection,
-  } from "../ListBox";
-  import HighlightSlot from "../ListBox/HighlightSlot.svelte";
+  } from "../ListBox/index.js";
   import { shouldVirtualizeMenu } from "../ListBox/list-box-utils.js";
-  import { createMenuWindow } from "../ListBox/menuWindow.js";
+  import { createMenuWindow } from "../ListBox/menu-window.js";
   import { debounce } from "../utils/debounce.js";
   import { dismiss } from "../utils/dismiss.js";
-  import { isOutsideClick } from "../utils/isOutsideClick.js";
-  import { createScrollEndTracker } from "../utils/isScrollNearEnd.js";
-  import { moveIndex } from "../utils/moveIndex.js";
+  import { isOutsideClick } from "../utils/is-outside-click.js";
+  import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
+  import { moveIndex } from "../utils/move-index.js";
   import { typeaheadIndex } from "../utils/typeahead.js";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { uniqueId } from "../utils/unique-id.js";
   import { resetVirtualScrollOnClose } from "../utils/virtualize.js";
 
   const dispatch = createEventDispatcher();
@@ -277,7 +279,7 @@
   let itemsById = new Map();
   /** Text content of the visually-hidden status live region. */
   let statusText = "";
-  /** @type {import("../ListBox/menuWindow.js").MenuWindowState} */
+  /** @type {import("../ListBox/menu-window.js").MenuWindowState} */
   let menuState;
 
   const menuWindow = createMenuWindow({
@@ -443,12 +445,12 @@
     ) {
       tick().then(() => {
         if (!listRef) return;
-        const selectedEl = listRef.querySelector('[aria-selected="true"]');
-        if (!selectedEl) return;
+        const selectedOption = listRef.querySelector('[aria-selected="true"]');
+        if (!selectedOption) return;
         // Adjust the menu's own scrollTop instead of scrollIntoView,
         // which would also scroll the document.
         listRef.scrollTop +=
-          selectedEl.getBoundingClientRect().top -
+          selectedOption.getBoundingClientRect().top -
           listRef.getBoundingClientRect().top;
       });
     }

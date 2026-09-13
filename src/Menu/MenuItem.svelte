@@ -80,8 +80,8 @@
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import CaretRight from "../icons/CaretRight.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
-  import { createSubmenuHoverIntent } from "../utils/submenuHoverIntent.js";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { createSubmenuHoverIntent } from "../utils/submenu-hover-intent.js";
+  import { uniqueId } from "../utils/unique-id.js";
   import Menu from "./Menu.svelte";
 
   // "moderate-01" duration (ms) from Carbon motion recommended for small
@@ -103,11 +103,11 @@
   );
   // `selected` implies the checkbox variant. Latch it instead of writing back
   // to `selectable` so deselecting the item keeps its role and indentation.
-  let hasBeenSelected = false;
+  let selectedOnce = false;
 
   $: hasSubmenu = labelText !== undefined && $$slots.default;
-  $: if (selected) hasBeenSelected = true;
-  $: isSelectable = !!ctxGroup || selectable || hasBeenSelected;
+  $: if (selected) selectedOnce = true;
+  $: isSelectable = !!ctxGroup || selectable || selectedOnce;
   $: isRadio = !!ctxRadioGroup;
   $: isIndented = isSelectable || isRadio;
   $: role = isRadio

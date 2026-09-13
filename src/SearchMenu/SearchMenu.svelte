@@ -123,9 +123,9 @@
   import Search from "../Search/Search.svelte";
   import SkeletonText from "../SkeletonText/SkeletonText.svelte";
   import { dismiss } from "../utils/dismiss.js";
-  import { fuzzyMatch } from "../utils/fuzzyMatch.js";
-  import { isOutsideClick } from "../utils/isOutsideClick.js";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { fuzzyMatch } from "../utils/fuzzy-match.js";
+  import { isOutsideClick } from "../utils/is-outside-click.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
 
@@ -135,19 +135,19 @@
   let dismissed = false;
   let refocusOnBlur = false;
 
-  const queryStore = writable("");
-  const shouldFilterStore = writable(shouldFilter);
-  const matchStore = writable(match);
-  const activeId = writable(/** @type {string | null} */ (null));
-  const hasPrimaryItemsStore = writable(false);
+  const query = writable("");
+  const sharedShouldFilter = writable(shouldFilter);
+  const sharedMatch = writable(match);
+  const highlightedId = writable(/** @type {string | null} */ (null));
+  const hasPrimaryItems = writable(false);
 
   let itemIds = new Set();
   let filterableIds = new Set();
   let primaryItemIds = new Set();
 
-  $: queryStore.set(String(value ?? ""));
-  $: shouldFilterStore.set(shouldFilter);
-  $: matchStore.set(match);
+  $: query.set(String(value ?? ""));
+  $: sharedShouldFilter.set(shouldFilter);
+  $: sharedMatch.set(match);
 
   // Varying widths so the skeleton rows mimic results of different lengths.
   const SKELETON_WIDTHS = ["75%", "90%", "65%", "80%"];
@@ -157,7 +157,7 @@
   );
 
   $: itemCount = itemIds.size;
-  $: hasPrimaryItemsStore.set(primaryItemIds.size > 0);
+  $: hasPrimaryItems.set(primaryItemIds.size > 0);
   $: hasQuery = String(value ?? "").length > 0;
   $: showNoResults =
     !loading &&
@@ -180,21 +180,21 @@
     .join(" ");
 
   setContext("carbon:SearchMenu", {
-    query: queryStore,
-    shouldFilter: shouldFilterStore,
-    match: matchStore,
-    activeId,
+    query,
+    shouldFilter: sharedShouldFilter,
+    match: sharedMatch,
+    highlightedId,
     setActiveId(next) {
-      activeId.set(next);
+      highlightedId.set(next);
     },
     selectItem(detail) {
       value = detail.value ?? value;
       dispatch("select", detail);
       close("select");
       dismissed = true;
-      activeId.set(null);
+      highlightedId.set(null);
     },
-    hasPrimaryItems: hasPrimaryItemsStore,
+    hasPrimaryItems,
     registerItem(itemId, filterable, inDividerGroup = false) {
       itemIds.add(itemId);
       if (filterable) filterableIds.add(itemId);
@@ -230,26 +230,26 @@
     if (!menuRef) return [];
     return Array.from(
       menuRef.querySelectorAll('[role="option"]:not([hidden])'),
-    ).filter((el) => el.getAttribute("aria-disabled") !== "true");
+    ).filter((option) => option.getAttribute("aria-disabled") !== "true");
   }
 
   function moveActive(step) {
     const els = getOptionElements();
     if (els.length === 0) {
-      activeId.set(null);
+      highlightedId.set(null);
       return;
     }
-    const current = els.findIndex((el) => el.id === $activeId);
+    const current = els.findIndex((option) => option.id === $highlightedId);
     let next = current + step;
     if (next < 0) next = els.length - 1;
     else if (next >= els.length) next = 0;
-    activeId.set(els[next].id);
+    highlightedId.set(els[next].id);
   }
 
   function setActiveEdge(edge) {
     const els = getOptionElements();
     if (els.length === 0) return;
-    activeId.set(els[edge === "first" ? 0 : els.length - 1].id);
+    highlightedId.set(els[edge === "first" ? 0 : els.length - 1].id);
   }
 
   function handleKeydown(event) {
@@ -276,8 +276,8 @@
         setActiveEdge("last");
         break;
       case "Enter": {
-        const active = $activeId
-          ? getOptionElements().find((el) => el.id === $activeId)
+        const active = $highlightedId
+          ? getOptionElements().find((option) => option.id === $highlightedId)
           : null;
         if (menuVisible && active) {
           event.preventDefault();
@@ -295,7 +295,7 @@
           event.stopImmediatePropagation();
           close("escape-key");
           dismissed = true;
-          activeId.set(null);
+          highlightedId.set(null);
         }
         break;
     }
@@ -309,7 +309,7 @@
   function handleBeforeInteraction() {
     close("outside-click");
     dismissed = true;
-    activeId.set(null);
+    highlightedId.set(null);
   }
 
   function handleBlur(event) {
@@ -330,7 +330,7 @@
     }
     close("blur");
     focused = false;
-    activeId.set(null);
+    highlightedId.set(null);
   }
 
   function handleMenuPointerDown() {
@@ -350,7 +350,7 @@
     if (open && isOutsideClick(event, [anchorRef, portal ? menuRef : null])) {
       close("outside-click");
       dismissed = true;
-      activeId.set(null);
+      highlightedId.set(null);
     }
   }
 </script>
@@ -389,7 +389,7 @@
       aria-autocomplete="list"
       aria-expanded={menuVisible}
       aria-controls={menuVisible ? menuDomId : undefined}
-      aria-activedescendant={$activeId ?? undefined}
+      aria-activedescendant={$highlightedId ?? undefined}
       {...$$restProps}
       on:focus
       on:focus={handleFocus}

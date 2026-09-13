@@ -1,4 +1,4 @@
-import { rafThrottle } from "../../src/utils/rafThrottle.js";
+import { rafThrottle } from "../../src/utils/raf-throttle.js";
 
 describe("rafThrottle", () => {
   let frame: (() => void) | null;

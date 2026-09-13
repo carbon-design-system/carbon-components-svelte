@@ -28,14 +28,16 @@
    * Override the default translation ids.
    * @type {(id: TableHeaderTranslationId) => string}
    */
-  export let translateWithId = (id) => defaultTranslations[id];
+  export let translateWithId = function translateWithId(id) {
+    return defaultTranslations[id];
+  };
 
   /** Set an id for the top-level element */
   export let id = uniqueId();
 
   import ArrowsVertical from "../icons/ArrowsVertical.svelte";
   import ArrowUp from "../icons/ArrowUp.svelte";
-  import { uniqueId } from "../utils/uniqueId.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const defaultTranslations = {
     [translationIds.columnSortAscending]:
