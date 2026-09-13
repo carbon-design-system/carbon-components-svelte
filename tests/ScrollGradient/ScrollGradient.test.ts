@@ -205,4 +205,15 @@ describe("ScrollGradient", () => {
       "red",
     );
   });
+
+  it("applies the background prop to the scroll element", () => {
+    const { container } = render(ScrollGradient, {
+      props: { background: "transparent" },
+    });
+
+    const scrollElement = container.querySelector(
+      ".bx--scroll-gradient__scroll-element",
+    ) as HTMLElement;
+    expect(scrollElement.style.backgroundColor).toBe("transparent");
+  });
 });

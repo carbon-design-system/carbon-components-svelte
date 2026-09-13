@@ -11,6 +11,14 @@
   export let color = undefined;
 
   /**
+   * Specify the background color of the scrollable content area.
+   * Defaults to the `layer` theme token. Does not affect the gradient
+   * color — use `color` for that.
+   * @type {string | undefined}
+   */
+  export let background = undefined;
+
+  /**
    * Set to `true` to suppress the top and left gradients,
    * even when their edge is scrollable.
    */
@@ -109,6 +117,7 @@
   <div
     class:bx--scroll-gradient__scroll-element={true}
     class={scrollElementClassName}
+    style:background-color={background}
     bind:this={scrollRef}
     on:scroll
   >

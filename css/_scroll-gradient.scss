@@ -19,7 +19,8 @@
     overflow: auto;
     // Fixed to the theme background, independent of `--cds-scroll-gradient-color`:
     // a custom `color` should only retint the fade, not repaint the content area.
-    background-color: $layer;
+    // Override with the `background` prop, applied inline by the component.
+    background-color: #{$layer};
   }
 
   .#{$prefix}--scroll-gradient__content {
