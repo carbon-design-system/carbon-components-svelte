@@ -1,24 +1,24 @@
 <script>
   import { Tag, TagSet } from "carbon-components-svelte";
 
-  const frameworks = [
-    { label: "Angular", type: "red" },
-    { label: "React", type: "blue" },
-    { label: "Svelte", type: "purple" },
-    { label: "Vue", type: "green" },
-    { label: "Ember", type: "magenta" },
-    { label: "Preact", type: "cyan" },
-    { label: "Solid", type: "teal" },
-    { label: "Qwik", type: "cool-gray" },
-    { label: "Lit", type: "warm-gray" },
-    { label: "Alpine", type: "outline" },
+  const categories = [
+    { label: "Compute", type: "red" },
+    { label: "Storage", type: "blue" },
+    { label: "Networking", type: "purple" },
+    { label: "Database", type: "green" },
+    { label: "Analytics", type: "magenta" },
+    { label: "Security", type: "cyan" },
+    { label: "Identity", type: "teal" },
+    { label: "Monitoring", type: "cool-gray" },
+    { label: "Billing", type: "warm-gray" },
+    { label: "DevOps", type: "outline" },
   ];
 </script>
 
 <div style="max-width: 20rem;">
   <TagSet multiline>
-    {#each frameworks as framework}
-      <Tag type={framework.type}>{framework.label}</Tag>
+    {#each categories as category}
+      <Tag type={category.type}>{category.label}</Tag>
     {/each}
   </TagSet>
 </div>

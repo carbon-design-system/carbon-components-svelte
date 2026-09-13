@@ -10,10 +10,10 @@
 <div style="max-width: 20rem;">
   <div bind:this={target} style="max-width: 8rem;"></div>
   <TagSet containingElement={target}>
-    <Tag type="red">Angular</Tag>
-    <Tag type="blue">React</Tag>
-    <Tag type="purple">Svelte</Tag>
-    <Tag type="green">Vue</Tag>
-    <Tag type="magenta">Ember</Tag>
+    <Tag type="red">Production</Tag>
+    <Tag type="blue">Staging</Tag>
+    <Tag type="purple">Development</Tag>
+    <Tag type="green">QA</Tag>
+    <Tag type="magenta">Sandbox</Tag>
   </TagSet>
 </div>
