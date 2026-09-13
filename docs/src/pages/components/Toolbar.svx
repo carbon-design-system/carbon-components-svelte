@@ -15,7 +15,7 @@ Create a basic toolbar with content inside toolbar content. **Toolbar** can be u
 
 <Toolbar>
   <ToolbarContent>
-    <Button>Primary action</Button>
+    <Button>Create</Button>
   </ToolbarContent>
 </Toolbar>
 
