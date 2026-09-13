@@ -224,7 +224,7 @@
     // Ignore clicks that land before this tab's batched registration flushes.
     const tab = $tabsById[id];
     if (!tab) return;
-    currentIndex = tab.index;
+    selectedIndex = tab.index;
   }
 
   /**
@@ -234,20 +234,20 @@
    */
   function syncSelection() {
     if (selectedId === undefined) {
-      currentIndex = selected;
+      selectedIndex = selected;
       return;
     }
 
     const tab = $tabsById[selectedId];
     if (tab) {
-      currentIndex = tab.index;
+      selectedIndex = tab.index;
       return;
     }
 
     if ($tabs.length === 0) return;
 
-    currentIndex = clampIndex(currentIndex, 0, $tabs.length);
-    selectedId = $tabs[currentIndex].id;
+    selectedIndex = clampIndex(selectedIndex, 0, $tabs.length);
+    selectedId = $tabs[selectedIndex].id;
   }
 
   // Vertical tabs are never dismissible; this no-op satisfies the `Tab` context.
@@ -275,14 +275,14 @@
    * @type {(index: number) => Promise<void>}
    */
   async function selectTab(index) {
-    if (index === currentIndex) {
+    if (index === selectedIndex) {
       focusedIndex = -1;
       return;
     }
 
     focusedIndex = -1;
     if (selectedId === undefined) {
-      currentIndex = index;
+      selectedIndex = index;
     } else {
       const tab = $tabs[index];
       if (!tab) return;
@@ -351,15 +351,15 @@
       }
     }
 
-    if (selected !== currentIndex) {
-      selected = currentIndex;
+    if (selected !== selectedIndex) {
+      selected = selectedIndex;
     }
 
-    if (prevIndex > -1 && prevIndex !== currentIndex) {
-      dispatch("change", currentIndex);
+    if (prevIndex > -1 && prevIndex !== selectedIndex) {
+      dispatch("change", selectedIndex);
     }
 
-    prevIndex = currentIndex;
+    prevIndex = selectedIndex;
   });
 
   onMount(() => {
@@ -369,20 +369,20 @@
     return () => observer.disconnect();
   });
 
-  let currentIndex = selected;
+  let selectedIndex = selected;
   let focusedIndex = -1;
   let prevIndex = -1;
 
   $: {
     if (selectedId === undefined) {
-      currentIndex = selected;
+      selectedIndex = selected;
     } else {
       syncSelection();
     }
     focusedIndex = -1;
   }
-  $: currentTab = $tabs[currentIndex] || undefined;
-  $: currentContent = $content[currentIndex] || undefined;
+  $: currentTab = $tabs[selectedIndex] || undefined;
+  $: currentContent = $content[selectedIndex] || undefined;
   $: {
     if (currentTab) {
       selectedTab.set(currentTab.id);
@@ -441,7 +441,7 @@
         selector: "[role='tab']",
         orientation,
         skipDisabled: true,
-        getActiveIndex: () => (focusedIndex >= 0 ? focusedIndex : currentIndex),
+        getActiveIndex: () => (focusedIndex >= 0 ? focusedIndex : selectedIndex),
         onMove: (index, event) => {
           // Prevent the arrow keys from also scrolling the page.
           event.preventDefault();
