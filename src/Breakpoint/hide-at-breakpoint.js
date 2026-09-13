@@ -1,7 +1,7 @@
 // @ts-check
 
-import { observeBreakpoint } from "./breakpoint-observer";
-import { breakpoints } from "./breakpoints";
+import { observeBreakpoint } from "./breakpoint-observer.js";
+import { breakpoints } from "./breakpoints.js";
 
 /** @typedef {import("./breakpoints").BreakpointSize} BreakpointSize */
 

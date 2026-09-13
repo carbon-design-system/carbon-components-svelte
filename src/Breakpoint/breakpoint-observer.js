@@ -1,6 +1,6 @@
 import { onMount } from "svelte";
 import { derived, writable } from "svelte/store";
-import { breakpoints } from "./breakpoints";
+import { breakpoints } from "./breakpoints.js";
 
 /** @typedef {import("./breakpoints").BreakpointSize} BreakpointSize */
 

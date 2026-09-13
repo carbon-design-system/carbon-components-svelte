@@ -119,12 +119,12 @@
   import { dismiss } from "../utils/dismiss.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { uniqueId } from "../utils/unique-id.js";
-  import { createCalendar, resolveLocale } from "./create-calendar";
+  import { createCalendar, resolveLocale } from "./create-calendar.js";
   import {
     getTopLayerAncestor,
     isEventTargetInsidePortaledCalendar,
     positionFlatpickrCalendarFixed,
-  } from "./date-picker-top-layer";
+  } from "./date-picker-top-layer.js";
 
   const dispatch = createEventDispatcher();
   const insideModal = getContext("carbon:Modal");
