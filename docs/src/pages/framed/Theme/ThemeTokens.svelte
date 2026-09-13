@@ -46,28 +46,28 @@
 
 <Stack gap={5}>
   <div>
-    <Button>Primary button</Button>
-    <Button kind="secondary">Secondary button</Button>
+    <Button>Save changes</Button>
+    <Button kind="secondary">Cancel</Button>
   </div>
 
   <div>
-    <Link href="#example">Themed link</Link>
+    <Link href="#example">View audit log</Link>
   </div>
 
-  <div><Tag type="blue">Themed tag</Tag></div>
+  <div><Tag type="blue">Production</Tag></div>
 
-  <TextInput labelText="Text input" placeholder="Enter text..." />
+  <TextInput labelText="Workspace name" placeholder="Enter workspace name..." />
 
-  <Checkbox labelText="Checkbox with themed focus" />
+  <Checkbox labelText="Enable two-factor authentication" />
 
-  <Toggle labelText="Toggle with themed colors" />
+  <Toggle labelText="Maintenance mode" />
 
-  <Tile> <p>Tile with themed background</p> </Tile>
+  <Tile> <p>Deployment pipeline — 2 builds queued</p> </Tile>
 
   <InlineNotification
     kind="info"
-    title="Info notification"
-    subtitle="With themed colors"
+    title="Sync complete:"
+    subtitle="Your workspace data is up to date."
     hideCloseButton
     lowContrast
   />
