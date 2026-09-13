@@ -62,19 +62,19 @@
 
   let prevIndex = -1;
 
-  let currentIndex = -1;
+  let committedIndex = -1;
   let focusedIndex = -1;
   /**
    * @type {import("svelte/store").Writable<Array<{ id: string; text: string; selected: boolean; icon: boolean }>>}
    */
-  const switchesStore = writable([]);
+  const sharedSwitches = writable([]);
   // Batch child registration. Leave afterUpdate's syncDomOrder unbatched
   // so DOM-order correction stays synchronous.
   //
   // Set needsDomSync inside the batched update. afterUpdate runs once
   // after mount before this flush, while switches is still [].
-  const batchedSwitchesUpdate = batchStoreUpdates(switchesStore);
-  $: switches = $switchesStore;
+  const batchedSwitchesUpdate = batchStoreUpdates(sharedSwitches);
+  $: switches = $sharedSwitches;
 
   // Inferred when every registered switch provides an `icon`.
   $: iconOnly = switches.length > 0 && switches.every((s) => s.icon);
@@ -86,12 +86,12 @@
   // Flag to trigger DOM reordering only when switches change.
   // This is necessary to avoid infinite loops in Svelte 5.
   let needsDomSync = false;
-  $: if (switches[currentIndex]) {
-    if (prevIndex > -1 && prevIndex !== currentIndex) {
-      dispatch("change", currentIndex);
+  $: if (switches[committedIndex]) {
+    if (prevIndex > -1 && prevIndex !== committedIndex) {
+      dispatch("change", committedIndex);
     }
-    prevIndex = currentIndex;
-    currentId.set(switches[currentIndex].id);
+    prevIndex = committedIndex;
+    currentId.set(switches[committedIndex].id);
   }
 
   /**
@@ -211,7 +211,7 @@
 
       const preservedId = switches[selectedIndex]?.id;
       let next = switches;
-      switchesStore.update((current) => {
+      sharedSwitches.update((current) => {
         next = syncDomOrder({
           root: ref,
           selector: "[role='tab']",
@@ -228,8 +228,8 @@
       }
     }
 
-    if (selectedIndex !== currentIndex) {
-      currentIndex = selectedIndex;
+    if (selectedIndex !== committedIndex) {
+      committedIndex = selectedIndex;
       focusedIndex = -1;
     }
   });
@@ -246,8 +246,8 @@
     getItems: () =>
       switches
         .map((s) => document.getElementById(s.id))
-        .filter((el) => el instanceof HTMLElement),
-    getActiveIndex: () => (focusedIndex >= 0 ? focusedIndex : currentIndex),
+        .filter((node) => node instanceof HTMLElement),
+    getActiveIndex: () => (focusedIndex >= 0 ? focusedIndex : committedIndex),
     onMove: (index, event) => {
       // Prevent the arrow keys from also scrolling the page.
       event.preventDefault();
