@@ -82,7 +82,7 @@
   const groupReadonly = writable(readonly);
   const groupInvalid = writable(invalid);
   const groupWarn = writable(warn);
-  let isInitialRender = true;
+  let initialRender = true;
 
   /**
    * @type {(value: string | number, checked: boolean) => void}
@@ -112,14 +112,14 @@
   const unsubscribe = selectedValues.subscribe((value) => {
     if (readonly) return;
     selected = value;
-    if (!isInitialRender) {
+    if (!initialRender) {
       dispatch("change", value);
     }
   });
 
   onMount(() => {
     tick().then(() => {
-      isInitialRender = false;
+      initialRender = false;
     });
     return unsubscribe;
   });
