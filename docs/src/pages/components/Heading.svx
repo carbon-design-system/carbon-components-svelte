@@ -12,14 +12,14 @@ description: Heading and Section components automatically manage semantic headin
 A top-level heading inside a section renders as an h1 element, a semantic starting point for your document structure.
 
 <Section>
-  <Heading>Heading 1</Heading>
+  <Heading>Admin console</Heading>
 </Section>
 
 ## Standalone heading
 
 A `Heading` used without a `Section` ancestor also defaults to h1. Wrap headings in `Section` when you need automatic level management as content nests.
 
-<Heading>Standalone Heading</Heading>
+<Heading>Incident report</Heading>
 
 ## Heading levels
 
@@ -30,19 +30,19 @@ A `Heading` used without a `Section` ancestor also defaults to h1. Wrap headings
 As you nest sections, heading levels automatically increment to maintain proper hierarchy. Each nested section increases the heading level by one (h1 → h2 → h3, and so on). Heading levels cap at h6 to ensure valid HTML structure, even when nested deeper than six levels.
 
 <Section>
-  <Heading>Heading 1</Heading>
+  <Heading>Admin console</Heading>
   <Section>
-    <Heading>Heading 2</Heading>
+    <Heading>User management</Heading>
     <Section>
-      <Heading>Heading 3</Heading>
+      <Heading>Permissions</Heading>
       <Section>
-        <Heading>Heading 4</Heading>
+        <Heading>Role assignments</Heading>
         <Section>
-          <Heading>Heading 5</Heading>
+          <Heading>Audit trail</Heading>
           <Section>
-            <Heading>Heading 6</Heading>
+            <Heading>Session details</Heading>
             <Section>
-              <Heading>Capped at Heading 6</Heading>
+              <Heading>Capped at h6</Heading>
             </Section>
           </Section>
         </Section>
@@ -56,9 +56,9 @@ As you nest sections, heading levels automatically increment to maintain proper 
 Set a custom starting heading level with `level` on the section. Child sections continue to increment from this level.
 
 <Section level={5}>
-  <Heading>Starts at Heading 5</Heading>
+  <Heading>Audit trail</Heading>
   <Section>
-    <Heading>Heading 6</Heading>
+    <Heading>Session details</Heading>
   </Section>
 </Section>
 
@@ -67,5 +67,5 @@ Set a custom starting heading level with `level` on the section. Child sections 
 The section renders a semantic section element by default. Set `tag` to render a different element (such as div, article, or aside) while keeping automatic heading level management.
 
 <Section tag="div">
-  <Heading>Heading 1</Heading>
+  <Heading>Admin console</Heading>
 </Section>
