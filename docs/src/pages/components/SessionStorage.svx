@@ -41,7 +41,7 @@ With sync enabled by default, the component listens for storage events and updat
 Session storage is already per tab, so this matters mainly when an iframe shares the session. Turn sync off when the host page should not follow iframe writes, or when the app handles conflicts itself. Sync is reactive, so you can change it at runtime.
 
 ```svelte
-<SessionStorage key="draft" bind:value sync="off" />
+<SessionStorage key="draft-form-data" bind:value sync="off" />
 ```
 
 ## Clear item, clear all
@@ -83,7 +83,7 @@ Dispatched when a write to session storage fails — for example, when storage q
 
 ```svelte
 <SessionStorage
-  key="draft"
+  key="draft-form-data"
   bind:value
   on:error={({ detail }) => console.error("Failed to persist:", detail.error)}
 />
