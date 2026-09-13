@@ -143,7 +143,7 @@
   import { scrollIntoViewWithinMenu } from "../utils/scroll-into-view-within-menu.js";
   import { trapFocus } from "../utils/trap-focus.js";
   import { uniqueId } from "../utils/unique-id.js";
-  import { trackModal } from "./modal-store";
+  import { trackModal } from "./modal-store.js";
 
   const dispatch = createEventDispatcher();
   const focusReturn = restoreFocus();

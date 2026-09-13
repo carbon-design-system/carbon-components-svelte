@@ -44,7 +44,7 @@
 
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
-  import { trackModal } from "../Modal/modal-store";
+  import { trackModal } from "../Modal/modal-store.js";
   import { initialFocus, restoreFocus } from "../utils/focus.js";
   import { createOutsideDismiss } from "../utils/outside-dismiss.js";
   import { trapFocus } from "../utils/trap-focus.js";

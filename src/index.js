@@ -11,9 +11,9 @@ export { default as Breadcrumb } from "./Breadcrumb/Breadcrumb.svelte";
 export { default as BreadcrumbItem } from "./Breadcrumb/BreadcrumbItem.svelte";
 export { default as BreadcrumbSkeleton } from "./Breadcrumb/BreadcrumbSkeleton.svelte";
 export { default as Breakpoint } from "./Breakpoint/Breakpoint.svelte";
-export { breakpointObserver } from "./Breakpoint/breakpoint-observer";
-export { breakpoints } from "./Breakpoint/breakpoints";
-export { hideAtBreakpoint } from "./Breakpoint/hide-at-breakpoint";
+export { breakpointObserver } from "./Breakpoint/breakpoint-observer.js";
+export { breakpoints } from "./Breakpoint/breakpoints.js";
+export { hideAtBreakpoint } from "./Breakpoint/hide-at-breakpoint.js";
 export { default as Button } from "./Button/Button.svelte";
 export { default as ButtonSet } from "./Button/ButtonSet.svelte";
 export { default as ButtonSkeleton } from "./Button/ButtonSkeleton.svelte";
@@ -29,7 +29,7 @@ export { default as ComposedModal } from "./ComposedModal/ComposedModal.svelte";
 export { default as ModalBody } from "./ComposedModal/ModalBody.svelte";
 export { default as ModalFooter } from "./ComposedModal/ModalFooter.svelte";
 export { default as ModalHeader } from "./ComposedModal/ModalHeader.svelte";
-export { ContainedList, ContainedListItem } from "./ContainedList";
+export { ContainedList, ContainedListItem } from "./ContainedList/index.js";
 export { default as ContentSwitcher } from "./ContentSwitcher/ContentSwitcher.svelte";
 export { default as Switch } from "./ContentSwitcher/Switch.svelte";
 export { default as ContextMenu } from "./ContextMenu/ContextMenu.svelte";
@@ -43,7 +43,7 @@ export { default as CopyInputSkeleton } from "./CopyInput/CopyInputSkeleton.svel
 export { default as FluidCopyInputSkeleton } from "./CopyInput/FluidCopyInputSkeleton.svelte";
 export { default as DataTable } from "./DataTable/DataTable.svelte";
 export { default as DataTableSkeleton } from "./DataTable/DataTableSkeleton.svelte";
-export { toCsv } from "./DataTable/data-table-utils";
+export { toCsv } from "./DataTable/data-table-utils.js";
 export { default as Table } from "./DataTable/Table.svelte";
 export { default as TableBody } from "./DataTable/TableBody.svelte";
 export { default as TableCell } from "./DataTable/TableCell.svelte";
@@ -212,7 +212,7 @@ export { default as TooltipDefinition } from "./TooltipDefinition/TooltipDefinit
 export { default as TooltipIcon } from "./TooltipIcon/TooltipIcon.svelte";
 export { default as TreeView } from "./TreeView/TreeView.svelte";
 export { default as Truncate } from "./Truncate/Truncate.svelte";
-export { truncate } from "./Truncate/truncate";
+export { truncate } from "./Truncate/truncate.js";
 export { default as Content } from "./UIShell/Content.svelte";
 export { default as Header } from "./UIShell/Header.svelte";
 export { default as HeaderAction } from "./UIShell/HeaderAction.svelte";
@@ -244,15 +244,15 @@ export { default as SkipToContent } from "./UIShell/SkipToContent.svelte";
 export { default as UnorderedList } from "./UnorderedList/UnorderedList.svelte";
 export { default as UserAvatar } from "./UserAvatar/UserAvatar.svelte";
 export { default as UserAvatarGroup } from "./UserAvatarGroup/UserAvatarGroup.svelte";
-export { downloadFile } from "./utils/download-file";
+export { downloadFile } from "./utils/download-file.js";
 export {
   filterTreeById,
   filterTreeByText,
   filterTreeNodes,
-} from "./utils/filter-tree-nodes";
-export { fuzzyMatch, highlightSegments } from "./utils/fuzzy-match";
-export { toHierarchy } from "./utils/to-hierarchy";
+} from "./utils/filter-tree-nodes.js";
+export { fuzzyMatch, highlightSegments } from "./utils/fuzzy-match.js";
+export { toHierarchy } from "./utils/to-hierarchy.js";
 export {
   resolveCheckboxState,
   toggleCheckboxNode,
-} from "./utils/tree-checkbox-state";
+} from "./utils/tree-checkbox-state.js";
