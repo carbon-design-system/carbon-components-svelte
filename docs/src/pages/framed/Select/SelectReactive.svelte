@@ -1,27 +1,27 @@
 <script>
   import { Button, Select, SelectItem, Stack } from "carbon-components-svelte";
 
-  let selected = "g10";
+  let selected = "starter";
 </script>
 
 <Stack gap={6}>
   <Select
-    labelText="Carbon theme"
+    labelText="Account plan"
     helperText="Selected: {selected}"
     bind:selected
   >
-    <SelectItem value="white" text="White" />
-    <SelectItem value="g10" text="Gray 10" />
-    <SelectItem value="g80" text="Gray 80" />
-    <SelectItem value="g90" text="Gray 90" />
-    <SelectItem value="g100" text="Gray 100" />
+    <SelectItem value="free" text="Free" />
+    <SelectItem value="starter" text="Starter" />
+    <SelectItem value="team" text="Team" />
+    <SelectItem value="business" text="Business" />
+    <SelectItem value="enterprise" text="Enterprise" />
   </Select>
   <Button
     kind="tertiary"
     size="small"
-    disabled={selected === "g90"}
-    on:click={() => (selected = "g90")}
+    disabled={selected === "business"}
+    on:click={() => (selected = "business")}
   >
-    Set to "g90"
+    Set to "business"
   </Button>
 </Stack>
