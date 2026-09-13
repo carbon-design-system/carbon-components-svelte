@@ -2,13 +2,19 @@
   import { Button, ImageLoader } from "carbon-components-svelte";
 
   const images = [
-    "https://upload.wikimedia.org/wikipedia/commons/1/1b/Svelte_Logo.svg",
-    "https://upload.wikimedia.org/wikipedia/commons/b/b9/Carbon-design-system-logo.png",
+    {
+      src: "https://upload.wikimedia.org/wikipedia/commons/1/1b/Svelte_Logo.svg",
+      alt: "Svelte logo",
+    },
+    {
+      src: "https://upload.wikimedia.org/wikipedia/commons/b/b9/Carbon-design-system-logo.png",
+      alt: "Carbon Design System logo",
+    },
   ];
 
   let index = 0;
 
-  $: src = images[index];
+  $: image = images[index];
 </script>
 
 <Button
@@ -21,5 +27,5 @@
 </Button>
 
 <div style:margin-top="1rem" style:width="100%" style:max-width="120px">
-  <ImageLoader ratio="1x1" fadeIn {src} alt={src} />
+  <ImageLoader ratio="1x1" fadeIn src={image.src} alt={image.alt} />
 </div>
