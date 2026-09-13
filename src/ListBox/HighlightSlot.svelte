@@ -7,9 +7,9 @@
   export let optionId;
 
   const cursor = getContext(HIGHLIGHT_CURSOR_KEY);
-  const highlightedIdStore = cursor?.highlightedId ?? readable(null);
+  const highlightedId = cursor?.highlightedId ?? readable(null);
 
-  $: highlighted = $highlightedIdStore === optionId;
+  $: highlighted = $highlightedId === optionId;
 </script>
 
 <slot {highlighted} />
