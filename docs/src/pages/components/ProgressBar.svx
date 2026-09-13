@@ -1,5 +1,5 @@
 ---
-description: Progress bars visually indicate the progress of operations like file uploads or data processing. They support determinate and indeterminate states, sizes, and status indicators.
+description: Progress bars indicate the progress of an operation, such as a file upload or data processing, with determinate and indeterminate states, sizes, and status indicators.
 ---
 
 <script>

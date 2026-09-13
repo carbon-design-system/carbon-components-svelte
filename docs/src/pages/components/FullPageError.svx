@@ -1,6 +1,6 @@
 ---
 components: ["FullPageError"]
-description: Display a full-page error when the requested page is unavailable to the user, typically caused by issues with the requested URL or access permissions.
+description: A full-page error notifies the user that a requested page is unavailable, typically due to an invalid URL or insufficient access permissions.
 ---
 
 <script>

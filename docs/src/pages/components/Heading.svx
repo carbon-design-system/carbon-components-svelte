@@ -1,6 +1,6 @@
 ---
 components: ["Heading", "Section"]
-description: Heading and Section components automatically manage semantic heading hierarchy, adjusting heading levels (h1–h6) to section nesting depth for accessible document structure.
+description: Heading and Section automatically manage semantic heading hierarchy, adjusting each heading's level to its nesting depth for accessible documents.
 ---
 
 <script>

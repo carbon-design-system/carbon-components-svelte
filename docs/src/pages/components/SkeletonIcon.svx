@@ -1,5 +1,5 @@
 ---
-description: Skeleton icon provides a loading-state placeholder sized to match icons.
+description: Skeleton icons provide a loading-state placeholder sized to match icons.
 ---
 
 <script>
