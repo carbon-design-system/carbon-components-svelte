@@ -13,7 +13,7 @@ description: Copy inputs display a read-only value in a text field with a built-
 
 Set `value` to the string to show and copy. For install commands, see [CodeSnippet](/components/CodeSnippet); for display-only values, use [TextInput](/components/TextInput#read-only).
 
-<CopyInput labelText="API endpoint" value="https://api.example.com/v1" />
+<CopyInput labelText="API endpoint" value="https://api.acme.io/v1" />
 
 ## Custom label
 
@@ -31,7 +31,7 @@ tooltip icon.
 
 Set `selectOnFocus` to select the full value when the field receives focus.
 
-<CopyInput selectOnFocus labelText="API endpoint" value="https://api.example.com/v1" />
+<CopyInput selectOnFocus labelText="API endpoint" value="https://api.acme.io/v1" />
 
 ## Async copy
 
@@ -104,7 +104,7 @@ Set `disabled` to disable the input and copy button.
 
 ## Light
 
-<CopyInput light labelText="API endpoint" value="https://api.example.com/v1" />
+<CopyInput light labelText="API endpoint" value="https://api.acme.io/v1" />
 
 ## Custom feedback
 
@@ -120,13 +120,13 @@ Set `feedback` to customize the message shown after copying. Set `errorFeedback`
 
 Set `feedbackIcon` to show a different icon while feedback is visible. The copy icon returns when feedback closes.
 
-<CopyInput labelText="API endpoint" value="https://api.example.com/v1" feedbackIcon={Checkmark} />
+<CopyInput labelText="API endpoint" value="https://api.acme.io/v1" feedbackIcon={Checkmark} />
 
 ### Duration
 
 Set `feedbackTimeout` to change how long the feedback stays visible, in milliseconds. Defaults to `2000`.
 
-<CopyInput labelText="API endpoint" value="https://api.example.com/v1" feedbackTimeout={5000} />
+<CopyInput labelText="API endpoint" value="https://api.acme.io/v1" feedbackTimeout={5000} />
 
 ## Copy behavior
 
@@ -154,13 +154,13 @@ On hover or focus, the copy button shows a tooltip with `iconDescription`. It re
 
 Set `tooltipPosition` to place the tooltip relative to the copy button. Accepts `"top"`, `"right"`, `"bottom"` (default), and `"left"`.
 
-<CopyInput labelText="API endpoint" value="https://api.example.com/v1" tooltipPosition="left" />
+<CopyInput labelText="API endpoint" value="https://api.acme.io/v1" tooltipPosition="left" />
 
 ### Alignment
 
 Set `tooltipAlignment` to align the tooltip relative to the copy button. Accepts `"start"`, `"center"` (default), and `"end"`.
 
-<CopyInput labelText="API endpoint" value="https://api.example.com/v1" tooltipAlignment="end" />
+<CopyInput labelText="API endpoint" value="https://api.acme.io/v1" tooltipAlignment="end" />
 
 ## Portal tooltip
 
