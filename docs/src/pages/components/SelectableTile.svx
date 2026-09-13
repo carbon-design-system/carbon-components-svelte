@@ -11,15 +11,15 @@ description: Selectable tiles provide a tile-based interface for choosing multip
 
 Group multiple selectable tiles together for multi-selection scenarios.
 
-<SelectableTileGroup legendText="Select options" name="options" selected={["option1", "option2"]}>
-  <SelectableTile value="option1">
-    Multi-select Tile
+<SelectableTileGroup legendText="Deployment regions" name="options" selected={["us-east-1", "us-west-2"]}>
+  <SelectableTile value="us-east-1">
+    US East (N. Virginia)
   </SelectableTile>
-  <SelectableTile value="option2">
-    Multi-select Tile
+  <SelectableTile value="us-west-2">
+    US West (Oregon)
   </SelectableTile>
-  <SelectableTile value="option3">
-    Multi-select Tile
+  <SelectableTile value="eu-central-1">
+    EU Central (Frankfurt)
   </SelectableTile>
 </SelectableTileGroup>
 
@@ -43,16 +43,16 @@ Bind to `selected` for simpler state management.
 
 Use the `legendChildren` slot on `SelectableTileGroup` to provide custom legend content instead of `legendText`.
 
-<SelectableTileGroup name="options-legend-slot" selected={["option1", "option2"]}>
-  <strong slot="legendChildren">Select options</strong>
-  <SelectableTile value="option1">
-    Multi-select Tile
+<SelectableTileGroup name="options-legend-slot" selected={["us-east-1", "us-west-2"]}>
+  <strong slot="legendChildren">Deployment regions</strong>
+  <SelectableTile value="us-east-1">
+    US East (N. Virginia)
   </SelectableTile>
-  <SelectableTile value="option2">
-    Multi-select Tile
+  <SelectableTile value="us-west-2">
+    US West (Oregon)
   </SelectableTile>
-  <SelectableTile value="option3">
-    Multi-select Tile
+  <SelectableTile value="eu-central-1">
+    EU Central (Frankfurt)
   </SelectableTile>
 </SelectableTileGroup>
 
@@ -60,15 +60,15 @@ Use the `legendChildren` slot on `SelectableTileGroup` to provide custom legend 
 
 Hide the legend visually by setting `hideLegend` to `true`. The legend remains available to screen readers.
 
-<SelectableTileGroup hideLegend legendText="Select options" name="options-hidden-legend" selected={["option1"]}>
-  <SelectableTile value="option1">
-    Multi-select Tile
+<SelectableTileGroup hideLegend legendText="Deployment regions" name="options-hidden-legend" selected={["us-east-1"]}>
+  <SelectableTile value="us-east-1">
+    US East (N. Virginia)
   </SelectableTile>
-  <SelectableTile value="option2">
-    Multi-select Tile
+  <SelectableTile value="us-west-2">
+    US West (Oregon)
   </SelectableTile>
-  <SelectableTile value="option3">
-    Multi-select Tile
+  <SelectableTile value="eu-central-1">
+    EU Central (Frankfurt)
   </SelectableTile>
 </SelectableTileGroup>
 
@@ -76,15 +76,15 @@ Hide the legend visually by setting `hideLegend` to `true`. The legend remains a
 
 Use the light variant for light backgrounds.
 
-<SelectableTileGroup legendText="Select options" name="options-light" selected={["option1", "option2"]}>
-  <SelectableTile light value="option1">
-    Multi-select Tile
+<SelectableTileGroup legendText="Deployment regions" name="options-light" selected={["us-east-1", "us-west-2"]}>
+  <SelectableTile light value="us-east-1">
+    US East (N. Virginia)
   </SelectableTile>
-  <SelectableTile light value="option2">
-    Multi-select Tile
+  <SelectableTile light value="us-west-2">
+    US West (Oregon)
   </SelectableTile>
-  <SelectableTile light value="option3">
-    Multi-select Tile
+  <SelectableTile light value="eu-central-1">
+    EU Central (Frankfurt)
   </SelectableTile>
 </SelectableTileGroup>
 
@@ -96,15 +96,15 @@ Disable specific tiles, or the entire group, to prevent selection.
 
 Disable specific tiles to prevent interaction.
 
-<SelectableTileGroup legendText="Select options" name="options-disabled" selected={["option1"]}>
-  <SelectableTile value="option1">
-    Multi-select Tile
+<SelectableTileGroup legendText="Deployment regions" name="options-disabled" selected={["us-east-1"]}>
+  <SelectableTile value="us-east-1">
+    US East (N. Virginia)
   </SelectableTile>
-  <SelectableTile disabled value="option2">
-    Multi-select Tile
+  <SelectableTile disabled value="us-west-2">
+    US West (Oregon)
   </SelectableTile>
-  <SelectableTile disabled value="option3">
-    Multi-select Tile
+  <SelectableTile disabled value="eu-central-1">
+    EU Central (Frankfurt)
   </SelectableTile>
 </SelectableTileGroup>
 
@@ -112,15 +112,15 @@ Disable specific tiles to prevent interaction.
 
 Disable every tile at once by setting `disabled` on `SelectableTileGroup`. This prevents selection natively through the underlying `fieldset`, but doesn't apply the muted disabled tile styling shown above—set `disabled` on each `SelectableTile` too for the visual state.
 
-<SelectableTileGroup legendText="Select options" name="options-disabled-group" selected={["option1", "option2"]} disabled>
-  <SelectableTile value="option1">
-    Multi-select Tile
+<SelectableTileGroup legendText="Deployment regions" name="options-disabled-group" selected={["us-east-1", "us-west-2"]} disabled>
+  <SelectableTile value="us-east-1">
+    US East (N. Virginia)
   </SelectableTile>
-  <SelectableTile value="option2">
-    Multi-select Tile
+  <SelectableTile value="us-west-2">
+    US West (Oregon)
   </SelectableTile>
-  <SelectableTile value="option3">
-    Multi-select Tile
+  <SelectableTile value="eu-central-1">
+    EU Central (Frankfurt)
   </SelectableTile>
 </SelectableTileGroup>
 
@@ -128,14 +128,14 @@ Disable every tile at once by setting `disabled` on `SelectableTileGroup`. This 
 
 Customize the ARIA label announced for a tile's checkmark icon with `iconDescription`. Defaults to `"Tile checkmark"`.
 
-<SelectableTileGroup legendText="Select options" name="options-checkmark-label" selected={["option1"]}>
-  <SelectableTile iconDescription="Option 1 selected" value="option1">
-    Multi-select Tile
+<SelectableTileGroup legendText="Deployment regions" name="options-checkmark-label" selected={["us-east-1"]}>
+  <SelectableTile iconDescription="US East (N. Virginia) selected" value="us-east-1">
+    US East (N. Virginia)
   </SelectableTile>
-  <SelectableTile value="option2">
-    Multi-select Tile
+  <SelectableTile value="us-west-2">
+    US West (Oregon)
   </SelectableTile>
-  <SelectableTile value="option3">
-    Multi-select Tile
+  <SelectableTile value="eu-central-1">
+    EU Central (Frankfurt)
   </SelectableTile>
 </SelectableTileGroup>
