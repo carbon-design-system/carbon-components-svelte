@@ -76,6 +76,10 @@
   .#{$prefix}--big-number__trend-icon--error {
     fill: $support-error;
   }
+
+  .#{$prefix}--big-number__trend-icon--neutral {
+    fill: $icon-secondary;
+  }
 }
 
 @include exports("big-number") {
