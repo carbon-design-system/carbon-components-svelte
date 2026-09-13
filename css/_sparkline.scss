@@ -1,0 +1,50 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Sparkline (absent from v10): a dependency-free inline SVG line or bar
+/// chart sized to sit inside a stat tile.
+/// @access private
+/// @group components
+@mixin sparkline {
+  .#{$prefix}--sparkline {
+    display: inline-block;
+    vertical-align: middle;
+    overflow: visible;
+  }
+
+  .#{$prefix}--sparkline__line {
+    fill: none;
+    stroke: currentColor;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+  .#{$prefix}--sparkline__area {
+    fill: currentColor;
+    fill-opacity: 0.1;
+  }
+
+  .#{$prefix}--sparkline__bar {
+    fill: currentColor;
+  }
+
+  .#{$prefix}--sparkline--interactive {
+    color: $interactive-04;
+  }
+
+  .#{$prefix}--sparkline--neutral {
+    color: $icon-secondary;
+  }
+
+  .#{$prefix}--sparkline--success {
+    color: $support-success;
+  }
+
+  .#{$prefix}--sparkline--error {
+    color: $support-error;
+  }
+}
+
+@include exports("sparkline") {
+  @include sparkline;
+}

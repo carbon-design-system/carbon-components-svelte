@@ -118,7 +118,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
   },
   {
     label: "Data visualization",
-    components: ["BigNumber", "DeltaIndicator", "Meter"],
+    components: ["BigNumber", "DeltaIndicator", "Meter", "Sparkline"],
   },
   {
     label: "Loading",
