@@ -3,7 +3,7 @@
 
   const items = Array.from({ length: 10_000 }, (_, i) => ({
     id: i,
-    text: `Item ${i + 1}`,
+    text: `Account ${i + 1}`,
   }));
 
   let selectedIds = [1000];
@@ -13,7 +13,7 @@
 <Stack gap={5}>
   <MultiSelect
     filterable
-    labelText="Virtualized MultiSelect (10,000 items)"
+    labelText="Customer accounts (10,000)"
     {items}
     bind:selectedIds
   />
