@@ -100,7 +100,7 @@ Prefetch on hover with `on:mouseenter:copy-button` on the copy control. The exam
 
 ### Override
 
-Pass a custom function to `copy` to override the default copy behavior.
+Pass a function to `copy` to replace the default Clipboard API behavior.
 
 This example uses [clipboard-copy](https://github.com/feross/clipboard-copy) to copy the text instead of the default Clipboard API.
 
@@ -108,7 +108,7 @@ This example uses [clipboard-copy](https://github.com/feross/clipboard-copy) to 
 
 ### Prevent
 
-Pass a no-op function to `copy` to disable copying.
+Set `copy` to a no-op function to disable copying.
 
 <CodeSnippet code="npm i carbon-components-svelte" copy={() => {}} />
 
@@ -118,14 +118,13 @@ Customize the message, icon, and duration shown after copying.
 
 ### Text
 
-Set `feedback` to customize the copy button feedback text. Set `errorFeedback` to customize the message shown when copying fails (default `"Failed to copy"`).
+Set `feedback` to customize the message shown after copying. Set `errorFeedback` to customize the message shown when copying fails (default `"Failed to copy"`).
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetFeedback" />
 
 ### Icon
 
-Set `feedbackIcon` to swap the copy button icon during the feedback window. Applies
-to `"single"` and `"multi"` types; has no effect on `"inline"`.
+Set `feedbackIcon` to show a different icon while feedback is visible. The copy icon returns when feedback closes. Applies to `"single"` and `"multi"` types; has no effect on `"inline"`.
 
 <CodeSnippet code="npm i carbon-components-svelte" feedbackIcon={Checkmark} />
 
