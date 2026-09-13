@@ -220,9 +220,9 @@
 >
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-  <!-- svelte-ignore a11y_interactive_supports_focus -->
   <div
     bind:this={innerModalRef}
+    tabindex="-1"
     role="dialog"
     aria-modal="true"
     aria-label={$$props["aria-label"] ?? ($label || $title || undefined)}

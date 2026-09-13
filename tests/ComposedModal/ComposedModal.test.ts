@@ -29,6 +29,7 @@ describe("ComposedModal", () => {
     expect(modal).toBeInTheDocument();
     expect(modal).toHaveClass("bx--modal-container");
     expect(modal).toHaveAttribute("aria-modal", "true");
+    expect(modal).toHaveAttribute("tabindex", "-1");
     expect(screen.getByText("Test Modal")).toBeInTheDocument();
   });
 
