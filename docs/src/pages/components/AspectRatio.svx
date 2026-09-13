@@ -91,7 +91,7 @@ Wrap content like tiles, images, or videos in an aspect ratio container to maint
 Wrap a tile or other content in an aspect ratio container to maintain proportions. Content that should fill the container, like a `Tile`, needs `height: 100%` since the container's own height is derived from padding rather than a fixed size.
 
 <AspectRatio ratio="16x9">
-  <Tile style="height: 100%">Content</Tile>
+  <Tile style="height: 100%">Incident postmortem recording — Q3 outage</Tile>
 </AspectRatio>
 
 ### Grid columns
