@@ -12,7 +12,7 @@ description: Text areas provide a multi-line field for longer text like descript
 
 Create a basic textarea with a label and placeholder text.
 
-<TextArea labelText="App description" placeholder="Enter a description..." />
+<TextArea labelText="Incident summary" placeholder="Describe what happened, the impact, and any mitigation steps taken so far..." />
 
 ## Rows and columns
 
@@ -22,45 +22,45 @@ Control the visible size of the textarea.
 
 Adjust visible rows with `rows`. The default is `4`.
 
-<TextArea rows={10} labelText="App description" placeholder="Enter a description..." />
+<TextArea rows={10} labelText="Incident summary" placeholder="Describe what happened, the impact, and any mitigation steps taken so far..." />
 
 ### Columns
 
 Adjust visible columns with `cols`. Setting `cols` disables the default resize handle; override this with the `resize` style property.
 
-<TextArea cols={40} labelText="App description" placeholder="Enter a description..." />
+<TextArea cols={40} labelText="Incident summary" placeholder="Describe what happened, the impact, and any mitigation steps taken so far..." />
 
 ## Maximum character count
 
 Specify the max character count with `maxCount`. A character counter appears to the right of the label. Use the native maxlength attribute instead if you prefer not to show a counter.
 
-<TextArea labelText="App description" placeholder="Enter a description..." maxCount={100} />
+<TextArea labelText="Incident summary" placeholder="Describe what happened, the impact, and any mitigation steps taken so far..." maxCount={100} />
 
 ## Helper text
 
 Add helper text below the textarea to provide additional context or instructions.
 
-<TextArea labelText="App description" helperText="A rich description helps us better recommend related products and services" placeholder="Enter a description..." />
+<TextArea labelText="Deployment notes" helperText="Include the rollback plan and any risks the on-call engineer should know about" placeholder="Summarize what changed and why..." />
 
 ## Hidden label
 
 Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
 
-<TextArea hideLabel labelText="App description" placeholder="Enter a description..." />
+<TextArea hideLabel labelText="Internal note" placeholder="Add a note visible only to the support team..." />
 
 ## Custom label
 
 Use the `labelChildren` slot to provide custom label content.
 
-<TextArea labelText="" placeholder="Enter a description...">
-  <strong slot="labelChildren">App description</strong>
+<TextArea labelText="" placeholder="Describe what happened, the impact, and any mitigation steps taken so far...">
+  <strong slot="labelChildren">Incident summary</strong>
 </TextArea>
 
 ## Light
 
 Enable the light variant with `light`.
 
-<TextArea light labelText="App description" placeholder="Enter a description..." />
+<TextArea light labelText="Incident summary" placeholder="Describe what happened, the impact, and any mitigation steps taken so far..." />
 
 ## Fluid
 
@@ -68,24 +68,24 @@ Set `fluid` to embed the label inside the field. Fluid text areas work
 standalone or inside [FluidForm](/components/FluidForm), which applies the
 variant automatically.
 
-<TextArea fluid labelText="App description" placeholder="Enter a description..." />
+<TextArea fluid labelText="Change request justification" placeholder="Explain why this change is needed and the impact of delaying it..." />
 
 ### Maximum character count
 
 The character counter sits at the trailing edge of the field, opposite the
 embedded label.
 
-<TextArea fluid labelText="App description" placeholder="Enter a description..." maxCount={100} />
+<TextArea fluid labelText="Change request justification" placeholder="Explain why this change is needed and the impact of delaying it..." maxCount={100} />
 
 ### Custom label
 
 Use the `labelChildren` slot to render custom label content, such as a
 tooltip icon.
 
-<TextArea fluid labelText="App description" placeholder="Enter a description...">
+<TextArea fluid labelText="Change request justification" placeholder="Explain why this change is needed and the impact of delaying it...">
   <svelte:fragment slot="labelChildren">
-    App description
-    <TooltipIcon tooltipText="A rich description helps us better recommend related products and services." icon={Information} />
+    Change request justification
+    <TooltipIcon tooltipText="Include the business impact and urgency to help the approver prioritize this request." icon={Information} />
   </svelte:fragment>
 </TextArea>
 
@@ -94,23 +94,23 @@ tooltip icon.
 Fluid text areas display the error message inside the field boundary. Long
 messages wrap to multiple lines.
 
-<TextArea fluid invalid invalidText="Only plain text characters are allowed. HTML tags, markdown formatting, and special characters will be stripped from your submission." labelText="App description" placeholder="Enter a description..." />
+<TextArea fluid invalid invalidText="Justification must be at least 20 characters. HTML tags, markdown formatting, and special characters will be stripped from your submission." labelText="Change request justification" placeholder="Explain why this change is needed and the impact of delaying it..." />
 
 ### Warning
 
-<TextArea fluid warn warnText="This description is shorter than recommended for product listings" labelText="App description" placeholder="Enter a description..." />
+<TextArea fluid warn warnText="This justification is shorter than typically approved for high-risk changes" labelText="Change request justification" placeholder="Explain why this change is needed and the impact of delaying it..." />
 
 ### Disabled
 
 Invalid and warning states are not displayed while the text area is disabled.
 
-<TextArea fluid disabled invalid invalidText="Only plain text characters are allowed" labelText="App description" placeholder="Enter a description..." />
+<TextArea fluid disabled invalid invalidText="Justification must be at least 20 characters" labelText="Change request justification" placeholder="Explain why this change is needed and the impact of delaying it..." />
 
 ### Read-only
 
 Invalid and warning states are not displayed while the text area is read-only.
 
-<TextArea fluid readonly warn warnText="This description is shorter than recommended" labelText="App description" value="I'm read-only" />
+<TextArea fluid readonly warn warnText="This justification is shorter than typically approved" labelText="Change request justification" value="Rolling back the payments-service deployment due to elevated error rates." />
 
 ### Skeleton
 
@@ -126,25 +126,25 @@ Reflect validation and interaction states.
 
 Show validation errors with `invalid` and a message in `invalidText`.
 
-<TextArea invalid invalidText="Only plain text characters are allowed" labelText="App description" placeholder="Enter a description..." />
+<TextArea invalid invalidText="Summary must be at least 20 characters" labelText="Incident summary" placeholder="Describe what happened, the impact, and any mitigation steps taken so far..." />
 
 ### Warning
 
 Show a warning with `warn` and a message in `warnText`.
 
-<TextArea warn warnText="This description is shorter than recommended" labelText="App description" placeholder="Enter a description..." />
+<TextArea warn warnText="This summary is shorter than recommended for a post-incident review" labelText="Incident summary" placeholder="Describe what happened, the impact, and any mitigation steps taken so far..." />
 
 ### Disabled
 
 Disable the textarea with `disabled`.
 
-<TextArea disabled labelText="App description" placeholder="Enter a description..." />
+<TextArea disabled labelText="Incident summary" placeholder="Describe what happened, the impact, and any mitigation steps taken so far..." />
 
 ### Read-only
 
 Display a non-editable value with `readonly`.
 
-<TextArea readonly labelText="App description" value="I'm read-only" />
+<TextArea readonly labelText="Incident summary" value="Database connection pool exhausted during peak traffic; scaled up replicas to mitigate." />
 
 ## Skeleton
 
