@@ -10,8 +10,8 @@ description: Tooltip definitions show an inline tooltip for a defined term on ho
 
 Display a basic definition tooltip with the default bottom-center alignment.
 
-<TooltipDefinition tooltipText="IBM Corporate Headquarters is based in Armonk, New York.">
-  Armonk
+<TooltipDefinition tooltipText="Single sign-on: one login for all connected applications.">
+  SSO
 </TooltipDefinition>
 
 ## Placement
@@ -55,16 +55,16 @@ Control how and when the tooltip opens.
 
 Open the tooltip on click instead of hover with `clickToOpen`.
 
-<TooltipDefinition clickToOpen tooltipText="IBM Corporate Headquarters is based in Armonk, New York.">
-  Armonk
+<TooltipDefinition clickToOpen tooltipText="Single sign-on: one login for all connected applications.">
+  SSO
 </TooltipDefinition>
 
 ### Open by default
 
 Open the tooltip by default with `open`.
 
-<TooltipDefinition open tooltipText="IBM Corporate Headquarters is based in Armonk, New York.">
-  Armonk
+<TooltipDefinition open tooltipText="Single sign-on: one login for all connected applications.">
+  SSO
 </TooltipDefinition>
 
 ## Reactive example
@@ -84,7 +84,7 @@ The component dispatches `open` and `close` events.
 Customize hover delays with `enterDelayMs` and `leaveDelayMs`. Defaults are 100ms and 300ms.
 
 <TooltipDefinition tooltipText="Slow to appear" enterDelayMs={500} leaveDelayMs={500}>
-  Armonk
+  SSO
 </TooltipDefinition>
 
 ## Custom tooltip slot
@@ -92,9 +92,9 @@ Customize hover delays with `enterDelayMs` and `leaveDelayMs`. Defaults are 100m
 Use the `tooltip` slot to customize tooltip content with additional styling or structure.
 
 <TooltipDefinition>
-  Armonk
+  SSO
   <span slot="tooltip" style="color: red">
-    IBM Corporate Headquarters is based in Armonk, New York.
+    Single sign-on: one login for all connected applications.
   </span>
 </TooltipDefinition>
 
@@ -102,8 +102,8 @@ Use the `tooltip` slot to customize tooltip content with additional styling or s
 
 Set `portalTooltip` to render the tooltip in a portal so it is not clipped by overflow containers. This is enabled automatically inside a Modal. Alignment matches the non-portal path.
 
-<TooltipDefinition portalTooltip tooltipText="IBM Corporate Headquarters is based in Armonk, New York.">
-  Armonk
+<TooltipDefinition portalTooltip tooltipText="Single sign-on: one login for all connected applications.">
+  SSO
 </TooltipDefinition>
 
 ### Directions

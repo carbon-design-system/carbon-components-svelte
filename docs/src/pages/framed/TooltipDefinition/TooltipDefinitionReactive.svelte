@@ -9,9 +9,9 @@
     <TooltipDefinition
       align="start"
       bind:open
-      tooltipText="IBM Corporate Headquarters is based in Armonk, New York."
+      tooltipText="Single sign-on: one login for all connected applications."
     >
-      Armonk
+      SSO
     </TooltipDefinition>
   </div>
   <div>
