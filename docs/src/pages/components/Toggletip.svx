@@ -13,7 +13,8 @@ description: Toggletips display contextual content in a popover that is toggled 
 Unlike a tooltip, a toggletip opens and closes on click. Click the button to toggle the content. Press <DocKbd label="Escape" /> or click outside to close it.
 
 <Toggletip>
-  Custom toggletip content with a longer description that wraps onto multiple lines.
+  API keys are limited to 1,000 requests per minute. Requests beyond this
+  limit return an HTTP 429 status until the next window.
 </Toggletip>
 
 ## Reactive example
@@ -30,8 +31,8 @@ Customize the toggletip's visible label and the button's accessible name.
 
 Render an inline label beside the button using the `labelText` prop.
 
-<Toggletip labelText="Setting">
-  This setting controls how items are displayed.
+<Toggletip labelText="Density">
+  Controls the row height and spacing across tables in this workspace.
 </Toggletip>
 
 ### Label slot
@@ -39,16 +40,16 @@ Render an inline label beside the button using the `labelText` prop.
 Alternatively, use the `"labelText"` slot for custom markup.
 
 <Toggletip>
-  <span slot="labelText"><strong>Setting</strong></span>
-  This setting controls how items are displayed.
+  <span slot="labelText"><strong>Density</strong></span>
+  Controls the row height and spacing across tables in this workspace.
 </Toggletip>
 
 ### Accessible label
 
 Set the button's ARIA label with `iconDescription`. It defaults to `"Show information"`.
 
-<Toggletip iconDescription="Additional information">
-  The button has a custom ARIA label.
+<Toggletip iconDescription="Density settings">
+  Controls the row height and spacing across tables in this workspace.
 </Toggletip>
 
 ## Actions
@@ -56,10 +57,11 @@ Set the button's ARIA label with `iconDescription`. It defaults to `"Show inform
 Use `ToggletipFooter` to render one or two actions at the base of the content.
 
 <Toggletip>
-  Custom toggletip content with actions.
+  Your billing cycle renews on the 1st of each month. Usage-based charges
+  are calculated at the end of the cycle.
   <ToggletipFooter>
-    <Link href="#">Link action</Link>
-    <Button size="small">Button</Button>
+    <Link href="#">View invoices</Link>
+    <Button size="small">Manage billing</Button>
   </ToggletipFooter>
 </Toggletip>
 
@@ -69,17 +71,19 @@ Use `ToggletipFooter` to render one or two actions at the base of the content.
 
 Pass an icon component to the `icon` prop.
 
-<Toggletip icon={Add} iconDescription="Add">
-  The button renders a custom icon.
+<Toggletip icon={Add} iconDescription="Add environment variable">
+  Environment variables are encrypted at rest and injected into your build
+  at deploy time.
 </Toggletip>
 
 ### Slot
 
 Alternatively, use the `"icon"` slot.
 
-<Toggletip iconDescription="Add">
+<Toggletip iconDescription="Add environment variable">
   <Add slot="icon" />
-  The button renders a custom icon.
+  Environment variables are encrypted at rest and injected into your build
+  at deploy time.
 </Toggletip>
 
 ## Placement
@@ -109,7 +113,8 @@ Set `portalTooltip` to render the content in a portal so it is not clipped by `o
 
 <Box padding={5} border="subtle" maxWidth="8rem" style="overflow: hidden;">
   <Toggletip portalTooltip>
-    This content escapes the clipping container via a portal.
+    Deleting this workspace also removes its API keys, webhooks, and audit
+    logs.
   </Toggletip>
 </Box>
 
