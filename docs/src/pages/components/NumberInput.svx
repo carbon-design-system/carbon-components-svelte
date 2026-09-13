@@ -58,7 +58,7 @@ silently clamping. Add `invalidText` for an error message.
 Control increment and decrement step size with `step`. This example uses a step
 of 0.1.
 
-<NumberInput value="{1}" helperText="Step of 0.1" step={0.1} labelText="Clusters" />
+<NumberInput value="{1}" helperText="Step of 0.1" step={0.1} labelText="CPU cores allocated" />
 
 ### Step start
 
@@ -262,7 +262,7 @@ Reflect validation and interaction states.
 
 Indicate an invalid value by setting `invalid` to `true`. This example shows a validation error.
 
-<NumberInput invalid invalidText="Invalid value" labelText="Clusters" value={0} />
+<NumberInput invalid invalidText="Enter a valid cluster count" labelText="Clusters" value={0} />
 
 ### Warning
 
