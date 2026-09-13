@@ -11,12 +11,12 @@
   let open = false;
 </script>
 
-<Button on:click={() => (open = true)}>Invite someone</Button>
+<Button on:click={() => (open = true)}>Invite teammate</Button>
 
 <ComposedModal bind:open on:submit={() => (open = false)}>
-  <ModalHeader title="Invite someone" />
+  <ModalHeader title="Invite teammate" />
   <ModalBody>
-    <p>Do you really want to invite someone?</p>
+    <p>An email invitation with a link to join the workspace will be sent.</p>
   </ModalBody>
   <ModalFooter
     primaryButtonText="Send invitation"
