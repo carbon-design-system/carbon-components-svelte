@@ -69,7 +69,7 @@
   /**
    * @type {import("svelte/store").Writable<number>}
    */
-  const currentIndex = writable(-1);
+  const focusedIndex = writable(-1);
   const hasPopup = writable(false);
   /**
    * @type {import("svelte/store").Writable<number>}
@@ -99,7 +99,7 @@
     dispatch("close", { trigger });
   }
 
-  /** @type {(e: MouseEvent) => void} */
+  /** @type {(event: MouseEvent) => void} */
   function openMenu(event) {
     event.preventDefault();
     const { height, width } = ref.getBoundingClientRect();
@@ -157,7 +157,7 @@
 
   setContext("carbon:ContextMenu", {
     menuOffsetX,
-    currentIndex,
+    focusedIndex,
     position,
     close,
     setPopup,
@@ -181,7 +181,7 @@
   });
 
   $: level = ctx ? 2 : 1;
-  $: currentIndex.set(focusIndex);
+  $: focusedIndex.set(focusIndex);
   $: menuAriaLabel = ($$props["aria-label"] ?? labelText) || undefined;
 
   function handleOutsideClick(event) {
