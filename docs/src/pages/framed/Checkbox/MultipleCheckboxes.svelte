@@ -1,7 +1,7 @@
 <script>
   import { Button, Checkbox, Stack } from "carbon-components-svelte";
 
-  let values = ["Apple", "Banana", "Coconut"];
+  let values = ["Production", "Staging", "Development"];
   let group = values.slice(0, 2);
 </script>
 
@@ -12,7 +12,7 @@
     {/each}
   </div>
 
-  <Button on:click={() => (group = ["Banana"])}>Set to ["Banana"]</Button>
+  <Button on:click={() => (group = ["Staging"])}>Set to ["Staging"]</Button>
 
   <div>
     <strong>Selected:</strong>
