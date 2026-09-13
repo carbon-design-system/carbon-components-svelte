@@ -9,18 +9,19 @@
     This container hides overflowing content. Without a portal, the modal would
     be clipped.
   </p>
-  <div><Button on:click={() => (open = true)}>Open modal</Button></div>
+  <div><Button on:click={() => (open = true)}>Deploy build #4213</Button></div>
   <Portal>
     <Modal
       bind:open
-      modalHeading="Modal in Portal"
-      primaryButtonText="Confirm"
+      modalHeading="Confirm deployment"
+      primaryButtonText="Deploy"
       secondaryButtonText="Cancel"
       on:click:button--secondary={() => (open = false)}
     >
       <p>
-        This modal is rendered in a portal, escaping the parent container's
-        overflow constraints and ensuring it appears above all other content.
+        Deploying build #4213 to production cannot be undone. This modal is
+        rendered in a portal, escaping the parent container's overflow
+        constraints and ensuring it appears above all other content.
       </p>
     </Modal>
   </Portal>

@@ -6,12 +6,12 @@
 
 <Stack gap={4}>
   <Tile>
-    <div>Portal is declared here.</div>
-    <Portal {target}><strong>Portalled content</strong></Portal>
+    <div>Widget declared in the sidebar.</div>
+    <Portal {target}><strong>3 incidents open</strong></Portal>
   </Tile>
   <Tile>
     <div bind:this={target}>
-      But mounted into this container via <code>target</code>.
+      But mounted into the dashboard's main panel via <code>target</code>.
     </div>
   </Tile>
 </Stack>

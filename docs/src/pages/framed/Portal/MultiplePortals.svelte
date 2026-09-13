@@ -7,17 +7,17 @@
 
 <ButtonSet>
   <Button on:click={() => (showPortal1 = !showPortal1)}>
-    {showPortal1 ? "Unmount portal 1" : "Mount portal 1"}
+    {showPortal1 ? "Hide system alert" : "Show system alert"}
   </Button>
   <Button on:click={() => (showPortal2 = !showPortal2)}>
-    {showPortal2 ? "Unmount portal 2" : "Mount portal 2"}
+    {showPortal2 ? "Hide maintenance notice" : "Show maintenance notice"}
   </Button>
 </ButtonSet>
 
 {#if showPortal1}
-  <Portal> Portal content 1 </Portal>
+  <Portal> System alert: API latency is elevated </Portal>
 {/if}
 
 {#if showPortal2}
-  <Portal> Portal content 2 </Portal>
+  <Portal> Maintenance notice: scheduled downtime at 2:00 AM UTC </Portal>
 {/if}
