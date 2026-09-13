@@ -254,10 +254,18 @@ Heading slugs are GitHub-style ([rehype-slug](https://github.com/rehypejs/rehype
 - Fix cross-page links: `grep -rn '<Component>#<old-anchor>' docs/src/pages`
 - To keep an anchor while grouping, demote the heading to `###` with its text unchanged — the slug is preserved. See `#selectable` / `#radio-group` in [`ContextMenu.svx`](docs/src/pages/components/ContextMenu.svx) and `Portal#custom-target`.
 
-Description language: imperative, prop-focused. See [Writing style](#writing-style) for Carbon content rules.
+Description language: lead with an imperative instruction when the section introduces a prop to set. Switch to a declarative sentence only to state resulting behavior, not a new action. See [Writing style](#writing-style) for Carbon content rules.
 
 - "Set `kind="secondary"` for secondary actions."
 - "Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers."
+- "Sortable columns support three directions: none, ascending, and descending." (declarative: describes behavior, not an action to take)
+
+Recurring section types should reuse the same template across every component page instead of drifting into per-page variants:
+
+- Sizes: "Set `size` to control {noun} height. The default is `{value}`."
+- States: "Reflect validation and interaction states."
+- Disabled: "Set `disabled` to `true` to prevent {user }interaction."
+- Skeleton: "Show a loading state with `{Component}Skeleton`." (or "Set `skeleton` to show a loading state." when there's no separate skeleton component)
 
 Typical section order (follow sibling sections on that page):
 
