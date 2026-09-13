@@ -1,0 +1,58 @@
+---
+components: ["Sparkline"]
+description: Sparkline renders a small inline line or bar chart, sized to sit inside a stat tile alongside a label and value.
+---
+
+<script>
+  import { Stack, Sparkline } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Create a sparkline with `values`, an array of numbers to plot. Set `label` to an accessible description of the series, such as "Requests per minute, last 24 hours", whenever the chart conveys information not stated elsewhere. Leave `label` empty to mark the chart as decorative.
+
+<Sparkline values={[4, 7, 3, 9, 5, 12, 8, 6, 10, 14, 9, 13]} label="Requests per minute, last 24 hours" />
+
+## Kinds
+
+Set `kind` to `"line"` or `"bar"` to choose how the series is drawn.
+
+### Line
+
+<Sparkline values={[4, 7, 3, 9, 5, 12, 8, 6, 10, 14, 9, 13]} kind="line" />
+
+### Bar
+
+<Sparkline values={[4, 7, 3, 9, 5, 12, 8, 6, 10, 14, 9, 13]} kind="bar" />
+
+## Colors
+
+Set `color` to `"interactive"`, `"neutral"`, `"success"`, or `"error"` to match the series to its meaning.
+
+<Stack gap={5}>
+  <Sparkline values={[4, 7, 3, 9, 5, 12, 8, 6, 10, 14, 9, 13]} color="interactive" />
+  <Sparkline values={[4, 7, 3, 9, 5, 12, 8, 6, 10, 14, 9, 13]} color="neutral" />
+  <Sparkline values={[4, 7, 3, 9, 5, 12, 8, 6, 10, 14, 9, 13]} color="success" />
+  <Sparkline values={[4, 7, 3, 9, 5, 12, 8, 6, 10, 14, 9, 13]} color="error" />
+</Stack>
+
+## Filled area
+
+Set `fill` to `true` to shade the area under a line sparkline.
+
+<Sparkline values={[4, 7, 3, 9, 5, 12, 8, 6, 10, 14, 9, 13]} kind="line" fill />
+
+## Fixed domain
+
+Set `min` and `max` to plot two sparklines against the same domain instead of each scaling to its own data, so their heights compare directly.
+
+<Stack gap={5}>
+  <Sparkline values={[2, 3, 4, 3, 5]} min={0} max={14} />
+  <Sparkline values={[9, 11, 8, 12, 13]} min={0} max={14} />
+</Stack>
+
+## Sizing
+
+Set `width` and `height` to change the viewBox dimensions. The svg also scales with a CSS width or height applied to it, since `preserveAspectRatio` is `"none"`.
+
+<Sparkline values={[4, 7, 3, 9, 5, 12, 8, 6, 10, 14, 9, 13]} width={160} height={40} />
