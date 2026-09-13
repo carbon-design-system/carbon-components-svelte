@@ -110,7 +110,7 @@ Set `size` to `"xl"` to render extra-large segments.
 
 ## Light
 
-Use the light variant for light-themed backgrounds by setting `light` to `true`.
+Use the light variant for light backgrounds.
 
 <PinCodeInput light labelText="Verification code" />
 

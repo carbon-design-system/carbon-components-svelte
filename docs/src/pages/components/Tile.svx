@@ -14,7 +14,7 @@ Create a basic tile container for your content.
 
 ## Light
 
-Use the light variant for light-themed backgrounds by setting `light` to `true`.
+Use the light variant for light backgrounds.
 
 <Tile light>Object storage — 82% capacity used</Tile>
 

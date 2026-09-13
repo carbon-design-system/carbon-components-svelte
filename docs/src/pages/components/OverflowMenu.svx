@@ -62,7 +62,7 @@ Set `direction` to `"top"` to position the menu above the button.
 
 ## Light
 
-Enable the light variant by setting `light` to `true`.
+Use the light variant for light backgrounds.
 
 <OverflowMenu light>
   <OverflowMenuItem text="Manage credentials" />

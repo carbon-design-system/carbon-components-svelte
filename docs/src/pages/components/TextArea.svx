@@ -58,7 +58,7 @@ Use the `labelChildren` slot to provide custom label content.
 
 ## Light
 
-Enable the light variant with `light`.
+Use the light variant for light backgrounds.
 
 <TextArea light labelText="Incident summary" placeholder="Describe what happened, the impact, and any mitigation steps taken so far..." />
 

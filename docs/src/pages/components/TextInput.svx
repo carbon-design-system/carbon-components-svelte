@@ -67,7 +67,7 @@ The bound valueâ€”and the event detail dispatched by `on:input` and `on:change`â
 
 ## Light
 
-Use the light variant for light-themed backgrounds with `light`.
+Use the light variant for light backgrounds.
 
 <TextInput light labelText="Workspace name" placeholder="Enter workspace name..." />
 
