@@ -3,19 +3,19 @@
 
   const nodes = [
     {
-      text: "Item 1",
+      text: "Engineering",
       nodes: [
         {
-          text: "Item 1a",
-          nodes: [{ text: "Item 1a-i" }],
+          text: "Platform team",
+          nodes: [{ text: "On-call lead" }],
         },
       ],
     },
     {
-      text: "Item 2",
-      nodes: [{ text: "Item 2a" }],
+      text: "Product",
+      nodes: [{ text: "Design" }],
     },
-    { text: "Item 3" },
+    { text: "Customer support" },
   ];
 </script>
 
