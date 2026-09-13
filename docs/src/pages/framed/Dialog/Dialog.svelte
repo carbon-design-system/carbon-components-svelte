@@ -4,11 +4,14 @@
   let open = false;
 </script>
 
-<Button on:click={() => (open = true)}>Open dialog</Button>
+<Button on:click={() => (open = true)}>View build logs</Button>
 
-<Dialog bind:open aria-label="Example dialog">
+<Dialog bind:open aria-label="Build logs">
   <Stack gap={5}>
-    <p>This dialog has no backdrop. The page behind it stays interactive.</p>
+    <p>
+      This panel has no backdrop, so you can keep watching the deployment queue
+      while it's open.
+    </p>
     <Button on:click={() => (open = false)}>Close</Button>
   </Stack>
 </Dialog>
