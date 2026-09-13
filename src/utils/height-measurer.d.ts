@@ -10,7 +10,7 @@ export type HeightMeasurerOptions = {
    * been measured, and the heights they replace. Only called when a report
    * differs from the heights already held.
    */
-  onMeasure: (heights: number[], previousHeights: number[]) => void;
+  onMeasure: (heights: number[], prevHeights: number[]) => void;
 };
 
 export type HeightMeasurer = {

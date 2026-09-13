@@ -32,19 +32,20 @@ import { moveIndex, nextEnabledIndex } from "./move-index.js";
  * @param {RovingFocusOptions} options
  */
 export function rovingFocus(node, options) {
-  let opts = options;
+  let currentOptions = options;
 
-  /** @param {HTMLElement} el */
-  function defaultIsDisabled(el) {
+  /** @param {HTMLElement} node */
+  function defaultIsDisabled(node) {
     return (
-      el.hasAttribute("disabled") || el.getAttribute("aria-disabled") === "true"
+      node.hasAttribute("disabled") ||
+      node.getAttribute("aria-disabled") === "true"
     );
   }
 
   function getItems() {
-    if (opts.getItems) return opts.getItems();
+    if (currentOptions.getItems) return currentOptions.getItems();
     return /** @type {HTMLElement[]} */ (
-      Array.from(node.querySelectorAll(opts.selector))
+      Array.from(node.querySelectorAll(currentOptions.selector))
     );
   }
 
@@ -53,12 +54,12 @@ export function rovingFocus(node, options) {
    * @param {number} direction
    */
   function moveBy(items, direction) {
-    const index = opts.getActiveIndex();
-    if (opts.skipDisabled) {
-      const isDisabled = opts.isDisabled ?? defaultIsDisabled;
+    const index = currentOptions.getActiveIndex();
+    if (currentOptions.skipDisabled) {
+      const isDisabled = currentOptions.isDisabled ?? defaultIsDisabled;
       return nextEnabledIndex({ items, index, step: direction, isDisabled });
     }
-    return opts.wrap === false
+    return currentOptions.wrap === false
       ? clampIndex(index, direction, items.length)
       : moveIndex(index, direction, items.length);
   }
@@ -68,10 +69,10 @@ export function rovingFocus(node, options) {
    * @param {1 | -1} direction - 1 for the first item, -1 for the last.
    */
   function edge(items, direction) {
-    if (!opts.skipDisabled) {
+    if (!currentOptions.skipDisabled) {
       return direction === 1 ? 0 : items.length - 1;
     }
-    const isDisabled = opts.isDisabled ?? defaultIsDisabled;
+    const isDisabled = currentOptions.isDisabled ?? defaultIsDisabled;
     return nextEnabledIndex({ items, index: -1, step: direction, isDisabled });
   }
 
@@ -80,9 +81,9 @@ export function rovingFocus(node, options) {
     const target = event.target;
     if (!(target instanceof Element)) return;
     // Item keydown, or keydown on `node` when the list itself is focused.
-    if (target !== node && !target.closest(opts.selector)) return;
+    if (target !== node && !target.closest(currentOptions.selector)) return;
 
-    const orientation = opts.orientation ?? "horizontal";
+    const orientation = currentOptions.orientation ?? "horizontal";
     const horizontal = orientation === "horizontal" || orientation === "both";
     const vertical = orientation === "vertical" || orientation === "both";
 
@@ -100,10 +101,10 @@ export function rovingFocus(node, options) {
       (vertical && event.key === "ArrowUp")
     ) {
       index = moveBy(items, -1);
-    } else if (opts.home !== false && event.key === "Home") {
+    } else if (currentOptions.home !== false && event.key === "Home") {
       event.preventDefault();
       index = edge(items, 1);
-    } else if (opts.end !== false && event.key === "End") {
+    } else if (currentOptions.end !== false && event.key === "End") {
       event.preventDefault();
       index = edge(items, -1);
     } else {
@@ -111,8 +112,8 @@ export function rovingFocus(node, options) {
     }
 
     if (index < 0) return;
-    opts.onMove?.(index, event);
-    if (opts.focusOnMove) items[index]?.focus();
+    currentOptions.onMove?.(index, event);
+    if (currentOptions.focusOnMove) items[index]?.focus();
   }
 
   node.addEventListener("keydown", handleKeydown);
@@ -120,7 +121,7 @@ export function rovingFocus(node, options) {
   return {
     /** @param {RovingFocusOptions} update */
     update(update) {
-      opts = update;
+      currentOptions = update;
     },
     destroy() {
       node.removeEventListener("keydown", handleKeydown);

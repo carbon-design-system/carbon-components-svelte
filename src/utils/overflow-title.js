@@ -2,8 +2,8 @@
 
 /**
  * Svelte action: set `title` while text overflows horizontally.
- * `params.title` wins over auto-detection, including `""`.
- * `params.measure` checks a descendant instead of `node`.
+ * `options.title` wins over auto-detection, including `""`.
+ * `options.measure` checks a descendant instead of `node`.
  *
  * Measurement is deferred to a microtask. Svelte 3/4 run actions inline while
  * mounting each item, so measuring synchronously forces one layout per item in
@@ -12,15 +12,15 @@
  * no measurement and is applied synchronously.
  *
  * @param {HTMLElement} node Element that gets the `title` attribute.
- * @param {import("./overflow-title.js").OverflowTitleParams} [params]
- * @returns {{ update: (params?: import("./overflow-title.js").OverflowTitleParams) => void, destroy: () => void }}
+ * @param {import("./overflow-title.js").OverflowTitleParams} [options]
+ * @returns {{ update: (options?: import("./overflow-title.js").OverflowTitleParams) => void, destroy: () => void }}
  * @example
  * <div use:overflowTitle>{text}</div>
  * <label use:overflowTitle={{ title, measure: labelText }}>...</label>
  */
-export function overflowTitle(node, params = {}) {
+export function overflowTitle(node, options = {}) {
   /** @type {import("./overflow-title.js").OverflowTitleParams} */
-  let latest = params;
+  let latest = options;
   let scheduled = false;
   let destroyed = false;
 
@@ -49,7 +49,7 @@ export function overflowTitle(node, params = {}) {
     queueMicrotask(measure);
   }
 
-  update(params);
+  update(options);
 
   return {
     update,

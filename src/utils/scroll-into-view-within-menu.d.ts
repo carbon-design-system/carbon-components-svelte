@@ -9,11 +9,11 @@
  * not scrollable.
  */
 /**
- * Scroll `el` into view within its nearest scroll container matching
+ * Scroll `node` into view within its nearest scroll container matching
  * `containerSelector` using `block: "nearest"` semantics. Never scrolls the
  * document.
  */
 export function scrollIntoViewWithinMenu(
-  el: HTMLElement,
+  node: HTMLElement,
   containerSelector?: string,
 ): void;

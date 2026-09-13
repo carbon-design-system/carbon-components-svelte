@@ -20,11 +20,11 @@ const selectorTabbable = `
 export function trapFocus({ container, event }) {
   const tabbable = /** @type {HTMLElement[]} */ (
     Array.from(container.querySelectorAll(selectorTabbable))
-  ).filter((el) => {
+  ).filter((node) => {
     // One call answers display/visibility for the element and its ancestors
     // without materialising a computed-style object per candidate.
-    if (typeof el.checkVisibility === "function") {
-      return el.checkVisibility({
+    if (typeof node.checkVisibility === "function") {
+      return node.checkVisibility({
         visibilityProperty: true,
         // Older name of the same option (Chrome 105 to 120).
         checkVisibilityCSS: true,
@@ -41,16 +41,16 @@ export function trapFocus({ container, event }) {
     // `offsetParent !== null` before trusting zero dimensions avoids
     // treating "no layout information" as "hidden".
     if (
-      el.offsetParent !== null &&
-      el.offsetWidth === 0 &&
-      el.offsetHeight === 0
+      node.offsetParent !== null &&
+      node.offsetWidth === 0 &&
+      node.offsetHeight === 0
     ) {
       return false;
     }
 
     // `visibility: hidden` elements keep their layout box, so this can only
     // be detected via computed style, not geometry.
-    const style = getComputedStyle(el);
+    const style = getComputedStyle(node);
     return style.visibility !== "hidden" && style.display !== "none";
   });
 

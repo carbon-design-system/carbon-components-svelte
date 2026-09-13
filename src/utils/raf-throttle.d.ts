@@ -6,5 +6,5 @@ export type RafThrottled<Fn extends (...args: unknown[]) => void> = ((
 
 /** Run `fn` at most once per frame; same-frame calls keep the latest arguments. */
 export function rafThrottle<Fn extends (...args: unknown[]) => void>(
-  fn: Fn,
+  callback: Fn,
 ): RafThrottled<Fn>;

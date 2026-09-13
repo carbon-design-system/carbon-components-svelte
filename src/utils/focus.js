@@ -36,18 +36,18 @@ export function initialFocus({
  */
 export function restoreFocus() {
   /** @type {HTMLElement | null} */
-  let previouslyFocusedElement = null;
+  let prevFocus = null;
   return {
     save() {
-      previouslyFocusedElement =
+      prevFocus =
         document.activeElement instanceof HTMLElement
           ? document.activeElement
           : null;
     },
     restore() {
-      if (previouslyFocusedElement?.isConnected) {
-        previouslyFocusedElement.focus();
-        previouslyFocusedElement = null;
+      if (prevFocus?.isConnected) {
+        prevFocus.focus();
+        prevFocus = null;
       }
     },
   };

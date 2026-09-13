@@ -9,23 +9,23 @@
 // not scrollable.
 
 /**
- * Scroll `el` into view within its nearest scroll container matching
+ * Scroll `node` into view within its nearest scroll container matching
  * `containerSelector` using `block: "nearest"` semantics. Never scrolls the
  * document.
  *
- * @param {HTMLElement} el
+ * @param {HTMLElement} node
  * @param {string} [containerSelector] defaults to `[role="listbox"]`
  * @returns {void}
  */
 export function scrollIntoViewWithinMenu(
-  el,
+  node,
   containerSelector = '[role="listbox"]',
 ) {
-  const container = el.closest(containerSelector);
+  const container = node.closest(containerSelector);
   if (!(container instanceof HTMLElement)) return;
   if (container.scrollHeight <= container.clientHeight) return;
 
-  const itemRect = el.getBoundingClientRect();
+  const itemRect = node.getBoundingClientRect();
   const containerRect = container.getBoundingClientRect();
 
   if (itemRect.top < containerRect.top) {

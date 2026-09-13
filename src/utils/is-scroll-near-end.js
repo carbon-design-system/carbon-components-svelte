@@ -49,17 +49,17 @@ export function createScrollEndTracker({
 } = {}) {
   let armed = true;
   /** @type {number | undefined} */
-  let lastItemCount;
+  let prevItemCount;
 
   /**
    * Re-arm when the rendered list grows.
    * @param {number} itemCount
    */
   function noteItemCount(itemCount) {
-    if (lastItemCount !== undefined && itemCount > lastItemCount) {
+    if (prevItemCount !== undefined && itemCount > prevItemCount) {
       armed = true;
     }
-    lastItemCount = itemCount;
+    prevItemCount = itemCount;
   }
 
   return {
@@ -99,7 +99,7 @@ export function createScrollEndTracker({
 
     reset() {
       armed = true;
-      lastItemCount = undefined;
+      prevItemCount = undefined;
     },
   };
 }
