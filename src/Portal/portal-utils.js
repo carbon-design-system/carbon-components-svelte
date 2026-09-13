@@ -2,12 +2,12 @@
  * Observe the closest modal ancestor for close events.
  * Calls `onClose` when the modal loses the "is-visible" class.
  * Returns a cleanup function to disconnect the observer.
- * @param {HTMLElement} element
+ * @param {HTMLElement} node
  * @param {() => void} onClose
  * @returns {() => void}
  */
-export function observeModalClose(element, onClose) {
-  const modal = element.closest(".bx--modal");
+export function observeModalClose(node, onClose) {
+  const modal = node.closest(".bx--modal");
   if (!modal) return () => {};
 
   const observer = new MutationObserver(() => {
