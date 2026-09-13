@@ -148,8 +148,8 @@ always undefined and fileName matches name.
 
 <FileUploaderItem
   invalid
-  id="readme"
-  name="README.md"
+  id="server-logs"
+  name="server-logs-2026-09.csv"
   errorSubject="File size exceeds 500kb limit"
   errorBody="Please select a new file."
   status="edit"
@@ -251,22 +251,22 @@ Render individual file rows with `FileUploaderItem`.
 Display a file upload in progress with `status="uploading"`. This shows a loading
 indicator and the file name.
 
-<FileUploaderItem name="README.md" status="uploading" />
+<FileUploaderItem name="Q3-financial-report.pdf" status="uploading" />
 
 ### Complete
 
 Show a successfully uploaded file with `status="complete"`. This displays a
 checkmark icon next to the file name.
 
-<FileUploaderItem name="README.md" status="complete" />
+<FileUploaderItem name="Q3-financial-report.pdf" status="complete" />
 
 ### Edit
 
 Enable file deletion by setting the status to `"edit"`. Clicking the close icon
 dispatches a `delete` event with the item's ID.
 
-<FileUploaderItem id="readme" name="README.md" status="edit" on:delete={(e) => {
-  console.log(e.detail); // "readme"
+<FileUploaderItem id="q3-report" name="Q3-financial-report.pdf" status="edit" on:delete={(e) => {
+  console.log(e.detail); // "q3-report"
 }} />
 
 ### Edit (invalid)
@@ -274,7 +274,7 @@ dispatches a `delete` event with the item's ID.
 Mark a file as invalid while keeping it editable. This shows an error icon and
 allows the user to remove the file.
 
-<FileUploaderItem invalid id="readme" name="README.md" status="edit" on:delete />
+<FileUploaderItem invalid id="q3-report" name="Q3-financial-report.pdf" status="edit" on:delete />
 
 ### Edit (invalid, with subject and body)
 
@@ -283,8 +283,8 @@ Provide detailed error messages for invalid files with `errorSubject` and
 
 <FileUploaderItem
   invalid
-  id="readme"
-  name="README.md"
+  id="q3-report"
+  name="Q3-financial-report.pdf"
   errorSubject="File size exceeds 500kb limit"
   errorBody="Please select a new file."
   status="edit"
@@ -295,9 +295,9 @@ Provide detailed error messages for invalid files with `errorSubject` and
 
 Customize file uploader item size with `size`. The default is `"default"`.
 
-<FileUploaderItem size="default" name="README.md" status="uploading" />
-<FileUploaderItem size="field" name="README.md" status="uploading" />
-<FileUploaderItem size="small" name="README.md" status="uploading" />
+<FileUploaderItem size="default" name="Q3-financial-report.pdf" status="uploading" />
+<FileUploaderItem size="field" name="Q3-financial-report.pdf" status="uploading" />
+<FileUploaderItem size="small" name="Q3-financial-report.pdf" status="uploading" />
 
 ## Drop container
 
