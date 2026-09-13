@@ -8,18 +8,18 @@
   const ctx = getContext("carbon:Toolbar") ?? {};
 
   let menuRef = null;
-  let lastVisible = false;
+  let prevVisible = false;
 
   $: {
     const visible = menuRef != null;
-    if (visible !== lastVisible) {
-      lastVisible = visible;
+    if (visible !== prevVisible) {
+      prevVisible = visible;
       ctx.setOverflowVisible?.(visible);
     }
   }
 
   onMount(() => () => {
-    if (lastVisible) ctx.setOverflowVisible?.(false);
+    if (prevVisible) ctx.setOverflowVisible?.(false);
   });
 </script>
 
