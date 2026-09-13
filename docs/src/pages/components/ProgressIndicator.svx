@@ -16,20 +16,20 @@ Create a horizontal progress indicator with four steps.
 
 <ProgressIndicator currentIndex={2}>
   <ProgressStep complete
-    label="Step 1"
-    description="The progress indicator will listen for clicks on the steps"
+    label="Build"
+    description="Build completed successfully"
   />
   <ProgressStep complete
-    label="Step 2"
-    description="The progress indicator will listen for clicks on the steps"
-  />
-  <ProgressStep complete
-    label="Step 3"
-    description="The progress indicator will listen for clicks on the steps"
+    label="Test"
+    description="Automated test suite passed"
   />
   <ProgressStep
-    label="Step 4"
-    description="The progress indicator will listen for clicks on the steps"
+    label="Stage"
+    description="Deploying to the staging environment"
+  />
+  <ProgressStep
+    label="Deploy"
+    description="Waiting to release to production"
   />
 </ProgressIndicator>
 
@@ -55,20 +55,20 @@ Disable automatic step selection when clicking completed steps.
 
 <ProgressIndicator preventChangeOnClick currentIndex={2}>
   <ProgressStep complete
-    label="Step 1"
-    description="The progress indicator will listen for clicks on the steps"
+    label="Build"
+    description="Build completed successfully"
   />
   <ProgressStep complete
-    label="Step 2"
-    description="The progress indicator will listen for clicks on the steps"
-  />
-  <ProgressStep complete
-    label="Step 3"
-    description="The progress indicator will listen for clicks on the steps"
+    label="Test"
+    description="Automated test suite passed"
   />
   <ProgressStep
-    label="Step 4"
-    description="The progress indicator will listen for clicks on the steps"
+    label="Stage"
+    description="Deploying to the staging environment"
+  />
+  <ProgressStep
+    label="Deploy"
+    description="Waiting to release to production"
   />
 </ProgressIndicator>
 
@@ -80,16 +80,16 @@ Mark a step as invalid to indicate an error state.
 
 <ProgressIndicator>
   <ProgressStep complete
-    label="Step 1"
-    description="The progress indicator will listen for clicks on the steps"
+    label="Build"
+    description="Build completed successfully"
   />
   <ProgressStep invalid
-    label="Step 2"
-    description="The progress indicator will listen for clicks on the steps"
+    label="Test"
+    description="Automated tests failed"
   />
   <ProgressStep
-    label="Step 3"
-    description="The progress indicator will listen for clicks on the steps"
+    label="Deploy"
+    description="Blocked until tests pass"
   />
 </ProgressIndicator>
 
@@ -99,16 +99,16 @@ Disable specific steps to prevent user interaction.
 
 <ProgressIndicator>
   <ProgressStep complete
-    label="Step 1"
-    description="The progress indicator will listen for clicks on the steps"
+    label="Build"
+    description="Build completed successfully"
   />
   <ProgressStep disabled
-    label="Step 2"
-    description="The progress indicator will listen for clicks on the steps"
+    label="Test"
+    description="Blocked until the build step completes"
   />
   <ProgressStep disabled
-    label="Step 3"
-    description="The progress indicator will listen for clicks on the steps"
+    label="Deploy"
+    description="Blocked until testing completes"
   />
 </ProgressIndicator>
 
@@ -121,13 +121,13 @@ Customize what renders inside a step, beyond the default label and icon.
 Override the default step icon using the `icon` named slot. The slot exposes complete, current, invalid, and description so the override can mirror the step state.
 
 <ProgressIndicator currentIndex={1}>
-  <ProgressStep complete label="Step 1" description="Completed step">
+  <ProgressStep complete label="Build" description="Build completed successfully">
     <CheckmarkFilled slot="icon" />
   </ProgressStep>
-  <ProgressStep label="Step 2" description="Current step">
+  <ProgressStep label="Test" description="Currently running the test suite">
     <InProgress slot="icon" />
   </ProgressStep>
-  <ProgressStep label="Step 3" description="Upcoming step">
+  <ProgressStep label="Deploy" description="Waiting to deploy">
     <Circle slot="icon" />
   </ProgressStep>
 </ProgressIndicator>
@@ -137,14 +137,14 @@ Override the default step icon using the `icon` named slot. The slot exposes com
 Override the default label using the default slot instead of `label`. The slot exposes `props`, which includes the `class` needed to keep the label styled correctly.
 
 <ProgressIndicator currentIndex={1}>
-  <ProgressStep complete let:props description="Completed step">
-    <strong class={props.class}>Step 1</strong>
+  <ProgressStep complete let:props description="Build completed successfully">
+    <strong class={props.class}>Build</strong>
   </ProgressStep>
-  <ProgressStep let:props description="Current step">
-    <strong class={props.class}>Step 2</strong>
+  <ProgressStep let:props description="Currently running the test suite">
+    <strong class={props.class}>Test</strong>
   </ProgressStep>
-  <ProgressStep let:props description="Upcoming step">
-    <strong class={props.class}>Step 3</strong>
+  <ProgressStep let:props description="Waiting to deploy">
+    <strong class={props.class}>Deploy</strong>
   </ProgressStep>
 </ProgressIndicator>
 
@@ -153,13 +153,13 @@ Override the default label using the default slot instead of `label`. The slot e
 Set `secondaryLabel` to display supplementary text after the label, such as marking a step as optional.
 
 <ProgressIndicator currentIndex={1}>
-  <ProgressStep complete label="Step 1" description="Completed step" />
+  <ProgressStep complete label="Create account" description="Account created successfully" />
   <ProgressStep
-    label="Step 2"
-    description="Current step"
+    label="Add payment method"
+    description="Add a payment method now, or skip and add one later"
     secondaryLabel="Optional"
   />
-  <ProgressStep label="Step 3" description="Upcoming step" />
+  <ProgressStep label="Invite team" description="Invite teammates to your workspace" />
 </ProgressIndicator>
 
 ## Layout
@@ -172,16 +172,16 @@ Distribute steps evenly across the available space.
 
 <ProgressIndicator spaceEqually>
   <ProgressStep
-    label="Really long label"
-    description="The progress indicator will listen for clicks on the steps"
+    label="Provision infrastructure resources"
+    description="Allocate compute, storage, and networking capacity"
   />
   <ProgressStep
-    label="Really long label"
-    description="The progress indicator will listen for clicks on the steps"
+    label="Run integration test suite"
+    description="Verify service-to-service contracts before release"
   />
   <ProgressStep
-    label="Really long label"
-    description="The progress indicator will listen for clicks on the steps"
+    label="Deploy to production environment"
+    description="Roll out the release to all regions"
   />
 </ProgressIndicator>
 
@@ -191,16 +191,16 @@ Display steps in a vertical layout.
 
 <ProgressIndicator vertical>
   <ProgressStep
-    label="Really long label"
-    description="The progress indicator will listen for clicks on the steps"
+    label="Provision infrastructure resources"
+    description="Allocate compute, storage, and networking capacity"
   />
   <ProgressStep
-    label="Really long label"
-    description="The progress indicator will listen for clicks on the steps"
+    label="Run integration test suite"
+    description="Verify service-to-service contracts before release"
   />
   <ProgressStep
-    label="Really long label"
-    description="The progress indicator will listen for clicks on the steps"
+    label="Deploy to production environment"
+    description="Roll out the release to all regions"
   />
 </ProgressIndicator>
 
@@ -215,16 +215,16 @@ Use `on:change` to listen for the step becoming active, either from a completed 
   on:change={(e) => console.log(e.detail)} // number
 >
   <ProgressStep complete
-    label="Step 1"
-    description="The progress indicator will listen for clicks on the steps"
+    label="Build"
+    description="Build completed successfully"
   />
   <ProgressStep complete
-    label="Step 2"
-    description="The progress indicator will listen for clicks on the steps"
+    label="Test"
+    description="Automated test suite passed"
   />
   <ProgressStep
-    label="Step 3"
-    description="The progress indicator will listen for clicks on the steps"
+    label="Deploy"
+    description="Waiting to release to production"
   />
 </ProgressIndicator>
 

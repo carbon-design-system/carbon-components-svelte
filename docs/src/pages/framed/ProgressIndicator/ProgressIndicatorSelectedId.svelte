@@ -14,19 +14,19 @@
   let showStepD = true;
 
   $: visibleSteps = [
-    { id: "step-a", label: "Step 1", show: showStepA },
-    { id: "step-b", label: "Step 2", show: showStepB },
-    { id: "step-c", label: "Step 3", show: showStepC },
-    { id: "step-d", label: "Step 4", show: showStepD },
+    { id: "step-a", label: "Build", show: showStepA },
+    { id: "step-b", label: "Test", show: showStepB },
+    { id: "step-c", label: "Stage", show: showStepC },
+    { id: "step-d", label: "Deploy", show: showStepD },
   ].filter((s) => s.show);
 </script>
 
 <Stack gap={3}>
   <div>
-    <Checkbox bind:checked={showStepA} labelText="Show Step 1" />
-    <Checkbox bind:checked={showStepB} labelText="Show Step 2" />
-    <Checkbox bind:checked={showStepC} labelText="Show Step 3" />
-    <Checkbox bind:checked={showStepD} labelText="Show Step 4" />
+    <Checkbox bind:checked={showStepA} labelText="Show Build step" />
+    <Checkbox bind:checked={showStepB} labelText="Show Test step" />
+    <Checkbox bind:checked={showStepC} labelText="Show Stage step" />
+    <Checkbox bind:checked={showStepD} labelText="Show Deploy step" />
   </div>
   <Stack gap={4} orientation="horizontal" align="center">
     <Button
@@ -34,7 +34,7 @@
       size="small"
       on:click={() => (selectedId = "step-c")}
     >
-      Select Step 3 by id
+      Select the Stage step by id
     </Button>
     <div><strong>selectedId:</strong> {selectedId}</div>
   </Stack>

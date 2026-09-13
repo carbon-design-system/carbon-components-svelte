@@ -14,23 +14,23 @@
   <ProgressIndicator bind:currentIndex>
     <ProgressStep
       complete
-      label="Step 1"
-      description="The progress indicator will listen for clicks on the steps"
+      label="Build"
+      description="Build completed successfully"
     />
     <ProgressStep
       complete
-      label="Step 2"
-      description="The progress indicator will listen for clicks on the steps"
+      label="Test"
+      description="Automated test suite passed"
     />
     <ProgressStep
       complete
       bind:current={thirdStepCurrent}
-      label="Step 3"
-      description="The progress indicator will listen for clicks on the steps"
+      label="Stage"
+      description="Deploying to the staging environment"
     />
     <ProgressStep
-      label="Step 4"
-      description="The progress indicator will listen for clicks on the steps"
+      label="Deploy"
+      description="Waiting to release to production"
     />
   </ProgressIndicator>
   <Stack gap={4}>
