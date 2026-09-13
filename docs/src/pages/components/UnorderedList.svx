@@ -12,9 +12,9 @@ description: Unordered lists display a bulleted list of items, with support for 
 Create a basic unordered list with list item components. For tree-structured data, consider [RecursiveList](/components/RecursiveList).
 
 <UnorderedList>
-  <ListItem>Unordered list item</ListItem>
-  <ListItem>Unordered list item</ListItem>
-  <ListItem>Unordered list item</ListItem>
+  <ListItem>Rotate the service account key at least every 90 days</ListItem>
+  <ListItem>Grant the least privilege required for the integration</ListItem>
+  <ListItem>Review audit logs weekly for anomalous access</ListItem>
 </UnorderedList>
 
 ## With links
@@ -23,13 +23,13 @@ Add links to list items by wrapping them in link components.
 
 <UnorderedList>
   <ListItem>
-    <Link href="#">Unordered list item</Link>
+    <Link href="#">API reference</Link>
   </ListItem>
   <ListItem>
-    <Link href="#">Unordered list item</Link>
+    <Link href="#">Deployment runbook</Link>
   </ListItem>
   <ListItem>
-    <Link href="#">Unordered list item</Link>
+    <Link href="#">Incident response playbook</Link>
   </ListItem>
 </UnorderedList>
 
@@ -39,20 +39,20 @@ Create hierarchical lists by setting `nested` on a child unordered list componen
 
 <UnorderedList>
   <ListItem>
-    Unordered list level 1
+    Workspace settings
     <UnorderedList nested>
-      <ListItem>Unordered list level 2</ListItem>
+      <ListItem>Billing</ListItem>
       <ListItem>
-        Unordered list level 3
+        Access control
         <UnorderedList nested>
-          <ListItem>Unordered list level 3</ListItem>
-          <ListItem>Unordered list level 3</ListItem>
+          <ListItem>Role assignments</ListItem>
+          <ListItem>SSO configuration</ListItem>
         </UnorderedList>
       </ListItem>
     </UnorderedList>
   </ListItem>
-  <ListItem>Unordered list level 1</ListItem>
-  <ListItem>Unordered list level 1</ListItem>
+  <ListItem>Audit logs</ListItem>
+  <ListItem>API keys</ListItem>
 </UnorderedList>
 
 ## Expressive styles
@@ -60,7 +60,7 @@ Create hierarchical lists by setting `nested` on a child unordered list componen
 Use Carbon's expressive typesetting with `expressive`.
 
 <UnorderedList expressive>
-  <ListItem><Link size="lg" href="#">Unordered list item</Link></ListItem>
-  <ListItem>Unordered list item</ListItem>
-  <ListItem>Unordered list item</ListItem>
+  <ListItem><Link size="lg" href="#">Read the onboarding guide</Link></ListItem>
+  <ListItem>Request access to the staging environment</ListItem>
+  <ListItem>Schedule a walkthrough with your team lead</ListItem>
 </UnorderedList>
