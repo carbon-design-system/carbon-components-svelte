@@ -81,14 +81,14 @@ Use `formatValue` to format range labels and `aria-valuetext` (for example curre
 
 <Slider labelText="Budget" value={50} formatValue={(v) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(v)} />
 
-<Slider labelText="Opacity" value={75} formatValue={(v) => `${v}%`} />
+<Slider labelText="CPU utilization" value={75} formatValue={(v) => `${v}%`} />
 
 ## Marks
 
 Set `marks` to show tick marks along the track. Pass an array of stops with optional labels, or set `marks` to `true` to tick every `step`. Marks are visual only; snapping still follows `step`.
 
 <Slider
-  labelText="Intensity"
+  labelText="Log verbosity"
   hideTextInput
   min={0}
   max={3}
@@ -141,7 +141,7 @@ Set `invalid` to `true` to show a validation error. Invalid takes precedence ove
 
 Set `warn` to `true` to show a warning. The warning icon appears next to the input field, with a message below the slider.
 
-<Slider warn warnText="Value must be an increment of 5" labelText="Slider (must be an increment of 5)" min={0} max={100} value={51} step={5} />
+<Slider warn warnText="Value must be an increment of 5" labelText="Concurrency limit" min={0} max={100} value={51} step={5} />
 
 ### Disabled
 
@@ -159,19 +159,19 @@ Set `readonly` to `true` to display a value while preventing changes.
 
 Use `RangeSlider` to select a range with two handles. Bind to `value` for the lower bound and `valueUpper` for the upper bound. `RangeSlider` supports the same layout and state options as `Slider`.
 
-<RangeSlider labelText="Range" value={10} valueUpper={90} />
+<RangeSlider labelText="Alert threshold (%)" value={10} valueUpper={90} />
 
 ### Full width
 
 Set `fullWidth` to `true` for the range slider to span the full width of its container.
 
-<RangeSlider labelText="Range" fullWidth value={10} valueUpper={90} />
+<RangeSlider labelText="Alert threshold (%)" fullWidth value={10} valueUpper={90} />
 
 ### Hidden text inputs
 
 Set `hideTextInput` to `true` to hide both numeric inputs while keeping the slider.
 
-<RangeSlider labelText="Range" hideTextInput value={0} valueUpper={100} />
+<RangeSlider labelText="Alert threshold (%)" hideTextInput value={0} valueUpper={100} />
 
 ### Custom range and step
 
@@ -190,7 +190,7 @@ Set `min`, `max`, and `step` to customize the range.
 Set `marks` the same way as on `Slider` for tick marks and optional labels.
 
 <RangeSlider
-  labelText="Intensity"
+  labelText="Log verbosity"
   hideTextInput
   min={0}
   max={3}
@@ -218,7 +218,7 @@ Use `on:input` and `on:change` the same way as `Slider`. Both events dispatch `{
 <RangeSlider
   on:input={(e) => console.log(e.detail)} // { value: number; valueUpper: number }
   on:change={(e) => console.log(e.detail)} // { value: number; valueUpper: number }
-  labelText="Range"
+  labelText="Alert threshold (%)"
   value={10}
   valueUpper={90}
 />
@@ -227,25 +227,25 @@ Use `on:input` and `on:change` the same way as `Slider`. Both events dispatch `{
 
 Set `invalid` to `true` to show a validation error. Invalid takes precedence over the [warning state](#warning) when both are set.
 
-<RangeSlider invalid invalidText="Values must be a multiple of 10" labelText="Range" min={0} max={100} step={10} value={15} valueUpper={85} />
+<RangeSlider invalid invalidText="Values must be a multiple of 10" labelText="Alert threshold (%)" min={0} max={100} step={10} value={15} valueUpper={85} />
 
 ### Warning
 
 Set `warn` to `true` to show a warning. A warning icon appears next to each input field, with a message below the slider.
 
-<RangeSlider warn warnText="Values must be an increment of 5" labelText="Range" min={0} max={100} step={5} value={11} valueUpper={89} />
+<RangeSlider warn warnText="Values must be an increment of 5" labelText="Alert threshold (%)" min={0} max={100} step={5} value={11} valueUpper={89} />
 
 ### Disabled
 
 Set `disabled` to `true` to prevent interaction.
 
-<RangeSlider disabled labelText="Range" value={10} valueUpper={90} />
+<RangeSlider disabled labelText="Alert threshold (%)" value={10} valueUpper={90} />
 
 ### Read-only
 
 Set `readonly` to `true` to display values while preventing changes.
 
-<RangeSlider readonly labelText="Range" value={10} valueUpper={90} />
+<RangeSlider readonly labelText="Alert threshold (%)" value={10} valueUpper={90} />
 
 ## Skeleton
 
