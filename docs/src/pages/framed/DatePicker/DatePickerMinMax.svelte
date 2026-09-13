@@ -6,5 +6,5 @@
 </script>
 
 <DatePicker datePickerType="single" minDate={start} maxDate={end} on:change>
-  <DatePickerInput labelText="Date (2025 only)" placeholder="mm/dd/yyyy" />
+  <DatePickerInput labelText="Fiscal year 2025 date" placeholder="mm/dd/yyyy" />
 </DatePicker>

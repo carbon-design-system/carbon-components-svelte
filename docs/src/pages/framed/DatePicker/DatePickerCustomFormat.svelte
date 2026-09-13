@@ -14,7 +14,7 @@
   <Stack inline gap={4}>
     <DatePicker bind:value datePickerType="single" dateFormat="Y-m-d">
       <DatePickerInput
-        labelText="Date of birth"
+        labelText="Contract effective date"
         placeholder="yyyy-mm-dd"
         helperText={submittedValue ? `Submitted: ${submittedValue}` : ""}
       />
