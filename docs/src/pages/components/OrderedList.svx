@@ -12,9 +12,9 @@ description: Ordered lists display a numbered list of items, with support for ne
 Create a basic ordered list by wrapping list item components within the ordered list. For tree-structured data, consider [RecursiveList](/components/RecursiveList#ordered).
 
 <OrderedList>
-  <ListItem>Ordered list item</ListItem>
-  <ListItem>Ordered list item</ListItem>
-  <ListItem>Ordered list item</ListItem>
+  <ListItem>Submit the change request for approval</ListItem>
+  <ListItem>Run the automated test suite in the CI pipeline</ListItem>
+  <ListItem>Deploy the build to the production environment</ListItem>
 </OrderedList>
 
 ## With links
@@ -23,13 +23,13 @@ Add interactive elements like link components within list items.
 
 <OrderedList>
   <ListItem>
-    <Link href="#">Ordered list item</Link>
+    <Link href="#">Review the architecture decision record</Link>
   </ListItem>
   <ListItem>
-    <Link href="#">Ordered list item</Link>
+    <Link href="#">Review the security sign-off checklist</Link>
   </ListItem>
   <ListItem>
-    <Link href="#">Ordered list item</Link>
+    <Link href="#">Review the on-call runbook</Link>
   </ListItem>
 </OrderedList>
 
@@ -43,20 +43,20 @@ Set `nested` on a child ordered list for proper indentation and numbering.
 
 <OrderedList>
   <ListItem>
-    Ordered list level 1
+    Triage the incident
     <OrderedList nested>
-      <ListItem>Ordered list level 2</ListItem>
+      <ListItem>Acknowledge the PagerDuty alert</ListItem>
       <ListItem>
-        Ordered list level 3
+        Assess the blast radius
         <OrderedList nested>
-          <ListItem>Ordered list level 3</ListItem>
-          <ListItem>Ordered list level 3</ListItem>
+          <ListItem>Check the service health dashboard</ListItem>
+          <ListItem>Identify affected customer tenants</ListItem>
         </OrderedList>
       </ListItem>
     </OrderedList>
   </ListItem>
-  <ListItem>Ordered list level 1</ListItem>
-  <ListItem>Ordered list level 1</ListItem>
+  <ListItem>Mitigate the incident</ListItem>
+  <ListItem>Publish the postmortem</ListItem>
 </OrderedList>
 
 ### Native styles
@@ -65,20 +65,20 @@ Set `native` to `true` to use the browser's native list styles. Useful for large
 
 <OrderedList native>
   <ListItem>
-    Ordered list level 1
+    Triage the incident
     <OrderedList nested>
-      <ListItem>Ordered list level 2</ListItem>
+      <ListItem>Acknowledge the PagerDuty alert</ListItem>
       <ListItem>
-        Ordered list level 3
+        Assess the blast radius
         <OrderedList nested>
-          <ListItem>Ordered list level 3</ListItem>
-          <ListItem>Ordered list level 3</ListItem>
+          <ListItem>Check the service health dashboard</ListItem>
+          <ListItem>Identify affected customer tenants</ListItem>
         </OrderedList>
       </ListItem>
     </OrderedList>
   </ListItem>
-  <ListItem>Ordered list level 1</ListItem>
-  <ListItem>Ordered list level 1</ListItem>
+  <ListItem>Mitigate the incident</ListItem>
+  <ListItem>Publish the postmortem</ListItem>
 </OrderedList>
 
 ## Expressive styles
@@ -86,7 +86,7 @@ Set `native` to `true` to use the browser's native list styles. Useful for large
 Use Carbon's expressive typesetting with `expressive`.
 
 <OrderedList expressive>
-  <ListItem><Link size="lg" href="#">Ordered list item</Link></ListItem>
-  <ListItem>Ordered list item</ListItem>
-  <ListItem>Ordered list item</ListItem>
+  <ListItem><Link size="lg" href="#">Complete the security training module</Link></ListItem>
+  <ListItem>Set up multi-factor authentication</ListItem>
+  <ListItem>Request access to the production VPN</ListItem>
 </OrderedList>
