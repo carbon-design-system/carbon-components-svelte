@@ -3,6 +3,6 @@
 </script>
 
 <DatePicker datePickerType="range" on:change>
-  <DatePickerInput labelText="Start date" placeholder="mm/dd/yyyy" />
-  <DatePickerInput labelText="End date" placeholder="mm/dd/yyyy" />
+  <DatePickerInput labelText="Report period start" placeholder="mm/dd/yyyy" />
+  <DatePickerInput labelText="Report period end" placeholder="mm/dd/yyyy" />
 </DatePicker>

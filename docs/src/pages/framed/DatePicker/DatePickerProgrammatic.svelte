@@ -29,8 +29,8 @@
 
 <Stack gap={4}>
   <DatePicker datePickerType="range" bind:valueFrom bind:valueTo on:change>
-    <DatePickerInput labelText="Start date" placeholder="mm/dd/yyyy" />
-    <DatePickerInput labelText="End date" placeholder="mm/dd/yyyy" />
+    <DatePickerInput labelText="Report period start" placeholder="mm/dd/yyyy" />
+    <DatePickerInput labelText="Report period end" placeholder="mm/dd/yyyy" />
   </DatePicker>
   <Button on:click={nextMonth}>Next month</Button>
 </Stack>

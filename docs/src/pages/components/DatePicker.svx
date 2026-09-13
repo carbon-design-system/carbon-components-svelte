@@ -17,7 +17,7 @@ DatePicker supports five `datePickerType` values: `"simple"` (default, no calend
 The default `datePickerType` renders a text field without a dropdown calendar.
 
 <DatePicker>
-  <DatePickerInput labelText="Date of birth" placeholder="mm/dd/yyyy" />
+  <DatePickerInput labelText="Subscription renewal date" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
 ### Single
@@ -169,7 +169,7 @@ Listen for calendar interactions.
 Listen for `on:change` to respond to value updates. For the `"simple"` date picker type (no calendar), `event.detail` is the input's string value. For calendar types (`"single"`, `"range"`, `"month"`, `"year"`), `event.detail` is an object with `selectedDates` (an array of `Date`) and `dateStr` (a string, or `{ from, to }` for `"range"`).
 
 <DatePicker datePickerType="single" on:change={(e) => console.log(e.detail)}>
-  <DatePickerInput labelText="Date of birth" placeholder="mm/dd/yyyy" />
+  <DatePickerInput labelText="Invoice due date" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
 ### Close
@@ -177,7 +177,7 @@ Listen for `on:change` to respond to value updates. For the `"simple"` date pick
 Listen for `on:close` to know when the calendar closes and why. This event is only dispatched for calendar types (not `"simple"`). `event.detail.trigger` is `"escape-key"`, `"outside-click"`, or `"select"`; the detail also includes `selectedDates` and `dateStr`.
 
 <DatePicker datePickerType="single" on:close={(e) => console.log(e.detail.trigger)}>
-  <DatePickerInput labelText="Date of birth" placeholder="mm/dd/yyyy" />
+  <DatePickerInput labelText="Maintenance window date" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
 ## Helper text
@@ -185,7 +185,7 @@ Listen for `on:close` to know when the calendar closes and why. This event is on
 Add helper text to provide additional context or formatting instructions.
 
 <DatePicker>
-  <DatePickerInput labelText="Date of birth" helperText="Example: 01/12/1990" placeholder="mm/dd/yyyy" />
+  <DatePickerInput labelText="Contract start date" helperText="Example: 01/12/2026" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
 ## Hidden label
@@ -193,7 +193,7 @@ Add helper text to provide additional context or formatting instructions.
 Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
 
 <DatePicker>
-  <DatePickerInput hideLabel labelText="Date of birth" placeholder="mm/dd/yyyy" />
+  <DatePickerInput hideLabel labelText="Report date" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
 ## Light
@@ -201,7 +201,7 @@ Hide the label visually by setting `hideLabel` to `true`. The label remains avai
 Use the light variant for light backgrounds.
 
 <DatePicker light>
-  <DatePickerInput labelText="Date of birth" placeholder="mm/dd/yyyy" />
+  <DatePickerInput labelText="Onboarding date" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
 ## Fluid
@@ -217,7 +217,7 @@ the width with `style` or `class` when you need a different size (for example
 `style="width: 50%"`).
 
 <DatePicker fluid datePickerType="single">
-  <DatePickerInput labelText="Date of birth" placeholder="mm/dd/yyyy" />
+  <DatePickerInput labelText="Subscription renewal date" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
 ### Simple
@@ -225,7 +225,7 @@ the width with `style` or `class` when you need a different size (for example
 The fluid variant also supports the default `"simple"` date picker type.
 
 <DatePicker fluid>
-  <DatePickerInput labelText="Date of birth" placeholder="mm/dd/yyyy" />
+  <DatePickerInput labelText="License expiration date" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
 ### Range
@@ -233,8 +233,8 @@ The fluid variant also supports the default `"simple"` date picker type.
 The range date picker renders both inputs inside a single fluid field.
 
 <DatePicker fluid datePickerType="range">
-  <DatePickerInput labelText="Start date" placeholder="mm/dd/yyyy" />
-  <DatePickerInput labelText="End date" placeholder="mm/dd/yyyy" />
+  <DatePickerInput labelText="Report period start" placeholder="mm/dd/yyyy" />
+  <DatePickerInput labelText="Report period end" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
 ### Month
@@ -261,7 +261,7 @@ icon.
 <DatePicker fluid datePickerType="single">
   <DatePickerInput placeholder="mm/dd/yyyy">
     <svelte:fragment slot="labelChildren">
-      Date of birth
+      License expiration date
       <TooltipIcon tooltipText="Use the format mm/dd/yyyy." icon={Information} />
     </svelte:fragment>
   </DatePickerInput>
@@ -273,29 +273,29 @@ Fluid date pickers display the error message inside the field boundary. Long
 messages wrap to multiple lines.
 
 <DatePicker fluid datePickerType="single">
-  <DatePickerInput invalid invalidText="The provided date is not valid. Enter a date in the mm/dd/yyyy format that falls within the allowed range." labelText="Date of birth" placeholder="mm/dd/yyyy" />
+  <DatePickerInput invalid invalidText="The provided date is not valid. Enter a date in the mm/dd/yyyy format that falls within the allowed range." labelText="License expiration date" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
 ### Warning
 
 <DatePicker fluid datePickerType="single">
-  <DatePickerInput warn warnText="This date will not be stored" labelText="Date of birth" placeholder="mm/dd/yyyy" />
+  <DatePickerInput warn warnText="This date will not be stored" labelText="Invoice due date" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
 ### Disabled
 
 Invalid and warning states are not displayed while the input is disabled.
 
-<DatePicker fluid datePickerType="single" value="01/15/1990">
-  <DatePickerInput disabled invalid invalidText="The provided date is not valid" labelText="Date of birth" placeholder="mm/dd/yyyy" />
+<DatePicker fluid datePickerType="single" value="01/15/2024">
+  <DatePickerInput disabled invalid invalidText="The provided date is not valid" labelText="Contract start date" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
 ### Read-only
 
 Invalid and warning states are not displayed while the input is read-only.
 
-<DatePicker fluid datePickerType="single" value="01/15/1990">
-  <DatePickerInput readonly warn warnText="This date will not be stored" labelText="Date of birth" placeholder="mm/dd/yyyy" />
+<DatePicker fluid datePickerType="single" value="03/01/2024">
+  <DatePickerInput readonly warn warnText="This date will not be stored" labelText="Onboarding date" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
 ### Skeleton
@@ -317,7 +317,7 @@ Set `size` on DatePickerInput. The default is `md`.
 Set `short` to `true` on DatePicker for a narrower field. It only changes the field width for the default `"simple"` date picker type.
 
 <DatePicker short>
-  <DatePickerInput labelText="Date of birth" placeholder="mm/dd/yyyy" />
+  <DatePickerInput labelText="Subscription renewal date" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
 ### Extra-large
@@ -325,14 +325,14 @@ Set `short` to `true` on DatePicker for a narrower field. It only changes the fi
 Set `size` to `"xl"` on DatePickerInput for a more prominent input.
 
 <DatePicker datePickerType="single">
-  <DatePickerInput size="xl" labelText="Date of birth" placeholder="mm/dd/yyyy" />
+  <DatePickerInput size="xl" labelText="License expiration date" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
 ### Extra-large (range)
 
 <DatePicker datePickerType="range">
-  <DatePickerInput size="xl" labelText="Start date" placeholder="mm/dd/yyyy" />
-  <DatePickerInput size="xl" labelText="End date" placeholder="mm/dd/yyyy" />
+  <DatePickerInput size="xl" labelText="Report period start" placeholder="mm/dd/yyyy" />
+  <DatePickerInput size="xl" labelText="Report period end" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
 ### Small
@@ -340,14 +340,14 @@ Set `size` to `"xl"` on DatePickerInput for a more prominent input.
 Set `size` to `"sm"` on DatePickerInput for a compact input.
 
 <DatePicker datePickerType="single">
-  <DatePickerInput size="sm" labelText="Date of birth" placeholder="mm/dd/yyyy" />
+  <DatePickerInput size="sm" labelText="Invoice due date" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
 ### Small (range)
 
 <DatePicker datePickerType="range">
-  <DatePickerInput size="sm" labelText="Start date" placeholder="mm/dd/yyyy" />
-  <DatePickerInput size="sm" labelText="End date" placeholder="mm/dd/yyyy" />
+  <DatePickerInput size="sm" labelText="Report period start" placeholder="mm/dd/yyyy" />
+  <DatePickerInput size="sm" labelText="Report period end" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
 ## States
@@ -359,7 +359,7 @@ Reflect validation and interaction states.
 Show an invalid state when the input value is not valid.
 
 <DatePicker>
-  <DatePickerInput invalid invalidText="Invalid date" labelText="Date of birth" placeholder="mm/dd/yyyy" />
+  <DatePickerInput invalid invalidText="Invalid date" labelText="License expiration date" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
 ### Warning
@@ -367,23 +367,23 @@ Show an invalid state when the input value is not valid.
 Show a warning state to indicate potential issues with the input.
 
 <DatePicker>
-  <DatePickerInput warn warnText="This info will not be stored" labelText="Date of birth" placeholder="mm/dd/yyyy" />
+  <DatePickerInput warn warnText="This info will not be stored" labelText="Invoice due date" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
 ### Disabled (simple)
 
 With the default datePickerType (`"simple"`), disabled prevents interaction and styles the field as unavailable.
 
-<DatePicker value="01/15/1990">
-  <DatePickerInput disabled labelText="Date of birth" placeholder="mm/dd/yyyy" />
+<DatePicker value="01/15/2024">
+  <DatePickerInput disabled labelText="Contract start date" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
 ### Disabled (single)
 
 Set `disabled` to `true` to block interaction with the single-date picker and calendar.
 
-<DatePicker datePickerType="single" value="01/15/1990">
-  <DatePickerInput disabled labelText="Date of birth" placeholder="mm/dd/yyyy" />
+<DatePicker datePickerType="single" value="01/15/2027">
+  <DatePickerInput disabled labelText="License expiration date" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
 ### Disabled (range)
@@ -391,24 +391,24 @@ Set `disabled` to `true` to block interaction with the single-date picker and ca
 Apply disabled to each DatePickerInput in a range picker when both fields should be unavailable.
 
 <DatePicker datePickerType="range" valueFrom="01/01/2025" valueTo="01/31/2025">
-  <DatePickerInput disabled labelText="Start date" placeholder="mm/dd/yyyy" />
-  <DatePickerInput disabled labelText="End date" placeholder="mm/dd/yyyy" />
+  <DatePickerInput disabled labelText="Report period start" placeholder="mm/dd/yyyy" />
+  <DatePickerInput disabled labelText="Report period end" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
 ### Read-only (simple)
 
 With the default datePickerType (`"simple"`), readonly shows a fixed value in the text field without a calendar.
 
-<DatePicker value="01/15/1990">
-  <DatePickerInput readonly labelText="Date of birth" placeholder="mm/dd/yyyy" />
+<DatePicker value="03/01/2024">
+  <DatePickerInput readonly labelText="Onboarding date" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
 ### Read-only (single)
 
 Set `readonly` to `true` to display a value while preventing edits. Unlike disabled, the input remains focusable and its value is submitted with the form.
 
-<DatePicker datePickerType="single" value="01/15/1990">
-  <DatePickerInput readonly labelText="Date of birth" placeholder="mm/dd/yyyy" />
+<DatePicker datePickerType="single" value="01/15/2024">
+  <DatePickerInput readonly labelText="Contract start date" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
 ### Read-only (range)
@@ -416,8 +416,8 @@ Set `readonly` to `true` to display a value while preventing edits. Unlike disab
 The readonly state also works with range pickers.
 
 <DatePicker datePickerType="range" valueFrom="01/01/2025" valueTo="01/31/2025">
-  <DatePickerInput readonly labelText="Start date" placeholder="mm/dd/yyyy" />
-  <DatePickerInput readonly labelText="End date" placeholder="mm/dd/yyyy" />
+  <DatePickerInput readonly labelText="Report period start" placeholder="mm/dd/yyyy" />
+  <DatePickerInput readonly labelText="Report period end" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
 ## Skeleton
