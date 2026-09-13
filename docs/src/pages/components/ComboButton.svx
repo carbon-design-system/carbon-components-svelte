@@ -169,6 +169,8 @@ Set `labelText` on a `MenuItem` and nest child `MenuItem` rows to get a submenu.
 
 ## Events
 
+Respond to trigger button clicks and menu close attempts.
+
 ### Trigger events
 
 Clicking the chevron trigger fires `on:click:trigger`, separate from the primary action's `on:click`. The trigger's other native events (`mousedown`, `focus`, `blur`, `mouseover`, `mouseenter`, `mouseleave`) dispatch the same way, each with a `:trigger`-suffixed counterpart alongside the shared, unscoped event.

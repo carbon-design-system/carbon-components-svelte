@@ -139,6 +139,8 @@ Set `disabled` to `true` to disable the entire pagination, including the nav but
 
 ## Events
 
+Respond to page and page-size changes.
+
 ### Change
 
 Use `on:change` to listen for direct user interaction—the previous/next buttons, or the page and page-size selects. The event detail includes whichever value changed.
