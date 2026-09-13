@@ -166,6 +166,24 @@ Create a header with a persistent hamburger menu state.
 </SideNav>
 ```
 
+### Scroll gradient
+
+When the side nav's content overflows, wrap `SideNavItems` in [ScrollGradient](/components/ScrollGradient) to fade its top and bottom edges as a scroll affordance, hiding each edge's gradient once it's scrolled into view. The side nav's background uses the `background` token rather than `layer`, so pass `color="var(--cds-background)"` to match it — otherwise `ScrollGradient` fades to the wrong color.
+
+```svelte
+<SideNav fixed isOpen>
+  <ScrollGradient color="var(--cds-background)">
+    <SideNavItems>
+      <SideNavLink href="/dashboard" text="Dashboard" isSelected />
+      <SideNavLink href="/resources" text="Resource list" />
+      <SideNavLink href="/activity" text="Activity tracker" />
+    </SideNavItems>
+  </ScrollGradient>
+</SideNav>
+```
+
+<FileSource src="/framed/UIShell/HeaderNavScrollGradient" />
+
 ## Switcher
 
 A `HeaderAction` reveals a panel from the right edge.
