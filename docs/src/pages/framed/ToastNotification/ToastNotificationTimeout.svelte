@@ -20,7 +20,7 @@
     <ToastNotification
       {timeout}
       kind="success"
-      title="Success"
+      title="Export complete"
       subtitle="This notification will autoclose in {timeout.toLocaleString()} ms."
       caption={new Date().toLocaleString()}
       on:close={(e) => {
