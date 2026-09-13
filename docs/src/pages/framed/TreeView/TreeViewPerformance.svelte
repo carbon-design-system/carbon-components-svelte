@@ -30,20 +30,20 @@
         for (let k = 0; k < 10; k++) {
           subcategoryNodes.push({
             id: idCounter++,
-            text: `Item ${i}-${j}-${k}`,
+            text: `Employee ${i + 1}-${j + 1}-${k + 1}`,
           });
         }
 
         categoryNodes.push({
           id: idCounter++,
-          text: `Subcategory ${i}-${j}`,
+          text: `Team ${i + 1}-${j + 1}`,
           nodes: subcategoryNodes,
         });
       }
 
       nodes.push({
         id: idCounter++,
-        text: `Category ${i}`,
+        text: `Business Unit ${i + 1}`,
         nodes: categoryNodes,
       });
     }
@@ -58,7 +58,7 @@
     function createNestedNode(depth, maxDepth) {
       const node = {
         id: idCounter++,
-        text: `Level ${depth}`,
+        text: `Approval Step ${depth + 1}`,
       };
       lastId = node.id;
 
