@@ -129,3 +129,25 @@
   format={(v) => `${v}h`}
   data-testid="format-custom"
 />
+
+<BigNumber
+  labelText="Cache 1"
+  value={1000}
+  locale="en-US"
+  formatOptions={{ style: "currency", currency: "USD" }}
+  data-testid="cache-1"
+/>
+<BigNumber
+  labelText="Cache 2"
+  value={2000}
+  locale="en-US"
+  formatOptions={{ style: "currency", currency: "USD" }}
+  data-testid="cache-2"
+/>
+<BigNumber
+  labelText="Cache 3"
+  value={3000}
+  locale="en-US"
+  formatOptions={{ style: "currency", currency: "USD" }}
+  data-testid="cache-3"
+/>

@@ -1,3 +1,19 @@
+<script context="module">
+  import { BoundedFifoCache } from "../utils/boundedFifoCache.js";
+
+  const formatterCache = new BoundedFifoCache(32);
+
+  function getFormatter(formatterLocale, options) {
+    const key = `${formatterLocale ?? ""}|${JSON.stringify(options)}`;
+    let formatter = formatterCache.get(key);
+    if (!formatter) {
+      formatter = new Intl.NumberFormat(formatterLocale, options);
+      formatterCache.set(key, formatter);
+    }
+    return formatter;
+  }
+</script>
+
 <script>
   /** @restProps {figure} */
 
@@ -102,7 +118,7 @@
       options.compactDisplay = "short";
     }
     Object.assign(options, formatOptions);
-    return new Intl.NumberFormat(locale, options).format(num);
+    return getFormatter(locale, options).format(num);
   }
 
   function getIconSize(currentSize) {
