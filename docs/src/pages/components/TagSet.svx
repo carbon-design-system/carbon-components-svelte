@@ -12,9 +12,9 @@ description: Displays a row of tags that collapses to fit the available width, m
 Compose `TagSet` from ordinary `Tag` children. `TagSet` measures the available width and shows as many as fit.
 
 <TagSet>
-  <Tag type="red">Angular</Tag>
-  <Tag type="blue">React</Tag>
-  <Tag type="purple">Svelte</Tag>
+  <Tag type="red">Production</Tag>
+  <Tag type="blue">Staging</Tag>
+  <Tag type="purple">Development</Tag>
 </TagSet>
 
 ## Alignment
@@ -24,17 +24,17 @@ Set `align` to change how the visible tags are positioned within the row when th
 ### Center
 
 <TagSet align="center">
-  <Tag type="red">Angular</Tag>
-  <Tag type="blue">React</Tag>
-  <Tag type="purple">Svelte</Tag>
+  <Tag type="red">Production</Tag>
+  <Tag type="blue">Staging</Tag>
+  <Tag type="purple">Development</Tag>
 </TagSet>
 
 ### End
 
 <TagSet align="end">
-  <Tag type="red">Angular</Tag>
-  <Tag type="blue">React</Tag>
-  <Tag type="purple">Svelte</Tag>
+  <Tag type="red">Production</Tag>
+  <Tag type="blue">Staging</Tag>
+  <Tag type="purple">Development</Tag>
 </TagSet>
 
 ## Overflow
@@ -66,11 +66,11 @@ Set `measurementOffset` to subtract a fixed amount from the measured available w
     <div>measurementOffset={0} (default)</div>
     <div style="max-width: 14rem;">
       <TagSet>
-        <Tag type="red">Angular</Tag>
-        <Tag type="blue">React</Tag>
-        <Tag type="purple">Svelte</Tag>
-        <Tag type="green">Vue</Tag>
-        <Tag type="magenta">Ember</Tag>
+        <Tag type="red">Production</Tag>
+        <Tag type="blue">Staging</Tag>
+        <Tag type="purple">Development</Tag>
+        <Tag type="green">QA</Tag>
+        <Tag type="magenta">Sandbox</Tag>
       </TagSet>
     </div>
   </div>
@@ -78,11 +78,11 @@ Set `measurementOffset` to subtract a fixed amount from the measured available w
     <div>measurementOffset={80}</div>
     <div style="max-width: 14rem;">
       <TagSet measurementOffset={80}>
-        <Tag type="red">Angular</Tag>
-        <Tag type="blue">React</Tag>
-        <Tag type="purple">Svelte</Tag>
-        <Tag type="green">Vue</Tag>
-        <Tag type="magenta">Ember</Tag>
+        <Tag type="red">Production</Tag>
+        <Tag type="blue">Staging</Tag>
+        <Tag type="purple">Development</Tag>
+        <Tag type="green">QA</Tag>
+        <Tag type="magenta">Sandbox</Tag>
       </TagSet>
     </div>
   </div>
@@ -107,11 +107,11 @@ Set `overflowAlign` to align the tooltip relative to the "+N" indicator.
     <div>overflowAlign="start"</div>
     <div style="max-width: 12rem;">
       <TagSet overflowAlign="start">
-        <Tag type="red">Angular</Tag>
-        <Tag type="blue">React</Tag>
-        <Tag type="purple">Svelte</Tag>
-        <Tag type="green">Vue</Tag>
-        <Tag type="magenta">Ember</Tag>
+        <Tag type="red">Production</Tag>
+        <Tag type="blue">Staging</Tag>
+        <Tag type="purple">Development</Tag>
+        <Tag type="green">QA</Tag>
+        <Tag type="magenta">Sandbox</Tag>
       </TagSet>
     </div>
   </div>
@@ -119,11 +119,11 @@ Set `overflowAlign` to align the tooltip relative to the "+N" indicator.
     <div>overflowAlign="end"</div>
     <div style="max-width: 12rem;">
       <TagSet overflowAlign="end">
-        <Tag type="red">Angular</Tag>
-        <Tag type="blue">React</Tag>
-        <Tag type="purple">Svelte</Tag>
-        <Tag type="green">Vue</Tag>
-        <Tag type="magenta">Ember</Tag>
+        <Tag type="red">Production</Tag>
+        <Tag type="blue">Staging</Tag>
+        <Tag type="purple">Development</Tag>
+        <Tag type="green">QA</Tag>
+        <Tag type="magenta">Sandbox</Tag>
       </TagSet>
     </div>
   </div>
@@ -135,11 +135,11 @@ Set `overflowDirection` to `"top"` to show the tooltip above the indicator inste
 
 <div style="max-width: 12rem;">
   <TagSet overflowDirection="top">
-    <Tag type="red">Angular</Tag>
-    <Tag type="blue">React</Tag>
-    <Tag type="purple">Svelte</Tag>
-    <Tag type="green">Vue</Tag>
-    <Tag type="magenta">Ember</Tag>
+    <Tag type="red">Production</Tag>
+    <Tag type="blue">Staging</Tag>
+    <Tag type="purple">Development</Tag>
+    <Tag type="green">QA</Tag>
+    <Tag type="magenta">Sandbox</Tag>
   </TagSet>
 </div>
 
@@ -165,11 +165,11 @@ Use `on:click:overflow` to listen for clicks on the "+N" indicator. The event de
 
 <div style="max-width: 12rem;">
   <TagSet on:click:overflow={(e) => console.log(e.detail.count)}>
-    <Tag type="red">Angular</Tag>
-    <Tag type="blue">React</Tag>
-    <Tag type="purple">Svelte</Tag>
-    <Tag type="green">Vue</Tag>
-    <Tag type="magenta">Ember</Tag>
+    <Tag type="red">Production</Tag>
+    <Tag type="blue">Staging</Tag>
+    <Tag type="purple">Development</Tag>
+    <Tag type="green">QA</Tag>
+    <Tag type="magenta">Sandbox</Tag>
   </TagSet>
 </div>
 
@@ -179,11 +179,11 @@ Use `on:overflow:change` to listen for changes to the overflow count, whether fr
 
 <div style="max-width: 12rem;">
   <TagSet on:overflow:change={(e) => console.log(e.detail.count)}>
-    <Tag type="red">Angular</Tag>
-    <Tag type="blue">React</Tag>
-    <Tag type="purple">Svelte</Tag>
-    <Tag type="green">Vue</Tag>
-    <Tag type="magenta">Ember</Tag>
+    <Tag type="red">Production</Tag>
+    <Tag type="blue">Staging</Tag>
+    <Tag type="purple">Development</Tag>
+    <Tag type="green">QA</Tag>
+    <Tag type="magenta">Sandbox</Tag>
   </TagSet>
 </div>
 
@@ -194,17 +194,17 @@ Set `size` on `TagSet` to apply it to every slotted tag (including the "+N" over
 ### Small
 
 <TagSet size="sm">
-  <Tag type="red">Angular</Tag>
-  <Tag type="blue">React</Tag>
-  <Tag type="purple">Svelte</Tag>
+  <Tag type="red">Production</Tag>
+  <Tag type="blue">Staging</Tag>
+  <Tag type="purple">Development</Tag>
 </TagSet>
 
 ### Large
 
 <TagSet size="lg">
-  <Tag type="red">Angular</Tag>
-  <Tag type="blue">React</Tag>
-  <Tag type="purple">Svelte</Tag>
+  <Tag type="red">Production</Tag>
+  <Tag type="blue">Staging</Tag>
+  <Tag type="purple">Development</Tag>
 </TagSet>
 
 ## Gap
