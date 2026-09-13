@@ -20,45 +20,45 @@ Create a form with grouped controls using the form and form group. This example
 shows a form with checkboxes, radio buttons, and a select menu.
 
 <Form on:submit>
-  <FormGroup legendText="Checkboxes">
-    <Checkbox id="checkbox-0" labelText="Checkbox Label" checked />
-    <Checkbox id="checkbox-1" labelText="Checkbox Label" />
-    <Checkbox id="checkbox-2" labelText="Checkbox Label" disabled />
+  <FormGroup legendText="Security settings">
+    <Checkbox id="checkbox-0" labelText="Enable single sign-on (SSO)" checked />
+    <Checkbox id="checkbox-1" labelText="Require multi-factor authentication" />
+    <Checkbox id="checkbox-2" labelText="Enable audit logging" disabled />
   </FormGroup>
-  <FormGroup legendText="Radio buttons">
+  <FormGroup legendText="Storage tier">
     <RadioButtonGroup
       name="radio-button-group"
-      selected="default-selected"
+      selected="standard"
     >
       <RadioButton
         id="radio-1"
-        value="standard"
-        labelText="Standard Radio Button"
+        value="free"
+        labelText="Free (1 GB)"
       />
       <RadioButton
         id="radio-2"
-        value="default-selected"
-        labelText="Default Selected Radio Button"
+        value="standard"
+        labelText="Standard (10 GB)"
       />
       <RadioButton
         id="radio-4"
-        value="disabled"
-        labelText="Disabled Radio Button"
+        value="pro"
+        labelText="Pro (128 GB)"
         disabled
       />
     </RadioButtonGroup>
   </FormGroup>
   <FormGroup>
-  <Select id="select-1" labelText="Select menu">
+  <Select id="select-1" labelText="Account plan">
     <SelectItem
       disabled
       hidden
       value="placeholder-item"
-      text="Choose an option"
+      text="Choose a plan"
     />
-    <SelectItem value="option-1" text="Option 1" />
-    <SelectItem value="option-2" text="Option 2" />
-    <SelectItem value="option-3" text="Option 3" />
+    <SelectItem value="free" text="Free" />
+    <SelectItem value="starter" text="Starter" />
+    <SelectItem value="team" text="Team" />
   </Select>
   </FormGroup>
   <Button type="submit">Submit</Button>
@@ -96,10 +96,10 @@ useful when stacking form groups without extra spacing between them.
 
 <Form>
   <FormGroup legendText="Default spacing">
-    <Checkbox id="checkbox-margin-0" labelText="Checkbox Label" />
+    <Checkbox id="checkbox-margin-0" labelText="Show advanced settings" />
   </FormGroup>
   <FormGroup legendText="No margin" noMargin>
-    <Checkbox id="checkbox-margin-1" labelText="Checkbox Label" />
+    <Checkbox id="checkbox-margin-1" labelText="Show advanced settings" />
   </FormGroup>
 </Form>
 
@@ -137,7 +137,7 @@ programmatically.
   e.preventDefault();
   console.log("submit", e);
 }}>
-   <Checkbox id="checkbox-0" labelText="Checkbox Label" checked />
+   <Checkbox id="checkbox-0" labelText="Send email confirmation" checked />
   <Button type="submit">Submit</Button>
 </Form>
 
