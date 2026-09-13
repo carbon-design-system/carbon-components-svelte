@@ -155,6 +155,22 @@ describe("BigNumber", () => {
       const icon = el.querySelector(".bx--big-number__trend-icon");
       expect(icon).toHaveClass("bx--big-number__trend-icon--success");
     });
+
+    it("renders a flat trend icon colored neutral by default", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("trend-flat");
+      const icon = el.querySelector(".bx--big-number__trend-icon");
+      expect(icon).toHaveClass("bx--big-number__trend-icon--neutral");
+    });
+
+    it("overrides a flat trend's color", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("trend-flat-error");
+      const icon = el.querySelector(".bx--big-number__trend-icon");
+      expect(icon).toHaveClass("bx--big-number__trend-icon--error");
+    });
   });
 
   it("renders the skeleton instead of the value when loading", () => {

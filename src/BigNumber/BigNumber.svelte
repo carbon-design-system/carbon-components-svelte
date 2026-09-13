@@ -55,15 +55,16 @@
 
   /**
    * Render a trend indicator next to the value.
-   * @type {"up" | "down"}
+   * @type {"up" | "down" | "flat"}
    */
   export let trend = undefined;
 
   /**
-   * Override the trend indicator's color. Defaults to `"success"` for `trend="up"` and
-   * `"error"` for `trend="down"` — set this when the direction's meaning is reversed for
-   * the metric (e.g. a falling error rate, or a rising failure count).
-   * @type {"success" | "error"}
+   * Override the trend indicator's color. Defaults to `"success"` for `trend="up"`,
+   * `"error"` for `trend="down"`, and `"neutral"` for `trend="flat"` — set this when
+   * the direction's meaning is reversed for the metric (e.g. a falling error rate,
+   * or a rising failure count).
+   * @type {"success" | "error" | "neutral"}
    */
   export let trendColor = undefined;
 
@@ -105,6 +106,7 @@
 
   import ArrowDown from "../icons/ArrowDown.svelte";
   import ArrowUp from "../icons/ArrowUp.svelte";
+  import Subtract from "../icons/Subtract.svelte";
   import Tooltip from "../Tooltip/Tooltip.svelte";
   import BigNumberSkeleton from "./BigNumberSkeleton.svelte";
 
@@ -138,7 +140,8 @@
     hasTotal &&
     (forceShowTotal || (!percentage && formattedValue !== formattedTotal));
   $: displayValue = `${formattedValue ?? DASH}${percentage ? "%" : ""}`;
-  $: resolvedTrendColor = trendColor ?? (trend === "up" ? "success" : "error");
+  $: resolvedTrendColor =
+    trendColor ?? { up: "success", down: "error", flat: "neutral" }[trend];
 </script>
 
 {#if loading}
@@ -179,6 +182,12 @@
         />
       {:else if trend === "down"}
         <ArrowDown
+          size={getIconSize(size)}
+          class="bx--big-number__trend-icon bx--big-number__trend-icon--{resolvedTrendColor}"
+          aria-hidden="true"
+        />
+      {:else if trend === "flat"}
+        <Subtract
           size={getIconSize(size)}
           class="bx--big-number__trend-icon bx--big-number__trend-icon--{resolvedTrendColor}"
           aria-hidden="true"

@@ -90,6 +90,19 @@
   trendColor="success"
   data-testid="trend-down-success"
 />
+<BigNumber
+  labelText="Trend flat"
+  value={42}
+  trend="flat"
+  data-testid="trend-flat"
+/>
+<BigNumber
+  labelText="Trend flat, overridden to error"
+  value={42}
+  trend="flat"
+  trendColor="error"
+  data-testid="trend-flat-error"
+/>
 
 <BigNumber labelText="Loading" value={42} loading data-testid="loading" />
 
