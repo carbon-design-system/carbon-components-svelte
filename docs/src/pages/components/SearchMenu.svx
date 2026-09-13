@@ -17,7 +17,7 @@ Render `SearchMenuItem` children to display suggestions. Each item highlights th
 
 ## Sizes
 
-The search input is extra-large (`"xl"`) by default. Set `size` to choose another variant, matching the [Search](/components/Search) input sizing. By default the results menu adjusts to match the input: row height, text inset, and the leading-icon gutter all align with the input for the chosen size.
+Set `size` to control the search input height, matching the [Search](/components/Search) input sizing. The default is extra-large (`"xl"`). By default the results menu adjusts to match the input: row height, text inset, and the leading-icon gutter all align with the input for the chosen size.
 
 ### Extra large
 

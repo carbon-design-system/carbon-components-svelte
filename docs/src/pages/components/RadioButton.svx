@@ -111,7 +111,7 @@ Use `helperText` to provide additional context below the radio button group.
 
 ## States
 
-Reflect disabled and read-only states.
+Reflect interaction states.
 
 ### Disabled buttons
 

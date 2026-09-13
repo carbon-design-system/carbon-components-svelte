@@ -303,7 +303,7 @@ It defaults to `false` because wrapping changes option heights.
 
 ## Sizes
 
-The `size` prop sets the field height. The default is medium.
+Set `size` to control the field height. The default is medium.
 
 ### Extra-small
 
@@ -471,7 +471,7 @@ When inside a [Modal](/components/Modal#modal-with-dropdowns), portalMenu defaul
 
 ## States
 
-Surface validation and interaction states. Invalid and warning states each have a filterable counterpart.
+Reflect validation and interaction states. Invalid and warning states each have a filterable counterpart.
 
 ### Invalid
 

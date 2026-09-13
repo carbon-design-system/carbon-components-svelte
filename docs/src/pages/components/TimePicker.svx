@@ -273,7 +273,7 @@ Set `isOnlyTwo` to render only two elements.
 
 ## Sizes
 
-The default input height is medium. Set `size` to choose another variant.
+Set `size` to control the input height. The default is medium.
 
 ### Extra-large
 

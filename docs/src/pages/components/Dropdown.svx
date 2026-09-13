@@ -340,7 +340,7 @@ Set `size` to `"sm"` for a small dropdown. Useful for compact layouts or seconda
 
 ## States
 
-Communicate validation and availability through the dropdown state.
+Reflect validation and interaction states.
 
 ### Invalid
 
@@ -511,6 +511,6 @@ the selected item is disabled.
 
 ## Skeleton
 
-Display a loading state using the dropdown skeleton.
+Show a loading state with the dropdown skeleton.
 
 <DropdownSkeleton />

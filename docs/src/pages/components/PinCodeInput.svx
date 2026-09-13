@@ -88,7 +88,7 @@ Non-fluid pin code inputs do not show a placeholder by default. Set `placeholder
 
 ## Sizes
 
-The `size` prop sets the segment height. The default is `md`.
+Set `size` to control the segment height. The default is `md`.
 
 ### Extra-small
 
