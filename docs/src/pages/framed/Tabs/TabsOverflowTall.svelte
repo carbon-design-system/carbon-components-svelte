@@ -1,8 +1,23 @@
 <script>
   import { Tab, TabContent, Tabs } from "carbon-components-svelte";
 
-  const items = Array.from({ length: 12 }, (_, i) => ({
-    label: `Tab label ${i + 1}`,
+  const labels = [
+    "Dashboard",
+    "Monitoring",
+    "Activity",
+    "Settings",
+    "Reports",
+    "Billing",
+    "Users",
+    "Security",
+    "Integrations",
+    "Notifications",
+    "Webhooks",
+    "Audit logs",
+  ];
+
+  const items = labels.map((label, i) => ({
+    label,
     secondaryLabel: `(${i + 1}/12)`,
   }));
 </script>

@@ -1,11 +1,23 @@
 <script>
   import { Tab, TabContent, Tabs } from "carbon-components-svelte";
 
+  const labels = [
+    "Dashboard",
+    "Monitoring",
+    "Activity",
+    "Settings",
+    "Reports",
+    "Billing",
+    "Users",
+    "Security",
+    "Integrations",
+    "Notifications",
+    "Webhooks",
+    "Audit logs",
+  ];
+
   let selectedId = "tab-1";
-  let tabs = Array.from({ length: 12 }, (_, i) => ({
-    id: `tab-${i + 1}`,
-    label: `Tab label ${i + 1}`,
-  }));
+  let tabs = labels.map((label, i) => ({ id: `tab-${i + 1}`, label }));
 
   function handleDismiss({ detail }) {
     tabs = tabs.filter((tab) => tab.id !== detail.id);
