@@ -1,0 +1,94 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Meter (absent from v10; new partial modeled on progress-bar tokens).
+/// A capacity gauge: usage against a maximum, with optional warning/error
+/// thresholds. Unlike a progress bar, nothing is "in progress."
+/// @access private
+/// @group components
+@mixin meter {
+  .#{$prefix}--meter {
+    display: flex;
+    flex-direction: column;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--meter__label {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: $carbon--spacing-03;
+    color: $text-primary;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--meter__value-text {
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--meter__track {
+    position: relative;
+    width: 100%;
+    height: to-rem(8px);
+    background: $ui-03;
+    overflow: hidden;
+  }
+
+  .#{$prefix}--meter--sm .#{$prefix}--meter__track {
+    height: to-rem(4px);
+  }
+
+  .#{$prefix}--meter__bar {
+    height: 100%;
+    width: 100%;
+    background: $interactive-04;
+    transform-origin: 0 50%;
+    transition: transform $duration--fast-02 motion(standard, productive);
+  }
+
+  .#{$prefix}--meter--success .#{$prefix}--meter__bar {
+    background: $support-02;
+  }
+
+  .#{$prefix}--meter--warning .#{$prefix}--meter__bar {
+    background: $support-03;
+  }
+
+  .#{$prefix}--meter--error .#{$prefix}--meter__bar {
+    background: $support-01;
+  }
+
+  .#{$prefix}--meter__threshold {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: to-rem(2px);
+    transform: translateX(-50%);
+    background: $ui-04;
+  }
+
+  .#{$prefix}--meter__threshold--warning {
+    background: $support-03;
+  }
+
+  .#{$prefix}--meter__threshold--error {
+    background: $support-01;
+  }
+
+  .#{$prefix}--meter__helper-text {
+    color: $text-secondary;
+
+    @include type-style("helper-text-01");
+  }
+
+  .#{$prefix}--meter--error .#{$prefix}--meter__helper-text {
+    color: $text-error;
+  }
+}
+
+@include exports("meter") {
+  @include meter;
+}
