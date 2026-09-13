@@ -216,4 +216,15 @@ describe("ScrollGradient", () => {
     ) as HTMLElement;
     expect(scrollElement.style.backgroundColor).toBe("transparent");
   });
+
+  it("applies the height prop to the wrapper", () => {
+    const { container } = render(ScrollGradient, {
+      props: { height: "100vh" },
+    });
+
+    const wrapper = container.querySelector(
+      ".bx--scroll-gradient",
+    ) as HTMLElement;
+    expect(wrapper.style.height).toBe("100vh");
+  });
 });

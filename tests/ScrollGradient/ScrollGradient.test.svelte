@@ -3,9 +3,10 @@
 
   export let color: string | undefined = undefined;
   export let background: string | undefined = undefined;
+  export let height: string | undefined = undefined;
   export let hideStartGradient = false;
 </script>
 
-<ScrollGradient {color} {background} {hideStartGradient}>
+<ScrollGradient {color} {background} {height} {hideStartGradient}>
   <p>Content</p>
 </ScrollGradient>

@@ -19,6 +19,13 @@
   export let background = undefined;
 
   /**
+   * Specify the height of the component. Set a height so the content
+   * can overflow vertically.
+   * @type {"100%" | "100vh" | (string & {})}
+   */
+  export let height = undefined;
+
+  /**
    * Set to `true` to suppress the top and left gradients,
    * even when their edge is scrollable.
    */
@@ -51,10 +58,15 @@
   $: showLeftGradient = xScrollable && !hideStartGradient && !atLeft;
   $: showRightGradient = xScrollable && !atRight;
 
-  $: style = color
-    ? `--cds-scroll-gradient-color: ${color};${
-        $$restProps.style ? ` ${$$restProps.style}` : ""
-      }`
+  $: declarations = [
+    color && `--cds-scroll-gradient-color: ${color};`,
+    height && `height: ${height};`,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  $: style = declarations
+    ? `${declarations}${$$restProps.style ? ` ${$$restProps.style}` : ""}`
     : $$restProps.style;
 
   function updateScrollable() {
