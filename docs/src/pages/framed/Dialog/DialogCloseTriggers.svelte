@@ -6,7 +6,7 @@
 </script>
 
 <Stack gap={5}>
-  <Button on:click={() => (open = true)}>Open modal dialog</Button>
+  <Button on:click={() => (open = true)}>Edit deployment settings</Button>
   {#if lastTrigger}
     <p>Last close trigger: <code>{lastTrigger}</code></p>
   {/if}
@@ -15,7 +15,7 @@
 <Dialog
   bind:open
   modal
-  aria-label="Close trigger example"
+  aria-label="Deployment settings"
   on:close={(e) => {
     lastTrigger = e.detail.trigger;
     console.log("close", e.detail);

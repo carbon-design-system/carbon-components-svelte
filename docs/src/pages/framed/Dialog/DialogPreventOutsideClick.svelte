@@ -4,13 +4,13 @@
   let open = false;
 </script>
 
-<Button on:click={() => (open = true)}>Open dialog</Button>
+<Button on:click={() => (open = true)}>Delete workspace</Button>
 
 <Dialog
   preventCloseOnClickOutside
   bind:open
   modal
-  aria-label="Prevent outside click example"
+  aria-label="Delete workspace"
 >
   <Stack gap={5}>
     <p>
