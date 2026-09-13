@@ -11,7 +11,7 @@ description: Inline notifications display contextual messages inline with conten
 
 Display a basic error notification with title and subtitle by default. See [detailed usage](https://carbondesignsystem.com/components/notification/usage) and the related [ToastNotification](ToastNotification).
 
-<InlineNotification title="Error:" subtitle="An internal server error occurred." />
+<InlineNotification title="Access denied:" subtitle="You do not have permission to edit this record." />
 
 ## Reusable
 
@@ -33,8 +33,8 @@ Both the title and subtitle are optional and can be customized with slots.
 
 Title and subtitle only render when provided.
 
-<InlineNotification subtitle="An internal server error occurred." />
-<InlineNotification title="An error occurred." />
+<InlineNotification subtitle="You do not have permission to perform this action." />
+<InlineNotification title="Unable to process your request." />
 
 ### Custom (slots)
 
@@ -42,7 +42,7 @@ Customize the notification content using slots for more flexibility.
 
 <InlineNotification>
   <span slot="titleChildren">Error: </span>
-  <strong slot="subtitleChildren">An internal server error occurred.</strong>
+  <strong slot="subtitleChildren">Your API key has expired.</strong>
 </InlineNotification>
 
 ## Actions
@@ -51,7 +51,7 @@ Add interactive elements to notifications using the actions slot.
 
 ### Action button
 
-<InlineNotification kind="warning" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours.">
+<InlineNotification kind="warning" title="Storage limit approaching:" subtitle="Your workspace has used 90% of its allocated storage.">
   <svelte:fragment slot="actions">
     <NotificationActionButton>Learn more</NotificationActionButton>
   </svelte:fragment>
@@ -75,7 +75,7 @@ Hide the close button or customize its behavior and label.
 
 Create a persistent notification by hiding the close button.
 
-<InlineNotification hideCloseButton kind="warning" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours." />
+<InlineNotification hideCloseButton kind="warning" title="Scheduled downtime:" subtitle="The system will be unavailable during tonight's maintenance window." />
 
 ### Translated label
 
@@ -91,7 +91,7 @@ Translate the close button label via `closeButtonDescription`.
 
 The component is controlled, so you can prevent the default close behavior with `e.preventDefault()`.
 
-<InlineNotification title="Error" subtitle="An internal server error occurred." on:close={(e) => {
+<InlineNotification title="Delete failed" subtitle="This resource is still in use by another service." on:close={(e) => {
   e.preventDefault();
   // custom close logic (e.g., transitions)
 }} />
@@ -100,7 +100,7 @@ The component is controlled, so you can prevent the default close behavior with 
 
 Specify the ARIA `role` for the notification container to control how screen readers announce it. Defaults to `"alert"` for interruptive announcements. Use `"status"` for polite live-region updates, or `"log"` for a running log of messages.
 
-<InlineNotification role="status" kind="success" title="Success:" subtitle="Your settings have been saved." />
+<InlineNotification role="status" kind="success" title="Success:" subtitle="Your profile has been updated." />
 
 ## Variants
 
@@ -108,10 +108,10 @@ The component supports different notification types.
 
 ### High contrast
 
-<InlineNotification kind="error" title="Error:" subtitle="An internal server error occurred." />
-<InlineNotification kind="info" title="New updates:" subtitle="Restart to get the latest updates." />
-<InlineNotification kind="info-square" title="New updates:" subtitle="Restart to get the latest updates." />
-<InlineNotification kind="success" title="Success:" subtitle="Your settings have been saved." />
+<InlineNotification kind="error" title="Deployment failed:" subtitle="Build #128 failed to deploy. Check the pipeline logs for details." />
+<InlineNotification kind="info" title="Update available:" subtitle="Restart the application to install the latest updates." />
+<InlineNotification kind="info-square" title="Update available:" subtitle="Restart the application to install the latest updates." />
+<InlineNotification kind="success" title="Sync complete:" subtitle="All records have been synchronized with the server." />
 <InlineNotification kind="warning" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours." />
 <InlineNotification kind="warning-alt" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours." />
 
@@ -119,9 +119,9 @@ The component supports different notification types.
 
 Use low contrast variants for less prominent notifications.
 
-<InlineNotification lowContrast kind="error" title="Error:" subtitle="An internal server error occurred." />
-<InlineNotification lowContrast kind="info" title="New updates:" subtitle="Restart to get the latest updates." />
-<InlineNotification lowContrast kind="info-square" title="New updates:" subtitle="Restart to get the latest updates." />
-<InlineNotification lowContrast kind="success" title="Success:" subtitle="Your settings have been saved." />
+<InlineNotification lowContrast kind="error" title="Deployment failed:" subtitle="Build #128 failed to deploy. Check the pipeline logs for details." />
+<InlineNotification lowContrast kind="info" title="Update available:" subtitle="Restart the application to install the latest updates." />
+<InlineNotification lowContrast kind="info-square" title="Update available:" subtitle="Restart the application to install the latest updates." />
+<InlineNotification lowContrast kind="success" title="Sync complete:" subtitle="All records have been synchronized with the server." />
 <InlineNotification lowContrast kind="warning" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours." />
 <InlineNotification lowContrast kind="warning-alt" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours." />

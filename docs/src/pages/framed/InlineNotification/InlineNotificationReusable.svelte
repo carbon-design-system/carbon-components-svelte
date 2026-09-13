@@ -13,22 +13,23 @@
 
   function showError() {
     kind = "error";
-    title = "Error:";
-    subtitle = "An internal server error occurred.";
+    title = "Save failed:";
+    subtitle =
+      "Your changes could not be saved. Check your connection and try again.";
     open = true;
   }
 
   function showSuccess() {
     kind = "success";
     title = "Success:";
-    subtitle = "Your settings have been saved.";
+    subtitle = "Changes saved successfully.";
     open = true;
   }
 
   function showWarning() {
     kind = "warning";
     title = "Warning:";
-    subtitle = "Please review your changes before continuing.";
+    subtitle = "Some fields require your attention before you continue.";
     open = true;
   }
 </script>

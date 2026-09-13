@@ -21,7 +21,7 @@
       {timeout}
       pauseOnHover
       kind="success"
-      title="Success:"
+      title="Export complete:"
       subtitle="This notification will autoclose in {timeout.toLocaleString()} ms. Hover to pause the countdown."
       on:close={(e) => {
         timeout = undefined;
