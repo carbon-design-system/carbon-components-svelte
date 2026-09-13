@@ -17,15 +17,15 @@ By default, the tile is collapsed. Use the above and below slots to define conte
 <ExpandableTile>
   <div slot="above">
     <div>
-      Above the fold content here
+      Payments API
     </div>
     <br />
     <br />
     <div>
-      More above the fold content
+      Operational — 99.98% uptime over the last 30 days
     </div>
   </div>
-  <div slot="below">Below the fold content here</div>
+  <div slot="below">No open incidents. Last deployment: 2 hours ago.</div>
 </ExpandableTile>
 
 ## Expanded state
@@ -45,8 +45,8 @@ and update the tile height.
 Display the tile expanded by default with `expanded`.
 
 <ExpandableTile expanded>
-  <div slot="above">Above the fold content here</div>
-  <div slot="below">Below the fold content here</div>
+  <div slot="above">Payments API — Operational, 99.98% uptime over the last 30 days</div>
+  <div slot="below">No open incidents. Last deployment: 2 hours ago.</div>
 </ExpandableTile>
 
 ## Light
@@ -54,8 +54,8 @@ Display the tile expanded by default with `expanded`.
 Use the light variant on dark backgrounds with `light`.
 
 <ExpandableTile light>
-  <div slot="above">Above the fold content here</div>
-  <div slot="below">Below the fold content here</div>
+  <div slot="above">Payments API — Operational, 99.98% uptime over the last 30 days</div>
+  <div slot="below">No open incidents. Last deployment: 2 hours ago.</div>
 </ExpandableTile>
 
 ## Content height
@@ -68,8 +68,8 @@ Set custom heights for the tile content using CSS to control the exact dimension
 of the visible and hidden content.
 
 <ExpandableTile>
-  <div slot="above" style="height: 10rem">Above the fold content here</div>
-  <div slot="below" style="height: 10rem">Below the fold content here</div>
+  <div slot="above" style="height: 10rem">Payments API — Operational, 99.98% uptime over the last 30 days</div>
+  <div slot="below" style="height: 10rem">No open incidents. Last deployment: 2 hours ago.</div>
 </ExpandableTile>
 
 ### Manual height override
@@ -80,8 +80,8 @@ padding automatically with a resize observer. Set `tileMaxHeight` and
 the collapsed height ahead of time instead of relying on the observer.
 
 <ExpandableTile tileMaxHeight={64} tilePadding={32}>
-  <div slot="above">Above the fold content here</div>
-  <div slot="below">Below the fold content here</div>
+  <div slot="above">Payments API — Operational, 99.98% uptime over the last 30 days</div>
+  <div slot="below">No open incidents. Last deployment: 2 hours ago.</div>
 </ExpandableTile>
 
 ## Labels
@@ -93,8 +93,8 @@ Customize the chevron's visible label text and the tile's accessible tooltip tex
 Customize expand/collapse button labels with `tileExpandedLabel` and `tileCollapsedLabel`.
 
 <ExpandableTile tileExpandedLabel="View less" tileCollapsedLabel="View more">
-  <div slot="above">Above the fold content here</div>
-  <div slot="below">Below the fold content here</div>
+  <div slot="above">Payments API — Operational, 99.98% uptime over the last 30 days</div>
+  <div slot="below">No open incidents. Last deployment: 2 hours ago.</div>
 </ExpandableTile>
 
 ### Accessible text
@@ -108,8 +108,8 @@ button when `hasInteractiveContent` is set.
   tileCollapsedIconText="Show more details"
   tileExpandedIconText="Show fewer details"
 >
-  <div slot="above">Above the fold content here</div>
-  <div slot="below">Below the fold content here</div>
+  <div slot="above">Payments API — Operational, 99.98% uptime over the last 30 days</div>
+  <div slot="below">No open incidents. Last deployment: 2 hours ago.</div>
 </ExpandableTile>
 
 ## Interactive content
@@ -123,11 +123,11 @@ Only the expand/collapse toggle affects the tile state.
 <ExpandableTile hasInteractiveContent tileExpandedLabel="View less" tileCollapsedLabel="View more">
   <Stack slot="above" gap={4} inline>
     <OutboundLink href="https://svelte.carbondesignsystem.com/">
-      Native link
+      View documentation
     </OutboundLink>
-    <Button on:click={() => console.log("Hello world")}>
-      Button
+    <Button on:click={() => console.log("Alert acknowledged")}>
+      Acknowledge alert
     </Button>
   </Stack>
-  <div slot="below">Below the fold content here</div>
+  <div slot="below">Escalated to the on-call engineer at 2:14 AM UTC.</div>
 </ExpandableTile>

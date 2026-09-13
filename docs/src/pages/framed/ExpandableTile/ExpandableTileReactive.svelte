@@ -24,12 +24,17 @@
   <div>Expanded: <strong>{expanded}</strong></div>
   <ExpandableTile bind:expanded>
     <div slot="above">
-      <div>Above the fold content here</div>
+      <div>Payments API — Operational</div>
       {#if grow}
-        <div>Extra line added dynamically.</div>
-        <div>The resize observer remeasures the collapsed height.</div>
+        <div>Elevated error rate detected on the /charges endpoint.</div>
+        <div>
+          The resize observer remeasures the collapsed height as new alerts
+          stream in.
+        </div>
       {/if}
     </div>
-    <div slot="below">Below the fold content here</div>
+    <div slot="below">
+      No open incidents. On-call engineer: Priya Natarajan.
+    </div>
   </ExpandableTile>
 </Stack>
