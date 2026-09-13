@@ -1,5 +1,5 @@
 import type { Readable, Subscriber, Unsubscriber } from "svelte/store";
-import type { BreakpointSize } from "./breakpoints";
+import type { BreakpointSize } from "./breakpoints.js";
 
 /**
  * Attaches `matchMedia` listeners for every breakpoint and invokes `callback`

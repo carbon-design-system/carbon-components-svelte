@@ -6,7 +6,7 @@
     isSideNavCollapsed,
     isSideNavMobile,
     isSideNavRail,
-  } from "./nav-store";
+  } from "./nav-store.js";
 
   /**
    * By default, the `SideNav` applies a left margin of `3rem` to `Content`

@@ -237,14 +237,14 @@
   import Checkmark from "../icons/Checkmark.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import HighlightSlot from "../ListBox/HighlightSlot.svelte";
   import {
     ListBox,
     ListBoxMenu,
     ListBoxMenuIcon,
     ListBoxMenuItem,
     ListBoxSelection,
-  } from "../ListBox";
-  import HighlightSlot from "../ListBox/HighlightSlot.svelte";
+  } from "../ListBox/index.js";
   import { shouldVirtualizeMenu } from "../ListBox/list-box-utils.js";
   import { createMenuWindow } from "../ListBox/menu-window.js";
   import { debounce } from "../utils/debounce.js";

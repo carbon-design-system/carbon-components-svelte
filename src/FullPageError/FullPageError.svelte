@@ -18,7 +18,7 @@
   /** Specify the description for the error. */
   export let description = "";
 
-  import { Column, Grid } from "../Grid";
+  import { Column, Grid } from "../Grid/index.js";
   import Error403 from "./Error403.svelte";
   import Error404 from "./Error404.svelte";
   import ErrorGeneric from "./ErrorGeneric.svelte";

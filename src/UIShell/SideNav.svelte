@@ -54,7 +54,7 @@
     isSideNavMobile,
     isSideNavRail,
     shouldRenderHamburgerMenu,
-  } from "./nav-store";
+  } from "./nav-store.js";
 
   function handleEscape(event) {
     if (isOpen && !fixed && $isSideNavMobile && event.key === "Escape") {
