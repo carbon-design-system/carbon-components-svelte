@@ -125,7 +125,7 @@ Hide the label visually by setting `hideLabel` to `true`. The label remains avai
 
 ## Light
 
-Enable the light variant with `light`.
+Use the light variant for light backgrounds.
 
 <TimePicker light labelText="Cron job" placeholder="hh:mm">
   <TimePickerSelect value="pm">

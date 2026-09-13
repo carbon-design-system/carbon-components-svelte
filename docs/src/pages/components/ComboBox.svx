@@ -418,7 +418,7 @@ Bind to `open` to control the dropdown menu programmatically, such as opening it
 
 ## Light
 
-Set `light` to `true` to use the light color scheme.
+Use the light variant for light backgrounds.
 
 <ComboBox light labelText="Alert channel" placeholder="Select alert channel"
 items={[
