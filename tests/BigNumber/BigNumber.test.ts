@@ -196,6 +196,45 @@ describe("BigNumber", () => {
     });
   });
 
+  describe("delta", () => {
+    it("renders a percentage delta with the trend color and a label", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("delta-percentage");
+      const deltaValue = el.querySelector(".bx--big-number__delta-value");
+      expect(deltaValue).toHaveTextContent("+4.2%");
+      expect(deltaValue).toHaveClass("bx--big-number__delta-value--success");
+      expect(
+        el.querySelector(".bx--big-number__delta-label"),
+      ).toHaveTextContent("vs last week");
+    });
+
+    it("renders a negative absolute delta with the neutral color when there is no trend", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("delta-negative");
+      const deltaValue = el.querySelector(".bx--big-number__delta-value");
+      expect(deltaValue).toHaveTextContent("-120");
+      expect(deltaValue).toHaveClass("bx--big-number__delta-value--neutral");
+    });
+
+    it("renders a zero delta without a sign", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("delta-zero");
+      expect(
+        el.querySelector(".bx--big-number__delta-value"),
+      ).toHaveTextContent("0");
+    });
+
+    it("renders no delta block when delta is not set", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("no-delta");
+      expect(el.querySelector(".bx--big-number__delta")).toBeNull();
+    });
+  });
+
   it("renders the skeleton instead of the value when loading", () => {
     render(BigNumber);
 
