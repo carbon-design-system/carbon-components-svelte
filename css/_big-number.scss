@@ -76,6 +76,38 @@
   .#{$prefix}--big-number__trend-icon--error {
     fill: $support-error;
   }
+
+  .#{$prefix}--big-number__trend-icon--neutral {
+    fill: $icon-secondary;
+  }
+
+  .#{$prefix}--big-number__delta {
+    display: flex;
+    gap: $carbon--spacing-02;
+    margin-block-start: $carbon--spacing-02;
+
+    @include type-style("body-short-01");
+  }
+
+  .#{$prefix}--big-number__delta-value--success {
+    color: $support-success;
+  }
+
+  .#{$prefix}--big-number__delta-value--error {
+    color: $support-error;
+  }
+
+  .#{$prefix}--big-number__delta-value--neutral {
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--big-number__delta-label {
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--big-number__footer {
+    margin-block-start: $carbon--spacing-03;
+  }
 }
 
 @include exports("big-number") {

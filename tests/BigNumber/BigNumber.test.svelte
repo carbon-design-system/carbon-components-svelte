@@ -90,6 +90,54 @@
   trendColor="success"
   data-testid="trend-down-success"
 />
+<BigNumber
+  labelText="Trend flat"
+  value={42}
+  trend="flat"
+  data-testid="trend-flat"
+/>
+<BigNumber
+  labelText="Trend flat, overridden to error"
+  value={42}
+  trend="flat"
+  trendColor="error"
+  data-testid="trend-flat-error"
+/>
+<BigNumber
+  labelText="Trend description override"
+  value={42}
+  trend="up"
+  trendDescription="Up 12% week over week"
+  data-testid="trend-description"
+/>
+
+<BigNumber
+  labelText="Delta percentage with label"
+  value={128000}
+  delta={4.2}
+  deltaPercentage
+  deltaLabel="vs last week"
+  trend="up"
+  data-testid="delta-percentage"
+/>
+<BigNumber
+  labelText="Delta absolute negative"
+  value={128000}
+  delta={-120}
+  data-testid="delta-negative"
+/>
+<BigNumber
+  labelText="Delta zero"
+  value={128000}
+  delta={0}
+  data-testid="delta-zero"
+/>
+<BigNumber labelText="No delta" value={128000} data-testid="no-delta" />
+
+<BigNumber labelText="Footer" value={42} data-testid="footer">
+  <span>Footer content</span>
+</BigNumber>
+<BigNumber labelText="No footer" value={42} data-testid="no-footer" />
 
 <BigNumber labelText="Loading" value={42} loading data-testid="loading" />
 
@@ -107,3 +155,47 @@
 >
   <strong slot="labelChildren">Custom label content</strong>
 </BigNumber>
+
+<BigNumber
+  labelText="Currency"
+  value={1250000}
+  locale="en-US"
+  formatOptions={{ style: "currency", currency: "USD" }}
+  data-testid="format-currency"
+/>
+<BigNumber
+  labelText="Unit"
+  value={340}
+  locale="en-US"
+  fullNumber
+  formatOptions={{ style: "unit", unit: "millisecond", unitDisplay: "short" }}
+  data-testid="format-unit"
+/>
+<BigNumber
+  labelText="Custom format"
+  value={7}
+  format={(v) => `${v}h`}
+  data-testid="format-custom"
+/>
+
+<BigNumber
+  labelText="Cache 1"
+  value={1000}
+  locale="en-US"
+  formatOptions={{ style: "currency", currency: "USD" }}
+  data-testid="cache-1"
+/>
+<BigNumber
+  labelText="Cache 2"
+  value={2000}
+  locale="en-US"
+  formatOptions={{ style: "currency", currency: "USD" }}
+  data-testid="cache-2"
+/>
+<BigNumber
+  labelText="Cache 3"
+  value={3000}
+  locale="en-US"
+  formatOptions={{ style: "currency", currency: "USD" }}
+  data-testid="cache-3"
+/>

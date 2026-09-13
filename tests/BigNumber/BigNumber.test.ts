@@ -37,11 +37,13 @@ describe("BigNumber", () => {
       expect(el.querySelector(".bx--big-number__denominator")).toBeNull();
     });
 
-    it("hides the denominator when total is less than value", () => {
+    it("shows the denominator when total is less than value", () => {
       render(BigNumber);
 
       const el = screen.getByTestId("total-less");
-      expect(el.querySelector(".bx--big-number__denominator")).toBeNull();
+      expect(
+        el.querySelector(".bx--big-number__denominator"),
+      ).toHaveTextContent("/ 3");
     });
 
     it("hides the denominator when its truncated display matches the value's", () => {
@@ -153,6 +155,101 @@ describe("BigNumber", () => {
       const icon = el.querySelector(".bx--big-number__trend-icon");
       expect(icon).toHaveClass("bx--big-number__trend-icon--success");
     });
+
+    it("renders a flat trend icon colored neutral by default", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("trend-flat");
+      const icon = el.querySelector(".bx--big-number__trend-icon");
+      expect(icon).toHaveClass("bx--big-number__trend-icon--neutral");
+    });
+
+    it("overrides a flat trend's color", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("trend-flat-error");
+      const icon = el.querySelector(".bx--big-number__trend-icon");
+      expect(icon).toHaveClass("bx--big-number__trend-icon--error");
+    });
+
+    it("announces the default trend description to assistive tech", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("trend-up");
+      expect(el).toHaveTextContent("Trending up");
+    });
+
+    it("announces a custom trendDescription instead of the default", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("trend-description");
+      expect(el).toHaveTextContent("Up 12% week over week");
+      expect(el).not.toHaveTextContent("Trending up");
+    });
+
+    it("has no role attribute on the value row", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("trend-up");
+      const row = el.querySelector(".bx--big-number__value-row");
+      expect(row).not.toHaveAttribute("role");
+    });
+  });
+
+  describe("delta", () => {
+    it("renders a percentage delta with the trend color and a label", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("delta-percentage");
+      const deltaValue = el.querySelector(".bx--big-number__delta-value");
+      expect(deltaValue).toHaveTextContent("+4.2%");
+      expect(deltaValue).toHaveClass("bx--big-number__delta-value--success");
+      expect(
+        el.querySelector(".bx--big-number__delta-label"),
+      ).toHaveTextContent("vs last week");
+    });
+
+    it("renders a negative absolute delta with the neutral color when there is no trend", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("delta-negative");
+      const deltaValue = el.querySelector(".bx--big-number__delta-value");
+      expect(deltaValue).toHaveTextContent("-120");
+      expect(deltaValue).toHaveClass("bx--big-number__delta-value--neutral");
+    });
+
+    it("renders a zero delta without a sign", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("delta-zero");
+      expect(
+        el.querySelector(".bx--big-number__delta-value"),
+      ).toHaveTextContent("0");
+    });
+
+    it("renders no delta block when delta is not set", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("no-delta");
+      expect(el.querySelector(".bx--big-number__delta")).toBeNull();
+    });
+  });
+
+  describe("footer slot", () => {
+    it("renders slotted content inside the footer", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("footer");
+      const footer = el.querySelector(".bx--big-number__footer");
+      expect(footer).toHaveTextContent("Footer content");
+    });
+
+    it("renders no footer element without slot content", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("no-footer");
+      expect(el.querySelector(".bx--big-number__footer")).toBeNull();
+    });
   });
 
   it("renders the skeleton instead of the value when loading", () => {
@@ -179,5 +276,77 @@ describe("BigNumber", () => {
     const el = screen.getByTestId("label-children-test");
     expect(screen.getByText("Custom label content")).toBeInTheDocument();
     expect(el).not.toHaveTextContent("Default label");
+  });
+
+  describe("hover title", () => {
+    it("shows the full value as a title when abbreviated", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("truncate-thousands");
+      expect(el.querySelector(".bx--big-number__value")).toHaveAttribute(
+        "title",
+        "1,500",
+      );
+    });
+
+    it("omits the title when fullNumber is set", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("full-number");
+      expect(el.querySelector(".bx--big-number__value")).not.toHaveAttribute(
+        "title",
+      );
+    });
+  });
+
+  describe("formatOptions and format", () => {
+    it("formats the value as currency", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("format-currency");
+      expect(el.querySelector(".bx--big-number__value")).toHaveTextContent(
+        /^\$1\.[23]M$/,
+      );
+    });
+
+    it("formats the value as a unit", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("format-unit");
+      expect(el.querySelector(".bx--big-number__value")).toHaveTextContent(
+        "340 ms",
+      );
+    });
+
+    it("uses a custom format function", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("format-custom");
+      expect(el.querySelector(".bx--big-number__value")).toHaveTextContent(
+        "7h",
+      );
+    });
+  });
+
+  describe("formatter cache", () => {
+    const OriginalNumberFormat = Intl.NumberFormat;
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    it("reuses a single Intl.NumberFormat instance for identical locale and options", () => {
+      class MockNumberFormat extends OriginalNumberFormat {}
+      const spy = vi
+        .spyOn(Intl, "NumberFormat")
+        .mockImplementation(MockNumberFormat);
+
+      render(BigNumber);
+
+      const calls = spy.mock.calls.filter(
+        ([, options]) => options?.style === "currency",
+      );
+      expect(calls.length).toBeLessThanOrEqual(1);
+    });
   });
 });

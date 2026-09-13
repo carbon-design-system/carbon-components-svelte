@@ -1,5 +1,8 @@
 <script>
-  /** @restProps {figure} */
+  /**
+   * @restProps {figure}
+   * @slot {{}}
+   */
 
   /**
    * Text label rendered above the value.
@@ -15,7 +18,8 @@
 
   /**
    * The number to render after the slash (the "denominator" of a fraction).
-   * Hidden if it's the same as `value` or if `percentage` is `true`; see `forceShowTotal`.
+   * Hidden when it formats identically to `value`, or when `percentage` is `true`;
+   * see `forceShowTotal`.
    * @type {number}
    */
   export let total = undefined;
@@ -38,15 +42,16 @@
 
   /**
    * Render a trend indicator next to the value.
-   * @type {"up" | "down"}
+   * @type {"up" | "down" | "flat"}
    */
   export let trend = undefined;
 
   /**
-   * Override the trend indicator's color. Defaults to `"success"` for `trend="up"` and
-   * `"error"` for `trend="down"` — set this when the direction's meaning is reversed for
-   * the metric (e.g. a falling error rate, or a rising failure count).
-   * @type {"success" | "error"}
+   * Override the trend indicator's color. Defaults to `"success"` for `trend="up"`,
+   * `"error"` for `trend="down"`, and `"neutral"` for `trend="flat"` — set this when
+   * the direction's meaning is reversed for the metric (e.g. a falling error rate,
+   * or a rising failure count).
+   * @type {"success" | "error" | "neutral"}
    */
   export let trendColor = undefined;
 
@@ -68,21 +73,62 @@
   /** Set to `true` to render the loading skeleton in place of the value. */
   export let loading = false;
 
+  /**
+   * Additional options merged into the `Intl.NumberFormat` options used to format
+   * `value` and `total`. Consumer keys take precedence over the component's defaults.
+   * @type {Intl.NumberFormatOptions}
+   * @example
+   * `{ style: "currency", currency: "USD" }`
+   * @example
+   * `{ style: "unit", unit: "millisecond" }`
+   */
+  export let formatOptions = undefined;
+
+  /**
+   * Provide a custom formatter for `value` and `total`, replacing Intl formatting
+   * entirely. Non-number inputs still render the dash.
+   * @type {(value: number) => string}
+   */
+  export let format = undefined;
+
+  /**
+   * Override the text announced to assistive technology for the trend indicator.
+   * Defaults to "Trending up", "Trending down", or "No change" based on `trend`.
+   * @type {string}
+   */
+  export let trendDescription = undefined;
+
+  /**
+   * The signed change in `value` since the last period.
+   * @type {number}
+   */
+  export let delta = undefined;
+
+  /** Set to `true` to format `delta` as a percentage instead of a plain number. */
+  export let deltaPercentage = false;
+
+  /** Trailing context rendered after the formatted `delta`, such as "vs last week". */
+  export let deltaLabel = "";
+
   import ArrowDown from "../icons/ArrowDown.svelte";
   import ArrowUp from "../icons/ArrowUp.svelte";
+  import Subtract from "../icons/Subtract.svelte";
   import Tooltip from "../Tooltip/Tooltip.svelte";
+  import { getNumberFormatter } from "../utils/intlFormatterCache.js";
   import BigNumberSkeleton from "./BigNumberSkeleton.svelte";
 
   const DASH = "–";
 
   function formatNumber(num, digits, doTruncate) {
     if (typeof num !== "number" || Number.isNaN(num)) return undefined;
+    if (format) return format(num);
     const options = { maximumFractionDigits: digits };
     if (doTruncate) {
       options.notation = "compact";
       options.compactDisplay = "short";
     }
-    return new Intl.NumberFormat(locale, options).format(num);
+    Object.assign(options, formatOptions);
+    return getNumberFormatter(locale, options).format(num);
   }
 
   function getIconSize(currentSize) {
@@ -91,17 +137,43 @@
     return 16;
   }
 
+  function formatDelta(num, digits, doTruncate) {
+    if (typeof num !== "number" || Number.isNaN(num)) return undefined;
+    if (format) {
+      const formatted = format(num);
+      return num > 0 ? `+${formatted}` : formatted;
+    }
+    const options = {
+      signDisplay: "exceptZero",
+      maximumFractionDigits: digits,
+    };
+    if (doTruncate) {
+      options.notation = "compact";
+      options.compactDisplay = "short";
+    }
+    if (deltaPercentage)
+      return `${getNumberFormatter(locale, options).format(num)}%`;
+    Object.assign(options, formatOptions);
+    return getNumberFormatter(locale, options).format(num);
+  }
+
   $: hasTotal = typeof total === "number";
   $: formattedValue = formatNumber(value, fractionDigits, !fullNumber);
+  $: fullValue = formatNumber(value, fractionDigits, false);
   $: formattedTotal = hasTotal
     ? formatNumber(total, fractionDigits, !fullNumber)
     : undefined;
   $: showDenominator =
     hasTotal &&
-    (forceShowTotal ||
-      (!percentage && total > value && formattedValue !== formattedTotal));
+    (forceShowTotal || (!percentage && formattedValue !== formattedTotal));
   $: displayValue = `${formattedValue ?? DASH}${percentage ? "%" : ""}`;
-  $: resolvedTrendColor = trendColor ?? (trend === "up" ? "success" : "error");
+  $: resolvedTrendColor =
+    trendColor ?? { up: "success", down: "error", flat: "neutral" }[trend];
+  $: resolvedTrendDescription =
+    trendDescription ??
+    { up: "Trending up", down: "Trending down", flat: "No change" }[trend];
+  $: formattedDelta = formatDelta(delta, fractionDigits, !fullNumber);
+  $: deltaColor = trend ? resolvedTrendColor : "neutral";
 </script>
 
 {#if loading}
@@ -128,24 +200,61 @@
         </Tooltip>
       {/if}
     </figcaption>
-    <div class:bx--big-number__value-row={true} role="math">
-      <span class:bx--big-number__value={true}>{displayValue}</span>
+    <div class:bx--big-number__value-row={true}>
+      <span
+        class:bx--big-number__value={true}
+        title={formattedValue === fullValue ? undefined : fullValue}
+        >{displayValue}</span
+      >
       {#if trend === "up"}
         <ArrowUp
           size={getIconSize(size)}
           class="bx--big-number__trend-icon bx--big-number__trend-icon--{resolvedTrendColor}"
           aria-hidden="true"
         />
+        <span class:bx--visually-hidden={true}>{resolvedTrendDescription}</span>
       {:else if trend === "down"}
         <ArrowDown
           size={getIconSize(size)}
           class="bx--big-number__trend-icon bx--big-number__trend-icon--{resolvedTrendColor}"
           aria-hidden="true"
         />
+        <span class:bx--visually-hidden={true}>{resolvedTrendDescription}</span>
+      {:else if trend === "flat"}
+        <Subtract
+          size={getIconSize(size)}
+          class="bx--big-number__trend-icon bx--big-number__trend-icon--{resolvedTrendColor}"
+          aria-hidden="true"
+        />
+        <span class:bx--visually-hidden={true}>{resolvedTrendDescription}</span>
       {/if}
       {#if showDenominator}
-        <span class:bx--big-number__denominator={true}>/ {formattedTotal}</span>
+        <!-- "of" is only meaningful to screen readers; sighted users read the slash. -->
+        <span class:bx--big-number__denominator={true}>
+          <span class:bx--visually-hidden={true}>of</span>
+          <span aria-hidden="true">/</span>
+          {formattedTotal}
+        </span>
       {/if}
     </div>
+    {#if typeof delta === "number"}
+      <div class:bx--big-number__delta={true}>
+        <span
+          class:bx--big-number__delta-value={true}
+          class:bx--big-number__delta-value--success={deltaColor === "success"}
+          class:bx--big-number__delta-value--error={deltaColor === "error"}
+          class:bx--big-number__delta-value--neutral={deltaColor === "neutral"}
+          >{formattedDelta}</span
+        >
+        {#if deltaLabel}
+          <span class:bx--big-number__delta-label={true}>{deltaLabel}</span>
+        {/if}
+      </div>
+    {/if}
+    {#if $$slots.default}
+      <div class:bx--big-number__footer={true}>
+        <slot />
+      </div>
+    {/if}
   </figure>
 {/if}

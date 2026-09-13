@@ -173,6 +173,7 @@
   import Subtract from "../icons/Subtract.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import { getNumberFormatter } from "../utils/intlFormatterCache.js";
   import {
     clamp,
     getDefaultValue,
@@ -246,10 +247,10 @@
   $: autoInvalid =
     value !== null &&
     ((min !== undefined && value < min) || (max !== undefined && value > max));
-  $: formatter = locale ? new Intl.NumberFormat(locale, formatOptions) : null;
+  $: formatter = locale ? getNumberFormatter(locale, formatOptions) : null;
   $: useTextMode = allowDecimal || !!locale;
   $: separatorParts = locale
-    ? new Intl.NumberFormat(locale).formatToParts(12345.6)
+    ? getNumberFormatter(locale, undefined).formatToParts(12345.6)
     : null;
   $: groupSeparator = separatorParts
     ? (separatorParts.find((p) => p.type === "group")?.value ?? "")

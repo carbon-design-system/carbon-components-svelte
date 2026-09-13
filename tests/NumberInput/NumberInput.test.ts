@@ -1775,6 +1775,23 @@ describe("NumberInput", () => {
       expect(spinbutton).toHaveAttribute("type", "number");
       expect(spinbutton).toHaveValue(1234.5);
     });
+
+    it("reuses a single Intl.NumberFormat instance across instances with the same locale", () => {
+      const OriginalNumberFormat = Intl.NumberFormat;
+      class MockNumberFormat extends OriginalNumberFormat {}
+      const spy = vi
+        .spyOn(Intl, "NumberFormat")
+        .mockImplementation(MockNumberFormat);
+
+      render(NumberInput, { props: { locale: "fr-FR", value: 1 } });
+      render(NumberInput, { props: { locale: "fr-FR", value: 2 } });
+      render(NumberInput, { props: { locale: "fr-FR", value: 3 } });
+
+      const calls = spy.mock.calls.filter(([loc]) => loc === "fr-FR");
+      expect(calls.length).toBeLessThanOrEqual(1);
+
+      spy.mockRestore();
+    });
   });
 
   describe("click:stepper event", () => {
