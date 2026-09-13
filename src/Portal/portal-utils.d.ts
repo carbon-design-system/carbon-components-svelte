@@ -4,6 +4,6 @@
  * Returns a cleanup function to disconnect the observer.
  */
 export declare function observeModalClose(
-  element: HTMLElement,
+  node: HTMLElement,
   onClose: () => void,
 ): () => void;

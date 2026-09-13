@@ -44,11 +44,11 @@
     effectiveTarget &&
     ref.parentNode !== effectiveTarget
   ) {
-    const activeEl = document.activeElement;
-    const hadFocus = ref.contains(activeEl);
+    const previouslyFocused = document.activeElement;
+    const hadFocus = ref.contains(previouslyFocused);
     effectiveTarget.appendChild(ref);
-    if (hadFocus && activeEl instanceof HTMLElement) {
-      activeEl.focus();
+    if (hadFocus && previouslyFocused instanceof HTMLElement) {
+      previouslyFocused.focus();
     }
   }
 </script>
