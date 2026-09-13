@@ -55,7 +55,7 @@ Hide the legend visually by setting `hideLegend` to `true`. The legend remains a
 
 Hide an individual radio button's label text by setting `hideLabel` to `true` on `RadioButton`. The label remains available to screen readers.
 
-<RadioButton labelText="Label text" hideLabel />
+<RadioButton labelText="Enable two-factor authentication" hideLabel />
 
 ### Custom label
 
