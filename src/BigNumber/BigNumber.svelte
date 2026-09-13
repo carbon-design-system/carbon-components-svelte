@@ -129,6 +129,7 @@
 
   $: hasTotal = typeof total === "number";
   $: formattedValue = formatNumber(value, fractionDigits, !fullNumber);
+  $: fullValue = formatNumber(value, fractionDigits, false);
   $: formattedTotal = hasTotal
     ? formatNumber(total, fractionDigits, !fullNumber)
     : undefined;
@@ -165,7 +166,11 @@
       {/if}
     </figcaption>
     <div class:bx--big-number__value-row={true} role="math">
-      <span class:bx--big-number__value={true}>{displayValue}</span>
+      <span
+        class:bx--big-number__value={true}
+        title={formattedValue === fullValue ? undefined : fullValue}
+        >{displayValue}</span
+      >
       {#if trend === "up"}
         <ArrowUp
           size={getIconSize(size)}

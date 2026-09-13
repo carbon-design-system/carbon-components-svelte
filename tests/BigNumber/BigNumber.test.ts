@@ -181,6 +181,27 @@ describe("BigNumber", () => {
     expect(el).not.toHaveTextContent("Default label");
   });
 
+  describe("hover title", () => {
+    it("shows the full value as a title when abbreviated", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("truncate-thousands");
+      expect(el.querySelector(".bx--big-number__value")).toHaveAttribute(
+        "title",
+        "1,500",
+      );
+    });
+
+    it("omits the title when fullNumber is set", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("full-number");
+      expect(el.querySelector(".bx--big-number__value")).not.toHaveAttribute(
+        "title",
+      );
+    });
+  });
+
   describe("formatOptions and format", () => {
     it("formats the value as currency", () => {
       render(BigNumber);
