@@ -137,20 +137,20 @@
   // `menu` slot shares SearchMenu context with SearchMenuItem/SearchMenuGroup.
   $: richMenu = Boolean($$slots.menu);
 
-  const queryStore = writable("");
-  const shouldFilterStore = writable(shouldFilter);
-  const matchStore = writable(match);
-  const activeId = writable(/** @type {string | null} */ (null));
-  const hasPrimaryItemsStore = writable(false);
+  const query = writable("");
+  const sharedShouldFilter = writable(shouldFilter);
+  const sharedMatch = writable(match);
+  const highlightedId = writable(/** @type {string | null} */ (null));
+  const hasPrimaryItems = writable(false);
 
   let itemIds = new Set();
   let filterableIds = new Set();
   let primaryItemIds = new Set();
 
-  $: queryStore.set(String(value ?? ""));
-  $: shouldFilterStore.set(shouldFilter);
-  $: matchStore.set(match);
-  $: hasPrimaryItemsStore.set(primaryItemIds.size > 0);
+  $: query.set(String(value ?? ""));
+  $: sharedShouldFilter.set(shouldFilter);
+  $: sharedMatch.set(match);
+  $: hasPrimaryItems.set(primaryItemIds.size > 0);
 
   const SKELETON_WIDTHS = ["75%", "90%", "65%", "80%"];
   $: skeletonWidths = Array.from(
@@ -174,12 +174,12 @@
     (loading || itemCount > 0 || showNoResults);
 
   setContext("carbon:SearchMenu", {
-    query: queryStore,
-    shouldFilter: shouldFilterStore,
-    match: matchStore,
-    activeId,
+    query,
+    shouldFilter: sharedShouldFilter,
+    match: sharedMatch,
+    highlightedId,
     setActiveId(next) {
-      activeId.set(next);
+      highlightedId.set(next);
     },
     selectItem(detail) {
       value = detail.value ?? value;
@@ -187,7 +187,7 @@
       reset();
       dispatch("close", { trigger: "select" });
     },
-    hasPrimaryItems: hasPrimaryItemsStore,
+    hasPrimaryItems,
     registerItem(itemId, filterable, inDividerGroup = false) {
       itemIds.add(itemId);
       if (filterable) filterableIds.add(itemId);
@@ -211,27 +211,27 @@
   function getOptionElements() {
     if (!menuRef) return [];
     return Array.from(menuRef.querySelectorAll('[role="option"]')).filter(
-      (el) => el.getAttribute("aria-disabled") !== "true",
+      (option) => option.getAttribute("aria-disabled") !== "true",
     );
   }
 
   function moveActive(step) {
     const els = getOptionElements();
     if (els.length === 0) {
-      activeId.set(null);
+      highlightedId.set(null);
       return;
     }
-    const current = els.findIndex((el) => el.id === $activeId);
+    const current = els.findIndex((option) => option.id === $highlightedId);
     let next = current + step;
     if (next < 0) next = els.length - 1;
     else if (next >= els.length) next = 0;
-    activeId.set(els[next].id);
+    highlightedId.set(els[next].id);
   }
 
   function setActiveEdge(edge) {
     const els = getOptionElements();
     if (els.length === 0) return;
-    activeId.set(els[edge === "first" ? 0 : els.length - 1].id);
+    highlightedId.set(els[edge === "first" ? 0 : els.length - 1].id);
   }
 
   /** Keyboard navigation for the `menu` slot (`role="option"`). */
@@ -258,8 +258,8 @@
         setActiveEdge("last");
         break;
       case "Enter": {
-        const active = $activeId
-          ? getOptionElements().find((el) => el.id === $activeId)
+        const active = $highlightedId
+          ? getOptionElements().find((option) => option.id === $highlightedId)
           : null;
         if (richMenuVisible && active) {
           event.preventDefault();
@@ -273,7 +273,7 @@
         if (richMenuVisible) {
           // Close the menu but keep the bar active and the value intact.
           menuDismissed = true;
-          activeId.set(null);
+          highlightedId.set(null);
         } else if (value === "") {
           active = false;
           dispatch("close", { trigger: "escape-key" });
@@ -289,7 +289,7 @@
     value = "";
     selectedResultIndex = 0;
     menuDismissed = false;
-    activeId.set(null);
+    highlightedId.set(null);
   }
 
   function selectResult() {
@@ -314,7 +314,7 @@
   function handleOutsideMouseup(event) {
     if (active && isOutsideClick(event, refSearch)) {
       active = false;
-      activeId.set(null);
+      highlightedId.set(null);
       menuDismissed = false;
       dispatch("close", { trigger: "outside-click" });
     }
@@ -372,7 +372,7 @@
       aria-expanded={richMenu ? richMenuVisible : undefined}
       aria-activedescendant={active
         ? richMenu
-          ? ($activeId ?? undefined)
+          ? ($highlightedId ?? undefined)
           : selectedId
         : undefined}
       bind:value
