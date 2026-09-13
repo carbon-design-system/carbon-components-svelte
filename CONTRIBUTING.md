@@ -550,6 +550,7 @@ The full suite (`bun run test`) is slow and can hit unrelated flaky UIShell focu
 Types and E2E:
 
 - `bun test:src-types` type-checks `src/` (uses `tsconfig.types.json`)
+- `bun test:src-svelte` runs `svelte-check` compiler diagnostics on `src/` (a11y, unused CSS)
 - `bun test:types` runs `svelte-check` on `*.svelte` and `.ts` files in `tests/`
 - `bunx playwright test --grep "Breakpoint"` runs a focused E2E pattern (see [E2E testing](#e2e-testing-with-playwright)); `bun run test:e2e` runs the full E2E suite
 
