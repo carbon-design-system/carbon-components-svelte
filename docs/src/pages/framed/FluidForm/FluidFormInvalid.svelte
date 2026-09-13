@@ -12,14 +12,18 @@
 </script>
 
 <FluidForm>
-  <TextInput labelText="User name" placeholder="Enter user name..." required />
+  <TextInput
+    labelText="Admin username"
+    placeholder="Enter admin username..."
+    required
+  />
   <PasswordInput
     bind:value={password}
     {invalid}
-    invalidText="Your password must be at least 6 characters as well as contain at least one uppercase, one lowercase, and one number."
+    invalidText="Your password must be at least 6 characters and contain at least one uppercase letter, one lowercase letter, and one number."
     required
     type="password"
-    labelText="Password"
-    placeholder="Enter password..."
+    labelText="Admin password"
+    placeholder="Enter admin password..."
   />
 </FluidForm>
