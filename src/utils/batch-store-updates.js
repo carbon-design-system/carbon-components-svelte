@@ -10,7 +10,7 @@
  *
  * @template T
  * @param {import("svelte/store").Writable<T>} store
- * @returns {(fn: (value: T) => T) => void}
+ * @returns {(callback: (value: T) => T) => void}
  */
 export function batchStoreUpdates(store) {
   /** @type {Array<(value: T) => T>} */
@@ -21,11 +21,13 @@ export function batchStoreUpdates(store) {
     scheduled = false;
     const ops = pending;
     pending = [];
-    store.update((value) => ops.reduce((acc, fn) => fn(acc), value));
+    store.update((value) =>
+      ops.reduce((acc, callback) => callback(acc), value),
+    );
   }
 
-  return function batchedUpdate(fn) {
-    pending.push(fn);
+  return function batchedUpdate(callback) {
+    pending.push(callback);
     if (!scheduled) {
       scheduled = true;
       Promise.resolve().then(flush);

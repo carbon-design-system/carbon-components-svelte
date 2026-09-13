@@ -28,7 +28,7 @@ export function createCopyFeedbackState(onSync) {
   let timeout;
   let copyActive = false;
   let copyPending = false;
-  let isError = false;
+  let copyFailed = false;
 
   function notify() {
     onSync?.();
@@ -41,7 +41,7 @@ export function createCopyFeedbackState(onSync) {
    */
   function openFeedback(feedbackTimeout, portalled, error) {
     copyPending = false;
-    isError = error;
+    copyFailed = error;
     animation = "fade-in";
     feedbackOpen = true;
     clearTimeout(timeout);
@@ -50,7 +50,7 @@ export function createCopyFeedbackState(onSync) {
         feedbackOpen = false;
         animation = undefined;
         copyActive = false;
-        isError = false;
+        copyFailed = false;
       } else {
         animation = "fade-out";
       }
@@ -64,7 +64,7 @@ export function createCopyFeedbackState(onSync) {
     animation = undefined;
     copyActive = false;
     copyPending = false;
-    isError = false;
+    copyFailed = false;
     clearTimeout(timeout);
     timeout = undefined;
     notify();
@@ -75,7 +75,7 @@ export function createCopyFeedbackState(onSync) {
     animation = undefined;
     copyActive = false;
     copyPending = false;
-    isError = false;
+    copyFailed = false;
     clearTimeout(timeout);
     timeout = undefined;
   }
@@ -89,12 +89,12 @@ export function createCopyFeedbackState(onSync) {
    *   `animationend`) never fires and the tooltip would otherwise stay open.
    * @returns {Promise<void>}
    */
-  async function onClick(performCopy, feedbackTimeout, portalled = false) {
+  async function handleClick(performCopy, feedbackTimeout, portalled = false) {
     if (copyActive || animation === "fade-in") return;
 
     copyActive = true;
     copyPending = true;
-    isError = false;
+    copyFailed = false;
     notify();
 
     try {
@@ -108,12 +108,12 @@ export function createCopyFeedbackState(onSync) {
   }
 
   /** @param {{ animationName: string }} event */
-  function onAnimationEnd(event) {
+  function handleAnimationend(event) {
     if (event.animationName === "hide-feedback") {
       animation = undefined;
       feedbackOpen = false;
       copyActive = false;
-      isError = false;
+      copyFailed = false;
       notify();
     }
   }
@@ -129,11 +129,11 @@ export function createCopyFeedbackState(onSync) {
       return copyPending;
     },
     get isError() {
-      return isError;
+      return copyFailed;
     },
     dismiss,
-    onClick,
-    onAnimationEnd,
+    onClick: handleClick,
+    onAnimationEnd: handleAnimationend,
     cleanup,
   };
 }

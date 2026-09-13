@@ -19,9 +19,11 @@ export function isOutsideClick(event, elements) {
     typeof event.composedPath === "function" ? event.composedPath() : [];
   if (!(target instanceof Node) && !path.length) return false;
   const list = Array.isArray(elements) ? elements : [elements];
-  return list.every((el) => {
-    if (!el) return true;
-    if (target instanceof Node && el.contains(target)) return false;
-    return !path.some((node) => node instanceof Node && el.contains(node));
+  return list.every((container) => {
+    if (!container) return true;
+    if (target instanceof Node && container.contains(target)) return false;
+    return !path.some(
+      (node) => node instanceof Node && container.contains(node),
+    );
   });
 }

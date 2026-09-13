@@ -22,12 +22,12 @@ function readEntryHeight(entry) {
 }
 
 /**
- * @param {Element} element
+ * @param {Element} node
  * @returns {number} The item index the element renders, or `-1` when it
  * carries no usable one.
  */
-function readIndex(element) {
-  const raw = element.getAttribute(VIRTUAL_INDEX_ATTRIBUTE);
+function readIndex(node) {
+  const raw = node.getAttribute(VIRTUAL_INDEX_ATTRIBUTE);
   if (raw === null || raw === "") return -1;
   const index = Number(raw);
   return Number.isInteger(index) && index >= 0 ? index : -1;
@@ -61,7 +61,7 @@ function readIndex(element) {
  * so offsets accumulate once for all of them.
  *
  * @param {Object} options
- * @param {(heights: number[], previousHeights: number[]) => void} options.onMeasure
+ * @param {(heights: number[], prevHeights: number[]) => void} options.onMeasure
  * Called on the animation frame after a report that differs from the heights
  * already held.
  * @returns {{
@@ -102,9 +102,9 @@ export function createHeightMeasurer({ onMeasure }) {
 
     if (next === null) return;
 
-    const previousHeights = heights;
+    const prevHeights = heights;
     heights = next;
-    onMeasure(heights, previousHeights);
+    onMeasure(heights, prevHeights);
   }
 
   /** Report everything batched since the last frame, as one measurement. */
@@ -215,9 +215,9 @@ export function createHeightMeasurer({ onMeasure }) {
 
     if (heights.length === 0) return;
 
-    const previousHeights = heights;
+    const prevHeights = heights;
     heights = [];
-    onMeasure(heights, previousHeights);
+    onMeasure(heights, prevHeights);
   }
 
   /** Stop observing for good. Measurements are kept but never updated again. */

@@ -7,4 +7,4 @@ import type { Writable } from "svelte/store";
  */
 export function batchStoreUpdates<T>(
   store: Writable<T>,
-): (fn: (value: T) => T) => void;
+): (callback: (value: T) => T) => void;

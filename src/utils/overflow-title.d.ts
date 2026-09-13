@@ -9,5 +9,5 @@ export interface OverflowTitleParams {
 /** Set `title` from overflow text. Provided `title` wins. */
 export function overflowTitle(
   node: HTMLElement,
-  params?: OverflowTitleParams,
-): { update: (params?: OverflowTitleParams) => void; destroy: () => void };
+  options?: OverflowTitleParams,
+): { update: (options?: OverflowTitleParams) => void; destroy: () => void };
