@@ -49,5 +49,5 @@ Set `size` to control the icon and label size.
 Use the `labelChildren` slot for custom label content instead of `label`.
 
 <IconIndicator kind="succeeded" label="Succeeded">
-  <strong slot="labelChildren">Custom label</strong>
+  <strong slot="labelChildren">Deploy to production succeeded</strong>
 </IconIndicator>
