@@ -12,13 +12,13 @@
 
 <Stack gap={6}>
   <Tabs bind:selected>
-    <Tab label="Tab label 1" />
-    <Tab label="Tab label 2" />
-    <Tab label="Tab label 3" />
+    <Tab label="Dashboard" />
+    <Tab label="Monitoring" />
+    <Tab label="Activity" />
     <svelte:fragment slot="content">
-      <TabContent>Content 1</TabContent>
-      <TabContent>Content 2</TabContent>
-      <TabContent>Content 3</TabContent>
+      <TabContent>Dashboard content with analytics and overview.</TabContent>
+      <TabContent>Monitoring content for uptime and alerts.</TabContent>
+      <TabContent>Activity content for recent user actions.</TabContent>
     </svelte:fragment>
   </Tabs>
   <Stack gap={4} orientation="horizontal" align="center">
