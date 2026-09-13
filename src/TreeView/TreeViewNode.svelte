@@ -6,10 +6,10 @@
    * @example
    * ```svelte
    * import { computeTreeLeafDepth } from 'carbon-components-svelte/TreeView/TreeViewNode.svelte';
-   * let nodeElement;
-   * $: depth = computeTreeLeafDepth(nodeElement);
+   * let nodeRef;
+   * $: depth = computeTreeLeafDepth(nodeRef);
    *
-   * <li bind:this={nodeElement}>Node at depth {depth}</li>
+   * <li bind:this={nodeRef}>Node at depth {depth}</li>
    * ```
    */
   export function computeTreeLeafDepth(node) {
@@ -102,10 +102,10 @@
 
   const {
     activeNodeId,
-    selectedIdsSetStore,
-    checkedIdsSetStore,
-    indeterminateIdsSetStore,
-    selectionModeStore,
+    selectedIdSet,
+    checkedIdSet,
+    indeterminateIdSet,
+    selectionMode,
     clickNode,
     selectNode,
     focusNode,
@@ -129,11 +129,11 @@
     return depth + (leaf && icon ? 2 : 2.5);
   }
 
-  $: selected = $selectedIdsSetStore.has(id);
-  $: checked = $checkedIdsSetStore.has(id);
+  $: selected = $selectedIdSet.has(id);
+  $: checked = $checkedIdSet.has(id);
   // Link rows navigate; they render no checkbox.
-  $: isCheckboxMode = $selectionModeStore === "checkbox" && href === undefined;
-  $: indeterminate = isCheckboxMode && $indeterminateIdsSetStore.has(id);
+  $: isCheckboxMode = $selectionMode === "checkbox" && href === undefined;
+  $: indeterminate = isCheckboxMode && $indeterminateIdSet.has(id);
   // Merge all props (including custom properties) with computed properties
   // Explicitly include disabled to ensure it's always present (has default value)
   // `level`/`posinset`/`setsize` are layout-only (drive `aria-*` attributes) and excluded from `node`.
@@ -156,7 +156,7 @@
     if (
       id === $activeNodeId &&
       prevActiveId !== $activeNodeId &&
-      !$selectedIdsSetStore.has(id)
+      !$selectedIdSet.has(id)
     )
       selectNode(node);
 

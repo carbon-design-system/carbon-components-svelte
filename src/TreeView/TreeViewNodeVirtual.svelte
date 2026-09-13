@@ -28,11 +28,11 @@
 
   const {
     activeNodeId,
-    selectedIdsSetStore,
-    checkedIdsSetStore,
-    expandedIdsSetStore,
-    indeterminateIdsSetStore,
-    selectionModeStore,
+    selectedIdSet,
+    checkedIdSet,
+    expandedIdSet,
+    indeterminateIdSet,
+    selectionMode,
     clickNode,
     selectNode,
     expandNode,
@@ -56,13 +56,12 @@
   $: disabled = node.disabled === true;
   $: href = node.href;
   $: target = node.target;
-  $: expanded = hasChildren && $expandedIdsSetStore.has(id);
-  $: selected = $selectedIdsSetStore.has(id);
-  $: checked = $checkedIdsSetStore.has(id);
+  $: expanded = hasChildren && $expandedIdSet.has(id);
+  $: selected = $selectedIdSet.has(id);
+  $: checked = $checkedIdSet.has(id);
   // Link rows navigate; they render no checkbox (same as TreeViewNode).
-  $: isCheckboxMode =
-    $selectionModeStore === "checkbox" && node.href === undefined;
-  $: indeterminate = isCheckboxMode && $indeterminateIdsSetStore.has(id);
+  $: isCheckboxMode = $selectionMode === "checkbox" && node.href === undefined;
+  $: indeterminate = isCheckboxMode && $indeterminateIdSet.has(id);
   $: icon = node.icon;
   $: isLinkLeaf = href !== undefined && !hasChildren;
 
@@ -89,7 +88,7 @@
     if (
       id === $activeNodeId &&
       prevActiveId !== $activeNodeId &&
-      !$selectedIdsSetStore.has(id)
+      !$selectedIdSet.has(id)
     )
       selectNode(mergedNode);
 
@@ -121,9 +120,9 @@
       class:bx--tree-node--selected={selected}
       class:bx--tree-node--disabled={disabled}
       class:bx--tree-node--with-icon={icon}
-      on:click|stopPropagation={(e) => {
+      on:click|stopPropagation={(event) => {
         if (disabled) return;
-        clickNode(mergedNode, e);
+        clickNode(mergedNode, event);
       }}
       on:focus={() => focusNode(mergedNode)}
     >
@@ -164,12 +163,12 @@
     class:bx--tree-node--selected={isCheckboxMode ? checked : selected}
     class:bx--tree-node--disabled={disabled}
     class:bx--tree-node--with-icon={icon}
-    on:click|stopPropagation={(e) => {
+    on:click|stopPropagation={(event) => {
       if (disabled) return;
       // Stop the label from toggling the decorative input; `clickNode`
       // owns checked state.
-      if (isCheckboxMode) e.preventDefault();
-      clickNode(mergedNode, e);
+      if (isCheckboxMode) event.preventDefault();
+      clickNode(mergedNode, event);
     }}
     on:focus={() => focusNode(mergedNode)}
   >
