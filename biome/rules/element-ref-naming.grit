@@ -1,0 +1,22 @@
+language js
+
+or {
+  `const $n = $v` where {
+    $n <: r"\w+(?:El|Element)",
+    register_diagnostic(span=$n, message="Component-level DOM refs end in `Ref` (`menuRef`); function-local element variables use a role noun without an `El`/`Element` suffix.", severity="warn")
+  },
+  `const $n = $v` where {
+    $n <: r"el",
+    register_diagnostic(span=$n, message="Component-level DOM refs end in `Ref` (`menuRef`); function-local element variables use a role noun without an `El`/`Element` suffix.", severity="warn")
+  },
+  `$x` where {
+    $x <: r"(?s)let\s+(\w+(?:El|Element))\s*=.*;"($n),
+    not $x <: within r"export\s[^;]*;" ,
+    register_diagnostic(span=$x, message="Component-level DOM refs end in `Ref` (`menuRef`); function-local element variables use a role noun without an `El`/`Element` suffix.", severity="warn")
+  },
+  `$x` where {
+    $x <: r"(?s)let\s+(el)\s*=.*;"($n),
+    not $x <: within r"export\s[^;]*;" ,
+    register_diagnostic(span=$x, message="Component-level DOM refs end in `Ref` (`menuRef`); function-local element variables use a role noun without an `El`/`Element` suffix.", severity="warn")
+  }
+}

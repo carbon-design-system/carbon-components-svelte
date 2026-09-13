@@ -21,7 +21,8 @@
       "**",
       "!!**/.*/**/*",
       "!!**/docs/src/pages/index.svelte",
-      "!**/*.svg"
+      "!**/*.svg",
+      "!biome/fixtures"
     ]
   },
   "linter": {
@@ -203,6 +204,9 @@
       "includes": ["src/**"],
       "linter": {
         "rules": {
+          "correctness": {
+            "useImportExtensions": "error"
+          },
           "style": {
             "noRestrictedImports": {
               "level": "error",
@@ -219,6 +223,29 @@
                     "message": "Use the local icon in src/icons instead of importing from carbon-icons-svelte."
                   }
                 ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "src/**/*.js",
+        "src/**/*.d.ts",
+        "!src/**/*.svelte.d.ts",
+        "!src/**/index.js",
+        "!src/**/index.d.ts"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "useFilenamingConvention": {
+              "level": "error",
+              "options": {
+                "strictCase": true,
+                "requireAscii": true,
+                "filenameCases": ["kebab-case"]
               }
             }
           }
