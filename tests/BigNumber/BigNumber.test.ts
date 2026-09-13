@@ -171,6 +171,29 @@ describe("BigNumber", () => {
       const icon = el.querySelector(".bx--big-number__trend-icon");
       expect(icon).toHaveClass("bx--big-number__trend-icon--error");
     });
+
+    it("announces the default trend description to assistive tech", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("trend-up");
+      expect(el).toHaveTextContent("Trending up");
+    });
+
+    it("announces a custom trendDescription instead of the default", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("trend-description");
+      expect(el).toHaveTextContent("Up 12% week over week");
+      expect(el).not.toHaveTextContent("Trending up");
+    });
+
+    it("has no role attribute on the value row", () => {
+      render(BigNumber);
+
+      const el = screen.getByTestId("trend-up");
+      const row = el.querySelector(".bx--big-number__value-row");
+      expect(row).not.toHaveAttribute("role");
+    });
   });
 
   it("renders the skeleton instead of the value when loading", () => {

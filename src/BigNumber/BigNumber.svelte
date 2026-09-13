@@ -104,6 +104,13 @@
    */
   export let format = undefined;
 
+  /**
+   * Override the text announced to assistive technology for the trend indicator.
+   * Defaults to "Trending up", "Trending down", or "No change" based on `trend`.
+   * @type {string}
+   */
+  export let trendDescription = undefined;
+
   import ArrowDown from "../icons/ArrowDown.svelte";
   import ArrowUp from "../icons/ArrowUp.svelte";
   import Subtract from "../icons/Subtract.svelte";
@@ -142,6 +149,9 @@
   $: displayValue = `${formattedValue ?? DASH}${percentage ? "%" : ""}`;
   $: resolvedTrendColor =
     trendColor ?? { up: "success", down: "error", flat: "neutral" }[trend];
+  $: resolvedTrendDescription =
+    trendDescription ??
+    { up: "Trending up", down: "Trending down", flat: "No change" }[trend];
 </script>
 
 {#if loading}
@@ -168,7 +178,7 @@
         </Tooltip>
       {/if}
     </figcaption>
-    <div class:bx--big-number__value-row={true} role="math">
+    <div class:bx--big-number__value-row={true}>
       <span
         class:bx--big-number__value={true}
         title={formattedValue === fullValue ? undefined : fullValue}
@@ -180,21 +190,29 @@
           class="bx--big-number__trend-icon bx--big-number__trend-icon--{resolvedTrendColor}"
           aria-hidden="true"
         />
+        <span class:bx--visually-hidden={true}>{resolvedTrendDescription}</span>
       {:else if trend === "down"}
         <ArrowDown
           size={getIconSize(size)}
           class="bx--big-number__trend-icon bx--big-number__trend-icon--{resolvedTrendColor}"
           aria-hidden="true"
         />
+        <span class:bx--visually-hidden={true}>{resolvedTrendDescription}</span>
       {:else if trend === "flat"}
         <Subtract
           size={getIconSize(size)}
           class="bx--big-number__trend-icon bx--big-number__trend-icon--{resolvedTrendColor}"
           aria-hidden="true"
         />
+        <span class:bx--visually-hidden={true}>{resolvedTrendDescription}</span>
       {/if}
       {#if showDenominator}
-        <span class:bx--big-number__denominator={true}>/ {formattedTotal}</span>
+        <!-- "of" is only meaningful to screen readers; sighted users read the slash. -->
+        <span class:bx--big-number__denominator={true}>
+          <span class:bx--visually-hidden={true}>of</span>
+          <span aria-hidden="true">/</span>
+          {formattedTotal}
+        </span>
       {/if}
     </div>
   </figure>
