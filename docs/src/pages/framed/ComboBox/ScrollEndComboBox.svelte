@@ -11,7 +11,7 @@
   function makePage(offset) {
     return Array.from({ length: PAGE_SIZE }, (_, i) => {
       const n = offset + i;
-      return { id: String(n), text: `Item ${n + 1}` };
+      return { id: String(n), text: `Invoice #${n + 1}` };
     }).filter((item) => Number(item.id) < TOTAL);
   }
 

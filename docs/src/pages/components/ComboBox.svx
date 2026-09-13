@@ -8,7 +8,7 @@ description: Combo boxes combine a text input with a dropdown menu to select fro
   import Chat from "carbon-icons-svelte/lib/Chat.svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
   import Email from "carbon-icons-svelte/lib/Email.svelte";
-  import Document from "carbon-icons-svelte/lib/Document.svelte";
+  import Webhook from "carbon-icons-svelte/lib/Webhook.svelte";
   import Star from "carbon-icons-svelte/lib/Star.svelte";
   import StarFilled from "carbon-icons-svelte/lib/StarFilled.svelte";
 </script>
@@ -17,11 +17,11 @@ description: Combo boxes combine a text input with a dropdown menu to select fro
 
 Create a combobox with a title and placeholder text. Each item needs a unique id and display text. Combo boxes key items by id for performance.
 
-<ComboBox labelText="Contact" placeholder="Select contact method"
+<ComboBox labelText="Alert channel" placeholder="Select alert channel"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
+  {id: "2", text: "Webhook"}
   ]}  />
 
 ## Content
@@ -38,17 +38,17 @@ Override the default slot to customize how each item displays. Use `let:item`, `
 
 Set icon on an item for a left icon. The label sits between the icon and the checkmark. Use the icon slot for custom markup.
 
-<ComboBox labelText="Contact" placeholder="Select contact method" selectedId="0" items={[
+<ComboBox labelText="Alert channel" placeholder="Select alert channel" selectedId="0" items={[
   {id: "0", text: "Slack", icon: Chat},
   {id: "1", text: "Email", icon: Email},
-  {id: "2", text: "Fax", icon: Document}]} />
+  {id: "2", text: "Webhook", icon: Webhook}]} />
 
 Use the `iconRight` slot to replace the checkmark.
 
-<ComboBox labelText="Contact" placeholder="Select contact method" selectedId="0" items={[
+<ComboBox labelText="Alert channel" placeholder="Select alert channel" selectedId="0" items={[
   {id: "0", text: "Slack", icon: Chat},
   {id: "1", text: "Email", icon: Email},
-  {id: "2", text: "Fax", icon: Document}]}>
+  {id: "2", text: "Webhook", icon: Webhook}]}>
   <svelte:fragment slot="icon" let:item>
     <svelte:component this={item.icon} />
   </svelte:fragment>
@@ -61,22 +61,22 @@ Use the `iconRight` slot to replace the checkmark.
 
 Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
 
-<ComboBox hideLabel labelText="Hidden Label" placeholder="Select contact method"
+<ComboBox hideLabel labelText="Hidden Label" placeholder="Select alert channel"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
+  {id: "2", text: "Webhook"}
   ]}  />
 
 ### Helper text
 
 Add descriptive text below the combobox with `helperText`.
 
-<ComboBox helperText="Choose your preferred contact method" labelText="Contact" placeholder="Select contact method"
+<ComboBox helperText="Choose where alert notifications are sent" labelText="Alert channel" placeholder="Select alert channel"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
+  {id: "2", text: "Webhook"}
   ]}  />
 
 ## Selection
@@ -93,12 +93,12 @@ See how the combobox responds to user input and selection changes.
 
 Set `selectedId` to pre-select an item when the combobox loads.
 
-<ComboBox labelText="Contact" placeholder="Select contact method"
+<ComboBox labelText="Alert channel" placeholder="Select alert channel"
 selectedId="1"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
+  {id: "2", text: "Webhook"}
   ]}  />
 
 ### Clear selection
@@ -113,13 +113,13 @@ By default, the dropdown menu is closed after clearing the selection.
 
 Set `openOnClear` to `true` to reopen the dropdown menu after clearing the selection. This lets users immediately browse all available items without needing to click the input again.
 
-<ComboBox openOnClear labelText="Contact" placeholder="Select contact method"
+<ComboBox openOnClear labelText="Alert channel" placeholder="Select alert channel"
 selectedId="1"
 value="Email"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
+  {id: "2", text: "Webhook"}
   ]}  />
 
 ### Multiple combo boxes
@@ -136,22 +136,22 @@ Auto-highlight and typeahead both assist users while typing. Auto-highlight high
 
 Set `autoHighlight` to `"first-match"` to automatically highlight the first matching item as you type. Select it by pressing <DocKbd label="Enter" /> without using arrow keys.
 
-The default filter is case-insensitive substring matching (for example, "app" matches "Apple").
+The default filter is case-insensitive substring matching (for example, "mar" matches "Marketing").
 
 <ComboBox autoHighlight="first-match"
-labelText="Item"
-placeholder="Select an item"
+labelText="Department"
+placeholder="Select a department"
 items={[
-  {id: "0", text: "Apple"},
-  {id: "1", text: "Apricot"},
-  {id: "2", text: "Banana"},
-  {id: "3", text: "Blueberry"},
-  {id: "4", text: "Blackberry"},
-  {id: "5", text: "Cherry"},
-  {id: "6", text: "Cranberry"},
-  {id: "7", text: "Grape"},
-  {id: "8", text: "Mango"},
-  {id: "9", text: "Pineapple"},
+  {id: "0", text: "Accounting"},
+  {id: "1", text: "Accounts Payable"},
+  {id: "2", text: "Billing"},
+  {id: "3", text: "Business Development"},
+  {id: "4", text: "Business Intelligence"},
+  {id: "5", text: "Customer Success"},
+  {id: "6", text: "Customer Support"},
+  {id: "7", text: "Engineering"},
+  {id: "8", text: "Marketing"},
+  {id: "9", text: "Product"},
   ]}  />
 
 ### Case-sensitive filter
@@ -162,19 +162,19 @@ In this example, the filter is case-sensitive.
 
 <ComboBox autoHighlight="first-match"
 shouldFilterItem={(item, value) => item.text.startsWith(value)}
-labelText="Item"
-placeholder="Select an item"
+labelText="Department"
+placeholder="Select a department"
 items={[
-  {id: "0", text: "Apple"},
-  {id: "1", text: "Apricot"},
-  {id: "2", text: "Banana"},
-  {id: "3", text: "Blueberry"},
-  {id: "4", text: "Blackberry"},
-  {id: "5", text: "Cherry"},
-  {id: "6", text: "Cranberry"},
-  {id: "7", text: "Grape"},
-  {id: "8", text: "Mango"},
-  {id: "9", text: "Pineapple"},
+  {id: "0", text: "Accounting"},
+  {id: "1", text: "Accounts Payable"},
+  {id: "2", text: "Billing"},
+  {id: "3", text: "Business Development"},
+  {id: "4", text: "Business Intelligence"},
+  {id: "5", text: "Customer Success"},
+  {id: "6", text: "Customer Support"},
+  {id: "7", text: "Engineering"},
+  {id: "8", text: "Marketing"},
+  {id: "9", text: "Product"},
   ]}  />
 
 ### Typeahead
@@ -195,25 +195,25 @@ You can provide a custom `shouldFilterItem` to change the filtering logic. See t
 
 Combine `typeahead` and `autoHighlight="first-match"` for the full autocomplete experience: the input text is completed and the matching item is visually highlighted.
 
-<ComboBox typeahead autoHighlight="first-match" labelText="Fruit" placeholder="Search for a fruit"
+<ComboBox typeahead autoHighlight="first-match" labelText="Department" placeholder="Search for a department"
 items={[
-  {id: "0", text: "Apple"},
-  {id: "1", text: "Apricot"},
-  {id: "2", text: "Banana"},
-  {id: "3", text: "Blueberry"},
-  {id: "4", text: "Blackberry"},
-  {id: "5", text: "Cherry"},
-  {id: "6", text: "Cranberry"},
-  {id: "7", text: "Grape"},
-  {id: "8", text: "Mango"},
-  {id: "9", text: "Pineapple"},
+  {id: "0", text: "Accounting"},
+  {id: "1", text: "Accounts Payable"},
+  {id: "2", text: "Billing"},
+  {id: "3", text: "Business Development"},
+  {id: "4", text: "Business Intelligence"},
+  {id: "5", text: "Customer Success"},
+  {id: "6", text: "Customer Support"},
+  {id: "7", text: "Engineering"},
+  {id: "8", text: "Marketing"},
+  {id: "9", text: "Product"},
   ]}  />
 
 ### Fuzzy filter
 
-Provide a custom `shouldFilterItem` to override the default prefix matching used by typeahead. This example reuses the built-in `fuzzyMatch` utility, exported from `carbon-components-svelte`, as the predicate. It matches items whose text contains the typed characters in order (for example, "bl" matches "Blueberry" and "Blackberry"). Only the `matched` boolean is used here; the `score` and `indices` it also returns rank and highlight matches, as shown in [Highlight matches](#highlight-matches) below.
+Provide a custom `shouldFilterItem` to override the default prefix matching used by typeahead. This example reuses the built-in `fuzzyMatch` utility, exported from `carbon-components-svelte`, as the predicate. It matches items whose text contains the typed characters in order (for example, "acc" matches "Accounting" and "Accounts Payable"). Only the `matched` boolean is used here; the `score` and `indices` it also returns rank and highlight matches, as shown in [Highlight matches](#highlight-matches) below.
 
-Inline completion only fills in the input when the top match starts with the typed text, so a fuzzy match like "api" against "Apricot" filters the list without completing the input. Pair the custom filter with `autoHighlight="first-match"` so the matched item is highlighted and <DocKbd label="Enter" /> or <DocKbd label="Tab" /> selects it.
+Inline completion only fills in the input when the top match starts with the typed text, so a fuzzy match like "pdt" against "Product" filters the list without completing the input. Pair the custom filter with `autoHighlight="first-match"` so the matched item is highlighted and <DocKbd label="Enter" /> or <DocKbd label="Tab" /> selects it.
 
 <FileSource src="/framed/ComboBox/TypeaheadCustomFilter" />
 
@@ -239,11 +239,11 @@ By default (`filterMode="remove"`), filtering unmounts non-matching options and 
 
 Set `filterMode` to `"hide"` to keep every option mounted and hide non-matching ones with the `hidden` attribute. Keyboard navigation, `aria-setsize`, and `aria-posinset` still follow the matching items only. `"hide"` falls back to `"remove"` when virtualization is enabled. For typical ComboBox lists, `"remove"` is faster per keystroke because it only updates matching option nodes.
 
-<ComboBox filterMode="hide" labelText="Contact" placeholder="Select contact method"
+<ComboBox filterMode="hide" labelText="Alert channel" placeholder="Select alert channel"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
+  {id: "2", text: "Webhook"}
   ]}  />
 
 ### Custom label
@@ -290,13 +290,13 @@ Set `selectTextOnFocus` to `true` to select all text in the input when it receiv
 
 An alternative is [clear filter on open](#clear-filter-on-open), which clears the filter when opening so all options are visible.
 
-<ComboBox selectTextOnFocus labelText="Contact" placeholder="Select contact method"
+<ComboBox selectTextOnFocus labelText="Alert channel" placeholder="Select alert channel"
 selectedId="1"
 value="Email"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
+  {id: "2", text: "Webhook"}
   ]}  />
 
 ## Virtualization
@@ -345,36 +345,36 @@ Listen for selection, dismissal, and clear interactions. The `scrollend` load-mo
 
 Listen for `on:select` to know when an item is selected. `event.detail` includes `selectedId` and `selectedItem`.
 
-<ComboBox labelText="Contact" placeholder="Select contact method"
+<ComboBox labelText="Alert channel" placeholder="Select alert channel"
 on:select={(e) => console.log(e.detail.selectedId, e.detail.selectedItem)}
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
+  {id: "2", text: "Webhook"}
   ]}  />
 
 ### Close
 
 Listen for `on:close` to know when the dropdown menu closes and why. `event.detail.trigger` is `"escape-key"`, `"outside-click"`, or `"select"`.
 
-<ComboBox labelText="Contact" placeholder="Select contact method"
+<ComboBox labelText="Alert channel" placeholder="Select alert channel"
 on:close={(e) => console.log(e.detail.trigger)}
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
+  {id: "2", text: "Webhook"}
   ]}  />
 
 ### Clear
 
 Listen for `on:clear` to know when the user activates the clear ("x") button that appears once there is a selection, whether by click or by keyboard. `event.detail` is the originating `KeyboardEvent` or `MouseEvent`. This is distinct from calling the [imperative `clear()` method](#clear-selection) directly, which does not dispatch `clear`.
 
-<ComboBox selectedId="1" labelText="Contact" placeholder="Select contact method"
+<ComboBox selectedId="1" labelText="Alert channel" placeholder="Select alert channel"
 on:clear={(e) => console.log(e.type)}
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
+  {id: "2", text: "Webhook"}
   ]}  />
 
 ## Menu placement
@@ -385,11 +385,11 @@ Control where and how the dropdown menu renders relative to the input.
 
 Set `direction` to `"top"` to make the dropdown menu appear above the input.
 
-<ComboBox direction="top" labelText="Contact" placeholder="Select contact method"
+<ComboBox direction="top" labelText="Alert channel" placeholder="Select alert channel"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
+  {id: "2", text: "Webhook"}
   ]}  />
 
 ### Portal menu
@@ -420,11 +420,11 @@ Bind to `open` to control the dropdown menu programmatically, such as opening it
 
 Set `light` to `true` to use the light color scheme.
 
-<ComboBox light labelText="Contact" placeholder="Select contact method"
+<ComboBox light labelText="Alert channel" placeholder="Select alert channel"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
+  {id: "2", text: "Webhook"}
   ]}  />
 
 ## Sizes
@@ -435,36 +435,36 @@ The `size` prop sets the height. The default is `medium`.
 
 Set `size` to `"xs"` for an extra-small combobox.
 
-<ComboBox labelText="Contact" placeholder="Select contact method"
+<ComboBox labelText="Alert channel" placeholder="Select alert channel"
 size="xs"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
+  {id: "2", text: "Webhook"}
   ]}  />
 
 ### Small
 
 Set `size` to `"sm"` for a small combobox.
 
-<ComboBox labelText="Contact" placeholder="Select contact method"
+<ComboBox labelText="Alert channel" placeholder="Select alert channel"
 size="sm"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
+  {id: "2", text: "Webhook"}
   ]}  />
 
 ### Extra-large
 
 Set `size` to `"xl"` for an extra-large combobox.
 
-<ComboBox labelText="Contact" placeholder="Select contact method"
+<ComboBox labelText="Alert channel" placeholder="Select alert channel"
 size="xl"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
+  {id: "2", text: "Webhook"}
   ]}  />
 
 ## States
@@ -475,33 +475,33 @@ Surface validation, warning, disabled, and read-only states.
 
 Set `invalid` to `true` and provide `invalidText` to show an error message.
 
-<ComboBox invalid invalidText="Secondary contact method must be different from the primary contact" labelText="Contact" placeholder="Select contact method"
+<ComboBox invalid invalidText="Secondary alert channel must be different from the primary channel" labelText="Alert channel" placeholder="Select alert channel"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
+  {id: "2", text: "Webhook"}
   ]}  />
 
 ### Warning
 
 Set `warn` to `true` and provide `warnText` to show a warning message.
 
-<ComboBox warn warnText="This contact method is not associated with your account" labelText="Contact" placeholder="Select contact method"
+<ComboBox warn warnText="This alert channel is not associated with your on-call schedule" labelText="Alert channel" placeholder="Select alert channel"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
+  {id: "2", text: "Webhook"}
   ]}  />
 
 ### Disabled
 
 Set `disabled` to `true` to prevent interaction with the combobox.
 
-<ComboBox disabled labelText="Contact" placeholder="Select contact method"
+<ComboBox disabled labelText="Alert channel" placeholder="Select alert channel"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
+  {id: "2", text: "Webhook"}
   ]}  />
 
 ### Disabled items
@@ -509,12 +509,12 @@ items={[
 Mark individual items with `disabled: true` to disable specific options.
 
 <ComboBox
-  labelText="Contact"
-  placeholder="Select contact method"
+  labelText="Alert channel"
+  placeholder="Select alert channel"
   items={[
     { id: "0", text: "Slack" },
     { id: "1", text: "Email", disabled: true },
-    { id: "2", text: "Fax" },
+    { id: "2", text: "Webhook" },
   ]}
 />
 
@@ -525,12 +525,12 @@ Set `readonly` to `true` to display a non-editable value.
 <ComboBox
   readonly
   selectedId="1"
-  labelText="Contact"
-  placeholder="Select contact method"
+  labelText="Alert channel"
+  placeholder="Select alert channel"
   items={[
     { id: "0", text: "Slack" },
     { id: "1", text: "Email" },
-    { id: "2", text: "Fax" },
+    { id: "2", text: "Webhook" },
   ]}
 />
 
@@ -541,11 +541,11 @@ inside the field. Fluid combo boxes can be used standalone or inside
 [FluidForm](/components/FluidForm), where the fluid variant is applied
 automatically.
 
-<ComboBox fluid labelText="Contact" placeholder="Select contact method"
+<ComboBox fluid labelText="Alert channel" placeholder="Select alert channel"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
+  {id: "2", text: "Webhook"}
   ]}  />
 
 ### Custom label
@@ -553,15 +553,15 @@ items={[
 Use the `labelChildren` slot to render custom label content, such as a
 tooltip icon.
 
-<ComboBox fluid labelText="Contact" placeholder="Select contact method"
+<ComboBox fluid labelText="Alert channel" placeholder="Select alert channel"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
+  {id: "2", text: "Webhook"}
   ]}>
   <svelte:fragment slot="labelChildren">
-    Contact
-    <TooltipIcon tooltipText="Your contact method is used for account notifications." icon={Information} />
+    Alert channel
+    <TooltipIcon tooltipText="Your alert channel is used for on-call notifications." icon={Information} />
   </svelte:fragment>
 </ComboBox>
 
@@ -571,11 +571,11 @@ By default, the fluid variant renders taller menu items to match the taller
 field. Set `condensed` to `true` to render menu items at their default
 height instead.
 
-<ComboBox fluid condensed labelText="Contact" placeholder="Select contact method" selectedId="0"
+<ComboBox fluid condensed labelText="Alert channel" placeholder="Select alert channel" selectedId="0"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
+  {id: "2", text: "Webhook"}
   ]}  />
 
 ### Invalid
@@ -583,42 +583,42 @@ items={[
 Fluid combo boxes display the error message inside the field boundary. Long
 messages wrap to multiple lines.
 
-<ComboBox fluid invalid invalidText="Secondary contact method must be different from the primary contact. Slack is already configured as your primary contact method; choose Email or Fax instead." labelText="Contact" placeholder="Select contact method"
+<ComboBox fluid invalid invalidText="Secondary alert channel must be different from the primary channel. Slack is already configured as your primary alert channel; choose Email or Webhook instead." labelText="Alert channel" placeholder="Select alert channel"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
+  {id: "2", text: "Webhook"}
   ]}  />
 
 ### Warning
 
-<ComboBox fluid warn warnText="This contact method is not associated with your account" labelText="Contact" placeholder="Select contact method"
+<ComboBox fluid warn warnText="This alert channel is not associated with your on-call schedule" labelText="Alert channel" placeholder="Select alert channel"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
+  {id: "2", text: "Webhook"}
   ]}  />
 
 ### Disabled
 
 Invalid and warning states are not displayed while the combo box is disabled.
 
-<ComboBox fluid disabled invalid invalidText="Secondary contact method must be different from the primary contact" labelText="Contact" placeholder="Select contact method"
+<ComboBox fluid disabled invalid invalidText="Secondary alert channel must be different from the primary channel" labelText="Alert channel" placeholder="Select alert channel"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
+  {id: "2", text: "Webhook"}
   ]}  />
 
 ### Read-only
 
 Invalid and warning states are not displayed while the combo box is read-only.
 
-<ComboBox fluid readonly warn warnText="This contact method is not associated with your account" labelText="Contact" placeholder="Select contact method" selectedId="0"
+<ComboBox fluid readonly warn warnText="This alert channel is not associated with your on-call schedule" labelText="Alert channel" placeholder="Select alert channel" selectedId="0"
 items={[
   {id: "0", text: "Slack"},
   {id: "1", text: "Email"},
-  {id: "2", text: "Fax"}
+  {id: "2", text: "Webhook"}
   ]}  />
 
 ### Skeleton
@@ -640,14 +640,14 @@ nothing is selected.
   import { Form, ComboBox, Button } from "carbon-components-svelte";
 </script>
 
-<Form method="POST" action="?/contact">
+<Form method="POST" action="?/alerts">
   <ComboBox
-    name="contactMethod"
-    labelText="Contact"
+    name="alertChannel"
+    labelText="Alert channel"
     items={[
       { id: "0", text: "Slack" },
       { id: "1", text: "Email" },
-      { id: "2", text: "Fax" },
+      { id: "2", text: "Webhook" },
     ]}
   />
   <Button type="submit">Submit</Button>
