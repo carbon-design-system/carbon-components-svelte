@@ -14,8 +14,8 @@ Create a full-page error with `labelText`, `title`, and `description`.
 
 <FullPageError
   labelText="Error"
-  title="Something went wrong"
-  description="An unexpected error occurred while loading this page."
+  title="Unable to load this workspace"
+  description="We couldn't load this workspace right now. Try again in a few minutes, or contact your administrator if the problem persists."
 />
 
 ## 403
@@ -26,7 +26,7 @@ Set `kind` to `"403"` to display the forbidden access illustration.
   kind="403"
   labelText="Error 403"
   title="Access denied"
-  description="You don't have permission to view this page."
+  description="You don't have permission to view this workspace. Contact your workspace administrator to request access."
 />
 
 ## 404
@@ -37,7 +37,7 @@ Set `kind` to `"404"` to display the not found illustration.
   kind="404"
   labelText="Error 404"
   title="Page not found"
-  description="The page you're looking for doesn't exist or has been moved."
+  description="The dashboard you're looking for doesn't exist or has been moved."
 />
 
 ## With action
@@ -46,8 +46,8 @@ Use the default slot to add extra body content below the description, such as a 
 
 <FullPageError
   labelText="Error"
-  title="Something went wrong"
-  description="An unexpected error occurred while loading this page."
+  title="This service is temporarily unavailable"
+  description="We're experiencing an unplanned outage. Our engineering team is investigating and will restore access as soon as possible."
 >
   <Button>Go home</Button>
 </FullPageError>
@@ -72,7 +72,7 @@ Use the `illustration` slot to replace the default kind-based SVG. Pictograms fr
 
 <FullPageError
   labelText="Error"
-  title="Something went wrong"
+  title="This automation is currently offline"
 >
   <Robot slot="illustration" />
 </FullPageError>
