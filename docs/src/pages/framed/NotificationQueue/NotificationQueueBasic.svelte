@@ -15,8 +15,8 @@
     on:click={() => {
       queue.add({
         kind: "success",
-        title: "Success",
-        subtitle: "Your changes have been saved.",
+        title: "Deployment succeeded",
+        subtitle: "Build #482 deployed to production.",
         timeout: 3000,
       });
     }}
@@ -28,8 +28,8 @@
     on:click={() => {
       queue.add({
         kind: "error",
-        title: "Error",
-        subtitle: "An error occurred while processing your request.",
+        title: "API rate limit exceeded",
+        subtitle: "Requests are being throttled. Try again in 60 seconds.",
         timeout: 3000,
       });
     }}
@@ -41,8 +41,8 @@
     on:click={() => {
       queue.add({
         kind: "info",
-        title: "Information",
-        subtitle: "New updates are available.",
+        title: "Scheduled maintenance",
+        subtitle: "Maintenance window begins tonight at 10:00 PM UTC.",
         timeout: 3000,
       });
     }}
@@ -54,8 +54,8 @@
     on:click={() => {
       queue.add({
         kind: "warning",
-        title: "Warning",
-        subtitle: "This is a warning notification.",
+        title: "Certificate expiring soon",
+        subtitle: "TLS certificate for api.example.com expires in 7 days.",
         timeout: 3000,
       });
     }}
