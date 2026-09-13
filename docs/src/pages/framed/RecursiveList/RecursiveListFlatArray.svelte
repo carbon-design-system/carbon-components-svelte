@@ -2,18 +2,18 @@
   import { RecursiveList, toHierarchy } from "carbon-components-svelte";
 
   const nodesFlat = [
-    { id: 1, text: "Item 1" },
-    { id: 2, text: "Item 1a", pid: 1 },
-    { id: 3, html: "<h5>HTML content</h5>", pid: 2 },
-    { id: 4, text: "Item 2" },
-    { id: 5, href: "https://svelte.dev/", pid: 4 },
+    { id: 1, text: "Infrastructure" },
+    { id: 2, text: "Deployment runbooks", pid: 1 },
+    { id: 3, html: "<h5>Last updated: Q3 2026</h5>", pid: 2 },
+    { id: 4, text: "Incident response" },
+    { id: 5, href: "https://status.example.com/incidents", pid: 4 },
     {
       id: 6,
-      href: "https://svelte.dev/",
-      text: "Link with custom text",
+      href: "https://status.example.com/incidents",
+      text: "View incident history",
       pid: 4,
     },
-    { id: 7, text: "Item 3" },
+    { id: 7, text: "Billing" },
   ];
 </script>
 

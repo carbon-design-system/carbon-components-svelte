@@ -3,13 +3,13 @@
 
   const nodes = [
     {
-      text: "Opens in a new tab",
-      href: "https://svelte.dev/",
+      text: "Status page",
+      href: "https://status.example.com/",
       target: "_blank",
     },
     {
-      text: "Custom rel",
-      href: "https://svelte.dev/",
+      text: "Internal wiki",
+      href: "https://wiki.example.com/",
       rel: "nofollow",
     },
   ];
