@@ -8,7 +8,9 @@
     if (copying) return;
     copying = true;
     copied = false;
-    await navigator.clipboard.writeText("Sample text to copy");
+    await navigator.clipboard.writeText(
+      "https://api.example.com/webhooks/incoming/8f2b41c9",
+    );
     copied = true;
     setTimeout(() => {
       copied = false;
@@ -20,7 +22,7 @@
 
 <OverflowMenu size="field">
   <OverflowMenuItem
-    text={copied ? "Copied!" : "Copy page"}
+    text={copied ? "Copied!" : "Copy webhook URL"}
     disabled={copying}
     on:click={(e) => {
       // Prevent menu from closing for this item.
