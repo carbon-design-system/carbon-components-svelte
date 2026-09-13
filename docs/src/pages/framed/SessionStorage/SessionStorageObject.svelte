@@ -15,7 +15,7 @@
 
 <Stack gap={6}>
   <SessionStorage
-    key="session-storage-object-example"
+    key="user-profile-draft"
     bind:value={settings}
     on:update={({ detail }) => {
       events = [...events, { event: "on:update", detail }];

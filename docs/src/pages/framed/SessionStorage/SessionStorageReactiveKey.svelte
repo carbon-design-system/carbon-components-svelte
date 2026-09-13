@@ -10,7 +10,7 @@
   let theme = "white";
   let events = [];
 
-  $: storageKey = `session-storage-reactive-example-${selectedUser}`;
+  $: storageKey = `theme-preference-${selectedUser}`;
 </script>
 
 <Stack gap={6}>

@@ -13,7 +13,11 @@
 </script>
 
 <Stack gap={6}>
-  <SessionStorage bind:this={storage} bind:value={toggled} />
+  <SessionStorage
+    key="dark-mode-session"
+    bind:this={storage}
+    bind:value={toggled}
+  />
 
   <Toggle size="sm" labelText="Dark mode" bind:toggled />
 
