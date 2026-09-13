@@ -63,11 +63,11 @@
   const {
     treeId,
     activeNodeId,
-    selectedIdsSetStore,
-    checkedIdsSetStore,
-    expandedIdsSetStore,
-    indeterminateIdsSetStore,
-    selectionModeStore,
+    selectedIdSet,
+    checkedIdSet,
+    expandedIdSet,
+    indeterminateIdSet,
+    selectionMode,
     clickNode,
     selectNode,
     expandNode,
@@ -76,7 +76,7 @@
     isInitialRender,
   } = getContext("carbon:TreeView");
 
-  let subtreeRendered = isInitialRender() && $expandedIdsSetStore.has(id);
+  let subtreeRendered = isInitialRender() && $expandedIdSet.has(id);
 
   /**
    * Tri-state value for `aria-checked` on the row.
@@ -100,7 +100,7 @@
   }
 
   $: parent = Array.isArray(nodes);
-  $: expanded = $expandedIdsSetStore.has(id);
+  $: expanded = $expandedIdSet.has(id);
   const SYNC_REVEAL_LEVELS = 16;
   $: if (expanded && !subtreeRendered) {
     if (level % SYNC_REVEAL_LEVELS === 0) {
@@ -111,10 +111,10 @@
       subtreeRendered = true;
     }
   }
-  $: selected = $selectedIdsSetStore.has(id);
-  $: checked = $checkedIdsSetStore.has(id);
-  $: isCheckboxMode = $selectionModeStore === "checkbox";
-  $: indeterminate = isCheckboxMode && $indeterminateIdsSetStore.has(id);
+  $: selected = $selectedIdSet.has(id);
+  $: checked = $checkedIdSet.has(id);
+  $: isCheckboxMode = $selectionMode === "checkbox";
+  $: indeterminate = isCheckboxMode && $indeterminateIdSet.has(id);
   // Merge all props (including custom properties) with computed properties
   // Explicitly reference text and disabled to avoid Svelte warning and ensure they're included
   // `level`/`posinset`/`setsize` are layout-only (drive `aria-*` attributes) and excluded from `node`.
@@ -142,7 +142,7 @@
       !root &&
       id === $activeNodeId &&
       prevActiveId !== $activeNodeId &&
-      !$selectedIdsSetStore.has(id)
+      !$selectedIdSet.has(id)
     )
       selectNode(node);
 
