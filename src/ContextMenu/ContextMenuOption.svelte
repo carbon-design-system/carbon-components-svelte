@@ -126,7 +126,7 @@
     menuOffsetX = _menuOffsetX;
   });
 
-  function handleClick(event, opts = {}) {
+  function handleClick(event, options = {}) {
     if (disabled) return;
     if (subOptions) return;
 
@@ -134,8 +134,8 @@
     if (ctxGroup) {
       ctxGroup.toggleOption({ id });
     } else if (ctxRadioGroup) {
-      if (opts.fromKeyboard) {
-        ctxRadioGroup.setOption({ id: opts.id });
+      if (options.fromKeyboard) {
+        ctxRadioGroup.setOption({ id: options.id });
       } else {
         ctxRadioGroup.setOption({ id });
       }
