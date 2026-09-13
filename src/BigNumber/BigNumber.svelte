@@ -1,19 +1,3 @@
-<script context="module">
-  import { BoundedFifoCache } from "../utils/boundedFifoCache.js";
-
-  const formatterCache = new BoundedFifoCache(32);
-
-  function getFormatter(formatterLocale, options) {
-    const key = `${formatterLocale ?? ""}|${JSON.stringify(options)}`;
-    let formatter = formatterCache.get(key);
-    if (!formatter) {
-      formatter = new Intl.NumberFormat(formatterLocale, options);
-      formatterCache.set(key, formatter);
-    }
-    return formatter;
-  }
-</script>
-
 <script>
   /**
    * @restProps {figure}
@@ -130,6 +114,7 @@
   import ArrowUp from "../icons/ArrowUp.svelte";
   import Subtract from "../icons/Subtract.svelte";
   import Tooltip from "../Tooltip/Tooltip.svelte";
+  import { getNumberFormatter } from "../utils/intlFormatterCache.js";
   import BigNumberSkeleton from "./BigNumberSkeleton.svelte";
 
   const DASH = "–";
@@ -143,7 +128,7 @@
       options.compactDisplay = "short";
     }
     Object.assign(options, formatOptions);
-    return getFormatter(locale, options).format(num);
+    return getNumberFormatter(locale, options).format(num);
   }
 
   function getIconSize(currentSize) {
@@ -166,9 +151,10 @@
       options.notation = "compact";
       options.compactDisplay = "short";
     }
-    if (deltaPercentage) return `${getFormatter(locale, options).format(num)}%`;
+    if (deltaPercentage)
+      return `${getNumberFormatter(locale, options).format(num)}%`;
     Object.assign(options, formatOptions);
-    return getFormatter(locale, options).format(num);
+    return getNumberFormatter(locale, options).format(num);
   }
 
   $: hasTotal = typeof total === "number";
