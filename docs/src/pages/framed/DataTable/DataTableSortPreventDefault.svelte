@@ -3,9 +3,9 @@
 
   // Mock data from the server.
   const unsortedFromServer = [
-    { id: "1", name: "Charlie", port: 3 },
-    { id: "2", name: "Alpha", port: 1 },
-    { id: "3", name: "Bravo", port: 2 },
+    { id: "1", name: "Load Balancer C", port: 8080 },
+    { id: "2", name: "Load Balancer A", port: 80 },
+    { id: "3", name: "Load Balancer B", port: 443 },
   ];
 
   let rows = [...unsortedFromServer];
