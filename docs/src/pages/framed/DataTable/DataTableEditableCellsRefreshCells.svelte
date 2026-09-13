@@ -9,9 +9,9 @@
   let dataTable;
 
   let rows = [
-    { id: "a", item: "Widget", unitPrice: 10, qty: 3 },
-    { id: "b", item: "Gadget", unitPrice: 25, qty: 1 },
-    { id: "c", item: "Gizmo", unitPrice: 8, qty: 5 },
+    { id: "a", item: "Enterprise seat", unitPrice: 89, qty: 12 },
+    { id: "b", item: "Standard seat", unitPrice: 29, qty: 40 },
+    { id: "c", item: "API overage (per 1K calls)", unitPrice: 2, qty: 150 },
   ];
 
   function snapshotQty() {
