@@ -15,7 +15,10 @@
 </script>
 
 <script>
-  /** @restProps {figure} */
+  /**
+   * @restProps {figure}
+   * @slot {{}}
+   */
 
   /**
    * Text label rendered above the value.
@@ -260,6 +263,11 @@
         {#if deltaLabel}
           <span class:bx--big-number__delta-label={true}>{deltaLabel}</span>
         {/if}
+      </div>
+    {/if}
+    {#if $$slots.default}
+      <div class:bx--big-number__footer={true}>
+        <slot />
       </div>
     {/if}
   </figure>
