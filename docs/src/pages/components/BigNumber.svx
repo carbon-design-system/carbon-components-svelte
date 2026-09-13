@@ -1,10 +1,16 @@
 ---
 components: ["BigNumber", "BigNumberSkeleton"]
-description: Big number displays a single prominent statistic, such as a dashboard metric or KPI, alongside an optional fraction, percentage, or trend indicator.
+description: Big number displays a single prominent statistic, such as a dashboard metric or KPI, with optional formatting, a fraction or percentage, a trend, and a delta.
 ---
 
 <script>
-  import { Stack, BigNumber } from "carbon-components-svelte";
+  import { Stack, BigNumber, Text } from "carbon-components-svelte";
+
+  function formatDuration(totalMinutes) {
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    return `${hours}h ${minutes}m`;
+  }
 </script>
 
 ## Basic
@@ -39,11 +45,12 @@ Use the `labelChildren` slot for custom label content instead of `labelText`.
 
 ## With total
 
-Set `total` to render `value` as the numerator of a "value / total" fraction. The denominator is hidden when it equals `value`, or when its truncated display would look identical to `value`'s. Set `forceShowTotal` to `true` to always render it.
+Set `total` to render `value` as the numerator of a "value / total" fraction. The denominator is hidden when it formats identically to `value`, or when `percentage` is `true`. Set `forceShowTotal` to `true` to always render it.
 
 <Stack gap={5}>
   <BigNumber labelText="Tickets resolved" value={42} total={120} />
   <BigNumber labelText="Same after truncation" value={42} total={42} forceShowTotal />
+  <BigNumber labelText="Over capacity" value={130} total={120} />
 </Stack>
 
 ## Percentage
@@ -54,7 +61,7 @@ Set `percentage` to `true` to append a percent sign after `value` instead of ren
 
 ## Trending
 
-Set `trend` to `"up"` or `"down"` to render a trend indicator next to the value.
+Set `trend` to `"up"`, `"down"`, or `"flat"` to render a trend indicator next to the value. Screen readers announce the trend direction. Set `trendDescription` to replace the default announcement.
 
 ### Default color
 
@@ -80,14 +87,69 @@ A trend's direction and its meaning aren't always the same: more failed builds i
   />
 </Stack>
 
-## Truncation
+### Flat
 
-`value` and `total` abbreviate large numbers by default (for example, `12,400` becomes `12.4K`). Set `fullNumber` to `true` to render the full number instead, and `fractionDigits` to control the number of fraction digits used when formatting.
+A metric that isn't trending up or down renders a neutral dash-shaped icon instead of an arrow.
+
+<BigNumber labelText="Active users" value={4200} trend="flat" />
+
+## Delta
+
+Set `delta` to render a signed change since the last period below the value. Its color follows `trend` when set, and falls back to a neutral color otherwise.
+
+<Stack gap={5}>
+  <BigNumber
+    labelText="Uptime"
+    value={99.8}
+    percentage
+    trend="up"
+    delta={0.2}
+    deltaPercentage
+    deltaLabel="vs last week"
+  />
+  <BigNumber
+    labelText="Revenue"
+    value={128000}
+    delta={12000}
+    formatOptions={{ style: "currency", currency: "USD" }}
+  />
+</Stack>
+
+## Formatting
+
+`value` and `total` abbreviate large numbers by default (for example, `12,400` becomes `12.4K`), and hovering an abbreviated value shows the full number in a tooltip.
+
+### Abbreviated
+
+Set `fullNumber` to `true` to render the full number instead, and `fractionDigits` to control the number of fraction digits used when formatting.
 
 <Stack gap={5}>
   <BigNumber labelText="Abbreviated" value={12400} />
   <BigNumber labelText="Full number" value={12400} fullNumber />
 </Stack>
+
+### Units and currency
+
+Set `formatOptions` to pass additional `Intl.NumberFormatOptions`, merged after the component's own defaults so your keys win.
+
+<BigNumber
+  labelText="Revenue"
+  value={1250000}
+  formatOptions={{ style: "currency", currency: "USD" }}
+/>
+
+<BigNumber
+  labelText="Response time"
+  value={340}
+  fullNumber
+  formatOptions={{ style: "unit", unit: "millisecond", unitDisplay: "short" }}
+/>
+
+### Custom format
+
+Set `format` to replace Intl formatting entirely with your own function, such as one that renders a duration like `2h 14m`.
+
+<BigNumber labelText="Session length" value={134} format={formatDuration} />
 
 ## Tooltip
 
@@ -99,6 +161,14 @@ Set `tooltipDescription` to render an information icon next to `labelText` with 
   percentage
   tooltipDescription="Percentage of requests that returned a 5xx status in the last 24 hours."
 />
+
+## Footer
+
+Use the default slot to render content below the value, such as a sparkline or a secondary metric.
+
+<BigNumber labelText="Deployments" value={1240}>
+  <Text type="label-01" color="secondary">Updated 5 minutes ago</Text>
+</BigNumber>
 
 ## Skeleton
 
