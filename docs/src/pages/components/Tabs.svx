@@ -21,13 +21,13 @@ description: Tabs organize content into separate views that can be switched betw
 Create a basic tab interface with labels and content.
 
 <Tabs>
-  <Tab label="Tab label 1" />
-  <Tab label="Tab label 2" />
-  <Tab label="Tab label 3" />
+  <Tab label="Dashboard" />
+  <Tab label="Monitoring" />
+  <Tab label="Activity" />
   <svelte:fragment slot="content">
-    <TabContent>Content 1</TabContent>
-    <TabContent>Content 2</TabContent>
-    <TabContent>Content 3</TabContent>
+    <TabContent>Dashboard content with analytics and overview.</TabContent>
+    <TabContent>Monitoring content for uptime and alerts.</TabContent>
+    <TabContent>Activity content for recent user actions.</TabContent>
   </svelte:fragment>
 </Tabs>
 
@@ -38,39 +38,39 @@ Set `size` to change the tab height. Line tabs support `"sm"`, `"md"`, and `"lg"
 ### Small
 
 <Tabs size="sm">
-  <Tab label="Tab label 1" />
-  <Tab label="Tab label 2" />
-  <Tab label="Tab label 3" />
+  <Tab label="Dashboard" />
+  <Tab label="Monitoring" />
+  <Tab label="Activity" />
   <svelte:fragment slot="content">
-    <TabContent>Content 1</TabContent>
-    <TabContent>Content 2</TabContent>
-    <TabContent>Content 3</TabContent>
+    <TabContent>Dashboard content with analytics and overview.</TabContent>
+    <TabContent>Monitoring content for uptime and alerts.</TabContent>
+    <TabContent>Activity content for recent user actions.</TabContent>
   </svelte:fragment>
 </Tabs>
 
 ### Medium
 
 <Tabs size="md">
-  <Tab label="Tab label 1" />
-  <Tab label="Tab label 2" />
-  <Tab label="Tab label 3" />
+  <Tab label="Dashboard" />
+  <Tab label="Monitoring" />
+  <Tab label="Activity" />
   <svelte:fragment slot="content">
-    <TabContent>Content 1</TabContent>
-    <TabContent>Content 2</TabContent>
-    <TabContent>Content 3</TabContent>
+    <TabContent>Dashboard content with analytics and overview.</TabContent>
+    <TabContent>Monitoring content for uptime and alerts.</TabContent>
+    <TabContent>Activity content for recent user actions.</TabContent>
   </svelte:fragment>
 </Tabs>
 
 ### Large
 
 <Tabs size="lg">
-  <Tab label="Tab label 1" />
-  <Tab label="Tab label 2" />
-  <Tab label="Tab label 3" />
+  <Tab label="Dashboard" />
+  <Tab label="Monitoring" />
+  <Tab label="Activity" />
   <svelte:fragment slot="content">
-    <TabContent>Content 1</TabContent>
-    <TabContent>Content 2</TabContent>
-    <TabContent>Content 3</TabContent>
+    <TabContent>Dashboard content with analytics and overview.</TabContent>
+    <TabContent>Monitoring content for uptime and alerts.</TabContent>
+    <TabContent>Activity content for recent user actions.</TabContent>
   </svelte:fragment>
 </Tabs>
 
@@ -97,13 +97,13 @@ tab. Set `activation` to `"manual"` so arrow keys only move focus. Press <DocKbd
 Use manual activation when switching panels is expensive.
 
 <Tabs activation="manual">
-  <Tab label="Tab label 1" />
-  <Tab label="Tab label 2" />
-  <Tab label="Tab label 3" />
+  <Tab label="Dashboard" />
+  <Tab label="Monitoring" />
+  <Tab label="Activity" />
   <svelte:fragment slot="content">
-    <TabContent>Content 1</TabContent>
-    <TabContent>Content 2</TabContent>
-    <TabContent>Content 3</TabContent>
+    <TabContent>Dashboard content with analytics and overview.</TabContent>
+    <TabContent>Monitoring content for uptime and alerts.</TabContent>
+    <TabContent>Activity content for recent user actions.</TabContent>
   </svelte:fragment>
 </Tabs>
 
@@ -116,13 +116,13 @@ Listen for tab selection changes.
 Listen for `on:change` to know when the selected tab index changes, whether from a click, keyboard navigation, or a `selected`/`selectedId` update. `event.detail` is the new selected index. For the dismiss event, see [Dismissible](#dismissible).
 
 <Tabs on:change={(e) => console.log(e.detail)}>
-  <Tab label="Tab label 1" />
-  <Tab label="Tab label 2" />
-  <Tab label="Tab label 3" />
+  <Tab label="Dashboard" />
+  <Tab label="Monitoring" />
+  <Tab label="Activity" />
   <svelte:fragment slot="content">
-    <TabContent>Content 1</TabContent>
-    <TabContent>Content 2</TabContent>
-    <TabContent>Content 3</TabContent>
+    <TabContent>Dashboard content with analytics and overview.</TabContent>
+    <TabContent>Monitoring content for uptime and alerts.</TabContent>
+    <TabContent>Activity content for recent user actions.</TabContent>
   </svelte:fragment>
 </Tabs>
 
@@ -162,15 +162,15 @@ Set `disabled` on a tab to prevent interaction. Keyboard navigation skips disabl
 tabs.
 
 <Tabs>
-  <Tab label="Tab label 1" />
-  <Tab label="Tab label 2" disabled />
-  <Tab label="Tab label 3" disabled />
-  <Tab label="Tab label 4" />
+  <Tab label="Dashboard" />
+  <Tab label="Monitoring" disabled />
+  <Tab label="Activity" disabled />
+  <Tab label="Settings" />
   <svelte:fragment slot="content">
-    <TabContent>Content 1</TabContent>
-    <TabContent>Content 2</TabContent>
-    <TabContent>Content 3</TabContent>
-    <TabContent>Content 4</TabContent>
+    <TabContent>Dashboard content with analytics and overview.</TabContent>
+    <TabContent>Monitoring content for uptime and alerts.</TabContent>
+    <TabContent>Activity content for recent user actions.</TabContent>
+    <TabContent>Settings and configuration options.</TabContent>
   </svelte:fragment>
 </Tabs>
 
@@ -236,13 +236,13 @@ By default, each tab has a fixed width of `10rem`. Adjust how tabs size themselv
 Set `autoWidth` to `true` for tabs to automatically adjust their width based on content.
 
 <Tabs autoWidth>
-  <Tab label="Tab label 1" />
-  <Tab label="Tab label 2" />
-  <Tab label="Tab label 3" />
+  <Tab label="Dashboard" />
+  <Tab label="Monitoring" />
+  <Tab label="Activity" />
   <svelte:fragment slot="content">
-    <TabContent>Content 1</TabContent>
-    <TabContent>Content 2</TabContent>
-    <TabContent>Content 3</TabContent>
+    <TabContent>Dashboard content with analytics and overview.</TabContent>
+    <TabContent>Monitoring content for uptime and alerts.</TabContent>
+    <TabContent>Activity content for recent user actions.</TabContent>
   </svelte:fragment>
 </Tabs>
 
@@ -251,13 +251,13 @@ Set `autoWidth` to `true` for tabs to automatically adjust their width based on 
 Set `fullWidth` to `true` for tabs to evenly span the full width of the container.
 
 <Tabs fullWidth>
-  <Tab label="Tab label 1" />
-  <Tab label="Tab label 2" />
-  <Tab label="Tab label 3" />
+  <Tab label="Dashboard" />
+  <Tab label="Monitoring" />
+  <Tab label="Activity" />
   <svelte:fragment slot="content">
-    <TabContent>Content 1</TabContent>
-    <TabContent>Content 2</TabContent>
-    <TabContent>Content 3</TabContent>
+    <TabContent>Dashboard content with analytics and overview.</TabContent>
+    <TabContent>Monitoring content for uptime and alerts.</TabContent>
+    <TabContent>Activity content for recent user actions.</TabContent>
   </svelte:fragment>
 </Tabs>
 
@@ -418,19 +418,19 @@ Use the default slot with `let:selected` to customize the tab label based on
 whether the tab is selected.
 
 <Tabs>
-  <Tab label="Tab label 1" let:selected>
-    Tab label 1 {#if selected}(selected){/if}
+  <Tab label="Dashboard" let:selected>
+    Dashboard {#if selected}(selected){/if}
   </Tab>
-  <Tab label="Tab label 2" let:selected>
-    Tab label 2 {#if selected}(selected){/if}
+  <Tab label="Monitoring" let:selected>
+    Monitoring {#if selected}(selected){/if}
   </Tab>
-  <Tab label="Tab label 3" let:selected>
-    Tab label 3 {#if selected}(selected){/if}
+  <Tab label="Activity" let:selected>
+    Activity {#if selected}(selected){/if}
   </Tab>
   <svelte:fragment slot="content">
-    <TabContent>Content 1</TabContent>
-    <TabContent>Content 2</TabContent>
-    <TabContent>Content 3</TabContent>
+    <TabContent>Dashboard content with analytics and overview.</TabContent>
+    <TabContent>Monitoring content for uptime and alerts.</TabContent>
+    <TabContent>Activity content for recent user actions.</TabContent>
   </svelte:fragment>
 </Tabs>
 
@@ -447,13 +447,13 @@ Use the container type for a more prominent tab interface. By default, container
 ### Basic
 
 <Tabs type="container">
-  <Tab label="Tab label 1" />
-  <Tab label="Tab label 2" />
-  <Tab label="Tab label 3" />
+  <Tab label="Dashboard" />
+  <Tab label="Monitoring" />
+  <Tab label="Activity" />
   <svelte:fragment slot="content">
-    <TabContent>Content 1</TabContent>
-    <TabContent>Content 2</TabContent>
-    <TabContent>Content 3</TabContent>
+    <TabContent>Dashboard content with analytics and overview.</TabContent>
+    <TabContent>Monitoring content for uptime and alerts.</TabContent>
+    <TabContent>Activity content for recent user actions.</TabContent>
   </svelte:fragment>
 </Tabs>
 
@@ -464,52 +464,52 @@ Container tabs support the full size range: `"sm"`, `"md"`, `"lg"`, and `"xl"`. 
 #### Small
 
 <Tabs type="container" size="sm">
-  <Tab label="Tab label 1" />
-  <Tab label="Tab label 2" />
-  <Tab label="Tab label 3" />
+  <Tab label="Dashboard" />
+  <Tab label="Monitoring" />
+  <Tab label="Activity" />
   <svelte:fragment slot="content">
-    <TabContent>Content 1</TabContent>
-    <TabContent>Content 2</TabContent>
-    <TabContent>Content 3</TabContent>
+    <TabContent>Dashboard content with analytics and overview.</TabContent>
+    <TabContent>Monitoring content for uptime and alerts.</TabContent>
+    <TabContent>Activity content for recent user actions.</TabContent>
   </svelte:fragment>
 </Tabs>
 
 #### Medium
 
 <Tabs type="container" size="md">
-  <Tab label="Tab label 1" />
-  <Tab label="Tab label 2" />
-  <Tab label="Tab label 3" />
+  <Tab label="Dashboard" />
+  <Tab label="Monitoring" />
+  <Tab label="Activity" />
   <svelte:fragment slot="content">
-    <TabContent>Content 1</TabContent>
-    <TabContent>Content 2</TabContent>
-    <TabContent>Content 3</TabContent>
+    <TabContent>Dashboard content with analytics and overview.</TabContent>
+    <TabContent>Monitoring content for uptime and alerts.</TabContent>
+    <TabContent>Activity content for recent user actions.</TabContent>
   </svelte:fragment>
 </Tabs>
 
 #### Large
 
 <Tabs type="container" size="lg">
-  <Tab label="Tab label 1" />
-  <Tab label="Tab label 2" />
-  <Tab label="Tab label 3" />
+  <Tab label="Dashboard" />
+  <Tab label="Monitoring" />
+  <Tab label="Activity" />
   <svelte:fragment slot="content">
-    <TabContent>Content 1</TabContent>
-    <TabContent>Content 2</TabContent>
-    <TabContent>Content 3</TabContent>
+    <TabContent>Dashboard content with analytics and overview.</TabContent>
+    <TabContent>Monitoring content for uptime and alerts.</TabContent>
+    <TabContent>Activity content for recent user actions.</TabContent>
   </svelte:fragment>
 </Tabs>
 
 #### Extra large
 
 <Tabs type="container" size="xl">
-  <Tab label="Tab label 1" />
-  <Tab label="Tab label 2" />
-  <Tab label="Tab label 3" />
+  <Tab label="Dashboard" />
+  <Tab label="Monitoring" />
+  <Tab label="Activity" />
   <svelte:fragment slot="content">
-    <TabContent>Content 1</TabContent>
-    <TabContent>Content 2</TabContent>
-    <TabContent>Content 3</TabContent>
+    <TabContent>Dashboard content with analytics and overview.</TabContent>
+    <TabContent>Monitoring content for uptime and alerts.</TabContent>
+    <TabContent>Activity content for recent user actions.</TabContent>
   </svelte:fragment>
 </Tabs>
 
@@ -518,13 +518,13 @@ Container tabs support the full size range: `"sm"`, `"md"`, `"lg"`, and `"xl"`. 
 Combine `type="container"` with `fullWidth` for container tabs that evenly span the full width of the container.
 
 <Tabs type="container" fullWidth>
-  <Tab label="Tab label 1" />
-  <Tab label="Tab label 2" />
-  <Tab label="Tab label 3" />
+  <Tab label="Dashboard" />
+  <Tab label="Monitoring" />
+  <Tab label="Activity" />
   <svelte:fragment slot="content">
-    <TabContent>Content 1</TabContent>
-    <TabContent>Content 2</TabContent>
-    <TabContent>Content 3</TabContent>
+    <TabContent>Dashboard content with analytics and overview.</TabContent>
+    <TabContent>Monitoring content for uptime and alerts.</TabContent>
+    <TabContent>Activity content for recent user actions.</TabContent>
   </svelte:fragment>
 </Tabs>
 
@@ -534,15 +534,15 @@ Container type tabs with disabled states. Set `disabled` on individual tabs to
 prevent interaction.
 
 <Tabs type="container">
-  <Tab label="Tab label 1" />
-  <Tab label="Tab label 2" disabled />
-  <Tab label="Tab label 3" disabled />
-  <Tab label="Tab label 4" />
+  <Tab label="Dashboard" />
+  <Tab label="Monitoring" disabled />
+  <Tab label="Activity" disabled />
+  <Tab label="Settings" />
   <svelte:fragment slot="content">
-    <TabContent>Content 1</TabContent>
-    <TabContent>Content 2</TabContent>
-    <TabContent>Content 3</TabContent>
-    <TabContent>Content 4</TabContent>
+    <TabContent>Dashboard content with analytics and overview.</TabContent>
+    <TabContent>Monitoring content for uptime and alerts.</TabContent>
+    <TabContent>Activity content for recent user actions.</TabContent>
+    <TabContent>Settings and configuration options.</TabContent>
   </svelte:fragment>
 </Tabs>
 
@@ -654,10 +654,10 @@ On narrower screens, the list becomes a horizontal row with overflow scrolling.
   <Tab label="Activity" />
   <Tab label="Settings" />
   <svelte:fragment slot="content">
-    <TabContent>Content 1</TabContent>
-    <TabContent>Content 2</TabContent>
-    <TabContent>Content 3</TabContent>
-    <TabContent>Content 4</TabContent>
+    <TabContent>Dashboard content with analytics and overview.</TabContent>
+    <TabContent>Monitoring content for uptime and alerts.</TabContent>
+    <TabContent>Activity content for recent user actions.</TabContent>
+    <TabContent>Settings and configuration options.</TabContent>
   </svelte:fragment>
 </TabsVertical>
 
@@ -675,9 +675,9 @@ height.
   <Tab label="Monitoring" />
   <Tab label="Activity" />
   <svelte:fragment slot="content">
-    <TabContent>Content 1</TabContent>
-    <TabContent>Content 2</TabContent>
-    <TabContent>Content 3</TabContent>
+    <TabContent>Dashboard content with analytics and overview.</TabContent>
+    <TabContent>Monitoring content for uptime and alerts.</TabContent>
+    <TabContent>Activity content for recent user actions.</TabContent>
   </svelte:fragment>
 </TabsVertical>
 
@@ -688,9 +688,9 @@ height.
   <Tab label="Monitoring" />
   <Tab label="Activity" />
   <svelte:fragment slot="content">
-    <TabContent>Content 1</TabContent>
-    <TabContent>Content 2</TabContent>
-    <TabContent>Content 3</TabContent>
+    <TabContent>Dashboard content with analytics and overview.</TabContent>
+    <TabContent>Monitoring content for uptime and alerts.</TabContent>
+    <TabContent>Activity content for recent user actions.</TabContent>
   </svelte:fragment>
 </TabsVertical>
 
@@ -701,9 +701,9 @@ height.
   <Tab label="Monitoring" />
   <Tab label="Activity" />
   <svelte:fragment slot="content">
-    <TabContent>Content 1</TabContent>
-    <TabContent>Content 2</TabContent>
-    <TabContent>Content 3</TabContent>
+    <TabContent>Dashboard content with analytics and overview.</TabContent>
+    <TabContent>Monitoring content for uptime and alerts.</TabContent>
+    <TabContent>Activity content for recent user actions.</TabContent>
   </svelte:fragment>
 </TabsVertical>
 
@@ -717,9 +717,9 @@ Set `selected` to control the active tab index on mount. As with `Tabs`, bind
   <Tab label="Monitoring" />
   <Tab label="Activity" />
   <svelte:fragment slot="content">
-    <TabContent>Content 1</TabContent>
-    <TabContent>Content 2</TabContent>
-    <TabContent>Content 3</TabContent>
+    <TabContent>Dashboard content with analytics and overview.</TabContent>
+    <TabContent>Monitoring content for uptime and alerts.</TabContent>
+    <TabContent>Activity content for recent user actions.</TabContent>
   </svelte:fragment>
 </TabsVertical>
 
@@ -734,10 +734,10 @@ tabs.
   <Tab label="Activity" />
   <Tab label="Settings" disabled />
   <svelte:fragment slot="content">
-    <TabContent>Content 1</TabContent>
-    <TabContent>Content 2</TabContent>
-    <TabContent>Content 3</TabContent>
-    <TabContent>Content 4</TabContent>
+    <TabContent>Dashboard content with analytics and overview.</TabContent>
+    <TabContent>Monitoring content for uptime and alerts.</TabContent>
+    <TabContent>Activity content for recent user actions.</TabContent>
+    <TabContent>Settings and configuration options.</TabContent>
   </svelte:fragment>
 </TabsVertical>
 
@@ -750,9 +750,9 @@ Long labels wrap to two lines, then truncate with an ellipsis.
   <Tab label="Extra long label that will go two lines then truncate when it gets too long" />
   <Tab label="Activity" />
   <svelte:fragment slot="content">
-    <TabContent>Content 1</TabContent>
-    <TabContent>Content 2</TabContent>
-    <TabContent>Content 3</TabContent>
+    <TabContent>Dashboard content with analytics and overview.</TabContent>
+    <TabContent>Content for the second tab.</TabContent>
+    <TabContent>Activity content for recent user actions.</TabContent>
   </svelte:fragment>
 </TabsVertical>
 
@@ -767,10 +767,10 @@ the first line when the label wraps or truncates.
   <Tab label="Analyze trends across every region and team" icon={Analytics} />
   <Tab label="Settings" icon={Settings} />
   <svelte:fragment slot="content">
-    <TabContent>Content 1</TabContent>
-    <TabContent>Content 2</TabContent>
-    <TabContent>Content 3</TabContent>
-    <TabContent>Content 4</TabContent>
+    <TabContent>Dashboard content with analytics and overview.</TabContent>
+    <TabContent>Activity content for recent user actions.</TabContent>
+    <TabContent>Regional trend analysis across teams.</TabContent>
+    <TabContent>Settings and configuration options.</TabContent>
   </svelte:fragment>
 </TabsVertical>
 
