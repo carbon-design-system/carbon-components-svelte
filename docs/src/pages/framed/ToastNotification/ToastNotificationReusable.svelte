@@ -8,30 +8,31 @@
 
   let open = false;
   let kind = "error";
-  let title = "Error";
-  let subtitle = "An internal server error occurred.";
+  let title = "Session expired";
+  let subtitle = "Your session has ended. Please sign in again to continue.";
   let caption = new Date().toLocaleString();
 
   function showError() {
     kind = "error";
-    title = "Error";
-    subtitle = "An internal server error occurred.";
+    title = "Session expired";
+    subtitle = "Your session has ended. Please sign in again to continue.";
     caption = new Date().toLocaleString();
     open = true;
   }
 
   function showSuccess() {
     kind = "success";
-    title = "Success";
-    subtitle = "Your settings have been saved.";
+    title = "Export complete";
+    subtitle = "Your report has been exported and is ready for download.";
     caption = new Date().toLocaleString();
     open = true;
   }
 
   function showWarning() {
     kind = "warning";
-    title = "Warning";
-    subtitle = "Please review your changes before continuing.";
+    title = "Unsaved changes";
+    subtitle =
+      "You have unsaved changes that will be lost if you navigate away.";
     caption = new Date().toLocaleString();
     open = true;
   }
