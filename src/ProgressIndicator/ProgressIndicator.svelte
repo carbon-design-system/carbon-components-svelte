@@ -1,5 +1,9 @@
 <script>
   /**
+   * @restProps {ul}
+   */
+
+  /**
    * Specify the current step index.
    * Ignored when `selectedId` is set.
    * @bindable writable
@@ -30,6 +34,7 @@
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { clampIndex } from "../utils/clamp-index.js";
   import { keyBy } from "../utils/key-by.js";
+  import { rovingFocus } from "../utils/roving-focus.js";
 
   const dispatch = createEventDispatcher();
   /**
@@ -41,6 +46,8 @@
    */
   const stepsById = derived(steps, (steps) => keyBy(steps));
   const sharedPreventChangeOnClick = writable(preventChangeOnClick);
+
+  let listRef = null;
 
   /**
    * @type {import("svelte/store").Readable<boolean>}
@@ -161,10 +168,28 @@
 </script>
 
 <ul
+  bind:this={listRef}
   class:bx--progress={true}
   class:bx--progress--vertical={vertical}
   class:bx--progress--space-equal={spaceEqually && !vertical}
   {...$$restProps}
+  use:rovingFocus={{
+    selector: ".bx--progress-step-button",
+    orientation: vertical ? "vertical" : "horizontal",
+    skipDisabled: true,
+    focusOnMove: true,
+    getActiveIndex: () => {
+      if (!listRef) return -1;
+      const items = Array.from(
+        listRef.querySelectorAll(".bx--progress-step-button"),
+      );
+      return items.indexOf(document.activeElement);
+    },
+    onMove: (index, event) => {
+      // Arrow keys would otherwise also scroll the page.
+      event.preventDefault();
+    },
+  }}
   on:click
   on:mouseover
   on:mouseenter

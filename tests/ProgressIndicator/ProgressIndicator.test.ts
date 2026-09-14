@@ -349,6 +349,98 @@ describe("ProgressIndicator", () => {
     });
   });
 
+  describe("Keyboard navigation", () => {
+    const fourSteps = [
+      { label: "Step 1", description: "First step", complete: true },
+      { label: "Step 2", description: "Second step", complete: false },
+      { label: "Step 3", description: "Third step", complete: false },
+      {
+        label: "Step 4",
+        description: "Fourth step",
+        complete: false,
+        disabled: true,
+      },
+    ];
+
+    it("moves focus with ArrowLeft/ArrowRight, skips the disabled step, and wraps at the ends", async () => {
+      render(ProgressIndicator, {
+        currentIndex: 1,
+        steps: fourSteps,
+      });
+
+      const buttons = screen.getAllByRole("button");
+
+      await user.tab();
+      expect(buttons[0]).toHaveFocus();
+
+      await user.keyboard("{ArrowRight}");
+      expect(buttons[1]).toHaveFocus();
+
+      await user.keyboard("{ArrowLeft}");
+      expect(buttons[0]).toHaveFocus();
+
+      await user.keyboard("{End}");
+      expect(buttons[2]).toHaveFocus();
+
+      await user.keyboard("{Home}");
+      expect(buttons[0]).toHaveFocus();
+
+      await user.keyboard("{End}");
+      expect(buttons[2]).toHaveFocus();
+      await user.keyboard("{ArrowRight}");
+      expect(buttons[0]).toHaveFocus();
+    });
+
+    it("moves focus with ArrowUp/ArrowDown when vertical, ignoring horizontal arrows", async () => {
+      render(ProgressIndicator, {
+        currentIndex: 1,
+        vertical: true,
+        steps: fourSteps,
+      });
+
+      const buttons = screen.getAllByRole("button");
+
+      await user.tab();
+      expect(buttons[0]).toHaveFocus();
+
+      await user.keyboard("{ArrowDown}");
+      expect(buttons[1]).toHaveFocus();
+
+      await user.keyboard("{ArrowRight}");
+      expect(buttons[1]).toHaveFocus();
+    });
+
+    it("keeps every non-disabled button tabbable", () => {
+      render(ProgressIndicator, {
+        currentIndex: 1,
+        steps: fourSteps,
+      });
+
+      const buttons = screen.getAllByRole("button");
+      for (const button of buttons.slice(0, 3)) {
+        expect(button).toHaveAttribute("tabindex", "0");
+      }
+      expect(buttons[3]).toHaveAttribute("tabindex", "-1");
+    });
+
+    it("does not dispatch change from arrow movement alone", async () => {
+      const changeHandler = vi.fn();
+      render(ProgressIndicator, {
+        currentIndex: 1,
+        steps: fourSteps,
+        onchange: changeHandler,
+      });
+
+      await user.tab();
+      await user.keyboard("{ArrowRight}");
+      await user.keyboard("{ArrowLeft}");
+      await user.keyboard("{End}");
+      await user.keyboard("{Home}");
+
+      expect(changeHandler).not.toHaveBeenCalled();
+    });
+  });
+
   describe("Conditional step rendering", () => {
     it("should remove unmounted steps and re-index, so change emits the correct index", async () => {
       const consoleLog = vi.spyOn(console, "log");
