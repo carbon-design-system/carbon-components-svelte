@@ -112,6 +112,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
     components: [
       "Dialog",
       "Modal",
+      "ConfirmModal",
       "ComposedModal",
       "InterstitialScreen",
       "Popover",
