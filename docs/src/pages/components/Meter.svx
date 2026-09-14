@@ -1,0 +1,95 @@
+---
+components: ["Meter"]
+description: Meter shows usage against a fixed capacity, with optional warning and error thresholds. It is not a progress bar; nothing is in progress and nothing finishes.
+---
+
+<script>
+  import { Stack, Meter } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Create a meter with `labelText`, `value`, and `max`.
+
+<Meter labelText="Storage" value={420} max={1000} />
+
+## Sizes
+
+Set `size` to control the track height.
+
+### Medium
+
+<Meter labelText="Storage" value={420} max={1000} size="md" />
+
+### Small
+
+<Meter labelText="Storage" value={420} max={1000} size="sm" />
+
+## Value text
+
+Set `valueText` to render a right-aligned value in the label row. Format it yourself; `valueText` also becomes the meter's `aria-valuetext`.
+
+<Meter labelText="Storage" value={812} max={1000} valueText="812 GB of 1 TB" />
+
+Use the `valueChildren` slot to render custom value content instead of `valueText`.
+
+<Meter labelText="Storage" value={812} max={1000}>
+  <strong slot="valueChildren">812 GB / 1 TB</strong>
+</Meter>
+
+## Helper text
+
+Set `helperText` to render supporting text below the track, linked to the meter through `aria-describedby`.
+
+<Meter labelText="Storage" value={420} max={1000} helperText="420 GB used of 1 TB" />
+
+## Thresholds
+
+Set `thresholds` with `warning` and `error` values, in the same units as `value`, to color the bar as usage grows.
+
+### Warning
+
+The bar switches to the warning color once `value` reaches `thresholds.warning`.
+
+<Meter labelText="Storage" value={820} max={1000} thresholds={{ warning: 800, error: 950 }} helperText="Approaching capacity" />
+
+### Error
+
+The bar switches to the error color once `value` reaches `thresholds.error`.
+
+<Meter labelText="Storage" value={960} max={1000} thresholds={{ warning: 800, error: 950 }} helperText="Over capacity soon" />
+
+### Threshold markers
+
+Set `showThresholds` to `true` to draw a tick at each defined threshold.
+
+<Meter labelText="Storage" value={820} max={1000} thresholds={{ warning: 800, error: 950 }} showThresholds />
+
+## Status
+
+Set `status` to override the derived status. An explicit `status` wins over `thresholds`.
+
+<Stack gap={5}>
+  <Meter labelText="Default" value={420} max={1000} status="default" />
+  <Meter labelText="Success" value={420} max={1000} status="success" />
+  <Meter labelText="Warning" value={420} max={1000} status="warning" />
+  <Meter labelText="Error" value={420} max={1000} status="error" />
+</Stack>
+
+## Over capacity
+
+When `value` exceeds `max`, the meter caps the bar and label at full width and switches to the error status.
+
+<Meter labelText="Storage" value={1200} max={1000} helperText="1.2 TB used of 1 TB" />
+
+## Hidden label
+
+Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
+
+<Meter labelText="Storage" value={420} max={1000} hideLabel />
+
+## Reactive
+
+Drive a meter's `value` from a bound `Slider` to see the thresholds respond as usage changes.
+
+<FileSource src="/framed/Meter/MeterLive" />
