@@ -168,6 +168,7 @@ export { default as RangeSliderSkeleton } from "./Slider/RangeSliderSkeleton.sve
 export { default as Slider } from "./Slider/Slider.svelte";
 export { default as SliderSkeleton } from "./Slider/SliderSkeleton.svelte";
 export { default as Stack } from "./Stack/Stack.svelte";
+export { createStepStore } from "./Stepper/step-store.js";
 export { default as StructuredList } from "./StructuredList/StructuredList.svelte";
 export { default as StructuredListBody } from "./StructuredList/StructuredListBody.svelte";
 export { default as StructuredListCell } from "./StructuredList/StructuredListCell.svelte";
