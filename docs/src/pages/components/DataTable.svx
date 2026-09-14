@@ -1,5 +1,5 @@
 ---
-components: ["DataTable", "Pagination","Toolbar", "ToolbarContent", "ToolbarSearch", "ToolbarMenu", "ToolbarMenuItem", "ToolbarBatchActions", "DataTableSkeleton"]
+components: ["DataTable", "Pagination","Toolbar", "ToolbarContent", "ToolbarSearch", "ToolbarMenu", "ToolbarMenuItem", "ToolbarBatchActions", "ToolbarDensity", "DataTableSkeleton"]
 description: Data tables display structured data in rows and columns, with sorting, filtering, pagination, virtualization, and row selection and expansion.
 ---
 
@@ -1275,6 +1275,14 @@ Set `size="compact"` for minimal row height.
     },
   ]}"
 />
+
+### Density toggle
+
+Compose `ToolbarDensity` in the toolbar for a menu that picks the row height. It binds `size`, so pass the same value to the `DataTable`, and the toolbar's own height follows the picked size. This is the recommended pattern for letting users control the table's row height themselves.
+
+Set `sizes` to offer a subset of the four row heights. Set `icon` to render a custom trigger icon in place of the default.
+
+<FileSource src="/framed/DataTable/DataTableDensity" />
 
 ## Sorting
 
