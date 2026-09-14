@@ -11,6 +11,7 @@ export { default as TableRow } from "./TableRow.svelte";
 export { default as Toolbar } from "./Toolbar.svelte";
 export { default as ToolbarBatchActions } from "./ToolbarBatchActions.svelte";
 export { default as ToolbarContent } from "./ToolbarContent.svelte";
+export { default as ToolbarDensity } from "./ToolbarDensity.svelte";
 export { default as ToolbarMenu } from "./ToolbarMenu.svelte";
 export { default as ToolbarMenuItem } from "./ToolbarMenuItem.svelte";
 export { default as ToolbarSearch } from "./ToolbarSearch.svelte";
