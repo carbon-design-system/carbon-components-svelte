@@ -51,7 +51,7 @@ Update the current step programmatically while maintaining step completion rules
 
 ### Prevent change on click
 
-Disable automatic step selection when clicking completed steps.
+Disable automatic step selection when clicking completed steps. Incomplete steps are never clickable; only completed steps respond, and `preventChangeOnClick` turns those off too.
 
 <ProgressIndicator preventChangeOnClick currentIndex={2}>
   <ProgressStep complete
@@ -69,6 +69,29 @@ Disable automatic step selection when clicking completed steps.
   <ProgressStep
     label="Deploy"
     description="Waiting to release to production"
+  />
+</ProgressIndicator>
+
+## Keyboard navigation
+
+<DocKbd label="Tab" /> reaches every enabled step. <DocKbd label="ArrowLeft" /> and <DocKbd label="ArrowRight" /> (or <DocKbd label="ArrowUp" /> and <DocKbd label="ArrowDown" /> when vertical) move focus between steps. <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the first and last enabled step. <DocKbd label="Enter" /> or <DocKbd label="Space" /> selects a completed step.
+
+<ProgressIndicator currentIndex={2}>
+  <ProgressStep complete
+    label="Build"
+    description="Build completed successfully"
+  />
+  <ProgressStep complete
+    label="Test"
+    description="Automated test suite passed"
+  />
+  <ProgressStep
+    label="Stage"
+    description="Deploying to the staging environment"
+  />
+  <ProgressStep disabled
+    label="Deploy"
+    description="Blocked until the stage step completes"
   />
 </ProgressIndicator>
 
@@ -208,7 +231,7 @@ Display steps in a vertical layout.
 
 Respond to step selection changes.
 
-Use `on:change` to listen for the step becoming active, either from a completed step being clicked or from `currentIndex`/`selectedId` being updated. The event dispatches the new step index as `event.detail`.
+Use `on:change` to listen for the step becoming active. `change` dispatches when the user selects a completed step by click, <DocKbd label="Enter" />, or <DocKbd label="Space" />, with the new index as `event.detail`; updating `currentIndex` or `selectedId` from code does not dispatch it.
 
 <ProgressIndicator
   currentIndex={0}
