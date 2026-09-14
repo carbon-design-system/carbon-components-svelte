@@ -24,6 +24,12 @@ Call `close(value)` on the dialog instance, obtained through `bind:this`, to clo
 
 <FileSource src="/framed/Dialog/DialogReturnValue" />
 
+## Light
+
+Set `light` to `true` to use the light variant, for placing the dialog on a light-themed surface alongside other light components.
+
+<FileSource src="/framed/Dialog/DialogLight" />
+
 ## Closed by
 
 Set `closedby` to `"any"`, `"closerequest"`, or `"none"` to forward the native `closedby` attribute, which controls which user interactions can close the dialog. Browsers without support for the attribute ignore it. Set it to `"none"` to also disable this component's own backdrop light-dismiss, since that logic runs in Svelte rather than natively.
