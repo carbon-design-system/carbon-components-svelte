@@ -256,6 +256,7 @@ export {
   filterTreeNodes,
 } from "./utils/filter-tree-nodes.js";
 export { fuzzyMatch, highlightSegments } from "./utils/fuzzy-match.js";
+export { getInitials } from "./utils/initials.js";
 export { toHierarchy } from "./utils/to-hierarchy.js";
 export {
   resolveCheckboxState,
