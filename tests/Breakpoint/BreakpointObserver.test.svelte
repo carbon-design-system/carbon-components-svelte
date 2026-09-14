@@ -3,10 +3,12 @@
 
   export let smallerThanMd = false;
   export let largerThanMd = false;
+  export let fallback: "sm" | "md" | "lg" | "xlg" | "max" | undefined =
+    undefined;
 
   export let compareTo: "sm" | "md" | "lg" | "xlg" | "max" = "md";
 
-  const observer = breakpointObserver();
+  const observer = breakpointObserver({ fallback });
   const smallerThan = observer.smallerThan(compareTo);
   const largerThan = observer.largerThan(compareTo);
 

@@ -1,5 +1,3 @@
-type Size = "sm" | "md" | "lg" | "xlg" | "max";
-
 /**
  * Stub `window.matchMedia`; `matches(query)` decides each list. Returns a
  * `fire(query, matches)` that invokes the change listeners registered for
@@ -46,24 +44,6 @@ export function stubMatchMedia(matches: (query: string) => boolean) {
   }
 
   return { fire };
-}
-
-/**
- * Stub so exactly one Carbon breakpoint range matches (queries copied from
- * `tests/Breakpoint/HideAtBreakpoint.test.ts` `stubMatchMediaForSize`).
- */
-export function stubMatchMediaForSize(size: Size) {
-  const isMatch: Record<Size, (query: string) => boolean> = {
-    sm: (query) => query.includes("(max-width: 672px)"),
-    md: (query) => query.includes("(min-width: 672px) and (max-width: 1056px)"),
-    lg: (query) =>
-      query.includes("(min-width: 1056px) and (max-width: 1312px)"),
-    xlg: (query) =>
-      query.includes("(min-width: 1312px) and (max-width: 1584px)"),
-    max: (query) => query.includes("(min-width: 1584px)"),
-  };
-
-  return stubMatchMedia(isMatch[size]);
 }
 
 /** `vi.stubGlobal("matchMedia", undefined)` for the missing-API path. */
