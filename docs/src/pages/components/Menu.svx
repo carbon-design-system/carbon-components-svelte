@@ -86,7 +86,7 @@ Set `labelText` on a `MenuItem` and nest child `MenuItem` rows to get a submenu.
 
 ## Keyboard interactions
 
-Once open, arrow keys move focus between items without wrapping past the first or last item. <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the first and last enabled item, skipping disabled ones. <DocKbd label="Escape" /> closes the menu and returns focus to the anchor. See [Events](#events) for the full set of ways the menu can close, and how to keep it open after selection.
+Once open, arrow keys move focus between items without wrapping past the first or last item. <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the first and last enabled item, skipping disabled ones. <DocKbd label="Escape" /> closes the menu and returns focus to the anchor. Selecting an item closes the menu and returns focus to whatever element had it when the menu opened, so a keyboard user lands back on the trigger while a mouse user is left where they were. See [Events](#events) for the full set of ways the menu can close, and how to keep it open after selection.
 
 ## Scrollable
 
