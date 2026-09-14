@@ -43,6 +43,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   LocalStorage: "0.30.0",
   Menu: "0.110.0",
   MenuButton: "0.110.0",
+  Meter: "0.113.0",
   Modal: "0.2.0",
   MultiSelect: "0.2.0",
   NotificationQueue: "0.94.0",
