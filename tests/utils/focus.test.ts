@@ -108,4 +108,59 @@ describe("restoreFocus", () => {
     focusReturn.restore();
     expect(document.activeElement).toBe(other);
   });
+
+  test("restore(fallback) focuses the fallback when the saved element is disconnected", () => {
+    const trigger = document.createElement("button");
+    document.body.appendChild(trigger);
+    trigger.focus();
+
+    const focusReturn = restoreFocus();
+    focusReturn.save();
+
+    trigger.remove();
+
+    const fallbackTarget = document.createElement("button");
+    document.body.appendChild(fallbackTarget);
+
+    focusReturn.restore(() => fallbackTarget);
+    expect(document.activeElement).toBe(fallbackTarget);
+  });
+
+  test("restore(fallback) is a no-op when the fallback returns a disconnected element", () => {
+    const trigger = document.createElement("button");
+    document.body.appendChild(trigger);
+    trigger.focus();
+
+    const focusReturn = restoreFocus();
+    focusReturn.save();
+
+    trigger.remove();
+
+    const other = document.createElement("button");
+    document.body.appendChild(other);
+    other.focus();
+
+    const disconnectedFallback = document.createElement("button");
+    focusReturn.restore(() => disconnectedFallback);
+    expect(document.activeElement).toBe(other);
+  });
+
+  test("restore(fallback) prefers the saved element when it is still connected", () => {
+    const trigger = document.createElement("button");
+    document.body.appendChild(trigger);
+    trigger.focus();
+
+    const focusReturn = restoreFocus();
+    focusReturn.save();
+
+    const other = document.createElement("button");
+    document.body.appendChild(other);
+    other.focus();
+
+    const fallbackTarget = document.createElement("button");
+    document.body.appendChild(fallbackTarget);
+
+    focusReturn.restore(() => fallbackTarget);
+    expect(document.activeElement).toBe(trigger);
+  });
 });

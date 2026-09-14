@@ -26,6 +26,14 @@
    */
   export let preventCloseOnClickOutside = false;
 
+  /**
+   * Specify an element—or a function returning one—to focus when the dialog
+   * closes. Use when the element that opened the dialog may unmount while
+   * the dialog is open, for example a deleted row.
+   * @type {HTMLElement | (() => HTMLElement | null) | null}
+   */
+  export let returnFocusTo = null;
+
   import { createEventDispatcher } from "svelte";
   import { restoreFocus } from "../utils/focus.js";
 
@@ -92,7 +100,9 @@
     pendingTrigger = null;
     open = false;
     dispatch("close", { trigger });
-    focusReturn.restore();
+    focusReturn.restore(() =>
+      typeof returnFocusTo === "function" ? returnFocusTo() : returnFocusTo,
+    );
   }
 </script>
 

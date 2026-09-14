@@ -32,7 +32,7 @@ export function initialFocus({
  * Save focus before an overlay opens and restore it on close when the element
  * is still connected.
  *
- * @returns {{ save: () => void; restore: () => void }}
+ * @returns {{ save: () => void; restore: (fallback?: () => HTMLElement | null | undefined) => void }}
  */
 export function restoreFocus() {
   /** @type {HTMLElement | null} */
@@ -44,11 +44,16 @@ export function restoreFocus() {
           ? document.activeElement
           : null;
     },
-    restore() {
+    restore(fallback) {
       if (prevFocus?.isConnected) {
         prevFocus.focus();
-        prevFocus = null;
+      } else if (typeof fallback === "function") {
+        const target = fallback();
+        if (target?.isConnected) {
+          target.focus();
+        }
       }
+      prevFocus = null;
     },
   };
 }

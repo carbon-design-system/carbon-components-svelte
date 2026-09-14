@@ -124,6 +124,14 @@
    */
   export let hideCloseButton = false;
 
+  /**
+   * Specify an element—or a function returning one—to focus when the modal
+   * closes. Use when the element that opened the modal may unmount while
+   * the modal is open, for example a deleted row.
+   * @type {HTMLElement | (() => HTMLElement | null) | null}
+   */
+  export let returnFocusTo = null;
+
   /** Set an id for the top-level element */
   export let id = uniqueId();
 
@@ -294,7 +302,11 @@
   on:transitionend={(event) => {
     if (event.propertyName === "transform") {
       dispatch("transitionend", { open });
-      if (!open) focusReturn.restore();
+      if (!open) {
+        focusReturn.restore(() =>
+          typeof returnFocusTo === "function" ? returnFocusTo() : returnFocusTo,
+        );
+      }
     }
   }}
 >
