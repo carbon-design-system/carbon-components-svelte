@@ -167,6 +167,7 @@
   import CopyButton from "../CopyButton/CopyButton.svelte";
   import View from "../icons/View.svelte";
   import ViewOff from "../icons/ViewOff.svelte";
+  import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -212,6 +213,13 @@
   $: helperId = `helper-${id}`;
   $: toggleLabel = toggled ? hideValueLabel : showValueLabel;
   $: showToggle = type === "password" && revealMode === "toggle";
+  $: toggleTooltipDirection = tooltipPosition === "top" ? "top" : "bottom";
+  // Matches the copy button's own gap so both tooltips sit the same
+  // distance from their trigger.
+  $: toggleTooltipGaps = iconTooltipPortalGaps(
+    toggleTooltipDirection,
+    "center",
+  );
 
   $: if (!showToggle) {
     if (toggled) {
@@ -419,9 +427,11 @@
 {#if toggleRef}
   <PortalTooltip
     anchor={toggleRef}
-    direction={tooltipPosition === "top" ? "top" : "bottom"}
+    direction={toggleTooltipDirection}
     open={toggleHovered || toggleFocused}
     text={toggleLabel}
     tooltipType="icon"
+    gapTop={toggleTooltipGaps.gapTop}
+    gapBottom={toggleTooltipGaps.gapBottom}
   />
 {/if}
