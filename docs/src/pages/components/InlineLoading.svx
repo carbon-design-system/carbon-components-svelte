@@ -41,6 +41,10 @@ Set `iconDescription` to override the accessible label announced for the status 
 
 <InlineLoading status="error" iconDescription="Upload failed" description="Failed to upload file" />
 
+### Live region roles
+
+The `"error"` status renders `role="alert"`, interrupting the screen reader immediately, as demonstrated by the four `<InlineLoading>` examples above. Every other status renders `role="status"`, announced politely so it doesn't interrupt. Pass `role` through rest props to override either default.
+
 ## Events
 
 Listen for `on:success`, dispatched `successDelay` milliseconds (default `1500`) after `status` is set to `"finished"`.
