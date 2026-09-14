@@ -41,6 +41,7 @@
           size="small"
           icon={TrashCan}
           iconDescription="Delete {item.name}"
+          tooltipAlignment="end"
           on:click={() => confirmDelete(item.id)}
         />
       </svelte:fragment>
