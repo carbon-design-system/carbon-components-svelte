@@ -1,5 +1,9 @@
 <script>
   /**
+   * @restProps {div} Pass `role` or `aria-live` to override the status-derived defaults.
+   */
+
+  /**
    * Set the loading status.
    * @type {"active" | "inactive" | "finished" | "error"}
    */
@@ -46,7 +50,8 @@
 
 <div
   class:bx--inline-loading={true}
-  aria-live="assertive"
+  role={status === "error" ? "alert" : "status"}
+  aria-live={status === "error" ? "assertive" : "polite"}
   {...$$restProps}
   on:click
   on:mouseover

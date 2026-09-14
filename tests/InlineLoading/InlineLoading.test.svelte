@@ -45,6 +45,11 @@
   <InlineLoading status="error" description="An error occurred" />
 </div>
 
+<!-- Inline loading with an overridden role passed through rest props -->
+<div data-testid="loader-role-override">
+  <InlineLoading status="active" description="Submitting..." role="none" />
+</div>
+
 <!-- Inline loading with custom icon description -->
 <div data-testid="loader-custom-icon">
   <InlineLoading

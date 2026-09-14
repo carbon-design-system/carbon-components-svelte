@@ -80,6 +80,36 @@ describe("InlineLoading", () => {
     ).toHaveTextContent("An error occurred");
   });
 
+  it("maps error status to an assertive alert live region", () => {
+    render(InlineLoading);
+    const wrapper = screen.getByTestId("loader-error");
+
+    const region = wrapper.querySelector(".bx--inline-loading");
+    expect(region).toHaveAttribute("role", "alert");
+    expect(region).toHaveAttribute("aria-live", "assertive");
+  });
+
+  it("maps non-error statuses to a polite status live region", () => {
+    render(InlineLoading);
+
+    for (const testId of ["loader-active", "loader-finished"]) {
+      const wrapper = screen.getByTestId(testId);
+      const region = wrapper.querySelector(".bx--inline-loading");
+      expect(region).toHaveAttribute("role", "status");
+      expect(region).toHaveAttribute("aria-live", "polite");
+    }
+  });
+
+  it("lets a passed-through role override the status-derived default", () => {
+    render(InlineLoading);
+    const wrapper = screen.getByTestId("loader-role-override");
+
+    expect(wrapper.querySelector(".bx--inline-loading")).toHaveAttribute(
+      "role",
+      "none",
+    );
+  });
+
   it("supports custom icon description", () => {
     render(InlineLoading);
     const wrapper = screen.getByTestId("loader-custom-icon");
