@@ -141,6 +141,17 @@
 
     display: flex;
     text-align: left;
+
+    // Upstream relies on `.bx--progress-label:focus` for a focus indicator,
+    // but that span is never itself the focused element (the button is), so
+    // it never fires; `--unclickable` below then also zeroes the button's
+    // own outline. Style the button's own `:focus` directly so every step
+    // (clickable or not) gets the same visible ring; specificity (one class
+    // + `:focus`) beats `--unclickable`'s single class regardless of order.
+    // ccs: added
+    &:focus {
+      @include focus-outline('outline');
+    }
   }
 
   .#{$prefix}--progress-step-button--unclickable {

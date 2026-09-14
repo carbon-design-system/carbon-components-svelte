@@ -34,4 +34,26 @@ test.describe("ProgressIndicator", () => {
       "2",
     );
   });
+
+  test("shows the same focus outline on unclickable and clickable steps", async ({
+    page,
+  }) => {
+    const outlineOf = (locator: ReturnType<typeof page.getByRole>) =>
+      locator.evaluate((el) => getComputedStyle(el).outline);
+
+    // First step is current, so it's unclickable; second step is complete
+    // and not current, so it's clickable.
+    const currentStep = page.getByRole("button", { name: /First step/ });
+    const clickableStep = page.getByRole("button", { name: /Second step/ });
+
+    await currentStep.focus();
+    const currentOutline = await outlineOf(currentStep);
+    expect(currentOutline).not.toContain("none");
+
+    await clickableStep.focus();
+    const clickableOutline = await outlineOf(clickableStep);
+    expect(clickableOutline).not.toContain("none");
+
+    expect(clickableOutline).toBe(currentOutline);
+  });
 });
