@@ -12,8 +12,27 @@
    */
   export let ariaLabel = "data table toolbar";
 
+  /** Set to `true` to keep the toolbar pinned while its scroll container scrolls. */
+  export let sticky = false;
+
+  /**
+   * Distance from the top edge while stuck. Numbers are treated as pixels;
+   * strings may be any CSS length (for example `"3rem"`).
+   *
+   * If unset, defaults to `0`, or to the fixed UI Shell header height
+   * (48px) when a `Header` is rendered on the page, so the toolbar doesn't
+   * stick underneath it. Set explicitly (including `0`) to opt out.
+   * @type {number | string}
+   */
+  export let stickyOffset = undefined;
+
   import { getContext, setContext } from "svelte";
   import { writable } from "svelte/store";
+  import { isHeaderRendered } from "../UIShell/nav-store.js";
+
+  // Matches `.bx--header`'s fixed height (`mini-units(6)` in
+  // _header.scss); Header has no prop to override it.
+  const UI_SHELL_HEADER_HEIGHT = 48;
 
   let ref = null;
 
@@ -34,6 +53,8 @@
     ? TOOLBAR_SIZE_BY_TABLE_SIZE[$tableSize]
     : undefined;
   $: effectiveSize = size ?? inheritedSize ?? "default";
+  $: effectiveStickyOffset =
+    stickyOffset ?? ($isHeaderRendered ? UI_SHELL_HEADER_HEIGHT : 0);
 
   /**
    * @type {import("svelte/store").Writable<boolean>}
@@ -53,6 +74,11 @@
     if (ref) ref.style.overflow = visible ? "visible" : "inherit";
   }
 
+  /** @param {number | string} offset */
+  function formatOffset(offset) {
+    return typeof offset === "number" ? `${offset}px` : offset;
+  }
+
   setContext("carbon:Toolbar", {
     overflowVisible,
     setOverflowVisible,
@@ -69,7 +95,9 @@
   class:bx--table-toolbar--xs={effectiveSize === "xs"}
   class:bx--table-toolbar--small={effectiveSize === "sm"}
   class:bx--table-toolbar--normal={effectiveSize === "default"}
+  class:bx--table-toolbar--sticky={sticky}
   style:z-index={1}
+  style:top={sticky ? formatOffset(effectiveStickyOffset) : undefined}
   {...$$restProps}
 >
   <slot />

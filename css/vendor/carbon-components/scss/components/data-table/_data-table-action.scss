@@ -697,3 +697,22 @@
 @include exports('data-table-toolbar-xs') {
   @include data-table-toolbar-xs;
 }
+
+// carbon-components-svelte patch (sticky toolbar)
+/// @access private
+/// @group data-table
+@mixin data-table-toolbar-sticky {
+  // Sticky is still a positioned box, so the absolutely positioned
+  // .bx--batch-actions bar keeps the toolbar as its containing block.
+  .#{$prefix}--table-toolbar--sticky {
+    position: sticky;
+    top: 0;
+    // Match the row divider color so the stuck toolbar reads as separate
+    // from the table body instead of blending into the first row.
+    border-bottom: 1px solid $border-subtle;
+  }
+}
+
+@include exports('data-table-toolbar-sticky') {
+  @include data-table-toolbar-sticky;
+}
