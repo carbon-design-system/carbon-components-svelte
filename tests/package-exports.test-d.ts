@@ -4,6 +4,7 @@ import type {
   breakpointObserver,
   breakpoints,
   fuzzyMatch,
+  getAvatarBackgroundColor,
 } from "carbon-components-svelte";
 import type { BreakpointSize } from "carbon-components-svelte/src/Breakpoint/breakpoints.js";
 import type Button from "carbon-components-svelte/src/Button/Button.svelte";
@@ -33,6 +34,7 @@ type _CarbonTheme = CarbonTheme;
 type _DataTable = DataTable;
 type _DataTableRow = DataTableRow<{ id: string; name: string }>;
 type _FuzzyMatch = ReturnType<typeof fuzzyMatch>;
+type _GetAvatarBackgroundColor = ReturnType<typeof getAvatarBackgroundColor>;
 type _HeaderSearchResult = HeaderSearchResult;
 type _ThemeProps = ThemeProps;
 type _Themes = typeof themes;
