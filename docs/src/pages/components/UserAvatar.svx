@@ -32,6 +32,19 @@ Set `initials` to override the derived initials while keeping `name` for display
 
 <UserAvatar name="Richard J. Hendricks" initials="RH" tooltipText="Richard J. Hendricks" />
 
+Initials come from `getInitials`, which takes the first user-perceived character of each word so emoji and accented letters stay intact. Import it from the package to compute the same initials elsewhere, for example in a legend.
+
+```html
+<script context="module">
+  import { getInitials } from "carbon-components-svelte";
+
+  getInitials("Richard J. Hendricks"); // "RJ"
+  getInitials("Richard J. Hendricks", { max: 3 }); // "RJH"
+</script>
+```
+
+Set `locale` for language-specific casing, such as `"tr"`.
+
 ### Custom icon
 
 Set `icon` to render a custom icon instead of the default user icon, such as an icon from [carbon-icons-svelte](https://github.com/carbon-design-system/carbon-icons-svelte).
@@ -118,6 +131,8 @@ Render the avatar as an interactive element instead of a static `span` — a `bu
 Set `interactive` to render a `button` instead of a `span` when the avatar is a clickable control, such as a custom profile menu trigger. The button receives a focus ring. `name` is used as the accessible name when `aria-label` is not set.
 
 Do not set `interactive` when slotting the avatar into [ProfileMenu](/components/UIShell#profile-menu) — that component already wraps the avatar in a labelled trigger button.
+
+The button forwards `keydown`, focus, and blur events, so it can control a popover or a menu.
 
 <UserAvatar interactive name="Richard Hendricks" backgroundColor="purple" />
 
