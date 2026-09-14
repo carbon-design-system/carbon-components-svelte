@@ -109,6 +109,12 @@ Listen for `on:clear` to know when the user clears the field—by clicking the b
   </ToolbarContent>
 </Toolbar>
 
+### Debounce
+
+Set `debounce` to delay client-side filtering until typing pauses, in milliseconds. `value` still updates on every keystroke; only the filter run waits. This keeps large tables responsive without wrapping `value` yourself. Clearing the field, by the clear icon, <DocKbd label="Escape" />, or an empty value, restores the full row set immediately, without waiting for the debounce period.
+
+<FileSource src="/framed/Toolbar/ToolbarSearchDebounce" />
+
 ## Menu
 
 Add an overflow menu using toolbar menu and toolbar menu item.
@@ -240,6 +246,22 @@ Override the "N items selected" text with `formatTotalSelected`.
 In standalone usage there's no `DataTable` context to reset the selection automatically, so listen for `on:cancel` and clear your own selection state in the handler.
 
 <FileSource src="/framed/Toolbar/ToolbarBatchActionsStandalone" />
+
+## Sticky
+
+### Pinned toolbar
+
+Set `sticky` to keep the toolbar pinned to the top of its nearest scrolling ancestor as the page scrolls, including an active [ToolbarBatchActions](#basic-usage) bar, which would otherwise scroll out of view along with the table body. This differs from [DataTable's sticky header](/components/DataTable#sticky-header), which pins the column headers while the table body scrolls within its own container; a sticky toolbar instead sticks to the page (or another ancestor with `overflow`), since the toolbar sits outside the table's scroll wrappers. Select some rows below and scroll the example to see the batch bar stay in view.
+
+<FileSource src="/framed/Toolbar/ToolbarSticky" />
+
+### Offset
+
+Set `stickyOffset` to add clearance above the stuck toolbar, useful when a fixed UI Shell header would otherwise overlap it. Pass a number for pixels or a string for any CSS length.
+
+If a [Header](/components/UIShell#header) is rendered on the page, `stickyOffset` defaults to its height (48px) automatically, so the toolbar clears it without any extra configuration. Set `stickyOffset` explicitly, including `stickyOffset={0}`, to opt out of this default.
+
+<FileSource src="/framed/Toolbar/ToolbarStickyHeader" />
 
 ## Composition
 
