@@ -61,7 +61,6 @@
   const labelId = `${modalId}-label`;
   const titleId = `${modalId}-title`;
 
-  let buttonRef = null;
   let innerModalRef = null;
   let closeDispatched = false;
 
@@ -95,13 +94,6 @@
   }
 
   /**
-   * @type {(ref: HTMLButtonElement) => void}
-   */
-  function declareRef(node) {
-    buttonRef = node;
-  }
-
-  /**
    * @type {(value: string | undefined) => void}
    */
   function updateLabel(value) {
@@ -119,7 +111,6 @@
   setContext("carbon:ComposedModal", {
     closeModal,
     submit,
-    declareRef,
     updateLabel,
     updateTitle,
     labelId,
