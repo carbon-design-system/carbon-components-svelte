@@ -6,16 +6,12 @@
     finished: "Saved",
   };
 
-  let status = "inactive";
+  let status = undefined;
 
   async function simulateSave(duration) {
     status = "active";
     await new Promise((resolve) => setTimeout(resolve, duration));
     status = "finished";
-  }
-
-  function handleSuccess() {
-    status = "inactive";
   }
 </script>
 
@@ -23,12 +19,13 @@
   <Stack orientation="horizontal" gap={5} align="center">
     <Button on:click={() => simulateSave(100)}>Fast save (100 ms)</Button>
     <Button on:click={() => simulateSave(2000)}>Slow save (2 s)</Button>
-    <InlineLoading
-      {status}
-      description={descriptionMap[status]}
-      delay={250}
-      on:success={handleSuccess}
-    />
+    {#if status}
+      <InlineLoading
+        {status}
+        description={descriptionMap[status]}
+        delay={250}
+      />
+    {/if}
   </Stack>
 
   <Text type="helper-text-01">
