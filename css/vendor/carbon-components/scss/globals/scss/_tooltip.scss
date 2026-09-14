@@ -137,6 +137,19 @@
     @include tooltip--content($tooltip-type);
   }
 
+  // carbon-components-svelte patch: `tooltip--content` sizes the bubble (up to its
+  // max-width) even while hidden — `clip: rect()` below only hides it from *view*,
+  // not from layout, so an icon-only trigger near a scroll container's edge can
+  // inflate that container's scrollWidth with an invisible box. Collapse the box
+  // to a point by default; the hover/focus/visible state below restores the full
+  // tooltip size.
+  &::after,
+  .#{$prefix}--assistive-text,
+  + .#{$prefix}--assistive-text {
+    width: 1px;
+    height: 1px;
+  }
+
   &::after {
     content: attr(aria-label);
   }
@@ -151,6 +164,14 @@
     &::before,
     &::after {
       opacity: 1;
+    }
+
+    // carbon-components-svelte patch: restore the size collapsed above.
+    &::after,
+    .#{$prefix}--assistive-text,
+    + .#{$prefix}--assistive-text {
+      width: max-content;
+      height: auto;
     }
 
     @keyframes tooltip-fade {
