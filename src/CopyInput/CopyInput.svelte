@@ -34,6 +34,14 @@
   export let revealMode = undefined;
 
   /**
+   * Milliseconds a revealed value stays visible before it is obscured again.
+   * Only applies when `revealMode` is `"toggle"`.
+   * When unset, the value stays revealed until the toggle is clicked again.
+   * @type {number}
+   */
+  export let revealTimeout = undefined;
+
+  /**
    * Whether the value currently renders as text, in any reveal mode.
    * @bindable readonly
    */
@@ -146,7 +154,7 @@
    */
   export let tooltipAlignment = "center";
 
-  import { createEventDispatcher, getContext } from "svelte";
+  import { createEventDispatcher, getContext, onMount } from "svelte";
   import CopyButton from "../CopyButton/CopyButton.svelte";
   import View from "../icons/View.svelte";
   import ViewOff from "../icons/ViewOff.svelte";
@@ -165,6 +173,8 @@
   /** @type {null | HTMLButtonElement} */
   let toggleRef = null;
 
+  let revealTimer;
+
   $: revealed =
     revealMode === "toggle"
       ? toggled
@@ -177,6 +187,11 @@
   $: isFluid = !inline && (fluid || !!ctx?.isFluid);
   $: helperId = `helper-${id}`;
   $: toggleLabel = toggled ? hideValueLabel : showValueLabel;
+
+  $: if (revealMode !== "toggle" && toggled) {
+    toggled = false;
+    clearTimeout(revealTimer);
+  }
 
   function handleFocus() {
     focused = true;
@@ -191,7 +206,23 @@
 
   function handleToggleClick() {
     toggled = !toggled;
+    if (toggled) {
+      if (revealTimeout > 0) {
+        clearTimeout(revealTimer);
+        revealTimer = setTimeout(() => {
+          toggled = false;
+        }, revealTimeout);
+      }
+    } else {
+      clearTimeout(revealTimer);
+    }
   }
+
+  onMount(() => {
+    return () => {
+      clearTimeout(revealTimer);
+    };
+  });
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->

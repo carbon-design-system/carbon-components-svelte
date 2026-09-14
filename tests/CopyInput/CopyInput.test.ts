@@ -315,6 +315,64 @@ describe("CopyInput", () => {
     });
   });
 
+  describe("revealTimeout", () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it("re-obscures the value after revealTimeout elapses", async () => {
+      render(CopyInput, {
+        props: { type: "password", revealMode: "toggle", revealTimeout: 100 },
+      });
+
+      const toggle = screen.getByRole("button", { name: "Show value" });
+      await fireEvent.click(toggle);
+      expect(
+        screen.getByRole("button", { name: "Hide value" }),
+      ).toHaveAttribute("aria-pressed", "true");
+
+      await vi.advanceTimersByTimeAsync(100);
+
+      const toggleAfter = screen.getByRole("button", { name: "Show value" });
+      expect(toggleAfter).toHaveAttribute("aria-pressed", "false");
+    });
+
+    it("clears the timeout when hidden manually before it elapses", async () => {
+      render(CopyInput, {
+        props: { type: "password", revealMode: "toggle", revealTimeout: 100 },
+      });
+
+      await fireEvent.click(screen.getByRole("button", { name: "Show value" }));
+      await fireEvent.click(screen.getByRole("button", { name: "Hide value" }));
+
+      await vi.advanceTimersByTimeAsync(100);
+
+      expect(
+        screen.getByRole("button", { name: "Show value" }),
+      ).toHaveAttribute("aria-pressed", "false");
+    });
+
+    it("obscures the value when revealMode switches away from toggle while revealed", async () => {
+      const { rerender } = render(CopyInput, {
+        props: { type: "password", revealMode: "toggle" },
+      });
+
+      await fireEvent.click(screen.getByRole("button", { name: "Show value" }));
+      expect(screen.getByText("Revealed: true")).toBeInTheDocument();
+
+      await rerender({
+        type: "password",
+        revealMode: "focus",
+      });
+
+      expect(screen.getByText("Revealed: false")).toBeInTheDocument();
+    });
+  });
+
   describe("fluid variant", () => {
     it("does not render fluid classes by default", () => {
       render(CopyInput);
