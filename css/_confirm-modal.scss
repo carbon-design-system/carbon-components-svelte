@@ -1,0 +1,28 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// ConfirmModal component
+/// @access private
+/// @group components
+@mixin confirm-modal {
+  .#{$prefix}--confirm-modal__heading-icon {
+    margin-right: $carbon--spacing-03;
+    vertical-align: middle;
+  }
+
+  .#{$prefix}--confirm-modal__phrase {
+    margin-top: $carbon--spacing-05;
+  }
+
+  // The phrase to type stands out from the rest of the label.
+  .#{$prefix}--confirm-modal__phrase-text {
+    font-weight: 600;
+  }
+}
+
+@include exports("confirm-modal") {
+  @include confirm-modal;
+}
