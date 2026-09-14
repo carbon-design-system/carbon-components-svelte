@@ -107,7 +107,6 @@
   let role = "menuitem";
   let submenuOpen = false;
   let submenuPosition = [0, 0];
-  let menuOffsetX = 0;
   /** @type {HTMLUListElement | null} */
   let submenuRef = null;
 
@@ -120,10 +119,6 @@
 
   const unsubPosition = ctx.position.subscribe((position) => {
     rootMenuPosition = position;
-  });
-
-  const unsubMenuOffsetX = ctx.menuOffsetX.subscribe((_menuOffsetX) => {
-    menuOffsetX = _menuOffsetX;
   });
 
   function handleClick(event, options = {}) {
@@ -167,7 +162,6 @@
 
     return () => {
       unsubPosition();
-      unsubMenuOffsetX();
       if (unsubCurrentIds) unsubCurrentIds();
       if (unsubCurrentId) unsubCurrentId();
       hoverIntent.cancel();
