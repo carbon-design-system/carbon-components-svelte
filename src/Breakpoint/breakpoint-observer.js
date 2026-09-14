@@ -1,3 +1,4 @@
+// @ts-check
 import { onMount } from "svelte";
 import { derived, writable } from "svelte/store";
 import { breakpoints } from "./breakpoints.js";
@@ -13,6 +14,11 @@ import { breakpoints } from "./breakpoints.js";
  * @returns {() => void} Cleanup function that removes the listeners.
  */
 export function observeBreakpoint(callback) {
+  // Guards SSR entry points that call this outside `onMount`, and runtimes
+  // without the `matchMedia` API.
+  if (typeof window === "undefined" || typeof window.matchMedia !== "function")
+    return () => {};
+
   /** @type {Record<BreakpointSize, MediaQueryList>} */
   const match = {
     sm: window.matchMedia(`(max-width: ${breakpoints.md}px)`),
@@ -60,10 +66,11 @@ export function observeBreakpoint(callback) {
 /**
  * Creates a readable store that returns the current breakpoint size.
  * It also provides functions for creating derived stores used to do comparisons.
+ * @param {{ fallback?: BreakpointSize }} [options]
  */
-export function breakpointObserver() {
+export function breakpointObserver(options = {}) {
   /** @type {import("svelte/store").Writable<BreakpointSize | undefined>} */
-  const store = writable(undefined);
+  const store = writable(options.fallback);
 
   onMount(() => observeBreakpoint((size) => store.set(size)));
 
