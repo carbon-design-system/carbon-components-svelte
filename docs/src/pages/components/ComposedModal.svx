@@ -6,9 +6,9 @@ description: Composed modals let you build custom modals from modal header, body
 <script>
 </script>
 
-## ComposedModal vs Modal
+## When to use
 
-The composed modal provides a composition-based approach with modal header, modal body, and modal footer sub-components for maximum flexibility. For simpler use cases, use [Modal](/components/Modal) instead. Both components share the same events, accessibility features, and [focus behavior](/components/Modal#focus-behavior).
+See [Choosing an overlay](/components/Modal#choosing-an-overlay) for how ComposedModal compares to Modal and Dialog.
 
 ## Basic
 
