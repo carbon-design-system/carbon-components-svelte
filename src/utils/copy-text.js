@@ -12,9 +12,12 @@ function copyTextWithExecCommand(text) {
     throw new Error("Failed to copy");
   }
 
+  const previousActiveElement = document.activeElement;
+
   const textarea = document.createElement("textarea");
   textarea.value = text;
   textarea.setAttribute("readonly", "");
+  textarea.setAttribute("aria-hidden", "true");
   textarea.style.position = "fixed";
   textarea.style.top = "0";
   textarea.style.left = "0";
@@ -30,6 +33,14 @@ function copyTextWithExecCommand(text) {
     }
   } finally {
     document.body.removeChild(textarea);
+    // Removing the focused textarea drops focus to `body`, stranding
+    // keyboard users after a fallback copy.
+    if (
+      previousActiveElement instanceof HTMLElement &&
+      previousActiveElement.isConnected
+    ) {
+      previousActiveElement.focus();
+    }
   }
 }
 
