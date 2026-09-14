@@ -50,6 +50,13 @@
   export let tabindex = "0";
 
   /**
+   * Milliseconds of quiet time before rows are filtered. Filtering waits
+   * until typing pauses; `value` still updates immediately; clearing
+   * applies at once. `0` filters synchronously on every keystroke.
+   */
+  export let debounce = 0;
+
+  /**
    * Obtain a reference to the input HTML element.
    * @type {null | HTMLInputElement}
    * @bindable readonly
@@ -58,6 +65,7 @@
 
   import { getContext, onMount, tick } from "svelte";
   import Search from "../Search/Search.svelte";
+  import { debounce as debounceFn } from "../utils/debounce.js";
   import { rowsEqual } from "./data-table-utils.js";
 
   const ctx = getContext("carbon:DataTable") ?? {};
@@ -81,14 +89,31 @@
     }
   }
 
+  let debouncedFilter = null;
+
+  function applyFilter(searchValue, filter) {
+    filteredRowIds = ctx.filterRows(searchValue, filter);
+  }
+
+  $: {
+    debouncedFilter?.cancel();
+    debouncedFilter = debounce > 0 ? debounceFn(applyFilter, debounce) : null;
+  }
+
   onMount(() => {
     return () => {
       unsubscribe?.();
+      debouncedFilter?.cancel();
     };
   });
 
   $: if (rows !== null) {
-    filteredRowIds = ctx.filterRows(value, shouldFilterRows);
+    if (debouncedFilter && String(value ?? "").length > 0) {
+      debouncedFilter(value, shouldFilterRows);
+    } else {
+      debouncedFilter?.cancel();
+      applyFilter(value, shouldFilterRows);
+    }
   }
 
   async function expandSearch() {
