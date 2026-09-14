@@ -12,6 +12,8 @@
     undefined;
   export let hideValueLabel: ComponentProps<CopyInput>["hideValueLabel"] =
     undefined;
+  export let copyButtonVisibility: ComponentProps<CopyInput>["copyButtonVisibility"] =
+    undefined;
   export let selectOnFocus: ComponentProps<CopyInput>["selectOnFocus"] =
     undefined;
   export let labelText = "API token";
@@ -30,6 +32,7 @@
   bind:revealed
   {showValueLabel}
   {hideValueLabel}
+  {copyButtonVisibility}
   {selectOnFocus}
   {labelText}
   {helperText}

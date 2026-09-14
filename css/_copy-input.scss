@@ -165,6 +165,23 @@
       padding: 0;
     }
   }
+
+  // Hide the copy button until intent is signaled, so dense key lists read
+  // cleaner; focus-within keeps it reachable by keyboard and visible after a
+  // tap on touch devices, and the animating class keeps feedback visible.
+  .#{$prefix}--copy-input__field-wrapper--copy-on-hover .#{$prefix}--copy-btn {
+    opacity: 0;
+    transition: opacity $duration--fast-01 motion(standard, productive);
+  }
+
+  .#{$prefix}--copy-input__field-wrapper--copy-on-hover:hover
+    .#{$prefix}--copy-btn,
+  .#{$prefix}--copy-input__field-wrapper--copy-on-hover:focus-within
+    .#{$prefix}--copy-btn,
+  .#{$prefix}--copy-input__field-wrapper--copy-on-hover
+    .#{$prefix}--copy-btn.#{$prefix}--copy-btn--animating {
+    opacity: 1;
+  }
 }
 
 @include exports("copy-input") {

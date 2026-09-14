@@ -373,6 +373,28 @@ describe("CopyInput", () => {
     });
   });
 
+  describe("copyButtonVisibility", () => {
+    it("hides the copy button until hover or focus when set to hover-focus", () => {
+      render(CopyInput, { props: { copyButtonVisibility: "hover-focus" } });
+
+      const button = screen.getByRole("button", { name: "Copy to clipboard" });
+      const fieldWrapper = button.closest(".bx--copy-input__field-wrapper");
+      expect(fieldWrapper).toHaveClass(
+        "bx--copy-input__field-wrapper--copy-on-hover",
+      );
+      expect(button).toBeInTheDocument();
+    });
+
+    it("does not add the copy-on-hover class by default", () => {
+      render(CopyInput);
+
+      const button = screen.getByRole("button", { name: "Copy to clipboard" });
+      expect(button.closest(".bx--copy-input__field-wrapper")).not.toHaveClass(
+        "bx--copy-input__field-wrapper--copy-on-hover",
+      );
+    });
+  });
+
   describe("fluid variant", () => {
     it("does not render fluid classes by default", () => {
       render(CopyInput);
