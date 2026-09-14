@@ -11,6 +11,8 @@
 
 <UserAvatar data-testid="initials-override" name="John Doe" initials="XY" />
 
+<UserAvatar data-testid="initials-emoji" name="👩‍🚀 Astronaut" />
+
 <UserAvatar
   data-testid="image"
   name="Should Not Show"

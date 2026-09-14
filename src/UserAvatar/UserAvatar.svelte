@@ -117,6 +117,7 @@
   import User from "../icons/User.svelte";
   import TooltipDefinition from "../TooltipDefinition/TooltipDefinition.svelte";
   import { getAvatarBackgroundColor } from "../utils/avatar-color.js";
+  import { getInitials } from "../utils/initials.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -209,21 +210,8 @@
   $: useTooltipWrapper = !!tooltipText && !isInteractive;
 
   const glyphSize = { sm: 16, md: 20, lg: 24, xl: 32 };
-  const WHITESPACE = /\s+/;
 
-  function formatInitials(value) {
-    if (!value) return "";
-    return value
-      .trim()
-      .split(WHITESPACE)
-      .filter(Boolean)
-      .map((word) => word[0])
-      .join("")
-      .slice(0, 2)
-      .toUpperCase();
-  }
-
-  $: avatarInitials = initials ?? formatInitials(name);
+  $: avatarInitials = initials ?? getInitials(name);
   $: resolvedBackgroundColor =
     backgroundColor === "auto"
       ? getAvatarBackgroundColor(name ?? initials ?? "")

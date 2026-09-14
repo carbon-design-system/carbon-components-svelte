@@ -41,6 +41,13 @@ describe("UserAvatar", () => {
     expect(avatar).toHaveTextContent("XY");
   });
 
+  it("derives initials from a grapheme cluster, keeping an emoji whole", () => {
+    render(UserAvatar);
+
+    const avatar = screen.getByTestId("initials-emoji");
+    expect(avatar).toHaveTextContent("👩‍🚀A");
+  });
+
   it("renders an image with alt text, taking priority over the name", () => {
     render(UserAvatar);
 
