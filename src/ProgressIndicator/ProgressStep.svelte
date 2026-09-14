@@ -79,6 +79,7 @@
     tabindex={disabled ? "-1" : "0"}
     class:bx--progress-step-button={true}
     class:bx--progress-step-button--unclickable={current ||
+      !complete ||
       $preventChangeOnClick}
     on:click
     on:click={() => {
