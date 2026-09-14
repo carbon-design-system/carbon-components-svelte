@@ -351,6 +351,44 @@ describe("CopyInput", () => {
       }
     });
 
+    it("swaps tooltips instantly when the pointer moves from the toggle to the copy button", async () => {
+      vi.useFakeTimers();
+      try {
+        render(CopyInput, {
+          props: { type: "password", revealMode: "toggle" },
+        });
+
+        const copyButton = screen.getByRole("button", {
+          name: "Copy to clipboard",
+        });
+        const toggle = screen.getByRole("button", { name: "Show value" });
+
+        await fireEvent.mouseEnter(toggle);
+        await vi.advanceTimersByTimeAsync(120);
+        expect(
+          document.querySelectorAll(".bx--tooltip-portal__content"),
+        ).toHaveLength(1);
+        expect(
+          document.querySelector(".bx--tooltip-portal__content"),
+        ).toHaveTextContent("Show value");
+
+        // Moving to the copy button reveals it immediately and closes the
+        // toggle's tooltip, instead of it lingering through its own leave
+        // delay after the pointer has already left.
+        await fireEvent.mouseLeave(toggle);
+        await fireEvent.mouseEnter(copyButton);
+        await vi.advanceTimersByTimeAsync(0);
+
+        const tooltips = document.querySelectorAll(
+          ".bx--tooltip-portal__content",
+        );
+        expect(tooltips).toHaveLength(1);
+        expect(tooltips[0]).toHaveTextContent("Copy to clipboard");
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+
     describe("hover tooltip delay", () => {
       beforeEach(() => {
         vi.useFakeTimers();

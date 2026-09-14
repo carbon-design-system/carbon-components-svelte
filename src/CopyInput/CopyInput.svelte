@@ -265,6 +265,12 @@
     toggleTooltipDirection,
     "center",
   );
+  // Gated on the shared store, like the copy button's own tooltip: the
+  // moment the other trigger claims it, this one closes instantly instead of
+  // lingering through its own leaveDelayMs.
+  $: toggleTooltipOpen =
+    (toggleHovered || toggleFocused) &&
+    $activeButtonTooltip === toggleTooltipId;
 
   $: if (!showToggle) {
     if (toggled) {
@@ -465,7 +471,7 @@
   <PortalTooltip
     anchor={toggleRef}
     direction={toggleTooltipDirection}
-    open={toggleHovered || toggleFocused}
+    open={toggleTooltipOpen}
     text={toggleLabel}
     tooltipType="icon"
     gapTop={toggleTooltipGaps.gapTop}

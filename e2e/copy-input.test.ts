@@ -32,4 +32,27 @@ test.describe("CopyInput", () => {
 
     expect(toggleGap).toBe(copyGap);
   });
+
+  test("never shows both tooltips at once when moving quickly between the toggle and the copy button", async ({
+    page,
+  }) => {
+    const toggle = page.getByRole("button", { name: "Show value" });
+    const copyButton = page.getByRole("button", { name: "Copy to clipboard" });
+    const tooltip = page.locator(".bx--tooltip-portal__content");
+
+    await toggle.hover();
+    await expect(tooltip).toHaveText("Show value");
+
+    // Handoff to the copy button should be instant, not wait out the
+    // toggle's own leave delay while the copy button's tooltip is already
+    // showing (which would render both at once).
+    await copyButton.hover();
+    await expect(tooltip).toHaveText("Copy to clipboard");
+    await expect(tooltip).toHaveCount(1);
+
+    // And the reverse direction.
+    await toggle.hover();
+    await expect(tooltip).toHaveText("Show value");
+    await expect(tooltip).toHaveCount(1);
+  });
 });
