@@ -233,9 +233,26 @@ describe("ProgressIndicator", () => {
       // Incomplete step button should be unclickable
       expect(buttons[2]).toHaveAttribute("tabindex", "0");
       expect(buttons[2]).toHaveAttribute("aria-disabled", "false");
-      expect(buttons[2]).not.toHaveClass(
-        "bx--progress-step-button--unclickable",
-      );
+      expect(buttons[2]).toHaveClass("bx--progress-step-button--unclickable");
+    });
+
+    it("should not dispatch change when clicking an incomplete step", async () => {
+      const changeHandler = vi.fn();
+      render(ProgressIndicator, {
+        props: {
+          currentIndex: 0,
+          steps: [
+            { label: "Step 1", description: "First step", complete: true },
+            { label: "Step 2", description: "Second step", complete: false },
+            { label: "Step 3", description: "Third step", complete: false },
+            { label: "Step 4", description: "Fourth step", complete: false },
+          ],
+          onchange: changeHandler,
+        },
+      });
+
+      await user.click(screen.getByText("Step 4"));
+      expect(changeHandler).not.toHaveBeenCalled();
     });
 
     it("should have correct button attributes for disabled state", () => {
