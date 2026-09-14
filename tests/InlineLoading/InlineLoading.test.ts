@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import InlineLoading from "./InlineLoading.test.svelte";
+import InlineLoadingDelay from "./InlineLoadingDelay.test.svelte";
 import InlineLoadingRerender from "./InlineLoadingRerender.test.svelte";
 import InlineLoadingTransition from "./InlineLoadingTransition.test.svelte";
 
@@ -206,5 +207,98 @@ describe("InlineLoading", () => {
     // Advance timers to ensure no lingering timeouts
     vi.advanceTimersByTime(2000);
     // If cleanup wasn't working, this would throw an error about setState after unmount
+  });
+
+  describe("delay", () => {
+    it("does not render until the delay elapses while active", async () => {
+      const { getByTestId } = render(InlineLoadingDelay, {
+        props: { status: "active", delay: 200 },
+      });
+      const wrapper = getByTestId("delayed");
+
+      expect(
+        wrapper.querySelector(".bx--inline-loading"),
+      ).not.toBeInTheDocument();
+
+      await vi.advanceTimersByTimeAsync(200);
+
+      expect(wrapper.querySelector(".bx--inline-loading")).toBeInTheDocument();
+    });
+
+    it("renders immediately when status leaves active before the delay elapses", async () => {
+      const { getByTestId, rerender } = render(InlineLoadingDelay, {
+        props: { status: "active", delay: 200 },
+      });
+      const wrapper = getByTestId("delayed");
+
+      await vi.advanceTimersByTimeAsync(100);
+      await rerender({ status: "finished", delay: 200 });
+
+      expect(wrapper.querySelector(".bx--inline-loading")).toBeInTheDocument();
+      expect(
+        wrapper.querySelector(".bx--inline-loading__checkmark-container"),
+      ).toBeInTheDocument();
+    });
+
+    it("renders synchronously when delay is 0", () => {
+      const { getByTestId } = render(InlineLoadingDelay, {
+        props: { status: "active", delay: 0 },
+      });
+      const wrapper = getByTestId("delayed");
+
+      expect(wrapper.querySelector(".bx--inline-loading")).toBeInTheDocument();
+    });
+
+    // Regression: a resting status renders immediately, but re-entering
+    // "active" from that resting state must still honor the delay rather
+    // than inheriting the already-true visibility.
+    it("re-hides when re-entering active from a resting status", async () => {
+      const { getByTestId, rerender } = render(InlineLoadingDelay, {
+        props: { status: "inactive", delay: 200 },
+      });
+      const wrapper = getByTestId("delayed");
+
+      expect(wrapper.querySelector(".bx--inline-loading")).toBeInTheDocument();
+
+      await rerender({ status: "active", delay: 200 });
+
+      expect(
+        wrapper.querySelector(".bx--inline-loading"),
+      ).not.toBeInTheDocument();
+
+      await vi.advanceTimersByTimeAsync(200);
+
+      expect(wrapper.querySelector(".bx--inline-loading")).toBeInTheDocument();
+    });
+
+    it("renders immediately when mounted inactive", () => {
+      const { getByTestId } = render(InlineLoadingDelay, {
+        props: { status: "inactive", delay: 200 },
+      });
+      const wrapper = getByTestId("delayed");
+
+      expect(wrapper.querySelector(".bx--inline-loading")).toBeInTheDocument();
+    });
+
+    it("renders immediately when mounted in the error state", () => {
+      const { getByTestId } = render(InlineLoadingDelay, {
+        props: { status: "error", delay: 200 },
+      });
+      const wrapper = getByTestId("delayed");
+
+      const region = wrapper.querySelector(".bx--inline-loading");
+      expect(region).toBeInTheDocument();
+      expect(region).toHaveAttribute("role", "alert");
+    });
+
+    it("does not throw when unmounted during the delay", () => {
+      const { unmount } = render(InlineLoadingDelay, {
+        props: { status: "active", delay: 200 },
+      });
+
+      unmount();
+
+      expect(() => vi.advanceTimersByTime(200)).not.toThrow();
+    });
   });
 });
