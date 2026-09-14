@@ -18,6 +18,18 @@ When the dialog opens, focus moves into it (native modal focus trap). When it cl
 
 <FileSource src="/framed/Dialog/ModalDialog" />
 
+## Return value
+
+Call `close(value)` on the dialog instance, obtained through `bind:this`, to close it and set `returnValue` in one step, matching the native `dialog.close(value)` API. `returnValue` is a readonly bindable prop; read it with `bind:returnValue`.
+
+<FileSource src="/framed/Dialog/DialogReturnValue" />
+
+## Closed by
+
+Set `closedby` to `"any"`, `"closerequest"`, or `"none"` to forward the native `closedby` attribute, which controls which user interactions can close the dialog. Browsers without support for the attribute ignore it. Set it to `"none"` to also disable this component's own backdrop light-dismiss, since that logic runs in Svelte rather than natively.
+
+<FileSource src="/framed/Dialog/DialogClosedBy" />
+
 ## Events
 
 `Dialog` dispatches `open` once the dialog becomes visible (after `show()`/`showModal()` runs and focus moves in). Pair it with `close` — see [Closing](#closing) below — to track the dialog's full lifecycle.
