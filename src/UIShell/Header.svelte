@@ -97,10 +97,18 @@
    */
   export let theme = undefined;
 
+  import { onMount } from "svelte";
   import Close from "../icons/Close.svelte";
   import Menu from "../icons/MenuIcon.svelte";
   import HamburgerMenu from "./HamburgerMenu.svelte";
-  import { shouldRenderHamburgerMenu } from "./nav-store.js";
+  import { isHeaderRendered, shouldRenderHamburgerMenu } from "./nav-store.js";
+
+  onMount(() => {
+    isHeaderRendered.set(true);
+    return () => {
+      isHeaderRendered.set(false);
+    };
+  });
 
   /** @type {undefined | number} */
   let winWidth = undefined;
