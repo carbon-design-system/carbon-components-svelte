@@ -71,10 +71,6 @@
    */
   const focusedIndex = writable(-1);
   const hasPopup = writable(false);
-  /**
-   * @type {import("svelte/store").Writable<number>}
-   */
-  const menuOffsetX = writable(0);
   const ctx = getContext("carbon:ContextMenu");
 
   let options = [];
@@ -113,8 +109,6 @@
     }
 
     if (open || y === 0) {
-      menuOffsetX.set(event.x);
-
       if (window.innerHeight - height < event.y) {
         y = event.y - height;
       } else {
@@ -156,7 +150,6 @@
   }
 
   setContext("carbon:ContextMenu", {
-    menuOffsetX,
     focusedIndex,
     position,
     close,

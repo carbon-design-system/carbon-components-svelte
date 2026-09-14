@@ -165,8 +165,7 @@
     },
     {
       "includes": [
-        "docs/src/pages/framed/NotificationQueue/NotificationQueueDeduplication.svelte",
-        "src/ContextMenu/ContextMenuOption.svelte"
+        "docs/src/pages/framed/NotificationQueue/NotificationQueueDeduplication.svelte"
       ],
       "linter": {
         "rules": {
