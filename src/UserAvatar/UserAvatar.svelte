@@ -259,6 +259,9 @@
       on:mouseenter={claimTooltip}
       on:mouseleave
       on:mouseleave={scheduleRelease}
+      on:focus
+      on:blur
+      on:keydown
     >
       {#if $$slots.default}
         <slot />
@@ -293,6 +296,9 @@
     on:mouseover
     on:mouseenter
     on:mouseleave
+    on:focus
+    on:blur
+    on:keydown
   >
     {#if $$slots.default}
       <slot />

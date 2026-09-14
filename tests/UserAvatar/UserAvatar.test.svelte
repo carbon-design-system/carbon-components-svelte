@@ -78,7 +78,14 @@
   tooltipText="Jane Roe"
 />
 
-<UserAvatar data-testid="interactive" interactive name="John Doe" />
+<UserAvatar
+  data-testid="interactive"
+  interactive
+  name="John Doe"
+  on:focus={() => console.log("focus")}
+  on:blur={() => console.log("blur")}
+  on:keydown={() => console.log("keydown")}
+/>
 
 <UserAvatar data-testid="href" href="/profile" name="John Doe" />
 
