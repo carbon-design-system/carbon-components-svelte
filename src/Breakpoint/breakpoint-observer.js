@@ -14,6 +14,11 @@ import { breakpoints } from "./breakpoints.js";
  * @returns {() => void} Cleanup function that removes the listeners.
  */
 export function observeBreakpoint(callback) {
+  // Guards SSR entry points that call this outside `onMount`, and runtimes
+  // without the `matchMedia` API.
+  if (typeof window === "undefined" || typeof window.matchMedia !== "function")
+    return () => {};
+
   // `max-width` is inclusive, so each upper bound stops 0.02px short of the
   // next breakpoint (Carbon's `breakpoint-down`). Otherwise two lists match at
   // the boundary and the size sticks when only one of them flips.
@@ -66,10 +71,11 @@ export function observeBreakpoint(callback) {
 /**
  * Creates a readable store that returns the current breakpoint size.
  * It also provides functions for creating derived stores used to do comparisons.
+ * @param {{ fallback?: BreakpointSize }} [options]
  */
-export function breakpointObserver() {
+export function breakpointObserver(options = {}) {
   /** @type {import("svelte/store").Writable<BreakpointSize | undefined>} */
-  const store = writable(undefined);
+  const store = writable(options.fallback);
 
   onMount(() => observeBreakpoint((size) => store.set(size)));
 

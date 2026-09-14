@@ -14,6 +14,7 @@
     xlg: false,
     max: false,
   };
+  export let fallback: ComponentProps<Breakpoint>["fallback"] = undefined;
   export let onchange:
     | ((
         event: CustomEvent<{
@@ -27,6 +28,7 @@
 <Breakpoint
   bind:size
   bind:sizes
+  {fallback}
   on:change={(e) => onchange?.(e)}
   let:size={currentSize}
   let:sizes={currentSizes}
