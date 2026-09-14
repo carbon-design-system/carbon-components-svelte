@@ -133,13 +133,9 @@
   import ButtonSkeleton from "./ButtonSkeleton.svelte";
   import { activeButtonTooltip } from "./button-tooltip-store.js";
 
-  const ctx = getContext("carbon:ComposedModal");
   const insideModal = getContext("carbon:Modal");
   const actionSetSize = getContext("carbon:ActionSet")?.size;
 
-  $: if (ctx && ref) {
-    ctx.declareRef(ref);
-  }
   $: hasIconOnly = (icon || $$slots.icon) && !$$slots.default;
   // Without an iconDescription there is nothing to show in a tooltip or
   // announce as the accessible name via the assistive-text span; skip the

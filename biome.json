@@ -166,7 +166,6 @@
     {
       "includes": [
         "docs/src/pages/framed/NotificationQueue/NotificationQueueDeduplication.svelte",
-        "src/ComposedModal/ComposedModal.svelte",
         "src/ContextMenu/ContextMenuOption.svelte"
       ],
       "linter": {
