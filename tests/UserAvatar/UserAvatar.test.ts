@@ -219,6 +219,21 @@ describe("UserAvatar", () => {
     expect(avatar).not.toHaveClass("bx--user-avatar--interactive");
   });
 
+  it("forwards focus, keydown, and blur events on an interactive avatar", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(UserAvatar);
+
+    const avatar = screen.getByTestId("interactive");
+    avatar.focus();
+    expect(consoleLog).toHaveBeenCalledWith("focus");
+
+    await user.keyboard("a");
+    expect(consoleLog).toHaveBeenCalledWith("keydown");
+
+    avatar.blur();
+    expect(consoleLog).toHaveBeenCalledWith("blur");
+  });
+
   it("renders a button when interactive is set", () => {
     render(UserAvatar);
 
