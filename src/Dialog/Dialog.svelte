@@ -51,6 +51,9 @@
    */
   export let closedby = undefined;
 
+  /** Set to `true` to use the light variant */
+  export let light = false;
+
   import { createEventDispatcher } from "svelte";
   import { restoreFocus } from "../utils/focus.js";
 
@@ -145,6 +148,7 @@
   bind:this={dialogRef}
   class:bx--dialog={true}
   class:bx--dialog--modal={modal}
+  class:bx--dialog--light={light}
   use:dialogAction={{ open, modal }}
   {closedby}
   {...$$restProps}

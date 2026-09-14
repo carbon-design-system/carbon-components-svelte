@@ -240,6 +240,12 @@ describe("Dialog", () => {
     );
   });
 
+  it("applies the light class when light is set", () => {
+    render(Dialog, { props: { open: true, light: true } });
+
+    expect(screen.getByRole("dialog")).toHaveClass("bx--dialog--light");
+  });
+
   it("dispatches a close event and syncs open to false when the browser closes the dialog", () => {
     const onclose = vi.fn();
     render(Dialog, { props: { open: true, onclose } });

@@ -10,6 +10,7 @@
   export let returnFocusTo: HTMLElement | (() => HTMLElement | null) | null =
     null;
   export let closedby: "any" | "closerequest" | "none" | undefined = undefined;
+  export let light = false;
   export let onopen: ((event: CustomEvent) => void) | undefined = undefined;
   export let onclose: ((event: CustomEvent) => void) | undefined = undefined;
 
@@ -30,6 +31,7 @@
   {preventCloseOnClickOutside}
   {returnFocusTo}
   {closedby}
+  {light}
   on:open={(e) => onopen?.(e)}
   on:close={(e) => onclose?.(e)}
 >
