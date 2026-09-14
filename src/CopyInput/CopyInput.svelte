@@ -162,6 +162,8 @@
   export let tooltipAlignment = "center";
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
+  import { get } from "svelte/store";
+  import { activeButtonTooltip } from "../Button/button-tooltip-store.js";
   import CopyButton from "../CopyButton/CopyButton.svelte";
   import View from "../icons/View.svelte";
   import ViewOff from "../icons/ViewOff.svelte";
@@ -182,6 +184,21 @@
 
   let revealTimer;
 
+  // Shares the copy button's tooltip coordination store so moving the
+  // pointer between the toggle and the copy button swaps tooltips instantly
+  // instead of the copy button's leave delay overlapping the toggle's.
+  const toggleTooltipId = {};
+
+  function claimToggleTooltip() {
+    activeButtonTooltip.set(toggleTooltipId);
+  }
+
+  function releaseToggleTooltip() {
+    if (get(activeButtonTooltip) === toggleTooltipId) {
+      activeButtonTooltip.set(null);
+    }
+  }
+
   $: revealed =
     revealMode === "toggle"
       ? toggled
@@ -194,10 +211,18 @@
   $: isFluid = !inline && (fluid || !!ctx?.isFluid);
   $: helperId = `helper-${id}`;
   $: toggleLabel = toggled ? hideValueLabel : showValueLabel;
+  $: showToggle = type === "password" && revealMode === "toggle";
 
-  $: if (revealMode !== "toggle" && toggled) {
-    toggled = false;
-    clearTimeout(revealTimer);
+  $: if (!showToggle) {
+    if (toggled) {
+      toggled = false;
+      clearTimeout(revealTimer);
+    }
+    if (toggleHovered || toggleFocused) {
+      toggleHovered = false;
+      toggleFocused = false;
+      releaseToggleTooltip();
+    }
   }
 
   function handleFocus() {
@@ -228,6 +253,7 @@
   onMount(() => {
     return () => {
       clearTimeout(revealTimer);
+      releaseToggleTooltip();
     };
   });
 </script>
@@ -291,8 +317,7 @@
     <div
       class:bx--text-input__field-wrapper={true}
       class:bx--copy-input__field-wrapper={true}
-      class:bx--copy-input__field-wrapper--toggle={type === "password" &&
-        revealMode === "toggle"}
+      class:bx--copy-input__field-wrapper--toggle={showToggle}
       class:bx--copy-input__field-wrapper--copy-on-hover={copyButtonVisibility ===
         "hover-focus"}
     >
@@ -320,7 +345,7 @@
       {#if isFluid}
         <hr class:bx--text-input__divider={true}>
       {/if}
-      {#if type === "password" && revealMode === "toggle"}
+      {#if showToggle}
         <!-- svelte-ignore a11y-mouse-events-have-key-events -->
         <button
           bind:this={toggleRef}
@@ -337,10 +362,22 @@
           class:bx--tooltip--a11y={true}
           class:bx--tooltip--portal-active={true}
           on:click={handleToggleClick}
-          on:mouseenter={() => (toggleHovered = true)}
-          on:mouseleave={() => (toggleHovered = false)}
-          on:focus={() => (toggleFocused = true)}
-          on:blur={() => (toggleFocused = false)}
+          on:mouseenter={() => {
+            toggleHovered = true;
+            claimToggleTooltip();
+          }}
+          on:mouseleave={() => {
+            toggleHovered = false;
+            if (!toggleFocused) releaseToggleTooltip();
+          }}
+          on:focus={() => {
+            toggleFocused = true;
+            claimToggleTooltip();
+          }}
+          on:blur={() => {
+            toggleFocused = false;
+            if (!toggleHovered) releaseToggleTooltip();
+          }}
         >
           {#if toggled}
             <ViewOff class="bx--icon-visibility-off" />

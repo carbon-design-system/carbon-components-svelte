@@ -313,6 +313,43 @@ describe("CopyInput", () => {
       expect(input).toHaveAttribute("type", "text");
       expect(screen.getByText("Revealed: true")).toBeInTheDocument();
     });
+
+    it("swaps tooltips instantly when the pointer moves between the copy button and the toggle", async () => {
+      vi.useFakeTimers();
+      try {
+        render(CopyInput, {
+          props: { type: "password", revealMode: "toggle" },
+        });
+
+        const copyButton = screen.getByRole("button", {
+          name: "Copy to clipboard",
+        });
+        const toggle = screen.getByRole("button", { name: "Show value" });
+
+        await fireEvent.mouseEnter(copyButton);
+        await vi.advanceTimersByTimeAsync(120);
+        expect(
+          document.querySelectorAll(".bx--tooltip-portal__content"),
+        ).toHaveLength(1);
+        expect(
+          document.querySelector(".bx--tooltip-portal__content"),
+        ).toHaveTextContent("Copy to clipboard");
+
+        // Moving to the toggle reveals it immediately and closes the copy
+        // button's tooltip, instead of waiting out its leave delay.
+        await fireEvent.mouseLeave(copyButton);
+        await fireEvent.mouseEnter(toggle);
+        await vi.advanceTimersByTimeAsync(0);
+
+        const tooltips = document.querySelectorAll(
+          ".bx--tooltip-portal__content",
+        );
+        expect(tooltips).toHaveLength(1);
+        expect(tooltips[0]).toHaveTextContent("Show value");
+      } finally {
+        vi.useRealTimers();
+      }
+    });
   });
 
   describe("revealTimeout", () => {
