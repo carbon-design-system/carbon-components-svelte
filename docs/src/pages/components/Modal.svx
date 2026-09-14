@@ -33,6 +33,12 @@ Use `selectorPrimaryFocus` to override the default and target a specific element
 
 <FileSource src="/framed/Modal/ModalCustomFocus" />
 
+### Return focus to a fallback element
+
+The element that triggered the modal is not always still around when it closes, for example a row deleted from a list. Set `returnFocusTo` to an element, or a function returning one, to focus instead when the trigger has unmounted. This example returns focus to the list's heading after deleting a row.
+
+<FileSource src="/framed/Modal/ModalReturnFocusTo" />
+
 ## Alert mode
 
 Set `alert` to `true` to mark the modal as time-sensitive or requiring immediate attention. This changes the ARIA `role` from `"dialog"` to `"alertdialog"` (or `"alert"` when combined with `passiveModal`), which prompts assistive technology to announce the modal as soon as it opens. When not `passiveModal`, the body content is also linked with `aria-describedby` so screen readers include it in the announcement.

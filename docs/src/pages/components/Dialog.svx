@@ -14,7 +14,7 @@ Set `modal` to `true` to open the dialog with the browser's `showModal()`, which
 
 `Dialog` renders only what you put in its default slot, with no built-in header, footer, or action buttons. Use it to build a custom overlay, or as the top-layer host for portalled content such as DatePicker or FloatingPortal. For a ready-made dialog with a heading, body, and action buttons, use [Modal](/components/Modal) instead.
 
-When the dialog opens, focus moves into it (native modal focus trap). When it closes, focus returns to the element that opened it.
+When the dialog opens, focus moves into it (native modal focus trap). When it closes, focus returns to the element that opened it. Set `returnFocusTo` to an element, or a function returning one, to focus instead when the opener has unmounted while the dialog was open.
 
 <FileSource src="/framed/Dialog/ModalDialog" />
 

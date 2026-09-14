@@ -20,6 +20,8 @@ Create a modal with a header, body, and footer. Each section can be customized i
 
 Control how focus moves when the composed modal opens, and override the default target when needed. Focus follows the same priority order as Modal. See [focus behavior](/components/Modal#focus-behavior).
 
+Set `returnFocusTo` to an element, or a function returning one, to focus instead of the trigger when it has unmounted while the modal was open. See Modal's [return focus to a fallback element](/components/Modal#return-focus-to-a-fallback-element) example.
+
 ### Custom focus
 
 Use `selectorPrimaryFocus` on `ComposedModal` to override the default and target a specific element when the automatic first-input focus is not desired.
