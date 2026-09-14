@@ -49,13 +49,49 @@ Set `type` to `"password"` to obscure the value. By default the value stays obsc
 
 <CopyInput labelText="API token" type="password" value="sk-1234567890abcdef" />
 
-Set `revealMode` to opt into revealing the value on interaction. Use `"focus"` to reveal while the input is focused.
+Set `revealMode` to opt into revealing the value on interaction.
+
+### Reveal on focus
+
+Use `"focus"` to reveal while the input is focused.
 
 <CopyInput labelText="API token" type="password" revealMode="focus" value="sk-1234567890abcdef" />
+
+### Reveal on hover or focus
 
 Use `"hover-focus"` to reveal while the input is hovered or focused.
 
 <CopyInput labelText="API token" type="password" revealMode="hover-focus" value="sk-1234567890abcdef" />
+
+### Reveal toggle
+
+Use `"toggle"` to render a show/hide button between the field and the copy button. The value stays revealed until the button is clicked again.
+
+<CopyInput labelText="API token" type="password" revealMode="toggle" value="sk-1234567890abcdef" />
+
+### Toggle labels
+
+Set `showValueLabel` to change the toggle button's label and tooltip while the value is obscured.
+
+Set `hideValueLabel` to change the toggle button's label and tooltip while the value is revealed.
+
+### Reveal timeout
+
+Set `revealTimeout` to re-obscure a toggled value automatically, in milliseconds. It applies only to `revealMode="toggle"`.
+
+<CopyInput labelText="API token" type="password" revealMode="toggle" revealTimeout={5000} value="sk-1234567890abcdef" />
+
+### Revealed state
+
+Bind to `revealed` to read whether the value currently renders as text, in any reveal mode.
+
+<FileSource src="/framed/CopyInput/CopyInputRevealed" />
+
+## Copy button visibility
+
+Set `copyButtonVisibility` to `"hover-focus"` to fade the copy button in only while the field is hovered or has focus within. Keyboard focus and the copy feedback keep the button visible.
+
+<CopyInput labelText="API token" copyButtonVisibility="hover-focus" value="sk-1234567890abcdef" />
 
 ## Truncation
 
@@ -198,6 +234,12 @@ tooltip icon.
 ### Disabled
 
 <CopyInput fluid disabled labelText="API token" value="sk-1234567890abcdef" />
+
+### Reveal toggle
+
+The reveal toggle positions itself correctly in the fluid variant.
+
+<CopyInput fluid labelText="API token" type="password" revealMode="toggle" value="sk-1234567890abcdef" />
 
 ### Skeleton
 
