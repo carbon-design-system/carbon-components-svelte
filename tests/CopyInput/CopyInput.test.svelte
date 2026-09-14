@@ -5,6 +5,11 @@
   export let value = "secret-token-123";
   export let type: ComponentProps<CopyInput>["type"] = "text";
   export let revealMode: ComponentProps<CopyInput>["revealMode"] = undefined;
+  export let revealed: ComponentProps<CopyInput>["revealed"] = false;
+  export let showValueLabel: ComponentProps<CopyInput>["showValueLabel"] =
+    undefined;
+  export let hideValueLabel: ComponentProps<CopyInput>["hideValueLabel"] =
+    undefined;
   export let selectOnFocus: ComponentProps<CopyInput>["selectOnFocus"] =
     undefined;
   export let labelText = "API token";
@@ -19,6 +24,9 @@
   {value}
   {type}
   {revealMode}
+  bind:revealed
+  {showValueLabel}
+  {hideValueLabel}
   {selectOnFocus}
   {labelText}
   {helperText}
@@ -30,3 +38,4 @@
     console.log("copied");
   }}
 />
+<p>Revealed: {revealed}</p>

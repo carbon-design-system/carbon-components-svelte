@@ -27,10 +27,23 @@
    * Has no effect unless `type` is `"password"`.
    * - `"focus"`: reveal while the input is focused.
    * - `"hover-focus"`: reveal while the input is hovered or focused.
+   * - `"toggle"`: reveal only while the show/hide button is toggled on.
    * When unset, the value stays obscured; the copy button still copies the full value.
-   * @type {"focus" | "hover-focus"}
+   * @type {"focus" | "hover-focus" | "toggle"}
    */
   export let revealMode = undefined;
+
+  /**
+   * Whether the value currently renders as text, in any reveal mode.
+   * @bindable readonly
+   */
+  export let revealed = false;
+
+  /** Set the show-value toggle's label and tooltip text while the value is obscured */
+  export let showValueLabel = "Show value";
+
+  /** Set the show-value toggle's label and tooltip text while the value is revealed */
+  export let hideValueLabel = "Hide value";
 
   /**
    * Set to `true` to select the full value when the input receives focus.
@@ -113,9 +126,10 @@
   export let copy = copyText;
 
   /**
-   * Set to `true` to render the feedback tooltip in a portal,
-   * preventing it from being clipped by `overflow: hidden` containers.
-   * By default, the tooltip is portalled when inside a `Modal`.
+   * Set how the feedback tooltip is rendered.
+   * By default, it is rendered in a portal so it is never clipped by an
+   * `overflow: hidden` container. Set to `false` to use Carbon's inline
+   * feedback caret instead.
    * @type {boolean | undefined}
    */
   export let portalTooltip = undefined;
@@ -134,6 +148,9 @@
 
   import { createEventDispatcher, getContext } from "svelte";
   import CopyButton from "../CopyButton/CopyButton.svelte";
+  import View from "../icons/View.svelte";
+  import ViewOff from "../icons/ViewOff.svelte";
+  import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -141,16 +158,25 @@
 
   let focused = false;
   let hovered = false;
+  let toggled = false;
+  let toggleHovered = false;
+  let toggleFocused = false;
+
+  /** @type {null | HTMLButtonElement} */
+  let toggleRef = null;
 
   $: revealed =
-    revealMode === "hover-focus"
-      ? focused || hovered
-      : revealMode === "focus"
-        ? focused
-        : false;
+    revealMode === "toggle"
+      ? toggled
+      : revealMode === "hover-focus"
+        ? focused || hovered
+        : revealMode === "focus"
+          ? focused
+          : false;
   $: inputType = type === "password" && !revealed ? "password" : "text";
   $: isFluid = !inline && (fluid || !!ctx?.isFluid);
   $: helperId = `helper-${id}`;
+  $: toggleLabel = toggled ? hideValueLabel : showValueLabel;
 
   function handleFocus() {
     focused = true;
@@ -161,6 +187,10 @@
 
   function handleBlur() {
     focused = false;
+  }
+
+  function handleToggleClick() {
+    toggled = !toggled;
   }
 </script>
 
@@ -223,6 +253,8 @@
     <div
       class:bx--text-input__field-wrapper={true}
       class:bx--copy-input__field-wrapper={true}
+      class:bx--copy-input__field-wrapper--toggle={type === "password" &&
+        revealMode === "toggle"}
     >
       <input
         bind:this={ref}
@@ -247,6 +279,35 @@
       >
       {#if isFluid}
         <hr class:bx--text-input__divider={true}>
+      {/if}
+      {#if type === "password" && revealMode === "toggle"}
+        <!-- svelte-ignore a11y-mouse-events-have-key-events -->
+        <button
+          bind:this={toggleRef}
+          type="button"
+          {disabled}
+          aria-label={toggleLabel}
+          aria-pressed={toggled}
+          class:bx--copy-input__reveal-toggle={true}
+          class:bx--text-input--password__visibility__toggle={true}
+          class:bx--btn={true}
+          class:bx--btn--icon-only={true}
+          class:bx--btn--disabled={disabled}
+          class:bx--tooltip__trigger={true}
+          class:bx--tooltip--a11y={true}
+          class:bx--tooltip--portal-active={true}
+          on:click={handleToggleClick}
+          on:mouseenter={() => (toggleHovered = true)}
+          on:mouseleave={() => (toggleHovered = false)}
+          on:focus={() => (toggleFocused = true)}
+          on:blur={() => (toggleFocused = false)}
+        >
+          {#if toggled}
+            <ViewOff class="bx--icon-visibility-off" />
+          {:else}
+            <View class="bx--icon-visibility-on" />
+          {/if}
+        </button>
       {/if}
       <CopyButton
         text={value}
@@ -277,3 +338,13 @@
     {/if}
   </div>
 </div>
+
+{#if toggleRef}
+  <PortalTooltip
+    anchor={toggleRef}
+    direction={tooltipPosition === "top" ? "top" : "bottom"}
+    open={toggleHovered || toggleFocused}
+    text={toggleLabel}
+    tooltipType="icon"
+  />
+{/if}
