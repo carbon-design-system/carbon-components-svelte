@@ -56,6 +56,7 @@ export { default as TableRow } from "./DataTable/TableRow.svelte";
 export { default as Toolbar } from "./DataTable/Toolbar.svelte";
 export { default as ToolbarBatchActions } from "./DataTable/ToolbarBatchActions.svelte";
 export { default as ToolbarContent } from "./DataTable/ToolbarContent.svelte";
+export { default as ToolbarDensity } from "./DataTable/ToolbarDensity.svelte";
 export { default as ToolbarMenu } from "./DataTable/ToolbarMenu.svelte";
 export { default as ToolbarMenuItem } from "./DataTable/ToolbarMenuItem.svelte";
 export { default as ToolbarSearch } from "./DataTable/ToolbarSearch.svelte";
