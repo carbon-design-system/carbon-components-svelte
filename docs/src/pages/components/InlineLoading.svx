@@ -45,6 +45,12 @@ Set `iconDescription` to override the accessible label announced for the status 
 
 The `"error"` status renders `role="alert"`, interrupting the screen reader immediately, as demonstrated by the four `<InlineLoading>` examples above. Every other status renders `role="status"`, announced politely so it doesn't interrupt. Pass `role` through rest props to override either default.
 
+## Delay
+
+Set `delay` to wait a number of milliseconds after `status` becomes `"active"` before rendering. Operations that finish within the delay never show the pending state; `"inactive"`, `"finished"`, and `"error"` always render immediately since they're resting or terminal states, not something to hide.
+
+<FileSource src="/framed/InlineLoading/InlineLoadingDelay" />
+
 ## Events
 
 Listen for `on:success`, dispatched `successDelay` milliseconds (default `1500`) after `status` is set to `"finished"`.
