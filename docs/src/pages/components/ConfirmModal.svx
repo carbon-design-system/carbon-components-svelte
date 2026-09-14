@@ -1,0 +1,76 @@
+---
+components: ["ConfirmModal"]
+description: ConfirmModal is a preset over Modal for are-you-sure decisions, with danger, warning, and info kinds and an optional type-to-confirm phrase.
+---
+
+## Basic
+
+Ask the user to confirm or cancel an action. `heading` sets the modal title, and `confirmText`/`cancelText` label the two footer buttons. Listen for `on:confirm` and `on:cancel` to react to the choice; the modal closes itself in both cases. For anything beyond a yes/no decision, use [Modal](/components/Modal) directly.
+
+<FileSource src="/framed/ConfirmModal/ConfirmModal" />
+
+## Kinds
+
+Set `kind` to match the severity of the action. The default is `"danger"`.
+
+### Danger
+
+Use `kind="danger"` for destructive, irreversible actions. The confirm button uses Modal's danger styling, and the cancel button receives focus first so a stray keypress can't confirm by accident.
+
+<FileSource src="/framed/ConfirmModal/DangerConfirmModal" />
+
+### Warning
+
+Use `kind="warning"` for actions that need attention but aren't destructive. The modal switches to Modal's alert mode and shows a warning icon next to the heading.
+
+<FileSource src="/framed/ConfirmModal/WarningConfirmModal" />
+
+### Info
+
+Use `kind="info"` for plain confirmations with no danger or warning styling.
+
+<FileSource src="/framed/ConfirmModal/InfoConfirmModal" />
+
+## Type to confirm
+
+Set `confirmationPhrase` to require the user to type an exact phrase before the confirm button is enabled. `confirmationLabel` controls the input's label; `{phrase}` is replaced with `confirmationPhrase`.
+
+<FileSource src="/framed/ConfirmModal/ConfirmModalTypeToConfirm" />
+
+## Async confirm
+
+Set `loading` while the confirmed action is in progress. The confirm button shows a loading spinner, and both the cancel button and outside-click dismissal are disabled until it finishes. Pair with `closeOnConfirm={false}` so the modal stays open until you close it yourself.
+
+<FileSource src="/framed/ConfirmModal/ConfirmModalAsyncConfirm" />
+
+## Custom body
+
+Use the default slot to add richer content below the confirmation prompt, such as a list of the items an action will affect.
+
+<FileSource src="/framed/ConfirmModal/ConfirmModalCustomBody" />
+
+## Events
+
+### Confirm
+
+`on:confirm` fires when the confirm button is clicked (or activated via <DocKbd label="Enter" />) and, when `confirmationPhrase` is set, the typed phrase matches. It carries no detail.
+
+```svelte
+<ConfirmModal bind:open heading="Delete this item?" on:confirm={handleDelete}>
+```
+
+### Cancel
+
+`on:cancel` fires when the user backs out, either through the header close button or the footer cancel button. `event.detail.trigger` is `"close-button"` or `"cancel-button"`.
+
+```svelte
+<ConfirmModal
+  bind:open
+  heading="Delete this item?"
+  on:cancel={(e) => console.log(e.detail.trigger)}
+>
+```
+
+### Open, close, and transition end
+
+`on:open`, `on:close`, and `on:transitionend` forward the underlying [Modal](/components/Modal#events) events unchanged.
