@@ -16,6 +16,10 @@
     undefined;
   export let selectOnFocus: ComponentProps<CopyInput>["selectOnFocus"] =
     undefined;
+  export let enterDelayMs: ComponentProps<CopyInput>["enterDelayMs"] =
+    undefined;
+  export let leaveDelayMs: ComponentProps<CopyInput>["leaveDelayMs"] =
+    undefined;
   export let labelText = "API token";
   export let helperText = "";
   export let disabled = false;
@@ -34,6 +38,8 @@
   {hideValueLabel}
   {copyButtonVisibility}
   {selectOnFocus}
+  {enterDelayMs}
+  {leaveDelayMs}
   {labelText}
   {helperText}
   {disabled}

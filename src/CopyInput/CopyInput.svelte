@@ -161,6 +161,21 @@
    */
   export let tooltipAlignment = "center";
 
+  /**
+   * Specify the duration in milliseconds to delay before showing a
+   * hover/focus tooltip (the toggle's and the copy button's). Skipped when
+   * moving directly from one to the other, so that handoff feels instant.
+   * @type {number}
+   */
+  export let enterDelayMs = 100;
+
+  /**
+   * Specify the duration in milliseconds to delay before hiding a
+   * hover/focus tooltip after the pointer leaves or focus moves away.
+   * @type {number}
+   */
+  export let leaveDelayMs = 300;
+
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import { get } from "svelte/store";
   import { activeButtonTooltip } from "../Button/button-tooltip-store.js";
@@ -169,6 +184,7 @@
   import ViewOff from "../icons/ViewOff.svelte";
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
+  import { createDelayedSetter } from "../utils/delayed-setter.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -185,10 +201,12 @@
 
   let revealTimer;
 
-  // Shares the copy button's tooltip coordination store so moving the
-  // pointer between the toggle and the copy button swaps tooltips instantly
-  // instead of the copy button's leave delay overlapping the toggle's.
+  // Shares the copy button's tooltip coordination store and enter/leave
+  // delay pattern, so moving the pointer between the toggle and the copy
+  // button swaps tooltips instantly instead of one's leave delay overlapping
+  // the other's, and a fresh hover on either waits the same delay.
   const toggleTooltipId = {};
+  const scheduleToggleTooltip = createDelayedSetter();
 
   function claimToggleTooltip() {
     activeButtonTooltip.set(toggleTooltipId);
@@ -198,6 +216,33 @@
     if (get(activeButtonTooltip) === toggleTooltipId) {
       activeButtonTooltip.set(null);
     }
+  }
+
+  function handleToggleTooltipMouseEnter() {
+    const warmHandoff =
+      get(activeButtonTooltip) !== null &&
+      get(activeButtonTooltip) !== toggleTooltipId;
+    scheduleToggleTooltip(warmHandoff ? 0 : enterDelayMs, () => {
+      toggleHovered = true;
+      claimToggleTooltip();
+    });
+  }
+
+  function handleToggleTooltipMouseLeave() {
+    scheduleToggleTooltip(leaveDelayMs, () => {
+      toggleHovered = false;
+      if (!toggleFocused) releaseToggleTooltip();
+    });
+  }
+
+  function handleToggleTooltipFocus() {
+    toggleFocused = true;
+    claimToggleTooltip();
+  }
+
+  function handleToggleTooltipBlur() {
+    toggleFocused = false;
+    if (!toggleHovered) releaseToggleTooltip();
   }
 
   $: revealed =
@@ -231,6 +276,7 @@
       toggleFocused = false;
       releaseToggleTooltip();
     }
+    scheduleToggleTooltip.cancel();
   }
 
   function handleFocus() {
@@ -261,6 +307,7 @@
   onMount(() => {
     return () => {
       clearTimeout(revealTimer);
+      scheduleToggleTooltip.cancel();
       releaseToggleTooltip();
     };
   });
@@ -370,22 +417,10 @@
           class:bx--tooltip--a11y={true}
           class:bx--tooltip--portal-active={true}
           on:click={handleToggleClick}
-          on:mouseenter={() => {
-            toggleHovered = true;
-            claimToggleTooltip();
-          }}
-          on:mouseleave={() => {
-            toggleHovered = false;
-            if (!toggleFocused) releaseToggleTooltip();
-          }}
-          on:focus={() => {
-            toggleFocused = true;
-            claimToggleTooltip();
-          }}
-          on:blur={() => {
-            toggleFocused = false;
-            if (!toggleHovered) releaseToggleTooltip();
-          }}
+          on:mouseenter={handleToggleTooltipMouseEnter}
+          on:mouseleave={handleToggleTooltipMouseLeave}
+          on:focus={handleToggleTooltipFocus}
+          on:blur={handleToggleTooltipBlur}
         >
           {#if toggled}
             <ViewOff class="bx--icon-visibility-off" />
@@ -404,6 +439,8 @@
         {portalTooltip}
         {tooltipPosition}
         {tooltipAlignment}
+        {enterDelayMs}
+        {leaveDelayMs}
         {disabled}
         {copy}
         on:copy

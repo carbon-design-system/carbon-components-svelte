@@ -350,6 +350,67 @@ describe("CopyInput", () => {
         vi.useRealTimers();
       }
     });
+
+    describe("hover tooltip delay", () => {
+      beforeEach(() => {
+        vi.useFakeTimers();
+      });
+
+      afterEach(() => {
+        vi.useRealTimers();
+      });
+
+      it("waits enterDelayMs (default 100ms) before showing the toggle's tooltip", async () => {
+        render(CopyInput, {
+          props: { type: "password", revealMode: "toggle" },
+        });
+
+        const toggle = screen.getByRole("button", { name: "Show value" });
+        await fireEvent.mouseEnter(toggle);
+        expect(
+          document.querySelector(".bx--tooltip-portal__content"),
+        ).toBeNull();
+
+        await vi.advanceTimersByTimeAsync(100);
+        expect(
+          document.querySelector(".bx--tooltip-portal__content"),
+        ).toHaveTextContent("Show value");
+      });
+
+      it("supports custom enterDelayMs and leaveDelayMs on the toggle", async () => {
+        render(CopyInput, {
+          props: {
+            type: "password",
+            revealMode: "toggle",
+            enterDelayMs: 500,
+            leaveDelayMs: 500,
+          },
+        });
+
+        const toggle = screen.getByRole("button", { name: "Show value" });
+        await fireEvent.mouseEnter(toggle);
+        await vi.advanceTimersByTimeAsync(100);
+        expect(
+          document.querySelector(".bx--tooltip-portal__content"),
+        ).toBeNull();
+
+        await vi.advanceTimersByTimeAsync(400);
+        expect(
+          document.querySelector(".bx--tooltip-portal__content"),
+        ).toHaveTextContent("Show value");
+
+        await fireEvent.mouseLeave(toggle);
+        await vi.advanceTimersByTimeAsync(300);
+        expect(
+          document.querySelector(".bx--tooltip-portal__content"),
+        ).toBeInTheDocument();
+
+        await vi.advanceTimersByTimeAsync(200);
+        expect(
+          document.querySelector(".bx--tooltip-portal__content"),
+        ).toBeNull();
+      });
+    });
   });
 
   describe("revealTimeout", () => {

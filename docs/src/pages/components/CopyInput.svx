@@ -198,6 +198,12 @@ Set `tooltipAlignment` to align the tooltip relative to the copy button. Accepts
 
 <CopyInput labelText="API endpoint" value="https://api.acme.io/v1" tooltipAlignment="end" />
 
+### Delay
+
+Set `enterDelayMs` to change how long the pointer must hover before a tooltip appears. Defaults to `100`. Set `leaveDelayMs` to change how long a tooltip stays open after the pointer leaves. Defaults to `300`. Both apply to the copy button's tooltip and, when `revealMode` is `"toggle"`, the reveal toggle's tooltip. Moving directly between the two skips `enterDelayMs`.
+
+<CopyInput labelText="API endpoint" value="https://api.acme.io/v1" enterDelayMs={1000} />
+
 ## Portal tooltip
 
 The copy feedback tooltip is rendered in a floating portal by default, so it shares the same surface as the hover tooltip (the text swaps in place) and is never clipped by an `overflow: hidden` container. Set `portalTooltip` to `false` to use Carbon's inline feedback caret instead. A non-default `tooltipPosition` or `tooltipAlignment` is always portalled because the inline caret only supports the default placement.
