@@ -31,6 +31,12 @@ Customize the text announced to screen readers by setting `description`. Default
 
 <Loading description="Loading metrics..." withOverlay={false} />
 
+## Delay
+
+Set `delay` to wait a number of milliseconds after `active` becomes `true` before rendering the spinner. Requests that finish within the delay never show a spinner, avoiding a flash of loading state for fast responses.
+
+<FileSource src="/framed/Loading/LoadingDelay" />
+
 ## Stop state
 
 Set `active` to `false` to play the spinner's end-of-loading animation and mark it inactive for screen readers (`aria-live="off"`). Useful when transitioning out of a loading state before removing the component.
