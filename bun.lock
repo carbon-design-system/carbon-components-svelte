@@ -27,7 +27,7 @@
         "lightningcss": "^1.33.0",
         "ostia": "^0.2.4",
         "sass-embedded": "^1.104.0",
-        "sveld": "^0.36.11",
+        "sveld": "^0.37.1",
         "svelte": "^5.57.0",
         "svelte-check": "^4.7.6",
         "typescript": "^6.0.3",
@@ -449,7 +449,7 @@
 
     "supports-color": ["supports-color@8.1.1", "", { "dependencies": { "has-flag": "^4.0.0" } }, "sha512-MpUEN2OodtUzxvKQl72cUF7RQ5EiHsGvSsVG0ia9c5RbWGL2CI4C7EpPS8UTBIplnlzZiNuV56w+FuNxy3ty2Q=="],
 
-    "sveld": ["sveld@0.36.11", "", { "bin": { "sveld": "cli.js" } }, "sha512-BsFkk5oSWWCfdjlIsrvvZkWc7wXUCmAgt0cGLcUJ2YdmTs9IPXsQ73ycBZxWXZg9HV9zedubkNxjkWS6t5Qqow=="],
+    "sveld": ["sveld@0.37.1", "", { "bin": { "sveld": "cli.js" } }, "sha512-cIEKyAr27Ir7m5GKMHH3swXLN6+iQ3UHqi9uj7N+TgTinFs5knXjW6IZkZ27g8p7eJszvjX0aOSME1EoYcROBQ=="],
 
     "svelte": ["svelte@5.57.0", "", { "dependencies": { "@jridgewell/remapping": "^2.3.4", "@jridgewell/sourcemap-codec": "^1.5.0", "@sveltejs/acorn-typescript": "^1.0.10", "@types/estree": "^1.0.5", "acorn": "^8.12.1", "aria-query": "5.3.1", "axobject-query": "^4.1.0", "clsx": "^2.1.1", "devalue": "^5.8.1", "esm-env": "^1.2.1", "esrap": "^2.2.12", "is-reference": "^3.0.3", "locate-character": "^3.0.0", "magic-string": "^0.30.11", "zimmerframe": "^1.1.2" } }, "sha512-NdbDn7fl4be1ViUG0oq/lvG6OZy3oENolV2ONjiqqsfVoeAfzaQAKUcEX3MrQod/Bebv1PgwET9rfXhgn9s4Kg=="],
 
