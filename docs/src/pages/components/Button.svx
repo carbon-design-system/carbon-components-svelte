@@ -4,7 +4,7 @@ description: Buttons trigger actions like submitting a form or navigating, with 
 ---
 
 <script>
-  import { BadgeIndicator, Button, ButtonSkeleton, Stack } from "carbon-components-svelte";
+  import { BadgeIndicator, Box, Button, ButtonSkeleton, Stack } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
   import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
   import Login from "carbon-icons-svelte/lib/Login.svelte";
@@ -209,6 +209,17 @@ Set `size="xl"` for extra-large buttons.
 <Button size="xl" kind="tertiary">Tertiary</Button>
 <Button size="xl" kind="ghost">Ghost</Button>
 <Button size="xl" kind="danger">Danger</Button>
+
+## Full width
+
+Set `fullWidth` to `true` so the button spans its container, for example a
+sign-in CTA or a dialog action. This replaces relying on a parent `Stack`'s
+`align="stretch"` to stretch the button, which stretches every child, not just
+the one that needs it.
+
+<Box maxWidth="20rem">
+  <Button fullWidth>Sign in</Button>
+</Box>
 
 ## Disabled
 
