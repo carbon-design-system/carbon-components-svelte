@@ -2,6 +2,7 @@
   /**
    * @typedef {1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13} SpacingScale
    * @typedef {SpacingScale | string} SpacingValue
+   * @typedef {0 | SpacingScale | string} OffsetValue
    * @restProps {any}
    * @slot {{}}
    */
@@ -76,12 +77,48 @@
   export let fullWidth = false;
 
   /**
+   * Set the height. Numbers `1`–`13` use the shared layout scale; strings accept any CSS length; `"viewport"` sets the full viewport height (`100dvh`, with a `100vh` fallback).
+   * @type {SpacingValue | "viewport" | undefined}
+   */
+  export let height = undefined;
+
+  /**
+   * Set the min height. Numbers `1`–`13` use the shared layout scale; strings accept any CSS length; `"viewport"` sets the full viewport height (`100dvh`, with a `100vh` fallback).
+   * @type {SpacingValue | "viewport" | undefined}
+   */
+  export let minHeight = undefined;
+
+  /**
+   * Set the max height. Numbers `1`–`13` use the shared layout scale; strings accept any CSS length.
+   * @type {SpacingValue | undefined}
+   */
+  export let maxHeight = undefined;
+
+  /**
+   * Set the CSS position. `"sticky"` is relative to the nearest scroll container, not the viewport.
+   * @type {"relative" | "sticky" | undefined}
+   */
+  export let position = undefined;
+
+  /**
+   * Set the offset from the top when `position` is set. Numbers `0`–`13` use the shared layout scale; strings accept any CSS length.
+   * @type {OffsetValue | undefined}
+   */
+  export let top = undefined;
+
+  /**
+   * Set the offset from the bottom when `position` is set. Numbers `0`–`13` use the shared layout scale; strings accept any CSS length.
+   * @type {OffsetValue | undefined}
+   */
+  export let bottom = undefined;
+
+  /**
    * Specify the tag name.
    * @type {keyof HTMLElementTagNameMap}
    */
   export let tag = "div";
 
-  /** @param {"p" | "px" | "py" | "m" | "mx" | "my"} kind @param {SpacingValue | undefined} value */
+  /** @param {"p" | "px" | "py" | "m" | "mx" | "my" | "height" | "min-height" | "max-height"} kind @param {SpacingValue | undefined} value */
   function spacingClass(kind, value) {
     if (value == null) return undefined;
     if (typeof value === "number" && value >= 1 && value <= 13) {
@@ -106,6 +143,36 @@
     return typeof value === "number" ? `${value}px` : value;
   }
 
+  /** @param {"height" | "min-height"} kind @param {SpacingValue | "viewport" | undefined} value */
+  function viewportClass(kind, value) {
+    if (value === "viewport") return `bx--box-${kind}-viewport`;
+    return spacingClass(kind, value);
+  }
+
+  /** @param {SpacingValue | "viewport" | undefined} value */
+  function viewportStyle(value) {
+    if (value === "viewport") return undefined;
+    return spacingStyle(value);
+  }
+
+  /** @param {"top" | "bottom"} kind @param {OffsetValue | undefined} value */
+  function offsetClass(kind, value) {
+    if (value == null) return undefined;
+    if (typeof value === "number" && value >= 0 && value <= 13) {
+      return `bx--box-${kind}-${value}`;
+    }
+    return undefined;
+  }
+
+  /** @param {OffsetValue | undefined} value */
+  function offsetStyle(value) {
+    if (value == null) return undefined;
+    if (typeof value === "number" && value >= 0 && value <= 13)
+      return undefined;
+    if (typeof value === "string") return value;
+    return undefined;
+  }
+
   $: boxClass = [
     fill && `bx--box-fill-${fill}`,
     border && `bx--box-border-${border}`,
@@ -116,6 +183,12 @@
     spacingClass("mx", marginX),
     spacingClass("my", marginY),
     fullWidth && "bx--box-full-width",
+    viewportClass("height", height),
+    viewportClass("min-height", minHeight),
+    spacingClass("max-height", maxHeight),
+    position && `bx--box-position-${position}`,
+    offsetClass("top", top),
+    offsetClass("bottom", bottom),
     $$restProps.class,
   ]
     .filter(Boolean)
@@ -130,6 +203,11 @@
   $: resolvedMargin = spacingStyle(margin);
   $: resolvedMarginX = spacingStyle(marginX);
   $: resolvedMarginY = spacingStyle(marginY);
+  $: resolvedHeight = viewportStyle(height);
+  $: resolvedMinHeight = viewportStyle(minHeight);
+  $: resolvedMaxHeight = spacingStyle(maxHeight);
+  $: resolvedTop = offsetStyle(top);
+  $: resolvedBottom = offsetStyle(bottom);
 </script>
 
 <svelte:element
@@ -144,6 +222,11 @@
   style:margin={resolvedMargin}
   style:margin-inline={resolvedMarginX}
   style:margin-block={resolvedMarginY}
+  style:height={resolvedHeight}
+  style:min-height={resolvedMinHeight}
+  style:max-height={resolvedMaxHeight}
+  style:top={resolvedTop}
+  style:bottom={resolvedBottom}
   class={boxClass}
 >
   <slot />

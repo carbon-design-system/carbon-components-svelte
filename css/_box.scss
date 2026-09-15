@@ -64,6 +64,56 @@
   .#{$prefix}--box-full-width {
     width: 100%;
   }
+
+  @each $step, $size in $ccs-spacing-scale {
+    .#{$prefix}--box-height-#{$step} {
+      height: $size;
+    }
+
+    .#{$prefix}--box-min-height-#{$step} {
+      min-height: $size;
+    }
+
+    .#{$prefix}--box-max-height-#{$step} {
+      max-height: $size;
+    }
+
+    .#{$prefix}--box-top-#{$step} {
+      top: $size;
+    }
+
+    .#{$prefix}--box-bottom-#{$step} {
+      bottom: $size;
+    }
+  }
+
+  .#{$prefix}--box-top-0 {
+    top: 0;
+  }
+
+  .#{$prefix}--box-bottom-0 {
+    bottom: 0;
+  }
+
+  // 100vh first as a fallback for browsers without dvh support; 100dvh
+  // overrides it and tracks mobile browser chrome, so no scroll clipping.
+  .#{$prefix}--box-height-viewport {
+    height: 100vh;
+    height: 100dvh;
+  }
+
+  .#{$prefix}--box-min-height-viewport {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  .#{$prefix}--box-position-relative {
+    position: relative;
+  }
+
+  .#{$prefix}--box-position-sticky {
+    position: sticky;
+  }
 }
 
 @include exports("box") {
