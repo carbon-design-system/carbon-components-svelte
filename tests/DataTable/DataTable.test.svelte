@@ -73,6 +73,7 @@
   export let batchExpansion = false;
   export let selectable = false;
   export let radio = false;
+  export let allowDeselect = false;
   export let batchSelection = false;
   export let nonSelectableRowIds: ComponentProps<DataTable>["nonSelectableRowIds"] =
     [];
@@ -113,6 +114,7 @@
   {batchExpansion}
   {selectable}
   {radio}
+  {allowDeselect}
   {batchSelection}
   {nonSelectableRowIds}
   {nonExpandableRowIds}

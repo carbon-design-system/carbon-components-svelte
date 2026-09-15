@@ -227,6 +227,12 @@
   export let radio = false;
 
   /**
+   * Set to `true` so clicking an already-selected `radio` row clears the
+   * selection instead of leaving it selected. Only applies with `radio`.
+   */
+  export let allowDeselect = false;
+
+  /**
    * Set to `true` for the selectable variant.
    * Shift-clicking a row checkbox extends selection to every row between it and the last row clicked (not supported with `radio`).
    * @bindable writable
@@ -568,6 +574,24 @@
     }
     selectedRowIds = [...next];
     return true;
+  }
+
+  /**
+   * With `allowDeselect`, clicking an already-selected radio row clears the
+   * selection. This listens for `click` rather than `change`: clicking a
+   * radio's associated `<label>` re-dispatches the click onto the hidden
+   * input, whose native activation behavior re-checks it and fires `change`
+   * right after this handler clears the selection. `preventDefault` stops
+   * that native activation (and the label's re-dispatch) so the clear
+   * sticks.
+   * @type {(row: Row, event: MouseEvent) => void}
+   */
+  function handleRadioColumnClick(row, event) {
+    if (!radio || !allowDeselect || !selectedRowIdsSet.has(row.id)) return;
+
+    event.preventDefault();
+    selectedRowIds = [];
+    dispatch("click:row--select", { row, selected: false });
   }
 
   setContext("carbon:DataTable", {
@@ -1210,6 +1234,7 @@
                 <td
                   class:bx--table-column-checkbox={true}
                   class:bx--table-column-radio={radio}
+                  on:click={(event) => handleRadioColumnClick(row, event)}
                 >
                   {#if !nonSelectableRowIdsSet.has(row.id)}
                     {@const inputId = `${id}-${row.id}`}
@@ -1445,6 +1470,7 @@
                 <td
                   class:bx--table-column-checkbox={true}
                   class:bx--table-column-radio={radio}
+                  on:click={(event) => handleRadioColumnClick(row, event)}
                 >
                   {#if isSelectable}
                     {@const inputId = `${id}-${row.id}`}
