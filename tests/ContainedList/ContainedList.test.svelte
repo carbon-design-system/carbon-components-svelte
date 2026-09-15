@@ -12,6 +12,7 @@
     "List title";
   export let size: ComponentProps<ContainedList>["size"] = "md";
   export let inset: ComponentProps<ContainedList>["inset"] = false;
+  export let hideLabel: ComponentProps<ContainedList>["hideLabel"] = false;
   export let id: ComponentProps<ContainedList>["id"] = undefined;
   export let interactive: ComponentProps<ContainedListItem>["interactive"] = false;
   export let disabled: ComponentProps<ContainedListItem>["disabled"] = false;
@@ -20,7 +21,7 @@
   export let showSearch = false;
 </script>
 
-<ContainedList {kind} {labelText} {size} {inset} {id}>
+<ContainedList {kind} {labelText} {size} {inset} {hideLabel} {id}>
   {#if showSearch}
     <Search slot="action" expandable />
   {/if}
