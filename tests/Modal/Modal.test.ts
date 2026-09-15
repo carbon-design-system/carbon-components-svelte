@@ -9,6 +9,7 @@ import ModalFocusReturnTest from "./ModalFocusReturn.test.svelte";
 import ModalFocusTrapTest from "./ModalFocusTrap.test.svelte";
 import ModalFormIdTest from "./ModalFormId.test.svelte";
 import ModalNullishAriaLabel from "./ModalNullishAriaLabel.test.svelte";
+import ModalReturnFocusToTest from "./ModalReturnFocusTo.test.svelte";
 import ModalSideNavBodyLockTest from "./ModalSideNavBodyLock.test.svelte";
 import ModalTextareaEnterTest from "./ModalTextareaEnter.test.svelte";
 import ModalUnmountOnCloseTest from "./ModalUnmountOnClose.test.svelte";
@@ -431,6 +432,61 @@ describe("Modal", () => {
     await tick();
 
     expect(trigger).toHaveFocus();
+  });
+
+  it("returns focus to returnFocusTo when the opener unmounts while open", async () => {
+    const { container, rerender } = render(ModalReturnFocusToTest, {
+      props: { returnFocusTo: () => screen.getByTestId("fallback") },
+    });
+
+    const trigger = screen.getByTestId("opener");
+    await user.click(trigger);
+    await tick();
+
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    expect(trigger).toHaveFocus();
+    trigger.remove();
+    expect(document.body).toHaveFocus();
+
+    await rerender({
+      open: false,
+      returnFocusTo: () => screen.getByTestId("fallback"),
+    });
+    await tick();
+
+    const modalWrapper = container.querySelector(".bx--modal");
+    assert(modalWrapper);
+    modalWrapper.dispatchEvent(
+      new TransitionEvent("transitionend", { propertyName: "transform" }),
+    );
+    await tick();
+
+    expect(screen.getByTestId("fallback")).toHaveFocus();
+  });
+
+  it("leaves focus on body when the opener unmounts without returnFocusTo", async () => {
+    const { container, rerender } = render(ModalReturnFocusToTest, {
+      props: {},
+    });
+
+    const trigger = screen.getByTestId("opener");
+    await user.click(trigger);
+    await tick();
+
+    trigger.remove();
+    expect(document.body).toHaveFocus();
+
+    await rerender({ open: false });
+    await tick();
+
+    const modalWrapper = container.querySelector(".bx--modal");
+    assert(modalWrapper);
+    modalWrapper.dispatchEvent(
+      new TransitionEvent("transitionend", { propertyName: "transform" }),
+    );
+    await tick();
+
+    expect(document.body).toHaveFocus();
   });
 
   it("respects the selectorPrimaryFocus prop", () => {

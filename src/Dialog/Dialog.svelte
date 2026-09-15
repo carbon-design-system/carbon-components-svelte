@@ -26,6 +26,34 @@
    */
   export let preventCloseOnClickOutside = false;
 
+  /**
+   * Specify an element—or a function returning one—to focus when the dialog
+   * closes. Use when the element that opened the dialog may unmount while
+   * the dialog is open, for example a deleted row.
+   * @type {HTMLElement | (() => HTMLElement | null) | null}
+   */
+  export let returnFocusTo = null;
+
+  /**
+   * Set from the native `returnValue` when the dialog closes; cleared when
+   * it opens. Set it by calling `close(value)` on the component instance.
+   * @type {string}
+   * @bindable readonly
+   */
+  export let returnValue = "";
+
+  /**
+   * Forwarded as the `closedby` attribute, which controls which user
+   * interactions can close the dialog. Browsers without support ignore the
+   * attribute; `closedby="none"` also disables this component's own
+   * backdrop light-dismiss, since that logic runs in Svelte, not natively.
+   * @type {"any" | "closerequest" | "none"}
+   */
+  export let closedby = undefined;
+
+  /** Set to `true` to use the light variant */
+  export let light = false;
+
   import { createEventDispatcher } from "svelte";
   import { restoreFocus } from "../utils/focus.js";
 
@@ -34,6 +62,20 @@
 
   /** @type {DialogCloseTrigger | null} */
   let pendingTrigger = null;
+
+  /** @type {HTMLDialogElement | null} */
+  let dialogRef = null;
+
+  /**
+   * Close the dialog programmatically, setting `returnValue` like the
+   * native `dialog.close(value)` API.
+   * @param {string} [value]
+   */
+  export function close(value) {
+    pendingTrigger = "programmatic";
+    dialogRef.returnValue = value;
+    dialogRef.close(value);
+  }
 
   /**
    * Calls `showModal()`/`show()`/`close()` on the native `<dialog>` element
@@ -54,6 +96,7 @@
       if (shouldOpen) {
         if (!node.open) {
           focusReturn.save();
+          returnValue = "";
           if (isModal) {
             node.showModal();
           } else {
@@ -79,7 +122,9 @@
    * @param {MouseEvent} event
    */
   function handleClick(event) {
-    if (!modal || preventCloseOnClickOutside) return;
+    // closedby="none" disables light-dismiss here since the browser attribute
+    // is inert without native support and this component's own logic still runs.
+    if (!modal || preventCloseOnClickOutside || closedby === "none") return;
     if (event.target !== event.currentTarget) return;
     /** @type {HTMLDialogElement} */
     const node = event.currentTarget;
@@ -90,16 +135,22 @@
   function handleClose() {
     const trigger = pendingTrigger ?? "close-button";
     pendingTrigger = null;
+    returnValue = dialogRef.returnValue;
     open = false;
     dispatch("close", { trigger });
-    focusReturn.restore();
+    focusReturn.restore(() =>
+      typeof returnFocusTo === "function" ? returnFocusTo() : returnFocusTo,
+    );
   }
 </script>
 
 <dialog
+  bind:this={dialogRef}
   class:bx--dialog={true}
   class:bx--dialog--modal={modal}
+  class:bx--dialog--light={light}
   use:dialogAction={{ open, modal }}
+  {closedby}
   {...$$restProps}
   on:cancel={handleCancel}
   on:close={handleClose}
