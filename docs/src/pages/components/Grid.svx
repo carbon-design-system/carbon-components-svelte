@@ -115,6 +115,22 @@ content alignment across different column widths.
 
 <FileSource src="/framed/Grid/AspectRatioColumns" />
 
+## Alignment
+
+`Row` stretches its columns to an equal height by default. Set `align` on
+`Row` to change how columns align along the cross axis (`start`, `center`,
+`end`, or `stretch`), or set `align` on an individual `Column` to override the
+row's alignment for that column alone.
+
+<FileSource src="/framed/Grid/RowAlignment" />
+
+### Equal height columns
+
+A stretched `Column` does not stretch the content inside it. Set `fullHeight`
+on `Tile` so a tile fills its column instead of sizing to its own content.
+
+<FileSource src="/framed/Grid/EqualHeightColumns" />
+
 ## Spacing
 
 Control vertical rhythm and horizontal gutters at the grid, row, or column
