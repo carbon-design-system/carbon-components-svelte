@@ -4,6 +4,7 @@ import path from "node:path";
 const root = path.resolve(import.meta.dirname, "..");
 
 const GITHUB_REPO_RE = /github\.com[:/]([^/]+)\/([^/.]+)/;
+const TAG_VERSION_RE = /^v?(\d+\.\d+\.\d+)$/;
 const CONVENTIONAL_HEADER_RE = /^(\w+)(?:\(([^)]+)\))?(!)?: (.+)$/;
 const BREAKING_CHANGE_FOOTER_RE =
   /BREAKING CHANGE:\s*([\s\S]+?)(?:\n\n(?!\s)|$)/i;
@@ -176,9 +177,16 @@ const pkg = JSON.parse(pkgRaw) as {
   repository: { url: string };
 };
 const baseUrl = repoBaseUrl(pkg.repository.url);
-const currentVersion = pkg.version;
 
 const lastTag = await git("describe", "--tags", "--abbrev=0");
+const tagVersionMatch = lastTag.match(TAG_VERSION_RE);
+if (!tagVersionMatch) {
+  throw new Error(`Could not parse version from tag: ${lastTag}`);
+}
+// Derived from the last tag, not package.json, so a prior unstaged/uncommitted
+// run of this script (which already bumped package.json) doesn't cause a
+// double bump on re-run.
+const currentVersion = tagVersionMatch[1];
 const logOut = await git(
   "log",
   `${lastTag}..HEAD`,
@@ -308,7 +316,19 @@ if (docsOnly) {
   if (idx === -1) {
     throw new Error("CHANGELOG.md: could not find insertion point after intro");
   }
-  const updated = `${changelog.slice(0, idx)}\n\n${newBlock}\n\n${changelog.slice(idx + 2)}`;
+  const blockStart = idx + 2;
+
+  // If the top block is already this release (an unstaged re-run), replace
+  // it in place instead of prepending a duplicate.
+  const isRerun = changelog.startsWith(`### [${nextVersion}]`, blockStart);
+  let updated: string;
+  if (isRerun) {
+    const nextBlockIdx = changelog.indexOf(marker, blockStart);
+    const blockEnd = nextBlockIdx === -1 ? changelog.length : nextBlockIdx;
+    updated = `${changelog.slice(0, blockStart)}${newBlock}${changelog.slice(blockEnd)}`;
+  } else {
+    updated = `${changelog.slice(0, idx)}\n\n${newBlock}\n\n${changelog.slice(blockStart)}`;
+  }
 
   fs.writeFileSync(changelogPath, updated, "utf8");
 
