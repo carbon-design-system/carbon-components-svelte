@@ -1343,7 +1343,7 @@ describe("DataTable", () => {
     expect(nameHeader).toHaveStyle({ width: "0px" });
   });
 
-  it("applies custom column widths", () => {
+  it("applies custom column widths without forcing fixed layout", () => {
     const customHeaders = [
       { key: "name", value: "Name", width: "200px" },
       { key: "protocol", value: "Protocol", minWidth: "100px" },
@@ -1358,9 +1358,10 @@ describe("DataTable", () => {
       },
     });
 
-    // Verify table has fixed layout
+    // A single sized header no longer forces every other column to share
+    // the remainder equally.
     const table = screen.getByRole("table");
-    expect(table).toHaveStyle({ "table-layout": "fixed" });
+    expect(table).not.toHaveStyle({ "table-layout": "fixed" });
 
     // Verify name column has correct width
     const nameHeader = screen.getByRole("columnheader", { name: "Name" });
@@ -1376,7 +1377,7 @@ describe("DataTable", () => {
   // Regression: table-layout: fixed strictly enforces the expand column's
   // CSS width (32px), clipping the chevron that auto layout otherwise grows
   // to fit (40px). Pin the expand column width so it matches auto layout.
-  it("marks the table fixed-layout when a header has a custom width, so CSS can keep the expand column stable", () => {
+  it("marks the table fixed-layout when fixedLayout is set explicitly, so CSS can keep the expand column stable", () => {
     const customHeaders = [
       { key: "name", value: "Name" },
       { key: "protocol", value: "Protocol" },
@@ -1387,6 +1388,7 @@ describe("DataTable", () => {
     render(DataTable, {
       props: {
         expandable: true,
+        fixedLayout: true,
         headers: customHeaders,
         rows,
       },
@@ -1394,6 +1396,7 @@ describe("DataTable", () => {
 
     const table = screen.getByRole("table");
     expect(table).toHaveClass("bx--data-table--fixed-layout");
+    expect(table).toHaveStyle({ "table-layout": "fixed" });
   });
 
   describe("column alignment", () => {

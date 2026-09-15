@@ -275,6 +275,13 @@
   export let useStaticWidth = false;
 
   /**
+   * Set to `true` to use a fixed table layout, where a header's `width`/`minWidth`
+   * is the column's exact rendered size instead of a floor that content can grow past.
+   * Unset columns share the remaining space equally.
+   */
+  export let fixedLayout = false;
+
+  /**
    * Set the filtering strategy used by `ToolbarSearch`.
    * - `"remove"`: remove non-matching rows from the DOM and recreate them when the
    *   filter clears.
@@ -925,14 +932,27 @@
       {stickyHeader}
       {sortable}
       {useStaticWidth}
-      fixedLayout={hasCustomHeaderWidth}
+      {fixedLayout}
       labelledBy={hasTitle ? titleId : undefined}
       describedBy={hasDescription ? descriptionId : undefined}
-      tableStyle={hasCustomHeaderWidth ? "table-layout: fixed" : undefined}
+      tableStyle={fixedLayout ? "table-layout: fixed" : undefined}
       containerStyle={stickyHeader && stickyHeaderMaxHeight != null
         ? `max-height: ${typeof stickyHeaderMaxHeight === "number" ? `${stickyHeaderMaxHeight}px` : stickyHeaderMaxHeight}`
         : undefined}
     >
+      {#if hasCustomHeaderWidth}
+        <colgroup>
+          {#if expandable}
+            <col>
+          {/if}
+          {#if isSelectionEnabled}
+            <col>
+          {/if}
+          {#each visibleHeaders as header (header.key)}
+            <col style={formatHeaderWidth(header)}>
+          {/each}
+        </colgroup>
+      {/if}
       <TableHead
         style={virtualScrollContainer
           ? "position: sticky; top: 0;"

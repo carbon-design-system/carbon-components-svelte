@@ -68,6 +68,7 @@
   export let stickyHeaderMaxHeight: ComponentProps<DataTable>["stickyHeaderMaxHeight"] =
     undefined;
   export let useStaticWidth = false;
+  export let fixedLayout = false;
   export let expandable = false;
   export let batchExpansion = false;
   export let selectable = false;
@@ -107,6 +108,7 @@
   {stickyHeader}
   {stickyHeaderMaxHeight}
   {useStaticWidth}
+  {fixedLayout}
   {expandable}
   {batchExpansion}
   {selectable}
