@@ -37,6 +37,21 @@
   export let disabled = false;
 
   /**
+   * Set to `true` to show a loading spinner on the primary action button
+   * and prevent it from being activated. Unlike `disabled`, the trigger
+   * button is unaffected — the menu can still be opened while the primary
+   * action is in flight.
+   */
+  export let loading = false;
+
+  /**
+   * Specify the accessible description for the primary action's loading
+   * spinner.
+   * @type {string}
+   */
+  export let loadingDescription = undefined;
+
+  /**
    * Specify the size of both buttons and the menu row height.
    * @type {"xs" | "sm" | "md" | "lg"}
    */
@@ -140,6 +155,8 @@
     kind="primary"
     size={TRIGGER_BUTTON_SIZES[size]}
     {disabled}
+    {loading}
+    {loadingDescription}
     class="bx--combo-button__primary-action"
     aria-label={$$restProps["aria-label"] ?? labelText}
     on:click

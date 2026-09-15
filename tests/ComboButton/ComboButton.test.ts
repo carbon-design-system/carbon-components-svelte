@@ -107,6 +107,25 @@ describe("ComboButton", () => {
     ).toBeDisabled();
   });
 
+  it("shows a spinner on the primary action while loading, without disabling the trigger", async () => {
+    render(ComboButtonFixture, {
+      props: { loading: true, loadingDescription: "Saving" },
+    });
+
+    const primaryAction = screen.getByRole("button", { name: "Save" });
+    expect(primaryAction.querySelector(".bx--btn__loading")).not.toBeNull();
+    expect(primaryAction).not.toBeDisabled();
+    expect(primaryAction).toHaveAttribute("aria-disabled", "true");
+
+    const trigger = screen.getByRole("button", { name: "Additional actions" });
+    expect(trigger).not.toBeDisabled();
+    expect(trigger).not.toHaveAttribute("aria-disabled");
+
+    const consoleLog = vi.spyOn(console, "log");
+    await user.click(primaryAction);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+  });
+
   it.each([
     { size: "xs", buttonClass: "bx--btn--sm", menuClass: "bx--menu--xs" },
     { size: "sm", buttonClass: "bx--btn--sm", menuClass: undefined },

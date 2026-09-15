@@ -4,6 +4,9 @@
   import type { ComponentProps } from "svelte";
 
   export let disabled: ComponentProps<ComboButton>["disabled"] = false;
+  export let loading: ComponentProps<ComboButton>["loading"] = false;
+  export let loadingDescription: ComponentProps<ComboButton>["loadingDescription"] =
+    undefined;
   export let size: ComponentProps<ComboButton>["size"] = undefined;
   export let direction: ComponentProps<ComboButton>["direction"] = undefined;
   export let tooltipPosition: ComponentProps<ComboButton>["tooltipPosition"] =
@@ -19,6 +22,8 @@
 <ComboButton
   labelText="Save"
   {disabled}
+  {loading}
+  {loadingDescription}
   {size}
   {direction}
   {tooltipPosition}
