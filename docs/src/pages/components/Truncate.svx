@@ -3,7 +3,7 @@ description: Truncate handles single-line and multiline text overflow, as a comp
 ---
 
 <script>
-  import { Truncate, truncate } from "carbon-components-svelte";
+  import { Truncate, Text, truncate } from "carbon-components-svelte";
 </script>
 
 Truncate offers two ways to clip overflowing text: the `Truncate` component, which wraps content in a `<p>`, and the `truncate` action, which applies the same clipping to any element. For truncating text that also needs a specific Carbon type style, see [Text](/components/Text#truncate).
@@ -32,6 +32,24 @@ Set `lines` above 1 to limit how many lines show. Multiline mode always clamps f
 
 <Truncate lines={3} style="max-width: 20rem">
   The nightly reconciliation job failed after three retries because the upstream billing service returned inconsistent invoice totals for 42 accounts. Support has been notified and a manual review is in progress.
+</Truncate>
+
+### Inline test
+
+Truncating a span mid-sentence needs a normal block ancestor so the truncated text keeps the surrounding line height, otherwise descenders get clipped.
+
+<p style="max-width: 20rem">
+  Deploy failed for image <Truncate tag="span" style="display: inline-block; max-width: 9rem; vertical-align: bottom">ghcr.io/acme-corp/payments-api:2.4.1-rc3</Truncate> during rollout.
+</p>
+
+### Nested text
+
+Set `tag` when the content is itself a block element such as Text, since paragraphs cannot nest.
+
+<Truncate tag="div" style="max-width: 20rem">
+  <Text tag="span">
+    Failed to deploy revision 214: container image ghcr.io/acme-corp/payments-api:2.4.1-rc3 exceeded the memory limit configured for the production namespace.
+  </Text>
 </Truncate>
 
 ## Action
