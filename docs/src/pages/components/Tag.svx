@@ -94,7 +94,7 @@ carbon-components
 
 ### Max width
 
-Set `maxWidth` to a CSS length to ellipsis long labels. A tooltip with the full text appears only when the label is truncated. Accepts any valid CSS length, including `rem`, `px`, `ch`, and `%`.
+Set `maxWidth` to a CSS length to ellipsis long labels. A tooltip with the full text appears only when the label is truncated. Accepts any valid CSS length, including `rem`, `px`, `ch`, and `%`. Interactive and link tags expose the full label through the native `title` attribute on hover instead of a tooltip.
 
 <Stack gap={5}>
   <div>

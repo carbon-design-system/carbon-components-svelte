@@ -91,9 +91,9 @@
   // Fall back to the group's size, then to "default".
   $: resolvedSize = size ?? $groupSize ?? "default";
 
-  // Interactive tags are already buttons, and link tags are already anchors —
-  // wrapping the label in `TooltipDefinition` would nest interactive
-  // elements. Use the native `title` instead.
+  // Interactive tags are already buttons, and link tags are already anchors.
+  // Wrapping the label in `TooltipDefinition` would nest interactive
+  // elements, so use the native `title` instead.
   $: showTruncationTooltip = truncated && !interactive && !href;
   $: nativeTitle =
     truncated && (interactive || href) ? truncationLabel : undefined;
