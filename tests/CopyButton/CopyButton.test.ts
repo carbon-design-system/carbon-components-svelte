@@ -235,6 +235,63 @@ describe("CopyButton", () => {
     });
   });
 
+  describe("hover tooltip delay", () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it("waits enterDelayMs (default 100ms) before showing the hover tooltip", async () => {
+      render(CopyButton);
+      const button = getCopyButton("Basic");
+
+      await fireEvent.mouseEnter(button);
+      expect(document.querySelector(".bx--tooltip-portal__content")).toBeNull();
+
+      await vi.advanceTimersByTimeAsync(100);
+      expect(
+        document.querySelector(".bx--tooltip-portal__content"),
+      ).toHaveTextContent("Basic");
+    });
+
+    it("supports a custom enterDelayMs", async () => {
+      render(CopyButton, { props: { enterDelayMs: 500 } });
+      const button = getCopyButton("Basic");
+
+      await fireEvent.mouseEnter(button);
+      await vi.advanceTimersByTimeAsync(100);
+      expect(document.querySelector(".bx--tooltip-portal__content")).toBeNull();
+
+      await vi.advanceTimersByTimeAsync(400);
+      expect(
+        document.querySelector(".bx--tooltip-portal__content"),
+      ).toHaveTextContent("Basic");
+    });
+
+    it("supports a custom leaveDelayMs", async () => {
+      render(CopyButton, { props: { leaveDelayMs: 500 } });
+      const button = getCopyButton("Basic");
+
+      await fireEvent.mouseEnter(button);
+      await vi.advanceTimersByTimeAsync(100);
+      expect(
+        document.querySelector(".bx--tooltip-portal__content"),
+      ).toHaveTextContent("Basic");
+
+      await fireEvent.mouseLeave(button);
+      await vi.advanceTimersByTimeAsync(300);
+      expect(
+        document.querySelector(".bx--tooltip-portal__content"),
+      ).toBeInTheDocument();
+
+      await vi.advanceTimersByTimeAsync(200);
+      expect(document.querySelector(".bx--tooltip-portal__content")).toBeNull();
+    });
+  });
+
   describe("Portal tooltip", () => {
     it("should add portal-active class when portalTooltip is true", () => {
       render(CopyButton, {
