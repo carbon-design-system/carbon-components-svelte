@@ -30,6 +30,16 @@ Use the `labelChildren` slot for custom label content instead of plain label tex
   <ContainedListItem>Esther Howard</ContainedListItem>
 </ContainedList>
 
+## Hidden label
+
+Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
+
+<ContainedList labelText="Team members" hideLabel>
+  <ContainedListItem>Jane Cooper</ContainedListItem>
+  <ContainedListItem>Devon Lane</ContainedListItem>
+  <ContainedListItem>Esther Howard</ContainedListItem>
+</ContainedList>
+
 ## Sizes
 
 The default size is medium. See variants below for compact and larger layouts.

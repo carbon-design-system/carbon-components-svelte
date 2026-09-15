@@ -20,7 +20,9 @@ describe("ContainedList hideLabel", () => {
   });
 
   it("should still resolve the accessible name when hideLabel is true", () => {
-    render(ContainedList, { props: { hideLabel: true, labelText: "List title" } });
+    render(ContainedList, {
+      props: { hideLabel: true, labelText: "List title" },
+    });
 
     const list = screen.getByRole("list");
     expect(list).toHaveAccessibleName("List title");
