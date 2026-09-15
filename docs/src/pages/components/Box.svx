@@ -138,6 +138,51 @@ Set `width`, `maxWidth`, or `minWidth` to any CSS length. Numbers are treated as
   </Box>
 </div>
 
+## Height
+
+Set `height`, `minHeight`, or `maxHeight` using the same layout scale as
+padding and margin, or pass a string for any CSS length. Set `height` or
+`minHeight` to `"viewport"` to size the box to the full viewport height. The
+`"viewport"` keyword emits a class that sets `100vh` first and `100dvh` after,
+so the box tracks mobile browser chrome instead of clipping under it.
+
+### Scale and custom height
+
+<Stack gap={5}>
+  <Box fill="layer-01" padding={5} height={9}>Scale height (9)</Box>
+  <Box fill="layer-01" padding={5} maxHeight="8rem" style="overflow-y: auto;">
+    Max height in rem (`8rem`), with the rest of this sentence scrolling
+    past the edge of the box so you can see the clip in action.
+  </Box>
+</Stack>
+
+### Viewport height
+
+Set `minHeight="viewport"` to center content in the full height of the
+viewport, such as a sign-in card.
+
+```svelte
+<Box minHeight="viewport">
+  <Stack align="center" justify="center" style="height: 100%">
+    <SignInCard />
+  </Stack>
+</Box>
+```
+
+## Position
+
+Set `position` to `"relative"` or `"sticky"`, then use `top` or `bottom` to
+offset the box using the same layout scale as padding and margin (`0`–`13`),
+or pass a string for any CSS length. A sticky box sticks to the nearest
+scroll container, not the browser viewport.
+
+<Box height="8rem" border="subtle" style="overflow-y: auto;">
+  <Box height="12rem">Scroll to see the sticky box below.</Box>
+  <Box position="sticky" bottom={0} fill="layer-01" padding={3} border="subtle">
+    Sticky footer bar
+  </Box>
+</Box>
+
 ## Custom element
 
 The box renders a `<div>` by default. Set `tag` to use a different element.
@@ -180,6 +225,15 @@ Apply Box utilities directly when you do not need the component. Classes use the
 | `bx--box-mx-{1-13}` | Horizontal margin |
 | `bx--box-my-{1-13}` | Vertical margin |
 | `bx--box-full-width` | Span the full container width |
+| `bx--box-height-{1-13}` | Height |
+| `bx--box-height-viewport` | Full viewport height (`100dvh`, `100vh` fallback) |
+| `bx--box-min-height-{1-13}` | Min height |
+| `bx--box-min-height-viewport` | Full viewport min height (`100dvh`, `100vh` fallback) |
+| `bx--box-max-height-{1-13}` | Max height |
+| `bx--box-position-relative` | `position: relative` |
+| `bx--box-position-sticky` | `position: sticky` |
+| `bx--box-top-{0-13}` | Offset from the top |
+| `bx--box-bottom-{0-13}` | Offset from the bottom |
 
 <div class="bx--box-fill-layer-01 bx--box-p-5 bx--box-border-subtle">
   Styled with utility classes
