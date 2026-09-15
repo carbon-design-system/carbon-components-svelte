@@ -62,6 +62,14 @@ Set a custom starting heading level with `level` on the section. Child sections 
   </Section>
 </Section>
 
+## Visual size
+
+Semantic heading level comes from `Section` context, so every level renders at the same browser default size. Set `type` to a Carbon type token to control the visual size independently of the semantic level, the same tokens `Text` uses.
+
+<Section level={2}>
+  <Heading type="productive-heading-03">Account settings</Heading>
+</Section>
+
 ## Custom section element
 
 The section renders a semantic section element by default. Set `tag` to render a different element (such as div, article, or aside) while keeping automatic heading level management.
