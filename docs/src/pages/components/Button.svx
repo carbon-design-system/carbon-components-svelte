@@ -217,6 +217,78 @@ Set `disabled` to disable the button.
 <Button disabled>Disabled button</Button>
 <Button disabled iconDescription="Tooltip text" icon={Add} />
 
+## Loading
+
+Set `loading` to `true` to display a loading spinner in place of the icon and prevent the button from being activated. Use `loadingDescription` to set the accessible description announced while loading.
+
+Unlike `disabled`, a loading button stays focusable and keeps its place in the tab order, since removing focus from the element a user just activated is disorienting for keyboard and screen reader users. Set `disabled` as well if the button should also be removed from the tab order.
+
+<FileSource src="/framed/Button/ButtonLoading" />
+
+### Small
+
+<Button kind="primary" size="small" loading>Loading</Button>
+<Button kind="secondary" size="small" loading>Loading</Button>
+<Button kind="tertiary" size="small" loading>Loading</Button>
+<Button kind="ghost" size="small" loading>Loading</Button>
+<Button kind="danger" size="small" loading>Loading</Button>
+
+### Field
+
+<Button kind="primary" size="field" loading>Loading</Button>
+<Button kind="secondary" size="field" loading>Loading</Button>
+<Button kind="tertiary" size="field" loading>Loading</Button>
+<Button kind="ghost" size="field" loading>Loading</Button>
+<Button kind="danger" size="field" loading>Loading</Button>
+
+### Large
+
+<Button kind="primary" size="lg" loading>Loading</Button>
+<Button kind="secondary" size="lg" loading>Loading</Button>
+<Button kind="tertiary" size="lg" loading>Loading</Button>
+<Button kind="ghost" size="lg" loading>Loading</Button>
+<Button kind="danger" size="lg" loading>Loading</Button>
+
+### Extra-large
+
+<Button kind="primary" size="xl" loading>Loading</Button>
+<Button kind="secondary" size="xl" loading>Loading</Button>
+<Button kind="tertiary" size="xl" loading>Loading</Button>
+<Button kind="ghost" size="xl" loading>Loading</Button>
+<Button kind="danger" size="xl" loading>Loading</Button>
+
+### Icon-only
+
+<Button kind="primary" icon={Add} iconDescription="Add item" loading />
+<Button kind="secondary" icon={Add} iconDescription="Add item" loading />
+<Button kind="tertiary" icon={Add} iconDescription="Add item" loading />
+<Button kind="ghost" icon={Add} iconDescription="Add item" loading />
+<Button kind="danger" icon={Add} iconDescription="Add item" loading />
+
+### Expressive
+
+<Button expressive loading>Loading</Button>
+<Button expressive kind="secondary" loading>Loading</Button>
+<Button expressive kind="tertiary" loading>Loading</Button>
+<Button expressive kind="ghost" loading>Loading</Button>
+<Button expressive kind="danger" loading>Loading</Button>
+
+### Expressive large
+
+<Button expressive size="lg" loading>Loading</Button>
+<Button expressive size="lg" kind="secondary" loading>Loading</Button>
+<Button expressive size="lg" kind="tertiary" loading>Loading</Button>
+<Button expressive size="lg" kind="ghost" loading>Loading</Button>
+<Button expressive size="lg" kind="danger" loading>Loading</Button>
+
+### Expressive extra-large
+
+<Button expressive size="xl" loading>Loading</Button>
+<Button expressive size="xl" kind="secondary" loading>Loading</Button>
+<Button expressive size="xl" kind="tertiary" loading>Loading</Button>
+<Button expressive size="xl" kind="ghost" loading>Loading</Button>
+<Button expressive size="xl" kind="danger" loading>Loading</Button>
+
 ## Expressive styles
 
 Set `expressive` to `true` to use Carbon's expressive typesetting. Use expressive styles with the default, "lg", or "xl" button sizes.
