@@ -1,5 +1,5 @@
 ---
-components: ["DataTable", "Pagination","Toolbar", "ToolbarContent", "ToolbarSearch", "ToolbarMenu", "ToolbarMenuItem", "ToolbarBatchActions", "ToolbarDensity", "DataTableSkeleton"]
+components: ["DataTable", "Pagination","Toolbar", "ToolbarContent", "ToolbarSearch", "ToolbarMenu", "ToolbarMenuItem", "ToolbarBatchActions", "ToolbarDensity", "ToolbarColumnVisibility", "DataTableSkeleton"]
 description: Data tables display structured data in rows and columns, with sorting, filtering, pagination, virtualization, and row selection and expansion.
 ---
 
@@ -438,11 +438,17 @@ Set `columnHidden` to `true` on a header to skip that column in render while kee
   ]}
 />
 
-### Toggling columns
+### Visibility menu
 
-Flip `columnHidden` on a bound `headers` array from a `ToolbarMenu` to build a column picker.
+Add `ToolbarColumnVisibility` to a `Toolbar` for a ready-made column picker. It edits a bound `headers` array directly, so `DataTable` reflects each choice: picking an item toggles `columnHidden` for that column and keeps the menu open. Press <DocKbd label="Escape" /> to close it, and the last visible column's item is disabled so a table never loses every column. Pass `toggleableKeys` to restrict the menu to a subset of columns; the rest are omitted and keep their current visibility.
 
-<FileSource src="/framed/DataTable/DataTableColumnVisibility" />
+<FileSource src="/framed/DataTable/DataTableToolbarColumnVisibility" />
+
+### Persisting visibility
+
+`headers` can carry functions in `display` and `sort`, so persisting the array itself through `LocalStorage` would silently drop them on the next page load. `toColumnSettings` converts a header array into a small `{ order, hidden }` object instead, safe to serialize; `applyColumnSettings` converts it back onto the original header array, keeping the functions intact. Store the settings object, not the headers, and derive `headers` from it on every change.
+
+<FileSource src="/framed/DataTable/DataTableToolbarColumnVisibilityPersist" />
 
 ## Sticky header
 

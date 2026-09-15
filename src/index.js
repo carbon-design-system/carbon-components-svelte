@@ -55,6 +55,7 @@ export { default as TableHeader } from "./DataTable/TableHeader.svelte";
 export { default as TableRow } from "./DataTable/TableRow.svelte";
 export { default as Toolbar } from "./DataTable/Toolbar.svelte";
 export { default as ToolbarBatchActions } from "./DataTable/ToolbarBatchActions.svelte";
+export { default as ToolbarColumnVisibility } from "./DataTable/ToolbarColumnVisibility.svelte";
 export { default as ToolbarContent } from "./DataTable/ToolbarContent.svelte";
 export { default as ToolbarDensity } from "./DataTable/ToolbarDensity.svelte";
 export { default as ToolbarMenu } from "./DataTable/ToolbarMenu.svelte";
@@ -249,6 +250,12 @@ export { default as UnorderedList } from "./UnorderedList/UnorderedList.svelte";
 export { default as UserAvatar } from "./UserAvatar/UserAvatar.svelte";
 export { default as UserAvatarGroup } from "./UserAvatarGroup/UserAvatarGroup.svelte";
 export { getAvatarBackgroundColor } from "./utils/avatar-color.js";
+export {
+  applyColumnSettings,
+  moveColumn,
+  setColumnHidden,
+  toColumnSettings,
+} from "./utils/column-settings.js";
 export { downloadFile } from "./utils/download-file.js";
 export {
   filterTreeById,
