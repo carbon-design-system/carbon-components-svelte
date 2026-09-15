@@ -249,6 +249,12 @@ export { default as UnorderedList } from "./UnorderedList/UnorderedList.svelte";
 export { default as UserAvatar } from "./UserAvatar/UserAvatar.svelte";
 export { default as UserAvatarGroup } from "./UserAvatarGroup/UserAvatarGroup.svelte";
 export { getAvatarBackgroundColor } from "./utils/avatar-color.js";
+export {
+  applyColumnSettings,
+  moveColumn,
+  setColumnHidden,
+  toColumnSettings,
+} from "./utils/column-settings.js";
 export { downloadFile } from "./utils/download-file.js";
 export {
   filterTreeById,
