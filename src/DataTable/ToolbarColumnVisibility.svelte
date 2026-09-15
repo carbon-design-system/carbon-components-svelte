@@ -49,7 +49,7 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, getContext } from "svelte";
   import ColumnIcon from "../icons/ColumnIcon.svelte";
   import MenuItem from "../Menu/MenuItem.svelte";
   import MenuButton from "../MenuButton/MenuButton.svelte";
@@ -59,6 +59,18 @@
   } from "../utils/column-settings.js";
 
   const dispatch = createEventDispatcher();
+  const toolbarCtx = getContext("carbon:Toolbar") ?? {};
+  const toolbarSize = toolbarCtx.toolbarSize;
+
+  /**
+   * MenuButton's icon-only trigger sizes to a Toolbar's own CSS-driven
+   * width (24/32/48px for xs/sm/default), not to its own "md" (40px)
+   * default; pass the matching size so the menu's seam-hiding bridge
+   * lines up with the trigger's actual rendered width.
+   * @type {Record<"xs" | "sm" | "default", "xs" | "sm" | "lg">}
+   */
+  const MENU_SIZE_BY_TOOLBAR_SIZE = { xs: "xs", sm: "sm", default: "lg" };
+  $: menuSize = MENU_SIZE_BY_TOOLBAR_SIZE[$toolbarSize ?? "default"] ?? "lg";
 
   $: listedHeaders = headers.filter((header) => !header.empty);
   $: toggleableHeaders = toggleableKeys
@@ -81,6 +93,7 @@
   bind:open
   iconOnly
   icon={ColumnIcon}
+  size={menuSize}
   {labelText}
   intrinsicAlign={align}
   {...$$restProps}

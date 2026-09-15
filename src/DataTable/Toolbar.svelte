@@ -57,6 +57,12 @@
     stickyOffset ?? ($isHeaderRendered ? UI_SHELL_HEADER_HEIGHT : 0);
 
   /**
+   * @type {import("svelte/store").Writable<"xs" | "sm" | "default">}
+   */
+  const toolbarSize = writable(effectiveSize);
+  $: toolbarSize.set(effectiveSize);
+
+  /**
    * @type {import("svelte/store").Writable<boolean>}
    */
   const overflowVisible = writable(false);
@@ -84,6 +90,7 @@
     setOverflowVisible,
     batchActionsActive,
     getRef: () => ref,
+    toolbarSize,
   });
 </script>
 

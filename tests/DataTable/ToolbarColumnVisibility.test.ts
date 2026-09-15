@@ -14,6 +14,40 @@ describe("ToolbarColumnVisibility", () => {
     expect(trigger).toHaveAttribute("aria-expanded", "false");
   });
 
+  const toolbarSizeCases: Array<
+    ["default" | "sm" | "xs" | undefined, string[]]
+  > = [
+    [undefined, ["bx--menu--lg"]],
+    // "sm" (a small/short toolbar's trigger width) has no size class of its
+    // own; Menu's unclassed base rule already matches it (32px).
+    ["sm", []],
+    ["xs", ["bx--menu--xs"]],
+  ];
+
+  it.each(toolbarSizeCases)(
+    "matches the menu's seam-hiding bridge width to a %s toolbar's trigger",
+    async (toolbarSize, expectedClasses) => {
+      render(ToolbarColumnVisibilityTest, { props: { toolbarSize } });
+
+      await user.click(
+        screen.getByRole("button", { name: "Column visibility" }),
+      );
+
+      const menu = screen.getByRole("menu");
+      for (const className of [
+        "bx--menu--xs",
+        "bx--menu--md",
+        "bx--menu--lg",
+      ]) {
+        if (expectedClasses.includes(className)) {
+          expect(menu).toHaveClass(className);
+        } else {
+          expect(menu).not.toHaveClass(className);
+        }
+      }
+    },
+  );
+
   it("opens a menu listing one item per non-empty header", async () => {
     render(ToolbarColumnVisibilityTest);
 
