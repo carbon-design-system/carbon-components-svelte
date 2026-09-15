@@ -242,6 +242,36 @@ describe("Menu", () => {
     });
   });
 
+  it("closes and returns focus to the element focused at open when an item is selected", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(MenuFixture);
+
+    // A plain button takes focus on click, so it is what gets restored.
+    const trigger = screen.getByRole("button", { name: "Trigger" });
+    await user.click(trigger);
+    expect(screen.getAllByRole("menuitem")[0]).toHaveFocus();
+
+    await user.click(screen.getAllByRole("menuitem")[0]);
+
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+    expect(trigger).toHaveFocus();
+    expect(consoleLog).toHaveBeenCalledWith("close", {
+      trigger: "select",
+    });
+  });
+
+  it("closes and returns focus to the anchor when an item is selected via keyboard", async () => {
+    render(MenuFixture);
+
+    const trigger = screen.getByRole("button", { name: "Trigger" });
+    await user.click(trigger);
+
+    await user.keyboard("{Enter}");
+
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+    expect(trigger).toHaveFocus();
+  });
+
   it("closes and returns focus to the anchor on Tab", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(MenuFixture);

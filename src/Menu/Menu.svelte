@@ -122,12 +122,29 @@
   let prevOpen = false;
 
   /**
+   * The element that had focus when the menu opened, restored after an item
+   * is selected. A keyboard-opened menu hands focus back to the trigger; a
+   * mouse-opened one (whose trigger suppresses mousedown focus) restores
+   * nothing, so the trigger doesn't light up with a focus ring or tooltip.
+   * @type {null | HTMLElement}
+   */
+  let focusReturn = null;
+
+  /**
    * @type {(trigger: "escape-key" | "outside-click" | "select") => void}
    */
   function close(trigger) {
     if (!open) return;
     open = false;
-    if (trigger === "escape-key") anchor?.focus({ preventScroll: true });
+    if (trigger === "escape-key") {
+      anchor?.focus({ preventScroll: true });
+    } else if (
+      trigger === "select" &&
+      focusReturn &&
+      focusReturn !== document.body
+    ) {
+      focusReturn.focus({ preventScroll: true });
+    }
     dispatch("close", { trigger });
   }
 
@@ -178,6 +195,8 @@
   $: {
     if (open && !prevOpen) {
       focusIndex = -1;
+      const { activeElement } = document;
+      focusReturn = activeElement instanceof HTMLElement ? activeElement : null;
       tick().then(() => {
         if (!open) return;
         const firstItem = ref?.querySelector(NON_DISABLED_MENUITEM_SELECTOR);
