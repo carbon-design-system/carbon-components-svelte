@@ -11,6 +11,12 @@
    */
   export let lines = 1;
 
+  /**
+   * Specify the tag name.
+   * @type {keyof HTMLElementTagNameMap}
+   */
+  export let tag = "p";
+
   $: multiline = lines > 1;
   $: style = multiline
     ? `--ccs-truncate-lines: ${lines};${
@@ -19,7 +25,8 @@
     : $$restProps.style;
 </script>
 
-<p
+<svelte:element
+  this={tag}
   class:bx--text-truncate--end={!multiline && clamp === "end"}
   class:bx--text-truncate--front={!multiline && clamp === "front"}
   class:bx--text-truncate--multiline={multiline}
@@ -27,4 +34,4 @@
   {style}
 >
   <slot />
-</p>
+</svelte:element>
