@@ -125,8 +125,23 @@
    */
   export let portalTooltip = undefined;
 
+  /**
+   * Set to `true` to display a loading spinner in place of the icon
+   * and prevent the button from being activated.
+   * Unlike `disabled`, the button remains focusable; use `disabled`
+   * as well if it should also be removed from the tab order.
+   */
+  export let loading = false;
+
+  /**
+   * Specify the accessible description for the loading spinner.
+   * @type {string}
+   */
+  export let loadingDescription = undefined;
+
   import { getContext, onMount } from "svelte";
   import { get } from "svelte/store";
+  import Loading from "../Loading/Loading.svelte";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
   import { noop } from "../utils/noop.js";
@@ -141,7 +156,9 @@
   // announce as the accessible name via the assistive-text span; skip the
   // whole tooltip apparatus and let the consumer's own aria-label/
   // aria-labelledby (passed through $$restProps) carry accessibility instead.
-  $: hasTooltipContent = hasIconOnly && Boolean(iconDescription);
+  // While loading, Loading's own <title> + aria-live carries the accessible
+  // name instead, so the tooltip is suppressed to avoid double-announcing.
+  $: hasTooltipContent = hasIconOnly && Boolean(iconDescription) && !loading;
   $: effectivePortalTooltip =
     portalTooltip === undefined ? !!insideModal : portalTooltip;
   $: usePortal = hasTooltipContent && !hideTooltip && effectivePortalTooltip;
@@ -292,7 +309,15 @@
     };
   });
 
+  // Native `disabled` is reserved for the `disabled` prop. `loading` alone
+  // never sets it: disabling the element the user just clicked steals focus
+  // (browsers move it to <body>), which is jarring for keyboard/screen
+  // reader users mid-submit. Loading instead keeps the element focusable,
+  // marks it with aria-disabled, and blocks the click itself (see
+  // handleClick) — the same pattern Modal's primaryButtonLoading already
+  // uses, minus the focus loss.
   $: isDisabled = Boolean(disabled);
+  $: isVisuallyDisabled = isDisabled || loading;
   $: effectiveSize = $$slots.badge
     ? "lg"
     : (size ?? $actionSetSize ?? "default");
@@ -300,6 +325,14 @@
     "aria-hidden": "true",
     class: "bx--btn__icon",
   };
+
+  function handleClick(event) {
+    if (loading) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }
+  }
+
   $: buttonProps = {
     type: href && !isDisabled ? undefined : type,
     tabindex,
@@ -311,6 +344,8 @@
         : undefined,
     "aria-pressed":
       hasIconOnly && kind === "ghost" && !href ? isSelected : undefined,
+    "aria-busy": loading || undefined,
+    "aria-disabled": loading || undefined,
     ...$$restProps,
     class: [
       "bx--btn",
@@ -320,7 +355,7 @@
       effectiveSize === "lg" && "bx--btn--lg",
       effectiveSize === "xl" && "bx--btn--xl",
       kind && `bx--btn--${kind}`,
-      isDisabled && "bx--btn--disabled",
+      isVisuallyDisabled && "bx--btn--disabled",
       hasIconOnly && "bx--btn--icon-only",
       hasTooltip && "bx--tooltip__trigger",
       hasTooltip && "bx--tooltip--a11y",
@@ -358,6 +393,7 @@
       <a
         bind:this={ref}
         {...buttonProps}
+        on:click={handleClick}
         on:click
         on:mousedown
         on:focus
@@ -372,13 +408,21 @@
         on:mouseleave={handleMouseleave}
         on:mouseleave={handlePortalMouseLeave}
       >
-        {#if hasIconOnly && iconDescription}
+        {#if hasIconOnly && iconDescription && !loading}
           <span class:bx--assistive-text={true} style:pointer-events="none">
             {iconDescription}
           </span>
         {/if}
         <slot />
-        {#if $$slots.icon}
+        {#if loading}
+          <Loading
+            small
+            withOverlay={false}
+            description={loadingDescription}
+            class="bx--btn__loading"
+            style={hasIconOnly ? "margin-left: 0" : undefined}
+          />
+        {:else if $$slots.icon}
           <slot
             name="icon"
             style={hasIconOnly ? "margin-left: 0" : undefined}
@@ -398,6 +442,7 @@
     <a
       bind:this={ref}
       {...buttonProps}
+      on:click={handleClick}
       on:click
       on:mousedown
       on:focus
@@ -412,13 +457,21 @@
       on:mouseleave={handleMouseleave}
       on:mouseleave={handlePortalMouseLeave}
     >
-      {#if hasIconOnly && iconDescription}
+      {#if hasIconOnly && iconDescription && !loading}
         <span class:bx--assistive-text={true} style:pointer-events="none">
           {iconDescription}
         </span>
       {/if}
       <slot />
-      {#if $$slots.icon}
+      {#if loading}
+        <Loading
+          small
+          withOverlay={false}
+          description={loadingDescription}
+          class="bx--btn__loading"
+          style={hasIconOnly ? "margin-left: 0" : undefined}
+        />
+      {:else if $$slots.icon}
         <slot
           name="icon"
           style={hasIconOnly ? "margin-left: 0" : undefined}
@@ -439,6 +492,7 @@
       type="button"
       bind:this={ref}
       {...buttonProps}
+      on:click={handleClick}
       on:click
       on:mousedown
       on:focus
@@ -453,13 +507,21 @@
       on:mouseleave={handleMouseleave}
       on:mouseleave={handlePortalMouseLeave}
     >
-      {#if hasIconOnly && iconDescription}
+      {#if hasIconOnly && iconDescription && !loading}
         <span class:bx--assistive-text={true} style:pointer-events="none">
           {iconDescription}
         </span>
       {/if}
       <slot />
-      {#if $$slots.icon}
+      {#if loading}
+        <Loading
+          small
+          withOverlay={false}
+          description={loadingDescription}
+          class="bx--btn__loading"
+          style={hasIconOnly ? "margin-left: 0" : undefined}
+        />
+      {:else if $$slots.icon}
         <slot
           name="icon"
           style={hasIconOnly ? "margin-left: 0" : undefined}
@@ -480,6 +542,7 @@
     type="button"
     bind:this={ref}
     {...buttonProps}
+    on:click={handleClick}
     on:click
     on:mousedown
     on:focus
@@ -494,13 +557,21 @@
     on:mouseleave={handleMouseleave}
     on:mouseleave={handlePortalMouseLeave}
   >
-    {#if hasIconOnly && iconDescription}
+    {#if hasIconOnly && iconDescription && !loading}
       <span class:bx--assistive-text={true} style:pointer-events="none">
         {iconDescription}
       </span>
     {/if}
     <slot />
-    {#if $$slots.icon}
+    {#if loading}
+      <Loading
+        small
+        withOverlay={false}
+        description={loadingDescription}
+        class="bx--btn__loading"
+        style={hasIconOnly ? "margin-left: 0" : undefined}
+      />
+    {:else if $$slots.icon}
       <slot
         name="icon"
         style={hasIconOnly ? "margin-left: 0" : undefined}
