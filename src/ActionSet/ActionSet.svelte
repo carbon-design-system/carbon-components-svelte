@@ -19,6 +19,12 @@
    */
   export let disableStacking = false;
 
+  /**
+   * Set to `true` to stick the action set to the bottom of its nearest
+   * scroll container, for example a save bar under a long form.
+   */
+  export let sticky = false;
+
   import { onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
   import ButtonSet from "../Button/ButtonSet.svelte";
@@ -67,6 +73,7 @@
     "bx--action-set",
     `bx--action-set--${size}`,
     stacking && "bx--action-set--stacking",
+    sticky && "bx--action-set--sticky",
     !stacking && actionCount === 1 && "bx--action-set--row-single",
     !stacking && actionCount === 2 && "bx--action-set--row-double",
     !stacking && actionCount === 3 && "bx--action-set--row-triple",
