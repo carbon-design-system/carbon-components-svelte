@@ -543,3 +543,26 @@
 @include exports('button') {
   @include button;
 }
+
+// carbon-components-svelte patch (button-full-width)
+
+/// Full width button, overriding the button's max-width caps
+/// @access private
+/// @group components
+@mixin button-full-width {
+  .#{$prefix}--btn--full-width {
+    width: 100%;
+    max-width: none;
+  }
+
+  // After `.bx--btn-set .bx--btn` (same specificity) so full-width wins by
+  // order when the button also sits inside a ButtonSet/ActionSet, which
+  // would otherwise cap it back to 196px.
+  .#{$prefix}--btn-set .#{$prefix}--btn--full-width {
+    max-width: none;
+  }
+}
+
+@include exports('button-full-width') {
+  @include button-full-width;
+}
