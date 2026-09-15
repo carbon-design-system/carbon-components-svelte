@@ -1743,6 +1743,12 @@ Set `radio` to `true` for single-row selection. Bind selectedRowIds to track the
 
 <FileSource src="/framed/DataTable/RadioSelectableDataTable" />
 
+### Clearing the selection
+
+Set `selectedRowIds` to an empty array to clear a radio selection programmatically, for example from a "Clear selection" button. Set `allowDeselect` to `true` so clicking the already-selected row also clears it.
+
+<FileSource src="/framed/DataTable/DataTableRadioClearSelection" />
+
 ### Non-selectable
 
 Use `nonSelectableRowIds` to prevent selection of specific rows.
