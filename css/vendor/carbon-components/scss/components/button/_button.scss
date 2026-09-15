@@ -480,6 +480,8 @@
     width: 100%;
     // 196px from design kit
     max-width: to-rem(196px);
+    flex: 1 1 0; // ccs: allow shrink below max-width
+    min-width: 0; // ccs: allow shrink below max-width
 
     &:not(:focus) {
       box-shadow: to-rem(-1px) 0 0 0 $button-separator;
