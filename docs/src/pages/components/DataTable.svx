@@ -351,11 +351,9 @@ title="Load balancers" description="Your organization's active load balancers."
 
 ### Custom columns
 
-Specify `width` or `minWidth` in `headers` to size a column. Unsized columns share the remaining space and grow to fit their content; a sized column stays at least that wide.
+Specify `width` or `minWidth` in `headers` to size a column. Unsized columns share the remaining space and grow to fit their content; a sized column stays at least that wide. This works with a [sticky header](#sticky-header).
 
 Set `fixedLayout` to `true` to take each header's `width` as the column's exact rendered size instead of a floor content can grow past. Unsized columns then share the remainder equally.
-
-Custom column widths do not work with a [sticky header](#sticky-header).
 
 <FileSource src="/framed/DataTable/DataTableHeaderWidth" />
 
