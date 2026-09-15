@@ -117,6 +117,12 @@ Set `primaryButtonLoading` while an async submit is in progress. The primary but
 
 <FileSource src="/framed/Modal/ModalPrimaryButtonLoading" />
 
+### Secondary button loading
+
+Secondary buttons support their own, independent loading state, useful when a secondary action (such as "Save as draft") is itself async. For `secondaryButtons`, set `loading` (and optionally `loadingDescription`) on the entry; for `secondaryButtonText`, use `secondaryButtonLoading` and `secondaryButtonLoadingDescription`. A loading secondary button shows its own `InlineLoading` spinner and becomes non-interactive, independent of `primaryButtonLoading`.
+
+<FileSource src="/framed/Modal/ModalSecondaryButtonLoading" />
+
 ## Stacking modals
 
 Show more than one modal at a time.

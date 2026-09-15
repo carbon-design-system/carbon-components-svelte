@@ -88,6 +88,12 @@ Set `primaryButtonLoading` on `ModalFooter` while an async submit is in progress
 
 <FileSource src="/framed/Modal/ComposedModalPrimaryButtonLoading" />
 
+### Secondary button loading
+
+Secondary buttons support their own, independent loading state, useful when a secondary action (such as "Save as draft") is itself async. For `secondaryButtons`, set `loading` (and optionally `loadingDescription`) on the entry; for `secondaryButtonText`, use `secondaryButtonLoading` and `secondaryButtonLoadingDescription` on `ModalFooter`. A loading secondary button shows its own `InlineLoading` spinner and becomes non-interactive, independent of `primaryButtonLoading`.
+
+<FileSource src="/framed/Modal/ComposedModalSecondaryButtonLoading" />
+
 ## Progress
 
 Combine the composed modal with a progress indicator to create a multi-step flow within a modal. Use the modal footer's default slot to render Cancel (ghost), Previous (secondary), and Next (primary) buttons. Track the current step to control which content is displayed and update the button label on the final step.
