@@ -21,4 +21,9 @@ test.describe("ContainedList", () => {
     await page.getByRole("button", { name: "Item 2" }).click();
     await expect(page.getByTestId("clicked-item")).toHaveText("2");
   });
+
+  test("link item has no native underline", async ({ page }) => {
+    const link = page.getByTestId("link-item");
+    await expect(link).toHaveCSS("text-decoration-line", "none");
+  });
 });

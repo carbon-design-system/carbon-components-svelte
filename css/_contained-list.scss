@@ -152,6 +152,8 @@
     @include button-reset;
 
     text-align: left;
+    text-decoration: none;
+    color: inherit;
     transition: background-color 150ms;
   }
 
