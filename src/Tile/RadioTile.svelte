@@ -16,6 +16,9 @@
   /** Set to `true` to disable the tile */
   export let disabled = false;
 
+  /** Set to `true` to stretch the tile to fill the height of its container */
+  export let fullHeight = false;
+
   /** Set to `true` to mark the field as required */
   export let required = false;
 
@@ -104,6 +107,7 @@
   class:bx--tile--is-selected={checked}
   class:bx--tile--light={light}
   class:bx--tile--disabled={disabled}
+  class:bx--tile--full-height={fullHeight}
   {...labelRestProps}
   on:click
   on:mouseover
