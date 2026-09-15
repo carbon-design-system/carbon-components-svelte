@@ -39,6 +39,7 @@ export { default as ContextMenuGroup } from "./ContextMenu/ContextMenuGroup.svel
 export { default as ContextMenuOption } from "./ContextMenu/ContextMenuOption.svelte";
 export { default as ContextMenuRadioGroup } from "./ContextMenu/ContextMenuRadioGroup.svelte";
 export { default as CopyButton } from "./CopyButton/CopyButton.svelte";
+export { copy } from "./CopyButton/copy.js";
 export { default as CopyInput } from "./CopyInput/CopyInput.svelte";
 export { default as CopyInputSkeleton } from "./CopyInput/CopyInputSkeleton.svelte";
 export { default as FluidCopyInputSkeleton } from "./CopyInput/FluidCopyInputSkeleton.svelte";
@@ -248,6 +249,7 @@ export { default as SkipToContent } from "./UIShell/SkipToContent.svelte";
 export { default as UnorderedList } from "./UnorderedList/UnorderedList.svelte";
 export { default as UserAvatar } from "./UserAvatar/UserAvatar.svelte";
 export { default as UserAvatarGroup } from "./UserAvatarGroup/UserAvatarGroup.svelte";
+export { copyText } from "./utils/copy-text.js";
 export { downloadFile } from "./utils/download-file.js";
 export {
   filterTreeById,

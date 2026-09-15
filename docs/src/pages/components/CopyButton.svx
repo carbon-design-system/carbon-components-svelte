@@ -1,5 +1,5 @@
 ---
-description: Copy buttons copy text to the clipboard as a standalone control, for links, table cells, and other one-off copy actions.
+description: Copy buttons copy text to the clipboard as a standalone control, for links, table cells, and other one-off copy actions; the copy action does the same on any element.
 ---
 
 <script>
@@ -123,3 +123,21 @@ The "Copied!" feedback tooltip is rendered in a floating portal by default, so i
 Because the feedback tooltip is portalled by default, it is not clipped inside a [Modal](/components/Modal). Set `portalTooltip` to `false` to use the inline caret.
 
 <FileSource src="/framed/CopyButton/CopyButtonInModal" />
+
+## Action
+
+Use `copy` to apply the same clipboard write, fallback, double-click guard, and feedback timing to an element you already own, without adopting the `CopyButton` markup. The node exposes `data-copy-state` (`pending`, `copied`, or `error`) and `aria-busy` for styling. On a `<button>`, Enter and Space already trigger a click; a non-button host needs its own key handling to be operable by keyboard.
+
+### Basic
+
+Pass `text` to copy a fixed string on click.
+
+### Resolve text on click
+
+Pass `getText` to resolve the text when the node is clicked, for example a token fetched from an API. While it is pending, the node gets `aria-busy="true"` and further clicks are ignored.
+
+### Programmatic
+
+Call `copyText` directly from a handler, such as after an async operation completes, without an action at all.
+
+<FileSource src="/framed/CopyButton/CopyButtonAction" />
