@@ -170,6 +170,16 @@
     width: $carbon--spacing-07;
     transform: translateY(-50%);
   }
+
+  // Sticks to the nearest scroll container, not the viewport, so a save
+  // bar under a long form stays visible while the form scrolls.
+  .#{$prefix}--action-set--sticky {
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+    background-color: $background;
+    border-top: 1px solid $ui-03;
+  }
 }
 
 @include exports("action-set") {
