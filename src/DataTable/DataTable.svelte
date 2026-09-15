@@ -306,7 +306,7 @@
    * Provide an object to customize virtualization behavior:
    * - `itemHeight` (default: 48 for medium size, adjusted for size variant): The height in pixels of each row. Specify a custom value when using custom slots with multi-line content or different heights.
    * - `maxVisibleRows` (default: 10): The maximum number of rows to display in the viewport. The container height will be calculated as `itemHeight * maxVisibleRows`. Overridden by `containerHeight` if explicitly provided.
-   * - `containerHeight` (default: calculated from maxVisibleRows): The maximum height in pixels of the table body container. If not provided, calculated from `itemHeight * maxVisibleRows`.
+   * - `containerHeight` (default: calculated from maxVisibleRows): The maximum height in pixels of the table body container. If not provided and `stickyHeader` is `true` with a numeric `stickyHeaderMaxHeight`, that value is used instead so the virtual window matches the visible scroll area; otherwise calculated from `itemHeight * maxVisibleRows`. A string `stickyHeaderMaxHeight` (e.g. `"50vh"`) does not feed virtualization.
    * - `overscan` (default: 3): The number of extra rows to render above and below the viewport for smoother scrolling. Higher values may cause more flickering during very fast scrolling.
    * - `threshold` (default: 100): The minimum number of rows required before virtualization activates. Tables with fewer rows will render all rows normally without virtualization.
    * - `maxItems` (default: undefined): The maximum number of rows to render. When undefined, all visible rows are rendered.
@@ -788,7 +788,9 @@
 
   $: calculatedContainerHeight = virtualConfig
     ? (virtualConfig.containerHeight ??
-      virtualConfig.itemHeight * virtualConfig.maxVisibleRows)
+      (stickyHeader && typeof stickyHeaderMaxHeight === "number"
+        ? stickyHeaderMaxHeight
+        : virtualConfig.itemHeight * virtualConfig.maxVisibleRows))
     : null;
 
   $: virtualScrollContainer = virtualConfig && !stickyHeader;
