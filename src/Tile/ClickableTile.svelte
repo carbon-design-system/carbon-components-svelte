@@ -17,6 +17,9 @@
   /** Set to `true` to stretch the tile to fill the height of its container */
   export let fullHeight = false;
 
+  /** Set to `true` to remove the tile's padding */
+  export let noPadding = false;
+
   /**
    * Set the `href`.
    * @type {string}
@@ -37,6 +40,7 @@
     clicked && "bx--tile--is-clicked",
     light && "bx--tile--light",
     fullHeight && "bx--tile--full-height",
+    noPadding && "bx--tile--no-padding",
     $$restProps.class,
   ]
     .filter(Boolean)

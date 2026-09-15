@@ -273,6 +273,10 @@
   .#{$prefix}--tile--full-height {
     height: 100%;
   }
+
+  .#{$prefix}--tile--no-padding {
+    padding: 0;
+  }
 }
 
 @include exports('tile-full-height') {
