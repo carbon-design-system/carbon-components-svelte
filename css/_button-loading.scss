@@ -1,0 +1,73 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Button `loading` prop (absent from v10; new pattern for this library).
+/// Positions the nested `Loading` spinner in the same footprint
+/// `.bx--btn__icon` already occupies, and recolors its stroke to match the
+/// button's `currentColor` icon fill.
+/// @access private
+/// @group components
+@mixin button-loading {
+  .#{$prefix}--btn__loading {
+    position: absolute;
+    right: to-rem(16px);
+    flex-shrink: 0;
+  }
+
+  .#{$prefix}--btn--icon-only .#{$prefix}--btn__loading {
+    position: static;
+  }
+
+  .#{$prefix}--btn--ghost .#{$prefix}--btn__loading,
+  .#{$prefix}--btn--danger-ghost .#{$prefix}--btn__loading {
+    position: static;
+    line-height: 0;
+    margin-left: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--btn--icon-only.#{$prefix}--btn--ghost .#{$prefix}--btn__loading,
+  .#{$prefix}--btn--icon-only.#{$prefix}--btn--danger-ghost .#{$prefix}--btn__loading {
+    margin-left: 0;
+  }
+
+  .#{$prefix}--btn .#{$prefix}--btn__loading .#{$prefix}--loading__stroke {
+    stroke: currentColor;
+  }
+
+  // Ghost icon-only buttons render their icon in $icon-01/$disabled-03, not
+  // currentColor (see the .bx--btn--ghost.bx--btn--icon-only .bx--btn__icon
+  // fill overrides in components/button/_button.scss) — mirror that for the
+  // spinner stroke.
+  .#{$prefix}--btn--ghost.#{$prefix}--btn--icon-only .#{$prefix}--btn__loading .#{$prefix}--loading__stroke {
+    stroke: $icon-01;
+  }
+
+  // `loading` alone never sets the native `disabled` attribute (see
+  // Button.svelte), so this also has to key off the `.bx--btn--disabled`
+  // class the component still applies for the visual treatment.
+  .#{$prefix}--btn--ghost.#{$prefix}--btn--icon-only[disabled] .#{$prefix}--btn__loading .#{$prefix}--loading__stroke,
+  .#{$prefix}--btn--ghost.#{$prefix}--btn--icon-only.#{$prefix}--btn--disabled .#{$prefix}--btn__loading .#{$prefix}--loading__stroke {
+    stroke: $disabled-03;
+  }
+
+  // Every kind's disabled styling (components/button/_mixins.scss and the
+  // per-kind blocks in _button.scss) zeroes out the focus ring for
+  // `.bx--btn--disabled:focus`, on the assumption that a disabled button can
+  // never actually receive focus. `loading` breaks that assumption — it
+  // applies the same class without the native `disabled` attribute, so the
+  // button stays focusable — meaning `:focus` here can only ever match a
+  // loading button, never a truly disabled one. Restore the same ring an
+  // enabled button gets. Matches `.bx--btn.bx--btn--disabled:focus` (not the
+  // bare class) so this ties the per-kind overrides on specificity and wins
+  // on source order instead of silently losing to them.
+  .#{$prefix}--btn.#{$prefix}--btn--disabled:focus {
+    border-color: $focus;
+    box-shadow: inset 0 0 0 $button-outline-width $focus,
+      inset 0 0 0 $button-border-width $ui-background;
+  }
+}
+
+@include exports("button-loading") {
+  @include button-loading;
+}

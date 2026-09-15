@@ -5,6 +5,7 @@ import { user } from "../utils/user";
 import Button from "./Button.test.svelte";
 import ButtonInActionSetContext from "./ButtonInActionSetContext.test.svelte";
 import ButtonInModal from "./ButtonInModal.test.svelte";
+import ButtonLoading from "./ButtonLoading.test.svelte";
 import ButtonPortalAdjacent from "./ButtonPortalAdjacent.test.svelte";
 import HeaderGlobalActionPortal from "./HeaderGlobalActionPortal.test.svelte";
 
@@ -409,6 +410,101 @@ describe("Button", () => {
     const button = screen.getByRole("button");
     expect(button).toHaveClass("bx--btn--lg");
     expect(button).not.toHaveClass("bx--btn--sm");
+  });
+
+  describe("loading", () => {
+    it("replaces the icon with a spinner and sets aria-busy on an icon-only button", () => {
+      const { container } = render(ButtonLoading, { loading: true });
+
+      const button = screen.getByTestId("btn-icon-only-loading");
+      expect(button).toHaveAttribute("aria-busy", "true");
+      expect(button.querySelector(".bx--btn__icon")).toBeNull();
+      expect(button.querySelector(".bx--btn__loading")).not.toBeNull();
+      expect(container.querySelector("title")).toHaveTextContent("Adding item");
+    });
+
+    it("suppresses the assistive-text span while loading", () => {
+      render(ButtonLoading, { loading: true });
+
+      const button = screen.getByTestId("btn-icon-only-loading");
+      expect(button.querySelector(".bx--assistive-text")).toBeNull();
+    });
+
+    it("renders the spinner trailing the label on a labeled button", () => {
+      render(ButtonLoading, { loading: true });
+
+      const button = screen.getByTestId("btn-labeled-loading");
+      expect(button).toHaveTextContent("Submit");
+      expect(button.querySelector(".bx--btn__loading")).not.toBeNull();
+    });
+
+    it("marks the button aria-disabled but keeps it focusable while loading", () => {
+      render(ButtonLoading, { loading: true });
+
+      const button = screen.getByTestId("btn-labeled-loading");
+      expect(button).not.toBeDisabled();
+      expect(button).toHaveAttribute("aria-disabled", "true");
+      expect(button).toHaveClass("bx--btn--disabled");
+
+      button.focus();
+      expect(button).toHaveFocus();
+    });
+
+    it("keeps href and blocks the click handler while loading", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ButtonLoading, { loading: true });
+
+      const button = screen.getByTestId("btn-href-loading");
+      expect(button.tagName).toBe("A");
+      expect(button).toHaveAttribute("href", "#");
+
+      const clickEvent = new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+      });
+      button.dispatchEvent(clickEvent);
+      expect(clickEvent.defaultPrevented).toBe(true);
+
+      const clickGuardButton = screen.getByTestId("btn-click-guard");
+      await user.click(clickGuardButton);
+      expect(consoleLog).not.toHaveBeenCalled();
+    });
+
+    it("still fires the click handler when not loading", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ButtonLoading, { loading: false });
+
+      const clickGuardButton = screen.getByTestId("btn-click-guard");
+      await user.click(clickGuardButton);
+      expect(consoleLog).toHaveBeenCalledWith("click");
+    });
+
+    it("does not render a spinner when skeleton and loading are both set", () => {
+      render(ButtonLoading, { loading: true });
+
+      const button = screen.getByTestId("btn-skeleton-loading");
+      expect(button).toHaveClass("bx--skeleton");
+      expect(button.querySelector(".bx--btn__loading")).toBeNull();
+    });
+
+    it("does not throw when unmounted while loading", () => {
+      const { unmount } = render(ButtonLoading, { loading: true });
+
+      expect(() => unmount()).not.toThrow();
+    });
+
+    it("toggles the spinner on and off when loading changes", async () => {
+      const { rerender } = render(ButtonLoading, { loading: false });
+
+      const button = screen.getByTestId("btn-labeled-loading");
+      expect(button.querySelector(".bx--btn__loading")).toBeNull();
+
+      await rerender({ loading: true });
+      expect(button.querySelector(".bx--btn__loading")).not.toBeNull();
+
+      await rerender({ loading: false });
+      expect(button.querySelector(".bx--btn__loading")).toBeNull();
+    });
   });
 
   describe("Generics", () => {
