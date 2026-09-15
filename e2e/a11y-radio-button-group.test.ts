@@ -11,9 +11,12 @@ test.describe("RadioButtonGroup a11y", () => {
       .analyze();
     expect(staticResults.violations).toEqual([]);
 
-    await page.getByRole("radio", { name: "Option Two" }).click({
-      force: true,
-    });
+    await page
+      .getByTestId("radio-group-choice")
+      .getByRole("radio", { name: "Option Two" })
+      .click({
+        force: true,
+      });
     await expect(page.getByTestId("selected-value")).toHaveText(
       "Selected: two",
     );

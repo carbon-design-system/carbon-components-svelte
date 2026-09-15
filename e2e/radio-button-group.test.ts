@@ -11,6 +11,7 @@ test.describe("RadioButtonGroup", () => {
 
   test("selects radio button", async ({ page }) => {
     await page
+      .getByTestId("radio-group-choice")
       .getByRole("radio", { name: "Option Two" })
       .evaluate((el: HTMLInputElement) => el.click());
     await expect(page.getByTestId("selected-value")).toContainText("two");
@@ -26,16 +27,51 @@ test.describe("RadioButtonGroup", () => {
   });
 
   test("only one option can be selected at a time", async ({ page }) => {
-    await page
+    const group = page.getByTestId("radio-group-choice");
+    await group
       .getByRole("radio", { name: "Option One" })
       .evaluate((el) => el.click());
-    await page
+    await group
       .getByRole("radio", { name: "Option Two" })
       .evaluate((el) => el.click());
 
     await expect(
-      page.getByRole("radio", { name: "Option One" }),
+      group.getByRole("radio", { name: "Option One" }),
     ).not.toBeChecked();
-    await expect(page.getByRole("radio", { name: "Option Two" })).toBeChecked();
+    await expect(
+      group.getByRole("radio", { name: "Option Two" }),
+    ).toBeChecked();
+  });
+
+  test("allowDeselect clears the selection when clicking the already-selected radio's label", async ({
+    page,
+  }) => {
+    const group = page.getByTestId("radio-group-deselect");
+    const firstLabel = group.locator("label.bx--radio-button__label").first();
+    const firstRadio = group.getByRole("radio", { name: "Option One" });
+
+    await expect(firstRadio).toBeChecked();
+    await firstLabel.click();
+
+    await expect(firstRadio).not.toBeChecked();
+    await expect(page.getByTestId("deselect-selected-value")).toContainText(
+      "Selected: ",
+    );
+  });
+
+  test("allowDeselect still selects a different radio via its label", async ({
+    page,
+  }) => {
+    const group = page.getByTestId("radio-group-deselect");
+    const secondLabel = group.locator("label.bx--radio-button__label").nth(1);
+
+    await secondLabel.click();
+
+    await expect(
+      group.getByRole("radio", { name: "Option Two" }),
+    ).toBeChecked();
+    await expect(
+      group.getByRole("radio", { name: "Option One" }),
+    ).not.toBeChecked();
   });
 });

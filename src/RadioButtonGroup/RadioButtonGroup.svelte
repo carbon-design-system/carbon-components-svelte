@@ -51,6 +51,12 @@
   export let readonly = false;
 
   /**
+   * Set to `true` so clicking an already-selected radio clears the selection
+   * instead of leaving it selected.
+   */
+  export let allowDeselect = false;
+
+  /**
    * Specify the label position.
    * @type {"right" | "left"}
    */
@@ -80,6 +86,7 @@
   const groupName = writable(name);
   const groupRequired = writable(required);
   const groupReadonly = writable(readonly);
+  const groupAllowDeselect = writable(allowDeselect);
   const fallbackHelperId = uniqueId();
   /** @type {import("svelte/store").Writable<string | undefined>} */
   const helperId = writable(undefined);
@@ -102,14 +109,21 @@
     selected = value;
   }
 
+  function deselect() {
+    if (readonly) return;
+    selected = undefined;
+  }
+
   setContext("carbon:RadioButtonGroup", {
     selectedValue,
     groupName: readOnly(groupName),
     groupRequired: readOnly(groupRequired),
     readonly: readOnly(groupReadonly),
+    allowDeselect: readOnly(groupAllowDeselect),
     helperId: readOnly(helperId),
     add,
     update,
+    deselect,
   });
 
   $: if (!readonly) $selectedValue = selected;
@@ -131,6 +145,7 @@
   $: $groupName = name;
   $: $groupRequired = required;
   $: $groupReadonly = readonly;
+  $: $groupAllowDeselect = allowDeselect;
   $: $helperId = helperText
     ? id
       ? `helper-${id}`

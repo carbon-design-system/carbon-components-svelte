@@ -17,6 +17,7 @@
     "horizontal";
   export let id: ComponentProps<RadioButtonGroup>["id"] = undefined;
   export let helperText: ComponentProps<RadioButtonGroup>["helperText"] = "";
+  export let allowDeselect: ComponentProps<RadioButtonGroup>["allowDeselect"] = false;
   export let customClass = "";
   export let useSlot = false;
 </script>
@@ -32,6 +33,7 @@
     {orientation}
     {id}
     {helperText}
+    {allowDeselect}
     class={customClass}
     on:change={(e) => {
       console.log("change", e.detail);
@@ -54,6 +56,7 @@
     {orientation}
     {id}
     {helperText}
+    {allowDeselect}
     class={customClass}
     on:change={(e) => {
       console.log("change", e.detail);
