@@ -1820,6 +1820,12 @@ Set `expandable` to `true` to make rows expandable. Use `expandedRow` to customi
   </svelte:fragment>
 </DataTable>
 
+### Nested tables
+
+Render a `DataTable` inside `expandedRow` to show related rows. Its container gets a distinct background so it reads as nested content instead of more rows of the parent table.
+
+<FileSource src="/framed/DataTable/DataTableExpandableNestedTable" />
+
 ### Custom widths
 
 Setting `width` on a header keeps the expand column at its usual size.
