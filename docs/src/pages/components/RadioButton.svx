@@ -143,6 +143,16 @@ Display non-editable values with `readonly` on RadioButtonGroup.
   <RadioButton labelText="Pro (128 GB)" value="pro" />
 </RadioButtonGroup>
 
+### Deselecting
+
+Radio buttons normally keep one option selected once a choice is made. Set `allowDeselect` on RadioButtonGroup to opt out of that: clicking the already-selected radio clears the selection instead of leaving it selected.
+
+<RadioButtonGroup allowDeselect legendText="Storage tier (disk)" name="plan-deselect" selected="standard">
+  <RadioButton labelText="Free (1 GB)" value="free" />
+  <RadioButton labelText="Standard (10 GB)" value="standard" />
+  <RadioButton labelText="Pro (128 GB)" value="pro" />
+</RadioButtonGroup>
+
 ## Skeleton
 
 Show a loading state for horizontal radio buttons.
