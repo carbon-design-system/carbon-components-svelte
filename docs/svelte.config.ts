@@ -251,12 +251,27 @@ function plugin() {
   /** mdsvex / remark can surface `html` nodes that carry fenced-block metadata on `lang`. */
   async function visitHtml(
     node: { lang?: string; value: string } & import("unist").Node,
+    isWholeParagraph: boolean,
   ) {
+    // A paragraph that *opens* with `<DocKbd ...>` parses as a raw HTML
+    // block instead of a normal paragraph (CommonMark treats a line
+    // starting with a tag as an HTML block), so the whole paragraph becomes
+    // this "html" node directly under its parent (not nested inside a
+    // "paragraph" node) and never gets `carbonify()`'s `<p>` wrapper/class.
+    // Restore both here. A `<DocKbd ...>` used mid-sentence stays nested
+    // inside a real "paragraph" node, which is already wrapped correctly,
+    // so only touch the block-level case.
+    if (NO_PREVIEW_HTML_RE.test(node.value)) {
+      if (isWholeParagraph) {
+        node.value = `<p class="bx--type-body-long-02">${node.value}</p>`;
+      }
+      return;
+    }
+
     if (
       node.lang !== "svelte" &&
       !node.value.startsWith("<FileSource") &&
-      !node.value.startsWith("<script>") &&
-      !NO_PREVIEW_HTML_RE.test(node.value)
+      !node.value.startsWith("<script>")
     ) {
       const scriptBlock = createImports(node.value);
       const { formattedCode, highlightedCode } =
@@ -281,8 +296,12 @@ function plugin() {
 
   return async (tree: Parameters<typeof visit>[0]) => {
     const jobs: Promise<void>[] = [];
-    visit(tree, "html", (node) => {
-      jobs.push(visitHtml(node as Parameters<typeof visitHtml>[0]));
+    visit(tree, "html", (node, _index, parent) => {
+      const isWholeParagraph =
+        (parent as { type?: string } | null)?.type !== "paragraph";
+      jobs.push(
+        visitHtml(node as Parameters<typeof visitHtml>[0], isWholeParagraph),
+      );
     });
     await Promise.all(jobs);
   };
