@@ -65,10 +65,20 @@
 
   const ctx = getContext("carbon:DataTable");
   const tableSize = ctx?.tableSize;
+  const toolbarCtx = getContext("carbon:Toolbar") ?? {};
+  const toolbarSize = toolbarCtx.toolbarSize;
 
   $: selectedId = size ?? $tableSize ?? "medium";
-  $: menuSize =
-    $tableSize === "compact" ? "xs" : $tableSize === "short" ? "sm" : "md";
+
+  /**
+   * MenuButton's icon-only trigger sizes to a Toolbar's own CSS-driven
+   * width (24/32/48px for xs/sm/default), not to its own "md" (40px)
+   * default; pass the matching size so the menu's seam-hiding bridge
+   * lines up with the trigger's actual rendered width.
+   * @type {Record<"xs" | "sm" | "default", "xs" | "sm" | "lg">}
+   */
+  const MENU_SIZE_BY_TOOLBAR_SIZE = { xs: "xs", sm: "sm", default: "lg" };
+  $: menuSize = MENU_SIZE_BY_TOOLBAR_SIZE[$toolbarSize ?? "default"] ?? "lg";
 
   /**
    * @type {(nextSize: "compact" | "short" | "medium" | "tall") => void}
