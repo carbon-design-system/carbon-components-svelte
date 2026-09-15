@@ -1,0 +1,42 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// AspectRatio fill and alignment utility classes.
+/// @access private
+/// @group components
+@mixin aspect-ratio-fill {
+  .#{$prefix}--aspect-ratio--object.#{$prefix}--aspect-ratio--fill > * {
+    width: 100%;
+    height: 100%;
+  }
+
+  $align-items: (
+    start: flex-start,
+    center: center,
+    end: flex-end,
+  );
+
+  @each $name, $value in $align-items {
+    .#{$prefix}--aspect-ratio--object.#{$prefix}--aspect-ratio--align-#{$name} {
+      display: flex;
+      align-items: $value;
+    }
+  }
+
+  $justify-content: (
+    start: flex-start,
+    center: center,
+    end: flex-end,
+  );
+
+  @each $name, $value in $justify-content {
+    .#{$prefix}--aspect-ratio--object.#{$prefix}--aspect-ratio--justify-#{$name} {
+      display: flex;
+      justify-content: $value;
+    }
+  }
+}
+
+@include exports("aspect-ratio-fill") {
+  @include aspect-ratio-fill;
+}
