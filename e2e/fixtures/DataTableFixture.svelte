@@ -66,6 +66,18 @@
   </DataTable>
 </div>
 
+<div data-testid="data-table-expand-nested-table">
+  <DataTable expandable headers={expandHeaders} rows={expandRows}>
+    <svelte:fragment slot="expandedRow" let:row>
+      <DataTable
+        size="compact"
+        headers={[{ key: "detail", value: "Detail" }]}
+        rows={[{ id: `${row.id}-detail`, detail: `Extra row: ${row.name}` }]}
+      />
+    </svelte:fragment>
+  </DataTable>
+</div>
+
 <div data-testid="data-table-prototype-id">
   <DataTable expandable headers={expandHeaders} rows={prototypeIdRows}>
     <svelte:fragment slot="expandedRow" let:row>

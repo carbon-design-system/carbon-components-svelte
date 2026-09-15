@@ -68,6 +68,109 @@ test.describe("DataTable", () => {
     await expect(container).toHaveCSS("padding-bottom", "24px");
   });
 
+  test("expandable: a nested DataTable in the expandedRow slot gets its own background, unlike plain content", async ({
+    page,
+  }) => {
+    const table = page.getByTestId("data-table-expand-nested-table");
+    await table
+      .getByRole("button", { name: "Expand current row" })
+      .first()
+      .click();
+
+    const container = table.locator(".bx--child-row-inner-container").first();
+    const nestedContainer = container.locator(".bx--data-table-container");
+
+    const [containerBg, nestedBg] = await Promise.all([
+      container.evaluate((el) => getComputedStyle(el).backgroundColor),
+      nestedContainer.evaluate((el) => getComputedStyle(el).backgroundColor),
+    ]);
+
+    // The generic child-row wrapper stays transparent (plain expandedRow
+    // content, like the "block padding" example above, keeps the parent
+    // row's background). Only the nested table's own container gets a
+    // distinct background so it does not blend into the parent row.
+    expect(containerBg).toBe("rgba(0, 0, 0, 0)");
+    expect(nestedBg).not.toBe("rgba(0, 0, 0, 0)");
+  });
+
+  test("expandable: a nested DataTable's own header and body cells keep their own backgrounds", async ({
+    page,
+  }) => {
+    const table = page.getByTestId("data-table-expand-nested-table");
+    await table
+      .getByRole("button", { name: "Expand current row" })
+      .first()
+      .click();
+
+    const nestedContainer = table
+      .locator(".bx--child-row-inner-container .bx--data-table-container")
+      .first();
+
+    // Regression: `.bx--data-table tbody th` and similar unscoped
+    // descendant selectors match the nested table's cells too, since a
+    // nested table sits inside the parent table's own tbody. That
+    // misapplied the tbody-row-header token to the nested table's column
+    // headers, making them match its body cells instead of standing out,
+    // and gave them a stray border-top/border-bottom meant for tbody
+    // row-header cells, showing as a thin line above the header row.
+    const th = nestedContainer.locator("thead th").first();
+    const td = nestedContainer.locator("tbody td").first();
+    const [theadBg, tdBg, thBorderTop] = await Promise.all([
+      th.evaluate((el) => getComputedStyle(el).backgroundColor),
+      td.evaluate((el) => getComputedStyle(el).backgroundColor),
+      th.evaluate((el) => getComputedStyle(el).borderTopWidth),
+    ]);
+    expect(theadBg).not.toBe(tdBg);
+    expect(thBorderTop).toBe("0px");
+
+    // Regression: the parent row's own indent
+    // (`padding-left: 3.5rem` on `tr[data-child-row] td`) also uses a bare
+    // `td` descendant selector, which reaches the nested table's own body
+    // cells and pushed them out of alignment with its own header.
+    const [thX, tdX] = await Promise.all([
+      th.evaluate((el) => el.getBoundingClientRect().x),
+      td.evaluate((el) => el.getBoundingClientRect().x),
+    ]);
+    expect(tdX).toBeCloseTo(thX, 0);
+  });
+
+  test("expandable: hovering the parent row does not bleed into a nested DataTable's background", async ({
+    page,
+  }) => {
+    const table = page.getByTestId("data-table-expand-nested-table");
+    await table
+      .getByRole("button", { name: "Expand current row" })
+      .first()
+      .click();
+
+    const nestedTd = table
+      .locator(
+        ".bx--child-row-inner-container .bx--data-table-container tbody td",
+      )
+      .first();
+    const nestedRow = table
+      .locator(
+        ".bx--child-row-inner-container .bx--data-table-container tbody tr",
+      )
+      .first();
+    const outerRow = table.locator("tr.bx--parent-row").first();
+
+    const restingBg = await nestedTd.evaluate(
+      (el) => getComputedStyle(el).backgroundColor,
+    );
+
+    // Regression: the parent row's `:hover` rule for its sibling child row
+    // uses a bare `td` descendant selector, which matches the nested
+    // table's cells too and swapped them to the parent row's hover color,
+    // even though the nested table's own rows were not hovered.
+    await outerRow.hover();
+    await expect(nestedTd).toHaveCSS("background-color", restingBg);
+
+    // The nested table's own row hover still works normally.
+    await nestedRow.hover();
+    await expect(nestedTd).not.toHaveCSS("background-color", restingBg);
+  });
+
   test("expandable: with a checkbox column, expanded content aligns under the row's own text", async ({
     page,
   }) => {
