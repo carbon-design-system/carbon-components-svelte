@@ -88,6 +88,38 @@ describe("ToolbarDensity", () => {
     ).toBeInTheDocument();
   });
 
+  const toolbarSizeCases: Array<
+    ["compact" | "short" | "medium" | "tall" | undefined, string[]]
+  > = [
+    [undefined, ["bx--menu--lg"]],
+    ["compact", ["bx--menu--xs"]],
+    // "short" (a small toolbar's trigger width) has no size class of its
+    // own; Menu's unclassed base rule already matches it (32px).
+    ["short", []],
+  ];
+
+  it.each(toolbarSizeCases)(
+    "matches the menu's seam-hiding bridge width to a %s table's toolbar",
+    async (tableSize, expectedClasses) => {
+      render(ToolbarDensity, { props: { tableSize } });
+
+      await user.click(screen.getByRole("button", { name: "Row height" }));
+
+      const menu = screen.getByRole("menu");
+      for (const className of [
+        "bx--menu--xs",
+        "bx--menu--md",
+        "bx--menu--lg",
+      ]) {
+        if (expectedClasses.includes(className)) {
+          expect(menu).toHaveClass(className);
+        } else {
+          expect(menu).not.toHaveClass(className);
+        }
+      }
+    },
+  );
+
   it("checks Medium by default standalone in a bare Toolbar", async () => {
     render(ToolbarDensity, { props: { standalone: true } });
 
