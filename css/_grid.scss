@@ -1,0 +1,28 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Row and Column cross-axis alignment utility classes.
+/// @access private
+/// @group components
+@mixin grid-align {
+  $align-items: (
+    start: flex-start,
+    center: center,
+    end: flex-end,
+    stretch: stretch,
+  );
+
+  @each $name, $value in $align-items {
+    .#{$prefix}--row--align-#{$name} {
+      align-items: $value;
+    }
+
+    .#{$prefix}--col--align-#{$name} {
+      align-self: $value;
+    }
+  }
+}
+
+@include exports("grid-align") {
+  @include grid-align;
+}
