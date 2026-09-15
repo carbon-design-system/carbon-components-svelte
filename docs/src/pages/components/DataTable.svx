@@ -525,6 +525,12 @@ Pass an object instead of `true` to customize behavior further. Besides the opti
 
 When `stickyHeader` is `false`, bind `scrollContainerRef` to obtain the scrolling element and control its position programmatically, for example resetting scroll to the top after the row data changes.
 
+### With a sticky header
+
+Combine `virtualize` with `stickyHeader` and a numeric `stickyHeaderMaxHeight` to keep the virtual window sized to the visible scroll area.
+
+<FileSource src="/framed/DataTable/VirtualizedStickyHeader" />
+
 ### Custom overscan
 
 Overscanning renders extra rows above and below the viewport for smoother scrolling. The default overscan is 3. Set `overscan` to control how many extra rows are rendered.
