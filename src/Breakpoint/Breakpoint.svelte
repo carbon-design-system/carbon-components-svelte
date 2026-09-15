@@ -29,6 +29,13 @@
     max: false,
   };
 
+  /**
+   * Size assumed before the first measurement (SSR) and when `matchMedia`
+   * is unavailable. `change` does not fire for the fallback.
+   * @type {BreakpointSize}
+   */
+  export let fallback = undefined;
+
   import { createEventDispatcher } from "svelte";
   import { breakpointObserver } from "./breakpoint-observer.js";
   import { breakpoints } from "./breakpoints.js";
@@ -36,7 +43,7 @@
   const dispatch = createEventDispatcher();
   const observer = breakpointObserver();
 
-  $: size = $observer;
+  $: size = $observer ?? fallback;
   $: sizes = {
     sm: size === "sm",
     md: size === "md",
@@ -44,7 +51,7 @@
     xlg: size === "xlg",
     max: size === "max",
   };
-  $: if (size !== undefined)
+  $: if ($observer !== undefined)
     // svelte-ignore reactive_declaration_non_reactive_property
     dispatch("change", { size, breakpointValue: breakpoints[size] });
 </script>
