@@ -39,3 +39,51 @@ test.describe("PasswordInput", () => {
     await expect(input).toHaveAttribute("type", "password");
   });
 });
+
+test.describe("PasswordInput at narrow widths", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 640 });
+    await page.goto("/password-input.html");
+  });
+
+  test("does not cause horizontal overflow", async ({ page }) => {
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth,
+    );
+    expect(overflow).toBeLessThanOrEqual(360);
+  });
+
+  test("shows the tooltip fully within the viewport on hover", async ({
+    page,
+  }) => {
+    const toggle = page.getByRole("button", { name: "Show password" });
+    await toggle.hover();
+
+    const tooltip = page.getByText("Show password");
+    await expect(tooltip).toBeVisible();
+
+    const box = await tooltip.boundingBox();
+    expect(box).not.toBeNull();
+    if (box) {
+      expect(box.x).toBeGreaterThanOrEqual(0);
+      expect(box.x + box.width).toBeLessThanOrEqual(360);
+    }
+  });
+
+  test("shows the tooltip fully within the viewport on focus", async ({
+    page,
+  }) => {
+    const toggle = page.getByRole("button", { name: "Show password" });
+    await toggle.focus();
+
+    const tooltip = page.getByText("Show password");
+    await expect(tooltip).toBeVisible();
+
+    const box = await tooltip.boundingBox();
+    expect(box).not.toBeNull();
+    if (box) {
+      expect(box.x).toBeGreaterThanOrEqual(0);
+      expect(box.x + box.width).toBeLessThanOrEqual(360);
+    }
+  });
+});

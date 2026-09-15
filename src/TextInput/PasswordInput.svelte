@@ -32,7 +32,7 @@
    * Set the alignment of the tooltip relative to the icon.
    * @type {"start" | "center" | "end"}
    */
-  export let tooltipAlignment = "center";
+  export let tooltipAlignment = "end";
 
   /**
    * Set the position of the tooltip relative to the icon.
