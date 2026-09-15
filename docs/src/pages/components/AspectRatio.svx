@@ -82,17 +82,25 @@ Display content with a 1:2 aspect ratio.
   1x2
 </AspectRatio>
 
+## Fill
+
+Set `fill` to `true` so the slotted content stretches to fill the aspect box, instead of sizing to its own content. This replaces setting `height: 100%` by hand on the content.
+
+<AspectRatio ratio="16x9" fill>
+  <Tile>Incident postmortem recording, Q3 outage</Tile>
+</AspectRatio>
+
+## Alignment
+
+Set `align` or `justify` to position content that doesn't fill the aspect box, such as a placeholder icon or short caption. Setting either makes the aspect box a flex container.
+
+<AspectRatio ratio="16x9" align="center" justify="center">
+  <Tile>Centered</Tile>
+</AspectRatio>
+
 ## Usage
 
-Wrap content like tiles, images, or videos in an aspect ratio container to maintain consistent proportions across screen sizes.
-
-### Tile
-
-Wrap a tile or other content in an aspect ratio container to maintain proportions. Content that should fill the container, like a `Tile`, needs `height: 100%` since the container's own height is derived from padding rather than a fixed size.
-
-<AspectRatio ratio="16x9">
-  <Tile style="height: 100%">Incident postmortem recording — Q3 outage</Tile>
-</AspectRatio>
+Wrap content like tiles, images, or videos in an aspect ratio container to maintain consistent proportions across screen sizes. See [Fill](#fill) above for making that content stretch to the container.
 
 ### Grid columns
 
