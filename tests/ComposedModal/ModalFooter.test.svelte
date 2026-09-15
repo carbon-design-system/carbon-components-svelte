@@ -18,6 +18,9 @@
     undefined;
   export let secondaryButtonText: ComponentProps<ModalFooter>["secondaryButtonText"] =
     "";
+  export let secondaryButtonLoading: ComponentProps<ModalFooter>["secondaryButtonLoading"] = false;
+  export let secondaryButtonLoadingDescription: ComponentProps<ModalFooter>["secondaryButtonLoadingDescription"] =
+    "Loading";
   export let secondaryButtons: ComponentProps<ModalFooter>["secondaryButtons"] =
     [];
   export let secondaryClass: ComponentProps<ModalFooter>["secondaryClass"] =
@@ -44,6 +47,8 @@
     {primaryButtonLoadingDescription}
     {primaryClass}
     {secondaryButtonText}
+    {secondaryButtonLoading}
+    {secondaryButtonLoadingDescription}
     {secondaryButtons}
     {secondaryClass}
     {danger}

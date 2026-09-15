@@ -1087,6 +1087,65 @@ describe("Modal", () => {
     });
   });
 
+  describe("secondaryButtonLoading", () => {
+    it("shows InlineLoading and does not dispatch click on click", async () => {
+      const clickSecondaryHandler = vi.fn();
+      render(ModalTest, {
+        props: {
+          open: true,
+          secondaryButtonText: "Cancel",
+          secondaryButtonLoading: true,
+          onclickbuttonsecondary: clickSecondaryHandler,
+        },
+      });
+
+      expect(screen.getByText("Loading")).toBeInTheDocument();
+      const secondaryButton = screen.getByRole("button", { name: /Loading/i });
+      expect(secondaryButton).toBeDisabled();
+      await user.click(secondaryButton);
+
+      expect(clickSecondaryHandler).not.toHaveBeenCalled();
+    });
+
+    it("uses a custom loading description", () => {
+      render(ModalTest, {
+        props: {
+          open: true,
+          secondaryButtonText: "Cancel",
+          secondaryButtonLoading: true,
+          secondaryButtonLoadingDescription: "Cancelling...",
+        },
+      });
+
+      expect(screen.getByText("Cancelling...")).toBeInTheDocument();
+    });
+  });
+
+  describe("secondaryButtons loading", () => {
+    it("shows InlineLoading for a loading entry and disables it", async () => {
+      const clickSecondaryHandler = vi.fn();
+      render(ModalTest, {
+        props: {
+          open: true,
+          secondaryButtons: [
+            { text: "Draft", loading: true, loadingDescription: "Saving..." },
+            { text: "Discard" },
+          ],
+          onclickbuttonsecondary: clickSecondaryHandler,
+        },
+      });
+
+      expect(screen.getByText("Saving...")).toBeInTheDocument();
+      const loadingButton = screen.getByRole("button", { name: /Saving/i });
+      expect(loadingButton).toBeDisabled();
+      await user.click(loadingButton);
+      expect(clickSecondaryHandler).not.toHaveBeenCalled();
+
+      const idleButton = screen.getByRole("button", { name: "Discard" });
+      expect(idleButton).not.toBeDisabled();
+    });
+  });
+
   describe("Generics", () => {
     it("should support custom Icon types with generics", () => {
       type CustomIcon = new (...args: unknown[]) => unknown;
