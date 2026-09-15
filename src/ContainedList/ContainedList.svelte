@@ -22,6 +22,13 @@
   /** Set to `true` for lines between list items to be inset */
   export let inset = false;
 
+  /**
+   * Set to `true` to visually hide the label text.
+   * The label remains available to screen readers.
+   * Has no effect when the "action" slot is used.
+   */
+  export let hideLabel = false;
+
   /** Set an id for the list element */
   export let id = uniqueId();
 
@@ -42,7 +49,11 @@
   class:bx--contained-list--on-page="{kind === 'on-page'}"
   class:bx--contained-list--disclosed="{kind === 'disclosed'}"
 >
-  {#if labelText || $$slots.labelChildren || $$slots.action}
+  {#if hideLabel && !$$slots.action && (labelText || $$slots.labelChildren)}
+    <span id="{labelId}" class:bx--visually-hidden="{true}">
+      <slot name="labelChildren"> {labelText} </slot>
+    </span>
+  {:else if labelText || $$slots.labelChildren || $$slots.action}
     <div
       class:bx--contained-list__header="{true}"
       class:bx--layout--size-sm={kind !== 'disclosed' && size === 'sm'}
@@ -51,7 +62,11 @@
       class:bx--layout--size-xl={kind !== 'disclosed' && size === 'xl'}
     >
       {#if labelText || $$slots.labelChildren}
-        <div id="{labelId}" class:bx--contained-list__label="{true}">
+        <div
+          id="{labelId}"
+          class:bx--contained-list__label="{true}"
+          class:bx--visually-hidden={hideLabel}
+        >
           <slot name="labelChildren"> {labelText} </slot>
         </div>
       {/if}
