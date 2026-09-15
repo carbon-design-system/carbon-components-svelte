@@ -3,7 +3,7 @@ description: Tiles provide a container for displaying content in a structured, c
 ---
 
 <script>
-  import { Column, Grid, Row, Tile } from "carbon-components-svelte";
+  import { Box, Column, Grid, Row, Tile } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -36,6 +36,14 @@ tallest column by default but the tile inside does not.
     </Column>
   </Row>
 </Grid>
+
+## No padding
+
+Set `noPadding` to `true` to remove the tile's padding, so media or a chart can bleed to its edge.
+
+<Tile noPadding>
+  <Box fill="layer-03" height="8rem" />
+</Tile>
 
 ## Custom interaction
 
