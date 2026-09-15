@@ -34,6 +34,9 @@
    */
   export let isSelected = false;
 
+  /** Set to `true` to span the full width of the container */
+  export let fullWidth = false;
+
   /**
    * Specify the icon to render.
    * Alternatively, use the named slot "icon".
@@ -355,6 +358,7 @@
       effectiveSize === "lg" && "bx--btn--lg",
       effectiveSize === "xl" && "bx--btn--xl",
       kind && `bx--btn--${kind}`,
+      fullWidth && "bx--btn--full-width",
       isVisuallyDisabled && "bx--btn--disabled",
       hasIconOnly && "bx--btn--icon-only",
       hasTooltip && "bx--tooltip__trigger",
