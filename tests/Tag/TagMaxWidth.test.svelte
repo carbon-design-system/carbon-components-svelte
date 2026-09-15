@@ -4,8 +4,9 @@
   export let maxWidth: string | undefined = "8rem";
   export let filter = false;
   export let interactive = false;
+  export let href: string | undefined = undefined;
   export let label =
     "status:active AND region:us-south AND service:cloud-object-storage";
 </script>
 
-<Tag {maxWidth} {filter} {interactive} on:close>{label}</Tag>
+<Tag {maxWidth} {filter} {interactive} {href} on:close>{label}</Tag>

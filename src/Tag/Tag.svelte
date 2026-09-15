@@ -91,10 +91,12 @@
   // Fall back to the group's size, then to "default".
   $: resolvedSize = size ?? $groupSize ?? "default";
 
-  // Interactive tags are already buttons — wrapping the label in
-  // `TooltipDefinition` would nest buttons. Use the native `title` instead.
-  $: showTruncationTooltip = truncated && !interactive;
-  $: interactiveTitle = truncated && interactive ? truncationLabel : undefined;
+  // Interactive tags are already buttons, and link tags are already anchors —
+  // wrapping the label in `TooltipDefinition` would nest interactive
+  // elements. Use the native `title` instead.
+  $: showTruncationTooltip = truncated && !interactive && !href;
+  $: nativeTitle =
+    truncated && (interactive || href) ? truncationLabel : undefined;
 
   async function measureTruncation() {
     const token = ++measureToken;
@@ -117,6 +119,7 @@
     void maxWidth;
     void filter;
     void interactive;
+    void href;
     void type;
     void resolvedSize;
     measureTruncation();
@@ -236,10 +239,12 @@
     aria-disabled={disabled || undefined}
     rel={$$restProps.target === "_blank" ? "noopener noreferrer" : undefined}
     data-overflow={groupOverflow ? "true" : undefined}
+    title={nativeTitle}
     class:bx--tag={true}
     class:bx--tag--inline={inline}
     class:bx--tag--interactive={true}
     class:bx--tag--disabled={disabled}
+    class:bx--tag--truncate={maxWidth != null}
     class:bx--tag--sm={resolvedSize === "sm"}
     class:bx--tag--lg={resolvedSize === "lg"}
     class:bx--tag--red={type === "red"}
@@ -255,6 +260,7 @@
     class:bx--tag--high-contrast={type === "high-contrast"}
     class:bx--tag--outline={type === "outline"}
     {...$$restProps}
+    style:max-width={maxWidth}
     on:click
     on:mouseover
     on:mouseenter
@@ -275,7 +281,7 @@
     {disabled}
     aria-disabled={disabled}
     tabindex={disabled ? "-1" : undefined}
-    title={interactiveTitle}
+    title={nativeTitle}
     data-overflow={groupOverflow ? "true" : undefined}
     class:bx--tag={true}
     class:bx--tag--inline={inline}
