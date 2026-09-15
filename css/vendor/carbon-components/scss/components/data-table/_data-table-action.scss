@@ -302,6 +302,7 @@
       clip-path $duration--fast-02 motion(standard, productive),
       opacity $duration--fast-02 motion(standard, productive);
     will-change: transform;
+    overflow: hidden; // ccs: hidden bar must not widen the page
   }
 
   .#{$prefix}--batch-actions:focus {
