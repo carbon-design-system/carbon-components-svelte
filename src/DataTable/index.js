@@ -10,6 +10,7 @@ export { default as TableHeader } from "./TableHeader.svelte";
 export { default as TableRow } from "./TableRow.svelte";
 export { default as Toolbar } from "./Toolbar.svelte";
 export { default as ToolbarBatchActions } from "./ToolbarBatchActions.svelte";
+export { default as ToolbarColumnVisibility } from "./ToolbarColumnVisibility.svelte";
 export { default as ToolbarContent } from "./ToolbarContent.svelte";
 export { default as ToolbarDensity } from "./ToolbarDensity.svelte";
 export { default as ToolbarMenu } from "./ToolbarMenu.svelte";
