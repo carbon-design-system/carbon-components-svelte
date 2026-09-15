@@ -3,7 +3,7 @@ description: Tiles provide a container for displaying content in a structured, c
 ---
 
 <script>
-  import { Tile } from "carbon-components-svelte";
+  import { Column, Grid, Row, Tile } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -17,6 +17,25 @@ Create a basic tile container for your content.
 Use the light variant for light backgrounds.
 
 <Tile light>Object storage — 82% capacity used</Tile>
+
+## Full height
+
+Set `fullHeight` to `true` so the tile fills the height of its container. This
+is useful for tiles placed in a `Row`, where sibling columns stretch to the
+tallest column by default but the tile inside does not.
+
+<Grid>
+  <Row>
+    <Column>
+      <Tile fullHeight>Requests per minute: 4,201</Tile>
+    </Column>
+    <Column>
+      <Tile fullHeight
+        >Error rate: 0.3% over the last hour, down from 0.8% yesterday</Tile
+      >
+    </Column>
+  </Row>
+</Grid>
 
 ## Custom interaction
 
