@@ -15,6 +15,7 @@
     undefined;
   export let open: ComponentProps<ToolbarColumnVisibility>["open"] = false;
   export let change: ((event: CustomEvent) => void) | undefined = undefined;
+  export let toolbarSize: ComponentProps<Toolbar>["size"] = undefined;
 
   const rows = [
     { id: "a", name: "Load Balancer 1", protocol: "HTTP", port: 443 },
@@ -28,7 +29,7 @@
 </div>
 
 <DataTable {headers} {rows}>
-  <Toolbar>
+  <Toolbar size={toolbarSize}>
     <ToolbarContent>
       <ToolbarColumnVisibility
         bind:headers
