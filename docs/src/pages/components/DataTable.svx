@@ -351,9 +351,7 @@ title="Load balancers" description="Your organization's active load balancers."
 
 ### Custom columns
 
-Specify width or minWidth in `headers` to set column dimensions. This applies a fixed table layout.
-
-Custom column widths do not work with a [sticky header](#sticky-header).
+Specify width or minWidth in `headers` to set column dimensions. This applies a fixed table layout, and works with a [sticky header](#sticky-header).
 
 <FileSource src="/framed/DataTable/DataTableHeaderWidth" />
 
