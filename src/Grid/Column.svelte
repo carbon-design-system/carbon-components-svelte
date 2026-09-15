@@ -73,6 +73,12 @@
    */
   export let max = undefined;
 
+  /**
+   * Set the cross-axis self-alignment of the column within its row.
+   * @type {"start" | "center" | "end" | "stretch" | undefined}
+   */
+  export let align = undefined;
+
   const breakpoints = ["sm", "md", "lg", "xlg", "max"];
 
   $: columnClass = [sm, md, lg, xlg, max]
@@ -114,6 +120,7 @@
       noGutterRight && "bx--no-gutter--right",
       aspectRatio && `bx--aspect-ratio bx--aspect-ratio--${aspectRatio}`,
       padding && "bx--col-padding",
+      align && `bx--col--align-${align}`,
     ]
       .filter(Boolean)
       .join(" "),

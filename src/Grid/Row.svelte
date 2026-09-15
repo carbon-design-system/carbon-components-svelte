@@ -34,6 +34,12 @@
   /** Set to `true` to add top and bottom padding to all columns */
   export let padding = false;
 
+  /**
+   * Set the cross-axis alignment of the columns in the row.
+   * @type {"start" | "center" | "end" | "stretch" | undefined}
+   */
+  export let align = undefined;
+
   $: props = {
     ...$$restProps,
     class: [
@@ -45,6 +51,7 @@
       noGutterLeft && "bx--no-gutter--left",
       noGutterRight && "bx--no-gutter--right",
       padding && "bx--row-padding",
+      align && `bx--row--align-${align}`,
     ]
       .filter(Boolean)
       .join(" "),
