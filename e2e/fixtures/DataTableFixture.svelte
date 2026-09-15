@@ -48,6 +48,16 @@
     { id: "r2", name: "Item B" },
     { id: "r3", name: "Item C" },
   ];
+
+  const radioHeaders = [{ key: "name", value: "Product" }];
+
+  const radioRows = [
+    { id: "q1", name: "Item A" },
+    { id: "q2", name: "Item B" },
+    { id: "q3", name: "Item C" },
+  ];
+
+  let radioSelectedRowIds = ["q1"];
 </script>
 
 <div data-testid="data-table-basic">
@@ -105,4 +115,14 @@
 
 <div data-testid="data-table-select-range">
   <DataTable selectable headers={selectRangeHeaders} rows={selectRangeRows} />
+</div>
+
+<div data-testid="data-table-radio-deselect">
+  <DataTable
+    radio
+    allowDeselect
+    headers={radioHeaders}
+    rows={radioRows}
+    bind:selectedRowIds={radioSelectedRowIds}
+  />
 </div>

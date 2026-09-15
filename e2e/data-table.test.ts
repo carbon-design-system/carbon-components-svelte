@@ -231,4 +231,45 @@ test.describe("DataTable", () => {
     await expect(checkboxes.nth(1)).toBeChecked();
     await expect(checkboxes.nth(2)).toBeChecked();
   });
+
+  test("radio: allowDeselect clears the selection when clicking the already-selected row's label", async ({
+    page,
+  }) => {
+    const table = page.getByTestId("data-table-radio-deselect");
+    const firstRowLabel = table
+      .locator('tr[data-row="q1"] label.bx--radio-button__label')
+      .first();
+    const firstRowRadio = table.locator(
+      'tr[data-row="q1"] input[type="radio"]',
+    );
+
+    // A real (unforced) click goes through the visible label, which the
+    // browser re-dispatches onto the hidden input. That is the path a real
+    // user takes and force-clicking the input directly does not exercise.
+    await expect(firstRowRadio).toBeChecked();
+    await firstRowLabel.click();
+
+    await expect(firstRowRadio).not.toBeChecked();
+    await expect(table.locator('input[type="radio"]:checked')).toHaveCount(0);
+  });
+
+  test("radio: clicking a different row's label still selects it", async ({
+    page,
+  }) => {
+    const table = page.getByTestId("data-table-radio-deselect");
+    const secondRowLabel = table
+      .locator('tr[data-row="q2"] label.bx--radio-button__label')
+      .first();
+    const secondRowRadio = table.locator(
+      'tr[data-row="q2"] input[type="radio"]',
+    );
+    const firstRowRadio = table.locator(
+      'tr[data-row="q1"] input[type="radio"]',
+    );
+
+    await secondRowLabel.click();
+
+    await expect(secondRowRadio).toBeChecked();
+    await expect(firstRowRadio).not.toBeChecked();
+  });
 });
