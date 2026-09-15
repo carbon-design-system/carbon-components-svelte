@@ -935,14 +935,10 @@
       {fixedLayout}
       labelledBy={hasTitle ? titleId : undefined}
       describedBy={hasDescription ? descriptionId : undefined}
-      tableStyle={[
-        fixedLayout && "table-layout: fixed",
-        stickyHeader &&
-          stickyHeaderMaxHeight != null &&
-          `max-height: ${typeof stickyHeaderMaxHeight === "number" ? `${stickyHeaderMaxHeight}px` : stickyHeaderMaxHeight}`,
-      ]
-        .filter(Boolean)
-        .join("; ") || undefined}
+      tableStyle={fixedLayout ? "table-layout: fixed" : undefined}
+      containerStyle={stickyHeader && stickyHeaderMaxHeight != null
+        ? `max-height: ${typeof stickyHeaderMaxHeight === "number" ? `${stickyHeaderMaxHeight}px` : stickyHeaderMaxHeight}`
+        : undefined}
     >
       {#if hasCustomHeaderWidth}
         <colgroup>

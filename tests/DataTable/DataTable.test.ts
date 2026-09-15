@@ -1506,7 +1506,7 @@ describe("DataTable", () => {
 
   describe("stickyHeaderMaxHeight", () => {
     it("applies a pixel max-height when stickyHeader is enabled", () => {
-      render(DataTable, {
+      const { container } = render(DataTable, {
         props: {
           headers,
           rows,
@@ -1515,12 +1515,14 @@ describe("DataTable", () => {
         },
       });
 
-      const table = screen.getByRole("table");
-      expect(table).toHaveStyle({ "max-height": "500px" });
+      const innerContainer = container.querySelector(
+        "section.bx--data-table_inner-container",
+      );
+      expect(innerContainer).toHaveStyle({ "max-height": "500px" });
     });
 
     it("applies a CSS length string when stickyHeader is enabled", () => {
-      render(DataTable, {
+      const { container } = render(DataTable, {
         props: {
           headers,
           rows,
@@ -1529,8 +1531,10 @@ describe("DataTable", () => {
         },
       });
 
-      const table = screen.getByRole("table");
-      expectInlineStyle(table, { "max-height": "24rem" });
+      const innerContainer = container.querySelector(
+        "section.bx--data-table_inner-container",
+      );
+      expectInlineStyle(innerContainer, { "max-height": "24rem" });
     });
 
     it("ignores stickyHeaderMaxHeight when stickyHeader is disabled", () => {
