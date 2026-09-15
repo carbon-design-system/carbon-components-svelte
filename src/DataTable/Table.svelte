@@ -29,6 +29,12 @@
   export let tableStyle = undefined;
 
   /**
+   * Set the style attribute on the outer `section` element when `stickyHeader` is `true`.
+   * @type {string}
+   */
+  export let containerStyle = undefined;
+
+  /**
    * Obtain a reference to the section HTML element (when stickyHeader is enabled) or table HTML element.
    * @type {null | HTMLElement | HTMLTableElement}
    * @bindable readonly
@@ -80,6 +86,7 @@
     class:bx--data-table_inner-container={true}
     bind:this={ref}
     {...$$restProps}
+    style={containerStyle}
   >
     <table
       aria-labelledby={ariaLabelledby}

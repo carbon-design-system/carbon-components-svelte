@@ -928,14 +928,10 @@
       fixedLayout={hasCustomHeaderWidth}
       labelledBy={hasTitle ? titleId : undefined}
       describedBy={hasDescription ? descriptionId : undefined}
-      tableStyle={[
-        hasCustomHeaderWidth && "table-layout: fixed",
-        stickyHeader &&
-          stickyHeaderMaxHeight != null &&
-          `max-height: ${typeof stickyHeaderMaxHeight === "number" ? `${stickyHeaderMaxHeight}px` : stickyHeaderMaxHeight}`,
-      ]
-        .filter(Boolean)
-        .join("; ") || undefined}
+      tableStyle={hasCustomHeaderWidth ? "table-layout: fixed" : undefined}
+      containerStyle={stickyHeader && stickyHeaderMaxHeight != null
+        ? `max-height: ${typeof stickyHeaderMaxHeight === "number" ? `${stickyHeaderMaxHeight}px` : stickyHeaderMaxHeight}`
+        : undefined}
     >
       <TableHead
         style={virtualScrollContainer

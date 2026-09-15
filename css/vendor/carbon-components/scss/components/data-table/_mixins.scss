@@ -13,10 +13,14 @@
     max-width: $max-width;
   }
 
-  .#{$prefix}--data-table--sticky-header {
+  // ccs: keep table layout. Max-height now bounds the scroll container
+  // (the section wrapping the table), not the table itself.
+  .#{$prefix}--data-table_inner-container {
     max-height: $max-height;
+  }
 
-    @if $min-width {
+  @if $min-width {
+    .#{$prefix}--data-table--sticky-header {
       th:not(.#{$prefix}--table-column-checkbox):not(.#{$prefix}--table-column-menu):not(.#{$prefix}--table-expand):not(.#{$prefix}--table-column-icon),
       td:not(.#{$prefix}--table-column-checkbox):not(.#{$prefix}--table-column-menu):not(.#{$prefix}--table-expand):not(.#{$prefix}--table-column-icon) {
         min-width: $min-width;
