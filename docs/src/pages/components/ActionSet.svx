@@ -4,7 +4,7 @@ description: A row of action buttons for a custom modal or panel footer that aut
 ---
 
 <script>
-  import { ActionSet, Button } from "carbon-components-svelte";
+  import { ActionSet, Box, Button } from "carbon-components-svelte";
 </script>
 
 Use `ActionSet` for custom footers you compose yourself, typically [ComposedModal](/components/ComposedModal#custom-footer-with-actionset)'s `ModalFooter` slot. [Modal](/components/Modal) builds its footer from props and has no footer slot.
@@ -55,6 +55,20 @@ Set `size` to control the layout. `"sm"` always stacks; `"md"` stacks once there
   <Button kind="danger">Delete</Button>
   <Button>Save</Button>
 </ActionSet>
+
+## Sticky
+
+Set `sticky` to `true` to stick the action set to the bottom of its nearest
+scroll container. Use this for a save bar under a long scrolling form so the
+actions stay visible.
+
+<Box height="8rem" border="subtle" style="overflow-y: auto;">
+  <Box height="12rem" padding={5}>Scroll to see the sticky action set below.</Box>
+  <ActionSet sticky>
+    <Button kind="secondary">Discard</Button>
+    <Button>Save</Button>
+  </ActionSet>
+</Box>
 
 ## Disable stacking
 
