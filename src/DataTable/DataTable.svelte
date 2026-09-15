@@ -402,7 +402,11 @@
       scrollListenerCleanup();
       scrollListenerCleanup = null;
     }
-    const container = tableRef;
+    // When `stickyHeader` is true, `tableRef` is the wrapping `<section>`
+    // (see Table.svelte); the `<table>` inside it is the element that
+    // actually scrolls, so the listener must target that, not the section,
+    // or it never fires and the virtual window freezes on the initial rows.
+    const container = tableRef.querySelector("table") ?? tableRef;
     container.style.maxHeight = `${calculatedContainerHeight}px`;
     container.style.overflowY = "auto";
     function handleScroll() {
@@ -820,7 +824,9 @@
   $: if (virtualConfig && prevExpandedRowIds.length !== expandedRowIds.length) {
     prevExpandedRowIds = [...expandedRowIds];
     tick().then(() => {
-      const scrollContainer = stickyHeader ? tableRef : scrollContainerRef;
+      const scrollContainer = stickyHeader
+        ? (tableRef?.querySelector("table") ?? tableRef)
+        : scrollContainerRef;
       if (scrollContainer) {
         tableBodyScrollTop = scrollContainer.scrollTop || 0;
       }
