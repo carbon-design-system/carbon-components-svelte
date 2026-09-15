@@ -63,16 +63,19 @@
   const {
     add,
     update,
+    deselect,
     selectedValue,
     groupName,
     groupRequired,
     readonly,
+    allowDeselect,
     helperId,
   } = ctx ?? {
     groupName: readable(undefined),
     groupRequired: readable(undefined),
     selectedValue: readable(checked ? value : undefined),
     readonly: readable(false),
+    allowDeselect: readable(false),
     helperId: readable(undefined),
   };
 
@@ -172,7 +175,17 @@
     on:focus
     on:blur
     on:click={(event) => {
-      if ($readonly) event.preventDefault();
+      if ($readonly) {
+        event.preventDefault();
+        return;
+      }
+      // No `event.preventDefault()` here: canceling the click makes the
+      // browser revert `checked` back to its pre-click value once the event
+      // finishes dispatching, which runs after Svelte's microtask-scheduled
+      // DOM update and silently reselects the radio.
+      if ($allowDeselect && checked && deselect) {
+        deselect();
+      }
     }}
     on:change={(event) => {
       if ($readonly) {
