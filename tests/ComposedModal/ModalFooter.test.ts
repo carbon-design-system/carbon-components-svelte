@@ -162,6 +162,66 @@ describe("ModalFooter", () => {
     });
   });
 
+  describe("secondaryButtonLoading", () => {
+    it("shows InlineLoading and does not dispatch click on click", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ModalFooterTest, {
+        props: {
+          secondaryButtonText: "Cancel",
+          secondaryButtonLoading: true,
+        },
+      });
+
+      expect(screen.getByText("Loading")).toBeInTheDocument();
+      const secondaryButton = screen.getByRole("button", { name: /Loading/i });
+      expect(secondaryButton).toBeDisabled();
+      await user.click(secondaryButton);
+
+      expect(consoleLog).not.toHaveBeenCalledWith(
+        "click:button--secondary",
+        expect.anything(),
+      );
+    });
+
+    it("uses a custom loading description", () => {
+      render(ModalFooterTest, {
+        props: {
+          secondaryButtonText: "Cancel",
+          secondaryButtonLoading: true,
+          secondaryButtonLoadingDescription: "Cancelling...",
+        },
+      });
+
+      expect(screen.getByText("Cancelling...")).toBeInTheDocument();
+    });
+  });
+
+  describe("secondaryButtons loading", () => {
+    it("shows InlineLoading for a loading entry and disables it", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ModalFooterTest, {
+        props: {
+          secondaryButtons: [
+            { text: "Draft", loading: true, loadingDescription: "Saving..." },
+            { text: "Discard" },
+          ],
+        },
+      });
+
+      expect(screen.getByText("Saving...")).toBeInTheDocument();
+      const loadingButton = screen.getByRole("button", { name: /Saving/i });
+      expect(loadingButton).toBeDisabled();
+      await user.click(loadingButton);
+      expect(consoleLog).not.toHaveBeenCalledWith(
+        "click:button--secondary",
+        expect.anything(),
+      );
+
+      const idleButton = screen.getByRole("button", { name: "Discard" });
+      expect(idleButton).not.toBeDisabled();
+    });
+  });
+
   it("should render danger variant", () => {
     render(ModalFooterTest, {
       props: {

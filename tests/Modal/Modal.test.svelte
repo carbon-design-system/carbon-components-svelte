@@ -17,6 +17,8 @@
   export let primaryButtonIcon = undefined;
   export let shouldSubmitOnEnter = true;
   export let secondaryButtonText = "";
+  export let secondaryButtonLoading = false;
+  export let secondaryButtonLoadingDescription = "Loading";
   export let secondaryButtons: ComponentProps<Modal>["secondaryButtons"] =
     undefined;
   export let selectorPrimaryFocus = "[data-modal-primary-focus]";
@@ -53,6 +55,8 @@
   {primaryButtonIcon}
   {shouldSubmitOnEnter}
   {secondaryButtonText}
+  {secondaryButtonLoading}
+  {secondaryButtonLoadingDescription}
   {secondaryButtons}
   {selectorPrimaryFocus}
   {preventCloseOnClickOutside}

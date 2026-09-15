@@ -38,11 +38,26 @@
   export let secondaryButtonText = "";
 
   /**
+   * Set to `true` to show a loading state on the secondary button.
+   * Only applies to the `secondaryButtonText` path (not `secondaryButtons`).
+   * While loading, the button is non-interactive.
+   */
+  export let secondaryButtonLoading = false;
+
+  /**
+   * Specify the description for the secondary button loading state.
+   * Passed to `InlineLoading` as `description`.
+   */
+  export let secondaryButtonLoadingDescription = "Loading";
+
+  /**
    * One or two secondary buttons for the modal footer.
    * Supersedes `secondaryButtonText`. Each entry needs `text`; optional
-   * `kind` (defaults to `"secondary"`) and `disabled` pass through to Button.
-   * With two entries plus a primary button, the footer uses the three-button layout.
-   * @type {ReadonlyArray<{ text: string; kind?: string; disabled?: boolean }>}
+   * `kind` (defaults to `"secondary"`), `disabled`, `loading`, and
+   * `loadingDescription` (defaults to `"Loading"`) pass through to Button /
+   * the loading state. With two entries plus a primary button, the footer
+   * uses the three-button layout.
+   * @type {ReadonlyArray<{ text: string; kind?: string; disabled?: boolean; loading?: boolean; loadingDescription?: string }>}
    */
   export let secondaryButtons = [];
 
@@ -68,6 +83,7 @@
   }
 
   function handleSecondaryClick() {
+    if (secondaryButtonLoading) return;
     const shouldContinue = dispatch(
       "click:button--secondary",
       { text: secondaryButtonText },
@@ -88,21 +104,37 @@
     {#each secondaryButtons as button (button.text)}
       <Button
         kind={button.kind ?? "secondary"}
-        disabled={button.disabled}
+        disabled={button.disabled || button.loading}
         on:click={() => {
+          if (button.loading) return;
           dispatch("click:button--secondary", { text: button.text });
         }}
       >
-        {button.text}
+        {#if button.loading}
+          <InlineLoading
+            status="active"
+            description={button.loadingDescription ?? "Loading"}
+          />
+        {:else}
+          {button.text}
+        {/if}
       </Button>
     {/each}
   {:else if secondaryButtonText}
     <Button
       kind="secondary"
       class={secondaryClass}
+      disabled={secondaryButtonLoading}
       on:click={handleSecondaryClick}
     >
-      {secondaryButtonText}
+      {#if secondaryButtonLoading}
+        <InlineLoading
+          status="active"
+          description={secondaryButtonLoadingDescription}
+        />
+      {:else}
+        {secondaryButtonText}
+      {/if}
     </Button>
   {/if}
   {#if primaryButtonText}
