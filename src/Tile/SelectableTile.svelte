@@ -16,6 +16,9 @@
   /** Set to `true` to disable the tile */
   export let disabled = false;
 
+  /** Set to `true` to stretch the tile to fill the height of its container */
+  export let fullHeight = false;
+
   /**
    * Specify the title of the selectable tile.
    * @type {string | undefined}
@@ -120,6 +123,7 @@
   class:bx--tile--is-selected={selected}
   class:bx--tile--light={light}
   class:bx--tile--disabled={disabled}
+  class:bx--tile--full-height={fullHeight}
   {...$$restProps}
   on:click
   on:mouseover

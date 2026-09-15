@@ -14,6 +14,9 @@
   /** Set to `true` to disable the tile */
   export let disabled = false;
 
+  /** Set to `true` to stretch the tile to fill the height of its container */
+  export let fullHeight = false;
+
   /**
    * Set the `href`.
    * @type {string}
@@ -33,6 +36,7 @@
     "bx--tile--clickable",
     clicked && "bx--tile--is-clicked",
     light && "bx--tile--light",
+    fullHeight && "bx--tile--full-height",
     $$restProps.class,
   ]
     .filter(Boolean)

@@ -263,3 +263,18 @@
 @include exports('tile') {
   @include tile;
 }
+
+// carbon-components-svelte patch (tile-full-height)
+
+/// Full height tile (stretches to fill a flex/grid container)
+/// @access private
+/// @group components
+@mixin tile-full-height {
+  .#{$prefix}--tile--full-height {
+    height: 100%;
+  }
+}
+
+@include exports('tile-full-height') {
+  @include tile-full-height;
+}
