@@ -24,14 +24,14 @@
     return typeof value === "number" ? `${value}px` : value;
   }
 
-  $: resolvedWidth =
-    width == null ? (size == null ? undefined : toStyle(size)) : toStyle(width);
-  $: resolvedHeight =
-    height == null
-      ? size == null
-        ? undefined
-        : toStyle(size)
-      : toStyle(height);
+  /** Explicit dimension wins; otherwise fall back to `size`. */
+  function resolveDimension(explicit, fallback) {
+    if (explicit != null) return toStyle(explicit);
+    return fallback == null ? undefined : toStyle(fallback);
+  }
+
+  $: resolvedWidth = resolveDimension(width, size);
+  $: resolvedHeight = resolveDimension(height, size);
 </script>
 
 <div
