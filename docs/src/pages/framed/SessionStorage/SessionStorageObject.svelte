@@ -18,8 +18,8 @@
     key="user-profile-draft"
     bind:value={settings}
     on:update={({ detail }) => {
-      events = [...events, { event: "on:update", detail }];
-    }}
+    events = [...events, { event: "on:update", detail }];
+  }}
   />
 
   <div>
@@ -42,9 +42,9 @@
   <Button
     size="small"
     on:click={() => {
-      settings.visits += 1; // in-place mutation
-      settings = settings; // signal the change to Svelte
-    }}
+    settings.visits += 1; // in-place mutation
+    settings = settings; // signal the change to Svelte
+  }}
   >
     Increment visits ({settings.visits})
   </Button>

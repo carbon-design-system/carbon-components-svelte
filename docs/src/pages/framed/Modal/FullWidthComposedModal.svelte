@@ -18,24 +18,24 @@
   <ModalBody hasScrollingContent>
     <DataTable
       headers={[
-        { key: "endpoint", value: "Endpoint" },
-        { key: "event", value: "Event" },
-        { key: "status", value: "Status" },
-      ]}
+    { key: "endpoint", value: "Endpoint" },
+    { key: "event", value: "Event" },
+    { key: "status", value: "Status" },
+  ]}
       rows={[
-        {
-          id: "1",
-          endpoint: "https://hooks.example.com/deploy",
-          event: "deployment.succeeded",
-          status: "Delivered in 214ms; response 200 OK.",
-        },
-        {
-          id: "2",
-          endpoint: "https://hooks.example.com/alerts",
-          event: "incident.created",
-          status: "Retrying after timeout; next attempt in 5 minutes.",
-        },
-      ]}
+    {
+      id: "1",
+      endpoint: "https://hooks.example.com/deploy",
+      event: "deployment.succeeded",
+      status: "Delivered in 214ms; response 200 OK.",
+    },
+    {
+      id: "2",
+      endpoint: "https://hooks.example.com/alerts",
+      event: "incident.created",
+      status: "Retrying after timeout; next attempt in 5 minutes.",
+    },
+  ]}
     />
   </ModalBody>
   <ModalFooter

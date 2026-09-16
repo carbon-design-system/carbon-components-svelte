@@ -45,15 +45,15 @@
   <DataTable
     bind:this={dataTable}
     headers={[
-      { key: "item", value: "Item" },
-      { key: "unitPrice", value: "Unit price" },
-      { key: "qty", value: "Quantity" },
-      {
-        key: "total",
-        value: "Total",
-        display: (_value, row) => `$${row.unitPrice * row.qty}`,
-      },
-    ]}
+    { key: "item", value: "Item" },
+    { key: "unitPrice", value: "Unit price" },
+    { key: "qty", value: "Quantity" },
+    {
+      key: "total",
+      value: "Total",
+      display: (_value, row) => `$${row.unitPrice * row.qty}`,
+    },
+  ]}
     {rows}
   >
     <svelte:fragment slot="cell" let:row let:cell>

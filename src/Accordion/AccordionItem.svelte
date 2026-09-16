@@ -103,9 +103,9 @@
     {disabled}
     on:click
     on:click={() => {
-      open = !open;
-      animation = open ? "expanding" : "collapsing";
-    }}
+    open = !open;
+    animation = open ? "expanding" : "collapsing";
+  }}
     on:mouseover
     on:mouseenter
     on:mouseleave

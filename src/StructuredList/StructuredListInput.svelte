@@ -76,13 +76,13 @@
     class:bx--structured-list-input={true}
     {...$$restProps}
     on:change={() => {
-      update(value);
-    }}
+    update(value);
+  }}
     on:keydown={(event) => {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        ref.click();
-      }
-    }}
+    if (event.key === "Enter") {
+      event.preventDefault();
+      ref.click();
+    }
+  }}
   >
 </span>

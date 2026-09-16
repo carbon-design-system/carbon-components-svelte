@@ -36,8 +36,8 @@
     {allowDeselect}
     class={customClass}
     on:change={(e) => {
-      console.log("change", e.detail);
-    }}
+    console.log("change", e.detail);
+  }}
   >
     <span slot="legendChildren">Custom Legend</span>
     <RadioButton labelText="Option 1" value="1" />
@@ -59,8 +59,8 @@
     {allowDeselect}
     class={customClass}
     on:change={(e) => {
-      console.log("change", e.detail);
-    }}
+    console.log("change", e.detail);
+  }}
   >
     <RadioButton labelText="Option 1" value="1" />
     <RadioButton labelText="Option 2" value="2" />

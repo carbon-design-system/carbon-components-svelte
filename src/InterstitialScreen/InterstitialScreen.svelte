@@ -166,9 +166,9 @@
       aria-label={ariaLabel}
       {...$$restProps}
       on:close={(event) => {
-        event.preventDefault();
-        handleClose("close");
-      }}
+    event.preventDefault();
+    handleClose("close");
+  }}
     >
       <slot />
     </ComposedModal>

@@ -216,11 +216,7 @@
     align="center"
     {gap}
     wrap={multiline ? "wrap" : "nowrap"}
-    justify={align === "start"
-      ? "start"
-      : align === "center"
-        ? "center"
-        : "end"}
+    justify={align === "start" ? "start" : align === "center" ? "center" : "end"}
     class="bx--tag-set__space"
   >
     <slot />

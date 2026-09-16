@@ -139,8 +139,8 @@
       bind:this={searchRef}
       class:bx--search-magnifier={true}
       on:click={() => {
-        if (expandable && !disabled) expanded = true;
-      }}
+    if (expandable && !disabled) expanded = true;
+  }}
     >
       <svelte:component this={icon} class="bx--search-magnifier-icon" />
     </div>
@@ -170,21 +170,21 @@
       on:input
       on:focus
       on:focus={() => {
-        if (expandable && !disabled) expanded = true;
-      }}
+    if (expandable && !disabled) expanded = true;
+  }}
       on:blur
       on:blur={() => {
-        if (expanded && (value === "" || value == null)) {
-          expanded = false;
-        }
-      }}
+    if (expanded && (value === "" || value == null)) {
+      expanded = false;
+    }
+  }}
       on:keydown
       on:keydown={(event) => {
-        if (event.key === "Escape") {
-          value = "";
-          dispatch("clear");
-        }
-      }}
+    if (event.key === "Escape") {
+      value = "";
+      dispatch("clear");
+    }
+  }}
       on:keyup
       on:paste
     >
@@ -196,10 +196,10 @@
       class:bx--search-close--hidden={value === "" || value == null}
       on:click
       on:click={() => {
-        value = "";
-        ref.focus();
-        dispatch("clear");
-      }}
+    value = "";
+    ref.focus();
+    dispatch("clear");
+  }}
     >
       <svelte:component this={Close} size={size === "xl" ? 20 : 16} />
     </button>

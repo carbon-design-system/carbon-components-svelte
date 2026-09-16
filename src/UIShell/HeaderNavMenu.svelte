@@ -134,45 +134,45 @@
     {...$$restProps}
     on:keydown
     on:keydown={async (event) => {
-      if (event.key === " ") {
-        event.preventDefault();
-        event.stopPropagation();
-        const wasExpanded = expanded;
-        expanded = !expanded;
-        if (!wasExpanded && expanded && $menuItems.length > 0) {
-          // Only focus first item when opening (not closing)
-          await tick();
-          $menuItems[0]?.focus();
-        }
-      } else if (event.key === "Enter") {
-        event.preventDefault();
-        // Let the li handler toggle the expanded state
-        // Just focus the first item if opening
-        if (!expanded && $menuItems.length > 0) {
-          await tick();
-          $menuItems[0]?.focus();
-        }
-      } else if (event.key === "ArrowDown") {
-        event.preventDefault();
-        if (!expanded) {
-          expanded = true;
-        }
-        // Focus first item
+    if (event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+      const wasExpanded = expanded;
+      expanded = !expanded;
+      if (!wasExpanded && expanded && $menuItems.length > 0) {
+        // Only focus first item when opening (not closing)
         await tick();
         $menuItems[0]?.focus();
-      } else if (event.key === "ArrowUp") {
-        event.preventDefault();
-        if (!expanded) {
-          expanded = true;
-        }
-        // Focus last item
-        await tick();
-        $menuItems[$menuItems.length - 1]?.focus();
-      } else if (event.key === "Escape") {
-        event.preventDefault();
-        await closeMenu("escape-key");
       }
-    }}
+    } else if (event.key === "Enter") {
+      event.preventDefault();
+      // Let the li handler toggle the expanded state
+      // Just focus the first item if opening
+      if (!expanded && $menuItems.length > 0) {
+        await tick();
+        $menuItems[0]?.focus();
+      }
+    } else if (event.key === "ArrowDown") {
+      event.preventDefault();
+      if (!expanded) {
+        expanded = true;
+      }
+      // Focus first item
+      await tick();
+      $menuItems[0]?.focus();
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      if (!expanded) {
+        expanded = true;
+      }
+      // Focus last item
+      await tick();
+      $menuItems[$menuItems.length - 1]?.focus();
+    } else if (event.key === "Escape") {
+      event.preventDefault();
+      await closeMenu("escape-key");
+    }
+  }}
     on:click|preventDefault
     on:mouseover
     on:mouseenter

@@ -351,8 +351,8 @@
       class:bx--header__action={true}
       class:bx--header-search-button--disabled={active}
       on:click={() => {
-        active = true;
-      }}
+    active = true;
+  }}
     >
       <svelte:component this={icon} size={20} title="Search" />
     </button>
@@ -370,59 +370,55 @@
       aria-autocomplete="list"
       aria-controls={active ? menuId : undefined}
       aria-expanded={richMenu ? richMenuVisible : undefined}
-      aria-activedescendant={active
-        ? richMenu
-          ? ($highlightedId ?? undefined)
-          : selectedId
-        : undefined}
+      aria-activedescendant={active ? (richMenu ? ($highlightedId ?? undefined) : selectedId) : undefined}
       bind:value
       on:change
       on:input
       on:input={() => {
-        if (richMenu) menuDismissed = false;
-      }}
+    if (richMenu) menuDismissed = false;
+  }}
       on:focus
       on:blur
       on:keydown
       on:keydown={(event) => {
-        if (richMenu) {
-          handleRichKeydown(event);
-          return;
+    if (richMenu) {
+      handleRichKeydown(event);
+      return;
+    }
+    switch (event.key) {
+      case "Enter":
+        selectResult();
+        break;
+      case "ArrowDown":
+        event.preventDefault();
+        if (selectedResultIndex === results.length - 1) {
+          selectedResultIndex = 0;
+        } else {
+          selectedResultIndex += 1;
         }
-        switch (event.key) {
-          case "Enter":
-            selectResult();
-            break;
-          case "ArrowDown":
-            event.preventDefault();
-            if (selectedResultIndex === results.length - 1) {
-              selectedResultIndex = 0;
-            } else {
-              selectedResultIndex += 1;
-            }
-            break;
-          case "ArrowUp":
-            event.preventDefault();
-            if (selectedResultIndex === 0) {
-              selectedResultIndex = results.length - 1;
-            } else {
-              selectedResultIndex -= 1;
-            }
-            break;
-          case "Escape":
-            if (value === "") {
-              // If the search bar is empty, deactivate the input.
-              active = false;
-              dispatch("close", { trigger: "escape-key" });
-            }
+        break;
+      case "ArrowUp":
+        event.preventDefault();
+        if (selectedResultIndex === 0) {
+          selectedResultIndex = results.length - 1;
+        } else {
+          selectedResultIndex -= 1;
+        }
+        break;
+      case "Escape":
+        if (value === "") {
+          // If the search bar is empty, deactivate the input.
+          active = false;
+          dispatch("close", { trigger: "escape-key" });
+        }
 
-            // Reset the search query but keep the search bar active.
-            // Do not dispatch "clear" event as that should fire only on the "x" button.
-            value = "";
-            selectedResultIndex = 0;
-            break;
-        }
-      }}
+        // Reset the search query but keep the search bar active.
+        // Do not dispatch "clear" event as that should fire only on the "x" button.
+        value = "";
+        selectedResultIndex = 0;
+        break;
+    }
+  }}
       on:paste
     >
     {#if active}
@@ -433,9 +429,9 @@
         class:bx--header__action={true}
         class:bx--header-search-button={true}
         on:click={() => {
-          reset();
-          dispatch("clear");
-        }}
+    reset();
+    dispatch("clear");
+  }}
       >
         <Close size={20} title={closeButtonLabelText} />
       </button>
@@ -486,13 +482,12 @@
             role="menuitem"
             href={result.href}
             class:bx--header-search-menu-item={true}
-            class:bx--header-search-menu-item--selected={selectedId ===
-              `${id}-menuitem-${result.id ?? index}`}
+            class:bx--header-search-menu-item--selected={selectedId === `${id}-menuitem-${result.id ?? index}`}
             on:click|preventDefault={async () => {
-              selectedResultIndex = index;
-              await tick();
-              selectResult();
-            }}
+    selectedResultIndex = index;
+    await tick();
+    selectResult();
+  }}
           >
             <slot {result} {index} selected={selectedResultIndex === index}>
               {result.text}

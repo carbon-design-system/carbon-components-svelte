@@ -34,24 +34,24 @@
     <ToolbarBatchActions
       {active}
       on:cancel={async () => {
-        if (!controlled) {
-          selectedRowIds = [];
-          await tick();
-        }
-      }}
+    if (!controlled) {
+      selectedRowIds = [];
+      await tick();
+    }
+  }}
     >
       <Button
         kind="danger"
         on:click={() => {
-          console.log("delete", selectedRowIds);
-        }}
+    console.log("delete", selectedRowIds);
+  }}
       >
         Delete
       </Button>
       <Button
         on:click={() => {
-          console.log("restart", selectedRowIds);
-        }}
+    console.log("restart", selectedRowIds);
+  }}
       >
         Restart
       </Button>

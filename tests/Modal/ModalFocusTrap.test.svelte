@@ -19,9 +19,9 @@
     labelText="Select source"
     selectedId="0"
     items={[
-      { id: "0", text: "First item" },
-      { id: "1", text: "Second item" },
-    ]}
+    { id: "0", text: "First item" },
+    { id: "1", text: "Second item" },
+  ]}
   />
   <TextInput placeholder="text" name="text" labelText="Login" />
   <TextInput placeholder="password" type="password" labelText="Password" />

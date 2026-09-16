@@ -194,38 +194,32 @@
       aria-readonly={effectiveReadonly || undefined}
       aria-invalid={showInvalid || undefined}
       data-invalid={showInvalid || undefined}
-      aria-describedby={showInvalid
-        ? errorId
-        : showWarn
-          ? warnId
-          : helperText
-            ? helperId
-            : undefined}
+      aria-describedby={showInvalid ? errorId : showWarn ? warnId : helperText ? helperId : undefined}
       class:bx--checkbox={true}
       on:click={(event) => {
-        if (effectiveReadonly) {
-          event.preventDefault();
-        }
-      }}
+    if (effectiveReadonly) {
+      event.preventDefault();
+    }
+  }}
       on:change={(event) => {
-        if (effectiveReadonly) {
-          event.stopImmediatePropagation();
-          return;
-        }
-        if (ctxUpdate) {
-          ctxUpdate(value, !checked);
-        } else if (useGroup) {
-          group = group.includes(value)
-            ? group.filter((_value) => _value !== value)
-            : [...group, value];
-        } else {
-          const newChecked = !checked;
-          prevChecked = newChecked;
-          checked = newChecked;
-          // Dispatch directly for user-initiated changes to avoid duplicate events in Svelte 5
-          dispatch("check", newChecked);
-        }
-      }}
+    if (effectiveReadonly) {
+      event.stopImmediatePropagation();
+      return;
+    }
+    if (ctxUpdate) {
+      ctxUpdate(value, !checked);
+    } else if (useGroup) {
+      group = group.includes(value)
+        ? group.filter((_value) => _value !== value)
+        : [...group, value];
+    } else {
+      const newChecked = !checked;
+      prevChecked = newChecked;
+      checked = newChecked;
+      // Dispatch directly for user-initiated changes to avoid duplicate events in Svelte 5
+      dispatch("check", newChecked);
+    }
+  }}
       on:change
       on:focus
       on:blur

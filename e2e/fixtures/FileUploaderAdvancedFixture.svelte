@@ -23,8 +23,8 @@
     buttonLabel="Add file"
     iconDescription="Remove file"
     on:rejected={(e) => {
-      rejectedMax = e.detail;
-    }}
+    rejectedMax = e.detail;
+  }}
   />
   <p data-testid="rejected-max-len">{rejectedMax.length}</p>
   {#if rejectedMax[0]}

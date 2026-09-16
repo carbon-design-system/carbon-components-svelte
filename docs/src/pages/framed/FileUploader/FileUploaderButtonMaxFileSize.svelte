@@ -17,8 +17,8 @@
     labelText="Add files under 1 MB"
     bind:files
     on:rejected={(e) => {
-      rejectedFiles = [...rejectedFiles, ...e.detail];
-    }}
+    rejectedFiles = [...rejectedFiles, ...e.detail];
+  }}
   />
 
   {#each files as file, i (`${file.name}-${file.lastModified}-${i}`)}
@@ -27,8 +27,8 @@
       name={file.name}
       status="edit"
       on:delete={() => {
-        files = files.filter((f) => f !== file);
-      }}
+    files = files.filter((f) => f !== file);
+  }}
     />
   {/each}
 
@@ -41,8 +41,8 @@
       errorBody="Please select a smaller file."
       status="edit"
       on:delete={() => {
-        rejectedFiles = rejectedFiles.filter((r) => r.file !== file);
-      }}
+    rejectedFiles = rejectedFiles.filter((r) => r.file !== file);
+  }}
     />
   {/each}
 </Stack>

@@ -33,8 +33,8 @@
     {#each [nodeSpark, nodeBlockchain] as { id, text }}
       <Button
         on:click={() => {
-          treeview?.showNode(id);
-        }}
+    treeview?.showNode(id);
+  }}
       >
         Show "{text}"
       </Button>

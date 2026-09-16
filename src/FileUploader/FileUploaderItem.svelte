@@ -61,13 +61,13 @@
     <Filename
       fileName={name}
       on:keydown={(event) => {
-        if (event.key === " " || event.key === "Enter") {
-          dispatch("delete", id);
-        }
-      }}
+    if (event.key === " " || event.key === "Enter") {
+      dispatch("delete", id);
+    }
+  }}
       on:click={() => {
-        dispatch("delete", id);
-      }}
+    dispatch("delete", id);
+  }}
       {iconDescription}
       {status}
       {invalid}

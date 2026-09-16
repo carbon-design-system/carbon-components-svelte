@@ -1853,8 +1853,7 @@
     class:bx--tree--compact={size === "compact"}
     class:bx--tree--multiselect={isMultiselect}
     class:bx--tree--checkbox={isCheckboxMode}
-    class:bx--tree--multiselect-modifier={isMultiselect &&
-      multiselectModifierActive}
+    class:bx--tree--multiselect-modifier={isMultiselect && multiselectModifierActive}
     style="height: {containerHeightStyle}; overflow-y: auto;"
     aria-label={hideLabel ? labelText : undefined}
     aria-labelledby={hideLabel ? undefined : labelId}
@@ -1881,8 +1880,7 @@
     {#if virtualData.endIndex < virtualIndex.totalCount}
       <li
         aria-hidden="true"
-        style:height="{virtualData.totalHeight -
-          virtualData.endIndex * virtualConfig.itemHeight}px"
+        style:height="{virtualData.totalHeight - virtualData.endIndex * virtualConfig.itemHeight}px"
       ></li>
     {/if}
   </ul>
@@ -1896,8 +1894,7 @@
     class:bx--tree--compact={size === "compact"}
     class:bx--tree--multiselect={isMultiselect}
     class:bx--tree--checkbox={isCheckboxMode}
-    class:bx--tree--multiselect-modifier={isMultiselect &&
-      multiselectModifierActive}
+    class:bx--tree--multiselect-modifier={isMultiselect && multiselectModifierActive}
     aria-label={hideLabel ? labelText : undefined}
     aria-labelledby={hideLabel ? undefined : labelId}
     aria-multiselectable={isMultiselect || isCheckboxMode || undefined}

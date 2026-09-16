@@ -27,12 +27,12 @@
     on:mouseleave
   >
     {#each Array.from({ length: lines }).map((_, i) => {
-      const min = widthPx ? widthNum - 75 : 0;
-      const max = widthPx ? widthNum : 75;
-      const rand = `${Math.floor(RANDOM[i % 3] * (max - min + 1)) + min}px`;
+     const min = widthPx ? widthNum - 75 : 0;
+     const max = widthPx ? widthNum : 75;
+     const rand = `${Math.floor(RANDOM[i % 3] * (max - min + 1)) + min}px`;
 
-      return widthPx ? rand : `calc(${width} - ${rand})`;
-    }) as width, i (i)}
+     return widthPx ? rand : `calc(${width} - ${rand})`;
+   }) as width, i (i)}
       <p
         class:bx--skeleton__text={true}
         class:bx--skeleton__heading={heading}

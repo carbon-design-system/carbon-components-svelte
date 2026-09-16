@@ -159,10 +159,10 @@
     class:bx--file-browse-btn--disabled={disabled}
     on:keydown
     on:keydown={(event) => {
-      if (event.key === " " || event.key === "Enter") {
-        ref.click();
-      }
-    }}
+    if (event.key === " " || event.key === "Enter") {
+      ref.click();
+    }
+  }}
   >
     <div
       class:bx--file__drop-container={true}
@@ -182,11 +182,11 @@
     {multiple}
     class:bx--file-input={true}
     on:change={({ target }) => {
-      processIncoming([...target.files]);
-    }}
+    processIncoming([...target.files]);
+  }}
     on:click
     on:click={(event) => {
-      event.target.value = null;
-    }}
+    event.target.value = null;
+  }}
   >
 </div>

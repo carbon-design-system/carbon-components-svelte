@@ -454,12 +454,12 @@
           inputmode="decimal"
           pattern="[0-9]*"
           aria-describedby={hasErrorMessage
-            ? errorId
-            : showWarn
-              ? warnId
-              : helperText && !isFluid
-                ? helperId
-                : undefined}
+    ? errorId
+    : showWarn
+      ? warnId
+      : helperText && !isFluid
+        ? helperId
+        : undefined}
           data-invalid={showInvalid || undefined}
           aria-invalid={showInvalid || undefined}
           aria-label={labelText ? undefined : ariaLabel}
@@ -482,8 +482,8 @@
           on:blur={handleBlur}
           on:paste
           on:wheel|nonpassive={(event) => {
-            if (disableWheel) event.preventDefault();
-          }}
+    if (disableWheel) event.preventDefault();
+  }}
         >
       {:else}
         <input
@@ -491,12 +491,12 @@
           type="number"
           inputmode="decimal"
           aria-describedby={hasErrorMessage
-            ? errorId
-            : showWarn
-              ? warnId
-              : helperText && !isFluid
-                ? helperId
-                : undefined}
+    ? errorId
+    : showWarn
+      ? warnId
+      : helperText && !isFluid
+        ? helperId
+        : undefined}
           data-invalid={showInvalid || undefined}
           aria-invalid={showInvalid || undefined}
           aria-label={labelText ? undefined : ariaLabel}
@@ -520,8 +520,8 @@
           on:blur={handleBlur}
           on:paste
           on:wheel|nonpassive={(event) => {
-            if (disableWheel) event.preventDefault();
-          }}
+    if (disableWheel) event.preventDefault();
+  }}
         >
       {/if}
       {#if readonly && !isFluid}
@@ -546,9 +546,9 @@
             class:bx--number__control-btn={true}
             class:down-icon={true}
             on:click={() => {
-              updateValue(false);
-              dispatch("click:stepper", { value, direction: "down" });
-            }}
+    updateValue(false);
+    dispatch("click:stepper", { value, direction: "down" });
+  }}
             on:blur={(event) => handleStepperBlur(event, "down")}
             disabled={disabled || readonly}
           >
@@ -563,9 +563,9 @@
             class:bx--number__control-btn={true}
             class:up-icon={true}
             on:click={() => {
-              updateValue(true);
-              dispatch("click:stepper", { value, direction: "up" });
-            }}
+    updateValue(true);
+    dispatch("click:stepper", { value, direction: "up" });
+  }}
             on:blur={(event) => handleStepperBlur(event, "up")}
             disabled={disabled || readonly}
           >

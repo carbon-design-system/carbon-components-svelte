@@ -941,13 +941,13 @@
   <slot />
   <div
     bind:this={scrollContainerRef}
-    style:max-height={virtualScrollContainer
-      ? `${calculatedContainerHeight}px`
-      : undefined}
+    style:max-height={virtualScrollContainer ? `${calculatedContainerHeight}px` : undefined}
     style:overflow-y={virtualScrollContainer ? "auto" : undefined}
     on:scroll={virtualScrollContainer
-      ? (event) => { tableBodyScrollTop = event.target.scrollTop || 0; }
-      : undefined}
+    ? (event) => {
+        tableBodyScrollTop = event.target.scrollTop || 0;
+      }
+    : undefined}
   >
     <Table
       bind:ref={tableRef}
@@ -961,8 +961,8 @@
       describedBy={hasDescription ? descriptionId : undefined}
       tableStyle={fixedLayout ? "table-layout: fixed" : undefined}
       containerStyle={stickyHeader && stickyHeaderMaxHeight != null
-        ? `max-height: ${typeof stickyHeaderMaxHeight === "number" ? `${stickyHeaderMaxHeight}px` : stickyHeaderMaxHeight}`
-        : undefined}
+    ? `max-height: ${typeof stickyHeaderMaxHeight === "number" ? `${stickyHeaderMaxHeight}px` : stickyHeaderMaxHeight}`
+    : undefined}
     >
       {#if hasCustomHeaderWidth}
         <colgroup>
@@ -978,9 +978,7 @@
         </colgroup>
       {/if}
       <TableHead
-        style={virtualScrollContainer
-          ? "position: sticky; top: 0;"
-          : undefined}
+        style={virtualScrollContainer ? "position: sticky; top: 0;" : undefined}
       >
         <TableRow>
           {#if expandable}
@@ -994,19 +992,15 @@
                 <button
                   type="button"
                   class:bx--table-expand__button={true}
-                  aria-label={expanded
-                    ? "Collapse all rows"
-                    : "Expand all rows"}
+                  aria-label={expanded ? "Collapse all rows" : "Expand all rows"}
                   aria-expanded={expanded}
-                  aria-controls={expandableRowIds
-                    .map((rid) => `${id}-expandable-row-${rid}`)
-                    .join(" ")}
+                  aria-controls={expandableRowIds.map((rid) => `${id}-expandable-row-${rid}`).join(" ")}
                   on:click={() => {
-                    expanded = !expanded;
-                    expandedRowIds = expanded ? expandableRowIds : [];
+    expanded = !expanded;
+    expandedRowIds = expanded ? expandableRowIds : [];
 
-                    dispatch("click:header--expand", { expanded });
-                  }}
+    dispatch("click:header--expand", { expanded });
+  }}
                 >
                   <slot
                     name="expandIcon"
@@ -1036,24 +1030,24 @@
                 checked={selectAll}
                 {indeterminate}
                 on:change={(event) => {
-                  dispatch("click:header--select", {
-                    indeterminate,
-                    selected: !indeterminate && event.target.checked,
-                  });
+    dispatch("click:header--select", {
+      indeterminate,
+      selected: !indeterminate && event.target.checked,
+    });
 
-                  if (indeterminate) {
-                    event.target.checked = false;
-                    selectAll = false;
-                    selectedRowIds = [];
-                    return;
-                  }
+    if (indeterminate) {
+      event.target.checked = false;
+      selectAll = false;
+      selectedRowIds = [];
+      return;
+    }
 
-                  if (event.target.checked) {
-                    selectedRowIds = selectableRowIds;
-                  } else {
-                    selectedRowIds = [];
-                  }
-                }}
+    if (event.target.checked) {
+      selectedRowIds = selectableRowIds;
+    } else {
+      selectedRowIds = [];
+    }
+  }}
               />
             </th>
           {/if}
@@ -1078,57 +1072,52 @@
                 sortable={isHeaderSortable(header)}
                 sortDirection={sortKey === header.key ? sortDirection : "none"}
                 active={sortKey === header.key}
-                {...(tableHeaderTranslateWithId
-                  ? { translateWithId: tableHeaderTranslateWithId }
-                  : {})}
+                {...tableHeaderTranslateWithId
+    ? { translateWithId: tableHeaderTranslateWithId }
+    : {}}
                 on:click={(event) => {
-                  dispatch("click", { header });
+    dispatch("click", { header });
 
-                  if (isHeaderSortable(header)) {
-                    const currentSortDirection =
-                      sortKey === header.key ? sortDirection : "none";
-                    const effectiveSortAlways =
-                      header.sortAlways ?? sortAlways;
-                    const sortDirectionMap = effectiveSortAlways
-                      ? {
-                          none: "ascending",
-                          ascending: "descending",
-                          descending: "ascending",
-                        }
-                      : {
-                          none: "ascending",
-                          ascending: "descending",
-                          descending: "none",
-                        };
-                    const nextSortDirection =
-                      sortDirectionMap[currentSortDirection];
-                    const nextSortKey =
-                      nextSortDirection === "none"
-                        ? null
-                        : header.key;
-                    const applySort = dispatch(
-                      "sort",
-                      { key: nextSortKey, direction: nextSortDirection },
-                      { cancelable: true },
-                    );
-                    if (applySort) {
-                      sortDirection = nextSortDirection;
-                      sortKey = nextSortKey;
-                    }
-                    dispatch("click:header", {
-                      header,
-                      sortDirection: nextSortDirection,
-                      target: event.target,
-                      currentTarget: event.currentTarget,
-                    });
-                  } else {
-                    dispatch("click:header", {
-                      header,
-                      target: event.target,
-                      currentTarget: event.currentTarget,
-                    });
-                  }
-                }}
+    if (isHeaderSortable(header)) {
+      const currentSortDirection =
+        sortKey === header.key ? sortDirection : "none";
+      const effectiveSortAlways = header.sortAlways ?? sortAlways;
+      const sortDirectionMap = effectiveSortAlways
+        ? {
+            none: "ascending",
+            ascending: "descending",
+            descending: "ascending",
+          }
+        : {
+            none: "ascending",
+            ascending: "descending",
+            descending: "none",
+          };
+      const nextSortDirection = sortDirectionMap[currentSortDirection];
+      const nextSortKey = nextSortDirection === "none" ? null : header.key;
+      const applySort = dispatch(
+        "sort",
+        { key: nextSortKey, direction: nextSortDirection },
+        { cancelable: true },
+      );
+      if (applySort) {
+        sortDirection = nextSortDirection;
+        sortKey = nextSortKey;
+      }
+      dispatch("click:header", {
+        header,
+        sortDirection: nextSortDirection,
+        target: event.target,
+        currentTarget: event.currentTarget,
+      });
+    } else {
+      dispatch("click:header", {
+        header,
+        target: event.target,
+        currentTarget: event.currentTarget,
+      });
+    }
+  }}
               >
                 <slot name="cellHeader" {header}>{header.value}</slot>
               </TableHeader>
@@ -1147,76 +1136,70 @@
 
           <!-- Visible rows -->
           {#each rowsToRender as row, index (row.id)}
-            {@const actualIndex = virtualData.startIndex + index}
-            {@const isSelected = selectedRowIdsSet.has(row.id)}
-            {@const isExpanded = expandedRowIdsSet.has(row.id)}
-            {@const isHighlighted = highlightedRowIdsSet.has(row.id)}
-            {@const rowClassValue =
-              typeof rowClass === "function"
-                ? rowClass({ row, rowIndex: actualIndex, selected: isSelected, expanded: isExpanded })
-                : rowClass}
+            {@const (actualIndex = virtualData.startIndex + index)}
+            {@const (isSelected = selectedRowIdsSet.has(row.id))}
+            {@const (isExpanded = expandedRowIdsSet.has(row.id))}
+            {@const (isHighlighted = highlightedRowIdsSet.has(row.id))}
+            {@const (rowClassValue =
+    typeof rowClass === "function"
+      ? rowClass({
+          row,
+          rowIndex: actualIndex,
+          selected: isSelected,
+          expanded: isExpanded,
+        })
+      : rowClass)}
             <TableRow
               data-row={row.id}
               data-parent-row={expandable ? true : undefined}
-              class="{isSelected
-                ? 'bx--data-table--selected'
-                : ''} {isExpanded ? 'bx--expandable-row' : ''} {expandable ? 'bx--parent-row' : ''} {expandable &&
-              parentRowId === row.id
-                ? 'bx--expandable-row--hover'
-                : ''} {isHighlighted ? 'bx--data-table--highlighted-row' : ''} {expandable &&
-              isSelectionEnabled
-                ? 'bx--expandable-row--with-selection'
-                : ''} {rowClassValue ?? ''}"
+              class="{isSelected ? "bx--data-table--selected" : ""} {isExpanded ? "bx--expandable-row" : ""} {expandable ? "bx--parent-row" : ""} {expandable && parentRowId === row.id ? "bx--expandable-row--hover" : ""} {isHighlighted ? "bx--data-table--highlighted-row" : ""} {expandable && isSelectionEnabled ? "bx--expandable-row--with-selection" : ""} {rowClassValue ?? ""}"
               on:click={(event) => {
-                // forgo "click", "click:row" events if target
-                // resembles an overflow menu, a checkbox, or radio button
-                if (shouldIgnoreRowClick(event.target)) {
-                  return;
-                }
-                dispatch("click", { row });
-                dispatch("click:row", {
-                  row,
-                  target: event.target,
-                  currentTarget: event.currentTarget,
-                });
-              }}
+    // forgo "click", "click:row" events if target
+    // resembles an overflow menu, a checkbox, or radio button
+    if (shouldIgnoreRowClick(event.target)) {
+      return;
+    }
+    dispatch("click", { row });
+    dispatch("click:row", {
+      row,
+      target: event.target,
+      currentTarget: event.currentTarget,
+    });
+  }}
               on:mouseenter={() => {
-                dispatch("mouseenter:row", row);
-              }}
+    dispatch("mouseenter:row", row);
+  }}
               on:mouseleave={() => {
-                dispatch("mouseleave:row", row);
-              }}
+    dispatch("mouseleave:row", row);
+  }}
             >
               {#if expandable}
                 <TableCell
                   class="bx--table-expand"
                   headers="{id}-expand"
-                  data-previous-value={!nonExpandableRowIdsSet.has(row.id) &&
-                  expandedRowIdsSet.has(row.id)
-                    ? "collapsed"
-                    : undefined}
+                  data-previous-value={!nonExpandableRowIdsSet.has(row.id) && expandedRowIdsSet.has(row.id)
+    ? "collapsed"
+    : undefined}
                 >
                   {#if !nonExpandableRowIdsSet.has(row.id)}
                     <button
                       type="button"
                       class:bx--table-expand__button={true}
                       aria-controls="{id}-expandable-row-{row.id}"
-                      aria-label={expandedRowIdsSet.has(row.id)
-                        ? "Collapse current row"
-                        : "Expand current row"}
+                      aria-label={expandedRowIdsSet.has(row.id) ? "Collapse current row" : "Expand current row"}
                       aria-expanded={expandedRowIdsSet.has(row.id)}
                       on:click|stopPropagation={() => {
-                        const rowExpanded = expandedRowIdsSet.has(row.id);
+    const rowExpanded = expandedRowIdsSet.has(row.id);
 
-                        expandedRowIds = rowExpanded
-                          ? expandedRowIds.filter((id) => id !== row.id)
-                          : [...expandedRowIds, row.id];
+    expandedRowIds = rowExpanded
+      ? expandedRowIds.filter((id) => id !== row.id)
+      : [...expandedRowIds, row.id];
 
-                        dispatch("click:row--expand", {
-                          row,
-                          expanded: !rowExpanded,
-                        });
-                      }}
+    dispatch("click:row--expand", {
+      row,
+      expanded: !rowExpanded,
+    });
+  }}
                     >
                       <slot
                         name="expandIcon"
@@ -1237,7 +1220,7 @@
                   on:click={(event) => handleRadioColumnClick(row, event)}
                 >
                   {#if !nonSelectableRowIdsSet.has(row.id)}
-                    {@const inputId = `${id}-${row.id}`}
+                    {@const (inputId = `${id}-${row.id}`)}
                     {#if radio}
                       <RadioButton
                         id={inputId}
@@ -1247,12 +1230,12 @@
                         hideLabel
                         labelText="Select row"
                         on:change={() => {
-                          selectedRowIds = [row.id];
-                          dispatch("click:row--select", {
-                            row,
-                            selected: true,
-                          });
-                        }}
+    selectedRowIds = [row.id];
+    dispatch("click:row--select", {
+      row,
+      selected: true,
+    });
+  }}
                       />
                     {:else}
                       <InlineCheckbox
@@ -1262,25 +1245,25 @@
                         checked={selectedRowIdsSet.has(row.id)}
                         value={row.id}
                         on:click={(event) => {
-                          const checked = event.target.checked;
-                          const usedRange =
-                            event.shiftKey &&
-                            rangeAnchorRowId !== null &&
-                            selectRowRange(actualIndex, checked);
+    const checked = event.target.checked;
+    const usedRange =
+      event.shiftKey &&
+      rangeAnchorRowId !== null &&
+      selectRowRange(actualIndex, checked);
 
-                          if (!usedRange) {
-                            const next = new Set(selectedRowIds);
-                            if (checked) {
-                              next.add(row.id);
-                            } else {
-                              next.delete(row.id);
-                            }
-                            selectedRowIds = [...next];
-                          }
+    if (!usedRange) {
+      const next = new Set(selectedRowIds);
+      if (checked) {
+        next.add(row.id);
+      } else {
+        next.delete(row.id);
+      }
+      selectedRowIds = [...next];
+    }
 
-                          rangeAnchorRowId = row.id;
-                          dispatch("click:row--select", { row, selected: checked });
-                        }}
+    rangeAnchorRowId = row.id;
+    dispatch("click:row--select", { row, selected: checked });
+  }}
                       />
                     {/if}
                   {/if}
@@ -1301,9 +1284,7 @@
                       rowSelected={isSelected}
                       rowExpanded={isExpanded}
                     >
-                      {cell.display
-                        ? cell.display(cell.value, row)
-                        : cell.value}
+                      {cell.display ? cell.display(cell.value, row) : cell.value}
                     </slot>
                   </td>
                 {:else}
@@ -1311,13 +1292,13 @@
                     class={formatAlignClass(cell.columnAlign)}
                     headers="{id}-{cell.key}"
                     on:click={(event) => {
-                      dispatch("click", { row, cell });
-                      dispatch("click:cell", {
-                        cell,
-                        target: event.target,
-                        currentTarget: event.currentTarget,
-                      });
-                    }}
+    dispatch("click", { row, cell });
+    dispatch("click:cell", {
+      cell,
+      target: event.target,
+      currentTarget: event.currentTarget,
+    });
+  }}
                   >
                     <slot
                       name="cell"
@@ -1328,9 +1309,7 @@
                       rowSelected={isSelected}
                       rowExpanded={isExpanded}
                     >
-                      {cell.display
-                        ? cell.display(cell.value, row)
-                        : cell.value}
+                      {cell.display ? cell.display(cell.value, row) : cell.value}
                     </slot>
                   </TableCell>
                 {/if}
@@ -1343,16 +1322,15 @@
                 data-child-row
                 class:bx--expandable-row={true}
                 on:mouseenter={() => {
-                  if (nonExpandableRowIdsSet.has(row.id)) return;
-                  parentRowId = row.id;
-                }}
+    if (nonExpandableRowIdsSet.has(row.id)) return;
+    parentRowId = row.id;
+  }}
                 on:mouseleave={() => {
-                  if (nonExpandableRowIdsSet.has(row.id)) return;
-                  parentRowId = null;
-                }}
+    if (nonExpandableRowIdsSet.has(row.id)) return;
+    parentRowId = null;
+  }}
               >
-                {#if expandedRowIdsSet.has(row.id) &&
-                !nonExpandableRowIdsSet.has(row.id)}
+                {#if expandedRowIdsSet.has(row.id) && !nonExpandableRowIdsSet.has(row.id)}
                   <TableCell colspan={totalColumns}>
                     <div class:bx--child-row-inner-container={true}>
                       <slot
@@ -1369,9 +1347,8 @@
 
           <!-- Spacer row for remaining height -->
           {#if virtualData.endIndex < rowsToVirtualize.length}
-            {@const remainingHeight =
-              virtualData.totalHeight -
-              virtualData.endIndex * virtualConfig.itemHeight}
+            {@const (remainingHeight =
+    virtualData.totalHeight - virtualData.endIndex * virtualConfig.itemHeight)}
             <tr style:height="{remainingHeight}px">
               <td colspan={totalColumns}></td>
             </tr>
@@ -1379,82 +1356,70 @@
         {:else}
           <!-- Non-virtualized: render all rows normally -->
           {#each rowsToRender as row, index (row.id)}
-            {@const isSelected = selectedRowIdsSet.has(row.id)}
-            {@const isExpanded = expandedRowIdsSet.has(row.id)}
-            {@const isExpandable = !nonExpandableRowIdsSet.has(row.id)}
-            {@const isSelectable = !nonSelectableRowIdsSet.has(row.id)}
-            {@const isHighlighted = highlightedRowIdsSet.has(row.id)}
-            {@const rowClassValue =
-              typeof rowClass === "function"
-                ? rowClass({ row, rowIndex: index, selected: isSelected, expanded: isExpanded })
-                : rowClass}
+            {@const (isSelected = selectedRowIdsSet.has(row.id))}
+            {@const (isExpanded = expandedRowIdsSet.has(row.id))}
+            {@const (isExpandable = !nonExpandableRowIdsSet.has(row.id))}
+            {@const (isSelectable = !nonSelectableRowIdsSet.has(row.id))}
+            {@const (isHighlighted = highlightedRowIdsSet.has(row.id))}
+            {@const (rowClassValue =
+    typeof rowClass === "function"
+      ? rowClass({
+          row,
+          rowIndex: index,
+          selected: isSelected,
+          expanded: isExpanded,
+        })
+      : rowClass)}
             <TableRow
               data-row={row.id}
               data-parent-row={expandable ? true : undefined}
-              hidden={hideMode && !matchedRowIdsSet.has(row.id)
-                ? true
-                : undefined}
-              data-zebra-even={zebraVisibleEvenIds?.has(row.id)
-                ? ""
-                : undefined}
-              class="{isSelected
-                ? 'bx--data-table--selected'
-                : ''} {isExpanded ? 'bx--expandable-row' : ''} {expandable
-                ? 'bx--parent-row'
-                : ''} {expandable && parentRowId === row.id
-                ? 'bx--expandable-row--hover'
-                : ''} {isHighlighted ? 'bx--data-table--highlighted-row' : ''} {expandable &&
-              isSelectionEnabled
-                ? 'bx--expandable-row--with-selection'
-                : ''} {rowClassValue ?? ''}"
+              hidden={hideMode && !matchedRowIdsSet.has(row.id) ? true : undefined}
+              data-zebra-even={zebraVisibleEvenIds?.has(row.id) ? "" : undefined}
+              class="{isSelected ? "bx--data-table--selected" : ""} {isExpanded ? "bx--expandable-row" : ""} {expandable ? "bx--parent-row" : ""} {expandable && parentRowId === row.id ? "bx--expandable-row--hover" : ""} {isHighlighted ? "bx--data-table--highlighted-row" : ""} {expandable && isSelectionEnabled ? "bx--expandable-row--with-selection" : ""} {rowClassValue ?? ""}"
               on:click={(event) => {
-                // forgo "click", "click:row" events if target
-                // resembles an overflow menu, a checkbox, or radio button
-                if (shouldIgnoreRowClick(event.target)) {
-                  return;
-                }
-                dispatch("click", { row });
-                dispatch("click:row", {
-                  row,
-                  target: event.target,
-                  currentTarget: event.currentTarget,
-                });
-              }}
+    // forgo "click", "click:row" events if target
+    // resembles an overflow menu, a checkbox, or radio button
+    if (shouldIgnoreRowClick(event.target)) {
+      return;
+    }
+    dispatch("click", { row });
+    dispatch("click:row", {
+      row,
+      target: event.target,
+      currentTarget: event.currentTarget,
+    });
+  }}
               on:mouseenter={() => {
-                dispatch("mouseenter:row", row);
-              }}
+    dispatch("mouseenter:row", row);
+  }}
               on:mouseleave={() => {
-                dispatch("mouseleave:row", row);
-              }}
+    dispatch("mouseleave:row", row);
+  }}
             >
               {#if expandable}
                 <TableCell
                   class="bx--table-expand"
                   headers="{id}-expand"
-                  data-previous-value={isExpandable && isExpanded
-                    ? "collapsed"
-                    : undefined}
+                  data-previous-value={isExpandable && isExpanded ? "collapsed" : undefined}
                 >
                   {#if isExpandable}
                     <button
                       type="button"
                       class:bx--table-expand__button={true}
                       aria-controls="{id}-expandable-row-{row.id}"
-                      aria-label={isExpanded
-                        ? "Collapse current row"
-                        : "Expand current row"}
+                      aria-label={isExpanded ? "Collapse current row" : "Expand current row"}
                       aria-expanded={isExpanded}
                       on:click|stopPropagation={() => {
-                        const next = new Set(expandedRowIds);
-                        if (isExpanded) next.delete(row.id);
-                        else next.add(row.id);
-                        expandedRowIds = [...next];
+    const next = new Set(expandedRowIds);
+    if (isExpanded) next.delete(row.id);
+    else next.add(row.id);
+    expandedRowIds = [...next];
 
-                        dispatch("click:row--expand", {
-                          row,
-                          expanded: !isExpanded,
-                        });
-                      }}
+    dispatch("click:row--expand", {
+      row,
+      expanded: !isExpanded,
+    });
+  }}
                     >
                       <slot
                         name="expandIcon"
@@ -1475,7 +1440,7 @@
                   on:click={(event) => handleRadioColumnClick(row, event)}
                 >
                   {#if isSelectable}
-                    {@const inputId = `${id}-${row.id}`}
+                    {@const (inputId = `${id}-${row.id}`)}
                     {#if radio}
                       <RadioButton
                         id={inputId}
@@ -1485,9 +1450,9 @@
                         hideLabel
                         labelText="Select row"
                         on:change={() => {
-                          selectedRowIds = [row.id];
-                          dispatch("click:row--select", { row, selected: true });
-                        }}
+    selectedRowIds = [row.id];
+    dispatch("click:row--select", { row, selected: true });
+  }}
                       />
                     {:else}
                       <InlineCheckbox
@@ -1497,25 +1462,25 @@
                         checked={isSelected}
                         value={row.id}
                         on:click={(event) => {
-                          const checked = event.target.checked;
-                          const usedRange =
-                            event.shiftKey &&
-                            rangeAnchorRowId !== null &&
-                            selectRowRange(index, checked);
+    const checked = event.target.checked;
+    const usedRange =
+      event.shiftKey &&
+      rangeAnchorRowId !== null &&
+      selectRowRange(index, checked);
 
-                          if (!usedRange) {
-                            const next = new Set(selectedRowIds);
-                            if (checked) {
-                              next.add(row.id);
-                            } else {
-                              next.delete(row.id);
-                            }
-                            selectedRowIds = [...next];
-                          }
+    if (!usedRange) {
+      const next = new Set(selectedRowIds);
+      if (checked) {
+        next.add(row.id);
+      } else {
+        next.delete(row.id);
+      }
+      selectedRowIds = [...next];
+    }
 
-                          rangeAnchorRowId = row.id;
-                          dispatch("click:row--select", { row, selected: checked });
-                        }}
+    rangeAnchorRowId = row.id;
+    dispatch("click:row--select", { row, selected: checked });
+  }}
                       />
                     {/if}
                   {/if}
@@ -1544,13 +1509,13 @@
                     class={formatAlignClass(cell.columnAlign)}
                     headers="{id}-{cell.key}"
                     on:click={(event) => {
-                      dispatch("click", { row, cell });
-                      dispatch("click:cell", {
-                        cell,
-                        target: event.target,
-                        currentTarget: event.currentTarget,
-                      });
-                    }}
+    dispatch("click", { row, cell });
+    dispatch("click:cell", {
+      cell,
+      target: event.target,
+      currentTarget: event.currentTarget,
+    });
+  }}
                   >
                     <slot
                       name="cell"
@@ -1572,18 +1537,16 @@
               <tr
                 id="{id}-expandable-row-{row.id}"
                 data-child-row
-                hidden={hideMode && !matchedRowIdsSet.has(row.id)
-                  ? true
-                  : undefined}
+                hidden={hideMode && !matchedRowIdsSet.has(row.id) ? true : undefined}
                 class:bx--expandable-row={true}
                 on:mouseenter={() => {
-                  if (!isExpandable) return;
-                  parentRowId = row.id;
-                }}
+    if (!isExpandable) return;
+    parentRowId = row.id;
+  }}
                 on:mouseleave={() => {
-                  if (!isExpandable) return;
-                  parentRowId = null;
-                }}
+    if (!isExpandable) return;
+    parentRowId = null;
+  }}
               >
                 {#if isExpanded && isExpandable}
                   <TableCell colspan={totalColumns}>

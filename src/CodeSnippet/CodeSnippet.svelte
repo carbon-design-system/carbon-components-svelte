@@ -441,22 +441,22 @@
       {...$$restProps}
       on:click
       on:click={async () => {
-        try {
-          await copyFeedback.onClick(
-            async () => {
-              await copy(code);
-              dispatch("copy");
-            },
-            feedbackTimeout,
-            effectivePortalTooltip,
-          );
-        } catch (error) {
-          dispatch("copy:error", { error });
-        }
-      }}
+    try {
+      await copyFeedback.onClick(
+        async () => {
+          await copy(code);
+          dispatch("copy");
+        },
+        feedbackTimeout,
+        effectivePortalTooltip,
+      );
+    } catch (error) {
+      dispatch("copy:error", { error });
+    }
+  }}
       on:animationend={(event) => {
-        copyFeedback.onAnimationEnd(event);
-      }}
+    copyFeedback.onAnimationEnd(event);
+  }}
       on:mouseover
       on:mouseenter
       on:mouseleave
@@ -557,8 +557,8 @@
         aria-controls={id}
         {disabled}
         on:click={() => {
-          expanded = !expanded;
-        }}
+    expanded = !expanded;
+  }}
       >
         <span class:bx--snippet-btn--text={true}>{expandText}</span>
         <ChevronDown

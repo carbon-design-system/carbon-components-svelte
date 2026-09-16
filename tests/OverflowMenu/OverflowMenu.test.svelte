@@ -37,22 +37,22 @@
   <OverflowMenuItem
     text="Manage credentials"
     on:click={() => {
-      console.log("click", "Manage credentials");
-    }}
+    console.log("click", "Manage credentials");
+  }}
   />
   <OverflowMenuItem
     href="https://cloud.ibm.com/docs/api-gateway/"
     target="_blank"
     text="API documentation"
     on:click={() => {
-      console.log("click", "API documentation");
-    }}
+    console.log("click", "API documentation");
+  }}
   />
   <OverflowMenuItem
     danger
     text="Delete service"
     on:click={() => {
-      console.log("click", "Delete service");
-    }}
+    console.log("click", "Delete service");
+  }}
   />
 </OverflowMenu>

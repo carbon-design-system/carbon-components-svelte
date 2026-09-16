@@ -225,13 +225,7 @@
         >
           <select
             bind:this={ref}
-            aria-describedby={showInvalid
-              ? errorId
-              : showWarn
-                ? warnId
-                : helperText
-                  ? helperId
-                  : undefined}
+            aria-describedby={showInvalid ? errorId : showWarn ? warnId : helperText ? helperId : undefined}
             aria-invalid={showInvalid || undefined}
             aria-readonly={readonly || undefined}
             disabled={disabled || undefined}
@@ -294,12 +288,12 @@
           {id}
           {name}
           aria-describedby={showInvalid
-            ? errorId
-            : showWarn
-              ? warnId
-              : helperText && !isFluid
-                ? helperId
-                : undefined}
+    ? errorId
+    : showWarn
+      ? warnId
+      : helperText && !isFluid
+        ? helperId
+        : undefined}
           disabled={disabled || undefined}
           required={required || undefined}
           aria-invalid={showInvalid || undefined}

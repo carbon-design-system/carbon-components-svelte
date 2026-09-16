@@ -193,9 +193,7 @@
   <div>
     <TreeView
       bind:this={treeview}
-      labelText={treeType === "large"
-        ? "Large Tree (1000+ nodes)"
-        : "Deep Tree (100 levels)"}
+      labelText={treeType === "large" ? "Large Tree (1000+ nodes)" : "Deep Tree (100 levels)"}
       {nodes}
     />
   </div>

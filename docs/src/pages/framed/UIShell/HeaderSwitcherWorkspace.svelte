@@ -42,9 +42,9 @@
         <ProfileMenuItem
           icon={workspace.id === activeId ? Checkmark : undefined}
           on:click={() => {
-            activeId = workspace.id;
-            isOpen = false;
-          }}
+    activeId = workspace.id;
+    isOpen = false;
+  }}
         >
           <svelte:fragment slot="avatar">
             <UserAvatar

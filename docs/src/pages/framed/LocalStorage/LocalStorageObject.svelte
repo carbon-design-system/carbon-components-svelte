@@ -21,8 +21,8 @@
     key="admin-user-profile"
     bind:value={settings}
     on:update={({ detail }) => {
-      events = [...events, { event: "on:update", detail }];
-    }}
+    events = [...events, { event: "on:update", detail }];
+  }}
   />
 
   <div>
@@ -44,9 +44,9 @@
   <Button
     size="small"
     on:click={() => {
-      settings.sessionCount += 1; // in-place mutation
-      settings = settings; // signal the change to Svelte
-    }}
+    settings.sessionCount += 1; // in-place mutation
+    settings = settings; // signal the change to Svelte
+  }}
   >
     Increment session count ({settings.sessionCount})
   </Button>

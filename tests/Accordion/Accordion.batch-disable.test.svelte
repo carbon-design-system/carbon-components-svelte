@@ -36,11 +36,11 @@
     kind="ghost"
     size="field"
     on:click={() => {
-      disabled = !disabled;
-      if (disabled) {
-        open = false;
-      }
-    }}
+    disabled = !disabled;
+    if (disabled) {
+      open = false;
+    }
+  }}
   >
     {disabled ? "Enable" : "Disable"}
     all

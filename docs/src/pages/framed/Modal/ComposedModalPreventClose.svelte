@@ -53,9 +53,9 @@
     primaryButtonText="Save"
     secondaryButtonText="Discard changes"
     on:click:button--secondary={() => {
-      hasUnsavedChanges = false;
-      showWarning = false;
-      open = false;
-    }}
+    hasUnsavedChanges = false;
+    showWarning = false;
+    open = false;
+  }}
   />
 </ComposedModal>

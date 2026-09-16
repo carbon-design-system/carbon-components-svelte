@@ -56,9 +56,9 @@
     class:bx--link--muted={muted}
     {...$$restProps}
     on:click={(event) => {
-      event.preventDefault();
-      event.stopPropagation();
-    }}
+    event.preventDefault();
+    event.stopPropagation();
+  }}
     on:mouseover
     on:mouseenter
     on:mouseleave

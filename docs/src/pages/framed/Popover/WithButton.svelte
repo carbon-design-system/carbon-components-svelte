@@ -11,9 +11,9 @@
     bind:open
     align="bottom-left"
     on:click:outside={({ detail }) => {
-      console.log("on:click:outside");
-      open = ref.contains(detail.target);
-    }}
+    console.log("on:click:outside");
+    open = ref.contains(detail.target);
+  }}
   >
     Adjust table density and default sort order for this workspace.
   </Popover>

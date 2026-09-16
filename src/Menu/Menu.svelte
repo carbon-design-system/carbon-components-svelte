@@ -248,27 +248,27 @@
   <ul
     bind:this={ref}
     use:rovingFocus={{
-      selector: NON_DISABLED_MENUITEM_SELECTOR,
-      orientation: "vertical",
-      wrap: false,
-      focusOnMove: false,
-      getActiveIndex: () => focusIndex,
-      onMove: (index) => {
-        focusIndex = index;
-        const items = /** @type {HTMLElement[]} */ (
-          Array.from(ref?.querySelectorAll(NON_DISABLED_MENUITEM_SELECTOR) ?? [])
-        );
-        const item = items[index];
-        if (item) focusMenuItem(item);
-      },
-    }}
+    selector: NON_DISABLED_MENUITEM_SELECTOR,
+    orientation: "vertical",
+    wrap: false,
+    focusOnMove: false,
+    getActiveIndex: () => focusIndex,
+    onMove: (index) => {
+      focusIndex = index;
+      const items = /** @type {HTMLElement[]} */ (
+        Array.from(ref?.querySelectorAll(NON_DISABLED_MENUITEM_SELECTOR) ?? [])
+      );
+      const item = items[index];
+      if (item) focusMenuItem(item);
+    },
+  }}
     use:dismiss={{
-      enabled: open,
-      listeners: [
-        { type: "click", handler: handleOutsideClick },
-        { type: "keydown", handler: handleEscape },
-      ],
-    }}
+    enabled: open,
+    listeners: [
+      { type: "click", handler: handleOutsideClick },
+      { type: "keydown", handler: handleEscape },
+    ],
+  }}
     role="menu"
     tabindex="-1"
     data-floating-menu-direction={portalDirection}
@@ -286,12 +286,10 @@
     aria-label={menuAriaLabel}
     on:keydown
     on:keydown={(event) => {
-      if (
-        ["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)
-      ) {
-        event.preventDefault();
-      }
-    }}
+    if (["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) {
+      event.preventDefault();
+    }
+  }}
     on:mouseenter
     on:mouseleave
   >

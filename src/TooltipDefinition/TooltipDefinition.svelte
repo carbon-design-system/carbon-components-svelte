@@ -138,12 +138,9 @@
     class:bx--tooltip--hidden={!effectivePortalTooltip && !open}
     class:bx--tooltip--visible={!effectivePortalTooltip && open}
     class:bx--tooltip--top={!effectivePortalTooltip && direction === "top"}
-    class:bx--tooltip--bottom={!effectivePortalTooltip &&
-      direction === "bottom"}
-    class:bx--tooltip--align-start={!effectivePortalTooltip &&
-      align === "start"}
-    class:bx--tooltip--align-center={!effectivePortalTooltip &&
-      align === "center"}
+    class:bx--tooltip--bottom={!effectivePortalTooltip && direction === "bottom"}
+    class:bx--tooltip--align-start={!effectivePortalTooltip && align === "start"}
+    class:bx--tooltip--align-center={!effectivePortalTooltip && align === "center"}
     class:bx--tooltip--align-end={!effectivePortalTooltip && align === "end"}
     on:click={clickToOpen ? toggle : undefined}
     on:click
@@ -180,9 +177,7 @@
       data-direction={actualDirection ?? direction}
       data-tooltip-type="definition"
       on:mouseenter={clickToOpen ? undefined : () => setOpenDelayed(true, 0)}
-      on:mouseleave={clickToOpen
-        ? undefined
-        : () => setOpenDelayed(false, leaveDelayMs)}
+      on:mouseleave={clickToOpen ? undefined : () => setOpenDelayed(false, leaveDelayMs)}
     >
       <span class:bx--tooltip-portal__caret={true}></span>
       <span

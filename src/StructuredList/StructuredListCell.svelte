@@ -104,8 +104,7 @@
       type="button"
       class:bx--structured-list-sort={true}
       class:bx--structured-list-sort--active={active}
-      class:bx--structured-list-sort--ascending={active &&
-        sortDirection === "descending"}
+      class:bx--structured-list-sort--ascending={active && sortDirection === "descending"}
       on:click
       on:click={handleSortClick}
     >

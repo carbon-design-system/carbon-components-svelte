@@ -119,7 +119,7 @@
               <CodeBlock language="svelte" code={usageExample} />
             </DocCodeBox>
             <Text type="caption-01" color="secondary">
-              Explore the full{' '}
+              Explore the full{" "}
               <Link inline size="sm" href="/component-index">
                 component index.
               </Link>
@@ -331,11 +331,11 @@
                     hideTextInput
                     fullWidth
                     marks={[
-                      { value: 0, label: "16" },
-                      { value: 1, label: "20" },
-                      { value: 2, label: "24" },
-                      { value: 3, label: "32" },
-                    ]}
+    { value: 0, label: "16" },
+    { value: 1, label: "20" },
+    { value: 2, label: "24" },
+    { value: 3, label: "32" },
+  ]}
                   />
                   <div class="glyph-grid glyph-grid--icons">
                     <div class="glyph-cell">
@@ -441,12 +441,12 @@
                     hideTextInput
                     fullWidth
                     marks={[
-                      { value: 48, label: "48" },
-                      { value: 52, label: "52" },
-                      { value: 56, label: "56" },
-                      { value: 60, label: "60" },
-                      { value: 64, label: "64" },
-                    ]}
+    { value: 48, label: "48" },
+    { value: 52, label: "52" },
+    { value: 56, label: "56" },
+    { value: 60, label: "60" },
+    { value: 64, label: "64" },
+  ]}
                   />
                   <div class="glyph-grid glyph-grid--pictograms">
                     <div class="glyph-cell">

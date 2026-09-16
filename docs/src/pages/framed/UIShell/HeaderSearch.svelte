@@ -77,17 +77,17 @@
       placeholder="Search services"
       {results}
       on:active={() => {
-        events = [...events, { type: "active" }];
-      }}
+    events = [...events, { type: "active" }];
+  }}
       on:inactive={() => {
-        events = [...events, { type: "inactive" }];
-      }}
+    events = [...events, { type: "inactive" }];
+  }}
       on:clear={() => {
-        events = [...events, { type: "clear" }];
-      }}
+    events = [...events, { type: "clear" }];
+  }}
       on:select={(e) => {
-        events = [...events, { type: "select", ...e.detail }];
-      }}
+    events = [...events, { type: "select", ...e.detail }];
+  }}
     />
   </HeaderUtilities>
 </Header>
@@ -99,8 +99,8 @@
         <h1>HeaderSearch</h1>
         <Button
           on:click={() => {
-            active = true;
-          }}
+    active = true;
+  }}
         >
           Activate the search bar
         </Button>

@@ -150,16 +150,14 @@
     class:bx--notification-queue--bottom-right={position === "bottom-right"}
     style:position="fixed"
     style:left={isLeftPosition(position)
-      ? offsetLeft
-      : isCenterPosition(position)
-        ? "50%"
-        : undefined}
+    ? offsetLeft
+    : isCenterPosition(position)
+      ? "50%"
+      : undefined}
     style:right={isRightPosition(position) ? offsetRight : undefined}
     style:top={isTopPosition(position) ? offsetTop : undefined}
     style:bottom={isTopPosition(position) ? undefined : offsetBottom}
-    style:transform={isCenterPosition(position)
-      ? "translateX(-50%)"
-      : undefined}
+    style:transform={isCenterPosition(position) ? "translateX(-50%)" : undefined}
     style:z-index={zIndex}
   >
     {#each notifications as notification (notification.id)}

@@ -32,15 +32,15 @@
   <ModalFooter
     primaryButtonText="Save"
     secondaryButtons={[
-      {
-        text: "Save as draft",
-        kind: "secondary",
-        loading: savingDraft,
-        loadingDescription: "Saving...",
-      },
-    ]}
+    {
+      text: "Save as draft",
+      kind: "secondary",
+      loading: savingDraft,
+      loadingDescription: "Saving...",
+    },
+  ]}
     on:click:button--secondary={({ detail }) => {
-      if (detail.text === "Save as draft") onSaveDraft();
-    }}
+    if (detail.text === "Save as draft") onSaveDraft();
+  }}
   />
 </ComposedModal>

@@ -39,8 +39,8 @@
         kind={currentIndex === 2 ? "secondary" : "primary"}
         size="small"
         on:click={() => {
-          currentIndex = currentIndex === 2 ? 0 : 2;
-        }}
+    currentIndex = currentIndex === 2 ? 0 : 2;
+  }}
       >
         Set currentIndex to
         {currentIndex === 2 ? 0 : 2}

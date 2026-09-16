@@ -31,8 +31,8 @@
     {id}
     {name}
     on:change={() => {
-      console.log("change");
-    }}
+    console.log("change");
+  }}
     on:keydown
     on:click
     on:mouseover

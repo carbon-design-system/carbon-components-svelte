@@ -437,20 +437,20 @@
       role="tablist"
       aria-orientation={orientation}
       use:rovingFocus={{
-        selector: "[role='tab']",
-        orientation,
-        skipDisabled: true,
-        getActiveIndex: () => (focusedIndex >= 0 ? focusedIndex : selectedIndex),
-        onMove: (index, event) => {
-          // Prevent the arrow keys from also scrolling the page.
-          event.preventDefault();
-          if (activation === "manual") {
-            focusTab(index);
-          } else {
-            selectTab(index);
-          }
-        },
-      }}
+    selector: "[role='tab']",
+    orientation,
+    skipDisabled: true,
+    getActiveIndex: () => (focusedIndex >= 0 ? focusedIndex : selectedIndex),
+    onMove: (index, event) => {
+      // Prevent the arrow keys from also scrolling the page.
+      event.preventDefault();
+      if (activation === "manual") {
+        focusTab(index);
+      } else {
+        selectTab(index);
+      }
+    },
+  }}
       class:bx--tabs__nav={true}
       on:scroll={updateOverflow}
     >

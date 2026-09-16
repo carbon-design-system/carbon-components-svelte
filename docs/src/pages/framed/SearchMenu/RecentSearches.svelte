@@ -29,10 +29,10 @@
       slot="action"
       href="#"
       on:click={(e) => {
-        e.preventDefault();
-        recent = [];
-        searchRef?.focus();
-      }}
+    e.preventDefault();
+    recent = [];
+    searchRef?.focus();
+  }}
     >
       Clear recent searches
     </Link>

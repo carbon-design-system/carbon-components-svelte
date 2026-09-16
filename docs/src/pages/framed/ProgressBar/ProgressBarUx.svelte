@@ -24,17 +24,17 @@
     <Button
       disabled={value > 0}
       on:click={() => {
-        const interval = setInterval(() => {
-          const delta = Math.random() * 10;
+    const interval = setInterval(() => {
+      const delta = Math.random() * 10;
 
-          if (value + delta < max) {
-            value += delta;
-          } else {
-            value = max;
-            clearInterval(interval);
-          }
-        }, 30);
-      }}
+      if (value + delta < max) {
+        value += delta;
+      } else {
+        value = max;
+        clearInterval(interval);
+      }
+    }, 30);
+  }}
     >
       Start
     </Button>
@@ -42,9 +42,9 @@
       kind="tertiary"
       disabled={value !== max}
       on:click={() => {
-        value = 0;
-        status = "active";
-      }}
+    value = 0;
+    status = "active";
+  }}
     >
       Reset
     </Button>

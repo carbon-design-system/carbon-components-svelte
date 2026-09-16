@@ -212,12 +212,12 @@
         data-warn={showWarn || undefined}
         aria-errormessage={showInvalid ? errorId : undefined}
         aria-describedby={showInvalid
-          ? undefined
-          : showWarn
-            ? warnId
-            : helperText && !isFluid
-              ? helperId
-              : undefined}
+    ? undefined
+    : showWarn
+      ? warnId
+      : helperText && !isFluid
+        ? helperId
+        : undefined}
         {id}
         {name}
         {placeholder}
@@ -237,8 +237,8 @@
         on:change
         on:input
         on:input={(event) => {
-          value = event.target.value;
-        }}
+    value = event.target.value;
+  }}
         on:keydown
         on:keyup
         on:focus
@@ -276,20 +276,20 @@
         class:bx--tooltip--align-end={tooltipAlignment === "end"}
         aria-label={effectivePortalTooltip ? tooltipLabel : undefined}
         on:click={() => {
-          type = type === "password" ? "text" : "password";
-        }}
+    type = type === "password" ? "text" : "password";
+  }}
         on:mouseenter={() => {
-          tooltipOpen = true;
-        }}
+    tooltipOpen = true;
+  }}
         on:mouseleave={() => {
-          tooltipOpen = false;
-        }}
+    tooltipOpen = false;
+  }}
         on:focus={() => {
-          tooltipOpen = true;
-        }}
+    tooltipOpen = true;
+  }}
         on:blur={() => {
-          tooltipOpen = false;
-        }}
+    tooltipOpen = false;
+  }}
       >
         {#if !disabled && !effectivePortalTooltip}
           <span class:bx--assistive-text={true}> {tooltipLabel} </span>

@@ -22,8 +22,8 @@
     key={storageKey}
     bind:value={theme}
     on:update={({ detail }) => {
-      events = [...events, { event: "on:update", detail }];
-    }}
+    events = [...events, { event: "on:update", detail }];
+  }}
   />
   <RadioButtonGroup legendText="Select user" bind:selected={selectedUser}>
     <RadioButton labelText="User 1" value="user-1" />

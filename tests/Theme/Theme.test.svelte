@@ -13,8 +13,8 @@
     {persist}
     {tokens}
     on:update={({ detail }) => {
-      console.log("update", detail);
-    }}
+    console.log("update", detail);
+  }}
   >
     <slot />
   </Theme>

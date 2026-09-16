@@ -18,14 +18,14 @@
     { id: "1", text: "us-west-2" },
     { id: "2", text: "eu-west-1" },
     { id: "3", text: "ap-southeast-1" },
-    ]}
+  ]}
     shouldFilterItem={(item, value) => {
     if (!value) return true;
-      return item.text.toLowerCase().includes(value.toLowerCase());
-    }}
+    return item.text.toLowerCase().includes(value.toLowerCase());
+  }}
     on:select={(e) => {
-      console.log("Selected item:", e.detail);
-    }}
+    console.log("Selected item:", e.detail);
+  }}
   />
   <div>
     <div><strong>Selected ID:</strong> {selectedId ?? "none"}</div>

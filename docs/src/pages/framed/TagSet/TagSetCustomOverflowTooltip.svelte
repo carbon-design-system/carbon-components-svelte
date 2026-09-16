@@ -17,9 +17,8 @@
       <Tag type={certification.type}>{certification.label}</Tag>
     {/each}
     <svelte:fragment slot="overflowTooltip" let:tags let:count>
-      <strong>{count} more:</strong>&nbsp;{tags
-        .map((tag) => tag.label)
-        .join(", ")}
+      <strong>{count} more:</strong
+      >&nbsp;{tags.map((tag) => tag.label).join(", ")}
     </svelte:fragment>
   </TagSet>
 </div>

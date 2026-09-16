@@ -32,11 +32,11 @@
     batchSelection
     bind:selectedRowIds
     headers={[
-      { key: "name", value: "Name" },
-      { key: "protocol", value: "Protocol" },
-      { key: "port", value: "Port" },
-      { key: "rule", value: "Rule" },
-    ]}
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol" },
+    { key: "port", value: "Port" },
+    { key: "rule", value: "Rule" },
+  ]}
     {rows}
   >
     <Toolbar sticky>
@@ -44,8 +44,8 @@
         <Button
           icon={TrashCan}
           on:click={() => {
-            rows = rows.filter((row) => !selectedRowIds.includes(row.id));
-          }}
+    rows = rows.filter((row) => !selectedRowIds.includes(row.id));
+  }}
         >
           Delete
         </Button>

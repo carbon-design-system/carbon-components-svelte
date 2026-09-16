@@ -10,16 +10,16 @@
   bind:selectedId
   typeahead
   items={[
-  {id: "0", text: "Accounting"},
-  {id: "1", text: "Accounts Payable"},
-  {id: "2", text: "Billing"},
-  {id: "3", text: "Business Development"},
-  {id: "4", text: "Business Intelligence"},
-  {id: "5", text: "Customer Success"},
-  {id: "6", text: "Customer Support"},
-  {id: "7", text: "Engineering"},
-  {id: "8", text: "Marketing"},
-  {id: "9", text: "Product"},
+    { id: "0", text: "Accounting" },
+    { id: "1", text: "Accounts Payable" },
+    { id: "2", text: "Billing" },
+    { id: "3", text: "Business Development" },
+    { id: "4", text: "Business Intelligence" },
+    { id: "5", text: "Customer Success" },
+    { id: "6", text: "Customer Support" },
+    { id: "7", text: "Engineering" },
+    { id: "8", text: "Marketing" },
+    { id: "9", text: "Product" },
   ]}
 />
 <br>

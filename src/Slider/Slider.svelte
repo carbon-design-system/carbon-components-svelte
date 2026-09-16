@@ -261,46 +261,42 @@
         aria-valuenow={value}
         aria-valuetext={getValueText(value)}
         aria-labelledby={labelId}
-        aria-describedby={showInvalid
-          ? errorId
-          : showWarn
-            ? warnId
-            : undefined}
+        aria-describedby={showInvalid ? errorId : showWarn ? warnId : undefined}
         aria-invalid={showInvalid || undefined}
         {id}
         on:keydown={(event) => {
-          if (disabled || readonly) return;
+    if (disabled || readonly) return;
 
-          if (event.key === "Home" || event.key === "End") {
-            // Prevent the browser from also scrolling to the top/bottom of the page.
-            event.preventDefault();
-            value = event.key === "Home" ? min : max;
-            dispatch("input", value);
-            dispatch("change", value);
-            return;
-          }
+    if (event.key === "Home" || event.key === "End") {
+      // Prevent the browser from also scrolling to the top/bottom of the page.
+      event.preventDefault();
+      value = event.key === "Home" ? min : max;
+      dispatch("input", value);
+      dispatch("change", value);
+      return;
+    }
 
-          const keys = {
-            ArrowDown: -1,
-            ArrowLeft: -1,
-            ArrowRight: 1,
-            ArrowUp: 1,
-          };
-          if (keys[event.key]) {
-            // Prevent the arrow keys from also scrolling the page.
-            event.preventDefault();
-            const delta =
-              step *
-              (event.shiftKey ? range / step / stepMultiplier : 1) *
-              keys[event.key];
-            let next = Math.round((value + delta) / step) * step;
-            if (next < min) next = min;
-            else if (next > max) next = max;
-            value = next;
-            dispatch("input", value);
-            dispatch("change", value);
-          }
-        }}
+    const keys = {
+      ArrowDown: -1,
+      ArrowLeft: -1,
+      ArrowRight: 1,
+      ArrowUp: 1,
+    };
+    if (keys[event.key]) {
+      // Prevent the arrow keys from also scrolling the page.
+      event.preventDefault();
+      const delta =
+        step *
+        (event.shiftKey ? range / step / stepMultiplier : 1) *
+        keys[event.key];
+      let next = Math.round((value + delta) / step) * step;
+      if (next < min) next = min;
+      else if (next > max) next = max;
+      value = next;
+      dispatch("input", value);
+      dispatch("change", value);
+    }
+  }}
       ></div>
       <div bind:this={trackRef} class:bx--slider__track={true}></div>
       <div
@@ -310,8 +306,7 @@
       {#if resolvedMarks.length > 0}
         <div class:bx--slider__marks={true} aria-hidden="true">
           {#each resolvedMarks as mark (mark.value)}
-            {@const percent =
-              range === 0 ? 0 : ((mark.value - min) / range) * 100}
+            {@const (percent = range === 0 ? 0 : ((mark.value - min) / range) * 100)}
             <span class:bx--slider__mark={true} style:left="{percent}%">
               {#if mark.label != null && mark.label !== ""}
                 <span class:bx--slider__mark-label={true}>{mark.label}</span>
@@ -351,22 +346,18 @@
         {max}
         {step}
         on:change={(event) => {
-          if (!readonly) {
-            let next = Number(event.target.value);
-            if (next < min) next = min;
-            else if (next > max) next = max;
-            value = next;
-            dispatch("change", value);
-          }
-        }}
+    if (!readonly) {
+      let next = Number(event.target.value);
+      if (next < min) next = min;
+      else if (next > max) next = max;
+      value = next;
+      dispatch("change", value);
+    }
+  }}
         data-invalid={showInvalid || null}
         data-warn={showWarn || null}
         aria-invalid={showInvalid || null}
-        aria-describedby={showInvalid
-          ? errorId
-          : showWarn
-            ? warnId
-            : undefined}
+        aria-describedby={showInvalid ? errorId : showWarn ? warnId : undefined}
       >
     </div>
   </div>

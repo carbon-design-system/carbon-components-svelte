@@ -74,20 +74,20 @@
     aria-disabled={readonly || undefined}
     aria-readonly={readonly || undefined}
     on:click={(event) => {
-      if (readonly) event.preventDefault();
-    }}
+    if (readonly) event.preventDefault();
+  }}
     on:change={() => {
-      if (readonly) return;
-      toggled = !toggled;
-      dispatch("toggle", { toggled });
-    }}
+    if (readonly) return;
+    toggled = !toggled;
+    dispatch("toggle", { toggled });
+  }}
     on:change
     on:keydown={(event) => {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        if (!readonly) ref?.click();
-      }
-    }}
+    if (event.key === "Enter") {
+      event.preventDefault();
+      if (!readonly) ref?.click();
+    }
+  }}
     on:keyup
     on:focus
     on:blur
@@ -96,7 +96,7 @@
     {name}
   >
   <label
-    aria-label={labelText ? undefined : $$props["aria-label"] ?? "Toggle"}
+    aria-label={labelText ? undefined : ($$props["aria-label"] ?? "Toggle")}
     for={id}
     class:bx--toggle-input__label={true}
   >

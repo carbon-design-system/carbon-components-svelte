@@ -106,9 +106,9 @@
         kind={button.kind ?? "secondary"}
         disabled={button.disabled || button.loading}
         on:click={() => {
-          if (button.loading) return;
-          dispatch("click:button--secondary", { text: button.text });
-        }}
+    if (button.loading) return;
+    dispatch("click:button--secondary", { text: button.text });
+  }}
       >
         {#if button.loading}
           <InlineLoading

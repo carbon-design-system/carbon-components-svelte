@@ -31,11 +31,11 @@
       labelText="Region"
       selectedId="us-south"
       items={[
-        { id: "us-south", text: "Dallas" },
-        { id: "us-east", text: "Washington DC" },
-        { id: "eu-de", text: "Frankfurt" },
-        { id: "jp-tok", text: "Tokyo" },
-      ]}
+    { id: "us-south", text: "Dallas" },
+    { id: "us-east", text: "Washington DC" },
+    { id: "eu-de", text: "Frankfurt" },
+    { id: "jp-tok", text: "Tokyo" },
+  ]}
     />
     <OverflowMenu portalMenu>
       <OverflowMenuItem text="Edit" />

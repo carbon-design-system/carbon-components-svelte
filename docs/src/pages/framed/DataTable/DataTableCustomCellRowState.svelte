@@ -39,11 +39,7 @@
   <svelte:fragment slot="cell" let:row let:cell let:rowSelected let:rowExpanded>
     {#if cell.key === "status"}
       <span
-        style="color: {rowSelected
-          ? '#0f62fe'
-          : cell.value === 'Active'
-            ? 'green'
-            : 'gray'}"
+        style="color: {rowSelected ? "#0f62fe" : cell.value === "Active" ? "green" : "gray"}"
       >
         {cell.value}
         {rowExpanded ? "(expanded)" : ""}

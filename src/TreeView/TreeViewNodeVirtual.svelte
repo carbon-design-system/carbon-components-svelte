@@ -121,9 +121,9 @@
       class:bx--tree-node--disabled={disabled}
       class:bx--tree-node--with-icon={icon}
       on:click|stopPropagation={(event) => {
-        if (disabled) return;
-        clickNode(mergedNode, event);
-      }}
+    if (disabled) return;
+    clickNode(mergedNode, event);
+  }}
       on:focus={() => focusNode(mergedNode)}
     >
       <div
@@ -152,9 +152,7 @@
     aria-expanded={hasChildren ? expanded : undefined}
     aria-current={id === $activeNodeId || undefined}
     aria-selected={isCheckboxMode || disabled ? undefined : selected}
-    aria-checked={isCheckboxMode
-      ? toAriaChecked(checked, indeterminate)
-      : undefined}
+    aria-checked={isCheckboxMode ? toAriaChecked(checked, indeterminate) : undefined}
     aria-disabled={disabled}
     class:bx--tree-node={true}
     class:bx--tree-parent-node={hasChildren}
@@ -164,12 +162,12 @@
     class:bx--tree-node--disabled={disabled}
     class:bx--tree-node--with-icon={icon}
     on:click|stopPropagation={(event) => {
-      if (disabled) return;
-      // Stop the label from toggling the decorative input; `clickNode`
-      // owns checked state.
-      if (isCheckboxMode) event.preventDefault();
-      clickNode(mergedNode, event);
-    }}
+    if (disabled) return;
+    // Stop the label from toggling the decorative input; `clickNode`
+    // owns checked state.
+    if (isCheckboxMode) event.preventDefault();
+    clickNode(mergedNode, event);
+  }}
     on:focus={() => focusNode(mergedNode)}
   >
     <div
@@ -195,18 +193,18 @@
           class:bx--tree-parent-node__toggle={true}
           {disabled}
           on:click={() => {
-            if (disabled) return;
-            expandNode(mergedNode, !expanded);
-            toggleNode(mergedNode);
-          }}
+    if (disabled) return;
+    expandNode(mergedNode, !expanded);
+    toggleNode(mergedNode);
+  }}
         >
           <CaretDown
             class={[
-              "bx--tree-parent-node__toggle-icon",
-              expanded && "bx--tree-parent-node__toggle-icon--expanded",
-            ]
-              .filter(Boolean)
-              .join(" ")}
+    "bx--tree-parent-node__toggle-icon",
+    expanded && "bx--tree-parent-node__toggle-icon--expanded",
+  ]
+    .filter(Boolean)
+    .join(" ")}
           />
         </span>
         <span class:bx--tree-node__label__details={true}>

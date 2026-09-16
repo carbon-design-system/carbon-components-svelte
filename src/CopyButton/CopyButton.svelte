@@ -242,12 +242,16 @@
   on:click
   on:click={async () => {
     try {
-      await copyFeedback.onClick(async () => {
-        if (copy === copyText ? text !== undefined : true) {
-          await copy(text ?? "");
-          dispatch("copy");
-        }
-      }, feedbackTimeout, feedbackPortalled);
+      await copyFeedback.onClick(
+        async () => {
+          if (copy === copyText ? text !== undefined : true) {
+            await copy(text ?? "");
+            dispatch("copy");
+          }
+        },
+        feedbackTimeout,
+        feedbackPortalled,
+      );
     } catch (error) {
       dispatch("copy:error", { error });
     }

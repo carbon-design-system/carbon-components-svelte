@@ -32,9 +32,9 @@
         <ProfileMenuItem
           icon={account.id === activeId ? Checkmark : undefined}
           on:click={() => {
-            activeId = account.id;
-            isOpen = false;
-          }}
+    activeId = account.id;
+    isOpen = false;
+  }}
         >
           {account.name}
         </ProfileMenuItem>

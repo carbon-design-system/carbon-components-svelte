@@ -138,30 +138,30 @@
 {/if}
 
 {#if render === "toggle"}
-  {@const { themes: toggleThemes, ...toggleProps } = toggle}
+  {@const ({ themes: toggleThemes, ...toggleProps } = toggle)}
   <Toggle
     {...toggleProps}
     toggled={theme === toggleThemes[1]}
     on:toggle={(event) => {
-      theme = event.detail.toggled ? toggleThemes[1] : toggleThemes[0];
-    }}
+    theme = event.detail.toggled ? toggleThemes[1] : toggleThemes[0];
+  }}
   />
 {:else if render === "select"}
-  {@const { themes: selectThemes, ...selectProps } = select}
+  {@const ({ themes: selectThemes, ...selectProps } = select)}
   <Select {...selectProps} bind:selected={theme}>
     {#each selectThemes as theme (theme)}
       <SelectItem value={theme} text={themes[theme]} />
     {/each}
   </Select>
 {:else if render === "dropdown"}
-  {@const { themes: dropdownThemes, ...dropdownProps } = dropdown}
+  {@const ({ themes: dropdownThemes, ...dropdownProps } = dropdown)}
   <Dropdown
     {...dropdownProps}
     items={dropdownThemes.map((t) => ({ id: t, text: themes[t] }))}
     selectedId={theme}
     on:select={(event) => {
-      theme = event.detail.selectedId;
-    }}
+    theme = event.detail.selectedId;
+  }}
   />
 {/if}
 

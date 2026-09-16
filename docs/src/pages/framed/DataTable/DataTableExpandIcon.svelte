@@ -59,7 +59,7 @@
   <svelte:fragment slot="expandIcon" let:expanded let:props>
     <Add
       {...props}
-      style="display: inline-block; transition: transform 0.2s ease; transform: {expanded ? 'rotate(45deg)' : 'rotate(0deg)'}"
+      style="display: inline-block; transition: transform 0.2s ease; transform: {expanded ? "rotate(45deg)" : "rotate(0deg)"}"
     />
   </svelte:fragment>
   <svelte:fragment slot="expandedRow" let:row>

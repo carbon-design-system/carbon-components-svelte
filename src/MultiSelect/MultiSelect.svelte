@@ -973,7 +973,7 @@
   class:bx--multi-select--filterable__wrapper={isFluid && filterable}
 >
   {#each formItems as item (item.id)}
-    {@const itemInput = itemToInput(item) ?? {}}
+    {@const (itemInput = itemToInput(item) ?? {})}
     <input
       type="hidden"
       name={itemInput.name ?? name ?? item.id}
@@ -1022,8 +1022,7 @@
       >
         <div
           class:bx--list-box__field={true}
-          class:bx--list-box__field--wrapper--input-focused={!isFluid &&
-            showFieldFocus}
+          class:bx--list-box__field--wrapper--input-focused={!isFluid && showFieldFocus}
         >
           {#if selectionCount > 0}
             <ListBoxSelection
@@ -1054,66 +1053,66 @@
             class:bx--text-input--empty={value === ""}
             class:bx--text-input--light={light}
             on:click={() => {
-            if (disabled) return;
-            open = true;
-          }}
+    if (disabled) return;
+    open = true;
+  }}
             on:keydown
             on:keydown|stopPropagation={(event) => {
-            // Read-only opens and navigates the menu to review values, but the
-            // keys that clear the selection are blocked; selectItem guards the
-            // rest (Enter/option toggle).
-            if (readonly && (event.key === "Backspace" || event.key === "Delete")) {
-              return;
-            }
-            if (event.key === "Enter") {
-              if (highlightOrigin === "keyboard" && highlightedId) {
-                const highlightedItem = sortedItems.find(
-                  (item) => item.id === highlightedId,
-                );
-                if (highlightedItem) selectItem(highlightedItem);
-              }
-            } else if (event.key === "Tab") {
-              open = false;
-            } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
-              event.preventDefault();
-              const step = event.key === "ArrowDown" ? 1 : -1;
-              if (event.altKey) {
-                // APG combobox pattern: Alt+ArrowDown opens a closed menu
-                // without moving the highlight; Alt+ArrowUp closes an open one.
-                if (event.key === "ArrowDown" && !open) {
-                  open = true;
-                } else if (event.key === "ArrowUp" && open) {
-                  close("escape-key");
-                }
-              } else {
-                if (!open) open = true;
-                change(step);
-              }
-            } else if (event.key === "Escape") {
-              close("escape-key");
-            } else if (event.key === " ") {
-              if (readonly) event.preventDefault();
-              if (!open) open = true;
-            } else if (event.key === "Backspace" && value === "") {
-              clear({ open: openOnClear });
-            } else if (event.key === "Delete") {
-              value = "";
-              if (!open) clear({ open: openOnClear });
-            }
-          }}
+    // Read-only opens and navigates the menu to review values, but the
+    // keys that clear the selection are blocked; selectItem guards the
+    // rest (Enter/option toggle).
+    if (readonly && (event.key === "Backspace" || event.key === "Delete")) {
+      return;
+    }
+    if (event.key === "Enter") {
+      if (highlightOrigin === "keyboard" && highlightedId) {
+        const highlightedItem = sortedItems.find(
+          (item) => item.id === highlightedId,
+        );
+        if (highlightedItem) selectItem(highlightedItem);
+      }
+    } else if (event.key === "Tab") {
+      open = false;
+    } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault();
+      const step = event.key === "ArrowDown" ? 1 : -1;
+      if (event.altKey) {
+        // APG combobox pattern: Alt+ArrowDown opens a closed menu
+        // without moving the highlight; Alt+ArrowUp closes an open one.
+        if (event.key === "ArrowDown" && !open) {
+          open = true;
+        } else if (event.key === "ArrowUp" && open) {
+          close("escape-key");
+        }
+      } else {
+        if (!open) open = true;
+        change(step);
+      }
+    } else if (event.key === "Escape") {
+      close("escape-key");
+    } else if (event.key === " ") {
+      if (readonly) event.preventDefault();
+      if (!open) open = true;
+    } else if (event.key === "Backspace" && value === "") {
+      clear({ open: openOnClear });
+    } else if (event.key === "Delete") {
+      value = "";
+      if (!open) clear({ open: openOnClear });
+    }
+  }}
             on:input
             on:input={() => {
-            if (!open) open = true;
-          }}
+    if (!open) open = true;
+  }}
             on:keyup
             on:focus
             on:focus={() => {
-            fieldFocused = true;
-          }}
+    fieldFocused = true;
+  }}
             on:blur
             on:blur={() => {
-            fieldFocused = false;
-          }}
+    fieldFocused = false;
+  }}
             on:paste
             {disabled}
             {readonly}
@@ -1123,18 +1122,18 @@
           {#if value}
             <ListBoxSelection
               on:clear={() => {
-              value = "";
-              open = false;
-              // `bind:value` writes the DOM value without firing "input",
-              // so the `on:input` below would miss this clear. Set the
-              // node first, then dispatch. Svelte's `bind:value` listener
-              // reads `event.target.value`, and the reactive assignment
-              // above has not flushed yet.
-              if (inputRef) {
-                inputRef.value = "";
-                inputRef.dispatchEvent(new Event("input", { bubbles: true }));
-              }
-            }}
+    value = "";
+    open = false;
+    // `bind:value` writes the DOM value without firing "input",
+    // so the `on:input` below would miss this clear. Set the
+    // node first, then dispatch. Svelte's `bind:value` listener
+    // reads `event.target.value`, and the reactive assignment
+    // above has not flushed yet.
+    if (inputRef) {
+      inputRef.value = "";
+      inputRef.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+  }}
               translateWithId={translateWithIdSelection}
               {disabled}
               {readonly}
@@ -1143,10 +1142,10 @@
           {/if}
           <ListBoxMenuIcon
             on:click={(event) => {
-            if (disabled) return;
-            event.stopPropagation();
-            open = !open;
-          }}
+    if (disabled) return;
+    event.stopPropagation();
+    open = !open;
+  }}
             {translateWithId}
             {open}
           />
@@ -1160,9 +1159,7 @@
            wrapper avoids that `:focus` specificity bump. -->
       <div
         class:bx--list-box__field--wrapper={true}
-        class:bx--list-box__field--wrapper--input-focused={isFluid
-          ? showFluidFieldFocus
-          : showFieldFocus}
+        class:bx--list-box__field--wrapper--input-focused={isFluid ? showFluidFieldFocus : showFieldFocus}
       >
         <ListBoxField
           {...$$restProps}
@@ -1173,82 +1170,81 @@
           aria-controls={open ? menuId : undefined}
           aria-describedby={fieldDescribedById}
           on:focus={() => {
-          fieldFocused = true;
-        }}
+    fieldFocused = true;
+  }}
           on:click={() => {
-          if (disabled) return;
-          open = !open;
-        }}
+    if (disabled) return;
+    open = !open;
+  }}
           on:keydown={(event) => {
-          if (
-            event.key === " " ||
-            event.key === "Enter" ||
-            event.key === "ArrowUp" ||
-            event.key === "ArrowDown"
-          ) {
-            // Prevent the native button from synthesizing a click (which would
-            // toggle the menu) so these keys are handled solely below.
-            event.preventDefault();
-          }
-          // Read-only still opens and navigates the menu; selectItem is the
-          // single guard that blocks the actual selection change.
-          if (event.key === " ") {
-            if (!open) {
-              open = true;
-            } else if (highlightOrigin === "keyboard" && highlightedIndex > -1) {
-              const item = (filterable ? filteredItems : sortedItems)[
-                highlightedIndex
-              ];
-              if (item) selectItem(item);
-            }
-          } else if (event.key === "Tab") {
-            open = false;
-          } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
-            const step = event.key === "ArrowDown" ? 1 : -1;
-            if (event.altKey) {
-              // APG combobox pattern: Alt+ArrowDown opens a closed menu
-              // without moving the highlight; Alt+ArrowUp closes an open one.
-              if (event.key === "ArrowDown" && !open) {
-                open = true;
-              } else if (event.key === "ArrowUp" && open) {
-                close("escape-key");
-              }
-            } else {
-              if (!open) open = true;
-              change(step);
-            }
-          } else if (event.key === "Enter") {
-            if (highlightOrigin === "keyboard" && highlightedIndex > -1) {
-              const item = (filterable ? filteredItems : sortedItems)[
-                highlightedIndex
-              ];
-              if (item) selectItem(item);
-            }
-          } else if (event.key === "Escape") {
-            close("escape-key");
-          } else if (event.key === "Home" || event.key === "End") {
-            // APG select-only combobox: Home/End open a closed listbox, then
-            // move the highlight to the first/last option. The filterable
-            // variant deliberately leaves these keys to the text caret.
-            event.preventDefault();
-            if (!open) open = true;
-            const navigableItems = filterable ? filteredItems : sortedItems;
-            highlightedIndex =
-              event.key === "Home" ? 0 : navigableItems.length - 1;
-            highlightOrigin = "keyboard";
-          } else if (event.key === "Delete" || event.key === "Backspace") {
-            // Clear the whole selection from the keyboard, menu open or
-            // closed, matching the filterable variant. Read-only reviews the
-            // menu but never changes the selection.
-            if (readonly) return;
-            event.preventDefault();
-            clear({ open: openOnClear });
-          }
-        }}
+    if (
+      event.key === " " ||
+      event.key === "Enter" ||
+      event.key === "ArrowUp" ||
+      event.key === "ArrowDown"
+    ) {
+      // Prevent the native button from synthesizing a click (which would
+      // toggle the menu) so these keys are handled solely below.
+      event.preventDefault();
+    }
+    // Read-only still opens and navigates the menu; selectItem is the
+    // single guard that blocks the actual selection change.
+    if (event.key === " ") {
+      if (!open) {
+        open = true;
+      } else if (highlightOrigin === "keyboard" && highlightedIndex > -1) {
+        const item = (filterable ? filteredItems : sortedItems)[
+          highlightedIndex
+        ];
+        if (item) selectItem(item);
+      }
+    } else if (event.key === "Tab") {
+      open = false;
+    } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      const step = event.key === "ArrowDown" ? 1 : -1;
+      if (event.altKey) {
+        // APG combobox pattern: Alt+ArrowDown opens a closed menu
+        // without moving the highlight; Alt+ArrowUp closes an open one.
+        if (event.key === "ArrowDown" && !open) {
+          open = true;
+        } else if (event.key === "ArrowUp" && open) {
+          close("escape-key");
+        }
+      } else {
+        if (!open) open = true;
+        change(step);
+      }
+    } else if (event.key === "Enter") {
+      if (highlightOrigin === "keyboard" && highlightedIndex > -1) {
+        const item = (filterable ? filteredItems : sortedItems)[
+          highlightedIndex
+        ];
+        if (item) selectItem(item);
+      }
+    } else if (event.key === "Escape") {
+      close("escape-key");
+    } else if (event.key === "Home" || event.key === "End") {
+      // APG select-only combobox: Home/End open a closed listbox, then
+      // move the highlight to the first/last option. The filterable
+      // variant deliberately leaves these keys to the text caret.
+      event.preventDefault();
+      if (!open) open = true;
+      const navigableItems = filterable ? filteredItems : sortedItems;
+      highlightedIndex = event.key === "Home" ? 0 : navigableItems.length - 1;
+      highlightOrigin = "keyboard";
+    } else if (event.key === "Delete" || event.key === "Backspace") {
+      // Clear the whole selection from the keyboard, menu open or
+      // closed, matching the filterable variant. Read-only reviews the
+      // menu but never changes the selection.
+      if (readonly) return;
+      event.preventDefault();
+      clear({ open: openOnClear });
+    }
+  }}
           on:blur={(event) => {
-          fieldFocused = false;
-          dispatch("blur", event);
-        }}
+    fieldFocused = false;
+    dispatch("blur", event);
+  }}
           {id}
           {disabled}
           {readonly}
@@ -1285,33 +1281,30 @@
         on:scroll
         on:scroll={handleMenuScroll}
         on:mouseleave={() => {
-          // Clear the hover highlight when the cursor leaves the menu so the
-          // highlighted state does not linger on the last hovered item.
-          highlightedIndex = -1;
-          highlightOrigin = null;
-        }}
+    // Clear the hover highlight when the cursor leaves the menu so the
+    // highlighted state does not linger on the last hovered item.
+    highlightedIndex = -1;
+    highlightOrigin = null;
+  }}
         bind:ref={listRef}
         style={isWindowed
-          ? `max-height: ${menuMaxHeight}; overflow-y: auto;`
-          : effectivePortalMenu
-            ? `max-height: ${menuMaxHeight};`
-            : undefined}
+    ? `max-height: ${menuMaxHeight}; overflow-y: auto;`
+    : effectivePortalMenu
+      ? `max-height: ${menuMaxHeight};`
+      : undefined}
       >
         {#if isVirtualized}
           <div style:height="{totalHeight}px" style:position="relative">
             <div style:transform="translateY({offsetY}px)">
               {#each itemsToRender as item, index (item.id)}
-                {@const actualIndex = startIndex + index}
-                {@const optionId = `${id}-${item.id}`}
-                {@const itemDisabled =
-                  item.disabled ||
-                  (hasMaxSelectedItems && !!item.isSelectAll) ||
-                  (isAtSelectionCap && !item.checked)}
-                {@const capDisabled =
-                  isAtSelectionCap &&
-                  !item.checked &&
-                  !item.disabled &&
-                  !item.isSelectAll}
+                {@const (actualIndex = startIndex + index)}
+                {@const (optionId = `${id}-${item.id}`)}
+                {@const (itemDisabled =
+    item.disabled ||
+    (hasMaxSelectedItems && !!item.isSelectAll) ||
+    (isAtSelectionCap && !item.checked))}
+                {@const (capDisabled =
+    isAtSelectionCap && !item.checked && !item.disabled && !item.isSelectAll)}
                 <ListBoxMenuItem
                   id={optionId}
                   role="option"
@@ -1319,43 +1312,43 @@
                   aria-describedby={capDisabled ? maxSelectedId : undefined}
                   aria-selected={item.isSelectAll ? allSelected : item.checked}
                   aria-checked={item.isSelectAll
-                    ? selectAllIndeterminate
-                      ? "mixed"
-                      : allSelected
-                    : item.checked}
+    ? selectAllIndeterminate
+      ? "mixed"
+      : allSelected
+    : item.checked}
                   aria-setsize={itemsToUse.length}
                   aria-posinset={actualIndex + 1}
                   data-virtual-index={isMeasured ? actualIndex : undefined}
                   active={item.isSelectAll ? false : item.checked}
                   disabled={itemDisabled}
                   on:click={(event) => {
-                    if (itemDisabled) {
-                      event.stopPropagation();
-                      return;
-                    }
-                    // Label default synthesizes a second click; without this,
-                    // selectItem runs twice and the toggle nets to no change.
-                    event.preventDefault();
-                    const usedRange =
-                      event.shiftKey &&
-                      prevSelectedItemId !== null &&
-                      !item.isSelectAll &&
-                      selectItemRange(actualIndex, !item.checked);
-                    if (!usedRange) {
-                      selectItem(item);
-                    }
-                    prevSelectedItemId = item.id;
-                  }}
+    if (itemDisabled) {
+      event.stopPropagation();
+      return;
+    }
+    // Label default synthesizes a second click; without this,
+    // selectItem runs twice and the toggle nets to no change.
+    event.preventDefault();
+    const usedRange =
+      event.shiftKey &&
+      prevSelectedItemId !== null &&
+      !item.isSelectAll &&
+      selectItemRange(actualIndex, !item.checked);
+    if (!usedRange) {
+      selectItem(item);
+    }
+    prevSelectedItemId = item.id;
+  }}
                   on:mousedown={(event) => {
-                    // Keep focus on the field so screen readers don't
-                    // re-announce it on every option click.
-                    event.preventDefault();
-                  }}
+    // Keep focus on the field so screen readers don't
+    // re-announce it on every option click.
+    event.preventDefault();
+  }}
                   on:mouseenter={() => {
-                    if (itemDisabled) return;
-                    highlightedIndex = actualIndex;
-                    highlightOrigin = "pointer";
-                  }}
+    if (itemDisabled) return;
+    highlightedIndex = actualIndex;
+    highlightOrigin = "pointer";
+  }}
                 >
                   <HighlightSlot {optionId} let:highlighted>
                     <Checkbox
@@ -1366,9 +1359,7 @@
                       decorative
                       id="checkbox-{id}-{item.id}"
                       checked={item.isSelectAll ? allSelected : item.checked}
-                      indeterminate={item.isSelectAll
-                        ? selectAllIndeterminate
-                        : false}
+                      indeterminate={item.isSelectAll ? selectAllIndeterminate : false}
                       disabled={itemDisabled}
                       {readonly}
                     >
@@ -1389,16 +1380,13 @@
           </div>
         {:else}
           {#each itemsToRender as item, index (item.id)}
-            {@const optionId = `${id}-${item.id}`}
-            {@const itemDisabled =
-              item.disabled ||
-              (hasMaxSelectedItems && !!item.isSelectAll) ||
-              (isAtSelectionCap && !item.checked)}
-            {@const capDisabled =
-              isAtSelectionCap &&
-              !item.checked &&
-              !item.disabled &&
-              !item.isSelectAll}
+            {@const (optionId = `${id}-${item.id}`)}
+            {@const (itemDisabled =
+    item.disabled ||
+    (hasMaxSelectedItems && !!item.isSelectAll) ||
+    (isAtSelectionCap && !item.checked))}
+            {@const (capDisabled =
+    isAtSelectionCap && !item.checked && !item.disabled && !item.isSelectAll)}
             <ListBoxMenuItem
               id={optionId}
               role="option"
@@ -1406,41 +1394,41 @@
               aria-describedby={capDisabled ? maxSelectedId : undefined}
               aria-selected={item.isSelectAll ? allSelected : item.checked}
               aria-checked={item.isSelectAll
-                ? selectAllIndeterminate
-                  ? "mixed"
-                  : allSelected
-                : item.checked}
+    ? selectAllIndeterminate
+      ? "mixed"
+      : allSelected
+    : item.checked}
               data-virtual-index={isMeasured ? index : undefined}
               active={item.isSelectAll ? false : item.checked}
               disabled={itemDisabled}
               on:click={(event) => {
-                if (itemDisabled) {
-                  event.stopPropagation();
-                  return;
-                }
-                // Label default synthesizes a second click; without this,
-                // selectItem runs twice and the toggle nets to no change.
-                event.preventDefault();
-                const usedRange =
-                  event.shiftKey &&
-                  prevSelectedItemId !== null &&
-                  !item.isSelectAll &&
-                  selectItemRange(index, !item.checked);
-                if (!usedRange) {
-                  selectItem(item);
-                }
-                prevSelectedItemId = item.id;
-              }}
+    if (itemDisabled) {
+      event.stopPropagation();
+      return;
+    }
+    // Label default synthesizes a second click; without this,
+    // selectItem runs twice and the toggle nets to no change.
+    event.preventDefault();
+    const usedRange =
+      event.shiftKey &&
+      prevSelectedItemId !== null &&
+      !item.isSelectAll &&
+      selectItemRange(index, !item.checked);
+    if (!usedRange) {
+      selectItem(item);
+    }
+    prevSelectedItemId = item.id;
+  }}
               on:mousedown={(event) => {
-                // Keep focus on the field so screen readers don't
-                // re-announce it on every option click.
-                event.preventDefault();
-              }}
+    // Keep focus on the field so screen readers don't
+    // re-announce it on every option click.
+    event.preventDefault();
+  }}
               on:mouseenter={() => {
-                if (itemDisabled) return;
-                highlightedIndex = index;
-                highlightOrigin = "pointer";
-              }}
+    if (itemDisabled) return;
+    highlightedIndex = index;
+    highlightOrigin = "pointer";
+  }}
             >
               <HighlightSlot {optionId} let:highlighted>
                 <Checkbox
@@ -1451,9 +1439,7 @@
                   decorative
                   id="checkbox-{id}-{item.id}"
                   checked={item.isSelectAll ? allSelected : item.checked}
-                  indeterminate={item.isSelectAll
-                    ? selectAllIndeterminate
-                    : false}
+                  indeterminate={item.isSelectAll ? selectAllIndeterminate : false}
                   disabled={itemDisabled}
                   {readonly}
                 >

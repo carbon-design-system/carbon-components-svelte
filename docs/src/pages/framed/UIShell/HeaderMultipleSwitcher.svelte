@@ -29,9 +29,9 @@
       tooltipAlignment="start"
       icon={Notification}
       on:open={() => {
-        isOpen2 = false;
-        isOpen3 = false;
-      }}
+    isOpen2 = false;
+    isOpen3 = false;
+  }}
     >
       <HeaderPanelLinks>
         <HeaderPanelDivider>Today</HeaderPanelDivider>
@@ -49,9 +49,9 @@
       iconDescription="Help"
       icon={Help}
       on:open={() => {
-        isOpen1 = false;
-        isOpen3 = false;
-      }}
+    isOpen1 = false;
+    isOpen3 = false;
+  }}
     >
       <HeaderPanelLinks>
         <HeaderPanelDivider>Support</HeaderPanelDivider>
@@ -64,9 +64,9 @@
       bind:isOpen={isOpen3}
       text="IBM Cloud"
       on:open={() => {
-        isOpen1 = false;
-        isOpen2 = false;
-      }}
+    isOpen1 = false;
+    isOpen2 = false;
+  }}
     >
       <HeaderPanelLinks>
         <HeaderPanelDivider>Switch product</HeaderPanelDivider>

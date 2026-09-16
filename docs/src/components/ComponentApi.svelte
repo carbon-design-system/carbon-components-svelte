@@ -150,26 +150,24 @@
       </StructuredListHead>
       <StructuredListBody>
         {#each component.props.sort((a, b) => {
-          // Sort props so required props are listed first, then reactive props.
+     // Sort props so required props are listed first, then reactive props.
 
-          if (a.isRequired !== b.isRequired) {
-            return b.isRequired ? 1 : -1;
-          }
+     if (a.isRequired !== b.isRequired) {
+       return b.isRequired ? 1 : -1;
+     }
 
-          if (a.reactive !== b.reactive) {
-            return b.reactive ? 1 : -1;
-          }
+     if (a.reactive !== b.reactive) {
+       return b.reactive ? 1 : -1;
+     }
 
-          return 0;
-        }) as prop (prop.name)}
+     return 0;
+   }) as prop (prop.name)}
           <StructuredListRow>
             <StructuredListCell noWrap>
               <InlineSnippet code={prop.name} portalTooltip />
               {#if prop.reactive}
                 <div
-                  style="white-space: nowrap; margin-top: var(--cds-spacing-03); margin-bottom: var(--cds-spacing-{prop.isRequired
-                    ? '01'
-                    : '03'})"
+                  style="white-space: nowrap; margin-top: var(--cds-spacing-03); margin-bottom: var(--cds-spacing-{prop.isRequired ? "01" : "03"})"
                 >
                   <Tag style="margin-left: 0" size="sm" type="cyan">
                     Reactive
@@ -184,7 +182,7 @@
               {#each (prop.type || "").split(" | ") as type, i (type)}
                 <div
                   class="cell"
-                  style="z-index: {(prop.type || '').split(' | ').length - i}"
+                  style="z-index: {(prop.type || "").split(" | ").length - i}"
                 >
                   {#if type.startsWith("HTML")}
                     <OutboundLink
@@ -223,7 +221,7 @@
             </StructuredListCell>
             <StructuredListCell>
               {#if prop.description}
-                {@const parsed = parseDescription(prop.description)}
+                {@const (parsed = parseDescription(prop.description))}
                 {#if parsed.mainDescription}
                   <div class="description">
                     {@html formatDescriptionHtml(parsed.mainDescription)}
@@ -350,7 +348,7 @@
 </h2>
 
 {#if dispatched_events.length > 0}
-  {@const hasDescription = dispatched_events.find((el) => el.description)}
+  {@const (hasDescription = dispatched_events.find((el) => el.description))}
   <div class="overflow">
     <StructuredList flush condensed>
       <StructuredListHead>

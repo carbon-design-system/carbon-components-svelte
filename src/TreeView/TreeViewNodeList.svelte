@@ -191,9 +191,7 @@
     tabindex={disabled ? undefined : -1}
     aria-current={id === $activeNodeId || undefined}
     aria-selected={isCheckboxMode || disabled ? undefined : selected}
-    aria-checked={isCheckboxMode
-      ? toAriaChecked(checked, indeterminate)
-      : undefined}
+    aria-checked={isCheckboxMode ? toAriaChecked(checked, indeterminate) : undefined}
     aria-disabled={disabled}
     class:bx--tree-node={true}
     class:bx--tree-parent-node={true}
@@ -207,69 +205,69 @@
     aria-posinset={posinset}
     aria-setsize={setsize}
     on:click|stopPropagation={(event) => {
-      if (disabled) return;
-      // Stop the label from toggling the decorative input; `clickNode`
-      // owns checked state.
-      if (isCheckboxMode) event.preventDefault();
-      clickNode(node, event);
-    }}
+    if (disabled) return;
+    // Stop the label from toggling the decorative input; `clickNode`
+    // owns checked state.
+    if (isCheckboxMode) event.preventDefault();
+    clickNode(node, event);
+  }}
     on:keydown={(event) => {
-      if (
-        event.key === "ArrowUp" ||
-        event.key === "ArrowDown" ||
-        event.key === "Home" ||
-        event.key === "End"
-      ) {
-        event.preventDefault();
-      }
+    if (
+      event.key === "ArrowUp" ||
+      event.key === "ArrowDown" ||
+      event.key === "Home" ||
+      event.key === "End"
+    ) {
+      event.preventDefault();
+    }
 
-      if (
-        event.key === "ArrowLeft" ||
-        event.key === "ArrowRight" ||
-        event.key === "Enter"
-      ) {
-        event.preventDefault();
-        event.stopPropagation();
-      }
+    if (
+      event.key === "ArrowLeft" ||
+      event.key === "ArrowRight" ||
+      event.key === "Enter"
+    ) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
 
-      if (parent && event.key === "ArrowLeft") {
-        if (expanded) {
-          expandNode(node, false);
-          toggleNode(node);
-        } else {
-          const parentNode = findParentTreeNode(ref.parentElement);
-          if (parentNode instanceof HTMLElement) parentNode.focus();
+    if (parent && event.key === "ArrowLeft") {
+      if (expanded) {
+        expandNode(node, false);
+        toggleNode(node);
+      } else {
+        const parentNode = findParentTreeNode(ref.parentElement);
+        if (parentNode instanceof HTMLElement) parentNode.focus();
+      }
+    }
+
+    if (parent && event.key === "ArrowRight") {
+      if (expanded) {
+        const groupUl = ref.lastElementChild;
+        if (groupUl instanceof HTMLElement) {
+          const next = firstTreeItemInGroup(groupUl);
+          next?.focus();
         }
+      } else {
+        expandNode(node, true);
+        toggleNode(node);
       }
+    }
 
-      if (parent && event.key === "ArrowRight") {
-        if (expanded) {
-          const groupUl = ref.lastElementChild;
-          if (groupUl instanceof HTMLElement) {
-            const next = firstTreeItemInGroup(groupUl);
-            next?.focus();
-          }
-        } else {
-          expandNode(node, true);
-          toggleNode(node);
-        }
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      if (disabled) return;
+      if (event.key === "Enter" && parent) {
+        const nextExpanded = !expanded;
+        expandNode(node, nextExpanded);
+        toggleNode(node);
       }
-
-      if (event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        if (disabled) return;
-        if (event.key === "Enter" && parent) {
-          const nextExpanded = !expanded;
-          expandNode(node, nextExpanded);
-          toggleNode(node);
-        }
-        clickNode(node, event);
-        ref.focus();
-      }
-    }}
+      clickNode(node, event);
+      ref.focus();
+    }
+  }}
     on:focus={() => {
-      focusNode(node);
-    }}
+    focusNode(node);
+  }}
   >
     <div class:bx--tree-node__label={true} bind:this={refLabel}>
       {#if isCheckboxMode}
@@ -289,19 +287,19 @@
         class:bx--tree-parent-node__toggle={true}
         {disabled}
         on:click={() => {
-          if (disabled) return;
-          const nextExpanded = !expanded;
-          expandNode(node, nextExpanded);
-          toggleNode(node);
-        }}
+    if (disabled) return;
+    const nextExpanded = !expanded;
+    expandNode(node, nextExpanded);
+    toggleNode(node);
+  }}
       >
         <CaretDown
           class={[
-            "bx--tree-parent-node__toggle-icon",
-            expanded && "bx--tree-parent-node__toggle-icon--expanded",
-          ]
-            .filter(Boolean)
-            .join(" ")}
+    "bx--tree-parent-node__toggle-icon",
+    expanded && "bx--tree-parent-node__toggle-icon--expanded",
+  ]
+    .filter(Boolean)
+    .join(" ")}
         />
       </span>
       <span class:bx--tree-node__label__details={true}>

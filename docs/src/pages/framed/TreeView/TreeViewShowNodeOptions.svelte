@@ -33,28 +33,28 @@
   <ButtonSet>
     <Button
       on:click={() => {
-        treeview?.showNode(targetNode.id);
-      }}
+    treeview?.showNode(targetNode.id);
+  }}
     >
       Default (expand + select + focus)
     </Button>
     <Button
       on:click={() => {
-        treeview?.showNode(targetNode.id, {
-          select: false,
-          focus: false,
-        });
-      }}
+    treeview?.showNode(targetNode.id, {
+      select: false,
+      focus: false,
+    });
+  }}
     >
       Expand only
     </Button>
     <Button
       on:click={() => {
-        treeview?.showNode(targetNodeSelect.id, {
-          expand: false,
-          focus: false,
-        });
-      }}
+    treeview?.showNode(targetNodeSelect.id, {
+      expand: false,
+      focus: false,
+    });
+  }}
     >
       Select only
     </Button>

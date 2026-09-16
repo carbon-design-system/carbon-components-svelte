@@ -177,27 +177,13 @@
   class:bx--btn--icon-only={hasIconOnly}
   class:bx--tooltip__trigger={hasIconOnly && !hideTooltip}
   class:bx--tooltip--a11y={hasIconOnly && !hideTooltip}
-  class:bx--btn--icon-only--top={hasIconOnly &&
-    !hideTooltip &&
-    tooltipPosition === "top"}
-  class:bx--btn--icon-only--right={hasIconOnly &&
-    !hideTooltip &&
-    tooltipPosition === "right"}
-  class:bx--btn--icon-only--bottom={hasIconOnly &&
-    !hideTooltip &&
-    tooltipPosition === "bottom"}
-  class:bx--btn--icon-only--left={hasIconOnly &&
-    !hideTooltip &&
-    tooltipPosition === "left"}
-  class:bx--tooltip--align-start={hasIconOnly &&
-    !hideTooltip &&
-    tooltipAlignment === "start"}
-  class:bx--tooltip--align-center={hasIconOnly &&
-    !hideTooltip &&
-    tooltipAlignment === "center"}
-  class:bx--tooltip--align-end={hasIconOnly &&
-    !hideTooltip &&
-    tooltipAlignment === "end"}
+  class:bx--btn--icon-only--top={hasIconOnly && !hideTooltip && tooltipPosition === "top"}
+  class:bx--btn--icon-only--right={hasIconOnly && !hideTooltip && tooltipPosition === "right"}
+  class:bx--btn--icon-only--bottom={hasIconOnly && !hideTooltip && tooltipPosition === "bottom"}
+  class:bx--btn--icon-only--left={hasIconOnly && !hideTooltip && tooltipPosition === "left"}
+  class:bx--tooltip--align-start={hasIconOnly && !hideTooltip && tooltipAlignment === "start"}
+  class:bx--tooltip--align-center={hasIconOnly && !hideTooltip && tooltipAlignment === "center"}
+  class:bx--tooltip--align-end={hasIconOnly && !hideTooltip && tooltipAlignment === "end"}
   on:keydown
 >
   {#if hasIconOnly}

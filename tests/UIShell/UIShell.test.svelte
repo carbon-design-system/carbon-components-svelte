@@ -46,8 +46,8 @@
     bind:ref={headerRef}
     class={headerClass}
     on:click={() => {
-      console.log("header-click");
-    }}
+    console.log("header-click");
+  }}
   >
     <span slot="company">Custom Company</span>
     <span slot="platform">Custom Platform</span>
@@ -70,8 +70,8 @@
     bind:ref={headerRef}
     class={headerClass}
     on:click={() => {
-      console.log("header-click");
-    }}
+    console.log("header-click");
+  }}
   >
     <HeaderNav class={headerNavClass} aria-label="Navigation">
       <HeaderNavItem href="#" text="Link 1" />

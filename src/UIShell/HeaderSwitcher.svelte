@@ -127,12 +127,12 @@
   <button
     bind:this={ref}
     use:dismiss={{
-      enabled: isOpen,
-      listeners: [
-        { type: "click", handler: handleOutsideClick },
-        { type: "keydown", handler: handleKeydown },
-      ],
-    }}
+    enabled: isOpen,
+    listeners: [
+      { type: "click", handler: handleOutsideClick },
+      { type: "keydown", handler: handleKeydown },
+    ],
+  }}
     type="button"
     aria-haspopup="true"
     aria-expanded={isOpen}
@@ -144,14 +144,14 @@
     {...$$restProps}
     on:click
     on:click|stopPropagation={async (event) => {
-      const wasOpen = isOpen;
-      isOpen = !isOpen;
-      dispatch(isOpen ? "open" : "close", { trigger: "toggle" });
-      if (!wasOpen && isOpen && event.detail === 0) {
-        await tick();
-        get(menuItems)[0]?.focus();
-      }
-    }}
+    const wasOpen = isOpen;
+    isOpen = !isOpen;
+    dispatch(isOpen ? "open" : "close", { trigger: "toggle" });
+    if (!wasOpen && isOpen && event.detail === 0) {
+      await tick();
+      get(menuItems)[0]?.focus();
+    }
+  }}
     on:keydown={handleTriggerKeydown}
   >
     {#if $$slots.avatar}
@@ -182,9 +182,9 @@
       class:bx--profile-menu={true}
       class:bx--header-switcher__menu={true}
       transition:slide|local={{
-        ...transition,
-        duration: transition === false ? 0 : transition.duration,
-      }}
+    ...transition,
+    duration: transition === false ? 0 : transition.duration,
+  }}
     >
       <slot />
     </div>

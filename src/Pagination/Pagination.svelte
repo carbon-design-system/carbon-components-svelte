@@ -304,8 +304,8 @@
           inline
           disabled={pageSizeInputDisabled || disabled}
           on:update={(event) => {
-            dispatch("change", { pageSize: event.detail });
-          }}
+    dispatch("change", { pageSize: event.detail });
+  }}
           bind:selected={pageSize}
         >
           {#each effectivePageSizes as size, index (size)}
@@ -351,10 +351,10 @@
           disabled={pageInputDisabled || disabled}
           selected={page}
           on:update={(event) => {
-            const next = Number(event.detail);
-            page = next;
-            dispatch("change", { page: next });
-          }}
+    const next = Number(event.detail);
+    page = next;
+    dispatch("change", { page: next });
+  }}
         >
           {#each selectItems as pageNumber (pageNumber)}
             <option class="bx--select-option" value={pageNumber}>
@@ -381,15 +381,13 @@
         icon={CaretLeft}
         iconDescription={backwardText}
         disabled={internalBackButtonDisabled}
-        class="bx--pagination__button bx--pagination__button--backward {internalBackButtonDisabled
-          ? 'bx--pagination__button--no-index'
-          : ''}"
+        class="bx--pagination__button bx--pagination__button--backward {internalBackButtonDisabled ? "bx--pagination__button--no-index" : ""}"
         on:click={() => {
-          page--;
-          dispatch("click:button--previous", { page });
-          dispatch("change", { page });
-          refocusIfDisabled(backBtnRef, forwardBtnRef);
-        }}
+    page--;
+    dispatch("click:button--previous", { page });
+    dispatch("change", { page });
+    refocusIfDisabled(backBtnRef, forwardBtnRef);
+  }}
       />
       <Button
         bind:ref={forwardBtnRef}
@@ -400,15 +398,13 @@
         icon={CaretRight}
         iconDescription={forwardText}
         disabled={internalForwardButtonDisabled}
-        class="bx--pagination__button bx--pagination__button--forward {internalForwardButtonDisabled
-          ? 'bx--pagination__button--no-index'
-          : ''}"
+        class="bx--pagination__button bx--pagination__button--forward {internalForwardButtonDisabled ? "bx--pagination__button--no-index" : ""}"
         on:click={() => {
-          page++;
-          dispatch("click:button--next", { page });
-          dispatch("change", { page });
-          refocusIfDisabled(forwardBtnRef, backBtnRef);
-        }}
+    page++;
+    dispatch("click:button--next", { page });
+    dispatch("change", { page });
+    refocusIfDisabled(forwardBtnRef, backBtnRef);
+  }}
       />
     </div>
   </div>

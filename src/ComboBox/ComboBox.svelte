@@ -787,12 +787,12 @@
           aria-controls={open ? menuId : undefined}
           aria-errormessage={showInvalid && invalidText ? errorId : undefined}
           aria-describedby={showInvalid
-          ? undefined
-          : showWarn && warnText
-            ? warnId
-            : !isFluid && !showWarn && helperText
-              ? helperId
-              : undefined}
+    ? undefined
+    : showWarn && warnText
+      ? warnId
+      : !isFluid && !showWarn && helperText
+        ? helperId
+        : undefined}
           {disabled}
           {readonly}
           {placeholder}
@@ -803,161 +803,158 @@
           class:bx--text-input--light={light}
           class:bx--text-input--empty={value === ""}
           on:click={() => {
-          if (disabled || readonly) return;
-          open = true;
-        }}
+    if (disabled || readonly) return;
+    open = true;
+  }}
           on:input
           on:input={(event) => {
-          if (!open && event.target.value.length > 0) {
-            open = true;
-          }
+    if (!open && event.target.value.length > 0) {
+      open = true;
+    }
 
-          if (!value.length) {
-            // Skip `clear()`. It drops `selectedId`, so a later unmatched blur
-            // has nothing to restore.
-            highlightedIndex = -1;
-            highlightOrigin = null;
-            open = true;
-          }
-        }}
+    if (!value.length) {
+      // Skip `clear()`. It drops `selectedId`, so a later unmatched blur
+      // has nothing to restore.
+      highlightedIndex = -1;
+      highlightOrigin = null;
+      open = true;
+    }
+  }}
           on:keydown
           on:keydown|stopPropagation={(event) => {
-          if (readonly) return;
-          if (
-            event.key === "Enter" ||
-            event.key === "ArrowDown" ||
-            event.key === "ArrowUp"
-          ) {
-            event.preventDefault();
-          }
-          if (event.key === "Enter") {
-            // Enter on a highlighted disabled option -> the menu stays open.
-            if (
-              open &&
-              highlightOrigin === "keyboard" &&
-              highlightedIndex > -1 &&
-              filteredItems[highlightedIndex]?.disabled
-            ) {
-              return;
-            }
-            const wasOpen = open;
-            open = !open;
-            if (
-              highlightOrigin === "keyboard" &&
-              highlightedIndex > -1 &&
-              filteredItems[highlightedIndex]?.id !== selectedId
-            ) {
-              open = false;
-              valueBeforeOpen = "";
-              if (filteredItems[highlightedIndex]) {
-                value = itemToString(filteredItems[highlightedIndex]);
-                selectedItem = filteredItems[highlightedIndex];
-                selectedId = filteredItems[highlightedIndex].id;
-                if (wasOpen) dispatch("close", { trigger: "select" });
-              }
-            } else {
-              // Match typed value case-insensitively against item text
-              const inputValue = ref?.value ?? value;
-              const matchedItem = filteredItems.find(
-                (item) =>
-                  item.text.toLowerCase() === inputValue?.toLowerCase() &&
-                  !item.disabled,
-              );
-              if (matchedItem) {
-                open = false;
-                valueBeforeOpen = "";
-                selectedItem = matchedItem;
-                value = itemToString(selectedItem);
-                selectedId = selectedItem.id;
-                if (wasOpen) dispatch("close", { trigger: "select" });
-              }
-            }
-            highlightedIndex = -1;
-            highlightOrigin = null;
-          } else if (event.key === "Tab") {
-            // Commit a keyboard highlight or typeahead suggestion first.
-            // Tab is not prevented, so focus still advances.
-            const committed = commitHighlightedItem();
-            const accepted = committed || acceptTypeaheadSuggestion();
-            if (!accepted) normalizeValue();
-            close(accepted ? "select" : "escape-key");
-          } else if (
-            typeahead &&
-            (event.key === "ArrowRight" || event.key === "End") &&
-            ref &&
-            ref.selectionStart !== ref.selectionEnd &&
-            ref.selectionEnd === ref.value.length
-          ) {
-            // APG inline-both "accept in place": when the ghost completion is
-            // shown (a trailing selection extends to the end of the input),
-            // ArrowRight/End commits the displayed text into the editable value
-            // and collapses the cursor to the end, keeping focus and the open
-            // menu. Unlike Enter/Tab it does not select an item or close, and it
-            // preserves the user's casing so continued typing still filters.
-            event.preventDefault();
-            value = ref.value;
-            tick().then(() => {
-              ref.setSelectionRange(value.length, value.length);
-            });
-          } else if (open && (event.key === "Home" || event.key === "End")) {
-            // APG editable combobox: Home/End stay native caret keys while
-            // the menu is closed. Once open, they move the highlight to the
-            // first/last option instead, matching Carbon React's ComboBox
-            // (downshift's useCombobox gates the same jump on `isOpen`).
-            event.preventDefault();
-            const navigableItems = filteredItems?.length
-              ? filteredItems
-              : items;
-            highlightedIndex =
-              event.key === "Home" ? 0 : navigableItems.length - 1;
-            highlightOrigin = "keyboard";
-          } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
-            const step = event.key === "ArrowDown" ? 1 : -1;
-            if (event.altKey) {
-              // APG combobox pattern: Alt+ArrowDown opens a closed menu
-              // without moving the highlight; Alt+ArrowUp closes an open one.
-              if (event.key === "ArrowDown" && !open) {
-                open = true;
-              } else if (event.key === "ArrowUp" && open) {
-                close("escape-key");
-              }
-            } else if (open) {
-              change(step);
-            } else {
-              open = true;
-              // `filteredItems` recomputes and `afterUpdate` highlights any
-              // selected item only after the update flushes; if nothing is
-              // highlighted by then, start at the first (ArrowDown) or last
-              // (ArrowUp) enabled item.
-              tick().then(() => {
-                if (highlightedIndex === -1) change(step);
-              });
-            }
-          } else if (event.key === "Escape") {
-            // Dispatch before `clear()` flips `open`, so the guard still sees it open.
-            close("escape-key");
-            clear();
-          }
-        }}
+    if (readonly) return;
+    if (
+      event.key === "Enter" ||
+      event.key === "ArrowDown" ||
+      event.key === "ArrowUp"
+    ) {
+      event.preventDefault();
+    }
+    if (event.key === "Enter") {
+      // Enter on a highlighted disabled option -> the menu stays open.
+      if (
+        open &&
+        highlightOrigin === "keyboard" &&
+        highlightedIndex > -1 &&
+        filteredItems[highlightedIndex]?.disabled
+      ) {
+        return;
+      }
+      const wasOpen = open;
+      open = !open;
+      if (
+        highlightOrigin === "keyboard" &&
+        highlightedIndex > -1 &&
+        filteredItems[highlightedIndex]?.id !== selectedId
+      ) {
+        open = false;
+        valueBeforeOpen = "";
+        if (filteredItems[highlightedIndex]) {
+          value = itemToString(filteredItems[highlightedIndex]);
+          selectedItem = filteredItems[highlightedIndex];
+          selectedId = filteredItems[highlightedIndex].id;
+          if (wasOpen) dispatch("close", { trigger: "select" });
+        }
+      } else {
+        // Match typed value case-insensitively against item text
+        const inputValue = ref?.value ?? value;
+        const matchedItem = filteredItems.find(
+          (item) =>
+            item.text.toLowerCase() === inputValue?.toLowerCase() &&
+            !item.disabled,
+        );
+        if (matchedItem) {
+          open = false;
+          valueBeforeOpen = "";
+          selectedItem = matchedItem;
+          value = itemToString(selectedItem);
+          selectedId = selectedItem.id;
+          if (wasOpen) dispatch("close", { trigger: "select" });
+        }
+      }
+      highlightedIndex = -1;
+      highlightOrigin = null;
+    } else if (event.key === "Tab") {
+      // Commit a keyboard highlight or typeahead suggestion first.
+      // Tab is not prevented, so focus still advances.
+      const committed = commitHighlightedItem();
+      const accepted = committed || acceptTypeaheadSuggestion();
+      if (!accepted) normalizeValue();
+      close(accepted ? "select" : "escape-key");
+    } else if (
+      typeahead &&
+      (event.key === "ArrowRight" || event.key === "End") &&
+      ref &&
+      ref.selectionStart !== ref.selectionEnd &&
+      ref.selectionEnd === ref.value.length
+    ) {
+      // APG inline-both "accept in place": when the ghost completion is
+      // shown (a trailing selection extends to the end of the input),
+      // ArrowRight/End commits the displayed text into the editable value
+      // and collapses the cursor to the end, keeping focus and the open
+      // menu. Unlike Enter/Tab it does not select an item or close, and it
+      // preserves the user's casing so continued typing still filters.
+      event.preventDefault();
+      value = ref.value;
+      tick().then(() => {
+        ref.setSelectionRange(value.length, value.length);
+      });
+    } else if (open && (event.key === "Home" || event.key === "End")) {
+      // APG editable combobox: Home/End stay native caret keys while
+      // the menu is closed. Once open, they move the highlight to the
+      // first/last option instead, matching Carbon React's ComboBox
+      // (downshift's useCombobox gates the same jump on `isOpen`).
+      event.preventDefault();
+      const navigableItems = filteredItems?.length ? filteredItems : items;
+      highlightedIndex = event.key === "Home" ? 0 : navigableItems.length - 1;
+      highlightOrigin = "keyboard";
+    } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      const step = event.key === "ArrowDown" ? 1 : -1;
+      if (event.altKey) {
+        // APG combobox pattern: Alt+ArrowDown opens a closed menu
+        // without moving the highlight; Alt+ArrowUp closes an open one.
+        if (event.key === "ArrowDown" && !open) {
+          open = true;
+        } else if (event.key === "ArrowUp" && open) {
+          close("escape-key");
+        }
+      } else if (open) {
+        change(step);
+      } else {
+        open = true;
+        // `filteredItems` recomputes and `afterUpdate` highlights any
+        // selected item only after the update flushes; if nothing is
+        // highlighted by then, start at the first (ArrowDown) or last
+        // (ArrowUp) enabled item.
+        tick().then(() => {
+          if (highlightedIndex === -1) change(step);
+        });
+      }
+    } else if (event.key === "Escape") {
+      // Dispatch before `clear()` flips `open`, so the guard still sees it open.
+      close("escape-key");
+      clear();
+    }
+  }}
           on:keyup
           on:focus
           on:focus={() => {
-          if (isFluid) fieldFocused = true;
-          if (selectTextOnFocus && ref) {
-            tick().then(() => ref.select());
-          }
-        }}
+    if (isFluid) fieldFocused = true;
+    if (selectTextOnFocus && ref) {
+      tick().then(() => ref.select());
+    }
+  }}
           on:blur
           on:blur={(event) => {
-          if (isFluid) fieldFocused = false;
-          if (!open || !event.relatedTarget) return;
-          if (
-            fieldRef?.contains(event.relatedTarget) ||
-            listRef?.contains(event.relatedTarget)
-          ) {
-            ref.focus();
-          }
-        }}
+    if (isFluid) fieldFocused = false;
+    if (!open || !event.relatedTarget) return;
+    if (
+      fieldRef?.contains(event.relatedTarget) ||
+      listRef?.contains(event.relatedTarget)
+    ) {
+      ref.focus();
+    }
+  }}
           on:paste
         >
         {#if showInvalid}
@@ -981,10 +978,10 @@
         <ListBoxMenuIcon
           aria-hidden={readonly || undefined}
           on:click={(event) => {
-          if (disabled || readonly) return;
-          event.stopPropagation();
-          open = !open;
-        }}
+    if (disabled || readonly) return;
+    event.stopPropagation();
+    open = !open;
+  }}
           {translateWithId}
           {open}
         />
@@ -1004,25 +1001,25 @@
         on:scroll
         on:scroll={handleMenuScroll}
         on:mouseleave={() => {
-          // Clear the hover highlight when the cursor leaves the menu so the
-          // highlighted state does not linger on the last hovered item.
-          highlightedIndex = -1;
-          highlightOrigin = null;
-        }}
+    // Clear the hover highlight when the cursor leaves the menu so the
+    // highlighted state does not linger on the last hovered item.
+    highlightedIndex = -1;
+    highlightOrigin = null;
+  }}
         bind:ref={listRef}
         style={isWindowed
-          ? `max-height: ${menuMaxHeight}; overflow-y: auto;`
-          : effectivePortalMenu
-            ? `max-height: ${menuMaxHeight};`
-            : undefined}
+    ? `max-height: ${menuMaxHeight}; overflow-y: auto;`
+    : effectivePortalMenu
+      ? `max-height: ${menuMaxHeight};`
+      : undefined}
       >
         {#if isVirtualized}
           <div style:height="{totalHeight}px" style:position="relative">
             <div style:transform="translateY({offsetY}px)">
               {#each itemsToRender as item, index (item.id)}
-                {@const actualIndex = startIndex + index}
-                {@const selected = selectedItem?.id === item.id}
-                {@const optionId = `${id}-${item.id}`}
+                {@const (actualIndex = startIndex + index)}
+                {@const (selected = selectedItem?.id === item.id)}
+                {@const (optionId = `${id}-${item.id}`)}
                 <ListBoxMenuItem
                   id={optionId}
                   active={selectedId === item.id}
@@ -1032,17 +1029,17 @@
                   aria-posinset={actualIndex + 1}
                   data-virtual-index={isMeasured ? actualIndex : undefined}
                   on:click={(event) => {
-                    if (item.disabled) {
-                      event.stopPropagation();
-                      return;
-                    }
-                    selectItem(item);
-                  }}
+    if (item.disabled) {
+      event.stopPropagation();
+      return;
+    }
+    selectItem(item);
+  }}
                   on:mousedown={(event) => {
-                    // Keep focus on the field so screen readers don't
-                    // re-announce it on every option click.
-                    event.preventDefault();
-                  }}
+    // Keep focus on the field so screen readers don't
+    // re-announce it on every option click.
+    event.preventDefault();
+  }}
                   on:mouseenter={() => highlightItem(item)}
                 >
                   {#if $$slots.icon}
@@ -1104,10 +1101,10 @@
           </div>
         {:else}
           {#each itemsToRender as item, index (item.id)}
-            {@const selected = selectedItem?.id === item.id}
-            {@const optionId = `${id}-${item.id}`}
-            {@const matchIndex = filteredIndexById.get(item.id)}
-            {@const slotIndex = matchIndex ?? index}
+            {@const (selected = selectedItem?.id === item.id)}
+            {@const (optionId = `${id}-${item.id}`)}
+            {@const (matchIndex = filteredIndexById.get(item.id))}
+            {@const (slotIndex = matchIndex ?? index)}
             <ListBoxMenuItem
               id={optionId}
               active={selectedId === item.id}
@@ -1118,17 +1115,17 @@
               aria-posinset={matchIndex === undefined ? undefined : matchIndex + 1}
               data-virtual-index={isMeasured ? matchIndex : undefined}
               on:click={(event) => {
-                if (item.disabled) {
-                  event.stopPropagation();
-                  return;
-                }
-                selectItem(item);
-              }}
+    if (item.disabled) {
+      event.stopPropagation();
+      return;
+    }
+    selectItem(item);
+  }}
               on:mousedown={(event) => {
-                // Keep focus on the field so screen readers don't
-                // re-announce it on every option click.
-                event.preventDefault();
-              }}
+    // Keep focus on the field so screen readers don't
+    // re-announce it on every option click.
+    event.preventDefault();
+  }}
               on:mouseenter={() => highlightItem(item)}
             >
               {#if $$slots.icon}

@@ -16,8 +16,8 @@
       href="/"
       data-testid="test-link"
       on:click|preventDefault|stopPropagation={() => {
-        linkClicked = true;
-      }}
+    linkClicked = true;
+  }}
     >
       Test link
     </a>
@@ -25,9 +25,9 @@
     <Button
       data-testid="test-button"
       on:click={(e) => {
-        e.stopPropagation();
-        buttonClicked = true;
-      }}
+    e.stopPropagation();
+    buttonClicked = true;
+  }}
     >
       Test button
     </Button>

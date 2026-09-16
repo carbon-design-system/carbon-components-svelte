@@ -52,20 +52,20 @@
       title="Language Translator"
       class={itemClass}
       on:click={() => {
-        console.log("item-click");
-      }}
+    console.log("item-click");
+  }}
       on:focus={() => {
-        console.log("item-focus");
-      }}
+    console.log("item-focus");
+  }}
       on:blur={() => {
-        console.log("item-blur");
-      }}
+    console.log("item-blur");
+  }}
       on:keydown={(e) => {
-        console.log("item-keydown", e.key);
-      }}
+    console.log("item-keydown", e.key);
+  }}
       on:animationend={() => {
-        console.log("item-animationend");
-      }}
+    console.log("item-animationend");
+  }}
       >3</AccordionItem
     >
   {/if}

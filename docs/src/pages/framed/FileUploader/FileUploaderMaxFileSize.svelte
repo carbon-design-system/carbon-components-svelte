@@ -17,8 +17,8 @@
     labelDescription="Maximum file size: 1 MB"
     status="edit"
     on:rejected={(e) => {
-      rejectedFiles = e.detail;
-    }}
+    rejectedFiles = e.detail;
+  }}
   />
 
   {#each rejectedFiles as { file }, i (`${file.name}-${file.lastModified}-${i}`)}
@@ -30,8 +30,8 @@
       errorBody="Please select a smaller file."
       status="edit"
       on:delete={() => {
-        rejectedFiles = rejectedFiles.filter((r) => r.file !== file);
-      }}
+    rejectedFiles = rejectedFiles.filter((r) => r.file !== file);
+  }}
     />
   {/each}
 </Stack>

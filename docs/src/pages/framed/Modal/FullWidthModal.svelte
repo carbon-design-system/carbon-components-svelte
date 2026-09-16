@@ -18,23 +18,24 @@
 >
   <DataTable
     headers={[
-      { key: "resource", value: "Resource" },
-      { key: "region", value: "Region" },
-      { key: "status", value: "Status" },
-    ]}
+    { key: "resource", value: "Resource" },
+    { key: "region", value: "Region" },
+    { key: "status", value: "Status" },
+  ]}
     rows={[
-      {
-        id: "1",
-        resource: "prod-db-01",
-        region: "us-south",
-        status: "Provisioning replicas across three availability zones to meet the 99.99% SLA.",
-      },
-      {
-        id: "2",
-        resource: "staging-db-02",
-        region: "eu-de",
-        status: "Backup snapshot completed; 30-day retention policy applied.",
-      },
-    ]}
+    {
+      id: "1",
+      resource: "prod-db-01",
+      region: "us-south",
+      status:
+        "Provisioning replicas across three availability zones to meet the 99.99% SLA.",
+    },
+    {
+      id: "2",
+      resource: "staging-db-02",
+      region: "eu-de",
+      status: "Backup snapshot completed; 30-day retention policy applied.",
+    },
+  ]}
   />
 </Modal>

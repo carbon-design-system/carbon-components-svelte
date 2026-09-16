@@ -219,9 +219,9 @@ whitespace gap; the label's `margin-right` is then the only spacing. -->
     class:bx--toggletip={true}
     class:bx--toggletip--open={open}
     use:dismiss={{
-      enabled: listenersEnabled,
-      listeners: [{ type: "click", handler: handleOutsideClick }],
-    }}
+    enabled: listenersEnabled,
+    listeners: [{ type: "click", handler: handleOutsideClick }],
+  }}
     on:keydown={handleKeydown}
     on:focusout={handleFocusout}
     {...$$restProps}
@@ -278,9 +278,7 @@ whitespace gap; the label's `margin-right` is then the only spacing. -->
       id={contentId}
       caret
       highContrast
-      style="{PORTAL_NEUTRALIZE_STYLE} {popoverStyleFor(
-        toPopoverAlign(actualDirection ?? direction, align),
-      )}"
+      style="{PORTAL_NEUTRALIZE_STYLE} {popoverStyleFor(toPopoverAlign(actualDirection ?? direction, align))}"
     >
       <!-- svelte-ignore a11y-no-static-element-interactions -->
       <div class:bx--toggletip-content={true} on:keydown={handleKeydown}>

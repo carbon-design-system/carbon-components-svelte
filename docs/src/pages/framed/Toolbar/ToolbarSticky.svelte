@@ -36,8 +36,8 @@
       <Button
         icon={TrashCan}
         on:click={() => {
-          rows = rows.filter((row) => !selectedRowIds.includes(row.id));
-        }}
+    rows = rows.filter((row) => !selectedRowIds.includes(row.id));
+  }}
       >
         Delete
       </Button>

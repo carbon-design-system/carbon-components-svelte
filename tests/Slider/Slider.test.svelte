@@ -61,11 +61,11 @@
     {inputType}
     class={customClass}
     on:change={(e) => {
-      console.log("change", e.detail);
-    }}
+    console.log("change", e.detail);
+  }}
     on:input={(e) => {
-      console.log("input", e.detail);
-    }}
+    console.log("input", e.detail);
+  }}
   >
     <span slot="labelChildren">Slot Label</span>
   </Slider>
@@ -97,10 +97,10 @@
     {inputType}
     class={customClass}
     on:change={(e) => {
-      console.log("change", e.detail);
-    }}
+    console.log("change", e.detail);
+  }}
     on:input={(e) => {
-      console.log("input", e.detail);
-    }}
+    console.log("input", e.detail);
+  }}
   />
 {/if}

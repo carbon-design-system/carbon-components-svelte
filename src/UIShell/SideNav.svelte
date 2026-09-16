@@ -117,9 +117,9 @@
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div
     on:click={() => {
-      dispatch("click:overlay");
-      isOpen = false;
-    }}
+    dispatch("click:overlay");
+    isOpen = false;
+  }}
     class:bx--side-nav__overlay={true}
     class:bx--side-nav__overlay--mobile={$isSideNavMobile}
     class:bx--side-nav__overlay-active={isOpen}
@@ -136,16 +136,12 @@
   class:bx--side-nav__navigation={true}
   class:bx--side-nav={true}
   class:bx--side-nav--ux={true}
-  class:bx--side-nav--expanded={rail && winWidth >= expansionBreakpoint
-    ? false
-    : isOpen}
+  class:bx--side-nav--expanded={rail && winWidth >= expansionBreakpoint ? false : isOpen}
   class:bx--side-nav--collapsed={winWidth !== undefined && !isOpen && !rail}
   class:bx--side-nav--rail={rail}
   class:bx--side-nav--fixed={fixed}
   class:bx--side-nav--ui-shell-classic={theme === "classic"}
-  style:visibility={winWidth !== undefined && !isOpen && !rail
-    ? "hidden"
-    : undefined}
+  style:visibility={winWidth !== undefined && !isOpen && !rail ? "hidden" : undefined}
   {...$$restProps}
 >
   <slot />

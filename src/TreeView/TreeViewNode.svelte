@@ -191,42 +191,42 @@
       class:bx--tree-node--disabled={disabled}
       class:bx--tree-node--with-icon={icon}
       on:click|stopPropagation={(event) => {
-        if (disabled) return;
-        clickNode(node, event);
-      }}
+    if (disabled) return;
+    clickNode(node, event);
+  }}
       on:keydown={(event) => {
-        if (
-          event.key === "ArrowUp" ||
-          event.key === "ArrowDown" ||
-          event.key === "Home" ||
-          event.key === "End"
-        ) {
-          event.preventDefault();
-        }
+    if (
+      event.key === "ArrowUp" ||
+      event.key === "ArrowDown" ||
+      event.key === "Home" ||
+      event.key === "End"
+    ) {
+      event.preventDefault();
+    }
 
-        if (
-          event.key === "ArrowLeft" ||
-          event.key === "ArrowRight" ||
-          event.key === "Enter"
-        ) {
-          event.preventDefault();
-          event.stopPropagation();
-        }
+    if (
+      event.key === "ArrowLeft" ||
+      event.key === "ArrowRight" ||
+      event.key === "Enter"
+    ) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
 
-        if (event.key === "ArrowLeft") {
-          const parentNode = findParentTreeNode(ref.parentNode?.parentNode);
-          if (parentNode) parentNode.focus();
-        }
+    if (event.key === "ArrowLeft") {
+      const parentNode = findParentTreeNode(ref.parentNode?.parentNode);
+      if (parentNode) parentNode.focus();
+    }
 
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          if (disabled) return;
-          clickNode(node, event);
-        }
-      }}
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      if (disabled) return;
+      clickNode(node, event);
+    }
+  }}
       on:focus={() => {
-        focusNode(node);
-      }}
+    focusNode(node);
+  }}
     >
       <div bind:this={refLabel} class:bx--tree-node__label={true}>
         <svelte:component this={icon} class="bx--tree-node__icon" />
@@ -243,9 +243,7 @@
     tabindex={disabled ? undefined : -1}
     aria-current={id === $activeNodeId || undefined}
     aria-selected={isCheckboxMode || disabled ? undefined : selected}
-    aria-checked={isCheckboxMode
-      ? toAriaChecked(checked, indeterminate)
-      : undefined}
+    aria-checked={isCheckboxMode ? toAriaChecked(checked, indeterminate) : undefined}
     aria-disabled={disabled}
     aria-level={level}
     aria-posinset={posinset}
@@ -257,45 +255,45 @@
     class:bx--tree-node--disabled={disabled}
     class:bx--tree-node--with-icon={icon}
     on:click|stopPropagation={(event) => {
-      if (disabled) return;
-      // Stop the label from toggling the decorative input; `clickNode`
-      // owns checked state.
-      if (isCheckboxMode) event.preventDefault();
-      clickNode(node, event);
-    }}
+    if (disabled) return;
+    // Stop the label from toggling the decorative input; `clickNode`
+    // owns checked state.
+    if (isCheckboxMode) event.preventDefault();
+    clickNode(node, event);
+  }}
     on:keydown={(event) => {
-      if (
-        event.key === "ArrowUp" ||
-        event.key === "ArrowDown" ||
-        event.key === "Home" ||
-        event.key === "End"
-      ) {
-        event.preventDefault();
-      }
+    if (
+      event.key === "ArrowUp" ||
+      event.key === "ArrowDown" ||
+      event.key === "Home" ||
+      event.key === "End"
+    ) {
+      event.preventDefault();
+    }
 
-      if (
-        event.key === "ArrowLeft" ||
-        event.key === "ArrowRight" ||
-        event.key === "Enter"
-      ) {
-        event.preventDefault();
-        event.stopPropagation();
-      }
+    if (
+      event.key === "ArrowLeft" ||
+      event.key === "ArrowRight" ||
+      event.key === "Enter"
+    ) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
 
-      if (event.key === "ArrowLeft") {
-        const parentNode = findParentTreeNode(ref.parentNode);
-        if (parentNode) parentNode.focus();
-      }
+    if (event.key === "ArrowLeft") {
+      const parentNode = findParentTreeNode(ref.parentNode);
+      if (parentNode) parentNode.focus();
+    }
 
-      if (event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        if (disabled) return;
-        clickNode(node, event);
-      }
-    }}
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      if (disabled) return;
+      clickNode(node, event);
+    }
+  }}
     on:focus={() => {
-      focusNode(node);
-    }}
+    focusNode(node);
+  }}
   >
     <div bind:this={refLabel} class:bx--tree-node__label={true}>
       {#if isCheckboxMode}
