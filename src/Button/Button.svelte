@@ -145,6 +145,7 @@
   import { getContext, onMount } from "svelte";
   import { get } from "svelte/store";
   import Loading from "../Loading/Loading.svelte";
+  import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
   import { noop } from "../utils/noop.js";
@@ -270,37 +271,7 @@
     if (!hovered) releaseActiveTooltip();
   }
 
-  const PORTAL_HORIZONTAL_GAP_LEFT_PX = 2;
-  const PORTAL_HORIZONTAL_GAP_RIGHT_PX = 2;
-  const PORTAL_VERTICAL_GAP_TOP_PX = 1;
-  const PORTAL_VERTICAL_GAP_BOTTOM_PX = 1;
-  const PORTAL_VERTICAL_ALIGN_OFFSET_LEFT_START_PX = -3;
-  const PORTAL_VERTICAL_ALIGN_OFFSET_RIGHT_END_PX = 1;
-
-  $: portalHorizontalGapLeft =
-    tooltipPosition === "left" || tooltipPosition === "right"
-      ? PORTAL_HORIZONTAL_GAP_LEFT_PX
-      : 0;
-  $: portalHorizontalGapRight =
-    tooltipPosition === "left" || tooltipPosition === "right"
-      ? PORTAL_HORIZONTAL_GAP_RIGHT_PX
-      : 0;
-  $: portalGapTop =
-    tooltipPosition === "top" || tooltipPosition === "bottom"
-      ? PORTAL_VERTICAL_GAP_TOP_PX
-      : 0;
-  $: portalGapBottom =
-    tooltipPosition === "top" || tooltipPosition === "bottom"
-      ? PORTAL_VERTICAL_GAP_BOTTOM_PX
-      : 0;
-  $: portalVerticalAlignOffsetLeft =
-    tooltipPosition === "left" && tooltipAlignment === "start"
-      ? PORTAL_VERTICAL_ALIGN_OFFSET_LEFT_START_PX
-      : 0;
-  $: portalVerticalAlignOffsetRight =
-    tooltipPosition === "right" && tooltipAlignment === "end"
-      ? PORTAL_VERTICAL_ALIGN_OFFSET_RIGHT_END_PX
-      : 0;
+  $: portalGaps = iconTooltipPortalGaps(tooltipPosition, tooltipAlignment);
 
   onMount(() => {
     return () => {
@@ -599,11 +570,11 @@
     text={iconDescription}
     tooltipType="icon"
     intrinsicAlign={tooltipAlignment}
-    horizontalGapLeft={portalHorizontalGapLeft}
-    horizontalGapRight={portalHorizontalGapRight}
-    gapTop={portalGapTop}
-    gapBottom={portalGapBottom}
-    verticalAlignOffsetLeft={portalVerticalAlignOffsetLeft}
-    verticalAlignOffsetRight={portalVerticalAlignOffsetRight}
+    horizontalGapLeft={portalGaps.horizontalGapLeft}
+    horizontalGapRight={portalGaps.horizontalGapRight}
+    gapTop={portalGaps.gapTop}
+    gapBottom={portalGaps.gapBottom}
+    verticalAlignOffsetLeft={portalGaps.verticalAlignOffsetLeft}
+    verticalAlignOffsetRight={portalGaps.verticalAlignOffsetRight}
   />
 {/if}

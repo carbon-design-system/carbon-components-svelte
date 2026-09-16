@@ -1,9 +1,9 @@
 // @ts-check
 
 // Caret spacing + alignment nudges for an icon tooltip rendered through
-// `PortalTooltip`. Shared by `CopyButton` and `CodeSnippet`'s inline copy
-// feedback so the portalled caret sits the same distance from the trigger
-// across components. Mirrors Button's icon tooltip.
+// `PortalTooltip`. Shared by `Button`, `CopyButton`, and `CodeSnippet`'s
+// inline copy feedback so the portalled caret sits the same distance from the
+// trigger across components.
 const PORTAL_HORIZONTAL_GAP_PX = 2;
 const PORTAL_VERTICAL_GAP_PX = 1;
 const PORTAL_VERTICAL_ALIGN_OFFSET_LEFT_START_PX = -3;
