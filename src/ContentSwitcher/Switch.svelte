@@ -50,6 +50,7 @@
   import { getContext, onMount } from "svelte";
   import { get } from "svelte/store";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
+  import { createDelayedSetter } from "../utils/delayed-setter.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const ctx = getContext("carbon:ContentSwitcher");
@@ -70,7 +71,7 @@
 
   let hovered = false;
   let focused = false;
-  let openTimeout;
+  const scheduleTooltip = createDelayedSetter();
 
   // Gate on `activeTooltip` so only one switch tooltip shows at a time. When a
   // neighbor claims the active slot, this one closes even while still hovered.
@@ -93,26 +94,22 @@
   }
 
   function showTooltip() {
-    clearTimeout(openTimeout);
     // Skip the enter delay when another tooltip is already open (warm handoff).
-    if (get(activeTooltip) !== null && get(activeTooltip) !== id) {
-      reveal();
-    } else {
-      openTimeout = setTimeout(reveal, ENTER_DELAY_MS);
-    }
+    const warmHandoff =
+      get(activeTooltip) !== null && get(activeTooltip) !== id;
+    scheduleTooltip(warmHandoff ? 0 : ENTER_DELAY_MS, reveal);
   }
 
   function hideTooltip() {
-    clearTimeout(openTimeout);
-    openTimeout = setTimeout(() => {
+    scheduleTooltip(LEAVE_DELAY_MS, () => {
       hovered = false;
       release();
-    }, LEAVE_DELAY_MS);
+    });
   }
 
   onMount(() => {
     return () => {
-      clearTimeout(openTimeout);
+      scheduleTooltip.cancel();
       if (get(activeTooltip) === id) activeTooltip.set(null);
       ctx.remove(id);
       unsubscribe();
