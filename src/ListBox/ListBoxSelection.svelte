@@ -56,10 +56,26 @@
     selectionCount !== undefined && selectionCount > 1
       ? translationIds.clearAll
       : translationIds.clearSelection;
-  $: buttonLabel =
-    translateWithId?.(translationId) ?? defaultTranslations[translationId];
   $: description =
     translateWithId?.(translationId) ?? defaultTranslations[translationId];
+
+  /** @param {MouseEvent} event */
+  function handleClear(event) {
+    if (!disabled && !readonly) {
+      dispatch("clear", event);
+    }
+  }
+
+  /** @param {KeyboardEvent} event */
+  function handleClearKeydown(event) {
+    if (
+      !disabled &&
+      !readonly &&
+      (event.key === "Enter" || event.key === " ")
+    ) {
+      dispatch("clear", event);
+    }
+  }
 </script>
 
 {#if selectionCount !== undefined}
@@ -82,19 +98,11 @@
       role="button"
       tabindex="-1"
       class:bx--tag__close-icon={true}
-      on:click|preventDefault|stopPropagation={(event) => {
-        if (!disabled && !readonly) {
-          dispatch("clear", event);
-        }
-      }}
-      on:keydown|stopPropagation={(event) => {
-        if (!disabled && !readonly && (event.key === "Enter" || event.key === " ")) {
-          dispatch("clear", event);
-        }
-      }}
+      on:click|preventDefault|stopPropagation={handleClear}
+      on:keydown|stopPropagation={handleClearKeydown}
       {disabled}
       aria-disabled={readonly || undefined}
-      aria-label={buttonLabel}
+      aria-label={description}
       aria-hidden={readonly || undefined}
       title={description}
     >
@@ -113,16 +121,8 @@
     class:bx--list-box__selection--multi={selectionCount}
     aria-disabled={readonly || undefined}
     {...$$restProps}
-    on:click|preventDefault|stopPropagation={(event) => {
-      if (!disabled && !readonly) {
-        dispatch("clear", event);
-      }
-    }}
-    on:keydown|stopPropagation={(event) => {
-      if (!disabled && !readonly && (event.key === "Enter" || event.key === " ")) {
-        dispatch("clear", event);
-      }
-    }}
+    on:click|preventDefault|stopPropagation={handleClear}
+    on:keydown|stopPropagation={handleClearKeydown}
   >
     {#if selectionCount !== undefined}
       {selectionCount}
