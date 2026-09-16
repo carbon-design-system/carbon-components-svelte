@@ -190,9 +190,9 @@
     (mark) => mark.label != null && mark.label !== "",
   );
   $: {
-    if (value <= min) {
+    if (value < min) {
       value = min;
-    } else if (value >= max) {
+    } else if (value > max) {
       value = max;
     }
 
