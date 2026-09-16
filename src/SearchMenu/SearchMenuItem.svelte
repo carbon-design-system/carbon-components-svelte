@@ -85,7 +85,9 @@
     !text || persistent || !effectiveFilter || matchResult.matched;
   $: highlighted = $highlightedId === id;
   $: segments = text ? highlightSegments(text, matchResult.indices) : [];
-  $: labelHtml = text ? segmentsToHtml(segments) : "";
+  // Only the fallback markup reads this; skip the escape/join work when the
+  // consumer renders the default slot.
+  $: labelHtml = text && !$$slots.default ? segmentsToHtml(segments) : "";
 
   $: inDividerGroup = group?.divider ?? false;
   $: updateRegistration(shouldRender, isFilterable, inDividerGroup);

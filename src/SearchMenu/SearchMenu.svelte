@@ -125,6 +125,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import { fuzzyMatch } from "../utils/fuzzy-match.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
+  import { moveIndex } from "../utils/move-index.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -240,10 +241,7 @@
       return;
     }
     const current = els.findIndex((option) => option.id === $highlightedId);
-    let next = current + step;
-    if (next < 0) next = els.length - 1;
-    else if (next >= els.length) next = 0;
-    highlightedId.set(els[next].id);
+    highlightedId.set(els[moveIndex(current, step, els.length)].id);
   }
 
   function setActiveEdge(edge) {
