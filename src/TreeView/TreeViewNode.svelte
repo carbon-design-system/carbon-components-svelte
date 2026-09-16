@@ -163,8 +163,9 @@
     prevActiveId = $activeNodeId;
   }
   $: if (refLabel) {
-    refLabel.style.marginLeft = `-${offset()}rem`;
-    refLabel.style.paddingLeft = `${offset()}rem`;
+    const rem = offset();
+    refLabel.style.marginLeft = `-${rem}rem`;
+    refLabel.style.paddingLeft = `${rem}rem`;
   }
 </script>
 
