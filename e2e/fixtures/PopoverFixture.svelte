@@ -19,10 +19,10 @@
     align="bottom"
     closeOnOutsideClick={false}
     on:click:outside={({ detail }) => {
-      if (containerRef && !containerRef.contains(detail.target)) {
-        open = false;
-      }
-    }}
+    if (containerRef && !containerRef.contains(detail.target)) {
+      open = false;
+    }
+  }}
   >
     <div data-testid="popover-content">Popover content</div>
     <Button data-testid="close-popover" on:click={() => (open = false)}>

@@ -48,16 +48,16 @@
   <ButtonSet>
     <Button
       on:click={() => {
-        treeview?.expandNodes();
-      }}
+    treeview?.expandNodes();
+  }}
     >
       Expand all nodes
     </Button>
     <Button
       on:click={() => {
-        treeview?.collapseNodes();
-        treeview?.expandNodes((node) => /^IBM/.test(node.text));
-      }}
+    treeview?.collapseNodes();
+    treeview?.expandNodes((node) => /^IBM/.test(node.text));
+  }}
     >
       Expand nodes starting with "IBM"
     </Button>

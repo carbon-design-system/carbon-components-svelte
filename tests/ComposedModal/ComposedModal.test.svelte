@@ -63,8 +63,7 @@
       primaryButtonDisabled={footerPrimaryButtonDisabled}
       secondaryButtonText={footerSecondaryButtonText}
       danger={footerDanger}
-      on:click:button--secondary={(e) =>
-        console.log("click:button--secondary", e.detail)}
+      on:click:button--secondary={(e) => console.log("click:button--secondary", e.detail)}
     />
   {/if}
 </ComposedModal>

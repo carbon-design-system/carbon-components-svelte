@@ -24,8 +24,8 @@
     status="finished"
     description="Success"
     on:success={() => {
-      console.log("success");
-    }}
+    console.log("success");
+  }}
   />
 </div>
 
@@ -36,8 +36,8 @@
     description="Processing..."
     successDelay={500}
     on:success={() => {
-      console.log("success custom delay");
-    }}
+    console.log("success custom delay");
+  }}
   />
 </div>
 

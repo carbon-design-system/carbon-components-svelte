@@ -346,7 +346,9 @@
   on:keydown
   on:keydown={(event) => {
     if (open) {
-      if (["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(event.key)) {
+      if (
+        ["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(event.key)
+      ) {
         event.preventDefault();
       } else if (event.key === "Home") {
         event.preventDefault();
@@ -401,21 +403,23 @@
     style:--overflow-menu-options-after-width={overflowMenuOptionsAfterWidth}
     style:max-height={maxHeightStyle}
     on:keydown={(event) => {
-      if (["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(event.key)) {
-        event.preventDefault();
-      } else if (event.key === "Escape") {
-        event.stopPropagation();
-        const shouldContinue = dispatch(
-          "close",
-          { trigger: "escape-key" },
-          { cancelable: true },
-        );
-        if (shouldContinue) {
-          open = false;
-          buttonRef.focus({ preventScroll: true });
-        }
+    if (
+      ["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(event.key)
+    ) {
+      event.preventDefault();
+    } else if (event.key === "Escape") {
+      event.stopPropagation();
+      const shouldContinue = dispatch(
+        "close",
+        { trigger: "escape-key" },
+        { cancelable: true },
+      );
+      if (shouldContinue) {
+        open = false;
+        buttonRef.focus({ preventScroll: true });
       }
-    }}
+    }
+  }}
   >
     <slot />
   </ul>
@@ -452,21 +456,23 @@
       style:--overflow-menu-options-after-width={overflowMenuOptionsAfterWidth}
       style:max-height={maxHeightStyle}
       on:keydown={(event) => {
-        if (["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(event.key)) {
-          event.preventDefault();
-        } else if (event.key === "Escape") {
-          event.stopPropagation();
-          const shouldContinue = dispatch(
-            "close",
-            { trigger: "escape-key" },
-            { cancelable: true },
-          );
-          if (shouldContinue) {
-            open = false;
-            buttonRef.focus({ preventScroll: true });
-          }
-        }
-      }}
+    if (
+      ["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(event.key)
+    ) {
+      event.preventDefault();
+    } else if (event.key === "Escape") {
+      event.stopPropagation();
+      const shouldContinue = dispatch(
+        "close",
+        { trigger: "escape-key" },
+        { cancelable: true },
+      );
+      if (shouldContinue) {
+        open = false;
+        buttonRef.focus({ preventScroll: true });
+      }
+    }
+  }}
     >
       <slot />
     </ul>

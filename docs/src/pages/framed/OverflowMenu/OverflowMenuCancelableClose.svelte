@@ -24,19 +24,19 @@
   }}
 >
   <OverflowMenuItem
-    text="Email alerts: {emailEnabled ? 'On' : 'Off'}"
+    text="Email alerts: {emailEnabled ? "On" : "Off"}"
     on:click={toggle(() => (emailEnabled = !emailEnabled))}
   />
   <OverflowMenuItem
-    text="SMS alerts: {smsEnabled ? 'On' : 'Off'}"
+    text="SMS alerts: {smsEnabled ? "On" : "Off"}"
     on:click={toggle(() => (smsEnabled = !smsEnabled))}
   />
   <OverflowMenuItem
     hasDivider
     text="Save changes"
     on:click={() => {
-      // Allow the menu to close after saving.
-      saved = true;
-    }}
+    // Allow the menu to close after saving.
+    saved = true;
+  }}
   />
 </OverflowMenu>

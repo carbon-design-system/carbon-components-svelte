@@ -14,9 +14,9 @@
     kind="tertiary"
     disabled={sortKey === "port" && sortDirection === "ascending"}
     on:click={() => {
-      sortKey = "port";
-      sortDirection = "ascending";
-    }}
+    sortKey = "port";
+    sortDirection = "ascending";
+  }}
   >
     Sort "port" in ascending order
   </Button>
@@ -25,9 +25,9 @@
     kind="tertiary"
     disabled={sortKey === "name" && sortDirection === "descending"}
     on:click={() => {
-      sortKey = "name";
-      sortDirection = "descending";
-    }}
+    sortKey = "name";
+    sortDirection = "descending";
+  }}
   >
     Sort "name" in descending order
   </Button>
@@ -35,9 +35,9 @@
     size="sm"
     kind="ghost"
     on:click={() => {
-      sortKey = null;
-      sortDirection = "none";
-    }}
+    sortKey = null;
+    sortDirection = "none";
+  }}
   >
     Clear sorting
   </Button>

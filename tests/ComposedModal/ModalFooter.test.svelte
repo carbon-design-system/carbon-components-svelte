@@ -53,9 +53,9 @@
     {secondaryClass}
     {danger}
     on:click:button--secondary={(e) => {
-      console.log("click:button--secondary", e.detail);
-      if (preventSecondaryDefault) e.preventDefault();
-    }}
+    console.log("click:button--secondary", e.detail);
+    if (preventSecondaryDefault) e.preventDefault();
+  }}
     {...$$restProps}
   >
     {#if slotContent}

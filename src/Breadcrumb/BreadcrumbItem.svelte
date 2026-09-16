@@ -48,9 +48,9 @@
   {:else}
     <slot
       props={{
-        "aria-current": ariaCurrent ?? (isCurrentPage ? "page" : undefined),
-        class: "bx--link",
-      }}
+    "aria-current": ariaCurrent ?? (isCurrentPage ? "page" : undefined),
+    class: "bx--link",
+  }}
     />
   {/if}
 </li>

@@ -83,15 +83,19 @@
       tabindex="-1"
       class:bx--tag__close-icon={true}
       on:click|preventDefault|stopPropagation={(event) => {
-        if (!disabled && !readonly) {
-          dispatch("clear", event);
-        }
-      }}
+    if (!disabled && !readonly) {
+      dispatch("clear", event);
+    }
+  }}
       on:keydown|stopPropagation={(event) => {
-        if (!disabled && !readonly && (event.key === "Enter" || event.key === " ")) {
-          dispatch("clear", event);
-        }
-      }}
+    if (
+      !disabled &&
+      !readonly &&
+      (event.key === "Enter" || event.key === " ")
+    ) {
+      dispatch("clear", event);
+    }
+  }}
       {disabled}
       aria-disabled={readonly || undefined}
       aria-label={buttonLabel}
@@ -114,15 +118,19 @@
     aria-disabled={readonly || undefined}
     {...$$restProps}
     on:click|preventDefault|stopPropagation={(event) => {
-      if (!disabled && !readonly) {
-        dispatch("clear", event);
-      }
-    }}
+    if (!disabled && !readonly) {
+      dispatch("clear", event);
+    }
+  }}
     on:keydown|stopPropagation={(event) => {
-      if (!disabled && !readonly && (event.key === "Enter" || event.key === " ")) {
-        dispatch("clear", event);
-      }
-    }}
+    if (
+      !disabled &&
+      !readonly &&
+      (event.key === "Enter" || event.key === " ")
+    ) {
+      dispatch("clear", event);
+    }
+  }}
   >
     {#if selectionCount !== undefined}
       {selectionCount}

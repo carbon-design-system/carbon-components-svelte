@@ -180,33 +180,33 @@
       {readonly}
       {...$$restProps}
       value={$range
-        ? $inputIds.indexOf(id) === 0
-          ? $inputValueFrom
-          : $inputValueTo
-        : $inputValue}
+    ? $inputIds.indexOf(id) === 0
+      ? $inputValueFrom
+      : $inputValueTo
+    : $inputValue}
       class:bx--date-picker__input={true}
       class:bx--date-picker__input--invalid={showInvalid}
       class:bx--date-picker__input--sm={size === "sm"}
       class:bx--date-picker__input--xl={size === "xl"}
       on:input
       on:input={(event) => {
-        updateValue({ type: "input", value: event.target.value });
-      }}
+    updateValue({ type: "input", value: event.target.value });
+  }}
       on:change={(event) => {
-        updateValue({ type: "change", value: event.target.value });
-      }}
+    updateValue({ type: "change", value: event.target.value });
+  }}
       on:keydown
       on:keydown={(event) => {
-        if (!readonly && event.key === "ArrowDown") {
-          focusCalendar();
-        }
-      }}
+    if (!readonly && event.key === "ArrowDown") {
+      focusCalendar();
+    }
+  }}
       on:keyup
       on:focus
       on:blur
       on:blur={(event) => {
-        blurInput(event.relatedTarget);
-      }}
+    blurInput(event.relatedTarget);
+  }}
       on:paste
     >
     {#if showInvalid}

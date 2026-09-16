@@ -30,9 +30,9 @@
       secondaryButtonText="Cancel"
       on:click:button--secondary={() => (openConfirm = false)}
       on:submit={() => {
-        openConfirm = false;
-        open = false;
-      }}
+    openConfirm = false;
+    open = false;
+  }}
     >
       <p>This action cannot be undone.</p>
     </Modal>

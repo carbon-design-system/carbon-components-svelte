@@ -23,31 +23,31 @@
 <ButtonSet>
   <Button
     on:click={() => {
-      topLeftQueue.add({
-        kind: "info",
-        title: "Top left",
-      });
-    }}
+    topLeftQueue.add({
+      kind: "info",
+      title: "Top left",
+    });
+  }}
   >
     Add top left
   </Button>
   <Button
     on:click={() => {
-      topCenterQueue.add({
-        kind: "success",
-        title: "Top center",
-      });
-    }}
+    topCenterQueue.add({
+      kind: "success",
+      title: "Top center",
+    });
+  }}
   >
     Add top center
   </Button>
   <Button
     on:click={() => {
-      topRightQueue.add({
-        kind: "success",
-        title: "Top right",
-      });
-    }}
+    topRightQueue.add({
+      kind: "success",
+      title: "Top right",
+    });
+  }}
   >
     Add top right
   </Button>
@@ -56,31 +56,31 @@
 <ButtonSet>
   <Button
     on:click={() => {
-      bottomLeftQueue.add({
-        kind: "warning",
-        title: "Bottom left",
-      });
-    }}
+    bottomLeftQueue.add({
+      kind: "warning",
+      title: "Bottom left",
+    });
+  }}
   >
     Add bottom left
   </Button>
   <Button
     on:click={() => {
-      bottomCenterQueue.add({
-        kind: "info",
-        title: "Bottom center",
-      });
-    }}
+    bottomCenterQueue.add({
+      kind: "info",
+      title: "Bottom center",
+    });
+  }}
   >
     Add bottom center
   </Button>
   <Button
     on:click={() => {
-      bottomRightQueue.add({
-        kind: "info",
-        title: "Bottom right",
-      });
-    }}
+    bottomRightQueue.add({
+      kind: "info",
+      title: "Bottom right",
+    });
+  }}
   >
     Add bottom right
   </Button>

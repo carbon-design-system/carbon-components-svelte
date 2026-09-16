@@ -72,8 +72,8 @@
       on:mouseleave:copy-button={logEvent("inline", "mouseleave")}
       on:copy={logEvent("inline", "copy")}
       on:copy:error={(e) => {
-        console.error("copy:error",  e.detail.error);
-      }}
+    console.error("copy:error", e.detail.error);
+  }}
     />
   </div>
 
@@ -85,8 +85,8 @@
     on:mouseleave:copy-button={logEvent("single", "mouseleave")}
     on:copy={logEvent("single", "copy")}
     on:copy:error={(e) => {
-      console.error("copy:error",  e.detail.error);
-    }}
+    console.error("copy:error", e.detail.error);
+  }}
   />
 
   <CodeSnippet
@@ -97,7 +97,7 @@
     on:mouseleave:copy-button={logEvent("multi", "mouseleave")}
     on:copy={logEvent("multi", "copy")}
     on:copy:error={(e) => {
-      console.error("copy:error",  e.detail.error);
-    }}
+    console.error("copy:error", e.detail.error);
+  }}
   />
 </Stack>

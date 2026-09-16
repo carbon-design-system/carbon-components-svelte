@@ -22,8 +22,8 @@
     {highContrast}
     {relative}
     on:click:outside={(e) => {
-      console.log("click:outside", e.detail);
-    }}
+    console.log("click:outside", e.detail);
+  }}
   >
     <div data-testid="content">Content</div>
   </Popover>

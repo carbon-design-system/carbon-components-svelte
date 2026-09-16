@@ -107,9 +107,9 @@
       selected={!header.columnHidden}
       disabled={!header.columnHidden && visibleCount === 1}
       on:click={(event) => {
-        event.preventDefault();
-        toggle(header.key);
-      }}
+    event.preventDefault();
+    toggle(header.key);
+  }}
     />
   {/each}
 </MenuButton>

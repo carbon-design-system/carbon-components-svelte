@@ -153,11 +153,7 @@
                   bind:value
                   type="text"
                   aria-invalid={showInvalid || undefined}
-                  aria-describedby={showInvalid
-                    ? errorId
-                    : showWarn
-                      ? warnId
-                      : undefined}
+                  aria-describedby={showInvalid ? errorId : showWarn ? warnId : undefined}
                   {pattern}
                   {placeholder}
                   {maxlength}
@@ -245,13 +241,7 @@
               type="text"
               data-invalid={showInvalid || undefined}
               aria-invalid={showInvalid || undefined}
-              aria-describedby={showInvalid
-                ? errorId
-                : showWarn
-                  ? warnId
-                  : helperText
-                    ? helperId
-                    : undefined}
+              aria-describedby={showInvalid ? errorId : showWarn ? warnId : helperText ? helperId : undefined}
               {pattern}
               {placeholder}
               {maxlength}

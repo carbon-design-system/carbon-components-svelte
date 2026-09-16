@@ -335,8 +335,8 @@
           aria-label={iconDescription}
           class:bx--modal-close={true}
           on:click={() => {
-            close("close-button");
-          }}
+    close("close-button");
+  }}
         >
           <Close size={20} class="bx--modal-close__icon" aria-hidden="true" />
         </button>
@@ -356,8 +356,8 @@
           aria-label={iconDescription}
           class:bx--modal-close={true}
           on:click={() => {
-            close("close-button");
-          }}
+    close("close-button");
+  }}
         >
           <Close size={20} class="bx--modal-close__icon" aria-hidden="true" />
         </button>
@@ -374,12 +374,12 @@
       aria-label={hasScrollingContent ? ariaLabel : undefined}
       aria-labelledby={modalLabel ? modalLabelId : modalHeadingId}
       on:focusin={(event) => {
-        // Keep a newly-focused element (e.g. via Tab) from being hidden
-        // under the scroll gradient at the bottom of the content area.
-        if (event.target instanceof HTMLElement) {
-          scrollIntoViewWithinMenu(event.target, ".bx--modal-content");
-        }
-      }}
+    // Keep a newly-focused element (e.g. via Tab) from being hidden
+    // under the scroll gradient at the bottom of the content area.
+    if (event.target instanceof HTMLElement) {
+      scrollIntoViewWithinMenu(event.target, ".bx--modal-content");
+    }
+  }}
     >
       <slot />
     </div>
@@ -397,9 +397,9 @@
               kind={button.kind ?? "secondary"}
               disabled={button.disabled || button.loading}
               on:click={() => {
-                if (button.loading) return;
-                dispatch("click:button--secondary", { text: button.text });
-              }}
+    if (button.loading) return;
+    dispatch("click:button--secondary", { text: button.text });
+  }}
             >
               {#if button.loading}
                 <InlineLoading
@@ -416,11 +416,11 @@
             kind="secondary"
             disabled={secondaryButtonLoading}
             on:click={() => {
-              if (secondaryButtonLoading) return;
-              dispatch("click:button--secondary", {
-                text: secondaryButtonText,
-              });
-            }}
+    if (secondaryButtonLoading) return;
+    dispatch("click:button--secondary", {
+      text: secondaryButtonText,
+    });
+  }}
           >
             {#if secondaryButtonLoading}
               <InlineLoading
@@ -440,10 +440,10 @@
           type={formId ? "submit" : "button"}
           form={formId}
           on:click={() => {
-            if (primaryButtonLoading) return;
-            dispatch("submit");
-            dispatch("click:button--primary");
-          }}
+    if (primaryButtonLoading) return;
+    dispatch("submit");
+    dispatch("click:button--primary");
+  }}
         >
           {#if primaryButtonLoading}
             <InlineLoading

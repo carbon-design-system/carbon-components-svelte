@@ -88,28 +88,28 @@
           aria-readonly={readonly || undefined}
           class:bx--select-input={true}
           on:change={(event) => {
-            selectedValue.set(event.target.value);
-          }}
+    selectedValue.set(event.target.value);
+  }}
           on:change
           on:input
           on:focus
           on:blur
           on:mousedown={(event) => {
-            if (readonly) {
-              event.preventDefault();
-              event.currentTarget.focus();
-            }
-          }}
+    if (readonly) {
+      event.preventDefault();
+      event.currentTarget.focus();
+    }
+  }}
           on:keydown={(event) => {
-            if (
-              readonly &&
-              event.key !== "Tab" &&
-              event.key !== "Shift" &&
-              !(event.altKey && event.key === "ArrowDown")
-            ) {
-              event.preventDefault();
-            }
-          }}
+    if (
+      readonly &&
+      event.key !== "Tab" &&
+      event.key !== "Shift" &&
+      !(event.altKey && event.key === "ArrowDown")
+    ) {
+      event.preventDefault();
+    }
+  }}
         >
           <slot />
         </select>
@@ -146,28 +146,28 @@
       aria-readonly={readonly || undefined}
       class:bx--select-input={true}
       on:change={(event) => {
-        selectedValue.set(event.target.value);
-      }}
+    selectedValue.set(event.target.value);
+  }}
       on:change
       on:input
       on:focus
       on:blur
       on:mousedown={(event) => {
-        if (readonly) {
-          event.preventDefault();
-          event.currentTarget.focus();
-        }
-      }}
+    if (readonly) {
+      event.preventDefault();
+      event.currentTarget.focus();
+    }
+  }}
       on:keydown={(event) => {
-        if (
-          readonly &&
-          event.key !== "Tab" &&
-          event.key !== "Shift" &&
-          !(event.altKey && event.key === "ArrowDown")
-        ) {
-          event.preventDefault();
-        }
-      }}
+    if (
+      readonly &&
+      event.key !== "Tab" &&
+      event.key !== "Shift" &&
+      !(event.altKey && event.key === "ArrowDown")
+    ) {
+      event.preventDefault();
+    }
+  }}
     >
       <slot />
     </select>

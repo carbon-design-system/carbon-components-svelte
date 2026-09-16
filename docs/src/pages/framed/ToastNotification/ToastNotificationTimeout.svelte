@@ -24,9 +24,9 @@
       subtitle="This notification will autoclose in {timeout.toLocaleString()} ms."
       caption={new Date().toLocaleString()}
       on:close={(e) => {
-        timeout = undefined;
-        console.log(e.detail.timeout); // true if closed via timeout
-      }}
+    timeout = undefined;
+    console.log(e.detail.timeout); // true if closed via timeout
+  }}
     />
   </div>
 {/if}

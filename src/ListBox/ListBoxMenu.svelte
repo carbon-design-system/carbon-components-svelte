@@ -88,7 +88,7 @@
         id="menu-{id}"
         class:bx--list-box__menu={true}
         class:bx--list-box__menu--wrap-options={wrapOptions}
-        style="position: static; {$$restProps.style || ''}"
+        style="position: static; {$$restProps.style || ""}"
         {...$$restProps}
         on:scroll
         on:mouseleave

@@ -22,10 +22,10 @@
     {rows}
     stickyHeader={false}
     virtualize={{
-      threshold: 10,
-      maxVisibleRows: 8,
-      itemHeight: 48,
-      overscan: 2,
-    }}
+    threshold: 10,
+    maxVisibleRows: 8,
+    itemHeight: 48,
+    overscan: 2,
+  }}
   />
 </div>

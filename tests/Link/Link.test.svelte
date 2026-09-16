@@ -10,18 +10,18 @@
   <Link
     href="https://www.carbondesignsystem.com/"
     on:click={(e) => {
-      e.preventDefault();
-      console.log("click");
-    }}
+    e.preventDefault();
+    console.log("click");
+  }}
     on:mouseover={() => {
-      console.log("mouseover");
-    }}
+    console.log("mouseover");
+  }}
     on:mouseenter={() => {
-      console.log("mouseenter");
-    }}
+    console.log("mouseenter");
+  }}
     on:mouseleave={() => {
-      console.log("mouseleave");
-    }}
+    console.log("mouseleave");
+  }}
   >
     Carbon Design System
   </Link>

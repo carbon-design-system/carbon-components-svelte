@@ -24,9 +24,9 @@
     type="button"
     data-testid="close-button"
     on:click={(e) => {
-      const dialog = e.currentTarget.closest("dialog");
-      dialog?.close();
-    }}
+    const dialog = e.currentTarget.closest("dialog");
+    dialog?.close();
+  }}
   >
     Close
   </button>

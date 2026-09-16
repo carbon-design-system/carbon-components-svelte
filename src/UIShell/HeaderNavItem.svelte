@@ -84,44 +84,44 @@
     on:keyup
     on:keydown
     on:keydown={(event) => {
-      if (!ctx) return;
+    if (!ctx) return;
 
-      const currentIndex = menuItems.indexOf(ref);
-      if (currentIndex === -1) return;
+    const currentIndex = menuItems.indexOf(ref);
+    if (currentIndex === -1) return;
 
-      if (event.key === "ArrowDown") {
-        event.preventDefault();
-        // Move to next item, wrap to first
-        menuItems[moveIndex(currentIndex, 1, menuItems.length)]?.focus();
-      } else if (event.key === "ArrowUp") {
-        event.preventDefault();
-        // Move to previous item, wrap to last
-        menuItems[moveIndex(currentIndex, -1, menuItems.length)]?.focus();
-      } else if (event.key === "Home") {
-        event.preventDefault();
-        // Focus first item
-        menuItems[0]?.focus();
-      } else if (event.key === "End") {
-        event.preventDefault();
-        // Focus last item
-        menuItems[menuItems.length - 1]?.focus();
-      } else if (event.key === "Escape") {
-        event.preventDefault();
-        ctx.closeMenu("escape-key");
-      }
-    }}
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      // Move to next item, wrap to first
+      menuItems[moveIndex(currentIndex, 1, menuItems.length)]?.focus();
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      // Move to previous item, wrap to last
+      menuItems[moveIndex(currentIndex, -1, menuItems.length)]?.focus();
+    } else if (event.key === "Home") {
+      event.preventDefault();
+      // Focus first item
+      menuItems[0]?.focus();
+    } else if (event.key === "End") {
+      event.preventDefault();
+      // Focus last item
+      menuItems[menuItems.length - 1]?.focus();
+    } else if (event.key === "Escape") {
+      event.preventDefault();
+      ctx.closeMenu("escape-key");
+    }
+  }}
     on:focus
     on:blur
     on:blur={(event) => {
-      // Only close menu if blur is moving focus outside the menu
-      // (not when navigating between menu items with arrow keys)
-      if (
-        selectedItemIds.indexOf(id) === selectedItemIds.length - 1 &&
-        (!event.relatedTarget || !menuItems.includes(event.relatedTarget))
-      ) {
-        ctx?.closeMenu("blur");
-      }
-    }}
+    // Only close menu if blur is moving focus outside the menu
+    // (not when navigating between menu items with arrow keys)
+    if (
+      selectedItemIds.indexOf(id) === selectedItemIds.length - 1 &&
+      (!event.relatedTarget || !menuItems.includes(event.relatedTarget))
+    ) {
+      ctx?.closeMenu("blur");
+    }
+  }}
   >
     <span class:bx--text-truncate--end={true}><slot>{text}</slot></span>
     {#if icon || $$slots.icon}

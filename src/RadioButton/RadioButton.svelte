@@ -175,35 +175,35 @@
     on:focus
     on:blur
     on:click={(event) => {
-      if ($readonly) {
-        event.preventDefault();
-        return;
-      }
-      // No `event.preventDefault()` here: canceling the click makes the
-      // browser revert `checked` back to its pre-click value once the event
-      // finishes dispatching, which runs after Svelte's microtask-scheduled
-      // DOM update and silently reselects the radio.
-      if ($allowDeselect && checked && deselect) {
-        deselect();
-      }
-    }}
+    if ($readonly) {
+      event.preventDefault();
+      return;
+    }
+    // No `event.preventDefault()` here: canceling the click makes the
+    // browser revert `checked` back to its pre-click value once the event
+    // finishes dispatching, which runs after Svelte's microtask-scheduled
+    // DOM update and silently reselects the radio.
+    if ($allowDeselect && checked && deselect) {
+      deselect();
+    }
+  }}
     on:change={(event) => {
-      if ($readonly) {
-        event.stopImmediatePropagation();
-        return;
-      }
-      if (update) {
-        // Inside RadioButtonGroup - use context
-        update(value);
-      } else if (name && registry) {
-        // Standalone with name - update local checked and notify siblings via registry
-        checked = event.currentTarget.checked;
-        updateGroupSelection(name, instanceKey);
-      } else {
-        // Standalone without name - just update local checked
-        checked = event.currentTarget.checked;
-      }
-    }}
+    if ($readonly) {
+      event.stopImmediatePropagation();
+      return;
+    }
+    if (update) {
+      // Inside RadioButtonGroup - use context
+      update(value);
+    } else if (name && registry) {
+      // Standalone with name - update local checked and notify siblings via registry
+      checked = event.currentTarget.checked;
+      updateGroupSelection(name, instanceKey);
+    } else {
+      // Standalone without name - just update local checked
+      checked = event.currentTarget.checked;
+    }
+  }}
     on:change
   >
   <label class:bx--radio-button__label={true} for={id}>

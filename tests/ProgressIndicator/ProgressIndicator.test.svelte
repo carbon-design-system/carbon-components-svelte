@@ -21,9 +21,10 @@
   {vertical}
   {spaceEqually}
   {preventChangeOnClick}
-  on:change={onchange || ((e) => {
-    console.log("change", e.detail);
-  })}
+  on:change={onchange ||
+    ((e) => {
+      console.log("change", e.detail);
+    })}
 >
   {#each steps as step}
     <ProgressStep
@@ -33,11 +34,11 @@
       invalid={step.invalid}
       disabled={step.disabled}
       on:focus={() => {
-        console.log("focus", step.label);
-      }}
+    console.log("focus", step.label);
+  }}
       on:blur={() => {
-        console.log("blur", step.label);
-      }}
+    console.log("blur", step.label);
+  }}
     />
   {/each}
 </ProgressIndicator>

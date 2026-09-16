@@ -654,9 +654,9 @@
     aria-label={$$props["aria-label"]}
     class={dropdownListBoxClass}
     on:click={(event) => {
-      if (disabled || readonly) return;
-      open = ref.contains(event.target) ? !open : false;
-    }}
+    if (disabled || readonly) return;
+    open = ref.contains(event.target) ? !open : false;
+  }}
     {disabled}
     {open}
     invalid={showInvalid}
@@ -691,90 +691,90 @@
         aria-controls={open ? menuId : undefined}
         aria-describedby={fieldDescribedById}
         on:focus={() => {
-          if (isFluid) fieldFocused = true;
-        }}
+    if (isFluid) fieldFocused = true;
+  }}
         on:blur={() => {
-          if (isFluid) fieldFocused = false;
-        }}
+    if (isFluid) fieldFocused = false;
+  }}
         on:keydown={(event) => {
-        if (
-          event.key === " " ||
-          event.key === "Enter" ||
-          event.key === "ArrowDown" ||
-          event.key === "ArrowUp"
-        ) {
-          event.preventDefault();
-        }
+    if (
+      event.key === " " ||
+      event.key === "Enter" ||
+      event.key === "ArrowDown" ||
+      event.key === "ArrowUp"
+    ) {
+      event.preventDefault();
+    }
 
-        if (readonly) return;
+    if (readonly) return;
 
-        if (event.key === "Enter") {
-          selectHighlighted();
-        } else if (event.key === "Tab") {
-          open = false;
-        } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
-          const step = event.key === "ArrowDown" ? 1 : -1;
-          if (event.altKey) {
-            // APG combobox pattern: Alt+ArrowDown opens a closed menu without
-            // moving the highlight; Alt+ArrowUp closes an open one.
-            if (event.key === "ArrowDown" && !open) {
-              open = true;
-            } else if (event.key === "ArrowUp" && open) {
-              // APG combobox: Alt+ArrowUp dismisses an open menu without
-              // selecting, so it shares the keyboard-dismissal trigger.
-              close("escape-key");
-            }
-          } else if (open) {
-            change(step);
-          } else {
-            open = true;
-            // `afterUpdate` highlights any selected item only after the open
-            // state flushes; if nothing is highlighted by then, start at the
-            // first (ArrowDown) or last (ArrowUp) enabled item.
-            tick().then(() => {
-              if (highlightedIndex === -1) change(step);
-            });
-          }
-        } else if (event.key === "Home" || event.key === "End") {
-          // APG select-only combobox: Home/End open a closed listbox, then
-          // move the highlight to the first/last option, mirroring the
-          // open-and-move convention already used for the plain arrow keys.
-          event.preventDefault();
-          if (!open) open = true;
-          highlightedIndex = event.key === "Home" ? 0 : items.length - 1;
-          highlightOrigin = "keyboard";
-        } else if (event.key === "Escape") {
+    if (event.key === "Enter") {
+      selectHighlighted();
+    } else if (event.key === "Tab") {
+      open = false;
+    } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      const step = event.key === "ArrowDown" ? 1 : -1;
+      if (event.altKey) {
+        // APG combobox pattern: Alt+ArrowDown opens a closed menu without
+        // moving the highlight; Alt+ArrowUp closes an open one.
+        if (event.key === "ArrowDown" && !open) {
+          open = true;
+        } else if (event.key === "ArrowUp" && open) {
+          // APG combobox: Alt+ArrowUp dismisses an open menu without
+          // selecting, so it shares the keyboard-dismissal trigger.
           close("escape-key");
-        } else if (
-          clearable &&
-          selectedId !== undefined &&
-          (event.key === "Delete" || event.key === "Backspace")
-        ) {
-          // Clear the selection from the keyboard, menu open or closed,
-          // matching the click-to-clear button. Only wired when `clearable`
-          // is set, since that is what makes clearing possible at all.
-          event.preventDefault();
-          clear({ open: openOnClear });
-        } else if (
-          open &&
-          event.key.length === 1 &&
-          event.key !== " " &&
-          !event.ctrlKey &&
-          !event.metaKey &&
-          !event.altKey
-        ) {
-          event.preventDefault();
-          typeaheadSearch(event.key);
         }
-      }}
+      } else if (open) {
+        change(step);
+      } else {
+        open = true;
+        // `afterUpdate` highlights any selected item only after the open
+        // state flushes; if nothing is highlighted by then, start at the
+        // first (ArrowDown) or last (ArrowUp) enabled item.
+        tick().then(() => {
+          if (highlightedIndex === -1) change(step);
+        });
+      }
+    } else if (event.key === "Home" || event.key === "End") {
+      // APG select-only combobox: Home/End open a closed listbox, then
+      // move the highlight to the first/last option, mirroring the
+      // open-and-move convention already used for the plain arrow keys.
+      event.preventDefault();
+      if (!open) open = true;
+      highlightedIndex = event.key === "Home" ? 0 : items.length - 1;
+      highlightOrigin = "keyboard";
+    } else if (event.key === "Escape") {
+      close("escape-key");
+    } else if (
+      clearable &&
+      selectedId !== undefined &&
+      (event.key === "Delete" || event.key === "Backspace")
+    ) {
+      // Clear the selection from the keyboard, menu open or closed,
+      // matching the click-to-clear button. Only wired when `clearable`
+      // is set, since that is what makes clearing possible at all.
+      event.preventDefault();
+      clear({ open: openOnClear });
+    } else if (
+      open &&
+      event.key.length === 1 &&
+      event.key !== " " &&
+      !event.ctrlKey &&
+      !event.metaKey &&
+      !event.altKey
+    ) {
+      event.preventDefault();
+      typeaheadSearch(event.key);
+    }
+  }}
         on:keyup={(event) => {
-        if (event.key === " ") {
-          event.preventDefault();
-        } else {
-          return;
-        }
-        selectHighlighted();
-      }}
+    if (event.key === " ") {
+      event.preventDefault();
+    } else {
+      return;
+    }
+    selectHighlighted();
+  }}
         {disabled}
         {id}
       >
@@ -796,10 +796,10 @@
         {/if}
         <ListBoxMenuIcon
           on:click={(event) => {
-          event.stopPropagation();
-          if (disabled || readonly) return;
-          open = !open;
-        }}
+    event.stopPropagation();
+    if (disabled || readonly) return;
+    open = !open;
+  }}
           {translateWithId}
           {open}
         />
@@ -819,25 +819,25 @@
         on:scroll
         on:scroll={handleMenuScroll}
         on:mouseleave={() => {
-          // Clear the hover highlight when the cursor leaves the menu so the
-          // highlighted state does not linger on the last hovered item.
-          highlightedIndex = -1;
-          highlightOrigin = null;
-        }}
+    // Clear the hover highlight when the cursor leaves the menu so the
+    // highlighted state does not linger on the last hovered item.
+    highlightedIndex = -1;
+    highlightOrigin = null;
+  }}
         bind:ref={listRef}
         style={isWindowed
-          ? `max-height: ${menuMaxHeight}; overflow-y: auto;`
-          : effectivePortalMenu
-            ? `max-height: ${menuMaxHeight};`
-            : undefined}
+    ? `max-height: ${menuMaxHeight}; overflow-y: auto;`
+    : effectivePortalMenu
+      ? `max-height: ${menuMaxHeight};`
+      : undefined}
       >
         {#if isVirtualized}
           <div style:height="{totalHeight}px" style:position="relative">
             <div style:transform="translateY({offsetY}px)">
               {#each itemsToRender as item, index (item.id)}
-                {@const actualIndex = startIndex + index}
-                {@const selected = selectedId === item.id}
-                {@const optionId = `${id}-${item.id}`}
+                {@const (actualIndex = startIndex + index)}
+                {@const (selected = selectedId === item.id)}
+                {@const (optionId = `${id}-${item.id}`)}
                 <ListBoxMenuItem
                   id={optionId}
                   active={selectedId === item.id}
@@ -847,24 +847,24 @@
                   aria-posinset={actualIndex + 1}
                   data-virtual-index={isMeasured ? actualIndex : undefined}
                   on:click={(event) => {
-                    if (item.disabled) {
-                      event.stopPropagation();
-                      return;
-                    }
-                    selectedId = item.id;
-                    dispatchSelect();
-                    close("select");
-                  }}
+    if (item.disabled) {
+      event.stopPropagation();
+      return;
+    }
+    selectedId = item.id;
+    dispatchSelect();
+    close("select");
+  }}
                   on:mousedown={(event) => {
-                    // Keep focus on the field so screen readers don't
-                    // re-announce it on every option click.
-                    event.preventDefault();
-                  }}
+    // Keep focus on the field so screen readers don't
+    // re-announce it on every option click.
+    event.preventDefault();
+  }}
                   on:mouseenter={() => {
-                    if (item.disabled) return;
-                    highlightedIndex = actualIndex;
-                    highlightOrigin = "pointer";
-                  }}
+    if (item.disabled) return;
+    highlightedIndex = actualIndex;
+    highlightOrigin = "pointer";
+  }}
                 >
                   {#if $$slots.icon}
                     <span
@@ -925,8 +925,8 @@
           </div>
         {:else}
           {#each itemsToRender as item, index (item.id)}
-            {@const selected = selectedId === item.id}
-            {@const optionId = `${id}-${item.id}`}
+            {@const (selected = selectedId === item.id)}
+            {@const (optionId = `${id}-${item.id}`)}
             <ListBoxMenuItem
               id={optionId}
               active={selectedId === item.id}
@@ -934,24 +934,24 @@
               hasLeftIcon={Boolean($$slots.icon || item.icon)}
               data-virtual-index={isMeasured ? index : undefined}
               on:click={(event) => {
-                if (item.disabled) {
-                  event.stopPropagation();
-                  return;
-                }
-                selectedId = item.id;
-                dispatchSelect();
-                close("select");
-              }}
+    if (item.disabled) {
+      event.stopPropagation();
+      return;
+    }
+    selectedId = item.id;
+    dispatchSelect();
+    close("select");
+  }}
               on:mousedown={(event) => {
-                // Keep focus on the field so screen readers don't
-                // re-announce it on every option click.
-                event.preventDefault();
-              }}
+    // Keep focus on the field so screen readers don't
+    // re-announce it on every option click.
+    event.preventDefault();
+  }}
               on:mouseenter={() => {
-                if (item.disabled) return;
-                highlightedIndex = index;
-                highlightOrigin = "pointer";
-              }}
+    if (item.disabled) return;
+    highlightedIndex = index;
+    highlightOrigin = "pointer";
+  }}
             >
               {#if $$slots.icon}
                 <span

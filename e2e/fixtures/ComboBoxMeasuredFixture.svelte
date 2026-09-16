@@ -39,8 +39,7 @@
     bind:selectedId
     bind:value
     portalMenu={false}
-    shouldFilterItem={(item, value) =>
-      item.text.toLowerCase().includes(value.toLowerCase())}
+    shouldFilterItem={(item, value) => item.text.toLowerCase().includes(value.toLowerCase())}
     wrapOptions
     virtualize={{ containerHeight: 300 }}
   />

@@ -25,15 +25,15 @@
     <ToolbarBatchActions
       {selectedIds}
       on:cancel={() => {
-        items = items.map((item) => ({ ...item, checked: false }));
-      }}
+    items = items.map((item) => ({ ...item, checked: false }));
+  }}
     >
       <Button
         kind="danger"
         icon={TrashCan}
         on:click={() => {
-          items = items.filter((item) => !item.checked);
-        }}
+    items = items.filter((item) => !item.checked);
+  }}
       >
         Delete
       </Button>
@@ -43,12 +43,12 @@
         icon={Add}
         size="small"
         on:click={() => {
-          items = [
-            ...items,
-            { id: nextId, name: `Load Balancer ${nextId}`, checked: false },
-          ];
-          nextId++;
-        }}
+    items = [
+      ...items,
+      { id: nextId, name: `Load Balancer ${nextId}`, checked: false },
+    ];
+    nextId++;
+  }}
       >
         Add balancer
       </Button>

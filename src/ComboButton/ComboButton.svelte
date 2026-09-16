@@ -178,9 +178,7 @@
     {disabled}
     hideTooltip={open}
     {tooltipPosition}
-    class="bx--combo-button__trigger {open
-      ? 'bx--combo-button__trigger--open'
-      : ''}"
+    class="bx--combo-button__trigger {open ? "bx--combo-button__trigger--open" : ""}"
     aria-haspopup="menu"
     aria-expanded={open}
     on:mousedown={(event) => event.preventDefault()}

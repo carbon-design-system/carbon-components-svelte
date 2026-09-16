@@ -38,11 +38,11 @@
         persistent
         value="round"
         shouldFilterRows={(row, value) => {
-          return (
-            /(6|8)$/.test(row.name) &&
-            row.rule.toLowerCase().includes(value.toLowerCase())
-          );
-        }}
+    return (
+      /(6|8)$/.test(row.name) &&
+      row.rule.toLowerCase().includes(value.toLowerCase())
+    );
+  }}
         bind:filteredRowIds
       />
     </ToolbarContent>

@@ -27,9 +27,9 @@
         class:bx--pagination-nav__page={true}
         class:bx--pagination-nav__page--select={true}
         on:change={(event) => {
-          value = "";
-          dispatch("select", { index: Number(event.target.value) });
-        }}
+    value = "";
+    dispatch("select", { index: Number(event.target.value) });
+  }}
       >
         <option value="" hidden></option>
         {#each Array.from({ length: count }, (_, index) => index) as pageOffset (pageOffset)}
@@ -50,8 +50,8 @@
   <PaginationItem
     page={fromIndex + 1}
     on:click={() => {
-      dispatch("select", { index: fromIndex + 1 });
-    }}
+    dispatch("select", { index: fromIndex + 1 });
+  }}
   >
     Page
   </PaginationItem>

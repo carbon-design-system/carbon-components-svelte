@@ -12,20 +12,20 @@
     bind:value
     labelText="Clusters"
     on:click:stepper={(e) => {
-      clickStepperEvents = [
-        ...clickStepperEvents,
-        `value: ${e.detail.value}, direction: ${e.detail.direction}`,
-      ];
-    }}
+    clickStepperEvents = [
+      ...clickStepperEvents,
+      `value: ${e.detail.value}, direction: ${e.detail.direction}`,
+    ];
+  }}
     on:blur={(e) => {
-      blurEvents = [...blurEvents, `value: ${e.detail.value}`];
-    }}
+    blurEvents = [...blurEvents, `value: ${e.detail.value}`];
+  }}
     on:blur:stepper={(e) => {
-      blurStepperEvents = [
-        ...blurStepperEvents,
-        `value: ${e.detail.value}, direction: ${e.detail.direction}`,
-      ];
-    }}
+    blurStepperEvents = [
+      ...blurStepperEvents,
+      `value: ${e.detail.value}, direction: ${e.detail.direction}`,
+    ];
+  }}
   />
   <Stack gap={4}>
     <Stack gap={2}>

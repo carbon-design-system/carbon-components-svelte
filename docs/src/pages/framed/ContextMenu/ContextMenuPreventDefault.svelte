@@ -33,9 +33,9 @@
     icon={copied ? Checkmark : Copy}
     disabled={copying}
     on:click={(e) => {
-      e.preventDefault();
-      copyToClipboard();
-    }}
+    e.preventDefault();
+    copyToClipboard();
+  }}
   />
   <ContextMenuDivider />
   <ContextMenuOption kind="danger" labelText="Delete item" icon={TrashCan} />

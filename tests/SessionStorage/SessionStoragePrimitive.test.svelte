@@ -11,10 +11,10 @@
     key="test-key"
     bind:value
     on:save={() => {
-      console.log("save event");
-    }}
+    console.log("save event");
+  }}
     on:update={({ detail }) => {
-      console.log("update event", detail);
-    }}
+    console.log("update event", detail);
+  }}
   />
 </div>

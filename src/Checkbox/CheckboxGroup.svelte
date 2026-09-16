@@ -156,13 +156,7 @@
     class:bx--checkbox-group--warning={showWarn}
     {disabled}
     data-invalid={showInvalid || undefined}
-    aria-describedby={showInvalid
-      ? errorId
-      : showWarn
-        ? warnId
-        : helperText
-          ? helperId
-          : undefined}
+    aria-describedby={showInvalid ? errorId : showWarn ? warnId : helperText ? helperId : undefined}
   >
     {#if legendText || $$slots.legendChildren}
       <legend class:bx--label={true} class:bx--visually-hidden={hideLegend}>

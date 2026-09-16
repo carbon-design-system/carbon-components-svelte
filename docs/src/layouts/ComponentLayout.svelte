@@ -173,8 +173,8 @@
         items={themeItems}
         selectedId={$theme}
         on:select={({ detail }) => {
-          theme.set(detail.selectedId);
-        }}
+    theme.set(detail.selectedId);
+  }}
       />
       <ComponentDocBarActions
         {component}
@@ -184,8 +184,8 @@
         {tocToggleIcon}
         {tocToggleDescription}
         on:tocToggle={() => {
-          componentTocOpen.update((open) => !open);
-        }}
+    componentTocOpen.update((open) => !open);
+  }}
       />
     </div>
     <div class="toc mobile">

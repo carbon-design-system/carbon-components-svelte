@@ -17,12 +17,23 @@
 <DataTableSkeleton headers={["Name", "Protocol", "Port", "Rule"]} rows={10} />
 
 <DataTableSkeleton
-  headers={[{ value: "Name" }, { value: "Protocol" }, { value: "Port" }, { value: "Rule" }]}
+  headers={[
+    { value: "Name" },
+    { value: "Protocol" },
+    { value: "Port" },
+    { value: "Rule" },
+  ]}
   rows={10}
 />
 
 <DataTableSkeleton
-  headers={[{ value: "Name" }, { value: "Protocol" }, { value: "Port" }, { value: "Rule" }, { empty: true }]}
+  headers={[
+    { value: "Name" },
+    { value: "Protocol" },
+    { value: "Port" },
+    { value: "Rule" },
+    { empty: true },
+  ]}
   rows={10}
 />
 

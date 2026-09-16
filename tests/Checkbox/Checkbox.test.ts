@@ -687,7 +687,8 @@ describe("Checkbox", () => {
       expectTypeOf<Props["value"]>().toEqualTypeOf<any>();
       expectTypeOf<Props["group"]>().toEqualTypeOf<
         // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
-        ReadonlyArray<any> | undefined>();
+        ReadonlyArray<any> | undefined
+      >();
     });
 
     it("should provide type-safe access when using group binding", () => {

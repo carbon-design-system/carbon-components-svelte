@@ -33,9 +33,9 @@
     type="button"
     data-testid="open-all-menus"
     on:click={(event) => {
-      event.stopPropagation();
-      setAllOpen(true);
-    }}
+    event.stopPropagation();
+    setAllOpen(true);
+  }}
   >
     Open all menus
   </button>
@@ -43,9 +43,9 @@
     type="button"
     data-testid="close-all-menus"
     on:click={(event) => {
-      event.stopPropagation();
-      setAllOpen(false);
-    }}
+    event.stopPropagation();
+    setAllOpen(false);
+  }}
   >
     Close all menus
   </button>

@@ -33,9 +33,9 @@
         min={0}
         bind:value={row.qty}
         on:input={() => {
-          // Rebuild cells so the Total column picks up the new qty.
-          dataTable.refreshRow(row.id);
-        }}
+    // Rebuild cells so the Total column picks up the new qty.
+    dataTable.refreshRow(row.id);
+  }}
       />
     {:else}
       {cell.display ? cell.display(cell.value, row) : cell.value}

@@ -18,14 +18,14 @@
   <ContextMenuOption
     labelText="Stay open"
     on:click={(e) => {
-      console.log("click", "Stay open");
-      e.preventDefault();
-    }}
+    console.log("click", "Stay open");
+    e.preventDefault();
+  }}
   />
   <ContextMenuOption
     labelText="Close menu"
     on:click={() => {
-      console.log("click", "Close menu");
-    }}
+    console.log("click", "Close menu");
+  }}
   />
 </ContextMenu>

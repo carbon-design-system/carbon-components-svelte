@@ -102,22 +102,22 @@
         kind="ghost"
         tooltipAlignment="center"
         tooltipPosition={tooltipPosition === "inside"
-          ? "right"
-          : tooltipPosition === "outside"
-            ? "left"
-            : tooltipPosition}
+    ? "right"
+    : tooltipPosition === "outside"
+      ? "left"
+      : tooltipPosition}
         iconDescription={backwardText}
         disabled={!loop && page === 1}
         icon={CaretLeft}
         on:click={() => {
-          if (page <= 1) {
-            if (loop) page = total;
-          } else {
-            page--;
-          }
-          dispatch("click:button--previous", { page });
-          dispatch("change", { page });
-        }}
+    if (page <= 1) {
+      if (loop) page = total;
+    } else {
+      page--;
+    }
+    dispatch("click:button--previous", { page });
+    dispatch("change", { page });
+  }}
       />
     </li>
     {#if fit > MIN || (fit <= MIN && page <= 1)}
@@ -125,9 +125,9 @@
         page={1}
         active={page === 1}
         on:click={() => {
-          page = 1;
-          dispatch("change", { page });
-        }}
+    page = 1;
+    dispatch("change", { page });
+  }}
       >
         {page === 1 ? "Active, Page" : "Page"}
       </PaginationItem>
@@ -136,18 +136,18 @@
       fromIndex={startOffset}
       count={front}
       on:select={(event) => {
-        page = event.detail.index;
-        dispatch("change", { page });
-      }}
+    page = event.detail.index;
+    dispatch("change", { page });
+  }}
     />
     {#each items as item (item)}
       <PaginationItem
         page={item + 1}
         active={page === item + 1}
         on:click={() => {
-          page = item + 1;
-          dispatch("change", { page });
-        }}
+    page = item + 1;
+    dispatch("change", { page });
+  }}
       >
         {page === item + 1 ? "Active, Page" : "Page"}
       </PaginationItem>
@@ -156,18 +156,18 @@
       fromIndex={total - back - 1}
       count={back}
       on:select={(event) => {
-        page = event.detail.index;
-        dispatch("change", { page });
-      }}
+    page = event.detail.index;
+    dispatch("change", { page });
+  }}
     />
     {#if total > 1}
       <PaginationItem
         page={total}
         active={page === total}
         on:click={() => {
-          page = total;
-          dispatch("change", { page });
-        }}
+    page = total;
+    dispatch("change", { page });
+  }}
       >
         {page === total ? "Active, Page" : "Page"}
       </PaginationItem>
@@ -177,22 +177,22 @@
         kind="ghost"
         tooltipAlignment="center"
         tooltipPosition={tooltipPosition === "inside"
-          ? "left"
-          : tooltipPosition === "outside"
-            ? "right"
-            : tooltipPosition}
+    ? "left"
+    : tooltipPosition === "outside"
+      ? "right"
+      : tooltipPosition}
         iconDescription={forwardText}
         disabled={!loop && page === total}
         icon={CaretRight}
         on:click={() => {
-          if (page >= total) {
-            if (loop) page = 1;
-          } else {
-            page++;
-          }
-          dispatch("click:button--next", { page });
-          dispatch("change", { page });
-        }}
+    if (page >= total) {
+      if (loop) page = 1;
+    } else {
+      page++;
+    }
+    dispatch("click:button--next", { page });
+    dispatch("change", { page });
+  }}
       />
     </li>
   </ul>

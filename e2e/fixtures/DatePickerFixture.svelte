@@ -12,16 +12,16 @@
     datePickerType="single"
     value="03/15/2024"
     flatpickrProps={{
-      static: true,
-      minDate: "03/01/2024",
-      maxDate: "03/31/2024",
-    }}
+    static: true,
+    minDate: "03/01/2024",
+    maxDate: "03/31/2024",
+  }}
     on:change
     on:close={(e) =>
-      (singleCloseTriggers = [
-        ...singleCloseTriggers,
-        e.detail?.trigger ?? "null",
-      ])}
+    (singleCloseTriggers = [
+      ...singleCloseTriggers,
+      e.detail?.trigger ?? "null",
+    ])}
   >
     <DatePickerInput
       data-testid="date-picker-meeting"
@@ -42,16 +42,13 @@
   <DatePicker
     datePickerType="range"
     flatpickrProps={{
-      static: true,
-      minDate: "03/01/2024",
-      maxDate: "03/31/2024",
-    }}
+    static: true,
+    minDate: "03/01/2024",
+    maxDate: "03/31/2024",
+  }}
     on:change
     on:close={(e) =>
-      (rangeCloseTriggers = [
-        ...rangeCloseTriggers,
-        e.detail?.trigger ?? "null",
-      ])}
+    (rangeCloseTriggers = [...rangeCloseTriggers, e.detail?.trigger ?? "null"])}
   >
     <DatePickerInput
       data-testid="date-picker-range-start"

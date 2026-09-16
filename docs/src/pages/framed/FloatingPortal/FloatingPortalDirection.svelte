@@ -109,8 +109,8 @@
       on:drag={handleDragBottom}
       on:dragend={handleDragEndBottom}
       on:keydown={(e) => {
-        if (e.key === "Enter") openBottom = !openBottom;
-      }}
+    if (e.key === "Enter") openBottom = !openBottom;
+  }}
       title="Drag to move, click to toggle"
     >
       <Tile>
@@ -138,8 +138,8 @@
       on:drag={handleDragTop}
       on:dragend={handleDragEndTop}
       on:keydown={(e) => {
-        if (e.key === "Enter") openTop = !openTop;
-      }}
+    if (e.key === "Enter") openTop = !openTop;
+  }}
       title="Drag to move, click to toggle"
     >
       <Tile>

@@ -625,33 +625,32 @@
   <div
     bind:this={datePickerRef}
     use:dismiss={{
-      enabled: calendarOpen,
-      listeners: [
-        {
-          type: "pointerdown",
-          handler: handleOutsidePointerDown,
-          options: { capture: true },
-        },
-        { type: "click", handler: handleOutsideClick },
-      ],
-    }}
+    enabled: calendarOpen,
+    listeners: [
+      {
+        type: "pointerdown",
+        handler: handleOutsidePointerDown,
+        options: { capture: true },
+      },
+      { type: "click", handler: handleOutsideClick },
+    ],
+  }}
     {id}
     class:bx--date-picker={true}
     class:bx--date-picker--short={short}
     class:bx--date-picker--light={light}
     class:bx--date-picker--simple={datePickerType === "simple"}
     class:bx--date-picker--single={datePickerType === "single" ||
-      datePickerType === "month" ||
-      datePickerType === "year"}
+    datePickerType === "month" ||
+    datePickerType === "year"}
     class:bx--date-picker--range={datePickerType === "range"}
-    class:bx--date-picker--nolabel={datePickerType === "range" &&
-      $labelTextEmpty}
+    class:bx--date-picker--nolabel={datePickerType === "range" && $labelTextEmpty}
     on:keydown={(event) => {
-      if (calendar?.isOpen && event.key === "Escape") {
-        event.stopPropagation();
-        dismissCalendar("escape-key");
-      }
-    }}
+    if (calendar?.isOpen && event.key === "Escape") {
+      event.stopPropagation();
+      dismissCalendar("escape-key");
+    }
+  }}
   >
     <slot />
   </div>

@@ -50,10 +50,10 @@
     primaryButtonText="Save"
     secondaryButtonText="Cancel"
     on:click:button--secondary={(e) => {
-      if (isDirty) {
-        e.preventDefault();
-        showWarning = true;
-      }
-    }}
+    if (isDirty) {
+      e.preventDefault();
+      showWarning = true;
+    }
+  }}
   />
 </ComposedModal>

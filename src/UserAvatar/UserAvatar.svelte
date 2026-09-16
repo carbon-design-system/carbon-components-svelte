@@ -289,8 +289,7 @@
     class={avatarClass}
     href={isLink ? href : undefined}
     type={isButton ? "button" : undefined}
-    aria-label={$$restProps["aria-label"] ??
-      (isInteractive && name ? name : undefined)}
+    aria-label={$$restProps["aria-label"] ?? (isInteractive && name ? name : undefined)}
     data-overflow={groupOverflow ? "true" : undefined}
     on:click
     on:mouseover

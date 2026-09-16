@@ -216,9 +216,9 @@
       size="small"
       disabled={!ready}
       on:click={() => {
-        treeview?.collapseAll();
-        expandedIds = [];
-      }}
+    treeview?.collapseAll();
+    expandedIds = [];
+  }}
     >
       Collapse all
     </Button>

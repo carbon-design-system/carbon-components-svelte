@@ -16,8 +16,7 @@
   labelText="Custom item height (60px)"
   placeholder="Filter..."
   {items}
-  shouldFilterItem={(item, value) =>
-    item.text.toLowerCase().includes(value.toLowerCase())}
+  shouldFilterItem={(item, value) => item.text.toLowerCase().includes(value.toLowerCase())}
   bind:selectedId
   bind:value
   let:item

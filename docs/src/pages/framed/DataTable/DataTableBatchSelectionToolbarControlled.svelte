@@ -41,17 +41,17 @@
     <ToolbarBatchActions
       bind:active
       on:cancel={(e) => {
-        e.preventDefault();
-        active = false;
-      }}
+    e.preventDefault();
+    active = false;
+  }}
     >
       <Button
         icon={TrashCan}
         disabled={selectedRowIds.length === 0}
         on:click={() => {
-          rows = rows.filter((row) => !selectedRowIds.includes(row.id));
-          selectedRowIds = [];
-        }}
+    rows = rows.filter((row) => !selectedRowIds.includes(row.id));
+    selectedRowIds = [];
+  }}
       >
         Delete
       </Button>

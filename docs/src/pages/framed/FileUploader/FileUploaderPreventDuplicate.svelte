@@ -17,8 +17,8 @@
     labelDescription="Duplicate files are rejected."
     status="edit"
     on:rejected={(e) => {
-      rejectedFiles = e.detail;
-    }}
+    rejectedFiles = e.detail;
+  }}
   />
 
   {#each rejectedFiles as { file }, i (`${file.name}-${file.lastModified}-${i}`)}
@@ -30,8 +30,8 @@
       errorBody="This file is already in the list."
       status="edit"
       on:delete={() => {
-        rejectedFiles = rejectedFiles.filter((r) => r.file !== file);
-      }}
+    rejectedFiles = rejectedFiles.filter((r) => r.file !== file);
+  }}
     />
   {/each}
 </Stack>

@@ -13,13 +13,13 @@
     href="https://cloud.ibm.com/docs/api-gateway/"
     text="API documentation"
     on:click={() => {
-      console.log("click", "API documentation");
-    }}
+    console.log("click", "API documentation");
+  }}
   />
   <OverflowMenuItem
     text="Manage credentials"
     on:click={() => {
-      console.log("click", "Manage credentials");
-    }}
+    console.log("click", "Manage credentials");
+  }}
   />
 </OverflowMenu>

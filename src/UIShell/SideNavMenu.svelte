@@ -51,8 +51,8 @@
     {...$$restProps}
     on:click
     on:click={() => {
-      expanded = !expanded;
-    }}
+    expanded = !expanded;
+  }}
   >
     {#if $$slots.icon || icon}
       <span class:bx--side-nav__icon={true}>

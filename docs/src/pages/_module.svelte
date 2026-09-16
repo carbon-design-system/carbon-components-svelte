@@ -251,17 +251,17 @@
         shouldFilter={false}
         match={matchQuery}
         on:select={(e) => {
-          // Selecting a link item would navigate natively; intercept it and
-          // route through Routify for SPA navigation instead.
-          e.detail.event?.preventDefault();
-          const href = e.detail.item.href;
-          // Hash must not be part of the path: getChainTo treats "/" segments literally,
-          // so "Toolbar#slug" would not match the Toolbar route node.
-          const u = new URL(href, window.location.origin);
-          const path = u.pathname;
-          const hash = u.hash.slice(1);
-          routifyNav.getNavigate()?.(path, hash ? { "#": hash } : undefined);
-        }}
+    // Selecting a link item would navigate natively; intercept it and
+    // route through Routify for SPA navigation instead.
+    e.detail.event?.preventDefault();
+    const href = e.detail.item.href;
+    // Hash must not be part of the path: getChainTo treats "/" segments literally,
+    // so "Toolbar#slug" would not match the Toolbar route node.
+    const u = new URL(href, window.location.origin);
+    const path = u.pathname;
+    const hash = u.hash.slice(1);
+    routifyNav.getNavigate()?.(path, hash ? { "#": hash } : undefined);
+  }}
       >
         <svelte:fragment slot="menu">
           {#if componentHits.length}

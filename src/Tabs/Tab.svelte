@@ -214,26 +214,26 @@
     class:bx--tabs__nav-link--icon={Boolean(icon) && !$iconOnly}
     class:bx--tabs__nav-link--icon-only={$iconOnly}
     style:width={$iconOnly
-      ? undefined
-      : $useFullWidth
-        ? "100%"
-        : $useAutoWidth
-          ? "auto"
-          : undefined}
+    ? undefined
+    : $useFullWidth
+      ? "100%"
+      : $useAutoWidth
+        ? "auto"
+        : undefined}
     on:mouseenter={$iconOnly ? showTooltip : undefined}
     on:mouseleave={$iconOnly ? hideTooltip : undefined}
     on:focus={$iconOnly
-      ? () => {
-          focused = true;
-          claim();
-        }
-      : undefined}
+    ? () => {
+        focused = true;
+        claim();
+      }
+    : undefined}
     on:blur={$iconOnly
-      ? () => {
-          focused = false;
-          release();
-        }
-      : undefined}
+    ? () => {
+        focused = false;
+        release();
+      }
+    : undefined}
   >
     {#if $iconOnly}
       <div class:bx--tabs__nav-item--icon={true}>
@@ -291,10 +291,10 @@
         class:bx--tabs__nav-item--close-icon--disabled={disabled}
         {disabled}
         on:click|preventDefault|stopPropagation={() => {
-          if (!disabled) {
-            dismiss(id);
-          }
-        }}
+    if (!disabled) {
+      dismiss(id);
+    }
+  }}
       >
         <Close aria-hidden="true" />
       </button>

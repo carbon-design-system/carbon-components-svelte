@@ -39,8 +39,8 @@
     {readonly}
     class={customClass}
     on:change={(e) => {
-      console.log("change", e.detail);
-    }}
+    console.log("change", e.detail);
+  }}
   >
     <span slot="legendChildren">Custom Legend</span>
     <Checkbox value="1" labelText="Option 1" />
@@ -64,8 +64,8 @@
     {readonly}
     class={customClass}
     on:change={(e) => {
-      console.log("change", e.detail);
-    }}
+    console.log("change", e.detail);
+  }}
   >
     <Checkbox value="1" labelText="Option 1" />
     <Checkbox

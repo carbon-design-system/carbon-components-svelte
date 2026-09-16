@@ -141,9 +141,9 @@
     aria-label={iconDescription}
     class:bx--profile-menu={true}
     transition:slide|local={{
-      ...transition,
-      duration: transition === false ? 0 : transition.duration,
-    }}
+    ...transition,
+    duration: transition === false ? 0 : transition.duration,
+  }}
   >
     <slot />
   </div>

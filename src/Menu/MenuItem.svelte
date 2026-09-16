@@ -298,18 +298,18 @@
       bind:open={submenuOpen}
       {labelText}
       on:keydown={(event) => {
-        if (event.key === "ArrowLeft") {
-          event.preventDefault();
-          event.stopPropagation();
-          submenuOpen = false;
-          ref?.focus({ preventScroll: true });
-        }
-      }}
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      event.stopPropagation();
+      submenuOpen = false;
+      ref?.focus({ preventScroll: true });
+    }
+  }}
       on:mouseenter={cancelCloseSubmenu}
       on:mouseleave={scheduleCloseSubmenu}
       on:close={(event) => {
-        if (event.detail.trigger === "select") ctx.close("select");
-      }}
+    if (event.detail.trigger === "select") ctx.close("select");
+  }}
     >
       <slot />
     </Menu>

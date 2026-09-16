@@ -299,44 +299,44 @@
     bind:ref
     bind:files
     on:change={(event) => {
-      // In multiple mode, newFiles includes re-sent existing files
-      // (same reference) plus newly selected ones. Only reject new
-      // objects that match an existing file by content.
-      const existingRefs = new Set(prevFiles);
-      const { accepted: newFiles, rejected: allRejected } = filterIncomingFiles(
-        event.detail,
-        {
-          maxFileSize,
-          preventDuplicate,
-          existingFiles: prevFiles,
-          carryRefs: existingRefs,
-        },
-      );
+    // In multiple mode, newFiles includes re-sent existing files
+    // (same reference) plus newly selected ones. Only reject new
+    // objects that match an existing file by content.
+    const existingRefs = new Set(prevFiles);
+    const { accepted: newFiles, rejected: allRejected } = filterIncomingFiles(
+      event.detail,
+      {
+        maxFileSize,
+        preventDuplicate,
+        existingFiles: prevFiles,
+        carryRefs: existingRefs,
+      },
+    );
 
-      if (allRejected.length > 0) {
-        dispatch("rejected", allRejected);
-      }
+    if (allRejected.length > 0) {
+      dispatch("rejected", allRejected);
+    }
 
-      const carried = newFiles.filter((f) => existingRefs.has(f));
-      const added = newFiles.filter((f) => !existingRefs.has(f));
+    const carried = newFiles.filter((f) => existingRefs.has(f));
+    const added = newFiles.filter((f) => !existingRefs.has(f));
 
-      if (typeof orderFiles === "function") {
-        files = orderFiles(carried, added);
-      } else if (orderFiles === "prepend") {
-        files = [...added, ...carried];
-      } else {
-        files = [...carried, ...added];
-      }
+    if (typeof orderFiles === "function") {
+      files = orderFiles(carried, added);
+    } else if (orderFiles === "prepend") {
+      files = [...added, ...carried];
+    } else {
+      files = [...carried, ...added];
+    }
 
-      dispatch("change", files);
-    }}
+    dispatch("change", files);
+  }}
   />
   <div class:bx--file-container={true}>
     {#each filesWithKeys as { file, key }, index (key)}
-      {@const rowStatus = resolveFileStatus(file, index)}
-      {@const rowInvalid = resolveFileInvalid(file, index)}
-      {@const rowErrorSubject = resolveFileErrorSubject(file, index)}
-      {@const rowErrorBody = resolveFileErrorBody(file, index)}
+      {@const (rowStatus = resolveFileStatus(file, index))}
+      {@const (rowInvalid = resolveFileInvalid(file, index))}
+      {@const (rowErrorSubject = resolveFileErrorSubject(file, index))}
+      {@const (rowErrorBody = resolveFileErrorBody(file, index))}
       <span
         class:bx--file__selected-file={true}
         class:bx--file__selected-file--invalid={rowInvalid}
@@ -351,14 +351,14 @@
             invalid={rowInvalid}
             on:keydown
             on:keydown={(event) => {
-              if (event.key === " " || event.key === "Enter") {
-                files = files.filter((f) => f !== file);
-              }
-            }}
+    if (event.key === " " || event.key === "Enter") {
+      files = files.filter((f) => f !== file);
+    }
+  }}
             on:click
             on:click={() => {
-              files = files.filter((f) => f !== file);
-            }}
+    files = files.filter((f) => f !== file);
+  }}
           />
         </span>
         {#if rowInvalid && rowErrorSubject}

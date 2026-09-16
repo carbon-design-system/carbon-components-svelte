@@ -51,16 +51,16 @@
   <ButtonSet>
     <Button
       on:click={() => {
-        treeview?.collapseNodes();
-      }}
+    treeview?.collapseNodes();
+  }}
     >
       Collapse all nodes
     </Button>
     <Button
       on:click={() => {
-        treeview?.expandNodes();
-        treeview?.collapseNodes((node) => node.disabled);
-      }}
+    treeview?.expandNodes();
+    treeview?.collapseNodes((node) => node.disabled);
+  }}
     >
       Collapse disabled nodes
     </Button>

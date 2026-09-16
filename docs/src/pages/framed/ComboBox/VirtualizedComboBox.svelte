@@ -16,8 +16,7 @@
     labelText="Virtualized ComboBox (10,000 items)"
     placeholder="Filter..."
     {items}
-    shouldFilterItem={(item, value) =>
-      item.text.toLowerCase().includes(value.toLowerCase())}
+    shouldFilterItem={(item, value) => item.text.toLowerCase().includes(value.toLowerCase())}
     bind:selectedId
     bind:value
   />

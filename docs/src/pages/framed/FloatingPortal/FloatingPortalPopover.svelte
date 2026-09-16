@@ -31,20 +31,20 @@
       titleText="Region"
       selectedId="us-south"
       items={[
-        { id: "us-south", text: "Dallas (us-south)" },
-        { id: "us-east", text: "Washington DC (us-east)" },
-        { id: "eu-de", text: "Frankfurt (eu-de)" },
-        { id: "jp-tok", text: "Tokyo (jp-tok)" },
-        { id: "br-sao", text: "São Paulo (br-sao)" },
-        { id: "au-syd", text: "Sydney (au-syd)" },
-        { id: "ca-tor", text: "Toronto (ca-tor)" },
-        { id: "de-fra", text: "Frankfurt (de-fra)" },
-        { id: "es-mad", text: "Madrid (es-mad)" },
-        { id: "fr-par", text: "Paris (fr-par)" },
-        { id: "in-mum", text: "Mumbai (in-mum)" },
-        { id: "it-mil", text: "Milan (it-mil)" },
-        { id: "jp-osa", text: "Osaka (jp-osa)" },
-      ]}
+    { id: "us-south", text: "Dallas (us-south)" },
+    { id: "us-east", text: "Washington DC (us-east)" },
+    { id: "eu-de", text: "Frankfurt (eu-de)" },
+    { id: "jp-tok", text: "Tokyo (jp-tok)" },
+    { id: "br-sao", text: "São Paulo (br-sao)" },
+    { id: "au-syd", text: "Sydney (au-syd)" },
+    { id: "ca-tor", text: "Toronto (ca-tor)" },
+    { id: "de-fra", text: "Frankfurt (de-fra)" },
+    { id: "es-mad", text: "Madrid (es-mad)" },
+    { id: "fr-par", text: "Paris (fr-par)" },
+    { id: "in-mum", text: "Mumbai (in-mum)" },
+    { id: "it-mil", text: "Milan (it-mil)" },
+    { id: "jp-osa", text: "Osaka (jp-osa)" },
+  ]}
     />
     <OverflowMenu portalMenu>
       <OverflowMenuItem text="Edit" />

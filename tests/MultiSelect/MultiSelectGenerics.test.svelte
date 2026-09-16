@@ -17,7 +17,7 @@
   }}
   let:item
 >
-  {@const { id, text, price, category } = item}
+  {@const ({ id, text, price, category } = item)}
   <div>
     <strong>{text}</strong>
     - ${price}

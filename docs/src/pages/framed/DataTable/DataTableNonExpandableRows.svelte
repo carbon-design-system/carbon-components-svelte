@@ -49,9 +49,7 @@
 
 <DataTable
   batchExpansion
-  nonExpandableRowIds={rows
-    .filter((row) => row.port < 3000)
-    .map((row) => row.id)}
+  nonExpandableRowIds={rows.filter((row) => row.port < 3000).map((row) => row.id)}
   headers={[
     { key: "name", value: "Name" },
     { key: "protocol", value: "Protocol" },

@@ -78,14 +78,12 @@
     aria-current={current ? "step" : undefined}
     tabindex={disabled ? "-1" : "0"}
     class:bx--progress-step-button={true}
-    class:bx--progress-step-button--unclickable={current ||
-      !complete ||
-      $preventChangeOnClick}
+    class:bx--progress-step-button--unclickable={current || !complete || $preventChangeOnClick}
     on:click
     on:click={() => {
-      if (!step.complete) return;
-      change(step.index);
-    }}
+    if (!step.complete) return;
+    change(step.index);
+  }}
     on:mouseover
     on:mouseenter
     on:mouseleave

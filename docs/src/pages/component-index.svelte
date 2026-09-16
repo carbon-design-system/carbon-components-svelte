@@ -227,14 +227,10 @@
                       sortable
                       sortAlways
                       active={sortKey === column.key}
-                      sortDirection={sortDirection === "asc"
-                      ? "ascending"
-                      : "descending"}
+                      sortDirection={sortDirection === "asc" ? "ascending" : "descending"}
                       on:sort={(e) => handleSort(column.key, e.detail.direction)}
                     >
-                      {column.key === "name"
-                      ? `Component (${visible.length})`
-                      : column.label}
+                      {column.key === "name" ? `Component (${visible.length})` : column.label}
                     </StructuredListCell>
                   {/each}
                   <StructuredListCell head class="links-cell" />
@@ -329,9 +325,9 @@
                   href="#"
                   size="xl"
                   on:click={(e) => {
-                    e.preventDefault();
-                    clearFilters();
-                  }}
+    e.preventDefault();
+    clearFilters();
+  }}
                 >
                   Clear filters
                 </Link>

@@ -376,15 +376,15 @@
         max={valueUpper}
         {step}
         on:change={(event) => {
-          if (readonly) return;
-          const target = /** @type {HTMLInputElement} */ (event.currentTarget);
-          let next = Number(target.value);
-          if (Number.isNaN(next)) return;
-          if (next < min) next = min;
-          if (next > valueUpper) next = valueUpper;
-          value = next;
-          dispatch("change", { value, valueUpper });
-        }}
+    if (readonly) return;
+    const target = /** @type {HTMLInputElement} */ (event.currentTarget);
+    let next = Number(target.value);
+    if (Number.isNaN(next)) return;
+    if (next < min) next = min;
+    if (next > valueUpper) next = valueUpper;
+    value = next;
+    dispatch("change", { value, valueUpper });
+  }}
         data-invalid={invalid || null}
         data-warn={(warn && !invalid) || null}
         aria-invalid={invalid || null}
@@ -508,14 +508,12 @@
       <div bind:this={trackRef} class:bx--slider__track={true}></div>
       <div
         class:bx--slider__filled-track={true}
-        style:transform="translate({left}%, -50%) scaleX({(leftUpper - left) /
-          100})"
+        style:transform="translate({left}%, -50%) scaleX({(leftUpper - left) / 100})"
       ></div>
       {#if resolvedMarks.length > 0}
         <div class:bx--slider__marks={true} aria-hidden="true">
           {#each resolvedMarks as mark (mark.value)}
-            {@const percent =
-              range === 0 ? 0 : ((mark.value - min) / range) * 100}
+            {@const (percent = range === 0 ? 0 : ((mark.value - min) / range) * 100)}
             <span class:bx--slider__mark={true} style:left="{percent}%">
               {#if mark.label != null && mark.label !== ""}
                 <span class:bx--slider__mark-label={true}>{mark.label}</span>
@@ -552,15 +550,15 @@
         {max}
         {step}
         on:change={(event) => {
-          if (readonly) return;
-          const target = /** @type {HTMLInputElement} */ (event.currentTarget);
-          let next = Number(target.value);
-          if (Number.isNaN(next)) return;
-          if (next > max) next = max;
-          if (next < value) next = value;
-          valueUpper = next;
-          dispatch("change", { value, valueUpper });
-        }}
+    if (readonly) return;
+    const target = /** @type {HTMLInputElement} */ (event.currentTarget);
+    let next = Number(target.value);
+    if (Number.isNaN(next)) return;
+    if (next > max) next = max;
+    if (next < value) next = value;
+    valueUpper = next;
+    dispatch("change", { value, valueUpper });
+  }}
         data-invalid={invalid || null}
         data-warn={(warn && !invalid) || null}
         aria-invalid={invalid || null}

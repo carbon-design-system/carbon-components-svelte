@@ -207,19 +207,14 @@
   class:bx--tooltip__trigger={true}
   class:bx--tooltip--portal-active={effectivePortalTooltip}
   class:bx--tooltip--a11y={!effectivePortalTooltip}
-  class:bx--tooltip--visible={!effectivePortalTooltip &&
-    open &&
-    !disabled &&
-    !tooltipHidden}
-  class:bx--tooltip--hidden={!effectivePortalTooltip &&
-    (!open || disabled || tooltipHidden)}
+  class:bx--tooltip--visible={!effectivePortalTooltip && open && !disabled && !tooltipHidden}
+  class:bx--tooltip--hidden={!effectivePortalTooltip && (!open || disabled || tooltipHidden)}
   class:bx--tooltip--top={!effectivePortalTooltip && direction === "top"}
   class:bx--tooltip--right={!effectivePortalTooltip && direction === "right"}
   class:bx--tooltip--bottom={!effectivePortalTooltip && direction === "bottom"}
   class:bx--tooltip--left={!effectivePortalTooltip && direction === "left"}
   class:bx--tooltip--align-start={!effectivePortalTooltip && align === "start"}
-  class:bx--tooltip--align-center={!effectivePortalTooltip &&
-    align === "center"}
+  class:bx--tooltip--align-center={!effectivePortalTooltip && align === "center"}
   class:bx--tooltip--align-end={!effectivePortalTooltip && align === "end"}
   style:cursor={disabled ? "not-allowed" : "default"}
   {...$$restProps}

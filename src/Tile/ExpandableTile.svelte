@@ -122,12 +122,18 @@
   {id}
   aria-expanded={hasInteractiveContent ? undefined : expanded}
   tabindex={hasInteractiveContent ? undefined : tabindex}
-  title={hasInteractiveContent ? undefined : (expanded ? tileExpandedIconText : tileCollapsedIconText)}
+  title={hasInteractiveContent
+    ? undefined
+    : expanded
+      ? tileExpandedIconText
+      : tileCollapsedIconText}
   class:bx--tile={true}
   class:bx--tile--expandable={true}
   class:bx--tile--is-expanded={expanded}
   class:bx--tile--light={light}
-  style:max-height={expanded || (tileMaxHeight > 0 ? tileMaxHeight : measuredMaxHeight) <= 0 ? "none" : `${(tileMaxHeight > 0 ? tileMaxHeight : measuredMaxHeight) + (tilePadding > 0 ? tilePadding : measuredPadding)}px`}
+  style:max-height={expanded || (tileMaxHeight > 0 ? tileMaxHeight : measuredMaxHeight) <= 0
+    ? "none"
+    : `${(tileMaxHeight > 0 ? tileMaxHeight : measuredMaxHeight) + (tilePadding > 0 ? tilePadding : measuredPadding)}px`}
   {...$$restProps}
   on:click
   on:click={() => {
@@ -151,12 +157,20 @@
       type={hasInteractiveContent ? "button" : undefined}
       class:bx--tile__chevron={true}
       aria-expanded={hasInteractiveContent ? expanded : undefined}
-      aria-label={hasInteractiveContent ? (expanded ? tileExpandedIconText : tileCollapsedIconText) : undefined}
+      aria-label={hasInteractiveContent
+    ? expanded
+      ? tileExpandedIconText
+      : tileCollapsedIconText
+    : undefined}
       aria-controls={hasInteractiveContent ? `${id}-content` : undefined}
-      title={hasInteractiveContent ? (expanded ? tileExpandedIconText : tileCollapsedIconText) : undefined}
+      title={hasInteractiveContent
+    ? expanded
+      ? tileExpandedIconText
+      : tileCollapsedIconText
+    : undefined}
       on:click={() => {
-        if (hasInteractiveContent) expanded = !expanded;
-      }}
+    if (hasInteractiveContent) expanded = !expanded;
+  }}
     >
       <span>{expanded ? tileExpandedLabel : tileCollapsedLabel}</span>
       <ChevronDown />
