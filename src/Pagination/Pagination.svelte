@@ -308,7 +308,7 @@
           }}
           bind:selected={pageSize}
         >
-          {#each effectivePageSizes as size, index (size)}
+          {#each effectivePageSizes as size (size)}
             <SelectItem value={size} text={size.toString()} />
           {/each}
         </Select>
