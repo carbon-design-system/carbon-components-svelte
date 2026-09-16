@@ -304,6 +304,26 @@
       }
     }
   }
+
+  /** @param {KeyboardEvent} event */
+  function handleMenuKeydown(event) {
+    if (
+      ["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(event.key)
+    ) {
+      event.preventDefault();
+    } else if (event.key === "Escape") {
+      event.stopPropagation();
+      const shouldContinue = dispatch(
+        "close",
+        { trigger: "escape-key" },
+        { cancelable: true },
+      );
+      if (shouldContinue) {
+        open = false;
+        buttonRef.focus({ preventScroll: true });
+      }
+    }
+  }
 </script>
 
 <button
@@ -400,22 +420,7 @@
     class={menuOptionsClass}
     style:--overflow-menu-options-after-width={overflowMenuOptionsAfterWidth}
     style:max-height={maxHeightStyle}
-    on:keydown={(event) => {
-      if (["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(event.key)) {
-        event.preventDefault();
-      } else if (event.key === "Escape") {
-        event.stopPropagation();
-        const shouldContinue = dispatch(
-          "close",
-          { trigger: "escape-key" },
-          { cancelable: true },
-        );
-        if (shouldContinue) {
-          open = false;
-          buttonRef.focus({ preventScroll: true });
-        }
-      }
-    }}
+    on:keydown={handleMenuKeydown}
   >
     <slot />
   </ul>
@@ -451,22 +456,7 @@
       style:left="auto"
       style:--overflow-menu-options-after-width={overflowMenuOptionsAfterWidth}
       style:max-height={maxHeightStyle}
-      on:keydown={(event) => {
-        if (["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(event.key)) {
-          event.preventDefault();
-        } else if (event.key === "Escape") {
-          event.stopPropagation();
-          const shouldContinue = dispatch(
-            "close",
-            { trigger: "escape-key" },
-            { cancelable: true },
-          );
-          if (shouldContinue) {
-            open = false;
-            buttonRef.focus({ preventScroll: true });
-          }
-        }
-      }}
+      on:keydown={handleMenuKeydown}
     >
       <slot />
     </ul>
