@@ -114,30 +114,23 @@
   // A full-screen takeover has no ComposedModal to own Escape (modal-hosted
   // mode already gets this from ComposedModal's own handler); this listener
   // only ever runs for the full-screen case.
-  let escapeListenerActive = false;
-
   function handleWindowKeydown(event) {
     if (event.key === "Escape") {
       handleClose("close");
     }
   }
 
+  // Same listener reference each time, so add/remove are idempotent.
   $: {
-    const shouldListen = isFullScreen && open;
-    if (shouldListen && !escapeListenerActive) {
+    window.removeEventListener("keydown", handleWindowKeydown);
+    if (isFullScreen && open) {
       window.addEventListener("keydown", handleWindowKeydown);
-      escapeListenerActive = true;
-    } else if (!shouldListen && escapeListenerActive) {
-      window.removeEventListener("keydown", handleWindowKeydown);
-      escapeListenerActive = false;
     }
   }
 
   onMount(() => {
     return () => {
-      if (escapeListenerActive) {
-        window.removeEventListener("keydown", handleWindowKeydown);
-      }
+      window.removeEventListener("keydown", handleWindowKeydown);
     };
   });
 </script>
