@@ -202,40 +202,17 @@
   $: filesWithKeys = keyFiles(files);
 
   /**
+   * Per-file override: call `fn(file, index)` when supplied, else `fallback`.
+   *
+   * @template T
+   * @param {((file: File, index: number) => T) | undefined} fn
+   * @param {T} fallback
    * @param {File} file
    * @param {number} index
-   * @returns {"uploading" | "edit" | "complete"}
+   * @returns {T}
    */
-  function resolveFileStatus(file, index) {
-    return typeof fileStatus === "function" ? fileStatus(file, index) : status;
-  }
-
-  /**
-   * @param {File} file
-   * @param {number} index
-   */
-  function resolveFileInvalid(file, index) {
-    return typeof fileInvalid === "function" ? fileInvalid(file, index) : false;
-  }
-
-  /**
-   * @param {File} file
-   * @param {number} index
-   */
-  function resolveFileErrorSubject(file, index) {
-    return typeof fileErrorSubject === "function"
-      ? fileErrorSubject(file, index)
-      : "";
-  }
-
-  /**
-   * @param {File} file
-   * @param {number} index
-   */
-  function resolveFileErrorBody(file, index) {
-    return typeof fileErrorBody === "function"
-      ? fileErrorBody(file, index)
-      : "";
+  function resolveFileOverride(fn, fallback, file, index) {
+    return typeof fn === "function" ? fn(file, index) : fallback;
   }
 
   $: {
@@ -333,10 +310,10 @@
   />
   <div class:bx--file-container={true}>
     {#each filesWithKeys as { file, key }, index (key)}
-      {@const rowStatus = resolveFileStatus(file, index)}
-      {@const rowInvalid = resolveFileInvalid(file, index)}
-      {@const rowErrorSubject = resolveFileErrorSubject(file, index)}
-      {@const rowErrorBody = resolveFileErrorBody(file, index)}
+      {@const rowStatus = resolveFileOverride(fileStatus, status, file, index)}
+      {@const rowInvalid = resolveFileOverride(fileInvalid, false, file, index)}
+      {@const rowErrorSubject = resolveFileOverride(fileErrorSubject, "", file, index)}
+      {@const rowErrorBody = resolveFileOverride(fileErrorBody, "", file, index)}
       <span
         class:bx--file__selected-file={true}
         class:bx--file__selected-file--invalid={rowInvalid}
