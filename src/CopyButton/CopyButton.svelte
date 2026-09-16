@@ -209,7 +209,7 @@
     disconnectModalObserver();
     disconnectModalObserver = ref
       ? observeModalClose(ref, dismissFeedback)
-      : () => {};
+      : noop;
   }
 
   onMount(() => {
