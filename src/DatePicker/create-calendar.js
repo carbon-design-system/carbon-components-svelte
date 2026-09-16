@@ -79,10 +79,8 @@ function updateClasses(instance, { isMonth = false, isYear = false } = {}) {
   }
   for (const node of days.querySelectorAll(".flatpickr-day")) {
     node.classList.add("bx--date-picker__day");
-    if (node.classList.contains("today") && selectedDates.length > 0) {
-      node.classList.add("no-border");
-    } else if (node.classList.contains("today") && selectedDates.length === 0) {
-      node.classList.remove("no-border");
+    if (node.classList.contains("today")) {
+      node.classList.toggle("no-border", selectedDates.length > 0);
     }
   }
 }
