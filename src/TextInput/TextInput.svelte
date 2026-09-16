@@ -184,8 +184,6 @@
         class:bx--visually-hidden={hideLabel}
         class:bx--label--disabled={disabled}
         class:bx--label--inline={inline}
-        class:bx--label--inline-sm={inline && size === "sm"}
-        class:bx--label--inline-xl={inline && size === "xl"}
         class:bx--label--slotted={isFluid && $$slots.labelChildren}
       >
         <slot name="labelChildren"> {labelText} </slot>
