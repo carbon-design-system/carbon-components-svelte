@@ -337,11 +337,18 @@
     return lowercaseItem.startsWith(lowercaseInput);
   }
 
-  $: filterFn = typeahead
-    ? shouldFilterItem === defaultShouldFilter
+  $: statusDescribedById = showInvalid
+    ? undefined
+    : showWarn && warnText
+      ? warnId
+      : !isFluid && !showWarn && helperText
+        ? helperId
+        : undefined;
+
+  $: filterFn =
+    typeahead && shouldFilterItem === defaultShouldFilter
       ? autocompleteCustomFilter
-      : shouldFilterItem
-    : shouldFilterItem;
+      : shouldFilterItem;
 
   /**
    * @param {Event} event
@@ -786,13 +793,7 @@
           aria-readonly={readonly || undefined}
           aria-controls={open ? menuId : undefined}
           aria-errormessage={showInvalid && invalidText ? errorId : undefined}
-          aria-describedby={showInvalid
-          ? undefined
-          : showWarn && warnText
-            ? warnId
-            : !isFluid && !showWarn && helperText
-              ? helperId
-              : undefined}
+          aria-describedby={statusDescribedById}
           {disabled}
           {readonly}
           {placeholder}
