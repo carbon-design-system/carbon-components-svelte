@@ -118,23 +118,37 @@
    */
   export let tag = "div";
 
+  /**
+   * Whether `value` is a spacing-scale step (rendered as a class rather than
+   * inline style). Spacing steps start at 1; offsets also allow 0.
+   * @param {unknown} value @param {number} min
+   */
+  function isScaleStep(value, min) {
+    return typeof value === "number" && value >= min && value <= 13;
+  }
+
+  /** @param {string} kind @param {number | string | undefined} value @param {number} min */
+  function scaleClass(kind, value, min) {
+    if (value == null) return undefined;
+    return isScaleStep(value, min) ? `bx--box-${kind}-${value}` : undefined;
+  }
+
+  /** @param {number | string | undefined} value @param {number} min */
+  function scaleStyle(value, min) {
+    if (value == null) return undefined;
+    if (isScaleStep(value, min)) return undefined;
+    if (typeof value === "string") return value;
+    return undefined;
+  }
+
   /** @param {"p" | "px" | "py" | "m" | "mx" | "my" | "height" | "min-height" | "max-height"} kind @param {SpacingValue | undefined} value */
   function spacingClass(kind, value) {
-    if (value == null) return undefined;
-    if (typeof value === "number" && value >= 1 && value <= 13) {
-      return `bx--box-${kind}-${value}`;
-    }
-    return undefined;
+    return scaleClass(kind, value, 1);
   }
 
   /** @param {SpacingValue | undefined} value */
   function spacingStyle(value) {
-    if (value == null) return undefined;
-    if (typeof value === "number" && value >= 1 && value <= 13) {
-      return undefined;
-    }
-    if (typeof value === "string") return value;
-    return undefined;
+    return scaleStyle(value, 1);
   }
 
   /** @param {number | string | undefined} value */
@@ -157,20 +171,12 @@
 
   /** @param {"top" | "bottom"} kind @param {OffsetValue | undefined} value */
   function offsetClass(kind, value) {
-    if (value == null) return undefined;
-    if (typeof value === "number" && value >= 0 && value <= 13) {
-      return `bx--box-${kind}-${value}`;
-    }
-    return undefined;
+    return scaleClass(kind, value, 0);
   }
 
   /** @param {OffsetValue | undefined} value */
   function offsetStyle(value) {
-    if (value == null) return undefined;
-    if (typeof value === "number" && value >= 0 && value <= 13)
-      return undefined;
-    if (typeof value === "string") return value;
-    return undefined;
+    return scaleStyle(value, 0);
   }
 
   $: boxClass = [
