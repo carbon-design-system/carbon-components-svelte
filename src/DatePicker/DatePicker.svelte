@@ -223,10 +223,22 @@
     );
   }
 
-  function snapshotCloseBaseline() {
-    dateStrAtOpen = $range
+  function currentDateStr() {
+    return $range
       ? { from: inputRef.value, to: inputRefTo.value }
       : inputRef.value;
+  }
+
+  /** Mirror the inputs into `valueFrom`/`valueTo` in range mode. */
+  function syncRangeValues() {
+    if ($range) {
+      valueFrom = inputRef.value;
+      valueTo = inputRefTo.value;
+    }
+  }
+
+  function snapshotCloseBaseline() {
+    dateStrAtOpen = currentDateStr();
     selectedDatesAtOpen = (calendar?.selectedDates || []).map((date) =>
       date.getTime(),
     );
@@ -236,9 +248,7 @@
     if (
       selectedDatesChanged(selectedDatesAtOpen, calendar?.selectedDates || [])
     ) {
-      dateStrAtOpen = $range
-        ? { from: inputRef.value, to: inputRefTo.value }
-        : inputRef.value;
+      dateStrAtOpen = currentDateStr();
     } else {
       snapshotCloseBaseline();
     }
@@ -249,30 +259,17 @@
    */
   function buildCalendarDetail({ copySelectedDates = false } = {}) {
     const dates = calendar?.selectedDates || [];
-    const detail = {
+    return {
       selectedDates: copySelectedDates ? [...dates] : dates,
+      dateStr: currentDateStr(),
     };
-
-    if ($range) {
-      const from = inputRef.value;
-      const to = inputRefTo.value;
-      detail.dateStr = { from, to };
-    } else {
-      detail.dateStr = inputRef.value;
-    }
-
-    return detail;
   }
 
   function dispatchDeferredClose() {
     if (!calendar) return;
 
     const detail = buildCalendarDetail({ copySelectedDates: true });
-
-    if ($range) {
-      valueFrom = inputRef.value;
-      valueTo = inputRefTo.value;
-    }
+    syncRangeValues();
 
     const selectionChanged =
       selectedDatesChanged(selectedDatesAtOpen, detail.selectedDates) ||
@@ -319,21 +316,27 @@
   }
 
   /**
+   * @param {string} id
+   * @param {Record<string, unknown>} patch
+   */
+  function updateInput(id, patch) {
+    inputs.update((_) =>
+      _.map((input) => (input.id === id ? { ...input, ...patch } : input)),
+    );
+  }
+
+  /**
    * @type {(id: string, readonly: boolean) => void}
    */
   function setReadonly(id, readonly) {
-    inputs.update((_) =>
-      _.map((input) => (input.id === id ? { ...input, readonly } : input)),
-    );
+    updateInput(id, { readonly });
   }
 
   /**
    * @type {(id: string, invalid: boolean, warn: boolean) => void}
    */
   function setValidation(id, invalid, warn) {
-    inputs.update((_) =>
-      _.map((input) => (input.id === id ? { ...input, invalid, warn } : input)),
-    );
+    updateInput(id, { invalid, warn });
   }
 
   /**
@@ -488,12 +491,7 @@
         if (calendarUsesFixedPositioning && event === "open")
           attachFixedRepositionListeners();
         const detail = buildCalendarDetail();
-
-        if ($range) {
-          valueFrom = inputRef.value;
-          valueTo = inputRefTo.value;
-        }
-
+        syncRangeValues();
         return dispatch(event, detail);
       },
     });
