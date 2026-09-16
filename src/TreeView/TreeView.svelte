@@ -593,6 +593,7 @@
     getVisibleRange,
     scrollHighlightedIntoView,
   } from "../utils/virtualize.js";
+  import { addPooledListener } from "../utils/window-listener-pool.js";
   import TreeViewNodeList from "./TreeViewNodeList.svelte";
   import TreeViewNodeVirtual from "./TreeViewNodeVirtual.svelte";
 
@@ -630,8 +631,8 @@
   /** While true (Ctrl/Cmd/Shift held), node labels use user-select: none for multiselect clicks. */
   let multiselectModifierActive = false;
 
-  /** @param {KeyboardEvent} e */
-  function syncModifierFromKeyboard(event) {
+  /** @param {KeyboardEvent | MouseEvent} event */
+  function syncModifierFromEvent(event) {
     if (!isMultiselect) return;
     multiselectModifierActive =
       event.ctrlKey || event.metaKey || event.shiftKey;
@@ -639,13 +640,6 @@
 
   function clearMultiselectModifierKeys() {
     multiselectModifierActive = false;
-  }
-
-  /** @param {MouseEvent} e */
-  function syncModifierFromTreeMouseDown(event) {
-    if (!isMultiselect) return;
-    multiselectModifierActive =
-      event.ctrlKey || event.metaKey || event.shiftKey;
   }
 
   /** @param {Event} e */
@@ -661,22 +655,22 @@
     }
   }
 
-  let multiselectKeyListenersAttached = false;
+  /** @type {Array<() => void>} */
+  let multiselectWindowUnlisteners = [];
 
   /** @param {boolean} want */
   function setMultiselectKeyListeners(want) {
-    if (want && !multiselectKeyListenersAttached) {
-      window.addEventListener("keydown", syncModifierFromKeyboard, true);
-      window.addEventListener("keyup", syncModifierFromKeyboard, true);
-      window.addEventListener("blur", clearMultiselectModifierKeys);
+    if (want && multiselectWindowUnlisteners.length === 0) {
+      multiselectWindowUnlisteners = [
+        addPooledListener("keydown", syncModifierFromEvent, true),
+        addPooledListener("keyup", syncModifierFromEvent, true),
+        addPooledListener("blur", clearMultiselectModifierKeys),
+      ];
       document.addEventListener("visibilitychange", handleVisibilitychange);
-      multiselectKeyListenersAttached = true;
-    } else if (!want && multiselectKeyListenersAttached) {
-      window.removeEventListener("keydown", syncModifierFromKeyboard, true);
-      window.removeEventListener("keyup", syncModifierFromKeyboard, true);
-      window.removeEventListener("blur", clearMultiselectModifierKeys);
+    } else if (!want && multiselectWindowUnlisteners.length > 0) {
+      for (const unlisten of multiselectWindowUnlisteners) unlisten();
+      multiselectWindowUnlisteners = [];
       document.removeEventListener("visibilitychange", handleVisibilitychange);
-      multiselectKeyListenersAttached = false;
       multiselectModifierActive = false;
     }
   }
@@ -1009,6 +1003,27 @@
   let typeAheadTimeoutId = null;
   const typeAheadTimeoutMs = 500;
 
+  /**
+   * Append the typed key to the buffer (re-arming the reset timer) and return
+   * the query to match: a repeated single character (e.g. "bbb") collapses to
+   * that character so repeated presses cycle through matches.
+   *
+   * @param {KeyboardEvent} event
+   * @returns {string}
+   */
+  function pushTypeAheadChar(event) {
+    if (typeAheadTimeoutId) clearTimeout(typeAheadTimeoutId);
+    typeAheadBuffer += event.key.toLowerCase();
+    typeAheadTimeoutId = setTimeout(() => {
+      typeAheadBuffer = "";
+    }, typeAheadTimeoutMs);
+
+    const isRepeatedChar =
+      typeAheadBuffer.length > 1 &&
+      [...typeAheadBuffer].every((c) => c === typeAheadBuffer[0]);
+    return isRepeatedChar ? typeAheadBuffer[0] : typeAheadBuffer;
+  }
+
   /** @returns {Element[]} Visible (non-disabled, non-hidden) tree items in document order. */
   function collectVisibleTreeItems() {
     if (!treeWalker || !ref) return [];
@@ -1035,16 +1050,7 @@
   function handleTypeAhead(event, treeItem) {
     if (!isTypeAheadKey(event)) return false;
 
-    if (typeAheadTimeoutId) clearTimeout(typeAheadTimeoutId);
-    typeAheadBuffer += event.key.toLowerCase();
-    typeAheadTimeoutId = setTimeout(() => {
-      typeAheadBuffer = "";
-    }, typeAheadTimeoutMs);
-
-    const isRepeatedChar =
-      typeAheadBuffer.length > 1 &&
-      [...typeAheadBuffer].every((c) => c === typeAheadBuffer[0]);
-    const query = isRepeatedChar ? typeAheadBuffer[0] : typeAheadBuffer;
+    const query = pushTypeAheadChar(event);
 
     const items = collectVisibleTreeItems();
     if (items.length === 0) return true;
@@ -1573,16 +1579,7 @@
   function handleVirtualTypeAhead(event, activeIdx) {
     if (!virtualIndex || !isTypeAheadKey(event)) return false;
 
-    if (typeAheadTimeoutId) clearTimeout(typeAheadTimeoutId);
-    typeAheadBuffer += event.key.toLowerCase();
-    typeAheadTimeoutId = setTimeout(() => {
-      typeAheadBuffer = "";
-    }, typeAheadTimeoutMs);
-
-    const isRepeatedChar =
-      typeAheadBuffer.length > 1 &&
-      [...typeAheadBuffer].every((c) => c === typeAheadBuffer[0]);
-    const query = isRepeatedChar ? typeAheadBuffer[0] : typeAheadBuffer;
+    const query = pushTypeAheadChar(event);
     const count = virtualIndex.totalCount;
     if (count === 0) return true;
 
@@ -1859,7 +1856,7 @@
     aria-label={hideLabel ? labelText : undefined}
     aria-labelledby={hideLabel ? undefined : labelId}
     aria-multiselectable={isMultiselect || isCheckboxMode || undefined}
-    on:mousedown|capture={syncModifierFromTreeMouseDown}
+    on:mousedown|capture={syncModifierFromEvent}
     on:selectstart|capture={handleMultiselectSelectStart}
     on:scroll={handleVirtualScroll}
     on:keydown
@@ -1901,7 +1898,7 @@
     aria-label={hideLabel ? labelText : undefined}
     aria-labelledby={hideLabel ? undefined : labelId}
     aria-multiselectable={isMultiselect || isCheckboxMode || undefined}
-    on:mousedown|capture={syncModifierFromTreeMouseDown}
+    on:mousedown|capture={syncModifierFromEvent}
     on:selectstart|capture={handleMultiselectSelectStart}
     on:keydown
     on:keydown|stopPropagation={handleKeydown}
