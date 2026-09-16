@@ -53,6 +53,28 @@
   $: selectedValue.set(value);
   $: value = $selectedValue;
   $: isFluid = !!timePickerContext?.isFluid || !!formContext?.isFluid;
+
+  function handleSelectChange(event) {
+    selectedValue.set(event.target.value);
+  }
+
+  function handleSelectMousedown(event) {
+    if (readonly) {
+      event.preventDefault();
+      event.currentTarget.focus();
+    }
+  }
+
+  function handleSelectKeydown(event) {
+    if (
+      readonly &&
+      event.key !== "Tab" &&
+      event.key !== "Shift" &&
+      !(event.altKey && event.key === "ArrowDown")
+    ) {
+      event.preventDefault();
+    }
+  }
 </script>
 
 {#if isFluid}
@@ -87,29 +109,13 @@
           {value}
           aria-readonly={readonly || undefined}
           class:bx--select-input={true}
-          on:change={(event) => {
-            selectedValue.set(event.target.value);
-          }}
+          on:change={handleSelectChange}
           on:change
           on:input
           on:focus
           on:blur
-          on:mousedown={(event) => {
-            if (readonly) {
-              event.preventDefault();
-              event.currentTarget.focus();
-            }
-          }}
-          on:keydown={(event) => {
-            if (
-              readonly &&
-              event.key !== "Tab" &&
-              event.key !== "Shift" &&
-              !(event.altKey && event.key === "ArrowDown")
-            ) {
-              event.preventDefault();
-            }
-          }}
+          on:mousedown={handleSelectMousedown}
+          on:keydown={handleSelectKeydown}
         >
           <slot />
         </select>
@@ -145,29 +151,13 @@
       {value}
       aria-readonly={readonly || undefined}
       class:bx--select-input={true}
-      on:change={(event) => {
-        selectedValue.set(event.target.value);
-      }}
+      on:change={handleSelectChange}
       on:change
       on:input
       on:focus
       on:blur
-      on:mousedown={(event) => {
-        if (readonly) {
-          event.preventDefault();
-          event.currentTarget.focus();
-        }
-      }}
-      on:keydown={(event) => {
-        if (
-          readonly &&
-          event.key !== "Tab" &&
-          event.key !== "Shift" &&
-          !(event.altKey && event.key === "ArrowDown")
-        ) {
-          event.preventDefault();
-        }
-      }}
+      on:mousedown={handleSelectMousedown}
+      on:keydown={handleSelectKeydown}
     >
       <slot />
     </select>
