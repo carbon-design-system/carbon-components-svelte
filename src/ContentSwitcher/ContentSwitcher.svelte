@@ -154,6 +154,16 @@
     selectedId = switches[selectedIndex]?.id;
   }
 
+  /** @param {number} index */
+  async function focusSwitchElement(index) {
+    await tick();
+    const tab = document.getElementById(switches[index].id);
+
+    if (tab instanceof HTMLElement) {
+      tab.focus();
+    }
+  }
+
   /**
    * @type {(index: number) => Promise<void>}
    */
@@ -168,12 +178,7 @@
       selectedId = target.id;
     }
 
-    await tick();
-    const tab = document.getElementById(switches[index].id);
-
-    if (tab instanceof HTMLElement) {
-      tab.focus();
-    }
+    await focusSwitchElement(index);
   }
 
   /**
@@ -184,12 +189,7 @@
     if (index < 0 || index >= switches.length) return;
     focusedIndex = index;
 
-    await tick();
-    const tab = document.getElementById(switches[index].id);
-
-    if (tab instanceof HTMLElement) {
-      tab.focus();
-    }
+    await focusSwitchElement(index);
   }
 
   setContext("carbon:ContentSwitcher", {
