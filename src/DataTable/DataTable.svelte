@@ -541,7 +541,6 @@
    * @type {() => void}
    */
   function resetSelectedRowIds() {
-    selectAll = false;
     selectedRowIds = [];
     rangeAnchorRowId = null;
   }
@@ -1043,7 +1042,6 @@
 
                   if (indeterminate) {
                     event.target.checked = false;
-                    selectAll = false;
                     selectedRowIds = [];
                     return;
                   }
