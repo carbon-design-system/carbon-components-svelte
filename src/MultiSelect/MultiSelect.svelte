@@ -433,6 +433,41 @@
     return false;
   }
 
+  /**
+   * @param {MouseEvent} event
+   * @param {Item & { checked?: boolean }} item
+   * @param {number} index Index into `itemsToUse`.
+   * @param {boolean} itemDisabled
+   */
+  function handleOptionClick(event, item, index, itemDisabled) {
+    if (itemDisabled) {
+      event.stopPropagation();
+      return;
+    }
+    // Label default synthesizes a second click; without this,
+    // selectItem runs twice and the toggle nets to no change.
+    event.preventDefault();
+    const usedRange =
+      event.shiftKey &&
+      prevSelectedItemId !== null &&
+      !item.isSelectAll &&
+      selectItemRange(index, !item.checked);
+    if (!usedRange) {
+      selectItem(item);
+    }
+    prevSelectedItemId = item.id;
+  }
+
+  /**
+   * @param {number} index Index into `itemsToUse`.
+   * @param {boolean} itemDisabled
+   */
+  function handleOptionMouseenter(index, itemDisabled) {
+    if (itemDisabled) return;
+    highlightedIndex = index;
+    highlightOrigin = "pointer";
+  }
+
   function change(step) {
     // Disabled options stay in the keyboard navigation sequence (APG:
     // "Focusability of disabled controls") so assistive-tech users can
@@ -1196,9 +1231,7 @@
             if (!open) {
               open = true;
             } else if (highlightOrigin === "keyboard" && highlightedIndex > -1) {
-              const item = (filterable ? filteredItems : sortedItems)[
-                highlightedIndex
-              ];
+              const item = itemsToUse[highlightedIndex];
               if (item) selectItem(item);
             }
           } else if (event.key === "Tab") {
@@ -1219,9 +1252,7 @@
             }
           } else if (event.key === "Enter") {
             if (highlightOrigin === "keyboard" && highlightedIndex > -1) {
-              const item = (filterable ? filteredItems : sortedItems)[
-                highlightedIndex
-              ];
+              const item = itemsToUse[highlightedIndex];
               if (item) selectItem(item);
             }
           } else if (event.key === "Escape") {
@@ -1232,9 +1263,8 @@
             // variant deliberately leaves these keys to the text caret.
             event.preventDefault();
             if (!open) open = true;
-            const navigableItems = filterable ? filteredItems : sortedItems;
             highlightedIndex =
-              event.key === "Home" ? 0 : navigableItems.length - 1;
+              event.key === "Home" ? 0 : itemsToUse.length - 1;
             highlightOrigin = "keyboard";
           } else if (event.key === "Delete" || event.key === "Backspace") {
             // Clear the whole selection from the keyboard, menu open or
@@ -1328,34 +1358,13 @@
                   data-virtual-index={isMeasured ? actualIndex : undefined}
                   active={item.isSelectAll ? false : item.checked}
                   disabled={itemDisabled}
-                  on:click={(event) => {
-                    if (itemDisabled) {
-                      event.stopPropagation();
-                      return;
-                    }
-                    // Label default synthesizes a second click; without this,
-                    // selectItem runs twice and the toggle nets to no change.
-                    event.preventDefault();
-                    const usedRange =
-                      event.shiftKey &&
-                      prevSelectedItemId !== null &&
-                      !item.isSelectAll &&
-                      selectItemRange(actualIndex, !item.checked);
-                    if (!usedRange) {
-                      selectItem(item);
-                    }
-                    prevSelectedItemId = item.id;
-                  }}
+                  on:click={(event) => handleOptionClick(event, item, actualIndex, itemDisabled)}
                   on:mousedown={(event) => {
                     // Keep focus on the field so screen readers don't
                     // re-announce it on every option click.
                     event.preventDefault();
                   }}
-                  on:mouseenter={() => {
-                    if (itemDisabled) return;
-                    highlightedIndex = actualIndex;
-                    highlightOrigin = "pointer";
-                  }}
+                  on:mouseenter={() => handleOptionMouseenter(actualIndex, itemDisabled)}
                 >
                   <HighlightSlot {optionId} let:highlighted>
                     <Checkbox
@@ -1413,34 +1422,13 @@
               data-virtual-index={isMeasured ? index : undefined}
               active={item.isSelectAll ? false : item.checked}
               disabled={itemDisabled}
-              on:click={(event) => {
-                if (itemDisabled) {
-                  event.stopPropagation();
-                  return;
-                }
-                // Label default synthesizes a second click; without this,
-                // selectItem runs twice and the toggle nets to no change.
-                event.preventDefault();
-                const usedRange =
-                  event.shiftKey &&
-                  prevSelectedItemId !== null &&
-                  !item.isSelectAll &&
-                  selectItemRange(index, !item.checked);
-                if (!usedRange) {
-                  selectItem(item);
-                }
-                prevSelectedItemId = item.id;
-              }}
+              on:click={(event) => handleOptionClick(event, item, index, itemDisabled)}
               on:mousedown={(event) => {
                 // Keep focus on the field so screen readers don't
                 // re-announce it on every option click.
                 event.preventDefault();
               }}
-              on:mouseenter={() => {
-                if (itemDisabled) return;
-                highlightedIndex = index;
-                highlightOrigin = "pointer";
-              }}
+              on:mouseenter={() => handleOptionMouseenter(index, itemDisabled)}
             >
               <HighlightSlot {optionId} let:highlighted>
                 <Checkbox
