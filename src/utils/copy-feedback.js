@@ -59,17 +59,6 @@ export function createCopyFeedbackState(onSync) {
     notify();
   }
 
-  function dismiss() {
-    feedbackOpen = false;
-    animation = undefined;
-    copyActive = false;
-    copyPending = false;
-    copyFailed = false;
-    clearTimeout(timeout);
-    timeout = undefined;
-    notify();
-  }
-
   function cleanup() {
     feedbackOpen = false;
     animation = undefined;
@@ -78,6 +67,11 @@ export function createCopyFeedbackState(onSync) {
     copyFailed = false;
     clearTimeout(timeout);
     timeout = undefined;
+  }
+
+  function dismiss() {
+    cleanup();
+    notify();
   }
 
   /**

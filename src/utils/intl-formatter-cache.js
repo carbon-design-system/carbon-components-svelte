@@ -14,6 +14,24 @@ function cacheKey(locale, options) {
 }
 
 /**
+ * @template T
+ * @param {Map<string, T>} cache
+ * @param {new (locale: string | undefined, options?: any) => T} Ctor
+ * @param {string | undefined} locale
+ * @param {any} [options]
+ * @returns {T}
+ */
+function getCached(cache, Ctor, locale, options) {
+  const key = cacheKey(locale, options);
+  let formatter = cache.get(key);
+  if (!formatter) {
+    formatter = new Ctor(locale, options);
+    cache.set(key, formatter);
+  }
+  return formatter;
+}
+
+/**
  * Get a cached `Intl.NumberFormat` for the given locale and options, constructing
  * and storing one on a cache miss. Shared across components so that identical
  * locale/options combinations reuse a single formatter instance instead of each
@@ -24,13 +42,7 @@ function cacheKey(locale, options) {
  * @returns {Intl.NumberFormat}
  */
 export function getNumberFormatter(locale, options) {
-  const key = cacheKey(locale, options);
-  let formatter = numberCache.get(key);
-  if (!formatter) {
-    formatter = new Intl.NumberFormat(locale, options);
-    numberCache.set(key, formatter);
-  }
-  return formatter;
+  return getCached(numberCache, Intl.NumberFormat, locale, options);
 }
 
 /**
@@ -39,13 +51,7 @@ export function getNumberFormatter(locale, options) {
  * @returns {Intl.RelativeTimeFormat}
  */
 export function getRelativeTimeFormatter(locale, options) {
-  const key = cacheKey(locale, options);
-  let formatter = relativeTimeCache.get(key);
-  if (!formatter) {
-    formatter = new Intl.RelativeTimeFormat(locale, options);
-    relativeTimeCache.set(key, formatter);
-  }
-  return formatter;
+  return getCached(relativeTimeCache, Intl.RelativeTimeFormat, locale, options);
 }
 
 /**
@@ -54,11 +60,5 @@ export function getRelativeTimeFormatter(locale, options) {
  * @returns {Intl.DateTimeFormat}
  */
 export function getDateTimeFormatter(locale, options) {
-  const key = cacheKey(locale, options);
-  let formatter = dateTimeCache.get(key);
-  if (!formatter) {
-    formatter = new Intl.DateTimeFormat(locale, options);
-    dateTimeCache.set(key, formatter);
-  }
-  return formatter;
+  return getCached(dateTimeCache, Intl.DateTimeFormat, locale, options);
 }
