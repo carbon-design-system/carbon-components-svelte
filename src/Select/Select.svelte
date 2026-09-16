@@ -194,6 +194,13 @@
   $: showInvalid = invalid && !disabled && !readonly;
   $: showWarn = warn && !invalid && !disabled && !readonly;
   $: isFluid = !inline && (fluid || !!formContext?.isFluid);
+  $: describedById = showInvalid
+    ? errorId
+    : showWarn
+      ? warnId
+      : helperText && !isFluid
+        ? helperId
+        : undefined;
 </script>
 
 <div class:bx--form-item={true} class:bx--select--fluid={isFluid}>
@@ -225,13 +232,7 @@
         >
           <select
             bind:this={ref}
-            aria-describedby={showInvalid
-              ? errorId
-              : showWarn
-                ? warnId
-                : helperText
-                  ? helperId
-                  : undefined}
+            aria-describedby={describedById}
             aria-invalid={showInvalid || undefined}
             aria-readonly={readonly || undefined}
             disabled={disabled || undefined}
@@ -293,13 +294,7 @@
           bind:this={ref}
           {id}
           {name}
-          aria-describedby={showInvalid
-            ? errorId
-            : showWarn
-              ? warnId
-              : helperText && !isFluid
-                ? helperId
-                : undefined}
+          aria-describedby={describedById}
           disabled={disabled || undefined}
           required={required || undefined}
           aria-invalid={showInvalid || undefined}
