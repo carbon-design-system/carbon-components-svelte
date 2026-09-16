@@ -93,6 +93,17 @@
   // all enumerable items to render in between
   // overflow menus
   $: items = computePageWindow(total, startOffset, front, back);
+
+  /**
+   * Resolve "inside"/"outside" to a concrete side for the previous ("start")
+   * or next ("end") button; concrete positions pass through.
+   * @param {string} position @param {"start" | "end"} edge
+   */
+  function edgeTooltipPosition(position, edge) {
+    if (position === "inside") return edge === "start" ? "right" : "left";
+    if (position === "outside") return edge === "start" ? "left" : "right";
+    return position;
+  }
 </script>
 
 <nav aria-label="pagination" class:bx--pagination-nav={true} {...$$restProps}>
@@ -101,11 +112,7 @@
       <Button
         kind="ghost"
         tooltipAlignment="center"
-        tooltipPosition={tooltipPosition === "inside"
-          ? "right"
-          : tooltipPosition === "outside"
-            ? "left"
-            : tooltipPosition}
+        tooltipPosition={edgeTooltipPosition(tooltipPosition, "start")}
         iconDescription={backwardText}
         disabled={!loop && page === 1}
         icon={CaretLeft}
@@ -176,11 +183,7 @@
       <Button
         kind="ghost"
         tooltipAlignment="center"
-        tooltipPosition={tooltipPosition === "inside"
-          ? "left"
-          : tooltipPosition === "outside"
-            ? "right"
-            : tooltipPosition}
+        tooltipPosition={edgeTooltipPosition(tooltipPosition, "end")}
         iconDescription={forwardText}
         disabled={!loop && page === total}
         icon={CaretRight}
