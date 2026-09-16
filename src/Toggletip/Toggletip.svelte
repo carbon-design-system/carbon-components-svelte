@@ -271,16 +271,15 @@ whitespace gap; the label's `margin-right` is then the only spacing. -->
     bind:ref={portalRef}
     let:direction={actualDirection}
   >
+    {@const popoverAlign = toPopoverAlign(actualDirection ?? direction, align)}
     <Popover
       open
       relative
-      align={toPopoverAlign(actualDirection ?? direction, align)}
+      align={popoverAlign}
       id={contentId}
       caret
       highContrast
-      style="{PORTAL_NEUTRALIZE_STYLE} {popoverStyleFor(
-        toPopoverAlign(actualDirection ?? direction, align),
-      )}"
+      style="{PORTAL_NEUTRALIZE_STYLE} {popoverStyleFor(popoverAlign)}"
     >
       <!-- svelte-ignore a11y-no-static-element-interactions -->
       <div class:bx--toggletip-content={true} on:keydown={handleKeydown}>
