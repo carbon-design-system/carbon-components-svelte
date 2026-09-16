@@ -28,7 +28,9 @@ function createStore(subscriberCost: (value: number[]) => void) {
 
 function registeredOrderIndex(value: number[]) {
   const index = new Map<number, number>();
-  value.forEach((id, i) => index.set(id, i));
+  value.forEach((id, i) => {
+    index.set(id, i);
+  });
   return index;
 }
 
