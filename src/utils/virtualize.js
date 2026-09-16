@@ -562,6 +562,8 @@ export function scrollSelectedIntoView({
  * Per-option heights as they are now.
  * @param {ItemHeights | undefined} options.previousHeights
  * Per-option heights the current scroll position was computed against.
+ * @param {ReturnType<typeof accumulateOffsets>} [options.accumulatedBefore]
+ * `previousHeights` already accumulated, when the caller has it.
  * @returns {number}
  */
 function getScrollCorrection({
@@ -570,16 +572,15 @@ function getScrollCorrection({
   itemHeight,
   heights,
   previousHeights,
+  accumulatedBefore,
 }) {
   const anchor = Math.max(0, Math.min(index, itemCount));
   if (anchor === 0) return 0;
 
   const after = accumulateOffsets({ itemCount, heights, itemHeight });
-  const before = accumulateOffsets({
-    itemCount,
-    heights: previousHeights,
-    itemHeight,
-  });
+  const before =
+    accumulatedBefore ??
+    accumulateOffsets({ itemCount, heights: previousHeights, itemHeight });
 
   return after.offsets[anchor] - before.offsets[anchor];
 }
@@ -613,14 +614,27 @@ export function getMeasuredScrollCorrection({
   heights,
   previousHeights,
 }) {
-  const { startIndex } = getVisibleRange({
-    scrollTop,
-    itemHeight,
-    containerHeight,
-    itemCount,
-    overscan: 0,
-    heights: previousHeights,
-  });
+  // Accumulate `previousHeights` once; both the anchor lookup and the
+  // correction need the same offsets.
+  const accumulatedBefore = previousHeights
+    ? accumulateOffsets({ itemCount, heights: previousHeights, itemHeight })
+    : undefined;
+
+  const { startIndex } = accumulatedBefore
+    ? measuredVisibleRange({
+        accumulated: accumulatedBefore,
+        scrollTop,
+        containerHeight,
+        itemCount,
+        overscan: 0,
+      })
+    : getVisibleRange({
+        scrollTop,
+        itemHeight,
+        containerHeight,
+        itemCount,
+        overscan: 0,
+      });
 
   return getScrollCorrection({
     index: startIndex,
@@ -628,6 +642,7 @@ export function getMeasuredScrollCorrection({
     itemHeight,
     heights,
     previousHeights,
+    accumulatedBefore,
   });
 }
 

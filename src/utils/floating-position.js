@@ -95,6 +95,31 @@ export function floatingPosition({
   /** @type {number | undefined} */
   let width;
 
+  /**
+   * Vertical position for a left/right-anchored floating element: aligned to
+   * the reference's top/bottom edge when it has intrinsic width, else centered.
+   *
+   * @param {number} alignOffset
+   * @returns {number}
+   */
+  function intrinsicTop(alignOffset) {
+    if (intrinsicWidth) {
+      if (intrinsicAlign === "start") {
+        return rect.top + scrollYOffset + alignOffset;
+      }
+      if (intrinsicAlign === "end") {
+        return rect.bottom + scrollYOffset - floatingRect.height + alignOffset;
+      }
+    }
+    return (
+      rect.top +
+      scrollYOffset +
+      rect.height / 2 -
+      floatingRect.height / 2 +
+      alignOffset
+    );
+  }
+
   if (actualDirection === "bottom") {
     top = rect.bottom + scrollYOffset + gapBottom;
     left = rect.left + scrollXOffset;
@@ -104,59 +129,11 @@ export function floatingPosition({
     left = rect.left + scrollXOffset;
     width = rect.width;
   } else if (actualDirection === "right") {
-    if (intrinsicWidth) {
-      if (intrinsicAlign === "start") {
-        top = rect.top + scrollYOffset + verticalAlignOffsetRight;
-      } else if (intrinsicAlign === "end") {
-        top =
-          rect.bottom +
-          scrollYOffset -
-          floatingRect.height +
-          verticalAlignOffsetRight;
-      } else {
-        top =
-          rect.top +
-          scrollYOffset +
-          rect.height / 2 -
-          floatingRect.height / 2 +
-          verticalAlignOffsetRight;
-      }
-    } else {
-      top =
-        rect.top +
-        scrollYOffset +
-        rect.height / 2 -
-        floatingRect.height / 2 +
-        verticalAlignOffsetRight;
-    }
+    top = intrinsicTop(verticalAlignOffsetRight);
     left = rect.right + scrollXOffset + horizontalGapRight;
   } else {
     // left
-    if (intrinsicWidth) {
-      if (intrinsicAlign === "start") {
-        top = rect.top + scrollYOffset + verticalAlignOffsetLeft;
-      } else if (intrinsicAlign === "end") {
-        top =
-          rect.bottom +
-          scrollYOffset -
-          floatingRect.height +
-          verticalAlignOffsetLeft;
-      } else {
-        top =
-          rect.top +
-          scrollYOffset +
-          rect.height / 2 -
-          floatingRect.height / 2 +
-          verticalAlignOffsetLeft;
-      }
-    } else {
-      top =
-        rect.top +
-        scrollYOffset +
-        rect.height / 2 -
-        floatingRect.height / 2 +
-        verticalAlignOffsetLeft;
-    }
+    top = intrinsicTop(verticalAlignOffsetLeft);
     left = rect.left + scrollXOffset - floatingRect.width - horizontalGapLeft;
   }
 
