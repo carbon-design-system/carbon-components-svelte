@@ -75,17 +75,16 @@
   $: ariaLabel =
     translateWithId?.(translationId) ?? defaultTranslations[translationId];
 
+  /** @param {"none" | "ascending" | "descending"} current */
+  function nextSortDirection(current) {
+    if (current === "none") return "ascending";
+    if (current === "ascending") return "descending";
+    return sortAlways ? "ascending" : "none";
+  }
+
   function handleSortClick() {
     const currentDirection = active ? sortDirection : "none";
-    const nextDirection =
-      currentDirection === "none"
-        ? "ascending"
-        : currentDirection === "ascending"
-          ? "descending"
-          : sortAlways
-            ? "ascending"
-            : "none";
-    dispatch("sort", { direction: nextDirection });
+    dispatch("sort", { direction: nextSortDirection(currentDirection) });
   }
 </script>
 
