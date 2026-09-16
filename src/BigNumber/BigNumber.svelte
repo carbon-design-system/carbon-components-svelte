@@ -167,6 +167,8 @@
     hasTotal &&
     (forceShowTotal || (!percentage && formattedValue !== formattedTotal));
   $: displayValue = `${formattedValue ?? DASH}${percentage ? "%" : ""}`;
+  const TREND_ICONS = { up: ArrowUp, down: ArrowDown, flat: Subtract };
+  $: TrendIcon = TREND_ICONS[trend];
   $: resolvedTrendColor =
     trendColor ?? { up: "success", down: "error", flat: "neutral" }[trend];
   $: resolvedTrendDescription =
@@ -206,22 +208,9 @@
         title={formattedValue === fullValue ? undefined : fullValue}
         >{displayValue}</span
       >
-      {#if trend === "up"}
-        <ArrowUp
-          size={getIconSize(size)}
-          class="bx--big-number__trend-icon bx--big-number__trend-icon--{resolvedTrendColor}"
-          aria-hidden="true"
-        />
-        <span class:bx--visually-hidden={true}>{resolvedTrendDescription}</span>
-      {:else if trend === "down"}
-        <ArrowDown
-          size={getIconSize(size)}
-          class="bx--big-number__trend-icon bx--big-number__trend-icon--{resolvedTrendColor}"
-          aria-hidden="true"
-        />
-        <span class:bx--visually-hidden={true}>{resolvedTrendDescription}</span>
-      {:else if trend === "flat"}
-        <Subtract
+      {#if TrendIcon}
+        <svelte:component
+          this={TrendIcon}
           size={getIconSize(size)}
           class="bx--big-number__trend-icon bx--big-number__trend-icon--{resolvedTrendColor}"
           aria-hidden="true"
