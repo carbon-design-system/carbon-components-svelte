@@ -566,3 +566,26 @@
 @include exports('button-full-width') {
   @include button-full-width;
 }
+
+// carbon-components-svelte patch (button-set-responsive)
+
+/// Per-breakpoint override of ButtonSet's stacked layout
+/// @access private
+/// @group components
+@mixin button-set-responsive {
+  @each $bp in (md, lg, xlg, max) {
+    @include carbon--breakpoint($bp) {
+      .#{$prefix}--btn-set--#{$bp}-stacked {
+        flex-direction: column;
+      }
+
+      .#{$prefix}--btn-set--#{$bp}-unstacked {
+        flex-direction: row;
+      }
+    }
+  }
+}
+
+@include exports('button-set-responsive') {
+  @include button-set-responsive;
+}
