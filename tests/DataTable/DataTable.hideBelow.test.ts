@@ -18,7 +18,8 @@ function stubMatchMedia(initialQuery: string) {
     addEventListener: (event: string, listener: (event: unknown) => void) => {
       if (event !== "change") return;
       if (!listeners.has(query)) listeners.set(query, []);
-      listeners.get(query).push(listener);
+      const queryListeners = listeners.get(query);
+      if (queryListeners) queryListeners.push(listener);
     },
     removeEventListener: vi.fn(),
   }));
