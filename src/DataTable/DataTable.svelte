@@ -16,6 +16,7 @@
    *         : import('./data-table-utils.d.ts').PropertyPath<Row>
    * )} DataTableKey<Row=DataTableRow> Path keys for sort, headers, and cells; mirrors PropertyPath / PropertyPathIgnoringIndexSignatures in ./data-table-utils.d.ts.
    * @typedef {import('./data-table-utils.d.ts').DataTableSortValue<Row>} DataTableSortValue<Row=DataTableRow>
+   * @typedef {import('../Breakpoint/breakpoints.js').BreakpointSize} BreakpointSize
    * @typedef {object} DataTableEmptyHeader<Row=DataTableRow>
    * @property {DataTableKey<Row> | (string & {})} key
    * @property {true} empty - Whether the header is empty
@@ -24,6 +25,8 @@
    * @property {boolean} [sortAlways] - Override table-level sortAlways for this column
    * @property {boolean} [columnMenu] - Whether the column menu is enabled
    * @property {boolean} [columnHidden] - Whether the column is skipped in render while remaining in `headers`
+   * @property {BreakpointSize} [hideBelow] - Hide the column below this breakpoint
+   * @property {BreakpointSize} [hideAbove] - Hide the column above this breakpoint
    * @property {string} [width]
    * @property {string} [minWidth]
    * @typedef {object} DataTableNonEmptyHeader<Row=DataTableRow>
@@ -35,6 +38,8 @@
    * @property {boolean} [sortAlways] - Override table-level sortAlways for this column
    * @property {boolean} [columnMenu] - Whether the column menu is enabled
    * @property {boolean} [columnHidden] - Whether the column is skipped in render while remaining in `headers`
+   * @property {BreakpointSize} [hideBelow] - Hide the column below this breakpoint
+   * @property {BreakpointSize} [hideAbove] - Hide the column above this breakpoint
    * @property {string} [width]
    * @property {string} [minWidth]
    * @property {"start" | "end"} [columnAlign] - Horizontal alignment of the column header and cells. Logical, so `end` is the right edge in LTR and the left edge in RTL. Defaults to `"start"`.
@@ -342,6 +347,8 @@
 
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
+  import { observeBreakpoint } from "../Breakpoint/breakpoint-observer.js";
+  import { breakpoints } from "../Breakpoint/breakpoints.js";
   import InlineCheckbox from "../Checkbox/InlineCheckbox.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
   import RadioButton from "../RadioButton/RadioButton.svelte";
@@ -398,6 +405,10 @@
   let tableRef = null;
   let scrollListenerCleanup = null;
 
+  /** @type {BreakpointSize | undefined} */
+  let currentBreakpoint = undefined;
+  let breakpointCleanup = null;
+
   // Clean up scroll listener when virtualization or sticky header is disabled
   $: if ((!virtualConfig || !stickyHeader) && scrollListenerCleanup) {
     scrollListenerCleanup();
@@ -432,8 +443,13 @@
   }
 
   onMount(() => {
+    breakpointCleanup = observeBreakpoint((size) => {
+      currentBreakpoint = size;
+    });
+
     return () => {
       if (scrollListenerCleanup) scrollListenerCleanup();
+      if (breakpointCleanup) breakpointCleanup();
     };
   });
 
@@ -449,9 +465,35 @@
   $: hasTitle = !!title && !$$slots.titleChildren;
   $: hasDescription = !!description && !$$slots.descriptionChildren;
 
-  // A columnHidden header stays in `headers`, the column definition, and is
+  /**
+   * @param {DataTableHeader} header
+   * @param {BreakpointSize | undefined} breakpoint
+   */
+  function isHeaderHiddenAtBreakpoint(header, breakpoint) {
+    if (breakpoint === undefined) return false;
+    if (
+      header.hideAbove !== undefined &&
+      breakpoints[breakpoint] > breakpoints[header.hideAbove]
+    ) {
+      return true;
+    }
+    if (
+      header.hideBelow !== undefined &&
+      breakpoints[breakpoint] < breakpoints[header.hideBelow]
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  // A columnHidden header (or one hidden by hideBelow/hideAbove for the
+  // current breakpoint) stays in `headers`, the column definition, and is
   // skipped everywhere the rendered column set is meant.
-  $: visibleHeaders = headers.filter((header) => !header.columnHidden);
+  $: visibleHeaders = headers.filter(
+    (header) =>
+      !header.columnHidden &&
+      !isHeaderHiddenAtBreakpoint(header, currentBreakpoint),
+  );
 
   // Store a copy of the original rows for filter restoration.
   let prevFilterRows = rows;
@@ -678,6 +720,7 @@
     // column does not renumber the generated keys the `{#each}` blocks key on.
     headers.forEach((header, index) => {
       if (header.columnHidden) return;
+      if (isHeaderHiddenAtBreakpoint(header, currentBreakpoint)) return;
       cells.push({
         key: header.key ?? `key-${index}`,
         value: header.key ? resolvePath(row, header.key) : undefined,
