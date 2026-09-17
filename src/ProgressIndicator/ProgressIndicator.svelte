@@ -1,4 +1,10 @@
 <script>
+  import { responsiveClasses } from "../utils/responsive-classes.js";
+
+  /** @typedef {import("../Breakpoint/breakpoints").BreakpointSize} BreakpointSize */
+
+  const BREAKPOINTS = ["sm", "md", "lg", "xlg", "max"];
+
   /**
    * @restProps {ul}
    */
@@ -20,7 +26,11 @@
    */
   export let selectedId = undefined;
 
-  /** Set to `true` to use the vertical variant */
+  /**
+   * Set to `true` to use the vertical variant.
+   * Accepts a breakpoint object (e.g., `{ sm: true, md: false }`) resolved mobile-first.
+   * @type {boolean | Partial<Record<BreakpointSize, boolean>>}
+   */
   export let vertical = false;
 
   /** Set to `true` to specify whether the progress steps should be split equally in size in the div */
@@ -165,17 +175,54 @@
     );
   }
   $: sharedPreventChangeOnClick.set(preventChangeOnClick);
+
+  /**
+   * Resolve a boolean-or-breakpoint-object `vertical` value into the
+   * string-per-breakpoint shape `responsiveClasses` expects, reusing the
+   * component's own `-vertical` / `-horizontal` class names instead of the
+   * generic `un`-prefixed negation. `false` at `sm` (or a bare scalar) drops
+   * out entirely, matching the implicit horizontal default.
+   * @param {boolean | Partial<Record<BreakpointSize, boolean>> | undefined} value
+   */
+  function toOrientation(value) {
+    if (typeof value !== "object" || value === null) {
+      return value === true ? "vertical" : undefined;
+    }
+
+    /** @type {Partial<Record<BreakpointSize, string>>} */
+    const resolved = {};
+    for (const bp of BREAKPOINTS) {
+      const bpValue = value[bp];
+      if (bpValue === undefined) continue;
+      if (bp === "sm") {
+        if (bpValue === true) resolved.sm = "vertical";
+      } else {
+        resolved[bp] = bpValue ? "vertical" : "horizontal";
+      }
+    }
+    return resolved;
+  }
+
+  $: resolvedVertical =
+    typeof vertical === "object" && vertical !== null
+      ? (vertical.sm ?? false)
+      : vertical;
+  $: verticalClasses = responsiveClasses(
+    "bx--progress-",
+    toOrientation(vertical),
+    BREAKPOINTS,
+  );
 </script>
 
 <ul
   bind:this={listRef}
   class:bx--progress={true}
-  class:bx--progress--vertical={vertical}
-  class:bx--progress--space-equal={spaceEqually && !vertical}
+  class:bx--progress--space-equal={spaceEqually && !resolvedVertical}
   {...$$restProps}
+  class={verticalClasses.concat($$restProps.class).filter(Boolean).join(" ")}
   use:rovingFocus={{
     selector: ".bx--progress-step-button",
-    orientation: vertical ? "vertical" : "horizontal",
+    orientation: resolvedVertical ? "vertical" : "horizontal",
     skipDisabled: true,
     focusOnMove: true,
     getActiveIndex: () => {
