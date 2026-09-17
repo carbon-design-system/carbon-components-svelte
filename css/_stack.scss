@@ -75,6 +75,60 @@
   .#{$prefix}--stack-wrap-reverse {
     flex-wrap: wrap-reverse;
   }
+
+  // carbon-components-svelte patch (stack-responsive)
+  $ccs-stack-orientation: (
+    vertical: column,
+    horizontal: row,
+  );
+  $ccs-stack-align: (
+    start: flex-start,
+    center: center,
+    end: flex-end,
+    stretch: stretch,
+    baseline: baseline,
+  );
+  $ccs-stack-justify: (
+    start: flex-start,
+    center: center,
+    end: flex-end,
+    space-between: space-between,
+    space-around: space-around,
+    space-evenly: space-evenly,
+  );
+  $ccs-stack-wrap: (
+    wrap: wrap,
+    wrap-reverse: wrap-reverse,
+    nowrap: nowrap,
+  );
+
+  @each $bp in (md, lg, xlg, max) {
+    @include carbon--breakpoint($bp) {
+      @each $value, $direction in $ccs-stack-orientation {
+        .#{$prefix}--stack-#{$bp}-#{$value} {
+          flex-direction: $direction;
+        }
+      }
+
+      @each $value, $align-items in $ccs-stack-align {
+        .#{$prefix}--stack-align-#{$bp}-#{$value} {
+          align-items: $align-items;
+        }
+      }
+
+      @each $value, $justify-content in $ccs-stack-justify {
+        .#{$prefix}--stack-justify-#{$bp}-#{$value} {
+          justify-content: $justify-content;
+        }
+      }
+
+      @each $value, $flex-wrap in $ccs-stack-wrap {
+        .#{$prefix}--stack-#{$bp}-#{$value} {
+          flex-wrap: $flex-wrap;
+        }
+      }
+    }
+  }
 }
 
 @include exports('stack') {
