@@ -25,7 +25,7 @@
 
   .#{$prefix}--parent-row:not(.#{$prefix}--expandable-row)
     + tr[data-child-row]
-    td { // ccs: flatten
+    > td { // ccs: flatten
     padding-top: 0;
     padding-bottom: 0;
     border: 0;
@@ -46,7 +46,7 @@
     transition: height $duration--moderate-01 motion(standard, productive);
   }
 
-  .#{$prefix}--parent-row.#{$prefix}--expandable-row + tr[data-child-row] td { // ccs: flatten
+  .#{$prefix}--parent-row.#{$prefix}--expandable-row + tr[data-child-row] > td { // ccs: flatten
     padding-left: 3.5rem;
     border-bottom: 1px solid $border-subtle;
     transition: padding-bottom $duration--fast-02 motion(standard, productive),
@@ -59,7 +59,7 @@
   // further to still land under it.
   .#{$prefix}--parent-row.#{$prefix}--expandable-row.#{$prefix}--expandable-row--with-selection
     + tr[data-child-row]
-    td { // ccs: flatten
+    > td { // ccs: flatten
     padding-left: 5.5rem;
   }
 
@@ -125,13 +125,13 @@
 
   .#{$prefix}--parent-row.#{$prefix}--expandable-row:hover
     + tr[data-child-row]
-    td { // ccs: flatten
+    > td { // ccs: flatten
     border-bottom: 1px solid $border-subtle;
     background-color: $layer-hover;
     color: $text-primary;
   }
 
-  .#{$prefix}--expandable-row--hover + tr[data-child-row] td { // ccs: flatten
+  .#{$prefix}--expandable-row--hover + tr[data-child-row] > td { // ccs: flatten
     border-bottom: 1px solid $border-subtle;
   }
 
@@ -244,12 +244,12 @@
   }
 
   .#{$prefix}--data-table--zebra tbody tr[data-parent-row]:nth-child(4n + 3) td,
-  .#{$prefix}--data-table--zebra tbody tr[data-child-row]:nth-child(4n + 4) td {
+  .#{$prefix}--data-table--zebra tbody tr[data-child-row]:nth-child(4n + 4) > td {
     border-bottom: 1px solid $layer;
   }
 
   .#{$prefix}--data-table--zebra tbody tr[data-parent-row]:nth-child(4n + 1) td,
-  .#{$prefix}--data-table--zebra tbody tr[data-child-row]:nth-child(4n + 2) td {
+  .#{$prefix}--data-table--zebra tbody tr[data-child-row]:nth-child(4n + 2) > td {
     border-top: 1px solid $data-table-zebra-color;
     border-bottom: 1px solid $data-table-zebra-color;
     background-color: $data-table-zebra-color;
@@ -259,7 +259,7 @@
   .#{$prefix}--data-table--zebra
     .#{$prefix}--parent-row.#{$prefix}--expandable-row
     + tr[data-child-row]
-    td { // ccs: flatten
+    > td { // ccs: flatten
     transition: transform $duration--moderate-01 motion(standard, productive),
       border-bottom $duration--moderate-01 motion(standard, productive),
       border-top $duration--moderate-01 motion(standard, productive);
@@ -270,8 +270,8 @@
     tbody
     tr[data-parent-row]:hover
     + tr[data-child-row]
-    td,
-  .#{$prefix}--data-table--zebra tbody tr[data-child-row]:hover td {
+    > td,
+  .#{$prefix}--data-table--zebra tbody tr[data-child-row]:hover > td {
     border-top: 1px solid $layer-hover;
     border-bottom: 1px solid $layer-hover;
     background-color: $layer-hover;
@@ -338,7 +338,7 @@
 
   .#{$prefix}--parent-row.#{$prefix}--data-table--selected.#{$prefix}--expandable-row
     + tr[data-child-row]
-    td { // ccs: flatten
+    > td { // ccs: flatten
     border-top: 1px solid $layer-active;
     border-bottom: 1px solid $border-subtle;
     background-color: $layer-hover;
@@ -348,80 +348,18 @@
 
   .#{$prefix}--parent-row.#{$prefix}--data-table--selected.#{$prefix}--expandable-row
     + tr[data-child-row]:last-of-type
-    td { // ccs: flatten
+    > td { // ccs: flatten
     padding-bottom: to-rem(24px);
     box-shadow: inset 0 -1px $layer-active;
   }
 
   .#{$prefix}--parent-row.#{$prefix}--data-table--selected.#{$prefix}--expandable-row:hover
     + tr[data-child-row]
-    td,
+    > td,
   .#{$prefix}--parent-row.#{$prefix}--data-table--selected.#{$prefix}--expandable-row--hover
     + tr[data-child-row]
-    td { // ccs: flatten
+    > td { // ccs: flatten
     background: $layer-selected;
-  }
-
-  // A nested `DataTable` sits inside the parent table's own tbody, so
-  // bare descendant selectors elsewhere in this file (`.bx--data-table
-  // tbody th`, and the parent row's hover rules above) match its cells
-  // too, since a descendant combinator does not stop at the nested
-  // table's own boundary. That misapplies the tbody-row-header token to
-  // the nested table's column headers, and swaps its body cells to the
-  // parent row's hover color whenever the parent row is hovered, not
-  // just when a user hovers the nested table's own rows. Re-assert the
-  // nested table's resting and hover backgrounds with enough specificity
-  // to win regardless of the parent row's state.
-  .#{$prefix}--child-row-inner-container
-    .#{$prefix}--data-table-container
-    .#{$prefix}--data-table { // ccs: inset nested content
-    thead th {
-      background-color: $layer-accent;
-      // Same bleed: `.bx--data-table td, .bx--data-table tbody th` also
-      // gives the nested table's own headers a stray top/bottom border
-      // meant for tbody row-header cells, showing as a thin line above
-      // the nested header row.
-      border-top: none;
-      border-bottom: none;
-    }
-
-    tbody td,
-    tbody th {
-      background-color: $layer;
-    }
-  }
-
-  // The `[data-child-row]` attribute selector matches the same td the
-  // parent row's hover rules above target, so it is needed here too:
-  // without it, this loses the specificity fight and the parent row's
-  // hover color still wins when only the parent row (not the nested
-  // table's own row) is hovered. The parent row's own indent
-  // (`padding-left: 3.5rem` above) uses the same kind of bare `td`
-  // descendant selector, so it reaches the nested table's own cells too,
-  // pushing its body out of alignment with its own header.
-  tr[data-child-row]
-    .#{$prefix}--child-row-inner-container
-    .#{$prefix}--data-table-container
-    .#{$prefix}--data-table
-    tbody
-    td { // ccs: inset nested content
-    padding-left: $spacing-05;
-    background-color: $layer;
-  }
-
-  @media (any-hover: hover) {
-    tr[data-child-row]
-      .#{$prefix}--child-row-inner-container
-      .#{$prefix}--data-table-container
-      .#{$prefix}--data-table
-      tbody
-      tr:hover
-      td { // ccs: inset nested content
-      border-top: 1px solid $layer-hover;
-      border-bottom: 1px solid $layer-hover;
-      background-color: $layer-hover;
-      color: $text-primary;
-    }
   }
 
   // Windows HCM fix

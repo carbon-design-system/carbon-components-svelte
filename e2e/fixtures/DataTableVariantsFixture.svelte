@@ -110,6 +110,29 @@
   </DataTable>
 </section>
 
+<section data-testid="nested">
+  <!--
+    A DataTable nested inside an expandedRow sits inside the parent
+    table's own tbody, so bare descendant selectors targeting the parent
+    row/child-row must not bleed into the nested table's own cells. Zebra
+    + selected + expandable together is the specific combination flagged
+    as a known gap in d85129ad9.
+  -->
+  <DataTable
+    zebra
+    selectable
+    expandable
+    selectedRowIds={["a"]}
+    expandedRowIds={["a"]}
+    {headers}
+    {rows}
+  >
+    <svelte:fragment slot="expandedRow">
+      <DataTable {headers} rows={rows.slice(0, 2)} />
+    </svelte:fragment>
+  </DataTable>
+</section>
+
 <section data-testid="highlighted">
   <DataTable highlightedRowIds={["b"]} {headers} {rows} />
   <DataTable
