@@ -23,10 +23,7 @@ describe("css-only tooltip mixins", () => {
         .filter((rule) => !rule.selector.includes(":not(.bx--tooltip--hidden)"))
         .map((rule) => rule.selector.replace(/(::before| \S+|\+\S+)$/, "")),
     );
-    // The shared trigger, plus the deprecated password visibility button.
     expect([...hidden].sort()).toEqual([
-      ".bx--text-input--password__visibility.bx--tooltip--hidden",
-      ".bx--text-input--password__visibility.bx--tooltip--hidden.bx--tooltip--a11y",
       ".bx--tooltip__trigger.bx--tooltip--a11y.bx--tooltip--hidden",
       ".bx--tooltip__trigger.bx--tooltip--a11y.bx--tooltip--hidden.bx--tooltip--a11y",
     ]);
