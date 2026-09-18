@@ -101,7 +101,9 @@ function blocksOf(css: string, positions: boolean): Block[] {
       }
       blocks.push({
         context: context.join(" / "),
-        selectors: node.prelude.children.toArray().map((s) => generate(s)),
+        selectors: node.prelude.children
+          .toArray()
+          .map((s: CssNode) => generate(s)),
         decls,
       });
     },

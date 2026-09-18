@@ -42,6 +42,8 @@ export interface CdpProperty {
   name: string;
   value: string;
   important?: boolean;
+  /** Set by CDP on longhands it derived from an authored shorthand. */
+  implicit?: boolean;
   text?: string;
   parsedOk?: boolean;
   disabled?: boolean;
