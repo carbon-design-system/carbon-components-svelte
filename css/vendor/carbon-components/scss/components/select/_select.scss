@@ -53,9 +53,6 @@
     // reset disabled <select> opacity
     opacity: 1;
 
-    // Do not transition on background-color (see: https://github.com/carbon-design-system/carbon/issues/4464)
-    transition: outline $duration--fast-01 motion(standard, productive);
-
     &:hover {
       background-color: $hover-ui;
     }

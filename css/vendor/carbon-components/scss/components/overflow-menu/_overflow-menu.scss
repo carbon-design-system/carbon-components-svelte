@@ -29,8 +29,7 @@
     height: to-rem(40px);
     align-items: center;
     justify-content: center;
-    transition: outline $duration--fast-02 motion(entrance, productive),
-      background-color $duration--fast-02 motion(entrance, productive);
+    transition: background-color $duration--fast-02 motion(entrance, productive);
 
     &:focus {
       @include focus-outline('outline');
@@ -246,8 +245,7 @@
     cursor: pointer;
     font-weight: 400;
     text-align: left;
-    transition: outline $duration--fast-02 motion(entrance, productive),
-      background-color $duration--fast-02 motion(entrance, productive),
+    transition: background-color $duration--fast-02 motion(entrance, productive),
       color $duration--fast-02 motion(entrance, productive);
 
     @media (any-hover: hover) {

@@ -49,8 +49,7 @@
     width: 4.875rem;
     height: to-rem(40px);
     align-items: center;
-    transition: outline $duration--fast-01 motion(standard, productive),
-      background-color $duration--fast-01 motion(standard, productive);
+    transition: background-color $duration--fast-01 motion(standard, productive);
 
     &::placeholder {
       @include placeholder-colors;

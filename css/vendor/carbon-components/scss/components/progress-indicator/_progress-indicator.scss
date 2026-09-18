@@ -70,8 +70,7 @@
     color: $text-01;
     line-height: 1.45;
     text-overflow: ellipsis;
-    transition: box-shadow $duration--fast-02 motion(standard, productive),
-      color $duration--fast-02 motion(standard, productive);
+    transition: color $duration--fast-02 motion(standard, productive);
     white-space: nowrap;
 
     &::before {

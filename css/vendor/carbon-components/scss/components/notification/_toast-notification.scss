@@ -169,7 +169,7 @@
     margin-left: auto;
     background-color: transparent;
     cursor: pointer;
-    transition: outline $transition--base, background-color $transition--base;
+    transition: background-color $transition--base;
 
     &:focus {
       outline: 2px solid $inverse-focus-ui;
