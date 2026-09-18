@@ -60,11 +60,16 @@
 }
 
 /// @param {String} $tooltip-type ['icon'] - The type, from: `icon`, `definition`
-/// @param {String} $position ['bottom'] - The position, from: `top`, `right`, `bottom`, `left`
-/// @param {List} $omit [()] - Properties this mixin should not emit, for includers that always re-set them afterward
+/// @param {List} $omit [()] - Properties this mixin should not emit, for includers that always re-set them afterward. `state` (not a CSS property) skips the `tooltip--trigger-state` include instead.
 /// @access public
 /// @group tooltip
-@mixin tooltip--trigger($tooltip-type: 'icon', $position: 'bottom', $omit: ()) {
+// ccs: dropped the unused `$position` param (this mixin's output never
+// varied by position; only `tooltip--placement` below does). Includers now
+// share one rule per `$tooltip-type` across every position it supports
+// instead of emitting this body once per position, since `&` in a combined
+// selector list still fans out per nested pseudo-selector but the
+// declarations themselves are written once.
+@mixin tooltip--trigger($tooltip-type: 'icon', $omit: ()) {
   @if not index($omit, position) {
     position: relative;
   }
@@ -170,6 +175,48 @@
     content: none;
   }
 
+  // ccs: the visible/hover/focus/hidden state block below never varies by
+  // `$tooltip-type` or position, so an includer whose trigger elements
+  // always carry both `.#{$prefix}--tooltip__trigger` and
+  // `.#{$prefix}--tooltip--a11y` (every includer in this tree does) can
+  // `$omit: (state,)` here and pick it up once from the shared
+  // `.#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--a11y` rule in
+  // components/tooltip/_tooltip.scss instead of repeating it per call site.
+  @if not index($omit, state) {
+    @include tooltip--trigger-state;
+  }
+}
+
+/// `tooltip--trigger('icon', ...)`, minus the state block (see `$omit`
+/// above). Every `$tooltip-type: 'icon'` includer in this tree - this
+/// component's icon trigger and `.#{$prefix}--btn--icon-only` (see
+/// button/_button.scss) - emits identical output here, so
+/// components/tooltip/_tooltip.scss includes this once from a rule whose
+/// selector list combines both families' direction-qualified classes
+/// (`.#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--top`,
+/// `.#{$prefix}--tooltip__trigger.#{$prefix}--btn--icon-only--top`, etc.)
+/// instead of every icon-type call site repeating it. A bare
+/// `.#{$prefix}--tooltip__trigger` (no direction class) is deliberately
+/// never used for this: it would also match a portal-rendered tooltip's
+/// trigger, which keeps the `.#{$prefix}--tooltip__trigger` class but never
+/// gets a direction class (see the Svelte components) and must not receive
+/// this CSS-only styling.
+/// @param {List} $omit [()] - Forwarded to `tooltip--trigger`.
+/// @access public
+/// @group tooltip
+@mixin tooltip--trigger-icon-body($omit: ()) {
+  @include tooltip--trigger('icon', join($omit, (state,)));
+}
+
+/// The visible/hover/focus/hidden state rules shared by every tooltip
+/// trigger, regardless of type or position. Split out of `tooltip--trigger`
+/// so includers whose elements are guaranteed to also match
+/// `.#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--a11y` can emit this
+/// body once (see components/tooltip/_tooltip.scss) instead of once per
+/// `tooltip--trigger` call site.
+/// @access public
+/// @group tooltip
+@mixin tooltip--trigger-state {
   &.#{$prefix}--tooltip--visible,
   &:hover,
   &:focus {
