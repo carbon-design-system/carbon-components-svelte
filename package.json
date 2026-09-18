@@ -58,7 +58,7 @@
   },
   "dependencies": {
     "@ibm/telemetry-js": "^1.10.2",
-    "flatpickr": "4.6.9"
+    "flatpickr": "4.6.13"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",

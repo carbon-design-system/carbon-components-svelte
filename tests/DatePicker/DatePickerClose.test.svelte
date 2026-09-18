@@ -7,9 +7,17 @@
   export let value = "";
   export let valueFrom = "";
   export let valueTo = "";
+  export let portalMenu: boolean | undefined = undefined;
 </script>
 
-<DatePicker {datePickerType} {value} {valueFrom} {valueTo} on:close={onClose}>
+<DatePicker
+  {datePickerType}
+  {value}
+  {valueFrom}
+  {valueTo}
+  {portalMenu}
+  on:close={onClose}
+>
   {#if datePickerType === "range"}
     <DatePickerInput labelText="Start date" placeholder="mm/dd/yyyy" />
     <DatePickerInput labelText="End date" placeholder="mm/dd/yyyy" />
