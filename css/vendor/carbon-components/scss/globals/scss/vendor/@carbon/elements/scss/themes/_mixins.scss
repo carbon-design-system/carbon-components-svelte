@@ -31,6 +31,16 @@ $custom-property-prefix: 'cds' !default;
   @if $emit-difference == false {
     @return true;
   }
+  // ccs: a list of themes emits the token when any of them disagrees, for a
+  // scope that can nest under every theme (`true` only compares the parent).
+  @if type-of($emit-difference) == 'list' {
+    @each $theme-c in $emit-difference {
+      @if map-get($theme-a, $token) != map-get($theme-c, $token) {
+        @return true;
+      }
+    }
+    @return false;
+  }
   @return map-get($theme-a, $token) != map-get($theme-b, $token);
 }
 

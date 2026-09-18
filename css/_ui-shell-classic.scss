@@ -6,10 +6,20 @@
 // entry file sets `$ccs-theme-switching`.
 @if $ccs-theme-switching {
 
+// These scopes nest under any page theme, so they re-declare every token that
+// varies between themes and inherit the rest (type, spacing, layout) from it.
+$ccs-themes: (
+  $carbon--theme--white,
+  $carbon--theme--g10,
+  $carbon--theme--g80,
+  $carbon--theme--g90,
+  $carbon--theme--g100
+);
+
 .#{$prefix}--header.#{$prefix}--header--ui-shell-classic {
-  @include carbon--theme($carbon--theme--g100, true) {
-    @include emit-component-tokens($tag-colors);
-    @include emit-component-tokens($notification-colors);
+  @include carbon--theme($carbon--theme--g100, true, $ccs-themes) {
+    @include emit-component-tokens($tag-colors, $ccs-themes);
+    @include emit-component-tokens($notification-colors, $ccs-themes);
   }
 
   // The header panel is always g100 (dark) in the classic variant, regardless of
@@ -27,9 +37,9 @@
 }
 
 .#{$prefix}--side-nav.#{$prefix}--side-nav--ui-shell-classic {
-  @include carbon--theme($carbon--theme--white, true) {
-    @include emit-component-tokens($tag-colors);
-    @include emit-component-tokens($notification-colors);
+  @include carbon--theme($carbon--theme--white, true, $ccs-themes) {
+    @include emit-component-tokens($tag-colors, $ccs-themes);
+    @include emit-component-tokens($notification-colors, $ccs-themes);
   }
 }
 }
