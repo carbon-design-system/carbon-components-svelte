@@ -52,6 +52,25 @@ describe("DatePicker close event", () => {
     expect(onClose.mock.calls[0][0].detail.trigger).toBe("escape-key");
   });
 
+  it('dispatches close with trigger "escape-key" when Escape is pressed while portalled', async () => {
+    const onClose = vi.fn();
+    render(DatePickerClose, { props: { onClose, portalMenu: true } });
+
+    const input = screen.getByLabelText("Date");
+    await user.click(input);
+    const calendar = await screen.findByLabelText("calendar-container");
+    expect(calendar).toHaveClass("open");
+    expect(document.body.contains(calendar)).toBe(true);
+
+    input.focus();
+    await user.keyboard("{Escape}");
+    await tick();
+
+    expect(calendar).not.toHaveClass("open");
+    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(onClose.mock.calls[0][0].detail.trigger).toBe("escape-key");
+  });
+
   it('dispatches close with trigger "outside-click" when clicking outside', async () => {
     const onClose = vi.fn();
     render(DatePickerClose, { props: { onClose } });
