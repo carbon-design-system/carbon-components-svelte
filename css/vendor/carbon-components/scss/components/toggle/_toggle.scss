@@ -178,7 +178,6 @@
         cursor: pointer;
         transition: box-shadow $duration--fast-01 motion(exit, productive),
           background-color $duration--fast-01 motion(exit, productive);
-        will-change: box-shadow;
 
         @media screen and (prefers-reduced-motion: reduce) {
           transition: none;
@@ -380,7 +379,6 @@
         content: '';
         transition: box-shadow $duration--fast-01 motion(exit, productive),
           background-color $duration--fast-01 motion(exit, productive);
-        will-change: box-shadow;
 
         @media screen and (prefers-reduced-motion: reduce) {
           transition: none;
