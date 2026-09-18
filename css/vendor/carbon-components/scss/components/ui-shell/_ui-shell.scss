@@ -62,9 +62,7 @@
     position: relative;
     text-decoration: none;
     color: inherit;
-    transition:
-      background-color 110ms,
-      border-color 110ms;
+    transition: background-color 110ms;
     border: 0.0625rem solid rgba(0, 0, 0, 0);
     background-color: transparent;
   }

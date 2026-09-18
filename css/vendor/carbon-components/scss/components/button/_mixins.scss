@@ -29,10 +29,7 @@
   outline: none;
   text-align: left;
   text-decoration: none;
-  transition: background $duration--fast-01 motion(entrance, productive),
-    box-shadow $duration--fast-01 motion(entrance, productive),
-    border-color $duration--fast-01 motion(entrance, productive),
-    outline $duration--fast-01 motion(entrance, productive);
+  transition: background $duration--fast-01 motion(entrance, productive);
   vertical-align: top;
 
   &:disabled,

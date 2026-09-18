@@ -90,7 +90,7 @@
     border-bottom: 1px solid $border-strong;
     background-color: $field;
     color: $text-primary;
-    transition: $duration--fast-01 motion(standard, productive) all;
+    transition: background-color $duration--fast-01 motion(standard, productive);
 
     &:focus,
     &.#{$prefix}--focused {

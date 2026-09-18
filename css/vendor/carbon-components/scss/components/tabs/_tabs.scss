@@ -102,8 +102,7 @@
 
   .#{$prefix}--tabs__nav-item .#{$prefix}--tabs__nav-link {
     transition: color $duration--fast-01 motion(standard, productive),
-      border-bottom-color $duration--fast-01 motion(standard, productive),
-      outline $duration--fast-01 motion(standard, productive);
+      border-bottom-color $duration--fast-01 motion(standard, productive);
   }
 
   .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--selected) {
@@ -193,8 +192,6 @@
     line-height: inherit;
     text-decoration: none;
     text-overflow: ellipsis;
-    transition: border $duration--fast-01 motion(standard, productive),
-      outline $duration--fast-01 motion(standard, productive);
     white-space: nowrap;
 
     &:focus,

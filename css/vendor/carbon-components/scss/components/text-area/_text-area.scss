@@ -32,8 +32,7 @@
     background-color: $field-01;
     color: $text-01;
     resize: vertical;
-    transition: background-color $duration--fast-01 motion(standard, productive),
-      outline $duration--fast-01 motion(standard, productive);
+    transition: background-color $duration--fast-01 motion(standard, productive);
   }
 
   .#{$prefix}--text-area:focus,

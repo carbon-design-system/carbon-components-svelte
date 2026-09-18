@@ -269,8 +269,7 @@
     border: none;
     background: transparent;
     cursor: pointer;
-    transition: outline $duration--fast-02 motion(standard, productive),
-      background-color $duration--fast-02 motion(standard, productive);
+    transition: background-color $duration--fast-02 motion(standard, productive);
 
     &:focus {
       outline: 2px solid $inverse-focus-ui;

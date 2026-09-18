@@ -197,8 +197,7 @@ $css--helpers: true;
     background: none;
     cursor: pointer;
     fill: $ui-05;
-    transition: outline $duration--fast-02 motion(standard, productive),
-      background-color $duration--fast-02 motion(standard, productive);
+    transition: background-color $duration--fast-02 motion(standard, productive);
   }
 
   .#{$prefix}--pagination--sm .#{$prefix}--pagination__button,

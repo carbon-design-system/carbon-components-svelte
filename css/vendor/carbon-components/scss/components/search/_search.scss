@@ -41,8 +41,7 @@
     background-color: $field-01;
     color: $text-01;
     text-overflow: ellipsis;
-    transition: background-color $duration--fast-02 motion(standard, productive),
-      outline $duration--fast-02 motion(standard, productive);
+    transition: background-color $duration--fast-02 motion(standard, productive);
 
     &:focus {
       @include focus-outline('outline');
@@ -168,7 +167,6 @@
     opacity: 1;
     transition: opacity $duration--fast-02 motion(standard, productive),
       background-color $duration--fast-02 motion(standard, productive),
-      outline $duration--fast-02 motion(standard, productive),
       border $duration--fast-02 motion(standard, productive);
     visibility: inherit;
 

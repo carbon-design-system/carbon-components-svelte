@@ -86,8 +86,7 @@
     outline: none;
     transform: translate(-50%, -50%);
     transition: transform $duration--fast-02 motion(standard, productive),
-      background $duration--fast-02 motion(standard, productive),
-      box-shadow $duration--fast-02 motion(standard, productive);
+      background $duration--fast-02 motion(standard, productive);
 
     @media (any-hover: hover) {
       &:hover {
