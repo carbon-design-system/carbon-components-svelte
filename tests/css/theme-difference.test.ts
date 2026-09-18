@@ -18,7 +18,9 @@ describe("all.scss theme tokens", () => {
       logger: { warn() {}, debug() {} },
     });
     const tokens = (selector: string) => {
-      const rule = parseRules(css).find((r) => r.selector === selector);
+      const rule = parseRules(css).find(
+        (r) => r.selector === selector && r.context === "",
+      );
       return new Map(
         [...(rule?.decls ?? [])].filter(([prop]) => prop.startsWith("--cds-")),
       );

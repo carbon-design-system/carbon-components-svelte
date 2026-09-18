@@ -43,6 +43,20 @@
   box-shadow: 0 2px 6px $shadow;
 }
 
+/// ccs: `solid`, or `dotted` under `prefers-contrast`. One custom property set
+/// on `:root` replaces a `@media` block after every focus outline.
+/// @access private
+/// @group global-helpers
+$focus-outline-style: var(--#{$custom-property-prefix}-focus-outline-style, solid);
+
+@include exports('focus-outline-style') {
+  @media screen and (prefers-contrast) {
+    :root {
+      --#{$custom-property-prefix}-focus-outline-style: dotted;
+    }
+  }
+}
+
 /// Adds outline styles depending on specific type
 /// @access public
 /// @param {String} $type ['border'] - Type of outline from: `border`, `blurred`, `outline`, `invalid`, `reset`
@@ -52,11 +66,7 @@
 @mixin focus-outline($type: 'border', $omit: ()) {
   @if ($type == 'border') {
     @if not index($omit, outline) {
-      outline: 1px solid $focus;
-    }
-
-    @media screen and (prefers-contrast) {
-      outline-style: dotted;
+      outline: 1px $focus-outline-style $focus;
     }
   }
 
@@ -66,13 +76,9 @@
   }
 
   @if ($type == 'outline') {
-    outline: 2px solid $focus;
+    outline: 2px $focus-outline-style $focus;
     @if not index($omit, outline-offset) {
       outline-offset: -2px;
-    }
-
-    @media screen and (prefers-contrast) {
-      outline-style: dotted;
     }
   }
 
@@ -86,12 +92,8 @@
   }
 
   @if ($type == 'invalid') {
-    outline: 2px solid $support-01;
+    outline: 2px $focus-outline-style $support-01;
     outline-offset: -2px;
-
-    @media screen and (prefers-contrast) {
-      outline-style: dotted;
-    }
   }
 
   @if ($type == 'reset') {
