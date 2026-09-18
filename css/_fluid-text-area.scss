@@ -39,14 +39,14 @@
 
     &:not(.#{$prefix}--text-area__label-counter) {
       inline-size: auto;
-      inset-inline-end: auto;
-      inset-inline-start: $spacing-05;
+      right: auto;
+      left: $spacing-05;
     }
 
     &.#{$prefix}--text-area__label-counter {
       inline-size: auto;
-      inset-inline-end: $spacing-05;
-      inset-inline-start: auto;
+      right: $spacing-05;
+      left: auto;
     }
   }
 

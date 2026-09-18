@@ -31,7 +31,7 @@
     block-size: to-rem(16px);
     inline-size: calc(100% - 2rem);
     inset-block-start: to-rem(13px);
-    inset-inline-start: $spacing-05;
+    left: $spacing-05;
   }
 
   .#{$prefix}--select--fluid .#{$prefix}--label::-webkit-scrollbar {
@@ -53,7 +53,7 @@
   .#{$prefix}--select--fluid .#{$prefix}--select__arrow {
     block-size: 1rem;
     inset-block-start: to-rem(34px);
-    inset-inline-end: $spacing-04;
+    right: $spacing-04;
   }
 
   .#{$prefix}--select--fluid .#{$prefix}--select__divider {
@@ -141,7 +141,7 @@
     .#{$prefix}--select-input__wrapper
     .#{$prefix}--select__invalid-icon {
     inset-block-start: to-rem(73px);
-    inset-inline-end: $spacing-05;
+    right: $spacing-05;
     pointer-events: none;
   }
 
@@ -169,7 +169,7 @@
     block-size: to-rem(8px);
     inline-size: 25%;
     inset-block-start: $spacing-05;
-    inset-inline-start: $spacing-05;
+    left: $spacing-05;
   }
 
   .#{$prefix}--select--fluid__skeleton .#{$prefix}--label {
@@ -178,7 +178,7 @@
     block-size: to-rem(8px);
     inline-size: 50%;
     inset-block-start: to-rem(36px);
-    inset-inline-start: $spacing-05;
+    left: $spacing-05;
   }
 }
 

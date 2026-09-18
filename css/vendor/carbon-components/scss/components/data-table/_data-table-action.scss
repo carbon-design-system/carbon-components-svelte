@@ -520,8 +520,8 @@
   }
 
   // V11: remove --small selector block
-  .#{$prefix}--table-toolbar--small .#{$prefix}--btn:not(.#{$prefix}--btn--lg, .#{$prefix}--btn--xl), // ccs: resize every button kind, not only primary; leave an explicit lg/xl size alone
-  .#{$prefix}--table-toolbar--sm .#{$prefix}--btn:not(.#{$prefix}--btn--lg, .#{$prefix}--btn--xl) {
+  .#{$prefix}--table-toolbar--small .#{$prefix}--btn:not(.#{$prefix}--btn--lg):not(.#{$prefix}--btn--xl), // ccs: resize every button kind, not only primary; leave an explicit lg/xl size alone
+  .#{$prefix}--table-toolbar--sm .#{$prefix}--btn:not(.#{$prefix}--btn--lg):not(.#{$prefix}--btn--xl) {
     height: to-rem(32px);
     min-height: auto;
     padding-top: calc(0.375rem - 3px);
@@ -671,7 +671,7 @@
   }
 
   // ccs: resize every button kind, not only primary; leave an explicit lg/xl size alone
-  .#{$prefix}--table-toolbar--xs .#{$prefix}--btn:not(.#{$prefix}--btn--lg, .#{$prefix}--btn--xl) {
+  .#{$prefix}--table-toolbar--xs .#{$prefix}--btn:not(.#{$prefix}--btn--lg):not(.#{$prefix}--btn--xl) {
     height: $spacing-06;
     min-height: auto;
     padding-top: 0;
