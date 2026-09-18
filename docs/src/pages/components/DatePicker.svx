@@ -38,6 +38,12 @@ Use `bind:valueFrom` and `bind:valueTo` to update the range from outside the com
 
 <FileSource src="/framed/DatePicker/DatePickerProgrammatic" />
 
+### Range presets
+
+Build preset range buttons (for example "Last 7 days" or "This month") by setting `valueFrom` and `valueTo` from outside the component, the same way as the programmatic example above.
+
+<FileSource src="/framed/DatePicker/DatePickerRangePresets" />
+
 ### Month
 
 Set `datePickerType` to `"month"` to select a month instead of a day. The calendar shows a 12-month grid for the current year; use the year stepper to change years. Pair it with a `dateFormat` that omits the day, such as `"F Y"` (for example, "January 2026").
