@@ -22,7 +22,6 @@
         "@typescript/native-preview": "^7.0.0-dev.20260707.2",
         "browserslist": "^4.28.9",
         "carbon-icons-svelte": "^13.15.0",
-        "culls": "^0.2.0",
         "jsdom": "^30.0.1",
         "lightningcss": "^1.33.0",
         "ostia": "^0.2.4",
@@ -252,8 +251,6 @@
     "css-tree": ["css-tree@3.2.1", "", { "dependencies": { "mdn-data": "2.27.1", "source-map-js": "^1.2.1" } }, "sha512-X7sjQzceUhu1u7Y/ylrRZFU2FS6LRiFVp6rKLPg23y3x3c3DOKAwuXGDp+PAGjh6CSnCjYeAul8pcT8bAl+lSA=="],
 
     "css.escape": ["css.escape@1.5.1", "", {}, "sha512-YUifsXXuknHlUsmlgyY0PKzgPOr7/FjCePfHNt0jxm83wHZi44VDMQ7/fGNkjY3/jV1MC+1CmZbaHzugyeRtpg=="],
-
-    "culls": ["culls@0.2.0", "", { "bin": { "culls": "dist/index.js" } }, "sha512-SXout6aJuwBKzA9HuACs1Z9Yn51UwpgKPwEwMm9NU0bLoZUTIJer0M+qN+yY3Vki6Pt9QxKRpcjRetSisQOFAw=="],
 
     "data-urls": ["data-urls@7.0.0", "", { "dependencies": { "whatwg-mimetype": "^5.0.0", "whatwg-url": "^16.0.0" } }, "sha512-23XHcCF+coGYevirZceTVD7NdJOqVn+49IHyxgszm+JIiHLoB2TkmPtsYkNWT1pvRSGkc35L6NHs0yHkN2SumA=="],
 
