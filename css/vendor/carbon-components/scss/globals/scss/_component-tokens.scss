@@ -37,7 +37,7 @@ $enable-css-custom-properties: feature-flag-enabled(
 
         @return if(
           $emit-as-css-custom-property,
-          var(--#{$custom-property-prefix}-#{$name}, #{$value}),
+          custom-property-var($name, $value),
           $value
         );
       }
@@ -45,7 +45,7 @@ $enable-css-custom-properties: feature-flag-enabled(
 
     @return if(
       $emit-as-css-custom-property,
-      var(--#{$custom-property-prefix}-#{$name}, #{$fallback}),
+      custom-property-var($name, $fallback),
       $fallback
     );
   } @else {

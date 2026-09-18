@@ -16,6 +16,8 @@ $css--default-type: true;
 $css--plex: true;
 
 $ccs-theme-switching: true;
+// `:root` below always declares every token, so `var()` needs no fallback.
+$ccs-omit-token-fallbacks: true;
 
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/themes/themes";
 @import "carbon-components/scss/globals/scss/component-tokens";
