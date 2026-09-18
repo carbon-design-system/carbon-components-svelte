@@ -155,22 +155,6 @@
     flex-direction: column;
   }
 
-  .#{$prefix}--side-nav__header {
-    display: flex;
-    width: 100%;
-    max-width: 100%;
-    height: mini-units(6);
-    border-bottom: 1px solid $shell-side-nav-bg-02;
-
-    @include expanded() {
-      height: auto;
-    }
-  }
-
-  .#{$prefix}--side-nav--ux .#{$prefix}--side-nav__header {
-    height: auto;
-  }
-
   .#{$prefix}--side-nav__items {
     overflow: hidden;
     flex: 1 1 0%;
