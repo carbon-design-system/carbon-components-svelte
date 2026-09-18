@@ -48,13 +48,13 @@ const THEMES = (opt("themes") ?? "white,g100").split(",");
 const ONLY = opt("only");
 const STATES = !rest.includes("--no-states");
 const URL = opt("url");
-const MAX_STATE_ELEMENTS = 80;
 const [VIEW_W, VIEW_H] = (opt("viewport") ?? "1280x900")
   .split("x")
   .map((n) => Number(n));
 
-const INTERACTIVE =
+export const INTERACTIVE =
   "a, button, input, select, textarea, [tabindex], [role], label, li, tr, td, th, summary";
+export const MAX_STATE_ELEMENTS = 80;
 
 // ---------------------------------------------------------------------------
 // In-page helpers (serialised into the browser)
@@ -138,16 +138,16 @@ const PAGE_HELPERS = `
 // ---------------------------------------------------------------------------
 // Capture
 
-async function fixtures(): Promise<string[]> {
+export async function fixtures(only = ONLY): Promise<string[]> {
   const dir = path.resolve("e2e/fixtures");
   return (await readdir(dir))
     .filter((f) => f.endsWith(".html"))
     .map((f) => f.slice(0, -".html".length))
-    .filter((f) => !ONLY || f.includes(ONLY))
+    .filter((f) => !only || f.includes(only))
     .sort();
 }
 
-async function waitForServer(url: string): Promise<void> {
+export async function waitForServer(url: string): Promise<void> {
   for (let i = 0; i < 100; i++) {
     try {
       // biome-ignore lint/performance/noAwaitInLoops: sequential by design
@@ -157,6 +157,33 @@ async function waitForServer(url: string): Promise<void> {
     await Bun.sleep(200);
   }
   throw new Error(`server at ${url} did not start`);
+}
+
+/**
+ * Spawns the e2e vite dev server (unless `url` points at one already
+ * running) and waits for it to answer. Shared by cascade-snapshot's
+ * `capture` and cascade-usage.ts, which both load fixtures the same way.
+ */
+export async function startServer(
+  port: number,
+  url?: string,
+): Promise<{ base: string; server?: ReturnType<typeof Bun.spawn> }> {
+  const base = url ?? `http://localhost:${port}`;
+  if (url) return { base };
+  const server = Bun.spawn(
+    [
+      "bunx",
+      "vite",
+      "--config",
+      "e2e/vite.config.ts",
+      "--port",
+      String(port),
+      "--strictPort",
+    ],
+    { stdout: "ignore", stderr: "inherit" },
+  );
+  await waitForServer(base);
+  return { base, server };
 }
 
 async function capturePage(
@@ -239,23 +266,7 @@ async function capturePage(
 
 async function capture(outDir: string): Promise<void> {
   await mkdir(outDir, { recursive: true });
-  let server: ReturnType<typeof Bun.spawn> | undefined;
-  const base = URL ?? `http://localhost:${PORT}`;
-  if (!URL) {
-    server = Bun.spawn(
-      [
-        "bunx",
-        "vite",
-        "--config",
-        "e2e/vite.config.ts",
-        "--port",
-        String(PORT),
-        "--strictPort",
-      ],
-      { stdout: "ignore", stderr: "inherit" },
-    );
-    await waitForServer(base);
-  }
+  const { base, server } = await startServer(PORT, URL);
   const browser = await chromium.launch();
   const context = await browser.newContext({
     viewport: { width: VIEW_W, height: VIEW_H },
@@ -356,14 +367,19 @@ async function diff(a: string, b: string): Promise<void> {
 }
 
 // ---------------------------------------------------------------------------
+// Gated so e2e/cascade-usage.ts can import fixtures()/waitForServer()/
+// startServer() without triggering this file's own CLI dispatch as a
+// side effect of the import.
 
-if (cmd === "capture" && positional[0]) {
-  await capture(positional[0]);
-} else if (cmd === "diff" && positional[0] && positional[1]) {
-  await diff(positional[0], positional[1]);
-} else {
-  console.error(
-    "usage: cascade-snapshot.ts capture <outDir> | diff <dirA> <dirB>",
-  );
-  process.exit(2);
+if (import.meta.main) {
+  if (cmd === "capture" && positional[0]) {
+    await capture(positional[0]);
+  } else if (cmd === "diff" && positional[0] && positional[1]) {
+    await diff(positional[0], positional[1]);
+  } else {
+    console.error(
+      "usage: cascade-snapshot.ts capture <outDir> | diff <dirA> <dirB>",
+    );
+    process.exit(2);
+  }
 }
