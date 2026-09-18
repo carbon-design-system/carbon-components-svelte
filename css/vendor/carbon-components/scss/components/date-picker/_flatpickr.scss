@@ -159,7 +159,7 @@
   }
 
   .flatpickr-month {
-    @include type-style('productive-heading-01');
+    @include type-style('productive-heading-01', $omit: (line-height));
 
     display: flex;
     align-items: center;
@@ -282,7 +282,6 @@
 
   .numInputWrapper .arrowUp {
     top: to-rem(4px);
-    border-bottom: 0;
 
     &::after {
       border-bottom: to-rem(4px) solid $icon-01;

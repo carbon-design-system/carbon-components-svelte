@@ -21,11 +21,10 @@
     .#{$prefix}--structured-list-row--focused-within {
       @include focus-outline('outline');
     }
-  } @else {
-    .#{$prefix}--structured-list-input {
-      display: none;
-    }
   }
+  // Else: the `structured-list-input-focusable` patch below always sets
+  // `display: inline-block` on `.bx--structured-list-input` instead, so it
+  // stays in the tab order (see that mixin's docstring).
 
   .#{$prefix}--structured-list {
     @include reset;
@@ -127,7 +126,7 @@
   .#{$prefix}--structured-list-th {
     @include reset;
     @include padding-th;
-    @include type-style('productive-heading-01');
+    @include type-style('productive-heading-01', $omit: (font-weight));
 
     display: table-cell;
     height: to-rem(40px);
@@ -403,7 +402,6 @@
 
   .#{$prefix}--structured-list-sort:focus {
     @include focus-outline("outline");
-    outline-offset: -2px;
   }
 
   .#{$prefix}--structured-list-sort__icon-unsorted {

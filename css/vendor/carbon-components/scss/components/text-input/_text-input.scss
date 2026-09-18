@@ -97,7 +97,12 @@
 
   // TODO: deprecate this style block
   .#{$prefix}--text-input--password__visibility {
-    @include tooltip--trigger('icon', 'bottom');
+    // position/display/align-items/cursor are always re-set below
+    @include tooltip--trigger(
+      'icon',
+      'bottom',
+      (position, display, align-items, cursor)
+    );
     @include tooltip--placement('icon', 'bottom', 'center');
   }
 

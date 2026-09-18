@@ -273,7 +273,7 @@ $list-box-menu-width: to-rem(300px);
   }
 
   .#{$prefix}--list-box__field {
-    @include button-reset;
+    @include button-reset($omit: (display, padding));
 
     position: relative;
     display: inline-flex;
@@ -282,7 +282,6 @@ $list-box-menu-width: to-rem(300px);
     height: calc(100% + 1px);
     align-items: center;
     padding: 0 $carbon--spacing-09 0 $carbon--spacing-05;
-    cursor: pointer;
     outline: none;
     text-overflow: ellipsis;
     vertical-align: top;
@@ -360,7 +359,7 @@ $list-box-menu-width: to-rem(300px);
   }
 
   .#{$prefix}--list-box__menu-icon {
-    @include button-reset($width: false);
+    @include button-reset($width: false, $omit: (display));
 
     position: absolute;
     right: $carbon--spacing-05;
@@ -369,7 +368,6 @@ $list-box-menu-width: to-rem(300px);
     height: to-rem(24px);
     align-items: center;
     justify-content: center;
-    cursor: pointer;
     outline: none;
     transition: transform $duration--fast-01 motion(standard, productive);
   }
@@ -385,7 +383,7 @@ $list-box-menu-width: to-rem(300px);
   }
 
   .#{$prefix}--list-box__selection {
-    @include button-reset($width: false);
+    @include button-reset($width: false, $omit: (display));
 
     position: absolute;
     top: 50%;
@@ -396,7 +394,6 @@ $list-box-menu-width: to-rem(300px);
     height: to-rem(24px);
     align-items: center;
     justify-content: center;
-    cursor: pointer;
     transform: translateY(-50%);
     transition: background-color $duration--fast-01 motion(standard, productive);
     user-select: none;
@@ -420,7 +417,7 @@ $list-box-menu-width: to-rem(300px);
 
   // Modifier for a selection to show that multiple selections have been made
   .#{$prefix}--list-box__selection--multi {
-    @include type-style('label-01');
+    @include type-style('label-01', $omit: (line-height));
 
     position: static;
     top: auto;

@@ -56,7 +56,7 @@
   .#{$prefix}--link--disabled,
   .#{$prefix}--link--disabled:hover {
     @include reset;
-    @include type-style('body-short-01');
+    @include type-style('body-short-01', $omit: (font-weight));
 
     color: $disabled-02;
     cursor: not-allowed;

@@ -62,7 +62,7 @@
   }
 
   .#{$prefix}--progress-label {
-    @include type-style('body-short-01');
+    @include type-style('body-short-01', $omit: (line-height));
 
     overflow: hidden;
     max-width: to-rem(88px);
@@ -137,7 +137,7 @@
   }
 
   .#{$prefix}--progress-step-button {
-    @include button-reset();
+    @include button-reset($omit: (display));
 
     display: flex;
     text-align: left;

@@ -180,24 +180,22 @@
   }
 
   .#{$prefix}--overflow-menu.#{$prefix}--toolbar-action {
-    @include button-reset;
+    @include button-reset($omit: (display, width, padding));
 
     display: flex;
     width: $spacing-09;
     height: $spacing-09;
     padding: $spacing-05;
-    cursor: pointer;
     transition: background $duration--fast-02 motion(entrance, productive);
   }
 
   // DEPRECATED prefer .#{$prefix}--overflow-menu.#{$prefix}--toolbar-action instead
   .#{$prefix}--toolbar-action {
-    @include button-reset;
+    @include button-reset($omit: (display, width));
 
     display: flex;
     width: $spacing-09;
     height: $spacing-09;
-    cursor: pointer;
     transition: background $duration--fast-02 motion(entrance, productive);
   }
 

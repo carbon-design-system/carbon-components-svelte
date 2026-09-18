@@ -22,12 +22,17 @@
 }
 
 /// @param {String} $tooltip-type ['icon'] - The type, from: `icon`, `definition`
+/// @param {List} $omit [()] - Properties this mixin should not emit, for includers that always re-set them afterward
 /// @access public
 /// @group tooltip
-@mixin tooltip--content($tooltip-type: 'icon') {
-  @include box-shadow;
+@mixin tooltip--content($tooltip-type: 'icon', $omit: ()) {
+  @if not index($omit, box-shadow) {
+    @include box-shadow;
+  }
 
-  z-index: z('floating');
+  @if not index($omit, z-index) {
+    z-index: z('floating');
+  }
   width: max-content;
   min-width: to-rem(24px);
   max-width: to-rem(208px);
@@ -40,9 +45,12 @@
   background-color: $inverse-02;
   border-radius: to-rem(2px);
   color: $inverse-01;
-  font-weight: 400;
   text-align: left;
-  transform: translateX(-50%);
+  @if not index($omit, transform) {
+    transform: translateX(-50%);
+  }
+  // The font-weight this sets is always redundant: type-style below emits
+  // its own `font-weight` right after, in the same rule.
   @include type-style('body-short-01');
 
   // Windows, Firefox HCM Fix
@@ -53,16 +61,29 @@
 
 /// @param {String} $tooltip-type ['icon'] - The type, from: `icon`, `definition`
 /// @param {String} $position ['bottom'] - The position, from: `top`, `right`, `bottom`, `left`
+/// @param {List} $omit [()] - Properties this mixin should not emit, for includers that always re-set them afterward
 /// @access public
 /// @group tooltip
-@mixin tooltip--trigger($tooltip-type: 'icon', $position: 'bottom') {
-  position: relative;
-  display: inline-flex;
+@mixin tooltip--trigger($tooltip-type: 'icon', $position: 'bottom', $omit: ()) {
+  @if not index($omit, position) {
+    position: relative;
+  }
+  @if not index($omit, display) {
+    display: inline-flex;
+  }
   overflow: visible;
-  align-items: center;
+  @if not index($omit, align-items) {
+    align-items: center;
+  }
 
   &:focus {
-    @include focus-outline('border');
+    // Icon type always overrides the outline color to transparent below, in
+    // favor of the outline on the child svg; the high-contrast fallback
+    // still applies to this element either way.
+    @include focus-outline(
+      'border',
+      $omit: if($tooltip-type == 'icon', (outline,), ())
+    );
   }
 
   @if $tooltip-type == 'definition' {
@@ -70,7 +91,9 @@
   }
 
   @if $tooltip-type == 'icon' {
-    cursor: pointer;
+    @if not index($omit, cursor) {
+      cursor: pointer;
+    }
 
     &:focus {
       outline: 1px solid transparent;
@@ -121,7 +144,7 @@
   .#{$prefix}--assistive-text,
   + .#{$prefix}--assistive-text {
     box-sizing: content-box;
-    color: inherit;
+    // color is always re-set by tooltip--content below
     // In order to pass AAT, opacity must be set to 1 in the default state
     // On focus/hover use a keyframe animation to mimic transition
     opacity: 1;
@@ -131,10 +154,12 @@
   }
 
   // @todo Simplify CSS selectors on next major release
+  // transform is omitted: tooltip--placement always re-sets it below for
+  // this selector group.
   &::after,
   .#{$prefix}--assistive-text,
   + .#{$prefix}--assistive-text {
-    @include tooltip--content($tooltip-type);
+    @include tooltip--content($tooltip-type, (transform,));
   }
 
   &::after {
@@ -241,25 +266,24 @@
   }
 
   // @todo Simplify CSS selectors on next major release
+  // Only the cross-axis centering offset is set here: the position-matching
+  // offset (top/right/bottom/left) is always re-set below by the
+  // `::before`- and `::after`-specific blocks.
   &::before,
   &::after,
   .#{$prefix}--assistive-text,
   + .#{$prefix}--assistive-text {
     @if ($position == 'top') {
-      top: 0;
       left: 50%;
     }
     @if ($position == 'right') {
       top: 50%;
-      right: 0;
     }
     @if ($position == 'bottom') {
-      bottom: 0;
       left: 50%;
     }
     @if ($position == 'left') {
       top: 50%;
-      left: 0;
     }
   }
 

@@ -30,7 +30,7 @@
 
   .#{$prefix}--body {
     @include reset;
-    @include type-style('body-short-01');
+    @include type-style('body-short-01', $omit: (line-height));
 
     background-color: $ui-background;
     color: $text-01;

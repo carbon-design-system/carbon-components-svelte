@@ -240,7 +240,7 @@
   }
 
   .#{$prefix}--side-nav__submenu {
-    @include button-reset($width: true);
+    @include button-reset($width: true, $omit: (display, padding));
     @include type-style('productive-heading-01');
     @include focus-outline('reset');
 

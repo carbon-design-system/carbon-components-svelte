@@ -118,7 +118,7 @@
   }
 
   .#{$prefix}--search-close {
-    @include button-reset(false);
+    @include button-reset(false, $omit: (display));
     @include focus-outline('reset');
 
     position: absolute;
@@ -164,7 +164,6 @@
     border-width: 1px 0;
     border-style: solid;
     border-color: transparent;
-    cursor: pointer;
     fill: $icon-01;
     opacity: 1;
     transition: opacity $duration--fast-02 motion(standard, productive),

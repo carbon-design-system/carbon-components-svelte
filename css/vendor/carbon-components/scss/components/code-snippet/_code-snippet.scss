@@ -186,7 +186,7 @@
     transition: max-height $duration--moderate-01 motion(standard, productive);
 
     &:focus {
-      @include focus-outline('outline');
+      @include focus-outline('outline', $omit: (outline-offset));
 
       outline-offset: 0;
     }

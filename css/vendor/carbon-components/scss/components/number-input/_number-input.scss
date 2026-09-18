@@ -30,7 +30,7 @@
 
   .#{$prefix}--number input[type='number'],
   .#{$prefix}--number input[type='text'] {
-    @include type-style('code-01');
+    @include type-style('code-01', $omit: (font-family, font-weight));
     @include focus-outline('reset');
 
     display: inline-flex;
@@ -116,7 +116,7 @@
   }
 
   .#{$prefix}--number__control-btn {
-    @include button-reset;
+    @include button-reset($omit: (display));
 
     position: relative;
     display: inline-flex;

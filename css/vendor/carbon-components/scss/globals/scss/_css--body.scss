@@ -16,11 +16,12 @@
 @mixin css-body {
   body {
     @include reset;
-    @include type-style('body-short-01');
+    // line-height is set by the eric-meyer reset above (`css--reset`),
+    // which always runs before this
+    @include type-style('body-short-01', $omit: (line-height));
 
     background-color: $ui-background;
     color: $text-01;
-    line-height: 1;
   }
 }
 

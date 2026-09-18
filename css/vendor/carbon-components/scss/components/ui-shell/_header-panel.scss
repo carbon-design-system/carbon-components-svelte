@@ -18,8 +18,8 @@
 /// @group ui-shell
 @mixin carbon-header-panel {
   .#{$prefix}--header-panel {
-    @include carbon--motion(exit, productive);
-
+    // The `transition` shorthand below resets transition-timing-function,
+    // so a `carbon--motion` easing curve here would always be dead.
     position: fixed;
     z-index: z('header');
     top: carbon--mini-units(6);
