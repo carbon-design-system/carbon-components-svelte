@@ -40,6 +40,10 @@
   .#{$prefix}--dialog::backdrop {
     background-color: $overlay-01;
   }
+
+  .#{$prefix}--dialog--light {
+    background-color: $ui-02;
+  }
 }
 
 @include exports("dialog") {

@@ -2,9 +2,15 @@
 description: Modals provide a focused dialog for user interactions, confirmations, or data entry, with various sizes and states.
 ---
 
-## Modal vs ComposedModal
+## Choosing an overlay
 
-The modal is an all-in-one component configured through props, making it ideal for standard modal dialogs. For more complex layouts or fine-grained control, use [ComposedModal](/components/ComposedModal) instead.
+| | Use when | Layout control | Native `<dialog>` | Focus and scroll lock |
+| --- | --- | --- | --- | --- |
+| Modal | A standard confirmation or transactional dialog fits your content | Fixed header, body, and footer configured through props | No | Automatic, managed by the component |
+| ComposedModal | The header, body, or footer needs custom composition or slotted content | Full, through `ModalHeader`, `ModalBody`, and `ModalFooter` | No | Automatic, same behavior as Modal |
+| [Dialog](/components/Dialog) | You need a non-modal overlay, a return value, or a host for other portalled content | Full; only a slot, no built-in chrome | Yes, `show()`/`showModal()` | Native when `modal`, none otherwise |
+
+Reach for Modal when props alone cover the layout, and ComposedModal when the header, body, or footer needs custom markup. Drop to Dialog for non-modal overlays or when you'd rather build the chrome yourself.
 
 ## Basic
 
@@ -32,6 +38,12 @@ After closing the modal, focus is returned to the element that triggered the mod
 Use `selectorPrimaryFocus` to override the default and target a specific element when the automatic first-input focus is not desired.
 
 <FileSource src="/framed/Modal/ModalCustomFocus" />
+
+### Return focus to a fallback element
+
+The element that triggered the modal is not always still around when it closes, for example a row deleted from a list. Set `returnFocusTo` to an element, or a function returning one, to focus instead when the trigger has unmounted. This example returns focus to the list's heading after deleting a row.
+
+<FileSource src="/framed/Modal/ModalReturnFocusTo" />
 
 ## Alert mode
 
@@ -135,7 +147,7 @@ Stack multiple modals for complex workflows. Each modal maintains its own state 
 
 ### Nested
 
-Nest a modal inside another modal's content to stack a confirmation dialog on top of it. Each modal tracks its own `open` state, and <DocKbd label="Escape" /> only closes the topmost (innermost) modal.
+Nest a modal inside another modal's content to stack a confirmation dialog on top of it. Each modal tracks its own `open` state, and <DocKbd label="Escape" /> only closes the topmost (innermost) modal, leaving the modals underneath open. Each modal layers its own backdrop, so the page darkens further with each additional modal stacked on top.
 
 Wrap the nested modal in [Portal](/components/Portal) so it renders outside the outer modal's DOM. The outer modal's container has its own transform and `overflow: hidden`, so an unportaled nested modal would be sized and clipped to that container instead of covering the full screen.
 
