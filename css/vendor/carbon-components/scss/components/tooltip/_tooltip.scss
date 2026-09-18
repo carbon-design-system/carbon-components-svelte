@@ -279,10 +279,56 @@
     white-space: nowrap;
   }
 
-  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition.#{$prefix}--tooltip--top {
-    @include tooltip--trigger('definition', 'top');
-    @include tooltip--placement('definition', 'top', 'start');
+  // ccs: the visible/hover/focus/hidden state rules (`tooltip--trigger-state`)
+  // never vary by type or position, so every CSS-only trigger in the bundle
+  // - this component's, `.#{$prefix}--btn--icon-only`'s (button/_button.scss)
+  // and the password toggle's (which reuses the icon-only rules, see
+  // text-input/_text-input.scss) - shares this one rule instead of each
+  // `tooltip--trigger` call site repeating it. Every trigger element always
+  // carries both classes below (see the Svelte components), so this is the
+  // same selector shape (2 classes) `tooltip--trigger` used per call site
+  // before, not a specificity change.
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--a11y {
+    @include tooltip--trigger-state;
+  }
 
+  // ccs: same idea, for the rest of the `$tooltip-type: 'icon'` trigger body
+  // (position/display/focus/cursor/pseudo-element base/transition/content -
+  // everything `tooltip--trigger('icon', ...)` emits besides state, already
+  // shared above). This component's icon trigger and
+  // `.#{$prefix}--btn--icon-only` (button/_button.scss) both emit it
+  // identically, so one rule covers both families instead of each repeating
+  // it. Every selector below is exactly the 2-class compound
+  // `tooltip--trigger` used per direction before (never a bare
+  // `.#{$prefix}--tooltip__trigger`): a portal-rendered tooltip's trigger
+  // never gets a direction class (see the Svelte components), so, like
+  // before, this only ever matches a CSS-only trigger.
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--top,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--right,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--bottom,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--left,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--btn--icon-only--top,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--btn--icon-only--right,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--btn--icon-only--bottom,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--btn--icon-only--left {
+    @include tooltip--trigger-icon-body;
+  }
+
+  // ccs: `tooltip--trigger`'s output never varies by position (only
+  // `tooltip--placement` below does), so both positions this type supports
+  // share one rule instead of repeating the ~20-declaration body per
+  // position.
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition.#{$prefix}--tooltip--top,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition.#{$prefix}--tooltip--bottom {
+    @include tooltip--trigger('definition', (state,));
+  }
+
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition.#{$prefix}--tooltip--top {
+    // ccs: the align-less selector only matters for CSS-only markup that
+    // omits an align modifier class; our components always add one. 'start'
+    // is the mixin's default here, so it's folded into the align-start
+    // selector instead of repeating the same declarations under its own rule.
+    &,
     &.#{$prefix}--tooltip--align-start {
       @include tooltip--placement('definition', 'top', 'start');
     }
@@ -297,9 +343,7 @@
   }
 
   .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition.#{$prefix}--tooltip--bottom {
-    @include tooltip--trigger('definition', 'bottom');
-    @include tooltip--placement('definition', 'bottom', 'start');
-
+    &,
     &.#{$prefix}--tooltip--align-start {
       @include tooltip--placement('definition', 'bottom', 'start');
     }
@@ -322,16 +366,29 @@
     }
   }
 
-  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--top {
-    @include tooltip--trigger('icon', 'top');
-    @include tooltip--placement('icon', 'top', 'center');
+  // ccs: the icon-type trigger body (position/display/focus/cursor/
+  // pseudo-element base/transition/content) and its state rules both come
+  // from the shared rules near the top of this mixin now (see the
+  // `tooltip--trigger-icon-body` / `tooltip--trigger-state` comments
+  // above); only placement (offsets/transform/caret) still varies by
+  // position below. `tooltip--placement('icon', ...)` doesn't read
+  // `$tooltip-type` for anything but padding (set by `tooltip--content`,
+  // already emitted by the trigger body), so this component's icon trigger
+  // and `.#{$prefix}--btn--icon-only` (button/_button.scss) emit identical
+  // placement declarations too; each rule below combines both families'
+  // selectors instead of each repeating the same call.
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--top,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--btn--icon-only--top {
+    // ccs: 'center' is the mixin's default align for icon tooltips, so the
+    // align-less selector is folded into the align-center selector (see the
+    // definition trigger comment above).
+    &,
+    &.#{$prefix}--tooltip--align-center {
+      @include tooltip--placement('icon', 'top', 'center');
+    }
 
     &.#{$prefix}--tooltip--align-start {
       @include tooltip--placement('icon', 'top', 'start');
-    }
-
-    &.#{$prefix}--tooltip--align-center {
-      @include tooltip--placement('icon', 'top', 'center');
     }
 
     &.#{$prefix}--tooltip--align-end {
@@ -339,33 +396,24 @@
     }
   }
 
-  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--right {
-    @include tooltip--trigger('icon', 'right');
+  // ccs: `tooltip--placement` never reads `$align` for the `right`/`left`
+  // positions (only `top`/`bottom` vary by alignment), so the three
+  // align-modifier selectors used to emit byte-identical declarations; one
+  // call covers every align class value.
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--right,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--btn--icon-only--right {
     @include tooltip--placement('icon', 'right', 'center');
-
-    &.#{$prefix}--tooltip--align-start {
-      @include tooltip--placement('icon', 'right', 'start');
-    }
-
-    &.#{$prefix}--tooltip--align-center {
-      @include tooltip--placement('icon', 'right', 'center');
-    }
-
-    &.#{$prefix}--tooltip--align-end {
-      @include tooltip--placement('icon', 'right', 'end');
-    }
   }
 
-  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--bottom {
-    @include tooltip--trigger('icon', 'bottom');
-    @include tooltip--placement('icon', 'bottom', 'center');
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--bottom,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--btn--icon-only--bottom {
+    &,
+    &.#{$prefix}--tooltip--align-center {
+      @include tooltip--placement('icon', 'bottom', 'center');
+    }
 
     &.#{$prefix}--tooltip--align-start {
       @include tooltip--placement('icon', 'bottom', 'start');
-    }
-
-    &.#{$prefix}--tooltip--align-center {
-      @include tooltip--placement('icon', 'bottom', 'center');
     }
 
     &.#{$prefix}--tooltip--align-end {
@@ -373,21 +421,9 @@
     }
   }
 
-  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--left {
-    @include tooltip--trigger('icon', 'left');
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--left,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--btn--icon-only--left {
     @include tooltip--placement('icon', 'left', 'center');
-
-    &.#{$prefix}--tooltip--align-start {
-      @include tooltip--placement('icon', 'left', 'start');
-    }
-
-    &.#{$prefix}--tooltip--align-center {
-      @include tooltip--placement('icon', 'left', 'center');
-    }
-
-    &.#{$prefix}--tooltip--align-end {
-      @include tooltip--placement('icon', 'left', 'end');
-    }
   }
 
   // Allow pointer events on tooltip when tooltip is visible
