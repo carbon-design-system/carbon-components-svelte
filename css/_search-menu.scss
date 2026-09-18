@@ -178,7 +178,9 @@
     // match sm result rows.
     min-height: $carbon--spacing-07;
     padding-top: $carbon--spacing-03;
-    padding-bottom: $carbon--spacing-03;
+    // Header only ever renders alongside its group's items, so keep this
+    // tighter than padding-top to read with the item list directly below.
+    padding-bottom: $carbon--spacing-02;
     padding-right: $carbon--spacing-05;
     color: $text-02;
     @include type-style("label-01");
