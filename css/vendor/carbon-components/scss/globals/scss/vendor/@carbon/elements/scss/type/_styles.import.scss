@@ -717,10 +717,17 @@ $custom-property-prefix: 'cds' !default;
 /// @group @carbon/type
 @mixin custom-properties($name, $value) {
   @each $property, $value in $value {
-    #{$property}: var(
-      --#{$custom-property-prefix}-#{$name}-#{$property},
-      #{$value}
-    );
+    // ccs: `$ccs-omit-token-fallbacks`, see themes/_mixins.scss
+    @if global-variable-exists('ccs-omit-token-fallbacks') and
+      $ccs-omit-token-fallbacks
+    {
+      #{$property}: var(--#{$custom-property-prefix}-#{$name}-#{$property});
+    } @else {
+      #{$property}: var(
+        --#{$custom-property-prefix}-#{$name}-#{$property},
+        #{$value}
+      );
+    }
   }
 }
 

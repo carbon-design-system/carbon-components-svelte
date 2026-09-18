@@ -9,6 +9,24 @@
 /// @group @carbon/themes
 $custom-property-prefix: 'cds' !default;
 
+/// ccs: drop the static fallback from every token `var()`. Only for an entry
+/// whose `:root` always declares the tokens (`all.scss`), where it is dead weight.
+/// @access public
+/// @type Bool
+$ccs-omit-token-fallbacks: false !default;
+
+/// ccs: reference a token custom property
+/// @access private
+/// @param {String} $name - Token name, without the custom property prefix
+/// @param {*} $fallback - Static value of the token
+/// @returns {String}
+@function custom-property-var($name, $fallback) {
+  @if $ccs-omit-token-fallbacks {
+    @return var(--#{$custom-property-prefix}-#{$name});
+  }
+  @return var(--#{$custom-property-prefix}-#{$name}, #{$fallback});
+}
+
 /// @access private
 /// @group @carbon/themes
 @mixin custom-property($name, $value, $prefix: $custom-property-prefix) {

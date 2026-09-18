@@ -369,742 +369,190 @@
   @if global-variable-exists('feature-flags') and
     map-get($feature-flags, 'enable-css-custom-properties')
   {
-    $interactive-01: var(
-      --#{$custom-property-prefix}-interactive-01,
-      map-get($theme, 'interactive-01')
-    ) !global;
-    $interactive-02: var(
-      --#{$custom-property-prefix}-interactive-02,
-      map-get($theme, 'interactive-02')
-    ) !global;
-    $interactive-03: var(
-      --#{$custom-property-prefix}-interactive-03,
-      map-get($theme, 'interactive-03')
-    ) !global;
-    $interactive-04: var(
-      --#{$custom-property-prefix}-interactive-04,
-      map-get($theme, 'interactive-04')
-    ) !global;
-    $ui-background: var(
-      --#{$custom-property-prefix}-ui-background,
-      map-get($theme, 'ui-background')
-    ) !global;
-    $ui-01: var(
-      --#{$custom-property-prefix}-ui-01,
-      map-get($theme, 'ui-01')
-    ) !global;
-    $ui-02: var(
-      --#{$custom-property-prefix}-ui-02,
-      map-get($theme, 'ui-02')
-    ) !global;
-    $ui-03: var(
-      --#{$custom-property-prefix}-ui-03,
-      map-get($theme, 'ui-03')
-    ) !global;
-    $ui-04: var(
-      --#{$custom-property-prefix}-ui-04,
-      map-get($theme, 'ui-04')
-    ) !global;
-    $ui-05: var(
-      --#{$custom-property-prefix}-ui-05,
-      map-get($theme, 'ui-05')
-    ) !global;
-    $text-01: var(
-      --#{$custom-property-prefix}-text-01,
-      map-get($theme, 'text-01')
-    ) !global;
-    $text-02: var(
-      --#{$custom-property-prefix}-text-02,
-      map-get($theme, 'text-02')
-    ) !global;
-    $text-03: var(
-      --#{$custom-property-prefix}-text-03,
-      map-get($theme, 'text-03')
-    ) !global;
-    $text-04: var(
-      --#{$custom-property-prefix}-text-04,
-      map-get($theme, 'text-04')
-    ) !global;
-    $text-05: var(
-      --#{$custom-property-prefix}-text-05,
-      map-get($theme, 'text-05')
-    ) !global;
-    $text-error: var(
-      --#{$custom-property-prefix}-text-error,
-      map-get($theme, 'text-error')
-    ) !global;
-    $icon-01: var(
-      --#{$custom-property-prefix}-icon-01,
-      map-get($theme, 'icon-01')
-    ) !global;
-    $icon-02: var(
-      --#{$custom-property-prefix}-icon-02,
-      map-get($theme, 'icon-02')
-    ) !global;
-    $icon-03: var(
-      --#{$custom-property-prefix}-icon-03,
-      map-get($theme, 'icon-03')
-    ) !global;
-    $link-01: var(
-      --#{$custom-property-prefix}-link-01,
-      map-get($theme, 'link-01')
-    ) !global;
-    $link-02: var(
-      --#{$custom-property-prefix}-link-02,
-      map-get($theme, 'link-02')
-    ) !global;
-    $inverse-link: var(
-      --#{$custom-property-prefix}-inverse-link,
-      map-get($theme, 'inverse-link')
-    ) !global;
-    $field-01: var(
-      --#{$custom-property-prefix}-field-01,
-      map-get($theme, 'field-01')
-    ) !global;
-    $field-02: var(
-      --#{$custom-property-prefix}-field-02,
-      map-get($theme, 'field-02')
-    ) !global;
-    $inverse-01: var(
-      --#{$custom-property-prefix}-inverse-01,
-      map-get($theme, 'inverse-01')
-    ) !global;
-    $inverse-02: var(
-      --#{$custom-property-prefix}-inverse-02,
-      map-get($theme, 'inverse-02')
-    ) !global;
-    $support-01: var(
-      --#{$custom-property-prefix}-support-01,
-      map-get($theme, 'support-01')
-    ) !global;
-    $support-02: var(
-      --#{$custom-property-prefix}-support-02,
-      map-get($theme, 'support-02')
-    ) !global;
-    $support-03: var(
-      --#{$custom-property-prefix}-support-03,
-      map-get($theme, 'support-03')
-    ) !global;
-    $support-04: var(
-      --#{$custom-property-prefix}-support-04,
-      map-get($theme, 'support-04')
-    ) !global;
-    $inverse-support-01: var(
-      --#{$custom-property-prefix}-inverse-support-01,
-      map-get($theme, 'inverse-support-01')
-    ) !global;
-    $inverse-support-02: var(
-      --#{$custom-property-prefix}-inverse-support-02,
-      map-get($theme, 'inverse-support-02')
-    ) !global;
-    $inverse-support-03: var(
-      --#{$custom-property-prefix}-inverse-support-03,
-      map-get($theme, 'inverse-support-03')
-    ) !global;
-    $inverse-support-04: var(
-      --#{$custom-property-prefix}-inverse-support-04,
-      map-get($theme, 'inverse-support-04')
-    ) !global;
-    $overlay-01: var(
-      --#{$custom-property-prefix}-overlay-01,
-      map-get($theme, 'overlay-01')
-    ) !global;
-    $danger-01: var(
-      --#{$custom-property-prefix}-danger-01,
-      map-get($theme, 'danger-01')
-    ) !global;
-    $danger-02: var(
-      --#{$custom-property-prefix}-danger-02,
-      map-get($theme, 'danger-02')
-    ) !global;
-    $focus: var(
-      --#{$custom-property-prefix}-focus,
-      map-get($theme, 'focus')
-    ) !global;
-    $inverse-focus-ui: var(
-      --#{$custom-property-prefix}-inverse-focus-ui,
-      map-get($theme, 'inverse-focus-ui')
-    ) !global;
-    $hover-primary: var(
-      --#{$custom-property-prefix}-hover-primary,
-      map-get($theme, 'hover-primary')
-    ) !global;
-    $active-primary: var(
-      --#{$custom-property-prefix}-active-primary,
-      map-get($theme, 'active-primary')
-    ) !global;
-    $hover-primary-text: var(
-      --#{$custom-property-prefix}-hover-primary-text,
-      map-get($theme, 'hover-primary-text')
-    ) !global;
-    $hover-secondary: var(
-      --#{$custom-property-prefix}-hover-secondary,
-      map-get($theme, 'hover-secondary')
-    ) !global;
-    $active-secondary: var(
-      --#{$custom-property-prefix}-active-secondary,
-      map-get($theme, 'active-secondary')
-    ) !global;
-    $hover-tertiary: var(
-      --#{$custom-property-prefix}-hover-tertiary,
-      map-get($theme, 'hover-tertiary')
-    ) !global;
-    $active-tertiary: var(
-      --#{$custom-property-prefix}-active-tertiary,
-      map-get($theme, 'active-tertiary')
-    ) !global;
-    $hover-ui: var(
-      --#{$custom-property-prefix}-hover-ui,
-      map-get($theme, 'hover-ui')
-    ) !global;
-    $hover-light-ui: var(
-      --#{$custom-property-prefix}-hover-light-ui,
-      map-get($theme, 'hover-light-ui')
-    ) !global;
-    $hover-selected-ui: var(
-      --#{$custom-property-prefix}-hover-selected-ui,
-      map-get($theme, 'hover-selected-ui')
-    ) !global;
-    $active-ui: var(
-      --#{$custom-property-prefix}-active-ui,
-      map-get($theme, 'active-ui')
-    ) !global;
-    $active-light-ui: var(
-      --#{$custom-property-prefix}-active-light-ui,
-      map-get($theme, 'active-light-ui')
-    ) !global;
-    $selected-ui: var(
-      --#{$custom-property-prefix}-selected-ui,
-      map-get($theme, 'selected-ui')
-    ) !global;
-    $selected-light-ui: var(
-      --#{$custom-property-prefix}-selected-light-ui,
-      map-get($theme, 'selected-light-ui')
-    ) !global;
-    $inverse-hover-ui: var(
-      --#{$custom-property-prefix}-inverse-hover-ui,
-      map-get($theme, 'inverse-hover-ui')
-    ) !global;
-    $hover-danger: var(
-      --#{$custom-property-prefix}-hover-danger,
-      map-get($theme, 'hover-danger')
-    ) !global;
-    $active-danger: var(
-      --#{$custom-property-prefix}-active-danger,
-      map-get($theme, 'active-danger')
-    ) !global;
-    $hover-row: var(
-      --#{$custom-property-prefix}-hover-row,
-      map-get($theme, 'hover-row')
-    ) !global;
-    $visited-link: var(
-      --#{$custom-property-prefix}-visited-link,
-      map-get($theme, 'visited-link')
-    ) !global;
-    $disabled-01: var(
-      --#{$custom-property-prefix}-disabled-01,
-      map-get($theme, 'disabled-01')
-    ) !global;
-    $disabled-02: var(
-      --#{$custom-property-prefix}-disabled-02,
-      map-get($theme, 'disabled-02')
-    ) !global;
-    $disabled-03: var(
-      --#{$custom-property-prefix}-disabled-03,
-      map-get($theme, 'disabled-03')
-    ) !global;
-    $highlight: var(
-      --#{$custom-property-prefix}-highlight,
-      map-get($theme, 'highlight')
-    ) !global;
-    $decorative-01: var(
-      --#{$custom-property-prefix}-decorative-01,
-      map-get($theme, 'decorative-01')
-    ) !global;
-    $button-separator: var(
-      --#{$custom-property-prefix}-button-separator,
-      map-get($theme, 'button-separator')
-    ) !global;
-    $skeleton-01: var(
-      --#{$custom-property-prefix}-skeleton-01,
-      map-get($theme, 'skeleton-01')
-    ) !global;
-    $skeleton-02: var(
-      --#{$custom-property-prefix}-skeleton-02,
-      map-get($theme, 'skeleton-02')
-    ) !global;
-    $background: var(
-      --#{$custom-property-prefix}-background,
-      map-get($theme, 'background')
-    ) !global;
-    $layer: var(
-      --#{$custom-property-prefix}-layer,
-      map-get($theme, 'layer')
-    ) !global;
-    $layer-accent: var(
-      --#{$custom-property-prefix}-layer-accent,
-      map-get($theme, 'layer-accent')
-    ) !global;
-    $layer-accent-hover: var(
-      --#{$custom-property-prefix}-layer-accent-hover,
-      map-get($theme, 'layer-accent-hover')
-    ) !global;
-    $layer-accent-active: var(
-      --#{$custom-property-prefix}-layer-accent-active,
-      map-get($theme, 'layer-accent-active')
-    ) !global;
-    $field: var(
-      --#{$custom-property-prefix}-field,
-      map-get($theme, 'field')
-    ) !global;
-    $background-inverse: var(
-      --#{$custom-property-prefix}-background-inverse,
-      map-get($theme, 'background-inverse')
-    ) !global;
-    $background-brand: var(
-      --#{$custom-property-prefix}-background-brand,
-      map-get($theme, 'background-brand')
-    ) !global;
-    $interactive: var(
-      --#{$custom-property-prefix}-interactive,
-      map-get($theme, 'interactive')
-    ) !global;
-    $border-subtle: var(
-      --#{$custom-property-prefix}-border-subtle,
-      map-get($theme, 'border-subtle')
-    ) !global;
-    $border-strong: var(
-      --#{$custom-property-prefix}-border-strong,
-      map-get($theme, 'border-strong')
-    ) !global;
-    $border-inverse: var(
-      --#{$custom-property-prefix}-border-inverse,
-      map-get($theme, 'border-inverse')
-    ) !global;
-    $border-interactive: var(
-      --#{$custom-property-prefix}-border-interactive,
-      map-get($theme, 'border-interactive')
-    ) !global;
-    $text-primary: var(
-      --#{$custom-property-prefix}-text-primary,
-      map-get($theme, 'text-primary')
-    ) !global;
-    $text-secondary: var(
-      --#{$custom-property-prefix}-text-secondary,
-      map-get($theme, 'text-secondary')
-    ) !global;
-    $text-placeholder: var(
-      --#{$custom-property-prefix}-text-placeholder,
-      map-get($theme, 'text-placeholder')
-    ) !global;
-    $text-helper: var(
-      --#{$custom-property-prefix}-text-helper,
-      map-get($theme, 'text-helper')
-    ) !global;
-    $text-on-color: var(
-      --#{$custom-property-prefix}-text-on-color,
-      map-get($theme, 'text-on-color')
-    ) !global;
-    $text-inverse: var(
-      --#{$custom-property-prefix}-text-inverse,
-      map-get($theme, 'text-inverse')
-    ) !global;
-    $link-primary: var(
-      --#{$custom-property-prefix}-link-primary,
-      map-get($theme, 'link-primary')
-    ) !global;
-    $link-secondary: var(
-      --#{$custom-property-prefix}-link-secondary,
-      map-get($theme, 'link-secondary')
-    ) !global;
-    $link-visited: var(
-      --#{$custom-property-prefix}-link-visited,
-      map-get($theme, 'link-visited')
-    ) !global;
-    $link-inverse: var(
-      --#{$custom-property-prefix}-link-inverse,
-      map-get($theme, 'link-inverse')
-    ) !global;
-    $icon-primary: var(
-      --#{$custom-property-prefix}-icon-primary,
-      map-get($theme, 'icon-primary')
-    ) !global;
-    $icon-secondary: var(
-      --#{$custom-property-prefix}-icon-secondary,
-      map-get($theme, 'icon-secondary')
-    ) !global;
-    $icon-on-color: var(
-      --#{$custom-property-prefix}-icon-on-color,
-      map-get($theme, 'icon-on-color')
-    ) !global;
-    $icon-inverse: var(
-      --#{$custom-property-prefix}-icon-inverse,
-      map-get($theme, 'icon-inverse')
-    ) !global;
-    $support-error: var(
-      --#{$custom-property-prefix}-support-error,
-      map-get($theme, 'support-error')
-    ) !global;
-    $support-success: var(
-      --#{$custom-property-prefix}-support-success,
-      map-get($theme, 'support-success')
-    ) !global;
-    $support-warning: var(
-      --#{$custom-property-prefix}-support-warning,
-      map-get($theme, 'support-warning')
-    ) !global;
-    $support-info: var(
-      --#{$custom-property-prefix}-support-info,
-      map-get($theme, 'support-info')
-    ) !global;
-    $support-error-inverse: var(
-      --#{$custom-property-prefix}-support-error-inverse,
-      map-get($theme, 'support-error-inverse')
-    ) !global;
-    $support-success-inverse: var(
-      --#{$custom-property-prefix}-support-success-inverse,
-      map-get($theme, 'support-success-inverse')
-    ) !global;
-    $support-warning-inverse: var(
-      --#{$custom-property-prefix}-support-warning-inverse,
-      map-get($theme, 'support-warning-inverse')
-    ) !global;
-    $support-info-inverse: var(
-      --#{$custom-property-prefix}-support-info-inverse,
-      map-get($theme, 'support-info-inverse')
-    ) !global;
-    $overlay: var(
-      --#{$custom-property-prefix}-overlay,
-      map-get($theme, 'overlay')
-    ) !global;
-    $toggle-off: var(
-      --#{$custom-property-prefix}-toggle-off,
-      map-get($theme, 'toggle-off')
-    ) !global;
-    $shadow: var(
-      --#{$custom-property-prefix}-shadow,
-      map-get($theme, 'shadow')
-    ) !global;
-    $button-primary: var(
-      --#{$custom-property-prefix}-button-primary,
-      map-get($theme, 'button-primary')
-    ) !global;
-    $button-secondary: var(
-      --#{$custom-property-prefix}-button-secondary,
-      map-get($theme, 'button-secondary')
-    ) !global;
-    $button-tertiary: var(
-      --#{$custom-property-prefix}-button-tertiary,
-      map-get($theme, 'button-tertiary')
-    ) !global;
-    $button-danger-primary: var(
-      --#{$custom-property-prefix}-button-danger-primary,
-      map-get($theme, 'button-danger-primary')
-    ) !global;
-    $button-danger-secondary: var(
-      --#{$custom-property-prefix}-button-danger-secondary,
-      map-get($theme, 'button-danger-secondary')
-    ) !global;
-    $background-active: var(
-      --#{$custom-property-prefix}-background-active,
-      map-get($theme, 'background-active')
-    ) !global;
-    $layer-active: var(
-      --#{$custom-property-prefix}-layer-active,
-      map-get($theme, 'layer-active')
-    ) !global;
-    $button-danger-active: var(
-      --#{$custom-property-prefix}-button-danger-active,
-      map-get($theme, 'button-danger-active')
-    ) !global;
-    $button-primary-active: var(
-      --#{$custom-property-prefix}-button-primary-active,
-      map-get($theme, 'button-primary-active')
-    ) !global;
-    $button-secondary-active: var(
-      --#{$custom-property-prefix}-button-secondary-active,
-      map-get($theme, 'button-secondary-active')
-    ) !global;
-    $button-tertiary-active: var(
-      --#{$custom-property-prefix}-button-tertiary-active,
-      map-get($theme, 'button-tertiary-active')
-    ) !global;
-    $focus-inset: var(
-      --#{$custom-property-prefix}-focus-inset,
-      map-get($theme, 'focus-inset')
-    ) !global;
-    $focus-inverse: var(
-      --#{$custom-property-prefix}-focus-inverse,
-      map-get($theme, 'focus-inverse')
-    ) !global;
-    $background-hover: var(
-      --#{$custom-property-prefix}-background-hover,
-      map-get($theme, 'background-hover')
-    ) !global;
-    $layer-hover: var(
-      --#{$custom-property-prefix}-layer-hover,
-      map-get($theme, 'layer-hover')
-    ) !global;
-    $field-hover: var(
-      --#{$custom-property-prefix}-field-hover,
-      map-get($theme, 'field-hover')
-    ) !global;
-    $background-inverse-hover: var(
-      --#{$custom-property-prefix}-background-inverse-hover,
-      map-get($theme, 'background-inverse-hover')
-    ) !global;
-    $link-primary-hover: var(
-      --#{$custom-property-prefix}-link-primary-hover,
-      map-get($theme, 'link-primary-hover')
-    ) !global;
-    $button-danger-hover: var(
-      --#{$custom-property-prefix}-button-danger-hover,
-      map-get($theme, 'button-danger-hover')
-    ) !global;
-    $button-primary-hover: var(
-      --#{$custom-property-prefix}-button-primary-hover,
-      map-get($theme, 'button-primary-hover')
-    ) !global;
-    $button-secondary-hover: var(
-      --#{$custom-property-prefix}-button-secondary-hover,
-      map-get($theme, 'button-secondary-hover')
-    ) !global;
-    $button-tertiary-hover: var(
-      --#{$custom-property-prefix}-button-tertiary-hover,
-      map-get($theme, 'button-tertiary-hover')
-    ) !global;
-    $background-selected: var(
-      --#{$custom-property-prefix}-background-selected,
-      map-get($theme, 'background-selected')
-    ) !global;
-    $background-selected-hover: var(
-      --#{$custom-property-prefix}-background-selected-hover,
-      map-get($theme, 'background-selected-hover')
-    ) !global;
-    $layer-selected: var(
-      --#{$custom-property-prefix}-layer-selected,
-      map-get($theme, 'layer-selected')
-    ) !global;
-    $layer-selected-hover: var(
-      --#{$custom-property-prefix}-layer-selected-hover,
-      map-get($theme, 'layer-selected-hover')
-    ) !global;
-    $layer-selected-inverse: var(
-      --#{$custom-property-prefix}-layer-selected-inverse,
-      map-get($theme, 'layer-selected-inverse')
-    ) !global;
-    $border-subtle-selected: var(
-      --#{$custom-property-prefix}-border-subtle-selected,
-      map-get($theme, 'border-subtle-selected')
-    ) !global;
-    $border-disabled: var(
-      --#{$custom-property-prefix}-border-disabled,
-      map-get($theme, 'border-disabled')
-    ) !global;
-    $text-disabled: var(
-      --#{$custom-property-prefix}-text-disabled,
-      map-get($theme, 'text-disabled')
-    ) !global;
-    $button-disabled: var(
-      --#{$custom-property-prefix}-button-disabled,
-      map-get($theme, 'button-disabled')
-    ) !global;
-    $icon-disabled: var(
-      --#{$custom-property-prefix}-icon-disabled,
-      map-get($theme, 'icon-disabled')
-    ) !global;
-    $text-on-color-disabled: var(
-      --#{$custom-property-prefix}-text-on-color-disabled,
-      map-get($theme, 'text-on-color-disabled')
-    ) !global;
-    $icon-on-color-disabled: var(
-      --#{$custom-property-prefix}-icon-on-color-disabled,
-      map-get($theme, 'icon-on-color-disabled')
-    ) !global;
-    $layer-selected-disabled: var(
-      --#{$custom-property-prefix}-layer-selected-disabled,
-      map-get($theme, 'layer-selected-disabled')
-    ) !global;
-    $skeleton-background: var(
-      --#{$custom-property-prefix}-skeleton-background,
-      map-get($theme, 'skeleton-background')
-    ) !global;
-    $skeleton-element: var(
-      --#{$custom-property-prefix}-skeleton-element,
-      map-get($theme, 'skeleton-element')
-    ) !global;
-    $brand-01: var(
-      --#{$custom-property-prefix}-brand-01,
-      map-get($theme, 'brand-01')
-    ) !global;
-    $brand-02: var(
-      --#{$custom-property-prefix}-brand-02,
-      map-get($theme, 'brand-02')
-    ) !global;
-    $brand-03: var(
-      --#{$custom-property-prefix}-brand-03,
-      map-get($theme, 'brand-03')
-    ) !global;
-    $active-01: var(
-      --#{$custom-property-prefix}-active-01,
-      map-get($theme, 'active-01')
-    ) !global;
-    $hover-field: var(
-      --#{$custom-property-prefix}-hover-field,
-      map-get($theme, 'hover-field')
-    ) !global;
-    $danger: var(
-      --#{$custom-property-prefix}-danger,
-      map-get($theme, 'danger')
-    ) !global;
-    $spacing-01: var(
-      --#{$custom-property-prefix}-spacing-01,
-      map-get($theme, 'spacing-01')
-    ) !global;
-    $spacing-02: var(
-      --#{$custom-property-prefix}-spacing-02,
-      map-get($theme, 'spacing-02')
-    ) !global;
-    $spacing-03: var(
-      --#{$custom-property-prefix}-spacing-03,
-      map-get($theme, 'spacing-03')
-    ) !global;
-    $spacing-04: var(
-      --#{$custom-property-prefix}-spacing-04,
-      map-get($theme, 'spacing-04')
-    ) !global;
-    $spacing-05: var(
-      --#{$custom-property-prefix}-spacing-05,
-      map-get($theme, 'spacing-05')
-    ) !global;
-    $spacing-06: var(
-      --#{$custom-property-prefix}-spacing-06,
-      map-get($theme, 'spacing-06')
-    ) !global;
-    $spacing-07: var(
-      --#{$custom-property-prefix}-spacing-07,
-      map-get($theme, 'spacing-07')
-    ) !global;
-    $spacing-08: var(
-      --#{$custom-property-prefix}-spacing-08,
-      map-get($theme, 'spacing-08')
-    ) !global;
-    $spacing-09: var(
-      --#{$custom-property-prefix}-spacing-09,
-      map-get($theme, 'spacing-09')
-    ) !global;
-    $spacing-10: var(
-      --#{$custom-property-prefix}-spacing-10,
-      map-get($theme, 'spacing-10')
-    ) !global;
-    $spacing-11: var(
-      --#{$custom-property-prefix}-spacing-11,
-      map-get($theme, 'spacing-11')
-    ) !global;
-    $spacing-12: var(
-      --#{$custom-property-prefix}-spacing-12,
-      map-get($theme, 'spacing-12')
-    ) !global;
-    $spacing-13: var(
-      --#{$custom-property-prefix}-spacing-13,
-      map-get($theme, 'spacing-13')
-    ) !global;
-    $fluid-spacing-01: var(
-      --#{$custom-property-prefix}-fluid-spacing-01,
-      map-get($theme, 'fluid-spacing-01')
-    ) !global;
-    $fluid-spacing-02: var(
-      --#{$custom-property-prefix}-fluid-spacing-02,
-      map-get($theme, 'fluid-spacing-02')
-    ) !global;
-    $fluid-spacing-03: var(
-      --#{$custom-property-prefix}-fluid-spacing-03,
-      map-get($theme, 'fluid-spacing-03')
-    ) !global;
-    $fluid-spacing-04: var(
-      --#{$custom-property-prefix}-fluid-spacing-04,
-      map-get($theme, 'fluid-spacing-04')
-    ) !global;
-    $layout-01: var(
-      --#{$custom-property-prefix}-layout-01,
-      map-get($theme, 'layout-01')
-    ) !global;
-    $layout-02: var(
-      --#{$custom-property-prefix}-layout-02,
-      map-get($theme, 'layout-02')
-    ) !global;
-    $layout-03: var(
-      --#{$custom-property-prefix}-layout-03,
-      map-get($theme, 'layout-03')
-    ) !global;
-    $layout-04: var(
-      --#{$custom-property-prefix}-layout-04,
-      map-get($theme, 'layout-04')
-    ) !global;
-    $layout-05: var(
-      --#{$custom-property-prefix}-layout-05,
-      map-get($theme, 'layout-05')
-    ) !global;
-    $layout-06: var(
-      --#{$custom-property-prefix}-layout-06,
-      map-get($theme, 'layout-06')
-    ) !global;
-    $layout-07: var(
-      --#{$custom-property-prefix}-layout-07,
-      map-get($theme, 'layout-07')
-    ) !global;
-    $container-01: var(
-      --#{$custom-property-prefix}-container-01,
-      map-get($theme, 'container-01')
-    ) !global;
-    $container-02: var(
-      --#{$custom-property-prefix}-container-02,
-      map-get($theme, 'container-02')
-    ) !global;
-    $container-03: var(
-      --#{$custom-property-prefix}-container-03,
-      map-get($theme, 'container-03')
-    ) !global;
-    $container-04: var(
-      --#{$custom-property-prefix}-container-04,
-      map-get($theme, 'container-04')
-    ) !global;
-    $container-05: var(
-      --#{$custom-property-prefix}-container-05,
-      map-get($theme, 'container-05')
-    ) !global;
-    $size-xsmall: var(
-      --#{$custom-property-prefix}-size-xsmall,
-      map-get($theme, 'size-xsmall')
-    ) !global;
-    $size-small: var(
-      --#{$custom-property-prefix}-size-small,
-      map-get($theme, 'size-small')
-    ) !global;
-    $size-medium: var(
-      --#{$custom-property-prefix}-size-medium,
-      map-get($theme, 'size-medium')
-    ) !global;
-    $size-large: var(
-      --#{$custom-property-prefix}-size-large,
-      map-get($theme, 'size-large')
-    ) !global;
-    $size-xlarge: var(
-      --#{$custom-property-prefix}-size-xlarge,
-      map-get($theme, 'size-xlarge')
-    ) !global;
-    $size-2XLarge: var(
-      --#{$custom-property-prefix}-size-2XLarge,
-      map-get($theme, 'size-2XLarge')
-    ) !global;
-    $icon-size-01: var(
-      --#{$custom-property-prefix}-icon-size-01,
-      map-get($theme, 'icon-size-01')
-    ) !global;
-    $icon-size-02: var(
-      --#{$custom-property-prefix}-icon-size-02,
-      map-get($theme, 'icon-size-02')
-    ) !global;
+    $interactive-01: custom-property-var('interactive-01', map-get($theme, 'interactive-01')) !global;
+    $interactive-02: custom-property-var('interactive-02', map-get($theme, 'interactive-02')) !global;
+    $interactive-03: custom-property-var('interactive-03', map-get($theme, 'interactive-03')) !global;
+    $interactive-04: custom-property-var('interactive-04', map-get($theme, 'interactive-04')) !global;
+    $ui-background: custom-property-var('ui-background', map-get($theme, 'ui-background')) !global;
+    $ui-01: custom-property-var('ui-01', map-get($theme, 'ui-01')) !global;
+    $ui-02: custom-property-var('ui-02', map-get($theme, 'ui-02')) !global;
+    $ui-03: custom-property-var('ui-03', map-get($theme, 'ui-03')) !global;
+    $ui-04: custom-property-var('ui-04', map-get($theme, 'ui-04')) !global;
+    $ui-05: custom-property-var('ui-05', map-get($theme, 'ui-05')) !global;
+    $text-01: custom-property-var('text-01', map-get($theme, 'text-01')) !global;
+    $text-02: custom-property-var('text-02', map-get($theme, 'text-02')) !global;
+    $text-03: custom-property-var('text-03', map-get($theme, 'text-03')) !global;
+    $text-04: custom-property-var('text-04', map-get($theme, 'text-04')) !global;
+    $text-05: custom-property-var('text-05', map-get($theme, 'text-05')) !global;
+    $text-error: custom-property-var('text-error', map-get($theme, 'text-error')) !global;
+    $icon-01: custom-property-var('icon-01', map-get($theme, 'icon-01')) !global;
+    $icon-02: custom-property-var('icon-02', map-get($theme, 'icon-02')) !global;
+    $icon-03: custom-property-var('icon-03', map-get($theme, 'icon-03')) !global;
+    $link-01: custom-property-var('link-01', map-get($theme, 'link-01')) !global;
+    $link-02: custom-property-var('link-02', map-get($theme, 'link-02')) !global;
+    $inverse-link: custom-property-var('inverse-link', map-get($theme, 'inverse-link')) !global;
+    $field-01: custom-property-var('field-01', map-get($theme, 'field-01')) !global;
+    $field-02: custom-property-var('field-02', map-get($theme, 'field-02')) !global;
+    $inverse-01: custom-property-var('inverse-01', map-get($theme, 'inverse-01')) !global;
+    $inverse-02: custom-property-var('inverse-02', map-get($theme, 'inverse-02')) !global;
+    $support-01: custom-property-var('support-01', map-get($theme, 'support-01')) !global;
+    $support-02: custom-property-var('support-02', map-get($theme, 'support-02')) !global;
+    $support-03: custom-property-var('support-03', map-get($theme, 'support-03')) !global;
+    $support-04: custom-property-var('support-04', map-get($theme, 'support-04')) !global;
+    $inverse-support-01: custom-property-var('inverse-support-01', map-get($theme, 'inverse-support-01')) !global;
+    $inverse-support-02: custom-property-var('inverse-support-02', map-get($theme, 'inverse-support-02')) !global;
+    $inverse-support-03: custom-property-var('inverse-support-03', map-get($theme, 'inverse-support-03')) !global;
+    $inverse-support-04: custom-property-var('inverse-support-04', map-get($theme, 'inverse-support-04')) !global;
+    $overlay-01: custom-property-var('overlay-01', map-get($theme, 'overlay-01')) !global;
+    $danger-01: custom-property-var('danger-01', map-get($theme, 'danger-01')) !global;
+    $danger-02: custom-property-var('danger-02', map-get($theme, 'danger-02')) !global;
+    $focus: custom-property-var('focus', map-get($theme, 'focus')) !global;
+    $inverse-focus-ui: custom-property-var('inverse-focus-ui', map-get($theme, 'inverse-focus-ui')) !global;
+    $hover-primary: custom-property-var('hover-primary', map-get($theme, 'hover-primary')) !global;
+    $active-primary: custom-property-var('active-primary', map-get($theme, 'active-primary')) !global;
+    $hover-primary-text: custom-property-var('hover-primary-text', map-get($theme, 'hover-primary-text')) !global;
+    $hover-secondary: custom-property-var('hover-secondary', map-get($theme, 'hover-secondary')) !global;
+    $active-secondary: custom-property-var('active-secondary', map-get($theme, 'active-secondary')) !global;
+    $hover-tertiary: custom-property-var('hover-tertiary', map-get($theme, 'hover-tertiary')) !global;
+    $active-tertiary: custom-property-var('active-tertiary', map-get($theme, 'active-tertiary')) !global;
+    $hover-ui: custom-property-var('hover-ui', map-get($theme, 'hover-ui')) !global;
+    $hover-light-ui: custom-property-var('hover-light-ui', map-get($theme, 'hover-light-ui')) !global;
+    $hover-selected-ui: custom-property-var('hover-selected-ui', map-get($theme, 'hover-selected-ui')) !global;
+    $active-ui: custom-property-var('active-ui', map-get($theme, 'active-ui')) !global;
+    $active-light-ui: custom-property-var('active-light-ui', map-get($theme, 'active-light-ui')) !global;
+    $selected-ui: custom-property-var('selected-ui', map-get($theme, 'selected-ui')) !global;
+    $selected-light-ui: custom-property-var('selected-light-ui', map-get($theme, 'selected-light-ui')) !global;
+    $inverse-hover-ui: custom-property-var('inverse-hover-ui', map-get($theme, 'inverse-hover-ui')) !global;
+    $hover-danger: custom-property-var('hover-danger', map-get($theme, 'hover-danger')) !global;
+    $active-danger: custom-property-var('active-danger', map-get($theme, 'active-danger')) !global;
+    $hover-row: custom-property-var('hover-row', map-get($theme, 'hover-row')) !global;
+    $visited-link: custom-property-var('visited-link', map-get($theme, 'visited-link')) !global;
+    $disabled-01: custom-property-var('disabled-01', map-get($theme, 'disabled-01')) !global;
+    $disabled-02: custom-property-var('disabled-02', map-get($theme, 'disabled-02')) !global;
+    $disabled-03: custom-property-var('disabled-03', map-get($theme, 'disabled-03')) !global;
+    $highlight: custom-property-var('highlight', map-get($theme, 'highlight')) !global;
+    $decorative-01: custom-property-var('decorative-01', map-get($theme, 'decorative-01')) !global;
+    $button-separator: custom-property-var('button-separator', map-get($theme, 'button-separator')) !global;
+    $skeleton-01: custom-property-var('skeleton-01', map-get($theme, 'skeleton-01')) !global;
+    $skeleton-02: custom-property-var('skeleton-02', map-get($theme, 'skeleton-02')) !global;
+    $background: custom-property-var('background', map-get($theme, 'background')) !global;
+    $layer: custom-property-var('layer', map-get($theme, 'layer')) !global;
+    $layer-accent: custom-property-var('layer-accent', map-get($theme, 'layer-accent')) !global;
+    $layer-accent-hover: custom-property-var('layer-accent-hover', map-get($theme, 'layer-accent-hover')) !global;
+    $layer-accent-active: custom-property-var('layer-accent-active', map-get($theme, 'layer-accent-active')) !global;
+    $field: custom-property-var('field', map-get($theme, 'field')) !global;
+    $background-inverse: custom-property-var('background-inverse', map-get($theme, 'background-inverse')) !global;
+    $background-brand: custom-property-var('background-brand', map-get($theme, 'background-brand')) !global;
+    $interactive: custom-property-var('interactive', map-get($theme, 'interactive')) !global;
+    $border-subtle: custom-property-var('border-subtle', map-get($theme, 'border-subtle')) !global;
+    $border-strong: custom-property-var('border-strong', map-get($theme, 'border-strong')) !global;
+    $border-inverse: custom-property-var('border-inverse', map-get($theme, 'border-inverse')) !global;
+    $border-interactive: custom-property-var('border-interactive', map-get($theme, 'border-interactive')) !global;
+    $text-primary: custom-property-var('text-primary', map-get($theme, 'text-primary')) !global;
+    $text-secondary: custom-property-var('text-secondary', map-get($theme, 'text-secondary')) !global;
+    $text-placeholder: custom-property-var('text-placeholder', map-get($theme, 'text-placeholder')) !global;
+    $text-helper: custom-property-var('text-helper', map-get($theme, 'text-helper')) !global;
+    $text-on-color: custom-property-var('text-on-color', map-get($theme, 'text-on-color')) !global;
+    $text-inverse: custom-property-var('text-inverse', map-get($theme, 'text-inverse')) !global;
+    $link-primary: custom-property-var('link-primary', map-get($theme, 'link-primary')) !global;
+    $link-secondary: custom-property-var('link-secondary', map-get($theme, 'link-secondary')) !global;
+    $link-visited: custom-property-var('link-visited', map-get($theme, 'link-visited')) !global;
+    $link-inverse: custom-property-var('link-inverse', map-get($theme, 'link-inverse')) !global;
+    $icon-primary: custom-property-var('icon-primary', map-get($theme, 'icon-primary')) !global;
+    $icon-secondary: custom-property-var('icon-secondary', map-get($theme, 'icon-secondary')) !global;
+    $icon-on-color: custom-property-var('icon-on-color', map-get($theme, 'icon-on-color')) !global;
+    $icon-inverse: custom-property-var('icon-inverse', map-get($theme, 'icon-inverse')) !global;
+    $support-error: custom-property-var('support-error', map-get($theme, 'support-error')) !global;
+    $support-success: custom-property-var('support-success', map-get($theme, 'support-success')) !global;
+    $support-warning: custom-property-var('support-warning', map-get($theme, 'support-warning')) !global;
+    $support-info: custom-property-var('support-info', map-get($theme, 'support-info')) !global;
+    $support-error-inverse: custom-property-var('support-error-inverse', map-get($theme, 'support-error-inverse')) !global;
+    $support-success-inverse: custom-property-var('support-success-inverse', map-get($theme, 'support-success-inverse')) !global;
+    $support-warning-inverse: custom-property-var('support-warning-inverse', map-get($theme, 'support-warning-inverse')) !global;
+    $support-info-inverse: custom-property-var('support-info-inverse', map-get($theme, 'support-info-inverse')) !global;
+    $overlay: custom-property-var('overlay', map-get($theme, 'overlay')) !global;
+    $toggle-off: custom-property-var('toggle-off', map-get($theme, 'toggle-off')) !global;
+    $shadow: custom-property-var('shadow', map-get($theme, 'shadow')) !global;
+    $button-primary: custom-property-var('button-primary', map-get($theme, 'button-primary')) !global;
+    $button-secondary: custom-property-var('button-secondary', map-get($theme, 'button-secondary')) !global;
+    $button-tertiary: custom-property-var('button-tertiary', map-get($theme, 'button-tertiary')) !global;
+    $button-danger-primary: custom-property-var('button-danger-primary', map-get($theme, 'button-danger-primary')) !global;
+    $button-danger-secondary: custom-property-var('button-danger-secondary', map-get($theme, 'button-danger-secondary')) !global;
+    $background-active: custom-property-var('background-active', map-get($theme, 'background-active')) !global;
+    $layer-active: custom-property-var('layer-active', map-get($theme, 'layer-active')) !global;
+    $button-danger-active: custom-property-var('button-danger-active', map-get($theme, 'button-danger-active')) !global;
+    $button-primary-active: custom-property-var('button-primary-active', map-get($theme, 'button-primary-active')) !global;
+    $button-secondary-active: custom-property-var('button-secondary-active', map-get($theme, 'button-secondary-active')) !global;
+    $button-tertiary-active: custom-property-var('button-tertiary-active', map-get($theme, 'button-tertiary-active')) !global;
+    $focus-inset: custom-property-var('focus-inset', map-get($theme, 'focus-inset')) !global;
+    $focus-inverse: custom-property-var('focus-inverse', map-get($theme, 'focus-inverse')) !global;
+    $background-hover: custom-property-var('background-hover', map-get($theme, 'background-hover')) !global;
+    $layer-hover: custom-property-var('layer-hover', map-get($theme, 'layer-hover')) !global;
+    $field-hover: custom-property-var('field-hover', map-get($theme, 'field-hover')) !global;
+    $background-inverse-hover: custom-property-var('background-inverse-hover', map-get($theme, 'background-inverse-hover')) !global;
+    $link-primary-hover: custom-property-var('link-primary-hover', map-get($theme, 'link-primary-hover')) !global;
+    $button-danger-hover: custom-property-var('button-danger-hover', map-get($theme, 'button-danger-hover')) !global;
+    $button-primary-hover: custom-property-var('button-primary-hover', map-get($theme, 'button-primary-hover')) !global;
+    $button-secondary-hover: custom-property-var('button-secondary-hover', map-get($theme, 'button-secondary-hover')) !global;
+    $button-tertiary-hover: custom-property-var('button-tertiary-hover', map-get($theme, 'button-tertiary-hover')) !global;
+    $background-selected: custom-property-var('background-selected', map-get($theme, 'background-selected')) !global;
+    $background-selected-hover: custom-property-var('background-selected-hover', map-get($theme, 'background-selected-hover')) !global;
+    $layer-selected: custom-property-var('layer-selected', map-get($theme, 'layer-selected')) !global;
+    $layer-selected-hover: custom-property-var('layer-selected-hover', map-get($theme, 'layer-selected-hover')) !global;
+    $layer-selected-inverse: custom-property-var('layer-selected-inverse', map-get($theme, 'layer-selected-inverse')) !global;
+    $border-subtle-selected: custom-property-var('border-subtle-selected', map-get($theme, 'border-subtle-selected')) !global;
+    $border-disabled: custom-property-var('border-disabled', map-get($theme, 'border-disabled')) !global;
+    $text-disabled: custom-property-var('text-disabled', map-get($theme, 'text-disabled')) !global;
+    $button-disabled: custom-property-var('button-disabled', map-get($theme, 'button-disabled')) !global;
+    $icon-disabled: custom-property-var('icon-disabled', map-get($theme, 'icon-disabled')) !global;
+    $text-on-color-disabled: custom-property-var('text-on-color-disabled', map-get($theme, 'text-on-color-disabled')) !global;
+    $icon-on-color-disabled: custom-property-var('icon-on-color-disabled', map-get($theme, 'icon-on-color-disabled')) !global;
+    $layer-selected-disabled: custom-property-var('layer-selected-disabled', map-get($theme, 'layer-selected-disabled')) !global;
+    $skeleton-background: custom-property-var('skeleton-background', map-get($theme, 'skeleton-background')) !global;
+    $skeleton-element: custom-property-var('skeleton-element', map-get($theme, 'skeleton-element')) !global;
+    $brand-01: custom-property-var('brand-01', map-get($theme, 'brand-01')) !global;
+    $brand-02: custom-property-var('brand-02', map-get($theme, 'brand-02')) !global;
+    $brand-03: custom-property-var('brand-03', map-get($theme, 'brand-03')) !global;
+    $active-01: custom-property-var('active-01', map-get($theme, 'active-01')) !global;
+    $hover-field: custom-property-var('hover-field', map-get($theme, 'hover-field')) !global;
+    $danger: custom-property-var('danger', map-get($theme, 'danger')) !global;
+    $spacing-01: custom-property-var('spacing-01', map-get($theme, 'spacing-01')) !global;
+    $spacing-02: custom-property-var('spacing-02', map-get($theme, 'spacing-02')) !global;
+    $spacing-03: custom-property-var('spacing-03', map-get($theme, 'spacing-03')) !global;
+    $spacing-04: custom-property-var('spacing-04', map-get($theme, 'spacing-04')) !global;
+    $spacing-05: custom-property-var('spacing-05', map-get($theme, 'spacing-05')) !global;
+    $spacing-06: custom-property-var('spacing-06', map-get($theme, 'spacing-06')) !global;
+    $spacing-07: custom-property-var('spacing-07', map-get($theme, 'spacing-07')) !global;
+    $spacing-08: custom-property-var('spacing-08', map-get($theme, 'spacing-08')) !global;
+    $spacing-09: custom-property-var('spacing-09', map-get($theme, 'spacing-09')) !global;
+    $spacing-10: custom-property-var('spacing-10', map-get($theme, 'spacing-10')) !global;
+    $spacing-11: custom-property-var('spacing-11', map-get($theme, 'spacing-11')) !global;
+    $spacing-12: custom-property-var('spacing-12', map-get($theme, 'spacing-12')) !global;
+    $spacing-13: custom-property-var('spacing-13', map-get($theme, 'spacing-13')) !global;
+    $fluid-spacing-01: custom-property-var('fluid-spacing-01', map-get($theme, 'fluid-spacing-01')) !global;
+    $fluid-spacing-02: custom-property-var('fluid-spacing-02', map-get($theme, 'fluid-spacing-02')) !global;
+    $fluid-spacing-03: custom-property-var('fluid-spacing-03', map-get($theme, 'fluid-spacing-03')) !global;
+    $fluid-spacing-04: custom-property-var('fluid-spacing-04', map-get($theme, 'fluid-spacing-04')) !global;
+    $layout-01: custom-property-var('layout-01', map-get($theme, 'layout-01')) !global;
+    $layout-02: custom-property-var('layout-02', map-get($theme, 'layout-02')) !global;
+    $layout-03: custom-property-var('layout-03', map-get($theme, 'layout-03')) !global;
+    $layout-04: custom-property-var('layout-04', map-get($theme, 'layout-04')) !global;
+    $layout-05: custom-property-var('layout-05', map-get($theme, 'layout-05')) !global;
+    $layout-06: custom-property-var('layout-06', map-get($theme, 'layout-06')) !global;
+    $layout-07: custom-property-var('layout-07', map-get($theme, 'layout-07')) !global;
+    $container-01: custom-property-var('container-01', map-get($theme, 'container-01')) !global;
+    $container-02: custom-property-var('container-02', map-get($theme, 'container-02')) !global;
+    $container-03: custom-property-var('container-03', map-get($theme, 'container-03')) !global;
+    $container-04: custom-property-var('container-04', map-get($theme, 'container-04')) !global;
+    $container-05: custom-property-var('container-05', map-get($theme, 'container-05')) !global;
+    $size-xsmall: custom-property-var('size-xsmall', map-get($theme, 'size-xsmall')) !global;
+    $size-small: custom-property-var('size-small', map-get($theme, 'size-small')) !global;
+    $size-medium: custom-property-var('size-medium', map-get($theme, 'size-medium')) !global;
+    $size-large: custom-property-var('size-large', map-get($theme, 'size-large')) !global;
+    $size-xlarge: custom-property-var('size-xlarge', map-get($theme, 'size-xlarge')) !global;
+    $size-2XLarge: custom-property-var('size-2XLarge', map-get($theme, 'size-2XLarge')) !global;
+    $icon-size-01: custom-property-var('icon-size-01', map-get($theme, 'icon-size-01')) !global;
+    $icon-size-02: custom-property-var('icon-size-02', map-get($theme, 'icon-size-02')) !global;
   }
   @if $emit-custom-properties == true {
     @if should-emit(
