@@ -50,6 +50,8 @@ $ccs-theme-base: ($carbon--theme--white,);
 
 // <html theme="g80">
 :root[theme="g80"] {
+  color-scheme: dark;
+
   @include carbon--theme($carbon--theme--g80, true, $ccs-theme-base) {
     @include emit-component-tokens($tag-colors, $ccs-theme-base);
     @include emit-component-tokens($notification-colors, $ccs-theme-base);
@@ -58,6 +60,8 @@ $ccs-theme-base: ($carbon--theme--white,);
 
 // <html theme="g90">
 :root[theme="g90"] {
+  color-scheme: dark;
+
   @include carbon--theme($carbon--theme--g90, true, $ccs-theme-base) {
     @include emit-component-tokens($tag-colors, $ccs-theme-base);
     @include emit-component-tokens($notification-colors, $ccs-theme-base);
@@ -66,6 +70,8 @@ $ccs-theme-base: ($carbon--theme--white,);
 
 // <html theme="g100">
 :root[theme="g100"] {
+  color-scheme: dark;
+
   @include carbon--theme($carbon--theme--g100, true, $ccs-theme-base) {
     @include emit-component-tokens($tag-colors, $ccs-theme-base);
     @include emit-component-tokens($notification-colors, $ccs-theme-base);

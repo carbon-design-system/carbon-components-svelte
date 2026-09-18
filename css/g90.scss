@@ -18,3 +18,7 @@ $css--default-type: true;
 $css--plex: true;
 
 @import "./carbon-styles";
+
+html {
+  color-scheme: dark;
+}
