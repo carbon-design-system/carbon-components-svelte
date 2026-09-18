@@ -78,6 +78,14 @@ Use `minDate` and `maxDate` to constrain selectable dates. Values may be a Date,
 
 <FileSource src="/framed/DatePicker/DatePickerMinMax" />
 
+### Disabled dates
+
+Pass `disable` (or its inverse, `enable`) via `flatpickrProps` to restrict which individual dates are selectable, in addition to or instead of `minDate`/`maxDate`. Each accepts an array mixing date strings, `Date` objects, `[from, to]` range objects, and predicate functions. Disabled days receive `aria-disabled` automatically.
+
+<FileSource src="/framed/DatePicker/DatePickerDisabledDates" />
+
+For rules that need to change after the calendar mounts (such as toggling disabled weekends), call `calendar.set("disable", ...)` via `bind:calendar` instead—see [Programmatic access](#programmatic-access).
+
 ### Flatpickr options
 
 Use `flatpickrProps` to pass additional [Flatpickr options](https://flatpickr.js.org/options/). These merge with the options Carbon sets internally (for example static positioning, clickOpens, and top-layer appendTo when using `portalMenu`). Override props such as static only when you understand how they interact with portalling and modals.

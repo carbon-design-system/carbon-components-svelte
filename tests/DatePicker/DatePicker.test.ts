@@ -689,6 +689,34 @@ describe("DatePicker", () => {
       await screen.findByLabelText("calendar-container");
       expect(input._flatpickr.config.animate).toBe(true);
     });
+
+    it("marks explicitly disabled dates from flatpickrProps.disable as aria-disabled", async () => {
+      const { container } = render(DatePicker, {
+        datePickerType: "single",
+        value: "03/01/2024",
+        flatpickrProps: { disable: ["03/15/2024"] },
+      });
+
+      await user.click(screen.getByLabelText("Date"));
+      await screen.findByLabelText("calendar-container");
+
+      const days = Array.from(
+        container.querySelectorAll<HTMLElement>(".flatpickr-day"),
+      );
+      const day15 = days.find(
+        (day) =>
+          day.textContent?.trim() === "15" &&
+          !day.classList.contains("prevMonthDay") &&
+          !day.classList.contains("nextMonthDay"),
+      );
+      expect(day15).toHaveClass("flatpickr-disabled");
+      expect(day15).toHaveAttribute("aria-disabled", "true");
+
+      const disabledDays = container.querySelectorAll(
+        ".flatpickr-day.flatpickr-disabled",
+      );
+      expect(disabledDays.length).toBe(1);
+    });
   });
 
   describe("bind:calendar", () => {
