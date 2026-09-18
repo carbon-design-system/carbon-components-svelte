@@ -8,6 +8,7 @@ e2e/fixtures/dist/
 .DS_Store
 .vscode
 .idea
+*.tgz
 docs/src/COMPONENT_API.json
 docs/src/.COMPONENT_API_FORMAT_CACHE
 .docs-release-*.md
