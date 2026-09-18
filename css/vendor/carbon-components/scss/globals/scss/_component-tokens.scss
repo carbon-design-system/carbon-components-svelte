@@ -71,11 +71,35 @@ $enable-css-custom-properties: feature-flag-enabled(
   @return true;
 }
 
+/// ccs: static value of a component token under `$theme`
 /// @access private
 /// @param {Map} $tokens - Map of component tokens
+/// @param {String} $name - Token name
+/// @param {Map} $theme - Theme to resolve the token for
+/// @returns {String} Token value
+@function get-token-value-for-theme($tokens, $name, $theme) {
+  $current-theme: $carbon--theme;
+  $carbon--theme: $theme !global;
+  $value: get-token-value($tokens, $name, true);
+  $carbon--theme: $current-theme !global;
+  @return $value;
+}
+
+/// @access private
+/// @param {Map} $tokens - Map of component tokens
+/// @param {List} $emit-difference [()] - ccs: themes to compare with, a token is skipped when all of them resolve it to the current theme's value
 /// @example @include emit-component-tokens($component-tokens);
-@mixin emit-component-tokens($tokens) {
+@mixin emit-component-tokens($tokens, $emit-difference: ()) {
   @each $key, $options in $tokens {
-    @include custom-property($key, get-token-value($tokens, $key, true));
+    $value: get-token-value($tokens, $key, true);
+    $emit: length($emit-difference) == 0;
+    @each $theme in $emit-difference {
+      @if get-token-value-for-theme($tokens, $key, $theme) != $value {
+        $emit: true;
+      }
+    }
+    @if $emit {
+      @include custom-property($key, $value);
+    }
   }
 }

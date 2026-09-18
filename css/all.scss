@@ -34,34 +34,38 @@ $ccs-theme-switching: true;
   }
 }
 
+// Non-default themes only re-declare the tokens that differ from white, which
+// `:root` above always provides.
+$ccs-theme-base: ($carbon--theme--white,);
+
 // <html theme="g10">
 :root[theme="g10"] {
-  @include carbon--theme($carbon--theme--g10, true) {
-    @include emit-component-tokens($tag-colors);
-    @include emit-component-tokens($notification-colors);
+  @include carbon--theme($carbon--theme--g10, true, $ccs-theme-base) {
+    @include emit-component-tokens($tag-colors, $ccs-theme-base);
+    @include emit-component-tokens($notification-colors, $ccs-theme-base);
   }
 }
 
 // <html theme="g80">
 :root[theme="g80"] {
-  @include carbon--theme($carbon--theme--g80, true) {
-    @include emit-component-tokens($tag-colors);
-    @include emit-component-tokens($notification-colors);
+  @include carbon--theme($carbon--theme--g80, true, $ccs-theme-base) {
+    @include emit-component-tokens($tag-colors, $ccs-theme-base);
+    @include emit-component-tokens($notification-colors, $ccs-theme-base);
   }
 }
 
 // <html theme="g90">
 :root[theme="g90"] {
-  @include carbon--theme($carbon--theme--g90, true) {
-    @include emit-component-tokens($tag-colors);
-    @include emit-component-tokens($notification-colors);
+  @include carbon--theme($carbon--theme--g90, true, $ccs-theme-base) {
+    @include emit-component-tokens($tag-colors, $ccs-theme-base);
+    @include emit-component-tokens($notification-colors, $ccs-theme-base);
   }
 }
 
 // <html theme="g100">
 :root[theme="g100"] {
-  @include carbon--theme($carbon--theme--g100, true) {
-    @include emit-component-tokens($tag-colors);
-    @include emit-component-tokens($notification-colors);
+  @include carbon--theme($carbon--theme--g100, true, $ccs-theme-base) {
+    @include emit-component-tokens($tag-colors, $ccs-theme-base);
+    @include emit-component-tokens($notification-colors, $ccs-theme-base);
   }
 }
