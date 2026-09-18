@@ -29,8 +29,10 @@ export interface DeadDeclaration {
 const FALLBACK_VALUE_RE =
   /(^|[\s(,])-(webkit|moz|ms)-|fit-content|\d[dsl]v[hw]\b|color-mix\(|\bstretch\b/;
 
-// Longhands a shorthand resets, as property-name patterns.
-const SHORTHANDS: [string, RegExp][] = [
+// Longhands a shorthand resets, as property-name patterns. Also used by
+// scripts/lib/css-usage.ts as a fallback when CDP doesn't expand a matched
+// shorthand declaration into its `longhandProperties` itself.
+export const SHORTHANDS: [string, RegExp][] = [
   ["padding", /^padding-(top|right|bottom|left)$/],
   ["margin", /^margin-(top|right|bottom|left)$/],
   ["inset", /^(top|right|bottom|left)$/],
