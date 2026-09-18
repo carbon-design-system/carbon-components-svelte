@@ -565,7 +565,7 @@
       + .#{$prefix}--toggle-input__label
       .#{$prefix}--toggle__switch
       .#{$prefix}--toggle__text--left {
-      @include skeleton;
+      @include skeleton($omit: (position));
 
       position: absolute;
       width: 1rem;

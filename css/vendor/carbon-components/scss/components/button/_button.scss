@@ -80,7 +80,6 @@
 
     &:active {
       border-color: transparent;
-      background-color: $active-tertiary;
       color: $inverse-01;
     }
 
@@ -116,10 +115,6 @@
     &:hover,
     &:active {
       color: $hover-primary-text;
-    }
-
-    &:active {
-      background-color: $active-ui;
     }
 
     &:disabled,

@@ -315,7 +315,7 @@
   .#{$prefix}--list-box__wrapper--fluid
     .#{$prefix}--skeleton
     .#{$prefix}--list-box__field {
-    @include skeleton;
+    @include skeleton($omit: (position, padding));
 
     position: absolute;
     padding: 0;
@@ -328,7 +328,7 @@
   .#{$prefix}--list-box__wrapper--fluid
     .#{$prefix}--skeleton
     .#{$prefix}--list-box__label {
-    @include skeleton;
+    @include skeleton($omit: (position));
 
     position: absolute;
     block-size: to-rem(8px);

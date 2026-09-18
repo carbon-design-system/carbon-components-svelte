@@ -606,9 +606,9 @@ $tokens: (
 /// @group @carbon/type
 @mixin fluid-type($type-styles, $breakpoints: $carbon--grid-breakpoints) {
   // Include the initial styles for the given token by default without any
-  // media query guard. This includes `font-size` as a fallback in the case
-  // that a browser does not support `calc()`
-  @include properties(map-remove($type-styles, breakpoints));
+  // media query guard. `font-size` is omitted: every supported browser has
+  // `calc()`, so fluid-type-size below always sets the real value.
+  @include properties(map-remove($type-styles, breakpoints, font-size));
   // We also need to include the `sm` styles by default since they don't
   // appear in the fluid styles for tokens
   @include fluid-type-size($type-styles, sm, $breakpoints);
@@ -618,7 +618,7 @@ $tokens: (
   // breakpoint
   @each $name, $values in map-get($type-styles, breakpoints) {
     @include carbon--breakpoint($name) {
-      @include properties($values);
+      @include properties(map-remove($values, font-size));
       @include fluid-type-size($type-styles, $name, $breakpoints);
     }
   }
@@ -732,12 +732,14 @@ $custom-property-prefix: 'cds' !default;
 /// @param {String} $name - The name of the token to get the styles for
 /// @param {Boolean} $fluid [false] - Specify whether to include fluid styles for the
 /// @param {Map} $breakpoints [$carbon--grid-breakpoints] - Provide a custom breakpoint map to use
+/// @param {List} $omit [()] - Properties this mixin should not emit, for includers that always re-set them afterward
 /// @access public
 /// @group @carbon/type
 @mixin carbon--type-style(
   $name,
   $fluid: false,
-  $breakpoints: $carbon--grid-breakpoints
+  $breakpoints: $carbon--grid-breakpoints,
+  $omit: ()
 ) {
   @if not map-has-key($tokens, $name) {
     @error 'Unable to find a token with the name: `#{$name}`';
@@ -751,14 +753,15 @@ $custom-property-prefix: 'cds' !default;
   @if $fluid == true and map-has-key($token, 'breakpoints') {
     @include fluid-type($token, $breakpoints);
   } @else {
+    $token: map-remove(map-remove($token, 'breakpoints'), $omit...);
     @if global-variable-exists('feature-flags') and
       map-get($feature-flags, 'enable-css-custom-properties')
     {
-      @include custom-properties($name, map-remove($token, 'breakpoints'));
+      @include custom-properties($name, $token);
     } @else {
       // Otherwise, we just include all the property declarations directly on the
       // selector
-      @include properties(map-remove($token, 'breakpoints'));
+      @include properties($token);
     }
   }
 }

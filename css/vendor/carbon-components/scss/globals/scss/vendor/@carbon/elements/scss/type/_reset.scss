@@ -25,8 +25,8 @@
   }
 
   body {
-    @include carbon--font-weight('regular');
-
+    // font-weight is always re-set by `css--body`'s type-style, which runs
+    // after this
     font-family: $body-font-family;
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;

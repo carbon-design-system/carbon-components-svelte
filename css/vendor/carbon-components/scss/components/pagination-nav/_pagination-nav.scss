@@ -74,7 +74,7 @@
 ) {
   .#{$prefix}--pagination-nav {
     @include reset;
-    @include type-style('body-short-01');
+    @include type-style('body-short-01', $omit: (line-height));
 
     line-height: 0;
   }
@@ -98,8 +98,8 @@
   }
 
   .#{$prefix}--pagination-nav__page {
-    @include type-style('body-short-01');
-    @include button-reset($width: false);
+    @include type-style('body-short-01', $omit: (font-weight, line-height));
+    @include button-reset($width: false, $omit: (display, padding));
 
     position: relative;
     display: block;

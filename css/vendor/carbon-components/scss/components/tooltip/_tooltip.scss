@@ -36,7 +36,7 @@
   }
 
   .#{$prefix}--tooltip__trigger:not(.#{$prefix}--btn--icon-only) {
-    @include button-reset($width: false);
+    @include button-reset($width: false, $omit: (display));
 
     display: inline-flex;
     align-items: center;

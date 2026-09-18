@@ -378,7 +378,7 @@
     }
 
     .#{$prefix}--tab--overflow-nav-button {
-      @include button-reset;
+      @include button-reset($omit: (display, width));
 
       display: flex;
       width: $carbon--spacing-08;

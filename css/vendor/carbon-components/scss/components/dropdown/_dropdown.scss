@@ -53,7 +53,6 @@
     color: $text-primary;
     cursor: pointer;
     list-style: none;
-    outline: 2px solid transparent;
     transition: background-color $duration--fast-01 motion(standard, productive);
 
     &:hover {

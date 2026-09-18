@@ -22,7 +22,7 @@
   }
 
   .#{$prefix}--table-sort {
-    @include button-reset(false);
+    @include button-reset(false, $omit: (display));
 
     display: flex;
     width: 100%;

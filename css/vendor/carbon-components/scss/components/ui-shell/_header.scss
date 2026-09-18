@@ -32,7 +32,7 @@
   }
 
   .#{$prefix}--header__action {
-    @include button-reset();
+    @include button-reset($omit: (display, border, width));
 
     display: flex; // ccs: centre the icon
     width: mini-units(6);
@@ -61,10 +61,6 @@
     outline: none;
   }
 
-  .#{$prefix}--header__action:active {
-    background-color: $shell-header-bg-03;
-  }
-
   .#{$prefix}--header__action.#{$prefix}--btn--icon-only.#{$prefix}--tooltip__trigger {
     justify-content: center;
   }
@@ -85,7 +81,10 @@
   }
 
   .#{$prefix}--header__name { // ccs: flatten
-    @include type-style('body-short-01');
+    @include type-style(
+      'body-short-01',
+      $omit: (font-weight, letter-spacing, line-height)
+    );
 
     display: flex;
     height: 100%;

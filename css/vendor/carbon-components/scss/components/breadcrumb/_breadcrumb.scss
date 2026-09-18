@@ -134,7 +134,8 @@
   .#{$prefix}--breadcrumb-menu-options.#{$prefix}--overflow-menu-options[data-floating-menu-direction='bottom']::after {
     top: -$caret-size;
     left: $caret-size * 2;
-    width: 0;
+    // ccs: `width: 0` is set by overflow-menu's breadcrumb caret patch, which
+    // must emit after the overflow menu size variants
     height: 0;
     border-right: $caret-size solid transparent;
     border-bottom: $caret-size solid $field-01;

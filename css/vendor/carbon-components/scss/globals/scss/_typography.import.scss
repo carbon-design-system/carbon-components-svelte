@@ -98,8 +98,9 @@ $base-font-size: 16px !default;
 /// @access public
 /// @param {String} $name - The name of the token to get the styles for
 /// @param {Bool} $fluid [false] - Specify whether to include fluid styles
+/// @param {List} $omit [()] - Properties this mixin should not emit, for includers that always re-set them afterward
 /// @example @include type-style('body-short-01');
 /// @group global-typography
-@mixin type-style($name, $fluid: false) {
-  @include carbon--type-style($name, $fluid);
+@mixin type-style($name, $fluid: false, $omit: ()) {
+  @include carbon--type-style($name, $fluid, $omit: $omit);
 }

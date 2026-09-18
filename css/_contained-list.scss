@@ -149,11 +149,10 @@
 
   .#{$prefix}--contained-list-item--clickable
     .#{$prefix}--contained-list-item__content {
-    @include button-reset;
+    @include button-reset($omit: (padding));
 
     text-align: left;
     text-decoration: none;
-    color: inherit;
     transition: background-color 150ms;
   }
 

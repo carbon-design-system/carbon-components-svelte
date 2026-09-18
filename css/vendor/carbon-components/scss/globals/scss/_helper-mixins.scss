@@ -46,11 +46,14 @@
 /// Adds outline styles depending on specific type
 /// @access public
 /// @param {String} $type ['border'] - Type of outline from: `border`, `blurred`, `outline`, `invalid`, `reset`
+/// @param {List} $omit [()] - Properties this mixin should not emit, for includers that always re-set them afterward
 /// @example @include focus-outline('outline');
 /// @group global-helpers
-@mixin focus-outline($type: 'border') {
+@mixin focus-outline($type: 'border', $omit: ()) {
   @if ($type == 'border') {
-    outline: 1px solid $focus;
+    @if not index($omit, outline) {
+      outline: 1px solid $focus;
+    }
 
     @media screen and (prefers-contrast) {
       outline-style: dotted;
@@ -64,7 +67,9 @@
 
   @if ($type == 'outline') {
     outline: 2px solid $focus;
-    outline-offset: -2px;
+    @if not index($omit, outline-offset) {
+      outline-offset: -2px;
+    }
 
     @media screen and (prefers-contrast) {
       outline-style: dotted;
@@ -127,19 +132,28 @@
 /// Resets button styles
 /// @access public
 /// @param {Bool} $width [true] - Sets width to 100% if true
+/// @param {List} $omit [()] - Properties this mixin should not emit, for includers that always re-set them afterward
 /// @example @include button-reset($width: false);
 /// @group global-helpers
-@mixin button-reset($width: true) {
+@mixin button-reset($width: true, $omit: ()) {
   @include reset;
 
-  display: inline-block;
-  padding: 0;
-  border: 0;
+  @if not index($omit, display) {
+    display: inline-block;
+  }
+  @if not index($omit, padding) {
+    padding: 0;
+  }
+  @if not index($omit, border) {
+    border: 0;
+  }
   appearance: none;
   background: none;
-  cursor: pointer;
+  @if not index($omit, cursor) {
+    cursor: pointer;
+  }
 
-  @if ($width == true) {
+  @if ($width == true) and not index($omit, width) {
     width: 100%;
   }
 
@@ -150,11 +164,16 @@
 
 /// Skeleton loading animation
 /// @access public
+/// @param {List} $omit [()] - Properties this mixin should not emit, for includers that always re-set them afterward
 /// @example @include skeleton;
 /// @group global-helpers
-@mixin skeleton {
-  position: relative;
-  padding: 0;
+@mixin skeleton($omit: ()) {
+  @if not index($omit, position) {
+    position: relative;
+  }
+  @if not index($omit, padding) {
+    padding: 0;
+  }
   border: none;
   background: $skeleton-01;
   box-shadow: none;

@@ -50,8 +50,6 @@
 
   .#{$prefix}--radio-button {
     @include hidden;
-
-    visibility: inherit;
   }
 
   .#{$prefix}--radio-button__label {

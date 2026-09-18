@@ -19,7 +19,7 @@
 /// @group overflow-menu
 @mixin overflow-menu {
   .#{$prefix}--overflow-menu {
-    @include button-reset;
+    @include button-reset($omit: (display, width));
     @include reset;
     @include focus-outline('reset');
 
@@ -29,7 +29,6 @@
     height: to-rem(40px);
     align-items: center;
     justify-content: center;
-    cursor: pointer;
     transition: outline $duration--fast-02 motion(entrance, productive),
       background-color $duration--fast-02 motion(entrance, productive);
 
@@ -232,7 +231,7 @@
 
   .#{$prefix}--overflow-menu-options__btn {
     @include reset;
-    @include type-style('body-short-01');
+    @include type-style('body-short-01', $omit: (font-weight));
     @include focus-outline('reset');
 
     display: inline-flex;

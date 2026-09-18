@@ -217,7 +217,7 @@
 
   // TODO: deprecate
   .#{$prefix}--file__selected-file--invalid + .#{$prefix}--form-requirement {
-    @include type-style('caption-01');
+    @include type-style('caption-01', $omit: (font-weight));
 
     display: block;
     overflow: visible;
@@ -293,7 +293,7 @@
   }
 
   .#{$prefix}--file__drop-container {
-    @include button-reset;
+    @include button-reset($omit: (display, padding, border));
     @include type-style('body-short-01');
 
     display: flex;
