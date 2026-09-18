@@ -94,6 +94,12 @@ The example below sets `showMonths` so two months appear side by side in the cal
 
 <FileSource src="/framed/DatePicker/DatePickerFlatpickrProps" />
 
+### Day content
+
+Pass an `onDayCreate` callback via `flatpickrProps` to customize individual day cells, such as marking dates that have events. The callback receives `(dObj, dStr, fp, dayElem)`, matching [Flatpickr's onDayCreate hook](https://flatpickr.js.org/events/#hooks); `dayElem` is the day's DOM element, styled here by appending a plain DOM node with inline styles, since Flatpickr renders it outside Svelte's scoped-style boundary.
+
+<FileSource src="/framed/DatePicker/DatePickerDayContent" />
+
 ### Calendar-only selection
 
 By default, Carbon enables Flatpickr allowInput so typed dates work like an editable field.
