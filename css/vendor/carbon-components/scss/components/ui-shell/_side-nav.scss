@@ -87,7 +87,6 @@
     color: $shell-side-nav-text-01;
     // TODO: sync with motion work
     transition: width 0.11s cubic-bezier(0.2, 0, 1, 0.9);
-    will-change: width;
   }
 
   .#{$prefix}--side-nav--ux {
