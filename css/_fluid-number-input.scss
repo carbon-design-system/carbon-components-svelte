@@ -31,7 +31,7 @@
     block-size: to-rem(16px);
     inline-size: calc(100% - 2rem);
     inset-block-start: to-rem(13px);
-    inset-inline-start: $spacing-05;
+    left: $spacing-05;
   }
 
   .#{$prefix}--number-input--fluid .#{$prefix}--label::-webkit-scrollbar {
@@ -309,7 +309,7 @@
   // taller field, mirroring the fluid text input and select.
   .#{$prefix}--number-input--fluid .#{$prefix}--number__invalid {
     inset-block-start: to-rem(73px);
-    inset-inline-end: $spacing-05;
+    right: $spacing-05;
     pointer-events: none;
   }
 

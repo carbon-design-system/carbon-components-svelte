@@ -29,7 +29,7 @@
     clip: initial;
     inline-size: calc(100% - 2rem);
     inset-block-start: to-rem(13px);
-    inset-inline-start: $spacing-05;
+    left: $spacing-05;
   }
 
   .#{$prefix}--search--fluid .#{$prefix}--label::-webkit-scrollbar {
@@ -75,7 +75,7 @@
     content: "";
     inline-size: 100%;
     inset-block-end: 0;
-    inset-inline-start: 0;
+    left: 0;
   }
 
   .#{$prefix}--search--fluid

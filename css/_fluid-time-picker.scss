@@ -81,7 +81,7 @@
     block-size: to-rem(16px);
     inline-size: calc(100% - 2rem);
     inset-block-start: to-rem(13px);
-    inset-inline-start: $spacing-05;
+    left: $spacing-05;
   }
 
   .#{$prefix}--time-picker--fluid
@@ -155,12 +155,12 @@
 
   .#{$prefix}--time-picker--fluid__wrapper
     .#{$prefix}--select-input__wrapper::after {
-    inset-inline-end: 0;
+    right: 0;
   }
 
   .#{$prefix}--time-picker--fluid__wrapper
     .#{$prefix}--select-input__wrapper::before {
-    inset-inline-start: 0;
+    left: 0;
   }
 
   .#{$prefix}--time-picker--fluid__wrapper .#{$prefix}--select-input__wrapper {
@@ -279,7 +279,7 @@
     position: absolute;
     display: block;
     inset-block-start: to-rem(72px);
-    inset-inline-end: $spacing-05;
+    right: $spacing-05;
   }
 
   .#{$prefix}--time-picker--fluid--invalid .#{$prefix}--time-picker__icon {

@@ -29,16 +29,16 @@
     block-size: to-rem(16px);
     inset-block-start: to-rem(13px);
     inline-size: auto;
-    inset-inline-end: auto;
-    inset-inline-start: $spacing-05;
+    right: auto;
+    left: $spacing-05;
   }
 
   // The maxCount counter is a second `.bx--label` in the same wrapper, so
   // without this it inherits the label's own coordinates and the two overlap.
   // Carbon has no fluid counter to port from.
   .#{$prefix}--text-input--fluid .#{$prefix}--label.#{$prefix}--text-input__label-counter {
-    inset-inline-end: $spacing-05;
-    inset-inline-start: auto;
+    right: $spacing-05;
+    left: auto;
   }
 
   .#{$prefix}--text-input--fluid.#{$prefix}--text-input-wrapper--readonly .#{$prefix}--text-input__field-wrapper .#{$prefix}--text-input {
@@ -148,14 +148,14 @@
   }
 
   .#{$prefix}--text-input--fluid.#{$prefix}--password-input-wrapper .#{$prefix}--text-input__invalid-icon {
-    inset-inline-end: $spacing-05;
+    right: $spacing-05;
   }
 
   .#{$prefix}--text-input--fluid .#{$prefix}--btn.#{$prefix}--text-input--password__visibility__toggle.#{$prefix}--tooltip__trigger {
     block-size: to-rem(32px);
     inline-size: to-rem(32px);
     inset-block-start: to-rem(26px);
-    inset-inline-end: $spacing-03;
+    right: $spacing-03;
   }
 
   .#{$prefix}--text-input--fluid__skeleton {
@@ -170,7 +170,7 @@
     block-size: to-rem(8px);
     inline-size: 25%;
     inset-block-start: $spacing-05;
-    inset-inline-start: $spacing-05;
+    left: $spacing-05;
   }
 
   .#{$prefix}--text-input--fluid__skeleton .#{$prefix}--label {
@@ -179,7 +179,7 @@
     block-size: to-rem(8px);
     inline-size: 50%;
     inset-block-start: to-rem(36px);
-    inset-inline-start: $spacing-05;
+    left: $spacing-05;
   }
 }
 

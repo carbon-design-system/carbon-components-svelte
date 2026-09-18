@@ -44,7 +44,7 @@
     block-size: to-rem(16px);
     inline-size: calc(100% - 2rem);
     inset-block-start: to-rem(13px);
-    inset-inline-start: $spacing-05;
+    left: $spacing-05;
     overflow-x: scroll;
     white-space: nowrap;
     scrollbar-width: none;
@@ -280,7 +280,7 @@
     block-size: to-rem(8px);
     inline-size: 25%;
     inset-block-start: $spacing-05;
-    inset-inline-start: $spacing-05;
+    left: $spacing-05;
   }
 
   .#{$prefix}--date-picker--fluid__skeleton .#{$prefix}--label {
@@ -293,7 +293,7 @@
     block-size: to-rem(8px);
     inline-size: 50%;
     inset-block-start: to-rem(36px);
-    inset-inline-start: $spacing-05;
+    left: $spacing-05;
   }
 
   .#{$prefix}--date-picker--fluid__skeleton--container

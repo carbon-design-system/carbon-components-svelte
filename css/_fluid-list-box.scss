@@ -86,7 +86,7 @@
     block-size: to-rem(16px);
     inline-size: calc(100% - 2rem);
     inset-block-start: to-rem(13px);
-    inset-inline-start: $spacing-05;
+    left: $spacing-05;
   }
 
   .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--label::-webkit-scrollbar {
@@ -121,13 +121,13 @@
   .#{$prefix}--list-box__wrapper--fluid
     .#{$prefix}--dropdown
     .#{$prefix}--list-box__menu-icon {
-    inset-inline-end: $spacing-05;
+    right: $spacing-05;
   }
 
   .#{$prefix}--list-box__wrapper--fluid
     .#{$prefix}--multi-select
     .#{$prefix}--list-box__menu-icon {
-    inset-inline-end: $spacing-04;
+    right: $spacing-04;
   }
 
   .#{$prefix}--list-box__wrapper--fluid:not(
@@ -236,7 +236,7 @@
     .#{$prefix}--list-box.#{$prefix}--list-box--warning
     .#{$prefix}--list-box__invalid-icon {
     inset-block-start: to-rem(81px);
-    inset-inline-end: $spacing-05;
+    right: $spacing-05;
     pointer-events: none;
   }
 
@@ -280,7 +280,7 @@
   }
 
   .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--list-box__selection {
-    inset-inline-end: to-rem(41px);
+    right: to-rem(41px);
   }
 
   .#{$prefix}--list-box__wrapper--fluid
@@ -322,7 +322,7 @@
     block-size: to-rem(8px);
     inline-size: 50%;
     inset-block-start: to-rem(36px);
-    inset-inline-start: $spacing-05;
+    left: $spacing-05;
   }
 
   .#{$prefix}--list-box__wrapper--fluid
@@ -334,7 +334,7 @@
     block-size: to-rem(8px);
     inline-size: 25%;
     inset-block-start: $spacing-05;
-    inset-inline-start: $spacing-05;
+    left: $spacing-05;
   }
 }
 

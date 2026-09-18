@@ -1,0 +1,36 @@
+import { readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+
+const CSS_DIR = join(__dirname, "../../css");
+
+// Features newer than the Svelte 5 baseline (Chrome 87, Safari 14.0) that
+// lightningcss downlevels by duplicating the rule: flow-relative insets and
+// corner radii expand to `:lang()` RTL hacks (~900 bytes per declaration),
+// selector lists in `:not()` / `:is()` emit a `:-webkit-any` twin.
+const COSTLY_DOWNLEVELS = [
+  /inset-inline-(start|end)\s*:/,
+  /border-(start|end)-(start|end)-radius\s*:/,
+  /:not\([^()]*,/,
+  /:(is|where)\(/,
+];
+
+function scssFiles(dir: string): string[] {
+  return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const file = join(dir, entry.name);
+    if (entry.isDirectory()) return scssFiles(file);
+    return entry.name.endsWith(".scss") ? [file] : [];
+  });
+}
+
+describe("css downlevel cost", () => {
+  it("sources avoid features that lightningcss duplicates rules for", () => {
+    const offenders = scssFiles(CSS_DIR).flatMap((file) =>
+      readFileSync(file, "utf8")
+        .split("\n")
+        .map((line, i) => ({ line: line.replace(/\/\/.*$/, ""), i }))
+        .filter(({ line }) => COSTLY_DOWNLEVELS.some((re) => re.test(line)))
+        .map(({ i }) => `${file.slice(CSS_DIR.length + 1)}:${i + 1}`),
+    );
+    expect(offenders).toEqual([]);
+  });
+});

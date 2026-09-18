@@ -23,7 +23,7 @@
     block-size: to-rem(16px);
     inline-size: calc(100% - 2rem);
     inset-block-start: to-rem(13px);
-    inset-inline-start: $spacing-05;
+    left: $spacing-05;
     overflow-x: scroll;
     scrollbar-width: none;
     white-space: nowrap;
@@ -206,7 +206,7 @@
     position: absolute;
     margin: 0;
     inset-block-start: $spacing-03;
-    inset-inline-end: $spacing-05;
+    right: $spacing-05;
     pointer-events: none;
   }
 
