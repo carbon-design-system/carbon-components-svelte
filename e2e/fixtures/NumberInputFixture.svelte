@@ -39,3 +39,15 @@
   min={0}
   max={100}
 />
+
+<div data-testid="number-input-fluid-neutral">
+  <NumberInput
+    fluid
+    data-testid="number-input-fluid-neutral-input"
+    labelText="Quantity"
+    value={10}
+    min={0}
+    max={100}
+    step={1}
+  />
+</div>

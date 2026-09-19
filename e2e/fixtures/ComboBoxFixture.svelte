@@ -49,3 +49,14 @@
     value="Email"
   />
 </div>
+
+<div data-testid="combobox-fluid-neutral">
+  <ComboBox
+    fluid
+    data-testid="combobox-fluid-neutral-select"
+    labelText="Contact"
+    placeholder="Select contact method"
+    {items}
+    {shouldFilterItem}
+  />
+</div>

@@ -50,3 +50,15 @@
     Selected roles: {selectedRoleIds.length}
   </p>
 {/if}
+
+<div data-testid="multiselect-fluid-neutral">
+  <MultiSelect
+    fluid
+    data-testid="multiselect-fluid-neutral-select"
+    labelText="Fruits"
+    label="Choose fruits"
+    {items}
+    filterable={true}
+    placeholder="Filter fruits"
+  />
+</div>
