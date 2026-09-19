@@ -10,8 +10,8 @@ const PARTIALS = readdirSync(CSS_DIR).filter(
 );
 
 // Partials that legitimately emit nothing through `exports()`: the manifest,
-// a Sass map and declaration mixins other partials import, and the `$ccs-theme-switching`-gated
-// theme scopes.
+// a Sass map and declaration mixins other partials import, and the
+// `$ccs-theme-switching`-gated theme scopes.
 const NO_EXPORTS = new Set([
   "_carbon-styles.scss",
   "_fluid-shared.scss",
@@ -200,15 +200,13 @@ describe("css partial conventions", () => {
   });
 
   it("routes bare inset-block-start/right/pointer-events icon rules through fluid-status-icon()", () => {
-    // A rule whose own declarations are exactly the mixin's three
-    // properties should call fluid-status-icon() instead of repeating them.
-    // Rules that legitimately stay bare need a different property set: an
-    // extra position/display (fluid-time-picker's icon has no base v10
-    // position to inherit), or fewer of the three because a base v10 rule
-    // already supplies right/pointer-events (fluid-text-input,
+    // A rule with exactly the mixin's three properties should call
+    // fluid-status-icon() instead of repeating them. Bare exceptions need a
+    // different property set: an extra position/display (fluid-time-picker
+    // has no base v10 position to inherit), fewer of the three (a base v10
+    // rule already supplies right/pointer-events for fluid-text-input,
     // fluid-date-picker), or a different reference frame entirely
-    // (fluid-pin-code-input, fluid-text-area anchor to the message row, not
-    // the field).
+    // (fluid-pin-code-input, fluid-text-area anchor to the message row).
     const MIXIN_PROPS = ["inset-block-start", "right", "pointer-events"];
     const offenders: string[] = [];
     for (const name of PARTIALS.filter(
