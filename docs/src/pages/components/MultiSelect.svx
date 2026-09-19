@@ -238,6 +238,16 @@ Besides `matched`, `fuzzyMatch` returns the `indices` of the characters that mat
 
 <FileSource src="/framed/MultiSelect/MultiSelectHighlightMatch" />
 
+### Select on focus
+
+Set `selectTextOnFocus` to select the full filter value when the field receives focus. Only applies when `filterable` is `true`.
+
+<MultiSelect selectTextOnFocus filterable labelText="Contact" value="Slack"
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
 ## Multiple multi-selects
 
 Manage multiple dropdowns in a form with coordinated state.
