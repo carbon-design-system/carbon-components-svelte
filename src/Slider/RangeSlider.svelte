@@ -124,7 +124,10 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher } from "svelte";
+  /** Set to `true` to select a text input's text when it receives focus */
+  export let selectTextOnFocus = false;
+
+  import { createEventDispatcher, tick } from "svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { dismiss } from "../utils/dismiss.js";
@@ -192,6 +195,9 @@
   }
 
   function handleLowerInputFocus() {
+    if (selectTextOnFocus && !disabled) {
+      tick().then(() => lowerInputRef?.select());
+    }
     dispatch("focus", { value, valueUpper, handle: "lower" });
   }
 
@@ -200,6 +206,9 @@
   }
 
   function handleUpperInputFocus() {
+    if (selectTextOnFocus && !disabled) {
+      tick().then(() => upperInputRef?.select());
+    }
     dispatch("focus", { value, valueUpper, handle: "upper" });
   }
 

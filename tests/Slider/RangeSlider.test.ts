@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { user } from "../utils/user";
 import RangeSlider from "./RangeSlider.test.svelte";
 
@@ -59,6 +60,59 @@ describe("RangeSlider", () => {
       valueUpper: 90,
       handle: "upper",
     });
+  });
+
+  it("selects each text input's full value on focus when selectTextOnFocus is true", async () => {
+    render(RangeSlider, {
+      props: { selectTextOnFocus: true, value: 10, valueUpper: 90 },
+    });
+
+    const [lower, upper] = screen.getAllByRole(
+      "spinbutton",
+    ) as HTMLInputElement[];
+
+    const selectLower = vi.spyOn(lower, "select");
+    await user.click(lower);
+    await tick();
+    expect(selectLower).toHaveBeenCalled();
+
+    const selectUpper = vi.spyOn(upper, "select");
+    await user.click(upper);
+    await tick();
+    expect(selectUpper).toHaveBeenCalled();
+  });
+
+  it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {
+    render(RangeSlider, { props: { value: 10, valueUpper: 90 } });
+
+    const [lower] = screen.getAllByRole("spinbutton") as HTMLInputElement[];
+    const select = vi.spyOn(lower, "select");
+    await user.click(lower);
+    await tick();
+
+    expect(select).not.toHaveBeenCalled();
+  });
+
+  it("does not select text on focus when disabled", async () => {
+    render(RangeSlider, {
+      props: {
+        selectTextOnFocus: true,
+        disabled: true,
+        value: 10,
+        valueUpper: 90,
+      },
+    });
+
+    const [lower, upper] = screen.getAllByRole(
+      "spinbutton",
+    ) as HTMLInputElement[];
+    const selectLower = vi.spyOn(lower, "select");
+    const selectUpper = vi.spyOn(upper, "select");
+    await fireEvent.focus(lower);
+    await fireEvent.focus(upper);
+
+    expect(selectLower).not.toHaveBeenCalled();
+    expect(selectUpper).not.toHaveBeenCalled();
   });
 
   it("should apply two-handles container class", () => {

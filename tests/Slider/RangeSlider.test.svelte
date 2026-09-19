@@ -19,6 +19,7 @@
   export let formatValue: ((value: number) => string) | undefined = undefined;
   export let ariaLabelInput: string | undefined = undefined;
   export let ariaLabelInputUpper: string | undefined = undefined;
+  export let selectTextOnFocus = false;
   export let onfocus:
     | ((
         event: CustomEvent<{
@@ -55,6 +56,7 @@
   {formatValue}
   ariaLabelInput={ariaLabelInput ?? "Lower bound"}
   ariaLabelInputUpper={ariaLabelInputUpper ?? "Upper bound"}
+  {selectTextOnFocus}
   on:change={(e) => {
     console.log("change", e.detail);
   }}
