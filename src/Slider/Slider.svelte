@@ -107,7 +107,10 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher } from "svelte";
+  /** Set to `true` to select the number input's text when it receives focus */
+  export let selectTextOnFocus = false;
+
+  import { createEventDispatcher, tick } from "svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { dismiss } from "../utils/dismiss.js";
@@ -155,6 +158,12 @@
     if (holding) {
       currentEvent = event;
       dragging = true;
+    }
+  }
+
+  function handleTextInputFocus() {
+    if (selectTextOnFocus && !disabled) {
+      tick().then(() => textInputRef?.select());
     }
   }
 
@@ -370,6 +379,7 @@
             ? warnId
             : undefined}
         on:focus
+        on:focus={handleTextInputFocus}
         on:blur
       >
     </div>
