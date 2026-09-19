@@ -130,7 +130,7 @@
    * Set the alignment of the copy button's tooltip.
    * @type {"start" | "center" | "end"}
    */
-  export let tooltipAlignment = "center";
+  export let tooltipAlignment = "end";
 
   import { createEventDispatcher, getContext } from "svelte";
   import CopyButton from "../CopyButton/CopyButton.svelte";
