@@ -284,6 +284,8 @@
   $: showInvalid = effectiveInvalid && !disabled;
   $: showWarn = warn && !effectiveInvalid && !disabled && !readonly;
   $: isFluid = fluid || !!formContext?.isFluid;
+  // Neutral = neither invalid nor warn is showing.
+  $: neutral = !showInvalid && !showWarn;
   $: hasErrorMessage = showInvalid && !!invalidText;
   $: errorId = `error-${id}`;
   $: warnId = `warn-${id}`;
@@ -423,6 +425,7 @@
   <div
     data-invalid={showInvalid || undefined}
     class:bx--number={true}
+    class:bx--number--neutral={neutral}
     class:bx--number--helpertext={true}
     class:bx--number--readonly={readonly}
     class:bx--number--light={light}

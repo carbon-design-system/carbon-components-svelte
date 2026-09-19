@@ -174,6 +174,24 @@ describe("NumberInput", () => {
       },
     );
 
+    it.each([
+      { props: {}, neutral: true },
+      { props: { invalid: true, invalidText: "Invalid" }, neutral: false },
+      { props: { warn: true, warnText: "Warning" }, neutral: false },
+    ])(
+      "sets the neutral class on .bx--number only when neither invalid nor warn is showing (%o)",
+      ({ props, neutral }) => {
+        render(NumberInput, { fluid: true, ...props });
+
+        const numberEl = document.querySelector(".bx--number");
+        if (neutral) {
+          expect(numberEl).toHaveClass("bx--number--neutral");
+        } else {
+          expect(numberEl).not.toHaveClass("bx--number--neutral");
+        }
+      },
+    );
+
     it("renders disabled steppers instead of the readonly icon when readonly", () => {
       render(NumberInput, { fluid: true, readonly: true });
 
