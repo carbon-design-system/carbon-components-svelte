@@ -147,9 +147,13 @@
     transition: opacity $duration--fast-01 motion(standard, productive);
   }
 
-  .#{$prefix}--select--readonly .#{$prefix}--select-input__wrapper::before {
-    background-color: $ui-03 !important; /* stylelint-disable-line declaration-no-important */
-    opacity: 1 !important; /* stylelint-disable-line declaration-no-important */
+  // `!important` keeps a readonly select's divider visible against the
+  // hover rules below, which out-weigh any selector this could reasonably use.
+  .#{$prefix}--time-picker--fluid__wrapper
+    .#{$prefix}--select--readonly
+    .#{$prefix}--select-input__wrapper::before {
+    background-color: $ui-03 !important;
+    opacity: 1 !important;
     transition: none;
   }
 
@@ -270,7 +274,7 @@
     position: relative;
   }
 
-  .#{$prefix}--time-picker__icon {
+  .#{$prefix}--time-picker--fluid .#{$prefix}--time-picker__icon {
     display: none;
   }
 

@@ -124,6 +124,40 @@ describe("css partial conventions", () => {
     );
   });
 
+  it("scopes every fluid rule under a fluid class", () => {
+    // The bare `__divider` hides are shared with CopyInput's markup.
+    const allowed = new Set([
+      "_fluid-text-area.scss:.#{$prefix}--text-area__divider,",
+      "_fluid-text-input.scss:.#{$prefix}--text-input__divider,",
+    ]);
+    const unscoped = PARTIALS.filter((name) =>
+      name.startsWith("_fluid-"),
+    ).flatMap((name) => {
+      const found: string[] = [];
+      let selector = "";
+      for (const line of readFileSync(join(CSS_DIR, name), "utf8").split(
+        "\n",
+      )) {
+        // Top-level selectors sit at the mixin's two-space indent and may
+        // wrap onto deeper continuation lines until `{` or `,`.
+        if (/^ {2}[.[*a-z]/.test(line)) selector = line.trim();
+        else if (selector && /^ {4}\S/.test(line))
+          selector += ` ${line.trim()}`;
+        else continue;
+        if (/[{,]$/.test(selector)) {
+          if (
+            !selector.includes("fluid") &&
+            !allowed.has(`${name}:${selector}`)
+          )
+            found.push(`${name}: ${selector}`);
+          selector = "";
+        }
+      }
+      return found;
+    });
+    expect(unscoped).toEqual([]);
+  });
+
   it("avoids :has(), which is newer than the browser baseline", () => {
     expect(offenders(/:has\(/)).toEqual([]);
   });
