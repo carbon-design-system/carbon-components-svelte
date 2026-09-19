@@ -73,6 +73,14 @@ Set `borderWidth` to a pixel number or a CSS length for a thicker border. It onl
   <Box fill="layer-01" padding={5} border="interactive" borderWidth={2}>2px border</Box>
 </Stack>
 
+### Shadow
+
+Set `shadow` to `true` to apply a raised Carbon box shadow.
+
+<Stack gap={3}>
+  <Box fill="layer-01" padding={5} shadow>raised</Box>
+</Stack>
+
 ## Spacing
 
 Set padding and margin using the shared layout scale 1–13 (same values as [Stack](/components/Stack) gap). Pass a string for any CSS length.
