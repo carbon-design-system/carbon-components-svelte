@@ -230,6 +230,15 @@ describe("css partial conventions", () => {
     expect(offenders(/var\(--cds-[\w-]+,\s*(rgba?\(|#[0-9a-f])/i)).toEqual([]);
   });
 
+  it("positions the badge indicator with physical properties only", () => {
+    // `right: 0` beside `margin-inline-end` pinned the badge to the right
+    // while its margin flipped under `dir="rtl"`.
+    const source = readFileSync(join(CSS_DIR, "_badge-indicator.scss"), "utf8");
+    expect(source).not.toMatch(
+      /(inset|margin|padding)-(inline|block)|-(inline|block)-size/,
+    );
+  });
+
   it("avoids :has(), which is newer than the browser baseline", () => {
     expect(offenders(/:has\(/)).toEqual([]);
   });
