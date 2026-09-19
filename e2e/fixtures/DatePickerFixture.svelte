@@ -101,3 +101,75 @@
     />
   </DatePicker>
 </div>
+
+<div data-testid="date-picker-fluid-readonly-single">
+  <DatePicker
+    fluid
+    datePickerType="single"
+    value="03/15/2024"
+    flatpickrProps={{
+      static: true,
+      minDate: "03/01/2024",
+      maxDate: "03/31/2024",
+    }}
+  >
+    <DatePickerInput
+      data-testid="date-picker-fluid-readonly-single-input"
+      labelText="Meeting date"
+      placeholder="mm/dd/yyyy"
+      readonly
+    />
+  </DatePicker>
+</div>
+
+<div data-testid="date-picker-fluid-readonly-range">
+  <DatePicker
+    fluid
+    datePickerType="range"
+    flatpickrProps={{
+      static: true,
+      minDate: "03/01/2024",
+      maxDate: "03/31/2024",
+    }}
+  >
+    <DatePickerInput
+      data-testid="date-picker-fluid-readonly-range-start"
+      labelText="Start date"
+      placeholder="mm/dd/yyyy"
+      readonly
+    />
+    <DatePickerInput
+      data-testid="date-picker-fluid-readonly-range-end"
+      labelText="End date"
+      placeholder="mm/dd/yyyy"
+      readonly
+    />
+  </DatePicker>
+</div>
+
+<div data-testid="date-picker-fluid-invalid-range">
+  <DatePicker
+    fluid
+    datePickerType="range"
+    flatpickrProps={{
+      static: true,
+      minDate: "03/01/2024",
+      maxDate: "03/31/2024",
+    }}
+  >
+    <DatePickerInput
+      data-testid="date-picker-fluid-invalid-range-start"
+      labelText="Start date"
+      placeholder="mm/dd/yyyy"
+      invalid
+      invalidText="Enter a valid start date"
+    />
+    <DatePickerInput
+      data-testid="date-picker-fluid-invalid-range-end"
+      labelText="End date"
+      placeholder="mm/dd/yyyy"
+      invalid
+      invalidText="Enter a valid end date"
+    />
+  </DatePicker>
+</div>

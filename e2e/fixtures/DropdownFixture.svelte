@@ -14,3 +14,13 @@
   label="Choose an option"
   {items}
 />
+
+<div data-testid="dropdown-fluid-neutral">
+  <Dropdown
+    fluid
+    data-testid="dropdown-fluid-neutral-select"
+    labelText="Contact"
+    label="Choose an option"
+    {items}
+  />
+</div>
