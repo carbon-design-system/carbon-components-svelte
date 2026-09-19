@@ -416,7 +416,7 @@
       }
     }
 
-    &:focus {
+    &:focus-visible {
       @include focus-outline('outline');
 
       outline-color: $interactive-01;
@@ -467,7 +467,7 @@
     color: $text-04;
     background-color: $interactive-01;
 
-    &:focus {
+    &:focus-visible {
       outline: to-rem(1px) solid $ui-02;
       outline-offset: to-rem(-3px);
     }
