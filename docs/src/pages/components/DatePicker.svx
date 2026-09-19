@@ -110,15 +110,15 @@ Use `minDate` and `maxDate` to constrain selectable dates. Values may be a Date,
 
 ### Disabled dates
 
-Pass `disable` (or its inverse, `enable`) via `flatpickrProps` to restrict which individual dates are selectable, in addition to or instead of `minDate`/`maxDate`. Each accepts an array mixing date strings, `Date` objects, `[from, to]` range objects, and predicate functions. Disabled days receive `aria-disabled` automatically.
+Set `disabledDates` to restrict which individual dates are selectable, in addition to or instead of `minDate`/`maxDate`. It accepts an array mixing date strings, `Date` objects, `{ from, to }` range objects, and predicate functions. Disabled days receive `aria-disabled` automatically.
 
 <FileSource src="/framed/DatePicker/DatePickerDisabledDates" />
 
-For rules that need to change after the calendar mounts (such as toggling disabled weekends), call `calendar.set("disable", ...)` via `bind:calendar` instead—see [Programmatic access](#programmatic-access).
+`disabledDates` is reactive: reassigning the array updates an open calendar, so most rule changes no longer need imperative control. For the cases that still do, call `calendar.set("disable", ...)` via `bind:calendar`—see [Programmatic access](#programmatic-access).
 
 ### Enable only specific dates
 
-Pass `enable` via `flatpickrProps` for the inverse of [disabled dates](#disabled-dates): every date is disabled except those that match. It accepts the same entry types as `disable`.
+Set `enabledDates` for the inverse of [disabled dates](#disabled-dates): every date is disabled except those that match. It accepts the same entry types as `disabledDates`, and is reactive the same way.
 
 <FileSource src="/framed/DatePicker/DatePickerEnableDates" />
 
