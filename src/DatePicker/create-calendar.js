@@ -243,6 +243,7 @@ export async function createCalendar({ options, base, input, dispatch }) {
     allowInput: true,
     disableMobile: true,
     clickOpens: true,
+    animate: false,
     ariaDateFormat: "l, F j, Y",
     plugins,
     nextArrow:

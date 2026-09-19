@@ -237,6 +237,9 @@ test.describe("DatePicker", () => {
   test("range: switching between inputs keeps calendar open without replaying animation", async ({
     page,
   }) => {
+    // The fixture opts into flatpickrProps={{ animate: true }} for this
+    // picker; Carbon's own default is now animate: false, which would make
+    // this no-replay assertion trivially true.
     await page.getByTestId("date-picker-range-start").click();
     const calendar = page
       .getByTestId("date-picker-range")
@@ -275,6 +278,9 @@ test.describe("DatePicker", () => {
     page,
     context,
   }) => {
+    // The fixture opts into flatpickrProps={{ animate: true }} for this
+    // picker; Carbon's own default is now animate: false, which would make
+    // this no-replay assertion trivially true.
     const input = page.getByLabel("Meeting date");
     await input.click();
     const calendar = page

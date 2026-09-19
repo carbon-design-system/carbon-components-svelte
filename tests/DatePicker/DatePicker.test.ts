@@ -663,6 +663,32 @@ describe("DatePicker", () => {
         expect(day).toHaveAttribute("aria-disabled", "true");
       }
     });
+
+    it("disables the open/close animation by default, overridable via flatpickrProps", async () => {
+      const { unmount } = render(DatePicker, {
+        datePickerType: "single",
+      });
+
+      let input = screen.getByLabelText("Date") as HTMLInputElement & {
+        _flatpickr: Instance;
+      };
+      await user.click(input);
+      await screen.findByLabelText("calendar-container");
+      expect(input._flatpickr.config.animate).toBe(false);
+
+      unmount();
+
+      render(DatePicker, {
+        datePickerType: "single",
+        flatpickrProps: { animate: true },
+      });
+      input = screen.getByLabelText("Date") as HTMLInputElement & {
+        _flatpickr: Instance;
+      };
+      await user.click(input);
+      await screen.findByLabelText("calendar-container");
+      expect(input._flatpickr.config.animate).toBe(true);
+    });
   });
 
   describe("bind:calendar", () => {
