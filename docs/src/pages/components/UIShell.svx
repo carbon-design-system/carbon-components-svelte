@@ -255,6 +255,14 @@ Set `size` to `"sm"` (default), `"lg"`, or `"xl"` to control row density. Result
 
 <FileSource src="/framed/UIShell/HeaderSearchMenu" />
 
+### Select on focus
+
+Set `selectTextOnFocus` to select the full value when the search bar receives focus.
+
+```svelte
+<HeaderSearch selectTextOnFocus bind:value />
+```
+
 ### Events
 
 `HeaderSearch` dispatches `active` and `inactive` as the search bar opens and closes, `clear` when the clear ("x") button is clicked, `select` when a result is chosen (from `results` or the `menu` slot), and `submit` when <DocKbd label="Enter" /> is pressed with no result selected (`menu` slot only).
