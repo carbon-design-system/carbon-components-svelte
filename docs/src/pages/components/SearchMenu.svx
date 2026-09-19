@@ -75,6 +75,14 @@ Set `closeButtonLabelText` to customize the accessible label of the clear button
   <SearchMenuItem text="Cloud functions" />
 </SearchMenu>
 
+## Select on focus
+
+Set `selectTextOnFocus` to select the full value when the field receives focus.
+
+<SearchMenu selectTextOnFocus labelText="Search" placeholder="Search..." value="Cloud functions">
+  <SearchMenuItem text="Cloud functions" />
+</SearchMenu>
+
 ## Grouping
 
 Compose `SearchMenuGroup` and `SearchMenuItem` for grouped results, recent searches, and footer actions.
