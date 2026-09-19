@@ -63,12 +63,6 @@
       color: $text-01;
     }
 
-    @media (any-hover: hover) {
-      &:hover {
-        outline: 2px solid $interactive-03;
-        text-decoration: underline;
-      }
-    }
   }
 
   .#{$prefix}--file-browse-btn--disabled {
@@ -81,13 +75,22 @@
       outline: none;
       text-decoration: none;
     }
+  }
 
-    @media (any-hover: hover) {
-      &:hover {
-        color: $disabled-02;
-        outline: none;
-        text-decoration: none;
-      }
+  // ccs: grouped any-hover rules for the browse button and its disabled
+  // variant into one block (order-safe: the plain rule stays ahead of the
+  // disabled rule below, preserving the tie an element with both classes
+  // already resolved in the disabled variant's favor)
+  @media (any-hover: hover) {
+    .#{$prefix}--file-browse-btn:hover {
+      outline: 2px solid $interactive-03;
+      text-decoration: underline;
+    }
+
+    .#{$prefix}--file-browse-btn--disabled:hover {
+      color: $disabled-02;
+      outline: none;
+      text-decoration: none;
     }
   }
 

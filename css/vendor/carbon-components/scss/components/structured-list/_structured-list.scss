@@ -81,15 +81,6 @@
     transition: background-color $duration--fast-02 motion(standard, productive);
   }
 
-  @media (any-hover: hover) {
-    .#{$prefix}--structured-list--selection
-      .#{$prefix}--structured-list-row:hover:not(.#{$prefix}--structured-list-row--header-row):not(.#{$prefix}--structured-list-row--selected) {
-      border-bottom: 1px solid $hover-row;
-      background-color: $hover-row;
-      cursor: pointer;
-    }
-  }
-
   .#{$prefix}--structured-list-row.#{$prefix}--structured-list-row--header-row {
     border-bottom: 1px solid $selected-ui;
     cursor: inherit;
@@ -100,7 +91,18 @@
       @include focus-outline('outline');
     }
   }
+
+  // ccs: grouped this component's any-hover rules into one block
+  // (order-safe: no rule in between touches the row's border-bottom/
+  // background-color or the cell's color/border-top at equal specificity)
   @media (any-hover: hover) {
+    .#{$prefix}--structured-list--selection
+      .#{$prefix}--structured-list-row:hover:not(.#{$prefix}--structured-list-row--header-row):not(.#{$prefix}--structured-list-row--selected) {
+      border-bottom: 1px solid $hover-row;
+      background-color: $hover-row;
+      cursor: pointer;
+    }
+
     .#{$prefix}--structured-list--selection
       .#{$prefix}--structured-list-row:hover:not(.#{$prefix}--structured-list-row--header-row)
       > .#{$prefix}--structured-list-td {

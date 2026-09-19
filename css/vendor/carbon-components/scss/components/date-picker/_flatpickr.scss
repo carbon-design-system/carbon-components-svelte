@@ -186,25 +186,12 @@
     transition: background-color $duration--fast-01 motion(standard, productive);
     fill: $icon-01;
     user-select: none;
-
-    @media (any-hover: hover) {
-      &:hover {
-        background-color: $hover-ui;
-      }
-    }
   }
 
   .flatpickr-next-month.disabled svg,
   .flatpickr-prev-month.disabled svg {
     cursor: not-allowed;
     fill: $ui-05;
-  }
-
-  @media (any-hover: hover) {
-    .flatpickr-next-month.disabled:hover svg,
-    .flatpickr-prev-month.disabled:hover svg {
-      fill: $ui-05;
-    }
   }
 
   .flatpickr-current-month {
@@ -220,23 +207,11 @@
   .flatpickr-current-month .cur-month {
     margin-right: $carbon--spacing-02;
     margin-left: $carbon--spacing-02;
-
-    @media (any-hover: hover) {
-      &:hover {
-        background-color: $hover-ui;
-      }
-    }
   }
 
   .numInputWrapper {
     position: relative;
     width: to-rem(60px);
-
-    @media (any-hover: hover) {
-      &:hover {
-        background-color: $hover-ui;
-      }
-    }
   }
 
   .numInputWrapper .numInput {
@@ -270,13 +245,34 @@
       background-color: $ui-01;
       pointer-events: none;
     }
+  }
 
-    @media (any-hover: hover) {
-      &[disabled]:hover {
-        color: $disabled-02;
-        background-color: $ui-01;
-        pointer-events: none;
-      }
+  // ccs: grouped any-hover rules for the elements above into one block
+  // (order-safe: no equal-specificity rule between the originals touched
+  // the same property on the same element)
+  @media (any-hover: hover) {
+    .flatpickr-prev-month:hover,
+    .flatpickr-next-month:hover {
+      background-color: $hover-ui;
+    }
+
+    .flatpickr-next-month.disabled:hover svg,
+    .flatpickr-prev-month.disabled:hover svg {
+      fill: $ui-05;
+    }
+
+    .flatpickr-current-month .cur-month:hover {
+      background-color: $hover-ui;
+    }
+
+    .numInputWrapper:hover {
+      background-color: $hover-ui;
+    }
+
+    .numInputWrapper .numInput[disabled]:hover {
+      color: $disabled-02;
+      background-color: $ui-01;
+      pointer-events: none;
     }
   }
 
@@ -316,29 +312,18 @@
       border-left: to-rem(4px) solid transparent;
       content: '';
     }
-
-    @media (any-hover: hover) {
-      &:hover::after {
-        border-top-color: $interactive-01;
-        border-bottom-color: $interactive-01;
-      }
-    }
-
-    &:active::after {
-      border-top-color: $interactive-04;
-      border-bottom-color: $interactive-04;
-    }
   }
 
-  .numInput[disabled] ~ .arrowUp::after {
-    border-bottom-color: $disabled-02;
-  }
-
-  .numInput[disabled] ~ .arrowDown::after {
-    border-top-color: $disabled-02;
-  }
-
+  // ccs: grouped any-hover rules for the arrow controls into one block
+  // (order-safe: kept ahead of the :active::after rule below, which shares
+  // its specificity and property and must keep winning that tie)
   @media (any-hover: hover) {
+    .numInputWrapper .arrowUp:hover::after,
+    .numInputWrapper .arrowDown:hover::after {
+      border-top-color: $interactive-01;
+      border-bottom-color: $interactive-01;
+    }
+
     .numInputWrapper:hover .arrowUp,
     .numInputWrapper:hover .arrowDown {
       opacity: 1;
@@ -348,6 +333,20 @@
     .numInputWrapper:hover .numInput[disabled] ~ .arrowDown {
       opacity: 0;
     }
+  }
+
+  .numInputWrapper .arrowUp:active::after,
+  .numInputWrapper .arrowDown:active::after {
+    border-top-color: $interactive-04;
+    border-bottom-color: $interactive-04;
+  }
+
+  .numInput[disabled] ~ .arrowUp::after {
+    border-bottom-color: $disabled-02;
+  }
+
+  .numInput[disabled] ~ .arrowDown::after {
+    border-top-color: $disabled-02;
   }
 
   .flatpickr-weekdays {

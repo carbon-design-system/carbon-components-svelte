@@ -137,13 +137,6 @@
     fill: $icon-primary;
   }
 
-  @media (any-hover: hover) {
-    .#{$prefix}--btn.#{$prefix}--text-input--password__visibility__toggle.#{$prefix}--tooltip__trigger:hover
-      svg {
-      fill: $icon-primary;
-    }
-  }
-
   .#{$prefix}--text-input--invalid,
   .#{$prefix}--text-input--warning,
   .#{$prefix}--text-input-wrapper--readonly .#{$prefix}--text-input {
@@ -167,11 +160,22 @@
     + .#{$prefix}--text-input--password__visibility__toggle.#{$prefix}--tooltip__trigger svg {
     cursor: not-allowed;
     fill: $disabled-02;
+  }
 
-    @media (any-hover: hover) {
-      &:hover {
-        fill: $disabled-02;
-      }
+  // ccs: grouped any-hover rules for the visibility-toggle icon into one
+  // block (order-safe: the disabled variant's selector is strictly more
+  // specific than the plain hover rule, so precedence is spec-, not
+  // order-, determined)
+  @media (any-hover: hover) {
+    .#{$prefix}--btn.#{$prefix}--text-input--password__visibility__toggle.#{$prefix}--tooltip__trigger:hover
+      svg {
+      fill: $icon-primary;
+    }
+
+    .#{$prefix}--text-input:disabled
+      + .#{$prefix}--text-input--password__visibility__toggle.#{$prefix}--tooltip__trigger
+      svg:hover {
+      fill: $disabled-02;
     }
   }
 
