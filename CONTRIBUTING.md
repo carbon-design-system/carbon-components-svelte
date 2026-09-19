@@ -468,7 +468,7 @@ Each patch is a leading-underscore partial (for example [`css/_dropdown.scss`](c
 
 The `exports()` key must be unique across the whole build, **including the vendored Carbon keys**. Carbon already claims `exports("dropdown")`, `exports("tooltip")`, `exports("code-snippet")`, and so on; a partial that reuses one of those keys compiles cleanly and emits nothing. That is why `css/_dropdown.scss` exports `dropdown-clearable` and `css/_tooltip.scss` exports `tooltip-portal`. Name the mixin after the key.
 
-Non-emitting helpers (Sass maps or mixins other partials include, such as [`css/_spacing-scale.scss`](css/_spacing-scale.scss)) skip the mixin and `exports()` wrapper. `css/_ui-shell-classic.scss` is the one emitting exception: it is gated on `$ccs-theme-switching` instead.
+Non-emitting helpers (Sass maps or mixins other partials include, such as [`css/_spacing-scale.scss`](css/_spacing-scale.scss) and the fluid form declarations in [`css/_fluid-shared.scss`](css/_fluid-shared.scss), which every new fluid variant should reuse) skip the mixin and `exports()` wrapper. `css/_ui-shell-classic.scss` is the one emitting exception: it is gated on `$ccs-theme-switching` instead.
 
 #### Conventions
 

@@ -5,6 +5,7 @@
 @import "carbon-components/scss/globals/scss/helper-mixins";
 @import "carbon-components/scss/globals/scss/typography";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "./fluid-shared";
 
 /// Fluid pin code input variant
 /// @access private
@@ -15,18 +16,7 @@
   }
 
   .#{$prefix}--pin-code-input--fluid .#{$prefix}--pin-code-input__fieldset > legend.#{$prefix}--label {
-    position: absolute;
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    margin: 0;
-    block-size: to-rem(16px);
-    inline-size: calc(100% - to-rem(32px));
-    inset-block-start: to-rem(13px);
-    left: $carbon--spacing-05;
-    overflow-x: scroll;
-    scrollbar-width: none;
-    white-space: nowrap;
+    @include fluid-label;
   }
 
   .#{$prefix}--pin-code-input--fluid
@@ -40,8 +30,7 @@
   .#{$prefix}--pin-code-input--fluid
     .#{$prefix}--pin-code-input__fieldset
     > legend.#{$prefix}--label.#{$prefix}--label--slotted {
-    gap: $carbon--spacing-03;
-    overflow: visible;
+    @include fluid-label-slotted;
   }
 
   // The fields wrapper is the fluid container: it holds the segment row,
@@ -180,9 +169,7 @@
   .#{$prefix}--pin-code-input--fluid
     .#{$prefix}--pin-code-input__fields--warning
     .#{$prefix}--form-requirement {
-    display: block;
-    overflow: visible;
-    max-block-size: 100%;
+    @include fluid-requirement;
   }
 
   .#{$prefix}--pin-code-input--fluid
@@ -194,8 +181,7 @@
   .#{$prefix}--pin-code-input--fluid
     .#{$prefix}--pin-code-input__fields
     .#{$prefix}--form-requirement {
-    padding: $carbon--spacing-03 to-rem(40px) $carbon--spacing-03 $carbon--spacing-05;
-    margin: 0;
+    @include fluid-requirement-padding;
   }
 
   // Anchor the status icon to the message row so it stays aligned with the

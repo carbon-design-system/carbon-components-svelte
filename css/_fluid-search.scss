@@ -5,6 +5,7 @@
 @import "carbon-components/scss/globals/scss/helper-mixins";
 @import "carbon-components/scss/globals/scss/typography";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "./fluid-shared";
 
 /// Fluid search (Carbon React FluidSearch)
 /// @access private
@@ -17,19 +18,9 @@
   // The base v10 styles visually hide the search label (the `hidden`
   // mixin); the fluid variant embeds it at the top of the field.
   .#{$prefix}--search--fluid .#{$prefix}--label {
-    position: absolute;
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    margin: 0;
-    overflow-x: scroll;
-    scrollbar-width: none;
-    white-space: nowrap;
-    block-size: to-rem(16px);
+    @include fluid-label;
+
     clip: initial;
-    inline-size: calc(100% - to-rem(32px));
-    inset-block-start: to-rem(13px);
-    left: $carbon--spacing-05;
   }
 
   .#{$prefix}--search--fluid .#{$prefix}--label::-webkit-scrollbar {
@@ -37,8 +28,7 @@
   }
 
   .#{$prefix}--search--fluid .#{$prefix}--label.#{$prefix}--label--slotted {
-    gap: $carbon--spacing-03;
-    overflow: visible;
+    @include fluid-label-slotted;
   }
 
   .#{$prefix}--search--fluid .#{$prefix}--search-input {

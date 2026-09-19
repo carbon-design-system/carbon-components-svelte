@@ -5,6 +5,7 @@
 @import "carbon-components/scss/globals/scss/helper-mixins";
 @import "carbon-components/scss/globals/scss/typography";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "./fluid-shared";
 
 /// Fluid textarea (Carbon React FluidTextArea)
 /// @access private
@@ -61,8 +62,7 @@
   }
 
   .#{$prefix}--text-area--fluid .#{$prefix}--label.#{$prefix}--label--slotted {
-    gap: $carbon--spacing-03;
-    overflow: visible;
+    @include fluid-label-slotted;
   }
 
   .#{$prefix}--text-area--fluid .#{$prefix}--text-area__label-counter { // ccs: flatten
@@ -107,11 +107,7 @@
   .#{$prefix}--text-area--fluid
     .#{$prefix}--text-area__wrapper--warn
     .#{$prefix}--text-area__divider {
-    display: block;
-    border-style: solid;
-    border-color: $ui-03;
-    margin: 0 to-rem(16px);
-    border-block-end: none;
+    @include fluid-divider-frame;
   }
 
   .#{$prefix}--text-area--fluid

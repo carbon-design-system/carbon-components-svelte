@@ -5,6 +5,7 @@
 @import "carbon-components/scss/globals/scss/helper-mixins";
 @import "carbon-components/scss/globals/scss/typography";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "./fluid-shared";
 
 /// Fluid number input (Carbon React FluidNumberInput)
 /// @access private
@@ -20,18 +21,7 @@
   }
 
   .#{$prefix}--number-input--fluid .#{$prefix}--label {
-    position: absolute;
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    margin: 0;
-    overflow-x: scroll;
-    scrollbar-width: none;
-    white-space: nowrap;
-    block-size: to-rem(16px);
-    inline-size: calc(100% - to-rem(32px));
-    inset-block-start: to-rem(13px);
-    left: $carbon--spacing-05;
+    @include fluid-label;
   }
 
   .#{$prefix}--number-input--fluid .#{$prefix}--label::-webkit-scrollbar {
@@ -40,8 +30,7 @@
 
   .#{$prefix}--number-input--fluid
     .#{$prefix}--label.#{$prefix}--label--slotted {
-    gap: $carbon--spacing-03;
-    overflow: visible;
+    @include fluid-label-slotted;
   }
 
   // The base wrapper is `display: flex`, which would lay the embedded error
@@ -309,9 +298,7 @@
   // The status icon is pinned to the first line of the message, below the
   // taller field, mirroring the fluid text input and select.
   .#{$prefix}--number-input--fluid .#{$prefix}--number__invalid {
-    inset-block-start: to-rem(73px);
-    right: $carbon--spacing-05;
-    pointer-events: none;
+    @include fluid-status-icon(to-rem(73px));
   }
 
   // Divider: always in DOM for fluid, shown only in invalid/warn states.
@@ -357,11 +344,8 @@
   .#{$prefix}--number-input--fluid
     .#{$prefix}--number__input-wrapper
     .#{$prefix}--form-requirement {
-    display: block;
-    overflow: visible;
-    max-block-size: 100%;
-    padding: $carbon--spacing-03 to-rem(40px) $carbon--spacing-03 $carbon--spacing-05;
-    margin: 0;
+    @include fluid-requirement;
+    @include fluid-requirement-padding;
   }
 
   .#{$prefix}--number-input--fluid

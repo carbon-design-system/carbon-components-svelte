@@ -5,6 +5,7 @@
 @import "carbon-components/scss/globals/scss/helper-mixins";
 @import "carbon-components/scss/globals/scss/typography";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "./fluid-shared";
 
 /// Fluid list-box styles shared by `Dropdown`, `ComboBox`, and `MultiSelect`
 /// @access private
@@ -73,18 +74,7 @@
   }
 
   .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--label {
-    position: absolute;
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    margin: 0;
-    overflow-x: scroll;
-    scrollbar-width: none;
-    white-space: nowrap;
-    block-size: to-rem(16px);
-    inline-size: calc(100% - to-rem(32px));
-    inset-block-start: to-rem(13px);
-    left: $carbon--spacing-05;
+    @include fluid-label;
   }
 
   .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--label::-webkit-scrollbar {
@@ -93,8 +83,7 @@
 
   .#{$prefix}--list-box__wrapper--fluid
     .#{$prefix}--label.#{$prefix}--label--slotted {
-    gap: $carbon--spacing-03;
-    overflow: visible;
+    @include fluid-label-slotted;
   }
 
   .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--list-box__field--wrapper {
@@ -181,9 +170,8 @@
 
   .#{$prefix}--list-box__wrapper--fluid.#{$prefix}--list-box__wrapper--fluid--invalid
     .#{$prefix}--form-requirement {
-    display: block;
-    overflow: visible;
-    max-block-size: 100%;
+    @include fluid-requirement;
+
     color: $text-error;
   }
 
@@ -233,9 +221,7 @@
   .#{$prefix}--list-box__wrapper--fluid
     .#{$prefix}--list-box.#{$prefix}--list-box--warning
     .#{$prefix}--list-box__invalid-icon {
-    inset-block-start: to-rem(81px);
-    right: $carbon--spacing-05;
-    pointer-events: none;
+    @include fluid-status-icon(to-rem(81px));
   }
 
   .#{$prefix}--list-box__wrapper--fluid.#{$prefix}--list-box__wrapper--fluid--invalid
@@ -261,11 +247,7 @@
   .#{$prefix}--list-box__wrapper--fluid
     .#{$prefix}--list-box--warning
     ~ .#{$prefix}--list-box__divider {
-    display: block;
-    border: none;
-    margin: 0 to-rem(16px);
-    border-block-end: 1px solid $ui-03;
-    inline-size: calc(100% - to-rem(32px));
+    @include fluid-divider-rule;
   }
 
   .#{$prefix}--list-box__wrapper--fluid
@@ -314,25 +296,14 @@
     .#{$prefix}--skeleton
     .#{$prefix}--list-box__field {
     @include skeleton($omit: (position, padding));
-
-    position: absolute;
-    padding: 0;
-    block-size: to-rem(8px);
-    inline-size: 50%;
-    inset-block-start: to-rem(36px);
-    left: $carbon--spacing-05;
+    @include fluid-skeleton-field;
   }
 
   .#{$prefix}--list-box__wrapper--fluid
     .#{$prefix}--skeleton
     .#{$prefix}--list-box__label {
     @include skeleton($omit: (position));
-
-    position: absolute;
-    block-size: to-rem(8px);
-    inline-size: 25%;
-    inset-block-start: $carbon--spacing-05;
-    left: $carbon--spacing-05;
+    @include fluid-skeleton-label;
   }
 }
 

@@ -1,0 +1,107 @@
+// Declaration mixins shared by the fluid-* partials. This file emits no CSS
+// of its own; every mixin here is `@include`d from inside an existing rule
+// in one of the fluid-* partials.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+
+/// Absolutely positioned fluid label that overlays the top of a fluid field
+/// and scrolls horizontally instead of wrapping.
+/// @access private
+/// @group components
+@mixin fluid-label {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  overflow-x: scroll;
+  scrollbar-width: none;
+  white-space: nowrap;
+  block-size: to-rem(16px);
+  inline-size: calc(100% - to-rem(32px));
+  inset-block-start: to-rem(13px);
+  left: $carbon--spacing-05;
+}
+
+/// Slotted fluid label content (e.g. a tooltip icon) must not clip overflow.
+/// @access private
+/// @group components
+@mixin fluid-label-slotted {
+  gap: $carbon--spacing-03;
+  overflow: visible;
+}
+
+/// Reveals a `.bx--form-requirement` validation message that a fluid variant
+/// renders inline instead of as a v10 sibling.
+/// @access private
+/// @group components
+@mixin fluid-requirement {
+  display: block;
+  overflow: visible;
+  max-block-size: 100%;
+}
+
+/// Padding for a revealed fluid `.bx--form-requirement` message.
+/// @access private
+/// @group components
+@mixin fluid-requirement-padding {
+  padding: $carbon--spacing-03 to-rem(40px) $carbon--spacing-03 $carbon--spacing-05;
+  margin: 0;
+}
+
+/// Status icon pinned to the first line of a fluid field's validation
+/// message.
+/// @access private
+/// @group components
+@mixin fluid-status-icon($offset) {
+  inset-block-start: $offset;
+  right: $carbon--spacing-05;
+  pointer-events: none;
+}
+
+/// Full-width divider drawn as a `border-block-end` rule.
+/// @access private
+/// @group components
+@mixin fluid-divider-rule {
+  display: block;
+  border: none;
+  margin: 0 to-rem(16px);
+  border-block-end: 1px solid $ui-03;
+  inline-size: calc(100% - to-rem(32px));
+}
+
+/// Full-width divider drawn via `border-style`/`border-color`, leaving
+/// `border-block-end` for a sibling rule to fill in.
+/// @access private
+/// @group components
+@mixin fluid-divider-frame {
+  display: block;
+  border-style: solid;
+  border-color: $ui-03;
+  margin: 0 to-rem(16px);
+  border-block-end: none;
+}
+
+/// Small skeleton placeholder bar standing in for a fluid label.
+/// @access private
+/// @group components
+@mixin fluid-skeleton-label {
+  position: absolute;
+  block-size: to-rem(8px);
+  inline-size: 25%;
+  inset-block-start: $carbon--spacing-05;
+  left: $carbon--spacing-05;
+}
+
+/// Wider skeleton placeholder bar standing in for a fluid field's value.
+/// @access private
+/// @group components
+@mixin fluid-skeleton-field {
+  position: absolute;
+  padding: 0;
+  block-size: to-rem(8px);
+  inline-size: 50%;
+  inset-block-start: to-rem(36px);
+  left: $carbon--spacing-05;
+}
