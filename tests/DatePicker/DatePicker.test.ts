@@ -631,6 +631,145 @@ describe("DatePicker", () => {
     });
   });
 
+  describe("initialMonth", () => {
+    it("shows the initial month when there is no selection", async () => {
+      render(DatePicker, {
+        datePickerType: "single",
+        initialMonth: "04/01/2027",
+      });
+
+      const input = screen.getByLabelText("Date");
+      await user.click(input);
+      const calendar = await screen.findByLabelText("calendar-container");
+
+      expect(calendar.querySelector(".cur-month")).toHaveTextContent("April");
+      expect(calendar.querySelector(".cur-year")).toHaveValue(2027);
+      expect(input).toHaveValue("");
+      expect(calendar.querySelector(".flatpickr-day.selected")).toBeNull();
+      expect(calendar.querySelector(".flatpickr-day.today")).toBeNull();
+    });
+
+    it("is ignored once a value is selected", async () => {
+      render(DatePicker, {
+        datePickerType: "single",
+        value: "01/05/2024",
+        initialMonth: "04/01/2027",
+      });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+
+      expect(calendar.querySelector(".cur-month")).toHaveTextContent("January");
+      expect(calendar.querySelector(".cur-year")).toHaveValue(2024);
+    });
+
+    it("clamps into maxDate when it falls outside", async () => {
+      render(DatePicker, {
+        datePickerType: "single",
+        initialMonth: "08/01/2027",
+        maxDate: new Date(2027, 2, 15),
+      });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+
+      expect(calendar.querySelector(".cur-month")).toHaveTextContent("March");
+      expect(calendar.querySelector(".cur-year")).toHaveValue(2027);
+    });
+
+    it("updates the header when the prop changes with no selection", async () => {
+      const { rerender } = render(DatePicker, {
+        datePickerType: "single",
+        initialMonth: "04/01/2027",
+      });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+      expect(calendar.querySelector(".cur-month")).toHaveTextContent("April");
+
+      await rerender({ datePickerType: "single", initialMonth: "09/01/2028" });
+      await tick();
+
+      expect(calendar.querySelector(".cur-month")).toHaveTextContent(
+        "September",
+      );
+      expect(calendar.querySelector(".cur-year")).toHaveValue(2028);
+    });
+
+    it("does not update the header when the prop changes with a selection", async () => {
+      const { rerender } = render(DatePicker, {
+        datePickerType: "single",
+        value: "01/05/2024",
+        initialMonth: "04/01/2027",
+      });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+      expect(calendar.querySelector(".cur-month")).toHaveTextContent("January");
+
+      await rerender({
+        datePickerType: "single",
+        value: "01/05/2024",
+        initialMonth: "09/01/2028",
+      });
+      await tick();
+
+      expect(calendar.querySelector(".cur-month")).toHaveTextContent("January");
+    });
+
+    it("ignores an unparseable value without throwing or logging an error", async () => {
+      const consoleError = vi
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
+      render(DatePicker, {
+        datePickerType: "single",
+        initialMonth: "not-a-date",
+      });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+
+      const currentMonthName = new Date().toLocaleString("en-US", {
+        month: "long",
+      });
+      expect(calendar.querySelector(".cur-month")).toHaveTextContent(
+        currentMonthName,
+      );
+      expect(consoleError).not.toHaveBeenCalled();
+      consoleError.mockRestore();
+    });
+
+    it("keeps a manually navigated month across an unrelated re-render", async () => {
+      const { rerender } = render(DatePicker, {
+        datePickerType: "single",
+        initialMonth: "04/01/2027",
+      });
+
+      const input = screen.getByLabelText("Date");
+      await user.click(input);
+      const calendar = await screen.findByLabelText("calendar-container");
+      expect(calendar.querySelector(".cur-month")).toHaveTextContent("April");
+
+      const next = calendar.querySelector<HTMLElement>(".flatpickr-next-month");
+      assert(next);
+      await user.click(next);
+      expect(calendar.querySelector(".cur-month")).toHaveTextContent("May");
+      expect(calendar.querySelector(".cur-year")).toHaveValue(2027);
+
+      // Unrelated re-render: same `initialMonth`, but `short` changes,
+      // which re-triggers the `initCalendar` reactive statement.
+      await rerender({
+        datePickerType: "single",
+        initialMonth: "04/01/2027",
+        short: true,
+      });
+      await tick();
+
+      expect(calendar.querySelector(".cur-month")).toHaveTextContent("May");
+      expect(calendar.querySelector(".cur-year")).toHaveValue(2027);
+    });
+  });
+
   describe("flatpickrProps", () => {
     it("merges showMonths into the calendar", async () => {
       render(DatePicker, {

@@ -158,7 +158,7 @@ function isMonthFirst(locale) {
  * @param {FlatpickrInstance} instance
  * @param {unknown} locale
  */
-function updateMonthNode(instance, locale) {
+export function updateMonthNode(instance, locale) {
   const { longhand, shorthand } = instance.l10n.months;
   const monthText = (
     instance.config.shorthandCurrentMonth ? shorthand : longhand
