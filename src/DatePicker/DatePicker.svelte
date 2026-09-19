@@ -93,8 +93,10 @@
 
   /**
    * Override the options passed to the Flatpickr instance.
+   * `mode` is set by `datePickerType`, and `wrap` is not supported
+   * because Flatpickr is given the input element itself.
    * @see https://flatpickr.js.org/options
-   * @type {import("flatpickr/dist/types/options").Options}
+   * @type {Omit<import("flatpickr/dist/types/options").Options, "mode" | "wrap">}
    */
   export let flatpickrProps = { static: true };
 
