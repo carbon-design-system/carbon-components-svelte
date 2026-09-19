@@ -2,6 +2,8 @@
   /**
    * @event {{ value: number; valueUpper: number }} change
    * @event {{ value: number; valueUpper: number }} input
+   * @event {{ value: number; valueUpper: number; handle: "lower" | "upper" }} focus
+   * @event {{ value: number; valueUpper: number; handle: "lower" | "upper" }} blur
    */
 
   /**
@@ -131,9 +133,10 @@
 
   /** @typedef {{ value: number; valueUpper: number }} RangeSliderChangeDetail */
   /** @typedef {"lower" | "upper"} ActiveHandle */
+  /** @typedef {RangeSliderChangeDetail & { handle: ActiveHandle }} RangeSliderFocusDetail */
   /** @typedef {MouseEvent | TouchEvent} PointerLikeEvent */
 
-  /** @type {(type: "change" | "input", detail: RangeSliderChangeDetail) => void} */
+  /** @type {(type: "change" | "input" | "focus" | "blur", detail: RangeSliderChangeDetail | RangeSliderFocusDetail) => void} */
   const dispatch = createEventDispatcher();
 
   /** @type {HTMLDivElement | null} */
@@ -142,6 +145,10 @@
   let lowerThumbRef = null;
   /** @type {HTMLDivElement | null} */
   let upperThumbRef = null;
+  /** @type {HTMLInputElement | null} */
+  let lowerInputRef = null;
+  /** @type {HTMLInputElement | null} */
+  let upperInputRef = null;
   /** @type {ActiveHandle} */
   let activeHandle = "lower";
   let dragging = false;
@@ -182,6 +189,22 @@
       ? Math.abs(upperRect.left + upperRect.width / 2 - clientX)
       : Number.POSITIVE_INFINITY;
     return dLower <= dUpper ? "lower" : "upper";
+  }
+
+  function handleLowerInputFocus() {
+    dispatch("focus", { value, valueUpper, handle: "lower" });
+  }
+
+  function handleLowerInputBlur() {
+    dispatch("blur", { value, valueUpper, handle: "lower" });
+  }
+
+  function handleUpperInputFocus() {
+    dispatch("focus", { value, valueUpper, handle: "upper" });
+  }
+
+  function handleUpperInputBlur() {
+    dispatch("blur", { value, valueUpper, handle: "upper" });
   }
 
   /** @type {(e: MouseEvent | TouchEvent) => void} */
@@ -358,6 +381,7 @@
       class:bx--slider-text-input-wrapper--hidden={hideTextInput}
     >
       <input
+        bind:this={lowerInputRef}
         type={hideTextInput ? "hidden" : inputType}
         id={lowerInputId}
         {name}
@@ -389,6 +413,8 @@
         data-warn={(warn && !invalid) || null}
         aria-invalid={invalid || null}
         aria-describedby={invalid ? errorId : warn ? warnId : undefined}
+        on:focus={handleLowerInputFocus}
+        on:blur={handleLowerInputBlur}
       >
       {#if invalid}
         <WarningFilled class="bx--slider__invalid-icon" />
@@ -534,6 +560,7 @@
       class:bx--slider-text-input-wrapper--hidden={hideTextInput}
     >
       <input
+        bind:this={upperInputRef}
         type={hideTextInput ? "hidden" : inputType}
         id={upperInputId}
         name={nameUpper}
@@ -565,6 +592,8 @@
         data-warn={(warn && !invalid) || null}
         aria-invalid={invalid || null}
         aria-describedby={invalid ? errorId : warn ? warnId : undefined}
+        on:focus={handleUpperInputFocus}
+        on:blur={handleUpperInputBlur}
       >
       {#if invalid}
         <WarningFilled class="bx--slider__invalid-icon" />

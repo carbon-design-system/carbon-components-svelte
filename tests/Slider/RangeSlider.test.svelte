@@ -19,6 +19,24 @@
   export let formatValue: ((value: number) => string) | undefined = undefined;
   export let ariaLabelInput: string | undefined = undefined;
   export let ariaLabelInputUpper: string | undefined = undefined;
+  export let onfocus:
+    | ((
+        event: CustomEvent<{
+          value: number;
+          valueUpper: number;
+          handle: "lower" | "upper";
+        }>,
+      ) => void)
+    | undefined = undefined;
+  export let onblur:
+    | ((
+        event: CustomEvent<{
+          value: number;
+          valueUpper: number;
+          handle: "lower" | "upper";
+        }>,
+      ) => void)
+    | undefined = undefined;
 </script>
 
 <RangeSlider
@@ -43,4 +61,6 @@
   on:input={(e) => {
     console.log("input", e.detail);
   }}
+  on:focus={(e) => onfocus?.(e)}
+  on:blur={(e) => onblur?.(e)}
 />

@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import RangeSlider from "./RangeSlider.test.svelte";
 
@@ -19,6 +19,46 @@ describe("RangeSlider", () => {
     expect(inputs).toHaveLength(2);
     expect(inputs[0]).toHaveValue(10);
     expect(inputs[1]).toHaveValue(90);
+  });
+
+  it("dispatches focus and blur events from both text inputs with a handle", async () => {
+    const onfocus = vi.fn();
+    const onblur = vi.fn();
+    render(RangeSlider, {
+      props: { onfocus, onblur, value: 10, valueUpper: 90 },
+    });
+
+    const [lower, upper] = screen.getAllByRole("spinbutton");
+
+    await fireEvent.focus(lower);
+    expect(onfocus).toHaveBeenCalledTimes(1);
+    expect(onfocus.mock.calls[0][0].detail).toEqual({
+      value: 10,
+      valueUpper: 90,
+      handle: "lower",
+    });
+    await fireEvent.blur(lower);
+    expect(onblur).toHaveBeenCalledTimes(1);
+    expect(onblur.mock.calls[0][0].detail).toEqual({
+      value: 10,
+      valueUpper: 90,
+      handle: "lower",
+    });
+
+    await fireEvent.focus(upper);
+    expect(onfocus).toHaveBeenCalledTimes(2);
+    expect(onfocus.mock.calls[1][0].detail).toEqual({
+      value: 10,
+      valueUpper: 90,
+      handle: "upper",
+    });
+    await fireEvent.blur(upper);
+    expect(onblur).toHaveBeenCalledTimes(2);
+    expect(onblur.mock.calls[1][0].detail).toEqual({
+      value: 10,
+      valueUpper: 90,
+      handle: "upper",
+    });
   });
 
   it("should apply two-handles container class", () => {
