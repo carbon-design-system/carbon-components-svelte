@@ -212,6 +212,14 @@ Set `display` to control the CSS display mode. Use `"flex"` or `"inline-flex"` t
   <Box fill="layer-01" padding={4} border="subtle" marginX={2}>Flex item</Box>
 </Box>
 
+## Overflow
+
+Set `overflow` to control how content that exceeds the box's bounds is handled.
+
+<Box height="6rem" width="16rem" border="subtle" overflow="auto">
+  <Box height="12rem" padding={3}>Scroll to see the clipped content below.</Box>
+</Box>
+
 ## Custom element
 
 The box renders a `<div>` by default. Set `tag` to use a different element.
