@@ -203,6 +203,15 @@ scroll container, not the browser viewport.
   </Box>
 </Box>
 
+## Display
+
+Set `display` to control the CSS display mode. Use `"flex"` or `"inline-flex"` to lay out children without a separate flex wrapper.
+
+<Box display="flex">
+  <Box fill="layer-01" padding={4} border="subtle" marginX={2}>Flex item</Box>
+  <Box fill="layer-01" padding={4} border="subtle" marginX={2}>Flex item</Box>
+</Box>
+
 ## Custom element
 
 The box renders a `<div>` by default. Set `tag` to use a different element.
