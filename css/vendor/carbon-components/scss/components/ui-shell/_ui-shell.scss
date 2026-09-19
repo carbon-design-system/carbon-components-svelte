@@ -238,7 +238,11 @@
     font-weight: 600;
     line-height: 1.29;
     letter-spacing: 0.16px;
-    transition: all 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
+    // ccs: only background-color/color differ (hover, selected); avoid
+    // `all` so the browser doesn't interpolate the rest of the animatable
+    // property set.
+    transition: background-color 70ms cubic-bezier(0.2, 0, 0.38, 0.9),
+      color 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
     display: block;
     text-decoration: none;
     white-space: nowrap;
