@@ -32,6 +32,7 @@
   export let warnText = "";
   export let id: ComponentProps<Slider>["id"] = undefined;
   export let ariaLabel: ComponentProps<Slider>["aria-label"] = undefined;
+  export let selectTextOnFocus = false;
   export let onfocus: ((event: FocusEvent) => void) | undefined = undefined;
   export let onblur: ((event: FocusEvent) => void) | undefined = undefined;
 </script>
@@ -97,6 +98,7 @@
     {hideLabel}
     {name}
     {inputType}
+    {selectTextOnFocus}
     class={customClass}
     on:change={(e) => {
       console.log("change", e.detail);

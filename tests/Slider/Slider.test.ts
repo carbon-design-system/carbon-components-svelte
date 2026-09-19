@@ -162,6 +162,40 @@ describe("Slider", () => {
     expect(onblur).toHaveBeenCalled();
   });
 
+  it("selects the full value on focus when selectTextOnFocus is true", async () => {
+    render(Slider, { props: { selectTextOnFocus: true, value: 42 } });
+
+    const input = screen.getByRole("spinbutton") as HTMLInputElement;
+    const select = vi.spyOn(input, "select");
+    await user.click(input);
+    await tick();
+
+    expect(select).toHaveBeenCalled();
+  });
+
+  it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {
+    render(Slider, { props: { value: 42 } });
+
+    const input = screen.getByRole("spinbutton") as HTMLInputElement;
+    const select = vi.spyOn(input, "select");
+    await user.click(input);
+    await tick();
+
+    expect(select).not.toHaveBeenCalled();
+  });
+
+  it("does not select text on focus when disabled", async () => {
+    render(Slider, {
+      props: { selectTextOnFocus: true, disabled: true, value: 42 },
+    });
+
+    const input = screen.getByRole("spinbutton") as HTMLInputElement;
+    const select = vi.spyOn(input, "select");
+    await fireEvent.focus(input);
+
+    expect(select).not.toHaveBeenCalled();
+  });
+
   it("should handle full width", () => {
     render(Slider, {
       props: { fullWidth: true },
