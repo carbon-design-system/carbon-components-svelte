@@ -1,4 +1,5 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { user } from "../utils/user";
 import TextAreaFluidForm from "./TextArea.fluidForm.test.svelte";
 import TextAreaFluidSkeleton from "./TextArea.fluidSkeleton.test.svelte";
@@ -13,6 +14,41 @@ describe("TextArea", () => {
     expect(screen.getByLabelText("App description")).toBeInTheDocument();
     expect(screen.getByRole("textbox")).not.toHaveAttribute("cols");
     expect(screen.getByRole("textbox")).toHaveAttribute("rows", "4");
+  });
+
+  it("selects the full value on focus when selectTextOnFocus is true", async () => {
+    render(TextArea, {
+      props: { selectTextOnFocus: true, value: "hello world" },
+    });
+
+    const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+    await user.click(textarea);
+    await tick();
+
+    expect(textarea.selectionStart).toBe(0);
+    expect(textarea.selectionEnd).toBe("hello world".length);
+  });
+
+  it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {
+    render(TextArea, { props: { value: "hello world" } });
+
+    const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+    await user.click(textarea);
+    await tick();
+
+    expect(textarea.selectionStart).toBe(textarea.selectionEnd);
+  });
+
+  it("does not select text on focus when disabled", async () => {
+    render(TextArea, {
+      props: { selectTextOnFocus: true, disabled: true, value: "hello world" },
+    });
+
+    const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+    const select = vi.spyOn(textarea, "select");
+    await fireEvent.focus(textarea);
+
+    expect(select).not.toHaveBeenCalled();
   });
 
   it("should handle placeholder text", () => {

@@ -78,7 +78,10 @@
    */
   export let ref = null;
 
-  import { getContext } from "svelte";
+  /** Set to `true` to select the textarea's text when it receives focus */
+  export let selectTextOnFocus = false;
+
+  import { getContext, tick } from "svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { graphemeCount } from "../utils/grapheme-count.js";
@@ -108,6 +111,12 @@
     ]
       .filter(Boolean)
       .join(" ") || undefined;
+
+  function handleFocus() {
+    if (selectTextOnFocus && !disabled) {
+      tick().then(() => ref?.select());
+    }
+  }
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -186,6 +195,7 @@
       on:keydown
       on:keyup
       on:focus
+      on:focus={handleFocus}
       on:blur
       on:paste
     ></textarea>

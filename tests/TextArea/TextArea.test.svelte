@@ -21,6 +21,7 @@
   export let id = "ccs-test";
   export let name: ComponentProps<TextArea>["name"] = undefined;
   export let ref: ComponentProps<TextArea>["ref"] = null;
+  export let selectTextOnFocus = false;
 </script>
 
 <TextArea
@@ -43,6 +44,7 @@
   {id}
   {name}
   {ref}
+  {selectTextOnFocus}
   on:change
   on:input
   on:keydown
