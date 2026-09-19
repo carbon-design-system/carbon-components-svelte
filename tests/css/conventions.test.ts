@@ -85,6 +85,16 @@ describe("css partial conventions", () => {
     expect(offenders(/(^|[^a-z-])rem\(/)).toEqual([]);
   });
 
+  it("has no raw rem literals or literal breakpoints", () => {
+    // Custom property values are not evaluated by Sass, so `--x: 1rem` stays.
+    const raw = offenders(
+      /^(?!\s*--).*(?<![\w.(-])\d*\.?\d+rem\b/,
+      new Set(["_spacing-scale.scss"]),
+    );
+    expect(raw).toEqual([]);
+    expect(offenders(/@media[^{]*(min|max)-width/)).toEqual([]);
+  });
+
   it("uses $carbon--spacing-* tokens, not the $spacing-* aliases", () => {
     // The aliases compile to `var(--cds-spacing-*)` in all.css while the
     // vendored base is mostly static, so mixing them only adds bytes.

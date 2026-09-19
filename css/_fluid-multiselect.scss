@@ -15,7 +15,7 @@
   .#{$prefix}--list-box__wrapper--fluid
     .#{$prefix}--multi-select--filterable
     .#{$prefix}--tag.#{$prefix}--tag--filter {
-    margin-block-start: 1.25rem;
+    margin-block-start: to-rem(20px);
   }
 
   // Filterable + selected: reset padding-inline-start so text follows the tag.

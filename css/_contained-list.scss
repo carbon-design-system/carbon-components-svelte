@@ -7,7 +7,7 @@
 /// @group contained-list
 @mixin contained-list {
   .#{$prefix}--contained-list .#{$prefix}--tag {
-    height: 1.5rem; // 24px equivalent to md size
+    height: to-rem(24px); // 24px equivalent to md size
   }
 
   .#{$prefix}--contained-list > ul {
@@ -39,26 +39,26 @@
   }
 
   .#{$prefix}--contained-list--disclosed .#{$prefix}--search {
-    top: 2rem; // Fixed header height for disclosed variant
+    top: to-rem(32px); // Fixed header height for disclosed variant
   }
 
   .#{$prefix}--contained-list--on-page .#{$prefix}--search {
-    top: 3rem; // Default md size header height
+    top: to-rem(48px); // Default md size header height
   }
 
   .#{$prefix}--contained-list--on-page.#{$prefix}--contained-list--sm
     .#{$prefix}--search {
-    top: 2rem; // sm size header height
+    top: to-rem(32px); // sm size header height
   }
 
   .#{$prefix}--contained-list--on-page.#{$prefix}--contained-list--lg
     .#{$prefix}--search {
-    top: 4rem; // lg size header height
+    top: to-rem(64px); // lg size header height
   }
 
   .#{$prefix}--contained-list--on-page.#{$prefix}--contained-list--xl
     .#{$prefix}--search {
-    top: 4.5rem; // xl size header height
+    top: to-rem(72px); // xl size header height
   }
 
   .#{$prefix}--contained-list .#{$prefix}--search .#{$prefix}--search-input {
@@ -105,31 +105,31 @@
     @include type-style("heading-01");
 
     background-color: $ui-background;
-    height: 3rem;
+    height: to-rem(48px);
     border-bottom: 1px solid $ui-03;
     color: $text-01;
   }
 
   .#{$prefix}--contained-list--on-page.#{$prefix}--contained-list--sm
     .#{$prefix}--contained-list__header {
-    height: 2rem;
+    height: to-rem(32px);
   }
 
   .#{$prefix}--contained-list--on-page.#{$prefix}--contained-list--lg
     .#{$prefix}--contained-list__header {
-    height: 4rem;
+    height: to-rem(64px);
   }
 
   .#{$prefix}--contained-list--on-page.#{$prefix}--contained-list--xl
     .#{$prefix}--contained-list__header {
-    height: 4.5rem;
+    height: to-rem(72px);
   }
 
   .#{$prefix}--contained-list--disclosed .#{$prefix}--contained-list__header {
     @include type-style("label-01");
 
     background-color: $ui-01;
-    height: 2rem;
+    height: to-rem(32px);
     color: $text-02;
   }
 
@@ -162,9 +162,9 @@
     @include type-style("body-short-01");
 
     // Vertical padding centers body-short-01 in the row height
-    padding: 0.875rem $carbon--spacing-05;
+    padding: to-rem(14px) $carbon--spacing-05;
     color: $text-01;
-    min-height: 3rem; // md size default
+    min-height: to-rem(48px); // md size default
   }
 
   .#{$prefix}--contained-list--sm
@@ -172,9 +172,9 @@
   .#{$prefix}--contained-list--sm
     .#{$prefix}--contained-list-item--clickable
     .#{$prefix}--contained-list-item__content {
-    min-height: 2rem; // 32px
-    padding-top: 0.375rem; // (32px - 20px) / 2 = 6px
-    padding-bottom: 0.375rem;
+    min-height: to-rem(32px); // 32px
+    padding-top: to-rem(6px); // (32px - 20px) / 2 = 6px
+    padding-bottom: to-rem(6px);
   }
 
   .#{$prefix}--contained-list--lg
@@ -182,9 +182,9 @@
   .#{$prefix}--contained-list--lg
     .#{$prefix}--contained-list-item--clickable
     .#{$prefix}--contained-list-item__content {
-    min-height: 4rem; // 64px
-    padding-top: 1.375rem; // (64px - 20px) / 2 = 22px
-    padding-bottom: 1.375rem;
+    min-height: to-rem(64px); // 64px
+    padding-top: to-rem(22px); // (64px - 20px) / 2 = 22px
+    padding-bottom: to-rem(22px);
   }
 
   .#{$prefix}--contained-list--xl
@@ -192,9 +192,9 @@
   .#{$prefix}--contained-list--xl
     .#{$prefix}--contained-list-item--clickable
     .#{$prefix}--contained-list-item__content {
-    min-height: 4.5rem; // 72px
-    padding-top: 1.625rem; // (72px - 20px) / 2 = 26px
-    padding-bottom: 1.625rem;
+    min-height: to-rem(72px); // 72px
+    padding-top: to-rem(26px); // (72px - 20px) / 2 = 26px
+    padding-bottom: to-rem(26px);
   }
 
   .#{$prefix}--contained-list-item:not(:last-of-type)::before {
@@ -271,7 +271,7 @@
     .#{$prefix}--contained-list-item__content {
     display: grid;
     column-gap: $carbon--spacing-04;
-    grid-template-columns: 1rem 1fr;
+    grid-template-columns: to-rem(16px) 1fr;
   }
 
   .#{$prefix}--contained-list-item__icon {

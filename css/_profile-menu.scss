@@ -39,24 +39,24 @@
   }
 
   .#{$prefix}--profile-menu__trigger .#{$prefix}--profile-menu__avatar {
-    width: 2rem;
-    height: 2rem;
+    width: to-rem(32px);
+    height: to-rem(32px);
   }
 
   .#{$prefix}--profile-menu__header .#{$prefix}--profile-menu__avatar {
-    width: 2.5rem;
-    height: 2.5rem;
+    width: to-rem(40px);
+    height: to-rem(40px);
   }
 
   .#{$prefix}--profile-menu.#{$prefix}--profile-menu {
     position: absolute;
-    top: 3rem;
+    top: to-rem(48px);
     right: 0;
     z-index: 9000;
-    width: 20rem;
+    width: to-rem(320px);
     max-width: 100vw;
     // Scroll within the card when the menu is taller than the viewport.
-    max-height: calc(100vh - 3rem);
+    max-height: calc(100vh - to-rem(48px));
     overflow-y: auto;
     padding: 0;
     background-color: $layer;
@@ -128,7 +128,7 @@
     justify-content: space-between;
     width: 100%;
     // Tall enough to fit a leading `sm` (1.5rem) avatar with breathing room.
-    min-height: 2.5rem;
+    min-height: to-rem(40px);
     margin: 0;
     padding: 0 $carbon--spacing-05;
     color: $text-secondary;

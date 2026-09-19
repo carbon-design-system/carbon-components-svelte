@@ -1,6 +1,7 @@
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/functions";
 @import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/layout";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
 /// FullPageError (absent from v10)
@@ -26,7 +27,7 @@
     padding: 0;
   }
 
-  @media (min-width: 66rem) {
+  @include carbon--breakpoint(lg) {
     .#{$prefix}--full-page-error__column {
       padding: 0 $carbon--spacing-07 0 0;
     }

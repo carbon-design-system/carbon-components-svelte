@@ -5,18 +5,18 @@
 @mixin copy-input {
   // Reserve room so the value never sits under the copy button.
   .#{$prefix}--copy-input__field-wrapper .#{$prefix}--text-input {
-    padding-right: 2.5rem;
+    padding-right: to-rem(40px);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
   .#{$prefix}--copy-input__field-wrapper .#{$prefix}--text-input--sm {
-    padding-right: 2rem;
+    padding-right: to-rem(32px);
   }
 
   .#{$prefix}--copy-input__field-wrapper .#{$prefix}--text-input--xl {
-    padding-right: 3rem;
+    padding-right: to-rem(48px);
   }
 
   // Fluid form shorthand padding must not collapse right padding below button width.

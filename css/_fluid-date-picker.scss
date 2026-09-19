@@ -42,7 +42,7 @@
     align-items: center;
     margin: 0;
     block-size: to-rem(16px);
-    inline-size: calc(100% - 2rem);
+    inline-size: calc(100% - to-rem(32px));
     inset-block-start: to-rem(13px);
     left: $carbon--spacing-05;
     overflow-x: scroll;

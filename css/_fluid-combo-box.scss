@@ -51,7 +51,7 @@
     .#{$prefix}--list-box__field
     .#{$prefix}--text-input
     + .#{$prefix}--list-box__invalid-icon {
-    right: 1rem;
+    right: to-rem(16px);
   }
 
   .#{$prefix}--list-box__wrapper--fluid
