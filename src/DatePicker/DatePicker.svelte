@@ -725,7 +725,11 @@
       ...flatpickrProps,
     })
       .then(() => {})
-      .catch(() => {});
+      .catch((error) => {
+        // Only a failed plugin import lands here. Surface it like flatpickr
+        // surfaces its own init errors instead of failing silently.
+        console.error(error);
+      });
   }
   $: if (calendar) {
     calendar.set("clickOpens", !$readonlyAny);
