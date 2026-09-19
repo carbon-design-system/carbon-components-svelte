@@ -195,19 +195,20 @@
 
   // Steppers show only a bottom border on hover while the input is focused.
   // `--neutral` is set by the component only when neither invalid nor warn
-  // is showing, so it already encodes the same condition the two `:not()`
-  // clauses spelled out across the `.number`/`.input-wrapper` pair. Repeated
-  // to match the specificity of the `[data-invalid]` + `--warning` clauses
-  // it replaces.
+  // is showing, so it already encodes the same condition a `:not()` chain
+  // would spell out. Nothing else conflicts for a neutral element: the
+  // invalid/warning variants of this rule are mutually exclusive by class,
+  // and the unconditional base rules for this subject sit well below this
+  // selector's natural specificity.
   @media (any-hover: hover) {
     .#{$prefix}--number-input--fluid
-      .#{$prefix}--number.#{$prefix}--number--neutral.#{$prefix}--number--neutral
+      .#{$prefix}--number.#{$prefix}--number--neutral
       .#{$prefix}--number__input-wrapper
       input[type="number"]:focus
       ~ .#{$prefix}--number__controls
       .#{$prefix}--number__control-btn:hover,
     .#{$prefix}--number-input--fluid
-      .#{$prefix}--number.#{$prefix}--number--neutral.#{$prefix}--number--neutral
+      .#{$prefix}--number.#{$prefix}--number--neutral
       .#{$prefix}--number__input-wrapper
       input[type="text"]:focus
       ~ .#{$prefix}--number__controls
