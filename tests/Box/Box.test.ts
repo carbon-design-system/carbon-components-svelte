@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { expectInlineStyle } from "../utils/inline-style";
+import BoxRef from "./Box.ref.test.svelte";
 import Box from "./Box.test.svelte";
 
 describe("Box", () => {
@@ -8,6 +9,17 @@ describe("Box", () => {
 
     const node = screen.getByText("Default box");
     expect(node.tagName).toBe("DIV");
+  });
+
+  it("binds `ref` to the rendered element", async () => {
+    const { rerender } = render(BoxRef);
+
+    expect(screen.getByTestId("ref-tag")).toHaveTextContent("DIV");
+    expect(screen.getByText("Anchor")).toBeInTheDocument();
+
+    // `tag` swaps the element, so the binding has to follow it.
+    await rerender({ tag: "section" });
+    expect(screen.getByTestId("ref-tag")).toHaveTextContent("SECTION");
   });
 
   it("renders a custom element via `tag`", () => {
