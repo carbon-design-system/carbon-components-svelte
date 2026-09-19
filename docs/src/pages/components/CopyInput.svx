@@ -49,9 +49,15 @@ Set `type` to `"password"` to obscure the value. By default the value stays obsc
 
 <CopyInput labelText="API token" type="password" value="sk-1234567890abcdef" />
 
-Set `revealMode` to opt into revealing the value on interaction. Use `"focus"` to reveal while the input is focused.
+Set `revealMode` to opt into revealing the value on interaction.
+
+### Reveal on focus
+
+Use `"focus"` to reveal while the input is focused.
 
 <CopyInput labelText="API token" type="password" revealMode="focus" value="sk-1234567890abcdef" />
+
+### Reveal on hover or focus
 
 Use `"hover-focus"` to reveal while the input is hovered or focused.
 
@@ -82,19 +88,25 @@ Set `hideLabel` to visually hide the label text. The label remains available to 
 
 <CopyInput hideLabel labelText="API token" value="sk-1234567890abcdef" />
 
-## Sizes
-
-Set `size` to `"sm"` or `"xl"`.
-
-<CopyInput size="sm" labelText="Small" value="npm install carbon-components-svelte" />
-<br />
-<CopyInput labelText="Default" value="npm install carbon-components-svelte" />
-<br />
-<CopyInput size="xl" labelText="Extra large" value="npm install carbon-components-svelte" />
-
-## Inline label
+## Inline
 
 <CopyInput inline labelText="Token" value="sk-1234567890abcdef" />
+
+## Sizes
+
+Set `size` to control the input height. The default is `md`.
+
+### Extra-large
+
+Use the extra-large size for more prominent inputs by setting `size` to `"xl"`.
+
+<CopyInput size="xl" labelText="Extra large" value="npm install carbon-components-svelte" />
+
+### Small
+
+Use the small size for more compact inputs by setting `size` to `"sm"`.
+
+<CopyInput size="sm" labelText="Small" value="npm install carbon-components-svelte" />
 
 ## Disabled
 
@@ -154,13 +166,18 @@ On hover or focus, the copy button shows a tooltip with `iconDescription`. It re
 
 Set `tooltipPosition` to place the tooltip relative to the copy button. Accepts `"top"`, `"right"`, `"bottom"` (default), and `"left"`.
 
-<CopyInput labelText="API endpoint" value="https://api.acme.io/v1" tooltipPosition="left" />
+<CopyInput labelText="Top" value="https://api.acme.io/v1" iconDescription="Top" tooltipPosition="top" />
+<CopyInput labelText="Right" value="https://api.acme.io/v1" iconDescription="Right" tooltipPosition="right" />
+<CopyInput labelText="Bottom" value="https://api.acme.io/v1" iconDescription="Bottom" tooltipPosition="bottom" />
+<CopyInput labelText="Left" value="https://api.acme.io/v1" iconDescription="Left" tooltipPosition="left" />
 
 ### Alignment
 
 Set `tooltipAlignment` to align the tooltip relative to the copy button. Accepts `"start"`, `"center"` (default), and `"end"`.
 
-<CopyInput labelText="API endpoint" value="https://api.acme.io/v1" tooltipAlignment="end" />
+<CopyInput labelText="Start" value="https://api.acme.io/v1" iconDescription="Start" tooltipAlignment="start" />
+<CopyInput labelText="Center" value="https://api.acme.io/v1" iconDescription="Center" tooltipAlignment="center" />
+<CopyInput labelText="End" value="https://api.acme.io/v1" iconDescription="End" tooltipAlignment="end" />
 
 ## Portal tooltip
 
@@ -180,6 +197,7 @@ Use the fluid variant with `fluid`, which embeds the label
 inside the field. Fluid copy inputs can be used standalone or inside
 [FluidForm](/components/FluidForm), where the fluid variant is applied
 automatically. The fluid variant cannot be combined with the inline variant.
+`helperText` is not displayed in the fluid variant.
 
 <CopyInput fluid labelText="API token" value="sk-1234567890abcdef" />
 
