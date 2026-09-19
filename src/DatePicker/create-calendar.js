@@ -193,7 +193,7 @@ function updateMonthNode(instance, locale) {
 
 /**
  * @param {CreateCalendarArgs} args
- * @returns {Promise<FlatpickrInstance>}
+ * @returns {Promise<FlatpickrInstance | null>}
  */
 export async function createCalendar({ options, base, input, dispatch }) {
   /** @type {((new (config: { position: string; input: HTMLInputElement }) => unknown) | undefined)} */
@@ -318,5 +318,8 @@ export async function createCalendar({ options, base, input, dispatch }) {
           : []),
     ],
   };
-  return new /** @type {any} */ (flatpickr)(base, config);
+  const instance = new /** @type {any} */ (flatpickr)(base, config);
+  // flatpickr catches its own init errors, logs them, and returns an empty
+  // array. Report that as "no calendar" so callers never treat it as one.
+  return Array.isArray(instance) ? null : instance;
 }
