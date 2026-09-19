@@ -168,6 +168,12 @@ Pass `weekNumbers: true` via `flatpickrProps` to show a week number column besid
 
 <FileSource src="/framed/DatePicker/DatePickerWeekNumbers" />
 
+### Abbreviated month label
+
+Pass `shorthandCurrentMonth: true` via `flatpickrProps` to show the abbreviated month name from the active `locale` in the calendar header, such as "Sep" instead of "September".
+
+<FileSource src="/framed/DatePicker/DatePickerShorthandMonth" />
+
 ### Default date
 
 Pass `defaultDate` via `flatpickrProps` to preselect a date when `value` is empty. Unlike `value`, it accepts a `Date` or the `"today"` shorthand, and the formatted result is written back to `value`. A non-empty `value` always takes precedence.
