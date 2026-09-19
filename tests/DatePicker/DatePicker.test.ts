@@ -772,6 +772,34 @@ describe("DatePicker", () => {
       );
     });
 
+    it("keeps the picked date when formatDate output is not parseable", async () => {
+      render(DatePicker, {
+        datePickerType: "single",
+        value: "03/15/2024",
+        flatpickrProps: {
+          formatDate: (date: Date) => `Day ${date.getDate()}`,
+        },
+      });
+
+      const input = screen.getByLabelText("Date");
+      await user.click(input);
+      const calendar = await screen.findByLabelText("calendar-container");
+      const day = Array.from(
+        calendar.querySelectorAll<HTMLElement>(
+          ".flatpickr-day:not(.prevMonthDay):not(.nextMonthDay)",
+        ),
+      ).find((node) => node.textContent === "10");
+      assert(day);
+      await user.click(day);
+      await tick();
+
+      expect(input).toHaveValue("Day 10");
+      await user.click(input);
+      const selected = calendar.querySelector(".flatpickr-day.selected");
+      expect(selected).toHaveTextContent("10");
+      expect(calendar.querySelector(".cur-month")).toHaveTextContent("March");
+    });
+
     it("keeps the calendar open after selecting a date when closeOnSelect is false", async () => {
       render(DatePicker, {
         datePickerType: "single",
