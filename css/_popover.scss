@@ -119,9 +119,9 @@
       rotate(45deg);
   }
 
-  .#{$prefix}--popover--bottom.#{$prefix}--popover::before,
-  .#{$prefix}--popover--bottom-left.#{$prefix}--popover::before,
-  .#{$prefix}--popover--bottom-right.#{$prefix}--popover::before {
+  .#{$prefix}--popover--bottom::before,
+  .#{$prefix}--popover--bottom-left::before,
+  .#{$prefix}--popover--bottom-right::before {
     top: 0;
     right: 0;
     left: 0;
@@ -166,9 +166,9 @@
       rotate(45deg);
   }
 
-  .#{$prefix}--popover--top.#{$prefix}--popover::before,
-  .#{$prefix}--popover--top-left.#{$prefix}--popover::before,
-  .#{$prefix}--popover--top-right.#{$prefix}--popover::before {
+  .#{$prefix}--popover--top::before,
+  .#{$prefix}--popover--top-left::before,
+  .#{$prefix}--popover--top-right::before {
     right: 0;
     bottom: 0;
     left: 0;
@@ -213,9 +213,9 @@
       rotate(45deg);
   }
 
-  .#{$prefix}--popover--right.#{$prefix}--popover::before,
-  .#{$prefix}--popover--right-top.#{$prefix}--popover::before,
-  .#{$prefix}--popover--right-bottom.#{$prefix}--popover::before {
+  .#{$prefix}--popover--right::before,
+  .#{$prefix}--popover--right-top::before,
+  .#{$prefix}--popover--right-bottom::before {
     top: 0;
     bottom: 0;
     left: 0;
@@ -260,9 +260,9 @@
       rotate(45deg);
   }
 
-  .#{$prefix}--popover--left.#{$prefix}--popover::before,
-  .#{$prefix}--popover--left-top.#{$prefix}--popover::before,
-  .#{$prefix}--popover--left-bottom.#{$prefix}--popover::before {
+  .#{$prefix}--popover--left::before,
+  .#{$prefix}--popover--left-top::before,
+  .#{$prefix}--popover--left-bottom::before {
     top: 0;
     right: 0;
     bottom: 0;
