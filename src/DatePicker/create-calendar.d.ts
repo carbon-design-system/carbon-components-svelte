@@ -28,3 +28,12 @@ export interface CreateCalendarArgs {
 export function createCalendar(
   args: CreateCalendarArgs,
 ): Promise<FlatpickrInstance>;
+
+/**
+ * Resyncs Carbon's `.cur-month` header label after a programmatic
+ * navigation that suppressed flatpickr's own `onMonthChange` hook.
+ */
+export function updateMonthNode(
+  instance: FlatpickrInstance,
+  locale: unknown,
+): void;
