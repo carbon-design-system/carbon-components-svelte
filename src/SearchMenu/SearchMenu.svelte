@@ -117,6 +117,9 @@
    */
   export let menuRef = null;
 
+  /** Set to `true` to select the input's text when it receives focus */
+  export let selectTextOnFocus = false;
+
   import { createEventDispatcher, setContext } from "svelte";
   import { writable } from "svelte/store";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
@@ -135,6 +138,8 @@
   let focused = false;
   let dismissed = false;
   let refocusOnBlur = false;
+  /** @type {Search | null} */
+  let search = null;
 
   const query = writable("");
   const sharedShouldFilter = writable(shouldFilter);
@@ -323,7 +328,8 @@
     // are dead click areas; only selecting an item should close the menu.
     if (refocusOnBlur) {
       refocusOnBlur = false;
-      ref?.focus();
+      if (search) search.focusWithoutSelect();
+      else ref?.focus();
       return;
     }
     close("blur");
@@ -371,6 +377,7 @@
   {/if}
   <div bind:this={searchAnchorRef} class:bx--search-menu__search={true}>
     <Search
+      bind:this={search}
       {size}
       {light}
       {disabled}
@@ -380,6 +387,7 @@
       {icon}
       {id}
       {searchClass}
+      {selectTextOnFocus}
       bind:value
       bind:ref
       role="combobox"
