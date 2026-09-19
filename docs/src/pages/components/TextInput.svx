@@ -65,6 +65,12 @@ The bound valueâ€”and the event detail dispatched by `on:input` and `on:change`â
 
 <TextInput type="number" labelText="Port number" placeholder="Enter port number..." />
 
+## Select on focus
+
+Set `selectTextOnFocus` to select the full value when the field receives focus.
+
+<TextInput selectTextOnFocus labelText="Workspace name" value="acme-production" />
+
 ## Light
 
 Use the light variant for light backgrounds.
