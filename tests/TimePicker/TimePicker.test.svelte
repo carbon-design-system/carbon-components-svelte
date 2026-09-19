@@ -24,6 +24,7 @@
   export let name: ComponentProps<TimePicker>["name"] = "test-time";
   export let ref: ComponentProps<TimePicker>["ref"] = null;
   export let fluid: ComponentProps<TimePicker>["fluid"] = false;
+  export let selectTextOnFocus: ComponentProps<TimePicker>["selectTextOnFocus"] = false;
 </script>
 
 <TimePicker
@@ -46,6 +47,7 @@
   {name}
   {ref}
   {fluid}
+  {selectTextOnFocus}
   on:change={() => {
     console.log("change");
   }}

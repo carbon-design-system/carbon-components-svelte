@@ -1,4 +1,5 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { user } from "../utils/user";
 import TimePickerFluidForm from "./TimePicker.fluidForm.test.svelte";
 import TimePickerFluidSkeleton from "./TimePicker.fluidSkeleton.test.svelte";
@@ -23,6 +24,39 @@ describe("TimePicker", () => {
     expect(screen.getByText("PM")).toBeInTheDocument();
     expect(screen.getByText("PDT")).toBeInTheDocument();
     expect(screen.getByText("GMT")).toBeInTheDocument();
+  });
+
+  it("selects the full value on focus when selectTextOnFocus is true", async () => {
+    render(TimePicker, { props: { selectTextOnFocus: true, value: "12:00" } });
+
+    const input = screen.getByRole("textbox") as HTMLInputElement;
+    await user.click(input);
+    await tick();
+
+    expect(input.selectionStart).toBe(0);
+    expect(input.selectionEnd).toBe("12:00".length);
+  });
+
+  it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {
+    render(TimePicker, { props: { value: "12:00" } });
+
+    const input = screen.getByRole("textbox") as HTMLInputElement;
+    await user.click(input);
+    await tick();
+
+    expect(input.selectionStart).toBe(input.selectionEnd);
+  });
+
+  it("does not select text on focus when disabled", async () => {
+    render(TimePicker, {
+      props: { selectTextOnFocus: true, disabled: true, value: "12:00" },
+    });
+
+    const input = screen.getByRole("textbox") as HTMLInputElement;
+    const select = vi.spyOn(input, "select");
+    await fireEvent.focus(input);
+
+    expect(select).not.toHaveBeenCalled();
   });
 
   it("should handle different sizes", () => {
