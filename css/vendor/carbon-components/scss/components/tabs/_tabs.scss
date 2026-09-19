@@ -172,8 +172,17 @@
       line-height: calc(#{to-rem(48px)} - (#{$spacing-03} * 2));
     }
 
-    .#{$prefix}--tabs__nav-link:focus,
     .#{$prefix}--tabs__nav-link:active {
+      box-shadow: none;
+    }
+
+    @supports not selector(:focus-visible) {
+      .#{$prefix}--tabs__nav-link:focus {
+        box-shadow: none;
+      }
+    }
+
+    .#{$prefix}--tabs__nav-link:focus-visible {
       box-shadow: none;
     }
   }
@@ -197,8 +206,21 @@
       outline $duration--fast-01 motion(standard, productive);
     white-space: nowrap;
 
-    &:focus,
     &:active {
+      @include focus-outline('outline');
+
+      border-bottom: 2px;
+    }
+
+    @supports not selector(:focus-visible) {
+      &:focus {
+        @include focus-outline('outline');
+
+        border-bottom: 2px;
+      }
+    }
+
+    &:focus-visible {
       @include focus-outline('outline');
 
       border-bottom: 2px;
@@ -243,9 +265,19 @@
   }
 
   .#{$prefix}--tabs__nav-item:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled)
-    .#{$prefix}--tabs__nav-link:focus,
-  .#{$prefix}--tabs__nav-item:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled)
     .#{$prefix}--tabs__nav-link:active {
+    color: $text-02;
+  }
+
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--tabs__nav-item:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled)
+      .#{$prefix}--tabs__nav-link:focus {
+      color: $text-02;
+    }
+  }
+
+  .#{$prefix}--tabs__nav-item:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled)
+    .#{$prefix}--tabs__nav-link:focus-visible {
     color: $text-02;
   }
 
@@ -853,8 +885,17 @@
   }
 
   .#{$prefix}--tabs__nav-item--close-icon:not(.#{$prefix}--tabs__nav-item--close-icon--disabled):hover
-    svg,
-  .#{$prefix}--tabs__nav-item--close-icon:focus svg {
+    svg {
+    fill: $text-01;
+  }
+
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--tabs__nav-item--close-icon:focus svg {
+      fill: $text-01;
+    }
+  }
+
+  .#{$prefix}--tabs__nav-item--close-icon:focus-visible svg {
     fill: $text-01;
   }
 
@@ -1307,8 +1348,17 @@ $tabs-sizes: (
         // focus outline instead of the underline here, so drop the
         // indicator entirely rather than repaint it.
         .#{$prefix}--tabs__nav-item:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled) {
-          .#{$prefix}--tabs__nav-link:focus,
           .#{$prefix}--tabs__nav-link:active {
+            box-shadow: none;
+          }
+
+          @supports not selector(:focus-visible) {
+            .#{$prefix}--tabs__nav-link:focus {
+              box-shadow: none;
+            }
+          }
+
+          .#{$prefix}--tabs__nav-link:focus-visible {
             box-shadow: none;
           }
         }

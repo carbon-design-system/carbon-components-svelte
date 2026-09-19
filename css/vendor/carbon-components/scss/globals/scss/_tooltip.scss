@@ -61,7 +61,13 @@
   overflow: visible;
   align-items: center;
 
-  &:focus {
+  @supports not selector(:focus-visible) {
+    &:focus {
+      @include focus-outline('border');
+    }
+  }
+
+  &:focus-visible {
     @include focus-outline('border');
   }
 
@@ -72,7 +78,17 @@
   @if $tooltip-type == 'icon' {
     cursor: pointer;
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        outline: 1px solid transparent;
+
+        svg {
+          @include focus-outline('border');
+        }
+      }
+    }
+
+    &:focus-visible {
       outline: 1px solid transparent;
 
       svg {

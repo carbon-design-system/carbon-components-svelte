@@ -198,7 +198,14 @@
     vertical-align: inherit;
   }
 
-  .#{$prefix}--table-expand__button:focus {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--table-expand__button:focus {
+      box-shadow: inset 0 0 0 2px $focus;
+      outline: none;
+    }
+  }
+
+  .#{$prefix}--table-expand__button:focus-visible {
     box-shadow: inset 0 0 0 2px $focus;
     outline: none;
   }
@@ -363,7 +370,13 @@
   }
 
   // Windows HCM fix
-  .#{$prefix}--table-expand__button:focus .#{$prefix}--table-expand__svg {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--table-expand__button:focus .#{$prefix}--table-expand__svg {
+      @include high-contrast-mode('focus');
+    }
+  }
+
+  .#{$prefix}--table-expand__button:focus-visible .#{$prefix}--table-expand__svg {
     @include high-contrast-mode('focus');
   }
 

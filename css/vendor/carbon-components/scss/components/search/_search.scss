@@ -44,7 +44,13 @@
     transition: background-color $duration--fast-02 motion(standard, productive),
       outline $duration--fast-02 motion(standard, productive);
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        @include focus-outline('outline');
+      }
+    }
+
+    &:focus-visible {
       @include focus-outline('outline');
     }
 
@@ -177,7 +183,13 @@
       background-color: $hover-field;
     }
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        @include focus-outline('outline');
+      }
+    }
+
+    &:focus-visible {
       @include focus-outline('outline');
     }
 
@@ -208,8 +220,21 @@
     fill: $disabled;
   }
 
-  .#{$prefix}--search-close:focus,
   .#{$prefix}--search-close:active {
+    &::before {
+      background-color: $focus;
+    }
+  }
+
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--search-close:focus {
+      &::before {
+        background-color: $focus;
+      }
+    }
+  }
+
+  .#{$prefix}--search-close:focus-visible {
     &::before {
       background-color: $focus;
     }

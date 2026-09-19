@@ -84,7 +84,14 @@
     background-color: $background-hover;
   }
 
-  .#{$prefix}--profile-menu__header--link:focus {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--profile-menu__header--link:focus {
+      outline: 2px solid $focus;
+      outline-offset: -2px;
+    }
+  }
+
+  .#{$prefix}--profile-menu__header--link:focus-visible {
     outline: 2px solid $focus;
     outline-offset: -2px;
   }
@@ -146,7 +153,14 @@
     background-color: $background-hover;
   }
 
-  .#{$prefix}--profile-menu__item.#{$prefix}--profile-menu__item:focus {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--profile-menu__item.#{$prefix}--profile-menu__item:focus {
+      outline: 2px solid $focus;
+      outline-offset: -2px;
+    }
+  }
+
+  .#{$prefix}--profile-menu__item.#{$prefix}--profile-menu__item:focus-visible {
     outline: 2px solid $focus;
     outline-offset: -2px;
   }
@@ -222,8 +236,16 @@
     text-decoration: underline;
   }
 
-  .#{$prefix}--profile-menu__detail-action a:focus,
-  .#{$prefix}--profile-menu__detail-action button:focus {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--profile-menu__detail-action a:focus,
+    .#{$prefix}--profile-menu__detail-action button:focus {
+      outline: 2px solid $focus;
+      outline-offset: -2px;
+    }
+  }
+
+  .#{$prefix}--profile-menu__detail-action a:focus-visible,
+  .#{$prefix}--profile-menu__detail-action button:focus-visible {
     outline: 2px solid $focus;
     outline-offset: -2px;
   }

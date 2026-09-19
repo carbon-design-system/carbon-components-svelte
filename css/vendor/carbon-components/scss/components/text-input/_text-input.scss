@@ -32,8 +32,17 @@
     transition: background-color $duration--fast-01 motion(standard, productive),
       outline $duration--fast-01 motion(standard, productive);
 
-    &:focus,
     &:active {
+      @include focus-outline('outline');
+    }
+
+    @supports not selector(:focus-visible) {
+      &:focus {
+        @include focus-outline('outline');
+      }
+    }
+
+    &:focus-visible {
       @include focus-outline('outline');
     }
 
@@ -138,11 +147,24 @@
     }
   }
 
-  .#{$prefix}--btn.#{$prefix}--text-input--password__visibility__toggle.#{$prefix}--tooltip__trigger:focus {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--btn.#{$prefix}--text-input--password__visibility__toggle.#{$prefix}--tooltip__trigger:focus {
+      @include focus-outline('outline');
+    }
+  }
+
+  .#{$prefix}--btn.#{$prefix}--text-input--password__visibility__toggle.#{$prefix}--tooltip__trigger:focus-visible {
     @include focus-outline('outline');
   }
 
-  .#{$prefix}--btn.#{$prefix}--text-input--password__visibility__toggle.#{$prefix}--tooltip__trigger:focus
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--btn.#{$prefix}--text-input--password__visibility__toggle.#{$prefix}--tooltip__trigger:focus
+      svg {
+      fill: $icon-primary;
+    }
+  }
+
+  .#{$prefix}--btn.#{$prefix}--text-input--password__visibility__toggle.#{$prefix}--tooltip__trigger:focus-visible
     svg {
     fill: $icon-primary;
   }
@@ -295,9 +317,17 @@
     @include focus-outline('invalid');
   }
 
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--form--fluid
+      .#{$prefix}--text-input__field-wrapper[data-invalid]
+      > .#{$prefix}--text-input--invalid:focus {
+      @include focus-outline('outline');
+    }
+  }
+
   .#{$prefix}--form--fluid
     .#{$prefix}--text-input__field-wrapper[data-invalid]
-    > .#{$prefix}--text-input--invalid:focus {
+    > .#{$prefix}--text-input--invalid:focus-visible {
     @include focus-outline('outline');
   }
 

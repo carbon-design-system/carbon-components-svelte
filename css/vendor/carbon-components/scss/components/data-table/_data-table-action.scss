@@ -113,8 +113,15 @@
     }
   }
 
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--toolbar-search-container-expandable.#{$prefix}--search
+      .#{$prefix}--search-close:focus::before {
+      background-color: $focus;
+    }
+  }
+
   .#{$prefix}--toolbar-search-container-expandable.#{$prefix}--search
-    .#{$prefix}--search-close:focus::before {
+    .#{$prefix}--search-close:focus-visible::before {
     background-color: $focus;
   }
 
@@ -215,8 +222,27 @@
     cursor: not-allowed;
   }
 
-  .#{$prefix}--toolbar-action:focus:not([disabled]),
   .#{$prefix}--toolbar-action:active:not([disabled]) {
+    @include focus-outline('outline');
+
+    &.#{$prefix}--toolbar-search-container-expandable {
+      // The focus style is handled by search input in it, need to avoid duplicate animation
+      outline: none;
+    }
+  }
+
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--toolbar-action:focus:not([disabled]) {
+      @include focus-outline('outline');
+
+      &.#{$prefix}--toolbar-search-container-expandable {
+        // The focus style is handled by search input in it, need to avoid duplicate animation
+        outline: none;
+      }
+    }
+  }
+
+  .#{$prefix}--toolbar-action:focus-visible:not([disabled]) {
     @include focus-outline('outline');
 
     &.#{$prefix}--toolbar-search-container-expandable {
@@ -259,8 +285,15 @@
     border: none;
   }
 
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--toolbar-search-container-persistent
+      .#{$prefix}--search-input:focus:not([disabled]) {
+      @include focus-outline('outline');
+    }
+  }
+
   .#{$prefix}--toolbar-search-container-persistent
-    .#{$prefix}--search-input:focus:not([disabled]) {
+    .#{$prefix}--search-input:focus-visible:not([disabled]) {
     @include focus-outline('outline');
   }
 
@@ -305,7 +338,13 @@
     overflow: hidden; // ccs: hidden bar must not widen the page
   }
 
-  .#{$prefix}--batch-actions:focus {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--batch-actions:focus {
+      @include focus-outline;
+    }
+  }
+
+  .#{$prefix}--batch-actions:focus-visible {
     @include focus-outline;
   }
 
@@ -351,7 +390,14 @@
     display: none;
   }
 
-  .#{$prefix}--action-list .#{$prefix}--btn--primary:focus {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--action-list .#{$prefix}--btn--primary:focus {
+      outline: 2px solid $layer;
+      outline-offset: to-rem(-2px);
+    }
+  }
+
+  .#{$prefix}--action-list .#{$prefix}--btn--primary:focus-visible {
     outline: 2px solid $layer;
     outline-offset: to-rem(-2px);
   }
@@ -460,8 +506,17 @@
       visibility: inherit;
     }
 
+    @supports not selector(:focus-visible) {
+      .#{$prefix}--toolbar-search-container-active
+        .#{$prefix}--search-input:focus {
+        @include focus-outline('outline');
+
+        background-color: $field-hover;
+      }
+    }
+
     .#{$prefix}--toolbar-search-container-active
-      .#{$prefix}--search-input:focus {
+      .#{$prefix}--search-input:focus-visible {
       @include focus-outline('outline');
 
       background-color: $field-hover;
@@ -622,8 +677,17 @@
       visibility: inherit;
     }
 
+    @supports not selector(:focus-visible) {
+      .#{$prefix}--toolbar-search-container-active
+        .#{$prefix}--search-input:focus {
+        @include focus-outline('outline');
+
+        background-color: $field-hover;
+      }
+    }
+
     .#{$prefix}--toolbar-search-container-active
-      .#{$prefix}--search-input:focus {
+      .#{$prefix}--search-input:focus-visible {
       @include focus-outline('outline');
 
       background-color: $field-hover;

@@ -282,26 +282,51 @@
     outline: none;
   }
 
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--number-input--fluid
+      .#{$prefix}--number[data-invalid]
+      input[type="number"][data-invalid]
+      ~ .#{$prefix}--number__controls
+      .#{$prefix}--number__control-btn:focus,
+    .#{$prefix}--number-input--fluid
+      .#{$prefix}--number[data-invalid]
+      input[type="number"][data-invalid]
+      ~ .#{$prefix}--number__controls
+      .#{$prefix}--number__control-btn:focus:hover,
+    .#{$prefix}--number-input--fluid
+      .#{$prefix}--number[data-invalid]
+      input[type="text"][data-invalid]
+      ~ .#{$prefix}--number__controls
+      .#{$prefix}--number__control-btn:focus,
+    .#{$prefix}--number-input--fluid
+      .#{$prefix}--number[data-invalid]
+      input[type="text"][data-invalid]
+      ~ .#{$prefix}--number__controls
+      .#{$prefix}--number__control-btn:focus:hover {
+      @include focus-outline("outline");
+    }
+  }
+
   .#{$prefix}--number-input--fluid
     .#{$prefix}--number[data-invalid]
     input[type="number"][data-invalid]
     ~ .#{$prefix}--number__controls
-    .#{$prefix}--number__control-btn:focus,
+    .#{$prefix}--number__control-btn:focus-visible,
   .#{$prefix}--number-input--fluid
     .#{$prefix}--number[data-invalid]
     input[type="number"][data-invalid]
     ~ .#{$prefix}--number__controls
-    .#{$prefix}--number__control-btn:focus:hover,
+    .#{$prefix}--number__control-btn:focus-visible:hover,
   .#{$prefix}--number-input--fluid
     .#{$prefix}--number[data-invalid]
     input[type="text"][data-invalid]
     ~ .#{$prefix}--number__controls
-    .#{$prefix}--number__control-btn:focus,
+    .#{$prefix}--number__control-btn:focus-visible,
   .#{$prefix}--number-input--fluid
     .#{$prefix}--number[data-invalid]
     input[type="text"][data-invalid]
     ~ .#{$prefix}--number__controls
-    .#{$prefix}--number__control-btn:focus:hover {
+    .#{$prefix}--number__control-btn:focus-visible:hover {
     @include focus-outline("outline");
   }
 

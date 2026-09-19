@@ -59,7 +59,13 @@
     }
 
     // Show the button's own focus ring when it (not the input) is focused.
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        @include focus-outline("outline");
+      }
+    }
+
+    &:focus-visible {
       @include focus-outline("outline");
     }
 
@@ -68,8 +74,17 @@
       transition: fill $duration--fast-01 motion(standard, productive);
     }
 
-    &:hover .#{$prefix}--snippet__icon,
-    &:focus .#{$prefix}--snippet__icon {
+    &:hover .#{$prefix}--snippet__icon {
+      fill: $icon-primary;
+    }
+
+    @supports not selector(:focus-visible) {
+      &:focus .#{$prefix}--snippet__icon {
+        fill: $icon-primary;
+      }
+    }
+
+    &:focus-visible .#{$prefix}--snippet__icon {
       fill: $icon-primary;
     }
 

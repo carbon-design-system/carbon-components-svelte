@@ -46,7 +46,13 @@
     fill: $icon-01;
   }
 
-  .#{$prefix}--toggletip-button:focus {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--toggletip-button:focus {
+      outline: 1px solid $focus;
+    }
+  }
+
+  .#{$prefix}--toggletip-button:focus-visible {
     outline: 1px solid $focus;
   }
 
@@ -75,7 +81,14 @@
     color: $inverse-01;
   }
 
-  .#{$prefix}--toggletip-content .#{$prefix}--link:focus {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--toggletip-content .#{$prefix}--link:focus {
+      outline: 1px solid $inverse-focus-ui;
+      outline-offset: 2px;
+    }
+  }
+
+  .#{$prefix}--toggletip-content .#{$prefix}--link:focus-visible {
     outline: 1px solid $inverse-focus-ui;
     outline-offset: 2px;
   }

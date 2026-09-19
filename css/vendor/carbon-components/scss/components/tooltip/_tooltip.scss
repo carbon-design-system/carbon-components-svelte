@@ -26,7 +26,13 @@
     align-items: center;
     color: $text-02;
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        @include focus-outline('border');
+      }
+    }
+
+    &:focus-visible {
       @include focus-outline('border');
     }
   }
@@ -42,7 +48,15 @@
     align-items: center;
     font-size: 1rem;
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        @include focus-outline('border');
+
+        fill: $hover-primary;
+      }
+    }
+
+    &:focus-visible {
       @include focus-outline('border');
 
       fill: $hover-primary;
@@ -75,7 +89,14 @@
     word-wrap: break-word;
 
     // @todo this can be deprecated in v11 since focus should always be on the content container not the tooltip
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        box-shadow: inset 0 0 0 1px $inverse-02, inset 0 0 0 2px $ui-background;
+        outline: 0;
+      }
+    }
+
+    &:focus-visible {
       box-shadow: inset 0 0 0 1px $inverse-02, inset 0 0 0 2px $ui-background;
       outline: 0;
     }
@@ -142,7 +163,14 @@
       padding-right: $carbon--spacing-07;
     }
 
-    .#{$prefix}--btn:focus {
+    @supports not selector(:focus-visible) {
+      .#{$prefix}--btn:focus {
+        border-color: $inverse-focus-ui;
+        outline-color: $inverse-02;
+      }
+    }
+
+    .#{$prefix}--btn:focus-visible {
       border-color: $inverse-focus-ui;
       outline-color: $inverse-02;
     }
@@ -151,7 +179,14 @@
       color: $inverse-link;
       font-size: to-rem(14px);
 
-      &:focus {
+      @supports not selector(:focus-visible) {
+        &:focus {
+          outline: 1px solid $inverse-focus-ui;
+          outline-offset: 2px;
+        }
+      }
+
+      &:focus-visible {
         outline: 1px solid $inverse-focus-ui;
         outline-offset: 2px;
       }
@@ -254,8 +289,17 @@
     transition: border-color $duration--fast-02;
   }
 
-  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition:hover,
-  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition:focus {
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition:hover {
+    border-bottom-color: $interactive-04;
+  }
+
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition:focus {
+      border-bottom-color: $interactive-04;
+    }
+  }
+
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition:focus-visible {
     border-bottom-color: $interactive-04;
   }
 
@@ -314,8 +358,21 @@
   }
 
   .#{$prefix}--tooltip__trigger {
-    &:hover,
-    &:focus {
+    &:hover {
+      svg {
+        fill: $icon-02;
+      }
+    }
+
+    @supports not selector(:focus-visible) {
+      &:focus {
+        svg {
+          fill: $icon-02;
+        }
+      }
+    }
+
+    &:focus-visible {
       svg {
         fill: $icon-02;
       }
@@ -399,12 +456,22 @@
   // Windows HCM fix
   /* stylelint-disable */
   .#{$prefix}--tooltip__trigger svg,
-  .#{$prefix}--tooltip__trigger:hover svg,
-  .#{$prefix}--tooltip__trigger:focus svg {
+  .#{$prefix}--tooltip__trigger:hover svg {
     @include high-contrast-mode('icon-fill');
   }
 
-  .#{$prefix}--tooltip__trigger:focus svg {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--tooltip__trigger:focus svg {
+      @include high-contrast-mode('icon-fill');
+    }
+
+    .#{$prefix}--tooltip__trigger:focus svg {
+      @include high-contrast-mode('focus');
+    }
+  }
+
+  .#{$prefix}--tooltip__trigger:focus-visible svg {
+    @include high-contrast-mode('icon-fill');
     @include high-contrast-mode('focus');
   }
 

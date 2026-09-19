@@ -33,7 +33,13 @@
     transition: outline $duration--fast-02 motion(entrance, productive),
       background-color $duration--fast-02 motion(entrance, productive);
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        @include focus-outline('outline');
+      }
+    }
+
+    &:focus-visible {
       @include focus-outline('outline');
     }
 
@@ -257,7 +263,13 @@
       }
     }
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        @include focus-outline('outline');
+      }
+    }
+
+    &:focus-visible {
       @include focus-outline('outline');
     }
 
@@ -288,8 +300,20 @@
     }
   }
 
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--overflow-menu-options__option--danger
+      .#{$prefix}--overflow-menu-options__btn:focus {
+      background-color: $danger-01;
+      color: $text-04;
+
+      svg {
+        fill: currentColor;
+      }
+    }
+  }
+
   .#{$prefix}--overflow-menu-options__option--danger
-    .#{$prefix}--overflow-menu-options__btn:focus {
+    .#{$prefix}--overflow-menu-options__btn:focus-visible {
     background-color: $danger-01;
     color: $text-04;
 
@@ -355,8 +379,15 @@
 
   // Windows HCM fix
   /* stylelint-disable */
-  .#{$prefix}--overflow-menu:focus,
-  .#{$prefix}--overflow-menu-options__btn:focus {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--overflow-menu:focus,
+    .#{$prefix}--overflow-menu-options__btn:focus {
+      @include high-contrast-mode('focus');
+    }
+  }
+
+  .#{$prefix}--overflow-menu:focus-visible,
+  .#{$prefix}--overflow-menu-options__btn:focus-visible {
     @include high-contrast-mode('focus');
   }
 

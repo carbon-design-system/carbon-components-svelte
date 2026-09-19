@@ -215,8 +215,17 @@ $css--helpers: true;
     height: $size-lg;
   }
 
-  .#{$prefix}--pagination__button:focus,
-  .#{$prefix}--btn--ghost:focus.#{$prefix}--pagination__button {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--pagination__button:focus,
+    .#{$prefix}--btn--ghost:focus.#{$prefix}--pagination__button {
+      @include focus-outline('outline');
+
+      border-left: 0;
+    }
+  }
+
+  .#{$prefix}--pagination__button:focus-visible,
+  .#{$prefix}--btn--ghost:focus-visible.#{$prefix}--pagination__button {
     @include focus-outline('outline');
 
     border-left: 0;

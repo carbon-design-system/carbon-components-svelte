@@ -78,7 +78,15 @@
     background-color: $hover-bg-color;
   }
 
-  &:focus {
+  @supports not selector(:focus-visible) {
+    &:focus {
+      border-color: $focus;
+      box-shadow: inset 0 0 0 $button-outline-width $focus,
+        inset 0 0 0 $button-border-width $ui-background;
+    }
+  }
+
+  &:focus-visible {
     border-color: $focus;
     box-shadow: inset 0 0 0 $button-outline-width $focus,
       inset 0 0 0 $button-border-width $ui-background;

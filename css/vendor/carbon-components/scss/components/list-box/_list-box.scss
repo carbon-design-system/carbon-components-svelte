@@ -289,7 +289,13 @@ $list-box-menu-width: to-rem(300px);
     white-space: nowrap;
   }
 
-  .#{$prefix}--list-box__field:focus {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--list-box__field:focus {
+      @include focus-outline('outline');
+    }
+  }
+
+  .#{$prefix}--list-box__field:focus-visible {
     @include focus-outline('outline');
   }
 
@@ -401,7 +407,17 @@ $list-box-menu-width: to-rem(300px);
     transition: background-color $duration--fast-01 motion(standard, productive);
     user-select: none;
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        @include focus-outline('outline');
+
+        &:hover {
+          @include focus-outline('outline');
+        }
+      }
+    }
+
+    &:focus-visible {
       @include focus-outline('outline');
 
       &:hover {
@@ -481,7 +497,14 @@ $list-box-menu-width: to-rem(300px);
     overflow-y: auto;
     transition: max-height $duration--fast-02 motion(standard, productive);
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        // remove default browser focus in firefox
+        @include focus-outline('border');
+      }
+    }
+
+    &:focus-visible {
       // remove default browser focus in firefox
       @include focus-outline('border');
     }
@@ -603,7 +626,17 @@ $list-box-menu-width: to-rem(300px);
       color $duration--fast-01 motion(standard, productive);
     white-space: nowrap;
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        @include focus-outline('outline');
+
+        padding: to-rem(11px) to-rem(16px);
+        border-color: transparent;
+        margin: 0;
+      }
+    }
+
+    &:focus-visible {
       @include focus-outline('outline');
 
       padding: to-rem(11px) to-rem(16px);
@@ -672,7 +705,15 @@ $list-box-menu-width: to-rem(300px);
     .#{$prefix}--list-box__menu-item__option {
     margin: 0 $carbon--spacing-03;
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        padding-right: $carbon--spacing-03;
+        padding-left: $carbon--spacing-03;
+        margin: 0;
+      }
+    }
+
+    &:focus-visible {
       padding-right: $carbon--spacing-03;
       padding-left: $carbon--spacing-03;
       margin: 0;
@@ -800,10 +841,20 @@ $list-box-menu-width: to-rem(300px);
     @include high-contrast-mode('outline');
   }
 
-  .#{$prefix}--list-box__field:focus,
-  .#{$prefix}--multi-select .#{$prefix}--tag__close-icon:focus,
   .#{$prefix}--list-box__menu-item--highlighted
     .#{$prefix}--list-box__menu-item__option {
+    @include high-contrast-mode('focus');
+  }
+
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--list-box__field:focus,
+    .#{$prefix}--multi-select .#{$prefix}--tag__close-icon:focus {
+      @include high-contrast-mode('focus');
+    }
+  }
+
+  .#{$prefix}--list-box__field:focus-visible,
+  .#{$prefix}--multi-select .#{$prefix}--tag__close-icon:focus-visible {
     @include high-contrast-mode('focus');
   }
 

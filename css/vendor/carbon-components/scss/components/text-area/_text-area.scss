@@ -36,8 +36,17 @@
       outline $duration--fast-01 motion(standard, productive);
   }
 
-  .#{$prefix}--text-area:focus,
   .#{$prefix}--text-area:active {
+    @include focus-outline('outline');
+  }
+
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--text-area:focus {
+      @include focus-outline('outline');
+    }
+  }
+
+  .#{$prefix}--text-area:focus-visible {
     @include focus-outline('outline');
   }
 

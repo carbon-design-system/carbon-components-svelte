@@ -40,7 +40,13 @@
       text-decoration: underline;
     }
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        @include focus-outline;
+      }
+    }
+
+    &:focus-visible {
       @include focus-outline;
     }
 
@@ -80,8 +86,17 @@
   .#{$prefix}--link--inline { // ccs: flatten
     text-decoration: underline;
 
-    &:focus,
     &:visited {
+      text-decoration: none;
+    }
+
+    @supports not selector(:focus-visible) {
+      &:focus {
+        text-decoration: none;
+      }
+    }
+
+    &:focus-visible {
       text-decoration: none;
     }
   }

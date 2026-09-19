@@ -29,7 +29,13 @@
   .#{$prefix}--menu--open {
     visibility: visible;
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        @include focus-outline('border');
+      }
+    }
+
+    &:focus-visible {
       @include focus-outline('border');
     }
   }
@@ -47,7 +53,13 @@
     cursor: pointer;
     transition: background-color $duration--fast-01 motion(standard, productive);
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        @include focus-outline('outline');
+      }
+    }
+
+    &:focus-visible {
       @include focus-outline('outline');
     }
   }
@@ -56,7 +68,14 @@
     background-color: $layer-hover;
   }
 
-  .#{$prefix}--menu-option--danger:focus {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--menu-option--danger:focus {
+      background-color: $button-danger-primary;
+      color: $text-on-color;
+    }
+  }
+
+  .#{$prefix}--menu-option--danger:focus-visible {
     background-color: $button-danger-primary;
     color: $text-on-color;
   }

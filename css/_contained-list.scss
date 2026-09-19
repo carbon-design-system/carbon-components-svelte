@@ -76,7 +76,13 @@
     border-right: 2px solid transparent;
     outline: none;
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        @include focus-outline('outline');
+      }
+    }
+
+    &:focus-visible {
       @include focus-outline('outline');
     }
   }
@@ -235,8 +241,22 @@
     outline: none;
   }
 
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--contained-list-item--clickable
+      .#{$prefix}--contained-list-item__content:focus::after {
+      @include focus-outline('outline');
+
+      position: absolute;
+      content: '';
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+  }
+
   .#{$prefix}--contained-list-item--clickable
-    .#{$prefix}--contained-list-item__content:focus::after {
+    .#{$prefix}--contained-list-item__content:focus-visible::after {
     @include focus-outline('outline');
 
     position: absolute;

@@ -114,7 +114,13 @@
     background-color: $ui-01;
     border: none;
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        @include focus-outline('border');
+      }
+    }
+
+    &:focus-visible {
       @include focus-outline('border');
     }
   }
@@ -261,7 +267,13 @@
       -webkit-appearance: none;
     }
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        @include focus-outline('border');
+      }
+    }
+
+    &:focus-visible {
       @include focus-outline('border');
     }
 
@@ -418,7 +430,15 @@
       }
     }
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        @include focus-outline('outline');
+
+        outline-color: $interactive-01;
+      }
+    }
+
+    &:focus-visible {
       @include focus-outline('outline');
 
       outline-color: $interactive-01;
@@ -469,7 +489,14 @@
     color: $text-04;
     background-color: $interactive-01;
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        outline: to-rem(1px) solid $ui-02;
+        outline-offset: to-rem(-3px);
+      }
+    }
+
+    &:focus-visible {
       outline: to-rem(1px) solid $ui-02;
       outline-offset: to-rem(-3px);
     }

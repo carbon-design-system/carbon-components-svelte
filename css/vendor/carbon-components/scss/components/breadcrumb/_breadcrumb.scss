@@ -79,7 +79,13 @@
     width: to-rem(20px);
     height: to-rem(18px);
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        outline: 1px solid $focus;
+      }
+    }
+
+    &:focus-visible {
       outline: 1px solid $focus;
     }
 

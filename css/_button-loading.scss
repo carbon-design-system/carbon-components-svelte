@@ -61,7 +61,15 @@
   // enabled button gets. Matches `.bx--btn.bx--btn--disabled:focus` (not the
   // bare class) so this ties the per-kind overrides on specificity and wins
   // on source order instead of silently losing to them.
-  .#{$prefix}--btn.#{$prefix}--btn--disabled:focus {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--btn.#{$prefix}--btn--disabled:focus {
+      border-color: $focus;
+      box-shadow: inset 0 0 0 $button-outline-width $focus,
+        inset 0 0 0 $button-border-width $ui-background;
+    }
+  }
+
+  .#{$prefix}--btn.#{$prefix}--btn--disabled:focus-visible {
     border-color: $focus;
     box-shadow: inset 0 0 0 $button-outline-width $focus,
       inset 0 0 0 $button-border-width $ui-background;

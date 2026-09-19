@@ -64,12 +64,25 @@
     text-decoration: underline;
   }
 
-  .#{$prefix}--inline-notification a:focus {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--inline-notification a:focus {
+      outline: 1px solid $inverse-link;
+    }
+  }
+
+  .#{$prefix}--inline-notification a:focus-visible {
     outline: 1px solid $inverse-link;
   }
 
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--inline-notification.#{$prefix}--inline-notification--low-contrast
+      a:focus {
+      @include focus-outline;
+    }
+  }
+
   .#{$prefix}--inline-notification.#{$prefix}--inline-notification--low-contrast
-    a:focus {
+    a:focus-visible {
     @include focus-outline;
   }
 
@@ -234,15 +247,31 @@
     );
   }
 
-  .#{$prefix}--inline-notification__action-button.#{$prefix}--btn--ghost:focus {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--inline-notification__action-button.#{$prefix}--btn--ghost:focus {
+      border-color: transparent;
+      box-shadow: none;
+      outline: 2px solid $inverse-focus-ui;
+      outline-offset: -2px;
+    }
+  }
+
+  .#{$prefix}--inline-notification__action-button.#{$prefix}--btn--ghost:focus-visible {
     border-color: transparent;
     box-shadow: none;
     outline: 2px solid $inverse-focus-ui;
     outline-offset: -2px;
   }
 
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--inline-notification--low-contrast
+      .#{$prefix}--inline-notification__action-button.#{$prefix}--btn--ghost:focus {
+      outline-color: $focus;
+    }
+  }
+
   .#{$prefix}--inline-notification--low-contrast
-    .#{$prefix}--inline-notification__action-button.#{$prefix}--btn--ghost:focus {
+    .#{$prefix}--inline-notification__action-button.#{$prefix}--btn--ghost:focus-visible {
     outline-color: $focus;
   }
 
@@ -272,7 +301,14 @@
     transition: outline $duration--fast-02 motion(standard, productive),
       background-color $duration--fast-02 motion(standard, productive);
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        outline: 2px solid $inverse-focus-ui;
+        outline-offset: -2px;
+      }
+    }
+
+    &:focus-visible {
       outline: 2px solid $inverse-focus-ui;
       outline-offset: -2px;
     }
@@ -286,8 +322,15 @@
     }
   }
 
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--inline-notification--low-contrast
+      .#{$prefix}--inline-notification__close-button:focus {
+      @include focus-outline('outline');
+    }
+  }
+
   .#{$prefix}--inline-notification--low-contrast
-    .#{$prefix}--inline-notification__close-button:focus {
+    .#{$prefix}--inline-notification__close-button:focus-visible {
     @include focus-outline('outline');
   }
 
@@ -303,8 +346,15 @@
     @include high-contrast-mode('outline');
   }
 
-  .#{$prefix}--inline-notification__close-button:focus,
-  .#{$prefix}--btn.#{$prefix}--btn--ghost.#{$prefix}--inline-notification__action-button:focus {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--inline-notification__close-button:focus,
+    .#{$prefix}--btn.#{$prefix}--btn--ghost.#{$prefix}--inline-notification__action-button:focus {
+      @include high-contrast-mode('focus');
+    }
+  }
+
+  .#{$prefix}--inline-notification__close-button:focus-visible,
+  .#{$prefix}--btn.#{$prefix}--btn--ghost.#{$prefix}--inline-notification__action-button:focus-visible {
     @include high-contrast-mode('focus');
   }
 

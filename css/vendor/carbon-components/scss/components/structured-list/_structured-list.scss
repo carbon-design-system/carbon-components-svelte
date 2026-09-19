@@ -97,7 +97,13 @@
   }
 
   @if not feature-flag-enabled('enable-v11-release') {
-    .#{$prefix}--structured-list-row:focus:not(.#{$prefix}--structured-list-row--header-row) {
+    @supports not selector(:focus-visible) {
+      .#{$prefix}--structured-list-row:focus:not(.#{$prefix}--structured-list-row--header-row) {
+        @include focus-outline('outline');
+      }
+    }
+
+    .#{$prefix}--structured-list-row:focus-visible:not(.#{$prefix}--structured-list-row--header-row) {
       @include focus-outline('outline');
     }
   }
@@ -401,7 +407,14 @@
     color: $text-01;
   }
 
-  .#{$prefix}--structured-list-sort:focus {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--structured-list-sort:focus {
+      @include focus-outline("outline");
+      outline-offset: -2px;
+    }
+  }
+
+  .#{$prefix}--structured-list-sort:focus-visible {
     @include focus-outline("outline");
     outline-offset: -2px;
   }
@@ -412,8 +425,18 @@
   }
 
   .#{$prefix}--structured-list-sort:hover
-    .#{$prefix}--structured-list-sort__icon-unsorted,
-  .#{$prefix}--structured-list-sort:focus
+    .#{$prefix}--structured-list-sort__icon-unsorted {
+    opacity: 0.6;
+  }
+
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--structured-list-sort:focus
+      .#{$prefix}--structured-list-sort__icon-unsorted {
+      opacity: 0.6;
+    }
+  }
+
+  .#{$prefix}--structured-list-sort:focus-visible
     .#{$prefix}--structured-list-sort__icon-unsorted {
     opacity: 0.6;
   }

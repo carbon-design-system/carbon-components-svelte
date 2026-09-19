@@ -28,7 +28,13 @@
       }
     }
 
-    .#{$prefix}--tree-node:focus > .#{$prefix}--tree-node__label {
+    @supports not selector(:focus-visible) {
+      .#{$prefix}--tree-node:focus > .#{$prefix}--tree-node__label {
+        @include focus-outline('outline');
+      }
+    }
+
+    .#{$prefix}--tree-node:focus-visible > .#{$prefix}--tree-node__label {
       @include focus-outline('outline');
     }
 

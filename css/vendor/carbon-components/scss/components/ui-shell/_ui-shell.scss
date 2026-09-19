@@ -74,8 +74,17 @@
     background-color: $background-hover;
   }
 
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--header__global
+      .#{$prefix}--header__action:not(.#{$prefix}--header-search-button):focus {
+      border-width: $button-border-width;
+      border-color: $focus;
+      outline: none;
+    }
+  }
+
   .#{$prefix}--header__global
-    .#{$prefix}--header__action:not(.#{$prefix}--header-search-button):focus {
+    .#{$prefix}--header__action:not(.#{$prefix}--header-search-button):focus-visible {
     border-width: $button-border-width;
     border-color: $focus;
     outline: none;
@@ -104,10 +113,21 @@
   // Same shape as header's `.bx--header__menu-item:hover > svg`; wins by order.
   .#{$prefix}--header__menu-item--icon > svg,
   .#{$prefix}--header__menu-item--icon:hover > svg,
-  .#{$prefix}--header__menu-item--icon:active > svg,
-  .#{$prefix}--header__menu-item--icon:focus > svg { // ccs: flatten
+  .#{$prefix}--header__menu-item--icon:active > svg { // ccs: flatten
     flex-shrink: 0;
     // Track the text color across default/hover/active/focus states.
+    fill: currentColor;
+  }
+
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--header__menu-item--icon:focus > svg { // ccs: flatten
+      flex-shrink: 0;
+      fill: currentColor;
+    }
+  }
+
+  .#{$prefix}--header__menu-item--icon:focus-visible > svg { // ccs: flatten
+    flex-shrink: 0;
     fill: currentColor;
   }
 

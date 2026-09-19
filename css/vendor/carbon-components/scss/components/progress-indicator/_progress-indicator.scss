@@ -86,7 +86,15 @@
     cursor: pointer;
   }
 
-  .#{$prefix}--progress-label:focus {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--progress-label:focus {
+      box-shadow: 0 to-rem(3px) 0 0 $link-01;
+      color: $link-01;
+      outline: none;
+    }
+  }
+
+  .#{$prefix}--progress-label:focus-visible {
     box-shadow: 0 to-rem(3px) 0 0 $link-01;
     color: $link-01;
     outline: none;
@@ -149,7 +157,13 @@
     // (clickable or not) gets the same visible ring; specificity (one class
     // + `:focus`) beats `--unclickable`'s single class regardless of order.
     // ccs: added
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        @include focus-outline('outline');
+      }
+    }
+
+    &:focus-visible {
       @include focus-outline('outline');
     }
   }

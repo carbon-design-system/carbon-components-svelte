@@ -131,7 +131,13 @@
     grid-row: 2/-2;
     overflow-y: auto;
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        @include focus-outline('outline');
+      }
+    }
+
+    &:focus-visible {
       @include focus-outline('outline');
     }
   }
@@ -308,7 +314,14 @@
       background-color: $hover-ui;
     }
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        border-color: $focus;
+        outline: none;
+      }
+    }
+
+    &:focus-visible {
       border-color: $focus;
       outline: none;
     }
@@ -339,7 +352,13 @@
     @include high-contrast-mode('icon-fill');
   }
 
-  .#{$prefix}--modal-close:focus {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--modal-close:focus {
+      @include high-contrast-mode('focus');
+    }
+  }
+
+  .#{$prefix}--modal-close:focus-visible {
     @include high-contrast-mode('focus');
   }
   /* stylelint-enable */

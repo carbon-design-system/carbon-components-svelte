@@ -72,7 +72,15 @@
       }
     }
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        @include focus-outline('outline');
+
+        color: $text-01;
+      }
+    }
+
+    &:focus-visible {
       @include focus-outline('outline');
 
       color: $text-01;
@@ -208,9 +216,17 @@
     color: $text-01;
   }
 
-  .#{$prefix}--select--inline .#{$prefix}--select-input:focus,
-  .#{$prefix}--select--inline .#{$prefix}--select-input:focus option,
-  .#{$prefix}--select--inline .#{$prefix}--select-input:focus optgroup {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--select--inline .#{$prefix}--select-input:focus,
+    .#{$prefix}--select--inline .#{$prefix}--select-input:focus option,
+    .#{$prefix}--select--inline .#{$prefix}--select-input:focus optgroup {
+      background-color: $background;
+    }
+  }
+
+  .#{$prefix}--select--inline .#{$prefix}--select-input:focus-visible,
+  .#{$prefix}--select--inline .#{$prefix}--select-input:focus-visible option,
+  .#{$prefix}--select--inline .#{$prefix}--select-input:focus-visible optgroup {
     background-color: $background;
   }
 

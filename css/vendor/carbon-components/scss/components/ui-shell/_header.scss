@@ -55,7 +55,15 @@
     background: $layer; // ccs
   }
 
-  .#{$prefix}--header__action:focus {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--header__action:focus {
+      border-width: $button-border-width; // ccs
+      border-color: $shell-header-focus;
+      outline: none;
+    }
+  }
+
+  .#{$prefix}--header__action:focus-visible {
     border-width: $button-border-width; // ccs
     border-color: $shell-header-focus;
     outline: none;
@@ -101,7 +109,13 @@
     user-select: none;
   }
 
-  .#{$prefix}--header__name:focus { // ccs: flatten
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--header__name:focus { // ccs: flatten
+      border-color: $shell-header-focus;
+    }
+  }
+
+  .#{$prefix}--header__name:focus-visible { // ccs: flatten
     border-color: $shell-header-focus;
   }
 
@@ -191,15 +205,32 @@
     color: $shell-header-text-01;
   }
 
-  .#{$prefix}--header__menu-item:focus { // ccs: flatten
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--header__menu-item:focus { // ccs: flatten
+      border-color: $shell-header-focus;
+      color: $shell-header-text-01;
+      outline: none;
+    }
+  }
+
+  .#{$prefix}--header__menu-item:focus-visible { // ccs: flatten
     border-color: $shell-header-focus;
     color: $shell-header-text-01;
     outline: none;
   }
 
   .#{$prefix}--header__menu-item:hover > svg,
-  .#{$prefix}--header__menu-item:active > svg,
-  .#{$prefix}--header__menu-item:focus > svg { // ccs: flatten
+  .#{$prefix}--header__menu-item:active > svg { // ccs: flatten
+    fill: $shell-header-icon-01;
+  }
+
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--header__menu-item:focus > svg { // ccs: flatten
+      fill: $shell-header-icon-01;
+    }
+  }
+
+  .#{$prefix}--header__menu-item:focus-visible > svg { // ccs: flatten
     fill: $shell-header-icon-01;
   }
 
@@ -222,13 +253,27 @@
     content: '';
   }
 
-  .#{$prefix}--header__menu-item[aria-current='page']:focus::after,
-  .#{$prefix}--header__menu-item--current:focus::after { // ccs: flatten
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--header__menu-item[aria-current='page']:focus::after,
+    .#{$prefix}--header__menu-item--current:focus::after { // ccs: flatten
+      border: 0;
+    }
+  }
+
+  .#{$prefix}--header__menu-item[aria-current='page']:focus-visible::after,
+  .#{$prefix}--header__menu-item--current:focus-visible::after { // ccs: flatten
     border: 0;
   }
 
-  .#{$prefix}--header__menu-item[aria-current='page']:focus,
-  .#{$prefix}--header__menu-item.#{$prefix}--header__menu-item--current:focus { // ccs: flatten
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--header__menu-item[aria-current='page']:focus,
+    .#{$prefix}--header__menu-item.#{$prefix}--header__menu-item--current:focus { // ccs: flatten
+      border: 2px solid $shell-header-focus;
+    }
+  }
+
+  .#{$prefix}--header__menu-item[aria-current='page']:focus-visible,
+  .#{$prefix}--header__menu-item.#{$prefix}--header__menu-item--current:focus-visible { // ccs: flatten
     border: 2px solid $shell-header-focus;
   }
 
@@ -247,11 +292,23 @@
     content: '';
   }
 
-  .#{$prefix}--header__submenu--current:focus {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--header__submenu--current:focus {
+      border: 2px solid $focus;
+    }
+  }
+
+  .#{$prefix}--header__submenu--current:focus-visible {
     border: 2px solid $focus;
   }
 
-  .#{$prefix}--header__submenu--current:focus::after {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--header__submenu--current:focus::after {
+      border: 0;
+    }
+  }
+
+  .#{$prefix}--header__submenu--current:focus-visible::after {
     border: 0;
   }
 
@@ -342,7 +399,25 @@
     white-space: nowrap;
   }
 
-  .#{$prefix}--skip-to-content:focus {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--skip-to-content:focus {
+      z-index: 9999;
+      top: 0;
+      left: 0;
+      display: flex;
+      width: auto;
+      height: 3rem;
+      align-items: center;
+      padding: 0 1rem;
+      border: 4px solid $shell-header-focus; // ccs
+      background-color: $shell-header-bg-01;
+      clip: auto;
+      color: $shell-header-text-01;
+      outline: none;
+    }
+  }
+
+  .#{$prefix}--skip-to-content:focus-visible {
     z-index: 9999;
     top: 0;
     left: 0;

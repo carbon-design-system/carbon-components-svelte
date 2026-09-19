@@ -53,8 +53,17 @@
       $active-secondary
     );
 
-    &:hover,
-    &:focus {
+    &:hover {
+      color: $text-04;
+    }
+
+    @supports not selector(:focus-visible) {
+      &:focus {
+        color: $text-04;
+      }
+    }
+
+    &:focus-visible {
       color: $text-04;
     }
   }
@@ -73,7 +82,14 @@
       color: $inverse-01;
     }
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        background-color: $interactive-03;
+        color: $inverse-01;
+      }
+    }
+
+    &:focus-visible {
       background-color: $interactive-03;
       color: $inverse-01;
     }
@@ -351,7 +367,14 @@
         color: $text-04;
       }
 
-      &:focus {
+      @supports not selector(:focus-visible) {
+        &:focus {
+          background-color: $danger-01;
+          color: $text-04;
+        }
+      }
+
+      &:focus-visible {
         background-color: $danger-01;
         color: $text-04;
       }
@@ -526,7 +549,14 @@
   }
 
   // Windows HCM fix
-  .#{$prefix}--btn:focus {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--btn:focus {
+      @include high-contrast-mode('focus');
+    }
+  }
+
+  // Windows HCM fix
+  .#{$prefix}--btn:focus-visible {
     @include high-contrast-mode('focus');
   }
 

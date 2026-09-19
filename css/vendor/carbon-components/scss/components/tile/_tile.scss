@@ -28,7 +28,13 @@
     outline: 2px solid transparent;
     outline-offset: -2px;
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        @include focus-outline('outline');
+      }
+    }
+
+    &:focus-visible {
       @include focus-outline('outline');
     }
   }
@@ -53,12 +59,31 @@
 
   .#{$prefix}--tile--clickable,
   .#{$prefix}--tile--expandable {
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        @include focus-outline('outline');
+      }
+    }
+
+    &:focus-visible {
       @include focus-outline('outline');
     }
 
-    &:hover,
-    &:focus {
+    &:hover {
+      .#{$prefix}--tile__checkmark {
+        opacity: 1;
+      }
+    }
+
+    @supports not selector(:focus-visible) {
+      &:focus {
+        .#{$prefix}--tile__checkmark {
+          opacity: 1;
+        }
+      }
+    }
+
+    &:focus-visible {
       .#{$prefix}--tile__checkmark {
         opacity: 1;
       }
@@ -121,7 +146,13 @@
       fill: $icon-02;
     }
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        @include focus-outline('outline');
+      }
+    }
+
+    &:focus-visible {
       @include focus-outline('outline');
     }
   }

@@ -54,7 +54,13 @@
     transition: background-color $duration--fast-01 motion(standard, productive),
       outline $duration--fast-01 motion(standard, productive);
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        @include focus-outline('outline');
+      }
+    }
+
+    &:focus-visible {
       @include focus-outline('outline');
     }
 
@@ -150,7 +156,17 @@
       fill: currentColor;
     }
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        @include focus-outline;
+
+        color: $icon-01;
+        outline-offset: -2px;
+        outline-width: 2px;
+      }
+    }
+
+    &:focus-visible {
       @include focus-outline;
 
       color: $icon-01;
@@ -169,10 +185,19 @@
       }
     }
 
-    &:focus::before,
-    &:focus::after,
-    &:hover:focus::before,
-    &:hover:focus::after {
+    @supports not selector(:focus-visible) {
+      &:focus::before,
+      &:focus::after,
+      &:hover:focus::before,
+      &:hover:focus::after {
+        background-color: transparent;
+      }
+    }
+
+    &:focus-visible::before,
+    &:focus-visible::after,
+    &:hover:focus-visible::before,
+    &:hover:focus-visible::after {
       background-color: transparent;
     }
 
@@ -262,15 +287,31 @@
   .#{$prefix}--number
     input[type='text'][data-invalid]:focus
     ~ .#{$prefix}--number__controls
-    .#{$prefix}--number__control-btn.up-icon::after,
+    .#{$prefix}--number__control-btn.up-icon::after {
+    background-color: $focus;
+  }
+
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--number
+      input[type='number'][data-invalid]
+      ~ .#{$prefix}--number__controls
+      .#{$prefix}--number__control-btn.up-icon:focus::after,
+    .#{$prefix}--number
+      input[type='text'][data-invalid]
+      ~ .#{$prefix}--number__controls
+      .#{$prefix}--number__control-btn.up-icon:focus::after {
+      background-color: $focus;
+    }
+  }
+
   .#{$prefix}--number
     input[type='number'][data-invalid]
     ~ .#{$prefix}--number__controls
-    .#{$prefix}--number__control-btn.up-icon:focus::after,
+    .#{$prefix}--number__control-btn.up-icon:focus-visible::after,
   .#{$prefix}--number
     input[type='text'][data-invalid]
     ~ .#{$prefix}--number__controls
-    .#{$prefix}--number__control-btn.up-icon:focus::after {
+    .#{$prefix}--number__control-btn.up-icon:focus-visible::after {
     background-color: $focus;
   }
 
@@ -396,8 +437,17 @@
   }
 
   // V11: Possibly deprecate
-  .#{$prefix}--number--light .#{$prefix}--number__control-btn:focus::before,
-  .#{$prefix}--number--light .#{$prefix}--number__control-btn:focus::after {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--number--light .#{$prefix}--number__control-btn:focus::before,
+    .#{$prefix}--number--light .#{$prefix}--number__control-btn:focus::after {
+      background-color: transparent;
+    }
+  }
+
+  .#{$prefix}--number--light
+    .#{$prefix}--number__control-btn:focus-visible::before,
+  .#{$prefix}--number--light
+    .#{$prefix}--number__control-btn:focus-visible::after {
     background-color: transparent;
   }
 
@@ -490,8 +540,17 @@
 
   // Windows HCM fix
   /* stylelint-disable */
-  .#{$prefix}--number__control-btn:hover,
-  .#{$prefix}--number__control-btn:focus {
+  .#{$prefix}--number__control-btn:hover {
+    @include high-contrast-mode('focus');
+  }
+
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--number__control-btn:focus {
+      @include high-contrast-mode('focus');
+    }
+  }
+
+  .#{$prefix}--number__control-btn:focus-visible {
     @include high-contrast-mode('focus');
   }
 

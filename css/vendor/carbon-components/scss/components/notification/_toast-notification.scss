@@ -59,12 +59,25 @@
     text-decoration: underline;
   }
 
-  .#{$prefix}--toast-notification a:focus {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--toast-notification a:focus {
+      outline: 1px solid $inverse-link;
+    }
+  }
+
+  .#{$prefix}--toast-notification a:focus-visible {
     outline: 1px solid $inverse-link;
   }
 
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--toast-notification.#{$prefix}--toast-notification--low-contrast
+      a:focus {
+      @include focus-outline;
+    }
+  }
+
   .#{$prefix}--toast-notification.#{$prefix}--toast-notification--low-contrast
-    a:focus {
+    a:focus-visible {
     @include focus-outline;
   }
 
@@ -171,7 +184,14 @@
     cursor: pointer;
     transition: outline $transition--base, background-color $transition--base;
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        outline: 2px solid $inverse-focus-ui;
+        outline-offset: -2px;
+      }
+    }
+
+    &:focus-visible {
       outline: 2px solid $inverse-focus-ui;
       outline-offset: -2px;
     }
@@ -181,8 +201,15 @@
     }
   }
 
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--toast-notification--low-contrast
+      .#{$prefix}--toast-notification__close-button:focus {
+      @include focus-outline('outline');
+    }
+  }
+
   .#{$prefix}--toast-notification--low-contrast
-    .#{$prefix}--toast-notification__close-button:focus {
+    .#{$prefix}--toast-notification__close-button:focus-visible {
     @include focus-outline('outline');
   }
 
@@ -234,7 +261,13 @@
   .#{$prefix}--toast-notification {
     @include high-contrast-mode('outline');
   }
-  .#{$prefix}--toast-notification__close-button:focus {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--toast-notification__close-button:focus {
+      @include high-contrast-mode('focus');
+    }
+  }
+
+  .#{$prefix}--toast-notification__close-button:focus-visible {
     @include high-contrast-mode('focus');
   }
 

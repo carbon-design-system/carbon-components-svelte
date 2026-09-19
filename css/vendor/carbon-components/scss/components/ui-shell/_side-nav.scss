@@ -264,7 +264,13 @@
     }
   }
 
-  .#{$prefix}--side-nav__submenu:focus {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--side-nav__submenu:focus {
+      @include focus-outline('outline');
+    }
+  }
+
+  .#{$prefix}--side-nav__submenu:focus-visible {
     @include focus-outline('outline');
   }
 
@@ -364,8 +370,15 @@
     user-select: none;
   }
 
-  .#{$prefix}--side-nav__link:focus,
-  .#{$prefix}--side-nav .#{$prefix}--header__menu-item:focus { // ccs: flatten
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--side-nav__link:focus,
+    .#{$prefix}--side-nav .#{$prefix}--header__menu-item:focus { // ccs: flatten
+      @include focus-outline('outline');
+    }
+  }
+
+  .#{$prefix}--side-nav__link:focus-visible,
+  .#{$prefix}--side-nav .#{$prefix}--header__menu-item:focus-visible { // ccs: flatten
     @include focus-outline('outline');
   }
 
@@ -485,10 +498,21 @@
     height: inherit;
   }
 
-  .#{$prefix}--side-nav
-    .#{$prefix}--header__menu-item:focus
-    .#{$prefix}--header__menu-arrow,
   .#{$prefix}--side-nav .#{$prefix}--header__menu-arrow { // ccs: flatten
+    fill: $shell-side-nav-text-01;
+  }
+
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--side-nav
+      .#{$prefix}--header__menu-item:focus
+      .#{$prefix}--header__menu-arrow { // ccs: flatten
+      fill: $shell-side-nav-text-01;
+    }
+  }
+
+  .#{$prefix}--side-nav
+    .#{$prefix}--header__menu-item:focus-visible
+    .#{$prefix}--header__menu-arrow { // ccs: flatten
     fill: $shell-side-nav-text-01;
   }
 
@@ -502,10 +526,23 @@
 
   // Windows HCM fix
   .#{$prefix}--side-nav__icon > svg,
-  .#{$prefix}--side-nav
-    .#{$prefix}--header__menu-item:focus
-    .#{$prefix}--header__menu-arrow,
   .#{$prefix}--side-nav .#{$prefix}--header__menu-arrow { // ccs: flatten
+    @include high-contrast-mode('icon-fill');
+  }
+
+  // Windows HCM fix
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--side-nav
+      .#{$prefix}--header__menu-item:focus
+      .#{$prefix}--header__menu-arrow { // ccs: flatten
+      @include high-contrast-mode('icon-fill');
+    }
+  }
+
+  // Windows HCM fix
+  .#{$prefix}--side-nav
+    .#{$prefix}--header__menu-item:focus-visible
+    .#{$prefix}--header__menu-arrow { // ccs: flatten
     @include high-contrast-mode('icon-fill');
   }
 

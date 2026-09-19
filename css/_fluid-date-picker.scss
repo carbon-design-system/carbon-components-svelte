@@ -236,8 +236,15 @@
   }
 
   // Focus ring on invalid single/range cell (after invalid rules in source order).
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--date-picker-container.#{$prefix}--date-picker--fluid--invalid
+      .#{$prefix}--date-picker__input:focus {
+      @include focus-outline("outline");
+    }
+  }
+
   .#{$prefix}--date-picker-container.#{$prefix}--date-picker--fluid--invalid
-    .#{$prefix}--date-picker__input:focus {
+    .#{$prefix}--date-picker__input:focus-visible {
     @include focus-outline("outline");
   }
 

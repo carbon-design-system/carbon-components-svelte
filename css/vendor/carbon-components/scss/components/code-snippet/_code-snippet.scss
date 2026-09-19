@@ -68,7 +68,14 @@
       background-color: $copy-active;
     }
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        border: 2px solid $focus;
+        outline: none;
+      }
+    }
+
+    &:focus-visible {
       border: 2px solid $focus;
       outline: none;
     }
@@ -153,7 +160,13 @@
     padding-left: $carbon--spacing-05;
     overflow-x: auto;
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        @include focus-outline('outline');
+      }
+    }
+
+    &:focus-visible {
       @include focus-outline('outline');
     }
   }
@@ -185,7 +198,15 @@
     overflow-y: auto;
     transition: max-height $duration--moderate-01 motion(standard, productive);
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        @include focus-outline('outline');
+
+        outline-offset: 0;
+      }
+    }
+
+    &:focus-visible {
       @include focus-outline('outline');
 
       outline-offset: 0;
@@ -271,7 +292,15 @@
     background-color: $copy-active;
   }
 
-  .#{$prefix}--snippet-btn--expand:focus {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--snippet-btn--expand:focus {
+      @include focus-outline('outline');
+
+      border-color: transparent;
+    }
+  }
+
+  .#{$prefix}--snippet-btn--expand:focus-visible {
     @include focus-outline('outline');
 
     border-color: transparent;
@@ -365,7 +394,13 @@
     @include high-contrast-mode('icon-fill');
   }
 
-  .#{$prefix}--snippet--inline:focus {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--snippet--inline:focus {
+      @include high-contrast-mode('focus');
+    }
+  }
+
+  .#{$prefix}--snippet--inline:focus-visible {
     @include high-contrast-mode('focus');
   }
 
@@ -399,7 +434,13 @@
 
     // The focus outline is drawn on this same element, so the edge fade would
     // clip the ring. Drop the mask while focused so the outline is unbroken.
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        mask-image: none;
+      }
+    }
+
+    &:focus-visible {
       mask-image: none;
     }
   }
@@ -420,7 +461,13 @@
       linear-gradient(to top, var(--snippet-scroll-fade-bottom));
     mask-composite: intersect;
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        mask-image: none;
+      }
+    }
+
+    &:focus-visible {
       mask-image: none;
     }
   }

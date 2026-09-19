@@ -49,13 +49,28 @@
     outline-offset: -2px;
     transition: $duration--fast-02 motion(standard, productive);
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        outline: 2px solid $interactive-03;
+      }
+    }
+
+    &:focus-visible {
       outline: 2px solid $interactive-03;
     }
 
-    &:focus,
     &:active,
     &:active:visited {
+      text-decoration: underline;
+    }
+
+    @supports not selector(:focus-visible) {
+      &:focus {
+        text-decoration: underline;
+      }
+    }
+
+    &:focus-visible {
       text-decoration: underline;
     }
 
@@ -249,7 +264,13 @@
   .#{$prefix}--file__state-container .#{$prefix}--file-complete {
     fill: $interactive-04;
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        @include focus-outline('border');
+      }
+    }
+
+    &:focus-visible {
       @include focus-outline('border');
     }
 
@@ -279,7 +300,13 @@
     cursor: pointer;
     fill: $icon-01;
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        @include focus-outline('outline');
+      }
+    }
+
+    &:focus-visible {
       @include focus-outline('outline');
     }
   }

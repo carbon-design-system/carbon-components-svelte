@@ -24,7 +24,13 @@
     overflow-x: auto;
   }
 
-  .#{$prefix}--data-table-content:focus {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--data-table-content:focus {
+      @include focus-outline('outline');
+    }
+  }
+
+  .#{$prefix}--data-table-content:focus-visible {
     @include focus-outline('outline');
   }
 
@@ -160,9 +166,17 @@
     background-color: $field-02;
   }
 
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--data-table
+      td.#{$prefix}--table-column-menu
+      .#{$prefix}--overflow-menu[aria-expanded='false']:focus {
+      @include focus-outline('outline');
+    }
+  }
+
   .#{$prefix}--data-table
     td.#{$prefix}--table-column-menu
-    .#{$prefix}--overflow-menu[aria-expanded='false']:focus {
+    .#{$prefix}--overflow-menu[aria-expanded='false']:focus-visible {
     @include focus-outline('outline');
   }
 
@@ -188,9 +202,18 @@
     opacity: 1;
   }
 
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--data-table
+      td.#{$prefix}--table-column-menu
+      .#{$prefix}--overflow-menu:focus
+      .#{$prefix}--overflow-menu__icon {
+      opacity: 1;
+    }
+  }
+
   .#{$prefix}--data-table
     td.#{$prefix}--table-column-menu
-    .#{$prefix}--overflow-menu:focus
+    .#{$prefix}--overflow-menu:focus-visible
     .#{$prefix}--overflow-menu__icon {
     opacity: 1;
   }

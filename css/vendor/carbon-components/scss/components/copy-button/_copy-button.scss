@@ -64,7 +64,15 @@
 
     @include tooltip--placement('icon', 'bottom', 'center');
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        @include focus-outline('outline');
+
+        outline-color: $focus;
+      }
+    }
+
+    &:focus-visible {
       @include focus-outline('outline');
 
       outline-color: $focus;

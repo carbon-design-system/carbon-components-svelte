@@ -124,7 +124,13 @@
     box-shadow: none;
   }
 
-  .#{$prefix}--pin-code-input--fluid .#{$prefix}--pin-code-input__field:focus {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--pin-code-input--fluid .#{$prefix}--pin-code-input__field:focus {
+      @include focus-outline("outline");
+    }
+  }
+
+  .#{$prefix}--pin-code-input--fluid .#{$prefix}--pin-code-input__field:focus-visible {
     @include focus-outline("outline");
   }
 

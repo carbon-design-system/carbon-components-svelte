@@ -39,7 +39,13 @@
       outline $duration--fast-01 motion(entrance, productive);
   }
 
-  .#{$prefix}--table-sort:focus {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--table-sort:focus {
+      @include focus-outline('outline');
+    }
+  }
+
+  .#{$prefix}--table-sort:focus-visible {
     @include focus-outline('outline');
   }
 
@@ -48,8 +54,17 @@
   }
 
   // changes opacity when th is inactive (see line 161)
-  .#{$prefix}--table-sort:focus svg,
   .#{$prefix}--table-sort:hover svg {
+    opacity: 1;
+  }
+
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--table-sort:focus svg {
+      opacity: 1;
+    }
+  }
+
+  .#{$prefix}--table-sort:focus-visible svg {
     opacity: 1;
   }
 

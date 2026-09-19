@@ -96,7 +96,16 @@
       }
     }
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        background-color: $interactive-04;
+        box-shadow: inset 0 0 0 2px $interactive-04, inset 0 0 0 3px $ui-01;
+        // 20px / 14px = 1.4286
+        transform: translate(-50%, -50%) scale(1.4286);
+      }
+    }
+
+    &:focus-visible {
       background-color: $interactive-04;
       box-shadow: inset 0 0 0 2px $interactive-04, inset 0 0 0 3px $ui-01;
       // 20px / 14px = 1.4286
@@ -221,7 +230,12 @@
   .#{$prefix}--slider__thumb {
     @include high-contrast-mode('outline');
   }
-  .#{$prefix}--slider__thumb:focus {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--slider__thumb:focus {
+      @include high-contrast-mode('focus');
+    }
+  }
+  .#{$prefix}--slider__thumb:focus-visible {
     @include high-contrast-mode('focus');
   }
   .#{$prefix}--slider__track {
@@ -389,7 +403,24 @@
       transform: none;
     }
 
-    &:focus {
+    @supports not selector(:focus-visible) {
+      &:focus {
+        background: transparent;
+        box-shadow: none;
+        transform: none;
+        outline: none;
+
+        .#{$prefix}--slider__thumb-icon:not(.#{$prefix}--slider__thumb-icon--focus) {
+          display: none;
+        }
+
+        .#{$prefix}--slider__thumb-icon--focus {
+          display: block;
+        }
+      }
+    }
+
+    &:focus-visible {
       background: transparent;
       box-shadow: none;
       transform: none;
@@ -413,8 +444,15 @@
     left: 0;
   }
 
-  .#{$prefix}--slider__thumb--lower:focus::before,
-  .#{$prefix}--slider__thumb--upper:focus::before {
+  @supports not selector(:focus-visible) {
+    .#{$prefix}--slider__thumb--lower:focus::before,
+    .#{$prefix}--slider__thumb--upper:focus::before {
+      width: 100%;
+    }
+  }
+
+  .#{$prefix}--slider__thumb--lower:focus-visible::before,
+  .#{$prefix}--slider__thumb--upper:focus-visible::before {
     width: 100%;
   }
 
