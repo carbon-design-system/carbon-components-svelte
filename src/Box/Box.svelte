@@ -119,6 +119,13 @@
   export let tag = "div";
 
   /**
+   * Obtain a reference to the HTML element.
+   * @type {null | HTMLElement}
+   * @bindable readonly
+   */
+  export let ref = null;
+
+  /**
    * Whether `value` is a spacing-scale step (rendered as a class rather than
    * inline style). Spacing steps start at 1; offsets also allow 0.
    * @param {unknown} value @param {number} min
@@ -218,6 +225,7 @@
 
 <svelte:element
   this={tag}
+  bind:this={ref}
   {...$$restProps}
   style:width={resolvedWidth}
   style:max-width={resolvedMaxWidth}
