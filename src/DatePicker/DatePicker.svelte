@@ -391,6 +391,18 @@
     }
   }
 
+  /**
+   * Mirrors flatpickr's own `ignoredFocusElements` check so Carbon's
+   * outside-click and blur dismissal honor the option too.
+   *
+   * @param {EventTarget | null} target
+   */
+  function isIgnoredFocusElement(target) {
+    return (calendar?.config.ignoredFocusElements ?? []).some((element) =>
+      element.contains(/** @type {Node} */ (target)),
+    );
+  }
+
   function dismissCalendar(trigger) {
     if (!calendarOpen) return;
     closeTrigger = trigger;
@@ -412,6 +424,7 @@
       calendar.calendarContainer.contains(/** @type {Node} */ (relatedTarget))
     )
       return;
+    if (isIgnoredFocusElement(relatedTarget)) return;
     dismissCalendar("outside-click");
   }
 
@@ -765,6 +778,7 @@
    */
   function isOutsideCalendarTarget(event) {
     if (!calendarOpen || !calendar) return false;
+    if (isIgnoredFocusElement(event.target)) return false;
     return !isEventTargetInsidePortaledCalendar(
       datePickerRef,
       calendar.calendarContainer,
