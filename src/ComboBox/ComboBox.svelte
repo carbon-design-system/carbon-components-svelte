@@ -948,8 +948,8 @@
           on:focus
           on:focus={() => {
           if (isFluid) fieldFocused = true;
-          if (selectTextOnFocus && ref) {
-            tick().then(() => ref.select());
+          if (selectTextOnFocus && !disabled) {
+            tick().then(() => ref?.select());
           }
         }}
           on:blur
