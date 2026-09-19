@@ -34,29 +34,11 @@ Set `datePickerType` to `"multiple"` to select several individual, non-contiguou
 
 Selecting many dates never drops any of them from `value` or the `change` event's `selectedDates`; the field just visually truncates the joined string with an ellipsis once it no longer fits. Track `event.detail.selectedDates.length` (as in the example above) and surface it through `helperText` to show a count instead of relying on the truncated text.
 
-### Multiple programmatic control
-
-Use `bind:calendar` to select or clear dates from outside the component with `calendar.setDate(dates, true)` and `calendar.clear(true)`. The example below selects 20 or 100 dates at once to exercise the field's truncation and rendering with a large selection.
-
-<FileSource src="/framed/DatePicker/DatePickerMultipleProgrammatic" />
-
 ### Range
 
 Set `datePickerType` to `"range"` for a start and end date. Provide two DatePickerInput components in order—start, then end—and bind `valueFrom` and `valueTo`. Both fields share one calendar: the user selects a span, and the start and end inputs update together.
 
 <FileSource src="/framed/DatePicker/DatePickerRange" />
-
-#### Programmatic
-
-Use `bind:valueFrom` and `bind:valueTo` to update the range from outside the component, such as preset buttons or filters.
-
-<FileSource src="/framed/DatePicker/DatePickerProgrammatic" />
-
-### Range presets
-
-Build preset range buttons (for example "Last 7 days" or "This month") by setting `valueFrom` and `valueTo` from outside the component, the same way as the programmatic example above.
-
-<FileSource src="/framed/DatePicker/DatePickerRangePresets" />
 
 ### Month
 
@@ -70,19 +52,47 @@ Pass a numeric `dateFormat`, such as `"Y-m"`, along with a matching `placeholder
 
 <FileSource src="/framed/DatePicker/DatePickerMonthCustomFormat" />
 
-#### Programmatic
-
-Use `bind:value` to update the selected month from outside the component, such as a "previous month" button.
-
-<FileSource src="/framed/DatePicker/DatePickerMonthProgrammatic" />
-
 ### Year
 
 Set `datePickerType` to `"year"` to select a year instead of a day. The calendar shows a decade grid; use the prev/next controls to move between decades. Pair it with a year-only `dateFormat` such as `"Y"` (for example, "2026").
 
 <FileSource src="/framed/DatePicker/DatePickerYear" />
 
-#### Programmatic
+## Programmatic control
+
+Drive the calendar from outside the component—set values, select many dates at once, or read the underlying Flatpickr instance.
+
+### Programmatic access
+
+Use `bind:calendar` to access the underlying [Flatpickr instance](https://flatpickr.js.org/instance-methods-properties-elements/) for programmatic control, such as opening the calendar from an external trigger or updating options at runtime via `set`.
+
+<FileSource src="/framed/DatePicker/DatePickerCalendarInstance" />
+
+### Multiple
+
+Use `bind:calendar` to select or clear dates from outside the component with `calendar.setDate(dates, true)` and `calendar.clear(true)`. The example below selects 20 or 100 dates at once to exercise the field's truncation and rendering with a large selection.
+
+<FileSource src="/framed/DatePicker/DatePickerMultipleProgrammatic" />
+
+### Range
+
+Use `bind:valueFrom` and `bind:valueTo` to update the range from outside the component, such as preset buttons or filters.
+
+<FileSource src="/framed/DatePicker/DatePickerProgrammatic" />
+
+### Range presets
+
+Build preset range buttons (for example "Last 7 days" or "This month") by setting `valueFrom` and `valueTo` from outside the component, the same way as the programmatic example above.
+
+<FileSource src="/framed/DatePicker/DatePickerRangePresets" />
+
+### Month
+
+Use `bind:value` to update the selected month from outside the component, such as a "previous month" button.
+
+<FileSource src="/framed/DatePicker/DatePickerMonthProgrammatic" />
+
+### Year
 
 Use `bind:value` to select a year from outside the component, or `bind:calendar` to move the displayed decade—such as jumping to the current year or paging forward—without changing the selection.
 
@@ -139,12 +149,6 @@ By default, the calendar appears instantly with no animation. Pass `flatpickrPro
 By default, the calendar closes when a date is selected. Pass `closeOnSelect: false` via `flatpickrProps` to keep it open.
 
 <FileSource src="/framed/DatePicker/DatePickerCloseOnSelect" />
-
-### Programmatic access
-
-Use `bind:calendar` to access the underlying [Flatpickr instance](https://flatpickr.js.org/instance-methods-properties-elements/) for programmatic control, such as opening the calendar from an external trigger or updating options at runtime via `set`.
-
-<FileSource src="/framed/DatePicker/DatePickerCalendarInstance" />
 
 ## Formatting
 
