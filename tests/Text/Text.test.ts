@@ -86,6 +86,14 @@ describe("Text", () => {
     );
   });
 
+  it("applies pretty modifier class", () => {
+    render(Text);
+
+    expect(screen.getByText("Pretty-wrapped paragraph")).toHaveClass(
+      "bx--type-pretty",
+    );
+  });
+
   it("applies maxWidth as px when given a number", () => {
     render(Text);
 
