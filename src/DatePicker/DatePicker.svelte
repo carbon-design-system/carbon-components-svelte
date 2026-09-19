@@ -404,6 +404,12 @@
    * @type {() => void}
    */
   function focusCalendar() {
+    // Escape (or programmatic close) leaves the calendar in the DOM but
+    // hidden via CSS, so focusing its elements is a no-op unless it's
+    // reopened first.
+    if (!calendar.isOpen) {
+      calendar.open();
+    }
     (
       calendar.selectedDateElem ||
       calendar.todayDateElem ||

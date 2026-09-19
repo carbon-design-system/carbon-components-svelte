@@ -71,6 +71,27 @@ describe("DatePicker close event", () => {
     expect(onClose.mock.calls[0][0].detail.trigger).toBe("escape-key");
   });
 
+  it("reopens the calendar when ArrowDown is pressed after Escape closed it", async () => {
+    const onClose = vi.fn();
+    render(DatePickerClose, { props: { onClose } });
+
+    const input = screen.getByLabelText("Date");
+    await user.click(input);
+    const calendar = await screen.findByLabelText("calendar-container");
+    expect(calendar).toHaveClass("open");
+
+    input.focus();
+    await user.keyboard("{Escape}");
+    await tick();
+    expect(calendar).not.toHaveClass("open");
+
+    input.focus();
+    await user.keyboard("{ArrowDown}");
+    await tick();
+
+    expect(calendar).toHaveClass("open");
+  });
+
   it('dispatches close with trigger "outside-click" when clicking outside', async () => {
     const onClose = vi.fn();
     render(DatePickerClose, { props: { onClose } });
