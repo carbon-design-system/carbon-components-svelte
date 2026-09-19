@@ -198,6 +198,32 @@ describe("css partial conventions", () => {
     expect(unscoped).toEqual([]);
   });
 
+  it("guards hover rules with (any-hover: hover)", () => {
+    // `:focus:hover` rides along in `:focus` lists with the same declarations.
+    const unguarded = PARTIALS.flatMap((name) => {
+      const found: string[] = [];
+      let depth = 0;
+      let guardDepth = -1;
+      readFileSync(join(CSS_DIR, name), "utf8")
+        .split("\n")
+        .forEach((line, index) => {
+          const code = line.split("//")[0].replace(/#\{[^}]*\}/g, "");
+          if (code.includes("any-hover: hover") && guardDepth < 0)
+            guardDepth = depth;
+          if (
+            guardDepth < 0 &&
+            code.replace(/:not\(:hover\)|:focus:hover/g, "").includes(":hover")
+          )
+            found.push(`${name}:${index + 1}`);
+          depth += (code.match(/\{/g) ?? []).length;
+          depth -= (code.match(/\}/g) ?? []).length;
+          if (guardDepth >= 0 && depth <= guardDepth) guardDepth = -1;
+        });
+      return found;
+    });
+    expect(unguarded).toEqual([]);
+  });
+
   it("avoids :has(), which is newer than the browser baseline", () => {
     expect(offenders(/:has\(/)).toEqual([]);
   });

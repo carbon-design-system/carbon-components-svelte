@@ -19,8 +19,10 @@ describe("any-hover media query grouping", () => {
     // Grouped adjacent `(any-hover: hover)` rules per component close one
     // @media block instead of N. Was 72 blocks before grouping (see
     // .context/css-size-followup-results.md); this caps well below that so
-    // a future change re-scattering the blocks gets caught.
+    // a future change re-scattering the blocks gets caught. Raised from 40
+    // when the hand-authored partials adopted the guard (one block each,
+    // more only where moving a hover rule would reorder the cascade).
     const blocks = css.match(/@media\(any-hover: hover\)\{/g) ?? [];
-    expect(blocks.length).toBeLessThanOrEqual(40);
+    expect(blocks.length).toBeLessThanOrEqual(55);
   }, 30_000);
 });

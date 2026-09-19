@@ -55,7 +55,6 @@
     background: none;
     cursor: pointer;
 
-    &:hover,
     &:active {
       background: none;
     }
@@ -70,7 +69,18 @@
       transition: fill $duration--fast-01 motion(standard, productive);
     }
 
-    &:hover .#{$prefix}--snippet__icon,
+    // Hover only where a pointer can hover, so a tap does not leave it stuck.
+    // Stays ahead of `:disabled`, which must keep beating it.
+    @media (any-hover: hover) {
+      &:hover {
+        background: none;
+      }
+
+      &:hover .#{$prefix}--snippet__icon {
+        fill: $icon-primary;
+      }
+    }
+
     &:focus .#{$prefix}--snippet__icon {
       fill: $icon-primary;
     }

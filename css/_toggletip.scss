@@ -41,7 +41,6 @@
     fill: $icon-02;
   }
 
-  .#{$prefix}--toggletip-button:hover svg,
   .#{$prefix}--toggletip--open .#{$prefix}--toggletip-button svg {
     fill: $icon-01;
   }
@@ -63,15 +62,28 @@
   // the inverse link color across every state to remain legible. Mirrors the
   // link treatment Carbon applies inside `.bx--tooltip`.
   .#{$prefix}--toggletip-content .#{$prefix}--link,
-  .#{$prefix}--toggletip-content .#{$prefix}--link:hover,
-  .#{$prefix}--toggletip-content .#{$prefix}--link:visited,
-  .#{$prefix}--toggletip-content .#{$prefix}--link:visited:hover {
+  .#{$prefix}--toggletip-content .#{$prefix}--link:visited {
     color: $inverse-link;
   }
 
+  // Hover only where a pointer can hover, so a tap does not leave it stuck.
+  @media (any-hover: hover) {
+    .#{$prefix}--toggletip-button:hover svg {
+      fill: $icon-01;
+    }
+
+    .#{$prefix}--toggletip-content .#{$prefix}--link:hover,
+    .#{$prefix}--toggletip-content .#{$prefix}--link:visited:hover {
+      color: $inverse-link;
+    }
+
+    .#{$prefix}--toggletip-content .#{$prefix}--link:active:visited:hover {
+      color: $inverse-01;
+    }
+  }
+
   .#{$prefix}--toggletip-content .#{$prefix}--link:active,
-  .#{$prefix}--toggletip-content .#{$prefix}--link:active:visited,
-  .#{$prefix}--toggletip-content .#{$prefix}--link:active:visited:hover {
+  .#{$prefix}--toggletip-content .#{$prefix}--link:active:visited {
     color: $inverse-01;
   }
 

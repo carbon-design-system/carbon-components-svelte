@@ -50,12 +50,6 @@
     transition: background-color $duration--fast-01 motion(standard, productive);
   }
 
-  .#{$prefix}--search--fluid
-    .#{$prefix}--search-input:focus
-    ~ .#{$prefix}--search-close:hover {
-    outline: none;
-  }
-
   // The close button overlaps the field's bottom edge; its `::after`
   // re-draws the input's border (and focus underline) beneath it.
   .#{$prefix}--search--fluid .#{$prefix}--search-close::after {
@@ -85,10 +79,19 @@
     margin-block-end: to-rem(2px);
   }
 
-  .#{$prefix}--search--fluid
-    .#{$prefix}--search-input:disabled
-    ~ .#{$prefix}--search-close:hover::before {
-    background: $ui-03;
+  // Hover only where a pointer can hover, so a tap does not leave it stuck.
+  @media (any-hover: hover) {
+    .#{$prefix}--search--fluid
+      .#{$prefix}--search-input:focus
+      ~ .#{$prefix}--search-close:hover {
+      outline: none;
+    }
+
+    .#{$prefix}--search--fluid
+      .#{$prefix}--search-input:disabled
+      ~ .#{$prefix}--search-close:hover::before {
+      background: $ui-03;
+    }
   }
 
   .#{$prefix}--search--fluid.#{$prefix}--search--disabled .#{$prefix}--label {

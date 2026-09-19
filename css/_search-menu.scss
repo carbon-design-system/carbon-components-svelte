@@ -89,10 +89,6 @@
     text-decoration: none;
     @include type-style("body-short-01");
 
-    &:hover {
-      background-color: $hover-ui;
-    }
-
     // `display: flex` above beats the UA `[hidden] { display: none }`.
     &[hidden] {
       display: none;
@@ -107,10 +103,6 @@
     color: $disabled-02;
     cursor: not-allowed;
 
-    &:hover {
-      background-color: transparent;
-    }
-
     // The matched-text highlight otherwise forces text-01; keep it disabled.
     .#{$prefix}--search-menu-item__highlight {
       color: $disabled-02;
@@ -121,12 +113,23 @@
     cursor: default;
     pointer-events: none;
 
-    &:hover {
+    .#{$prefix}--skeleton__text {
+      margin: 0;
+    }
+  }
+
+  // Hover only where a pointer can hover, so a tap does not leave it stuck.
+  @media (any-hover: hover) {
+    .#{$prefix}--search-menu-item:hover {
+      background-color: $hover-ui;
+    }
+
+    .#{$prefix}--search-menu-item--disabled:hover {
       background-color: transparent;
     }
 
-    .#{$prefix}--skeleton__text {
-      margin: 0;
+    .#{$prefix}--search-menu-item--skeleton:hover {
+      background-color: transparent;
     }
   }
 

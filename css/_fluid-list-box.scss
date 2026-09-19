@@ -29,50 +29,6 @@
     background-color: transparent;
   }
 
-  // Suppress Carbon's per-list-box hover; fluid hover is scoped below. The
-  // skeleton's inner element carries `.bx--skeleton`; exclude it so its
-  // background isn't forced transparent on hover.
-  .#{$prefix}--list-box__wrapper--fluid
-    .#{$prefix}--list-box:not(.#{$prefix}--skeleton):hover,
-  .#{$prefix}--list-box__wrapper--fluid
-    .#{$prefix}--list-box.#{$prefix}--list-box--expanded:hover {
-    background-color: transparent;
-  }
-
-  // Default fluid (no error/warn footer): hover the full wrapper. `--neutral`
-  // is set by the component only when none of invalid/warning/disabled/
-  // readonly/skeleton apply, so it already encodes the same condition the
-  // `:not()` chain used to spell out. The class is repeated to match the
-  // specificity of the 5-clause `:not()` chain it replaces, so it keeps
-  // beating the same rules it used to in the cascade.
-  .#{$prefix}--list-box__wrapper--fluid.#{$prefix}--list-box__wrapper--fluid--neutral.#{$prefix}--list-box__wrapper--fluid--neutral.#{$prefix}--list-box__wrapper--fluid--neutral.#{$prefix}--list-box__wrapper--fluid--neutral.#{$prefix}--list-box__wrapper--fluid--neutral:hover {
-    background-color: $hover-ui;
-  }
-
-  // Invalid/warn fluid (matches fluid-select): hover tint only the input cell.
-  .#{$prefix}--list-box__wrapper--fluid--invalid:not(:focus-within):not(
-      .#{$prefix}--list-box__wrapper--fluid--disabled
-    ):not(.#{$prefix}--list-box__wrapper--fluid--readonly)
-    .#{$prefix}--list-box:hover:not(.#{$prefix}--combo-box),
-  .#{$prefix}--list-box__wrapper--fluid--warning:not(:focus-within):not(
-      .#{$prefix}--list-box__wrapper--fluid--disabled
-    ):not(.#{$prefix}--list-box__wrapper--fluid--readonly)
-    .#{$prefix}--list-box:hover:not(.#{$prefix}--combo-box),
-  .#{$prefix}--list-box__wrapper--fluid--invalid:not(:focus-within):not(
-      .#{$prefix}--list-box__wrapper--fluid--disabled
-    ):not(.#{$prefix}--list-box__wrapper--fluid--readonly)
-    .#{$prefix}--list-box.#{$prefix}--list-box--expanded:hover:not(
-      .#{$prefix}--combo-box
-    ),
-  .#{$prefix}--list-box__wrapper--fluid--warning:not(:focus-within):not(
-      .#{$prefix}--list-box__wrapper--fluid--disabled
-    ):not(.#{$prefix}--list-box__wrapper--fluid--readonly)
-    .#{$prefix}--list-box.#{$prefix}--list-box--expanded:hover:not(
-      .#{$prefix}--combo-box
-    ) {
-    background-color: $hover-ui;
-  }
-
   .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--label {
     @include fluid-label;
   }
@@ -250,13 +206,62 @@
     @include fluid-divider-rule;
   }
 
-  .#{$prefix}--list-box__wrapper--fluid
-    .#{$prefix}--list-box[data-invalid]:hover:not(.#{$prefix}--combo-box)
-    ~ .#{$prefix}--list-box__divider,
-  .#{$prefix}--list-box__wrapper--fluid
-    .#{$prefix}--list-box--warning:hover:not(.#{$prefix}--combo-box)
-    ~ .#{$prefix}--list-box__divider {
-    border-color: transparent;
+  // Hover only where a pointer can hover, so a tap does not leave it stuck.
+  @media (any-hover: hover) {
+    // Suppress Carbon's per-list-box hover; fluid hover is scoped below. The
+    // skeleton's inner element carries `.bx--skeleton`; exclude it so its
+    // background isn't forced transparent on hover.
+    .#{$prefix}--list-box__wrapper--fluid
+      .#{$prefix}--list-box:not(.#{$prefix}--skeleton):hover,
+    .#{$prefix}--list-box__wrapper--fluid
+      .#{$prefix}--list-box.#{$prefix}--list-box--expanded:hover {
+      background-color: transparent;
+    }
+
+    // Default fluid (no error/warn footer): hover the full wrapper.
+    // `--neutral` is set by the component only when none of
+    // invalid/warning/disabled/readonly/skeleton apply, so it already
+    // encodes the same condition the `:not()` chain used to spell out. The
+    // class is repeated to match the specificity of the 5-clause `:not()`
+    // chain it replaces, so it keeps beating the same rules it used to in
+    // the cascade.
+    .#{$prefix}--list-box__wrapper--fluid.#{$prefix}--list-box__wrapper--fluid--neutral.#{$prefix}--list-box__wrapper--fluid--neutral.#{$prefix}--list-box__wrapper--fluid--neutral.#{$prefix}--list-box__wrapper--fluid--neutral.#{$prefix}--list-box__wrapper--fluid--neutral:hover {
+      background-color: $hover-ui;
+    }
+
+    // Invalid/warn fluid (matches fluid-select): hover tint only the input
+    // cell.
+    .#{$prefix}--list-box__wrapper--fluid--invalid:not(:focus-within):not(
+        .#{$prefix}--list-box__wrapper--fluid--disabled
+      ):not(.#{$prefix}--list-box__wrapper--fluid--readonly)
+      .#{$prefix}--list-box:hover:not(.#{$prefix}--combo-box),
+    .#{$prefix}--list-box__wrapper--fluid--warning:not(:focus-within):not(
+        .#{$prefix}--list-box__wrapper--fluid--disabled
+      ):not(.#{$prefix}--list-box__wrapper--fluid--readonly)
+      .#{$prefix}--list-box:hover:not(.#{$prefix}--combo-box),
+    .#{$prefix}--list-box__wrapper--fluid--invalid:not(:focus-within):not(
+        .#{$prefix}--list-box__wrapper--fluid--disabled
+      ):not(.#{$prefix}--list-box__wrapper--fluid--readonly)
+      .#{$prefix}--list-box.#{$prefix}--list-box--expanded:hover:not(
+        .#{$prefix}--combo-box
+      ),
+    .#{$prefix}--list-box__wrapper--fluid--warning:not(:focus-within):not(
+        .#{$prefix}--list-box__wrapper--fluid--disabled
+      ):not(.#{$prefix}--list-box__wrapper--fluid--readonly)
+      .#{$prefix}--list-box.#{$prefix}--list-box--expanded:hover:not(
+        .#{$prefix}--combo-box
+      ) {
+      background-color: $hover-ui;
+    }
+
+    .#{$prefix}--list-box__wrapper--fluid
+      .#{$prefix}--list-box[data-invalid]:hover:not(.#{$prefix}--combo-box)
+      ~ .#{$prefix}--list-box__divider,
+    .#{$prefix}--list-box__wrapper--fluid
+      .#{$prefix}--list-box--warning:hover:not(.#{$prefix}--combo-box)
+      ~ .#{$prefix}--list-box__divider {
+      border-color: transparent;
+    }
   }
 
   .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--list-box__selection {

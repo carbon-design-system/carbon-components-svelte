@@ -15,9 +15,17 @@
     color: $disabled-02;
     cursor: not-allowed;
 
-    &:hover,
     &:active,
     &:focus {
+      background-color: $disabled-01;
+      border-color: transparent;
+      cursor: not-allowed;
+    }
+  }
+
+  // Hover only where a pointer can hover, so a tap does not leave it stuck.
+  @media (any-hover: hover) {
+    .#{$prefix}--snippet--inline:disabled:hover {
       background-color: $disabled-01;
       border-color: transparent;
       cursor: not-allowed;
