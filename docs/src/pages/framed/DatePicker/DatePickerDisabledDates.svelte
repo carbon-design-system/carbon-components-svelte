@@ -13,10 +13,6 @@
   );
 </script>
 
-<DatePicker
-  datePickerType="single"
-  flatpickrProps={{ disable: disabledDates }}
-  on:change
->
+<DatePicker datePickerType="single" {disabledDates} on:change>
   <DatePickerInput labelText="Delivery date" placeholder="mm/dd/yyyy" />
 </DatePicker>
