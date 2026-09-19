@@ -247,7 +247,6 @@ describe("css partial conventions", () => {
     // Sites not yet converted to fix the competing rule instead. Shrink this
     // list as each is converted; a converted site must stay off it.
     const NOT_YET_CONVERTED = new Set([
-      "_fluid-number-input.scss",
       "_fluid-text-area.scss",
       "_header-switcher.scss",
       "_profile-menu.scss",
