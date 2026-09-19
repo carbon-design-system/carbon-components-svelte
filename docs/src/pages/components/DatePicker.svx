@@ -182,7 +182,7 @@ With `datePickerType="multiple"`, dates in `value` are joined with `", "` by def
 
 ### Human-readable display format
 
-Pass `altInput: true` with an `altFormat` via `flatpickrProps` to show a friendly date while `value` keeps the machine format set by `dateFormat`. Flatpickr hides the original input and inserts its own visible one, which is not associated with the label, so give it an accessible name in `onReady`. The visible input copies Carbon's classes by default; if you set `altInputClass`, include `bx--date-picker__input` to keep the Carbon styling.
+Pass `altInput: true` with an `altFormat` via `flatpickrProps` to show a friendly date while `value` keeps the machine format set by `dateFormat`. Flatpickr hides the original input and inserts its own visible one, which Carbon associates with the label. The visible input copies Carbon's classes by default; if you set `altInputClass`, include `bx--date-picker__input` to keep the Carbon styling.
 
 <FileSource src="/framed/DatePicker/DatePickerAltInput" />
 
