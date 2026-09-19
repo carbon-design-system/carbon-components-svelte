@@ -134,6 +134,30 @@ describe("DatePicker", () => {
     expect(input).toBeDisabled();
   });
 
+  // Regression test: the invalid/warn/calendar icons all render after the
+  // input in the DOM, so a `.icon ~ .input` CSS sibling selector for
+  // padding-right can never match. Long values (for example many dates in
+  // "multiple" mode) would render underneath the icon undetected until now.
+  describe("icon padding", () => {
+    it("adds padding for the calendar icon", () => {
+      render(DatePicker, { datePickerType: "single" });
+      const input = screen.getByLabelText("Date");
+      expect(input).toHaveClass("bx--date-picker__input--with-icon");
+    });
+
+    it("does not add icon padding without a calendar (simple mode)", () => {
+      render(DatePicker);
+      const input = screen.getByLabelText("Date");
+      expect(input).not.toHaveClass("bx--date-picker__input--with-icon");
+    });
+
+    it("adds icon padding when invalid, even without a calendar", () => {
+      render(DatePicker, { invalid: true, invalidText: "Invalid" });
+      const input = screen.getByLabelText("Date");
+      expect(input).toHaveClass("bx--date-picker__input--with-icon");
+    });
+  });
+
   describe("readonly", () => {
     it("forwards the readonly attribute and marks the label", () => {
       render(DatePicker, { readonly: true });
@@ -554,6 +578,32 @@ describe("DatePicker", () => {
         expect(re.test(sampleValue)).toBe(true);
       },
     );
+
+    // datePickerType="multiple" joins selected dates with flatpickr's default
+    // ", " conjunction into one input value, so the pattern must accept one
+    // or more repetitions instead of a single date.
+    it("derives a pattern that accepts one or more comma-joined dates for datePickerType='multiple'", () => {
+      render(DatePicker, { datePickerType: "multiple" });
+
+      const input = screen.getByLabelText("Date");
+      const pattern = input.getAttribute("pattern");
+      const re = new RegExp(`^${pattern}$`);
+      expect(re.test("02/10/2026")).toBe(true);
+      expect(re.test("02/10/2026, 02/15/2026")).toBe(true);
+      expect(re.test("02/10/2026, 02/15/2026, 03/01/2026")).toBe(true);
+      expect(re.test("not a date")).toBe(false);
+    });
+
+    it("derived multiple-mode pattern is valid with the Unicode (u) flag", () => {
+      render(DatePicker, { datePickerType: "multiple" });
+
+      const input = screen.getByLabelText("Date");
+      const pattern = input.getAttribute("pattern");
+      expect(pattern).toBeTruthy();
+
+      const re = new RegExp(`^(?:${pattern})$`, "u");
+      expect(re.test("02/10/2026, 02/15/2026")).toBe(true);
+    });
   });
 
   describe("minDate and maxDate", () => {
@@ -928,6 +978,257 @@ describe("DatePicker", () => {
       await tick();
 
       expect(fp.config.static).toBe(false);
+    });
+  });
+
+  describe("multiple mode", () => {
+    it("renders multiple mode", async () => {
+      const { container } = render(DatePicker, {
+        datePickerType: "multiple",
+      });
+
+      const input = screen.getByLabelText("Date");
+      const wrapper = container.querySelector(".bx--date-picker");
+      // Multiple mode reuses the single-mode input width styling.
+      expect(wrapper).toHaveClass("bx--date-picker--single");
+
+      expect(
+        screen.queryByLabelText("calendar-container"),
+      ).not.toBeInTheDocument();
+      await user.click(input);
+      expect(
+        await screen.findByLabelText("calendar-container"),
+      ).toBeInTheDocument();
+    });
+
+    it("toggles a day in and out of selection on repeated clicks", async () => {
+      render(DatePicker, { datePickerType: "multiple" });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+      // flatpickr rebuilds the days grid from scratch on every selection, so
+      // the day element must be re-queried after each click.
+      const getDay = () =>
+        calendar.querySelector<HTMLElement>(
+          ".flatpickr-day:not(.prevMonthDay):not(.nextMonthDay)",
+        );
+
+      const day = getDay();
+      if (!day) throw new Error("expected a selectable day");
+      await user.click(day);
+      expect(getDay()).toHaveClass("selected");
+
+      const dayAgain = getDay();
+      if (!dayAgain) throw new Error("expected a selectable day");
+      await user.click(dayAgain);
+      expect(getDay()).not.toHaveClass("selected");
+    });
+
+    it("does not close the calendar after selecting a date", async () => {
+      render(DatePicker, { datePickerType: "multiple" });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+      const day = calendar.querySelector<HTMLElement>(
+        ".flatpickr-day:not(.prevMonthDay):not(.nextMonthDay)",
+      );
+      if (!day) throw new Error("expected a selectable day");
+
+      await user.click(day);
+      expect(calendar).toHaveClass("open");
+    });
+
+    it("dispatches change with all selected dates joined by a comma", async () => {
+      const changeHandler = vi.fn();
+      render(DatePicker, {
+        datePickerType: "multiple",
+        onchange: changeHandler,
+      });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+      // flatpickr rebuilds the days grid from scratch on every selection, so
+      // the day elements must be re-queried after each click.
+      const getDays = () =>
+        calendar.querySelectorAll<HTMLElement>(
+          ".flatpickr-day:not(.prevMonthDay):not(.nextMonthDay)",
+        );
+
+      await user.click(getDays()[0]);
+      await user.click(getDays()[1]);
+
+      const input = screen.getByLabelText("Date") as HTMLInputElement;
+      expect(input.value).toContain(", ");
+      expect(changeHandler.mock.lastCall?.[0]?.detail).toMatchObject({
+        dateStr: input.value,
+      });
+      expect(
+        changeHandler.mock.lastCall?.[0]?.detail.selectedDates,
+      ).toHaveLength(2);
+    });
+
+    it("supports a custom dateFormat", async () => {
+      render(DatePicker, { datePickerType: "multiple", dateFormat: "Y-m-d" });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+      const getDays = () =>
+        calendar.querySelectorAll<HTMLElement>(
+          ".flatpickr-day:not(.prevMonthDay):not(.nextMonthDay)",
+        );
+
+      await user.click(getDays()[0]);
+      await user.click(getDays()[1]);
+
+      const input = screen.getByLabelText("Date") as HTMLInputElement;
+      expect(input.value).toMatch(/^\d{4}-\d{2}-\d{2}, \d{4}-\d{2}-\d{2}$/);
+    });
+
+    // Regression test: the input has no maxlength and the derived pattern
+    // (see "pattern derived from dateFormat" above) allows unbounded
+    // repetitions, so selecting many dates must not lose any of them.
+    it("does not truncate the input value when many dates are selected", async () => {
+      let captured: Instance | null | undefined = null;
+      render(DatePickerCalendar, {
+        props: {
+          datePickerType: "multiple",
+          oncalendar: (cal: Instance | null | undefined) => {
+            captured = cal;
+          },
+        },
+      });
+
+      const instance = await vi.waitFor(() => {
+        if (!captured) throw new Error("calendar not set");
+        return captured;
+      });
+
+      const dates = Array.from(
+        { length: 20 },
+        (_, i) => new Date(2026, 0, i + 1),
+      );
+      instance.setDate(dates, true);
+      await tick();
+
+      const input = screen.getByLabelText("Date") as HTMLInputElement;
+      expect(input.value.split(", ")).toHaveLength(20);
+      expect(input.value).toContain("01/20/2026");
+    });
+
+    describe("shift-click range selection", () => {
+      function getDayByNumber(calendar: HTMLElement, day: number) {
+        return Array.from(
+          calendar.querySelectorAll<HTMLElement>(".flatpickr-day"),
+        ).find(
+          (el) =>
+            el.textContent?.trim() === String(day) &&
+            !el.classList.contains("prevMonthDay") &&
+            !el.classList.contains("nextMonthDay"),
+        );
+      }
+
+      function getSelectedDayNumbers(calendar: HTMLElement) {
+        return Array.from(
+          calendar.querySelectorAll<HTMLElement>(".flatpickr-day.selected"),
+        )
+          .map((el) => Number(el.textContent?.trim()))
+          .sort((a, b) => a - b);
+      }
+
+      it("extends the selection to a contiguous range on shift-click", async () => {
+        render(DatePicker, { datePickerType: "multiple", value: "03/10/2024" });
+
+        await user.click(screen.getByLabelText("Date"));
+        const calendar = await screen.findByLabelText("calendar-container");
+
+        const day5 = getDayByNumber(calendar, 5);
+        if (!day5) throw new Error("expected day 5");
+        await user.click(day5);
+
+        await user.keyboard("{Shift>}");
+        const day10 = getDayByNumber(calendar, 10);
+        if (!day10) throw new Error("expected day 10");
+        await user.click(day10);
+        await user.keyboard("{/Shift}");
+
+        expect(getSelectedDayNumbers(calendar)).toEqual([5, 6, 7, 8, 9, 10]);
+      });
+
+      it("adds the shift-click range to the existing selection instead of replacing it", async () => {
+        render(DatePicker, { datePickerType: "multiple", value: "03/20/2024" });
+
+        await user.click(screen.getByLabelText("Date"));
+        const calendar = await screen.findByLabelText("calendar-container");
+
+        const day5 = getDayByNumber(calendar, 5);
+        if (!day5) throw new Error("expected day 5");
+        await user.click(day5);
+
+        await user.keyboard("{Shift>}");
+        const day8 = getDayByNumber(calendar, 8);
+        if (!day8) throw new Error("expected day 8");
+        await user.click(day8);
+        await user.keyboard("{/Shift}");
+
+        // day 20 (from the initial value) survives alongside the new range.
+        expect(getSelectedDayNumbers(calendar)).toEqual([5, 6, 7, 8, 20]);
+      });
+
+      it("skips disabled dates within a shift-click range", async () => {
+        render(DatePicker, {
+          datePickerType: "multiple",
+          value: "03/10/2024",
+          flatpickrProps: { disable: ["03/07/2024"] },
+        });
+
+        await user.click(screen.getByLabelText("Date"));
+        const calendar = await screen.findByLabelText("calendar-container");
+
+        const day5 = getDayByNumber(calendar, 5);
+        if (!day5) throw new Error("expected day 5");
+        await user.click(day5);
+
+        await user.keyboard("{Shift>}");
+        const day9 = getDayByNumber(calendar, 9);
+        if (!day9) throw new Error("expected day 9");
+        await user.click(day9);
+        await user.keyboard("{/Shift}");
+
+        // day 7 is disabled and skipped; day 10 (initial value) survives.
+        expect(getSelectedDayNumbers(calendar)).toEqual([5, 6, 8, 9, 10]);
+      });
+
+      it("moves the anchor on the next plain click after a shift-click", async () => {
+        render(DatePicker, { datePickerType: "multiple", value: "03/01/2024" });
+
+        await user.click(screen.getByLabelText("Date"));
+        const calendar = await screen.findByLabelText("calendar-container");
+
+        const day5 = getDayByNumber(calendar, 5);
+        if (!day5) throw new Error("expected day 5");
+        await user.click(day5);
+
+        await user.keyboard("{Shift>}");
+        const day7 = getDayByNumber(calendar, 7);
+        if (!day7) throw new Error("expected day 7");
+        await user.click(day7);
+        await user.keyboard("{/Shift}");
+
+        // Plain click on day 20 moves the anchor there instead of day 5.
+        const day20 = getDayByNumber(calendar, 20);
+        if (!day20) throw new Error("expected day 20");
+        await user.click(day20);
+
+        await user.keyboard("{Shift>}");
+        const day18 = getDayByNumber(calendar, 18);
+        if (!day18) throw new Error("expected day 18");
+        await user.click(day18);
+        await user.keyboard("{/Shift}");
+
+        expect(getSelectedDayNumbers(calendar)).toEqual([
+          1, 5, 6, 7, 18, 19, 20,
+        ]);
+      });
     });
   });
 

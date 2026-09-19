@@ -74,6 +74,7 @@
 
   const {
     range,
+    multiple,
     add,
     setReadonly,
     setValidation,
@@ -119,15 +120,45 @@
     return result;
   }
 
+  /**
+   * `datePickerType="multiple"` joins each selected date with Flatpickr's
+   * default `", "` conjunction into one input value, so the derived pattern
+   * must allow one or more repetitions instead of a single date.
+   */
+  function dateFormatToMultiplePattern(fmt) {
+    const single = dateFormatToPattern(fmt);
+    return `${single}(, ${single})*`;
+  }
+
   add({ id, labelText });
 
-  $: actualPattern = pattern ?? dateFormatToPattern($dateFormat ?? "m/d/Y");
+  $: actualPattern =
+    pattern ??
+    ($multiple ? dateFormatToMultiplePattern : dateFormatToPattern)(
+      $dateFormat ?? "m/d/Y",
+    );
   $: if (ref) declareRef({ id, ref });
   $: setReadonly(id, readonly);
   // Invalid/warn states are suppressed when the input is disabled or read-only.
   $: showInvalid = invalid && !disabled && !readonly;
   $: showWarn = warn && !invalid && !disabled && !readonly;
   $: setValidation(id, showInvalid, showWarn);
+  // The invalid/warn/calendar icons all render after the input in the DOM
+  // (see below), so the vendor CSS's `.icon ~ .input` padding-right rule
+  // never matches. This class is the fix; see _date-picker.scss.
+  $: hasIcon = showInvalid || showWarn || $hasCalendar;
+  $: currentValue = $range
+    ? $inputIds.indexOf(id) === 0
+      ? $inputValueFrom
+      : $inputValueTo
+    : $inputValue;
+  // The "multiple"-mode ghost overlay (see below) mirrors this instead of
+  // `currentValue` directly: while a calendar exists, `updateValue` only
+  // pushes typed keystrokes into the shared store on "change" (blur/Enter),
+  // not "input", to avoid fighting flatpickr's own value management. That
+  // deliberate lag would otherwise leave the overlay showing stale text
+  // while the (invisible) real input already has the freshly typed value.
+  $: overlayValue = currentValue;
   $: errorId = `error-${id}`;
   $: warnId = `warn-${id}`;
   $: helperId = `helper-${id}`;
@@ -179,17 +210,16 @@
       {disabled}
       {readonly}
       {...$$restProps}
-      value={$range
-        ? $inputIds.indexOf(id) === 0
-          ? $inputValueFrom
-          : $inputValueTo
-        : $inputValue}
+      value={currentValue}
       class:bx--date-picker__input={true}
       class:bx--date-picker__input--invalid={showInvalid}
+      class:bx--date-picker__input--with-icon={hasIcon}
       class:bx--date-picker__input--sm={size === "sm"}
       class:bx--date-picker__input--xl={size === "xl"}
+      class:bx--date-picker__input--ghost-text={$multiple}
       on:input
       on:input={(event) => {
+        overlayValue = event.target.value;
         updateValue({ type: "input", value: event.target.value });
       }}
       on:change={(event) => {
@@ -214,6 +244,18 @@
       }}
       on:paste
     >
+    {#if $multiple}
+      <div
+        class:bx--date-picker__input={true}
+        class:bx--date-picker__input-overlay={true}
+        class:bx--date-picker__input--with-icon={hasIcon}
+        class:bx--date-picker__input--sm={size === "sm"}
+        class:bx--date-picker__input--xl={size === "xl"}
+        aria-hidden="true"
+      >
+        <span>{overlayValue}</span>
+      </div>
+    {/if}
     {#if showInvalid}
       <WarningFilled
         class="bx--date-picker__icon bx--date-picker__icon--invalid"
