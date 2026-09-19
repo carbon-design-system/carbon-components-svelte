@@ -194,6 +194,8 @@
   let prevValueFrom = valueFrom;
   let prevValueTo = valueTo;
   let prevAppliedOptions = {};
+  let creating = false;
+  let creationFailed = false;
   let calendarUsesFixedPositioning = false;
   /** @type {(ReturnType<typeof rafThrottle> & { cancel: () => void }) | null} */
   let onCalendarReposition = null;
@@ -605,6 +607,14 @@
       return;
     }
 
+    // Creation is async. A second reactive run before it resolves would build
+    // another instance on the same input, and flatpickr destroys the first,
+    // leaving `calendar` pointing at a dead one. A failed init is not retried
+    // either, since every retry logs the same flatpickr error again.
+    if (creating || creationFailed) return;
+    creating = true;
+    const flatpickrPropsAtCreation = flatpickrProps;
+
     // Auto-detect a top-layer ancestor (native dialog or open popover) so the
     // calendar can participate in its top layer instead of being clipped behind
     // the backdrop. Computed at creation time — appendTo cannot change after.
@@ -650,6 +660,20 @@
         return dispatch(event, detail);
       },
     });
+    creating = false;
+    creationFailed = !calendar;
+    if (!calendar) return;
+    // Record what the calendar was created with, then apply only what
+    // changed in the meantime.
+    prevAppliedOptions = {
+      minDate: options.minDate,
+      maxDate: options.maxDate,
+      locale: options.locale,
+      dateFormat: options.dateFormat,
+      ...flatpickrPropsAtCreation,
+    };
+    initCalendar(options);
+
     // flatpickr fills the input from `flatpickrProps.defaultDate` without
     // firing events, so mirror it into `value` here.
     if (calendar && !$range && $inputValue === "" && inputRef.value !== "") {
