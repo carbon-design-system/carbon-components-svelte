@@ -219,6 +219,12 @@ Update documentation when the change is user-facing:
 
 Skip doc updates for internal refactors with no API or behavior change.
 
+Ship docs as their own commit, separate from the `feat`/`fix` commit
+that adds the behavior (which should carry its own `src/` + `tests/`
+changes and nothing under `docs/`). Title a new-example commit after
+the example's exact heading: `docs(slider): add "Select on focus"
+example`.
+
 #### Where docs live
 
 | Path | Purpose |
@@ -844,6 +850,12 @@ Subject line:
 - Scope is the component or area; multi-word names are lowercase with dashes: `combo-box`, `code-snippet`, `data-table`, `ui-shell`, `accordion-item`
 - Omit scope when the change spans many areas (`docs: …`, `chore: …`)
 - Append `!` after the scope for breaking changes: `fix(accordion-item)!: …`
+- `fix` is for bugs in a published release. If the buggy code was only
+  ever on an unreleased commit (introduced since the last tag), use
+  `chore` instead, since it never shipped as a bug
+- `perf` bodies must state the measured effect: a before/after number
+  (bundle size, benchmark timing, operation count), not just a
+  description of the change. See [Performance benchmarks](#performance-benchmarks)
 
 Examples:
 
@@ -857,6 +869,9 @@ Body (optional):
 
 A body is not required. Add one when context helps reviewers or when closing an issue.
 
+- Lead with the root cause or prior (broken) behavior, naming the
+  specific selector, function, or mechanism at fault, then state the
+  fix. Don't just restate the diff; a reviewer can already read that
 - Reference the issue: `Fixes #1000` or `Closes #1000` (GitHub auto-closes on merge)
 - At most 2-3 sentences, full sentences, no bullet lists
 - Wrap lines at 72 characters for readability in `git log`
@@ -866,8 +881,21 @@ Example with body:
 ```
 fix(data-table): associate cells with column headers
 
-Cells now set aria-labelledby to their column header id.
+Cells never set aria-labelledby, so screen readers couldn't announce
+a cell's column header. Point each cell at its column header id.
 Fixes #3162
+```
+
+Example `perf` body with a measured effect:
+
+```
+perf(css): drop the redundant .popover qualifier on direction ::before
+
+.bx--popover--{dir} never renders without .bx--popover on the same
+element, so appending it to the compound filtered nothing, only
+added specificity.
+
+all.css 671418 -> 671274 B min, 72110 -> 72099 B gzip.
 ```
 
 Avoid vague subjects (`fix bug`), PascalCase or camelCase scopes (`fix(ComboBox):`), and long subjects. Move detail to the body. Prefer `Fixes #N` in the body over PR numbers in the subject.
