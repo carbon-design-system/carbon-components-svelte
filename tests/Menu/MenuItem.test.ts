@@ -252,6 +252,20 @@ describe("MenuItem", () => {
       expect(screen.queryByRole("menu")).not.toBeInTheDocument();
     });
 
+    it("selecting a nested item returns focus to the outermost trigger", async () => {
+      render(MenuItemFixture);
+
+      const trigger = screen.getByRole("button", { name: "Trigger" });
+      await user.click(trigger);
+      await user.click(screen.getByRole("menuitem", { name: "Export as" }));
+      await user.click(screen.getByRole("menuitem", { name: "PDF" }));
+
+      // The submenu's own close focuses its "Export as" anchor first, but
+      // the root menu closes last and wins with the real trigger button.
+      expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+      expect(trigger).toHaveFocus();
+    });
+
     it("opens the submenu on hover after a delay", async () => {
       vi.useFakeTimers();
       try {
