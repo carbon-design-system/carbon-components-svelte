@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import type SearchComponent from "carbon-components-svelte/Search/Search.svelte";
 import type { ComponentProps } from "svelte";
+import { tick } from "svelte";
 import { user } from "../utils/user";
 import SearchFluidForm from "./Search.fluidForm.test.svelte";
 import SearchFluidSkeleton from "./Search.fluidSkeleton.test.svelte";
@@ -33,6 +34,29 @@ describe("Search", () => {
 
     expect(screen.getByTestId("expand-event")).toHaveTextContent("false");
     expect(screen.getByTestId("collapse-event")).toHaveTextContent("false");
+  });
+
+  it("selects the full value on focus when selectTextOnFocus is true", async () => {
+    render(Search, {
+      props: { selectTextOnFocus: true, value: "Cloud functions" },
+    });
+
+    const search = getSearchInput("Default search") as HTMLInputElement;
+    await user.click(search);
+    await tick();
+
+    expect(search.selectionStart).toBe(0);
+    expect(search.selectionEnd).toBe("Cloud functions".length);
+  });
+
+  it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {
+    render(Search, { props: { value: "Cloud functions" } });
+
+    const search = getSearchInput("Default search") as HTMLInputElement;
+    await user.click(search);
+    await tick();
+
+    expect(search.selectionStart).toBe(search.selectionEnd);
   });
 
   it("renders and functions correctly", async () => {

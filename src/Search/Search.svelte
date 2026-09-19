@@ -82,6 +82,9 @@
    */
   export let ref = null;
 
+  /** Set to `true` to select the input's text when it receives focus */
+  export let selectTextOnFocus = false;
+
   import { createEventDispatcher, getContext, tick } from "svelte";
   import Close from "../icons/Close.svelte";
   import IconSearch from "../icons/IconSearch.svelte";
@@ -89,6 +92,14 @@
   import SearchSkeleton from "./SearchSkeleton.svelte";
 
   const dispatch = createEventDispatcher();
+
+  let skipSelectOnFocus = false;
+
+  /** Focus the input without selecting text, even when `selectTextOnFocus` is set. */
+  export function focusWithoutSelect() {
+    skipSelectOnFocus = true;
+    ref?.focus();
+  }
   const formContext = getContext("carbon:Form");
 
   let searchRef = null;
@@ -171,6 +182,11 @@
       on:focus
       on:focus={() => {
         if (expandable && !disabled) expanded = true;
+        const skip = skipSelectOnFocus;
+        skipSelectOnFocus = false;
+        if (selectTextOnFocus && !disabled && !skip) {
+          tick().then(() => ref?.select());
+        }
       }}
       on:blur
       on:blur={() => {
