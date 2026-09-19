@@ -9,8 +9,6 @@
 /// @group components
 @mixin popover {
   $popover-text-color: $text-01;
-  $popover-caret-offset: to-rem(16px);
-  $popover-offset: 8px;
 
   .#{$prefix}--popover {
     // Specify the distance between the popover and the trigger. This value must
@@ -193,7 +191,7 @@
   .#{$prefix}--popover--right-top {
     top: 0;
     left: 100%;
-    transform: translateX($popover-offset);
+    transform: translateX(var(--cds-popover-offset));
   }
 
   @include place-caret(right-top) {
