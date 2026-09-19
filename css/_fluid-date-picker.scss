@@ -175,6 +175,32 @@
     margin-inline-end: 0;
   }
 
+  // The container's own `border-block-end` (above) sits 1px below the input:
+  // the container is a content-box flex column around the (border-box, no
+  // border of its own) input, so its rendered height is the input's height
+  // plus that 1px border. flatpickr positions the calendar flush against the
+  // input (its offsetParent), which is 1px short of the container's true
+  // bottom, so a flush seam lets the calendar overlap and paint over the
+  // border on the non-focused field. This is scoped to fluid range only —
+  // every other date picker's border lives on the input itself, flush with
+  // its own box, so the base flush seam already covers it correctly.
+  .#{$prefix}--date-picker--fluid
+    .#{$prefix}--date-picker--range
+    .flatpickr-calendar.open {
+    margin-top: to-rem(-1px);
+  }
+
+  // Same 1px gap, but for the focused (open or closed) input: the focus
+  // outline is drawn on the input's own box, which likewise stops 1px short
+  // of the container's border. A less-negative offset lets the ring extend
+  // that extra pixel so it fully covers the border instead of leaving a
+  // sliver of it visible below the outline.
+  .#{$prefix}--date-picker--fluid
+    .#{$prefix}--date-picker--range
+    .#{$prefix}--date-picker__input:focus {
+    outline-offset: to-rem(-1px);
+  }
+
   .#{$prefix}--date-picker--fluid
     .#{$prefix}--date-picker--range
     > .#{$prefix}--date-picker-container:last-child
