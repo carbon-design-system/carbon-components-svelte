@@ -94,11 +94,11 @@ Pass `flatpickrProps={{ allowInput: false }}` when you want calendar-only select
 
 <FileSource src="/framed/DatePicker/DatePickerAllowInput" />
 
-### Disable open animation
+### Enable open animation
 
-By default, the calendar animates when it opens and closes. Pass `flatpickrProps={{ animate: false }}` to disable the [Flatpickr animate option](https://flatpickr.js.org/options/) and show the calendar instantly.
+By default, the calendar appears instantly with no animation. Pass `flatpickrProps={{ animate: true }}` to enable the [Flatpickr animate option](https://flatpickr.js.org/options/) and animate the calendar as it opens and closes.
 
-<FileSource src="/framed/DatePicker/DatePickerDisableAnimation" />
+<FileSource src="/framed/DatePicker/DatePickerEnableAnimation" />
 
 ### Keep open on select
 
