@@ -11,6 +11,7 @@ import DatePicker from "./DatePicker.test.svelte";
 import DatePickerCalendar from "./DatePickerCalendar.test.svelte";
 import DatePickerDefaultDate from "./DatePickerDefaultDate.test.svelte";
 import DatePickerIgnoredFocus from "./DatePickerIgnoredFocus.test.svelte";
+import DatePickerInlineOptions from "./DatePickerInlineOptions.test.svelte";
 import DatePickerInModal from "./DatePickerInModal.test.svelte";
 import DatePickerInputSlot from "./DatePickerInput.slot.test.svelte";
 import DatePickerRange from "./DatePickerRange.test.svelte";
@@ -937,6 +938,23 @@ describe("DatePicker", () => {
       expectTypeOf<FlatpickrProps>().toHaveProperty("showMonths");
       expectTypeOf<FlatpickrProps>().not.toHaveProperty("wrap");
       expectTypeOf<FlatpickrProps>().not.toHaveProperty("mode");
+    });
+
+    it("does not re-apply an inline option whose contents are unchanged", async () => {
+      let calendar: Instance | null = null;
+      const { rerender } = render(DatePickerInlineOptions, {
+        oncalendar: (cal) => {
+          calendar = cal ?? null;
+        },
+      });
+      await vi.waitFor(() => expect(calendar).not.toBeNull());
+      assert(calendar);
+      const set = vi.spyOn(calendar as Instance, "set");
+
+      await rerender({ renders: 1 });
+      await rerender({ renders: 2 });
+      expect(screen.getByText("Render 2")).toBeInTheDocument();
+      expect(set).not.toHaveBeenCalledWith("disable", expect.anything());
     });
 
     it("still runs a consumer onReady hook", async () => {
