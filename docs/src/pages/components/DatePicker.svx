@@ -34,6 +34,12 @@ Set `datePickerType` to `"multiple"` to select several individual, non-contiguou
 
 Selecting many dates never drops any of them from `value` or the `change` event's `selectedDates`; the field just visually truncates the joined string with an ellipsis once it no longer fits. Track `event.detail.selectedDates.length` (as in the example above) and surface it through `helperText` to show a count instead of relying on the truncated text.
 
+### Multiple programmatic control
+
+Use `bind:calendar` to select or clear dates from outside the component with `calendar.setDate(dates, true)` and `calendar.clear(true)`. The example below selects 20 or 100 dates at once to exercise the field's truncation and rendering with a large selection.
+
+<FileSource src="/framed/DatePicker/DatePickerMultipleProgrammatic" />
+
 ### Range
 
 Set `datePickerType` to `"range"` for a start and end date. Provide two DatePickerInput components in order—start, then end—and bind `valueFrom` and `valueTo`. Both fields share one calendar: the user selects a span, and the start and end inputs update together.
