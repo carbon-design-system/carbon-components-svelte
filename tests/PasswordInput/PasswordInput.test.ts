@@ -1,4 +1,5 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { user } from "../utils/user";
 import PasswordInputFluidForm from "./PasswordInput.fluidForm.test.svelte";
 import PasswordInputFluidSlot from "./PasswordInput.fluidSlot.test.svelte";
@@ -19,6 +20,49 @@ describe("PasswordInput", () => {
       expect(
         screen.getByPlaceholderText("Enter password..."),
       ).toBeInTheDocument();
+    });
+
+    it("selects the full value on focus when selectTextOnFocus is true", async () => {
+      render(PasswordInput, {
+        labelText: "Password",
+        value: "secret123",
+        selectTextOnFocus: true,
+      });
+
+      const input = screen.getByLabelText("Password") as HTMLInputElement;
+      await user.click(input);
+      await tick();
+
+      expect(input.selectionStart).toBe(0);
+      expect(input.selectionEnd).toBe("secret123".length);
+    });
+
+    it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {
+      render(PasswordInput, {
+        labelText: "Password",
+        value: "secret123",
+      });
+
+      const input = screen.getByLabelText("Password") as HTMLInputElement;
+      await user.click(input);
+      await tick();
+
+      expect(input.selectionStart).toBe(input.selectionEnd);
+    });
+
+    it("does not select text on focus when disabled", async () => {
+      render(PasswordInput, {
+        labelText: "Password",
+        value: "secret123",
+        selectTextOnFocus: true,
+        disabled: true,
+      });
+
+      const input = screen.getByLabelText("Password") as HTMLInputElement;
+      const select = vi.spyOn(input, "select");
+      await fireEvent.focus(input);
+
+      expect(select).not.toHaveBeenCalled();
     });
 
     it("should toggle password visibility", async () => {
