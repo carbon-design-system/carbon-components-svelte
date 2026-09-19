@@ -3,6 +3,7 @@ import {
   conflictingProps,
   histogram,
   histogramByFile,
+  matchContextMoves,
   parseRules,
   wins,
 } from "../../scripts/lib/css-cascade";
@@ -118,6 +119,39 @@ describe("coMatchable", () => {
     expect(coMatchable(r(".a svg"), r(".a:hover > svg"))).toBe(true);
     expect(coMatchable(r(".a svg"), r(".b svg"))).toBe(false);
     expect(coMatchable(r(".a svg"), r(".a path"))).toBe(false);
+  });
+});
+
+describe("matchContextMoves", () => {
+  test("pairs a dropped and a new rule sharing selector + decls across contexts", () => {
+    const removed = rules(".x { color: red }");
+    const added = rules("@media (any-hover: hover) { .x { color: red } }");
+    const moves = matchContextMoves(removed, added);
+    expect(moves.size).toBe(1);
+    expect(moves.get(added[0])).toBe(removed[0]);
+    expect(removed).toEqual([]);
+    expect(added).toEqual([]);
+  });
+
+  test("does not pair rules with the same context, or different selectors/decls", () => {
+    const removed = rules(".x { color: red } .y { color: red }");
+    const added = rules(
+      ".x { color: red } @media print { .y { color: blue } }",
+    );
+    const moves = matchContextMoves(removed, added);
+    expect(moves.size).toBe(0);
+    expect(removed.length).toBe(2);
+    expect(added.length).toBe(2);
+  });
+
+  test("leaves unmatched added rules in place", () => {
+    const removed = rules(".x { color: red }");
+    const added = rules(
+      "@media print { .x { color: red } } .z { color: green }",
+    );
+    const moves = matchContextMoves(removed, added);
+    expect(moves.size).toBe(1);
+    expect(added).toEqual([expect.objectContaining({ selector: ".z" })]);
   });
 });
 
