@@ -844,6 +844,49 @@ describe("DatePicker", () => {
       );
     });
 
+    it("creates one flatpickr instance when props settle during init", async () => {
+      const onReady = vi.fn();
+      const onDestroy = vi.fn();
+      render(DatePicker, {
+        datePickerType: "single",
+        helperText: "Pick a weekday",
+        flatpickrProps: {
+          altInput: true,
+          altFormat: "F j, Y",
+          onReady,
+          onDestroy,
+        },
+      });
+
+      await screen.findByLabelText("calendar-container");
+      await tick();
+      expect(onReady).toHaveBeenCalledTimes(1);
+      expect(onDestroy).not.toHaveBeenCalled();
+    });
+
+    it("does not retry a failed flatpickr init on every update", async () => {
+      const consoleError = vi
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
+      const plugin = vi.fn(() => {
+        throw new Error("plugin failed");
+      });
+      const props = {
+        datePickerType: "single",
+        flatpickrProps: { plugins: [plugin] },
+      } as const;
+      const { rerender } = render(DatePicker, props);
+      await tick();
+      const attempts = plugin.mock.calls.length;
+      expect(attempts).toBeGreaterThan(0);
+
+      await rerender({ ...props, helperText: "Changed" });
+      await rerender({ ...props, invalid: true });
+      await tick();
+      expect(plugin).toHaveBeenCalledTimes(attempts);
+      consoleError.mockRestore();
+    });
+
     it("still runs a consumer onReady hook", async () => {
       const onReady = vi.fn();
       render(DatePicker, {
