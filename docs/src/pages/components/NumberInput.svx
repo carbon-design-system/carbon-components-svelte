@@ -41,6 +41,12 @@ Use the `labelChildren` slot to provide custom label content.
   <strong slot="labelChildren">Clusters</strong>
 </NumberInput>
 
+## Select on focus
+
+Set `selectTextOnFocus` to select the full value when the field receives focus.
+
+<NumberInput selectTextOnFocus labelText="Clusters" value={12} />
+
 ## Range and steps
 
 Control the allowed values and increment.
