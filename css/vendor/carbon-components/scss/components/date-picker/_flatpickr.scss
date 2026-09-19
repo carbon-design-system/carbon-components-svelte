@@ -139,13 +139,36 @@
     display: block;
   }
 
+  .flatpickr-innerContainer {
+    display: flex;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .flatpickr-rContainer {
+    box-sizing: border-box;
+  }
+
+  .flatpickr-days {
+    display: flex;
+    align-items: flex-start;
+  }
+
   .dayContainer {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
+    box-sizing: border-box;
+    width: to-rem(280px);
+    min-width: to-rem(280px);
+    max-width: to-rem(280px);
     height: to-rem(246px);
     padding: 0;
     outline: 0;
+  }
+
+  .dayContainer + .dayContainer {
+    box-shadow: -1px 0 0 $border-subtle;
   }
 
   .flatpickr-calendar:focus {
