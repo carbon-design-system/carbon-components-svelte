@@ -295,4 +295,23 @@ describe("css partial conventions", () => {
   it("avoids :has(), which is newer than the browser baseline", () => {
     expect(offenders(/:has\(/)).toEqual([]);
   });
+
+  it("does not pad specificity by repeating a class in one compound", () => {
+    // Sites not yet converted to fix the competing rule instead. Shrink this
+    // list as each is converted; a converted site must stay off it.
+    const NOT_YET_CONVERTED = new Set([
+      "_fluid-date-picker.scss",
+      "_fluid-number-input.scss",
+      "_fluid-text-area.scss",
+      "_header-switcher.scss",
+      "_profile-menu.scss",
+      "_ui-shell-classic.scss",
+    ]);
+    // The lookahead matters: without it, `.foo.foo--bar` (a base class next
+    // to its own BEM modifier, a normal 2-class compound) false-positives,
+    // since `.foo` is a literal prefix of `.foo--bar`.
+    expect(
+      offenders(/(\.#\{\$prefix\}--[\w-]+)\1(?![\w-])/, NOT_YET_CONVERTED),
+    ).toEqual([]);
+  });
 });
