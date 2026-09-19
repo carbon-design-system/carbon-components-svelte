@@ -142,6 +142,7 @@ describe("css partial conventions", () => {
       ["fluid-text-input", "fluid-time-picker"],
       ["fluid-multiselect", "list-box-wrap-options"],
       ["fluid-multiselect", "dropdown"],
+      ["profile-menu", "header-switcher"],
     ];
     for (const [earlier, later] of pairs) {
       expect(position(earlier), `${earlier} < ${later}`).toBeLessThan(
