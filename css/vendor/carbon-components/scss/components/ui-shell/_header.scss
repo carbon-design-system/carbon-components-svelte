@@ -112,8 +112,7 @@
     color: $shell-header-text-01;
   }
 
-  .#{$prefix}--header__menu-toggle:not(.#{$prefix}--header__menu-toggle__hidden)
-    ~ .#{$prefix}--header__name {
+  .#{$prefix}--header__menu-toggle ~ .#{$prefix}--header__name { // ccs: dropped guard on unrendered __hidden
     padding-left: to-rem(8px);
   }
 

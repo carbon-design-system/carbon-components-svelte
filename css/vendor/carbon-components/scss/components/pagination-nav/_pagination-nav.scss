@@ -18,22 +18,21 @@
 /// @access private
 /// @group pagination-nav
 @mixin pseudo-underline() {
-  &:not(.#{$prefix}--pagination-nav__page--direction) {
-    &::after {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      display: block;
-      width: 0;
-      height: $carbon--spacing-02;
-      background-color: $interactive-01;
-      content: '';
-      opacity: 0;
-      transition: width $duration--fast-02 motion(standard, productive);
+  // ccs: dropped the guard on unrendered `__page--direction`
+  &::after {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    display: block;
+    width: 0;
+    height: $carbon--spacing-02;
+    background-color: $interactive-01;
+    content: '';
+    opacity: 0;
+    transition: width $duration--fast-02 motion(standard, productive);
 
-      @media screen and (prefers-reduced-motion: reduce) {
-        transition: none;
-      }
+    @media screen and (prefers-reduced-motion: reduce) {
+      transition: none;
     }
   }
 
