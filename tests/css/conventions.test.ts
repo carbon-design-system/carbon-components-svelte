@@ -43,6 +43,23 @@ describe("css partial conventions", () => {
     expect(missing).toEqual([]);
   });
 
+  it("documents every mixin with SassDoc access and group tags", () => {
+    const undocumented = PARTIALS.flatMap((name) => {
+      const lines = readFileSync(join(CSS_DIR, name), "utf8").split("\n");
+      return lines.flatMap((line, index) =>
+        line.startsWith("@mixin") &&
+        !(
+          lines[index - 1]?.startsWith("/// @group ") &&
+          lines[index - 2] === "/// @access private" &&
+          lines[index - 3]?.startsWith("///")
+        )
+          ? [`${name}:${index + 1}`]
+          : [],
+      );
+    });
+    expect(undocumented).toEqual([]);
+  });
+
   it("does not reuse an exports() key, including vendored Carbon's", () => {
     const keys = new Map<string, string[]>();
     const collect = (dir: string) => {

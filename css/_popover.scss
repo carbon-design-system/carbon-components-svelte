@@ -277,6 +277,8 @@
 /// distracting in the main stylesheet, but ultimately they target the ::before
 /// and ::after pseudo-elements for the given direction. The @content block
 /// passed in should appropriately position the caret for the given direction.
+/// @access private
+/// @group components
 @mixin place-caret($direction) {
   .#{$prefix}--popover--caret.#{$prefix}--popover--#{$direction}
     .#{$prefix}--popover-contents::before,
