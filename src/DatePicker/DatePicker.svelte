@@ -699,6 +699,8 @@
       locale: options.locale,
       dateFormat: options.dateFormat,
       ...flatpickrPropsAtCreation,
+      clickOpens: options.clickOpens,
+      allowInput: options.allowInput,
     };
     initCalendar(options);
 
@@ -803,11 +805,10 @@
       // default to static: true so the
       // date picker works inside a modal
       static: true,
-      clickOpens: !$readonlyAny,
-      // The flatpickr range plugin strips the `readonly` attribute when
-      // `allowInput` is true, so disable it to preserve the readonly state.
-      allowInput: !$readonlyAny,
       ...flatpickrProps,
+      // The flatpickr range plugin strips the `readonly` attribute when
+      // `allowInput` is true, so read-only wins over `flatpickrProps`.
+      ...interactive,
     })
       .then(() => {})
       .catch((error) => {
@@ -818,15 +819,15 @@
   }
   // Read-only turns both off. Otherwise the consumer's `flatpickrProps`
   // decide, so `allowInput: false` (calendar-only selection) survives.
+  $: interactive = {
+    clickOpens: !$readonlyAny && flatpickrProps.clickOpens !== false,
+    allowInput: !$readonlyAny && flatpickrProps.allowInput !== false,
+  };
+  // Each `calendar.set` rebuilds the day grid, so only apply a real change.
+  // The calendar is created with these values already.
   $: if (calendar) {
-    calendar.set(
-      "clickOpens",
-      !$readonlyAny && flatpickrProps.clickOpens !== false,
-    );
-    calendar.set(
-      "allowInput",
-      !$readonlyAny && flatpickrProps.allowInput !== false,
-    );
+    applyOptionIfChanged("clickOpens", interactive.clickOpens);
+    applyOptionIfChanged("allowInput", interactive.allowInput);
     if ($readonlyAny && calendar.isOpen) calendar.close();
   }
 
