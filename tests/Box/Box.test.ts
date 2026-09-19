@@ -57,6 +57,17 @@ describe("Box", () => {
     );
   });
 
+  it("applies border width only when a border token is set", () => {
+    render(Box);
+
+    expectInlineStyle(screen.getByText("Thick border"), {
+      borderWidth: "2px",
+    });
+    expectInlineStyle(screen.getByText("No border, custom width"), {
+      borderWidth: "",
+    });
+  });
+
   it("applies spacing scale classes", () => {
     render(Box);
 

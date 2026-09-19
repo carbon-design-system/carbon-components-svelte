@@ -7,6 +7,8 @@
 <Box fill="background" border="subtle">Fill and border</Box>
 <Box border="strong" borderStyle="dashed">Dashed border</Box>
 <Box borderStyle="dashed">No border, dashed style</Box>
+<Box border="strong" borderWidth={2}>Thick border</Box>
+<Box borderWidth={2}>No border, custom width</Box>
 <Box padding={5}>Padding scale</Box>
 <Box padding="1.5rem">Custom padding</Box>
 <Box paddingX={3} paddingY={5}>Axis padding</Box>
