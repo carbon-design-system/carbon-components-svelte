@@ -180,6 +180,12 @@ Pass `defaultDate` via `flatpickrProps` to preselect a date when `value` is empt
 
 <FileSource src="/framed/DatePicker/DatePickerDefaultDate" />
 
+### Initial month
+
+Set `initialMonth` to open the calendar on a specific month and year when there is no selection, such as a conference several months out. Unlike `defaultDate`, it never selects a date.
+
+<FileSource src="/framed/DatePicker/DatePickerInitialMonth" />
+
 ### Multiple date separator
 
 With `datePickerType="multiple"`, dates in `value` are joined with `", "` by default. Pass `conjunction` via `flatpickrProps` to use a different separator; the same separator is used to parse typed input. It has no effect on range pickers, which use two separate inputs.
