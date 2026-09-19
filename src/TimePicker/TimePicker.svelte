@@ -73,7 +73,10 @@
    */
   export let fluid = false;
 
-  import { getContext, setContext } from "svelte";
+  /** Set to `true` to select the input's text when it receives focus */
+  export let selectTextOnFocus = false;
+
+  import { getContext, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
@@ -94,6 +97,12 @@
   const timePickerContext = { isFluid: false, registerSelect };
 
   setContext("carbon:TimePicker", timePickerContext);
+
+  function handleFocus() {
+    if (selectTextOnFocus && !disabled) {
+      tick().then(() => ref?.select());
+    }
+  }
 
   $: helperId = `helper-${id}`;
   $: errorId = `error-${id}`;
@@ -173,6 +182,7 @@
                   on:keydown
                   on:keyup
                   on:focus
+                  on:focus={handleFocus}
                   on:blur
                   on:paste
                 >
@@ -270,6 +280,7 @@
               on:keydown
               on:keyup
               on:focus
+              on:focus={handleFocus}
               on:blur
               on:paste
             >
