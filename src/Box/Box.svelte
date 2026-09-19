@@ -122,6 +122,12 @@
   export let display = undefined;
 
   /**
+   * Set the CSS overflow behavior.
+   * @type {"visible" | "hidden" | "auto" | "scroll" | undefined}
+   */
+  export let overflow = undefined;
+
+  /**
    * Set the offset from the top when `position` is set. Numbers `0`–`13` use the shared layout scale; strings accept any CSS length.
    * @type {OffsetValue | undefined}
    */
@@ -224,6 +230,7 @@
     spacingClass("max-height", maxHeight),
     position && `bx--box-position-${position}`,
     display && `bx--box-display-${display}`,
+    overflow && `bx--box-overflow-${overflow}`,
     offsetClass("top", top),
     offsetClass("bottom", bottom),
     $$restProps.class,
