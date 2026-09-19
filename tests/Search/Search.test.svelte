@@ -4,14 +4,15 @@
 
   export let size: ComponentProps<Search>["size"] = undefined;
   export let fluid = false;
-
-  let value = "";
+  export let selectTextOnFocus = false;
+  export let value = "";
 </script>
 
 <Search
   bind:value
   {size}
   {fluid}
+  {selectTextOnFocus}
   labelText="Default search"
   placeholder="Search"
   closeButtonLabelText="Clear value"
