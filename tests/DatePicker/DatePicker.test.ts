@@ -824,6 +824,35 @@ describe("DatePicker", () => {
       ).not.toBeInTheDocument();
     });
 
+    it("labels the visible altInput instead of the hidden original", async () => {
+      render(DatePicker, {
+        datePickerType: "single",
+        dateFormat: "Y-m-d",
+        value: "2024-03-15",
+        flatpickrProps: { altInput: true, altFormat: "F j, Y" },
+      });
+
+      await vi.waitFor(() => {
+        const input = screen.getByLabelText("Date");
+        expect(input).toHaveAttribute("type", "text");
+        expect(input).toHaveValue("March 15, 2024");
+      });
+      expect(document.querySelectorAll("[id]")).toHaveLength(
+        new Set(Array.from(document.querySelectorAll("[id]"), (n) => n.id))
+          .size,
+      );
+    });
+
+    it("still runs a consumer onReady hook", async () => {
+      const onReady = vi.fn();
+      render(DatePicker, {
+        datePickerType: "single",
+        flatpickrProps: { onReady },
+      });
+
+      await vi.waitFor(() => expect(onReady).toHaveBeenCalledTimes(1));
+    });
+
     it("keeps the calendar open after selecting a date when closeOnSelect is false", async () => {
       render(DatePicker, {
         datePickerType: "single",
