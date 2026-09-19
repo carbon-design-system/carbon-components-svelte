@@ -200,7 +200,7 @@ Use `formatDate` and `parseDate` via `flatpickrProps` when `dateFormat` tokens a
 
 ### Handle invalid dates
 
-By default, Flatpickr logs a `console.error` and clears the field when it cannot parse a typed date. Pass `errorHandler` via `flatpickrProps` to surface the error in the UI instead.
+By default, Flatpickr logs a warning and clears the field when it cannot parse a typed date. Listen for `on:error` to surface it in the UI instead. Flatpickr fires `error` before the following `change`, and that `change` has an empty `selectedDates`, so only clear the error once a `change` reports a real selection.
 
 <FileSource src="/framed/DatePicker/DatePickerErrorHandler" />
 
@@ -288,6 +288,14 @@ Listen for `on:close` to know when the calendar closes and why. This event is on
 
 <DatePicker datePickerType="single" on:close={(e) => console.log(e.detail.trigger)}>
   <DatePickerInput labelText="Maintenance window date" placeholder="mm/dd/yyyy" />
+</DatePicker>
+
+### Error
+
+Listen for `on:error` to catch a date Flatpickr could not parse. `event.detail.error` is an `Error` and `event.detail.value` is the raw text that failed to parse.
+
+<DatePicker datePickerType="single" on:error={(e) => console.log(e.detail.error.message)}>
+  <DatePickerInput labelText="Renewal date" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
 ## Helper text
