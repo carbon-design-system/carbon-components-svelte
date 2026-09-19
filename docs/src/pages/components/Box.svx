@@ -61,6 +61,12 @@ Set `border` to a Carbon border token. Each utility applies `1px solid`.
   <Box fill="layer-01" padding={5} border="interactive">interactive</Box>
 </Stack>
 
+Set `borderStyle` to `"dashed"` for a dashed border. It only takes effect when `border` is set.
+
+<Stack gap={3}>
+  <Box fill="layer-01" padding={5} border="strong" borderStyle="dashed">dashed</Box>
+</Stack>
+
 ## Spacing
 
 Set padding and margin using the shared layout scale 1–13 (same values as [Stack](/components/Stack) gap). Pass a string for any CSS length.
