@@ -126,6 +126,30 @@ describe("css partial conventions", () => {
     );
   });
 
+  it("keeps the manifest's load-bearing import order", () => {
+    const manifest = readFileSync(join(CSS_DIR, "_carbon-styles.scss"), "utf8");
+    const position = (name: string) => {
+      const index = manifest.indexOf(`@import "./${name}";`);
+      expect(index, name).toBeGreaterThan(-1);
+      return index;
+    };
+    // [earlier, later]: the later partial wins equal-specificity ties.
+    const pairs = [
+      ["copy-input", "fluid-text-input"],
+      ["fluid-list-box", "fluid-combo-box"],
+      ["fluid-list-box", "fluid-multiselect"],
+      ["fluid-text-input", "fluid-pin-code-input"],
+      ["fluid-text-input", "fluid-time-picker"],
+      ["fluid-multiselect", "list-box-wrap-options"],
+      ["fluid-multiselect", "dropdown"],
+    ];
+    for (const [earlier, later] of pairs) {
+      expect(position(earlier), `${earlier} < ${later}`).toBeLessThan(
+        position(later),
+      );
+    }
+  });
+
   it("derives indicator status colors from one shared palette", () => {
     for (const name of ["_icon-indicator.scss", "_shape-indicator.scss"]) {
       const source = readFileSync(join(CSS_DIR, name), "utf8");
