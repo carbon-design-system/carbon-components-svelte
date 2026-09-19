@@ -171,18 +171,33 @@
     box-shadow: -1px 0 0 $border-subtle;
   }
 
-  // ccs: gutter each month so the divider isn't flush against the day
-  // columns on either side (#3856)
+  // ccs: gutter only the shared edge between months so the divider isn't
+  // flush against the day columns, without padding the calendar's outer
+  // edges past the single-month inset (#3856)
   .flatpickr-calendar.multiMonth .dayContainer {
-    width: to-rem(304px);
-    min-width: to-rem(304px);
-    max-width: to-rem(304px);
-    padding: 0 $carbon--spacing-04;
+    width: to-rem(292px);
+    min-width: to-rem(292px);
+    max-width: to-rem(292px);
+  }
+
+  .flatpickr-calendar.multiMonth .dayContainer:not(:last-child) {
+    padding-right: $carbon--spacing-04;
+  }
+
+  .flatpickr-calendar.multiMonth .dayContainer + .dayContainer {
+    padding-left: $carbon--spacing-04;
   }
 
   .flatpickr-calendar.multiMonth .flatpickr-weekdaycontainer {
     box-sizing: border-box;
-    padding: 0 $carbon--spacing-04;
+  }
+
+  .flatpickr-calendar.multiMonth .flatpickr-weekdaycontainer:not(:last-child) {
+    padding-right: $carbon--spacing-04;
+  }
+
+  .flatpickr-calendar.multiMonth .flatpickr-weekdaycontainer + .flatpickr-weekdaycontainer {
+    padding-left: $carbon--spacing-04;
   }
 
   .flatpickr-calendar:focus {
