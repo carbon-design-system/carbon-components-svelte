@@ -1,4 +1,10 @@
 <script>
+  import { responsiveClasses } from "../utils/responsive-classes.js";
+
+  /** @typedef {import("../Breakpoint/breakpoints").BreakpointSize} BreakpointSize */
+
+  const BREAKPOINTS = ["sm", "md", "lg", "xlg", "max"];
+
   /**
    * The stack scale maps to the following `@carbon/layout` values:
    * - 0  --> 0 (no gap)
@@ -30,26 +36,30 @@
 
   /**
    * Specify the orientation of the stack.
-   * @type {"vertical" | "horizontal"}
+   * Accepts a breakpoint object (e.g., `{ sm: "vertical", md: "horizontal" }`) resolved mobile-first.
+   * @type {"vertical" | "horizontal" | Partial<Record<BreakpointSize, "vertical" | "horizontal">>}
    */
   export let orientation = "vertical";
 
   /**
    * Specify the cross-axis alignment of items in the stack.
-   * @type {"start" | "center" | "end" | "stretch" | "baseline"}
+   * Accepts a breakpoint object resolved mobile-first.
+   * @type {"start" | "center" | "end" | "stretch" | "baseline" | Partial<Record<BreakpointSize, "start" | "center" | "end" | "stretch" | "baseline">>}
    */
   export let align = "stretch";
 
   /**
    * Specify the main-axis alignment of items in the stack.
-   * @type {"start" | "center" | "end" | "space-between" | "space-around" | "space-evenly"}
+   * Accepts a breakpoint object resolved mobile-first.
+   * @type {"start" | "center" | "end" | "space-between" | "space-around" | "space-evenly" | Partial<Record<BreakpointSize, "start" | "center" | "end" | "space-between" | "space-around" | "space-evenly">>}
    */
   export let justify = "start";
 
   /**
    * Specify how items wrap onto multiple lines.
    * Only applies to horizontal stacks that overflow their container.
-   * @type {"nowrap" | "wrap" | "wrap-reverse"}
+   * Accepts a breakpoint object resolved mobile-first.
+   * @type {"nowrap" | "wrap" | "wrap-reverse" | Partial<Record<BreakpointSize, "nowrap" | "wrap" | "wrap-reverse">>}
    */
   export let wrap = "nowrap";
 
@@ -63,14 +73,46 @@
    * @type {keyof HTMLElementTagNameMap}
    */
   export let tag = "div";
+
+  /**
+   * Drop a value equal to `defaultValue` at the `sm` position (or a bare
+   * scalar) so no class is emitted for it, matching the implicit CSS
+   * default. Explicit values at other breakpoints are kept so they can
+   * undo a value set at a smaller breakpoint.
+   * @param {string | Partial<Record<BreakpointSize, string>> | undefined} value
+   * @param {string} defaultValue
+   */
+  function withoutDefaultAtSm(value, defaultValue) {
+    if (typeof value !== "object" || value === null) {
+      return value === defaultValue ? undefined : value;
+    }
+    if (value.sm !== defaultValue) return value;
+    const { sm, ...rest } = value;
+    return rest;
+  }
+
+  $: stackClasses = responsiveClasses("bx--stack", orientation, BREAKPOINTS);
+  $: alignClasses = responsiveClasses(
+    "bx--stack-align",
+    withoutDefaultAtSm(align, "stretch"),
+    BREAKPOINTS,
+  );
+  $: justifyClasses = responsiveClasses(
+    "bx--stack-justify",
+    justify,
+    BREAKPOINTS,
+  );
+  $: wrapClasses = responsiveClasses(
+    "bx--stack",
+    withoutDefaultAtSm(wrap, "nowrap"),
+    BREAKPOINTS,
+  );
 </script>
 
 <svelte:element
   this={tag}
   class:bx--stack={true}
   class:bx--stack-inline={inline}
-  class:bx--stack-vertical={orientation === "vertical"}
-  class:bx--stack-horizontal={orientation === "horizontal"}
   class:bx--stack-scale-1={gap === 1}
   class:bx--stack-scale-2={gap === 2}
   class:bx--stack-scale-3={gap === 3}
@@ -84,20 +126,12 @@
   class:bx--stack-scale-11={gap === 11}
   class:bx--stack-scale-12={gap === 12}
   class:bx--stack-scale-13={gap === 13}
-  class:bx--stack-align-start={align === "start"}
-  class:bx--stack-align-center={align === "center"}
-  class:bx--stack-align-end={align === "end"}
-  class:bx--stack-align-baseline={align === "baseline"}
-  class:bx--stack-justify-start={justify === "start"}
-  class:bx--stack-justify-center={justify === "center"}
-  class:bx--stack-justify-end={justify === "end"}
-  class:bx--stack-justify-space-between={justify === "space-between"}
-  class:bx--stack-justify-space-around={justify === "space-around"}
-  class:bx--stack-justify-space-evenly={justify === "space-evenly"}
-  class:bx--stack-wrap={wrap === "wrap"}
-  class:bx--stack-wrap-reverse={wrap === "wrap-reverse"}
-  style:gap={typeof gap === "string" ? gap : undefined}
   {...$$restProps}
+  class={[...stackClasses, ...alignClasses, ...justifyClasses, ...wrapClasses]
+    .concat($$restProps.class)
+    .filter(Boolean)
+    .join(" ")}
+  style:gap={typeof gap === "string" ? gap : undefined}
 >
   <slot />
 </svelte:element>

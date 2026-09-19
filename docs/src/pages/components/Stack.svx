@@ -35,6 +35,16 @@ Stacks are vertical by default. Set `orientation` to `"horizontal"` for a row. U
 
 <FileSource src="/framed/Stack/StackHorizontalGap" />
 
+## Responsive orientation
+
+Set `orientation` to a breakpoint object to switch between `"vertical"` and `"horizontal"` at specific viewport widths, instead of reading `window.innerWidth` in your own code. Keys map to Carbon's breakpoints (`sm`, `md`, `lg`, `xlg`, `max`) and resolve mobile-first: each value applies from that breakpoint up until a larger key overrides it. Resize the browser to see the stack below switch from vertical to horizontal at `md`.
+
+<Stack orientation={{ sm: "vertical", md: "horizontal" }} gap={2}>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
+</Stack>
+
 ## Custom gap value
 
 Use an arbitrary `gap` value (for example, `"22px"`) instead of the scale.

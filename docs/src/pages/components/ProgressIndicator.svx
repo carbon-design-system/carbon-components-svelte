@@ -227,6 +227,25 @@ Display steps in a vertical layout.
   />
 </ProgressIndicator>
 
+### Responsive vertical
+
+Set `vertical` to a breakpoint object to switch layouts at specific viewport widths, instead of reading `window.innerWidth` in your own code. Keys map to Carbon's breakpoints (`sm`, `md`, `lg`, `xlg`, `max`) and resolve mobile-first. Resize the browser to see the steps below switch from vertical to horizontal at `md`.
+
+<ProgressIndicator vertical={{ sm: true, md: false }}>
+  <ProgressStep
+    label="Provision infrastructure resources"
+    description="Allocate compute, storage, and networking capacity"
+  />
+  <ProgressStep
+    label="Run integration test suite"
+    description="Verify service-to-service contracts before release"
+  />
+  <ProgressStep
+    label="Deploy to production environment"
+    description="Roll out the release to all regions"
+  />
+</ProgressIndicator>
+
 ## Events
 
 Respond to step selection changes.
