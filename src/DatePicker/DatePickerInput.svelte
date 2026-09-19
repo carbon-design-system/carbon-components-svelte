@@ -198,6 +198,11 @@
       on:keydown
       on:keydown={(event) => {
         if (!readonly && event.key === "ArrowDown") {
+          // flatpickr only intercepts arrow keys on the input when
+          // `allowInput` is off, so it never runs its own preventDefault
+          // here; without this, moving focus into the calendar also
+          // triggers the browser's native arrow-key page scroll.
+          event.preventDefault();
           focusCalendar();
         }
       }}
