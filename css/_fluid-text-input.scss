@@ -109,6 +109,9 @@
     @include fluid-divider-frame;
   }
 
+  // Status icon pinned to the first line of the message; the base rule
+  // already sets right/pointer-events, so this can't take
+  // fluid-status-icon().
   .#{$prefix}--text-input--fluid .#{$prefix}--text-input__invalid-icon {
     inset-block-start: to-rem(80px);
   }
