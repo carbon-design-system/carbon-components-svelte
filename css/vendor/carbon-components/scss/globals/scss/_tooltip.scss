@@ -418,3 +418,165 @@
     }
   }
 }
+
+// ccs: `--cds-tooltip-*` custom-property redesign of the direction x
+// alignment geometry above. `tooltip--placement` (kept as-is for the 3
+// single-combo legacy callers: text-input's password toggle, CopyButton,
+// CodeSnippet - none of them vary by direction/alignment, so they aren't
+// the combinatorial byte problem) emits one full declaration block per
+// call. Every `.#{$prefix}--tooltip__trigger` direction x alignment call
+// site in components/tooltip/_tooltip.scss used to do the same, expanding
+// to ~14 near-duplicate blocks whose only real difference is a handful of
+// offsets/transforms. The mixins below instead write only the custom
+// properties that differ, split into 3 tiers by what they vary on, and
+// components/tooltip/_tooltip.scss defines a single shared rule per
+// pseudo-element role that reads them via `var(...)`.
+//
+// Every mixin writes the *complete* pair of custom properties for the axis
+// it owns (e.g. both `--cds-tooltip-caret-top` and `--cds-tooltip-caret-
+// bottom`, not just whichever one differs from a previously-included
+// direction), even though only one of the pair ever holds a real value.
+// The two tiers that apply to the same element always run together (see
+// the call sites), so this is redundant there - but it also means a
+// tooltip trigger nested inside a *different* direction's trigger can't
+// inherit a stray custom property left set by the ancestor for an axis
+// this trigger's own rules don't otherwise touch; see
+// `tests/css/tooltip-expansion.test.ts` for the nested-trigger case this
+// guards, and `TooltipMatrixFixture`'s nested case for the DOM one.
+//
+// The shared consumer rules in components/tooltip/_tooltip.scss are scoped
+// to the same direction-qualified selector union `tooltip--trigger-icon-
+// body` already uses (never a bare `.#{$prefix}--tooltip__trigger`), so a
+// portal-rendered trigger that keeps the base class but never gets a
+// direction class (see the Svelte components) matches none of this, same
+// as before this rework - but each `var(...)` still carries an explicit
+// fallback (`auto`/`0`/`transparent`/`none`) as a second line of defense,
+// in case that scoping assumption is ever wrong.
+//
+// @access public
+// @group tooltip
+@mixin tooltip--geometry-hover($position) {
+  @if ($position == 'top' or $position == 'bottom') {
+    --cds-tooltip-hover-left: 0;
+    --cds-tooltip-hover-right: auto;
+    --cds-tooltip-hover-w: 100%;
+    --cds-tooltip-hover-h: #{to-rem(12px)};
+    @if ($position == 'top') {
+      --cds-tooltip-hover-top: auto;
+      --cds-tooltip-hover-bottom: #{to-rem(-12px)};
+    } @else {
+      --cds-tooltip-hover-top: #{to-rem(-12px)};
+      --cds-tooltip-hover-bottom: auto;
+    }
+  } @else {
+    --cds-tooltip-hover-top: 0;
+    --cds-tooltip-hover-bottom: auto;
+    --cds-tooltip-hover-w: #{to-rem(12px)};
+    --cds-tooltip-hover-h: 100%;
+    @if ($position == 'right') {
+      --cds-tooltip-hover-left: #{to-rem(-12px)};
+      --cds-tooltip-hover-right: auto;
+    } @else {
+      --cds-tooltip-hover-left: auto;
+      --cds-tooltip-hover-right: #{to-rem(-12px)};
+    }
+  }
+}
+
+/// Caret (::before) cross-axis position + border + transform - constant
+/// per position, shared by every trigger type/alignment.
+/// @access public
+/// @group tooltip
+@mixin tooltip--geometry-caret-cross($position) {
+  @if ($position == 'top' or $position == 'bottom') {
+    --cds-tooltip-caret-left: 50%;
+    --cds-tooltip-caret-right: auto;
+  } @else {
+    --cds-tooltip-caret-top: 50%;
+    --cds-tooltip-caret-bottom: auto;
+  }
+
+  @if ($position == 'top') {
+    --cds-tooltip-caret-bw: #{to-rem(5px)} #{to-rem(4px)} 0 #{to-rem(4px)};
+    --cds-tooltip-caret-bc: #{$inverse-02} transparent transparent transparent;
+    --cds-tooltip-caret-tf: translate(-50%, -100%);
+  } @else if ($position == 'right') {
+    --cds-tooltip-caret-bw: #{to-rem(4px)} #{to-rem(5px)} #{to-rem(4px)} 0;
+    --cds-tooltip-caret-bc: transparent #{$inverse-02} transparent transparent;
+    --cds-tooltip-caret-tf: translate(100%, -50%);
+  } @else if ($position == 'bottom') {
+    --cds-tooltip-caret-bw: 0 #{to-rem(4px)} #{to-rem(5px)} #{to-rem(4px)};
+    --cds-tooltip-caret-bc: transparent transparent #{$inverse-02} transparent;
+    --cds-tooltip-caret-tf: translate(-50%, 100%);
+  } @else {
+    --cds-tooltip-caret-bw: #{to-rem(4px)} 0 #{to-rem(4px)} #{to-rem(5px)};
+    --cds-tooltip-caret-bc: transparent transparent transparent #{$inverse-02};
+    --cds-tooltip-caret-tf: translate(-100%, -50%);
+  }
+}
+
+/// Caret (::before) main-axis offset + the CSS-only tooltip body's
+/// (::after / assistive text) main-axis offset - both depend on
+/// `$tooltip-type` (definition uses a tighter caret spacing) but never on
+/// `$align`. `right`/`left` positions don't support alignment at all, so
+/// this also sets the body's cross-axis offset + transform for them (the
+/// `top`/`bottom` positions get those from `tooltip--geometry-align`
+/// instead).
+/// @access public
+/// @group tooltip
+@mixin tooltip--geometry-main($tooltip-type, $position) {
+  $caret-spacing: if($tooltip-type == 'definition', to-rem(4px), to-rem(8px));
+  $body-spacing: $caret-spacing + to-rem(5px);
+
+  @if ($position == 'top') {
+    --cds-tooltip-caret-top: -#{$caret-spacing};
+    --cds-tooltip-caret-bottom: auto;
+    --cds-tooltip-body-top: -#{$body-spacing};
+    --cds-tooltip-body-bottom: auto;
+  } @else if ($position == 'bottom') {
+    --cds-tooltip-caret-bottom: -#{$caret-spacing};
+    --cds-tooltip-caret-top: auto;
+    --cds-tooltip-body-bottom: -#{$body-spacing};
+    --cds-tooltip-body-top: auto;
+  } @else if ($position == 'right') {
+    --cds-tooltip-caret-right: -#{$caret-spacing};
+    --cds-tooltip-caret-left: auto;
+    --cds-tooltip-body-right: -#{$body-spacing};
+    --cds-tooltip-body-left: auto;
+    --cds-tooltip-body-top: 50%;
+    --cds-tooltip-body-bottom: auto;
+    --cds-tooltip-body-tf: translate(100%, -50%);
+  } @else {
+    --cds-tooltip-caret-left: -#{$caret-spacing};
+    --cds-tooltip-caret-right: auto;
+    --cds-tooltip-body-left: -#{$body-spacing};
+    --cds-tooltip-body-right: auto;
+    --cds-tooltip-body-top: 50%;
+    --cds-tooltip-body-bottom: auto;
+    --cds-tooltip-body-tf: translate(-100%, -50%);
+  }
+}
+
+/// The CSS-only tooltip body's (::after / assistive text) cross-axis
+/// offset + transform for the `top`/`bottom` positions - the only two that
+/// support `$align`. Shared by icon and definition triggers: neither
+/// varies by `$tooltip-type`.
+/// @access public
+/// @group tooltip
+@mixin tooltip--geometry-align($position, $align) {
+  $body-tf-y: if($position == 'top', -100%, 100%);
+
+  @if ($align == 'start') {
+    --cds-tooltip-body-left: 0;
+    --cds-tooltip-body-right: auto;
+    --cds-tooltip-body-tf: translate(0, #{$body-tf-y});
+  } @else if ($align == 'end') {
+    --cds-tooltip-body-right: 0;
+    --cds-tooltip-body-left: auto;
+    --cds-tooltip-body-tf: translate(0, #{$body-tf-y});
+  } @else {
+    --cds-tooltip-body-left: 50%;
+    --cds-tooltip-body-right: auto;
+    --cds-tooltip-body-tf: translate(-50%, #{$body-tf-y});
+  }
+}

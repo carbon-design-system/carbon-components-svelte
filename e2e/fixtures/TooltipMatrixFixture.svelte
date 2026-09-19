@@ -107,3 +107,37 @@
     portalTooltip={false}
   />
 </section>
+
+<section data-testid="tooltip-nested-trigger">
+  <!--
+    The `--cds-tooltip-*` custom properties written by the direction x
+    alignment modifier classes (see css/vendor/carbon-components/scss/
+    globals/scss/_tooltip.scss's `tooltip--geometry-*` mixins) inherit down
+    the DOM tree like any custom property. A trigger nested inside another
+    trigger's subtree could pick up the ancestor's values for any var its
+    own rules don't set. The outer trigger below is `direction="left"`; the
+    inner one (raw markup carrying the real trigger classes, not a second
+    component instance - the components here are all `<button>`s, which
+    can't validly nest) is `top`/`align-start`. If any leaf rule ever
+    regressed to a partial custom-property set instead of the complete one
+    each leaf writes today, this inner element's geometry would drift
+    toward the outer's `left` values instead of its own `top` ones - the
+    cascade-snapshot equivalence check asserts against this fixture.
+  -->
+  <TooltipIcon
+    data-testid="ti-nested-outer"
+    tooltipText="Outer (left)"
+    icon={Information}
+    direction="left"
+  >
+    <svelte:fragment slot="tooltipText">
+      Outer (left)
+      <span
+        class="bx--tooltip__trigger bx--tooltip--top bx--tooltip--align-start"
+        data-testid="nested-inner-probe"
+      >
+        Inner probe (top/start)
+      </span>
+    </svelte:fragment>
+  </TooltipIcon>
+</section>

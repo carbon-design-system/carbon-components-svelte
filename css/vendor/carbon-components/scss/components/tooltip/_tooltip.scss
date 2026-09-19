@@ -323,40 +323,6 @@
     @include tooltip--trigger('definition', (state,));
   }
 
-  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition.#{$prefix}--tooltip--top {
-    // ccs: the align-less selector only matters for CSS-only markup that
-    // omits an align modifier class; our components always add one. 'start'
-    // is the mixin's default here, so it's folded into the align-start
-    // selector instead of repeating the same declarations under its own rule.
-    &,
-    &.#{$prefix}--tooltip--align-start {
-      @include tooltip--placement('definition', 'top', 'start');
-    }
-
-    &.#{$prefix}--tooltip--align-center {
-      @include tooltip--placement('definition', 'top', 'center');
-    }
-
-    &.#{$prefix}--tooltip--align-end {
-      @include tooltip--placement('definition', 'top', 'end');
-    }
-  }
-
-  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition.#{$prefix}--tooltip--bottom {
-    &,
-    &.#{$prefix}--tooltip--align-start {
-      @include tooltip--placement('definition', 'bottom', 'start');
-    }
-
-    &.#{$prefix}--tooltip--align-center {
-      @include tooltip--placement('definition', 'bottom', 'center');
-    }
-
-    &.#{$prefix}--tooltip--align-end {
-      @include tooltip--placement('definition', 'bottom', 'end');
-    }
-  }
-
   .#{$prefix}--tooltip__trigger {
     &:hover,
     &:focus {
@@ -366,64 +332,231 @@
     }
   }
 
-  // ccs: the icon-type trigger body (position/display/focus/cursor/
-  // pseudo-element base/transition/content) and its state rules both come
-  // from the shared rules near the top of this mixin now (see the
-  // `tooltip--trigger-icon-body` / `tooltip--trigger-state` comments
-  // above); only placement (offsets/transform/caret) still varies by
-  // position below. `tooltip--placement('icon', ...)` doesn't read
-  // `$tooltip-type` for anything but padding (set by `tooltip--content`,
-  // already emitted by the trigger body), so this component's icon trigger
-  // and `.#{$prefix}--btn--icon-only` (button/_button.scss) emit identical
-  // placement declarations too; each rule below combines both families'
-  // selectors instead of each repeating the same call.
+  // ccs: `--cds-tooltip-*` custom-property redesign (see the
+  // `tooltip--geometry-*` mixins in globals/scss/_tooltip.scss for the
+  // full rationale). One shared rule per pseudo-element role reads the
+  // custom properties via `var(...)`; the selector groups below it only
+  // set the handful that differ per direction/alignment/type, instead of
+  // ~14 near-duplicate declaration blocks each repeating everything.
+  // Scoped to the same direction-qualified selector union
+  // `tooltip--trigger-icon-body` above already uses (never a bare
+  // `.#{$prefix}--tooltip__trigger`), so this matches definition triggers
+  // too (they always also carry a `.#{$prefix}--tooltip--{position}`
+  // class) but not a portal-rendered trigger that never gets one.
   .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--top,
-  .#{$prefix}--tooltip__trigger.#{$prefix}--btn--icon-only--top {
-    // ccs: 'center' is the mixin's default align for icon tooltips, so the
-    // align-less selector is folded into the align-center selector (see the
-    // definition trigger comment above).
-    &,
-    &.#{$prefix}--tooltip--align-center {
-      @include tooltip--placement('icon', 'top', 'center');
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--right,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--bottom,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--left,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--btn--icon-only--top,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--btn--icon-only--right,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--btn--icon-only--bottom,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--btn--icon-only--left {
+    &::before {
+      top: var(--cds-tooltip-caret-top, auto);
+      right: var(--cds-tooltip-caret-right, auto);
+      bottom: var(--cds-tooltip-caret-bottom, auto);
+      left: var(--cds-tooltip-caret-left, auto);
+      border-width: var(--cds-tooltip-caret-bw, 0);
+      border-color: var(--cds-tooltip-caret-bc, transparent);
+      transform: var(--cds-tooltip-caret-tf, none);
     }
 
-    &.#{$prefix}--tooltip--align-start {
-      @include tooltip--placement('icon', 'top', 'start');
+    &::after,
+    .#{$prefix}--assistive-text,
+    + .#{$prefix}--assistive-text {
+      top: var(--cds-tooltip-body-top, auto);
+      right: var(--cds-tooltip-body-right, auto);
+      bottom: var(--cds-tooltip-body-bottom, auto);
+      left: var(--cds-tooltip-body-left, auto);
+      transform: var(--cds-tooltip-body-tf, none);
     }
 
-    &.#{$prefix}--tooltip--align-end {
-      @include tooltip--placement('icon', 'top', 'end');
+    .#{$prefix}--assistive-text::after {
+      position: absolute;
+      display: block;
+      content: '';
+      top: var(--cds-tooltip-hover-top, auto);
+      right: var(--cds-tooltip-hover-right, auto);
+      bottom: var(--cds-tooltip-hover-bottom, auto);
+      left: var(--cds-tooltip-hover-left, auto);
+      width: var(--cds-tooltip-hover-w, 0);
+      height: var(--cds-tooltip-hover-h, 0);
     }
   }
 
-  // ccs: `tooltip--placement` never reads `$align` for the `right`/`left`
-  // positions (only `top`/`bottom` vary by alignment), so the three
-  // align-modifier selectors used to emit byte-identical declarations; one
-  // call covers every align class value.
+  // ccs: position-only vars (hover-bridge geometry, caret cross-axis +
+  // border + transform) never vary by `$align` or `$tooltip-type`, so one
+  // rule per position covers icon, definition and button-icon-only
+  // triggers together.
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--top,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--btn--icon-only--top {
+    @include tooltip--geometry-hover('top');
+    @include tooltip--geometry-caret-cross('top');
+  }
+
   .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--right,
   .#{$prefix}--tooltip__trigger.#{$prefix}--btn--icon-only--right {
-    @include tooltip--placement('icon', 'right', 'center');
+    @include tooltip--geometry-hover('right');
+    @include tooltip--geometry-caret-cross('right');
+  }
+
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--bottom,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--btn--icon-only--bottom {
+    @include tooltip--geometry-hover('bottom');
+    @include tooltip--geometry-caret-cross('bottom');
+  }
+
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--left,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--btn--icon-only--left {
+    @include tooltip--geometry-hover('left');
+    @include tooltip--geometry-caret-cross('left');
+  }
+
+  // ccs: main-axis vars (caret + body offset) vary by `$tooltip-type`
+  // (definition uses a tighter caret spacing) but never by `$align`.
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--top,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--btn--icon-only--top {
+    @include tooltip--geometry-main('icon', 'top');
+  }
+
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--right,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--btn--icon-only--right {
+    @include tooltip--geometry-main('icon', 'right');
+  }
+
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--bottom,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--btn--icon-only--bottom {
+    @include tooltip--geometry-main('icon', 'bottom');
+  }
+
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--left,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--btn--icon-only--left {
+    @include tooltip--geometry-main('icon', 'left');
+  }
+
+  // ccs: definition's assistive text is a *sibling* of the trigger
+  // (`+ .#{$prefix}--assistive-text`), not a descendant like icon's - custom
+  // properties only inherit down the DOM tree, never sideways to a sibling,
+  // so the sibling selector needs its own copy of these declarations
+  // instead of picking them up from the trigger via inheritance.
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition.#{$prefix}--tooltip--top,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition.#{$prefix}--tooltip--top
+    + .#{$prefix}--assistive-text {
+    @include tooltip--geometry-main('definition', 'top');
+  }
+
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition.#{$prefix}--tooltip--bottom,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition.#{$prefix}--tooltip--bottom
+    + .#{$prefix}--assistive-text {
+    @include tooltip--geometry-main('definition', 'bottom');
+  }
+
+  // ccs: body cross-axis vars - `top`/`bottom` positions only (the two
+  // that support `$align`); shared by icon and definition since neither
+  // varies by `$tooltip-type`. The align-less selector only matters for
+  // CSS-only markup that omits an align modifier class; our components
+  // always add one. Icon's mixin default is 'center', definition's is
+  // 'start' (matching each type's own upstream default), so each folds the
+  // align-less selector into its own default instead of a separate rule.
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--top,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--btn--icon-only--top {
+    &,
+    &.#{$prefix}--tooltip--align-center {
+      @include tooltip--geometry-align('top', 'center');
+    }
+
+    &.#{$prefix}--tooltip--align-start {
+      @include tooltip--geometry-align('top', 'start');
+    }
+
+    &.#{$prefix}--tooltip--align-end {
+      @include tooltip--geometry-align('top', 'end');
+    }
   }
 
   .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--bottom,
   .#{$prefix}--tooltip__trigger.#{$prefix}--btn--icon-only--bottom {
     &,
     &.#{$prefix}--tooltip--align-center {
-      @include tooltip--placement('icon', 'bottom', 'center');
+      @include tooltip--geometry-align('bottom', 'center');
     }
 
     &.#{$prefix}--tooltip--align-start {
-      @include tooltip--placement('icon', 'bottom', 'start');
+      @include tooltip--geometry-align('bottom', 'start');
     }
 
     &.#{$prefix}--tooltip--align-end {
-      @include tooltip--placement('icon', 'bottom', 'end');
+      @include tooltip--geometry-align('bottom', 'end');
     }
   }
 
-  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--left,
-  .#{$prefix}--tooltip__trigger.#{$prefix}--btn--icon-only--left {
-    @include tooltip--placement('icon', 'left', 'center');
+  // ccs: same sibling-selector duplication as the main-axis block above -
+  // definition's assistive text can't inherit these from the trigger.
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition.#{$prefix}--tooltip--top {
+    &,
+    &.#{$prefix}--tooltip--align-start,
+    & + .#{$prefix}--assistive-text,
+    &.#{$prefix}--tooltip--align-start + .#{$prefix}--assistive-text {
+      @include tooltip--geometry-align('top', 'start');
+    }
+
+    &.#{$prefix}--tooltip--align-center,
+    &.#{$prefix}--tooltip--align-center + .#{$prefix}--assistive-text {
+      @include tooltip--geometry-align('top', 'center');
+    }
+
+    &.#{$prefix}--tooltip--align-end,
+    &.#{$prefix}--tooltip--align-end + .#{$prefix}--assistive-text {
+      @include tooltip--geometry-align('top', 'end');
+    }
+  }
+
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition.#{$prefix}--tooltip--bottom {
+    &,
+    &.#{$prefix}--tooltip--align-start,
+    & + .#{$prefix}--assistive-text,
+    &.#{$prefix}--tooltip--align-start + .#{$prefix}--assistive-text {
+      @include tooltip--geometry-align('bottom', 'start');
+    }
+
+    &.#{$prefix}--tooltip--align-center,
+    &.#{$prefix}--tooltip--align-center + .#{$prefix}--assistive-text {
+      @include tooltip--geometry-align('bottom', 'center');
+    }
+
+    &.#{$prefix}--tooltip--align-end,
+    &.#{$prefix}--tooltip--align-end + .#{$prefix}--assistive-text {
+      @include tooltip--geometry-align('bottom', 'end');
+    }
+  }
+
+  // ccs: kept literal (not custom-property-driven) - a single-combo
+  // carryover, not part of the combinatorial expansion this rework
+  // targets. `$body-spacing` for definition = to-rem(4px) + to-rem(5px).
+  // carryover from https://github.com/carbon-design-system/carbon/pull/3151/files#diff-93734be0784e9530b6d14a7b03b0d352R261-R265
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition.#{$prefix}--tooltip--bottom.#{$prefix}--tooltip--a11y
+    + .#{$prefix}--assistive-text,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition.#{$prefix}--tooltip--bottom.#{$prefix}--tooltip--align-start.#{$prefix}--tooltip--a11y
+    + .#{$prefix}--assistive-text,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition.#{$prefix}--tooltip--bottom.#{$prefix}--tooltip--align-center.#{$prefix}--tooltip--a11y
+    + .#{$prefix}--assistive-text,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition.#{$prefix}--tooltip--bottom.#{$prefix}--tooltip--align-end.#{$prefix}--tooltip--a11y
+    + .#{$prefix}--assistive-text {
+    bottom: -(to-rem(4px) + to-rem(5px) - to-rem(1px));
+  }
+
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition.#{$prefix}--tooltip--bottom.#{$prefix}--tooltip--a11y
+    + .#{$prefix}--assistive-text,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition.#{$prefix}--tooltip--bottom.#{$prefix}--tooltip--align-start.#{$prefix}--tooltip--a11y
+    + .#{$prefix}--assistive-text,
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition.#{$prefix}--tooltip--bottom.#{$prefix}--tooltip--align-end.#{$prefix}--tooltip--a11y
+    + .#{$prefix}--assistive-text {
+    transform: translate(0, 100%);
+  }
+
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition.#{$prefix}--tooltip--bottom.#{$prefix}--tooltip--align-center.#{$prefix}--tooltip--a11y
+    + .#{$prefix}--assistive-text {
+    transform: translate(-50%, 100%);
   }
 
   // Allow pointer events on tooltip when tooltip is visible
