@@ -848,6 +848,9 @@
   // Invalid/warn states are suppressed when the multi-select is disabled or read-only.
   $: showInvalid = invalid && !disabled && !readonly;
   $: showWarn = warn && !invalid && !disabled && !readonly;
+  // Neutral = default fluid state, i.e. none of the other wrapper modifiers apply.
+  $: fluidNeutral =
+    isFluid && !showInvalid && !showWarn && !disabled && !readonly;
   $: ariaLabel = $$props["aria-label"] ?? "Choose an item";
   $: if (items !== prevItems) {
     prevItems = items;
@@ -1000,6 +1003,7 @@
   class:bx--list-box__wrapper--inline={inline}
   class:bx--multi-select__wrapper--inline--invalid={inline && showInvalid}
   class:bx--list-box__wrapper--fluid={isFluid}
+  class:bx--list-box__wrapper--fluid--neutral={fluidNeutral}
   class:bx--list-box__wrapper--fluid--invalid={isFluid && showInvalid}
   class:bx--list-box__wrapper--fluid--warning={isFluid && showWarn}
   class:bx--list-box__wrapper--fluid--disabled={isFluid && disabled}

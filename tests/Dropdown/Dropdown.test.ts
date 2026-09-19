@@ -2948,6 +2948,31 @@ describe("Dropdown", () => {
       },
     );
 
+    it.each([
+      { props: {}, neutral: true },
+      { props: { invalid: true, invalidText: "Invalid" }, neutral: false },
+      { props: { warn: true, warnText: "Warning" }, neutral: false },
+      { props: { disabled: true }, neutral: false },
+      { props: { readonly: true }, neutral: false },
+    ])(
+      "sets the neutral wrapper class only when no other fluid modifier applies (%o)",
+      ({ props, neutral }) => {
+        render(Dropdown, {
+          props: { items, labelText: "Contact", fluid: true, ...props },
+        });
+
+        const button = screen.getByLabelText("Contact");
+        const wrapper = button.closest(".bx--dropdown__wrapper");
+        if (neutral) {
+          expect(wrapper).toHaveClass("bx--list-box__wrapper--fluid--neutral");
+        } else {
+          expect(wrapper).not.toHaveClass(
+            "bx--list-box__wrapper--fluid--neutral",
+          );
+        }
+      },
+    );
+
     it("marks the wrapper as condensed when fluid", () => {
       render(Dropdown, {
         props: { items, labelText: "Contact", fluid: true, condensed: true },

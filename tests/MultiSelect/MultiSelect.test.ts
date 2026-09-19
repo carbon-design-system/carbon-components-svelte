@@ -4470,6 +4470,30 @@ describe("MultiSelect", () => {
       },
     );
 
+    it.each([
+      { props: {}, neutral: true },
+      { props: { invalid: true, invalidText: "Invalid" }, neutral: false },
+      { props: { warn: true, warnText: "Warning" }, neutral: false },
+      { props: { disabled: true }, neutral: false },
+      { props: { readonly: true }, neutral: false },
+    ])(
+      "sets the neutral wrapper class only when no other fluid modifier applies (%o)",
+      ({ props, neutral }) => {
+        render(MultiSelect, {
+          props: { fluid: true, items, labelText: "Contact methods", ...props },
+        });
+
+        const wrapper = document.querySelector(".bx--list-box__wrapper--fluid");
+        if (neutral) {
+          expect(wrapper).toHaveClass("bx--list-box__wrapper--fluid--neutral");
+        } else {
+          expect(wrapper).not.toHaveClass(
+            "bx--list-box__wrapper--fluid--neutral",
+          );
+        }
+      },
+    );
+
     it("marks the wrapper as condensed when fluid", () => {
       render(MultiSelect, {
         props: {

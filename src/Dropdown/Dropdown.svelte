@@ -337,6 +337,9 @@
       .join(" ") || undefined;
   $: isFluid = !inline && (fluid || !!formContext?.isFluid);
   $: showFieldFocus = isFluid && (fieldFocused || open);
+  // Neutral = default fluid state, i.e. none of the other wrapper modifiers apply.
+  $: fluidNeutral =
+    isFluid && !showInvalid && !showWarn && !disabled && !readonly;
   // Scope the option id with the instance `id` so multiple Dropdowns on a
   // page do not produce duplicate DOM ids. `aria-activedescendant` references
   // this same scoped value (see the `ListBoxMenuItem` ids below).
@@ -626,6 +629,7 @@
   class:bx--list-box__wrapper--inline={inline}
   class:bx--dropdown__wrapper--inline--invalid={inline && showInvalid}
   class:bx--list-box__wrapper--fluid={isFluid}
+  class:bx--list-box__wrapper--fluid--neutral={fluidNeutral}
   class:bx--list-box__wrapper--fluid--invalid={isFluid && showInvalid}
   class:bx--list-box__wrapper--fluid--warning={isFluid && showWarn}
   class:bx--list-box__wrapper--fluid--disabled={isFluid && disabled}
