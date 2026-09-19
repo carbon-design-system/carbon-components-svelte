@@ -156,6 +156,12 @@ By default, the calendar closes when a date is selected. Pass `closeOnSelect: fa
 
 <FileSource src="/framed/DatePicker/DatePickerCloseOnSelect" />
 
+### Default date
+
+Pass `defaultDate` via `flatpickrProps` to preselect a date when `value` is empty. Unlike `value`, it accepts a `Date` or the `"today"` shorthand, and the formatted result is written back to `value`. A non-empty `value` always takes precedence.
+
+<FileSource src="/framed/DatePicker/DatePickerDefaultDate" />
+
 ### Multiple date separator
 
 With `datePickerType="multiple"`, dates in `value` are joined with `", "` by default. Pass `conjunction` via `flatpickrProps` to use a different separator; the same separator is used to parse typed input. It has no effect on range pickers, which use two separate inputs.
