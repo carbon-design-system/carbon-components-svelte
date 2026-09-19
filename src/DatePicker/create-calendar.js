@@ -35,6 +35,7 @@ export function resolveLocale(locale) {
  * @typedef {{
  *   calendarContainer: HTMLElement;
  *   input: HTMLInputElement;
+ *   altInput?: HTMLInputElement;
  *   days: HTMLElement;
  *   daysContainer?: HTMLElement;
  *   weekdayContainer: HTMLElement;
@@ -193,6 +194,17 @@ function updateMonthNode(instance, locale) {
  */
 
 /**
+ * flatpickr accepts a hook as a single function or an array of them.
+ *
+ * @param {unknown} hook
+ * @returns {Function[]}
+ */
+function toHookArray(hook) {
+  if (Array.isArray(hook)) return hook;
+  return hook ? [hook] : [];
+}
+
+/**
  * @param {CreateCalendarArgs} args
  * @returns {Promise<FlatpickrInstance | null>}
  */
@@ -239,6 +251,28 @@ export async function createCalendar({ options, base, input, dispatch }) {
   ].filter(Boolean);
 
   const userOnDayCreate = options.onDayCreate;
+
+  /**
+   * @param {any} _s
+   * @param {any} _d
+   * @param {FlatpickrInstance} instance
+   */
+  function prepareOnReady(_s, _d, instance) {
+    // `altInput` hides the original input and shows a generated one.
+    // Hand it the id so the label and `for` clicks reach a visible field.
+    if (instance.altInput && instance.input.id) {
+      instance.altInput.id = instance.input.id;
+      instance.input.removeAttribute("id");
+    }
+    // An `inline` calendar is always visible and never fires `onOpen`.
+    if (!options.inline) return;
+    applyCarbonMarkup(instance);
+    // flatpickr mounts it next to the input, inside the wrapper whose
+    // height vertically centers the calendar icon. Move it just below.
+    instance.input
+      .closest(".bx--date-picker-input__wrapper")
+      ?.after(instance.calendarContainer);
+  }
 
   /** @param {FlatpickrInstance} instance */
   function applyCarbonMarkup(instance) {
@@ -293,20 +327,6 @@ export async function createCalendar({ options, base, input, dispatch }) {
         markTodayMonth(instance);
       }
     },
-    onReady: (
-      /** @type {any} */ _s,
-      /** @type {any} */ _d,
-      /** @type {FlatpickrInstance} */ instance,
-    ) => {
-      // An `inline` calendar is always visible and never fires `onOpen`.
-      if (!options.inline) return;
-      applyCarbonMarkup(instance);
-      // flatpickr mounts it next to the input, inside the wrapper whose
-      // height vertically centers the calendar icon. Move it just below.
-      instance.input
-        .closest(".bx--date-picker-input__wrapper")
-        ?.after(instance.calendarContainer);
-    },
     onOpen: (
       /** @type {any} */ _s,
       /** @type {any} */ _d,
@@ -329,6 +349,8 @@ export async function createCalendar({ options, base, input, dispatch }) {
     // `wrap` expects `base` to be a wrapper holding a `[data-input]` child.
     // Carbon always passes the input itself, so flatpickr would throw.
     wrap: false,
+    // Run ahead of the consumer's hook rather than being replaced by it.
+    onReady: [prepareOnReady, ...toHookArray(options.onReady)],
     onDayCreate: [
       markDisabledDayAriaState,
       // Days are rebuilt on every redraw (month change, `set`), not only on
@@ -336,11 +358,7 @@ export async function createCalendar({ options, base, input, dispatch }) {
       (_dObj, _dStr, _fp, /** @type {HTMLElement} */ dayElem) => {
         dayElem.classList.add("bx--date-picker__day");
       },
-      ...(Array.isArray(userOnDayCreate)
-        ? userOnDayCreate
-        : userOnDayCreate
-          ? [userOnDayCreate]
-          : []),
+      ...toHookArray(userOnDayCreate),
     ],
   };
   const instance = new /** @type {any} */ (flatpickr)(base, config);
