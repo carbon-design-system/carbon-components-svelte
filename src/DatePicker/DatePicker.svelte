@@ -10,6 +10,13 @@
    */
 
   /**
+   * @event error
+   * @type {object}
+   * @property {Error} error
+   * @property {string} value
+   */
+
+  /**
    * Specify the date picker type.
    * @type {"simple" | "single" | "range" | "month" | "year" | "multiple"}
    */
@@ -168,6 +175,7 @@
     createCalendar,
     resolveLocale,
     resolveOptionValue,
+    setErrorHandler,
     updateMonthNode,
   } from "./create-calendar.js";
   import {
@@ -777,6 +785,10 @@
       applyOptionIfChanged("dateFormat", dateFormat);
       applyDisabledDates();
       applyEnabledDates();
+      // `calendar.set("errorHandler", fn)` would replace Carbon's own
+      // wrapper (see create-calendar.js), so the live handler is threaded
+      // through separately instead of going through the generic loop below.
+      setErrorHandler(calendar, flatpickrProps.errorHandler);
       for (const [option, value] of Object.entries(flatpickrProps)) {
         // `static` is decided by `effectivePortalMenu` at creation time
         // (see below); re-applying the default `flatpickrProps.static`
@@ -790,6 +802,7 @@
         // `disabledDates`/`enabledDates` already applied above and won.
         if (option === "disable" && disabledDates.length > 0) continue;
         if (option === "enable" && enabledDates.length > 0) continue;
+        if (option === "errorHandler") continue;
         applyOptionIfChanged(
           option,
           value,
@@ -831,7 +844,10 @@
       },
       base: inputRef,
       input: inputRefTo,
-      dispatch: (event) => {
+      dispatch: (event, eventDetail) => {
+        if (event === "error") {
+          return dispatch(event, eventDetail);
+        }
         if (event === "open") {
           calendarOpen = true;
           closeTrigger = undefined;
