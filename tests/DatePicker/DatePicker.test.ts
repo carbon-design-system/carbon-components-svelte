@@ -710,6 +710,32 @@ describe("DatePicker", () => {
       consoleError.mockRestore();
     });
 
+    it("stays usable as a plain input when flatpickr fails to initialize", async () => {
+      const consoleError = vi
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
+      const { unmount } = render(DatePicker, {
+        datePickerType: "single",
+        flatpickrProps: {
+          plugins: [
+            () => {
+              throw new Error("plugin failed");
+            },
+          ],
+        },
+      });
+
+      const input = screen.getByLabelText("Date");
+      await user.type(input, "01/01/2023");
+      expect(input).toHaveValue("01/01/2023");
+      // flatpickr reports the failure itself; it must not be silent.
+      expect(consoleError).toHaveBeenCalledWith(
+        expect.objectContaining({ message: "plugin failed" }),
+      );
+      expect(() => unmount()).not.toThrow();
+      consoleError.mockRestore();
+    });
+
     it("keeps the calendar open after selecting a date when closeOnSelect is false", async () => {
       render(DatePicker, {
         datePickerType: "single",
