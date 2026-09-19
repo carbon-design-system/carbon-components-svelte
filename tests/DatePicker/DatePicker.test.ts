@@ -1201,6 +1201,188 @@ describe("DatePicker", () => {
     });
   });
 
+  describe("disabledDates and enabledDates", () => {
+    function getDayByNumber(calendar: HTMLElement, day: number) {
+      return Array.from(
+        calendar.querySelectorAll<HTMLElement>(".flatpickr-day"),
+      ).find(
+        (el) =>
+          el.textContent?.trim() === String(day) &&
+          !el.classList.contains("prevMonthDay") &&
+          !el.classList.contains("nextMonthDay"),
+      );
+    }
+
+    it("disables dates matching a string, a Date, a range, and a predicate", async () => {
+      render(DatePicker, {
+        datePickerType: "single",
+        value: "03/01/2024",
+        disabledDates: [
+          "03/09/2024",
+          new Date(2024, 2, 10),
+          { from: "03/12/2024", to: "03/14/2024" },
+          (date: Date) => date.getDate() === 20,
+        ],
+      });
+
+      const input = screen.getByLabelText("Date");
+      await user.click(input);
+      const calendar = await screen.findByLabelText("calendar-container");
+
+      for (const day of [9, 10, 12, 13, 14, 20]) {
+        const dayElem = getDayByNumber(calendar, day);
+        expect(dayElem).toHaveClass("flatpickr-disabled");
+        expect(dayElem).toHaveAttribute("aria-disabled", "true");
+      }
+
+      const day9 = getDayByNumber(calendar, 9);
+      if (!day9) throw new Error("expected day 9");
+      await user.click(day9);
+      expect(input).toHaveValue("03/01/2024");
+    });
+
+    it("enables only matching dates via enabledDates", async () => {
+      // The anchor `value` must itself be an enabled date: flatpickr
+      // filters an invalid preloaded date against `enable`/`disable` before
+      // picking the displayed month, so an anchor outside the rule would
+      // silently fall back to today's month instead of March 2024.
+      render(DatePicker, {
+        datePickerType: "single",
+        value: "03/15/2024",
+        enabledDates: ["03/15/2024"],
+      });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+
+      expect(getDayByNumber(calendar, 15)).not.toHaveClass(
+        "flatpickr-disabled",
+      );
+      expect(getDayByNumber(calendar, 16)).toHaveClass("flatpickr-disabled");
+    });
+
+    it("treats empty arrays as no rule", async () => {
+      const { container } = render(DatePicker, {
+        datePickerType: "single",
+        disabledDates: [],
+        enabledDates: [],
+      });
+
+      await user.click(screen.getByLabelText("Date"));
+      await screen.findByLabelText("calendar-container");
+
+      expect(
+        container.querySelectorAll(".flatpickr-day.flatpickr-disabled").length,
+      ).toBe(0);
+    });
+
+    it("reassigning disabledDates updates an open calendar", async () => {
+      const { rerender } = render(DatePicker, {
+        datePickerType: "single",
+        value: "03/01/2024",
+      });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+
+      expect(getDayByNumber(calendar, 9)).not.toHaveClass("flatpickr-disabled");
+
+      await rerender({ disabledDates: ["03/09/2024"] });
+      await tick();
+
+      const day9 = getDayByNumber(calendar, 9);
+      expect(day9).toHaveClass("flatpickr-disabled");
+      // Days are rebuilt on redraw, so aria-disabled must still be applied.
+      expect(day9).toHaveAttribute("aria-disabled", "true");
+    });
+
+    it("keeps the selected value when a rule change disables it", async () => {
+      const { rerender } = render(DatePicker, {
+        datePickerType: "single",
+        value: "03/09/2024",
+      });
+
+      const input = screen.getByLabelText("Date");
+      await user.click(input);
+      await screen.findByLabelText("calendar-container");
+
+      await rerender({ disabledDates: ["03/09/2024"] });
+      await tick();
+
+      expect(input).toHaveValue("03/09/2024");
+    });
+
+    it("does not call calendar.set for disable when the reference is unchanged", async () => {
+      const disabledDates = ["03/09/2024"];
+      const { rerender } = render(DatePicker, {
+        datePickerType: "single",
+        disabledDates,
+      });
+
+      const input = screen.getByLabelText("Date") as HTMLInputElement & {
+        _flatpickr: Instance;
+      };
+      await user.click(input);
+      await screen.findByLabelText("calendar-container");
+
+      const setSpy = vi.spyOn(input._flatpickr, "set");
+
+      // Trigger a reactive update that keeps the same `disabledDates` reference.
+      await rerender({ disabledDates, light: true });
+      await tick();
+
+      expect(setSpy).not.toHaveBeenCalledWith("disable", expect.anything());
+    });
+
+    it("wins over flatpickrProps.disable; flatpickrProps.disable still applies once the prop is empty", async () => {
+      const { rerender } = render(DatePicker, {
+        datePickerType: "single",
+        value: "03/01/2024",
+        disabledDates: ["03/09/2024"],
+        flatpickrProps: { disable: ["03/15/2024"] },
+      });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+
+      expect(getDayByNumber(calendar, 9)).toHaveClass("flatpickr-disabled");
+      expect(getDayByNumber(calendar, 15)).not.toHaveClass(
+        "flatpickr-disabled",
+      );
+
+      await rerender({
+        disabledDates: [],
+        flatpickrProps: { disable: ["03/15/2024"] },
+      });
+      await tick();
+
+      expect(getDayByNumber(calendar, 9)).not.toHaveClass("flatpickr-disabled");
+      expect(getDayByNumber(calendar, 15)).toHaveClass("flatpickr-disabled");
+    });
+  });
+
+  describe("disabledDates/enabledDates generics", () => {
+    it("accepts each DatePickerDateRule shape and rejects a number", () => {
+      type Props = ComponentProps<DatePickerComponent>;
+      type Rule =
+        | string
+        | Date
+        | { from: string | Date; to: string | Date }
+        | ((date: Date) => boolean);
+
+      expectTypeOf<Props["disabledDates"]>().toEqualTypeOf<
+        ReadonlyArray<Rule> | undefined
+      >();
+      expectTypeOf<Props["enabledDates"]>().toEqualTypeOf<
+        ReadonlyArray<Rule> | undefined
+      >();
+
+      // @ts-expect-error a number is not a valid DatePickerDateRule
+      const invalid: Props["disabledDates"] = [42];
+      expect(invalid).toBeDefined();
+    });
+  });
+
   describe("bind:calendar", () => {
     it("is null in simple mode (no calendar is created)", async () => {
       let captured: unknown = "unset";
