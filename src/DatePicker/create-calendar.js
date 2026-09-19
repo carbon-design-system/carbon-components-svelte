@@ -40,7 +40,8 @@ export function resolveLocale(locale) {
  *   daysContainer?: HTMLElement;
  *   weekdayContainer: HTMLElement;
  *   selectedDates: unknown[];
- *   l10n: { months: { longhand: string[] }; weekdays?: { shorthand?: string[] } };
+ *   l10n: { months: { longhand: string[]; shorthand: string[] }; weekdays?: { shorthand?: string[] } };
+ *   config: { shorthandCurrentMonth?: boolean };
  *   currentMonth: number;
  *   monthNav: HTMLElement;
  *   monthsDropdownContainer: HTMLElement;
@@ -158,7 +159,10 @@ function isMonthFirst(locale) {
  * @param {unknown} locale
  */
 function updateMonthNode(instance, locale) {
-  const monthText = instance.l10n.months.longhand[instance.currentMonth];
+  const { longhand, shorthand } = instance.l10n.months;
+  const monthText = (
+    instance.config.shorthandCurrentMonth ? shorthand : longhand
+  )[instance.currentMonth];
   let monthNode = instance.monthNav.querySelector(".cur-month");
 
   if (monthNode) {
