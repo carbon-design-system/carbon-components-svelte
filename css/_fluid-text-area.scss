@@ -112,10 +112,10 @@
 
   .#{$prefix}--text-area--fluid
     .#{$prefix}--text-area__wrapper[data-invalid]
-    .#{$prefix}--form-requirement.#{$prefix}--form-requirement,
+    .#{$prefix}--form-requirement,
   .#{$prefix}--text-area--fluid
     .#{$prefix}--text-area__wrapper--warn
-    .#{$prefix}--form-requirement.#{$prefix}--form-requirement {
+    .#{$prefix}--form-requirement {
     position: relative;
     display: block;
     overflow: visible;
@@ -127,14 +127,14 @@
 
   .#{$prefix}--text-area--fluid
     .#{$prefix}--text-area__wrapper--warn
-    .#{$prefix}--form-requirement.#{$prefix}--form-requirement {
+    .#{$prefix}--form-requirement {
     border-block-end: 1px solid $ui-04;
     color: $text-01;
   }
 
   .#{$prefix}--text-area--fluid
     .#{$prefix}--text-area__wrapper[data-invalid]
-    .#{$prefix}--form-requirement.#{$prefix}--form-requirement {
+    .#{$prefix}--form-requirement {
     border-block-end: none;
     color: $text-error;
   }
