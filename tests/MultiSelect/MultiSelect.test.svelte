@@ -9,6 +9,7 @@
   export let value: ComponentProps<MultiSelect>["value"] = "";
   export let filterable = false;
   export let filterItem: ComponentProps<MultiSelect>["filterItem"] = undefined;
+  export let selectTextOnFocus: ComponentProps<MultiSelect>["selectTextOnFocus"] = false;
   export let placeholder = "";
   export let labelText = "";
   export let hideLabel = false;
@@ -62,6 +63,7 @@
   {value}
   {filterable}
   {filterItem}
+  {selectTextOnFocus}
   {placeholder}
   {labelText}
   {hideLabel}
