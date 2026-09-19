@@ -241,22 +241,21 @@
     @include focus-outline("outline");
   }
 
-  .#{$prefix}--date-picker--fluid.#{$prefix}--date-picker--fluid--readonly:not(
-      .#{$prefix}--date-picker--fluid--invalid
-    ):not(.#{$prefix}--date-picker--fluid--warn)
+  // `--readonly-only` is set by the component only when readonly applies and
+  // neither invalid nor warn override it, so it already encodes the same
+  // condition the `.fluid--readonly:not(invalid):not(warn)` chain spelled
+  // out. Repeated to match the replaced chain's specificity (4 class-
+  // equivalents: base + readonly + 2 `:not()` clauses).
+  .#{$prefix}--date-picker--fluid.#{$prefix}--date-picker--fluid--readonly-only.#{$prefix}--date-picker--fluid--readonly-only.#{$prefix}--date-picker--fluid--readonly-only
     .#{$prefix}--date-picker
     > .#{$prefix}--date-picker-container,
-  .#{$prefix}--date-picker--fluid.#{$prefix}--date-picker--fluid--readonly:not(
-      .#{$prefix}--date-picker--fluid--invalid
-    ):not(.#{$prefix}--date-picker--fluid--warn)
+  .#{$prefix}--date-picker--fluid.#{$prefix}--date-picker--fluid--readonly-only.#{$prefix}--date-picker--fluid--readonly-only.#{$prefix}--date-picker--fluid--readonly-only
     .#{$prefix}--date-picker
     .#{$prefix}--date-picker__input {
     border-block-end-color: $ui-03;
   }
 
-  .#{$prefix}--date-picker--fluid.#{$prefix}--date-picker--fluid--readonly:not(
-      .#{$prefix}--date-picker--fluid--invalid
-    ):not(.#{$prefix}--date-picker--fluid--warn)
+  .#{$prefix}--date-picker--fluid.#{$prefix}--date-picker--fluid--readonly-only.#{$prefix}--date-picker--fluid--readonly-only.#{$prefix}--date-picker--fluid--readonly-only
     .#{$prefix}--date-picker--range
     > .#{$prefix}--date-picker-container:last-child
     .#{$prefix}--date-picker__input {

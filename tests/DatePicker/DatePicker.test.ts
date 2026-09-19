@@ -1247,5 +1247,40 @@ describe("DatePicker", () => {
       );
       expect(invalidCells).toHaveLength(1);
     });
+
+    it("sets the readonly-only class when readonly and not overridden by invalid/warn", () => {
+      const { container } = render(DatePicker, {
+        fluid: true,
+        datePickerType: "single",
+        readonly: true,
+      });
+
+      expect(
+        container.querySelector(".bx--date-picker--fluid--readonly-only"),
+      ).not.toBeNull();
+    });
+
+    it("does not set the readonly-only class when not readonly", () => {
+      const { container } = render(DatePicker, {
+        fluid: true,
+        datePickerType: "single",
+      });
+
+      expect(
+        container.querySelector(".bx--date-picker--fluid--readonly-only"),
+      ).toBeNull();
+    });
+
+    it("clears the readonly-only class when another range cell is invalid", () => {
+      const { container } = render(DatePickerFluidRange, {
+        invalidFrom: true,
+        invalidText: "Invalid start date",
+        readonlyTo: true,
+      });
+
+      expect(
+        container.querySelector(".bx--date-picker--fluid--readonly-only"),
+      ).toBeNull();
+    });
   });
 });
