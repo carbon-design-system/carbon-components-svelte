@@ -584,8 +584,23 @@
     focusCalendar,
   });
 
+  /**
+   * Inline `flatpickrProps={{ disable: [...] }}` builds a new array on every
+   * parent render. Comparing contents avoids a `calendar.set` (a full day
+   * grid redraw) when nothing actually changed.
+   */
+  function optionChanged(prev, next) {
+    if (Array.isArray(prev) && Array.isArray(next)) {
+      return (
+        prev.length !== next.length ||
+        prev.some((item, index) => item !== next[index])
+      );
+    }
+    return prev !== next;
+  }
+
   function applyOptionIfChanged(optionKey, value, appliedValue = value) {
-    if (prevAppliedOptions[optionKey] !== value) {
+    if (optionChanged(prevAppliedOptions[optionKey], value)) {
       calendar.set(optionKey, appliedValue);
       prevAppliedOptions[optionKey] = value;
     }
