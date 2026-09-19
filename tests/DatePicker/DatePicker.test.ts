@@ -8,6 +8,7 @@ import DatePickerFluidSlot from "./DatePicker.fluidSlot.test.svelte";
 import DatePicker from "./DatePicker.test.svelte";
 import DatePickerCalendar from "./DatePickerCalendar.test.svelte";
 import DatePickerDefaultDate from "./DatePickerDefaultDate.test.svelte";
+import DatePickerIgnoredFocus from "./DatePickerIgnoredFocus.test.svelte";
 import DatePickerInModal from "./DatePickerInModal.test.svelte";
 import DatePickerInputSlot from "./DatePickerInput.slot.test.svelte";
 import DatePickerRange from "./DatePickerRange.test.svelte";
@@ -801,6 +802,20 @@ describe("DatePicker", () => {
       });
 
       await vi.waitFor(() => expect(onReady).toHaveBeenCalledTimes(1));
+    });
+
+    it("stays open when an ignoredFocusElements element is clicked", async () => {
+      render(DatePickerIgnoredFocus);
+
+      await user.click(await screen.findByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+      expect(calendar).toHaveClass("open");
+
+      await user.click(screen.getByRole("button", { name: "Preset" }));
+      expect(calendar).toHaveClass("open");
+
+      await user.click(screen.getByRole("button", { name: "Elsewhere" }));
+      expect(calendar).not.toHaveClass("open");
     });
 
     it("keeps the calendar open after selecting a date when closeOnSelect is false", async () => {
