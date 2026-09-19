@@ -32,6 +32,8 @@
   export let warnText = "";
   export let id: ComponentProps<Slider>["id"] = undefined;
   export let ariaLabel: ComponentProps<Slider>["aria-label"] = undefined;
+  export let onfocus: ((event: FocusEvent) => void) | undefined = undefined;
+  export let onblur: ((event: FocusEvent) => void) | undefined = undefined;
 </script>
 
 {#if useSlot}
@@ -102,5 +104,7 @@
     on:input={(e) => {
       console.log("input", e.detail);
     }}
+    on:focus={(e) => onfocus?.(e)}
+    on:blur={(e) => onblur?.(e)}
   />
 {/if}

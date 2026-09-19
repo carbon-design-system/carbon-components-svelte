@@ -149,6 +149,19 @@ describe("Slider", () => {
     expect(spinbutton).toHaveAttribute("type", "hidden");
   });
 
+  it("forwards focus and blur events from the number input", async () => {
+    const onfocus = vi.fn();
+    const onblur = vi.fn();
+    render(Slider, { props: { onfocus, onblur } });
+
+    const input = screen.getByRole("spinbutton");
+    await fireEvent.focus(input);
+    expect(onfocus).toHaveBeenCalled();
+
+    await fireEvent.blur(input);
+    expect(onblur).toHaveBeenCalled();
+  });
+
   it("should handle full width", () => {
     render(Slider, {
       props: { fullWidth: true },

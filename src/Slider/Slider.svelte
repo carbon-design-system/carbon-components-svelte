@@ -117,6 +117,7 @@
   const dispatch = createEventDispatcher();
 
   let trackRef = null;
+  let textInputRef = null;
   let dragging = false;
   let holding = false;
   let currentEvent = null;
@@ -333,6 +334,7 @@
         />
       {/if}
       <input
+        bind:this={textInputRef}
         type={hideTextInput ? "hidden" : inputType}
         id={inputId}
         {name}
@@ -367,6 +369,8 @@
           : showWarn
             ? warnId
             : undefined}
+        on:focus
+        on:blur
       >
     </div>
   </div>
