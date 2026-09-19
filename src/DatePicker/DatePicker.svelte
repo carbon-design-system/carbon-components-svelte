@@ -239,6 +239,14 @@
     );
   }
 
+  /** The string flatpickr writes to the input for its current selection. */
+  function formatSelectedDates() {
+    const { dateFormat, conjunction } = calendar.config;
+    return calendar.selectedDates
+      .map((date) => calendar.formatDate(date, dateFormat))
+      .join(conjunction);
+  }
+
   function currentDateStr() {
     return $range
       ? { from: inputRef.value, to: inputRefTo.value }
@@ -703,7 +711,12 @@
           }
         }
       } else if ($inputValue !== prevValue) {
-        calendar.setDate($inputValue);
+        // A value the calendar itself just wrote is already in sync.
+        // Re-parsing it would wipe the selection when a custom
+        // `formatDate` emits text that `dateFormat` cannot parse.
+        if ($inputValue !== formatSelectedDates()) {
+          calendar.setDate($inputValue);
+        }
         prevValue = $inputValue;
       }
     }
