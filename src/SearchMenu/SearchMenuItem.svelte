@@ -178,6 +178,9 @@
   on:mouseenter={() => {
     if (!disabled && shouldRender) menu.setActiveId(id);
   }}
+  on:mouseleave={() => {
+    if ($highlightedId === id) menu.setActiveId(null);
+  }}
 >
   {#if icon}
     <span class="bx--search-menu-item__icon">
