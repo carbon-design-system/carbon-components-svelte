@@ -5,6 +5,7 @@
 @import "carbon-components/scss/globals/scss/helper-mixins";
 @import "carbon-components/scss/globals/scss/typography";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "./fluid-shared";
 
 /// Fluid time picker (Carbon React FluidTimePicker)
 /// @access private
@@ -70,18 +71,7 @@
   .#{$prefix}--time-picker--fluid
     .#{$prefix}--time-picker__input
     .#{$prefix}--label {
-    position: absolute;
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    margin: 0;
-    overflow-x: scroll;
-    scrollbar-width: none;
-    white-space: nowrap;
-    block-size: to-rem(16px);
-    inline-size: calc(100% - to-rem(32px));
-    inset-block-start: to-rem(13px);
-    left: $carbon--spacing-05;
+    @include fluid-label;
   }
 
   .#{$prefix}--time-picker--fluid
@@ -93,8 +83,7 @@
   .#{$prefix}--time-picker--fluid
     .#{$prefix}--time-picker__input
     .#{$prefix}--label.#{$prefix}--label--slotted {
-    gap: $carbon--spacing-03;
-    overflow: visible;
+    @include fluid-label-slotted;
   }
 
   .#{$prefix}--time-picker--fluid
@@ -195,8 +184,8 @@
   }
 
   .#{$prefix}--time-picker--fluid .#{$prefix}--form-requirement {
-    padding: $carbon--spacing-03 to-rem(40px) $carbon--spacing-03 $carbon--spacing-05;
-    margin: 0;
+    @include fluid-requirement-padding;
+
     background: $field-01;
   }
 
@@ -302,9 +291,7 @@
 
   .#{$prefix}--time-picker--fluid--invalid .#{$prefix}--form-requirement,
   .#{$prefix}--time-picker--fluid--warning .#{$prefix}--form-requirement {
-    display: block;
-    overflow: visible;
-    max-block-size: 100%;
+    @include fluid-requirement;
   }
 
   .#{$prefix}--time-picker--fluid--invalid .#{$prefix}--form-requirement {
@@ -342,11 +329,8 @@
     .#{$prefix}--time-picker__divider,
   .#{$prefix}--time-picker--fluid.#{$prefix}--time-picker--fluid--warning
     .#{$prefix}--time-picker__divider {
-    display: block;
-    border-style: solid;
-    border-color: $ui-03;
-    margin: 0 to-rem(16px);
-    border-block-end: none;
+    @include fluid-divider-frame;
+
     inline-size: calc(100% - to-rem(32px));
   }
 

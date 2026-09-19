@@ -10,10 +10,11 @@ const PARTIALS = readdirSync(CSS_DIR).filter(
 );
 
 // Partials that legitimately emit nothing through `exports()`: the manifest,
-// a Sass map other partials import, and the `$ccs-theme-switching`-gated
+// a Sass map and declaration mixins other partials import, and the `$ccs-theme-switching`-gated
 // theme scopes.
 const NO_EXPORTS = new Set([
   "_carbon-styles.scss",
+  "_fluid-shared.scss",
   "_spacing-scale.scss",
   "_ui-shell-classic.scss",
 ]);
@@ -122,6 +123,12 @@ describe("css partial conventions", () => {
     expect(offenders(/transition:.*(\d(ms|s)\b|cubic-bezier|\ball\b)/)).toEqual(
       [],
     );
+  });
+
+  it("keeps _fluid-shared.scss to declaration mixins that emit nothing", () => {
+    const source = readFileSync(join(CSS_DIR, "_fluid-shared.scss"), "utf8");
+    expect(source).not.toMatch(/^\s*[.[&][^;]*\{/m);
+    expect(source.match(/^@mixin fluid-/gm)?.length).toBeGreaterThan(3);
   });
 
   it("scopes every fluid rule under a fluid class", () => {

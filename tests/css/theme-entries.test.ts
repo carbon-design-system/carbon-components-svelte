@@ -21,7 +21,11 @@ const ALL_ONLY_IMPORTS = [
 ];
 
 // Partials imported by other css/_*.scss partials, not by the manifest.
-const UNREGISTERED_PARTIALS = ["_spacing-scale.scss", MANIFEST];
+const UNREGISTERED_PARTIALS = [
+  "_fluid-shared.scss",
+  "_spacing-scale.scss",
+  MANIFEST,
+];
 
 function importsOf(file: string) {
   return readFileSync(join(CSS_DIR, file), "utf8")
