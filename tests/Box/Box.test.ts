@@ -68,6 +68,12 @@ describe("Box", () => {
     });
   });
 
+  it("applies the shadow utility class", () => {
+    render(Box);
+
+    expect(screen.getByText("Raised shadow")).toHaveClass("bx--box-shadow");
+  });
+
   it("applies spacing scale classes", () => {
     render(Box);
 
