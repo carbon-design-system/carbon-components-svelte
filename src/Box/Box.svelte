@@ -67,6 +67,9 @@
    */
   export let borderWidth = undefined;
 
+  /** Set to `true` to apply a Carbon raised box shadow. */
+  export let shadow = false;
+
   /**
    * Set the width. Numbers are treated as pixels; strings accept any CSS length.
    * @type {number | string | undefined}
@@ -202,6 +205,7 @@
     fill && `bx--box-fill-${fill}`,
     border && `bx--box-border-${border}`,
     border && borderStyle === "dashed" && "bx--box-border-style-dashed",
+    shadow && "bx--box-shadow",
     spacingClass("p", padding),
     spacingClass("px", paddingX),
     spacingClass("py", paddingY),

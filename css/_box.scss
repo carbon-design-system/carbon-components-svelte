@@ -1,4 +1,5 @@
 @import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/layer";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 @import "./spacing-scale";
 
@@ -37,6 +38,10 @@
 
   .#{$prefix}--box-border-style-dashed {
     border-style: dashed;
+  }
+
+  .#{$prefix}--box-shadow {
+    @include layer("raised");
   }
 
   @each $step, $size in $ccs-spacing-scale {
