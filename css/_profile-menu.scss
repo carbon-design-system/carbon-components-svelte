@@ -80,10 +80,6 @@
     transition: background-color $duration--fast-01 motion(standard, productive);
   }
 
-  .#{$prefix}--profile-menu__header--link:hover {
-    background-color: $background-hover;
-  }
-
   .#{$prefix}--profile-menu__header--link:focus {
     outline: 2px solid $focus;
     outline-offset: -2px;
@@ -139,11 +135,6 @@
     cursor: pointer;
     @include type-style('body-short-01');
     transition: background-color $duration--fast-01 motion(standard, productive);
-  }
-
-  .#{$prefix}--profile-menu__item.#{$prefix}--profile-menu__item:hover {
-    color: $text-primary;
-    background-color: $background-hover;
   }
 
   .#{$prefix}--profile-menu__item.#{$prefix}--profile-menu__item:focus {
@@ -217,9 +208,21 @@
     cursor: pointer;
   }
 
-  .#{$prefix}--profile-menu__detail-action a:hover,
-  .#{$prefix}--profile-menu__detail-action button:hover {
-    text-decoration: underline;
+  // Hover only where a pointer can hover, so a tap does not leave it stuck.
+  @media (any-hover: hover) {
+    .#{$prefix}--profile-menu__header--link:hover {
+      background-color: $background-hover;
+    }
+
+    .#{$prefix}--profile-menu__item.#{$prefix}--profile-menu__item:hover {
+      color: $text-primary;
+      background-color: $background-hover;
+    }
+
+    .#{$prefix}--profile-menu__detail-action a:hover,
+    .#{$prefix}--profile-menu__detail-action button:hover {
+      text-decoration: underline;
+    }
   }
 
   .#{$prefix}--profile-menu__detail-action a:focus,

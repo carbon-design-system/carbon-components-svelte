@@ -163,31 +163,34 @@
     box-shadow: inset -2px 0 $focus;
   }
 
-  .#{$prefix}--number-input--fluid
-    .#{$prefix}--number[data-invalid]
-    input[type="number"]:not(:focus)
-    ~ .#{$prefix}--number__controls
-    .#{$prefix}--number__control-btn:last-of-type:hover,
-  .#{$prefix}--number-input--fluid
-    .#{$prefix}--number[data-invalid]
-    input[type="text"]:not(:focus)
-    ~ .#{$prefix}--number__controls
-    .#{$prefix}--number__control-btn:last-of-type:hover {
-    box-shadow: inset -2px 0 $support-01;
-  }
+  // Hover only where a pointer can hover, so a tap does not leave it stuck.
+  @media (any-hover: hover) {
+    .#{$prefix}--number-input--fluid
+      .#{$prefix}--number[data-invalid]
+      input[type="number"]:not(:focus)
+      ~ .#{$prefix}--number__controls
+      .#{$prefix}--number__control-btn:last-of-type:hover,
+    .#{$prefix}--number-input--fluid
+      .#{$prefix}--number[data-invalid]
+      input[type="text"]:not(:focus)
+      ~ .#{$prefix}--number__controls
+      .#{$prefix}--number__control-btn:last-of-type:hover {
+      box-shadow: inset -2px 0 $support-01;
+    }
 
-  .#{$prefix}--number-input--fluid
-    .#{$prefix}--number[data-invalid]
-    input[type="number"]:not(:focus)
-    ~ .#{$prefix}--number__controls
-    .#{$prefix}--number__control-btn:hover,
-  .#{$prefix}--number-input--fluid
-    .#{$prefix}--number[data-invalid]
-    input[type="text"]:not(:focus)
-    ~ .#{$prefix}--number__controls
-    .#{$prefix}--number__control-btn:hover {
-    box-shadow: none;
-    outline: none;
+    .#{$prefix}--number-input--fluid
+      .#{$prefix}--number[data-invalid]
+      input[type="number"]:not(:focus)
+      ~ .#{$prefix}--number__controls
+      .#{$prefix}--number__control-btn:hover,
+    .#{$prefix}--number-input--fluid
+      .#{$prefix}--number[data-invalid]
+      input[type="text"]:not(:focus)
+      ~ .#{$prefix}--number__controls
+      .#{$prefix}--number__control-btn:hover {
+      box-shadow: none;
+      outline: none;
+    }
   }
 
   // Steppers show only a bottom border on hover while the input is focused.
@@ -196,20 +199,22 @@
   // clauses spelled out across the `.number`/`.input-wrapper` pair. Repeated
   // to match the specificity of the `[data-invalid]` + `--warning` clauses
   // it replaces.
-  .#{$prefix}--number-input--fluid
-    .#{$prefix}--number.#{$prefix}--number--neutral.#{$prefix}--number--neutral
-    .#{$prefix}--number__input-wrapper
-    input[type="number"]:focus
-    ~ .#{$prefix}--number__controls
-    .#{$prefix}--number__control-btn:hover,
-  .#{$prefix}--number-input--fluid
-    .#{$prefix}--number.#{$prefix}--number--neutral.#{$prefix}--number--neutral
-    .#{$prefix}--number__input-wrapper
-    input[type="text"]:focus
-    ~ .#{$prefix}--number__controls
-    .#{$prefix}--number__control-btn:hover {
-    border-block-end: 1px solid $focus;
-    outline: none;
+  @media (any-hover: hover) {
+    .#{$prefix}--number-input--fluid
+      .#{$prefix}--number.#{$prefix}--number--neutral.#{$prefix}--number--neutral
+      .#{$prefix}--number__input-wrapper
+      input[type="number"]:focus
+      ~ .#{$prefix}--number__controls
+      .#{$prefix}--number__control-btn:hover,
+    .#{$prefix}--number-input--fluid
+      .#{$prefix}--number.#{$prefix}--number--neutral.#{$prefix}--number--neutral
+      .#{$prefix}--number__input-wrapper
+      input[type="text"]:focus
+      ~ .#{$prefix}--number__controls
+      .#{$prefix}--number__control-btn:hover {
+      border-block-end: 1px solid $focus;
+      outline: none;
+    }
   }
 
   .#{$prefix}--number-input--fluid
@@ -249,27 +254,29 @@
     border-block-end-width: to-rem(1px);
   }
 
-  .#{$prefix}--number-input--fluid
-    .#{$prefix}--number[data-invalid]
-    input[type="number"]
-    ~ .#{$prefix}--number__controls
-    .#{$prefix}--number__control-btn:hover:not(:focus),
-  .#{$prefix}--number-input--fluid
-    .#{$prefix}--number__input-wrapper--warning
-    input[type="number"]
-    ~ .#{$prefix}--number__controls
-    .#{$prefix}--number__control-btn:hover:not(:focus),
-  .#{$prefix}--number-input--fluid
-    .#{$prefix}--number[data-invalid]
-    input[type="text"]
-    ~ .#{$prefix}--number__controls
-    .#{$prefix}--number__control-btn:hover:not(:focus),
-  .#{$prefix}--number-input--fluid
-    .#{$prefix}--number__input-wrapper--warning
-    input[type="text"]
-    ~ .#{$prefix}--number__controls
-    .#{$prefix}--number__control-btn:hover:not(:focus) {
-    outline: none;
+  @media (any-hover: hover) {
+    .#{$prefix}--number-input--fluid
+      .#{$prefix}--number[data-invalid]
+      input[type="number"]
+      ~ .#{$prefix}--number__controls
+      .#{$prefix}--number__control-btn:hover:not(:focus),
+    .#{$prefix}--number-input--fluid
+      .#{$prefix}--number__input-wrapper--warning
+      input[type="number"]
+      ~ .#{$prefix}--number__controls
+      .#{$prefix}--number__control-btn:hover:not(:focus),
+    .#{$prefix}--number-input--fluid
+      .#{$prefix}--number[data-invalid]
+      input[type="text"]
+      ~ .#{$prefix}--number__controls
+      .#{$prefix}--number__control-btn:hover:not(:focus),
+    .#{$prefix}--number-input--fluid
+      .#{$prefix}--number__input-wrapper--warning
+      input[type="text"]
+      ~ .#{$prefix}--number__controls
+      .#{$prefix}--number__control-btn:hover:not(:focus) {
+      outline: none;
+    }
   }
 
   .#{$prefix}--number-input--fluid
@@ -382,23 +389,27 @@
     pointer-events: none;
     cursor: not-allowed;
 
-    &:hover {
-      background-color: transparent;
-      outline: none;
+    @media (any-hover: hover) {
+      &:hover {
+        background-color: transparent;
+        outline: none;
+      }
     }
   }
 
-  .#{$prefix}--number-input--fluid
-    .#{$prefix}--number--readonly
-    input[type="number"]:focus
-    ~ .#{$prefix}--number__controls
-    .#{$prefix}--number__control-btn:hover,
-  .#{$prefix}--number-input--fluid
-    .#{$prefix}--number--readonly
-    input[type="text"]:focus
-    ~ .#{$prefix}--number__controls
-    .#{$prefix}--number__control-btn:hover {
-    outline: none;
+  @media (any-hover: hover) {
+    .#{$prefix}--number-input--fluid
+      .#{$prefix}--number--readonly
+      input[type="number"]:focus
+      ~ .#{$prefix}--number__controls
+      .#{$prefix}--number__control-btn:hover,
+    .#{$prefix}--number-input--fluid
+      .#{$prefix}--number--readonly
+      input[type="text"]:focus
+      ~ .#{$prefix}--number__controls
+      .#{$prefix}--number__control-btn:hover {
+      outline: none;
+    }
   }
 }
 

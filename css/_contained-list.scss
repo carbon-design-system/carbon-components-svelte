@@ -81,22 +81,6 @@
     }
   }
 
-  .#{$prefix}--contained-list
-    .#{$prefix}--search
-    .#{$prefix}--search-input
-    ~ .#{$prefix}--search-close:hover {
-    border-bottom: 1px solid transparent;
-  }
-
-  .#{$prefix}--contained-list
-    .#{$prefix}--search
-    .#{$prefix}--search-input:focus
-    ~ .#{$prefix}--search-close:hover {
-    border: 2px solid $focus;
-    border-left: 0;
-    outline: none;
-  }
-
   .#{$prefix}--contained-list--on-page + .#{$prefix}--contained-list--on-page {
     margin-top: $carbon--spacing-05;
   }
@@ -213,9 +197,28 @@
     right: $carbon--spacing-05;
   }
 
-  .#{$prefix}--contained-list-item--clickable
-    .#{$prefix}--contained-list-item__content:not(:disabled):hover {
-    background-color: $hover-ui;
+  // Hover only where a pointer can hover, so a tap does not leave it stuck.
+  @media (any-hover: hover) {
+    .#{$prefix}--contained-list
+      .#{$prefix}--search
+      .#{$prefix}--search-input
+      ~ .#{$prefix}--search-close:hover {
+      border-bottom: 1px solid transparent;
+    }
+
+    .#{$prefix}--contained-list
+      .#{$prefix}--search
+      .#{$prefix}--search-input:focus
+      ~ .#{$prefix}--search-close:hover {
+      border: 2px solid $focus;
+      border-left: 0;
+      outline: none;
+    }
+
+    .#{$prefix}--contained-list-item--clickable
+      .#{$prefix}--contained-list-item__content:not(:disabled):hover {
+      background-color: $hover-ui;
+    }
   }
 
   .#{$prefix}--contained-list-item--clickable

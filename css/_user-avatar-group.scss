@@ -53,9 +53,15 @@
 
   // Lift the hovered or focused avatar to the front of the stack, above the
   // highest z-index a reversed stack can produce.
-  .#{$prefix}--user-avatar-group--overlap > *:hover,
   .#{$prefix}--user-avatar-group--overlap > *:focus-within {
     z-index: calc(var(--user-avatar-group-count, 0) + 1);
+  }
+
+  // Hover only where a pointer can hover, so a tap does not leave it stuck.
+  @media (any-hover: hover) {
+    .#{$prefix}--user-avatar-group--overlap > *:hover {
+      z-index: calc(var(--user-avatar-group-count, 0) + 1);
+    }
   }
 }
 
