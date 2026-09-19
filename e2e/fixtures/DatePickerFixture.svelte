@@ -86,3 +86,18 @@
     />
   </DatePicker>
 </div>
+
+<div data-testid="date-picker-multiple">
+  <DatePicker
+    datePickerType="multiple"
+    value="09/09/2026, 09/10/2026, 09/11/2026, 09/12/2026, 09/13/2026"
+    flatpickrProps={{ static: true }}
+    on:change
+  >
+    <DatePickerInput
+      data-testid="date-picker-blackout-dates"
+      labelText="Blackout dates"
+      placeholder="mm/dd/yyyy"
+    />
+  </DatePicker>
+</div>

@@ -11,7 +11,7 @@
 
   /**
    * Specify the date picker type.
-   * @type {"simple" | "single" | "range" | "month" | "year"}
+   * @type {"simple" | "single" | "range" | "month" | "year" | "multiple"}
    */
   export let datePickerType = "simple";
 
@@ -173,9 +173,18 @@
   /**
    * @type {import("svelte/store").Readable<boolean>}
    */
+  const multiple = derived(mode, (_) => _ === "multiple");
+  /**
+   * @type {import("svelte/store").Readable<boolean>}
+   */
   const hasCalendar = derived(
     mode,
-    (_) => _ === "single" || _ === "range" || _ === "month" || _ === "year",
+    (_) =>
+      _ === "single" ||
+      _ === "range" ||
+      _ === "month" ||
+      _ === "year" ||
+      _ === "multiple",
   );
 
   let datePickerRef = null;
@@ -189,6 +198,11 @@
   /** @type {(ReturnType<typeof rafThrottle> & { cancel: () => void }) | null} */
   let onCalendarReposition = null;
   const SCROLL_LISTENER_OPTIONS = { capture: true, passive: true };
+  // datePickerType="multiple": anchor for shift-click range selection. Only
+  // moves on a plain click, so consecutive shift-clicks all extend from the
+  // same anchor (matches file-explorer-style multi-select).
+  /** @type {Date | null} */
+  let multipleSelectAnchor = null;
   /** @type {HTMLElement | null} */
   let topLayerAncestor = null;
   // Set from onOpen/onClose. Outside-click listener attaches only while open.
@@ -412,8 +426,116 @@
     ).focus();
   }
 
+  /**
+   * Extends a "multiple" mode selection to a contiguous range on shift-click.
+   * Flatpickr's own day-click handler only toggles the single clicked day, so
+   * a shift-click is intercepted here (capture phase, ahead of flatpickr's
+   * own listener) and handled entirely ourselves. Disabled dates within the
+   * range are skipped silently; the range is added to, not swapped with, the
+   * existing selection.
+   * @type {(event: MouseEvent) => void}
+   */
+  function handleMultipleDayClick(event) {
+    const dayElem = /** @type {HTMLElement} */ (event.target).closest(
+      ".flatpickr-day",
+    );
+    if (!dayElem || dayElem.classList.contains("flatpickr-disabled")) return;
+
+    const clickedDate = /** @type {any} */ (dayElem).dateObj;
+    if (!clickedDate) return;
+
+    if (!event.shiftKey || !multipleSelectAnchor) {
+      multipleSelectAnchor = clickedDate;
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    const [start, end] =
+      multipleSelectAnchor <= clickedDate
+        ? [multipleSelectAnchor, clickedDate]
+        : [clickedDate, multipleSelectAnchor];
+
+    const rangeDates = [];
+    const cursor = new Date(start);
+    while (cursor.getTime() <= end.getTime()) {
+      if (calendar.isEnabled(cursor)) rangeDates.push(new Date(cursor));
+      cursor.setDate(cursor.getDate() + 1);
+    }
+
+    const existingTimes = new Set(
+      calendar.selectedDates.map((date) => date.getTime()),
+    );
+    const merged = [
+      ...calendar.selectedDates,
+      ...rangeDates.filter((date) => !existingTimes.has(date.getTime())),
+    ];
+    calendar.setDate(merged, true);
+  }
+
+  /** @type {HTMLElement[]} */
+  let previewedDayElems = [];
+
+  function clearRangePreview() {
+    for (const el of previewedDayElems) {
+      el.classList.remove("inRange");
+    }
+    previewedDayElems = [];
+  }
+
+  /**
+   * Previews a pending shift-click range by marking the days between the
+   * anchor and the hovered day with flatpickr's own `inRange` class — the
+   * same one "range" mode already uses, so no new CSS is needed.
+   * @type {(event: MouseEvent) => void}
+   */
+  function updateRangePreview(event) {
+    if (!event.shiftKey || !multipleSelectAnchor || !calendar) {
+      clearRangePreview();
+      return;
+    }
+
+    const dayElem = /** @type {HTMLElement} */ (event.target).closest(
+      ".flatpickr-day",
+    );
+    if (!dayElem) return;
+
+    const hoveredDate = /** @type {any} */ (dayElem).dateObj;
+    if (!hoveredDate) return;
+
+    clearRangePreview();
+
+    const [start, end] =
+      multipleSelectAnchor <= hoveredDate
+        ? [multipleSelectAnchor, hoveredDate]
+        : [hoveredDate, multipleSelectAnchor];
+
+    for (const el of calendar.calendarContainer.querySelectorAll(
+      ".flatpickr-day",
+    )) {
+      const date = /** @type {any} */ (el).dateObj;
+      if (
+        date &&
+        date.getTime() >= start.getTime() &&
+        date.getTime() <= end.getTime()
+      ) {
+        el.classList.add("inRange");
+        previewedDayElems.push(/** @type {HTMLElement} */ (el));
+      }
+    }
+  }
+
+  /**
+   * @param {KeyboardEvent} event
+   */
+  function handleShiftKeyUp(event) {
+    if (event.key === "Shift") clearRangePreview();
+  }
+
   setContext("carbon:DatePicker", {
     range,
+    multiple,
     inputValue,
     inputValueFrom,
     inputValueTo,
@@ -487,6 +609,7 @@
           if (calendarUsesFixedPositioning) {
             detachFixedRepositionListeners();
           }
+          clearRangePreview();
           queueMicrotask(dispatchDeferredClose);
           return;
         }
@@ -503,12 +626,42 @@
       "aria-label",
       "calendar-container",
     );
+    if ($mode === "multiple") {
+      calendar?.calendarContainer?.addEventListener(
+        "click",
+        handleMultipleDayClick,
+        { capture: true },
+      );
+      calendar?.calendarContainer?.addEventListener(
+        "mouseover",
+        updateRangePreview,
+      );
+      calendar?.calendarContainer?.addEventListener(
+        "mouseleave",
+        clearRangePreview,
+      );
+      window.addEventListener("keyup", handleShiftKeyUp);
+    }
   }
 
   onMount(() => {
     return () => {
       detachFixedRepositionListeners();
       if (calendar) {
+        calendar.calendarContainer?.removeEventListener(
+          "click",
+          handleMultipleDayClick,
+          { capture: true },
+        );
+        calendar.calendarContainer?.removeEventListener(
+          "mouseover",
+          updateRangePreview,
+        );
+        calendar.calendarContainer?.removeEventListener(
+          "mouseleave",
+          clearRangePreview,
+        );
+        window.removeEventListener("keyup", handleShiftKeyUp);
         calendar.destroy();
         calendar = null;
       }
@@ -643,7 +796,8 @@
     class:bx--date-picker--simple={datePickerType === "simple"}
     class:bx--date-picker--single={datePickerType === "single" ||
       datePickerType === "month" ||
-      datePickerType === "year"}
+      datePickerType === "year" ||
+      datePickerType === "multiple"}
     class:bx--date-picker--range={datePickerType === "range"}
     class:bx--date-picker--nolabel={datePickerType === "range" &&
       $labelTextEmpty}

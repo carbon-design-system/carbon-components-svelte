@@ -553,4 +553,104 @@ test.describe("DatePicker", () => {
       await expect(calendar).toHaveClass(/open/);
     });
   });
+
+  test.describe("multiple", () => {
+    // Regression test for a long comma-joined value (many selected dates)
+    // rendering underneath the calendar icon instead of being truncated
+    // before it.
+    test("truncates an overflowing value with an ellipsis instead of overlapping the calendar icon", async ({
+      page,
+    }) => {
+      const input = page.getByTestId("date-picker-blackout-dates");
+
+      // Chromium reports computed `overflow` on <input> as its own internal
+      // "clip" regardless of the author-set `hidden` value, so assert the
+      // properties that actually control ellipsis rendering instead.
+      await expect(input).toHaveCSS("text-overflow", "ellipsis");
+      await expect(input).toHaveCSS("white-space", "nowrap");
+      // Reserved space for the calendar icon so ellipsized text can't render
+      // underneath it.
+      await expect(input).toHaveCSS("padding-right", "48px");
+
+      const isOverflowing = await input.evaluate(
+        (el) => el.scrollWidth > el.clientWidth,
+      );
+      expect(isOverflowing).toBe(true);
+    });
+
+    test("shift-click extends the selection to a contiguous range", async ({
+      page,
+    }) => {
+      const input = page.getByTestId("date-picker-blackout-dates");
+      await input.click();
+
+      const calendar = page
+        .getByTestId("date-picker-multiple")
+        .getByLabel("calendar-container");
+      await expect(calendar).toBeVisible();
+
+      const day = (n: number) =>
+        calendar
+          .locator(".flatpickr-day:not(.prevMonthDay):not(.nextMonthDay)")
+          .filter({ hasText: new RegExp(`^${n}$`) });
+
+      await day(20).click();
+      await day(25).click({ modifiers: ["Shift"] });
+
+      await Promise.all(
+        [20, 21, 22, 23, 24, 25].map((n) =>
+          expect(day(n)).toHaveClass(/selected/),
+        ),
+      );
+      // The pre-selected 9-13 range from the fixture's initial value
+      // survives — shift-click adds to the selection, it doesn't replace it.
+      await Promise.all(
+        [9, 10, 11, 12, 13].map((n) => expect(day(n)).toHaveClass(/selected/)),
+      );
+    });
+
+    // Regression test: nothing prevented the browser's native drag-to-select
+    // text behavior on the day cells, so a shift-click (or any click-drag)
+    // spanning multiple days highlighted their text instead of only
+    // selecting the range. `user-select: none` on `.flatpickr-day` stops it.
+    test("dragging across days while shift is held does not select their text", async ({
+      page,
+    }) => {
+      const input = page.getByTestId("date-picker-blackout-dates");
+      await input.click();
+
+      const calendar = page
+        .getByTestId("date-picker-multiple")
+        .getByLabel("calendar-container");
+      await expect(calendar).toBeVisible();
+
+      const day = (n: number) =>
+        calendar
+          .locator(".flatpickr-day:not(.prevMonthDay):not(.nextMonthDay)")
+          .filter({ hasText: new RegExp(`^${n}$`) });
+
+      const startBox = await day(9).boundingBox();
+      const endBox = await day(25).boundingBox();
+      if (!startBox || !endBox) throw new Error("expected bounding boxes");
+
+      await page.mouse.move(
+        startBox.x + startBox.width / 2,
+        startBox.y + startBox.height / 2,
+      );
+      await page.mouse.down();
+      await page.keyboard.down("Shift");
+      await page.mouse.move(
+        endBox.x + endBox.width / 2,
+        endBox.y + endBox.height / 2,
+        { steps: 10 },
+      );
+      await page.mouse.up();
+      await page.keyboard.up("Shift");
+
+      const selection = await page.evaluate(() =>
+        window.getSelection()?.toString(),
+      );
+      expect(selection).toBe("");
+    });
+  });
 });

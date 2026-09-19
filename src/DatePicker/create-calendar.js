@@ -298,10 +298,13 @@ export async function createCalendar({ options, base, input, dispatch }) {
     ...options,
     // `options.mode` also carries Carbon's "month"/"year" datePickerType,
     // used above to pick a plugin. flatpickr's own `mode` only understands
-    // "single" | "multiple" | "range": pass the raw value through only for
-    // range, else fall back to "single" so the bundled monthSelect plugin's
+    // "single" | "multiple" | "range": pass "range"/"multiple" through as-is,
+    // else fall back to "single" so the bundled monthSelect plugin's
     // setMonth() (which switches on fp.config.mode) still updates the value.
-    mode: options.mode === "range" ? "range" : "single",
+    mode:
+      options.mode === "range" || options.mode === "multiple"
+        ? options.mode
+        : "single",
     locale: resolveLocale(options.locale),
     onDayCreate: [
       markDisabledDayAriaState,

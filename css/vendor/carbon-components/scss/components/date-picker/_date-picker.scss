@@ -84,12 +84,15 @@
 
     position: relative;
     display: block;
+    overflow: hidden;
     height: to-rem(40px);
     padding: 0 $carbon--spacing-05;
     border: none;
     border-bottom: 1px solid $border-strong;
     background-color: $field;
     color: $text-primary;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     transition: background-color $duration--fast-01 motion(standard, productive);
 
     &:focus { // ccs: dropped unrendered .bx--focused
@@ -127,6 +130,41 @@
     height: to-rem(32px);
   }
 
+  // Chromium/Firefox/WebKit only render `text-overflow: ellipsis` on an
+  // <input> while it is blurred; a focused, editable field always shows its
+  // content unellipsized so the caret stays visible. For "multiple" mode's
+  // potentially long joined value, an overlay renders the same text as
+  // ellipsized static content on top of the (visually transparent, but
+  // still focusable/typable) real input, matching the blurred rendering in
+  // both states. See DatePickerInput.svelte.
+  .#{$prefix}--date-picker__input--ghost-text {
+    color: transparent;
+    caret-color: $text-primary;
+  }
+
+  .#{$prefix}--date-picker__input-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background: transparent;
+    border: none;
+    pointer-events: none;
+
+    // `display: flex` on the overlay itself (needed to vertically center
+    // the text) prevents `text-overflow: ellipsis` from taking effect
+    // directly on it, so the truncation happens on this nested flex child
+    // instead; `min-width: 0` lets it actually shrink below its content
+    // size rather than the flexbox default of refusing to.
+    span {
+      overflow: hidden;
+      min-width: 0;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+
   .#{$prefix}--date-picker__icon {
     position: absolute;
     z-index: 1;
@@ -157,7 +195,10 @@
     fill: $support-error;
   }
 
-  .#{$prefix}--date-picker__icon ~ .#{$prefix}--date-picker__input {
+  // The icon renders after the input in the DOM (Svelte component markup
+  // order), so a sibling selector from the icon can't reach a preceding
+  // input. This marker class is set whenever an icon renders instead.
+  .#{$prefix}--date-picker__input--with-icon {
     padding-right: $carbon--spacing-09;
   }
 
