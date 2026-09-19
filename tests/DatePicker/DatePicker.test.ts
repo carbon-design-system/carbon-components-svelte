@@ -1,5 +1,7 @@
 import { fireEvent, render, screen, within } from "@testing-library/svelte";
+import type DatePickerComponent from "carbon-components-svelte/DatePicker/DatePicker.svelte";
 import type { Instance } from "flatpickr/dist/types/instance";
+import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import DatePickerFluidForm from "./DatePicker.fluidForm.test.svelte";
@@ -701,6 +703,7 @@ describe("DatePicker", () => {
         .mockImplementation(() => {});
       render(DatePicker, {
         datePickerType: "single",
+        // @ts-expect-error `wrap` is omitted from the type; JS callers can still pass it.
         flatpickrProps: { wrap: true },
       });
 
@@ -910,10 +913,10 @@ describe("DatePicker", () => {
       const plugin = vi.fn(() => {
         throw new Error("plugin failed");
       });
-      const props = {
+      const props: ComponentProps<typeof DatePicker> = {
         datePickerType: "single",
         flatpickrProps: { plugins: [plugin] },
-      } as const;
+      };
       const { rerender } = render(DatePicker, props);
       await tick();
       const attempts = plugin.mock.calls.length;
@@ -924,6 +927,16 @@ describe("DatePicker", () => {
       await tick();
       expect(plugin).toHaveBeenCalledTimes(attempts);
       consoleError.mockRestore();
+    });
+
+    it("omits the options Carbon overrides from the prop type", () => {
+      type FlatpickrProps = NonNullable<
+        ComponentProps<DatePickerComponent>["flatpickrProps"]
+      >;
+
+      expectTypeOf<FlatpickrProps>().toHaveProperty("showMonths");
+      expectTypeOf<FlatpickrProps>().not.toHaveProperty("wrap");
+      expectTypeOf<FlatpickrProps>().not.toHaveProperty("mode");
     });
 
     it("still runs a consumer onReady hook", async () => {
