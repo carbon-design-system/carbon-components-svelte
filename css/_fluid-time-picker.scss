@@ -270,6 +270,9 @@
     display: none;
   }
 
+  // Status icon pinned to the first line of the message. Upstream's fluid
+  // override also omits pointer-events here (unlike the mixin), so this
+  // can't take fluid-status-icon().
   .#{$prefix}--time-picker--fluid--invalid .#{$prefix}--time-picker__icon,
   .#{$prefix}--time-picker--fluid--warning .#{$prefix}--time-picker__icon {
     position: absolute;

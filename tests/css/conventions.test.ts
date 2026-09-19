@@ -198,6 +198,59 @@ describe("css partial conventions", () => {
     expect(unscoped).toEqual([]);
   });
 
+  it("routes bare inset-block-start/right/pointer-events icon rules through fluid-status-icon()", () => {
+    // A rule whose own declarations are exactly the mixin's three
+    // properties should call fluid-status-icon() instead of repeating them.
+    // Rules that legitimately stay bare need a different property set: an
+    // extra position/display (fluid-time-picker's icon has no base v10
+    // position to inherit), or fewer of the three because a base v10 rule
+    // already supplies right/pointer-events (fluid-text-input,
+    // fluid-date-picker), or a different reference frame entirely
+    // (fluid-pin-code-input, fluid-text-area anchor to the message row, not
+    // the field).
+    const MIXIN_PROPS = ["inset-block-start", "right", "pointer-events"];
+    const offenders: string[] = [];
+    for (const name of PARTIALS.filter(
+      (n) => n.startsWith("_fluid-") && n !== "_fluid-shared.scss",
+    )) {
+      // Strip `#{...}` interpolation so it can't be mistaken for a brace.
+      const css = readFileSync(join(CSS_DIR, name), "utf8")
+        .split("\n")
+        .map((l) => l.split("//")[0])
+        .join("\n")
+        .replace(/#\{[^}]*\}/g, "PFX");
+      let buf = "";
+      let line = 1;
+      let ruleLine = 1;
+      for (const ch of css) {
+        if (ch === "\n") line++;
+        if (ch === "{") {
+          buf = "";
+          ruleLine = line;
+        } else if (ch === "}") {
+          const decls = buf
+            .split(";")
+            .map((d) => d.trim())
+            .filter(Boolean);
+          const usesMixin = decls.some((d) =>
+            d.startsWith("@include fluid-status-icon("),
+          );
+          const props = decls
+            .filter((d) => !d.startsWith("@include"))
+            .map((d) => d.split(":")[0].trim());
+          if (
+            !usesMixin &&
+            props.length === MIXIN_PROPS.length &&
+            MIXIN_PROPS.every((p) => props.includes(p))
+          )
+            offenders.push(`${name}:${ruleLine}`);
+          buf = "";
+        } else buf += ch;
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
+
   it("guards hover rules with (any-hover: hover)", () => {
     // `:focus:hover` rides along in `:focus` lists with the same declarations.
     const unguarded = PARTIALS.flatMap((name) => {

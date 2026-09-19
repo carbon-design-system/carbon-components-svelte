@@ -202,7 +202,9 @@
     border-block-end: 1px solid transparent;
   }
 
-  // Status icon aligned with first line of validation message.
+  // Status icon aligned with first line of validation message; the base
+  // rule already sets right/pointer-events, so this can't take
+  // fluid-status-icon().
   .#{$prefix}--date-picker-container.#{$prefix}--date-picker--fluid--invalid
     .#{$prefix}--date-picker__icon--invalid,
   .#{$prefix}--date-picker-container.#{$prefix}--date-picker--fluid--warn
