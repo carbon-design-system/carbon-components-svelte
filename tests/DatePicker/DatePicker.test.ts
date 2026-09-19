@@ -1522,6 +1522,97 @@ describe("DatePicker", () => {
     });
   });
 
+  describe("error event", () => {
+    it("dispatches an error event once for an unparseable initial value", async () => {
+      const errorHandler = vi.fn();
+      render(DatePicker, {
+        datePickerType: "single",
+        value: "not-a-date",
+        onerror: errorHandler,
+      });
+
+      await vi.waitFor(() => expect(errorHandler).toHaveBeenCalledTimes(1));
+      const detail = errorHandler.mock.lastCall?.[0]?.detail;
+      expect(detail.error).toBeInstanceOf(Error);
+      expect(detail.error.message).toBe("Invalid date provided: not-a-date");
+      expect(detail.value).toBe("not-a-date");
+    });
+
+    it("does not dispatch an error for a valid initial value", async () => {
+      const errorHandler = vi.fn();
+      render(DatePicker, {
+        datePickerType: "single",
+        value: "01/01/2024",
+        onerror: errorHandler,
+      });
+
+      const input = screen.getByLabelText("Date");
+      await vi.waitFor(() => expect(input).toHaveValue("01/01/2024"));
+      expect(errorHandler).not.toHaveBeenCalled();
+    });
+
+    it("calls a consumer flatpickrProps.errorHandler in addition to dispatching", async () => {
+      const errorHandler = vi.fn();
+      const userErrorHandler = vi.fn();
+      render(DatePicker, {
+        datePickerType: "single",
+        value: "not-a-date",
+        flatpickrProps: { errorHandler: userErrorHandler },
+        onerror: errorHandler,
+      });
+
+      await vi.waitFor(() => expect(errorHandler).toHaveBeenCalledTimes(1));
+      expect(userErrorHandler).toHaveBeenCalledTimes(1);
+      expect(userErrorHandler.mock.lastCall?.[0]).toBeInstanceOf(Error);
+    });
+
+    it("dispatches once for an unparseable initial valueFrom in range mode", async () => {
+      const errorHandler = vi.fn();
+      render(DatePickerRange, {
+        valueFrom: "not-a-date",
+        valueTo: "",
+        onerror: errorHandler,
+      });
+
+      await vi.waitFor(() => expect(errorHandler).toHaveBeenCalledTimes(1));
+      expect(errorHandler.mock.lastCall?.[0]?.detail).toMatchObject({
+        value: "not-a-date",
+      });
+    });
+
+    it("uses the latest flatpickrProps.errorHandler after it changes", async () => {
+      const handlerA = vi.fn();
+      const handlerB = vi.fn();
+      let captured: Instance | null | undefined = null;
+      const { rerender } = render(DatePickerCalendar, {
+        datePickerType: "single",
+        flatpickrProps: { errorHandler: handlerA },
+        oncalendar: (cal: Instance | null | undefined) => {
+          captured = cal;
+        },
+      });
+
+      const instance = await vi.waitFor(() => {
+        if (!captured) throw new Error("calendar not set");
+        return captured;
+      });
+
+      await rerender({
+        datePickerType: "single",
+        flatpickrProps: { errorHandler: handlerB },
+        oncalendar: (cal: Instance | null | undefined) => {
+          captured = cal;
+        },
+      });
+      await tick();
+
+      instance.setDate("not-a-date", true);
+
+      expect(handlerA).not.toHaveBeenCalled();
+      expect(handlerB).toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe("bind:calendar", () => {
     it("is null in simple mode (no calendar is created)", async () => {
       let captured: unknown = "unset";

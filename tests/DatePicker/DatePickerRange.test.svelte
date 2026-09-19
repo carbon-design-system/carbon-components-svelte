@@ -5,9 +5,16 @@
   export let valueFrom = "";
   export let valueTo = "";
   export let readonly = false;
+  export let onerror: ((event: CustomEvent) => void) | undefined = undefined;
 </script>
 
-<DatePicker datePickerType="range" {valueFrom} {valueTo} on:change>
+<DatePicker
+  datePickerType="range"
+  {valueFrom}
+  {valueTo}
+  on:change
+  on:error={(e) => onerror?.(e)}
+>
   <DatePickerInput {readonly} labelText="Start date" placeholder="mm/dd/yyyy" />
   <DatePickerInput {readonly} labelText="End date" placeholder="mm/dd/yyyy" />
 </DatePicker>
