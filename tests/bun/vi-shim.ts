@@ -16,7 +16,7 @@ function spyOnAccessor(obj: object, prop: PropertyKey, kind: "get" | "set") {
   // descriptor lookup is frequently undefined — that's expected, not a bug.
   const ownDescriptor = Object.getOwnPropertyDescriptor(obj, prop);
   const original = ownDescriptor?.[kind];
-  let impl: ((...args: unknown[]) => unknown) | undefined = original as any;
+  let impl: ((...args: unknown[]) => unknown) | undefined = original;
 
   const mock = {
     mockReturnValue(value: unknown) {
@@ -32,7 +32,7 @@ function spyOnAccessor(obj: object, prop: PropertyKey, kind: "get" | "set") {
       // property we defined below (always configurable: true) just needs
       // removing so lookups fall through to the prototype chain again.
       if (ownDescriptor) Object.defineProperty(obj, prop, ownDescriptor);
-      else delete (obj as any)[prop];
+      else Reflect.deleteProperty(obj, prop);
       return mock;
     },
   };
@@ -40,8 +40,18 @@ function spyOnAccessor(obj: object, prop: PropertyKey, kind: "get" | "set") {
   Object.defineProperty(obj, prop, {
     configurable: true,
     enumerable: ownDescriptor?.enumerable ?? true,
-    get: kind === "get" ? function (this: unknown) { return impl?.call(this); } : ownDescriptor?.get,
-    set: kind === "set" ? function (this: unknown, v: unknown) { return impl?.call(this, v); } : ownDescriptor?.set,
+    get:
+      kind === "get"
+        ? function (this: unknown) {
+            return impl?.call(this);
+          }
+        : ownDescriptor?.get,
+    set:
+      kind === "set"
+        ? function (this: unknown, v: unknown) {
+            return impl?.call(this, v);
+          }
+        : ownDescriptor?.set,
   });
 
   return mock;
@@ -68,6 +78,7 @@ export const vi = Object.assign(bunVi, {
     let lastError: unknown;
     while (Date.now() - start < timeout) {
       try {
+        // biome-ignore lint/performance/noAwaitInLoops: retries sequentially until callback stops throwing, can't be parallelized
         return await callback();
       } catch (err) {
         lastError = err;
@@ -79,33 +90,41 @@ export const vi = Object.assign(bunVi, {
   stubGlobal(name: string, value: unknown) {
     if (!stubbedGlobals.has(name)) {
       stubbedGlobals.set(name, {
-        had: Object.prototype.hasOwnProperty.call(globalThis, name),
-        value: (globalThis as any)[name],
+        had: Object.hasOwn(globalThis, name),
+        value: Reflect.get(globalThis, name),
       });
     }
-    (globalThis as any)[name] = value;
+    Reflect.set(globalThis, name, value);
     // `window` is a separate jsdom object from globalThis in this setup, so
     // source code reading `window.sessionStorage` etc. needs the stub
     // mirrored there too. jsdom defines some of these as getter-only, so a
     // plain assignment throws — redefine the property instead. Some
     // properties (e.g. jsdom's self-referential `window.window`) are
     // non-configurable and can't be overridden at all — best-effort only.
-    const win = (globalThis as any).window;
+    const win = Reflect.get(globalThis, "window") as object | undefined;
     if (win && win !== globalThis) {
       try {
-        Object.defineProperty(win, name, { value, configurable: true, writable: true });
+        Object.defineProperty(win, name, {
+          value,
+          configurable: true,
+          writable: true,
+        });
       } catch {}
     }
     return bunVi;
   },
   unstubAllGlobals() {
     for (const [name, entry] of stubbedGlobals) {
-      if (entry.had) (globalThis as any)[name] = entry.value;
-      else delete (globalThis as any)[name];
-      const win = (globalThis as any).window;
+      if (entry.had) Reflect.set(globalThis, name, entry.value);
+      else Reflect.deleteProperty(globalThis, name);
+      const win = Reflect.get(globalThis, "window") as object | undefined;
       if (win && win !== globalThis) {
         try {
-          Object.defineProperty(win, name, { value: entry.value, configurable: true, writable: true });
+          Object.defineProperty(win, name, {
+            value: entry.value,
+            configurable: true,
+            writable: true,
+          });
         } catch {}
       }
     }
@@ -128,6 +147,6 @@ export const vi = Object.assign(bunVi, {
     console.warn("vi.resetModules() is a no-op under the bun:test shim");
   },
   setSystemTime(t?: number | Date) {
-    bunSetSystemTime(t as any);
+    bunSetSystemTime(t);
   },
 });

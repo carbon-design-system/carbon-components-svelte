@@ -1,6 +1,16 @@
 import "./svelte-plugin.ts";
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  test,
+} from "bun:test";
 import assert from "node:assert";
-import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, test } from "bun:test";
+// biome-ignore lint/performance/noNamespaceImport: expect.extend() needs the whole matcher set; this subpath has no default export
 import * as jestDomMatchers from "@testing-library/jest-dom/matchers";
 import { vi } from "./vi-shim.ts";
 
@@ -11,7 +21,10 @@ import { vi } from "./vi-shim.ts";
 expect.extend(jestDomMatchers as never);
 
 expect.extend({
-  toHaveBeenCalledExactlyOnceWith(received: { mock?: { calls: unknown[][] } }, ...expectedArgs: unknown[]) {
+  toHaveBeenCalledExactlyOnceWith(
+    received: { mock?: { calls: unknown[][] } },
+    ...expectedArgs: unknown[]
+  ) {
     const calls = received.mock?.calls ?? [];
     let pass = calls.length === 1;
     if (pass) {
@@ -32,39 +45,50 @@ expect.extend({
 
 // vitest's `expect.assert(condition)` is a type-narrowing runtime assertion —
 // equivalent to Node's `assert()`, just namespaced under `expect`.
-(expect as any).assert = (condition: unknown, message?: string) => {
+Reflect.set(expect, "assert", (condition: unknown, message?: string) => {
   if (!condition) throw new Error(message ?? "Assertion failed");
-};
+});
 
 // vitest's `expect.poll(callback, options).toBe(x)` retries `callback` (and
 // the matcher) until it passes or times out. Bun's `expect` has no `.poll`,
 // so proxy arbitrary matcher names onto a retry loop around a plain expect().
-(expect as any).poll = (callback: () => unknown, options?: { timeout?: number; interval?: number }) => {
-  const timeout = options?.timeout ?? 1000;
-  const interval = options?.interval ?? 50;
-  return new Proxy(
-    {},
-    {
-      get(_target, matcherName: string) {
-        return async (...args: unknown[]) => {
-          const start = Date.now();
-          let lastError: unknown;
-          while (Date.now() - start < timeout) {
-            try {
-              const value = await callback();
-              (expect(value) as any)[matcherName](...args);
-              return;
-            } catch (err) {
-              lastError = err;
-              await new Promise((r) => setTimeout(r, interval));
+Reflect.set(
+  expect,
+  "poll",
+  (
+    callback: () => unknown,
+    options?: { timeout?: number; interval?: number },
+  ) => {
+    const timeout = options?.timeout ?? 1000;
+    const interval = options?.interval ?? 50;
+    return new Proxy(
+      {},
+      {
+        get(_target, matcherName: string) {
+          return async (...args: unknown[]) => {
+            const start = Date.now();
+            let lastError: unknown;
+            while (Date.now() - start < timeout) {
+              try {
+                // biome-ignore lint/performance/noAwaitInLoops: retries sequentially until the matcher stops throwing, can't be parallelized
+                const value = await callback();
+                const matcher = Reflect.get(expect(value), matcherName) as (
+                  ...args: unknown[]
+                ) => unknown;
+                matcher(...args);
+                return;
+              } catch (err) {
+                lastError = err;
+                await new Promise((r) => setTimeout(r, interval));
+              }
             }
-          }
-          throw lastError;
-        };
+            throw lastError;
+          };
+        },
       },
-    },
-  );
-};
+    );
+  },
+);
 
 // NOTE: bun:test's `expectTypeOf` throws on chains vitest supports, e.g.
 // `.parameter(0).toEqualTypeOf<T>()`. Bun re-injects its own ambient
@@ -75,30 +99,35 @@ expect.extend({
 // separately via `svelte-check`/`tsgo`, so this is a redundant runtime
 // no-op check, not a coverage gap.
 
-// @ts-ignore
+// @ts-expect-error
 globalThis.describe = describe;
-// @ts-ignore
+// @ts-expect-error
 globalThis.it = it;
-// @ts-ignore
+// @ts-expect-error
 globalThis.test = test;
-// @ts-ignore
+// @ts-expect-error
 globalThis.expect = expect;
-// @ts-ignore
+// @ts-expect-error
 globalThis.vi = vi;
-// @ts-ignore
+// @ts-expect-error
 globalThis.beforeEach = beforeEach;
-// @ts-ignore
+// @ts-expect-error
 globalThis.afterEach = afterEach;
-// @ts-ignore
+// @ts-expect-error
 globalThis.beforeAll = beforeAll;
-// @ts-ignore
+// @ts-expect-error
 globalThis.afterAll = afterAll;
 // vitest re-exports chai's `assert`, which has extra methods (e.g.
 // `instanceOf`) beyond node:assert's core API — patch on what's used.
-(assert as any).instanceOf = (obj: unknown, cls: new (...args: never[]) => unknown, message?: string) => {
-  if (!(obj instanceof cls)) throw new Error(message ?? `expected instance of ${cls.name}`);
-};
-// @ts-ignore
+Reflect.set(
+  assert,
+  "instanceOf",
+  (obj: unknown, cls: new (...args: never[]) => unknown, message?: string) => {
+    if (!(obj instanceof cls))
+      throw new Error(message ?? `expected instance of ${cls.name}`);
+  },
+);
+// @ts-expect-error
 globalThis.assert = assert;
 
 await import("../utils/setup-globals.ts");

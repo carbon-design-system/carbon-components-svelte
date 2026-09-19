@@ -37,13 +37,13 @@ for (const key of Object.getOwnPropertyNames(dom.window)) {
   if (skip.has(key)) continue;
   if (key.startsWith("webkit") || key.startsWith("on")) continue;
   try {
-    // @ts-ignore
+    // @ts-expect-error
     globalThis[key] = dom.window[key];
   } catch {}
 }
-// @ts-ignore
+// @ts-expect-error
 globalThis.window = dom.window;
-// @ts-ignore
+// @ts-expect-error
 globalThis.document = dom.window.document;
-// @ts-ignore
+// @ts-expect-error
 globalThis.navigator = dom.window.navigator;
