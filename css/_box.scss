@@ -139,6 +139,22 @@
   .#{$prefix}--box-display-grid {
     display: grid;
   }
+
+  .#{$prefix}--box-overflow-visible {
+    overflow: visible;
+  }
+
+  .#{$prefix}--box-overflow-hidden {
+    overflow: hidden;
+  }
+
+  .#{$prefix}--box-overflow-auto {
+    overflow: auto;
+  }
+
+  .#{$prefix}--box-overflow-scroll {
+    overflow: scroll;
+  }
 }
 
 @include exports("box") {

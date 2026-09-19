@@ -82,6 +82,14 @@ describe("Box", () => {
     );
   });
 
+  it("applies the overflow utility class", () => {
+    render(Box);
+
+    expect(screen.getByText("Auto overflow")).toHaveClass(
+      "bx--box-overflow-auto",
+    );
+  });
+
   it("applies spacing scale classes", () => {
     render(Box);
 
