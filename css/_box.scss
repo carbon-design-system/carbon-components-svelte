@@ -35,6 +35,10 @@
     }
   }
 
+  .#{$prefix}--box-border-style-dashed {
+    border-style: dashed;
+  }
+
   @each $step, $size in $ccs-spacing-scale {
     .#{$prefix}--box-p-#{$step} {
       padding: $size;

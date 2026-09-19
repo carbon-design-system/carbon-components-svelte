@@ -56,6 +56,12 @@
   export let border = undefined;
 
   /**
+   * Set the border style. Only takes effect when `border` is set.
+   * @type {"solid" | "dashed"}
+   */
+  export let borderStyle = "solid";
+
+  /**
    * Set the width. Numbers are treated as pixels; strings accept any CSS length.
    * @type {number | string | undefined}
    */
@@ -189,6 +195,7 @@
   $: boxClass = [
     fill && `bx--box-fill-${fill}`,
     border && `bx--box-border-${border}`,
+    border && borderStyle === "dashed" && "bx--box-border-style-dashed",
     spacingClass("p", padding),
     spacingClass("px", paddingX),
     spacingClass("py", paddingY),

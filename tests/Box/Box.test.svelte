@@ -5,6 +5,8 @@
 <Box>Default box</Box>
 <Box tag="section" fill="layer-01">Layer fill</Box>
 <Box fill="background" border="subtle">Fill and border</Box>
+<Box border="strong" borderStyle="dashed">Dashed border</Box>
+<Box borderStyle="dashed">No border, dashed style</Box>
 <Box padding={5}>Padding scale</Box>
 <Box padding="1.5rem">Custom padding</Box>
 <Box paddingX={3} paddingY={5}>Axis padding</Box>

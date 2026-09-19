@@ -45,6 +45,18 @@ describe("Box", () => {
     );
   });
 
+  it("applies dashed border style only when a border token is set", () => {
+    render(Box);
+
+    expect(screen.getByText("Dashed border")).toHaveClass(
+      "bx--box-border-strong",
+      "bx--box-border-style-dashed",
+    );
+    expect(screen.getByText("No border, dashed style")).not.toHaveClass(
+      "bx--box-border-style-dashed",
+    );
+  });
+
   it("applies spacing scale classes", () => {
     render(Box);
 
