@@ -643,6 +643,23 @@ describe("DatePicker", () => {
       expect(calendar.querySelectorAll(".flatpickr-month").length).toBe(2);
     });
 
+    it("ignores the unsupported wrap option instead of crashing", async () => {
+      const consoleError = vi
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
+      render(DatePicker, {
+        datePickerType: "single",
+        flatpickrProps: { wrap: true },
+      });
+
+      await user.click(screen.getByLabelText("Date"));
+      expect(
+        await screen.findByLabelText("calendar-container"),
+      ).toBeInTheDocument();
+      expect(consoleError).not.toHaveBeenCalled();
+      consoleError.mockRestore();
+    });
+
     it("keeps the calendar open after selecting a date when closeOnSelect is false", async () => {
       render(DatePicker, {
         datePickerType: "single",
