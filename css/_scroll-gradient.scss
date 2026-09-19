@@ -122,4 +122,6 @@
   }
 }
 
-@include scroll-gradient;
+@include exports("scroll-gradient") {
+  @include scroll-gradient;
+}

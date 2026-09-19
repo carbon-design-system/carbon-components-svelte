@@ -21,7 +21,7 @@
     --cds-popover-caret-offset: 1rem;
 
     position: absolute;
-    z-index: z('floating');
+    z-index: z("floating");
     display: none;
   }
 
@@ -32,7 +32,7 @@
   .#{$prefix}--popover::before {
     position: absolute;
     display: block;
-    content: '';
+    content: "";
   }
 
   .#{$prefix}--popover--open {
@@ -70,7 +70,7 @@
     width: rem(8px);
     height: rem(8px);
     background-color: inherit;
-    content: '';
+    content: "";
   }
 
   .#{$prefix}--popover--caret .#{$prefix}--popover-contents::before {
@@ -286,6 +286,6 @@
   }
 }
 
-@include exports('popover') {
+@include exports("popover") {
   @include popover;
 }
