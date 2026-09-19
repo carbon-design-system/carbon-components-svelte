@@ -224,6 +224,12 @@ describe("css partial conventions", () => {
     expect(unguarded).toEqual([]);
   });
 
+  it("reads theme tokens through Sass, not var() with a literal fallback", () => {
+    // Static theme sheets declare no custom properties, so a hand-written
+    // `var(--cds-shadow, rgba(...))` renders the light fallback in g100.
+    expect(offenders(/var\(--cds-[\w-]+,\s*(rgba?\(|#[0-9a-f])/i)).toEqual([]);
+  });
+
   it("avoids :has(), which is newer than the browser baseline", () => {
     expect(offenders(/:has\(/)).toEqual([]);
   });
