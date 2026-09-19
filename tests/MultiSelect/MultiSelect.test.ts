@@ -64,6 +64,63 @@ describe("MultiSelect", () => {
     );
   });
 
+  it("selects the full filter value on focus when selectTextOnFocus is true", async () => {
+    render(MultiSelectReal, {
+      props: {
+        items: [],
+        filterable: true,
+        selectTextOnFocus: true,
+        value: "Slack",
+      },
+    });
+
+    const input = screen.getByRole("combobox") as HTMLInputElement;
+    await user.click(input);
+    await tick();
+
+    expect(input.selectionStart).toBe(0);
+    expect(input.selectionEnd).toBe("Slack".length);
+  });
+
+  it("does not select all filter text on focus when selectTextOnFocus is false (default)", async () => {
+    render(MultiSelectReal, {
+      props: { items: [], filterable: true, value: "Slack" },
+    });
+
+    const input = screen.getByRole("combobox") as HTMLInputElement;
+    await user.click(input);
+    await tick();
+
+    expect(input.selectionStart).toBe(input.selectionEnd);
+  });
+
+  it("does not select text on focus when disabled", async () => {
+    render(MultiSelectReal, {
+      props: {
+        items: [],
+        filterable: true,
+        selectTextOnFocus: true,
+        disabled: true,
+        value: "Slack",
+      },
+    });
+
+    const input = screen.getByRole("combobox") as HTMLInputElement;
+    const select = vi.spyOn(input, "select");
+    await fireEvent.focus(input);
+
+    expect(select).not.toHaveBeenCalled();
+  });
+
+  it("does not apply selectTextOnFocus when filterable is false", () => {
+    render(MultiSelectReal, {
+      props: { items: [], filterable: false, selectTextOnFocus: true },
+    });
+
+    const field = screen.getByRole("combobox");
+    expect(field.tagName).not.toBe("INPUT");
+  });
+
   it("forwards a maxlength attribute to the filterable input via restProps", () => {
     render(MultiSelectReal, {
       props: { items: [], filterable: true, maxlength: 10 },

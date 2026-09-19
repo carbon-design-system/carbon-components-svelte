@@ -108,6 +108,12 @@
   };
 
   /**
+   * Set to `true` to select all text in the filter input when it receives
+   * focus (e.g. on tab or click). Only applies when `filterable` is `true`.
+   */
+  export let selectTextOnFocus = false;
+
+  /**
    * Set to `true` to open the dropdown.
    * @bindable writable
    */
@@ -1148,6 +1154,9 @@
             on:focus
             on:focus={() => {
             fieldFocused = true;
+            if (selectTextOnFocus && !disabled) {
+              tick().then(() => inputRef?.select());
+            }
           }}
             on:blur
             on:blur={() => {
