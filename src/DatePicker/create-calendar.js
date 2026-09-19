@@ -306,6 +306,9 @@ export async function createCalendar({ options, base, input, dispatch }) {
         ? options.mode
         : "single",
     locale: resolveLocale(options.locale),
+    // `wrap` expects `base` to be a wrapper holding a `[data-input]` child.
+    // Carbon always passes the input itself, so flatpickr would throw.
+    wrap: false,
     onDayCreate: [
       markDisabledDayAriaState,
       ...(Array.isArray(userOnDayCreate)

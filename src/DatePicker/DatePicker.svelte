@@ -577,6 +577,8 @@
         // (see below); re-applying the default `flatpickrProps.static`
         // here would clobber that on every reactive re-run.
         if (option === "static" && effectivePortalMenu) continue;
+        // Unsupported: see `wrap` in create-calendar.js.
+        if (option === "wrap") continue;
         applyOptionIfChanged(option, value);
       }
       return;
