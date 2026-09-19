@@ -868,6 +868,25 @@ describe("DatePicker", () => {
       expect(calendar).not.toHaveClass("open");
     });
 
+    it("abbreviates the month label when shorthandCurrentMonth is set", async () => {
+      render(DatePicker, {
+        datePickerType: "single",
+        value: "09/15/2024",
+        flatpickrProps: { shorthandCurrentMonth: true },
+      });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+      const month = calendar.querySelector(".cur-month");
+      expect(month).toHaveTextContent(/^Sep$/);
+
+      // The label is rewritten on month change as well as on open.
+      const next = calendar.querySelector<HTMLElement>(".flatpickr-next-month");
+      assert(next);
+      await user.click(next);
+      expect(calendar.querySelector(".cur-month")).toHaveTextContent(/^Oct$/);
+    });
+
     it("keeps the calendar open after selecting a date when closeOnSelect is false", async () => {
       render(DatePicker, {
         datePickerType: "single",
