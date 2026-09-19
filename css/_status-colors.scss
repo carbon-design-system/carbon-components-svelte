@@ -1,0 +1,26 @@
+// Status palette shared by the indicator partials. Emits no CSS.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/functions";
+
+/// v10 has no reactive per-theme status tokens, so status colors come from
+/// the static Carbon palette with a light/dark branch. With custom properties
+/// enabled (all.css) the light values are emitted and the partials re-scope
+/// the dark ones under `[theme]`.
+/// @access private
+/// @group components
+/// @return {Map} red, purple, green, blue and gray for the compiled theme
+@function ccs-status-colors() {
+  $is-light-theme: true;
+  @if not feature-flag-enabled("enable-css-custom-properties") {
+    $is-light-theme: lightness($ui-background) > 50%;
+  }
+
+  @return (
+    red: if($is-light-theme, $carbon--red-60, $carbon--red-50),
+    purple: if($is-light-theme, $carbon--purple-60, $carbon--purple-50),
+    green: if($is-light-theme, $carbon--green-50, $carbon--green-40),
+    blue: if($is-light-theme, $carbon--blue-70, $carbon--blue-50),
+    gray: if($is-light-theme, $carbon--gray-60, $carbon--gray-50)
+  );
+}
