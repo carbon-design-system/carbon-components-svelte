@@ -34,6 +34,7 @@ export function resolveLocale(locale) {
  * Matches flatpickr's Instance where some elements may be optional.
  * @typedef {{
  *   calendarContainer: HTMLElement;
+ *   input: HTMLInputElement;
  *   days: HTMLElement;
  *   daysContainer?: HTMLElement;
  *   weekdayContainer: HTMLElement;
@@ -239,6 +240,20 @@ export async function createCalendar({ options, base, input, dispatch }) {
 
   const userOnDayCreate = options.onDayCreate;
 
+  /** @param {FlatpickrInstance} instance */
+  function applyCarbonMarkup(instance) {
+    updateClasses(instance, {
+      isMonth: options.mode === "month",
+      isYear: options.mode === "year",
+    });
+    if (options.mode !== "month" && options.mode !== "year") {
+      updateMonthNode(instance, options.locale);
+    }
+    if (options.mode === "month") {
+      markTodayMonth(instance);
+    }
+  }
+
   const config = {
     allowInput: true,
     disableMobile: true,
@@ -278,22 +293,27 @@ export async function createCalendar({ options, base, input, dispatch }) {
         markTodayMonth(instance);
       }
     },
+    onReady: (
+      /** @type {any} */ _s,
+      /** @type {any} */ _d,
+      /** @type {FlatpickrInstance} */ instance,
+    ) => {
+      // An `inline` calendar is always visible and never fires `onOpen`.
+      if (!options.inline) return;
+      applyCarbonMarkup(instance);
+      // flatpickr mounts it next to the input, inside the wrapper whose
+      // height vertically centers the calendar icon. Move it just below.
+      instance.input
+        .closest(".bx--date-picker-input__wrapper")
+        ?.after(instance.calendarContainer);
+    },
     onOpen: (
       /** @type {any} */ _s,
       /** @type {any} */ _d,
       /** @type {FlatpickrInstance} */ instance,
     ) => {
       dispatch("open");
-      updateClasses(instance, {
-        isMonth: options.mode === "month",
-        isYear: options.mode === "year",
-      });
-      if (options.mode !== "month" && options.mode !== "year") {
-        updateMonthNode(instance, options.locale);
-      }
-      if (options.mode === "month") {
-        markTodayMonth(instance);
-      }
+      applyCarbonMarkup(instance);
     },
     ...options,
     // `options.mode` also carries Carbon's "month"/"year" datePickerType,
@@ -311,6 +331,11 @@ export async function createCalendar({ options, base, input, dispatch }) {
     wrap: false,
     onDayCreate: [
       markDisabledDayAriaState,
+      // Days are rebuilt on every redraw (month change, `set`), not only on
+      // open, so class them as they are created.
+      (_dObj, _dStr, _fp, /** @type {HTMLElement} */ dayElem) => {
+        dayElem.classList.add("bx--date-picker__day");
+      },
       ...(Array.isArray(userOnDayCreate)
         ? userOnDayCreate
         : userOnDayCreate

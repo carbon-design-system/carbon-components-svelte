@@ -750,6 +750,30 @@ describe("DatePicker", () => {
       expect(calendar.querySelector(".cur-month")).toHaveTextContent("March");
     });
 
+    it("applies Carbon classes to an inline calendar that never opens", async () => {
+      render(DatePicker, {
+        datePickerType: "single",
+        flatpickrProps: { inline: true },
+      });
+
+      const calendar = await screen.findByLabelText("calendar-container");
+      expect(calendar).toHaveClass("inline", "bx--date-picker__calendar");
+      expect(calendar.querySelector(".flatpickr-day")).toHaveClass(
+        "bx--date-picker__day",
+      );
+      // Inside the input wrapper it would stretch the box that vertically
+      // centers the calendar icon.
+      expect(calendar.closest(".bx--date-picker-input__wrapper")).toBeNull();
+      expect(calendar.previousElementSibling).toHaveClass(
+        "bx--date-picker-input__wrapper",
+      );
+      // The month dropdown is replaced by Carbon's static label.
+      expect(calendar.querySelector(".cur-month")).toBeInTheDocument();
+      expect(
+        calendar.querySelector(".flatpickr-monthDropdown-months"),
+      ).not.toBeInTheDocument();
+    });
+
     it("keeps the calendar open after selecting a date when closeOnSelect is false", async () => {
       render(DatePicker, {
         datePickerType: "single",
