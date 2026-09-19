@@ -112,6 +112,12 @@ Set `tooltipAlignment` to align the tooltip relative to the button.
 <CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" iconDescription="Center" tooltipAlignment="center" />
 <CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" iconDescription="End" tooltipAlignment="end" />
 
+### Delay
+
+Set `enterDelayMs` to change how long the pointer must hover before the tooltip appears. Defaults to `100`. Set `leaveDelayMs` to change how long the tooltip stays open after the pointer leaves. Defaults to `300`. Moving directly from another open icon tooltip skips `enterDelayMs`.
+
+<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" iconDescription="Slow to appear" enterDelayMs={1000} />
+
 ## Portal tooltip
 
 The "Copied!" feedback tooltip is rendered in a floating portal by default, so it shares the same surface as the hover tooltip (the text swaps in place) and is never clipped by an `overflow: hidden` container. Set `portalTooltip` to `false` to use Carbon's inline feedback caret instead. A non-default `tooltipPosition` or `tooltipAlignment` is always portalled because the inline caret only supports the default placement.

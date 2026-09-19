@@ -77,6 +77,21 @@
    */
   export let tooltipAlignment = "center";
 
+  /**
+   * Specify the duration in milliseconds to delay before showing the
+   * hover/focus tooltip. Skipped when a neighboring icon tooltip is already
+   * open, so moving between adjacent buttons feels instant.
+   * @type {number}
+   */
+  export let enterDelayMs = 100;
+
+  /**
+   * Specify the duration in milliseconds to delay before hiding the
+   * hover/focus tooltip after the pointer leaves or focus moves away.
+   * @type {number}
+   */
+  export let leaveDelayMs = 300;
+
   /** Obtain a reference to the underlying button element. */
   export let ref = null;
 
@@ -88,6 +103,7 @@
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
   import { createCopyFeedbackState } from "../utils/copy-feedback.js";
+  import { createDelayedSetter } from "../utils/delayed-setter.js";
   import { noop } from "../utils/noop.js";
 
   const dispatch = createEventDispatcher();
@@ -117,13 +133,11 @@
   // Proactive hover/focus tooltip. Reuses the floating-portal `PortalTooltip`
   // and the shared `activeButtonTooltip` store, so a CopyButton coordinates
   // with adjacent icon-only Buttons (warm handoff, no overlapping tooltips).
-  // Mirrors Button's portal-tooltip timing.
+  // Mirrors `Tooltip`'s configurable enter/leave delay.
   const tooltipId = {};
-  const ENTER_DELAY_MS = 100;
-  const LEAVE_DELAY_MS = 300;
   let hovered = false;
   let focused = false;
-  let tooltipTimeout;
+  const scheduleTooltip = createDelayedSetter();
 
   // Feedback shares the proactive tooltip's portal surface whenever the tooltip
   // is portalled OR a non-default position/alignment is set, so the "Copied!"
@@ -155,27 +169,22 @@
   }
 
   function handleTooltipMouseEnter() {
-    clearTimeout(tooltipTimeout);
     // Skip the enter delay when another icon tooltip is already open so moving
     // between adjacent buttons feels instant.
     const warmHandoff =
       get(activeButtonTooltip) !== null &&
       get(activeButtonTooltip) !== tooltipId;
-    tooltipTimeout = setTimeout(
-      () => {
-        hovered = true;
-        claimTooltip();
-      },
-      warmHandoff ? 0 : ENTER_DELAY_MS,
-    );
+    scheduleTooltip(warmHandoff ? 0 : enterDelayMs, () => {
+      hovered = true;
+      claimTooltip();
+    });
   }
 
   function handleTooltipMouseLeave() {
-    clearTimeout(tooltipTimeout);
-    tooltipTimeout = setTimeout(() => {
+    scheduleTooltip(leaveDelayMs, () => {
       hovered = false;
       if (!focused) releaseTooltip();
-    }, LEAVE_DELAY_MS);
+    });
   }
 
   function handleTooltipFocus() {
@@ -189,7 +198,7 @@
   }
 
   function dismissTooltip() {
-    clearTimeout(tooltipTimeout);
+    scheduleTooltip.cancel();
     hovered = false;
     focused = false;
     releaseTooltip();
@@ -216,7 +225,7 @@
     return () => {
       copyFeedback.cleanup();
       disconnectModalObserver();
-      clearTimeout(tooltipTimeout);
+      scheduleTooltip.cancel();
       releaseTooltip();
     };
   });

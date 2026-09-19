@@ -230,6 +230,307 @@ describe("CopyInput", () => {
     });
   });
 
+  describe("reveal toggle", () => {
+    it("renders a toggle that reveals and re-obscures the value", async () => {
+      render(CopyInput, { props: { type: "password", revealMode: "toggle" } });
+
+      const input = screen.getByLabelText("API token") as HTMLInputElement;
+      const fieldWrapper = input.closest(".bx--copy-input__field-wrapper");
+      expect(fieldWrapper).toHaveClass("bx--copy-input__field-wrapper--toggle");
+      expect(input).toHaveAttribute("type", "password");
+
+      const toggle = screen.getByRole("button", { name: "Show value" });
+      expect(toggle).toHaveAttribute("aria-pressed", "false");
+
+      await user.click(toggle);
+      expect(input).toHaveAttribute("type", "text");
+      expect(
+        screen.getByRole("button", { name: "Hide value" }),
+      ).toHaveAttribute("aria-pressed", "true");
+      expect(screen.getByText("Revealed: true")).toBeInTheDocument();
+
+      await user.click(screen.getByRole("button", { name: "Hide value" }));
+      expect(input).toHaveAttribute("type", "password");
+      expect(screen.getByText("Revealed: false")).toBeInTheDocument();
+    });
+
+    it("supports custom showValueLabel and hideValueLabel", async () => {
+      render(CopyInput, {
+        props: {
+          type: "password",
+          revealMode: "toggle",
+          showValueLabel: "Reveal",
+          hideValueLabel: "Conceal",
+        },
+      });
+
+      const toggle = screen.getByRole("button", { name: "Reveal" });
+      await user.click(toggle);
+
+      expect(
+        screen.getByRole("button", { name: "Conceal" }),
+      ).toBeInTheDocument();
+    });
+
+    it("does not render the toggle for text type", () => {
+      render(CopyInput, { props: { type: "text", revealMode: "toggle" } });
+      expect(
+        screen.queryByRole("button", { name: "Show value" }),
+      ).not.toBeInTheDocument();
+    });
+
+    it("does not render the toggle when revealMode is focus", () => {
+      render(CopyInput, { props: { type: "password", revealMode: "focus" } });
+      expect(
+        screen.queryByRole("button", { name: "Show value" }),
+      ).not.toBeInTheDocument();
+    });
+
+    it("does not render the toggle when revealMode is unset", () => {
+      render(CopyInput, { props: { type: "password" } });
+      expect(
+        screen.queryByRole("button", { name: "Show value" }),
+      ).not.toBeInTheDocument();
+      expect(
+        document.querySelector(".bx--copy-input__field-wrapper--toggle"),
+      ).not.toBeInTheDocument();
+    });
+
+    it("disables the toggle when disabled", () => {
+      render(CopyInput, {
+        props: { type: "password", revealMode: "toggle", disabled: true },
+      });
+
+      expect(screen.getByRole("button", { name: "Show value" })).toBeDisabled();
+    });
+
+    it("still reveals on focus when revealMode is focus (regression)", async () => {
+      render(CopyInput, { props: { type: "password", revealMode: "focus" } });
+
+      const input = screen.getByLabelText("API token") as HTMLInputElement;
+      await fireEvent.focus(input);
+
+      expect(input).toHaveAttribute("type", "text");
+      expect(screen.getByText("Revealed: true")).toBeInTheDocument();
+    });
+
+    it("swaps tooltips instantly when the pointer moves between the copy button and the toggle", async () => {
+      vi.useFakeTimers();
+      try {
+        render(CopyInput, {
+          props: { type: "password", revealMode: "toggle" },
+        });
+
+        const copyButton = screen.getByRole("button", {
+          name: "Copy to clipboard",
+        });
+        const toggle = screen.getByRole("button", { name: "Show value" });
+
+        await fireEvent.mouseEnter(copyButton);
+        await vi.advanceTimersByTimeAsync(120);
+        expect(
+          document.querySelectorAll(".bx--tooltip-portal__content"),
+        ).toHaveLength(1);
+        expect(
+          document.querySelector(".bx--tooltip-portal__content"),
+        ).toHaveTextContent("Copy to clipboard");
+
+        // Moving to the toggle reveals it immediately and closes the copy
+        // button's tooltip, instead of waiting out its leave delay.
+        await fireEvent.mouseLeave(copyButton);
+        await fireEvent.mouseEnter(toggle);
+        await vi.advanceTimersByTimeAsync(0);
+
+        const tooltips = document.querySelectorAll(
+          ".bx--tooltip-portal__content",
+        );
+        expect(tooltips).toHaveLength(1);
+        expect(tooltips[0]).toHaveTextContent("Show value");
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+
+    it("swaps tooltips instantly when the pointer moves from the toggle to the copy button", async () => {
+      vi.useFakeTimers();
+      try {
+        render(CopyInput, {
+          props: { type: "password", revealMode: "toggle" },
+        });
+
+        const copyButton = screen.getByRole("button", {
+          name: "Copy to clipboard",
+        });
+        const toggle = screen.getByRole("button", { name: "Show value" });
+
+        await fireEvent.mouseEnter(toggle);
+        await vi.advanceTimersByTimeAsync(120);
+        expect(
+          document.querySelectorAll(".bx--tooltip-portal__content"),
+        ).toHaveLength(1);
+        expect(
+          document.querySelector(".bx--tooltip-portal__content"),
+        ).toHaveTextContent("Show value");
+
+        // Moving to the copy button reveals it immediately and closes the
+        // toggle's tooltip, instead of it lingering through its own leave
+        // delay after the pointer has already left.
+        await fireEvent.mouseLeave(toggle);
+        await fireEvent.mouseEnter(copyButton);
+        await vi.advanceTimersByTimeAsync(0);
+
+        const tooltips = document.querySelectorAll(
+          ".bx--tooltip-portal__content",
+        );
+        expect(tooltips).toHaveLength(1);
+        expect(tooltips[0]).toHaveTextContent("Copy to clipboard");
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+
+    describe("hover tooltip delay", () => {
+      beforeEach(() => {
+        vi.useFakeTimers();
+      });
+
+      afterEach(() => {
+        vi.useRealTimers();
+      });
+
+      it("waits enterDelayMs (default 100ms) before showing the toggle's tooltip", async () => {
+        render(CopyInput, {
+          props: { type: "password", revealMode: "toggle" },
+        });
+
+        const toggle = screen.getByRole("button", { name: "Show value" });
+        await fireEvent.mouseEnter(toggle);
+        expect(
+          document.querySelector(".bx--tooltip-portal__content"),
+        ).toBeNull();
+
+        await vi.advanceTimersByTimeAsync(100);
+        expect(
+          document.querySelector(".bx--tooltip-portal__content"),
+        ).toHaveTextContent("Show value");
+      });
+
+      it("supports custom enterDelayMs and leaveDelayMs on the toggle", async () => {
+        render(CopyInput, {
+          props: {
+            type: "password",
+            revealMode: "toggle",
+            enterDelayMs: 500,
+            leaveDelayMs: 500,
+          },
+        });
+
+        const toggle = screen.getByRole("button", { name: "Show value" });
+        await fireEvent.mouseEnter(toggle);
+        await vi.advanceTimersByTimeAsync(100);
+        expect(
+          document.querySelector(".bx--tooltip-portal__content"),
+        ).toBeNull();
+
+        await vi.advanceTimersByTimeAsync(400);
+        expect(
+          document.querySelector(".bx--tooltip-portal__content"),
+        ).toHaveTextContent("Show value");
+
+        await fireEvent.mouseLeave(toggle);
+        await vi.advanceTimersByTimeAsync(300);
+        expect(
+          document.querySelector(".bx--tooltip-portal__content"),
+        ).toBeInTheDocument();
+
+        await vi.advanceTimersByTimeAsync(200);
+        expect(
+          document.querySelector(".bx--tooltip-portal__content"),
+        ).toBeNull();
+      });
+    });
+  });
+
+  describe("revealTimeout", () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it("re-obscures the value after revealTimeout elapses", async () => {
+      render(CopyInput, {
+        props: { type: "password", revealMode: "toggle", revealTimeout: 100 },
+      });
+
+      const toggle = screen.getByRole("button", { name: "Show value" });
+      await fireEvent.click(toggle);
+      expect(
+        screen.getByRole("button", { name: "Hide value" }),
+      ).toHaveAttribute("aria-pressed", "true");
+
+      await vi.advanceTimersByTimeAsync(100);
+
+      const toggleAfter = screen.getByRole("button", { name: "Show value" });
+      expect(toggleAfter).toHaveAttribute("aria-pressed", "false");
+    });
+
+    it("clears the timeout when hidden manually before it elapses", async () => {
+      render(CopyInput, {
+        props: { type: "password", revealMode: "toggle", revealTimeout: 100 },
+      });
+
+      await fireEvent.click(screen.getByRole("button", { name: "Show value" }));
+      await fireEvent.click(screen.getByRole("button", { name: "Hide value" }));
+
+      await vi.advanceTimersByTimeAsync(100);
+
+      expect(
+        screen.getByRole("button", { name: "Show value" }),
+      ).toHaveAttribute("aria-pressed", "false");
+    });
+
+    it("obscures the value when revealMode switches away from toggle while revealed", async () => {
+      const { rerender } = render(CopyInput, {
+        props: { type: "password", revealMode: "toggle" },
+      });
+
+      await fireEvent.click(screen.getByRole("button", { name: "Show value" }));
+      expect(screen.getByText("Revealed: true")).toBeInTheDocument();
+
+      await rerender({
+        type: "password",
+        revealMode: "focus",
+      });
+
+      expect(screen.getByText("Revealed: false")).toBeInTheDocument();
+    });
+  });
+
+  describe("copyButtonVisibility", () => {
+    it("hides the copy button until hover or focus when set to hover-focus", () => {
+      render(CopyInput, { props: { copyButtonVisibility: "hover-focus" } });
+
+      const button = screen.getByRole("button", { name: "Copy to clipboard" });
+      const fieldWrapper = button.closest(".bx--copy-input__field-wrapper");
+      expect(fieldWrapper).toHaveClass(
+        "bx--copy-input__field-wrapper--copy-on-hover",
+      );
+      expect(button).toBeInTheDocument();
+    });
+
+    it("does not add the copy-on-hover class by default", () => {
+      render(CopyInput);
+
+      const button = screen.getByRole("button", { name: "Copy to clipboard" });
+      expect(button.closest(".bx--copy-input__field-wrapper")).not.toHaveClass(
+        "bx--copy-input__field-wrapper--copy-on-hover",
+      );
+    });
+  });
+
   describe("fluid variant", () => {
     it("does not render fluid classes by default", () => {
       render(CopyInput);

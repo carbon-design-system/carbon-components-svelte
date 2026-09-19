@@ -49,13 +49,49 @@ Set `type` to `"password"` to obscure the value. By default the value stays obsc
 
 <CopyInput labelText="API token" type="password" value="sk-1234567890abcdef" />
 
-Set `revealMode` to opt into revealing the value on interaction. Use `"focus"` to reveal while the input is focused.
+Set `revealMode` to opt into revealing the value on interaction.
+
+### Reveal on focus
+
+Use `"focus"` to reveal while the input is focused.
 
 <CopyInput labelText="API token" type="password" revealMode="focus" value="sk-1234567890abcdef" />
+
+### Reveal on hover or focus
 
 Use `"hover-focus"` to reveal while the input is hovered or focused.
 
 <CopyInput labelText="API token" type="password" revealMode="hover-focus" value="sk-1234567890abcdef" />
+
+### Reveal toggle
+
+Use `"toggle"` to render a show/hide button between the field and the copy button. The value stays revealed until the button is clicked again.
+
+<CopyInput labelText="API token" type="password" revealMode="toggle" value="sk-1234567890abcdef" />
+
+### Toggle labels
+
+Set `showValueLabel` to change the toggle button's label and tooltip while the value is obscured.
+
+Set `hideValueLabel` to change the toggle button's label and tooltip while the value is revealed.
+
+### Reveal timeout
+
+Set `revealTimeout` to re-obscure a toggled value automatically, in milliseconds. It applies only to `revealMode="toggle"`.
+
+<CopyInput labelText="API token" type="password" revealMode="toggle" revealTimeout={5000} value="sk-1234567890abcdef" />
+
+### Revealed state
+
+Bind to `revealed` to read whether the value currently renders as text, in any reveal mode.
+
+<FileSource src="/framed/CopyInput/CopyInputRevealed" />
+
+## Copy button visibility
+
+Set `copyButtonVisibility` to `"hover-focus"` to fade the copy button in only while the field is hovered or has focus within. Keyboard focus and the copy feedback keep the button visible.
+
+<CopyInput labelText="API token" copyButtonVisibility="hover-focus" value="sk-1234567890abcdef" />
 
 ## Truncation
 
@@ -162,6 +198,12 @@ Set `tooltipAlignment` to align the tooltip relative to the copy button. Accepts
 
 <CopyInput labelText="API endpoint" value="https://api.acme.io/v1" tooltipAlignment="end" />
 
+### Delay
+
+Set `enterDelayMs` to change how long the pointer must hover before a tooltip appears. Defaults to `100`. Set `leaveDelayMs` to change how long a tooltip stays open after the pointer leaves. Defaults to `300`. Both apply to the copy button's tooltip and, when `revealMode` is `"toggle"`, the reveal toggle's tooltip. Moving directly between the two skips `enterDelayMs`.
+
+<CopyInput labelText="API endpoint" value="https://api.acme.io/v1" enterDelayMs={1000} />
+
 ## Portal tooltip
 
 The copy feedback tooltip is rendered in a floating portal by default, so it shares the same surface as the hover tooltip (the text swaps in place) and is never clipped by an `overflow: hidden` container. Set `portalTooltip` to `false` to use Carbon's inline feedback caret instead. A non-default `tooltipPosition` or `tooltipAlignment` is always portalled because the inline caret only supports the default placement.
@@ -198,6 +240,12 @@ tooltip icon.
 ### Disabled
 
 <CopyInput fluid disabled labelText="API token" value="sk-1234567890abcdef" />
+
+### Reveal toggle
+
+The reveal toggle positions itself correctly in the fluid variant.
+
+<CopyInput fluid labelText="API token" type="password" revealMode="toggle" value="sk-1234567890abcdef" />
 
 ### Skeleton
 
