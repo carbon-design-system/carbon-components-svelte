@@ -289,6 +289,36 @@ describe("DatePicker", () => {
     });
   });
 
+  it("keeps a consumer allowInput: false across mount and readonly toggles", async () => {
+    const props: ComponentProps<typeof DatePicker> = {
+      datePickerType: "single",
+      flatpickrProps: { allowInput: false, clickOpens: false },
+    };
+    const { rerender } = render(DatePicker, props);
+
+    const input = screen.getByLabelText("Date") as HTMLInputElement;
+    await vi.waitFor(() =>
+      expect(
+        (input as unknown as { _flatpickr?: unknown })._flatpickr,
+      ).toBeDefined(),
+    );
+    await tick();
+    const fp = (
+      input as unknown as {
+        _flatpickr: { config: { allowInput: boolean; clickOpens: boolean } };
+      }
+    )._flatpickr;
+    expect(fp.config.allowInput).toBe(false);
+    expect(fp.config.clickOpens).toBe(false);
+
+    await rerender({ ...props, readonly: true });
+    await tick();
+    await rerender({ ...props, readonly: false });
+    await tick();
+    expect(fp.config.allowInput).toBe(false);
+    expect(fp.config.clickOpens).toBe(false);
+  });
+
   it("handles invalid state", () => {
     const { container } = render(DatePicker, {
       invalid: true,
