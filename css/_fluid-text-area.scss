@@ -40,12 +40,12 @@
     &:not(.#{$prefix}--text-area__label-counter) {
       inline-size: auto;
       right: auto;
-      left: $spacing-05;
+      left: $carbon--spacing-05;
     }
 
     &.#{$prefix}--text-area__label-counter {
       inline-size: auto;
-      right: $spacing-05;
+      right: $carbon--spacing-05;
       left: auto;
     }
   }
@@ -61,7 +61,7 @@
   }
 
   .#{$prefix}--text-area--fluid .#{$prefix}--label.#{$prefix}--label--slotted {
-    gap: $spacing-03;
+    gap: $carbon--spacing-03;
     overflow: visible;
   }
 
@@ -71,7 +71,7 @@
   }
 
   .#{$prefix}--text-area--fluid .#{$prefix}--text-area {
-    padding: 0 $spacing-05 to-rem(13px);
+    padding: 0 $carbon--spacing-05 to-rem(13px);
     margin-block-start: 2rem;
     min-block-size: to-rem(64px);
     outline: none;
@@ -123,7 +123,7 @@
     position: relative;
     display: block;
     overflow: visible;
-    padding: $spacing-03 to-rem(40px) $spacing-03 $spacing-05;
+    padding: $carbon--spacing-03 to-rem(40px) $carbon--spacing-03 $carbon--spacing-05;
     margin: 0;
     background: $field-01;
     max-block-size: to-rem(200px);
@@ -188,7 +188,7 @@
   }
 
   .#{$prefix}--text-area--fluid__skeleton {
-    padding: $spacing-05;
+    padding: $carbon--spacing-05;
     background: $skeleton-01;
     border-block-end: 1px solid $skeleton-02;
   }
@@ -200,7 +200,7 @@
   }
 
   .#{$prefix}--text-area--fluid__skeleton .#{$prefix}--label {
-    margin-block-end: $spacing-04;
+    margin-block-end: $carbon--spacing-04;
   }
 
   .#{$prefix}--text-area--fluid__skeleton

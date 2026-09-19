@@ -75,14 +75,14 @@
   .#{$prefix}--scroll-gradient__gradient--bottom {
     left: 0;
     right: 0;
-    height: $spacing-09;
+    height: $carbon--spacing-09;
   }
 
   .#{$prefix}--scroll-gradient__gradient--left,
   .#{$prefix}--scroll-gradient__gradient--right {
     top: 0;
     bottom: 0;
-    width: $spacing-09;
+    width: $carbon--spacing-09;
   }
 
   .#{$prefix}--scroll-gradient__gradient--top {

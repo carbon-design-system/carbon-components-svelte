@@ -44,7 +44,7 @@
     block-size: to-rem(16px);
     inline-size: calc(100% - 2rem);
     inset-block-start: to-rem(13px);
-    left: $spacing-05;
+    left: $carbon--spacing-05;
     overflow-x: scroll;
     white-space: nowrap;
     scrollbar-width: none;
@@ -55,7 +55,7 @@
   }
 
   .#{$prefix}--date-picker--fluid .#{$prefix}--label--slotted {
-    gap: $spacing-03;
+    gap: $carbon--spacing-03;
     overflow: visible;
     white-space: normal;
   }
@@ -78,7 +78,7 @@
   .#{$prefix}--date-picker--fluid
     .#{$prefix}--date-picker-input__wrapper
     .#{$prefix}--date-picker__input {
-    padding: to-rem(32px) $spacing-05 to-rem(13px);
+    padding: to-rem(32px) $carbon--spacing-05 to-rem(13px);
     background: transparent;
     border-block-end: none;
     inline-size: 100%;
@@ -201,7 +201,7 @@
     .#{$prefix}--form-requirement {
     display: block;
     overflow: visible;
-    padding: $spacing-03 to-rem(40px) $spacing-03 $spacing-05;
+    padding: $carbon--spacing-03 to-rem(40px) $carbon--spacing-03 $carbon--spacing-05;
     margin: 0;
     max-block-size: 100%;
   }
@@ -278,8 +278,8 @@
     position: absolute;
     block-size: to-rem(8px);
     inline-size: 25%;
-    inset-block-start: $spacing-05;
-    left: $spacing-05;
+    inset-block-start: $carbon--spacing-05;
+    left: $carbon--spacing-05;
   }
 
   .#{$prefix}--date-picker--fluid__skeleton .#{$prefix}--label {
@@ -292,12 +292,12 @@
     block-size: to-rem(8px);
     inline-size: 50%;
     inset-block-start: to-rem(36px);
-    left: $spacing-05;
+    left: $carbon--spacing-05;
   }
 
   .#{$prefix}--date-picker--fluid__skeleton--container
     .#{$prefix}--date-picker__icon {
-    inset-block: auto $spacing-03;
+    inset-block: auto $carbon--spacing-03;
   }
 
   .#{$prefix}--date-picker--fluid__skeleton--range {
@@ -320,7 +320,7 @@
   .#{$prefix}--date-picker--fluid__skeleton--range
     .#{$prefix}--date-picker--fluid__skeleton--container
     .#{$prefix}--date-picker__icon {
-    inset-block-end: $spacing-03;
+    inset-block-end: $carbon--spacing-03;
   }
 }
 

@@ -29,7 +29,7 @@
     clip: initial;
     inline-size: calc(100% - 2rem);
     inset-block-start: to-rem(13px);
-    left: $spacing-05;
+    left: $carbon--spacing-05;
   }
 
   .#{$prefix}--search--fluid .#{$prefix}--label::-webkit-scrollbar {
@@ -37,12 +37,12 @@
   }
 
   .#{$prefix}--search--fluid .#{$prefix}--label.#{$prefix}--label--slotted {
-    gap: $spacing-03;
+    gap: $carbon--spacing-03;
     overflow: visible;
   }
 
   .#{$prefix}--search--fluid .#{$prefix}--search-input {
-    padding: to-rem(32px) to-rem(88px) to-rem(13px) $spacing-05;
+    padding: to-rem(32px) to-rem(88px) to-rem(13px) $carbon--spacing-05;
     block-size: 100%;
   }
 

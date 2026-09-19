@@ -23,7 +23,7 @@
     block-size: to-rem(16px);
     inline-size: calc(100% - 2rem);
     inset-block-start: to-rem(13px);
-    left: $spacing-05;
+    left: $carbon--spacing-05;
     overflow-x: scroll;
     scrollbar-width: none;
     white-space: nowrap;
@@ -40,7 +40,7 @@
   .#{$prefix}--pin-code-input--fluid
     .#{$prefix}--pin-code-input__fieldset
     > legend.#{$prefix}--label.#{$prefix}--label--slotted {
-    gap: $spacing-03;
+    gap: $carbon--spacing-03;
     overflow: visible;
   }
 
@@ -66,7 +66,7 @@
     max-inline-size: 100%;
     min-block-size: to-rem(64px);
     padding-block-start: to-rem(32px);
-    padding-inline: $spacing-05;
+    padding-inline: $carbon--spacing-05;
     padding-block-end: to-rem(13px);
     border-block-end: 1px solid $ui-04;
   }
@@ -131,7 +131,7 @@
   .#{$prefix}--pin-code-input--fluid .#{$prefix}--pin-code-input__divider {
     display: none;
     border: none;
-    margin: 0 $spacing-05;
+    margin: 0 $carbon--spacing-05;
     block-size: to-rem(1px);
     border-block-end: 1px solid $ui-03;
     transition: border-color $duration--fast-01 motion(standard, productive);
@@ -194,7 +194,7 @@
   .#{$prefix}--pin-code-input--fluid
     .#{$prefix}--pin-code-input__fields
     .#{$prefix}--form-requirement {
-    padding: $spacing-03 to-rem(40px) $spacing-03 $spacing-05;
+    padding: $carbon--spacing-03 to-rem(40px) $carbon--spacing-03 $carbon--spacing-05;
     margin: 0;
   }
 
@@ -205,8 +205,8 @@
     .#{$prefix}--pin-code-input__icon {
     position: absolute;
     margin: 0;
-    inset-block-start: $spacing-03;
-    right: $spacing-05;
+    inset-block-start: $carbon--spacing-03;
+    right: $carbon--spacing-05;
     pointer-events: none;
   }
 

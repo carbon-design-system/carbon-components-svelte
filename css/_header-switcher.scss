@@ -16,7 +16,7 @@
     display: inline-flex;
   }
 
-  // Sized to match `UserAvatar` `size="sm"` exactly (both `$spacing-06`) so a
+  // Sized to match `UserAvatar` `size="sm"` exactly (both `$carbon--spacing-06`) so a
   // slotted `UserAvatar` fills the frame flush, with no halo of
   // `$background-hover` showing around it. A plain icon in the `avatar` slot
   // keeps its own (default 16px) size, centered by `align-items`/
@@ -30,8 +30,8 @@
     border-radius: 50%;
     background-color: $background-hover;
     color: $icon-primary;
-    width: $spacing-06;
-    height: $spacing-06;
+    width: $carbon--spacing-06;
+    height: $carbon--spacing-06;
   }
 
   // Only stretch a raw `img` (a photo slotted without `UserAvatar`) to fill
@@ -67,7 +67,7 @@
   .#{$prefix}--header-switcher__chevron {
     display: flex;
     flex-shrink: 0;
-    margin-left: $spacing-03;
+    margin-left: $carbon--spacing-03;
     transition: transform 110ms cubic-bezier(0.2, 0, 0.38, 0.9);
   }
 
@@ -88,7 +88,7 @@
     // Offset the reserved border so the avatar lands at the same inset as
     // `.#{$prefix}--profile-menu__item`'s avatar (padding only, no border)
     // in the menu below, keeping both flush with the same left edge.
-    padding-left: calc(#{$spacing-05} - #{$button-border-width});
+    padding-left: calc(#{$carbon--spacing-05} - #{$button-border-width});
   }
 
   .#{$prefix}--header-switcher__menu.#{$prefix}--header-switcher__menu {

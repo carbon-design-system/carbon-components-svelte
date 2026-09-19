@@ -30,14 +30,14 @@
     inset-block-start: to-rem(13px);
     inline-size: auto;
     right: auto;
-    left: $spacing-05;
+    left: $carbon--spacing-05;
   }
 
   // The maxCount counter is a second `.bx--label` in the same wrapper, so
   // without this it inherits the label's own coordinates and the two overlap.
   // Carbon has no fluid counter to port from.
   .#{$prefix}--text-input--fluid .#{$prefix}--label.#{$prefix}--text-input__label-counter {
-    right: $spacing-05;
+    right: $carbon--spacing-05;
     left: auto;
   }
 
@@ -56,7 +56,7 @@
   }
 
   .#{$prefix}--text-input--fluid .#{$prefix}--label.#{$prefix}--label--slotted {
-    gap: $spacing-03;
+    gap: $carbon--spacing-03;
     overflow: visible;
   }
 
@@ -65,7 +65,7 @@
   }
 
   .#{$prefix}--text-input--fluid .#{$prefix}--text-input {
-    padding: to-rem(32px) $spacing-05 to-rem(13px);
+    padding: to-rem(32px) $carbon--spacing-05 to-rem(13px);
     min-block-size: to-rem(64px);
   }
 
@@ -98,7 +98,7 @@
   }
 
   .#{$prefix}--text-input--fluid .#{$prefix}--form-requirement {
-    padding: $spacing-03 to-rem(40px) $spacing-03 $spacing-05;
+    padding: $carbon--spacing-03 to-rem(40px) $carbon--spacing-03 $carbon--spacing-05;
     margin: 0;
   }
 
@@ -144,18 +144,18 @@
   }
 
   .#{$prefix}--text-input--fluid .#{$prefix}--text-input.#{$prefix}--password-input {
-    padding-inline-end: $spacing-08;
+    padding-inline-end: $carbon--spacing-08;
   }
 
   .#{$prefix}--text-input--fluid.#{$prefix}--password-input-wrapper .#{$prefix}--text-input__invalid-icon {
-    right: $spacing-05;
+    right: $carbon--spacing-05;
   }
 
   .#{$prefix}--text-input--fluid .#{$prefix}--btn.#{$prefix}--text-input--password__visibility__toggle.#{$prefix}--tooltip__trigger {
     block-size: to-rem(32px);
     inline-size: to-rem(32px);
     inset-block-start: to-rem(26px);
-    right: $spacing-03;
+    right: $carbon--spacing-03;
   }
 
   .#{$prefix}--text-input--fluid__skeleton {
@@ -169,8 +169,8 @@
     position: absolute;
     block-size: to-rem(8px);
     inline-size: 25%;
-    inset-block-start: $spacing-05;
-    left: $spacing-05;
+    inset-block-start: $carbon--spacing-05;
+    left: $carbon--spacing-05;
   }
 
   .#{$prefix}--text-input--fluid__skeleton .#{$prefix}--label {
@@ -179,7 +179,7 @@
     block-size: to-rem(8px);
     inline-size: 50%;
     inset-block-start: to-rem(36px);
-    left: $spacing-05;
+    left: $carbon--spacing-05;
   }
 }
 
