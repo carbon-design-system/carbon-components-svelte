@@ -239,6 +239,14 @@
     );
   }
 
+  /** The string flatpickr writes to the input for its current selection. */
+  function formatSelectedDates() {
+    const { dateFormat, conjunction } = calendar.config;
+    return calendar.selectedDates
+      .map((date) => calendar.formatDate(date, dateFormat))
+      .join(conjunction);
+  }
+
   function currentDateStr() {
     return $range
       ? { from: inputRef.value, to: inputRefTo.value }
@@ -383,6 +391,18 @@
     }
   }
 
+  /**
+   * Mirrors flatpickr's own `ignoredFocusElements` check so Carbon's
+   * outside-click and blur dismissal honor the option too.
+   *
+   * @param {EventTarget | null} target
+   */
+  function isIgnoredFocusElement(target) {
+    return (calendar?.config.ignoredFocusElements ?? []).some((element) =>
+      element.contains(/** @type {Node} */ (target)),
+    );
+  }
+
   function dismissCalendar(trigger) {
     if (!calendarOpen) return;
     closeTrigger = trigger;
@@ -404,6 +424,7 @@
       calendar.calendarContainer.contains(/** @type {Node} */ (relatedTarget))
     )
       return;
+    if (isIgnoredFocusElement(relatedTarget)) return;
     dismissCalendar("outside-click");
   }
 
@@ -577,6 +598,8 @@
         // (see below); re-applying the default `flatpickrProps.static`
         // here would clobber that on every reactive re-run.
         if (option === "static" && effectivePortalMenu) continue;
+        // Unsupported: see `wrap` in create-calendar.js.
+        if (option === "wrap") continue;
         applyOptionIfChanged(option, value);
       }
       return;
@@ -600,7 +623,8 @@
               }),
             }
           : { appendTo: datePickerRef }),
-        defaultDate: $inputValue,
+        // An empty `value` must not clobber `flatpickrProps.defaultDate`.
+        ...($inputValue !== "" && { defaultDate: $inputValue }),
         mode: $mode,
       },
       base: inputRef,
@@ -626,6 +650,12 @@
         return dispatch(event, detail);
       },
     });
+    // flatpickr fills the input from `flatpickrProps.defaultDate` without
+    // firing events, so mirror it into `value` here.
+    if (calendar && !$range && $inputValue === "" && inputRef.value !== "") {
+      prevValue = inputRef.value;
+      inputValue.set(inputRef.value);
+    }
     snapshotCloseBaseline();
     calendar?.calendarContainer?.setAttribute("role", "application");
     calendar?.calendarContainer?.setAttribute(
@@ -694,7 +724,12 @@
           }
         }
       } else if ($inputValue !== prevValue) {
-        calendar.setDate($inputValue);
+        // A value the calendar itself just wrote is already in sync.
+        // Re-parsing it would wipe the selection when a custom
+        // `formatDate` emits text that `dateFormat` cannot parse.
+        if ($inputValue !== formatSelectedDates()) {
+          calendar.setDate($inputValue);
+        }
         prevValue = $inputValue;
       }
     }
@@ -723,7 +758,11 @@
       ...flatpickrProps,
     })
       .then(() => {})
-      .catch(() => {});
+      .catch((error) => {
+        // Only a failed plugin import lands here. Surface it like flatpickr
+        // surfaces its own init errors instead of failing silently.
+        console.error(error);
+      });
   }
   $: if (calendar) {
     calendar.set("clickOpens", !$readonlyAny);
@@ -739,6 +778,7 @@
    */
   function isOutsideCalendarTarget(event) {
     if (!calendarOpen || !calendar) return false;
+    if (isIgnoredFocusElement(event.target)) return false;
     return !isEventTargetInsidePortaledCalendar(
       datePickerRef,
       calendar.calendarContainer,

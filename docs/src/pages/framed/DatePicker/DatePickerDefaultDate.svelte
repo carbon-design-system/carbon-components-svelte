@@ -1,0 +1,15 @@
+<script>
+  import { DatePicker, DatePickerInput } from "carbon-components-svelte";
+
+  let value = "";
+</script>
+
+<DatePicker
+  datePickerType="single"
+  bind:value
+  flatpickrProps={{ defaultDate: "today" }}
+>
+  <DatePickerInput labelText="Start date" placeholder="mm/dd/yyyy" />
+</DatePicker>
+
+<p style:margin-top="1rem">Value: {value || "none"}</p>

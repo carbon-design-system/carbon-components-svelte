@@ -7,6 +7,8 @@ import DatePickerFluidRange from "./DatePicker.fluidRange.test.svelte";
 import DatePickerFluidSlot from "./DatePicker.fluidSlot.test.svelte";
 import DatePicker from "./DatePicker.test.svelte";
 import DatePickerCalendar from "./DatePickerCalendar.test.svelte";
+import DatePickerDefaultDate from "./DatePickerDefaultDate.test.svelte";
+import DatePickerIgnoredFocus from "./DatePickerIgnoredFocus.test.svelte";
 import DatePickerInModal from "./DatePickerInModal.test.svelte";
 import DatePickerInputSlot from "./DatePickerInput.slot.test.svelte";
 import DatePickerRange from "./DatePickerRange.test.svelte";
@@ -641,6 +643,198 @@ describe("DatePicker", () => {
       const calendar = await screen.findByLabelText("calendar-container");
 
       expect(calendar.querySelectorAll(".flatpickr-month").length).toBe(2);
+    });
+
+    it("ignores the unsupported wrap option instead of crashing", async () => {
+      const consoleError = vi
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
+      render(DatePicker, {
+        datePickerType: "single",
+        flatpickrProps: { wrap: true },
+      });
+
+      await user.click(screen.getByLabelText("Date"));
+      expect(
+        await screen.findByLabelText("calendar-container"),
+      ).toBeInTheDocument();
+      expect(consoleError).not.toHaveBeenCalled();
+      consoleError.mockRestore();
+    });
+
+    it("stays usable as a plain input when flatpickr fails to initialize", async () => {
+      const consoleError = vi
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
+      const { unmount } = render(DatePicker, {
+        datePickerType: "single",
+        flatpickrProps: {
+          plugins: [
+            () => {
+              throw new Error("plugin failed");
+            },
+          ],
+        },
+      });
+
+      const input = screen.getByLabelText("Date");
+      await user.type(input, "01/01/2023");
+      expect(input).toHaveValue("01/01/2023");
+      // flatpickr reports the failure itself; it must not be silent.
+      expect(consoleError).toHaveBeenCalledWith(
+        expect.objectContaining({ message: "plugin failed" }),
+      );
+      expect(() => unmount()).not.toThrow();
+      consoleError.mockRestore();
+    });
+
+    it("preselects flatpickrProps.defaultDate when value is empty", async () => {
+      render(DatePicker, {
+        datePickerType: "single",
+        flatpickrProps: { defaultDate: "03/12/2024" },
+      });
+
+      const input = screen.getByLabelText("Date");
+      await vi.waitFor(() => expect(input).toHaveValue("03/12/2024"));
+    });
+
+    it("syncs flatpickrProps.defaultDate to the bound value", async () => {
+      render(DatePickerDefaultDate);
+
+      await vi.waitFor(() =>
+        expect(screen.getByTestId("value")).toHaveTextContent("03/12/2024"),
+      );
+    });
+
+    it("prefers value over flatpickrProps.defaultDate", async () => {
+      render(DatePicker, {
+        datePickerType: "single",
+        value: "01/05/2024",
+        flatpickrProps: { defaultDate: "03/12/2024" },
+      });
+
+      const input = screen.getByLabelText("Date");
+      await user.click(input);
+      const calendar = await screen.findByLabelText("calendar-container");
+      expect(input).toHaveValue("01/05/2024");
+      expect(calendar.querySelector(".flatpickr-day.selected")).toHaveAttribute(
+        "aria-label",
+        "Friday, January 5, 2024",
+      );
+    });
+
+    it("keeps the picked date when formatDate output is not parseable", async () => {
+      render(DatePicker, {
+        datePickerType: "single",
+        value: "03/15/2024",
+        flatpickrProps: {
+          formatDate: (date: Date) => `Day ${date.getDate()}`,
+        },
+      });
+
+      const input = screen.getByLabelText("Date");
+      await user.click(input);
+      const calendar = await screen.findByLabelText("calendar-container");
+      const day = Array.from(
+        calendar.querySelectorAll<HTMLElement>(
+          ".flatpickr-day:not(.prevMonthDay):not(.nextMonthDay)",
+        ),
+      ).find((node) => node.textContent === "10");
+      assert(day);
+      await user.click(day);
+      await tick();
+
+      expect(input).toHaveValue("Day 10");
+      await user.click(input);
+      const selected = calendar.querySelector(".flatpickr-day.selected");
+      expect(selected).toHaveTextContent("10");
+      expect(calendar.querySelector(".cur-month")).toHaveTextContent("March");
+    });
+
+    it("applies Carbon classes to an inline calendar that never opens", async () => {
+      render(DatePicker, {
+        datePickerType: "single",
+        flatpickrProps: { inline: true },
+      });
+
+      const calendar = await screen.findByLabelText("calendar-container");
+      expect(calendar).toHaveClass("inline", "bx--date-picker__calendar");
+      expect(calendar.querySelector(".flatpickr-day")).toHaveClass(
+        "bx--date-picker__day",
+      );
+      // Inside the input wrapper it would stretch the box that vertically
+      // centers the calendar icon.
+      expect(calendar.closest(".bx--date-picker-input__wrapper")).toBeNull();
+      expect(calendar.previousElementSibling).toHaveClass(
+        "bx--date-picker-input__wrapper",
+      );
+      // The month dropdown is replaced by Carbon's static label.
+      expect(calendar.querySelector(".cur-month")).toBeInTheDocument();
+      expect(
+        calendar.querySelector(".flatpickr-monthDropdown-months"),
+      ).not.toBeInTheDocument();
+    });
+
+    it("labels the visible altInput instead of the hidden original", async () => {
+      render(DatePicker, {
+        datePickerType: "single",
+        dateFormat: "Y-m-d",
+        value: "2024-03-15",
+        flatpickrProps: { altInput: true, altFormat: "F j, Y" },
+      });
+
+      await vi.waitFor(() => {
+        const input = screen.getByLabelText("Date");
+        expect(input).toHaveAttribute("type", "text");
+        expect(input).toHaveValue("March 15, 2024");
+      });
+      expect(document.querySelectorAll("[id]")).toHaveLength(
+        new Set(Array.from(document.querySelectorAll("[id]"), (n) => n.id))
+          .size,
+      );
+    });
+
+    it("still runs a consumer onReady hook", async () => {
+      const onReady = vi.fn();
+      render(DatePicker, {
+        datePickerType: "single",
+        flatpickrProps: { onReady },
+      });
+
+      await vi.waitFor(() => expect(onReady).toHaveBeenCalledTimes(1));
+    });
+
+    it("stays open when an ignoredFocusElements element is clicked", async () => {
+      render(DatePickerIgnoredFocus);
+
+      await user.click(await screen.findByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+      expect(calendar).toHaveClass("open");
+
+      await user.click(screen.getByRole("button", { name: "Preset" }));
+      expect(calendar).toHaveClass("open");
+
+      await user.click(screen.getByRole("button", { name: "Elsewhere" }));
+      expect(calendar).not.toHaveClass("open");
+    });
+
+    it("abbreviates the month label when shorthandCurrentMonth is set", async () => {
+      render(DatePicker, {
+        datePickerType: "single",
+        value: "09/15/2024",
+        flatpickrProps: { shorthandCurrentMonth: true },
+      });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+      const month = calendar.querySelector(".cur-month");
+      expect(month).toHaveTextContent(/^Sep$/);
+
+      // The label is rewritten on month change as well as on open.
+      const next = calendar.querySelector<HTMLElement>(".flatpickr-next-month");
+      assert(next);
+      await user.click(next);
+      expect(calendar.querySelector(".cur-month")).toHaveTextContent(/^Oct$/);
     });
 
     it("keeps the calendar open after selecting a date when closeOnSelect is false", async () => {
