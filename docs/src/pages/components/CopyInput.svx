@@ -166,13 +166,18 @@ On hover or focus, the copy button shows a tooltip with `iconDescription`. It re
 
 Set `tooltipPosition` to place the tooltip relative to the copy button. Accepts `"top"`, `"right"`, `"bottom"` (default), and `"left"`.
 
-<CopyInput labelText="API endpoint" value="https://api.acme.io/v1" tooltipPosition="left" />
+<CopyInput labelText="Top" value="https://api.acme.io/v1" iconDescription="Top" tooltipPosition="top" />
+<CopyInput labelText="Right" value="https://api.acme.io/v1" iconDescription="Right" tooltipPosition="right" />
+<CopyInput labelText="Bottom" value="https://api.acme.io/v1" iconDescription="Bottom" tooltipPosition="bottom" />
+<CopyInput labelText="Left" value="https://api.acme.io/v1" iconDescription="Left" tooltipPosition="left" />
 
 ### Alignment
 
 Set `tooltipAlignment` to align the tooltip relative to the copy button. Accepts `"start"`, `"center"` (default), and `"end"`.
 
-<CopyInput labelText="API endpoint" value="https://api.acme.io/v1" tooltipAlignment="end" />
+<CopyInput labelText="Start" value="https://api.acme.io/v1" iconDescription="Start" tooltipAlignment="start" />
+<CopyInput labelText="Center" value="https://api.acme.io/v1" iconDescription="Center" tooltipAlignment="center" />
+<CopyInput labelText="End" value="https://api.acme.io/v1" iconDescription="End" tooltipAlignment="end" />
 
 ## Portal tooltip
 
@@ -192,6 +197,7 @@ Use the fluid variant with `fluid`, which embeds the label
 inside the field. Fluid copy inputs can be used standalone or inside
 [FluidForm](/components/FluidForm), where the fluid variant is applied
 automatically. The fluid variant cannot be combined with the inline variant.
+`helperText` is not displayed in the fluid variant.
 
 <CopyInput fluid labelText="API token" value="sk-1234567890abcdef" />
 
