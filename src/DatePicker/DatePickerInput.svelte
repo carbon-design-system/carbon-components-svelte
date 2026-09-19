@@ -64,7 +64,10 @@
    */
   export let ref = null;
 
-  import { getContext } from "svelte";
+  /** Set to `true` to select the input's text when it receives focus */
+  export let selectTextOnFocus = false;
+
+  import { getContext, tick } from "svelte";
   import Calendar from "../icons/Calendar.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
@@ -169,6 +172,12 @@
       : helperText
         ? helperId
         : undefined;
+
+  function handleFocus() {
+    if (selectTextOnFocus && !disabled && !$multiple) {
+      tick().then(() => ref?.select());
+    }
+  }
 </script>
 
 <div
@@ -238,6 +247,7 @@
       }}
       on:keyup
       on:focus
+      on:focus={handleFocus}
       on:blur
       on:blur={(event) => {
         blurInput(event.relatedTarget);
