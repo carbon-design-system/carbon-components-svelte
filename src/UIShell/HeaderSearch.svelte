@@ -109,6 +109,9 @@
    */
   export let size = "sm";
 
+  /** Set to `true` to select the input's text when it receives focus */
+  export let selectTextOnFocus = false;
+
   import { createEventDispatcher, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
   import Close from "../icons/Close.svelte";
@@ -320,9 +323,12 @@
     }
   }
 
+  let skipSelectOnFocus = false;
+
   // Clicks on group headers or padding blur the input; refocus so only item
   // selection closes the menu.
   function handleMenuPointerDown() {
+    skipSelectOnFocus = true;
     ref?.focus();
   }
 </script>
@@ -382,6 +388,15 @@
         if (richMenu) menuDismissed = false;
       }}
       on:focus
+      on:focus={() => {
+        if (skipSelectOnFocus) {
+          skipSelectOnFocus = false;
+          return;
+        }
+        if (selectTextOnFocus) {
+          tick().then(() => ref?.select());
+        }
+      }}
       on:blur
       on:keydown
       on:keydown={(event) => {

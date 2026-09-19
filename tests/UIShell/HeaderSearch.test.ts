@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/svelte";
 import type HeaderSearchComponent from "carbon-components-svelte/UIShell/HeaderSearch.svelte";
 import type { HeaderSearchResult } from "carbon-components-svelte/UIShell/HeaderSearch.svelte";
 import type { ComponentProps } from "svelte";
+import { tick } from "svelte";
 import { flushDismiss } from "../utils/flushDismiss";
 import { user } from "../utils/user";
 import HeaderSearchTest from "./HeaderSearch.test.svelte";
@@ -53,6 +54,29 @@ describe("HeaderSearch", () => {
         "placeholder",
         "Find anything...",
       );
+    });
+
+    it("selects the full value on focus when selectTextOnFocus is true", async () => {
+      render(HeaderSearchTest, {
+        props: { selectTextOnFocus: true, value: "clusters" },
+      });
+
+      await user.click(screen.getByRole("button", { name: "Search" }));
+      await tick();
+
+      const input = screen.getByRole("textbox") as HTMLInputElement;
+      expect(input.selectionStart).toBe(0);
+      expect(input.selectionEnd).toBe("clusters".length);
+    });
+
+    it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {
+      render(HeaderSearchTest, { props: { value: "clusters" } });
+
+      await user.click(screen.getByRole("button", { name: "Search" }));
+      await tick();
+
+      const input = screen.getByRole("textbox") as HTMLInputElement;
+      expect(input.selectionStart).toBe(input.selectionEnd);
     });
 
     it("should label the input with labelText by default", () => {
