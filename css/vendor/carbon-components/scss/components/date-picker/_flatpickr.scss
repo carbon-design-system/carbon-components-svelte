@@ -408,7 +408,7 @@
     height: to-rem(40px);
     color: $text-01;
     cursor: pointer;
-    transition: all $duration--fast-01 motion(standard, productive);
+    transition: background-color $duration--fast-01 motion(standard, productive);
 
     @media (any-hover: hover) {
       &:hover {
