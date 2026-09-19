@@ -435,6 +435,61 @@
     color: $text-05;
   }
 
+  // Week numbers (flatpickr `weekNumbers`): a 40px column beside the grid.
+  // `!important` beats the inline widths flatpickr measures for this mode
+  // while the calendar is still hidden, which come out too narrow and wrap
+  // the day grid at six columns.
+  .flatpickr-calendar.hasWeeks.open {
+    width: to-rem(328px) !important;
+  }
+
+  .flatpickr-calendar.hasWeeks .flatpickr-days {
+    width: 100% !important;
+  }
+
+  .flatpickr-innerContainer {
+    display: flex;
+  }
+
+  .flatpickr-weekwrapper .flatpickr-weekday {
+    @include type-style('body-short-01');
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: to-rem(40px);
+    height: to-rem(40px);
+    color: $text-02;
+  }
+
+  .flatpickr-rContainer {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .flatpickr-weekwrapper {
+    flex: none;
+  }
+
+  // Same wrapping box as `.dayContainer` so the rows line up.
+  .flatpickr-weekwrapper .flatpickr-weeks {
+    display: flex;
+    flex-wrap: wrap;
+    width: to-rem(40px);
+    height: to-rem(246px);
+  }
+
+  .flatpickr-weekwrapper .flatpickr-day {
+    color: $text-02;
+    cursor: default;
+
+    @media (any-hover: hover) {
+      &:hover {
+        background: transparent;
+      }
+    }
+  }
+
   .flatpickr-day.today {
     position: relative;
     color: $link-01;
