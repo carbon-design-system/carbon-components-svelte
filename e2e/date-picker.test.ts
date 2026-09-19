@@ -105,6 +105,34 @@ test.describe("DatePicker", () => {
     await expect(input).not.toHaveValue("");
   });
 
+  test("arrow key navigation inside the calendar does not scroll the page", async ({
+    page,
+  }) => {
+    // Give the page room to scroll and put a day near the bottom of the
+    // viewport, otherwise the browser's default arrow-key scroll action
+    // never kicks in and the test can't catch a regression.
+    await page.evaluate(() => {
+      const spacer = document.createElement("div");
+      spacer.style.height = "2000px";
+      document.body.appendChild(spacer);
+    });
+
+    const input = page.getByLabel("Meeting date");
+    await input.click();
+    const calendar = page
+      .getByTestId("date-picker-single")
+      .getByLabel("calendar-container");
+    await expect(calendar).toBeVisible();
+
+    await page.keyboard.press("ArrowDown");
+    for (let i = 0; i < 5; i++) {
+      // biome-ignore lint/performance/noAwaitInLoops: arrow presses are sequential
+      await page.keyboard.press("ArrowRight");
+    }
+
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+  });
+
   test("Escape closes calendar", async ({ page }) => {
     const input = page.getByLabel("Meeting date");
     await input.click();
