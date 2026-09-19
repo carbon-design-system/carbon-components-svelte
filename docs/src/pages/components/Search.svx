@@ -29,6 +29,12 @@ Bind to `value` for reactive updates.
 
 <FileSource src="/framed/Search/SearchReactive" />
 
+## Select on focus
+
+Set `selectTextOnFocus` to select the full value when the field receives focus.
+
+<Search selectTextOnFocus placeholder="Search catalog..." value="Cloud functions" />
+
 ## Clear event
 
 The `clear` event fires when clicking the clear button or pressing <DocKbd label="Escape" />.
