@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/svelte";
+import { fireEvent, render, screen, within } from "@testing-library/svelte";
 import type { Instance } from "flatpickr/dist/types/instance";
 import { tick } from "svelte";
 import { user } from "../utils/user";
@@ -22,6 +22,56 @@ describe("DatePicker", () => {
 
     await user.type(input, "01/01/2023");
     expect(input).toHaveValue("01/01/2023");
+  });
+
+  it("selects the full value on focus when selectTextOnFocus is true", async () => {
+    render(DatePicker, { selectTextOnFocus: true, value: "01/01/2023" });
+
+    const input = screen.getByLabelText("Date") as HTMLInputElement;
+    await user.click(input);
+    await tick();
+
+    expect(input.selectionStart).toBe(0);
+    expect(input.selectionEnd).toBe("01/01/2023".length);
+  });
+
+  it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {
+    render(DatePicker, { value: "01/01/2023" });
+
+    const input = screen.getByLabelText("Date") as HTMLInputElement;
+    await user.click(input);
+    await tick();
+
+    expect(input.selectionStart).toBe(input.selectionEnd);
+  });
+
+  it("does not select text on focus when disabled", async () => {
+    render(DatePicker, {
+      selectTextOnFocus: true,
+      disabled: true,
+      value: "01/01/2023",
+    });
+
+    const input = screen.getByLabelText("Date") as HTMLInputElement;
+    const select = vi.spyOn(input, "select");
+    await fireEvent.focus(input);
+
+    expect(select).not.toHaveBeenCalled();
+  });
+
+  it("does not select text in multiple mode when selectTextOnFocus is true", async () => {
+    render(DatePicker, {
+      datePickerType: "multiple",
+      selectTextOnFocus: true,
+      value: "01/01/2023",
+    });
+
+    const input = screen.getByLabelText("Date") as HTMLInputElement;
+    const select = vi.spyOn(input, "select");
+    await user.click(input);
+    await tick();
+
+    expect(select).not.toHaveBeenCalled();
   });
 
   it("renders light variant", () => {
