@@ -180,6 +180,23 @@ describe("SearchMenu", () => {
     );
   });
 
+  it("clears the highlight when the mouse leaves the item", async () => {
+    render(SearchMenu);
+    const input = screen.getByRole("combobox");
+    await user.click(input);
+    const option = screen.getByText("Data Store for Memcache");
+    await user.hover(option);
+    expect(option.closest('[role="option"]')).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    await user.unhover(option);
+    expect(option.closest('[role="option"]')).toHaveAttribute(
+      "aria-selected",
+      "false",
+    );
+  });
+
   it("does not open when disabled", async () => {
     render(SearchMenu, { props: { disabled: true } });
     const input = screen.getByRole("combobox");
