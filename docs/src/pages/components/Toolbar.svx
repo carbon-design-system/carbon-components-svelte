@@ -75,6 +75,17 @@ Set `persistent` on toolbar search to keep it always expanded.
   </ToolbarContent>
 </Toolbar>
 
+### Select on focus
+
+Set `selectTextOnFocus` to select the full value when the field receives focus.
+
+<Toolbar>
+  <ToolbarContent>
+    <ToolbarSearch persistent selectTextOnFocus value="Cloud functions" />
+    <Button>Create</Button>
+  </ToolbarContent>
+</Toolbar>
+
 ### Disabled
 
 Set `disabled` to `true` to disable the search field.
