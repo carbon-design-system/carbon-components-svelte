@@ -11,6 +11,7 @@
   export let size: ComponentProps<SearchMenu>["size"] = undefined;
   export let menuSize: ComponentProps<SearchMenu>["menuSize"] = undefined;
   export let portal: ComponentProps<SearchMenu>["portal"] = true;
+  export let selectTextOnFocus: ComponentProps<SearchMenu>["selectTextOnFocus"] = false;
   export let selected: { value: string; submitted: boolean } = {
     value: "",
     submitted: false,
@@ -35,6 +36,7 @@
   {size}
   {menuSize}
   {portal}
+  {selectTextOnFocus}
   placeholder="Search..."
   labelText="Search"
   on:select={(e) => (selected = { value: e.detail.value, submitted: false })}

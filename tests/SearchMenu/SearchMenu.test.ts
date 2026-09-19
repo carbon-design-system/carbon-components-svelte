@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { user } from "../utils/user";
 import SearchMenu from "./SearchMenu.test.svelte";
 import SearchMenuBar from "./SearchMenuBar.test.svelte";
@@ -15,6 +16,41 @@ describe("SearchMenu", () => {
     expect(input).toHaveAttribute("aria-autocomplete", "list");
     expect(input).toHaveAttribute("aria-expanded", "false");
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+  });
+
+  it("selects the full value on focus when selectTextOnFocus is true", async () => {
+    render(SearchMenu, {
+      props: { selectTextOnFocus: true, value: "memcache" },
+    });
+
+    const input = screen.getByRole("combobox") as HTMLInputElement;
+    await user.click(input);
+    await tick();
+
+    expect(input.selectionStart).toBe(0);
+    expect(input.selectionEnd).toBe("memcache".length);
+  });
+
+  it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {
+    render(SearchMenu, { props: { value: "memcache" } });
+
+    const input = screen.getByRole("combobox") as HTMLInputElement;
+    await user.click(input);
+    await tick();
+
+    expect(input.selectionStart).toBe(input.selectionEnd);
+  });
+
+  it("does not select text on focus when disabled", async () => {
+    render(SearchMenu, {
+      props: { selectTextOnFocus: true, disabled: true, value: "memcache" },
+    });
+
+    const input = screen.getByRole("combobox") as HTMLInputElement;
+    const select = vi.spyOn(input, "select");
+    await fireEvent.focus(input);
+
+    expect(select).not.toHaveBeenCalled();
   });
 
   it("opens the menu on focus and renders all items for an empty value", async () => {
