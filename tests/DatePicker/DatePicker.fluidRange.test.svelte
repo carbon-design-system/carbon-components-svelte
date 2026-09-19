@@ -5,6 +5,7 @@
   export let fluid = true;
   export let invalidFrom = false;
   export let invalidText = "";
+  export let readonlyTo = false;
 </script>
 
 <DatePicker {fluid} datePickerType="range">
@@ -14,5 +15,9 @@
     invalid={invalidFrom}
     {invalidText}
   />
-  <DatePickerInput labelText="End date" placeholder="mm/dd/yyyy" />
+  <DatePickerInput
+    labelText="End date"
+    placeholder="mm/dd/yyyy"
+    readonly={readonlyTo}
+  />
 </DatePicker>

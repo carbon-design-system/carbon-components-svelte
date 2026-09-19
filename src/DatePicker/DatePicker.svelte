@@ -150,6 +150,8 @@
   const warnAny = derived(inputs, (_) => _.some(({ warn }) => warn));
   const sharedFluid = writable(false);
   $: sharedFluid.set(isFluid);
+  // Readonly styling only applies while invalid/warn don't already override it.
+  $: fluidReadonlyOnly = isFluid && $readonlyAny && !$invalidAny && !$warnAny;
   /**
    * @type {import("svelte/store").Writable<number | string>}
    */
@@ -613,6 +615,7 @@
   class:bx--date-picker--fluid--invalid={isFluid && $invalidAny}
   class:bx--date-picker--fluid--warn={isFluid && $warnAny}
   class:bx--date-picker--fluid--readonly={isFluid && $readonlyAny}
+  class:bx--date-picker--fluid--readonly-only={fluidReadonlyOnly}
   {...$$restProps}
   on:click
   on:mouseover
