@@ -30,6 +30,7 @@
   export let pattern: ComponentProps<DatePickerInput>["pattern"] = undefined;
   export let onchange: ((event: CustomEvent) => void) | undefined = undefined;
   export let onfocus: ((event: FocusEvent) => void) | undefined = undefined;
+  export let onerror: ((event: CustomEvent) => void) | undefined = undefined;
 </script>
 
 <DatePicker
@@ -47,6 +48,7 @@
   {flatpickrProps}
   {portalMenu}
   on:change={(e) => onchange?.(e)}
+  on:error={(e) => onerror?.(e)}
 >
   <DatePickerInput
     labelText="Date"

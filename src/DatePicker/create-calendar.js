@@ -209,6 +209,24 @@ function toHookArray(hook) {
 }
 
 /**
+ * Carries the current `errorHandler` for a running calendar. flatpickr's own
+ * `calendar.set("errorHandler", fn)` replaces `config.errorHandler` outright,
+ * which would drop Carbon's wrapper (and the `error` event it dispatches), so
+ * reactive updates go through `setErrorHandler` and this map instead.
+ * @type {WeakMap<FlatpickrInstance, { current: ((error: Error) => void) | undefined }>}
+ */
+const errorHandlerBoxes = new WeakMap();
+
+/**
+ * @param {FlatpickrInstance} instance
+ * @param {((error: Error) => void) | undefined} handler
+ */
+export function setErrorHandler(instance, handler) {
+  const box = errorHandlerBoxes.get(instance);
+  if (box) box.current = handler;
+}
+
+/**
  * @param {CreateCalendarArgs} args
  * @returns {Promise<FlatpickrInstance | null>}
  */
@@ -255,6 +273,28 @@ export async function createCalendar({ options, base, input, dispatch }) {
   ].filter(Boolean);
 
   const userOnDayCreate = options.onDayCreate;
+  const errorHandlerBox = { current: options.errorHandler };
+
+  /**
+   * flatpickr's `errorHandler` is a single function, not a hook array, and
+   * it never says which input produced the bad text. The focused range
+   * input (if any) is assumed to be the source, since that is the field
+   * flatpickr just tried to parse; `base` is the only candidate otherwise.
+   * @param {Error} error
+   */
+  function handleParseError(error) {
+    const value =
+      input && document.activeElement === input ? input.value : base.value;
+    dispatch("error", { error, value });
+    const userErrorHandler = errorHandlerBox.current;
+    if (userErrorHandler) {
+      userErrorHandler(error);
+    } else {
+      // Matches flatpickr's own default `errorHandler` so nobody loses the
+      // log they get today when they have not opted into anything else.
+      console.warn(error);
+    }
+  }
 
   /**
    * @param {any} _s
@@ -364,9 +404,15 @@ export async function createCalendar({ options, base, input, dispatch }) {
       },
       ...toHookArray(userOnDayCreate),
     ],
+    // Placed after `...options` so a consumer's own `errorHandler` (from
+    // `flatpickrProps`) can never replace this wrapper; it is still called,
+    // via `errorHandlerBox`, from inside `handleParseError`.
+    errorHandler: handleParseError,
   };
   const instance = new /** @type {any} */ (flatpickr)(base, config);
   // flatpickr catches its own init errors, logs them, and returns an empty
   // array. Report that as "no calendar" so callers never treat it as one.
-  return Array.isArray(instance) ? null : instance;
+  if (Array.isArray(instance)) return null;
+  errorHandlerBoxes.set(instance, errorHandlerBox);
+  return instance;
 }

@@ -2,17 +2,11 @@
   import { DatePicker, DatePickerInput } from "carbon-components-svelte";
 
   let invalidText = "";
-
-  const flatpickrProps = {
-    errorHandler: (error) => {
-      invalidText = error.message;
-    },
-  };
 </script>
 
 <DatePicker
   datePickerType="single"
-  {flatpickrProps}
+  on:error={(e) => (invalidText = e.detail.error.message)}
   on:change={(e) => {
     if (e.detail.selectedDates.length > 0) invalidText = "";
   }}
