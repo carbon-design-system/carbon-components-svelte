@@ -49,6 +49,12 @@ Set `inputType` to change the native `type` attribute of the text input—for ex
 
 <Slider inputType="text" labelText="Instances" value={0} />
 
+### Select on focus
+
+Set `selectTextOnFocus` to select the full value in the number input when it receives focus.
+
+<Slider selectTextOnFocus labelText="Instances" value={4} />
+
 ## Range and steps
 
 Control the allowed values and increment.
@@ -178,6 +184,12 @@ Set `hideTextInput` to `true` to hide both numeric inputs while keeping the slid
 Set `min`, `max`, and `step` to customize the range.
 
 <RangeSlider labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" step={10} value={100} valueUpper={500} />
+
+### Select on focus
+
+Set `selectTextOnFocus` to select the full value in either number input when it receives focus.
+
+<RangeSlider selectTextOnFocus labelText="Alert threshold (%)" value={10} valueUpper={90} />
 
 ### Formatted values
 
