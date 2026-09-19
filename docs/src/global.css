@@ -478,6 +478,7 @@ html {
   line-height: var(--cds-body-long-02-line-height);
   color: var(--cds-text-primary, var(--cds-text-01));
   max-width: 54ch;
+  text-wrap: pretty;
 }
 
 .prose > p.prose-section-intro {
