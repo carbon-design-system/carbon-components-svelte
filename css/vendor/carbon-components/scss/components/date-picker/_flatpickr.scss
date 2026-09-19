@@ -139,13 +139,68 @@
     display: block;
   }
 
+  .flatpickr-innerContainer {
+    display: flex;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .flatpickr-rContainer {
+    box-sizing: border-box;
+  }
+
+  .flatpickr-days {
+    display: flex;
+    align-items: flex-start;
+  }
+
   .dayContainer {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
+    box-sizing: border-box;
+    width: to-rem(280px);
+    min-width: to-rem(280px);
+    max-width: to-rem(280px);
     height: to-rem(246px);
     padding: 0;
     outline: 0;
+  }
+
+  .dayContainer + .dayContainer {
+    box-shadow: -1px 0 0 $border-subtle;
+  }
+
+  // ccs: gutter only the shared edge between months, sized to match the
+  // calendar's own outer inset so N months tile to exactly N times a
+  // single-month calendar's width, no wider (#3856). flatpickr's own
+  // width calc (daysWidth = (dayContainer.offsetWidth + 1) * showMonths)
+  // doesn't know about the calendar's padding, so 280 (7 days) + 4
+  // (spacing-02 gutter) undershoots by 3px; bake that back in here.
+  .flatpickr-calendar.multiMonth .dayContainer {
+    width: to-rem(287px);
+    min-width: to-rem(287px);
+    max-width: to-rem(287px);
+  }
+
+  .flatpickr-calendar.multiMonth .dayContainer:not(:last-child) {
+    padding-right: $carbon--spacing-02;
+  }
+
+  .flatpickr-calendar.multiMonth .dayContainer + .dayContainer {
+    padding-left: $carbon--spacing-02;
+  }
+
+  .flatpickr-calendar.multiMonth .flatpickr-weekdaycontainer {
+    box-sizing: border-box;
+  }
+
+  .flatpickr-calendar.multiMonth .flatpickr-weekdaycontainer:not(:last-child) {
+    padding-right: $carbon--spacing-02;
+  }
+
+  .flatpickr-calendar.multiMonth .flatpickr-weekdaycontainer + .flatpickr-weekdaycontainer {
+    padding-left: $carbon--spacing-02;
   }
 
   .flatpickr-calendar:focus {
