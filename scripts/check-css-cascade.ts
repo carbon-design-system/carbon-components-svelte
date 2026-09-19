@@ -48,6 +48,7 @@ import {
   histogram,
   histogramByFile,
   indexBySubject,
+  matchContextMoves,
   parseRules,
   type Rule,
   type Specificity,
@@ -200,8 +201,14 @@ for (const a of added) {
   }
 }
 
+// Context moves: a dropped rule and a new rule with the same selector and
+// declarations, differing only in media context (a rule that moved and, in
+// the same change, gained or lost a wrapping @media block). These never
+// match the rewrite pass above, which requires equal context.
+const contextMoves = matchContextMoves(removedPool, unmatchedAdded);
+
 // Map base rules -> head rules for pair comparison: identical keys map in
-// order; rewrites map explicitly.
+// order; rewrites and context moves map explicitly.
 const baseToHead = new Map<Rule, Rule>();
 for (const [key, hlist] of headByKey) {
   const blist = baseByKey.get(key) ?? [];
@@ -210,6 +217,7 @@ for (const [key, hlist] of headByKey) {
   }
 }
 for (const [h, b] of rewrites) baseToHead.set(b, h);
+for (const [h, b] of contextMoves) baseToHead.set(b, h);
 const headToBase = new Map<Rule, Rule>();
 for (const [b, h] of baseToHead) headToBase.set(h, b);
 
@@ -286,6 +294,7 @@ const changedHead = new Set<Rule>([
   ...rewrites.keys(),
   ...unmatchedAdded,
   ...movedHead,
+  ...contextMoves.keys(),
 ]);
 for (const rule of changedHead) {
   const ruleBase = headToBase.get(rule);
@@ -294,7 +303,8 @@ for (const rule of changedHead) {
     const props = conflictingProps(rule, other);
     if (props.length === 0) continue;
     const otherBase = headToBase.get(other);
-    const isMoveOnly = movedHead.has(rule) && !rewrites.has(rule);
+    const isMoveOnly =
+      (movedHead.has(rule) || contextMoves.has(rule)) && !rewrites.has(rule);
     if (isMoveOnly && !shareRoot(rule, other)) continue;
     for (const prop of props) {
       const after = wins(rule, other, prop) ? "wins" : "loses";
@@ -367,7 +377,7 @@ lines.push(
   `removed: ${removed.length}  added: ${added.length}  ` +
     `rewrites (same decls, new selector): ${rewrites.size}  ` +
     `new rules: ${unmatchedAdded.length}  dropped rules: ${removedPool.length}  ` +
-    `moved rules: ${movedHead.size}`,
+    `moved rules: ${movedHead.size}  context moves: ${contextMoves.size}`,
 );
 
 const section = (title: string, items: string[]) => {
@@ -395,6 +405,13 @@ section(
   [...rewrites].map(
     ([h, b]) =>
       `  ${b.selector} ${fmtSpec(b.specificity)}\n    -> ${h.selector} ${fmtSpec(h.specificity)}`,
+  ),
+);
+section(
+  "context moves (same selector + declarations, media context changed)",
+  [...contextMoves].map(
+    ([h, b]) =>
+      `  [${b.context || "(none)"}] ${b.selector}\n    -> [${h.context || "(none)"}] ${h.selector}`,
   ),
 );
 section(
