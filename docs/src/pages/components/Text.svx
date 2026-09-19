@@ -14,6 +14,8 @@ The default component renders a `<p>` with the body-long-01 type style.
 
 ## Text color
 
+### Semantic tokens
+
 Set `color` to a Carbon semantic text token. Each token describes intent and resolves to the active theme, so colors update when the theme changes.
 
 | Token         | Description                                                   |
@@ -33,6 +35,8 @@ Set `color` to a Carbon semantic text token. Each token describes intent and res
 <Text color="helper">Helper text</Text>
 <Text color="error">Error text</Text>
 <Text color="disabled">Disabled text</Text>
+
+### On-color and inverse surfaces
 
 On-color and inverse tokens are meant for colored or inverse surfaces, where the default text tokens would be unreadable. Both read light in the white theme but track different surfaces, so they diverge in other themes. Each example places the token on the surface it is designed for.
 
@@ -89,20 +93,44 @@ Set `type` to a Carbon type token. The scale covers supporting text, body copy, 
 | `display-03`              | Display text, fluid                                      |
 | `display-04`              | Display text, fluid (largest)                            |
 
+### Supporting text
+
+Captions, labels, and helper text support the smallest UI elements.
+
 <Text type="caption-01">Caption 01</Text>
 <Text type="caption-02">Caption 02</Text>
 <Text type="label-01">Label 01</Text>
 <Text type="label-02">Label 02</Text>
 <Text type="helper-text-01">Helper text 01</Text>
 <Text type="helper-text-02">Helper text 02</Text>
+
+### Body text
+
+`body-short` styles suit dense, single-line text; `body-long` styles suit multi-line paragraphs.
+
 <Text type="body-short-01">Body short 01</Text>
 <Text type="body-short-02">Body short 02</Text>
 <Text type="body-long-01">Body long 01</Text>
 <Text type="body-long-02">Body long 02</Text>
+
+### Code
+
+Set in IBM Plex Mono.
+
 <Text tag="code" type="code-01">const carbon = "components-svelte";</Text>
 <Text tag="pre" type="code-02">const carbon = "components-svelte";</Text>
+
+### Headings
+
+Bold, fixed-size headings for dense UI.
+
 <Text tag="h6" type="heading-01">Heading 01</Text>
 <Text tag="h5" type="heading-02">Heading 02</Text>
+
+### Productive headings
+
+A fixed heading scale for application UI, from smallest to largest.
+
 <Text tag="h6" type="productive-heading-01">Productive heading 01</Text>
 <Text tag="h5" type="productive-heading-02">Productive heading 02</Text>
 <Text tag="h4" type="productive-heading-03">Productive heading 03</Text>
@@ -110,6 +138,11 @@ Set `type` to a Carbon type token. The scale covers supporting text, body copy, 
 <Text tag="h2" type="productive-heading-05">Productive heading 05</Text>
 <Text tag="h2" type="productive-heading-06">Productive heading 06</Text>
 <Text tag="h1" type="productive-heading-07">Productive heading 07</Text>
+
+### Expressive type
+
+Fluid sizes that scale with the viewport, for editorial layouts.
+
 <Text type="expressive-paragraph-01">Expressive paragraph 01</Text>
 <Text tag="h4" type="expressive-heading-01">Expressive heading 01</Text>
 <Text tag="h3" type="expressive-heading-02">Expressive heading 02</Text>
@@ -117,8 +150,18 @@ Set `type` to a Carbon type token. The scale covers supporting text, body copy, 
 <Text tag="h2" type="expressive-heading-04">Expressive heading 04</Text>
 <Text tag="h2" type="expressive-heading-05">Expressive heading 05</Text>
 <Text tag="h1" type="expressive-heading-06">Expressive heading 06</Text>
+
+### Quotation
+
+Set in IBM Plex Serif.
+
 <Text tag="blockquote" type="quotation-01">Quotation 01</Text>
 <Text tag="blockquote" type="quotation-02">Quotation 02</Text>
+
+### Display
+
+The largest fluid sizes, for hero moments.
+
 <Text tag="h1" type="display-01">Display 01</Text>
 <Text tag="h1" type="display-02">Display 02</Text>
 <Text tag="h1" type="display-03">Display 03</Text>
@@ -135,6 +178,8 @@ Set `tag` to render a different element. Type and color apply to whichever tag y
 
 Set modifier props alongside a type style.
 
+### Weight, style, and family
+
 <Stack gap={5}>
   <Text type="body-long-01" weight="light">Light weight (300)</Text>
   <Text type="body-long-01" weight="regular">Regular weight (400)</Text>
@@ -144,8 +189,9 @@ Set modifier props alongside a type style.
   <Text type="body-long-01" family="serif">IBM Plex Serif</Text>
   <Text type="body-long-01" family="sans-condensed">IBM Plex Sans Condensed</Text>
   <Text type="body-long-01" family="sans-hebrew">IBM Plex Sans Hebrew</Text>
-  <Text tag="h2" type="productive-heading-04" balance maxWidth="20rem">Balanced heading across multiple lines</Text>
 </Stack>
+
+### Wrapping
 
 Set `wrap` to `break-word` to break long words, or `nowrap` to keep text on one line.
 
@@ -156,6 +202,10 @@ Set `wrap` to `break-word` to break long words, or `nowrap` to keep text on one 
 <Box maxWidth="12rem" border="subtle" padding={3}>
   <Text type="body-short-01" wrap="nowrap">This line will not wrap to the next row.</Text>
 </Box>
+
+Set `balance` to even out line lengths across a wrapped heading.
+
+<Text tag="h2" type="productive-heading-04" balance maxWidth="20rem">Balanced heading across multiple lines</Text>
 
 ### Pretty formatting
 
