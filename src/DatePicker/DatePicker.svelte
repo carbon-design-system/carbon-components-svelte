@@ -58,6 +58,37 @@
   export let minDate = null;
 
   /**
+   * @typedef {string | Date | { from: string | Date; to: string | Date } | ((date: Date) => boolean)} DatePickerDateRule
+   */
+
+  /**
+   * Specify dates to disable in the calendar. A date matches a rule when it
+   * equals a string or `Date`, falls within a `{ from, to }` range, or a
+   * predicate function returns `true`. Strings follow `dateFormat`.
+   * When `enabledDates` is also non-empty, `enabledDates` takes priority and
+   * `disabledDates` is ignored, matching flatpickr.
+   * Reassign the array to update an open calendar; mutating it in place
+   * (`push`) is not reactive. If the currently selected date becomes
+   * disabled by a rule change, it stays selected.
+   * Only works with the "single", "range", and "multiple" date picker types.
+   * @type {ReadonlyArray<DatePickerDateRule>}
+   */
+  export let disabledDates = [];
+
+  /**
+   * Specify the only dates to enable in the calendar; every other date is
+   * disabled. Takes the same rule shapes as `disabledDates`. When both are
+   * non-empty, `enabledDates` takes priority and `disabledDates` is ignored,
+   * matching flatpickr.
+   * Reassign the array to update an open calendar; mutating it in place
+   * (`push`) is not reactive. If the currently selected date becomes
+   * disabled by a rule change, it stays selected.
+   * Only works with the "single", "range", and "multiple" date picker types.
+   * @type {ReadonlyArray<DatePickerDateRule>}
+   */
+  export let enabledDates = [];
+
+  /**
    * Specify the locale.
    * @type {import("flatpickr/dist/types/locale").CustomLocale | import("flatpickr/dist/types/locale").key}
    */
@@ -199,6 +230,8 @@
   let prevValue = value;
   let prevValueFrom = valueFrom;
   let prevValueTo = valueTo;
+  let prevDisabledDates = disabledDates;
+  let prevEnabledDates = enabledDates;
   let prevAppliedOptions = {};
   let creating = false;
   let creationFailed = false;
@@ -610,12 +643,60 @@
     }
   }
 
+  /**
+   * flatpickr treats an empty `enable` array as "nothing is enabled", since
+   * merely having an `enable` array (even an empty one) switches it into
+   * allow-list mode, unlike `disable`, where empty is the natural "no rule"
+   * state. Resetting `enable` back to "no rule" needs `undefined`, but
+   * flatpickr's own `calendar.set("enable", undefined)` throws (its setter
+   * always calls `.slice()` on the value), so write the private backing
+   * field directly and redraw.
+   */
+  function clearCalendarEnable() {
+    calendar.config._enable = undefined;
+    calendar.redraw();
+  }
+
+  /** `disabledDates`/`enabledDates` win over the same key in `flatpickrProps`
+   * while non-empty; the `flatpickrProps` loop in `initCalendar` skips those
+   * keys in that case. Track each prop with its own `prev*` reference so
+   * clearing one back to `[]` restores `flatpickrProps` (or the natural "no
+   * rule" state) exactly once, instead of fighting the loop's own tracking
+   * of the same option key. */
+  function applyDisabledDates() {
+    if (disabledDates === prevDisabledDates) return;
+    const hadOverride = prevDisabledDates.length > 0;
+    prevDisabledDates = disabledDates;
+    if (disabledDates.length > 0) {
+      calendar.set("disable", disabledDates);
+    } else if (hadOverride) {
+      calendar.set("disable", flatpickrProps.disable ?? []);
+    }
+  }
+
+  function applyEnabledDates() {
+    if (enabledDates === prevEnabledDates) return;
+    const hadOverride = prevEnabledDates.length > 0;
+    prevEnabledDates = enabledDates;
+    if (enabledDates.length > 0) {
+      calendar.set("enable", enabledDates);
+    } else if (hadOverride) {
+      if (flatpickrProps.enable) {
+        calendar.set("enable", flatpickrProps.enable);
+      } else {
+        clearCalendarEnable();
+      }
+    }
+  }
+
   async function initCalendar(options) {
     if (calendar) {
       applyOptionIfChanged("minDate", minDate);
       applyOptionIfChanged("maxDate", maxDate);
       applyOptionIfChanged("locale", locale, resolveLocale(locale));
       applyOptionIfChanged("dateFormat", dateFormat);
+      applyDisabledDates();
+      applyEnabledDates();
       for (const [option, value] of Object.entries(flatpickrProps)) {
         // `static` is decided by `effectivePortalMenu` at creation time
         // (see below); re-applying the default `flatpickrProps.static`
@@ -626,6 +707,9 @@
         // Owned by the read-only block below, which combines them with
         // `$readonlyAny`.
         if (option === "clickOpens" || option === "allowInput") continue;
+        // `disabledDates`/`enabledDates` already applied above and won.
+        if (option === "disable" && disabledDates.length > 0) continue;
+        if (option === "enable" && enabledDates.length > 0) continue;
         applyOptionIfChanged(
           option,
           value,
@@ -809,6 +893,8 @@
       // The flatpickr range plugin strips the `readonly` attribute when
       // `allowInput` is true, so read-only wins over `flatpickrProps`.
       ...interactive,
+      ...(disabledDates.length > 0 && { disable: disabledDates }),
+      ...(enabledDates.length > 0 && { enable: enabledDates }),
     })
       .then(() => {})
       .catch((error) => {
