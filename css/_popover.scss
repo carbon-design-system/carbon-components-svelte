@@ -44,7 +44,7 @@
 
     position: relative;
     width: max-content;
-    max-width: rem(368px);
+    max-width: to-rem(368px);
     background-color: $ui-01;
     border-radius: 2px;
     color: $popover-text-color;
@@ -67,8 +67,8 @@
   .#{$prefix}--popover--caret .#{$prefix}--popover-contents::after {
     position: absolute;
     display: inline-block;
-    width: rem(8px);
-    height: rem(8px);
+    width: to-rem(8px);
+    height: to-rem(8px);
     background-color: inherit;
     content: "";
   }
