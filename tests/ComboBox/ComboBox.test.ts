@@ -1538,6 +1538,23 @@ describe("ComboBox", () => {
     expect(input.selectionEnd).toBe(5);
   });
 
+  it("does not select text on focus when disabled", async () => {
+    render(ComboBox, {
+      props: {
+        selectedId: "1",
+        value: "Email",
+        selectTextOnFocus: true,
+        disabled: true,
+      },
+    });
+
+    const input = getInput();
+    const select = vi.spyOn(input, "select");
+    await fireEvent.focus(input);
+
+    expect(select).not.toHaveBeenCalled();
+  });
+
   describe("Typeahead", () => {
     it("should autocomplete with typeahead when typing", async () => {
       render(ComboBox, {
