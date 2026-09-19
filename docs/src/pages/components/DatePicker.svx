@@ -164,7 +164,7 @@ Pass `inline: true` via `flatpickrProps` to render the calendar permanently belo
 
 ### Week numbers
 
-Pass `weekNumbers: true` via `flatpickrProps` to show a week number column beside the day grid. Weeks are numbered per ISO 8601 by default; pass `getWeek` alongside it to compute them differently, such as for fiscal weeks.
+Pass `weekNumbers: true` via `flatpickrProps` to show a week number column beside the day grid. Weeks are numbered per ISO 8601 by default; pass `getWeek` alongside it to compute them differently, such as for fiscal weeks. Flatpickr only fills the column when a single month is shown, so avoid combining it with `showMonths`.
 
 <FileSource src="/framed/DatePicker/DatePickerWeekNumbers" />
 
