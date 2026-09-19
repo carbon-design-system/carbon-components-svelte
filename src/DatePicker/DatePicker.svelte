@@ -623,6 +623,9 @@
         if (option === "static" && effectivePortalMenu) continue;
         // Unsupported: see `wrap` in create-calendar.js.
         if (option === "wrap") continue;
+        // Owned by the read-only block below, which combines them with
+        // `$readonlyAny`.
+        if (option === "clickOpens" || option === "allowInput") continue;
         applyOptionIfChanged(
           option,
           value,
@@ -813,9 +816,17 @@
         console.error(error);
       });
   }
+  // Read-only turns both off. Otherwise the consumer's `flatpickrProps`
+  // decide, so `allowInput: false` (calendar-only selection) survives.
   $: if (calendar) {
-    calendar.set("clickOpens", !$readonlyAny);
-    calendar.set("allowInput", !$readonlyAny);
+    calendar.set(
+      "clickOpens",
+      !$readonlyAny && flatpickrProps.clickOpens !== false,
+    );
+    calendar.set(
+      "allowInput",
+      !$readonlyAny && flatpickrProps.allowInput !== false,
+    );
     if ($readonlyAny && calendar.isOpen) calendar.close();
   }
 
