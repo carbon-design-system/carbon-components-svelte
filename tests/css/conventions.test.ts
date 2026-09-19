@@ -251,6 +251,26 @@ describe("css partial conventions", () => {
     expect(offenders).toEqual([]);
   });
 
+  it("pins the fluid CopyInput button with a real `right` offset, not `auto`", () => {
+    // Regression guard: a logical-inset cleanup swapped `inset-inline-end`
+    // for `right: $carbon--spacing-03` but left an existing `right: auto`
+    // in the same fluid rule. A later dead-declaration pass correctly
+    // pruned the now-unreachable `right: $carbon--spacing-03`, leaving
+    // only `right: auto` — no offset at all — and the button fell back to
+    // its static (left) position. See PR #3863.
+    const css = readFileSync(join(CSS_DIR, "_copy-input.scss"), "utf8");
+    // `block-size: to-rem(32px)` only appears once, inside the fluid
+    // `.bx--form--fluid .bx--copy-btn` override (the non-fluid rule above
+    // it uses `width`/`height` only), so anchoring here can't accidentally
+    // match the base rule's unrelated `right: 0`.
+    const fluidRule = css.match(
+      /block-size: to-rem\(32px\);[\s\S]*?\n\s*\}/,
+    )?.[0];
+    expect(fluidRule).toBeDefined();
+    expect(fluidRule).not.toMatch(/right:\s*auto\s*;/);
+    expect(fluidRule).toMatch(/right:\s*\$carbon--spacing-\d\d;/);
+  });
+
   it("guards hover rules with (any-hover: hover)", () => {
     // `:focus:hover` rides along in `:focus` lists with the same declarations.
     const unguarded = PARTIALS.flatMap((name) => {
