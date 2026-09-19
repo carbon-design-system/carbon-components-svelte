@@ -60,7 +60,7 @@
   // `.#{$prefix}--header__action-text`'s `margin-left` assumes a preceding
   // icon/avatar. Without one (no `avatar` slot), that margin is a stray gap
   // before the text — cancel it.
-  .#{$prefix}--header-switcher__text--flush.#{$prefix}--header-switcher__text--flush {
+  .#{$prefix}--header-switcher__text--flush {
     margin-left: 0;
   }
 
@@ -82,7 +82,7 @@
   // Reserve the full focus border-width at rest (transparent) so `:focus`
   // only swaps the border color instead of growing the border, which would
   // otherwise shift this auto-width trigger's content by a couple of pixels.
-  .#{$prefix}--header-switcher__trigger.#{$prefix}--header-switcher__trigger {
+  .#{$prefix}--header-switcher__trigger {
     border-width: $button-border-width;
     border-color: transparent;
     // Offset the reserved border so the avatar lands at the same inset as
@@ -91,7 +91,7 @@
     padding-left: calc(#{$carbon--spacing-05} - #{$button-border-width});
   }
 
-  .#{$prefix}--header-switcher__menu.#{$prefix}--header-switcher__menu {
+  .#{$prefix}--header-switcher__menu {
     position: absolute;
     top: 100%;
     left: 0;
