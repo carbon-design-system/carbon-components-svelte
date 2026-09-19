@@ -446,40 +446,61 @@ The library vendors the Carbon v10 SCSS (inlined from `carbon-components@10.58.1
 
 #### Anatomy of a partial
 
-Each patch is a leading-underscore partial (for example `css/_breadcrumb.scss`, `css/_tag.scss`) that imports the Carbon variables and mixins it needs, defines a single named mixin, and emits it through Carbon's `exports()` import-once guard:
+Each patch is a leading-underscore partial (for example [`css/_dropdown.scss`](css/_dropdown.scss), [`css/_meter.scss`](css/_meter.scss)) that imports the Carbon variables and mixins it uses, defines a single named mixin, and emits it through Carbon's `exports()` import-once guard:
 
 ```scss
 @import "carbon-components/scss/globals/scss/vars";
-@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
-/// Small breadcrumb variant (Carbon React `size="sm"` parity)
+/// Reserve room for `Dropdown`'s clear button next to the chevron.
 /// @access private
 /// @group components
-@mixin breadcrumb-sm {
-  .#{$prefix}--breadcrumb--sm {
-    @include type-style("label-01");
-    margin-right: $carbon--spacing-02;
+@mixin dropdown-clearable {
+  .#{$prefix}--list-box__field--clearable {
+    padding-right: to-rem(72px);
   }
 }
 
-@include exports("breadcrumb-sm") {
-  @include breadcrumb-sm;
+@include exports("dropdown-clearable") {
+  @include dropdown-clearable;
 }
 ```
 
+The `exports()` key must be unique across the whole build, **including the vendored Carbon keys**. Carbon already claims `exports("dropdown")`, `exports("tooltip")`, `exports("code-snippet")`, and so on; a partial that reuses one of those keys compiles cleanly and emits nothing. That is why `css/_dropdown.scss` exports `dropdown-clearable` and `css/_tooltip.scss` exports `tooltip-portal`. Name the mixin after the key.
+
+Non-emitting helpers (Sass maps or mixins other partials include, such as [`css/_spacing-scale.scss`](css/_spacing-scale.scss)) skip the mixin and `exports()` wrapper. `css/_ui-shell-classic.scss` is the one emitting exception: it is gated on `$ccs-theme-switching` instead.
+
 #### Conventions
 
-Style only through Carbon tokens and mixins: spacing (`$carbon--spacing-*`), type (`type-style(...)`), `to-rem(...)`, and theme color tokens. Do not hardcode raw `px` or hex values. Tokens keep themes consistent and survive a future Carbon upgrade.
+Values:
 
-Reference classes through `$prefix` (`.#{$prefix}--breadcrumb`), never a literal `.bx--…`.
+- Sizes: `to-rem(Npx)` or a spacing token. Not Carbon's bare `rem()`, not a raw rem literal. Hairlines (`1px`/`2px` borders, outlines, and offsets) stay in `px`.
+- Spacing tokens: `$carbon--spacing-01` … `-13`. Not the `$spacing-0N` aliases.
+- Color: theme tokens (`$ui-01`, `$field-01`, `$support-error`, …). No hex. In `all.css` tokens compile to `var(--cds-*)` strings, so Sass color functions (`mix()`, `lightness()`, `rgba($token, …)`) and unary minus (`-$token`) silently drop the rule or no-op.
+- Type: `type-style("…")`.
+- Motion: `$duration--*` with `motion(standard, productive)` and friends, never a literal `ms` or `cubic-bezier()`. Never `transition: all`: list the properties, and leave out `border-color`/`box-shadow`/`outline` when they double as the focus ring so the ring snaps instead of fading.
+- Focus rings: `@include focus-outline("outline")` / `("invalid")`, not a hand-written `outline`.
+- `z-index`: `z("floating")`, `z("dropdown")`, … for anything that floats over the page. A literal `1`/`-1` is fine for stacking inside the component's own box.
+- Breakpoints: `@include carbon--breakpoint(md)`, not a literal `min-width`.
+- Custom properties: `--cds-*` is reserved for Carbon theme tokens. Properties this library invents are `--ccs-*` (and Sass globals `$ccs-*`). A few older public hooks predate this rule (`--cds-scroll-gradient-color`, `--cds-popover-offset`, `--user-avatar-group-overlap`); do not add more.
 
-Do not use `:has()`. It exceeds the Svelte 5 browserslist baseline (Firefox 83/Safari 14) the CSS targets, and Lightning CSS cannot prefix or polyfill it. Mark parents explicitly instead (for example a `hasLeftIcon` prop emitting a marker class). Same rule for any selector newer than that baseline.
+Selectors:
 
-Wrap output in `@include exports("name")` so a partial imported by multiple theme entry files emits its rules only once.
+- Reference classes through `$prefix` (`.#{$prefix}--breadcrumb`), never a literal `.bx--…`.
+- Scope every rule in a variant partial under that variant's wrapper (`.#{$prefix}--time-picker--fluid …`), including "hide by default" rules.
+- State: follow the v10 base where one exists (`[data-invalid]`, `--warn` vs `--warning` differ per component upstream). For new components use modifier classes on the wrapper: `--invalid`, `--warning`, `--disabled`, `--readonly`, `--open`.
+- When a rule applies only if _none_ of several states hold, have the component emit one marker class (`--neutral`) instead of chaining `:not()`.
+- Do not pad specificity (repeated classes, `tag.class`, order-only `:not()`). If the rule you need to beat is in the vendored tree, edit it there. Repetition is tolerated only to preserve an existing cascade during a refactor, with a comment saying what it matches.
+- Hover rules go in **one** `@media (any-hover: hover)` block per partial, at the end of the mixin. Lightning CSS only merges adjacent blocks, and `tests/css/media-query-grouping.test.ts` budgets the total.
+- Use physical properties (`left`, `padding-right`, `height`) for new code, matching the v10 base. Several v11 backports use logical properties on the block axis; do not mix both for the same box in one rule.
+- Do not use `:has()`. It exceeds the Svelte 5 browserslist baseline (Firefox 83/Safari 14) the CSS targets, and Lightning CSS cannot prefix or polyfill it. Mark parents explicitly instead (for example a `hasLeftIcon` prop emitting a marker class). Same rule for any selector newer than that baseline, since one unknown selector invalidates the whole rule. Newer _properties_ that degrade gracefully (`text-wrap: pretty`) are fine.
 
-Document the mixin with SassDoc (`/// @access private`, `/// @group components`).
+Naming:
 
-Token utility partials (`css/_type.scss`, `css/_box.scss`, …) emit `bx--type-*` and `bx--box-*` classes. Map v11 token names in docs and props to v10 theme variables in SCSS where needed (for example `layer-01` → `$ui-01`). Share spacing scale values through [`css/_spacing-scale.scss`](css/_spacing-scale.scss) when multiple partials use the same rem steps.
+- Component variants are BEM modifiers (`bx--meter--sm`). Sizes use `--xs`/`--sm`/`--md`/`--lg`/`--xl`; a bare number (`--20`) only when the prop itself is a pixel size.
+- Token utilities are `bx--{block}-{property}-{step}` (`bx--box-p-5`, `bx--type-mono`). Map v11 token names in docs and props to v10 theme variables in SCSS where needed (for example `layer-01` → `$ui-01`). Share spacing scale values through [`css/_spacing-scale.scss`](css/_spacing-scale.scss).
+
+Document the mixin with SassDoc (`/// @access private`, `/// @group components`) and use `//` for everything else. Use double quotes. When a partial overrides a single vendored component, say in its header why it could not live in the vendored file.
 
 #### Where a patch lives
 
@@ -487,14 +508,20 @@ Component-scoped patches sit at the end of the vendored component file itself (f
 
 #### Registering a partial
 
-A `css/_*.scss` partial ships only after a theme entry file imports it. Add `@import "./name";` to the custom component overrides block, which comes _after_ the itemized Carbon base imports (`css/_carbon-styles.scss`), in all six entry files. Keep import order identical across them:
+A `css/_*.scss` partial ships only once [`css/_carbon-styles.scss`](css/_carbon-styles.scss) imports it. That manifest is shared by all six theme entry files (`all`, `white`, `g10`, `g80`, `g90`, `g100`), so there is nothing to add to the entries themselves.
 
-- `css/all.scss`
-- `css/white.scss`
-- `css/g10.scss`
-- `css/g80.scss`
-- `css/g90.scss`
-- `css/g100.scss`
+Emission order is load-bearing: equal-specificity ties resolve by source order. Slot a partial that extends one Carbon component right after that component's import; everything else goes in the post-base block, under the matching group comment. If your rule has to come after a specific neighbour to win, say so in a comment next to the import.
+
+#### Guards
+
+| Command | Use |
+| --- | --- |
+| `bun run check:css --base <ref>` | Compiled-rule cascade diff against a ref. Run for any refactor that should not change output. |
+| `bun run check:css:overrides` | Declarations that can never win. Also runs in CI as `tests/css/overrides.test.ts`. |
+| `bun e2e/cascade-snapshot.ts` | Computed-style snapshot of the e2e fixtures. |
+| `bun run check:css:usage` | Browser-measured "never wins" worklist. Evidence, not proof. |
+
+Compiled-output and source conventions are enforced by the tests in `tests/css/`. A new rule about how CSS is written or emitted should land with a test there.
 
 #### Rebuild
 

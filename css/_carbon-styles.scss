@@ -2,21 +2,19 @@
 // `carbon-components/scss/globals/scss/styles` and, since the theme files
 // used to duplicate it six times, this library's own partial list too.
 //
-// Emission order is load-bearing (equal-specificity ties resolve by order),
-// so the sections below are in the order they have always emitted:
+// Emission order is load-bearing (equal-specificity ties resolve by order).
+// Two sections:
 //
-//   1. tag + notification, first of all: the theme entry files need their
-//      component-token maps before the theme blocks, and their CSS has
-//      always emitted at the top.
-//   2. Carbon globals and the component partials this library renders,
+//   1. Carbon globals and the component partials this library renders,
 //      with this library's own components slotted right after the Carbon
-//      partial they build on.
+//      partial they build on. tag sits before list-box, not alphabetically,
+//      because later components restyle tags at equal specificity.
 //      Omits components/toolbar (deprecated v9 `bx--toolbar`; the DataTable
 //      toolbar is styled by data-table/_data-table-action.scss) and
 //      pagination/unstable_pagination (`bx--unstable-pagination`). Audit a
 //      partial's `bx--` class roots against `src/**/*.svelte` before removing
 //      or re-adding an import here.
-//   3. post-base library partials: v11 backports with no v10 base plus a few
+//   2. post-base library partials: v11 backports with no v10 base plus a few
 //      overrides that must emit after every component.
 //
 // Selector-level pruning has also been applied within several imported
