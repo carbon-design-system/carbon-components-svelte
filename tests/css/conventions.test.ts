@@ -91,6 +91,12 @@ describe("css partial conventions", () => {
     expect(offenders(/\$spacing-\d/)).toEqual([]);
   });
 
+  it("times transitions with motion tokens and an explicit property list", () => {
+    expect(offenders(/transition:.*(\d(ms|s)\b|cubic-bezier|\ball\b)/)).toEqual(
+      [],
+    );
+  });
+
   it("avoids :has(), which is newer than the browser baseline", () => {
     expect(offenders(/:has\(/)).toEqual([]);
   });

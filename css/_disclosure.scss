@@ -56,7 +56,7 @@
     margin: $accordion-arrow-margin;
     fill: $ui-05;
     transform: rotate(-270deg) #{"/*rtl:ignore*/"};
-    transition: all $duration--fast-02 motion(standard, productive);
+    transition: transform $duration--fast-02 motion(standard, productive);
   }
 
   .#{$prefix}--disclosure__summary {

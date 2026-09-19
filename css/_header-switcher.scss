@@ -68,7 +68,7 @@
     display: flex;
     flex-shrink: 0;
     margin-left: $carbon--spacing-03;
-    transition: transform 110ms cubic-bezier(0.2, 0, 0.38, 0.9);
+    transition: transform $duration--fast-02 motion(standard, productive);
   }
 
   .#{$prefix}--header-switcher__chevron > svg {
