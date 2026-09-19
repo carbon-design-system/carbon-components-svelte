@@ -116,6 +116,12 @@
   export let position = undefined;
 
   /**
+   * Set the CSS display.
+   * @type {"block" | "flex" | "inline-flex" | "grid" | undefined}
+   */
+  export let display = undefined;
+
+  /**
    * Set the offset from the top when `position` is set. Numbers `0`–`13` use the shared layout scale; strings accept any CSS length.
    * @type {OffsetValue | undefined}
    */
@@ -217,6 +223,7 @@
     viewportClass("min-height", minHeight),
     spacingClass("max-height", maxHeight),
     position && `bx--box-position-${position}`,
+    display && `bx--box-display-${display}`,
     offsetClass("top", top),
     offsetClass("bottom", bottom),
     $$restProps.class,
