@@ -50,6 +50,10 @@
     color: $text-secondary;
     text-align: left;
     text-decoration: none;
+    // ccs: hover/selected/disabled change background-color and color.
+    // Omit border-color/box-shadow so the :focus ring snaps on; avoid
+    // `all` so the browser doesn't interpolate the rest of the
+    // animatable property set.
     transition: background-color $duration--moderate-01 motion(standard, productive),
       color $duration--moderate-01 motion(standard, productive);
     white-space: nowrap;
