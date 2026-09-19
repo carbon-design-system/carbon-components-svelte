@@ -11,6 +11,13 @@
 </script>
 
 <Stack gap={4}>
+  <Button
+    kind="tertiary"
+    bind:ref={todayButton}
+    on:click={() => calendar?.setDate(new Date(), true)}
+  >
+    Jump to today
+  </Button>
   <DatePicker
     datePickerType="single"
     bind:calendar
@@ -22,11 +29,4 @@
   >
     <DatePickerInput labelText="Meeting date" placeholder="mm/dd/yyyy" />
   </DatePicker>
-  <Button
-    kind="tertiary"
-    bind:ref={todayButton}
-    on:click={() => calendar?.setDate(new Date(), true)}
-  >
-    Jump to today
-  </Button>
 </Stack>
