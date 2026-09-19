@@ -151,8 +151,10 @@
 
   .dayContainer {
     display: flex;
+    flex: none;
     flex-wrap: wrap;
     justify-content: space-around;
+    width: to-rem(280px);
     height: to-rem(246px);
     padding: 0;
     outline: 0;
@@ -440,15 +442,32 @@
   }
 
   // Week numbers (flatpickr `weekNumbers`): a 40px column beside the grid.
-  // `!important` beats the inline widths flatpickr measures for this mode
-  // while the calendar is still hidden, which come out too narrow and wrap
-  // the day grid at six columns.
-  .flatpickr-calendar.hasWeeks.open {
-    width: to-rem(328px) !important;
+  // For `weekNumbers` and `showMonths` flatpickr sets inline widths: one
+  // measured month per `showMonths`, plus the week column. It expects that
+  // to be the content width, so the padding must sit outside it, and each
+  // month must hold its measured width or the grids wrap into each other.
+  .flatpickr-calendar.hasWeeks,
+  .flatpickr-calendar.multiMonth {
+    box-sizing: content-box;
   }
 
-  .flatpickr-calendar.hasWeeks .flatpickr-days {
-    width: 100% !important;
+  .flatpickr-calendar.hasWeeks.open,
+  .flatpickr-calendar.multiMonth.open {
+    height: to-rem(324px);
+  }
+
+  .flatpickr-days {
+    display: flex;
+  }
+
+  // Multi-month grids only render the weeks a month needs, and flag the
+  // neighbouring months' days `hidden` since the next grid shows them.
+  .flatpickr-calendar.multiMonth .dayContainer {
+    align-content: flex-start;
+  }
+
+  .flatpickr-day.hidden {
+    visibility: hidden;
   }
 
   .flatpickr-innerContainer {
