@@ -67,6 +67,12 @@ Set `borderStyle` to `"dashed"` for a dashed border. It only takes effect when `
   <Box fill="layer-01" padding={5} border="strong" borderStyle="dashed">dashed</Box>
 </Stack>
 
+Set `borderWidth` to a pixel number or a CSS length for a thicker border. It only takes effect when `border` is set.
+
+<Stack gap={3}>
+  <Box fill="layer-01" padding={5} border="interactive" borderWidth={2}>2px border</Box>
+</Stack>
+
 ## Spacing
 
 Set padding and margin using the shared layout scale 1–13 (same values as [Stack](/components/Stack) gap). Pass a string for any CSS length.
