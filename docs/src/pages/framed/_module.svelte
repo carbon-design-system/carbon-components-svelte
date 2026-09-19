@@ -10,10 +10,6 @@
   function applyTheme(theme) {
     if (validThemes.includes(theme)) {
       document.documentElement.setAttribute("theme", theme);
-      document.documentElement.style.setProperty(
-        "color-scheme",
-        ["white", "g10"].includes(theme) ? "light" : "dark",
-      );
     }
   }
 
