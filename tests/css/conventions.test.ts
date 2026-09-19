@@ -16,6 +16,7 @@ const NO_EXPORTS = new Set([
   "_carbon-styles.scss",
   "_fluid-shared.scss",
   "_spacing-scale.scss",
+  "_status-colors.scss",
   "_ui-shell-classic.scss",
 ]);
 
@@ -123,6 +124,14 @@ describe("css partial conventions", () => {
     expect(offenders(/transition:.*(\d(ms|s)\b|cubic-bezier|\ball\b)/)).toEqual(
       [],
     );
+  });
+
+  it("derives indicator status colors from one shared palette", () => {
+    for (const name of ["_icon-indicator.scss", "_shape-indicator.scss"]) {
+      const source = readFileSync(join(CSS_DIR, name), "utf8");
+      expect(source).toContain("ccs-status-colors()");
+      expect(source).not.toMatch(/\$status-\w+: if\(/);
+    }
   });
 
   it("keeps _fluid-shared.scss to declaration mixins that emit nothing", () => {

@@ -24,6 +24,7 @@ const ALL_ONLY_IMPORTS = [
 const UNREGISTERED_PARTIALS = [
   "_fluid-shared.scss",
   "_spacing-scale.scss",
+  "_status-colors.scss",
   MANIFEST,
 ];
 
