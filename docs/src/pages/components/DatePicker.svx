@@ -156,6 +156,12 @@ By default, the calendar closes when a date is selected. Pass `closeOnSelect: fa
 
 <FileSource src="/framed/DatePicker/DatePickerCloseOnSelect" />
 
+### Inline calendar
+
+Pass `inline: true` via `flatpickrProps` to render the calendar permanently below the input instead of in a popup. The input still shows the selected date.
+
+<FileSource src="/framed/DatePicker/DatePickerInline" />
+
 ### Week numbers
 
 Pass `weekNumbers: true` via `flatpickrProps` to show a week number column beside the day grid. Weeks are numbered per ISO 8601 by default; pass `getWeek` alongside it to compute them differently, such as for fiscal weeks.
