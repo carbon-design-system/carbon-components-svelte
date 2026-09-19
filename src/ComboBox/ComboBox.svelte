@@ -549,6 +549,9 @@
   $: showWarn = warn && !invalid && !disabled && !readonly;
   $: isFluid = fluid || !!formContext?.isFluid;
   $: showFieldFocus = isFluid && (fieldFocused || open);
+  // Neutral = default fluid state, i.e. none of the other wrapper modifiers apply.
+  $: fluidNeutral =
+    isFluid && !showInvalid && !showWarn && !disabled && !readonly;
   // Fluid (non-condensed) menu items are 64px tall (see css/_fluid-list-box.scss).
   // Portaled menus render outside the fluid wrapper, so they keep default heights.
   $: hasFluidMenuItems = isFluid && !condensed && !effectivePortalMenu;
@@ -742,6 +745,7 @@
 <div
   class:bx--list-box__wrapper={true}
   class:bx--list-box__wrapper--fluid={isFluid}
+  class:bx--list-box__wrapper--fluid--neutral={fluidNeutral}
   class:bx--list-box__wrapper--fluid--invalid={isFluid && showInvalid}
   class:bx--list-box__wrapper--fluid--warning={isFluid && showWarn}
   class:bx--list-box__wrapper--fluid--disabled={isFluid && disabled}

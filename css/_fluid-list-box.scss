@@ -38,15 +38,13 @@
     background-color: transparent;
   }
 
-  // Default fluid (no error/warn footer): hover the full wrapper. The skeleton
-  // variant is non-interactive, so exclude wrappers that contain a skeleton.
-  .#{$prefix}--list-box__wrapper--fluid:not(
-      .#{$prefix}--list-box__wrapper--fluid--invalid
-    ):not(.#{$prefix}--list-box__wrapper--fluid--warning):not(
-      .#{$prefix}--list-box__wrapper--fluid--disabled
-    ):not(.#{$prefix}--list-box__wrapper--fluid--readonly):not(
-      .#{$prefix}--list-box__wrapper--fluid--skeleton
-    ):hover {
+  // Default fluid (no error/warn footer): hover the full wrapper. `--neutral`
+  // is set by the component only when none of invalid/warning/disabled/
+  // readonly/skeleton apply, so it already encodes the same condition the
+  // `:not()` chain used to spell out. The class is repeated to match the
+  // specificity of the 5-clause `:not()` chain it replaces, so it keeps
+  // beating the same rules it used to in the cascade.
+  .#{$prefix}--list-box__wrapper--fluid.#{$prefix}--list-box__wrapper--fluid--neutral.#{$prefix}--list-box__wrapper--fluid--neutral.#{$prefix}--list-box__wrapper--fluid--neutral.#{$prefix}--list-box__wrapper--fluid--neutral.#{$prefix}--list-box__wrapper--fluid--neutral:hover {
     background-color: $hover-ui;
   }
 
