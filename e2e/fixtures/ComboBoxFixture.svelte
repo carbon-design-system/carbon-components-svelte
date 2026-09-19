@@ -54,8 +54,8 @@
   <ComboBox
     fluid
     data-testid="combobox-fluid-neutral-select"
-    labelText="Contact"
-    placeholder="Select contact method"
+    labelText="Channel"
+    placeholder="Select channel"
     {items}
     {shouldFilterItem}
   />

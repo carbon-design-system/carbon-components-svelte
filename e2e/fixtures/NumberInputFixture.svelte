@@ -44,7 +44,7 @@
   <NumberInput
     fluid
     data-testid="number-input-fluid-neutral-input"
-    labelText="Quantity"
+    labelText="Amount"
     value={10}
     min={0}
     max={100}

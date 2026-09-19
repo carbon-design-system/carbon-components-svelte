@@ -215,9 +215,13 @@ Set `ariaLabelInput` and `ariaLabelInputUpper` to distinguish the lower and uppe
 
 Use `on:input` and `on:change` the same way as `Slider`. Both events dispatch `{ value, valueUpper }` as `event.detail`.
 
+`on:focus` and `on:blur` fire for each number input and add `handle` so you can tell which bound received the event.
+
 <RangeSlider
   on:input={(e) => console.log(e.detail)} // { value: number; valueUpper: number }
   on:change={(e) => console.log(e.detail)} // { value: number; valueUpper: number }
+  on:focus={(e) => console.log(e.detail)} // { value: number; valueUpper: number; handle: "lower" | "upper" }
+  on:blur={(e) => console.log(e.detail)} // { value: number; valueUpper: number; handle: "lower" | "upper" }
   labelText="Alert threshold (%)"
   value={10}
   valueUpper={90}

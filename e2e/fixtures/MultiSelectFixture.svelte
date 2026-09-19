@@ -55,10 +55,10 @@
   <MultiSelect
     fluid
     data-testid="multiselect-fluid-neutral-select"
-    labelText="Fruits"
-    label="Choose fruits"
+    labelText="Produce"
+    label="Choose produce"
     {items}
     filterable={true}
-    placeholder="Filter fruits"
+    placeholder="Filter produce"
   />
 </div>

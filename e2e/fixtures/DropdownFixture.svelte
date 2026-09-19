@@ -19,8 +19,8 @@
   <Dropdown
     fluid
     data-testid="dropdown-fluid-neutral-select"
-    labelText="Contact"
-    label="Choose an option"
+    labelText="Channel"
+    label="Choose a channel"
     {items}
   />
 </div>
