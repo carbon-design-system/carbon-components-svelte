@@ -40,7 +40,9 @@ these prunings relative to upstream:
   exclusive `search-button` rules; Button's `btn--md` and double-dash
   `btn--danger--ghost` / `btn--danger--tertiary` aliases (Button renders
   `--field` and the single-dash kinds); `date-picker__input.bx--focused`;
-  `overflow-menu-options__content`
+  `overflow-menu-options__content`; `:not()` guards naming the unrendered
+  `side-nav__item--active`, `pagination-nav__page--direction`, and
+  `header__menu-toggle__hidden`
 
 To use an upstream file that is not vendored, restore it from
 `carbon-components@10.58.15` on npm.

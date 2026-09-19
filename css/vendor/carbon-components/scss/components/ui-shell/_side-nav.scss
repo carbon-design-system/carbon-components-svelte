@@ -181,10 +181,10 @@
   }
 
   @media (any-hover: hover) {
-    .#{$prefix}--side-nav__item:not(.#{$prefix}--side-nav__item--active):hover
-      .#{$prefix}--side-nav__item:not(.#{$prefix}--side-nav__item--active)
+    .#{$prefix}--side-nav__item:hover
+      .#{$prefix}--side-nav__item
       > .#{$prefix}--side-nav__submenu:hover,
-    .#{$prefix}--side-nav__item:not(.#{$prefix}--side-nav__item--active)
+    .#{$prefix}--side-nav__item
       > .#{$prefix}--side-nav__link:hover,
     .#{$prefix}--side-nav__menu
       .#{$prefix}--side-nav__link:not(.#{$prefix}--side-nav__link--current):not([aria-current='page']):hover,
@@ -196,10 +196,10 @@
       color: $text-primary;
     }
 
-    .#{$prefix}--side-nav__item:not(.#{$prefix}--side-nav__item--active)
+    .#{$prefix}--side-nav__item
       > .#{$prefix}--side-nav__link:hover
       > span,
-    .#{$prefix}--side-nav__item:not(.#{$prefix}--side-nav__item--active)
+    .#{$prefix}--side-nav__item
       .#{$prefix}--side-nav__menu-item
       > .#{$prefix}--side-nav__link:hover
       > span {

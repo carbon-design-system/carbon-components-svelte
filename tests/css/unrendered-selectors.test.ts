@@ -19,6 +19,10 @@ const UNRENDERED = [
   /&--(ghost|tertiary) \{/,
   /\}--focused\b/,
   /overflow-menu-options__content/,
+  // `:not()` guards on these only padded specificity.
+  /side-nav__item--active/,
+  /pagination-nav__page--direction/,
+  /header__menu-toggle__hidden/,
 ];
 
 describe("unrendered selectors", () => {
