@@ -10,7 +10,7 @@
 /// @access private
 /// @group components
 @mixin dropdown-clearable {
-  .#{$prefix}--list-box__field.#{$prefix}--list-box__field--clearable {
+  .#{$prefix}--list-box__field--clearable {
     padding-right: to-rem(72px);
   }
 }
