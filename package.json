@@ -34,7 +34,7 @@
   ],
   "scripts": {
     "setup": "bun ci && bun build:docs && bun build:css && cd docs && bun ci",
-    "test": "vitest",
+    "test": "bun test --conditions=browser --isolate tests",
     "bench": "ostia bench --bun-flags=\"--conditions=browser\"",
     "test:src-types": "tsgo --project tsconfig.types.json",
     "test:src-svelte": "svelte-check --workspace src --no-tsconfig --diagnostic-sources svelte --fail-on-warnings",
@@ -85,8 +85,7 @@
     "svelte": "^5.57.0",
     "svelte-check": "^4.7.6",
     "typescript": "^6.0.3",
-    "vite": "^8.3.0",
-    "vitest": "^5.0.0"
+    "vite": "^8.3.0"
   },
   "repository": {
     "type": "git",
