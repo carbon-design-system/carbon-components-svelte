@@ -24,14 +24,14 @@ $ccs-themes: (
 
   // The header panel is always g100 (dark) in the classic variant, regardless of
   // the page theme, so force a dark color scheme rather than inheriting the root's.
-  .#{$prefix}--header-panel.#{$prefix}--header-panel {
+  .#{$prefix}--header-panel {
     color-scheme: dark;
   }
 
   // The ProfileMenu card inherits the classic header's g100 tokens (it renders as
   // a header descendant), so it is dark already; force the color scheme to match
   // for native scrollbars and controls.
-  .#{$prefix}--profile-menu.#{$prefix}--profile-menu {
+  .#{$prefix}--profile-menu {
     color-scheme: dark;
   }
 }
