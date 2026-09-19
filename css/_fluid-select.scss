@@ -31,7 +31,7 @@
     block-size: to-rem(16px);
     inline-size: calc(100% - 2rem);
     inset-block-start: to-rem(13px);
-    left: $spacing-05;
+    left: $carbon--spacing-05;
   }
 
   .#{$prefix}--select--fluid .#{$prefix}--label::-webkit-scrollbar {
@@ -39,12 +39,12 @@
   }
 
   .#{$prefix}--select--fluid .#{$prefix}--label.#{$prefix}--label--slotted {
-    gap: $spacing-03;
+    gap: $carbon--spacing-03;
     overflow: visible;
   }
 
   .#{$prefix}--select--fluid .#{$prefix}--select-input {
-    padding: to-rem(32px) to-rem(32px) to-rem(13px) $spacing-05;
+    padding: to-rem(32px) to-rem(32px) to-rem(13px) $carbon--spacing-05;
     min-block-size: to-rem(64px);
     outline: none;
     text-overflow: ellipsis;
@@ -53,7 +53,7 @@
   .#{$prefix}--select--fluid .#{$prefix}--select__arrow {
     block-size: 1rem;
     inset-block-start: to-rem(34px);
-    right: $spacing-04;
+    right: $carbon--spacing-04;
   }
 
   .#{$prefix}--select--fluid .#{$prefix}--select__divider {
@@ -128,7 +128,7 @@
   }
 
   .#{$prefix}--select--fluid .#{$prefix}--form-requirement {
-    padding: $spacing-03 to-rem(40px) $spacing-03 $spacing-05;
+    padding: $carbon--spacing-03 to-rem(40px) $carbon--spacing-03 $carbon--spacing-05;
     margin: 0;
   }
 
@@ -141,7 +141,7 @@
     .#{$prefix}--select-input__wrapper
     .#{$prefix}--select__invalid-icon {
     inset-block-start: to-rem(73px);
-    right: $spacing-05;
+    right: $carbon--spacing-05;
     pointer-events: none;
   }
 
@@ -168,8 +168,8 @@
     position: absolute;
     block-size: to-rem(8px);
     inline-size: 25%;
-    inset-block-start: $spacing-05;
-    left: $spacing-05;
+    inset-block-start: $carbon--spacing-05;
+    left: $carbon--spacing-05;
   }
 
   .#{$prefix}--select--fluid__skeleton .#{$prefix}--label {
@@ -178,7 +178,7 @@
     block-size: to-rem(8px);
     inline-size: 50%;
     inset-block-start: to-rem(36px);
-    left: $spacing-05;
+    left: $carbon--spacing-05;
   }
 }
 

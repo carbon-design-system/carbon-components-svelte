@@ -22,7 +22,7 @@
     .#{$prefix}--text-input {
     overflow: hidden;
     padding-block: to-rem(33px) to-rem(13px);
-    padding-inline: $spacing-05 $spacing-10;
+    padding-inline: $carbon--spacing-05 $carbon--spacing-10;
     text-overflow: ellipsis;
     transition: none;
     white-space: nowrap;

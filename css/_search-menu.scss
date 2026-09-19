@@ -187,7 +187,7 @@
   }
 
   // Margin between groups. Skips the first group (menu top padding handles that).
-  // Default is $spacing-05; xs/sm override in the size loop. HeaderSearch sm
+  // Default is $carbon--spacing-05; xs/sm override in the size loop. HeaderSearch sm
   // overrides in _ui-shell.scss.
   .#{$prefix}--search-menu-group:not(:first-child)
     .#{$prefix}--search-menu-group__header {

@@ -69,8 +69,8 @@
   .#{$prefix}--profile-menu__header {
     display: flex;
     flex-direction: column;
-    gap: $spacing-05;
-    padding: $spacing-05;
+    gap: $carbon--spacing-05;
+    padding: $carbon--spacing-05;
     color: $text-primary;
     text-decoration: none;
   }
@@ -92,7 +92,7 @@
   .#{$prefix}--profile-menu__identity {
     display: flex;
     align-items: center;
-    gap: $spacing-04;
+    gap: $carbon--spacing-04;
   }
 
   .#{$prefix}--profile-menu__meta {
@@ -119,7 +119,7 @@
   .#{$prefix}--profile-menu__list {
     display: flex;
     flex-direction: column;
-    padding: $spacing-03 0;
+    padding: $carbon--spacing-03 0;
   }
 
   .#{$prefix}--profile-menu__item.#{$prefix}--profile-menu__item {
@@ -130,7 +130,7 @@
     // Tall enough to fit a leading `sm` (1.5rem) avatar with breathing room.
     min-height: 2.5rem;
     margin: 0;
-    padding: 0 $spacing-05;
+    padding: 0 $carbon--spacing-05;
     color: $text-secondary;
     text-align: left;
     text-decoration: none;
@@ -164,7 +164,7 @@
     flex: 1;
     align-items: center;
     min-width: 0;
-    gap: $spacing-03;
+    gap: $carbon--spacing-03;
   }
 
   .#{$prefix}--profile-menu__item-avatar {
@@ -186,14 +186,14 @@
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    gap: $spacing-05;
-    padding: $spacing-05;
+    gap: $carbon--spacing-05;
+    padding: $carbon--spacing-05;
   }
 
   .#{$prefix}--profile-menu__detail-text {
     display: flex;
     flex-direction: column;
-    gap: $spacing-02;
+    gap: $carbon--spacing-02;
   }
 
   .#{$prefix}--profile-menu__detail-label {

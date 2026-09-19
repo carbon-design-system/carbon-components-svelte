@@ -23,7 +23,7 @@
   .#{$prefix}--toggletip-label {
     @include type-style("label-01");
 
-    margin-right: $spacing-03;
+    margin-right: $carbon--spacing-03;
     color: $text-02;
   }
 
@@ -55,8 +55,8 @@
 
     display: grid;
     max-width: to-rem(288px);
-    padding: $spacing-05;
-    row-gap: $spacing-05;
+    padding: $carbon--spacing-05;
+    row-gap: $carbon--spacing-05;
   }
 
   // The content sits on the inverse (dark) popover surface, so links must use
@@ -84,7 +84,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    column-gap: $spacing-05;
+    column-gap: $carbon--spacing-05;
   }
 }
 

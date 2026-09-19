@@ -85,6 +85,12 @@ describe("css partial conventions", () => {
     expect(offenders(/(^|[^a-z-])rem\(/)).toEqual([]);
   });
 
+  it("uses $carbon--spacing-* tokens, not the $spacing-* aliases", () => {
+    // The aliases compile to `var(--cds-spacing-*)` in all.css while the
+    // vendored base is mostly static, so mixing them only adds bytes.
+    expect(offenders(/\$spacing-\d/)).toEqual([]);
+  });
+
   it("avoids :has(), which is newer than the browser baseline", () => {
     expect(offenders(/:has\(/)).toEqual([]);
   });

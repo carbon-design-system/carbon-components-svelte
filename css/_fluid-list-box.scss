@@ -84,7 +84,7 @@
     block-size: to-rem(16px);
     inline-size: calc(100% - 2rem);
     inset-block-start: to-rem(13px);
-    left: $spacing-05;
+    left: $carbon--spacing-05;
   }
 
   .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--label::-webkit-scrollbar {
@@ -93,7 +93,7 @@
 
   .#{$prefix}--list-box__wrapper--fluid
     .#{$prefix}--label.#{$prefix}--label--slotted {
-    gap: $spacing-03;
+    gap: $carbon--spacing-03;
     overflow: visible;
   }
 
@@ -108,7 +108,7 @@
 
   .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--list-box__field {
     padding-block: to-rem(33px) to-rem(13px);
-    padding-inline-start: $spacing-05;
+    padding-inline-start: $carbon--spacing-05;
   }
 
   .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--list-box__menu-icon {
@@ -119,20 +119,20 @@
   .#{$prefix}--list-box__wrapper--fluid
     .#{$prefix}--dropdown
     .#{$prefix}--list-box__menu-icon {
-    right: $spacing-05;
+    right: $carbon--spacing-05;
   }
 
   .#{$prefix}--list-box__wrapper--fluid
     .#{$prefix}--multi-select
     .#{$prefix}--list-box__menu-icon {
-    right: $spacing-04;
+    right: $carbon--spacing-04;
   }
 
   .#{$prefix}--list-box__wrapper--fluid:not(
       .#{$prefix}--list-box__wrapper--fluid--condensed
     )
     .#{$prefix}--list-box__menu-item {
-    block-size: $spacing-10;
+    block-size: $carbon--spacing-10;
   }
 
   .#{$prefix}--list-box__wrapper--fluid:not(
@@ -217,7 +217,7 @@
   // the fluid wrapper. The base v10 styles already reveal it via the
   // `[data-invalid] ~` and `--warning ~` general sibling selectors.
   .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--form-requirement {
-    padding: to-rem(8px) 4rem to-rem(8px) $spacing-05;
+    padding: to-rem(8px) 4rem to-rem(8px) $carbon--spacing-05;
     margin-block-start: 0;
   }
 
@@ -234,20 +234,20 @@
     .#{$prefix}--list-box.#{$prefix}--list-box--warning
     .#{$prefix}--list-box__invalid-icon {
     inset-block-start: to-rem(81px);
-    right: $spacing-05;
+    right: $carbon--spacing-05;
     pointer-events: none;
   }
 
   .#{$prefix}--list-box__wrapper--fluid.#{$prefix}--list-box__wrapper--fluid--invalid
     .#{$prefix}--list-box[data-invalid]:not(.#{$prefix}--combo-box)
     .#{$prefix}--list-box__field {
-    padding-inline-end: $spacing-09;
+    padding-inline-end: $carbon--spacing-09;
   }
 
   .#{$prefix}--list-box__wrapper--fluid.#{$prefix}--list-box__wrapper--fluid--invalid
     .#{$prefix}--list-box[data-invalid].#{$prefix}--combo-box
     .#{$prefix}--text-input {
-    padding-inline-end: $spacing-10;
+    padding-inline-end: $carbon--spacing-10;
   }
 
   .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--list-box__divider {
@@ -284,7 +284,7 @@
   .#{$prefix}--list-box__wrapper--fluid
     .#{$prefix}--list-box--up
     .#{$prefix}--list-box__menu {
-    inset-block-end: $spacing-10;
+    inset-block-end: $carbon--spacing-10;
   }
 
   // The outline renders on the field wrapper (not the fluid
@@ -320,7 +320,7 @@
     block-size: to-rem(8px);
     inline-size: 50%;
     inset-block-start: to-rem(36px);
-    left: $spacing-05;
+    left: $carbon--spacing-05;
   }
 
   .#{$prefix}--list-box__wrapper--fluid
@@ -331,8 +331,8 @@
     position: absolute;
     block-size: to-rem(8px);
     inline-size: 25%;
-    inset-block-start: $spacing-05;
-    left: $spacing-05;
+    inset-block-start: $carbon--spacing-05;
+    left: $carbon--spacing-05;
   }
 }
 

@@ -81,7 +81,7 @@
     block-size: to-rem(16px);
     inline-size: calc(100% - 2rem);
     inset-block-start: to-rem(13px);
-    left: $spacing-05;
+    left: $carbon--spacing-05;
   }
 
   .#{$prefix}--time-picker--fluid
@@ -93,7 +93,7 @@
   .#{$prefix}--time-picker--fluid
     .#{$prefix}--time-picker__input
     .#{$prefix}--label.#{$prefix}--label--slotted {
-    gap: $spacing-03;
+    gap: $carbon--spacing-03;
     overflow: visible;
   }
 
@@ -122,7 +122,7 @@
     max-block-size: to-rem(64px);
     max-height: to-rem(64px);
     max-inline-size: 100%;
-    padding: to-rem(32px) $spacing-05 to-rem(13px);
+    padding: to-rem(32px) $carbon--spacing-05 to-rem(13px);
     outline: none;
   }
 
@@ -191,7 +191,7 @@
   }
 
   .#{$prefix}--time-picker--fluid .#{$prefix}--form-requirement {
-    padding: $spacing-03 to-rem(40px) $spacing-03 $spacing-05;
+    padding: $carbon--spacing-03 to-rem(40px) $carbon--spacing-03 $carbon--spacing-05;
     margin: 0;
     background: $field-01;
   }
@@ -279,7 +279,7 @@
     position: absolute;
     display: block;
     inset-block-start: to-rem(72px);
-    right: $spacing-05;
+    right: $carbon--spacing-05;
   }
 
   .#{$prefix}--time-picker--fluid--invalid .#{$prefix}--time-picker__icon {

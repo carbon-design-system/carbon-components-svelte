@@ -21,8 +21,8 @@
     display: flex;
     align-items: center;
     top: 0;
-    padding-left: $spacing-05;
-    padding-right: $spacing-05;
+    padding-left: $carbon--spacing-05;
+    padding-right: $carbon--spacing-05;
   }
 
   .#{$prefix}--contained-list__label {
@@ -98,7 +98,7 @@
   }
 
   .#{$prefix}--contained-list--on-page + .#{$prefix}--contained-list--on-page {
-    margin-top: $spacing-05;
+    margin-top: $carbon--spacing-05;
   }
 
   .#{$prefix}--contained-list--on-page .#{$prefix}--contained-list__header {
@@ -162,7 +162,7 @@
     @include type-style("body-short-01");
 
     // Vertical padding centers body-short-01 in the row height
-    padding: 0.875rem $spacing-05;
+    padding: 0.875rem $carbon--spacing-05;
     color: $text-01;
     min-height: 3rem; // md size default
   }
@@ -209,8 +209,8 @@
 
   .#{$prefix}--contained-list--inset-rulers
     .#{$prefix}--contained-list-item:not(:last-of-type)::before {
-    left: $spacing-05;
-    right: $spacing-05;
+    left: $carbon--spacing-05;
+    right: $carbon--spacing-05;
   }
 
   .#{$prefix}--contained-list-item--clickable
@@ -248,7 +248,7 @@
 
   .#{$prefix}--contained-list-item--with-action
     .#{$prefix}--contained-list-item__content {
-    padding-right: $spacing-10;
+    padding-right: $carbon--spacing-10;
   }
 
   .#{$prefix}--contained-list__action,
@@ -270,13 +270,13 @@
   .#{$prefix}--contained-list-item--with-icon
     .#{$prefix}--contained-list-item__content {
     display: grid;
-    column-gap: $spacing-04;
+    column-gap: $carbon--spacing-04;
     grid-template-columns: 1rem 1fr;
   }
 
   .#{$prefix}--contained-list-item__icon {
     display: inline-flex;
-    padding-top: $spacing-01;
+    padding-top: $carbon--spacing-01;
   }
 }
 
