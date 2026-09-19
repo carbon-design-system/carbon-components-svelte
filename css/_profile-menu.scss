@@ -12,7 +12,7 @@
 /// @access private
 /// @group ui-shell
 @mixin profile-menu {
-  .#{$prefix}--profile-menu__trigger.#{$prefix}--profile-menu__trigger {
+  .#{$prefix}--profile-menu__trigger {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -48,7 +48,7 @@
     height: to-rem(40px);
   }
 
-  .#{$prefix}--profile-menu.#{$prefix}--profile-menu {
+  .#{$prefix}--profile-menu {
     position: absolute;
     top: to-rem(48px);
     right: 0;
@@ -118,7 +118,7 @@
     padding: $carbon--spacing-03 0;
   }
 
-  .#{$prefix}--profile-menu__item.#{$prefix}--profile-menu__item {
+  .#{$prefix}--profile-menu__item {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -137,7 +137,7 @@
     transition: background-color $duration--fast-01 motion(standard, productive);
   }
 
-  .#{$prefix}--profile-menu__item.#{$prefix}--profile-menu__item:focus {
+  .#{$prefix}--profile-menu__item:focus {
     outline: 2px solid $focus;
     outline-offset: -2px;
   }
@@ -214,7 +214,7 @@
       background-color: $background-hover;
     }
 
-    .#{$prefix}--profile-menu__item.#{$prefix}--profile-menu__item:hover {
+    .#{$prefix}--profile-menu__item:hover {
       color: $text-primary;
       background-color: $background-hover;
     }
@@ -231,7 +231,7 @@
     outline-offset: -2px;
   }
 
-  .#{$prefix}--profile-menu__divider.#{$prefix}--profile-menu__divider {
+  .#{$prefix}--profile-menu__divider {
     height: 1px;
     margin: 0;
     background-color: $border-subtle;

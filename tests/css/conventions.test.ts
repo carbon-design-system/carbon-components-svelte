@@ -249,8 +249,6 @@ describe("css partial conventions", () => {
     const NOT_YET_CONVERTED = new Set([
       "_fluid-text-area.scss",
       "_header-switcher.scss",
-      "_profile-menu.scss",
-      "_ui-shell-classic.scss",
     ]);
     // The lookahead matters: without it, `.foo.foo--bar` (a base class next
     // to its own BEM modifier, a normal 2-class compound) false-positives,
