@@ -226,6 +226,14 @@ Add helper text to provide additional context or formatting instructions.
   <DatePickerInput labelText="Contract start date" helperText="Example: 01/12/2026" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
+## Select on focus
+
+Set `selectTextOnFocus` on `DatePickerInput` to select the full value when the field receives focus.
+
+<DatePicker value="01/12/2026">
+  <DatePickerInput selectTextOnFocus labelText="Contract start date" placeholder="mm/dd/yyyy" />
+</DatePicker>
+
 ## Hidden label
 
 Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
