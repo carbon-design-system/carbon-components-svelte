@@ -77,7 +77,7 @@
 
   .#{$prefix}--profile-menu__header--link {
     cursor: pointer;
-    transition: background-color 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
+    transition: background-color $duration--fast-01 motion(standard, productive);
   }
 
   .#{$prefix}--profile-menu__header--link:hover {
@@ -138,7 +138,7 @@
     border: none;
     cursor: pointer;
     @include type-style('body-short-01');
-    transition: background-color 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
+    transition: background-color $duration--fast-01 motion(standard, productive);
   }
 
   .#{$prefix}--profile-menu__item.#{$prefix}--profile-menu__item:hover {

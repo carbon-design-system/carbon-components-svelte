@@ -153,7 +153,7 @@
 
     text-align: left;
     text-decoration: none;
-    transition: background-color 150ms;
+    transition: background-color $duration--moderate-01;
   }
 
   .#{$prefix}--contained-list-item__content,
