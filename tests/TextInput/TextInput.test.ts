@@ -1,4 +1,5 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { isSvelte5 } from "../utils/svelte-version";
 import { user } from "../utils/user";
 import TextInputFluidForm from "./TextInput.fluidForm.test.svelte";
@@ -51,6 +52,41 @@ describe("TextInput", () => {
     render(TextInput, { props: { light: true } });
 
     expect(screen.getByRole("textbox")).toHaveClass("bx--text-input--light");
+  });
+
+  it("selects the full value on focus when selectTextOnFocus is true", async () => {
+    render(TextInput, {
+      props: { selectTextOnFocus: true, value: "hello world" },
+    });
+
+    const input = screen.getByLabelText("User name") as HTMLInputElement;
+    await user.click(input);
+    await tick();
+
+    expect(input.selectionStart).toBe(0);
+    expect(input.selectionEnd).toBe("hello world".length);
+  });
+
+  it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {
+    render(TextInput, { props: { value: "hello world" } });
+
+    const input = screen.getByLabelText("User name") as HTMLInputElement;
+    await user.click(input);
+    await tick();
+
+    expect(input.selectionStart).toBe(input.selectionEnd);
+  });
+
+  it("does not select text on focus when disabled", async () => {
+    render(TextInput, {
+      props: { selectTextOnFocus: true, disabled: true, value: "hello world" },
+    });
+
+    const input = screen.getByLabelText("User name") as HTMLInputElement;
+    const select = vi.spyOn(input, "select");
+    await fireEvent.focus(input);
+
+    expect(select).not.toHaveBeenCalled();
   });
 
   it("should handle disabled state", () => {

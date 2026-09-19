@@ -22,6 +22,7 @@
   export let inline = false;
   export let readonly = false;
   export let fluid = false;
+  export let selectTextOnFocus = false;
   export let type: ComponentProps<TextInput>["type"] = "text";
   export let onchange: ((event: CustomEvent) => void) | undefined = undefined;
   export let oninput: ((event: CustomEvent) => void) | undefined = undefined;
@@ -54,6 +55,7 @@
   {inline}
   {readonly}
   {fluid}
+  {selectTextOnFocus}
   {type}
   on:change={(e) => onchange?.(e)}
   on:input={(e) => oninput?.(e)}
