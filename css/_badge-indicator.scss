@@ -17,20 +17,20 @@
     background: $support-error;
     color: $text-on-color;
 
-    inset-block-start: 0;
+    top: 0;
     right: 0;
 
-    margin-block-start: $carbon--spacing-03;
-    margin-inline-end: $carbon--spacing-03;
+    margin-top: $carbon--spacing-03;
+    margin-right: $carbon--spacing-03;
 
-    max-block-size: $carbon--spacing-05;
-    min-block-size: $carbon--spacing-03;
-    min-inline-size: $carbon--spacing-03;
+    max-height: $carbon--spacing-05;
+    min-height: $carbon--spacing-03;
+    min-width: $carbon--spacing-03;
   }
 
   .#{$prefix}--badge-indicator--count {
-    margin-block-start: $carbon--spacing-02;
-    margin-inline-end: $carbon--spacing-02;
+    margin-top: $carbon--spacing-02;
+    margin-right: $carbon--spacing-02;
   }
 
   .#{$prefix}--btn__badge-wrapper {
