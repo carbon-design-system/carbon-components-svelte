@@ -510,7 +510,7 @@ Component-scoped patches sit at the end of the vendored component file itself (f
 
 A `css/_*.scss` partial ships only once [`css/_carbon-styles.scss`](css/_carbon-styles.scss) imports it. That manifest is shared by all six theme entry files (`all`, `white`, `g10`, `g80`, `g90`, `g100`), so there is nothing to add to the entries themselves.
 
-Emission order is load-bearing: equal-specificity ties resolve by source order. Slot a partial that extends one Carbon component right after that component's import; everything else goes in the post-base block, under the matching group comment. If your rule has to come after a specific neighbour to win, say so in a comment next to the import.
+Emission order is load-bearing: equal-specificity ties resolve by source order. Slot a partial that extends one Carbon component right after that component's import; everything else is appended to the post-base block. Do not reorder that block: its order is historical but load-bearing, and the known dependencies are listed in its header. If your rule has to come after a specific neighbour to win, add it to that list.
 
 #### Guards
 

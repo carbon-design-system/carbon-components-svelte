@@ -98,6 +98,19 @@ $ccs-theme-switching: false !default;
 @import "carbon-components/scss/components/treeview/treeview";
 
 // 2. post-base library partials
+//
+// Append new partials at the end. The order below is historical but
+// load-bearing: regrouping it by kind (backports, components, utilities)
+// flips 42 equal-specificity ties in `bun run check:css`. The ones known to
+// matter when components nest:
+//   - copy-input before fluid-text-input, so a fluid CopyInput keeps the
+//     fluid field padding.
+//   - fluid-list-box before fluid-combo-box and fluid-multiselect, which
+//     refine its rules.
+//   - fluid-text-input before fluid-pin-code-input and fluid-time-picker,
+//     whose segments restyle `.bx--text-input` inside a fluid wrapper.
+//   - list-box-wrap-options and dropdown after every list-box variant.
+// Run `bun run check:css --base master` after moving anything here.
 @import "./fluid-date-picker";
 @import "./copy-input";
 @import "./code-snippet";
