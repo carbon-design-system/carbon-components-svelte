@@ -60,6 +60,10 @@
     text-wrap: balance;
   }
 
+  .#{$prefix}--type-pretty {
+    text-wrap: pretty;
+  }
+
   .#{$prefix}--type-full-width {
     width: 100%;
   }

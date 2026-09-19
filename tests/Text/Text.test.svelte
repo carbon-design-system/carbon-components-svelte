@@ -14,6 +14,7 @@
 <Text type="body-short-01" wrap="break-word">Break word text</Text>
 <Text type="body-short-01" wrap="nowrap">Nowrap text</Text>
 <Text tag="h2" type="productive-heading-04" balance>Balanced heading</Text>
+<Text type="body-long-02" pretty>Pretty-wrapped paragraph</Text>
 <Text type="body-long-01" maxWidth={320}>Max width px</Text>
 <Text type="body-long-01" maxWidth="38ch">Max width ch</Text>
 <Text type="body-long-01" fullWidth>Full width text</Text>

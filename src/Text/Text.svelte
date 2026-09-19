@@ -42,6 +42,9 @@
   /** Set to `true` to balance line lengths across broken headings and short blocks */
   export let balance = false;
 
+  /** Set to `true` to avoid orphaned words at the end of wrapped paragraphs */
+  export let pretty = false;
+
   /**
    * Set the max width. Numbers are treated as pixels; strings accept any CSS length (e.g. `"38ch"`, `"20rem"`).
    * @type {number | string | undefined}
@@ -85,6 +88,7 @@
     wrap === "break-word" && "bx--type-break-word",
     wrap === "nowrap" && "bx--type-nowrap",
     balance && "bx--type-balance",
+    pretty && "bx--type-pretty",
     fullWidth && "bx--type-full-width",
     $$restProps.class,
   ]
