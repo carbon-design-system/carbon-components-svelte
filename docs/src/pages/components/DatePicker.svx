@@ -156,6 +156,12 @@ By default, the calendar closes when a date is selected. Pass `closeOnSelect: fa
 
 <FileSource src="/framed/DatePicker/DatePickerCloseOnSelect" />
 
+### Week numbers
+
+Pass `weekNumbers: true` via `flatpickrProps` to show a week number column beside the day grid. Weeks are numbered per ISO 8601 by default; pass `getWeek` alongside it to compute them differently, such as for fiscal weeks.
+
+<FileSource src="/framed/DatePicker/DatePickerWeekNumbers" />
+
 ### Default date
 
 Pass `defaultDate` via `flatpickrProps` to preselect a date when `value` is empty. Unlike `value`, it accepts a `Date` or the `"today"` shorthand, and the formatted result is written back to `value`. A non-empty `value` always takes precedence.
