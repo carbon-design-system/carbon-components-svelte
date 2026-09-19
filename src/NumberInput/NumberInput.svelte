@@ -103,6 +103,9 @@
   /** Set to `true` to prevent the scroll wheel from changing the input value */
   export let disableWheel = false;
 
+  /** Set to `true` to select the input's text when it receives focus */
+  export let selectTextOnFocus = false;
+
   /**
    * Custom validation function.
    * Receives the current raw input string and locale.
@@ -169,7 +172,7 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher, getContext } from "svelte";
+  import { createEventDispatcher, getContext, tick } from "svelte";
   import Add from "../icons/Add.svelte";
   import EditOff from "../icons/EditOff.svelte";
   import Subtract from "../icons/Subtract.svelte";
@@ -398,6 +401,9 @@
 
   function handleInputFocus() {
     if (isFluid) inputFocused = true;
+    if (selectTextOnFocus && !disabled) {
+      tick().then(() => ref?.select());
+    }
   }
 
   function handleBlur(event) {
