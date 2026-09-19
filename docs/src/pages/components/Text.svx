@@ -157,6 +157,29 @@ Set `wrap` to `break-word` to break long words, or `nowrap` to keep text on one 
   <Text type="body-short-01" wrap="nowrap">This line will not wrap to the next row.</Text>
 </Box>
 
+### Pretty formatting
+
+Set `pretty` to avoid a single orphaned word on the last line of a wrapped paragraph. Unlike `balance`, which evens out line lengths and suits short headings, `pretty` only adjusts the last line and works well for longer body copy.
+
+<Stack orientation="horizontal" gap={6}>
+  <Stack gap={2}>
+    <Text type="label-01" color="secondary">Without pretty</Text>
+    <Box maxWidth="13rem" border="subtle" padding={3}>
+      <Text type="body-long-01">
+        Carbon Components Svelte is a Svelte component library that implements the Carbon Design System, an open source design system by IBM.
+      </Text>
+    </Box>
+  </Stack>
+  <Stack gap={2}>
+    <Text type="label-01" color="secondary">With pretty</Text>
+    <Box maxWidth="13rem" border="subtle" padding={3}>
+      <Text type="body-long-01" pretty>
+        Carbon Components Svelte is a Svelte component library that implements the Carbon Design System, an open source design system by IBM.
+      </Text>
+    </Box>
+  </Stack>
+</Stack>
+
 ### Max width and full width
 
 Set `maxWidth` to any CSS length. Numbers are treated as pixels; strings accept units such as ch, rem, %, or px. Text fills its container by default. Width caps are opt-in — neither maxWidth nor fullWidth applies unless you set one.
