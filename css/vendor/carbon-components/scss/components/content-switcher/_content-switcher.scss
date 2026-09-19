@@ -125,10 +125,14 @@
     border-top-right-radius: to-rem(4px);
   }
 
+  // `border-color: transparent` (not `border: 0`) keeps the 1px border-width
+  // that unselected buttons carry (including the edge-only left/right border
+  // on first/last child), so selecting a button doesn't change its border-box
+  // size and shift the label.
   .#{$prefix}--content-switcher--selected,
   .#{$prefix}--content-switcher--selected:first-child,
   .#{$prefix}--content-switcher--selected:last-child {
-    border: 0;
+    border-color: transparent;
   }
 
   .#{$prefix}--content-switcher-btn::before {
