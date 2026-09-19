@@ -62,6 +62,12 @@
   export let borderStyle = "solid";
 
   /**
+   * Set the border width. Only takes effect when `border` is set. Numbers are treated as pixels; strings accept any CSS length.
+   * @type {number | string | undefined}
+   */
+  export let borderWidth = undefined;
+
+  /**
    * Set the width. Numbers are treated as pixels; strings accept any CSS length.
    * @type {number | string | undefined}
    */
@@ -217,6 +223,7 @@
   $: resolvedWidth = lengthStyle(width);
   $: resolvedMaxWidth = lengthStyle(maxWidth);
   $: resolvedMinWidth = lengthStyle(minWidth);
+  $: resolvedBorderWidth = border ? lengthStyle(borderWidth) : undefined;
   $: resolvedPadding = spacingStyle(padding);
   $: resolvedPaddingX = spacingStyle(paddingX);
   $: resolvedPaddingY = spacingStyle(paddingY);
@@ -237,6 +244,7 @@
   style:width={resolvedWidth}
   style:max-width={resolvedMaxWidth}
   style:min-width={resolvedMinWidth}
+  style:border-width={resolvedBorderWidth}
   style:padding={resolvedPadding}
   style:padding-inline={resolvedPaddingX}
   style:padding-block={resolvedPaddingY}
