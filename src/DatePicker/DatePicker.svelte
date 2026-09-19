@@ -10,6 +10,13 @@
    */
 
   /**
+   * @event error
+   * @type {object}
+   * @property {Error} error
+   * @property {string} value
+   */
+
+  /**
    * Specify the date picker type.
    * @type {"simple" | "single" | "range" | "month" | "year" | "multiple"}
    */
@@ -119,7 +126,11 @@
   import { dismiss } from "../utils/dismiss.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { uniqueId } from "../utils/unique-id.js";
-  import { createCalendar, resolveLocale } from "./create-calendar.js";
+  import {
+    createCalendar,
+    resolveLocale,
+    setErrorHandler,
+  } from "./create-calendar.js";
   import {
     getTopLayerAncestor,
     isEventTargetInsidePortaledCalendar,
@@ -593,6 +604,10 @@
       applyOptionIfChanged("maxDate", maxDate);
       applyOptionIfChanged("locale", locale, resolveLocale(locale));
       applyOptionIfChanged("dateFormat", dateFormat);
+      // `calendar.set("errorHandler", fn)` would replace Carbon's own
+      // wrapper (see create-calendar.js), so the live handler is threaded
+      // through separately instead of going through the generic loop below.
+      setErrorHandler(calendar, flatpickrProps.errorHandler);
       for (const [option, value] of Object.entries(flatpickrProps)) {
         // `static` is decided by `effectivePortalMenu` at creation time
         // (see below); re-applying the default `flatpickrProps.static`
@@ -600,6 +615,7 @@
         if (option === "static" && effectivePortalMenu) continue;
         // Unsupported: see `wrap` in create-calendar.js.
         if (option === "wrap") continue;
+        if (option === "errorHandler") continue;
         applyOptionIfChanged(option, value);
       }
       return;
@@ -629,7 +645,10 @@
       },
       base: inputRef,
       input: inputRefTo,
-      dispatch: (event) => {
+      dispatch: (event, eventDetail) => {
+        if (event === "error") {
+          return dispatch(event, eventDetail);
+        }
         if (event === "open") {
           calendarOpen = true;
           closeTrigger = undefined;
