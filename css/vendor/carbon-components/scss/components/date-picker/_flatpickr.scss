@@ -171,21 +171,24 @@
     box-shadow: -1px 0 0 $border-subtle;
   }
 
-  // ccs: gutter only the shared edge between months so the divider isn't
-  // flush against the day columns, without padding the calendar's outer
-  // edges past the single-month inset (#3856)
+  // ccs: gutter only the shared edge between months, sized to match the
+  // calendar's own outer inset so N months tile to exactly N times a
+  // single-month calendar's width, no wider (#3856). flatpickr's own
+  // width calc (daysWidth = (dayContainer.offsetWidth + 1) * showMonths)
+  // doesn't know about the calendar's padding, so 280 (7 days) + 4
+  // (spacing-02 gutter) undershoots by 3px; bake that back in here.
   .flatpickr-calendar.multiMonth .dayContainer {
-    width: to-rem(292px);
-    min-width: to-rem(292px);
-    max-width: to-rem(292px);
+    width: to-rem(287px);
+    min-width: to-rem(287px);
+    max-width: to-rem(287px);
   }
 
   .flatpickr-calendar.multiMonth .dayContainer:not(:last-child) {
-    padding-right: $carbon--spacing-04;
+    padding-right: $carbon--spacing-02;
   }
 
   .flatpickr-calendar.multiMonth .dayContainer + .dayContainer {
-    padding-left: $carbon--spacing-04;
+    padding-left: $carbon--spacing-02;
   }
 
   .flatpickr-calendar.multiMonth .flatpickr-weekdaycontainer {
@@ -193,11 +196,11 @@
   }
 
   .flatpickr-calendar.multiMonth .flatpickr-weekdaycontainer:not(:last-child) {
-    padding-right: $carbon--spacing-04;
+    padding-right: $carbon--spacing-02;
   }
 
   .flatpickr-calendar.multiMonth .flatpickr-weekdaycontainer + .flatpickr-weekdaycontainer {
-    padding-left: $carbon--spacing-04;
+    padding-left: $carbon--spacing-02;
   }
 
   .flatpickr-calendar:focus {
