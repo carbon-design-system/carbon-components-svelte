@@ -123,6 +123,22 @@
   .#{$prefix}--box-position-sticky {
     position: sticky;
   }
+
+  .#{$prefix}--box-display-block {
+    display: block;
+  }
+
+  .#{$prefix}--box-display-flex {
+    display: flex;
+  }
+
+  .#{$prefix}--box-display-inline-flex {
+    display: inline-flex;
+  }
+
+  .#{$prefix}--box-display-grid {
+    display: grid;
+  }
 }
 
 @include exports("box") {

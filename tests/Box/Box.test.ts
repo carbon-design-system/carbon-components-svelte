@@ -74,6 +74,14 @@ describe("Box", () => {
     expect(screen.getByText("Raised shadow")).toHaveClass("bx--box-shadow");
   });
 
+  it("applies the display utility class", () => {
+    render(Box);
+
+    expect(screen.getByText("Flex display")).toHaveClass(
+      "bx--box-display-flex",
+    );
+  });
+
   it("applies spacing scale classes", () => {
     render(Box);
 
