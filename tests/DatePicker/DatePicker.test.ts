@@ -7,6 +7,7 @@ import DatePickerFluidRange from "./DatePicker.fluidRange.test.svelte";
 import DatePickerFluidSlot from "./DatePicker.fluidSlot.test.svelte";
 import DatePicker from "./DatePicker.test.svelte";
 import DatePickerCalendar from "./DatePickerCalendar.test.svelte";
+import DatePickerDefaultDate from "./DatePickerDefaultDate.test.svelte";
 import DatePickerInModal from "./DatePickerInModal.test.svelte";
 import DatePickerInputSlot from "./DatePickerInput.slot.test.svelte";
 import DatePickerRange from "./DatePickerRange.test.svelte";
@@ -684,6 +685,41 @@ describe("DatePicker", () => {
       );
       expect(() => unmount()).not.toThrow();
       consoleError.mockRestore();
+    });
+
+    it("preselects flatpickrProps.defaultDate when value is empty", async () => {
+      render(DatePicker, {
+        datePickerType: "single",
+        flatpickrProps: { defaultDate: "03/12/2024" },
+      });
+
+      const input = screen.getByLabelText("Date");
+      await vi.waitFor(() => expect(input).toHaveValue("03/12/2024"));
+    });
+
+    it("syncs flatpickrProps.defaultDate to the bound value", async () => {
+      render(DatePickerDefaultDate);
+
+      await vi.waitFor(() =>
+        expect(screen.getByTestId("value")).toHaveTextContent("03/12/2024"),
+      );
+    });
+
+    it("prefers value over flatpickrProps.defaultDate", async () => {
+      render(DatePicker, {
+        datePickerType: "single",
+        value: "01/05/2024",
+        flatpickrProps: { defaultDate: "03/12/2024" },
+      });
+
+      const input = screen.getByLabelText("Date");
+      await user.click(input);
+      const calendar = await screen.findByLabelText("calendar-container");
+      expect(input).toHaveValue("01/05/2024");
+      expect(calendar.querySelector(".flatpickr-day.selected")).toHaveAttribute(
+        "aria-label",
+        "Friday, January 5, 2024",
+      );
     });
 
     it("keeps the calendar open after selecting a date when closeOnSelect is false", async () => {

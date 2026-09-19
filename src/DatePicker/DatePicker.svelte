@@ -602,7 +602,8 @@
               }),
             }
           : { appendTo: datePickerRef }),
-        defaultDate: $inputValue,
+        // An empty `value` must not clobber `flatpickrProps.defaultDate`.
+        ...($inputValue !== "" && { defaultDate: $inputValue }),
         mode: $mode,
       },
       base: inputRef,
@@ -628,6 +629,12 @@
         return dispatch(event, detail);
       },
     });
+    // flatpickr fills the input from `flatpickrProps.defaultDate` without
+    // firing events, so mirror it into `value` here.
+    if (calendar && !$range && $inputValue === "" && inputRef.value !== "") {
+      prevValue = inputRef.value;
+      inputValue.set(inputRef.value);
+    }
     snapshotCloseBaseline();
     calendar?.calendarContainer?.setAttribute("role", "application");
     calendar?.calendarContainer?.setAttribute(
