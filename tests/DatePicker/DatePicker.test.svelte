@@ -13,6 +13,7 @@
   export let minDate: ComponentProps<DatePicker>["minDate"] = null;
   export let disabledDates: ComponentProps<DatePicker>["disabledDates"] = [];
   export let enabledDates: ComponentProps<DatePicker>["enabledDates"] = [];
+  export let initialMonth: ComponentProps<DatePicker>["initialMonth"] = null;
   export let locale: ComponentProps<DatePicker>["locale"] = "en";
   export let short = false;
   export let light = false;
@@ -45,6 +46,7 @@
   {minDate}
   {disabledDates}
   {enabledDates}
+  {initialMonth}
   {locale}
   {short}
   {light}
