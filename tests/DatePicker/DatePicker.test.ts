@@ -957,6 +957,51 @@ describe("DatePicker", () => {
       expect(set).not.toHaveBeenCalledWith("disable", expect.anything());
     });
 
+    it("keeps Carbon's hooks when a consumer hook changes after mount", async () => {
+      const props: ComponentProps<typeof DatePicker> = {
+        datePickerType: "single",
+        value: "03/15/2024",
+        minDate: "03/10/2024",
+      };
+      const { rerender } = render(DatePicker, {
+        ...props,
+        flatpickrProps: { onDayCreate: () => {} },
+      });
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+
+      const onDayCreate = vi.fn();
+      await rerender({ ...props, flatpickrProps: { onDayCreate } });
+      const next = calendar.querySelector<HTMLElement>(".flatpickr-next-month");
+      const prev = calendar.querySelector<HTMLElement>(".flatpickr-prev-month");
+      assert(next && prev);
+      await user.click(next);
+      await user.click(prev);
+
+      expect(onDayCreate).toHaveBeenCalled();
+      expect(
+        calendar.querySelectorAll(".flatpickr-day[aria-disabled='true']")
+          .length,
+      ).toBeGreaterThan(0);
+      expect(calendar.querySelector(".flatpickr-day")).toHaveClass(
+        "bx--date-picker__day",
+      );
+    });
+
+    it("runs Carbon's open handling alongside flatpickrProps.onOpen", async () => {
+      const onOpen = vi.fn();
+      render(DatePicker, {
+        datePickerType: "single",
+        flatpickrProps: { onOpen },
+      });
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+
+      expect(onOpen).toHaveBeenCalled();
+      expect(calendar).toHaveClass("bx--date-picker__calendar");
+      expect(calendar.querySelector(".cur-month")).toBeInTheDocument();
+    });
+
     it("still runs a consumer onReady hook", async () => {
       const onReady = vi.fn();
       render(DatePicker, {

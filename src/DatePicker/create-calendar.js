@@ -190,7 +190,7 @@ function updateMonthNode(instance, locale) {
 
 /**
  * @typedef {{
- *   options: { locale?: string; mode?: string };
+ *   options: { locale?: string; mode?: string; [option: string]: unknown };
  *   base: HTMLElement;
  *   input: HTMLInputElement;
  *   dispatch: (event: string) => void;
@@ -247,6 +247,9 @@ function mirrorInputState(source, target) {
   });
   return observer;
 }
+
+/** @type {WeakMap<object, Record<string, Function[]>>} */
+const hooksByInstance = new WeakMap();
 
 /**
  * flatpickr accepts a hook as a single function or an array of them.
@@ -305,8 +308,6 @@ export async function createCalendar({ options, base, input, dispatch }) {
       : false,
   ].filter(Boolean);
 
-  const userOnDayCreate = options.onDayCreate;
-
   /** @type {MutationObserver | undefined} */
   let altInputObserver;
 
@@ -354,6 +355,78 @@ export async function createCalendar({ options, base, input, dispatch }) {
     }
   }
 
+  /**
+   * Carbon's own flatpickr hooks. They are merged with the consumer's rather
+   * than spread under `...options`, where a `flatpickrProps.onOpen` or an
+   * inline `onDayCreate` would silently replace them.
+   *
+   * @type {Record<string, Function[]>}
+   */
+  const carbonHooks = {
+    onChange: [
+      () => {
+        dispatch("change");
+      },
+    ],
+    onClose: [
+      () => {
+        dispatch("close");
+      },
+    ],
+    onMonthChange: [
+      (
+        /** @type {any} */ _s,
+        /** @type {any} */ _d,
+        /** @type {FlatpickrInstance} */ instance,
+      ) => {
+        // The monthSelect / yearSelect plugins remove the month-label node, so
+        // there is nothing for updateMonthNode to patch.
+        if (options.mode !== "month" && options.mode !== "year") {
+          updateMonthNode(instance, options.locale);
+        }
+      },
+    ],
+    onYearChange: [
+      (
+        /** @type {any} */ _s,
+        /** @type {any} */ _d,
+        /** @type {FlatpickrInstance} */ instance,
+      ) => {
+        // The monthSelect plugin mutates its month cells' `dateObj` in place
+        // on year change rather than rebuilding them, so re-mark "today" here.
+        if (options.mode === "month") {
+          markTodayMonth(instance);
+        }
+      },
+    ],
+    onOpen: [
+      (
+        /** @type {any} */ _s,
+        /** @type {any} */ _d,
+        /** @type {FlatpickrInstance} */ instance,
+      ) => {
+        dispatch("open");
+        applyCarbonMarkup(instance);
+      },
+    ],
+    onReady: [prepareOnReady],
+    onDestroy: [disconnectAltInputObserver],
+    onDayCreate: [
+      markDisabledDayAriaState,
+      // Days are rebuilt on every redraw (month change, `set`), not only on
+      // open, so class them as they are created.
+      (_dObj, _dStr, _fp, /** @type {HTMLElement} */ dayElem) => {
+        dayElem.classList.add("bx--date-picker__day");
+      },
+    ],
+  };
+
+  /** @type {Record<string, Function[]>} */
+  const mergedHooks = {};
+  for (const [name, hooks] of Object.entries(carbonHooks)) {
+    mergedHooks[name] = [...hooks, ...toHookArray(options[name])];
+  }
+
   const config = {
     allowInput: true,
     disableMobile: true,
@@ -365,42 +438,6 @@ export async function createCalendar({ options, base, input, dispatch }) {
       '<svg width="16px" height="16px" viewBox="0 0 16 16"><polygon points="11,8 6,13 5.3,12.3 9.6,8 5.3,3.7 6,3 "/><rect width="16" height="16" style="fill: none" /></svg>',
     prevArrow:
       '<svg width="16px" height="16px" viewBox="0 0 16 16"><polygon points="5,8 10,3 10.7,3.7 6.4,8 10.7,12.3 10,13 "/><rect width="16" height="16" style="fill: none" /></svg>',
-    onChange: () => {
-      dispatch("change");
-    },
-    onClose: () => {
-      dispatch("close");
-    },
-    onMonthChange: (
-      /** @type {any} */ _s,
-      /** @type {any} */ _d,
-      /** @type {FlatpickrInstance} */ instance,
-    ) => {
-      // The monthSelect / yearSelect plugins remove the month-label node, so
-      // there is nothing for updateMonthNode to patch.
-      if (options.mode !== "month" && options.mode !== "year") {
-        updateMonthNode(instance, options.locale);
-      }
-    },
-    onYearChange: (
-      /** @type {any} */ _s,
-      /** @type {any} */ _d,
-      /** @type {FlatpickrInstance} */ instance,
-    ) => {
-      // The monthSelect plugin mutates its month cells' `dateObj` in place
-      // on year change rather than rebuilding them, so re-mark "today" here.
-      if (options.mode === "month") {
-        markTodayMonth(instance);
-      }
-    },
-    onOpen: (
-      /** @type {any} */ _s,
-      /** @type {any} */ _d,
-      /** @type {FlatpickrInstance} */ instance,
-    ) => {
-      dispatch("open");
-      applyCarbonMarkup(instance);
-    },
     ...options,
     // `options.mode` also carries Carbon's "month"/"year" datePickerType,
     // used above to pick a plugin. flatpickr's own `mode` only understands
@@ -415,21 +452,26 @@ export async function createCalendar({ options, base, input, dispatch }) {
     // `wrap` expects `base` to be a wrapper holding a `[data-input]` child.
     // Carbon always passes the input itself, so flatpickr would throw.
     wrap: false,
-    // Run ahead of the consumer's hook rather than being replaced by it.
-    onReady: [prepareOnReady, ...toHookArray(options.onReady)],
-    onDestroy: [disconnectAltInputObserver, ...toHookArray(options.onDestroy)],
-    onDayCreate: [
-      markDisabledDayAriaState,
-      // Days are rebuilt on every redraw (month change, `set`), not only on
-      // open, so class them as they are created.
-      (_dObj, _dStr, _fp, /** @type {HTMLElement} */ dayElem) => {
-        dayElem.classList.add("bx--date-picker__day");
-      },
-      ...toHookArray(userOnDayCreate),
-    ],
+    ...mergedHooks,
   };
   const instance = new /** @type {any} */ (flatpickr)(base, config);
   // flatpickr catches its own init errors, logs them, and returns an empty
   // array. Report that as "no calendar" so callers never treat it as one.
-  return Array.isArray(instance) ? null : instance;
+  if (Array.isArray(instance)) return null;
+  hooksByInstance.set(instance, carbonHooks);
+  return instance;
+}
+
+/**
+ * Value to pass to `calendar.set(name, ...)` for a consumer option, keeping
+ * Carbon's hooks in front of a consumer hook instead of replacing them.
+ *
+ * @param {object} instance
+ * @param {string} name
+ * @param {unknown} value
+ * @returns {unknown}
+ */
+export function resolveOptionValue(instance, name, value) {
+  const carbonHooks = hooksByInstance.get(instance)?.[name];
+  return carbonHooks ? [...carbonHooks, ...toHookArray(value)] : value;
 }
