@@ -134,8 +134,7 @@
     }
 
     // V11: remove field
-    &.#{$prefix}--btn--field,
-    &.#{$prefix}--btn--md {
+    &.#{$prefix}--btn--field { // ccs: dropped unrendered --md alias
       padding: $button-padding-ghost-field;
     }
   }
@@ -210,8 +209,7 @@
       position: static;
     }
 
-    &.#{$prefix}--btn--ghost .#{$prefix}--btn__icon,
-    &.#{$prefix}--btn--danger--ghost .#{$prefix}--btn__icon {
+    &.#{$prefix}--btn--ghost .#{$prefix}--btn__icon { // ccs: dropped unrendered danger--ghost alias
       margin: 0;
     }
   }
@@ -246,8 +244,7 @@
   }
 
   // V11: remove field
-  .#{$prefix}--btn--field.#{$prefix}--btn--icon-only,
-  .#{$prefix}--btn--md.#{$prefix}--btn--icon-only {
+  .#{$prefix}--btn--field.#{$prefix}--btn--icon-only { // ccs: dropped unrendered --md alias
     padding-right: to-rem(11px);
     padding-left: to-rem(11px);
   }
@@ -271,9 +268,8 @@
       color: $text-04;
     }
 
-    // TODO: deprecate single dash tertiary
-    &-tertiary,
-    &--tertiary {
+    // ccs: single dash is the only form Button renders; dropped `&--tertiary`
+    &-tertiary {
       @include button-theme(
         transparent,
         $danger-02,
@@ -310,9 +306,8 @@
       }
     }
 
-    // TODO: deprecate single dash ghost
-    &-ghost,
-    &--ghost {
+    // ccs: single dash is the only form Button renders; dropped `&--ghost`
+    &-ghost {
       @include button-theme(
         transparent,
         transparent,
@@ -351,8 +346,7 @@
       }
 
       // V11: Remove field
-      &.#{$prefix}--btn--field,
-      &.#{$prefix}--btn--md {
+      &.#{$prefix}--btn--field { // ccs: dropped unrendered --md alias
         padding: $button-padding-ghost-field;
       }
     }
@@ -378,8 +372,7 @@
   }
 
   // V11: Remove field
-  .#{$prefix}--btn--field,
-  .#{$prefix}--btn--md {
+  .#{$prefix}--btn--field { // ccs: dropped unrendered --md alias
     min-height: to-rem(40px);
     padding: $button-padding-field;
   }

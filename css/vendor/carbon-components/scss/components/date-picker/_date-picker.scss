@@ -92,8 +92,7 @@
     color: $text-primary;
     transition: background-color $duration--fast-01 motion(standard, productive);
 
-    &:focus,
-    &.#{$prefix}--focused {
+    &:focus { // ccs: dropped unrendered .bx--focused
       @include focus-outline('outline');
     }
 
