@@ -23,7 +23,8 @@
     @include tag-theme(
       get-token-value($tag-colors, 'tag-background-gray'),
       get-token-value($tag-colors, 'tag-color-gray'),
-      get-token-value($tag-colors, 'tag-hover-gray')
+      get-token-value($tag-colors, 'tag-hover-gray'),
+      $emit-hover: false
     );
 
     display: inline-flex;
@@ -50,7 +51,8 @@
     @include tag-theme(
       get-token-value($tag-colors, 'tag-background-red'),
       get-token-value($tag-colors, 'tag-color-red'),
-      get-token-value($tag-colors, 'tag-hover-red')
+      get-token-value($tag-colors, 'tag-hover-red'),
+      $emit-hover: false
     );
   }
 
@@ -58,7 +60,8 @@
     @include tag-theme(
       get-token-value($tag-colors, 'tag-background-magenta'),
       get-token-value($tag-colors, 'tag-color-magenta'),
-      get-token-value($tag-colors, 'tag-hover-magenta')
+      get-token-value($tag-colors, 'tag-hover-magenta'),
+      $emit-hover: false
     );
   }
 
@@ -66,7 +69,8 @@
     @include tag-theme(
       get-token-value($tag-colors, 'tag-background-purple'),
       get-token-value($tag-colors, 'tag-color-purple'),
-      get-token-value($tag-colors, 'tag-hover-purple')
+      get-token-value($tag-colors, 'tag-hover-purple'),
+      $emit-hover: false
     );
   }
 
@@ -74,7 +78,8 @@
     @include tag-theme(
       get-token-value($tag-colors, 'tag-background-blue'),
       get-token-value($tag-colors, 'tag-color-blue'),
-      get-token-value($tag-colors, 'tag-hover-blue')
+      get-token-value($tag-colors, 'tag-hover-blue'),
+      $emit-hover: false
     );
   }
 
@@ -82,7 +87,8 @@
     @include tag-theme(
       get-token-value($tag-colors, 'tag-background-cyan'),
       get-token-value($tag-colors, 'tag-color-cyan'),
-      get-token-value($tag-colors, 'tag-hover-cyan')
+      get-token-value($tag-colors, 'tag-hover-cyan'),
+      $emit-hover: false
     );
   }
 
@@ -90,7 +96,8 @@
     @include tag-theme(
       get-token-value($tag-colors, 'tag-background-teal'),
       get-token-value($tag-colors, 'tag-color-teal'),
-      get-token-value($tag-colors, 'tag-hover-teal')
+      get-token-value($tag-colors, 'tag-hover-teal'),
+      $emit-hover: false
     );
   }
 
@@ -98,7 +105,8 @@
     @include tag-theme(
       get-token-value($tag-colors, 'tag-background-green'),
       get-token-value($tag-colors, 'tag-color-green'),
-      get-token-value($tag-colors, 'tag-hover-green')
+      get-token-value($tag-colors, 'tag-hover-green'),
+      $emit-hover: false
     );
   }
 
@@ -106,7 +114,8 @@
     @include tag-theme(
       get-token-value($tag-colors, 'tag-background-gray'),
       get-token-value($tag-colors, 'tag-color-gray'),
-      get-token-value($tag-colors, 'tag-hover-gray')
+      get-token-value($tag-colors, 'tag-hover-gray'),
+      $emit-hover: false
     );
   }
 
@@ -114,7 +123,8 @@
     @include tag-theme(
       get-token-value($tag-colors, 'tag-background-cool-gray'),
       get-token-value($tag-colors, 'tag-color-cool-gray'),
-      get-token-value($tag-colors, 'tag-hover-cool-gray')
+      get-token-value($tag-colors, 'tag-hover-cool-gray'),
+      $emit-hover: false
     );
   }
 
@@ -122,16 +132,17 @@
     @include tag-theme(
       get-token-value($tag-colors, 'tag-background-warm-gray'),
       get-token-value($tag-colors, 'tag-color-warm-gray'),
-      get-token-value($tag-colors, 'tag-hover-warm-gray')
+      get-token-value($tag-colors, 'tag-hover-warm-gray'),
+      $emit-hover: false
     );
   }
 
   .#{$prefix}--tag--high-contrast {
-    @include tag-theme($inverse-02, $inverse-01, $inverse-hover-ui);
+    @include tag-theme($inverse-02, $inverse-01, $inverse-hover-ui, $emit-hover: false);
   }
 
   .#{$prefix}--tag--outline {
-    @include tag-theme($background, $text-01, $hover-ui);
+    @include tag-theme($background, $text-01, $hover-ui, $emit-hover: false);
 
     box-shadow: inset 0 0 0 1px $inverse-02;
   }
@@ -139,13 +150,7 @@
   .#{$prefix}--tag--disabled,
   .#{$prefix}--tag--filter.#{$prefix}--tag--disabled,
   .#{$prefix}--tag--interactive.#{$prefix}--tag--disabled {
-    @include tag-theme($disabled-01, $disabled-02);
-
-    @media (any-hover: hover) {
-      &:hover {
-        cursor: not-allowed;
-      }
-    }
+    @include tag-theme($disabled-01, $disabled-02, $emit-hover: false);
   }
 
   .#{$prefix}--tag__label {
@@ -160,22 +165,30 @@
     outline: none;
   }
 
-  @media (any-hover: hover) {
-    .#{$prefix}--tag--interactive:hover {
-      cursor: pointer;
-    }
-  }
-
   .#{$prefix}--tag--filter {
     padding-top: 0;
     padding-right: 0;
     padding-bottom: 0;
     cursor: pointer;
+  }
 
-    @media (any-hover: hover) {
-      &:hover {
-        outline: none;
-      }
+  // ccs: grouped this component's any-hover rules into one block
+  // (order-safe: none of these rules collide with another rule on the same
+  // element/property in between; each has either a unique property or a
+  // higher specificity than any same-property rule it could tie with)
+  @media (any-hover: hover) {
+    .#{$prefix}--tag--disabled:hover,
+    .#{$prefix}--tag--filter.#{$prefix}--tag--disabled:hover,
+    .#{$prefix}--tag--interactive.#{$prefix}--tag--disabled:hover {
+      cursor: not-allowed;
+    }
+
+    .#{$prefix}--tag--interactive:hover {
+      cursor: pointer;
+    }
+
+    .#{$prefix}--tag--filter:hover {
+      outline: none;
     }
   }
 
@@ -234,13 +247,6 @@
     box-shadow: inset 0 0 0 1px $inverse-focus-ui;
   }
 
-  @media (any-hover: hover) {
-    .#{$prefix}--tag--filter.#{$prefix}--tag--disabled
-      .#{$prefix}--tag__close-icon:hover {
-      background-color: transparent;
-    }
-  }
-
   .#{$prefix}--tag--filter.#{$prefix}--tag--disabled svg {
     fill: $disabled-02;
   }
@@ -262,7 +268,7 @@
 
   .#{$prefix}--tag.#{$prefix}--skeleton {
     @include skeleton;
-    @include tag-theme($bg-color: $skeleton-01, $text-color: $text-01);
+    @include tag-theme($bg-color: $skeleton-01, $text-color: $text-01, $emit-hover: false);
 
     overflow: hidden;
     width: to-rem(60px);
@@ -272,6 +278,99 @@
       @supports (-webkit-appearance: none) and (stroke-color: transparent) {
         transform: translateZ(0);
       }
+    }
+  }
+
+  // ccs: grouped this file's ~15 tag-theme() any-hover rules (one per
+  // color/variant call site above, each with $emit-hover: false) into one
+  // block instead of 15 (order-safe: no other rule in this file sets
+  // background-color on `&.tag--interactive`/`.tag__close-icon` for any of
+  // these specific color/variant classes at equal or higher specificity)
+  @media (any-hover: hover) {
+    .#{$prefix}--tag.#{$prefix}--tag--interactive:hover,
+    .#{$prefix}--tag .#{$prefix}--tag__close-icon:hover {
+      background-color: get-token-value($tag-colors, 'tag-hover-gray');
+    }
+
+    .#{$prefix}--tag--red.#{$prefix}--tag--interactive:hover,
+    .#{$prefix}--tag--red .#{$prefix}--tag__close-icon:hover {
+      background-color: get-token-value($tag-colors, 'tag-hover-red');
+    }
+
+    .#{$prefix}--tag--magenta.#{$prefix}--tag--interactive:hover,
+    .#{$prefix}--tag--magenta .#{$prefix}--tag__close-icon:hover {
+      background-color: get-token-value($tag-colors, 'tag-hover-magenta');
+    }
+
+    .#{$prefix}--tag--purple.#{$prefix}--tag--interactive:hover,
+    .#{$prefix}--tag--purple .#{$prefix}--tag__close-icon:hover {
+      background-color: get-token-value($tag-colors, 'tag-hover-purple');
+    }
+
+    .#{$prefix}--tag--blue.#{$prefix}--tag--interactive:hover,
+    .#{$prefix}--tag--blue .#{$prefix}--tag__close-icon:hover {
+      background-color: get-token-value($tag-colors, 'tag-hover-blue');
+    }
+
+    .#{$prefix}--tag--cyan.#{$prefix}--tag--interactive:hover,
+    .#{$prefix}--tag--cyan .#{$prefix}--tag__close-icon:hover {
+      background-color: get-token-value($tag-colors, 'tag-hover-cyan');
+    }
+
+    .#{$prefix}--tag--teal.#{$prefix}--tag--interactive:hover,
+    .#{$prefix}--tag--teal .#{$prefix}--tag__close-icon:hover {
+      background-color: get-token-value($tag-colors, 'tag-hover-teal');
+    }
+
+    .#{$prefix}--tag--green.#{$prefix}--tag--interactive:hover,
+    .#{$prefix}--tag--green .#{$prefix}--tag__close-icon:hover {
+      background-color: get-token-value($tag-colors, 'tag-hover-green');
+    }
+
+    .#{$prefix}--tag--gray.#{$prefix}--tag--interactive:hover,
+    .#{$prefix}--tag--gray .#{$prefix}--tag__close-icon:hover {
+      background-color: get-token-value($tag-colors, 'tag-hover-gray');
+    }
+
+    .#{$prefix}--tag--cool-gray.#{$prefix}--tag--interactive:hover,
+    .#{$prefix}--tag--cool-gray .#{$prefix}--tag__close-icon:hover {
+      background-color: get-token-value($tag-colors, 'tag-hover-cool-gray');
+    }
+
+    .#{$prefix}--tag--warm-gray.#{$prefix}--tag--interactive:hover,
+    .#{$prefix}--tag--warm-gray .#{$prefix}--tag__close-icon:hover {
+      background-color: get-token-value($tag-colors, 'tag-hover-warm-gray');
+    }
+
+    .#{$prefix}--tag--high-contrast.#{$prefix}--tag--interactive:hover,
+    .#{$prefix}--tag--high-contrast .#{$prefix}--tag__close-icon:hover {
+      background-color: $inverse-hover-ui;
+    }
+
+    .#{$prefix}--tag--outline.#{$prefix}--tag--interactive:hover,
+    .#{$prefix}--tag--outline .#{$prefix}--tag__close-icon:hover {
+      background-color: $hover-ui;
+    }
+
+    .#{$prefix}--tag--disabled.#{$prefix}--tag--interactive:hover,
+    .#{$prefix}--tag--disabled .#{$prefix}--tag__close-icon:hover,
+    .#{$prefix}--tag--filter.#{$prefix}--tag--disabled.#{$prefix}--tag--interactive:hover,
+    .#{$prefix}--tag--filter.#{$prefix}--tag--disabled .#{$prefix}--tag__close-icon:hover,
+    .#{$prefix}--tag--interactive.#{$prefix}--tag--disabled.#{$prefix}--tag--interactive:hover,
+    .#{$prefix}--tag--interactive.#{$prefix}--tag--disabled .#{$prefix}--tag__close-icon:hover {
+      background-color: $disabled-01;
+    }
+
+    // Must stay after the disabled rule above: same selector, same
+    // specificity, and this one needs to win the tie.
+    .#{$prefix}--tag--filter.#{$prefix}--tag--disabled
+      .#{$prefix}--tag__close-icon:hover {
+      background-color: transparent;
+    }
+
+    .#{$prefix}--tag.#{$prefix}--skeleton.#{$prefix}--tag--interactive:hover,
+    .#{$prefix}--tag.#{$prefix}--skeleton .#{$prefix}--tag__close-icon:hover {
+      background-color: $skeleton-01;
     }
   }
 

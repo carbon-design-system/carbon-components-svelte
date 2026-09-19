@@ -7,15 +7,27 @@
 
 /// @access private
 /// @group tag
-@mixin tag-theme($bg-color, $text-color, $filter-hover-color: $bg-color) {
+/// @param {Bool} $emit-hover [true] - set to false when the caller batches
+///   this variant's hover rule into a single grouped `@media` block itself
+///   (see `@mixin tags` in `_tag.scss`), instead of emitting one here
+// ccs: $emit-hover lets `@mixin tags` opt out per-call so its ~15 color/
+// variant invocations close one @media block instead of 15
+@mixin tag-theme(
+  $bg-color,
+  $text-color,
+  $filter-hover-color: $bg-color,
+  $emit-hover: true
+) {
   background-color: $bg-color;
   color: $text-color;
 
-  &.#{$prefix}--tag--interactive,
-  .#{$prefix}--tag__close-icon {
-    @media (any-hover: hover) {
-      &:hover {
-        background-color: $filter-hover-color;
+  @if $emit-hover {
+    &.#{$prefix}--tag--interactive,
+    .#{$prefix}--tag__close-icon {
+      @media (any-hover: hover) {
+        &:hover {
+          background-color: $filter-hover-color;
+        }
       }
     }
   }

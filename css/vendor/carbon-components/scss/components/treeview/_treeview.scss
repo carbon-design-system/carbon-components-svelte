@@ -50,54 +50,11 @@
       cursor: not-allowed;
     }
 
-    @media (any-hover: hover) {
-      .#{$prefix}--tree-node--disabled .#{$prefix}--tree-node__label:hover,
-      .#{$prefix}--tree-node--disabled
-        .#{$prefix}--tree-node__label:hover
-        .#{$prefix}--tree-node__label__details {
-        background-color: $disabled-01;
-        color: $disabled-02;
-      }
-
-      .#{$prefix}--tree-node--disabled
-        .#{$prefix}--tree-node__label:hover
-        .#{$prefix}--tree-parent-node__toggle-icon,
-      .#{$prefix}--tree-node--disabled
-        .#{$prefix}--tree-node__label:hover
-        .#{$prefix}--tree-node__icon {
-        fill: $disabled-02;
-      }
-
-      .#{$prefix}--tree-node--disabled
-        .#{$prefix}--tree-parent-node__toggle-icon:hover {
-        cursor: not-allowed;
-      }
-    }
-
     .#{$prefix}--tree-node__label {
       display: flex;
       min-height: to-rem(32px);
       flex: 1;
       align-items: center;
-
-      @media (any-hover: hover) {
-        &:hover {
-          background-color: $hover-ui;
-          color: $text-01;
-        }
-      }
-    }
-
-    @media (any-hover: hover) {
-      .#{$prefix}--tree-node__label:hover .#{$prefix}--tree-node__label__details {
-        color: $text-01;
-      }
-
-      .#{$prefix}--tree-node__label:hover
-        .#{$prefix}--tree-parent-node__toggle-icon,
-      .#{$prefix}--tree-node__label:hover .#{$prefix}--tree-node__icon {
-        fill: $icon-01;
-      }
     }
 
     .#{$prefix}--tree-leaf-node {
@@ -123,12 +80,6 @@
       border: 0;
       margin-right: $spacing-03;
 
-      @media (any-hover: hover) {
-        &:hover {
-          cursor: pointer;
-        }
-      }
-
       &:focus {
         outline: none;
       }
@@ -153,12 +104,6 @@
     .#{$prefix}--tree-node--selected > .#{$prefix}--tree-node__label {
       background-color: $selected-ui;
       color: $text-01;
-
-      @media (any-hover: hover) {
-        &:hover {
-          background-color: $hover-selected-ui;
-        }
-      }
     }
 
     .#{$prefix}--tree-node--selected
@@ -168,6 +113,57 @@
       > .#{$prefix}--tree-node__label
       .#{$prefix}--tree-node__icon {
       fill: $icon-01;
+    }
+
+    // ccs: grouped this component's any-hover rules into one block
+    // (order-safe: each disabled/selected rule below has strictly higher
+    // specificity than the generic label/toggle rule it could tie with, so
+    // precedence here is spec-, not order-, determined)
+    @media (any-hover: hover) {
+      .#{$prefix}--tree-node--disabled .#{$prefix}--tree-node__label:hover,
+      .#{$prefix}--tree-node--disabled
+        .#{$prefix}--tree-node__label:hover
+        .#{$prefix}--tree-node__label__details {
+        background-color: $disabled-01;
+        color: $disabled-02;
+      }
+
+      .#{$prefix}--tree-node--disabled
+        .#{$prefix}--tree-node__label:hover
+        .#{$prefix}--tree-parent-node__toggle-icon,
+      .#{$prefix}--tree-node--disabled
+        .#{$prefix}--tree-node__label:hover
+        .#{$prefix}--tree-node__icon {
+        fill: $disabled-02;
+      }
+
+      .#{$prefix}--tree-node--disabled
+        .#{$prefix}--tree-parent-node__toggle-icon:hover {
+        cursor: not-allowed;
+      }
+
+      .#{$prefix}--tree-node__label:hover {
+        background-color: $hover-ui;
+        color: $text-01;
+      }
+
+      .#{$prefix}--tree-node__label:hover .#{$prefix}--tree-node__label__details {
+        color: $text-01;
+      }
+
+      .#{$prefix}--tree-node__label:hover
+        .#{$prefix}--tree-parent-node__toggle-icon,
+      .#{$prefix}--tree-node__label:hover .#{$prefix}--tree-node__icon {
+        fill: $icon-01;
+      }
+
+      .#{$prefix}--tree-parent-node__toggle:hover {
+        cursor: pointer;
+      }
+
+      .#{$prefix}--tree-node--selected > .#{$prefix}--tree-node__label:hover {
+        background-color: $hover-selected-ui;
+      }
     }
 
     .#{$prefix}--tree-node--active > .#{$prefix}--tree-node__label {
