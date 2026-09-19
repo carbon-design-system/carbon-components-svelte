@@ -98,7 +98,13 @@
   }
 
   .flatpickr-calendar.open {
-    @include box-shadow;
+    // ccs: `top: calc(100% + 2px)` (below, on `.static`) and `margin-top`
+    // net to a flush, zero-gap seam against the input above. The shared
+    // `box-shadow` mixin's blur (blur 6px, offset 2px down) still bleeds
+    // ~4px past the calendar's own top edge into that seam regardless, so a
+    // -4px spread pulls the shadow in before blurring (spread <= offset-y -
+    // blur) to keep it off the input while leaving it visible below/aside.
+    box-shadow: 0 2px 6px -4px $shadow;
 
     z-index: 99999;
     display: flex;
