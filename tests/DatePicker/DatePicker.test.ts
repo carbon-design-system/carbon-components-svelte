@@ -844,6 +844,45 @@ describe("DatePicker", () => {
       );
     });
 
+    it("mirrors later state changes onto the visible altInput", async () => {
+      const props = {
+        datePickerType: "single",
+        helperText: "Pick a weekday",
+        flatpickrProps: { altInput: true, altFormat: "F j, Y" },
+      } as const;
+      const { rerender } = render(DatePicker, props);
+
+      await vi.waitFor(() =>
+        expect(screen.getByLabelText("Date")).toHaveAttribute("type", "text"),
+      );
+      const visible = screen.getByLabelText("Date");
+      expect(visible).toBeEnabled();
+      expect(visible).toHaveAccessibleDescription("Pick a weekday");
+
+      await rerender({ ...props, disabled: true });
+      await vi.waitFor(() => expect(visible).toBeDisabled());
+
+      await rerender({ ...props, disabled: false, readonly: true });
+      await vi.waitFor(() => {
+        expect(visible).toBeEnabled();
+        expect(visible).toHaveAttribute("readonly");
+      });
+
+      await rerender({
+        ...props,
+        readonly: false,
+        invalid: true,
+        invalidText: "Bad date",
+      });
+      await vi.waitFor(() => {
+        expect(visible).not.toHaveAttribute("readonly");
+        expect(visible).toHaveClass("bx--date-picker__input--invalid");
+      });
+      // flatpickr's own classes on the visible input survive the sync.
+      expect(visible).toHaveClass("bx--date-picker__input");
+      expect(visible).not.toHaveClass("flatpickr-input");
+    });
+
     it("creates one flatpickr instance when props settle during init", async () => {
       const onReady = vi.fn();
       const onDestroy = vi.fn();

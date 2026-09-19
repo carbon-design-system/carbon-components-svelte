@@ -197,6 +197,57 @@ function updateMonthNode(instance, locale) {
  * }} CreateCalendarArgs
  */
 
+const MIRRORED_ATTRIBUTES = [
+  "class",
+  "disabled",
+  "readonly",
+  "placeholder",
+  "pattern",
+  "aria-describedby",
+  "aria-invalid",
+  "data-invalid",
+];
+
+/**
+ * flatpickr copies the original input's attributes onto its `altInput` once,
+ * at creation. Svelte keeps updating the original, which is hidden, so keep
+ * the visible one in sync for state that changes later (`disabled`,
+ * `readonly`, `invalid`).
+ *
+ * @param {HTMLInputElement} source
+ * @param {HTMLInputElement} target
+ * @returns {MutationObserver}
+ */
+function mirrorInputState(source, target) {
+  function sync() {
+    for (const name of MIRRORED_ATTRIBUTES) {
+      if (name === "class") {
+        // Only Carbon's classes: both inputs carry flatpickr's own as well.
+        for (const token of [...target.classList]) {
+          if (token.startsWith("bx--") && !source.classList.contains(token)) {
+            target.classList.remove(token);
+          }
+        }
+        for (const token of source.classList) {
+          if (token.startsWith("bx--")) target.classList.add(token);
+        }
+        continue;
+      }
+      const value = source.getAttribute(name);
+      if (value === null) target.removeAttribute(name);
+      else target.setAttribute(name, value);
+    }
+  }
+
+  sync();
+  const observer = new MutationObserver(sync);
+  observer.observe(source, {
+    attributes: true,
+    attributeFilter: MIRRORED_ATTRIBUTES,
+  });
+  return observer;
+}
+
 /**
  * flatpickr accepts a hook as a single function or an array of them.
  *
@@ -256,6 +307,14 @@ export async function createCalendar({ options, base, input, dispatch }) {
 
   const userOnDayCreate = options.onDayCreate;
 
+  /** @type {MutationObserver | undefined} */
+  let altInputObserver;
+
+  function disconnectAltInputObserver() {
+    altInputObserver?.disconnect();
+    altInputObserver = undefined;
+  }
+
   /**
    * @param {any} _s
    * @param {any} _d
@@ -267,6 +326,9 @@ export async function createCalendar({ options, base, input, dispatch }) {
     if (instance.altInput && instance.input.id) {
       instance.altInput.id = instance.input.id;
       instance.input.removeAttribute("id");
+    }
+    if (instance.altInput) {
+      altInputObserver = mirrorInputState(instance.input, instance.altInput);
     }
     // An `inline` calendar is always visible and never fires `onOpen`.
     if (!options.inline) return;
@@ -355,6 +417,7 @@ export async function createCalendar({ options, base, input, dispatch }) {
     wrap: false,
     // Run ahead of the consumer's hook rather than being replaced by it.
     onReady: [prepareOnReady, ...toHookArray(options.onReady)],
+    onDestroy: [disconnectAltInputObserver, ...toHookArray(options.onDestroy)],
     onDayCreate: [
       markDisabledDayAriaState,
       // Days are rebuilt on every redraw (month change, `set`), not only on
