@@ -54,7 +54,7 @@
     @include type-style("body-short-01");
 
     display: grid;
-    max-width: rem(288px);
+    max-width: to-rem(288px);
     padding: $spacing-05;
     row-gap: $spacing-05;
   }

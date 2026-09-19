@@ -81,6 +81,10 @@ describe("css partial conventions", () => {
     expect(offenders(/#[0-9a-fA-F]{3,8}\b(?!\{)/)).toEqual([]);
   });
 
+  it("converts px with to-rem(), not Carbon's bare rem()", () => {
+    expect(offenders(/(^|[^a-z-])rem\(/)).toEqual([]);
+  });
+
   it("avoids :has(), which is newer than the browser baseline", () => {
     expect(offenders(/:has\(/)).toEqual([]);
   });
