@@ -18,32 +18,32 @@
     pointer-events: none;
   }
 
-  [data-floating-portal][data-floating-direction='top'] .#{$prefix}--tooltip-portal {
+  [data-floating-portal][data-floating-direction="top"] .#{$prefix}--tooltip-portal {
     flex-direction: column-reverse;
   }
 
-  [data-floating-portal][data-floating-direction='top'][data-floating-intrinsic-align='start']
+  [data-floating-portal][data-floating-direction="top"][data-floating-intrinsic-align="start"]
     .#{$prefix}--tooltip-portal,
-  [data-floating-portal][data-floating-direction='bottom'][data-floating-intrinsic-align='start']
+  [data-floating-portal][data-floating-direction="bottom"][data-floating-intrinsic-align="start"]
     .#{$prefix}--tooltip-portal,
-  [data-floating-portal][data-floating-direction='top'][data-floating-intrinsic-align='end']
+  [data-floating-portal][data-floating-direction="top"][data-floating-intrinsic-align="end"]
     .#{$prefix}--tooltip-portal,
-  [data-floating-portal][data-floating-direction='bottom'][data-floating-intrinsic-align='end']
+  [data-floating-portal][data-floating-direction="bottom"][data-floating-intrinsic-align="end"]
     .#{$prefix}--tooltip-portal {
     align-items: flex-start;
   }
 
-  [data-floating-portal][data-floating-direction='top'][data-floating-intrinsic-align='end']
+  [data-floating-portal][data-floating-direction="top"][data-floating-intrinsic-align="end"]
     .#{$prefix}--tooltip-portal__content,
-  [data-floating-portal][data-floating-direction='bottom'][data-floating-intrinsic-align='end']
+  [data-floating-portal][data-floating-direction="bottom"][data-floating-intrinsic-align="end"]
     .#{$prefix}--tooltip-portal__content {
     align-self: flex-end;
   }
 
   // `start`: offset the caret from the box's left edge.
-  [data-floating-portal][data-floating-direction='top'][data-floating-intrinsic-align='start']
+  [data-floating-portal][data-floating-direction="top"][data-floating-intrinsic-align="start"]
     .#{$prefix}--tooltip-portal__caret,
-  [data-floating-portal][data-floating-direction='bottom'][data-floating-intrinsic-align='start']
+  [data-floating-portal][data-floating-direction="bottom"][data-floating-intrinsic-align="start"]
     .#{$prefix}--tooltip-portal__caret {
     margin-left: calc(var(--ccs-tooltip-caret-nudge) - 0.3125rem);
   }
@@ -51,25 +51,25 @@
   // `end`: offset the caret from the box's right edge. The nudge is the anchor
   // half-width, so the caret stays centered on the trigger regardless of the
   // tooltip width (no movement when the text swaps to the copy feedback).
-  [data-floating-portal][data-floating-direction='top'][data-floating-intrinsic-align='end']
+  [data-floating-portal][data-floating-direction="top"][data-floating-intrinsic-align="end"]
     .#{$prefix}--tooltip-portal__caret,
-  [data-floating-portal][data-floating-direction='bottom'][data-floating-intrinsic-align='end']
+  [data-floating-portal][data-floating-direction="bottom"][data-floating-intrinsic-align="end"]
     .#{$prefix}--tooltip-portal__caret {
     align-self: flex-end;
     margin-right: calc(var(--ccs-tooltip-caret-nudge) - 0.3125rem);
   }
 
-  [data-floating-portal][data-floating-direction='right'] .#{$prefix}--tooltip-portal {
+  [data-floating-portal][data-floating-direction="right"] .#{$prefix}--tooltip-portal {
     flex-direction: row;
     align-items: center;
   }
 
-  [data-floating-portal][data-floating-direction='left'] .#{$prefix}--tooltip-portal {
+  [data-floating-portal][data-floating-direction="left"] .#{$prefix}--tooltip-portal {
     flex-direction: row-reverse;
     align-items: center;
   }
 
-  .#{$prefix}--tooltip-portal[data-tooltip-type='definition'] {
+  .#{$prefix}--tooltip-portal[data-tooltip-type="definition"] {
     filter: drop-shadow(0 2px 6px var(--cds-shadow, rgba(0, 0, 0, 0.3)));
   }
 
@@ -83,13 +83,13 @@
     border-top: 0 solid transparent;
   }
 
-  [data-floating-portal][data-floating-direction='top']
+  [data-floating-portal][data-floating-direction="top"]
     .#{$prefix}--tooltip-portal__caret {
     border-top: 0.3125rem solid $inverse-02;
     border-bottom: none;
   }
 
-  [data-floating-portal][data-floating-direction='right']
+  [data-floating-portal][data-floating-direction="right"]
     .#{$prefix}--tooltip-portal__caret {
     width: 0.75rem;
     height: 0;
@@ -99,7 +99,7 @@
     border-left: 0;
   }
 
-  [data-floating-portal][data-floating-direction='left']
+  [data-floating-portal][data-floating-direction="left"]
     .#{$prefix}--tooltip-portal__caret {
     width: 0.75rem;
     height: 0;
@@ -130,14 +130,14 @@
   // hoverable so entering the tooltip cancels the pending close instead of
   // the portal being a dead zone the pointer falls through, which flickers
   // the tooltip open/closed as it re-triggers the trigger's hover handlers.
-  .#{$prefix}--tooltip-portal[data-tooltip-type='definition'] {
+  .#{$prefix}--tooltip-portal[data-tooltip-type="definition"] {
     pointer-events: auto;
   }
 
-  .#{$prefix}--tooltip-portal[data-tooltip-type='definition']
+  .#{$prefix}--tooltip-portal[data-tooltip-type="definition"]
     .#{$prefix}--tooltip-portal__content {
     // box-shadow, z-index and transform are always re-set below
-    @include tooltip--content('definition', (box-shadow, transform, z-index));
+    @include tooltip--content("definition", (box-shadow, transform, z-index));
 
     box-shadow: none;
     position: static;
@@ -153,10 +153,10 @@
     word-break: break-word;
   }
 
-  .#{$prefix}--tooltip-portal[data-tooltip-type='icon']
+  .#{$prefix}--tooltip-portal[data-tooltip-type="icon"]
     .#{$prefix}--tooltip-portal__content {
     // z-index and transform are always re-set below
-    @include tooltip--content('icon', (transform, z-index));
+    @include tooltip--content("icon", (transform, z-index));
 
     position: static;
     z-index: 1;
@@ -172,6 +172,6 @@
   }
 }
 
-@include exports('tooltip-portal') {
+@include exports("tooltip-portal") {
   @include tooltip-portal;
 }
