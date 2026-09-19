@@ -121,7 +121,11 @@
   import { dismiss } from "../utils/dismiss.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { uniqueId } from "../utils/unique-id.js";
-  import { createCalendar, resolveLocale } from "./create-calendar.js";
+  import {
+    createCalendar,
+    resolveLocale,
+    resolveOptionValue,
+  } from "./create-calendar.js";
   import {
     getTopLayerAncestor,
     isEventTargetInsidePortaledCalendar,
@@ -619,7 +623,11 @@
         if (option === "static" && effectivePortalMenu) continue;
         // Unsupported: see `wrap` in create-calendar.js.
         if (option === "wrap") continue;
-        applyOptionIfChanged(option, value);
+        applyOptionIfChanged(
+          option,
+          value,
+          resolveOptionValue(calendar, option, value),
+        );
       }
       return;
     }
