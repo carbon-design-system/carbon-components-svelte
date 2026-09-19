@@ -42,6 +42,12 @@ Add helper text below the textarea to provide additional context or instructions
 
 <TextArea labelText="Deployment notes" helperText="Include the rollback plan and any risks the on-call engineer should know about" placeholder="Summarize what changed and why..." />
 
+## Select on focus
+
+Set `selectTextOnFocus` to select the full value when the field receives focus.
+
+<TextArea selectTextOnFocus labelText="Deployment notes" value="Rolled out v2.4.1 to production; no issues observed." />
+
 ## Hidden label
 
 Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
