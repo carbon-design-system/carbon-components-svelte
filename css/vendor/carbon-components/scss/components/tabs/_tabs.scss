@@ -1270,7 +1270,11 @@ $tabs-sizes: (
       // `box-shadow` instead (not part of the box model); give sized line
       // tabs the same treatment so centering holds regardless of which
       // indicator is showing.
-      &:not(.#{$prefix}--tabs--container):not(.#{$prefix}--tabs--vertical) {
+      // ccs: `--line` is set by the component only for non-container,
+      // non-vertical tabs, replacing the `:not(--container):not(--vertical)`
+      // chain. Repeated to match the replaced chain's specificity (4 class-
+      // equivalents: base + size + 2 `:not()` clauses).
+      &.#{$prefix}--tabs--line.#{$prefix}--tabs--line {
         .#{$prefix}--tabs__nav-link,
         .#{$prefix}--tabs__nav-link:focus,
         .#{$prefix}--tabs__nav-link:active {
@@ -1286,7 +1290,10 @@ $tabs-sizes: (
           box-shadow: inset 0 -2px 0 0 $ui-03;
         }
 
-        .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled)
+        // ccs: `--default` (not selected, not disabled) replaces the
+        // `:not(--selected):not(--disabled)` pair; repeated to match its
+        // specificity.
+        .#{$prefix}--tabs__nav-item.#{$prefix}--tabs__nav-item--default.#{$prefix}--tabs__nav-item--default:hover
           .#{$prefix}--tabs__nav-link {
           box-shadow: inset 0 -2px 0 0 $ui-04;
         }
@@ -1306,7 +1313,7 @@ $tabs-sizes: (
         // Focused/active (not selected, not disabled): Carbon shows the
         // focus outline instead of the underline here, so drop the
         // indicator entirely rather than repaint it.
-        .#{$prefix}--tabs__nav-item:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled) {
+        .#{$prefix}--tabs__nav-item.#{$prefix}--tabs__nav-item--default.#{$prefix}--tabs__nav-item--default {
           .#{$prefix}--tabs__nav-link:focus,
           .#{$prefix}--tabs__nav-link:active {
             box-shadow: none;

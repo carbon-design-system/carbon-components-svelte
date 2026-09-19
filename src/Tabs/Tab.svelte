@@ -170,6 +170,7 @@
   class:bx--tabs__nav-item={true}
   class:bx--tabs__nav-item--disabled={disabled}
   class:bx--tabs__nav-item--selected={selected}
+  class:bx--tabs__nav-item--default={!disabled && !selected}
   {...$$restProps}
   on:click
   on:click={(event) => {

@@ -263,6 +263,29 @@ describe("Tabs", () => {
     expect(tabsContainer).toHaveClass("bx--tabs--container");
   });
 
+  it("sets the line class for the default (non-container) type only", () => {
+    render(Tabs, { props: { type: "default" } });
+    expect(screen.getByRole("navigation")).toHaveClass("bx--tabs--line");
+  });
+
+  it("does not set the line class for the container type", () => {
+    render(Tabs, { props: { type: "container" } });
+    expect(screen.getByRole("navigation")).not.toHaveClass("bx--tabs--line");
+  });
+
+  it("sets the default nav-item class only for tabs that are neither selected nor disabled", async () => {
+    render(Tabs);
+    await tick();
+
+    const tabs = screen.getAllByRole("tab");
+    const navItems = tabs.map((tab) => tab.closest(".bx--tabs__nav-item"));
+
+    // Tab 1: selected, Tab 2: disabled, Tab 3: neither.
+    expect(navItems[0]).not.toHaveClass("bx--tabs__nav-item--default");
+    expect(navItems[1]).not.toHaveClass("bx--tabs__nav-item--default");
+    expect(navItems[2]).toHaveClass("bx--tabs__nav-item--default");
+  });
+
   it("should not apply a layout size class by default", () => {
     render(Tabs);
 
