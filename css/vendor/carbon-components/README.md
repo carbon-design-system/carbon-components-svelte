@@ -37,7 +37,10 @@ these prunings relative to upstream:
   tall kept); `overflow-menu--lg`; `skeleton-icon`;
   `structured-list-row--selected`; `pagination-nav__page--direction`;
   `data-table--visible-overflow-menu`; `multi-select--invalid--focused`;
-  exclusive `search-button` rules
+  exclusive `search-button` rules; Button's `btn--md` and double-dash
+  `btn--danger--ghost` / `btn--danger--tertiary` aliases (Button renders
+  `--field` and the single-dash kinds); `date-picker__input.bx--focused`;
+  `overflow-menu-options__content`
 
 To use an upstream file that is not vendored, restore it from
 `carbon-components@10.58.15` on npm.
