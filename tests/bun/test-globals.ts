@@ -59,7 +59,9 @@ Reflect.set(
     callback: () => unknown,
     options?: { timeout?: number; interval?: number },
   ) => {
-    const timeout = options?.timeout ?? 1000;
+    // See tests/bun/vi-shim.ts's waitFor for why this is higher than
+    // vitest's own 1000ms default: it was flaking on CI's slower hardware.
+    const timeout = options?.timeout ?? 4000;
     const interval = options?.interval ?? 50;
     return new Proxy(
       {},
@@ -72,10 +74,15 @@ Reflect.set(
               try {
                 // biome-ignore lint/performance/noAwaitInLoops: retries sequentially until the matcher stops throwing, can't be parallelized
                 const value = await callback();
-                const matcher = Reflect.get(expect(value), matcherName) as (
-                  ...args: unknown[]
-                ) => unknown;
-                matcher(...args);
+                // Call as `assertion[matcherName](...)`, not a detached
+                // Reflect.get() reference — bun's matchers check `this
+                // instanceof Expect` internally, so pulling the function out
+                // and invoking it separately drops that binding and throws.
+                const assertion = expect(value) as Record<
+                  string,
+                  (...args: unknown[]) => unknown
+                >;
+                assertion[matcherName](...args);
                 return;
               } catch (err) {
                 lastError = err;

@@ -72,7 +72,13 @@ export const vi = Object.assign(bunVi, {
     callback: () => T | Promise<T>,
     options?: { timeout?: number; interval?: number },
   ): Promise<T> {
-    const timeout = options?.timeout ?? 1000;
+    // Default matches vitest's `expect.poll`/`vi.waitFor` (1000ms), but with
+    // headroom under bun:test's own 5000ms per-test timeout: on a slower CI
+    // runner, waiting on a real ResizeObserver-mock -> RAF -> style settle
+    // chain can take noticeably longer wall-clock than it does locally, so
+    // 1000ms was flaking in CI even though the assertion itself was correct
+    // (github.com/carbon-design-system/carbon-components-svelte/pull/3867).
+    const timeout = options?.timeout ?? 4000;
     const interval = options?.interval ?? 50;
     const start = Date.now();
     let lastError: unknown;
