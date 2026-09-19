@@ -1,9 +1,10 @@
-// Portal tooltip for overflow containers (e.g. modals).
-
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/tooltip";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
+/// Portal tooltip for overflow containers (e.g. modals)
+/// @access private
+/// @group components
 @mixin tooltip-portal {
   // Suppress the default CSS pseudo-element tooltip when a portal tooltip is active.
   .#{$prefix}--tooltip--portal-active::before,

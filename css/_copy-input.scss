@@ -2,6 +2,9 @@
 @import "carbon-components/scss/globals/scss/helper-mixins";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
+/// CopyInput: a read-only text input with a trailing copy button
+/// @access private
+/// @group components
 @mixin copy-input {
   // Reserve room so the value never sits under the copy button.
   .#{$prefix}--copy-input__field-wrapper .#{$prefix}--text-input {

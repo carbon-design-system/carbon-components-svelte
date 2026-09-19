@@ -4,7 +4,7 @@
 
 /// Contained List styles
 /// @access private
-/// @group contained-list
+/// @group components
 @mixin contained-list {
   .#{$prefix}--contained-list .#{$prefix}--tag {
     height: to-rem(24px); // 24px equivalent to md size

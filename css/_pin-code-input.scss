@@ -6,6 +6,7 @@
 @import "carbon-components/scss/globals/scss/typography";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
+/// PinCodeInput: a fieldset of single-character segments
 /// @access private
 /// @group components
 @mixin pin-code-input {
