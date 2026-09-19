@@ -204,6 +204,12 @@ By default, an initial `value` outside of `minDate` and `maxDate` (or matching `
 
 <FileSource src="/framed/DatePicker/DatePickerAllowInvalidPreload" />
 
+### Keep open for outside controls
+
+By default, clicking anywhere outside the calendar closes it. Pass the elements that should not dismiss it as `ignoredFocusElements` via `flatpickrProps`, such as a preset button that updates the open calendar through `bind:calendar`.
+
+<FileSource src="/framed/DatePicker/DatePickerIgnoredFocusElements" />
+
 ### Position relative to another element
 
 When `portalMenu` is enabled, pass `positionElement` via `flatpickrProps` to anchor the calendar to an element other than the input. It has no effect with the default static positioning, where the calendar is placed by CSS.
