@@ -8,6 +8,7 @@
   } from "carbon-components-svelte";
   import { createCopyFeedbackState } from "carbon-components-svelte/src/utils/copy-feedback.js";
   import ArrowUpRight from "carbon-icons-svelte/lib/ArrowUpRight.svelte";
+  import Checkmark from "carbon-icons-svelte/lib/Checkmark.svelte";
   import Code from "carbon-icons-svelte/lib/Code.svelte";
   import Copy from "carbon-icons-svelte/lib/Copy.svelte";
   import Document from "carbon-icons-svelte/lib/Document.svelte";
@@ -92,7 +93,7 @@
       target="_blank"
     />
     <OverflowMenuItem
-      icon={Copy}
+      icon={copied ? Checkmark : Copy}
       text={copied ? "Copied!" : "Copy Markdown"}
       disabled={copying}
       on:click={copyMarkdownFromMenu}
