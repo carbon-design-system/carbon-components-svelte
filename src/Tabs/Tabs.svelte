@@ -476,6 +476,7 @@
   role="navigation"
   class:bx--tabs={true}
   class:bx--tabs--container={type === "container"}
+  class:bx--tabs--line={type !== "container"}
   class:bx--tabs--tall={$hasSecondaryLabel}
   class:bx--tabs--full-width={fullWidth}
   class:bx--tabs--dismissible={dismissible}
