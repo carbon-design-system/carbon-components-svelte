@@ -79,7 +79,7 @@
     scrollbar-width: none;
     white-space: nowrap;
     block-size: to-rem(16px);
-    inline-size: calc(100% - 2rem);
+    inline-size: calc(100% - to-rem(32px));
     inset-block-start: to-rem(13px);
     left: $carbon--spacing-05;
   }
@@ -323,7 +323,7 @@
     .#{$prefix}--time-picker--fluid__wrapper
     > *:last-child
     .#{$prefix}--select-input__wrapper::before {
-    block-size: calc(100% - 1rem);
+    block-size: calc(100% - to-rem(16px));
     inset-block-start: 8px;
   }
 
@@ -341,9 +341,9 @@
     display: block;
     border-style: solid;
     border-color: $ui-03;
-    margin: 0 1rem;
+    margin: 0 to-rem(16px);
     border-block-end: none;
-    inline-size: calc(100% - 2rem);
+    inline-size: calc(100% - to-rem(32px));
   }
 
   .#{$prefix}--time-picker--fluid:not(.#{$prefix}--time-picker--fluid--invalid):not(

@@ -72,7 +72,7 @@
 
   .#{$prefix}--text-area--fluid .#{$prefix}--text-area {
     padding: 0 $carbon--spacing-05 to-rem(13px);
-    margin-block-start: 2rem;
+    margin-block-start: to-rem(32px);
     min-block-size: to-rem(64px);
     outline: none;
   }
@@ -110,7 +110,7 @@
     display: block;
     border-style: solid;
     border-color: $ui-03;
-    margin: 0 1rem;
+    margin: 0 to-rem(16px);
     border-block-end: none;
   }
 
@@ -156,7 +156,7 @@
   }
 
   .#{$prefix}--text-area--fluid .#{$prefix}--text-area__invalid-icon {
-    inset-block-start: 0.5rem;
+    inset-block-start: to-rem(8px);
   }
 
   .#{$prefix}--text-area--fluid
@@ -196,7 +196,7 @@
   .#{$prefix}--text-area--fluid__skeleton .#{$prefix}--skeleton,
   .#{$prefix}--text-area--fluid__skeleton
     .#{$prefix}--text-area.#{$prefix}--skeleton::before {
-    block-size: 0.5rem;
+    block-size: to-rem(8px);
   }
 
   .#{$prefix}--text-area--fluid__skeleton .#{$prefix}--label {
@@ -205,7 +205,7 @@
 
   .#{$prefix}--text-area--fluid__skeleton
     .#{$prefix}--text-area.#{$prefix}--skeleton {
-    block-size: 4rem;
+    block-size: to-rem(64px);
     inline-size: 80%;
   }
 }

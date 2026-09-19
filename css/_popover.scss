@@ -9,7 +9,7 @@
 /// @group components
 @mixin popover {
   $popover-text-color: $text-01;
-  $popover-caret-offset: 1rem;
+  $popover-caret-offset: to-rem(16px);
   $popover-offset: 8px;
 
   .#{$prefix}--popover {

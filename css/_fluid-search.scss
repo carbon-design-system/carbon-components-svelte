@@ -27,7 +27,7 @@
     white-space: nowrap;
     block-size: to-rem(16px);
     clip: initial;
-    inline-size: calc(100% - 2rem);
+    inline-size: calc(100% - to-rem(32px));
     inset-block-start: to-rem(13px);
     left: $carbon--spacing-05;
   }
@@ -48,7 +48,7 @@
 
   .#{$prefix}--search--fluid .#{$prefix}--search-magnifier-icon {
     fill: $icon-01;
-    inset: auto 1rem to-rem(13px) auto;
+    inset: auto to-rem(16px) to-rem(13px) auto;
     transform: none;
   }
 

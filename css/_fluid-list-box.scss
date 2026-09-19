@@ -82,7 +82,7 @@
     scrollbar-width: none;
     white-space: nowrap;
     block-size: to-rem(16px);
-    inline-size: calc(100% - 2rem);
+    inline-size: calc(100% - to-rem(32px));
     inset-block-start: to-rem(13px);
     left: $carbon--spacing-05;
   }
@@ -112,8 +112,8 @@
   }
 
   .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--list-box__menu-icon {
-    block-size: 1rem;
-    inline-size: 1rem;
+    block-size: to-rem(16px);
+    inline-size: to-rem(16px);
   }
 
   .#{$prefix}--list-box__wrapper--fluid
@@ -217,7 +217,7 @@
   // the fluid wrapper. The base v10 styles already reveal it via the
   // `[data-invalid] ~` and `--warning ~` general sibling selectors.
   .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--form-requirement {
-    padding: to-rem(8px) 4rem to-rem(8px) $carbon--spacing-05;
+    padding: to-rem(8px) to-rem(64px) to-rem(8px) $carbon--spacing-05;
     margin-block-start: 0;
   }
 
@@ -263,9 +263,9 @@
     ~ .#{$prefix}--list-box__divider {
     display: block;
     border: none;
-    margin: 0 1rem;
+    margin: 0 to-rem(16px);
     border-block-end: 1px solid $ui-03;
-    inline-size: calc(100% - 2rem);
+    inline-size: calc(100% - to-rem(32px));
   }
 
   .#{$prefix}--list-box__wrapper--fluid

@@ -45,7 +45,7 @@
     .#{$prefix}--tooltip-portal__caret,
   [data-floating-portal][data-floating-direction="bottom"][data-floating-intrinsic-align="start"]
     .#{$prefix}--tooltip-portal__caret {
-    margin-left: calc(var(--ccs-tooltip-caret-nudge) - 0.3125rem);
+    margin-left: calc(var(--ccs-tooltip-caret-nudge) - to-rem(5px));
   }
 
   // `end`: offset the caret from the box's right edge. The nudge is the anchor
@@ -56,7 +56,7 @@
   [data-floating-portal][data-floating-direction="bottom"][data-floating-intrinsic-align="end"]
     .#{$prefix}--tooltip-portal__caret {
     align-self: flex-end;
-    margin-right: calc(var(--ccs-tooltip-caret-nudge) - 0.3125rem);
+    margin-right: calc(var(--ccs-tooltip-caret-nudge) - to-rem(5px));
   }
 
   [data-floating-portal][data-floating-direction="right"] .#{$prefix}--tooltip-portal {
@@ -76,50 +76,50 @@
   .#{$prefix}--tooltip-portal__caret {
     flex-shrink: 0;
     width: 0;
-    height: 0.75rem;
-    border-right: 0.3125rem solid transparent;
-    border-bottom: 0.3125rem solid $inverse-02;
-    border-left: 0.3125rem solid transparent;
+    height: to-rem(12px);
+    border-right: to-rem(5px) solid transparent;
+    border-bottom: to-rem(5px) solid $inverse-02;
+    border-left: to-rem(5px) solid transparent;
     border-top: 0 solid transparent;
   }
 
   [data-floating-portal][data-floating-direction="top"]
     .#{$prefix}--tooltip-portal__caret {
-    border-top: 0.3125rem solid $inverse-02;
+    border-top: to-rem(5px) solid $inverse-02;
     border-bottom: none;
   }
 
   [data-floating-portal][data-floating-direction="right"]
     .#{$prefix}--tooltip-portal__caret {
-    width: 0.75rem;
+    width: to-rem(12px);
     height: 0;
-    border-top: 0.3125rem solid transparent;
-    border-right: 0.3125rem solid $inverse-02;
-    border-bottom: 0.3125rem solid transparent;
+    border-top: to-rem(5px) solid transparent;
+    border-right: to-rem(5px) solid $inverse-02;
+    border-bottom: to-rem(5px) solid transparent;
     border-left: 0;
   }
 
   [data-floating-portal][data-floating-direction="left"]
     .#{$prefix}--tooltip-portal__caret {
-    width: 0.75rem;
+    width: to-rem(12px);
     height: 0;
-    border-top: 0.3125rem solid transparent;
+    border-top: to-rem(5px) solid transparent;
     border-right: 0;
-    border-bottom: 0.3125rem solid transparent;
-    border-left: 0.3125rem solid $inverse-02;
+    border-bottom: to-rem(5px) solid transparent;
+    border-left: to-rem(5px) solid $inverse-02;
   }
 
   .#{$prefix}--tooltip-portal__content {
     display: flex;
     align-items: center;
     width: max-content;
-    min-height: 1.5rem;
-    max-width: 13rem;
-    padding: 0.1875rem 1rem;
-    border-radius: 0.125rem;
+    min-height: to-rem(24px);
+    max-width: to-rem(208px);
+    padding: to-rem(3px) to-rem(16px);
+    border-radius: to-rem(2px);
     background-color: $inverse-02;
     color: $inverse-01;
-    font-size: 0.875rem;
+    font-size: to-rem(14px);
     font-weight: 400;
     text-align: center;
   }

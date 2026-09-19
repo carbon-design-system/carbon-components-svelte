@@ -29,7 +29,7 @@
     scrollbar-width: none;
     white-space: nowrap;
     block-size: to-rem(16px);
-    inline-size: calc(100% - 2rem);
+    inline-size: calc(100% - to-rem(32px));
     inset-block-start: to-rem(13px);
     left: $carbon--spacing-05;
   }
@@ -51,7 +51,7 @@
   }
 
   .#{$prefix}--select--fluid .#{$prefix}--select__arrow {
-    block-size: 1rem;
+    block-size: to-rem(16px);
     inset-block-start: to-rem(34px);
     right: $carbon--spacing-04;
   }
@@ -79,9 +79,9 @@
     .#{$prefix}--select__divider {
     display: block;
     border: none;
-    margin: 0 1rem;
+    margin: 0 to-rem(16px);
     border-block-end: 1px solid $ui-03;
-    inline-size: calc(100% - 2rem);
+    inline-size: calc(100% - to-rem(32px));
   }
 
   .#{$prefix}--select--fluid
