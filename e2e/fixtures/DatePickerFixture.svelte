@@ -115,7 +115,7 @@
   >
     <DatePickerInput
       data-testid="date-picker-fluid-readonly-single-input"
-      labelText="Meeting date"
+      labelText="Readonly appointment"
       placeholder="mm/dd/yyyy"
       readonly
     />
@@ -134,13 +134,13 @@
   >
     <DatePickerInput
       data-testid="date-picker-fluid-readonly-range-start"
-      labelText="Start date"
+      labelText="Readonly from"
       placeholder="mm/dd/yyyy"
       readonly
     />
     <DatePickerInput
       data-testid="date-picker-fluid-readonly-range-end"
-      labelText="End date"
+      labelText="Readonly to"
       placeholder="mm/dd/yyyy"
       readonly
     />
@@ -159,14 +159,14 @@
   >
     <DatePickerInput
       data-testid="date-picker-fluid-invalid-range-start"
-      labelText="Start date"
+      labelText="Invalid from"
       placeholder="mm/dd/yyyy"
       invalid
       invalidText="Enter a valid start date"
     />
     <DatePickerInput
       data-testid="date-picker-fluid-invalid-range-end"
-      labelText="End date"
+      labelText="Invalid to"
       placeholder="mm/dd/yyyy"
       invalid
       invalidText="Enter a valid end date"
