@@ -63,6 +63,9 @@
    */
   export let ref = null;
 
+  /** Set to `true` to select the input's text when it receives focus */
+  export let selectTextOnFocus = false;
+
   import { getContext, onMount, tick } from "svelte";
   import Search from "../Search/Search.svelte";
   import { debounce as debounceFn } from "../utils/debounce.js";
@@ -154,6 +157,7 @@
 <Search
   {tabindex}
   {disabled}
+  {selectTextOnFocus}
   {...$$restProps}
   searchClass={[classes, $$restProps.class].filter(Boolean).join(" ")}
   bind:ref
