@@ -58,6 +58,18 @@
   export let minDate = null;
 
   /**
+   * Specify the month to show when the calendar opens with no date
+   * selected. Only the month and year are used; the day is ignored.
+   * Values may be a Date, or a string in the same format as `dateFormat`.
+   * Clamped into `minDate` / `maxDate` when it falls outside them.
+   * Ignored once a date is selected, until the selection is cleared.
+   * Only works with the "single", "range", and "multiple" date picker
+   * types.
+   * @type {null | string | Date}
+   */
+  export let initialMonth = null;
+
+  /**
    * Specify the locale.
    * @type {import("flatpickr/dist/types/locale").CustomLocale | import("flatpickr/dist/types/locale").key}
    */
@@ -119,7 +131,11 @@
   import { dismiss } from "../utils/dismiss.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { uniqueId } from "../utils/unique-id.js";
-  import { createCalendar, resolveLocale } from "./create-calendar.js";
+  import {
+    createCalendar,
+    resolveLocale,
+    updateMonthNode,
+  } from "./create-calendar.js";
   import {
     getTopLayerAncestor,
     isEventTargetInsidePortaledCalendar,
@@ -193,6 +209,7 @@
   let prevValue = value;
   let prevValueFrom = valueFrom;
   let prevValueTo = valueTo;
+  let prevInitialMonth = initialMonth;
   let prevAppliedOptions = {};
   let calendarUsesFixedPositioning = false;
   /** @type {(ReturnType<typeof rafThrottle> & { cancel: () => void }) | null} */
@@ -587,6 +604,72 @@
     }
   }
 
+  /**
+   * @param {number} year
+   * @param {number} month
+   */
+  function monthValue(year, month) {
+    return year * 12 + month;
+  }
+
+  /**
+   * @param {null | string | Date} a
+   * @param {null | string | Date} b
+   */
+  function initialMonthChanged(a, b) {
+    const at = a instanceof Date ? a.getTime() : a;
+    const bt = b instanceof Date ? b.getTime() : b;
+    return at !== bt;
+  }
+
+  /**
+   * Parses `initialMonth` with the active `dateFormat`, the same parsing
+   * `minDate` / `maxDate` use, and clamps it into the calendar's resolved
+   * bounds so the view never lands on a fully disabled month.
+   * @returns {Date | null}
+   */
+  function resolveInitialMonth() {
+    if (initialMonth == null) return null;
+    const parsed = calendar.parseDate(initialMonth, dateFormat);
+    if (!parsed) return null;
+
+    let year = parsed.getFullYear();
+    let month = parsed.getMonth();
+    const { minDate: resolvedMinDate, maxDate: resolvedMaxDate } =
+      calendar.config;
+    if (
+      resolvedMaxDate &&
+      monthValue(year, month) >
+        monthValue(resolvedMaxDate.getFullYear(), resolvedMaxDate.getMonth())
+    ) {
+      year = resolvedMaxDate.getFullYear();
+      month = resolvedMaxDate.getMonth();
+    }
+    if (
+      resolvedMinDate &&
+      monthValue(year, month) <
+        monthValue(resolvedMinDate.getFullYear(), resolvedMinDate.getMonth())
+    ) {
+      year = resolvedMinDate.getFullYear();
+      month = resolvedMinDate.getMonth();
+    }
+    return new Date(year, month, 1);
+  }
+
+  /**
+   * Moves the calendar's visible month to `initialMonth` while there is no
+   * selection. `jumpToDate`'s second argument suppresses flatpickr's own
+   * `onMonthChange` hook, so the Carbon header label is resynced by hand.
+   */
+  function applyInitialMonth() {
+    if (!calendar || calendar.selectedDates.length > 0) return;
+    if ($mode === "month" || $mode === "year") return;
+    const target = resolveInitialMonth();
+    if (!target) return;
+    calendar.jumpToDate(target, false);
+    updateMonthNode(calendar, locale);
+  }
+
   async function initCalendar(options) {
     if (calendar) {
       applyOptionIfChanged("minDate", minDate);
@@ -634,6 +717,7 @@
           calendarOpen = true;
           closeTrigger = undefined;
           refreshCloseBaselineOnOpen();
+          applyInitialMonth();
         } else if (event === "close") {
           calendarOpen = false;
           if (calendarUsesFixedPositioning) {
@@ -650,6 +734,18 @@
         return dispatch(event, detail);
       },
     });
+    // Seed with the values already applied at creation. Otherwise the first
+    // post-creation reactive run treats every option as newly changed, and
+    // re-setting `minDate` / `maxDate` triggers flatpickr's own internal
+    // `jumpToDate()` fallback (no selection means "jump to today"), silently
+    // yanking the view away from `initialMonth`.
+    prevAppliedOptions = {
+      minDate,
+      maxDate,
+      locale,
+      dateFormat,
+      ...flatpickrProps,
+    };
     // flatpickr fills the input from `flatpickrProps.defaultDate` without
     // firing events, so mirror it into `value` here.
     if (calendar && !$range && $inputValue === "" && inputRef.value !== "") {
@@ -657,6 +753,7 @@
       inputValue.set(inputRef.value);
     }
     snapshotCloseBaseline();
+    applyInitialMonth();
     calendar?.calendarContainer?.setAttribute("role", "application");
     calendar?.calendarContainer?.setAttribute(
       "aria-label",
@@ -742,6 +839,10 @@
   $: valueFrom = $inputValueFrom;
   $: inputValueTo.set(valueTo);
   $: valueTo = $inputValueTo;
+  $: if (calendar && initialMonthChanged(initialMonth, prevInitialMonth)) {
+    prevInitialMonth = initialMonth;
+    applyInitialMonth();
+  }
   $: if ($hasCalendar && inputRef) {
     initCalendar({
       dateFormat,

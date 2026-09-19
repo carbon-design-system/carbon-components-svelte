@@ -11,6 +11,7 @@
   export let dateFormat = "m/d/Y";
   export let maxDate: ComponentProps<DatePicker>["maxDate"] = null;
   export let minDate: ComponentProps<DatePicker>["minDate"] = null;
+  export let initialMonth: ComponentProps<DatePicker>["initialMonth"] = null;
   export let locale: ComponentProps<DatePicker>["locale"] = "en";
   export let short = false;
   export let light = false;
@@ -40,6 +41,7 @@
   {dateFormat}
   {maxDate}
   {minDate}
+  {initialMonth}
   {locale}
   {short}
   {light}
