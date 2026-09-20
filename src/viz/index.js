@@ -2,11 +2,13 @@
 // Styles ship separately in `carbon-components-svelte/css/viz.css`.
 // May import from core (`../utils`, `../icons`); core must never import from here.
 
+export { groupBy, toAccessor } from "./utils/accessor.js";
 export { bin } from "./utils/bin.js";
 export { extent, extentBy } from "./utils/extent.js";
 export { arcCentroid, pathArc, pieAngles } from "./utils/path-arc.js";
 export { pathArea } from "./utils/path-area.js";
 export { pathLine } from "./utils/path-line.js";
+export { pivotLonger } from "./utils/pivot-longer.js";
 export { boxStats, quantile } from "./utils/quantiles.js";
 export { scaleBand, scalePoint } from "./utils/scale-band.js";
 export { scaleLinear } from "./utils/scale-linear.js";
