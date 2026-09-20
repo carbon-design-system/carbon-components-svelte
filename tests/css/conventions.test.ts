@@ -33,6 +33,42 @@ function offenders(pattern: RegExp, skip: Set<string> = new Set()): string[] {
   );
 }
 
+// Literal timings or `all` in a transition. Matches the whole declaration up
+// to `;`, since the formatter wraps a multi-property list onto the lines
+// after `transition:`. Returns 1-based line numbers and the number inspected.
+function literalTransitions(lines: string[]) {
+  const LITERAL = /\d(ms|s)\b|cubic-bezier|\ball\b/;
+  const source = lines.map((line) => line.replace(/\/\/.*$/, "")).join("\n");
+  const matches = [...source.matchAll(/\btransition:\s*([^;]+);/g)];
+  return {
+    inspected: matches.length,
+    found: matches
+      .filter((match) => LITERAL.test(match[1]))
+      .map((match) => source.slice(0, match.index).split("\n").length),
+  };
+}
+
+// `:hover` outside an `(any-hover: hover)` block, as 1-based line numbers.
+// `:focus:hover` rides along in `:focus` lists with the same declarations.
+function unguardedHover(lines: string[]): number[] {
+  const found: number[] = [];
+  let depth = 0;
+  let guardDepth = -1;
+  lines.forEach((line, index) => {
+    const code = line.split("//")[0].replace(/#\{[^}]*\}/g, "");
+    if (code.includes("any-hover: hover") && guardDepth < 0) guardDepth = depth;
+    if (
+      guardDepth < 0 &&
+      code.replace(/:not\(:hover\)|:focus:hover/g, "").includes(":hover")
+    )
+      found.push(index + 1);
+    depth += (code.match(/\{/g) ?? []).length;
+    depth -= (code.match(/\}/g) ?? []).length;
+    if (guardDepth >= 0 && depth <= guardDepth) guardDepth = -1;
+  });
+  return found;
+}
+
 describe("css partial conventions", () => {
   it("emits through a double-quoted exports() guard", () => {
     const missing = PARTIALS.filter(
@@ -121,23 +157,13 @@ describe("css partial conventions", () => {
   });
 
   it("times transitions with motion tokens and an explicit property list", () => {
-    // Match the whole declaration up to `;`, since the formatter wraps a
-    // multi-property list onto the lines after `transition:`.
-    const LITERAL = /\d(ms|s)\b|cubic-bezier|\ball\b/;
     let declarations = 0;
     const found = PARTIALS.flatMap((name) => {
-      const source = readFileSync(join(CSS_DIR, name), "utf8")
-        .split("\n")
-        .map((line) => line.replace(/\/\/.*$/, ""))
-        .join("\n");
-      return [...source.matchAll(/\btransition:\s*([^;]+);/g)].flatMap(
-        (match) => {
-          declarations++;
-          return LITERAL.test(match[1])
-            ? [`${name}:${source.slice(0, match.index).split("\n").length}`]
-            : [];
-        },
+      const result = literalTransitions(
+        readFileSync(join(CSS_DIR, name), "utf8").split("\n"),
       );
+      declarations += result.inspected;
+      return result.found.map((line) => `${name}:${line}`);
     });
     expect(declarations).toBeGreaterThan(0);
     expect(found).toEqual([]);
@@ -290,28 +316,11 @@ describe("css partial conventions", () => {
   });
 
   it("guards hover rules with (any-hover: hover)", () => {
-    // `:focus:hover` rides along in `:focus` lists with the same declarations.
-    const unguarded = PARTIALS.flatMap((name) => {
-      const found: string[] = [];
-      let depth = 0;
-      let guardDepth = -1;
-      readFileSync(join(CSS_DIR, name), "utf8")
-        .split("\n")
-        .forEach((line, index) => {
-          const code = line.split("//")[0].replace(/#\{[^}]*\}/g, "");
-          if (code.includes("any-hover: hover") && guardDepth < 0)
-            guardDepth = depth;
-          if (
-            guardDepth < 0 &&
-            code.replace(/:not\(:hover\)|:focus:hover/g, "").includes(":hover")
-          )
-            found.push(`${name}:${index + 1}`);
-          depth += (code.match(/\{/g) ?? []).length;
-          depth -= (code.match(/\}/g) ?? []).length;
-          if (guardDepth >= 0 && depth <= guardDepth) guardDepth = -1;
-        });
-      return found;
-    });
+    const unguarded = PARTIALS.flatMap((name) =>
+      unguardedHover(readFileSync(join(CSS_DIR, name), "utf8").split("\n")).map(
+        (line) => `${name}:${line}`,
+      ),
+    );
     expect(unguarded).toEqual([]);
   });
 
@@ -339,5 +348,128 @@ describe("css partial conventions", () => {
     // to its own BEM modifier, a normal 2-class compound) false-positives,
     // since `.foo` is a literal prefix of `.foo--bar`.
     expect(offenders(/(\.#\{\$prefix\}--[\w-]+)\1(?![\w-])/)).toEqual([]);
+  });
+});
+
+// The vendored tree keeps upstream's style, except below a
+// `// carbon-components-svelte patch` banner: those blocks are hand-authored
+// and appended at the end of a component file, so they follow the same rules.
+const VENDOR_DIR = join(CSS_DIR, "vendor/carbon-components/scss");
+const PATCH_BANNER = "// carbon-components-svelte patch";
+
+function scssFiles(dir: string): string[] {
+  return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const file = join(dir, entry.name);
+    if (entry.isDirectory()) return scssFiles(file);
+    return entry.name.endsWith(".scss") ? [file] : [];
+  });
+}
+
+/** Each patched file, blanked above its first banner so line numbers hold. */
+const PATCHES = scssFiles(VENDOR_DIR).flatMap((file) => {
+  const lines = readFileSync(file, "utf8").split("\n");
+  const start = lines.findIndex((line) => line.startsWith(PATCH_BANNER));
+  return start < 0
+    ? []
+    : [
+        {
+          name: file.slice(VENDOR_DIR.length + 1),
+          lines: lines.map((line, index) => (index < start ? "" : line)),
+        },
+      ];
+});
+
+const matching =
+  (pattern: RegExp) =>
+  (lines: string[]): number[] =>
+    lines.flatMap((line, index) =>
+      !line.trimStart().startsWith("//") && pattern.test(line.split("//")[0])
+        ? [index + 1]
+        : [],
+    );
+
+const PATCH_RULES: Record<string, (lines: string[]) => number[]> = {
+  "literal .bx-- class": matching(/\.bx--/),
+  "hex color": matching(/#[0-9a-fA-F]{3,8}\b(?!\{)/),
+  "bare rem()": matching(/(^|[^a-z-])rem\(/),
+  "raw rem literal": matching(/^(?!\s*--).*(?<![\w.(-])\d*\.?\d+rem\b/),
+  "literal breakpoint": matching(/@media[^{]*(min|max)-width/),
+  "$spacing-* alias": matching(/\$spacing-\d/),
+  "var() with literal fallback": matching(
+    /var\(--cds-[\w-]+,\s*(rgba?\(|#[0-9a-f])/i,
+  ),
+  ":has()": matching(/:has\(/),
+  "repeated class": matching(/(\.#\{\$prefix\}--[\w-]+)\1(?![\w-])/),
+  "literal transition": (lines) => literalTransitions(lines).found,
+  "unguarded :hover": unguardedHover,
+};
+
+// Violations that predate this check, as a count per `rule: file`. The
+// comparison is exact, so fixing one means lowering its count here, and the
+// map only ever shrinks. Do not raise a count or add an entry: fix the new
+// rule instead. "repeated class" in tabs is deliberate (each site carries a
+// comment naming the `:not()` chain whose specificity it preserves).
+const KNOWN_PATCH_VIOLATIONS: Record<string, number> = {
+  "hex color: components/checkbox/_checkbox.scss": 1,
+  "bare rem(): components/text-area/_text-area.scss": 1,
+  "raw rem literal: components/copy-button/_copy-button.scss": 8,
+  "raw rem literal: components/date-picker/_date-picker.scss": 12,
+  "raw rem literal: components/menu/_menu.scss": 2,
+  "raw rem literal: components/slider/_slider.scss": 3,
+  "raw rem literal: components/structured-list/_structured-list.scss": 2,
+  "raw rem literal: components/tabs/_tabs.scss": 2,
+  "raw rem literal: components/time-picker/_time-picker.scss": 1,
+  "raw rem literal: components/treeview/_treeview.scss": 1,
+  "raw rem literal: components/ui-shell/_ui-shell.scss": 28,
+  "$spacing-* alias: components/code-snippet/_code-snippet.scss": 2,
+  "$spacing-* alias: components/data-table/_data-table-action.scss": 20,
+  "$spacing-* alias: components/data-table/_data-table.scss": 5,
+  "$spacing-* alias: components/menu/_menu.scss": 1,
+  "$spacing-* alias: components/pagination/_pagination.scss": 2,
+  "$spacing-* alias: components/slider/_slider.scss": 2,
+  "$spacing-* alias: components/ui-shell/_ui-shell.scss": 2,
+  "var() with literal fallback: components/ui-shell/_ui-shell.scss": 1,
+  "repeated class: components/tabs/_tabs.scss": 3,
+  "literal transition: components/data-table/_data-table-action.scss": 1,
+  "literal transition: components/ui-shell/_ui-shell.scss": 5,
+  "unguarded :hover: components/combo-box/_combo-box.scss": 1,
+  "unguarded :hover: components/content-switcher/_content-switcher.scss": 1,
+  "unguarded :hover: components/copy-button/_copy-button.scss": 1,
+  "unguarded :hover: components/data-table/_data-table-action.scss": 1,
+  "unguarded :hover: components/data-table/_data-table.scss": 5,
+  "unguarded :hover: components/date-picker/_date-picker.scss": 4,
+  "unguarded :hover: components/dropdown/_dropdown.scss": 2,
+  "unguarded :hover: components/link/_link.scss": 3,
+  "unguarded :hover: components/multi-select/_multi-select.scss": 2,
+  "unguarded :hover: components/overflow-menu/_overflow-menu.scss": 3,
+  "unguarded :hover: components/select/_select.scss": 3,
+  "unguarded :hover: components/slider/_slider.scss": 2,
+  "unguarded :hover: components/structured-list/_structured-list.scss": 2,
+  "unguarded :hover: components/tabs/_tabs.scss": 12,
+  "unguarded :hover: components/tag/_tag.scss": 3,
+  "unguarded :hover: components/time-picker/_time-picker.scss": 1,
+  "unguarded :hover: components/ui-shell/_ui-shell.scss": 6,
+};
+
+describe("vendored patch block conventions", () => {
+  it("finds the patch blocks", () => {
+    expect(PATCHES.length).toBeGreaterThan(30);
+  });
+
+  it("adds no violations beyond the known baseline", () => {
+    const counts: Record<string, number> = {};
+    const changed: string[] = [];
+    for (const [rule, find] of Object.entries(PATCH_RULES)) {
+      for (const { name, lines } of PATCHES) {
+        const found = find(lines);
+        const key = `${rule}: ${name}`;
+        if (found.length > 0) counts[key] = found.length;
+        if (found.length !== (KNOWN_PATCH_VIOLATIONS[key] ?? 0))
+          changed.push(`${key}:${found.join(",")}`);
+      }
+    }
+    // Lists the line numbers of any file whose count moved.
+    expect(changed).toEqual([]);
+    expect(counts).toEqual(KNOWN_PATCH_VIOLATIONS);
   });
 });
