@@ -1,0 +1,77 @@
+---
+components: ["UptimeBar"]
+description: Uptime bar draws one mark for each period of a service's history, where status changes the shape of the mark as well as its color.
+---
+
+<script>
+  import { Stack } from "carbon-components-svelte";
+  import { UptimeBar } from "carbon-components-svelte/viz";
+
+  const start = new Date(2026, 5, 1);
+  const incidents = { 11: "degraded", 12: "down", 31: "degraded", 47: "down", 48: "down" };
+  const days = Array.from({ length: 60 }, (_, i) => {
+    const date = new Date(start);
+    date.setDate(start.getDate() + i);
+    return {
+      id: i,
+      status: incidents[i] ?? "ok",
+      label: date.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+    };
+  });
+  const recent = [...Array.from({ length: 20 }, (_, i) => ({ id: `n${i}`, status: "none" })), ...days.slice(0, 40)];
+
+  let selectedIndex;
+</script>
+
+`UptimeBar` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+## Basic
+
+Pass `data`, oldest first, and a `label`. Each period has a `status`: `"ok"`, `"degraded"`, `"down"`, or `"none"`. The uptime is appended to the accessible name.
+
+<UptimeBar data={days} label="API, last 60 days" />
+
+## Status
+
+Status never rests on color alone: an operational period is solid, a degraded one is striped, an outage is hollow, and a period with no data is a stub on the baseline.
+
+<UptimeBar
+  data={[
+    { status: "ok" },
+    { status: "ok" },
+    { status: "degraded" },
+    { status: "down" },
+    { status: "none" },
+    { status: "ok" },
+  ]}
+  size="lg"
+  style="max-inline-size: 12rem"
+  label="One of each status"
+/>
+
+## Uptime
+
+Set `showValue` to write the uptime next to the bar. It is the share of measured periods that were not down. Periods with no data are left out.
+
+<Stack gap={5}>
+  <UptimeBar data={days} showValue label="API" />
+  <UptimeBar data={recent} showValue fractionDigits={0} label="New service" />
+</Stack>
+
+## Sizes
+
+<Stack gap={5}>
+  <UptimeBar data={days} size="sm" showValue label="Small" />
+  <UptimeBar data={days} showValue label="Medium (default)" />
+  <UptimeBar data={days} size="lg" showValue label="Large" />
+</Stack>
+
+## Selectable
+
+Set `selectable` to make each period a toggle button. Bind `selectedIndex` or listen for `select`. Give each period a `label`, such as its date, so the buttons have distinct names.
+
+<UptimeBar data={days} selectable bind:selectedIndex showValue label="API, pick a day" />
+
+## Accessibility
+
+With a `label`, the bar is announced as an image named with the label and the uptime, such as "API, last 60 days: 95% uptime". Without a label it is hidden from assistive technology. When `selectable`, the bar is a group of toggle buttons with one tab stop, which starts on the newest period, and the arrow keys move between them. Each button is named with the period's `label` and its status. Set `translations` to translate the status words and the word "uptime".

@@ -140,6 +140,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "ComparisonBar",
       "DeltaIndicator",
       "FunnelBars",
+      "HeatStrip",
       "LineChart",
       "Meter",
       "MicroFunnel",
@@ -149,6 +150,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "ShareOfTotal",
       "Sparkline",
       "StackedBar",
+      "UptimeBar",
     ],
   },
   {
