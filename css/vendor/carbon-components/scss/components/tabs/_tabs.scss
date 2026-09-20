@@ -105,32 +105,12 @@
       border-bottom-color $duration--fast-01 motion(standard, productive);
   }
 
-  .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--selected) {
-    background: transparent;
-  }
-
-  .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--disabled) {
-    background-color: transparent;
-    box-shadow: 0 -1px 0 $hover-ui;
-
-    + .#{$prefix}--tabs__nav-item {
-      box-shadow: none;
-    }
-  }
-
-  .#{$prefix}--tabs--container
-    .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--disabled) {
-    background-color: $hover-selected-ui;
-  }
-
-  .#{$prefix}--tabs__nav-item--disabled,
-  .#{$prefix}--tabs__nav-item--disabled:hover {
+  .#{$prefix}--tabs__nav-item--disabled {
     cursor: not-allowed;
     outline: none;
   }
 
-  .#{$prefix}--tabs--container .#{$prefix}--tabs__nav-item--disabled,
-  .#{$prefix}--tabs--container .#{$prefix}--tabs__nav-item--disabled:hover {
+  .#{$prefix}--tabs--container .#{$prefix}--tabs__nav-item--disabled {
     background-color: $disabled-02;
   }
 
@@ -157,9 +137,7 @@
   }
 
   .#{$prefix}--tabs--container
-    .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled),
-  .#{$prefix}--tabs--container
-    .#{$prefix}--tabs__nav-item--selected:hover:not(.#{$prefix}--tabs__nav-item--disabled) {
+    .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled) {
     background-color: $ui-01;
 
     .#{$prefix}--tabs__nav-link {
@@ -210,27 +188,10 @@
     line-height: calc(#{to-rem(48px)} - (#{$spacing-03} * 2));
   }
 
-  .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled)
-    .#{$prefix}--tabs__nav-link {
-    border-bottom: $tab-underline-color-hover;
-    color: $text-01;
-  }
-
-  .#{$prefix}--tabs--container
-    .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled)
-    .#{$prefix}--tabs__nav-link {
-    border-bottom: none;
-  }
-
   .#{$prefix}--tabs__nav-item--disabled .#{$prefix}--tabs__nav-link {
     border-bottom: $tab-underline-disabled;
     color: $tab-text-disabled;
     pointer-events: none;
-  }
-
-  .#{$prefix}--tabs__nav-item--disabled:hover .#{$prefix}--tabs__nav-link {
-    border-bottom: $tab-underline-disabled;
-    cursor: no-drop;
   }
 
   .#{$prefix}--tabs__nav-item--disabled .#{$prefix}--tabs__nav-link:focus,
@@ -431,11 +392,6 @@
       box-shadow: to-rem(-1px) 0 0 0 $ui-04;
     }
 
-    &.#{$prefix}--tabs--scrollable--container
-      .#{$prefix}--tabs--scrollable__nav-item:hover {
-      background-color: $hover-selected-ui;
-    }
-
     .#{$prefix}--tab-content {
       padding: $carbon--spacing-05;
     }
@@ -443,6 +399,80 @@
     .#{$prefix}--tabs.#{$prefix}--skeleton {
       cursor: default;
       pointer-events: none;
+    }
+  }
+
+  // ccs: every :hover rule in this mixin, guarded together so a touch tap
+  // cannot leave a hover-only style stuck. Kept in one block, in the same
+  // relative order the rules had unguarded, so none of the specificity ties
+  // between them (equal-specificity rules fall back to source order) flip.
+  @media (any-hover: hover) {
+    .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--selected) {
+      background: transparent;
+    }
+
+    .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--disabled) {
+      background-color: transparent;
+      box-shadow: 0 -1px 0 $hover-ui;
+
+      + .#{$prefix}--tabs__nav-item {
+        box-shadow: none;
+      }
+    }
+
+    .#{$prefix}--tabs--container
+      .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--disabled) {
+      background-color: $hover-selected-ui;
+    }
+
+    .#{$prefix}--tabs__nav-item--disabled:hover {
+      cursor: not-allowed;
+      outline: none;
+    }
+
+    .#{$prefix}--tabs--container .#{$prefix}--tabs__nav-item--disabled:hover {
+      background-color: $disabled-02;
+    }
+
+    .#{$prefix}--tabs--container
+      .#{$prefix}--tabs__nav-item--selected:hover:not(.#{$prefix}--tabs__nav-item--disabled) {
+      background-color: $ui-01;
+
+      .#{$prefix}--tabs__nav-link {
+        padding: $spacing-03 $spacing-05;
+        border-bottom: none;
+        box-shadow: inset 0 2px 0 0 $interactive-04;
+        // height - vertical padding
+        // Draws the border without affecting the inner-content
+        line-height: calc(#{to-rem(48px)} - (#{$spacing-03} * 2));
+      }
+
+      .#{$prefix}--tabs__nav-link:focus,
+      .#{$prefix}--tabs__nav-link:active {
+        box-shadow: none;
+      }
+    }
+
+    .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled)
+      .#{$prefix}--tabs__nav-link {
+      border-bottom: $tab-underline-color-hover;
+      color: $text-01;
+    }
+
+    .#{$prefix}--tabs--container
+      .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled)
+      .#{$prefix}--tabs__nav-link {
+      border-bottom: none;
+    }
+
+    .#{$prefix}--tabs__nav-item--disabled:hover .#{$prefix}--tabs__nav-link {
+      border-bottom: $tab-underline-disabled;
+      cursor: no-drop;
+    }
+
+    .#{$prefix}--tabs--scrollable.#{$prefix}--tabs--scrollable--container
+      .#{$prefix}--tabs--scrollable__nav-item:hover {
+      background-color: $hover-selected-ui;
     }
   }
 }
@@ -665,10 +695,12 @@
 /// @access private
 /// @group components
 @mixin tabs-container-disabled-hover {
-  .#{$prefix}--tabs--container
-    .#{$prefix}--tabs__nav-item--disabled:hover
-    .#{$prefix}--tabs__nav-link {
-    border-bottom: none;
+  @media (any-hover: hover) {
+    .#{$prefix}--tabs--container
+      .#{$prefix}--tabs__nav-item--disabled:hover
+      .#{$prefix}--tabs__nav-link {
+      border-bottom: none;
+    }
   }
 }
 
@@ -782,11 +814,6 @@
   }
 
   .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
-    .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled) {
-    border-block-end-color: $ui-04;
-  }
-
-  .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
     .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled) {
     border-block-end-color: $interactive-04;
   }
@@ -797,11 +824,10 @@
   }
 
   // Remove the link border in every state so only the item border shows;
-  // each base state rule is matched by shape.
+  // each base state rule is matched by shape. The hover half moves to the
+  // any-hover block below, same declaration, so touch does not strip it here
+  // unconditionally.
   .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
-    .#{$prefix}--tabs__nav-link,
-  .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
-    .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled)
     .#{$prefix}--tabs__nav-link,
   .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
     .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled)
@@ -838,18 +864,10 @@
     cursor: pointer;
   }
 
-  // Guard hover styling against the disabled marker so a disabled close button
-  // keeps its disabled treatment on hover instead of lighting up.
-  .#{$prefix}--tabs__nav-item--close-icon:not(.#{$prefix}--tabs__nav-item--close-icon--disabled):hover {
-    background-color: $hover-ui;
-  }
-
   .#{$prefix}--tabs__nav-item--close-icon svg {
     fill: $text-02;
   }
 
-  .#{$prefix}--tabs__nav-item--close-icon:not(.#{$prefix}--tabs__nav-item--close-icon--disabled):hover
-    svg,
   .#{$prefix}--tabs__nav-item--close-icon:focus svg {
     fill: $text-01;
   }
@@ -875,6 +893,34 @@
     .#{$prefix}--tabs__nav-item--icon-left
     svg {
     fill: $text-on-color-disabled;
+  }
+
+  // ccs: every :hover rule in this mixin, guarded together, same relative
+  // order they had unguarded (see the base mixin's any-hover block above for
+  // why order is preserved). The :not() chain on the first two selectors is
+  // intentionally left as-is; a follow-up replaces it with a marker class.
+  @media (any-hover: hover) {
+    .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
+      .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled) {
+      border-block-end-color: $ui-04;
+    }
+
+    .#{$prefix}--tabs--dismissible:not(.#{$prefix}--tabs--container)
+      .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled)
+      .#{$prefix}--tabs__nav-link {
+      border-block-end: none;
+    }
+
+    // Guard hover styling against the disabled marker so a disabled close
+    // button keeps its disabled treatment on hover instead of lighting up.
+    .#{$prefix}--tabs__nav-item--close-icon:not(.#{$prefix}--tabs__nav-item--close-icon--disabled):hover {
+      background-color: $hover-ui;
+    }
+
+    .#{$prefix}--tabs__nav-item--close-icon:not(.#{$prefix}--tabs__nav-item--close-icon--disabled):hover
+      svg {
+      fill: $text-01;
+    }
   }
 }
 
@@ -943,14 +989,28 @@
       box-shadow: inset 0 2px 0 0 $interactive-04;
     }
 
-    .#{$prefix}--tabs--vertical
-      .#{$prefix}--tabs__nav-item:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled):hover {
-      background-color: $hover-selected-ui;
+    .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav-item--disabled {
+      background-color: $disabled-02;
     }
 
-    .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav-item--disabled,
-    .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav-item--disabled:hover {
-      background-color: $disabled-02;
+    // ccs: hover rules for this breakpoint, guarded together, same relative
+    // order they had unguarded.
+    @media (any-hover: hover) {
+      .#{$prefix}--tabs--vertical
+        .#{$prefix}--tabs__nav-item:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled):hover {
+        background-color: $hover-selected-ui;
+      }
+
+      .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav-item--disabled:hover {
+        background-color: $disabled-02;
+      }
+
+      // Remove the base hover-link bottom border, which would shift the label.
+      .#{$prefix}--tabs--vertical
+        .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--disabled)
+        .#{$prefix}--tabs__nav-link {
+        border: none;
+      }
     }
 
     // The base disabled text token equals the disabled background here.
@@ -971,13 +1031,6 @@
       border: none;
       margin: 0;
       line-height: inherit;
-    }
-
-    // Remove the base hover-link bottom border, which would shift the label.
-    .#{$prefix}--tabs--vertical
-      .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--disabled)
-      .#{$prefix}--tabs__nav-link {
-      border: none;
     }
 
     .#{$prefix}--tabs--vertical
@@ -1049,17 +1102,32 @@
     }
 
     .#{$prefix}--tabs--vertical
-      .#{$prefix}--tabs__nav-item:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled):hover {
-      background-color: $hover-ui;
-      box-shadow: inset 3px 0 0 0 $ui-04;
-    }
-
-    .#{$prefix}--tabs--vertical
-      .#{$prefix}--tabs__nav-item--disabled,
-    .#{$prefix}--tabs--vertical
-      .#{$prefix}--tabs__nav-item--disabled:hover {
+      .#{$prefix}--tabs__nav-item--disabled {
       background-color: $ui-01;
       box-shadow: inset 3px 0 0 0 $ui-03;
+    }
+
+    // ccs: hover rules for this breakpoint, guarded together, same relative
+    // order they had unguarded.
+    @media (any-hover: hover) {
+      .#{$prefix}--tabs--vertical
+        .#{$prefix}--tabs__nav-item:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled):hover {
+        background-color: $hover-ui;
+        box-shadow: inset 3px 0 0 0 $ui-04;
+      }
+
+      .#{$prefix}--tabs--vertical
+        .#{$prefix}--tabs__nav-item--disabled:hover {
+        background-color: $ui-01;
+        box-shadow: inset 3px 0 0 0 $ui-03;
+      }
+
+      // Remove the base hover-link bottom border, which would shift the label.
+      .#{$prefix}--tabs--vertical
+        .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--disabled)
+        .#{$prefix}--tabs__nav-link {
+        border: none;
+      }
     }
 
     // The last tab closes against the panel edge; the second selector matches
@@ -1095,13 +1163,6 @@
       .#{$prefix}--tabs__nav-link--icon
       .#{$prefix}--tabs__nav-item--icon {
       block-size: to-rem(18px);
-    }
-
-    // Remove the base hover-link bottom border, which would shift the label.
-    .#{$prefix}--tabs--vertical
-      .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--disabled)
-      .#{$prefix}--tabs__nav-link {
-      border: none;
     }
 
     .#{$prefix}--tabs--vertical
@@ -1289,9 +1350,11 @@ $tabs-sizes: (
         // ccs: `--default` (not selected, not disabled) replaces the
         // `:not(--selected):not(--disabled)` pair; repeated to match its
         // specificity.
-        .#{$prefix}--tabs__nav-item.#{$prefix}--tabs__nav-item--default.#{$prefix}--tabs__nav-item--default:hover
-          .#{$prefix}--tabs__nav-link {
-          box-shadow: inset 0 -2px 0 0 $ui-04;
+        @media (any-hover: hover) {
+          .#{$prefix}--tabs__nav-item.#{$prefix}--tabs__nav-item--default.#{$prefix}--tabs__nav-item--default:hover
+            .#{$prefix}--tabs__nav-link {
+            box-shadow: inset 0 -2px 0 0 $ui-04;
+          }
         }
 
         .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled) {
