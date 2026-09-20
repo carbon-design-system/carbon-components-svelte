@@ -8,6 +8,7 @@
     FunnelBars,
     HeatStrip,
     LineChart,
+    MicroDonut,
     MicroFunnel,
     MicroHistogram,
     RadialProgress,
@@ -57,6 +58,7 @@
   <p>
     <MicroFunnel {stages} label="Signup funnel" />
     <MicroFunnel {stages} variant="completion" label="Signup funnel" />
+    <MicroDonut data={stages} size="lg" label="Users by stage" />
     <MicroHistogram {values} bins={6} marker={9} label="Requests per minute" />
   </p>
 
