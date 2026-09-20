@@ -1,5 +1,9 @@
 <script>
   /**
+   * @template [Icon=any]
+   */
+
+  /**
    * Spread `props` onto a custom element to inherit the link class
    * and `aria-current` attribute when `isCurrentPage` is set.
    * @example
@@ -20,6 +24,12 @@
 
   /** Set to `true` if the breadcrumb item represents the current page */
   export let isCurrentPage = false;
+
+  /**
+   * Specify the icon to render before the label.
+   * @type {Icon}
+   */
+  export let icon = /** @type {Icon} */ (undefined);
 
   import { getContext, setContext } from "svelte";
   import Link from "../Link/Link.svelte";
@@ -45,9 +55,19 @@
       {href}
       aria-current={ariaCurrent ?? (isCurrentPage ? "page" : undefined)}
     >
+      {#if $$slots.icon || icon}
+        <div class:bx--breadcrumb-item__icon={true}>
+          <slot name="icon"> <svelte:component this={icon} /> </slot>
+        </div>
+      {/if}
       <slot />
     </Link>
   {:else}
+    {#if $$slots.icon || icon}
+      <div class:bx--breadcrumb-item__icon={true}>
+        <slot name="icon"> <svelte:component this={icon} /> </slot>
+      </div>
+    {/if}
     <slot
       props={{
         "aria-current": ariaCurrent ?? (isCurrentPage ? "page" : undefined),

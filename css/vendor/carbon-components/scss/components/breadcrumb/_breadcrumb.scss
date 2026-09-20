@@ -35,6 +35,23 @@
     margin-right: $carbon--spacing-03;
   }
 
+  // `inline-flex` (matching `.#{$prefix}--link__icon`) so the surrounding
+  // link's hover/focus underline doesn't paint across the icon: text
+  // decoration lines don't propagate into atomic inline-level boxes like
+  // `inline-flex`. Left unset `color` so the icon inherits from its
+  // rendered position — inside `.#{$prefix}--link` when there's an `href`,
+  // matching that link's current color (default, hover, or current-page).
+  .#{$prefix}--breadcrumb-item__icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-self: center;
+    margin-right: $carbon--spacing-02;
+
+    svg {
+      fill: currentColor;
+    }
+  }
+
   .#{$prefix}--breadcrumb-item .#{$prefix}--link:visited {
     color: $link-01;
 
@@ -259,4 +276,23 @@
 
 @include exports('breadcrumb-separator-icon') {
   @include breadcrumb-separator-icon;
+}
+
+/// Scale the BreadcrumbItem icon to match the breadcrumb size.
+/// Mirrors the `link-icon` patch (see `../link/_link.scss`): carbon-components
+/// v10 ships no icon scaling, so the icon stays at its native size regardless
+/// of the imported carbon-icons-svelte glyph. `Breadcrumb` only has `"sm" |
+/// "md"` sizes, so `md` keeps the native (16px) icon and only `sm` is scaled
+/// down.
+/// @access private
+/// @group components
+@mixin breadcrumb-icon {
+  .#{$prefix}--breadcrumb--sm .#{$prefix}--breadcrumb-item__icon svg {
+    width: to-rem(14px);
+    height: to-rem(14px);
+  }
+}
+
+@include exports('breadcrumb-icon') {
+  @include breadcrumb-icon;
 }
