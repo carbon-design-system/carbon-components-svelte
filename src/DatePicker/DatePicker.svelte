@@ -259,6 +259,7 @@
   let prevEnabledDates = enabledDates;
   let prevInitialMonth = initialMonth;
   let prevAppliedOptions = {};
+  let changeDispatchedByCalendar = false;
   let creating = false;
   let creationFailed = false;
   // Bumped by `recreateCalendar()`. Named in the init block so it re-runs.
@@ -464,6 +465,13 @@
   function updateValue({ type, value }) {
     if ((!calendar && type === "input") || type === "change") {
       inputValue.set(value);
+    }
+
+    // flatpickr runs its `onChange` hooks, which already dispatched, and
+    // then synchronously fires this native `change` on the input.
+    if (type === "change" && changeDispatchedByCalendar) {
+      changeDispatchedByCalendar = false;
+      return;
     }
 
     if (type === "change") {
@@ -901,6 +909,13 @@
             attachFixedRepositionListeners();
           const detail = buildCalendarDetail();
           syncRangeValues();
+          if (event === "change") {
+            changeDispatchedByCalendar = true;
+            // Cleared here in case flatpickr's native `change` never arrives.
+            queueMicrotask(() => {
+              changeDispatchedByCalendar = false;
+            });
+          }
           return dispatch(event, detail);
         },
       });

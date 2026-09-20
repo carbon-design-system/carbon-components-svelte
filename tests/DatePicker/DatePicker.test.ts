@@ -364,6 +364,43 @@ describe("DatePicker", () => {
     );
   });
 
+  describe("change event count", () => {
+    it("dispatches change once for a calendar selection", async () => {
+      const onchange = vi.fn();
+      render(DatePicker, {
+        datePickerType: "single",
+        value: "03/15/2024",
+        onchange,
+      });
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+      const day = Array.from(
+        calendar.querySelectorAll<HTMLElement>(
+          ".flatpickr-day:not(.prevMonthDay):not(.nextMonthDay)",
+        ),
+      ).find((node) => node.textContent === "10");
+      assert(day);
+      onchange.mockClear();
+
+      await user.click(day);
+      await tick();
+      expect(onchange).toHaveBeenCalledTimes(1);
+      expect(onchange.mock.calls[0][0].detail.dateStr).toBe("03/10/2024");
+    });
+
+    it("still dispatches change once for a native change on the input", async () => {
+      const onchange = vi.fn();
+      render(DatePicker, { datePickerType: "single", onchange });
+      const input = screen.getByLabelText("Date");
+      await screen.findByLabelText("calendar-container");
+      onchange.mockClear();
+
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+      await tick();
+      expect(onchange).toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe("reactive datePickerType", () => {
     it("rebuilds the calendar when the type changes after mount", async () => {
       const { rerender } = render(DatePicker, { datePickerType: "single" });
