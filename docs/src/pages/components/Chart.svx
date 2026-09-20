@@ -1,5 +1,5 @@
 ---
-components: ["Chart", "ChartAxis", "ChartGrid", "ChartLine", "ChartRuler", "ChartTooltip", "ChartTooltipRow", "ChartLegend", "ChartThreshold"]
+components: ["Chart", "ChartAxis", "ChartGrid", "ChartLine", "ChartBars", "ChartRuler", "ChartTooltip", "ChartTooltipRow", "ChartLegend", "ChartThreshold"]
 description: Chart is the root that chart primitives compose inside. It turns long format rows into series, scales, and a plot box, and shares them with the marks you place in it.
 ---
 
@@ -32,7 +32,7 @@ description: Chart is the root that chart primitives compose inside. It turns lo
 
 The chart primitives are part of the data visualization subpackage. Import them from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
 
-For the common case use a ready-made chart such as [LineChart](/components/LineChart). Compose the primitives yourself when you need a different arrangement.
+For the common case use a ready-made chart such as [LineChart](/components/LineChart) or [BarChart](/components/BarChart). Compose the primitives yourself when you need a different arrangement.
 
 ## Composition
 
