@@ -19,6 +19,7 @@ export { default as ChartToolbar } from "./Chart/ChartToolbar.svelte";
 export { default as ChartTooltip } from "./Chart/ChartTooltip.svelte";
 export { default as ChartTooltipRow } from "./Chart/ChartTooltipRow.svelte";
 export { CHART_CONTEXT } from "./Chart/context.js";
+export { default as ComparisonBar } from "./ComparisonBar/ComparisonBar.svelte";
 export { default as DeltaIndicator } from "./DeltaIndicator/DeltaIndicator.svelte";
 export { default as FunnelBars } from "./FunnelBars/FunnelBars.svelte";
 export { default as LineChart } from "./LineChart/LineChart.svelte";
