@@ -1,0 +1,56 @@
+/// DeltaIndicator: a signed change with an arrow, read in three redundant
+/// ways (arrow, sign, color). Colors match `BigNumber`'s delta so the two
+/// look the same side by side.
+/// @access private
+/// @group viz
+@mixin viz-delta-indicator {
+  .#{$prefix}--viz-delta {
+    display: inline-flex;
+    align-items: center;
+    gap: $carbon--spacing-02;
+    font-variant-numeric: tabular-nums;
+    vertical-align: middle;
+    white-space: nowrap;
+
+    @include type-style("body-short-01");
+  }
+
+  .#{$prefix}--viz-delta--sm {
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-delta--lg {
+    @include type-style("body-short-02");
+  }
+
+  .#{$prefix}--viz-delta--success {
+    color: $support-success;
+  }
+
+  .#{$prefix}--viz-delta--error {
+    color: $support-error;
+  }
+
+  .#{$prefix}--viz-delta--neutral {
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--viz-delta__icon {
+    flex-shrink: 0;
+    fill: currentColor;
+  }
+
+  .#{$prefix}--viz-delta__label {
+    color: $text-secondary;
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-delta {
+      color: CanvasText;
+    }
+  }
+}
+
+@include exports("viz-delta-indicator") {
+  @include viz-delta-indicator;
+}
