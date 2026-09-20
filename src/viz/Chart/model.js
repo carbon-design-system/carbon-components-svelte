@@ -248,7 +248,24 @@ export function buildScales(domain, size, options = {}) {
     );
     x = { map: (value) => time.map(value), invert: time.invert };
     xTicks = result.values;
-    xFormat = timeTickFormat(result.interval, locale);
+    const timeOfDay = timeTickFormat(result.interval, locale);
+    const subDayTicks =
+      result.interval === "hour" ||
+      result.interval === "minute" ||
+      result.interval === "second";
+    if (subDayTicks && domain.x[1] - domain.x[0] > DAY) {
+      // Hourly ticks across several days would all read "12 AM". Show the
+      // date wherever a tick lands on midnight.
+      const date = timeTickFormat("day", locale);
+      xFormat = (value) => {
+        const at = new Date(value);
+        const midnight =
+          at.getHours() === 0 && at.getMinutes() === 0 && at.getSeconds() === 0;
+        return midnight ? date(value) : timeOfDay(value);
+      };
+    } else {
+      xFormat = timeOfDay;
+    }
     const subDay = domain.x[1] - domain.x[0] < DAY * 2;
     const full = getDateTimeFormatter(
       locale,
@@ -283,4 +300,27 @@ export function buildScales(domain, size, options = {}) {
     margin: { top, right, bottom, left },
     plot: { x0, x1, y0: top, y1: size.height - bottom },
   };
+}
+
+/**
+ * Which tick labels to show so neighbors do not collide. Label width is
+ * estimated from its text, so nothing is measured. Keeps every `n`th label,
+ * always including the first.
+ *
+ * @param {ReadonlyArray<number>} positions Pixel position of each tick.
+ * @param {ReadonlyArray<string>} labels
+ * @param {number} [gap] Minimum space between labels, in pixels.
+ * @returns {boolean[]}
+ */
+export function thinLabels(positions, labels, gap = 8) {
+  const n = positions.length;
+  if (n < 2) return new Array(n).fill(true);
+  let widest = 0;
+  for (const label of labels) widest = Math.max(widest, label.length);
+  const spacing = Math.abs(positions[n - 1] - positions[0]) / (n - 1);
+  const every =
+    spacing > 0
+      ? Math.max(1, Math.ceil((widest * GLYPH_WIDTH + gap) / spacing))
+      : n;
+  return positions.map((_, index) => index % every === 0);
 }

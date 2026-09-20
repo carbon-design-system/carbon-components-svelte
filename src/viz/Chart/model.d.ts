@@ -118,3 +118,14 @@ export function buildScales(
   size: ChartSize,
   options?: BuildScalesOptions,
 ): ChartScales;
+
+/**
+ * Which tick labels to show so neighbors do not collide. Label width is
+ * estimated from its text, so nothing is measured. Keeps every `n`th label,
+ * always including the first.
+ */
+export function thinLabels(
+  positions: ReadonlyArray<number>,
+  labels: ReadonlyArray<string>,
+  gap?: number,
+): boolean[];
