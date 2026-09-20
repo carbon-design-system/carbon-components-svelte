@@ -761,28 +761,75 @@
     }
   }
 
+  /**
+   * Index `entries` by id, bucketing same-id entries in order so duplicate
+   * ids pair up positionally (first old duplicate reused for the first new
+   * occurrence) instead of one id silently overwriting another.
+   * @type {(entries: typeof sortedItems) => Map<string, typeof sortedItems>}
+   */
+  function indexById(entries) {
+    const map = new Map();
+    for (const entry of entries) {
+      const bucket = map.get(entry.id);
+      if (bucket) bucket.push(entry);
+      else map.set(entry.id, [entry]);
+    }
+    return map;
+  }
+
   function sort() {
     const selectedIdsSet = new Set(selectedIds);
 
     const regularItems = items.filter((item) => !item.isSelectAll);
+    const regularSnapshots = prevItemsSnapshot.filter(
+      (item) => !item.isSelectAll,
+    );
+    const selectAllItems = items.filter((item) => item.isSelectAll);
+    const selectAllSnapshots = prevItemsSnapshot.filter(
+      (item) => item.isSelectAll,
+    );
     const enabledRegularItems = regularItems.filter((item) => !item.disabled);
     const allChecked =
       enabledRegularItems.length > 0 &&
       enabledRegularItems.every((item) => selectedIdsSet.has(item.id));
-    const selectAllEntries = items
-      .filter((item) => item.isSelectAll)
-      .map((item) => ({ ...item, checked: allChecked }));
+
+    // Reuse the previous entry object for `item` when nothing about it
+    // changed, so a keyed `{#each}` block sees the same reference and skips
+    // re-evaluating that option. `snapshot` is the value `item` had the last
+    // time `sortedItems` was rebuilt (positionally paired via `items`'s
+    // filtered order, not by id, so it also catches an in-place mutation
+    // handed back under the same id).
+    const prevById = indexById(sortedItems);
+    const reuseOrBuildEntry = (item, snapshot, checked) => {
+      const bucket = prevById.get(item.id);
+      const prev = bucket?.[0];
+      if (
+        prev &&
+        prev.checked === checked &&
+        snapshot !== undefined &&
+        deepEqual(snapshot, item)
+      ) {
+        bucket.shift();
+        return prev;
+      }
+      return { ...item, checked };
+    };
+
+    const selectAllEntries = selectAllItems.map((item, index) =>
+      reuseOrBuildEntry(item, selectAllSnapshots[index], allChecked),
+    );
 
     if (
       selectionFeedback === "top" ||
       selectionFeedback === "top-after-reopen"
     ) {
-      const checkedItems = regularItems
-        .filter((item) => selectedIdsSet.has(item.id))
-        .map((item) => ({ ...item, checked: true }));
-      const uncheckedItems = regularItems
-        .filter((item) => !selectedIdsSet.has(item.id))
-        .map((item) => ({ ...item, checked: false }));
+      const checkedItems = [];
+      const uncheckedItems = [];
+      regularItems.forEach((item, index) => {
+        const checked = selectedIdsSet.has(item.id);
+        const entry = reuseOrBuildEntry(item, regularSnapshots[index], checked);
+        (checked ? checkedItems : uncheckedItems).push(entry);
+      });
 
       return [
         ...selectAllEntries,
@@ -796,19 +843,23 @@
     return [
       ...selectAllEntries,
       ...regularItems
-        .map((item) => ({
-          ...item,
-          checked: selectedIdsSet.has(item.id),
-        }))
+        .map((item, index) =>
+          reuseOrBuildEntry(
+            item,
+            regularSnapshots[index],
+            selectedIdsSet.has(item.id),
+          ),
+        )
         .sort(sortItem),
     ];
   }
 
+  // Shallow copies, so an item mutated in place and handed over in a new
+  // array still reads as changed. Declared before the first `sort()` call,
+  // which reads it to decide whether an entry can be reused.
+  let prevItemsSnapshot = items.map((item) => ({ ...item }));
   sortedItems = sort();
   let prevItems = items;
-  // Shallow copies, so an item mutated in place and handed over in a new
-  // array still reads as changed.
-  let prevItemsSnapshot = items.map((item) => ({ ...item }));
 
   /**
    * Whether `sortedItems` already describes `nextItems` and `nextSelectedIds`,
@@ -888,8 +939,12 @@
   $: if (items !== prevItems) {
     prevItems = items;
     if (!isAlreadySorted(items, selectedIds)) {
-      prevItemsSnapshot = items.map((item) => ({ ...item }));
+      // `sort()` reads the OLD `prevItemsSnapshot` to decide which entries
+      // changed, so it must run before the snapshot is refreshed to match
+      // the new `items` — otherwise every entry would compare equal to its
+      // own just-taken snapshot and get stale-reused.
       sortedItems = sort();
+      prevItemsSnapshot = items.map((item) => ({ ...item }));
       prevChecked = sortedItems.filter((item) => item.checked);
     }
   }
