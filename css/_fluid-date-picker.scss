@@ -126,9 +126,10 @@
   // Width/style stay unconditional across every state this rule already
   // covers (including readonly, which paints over only the color below);
   // invalid/warn opt out here and get their own treatment further down.
-  .#{$prefix}--date-picker--fluid:not(
-      .#{$prefix}--date-picker--fluid--invalid
-    ):not(.#{$prefix}--date-picker--fluid--warn)
+  // `--neutral` is set by the component only when neither invalid nor warn
+  // applies, so it already encodes the same condition the two `:not()`
+  // clauses it replaces spelled out.
+  .#{$prefix}--date-picker--fluid.#{$prefix}--date-picker--fluid--neutral
     .#{$prefix}--date-picker--range
     .#{$prefix}--date-picker-container:not(
       .#{$prefix}--date-picker--fluid--invalid
@@ -139,10 +140,10 @@
 
   // Color is split from width/style above so `--readonly-only` can paint
   // its own color below without competing for it: the two are mutually
-  // exclusive by class, not by specificity.
-  .#{$prefix}--date-picker--fluid:not(
-      .#{$prefix}--date-picker--fluid--invalid
-    ):not(.#{$prefix}--date-picker--fluid--warn):not(
+  // exclusive by class, not by specificity. `--neutral` replaces the
+  // invalid/warn `:not()` pair; `:not(--readonly-only)` is the one
+  // remaining exclusion this rule needs on top of that.
+  .#{$prefix}--date-picker--fluid.#{$prefix}--date-picker--fluid--neutral:not(
       .#{$prefix}--date-picker--fluid--readonly-only
     )
     .#{$prefix}--date-picker--range
