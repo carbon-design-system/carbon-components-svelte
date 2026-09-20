@@ -33,11 +33,18 @@
     expandedIdSet,
     indeterminateIdSet,
     selectionMode,
+    dragEnabled,
+    dragState,
     clickNode,
     selectNode,
     expandNode,
     focusNode,
     toggleNode,
+    startDrag,
+    dragOverNode,
+    dragLeaveNode,
+    dropOnNode,
+    endDrag,
   } = getContext("carbon:TreeView");
 
   /**
@@ -64,6 +71,8 @@
   $: indeterminate = isCheckboxMode && $indeterminateIdSet.has(id);
   $: icon = node.icon;
   $: isLinkLeaf = href !== undefined && !hasChildren;
+  $: isDragging = $dragState.draggedIds.includes(id);
+  $: dropPosition = $dragState.dropTargetId === id ? $dragState.dropPosition : null;
 
   // Flattened-row indent that matches what the recursive TreeViewNodeList
   // produces visually. In the recursive tree, each ancestor `<li>` contributes
@@ -108,6 +117,7 @@
       rel={target === "_blank" ? "noopener noreferrer" : undefined}
       style:padding-left="{indentRem}rem"
       tabindex={disabled ? undefined : isTabAnchor ? 0 : -1}
+      draggable={$dragEnabled && !disabled}
       aria-level={depth + 1}
       aria-posinset={posInSet}
       aria-setsize={setSize}
@@ -120,10 +130,19 @@
       class:bx--tree-node--selected={selected}
       class:bx--tree-node--disabled={disabled}
       class:bx--tree-node--with-icon={icon}
+      class:bx--tree-node--dragging={isDragging}
+      class:bx--tree-node--drag-over-before={dropPosition === "before"}
+      class:bx--tree-node--drag-over-after={dropPosition === "after"}
+      class:bx--tree-node--drag-over-inside={dropPosition === "inside"}
       on:click|stopPropagation={(event) => {
         if (disabled) return;
         clickNode(mergedNode, event);
       }}
+      on:dragstart|stopPropagation={(event) => startDrag(mergedNode, event)}
+      on:dragover|stopPropagation={(event) => dragOverNode(mergedNode, event)}
+      on:dragleave|stopPropagation={(event) => dragLeaveNode(mergedNode, event)}
+      on:drop|stopPropagation={(event) => dropOnNode(mergedNode, event)}
+      on:dragend|stopPropagation={endDrag}
       on:focus={() => focusNode(mergedNode)}
     >
       <div
@@ -146,6 +165,7 @@
     style:height="{itemHeight}px"
     style:padding-left="{indentRem}rem"
     tabindex={disabled ? undefined : isTabAnchor ? 0 : -1}
+    draggable={$dragEnabled && !disabled}
     aria-level={depth + 1}
     aria-posinset={posInSet}
     aria-setsize={setSize}
@@ -163,6 +183,10 @@
     class:bx--tree-node--selected={isCheckboxMode ? checked : selected}
     class:bx--tree-node--disabled={disabled}
     class:bx--tree-node--with-icon={icon}
+    class:bx--tree-node--dragging={isDragging}
+    class:bx--tree-node--drag-over-before={dropPosition === "before"}
+    class:bx--tree-node--drag-over-after={dropPosition === "after"}
+    class:bx--tree-node--drag-over-inside={dropPosition === "inside"}
     on:click|stopPropagation={(event) => {
       if (disabled) return;
       // Stop the label from toggling the decorative input; `clickNode`
@@ -170,6 +194,11 @@
       if (isCheckboxMode) event.preventDefault();
       clickNode(mergedNode, event);
     }}
+    on:dragstart|stopPropagation={(event) => startDrag(mergedNode, event)}
+    on:dragover|stopPropagation={(event) => dragOverNode(mergedNode, event)}
+    on:dragleave|stopPropagation={(event) => dragLeaveNode(mergedNode, event)}
+    on:drop|stopPropagation={(event) => dropOnNode(mergedNode, event)}
+    on:dragend|stopPropagation={endDrag}
     on:focus={() => focusNode(mergedNode)}
   >
     <div

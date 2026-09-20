@@ -106,9 +106,16 @@
     checkedIdSet,
     indeterminateIdSet,
     selectionMode,
+    dragEnabled,
+    dragState,
     clickNode,
     selectNode,
     focusNode,
+    startDrag,
+    dragOverNode,
+    dragLeaveNode,
+    dropOnNode,
+    endDrag,
   } = getContext("carbon:TreeView");
 
   /**
@@ -134,6 +141,8 @@
   // Link rows navigate; they render no checkbox.
   $: isCheckboxMode = $selectionMode === "checkbox" && href === undefined;
   $: indeterminate = isCheckboxMode && $indeterminateIdSet.has(id);
+  $: isDragging = $dragState.draggedIds.includes(id);
+  $: dropPosition = $dragState.dropTargetId === id ? $dragState.dropPosition : null;
   // Merge all props (including custom properties) with computed properties
   // Explicitly include disabled to ensure it's always present (has default value)
   // `level`/`posinset`/`setsize` are layout-only (drive `aria-*` attributes) and excluded from `node`.
@@ -180,6 +189,7 @@
       target={disabled ? undefined : target}
       rel={target === "_blank" ? "noopener noreferrer" : undefined}
       tabindex={disabled ? undefined : -1}
+      draggable={$dragEnabled && !disabled}
       aria-current={id === $activeNodeId ? "page" : undefined}
       aria-disabled={disabled}
       aria-level={level}
@@ -191,10 +201,19 @@
       class:bx--tree-node--selected={selected}
       class:bx--tree-node--disabled={disabled}
       class:bx--tree-node--with-icon={icon}
+      class:bx--tree-node--dragging={isDragging}
+      class:bx--tree-node--drag-over-before={dropPosition === "before"}
+      class:bx--tree-node--drag-over-after={dropPosition === "after"}
+      class:bx--tree-node--drag-over-inside={dropPosition === "inside"}
       on:click|stopPropagation={(event) => {
         if (disabled) return;
         clickNode(node, event);
       }}
+      on:dragstart|stopPropagation={(event) => startDrag(node, event)}
+      on:dragover|stopPropagation={(event) => dragOverNode(node, event)}
+      on:dragleave|stopPropagation={(event) => dragLeaveNode(node, event)}
+      on:drop|stopPropagation={(event) => dropOnNode(node, event)}
+      on:dragend|stopPropagation={endDrag}
       on:keydown={(event) => {
         if (
           event.key === "ArrowUp" ||
@@ -242,6 +261,7 @@
     role="treeitem"
     {id}
     tabindex={disabled ? undefined : -1}
+    draggable={$dragEnabled && !disabled}
     aria-current={id === $activeNodeId || undefined}
     aria-selected={isCheckboxMode || disabled ? undefined : selected}
     aria-checked={isCheckboxMode
@@ -257,6 +277,10 @@
     class:bx--tree-node--selected={isCheckboxMode ? checked : selected}
     class:bx--tree-node--disabled={disabled}
     class:bx--tree-node--with-icon={icon}
+    class:bx--tree-node--dragging={isDragging}
+    class:bx--tree-node--drag-over-before={dropPosition === "before"}
+    class:bx--tree-node--drag-over-after={dropPosition === "after"}
+    class:bx--tree-node--drag-over-inside={dropPosition === "inside"}
     on:click|stopPropagation={(event) => {
       if (disabled) return;
       // Stop the label from toggling the decorative input; `clickNode`
@@ -264,6 +288,11 @@
       if (isCheckboxMode) event.preventDefault();
       clickNode(node, event);
     }}
+    on:dragstart|stopPropagation={(event) => startDrag(node, event)}
+    on:dragover|stopPropagation={(event) => dragOverNode(node, event)}
+    on:dragleave|stopPropagation={(event) => dragLeaveNode(node, event)}
+    on:drop|stopPropagation={(event) => dropOnNode(node, event)}
+    on:dragend|stopPropagation={endDrag}
     on:keydown={(event) => {
       if (
         event.key === "ArrowUp" ||

@@ -240,6 +240,10 @@
    * @property {Array<Id>} added - Node ids checked since the previous change
    * @property {Array<Id>} removed - Node ids unchecked since the previous change
    * @property {ReadonlyArray<Id>} indeterminateIds - The partially checked node ids after the change
+   * @typedef {object} TreeViewDragState<Id=(string|number)>
+   * @property {ReadonlyArray<Id>} draggedIds - The node id(s) currently being dragged; empty when no drag is in progress
+   * @property {Id | null} dropTargetId - The node currently hovered as a drop target
+   * @property {"before" | "after" | "inside" | null} dropPosition - Where a drop on `dropTargetId` would land
    * @slot {{ node: Node & { expanded: boolean; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean; } }}
    * @slot {{ node: Node & { expanded: boolean; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean; } }} childNodes
    * @event select
@@ -256,6 +260,8 @@
    * @type {Node & { expanded: boolean; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean }}
    * @event check:change
    * @type {TreeViewCheckChange<Node["id"]>}
+   * @event move
+   * @type {{ ids: Array<Node["id"]>, targetId: Node["id"], position: "before" | "after" | "inside" }}
    */
 
   /**
@@ -351,6 +357,14 @@
    * @bindable readonly
    */
   export let indeterminateIds = [];
+
+  /**
+   * Set to `true` to let users reorder and reparent nodes by dragging a row
+   * onto another with native HTML5 drag-and-drop. TreeView validates the
+   * gesture and dispatches `move`; it never mutates `nodes` itself — the
+   * consumer applies the change, the same pattern as `on:toggle` lazy-loading.
+   */
+  export let draggable = false;
 
   /**
    * Enable virtualization for large trees. Virtualization renders only the
@@ -585,6 +599,10 @@
     toggleCheckboxNode,
   } from "../utils/tree-checkbox-state.js";
   import {
+    computeDropPosition,
+    isValidDropTarget,
+  } from "../utils/tree-drag-drop.js";
+  import {
     createTreeVirtualIndex,
     isExpandableNode,
   } from "../utils/tree-virtual-index.js";
@@ -605,6 +623,19 @@
   const sharedMultiselect = writable(multiselect);
   /** @type {import("svelte/store").Writable<"highlight" | "checkbox">} */
   const sharedSelectionMode = writable(selectionMode);
+  /** @type {import("svelte/store").Writable<boolean>} */
+  const sharedDragEnabled = writable(draggable);
+
+  /** @type {TreeViewDragState<Node["id"]>} */
+  let dragStateValue = { draggedIds: [], dropTargetId: null, dropPosition: null };
+  /** @type {import("svelte/store").Writable<TreeViewDragState<Node["id"]>>} */
+  const dragState = writable(dragStateValue);
+
+  /** @type {(next: TreeViewDragState<Node["id"]>) => void} */
+  function setDragState(next) {
+    dragStateValue = next;
+    dragState.set(next);
+  }
 
   /** @type {import("svelte/store").Writable<Node["id"]>} */
   const activeNodeId = writable(activeId);
@@ -949,6 +980,97 @@
     dispatch("toggle", withLiveState(node));
   }
 
+  /** @type {(node: Node, event: DragEvent) => void} */
+  function startDrag(node, event) {
+    if (node.disabled) {
+      event.preventDefault();
+      return;
+    }
+    setDragState({
+      draggedIds: [node.id],
+      dropTargetId: null,
+      dropPosition: null,
+    });
+    if (event.dataTransfer) {
+      event.dataTransfer.effectAllowed = "move";
+      event.dataTransfer.setData("text/plain", String(node.id));
+    }
+  }
+
+  /** @type {(node: Node, event: DragEvent) => void} */
+  function dragOverNode(node, event) {
+    const { draggedIds } = dragStateValue;
+    if (draggedIds.length === 0) return;
+
+    const isValid =
+      !node.disabled &&
+      isValidDropTarget(
+        draggedIds[0],
+        node.id,
+        cachedParentIdById ?? new Map(),
+      );
+    if (!isValid) return;
+
+    // Allowing the drop requires preventing the default (disallow) handling.
+    event.preventDefault();
+    if (event.dataTransfer) event.dataTransfer.dropEffect = "move";
+
+    const rect = /** @type {HTMLElement} */ (
+      event.currentTarget
+    ).getBoundingClientRect();
+    const position = computeDropPosition(event.clientY, rect);
+
+    if (
+      dragStateValue.dropTargetId !== node.id ||
+      dragStateValue.dropPosition !== position
+    ) {
+      setDragState({ ...dragStateValue, dropTargetId: node.id, dropPosition: position });
+    }
+  }
+
+  /** @type {(node: Node, event: DragEvent) => void} */
+  function dragLeaveNode(node, event) {
+    if (dragStateValue.dropTargetId !== node.id) return;
+    // Moving between child elements of the same row also fires `dragleave`
+    // on the row; only clear the indicator once the pointer truly exits it.
+    const rowElement = /** @type {HTMLElement} */ (event.currentTarget);
+    const related = event.relatedTarget;
+    if (related instanceof Node && rowElement.contains(related)) return;
+    setDragState({ ...dragStateValue, dropTargetId: null, dropPosition: null });
+  }
+
+  /** @type {(node: Node, event: DragEvent) => void} */
+  function dropOnNode(node, event) {
+    event.preventDefault();
+    const { draggedIds, dropTargetId, dropPosition } = dragStateValue;
+    setDragState({ draggedIds: [], dropTargetId: null, dropPosition: null });
+
+    if (
+      draggedIds.length === 0 ||
+      node.disabled ||
+      dropTargetId !== node.id ||
+      !dropPosition ||
+      !isValidDropTarget(
+        draggedIds[0],
+        node.id,
+        cachedParentIdById ?? new Map(),
+      )
+    ) {
+      return;
+    }
+
+    dispatch("move", {
+      ids: draggedIds,
+      targetId: node.id,
+      position: dropPosition,
+    });
+  }
+
+  function endDrag() {
+    if (dragStateValue.draggedIds.length === 0) return;
+    setDragState({ draggedIds: [], dropTargetId: null, dropPosition: null });
+  }
+
   let initialRenderComplete = false;
 
   setContext("carbon:TreeView", {
@@ -962,11 +1084,18 @@
     indeterminateIdSet,
     multiselect: sharedMultiselect,
     selectionMode: sharedSelectionMode,
+    dragEnabled: sharedDragEnabled,
+    dragState,
     clickNode,
     selectNode,
     expandNode,
     focusNode,
     toggleNode,
+    startDrag,
+    dragOverNode,
+    dragLeaveNode,
+    dropOnNode,
+    endDrag,
     isInitialRender: () => !initialRenderComplete,
   });
 
@@ -1216,6 +1345,7 @@
 
   $: sharedMultiselect.set(isMultiselect);
   $: sharedSelectionMode.set(selectionMode);
+  $: sharedDragEnabled.set(draggable);
 
   /** @type {ReadonlyArray<Node["id"]>} */
   let prevIndeterminateIdsPushed = indeterminateIds;
