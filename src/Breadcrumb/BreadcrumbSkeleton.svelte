@@ -1,4 +1,8 @@
 <script>
+  /**
+   * @template [Separator=any]
+   */
+
   /** Set to `true` to hide the separator after the last breadcrumb item */
   export let noTrailingSlash = false;
 
@@ -11,8 +15,12 @@
    */
   export let size = "md";
 
-  /** Specify the separator character rendered between breadcrumb items */
-  export let separator = "/";
+  /**
+   * Specify the separator rendered between breadcrumb items.
+   * A component reference renders as no separator in the skeleton state.
+   * @type {string | Separator}
+   */
+  export let separator = /** @type {string | Separator} */ ("/");
 </script>
 
 <div
@@ -21,7 +29,10 @@
   class:bx--breadcrumb={true}
   class:bx--breadcrumb--no-trailing-slash={noTrailingSlash}
   class:bx--breadcrumb--sm={size === "sm"}
-  style:--ccs-separator="'{separator}'"
+  class:bx--breadcrumb--separator-icon={typeof separator !== "string"}
+  style:--ccs-separator={typeof separator === "string"
+    ? `'${separator}'`
+    : "''"}
   {...$$restProps}
   on:click
   on:mouseover
