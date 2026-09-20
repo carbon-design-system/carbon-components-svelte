@@ -40,6 +40,18 @@
     border-style: dashed;
   }
 
+  $border-sides: top, right, bottom, left;
+
+  @each $side in $border-sides {
+    .#{$prefix}--box-border-side-#{$side} {
+      @each $other in $border-sides {
+        @if $other != $side {
+          border-#{$other}-width: 0;
+        }
+      }
+    }
+  }
+
   .#{$prefix}--box-shadow {
     @include layer("raised");
   }

@@ -67,6 +67,12 @@
    */
   export let borderWidth = undefined;
 
+  /**
+   * Set which side the border applies to. Only takes effect when `border` is set.
+   * @type {"all" | "top" | "right" | "bottom" | "left"}
+   */
+  export let borderSide = "all";
+
   /** Set to `true` to apply a Carbon raised box shadow. */
   export let shadow = false;
 
@@ -191,6 +197,18 @@
     return typeof value === "number" ? `${value}px` : value;
   }
 
+  /**
+   * Resolve `border-{side}-width` for the one side `borderSide` targets;
+   * the other three sides are zeroed by the `bx--box-border-side-{side}` class.
+   * @param {"top" | "right" | "bottom" | "left"} side
+   * @param {string | undefined} border
+   * @param {"all" | "top" | "right" | "bottom" | "left"} borderSide
+   * @param {number | string | undefined} borderWidth
+   */
+  function borderSideWidth(side, border, borderSide, borderWidth) {
+    return border && borderSide === side ? lengthStyle(borderWidth) : undefined;
+  }
+
   /** @param {"height" | "min-height"} kind @param {SpacingValue | "viewport" | undefined} value */
   function viewportClass(kind, value) {
     if (value === "viewport") return `bx--box-${kind}-viewport`;
@@ -217,6 +235,7 @@
     fill && `bx--box-fill-${fill}`,
     border && `bx--box-border-${border}`,
     border && borderStyle === "dashed" && "bx--box-border-style-dashed",
+    border && borderSide !== "all" && `bx--box-border-side-${borderSide}`,
     shadow && "bx--box-shadow",
     spacingClass("p", padding),
     spacingClass("px", paddingX),
@@ -241,7 +260,32 @@
   $: resolvedWidth = lengthStyle(width);
   $: resolvedMaxWidth = lengthStyle(maxWidth);
   $: resolvedMinWidth = lengthStyle(minWidth);
-  $: resolvedBorderWidth = border ? lengthStyle(borderWidth) : undefined;
+  $: resolvedBorderWidth =
+    border && borderSide === "all" ? lengthStyle(borderWidth) : undefined;
+  $: resolvedBorderTopWidth = borderSideWidth(
+    "top",
+    border,
+    borderSide,
+    borderWidth,
+  );
+  $: resolvedBorderRightWidth = borderSideWidth(
+    "right",
+    border,
+    borderSide,
+    borderWidth,
+  );
+  $: resolvedBorderBottomWidth = borderSideWidth(
+    "bottom",
+    border,
+    borderSide,
+    borderWidth,
+  );
+  $: resolvedBorderLeftWidth = borderSideWidth(
+    "left",
+    border,
+    borderSide,
+    borderWidth,
+  );
   $: resolvedPadding = spacingStyle(padding);
   $: resolvedPaddingX = spacingStyle(paddingX);
   $: resolvedPaddingY = spacingStyle(paddingY);
@@ -263,6 +307,10 @@
   style:max-width={resolvedMaxWidth}
   style:min-width={resolvedMinWidth}
   style:border-width={resolvedBorderWidth}
+  style:border-top-width={resolvedBorderTopWidth}
+  style:border-right-width={resolvedBorderRightWidth}
+  style:border-bottom-width={resolvedBorderBottomWidth}
+  style:border-left-width={resolvedBorderLeftWidth}
   style:padding={resolvedPadding}
   style:padding-inline={resolvedPaddingX}
   style:padding-block={resolvedPaddingY}
