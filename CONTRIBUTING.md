@@ -601,10 +601,10 @@ For format and lint, scope Biome to what you touched:
 # Specific paths — always lints the current working tree
 bunx biome check --write src/DataTable
 
-# Staged files only (what a commit would include)
+# Staged files only (what a commit would include) — also `bun run lint:changed`
 bunx biome check --write --staged
 
-# Files committed on this branch relative to master
+# Files committed on this branch relative to master (CI-style, not aliased in package.json)
 bunx biome check --write --changed --since=master
 ```
 
@@ -613,9 +613,13 @@ list from git, so each sees a different slice:
 
 - Path scoping (`src/DataTable`) lints whatever is on disk now, committed or not. Use it
   while editing.
-- `--staged` lints the git index. Run it after `git add`.
-- `--changed` diffs commits against the default branch. It does **not** see uncommitted
-  or unstaged edits, so it reports nothing until you commit.
+- `--staged` lints the git index. Run it after `git add`. `bun run lint:changed` is an
+  alias for this — despite the name, it does **not** use `--changed`.
+- `--changed` diffs *committed* changes against the default branch and, per Biome, is
+  "intended for CI." It ignores staged and unstaged edits entirely, so on a long-lived
+  branch it can also pull in every file changed since the branch diverged from master —
+  not just your latest commit. Reach for it deliberately (e.g. auditing a whole branch
+  before a PR), not as a pre-commit habit.
 
 `bun run lint` runs Biome over the entire repository. Reserve it for broad sweeps.
 
@@ -636,7 +640,7 @@ Types and E2E:
 
 Two process traps:
 
-- Read the exit code, not the tail. `bun lint:changed | tail -1` prints "No fixes applied" and exits 0 even when Biome reported errors above it. Gate commits on the checks themselves: `bunx biome check <paths> && bun run test:types && git commit ...`.
+- Read the exit code, not the tail. `bun run lint:changed | tail -1` prints "No fixes applied" and exits 0 even when Biome reported errors above it. Gate commits on the checks themselves: `bunx biome check <paths> && bun run test:types && git commit ...`.
 - `bun test:types` reporting that a new prop or event "does not exist" usually means the generated `.d.ts` is stale, not that the code is wrong. Run `bun build:docs` first. This bites after a rebase as well as after an API change.
 
 ## Testing
