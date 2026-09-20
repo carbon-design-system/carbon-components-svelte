@@ -8,6 +8,7 @@
     FunnelBars,
     LineChart,
     MicroFunnel,
+    RangeIndicator,
     RankBars,
     ShareOfTotal,
     Sparkline,
@@ -64,6 +65,15 @@
   />
 
   <p><ShareOfTotal value={380} total={1000} label="Enterprise share" /></p>
+
+  <RangeIndicator
+    min={12}
+    max={480}
+    value={92}
+    quartiles={[40, 88, 140]}
+    showRange
+    label="Latency now"
+  />
 
   <ComparisonBar value={1284} previous={912} showDelta label="Orders" />
 
