@@ -102,7 +102,7 @@
 @mixin time-picker-error-width {
   .#{$prefix}--time-picker__input-field.#{$prefix}--text-input--invalid,
   .#{$prefix}--time-picker__input-field.#{$prefix}--text-input--warning {
-    inline-size: 6.175rem;
+    inline-size: to-rem(98.8px);
   }
 
   .#{$prefix}--time-picker--warn ~ .#{$prefix}--form-requirement {

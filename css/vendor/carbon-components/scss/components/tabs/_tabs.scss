@@ -618,7 +618,7 @@
   @include carbon--breakpoint(md) {
     .#{$prefix}--tabs--tall.#{$prefix}--tabs--container,
     .#{$prefix}--tabs--tall .#{$prefix}--tabs__nav-item {
-      min-height: 4rem;
+      min-height: to-rem(64px);
     }
 
     .#{$prefix}--tabs--tall.#{$prefix}--tabs--container .#{$prefix}--tabs__nav-link {
@@ -638,7 +638,7 @@
   .#{$prefix}--tabs--container .#{$prefix}--tabs__nav-item-secondary-label {
     @include carbon--type-style("caption-01");
 
-    min-height: 1rem;
+    min-height: to-rem(16px);
   }
 }
 
