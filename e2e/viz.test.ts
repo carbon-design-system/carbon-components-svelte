@@ -80,4 +80,35 @@ test.describe("Data visualization", () => {
     await page.keyboard.press("Escape");
     await expect(tooltip).toHaveCount(0);
   });
+
+  test("LineChart swaps to a data table and back from its toolbar", async ({
+    page,
+  }) => {
+    await page.goto("/viz.html");
+    // By caption: the chart surface leaves the accessibility tree while the
+    // table is showing.
+    const figure = page
+      .getByRole("figure")
+      .filter({ hasText: "Revenue by region" });
+
+    await figure.getByRole("button", { name: "Show as table" }).click();
+    const table = page.getByRole("region", {
+      name: "Revenue by region, data table",
+    });
+    await expect(table.getByRole("columnheader")).toHaveText([
+      "Date",
+      "EMEA",
+      "APAC",
+      "AMER",
+    ]);
+    await expect(table.getByRole("rowheader").first()).toHaveText(
+      "Jan 1, 2026",
+    );
+    await expect(
+      page.getByRole("application", { name: "Revenue by region" }),
+    ).toBeHidden();
+
+    await figure.getByRole("button", { name: "Show as chart" }).click();
+    await expect(table).toHaveCount(0);
+  });
 });

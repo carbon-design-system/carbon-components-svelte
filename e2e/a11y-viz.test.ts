@@ -18,4 +18,18 @@ test.describe("Data visualization a11y", () => {
       expect(results.violations).toEqual([]);
     });
   }
+
+  test("has no detectable accessibility violations in the data table view", async ({
+    page,
+  }) => {
+    await page.goto("/viz.html");
+    await page.getByRole("button", { name: "Show as table" }).first().click();
+    await expect(
+      page.getByRole("region", { name: "Revenue by region, data table" }),
+    ).toBeVisible();
+
+    const results = await new AxeBuilder({ page }).include("#app").analyze();
+
+    expect(results.violations).toEqual([]);
+  });
 });

@@ -82,5 +82,6 @@
     series="region"
     title="Revenue by region"
     yTitle="Revenue"
+    toolbar
   />
 </main>
