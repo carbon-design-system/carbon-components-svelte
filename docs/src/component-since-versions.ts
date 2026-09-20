@@ -46,6 +46,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   Grid: "0.8.4",
   Heading: "0.98.0",
   HeatStrip: "0.113.0",
+  Histogram: "0.113.0",
   IconIndicator: "0.110.0",
   ImageLoader: "0.30.0",
   InlineLoading: "0.2.0",
