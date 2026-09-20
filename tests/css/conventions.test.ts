@@ -121,9 +121,26 @@ describe("css partial conventions", () => {
   });
 
   it("times transitions with motion tokens and an explicit property list", () => {
-    expect(offenders(/transition:.*(\d(ms|s)\b|cubic-bezier|\ball\b)/)).toEqual(
-      [],
-    );
+    // Match the whole declaration up to `;`, since the formatter wraps a
+    // multi-property list onto the lines after `transition:`.
+    const LITERAL = /\d(ms|s)\b|cubic-bezier|\ball\b/;
+    let declarations = 0;
+    const found = PARTIALS.flatMap((name) => {
+      const source = readFileSync(join(CSS_DIR, name), "utf8")
+        .split("\n")
+        .map((line) => line.replace(/\/\/.*$/, ""))
+        .join("\n");
+      return [...source.matchAll(/\btransition:\s*([^;]+);/g)].flatMap(
+        (match) => {
+          declarations++;
+          return LITERAL.test(match[1])
+            ? [`${name}:${source.slice(0, match.index).split("\n").length}`]
+            : [];
+        },
+      );
+    });
+    expect(declarations).toBeGreaterThan(0);
+    expect(found).toEqual([]);
   });
 
   it("keeps the manifest's load-bearing import order", () => {
