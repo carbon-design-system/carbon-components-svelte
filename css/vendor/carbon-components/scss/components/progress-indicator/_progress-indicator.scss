@@ -12,6 +12,92 @@
 @import '../../globals/scss/vendor/@carbon/elements/scss/import-once/import-once';
 @import '../button/button';
 
+// ccs: reuse for breakpoint variants
+/// Vertical/horizontal layout for a `.bx--progress--vertical`-style selector.
+/// The horizontal branch mirrors the unprefixed base rules above so a
+/// breakpoint variant can fully undo a vertical variant set at a smaller one.
+/// @access private
+/// @group progress-indicator
+@mixin progress-indicator-orientation($selector, $vertical) {
+  #{$selector} {
+    display: flex;
+    flex-direction: if($vertical, column, row);
+  }
+
+  #{$selector} .#{$prefix}--progress-step,
+  #{$selector} .#{$prefix}--progress-step-button {
+    @if $vertical {
+      width: initial;
+      min-width: initial;
+      min-height: 3.625rem;
+      align-content: flex-start;
+    } @else {
+      width: to-rem(128px);
+      min-width: 7rem;
+      min-height: initial;
+      align-content: initial;
+    }
+  }
+
+  #{$selector} .#{$prefix}--progress-step svg,
+  #{$selector} .#{$prefix}--progress-step-button svg {
+    @if $vertical {
+      display: inline-block;
+      // 1px top margin based on visual review
+      margin: to-rem(1px) $carbon--spacing-03 0;
+    } @else {
+      display: initial;
+      margin: to-rem(10px) $carbon--spacing-03 0 0;
+    }
+  }
+
+  #{$selector} .#{$prefix}--progress-label {
+    @if $vertical {
+      display: inline-block;
+      width: initial;
+      max-width: to-rem(160px);
+      margin: 0;
+      vertical-align: top;
+      white-space: initial;
+    } @else {
+      display: initial;
+      width: initial;
+      max-width: to-rem(88px);
+      margin: $carbon--spacing-03 0 0 0;
+      vertical-align: initial;
+      white-space: nowrap;
+    }
+  }
+
+  #{$selector} .#{$prefix}--progress-optional {
+    @if $vertical {
+      position: static;
+      width: 100%;
+      margin: auto 0;
+    } @else {
+      position: absolute;
+      width: initial;
+      margin: to-rem(28px) 0 0 $carbon--spacing-06;
+    }
+  }
+
+  #{$selector} .#{$prefix}--progress-line {
+    @if $vertical {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1px;
+      height: 100%;
+    } @else {
+      position: absolute;
+      top: initial;
+      left: 0;
+      width: to-rem(128px);
+      height: 1px;
+    }
+  }
+}
+
 /// Progress indicator styles
 /// @access private
 /// @group progress-indicator
@@ -206,51 +292,39 @@
 
 
   // (upstream repeated `.bx--progress--vertical` alone just above) // ccs: dedupe
-  .#{$prefix}--progress--vertical,
   .#{$prefix}--progress-text {
     display: flex;
     flex-direction: column;
   }
 
-  .#{$prefix}--progress--vertical .#{$prefix}--progress-step,
-  .#{$prefix}--progress--vertical .#{$prefix}--progress-step-button {
-    width: initial;
-    min-width: initial;
-    min-height: 3.625rem;
-    align-content: flex-start;
-  }
-
-  .#{$prefix}--progress--vertical .#{$prefix}--progress-step svg,
-  .#{$prefix}--progress--vertical .#{$prefix}--progress-step-button svg {
-    display: inline-block;
-    // 1px top margin based on visual review
-    margin: to-rem(1px) $carbon--spacing-03 0;
-  }
-
-  .#{$prefix}--progress--vertical .#{$prefix}--progress-label {
-    display: inline-block;
-    width: initial;
-    max-width: to-rem(160px);
-    margin: 0;
-    vertical-align: top;
-    white-space: initial;
-  }
-
-  .#{$prefix}--progress--vertical .#{$prefix}--progress-optional {
-    position: static;
-    width: 100%;
-    margin: auto 0;
-  }
-
-  .#{$prefix}--progress--vertical .#{$prefix}--progress-line {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 1px;
-    height: 100%;
-  }
+  // ccs: reuse for breakpoint variants
+  @include progress-indicator-orientation('.#{$prefix}--progress--vertical', true);
 }
 
 @include exports('progress-indicator') {
   @include progress-indicator;
+}
+
+// carbon-components-svelte patch (progress-indicator-responsive)
+
+/// Per-breakpoint override of ProgressIndicator's vertical/horizontal layout
+/// @access private
+/// @group progress-indicator
+@mixin progress-indicator-responsive {
+  @each $bp in (md, lg, xlg, max) {
+    @include carbon--breakpoint($bp) {
+      @include progress-indicator-orientation(
+        '.#{$prefix}--progress--#{$bp}-vertical',
+        true
+      );
+      @include progress-indicator-orientation(
+        '.#{$prefix}--progress--#{$bp}-horizontal',
+        false
+      );
+    }
+  }
+}
+
+@include exports('progress-indicator-responsive') {
+  @include progress-indicator-responsive;
 }

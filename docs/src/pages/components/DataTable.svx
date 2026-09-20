@@ -438,6 +438,42 @@ Set `columnHidden` to `true` on a header to skip that column in render while kee
   ]}
 />
 
+### Responsive columns
+
+Set `hideBelow` and/or `hideAbove` to a breakpoint (`"sm"`, `"md"`, `"lg"`, `"xlg"`, `"max"`) on a header to hide that column outside the given viewport range, instead of reading `window.innerWidth` in your own code. Resize the browser to see the `Protocol` column drop below `md` and the `Rule` column appear only below `md`.
+
+<DataTable
+  headers={[
+    { key: "name", value: "Name" },
+    { key: "protocol", value: "Protocol", hideBelow: "md" },
+    { key: "port", value: "Port" },
+    { key: "rule", value: "Rule", hideAbove: "md" },
+  ]}
+  rows={[
+    {
+      id: "a",
+      name: "Load Balancer 3",
+      protocol: "HTTP",
+      port: 3000,
+      rule: "Round robin",
+    },
+    {
+      id: "b",
+      name: "Load Balancer 1",
+      protocol: "HTTP",
+      port: 443,
+      rule: "Round robin",
+    },
+    {
+      id: "c",
+      name: "Load Balancer 2",
+      protocol: "HTTP",
+      port: 80,
+      rule: "DNS delegation",
+    },
+  ]}
+/>
+
 ### Visibility menu
 
 Add `ToolbarColumnVisibility` to a `Toolbar` for a ready-made column picker. It edits a bound `headers` array directly, so `DataTable` reflects each choice: picking an item toggles `columnHidden` for that column and keeps the menu open. Press <DocKbd label="Escape" /> to close it, and the last visible column's item is disabled so a table never loses every column. Pass `toggleableKeys` to restrict the menu to a subset of columns; the rest are omitted and keep their current visibility.

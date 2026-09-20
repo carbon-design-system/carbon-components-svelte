@@ -26,3 +26,12 @@ Set `stacked` to `true` to stack the buttons vertically instead of side by side.
   <Button icon={Login}>Log in</Button>
   <Button kind="ghost">Sign up</Button>
 </ButtonSet>
+
+## Responsive stacked
+
+Set `stacked` to a breakpoint object to stack the buttons on narrow viewports and lay them out side by side from a given breakpoint up, instead of reading `window.innerWidth` in your own code. Keys map to Carbon's breakpoints (`sm`, `md`, `lg`, `xlg`, `max`) and resolve mobile-first. Resize the browser to see the buttons below unstack at `md`.
+
+<ButtonSet stacked={{ sm: true, md: false }}>
+  <Button kind="secondary">Cancel</Button>
+  <Button>Submit</Button>
+</ButtonSet>
