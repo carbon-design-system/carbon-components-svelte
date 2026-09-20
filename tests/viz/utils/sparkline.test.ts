@@ -12,7 +12,7 @@ describe("normalizeSparklineValues", () => {
     expect(normalizeSparklineValues([])).toEqual([]);
   });
 
-  test("drops NaN and Infinity", () => {
+  test("replaces missing and non-finite entries with null, keeping positions", () => {
     expect(
       normalizeSparklineValues([
         1,
@@ -21,8 +21,10 @@ describe("normalizeSparklineValues", () => {
         Number.POSITIVE_INFINITY,
         Number.NEGATIVE_INFINITY,
         3,
+        null,
+        undefined,
       ]),
-    ).toEqual([1, 2, 3]);
+    ).toEqual([1, null, 2, null, null, 3, null, null]);
   });
 });
 
@@ -81,14 +83,24 @@ describe("getSparklinePoints", () => {
 });
 
 describe("toLinePath", () => {
-  test("returns an empty string for fewer than two points", () => {
+  test("returns an empty string for no points", () => {
     expect(toLinePath([])).toBe("");
-    expect(toLinePath([{ x: 0, y: 0 }])).toBe("");
   });
 
-  test("a single point returns an empty line path", () => {
+  test("a single point is a zero-length segment that round caps paint as a dot", () => {
     const points = getSparklinePoints([5], { width: 100, height: 20 });
-    expect(toLinePath(points)).toBe("");
+    expect(toLinePath(points)).toBe("M50,10l0,0");
+  });
+
+  test("a null point is a gap that starts a new subpath", () => {
+    const points = getSparklinePoints([0, 10, null, 10, 0], {
+      width: 100,
+      height: 10,
+    });
+    expect(points[2]).toBeNull();
+    // Later points keep their own slots instead of shifting left.
+    expect(points[3]).toEqual({ x: 75, y: 0 });
+    expect(toLinePath(points)).toBe("M0,10L25,0M75,0L100,10");
   });
 
   test("builds an M/L path through every point", () => {
@@ -97,7 +109,7 @@ describe("toLinePath", () => {
       { x: 50, y: 0 },
       { x: 100, y: 10 },
     ]);
-    expect(path).toBe("M 0 10 L 50 0 L 100 10");
+    expect(path).toBe("M0,10L50,0L100,10");
   });
 });
 
@@ -115,7 +127,7 @@ describe("toAreaPath", () => {
       ],
       20,
     );
-    expect(path).toBe("M 0 10 L 100 0 L 100 20 L 0 20 Z");
+    expect(path).toBe("M0,10L100,0L100,20L0,20Z");
   });
 });
 
@@ -142,9 +154,28 @@ describe("getSparklineBars", () => {
     expect(negativeBaseline).toBeLessThan(30);
   });
 
-  test("bar width floors at 1 when n is huge", () => {
-    const values = new Array(1000).fill(1);
-    const bars = getSparklineBars(values, { width: 96, height: 24, gap: 2 });
-    expect(bars.every((bar) => bar.width === 1)).toBe(true);
+  test("a long series gives up gap, then width, and never overflows", () => {
+    const fits = getSparklineBars(new Array(40).fill(1), {
+      width: 96,
+      height: 24,
+      gap: 2,
+    });
+    const lastFit = fits[fits.length - 1];
+    expect(lastFit?.width).toBe(1);
+    expect((lastFit?.x ?? 0) + (lastFit?.width ?? 0)).toBeCloseTo(96);
+
+    const dense = getSparklineBars(new Array(1000).fill(1), {
+      width: 96,
+      height: 24,
+      gap: 2,
+    });
+    const last = dense[dense.length - 1];
+    expect((last?.x ?? 0) + (last?.width ?? 0)).toBeCloseTo(96);
+  });
+
+  test("a null value leaves its slot empty", () => {
+    const bars = getSparklineBars([1, null, 3], { width: 30, height: 10 });
+    expect(bars[1]).toBeNull();
+    expect(bars[2]?.x).toBe(20);
   });
 });

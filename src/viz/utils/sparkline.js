@@ -1,6 +1,8 @@
 // @ts-check
 // Sparkline geometry math, kept DOM-free so it can be unit-tested without
 // rendering the component.
+import { pathArea } from "./path-area.js";
+import { pathLine } from "./path-line.js";
 
 /**
  * A plotted point in SVG user units.
@@ -18,34 +20,36 @@
  */
 
 /**
- * Drop non-finite entries (`NaN`, `Infinity`) so downstream math never has to
- * guard against them.
+ * Replace missing and non-finite entries (`null`, `NaN`, `Infinity`) with
+ * `null`. Positions are kept, so a missing sample stays a gap at its own
+ * slot instead of pulling every later value one step to the left.
  *
- * @param {readonly number[]} values
- * @returns {number[]}
+ * @param {ReadonlyArray<number | null | undefined>} values
+ * @returns {Array<number | null>}
  */
 export function normalizeSparklineValues(values) {
-  return values.filter(Number.isFinite);
+  return values.map((value) =>
+    typeof value === "number" && Number.isFinite(value) ? value : null,
+  );
 }
 
 /**
  * The `[min, max]` of `values` itself, with no override applied. Empty input
  * has no extent, so it reports `0` on both ends.
  *
- * @param {readonly number[]} values
+ * @param {ReadonlyArray<number | null>} values
  * @returns {SparklineDomain}
  */
 function getDataExtent(values) {
-  if (values.length === 0) return { min: 0, max: 0 };
-
-  let min = values[0];
-  let max = values[0];
+  let min = Number.POSITIVE_INFINITY;
+  let max = Number.NEGATIVE_INFINITY;
   for (const value of values) {
+    if (value === null) continue;
     if (value < min) min = value;
     if (value > max) max = value;
   }
 
-  return { min, max };
+  return min <= max ? { min, max } : { min: 0, max: 0 };
 }
 
 /**
@@ -54,7 +58,7 @@ function getDataExtent(values) {
  * (a flat series, or a single value) is expanded symmetrically by `1` so it
  * lands on the vertical center instead of collapsing to a point.
  *
- * @param {readonly number[]} values
+ * @param {ReadonlyArray<number | null>} values
  * @param {Object} [options]
  * @param {number} [options.min] Domain floor override.
  * @param {number} [options.max] Domain ceiling override.
@@ -87,16 +91,17 @@ export function getSparklineDomain(
  * Plot `values` as points inside a `width` x `height` viewBox. `x` spreads
  * evenly across `[padding, width - padding]`; a single value sits centered at
  * `width / 2`. `y` maps the domain to `[height - padding, padding]` (low to
- * high), clamping values that fall outside an overridden domain.
+ * high), clamping values that fall outside an overridden domain. A `null`
+ * value yields a `null` point at the same index.
  *
- * @param {readonly number[]} values
+ * @param {ReadonlyArray<number | null>} values
  * @param {Object} options
  * @param {number} options.width
  * @param {number} options.height
  * @param {number} [options.padding]
  * @param {number} [options.min] Domain floor override.
  * @param {number} [options.max] Domain ceiling override.
- * @returns {SparklinePoint[]}
+ * @returns {Array<SparklinePoint | null>}
  */
 export function getSparklinePoints(
   values,
@@ -111,6 +116,7 @@ export function getSparklinePoints(
   const innerHeight = height - padding * 2;
 
   return values.map((value, index) => {
+    if (value === null) return null;
     const x =
       count === 1 ? width / 2 : padding + (index / (count - 1)) * innerWidth;
     const clamped = Math.min(domain.max, Math.max(domain.min, value));
@@ -120,52 +126,44 @@ export function getSparklinePoints(
 }
 
 /**
- * An SVG path `d` for a polyline through `points`, or `""` when there are
- * fewer than two points to connect.
+ * An SVG path `d` for a polyline through `points`. A `null` point is a gap:
+ * the line stops and resumes after it. A lone point becomes a zero-length
+ * segment, which the round line caps paint as a dot.
  *
- * @param {readonly SparklinePoint[]} points
+ * @param {ReadonlyArray<SparklinePoint | null>} points
  * @returns {string}
  */
 export function toLinePath(points) {
-  if (points.length < 2) return "";
-
-  return points
-    .map((point, index) => `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`)
-    .join(" ");
+  return pathLine(points);
 }
 
 /**
  * An SVG path `d` for the filled area under the polyline through `points`,
- * closed down to `baselineY`. `""` when there are fewer than two points.
+ * closed down to `baselineY`. Each run between gaps closes on its own.
  *
- * @param {readonly SparklinePoint[]} points
+ * @param {ReadonlyArray<SparklinePoint | null>} points
  * @param {number} baselineY
  * @returns {string}
  */
 export function toAreaPath(points, baselineY) {
-  if (points.length < 2) return "";
-
-  const linePath = toLinePath(points);
-  const first = points[0];
-  const last = points[points.length - 1];
-
-  return `${linePath} L ${last.x} ${baselineY} L ${first.x} ${baselineY} Z`;
+  return pathArea(points, baselineY);
 }
 
 /**
  * Plot `values` as bars inside a `width` x `height` viewBox. The domain
  * includes `0` so every bar has a baseline to draw from; negative values draw
- * downward from it. Bar width is `(width - gap * (n - 1)) / n`, floored at
- * `1` so a large series still renders visible bars.
+ * downward from it. When the bars would not fit, the gap shrinks first (down
+ * to `0`) and then the bars do, so a long series never overflows `width`. A
+ * `null` value yields a `null` bar and leaves its slot empty.
  *
- * @param {readonly number[]} values
+ * @param {ReadonlyArray<number | null>} values
  * @param {Object} options
  * @param {number} options.width
  * @param {number} options.height
  * @param {number} [options.gap]
  * @param {number} [options.min] Domain floor override.
  * @param {number} [options.max] Domain ceiling override.
- * @returns {SparklineBar[]}
+ * @returns {Array<SparklineBar | null>}
  */
 export function getSparklineBars(values, { width, height, gap = 0, min, max }) {
   const count = values.length;
@@ -173,15 +171,19 @@ export function getSparklineBars(values, { width, height, gap = 0, min, max }) {
 
   const domain = getSparklineDomain(values, { min, max, includeZero: true });
   const span = domain.max - domain.min;
-  const barWidth = Math.max(1, (width - gap * (count - 1)) / count);
+  // Keep bars at least 1 unit wide by giving up gap first.
+  const maxGap = count > 1 ? Math.max(0, (width - count) / (count - 1)) : 0;
+  const barGap = Math.min(gap, maxGap);
+  const barWidth = (width - barGap * (count - 1)) / count;
   const baselineY = height - ((0 - domain.min) / span) * height;
 
   return values.map((value, index) => {
+    if (value === null) return null;
     const clamped = Math.min(domain.max, Math.max(domain.min, value));
     const valueY = height - ((clamped - domain.min) / span) * height;
 
     return {
-      x: index * (barWidth + gap),
+      x: index * (barWidth + barGap),
       y: Math.min(valueY, baselineY),
       width: barWidth,
       height: Math.abs(valueY - baselineY),
