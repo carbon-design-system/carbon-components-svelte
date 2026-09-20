@@ -229,6 +229,33 @@ describe("TreeView (virtualize)", () => {
     );
   });
 
+  it("keeps a single virtual tab stop when nodes arrives new-but-equal after arrow navigation", async () => {
+    const { rerender } = render(TreeViewVirtualize, {
+      totalRoots: 5,
+      childrenPerRoot: 0,
+    });
+
+    const first = findRowById(0);
+    if (!first) throw new Error("expected first row");
+    first.focus();
+    await user.keyboard("{ArrowDown}");
+    await user.keyboard("{ArrowDown}");
+
+    const focused = document.activeElement as HTMLElement | null;
+    expect(focused).not.toBe(first);
+    expect(focused?.getAttribute("tabindex")).toBe("0");
+    const focusedRowId = focused?.getAttribute("data-tree-row-id");
+
+    // The fixture's `$: nodes = buildTree(...)` re-runs on every rerender,
+    // producing a new-but-equal tree of node objects (same ids/text/shape).
+    await rerender({ totalRoots: 5, childrenPerRoot: 0 });
+    await tick();
+
+    const tree = screen.getByRole("tree");
+    expect(tree.querySelectorAll('[tabindex="0"]')).toHaveLength(1);
+    expect(findRowById(focusedRowId ?? "")).toHaveAttribute("tabindex", "0");
+  });
+
   it("disconnects ResizeObserver when virtualize is turned off", async () => {
     const disconnect = vi.fn();
     class MockResizeObserver {

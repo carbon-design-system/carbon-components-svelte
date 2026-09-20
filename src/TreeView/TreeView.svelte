@@ -1181,6 +1181,19 @@
     if (nodes === prevNodesForFirstTab) return;
     prevNodesForFirstTab = nodes;
 
+    // A connected roving tab stop already exists — either the first node
+    // from a previous run of this block, or one the user arrowed to. Leave
+    // it alone: querying and overwriting it here would both redo work for
+    // nothing (new-but-equal `nodes`) and, without a `resetNodeTabIndices()`
+    // call, leave two `tabindex="0"` elements when the tab stop is
+    // elsewhere in the tree.
+    for (const element of rovingTabStops) {
+      if (element.isConnected) return;
+    }
+
+    // No connected tab stop (initial render, or the previous one was
+    // removed by the new `nodes`): fall back to the first focusable node.
+    rovingTabStops.clear();
     const firstFocusableNode = ref.querySelector(
       ".bx--tree-node:not(.bx--tree-node--disabled):not(.bx--tree-node--hidden)",
     );
