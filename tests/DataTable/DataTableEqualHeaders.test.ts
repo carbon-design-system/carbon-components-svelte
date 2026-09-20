@@ -1,4 +1,5 @@
 import { render, screen, within } from "@testing-library/svelte";
+import type { DataTableValue } from "carbon-components-svelte/DataTable/DataTable.svelte";
 import DataTable from "./DataTable.test.svelte";
 
 describe("DataTable new-but-equal headers", () => {
@@ -27,7 +28,9 @@ describe("DataTable new-but-equal headers", () => {
   ];
 
   const createSortFn = () =>
-    vi.fn((a: any, b: any) => (a < b ? -1 : a > b ? 1 : 0));
+    vi.fn((a: DataTableValue, b: DataTableValue) =>
+      a < b ? -1 : a > b ? 1 : 0,
+    );
 
   const buildHeaders = (
     sortFn: ReturnType<typeof createSortFn>,
