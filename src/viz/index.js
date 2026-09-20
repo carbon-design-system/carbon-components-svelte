@@ -5,8 +5,10 @@
 export { default as Chart } from "./Chart/Chart.svelte";
 export { default as ChartAxis } from "./Chart/ChartAxis.svelte";
 export { default as ChartGrid } from "./Chart/ChartGrid.svelte";
+export { default as ChartLegend } from "./Chart/ChartLegend.svelte";
 export { default as ChartLine } from "./Chart/ChartLine.svelte";
 export { default as ChartRuler } from "./Chart/ChartRuler.svelte";
+export { default as ChartThreshold } from "./Chart/ChartThreshold.svelte";
 export { default as ChartTooltip } from "./Chart/ChartTooltip.svelte";
 export { default as ChartTooltipRow } from "./Chart/ChartTooltipRow.svelte";
 export { CHART_CONTEXT } from "./Chart/context.js";
