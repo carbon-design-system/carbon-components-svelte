@@ -54,6 +54,15 @@
   export let dateFormat = "m/d/Y";
 
   /**
+   * Specify a separate format for the text shown in the input, using the
+   * same tokens as `dateFormat`. `value` and the submitted form field keep
+   * using `dateFormat`.
+   * Not supported with the "simple" and "range" date picker types.
+   * @type {string | undefined}
+   */
+  export let displayFormat = undefined;
+
+  /**
    * Specify the maximum date.
    * @type {null | string | Date}
    */
@@ -266,6 +275,8 @@
   let calendarEpoch = 0;
   let pendingOptions = null;
   let prevDatePickerType = datePickerType;
+  let prevDisplayFormat = displayFormat;
+  let prevUsesDisplayFormat = !!displayFormat && datePickerType !== "range";
   let calendarUsesFixedPositioning = false;
   /** @type {(ReturnType<typeof rafThrottle> & { cancel: () => void }) | null} */
   let onCalendarReposition = null;
@@ -839,6 +850,12 @@
         if (option === "disable" && disabledDates.length > 0) continue;
         if (option === "enable" && enabledDates.length > 0) continue;
         if (option === "errorHandler") continue;
+        // `displayFormat` owns these two.
+        if (
+          usesDisplayFormat &&
+          (option === "altInput" || option === "altFormat")
+        )
+          continue;
         applyOptionIfChanged(
           option,
           value,
@@ -1102,6 +1119,21 @@
       calendar.calendarContainer.removeAttribute("aria-disabled");
     }
   }
+  // The range plugin writes to two inputs and has no alt input for the second.
+  $: usesDisplayFormat = !!displayFormat && datePickerType !== "range";
+  // flatpickr only creates its `altInput` at init, so turning the feature on
+  // or off needs a new instance. A format change just repaints.
+  $: if (usesDisplayFormat !== prevUsesDisplayFormat) {
+    prevUsesDisplayFormat = usesDisplayFormat;
+    prevDisplayFormat = displayFormat;
+    recreateCalendar();
+  } else if (usesDisplayFormat && displayFormat !== prevDisplayFormat) {
+    prevDisplayFormat = displayFormat;
+    if (calendar) {
+      calendar.set("altFormat", displayFormat);
+      calendar.setDate(calendar.selectedDates, false);
+    }
+  }
   $: if (datePickerType !== prevDatePickerType) {
     prevDatePickerType = datePickerType;
     mode.set(datePickerType);
@@ -1122,6 +1154,7 @@
       ...interactive,
       ...(disabledDates.length > 0 && { disable: disabledDates }),
       ...(enabledDates.length > 0 && { enable: enabledDates }),
+      ...(usesDisplayFormat && { altInput: true, altFormat: displayFormat }),
     })
       .then(() => {})
       .catch((error) => {

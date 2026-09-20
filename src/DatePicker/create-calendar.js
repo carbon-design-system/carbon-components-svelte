@@ -248,6 +248,27 @@ function mirrorInputState(source, target) {
   return observer;
 }
 
+const FORWARDED_EVENTS = ["focus", "blur", "keydown", "keyup", "paste"];
+
+/**
+ * Consumer handlers (`on:focus`, `on:keydown`, ...) and Carbon's own are
+ * bound to the original input, which `altInput` hides. Replay what happens
+ * on the visible input there. The listeners die with the `altInput`.
+ *
+ * @param {HTMLInputElement} source
+ * @param {HTMLInputElement} target
+ */
+function forwardInputEvents(source, target) {
+  for (const type of FORWARDED_EVENTS) {
+    source.addEventListener(type, (event) => {
+      const EventType = /** @type {typeof Event} */ (event.constructor);
+      const replay = new EventType(event.type, event);
+      target.dispatchEvent(replay);
+      if (replay.defaultPrevented) event.preventDefault();
+    });
+  }
+}
+
 /** @type {WeakMap<object, Record<string, Function[]>>} */
 const hooksByInstance = new WeakMap();
 
@@ -315,13 +336,13 @@ export async function createCalendar({ options, base, input, dispatch }) {
       ? monthSelectPlugin({
           shorthand: true,
           dateFormat: options.dateFormat,
-          altFormat: options.dateFormat,
+          altFormat: options.altFormat ?? options.dateFormat,
         })
       : false,
     options.mode === "year" && yearSelectPlugin
       ? yearSelectPlugin({
           dateFormat: options.dateFormat,
-          altFormat: options.dateFormat,
+          altFormat: options.altFormat ?? options.dateFormat,
         })
       : false,
   ].filter(Boolean);
@@ -329,9 +350,21 @@ export async function createCalendar({ options, base, input, dispatch }) {
   /** @type {MutationObserver | undefined} */
   let altInputObserver;
 
-  function disconnectAltInputObserver() {
+  /**
+   * Runs before flatpickr removes the `altInput`, so hand the id back or the
+   * label would point at nothing once the calendar is rebuilt without one.
+   *
+   * @param {any} _s
+   * @param {any} _d
+   * @param {FlatpickrInstance} instance
+   */
+  function disconnectAltInputObserver(_s, _d, instance) {
     altInputObserver?.disconnect();
     altInputObserver = undefined;
+    if (instance?.altInput?.id) {
+      instance.input.id = instance.altInput.id;
+      instance.altInput.removeAttribute("id");
+    }
   }
 
   const errorHandlerBox = { current: options.errorHandler };
@@ -371,6 +404,7 @@ export async function createCalendar({ options, base, input, dispatch }) {
     }
     if (instance.altInput) {
       altInputObserver = mirrorInputState(instance.input, instance.altInput);
+      forwardInputEvents(instance.altInput, instance.input);
     }
     // An `inline` calendar is always visible and never fires `onOpen`.
     if (!options.inline) return;
