@@ -283,6 +283,52 @@ describe.each(testCases)("$name", ({ component }) => {
     expect(screen.queryByRole("treeitem", { name: /Alpha/ })).toBeNull();
   });
 
+  it("keeps a single tab stop when nodes arrives new-but-equal after arrow navigation", async () => {
+    const buildNodes = () => [
+      { id: "a", text: "Alpha" },
+      { id: "b", text: "Beta" },
+      { id: "c", text: "Charlie" },
+    ];
+    const { rerender } = render(TreeViewProps, { nodes: buildNodes() });
+
+    const alpha = screen.getByRole("treeitem", { name: /Alpha/ });
+    alpha.focus();
+    await user.keyboard("{ArrowDown}");
+    await user.keyboard("{ArrowDown}");
+
+    const charlie = screen.getByRole("treeitem", { name: /Charlie/ });
+    expect(charlie).toHaveFocus();
+    expect(charlie).toHaveAttribute("tabindex", "0");
+
+    // New array, same ids/text/shape: a "new but equal" `nodes` update.
+    await rerender({ nodes: buildNodes() });
+
+    const tree = screen.getByRole("tree");
+    expect(tree.querySelectorAll('[tabindex="0"]')).toHaveLength(1);
+    expect(charlie).toHaveAttribute("tabindex", "0");
+  });
+
+  it("does not query the tree for a new tab stop when one is already connected", async () => {
+    const buildNodes = () => [
+      { id: "a", text: "Alpha" },
+      { id: "b", text: "Beta" },
+    ];
+    const { rerender } = render(TreeViewProps, { nodes: buildNodes() });
+
+    const querySelector = vi.spyOn(Element.prototype, "querySelector");
+    querySelector.mockClear();
+
+    // New array, same ids/text/shape, and the first node is already the
+    // (default) tab stop: the redundant re-query/rewrite case.
+    await rerender({ nodes: buildNodes() });
+
+    const treeNodeQueries = querySelector.mock.calls.filter(([selector]) =>
+      String(selector).includes("bx--tree-node"),
+    );
+    querySelector.mockRestore();
+    expect(treeNodeQueries).toHaveLength(0);
+  });
+
   it("moves tabindex=0 along with focus (roving tabindex)", async () => {
     render(component);
 
