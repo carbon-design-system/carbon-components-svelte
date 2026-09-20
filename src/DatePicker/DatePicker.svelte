@@ -210,6 +210,8 @@
   $: sharedFluid.set(isFluid);
   // Readonly styling only applies while invalid/warn don't already override it.
   $: fluidReadonlyOnly = isFluid && $readonlyAny && !$invalidAny && !$warnAny;
+  // Neutral = neither invalid nor warn overrides the default border (readonly may still apply).
+  $: fluidNeutral = isFluid && !$invalidAny && !$warnAny;
   /**
    * @type {import("svelte/store").Writable<number | string>}
    */
@@ -1065,6 +1067,7 @@
 <div
   class:bx--form-item={true}
   class:bx--date-picker--fluid={isFluid}
+  class:bx--date-picker--fluid--neutral={fluidNeutral}
   class:bx--date-picker--fluid--invalid={isFluid && $invalidAny}
   class:bx--date-picker--fluid--warn={isFluid && $warnAny}
   class:bx--date-picker--fluid--readonly={isFluid && $readonlyAny}

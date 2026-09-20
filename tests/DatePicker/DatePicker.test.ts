@@ -2481,5 +2481,54 @@ describe("DatePicker", () => {
         container.querySelector(".bx--date-picker--fluid--readonly-only"),
       ).toBeNull();
     });
+
+    it("sets the neutral class when neither invalid nor warn applies", () => {
+      const { container } = render(DatePicker, {
+        fluid: true,
+        datePickerType: "single",
+      });
+
+      expect(
+        container.querySelector(".bx--date-picker--fluid--neutral"),
+      ).not.toBeNull();
+    });
+
+    it("keeps the neutral class when readonly (readonly alone does not override it)", () => {
+      const { container } = render(DatePicker, {
+        fluid: true,
+        datePickerType: "single",
+        readonly: true,
+      });
+
+      expect(
+        container.querySelector(".bx--date-picker--fluid--neutral"),
+      ).not.toBeNull();
+    });
+
+    it("clears the neutral class when invalid", () => {
+      const { container } = render(DatePicker, {
+        fluid: true,
+        datePickerType: "single",
+        invalid: true,
+        invalidText: "Invalid date",
+      });
+
+      expect(
+        container.querySelector(".bx--date-picker--fluid--neutral"),
+      ).toBeNull();
+    });
+
+    it("clears the neutral class when warn", () => {
+      const { container } = render(DatePicker, {
+        fluid: true,
+        datePickerType: "single",
+        warn: true,
+        warnText: "Warning",
+      });
+
+      expect(
+        container.querySelector(".bx--date-picker--fluid--neutral"),
+      ).toBeNull();
+    });
   });
 });
