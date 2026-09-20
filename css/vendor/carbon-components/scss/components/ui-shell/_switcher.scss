@@ -17,14 +17,6 @@
 /// @access private
 /// @group ui-shell
 @mixin carbon-switcher {
-  .#{$prefix}--switcher {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: $shell-panel-text-01;
-  }
-
   .#{$prefix}--switcher__item {
     width: 100%;
     height: $spacing-07;

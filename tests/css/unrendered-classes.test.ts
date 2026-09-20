@@ -27,7 +27,6 @@ const PUBLIC_UTILITIES = new Set([
 // rules behind one means deleting it here; the set only shrinks. A new
 // entry means the stylesheet grew a selector nothing can match.
 const KNOWN_UNRENDERED = new Set([
-  "bx--switcher",
   "bx--table-toolbar--sm",
   "bx--text-input--warn",
   "bx--toolbar-search-container",
