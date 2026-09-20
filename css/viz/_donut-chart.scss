@@ -1,0 +1,160 @@
+/// DonutChart: parts of a whole as a ring, beside a legend that lists every
+/// slice with its value.
+/// @access private
+/// @group viz
+@mixin viz-donut-chart {
+  .#{$prefix}--viz-donut {
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-donut .#{$prefix}--viz-chart__title {
+    margin-block-end: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--viz-donut__body {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $carbon--spacing-05 $carbon--spacing-07;
+  }
+
+  .#{$prefix}--viz-donut--bottom .#{$prefix}--viz-donut__body {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .#{$prefix}--viz-donut__plot {
+    display: grid;
+    flex: none;
+    inline-size: var(--bx-viz-diameter);
+  }
+
+  .#{$prefix}--viz-donut__svg,
+  .#{$prefix}--viz-donut__center {
+    grid-area: 1 / 1;
+  }
+
+  .#{$prefix}--viz-donut__svg {
+    display: block;
+    max-inline-size: 100%;
+    block-size: auto;
+  }
+
+  [dir="rtl"] .#{$prefix}--viz-donut__svg {
+    transform: scaleX(-1);
+  }
+
+  .#{$prefix}--viz-donut__track {
+    fill: none;
+    stroke: $ui-03;
+  }
+
+  .#{$prefix}--viz-donut__slice {
+    fill: var(--bx-viz-color, #{$interactive-04});
+    transition: opacity $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-donut--selectable .#{$prefix}--viz-donut__slice {
+    cursor: pointer;
+  }
+
+  // Emphasis dims the rest instead of recoloring the active slice.
+  .#{$prefix}--viz-donut--emphasis
+    .#{$prefix}--viz-donut__slice:not(.#{$prefix}--viz-donut__slice--active) {
+    opacity: 0.3;
+  }
+
+  .#{$prefix}--viz-donut__center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    // Clear of the ring on every side.
+    padding: calc(var(--bx-viz-diameter) * 0.22);
+    min-inline-size: 0;
+    pointer-events: none;
+    text-align: center;
+  }
+
+  .#{$prefix}--viz-donut__legend {
+    display: flex;
+    flex: 1 1 to-rem(160px);
+    flex-direction: column;
+    max-inline-size: to-rem(320px);
+    row-gap: $carbon--spacing-01;
+  }
+
+  .#{$prefix}--viz-donut--bottom .#{$prefix}--viz-donut__legend {
+    flex: none;
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--viz-donut__button {
+    display: flex;
+    align-items: center;
+    padding: $carbon--spacing-02;
+    border: 0;
+    appearance: none;
+    background: none;
+    color: $text-secondary;
+    column-gap: $carbon--spacing-03;
+    font: inherit;
+    inline-size: 100%;
+    text-align: start;
+
+    @include type-style("body-short-01");
+  }
+
+  .#{$prefix}--viz-donut--selectable .#{$prefix}--viz-donut__button {
+    cursor: pointer;
+  }
+
+  .#{$prefix}--viz-donut--selectable .#{$prefix}--viz-donut__button:hover {
+    background: $hover-ui;
+  }
+
+  .#{$prefix}--viz-donut__button:focus {
+    outline: 2px solid $focus;
+    outline-offset: -2px;
+  }
+
+  .#{$prefix}--viz-donut__button[aria-pressed="true"] {
+    background: $selected-ui;
+  }
+
+  .#{$prefix}--viz-donut__item--active .#{$prefix}--viz-donut__button {
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-donut__swatch {
+    flex: none;
+    background: var(--bx-viz-color, #{$interactive-04});
+    block-size: to-rem(12px);
+    inline-size: to-rem(12px);
+  }
+
+  .#{$prefix}--viz-donut__value {
+    color: $text-primary;
+    font-variant-numeric: tabular-nums;
+    margin-inline-start: auto;
+    padding-inline-start: $carbon--spacing-05;
+    white-space: nowrap;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-donut__slice {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-donut__slice,
+    .#{$prefix}--viz-donut__swatch {
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("viz-donut-chart") {
+  @include viz-donut-chart;
+}
