@@ -43,6 +43,11 @@ export function deepEqual(a, b, stack = new WeakMap()) {
   }
 
   if (typeof a === "object" && typeof b === "object") {
+    // `Map`, `Set`, DOM nodes, and class instances keep their state outside
+    // own enumerable keys, so walking keys would call two different ones
+    // equal. Reference equality was already ruled out above.
+    if (!isPlainObject(a) || !isPlainObject(b)) return false;
+
     const aVisited = stack.get(a);
 
     if (aVisited?.has(b)) {
@@ -97,4 +102,13 @@ export function deepEqual(a, b, stack = new WeakMap()) {
 
   // Finally, use strict equality for primitives.
   return a === b;
+}
+
+/**
+ * @param {object} value
+ * @returns {boolean}
+ */
+function isPlainObject(value) {
+  const prototype = Object.getPrototypeOf(value);
+  return prototype === Object.prototype || prototype === null;
 }
