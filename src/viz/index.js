@@ -2,6 +2,10 @@
 // Styles ship separately in `carbon-components-svelte/css/viz.css`.
 // May import from core (`../utils`, `../icons`); core must never import from here.
 
+export { default as DeltaIndicator } from "./DeltaIndicator/DeltaIndicator.svelte";
+export { default as FunnelBars } from "./FunnelBars/FunnelBars.svelte";
+export { default as MicroFunnel } from "./MicroFunnel/MicroFunnel.svelte";
+export { default as Sparkline } from "./Sparkline/Sparkline.svelte";
 export { groupBy, toAccessor } from "./utils/accessor.js";
 export { bin } from "./utils/bin.js";
 export {
@@ -19,6 +23,7 @@ export {
   formatPercent,
   resolveFormat,
 } from "./utils/format-compact.js";
+export { getFunnelStats } from "./utils/funnel.js";
 export { bisectNearest, createGridIndex } from "./utils/nearest-point.js";
 export { arcCentroid, pathArc, pieAngles } from "./utils/path-arc.js";
 export { pathArea } from "./utils/path-area.js";

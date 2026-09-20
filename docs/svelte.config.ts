@@ -31,6 +31,13 @@ const componentApiByName = new Set(
   componentApi.components.map((c) => c.moduleName),
 );
 
+/** Components exported from the `/viz` subpath instead of the core barrel. */
+const vizComponentNames = new Set(
+  componentApi.components
+    .filter((c) => c.filePath.startsWith("src/viz/"))
+    .map((c) => c.moduleName),
+);
+
 const ICON_NAME_REGEX = /[A-Z][a-z]*/;
 const NODE_MODULES_REGEX = /node_modules/;
 const PAGES_COMPONENTS_REGEX = /pages\/(components)/;
@@ -164,14 +171,27 @@ function createImportsUncached(source: string) {
   });
 
   const actionImports = [...actions];
-  const ccsImports = [...inlineComponents, ...actionImports];
+  const vizImports = [...inlineComponents].filter((name) =>
+    vizComponentNames.has(name),
+  );
+  const ccsImports = [
+    ...[...inlineComponents].filter((name) => !vizComponentNames.has(name)),
+    ...actionImports,
+  ];
   const iconImports = [...icons];
 
-  if (ccsImports.length === 0 && !usesDocKbd) return "";
+  if (ccsImports.length === 0 && vizImports.length === 0 && !usesDocKbd) {
+    return "";
+  }
 
   const lines: string[] = [];
   if (usesDocKbd) {
     lines.push(DOC_KBD_IMPORT_STMT);
+  }
+  if (vizImports.length > 0) {
+    lines.push(
+      `  import { ${vizImports.join(", ")} } from "carbon-components-svelte/viz";`,
+    );
   }
   if (ccsImports.length > 0) {
     lines.push(

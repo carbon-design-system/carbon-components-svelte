@@ -1,0 +1,173 @@
+---
+components: ["FunnelBars"]
+description: Funnel bars show how a count narrows across ordered stages, such as a signup or checkout flow, with the conversion rate and the drop at each step.
+---
+
+<script>
+  import { Button, Stack } from "carbon-components-svelte";
+  import { DeltaIndicator, FunnelBars } from "carbon-components-svelte/viz";
+
+  const stages = [
+    { id: "visit", label: "Visitors", value: 10000 },
+    { id: "signup", label: "Signup", value: 6000 },
+    { id: "activate", label: "Activated", value: 3000 },
+    { id: "paid", label: "Paid", value: 900 },
+  ];
+
+  const baseline = { visit: 1, signup: 0.55, activate: 0.52, paid: 0.33 };
+
+  let selectedId = "activate";
+  let live = stages;
+
+  function reshuffle() {
+    let previous = 8000 + Math.round(Math.random() * 4000);
+    live = stages.map((stage, i) => {
+      if (i > 0) previous = Math.round(previous * (0.3 + Math.random() * 0.5));
+      return { ...stage, value: previous };
+    });
+  }
+</script>
+
+`FunnelBars` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+Stages render as rows of a table, so labels, bars, and numbers stay aligned at any width and assistive technology reads each stage as a row.
+
+## Basic
+
+Pass `stages` in order and set `label` to name the funnel. Bar length is relative to the largest stage.
+
+<FunnelBars {stages} label="Signup funnel, last 30 days" />
+
+## Rates
+
+Set `rate` to choose which conversion rate to show. `"overall"` is relative to the first stage and `"step"` to the previous one.
+
+### Step
+
+<FunnelBars {stages} label="Signup funnel" rate="step" />
+
+### Both
+
+<FunnelBars {stages} label="Signup funnel" rate="both" />
+
+### None
+
+<FunnelBars {stages} label="Signup funnel" rate="none" />
+
+## Drop-off
+
+### Show what each stage lost
+
+Set `showDrop` to draw the lost portion as a hatched bar with its percentage.
+
+<FunnelBars {stages} label="Signup funnel" rate="step" showDrop />
+
+### Highlight the largest drop
+
+Set `highlight` to `"largest-drop"` to flag the stage that lost the most, or to a stage `id` to flag a specific one. The flag uses an icon as well as color.
+
+<FunnelBars {stages} label="Signup funnel" rate="step" showDrop highlight="largest-drop" />
+
+## Shape
+
+### Centered
+
+Set `align` to `"center"` for the classic funnel silhouette. The bar lengths are unchanged.
+
+<FunnelBars {stages} label="Signup funnel" align="center" showDrop />
+
+### Square root scale
+
+A very small last stage can vanish on a linear scale. Set `scale` to `"sqrt"` to keep it visible. Because bar lengths are then no longer proportional, a "Not to scale" note is always shown.
+
+<FunnelBars {stages} label="Signup funnel" scale="sqrt" />
+
+## Sizes
+
+Set `size` to control the row height.
+
+<Stack gap={7}>
+  <FunnelBars {stages} label="Small funnel" size="sm" />
+  <FunnelBars {stages} label="Medium funnel (default)" />
+  <FunnelBars {stages} label="Large funnel" size="lg" />
+</Stack>
+
+## Color
+
+### Semantic or categorical
+
+Set `color` to a semantic name, a categorical index from 1 to 14, a viz token name, or any CSS color.
+
+<Stack gap={7}>
+  <FunnelBars {stages} label="Neutral funnel" color="neutral" />
+  <FunnelBars {stages} label="Categorical funnel" color={3} />
+</Stack>
+
+### Per stage
+
+Give a stage its own `color` to override the funnel's.
+
+<FunnelBars
+  label="Signup funnel"
+  stages={[
+    { id: "visit", label: "Visitors", value: 10000 },
+    { id: "signup", label: "Signup", value: 6000 },
+    { id: "activate", label: "Activated", value: 3000 },
+    { id: "paid", label: "Paid", value: 900, color: "success" },
+  ]}
+/>
+
+## Formatting
+
+Set `format` to `Intl.NumberFormat` options or a function. Values use compact notation by default.
+
+<FunnelBars {stages} label="Signup funnel" format={{ maximumFractionDigits: 0 }} />
+
+## Selectable
+
+Set `selectable` to make stages interactive and bind `selectedId`. Use the arrow keys to move between stages and Enter or Space to select one. The `select` event fires on user action only.
+
+<FunnelBars
+  {stages}
+  label="Signup funnel"
+  rate="step"
+  selectable
+  bind:selectedId
+  on:select={(e) => console.log("select", e.detail.stage.id)}
+/>
+
+## Slots
+
+Use the `label`, `value`, and `rate` slots to customize a cell. Each receives `stage`, `stats`, and `index`.
+
+<FunnelBars {stages} label="Signup funnel" rate="step">
+  <svelte:fragment slot="rate" let:stage let:stats>
+    {#if stats.stepRate !== null}
+      <DeltaIndicator value={stats.stepRate - baseline[stage.id]} format="percent" size="sm" label="vs target" />
+    {/if}
+  </svelte:fragment>
+</FunnelBars>
+
+## Live data
+
+Reassign `stages` to update. Rows are keyed by `id`, so bars animate to their new length instead of being recreated.
+
+<Button size="small" kind="tertiary" on:click={reshuffle}>Randomize</Button>
+
+<FunnelBars stages={live} label="Live funnel" rate="step" showDrop highlight="largest-drop" />
+
+## Links
+
+Give a stage an `href` to render its label as a link.
+
+<FunnelBars
+  label="Signup funnel"
+  stages={[
+    { id: "visit", label: "Visitors", value: 10000, href: "#visitors" },
+    { id: "signup", label: "Signup", value: 6000, href: "#signup" },
+  ]}
+/>
+
+## Accessibility
+
+The funnel is a table. The caption carries `label` and the overall conversion, each stage is a row with a row header, and the bar column is hidden from assistive technology because the value and rate columns already say what it shows. Column headers are visually hidden. Set `headerLabels` to localize them. Leave `label` empty only when nearby text already conveys the same information: the whole funnel is then hidden from assistive technology.

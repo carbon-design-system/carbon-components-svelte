@@ -1,0 +1,54 @@
+/// Sparkline (absent from v10): a dependency-free inline SVG line or bar
+/// chart sized to sit inside a stat tile.
+/// @access private
+/// @group viz
+@mixin viz-sparkline {
+  .#{$prefix}--sparkline {
+    display: inline-block;
+    overflow: visible;
+    color: var(--bx-viz-color, #{$interactive-04});
+    vertical-align: middle;
+  }
+
+  .#{$prefix}--sparkline__line {
+    fill: none;
+    stroke: currentColor;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+  .#{$prefix}--sparkline__area {
+    fill: currentColor;
+    fill-opacity: 0.1;
+  }
+
+  .#{$prefix}--sparkline__bar {
+    fill: currentColor;
+  }
+
+  // Modifiers set the property rather than `color`, so an inline
+  // `--bx-viz-color` (categorical or custom colors) needs no extra specificity.
+  .#{$prefix}--sparkline--neutral {
+    --bx-viz-color: #{$icon-secondary};
+  }
+
+  .#{$prefix}--sparkline--success {
+    --bx-viz-color: #{$support-success};
+  }
+
+  .#{$prefix}--sparkline--error {
+    --bx-viz-color: #{$support-error};
+  }
+
+  .#{$prefix}--sparkline--warning {
+    --bx-viz-color: #{$support-warning};
+  }
+
+  .#{$prefix}--sparkline--info {
+    --bx-viz-color: #{$support-info};
+  }
+}
+
+@include exports("viz-sparkline") {
+  @include viz-sparkline;
+}
