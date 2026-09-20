@@ -25,7 +25,7 @@ description: Bar chart compares values across categories, grouped side by side, 
   }));
 </script>
 
-`BarChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
+`BarChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
 
 It is a ready-made composition of the [Chart](/components/Chart) primitives. Bar length encodes the value, so the y axis always includes zero.
 
