@@ -32,7 +32,7 @@
   .#{$prefix}--side-nav__overlay--mobile.#{$prefix}--side-nav__overlay-active {
     position: fixed;
     inset: 0;
-    z-index: 6000;
+    z-index: z('overlay');
     display: block;
     block-size: 100vh;
     inline-size: 100vw;
