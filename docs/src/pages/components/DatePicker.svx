@@ -120,7 +120,7 @@ Set `disabledDates` to restrict which individual dates are selectable, in additi
 
 <FileSource src="/framed/DatePicker/DatePickerDisabledDates" />
 
-`disabledDates` is reactive: reassigning the array updates an open calendar, so most rule changes no longer need imperative control. For the cases that still do, call `calendar.set("disable", ...)` via `bind:calendar`—see [Programmatic access](#programmatic-access).
+`disabledDates` is reactive: reassigning the array updates an open calendar, so most rule changes no longer need imperative control. Define the array in the script rather than inline in the markup: an inline array with a predicate function is a new value on every render, and each one redraws the calendar. For the cases that still do, call `calendar.set("disable", ...)` via `bind:calendar`—see [Programmatic access](#programmatic-access).
 
 ### Enable only specific dates
 
