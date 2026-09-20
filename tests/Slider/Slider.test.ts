@@ -108,6 +108,13 @@ describe("Slider", () => {
     expect(slider).toHaveAttribute("aria-valuenow", "0");
   });
 
+  it("should show the numeric min/max as range labels by default", () => {
+    render(Slider);
+
+    expect(screen.getByText("0")).toBeInTheDocument();
+    expect(screen.getByText("100")).toBeInTheDocument();
+  });
+
   it("should handle custom range and step", () => {
     render(Slider, {
       props: {
