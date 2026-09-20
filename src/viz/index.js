@@ -48,6 +48,7 @@ export {
   resolveFormat,
 } from "./utils/format-compact.js";
 export { getFunnelStats } from "./utils/funnel.js";
+export { getHistogramGeometry } from "./utils/histogram.js";
 export { bisectNearest, createGridIndex } from "./utils/nearest-point.js";
 export { arcCentroid, pathArc, pieAngles } from "./utils/path-arc.js";
 export { pathArea } from "./utils/path-area.js";
