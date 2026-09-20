@@ -131,6 +131,13 @@
   export let emitUpdate = false;
 
   /**
+   * Share hover with every other chart that has the same id, so a dashboard
+   * shows one crosshair across all of them. The charts should share an x axis.
+   * @type {string}
+   */
+  export let syncId = undefined;
+
+  /**
    * Obtain a reference to the figure element.
    * @bindable readonly
    * @type {null | HTMLElement}
@@ -150,6 +157,7 @@
     resolveDomain,
     sameDomain,
   } from "./model.js";
+  import { joinSync } from "./sync.js";
 
   const dispatch = createEventDispatcher();
 
@@ -200,11 +208,15 @@
     size.set({ width: resolved, height: nextHeight });
   }
 
+  /** @type {ReturnType<typeof joinSync> | null} */
+  let sync = null;
+
   /** @param {boolean} [fromSync] A synced chart must not echo back. */
   function clearHover(fromSync = false) {
     if (get(hover) === null) return;
     hover.set(null);
     dispatch("hover", null);
+    if (!fromSync) sync?.publish(null);
   }
 
   setContext(CHART_CONTEXT, {
@@ -362,6 +374,22 @@
     });
   });
 
+  /** @param {string | undefined} id */
+  function joinChannel(id) {
+    sync?.leave();
+    sync = id
+      ? joinSync(id, (x) => (x === null ? clearHover(true) : hoverAt(x, true)))
+      : null;
+  }
+
+  // Joining subscribes to other charts, which only makes sense in a browser.
+  let mounted = false;
+  onMount(() => {
+    mounted = true;
+    return () => sync?.leave();
+  });
+  $: if (mounted) joinChannel(syncId);
+
   // Pointer and keyboard share one path, so both get the same ruler,
   // tooltip, and announcement.
   let focusIndex = -1;
@@ -407,6 +435,7 @@
       });
     }
     hover.set({ x: nearest, px: current.x.map(nearest), points });
+    if (!fromSync) sync?.publish(nearest);
     dispatch("hover", {
       x: nearest,
       points: points.map(({ datum, series: key, index, y: value }) => ({
