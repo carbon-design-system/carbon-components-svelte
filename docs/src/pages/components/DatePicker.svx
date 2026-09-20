@@ -58,6 +58,12 @@ Set `datePickerType` to `"year"` to select a year instead of a day. The calendar
 
 <FileSource src="/framed/DatePicker/DatePickerYear" />
 
+### Inline calendar
+
+Set `inline` to `true` to render the calendar permanently below the input instead of in a popup. The input still shows the selected date. The calendar does not dispatch `open` or `close`, ignores `portalMenu`, and stops accepting selection or navigation while the input is read-only or disabled.
+
+<FileSource src="/framed/DatePicker/DatePickerInline" />
+
 ## Programmatic control
 
 Drive the calendar from outside the component—set values, select many dates at once, or read the underlying Flatpickr instance.
@@ -155,12 +161,6 @@ By default, the calendar appears instantly with no animation. Pass `flatpickrPro
 By default, the calendar closes when a date is selected. Pass `closeOnSelect: false` via `flatpickrProps` to keep it open.
 
 <FileSource src="/framed/DatePicker/DatePickerCloseOnSelect" />
-
-### Inline calendar
-
-Pass `inline: true` via `flatpickrProps` to render the calendar permanently below the input instead of in a popup. The input still shows the selected date. While the input is read-only or disabled, the calendar stays visible but does not accept selection or navigation.
-
-<FileSource src="/framed/DatePicker/DatePickerInline" />
 
 ### Week numbers
 
