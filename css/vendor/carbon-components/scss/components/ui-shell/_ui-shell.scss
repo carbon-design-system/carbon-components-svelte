@@ -96,7 +96,7 @@
   .#{$prefix}--header__menu-item--icon {
     display: flex;
     align-items: center;
-    gap: $spacing-03;
+    gap: $carbon--spacing-03;
   }
 
   // Same shape as header's `.bx--header__menu-item:hover > svg`; wins by order.
@@ -112,7 +112,7 @@
   .#{$prefix}--header__action--text {
     display: inline-flex;
     width: auto;
-    padding: 0 $spacing-05 $spacing-01;
+    padding: 0 $carbon--spacing-05 $carbon--spacing-01;
   }
 
   .#{$prefix}--header__action-text {

@@ -139,9 +139,9 @@
 /// @group components
 @mixin data-table-sticky-column-menu {
   .#{$prefix}--data-table--sticky-header .#{$prefix}--table-column-menu { // ccs: flatten
-    width: $spacing-09;
-    min-width: $spacing-09;
-    max-width: $spacing-09;
+    width: $carbon--spacing-09;
+    min-width: $carbon--spacing-09;
+    max-width: $carbon--spacing-09;
     align-items: center;
     padding: 0;
   }
@@ -239,7 +239,7 @@
   }
 
   .#{$prefix}--data-table--tall tfoot td {
-    padding-top: $spacing-05;
+    padding-top: $carbon--spacing-05;
     vertical-align: top;
   }
 
@@ -316,7 +316,7 @@
     .#{$prefix}--table-column--align-end
     .#{$prefix}--table-sort { // ccs: flatten
     flex-direction: row-reverse;
-    padding-right: $spacing-05;
+    padding-right: $carbon--spacing-05;
     padding-left: 0;
   }
 }

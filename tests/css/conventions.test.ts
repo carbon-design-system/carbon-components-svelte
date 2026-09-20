@@ -412,13 +412,6 @@ const PATCH_RULES: Record<string, (lines: string[]) => number[]> = {
 const KNOWN_PATCH_VIOLATIONS: Record<string, number> = {
   "hex color: components/checkbox/_checkbox.scss": 1,
   "bare rem(): components/text-area/_text-area.scss": 1,
-  "$spacing-* alias: components/code-snippet/_code-snippet.scss": 2,
-  "$spacing-* alias: components/data-table/_data-table-action.scss": 20,
-  "$spacing-* alias: components/data-table/_data-table.scss": 5,
-  "$spacing-* alias: components/menu/_menu.scss": 1,
-  "$spacing-* alias: components/pagination/_pagination.scss": 2,
-  "$spacing-* alias: components/slider/_slider.scss": 2,
-  "$spacing-* alias: components/ui-shell/_ui-shell.scss": 2,
   "var() with literal fallback: components/ui-shell/_ui-shell.scss": 1,
   "repeated class: components/tabs/_tabs.scss": 3,
   "literal transition: components/data-table/_data-table-action.scss": 1,

@@ -263,7 +263,7 @@
     fill: $support-error;
     // top/transform used to center invalid icon in IE11
     top: 50%;
-    right: $spacing-05;
+    right: $carbon--spacing-05;
     transform: translateY(-50%);
   }
 
@@ -502,7 +502,7 @@
   }
 
   .#{$prefix}--slider--with-mark-labels {
-    padding-bottom: $spacing-07;
+    padding-bottom: $carbon--spacing-07;
   }
 
   .#{$prefix}--slider--disabled .#{$prefix}--slider__mark {
