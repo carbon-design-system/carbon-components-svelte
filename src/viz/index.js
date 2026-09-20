@@ -5,6 +5,12 @@
 export { groupBy, toAccessor } from "./utils/accessor.js";
 export { bin } from "./utils/bin.js";
 export { extent, extentBy } from "./utils/extent.js";
+export {
+  formatCompact,
+  formatDuration,
+  formatPercent,
+  resolveFormat,
+} from "./utils/format-compact.js";
 export { arcCentroid, pathArc, pieAngles } from "./utils/path-arc.js";
 export { pathArea } from "./utils/path-area.js";
 export { pathLine } from "./utils/path-line.js";
