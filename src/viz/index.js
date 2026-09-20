@@ -26,6 +26,7 @@ export { default as Sparkline } from "./Sparkline/Sparkline.svelte";
 export { default as StackedBar } from "./StackedBar/StackedBar.svelte";
 export { groupBy, toAccessor } from "./utils/accessor.js";
 export { bin } from "./utils/bin.js";
+export { getBulletGeometry } from "./utils/bullet.js";
 export {
   contrastTextColor,
   divergingColor,
