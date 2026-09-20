@@ -10,6 +10,7 @@
     LineChart,
     MicroFunnel,
     MicroHistogram,
+    RadialProgress,
     RangeIndicator,
     RankBars,
     ShareOfTotal,
@@ -78,6 +79,15 @@
     showRange
     label="Latency now"
   />
+
+  <p>
+    <RadialProgress
+      value={86}
+      thresholds={{ warning: 80, error: 95 }}
+      arc="three-quarter"
+      label="Disk usage"
+    />
+  </p>
 
   <p><HeatStrip {values} label="Requests by hour" /></p>
 
