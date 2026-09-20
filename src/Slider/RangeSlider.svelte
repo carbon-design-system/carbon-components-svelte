@@ -132,6 +132,12 @@
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { dismiss } from "../utils/dismiss.js";
   import { resolveSliderMarks } from "../utils/resolve-slider-marks.js";
+  import {
+    formatRangeLabel as formatSliderRangeLabel,
+    getClientX,
+    getValueText as getSliderValueText,
+    valueFromTrackPosition,
+  } from "../utils/slider-value.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   /** @typedef {{ value: number; valueUpper: number }} RangeSliderChangeDetail */
@@ -161,20 +167,12 @@
 
   /** @type {(label: string, numericValue: number) => string | number} */
   function formatRangeLabel(label, numericValue) {
-    if (label) return label;
-    if (formatValue) return formatValue(numericValue);
-    return label || numericValue;
+    return formatSliderRangeLabel(label, numericValue, formatValue);
   }
 
   /** @type {(numericValue: number) => string | undefined} */
   function getValueText(numericValue) {
-    return formatValue ? formatValue(numericValue) : undefined;
-  }
-
-  /** @type {(e: PointerLikeEvent) => number | null} */
-  function getClientX(event) {
-    if ("touches" in event) return event.touches[0]?.clientX ?? null;
-    return event.clientX;
+    return getSliderValueText(numericValue, formatValue);
   }
 
   /** @type {(e: PointerLikeEvent) => ActiveHandle} */
@@ -253,18 +251,17 @@
   function calcValue(event) {
     if (disabled || readonly || !event || !trackRef) return;
 
-    const offsetX = getClientX(event);
-    if (offsetX == null) return;
+    const clientX = getClientX(event);
+    if (clientX == null) return;
     const { left, width } = trackRef.getBoundingClientRect();
-    let nextValue =
-      min +
-      Math.round(((max - min) * ((offsetX - left) / width)) / step) * step;
-
-    if (nextValue <= min) {
-      nextValue = min;
-    } else if (nextValue >= max) {
-      nextValue = max;
-    }
+    let nextValue = valueFromTrackPosition({
+      clientX,
+      left,
+      width,
+      min,
+      max,
+      step,
+    });
 
     if (activeHandle === "lower") {
       if (nextValue > valueUpper) nextValue = valueUpper;

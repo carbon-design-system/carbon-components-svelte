@@ -115,6 +115,11 @@
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { dismiss } from "../utils/dismiss.js";
   import { resolveSliderMarks } from "../utils/resolve-slider-marks.js";
+  import {
+    formatRangeLabel as formatSliderRangeLabel,
+    getValueText as getSliderValueText,
+    valueFromTrackPosition,
+  } from "../utils/slider-value.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -127,14 +132,12 @@
 
   /** @type {(label: string, numericValue: number) => string | number} */
   function formatRangeLabel(label, numericValue) {
-    if (label) return label;
-    if (formatValue) return formatValue(numericValue);
-    return label || numericValue;
+    return formatSliderRangeLabel(label, numericValue, formatValue);
   }
 
   /** @type {(numericValue: number) => string | undefined} */
   function getValueText(numericValue) {
-    return formatValue ? formatValue(numericValue) : undefined;
+    return getSliderValueText(numericValue, formatValue);
   }
 
   function startInteraction(event) {
@@ -170,19 +173,9 @@
   function calcValue(event) {
     if (disabled || readonly || !event) return;
 
-    const offsetX = event.touches ? event.touches[0].clientX : event.clientX;
+    const clientX = event.touches ? event.touches[0].clientX : event.clientX;
     const { left, width } = trackRef.getBoundingClientRect();
-    let nextValue =
-      min +
-      Math.round(((max - min) * ((offsetX - left) / width)) / step) * step;
-
-    if (nextValue <= min) {
-      nextValue = min;
-    } else if (nextValue >= max) {
-      nextValue = max;
-    }
-
-    value = nextValue;
+    value = valueFromTrackPosition({ clientX, left, width, min, max, step });
     dispatch("input", value);
   }
 
