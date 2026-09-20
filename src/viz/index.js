@@ -10,3 +10,5 @@ export {
   VIZ_SEQUENTIAL_STEPS,
   vizColor,
 } from "./utils/tokens.js";
+export { extent, extentBy } from "./utils/extent.js";
+export { niceDomain, tickStep, ticks } from "./utils/ticks.js";
