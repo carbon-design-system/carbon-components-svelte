@@ -16,6 +16,7 @@
    * @slot {{}} toolbar
    * @slot {{}} tooltip
    * @slot {{}} legend
+   * @slot {{}} table
    */
 
   /**
@@ -127,6 +128,20 @@
    */
   export let locale = undefined;
 
+  /**
+   * Specify whether to show the chart or its data as a table.
+   * The table is the text alternative: every value, reachable without a pointer.
+   * @type {"chart" | "table"}
+   */
+  export let view = "chart";
+
+  /**
+   * Specify the header of the x column in the data table.
+   * Defaults to the name of the `x` field, or to a word for the kind of axis.
+   * @type {string}
+   */
+  export let xHeader = undefined;
+
   /** Set to `true` to dispatch `update` after the data or its domain changes */
   export let emitUpdate = false;
 
@@ -150,6 +165,7 @@
   import { toAccessor } from "../utils/accessor.js";
   import { bisectNearest } from "../utils/nearest-point.js";
   import { observeResize } from "../utils/resize-pool.js";
+  import ChartDataTable from "./ChartDataTable.svelte";
   import { CHART_CONTEXT } from "./context.js";
   import {
     buildGroups,
@@ -180,6 +196,9 @@
   const scaleOptions = writable({});
   const hover = writable(/** @type {any} */ (null));
   const hiddenStore = writable(hidden);
+  const viewStore = writable(view);
+  const titleStore = writable(title);
+  const xHeaderStore = writable("");
   const included = writable(/** @type {number[]} */ ([]));
   // How many mounted marks need one slot per x, as bars do.
   const bandRequests = writable(0);
@@ -225,6 +244,13 @@
     size,
     hover,
     hidden: hiddenStore,
+    view: viewStore,
+    title: titleStore,
+    xHeader: xHeaderStore,
+    /** @param {"chart" | "table"} next */
+    setView(next) {
+      view = next;
+    },
     /** @param {number} value */
     includeY(value) {
       included.update((list) => [...list, value]);
@@ -286,6 +312,17 @@
   $: yAccessor = toAccessor(y);
   $: seriesAccessor = series ? toAccessor(series) : defaultSeries;
   $: hiddenStore.set(hidden);
+  $: viewStore.set(view);
+  $: titleStore.set(title);
+  // A column header may not be empty, so there is always a fallback.
+  $: xHeaderStore.set(
+    xHeader ??
+      (typeof x === "string"
+        ? x.charAt(0).toUpperCase() + x.slice(1)
+        : { time: "Date", category: "Category", linear: "Value" }[
+            $scales.kind
+          ]),
+  );
   $: scaleOptions.set({
     locale,
     margin,
@@ -550,11 +587,18 @@
 </script>
 
 <figure bind:this={ref} class:bx--viz-chart={true} {...$$restProps}>
-  {#if title}
-    <figcaption class:bx--viz-chart__title={true}>{title}</figcaption>
-  {/if}
-  <slot name="toolbar" />
-  <div class:bx--viz-chart__plot={true} style:height="{$size.height}px">
+  <div class:bx--viz-chart__header={true}>
+    {#if title}
+      <figcaption class:bx--viz-chart__title={true}>{title}</figcaption>
+    {/if}
+    <slot name="toolbar" />
+  </div>
+  <!-- The plot stays mounted behind the table, so switching back is instant. -->
+  <div
+    class:bx--viz-chart__plot={true}
+    style:height="{$size.height}px"
+    hidden={view === "table"}
+  >
     <!-- A chart is one tab stop. Arrow keys move between data points. -->
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
     <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
@@ -577,6 +621,11 @@
     </svg>
     <slot name="tooltip" />
   </div>
+  {#if view === "table"}
+    <div class:bx--viz-chart__table={true} style:max-height="{$size.height}px">
+      <slot name="table"><ChartDataTable /></slot>
+    </div>
+  {/if}
   <div class:bx--visually-hidden={true} aria-live="polite">{announcement}</div>
   <slot name="legend" />
 </figure>

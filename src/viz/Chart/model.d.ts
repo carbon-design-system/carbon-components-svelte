@@ -98,6 +98,10 @@ export type ChartScales = {
    * `undefined` on a time or linear axis.
    */
   step: number | undefined;
+  /** How the x values in each group should be read. */
+  kind: ChartXKind;
+  /** Labels for a categorical x, indexed by a group's `xs`. */
+  categories: ReadonlyArray<string>;
   margin: ChartMargins;
   plot: { x0: number; x1: number; y0: number; y1: number };
 };

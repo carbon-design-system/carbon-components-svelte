@@ -10,10 +10,49 @@
     color: $text-primary;
   }
 
-  .#{$prefix}--viz-chart__title {
+  // Title on one side, toolbar on the other.
+  .#{$prefix}--viz-chart__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $carbon--spacing-05;
     margin-block-end: $carbon--spacing-03;
+    min-block-size: to-rem(32px);
+  }
 
+  .#{$prefix}--viz-chart__header:empty {
+    display: none;
+  }
+
+  .#{$prefix}--viz-chart__title {
     @include type-style("productive-heading-01");
+  }
+
+  .#{$prefix}--viz-chart-toolbar {
+    display: flex;
+    flex-shrink: 0;
+    margin-inline-start: auto;
+  }
+
+  .#{$prefix}--viz-chart__table {
+    overflow: auto;
+  }
+
+  .#{$prefix}--viz-data-table:focus {
+    outline: 2px solid $focus;
+    outline-offset: -2px;
+  }
+
+  // Numbers line up on the right, in tabular figures.
+  .#{$prefix}--viz-data-table .#{$prefix}--viz-data-table__number {
+    font-variant-numeric: tabular-nums;
+    text-align: end;
+  }
+
+  .#{$prefix}--viz-data-table th[scope="row"] {
+    font-weight: inherit;
+    text-align: start;
+    white-space: nowrap;
   }
 
   .#{$prefix}--viz-chart__plot {

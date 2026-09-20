@@ -39,6 +39,14 @@ export type ChartContext<T> = {
   size: Readable<ChartSize>;
   hover: Readable<ChartHover<T>>;
   hidden: Readable<ReadonlyArray<ChartSeriesKey>>;
+  /** Whether the chart or its data table is showing. */
+  view: Readable<"chart" | "table">;
+  /** The chart's title, which names the data table too. */
+  title: Readable<string>;
+  /** Header of the x column in the data table. Never empty. */
+  xHeader: Readable<string>;
+  /** Switch between the chart and its data table. */
+  setView(view: "chart" | "table"): void;
   /** Keep a y value inside the domain. Returns a function that releases it. */
   includeY(value: number): () => void;
   /**

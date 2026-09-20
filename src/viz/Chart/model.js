@@ -365,6 +365,8 @@ export function buildScales(domain, size, options = {}) {
     yFormat,
     xLabel,
     step,
+    kind: domain.kind,
+    categories: domain.categories,
     margin: { top, right, bottom, left },
     plot: { x0, x1, y0: top, y1: size.height - bottom },
   };
