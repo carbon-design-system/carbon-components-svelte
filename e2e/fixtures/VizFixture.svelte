@@ -1,5 +1,6 @@
 <script>
   import {
+    BarChart,
     DeltaIndicator,
     FunnelBars,
     LineChart,
@@ -64,6 +65,15 @@
     data-testid="selectable-funnel"
   />
   <output data-testid="selected">{selectedId}</output>
+
+  <BarChart
+    data={revenue.filter((row) => row.date.getMonth() < 4)}
+    x="date"
+    y="revenue"
+    series="region"
+    title="Revenue by month"
+    mode="stacked"
+  />
 
   <LineChart
     data={revenue}
