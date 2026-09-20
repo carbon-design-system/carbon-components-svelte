@@ -46,10 +46,10 @@
   }
 
   .#{$prefix}--date-picker.#{$prefix}--date-picker--simple
-    .#{$prefix}--date-picker__input,
-  .#{$prefix}--date-picker.#{$prefix}--date-picker--simple .#{$prefix}--label {
+    .#{$prefix}--date-picker__input {
     width: to-rem(120px);
-  }
+  } // ccs: dropped `.bx--label` from this selector so a label longer than
+  // the 120px input overflows onto its own width instead of wrapping inside it
 
   .#{$prefix}--date-picker.#{$prefix}--date-picker--simple
     .#{$prefix}--date-picker-input__wrapper--invalid,
