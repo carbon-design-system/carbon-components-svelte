@@ -44,10 +44,17 @@
    */
   export let view = "chart";
 
-  /** Specify the x axis title */
+  /**
+   * Specify the orientation. `"horizontal"` lists the categories down the
+   * left side, which suits long labels and ranked lists.
+   * @type {"vertical" | "horizontal"}
+   */
+  export let orientation = "vertical";
+
+  /** Specify the title of the x (category) axis */
   export let xTitle = "";
 
-  /** Specify the y axis title */
+  /** Specify the title of the y (value) axis */
   export let yTitle = "";
 
   /**
@@ -92,6 +99,7 @@
   bind:ref
   {...$$restProps}
   {...normalized}
+  {orientation}
   zero
   on:select
   on:hover
@@ -101,8 +109,14 @@
   {#if grid}
     <ChartGrid />
   {/if}
-  <ChartAxis position="bottom" title={xTitle} />
-  <ChartAxis position="left" title={yTitle} />
+  <ChartAxis
+    position="bottom"
+    title={orientation === "horizontal" ? yTitle : xTitle}
+  />
+  <ChartAxis
+    position="left"
+    title={orientation === "horizontal" ? xTitle : yTitle}
+  />
   <ChartBars {mode} {padding} {maxBarWidth} />
   <slot />
   <svelte:fragment slot="toolbar">

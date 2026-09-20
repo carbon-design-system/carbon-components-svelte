@@ -102,6 +102,46 @@ describe("BarChart", () => {
     expect(geometry.calls).toBe(built);
   });
 
+  it("lists categories down the left and values along the bottom when horizontal", async () => {
+    render(BarChart, { orientation: "horizontal" });
+
+    expect(labels("left")).toEqual(["Q1", "Q2", "Q3"]);
+    expect(labels("bottom")[0]).toBe("0");
+    const titles = (side: string) =>
+      document.querySelector(`.bx--viz-axis--${side} .bx--viz-axis__title`)
+        ?.textContent;
+    expect(titles("left")).toBe("Quarter");
+    expect(titles("bottom")).toBe("Revenue");
+
+    // Bars are wider than tall, and a larger value is a longer bar.
+    const [q1, q2] = bars().map((bar) => ({
+      width: Number(bar.getAttribute("width")),
+      height: Number(bar.getAttribute("height")),
+    }));
+    expect(q1.width).toBeGreaterThan(q1.height);
+    expect(q2.width).toBeCloseTo(q1.width * 2);
+
+    // Down moves along the categories, right across the series.
+    const onselect = vi.fn();
+    render(BarChart, { orientation: "horizontal", onselect });
+    const horizontal = screen.getAllByRole("application")[1];
+    horizontal.focus();
+    await user.keyboard("{ArrowDown}{ArrowDown}{ArrowRight}{Enter}");
+    expect(onselect).toHaveBeenCalledWith(
+      expect.objectContaining({ series: "b", index: 1 }),
+    );
+    // The tooltip sits over or under the row instead of beside a ruler.
+    const tooltip = horizontal.parentElement?.querySelector(
+      ".bx--viz-chart-tooltip",
+    );
+    expect(tooltip).toHaveTextContent("Q2");
+    expect(tooltip).not.toHaveClass("bx--viz-chart-tooltip--flipped");
+    const band = horizontal.querySelector(".bx--viz-bars__band");
+    expect(Number(band?.getAttribute("width"))).toBeGreaterThan(
+      Number(band?.getAttribute("height")),
+    );
+  });
+
   it("selects the focused datum", async () => {
     const onselect = vi.fn();
     render(BarChart, { onselect });

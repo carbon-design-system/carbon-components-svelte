@@ -12,6 +12,7 @@
     { quarter: "Q3", product: "b", revenue: 50 },
   ];
   export let mode: "grouped" | "stacked" | "normalized" = "grouped";
+  export let orientation: "vertical" | "horizontal" = "vertical";
   export let hidden: ReadonlyArray<string | number> = [];
   export let onselect: (detail: unknown) => void = () => {};
 </script>
@@ -25,6 +26,9 @@
   width={640}
   locale="en-US"
   {mode}
+  {orientation}
+  xTitle="Quarter"
+  yTitle="Revenue"
   bind:hidden
   on:select={(e) => onselect(e.detail)}
 />
