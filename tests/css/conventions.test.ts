@@ -440,10 +440,12 @@ const KNOWN_PATCH_VIOLATIONS: Record<string, number> = {
   "literal transition: components/data-table/_data-table-action.scss": 1,
   "literal transition: components/ui-shell/_ui-shell.scss": 1,
   // What is left competes with a base hover rule the vendored tree leaves
-  // unguarded (readonly/disabled resets, Tabs, the shell header, link,
+  // unguarded (readonly/disabled resets, the shell header, link,
   // copy-button), or shares its declarations with `:active`/`:focus`/a
   // selected class. Guarding only the patch half would let the base hover
-  // through on touch, so these move when the base rule does.
+  // through on touch, so these move when the base rule does. Tabs is done:
+  // both its base mixin and every patch mixin below it guard `:hover`
+  // together (components/tabs/_tabs.scss).
   "unguarded :hover: components/content-switcher/_content-switcher.scss": 1,
   "unguarded :hover: components/copy-button/_copy-button.scss": 1,
   "unguarded :hover: components/data-table/_data-table-action.scss": 1,
@@ -454,7 +456,6 @@ const KNOWN_PATCH_VIOLATIONS: Record<string, number> = {
   "unguarded :hover: components/select/_select.scss": 3,
   "unguarded :hover: components/slider/_slider.scss": 2,
   "unguarded :hover: components/structured-list/_structured-list.scss": 2,
-  "unguarded :hover: components/tabs/_tabs.scss": 10,
   "unguarded :hover: components/time-picker/_time-picker.scss": 1,
   "unguarded :hover: components/ui-shell/_ui-shell.scss": 4,
 };
