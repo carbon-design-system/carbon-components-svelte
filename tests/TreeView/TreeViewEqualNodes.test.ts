@@ -3,12 +3,14 @@ import Add from "carbon-icons-svelte/lib/Add.svelte";
 import Analytics from "carbon-icons-svelte/lib/Analytics.svelte";
 import { tick } from "svelte";
 import type * as TreeCheckboxStateModule from "../../src/utils/tree-checkbox-state.js";
+import type * as TreeFingerprintModule from "../../src/utils/tree-fingerprint.js";
 import type * as TreeVirtualIndexModule from "../../src/utils/tree-virtual-index.js";
 import { isSvelte3 } from "../utils/svelte-version";
 import TreeViewEqualNodes from "./TreeView.equalNodes.test.svelte";
 
 const resolveCheckboxStateCalls: unknown[][] = [];
 const createTreeVirtualIndexCalls: unknown[][] = [];
+const fingerprintTreeCalls: unknown[][] = [];
 
 // Wrap (not replace) the real implementations so checkbox/virtualize
 // behavior stays correct; only count calls, matching the
@@ -39,6 +41,24 @@ vi.mock("../../src/utils/tree-virtual-index.js", async (importOriginal) => {
   };
 });
 
+// `fingerprintTree` rebuilds the same-reference-mutation snapshot — the
+// expensive half of the `stableNodes === nodes` guard (see TreeView.svelte).
+// It's only called when the tree is accepted as genuinely changed, so its
+// call count is the "did this redo the work" signal for that guard, the
+// same role `resolveCheckboxStateCalls` / `createTreeVirtualIndexCalls`
+// play above. `matchesFingerprint` (the cheap check) is deliberately not
+// spied on: it runs on every same-reference hit regardless of outcome.
+vi.mock("../../src/utils/tree-fingerprint.js", async (importOriginal) => {
+  const mod = await importOriginal<typeof TreeFingerprintModule>();
+  return {
+    ...mod,
+    fingerprintTree: (...args: Parameters<typeof mod.fingerprintTree>) => {
+      fingerprintTreeCalls.push(args);
+      return mod.fingerprintTree(...args);
+    },
+  };
+});
+
 function observeMutations(target: Node) {
   const records: MutationRecord[] = [];
   const observer = new MutationObserver((list) => records.push(...list));
@@ -55,6 +75,7 @@ describe("TreeView new-but-equal `nodes`", () => {
   beforeEach(() => {
     resolveCheckboxStateCalls.length = 0;
     createTreeVirtualIndexCalls.length = 0;
+    fingerprintTreeCalls.length = 0;
   });
 
   it("produces no DOM mutations for a new-but-equal nodes array", async () => {
@@ -261,5 +282,96 @@ describe("TreeView new-but-equal `nodes`", () => {
     await tick();
 
     expect(createTreeVirtualIndexCalls.length).toBeGreaterThan(0);
+  });
+});
+
+describe("TreeView same-reference `nodes` (nodes === stableNodes)", () => {
+  beforeEach(() => {
+    resolveCheckboxStateCalls.length = 0;
+    createTreeVirtualIndexCalls.length = 0;
+    fingerprintTreeCalls.length = 0;
+  });
+
+  it("does not rebuild the snapshot when the SAME nodes reference is reassigned unchanged", async () => {
+    const nodesArr = [
+      { id: "a", text: "Alpha" },
+      { id: "b", text: "Beta" },
+    ];
+    const { rerender } = render(TreeViewEqualNodes, { nodes: nodesArr });
+    await tick();
+    fingerprintTreeCalls.length = 0;
+
+    // Same top-level array reference, nothing mutated: the wrapper/`$:`
+    // idiom this guard targets.
+    await rerender({ nodes: nodesArr });
+    await tick();
+    await rerender({ nodes: nodesArr });
+    await tick();
+
+    expect(fingerprintTreeCalls).toHaveLength(0);
+  });
+
+  it("still rebuilds the snapshot after `node.nodes = children; nodes = nodes` (lazy load)", async () => {
+    const parent: {
+      id: string;
+      text: string;
+      nodes?: Array<{ id: string; text: string }>;
+    } = { id: "p", text: "Parent" };
+    const initialNodes = [parent];
+    const { rerender } = render(TreeViewEqualNodes, {
+      nodes: initialNodes,
+      expandedIds: ["p"],
+    });
+    await tick();
+    fingerprintTreeCalls.length = 0;
+
+    // Lazy-load idiom: mutate the SAME node object in place, then reassign
+    // `nodes` to the SAME top-level array reference. The fingerprint from
+    // before the mutation must no longer match, so this still redoes the
+    // work and renders the new children (see TreeViewEqualNodes.test.ts).
+    parent.nodes = [{ id: "c1", text: "Child 1" }];
+    await rerender({ nodes: initialNodes, expandedIds: ["p"] });
+    await tick();
+
+    expect(fingerprintTreeCalls.length).toBeGreaterThan(0);
+    expect(screen.getByText("Child 1")).toBeInTheDocument();
+  });
+
+  it("still rebuilds the snapshot when a field compared by identity changes in place", async () => {
+    const node: { id: string; text: string; icon?: unknown } = {
+      id: "a",
+      text: "Alpha",
+      icon: Analytics,
+    };
+    const nodesArr = [node];
+    const { rerender } = render(TreeViewEqualNodes, { nodes: nodesArr });
+    await tick();
+    fingerprintTreeCalls.length = 0;
+
+    // Same top-level array reference, but a field compared by identity (a
+    // different icon component) changed in place.
+    node.icon = Add;
+    await rerender({ nodes: nodesArr });
+    await tick();
+
+    expect(fingerprintTreeCalls.length).toBeGreaterThan(0);
+  });
+
+  it("still rebuilds the snapshot for a genuinely different nodes reference", async () => {
+    const { rerender } = render(TreeViewEqualNodes, {
+      nodes: [{ id: "a", text: "Alpha" }],
+    });
+    await tick();
+    fingerprintTreeCalls.length = 0;
+
+    await rerender({
+      nodes: [
+        { id: "a", text: "Alpha" },
+        { id: "b", text: "Beta" },
+      ],
+    });
+    await tick();
+
+    expect(fingerprintTreeCalls.length).toBeGreaterThan(0);
   });
 });
