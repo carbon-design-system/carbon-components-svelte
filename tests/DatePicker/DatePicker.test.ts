@@ -319,6 +319,63 @@ describe("DatePicker", () => {
     expect(fp.config.clickOpens).toBe(false);
   });
 
+  describe("reactive datePickerType", () => {
+    it("rebuilds the calendar when the type changes after mount", async () => {
+      const { rerender } = render(DatePicker, { datePickerType: "single" });
+      const input = screen.getByLabelText("Date");
+      await user.click(input);
+      const dayCalendar = await screen.findByLabelText("calendar-container");
+      expect(
+        dayCalendar.querySelector(".flatpickr-monthSelect-months"),
+      ).not.toBeInTheDocument();
+
+      await rerender({ datePickerType: "month", dateFormat: "F Y" });
+      await vi.waitFor(() => {
+        const calendars = screen.getAllByLabelText("calendar-container");
+        expect(calendars).toHaveLength(1);
+        expect(
+          calendars[0].querySelector(".flatpickr-monthSelect-months"),
+        ).toBeInTheDocument();
+      });
+      expect(dayCalendar).not.toBeInTheDocument();
+    });
+
+    it("drops the calendar for simple and creates one when leaving it", async () => {
+      const { rerender } = render(DatePicker, { datePickerType: "single" });
+      await screen.findByLabelText("calendar-container");
+
+      await rerender({ datePickerType: "simple" });
+      await vi.waitFor(() =>
+        expect(
+          screen.queryByLabelText("calendar-container"),
+        ).not.toBeInTheDocument(),
+      );
+
+      await rerender({ datePickerType: "single" });
+      expect(
+        await screen.findByLabelText("calendar-container"),
+      ).toBeInTheDocument();
+    });
+
+    it("keeps the selected date across a type change with the same format", async () => {
+      const { rerender } = render(DatePicker, {
+        datePickerType: "single",
+        value: "03/15/2024",
+      });
+      await screen.findByLabelText("calendar-container");
+
+      await rerender({ datePickerType: "multiple", value: "03/15/2024" });
+      const input = screen.getByLabelText("Date");
+      await vi.waitFor(() => {
+        const calendar = (input as unknown as { _flatpickr?: Instance })
+          ._flatpickr;
+        expect(calendar?.config.mode).toBe("multiple");
+        expect(calendar?.selectedDates).toHaveLength(1);
+      });
+      expect(input).toHaveValue("03/15/2024");
+    });
+  });
+
   it("handles invalid state", () => {
     const { container } = render(DatePicker, {
       invalid: true,

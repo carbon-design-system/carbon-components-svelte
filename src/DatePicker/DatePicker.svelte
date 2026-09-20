@@ -18,6 +18,7 @@
 
   /**
    * Specify the date picker type.
+   * Changing it after mount rebuilds the calendar.
    * @type {"simple" | "single" | "range" | "month" | "year" | "multiple"}
    */
   export let datePickerType = "simple";
@@ -257,6 +258,10 @@
   let prevAppliedOptions = {};
   let creating = false;
   let creationFailed = false;
+  // Bumped by `recreateCalendar()`. Named in the init block so it re-runs.
+  let calendarEpoch = 0;
+  let pendingOptions = null;
+  let prevDatePickerType = datePickerType;
   let calendarUsesFixedPositioning = false;
   /** @type {(ReturnType<typeof rafThrottle> & { cancel: () => void }) | null} */
   let onCalendarReposition = null;
@@ -822,8 +827,13 @@
     // another instance on the same input, and flatpickr destroys the first,
     // leaving `calendar` pointing at a dead one. A failed init is not retried
     // either, since every retry logs the same flatpickr error again.
-    if (creating || creationFailed) return;
+    if (creating) {
+      pendingOptions = options;
+      return;
+    }
+    if (creationFailed) return;
     creating = true;
+    const epoch = calendarEpoch;
     const flatpickrPropsAtCreation = flatpickrProps;
 
     // Auto-detect a top-layer ancestor (native dialog or open popover) so the
@@ -832,50 +842,65 @@
     topLayerAncestor = getTopLayerAncestor(datePickerRef);
     calendarUsesFixedPositioning = effectivePortalMenu && !!topLayerAncestor;
 
-    calendar = await createCalendar({
-      options: {
-        ...options,
-        ...(effectivePortalMenu
-          ? {
-              static: false,
-              ...(topLayerAncestor && {
-                appendTo: topLayerAncestor,
-                position: positionFlatpickrCalendarFixed,
-              }),
-            }
-          : { appendTo: datePickerRef }),
-        // An empty `value` must not clobber `flatpickrProps.defaultDate`.
-        ...($inputValue !== "" && { defaultDate: $inputValue }),
-        mode: $mode,
-      },
-      base: inputRef,
-      input: inputRefTo,
-      dispatch: (event, eventDetail) => {
-        if (event === "error") {
-          return dispatch(event, eventDetail);
-        }
-        if (event === "open") {
-          calendarOpen = true;
-          closeTrigger = undefined;
-          refreshCloseBaselineOnOpen();
-          applyInitialMonth();
-        } else if (event === "close") {
-          calendarOpen = false;
-          if (calendarUsesFixedPositioning) {
-            detachFixedRepositionListeners();
+    let created = null;
+    try {
+      created = await createCalendar({
+        options: {
+          ...options,
+          ...(effectivePortalMenu
+            ? {
+                static: false,
+                ...(topLayerAncestor && {
+                  appendTo: topLayerAncestor,
+                  position: positionFlatpickrCalendarFixed,
+                }),
+              }
+            : { appendTo: datePickerRef }),
+          // An empty `value` must not clobber `flatpickrProps.defaultDate`.
+          ...($inputValue !== "" && { defaultDate: $inputValue }),
+          mode: $mode,
+        },
+        base: inputRef,
+        input: inputRefTo,
+        dispatch: (event, eventDetail) => {
+          if (event === "error") {
+            return dispatch(event, eventDetail);
           }
-          clearRangePreview();
-          queueMicrotask(dispatchDeferredClose);
-          return;
-        }
-        if (calendarUsesFixedPositioning && event === "open")
-          attachFixedRepositionListeners();
-        const detail = buildCalendarDetail();
-        syncRangeValues();
-        return dispatch(event, detail);
-      },
-    });
-    creating = false;
+          if (event === "open") {
+            calendarOpen = true;
+            closeTrigger = undefined;
+            refreshCloseBaselineOnOpen();
+            applyInitialMonth();
+          } else if (event === "close") {
+            calendarOpen = false;
+            if (calendarUsesFixedPositioning) {
+              detachFixedRepositionListeners();
+            }
+            clearRangePreview();
+            queueMicrotask(dispatchDeferredClose);
+            return;
+          }
+          if (calendarUsesFixedPositioning && event === "open")
+            attachFixedRepositionListeners();
+          const detail = buildCalendarDetail();
+          syncRangeValues();
+          return dispatch(event, detail);
+        },
+      });
+    } finally {
+      creating = false;
+    }
+    // `recreateCalendar()` ran while this instance was being built, so it
+    // belongs to the previous `datePickerType`. Discard it and start over.
+    if (epoch !== calendarEpoch) {
+      created?.destroy();
+      const latestOptions = pendingOptions;
+      pendingOptions = null;
+      if (latestOptions) initCalendar(latestOptions);
+      return;
+    }
+    pendingOptions = null;
+    calendar = created;
     creationFailed = !calendar;
     if (!calendar) return;
     // Record what the calendar was created with, then apply only what
@@ -927,29 +952,40 @@
     }
   }
 
-  onMount(() => {
-    return () => {
-      detachFixedRepositionListeners();
-      if (calendar) {
-        calendar.calendarContainer?.removeEventListener(
-          "click",
-          handleMultipleDayClick,
-          { capture: true },
-        );
-        calendar.calendarContainer?.removeEventListener(
-          "mouseover",
-          updateRangePreview,
-        );
-        calendar.calendarContainer?.removeEventListener(
-          "mouseleave",
-          clearRangePreview,
-        );
-        window.removeEventListener("keyup", handleShiftKeyUp);
-        calendar.destroy();
-        calendar = null;
-      }
-    };
-  });
+  function destroyCalendar() {
+    detachFixedRepositionListeners();
+    if (!calendar) return;
+    calendar.calendarContainer?.removeEventListener(
+      "click",
+      handleMultipleDayClick,
+      { capture: true },
+    );
+    calendar.calendarContainer?.removeEventListener(
+      "mouseover",
+      updateRangePreview,
+    );
+    calendar.calendarContainer?.removeEventListener(
+      "mouseleave",
+      clearRangePreview,
+    );
+    window.removeEventListener("keyup", handleShiftKeyUp);
+    calendar.destroy();
+    calendar = null;
+    calendarOpen = false;
+  }
+
+  /**
+   * flatpickr reads `mode` and its plugins once, at creation, so options
+   * like these need a new instance. The init block below builds it.
+   */
+  function recreateCalendar() {
+    destroyCalendar();
+    creationFailed = false;
+    prevAppliedOptions = {};
+    calendarEpoch += 1;
+  }
+
+  onMount(() => destroyCalendar);
 
   afterUpdate(() => {
     if (calendar) {
@@ -993,7 +1029,12 @@
     prevInitialMonth = initialMonth;
     applyInitialMonth();
   }
-  $: if ($hasCalendar && inputRef) {
+  $: if (datePickerType !== prevDatePickerType) {
+    prevDatePickerType = datePickerType;
+    mode.set(datePickerType);
+    recreateCalendar();
+  }
+  $: if ($hasCalendar && inputRef && calendarEpoch >= 0) {
     initCalendar({
       dateFormat,
       locale,
