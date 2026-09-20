@@ -871,6 +871,16 @@ When the claim is "this expensive call should not happen", count the call instea
 - Get the "before" number from the parent commit in a temporary `git worktree` with `node_modules` symlinked, not from a stash. The stash stack is shared across worktrees.
 - Report counts as exact and times as a range over 2 to 3 runs, and say when ranges overlap. "Median 5.3 to 3.7 ms, ranges overlap" is an honest result. A lone best-case number is not.
 - Turn the finding into a permanent test with both halves: equal values do not call the method, and a genuinely different value does. A guard that never updates is worse than no guard.
+- Time in production mode, never under the default `bun run test`. Svelte 5's dev mode captures a stack trace on every state write (`get_stack`/`get_error`), which inflated a `ComboBox` re-render probe by roughly 5 to 10x in past audits and — because the inflation scales with the number of state writes per case — can change which suspect looks slowest. Counts are unaffected, only milliseconds are. Use `bun run test:perf <file>`, which runs against [`vite.config.perf.ts`](vite.config.perf.ts) (`compilerOptions: { dev: false }`) with `NODE_ENV=production` (the runtime `DEV` flag comes from `esm-env`, keyed off `NODE_ENV`; the compiler flag alone does not silence it). This does not apply to `bench/*.dom.bench.ts` — that tier compiles with the Svelte compiler directly (`generate: "client"`, no `dev` option, so it's already off) and never goes through vitest.
+- Count with a callback prop (`export let onCompare = () => {}`) on the fixture, not by mutating an `export let` object from inside the fixture — a mutated object is a new reference on every read, which both invalidates reactive statements that shouldn't re-run and wrecks the timing you're trying to measure.
+- Always include a control case that is a constant expression in the markup (`prop={build()}`, no reactive dependency) and must show zero extra calls. If the control re-runs, the counter is measuring something else, not the case under test.
+- A one-off probe file is throwaway, not a permanent test: put it under `tests/zzprobe/`, prefix `Zz`/`zz`, and delete it (and any scratch config) once you've written down the numbers. `.gitignore` already excludes `tests/zzprobe/`, `**/zz*.test.ts`, `**/Zz*.test.svelte`, and `zz.*.config.ts` so one can't be committed by accident.
+- To see where time actually goes, CPU-profile one case under the production config (vitest 5 dropped `--poolOptions`, use `--pool=forks` directly):
+
+  ```sh
+  bun run test:perf <file> --pool=forks \
+    --execArgv=--cpu-prof --execArgv=--cpu-prof-dir=/tmp/prof
+  ```
 
 #### Batching child registration
 
