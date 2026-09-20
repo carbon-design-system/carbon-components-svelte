@@ -120,8 +120,10 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
     label: "Data visualization",
     components: [
       "BigNumber",
+      "Chart",
       "DeltaIndicator",
       "FunnelBars",
+      "LineChart",
       "Meter",
       "MicroFunnel",
       "Sparkline",
