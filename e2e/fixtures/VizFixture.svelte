@@ -2,6 +2,7 @@
   import {
     DeltaIndicator,
     FunnelBars,
+    LineChart,
     MicroFunnel,
     Sparkline,
   } from "carbon-components-svelte/viz";
@@ -13,6 +14,14 @@
     { id: "paid", label: "Paid", value: 900 },
   ];
   const values = [4, 7, 3, null, 5, 12, 8, 6, 10, 14, 9, 13];
+
+  const revenue = ["EMEA", "APAC", "AMER"].flatMap((region, r) =>
+    Array.from({ length: 12 }, (_, i) => ({
+      date: new Date(2026, i, 1),
+      region,
+      revenue: 30000 + r * 9000 + Math.round(Math.sin(i / 2 + r) * 9000),
+    })),
+  );
 
   let selectedId = "activate";
 </script>
@@ -55,4 +64,13 @@
     data-testid="selectable-funnel"
   />
   <output data-testid="selected">{selectedId}</output>
+
+  <LineChart
+    data={revenue}
+    x="date"
+    y="revenue"
+    series="region"
+    title="Revenue by region"
+    yTitle="Revenue"
+  />
 </main>
