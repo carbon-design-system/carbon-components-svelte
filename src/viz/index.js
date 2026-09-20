@@ -24,6 +24,7 @@ export { default as DeltaIndicator } from "./DeltaIndicator/DeltaIndicator.svelt
 export { default as FunnelBars } from "./FunnelBars/FunnelBars.svelte";
 export { default as HeatStrip } from "./HeatStrip/HeatStrip.svelte";
 export { default as LineChart } from "./LineChart/LineChart.svelte";
+export { default as MicroDonut } from "./MicroDonut/MicroDonut.svelte";
 export { default as MicroFunnel } from "./MicroFunnel/MicroFunnel.svelte";
 export { default as MicroHistogram } from "./MicroHistogram/MicroHistogram.svelte";
 export { default as RadialProgress } from "./RadialProgress/RadialProgress.svelte";

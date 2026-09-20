@@ -1,0 +1,54 @@
+/// MicroDonut: parts of a whole as a small ring.
+/// @access private
+/// @group viz
+@mixin viz-micro-donut {
+  .#{$prefix}--viz-micro-donut {
+    display: inline-grid;
+    align-content: start;
+    inline-size: var(--bx-viz-diameter);
+    vertical-align: middle;
+  }
+
+  .#{$prefix}--viz-micro-donut__svg,
+  .#{$prefix}--viz-micro-donut__center {
+    grid-area: 1 / 1;
+  }
+
+  .#{$prefix}--viz-micro-donut__svg {
+    display: block;
+  }
+
+  [dir="rtl"] .#{$prefix}--viz-micro-donut__svg {
+    transform: scaleX(-1);
+  }
+
+  // Shows through only when there is nothing to draw.
+  .#{$prefix}--viz-micro-donut__track {
+    fill: none;
+    stroke: $ui-03;
+  }
+
+  .#{$prefix}--viz-micro-donut__slice {
+    fill: var(--bx-viz-color, #{$interactive-04});
+  }
+
+  .#{$prefix}--viz-micro-donut__center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $text-primary;
+    font-size: calc(var(--bx-viz-diameter) * 0.22);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-micro-donut__slice {
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("viz-micro-donut") {
+  @include viz-micro-donut;
+}
