@@ -52,4 +52,29 @@ describe("deadDeclarations", () => {
       "@keyframes x { to { top: 0 } } @keyframes x { to { top: 1px } }";
     expect(dead(css)).toEqual([]);
   });
+
+  test("block-axis logical properties share a slot with their physical twin", () => {
+    expect(dead(".a { inset-block-start: 0; top: 1px }")).toEqual([
+      ".a inset-block-start:0",
+    ]);
+    expect(dead(".a { height: 1px } .a { block-size: 2px }")).toEqual([
+      ".a height:1px",
+    ]);
+    expect(dead(".a { margin-top: 1px } .a { margin-block: 0 }")).toEqual([
+      ".a margin-top:1px",
+    ]);
+    expect(covers("border-block-end-color", "border-bottom-color")).toBe(true);
+  });
+
+  test("leaves the inline axis alone, since it maps by dir", () => {
+    expect(dead(".a { margin-inline-start: 0; margin-left: 1px }")).toEqual([]);
+    expect(covers("inset-inline-end", "right")).toBe(false);
+  });
+
+  test("keeps overflow: hidden as the fallback for overflow: clip", () => {
+    expect(dead(".a { overflow: hidden; overflow: clip }")).toEqual([]);
+    expect(dead(".a { overflow: hidden; overflow: auto }")).toEqual([
+      ".a overflow:hidden",
+    ]);
+  });
 });
