@@ -142,6 +142,7 @@
   import { rafThrottle } from "../../utils/raf-throttle.js";
   import { toAccessor } from "../utils/accessor.js";
   import { bisectNearest } from "../utils/nearest-point.js";
+  import { observeResize } from "../utils/resize-pool.js";
   import { CHART_CONTEXT } from "./context.js";
   import {
     buildGroups,
@@ -188,15 +189,19 @@
   /**
    * @param {number | "auto"} nextWidth
    * @param {number} nextHeight
+   * @param {boolean} [measured] The width came from the resize observer.
    */
-  function resize(nextWidth, nextHeight) {
+  function resize(nextWidth, nextHeight, measured = false) {
     const current = get(size);
+    // A measured width only applies while the chart is sized by its container.
+    if (measured && width !== "auto") return;
     const resolved = typeof nextWidth === "number" ? nextWidth : current.width;
     if (current.width === resolved && current.height === nextHeight) return;
     size.set({ width: resolved, height: nextHeight });
   }
 
-  function clearHover() {
+  /** @param {boolean} [fromSync] A synced chart must not echo back. */
+  function clearHover(fromSync = false) {
     if (get(hover) === null) return;
     hover.set(null);
     dispatch("hover", null);
@@ -260,7 +265,7 @@
       reserved.update((list) => [...list, entry]);
       return () => reserved.update((list) => list.filter((e) => e !== entry));
     },
-    clearHover,
+    clearHover: () => clearHover(),
   });
 
   const defaultSeries = () => title || "value";
@@ -350,19 +355,11 @@
   let svg;
 
   onMount(() => {
-    if (width !== "auto" || !ref || typeof ResizeObserver === "undefined") {
-      return;
-    }
-    const observer = new ResizeObserver(
-      rafThrottle((/** @type {ResizeObserverEntry[]} */ entries) => {
-        const measured = Math.round(entries[0].contentRect.width);
-        if (measured > 0 && measured !== get(size).width) {
-          size.update((current) => ({ ...current, width: measured }));
-        }
-      }),
-    );
-    observer.observe(ref);
-    return () => observer.disconnect();
+    if (width !== "auto" || !ref) return;
+    return observeResize(ref, (measured) => {
+      const rounded = Math.round(measured);
+      if (rounded > 0) resize(rounded, height, true);
+    });
   });
 
   // Pointer and keyboard share one path, so both get the same ruler,
@@ -370,8 +367,11 @@
   let focusIndex = -1;
   let focusSeries = 0;
 
-  /** @param {number} xValue */
-  function hoverAt(xValue) {
+  /**
+   * @param {number} xValue
+   * @param {boolean} [fromSync] A synced chart must not echo back.
+   */
+  function hoverAt(xValue, fromSync = false) {
     const visible = get(groups).filter(
       (group) => !group.hidden && group.xs.length > 0,
     );
@@ -386,7 +386,7 @@
         nearest = candidate;
       }
     }
-    if (nearest === null) return clearHover();
+    if (nearest === null) return clearHover(fromSync);
     const previous = get(hover);
     if (previous && previous.x === nearest) return;
 
@@ -542,7 +542,7 @@
       on:pointerleave={onPointerLeave}
       on:click={selectCurrent}
       on:keydown={onKeydown}
-      on:blur={clearHover}
+      on:blur={() => clearHover()}
     >
       <slot />
     </svg>
