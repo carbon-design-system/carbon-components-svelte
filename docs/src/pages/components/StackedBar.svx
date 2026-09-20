@@ -1,0 +1,104 @@
+---
+components: ["StackedBar"]
+description: Stacked bar shows the parts of a whole as one horizontal bar, small enough for a table cell or KPI card.
+---
+
+<script>
+  import { DataTable, Stack } from "carbon-components-svelte";
+  import { StackedBar } from "carbon-components-svelte/viz";
+
+  const devices = [
+    { id: "desktop", label: "Desktop", value: 5200 },
+    { id: "mobile", label: "Mobile", value: 3100 },
+    { id: "tablet", label: "Tablet", value: 1100 },
+    { id: "tv", label: "TV", value: 400 },
+    { id: "watch", label: "Watch", value: 200 },
+  ];
+
+  const status = [
+    { id: "passed", label: "Passed", value: 182, color: "success" },
+    { id: "failed", label: "Failed", value: 9, color: "error" },
+    { id: "skipped", label: "Skipped", value: 14, color: "neutral" },
+  ];
+
+  let selectedId;
+</script>
+
+`StackedBar` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+## Basic
+
+Pass `data` and a `label`. Each part and its share is appended to the accessible name.
+
+<StackedBar data={devices} label="Sessions by device" />
+
+## Labels
+
+Set `labels` to `"below"` to list the parts under the bar.
+
+<StackedBar data={devices} labels="below" label="Sessions by device" />
+
+### Values
+
+Set `valueType` to `"value"` to write values instead of shares. `format` takes `Intl.NumberFormat` options or a function.
+
+<StackedBar data={devices} labels="below" valueType="value" label="Sessions by device" />
+
+## Folding
+
+Set `maxSegments` to fold the parts past the limit into one neutral segment. Parts keep their input order, so sort by value first to fold the smallest.
+
+<StackedBar data={devices} labels="below" maxSegments={3} label="Sessions by device" />
+
+## Color
+
+Parts take Carbon's prescribed color groups in order. Set `palette` to pick another group, or give a part its own `color`: a semantic name, a categorical index from 1 to 14, a viz token name, or any CSS color.
+
+<Stack gap={6}>
+  <StackedBar data={devices} labels="below" palette={2} label="Sessions by device" />
+  <StackedBar data={status} labels="below" valueType="value" label="Test results" />
+</Stack>
+
+## Sizes
+
+<Stack gap={5}>
+  <StackedBar data={devices} size="sm" label="Small bar" />
+  <StackedBar data={devices} label="Medium bar (default)" />
+  <StackedBar data={devices} size="lg" label="Large bar" />
+</Stack>
+
+## Selectable
+
+Set `selectable` to make each segment a toggle button. Bind `selectedId` or listen for `select`. Activating the selected segment clears the selection.
+
+<StackedBar data={devices} labels="below" selectable bind:selectedId label="Sessions by device" />
+
+## In a data table
+
+<DataTable
+  size="short"
+  headers={[
+    { key: "suite", value: "Suite" },
+    { key: "results", value: "Results" },
+  ]}
+  rows={[
+    { id: "a", suite: "Unit", results: status },
+    { id: "b", suite: "End to end", results: [
+      { id: "passed", label: "Passed", value: 40, color: "success" },
+      { id: "failed", label: "Failed", value: 12, color: "error" },
+      { id: "skipped", label: "Skipped", value: 3, color: "neutral" },
+    ] },
+  ]}
+>
+  <svelte:fragment slot="cell" let:cell let:row>
+    {#if cell.key === "results"}
+      <StackedBar data={cell.value} size="sm" label="{row.suite} results" />
+    {:else}
+      {cell.value}
+    {/if}
+  </svelte:fragment>
+</DataTable>
+
+## Accessibility
+
+With a `label`, the bar is announced as an image named with the label and every part, such as "Sessions by device, Desktop 52%, Mobile 31%". Without a label or visible labels it is hidden from assistive technology. When `selectable`, the bar is a group of toggle buttons with arrow key navigation and a single tab stop. Segments are separated by a gap so neighbors stay distinct without relying on color.

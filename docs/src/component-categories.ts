@@ -142,6 +142,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "Meter",
       "MicroFunnel",
       "Sparkline",
+      "StackedBar",
     ],
   },
   {
