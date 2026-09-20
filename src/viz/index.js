@@ -3,6 +3,8 @@
 // May import from core (`../utils`, `../icons`); core must never import from here.
 
 export { extent, extentBy } from "./utils/extent.js";
+export { pathArea } from "./utils/path-area.js";
+export { pathLine } from "./utils/path-line.js";
 export { scaleBand, scalePoint } from "./utils/scale-band.js";
 export { scaleLinear } from "./utils/scale-linear.js";
 export { scaleLog } from "./utils/scale-log.js";
