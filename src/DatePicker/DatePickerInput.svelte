@@ -80,6 +80,7 @@
     multiple,
     add,
     setReadonly,
+    setDisabled,
     setValidation,
     hasCalendar,
     dateFormat,
@@ -142,6 +143,7 @@
     );
   $: if (ref) declareRef({ id, ref });
   $: setReadonly(id, readonly);
+  $: setDisabled(id, disabled);
   // Invalid/warn states are suppressed when the input is disabled or read-only.
   $: showInvalid = invalid && !disabled && !readonly;
   $: showWarn = warn && !invalid && !disabled && !readonly;

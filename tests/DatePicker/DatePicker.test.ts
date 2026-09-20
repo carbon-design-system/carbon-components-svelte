@@ -319,6 +319,51 @@ describe("DatePicker", () => {
     expect(fp.config.clickOpens).toBe(false);
   });
 
+  describe("inline calendar interaction states", () => {
+    function findDay(calendar: HTMLElement, label: string) {
+      const day = Array.from(
+        calendar.querySelectorAll<HTMLElement>(
+          ".flatpickr-day:not(.prevMonthDay):not(.nextMonthDay)",
+        ),
+      ).find((node) => node.textContent === label);
+      assert(day);
+      return day;
+    }
+
+    it.each(["readonly", "disabled"] as const)(
+      "blocks selection while the input is %s and restores it after",
+      async (state) => {
+        const props: ComponentProps<typeof DatePicker> = {
+          datePickerType: "single",
+          value: "03/15/2024",
+          flatpickrProps: { inline: true },
+        };
+        const { rerender } = render(DatePicker, { ...props, [state]: true });
+        const calendar = await screen.findByLabelText("calendar-container");
+        const input = screen.getByLabelText("Date");
+        await vi.waitFor(() =>
+          expect(calendar).toHaveAttribute("aria-disabled", "true"),
+        );
+
+        await user.click(findDay(calendar, "10"));
+        expect(input).toHaveValue("03/15/2024");
+        const next = calendar.querySelector<HTMLElement>(
+          ".flatpickr-next-month",
+        );
+        assert(next);
+        await user.click(next);
+        expect(calendar.querySelector(".cur-month")).toHaveTextContent("March");
+
+        await rerender({ ...props, [state]: false });
+        await vi.waitFor(() =>
+          expect(calendar).not.toHaveAttribute("aria-disabled"),
+        );
+        await user.click(findDay(calendar, "10"));
+        expect(input).toHaveValue("03/10/2024");
+      },
+    );
+  });
+
   describe("reactive datePickerType", () => {
     it("rebuilds the calendar when the type changes after mount", async () => {
       const { rerender } = render(DatePicker, { datePickerType: "single" });
