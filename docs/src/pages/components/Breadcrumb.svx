@@ -107,6 +107,14 @@ Add an overflow menu to handle long breadcrumb trails. Use overflow menu item co
   </BreadcrumbItem>
 </Breadcrumb>
 
+### Automatic overflow
+
+Set `enableOverflow` to collapse whichever middle items don't fit the available width into an overflow menu, instead of listing them manually. The first and current-page items always stay visible.
+
+This is opt-in: it forces a single, non-wrapping row so there is a stable width to measure and collapse against, which changes `Breadcrumb`'s default wrapping behavior below the `md` breakpoint.
+
+<FileSource src="/framed/Breadcrumb/BreadcrumbOverflow" />
+
 ### Small
 
 Use `size="sm"` for a compact breadcrumb. This pairs with an overflow menu when space is tight.
