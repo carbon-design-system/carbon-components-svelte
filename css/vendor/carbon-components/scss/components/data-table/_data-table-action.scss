@@ -41,13 +41,6 @@
     background-color: transparent;
   }
 
-  .#{$prefix}--batch-actions ~ .#{$prefix}--toolbar-search-container {
-    display: flex;
-    align-items: center;
-    opacity: 1;
-    transition: opacity 110ms;
-  }
-
   .#{$prefix}--toolbar-content
     .#{$prefix}--toolbar-search-container-expandable {
     position: relative;
@@ -276,7 +269,6 @@
     height: $spacing-09;
   }
 
-  .#{$prefix}--batch-actions--active ~ .#{$prefix}--toolbar-search-container,
   .#{$prefix}--batch-actions--active ~ .#{$prefix}--toolbar-content {
     clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
     transform: translate3d(0, 48px, 0);

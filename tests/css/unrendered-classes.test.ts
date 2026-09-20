@@ -26,9 +26,7 @@ const PUBLIC_UTILITIES = new Set([
 // Styled but never rendered, as found when this check landed. Removing the
 // rules behind one means deleting it here; the set only shrinks. A new
 // entry means the stylesheet grew a selector nothing can match.
-const KNOWN_UNRENDERED = new Set([
-  "bx--toolbar-search-container",
-]);
+const KNOWN_UNRENDERED = new Set([]);
 
 describe("unrendered classes", () => {
   it("every class in all.css is one a component can render", async () => {
