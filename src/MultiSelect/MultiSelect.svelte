@@ -358,6 +358,7 @@
   import { shouldVirtualizeMenu } from "../ListBox/list-box-utils.js";
   import { createMenuWindow } from "../ListBox/menu-window.js";
   import { debounce } from "../utils/debounce.js";
+  import { deepEqual } from "../utils/deep-equal.js";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
@@ -805,6 +806,28 @@
 
   sortedItems = sort();
   let prevItems = items;
+  // Shallow copies, so an item mutated in place and handed over in a new
+  // array still reads as changed.
+  let prevItemsSnapshot = items.map((item) => ({ ...item }));
+
+  /**
+   * Whether `sortedItems` already describes `nextItems` and `nextSelectedIds`,
+   * so sorting again would only rebuild every option for the same result.
+   * @type {(nextItems: typeof items, nextSelectedIds: typeof selectedIds) => boolean}
+   */
+  function isAlreadySorted(nextItems, nextSelectedIds) {
+    if (!deepEqual(prevItemsSnapshot, nextItems)) return false;
+
+    const checkedIds = new Set();
+    for (const item of sortedItems) {
+      if (item.checked && !item.isSelectAll) checkedIds.add(item.id);
+    }
+
+    return (
+      checkedIds.size === nextSelectedIds.length &&
+      nextSelectedIds.every((id) => checkedIds.has(id))
+    );
+  }
 
   $: menuId = `menu-${id}`;
   $: comboId = `combo-${id}`;
@@ -860,8 +883,11 @@
   $: ariaLabel = $$props["aria-label"] ?? "Choose an item";
   $: if (items !== prevItems) {
     prevItems = items;
-    sortedItems = sort();
-    prevChecked = sortedItems.filter((item) => item.checked);
+    if (!isAlreadySorted(items, selectedIds)) {
+      prevItemsSnapshot = items.map((item) => ({ ...item }));
+      sortedItems = sort();
+      prevChecked = sortedItems.filter((item) => item.checked);
+    }
   }
   $: if (
     selectedIds &&
