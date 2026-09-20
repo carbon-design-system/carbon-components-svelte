@@ -27,7 +27,7 @@ export interface DeadDeclaration {
 
 // Values some baseline browser drops, so an earlier declaration is a fallback.
 const FALLBACK_VALUE_RE =
-  /(^|[\s(,])-(webkit|moz|ms)-|fit-content|\d[dsl]v[hw]\b|color-mix\(|\bstretch\b/;
+  /(^|[\s(,])-(webkit|moz|ms)-|fit-content|\d[dsl]v[hw]\b|color-mix\(|\bstretch\b|^clip$/;
 
 // Longhands a shorthand resets, as property-name patterns. Also used by
 // scripts/lib/css-usage.ts as a fallback when CDP doesn't expand a matched
@@ -36,6 +36,9 @@ export const SHORTHANDS: [string, RegExp][] = [
   ["padding", /^padding-(top|right|bottom|left)$/],
   ["margin", /^margin-(top|right|bottom|left)$/],
   ["inset", /^(top|right|bottom|left)$/],
+  ["inset-block", /^(top|bottom)$/],
+  ["margin-block", /^margin-(top|bottom)$/],
+  ["padding-block", /^padding-(top|bottom)$/],
   ["outline", /^outline-(width|style|color)$/],
   ["overflow", /^overflow-[xy]$/],
   ["flex", /^flex-(grow|shrink|basis)$/],
@@ -54,7 +57,30 @@ export const SHORTHANDS: [string, RegExp][] = [
   ["border-radius", /^border-(top|bottom)-(left|right)-radius$/],
 ];
 
-export function covers(later: string, earlier: string): boolean {
+// Block-axis logical properties and sizes share a cascade slot with their
+// physical twin in the horizontal writing mode this library assumes, so the
+// later of `top` / `inset-block-start` wins whichever spelling it uses. The
+// inline axis is left alone: it maps to left or right by `dir`.
+const PHYSICAL_TWIN: [RegExp, string][] = [
+  [/^inset-block-start$/, "top"],
+  [/^inset-block-end$/, "bottom"],
+  [/^(margin|padding)-block-start$/, "$1-top"],
+  [/^(margin|padding)-block-end$/, "$1-bottom"],
+  [/^border-block-start(-width|-style|-color)?$/, "border-top$1"],
+  [/^border-block-end(-width|-style|-color)?$/, "border-bottom$1"],
+  [/^(min-|max-)?block-size$/, "$1height"],
+  [/^(min-|max-)?inline-size$/, "$1width"],
+];
+
+export function physical(property: string): string {
+  for (const [pattern, twin] of PHYSICAL_TWIN)
+    if (pattern.test(property)) return property.replace(pattern, twin);
+  return property;
+}
+
+export function covers(laterName: string, earlierName: string): boolean {
+  const later = physical(laterName);
+  const earlier = physical(earlierName);
   if (later === earlier) return true;
   if (later.startsWith("--") || earlier.startsWith("--")) return false;
   return SHORTHANDS.some(([short, re]) => short === later && re.test(earlier));
