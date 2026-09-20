@@ -1,0 +1,180 @@
+/// FunnelBars: stages as rows of a table, so labels, bars, and numbers align
+/// with no measurement. Bar length comes from `--bx-viz-pct` on the row.
+/// @access private
+/// @group viz
+@mixin viz-funnel-bars {
+  .#{$prefix}--viz-funnel-bars {
+    --bx-viz-row-size: #{to-rem(24px)};
+
+    inline-size: 100%;
+    border-collapse: collapse;
+    color: $text-primary;
+    font-variant-numeric: tabular-nums;
+
+    @include type-style("body-short-01");
+  }
+
+  .#{$prefix}--viz-funnel-bars--sm {
+    --bx-viz-row-size: #{to-rem(16px)};
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-funnel-bars--lg {
+    --bx-viz-row-size: #{to-rem(32px)};
+  }
+
+  .#{$prefix}--viz-funnel-bars th,
+  .#{$prefix}--viz-funnel-bars td {
+    // Block padding only: the cell classes below own the inline padding.
+    padding-block: $carbon--spacing-02;
+    padding-inline: 0;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--viz-funnel-bars .#{$prefix}--viz-funnel-bars__label {
+    padding-inline-end: $carbon--spacing-05;
+    font-weight: inherit;
+    text-align: start;
+  }
+
+  // The bar column takes all the width the text columns leave over.
+  .#{$prefix}--viz-funnel-bars__track-cell {
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--viz-funnel-bars__track {
+    position: relative;
+    block-size: var(--bx-viz-row-size);
+  }
+
+  .#{$prefix}--viz-funnel-bars__bar,
+  .#{$prefix}--viz-funnel-bars__drop {
+    position: absolute;
+    inset-block: 0;
+    // Physical, with an RTL rule below: the flow-relative inset costs about
+    // 900 bytes per declaration once it is downleveled.
+    left: 0;
+    transition: inline-size $duration--moderate-01
+      carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-funnel-bars__bar {
+    min-inline-size: to-rem(2px);
+    background: var(--bx-viz-color, #{$interactive-04});
+    inline-size: calc(var(--bx-viz-pct) * 1%);
+  }
+
+  // What the stage lost: hatched, so it does not rely on color.
+  .#{$prefix}--viz-funnel-bars__drop {
+    background: repeating-linear-gradient(
+      -45deg,
+      #{$ui-04} 0,
+      #{$ui-04} to-rem(1px),
+      transparent to-rem(1px),
+      transparent to-rem(5px)
+    );
+    inline-size: calc(var(--bx-viz-previous-pct) * 1%);
+  }
+
+  [dir="rtl"] .#{$prefix}--viz-funnel-bars__bar,
+  [dir="rtl"] .#{$prefix}--viz-funnel-bars__drop {
+    right: 0;
+    left: auto;
+  }
+
+  // Centering is symmetric, so it needs no RTL rule.
+  .#{$prefix}--viz-funnel-bars--center .#{$prefix}--viz-funnel-bars__bar,
+  .#{$prefix}--viz-funnel-bars--center .#{$prefix}--viz-funnel-bars__drop {
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .#{$prefix}--viz-funnel-bars .#{$prefix}--viz-funnel-bars__value,
+  .#{$prefix}--viz-funnel-bars .#{$prefix}--viz-funnel-bars__rate,
+  .#{$prefix}--viz-funnel-bars .#{$prefix}--viz-funnel-bars__drop-label {
+    padding-inline-start: $carbon--spacing-05;
+    text-align: end;
+  }
+
+  .#{$prefix}--viz-funnel-bars__rate,
+  .#{$prefix}--viz-funnel-bars__drop-label {
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--viz-funnel-bars__row--highlight
+    .#{$prefix}--viz-funnel-bars__drop-label {
+    color: $text-error;
+  }
+
+  .#{$prefix}--viz-funnel-bars__highlight-icon {
+    margin-inline-end: $carbon--spacing-02;
+    fill: $support-error;
+    vertical-align: text-bottom;
+  }
+
+  .#{$prefix}--viz-funnel-bars__button {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+    text-align: start;
+  }
+
+  // The button is the focus target, but the ring belongs on the whole row.
+  .#{$prefix}--viz-funnel-bars__button:focus {
+    outline: none;
+  }
+
+  .#{$prefix}--viz-funnel-bars--selectable .#{$prefix}--viz-funnel-bars__row {
+    cursor: pointer;
+  }
+
+  .#{$prefix}--viz-funnel-bars--selectable
+    .#{$prefix}--viz-funnel-bars__row:hover {
+    background: $hover-ui;
+  }
+
+  .#{$prefix}--viz-funnel-bars__row--selected {
+    background: $selected-ui;
+  }
+
+  .#{$prefix}--viz-funnel-bars__row:focus-within {
+    outline: 2px solid $focus;
+    outline-offset: -2px;
+  }
+
+  .#{$prefix}--viz-funnel-bars__note {
+    margin-block-start: $carbon--spacing-02;
+    color: $text-secondary;
+
+    @include type-style("label-01");
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-funnel-bars__bar,
+    .#{$prefix}--viz-funnel-bars__drop {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-funnel-bars__bar {
+      background: CanvasText;
+      forced-color-adjust: none;
+    }
+
+    .#{$prefix}--viz-funnel-bars__drop {
+      border: 1px dashed CanvasText;
+      background: none;
+    }
+  }
+}
+
+@include exports("viz-funnel-bars") {
+  @include viz-funnel-bars;
+}
