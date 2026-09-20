@@ -1,0 +1,21 @@
+// Data visualization styles for `carbon-components-svelte/viz`.
+// Load after `all.css`, which declares the `--cds-*` tokens these partials read.
+
+$feature-flags: (
+  enable-css-custom-properties: true,
+);
+
+// Tokens and mixins only. `all.css` already ships the reset, fonts, and type.
+$css--font-face: false;
+$css--helpers: false;
+$css--body: false;
+$css--use-layer: false;
+$css--reset: false;
+$css--default-type: false;
+$css--plex: false;
+
+// `all.css` always declares every token, so `var()` needs no fallback.
+$ccs-omit-token-fallbacks: true;
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
