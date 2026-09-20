@@ -345,6 +345,7 @@
   import InlineCheckbox from "../Checkbox/InlineCheckbox.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
   import RadioButton from "../RadioButton/RadioButton.svelte";
+  import { deepEqual } from "../utils/deep-equal.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { virtualize as virtualizeUtil } from "../utils/virtualize.js";
   import {
@@ -449,9 +450,34 @@
   $: hasTitle = !!title && !$$slots.titleChildren;
   $: hasDescription = !!description && !$$slots.descriptionChildren;
 
+  // `headers` is compared by identity, so a consumer that rebuilds a
+  // new-but-equal array (or reassigns from an object reassigned to an equal
+  // one) would otherwise re-sort and re-render every cell for an identical
+  // result. Alias to a stable reference that only moves when the header set
+  // actually differs, and derive every reader below from it. Functions
+  // (`sort`, `display`) are compared by identity: a consumer that rebuilds
+  // `headers` with inline arrow functions still re-runs, as it must.
+  //
+  // Compared against shallow copies, not `headers` itself: an in-place edit
+  // (`headers[i].columnHidden = true; headers = headers`) keeps the same
+  // array reference, so `deepEqual(stableHeaders, headers)` would take the
+  // reference fast path and report "unchanged" even though the content
+  // moved. A snapshot of independent copies forces the real comparison.
+  let stableHeaders = headers;
+  let headersSnapshot = headers.map((header) => ({ ...header }));
+
+  function headersUnchanged(nextHeaders) {
+    return deepEqual(headersSnapshot, nextHeaders);
+  }
+
+  $: if (!headersUnchanged(headers)) {
+    stableHeaders = headers;
+    headersSnapshot = headers.map((header) => ({ ...header }));
+  }
+
   // A columnHidden header stays in `headers`, the column definition, and is
   // skipped everywhere the rendered column set is meant.
-  $: visibleHeaders = headers.filter((header) => !header.columnHidden);
+  $: visibleHeaders = stableHeaders.filter((header) => !header.columnHidden);
 
   // Store a copy of the original rows for filter restoration.
   let prevFilterRows = rows;
@@ -775,7 +801,7 @@
   }
 
   $: ascending = sortDirection === "ascending";
-  $: sortingHeader = headers.find((header) => header.key === sortKey);
+  $: sortingHeader = stableHeaders.find((header) => header.key === sortKey);
   $: sorting =
     sortKey != null &&
     (sortingHeader ? isHeaderSortable(sortingHeader) : sortable);
@@ -1608,7 +1634,7 @@
                 class:bx--table-column-radio={radio}
               ></td>
             {/if}
-            {#each headers as header, index (header.key)}
+            {#each stableHeaders as header, index (header.key)}
               <td>
                 <slot name="footerCell" {header} {index} />
               </td>
