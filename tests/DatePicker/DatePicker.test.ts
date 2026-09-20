@@ -422,6 +422,15 @@ describe("DatePicker", () => {
     ).toContainElement(screen.getByLabelText("Date"));
   });
 
+  it("types the open event", () => {
+    type Events = import("svelte").ComponentEvents<DatePickerComponent>;
+
+    expectTypeOf<Events>().toHaveProperty("open");
+    expectTypeOf<Events["open"]["detail"]["selectedDates"]>().toEqualTypeOf<
+      Date[]
+    >();
+  });
+
   describe("reactive datePickerType", () => {
     it("rebuilds the calendar when the type changes after mount", async () => {
       const { rerender } = render(DatePicker, { datePickerType: "single" });
