@@ -27,7 +27,23 @@ export interface CreateCalendarArgs {
  */
 export function createCalendar(
   args: CreateCalendarArgs,
-): Promise<FlatpickrInstance>;
+): Promise<FlatpickrInstance | null>;
+
+/**
+ * Maps the `"en"` locale key to Carbon's English locale, and passes any
+ * other locale through.
+ */
+export function resolveLocale(locale: unknown): unknown;
+
+/**
+ * Value to pass to `calendar.set(name, ...)` for a consumer option, keeping
+ * Carbon's hooks in front of a consumer hook instead of replacing them.
+ */
+export function resolveOptionValue(
+  instance: object,
+  name: string,
+  value: unknown,
+): unknown;
 
 /**
  * Resyncs Carbon's `.cur-month` header label after a programmatic
