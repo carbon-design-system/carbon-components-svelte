@@ -12,6 +12,7 @@ export { default as ChartLegend } from "./Chart/ChartLegend.svelte";
 export { default as ChartLine } from "./Chart/ChartLine.svelte";
 export { default as ChartRuler } from "./Chart/ChartRuler.svelte";
 export { default as ChartThreshold } from "./Chart/ChartThreshold.svelte";
+export { default as ChartToolbar } from "./Chart/ChartToolbar.svelte";
 export { default as ChartTooltip } from "./Chart/ChartTooltip.svelte";
 export { default as ChartTooltipRow } from "./Chart/ChartTooltipRow.svelte";
 export { CHART_CONTEXT } from "./Chart/context.js";

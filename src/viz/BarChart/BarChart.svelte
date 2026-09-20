@@ -35,6 +35,15 @@
   /** Set to `false` to hide the tooltip */
   export let tooltip = true;
 
+  /** Set to `true` to show a toolbar with a data table view and a CSV download */
+  export let toolbar = false;
+
+  /**
+   * Specify whether to show the chart or its data as a table.
+   * @type {"chart" | "table"}
+   */
+  export let view = "chart";
+
   /** Specify the x axis title */
   export let xTitle = "";
 
@@ -65,6 +74,7 @@
   import ChartBars from "../Chart/ChartBars.svelte";
   import ChartGrid from "../Chart/ChartGrid.svelte";
   import ChartLegend from "../Chart/ChartLegend.svelte";
+  import ChartToolbar from "../Chart/ChartToolbar.svelte";
   import ChartTooltip from "../Chart/ChartTooltip.svelte";
 
   const PERCENT = { style: "percent", maximumFractionDigits: 0 };
@@ -78,6 +88,7 @@
 <Chart
   bind:hidden
   bind:selected
+  bind:view
   bind:ref
   {...$$restProps}
   {...normalized}
@@ -94,6 +105,11 @@
   <ChartAxis position="left" title={yTitle} />
   <ChartBars {mode} {padding} {maxBarWidth} />
   <slot />
+  <svelte:fragment slot="toolbar">
+    {#if toolbar}
+      <ChartToolbar />
+    {/if}
+  </svelte:fragment>
   <svelte:fragment slot="tooltip">
     {#if tooltip}
       <slot name="tooltip"><ChartTooltip /></slot>
