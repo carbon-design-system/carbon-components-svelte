@@ -2973,6 +2973,33 @@ describe("Dropdown", () => {
       },
     );
 
+    it.each([
+      { props: {}, hoverable: true },
+      { props: { invalid: true, invalidText: "Invalid" }, hoverable: true },
+      { props: { warn: true, warnText: "Warning" }, hoverable: true },
+      { props: { disabled: true }, hoverable: false },
+      { props: { readonly: true }, hoverable: false },
+    ])(
+      "sets the hoverable wrapper class unless disabled or readonly (%o)",
+      ({ props, hoverable }) => {
+        render(Dropdown, {
+          props: { items, labelText: "Contact", fluid: true, ...props },
+        });
+
+        const button = screen.getByLabelText("Contact");
+        const wrapper = button.closest(".bx--dropdown__wrapper");
+        if (hoverable) {
+          expect(wrapper).toHaveClass(
+            "bx--list-box__wrapper--fluid--hoverable",
+          );
+        } else {
+          expect(wrapper).not.toHaveClass(
+            "bx--list-box__wrapper--fluid--hoverable",
+          );
+        }
+      },
+    );
+
     it("marks the wrapper as condensed when fluid", () => {
       render(Dropdown, {
         props: { items, labelText: "Contact", fluid: true, condensed: true },

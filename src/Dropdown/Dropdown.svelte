@@ -340,6 +340,10 @@
   // Neutral = default fluid state, i.e. none of the other wrapper modifiers apply.
   $: fluidNeutral =
     isFluid && !showInvalid && !showWarn && !disabled && !readonly;
+  // Hoverable = disabled/readonly do not suppress the invalid/warning hover
+  // tint. showInvalid/showWarn already exclude both, so this only matters
+  // for readability of the selector it replaces.
+  $: fluidHoverable = isFluid && !disabled && !readonly;
   // Scope the option id with the instance `id` so multiple Dropdowns on a
   // page do not produce duplicate DOM ids. `aria-activedescendant` references
   // this same scoped value (see the `ListBoxMenuItem` ids below).
@@ -630,6 +634,7 @@
   class:bx--dropdown__wrapper--inline--invalid={inline && showInvalid}
   class:bx--list-box__wrapper--fluid={isFluid}
   class:bx--list-box__wrapper--fluid--neutral={fluidNeutral}
+  class:bx--list-box__wrapper--fluid--hoverable={fluidHoverable}
   class:bx--list-box__wrapper--fluid--invalid={isFluid && showInvalid}
   class:bx--list-box__wrapper--fluid--warning={isFluid && showWarn}
   class:bx--list-box__wrapper--fluid--disabled={isFluid && disabled}
