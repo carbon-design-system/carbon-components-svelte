@@ -319,10 +319,19 @@
     if (!sameDomain(get(domain), next)) domain.set(next);
     hover.set(null);
 
-    if (emitUpdate) {
-      const detail = { xDomain: next.x, yDomain: next.y, count: rows.length };
-      tick().then(() => dispatch("update", detail));
-    }
+    updateDetail = { xDomain: next.x, yDomain: next.y, count: rows.length };
+  }
+
+  /** @type {{ xDomain: [number, number]; yDomain: [number, number]; count: number } | null} */
+  let updateDetail = null;
+
+  // `emitUpdate` is named here so that turning it on dispatches too: Svelte 3
+  // and 4 only track what a reactive statement references directly.
+  $: if (emitUpdate && updateDetail) announceUpdate(updateDetail);
+
+  /** @param {NonNullable<typeof updateDetail>} detail */
+  function announceUpdate(detail) {
+    tick().then(() => dispatch("update", detail));
   }
 
   /** @type {SVGSVGElement} */
