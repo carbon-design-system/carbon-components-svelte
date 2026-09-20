@@ -11,4 +11,6 @@ export {
   vizColor,
 } from "./utils/tokens.js";
 export { extent, extentBy } from "./utils/extent.js";
+export { scaleLinear } from "./utils/scale-linear.js";
+export { scaleLog } from "./utils/scale-log.js";
 export { niceDomain, tickStep, ticks } from "./utils/ticks.js";
