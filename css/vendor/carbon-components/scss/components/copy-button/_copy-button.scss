@@ -164,26 +164,26 @@
   // Sizes (square dimensions matching Button's small/lg/xl heights;
   // `default` keeps Carbon's native 2.5rem)
   .#{$prefix}--copy-btn.#{$prefix}--copy-btn--sm {
-    width: 2rem;
-    height: 2rem;
+    width: to-rem(32px);
+    height: to-rem(32px);
   }
 
   .#{$prefix}--copy-btn.#{$prefix}--copy-btn--lg {
-    width: 3rem;
-    height: 3rem;
+    width: to-rem(48px);
+    height: to-rem(48px);
   }
 
   .#{$prefix}--copy-btn.#{$prefix}--copy-btn--xl {
-    width: 4rem;
-    height: 4rem;
+    width: to-rem(64px);
+    height: to-rem(64px);
   }
 
   // Grow the icon on the larger squares so it stays visually centered rather
   // than marooned in whitespace.
   .#{$prefix}--copy-btn.#{$prefix}--copy-btn--lg .#{$prefix}--snippet__icon,
   .#{$prefix}--copy-btn.#{$prefix}--copy-btn--xl .#{$prefix}--snippet__icon {
-    width: 1.25rem;
-    height: 1.25rem;
+    width: to-rem(20px);
+    height: to-rem(20px);
   }
 }
 

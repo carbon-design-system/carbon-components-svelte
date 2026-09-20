@@ -253,8 +253,8 @@
     .#{$prefix}--slider-text-input.#{$prefix}--text-input--invalid,
   .#{$prefix}--slider-text-input-wrapper
     .#{$prefix}--slider-text-input--warn {
-    width: 6rem;
-    padding-right: 3rem;
+    width: to-rem(96px);
+    padding-right: to-rem(48px);
     text-align: left;
   }
 
@@ -316,7 +316,7 @@
   .#{$prefix}--slider-container--two-handles {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: to-rem(16px);
   }
 
   .#{$prefix}--slider-container--two-handles .#{$prefix}--slider {

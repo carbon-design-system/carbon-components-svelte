@@ -319,13 +319,13 @@
   .flatpickr-monthSelect-months {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    margin: 0.625rem 0.0625rem 0.1875rem;
+    margin: to-rem(10px) to-rem(1px) to-rem(3px);
   }
 
   .flatpickr-monthSelect-month {
     box-sizing: border-box;
     display: flex;
-    padding: 0.625rem;
+    padding: to-rem(10px);
     align-items: center;
     justify-content: center;
     border: 0;
@@ -358,11 +358,11 @@
       &::after {
         content: "";
         position: absolute;
-        bottom: 0.4375rem;
+        bottom: to-rem(7px);
         left: 50%;
         display: block;
-        width: 0.25rem;
-        height: 0.25rem;
+        width: to-rem(4px);
+        height: to-rem(4px);
         background-color: $link-01;
         transform: translateX(-50%);
       }
@@ -392,7 +392,7 @@
 // (which loads before this partial).
 @mixin date-picker-month-select-height {
   .flatpickr-calendar.open.#{$prefix}--date-picker__calendar--month {
-    height: 14rem;
+    height: to-rem(224px);
   }
 }
 
@@ -412,13 +412,13 @@
   .flatpickr-yearSelect-years {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    margin: 0.625rem 0.0625rem 0.1875rem;
+    margin: to-rem(10px) to-rem(1px) to-rem(3px);
   }
 
   .flatpickr-yearSelect-year {
     box-sizing: border-box;
     display: flex;
-    padding: 0.625rem;
+    padding: to-rem(10px);
     align-items: center;
     justify-content: center;
     border: 0;
@@ -451,11 +451,11 @@
       &::after {
         content: "";
         position: absolute;
-        bottom: 0.4375rem;
+        bottom: to-rem(7px);
         left: 50%;
         display: block;
-        width: 0.25rem;
-        height: 0.25rem;
+        width: to-rem(4px);
+        height: to-rem(4px);
         background-color: $link-01;
         transform: translateX(-50%);
       }
@@ -478,7 +478,7 @@
 
 @mixin date-picker-year-select-height {
   .flatpickr-calendar.open.#{$prefix}--date-picker__calendar--year {
-    height: 14rem;
+    height: to-rem(224px);
   }
 }
 

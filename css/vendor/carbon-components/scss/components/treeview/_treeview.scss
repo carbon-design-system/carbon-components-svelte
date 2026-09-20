@@ -207,7 +207,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 0.25rem;
+    width: to-rem(4px);
     height: 100%;
     background-color: $interactive-04;
     content: "";
