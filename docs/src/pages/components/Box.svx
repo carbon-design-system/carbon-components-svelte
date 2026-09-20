@@ -73,6 +73,12 @@ Set `borderWidth` to a pixel number or a CSS length for a thicker border. It onl
   <Box fill="layer-01" padding={5} border="interactive" borderWidth={2}>2px border</Box>
 </Stack>
 
+Set `borderSide` to `"top"`, `"right"`, `"bottom"`, or `"left"` to apply the border to one side only, instead of all four. Combine it with `borderWidth` to control that side's thickness independently.
+
+<Stack gap={3}>
+  <Box fill="layer-01" padding={5} border="strong" borderSide="left" borderWidth={3}>left side only</Box>
+</Stack>
+
 ### Shadow
 
 Set `shadow` to `true` to apply a raised Carbon box shadow.
@@ -198,7 +204,7 @@ scroll container, not the browser viewport.
 
 <Box height="8rem" border="subtle" style="overflow-y: auto;">
   <Box height="12rem">Scroll to see the sticky box below.</Box>
-  <Box position="sticky" bottom={0} fill="layer-01" padding={3} border="subtle">
+  <Box position="sticky" bottom={0} fill="layer-01" padding={3} border="subtle" borderSide="top">
     Sticky footer bar
   </Box>
 </Box>
@@ -255,6 +261,12 @@ Apply Box utilities directly when you do not need the component. Classes use the
 | `bx--box-border-strong` | Strong 1px border |
 | `bx--box-border-interactive` | Interactive 1px border |
 | `bx--box-border-disabled` | Disabled 1px border |
+| `bx--box-border-style-dashed` | `border-style: dashed` |
+| `bx--box-border-side-top` | Zero the right, bottom, and left border widths |
+| `bx--box-border-side-right` | Zero the top, bottom, and left border widths |
+| `bx--box-border-side-bottom` | Zero the top, right, and left border widths |
+| `bx--box-border-side-left` | Zero the top, right, and bottom border widths |
+| `bx--box-shadow` | Raised Carbon box shadow |
 | `bx--box-p-{1-13}` | Padding on all sides |
 | `bx--box-px-{1-13}` | Horizontal padding |
 | `bx--box-py-{1-13}` | Vertical padding |
@@ -269,6 +281,14 @@ Apply Box utilities directly when you do not need the component. Classes use the
 | `bx--box-max-height-{1-13}` | Max height |
 | `bx--box-position-relative` | `position: relative` |
 | `bx--box-position-sticky` | `position: sticky` |
+| `bx--box-display-block` | `display: block` |
+| `bx--box-display-flex` | `display: flex` |
+| `bx--box-display-inline-flex` | `display: inline-flex` |
+| `bx--box-display-grid` | `display: grid` |
+| `bx--box-overflow-visible` | `overflow: visible` |
+| `bx--box-overflow-hidden` | `overflow: hidden` |
+| `bx--box-overflow-auto` | `overflow: auto` |
+| `bx--box-overflow-scroll` | `overflow: scroll` |
 | `bx--box-top-{0-13}` | Offset from the top |
 | `bx--box-bottom-{0-13}` | Offset from the bottom |
 
