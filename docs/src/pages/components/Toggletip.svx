@@ -111,7 +111,7 @@ Position the content with `direction` (`"top"`, `"right"`, `"bottom"`, `"left"`)
 
 Set `portalTooltip` to render the content in a portal so it is not clipped by `overflow: hidden` containers.
 
-<Box padding={5} border="subtle" maxWidth="8rem" style="overflow: hidden;">
+<Box padding={5} border="subtle" maxWidth="8rem" overflow="hidden">
   <Toggletip portalTooltip>
     Deleting this workspace also removes its API keys, webhooks, and audit
     logs.

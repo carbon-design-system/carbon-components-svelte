@@ -1,24 +1,29 @@
 <script>
-  import { ComboBox, Stack } from "carbon-components-svelte";
+  import { Box, ComboBox, Stack } from "carbon-components-svelte";
 </script>
 
-<Stack
-  gap={4}
-  style="overflow: hidden; border: 1px dashed var(--cds-border-subtle); padding: 1rem; max-height: 120px;"
+<Box
+  overflow="hidden"
+  border="subtle"
+  borderStyle="dashed"
+  padding={5}
+  maxHeight="120px"
 >
-  <div>
-    This container has hidden overflow. Without <code>portalMenu</code>, the
-    dropdown would be clipped.
-  </div>
-  <ComboBox
-    portalMenu
-    light
-    labelText="Alert channel"
-    placeholder="Select alert channel"
-    items={[
-      { id: "0", text: "Slack" },
-      { id: "1", text: "Email" },
-      { id: "2", text: "Webhook" },
-    ]}
-  />
-</Stack>
+  <Stack gap={4}>
+    <div>
+      This container has hidden overflow. Without <code>portalMenu</code>, the
+      dropdown would be clipped.
+    </div>
+    <ComboBox
+      portalMenu
+      light
+      labelText="Alert channel"
+      placeholder="Select alert channel"
+      items={[
+        { id: "0", text: "Slack" },
+        { id: "1", text: "Email" },
+        { id: "2", text: "Webhook" },
+      ]}
+    />
+  </Stack>
+</Box>
