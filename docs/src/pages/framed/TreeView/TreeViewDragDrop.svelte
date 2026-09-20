@@ -55,7 +55,10 @@
       }
       next.push(
         item.nodes
-          ? { ...item, nodes: insertNode(item.nodes, targetId, position, moved) }
+          ? {
+              ...item,
+              nodes: insertNode(item.nodes, targetId, position, moved),
+            }
           : item,
       );
     }
