@@ -6,22 +6,21 @@
    */
 
   /**
-   * @typedef {import("../utils/funnel.js").FunnelStage<Id>} FunnelStage
-   * @typedef {import("../utils/funnel.js").FunnelStageStats} FunnelStageStats
-   * @typedef {{ stage: FunnelStage; stats: FunnelStageStats; index: number }} FunnelBarsEventDetail
+   * The stage type is written inline rather than as a typedef: a typedef
+   * cannot carry the `Id` constraint into the generated declarations.
    * @restProps {table}
-   * @event {FunnelBarsEventDetail} select Fires when a stage is activated by click or keyboard. Requires `selectable`.
-   * @event {FunnelBarsEventDetail | null} hover Fires when the pointer or focus enters a stage, and with `null` when it leaves. Requires `selectable`.
+   * @event {{ stage: import("../utils/funnel.js").FunnelStage<Id>; stats: import("../utils/funnel.js").FunnelStageStats; index: number }} select Fires when a stage is activated by click or keyboard. Requires `selectable`.
+   * @event {{ stage: import("../utils/funnel.js").FunnelStage<Id>; stats: import("../utils/funnel.js").FunnelStageStats; index: number } | null} hover Fires when the pointer or focus enters a stage, and with `null` when it leaves. Requires `selectable`.
    * @event {{ count: number; domain: [number, number]; stats: { overallRate: number | null; largestDropIndex: number; total: number } }} update Fires after the stages change. Requires `emitUpdate`.
-   * @slot {{ stage: FunnelStage; stats: FunnelStageStats; index: number }} label
-   * @slot {{ stage: FunnelStage; stats: FunnelStageStats; index: number; formattedValue: string }} value
-   * @slot {{ stage: FunnelStage; stats: FunnelStageStats; index: number; kind: "step" | "overall" }} rate
+   * @slot {{ stage: import("../utils/funnel.js").FunnelStage<Id>; stats: import("../utils/funnel.js").FunnelStageStats; index: number }} label
+   * @slot {{ stage: import("../utils/funnel.js").FunnelStage<Id>; stats: import("../utils/funnel.js").FunnelStageStats; index: number; formattedValue: string }} value
+   * @slot {{ stage: import("../utils/funnel.js").FunnelStage<Id>; stats: import("../utils/funnel.js").FunnelStageStats; index: number; kind: "step" | "overall" }} rate
    */
 
   /**
    * Specify the stages, in order.
    * Reassign the array to update: `stages = [...stages]`.
-   * @type {ReadonlyArray<FunnelStage>}
+   * @type {ReadonlyArray<import("../utils/funnel.js").FunnelStage<Id>>}
    */
   export let stages = [];
 
