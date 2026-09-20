@@ -456,7 +456,6 @@ const KNOWN_PATCH_VIOLATIONS: Record<string, number> = {
   "unguarded :hover: components/slider/_slider.scss": 2,
   "unguarded :hover: components/structured-list/_structured-list.scss": 2,
   "unguarded :hover: components/tabs/_tabs.scss": 10,
-  "unguarded :hover: components/tag/_tag.scss": 3,
   "unguarded :hover: components/time-picker/_time-picker.scss": 1,
   "unguarded :hover: components/ui-shell/_ui-shell.scss": 4,
 };
