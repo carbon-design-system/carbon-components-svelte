@@ -11,6 +11,9 @@ description: Breadcrumbs display a hierarchical navigation trail showing the use
     OverflowMenu,
     OverflowMenuItem
   } from "carbon-components-svelte";
+  import Calendar from "carbon-icons-svelte/lib/Calendar.svelte";
+  import Document from "carbon-icons-svelte/lib/Document.svelte";
+  import Home from "carbon-icons-svelte/lib/Home.svelte";
 </script>
 
 ## Basic
@@ -47,6 +50,40 @@ Pass a text character to render it through CSS, matching upstream Carbon.
 Pass a component reference (for example an icon) to render it as a real separator element instead of a text character.
 
 <FileSource src="/framed/Breadcrumb/BreadcrumbSeparatorIcon" />
+
+## Icons
+
+Set `icon` on `BreadcrumbItem` to render a leading icon before the label. This works in both the `href` and custom link (`let:props`) branches.
+
+### Every item
+
+<Breadcrumb>
+  <BreadcrumbItem href="/" icon={Home}>Home</BreadcrumbItem>
+  <BreadcrumbItem href="/reports" icon={Document}>Reports</BreadcrumbItem>
+  <BreadcrumbItem href="/reports/2019" icon={Calendar} isCurrentPage>
+    2019
+  </BreadcrumbItem>
+</Breadcrumb>
+
+### First item only
+
+Pass `icon` only to the items that need it — for example, a home icon to anchor the start of the trail.
+
+<Breadcrumb>
+  <BreadcrumbItem href="/" icon={Home}>Home</BreadcrumbItem>
+  <BreadcrumbItem href="/reports">Annual reports</BreadcrumbItem>
+  <BreadcrumbItem href="/reports/2019" isCurrentPage>2019</BreadcrumbItem>
+</Breadcrumb>
+
+### All except the current page
+
+Omit `icon` from the current page to de-emphasize it relative to the navigable items.
+
+<Breadcrumb>
+  <BreadcrumbItem href="/" icon={Home}>Home</BreadcrumbItem>
+  <BreadcrumbItem href="/reports" icon={Document}>Annual reports</BreadcrumbItem>
+  <BreadcrumbItem href="/reports/2019" isCurrentPage>2019</BreadcrumbItem>
+</Breadcrumb>
 
 ## Overflow and sizing
 
