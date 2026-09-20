@@ -1,21 +1,8 @@
-import { join } from "node:path";
-import { compileAsync } from "sass-embedded";
 import { parseRules, type Rule } from "../../scripts/lib/css-cascade";
-
-const CSS_DIR = join(__dirname, "../../css");
+import { compileEntry } from "./compile";
 
 async function compileAll(): Promise<Rule[]> {
-  const { css } = await compileAsync(join(CSS_DIR, "all.scss"), {
-    loadPaths: [join(CSS_DIR, "vendor")],
-    quietDeps: true,
-    silenceDeprecations: [
-      "import",
-      "global-builtin",
-      "color-functions",
-      "if-function",
-    ],
-    logger: { warn() {}, debug() {} },
-  });
+  const css = await compileEntry("all.scss");
   return parseRules(css);
 }
 

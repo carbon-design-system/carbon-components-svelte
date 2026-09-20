@@ -1,8 +1,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { compileAsync } from "sass-embedded";
+import { compileEntry } from "./compile";
 
-const CSS_DIR = join(__dirname, "../../css");
 const SRC_DIR = join(__dirname, "../../src");
 
 function sourceFiles(dir: string): string[] {
@@ -37,18 +36,7 @@ const KNOWN_UNRENDERED = new Set([
 
 describe("unrendered classes", () => {
   it("every class in all.css is one a component can render", async () => {
-    const { css } = await compileAsync(join(CSS_DIR, "all.scss"), {
-      style: "compressed",
-      loadPaths: [join(CSS_DIR, "vendor")],
-      quietDeps: true,
-      silenceDeprecations: [
-        "import",
-        "global-builtin",
-        "color-functions",
-        "if-function",
-      ],
-      logger: { warn() {}, debug() {} },
-    });
+    const css = await compileEntry("all.scss", "compressed");
     const styled = new Set(
       [...css.matchAll(/\.(bx--[\w-]+)/g)].map((match) => match[1]),
     );

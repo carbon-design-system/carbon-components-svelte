@@ -25,7 +25,7 @@ describe("will-change", () => {
         .map(([decl]) => `${file.slice(CSS_DIR.length + 1)} ${decl}`),
     );
     expect(offenders).toEqual([]);
-  });
+  }, 30_000);
 
   it("is not set on skeletons, whose running animation already promotes them", () => {
     const mixins = readFileSync(

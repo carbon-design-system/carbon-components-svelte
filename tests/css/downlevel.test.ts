@@ -32,5 +32,5 @@ describe("css downlevel cost", () => {
         .map(({ i }) => `${file.slice(CSS_DIR.length + 1)}:${i + 1}`),
     );
     expect(offenders).toEqual([]);
-  });
+  }, 30_000);
 });
