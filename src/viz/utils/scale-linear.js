@@ -6,8 +6,9 @@ import { niceDomain } from "./ticks.js";
 /** @typedef {import("./scale-linear.d.ts").LinearScaleOptions} LinearScaleOptions */
 
 /**
- * Give a zero-width domain some span so the single value lands mid-range
- * instead of dividing by zero.
+ * Give a zero-width domain some span instead of dividing by zero. A non-zero
+ * value lands mid-range. A flat zero becomes `[0, 1]`, so an all-zero series
+ * sits on the baseline rather than floating in the middle of the plot.
  *
  * @param {number} d0
  * @param {number} d1
