@@ -32,6 +32,22 @@ Remove the trailing slash from the last item with `noTrailingSlash`.
   <BreadcrumbItem href="/account-settings" isCurrentPage>Account settings</BreadcrumbItem>
 </Breadcrumb>
 
+## Separator
+
+Change the separator rendered between breadcrumb items with `separator`. Defaults to `"/"`.
+
+### Character
+
+Pass a text character to render it through CSS, matching upstream Carbon.
+
+<FileSource src="/framed/Breadcrumb/BreadcrumbSeparator" />
+
+### Icon
+
+Pass a component reference (for example an icon) to render it as a real separator element instead of a text character.
+
+<FileSource src="/framed/Breadcrumb/BreadcrumbSeparatorIcon" />
+
 ## Overflow and sizing
 
 Handle long breadcrumb trails with an overflow menu, a compact size, or both together.
