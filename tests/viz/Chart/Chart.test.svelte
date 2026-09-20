@@ -17,6 +17,7 @@
   export let selected: { series: string | number; index: number } | null = null;
   export let title = "Revenue by region";
   export let emitUpdate = false;
+  export let loading = false;
   export let includeY: number | undefined = undefined;
   export let withProbe = true;
   export let tickle = 0;
@@ -37,6 +38,8 @@
   {title}
   width={640}
   {emitUpdate}
+  {loading}
+  emptyText="Nothing to show"
   bind:hidden
   bind:selected
   data-testid="chart"

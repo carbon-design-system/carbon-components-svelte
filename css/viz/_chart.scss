@@ -59,6 +59,26 @@
     position: relative;
   }
 
+  // Covers the plot box only, so the axes stay visible while data loads.
+  // The shimmer comes from the core skeleton class on the same element.
+  .#{$prefix}--viz-chart__skeleton.#{$prefix}--skeleton__placeholder {
+    position: absolute;
+    block-size: auto;
+    inline-size: auto;
+  }
+
+  .#{$prefix}--viz-chart__empty {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $text-secondary;
+    inset: 0;
+    pointer-events: none;
+
+    @include type-style("body-short-01");
+  }
+
   .#{$prefix}--viz-chart__svg {
     display: block;
     overflow: visible;

@@ -171,6 +171,33 @@ describe("Chart", () => {
     expect(ontoggle).toHaveBeenLastCalledWith({ series: "b", hidden: false });
   });
 
+  it("covers the plot with a skeleton and marks the chart busy while loading", async () => {
+    const { rerender } = render(Chart, { loading: true, data: [] });
+
+    const figure = screen.getByTestId("chart");
+    expect(figure).toHaveAttribute("aria-busy", "true");
+    const skeleton = figure.querySelector(".bx--viz-chart__skeleton");
+    expect(skeleton).toHaveClass("bx--skeleton__placeholder");
+    // Loading never reads as empty.
+    expect(figure.querySelector(".bx--viz-chart__empty")).toBeNull();
+
+    await rerender({ loading: false });
+    expect(figure).not.toHaveAttribute("aria-busy");
+    expect(figure.querySelector(".bx--viz-chart__skeleton")).toBeNull();
+  });
+
+  it("says so when there is no data, and only then", async () => {
+    const { rerender } = render(Chart, { data: [] });
+
+    const figure = screen.getByTestId("chart");
+    expect(figure.querySelector(".bx--viz-chart__empty")).toHaveTextContent(
+      "Nothing to show",
+    );
+
+    await rerender({ data: [{ day: 0, region: "a", revenue: 1 }] });
+    expect(figure.querySelector(".bx--viz-chart__empty")).toBeNull();
+  });
+
   it("dispatches update only when emitUpdate is set", async () => {
     const onupdate = vi.fn();
     const { rerender } = render(Chart, { onupdate });

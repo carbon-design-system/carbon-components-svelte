@@ -17,6 +17,7 @@
    * @slot {{}} tooltip
    * @slot {{}} legend
    * @slot {{}} table
+   * @slot {{}} empty
    */
 
   /**
@@ -134,6 +135,15 @@
    * @type {string}
    */
   export let locale = undefined;
+
+  /**
+   * Set to `true` while the data loads. The plot is covered by a skeleton
+   * and the chart is marked busy.
+   */
+  export let loading = false;
+
+  /** Specify the text shown in place of the plot when there is no data */
+  export let emptyText = "No data";
 
   /**
    * Specify whether to show the chart or its data as a table.
@@ -593,6 +603,8 @@
     hoverAt(target.xs[Math.min(focusIndex, target.xs.length - 1)]);
   }
 
+  $: empty = !loading && $groups.every((group) => group.xs.length === 0);
+
   $: announcement = $hover
     ? `${$scales.xLabel($hover.x)}: ${$hover.points
         .map(
@@ -603,7 +615,12 @@
     : "";
 </script>
 
-<figure bind:this={ref} class:bx--viz-chart={true} {...$$restProps}>
+<figure
+  bind:this={ref}
+  class:bx--viz-chart={true}
+  aria-busy={loading ? "true" : undefined}
+  {...$$restProps}
+>
   <div class:bx--viz-chart__header={true}>
     {#if title}
       <figcaption class:bx--viz-chart__title={true}>{title}</figcaption>
@@ -637,6 +654,18 @@
       <slot />
     </svg>
     <slot name="tooltip" />
+    {#if loading}
+      <div
+        class:bx--viz-chart__skeleton={true}
+        class:bx--skeleton__placeholder={true}
+        style:inset="{$scales.plot.y0}px {$size.width - $scales.plot.x1}px {$size.height -
+          $scales.plot.y1}px {$scales.plot.x0}px"
+      ></div>
+    {:else if empty}
+      <div class:bx--viz-chart__empty={true}>
+        <slot name="empty">{emptyText}</slot>
+      </div>
+    {/if}
   </div>
   {#if view === "table"}
     <div class:bx--viz-chart__table={true} style:max-height="{$size.height}px">
