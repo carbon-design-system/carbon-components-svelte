@@ -25,6 +25,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   DataTable: "0.5.0",
   DatePicker: "0.2.0",
   DescriptionList: "0.113.0",
+  DeltaIndicator: "0.113.0",
   Dialog: "0.110.0",
   Disclosure: "0.110.0",
   Divider: "0.113.0",
