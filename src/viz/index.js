@@ -50,6 +50,7 @@ export { pathArea } from "./utils/path-area.js";
 export { pathLine } from "./utils/path-line.js";
 export { pivotLonger } from "./utils/pivot-longer.js";
 export { boxStats, quantile } from "./utils/quantiles.js";
+export { getRanks } from "./utils/rank.js";
 export { scaleBand, scalePoint } from "./utils/scale-band.js";
 export { scaleLinear } from "./utils/scale-linear.js";
 export { scaleLog } from "./utils/scale-log.js";
