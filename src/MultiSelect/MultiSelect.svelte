@@ -392,7 +392,10 @@
   let initialRender = true;
   let listScrollTop = 0;
   let prevOpen = false;
-  let prevSelectedIds = selectedIds;
+  // A copy, not the prop reference: `sameSelectedIds` value-compares against
+  // this, and a live reference would silently track any in-place mutation a
+  // consumer made to the array it previously handed over.
+  let prevSelectedIds = selectedIds.slice();
   /** Anchor item id for shift+click range selection; cleared when selection is reset entirely. */
   let prevSelectedItemId = null;
   /** Text content of the visually-hidden status live region. */
@@ -538,7 +541,7 @@
     selectedIds = sortedItems
       .filter((sortedItem) => sortedItem.checked && !sortedItem.isSelectAll)
       .map((sortedItem) => sortedItem.id);
-    prevSelectedIds = selectedIds;
+    prevSelectedIds = selectedIds.slice();
     sortedItems = sort();
   }
 
@@ -668,7 +671,7 @@
       selectedIds = checked
         .filter((item) => !item.isSelectAll)
         .map((item) => item.id);
-      prevSelectedIds = selectedIds;
+      prevSelectedIds = selectedIds.slice();
       if (!initialRender) {
         dispatch("select", {
           selectedIds,
@@ -900,10 +903,30 @@
       if (item.checked && !item.isSelectAll) checkedIds.add(item.id);
     }
 
-    return (
-      checkedIds.size === nextSelectedIds.length &&
-      nextSelectedIds.every((id) => checkedIds.has(id))
-    );
+    return sameIdSet(nextSelectedIds, checkedIds);
+  }
+
+  /**
+   * Whether `ids` holds exactly the ids in `idSet`, ignoring order and
+   * duplicates. Sizes are compared as sets, not by `ids.length`: a duplicate
+   * (`["1", "1"]` against `{"1", "2"}`) matches on length and membership
+   * while selecting something different.
+   * @type {(ids: typeof selectedIds, idSet: Set<typeof selectedIds[number]>) => boolean}
+   */
+  function sameIdSet(ids, idSet) {
+    if (ids.length < idSet.size) return false;
+    if (!ids.every((id) => idSet.has(id))) return false;
+    return new Set(ids).size === idSet.size;
+  }
+
+  /**
+   * Value-compare two `selectedIds` arrays, ignoring order: `sort()` only
+   * ever tests membership via a `Set`, so a reordered-but-otherwise-equal
+   * array produces the same result and shouldn't trigger a re-sort.
+   * @type {(a: typeof selectedIds, b: typeof selectedIds) => boolean}
+   */
+  function sameSelectedIds(a, b) {
+    return sameIdSet(a, new Set(b));
   }
 
   $: menuId = `menu-${id}`;
@@ -976,10 +999,11 @@
   }
   $: if (
     selectedIds &&
-    ((selectionFeedback === "top" && selectedIds !== prevSelectedIds) ||
+    ((selectionFeedback === "top" &&
+      !sameSelectedIds(selectedIds, prevSelectedIds)) ||
       (selectionFeedback === "top-after-reopen" && open === false))
   ) {
-    prevSelectedIds = selectedIds;
+    prevSelectedIds = selectedIds.slice();
     sortedItems = sort();
   }
   $: hasSelectAll = items.some((item) => item.isSelectAll);
