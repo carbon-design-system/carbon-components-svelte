@@ -2,6 +2,8 @@
 // Styles ship separately in `carbon-components-svelte/css/viz.css`.
 // May import from core (`../utils`, `../icons`); core must never import from here.
 
+export { default as Chart } from "./Chart/Chart.svelte";
+export { CHART_CONTEXT } from "./Chart/context.js";
 export { default as DeltaIndicator } from "./DeltaIndicator/DeltaIndicator.svelte";
 export { default as FunnelBars } from "./FunnelBars/FunnelBars.svelte";
 export { default as MicroFunnel } from "./MicroFunnel/MicroFunnel.svelte";

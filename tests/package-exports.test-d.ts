@@ -24,6 +24,7 @@ import type TimePickerSkeleton from "carbon-components-svelte/src/TimePicker/Tim
 import type { HeaderSearchResult } from "carbon-components-svelte/src/UIShell/HeaderSearch.svelte";
 import type {
   scaleLinear,
+  Chart as VizChart,
   DeltaIndicator as VizDeltaIndicator,
   FunnelBars as VizFunnelBars,
   vizColor,
@@ -62,6 +63,7 @@ type _HeaderSearchResult = HeaderSearchResult;
 type _ThemeProps = ThemeProps;
 type _Themes = typeof themes;
 type _TimePickerSkeleton = TimePickerSkeleton;
+type _VizChart = VizChart<{ date: Date; value: number }>;
 type _VizColor = ReturnType<typeof vizColor>;
 type _VizDeltaIndicator = VizDeltaIndicator;
 type _VizFunnelBars = VizFunnelBars<"a" | "b">;
