@@ -5,6 +5,7 @@
     BulletChart,
     ComparisonBar,
     DeltaIndicator,
+    DonutChart,
     FunnelBars,
     HeatStrip,
     LineChart,
@@ -162,6 +163,14 @@
     title="Users by stage"
     orientation="horizontal"
     height={220}
+  />
+
+  <DonutChart
+    data={stages}
+    value="value"
+    category="label"
+    title="Users by stage, as a donut"
+    selectable
   />
 
   <LineChart
