@@ -62,7 +62,7 @@
     position: relative;
     text-decoration: none;
     color: inherit;
-    transition: background-color 110ms;
+    transition: background-color $duration--fast-02;
     border: to-rem(1px) solid rgba(0, 0, 0, 0);
     background-color: transparent;
   }
@@ -149,8 +149,8 @@
     background-color: $layer;
     color: $text-primary;
     transition:
-      max-width 0.11s cubic-bezier(0.2, 0, 0.38, 0.9),
-      background 0.11s cubic-bezier(0.2, 0, 0.38, 0.9);
+      max-width $duration--fast-02 motion(standard, productive),
+      background $duration--fast-02 motion(standard, productive);
   }
 
   .#{$prefix}--header__search:not(.#{$prefix}--header__search--active) {
@@ -182,7 +182,7 @@
     background-color: initial;
     border: none;
     outline: none;
-    transition: opacity 0.11s cubic-bezier(0.2, 0, 0.38, 0.9);
+    transition: opacity $duration--fast-02 motion(standard, productive);
   }
 
   .#{$prefix}--header__search-input:not(.#{$prefix}--header__search--active) {
@@ -241,8 +241,9 @@
     // ccs: only background-color/color differ (hover, selected); avoid
     // `all` so the browser doesn't interpolate the rest of the animatable
     // property set.
-    transition: background-color 70ms cubic-bezier(0.2, 0, 0.38, 0.9),
-      color 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
+    transition:
+      background-color $duration--fast-01 motion(standard, productive),
+      color $duration--fast-01 motion(standard, productive);
     display: block;
     text-decoration: none;
     white-space: nowrap;
