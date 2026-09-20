@@ -202,6 +202,36 @@
   .#{$prefix}--viz-threshold--info .#{$prefix}--viz-threshold__label {
     fill: $text-secondary;
   }
+
+  .#{$prefix}--viz-bars__bar {
+    fill: var(--bx-viz-color, #{$interactive-04});
+    shape-rendering: crispEdges;
+    transition: opacity $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  // Hovering a slot quiets the others rather than recoloring the focused one.
+  .#{$prefix}--viz-bars__bar--dimmed {
+    opacity: 0.4;
+  }
+
+  .#{$prefix}--viz-bars__band {
+    fill: $hover-ui;
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-bars__bar {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-bars__bar {
+      fill: CanvasText;
+      forced-color-adjust: none;
+      stroke: Canvas;
+    }
+  }
 }
 
 @include exports("viz-chart") {
