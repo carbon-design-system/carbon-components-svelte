@@ -482,3 +482,84 @@ describe("vendored patch block conventions", () => {
     expect(counts).toEqual(KNOWN_PATCH_VIOLATIONS);
   });
 });
+
+// Rules that hold for everything hand-authored: partials and patch blocks.
+const HAND_AUTHORED = [
+  ...PARTIALS.map((name) => ({
+    name,
+    lines: readFileSync(join(CSS_DIR, name), "utf8").split("\n"),
+  })),
+  ...PATCHES,
+];
+
+// Custom properties under Carbon's `--cds-*` namespace that predate the
+// `--ccs-*` rule and are public API now.
+const LEGACY_CDS_PROPERTIES = new Set([
+  "--cds-popover-offset",
+  "--cds-popover-caret-offset",
+  "--cds-scroll-gradient-color",
+]);
+
+const SHARED_RULES: Record<string, (lines: string[]) => number[]> = {
+  // `z("…")` covers anything that floats over the page; one digit is local
+  // stacking inside the component's own box.
+  "literal z-index": matching(/z-index:\s*-?\d{2,}/),
+  "element-qualified class": matching(
+    /(^|[\s>+~,])[a-z][a-z0-9]*\.#\{\$prefix\}/,
+  ),
+  "new --cds-* property": (lines) =>
+    lines.flatMap((line, index) =>
+      [...line.split("//")[0].matchAll(/(?:^|[{;\s])(--cds-[\w-]+)\s*:/g)].some(
+        ([, property]) => !LEGACY_CDS_PROPERTIES.has(property),
+      )
+        ? [index + 1]
+        : [],
+    ),
+  // Allowed only under a comment that names what it has to beat.
+  "unexplained !important": (lines) =>
+    lines.flatMap((line, index) =>
+      line.split("//")[0].includes("!important") &&
+      !lines
+        .slice(Math.max(0, index - 8), index)
+        .some((above) => /^\s*\/\/.*!important/.test(above))
+        ? [index + 1]
+        : [],
+    ),
+};
+
+// Same contract as KNOWN_PATCH_VIOLATIONS: exact counts that only shrink.
+// The z-index values have no `z()` layer (9000 sits on "modal" by
+// coincidence, 10000 is above the map). The element qualifiers out-rank
+// `legend`/`tr` rules in the vendored base.
+const KNOWN_SHARED_VIOLATIONS: Record<string, number> = {
+  "literal z-index: _profile-menu.scss": 1,
+  "literal z-index: components/ui-shell/_ui-shell.scss": 2,
+  "element-qualified class: _fluid-pin-code-input.scss": 3,
+  "element-qualified class: components/data-table/_data-table.scss": 4,
+};
+
+describe("hand-authored conventions (partials and patch blocks)", () => {
+  it("adds no violations beyond the known baseline", () => {
+    const counts: Record<string, number> = {};
+    const changed: string[] = [];
+    for (const [rule, find] of Object.entries(SHARED_RULES)) {
+      for (const { name, lines } of HAND_AUTHORED) {
+        const found = find(lines);
+        const key = `${rule}: ${name}`;
+        if (found.length > 0) counts[key] = found.length;
+        if (found.length !== (KNOWN_SHARED_VIOLATIONS[key] ?? 0))
+          changed.push(`${key}:${found.join(",")}`);
+      }
+    }
+    expect(HAND_AUTHORED.length).toBeGreaterThan(PARTIALS.length);
+    expect(changed).toEqual([]);
+    expect(counts).toEqual(KNOWN_SHARED_VIOLATIONS);
+  });
+
+  it("still sees the !important declarations it vets", () => {
+    const total = HAND_AUTHORED.flatMap(({ lines }) =>
+      lines.filter((line) => line.split("//")[0].includes("!important")),
+    );
+    expect(total.length).toBeGreaterThan(0);
+  });
+});
