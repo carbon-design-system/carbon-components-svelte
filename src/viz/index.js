@@ -2,6 +2,7 @@
 // Styles ship separately in `carbon-components-svelte/css/viz.css`.
 // May import from core (`../utils`, `../icons`); core must never import from here.
 
+export { default as DeltaIndicator } from "./DeltaIndicator/DeltaIndicator.svelte";
 export { groupBy, toAccessor } from "./utils/accessor.js";
 export { bin } from "./utils/bin.js";
 export {
