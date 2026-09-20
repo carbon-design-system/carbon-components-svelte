@@ -1,0 +1,43 @@
+/// Chart: the figure, plot box, and SVG root that chart marks compose inside.
+/// Marks set `fill` and `stroke` here by class, since static theme builds
+/// declare no `--cds-*` properties for an SVG attribute to read.
+/// @access private
+/// @group viz
+@mixin viz-chart {
+  .#{$prefix}--viz-chart {
+    position: relative;
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-chart__title {
+    margin-block-end: $carbon--spacing-03;
+
+    @include type-style("productive-heading-01");
+  }
+
+  .#{$prefix}--viz-chart__plot {
+    position: relative;
+  }
+
+  .#{$prefix}--viz-chart__svg {
+    display: block;
+    overflow: visible;
+    inline-size: 100%;
+    // Horizontal pointer moves scrub the chart. Vertical ones scroll the page.
+    touch-action: pan-y;
+  }
+
+  .#{$prefix}--viz-chart__svg:focus {
+    outline: 2px solid $focus;
+    outline-offset: 2px;
+  }
+
+  .#{$prefix}--viz-chart__svg:focus:not(:focus-visible) {
+    outline: none;
+  }
+}
+
+@include exports("viz-chart") {
+  @include viz-chart;
+}
