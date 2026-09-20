@@ -6,17 +6,33 @@ import { testConfig } from "./tests/utils.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-export default defineConfig({
-  root: "./tests",
-  plugins: [svelte({ preprocess: [vitePreprocess()] })],
-  resolve: {
-    alias: {
-      "carbon-components-svelte": path.resolve(__dirname, "src"),
+/**
+ * `dev` left `undefined` (the default) omits `compilerOptions` entirely, so
+ * `bun run test` keeps vite-plugin-svelte's own default. `vite.config.perf.ts`
+ * passes `dev: false` to disable Svelte 5's dev-mode instrumentation (stack
+ * capture on every state write), which otherwise dominates jsdom timings —
+ * see "Counting redundant work" in CONTRIBUTING.md.
+ */
+export function createConfig({ dev }: { dev?: boolean } = {}) {
+  return defineConfig({
+    root: "./tests",
+    plugins: [
+      svelte({
+        preprocess: [vitePreprocess()],
+        ...(dev === undefined ? {} : { compilerOptions: { dev } }),
+      }),
+    ],
+    resolve: {
+      alias: {
+        "carbon-components-svelte": path.resolve(__dirname, "src"),
+      },
+      conditions: ["browser"],
     },
-    conditions: ["browser"],
-  },
-  test: {
-    ...testConfig,
-    setupFiles: ["./setup-tests.ts"],
-  },
-});
+    test: {
+      ...testConfig,
+      setupFiles: ["./setup-tests.ts"],
+    },
+  });
+}
+
+export default createConfig();
