@@ -68,6 +68,25 @@ describe("Box", () => {
     });
   });
 
+  it("scopes the border to one side only when a border token is set", () => {
+    render(Box);
+
+    expect(screen.getByText("Top border only")).toHaveClass(
+      "bx--box-border-subtle",
+      "bx--box-border-side-top",
+    );
+    expect(screen.getByText("No border, top side only")).not.toHaveClass(
+      "bx--box-border-side-top",
+    );
+
+    expectInlineStyle(screen.getByText("Thick left border"), {
+      borderTopWidth: "",
+      borderRightWidth: "",
+      borderBottomWidth: "",
+      borderLeftWidth: "3px",
+    });
+  });
+
   it("applies the shadow utility class", () => {
     render(Box);
 

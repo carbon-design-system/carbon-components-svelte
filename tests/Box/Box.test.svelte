@@ -9,6 +9,9 @@
 <Box borderStyle="dashed">No border, dashed style</Box>
 <Box border="strong" borderWidth={2}>Thick border</Box>
 <Box borderWidth={2}>No border, custom width</Box>
+<Box border="subtle" borderSide="top">Top border only</Box>
+<Box borderSide="top">No border, top side only</Box>
+<Box border="strong" borderSide="left" borderWidth={3}>Thick left border</Box>
 <Box shadow>Raised shadow</Box>
 <Box display="flex">Flex display</Box>
 <Box overflow="auto">Auto overflow</Box>
