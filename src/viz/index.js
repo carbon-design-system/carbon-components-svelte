@@ -31,6 +31,7 @@ export { default as RankBars } from "./RankBars/RankBars.svelte";
 export { default as ShareOfTotal } from "./ShareOfTotal/ShareOfTotal.svelte";
 export { default as Sparkline } from "./Sparkline/Sparkline.svelte";
 export { default as StackedBar } from "./StackedBar/StackedBar.svelte";
+export { default as UptimeBar } from "./UptimeBar/UptimeBar.svelte";
 export { groupBy, toAccessor } from "./utils/accessor.js";
 export { bin } from "./utils/bin.js";
 export { getBulletGeometry } from "./utils/bullet.js";

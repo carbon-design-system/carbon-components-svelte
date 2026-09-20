@@ -1,0 +1,109 @@
+/// UptimeBar: one mark for each period, where status changes the shape of the
+/// mark as well as its color.
+/// @access private
+/// @group viz
+@mixin viz-uptime-bar {
+  .#{$prefix}--viz-uptime {
+    --bx-viz-size: #{to-rem(24px)};
+
+    display: flex;
+    align-items: center;
+    column-gap: $carbon--spacing-03;
+    min-inline-size: to-rem(64px);
+  }
+
+  .#{$prefix}--viz-uptime--sm {
+    --bx-viz-size: #{to-rem(16px)};
+  }
+
+  .#{$prefix}--viz-uptime--lg {
+    --bx-viz-size: #{to-rem(32px)};
+  }
+
+  .#{$prefix}--viz-uptime__track {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: flex-end;
+    block-size: var(--bx-viz-size);
+    gap: to-rem(2px);
+  }
+
+  .#{$prefix}--viz-uptime__period {
+    flex: 1 1 0;
+    padding: 0;
+    border: 0;
+    min-inline-size: to-rem(2px);
+    appearance: none;
+    background: $support-02;
+    block-size: 100%;
+  }
+
+  // Degraded: striped like hazard tape.
+  .#{$prefix}--viz-uptime__period--degraded {
+    background: repeating-linear-gradient(
+        -45deg,
+        #{$ui-05} 0,
+        #{$ui-05} to-rem(1px),
+        transparent to-rem(1px),
+        transparent to-rem(4px)
+      ),
+      $support-03;
+  }
+
+  // Down: hollow.
+  .#{$prefix}--viz-uptime__period--down {
+    background: none;
+    box-shadow: inset 0 0 0 to-rem(2px) $support-01;
+  }
+
+  // No data: a stub on the baseline.
+  .#{$prefix}--viz-uptime__period--none {
+    background: $ui-04;
+    block-size: to-rem(2px);
+  }
+
+  .#{$prefix}--viz-uptime--selectable .#{$prefix}--viz-uptime__period {
+    cursor: pointer;
+  }
+
+  .#{$prefix}--viz-uptime--selectable .#{$prefix}--viz-uptime__period:hover {
+    opacity: 0.7;
+  }
+
+  .#{$prefix}--viz-uptime--selectable
+    .#{$prefix}--viz-uptime__period:focus-visible,
+  .#{$prefix}--viz-uptime__period--selected {
+    outline: 2px solid $focus;
+    outline-offset: 1px;
+  }
+
+  .#{$prefix}--viz-uptime__value {
+    flex: none;
+    color: $text-primary;
+    font-variant-numeric: tabular-nums;
+
+    @include type-style("label-01");
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-uptime__period {
+      background: CanvasText;
+      forced-color-adjust: none;
+    }
+
+    .#{$prefix}--viz-uptime__period--degraded {
+      border: 1px dashed CanvasText;
+      background: none;
+    }
+
+    .#{$prefix}--viz-uptime__period--down {
+      border: 1px solid CanvasText;
+      background: none;
+      box-shadow: none;
+    }
+  }
+}
+
+@include exports("viz-uptime-bar") {
+  @include viz-uptime-bar;
+}
