@@ -478,7 +478,7 @@ Non-emitting helpers (Sass maps or mixins other partials include, such as [`css/
 
 #### Conventions
 
-These apply to every hand-authored rule: the `css/_*.scss` partials and the blocks below a `// carbon-components-svelte patch` banner in the vendored tree. `tests/css/conventions.test.ts` scans both. Patch blocks are checked against `KNOWN_PATCH_VIOLATIONS`, an exact per-file count of what predates the check: lower a count when you fix one, never raise it. Untouched upstream code keeps upstream's style.
+These apply to every hand-authored rule: the `css/_*.scss` partials and the blocks below a `// carbon-components-svelte patch` banner in the vendored tree. `tests/css/conventions.test.ts` scans both. Patch blocks are checked against `KNOWN_PATCH_VIOLATIONS`, an exact per-file count of what predates the check: lower a count when you fix one, never raise it. In-place `// ccs:` edits to upstream rules match the value style of the lines around them, and are checked for literal `.bx--`, hex, `:has()`, and repeated classes. Untouched upstream code keeps upstream's style.
 
 Values:
 
@@ -490,6 +490,7 @@ Values:
 - `will-change`: only `transform` or `opacity`, the two properties the hint can promote to a compositor layer. Not on an element that is idle most of the time, and not on one whose running animation already promotes it (skeletons).
 - No `!important`. When a vendored rule or an inline style leaves no other way, add a comment naming what it has to beat.
 - Focus rings: `@include focus-outline("outline")` / `("invalid")`, not a hand-written `outline`.
+- Set one spelling of a box property per rule. `width` and `inline-size` (likewise `top`/`inset-block-start`, `height`/`block-size`) share a cascade slot, so the earlier one is dead; `check:css:overrides` reports it.
 - `z-index`: `z("floating")`, `z("dropdown")`, … for anything that floats over the page. A literal `1`/`-1` is fine for stacking inside the component's own box.
 - Breakpoints: `@include carbon--breakpoint(md)`, not a literal `min-width`.
 - Custom properties: `--cds-*` is reserved for Carbon theme tokens. Properties this library invents are `--ccs-*` (and Sass globals `$ccs-*`). A few older public hooks predate this rule (`--cds-scroll-gradient-color`, `--cds-popover-offset`, `--user-avatar-group-overlap`); do not add more.
@@ -501,7 +502,7 @@ Selectors:
 - State: follow the v10 base where one exists (`[data-invalid]`, `--warn` vs `--warning` differ per component upstream). For new components use modifier classes on the wrapper: `--invalid`, `--warning`, `--disabled`, `--readonly`, `--open`.
 - When a rule applies only if _none_ of several states hold, have the component emit one marker class (`--neutral`) instead of chaining `:not()`.
 - Do not pad specificity (repeated classes, `tag.class`, order-only `:not()`). If the rule you need to beat is in the vendored tree, edit it there. Repetition is tolerated only to preserve an existing cascade during a refactor, with a comment saying what it matches.
-- Hover rules go in **one** `@media (any-hover: hover)` block per partial, at the end of the mixin. Lightning CSS only merges adjacent blocks, and `tests/css/media-query-grouping.test.ts` budgets the total.
+- Hover rules go in **one** `@media (any-hover: hover)` block per partial, at the end of the mixin. Lightning CSS only merges adjacent blocks, and `tests/css/media-query-grouping.test.ts` budgets the total. Keep any equal-specificity `:focus` rule after the block, or a hover `outline: none` will erase the ring. Two shapes stay outside the block: a suppressor that lists `X:hover` beside its own `X` to restate the resting style, and any hover rule that competes with a base hover rule the vendored tree leaves unguarded (most of them). Guarding only your half lets the base hover through on touch; guard both or neither.
 - Use physical properties (`left`, `padding-right`, `height`) for new code, matching the v10 base. Several v11 backports use logical properties on the block axis; do not mix both for the same box in one rule.
 - Avoid syntax Lightning CSS downlevels by duplicating the rule: `inset-inline-start`/`-end`, `border-start-start-radius` and its siblings (each expands to `:lang()` RTL twins, about 900 bytes per declaration), a selector list inside `:not()` (write `:not(.a):not(.b)`, or better a marker class), and `:is()`/`:where()`. `tests/css/downlevel.test.ts` scans the vendored tree too.
 - Do not use `:has()`. It exceeds the Svelte 5 browserslist baseline (Firefox 83/Safari 14) the CSS targets, and Lightning CSS cannot prefix or polyfill it. Mark parents explicitly instead (for example a `hasLeftIcon` prop emitting a marker class). Same rule for any selector newer than that baseline, since one unknown selector invalidates the whole rule. Newer _properties_ that degrade gracefully (`text-wrap: pretty`) are fine.
@@ -532,11 +533,23 @@ Emission order is load-bearing: equal-specificity ties resolve by source order. 
 | `bun e2e/cascade-snapshot.ts` | Computed-style snapshot of the e2e fixtures. |
 | `bun run check:css:usage` | Browser-measured "never wins" worklist. Evidence, not proof. |
 
+Tests in `tests/css/` that budget the compiled sheet, each with the number to lower when you improve it:
+
+| Test | Holds |
+| --- | --- |
+| `size-budget.test.ts` | Minified and gzipped size of `all.css` and `white.css`, about 2% above measured. |
+| `not-chains.test.ts` | Selectors with three or more `:not()`. |
+| `media-query-grouping.test.ts` | Number of `(any-hover: hover)` blocks. |
+| `unrendered-classes.test.ts` | Styled `bx--*` classes nothing in `src/` renders. |
+| `conventions.test.ts` | Source rules, with exact baselines for what predates them. |
+
+Compile through `compileEntry()` from `tests/css/compile.ts`, not `compileAsync` directly. It caches per source hash so a dozen workers do not each compile the same sheet. A PR that touches `css/**` also gets a `css-cascade` job whose summary shows the rule delta and size movement against the base branch; it is informational and never blocks.
+
 Compiled-output and source conventions are enforced by the tests in `tests/css/`. A new rule about how CSS is written or emitted should land with a test there.
 
 When `check:css:overrides` reports a pair, work out which of the two values is the intended one before deleting anything. The checker proves the earlier declaration never wins; it does not know whether the later one is right. Deleting the flagged half of a `right: $carbon--spacing-03` / `right: auto` pair is how the fluid `CopyInput` button lost its offset.
 
-Delete a selector family only after confirming no component in `src/` renders the class, including classes built from interpolated strings. Then add its pattern to `tests/css/unrendered-selectors.test.ts` so a vendored re-sync cannot bring it back.
+Delete a selector family only after confirming no component in `src/` renders the class, including classes built from interpolated strings. Then add its pattern to `tests/css/unrendered-selectors.test.ts` so a vendored re-sync cannot bring it back, and drop its class from `KNOWN_UNRENDERED` in `tests/css/unrendered-classes.test.ts`.
 
 A guard that asserts absence (`not.toMatch`, an upper bound on a count, an empty offender list) needs a positive assertion beside it that fails when the pattern stops matching: a lower bound, or a count of the declarations it inspected. Match whole declarations up to `;` instead of single lines, since the formatter wraps long values. Then break the source on purpose once and confirm the test fails.
 
