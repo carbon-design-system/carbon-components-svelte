@@ -365,6 +365,13 @@ export async function createCalendar({ options, base, input, dispatch }) {
       instance.input.id = instance.altInput.id;
       instance.altInput.removeAttribute("id");
     }
+    // `prepareOnReady` moved an inline calendar out of flatpickr's wrapper.
+    // flatpickr's teardown unwraps `calendarContainer.parentNode` and drops
+    // its last child, so put the calendar back or it dismantles Carbon's
+    // own container instead.
+    if (options.inline && instance?.calendarContainer) {
+      instance.input.parentNode?.appendChild(instance.calendarContainer);
+    }
   }
 
   const errorHandlerBox = { current: options.errorHandler };
