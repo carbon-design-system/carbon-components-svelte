@@ -206,6 +206,7 @@
     aria-disabled={disabled}
     aria-controls={panelId}
     aria-label={$iconOnly ? label : undefined}
+    data-label={label || undefined}
     {id}
     {href}
     class:bx--tabs__nav-link={true}

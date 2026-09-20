@@ -178,6 +178,20 @@
 
       border-bottom: 2px;
     }
+
+    // ccs: reserves width for the `productive-heading-01` (600) weight the
+    // selected state switches to below, so selecting a tab doesn't widen it
+    // and reflow its neighbors. `data-label` is set by the component from
+    // the same string as the visible label; slotted custom content has no
+    // attribute to read and isn't reserved for.
+    &::after {
+      display: block;
+      overflow: hidden;
+      height: 0;
+      content: attr(data-label);
+      font-weight: 600;
+      visibility: hidden;
+    }
   }
 
   .#{$prefix}--tabs--container .#{$prefix}--tabs__nav-link {
