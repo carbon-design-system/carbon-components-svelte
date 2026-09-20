@@ -30,7 +30,7 @@ description: Chart is the root that chart primitives compose inside. It turns lo
     .map((row, i) => ({ ...row, date: new Date(START + i * 3_600_000 * 1.5) }));
 </script>
 
-The chart primitives are part of the data visualization subpackage. Import them from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
+The chart primitives are part of the data visualization subpackage. Import them from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
 
 For the common case use a ready-made chart such as [LineChart](/components/LineChart) or [BarChart](/components/BarChart). Compose the primitives yourself when you need a different arrangement.
 
