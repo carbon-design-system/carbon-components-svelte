@@ -1,3 +1,4 @@
+export { default as AreaChart } from "./AreaChart/AreaChart.svelte";
 export { default as BarChart } from "./BarChart/BarChart.svelte";
 // Data visualization subpackage: `carbon-components-svelte/viz`.
 // Styles ship separately in `carbon-components-svelte/css/viz.css`.
