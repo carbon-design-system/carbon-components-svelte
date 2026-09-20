@@ -69,6 +69,7 @@ jobs:
               - '.github/**'
             e2e:
               - 'src/**'
+              - 'css/**'
               - 'e2e/**'
               - 'scripts/**'
               - 'playwright.config.ts'
