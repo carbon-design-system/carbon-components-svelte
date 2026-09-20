@@ -652,10 +652,18 @@
     if (Array.isArray(prev) && Array.isArray(next)) {
       return (
         prev.length !== next.length ||
-        prev.some((item, index) => item !== next[index])
+        prev.some((item, index) => !sameValue(item, next[index]))
       );
     }
-    return prev !== next;
+    return !sameValue(prev, next);
+  }
+
+  /** A `Date` rebuilt in `$:` or from a reassigned object is new but equal. */
+  function sameValue(a, b) {
+    if (a instanceof Date && b instanceof Date) {
+      return a.getTime() === b.getTime();
+    }
+    return a === b;
   }
 
   function applyOptionIfChanged(optionKey, value, appliedValue = value) {
@@ -724,9 +732,7 @@
    * @param {null | string | Date} b
    */
   function initialMonthChanged(a, b) {
-    const at = a instanceof Date ? a.getTime() : a;
-    const bt = b instanceof Date ? b.getTime() : b;
-    return at !== bt;
+    return !sameValue(a, b);
   }
 
   /**
