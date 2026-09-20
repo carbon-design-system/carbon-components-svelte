@@ -135,6 +135,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "AreaChart",
       "BarChart",
       "BigNumber",
+      "BulletChart",
       "Chart",
       "DeltaIndicator",
       "FunnelBars",
