@@ -10,10 +10,10 @@ import { compileEntry } from "./compile";
 // trips one, raise it to the new size plus 2% and say why in the commit.
 // `bun run check:css` prints the current numbers.
 const BUDGETS: Record<string, { min: number; gzip: number }> = {
-  // measured 672,836 / 72,366
-  "all.scss": { min: 686_000, gzip: 73_800 },
-  // measured 583,478 / 63,007
-  "white.scss": { min: 595_000, gzip: 64_200 },
+  // measured 670,582 / 72,122
+  "all.scss": { min: 683_000, gzip: 73_500 },
+  // measured 581,260 / 62,750
+  "white.scss": { min: 592_000, gzip: 64_000 },
 };
 
 describe("css size budget", () => {
