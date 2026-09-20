@@ -4,6 +4,7 @@
 
 export { groupBy, toAccessor } from "./utils/accessor.js";
 export { bin } from "./utils/bin.js";
+export { lttb } from "./utils/downsample-lttb.js";
 export { extent, extentBy } from "./utils/extent.js";
 export {
   formatCompact,
