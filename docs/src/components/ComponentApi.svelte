@@ -136,7 +136,14 @@
   </OutboundLink>
 </p>
 
-<h2 id="component-api-props" class="bx--type-productive-heading-04">Props</h2>
+<h2 id="component-api-props" class="bx--type-productive-heading-04">
+  Props
+  <a
+    class="heading-anchor"
+    href="#component-api-props"
+    aria-label="Copy link to this heading">#</a
+  >
+</h2>
 
 {#if component.props.length > 0}
   <div class="overflow">
@@ -284,6 +291,11 @@
 
 <h2 id="component-api-typedefs" class="bx--type-productive-heading-04">
   Typedefs
+  <a
+    class="heading-anchor"
+    href="#component-api-typedefs"
+    aria-label="Copy link to this heading">#</a
+  >
 </h2>
 
 {#if component.typedefs.length > 0}
@@ -298,7 +310,14 @@
   <p class="my-layout-01-03">No typedefs.</p>
 {/if}
 
-<h2 id="component-api-slots" class="bx--type-productive-heading-04">Slots</h2>
+<h2 id="component-api-slots" class="bx--type-productive-heading-04">
+  Slots
+  <a
+    class="heading-anchor"
+    href="#component-api-slots"
+    aria-label="Copy link to this heading">#</a
+  >
+</h2>
 {#if component.slots.length > 0}
   <div class="overflow">
     <StructuredList flush condensed>
@@ -334,6 +353,11 @@
 
 <h2 id="component-api-forwarded-events" class="bx--type-productive-heading-04">
   Forwarded events
+  <a
+    class="heading-anchor"
+    href="#component-api-forwarded-events"
+    aria-label="Copy link to this heading">#</a
+  >
 </h2>
 {#if forwarded_events.length > 0}
   <UnorderedList class="my-layout-01-03">
@@ -347,6 +371,11 @@
 
 <h2 id="component-api-dispatched-events" class="bx--type-productive-heading-04">
   Dispatched events
+  <a
+    class="heading-anchor"
+    href="#component-api-dispatched-events"
+    aria-label="Copy link to this heading">#</a
+  >
 </h2>
 
 {#if dispatched_events.length > 0}
@@ -391,6 +420,11 @@
 
 <h2 id="component-api-rest-props" class="bx--type-productive-heading-04">
   $$restProps
+  <a
+    class="heading-anchor"
+    href="#component-api-rest-props"
+    aria-label="Copy link to this heading">#</a
+  >
 </h2>
 
 <div class="my-layout-01-03">
