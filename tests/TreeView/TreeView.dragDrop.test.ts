@@ -58,10 +58,7 @@ describe("TreeView drag-and-drop (move event)", () => {
   it("marks non-disabled rows draggable and disabled rows not draggable", () => {
     render(TreeViewDragDrop);
     expect(treeItemById("blockchain")).toHaveAttribute("draggable", "true");
-    expect(treeItemById("disabled-node")).toHaveAttribute(
-      "draggable",
-      "false",
-    );
+    expect(treeItemById("disabled-node")).toHaveAttribute("draggable", "false");
   });
 
   it("dispatches move with position 'before' when dropped on the top third of a row", () => {
@@ -115,6 +112,47 @@ describe("TreeView drag-and-drop (move event)", () => {
       ids: ["blockchain"],
       targetId: "sql-query",
       position: "after",
+    });
+  });
+
+  it("measures the drop position against the row's own label, not the whole subtree", () => {
+    // A parent row's `<li>` also contains its (expanded) children, so its
+    // own rect spans the whole subtree — much taller than a single row.
+    // Position math must use `.bx--tree-node__label`'s rect instead.
+    vi.spyOn(Element.prototype, "getBoundingClientRect").mockImplementation(
+      function (this: Element) {
+        const isLabel = this.classList.contains("bx--tree-node__label");
+        return {
+          top: 100,
+          height: isLabel ? 32 : 200,
+          bottom: isLabel ? 132 : 300,
+          left: 0,
+          right: 0,
+          width: 0,
+          x: 0,
+          y: 100,
+          toJSON() {},
+        };
+      },
+    );
+
+    const onMove = vi.fn();
+    render(TreeViewDragDrop, { props: { onMove } });
+
+    const source = treeItemById("blockchain");
+    const target = treeItemById("analytics");
+
+    // Offset 15 within a 32px label lands in the middle third ("inside");
+    // the same offset within the 200px `<li>` would land in the top third
+    // ("before"), so this only passes when the label rect is used.
+    source.dispatchEvent(createDragEvent("dragstart"));
+    target.dispatchEvent(createDragEvent("dragover", { clientY: 115 }));
+    target.dispatchEvent(createDragEvent("drop", { clientY: 115 }));
+
+    expect(onMove).toHaveBeenCalledWith({
+      ids: ["blockchain"],
+      targetId: "analytics",
+      position: "inside",
     });
   });
 

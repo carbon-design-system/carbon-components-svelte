@@ -627,7 +627,11 @@
   const sharedDragEnabled = writable(draggable);
 
   /** @type {TreeViewDragState<Node["id"]>} */
-  let dragStateValue = { draggedIds: [], dropTargetId: null, dropPosition: null };
+  let dragStateValue = {
+    draggedIds: [],
+    dropTargetId: null,
+    dropPosition: null,
+  };
   /** @type {import("svelte/store").Writable<TreeViewDragState<Node["id"]>>} */
   const dragState = writable(dragStateValue);
 
@@ -1015,8 +1019,12 @@
     event.preventDefault();
     if (event.dataTransfer) event.dataTransfer.dropEffect = "move";
 
-    const rect = /** @type {HTMLElement} */ (
-      event.currentTarget
+    // A parent row's `<li>` also contains its (possibly expanded) children,
+    // so its own rect would span the whole subtree. Measure just the row's
+    // own label instead.
+    const rowElement = /** @type {HTMLElement} */ (event.currentTarget);
+    const rect = (
+      rowElement.querySelector(".bx--tree-node__label") ?? rowElement
     ).getBoundingClientRect();
     const position = computeDropPosition(event.clientY, rect);
 
@@ -1024,7 +1032,11 @@
       dragStateValue.dropTargetId !== node.id ||
       dragStateValue.dropPosition !== position
     ) {
-      setDragState({ ...dragStateValue, dropTargetId: node.id, dropPosition: position });
+      setDragState({
+        ...dragStateValue,
+        dropTargetId: node.id,
+        dropPosition: position,
+      });
     }
   }
 

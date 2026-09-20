@@ -123,7 +123,8 @@
   $: isCheckboxMode = $selectionMode === "checkbox";
   $: indeterminate = isCheckboxMode && $indeterminateIdSet.has(id);
   $: isDragging = $dragState.draggedIds.includes(id);
-  $: dropPosition = $dragState.dropTargetId === id ? $dragState.dropPosition : null;
+  $: dropPosition =
+    $dragState.dropTargetId === id ? $dragState.dropPosition : null;
   // Merge all props (including custom properties) with computed properties
   // Explicitly reference text and disabled to avoid Svelte warning and ensure they're included
   // `level`/`posinset`/`setsize` are layout-only (drive `aria-*` attributes) and excluded from `node`.

@@ -72,7 +72,8 @@
   $: icon = node.icon;
   $: isLinkLeaf = href !== undefined && !hasChildren;
   $: isDragging = $dragState.draggedIds.includes(id);
-  $: dropPosition = $dragState.dropTargetId === id ? $dragState.dropPosition : null;
+  $: dropPosition =
+    $dragState.dropTargetId === id ? $dragState.dropPosition : null;
 
   // Flattened-row indent that matches what the recursive TreeViewNodeList
   // produces visually. In the recursive tree, each ancestor `<li>` contributes

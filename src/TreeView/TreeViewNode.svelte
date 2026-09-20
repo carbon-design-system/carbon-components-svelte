@@ -142,7 +142,8 @@
   $: isCheckboxMode = $selectionMode === "checkbox" && href === undefined;
   $: indeterminate = isCheckboxMode && $indeterminateIdSet.has(id);
   $: isDragging = $dragState.draggedIds.includes(id);
-  $: dropPosition = $dragState.dropTargetId === id ? $dragState.dropPosition : null;
+  $: dropPosition =
+    $dragState.dropTargetId === id ? $dragState.dropPosition : null;
   // Merge all props (including custom properties) with computed properties
   // Explicitly include disabled to ensure it's always present (has default value)
   // `level`/`posinset`/`setsize` are layout-only (drive `aria-*` attributes) and excluded from `node`.
