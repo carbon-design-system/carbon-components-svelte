@@ -1,4 +1,5 @@
 export { default as Chart } from "./Chart.svelte";
+export { default as ChartArea } from "./ChartArea.svelte";
 export { default as ChartAxis } from "./ChartAxis.svelte";
 export { default as ChartBars } from "./ChartBars.svelte";
 export { default as ChartDataTable } from "./ChartDataTable.svelte";

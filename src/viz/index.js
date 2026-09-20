@@ -4,6 +4,7 @@ export { default as BarChart } from "./BarChart/BarChart.svelte";
 // May import from core (`../utils`, `../icons`); core must never import from here.
 
 export { default as Chart } from "./Chart/Chart.svelte";
+export { default as ChartArea } from "./Chart/ChartArea.svelte";
 export { default as ChartAxis } from "./Chart/ChartAxis.svelte";
 export { default as ChartBars } from "./Chart/ChartBars.svelte";
 export { default as ChartDataTable } from "./Chart/ChartDataTable.svelte";

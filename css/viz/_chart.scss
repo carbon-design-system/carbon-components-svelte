@@ -242,6 +242,17 @@
     fill: $text-secondary;
   }
 
+  .#{$prefix}--viz-area__fill {
+    fill: var(--bx-viz-color, #{$interactive-04});
+  }
+
+  .#{$prefix}--viz-area__line {
+    fill: none;
+    stroke: var(--bx-viz-color, #{$interactive-04});
+    stroke-linejoin: round;
+    stroke-width: 1.5;
+  }
+
   .#{$prefix}--viz-bars__bar {
     fill: var(--bx-viz-color, #{$interactive-04});
     shape-rendering: crispEdges;
