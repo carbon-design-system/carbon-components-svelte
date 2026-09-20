@@ -31,8 +31,13 @@
    */
   export let threshold = 0;
 
-  /** Specify the maximum number of fraction digits */
-  export let fractionDigits = 1;
+  /**
+   * Specify the maximum number of fraction digits.
+   * Defaults to `1`, or to the format's own default when `format` is an
+   * options object, so a currency keeps its two decimals.
+   * @type {number}
+   */
+  export let fractionDigits = undefined;
 
   /** Set to `false` to write large numbers in full instead of compact notation */
   export let compact = true;
@@ -82,13 +87,18 @@
   const ICON_SIZES = { sm: 12, md: 16, lg: 20 };
 
   function formatValue(num) {
-    const shared = { locale, digits: fractionDigits, compact };
     if (typeof format === "function") return formatDelta(num, { format });
+    if (format && typeof format === "object") {
+      return formatDelta(num, {
+        locale,
+        digits: fractionDigits,
+        compact,
+        formatOptions: format,
+      });
+    }
+    const shared = { locale, digits: fractionDigits ?? 1, compact };
     if (format === "percent") {
       return formatDelta(num, { ...shared, percent: "ratio" });
-    }
-    if (format && typeof format === "object") {
-      return formatDelta(num, { ...shared, formatOptions: format });
     }
     return formatDelta(num, shared);
   }
