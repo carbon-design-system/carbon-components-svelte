@@ -14,6 +14,7 @@ export { default as ChartTooltipRow } from "./Chart/ChartTooltipRow.svelte";
 export { CHART_CONTEXT } from "./Chart/context.js";
 export { default as DeltaIndicator } from "./DeltaIndicator/DeltaIndicator.svelte";
 export { default as FunnelBars } from "./FunnelBars/FunnelBars.svelte";
+export { default as LineChart } from "./LineChart/LineChart.svelte";
 export { default as MicroFunnel } from "./MicroFunnel/MicroFunnel.svelte";
 export { default as Sparkline } from "./Sparkline/Sparkline.svelte";
 export { groupBy, toAccessor } from "./utils/accessor.js";
