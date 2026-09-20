@@ -746,6 +746,21 @@ describe("Tab", () => {
     expect(tab).toHaveTextContent("");
   });
 
+  // `data-label` backs the CSS bold-width reservation (::after) that keeps
+  // selecting a tab from reflowing its neighbors; empty labels must omit the
+  // attribute so slotted custom content isn't measured against blank text.
+  it("should reflect label via data-label, omitted when empty", async () => {
+    const { rerender } = render(Tab, { props: { label: "Custom Label" } });
+
+    expect(screen.getByRole("tab")).toHaveAttribute(
+      "data-label",
+      "Custom Label",
+    );
+
+    await rerender({ label: "" });
+    expect(screen.getByRole("tab")).not.toHaveAttribute("data-label");
+  });
+
   it("should render slot content instead of label", () => {
     render(Tab, { props: { useSlot: true } });
 
