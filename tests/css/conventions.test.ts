@@ -483,6 +483,44 @@ describe("vendored patch block conventions", () => {
   });
 });
 
+// In-place edits to upstream rules carry a trailing `// ccs: <reason>`. Keep
+// only those lines (above any patch banner, which PATCHES already covers).
+const CCS_EDITS = scssFiles(VENDOR_DIR).flatMap((file) => {
+  const lines = readFileSync(file, "utf8").split("\n");
+  const banner = lines.findIndex((line) => line.startsWith(PATCH_BANNER));
+  const kept = lines.map((line, index) =>
+    (banner < 0 || index < banner) && /\/\/ ccs:/.test(line) ? line : "",
+  );
+  return kept.some(Boolean)
+    ? [{ name: file.slice(VENDOR_DIR.length + 1), lines: kept }]
+    : [];
+});
+
+// Single-line rules only: an edited line has no rule structure around it.
+// Value style (`$spacing-*`, raw rem) is left to match the upstream lines
+// around the edit; these are the rules that hold either way.
+const CCS_EDIT_RULES = [
+  "literal .bx-- class",
+  "hex color",
+  ":has()",
+  "repeated class",
+];
+
+describe("in-place `// ccs:` edits", () => {
+  it("finds the edited lines", () => {
+    expect(CCS_EDITS.length).toBeGreaterThan(20);
+  });
+
+  it("follow the selector and color conventions", () => {
+    const found = CCS_EDIT_RULES.flatMap((rule) =>
+      CCS_EDITS.flatMap(({ name, lines }) =>
+        PATCH_RULES[rule](lines).map((line) => `${rule}: ${name}:${line}`),
+      ),
+    );
+    expect(found).toEqual([]);
+  });
+});
+
 // Rules that hold for everything hand-authored: partials and patch blocks.
 const HAND_AUTHORED = [
   ...PARTIALS.map((name) => ({
