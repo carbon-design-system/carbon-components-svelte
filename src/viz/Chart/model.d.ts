@@ -48,6 +48,13 @@ export type BuildGroupsOptions<T> = {
   colors?: Record<string, VizColor>;
   /** Which of Carbon's prescribed color groups to use, 1-based. */
   palette?: number;
+  /**
+   * Give every distinct x its own slot, as bars need. A numeric or time x
+   * becomes categories in ascending order.
+   */
+  band?: boolean;
+  /** Used to label time and number categories in band mode. */
+  locale?: string;
 };
 
 export type ChartDomain = {
@@ -86,6 +93,11 @@ export type ChartScales = {
   yFormat(value: number): string;
   /** Full-precision x label, for tooltips and announcements. */
   xLabel(value: number): string;
+  /**
+   * Width of one category slot. `x.map(index)` is the slot's center.
+   * `undefined` on a time or linear axis.
+   */
+  step: number | undefined;
   margin: ChartMargins;
   plot: { x0: number; x1: number; y0: number; y1: number };
 };
