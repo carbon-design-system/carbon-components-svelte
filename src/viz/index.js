@@ -59,6 +59,7 @@ export {
   timeTickFormat,
   timeTicks,
 } from "./utils/time-ticks.js";
+export { groupsToCsv } from "./utils/to-csv.js";
 export {
   categoricalColors,
   VIZ_CATEGORICAL_COUNT,
