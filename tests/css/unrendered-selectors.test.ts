@@ -28,6 +28,7 @@ const UNRENDERED = [
   /--switcher \{/,
   /--table-toolbar--sm\b/,
   /--text-input--warn\b(?!ing)/,
+  /--toolbar-search-container\b(?!-)/,
 ];
 
 describe("unrendered selectors", () => {
