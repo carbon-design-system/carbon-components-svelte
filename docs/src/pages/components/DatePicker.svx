@@ -192,12 +192,6 @@ With `datePickerType="multiple"`, dates in `value` are joined with `", "` by def
 
 <FileSource src="/framed/DatePicker/DatePickerConjunction" />
 
-### Human-readable display format
-
-Pass `altInput: true` with an `altFormat` via `flatpickrProps` to show a friendly date while `value` keeps the machine format set by `dateFormat`. Flatpickr hides the original input and inserts its own visible one, which Carbon associates with the label. The visible input copies Carbon's classes by default; if you set `altInputClass`, include `bx--date-picker__input` to keep the Carbon styling.
-
-<FileSource src="/framed/DatePicker/DatePickerAltInput" />
-
 ### Custom parsing and formatting
 
 Use `formatDate` and `parseDate` via `flatpickrProps` when `dateFormat` tokens are not expressive enough, for example to format with `Intl.DateTimeFormat`. Always provide both: Flatpickr re-parses the input text it just formatted, so `parseDate` must understand the output of `formatDate`.
@@ -237,6 +231,12 @@ Customize the date format and locale.
 Use the `dateFormat` prop to customize the date format (default: `"m/d/Y"`). The input pattern attribute is automatically derived to match, ensuring native form validation works correctly.
 
 <FileSource src="/framed/DatePicker/DatePickerCustomFormat" />
+
+### Human-readable display format
+
+Set `displayFormat` to show a friendly date in the input while `value` and the submitted form field keep the machine format from `dateFormat`. It uses the same tokens as `dateFormat` and can change at any time. It is not supported with the range date picker type.
+
+<FileSource src="/framed/DatePicker/DatePickerAltInput" />
 
 ### Locale
 
