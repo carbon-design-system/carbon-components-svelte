@@ -54,4 +54,30 @@ test.describe("Data visualization", () => {
     await funnel.getByRole("row", { name: /Signup/ }).click();
     await expect(page.getByTestId("selected")).toHaveText("signup");
   });
+
+  test("LineChart follows its container and shows a tooltip for the focused point", async ({
+    page,
+  }) => {
+    await page.goto("/viz.html");
+    const chart = page.getByRole("application", { name: "Revenue by region" });
+
+    // The nominal server width is replaced by the measured one.
+    await expect
+      .poll(async () => (await chart.getAttribute("viewBox")) ?? "")
+      .not.toBe("0 0 640 288");
+    const box = await chart.boundingBox();
+    expect((await chart.getAttribute("viewBox")) ?? "").toBe(
+      `0 0 ${Math.round(box?.width ?? 0)} 288`,
+    );
+
+    await chart.focus();
+    await page.keyboard.press("ArrowRight");
+    await page.keyboard.press("ArrowRight");
+    const tooltip = page.locator(".bx--viz-chart-tooltip");
+    await expect(tooltip).toContainText("Feb 1, 2026");
+    await expect(tooltip).toContainText("EMEA");
+
+    await page.keyboard.press("Escape");
+    await expect(tooltip).toHaveCount(0);
+  });
 });
