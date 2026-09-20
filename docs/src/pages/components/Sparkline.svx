@@ -4,8 +4,11 @@ description: Sparkline renders a small inline line or bar chart, sized to sit in
 ---
 
 <script>
-  import { Stack, Sparkline } from "carbon-components-svelte";
+  import { Stack } from "carbon-components-svelte";
+  import { Sparkline } from "carbon-components-svelte/viz";
 </script>
+
+`Sparkline` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
 
 ## Basic
 

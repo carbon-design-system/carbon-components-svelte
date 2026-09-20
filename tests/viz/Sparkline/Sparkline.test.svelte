@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Sparkline from "carbon-components-svelte/Sparkline/Sparkline.svelte";
+  import Sparkline from "carbon-components-svelte/viz/Sparkline/Sparkline.svelte";
 
   const values = [1, 5, 3, 8, 2, 9, 4];
 </script>
