@@ -453,36 +453,42 @@
     background-color: $ui-01;
     color: $text-01;
     cursor: pointer;
-
-    &:hover {
-      background-color: $hover-ui;
-      outline: none;
-    }
-
-    &:focus {
-      outline: 2px solid $focus;
-      outline-offset: 1px;
-    }
   }
 
   .#{$prefix}--tag--selectable-selected {
     background-color: $layer-selected-inverse;
     color: $text-inverse;
-
-    &:hover {
-      background-color: $layer-selected-inverse;
-    }
   }
 
   .#{$prefix}--tag--selectable.#{$prefix}--tag--disabled {
     border: 1px solid $disabled-02;
     background-color: $ui-01;
     color: $disabled-02;
+  }
 
-    &:hover {
+  // Same order as the resting rules above, so selected and disabled still
+  // out-rank the plain hover fill.
+  @media (any-hover: hover) {
+    .#{$prefix}--tag--selectable:hover {
+      background-color: $hover-ui;
+      outline: none;
+    }
+
+    .#{$prefix}--tag--selectable-selected:hover {
+      background-color: $layer-selected-inverse;
+    }
+
+    .#{$prefix}--tag--selectable.#{$prefix}--tag--disabled:hover {
       background-color: $ui-01;
       cursor: not-allowed;
     }
+  }
+
+  // After the hover block: its `outline: none` ties on specificity, and a
+  // hovered tag that has focus keeps its ring.
+  .#{$prefix}--tag--selectable:focus {
+    outline: 2px solid $focus;
+    outline-offset: 1px;
   }
 }
 
