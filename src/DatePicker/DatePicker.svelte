@@ -191,6 +191,7 @@
     setContext,
   } from "svelte";
   import { derived, writable } from "svelte/store";
+  import { deepEqual } from "../utils/deep-equal.js";
   import { dismiss } from "../utils/dismiss.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -704,26 +705,12 @@
   });
 
   /**
-   * Inline `flatpickrProps={{ disable: [...] }}` builds a new array on every
-   * parent render. Comparing contents avoids a `calendar.set` (a full day
-   * grid redraw) when nothing actually changed.
+   * A value rebuilt in a `$:` statement, forwarded through a wrapper, or
+   * built from a reassigned object arrives new but equal. Comparing contents
+   * avoids a `calendar.set` (a full day grid redraw) when nothing changed.
    */
   function optionChanged(prev, next) {
-    if (Array.isArray(prev) && Array.isArray(next)) {
-      return (
-        prev.length !== next.length ||
-        prev.some((item, index) => !sameValue(item, next[index]))
-      );
-    }
-    return !sameValue(prev, next);
-  }
-
-  /** A `Date` rebuilt in `$:` or from a reassigned object is new but equal. */
-  function sameValue(a, b) {
-    if (a instanceof Date && b instanceof Date) {
-      return a.getTime() === b.getTime();
-    }
-    return a === b;
+    return !deepEqual(prev, next);
   }
 
   function applyOptionIfChanged(optionKey, value, appliedValue = value) {
@@ -792,7 +779,7 @@
    * @param {null | string | Date} b
    */
   function initialMonthChanged(a, b) {
-    return !sameValue(a, b);
+    return !deepEqual(a, b);
   }
 
   /**

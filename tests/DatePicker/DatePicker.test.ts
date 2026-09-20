@@ -1314,6 +1314,56 @@ describe("DatePicker", () => {
       expectTypeOf<FlatpickrProps>().not.toHaveProperty("mode");
     });
 
+    it("does not re-apply a range rule that is rebuilt with equal contents", async () => {
+      function props(): ComponentProps<typeof DatePicker> {
+        return {
+          datePickerType: "single",
+          flatpickrProps: {
+            disable: [{ from: "03/10/2024", to: new Date(2024, 2, 14) }],
+          },
+        };
+      }
+      const { rerender } = render(DatePicker, props());
+      const input = screen.getByLabelText("Date");
+      await screen.findByLabelText("calendar-container");
+      const calendar = (input as unknown as { _flatpickr: Instance })
+        ._flatpickr;
+      const set = vi.spyOn(calendar, "set");
+
+      await rerender(props());
+      await rerender(props());
+      expect(set).not.toHaveBeenCalled();
+
+      await rerender({
+        ...props(),
+        flatpickrProps: {
+          disable: [{ from: "03/10/2024", to: new Date(2024, 2, 20) }],
+        },
+      });
+      expect(set).toHaveBeenCalledWith("disable", expect.anything());
+    });
+
+    it("re-applies positionElement when it points at another element", async () => {
+      const first = document.createElement("div");
+      const second = document.createElement("div");
+      const props: ComponentProps<typeof DatePicker> = {
+        datePickerType: "single",
+        portalMenu: true,
+      };
+      const { rerender } = render(DatePicker, {
+        ...props,
+        flatpickrProps: { positionElement: first },
+      });
+      const input = screen.getByLabelText("Date");
+      await screen.findByLabelText("calendar-container");
+      const calendar = (input as unknown as { _flatpickr: Instance })
+        ._flatpickr;
+      const set = vi.spyOn(calendar, "set");
+
+      await rerender({ ...props, flatpickrProps: { positionElement: second } });
+      expect(set).toHaveBeenCalledWith("positionElement", second);
+    });
+
     it("does not re-apply a Date that is rebuilt with an equal value", async () => {
       function props(): ComponentProps<typeof DatePicker> {
         return {
