@@ -777,13 +777,43 @@
     return map;
   }
 
-  function sort() {
-    const selectedIdsSet = new Set(selectedIds);
+  /**
+   * Alphabetical order depends only on `items` and `sortItem`, never on
+   * `selectedIds`, so it's cached across `sort()` calls that only change
+   * selection (a toggle, an external `selectedIds` change, a close with
+   * `top-after-reopen`). Keyed on `items` reference: `sort()` only runs for
+   * a genuinely different `items` value (see `isAlreadySorted`), so a
+   * reference change here always means the order needs recomputing.
+   *
+   * `sortItem` is intentionally NOT part of the cache key: like today, a new
+   * `sortItem` function does nothing until some other change forces a
+   * re-sort (define it outside the markup, as with `filterItem`/date rules
+   * elsewhere in this library).
+   */
+  let baseOrderItems;
+  let baseOrderPairs;
+  function getBaseOrderPairs() {
+    if (baseOrderItems === items) return baseOrderPairs;
 
     const regularItems = items.filter((item) => !item.isSelectAll);
     const regularSnapshots = prevItemsSnapshot.filter(
       (item) => !item.isSelectAll,
     );
+    const pairs = regularItems.map((item, index) => ({
+      item,
+      snapshot: regularSnapshots[index],
+    }));
+    pairs.sort((a, b) => sortItem(a.item, b.item));
+
+    baseOrderItems = items;
+    baseOrderPairs = pairs;
+    return pairs;
+  }
+
+  function sort() {
+    const selectedIdsSet = new Set(selectedIds);
+
+    const regularItems = items.filter((item) => !item.isSelectAll);
     const selectAllItems = items.filter((item) => item.isSelectAll);
     const selectAllSnapshots = prevItemsSnapshot.filter(
       (item) => item.isSelectAll,
@@ -819,38 +849,34 @@
       reuseOrBuildEntry(item, selectAllSnapshots[index], allChecked),
     );
 
+    const baseOrder = getBaseOrderPairs();
+
     if (
       selectionFeedback === "top" ||
       selectionFeedback === "top-after-reopen"
     ) {
+      // Stable partition of the cached alphabetical order: checked entries
+      // first (in base order), then unchecked (in base order). Zero
+      // comparator calls, and equivalent to sorting each group separately
+      // (as before) because `baseOrder` is already sorted by the same
+      // comparator and `Array.prototype.sort` is stable, so ties keep
+      // `items` order in both designs.
       const checkedItems = [];
       const uncheckedItems = [];
-      regularItems.forEach((item, index) => {
+      for (const { item, snapshot } of baseOrder) {
         const checked = selectedIdsSet.has(item.id);
-        const entry = reuseOrBuildEntry(item, regularSnapshots[index], checked);
+        const entry = reuseOrBuildEntry(item, snapshot, checked);
         (checked ? checkedItems : uncheckedItems).push(entry);
-      });
+      }
 
-      return [
-        ...selectAllEntries,
-        ...(checkedItems.length > 1
-          ? checkedItems.sort(sortItem)
-          : checkedItems),
-        ...uncheckedItems.sort(sortItem),
-      ];
+      return [...selectAllEntries, ...checkedItems, ...uncheckedItems];
     }
 
     return [
       ...selectAllEntries,
-      ...regularItems
-        .map((item, index) =>
-          reuseOrBuildEntry(
-            item,
-            regularSnapshots[index],
-            selectedIdsSet.has(item.id),
-          ),
-        )
-        .sort(sortItem),
+      ...baseOrder.map(({ item, snapshot }) =>
+        reuseOrBuildEntry(item, snapshot, selectedIdsSet.has(item.id)),
+      ),
     ];
   }
 

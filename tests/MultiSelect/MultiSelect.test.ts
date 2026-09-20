@@ -1262,17 +1262,17 @@ describe("MultiSelect", () => {
       await openMenu();
       sortCallCount = 0;
 
-      // Toggle two items so both checked and unchecked partitions get sorted.
+      // Toggle two items so both checked and unchecked partitions would be
+      // sorted under a naive implementation.
       await toggleOption("C");
       await toggleOption("E");
       const callsForTwoToggles = sortCallCount;
 
-      // With 5 items and 2 checked, a single sort() call produces
-      // at most ~10 comparisons (two small partitions).
-      // A double re-sort per toggle would roughly double this count.
-      // Use a generous upper bound for a single-pass sort per toggle.
-      expect(callsForTwoToggles).toBeLessThanOrEqual(20);
-      expect(callsForTwoToggles).toBeGreaterThan(0);
+      // A toggle never changes alphabetical order, only which partition an
+      // entry belongs to, so `sort()` now partitions a cached, already-sorted
+      // base order instead of re-sorting each partition. Zero comparator
+      // calls (a stronger guarantee than "not doubled").
+      expect(callsForTwoToggles).toBe(0);
     });
 
     it("re-sorts when selectedIds changes externally with selectionFeedback: top", async () => {
