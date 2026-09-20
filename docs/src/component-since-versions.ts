@@ -57,6 +57,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   Menu: "0.110.0",
   MenuButton: "0.110.0",
   Meter: "0.113.0",
+  MicroDonut: "0.113.0",
   MicroFunnel: "0.113.0",
   MicroHistogram: "0.113.0",
   Modal: "0.2.0",
