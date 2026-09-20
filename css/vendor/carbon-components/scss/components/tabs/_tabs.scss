@@ -664,14 +664,17 @@
     .#{$prefix}--tabs--tall .#{$prefix}--tabs__nav-item {
       min-height: to-rem(64px);
     }
+  }
 
-    .#{$prefix}--tabs--tall.#{$prefix}--tabs--container .#{$prefix}--tabs__nav-link {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: center;
-      height: 100%;
-    }
+  // Unconditional (not gated to `md`), so icon + secondary label tabs stay
+  // stacked in two rows below `md` too, instead of falling back to the icon
+  // mixin's row layout and squeezing the icon against the secondary label.
+  .#{$prefix}--tabs--tall.#{$prefix}--tabs--container .#{$prefix}--tabs__nav-link {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    height: 100%;
   }
 
   .#{$prefix}--tabs__nav-item-label-wrapper {
