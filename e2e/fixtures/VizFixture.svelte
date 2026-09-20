@@ -8,6 +8,7 @@
     FunnelBars,
     LineChart,
     MicroFunnel,
+    MicroHistogram,
     RangeIndicator,
     RankBars,
     ShareOfTotal,
@@ -53,6 +54,7 @@
   <p>
     <MicroFunnel {stages} label="Signup funnel" />
     <MicroFunnel {stages} variant="completion" label="Signup funnel" />
+    <MicroHistogram {values} bins={6} marker={9} label="Requests per minute" />
   </p>
 
   <BulletChart
