@@ -129,7 +129,7 @@
   function formatRangeLabel(label, numericValue) {
     if (label) return label;
     if (formatValue) return formatValue(numericValue);
-    return label ?? numericValue;
+    return label || numericValue;
   }
 
   /** @type {(numericValue: number) => string | undefined} */
