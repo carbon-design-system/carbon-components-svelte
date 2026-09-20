@@ -62,7 +62,7 @@ describe("getSparklinePoints", () => {
       width: 96,
       height: 24,
     });
-    expect(points.every((point) => point.y === 12)).toBe(true);
+    expect(points.every((point) => point?.y === 12)).toBe(true);
   });
 
   test("overrides clamp out-of-range values", () => {
@@ -72,8 +72,8 @@ describe("getSparklinePoints", () => {
       min: 2,
       max: 8,
     });
-    expect(points[0].y).toBe(20);
-    expect(points[2].y).toBe(0);
+    expect(points[0]?.y).toBe(20);
+    expect(points[2]?.y).toBe(0);
   });
 
   test("a single value returns one centered point", () => {
@@ -147,8 +147,8 @@ describe("getSparklineBars", () => {
     // A negative value draws down from the baseline, so its top edge (y) is
     // the baseline; a positive value draws up to it, so its bottom edge
     // (y + height) is the baseline.
-    const negativeBaseline = bars[0].y;
-    const positiveBaseline = bars[1].y + bars[1].height;
+    const negativeBaseline = bars[0]?.y;
+    const positiveBaseline = (bars[1]?.y ?? 0) + (bars[1]?.height ?? 0);
     expect(negativeBaseline).toBe(positiveBaseline);
     expect(negativeBaseline).toBeGreaterThan(0);
     expect(negativeBaseline).toBeLessThan(30);
