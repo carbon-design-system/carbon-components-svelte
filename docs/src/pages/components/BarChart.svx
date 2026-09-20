@@ -98,6 +98,12 @@ Set `colors` to fix a color per series, and `yFormat` to `Intl.NumberFormat` opt
   colors={{ Cloud: "cat-02", Data: "cat-07", Security: "cat-13" }}
 />
 
+## Data table and export
+
+Set `toolbar` to add a button that swaps the chart for a table of every value, and one that downloads the visible series as CSV. Bind `view` to control it yourself.
+
+<BarChart {data} x="quarter" y="revenue" series="product" title="Revenue by quarter" toolbar />
+
 ## Without chrome
 
 Set `grid`, `legend`, and `tooltip` to `false` to remove them.

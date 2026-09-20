@@ -146,6 +146,16 @@ Bind `selected` and `hidden`, and listen for `select` and `legend:toggle`. Click
 
 <FileSource src="/framed/LineChart/LineChartSelect" />
 
+## Data table and export
+
+Set `toolbar` to add a button that swaps the chart for a table of every value, and one that downloads the visible series as CSV. The table is the chart's text alternative: it needs no pointer and no color vision, and assistive technology reads it as an ordinary table. Bind `view` to control it yourself.
+
+<LineChart {data} x="date" y="revenue" series="region" title="Revenue by region" toolbar />
+
+### Table view
+
+<LineChart data={quarters} x="quarter" y="value" series="kind" title="Plan versus actual" toolbar view="table" height={220} />
+
 ## Live data
 
 Reassign `data` to update. An appended point that stays inside the current domain leaves the axes and grid untouched.

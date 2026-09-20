@@ -1,5 +1,5 @@
 ---
-components: ["Chart", "ChartAxis", "ChartGrid", "ChartLine", "ChartBars", "ChartRuler", "ChartTooltip", "ChartTooltipRow", "ChartLegend", "ChartThreshold"]
+components: ["Chart", "ChartAxis", "ChartGrid", "ChartLine", "ChartBars", "ChartRuler", "ChartTooltip", "ChartTooltipRow", "ChartLegend", "ChartThreshold", "ChartToolbar", "ChartDataTable"]
 description: Chart is the root that chart primitives compose inside. It turns long format rows into series, scales, and a plot box, and shares them with the marks you place in it.
 ---
 
@@ -12,6 +12,7 @@ description: Chart is the root that chart primitives compose inside. It turns lo
     ChartLine,
     ChartRuler,
     ChartThreshold,
+    ChartToolbar,
     ChartTooltip,
     ChartTooltipRow,
   } from "carbon-components-svelte/viz";
@@ -116,6 +117,20 @@ Time ticks land on calendar boundaries. When hourly ticks span several days, the
   <ChartLine />
 </Chart>
 
+## Toolbar and data table
+
+`ChartToolbar` goes in the `toolbar` slot. It switches the chart to a table of every value and downloads the visible series as CSV, in the same long format the chart reads: ISO dates, plain numbers, and an empty field for a missing value. Anything in its default slot sits before the buttons.
+
+The table is the chart's text alternative. `Chart` renders a `ChartDataTable` when `view` is `"table"`, so it is available even without the toolbar. Bind `view` to drive it from your own control, and use the `table` slot to replace it.
+
+<Chart {data} x="date" y="revenue" series="region" title="Revenue by region" height={240}>
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartLine />
+  <ChartToolbar slot="toolbar" filename="revenue-by-region" />
+  <ChartLegend slot="legend" />
+</Chart>
+
 ## Writing a mark
 
 A mark is a component that reads the chart context and renders SVG. `groups` holds the series, `scales` maps data to pixels, and `hover` holds the focused point. Subscribe only to what you draw from: a mark that reads `groups` and `scales` but not `hover` never re-renders while the pointer moves.
@@ -135,4 +150,4 @@ A mark is a component that reads the chart context and renders SVG. `groups` hol
 
 ## Accessibility
 
-A chart is one tab stop with `role="application"`. Left and Right move between data points, Up and Down between series, Home and End jump to the ends, Enter or Space selects, and Escape clears. The focused point is announced through a live region with a full x label. The tooltip and the axes are hidden from assistive technology so that nothing is read twice. Always set `title`.
+Every chart has a data table view, which is its text alternative. The chart itself is one tab stop with `role="application"`. Left and Right move between data points, Up and Down between series, Home and End jump to the ends, Enter or Space selects, and Escape clears. The focused point is announced through a live region with a full x label. The tooltip and the axes are hidden from assistive technology so that nothing is read twice. Always set `title`.
