@@ -25,6 +25,7 @@ const UNRENDERED = [
   /header__menu-toggle__hidden/,
   // Pruned as styled-but-unrendered; see tests/css/unrendered-classes.test.ts.
   /inline-loading__checkmark\b(?!-)/,
+  /--switcher \{/,
 ];
 
 describe("unrendered selectors", () => {
