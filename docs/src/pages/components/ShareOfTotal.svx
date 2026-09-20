@@ -1,0 +1,74 @@
+---
+components: ["ShareOfTotal"]
+description: Share of total shows one part of a whole as a filled track and a percentage, sized for a table cell or a sentence.
+---
+
+<script>
+  import { DataTable, Stack } from "carbon-components-svelte";
+  import { ShareOfTotal } from "carbon-components-svelte/viz";
+</script>
+
+`ShareOfTotal` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+Use it for a single part. For every part of the whole, use [StackedBar](/components/StackedBar).
+
+## Basic
+
+Pass `value`, `total`, and a `label`. The share is appended to the accessible name.
+
+<ShareOfTotal value={380} total={1000} label="Enterprise share of revenue" />
+
+## Text
+
+Set `suffix` to change the text after the percentage, or to an empty string for none. Set `hideValue` to drop the text. Set `fractionDigits` for more precision.
+
+<Stack gap={5}>
+  <ShareOfTotal value={380} total={1000} suffix="of revenue" label="Enterprise" />
+  <ShareOfTotal value={380} total={1000} suffix="" label="Enterprise" />
+  <ShareOfTotal value={380} total={1000} hideValue label="Enterprise" />
+  <ShareOfTotal value={1} total={3} fractionDigits={1} label="One third" />
+</Stack>
+
+## Color
+
+Set `color` to a semantic name, a categorical index from 1 to 14, a viz token name, or any CSS color.
+
+<Stack gap={5}>
+  <ShareOfTotal value={92} total={100} color="success" suffix="passing" label="Tests" />
+  <ShareOfTotal value={38} total={100} color={3} label="Enterprise" />
+</Stack>
+
+## Sizes
+
+<Stack gap={5}>
+  <ShareOfTotal value={38} total={100} size="sm" label="Small" />
+  <ShareOfTotal value={38} total={100} label="Medium (default)" />
+  <ShareOfTotal value={38} total={100} size="lg" label="Large" />
+</Stack>
+
+## In a data table
+
+<DataTable
+  size="short"
+  headers={[
+    { key: "plan", value: "Plan" },
+    { key: "revenue", value: "Share of revenue" },
+  ]}
+  rows={[
+    { id: "a", plan: "Enterprise", revenue: 380 },
+    { id: "b", plan: "Team", revenue: 450 },
+    { id: "c", plan: "Free", revenue: 170 },
+  ]}
+>
+  <svelte:fragment slot="cell" let:cell let:row>
+    {#if cell.key === "revenue"}
+      <ShareOfTotal value={cell.value} total={1000} size="sm" suffix="" label="{row.plan} share" />
+    {:else}
+      {cell.value}
+    {/if}
+  </svelte:fragment>
+</DataTable>
+
+## Accessibility
+
+With a `label`, the graphic is announced as an image named with the label and the share, such as "Enterprise share of revenue: 38% of total". The share stays in the name when `hideValue` is set. Without a label it is hidden from assistive technology.
