@@ -17,3 +17,18 @@
 <Sparkline {values} color="error" data-testid="error-color" />
 
 <Sparkline values={[]} data-testid="empty" />
+
+<Sparkline {values} color={3} data-testid="categorical" />
+
+<Sparkline {values} color="rebeccapurple" data-testid="custom-color" />
+
+<Sparkline
+  values={[1, 5, null, 8, 2]}
+  kind="line"
+  fill
+  data-testid="gap-line"
+/>
+
+<Sparkline values={[1, 5, Number.NaN, 8, 2]} kind="bar" data-testid="gap-bar" />
+
+<Sparkline values={[7]} kind="line" data-testid="single" />

@@ -58,4 +58,54 @@ describe("Sparkline", () => {
     expect(svg.querySelector("path")).toBeNull();
     expect(svg.querySelector("rect")).toBeNull();
   });
+
+  it("routes categorical and custom colors through --bx-viz-color", () => {
+    render(Sparkline);
+
+    expect(
+      screen
+        .getByTestId("categorical")
+        .style.getPropertyValue("--bx-viz-color"),
+    ).toBe("var(--cds-viz-cat-03)");
+    expect(
+      screen
+        .getByTestId("custom-color")
+        .style.getPropertyValue("--bx-viz-color"),
+    ).toBe("rebeccapurple");
+    // Semantic names resolve in CSS instead.
+    expect(
+      screen
+        .getByTestId("error-color")
+        .style.getPropertyValue("--bx-viz-color"),
+    ).toBe("");
+  });
+
+  it("breaks the line and the area at a missing value", () => {
+    render(Sparkline);
+
+    const svg = screen.getByTestId("gap-line");
+    const line = svg.querySelector("path.bx--sparkline__line");
+    const area = svg.querySelector("path.bx--sparkline__area");
+    expect(line?.getAttribute("d")?.match(/M/g)).toHaveLength(2);
+    expect(area?.getAttribute("d")?.match(/Z/g)).toHaveLength(2);
+  });
+
+  it("leaves an empty slot for a missing bar", () => {
+    render(Sparkline);
+
+    expect(screen.getByTestId("gap-bar").querySelectorAll("rect")).toHaveLength(
+      4,
+    );
+  });
+
+  it("paints a single value as a dot", () => {
+    render(Sparkline);
+
+    expect(
+      screen
+        .getByTestId("single")
+        .querySelector("path.bx--sparkline__line")
+        ?.getAttribute("d"),
+    ).toMatch(/l0,0$/);
+  });
 });
