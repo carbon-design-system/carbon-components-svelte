@@ -1,5 +1,5 @@
 <script>
-  /** Set to `true` to hide the breadcrumb trailing slash */
+  /** Set to `true` to hide the separator after the last breadcrumb item */
   export let noTrailingSlash = false;
 
   /** Specify the number of breadcrumb items to render */
@@ -10,6 +10,9 @@
    * @type {"sm" | "md"}
    */
   export let size = "md";
+
+  /** Specify the separator character rendered between breadcrumb items */
+  export let separator = "/";
 </script>
 
 <div
@@ -18,6 +21,7 @@
   class:bx--breadcrumb={true}
   class:bx--breadcrumb--no-trailing-slash={noTrailingSlash}
   class:bx--breadcrumb--sm={size === "sm"}
+  style:--ccs-separator="'{separator}'"
   {...$$restProps}
   on:click
   on:mouseover
