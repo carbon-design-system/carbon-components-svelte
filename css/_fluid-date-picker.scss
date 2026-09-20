@@ -250,6 +250,17 @@
     border-block-end: 1px solid transparent;
   }
 
+  // Give invalid single/simple the same divider warn gets above its
+  // validation message.
+  .#{$prefix}--date-picker--fluid
+    .#{$prefix}--date-picker--simple
+    .#{$prefix}--date-picker__input--invalid,
+  .#{$prefix}--date-picker--fluid
+    .#{$prefix}--date-picker--single
+    .#{$prefix}--date-picker__input--invalid {
+    border-block-end: 1px solid $ui-04;
+  }
+
   // Status icon aligned with first line of validation message; the base
   // rule already sets right/pointer-events, so this can't take
   // fluid-status-icon().
