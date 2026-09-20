@@ -243,16 +243,12 @@
     display: none;
   }
 
-  .#{$prefix}--form--fluid .#{$prefix}--text-input--invalid,
-  .#{$prefix}--form--fluid .#{$prefix}--text-input--warn {
+  .#{$prefix}--form--fluid .#{$prefix}--text-input--invalid {
     border-bottom: none;
   }
 
   .#{$prefix}--form--fluid
     .#{$prefix}--text-input--invalid
-    + .#{$prefix}--text-input__divider,
-  .#{$prefix}--form--fluid
-    .#{$prefix}--text-input--warn
     + .#{$prefix}--text-input__divider {
     display: block;
     border-style: solid;

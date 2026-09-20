@@ -27,6 +27,7 @@ const UNRENDERED = [
   /inline-loading__checkmark\b(?!-)/,
   /--switcher \{/,
   /--table-toolbar--sm\b/,
+  /--text-input--warn\b(?!ing)/,
 ];
 
 describe("unrendered selectors", () => {
