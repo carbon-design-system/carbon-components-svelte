@@ -1,6 +1,7 @@
 export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   Accordion: "0.2.0",
   ActionSet: "0.112.0",
+  AreaChart: "0.113.0",
   AspectRatio: "0.17.0",
   BadgeIndicator: "0.109.0",
   BarChart: "0.113.0",

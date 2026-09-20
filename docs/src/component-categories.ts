@@ -132,6 +132,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
   {
     label: "Data visualization",
     components: [
+      "AreaChart",
       "BarChart",
       "BigNumber",
       "Chart",
