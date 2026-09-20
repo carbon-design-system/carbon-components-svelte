@@ -967,6 +967,14 @@
     padding-inline: 0 $carbon--spacing-03;
   }
 
+  // The base link's bold-weight-reservation `::after` (see above) has no
+  // height but its width still counts toward shrink-to-fit sizing, doubling
+  // the auto-width mobile row item. Vertical tabs don't need it: the md+
+  // column is a fixed width and the mobile row should size to the label.
+  .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav-link::after {
+    content: none;
+  }
+
   @include carbon--breakpoint-down(md) {
     // The nav is an absolutely-positioned dropdown overlay by default.
     .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav {
@@ -997,8 +1005,10 @@
       box-shadow: inset 1px 0 0 0 $ui-04;
     }
 
+    // Outranks the base hover rule (`item:hover + item { box-shadow: none }`)
+    // so hovering the preceding tab doesn't strip the selected indicator.
     .#{$prefix}--tabs--vertical
-      .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled) {
+      .#{$prefix}--tabs__nav-item--selected.#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled) { // ccs: specificity
       background-color: $ui-01;
       box-shadow: inset 0 2px 0 0 $interactive-04;
     }
@@ -1056,10 +1066,9 @@
       color: $text-01;
     }
 
+    // The row scrolls horizontally, so size each item to its label instead
+    // of truncating it.
     .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav-item-label {
-      overflow: hidden;
-      max-inline-size: to-rem(160px);
-      text-overflow: ellipsis;
       white-space: nowrap;
     }
 
@@ -1071,7 +1080,9 @@
   @include carbon--breakpoint(md) {
     .#{$prefix}--tabs--vertical {
       flex: 0 0 auto;
-      inline-size: to-rem(160px);
+      // Fluid width (Carbon React spans a fixed ~25% of its Grid), bounded
+      // so it neither starves narrow layouts nor balloons on ultra-wide ones.
+      inline-size: clamp(#{to-rem(200px)}, 20%, #{to-rem(320px)});
       min-height: 0;
       background-color: $ui-01;
     }
@@ -1191,6 +1202,11 @@
     .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav-item-label {
       display: -webkit-box;
       overflow: hidden;
+      // `-webkit-line-clamp` mis-measures its own flex-basis (undersizing
+      // short labels); `width: 100%` still routes through that broken
+      // estimate. Pinning the floor with `min-inline-size` bypasses it.
+      inline-size: 0;
+      min-inline-size: 100%;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 2;
       text-overflow: ellipsis;
