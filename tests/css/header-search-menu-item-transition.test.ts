@@ -15,7 +15,7 @@ describe("header-search-menu-item transition", () => {
     expect(rule).not.toBeNull();
     const body = rule?.[1] ?? "";
     expect(body).not.toMatch(/transition:\s*all\b/);
-    expect(body).toMatch(/transition:\s*background-color 70ms/);
-    expect(body).toMatch(/color 70ms/);
+    expect(body).toMatch(/transition:\s*background-color \$duration--fast-01/);
+    expect(body).toMatch(/\n\s*color \$duration--fast-01/);
   });
 });
