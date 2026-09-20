@@ -19,6 +19,7 @@ import type {
 import type { HeaderSearchResult } from "carbon-components-svelte/src/UIShell/HeaderSearch.svelte";
 import type {
   scaleLinear,
+  Chart as VizChart,
   DeltaIndicator as VizDeltaIndicator,
   FunnelBars as VizFunnelBars,
   vizColor,
@@ -52,6 +53,7 @@ type _GetInitials = ReturnType<typeof getInitials>;
 type _HeaderSearchResult = HeaderSearchResult;
 type _ThemeProps = ThemeProps;
 type _Themes = typeof themes;
+type _VizChart = VizChart<{ date: Date; value: number }>;
 type _VizColor = ReturnType<typeof vizColor>;
 type _VizDeltaIndicator = VizDeltaIndicator;
 type _VizFunnelBars = VizFunnelBars<"a" | "b">;
