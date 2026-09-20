@@ -30,13 +30,43 @@ Set `kind` to `"line"` or `"bar"` to choose how the series is drawn.
 
 ## Colors
 
-Set `color` to `"interactive"`, `"neutral"`, `"success"`, or `"error"` to match the series to its meaning.
+### Semantic
+
+Set `color` to `"interactive"`, `"neutral"`, `"success"`, `"error"`, `"warning"`, or `"info"` to match the series to its meaning.
 
 <Stack gap={5}>
   <Sparkline values={[4, 7, 3, 9, 5, 12, 8, 6, 10, 14, 9, 13]} color="interactive" />
   <Sparkline values={[4, 7, 3, 9, 5, 12, 8, 6, 10, 14, 9, 13]} color="neutral" />
   <Sparkline values={[4, 7, 3, 9, 5, 12, 8, 6, 10, 14, 9, 13]} color="success" />
   <Sparkline values={[4, 7, 3, 9, 5, 12, 8, 6, 10, 14, 9, 13]} color="error" />
+  <Sparkline values={[4, 7, 3, 9, 5, 12, 8, 6, 10, 14, 9, 13]} color="warning" />
+  <Sparkline values={[4, 7, 3, 9, 5, 12, 8, 6, 10, 14, 9, 13]} color="info" />
+</Stack>
+
+### Categorical
+
+Set `color` to a number from 1 to 14 to use Carbon's categorical data visualization palette. The colors adapt to light and dark themes.
+
+<Stack gap={5}>
+  <Sparkline values={[4, 7, 3, 9, 5, 12, 8, 6, 10, 14, 9, 13]} color={1} />
+  <Sparkline values={[9, 6, 11, 5, 8, 4, 7, 10, 6, 3, 8, 5]} color={2} />
+  <Sparkline values={[2, 3, 5, 4, 6, 8, 7, 9, 11, 10, 12, 14]} color={3} />
+</Stack>
+
+### Custom
+
+Any other string is used as a CSS color.
+
+<Sparkline values={[4, 7, 3, 9, 5, 12, 8, 6, 10, 14, 9, 13]} color="rebeccapurple" />
+
+## Missing values
+
+A `null` or non-finite value is a gap. It keeps its slot, so the rest of the series stays aligned and two sparklines with different missing samples still line up.
+
+<Stack gap={5}>
+  <Sparkline values={[4, 7, 3, null, null, 12, 8, 6, 10, 14, 9, 13]} />
+  <Sparkline values={[4, 7, 3, null, null, 12, 8, 6, 10, 14, 9, 13]} fill />
+  <Sparkline values={[4, 7, 3, null, null, 12, 8, 6, 10, 14, 9, 13]} kind="bar" />
 </Stack>
 
 ## Filled area
