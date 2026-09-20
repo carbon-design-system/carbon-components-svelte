@@ -31,6 +31,8 @@ export function pathArea(points, baseline, options) {
 
   for (const run of splitRuns(points)) {
     const upper = run.points;
+    // One point encloses no area.
+    if (upper.length < 2) continue;
     const commands = runCommands(upper, curve, f, "M");
     for (let i = 0; i < commands.length; i++) parts.push(commands[i]);
 
