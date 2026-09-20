@@ -1109,6 +1109,30 @@ describe("DatePicker", () => {
       expectTypeOf<FlatpickrProps>().not.toHaveProperty("mode");
     });
 
+    it("does not re-apply a Date that is rebuilt with an equal value", async () => {
+      function props(): ComponentProps<typeof DatePicker> {
+        return {
+          datePickerType: "single",
+          minDate: new Date(2024, 0, 1),
+          maxDate: new Date(2024, 11, 31),
+          flatpickrProps: { disable: [new Date(2024, 5, 15)] },
+        };
+      }
+      const { rerender } = render(DatePicker, props());
+      const input = screen.getByLabelText("Date");
+      await screen.findByLabelText("calendar-container");
+      const calendar = (input as unknown as { _flatpickr: Instance })
+        ._flatpickr;
+      const set = vi.spyOn(calendar, "set");
+
+      await rerender(props());
+      await rerender(props());
+      expect(set).not.toHaveBeenCalled();
+
+      await rerender({ ...props(), minDate: new Date(2024, 1, 1) });
+      expect(set).toHaveBeenCalledWith("minDate", new Date(2024, 1, 1));
+    });
+
     it("does not re-apply an inline option whose contents are unchanged", async () => {
       let calendar: Instance | null = null;
       const { rerender } = render(DatePickerInlineOptions, {
