@@ -427,12 +427,12 @@
 
   .#{$prefix}--snippet--multi
     .#{$prefix}--snippet-container.#{$prefix}--snippet-container--fade-top {
-    --snippet-scroll-fade-top: transparent, #{$black-100} #{$spacing-05};
+    --snippet-scroll-fade-top: transparent, #{$black-100} #{$carbon--spacing-05};
   }
 
   .#{$prefix}--snippet--multi
     .#{$prefix}--snippet-container.#{$prefix}--snippet-container--fade-bottom {
-    --snippet-scroll-fade-bottom: transparent, #{$black-100} #{$spacing-05};
+    --snippet-scroll-fade-bottom: transparent, #{$black-100} #{$carbon--spacing-05};
   }
 }
 

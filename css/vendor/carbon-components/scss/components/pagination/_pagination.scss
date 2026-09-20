@@ -308,8 +308,8 @@ $css--helpers: true;
   .#{$prefix}--pagination--simple
     .#{$prefix}--pagination__right
     > .#{$prefix}--pagination__text {
-    margin-left: $spacing-05;
-    margin-right: $spacing-05;
+    margin-left: $carbon--spacing-05;
+    margin-right: $carbon--spacing-05;
   }
 
   // Keep status text and buttons visible below the md breakpoint.

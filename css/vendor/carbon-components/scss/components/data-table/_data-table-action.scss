@@ -559,28 +559,28 @@
 // carbon-components-svelte patch (formerly css/_data-table-toolbar.scss)
 @mixin data-table-toolbar-xs {
   .#{$prefix}--table-toolbar--xs {
-    min-height: $spacing-06; // ccs: grow for a taller (lg/xl) button instead of clipping it
+    min-height: $carbon--spacing-06; // ccs: grow for a taller (lg/xl) button instead of clipping it
 
     .#{$prefix}--toolbar-search-container-expandable,
     .#{$prefix}--toolbar-search-container-persistent,
     .#{$prefix}--toolbar-search-container-expandable .#{$prefix}--search-input,
     .#{$prefix}--toolbar-search-container-persistent .#{$prefix}--search-input { // ccs: dedupe
-      height: $spacing-06;
+      height: $carbon--spacing-06;
     }
 
     .#{$prefix}--toolbar-search-container-expandable .#{$prefix}--search-close,
     .#{$prefix}--toolbar-search-container-persistent .#{$prefix}--search-close {
-      width: $spacing-06;
-      height: $spacing-06;
+      width: $carbon--spacing-06;
+      height: $carbon--spacing-06;
     }
 
     .#{$prefix}--toolbar-search-container-expandable
       .#{$prefix}--search-magnifier-icon,
     .#{$prefix}--toolbar-search-container-persistent
       .#{$prefix}--search-magnifier-icon {
-      width: $spacing-06;
-      height: $spacing-06;
-      padding: $spacing-02;
+      width: $carbon--spacing-06;
+      height: $carbon--spacing-06;
+      padding: $carbon--spacing-02;
     }
 
     .#{$prefix}--toolbar-action.#{$prefix}--toolbar-search-container-persistent {
@@ -600,7 +600,7 @@
     }
 
     .#{$prefix}--toolbar-search-container-expandable {
-      width: $spacing-06;
+      width: $carbon--spacing-06;
     }
 
     .#{$prefix}--toolbar-search-container-expandable
@@ -608,7 +608,7 @@
       .#{$prefix}--search-input,
     .#{$prefix}--toolbar-search-container-active .#{$prefix}--search-input,
     .#{$prefix}--toolbar-search-container-persistent .#{$prefix}--search-input {
-      padding: 0 $spacing-06;
+      padding: 0 $carbon--spacing-06;
     }
 
     .#{$prefix}--toolbar-search-container-active {
@@ -646,31 +646,31 @@
     }
 
     .#{$prefix}--overflow-menu.#{$prefix}--toolbar-action {
-      width: $spacing-06;
-      min-width: $spacing-06;
-      height: $spacing-06;
+      width: $carbon--spacing-06;
+      min-width: $carbon--spacing-06;
+      height: $carbon--spacing-06;
     }
 
     .#{$prefix}--toolbar-content {
-      min-height: $spacing-06; // ccs: grow for a taller (lg/xl) button instead of clipping it
+      min-height: $carbon--spacing-06; // ccs: grow for a taller (lg/xl) button instead of clipping it
     }
   }
 
   .#{$prefix}--table-toolbar--xs
     .#{$prefix}--batch-actions
     .#{$prefix}--action-list {
-    height: $spacing-06;
+    height: $carbon--spacing-06;
   }
 
   .#{$prefix}--table-toolbar--xs .#{$prefix}--toolbar-action {
-    width: $spacing-06;
-    height: $spacing-06;
-    padding: $spacing-02 0;
+    width: $carbon--spacing-06;
+    height: $carbon--spacing-06;
+    padding: $carbon--spacing-02 0;
   }
 
   // ccs: resize every button kind, not only primary; leave an explicit lg/xl size alone
   .#{$prefix}--table-toolbar--xs .#{$prefix}--btn:not(.#{$prefix}--btn--lg):not(.#{$prefix}--btn--xl) {
-    height: $spacing-06;
+    height: $carbon--spacing-06;
     min-height: auto;
     padding-top: 0;
     padding-bottom: 0;
@@ -685,11 +685,11 @@
     .#{$prefix}--toolbar-action
     ~ .#{$prefix}--btn {
     overflow: hidden;
-    height: $spacing-06;
+    height: $carbon--spacing-06;
   }
 
   .#{$prefix}--table-toolbar--xs .#{$prefix}--batch-summary {
-    min-height: $spacing-06;
+    min-height: $carbon--spacing-06;
   }
 }
 
