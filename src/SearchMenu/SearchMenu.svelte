@@ -128,7 +128,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import { fuzzyMatch } from "../utils/fuzzy-match.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
-  import { moveIndex } from "../utils/move-index.js";
+  import { createOptionListNavigator } from "../utils/option-list-navigator.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -232,28 +232,11 @@
     if (isMenuOpen()) dispatch("close", { trigger });
   }
 
-  function getOptionElements() {
-    if (!menuRef) return [];
-    return Array.from(
-      menuRef.querySelectorAll('[role="option"]:not([hidden])'),
-    ).filter((option) => option.getAttribute("aria-disabled") !== "true");
-  }
-
-  function moveActive(step) {
-    const els = getOptionElements();
-    if (els.length === 0) {
-      highlightedId.set(null);
-      return;
-    }
-    const current = els.findIndex((option) => option.id === $highlightedId);
-    highlightedId.set(els[moveIndex(current, step, els.length)].id);
-  }
-
-  function setActiveEdge(edge) {
-    const els = getOptionElements();
-    if (els.length === 0) return;
-    highlightedId.set(els[edge === "first" ? 0 : els.length - 1].id);
-  }
+  const { getOptionElements, moveActive, setActiveEdge } =
+    createOptionListNavigator({
+      getMenuRef: () => menuRef,
+      highlightedId,
+    });
 
   function handleKeydown(event) {
     if (disabled) return;
