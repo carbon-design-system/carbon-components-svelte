@@ -155,6 +155,15 @@
     mode="stacked"
   />
 
+  <BarChart
+    data={stages}
+    x="label"
+    y="value"
+    title="Users by stage"
+    orientation="horizontal"
+    height={220}
+  />
+
   <LineChart
     data={revenue}
     x="date"

@@ -75,6 +75,34 @@ test.describe("Data visualization", () => {
     await expect(page.getByTestId("selected")).toHaveText("signup");
   });
 
+  test("horizontal BarChart lays bars on their side and follows the pointer down the plot", async ({
+    page,
+  }) => {
+    await page.goto("/viz.html");
+    const figure = page
+      .locator("figure")
+      .filter({ hasText: "Users by stage" })
+      .first();
+    const bars = figure.locator(".bx--viz-bars__bar");
+    await expect(bars).toHaveCount(4);
+
+    const boxes = await bars.evaluateAll((nodes) =>
+      nodes.map((node) => {
+        const { width, height, top } = node.getBoundingClientRect();
+        return { width, height, top };
+      }),
+    );
+    expect(boxes[0].width).toBeGreaterThan(boxes[0].height);
+    // 10000 then 6000, top to bottom.
+    expect(boxes[1].width / boxes[0].width).toBeCloseTo(0.6, 1);
+    expect(boxes[1].top).toBeGreaterThan(boxes[0].top);
+
+    await bars.nth(2).hover();
+    await expect(figure.locator(".bx--viz-chart-tooltip")).toContainText(
+      "Activated",
+    );
+  });
+
   test("LineChart follows its container and shows a tooltip for the focused point", async ({
     page,
   }) => {
