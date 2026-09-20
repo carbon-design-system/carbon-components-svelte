@@ -4,6 +4,10 @@
    */
 
   /**
+   * @event {{ selectedDates: Date[]; dateStr: string | { from: string; to: string; } }} open
+   */
+
+  /**
    * @event close
    * @type {object}
    * @property {"escape-key" | "outside-click" | "select"} trigger
