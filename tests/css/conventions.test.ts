@@ -49,24 +49,47 @@ function literalTransitions(lines: string[]) {
 }
 
 // `:hover` outside an `(any-hover: hover)` block, as 1-based line numbers.
-// `:focus:hover` rides along in `:focus` lists with the same declarations.
+// Two shapes are exempt because they restate a resting style instead of
+// adding a hover effect, and guarding them would let an unguarded base hover
+// rule through on touch: `:focus:hover` riding in a `:focus` list, and
+// `X:hover` listed beside its own `X` (a readonly/disabled suppressor).
 function unguardedHover(lines: string[]): number[] {
   const found: number[] = [];
   let depth = 0;
   let guardDepth = -1;
+  // Lines of the selector list being read, until its `{`.
+  let pending: { text: string; line: number }[] = [];
   lines.forEach((line, index) => {
-    const code = line.split("//")[0].replace(/#\{[^}]*\}/g, "");
+    const code = line.split("//")[0].replace(/#\{[^}]*\}/g, "PFX");
     if (code.includes("any-hover: hover") && guardDepth < 0) guardDepth = depth;
-    if (
-      guardDepth < 0 &&
-      code.replace(/:not\(:hover\)|:focus:hover/g, "").includes(":hover")
-    )
-      found.push(index + 1);
+    if (code.trim() && !/[;}]\s*$/.test(code))
+      pending.push({ text: code, line: index + 1 });
+    if (code.includes("{")) {
+      const parts = pending
+        .flatMap(({ text, line }) =>
+          text
+            .replace(/\{.*$/, "")
+            .split(",")
+            .map((part) => ({ part: part.trim().replace(/\s+/g, " "), line })),
+        )
+        .filter(({ part }) => part);
+      const listed = new Set(parts.map(({ part }) => part));
+      for (const { part, line } of parts) {
+        const hover = part.replace(/:not\(:hover\)|:focus:hover/g, "");
+        if (
+          guardDepth < 0 &&
+          hover.includes(":hover") &&
+          !listed.has(part.replace(/:hover/g, ""))
+        )
+          found.push(line);
+      }
+    }
+    if (/[{};]/.test(code)) pending = [];
     depth += (code.match(/\{/g) ?? []).length;
     depth -= (code.match(/\}/g) ?? []).length;
     if (guardDepth >= 0 && depth <= guardDepth) guardDepth = -1;
   });
-  return found;
+  return [...new Set(found)];
 }
 
 describe("css partial conventions", () => {
@@ -417,23 +440,25 @@ const KNOWN_PATCH_VIOLATIONS: Record<string, number> = {
   "repeated class: components/tabs/_tabs.scss": 3,
   "literal transition: components/data-table/_data-table-action.scss": 1,
   "literal transition: components/ui-shell/_ui-shell.scss": 1,
-  "unguarded :hover: components/combo-box/_combo-box.scss": 1,
+  // What is left competes with a base hover rule the vendored tree leaves
+  // unguarded (readonly/disabled resets, Tabs, the shell header, link,
+  // copy-button), or shares its declarations with `:active`/`:focus`/a
+  // selected class. Guarding only the patch half would let the base hover
+  // through on touch, so these move when the base rule does.
   "unguarded :hover: components/content-switcher/_content-switcher.scss": 1,
   "unguarded :hover: components/copy-button/_copy-button.scss": 1,
   "unguarded :hover: components/data-table/_data-table-action.scss": 1,
   "unguarded :hover: components/data-table/_data-table.scss": 5,
   "unguarded :hover: components/date-picker/_date-picker.scss": 4,
-  "unguarded :hover: components/dropdown/_dropdown.scss": 2,
-  "unguarded :hover: components/link/_link.scss": 3,
-  "unguarded :hover: components/multi-select/_multi-select.scss": 2,
-  "unguarded :hover: components/overflow-menu/_overflow-menu.scss": 3,
+  "unguarded :hover: components/link/_link.scss": 1,
+  "unguarded :hover: components/multi-select/_multi-select.scss": 1,
   "unguarded :hover: components/select/_select.scss": 3,
   "unguarded :hover: components/slider/_slider.scss": 2,
   "unguarded :hover: components/structured-list/_structured-list.scss": 2,
-  "unguarded :hover: components/tabs/_tabs.scss": 12,
+  "unguarded :hover: components/tabs/_tabs.scss": 10,
   "unguarded :hover: components/tag/_tag.scss": 3,
   "unguarded :hover: components/time-picker/_time-picker.scss": 1,
-  "unguarded :hover: components/ui-shell/_ui-shell.scss": 6,
+  "unguarded :hover: components/ui-shell/_ui-shell.scss": 4,
 };
 
 describe("vendored patch block conventions", () => {
