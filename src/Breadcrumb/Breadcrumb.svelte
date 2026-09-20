@@ -1,4 +1,8 @@
 <script>
+  /**
+   * @template [Separator=any]
+   */
+
   /** @extends {"./BreadcrumbSkeleton.svelte"} BreadcrumbSkeletonProps */
 
   /** Set to `true` to hide the separator after the last breadcrumb item */
@@ -16,10 +20,28 @@
    */
   export let size = "md";
 
-  /** Specify the separator character rendered between breadcrumb items */
-  export let separator = "/";
+  /**
+   * Specify the separator rendered between breadcrumb items.
+   * Accepts a text character, rendered through CSS, or a component
+   * reference (for example an icon or pictogram component), rendered as
+   * a decorative DOM node.
+   * @type {string | Separator}
+   * @example
+   * ```svelte
+   * <Breadcrumb separator={ArrowRight}>
+   * ```
+   */
+  export let separator = /** @type {string | Separator} */ ("/");
 
+  import { setContext } from "svelte";
+  import { writable } from "svelte/store";
   import BreadcrumbSkeleton from "./BreadcrumbSkeleton.svelte";
+
+  const separatorStore = writable(separator);
+
+  $: separatorStore.set(separator);
+
+  setContext("carbon:Breadcrumb", { separator: separatorStore });
 </script>
 
 {#if skeleton}
@@ -46,7 +68,10 @@
       class:bx--breadcrumb={true}
       class:bx--breadcrumb--no-trailing-slash={noTrailingSlash}
       class:bx--breadcrumb--sm={size === "sm"}
-      style:--ccs-separator="'{separator}'"
+      class:bx--breadcrumb--separator-icon={typeof separator !== "string"}
+      style:--ccs-separator={typeof separator === "string"
+        ? `'${separator}'`
+        : "''"}
     >
       <slot />
     </ol>

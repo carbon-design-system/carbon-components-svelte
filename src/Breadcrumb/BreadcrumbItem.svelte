@@ -21,10 +21,12 @@
   /** Set to `true` if the breadcrumb item represents the current page */
   export let isCurrentPage = false;
 
-  import { setContext } from "svelte";
+  import { getContext, setContext } from "svelte";
   import Link from "../Link/Link.svelte";
 
   setContext("carbon:BreadcrumbItem", {});
+
+  const { separator: separatorStore } = getContext("carbon:Breadcrumb");
 
   $: ({ "aria-current": ariaCurrent, ...liProps } = $$restProps);
 </script>
@@ -52,5 +54,10 @@
         class: "bx--link",
       }}
     />
+  {/if}
+  {#if typeof $separatorStore !== "string"}
+    <span class:bx--breadcrumb-item__separator={true} aria-hidden="true">
+      <svelte:component this={$separatorStore} />
+    </span>
   {/if}
 </li>

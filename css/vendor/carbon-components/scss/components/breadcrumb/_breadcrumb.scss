@@ -202,3 +202,61 @@
 @include exports('breadcrumb-sm') {
   @include breadcrumb-sm;
 }
+
+/// Render a component-based `separator` (an icon or pictogram) as a real
+/// DOM node. `content: var(--ccs-separator, '/')` above only covers
+/// text-character separators — CSS generated content cannot hold a Svelte
+/// component.
+/// @access private
+/// @group components
+@mixin breadcrumb-separator-icon {
+  // The text-separator ::after above always renders, even with an empty
+  // `content`, and its own margin-left would otherwise double up with
+  // this node's margin-left.
+  .#{$prefix}--breadcrumb--separator-icon .#{$prefix}--breadcrumb-item::after {
+    display: none;
+  }
+
+  // Half the text-separator's margin: a visible icon reads as its own
+  // shape, so it needs less breathing room than an inline character to
+  // still group with its neighboring items (Gestalt proximity).
+  .#{$prefix}--breadcrumb-item__separator {
+    display: inline-flex;
+    align-items: center;
+    margin-left: $carbon--spacing-02;
+    color: $text-01;
+  }
+
+  .#{$prefix}--breadcrumb--sm .#{$prefix}--breadcrumb-item__separator {
+    margin-left: $carbon--spacing-01;
+  }
+
+  // Match the item's own trailing margin to the halved separator margin
+  // above, so the gap on both sides of the icon stays symmetric.
+  .#{$prefix}--breadcrumb--separator-icon .#{$prefix}--breadcrumb-item {
+    margin-right: $carbon--spacing-02;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  .#{$prefix}--breadcrumb--separator-icon.#{$prefix}--breadcrumb--sm
+    .#{$prefix}--breadcrumb-item {
+    margin-right: $carbon--spacing-01;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  .#{$prefix}--breadcrumb--no-trailing-slash
+    .#{$prefix}--breadcrumb-item:last-child
+    .#{$prefix}--breadcrumb-item__separator {
+    display: none;
+  }
+}
+
+@include exports('breadcrumb-separator-icon') {
+  @include breadcrumb-separator-icon;
+}
