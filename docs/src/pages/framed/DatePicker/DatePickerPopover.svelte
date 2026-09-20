@@ -1,5 +1,6 @@
 <script>
   import {
+    Box,
     Button,
     DatePicker,
     DatePickerInput,
@@ -12,10 +13,13 @@
   >Open popover</Button
 >
 
-<div
-  bind:this={popover}
+<Box
+  bind:ref={popover}
   popover="manual"
-  style="width: min(100%, 28rem); padding: 1rem; border: 1px dashed var(--cds-border-subtle);"
+  width="min(100%, 28rem)"
+  padding={5}
+  border="subtle"
+  borderStyle="dashed"
 >
   <p>
     With <code>portalMenu</code>, the calendar auto-mounts into the nearest
@@ -32,4 +36,4 @@
   >
     Close
   </Button>
-</div>
+</Box>

@@ -1,5 +1,6 @@
 <script>
   import {
+    Box,
     Button,
     Dropdown,
     OverflowMenu,
@@ -14,10 +15,13 @@
   >Open popover</Button
 >
 
-<div
-  bind:this={popover}
+<Box
+  bind:ref={popover}
   popover="manual"
-  style="width: min(100%, 28rem); padding: 1rem; border: 1px dashed var(--cds-border-subtle);"
+  width="min(100%, 28rem)"
+  padding={5}
+  border="subtle"
+  borderStyle="dashed"
 >
   <Stack gap={5}>
     <p>
@@ -59,4 +63,4 @@
       Close
     </Button>
   </Stack>
-</div>
+</Box>

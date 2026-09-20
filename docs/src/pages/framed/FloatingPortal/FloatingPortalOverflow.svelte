@@ -1,5 +1,6 @@
 <script>
   import {
+    Box,
     Button,
     FloatingPortal,
     Stack,
@@ -52,35 +53,34 @@
   }
 </script>
 
-<Stack
-  gap={4}
-  style="overflow: hidden; border: 1px dashed var(--cds-border-subtle); padding: 1rem"
->
-  <div>This container has hidden overflow.</div>
-  <div
-    bind:this={container}
-    style="position: relative; min-height: 200px; min-width: 300px;"
-  >
+<Box overflow="hidden" border="subtle" borderStyle="dashed" padding={5}>
+  <Stack gap={4}>
+    <div>This container has hidden overflow.</div>
     <div
-      bind:this={anchor}
-      role="button"
-      tabindex="0"
-      draggable="true"
-      style="position: absolute; left: {x}px; top: {y}px; cursor: move; user-select: none;"
-      on:dragstart={handleDragStart}
-      on:drag={handleDrag}
-      on:dragend={handleDragEnd}
-      on:keydown={(e) => {
-        if (e.key === "Enter") open = !open;
-      }}
-      title="Drag to move, click to toggle"
+      bind:this={container}
+      style="position: relative; min-height: 200px; min-width: 300px;"
     >
-      <Tile>
-        <Button on:click={() => (open = !open)}>View instance details</Button>
-      </Tile>
+      <div
+        bind:this={anchor}
+        role="button"
+        tabindex="0"
+        draggable="true"
+        style="position: absolute; left: {x}px; top: {y}px; cursor: move; user-select: none;"
+        on:dragstart={handleDragStart}
+        on:drag={handleDrag}
+        on:dragend={handleDragEnd}
+        on:keydown={(e) => {
+          if (e.key === "Enter") open = !open;
+        }}
+        title="Drag to move, click to toggle"
+      >
+        <Tile>
+          <Button on:click={() => (open = !open)}>View instance details</Button>
+        </Tile>
+      </div>
     </div>
-  </div>
-</Stack>
+  </Stack>
+</Box>
 
 <FloatingPortal {anchor} {open}>
   <Tile>Instance i-0a1b2c3d: 3 of 4 health checks passing</Tile>
