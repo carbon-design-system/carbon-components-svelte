@@ -1,0 +1,85 @@
+/// MicroFunnel: a funnel small enough for a table cell or KPI card. Segment
+/// height steps down with each stage, which still reads as a funnel at 16px.
+/// @access private
+/// @group viz
+@mixin viz-micro-funnel {
+  .#{$prefix}--viz-micro-funnel {
+    --bx-viz-size: #{to-rem(24px)};
+
+    display: inline-flex;
+    align-items: flex-end;
+    block-size: var(--bx-viz-size);
+    gap: to-rem(2px);
+    inline-size: to-rem(96px);
+    vertical-align: middle;
+  }
+
+  .#{$prefix}--viz-micro-funnel--sm {
+    --bx-viz-size: #{to-rem(16px)};
+  }
+
+  .#{$prefix}--viz-micro-funnel--lg {
+    --bx-viz-size: #{to-rem(32px)};
+  }
+
+  .#{$prefix}--viz-micro-funnel__step {
+    flex: 1 1 0;
+    min-block-size: to-rem(2px);
+    background: var(--bx-viz-color, #{$interactive-04});
+    block-size: calc(var(--bx-viz-pct) * 1%);
+    transition: block-size $duration--moderate-01
+      carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-micro-funnel--completion {
+    align-items: center;
+    gap: $carbon--spacing-03;
+    inline-size: auto;
+  }
+
+  .#{$prefix}--viz-micro-funnel__track {
+    background: $ui-03;
+    block-size: to-rem(4px);
+    inline-size: to-rem(96px);
+  }
+
+  .#{$prefix}--viz-micro-funnel__fill {
+    display: block;
+    min-inline-size: to-rem(2px);
+    background: var(--bx-viz-color, #{$interactive-04});
+    block-size: 100%;
+    inline-size: calc(var(--bx-viz-pct) * 1%);
+    transition: inline-size $duration--moderate-01
+      carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-micro-funnel__value {
+    color: $text-primary;
+    font-variant-numeric: tabular-nums;
+
+    @include type-style("label-01");
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-micro-funnel__step,
+    .#{$prefix}--viz-micro-funnel__fill {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-micro-funnel__step,
+    .#{$prefix}--viz-micro-funnel__fill {
+      background: CanvasText;
+      forced-color-adjust: none;
+    }
+
+    .#{$prefix}--viz-micro-funnel__track {
+      border: 1px solid CanvasText;
+    }
+  }
+}
+
+@include exports("viz-micro-funnel") {
+  @include viz-micro-funnel;
+}
