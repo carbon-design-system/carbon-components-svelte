@@ -45,18 +45,6 @@
     }
   }
 
-  .#{$prefix}--inline-loading__checkmark {
-    animation-duration: 250ms;
-    animation-fill-mode: forwards;
-    animation-name: stroke;
-    fill: none;
-    stroke: $interactive-04;
-    stroke-dasharray: 12;
-    stroke-dashoffset: 12;
-    stroke-width: 1.8;
-    transform-origin: 50% 50%;
-  }
-
   .#{$prefix}--inline-loading--error {
     width: to-rem(16px);
     height: to-rem(16px);

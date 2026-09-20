@@ -23,6 +23,8 @@ const UNRENDERED = [
   /side-nav__item--active/,
   /pagination-nav__page--direction/,
   /header__menu-toggle__hidden/,
+  // Pruned as styled-but-unrendered; see tests/css/unrendered-classes.test.ts.
+  /inline-loading__checkmark\b(?!-)/,
 ];
 
 describe("unrendered selectors", () => {
