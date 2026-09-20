@@ -56,6 +56,7 @@
   import { writable } from "svelte/store";
   import Stack from "../Stack/Stack.svelte";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
+  import { sortByDomOrder } from "../utils/sort-by-dom-order.js";
   import UserAvatarGroupOverflow from "./UserAvatarGroupOverflow.svelte";
 
   /** @type {import("svelte/store").Writable<Array<{ id: string; name: string; node?: HTMLElement }>>} */
@@ -94,19 +95,9 @@
 
   // Avatars register in mount order, which differs from DOM order when they are
   // conditionally rendered. Each registers from its own `onMount`, so its node
-  // is already in the DOM; sort the registry by document position right then to
-  // keep the visible avatars and overflow names tracking the rendered layout.
-  // Sorting after a batched flush matches sorting after each registration.
-  // compareDocumentPosition reads live DOM position.
-  function sortByDomOrder(list) {
-    return [...list].sort((a, b) => {
-      if (!a.node || !b.node) return 0;
-      const position = a.node.compareDocumentPosition(b.node);
-      if (position & Node.DOCUMENT_POSITION_FOLLOWING) return -1;
-      if (position & Node.DOCUMENT_POSITION_PRECEDING) return 1;
-      return 0;
-    });
-  }
+  // is already in the DOM; sortByDomOrder keeps the visible avatars and
+  // overflow names tracking the rendered layout. Sorting after a batched
+  // flush matches sorting after each registration.
 
   // Route register, unregister, and updateName through the same batched
   // queue. Mixing in a direct items.update() would read a stale array
