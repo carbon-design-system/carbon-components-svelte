@@ -478,6 +478,8 @@ Non-emitting helpers (Sass maps or mixins other partials include, such as [`css/
 
 #### Conventions
 
+These apply to every hand-authored rule: the `css/_*.scss` partials and the blocks below a `// carbon-components-svelte patch` banner in the vendored tree. `tests/css/conventions.test.ts` scans both. Patch blocks are checked against `KNOWN_PATCH_VIOLATIONS`, an exact per-file count of what predates the check: lower a count when you fix one, never raise it. Untouched upstream code keeps upstream's style.
+
 Values:
 
 - Sizes: `to-rem(Npx)` or a spacing token. Not Carbon's bare `rem()`, not a raw rem literal. Hairlines (`1px`/`2px` borders, outlines, and offsets) stay in `px`.
@@ -485,6 +487,8 @@ Values:
 - Color: theme tokens (`$ui-01`, `$field-01`, `$support-error`, …). No hex. In `all.css` tokens compile to `var(--cds-*)` strings, so Sass color functions (`mix()`, `lightness()`, `rgba($token, …)`) and unary minus (`-$token`) silently drop the rule or no-op.
 - Type: `type-style("…")`.
 - Motion: `$duration--*` with `motion(standard, productive)` and friends, never a literal `ms` or `cubic-bezier()`. Never `transition: all`: list the properties, and leave out `border-color`/`box-shadow`/`outline` when they double as the focus ring so the ring snaps instead of fading.
+- `will-change`: only `transform` or `opacity`, the two properties the hint can promote to a compositor layer. Not on an element that is idle most of the time, and not on one whose running animation already promotes it (skeletons).
+- No `!important`. When a vendored rule or an inline style leaves no other way, add a comment naming what it has to beat.
 - Focus rings: `@include focus-outline("outline")` / `("invalid")`, not a hand-written `outline`.
 - `z-index`: `z("floating")`, `z("dropdown")`, … for anything that floats over the page. A literal `1`/`-1` is fine for stacking inside the component's own box.
 - Breakpoints: `@include carbon--breakpoint(md)`, not a literal `min-width`.
@@ -499,6 +503,7 @@ Selectors:
 - Do not pad specificity (repeated classes, `tag.class`, order-only `:not()`). If the rule you need to beat is in the vendored tree, edit it there. Repetition is tolerated only to preserve an existing cascade during a refactor, with a comment saying what it matches.
 - Hover rules go in **one** `@media (any-hover: hover)` block per partial, at the end of the mixin. Lightning CSS only merges adjacent blocks, and `tests/css/media-query-grouping.test.ts` budgets the total.
 - Use physical properties (`left`, `padding-right`, `height`) for new code, matching the v10 base. Several v11 backports use logical properties on the block axis; do not mix both for the same box in one rule.
+- Avoid syntax Lightning CSS downlevels by duplicating the rule: `inset-inline-start`/`-end`, `border-start-start-radius` and its siblings (each expands to `:lang()` RTL twins, about 900 bytes per declaration), a selector list inside `:not()` (write `:not(.a):not(.b)`, or better a marker class), and `:is()`/`:where()`. `tests/css/downlevel.test.ts` scans the vendored tree too.
 - Do not use `:has()`. It exceeds the Svelte 5 browserslist baseline (Firefox 83/Safari 14) the CSS targets, and Lightning CSS cannot prefix or polyfill it. Mark parents explicitly instead (for example a `hasLeftIcon` prop emitting a marker class). Same rule for any selector newer than that baseline, since one unknown selector invalidates the whole rule. Newer _properties_ that degrade gracefully (`text-wrap: pretty`) are fine.
 
 Naming:
@@ -528,6 +533,12 @@ Emission order is load-bearing: equal-specificity ties resolve by source order. 
 | `bun run check:css:usage` | Browser-measured "never wins" worklist. Evidence, not proof. |
 
 Compiled-output and source conventions are enforced by the tests in `tests/css/`. A new rule about how CSS is written or emitted should land with a test there.
+
+When `check:css:overrides` reports a pair, work out which of the two values is the intended one before deleting anything. The checker proves the earlier declaration never wins; it does not know whether the later one is right. Deleting the flagged half of a `right: $carbon--spacing-03` / `right: auto` pair is how the fluid `CopyInput` button lost its offset.
+
+Delete a selector family only after confirming no component in `src/` renders the class, including classes built from interpolated strings. Then add its pattern to `tests/css/unrendered-selectors.test.ts` so a vendored re-sync cannot bring it back.
+
+A guard that asserts absence (`not.toMatch`, an upper bound on a count, an empty offender list) needs a positive assertion beside it that fails when the pattern stops matching: a lower bound, or a count of the declarations it inspected. Match whole declarations up to `;` instead of single lines, since the formatter wraps long values. Then break the source on purpose once and confirm the test fails.
 
 #### Rebuild
 
