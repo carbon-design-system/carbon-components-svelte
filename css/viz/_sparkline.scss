@@ -5,8 +5,9 @@
 @mixin viz-sparkline {
   .#{$prefix}--sparkline {
     display: inline-block;
-    vertical-align: middle;
     overflow: visible;
+    color: var(--bx-viz-color, #{$interactive-04});
+    vertical-align: middle;
   }
 
   .#{$prefix}--sparkline__line {
@@ -25,20 +26,26 @@
     fill: currentColor;
   }
 
-  .#{$prefix}--sparkline--interactive {
-    color: $interactive-04;
-  }
-
+  // Modifiers set the property rather than `color`, so an inline
+  // `--bx-viz-color` (categorical or custom colors) needs no extra specificity.
   .#{$prefix}--sparkline--neutral {
-    color: $icon-secondary;
+    --bx-viz-color: #{$icon-secondary};
   }
 
   .#{$prefix}--sparkline--success {
-    color: $support-success;
+    --bx-viz-color: #{$support-success};
   }
 
   .#{$prefix}--sparkline--error {
-    color: $support-error;
+    --bx-viz-color: #{$support-error};
+  }
+
+  .#{$prefix}--sparkline--warning {
+    --bx-viz-color: #{$support-warning};
+  }
+
+  .#{$prefix}--sparkline--info {
+    --bx-viz-color: #{$support-info};
   }
 }
 
