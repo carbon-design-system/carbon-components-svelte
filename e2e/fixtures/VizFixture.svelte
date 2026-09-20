@@ -8,6 +8,7 @@
     DonutChart,
     FunnelBars,
     HeatStrip,
+    Histogram,
     LineChart,
     MicroDonut,
     MicroFunnel,
@@ -162,6 +163,15 @@
     y="value"
     title="Users by stage"
     orientation="horizontal"
+    height={220}
+  />
+
+  <Histogram
+    data={revenue}
+    x="revenue"
+    bins={8}
+    markers={[{ x: 40000, label: "Goal" }]}
+    title="Distribution of monthly revenue"
     height={220}
   />
 
