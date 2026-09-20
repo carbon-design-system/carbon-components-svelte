@@ -1,4 +1,6 @@
 <script context="module">
+  import { deepEqual } from "../utils/deep-equal.js";
+
   function isUnderCollapsedSubtree(node) {
     return Boolean(node.closest("ul.bx--tree-node--hidden"));
   }
@@ -156,6 +158,50 @@
     }
 
     return { nodeMap, parentIdById, childIdsByParentId };
+  }
+
+  /**
+   * Whether `nextNodes` is value-equal to `prevNodes` at every depth via
+   * nodes that are each a DIFFERENT object reference from their
+   * counterpart — the shape a rebuilt-from-equal-config prop or a `$:`
+   * derivation that re-runs for an unrelated reason produces.
+   *
+   * If any node at any depth is the SAME object reference as before, it may
+   * have been mutated in place — the documented lazy-load idiom
+   * (`node.nodes = children; nodes = nodes`) and `nodes = [...nodes]` after
+   * mutating an entry both keep sharing node objects — so this returns
+   * `false` and the caller redoes the work from scratch. No snapshot is
+   * kept, so it is never stale at the top level.
+   * @template {{ id: string | number; nodes?: TNode[] }} TNode
+   * @param {ReadonlyArray<TNode>} prevNodes
+   * @param {ReadonlyArray<TNode>} nextNodes
+   * @returns {boolean}
+   */
+  function sameTreeDifferentObjects(prevNodes, nextNodes) {
+    if (prevNodes.length !== nextNodes.length) return false;
+
+    for (let i = 0; i < prevNodes.length; i++) {
+      const prev = prevNodes[i];
+      const next = nextNodes[i];
+      // Same reference: might have been mutated in place, can't trust it.
+      if (prev === next) return false;
+
+      for (const key of Object.keys(next)) {
+        if (key === "nodes") continue;
+        if (!(key in prev) || !deepEqual(prev[key], next[key])) return false;
+      }
+      for (const key of Object.keys(prev)) {
+        if (key === "nodes" || key in next) continue;
+        return false;
+      }
+
+      const prevChildren = Array.isArray(prev.nodes) ? prev.nodes : [];
+      const nextChildren = Array.isArray(next.nodes) ? next.nodes : [];
+      if (prevChildren.length === 0 && nextChildren.length === 0) continue;
+      if (!sameTreeDifferentObjects(prevChildren, nextChildren)) return false;
+    }
+
+    return true;
   }
 
   /**
@@ -680,6 +726,17 @@
   /** @type {TreeWalker | null} */
   let treeWalker = null;
 
+  /**
+   * `nodes`, but kept at the SAME reference across a "new but equal" update
+   * (same tree by value, every node at every depth a different object) so
+   * the markup and every derived block below re-render nothing. Reassigned
+   * to `nodes` on any real change, including one this can't safely rule
+   * out (a node reused by reference, which may have been mutated in
+   * place). See `sameTreeDifferentObjects`.
+   * @type {ReadonlyArray<Node>}
+   */
+  let stableNodes = nodes;
+
   /** @type {ReadonlyArray<Node> | null} */
   let cachedNodes = null;
   /** @type {Array<Node> | null} */
@@ -1176,23 +1233,22 @@
   /** @type {ReadonlyArray<Node> | null} */
   let prevNodesForFirstTab = null;
 
-  afterUpdate(() => {
+  /**
+   * A connected roving tab stop already exists — either the first node from
+   * a previous run of this function, or one the user arrowed to. Leave it
+   * alone: querying and overwriting it here would both redo work for
+   * nothing (new-but-equal `nodes`) and, without a `resetNodeTabIndices()`
+   * call, leave two `tabindex="0"` elements when the tab stop is elsewhere
+   * in the tree. No connected tab stop (initial render, or the previous one
+   * was removed by the new `nodes`) falls back to the first focusable node.
+   */
+  function assignFirstTabStopIfNeeded() {
     if (!ref) return;
-    if (nodes === prevNodesForFirstTab) return;
-    prevNodesForFirstTab = nodes;
 
-    // A connected roving tab stop already exists — either the first node
-    // from a previous run of this block, or one the user arrowed to. Leave
-    // it alone: querying and overwriting it here would both redo work for
-    // nothing (new-but-equal `nodes`) and, without a `resetNodeTabIndices()`
-    // call, leave two `tabindex="0"` elements when the tab stop is
-    // elsewhere in the tree.
     for (const element of rovingTabStops) {
       if (element.isConnected) return;
     }
 
-    // No connected tab stop (initial render, or the previous one was
-    // removed by the new `nodes`): fall back to the first focusable node.
     rovingTabStops.clear();
     const firstFocusableNode = ref.querySelector(
       ".bx--tree-node:not(.bx--tree-node--disabled):not(.bx--tree-node--hidden)",
@@ -1201,6 +1257,27 @@
     if (firstFocusableNode instanceof HTMLElement) {
       setRovingTabStop(firstFocusableNode);
     }
+  }
+
+  afterUpdate(() => {
+    if (!ref) return;
+    if (nodes === prevNodesForFirstTab) return;
+    prevNodesForFirstTab = nodes;
+
+    if (rovingTabStops.size === 0) {
+      // Nothing tracked yet (initial render, most commonly): no existing
+      // element whose `isConnected` could still read stale, so resolve
+      // synchronously — this is relied on immediately after mount.
+      assignFirstTabStopIfNeeded();
+      return;
+    }
+
+    // A tab stop is already tracked from before this update. `stableNodes`
+    // (and therefore `<TreeViewNodeList nodes={stableNodes}>`) can settle
+    // one flush after this callback fires, so `element.isConnected` above
+    // could still read `true` for a row the new `nodes` is in the middle of
+    // removing. Defer to `tick()` so the check reflects the settled DOM.
+    tick().then(assignFirstTabStopIfNeeded);
   });
 
   onMount(() => {
@@ -1217,9 +1294,30 @@
     };
   });
 
-  $: if (nodes !== cachedNodes) {
-    cachedNodes = nodes;
-    const maps = buildTreeMaps(nodes);
+  // Only assign when the tree actually needs to change — an unconditional
+  // `stableNodes = nodes === stableNodes ? stableNodes : nodes` would call
+  // `$$invalidate` on every `nodes` update even when re-assigning the SAME
+  // reference back to itself, which (same "objects always changed" rule
+  // this guard works around) still re-renders every mounted node, same as
+  // MultiSelect's `sortedItems` (`isAlreadySorted`) fix skips its
+  // assignment entirely rather than reassigning to an equal value.
+  //
+  // `nodes === stableNodes` forces the update rather than skipping it: this
+  // block only re-runs when the consumer touched `nodes` at all (including
+  // reassigning the SAME reference, the lazy-load idiom's `nodes = nodes`),
+  // and a same-reference `nodes` may hold an in-place mutation this guard
+  // has no way to see — the in-place mutation hazard applies at the top
+  // level too, not just to nested nodes.
+  $: if (
+    nodes === stableNodes ||
+    !sameTreeDifferentObjects(stableNodes, nodes)
+  ) {
+    stableNodes = nodes;
+  }
+
+  $: if (stableNodes !== cachedNodes) {
+    cachedNodes = stableNodes;
+    const maps = buildTreeMaps(stableNodes);
     cachedNodeMap = maps.nodeMap;
     cachedParentIdById = maps.parentIdById;
     cachedChildIdsByParentId = maps.childIdsByParentId;
@@ -1235,24 +1333,48 @@
   /** @type {ReadonlyArray<Node["id"]>} */
   let prevCheckedIdsPushed = checkedIds;
 
-  // Depend on `cachedNodes` so this runs after the cache refresh, and write
-  // `checkedIds` so the sync block below sees the settled state.
+  /** @type {ReadonlyArray<Node> | null} */
+  let prevCheckboxInputNodes = null;
+  /** @type {ReadonlyArray<Node["id"]> | null} */
+  let prevCheckboxCheckedIds = null;
+  let prevCheckboxCheckMode;
+
+  // This block also runs on updates unrelated to any of the checkbox
+  // state below (it's part of a larger reactive statement that also syncs
+  // `selectedIds`/`expandedIds` mirrors), so gate the `resolveCheckboxState`
+  // call itself on its actual inputs, not just on the block re-running.
+  // The fallback reads `stableNodes`, not `nodes`: referencing the raw prop
+  // would make the block a dependent of it, re-running (and creating a
+  // "changed" `checkboxInputNodes` reading) on every `nodes` identity
+  // change even when `stableNodes` (and therefore `cachedNodes`) did not.
   $: {
     if (selectionMode === "checkbox") {
-      const checkboxState = resolveCheckboxState(
-        cachedNodes ?? nodes,
-        checkedIds,
-        {
-          cascade: checkMode !== "node",
-        },
-      );
-      if (!arrayIdsEqual(checkboxState.checkedIds, checkedIds)) {
-        setCheckedIds(checkboxState.checkedIds);
-      }
-      if (!arrayIdsEqual(checkboxState.indeterminateIds, indeterminateIds)) {
-        indeterminateIds = checkboxState.indeterminateIds;
-        indeterminateIdsSet = new Set(indeterminateIds);
-        prevIndeterminateIds = indeterminateIds;
+      const checkboxInputNodes = cachedNodes ?? stableNodes;
+      if (
+        checkboxInputNodes !== prevCheckboxInputNodes ||
+        checkedIds !== prevCheckboxCheckedIds ||
+        checkMode !== prevCheckboxCheckMode
+      ) {
+        const checkboxState = resolveCheckboxState(
+          checkboxInputNodes,
+          checkedIds,
+          {
+            cascade: checkMode !== "node",
+          },
+        );
+        if (!arrayIdsEqual(checkboxState.checkedIds, checkedIds)) {
+          setCheckedIds(checkboxState.checkedIds);
+        }
+        if (!arrayIdsEqual(checkboxState.indeterminateIds, indeterminateIds)) {
+          indeterminateIds = checkboxState.indeterminateIds;
+          indeterminateIdsSet = new Set(indeterminateIds);
+          prevIndeterminateIds = indeterminateIds;
+        }
+        prevCheckboxInputNodes = checkboxInputNodes;
+        // Re-read `checkedIds`: `setCheckedIds` above may have just
+        // reassigned it, and this should snapshot the settled value.
+        prevCheckboxCheckedIds = checkedIds;
+        prevCheckboxCheckMode = checkMode;
       }
     } else if (indeterminateIds.length > 0) {
       indeterminateIds = [];
@@ -1331,12 +1453,37 @@
   // `expandedIds` (expandNode / expandAll). Fall back to a temporary Set when
   // an external `bind:expandedIds` update has not been mirrored yet (this
   // reactive block runs before the sync block later in the file).
-  $: virtualIndex = virtualConfig
-    ? createTreeVirtualIndex(
-        nodes,
-        expandedIds === prevExpandedIds ? expandedIdsSet : new Set(expandedIds),
-      )
-    : null;
+  //
+  // This reactive statement re-runs on updates unrelated to any of its own
+  // inputs (same as the checkbox block above), so it snapshots its actual
+  // inputs and skips `createTreeVirtualIndex` — an O(n) rebuild of the
+  // whole windowing index — when none of them changed. Gate on `expandedIds`
+  // (the array), not the `expandedArg` passed to `createTreeVirtualIndex`:
+  // every expand/collapse site reassigns `expandedIds` to a fresh array,
+  // but the `expandedIdsSet` mirror it can resolve to is mutated in place
+  // and would never look "changed" by reference.
+  /** @type {ReadonlyArray<Node> | null} */
+  let prevVirtualIndexNodes = null;
+  /** @type {ReadonlyArray<Node["id"]> | null} */
+  let prevVirtualIndexExpandedIds = null;
+  /** @type {ReturnType<typeof createTreeVirtualIndex> | null} */
+  let virtualIndex = null;
+  $: {
+    if (!virtualConfig) {
+      virtualIndex = null;
+      prevVirtualIndexNodes = null;
+      prevVirtualIndexExpandedIds = null;
+    } else if (
+      stableNodes !== prevVirtualIndexNodes ||
+      expandedIds !== prevVirtualIndexExpandedIds
+    ) {
+      const expandedArg =
+        expandedIds === prevExpandedIds ? expandedIdsSet : new Set(expandedIds);
+      virtualIndex = createTreeVirtualIndex(stableNodes, expandedArg);
+      prevVirtualIndexNodes = stableNodes;
+      prevVirtualIndexExpandedIds = expandedIds;
+    }
+  }
 
   /** CSS height value applied to the scroll container. Strings pass through;
    * numbers/undefined become px. */
@@ -1916,7 +2063,7 @@
     on:keydown
     on:keydown|stopPropagation={handleKeydown}
   >
-    <TreeViewNodeList root {nodes} let:node>
+    <TreeViewNodeList root nodes={stableNodes} let:node>
       <slot {node}> {node.text} </slot>
       <svelte:fragment slot="childNodes" let:node>
         <slot name="childNodes" {node} />

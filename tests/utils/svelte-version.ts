@@ -3,3 +3,4 @@ const sveltePkg = await import("svelte/package.json");
 
 const SVELTE_VERSION = Number.parseInt(sveltePkg.version.split(".")[0], 10);
 export const isSvelte5 = SVELTE_VERSION === 5;
+export const isSvelte3 = SVELTE_VERSION === 3;
