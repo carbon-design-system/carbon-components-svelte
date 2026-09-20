@@ -3,7 +3,20 @@ description: Box applies Carbon fill, inset, and border tokens to any container,
 ---
 
 <script>
-  import { Box, Stack, Text } from "carbon-components-svelte";
+  import { Box, ScrollGradient, Stack, Text } from "carbon-components-svelte";
+
+  const auditLogEntries = [
+    "Signed in from new device",
+    "Updated API key",
+    "Revoked session token",
+    "Created service account",
+    "Modified IAM role: viewer → editor",
+    "Exported audit log (CSV)",
+    "Enabled MFA",
+    "Disabled webhook endpoint",
+    "Rotated database credentials",
+    "Added user to Engineering group",
+  ];
 </script>
 
 ## Basic
@@ -224,6 +237,18 @@ Set `overflow` to control how content that exceeds the box's bounds is handled.
 
 <Box height="6rem" width="16rem" border="subtle" overflow="auto">
   <Box height="12rem" padding={3}>Scroll to see the clipped content below.</Box>
+</Box>
+
+### Scroll gradient
+
+Compose `Box` with [ScrollGradient](/components/ScrollGradient) to hint at overflow with a fading edge instead of a plain scrollbar. `Box` supplies the panel styling; `ScrollGradient` owns the scroll behavior, so leave `overflow` unset on it.
+
+<Box fill="layer-01" border="subtle" paddingY={3} maxWidth="20rem">
+  <ScrollGradient height="10rem">
+    {#each auditLogEntries as entry}
+      <p>{entry}</p>
+    {/each}
+  </ScrollGradient>
 </Box>
 
 ## Custom element
