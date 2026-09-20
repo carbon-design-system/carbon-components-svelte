@@ -409,13 +409,14 @@ const PATCH_RULES: Record<string, (lines: string[]) => number[]> = {
 // map only ever shrinks. Do not raise a count or add an entry: fix the new
 // rule instead. "repeated class" in tabs is deliberate (each site carries a
 // comment naming the `:not()` chain whose specificity it preserves).
+// The remaining literal transitions use timings with no motion token (300ms,
+// 175ms), and the shell overlay's `var(--cds-overlay, …)` names a v11 token
+// this build never declares, so swapping in `$overlay-01` would change color.
 const KNOWN_PATCH_VIOLATIONS: Record<string, number> = {
-  "hex color: components/checkbox/_checkbox.scss": 1,
-  "bare rem(): components/text-area/_text-area.scss": 1,
   "var() with literal fallback: components/ui-shell/_ui-shell.scss": 1,
   "repeated class: components/tabs/_tabs.scss": 3,
   "literal transition: components/data-table/_data-table-action.scss": 1,
-  "literal transition: components/ui-shell/_ui-shell.scss": 5,
+  "literal transition: components/ui-shell/_ui-shell.scss": 1,
   "unguarded :hover: components/combo-box/_combo-box.scss": 1,
   "unguarded :hover: components/content-switcher/_content-switcher.scss": 1,
   "unguarded :hover: components/copy-button/_copy-button.scss": 1,

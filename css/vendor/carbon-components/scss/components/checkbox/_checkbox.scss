@@ -287,7 +287,7 @@
   }
 
   .#{$prefix}--checkbox__invalid-icon--warning path:first-of-type {
-    fill: #000000;
+    fill: $carbon__black-100;
   }
 
   .#{$prefix}--checkbox-group--invalid
