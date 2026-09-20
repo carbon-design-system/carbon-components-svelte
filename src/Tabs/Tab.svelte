@@ -206,7 +206,6 @@
     aria-disabled={disabled}
     aria-controls={panelId}
     aria-label={$iconOnly ? label : undefined}
-    data-label={label || undefined}
     {id}
     {href}
     class:bx--tabs__nav-link={true}
@@ -242,7 +241,10 @@
       <span class:bx--tabs__nav-item-label={true}>{label}</span>
     {:else if $hasSecondaryLabel}
       <div class:bx--tabs__nav-item-label-wrapper={true}>
-        <span class:bx--tabs__nav-item-label={true}>
+        <span
+          class:bx--tabs__nav-item-label={true}
+          data-label={label || undefined}
+        >
           <slot {selected}>{label}</slot>
         </span>
         {#if icon}
@@ -270,7 +272,10 @@
           <svelte:component this={icon} />
         </div>
       {/if}
-      <span class:bx--tabs__nav-item-label={true}>
+      <span
+        class:bx--tabs__nav-item-label={true}
+        data-label={label || undefined}
+      >
         <slot {selected}>{label}</slot>
       </span>
       {#if icon && !$useDismissible}

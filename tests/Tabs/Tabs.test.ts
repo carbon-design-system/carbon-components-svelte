@@ -749,16 +749,18 @@ describe("Tab", () => {
   // `data-label` backs the CSS bold-width reservation (::after) that keeps
   // selecting a tab from reflowing its neighbors; empty labels must omit the
   // attribute so slotted custom content isn't measured against blank text.
+  // It's on the label span (not the tab link) so the reservation sums
+  // correctly with an icon's width on icon tabs.
   it("should reflect label via data-label, omitted when empty", async () => {
-    const { rerender } = render(Tab, { props: { label: "Custom Label" } });
+    const { container, rerender } = render(Tab, {
+      props: { label: "Custom Label" },
+    });
+    const getLabel = () => container.querySelector(".bx--tabs__nav-item-label");
 
-    expect(screen.getByRole("tab")).toHaveAttribute(
-      "data-label",
-      "Custom Label",
-    );
+    expect(getLabel()).toHaveAttribute("data-label", "Custom Label");
 
     await rerender({ label: "" });
-    expect(screen.getByRole("tab")).not.toHaveAttribute("data-label");
+    expect(getLabel()).not.toHaveAttribute("data-label");
   });
 
   it("should render slot content instead of label", () => {

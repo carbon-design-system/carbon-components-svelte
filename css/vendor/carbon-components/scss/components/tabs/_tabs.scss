@@ -178,20 +178,22 @@
 
       border-bottom: 2px;
     }
+  }
 
-    // ccs: reserves width for the `productive-heading-01` (600) weight the
-    // selected state switches to below, so selecting a tab doesn't widen it
-    // and reflow its neighbors. `data-label` is set by the component from
-    // the same string as the visible label; slotted custom content has no
-    // attribute to read and isn't reserved for.
-    &::after {
-      display: block;
-      overflow: hidden;
-      height: 0;
-      content: attr(data-label);
-      font-weight: 600;
-      visibility: hidden;
-    }
+  // ccs: reserves width for the `productive-heading-01` (600) weight the
+  // selected state switches to, so selecting a tab doesn't widen it and
+  // reflow its neighbors. Scoped to the label (not the link) so it sums
+  // correctly with an icon's width on icon tabs, where the link is a row
+  // flex container and a link-level reservation would double-count. `data-
+  // label` mirrors the visible label; slotted custom content has no
+  // attribute to read and isn't reserved for.
+  .#{$prefix}--tabs__nav-item-label::after {
+    display: block;
+    overflow: hidden;
+    height: 0;
+    content: attr(data-label);
+    font-weight: 600;
+    visibility: hidden;
   }
 
   .#{$prefix}--tabs--container .#{$prefix}--tabs__nav-link {
