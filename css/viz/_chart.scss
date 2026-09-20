@@ -36,6 +36,48 @@
   .#{$prefix}--viz-chart__svg:focus:not(:focus-visible) {
     outline: none;
   }
+
+  .#{$prefix}--viz-axis__line {
+    shape-rendering: crispEdges;
+    stroke: $ui-04;
+  }
+
+  .#{$prefix}--viz-axis__label,
+  .#{$prefix}--viz-axis__title {
+    fill: $text-secondary;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-grid__line {
+    shape-rendering: crispEdges;
+    stroke: $ui-03;
+  }
+
+  .#{$prefix}--viz-grid--dashed .#{$prefix}--viz-grid__line {
+    stroke-dasharray: 2 4;
+  }
+
+  .#{$prefix}--viz-line__path {
+    fill: none;
+    stroke: var(--bx-viz-color, #{$interactive-04});
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .#{$prefix}--viz-line__path--dashed {
+    stroke-dasharray: 6 4;
+  }
+
+  .#{$prefix}--viz-line__point {
+    fill: var(--bx-viz-color, #{$interactive-04});
+  }
+
+  // A ring in the page background lifts the point off the line beneath it.
+  .#{$prefix}--viz-line__point--hover {
+    stroke: $ui-background;
+    stroke-width: 1.5;
+  }
 }
 
 @include exports("viz-chart") {
