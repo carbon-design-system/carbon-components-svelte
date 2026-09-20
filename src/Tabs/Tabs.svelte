@@ -80,6 +80,11 @@
   import ChevronRight from "../icons/ChevronRight.svelte";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { clampIndex } from "../utils/clamp-index.js";
+  import {
+    computeScrollOverflow,
+    scrollByViewport,
+    scrollIntoViewX,
+  } from "../utils/horizontal-scroll.js";
   import { keyBy } from "../utils/key-by.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { syncDomOrder } from "../utils/sync-dom-order.js";
@@ -151,23 +156,15 @@
   function updateOverflow() {
     if (!refTabList) return;
     const { scrollLeft, scrollWidth, clientWidth } = refTabList;
-    canScrollBackward = scrollLeft > 0;
-    // Round up for sub-pixel widths. Firefox can report scrollWidth 1px
-    // larger than clientWidth with nowhere to scroll; ignore that gap so
+    // forwardEpsilon absorbs sub-pixel widths. Firefox can report scrollWidth
+    // 1px larger than clientWidth with nowhere to scroll; ignore that gap so
     // the forward button does not flicker in.
-    canScrollForward = Math.ceil(scrollLeft + clientWidth) + 1 < scrollWidth;
-  }
-
-  /**
-   * Scroll the tab list by roughly a viewport width in the given direction.
-   * @type {(direction: 1 | -1) => void}
-   */
-  function scrollTabs(direction) {
-    if (!refTabList) return;
-    refTabList.scrollBy({
-      left: direction * refTabList.clientWidth * 0.75,
-      behavior: "smooth",
-    });
+    ({ canScrollBackward, canScrollForward } = computeScrollOverflow({
+      scrollLeft,
+      scrollWidth,
+      clientWidth,
+      forwardEpsilon: 1,
+    }));
   }
 
   // Flag to trigger DOM reordering only when tabs change.
@@ -296,20 +293,7 @@
    * @type {(tab: HTMLElement | undefined) => void}
    */
   function scrollTabIntoView(tab) {
-    if (!tab || !refTabList) return;
-
-    const navRect = refTabList.getBoundingClientRect();
-    const tabRect = tab.getBoundingClientRect();
-    const leftOverflow =
-      tabRect.left - (navRect.left + SCROLL_INTO_VIEW_MARGIN);
-    const rightOverflow =
-      tabRect.right - (navRect.right - SCROLL_INTO_VIEW_MARGIN);
-
-    if (leftOverflow < 0) {
-      refTabList.scrollLeft += leftOverflow;
-    } else if (rightOverflow > 0) {
-      refTabList.scrollLeft += rightOverflow;
-    }
+    scrollIntoViewX(refTabList, tab, SCROLL_INTO_VIEW_MARGIN);
   }
 
   /**
@@ -498,7 +482,7 @@
       class:bx--tab--overflow-nav-button={true}
       class:bx--tab--overflow-nav-button--previous={true}
       class:bx--tab--overflow-nav-button--hidden={!canScrollBackward}
-      on:click={() => scrollTabs(-1)}
+      on:click={() => scrollByViewport(refTabList, -1)}
     >
       <ChevronLeft />
     </button>
@@ -542,7 +526,7 @@
       class:bx--tab--overflow-nav-button={true}
       class:bx--tab--overflow-nav-button--next={true}
       class:bx--tab--overflow-nav-button--hidden={!canScrollForward}
-      on:click={() => scrollTabs(1)}
+      on:click={() => scrollByViewport(refTabList, 1)}
     >
       <ChevronRight />
     </button>
