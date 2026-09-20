@@ -272,6 +272,12 @@ The tree view is optimized to handle large datasets efficiently, as shown here w
 
 <FileSource src="/framed/TreeView/TreeViewPerformance" />
 
+### Unchanged reassignment
+
+Reassigning `nodes` to the *same* array reference (the lazy-loading idiom's `node.nodes = children; nodes = nodes`, or any wrapper component or `$:` block that re-runs and hands back the same array) skips the update when nothing was actually mutated. Mutating a node before reassigning still triggers one, so the tree stays correct.
+
+<FileSource src="/framed/TreeView/TreeViewUnchangedReassignment" />
+
 ## Data utilities
 
 Transform and filter node data using standalone utility functions.
