@@ -127,6 +127,15 @@
    */
   export let locale = "en";
 
+  /**
+   * Set to `true` to render the calendar permanently below the input
+   * instead of in a popup. `open` and `close` events are not dispatched,
+   * `portalMenu` is ignored, and the calendar stops accepting input while
+   * the input is read-only or disabled.
+   * Not supported with the "simple" date picker type.
+   */
+  export let inline = false;
+
   /** Set to `true` to use the short variant */
   export let short = false;
 
@@ -202,8 +211,10 @@
   const insideModal = getContext("carbon:Modal");
   const formContext = getContext("carbon:Form");
 
+  $: usesInline = inline || !!flatpickrProps.inline;
+  // An inline calendar lives in the layout, so there is nothing to portal.
   $: effectivePortalMenu =
-    portalMenu === undefined ? !!insideModal : portalMenu;
+    !usesInline && (portalMenu === undefined ? !!insideModal : portalMenu);
   $: isFluid = fluid || !!formContext?.isFluid;
 
   const inputs = writable([]);
@@ -279,6 +290,7 @@
   let calendarEpoch = 0;
   let pendingOptions = null;
   let prevDatePickerType = datePickerType;
+  let prevUsesInline = inline || !!flatpickrProps.inline;
   let prevDisplayFormat = displayFormat;
   let prevUsesDisplayFormat = !!displayFormat && datePickerType !== "range";
   let calendarUsesFixedPositioning = false;
@@ -854,6 +866,8 @@
         if (option === "disable" && disabledDates.length > 0) continue;
         if (option === "enable" && enabledDates.length > 0) continue;
         if (option === "errorHandler") continue;
+        // Creation-only, handled by `recreateCalendar()`.
+        if (option === "inline") continue;
         // `displayFormat` owns these two.
         if (
           usesDisplayFormat &&
@@ -912,6 +926,9 @@
           if (event === "error") {
             return dispatch(event, eventDetail);
           }
+          // An inline calendar is always visible. flatpickr still reports a
+          // `close` after each selection, which would be misleading.
+          if (usesInline && (event === "open" || event === "close")) return;
           if (event === "open") {
             calendarOpen = true;
             closeTrigger = undefined;
@@ -1138,6 +1155,11 @@
       calendar.setDate(calendar.selectedDates, false);
     }
   }
+  // flatpickr mounts an inline calendar differently, at creation only.
+  $: if (usesInline !== prevUsesInline) {
+    prevUsesInline = usesInline;
+    recreateCalendar();
+  }
   $: if (datePickerType !== prevDatePickerType) {
     prevDatePickerType = datePickerType;
     mode.set(datePickerType);
@@ -1159,6 +1181,7 @@
       ...(disabledDates.length > 0 && { disable: disabledDates }),
       ...(enabledDates.length > 0 && { enable: enabledDates }),
       ...(usesDisplayFormat && { altInput: true, altFormat: displayFormat }),
+      ...(usesInline && { inline: true }),
     })
       .then(() => {})
       .catch((error) => {
@@ -1256,6 +1279,7 @@
       datePickerType === "year" ||
       datePickerType === "multiple"}
     class:bx--date-picker--range={datePickerType === "range"}
+    class:bx--date-picker--inline={usesInline && $hasCalendar}
     class:bx--date-picker--nolabel={datePickerType === "range" &&
       $labelTextEmpty}
     on:keydown={(event) => {
