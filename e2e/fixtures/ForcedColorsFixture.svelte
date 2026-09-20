@@ -238,4 +238,15 @@
   <UserAvatar name="Away" status="away" />
   <UserAvatar name="Busy" status="busy" />
   <UserAvatar name="Offline" status="offline" />
+
+  <TreeView
+    draggable
+    labelText="Draggable tree"
+    nodes={[
+      { id: "drag-source", text: "Drag source" },
+      { id: "drop-target", text: "Drop target" },
+      { id: "drop-selected", text: "Selected drop target" },
+    ]}
+    selectedIds={["drop-selected"]}
+  />
 </main>

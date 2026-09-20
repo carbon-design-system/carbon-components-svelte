@@ -533,6 +533,49 @@ test.describe("forced colors", () => {
     expect.soft((await style(page, icon)).fill, icon).toBe(system.CanvasText);
   });
 
+  // The drop indicator is a border on the target row, which forcing turns
+  // into CanvasText like every other border.
+  test("the TreeView drop indicator reads Highlight, or HighlightText on a selected row", async ({
+    page,
+  }) => {
+    const indicator = (id: string) =>
+      page.evaluate((id) => {
+        const row = (id: string) => {
+          const el = document.querySelector(`[id$="-${id}"]`);
+          if (!el) throw new Error(`no ${id}`);
+          return el;
+        };
+        const target = row(id);
+        const label = target.querySelector(".bx--tree-node__label");
+        if (!label) throw new Error(`no ${id} label`);
+        const { top, height } = label.getBoundingClientRect();
+        const dataTransfer = new DataTransfer();
+        row("drag-source").dispatchEvent(
+          new DragEvent("dragstart", { bubbles: true, dataTransfer }),
+        );
+        // The middle third of the row drops inside it.
+        target.dispatchEvent(
+          new DragEvent("dragover", {
+            bubbles: true,
+            cancelable: true,
+            clientY: top + height / 2,
+            dataTransfer,
+          }),
+        );
+        return new Promise<string>((resolve) =>
+          requestAnimationFrame(() => {
+            const color = getComputedStyle(label, "::after").borderTopColor;
+            row("drag-source").dispatchEvent(
+              new DragEvent("dragend", { bubbles: true, dataTransfer }),
+            );
+            resolve(color);
+          }),
+        );
+      }, id);
+    expect.soft(await indicator("drop-target")).toBe(system.Highlight);
+    expect.soft(await indicator("drop-selected")).toBe(system.HighlightText);
+  });
+
   test("the Toggletip icon reads ButtonText, also open and on hover", async ({
     page,
   }) => {
