@@ -1,0 +1,14 @@
+// Data visualization styles for the static `g100.css` theme build.
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/themes/themes";
+
+$carbon--theme: $carbon--theme--g100;
+@include carbon--theme();
+
+@import "./viz/config";
+@import "./viz/tokens";
+@import "./viz/styles";
+
+:root {
+  @include viz-semantic-tokens;
+  @include viz-tokens(dark);
+}
