@@ -25,12 +25,28 @@
   /** Set to `true` to hide the tick labels */
   export let hideLabels = false;
 
-  import { getContext } from "svelte";
+  import { getContext, onMount } from "svelte";
   import { CHART_CONTEXT } from "./context.js";
   import { thinLabels } from "./model.js";
 
   /** @type {import("./context.js").ChartContext} */
-  const { scales, size } = getContext(CHART_CONTEXT);
+  const { scales, size, reserveMargin } = getContext(CHART_CONTEXT);
+
+  const TITLE_SPACE = 20;
+
+  /** @type {(() => void) | undefined} */
+  let release;
+
+  // A title needs room beyond the tick labels, on this axis's side.
+  /** @param {boolean} titled */
+  function reserve(titled) {
+    release?.();
+    release = titled ? reserveMargin(position, TITLE_SPACE) : undefined;
+  }
+
+  $: reserve(Boolean(title));
+
+  onMount(() => () => release?.());
 
   $: horizontal = position === "bottom" || position === "top";
   $: values = horizontal ? $scales.xTicks : $scales.yTicks;

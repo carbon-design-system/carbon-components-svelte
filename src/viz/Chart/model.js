@@ -180,10 +180,13 @@ export function sameDomain(a, b) {
  * @returns {ChartScales}
  */
 export function buildScales(domain, size, options = {}) {
-  const { locale, margin: marginOverride = {} } = options;
-  const top = marginOverride.top ?? 8;
-  const bottom = marginOverride.bottom ?? 28;
-  const right = marginOverride.right ?? 16;
+  const { locale, margin: marginOverride = {}, reserved = [] } = options;
+  // Space marks asked for, such as an axis title, on top of the defaults.
+  const extra = { top: 0, right: 0, bottom: 0, left: 0 };
+  for (const { side, px } of reserved) extra[side] += px;
+  const top = marginOverride.top ?? 8 + extra.top;
+  const bottom = marginOverride.bottom ?? 28 + extra.bottom;
+  const right = marginOverride.right ?? 16 + extra.right;
 
   const yFormat = options.yFormat
     ? resolveFormat(options.yFormat, locale)
@@ -198,7 +201,8 @@ export function buildScales(domain, size, options = {}) {
   let longest = 0;
   for (const tick of yTicks) longest = Math.max(longest, yFormat(tick).length);
   const left =
-    marginOverride.left ?? Math.round(longest * GLYPH_WIDTH * 1.15 + 14);
+    marginOverride.left ??
+    Math.round(longest * GLYPH_WIDTH * 1.15 + 14) + extra.left;
 
   const x0 = left;
   const x1 = Math.max(left + 1, size.width - right);

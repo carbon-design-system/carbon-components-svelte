@@ -172,6 +172,9 @@
   const hover = writable(/** @type {any} */ (null));
   const hiddenStore = writable(hidden);
   const included = writable(/** @type {number[]} */ ([]));
+  const reserved = writable(
+    /** @type {Array<{ side: "top" | "right" | "bottom" | "left", px: number }>} */ ([]),
+  );
 
   const scales = derived(
     [domain, size, scaleOptions],
@@ -217,8 +220,39 @@
     /** @param {string | number} key */
     toggleSeries(key) {
       const isHidden = hidden.includes(key);
+      const keys = get(groups).map((group) => group.key);
+      // Hiding the last visible series would leave an empty chart.
+      if (!isHidden && keys.filter((k) => !hidden.includes(k)).length <= 1) {
+        return;
+      }
       hidden = isHidden ? hidden.filter((k) => k !== key) : [...hidden, key];
       dispatch("legend:toggle", { series: key, hidden: !isHidden });
+    },
+    /** @param {string | number} key */
+    isolateSeries(key) {
+      const others = get(groups)
+        .map((group) => group.key)
+        .filter((k) => k !== key);
+      const isolated =
+        !hidden.includes(key) && others.every((k) => hidden.includes(k));
+      // Isolating the isolated series again brings the others back.
+      const next = isolated ? [] : others;
+      const before = hidden;
+      hidden = next;
+      for (const k of [key, ...others]) {
+        if (before.includes(k) !== next.includes(k)) {
+          dispatch("legend:toggle", { series: k, hidden: next.includes(k) });
+        }
+      }
+    },
+    /**
+     * @param {"top" | "right" | "bottom" | "left"} side
+     * @param {number} px
+     */
+    reserveMargin(side, px) {
+      const entry = { side, px };
+      reserved.update((list) => [...list, entry]);
+      return () => reserved.update((list) => list.filter((e) => e !== entry));
     },
     clearHover,
   });
@@ -229,7 +263,14 @@
   $: yAccessor = toAccessor(y);
   $: seriesAccessor = series ? toAccessor(series) : defaultSeries;
   $: hiddenStore.set(hidden);
-  $: scaleOptions.set({ locale, margin, yFormat, xFormat, xLabelFormat });
+  $: scaleOptions.set({
+    locale,
+    margin,
+    reserved: $reserved,
+    yFormat,
+    xFormat,
+    xLabelFormat,
+  });
   $: resize(width, height);
   $: rebuild(
     data,
@@ -369,6 +410,24 @@
     );
   });
 
+  /**
+   * Moving onto the tooltip keeps it open, so its content can be read and
+   * selected (WCAG 1.4.13). The tooltip clears hover when the pointer leaves it.
+   *
+   * @param {PointerEvent} event
+   */
+  function onPointerLeave(event) {
+    const to = event.relatedTarget;
+    if (
+      to instanceof Element &&
+      ref?.contains(to) &&
+      to.closest(".bx--viz-chart-tooltip")
+    ) {
+      return;
+    }
+    clearHover();
+  }
+
   /** @param {Event} event */
   function selectCurrent(event) {
     const current = get(hover);
@@ -459,7 +518,7 @@
       aria-label={[title, description].filter(Boolean).join(". ") || undefined}
       tabindex="0"
       on:pointermove={onPointerMove}
-      on:pointerleave={clearHover}
+      on:pointerleave={onPointerLeave}
       on:click={selectCurrent}
       on:keydown={onKeydown}
       on:blur={clearHover}

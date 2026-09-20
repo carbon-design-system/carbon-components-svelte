@@ -69,6 +69,8 @@ export type ResolveDomainOptions = {
 export type BuildScalesOptions = {
   locale?: string;
   margin?: Partial<ChartMargins>;
+  /** Extra space marks asked for, added to the default margins. */
+  reserved?: ReadonlyArray<{ side: keyof ChartMargins; px: number }>;
   yFormat?: NumberFormat;
   xFormat?: (value: number) => string;
   xLabelFormat?: (value: number) => string;

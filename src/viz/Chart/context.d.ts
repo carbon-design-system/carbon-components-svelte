@@ -4,6 +4,7 @@
 import type { Readable } from "svelte/store";
 import type {
   ChartGroup,
+  ChartMargins,
   ChartScales,
   ChartSeriesKey,
   ChartSize,
@@ -40,8 +41,12 @@ export type ChartContext<T> = {
   hidden: Readable<ReadonlyArray<ChartSeriesKey>>;
   /** Keep a y value inside the domain. Returns a function that releases it. */
   includeY(value: number): () => void;
-  /** Show or hide a series, as the legend does. */
+  /** Reserve margin space, as an axis title does. Returns a release function. */
+  reserveMargin(side: keyof ChartMargins, px: number): () => void;
+  /** Show or hide a series. The last visible series cannot be hidden. */
   toggleSeries(key: ChartSeriesKey): void;
+  /** Hide every other series, or show them all again when already isolated. */
+  isolateSeries(key: ChartSeriesKey): void;
   /** Clear the hover state, as Escape does. */
   clearHover(): void;
 };

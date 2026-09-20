@@ -49,6 +49,24 @@ describe("ChartAxis", () => {
     expect(screen.getByTestId("axis-x")).toHaveTextContent("Day");
   });
 
+  it("reserves margin for a title so it clears the tick labels", async () => {
+    const { rerender } = render(ChartParts);
+    const bottomOf = () =>
+      Number(
+        screen
+          .getByTestId("axis-x")
+          .querySelector(".bx--viz-axis__line")
+          ?.getAttribute("y1"),
+      );
+    const untitled = bottomOf();
+
+    await rerender({ axisTitle: "Day" });
+    expect(bottomOf()).toBe(untitled - 20);
+
+    await rerender({ axisTitle: "" });
+    expect(bottomOf()).toBe(untitled);
+  });
+
   it("shows fewer x labels in a narrower chart", async () => {
     const { rerender } = render(ChartParts);
     const wide = labels("axis-x").length;
