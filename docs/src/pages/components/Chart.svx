@@ -135,6 +135,26 @@ Set `orientation` to `"horizontal"` to run the x scale down the left side and th
   <ChartLine />
 </Chart>
 
+## Loading and empty
+
+Set `loading` while the data is on its way. A skeleton covers the plot, the axes stay in place so nothing jumps when the data lands, and the chart is marked busy for assistive technology. The wrappers, such as `LineChart`, take the same props.
+
+<Chart data={[]} x="date" y="revenue" title="Loading" height={200} loading>
+  <ChartGrid />
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartLine />
+</Chart>
+
+With no data and `loading` unset, the plot shows `emptyText`. Fill the `empty` slot for anything richer, such as a link to change the filters.
+
+<Chart data={[]} x="date" y="revenue" title="Empty" height={200} emptyText="No revenue in this period">
+  <ChartGrid />
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartLine />
+</Chart>
+
 ## Toolbar and data table
 
 `ChartToolbar` goes in the `toolbar` slot. It switches the chart to a table of every value and downloads the visible series as CSV, in the same long format the chart reads: ISO dates, plain numbers, and an empty field for a missing value. Anything in its default slot sits before the buttons.
