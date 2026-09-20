@@ -1,9 +1,12 @@
+<svelte:options immutable />
+
 <script>
   /** @restProps {svg} */
 
   /**
-   * Values to plot. Non-finite entries are dropped.
-   * @type {readonly number[]}
+   * Values to plot. A missing or non-finite entry (`null`, `NaN`) is a gap:
+   * it keeps its slot, so the rest of the series stays aligned.
+   * @type {ReadonlyArray<number | null | undefined>}
    */
   export let values = [];
 
@@ -15,7 +18,9 @@
 
   /**
    * Stroke or fill color of the series.
-   * @type {"interactive" | "neutral" | "success" | "error"}
+   * Use a semantic name, a categorical index from 1 to 14, a viz token name
+   * such as `"cat-03"`, or any CSS color.
+   * @type {import("../utils/tokens.js").VizColor}
    */
   export let color = "interactive";
 
@@ -61,8 +66,11 @@
     toAreaPath,
     toLinePath,
   } from "../utils/sparkline.js";
+  import { VIZ_SEMANTIC_COLORS, vizColor } from "../utils/tokens.js";
 
   $: normalizedValues = normalizeSparklineValues(values);
+  // Semantic names resolve in CSS, where themes can restyle them.
+  $: semantic = VIZ_SEMANTIC_COLORS.includes(color);
   $: linePadding = strokeWidth / 2;
   $: points =
     kind === "line"
@@ -94,10 +102,12 @@
   class:bx--sparkline--line={kind === "line"}
   class:bx--sparkline--bar={kind === "bar"}
   class:bx--sparkline--fill={kind === "line" && fill}
-  class:bx--sparkline--interactive={color === "interactive"}
   class:bx--sparkline--neutral={color === "neutral"}
   class:bx--sparkline--success={color === "success"}
   class:bx--sparkline--error={color === "error"}
+  class:bx--sparkline--warning={color === "warning"}
+  class:bx--sparkline--info={color === "info"}
+  style:--bx-viz-color={semantic ? undefined : vizColor(color)}
   viewBox="0 0 {width} {height}"
   {width}
   {height}
@@ -122,13 +132,15 @@
     {/if}
   {:else}
     {#each bars as bar, i (i)}
-      <rect
-        class:bx--sparkline__bar={true}
-        x={bar.x}
-        y={bar.y}
-        width={bar.width}
-        height={bar.height}
-      />
+      {#if bar}
+        <rect
+          class:bx--sparkline__bar={true}
+          x={bar.x}
+          y={bar.y}
+          width={bar.width}
+          height={bar.height}
+        />
+      {/if}
     {/each}
   {/if}
 </svg>
