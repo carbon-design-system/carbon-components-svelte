@@ -36,7 +36,7 @@
     display: block;
     block-size: 100vh;
     inline-size: 100vw;
-    background-color: var(--cds-overlay, rgba(0, 0, 0, 0.6));
+    background-color: $overlay-01;
     opacity: 1;
     transition:
       opacity 0.3s cubic-bezier(0.5, 0, 0.1, 1),
