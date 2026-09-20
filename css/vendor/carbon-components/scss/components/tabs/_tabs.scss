@@ -1381,6 +1381,20 @@ $tabs-sizes: (
       }
     }
   }
+
+  // TabsVertical collapses to a horizontal row below `md` and caps its item
+  // height at `lg` when sized `xl` (`tabs-vertical-size` above; Carbon React
+  // has no mobile `xl` row height there). The root floor set above doesn't
+  // know about that collapse and stays at `xl`, leaving the row taller than
+  // its items — visible as slack under the tabs and an overflow-nav button
+  // stretched past the row's real height. Reset the root to the same `lg`
+  // floor the items already use in this state. Emits after the loop so it
+  // outranks the unconditional `xl` root rule above at equal specificity.
+  @include carbon--breakpoint-down(md) {
+    .#{$prefix}--tabs--vertical.#{$prefix}--layout--size-xl {
+      min-block-size: $size-lg;
+    }
+  }
 }
 
 @include exports('tabs-size') {
