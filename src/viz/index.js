@@ -24,6 +24,7 @@ export { default as DeltaIndicator } from "./DeltaIndicator/DeltaIndicator.svelt
 export { default as FunnelBars } from "./FunnelBars/FunnelBars.svelte";
 export { default as LineChart } from "./LineChart/LineChart.svelte";
 export { default as MicroFunnel } from "./MicroFunnel/MicroFunnel.svelte";
+export { default as RangeIndicator } from "./RangeIndicator/RangeIndicator.svelte";
 export { default as RankBars } from "./RankBars/RankBars.svelte";
 export { default as ShareOfTotal } from "./ShareOfTotal/ShareOfTotal.svelte";
 export { default as Sparkline } from "./Sparkline/Sparkline.svelte";
