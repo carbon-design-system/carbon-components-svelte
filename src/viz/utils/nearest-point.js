@@ -57,6 +57,9 @@ export function createGridIndex(points, cellSize) {
     if (row > maxRow) maxRow = row;
   }
 
+  let total = 0;
+  for (const cell of cells.values()) total += cell.length;
+
   return {
     nearest(x, y, maxDistance = Number.POSITIVE_INFINITY) {
       if (cells.size === 0) return -1;
@@ -74,33 +77,50 @@ export function createGridIndex(points, cellSize) {
 
       let best = -1;
       let bestDistance = maxDistance * maxDistance;
+
+      /** @param {number[] | undefined} cell */
+      function visit(cell) {
+        if (!cell) return;
+        for (let k = 0; k < cell.length; k++) {
+          const point = /** @type {{ x: number, y: number }} */ (
+            points[cell[k]]
+          );
+          const dx = point.x - x;
+          const dy = point.y - y;
+          const distance = dx * dx + dy * dy;
+          if (
+            distance < bestDistance ||
+            (distance === bestDistance && best === -1)
+          ) {
+            best = cell[k];
+            bestDistance = distance;
+          }
+        }
+      }
+
+      // Rings cost their perimeter in lookups. From far outside the data, or
+      // across very sparse data, that dwarfs a plain scan of what is there.
+      if (limit * limit > total) {
+        for (const cell of cells.values()) visit(cell);
+        return best;
+      }
+
       for (let ring = 0; ring <= limit; ring++) {
         // A point in this ring is at least (ring - 1) cells away.
         const floor = (ring - 1) * size;
         if (best !== -1 && floor > 0 && floor * floor > bestDistance) break;
+        if (ring === 0) {
+          visit(cells.get(`${col},${row}`));
+          continue;
+        }
+        // Walk the perimeter only: top and bottom edges, then the sides.
         for (let c = col - ring; c <= col + ring; c++) {
-          for (let r = row - ring; r <= row + ring; r++) {
-            const edge =
-              Math.abs(c - col) === ring || Math.abs(r - row) === ring;
-            if (!edge) continue;
-            const cell = cells.get(`${c},${r}`);
-            if (!cell) continue;
-            for (let k = 0; k < cell.length; k++) {
-              const point = /** @type {{ x: number, y: number }} */ (
-                points[cell[k]]
-              );
-              const dx = point.x - x;
-              const dy = point.y - y;
-              const distance = dx * dx + dy * dy;
-              if (
-                distance < bestDistance ||
-                (distance === bestDistance && best === -1)
-              ) {
-                best = cell[k];
-                bestDistance = distance;
-              }
-            }
-          }
+          visit(cells.get(`${c},${row - ring}`));
+          visit(cells.get(`${c},${row + ring}`));
+        }
+        for (let r = row - ring + 1; r <= row + ring - 1; r++) {
+          visit(cells.get(`${col - ring},${r}`));
+          visit(cells.get(`${col + ring},${r}`));
         }
       }
       return best;
