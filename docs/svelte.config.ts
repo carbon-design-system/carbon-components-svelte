@@ -307,7 +307,9 @@ function plugin() {
   };
 }
 
-const HEADING_REGEX = /<h([23])[^>]+id="([^"]+)"[^>]*>([^<]+)<\/h\1>/g;
+const HEADING_REGEX = /<h([23])[^>]+id="([^"]+)"[^>]*>([\s\S]*?)<\/h\1>/g;
+const HEADING_ANCHOR_TAG_RE =
+  /<a\b[^>]*\bclass="heading-anchor"[^>]*>[\s\S]*?<\/a\s*>/g;
 const ADMONITION_RE = /^\[!(NOTE|WARNING|TIP|CAUTION)\]\s*/i;
 const ADMONITION_LINK_REF_RE = /^!(NOTE|WARNING|TIP|CAUTION)$/;
 const LEADING_WHITESPACE_RE = /^\n\s*/;
@@ -665,7 +667,8 @@ export default {
         const toc: { id: string; text: string; level: number }[] = [];
 
         for (const match of content.matchAll(HEADING_REGEX)) {
-          toc.push({ level: Number(match[1]), id: match[2], text: match[3] });
+          const text = match[3].replace(HEADING_ANCHOR_TAG_RE, "").trim();
+          toc.push({ level: Number(match[1]), id: match[2], text });
         }
 
         let code = content.replace(
