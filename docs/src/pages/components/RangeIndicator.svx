@@ -1,0 +1,103 @@
+---
+components: ["RangeIndicator"]
+description: Range indicator shows where a value sits within a range, over an optional box from the first to the third quartile.
+---
+
+<script>
+  import { DataTable, Stack } from "carbon-components-svelte";
+  import { RangeIndicator } from "carbon-components-svelte/viz";
+</script>
+
+`RangeIndicator` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+## Basic
+
+Pass `min`, `max`, a `value`, and a `label`. The value and the range are appended to the accessible name.
+
+<RangeIndicator min={12} max={480} value={92} label="Latency now" />
+
+## Quartiles
+
+Set `quartiles` to the first quartile, the median, and the third quartile. They are drawn as a box with a tick at the median, so the dot reads as typical or unusual at a glance.
+
+<Stack gap={5}>
+  <RangeIndicator min={12} max={480} value={92} quartiles={[40, 88, 140]} label="Latency now" />
+  <RangeIndicator min={12} max={480} value={390} quartiles={[40, 88, 140]} color="error" label="Latency now" />
+</Stack>
+
+Leave `value` out to show the spread alone.
+
+<RangeIndicator min={12} max={480} quartiles={[40, 88, 140]} label="Latency spread" />
+
+## Range labels
+
+Set `showRange` to write the ends beside the track. `format` takes `Intl.NumberFormat` options or a function.
+
+<RangeIndicator
+  min={12}
+  max={480}
+  value={92}
+  quartiles={[40, 88, 140]}
+  showRange
+  format={(value) => `${value} ms`}
+  label="Latency now"
+/>
+
+## Outside the range
+
+A value past either end is clamped and drawn as a ring, so clamping is never silent.
+
+<RangeIndicator min={0} max={100} value={140} showRange label="Usage" />
+
+## Color
+
+Set `color` to a semantic name, a categorical index from 1 to 14, a viz token name, or any CSS color. It applies to the dot.
+
+<Stack gap={5}>
+  <RangeIndicator min={0} max={100} value={62} quartiles={[30, 50, 70]} color="success" label="Score" />
+  <RangeIndicator min={0} max={100} value={62} quartiles={[30, 50, 70]} color={3} label="Score" />
+</Stack>
+
+## Sizes
+
+<Stack gap={5}>
+  <RangeIndicator min={0} max={100} value={62} quartiles={[30, 50, 70]} size="sm" label="Small" />
+  <RangeIndicator min={0} max={100} value={62} quartiles={[30, 50, 70]} label="Medium (default)" />
+  <RangeIndicator min={0} max={100} value={62} quartiles={[30, 50, 70]} size="lg" label="Large" />
+</Stack>
+
+## In a data table
+
+Share one `min` and `max` across the rows so the positions compare.
+
+<DataTable
+  size="short"
+  headers={[
+    { key: "service", value: "Service" },
+    { key: "latency", value: "Latency against its usual spread" },
+  ]}
+  rows={[
+    { id: "a", service: "api", latency: { value: 92, quartiles: [40, 88, 140] } },
+    { id: "b", service: "auth", latency: { value: 310, quartiles: [60, 110, 180] } },
+    { id: "c", service: "search", latency: { value: 45, quartiles: [80, 150, 260] } },
+  ]}
+>
+  <svelte:fragment slot="cell" let:cell let:row>
+    {#if cell.key === "latency"}
+      <RangeIndicator
+        min={0}
+        max={480}
+        value={cell.value.value}
+        quartiles={cell.value.quartiles}
+        size="sm"
+        label="{row.service} latency"
+      />
+    {:else}
+      {cell.value}
+    {/if}
+  </svelte:fragment>
+</DataTable>
+
+## Accessibility
+
+With a `label`, the graphic is announced as an image named with the label, the value, the range, and the median, such as "Latency now: 92, range 12–480, median 88". Set `translations` to translate the words "range" and "median". Without a label it is hidden from assistive technology.
