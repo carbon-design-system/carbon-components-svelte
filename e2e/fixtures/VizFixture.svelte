@@ -3,6 +3,7 @@
     AreaChart,
     BarChart,
     BulletChart,
+    ComparisonBar,
     DeltaIndicator,
     FunnelBars,
     LineChart,
@@ -60,6 +61,8 @@
     showValue
     label="Revenue"
   />
+
+  <ComparisonBar value={1284} previous={912} showDelta label="Orders" />
 
   <RankBars data={stages} top={3} other label="Stages by users" />
   <RankBars data={stages} selectable label="Pick a ranked stage" />
