@@ -130,7 +130,7 @@ Set `enabledDates` for the inverse of [disabled dates](#disabled-dates): every d
 
 ### Flatpickr options
 
-Use `flatpickrProps` to pass additional [Flatpickr options](https://flatpickr.js.org/options/). These merge with the options Carbon sets internally (for example static positioning, clickOpens, and top-layer appendTo when using `portalMenu`). Override props such as static only when you understand how they interact with portalling and modals. Flatpickr hooks such as `onOpen`, `onReady`, and `onDayCreate` run after Carbon's own handlers instead of replacing them. Carbon sets `mode` from `datePickerType` and does not support `wrap`.
+Use `flatpickrProps` to pass additional [Flatpickr options](https://flatpickr.js.org/options/). These merge with the options Carbon sets internally (for example static positioning, clickOpens, and top-layer appendTo when using `portalMenu`). Override props such as static only when you understand how they interact with portalling and modals. Flatpickr hooks such as `onOpen`, `onReady`, and `onDayCreate` run after Carbon's own handlers instead of replacing them. Carbon sets `mode` from `datePickerType` and does not support `wrap`. `positionElement` and `appendTo` only apply with `portalMenu`, and `altInput`, `disable`, and `enable` give way to `displayFormat`, `disabledDates`, and `enabledDates` when those are set. The console warns once when an option is passed that will not take effect.
 
 The example below sets `showMonths` so two months appear side by side in the calendar.
 
