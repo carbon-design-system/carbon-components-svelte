@@ -220,6 +220,23 @@ describe("buildScales", () => {
     ).toBe("custom");
   });
 
+  test("labels midnight ticks with the date when sub-day ticks span several days", () => {
+    const rows = [
+      { d: new Date(2026, 0, 1), r: "a", v: 1 },
+      { d: new Date(2026, 0, 4), r: "a", v: 2 },
+    ];
+    const scales = buildScales(
+      resolveDomain(buildGroups(rows, accessors), {}),
+      { width: 900, height: 288 },
+      { locale: "en-US" },
+    );
+    const labels = scales.xTicks.map(scales.xFormat);
+
+    expect(labels[0]).toBe("Jan 1");
+    expect(labels).toContain("Jan 2");
+    expect(labels.some((label) => /PM/.test(label))).toBe(true);
+  });
+
   test("places categories on a point scale and inverts to the nearest index", () => {
     const built = buildGroups(
       [
