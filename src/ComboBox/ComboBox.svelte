@@ -552,6 +552,10 @@
   // Neutral = default fluid state, i.e. none of the other wrapper modifiers apply.
   $: fluidNeutral =
     isFluid && !showInvalid && !showWarn && !disabled && !readonly;
+  // Hoverable = disabled/readonly do not suppress the invalid/warning hover
+  // tint. showInvalid/showWarn already exclude both, so this only matters
+  // for readability of the selector it replaces.
+  $: fluidHoverable = isFluid && !disabled && !readonly;
   // Fluid (non-condensed) menu items are 64px tall (see css/_fluid-list-box.scss).
   // Portaled menus render outside the fluid wrapper, so they keep default heights.
   $: hasFluidMenuItems = isFluid && !condensed && !effectivePortalMenu;
@@ -746,6 +750,7 @@
   class:bx--list-box__wrapper={true}
   class:bx--list-box__wrapper--fluid={isFluid}
   class:bx--list-box__wrapper--fluid--neutral={fluidNeutral}
+  class:bx--list-box__wrapper--fluid--hoverable={fluidHoverable}
   class:bx--list-box__wrapper--fluid--invalid={isFluid && showInvalid}
   class:bx--list-box__wrapper--fluid--warning={isFluid && showWarn}
   class:bx--list-box__wrapper--fluid--disabled={isFluid && disabled}

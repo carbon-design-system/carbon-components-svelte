@@ -229,24 +229,27 @@
     }
 
     // Invalid/warn fluid (matches fluid-select): hover tint only the input
-    // cell.
-    .#{$prefix}--list-box__wrapper--fluid--invalid:not(:focus-within):not(
-        .#{$prefix}--list-box__wrapper--fluid--disabled
-      ):not(.#{$prefix}--list-box__wrapper--fluid--readonly)
+    // cell. `--hoverable` is set by the component only when neither disabled
+    // nor readonly apply, so it already encodes the same condition the two
+    // `:not()` clauses it replaces spelled out. `:not(:focus-within)` is not
+    // a state marker (it tracks live DOM focus, not a prop), so it stays.
+    .#{$prefix}--list-box__wrapper--fluid--invalid.#{$prefix}--list-box__wrapper--fluid--hoverable:not(
+        :focus-within
+      )
       .#{$prefix}--list-box:hover:not(.#{$prefix}--combo-box),
-    .#{$prefix}--list-box__wrapper--fluid--warning:not(:focus-within):not(
-        .#{$prefix}--list-box__wrapper--fluid--disabled
-      ):not(.#{$prefix}--list-box__wrapper--fluid--readonly)
+    .#{$prefix}--list-box__wrapper--fluid--warning.#{$prefix}--list-box__wrapper--fluid--hoverable:not(
+        :focus-within
+      )
       .#{$prefix}--list-box:hover:not(.#{$prefix}--combo-box),
-    .#{$prefix}--list-box__wrapper--fluid--invalid:not(:focus-within):not(
-        .#{$prefix}--list-box__wrapper--fluid--disabled
-      ):not(.#{$prefix}--list-box__wrapper--fluid--readonly)
+    .#{$prefix}--list-box__wrapper--fluid--invalid.#{$prefix}--list-box__wrapper--fluid--hoverable:not(
+        :focus-within
+      )
       .#{$prefix}--list-box.#{$prefix}--list-box--expanded:hover:not(
         .#{$prefix}--combo-box
       ),
-    .#{$prefix}--list-box__wrapper--fluid--warning:not(:focus-within):not(
-        .#{$prefix}--list-box__wrapper--fluid--disabled
-      ):not(.#{$prefix}--list-box__wrapper--fluid--readonly)
+    .#{$prefix}--list-box__wrapper--fluid--warning.#{$prefix}--list-box__wrapper--fluid--hoverable:not(
+        :focus-within
+      )
       .#{$prefix}--list-box.#{$prefix}--list-box--expanded:hover:not(
         .#{$prefix}--combo-box
       ) {
