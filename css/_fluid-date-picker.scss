@@ -53,7 +53,6 @@
   // Stretch every layer so underline and warn divider span the full field.
   .#{$prefix}--date-picker--fluid .#{$prefix}--date-picker-container,
   .#{$prefix}--date-picker--fluid .#{$prefix}--date-picker-input__wrapper {
-    inline-size: 100%;
     width: 100%;
   }
 
@@ -61,7 +60,6 @@
     .#{$prefix}--date-picker-input__wrapper
     > .flatpickr-wrapper {
     display: block;
-    inline-size: 100%;
     width: 100%;
   }
 
@@ -71,7 +69,6 @@
     padding: to-rem(32px) $carbon--spacing-05 to-rem(13px);
     background: transparent;
     border-block-end: none;
-    inline-size: 100%;
     width: 100%;
     min-block-size: to-rem(64px);
     min-inline-size: to-rem(144px);
@@ -86,7 +83,6 @@
     .#{$prefix}--date-picker-input__wrapper--warn {
     .#{$prefix}--date-picker__input,
     ~ .#{$prefix}--form-requirement {
-      inline-size: 100%;
       width: 100%;
     }
   }
@@ -104,7 +100,6 @@
   .#{$prefix}--date-picker--fluid
     .#{$prefix}--date-picker--simple
     .#{$prefix}--label {
-    inline-size: 100%;
     width: 100%;
   }
 
@@ -163,7 +158,6 @@
   .#{$prefix}--date-picker--fluid
     .#{$prefix}--date-picker--range
     .#{$prefix}--date-picker-container {
-    inline-size: 100%;
     width: 100%;
     min-block-size: to-rem(63px);
     min-inline-size: to-rem(144px);

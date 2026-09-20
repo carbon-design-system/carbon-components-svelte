@@ -104,11 +104,8 @@
   .#{$prefix}--time-picker--fluid
     .#{$prefix}--time-picker__input-field {
     display: block;
-    inline-size: 100%;
     width: 100%;
-    block-size: to-rem(64px);
     height: to-rem(64px);
-    max-block-size: to-rem(64px);
     max-height: to-rem(64px);
     max-inline-size: 100%;
     padding: to-rem(32px) $carbon--spacing-05 to-rem(13px);
