@@ -114,6 +114,7 @@
   import ArrowUp from "../icons/ArrowUp.svelte";
   import Subtract from "../icons/Subtract.svelte";
   import Tooltip from "../Tooltip/Tooltip.svelte";
+  import { formatDelta } from "../utils/format-delta.js";
   import { getNumberFormatter } from "../utils/intl-formatter-cache.js";
   import BigNumberSkeleton from "./BigNumberSkeleton.svelte";
 
@@ -137,26 +138,6 @@
     return 16;
   }
 
-  function formatDelta(num, digits, doTruncate) {
-    if (typeof num !== "number" || Number.isNaN(num)) return undefined;
-    if (format) {
-      const formatted = format(num);
-      return num > 0 ? `+${formatted}` : formatted;
-    }
-    const options = {
-      signDisplay: "exceptZero",
-      maximumFractionDigits: digits,
-    };
-    if (doTruncate) {
-      options.notation = "compact";
-      options.compactDisplay = "short";
-    }
-    if (deltaPercentage)
-      return `${getNumberFormatter(locale, options).format(num)}%`;
-    Object.assign(options, formatOptions);
-    return getNumberFormatter(locale, options).format(num);
-  }
-
   $: hasTotal = typeof total === "number";
   $: formattedValue = formatNumber(value, fractionDigits, !fullNumber);
   $: fullValue = formatNumber(value, fractionDigits, false);
@@ -174,7 +155,14 @@
   $: resolvedTrendDescription =
     trendDescription ??
     { up: "Trending up", down: "Trending down", flat: "No change" }[trend];
-  $: formattedDelta = formatDelta(delta, fractionDigits, !fullNumber);
+  $: formattedDelta = formatDelta(delta, {
+    locale,
+    digits: fractionDigits,
+    compact: !fullNumber,
+    percent: deltaPercentage ? "literal" : undefined,
+    formatOptions,
+    format,
+  });
   $: deltaColor = trend ? resolvedTrendColor : "neutral";
 </script>
 
