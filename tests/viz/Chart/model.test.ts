@@ -261,6 +261,51 @@ describe("buildScales", () => {
     expect(scales.x.invert(1e6)).toBe(2);
   });
 
+  test("swaps the pixel axes for a horizontal chart", () => {
+    const built = buildGroups(
+      [
+        { q: "Engineering", v: 30 },
+        { q: "Sales", v: 50 },
+        { q: "Customer success", v: 40 },
+      ],
+      { x: (row) => row.q, y: (row) => row.v, series: () => "s" },
+    );
+    const domain = resolveDomain(built, {});
+    const size = { width: 400, height: 200 };
+    const vertical = buildScales(domain, size);
+    const scales = buildScales(domain, size, { orientation: "horizontal" });
+
+    expect(vertical.horizontal).toBe(false);
+    expect(scales.horizontal).toBe(true);
+    // Categories run down the plot, first at the top.
+    const rows = scales.xTicks.map((tick) => scales.x.map(tick));
+    expect(rows[0]).toBeGreaterThan(scales.plot.y0);
+    expect(rows[2]).toBeLessThan(scales.plot.y1);
+    expect(rows[1] - rows[0]).toBeCloseTo(rows[2] - rows[1]);
+    expect(scales.step).toBeCloseTo(rows[1] - rows[0]);
+    // Values run left to right.
+    expect(scales.y.map(scales.yTicks[0])).toBeCloseTo(scales.plot.x0);
+    expect(scales.y.map(50)).toBeGreaterThan(scales.y.map(10));
+    // The left margin fits the category labels, not the value ticks.
+    expect(scales.margin.left).toBeGreaterThan(vertical.margin.left);
+    expect(scales.x.invert(rows[2] + 2)).toBe(2);
+  });
+
+  test("caps the left margin of a horizontal chart at 40% of the width", () => {
+    const built = buildGroups([{ q: "x".repeat(200), v: 1 }], {
+      x: (row) => row.q,
+      y: (row) => row.v,
+      series: () => "s",
+    });
+    const scales = buildScales(
+      resolveDomain(built, {}),
+      { width: 400, height: 200 },
+      { orientation: "horizontal" },
+    );
+
+    expect(scales.margin.left).toBe(160);
+  });
+
   test("never produces NaN for an empty chart", () => {
     const scales = buildScales(resolveDomain(buildGroups([], accessors), {}), {
       width: 640,

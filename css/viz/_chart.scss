@@ -143,6 +143,11 @@
     transform: translateX(calc(-100% - #{$carbon--spacing-04}));
   }
 
+  // Over the hovered row of a horizontal chart.
+  .#{$prefix}--viz-chart-tooltip--above {
+    transform: translate($carbon--spacing-04, -100%);
+  }
+
   .#{$prefix}--viz-chart-tooltip__title {
     margin-block-end: $carbon--spacing-02;
     font-weight: 600;

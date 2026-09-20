@@ -123,6 +123,13 @@
   export let xLabelFormat = undefined;
 
   /**
+   * Specify the orientation. `"horizontal"` runs the x scale down the left
+   * side and the y scale along the bottom, for horizontal bars.
+   * @type {"vertical" | "horizontal"}
+   */
+  export let orientation = "vertical";
+
+  /**
    * Specify the locale.
    * @type {string}
    */
@@ -330,6 +337,7 @@
     yFormat,
     xFormat,
     xLabelFormat,
+    orientation,
   });
   $: resize(width, height);
   $: rebuild(
@@ -489,12 +497,14 @@
     const rect = svg.getBoundingClientRect();
     if (rect.width === 0) return;
     const current = get(scales);
-    const px = ((event.clientX - rect.left) / rect.width) * get(size).width;
-    hoverAt(
-      current.x.invert(
-        Math.min(current.plot.x1, Math.max(current.plot.x0, px)),
-      ),
-    );
+    // The x scale runs down the plot when the chart is horizontal.
+    const px = current.horizontal
+      ? ((event.clientY - rect.top) / rect.height) * get(size).height
+      : ((event.clientX - rect.left) / rect.width) * get(size).width;
+    const [from, to] = current.horizontal
+      ? [current.plot.y0, current.plot.y1]
+      : [current.plot.x0, current.plot.x1];
+    hoverAt(current.x.invert(Math.min(to, Math.max(from, px))));
   });
 
   /**
@@ -539,11 +549,18 @@
     const group = visible[Math.min(focusSeries, visible.length - 1)];
     const last = group.xs.length - 1;
 
+    // Arrow keys follow the screen: along the x scale moves between points,
+    // across it between series.
+    const flipped = get(scales).horizontal;
+    const [next, previous, seriesNext, seriesPrevious] = flipped
+      ? ["ArrowDown", "ArrowUp", "ArrowRight", "ArrowLeft"]
+      : ["ArrowRight", "ArrowLeft", "ArrowDown", "ArrowUp"];
+
     switch (event.key) {
-      case "ArrowRight":
+      case next:
         focusIndex = Math.min(last, focusIndex + 1);
         break;
-      case "ArrowLeft":
+      case previous:
         focusIndex = Math.max(0, focusIndex - 1);
         break;
       case "Home":
@@ -552,10 +569,10 @@
       case "End":
         focusIndex = last;
         break;
-      case "ArrowDown":
+      case seriesNext:
         focusSeries = (focusSeries + 1) % visible.length;
         break;
-      case "ArrowUp":
+      case seriesPrevious:
         focusSeries = (focusSeries - 1 + visible.length) % visible.length;
         break;
       case "Enter":

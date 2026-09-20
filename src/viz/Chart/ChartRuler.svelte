@@ -13,10 +13,10 @@
 {#if $hover}
   <line
     class:bx--viz-ruler={true}
-    x1={$hover.px}
-    x2={$hover.px}
-    y1={$scales.plot.y0}
-    y2={$scales.plot.y1}
+    x1={$scales.horizontal ? $scales.plot.x0 : $hover.px}
+    x2={$scales.horizontal ? $scales.plot.x1 : $hover.px}
+    y1={$scales.horizontal ? $hover.px : $scales.plot.y0}
+    y2={$scales.horizontal ? $hover.px : $scales.plot.y1}
     aria-hidden="true"
     {...$$restProps}
   />

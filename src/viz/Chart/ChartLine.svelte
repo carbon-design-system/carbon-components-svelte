@@ -70,11 +70,15 @@
             key: group.key,
             color: group.color,
             at: group.xs
-              .map((value, index) => ({
-                x: $scales.x.map(value),
-                y: $scales.y.map(group.ys[index]),
-                ok: Number.isFinite(group.ys[index]),
-              }))
+              .map((value, index) => {
+                const along = $scales.x.map(value);
+                const across = $scales.y.map(group.ys[index]);
+                return {
+                  x: $scales.horizontal ? across : along,
+                  y: $scales.horizontal ? along : across,
+                  ok: Number.isFinite(group.ys[index]),
+                };
+              })
               .filter((point) => point.ok),
           }))
       : [];
@@ -111,8 +115,8 @@
     <circle
       class:bx--viz-line__point={true}
       class:bx--viz-line__point--hover={true}
-      cx={$hover?.px}
-      cy={point.py}
+      cx={$scales.horizontal ? point.py : $hover?.px}
+      cy={$scales.horizontal ? $hover?.px : point.py}
       r="4"
       style:--bx-viz-color={point.color}
     />

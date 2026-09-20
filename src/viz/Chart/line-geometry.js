@@ -38,9 +38,20 @@ export function buildLinePath(
   for (let k = 0; k < count; k++) {
     const index = picked ? picked[k] : k;
     const value = group.ys[index];
-    points[k] = Number.isFinite(value)
-      ? { x: scales.x.map(group.xs[index]), y: scales.y.map(value) }
-      : null;
+    if (!Number.isFinite(value)) {
+      points[k] = null;
+      continue;
+    }
+    const along = scales.x.map(group.xs[index]);
+    const across = scales.y.map(value);
+    points[k] = scales.horizontal
+      ? { x: across, y: along }
+      : { x: along, y: across };
   }
-  return pathLine(points, { curve, precision: 1 });
+  // The monotone curve assumes pixel x only increases, which a horizontal
+  // chart breaks.
+  return pathLine(points, {
+    curve: scales.horizontal ? "linear" : curve,
+    precision: 1,
+  });
 }

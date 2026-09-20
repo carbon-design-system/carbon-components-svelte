@@ -19,14 +19,25 @@
         value: $scales.yFormat(point.y),
       }))
     : [];
+  // `px` runs along the x scale and `py` along the y scale. A horizontal
+  // chart draws the x scale down the plot, so the tooltip sits under the
+  // hovered row, or over it in the lower half, instead of beside a ruler.
+  $: sideways = $scales.horizontal;
+  $: half = ($scales.step ?? 0) / 2 + 4;
+  $: above = $hover
+    ? sideways && $hover.px > ($scales.plot.y0 + $scales.plot.y1) / 2
+    : false;
+  $: left = $hover ? (sideways ? $scales.plot.x0 : $hover.px) : 0;
   // Sit beside the ruler, on whichever side has more room.
-  $: flipped = $hover ? $hover.px > $size.width * 0.6 : false;
+  $: flipped = !sideways && left > $size.width * 0.6;
   $: top = $hover
-    ? Math.max(
-        $scales.plot.y0,
-        Math.min(...$hover.points.map((point) => point.py), $scales.plot.y1) -
-          16,
-      )
+    ? sideways
+      ? $hover.px + (above ? -half : half)
+      : Math.max(
+          $scales.plot.y0,
+          Math.min(...$hover.points.map((point) => point.py), $scales.plot.y1) -
+            16,
+        )
     : 0;
 </script>
 
@@ -39,8 +50,9 @@
   <div
     class:bx--viz-chart-tooltip={true}
     class:bx--viz-chart-tooltip--flipped={flipped}
+    class:bx--viz-chart-tooltip--above={above}
     aria-hidden="true"
-    style:left="{($hover.px / $size.width) * 100}%"
+    style:left="{(left / $size.width) * 100}%"
     style:top="{top}px"
     on:pointerleave={clearHover}
     {...$$restProps}

@@ -81,6 +81,8 @@ export type BuildScalesOptions = {
   yFormat?: NumberFormat;
   xFormat?: (value: number) => string;
   xLabelFormat?: (value: number) => string;
+  /** @default "vertical" */
+  orientation?: "vertical" | "horizontal";
 };
 
 export type ChartScales = {
@@ -102,6 +104,11 @@ export type ChartScales = {
   kind: ChartXKind;
   /** Labels for a categorical x, indexed by a group's `xs`. */
   categories: ReadonlyArray<string>;
+  /**
+   * Whether the x scale maps onto vertical pixels and the y scale onto
+   * horizontal ones, as for horizontal bars.
+   */
+  horizontal: boolean;
   margin: ChartMargins;
   plot: { x0: number; x1: number; y0: number; y1: number };
 };

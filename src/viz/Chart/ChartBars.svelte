@@ -76,10 +76,14 @@
   {#if band}
     <rect
       class:bx--viz-bars__band={true}
-      x={band.x}
-      y={$scales.plot.y0}
-      width={band.width}
-      height={$scales.plot.y1 - $scales.plot.y0}
+      x={$scales.horizontal ? $scales.plot.x0 : band.x}
+      y={$scales.horizontal ? band.x : $scales.plot.y0}
+      width={$scales.horizontal
+        ? $scales.plot.x1 - $scales.plot.x0
+        : band.width}
+      height={$scales.horizontal
+        ? band.width
+        : $scales.plot.y1 - $scales.plot.y0}
       aria-hidden="true"
     />
   {/if}

@@ -5,7 +5,8 @@
 
   /**
    * Specify which side of the plot the axis sits on.
-   * Bottom and top read the x scale, left and right the y scale.
+   * Bottom and top read the x scale, left and right the y scale. A
+   * horizontal chart swaps them.
    * @type {"bottom" | "left" | "top" | "right"}
    */
   export let position = "bottom";
@@ -46,19 +47,31 @@
 
   $: reserve(Boolean(title));
 
+  const ROW_HEIGHT = 16;
+
+  /** @param {ReadonlyArray<number>} at */
+  function thinRows(at) {
+    if (at.length < 2) return at.map(() => true);
+    const spacing = Math.abs(at[at.length - 1] - at[0]) / (at.length - 1);
+    const every =
+      spacing > 0 ? Math.max(1, Math.ceil(ROW_HEIGHT / spacing)) : 1;
+    return at.map((_, index) => index % every === 0);
+  }
+
   onMount(() => () => release?.());
 
   $: horizontal = position === "bottom" || position === "top";
-  $: values = horizontal ? $scales.xTicks : $scales.yTicks;
-  $: write = format ?? (horizontal ? $scales.xFormat : $scales.yFormat);
+  $: readsX = horizontal !== $scales.horizontal;
+  $: values = readsX ? $scales.xTicks : $scales.yTicks;
+  $: write = format ?? (readsX ? $scales.xFormat : $scales.yFormat);
   $: labels = values.map((value) => write(value));
   $: positions = values.map((value) =>
-    horizontal ? $scales.x.map(value) : $scales.y.map(value),
+    readsX ? $scales.x.map(value) : $scales.y.map(value),
   );
-  // Only a horizontal axis can crowd: its labels run along the axis.
-  $: visible = horizontal
-    ? thinLabels(positions, labels)
-    : values.map(() => true);
+  // Labels run along a horizontal axis, so their width can crowd it. Down a
+  // vertical axis only their height can, which matters once it holds the x
+  // scale of a horizontal chart.
+  $: visible = horizontal ? thinLabels(positions, labels) : thinRows(positions);
   $: plot = $scales.plot;
   $: edge =
     position === "bottom"

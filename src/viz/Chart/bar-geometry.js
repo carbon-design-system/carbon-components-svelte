@@ -7,7 +7,8 @@
 
 /**
  * One rectangle per visible datum. Bars grow from the zero line, clamped to
- * the plot, so a negative value hangs below it.
+ * the plot, so a negative value hangs below it, or to its left in a
+ * horizontal chart.
  *
  * - `"grouped"`: series sit side by side inside the slot.
  * - `"stacked"`: series pile up, positives above zero and negatives below.
@@ -37,10 +38,11 @@ export function buildBars(groups, scales, options = {}) {
     1,
     Math.min(maxBarWidth, lane * (stacked ? 1 : 1 - groupPadding)),
   );
-  const zero = Math.min(
-    scales.plot.y1,
-    Math.max(scales.plot.y0, scales.y.map(0)),
-  );
+  // The pixel axis the value scale runs along.
+  const [valueStart, valueEnd] = scales.horizontal
+    ? [scales.plot.x0, scales.plot.x1]
+    : [scales.plot.y0, scales.plot.y1];
+  const zero = Math.min(valueEnd, Math.max(valueStart, scales.y.map(0)));
 
   /** @type {Map<number, number>} */
   const totals = new Map();
@@ -85,15 +87,19 @@ export function buildBars(groups, scales, options = {}) {
         ? center - width / 2
         : center - slot / 2 + lane * laneIndex + (lane - width) / 2;
 
+      // `left` and `width` run along the x scale, the rest along the y
+      // scale. A horizontal chart swaps which pixel axis each one drives.
+      const start = Math.min(y0, y1);
+      const length = Math.abs(y1 - y0);
       rects.push({
         key: `${group.key}:${j}`,
         series: group.key,
         index: j,
         slot: index,
-        x: left,
-        y: Math.min(y0, y1),
-        width,
-        height: Math.abs(y1 - y0),
+        x: scales.horizontal ? start : left,
+        y: scales.horizontal ? left : start,
+        width: scales.horizontal ? length : width,
+        height: scales.horizontal ? width : length,
         color: group.color,
         value: group.ys[j],
       });

@@ -229,8 +229,12 @@ export function sameDomain(a, b) {
 
 /**
  * Scales, ticks, formatters, and the plot box for a domain at a size. The
- * left margin is estimated from the formatted y tick labels, so it needs no
+ * left margin is estimated from the labels that sit in it, so it needs no
  * DOM measurement and mount settles without an extra pass.
+ *
+ * With a horizontal orientation the x scale maps onto vertical pixels, top to
+ * bottom, and the y scale onto horizontal pixels. `x` and `y` keep their
+ * meaning (position and value); only the pixel axis each one drives swaps.
  *
  * @param {ChartDomain} domain
  * @param {ChartSize} size
@@ -239,6 +243,7 @@ export function sameDomain(a, b) {
  */
 export function buildScales(domain, size, options = {}) {
   const { locale, margin: marginOverride = {}, reserved = [] } = options;
+  const horizontal = options.orientation === "horizontal";
   // Space marks asked for, such as an axis title, on top of the defaults.
   const extra = { top: 0, right: 0, bottom: 0, left: 0 };
   for (const { side, px } of reserved) extra[side] += px;
@@ -250,123 +255,166 @@ export function buildScales(domain, size, options = {}) {
     ? resolveFormat(options.yFormat, locale)
     : (/** @type {number} */ value) => formatCompact(value, { locale });
   const plotHeight = Math.max(1, size.height - top - bottom);
-  const yTicks = ticks(
-    domain.y[0],
-    domain.y[1],
-    Math.max(2, Math.round(plotHeight / 56)),
-  );
 
-  let longest = 0;
-  for (const tick of yTicks) longest = Math.max(longest, yFormat(tick).length);
-  const left =
-    marginOverride.left ??
-    Math.round(longest * GLYPH_WIDTH * 1.15 + 14) + extra.left;
+  /**
+   * The x scale over a pixel range, with its ticks and formatters.
+   *
+   * @param {[number, number]} range
+   * @param {number} count Tick budget for a time or linear axis.
+   */
+  function buildX(range, count) {
+    /** @type {ChartScales["x"]} */
+    let x;
+    /** @type {number[]} */
+    let xTicks;
+    /** @type {(value: number) => string} */
+    let xFormat;
+    /** @type {(value: number) => string} */
+    let xLabel;
+    /** @type {number | undefined} */
+    let step;
+
+    if (domain.kind === "category") {
+      const point = scalePoint({
+        domain: domain.categories,
+        range,
+        padding: 0.5,
+      });
+      const last = domain.categories.length - 1;
+      x = {
+        map: (index) =>
+          point.map(domain.categories[Math.round(Number(index))]) ?? range[0],
+        invert: (px) => {
+          if (last < 0 || point.step === 0) return 0;
+          const first = point.map(domain.categories[0]) ?? range[0];
+          return Math.min(
+            last,
+            Math.max(0, Math.round((px - first) / point.step)),
+          );
+        },
+      };
+      xTicks = domain.categories.map((_, index) => index);
+      xFormat = (index) => domain.categories[index] ?? "";
+      xLabel = xFormat;
+      // Categories sit at the centers of equal slots, so a bar mark can use
+      // the same scale: `x.map(i)` is the slot center and `step` its width.
+      step = point.step;
+    } else if (domain.kind === "time") {
+      const time = scaleTime({ domain: domain.x, range });
+      const result = timeTicks(domain.x[0], domain.x[1], count);
+      x = { map: (value) => time.map(value), invert: time.invert };
+      xTicks = result.values;
+      const timeOfDay = timeTickFormat(result.interval, locale);
+      const subDayTicks =
+        result.interval === "hour" ||
+        result.interval === "minute" ||
+        result.interval === "second";
+      if (subDayTicks && domain.x[1] - domain.x[0] > DAY) {
+        // Hourly ticks across several days would all read "12 AM". Show the
+        // date wherever a tick lands on midnight.
+        const date = timeTickFormat("day", locale);
+        xFormat = (value) => {
+          const at = new Date(value);
+          const midnight =
+            at.getHours() === 0 &&
+            at.getMinutes() === 0 &&
+            at.getSeconds() === 0;
+          return midnight ? date(value) : timeOfDay(value);
+        };
+      } else {
+        xFormat = timeOfDay;
+      }
+      const subDay = domain.x[1] - domain.x[0] < DAY * 2;
+      const full = getDateTimeFormatter(
+        locale,
+        subDay
+          ? { dateStyle: "medium", timeStyle: "short" }
+          : { dateStyle: "medium" },
+      );
+      xLabel = (value) => full.format(value);
+    } else {
+      const linear = scaleLinear({ domain: domain.x, range });
+      x = { map: (value) => linear.map(Number(value)), invert: linear.invert };
+      xTicks = ticks(domain.x[0], domain.x[1], count);
+      xFormat = (value) => formatCompact(value, { locale });
+      xLabel = xFormat;
+    }
+
+    if (options.xFormat) xFormat = options.xFormat;
+    if (options.xLabelFormat) xLabel = options.xLabelFormat;
+    return { x, xTicks, xFormat, xLabel, step };
+  }
+
+  /**
+   * Left margin that fits the widest of `labels`, estimated from its text.
+   * @param {ReadonlyArray<string>} labels
+   * @param {number} [cap]
+   */
+  function leftFor(labels, cap = Number.POSITIVE_INFINITY) {
+    let longest = 0;
+    for (const label of labels) longest = Math.max(longest, label.length);
+    return (
+      marginOverride.left ??
+      Math.min(cap, Math.round(longest * GLYPH_WIDTH * 1.15 + 14)) + extra.left
+    );
+  }
+
+  /** @type {ReturnType<typeof buildX>} */
+  let band;
+  /** @type {number[]} */
+  let yTicks;
+  /** @type {number} */
+  let left;
+
+  if (horizontal) {
+    // The x scale runs down the left side, so its labels set the margin.
+    band = buildX(
+      [top, size.height - bottom],
+      Math.max(2, Math.round(plotHeight / 40)),
+    );
+    left = leftFor(
+      band.xTicks.map((tick) => band.xFormat(tick)),
+      Math.round(size.width * 0.4),
+    );
+    const plotWidth = Math.max(1, size.width - right - left);
+    yTicks = ticks(
+      domain.y[0],
+      domain.y[1],
+      Math.max(2, Math.round(plotWidth / 90)),
+    );
+  } else {
+    yTicks = ticks(
+      domain.y[0],
+      domain.y[1],
+      Math.max(2, Math.round(plotHeight / 56)),
+    );
+    left = leftFor(yTicks.map((tick) => yFormat(tick)));
+    const plotWidth = Math.max(1, size.width - right - left);
+    band = buildX(
+      [left, Math.max(left + 1, size.width - right)],
+      Math.max(2, Math.round(plotWidth / 90)),
+    );
+  }
 
   const x0 = left;
   const x1 = Math.max(left + 1, size.width - right);
-  const plotWidth = x1 - x0;
   const y = scaleLinear({
     domain: domain.y,
-    range: [size.height - bottom, top],
+    range: horizontal ? [x0, x1] : [size.height - bottom, top],
   });
 
-  /** @type {ChartScales["x"]} */
-  let x;
-  /** @type {number[]} */
-  let xTicks;
-  /** @type {(value: number) => string} */
-  let xFormat;
-  /** @type {(value: number) => string} */
-  let xLabel;
-  /** @type {number | undefined} */
-  let step;
-
-  if (domain.kind === "category") {
-    const point = scalePoint({
-      domain: domain.categories,
-      range: [x0, x1],
-      padding: 0.5,
-    });
-    const last = domain.categories.length - 1;
-    x = {
-      map: (index) =>
-        point.map(domain.categories[Math.round(Number(index))]) ?? x0,
-      invert: (px) => {
-        if (last < 0 || point.step === 0) return 0;
-        const first = point.map(domain.categories[0]) ?? x0;
-        return Math.min(
-          last,
-          Math.max(0, Math.round((px - first) / point.step)),
-        );
-      },
-    };
-    xTicks = domain.categories.map((_, index) => index);
-    xFormat = (index) => domain.categories[index] ?? "";
-    xLabel = xFormat;
-    // Categories sit at the centers of equal slots, so a bar mark can use
-    // the same scale: `x.map(i)` is the slot center and `step` its width.
-    step = point.step;
-  } else if (domain.kind === "time") {
-    const time = scaleTime({ domain: domain.x, range: [x0, x1] });
-    const result = timeTicks(
-      domain.x[0],
-      domain.x[1],
-      Math.max(2, Math.round(plotWidth / 90)),
-    );
-    x = { map: (value) => time.map(value), invert: time.invert };
-    xTicks = result.values;
-    const timeOfDay = timeTickFormat(result.interval, locale);
-    const subDayTicks =
-      result.interval === "hour" ||
-      result.interval === "minute" ||
-      result.interval === "second";
-    if (subDayTicks && domain.x[1] - domain.x[0] > DAY) {
-      // Hourly ticks across several days would all read "12 AM". Show the
-      // date wherever a tick lands on midnight.
-      const date = timeTickFormat("day", locale);
-      xFormat = (value) => {
-        const at = new Date(value);
-        const midnight =
-          at.getHours() === 0 && at.getMinutes() === 0 && at.getSeconds() === 0;
-        return midnight ? date(value) : timeOfDay(value);
-      };
-    } else {
-      xFormat = timeOfDay;
-    }
-    const subDay = domain.x[1] - domain.x[0] < DAY * 2;
-    const full = getDateTimeFormatter(
-      locale,
-      subDay
-        ? { dateStyle: "medium", timeStyle: "short" }
-        : { dateStyle: "medium" },
-    );
-    xLabel = (value) => full.format(value);
-  } else {
-    const linear = scaleLinear({ domain: domain.x, range: [x0, x1] });
-    x = { map: (value) => linear.map(Number(value)), invert: linear.invert };
-    xTicks = ticks(
-      domain.x[0],
-      domain.x[1],
-      Math.max(2, Math.round(plotWidth / 90)),
-    );
-    xFormat = (value) => formatCompact(value, { locale });
-    xLabel = xFormat;
-  }
-
-  if (options.xFormat) xFormat = options.xFormat;
-  if (options.xLabelFormat) xLabel = options.xLabelFormat;
-
   return {
-    x,
+    x: band.x,
     y: { map: y.map, invert: y.invert },
-    xTicks,
+    xTicks: band.xTicks,
     yTicks,
-    xFormat,
+    xFormat: band.xFormat,
     yFormat,
-    xLabel,
-    step,
+    xLabel: band.xLabel,
+    step: band.step,
     kind: domain.kind,
     categories: domain.categories,
+    horizontal,
     margin: { top, right, bottom, left },
     plot: { x0, x1, y0: top, y1: size.height - bottom },
   };

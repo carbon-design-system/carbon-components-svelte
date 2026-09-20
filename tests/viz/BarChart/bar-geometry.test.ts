@@ -10,17 +10,23 @@ import {
 
 type Row = { q: string; s: string; v: number | null };
 
-function setup(rows: Row[], include: number[] = [], hidden: string[] = []) {
+function setup(
+  rows: Row[],
+  include: number[] = [],
+  hidden: string[] = [],
+  orientation: "vertical" | "horizontal" = "vertical",
+) {
   const built = buildGroups(rows, {
     x: (row) => row.q,
     y: (row) => row.v,
     series: (row) => row.s,
     hidden,
   });
-  const scales = buildScales(resolveDomain(built, { include }), {
-    width: 440,
-    height: 240,
-  });
+  const scales = buildScales(
+    resolveDomain(built, { include }),
+    { width: 440, height: 240 },
+    { orientation },
+  );
   return { groups: built.groups, scales };
 }
 
@@ -109,6 +115,32 @@ describe("buildBars", () => {
 
     expect(bars.map((bar) => bar.series)).toEqual(["a", "a"]);
     expect(bars.every((bar) => bar.width === 12)).toBe(true);
+  });
+
+  test("turns bars on their side in a horizontal chart", () => {
+    const upright = setup(rows);
+    const { groups, scales } = setup(rows, [], [], "horizontal");
+    const bars = buildBars(groups, scales);
+    const zero = scales.y.map(0);
+
+    // Length runs along the value axis, thickness along the slot.
+    const [a1, a2, , negative] = bars;
+    expect(a1.x).toBeCloseTo(zero);
+    expect(a1.width).toBeCloseTo(scales.y.map(10) - zero);
+    expect(a2.width).toBeCloseTo(a1.width * 2);
+    expect(a2.y).toBeGreaterThan(a1.y);
+    // A negative value hangs to the left of zero.
+    expect(negative.x + negative.width).toBeCloseTo(zero);
+    expect(negative.x).toBeLessThan(zero);
+    // Same count and keys as the upright chart.
+    expect(bars.map((bar) => bar.key)).toEqual(
+      buildBars(upright.groups, upright.scales).map((bar) => bar.key),
+    );
+    for (const bar of bars) {
+      expect(bar.height).toBeLessThanOrEqual(48);
+      expect(bar.y).toBeGreaterThanOrEqual(scales.plot.y0);
+      expect(bar.y + bar.height).toBeLessThanOrEqual(scales.plot.y1);
+    }
   });
 
   test("keys stay stable for a series and datum", () => {
