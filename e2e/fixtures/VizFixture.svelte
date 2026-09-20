@@ -7,6 +7,7 @@
     LineChart,
     MicroFunnel,
     Sparkline,
+    StackedBar,
   } from "carbon-components-svelte/viz";
 
   const stages = [
@@ -48,6 +49,15 @@
     <MicroFunnel {stages} label="Signup funnel" />
     <MicroFunnel {stages} variant="completion" label="Signup funnel" />
   </p>
+
+  <StackedBar data={stages} labels="below" label="Users by stage" />
+  <StackedBar
+    data={stages}
+    labels="below"
+    selectable
+    label="Pick a stage"
+    data-testid="stacked-bar"
+  />
 
   <FunnelBars
     {stages}

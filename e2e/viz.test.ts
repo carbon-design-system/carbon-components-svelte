@@ -33,6 +33,26 @@ test.describe("Data visualization", () => {
     expect(widths[3] / widths[0]).toBeCloseTo(0.09, 1);
   });
 
+  test("StackedBar sizes segments by share and dims the rest on selection", async ({
+    page,
+  }) => {
+    await page.goto("/viz.html");
+    const bar = page.getByTestId("stacked-bar");
+    const segments = bar.getByRole("button");
+    const widths = await segments.evaluateAll((nodes) =>
+      nodes.map((node) => node.getBoundingClientRect().width),
+    );
+
+    // 10000 : 6000 : 3000 : 900
+    expect(widths[1] / widths[0]).toBeCloseTo(0.6, 1);
+    expect(widths[2] / widths[0]).toBeCloseTo(0.3, 1);
+
+    await segments.nth(1).click();
+    await expect(segments.nth(1)).toHaveAttribute("aria-pressed", "true");
+    await expect(segments.nth(0)).toHaveCSS("opacity", "0.3");
+    await expect(segments.nth(1)).toHaveCSS("opacity", "1");
+  });
+
   test("selectable FunnelBars is one tab stop with arrow key navigation", async ({
     page,
   }) => {
