@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { render, within } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import ToolbarSearchUnsubscribe from "./ToolbarSearchUnsubscribe.test.svelte";
 
@@ -9,9 +9,24 @@ import ToolbarSearchUnsubscribe from "./ToolbarSearchUnsubscribe.test.svelte";
 // so the leak compounds with every toggle over a component's lifetime.
 describe("ToolbarSearch unsubscribes from tableRows before resubscribing", () => {
   it("keeps exactly one live subscriber after toggling shouldFilterRows repeatedly", async () => {
-    const { component } = render(ToolbarSearchUnsubscribe);
+    // "Change rows" produces a genuinely different `rows` value, which the
+    // active `ToolbarSearch` independently replays through `filterRows`, so
+    // even a single live subscriber sees more than one emission from it.
+    // Comparing a toggled instance against a freshly mounted control (never
+    // toggled, so it can only ever have exactly one live subscriber) isolates
+    // the thing this test actually guards -- extra emissions from LEAKED
+    // subscribers -- from that unrelated, expected replay fan-out.
+    const control = render(ToolbarSearchUnsubscribe);
+    const controlBaseline = control.component.subscribeCount;
+    await user.click(
+      within(control.container).getByRole("button", { name: "Change rows" }),
+    );
+    const controlDelta = control.component.subscribeCount - controlBaseline;
 
-    const toggleButton = screen.getByRole("button", { name: "Toggle filter" });
+    const { component, container } = render(ToolbarSearchUnsubscribe);
+    const toggleButton = within(container).getByRole("button", {
+      name: "Toggle filter",
+    });
 
     // Mounts with `shouldFilterRows = true` (one live subscription), then
     // toggles true -> false -> true -> false -> true.
@@ -20,16 +35,15 @@ describe("ToolbarSearch unsubscribes from tableRows before resubscribing", () =>
       await user.click(toggleButton);
     }
 
-    // Baseline includes the immediate callback fire every new subscription
-    // receives from the store; reset the reference point before the single
-    // emission we actually care about.
     const baseline = component.subscribeCount;
 
-    await user.click(screen.getByRole("button", { name: "Change rows" }));
+    await user.click(
+      within(container).getByRole("button", { name: "Change rows" }),
+    );
 
-    // Exactly one live subscriber should receive the emission. Before the
-    // fix, each `false -> true` toggle leaked the previous subscription, so
-    // this would be 3 (three live subscribers left over from the toggles).
-    expect(component.subscribeCount - baseline).toBe(1);
+    // Before the fix, each `false -> true` toggle leaked the previous
+    // subscription, so a toggled instance would see more emissions than the
+    // control instead of matching it exactly.
+    expect(component.subscribeCount - baseline).toBe(controlDelta);
   });
 });

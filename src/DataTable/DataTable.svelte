@@ -479,9 +479,48 @@
   // skipped everywhere the rendered column set is meant.
   $: visibleHeaders = stableHeaders.filter((header) => !header.columnHidden);
 
+  /**
+   * Whether `next` describes the same row values as `prev`. Unlike
+   * `rowsEqual` (used by `ToolbarSearch`), a same-reference element does NOT
+   * count as equal: `rowsEqual` short-circuits per element on `rowA ===
+   * rowB`, so `rows[0].name = "x"; rows = [...rows]` (a legitimate in-place
+   * edit copied into a new array) would read as unchanged even though row 0
+   * moved. Here, only an array of entirely DIFFERENT objects that are each
+   * value-equal to their predecessor counts as unchanged; any same-reference
+   * element means it could have been mutated in place, so fall through and
+   * redo the work, matching today's behavior.
+   * @type {(prev: ReadonlyArray<Row>, next: ReadonlyArray<Row>) => boolean}
+   */
+  function rowsUnchanged(prev, next) {
+    if (prev === next) return true;
+    if (prev.length !== next.length) return false;
+
+    // Fast path: bail on the first id mismatch before paying for deep compares.
+    for (let i = 0; i < prev.length; i++) {
+      if (prev[i]?.id !== next[i]?.id) return false;
+    }
+
+    for (let i = 0; i < prev.length; i++) {
+      if (prev[i] === next[i]) return false;
+      if (!deepEqual(prev[i], next[i])) return false;
+    }
+
+    return true;
+  }
+
+  // A single stable reference that only moves when `rows` genuinely differs
+  // by value, shared by the filter-replay block and the cell cache block
+  // below. Sharing one signal matters: if each block tracked its own "last
+  // seen `rows`" by identity, a new-but-equal array would still look changed
+  // to whichever block wasn't updated, defeating the guard.
+  let stableRows = rows;
+  $: if (!rowsUnchanged(stableRows, rows)) {
+    stableRows = rows;
+  }
+
   // Store a copy of the original rows for filter restoration.
-  let prevFilterRows = rows;
-  let originalRows = [...rows];
+  let prevFilterRows = stableRows;
+  let originalRows = [...stableRows];
   // Row ids that match the active filter. In "hide" mode this toggles `hidden` on rows
   // instead of shrinking `tableRows`.
   let matchedRowIdsSet = new Set(originalRows.map((row) => row.id));
@@ -541,14 +580,14 @@
     return ids;
   }
 
-  $: if (rows !== prevFilterRows) {
-    originalRows = [...rows];
-    prevFilterRows = rows;
+  $: if (stableRows !== prevFilterRows) {
+    originalRows = [...stableRows];
+    prevFilterRows = stableRows;
     if (prevSearchValue.trim().length > 0) {
       filterRows(prevSearchValue, prevCustomFilter);
     } else {
-      matchedRowIdsSet = new Set(rows.map((row) => row.id));
-      $tableRows = rows;
+      matchedRowIdsSet = new Set(stableRows.map((row) => row.id));
+      $tableRows = stableRows;
     }
   }
 
@@ -895,11 +934,15 @@
 
   // Walk the painted window, not `rows`. Virtualized and paginated tables
   // otherwise allocate cell records for every row on each `rows`/headers
-  // invalidation. Compare against `visibleHeaders`, not `headers`: it is a
-  // fresh array on every `headers` invalidation, so toggling `columnHidden`
-  // in place still rebuilds the cells.
+  // invalidation. Compare against `stableRows`/`visibleHeaders`, not the raw
+  // props: both are fresh references on every prop invalidation (Svelte
+  // treats every object/array prop write as changed), so comparing against
+  // the raw prop would defeat the guards above and rebuild every cell for a
+  // new-but-equal `rows` or `headers`. `visibleHeaders` still changes
+  // reference when `columnHidden` is toggled in place, so that case keeps
+  // rebuilding cells.
   $: if (
-    rows !== prevRows ||
+    stableRows !== prevRows ||
     visibleHeaders !== prevVisibleHeaders ||
     paintedRowListChanged(rowsToRender, prevRowsToRender)
   ) {
@@ -907,7 +950,7 @@
       rowsToRender ?? [],
       tableCellsByRowId,
     );
-    prevRows = rows;
+    prevRows = stableRows;
     prevVisibleHeaders = visibleHeaders;
     prevRowsToRender = rowsToRender;
   }

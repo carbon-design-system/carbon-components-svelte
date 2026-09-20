@@ -22,7 +22,9 @@
 <Button on:click={() => (shouldFilterRows = !shouldFilterRows)}>
   Toggle filter
 </Button>
-<Button on:click={() => (rows = rows.map((row) => ({ ...row })))}>
+<Button
+  on:click={() => (rows = rows.map((row) => ({ ...row, name: `${row.name}!` })))}
+>
   Change rows
 </Button>
 
