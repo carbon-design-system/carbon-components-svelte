@@ -7,6 +7,7 @@
     FunnelBars,
     LineChart,
     MicroFunnel,
+    RankBars,
     Sparkline,
     StackedBar,
   } from "carbon-components-svelte/viz";
@@ -59,6 +60,9 @@
     showValue
     label="Revenue"
   />
+
+  <RankBars data={stages} top={3} other label="Stages by users" />
+  <RankBars data={stages} selectable label="Pick a ranked stage" />
 
   <StackedBar data={stages} labels="below" label="Users by stage" />
   <StackedBar
