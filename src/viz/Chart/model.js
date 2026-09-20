@@ -34,7 +34,7 @@ const DAY = 86_400_000;
  */
 export function buildGroups(
   rows,
-  { x, y, series, hidden = [], colors, palette = 1 },
+  { x, y, series, hidden = [], colors, palette = 1, band = false, locale },
 ) {
   const grouped = groupBy(rows, series);
   const defaults = categoricalColors(grouped.size, palette);
@@ -103,6 +103,37 @@ export function buildGroups(
     i++;
   }
 
+  // Bars need one slot per x. A numeric or time x becomes categories: its
+  // distinct values in ascending order, labelled like a tooltip would.
+  if (band && kind !== "category" && groups.length > 0) {
+    /** @type {Set<number>} */
+    const distinct = new Set();
+    for (const group of groups) {
+      for (const value of group.xs) {
+        if (Number.isFinite(value)) distinct.add(value);
+      }
+    }
+    const values = [...distinct].sort((a, b) => a - b);
+    const label =
+      kind === "time"
+        ? bandDateLabel(values, locale)
+        : (/** @type {number} */ value) => formatCompact(value, { locale });
+    /** @type {Map<number, number>} */
+    const slot = new Map();
+    values.forEach((value, index) => {
+      slot.set(value, index);
+      categories.push(label(value));
+    });
+    for (const group of groups) {
+      for (let j = 0; j < group.xs.length; j++) {
+        group.xs[j] = slot.get(group.xs[j]) ?? Number.NaN;
+      }
+    }
+    kind = "category";
+    xMin = 0;
+    xMax = Math.max(0, values.length - 1);
+  }
+
   return {
     groups,
     kind,
@@ -110,6 +141,33 @@ export function buildGroups(
     xExtent: xMin <= xMax ? [xMin, xMax] : null,
     yExtent: yMin <= yMax ? [yMin, yMax] : null,
   };
+}
+
+/**
+ * Label for a time value used as a bar category: as coarse as the spacing
+ * between values allows, so monthly data reads "Jan", not "Jan 1, 2026".
+ *
+ * @param {ReadonlyArray<number>} values Ascending epoch milliseconds.
+ * @param {string} [locale]
+ * @returns {(value: number) => string}
+ */
+function bandDateLabel(values, locale) {
+  let gap = Number.POSITIVE_INFINITY;
+  for (let i = 1; i < values.length; i++) {
+    gap = Math.min(gap, values[i] - values[i - 1]);
+  }
+  const span = values.length > 1 ? values[values.length - 1] - values[0] : 0;
+  /** @type {Intl.DateTimeFormatOptions} */
+  let options = { month: "short", day: "numeric" };
+  if (gap >= 360 * DAY) options = { year: "numeric" };
+  else if (gap >= 28 * DAY) {
+    options =
+      span >= 360 * DAY
+        ? { month: "short", year: "2-digit" }
+        : { month: "short" };
+  } else if (gap < DAY) options = { hour: "numeric", minute: "2-digit" };
+  const formatter = getDateTimeFormatter(locale, options);
+  return (value) => formatter.format(value);
 }
 
 /**
@@ -220,6 +278,8 @@ export function buildScales(domain, size, options = {}) {
   let xFormat;
   /** @type {(value: number) => string} */
   let xLabel;
+  /** @type {number | undefined} */
+  let step;
 
   if (domain.kind === "category") {
     const point = scalePoint({
@@ -243,6 +303,9 @@ export function buildScales(domain, size, options = {}) {
     xTicks = domain.categories.map((_, index) => index);
     xFormat = (index) => domain.categories[index] ?? "";
     xLabel = xFormat;
+    // Categories sit at the centers of equal slots, so a bar mark can use
+    // the same scale: `x.map(i)` is the slot center and `step` its width.
+    step = point.step;
   } else if (domain.kind === "time") {
     const time = scaleTime({ domain: domain.x, range: [x0, x1] });
     const result = timeTicks(
@@ -301,6 +364,7 @@ export function buildScales(domain, size, options = {}) {
     xFormat,
     yFormat,
     xLabel,
+    step,
     margin: { top, right, bottom, left },
     plot: { x0, x1, y0: top, y1: size.height - bottom },
   };

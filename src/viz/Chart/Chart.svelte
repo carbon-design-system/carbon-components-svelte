@@ -172,6 +172,8 @@
   const hover = writable(/** @type {any} */ (null));
   const hiddenStore = writable(hidden);
   const included = writable(/** @type {number[]} */ ([]));
+  // How many mounted marks need one slot per x, as bars do.
+  const bandRequests = writable(0);
   const reserved = writable(
     /** @type {Array<{ side: "top" | "right" | "bottom" | "left", px: number }>} */ ([]),
   );
@@ -245,6 +247,10 @@
         }
       }
     },
+    useBand() {
+      bandRequests.update((count) => count + 1);
+      return () => bandRequests.update((count) => count - 1);
+    },
     /**
      * @param {"top" | "right" | "bottom" | "left"} side
      * @param {number} px
@@ -284,6 +290,8 @@
     yDomain,
     zero,
     $included,
+    $bandRequests > 0,
+    locale,
   );
 
   function rebuild(
@@ -298,6 +306,8 @@
     /** @type {any} */ yD,
     /** @type {boolean} */ includeZero,
     /** @type {number[]} */ include,
+    /** @type {boolean} */ band,
+    /** @type {string | undefined} */ bandLocale,
   ) {
     const built = buildGroups(rows, {
       x: xA,
@@ -306,6 +316,8 @@
       hidden: hiddenKeys,
       colors: colorMap,
       palette: paletteOption,
+      band,
+      locale: bandLocale,
     });
     const next = resolveDomain(built, {
       xDomain: xD,

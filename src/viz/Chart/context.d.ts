@@ -41,6 +41,11 @@ export type ChartContext<T> = {
   hidden: Readable<ReadonlyArray<ChartSeriesKey>>;
   /** Keep a y value inside the domain. Returns a function that releases it. */
   includeY(value: number): () => void;
+  /**
+   * Give every distinct x its own slot, as bars need. A numeric or time x
+   * becomes categories. Returns a release function.
+   */
+  useBand(): () => void;
   /** Reserve margin space, as an axis title does. Returns a release function. */
   reserveMargin(side: keyof ChartMargins, px: number): () => void;
   /** Show or hide a series. The last visible series cannot be hidden. */
