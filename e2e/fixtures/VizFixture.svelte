@@ -6,6 +6,7 @@
     ComparisonBar,
     DeltaIndicator,
     FunnelBars,
+    HeatStrip,
     LineChart,
     MicroFunnel,
     MicroHistogram,
@@ -14,6 +15,7 @@
     ShareOfTotal,
     Sparkline,
     StackedBar,
+    UptimeBar,
   } from "carbon-components-svelte/viz";
 
   const stages = [
@@ -75,6 +77,20 @@
     quartiles={[40, 88, 140]}
     showRange
     label="Latency now"
+  />
+
+  <p><HeatStrip {values} label="Requests by hour" /></p>
+
+  <UptimeBar
+    data={[
+      { status: "ok", label: "Mon" },
+      { status: "degraded", label: "Tue" },
+      { status: "down", label: "Wed" },
+      { status: "none", label: "Thu" },
+    ]}
+    selectable
+    showValue
+    label="API uptime"
   />
 
   <ComparisonBar value={1284} previous={912} showDelta label="Orders" />
