@@ -46,6 +46,7 @@ jobs:
       unit: ${{ steps.filter.outputs.unit }}
       e2e: ${{ steps.filter.outputs.e2e }}
       docs-deploy: ${{ steps.filter.outputs.docs-deploy }}
+      css: ${{ steps.filter.outputs.css }}
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
@@ -75,6 +76,10 @@ jobs:
               - 'package.json'
               - 'bun.lock'
               - '.github/**'
+            css:
+              - 'css/**'
+              - 'scripts/check-css-cascade.ts'
+              - 'scripts/lib/css-*.ts'
             docs-deploy:
               - 'src/**'
               - 'css/**'
@@ -82,6 +87,34 @@ jobs:
               - 'package.json'
               - 'bun.lock'
               - '.github/**'
+
+  # Informational: prints the compiled-rule delta, specificity histogram and
+  # size movement against the base branch in the job summary. The script exits
+  # non-zero on a cascade flip candidate, which over-reports by design, so the
+  # job never blocks a merge.
+  css-cascade:
+    needs: [changes]
+    if: github.event_name == 'pull_request' && needs.changes.outputs.css == 'true'
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+      - run: bun ci
+      - name: Cascade diff against the base branch
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          status=0
+          bun run check:css --base "origin/$BASE_REF" > cascade.txt 2>&1 || status=$?
+          {
+            echo '```'
+            head -c 60000 cascade.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit "$status"
 
   test:
     needs: [changes]
