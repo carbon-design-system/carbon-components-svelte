@@ -1,0 +1,100 @@
+---
+components: ["RankBars"]
+description: Rank bars list items in order of value, with a number, a label, a bar, and a value on each row.
+---
+
+<script>
+  import { Stack } from "carbon-components-svelte";
+  import { RankBars } from "carbon-components-svelte/viz";
+
+  const browsers = [
+    { id: "edge", label: "Edge", value: 5200 },
+    { id: "chrome", label: "Chrome", value: 64100 },
+    { id: "firefox", label: "Firefox", value: 3900 },
+    { id: "safari", label: "Safari", value: 18700 },
+    { id: "opera", label: "Opera", value: 2100 },
+    { id: "samsung", label: "Samsung Internet", value: 2600 },
+  ];
+
+  const stages = [
+    { id: "lint", label: "Lint", value: 12 },
+    { id: "build", label: "Build", value: 95 },
+    { id: "test", label: "Test", value: 240, color: "error" },
+    { id: "deploy", label: "Deploy", value: 48 },
+  ];
+
+  let selectedId;
+</script>
+
+`RankBars` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+## Basic
+
+Pass `data` and a `label`. Rows are sorted by value and numbered from 1. Bar length is relative to the largest row.
+
+<RankBars data={browsers} label="Sessions by browser" />
+
+## Top rows
+
+Set `top` to keep the first rows. Add `other` to fold the rest into one unranked row.
+
+<Stack gap={7}>
+  <RankBars data={browsers} top={3} label="Top 3 browsers" />
+  <RankBars data={browsers} top={3} other label="Top 3 browsers and the rest" />
+</Stack>
+
+## Values
+
+Set `valueType` to `"percent"` to write each row's share of the total of every item, folded or not. `format` takes `Intl.NumberFormat` options or a function.
+
+<Stack gap={7}>
+  <RankBars data={browsers} top={3} other valueType="percent" label="Browser share" />
+  <RankBars
+    data={stages}
+    format={(value) => `${value}s`}
+    label="Pipeline stages by duration"
+  />
+</Stack>
+
+## Order
+
+Set `sort` to `false` to keep the input order, and `hideRank` to drop the numbers. Together they make a plain labeled bar list.
+
+<RankBars data={stages} sort={false} hideRank format={(value) => `${value}s`} label="Pipeline stages in order" />
+
+## Color
+
+Set `color` to a semantic name, a categorical index from 1 to 14, a viz token name, or any CSS color. An item's own `color` wins. The folded row is always neutral.
+
+<RankBars data={browsers} top={3} other color={3} label="Browser share" />
+
+## Sizes
+
+<Stack gap={7}>
+  <RankBars data={browsers} top={3} size="sm" label="Small" />
+  <RankBars data={browsers} top={3} label="Medium (default)" />
+  <RankBars data={browsers} top={3} size="lg" label="Large" />
+</Stack>
+
+## Selectable
+
+Set `selectable` to put a toggle button in each row. Bind `selectedId` or listen for `select`. `hover` fires as the pointer or focus moves between rows.
+
+<RankBars data={browsers} top={4} selectable bind:selectedId label="Pick a browser" />
+
+## Links
+
+Give an item an `href` to link its label.
+
+<RankBars
+  data={[
+    { id: "a", label: "/pricing", value: 8200, href: "#" },
+    { id: "b", label: "/docs", value: 6100, href: "#" },
+    { id: "c", label: "/blog", value: 1900, href: "#" },
+  ]}
+  label="Top pages"
+/>
+
+## Accessibility
+
+The list is a table: the `label` is its caption, each item is a row header, and the column headers are visually hidden. Set `headerLabels` to translate them. The bars are hidden from assistive technology because the value column carries the same information. Without a `label`, the whole table is hidden. When `selectable`, the row buttons share one tab stop and the arrow keys move between them.
