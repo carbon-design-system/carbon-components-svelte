@@ -158,7 +158,7 @@ By default, the calendar closes when a date is selected. Pass `closeOnSelect: fa
 
 ### Inline calendar
 
-Pass `inline: true` via `flatpickrProps` to render the calendar permanently below the input instead of in a popup. The input still shows the selected date.
+Pass `inline: true` via `flatpickrProps` to render the calendar permanently below the input instead of in a popup. The input still shows the selected date. While the input is read-only or disabled, the calendar stays visible but does not accept selection or navigation.
 
 <FileSource src="/framed/DatePicker/DatePickerInline" />
 
