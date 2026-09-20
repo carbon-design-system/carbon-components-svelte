@@ -431,6 +431,42 @@ describe("DatePicker", () => {
     >();
   });
 
+  describe("unsupported flatpickrProps warnings", () => {
+    it("warns once per option, not on every update", async () => {
+      const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+      function props(): ComponentProps<typeof DatePicker> {
+        return {
+          datePickerType: "single",
+          // @ts-expect-error `mode` is omitted from the type; JS callers can still pass it.
+          flatpickrProps: { mode: "multiple" },
+        };
+      }
+      const { rerender } = render(DatePicker, props());
+      await screen.findByLabelText("calendar-container");
+      await rerender(props());
+      await rerender(props());
+
+      expect(warn).toHaveBeenCalledTimes(1);
+      expect(warn).toHaveBeenCalledWith(
+        "[carbon-components-svelte] DatePicker: flatpickrProps.mode is ignored. Use datePickerType instead.",
+      );
+      warn.mockRestore();
+    });
+
+    it("stays silent for ordinary use", async () => {
+      const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+      render(DatePicker, {
+        datePickerType: "single",
+        flatpickrProps: { static: true, showMonths: 2 },
+      });
+      await user.click(screen.getByLabelText("Date"));
+      await screen.findByLabelText("calendar-container");
+
+      expect(warn).not.toHaveBeenCalled();
+      warn.mockRestore();
+    });
+  });
+
   describe("reactive datePickerType", () => {
     it("rebuilds the calendar when the type changes after mount", async () => {
       const { rerender } = render(DatePicker, { datePickerType: "single" });

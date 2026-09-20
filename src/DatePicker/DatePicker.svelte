@@ -206,6 +206,7 @@
     isEventTargetInsidePortaledCalendar,
     positionFlatpickrCalendarFixed,
   } from "./date-picker-top-layer.js";
+  import { getUnsupportedOptionWarnings } from "./unsupported-options.js";
 
   const dispatch = createEventDispatcher();
   const insideModal = getContext("carbon:Modal");
@@ -289,6 +290,8 @@
   // Bumped by `recreateCalendar()`. Named in the init block so it re-runs.
   let calendarEpoch = 0;
   let pendingOptions = null;
+  /** @type {Set<string>} */
+  const reportedWarnings = new Set();
   let prevDatePickerType = datePickerType;
   let prevUsesInline = inline || !!flatpickrProps.inline;
   let prevDisplayFormat = displayFormat;
@@ -1153,6 +1156,21 @@
     if (calendar) {
       calendar.set("altFormat", displayFormat);
       calendar.setDate(calendar.selectedDates, false);
+    }
+  }
+  // This re-runs whenever `flatpickrProps` is handed over again, even with
+  // equal contents, so each message is only reported once per instance.
+  $: if ($hasCalendar) {
+    for (const message of getUnsupportedOptionWarnings(flatpickrProps, {
+      portalled: effectivePortalMenu,
+      displayFormat,
+      disabledDates,
+      enabledDates,
+    })) {
+      if (!reportedWarnings.has(message)) {
+        reportedWarnings.add(message);
+        console.warn(message);
+      }
     }
   }
   // flatpickr mounts an inline calendar differently, at creation only.
