@@ -18,15 +18,28 @@ import { niceDomain, tickStep } from "./ticks.js";
  */
 export function bin(values, options = {}) {
   const { bins = "sturges", domain, nice = true } = options;
-  const sorted = sortedFinite(values);
-  const n = sorted.length;
+  // One pass for the finite values and their extent. Sorting a million
+  // values costs far more than binning them, so only the rule that needs
+  // quartiles pays for it.
+  /** @type {number[]} */
+  const finite = [];
+  let min = Number.POSITIVE_INFINITY;
+  let max = Number.NEGATIVE_INFINITY;
+  for (let i = 0; i < values.length; i++) {
+    const value = values[i];
+    if (typeof value !== "number" || !Number.isFinite(value)) continue;
+    finite.push(value);
+    if (value < min) min = value;
+    if (value > max) max = value;
+  }
+  const n = finite.length;
   if (n === 0) return [];
 
-  let lo = domain ? Math.min(domain[0], domain[1]) : sorted[0];
-  let hi = domain ? Math.max(domain[0], domain[1]) : sorted[n - 1];
+  let lo = domain ? Math.min(domain[0], domain[1]) : min;
+  let hi = domain ? Math.max(domain[0], domain[1]) : max;
   if (lo === hi) {
     return [
-      { x0: lo, x1: hi, count: domain ? countWithin(sorted, lo, hi) : n },
+      { x0: lo, x1: hi, count: domain ? countWithin(finite, lo, hi) : n },
     ];
   }
 
@@ -34,6 +47,7 @@ export function bin(values, options = {}) {
   if (typeof bins === "number") {
     count = Math.max(1, Math.floor(bins));
   } else if (bins === "freedman-diaconis") {
+    const sorted = sortedFinite(finite);
     const iqr = quantile(sorted, 0.75) - quantile(sorted, 0.25);
     const width = (2 * iqr) / Math.cbrt(n);
     count =
@@ -64,7 +78,7 @@ export function bin(values, options = {}) {
     };
   }
   for (let i = 0; i < n; i++) {
-    const value = sorted[i];
+    const value = finite[i];
     if (value < lo || value > hi) continue;
     const index = Math.min(count - 1, Math.floor((value - lo) / width));
     out[index].count += 1;
@@ -73,15 +87,15 @@ export function bin(values, options = {}) {
 }
 
 /**
- * @param {ReadonlyArray<number>} sorted
+ * @param {ReadonlyArray<number>} finite
  * @param {number} lo
  * @param {number} hi
  * @returns {number}
  */
-function countWithin(sorted, lo, hi) {
+function countWithin(finite, lo, hi) {
   let count = 0;
-  for (let i = 0; i < sorted.length; i++) {
-    if (sorted[i] >= lo && sorted[i] <= hi) count += 1;
+  for (let i = 0; i < finite.length; i++) {
+    if (finite[i] >= lo && finite[i] <= hi) count += 1;
   }
   return count;
 }
