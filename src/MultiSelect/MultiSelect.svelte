@@ -146,7 +146,8 @@
   /**
    * Override the sorting logic.
    * The default sorting compare the item text value.
-   * @type {((a: Item, b: Item) => number) | (() => void)}
+   * Set to `false` to skip sorting and keep the original `items` order.
+   * @type {((a: Item, b: Item) => number) | (() => void) | false}
    */
   export let sortItem = function sortItem(a, b) {
     return getSortCollator().compare(a.text, b.text);
@@ -806,7 +807,9 @@
       item,
       snapshot: regularSnapshots[index],
     }));
-    pairs.sort((a, b) => sortItem(a.item, b.item));
+    if (sortItem !== false) {
+      pairs.sort((a, b) => sortItem(a.item, b.item));
+    }
 
     baseOrderItems = items;
     baseOrderPairs = pairs;

@@ -2584,6 +2584,14 @@ describe("MultiSelect", () => {
       expectTypeOf(sortItem).parameters.toEqualTypeOf<[Item, Item]>();
     });
 
+    it("sortItem accepts false to opt out of sorting", () => {
+      type Item = { id: string; text: string };
+
+      expectTypeOf<false>().toMatchTypeOf<
+        ComponentProps<MultiSelectComponent<Item>>["sortItem"]
+      >();
+    });
+
     it('itemToString may return string or Item["id"] (matches default text ?? id)', () => {
       type Row = { id: number; text: string };
 
