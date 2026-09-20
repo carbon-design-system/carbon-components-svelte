@@ -973,7 +973,10 @@
   }
 
   @include carbon--breakpoint-down(md) {
-    // The nav is an absolutely-positioned dropdown overlay by default.
+    // The nav is an absolutely-positioned dropdown overlay by default. It is
+    // no longer an overlay here, so unlike the vendor original it stays
+    // transparent (matching contained `Tabs`) rather than painting a solid
+    // block behind any leftover space past the last tab.
     .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav {
       position: static;
       z-index: auto;
@@ -981,7 +984,7 @@
       box-shadow: none;
       flex-direction: row;
       overflow-x: auto;
-      background-color: $ui-01;
+      background: transparent;
     }
 
     // The selected item is hidden by default below `md` (legacy dropdown).
