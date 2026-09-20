@@ -2,6 +2,7 @@
   import {
     AreaChart,
     BarChart,
+    BulletChart,
     DeltaIndicator,
     FunnelBars,
     LineChart,
@@ -49,6 +50,15 @@
     <MicroFunnel {stages} label="Signup funnel" />
     <MicroFunnel {stages} variant="completion" label="Signup funnel" />
   </p>
+
+  <BulletChart
+    value={270}
+    target={300}
+    max={400}
+    bands={[150, 250]}
+    showValue
+    label="Revenue"
+  />
 
   <StackedBar data={stages} labels="below" label="Users by stage" />
   <StackedBar
