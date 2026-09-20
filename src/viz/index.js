@@ -4,6 +4,13 @@
 
 export { groupBy, toAccessor } from "./utils/accessor.js";
 export { bin } from "./utils/bin.js";
+export {
+  contrastTextColor,
+  divergingColor,
+  sequentialColor,
+  sequentialStep,
+} from "./utils/color-scale.js";
+export { describeSeries } from "./utils/describe-series.js";
 export { lttb } from "./utils/downsample-lttb.js";
 export { extent, extentBy } from "./utils/extent.js";
 export {

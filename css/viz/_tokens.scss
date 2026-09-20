@@ -187,8 +187,9 @@ $viz-diverging: (
   }
 }
 
-/// Semantic series colors: `--cds-viz-interactive`, `-neutral`, `-success`,
-/// `-error`, `-warning`, `-info`. Aliases of core theme tokens, so JS can name
+/// Semantic series colors (`--cds-viz-interactive`, `-neutral`, `-success`,
+/// `-error`, `-warning`, `-info`) and label colors for text drawn on a mark
+/// (`--cds-viz-text-01`, `-inverse-01`). Aliases of core theme tokens, so JS can name
 /// one property that resolves under `all.css` (a `var()` reference) and under
 /// the static theme builds (a literal, since those declare no `--cds-*`).
 @mixin viz-semantic-tokens {
@@ -198,4 +199,6 @@ $viz-diverging: (
   --cds-viz-error: #{$support-error};
   --cds-viz-warning: #{$support-warning};
   --cds-viz-info: #{$support-info};
+  --cds-viz-text-01: #{$text-01};
+  --cds-viz-inverse-01: #{$inverse-01};
 }
