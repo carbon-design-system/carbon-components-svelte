@@ -470,6 +470,35 @@ function tocLinkClasses(level: number): string {
   return level === 3 ? "bx--link toc-nav__sub bx--type-label-01" : "bx--link";
 }
 
+/** Appends a `#` anchor link to each slugged h2/h3 so its heading can be hovered/copied. */
+function rehypeHeadingAnchors() {
+  return (tree: Parameters<typeof visit>[0]) => {
+    visit(tree, "element", (node) => {
+      const el = node as {
+        tagName?: string;
+        properties?: Record<string, unknown>;
+        children?: unknown[];
+      };
+      if (el.tagName !== "h2" && el.tagName !== "h3") return;
+
+      const id = el.properties?.id;
+      if (typeof id !== "string" || !id) return;
+
+      el.children = el.children ?? [];
+      el.children.push({
+        type: "element",
+        tagName: "a",
+        properties: {
+          href: `#${id}`,
+          className: ["heading-anchor"],
+          ariaLabel: "Copy link to this heading",
+        },
+        children: [{ type: "text", value: "#" }],
+      });
+    });
+  };
+}
+
 function carbonify() {
   return (tree: Parameters<typeof visit>[0]) => {
     visit(tree, (node, index, parent) => {
@@ -623,7 +652,7 @@ export default {
       smartypants: false,
       highlight: { highlighter: mdsvexPrismHighlighter },
       remarkPlugins: [heroIntro, plugin, carbonify],
-      rehypePlugins: [rehypeSlug],
+      rehypePlugins: [rehypeSlug, rehypeHeadingAnchors],
       layout: {
         _: path.join(__dirname, "src/layouts/ComponentLayout.svelte"),
       },

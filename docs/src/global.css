@@ -609,6 +609,31 @@ html {
   scroll-margin-top: 3rem;
 }
 
+/* `#` heading anchor: hidden until hover, always shown on devices without hover. */
+.heading-anchor {
+  margin-left: var(--cds-spacing-03);
+  color: var(--cds-text-placeholder, var(--cds-text-05));
+  text-decoration: none;
+  font-weight: 400;
+  opacity: 0;
+}
+
+h2:hover .heading-anchor,
+h3:hover .heading-anchor,
+.heading-anchor:focus {
+  opacity: 1;
+}
+
+.heading-anchor:focus {
+  outline: 1px var(--cds-focus-outline-style, solid) var(--cds-focus);
+}
+
+@media (hover: none) {
+  .heading-anchor {
+    opacity: 1;
+  }
+}
+
 .bx--col > p,
 .bx--col > ul,
 .bx--col > ol {
