@@ -401,6 +401,27 @@ describe("DatePicker", () => {
     });
   });
 
+  it("leaves Carbon's markup intact when an inline calendar is rebuilt", async () => {
+    const props: ComponentProps<typeof DatePicker> = {
+      helperText: "Pick a weekday",
+      flatpickrProps: { inline: true },
+    };
+    const { container, rerender } = render(DatePicker, {
+      ...props,
+      datePickerType: "single",
+    });
+    await screen.findByLabelText("calendar-container");
+
+    await rerender({ ...props, datePickerType: "multiple" });
+    await vi.waitFor(() =>
+      expect(screen.getAllByLabelText("calendar-container")).toHaveLength(1),
+    );
+    expect(screen.getByText("Pick a weekday")).toBeInTheDocument();
+    expect(
+      container.querySelector(".bx--date-picker-container"),
+    ).toContainElement(screen.getByLabelText("Date"));
+  });
+
   describe("reactive datePickerType", () => {
     it("rebuilds the calendar when the type changes after mount", async () => {
       const { rerender } = render(DatePicker, { datePickerType: "single" });
