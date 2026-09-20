@@ -7,8 +7,8 @@
 <DatePicker
   datePickerType="single"
   dateFormat="Y-m-d"
+  displayFormat="F j, Y"
   bind:value
-  flatpickrProps={{ altInput: true, altFormat: "F j, Y" }}
 >
   <DatePickerInput
     labelText="Meeting date"
