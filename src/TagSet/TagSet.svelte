@@ -75,6 +75,7 @@
   import Stack from "../Stack/Stack.svelte";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
+  import { sortByDomOrder } from "../utils/sort-by-dom-order.js";
   import { getVisibleTagCount } from "../utils/tag-overflow.js";
   import TagSetOverflow from "./TagSetOverflow.svelte";
 
@@ -86,20 +87,6 @@
   const overflowIds = writable(new Set());
   const sharedSize = writable(size);
   $: sharedSize.set(size);
-
-  // Tags register in mount order, which differs from DOM order when they are
-  // conditionally rendered. Sort by document position right at registration
-  // time so the fit calculation and overflow tooltip track the rendered
-  // layout, mirroring `UserAvatarGroup`'s own registry.
-  function sortByDomOrder(list) {
-    return [...list].sort((a, b) => {
-      if (!a.node || !b.node) return 0;
-      const position = a.node.compareDocumentPosition(b.node);
-      if (position & Node.DOCUMENT_POSITION_FOLLOWING) return -1;
-      if (position & Node.DOCUMENT_POSITION_PRECEDING) return 1;
-      return 0;
-    });
-  }
 
   function handleTagClose(item) {
     dispatch("close:tag", { tag: item, index: $items.indexOf(item) });
