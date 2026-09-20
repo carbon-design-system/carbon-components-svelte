@@ -34,6 +34,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   Dialog: "0.110.0",
   Disclosure: "0.110.0",
   Divider: "0.113.0",
+  DonutChart: "0.113.0",
   Dropdown: "0.2.0",
   ExpandableTile: "0.2.0",
   FileUploader: "0.2.0",
