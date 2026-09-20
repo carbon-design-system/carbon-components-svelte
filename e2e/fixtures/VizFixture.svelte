@@ -9,6 +9,7 @@
     LineChart,
     MicroFunnel,
     RankBars,
+    ShareOfTotal,
     Sparkline,
     StackedBar,
   } from "carbon-components-svelte/viz";
@@ -61,6 +62,8 @@
     showValue
     label="Revenue"
   />
+
+  <p><ShareOfTotal value={380} total={1000} label="Enterprise share" /></p>
 
   <ComparisonBar value={1284} previous={912} showDelta label="Orders" />
 
