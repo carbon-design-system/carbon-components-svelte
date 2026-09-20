@@ -1,0 +1,169 @@
+---
+components: ["LineChart"]
+description: Line chart shows how one or more series change over a continuous or ordered axis, with a keyboard accessible tooltip and a toggleable legend.
+---
+
+<script>
+  import { ChartThreshold, LineChart } from "carbon-components-svelte/viz";
+
+  const DAY = 86_400_000;
+  const START = new Date(2026, 0, 1).getTime();
+  const REGIONS = ["EMEA", "APAC", "AMER"];
+
+  function make(n, regions = REGIONS) {
+    const rows = [];
+    for (let i = 0; i < n; i++) {
+      for (let r = 0; r < regions.length; r++) {
+        rows.push({
+          date: new Date(START + (i * DAY * 365) / n),
+          region: regions[r],
+          revenue: Math.round(30000 + r * 9000 + Math.sin(i / (n / 9) + r) * 9000 + ((i * 7919 * (r + 1)) % 4000)),
+        });
+      }
+    }
+    return rows;
+  }
+
+  const data = make(48);
+  const single = make(48, ["EMEA"]);
+  const gaps = make(24, ["EMEA"]).map((row, i) => (i > 8 && i < 12 ? { ...row, revenue: null } : row));
+  const large = make(20000, ["EMEA"]);
+  const quarters = ["Q1", "Q2", "Q3", "Q4"].flatMap((quarter, i) => [
+    { quarter, kind: "Plan", value: 40 + i * 12 },
+    { quarter, kind: "Actual", value: 36 + i * 15 },
+  ]);
+</script>
+
+`LineChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+It is a ready-made composition of the [Chart](/components/Chart) primitives. Reach for those directly when you need a different arrangement.
+
+## Basic
+
+Pass long format `data`, one row per x and series, and name the fields with `x`, `y`, and `series`. Set `title`: it names the chart for assistive technology.
+
+<LineChart {data} x="date" y="revenue" series="region" title="Revenue by region" />
+
+## Data
+
+### Single series
+
+Omit `series` to draw one line. The legend is hidden for a single series.
+
+<LineChart data={single} x="date" y="revenue" title="EMEA revenue" height={220} />
+
+### Categorical x
+
+String x values make a categorical axis, in first-seen order.
+
+<LineChart data={quarters} x="quarter" y="value" series="kind" title="Plan versus actual" points="all" height={220} />
+
+### Missing values
+
+A `null` or non-finite y breaks the line. It is never bridged, because a bridged gap reads as data that does not exist.
+
+<LineChart data={gaps} x="date" y="revenue" title="Revenue with missing months" height={220} />
+
+### Accessors
+
+`x`, `y`, and `series` take a property name or a function. Prefer names. To use a function, declare it once in your script rather than inline.
+
+<LineChart {data} x="date" y={(row) => row.revenue / 1000} series="region" title="Revenue, in thousands" height={220} />
+
+## Lines
+
+### Curves
+
+Set `curve` to `"monotone"` for a smooth line that never overshoots the data, or to `"step"`, `"step-before"`, or `"step-after"`.
+
+<LineChart data={single} x="date" y="revenue" title="Monotone curve" curve="monotone" height={220} />
+
+### Points
+
+Set `points` to `"all"` to mark every datum, `"hover"` for only the focused one, or `"none"`.
+
+<LineChart data={quarters} x="quarter" y="value" series="kind" title="Every point" points="all" height={220} />
+
+### Dashed series
+
+Set `dashed` to `true`, or to the series keys to dash, for projected or secondary series. Dashes also keep series apart without relying on color.
+
+<LineChart {data} x="date" y="revenue" series="region" title="AMER dashed" dashed={["AMER"]} height={220} />
+
+## Axes
+
+### Include zero
+
+A line chart shows change, so by default the y axis fits the data. Set `zero` to start at zero.
+
+<LineChart data={single} x="date" y="revenue" title="Starting at zero" zero height={220} />
+
+### Fixed domain
+
+Set `yDomain` to fixed bounds to compare charts on the same scale.
+
+<LineChart data={single} x="date" y="revenue" title="Fixed y domain" yDomain={[0, 80000]} height={220} />
+
+### Titles and formats
+
+Set `xTitle` and `yTitle` to label the axes, and `yFormat` to `Intl.NumberFormat` options or a function.
+
+<LineChart
+  {data}
+  x="date"
+  y="revenue"
+  series="region"
+  title="Revenue by region"
+  yTitle="Revenue"
+  yFormat={{ style: "currency", currency: "USD", notation: "compact" }}
+/>
+
+## Thresholds
+
+Add marks in the default slot. A `ChartThreshold` draws a labelled rule and keeps its value inside the y domain.
+
+<LineChart {data} x="date" y="revenue" series="region" title="Revenue against target">
+  <ChartThreshold y={65000} label="Target" />
+</LineChart>
+
+## Colors
+
+Up to five series use one of Carbon's prescribed high contrast color groups. Set `palette` to pick another option, or `colors` to fix a color per series so it stays stable across charts and filters.
+
+<LineChart
+  {data}
+  x="date"
+  y="revenue"
+  series="region"
+  title="Fixed colors"
+  colors={{ EMEA: "cat-07", APAC: "cat-02", AMER: "neutral" }}
+  height={220}
+/>
+
+## Selection and legend
+
+Bind `selected` and `hidden`, and listen for `select` and `legend:toggle`. Click a legend item to hide a series. Hold Alt and click to isolate it. The last visible series cannot be hidden.
+
+<FileSource src="/framed/LineChart/LineChartSelect" />
+
+## Live data
+
+Reassign `data` to update. An appended point that stays inside the current domain leaves the axes and grid untouched.
+
+<FileSource src="/framed/LineChart/LineChartLive" />
+
+## Large data
+
+A long series is downsampled to about two points per pixel before drawing, which keeps its shape and bounds the cost by the screen rather than the data. This chart has 20,000 points. Set `downsample` to `false` to draw them all.
+
+<LineChart data={large} x="date" y="revenue" title="Twenty thousand points" points="none" height={220} />
+
+## Without chrome
+
+Set `grid`, `legend`, and `tooltip` to `false` to remove them.
+
+<LineChart {data} x="date" y="revenue" series="region" title="Minimal" grid={false} legend={false} tooltip={false} height={180} />
+
+## Accessibility
+
+The chart is a single tab stop. Left and Right move between data points, Up and Down between series, Home and End jump to the ends, Enter or Space selects, and Escape clears. The focused point is announced with its full date and every series value, such as "Jul 8, 2026: EMEA 22.5K, APAC 36.7K". The tooltip shows the same thing for pointer users and is hidden from assistive technology, so nothing is read twice. The axes are decorative for the same reason.

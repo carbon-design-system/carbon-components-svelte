@@ -1,0 +1,109 @@
+---
+components: ["BarChart"]
+description: Bar chart compares values across categories, grouped side by side, stacked, or normalized to shares, with a keyboard accessible tooltip and a toggleable legend.
+---
+
+<script>
+  import { BarChart, ChartThreshold } from "carbon-components-svelte/viz";
+
+  const PRODUCTS = ["Cloud", "Data", "Security"];
+  const data = ["Q1", "Q2", "Q3", "Q4"].flatMap((quarter, i) =>
+    PRODUCTS.map((product, p) => ({
+      quarter,
+      product,
+      revenue: 24 + p * 9 + i * (6 - p) + ((i * 7 + p * 5) % 8),
+    })),
+  );
+  const single = data.filter((row) => row.product === "Cloud");
+  const change = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"].map((month, i) => ({
+    month,
+    net: [12, 18, -6, 9, -14, 21][i],
+  }));
+  const monthly = Array.from({ length: 12 }, (_, month) => ({
+    date: new Date(2026, month, 1),
+    signups: 300 + Math.round(Math.sin(month / 2) * 120) + month * 25,
+  }));
+</script>
+
+`BarChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+It is a ready-made composition of the [Chart](/components/Chart) primitives. Bar length encodes the value, so the y axis always includes zero.
+
+## Basic
+
+Pass long format `data`, one row per category and series, and name the fields with `x`, `y`, and `series`. Set `title`: it names the chart for assistive technology.
+
+<BarChart {data} x="quarter" y="revenue" series="product" title="Revenue by quarter" />
+
+## Modes
+
+### Stacked
+
+Set `mode` to `"stacked"` to pile the series up. The y axis grows to fit the tallest pile.
+
+<BarChart {data} x="quarter" y="revenue" series="product" title="Stacked revenue" mode="stacked" />
+
+### Normalized
+
+Set `mode` to `"normalized"` to show each series as a share of its category. The axis runs from 0% to 100%.
+
+<BarChart {data} x="quarter" y="revenue" series="product" title="Revenue mix" mode="normalized" />
+
+## Data
+
+### Single series
+
+Omit `series` to draw one bar per category. The legend is hidden for a single series.
+
+<BarChart data={single} x="quarter" y="revenue" title="Cloud revenue" height={220} />
+
+### Negative values
+
+A negative value hangs below the zero line.
+
+<BarChart data={change} x="month" y="net" title="Net new accounts" height={220} />
+
+### Dates
+
+Every distinct x gets its own slot. Dates are labelled as coarsely as their spacing allows, so monthly data reads as months.
+
+<BarChart data={monthly} x="date" y="signups" title="Signups by month" height={220} />
+
+## Sizing
+
+Set `padding` for the gap between slots, as a fraction of the slot, and `maxBarWidth` to keep bars from growing too wide in a sparse chart.
+
+<BarChart data={single} x="quarter" y="revenue" title="Narrow bars" maxBarWidth={16} height={220} />
+
+## Thresholds
+
+Add marks in the default slot. A `ChartThreshold` draws a labelled rule and keeps its value inside the y domain.
+
+<BarChart data={single} x="quarter" y="revenue" title="Cloud revenue against target" height={240}>
+  <ChartThreshold y={55} label="Target" kind="success" />
+</BarChart>
+
+## Colors and formats
+
+Set `colors` to fix a color per series, and `yFormat` to `Intl.NumberFormat` options or a function.
+
+<BarChart
+  {data}
+  x="quarter"
+  y="revenue"
+  series="product"
+  title="Revenue by quarter"
+  yTitle="Revenue (USD millions)"
+  yFormat={{ style: "currency", currency: "USD", maximumFractionDigits: 0 }}
+  colors={{ Cloud: "cat-02", Data: "cat-07", Security: "cat-13" }}
+/>
+
+## Without chrome
+
+Set `grid`, `legend`, and `tooltip` to `false` to remove them.
+
+<BarChart {data} x="quarter" y="revenue" series="product" title="Minimal" grid={false} legend={false} tooltip={false} height={180} />
+
+## Accessibility
+
+The chart is a single tab stop. Left and Right move between categories, Up and Down between series, Enter or Space selects, and Escape clears. The focused category is highlighted with a band and the other bars are dimmed, rather than recoloring the focused bars, and its values are announced, such as "Q2: Cloud 35, Data 40, Security 46".

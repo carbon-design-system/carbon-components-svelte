@@ -23,7 +23,11 @@ export default defineConfig({
   test: {
     ...testConfig,
     include: ["../tests/**/*.test.ts"],
-    exclude: ["../tests/Snippets/**"],
+    exclude: [
+      "../tests/Snippets/**",
+      // `svelte/server` only exists in Svelte 5.
+      "../tests/**/*.ssr.test.ts",
+    ],
     setupFiles: ["./setup-tests.ts"],
   },
 });

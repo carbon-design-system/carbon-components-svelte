@@ -1,9 +1,22 @@
+export { default as BarChart } from "./BarChart/BarChart.svelte";
 // Data visualization subpackage: `carbon-components-svelte/viz`.
 // Styles ship separately in `carbon-components-svelte/css/viz.css`.
 // May import from core (`../utils`, `../icons`); core must never import from here.
 
+export { default as Chart } from "./Chart/Chart.svelte";
+export { default as ChartAxis } from "./Chart/ChartAxis.svelte";
+export { default as ChartBars } from "./Chart/ChartBars.svelte";
+export { default as ChartGrid } from "./Chart/ChartGrid.svelte";
+export { default as ChartLegend } from "./Chart/ChartLegend.svelte";
+export { default as ChartLine } from "./Chart/ChartLine.svelte";
+export { default as ChartRuler } from "./Chart/ChartRuler.svelte";
+export { default as ChartThreshold } from "./Chart/ChartThreshold.svelte";
+export { default as ChartTooltip } from "./Chart/ChartTooltip.svelte";
+export { default as ChartTooltipRow } from "./Chart/ChartTooltipRow.svelte";
+export { CHART_CONTEXT } from "./Chart/context.js";
 export { default as DeltaIndicator } from "./DeltaIndicator/DeltaIndicator.svelte";
 export { default as FunnelBars } from "./FunnelBars/FunnelBars.svelte";
+export { default as LineChart } from "./LineChart/LineChart.svelte";
 export { default as MicroFunnel } from "./MicroFunnel/MicroFunnel.svelte";
 export { default as Sparkline } from "./Sparkline/Sparkline.svelte";
 export { groupBy, toAccessor } from "./utils/accessor.js";

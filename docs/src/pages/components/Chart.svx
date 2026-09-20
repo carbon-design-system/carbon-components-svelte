@@ -1,0 +1,138 @@
+---
+components: ["Chart", "ChartAxis", "ChartGrid", "ChartLine", "ChartBars", "ChartRuler", "ChartTooltip", "ChartTooltipRow", "ChartLegend", "ChartThreshold"]
+description: Chart is the root that chart primitives compose inside. It turns long format rows into series, scales, and a plot box, and shares them with the marks you place in it.
+---
+
+<script>
+  import {
+    Chart,
+    ChartAxis,
+    ChartGrid,
+    ChartLegend,
+    ChartLine,
+    ChartRuler,
+    ChartThreshold,
+    ChartTooltip,
+    ChartTooltipRow,
+  } from "carbon-components-svelte/viz";
+
+  const DAY = 86_400_000;
+  const START = new Date(2026, 0, 1).getTime();
+  const data = ["EMEA", "APAC", "AMER"].flatMap((region, r) =>
+    Array.from({ length: 48 }, (_, i) => ({
+      date: new Date(START + (i * DAY * 365) / 48),
+      region,
+      revenue: Math.round(30000 + r * 9000 + Math.sin(i / 5 + r) * 9000 + ((i * 7919 * (r + 1)) % 4000)),
+    })),
+  );
+  const hours = data
+    .filter((row) => row.region === "EMEA")
+    .map((row, i) => ({ ...row, date: new Date(START + i * 3_600_000 * 1.5) }));
+</script>
+
+The chart primitives are part of the data visualization subpackage. Import them from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+For the common case use a ready-made chart such as [LineChart](/components/LineChart) or [BarChart](/components/BarChart). Compose the primitives yourself when you need a different arrangement.
+
+## Composition
+
+`Chart` reads the `data` and shares series, scales, and hover state with the marks inside it. Marks that draw in the plot go in the default slot. The tooltip and the legend are HTML, so they go in the `tooltip` and `legend` slots.
+
+<Chart {data} x="date" y="revenue" series="region" title="Revenue by region">
+  <ChartGrid />
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" title="Revenue" />
+  <ChartThreshold y={65000} label="Target" />
+  <ChartLine curve="monotone" />
+  <ChartRuler />
+  <ChartTooltip slot="tooltip" />
+  <ChartLegend slot="legend" />
+</Chart>
+
+## Data
+
+`data` is long format: one row per x and series. `x`, `y`, and `series` name the fields, or take a function. Dates make a time axis, numbers a linear one, and strings a categorical one.
+
+Reassign `data` to update it. If your data is wide, with one column per series, reshape it first with `pivotLonger`.
+
+```js
+import { pivotLonger } from "carbon-components-svelte/viz";
+
+const wide = [{ month: "Jan", emea: 4, apac: 7 }];
+const data = pivotLonger(wide, { cols: ["emea", "apac"] });
+// [{ month: "Jan", series: "emea", value: 4 }, { month: "Jan", series: "apac", value: 7 }]
+```
+
+## Axes and grid
+
+### Positions and titles
+
+`ChartAxis` takes a `position` and an optional `title`, which reserves its own margin. Labels that would collide are dropped rather than rotated.
+
+<Chart {data} x="date" y="revenue" series="region" title="Axes on three sides" height={240}>
+  <ChartAxis position="bottom" title="Month" />
+  <ChartAxis position="left" title="Revenue" />
+  <ChartAxis position="right" hideLine />
+  <ChartLine />
+</Chart>
+
+### Time ticks
+
+Time ticks land on calendar boundaries. When hourly ticks span several days, the ones at midnight show the date.
+
+<Chart data={hours} x="date" y="revenue" title="Hourly ticks across three days" height={220} zero={false}>
+  <ChartGrid x dashed />
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartLine points="none" />
+</Chart>
+
+## Custom tooltip
+
+`ChartTooltip` passes `x`, `xLabel`, and the hovered `points` to its slot. Each point carries its `series`, `datum`, `color`, and a formatted `value`.
+
+<Chart {data} x="date" y="revenue" series="region" title="Custom tooltip" height={240}>
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartLine />
+  <ChartRuler />
+  <ChartTooltip slot="tooltip" let:points let:xLabel>
+    <strong>Week of {xLabel}</strong>
+    {#each points as point (point.series)}
+      <ChartTooltipRow color={point.color} label={`${point.series} region`} value={`$${point.value}`} />
+    {/each}
+  </ChartTooltip>
+</Chart>
+
+## Thresholds
+
+`ChartThreshold` takes a `kind` of `"error"`, `"warning"`, `"success"`, or `"info"`. The chart keeps the value inside the y domain for as long as the threshold is mounted.
+
+<Chart {data} x="date" y="revenue" series="region" title="Two thresholds" height={240}>
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartThreshold y={70000} label="Stretch" kind="success" />
+  <ChartThreshold y={25000} label="Floor" kind="warning" />
+  <ChartLine />
+</Chart>
+
+## Writing a mark
+
+A mark is a component that reads the chart context and renders SVG. `groups` holds the series, `scales` maps data to pixels, and `hover` holds the focused point. Subscribe only to what you draw from: a mark that reads `groups` and `scales` but not `hover` never re-renders while the pointer moves.
+
+```svelte
+<script>
+  import { getContext } from "svelte";
+  import { CHART_CONTEXT } from "carbon-components-svelte/viz";
+
+  const { groups, scales } = getContext(CHART_CONTEXT);
+</script>
+
+{#each $groups as group (group.key)}
+  <text x={$scales.plot.x1} y={$scales.y.map(group.ys.at(-1))}>{group.key}</text>
+{/each}
+```
+
+## Accessibility
+
+A chart is one tab stop with `role="application"`. Left and Right move between data points, Up and Down between series, Home and End jump to the ends, Enter or Space selects, and Escape clears. The focused point is announced through a live region with a full x label. The tooltip and the axes are hidden from assistive technology so that nothing is read twice. Always set `title`.
