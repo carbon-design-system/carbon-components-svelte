@@ -5,7 +5,7 @@ import {
   normalizeSparklineValues,
   toAreaPath,
   toLinePath,
-} from "../../src/utils/sparkline.js";
+} from "../../../src/viz/utils/sparkline.js";
 
 describe("normalizeSparklineValues", () => {
   test("returns an empty array for empty input", () => {

@@ -3,6 +3,7 @@
 // May import from core (`../utils`, `../icons`); core must never import from here.
 
 export { default as DeltaIndicator } from "./DeltaIndicator/DeltaIndicator.svelte";
+export { default as Sparkline } from "./Sparkline/Sparkline.svelte";
 export { groupBy, toAccessor } from "./utils/accessor.js";
 export { bin } from "./utils/bin.js";
 export {
