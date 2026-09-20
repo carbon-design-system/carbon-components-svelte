@@ -1,5 +1,9 @@
 <script context="module">
   import { deepEqual } from "../utils/deep-equal.js";
+  import {
+    fingerprintTree,
+    matchesFingerprint,
+  } from "../utils/tree-fingerprint.js";
 
   function isUnderCollapsedSubtree(node) {
     return Boolean(node.closest("ul.bx--tree-node--hidden"));
@@ -729,13 +733,20 @@
   /**
    * `nodes`, but kept at the SAME reference across a "new but equal" update
    * (same tree by value, every node at every depth a different object) so
-   * the markup and every derived block below re-render nothing. Reassigned
-   * to `nodes` on any real change, including one this can't safely rule
-   * out (a node reused by reference, which may have been mutated in
-   * place). See `sameTreeDifferentObjects`.
+   * the markup and every derived block below skip their update entirely.
+   * Reassigned to `nodes` on any real change, including one this can't
+   * safely rule out (a node reused by reference, which may have been
+   * mutated in place). See `sameTreeDifferentObjects`.
    * @type {ReadonlyArray<Node>}
    */
   let stableNodes = nodes;
+
+  /**
+   * Snapshot of `stableNodes`, refreshed every time `stableNodes` is set.
+   * See `fingerprintTree` / `matchesFingerprint`.
+   * @type {ReturnType<typeof fingerprintTree>}
+   */
+  let stableNodesFingerprint = fingerprintTree(stableNodes);
 
   /** @type {ReadonlyArray<Node> | null} */
   let cachedNodes = null;
@@ -1298,21 +1309,30 @@
   // `stableNodes = nodes === stableNodes ? stableNodes : nodes` would call
   // `$$invalidate` on every `nodes` update even when re-assigning the SAME
   // reference back to itself, which (same "objects always changed" rule
-  // this guard works around) still re-renders every mounted node, same as
-  // MultiSelect's `sortedItems` (`isAlreadySorted`) fix skips its
-  // assignment entirely rather than reassigning to an equal value.
+  // this guard works around) still forces an update pass over every
+  // mounted node, same as MultiSelect's `sortedItems` (`isAlreadySorted`)
+  // fix skips its assignment entirely rather than reassigning to an equal
+  // value.
   //
-  // `nodes === stableNodes` forces the update rather than skipping it: this
-  // block only re-runs when the consumer touched `nodes` at all (including
-  // reassigning the SAME reference, the lazy-load idiom's `nodes = nodes`),
-  // and a same-reference `nodes` may hold an in-place mutation this guard
-  // has no way to see — the in-place mutation hazard applies at the top
-  // level too, not just to nested nodes.
-  $: if (
-    nodes === stableNodes ||
-    !sameTreeDifferentObjects(stableNodes, nodes)
-  ) {
+  // `nodes === stableNodes` (the lazy-load idiom's `nodes = nodes`, or any
+  // wrapper/`$:` that re-runs and hands back the SAME array) used to force
+  // the update through unconditionally: a same-reference `nodes` may hold
+  // an in-place mutation, and `sameTreeDifferentObjects` can't see that —
+  // it bails out on the first `prev === next`, since a shared node object
+  // might have been mutated. `stableNodesFingerprint`, a snapshot taken the
+  // last time `stableNodes` actually changed, tells the two cases apart: if
+  // the live tree still matches it, nothing was mutated and the
+  // reassignment — and the update cascade it triggers, since `{...child}`
+  // spread in `TreeViewNodeList` marks every descendant dirty regardless of
+  // value — is skipped entirely.
+  $: if (nodes === stableNodes) {
+    if (!matchesFingerprint(stableNodesFingerprint, nodes)) {
+      stableNodes = nodes;
+      stableNodesFingerprint = fingerprintTree(nodes);
+    }
+  } else if (!sameTreeDifferentObjects(stableNodes, nodes)) {
     stableNodes = nodes;
+    stableNodesFingerprint = fingerprintTree(nodes);
   }
 
   $: if (stableNodes !== cachedNodes) {
