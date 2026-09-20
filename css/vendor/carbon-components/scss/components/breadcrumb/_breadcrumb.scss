@@ -46,7 +46,7 @@
   .#{$prefix}--breadcrumb-item::after {
     margin-left: $carbon--spacing-03;
     color: $text-01;
-    content: '/';
+    content: var(--ccs-separator, '/'); // ccs: configurable separator
   }
 
   .#{$prefix}--breadcrumb--no-trailing-slash

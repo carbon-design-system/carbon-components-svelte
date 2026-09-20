@@ -1,7 +1,7 @@
 <script>
   /** @extends {"./BreadcrumbSkeleton.svelte"} BreadcrumbSkeletonProps */
 
-  /** Set to `true` to hide the breadcrumb trailing slash */
+  /** Set to `true` to hide the separator after the last breadcrumb item */
   export let noTrailingSlash = false;
 
   /** Set to `true` to display skeleton state */
@@ -16,6 +16,9 @@
    */
   export let size = "md";
 
+  /** Specify the separator character rendered between breadcrumb items */
+  export let separator = "/";
+
   import BreadcrumbSkeleton from "./BreadcrumbSkeleton.svelte";
 </script>
 
@@ -23,6 +26,7 @@
   <BreadcrumbSkeleton
     {noTrailingSlash}
     {size}
+    {separator}
     {...$$restProps}
     on:click
     on:mouseover
@@ -42,6 +46,7 @@
       class:bx--breadcrumb={true}
       class:bx--breadcrumb--no-trailing-slash={noTrailingSlash}
       class:bx--breadcrumb--sm={size === "sm"}
+      style:--ccs-separator="'{separator}'"
     >
       <slot />
     </ol>
