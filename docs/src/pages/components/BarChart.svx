@@ -14,6 +14,14 @@ description: Bar chart compares values across categories, grouped side by side, 
       revenue: 24 + p * 9 + i * (6 - p) + ((i * 7 + p * 5) % 8),
     })),
   );
+  const teams = [
+    ["Customer success", 182],
+    ["Platform engineering", 141],
+    ["Billing and payments", 97],
+    ["Identity and access", 64],
+    ["Developer relations", 38],
+    ["Security operations", 21],
+  ].map(([team, tickets]) => ({ team, tickets }));
   const single = data.filter((row) => row.product === "Cloud");
   const change = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"].map((month, i) => ({
     month,
@@ -48,6 +56,18 @@ Set `mode` to `"stacked"` to pile the series up. The y axis grows to fit the tal
 Set `mode` to `"normalized"` to show each series as a share of its category. The axis runs from 0% to 100%.
 
 <BarChart {data} x="quarter" y="revenue" series="product" title="Revenue mix" mode="normalized" />
+
+## Orientation
+
+Set `orientation` to `"horizontal"` to list the categories down the left side. It suits long labels and ranked lists, where upright bars would crowd the axis. `x` stays the category and `y` the value: only the direction changes. The left margin grows to fit the labels, up to 40% of the width.
+
+<BarChart data={teams} x="team" y="tickets" title="Open tickets by team" orientation="horizontal" height={260} />
+
+Every mode, threshold, and interaction works the same way.
+
+<BarChart {data} x="quarter" y="revenue" series="product" title="Stacked revenue" mode="stacked" orientation="horizontal" height={240}>
+  <ChartThreshold y={120} label="Target" kind="success" />
+</BarChart>
 
 ## Data
 
@@ -112,4 +132,4 @@ Set `grid`, `legend`, and `tooltip` to `false` to remove them.
 
 ## Accessibility
 
-The chart is a single tab stop. Left and Right move between categories, Up and Down between series, Enter or Space selects, and Escape clears. The focused category is highlighted with a band and the other bars are dimmed, rather than recoloring the focused bars, and its values are announced, such as "Q2: Cloud 35, Data 40, Security 46".
+The chart is a single tab stop. Left and Right move between categories, Up and Down between series, Enter or Space selects, and Escape clears. A horizontal chart follows the screen instead: Up and Down move between categories, Left and Right between series. The focused category is highlighted with a band and the other bars are dimmed, rather than recoloring the focused bars, and its values are announced, such as "Q2: Cloud 35, Data 40, Security 46".

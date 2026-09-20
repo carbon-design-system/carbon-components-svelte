@@ -7,6 +7,7 @@ description: Chart is the root that chart primitives compose inside. It turns lo
   import {
     Chart,
     ChartAxis,
+    ChartBars,
     ChartGrid,
     ChartLegend,
     ChartLine,
@@ -26,6 +27,11 @@ description: Chart is the root that chart primitives compose inside. It turns lo
       revenue: Math.round(30000 + r * 9000 + Math.sin(i / 5 + r) * 9000 + ((i * 7919 * (r + 1)) % 4000)),
     })),
   );
+  const byRegion = [
+    { region: "Europe, Middle East, and Africa", revenue: 412 },
+    { region: "Asia Pacific", revenue: 296 },
+    { region: "Americas", revenue: 538 },
+  ];
   const hours = data
     .filter((row) => row.region === "EMEA")
     .map((row, i) => ({ ...row, date: new Date(START + i * 3_600_000 * 1.5) }));
@@ -88,6 +94,18 @@ Time ticks land on calendar boundaries. When hourly ticks span several days, the
   <ChartLine points="none" />
 </Chart>
 
+### Orientation
+
+Set `orientation` to `"horizontal"` to run the x scale down the left side and the y scale along the bottom. `x` and `y` keep their meaning, so the same marks work: an axis on the left or right then reads the x scale, and one on the bottom or top reads the y scale. `ChartArea` does not support it.
+
+<Chart data={byRegion} x="region" y="revenue" title="Revenue by region" orientation="horizontal" height={200}>
+  <ChartGrid />
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartBars />
+  <svelte:fragment slot="tooltip"><ChartTooltip /></svelte:fragment>
+</Chart>
+
 ## Custom tooltip
 
 `ChartTooltip` passes `x`, `xLabel`, and the hovered `points` to its slot. Each point carries its `series`, `datum`, `color`, and a formatted `value`.
@@ -147,6 +165,8 @@ A mark is a component that reads the chart context and renders SVG. `groups` hol
   <text x={$scales.plot.x1} y={$scales.y.map(group.ys.at(-1))}>{group.key}</text>
 {/each}
 ```
+
+`scales.x` and `scales.y` return positions along their own scale. In a horizontal chart `scales.horizontal` is `true`, and `x.map` gives a vertical pixel while `y.map` gives a horizontal one, so a mark that supports both swaps the two when it draws.
 
 ## Accessibility
 
