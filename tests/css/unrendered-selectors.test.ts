@@ -26,6 +26,7 @@ const UNRENDERED = [
   // Pruned as styled-but-unrendered; see tests/css/unrendered-classes.test.ts.
   /inline-loading__checkmark\b(?!-)/,
   /--switcher \{/,
+  /--table-toolbar--sm\b/,
 ];
 
 describe("unrendered selectors", () => {
