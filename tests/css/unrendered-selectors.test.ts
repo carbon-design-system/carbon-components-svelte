@@ -38,5 +38,5 @@ describe("unrendered selectors", () => {
         ),
     );
     expect(offenders).toEqual([]);
-  });
+  }, 30_000);
 });

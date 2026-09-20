@@ -1,8 +1,5 @@
-import { join } from "node:path";
-import { compileAsync } from "sass-embedded";
 import { parseRules } from "../../scripts/lib/css-cascade";
-
-const CSS_DIR = join(__dirname, "../../css");
+import { compileEntry } from "./compile";
 
 describe("fluid text area focus ring", () => {
   it("uses a positioned ::after box-shadow, not outline, so the ring is not clipped by or painted under the invalid/warn footer", async () => {
@@ -13,17 +10,7 @@ describe("fluid text area focus ring", () => {
     // interrupt it. A positioned `::after` overlay paints above them.
     // `prefers-contrast` still gets a real outline, since box-shadow is
     // dropped in forced-colors mode.
-    const { css } = await compileAsync(join(CSS_DIR, "white.scss"), {
-      loadPaths: [join(CSS_DIR, "vendor")],
-      quietDeps: true,
-      silenceDeprecations: [
-        "import",
-        "global-builtin",
-        "color-functions",
-        "if-function",
-      ],
-      logger: { warn() {}, debug() {} },
-    });
+    const css = await compileEntry("white.scss");
     const rules = parseRules(css);
     const ring = rules.filter(
       (r) =>
@@ -52,17 +39,7 @@ describe("fluid text area focus ring", () => {
     // `:not(:focus-within) { border: 2px solid ... }` alone reverts to a 0px
     // border on focus, shrinking the wrapper's border-box height by 4px.
     // The border must stay 2px in both states; only the color toggles.
-    const { css } = await compileAsync(join(CSS_DIR, "white.scss"), {
-      loadPaths: [join(CSS_DIR, "vendor")],
-      quietDeps: true,
-      silenceDeprecations: [
-        "import",
-        "global-builtin",
-        "color-functions",
-        "if-function",
-      ],
-      logger: { warn() {}, debug() {} },
-    });
+    const css = await compileEntry("white.scss");
     const rules = parseRules(css);
     const always = rules.find(
       (r) =>
@@ -88,17 +65,7 @@ describe("fluid text area focus ring", () => {
     // textarea's own rule (0,2,0). If that rule sets `border-block-end:
     // none` (0px) instead of a transparent 1px, the wrapper is 1px shorter
     // at rest than once focused.
-    const { css } = await compileAsync(join(CSS_DIR, "white.scss"), {
-      loadPaths: [join(CSS_DIR, "vendor")],
-      quietDeps: true,
-      silenceDeprecations: [
-        "import",
-        "global-builtin",
-        "color-functions",
-        "if-function",
-      ],
-      logger: { warn() {}, debug() {} },
-    });
+    const css = await compileEntry("white.scss");
     const rules = parseRules(css);
     const warning = rules.find(
       (r) =>

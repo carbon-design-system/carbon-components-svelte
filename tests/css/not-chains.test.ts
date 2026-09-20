@@ -1,23 +1,9 @@
-import { join } from "node:path";
-import { compileAsync } from "sass-embedded";
 import { parseRules } from "../../scripts/lib/css-cascade";
-
-const CSS_DIR = join(__dirname, "../../css");
+import { compileEntry } from "./compile";
 
 describe(":not() chains", () => {
   it("do not grow back where a marker class would do", async () => {
-    const { css } = await compileAsync(join(CSS_DIR, "all.scss"), {
-      style: "compressed",
-      loadPaths: [join(CSS_DIR, "vendor")],
-      quietDeps: true,
-      silenceDeprecations: [
-        "import",
-        "global-builtin",
-        "color-functions",
-        "if-function",
-      ],
-      logger: { warn() {}, debug() {} },
-    });
+    const css = await compileEntry("all.scss", "compressed");
     const chains = (selector: string) =>
       (selector.match(/:not\(/g) ?? []).length;
     const selectors = [...new Set(parseRules(css).map((r) => r.selector))];

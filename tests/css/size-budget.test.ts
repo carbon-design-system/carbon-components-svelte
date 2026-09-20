@@ -1,10 +1,7 @@
-import { join } from "node:path";
 import { gzipSync } from "node:zlib";
 import { transform } from "lightningcss";
-import { compileAsync } from "sass-embedded";
 import { targets } from "../../scripts/lib/css-targets";
-
-const CSS_DIR = join(__dirname, "../../css");
+import { compileEntry } from "./compile";
 
 // Shipped size of each entry: sass compressed, then the same Lightning CSS
 // pass `BUILD_CSS_MINIFY=1` and release run. Ceilings sit about 2% above the
@@ -22,18 +19,7 @@ const BUDGETS: Record<string, { min: number; gzip: number }> = {
 describe("css size budget", () => {
   for (const [entry, budget] of Object.entries(BUDGETS)) {
     it(`${entry} stays within its minified and gzipped budget`, async () => {
-      const { css } = await compileAsync(join(CSS_DIR, entry), {
-        style: "compressed",
-        loadPaths: [join(CSS_DIR, "vendor")],
-        quietDeps: true,
-        silenceDeprecations: [
-          "import",
-          "global-builtin",
-          "color-functions",
-          "if-function",
-        ],
-        logger: { warn() {}, debug() {} },
-      });
+      const css = await compileEntry(entry, "compressed");
       const { code } = transform({
         filename: entry.replace(".scss", ".css"),
         code: Buffer.from(css, "utf8"),

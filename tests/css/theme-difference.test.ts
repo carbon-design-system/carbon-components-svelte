@@ -1,22 +1,9 @@
-import { join } from "node:path";
-import { compileAsync } from "sass-embedded";
 import { parseRules } from "../../scripts/lib/css-cascade";
-
-const CSS_DIR = join(__dirname, "../../css");
+import { compileEntry } from "./compile";
 
 describe("all.scss theme tokens", () => {
   it("non-default themes only re-declare tokens that differ from :root", async () => {
-    const { css } = await compileAsync(join(CSS_DIR, "all.scss"), {
-      loadPaths: [join(CSS_DIR, "vendor")],
-      quietDeps: true,
-      silenceDeprecations: [
-        "import",
-        "global-builtin",
-        "color-functions",
-        "if-function",
-      ],
-      logger: { warn() {}, debug() {} },
-    });
+    const css = await compileEntry("all.scss");
     const tokens = (selector: string) => {
       const rule = parseRules(css).find(
         (r) => r.selector === selector && r.context === "",
