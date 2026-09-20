@@ -189,13 +189,15 @@ Set `locale` to a BCP 47 language tag to control how the default `sortItem` orde
 
 ### No alphabetical ordering
 
-Prevent automatic alphabetical ordering by passing a no-op function to `sortItem`. This maintains the original order of items.
+Set `sortItem` to `false` to keep items in their original `items` order, skipping the sort entirely. A no-op function (`sortItem="{() => {}}"`) still works the same way, but pays for a sort that changes nothing. Prefer `false`.
+
+If `items` is already sorted the way you want (for example, sorted server-side), leaving `sortItem` at its default still works: sorting an already-sorted array costs about `n` comparisons rather than `n log n`, so it's nearly free.
 
 <MultiSelect labelText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"},
     {id: "2", text: "Fax"}]}"
-    sortItem="{() => {}}"
+    sortItem="{false}"
   />
 
 ### Clear selection
