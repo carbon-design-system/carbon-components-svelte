@@ -5,6 +5,7 @@
 export { default as Chart } from "./Chart/Chart.svelte";
 export { default as ChartAxis } from "./Chart/ChartAxis.svelte";
 export { default as ChartGrid } from "./Chart/ChartGrid.svelte";
+export { default as ChartLine } from "./Chart/ChartLine.svelte";
 export { CHART_CONTEXT } from "./Chart/context.js";
 export { default as DeltaIndicator } from "./DeltaIndicator/DeltaIndicator.svelte";
 export { default as FunnelBars } from "./FunnelBars/FunnelBars.svelte";
