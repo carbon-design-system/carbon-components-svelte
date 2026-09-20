@@ -22,7 +22,10 @@ describe("any-hover media query grouping", () => {
     // a future change re-scattering the blocks gets caught. Raised from 40
     // when the hand-authored partials adopted the guard (one block each,
     // more only where moving a hover rule would reorder the cascade).
-    const blocks = css.match(/@media\(any-hover: hover\)\{/g) ?? [];
+    // Whitespace-tolerant so the count holds for expanded and compressed
+    // output; the lower bound fails the test if the pattern stops matching.
+    const blocks = css.match(/@media\s*\(any-hover:\s*hover\)\s*\{/g) ?? [];
+    expect(blocks.length).toBeGreaterThan(0);
     expect(blocks.length).toBeLessThanOrEqual(55);
   }, 30_000);
 });
