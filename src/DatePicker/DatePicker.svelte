@@ -205,6 +205,9 @@
   const readonlyAny = derived(inputs, (_) =>
     _.some(({ readonly }) => readonly),
   );
+  const disabledAny = derived(inputs, (_) =>
+    _.some(({ disabled }) => disabled),
+  );
   const invalidAny = derived(inputs, (_) => _.some(({ invalid }) => invalid));
   const warnAny = derived(inputs, (_) => _.some(({ warn }) => warn));
   const sharedFluid = writable(false);
@@ -403,7 +406,13 @@
   function add(data) {
     inputs.update((_) => [
       ..._,
-      { readonly: false, invalid: false, warn: false, ...data },
+      {
+        readonly: false,
+        disabled: false,
+        invalid: false,
+        warn: false,
+        ...data,
+      },
     ]);
   }
 
@@ -422,6 +431,13 @@
    */
   function setReadonly(id, readonly) {
     updateInput(id, { readonly });
+  }
+
+  /**
+   * @type {(id: string, disabled: boolean) => void}
+   */
+  function setDisabled(id, disabled) {
+    updateInput(id, { disabled });
   }
 
   /**
@@ -640,6 +656,7 @@
     isFluid: sharedFluid,
     add,
     setReadonly,
+    setDisabled,
     setValidation,
     declareRef,
     updateValue,
@@ -934,6 +951,15 @@
       "aria-label",
       "calendar-container",
     );
+    if (calendar.config.inline) {
+      for (const type of BLOCKED_EVENTS) {
+        calendar.calendarContainer?.addEventListener(
+          type,
+          handleBlockedInteraction,
+          { capture: true },
+        );
+      }
+    }
     if ($mode === "multiple") {
       calendar?.calendarContainer?.addEventListener(
         "click",
@@ -952,6 +978,23 @@
     }
   }
 
+  /**
+   * An inline calendar stays on screen while its input is read-only or
+   * disabled, unlike the popup, which simply never opens. Stop flatpickr's
+   * own listeners from seeing the interaction.
+   *
+   * @param {Event} event
+   */
+  function handleBlockedInteraction(event) {
+    if (!interactionBlocked) return;
+    event.stopImmediatePropagation();
+    if (event.type !== "keydown" || event.key !== "Tab") {
+      event.preventDefault();
+    }
+  }
+
+  const BLOCKED_EVENTS = ["click", "mousedown", "keydown"];
+
   function destroyCalendar() {
     detachFixedRepositionListeners();
     if (!calendar) return;
@@ -969,6 +1012,13 @@
       clearRangePreview,
     );
     window.removeEventListener("keyup", handleShiftKeyUp);
+    for (const type of BLOCKED_EVENTS) {
+      calendar.calendarContainer?.removeEventListener(
+        type,
+        handleBlockedInteraction,
+        { capture: true },
+      );
+    }
     calendar.destroy();
     calendar = null;
     calendarOpen = false;
@@ -1028,6 +1078,14 @@
   $: if (calendar && initialMonthChanged(initialMonth, prevInitialMonth)) {
     prevInitialMonth = initialMonth;
     applyInitialMonth();
+  }
+  $: interactionBlocked = $readonlyAny || $disabledAny;
+  $: if (calendar?.config.inline) {
+    if (interactionBlocked) {
+      calendar.calendarContainer.setAttribute("aria-disabled", "true");
+    } else {
+      calendar.calendarContainer.removeAttribute("aria-disabled");
+    }
   }
   $: if (datePickerType !== prevDatePickerType) {
     prevDatePickerType = datePickerType;
