@@ -10,6 +10,7 @@ export { scaleBand, scalePoint } from "./utils/scale-band.js";
 export { scaleLinear } from "./utils/scale-linear.js";
 export { scaleLog } from "./utils/scale-log.js";
 export { scaleTime } from "./utils/scale-time.js";
+export { stack } from "./utils/stack.js";
 export { niceDomain, tickStep, ticks } from "./utils/ticks.js";
 export {
   niceTimeDomain,
