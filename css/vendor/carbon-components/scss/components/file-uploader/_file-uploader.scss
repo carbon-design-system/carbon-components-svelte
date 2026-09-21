@@ -22,7 +22,6 @@
     width: 100%;
   }
 
-  // TODO: sync with type
   .#{$prefix}--file--label {
     @include reset;
     @include type-style('productive-heading-01');
@@ -218,7 +217,6 @@
     color: $text-01;
   }
 
-  // TODO: deprecate
   .#{$prefix}--file__selected-file--invalid + .#{$prefix}--form-requirement {
     @include type-style('caption-01', $omit: (font-weight));
 

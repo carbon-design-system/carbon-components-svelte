@@ -33,7 +33,6 @@ $carbon--base-font-size: 16px !default;
 /// @group @carbon/layout
 @function to-rem($px) {
   @if unit($px) != 'px' {
-    // TODO: update to @error in v11
     @warn "Expected argument $px to be of type `px`, instead received: `#{unit($px)}`";
   }
 
@@ -52,7 +51,6 @@ $carbon--base-font-size: 16px !default;
 /// @group @carbon/layout
 @function rem($px) {
   @if unit($px) != 'px' {
-    // TODO: update to @error in v11
     @warn "Expected argument $px to be of type `px`, instead received: `#{unit($px)}`";
   }
 
@@ -70,7 +68,6 @@ $carbon--base-font-size: 16px !default;
 /// @group @carbon/layout
 @function carbon--em($px) {
   @if unit($px) != 'px' {
-    // TODO: update to @error in v11
     @warn "Expected argument $px to be of type `px`, instead received: `#{unit($px)}`";
   }
 

@@ -257,7 +257,6 @@
     height: to-rem(14px);
   }
 
-  // TODO: remove namespace and suffix in next major release
   .#{$prefix}--tabs--scrollable {
     @include reset;
     @include type-style('body-short-01');

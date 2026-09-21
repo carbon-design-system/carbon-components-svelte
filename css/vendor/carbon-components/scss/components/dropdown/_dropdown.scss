@@ -65,7 +65,6 @@
     text-align: left;
   }
 
-  // TODO V11: Remove xl selector
   .#{$prefix}--dropdown--xl {
     height: to-rem(48px);
     max-height: to-rem(48px);
@@ -118,12 +117,10 @@
       outline: none;
     }
 
-    // TODO: remove in v11
     .#{$prefix}--list-box__label {
       color: $text-disabled;
     }
 
-    // TODO: remove in v11
     .#{$prefix}--list-box__menu-icon svg {
       fill: $icon-disabled;
     }

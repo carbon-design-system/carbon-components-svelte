@@ -85,7 +85,6 @@
     max-width: mini-units(32);
     background-color: $shell-side-nav-bg-01;
     color: $shell-side-nav-text-01;
-    // TODO: sync with motion work
     transition: width 0.11s cubic-bezier(0.2, 0, 1, 0.9);
   }
 
@@ -191,7 +190,6 @@
     .#{$prefix}--side-nav .#{$prefix}--header__menu-item:hover,
     .#{$prefix}--side-nav
       .#{$prefix}--header__menu-title[aria-expanded='true']:hover { // ccs: flatten
-      // TODO: sync color
       background-color: $shell-side-nav-bg-04;
       color: $text-primary;
     }
