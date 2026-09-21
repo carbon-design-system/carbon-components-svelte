@@ -48,6 +48,7 @@
     releaseBodyScrollLock,
   } from "../utils/body-scroll-lock.js";
   import { dismiss } from "../utils/dismiss.js";
+  import { trapFocus } from "../utils/trap-focus.js";
   import {
     hamburgerMenuRef,
     isSideNavCollapsed,
@@ -65,6 +66,7 @@
 
   const dispatch = createEventDispatcher();
 
+  let navRef = undefined;
   let winWidth = undefined;
   let prevIsOpen = isOpen;
 
@@ -126,10 +128,16 @@
   ></div>
 {/if}
 <nav
+  bind:this={navRef}
   use:dismiss={{
     enabled: isOpen && !fixed && $isSideNavMobile,
     type: "keydown",
     handler: handleEscape,
+  }}
+  on:keydown={(event) => {
+    if (isOpen && !fixed && $isSideNavMobile && event.key === "Tab") {
+      trapFocus({ container: navRef, event });
+    }
   }}
   aria-hidden={!isOpen}
   aria-label={ariaLabel}
