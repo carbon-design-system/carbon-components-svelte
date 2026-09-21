@@ -3,6 +3,7 @@
     AreaChart,
     BarChart,
     BulletChart,
+    CalendarHeatmap,
     ComparisonBar,
     DeltaIndicator,
     DonutChart,
@@ -175,6 +176,15 @@
     title="Revenue by region and month"
     rowHeader="Region"
     cellLabels
+    selectable
+  />
+
+  <CalendarHeatmap
+    data={revenue}
+    date="date"
+    value="revenue"
+    year={2026}
+    title="Revenue by day"
     selectable
   />
 
