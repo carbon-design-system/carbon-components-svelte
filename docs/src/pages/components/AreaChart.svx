@@ -91,7 +91,7 @@ Add marks in the default slot. A `ChartThreshold` draws a labelled rule and keep
 
 ## Data table and export
 
-Set `toolbar` to add a button that swaps the chart for a table of every value, and one that downloads the visible series as CSV.
+Set `toolbar` to add buttons that swap the chart for a table of every value, download the plot as a PNG or the visible series as CSV, and show the chart fullscreen.
 
 <AreaChart {data} x="date" y="sessions" series="channel" title="Sessions by channel" stack="stacked" toolbar />
 

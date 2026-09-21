@@ -169,6 +169,16 @@ The table is the chart's text alternative. `Chart` renders a `ChartDataTable` wh
   <ChartLegend slot="legend" />
 </Chart>
 
+### Image and fullscreen
+
+The toolbar also downloads the plot as an image and shows the chart fullscreen. Set `image` to `"png"` (the default), `"svg"`, or `false`, and `fullscreen` to `false` to drop that button. It is left out on its own where the browser has no Fullscreen API, such as Safari on iPhone.
+
+The image holds the plot, the title, and the visible series, on the background the chart sits on, so it matches the theme. Styles are resolved and written into the file, because the custom properties that color the chart mean nothing outside the page. Web fonts cannot follow, so text falls back to a system font. A PNG is drawn at twice the pixel density.
+
+While fullscreen, the plot grows to fill what the title, toolbar, and legend leave of the screen, and returns to `height` on exit.
+
+Both are on the chart context for a control of your own: `exportImage("png" | "svg")` resolves to a `Blob` or to markup, and `toggleFullscreen()` pairs with the `fullscreen` store.
+
 ## Writing a mark
 
 A mark is a component that reads the chart context and renders SVG. `groups` holds the series, `scales` maps data to pixels, and `hover` holds the focused point. Subscribe only to what you draw from: a mark that reads `groups` and `scales` but not `hover` never re-renders while the pointer moves.

@@ -148,7 +148,7 @@ Bind `selected` and `hidden`, and listen for `select` and `legend:toggle`. Click
 
 ## Data table and export
 
-Set `toolbar` to add a button that swaps the chart for a table of every value, and one that downloads the visible series as CSV. The table is the chart's text alternative: it needs no pointer and no color vision, and assistive technology reads it as an ordinary table. Bind `view` to control it yourself.
+Set `toolbar` to add buttons that swap the chart for a table of every value, download the plot as a PNG or the visible series as CSV, and show the chart fullscreen. The table is the chart's text alternative: it needs no pointer and no color vision, and assistive technology reads it as an ordinary table. Bind `view` to control it yourself.
 
 <LineChart {data} x="date" y="revenue" series="region" title="Revenue by region" toolbar />
 

@@ -120,7 +120,7 @@ Set `colors` to fix a color per series, and `yFormat` to `Intl.NumberFormat` opt
 
 ## Data table and export
 
-Set `toolbar` to add a button that swaps the chart for a table of every value, and one that downloads the visible series as CSV. Bind `view` to control it yourself.
+Set `toolbar` to add buttons that swap the chart for a table of every value, download the plot as a PNG or the visible series as CSV, and show the chart fullscreen. Bind `view` to control it yourself.
 
 <BarChart {data} x="quarter" y="revenue" series="product" title="Revenue by quarter" toolbar />
 
