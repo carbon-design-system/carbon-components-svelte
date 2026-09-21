@@ -6,6 +6,7 @@
     BulletChart,
     CalendarHeatmap,
     CohortTable,
+    ComboChart,
     ComparisonBar,
     DeltaIndicator,
     DonutChart,
@@ -213,6 +214,26 @@
     markers={[{ x: 40000, label: "Goal" }]}
     title="Distribution of monthly revenue"
     height={220}
+  />
+
+  <ComboChart
+    data={[
+      ...stages.map((stage) => ({ ...stage, metric: "Users" })),
+      ...stages.map((stage) => ({
+        ...stage,
+        metric: "Share",
+        value: stage.value / 10000,
+      })),
+    ]}
+    x="label"
+    y="value"
+    series="metric"
+    bars={["Users"]}
+    lines={["Share"]}
+    secondary={["Share"]}
+    y2Format={{ style: "percent" }}
+    title="Users and share by stage"
+    height={240}
   />
 
   <BoxplotChart
