@@ -4,6 +4,7 @@ export { default as BarChart } from "./BarChart/BarChart.svelte";
 // Styles ship separately in `carbon-components-svelte/css/viz.css`.
 // May import from core (`../utils`, `../icons`); core must never import from here.
 
+export { default as BoxplotChart } from "./BoxplotChart/BoxplotChart.svelte";
 export { default as BulletChart } from "./BulletChart/BulletChart.svelte";
 export { default as CalendarHeatmap } from "./CalendarHeatmap/CalendarHeatmap.svelte";
 export { default as Chart } from "./Chart/Chart.svelte";
