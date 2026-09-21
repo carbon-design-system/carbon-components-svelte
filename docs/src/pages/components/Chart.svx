@@ -1,5 +1,5 @@
 ---
-components: ["Chart", "ChartAxis", "ChartGrid", "ChartLine", "ChartArea", "ChartBars", "ChartBins", "ChartBoxes", "ChartLollipops", "ChartPoints", "ChartRuler", "ChartTooltip", "ChartTooltipRow", "ChartLegend", "ChartThreshold", "ChartMarker", "ChartToolbar", "ChartDataTable"]
+components: ["Chart", "ChartAxis", "ChartGrid", "ChartLine", "ChartArea", "ChartBars", "ChartBins", "ChartBoxes", "ChartLollipops", "ChartPoints", "ChartRuler", "ChartTooltip", "ChartTooltipRow", "ChartLegend", "ChartThreshold", "ChartMarker", "ChartToolbar", "ChartDataTable", "ChartZoomBar"]
 description: Chart is the root that chart primitives compose inside. It turns long format rows into series, scales, and a plot box, and shares them with the marks you place in it.
 ---
 
@@ -16,6 +16,7 @@ description: Chart is the root that chart primitives compose inside. It turns lo
     ChartToolbar,
     ChartTooltip,
     ChartTooltipRow,
+    ChartZoomBar,
   } from "carbon-components-svelte/viz";
 
   const DAY = 86_400_000;
@@ -202,6 +203,22 @@ The image holds the plot, the title, and the visible series, on the background t
 While fullscreen, the plot grows to fill what the title, toolbar, and legend leave of the screen, and returns to `height` on exit.
 
 Both are on the chart context for a control of your own: `exportImage("png" | "svg")` resolves to a `Blob` or to markup, and `toggleFullscreen()` pairs with the `fullscreen` store.
+
+## Zoom
+
+`ChartZoomBar` goes in the `zoom` slot, under the plot. It draws the whole dataset small, with a window over the visible range: drag a handle to resize it, drag the window to pan, and double click to reset. Bind `zoom` on the chart to read or set the range yourself. It applies to a time or numeric x, and renders nothing over categories.
+
+While zoomed, marks are clipped to the plot and the y axis keeps its full range, so values stay comparable as the window moves.
+
+<Chart {data} x="date" y="revenue" series="region" title="Revenue by region" height={220}>
+  <ChartGrid />
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartLine points="none" />
+  <ChartZoomBar slot="zoom" />
+  <ChartLegend slot="legend" />
+  <svelte:fragment slot="tooltip"><ChartTooltip /></svelte:fragment>
+</Chart>
 
 ## Color palettes
 
