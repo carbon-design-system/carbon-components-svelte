@@ -19,9 +19,29 @@
    * @bindable readonly
    */
   export let ref = null;
+
+  import { getContext, onMount } from "svelte";
+  import { readable } from "svelte/store";
+  import { fuzzyMatch } from "../utils/fuzzy-match.js";
+  import { uniqueId } from "../utils/unique-id.js";
+
+  const menuCtx = getContext("carbon:SideNavMenu");
+  const { query, setChildMatch, unregisterChild } = menuCtx ?? {
+    query: readable(""),
+    setChildMatch: () => {},
+    unregisterChild: () => {},
+  };
+  const id = uniqueId();
+
+  $: matchText = text ?? ref?.textContent ?? "";
+  $: matches = fuzzyMatch(matchText, $query).matched;
+  $: setChildMatch(id, matches);
+  $: hiddenByFilter = $query.length > 0 && !matches;
+
+  onMount(() => () => unregisterChild(id));
 </script>
 
-<li class:bx--side-nav__menu-item={true}>
+<li hidden={hiddenByFilter || undefined} class:bx--side-nav__menu-item={true}>
   <a
     bind:this={ref}
     aria-current={isSelected ? "page" : undefined}

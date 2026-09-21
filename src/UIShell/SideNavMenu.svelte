@@ -30,15 +30,73 @@
    */
   export let ref = null;
 
+  import { getContext, onMount, setContext } from "svelte";
+  import { readable, writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
+  import { uniqueId } from "../utils/unique-id.js";
   import { isSideNavCollapsed, isSideNavRail } from "./nav-store.js";
 
-  $: if ($isSideNavRail && $isSideNavCollapsed) {
-    expanded = false;
+  const outerFilterCtx = getContext("carbon:SideNavItems");
+  const { query, setItemMatch, unregisterItem } = outerFilterCtx ?? {
+    query: readable(""),
+    setItemMatch: () => {},
+    unregisterItem: () => {},
+  };
+  const id = uniqueId();
+
+  /** @type {Map<string, boolean>} */
+  const childMatches = new Map();
+  const anyChildVisible = writable(false);
+
+  function recomputeChildVisible() {
+    anyChildVisible.set(Array.from(childMatches.values()).some(Boolean));
+  }
+
+  /**
+   * @param {string} childId
+   * @param {boolean} isVisible
+   */
+  function setChildMatch(childId, isVisible) {
+    childMatches.set(childId, isVisible);
+    recomputeChildVisible();
+  }
+
+  /** @param {string} childId */
+  function unregisterChild(childId) {
+    childMatches.delete(childId);
+    recomputeChildVisible();
+  }
+
+  // Children (`SideNavMenuItem`) register against this nested context rather
+  // than the outer `SideNavItems` one, so only this menu's own descendants
+  // count toward whether this menu itself has a visible match.
+  setContext("carbon:SideNavMenu", { query, setChildMatch, unregisterChild });
+
+  $: groupVisible = $query.length === 0 || $anyChildVisible;
+  $: setItemMatch(id, groupVisible);
+  onMount(() => () => unregisterItem(id));
+
+  let savedExpanded = expanded;
+  let wasFiltering = false;
+  $: {
+    const filtering = $query.length > 0;
+    if ($isSideNavRail && $isSideNavCollapsed) {
+      expanded = false;
+    }
+    if (filtering && !wasFiltering) {
+      savedExpanded = expanded;
+    }
+    if (filtering) {
+      if ($anyChildVisible) expanded = true;
+    } else if (wasFiltering) {
+      expanded = savedExpanded;
+    }
+    wasFiltering = filtering;
   }
 </script>
 
 <li
+  hidden={!groupVisible || undefined}
   class:bx--side-nav__item={true}
   class:bx--side-nav__item--icon={icon}
   class:bx--side-nav__item--large={large}

@@ -1,0 +1,24 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// SideNavFilter: a `Search` input rendered as a top-level `SideNavItems`
+/// child, with a no-results message shown below it. Not a Carbon component;
+/// spacing is chosen to sit flush with the side nav's own item padding.
+/// @access private
+/// @group components
+@mixin side-nav-filter {
+  .#{$prefix}--side-nav-filter {
+    padding: $carbon--spacing-03 $carbon--spacing-03 $carbon--spacing-02;
+  }
+
+  .#{$prefix}--side-nav-filter__no-results {
+    padding: $carbon--spacing-03 $carbon--spacing-05;
+    color: $text-02;
+    @include type-style("body-short-01");
+  }
+}
+
+@include exports("side-nav-filter") {
+  @include side-nav-filter;
+}
