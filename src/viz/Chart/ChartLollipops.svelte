@@ -9,9 +9,17 @@
   /** Specify the gap between slots, as a fraction of the slot */
   export let padding = 0.2;
 
+  /**
+   * Specify the series to draw. Defaults to every series, so set it when
+   * marks share a chart, as bars and a line do in a combo.
+   * @type {ReadonlyArray<string | number>}
+   */
+  export let series = undefined;
+
   import { getContext, onMount } from "svelte";
   import { buildBars } from "./bar-geometry.js";
   import { CHART_CONTEXT } from "./context.js";
+  import { pickGroups } from "./model.js";
 
   /** @type {import("./context.js").ChartContext} */
   const { groups, scales, hover, useBand } = getContext(CHART_CONTEXT);
@@ -24,22 +32,24 @@
   // A lollipop is a bar drawn as a stem and a head: the bar geometry already
   // knows its lane, its zero, and which way it grows. Depends on groups and
   // scales only, so hover never rebuilds it.
-  $: pops = buildBars($groups, $scales, { padding }).map((bar) => {
-    const negative = bar.value < 0;
-    const middle = $scales.horizontal
-      ? bar.y + bar.height / 2
-      : bar.x + bar.width / 2;
-    const [from, to] = $scales.horizontal
-      ? negative
-        ? [bar.x + bar.width, bar.x]
-        : [bar.x, bar.x + bar.width]
-      : negative
-        ? [bar.y, bar.y + bar.height]
-        : [bar.y + bar.height, bar.y];
-    return $scales.horizontal
-      ? { ...bar, x1: from, x2: to, y1: middle, y2: middle }
-      : { ...bar, x1: middle, x2: middle, y1: from, y2: to };
-  });
+  $: pops = buildBars(pickGroups($groups, series), $scales, { padding }).map(
+    (bar) => {
+      const negative = bar.value < 0;
+      const middle = $scales.horizontal
+        ? bar.y + bar.height / 2
+        : bar.x + bar.width / 2;
+      const [from, to] = $scales.horizontal
+        ? negative
+          ? [bar.x + bar.width, bar.x]
+          : [bar.x, bar.x + bar.width]
+        : negative
+          ? [bar.y, bar.y + bar.height]
+          : [bar.y + bar.height, bar.y];
+      return $scales.horizontal
+        ? { ...bar, x1: from, x2: to, y1: middle, y2: middle }
+        : { ...bar, x1: middle, x2: middle, y1: from, y2: to };
+    },
+  );
   $: band =
     $hover && $scales.step
       ? { at: $scales.x.map($hover.x) - $scales.step / 2, size: $scales.step }

@@ -26,6 +26,10 @@
   } = getContext(CHART_CONTEXT);
 
   $: table = buildTableRows($groups);
+  // A series on the secondary axis is written in that axis's format.
+  $: secondaryKeys = new Set(
+    $groups.filter((group) => group.axis === "y2").map((group) => group.key),
+  );
 </script>
 
 <!-- Focusable so a keyboard can scroll a table taller than the chart. -->
@@ -59,7 +63,9 @@
           {#each row.values as value, i (table.series[i])}
             <td class:bx--viz-data-table__number={true}>
               {value !== undefined && Number.isFinite(value)
-                ? $scales.yFormat(value)
+                ? (secondaryKeys.has(table.series[i])
+                    ? $scales.y2Format
+                    : $scales.yFormat)(value)
                 : emptyText}
             </td>
           {/each}

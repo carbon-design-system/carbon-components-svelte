@@ -1,8 +1,10 @@
 // @ts-check
 // Layer geometry for the `Area` mark, kept out of the component so a test can
 // count how often it runs.
+
 import { pathArea } from "../utils/path-area.js";
 import { pathLine } from "../utils/path-line.js";
+import { yScaleOf } from "./model.js";
 
 /** @typedef {import("./area-geometry.d.ts").AreaLayer} AreaLayer */
 /** @typedef {import("./area-geometry.d.ts").AreaOptions} AreaOptions */
@@ -71,17 +73,22 @@ export function buildAreas(groups, scales, options = {}) {
   const path = { curve, precision: 1 };
 
   if (stack === "none") {
-    const zero = Math.min(
-      scales.plot.y1,
-      Math.max(scales.plot.y0, scales.y.map(0)),
-    );
     return visible.map((group) => {
+      // Each layer rises from zero on the axis its series is plotted on.
+      const scale = yScaleOf(scales, group);
+      const zero = Math.min(
+        scales.plot.y1,
+        Math.max(scales.plot.y0, scale.map(0)),
+      );
       /** @type {Map<number, number>} */
       const tops = new Map();
       const points = group.xs.map((x, i) => {
         const value = group.ys[i];
         if (!Number.isFinite(value)) return null;
-        const point = { x: scales.x.map(x), y: scales.y.map(value) };
+        const point = {
+          x: scales.x.map(x),
+          y: scale.map(value),
+        };
         tops.set(x, point.y);
         return point;
       });

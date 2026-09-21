@@ -26,6 +26,8 @@ export type ChartGroup<T> = {
   /** Resolved CSS color, usually a `var(--cds-viz-*)` reference. */
   color: string;
   hidden: boolean;
+  /** Which y scale the series is plotted on. Defaults to the first. */
+  axis?: "y" | "y2";
 };
 
 export type ChartXKind = "time" | "linear" | "category";
@@ -37,6 +39,8 @@ export type BuiltGroups<T> = {
   /** Extent over visible series. `null` when there is nothing to plot. */
   xExtent: [number, number] | null;
   yExtent: [number, number] | null;
+  /** Extent over the visible series on the secondary axis. */
+  y2Extent: [number, number] | null;
 };
 
 export type BuildGroupsOptions<T> = {
@@ -44,6 +48,8 @@ export type BuildGroupsOptions<T> = {
   y: (row: T, index: number) => number | null | undefined;
   series: (row: T, index: number) => ChartSeriesKey;
   hidden?: ReadonlyArray<ChartSeriesKey>;
+  /** Series plotted on a secondary y axis, with its own domain. */
+  secondary?: ReadonlyArray<ChartSeriesKey>;
   /** Fixed color per series key. */
   colors?: Record<string, VizColor>;
   /** Which of Carbon's prescribed color groups to use, 1-based. */
@@ -60,6 +66,8 @@ export type BuildGroupsOptions<T> = {
 export type ChartDomain = {
   x: [number, number];
   y: [number, number];
+  /** Domain of the secondary y axis, or `null` without one. */
+  y2: [number, number] | null;
   kind: ChartXKind;
   categories: string[];
 };
@@ -68,7 +76,8 @@ export type ResolveDomainOptions = {
   /** Fixed bounds, or `"nice"` to round a numeric x out to tick values. */
   xDomain?: readonly [number | Date, number | Date] | "nice";
   yDomain?: readonly [number, number] | "auto" | "nice";
-  /** Include zero in the y domain. @default true */
+  y2Domain?: readonly [number, number] | "auto" | "nice";
+  /** Include zero in the y domains. @default true */
   zero?: boolean;
   /** Extra y values marks asked to keep in view. */
   include?: ReadonlyArray<number>;
@@ -82,6 +91,7 @@ export type BuildScalesOptions = {
   yFormat?: NumberFormat;
   xFormat?: (value: number) => string;
   xLabelFormat?: (value: number) => string;
+  y2Format?: NumberFormat;
   /** @default "vertical" */
   orientation?: "vertical" | "horizontal";
 };
@@ -105,6 +115,11 @@ export type ChartScales = {
   kind: ChartXKind;
   /** Labels for a categorical x, indexed by a group's `xs`. */
   categories: ReadonlyArray<string>;
+  /** The secondary y scale, or `null` when no series is plotted on one. */
+  y2: { map(value: number): number; invert(px: number): number } | null;
+  /** Secondary tick values, at the same positions as `yTicks`. */
+  y2Ticks: number[];
+  y2Format(value: number): string;
   /**
    * Whether the x scale maps onto vertical pixels and the y scale onto
    * horizontal ones, as for horizontal bars.
@@ -155,3 +170,18 @@ export function thinLabels(
   labels: ReadonlyArray<string>,
   gap?: number,
 ): boolean[];
+
+/**
+ * The y scale a group is plotted on: the secondary one for a series the
+ * chart was told to put there, when it has one.
+ */
+export function yScaleOf(
+  scales: ChartScales,
+  group: { axis?: "y" | "y2" },
+): ChartScales["y"];
+
+/** The groups a mark draws: all of them, or only the series it was given. */
+export function pickGroups<G extends { key: ChartSeriesKey }>(
+  groups: ReadonlyArray<G>,
+  keys: ReadonlyArray<ChartSeriesKey> | undefined,
+): ReadonlyArray<G>;

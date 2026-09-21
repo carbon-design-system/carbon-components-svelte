@@ -2,6 +2,8 @@
 // Rectangle geometry for the `Bars` mark, kept out of the component so a
 // test can count how often it runs.
 
+import { yScaleOf } from "./model.js";
+
 /** @typedef {import("./bar-geometry.d.ts").BarRect} BarRect */
 /** @typedef {import("./bar-geometry.d.ts").BarOptions} BarOptions */
 
@@ -42,7 +44,6 @@ export function buildBars(groups, scales, options = {}) {
   const [valueStart, valueEnd] = scales.horizontal
     ? [scales.plot.x0, scales.plot.x1]
     : [scales.plot.y0, scales.plot.y1];
-  const zero = Math.min(valueEnd, Math.max(valueStart, scales.y.map(0)));
 
   /** @type {Map<number, number>} */
   const totals = new Map();
@@ -80,8 +81,13 @@ export function buildBars(groups, scales, options = {}) {
         pile.set(index, from + value);
       }
 
-      const y0 = stacked ? scales.y.map(from) : zero;
-      const y1 = scales.y.map(from + value);
+      // A stack lives on the first axis. Side by side, each series may
+      // have its own.
+      const scale = stacked ? scales.y : yScaleOf(scales, group);
+      const y0 = stacked
+        ? scale.map(from)
+        : Math.min(valueEnd, Math.max(valueStart, scale.map(0)));
+      const y1 = scale.map(from + value);
       const center = scales.x.map(index);
       const left = stacked
         ? center - width / 2

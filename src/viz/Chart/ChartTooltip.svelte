@@ -16,7 +16,9 @@
   $: points = $hover
     ? $hover.points.map((point) => ({
         ...point,
-        value: $scales.yFormat(point.y),
+        value: (point.axis === "y2" ? $scales.y2Format : $scales.yFormat)(
+          point.y,
+        ),
       }))
     : [];
   // `px` runs along the x scale and `py` along the y scale. A horizontal

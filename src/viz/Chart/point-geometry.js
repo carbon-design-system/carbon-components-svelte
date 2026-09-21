@@ -2,6 +2,8 @@
 // Circle geometry for the `ChartPoints` mark, kept out of the component so a
 // test can count how often it runs.
 
+import { yScaleOf } from "./model.js";
+
 /**
  * One circle per visible datum with a finite x and y. With a `size`
  * accessor, the circle's area follows the value between the two radii, since
@@ -40,7 +42,7 @@ export function buildPoints(groups, scales, options = {}) {
     if (group.hidden) continue;
     for (let j = 0; j < group.xs.length; j++) {
       const along = scales.x.map(group.xs[j]);
-      const across = scales.y.map(group.ys[j]);
+      const across = yScaleOf(scales, group).map(group.ys[j]);
       if (!Number.isFinite(along) || !Number.isFinite(across)) continue;
 
       let r = radius;

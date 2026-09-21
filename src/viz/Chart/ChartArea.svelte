@@ -27,9 +27,17 @@
   /** Set to `false` to hide the point on the focused datum */
   export let points = true;
 
+  /**
+   * Specify the series to draw. Defaults to every series, so set it when
+   * marks share a chart, as bars and a line do in a combo.
+   * @type {ReadonlyArray<string | number>}
+   */
+  export let series = undefined;
+
   import { getContext, onMount } from "svelte";
   import { areaExtent, buildAreas } from "./area-geometry.js";
   import { CHART_CONTEXT } from "./context.js";
+  import { pickGroups } from "./model.js";
 
   /** @type {import("./context.js").ChartContext} */
   const { groups, scales, hover, includeY } = getContext(CHART_CONTEXT);
@@ -62,9 +70,10 @@
     registered = next;
   }
 
-  $: include($groups, stack);
+  $: mine = pickGroups($groups, series);
+  $: include(mine, stack);
   // Depends on groups and scales only, so hover never rebuilds a layer.
-  $: layers = buildAreas($groups, $scales, { stack, curve });
+  $: layers = buildAreas(mine, $scales, { stack, curve });
   $: fill = opacity ?? (stack === "none" ? 0.3 : 0.8);
   $: dots =
     points && $hover

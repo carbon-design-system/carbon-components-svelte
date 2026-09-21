@@ -4,6 +4,8 @@
 import { lttb } from "../utils/downsample-lttb.js";
 import { pathLine } from "../utils/path-line.js";
 
+import { yScaleOf } from "./model.js";
+
 /**
  * SVG path `d` for one series. A long series is downsampled to `budget`
  * points first, over an index array so the chart's own rows stay untouched.
@@ -43,7 +45,7 @@ export function buildLinePath(
       continue;
     }
     const along = scales.x.map(group.xs[index]);
-    const across = scales.y.map(value);
+    const across = yScaleOf(scales, group).map(value);
     points[k] = scales.horizontal
       ? { x: across, y: along }
       : { x: along, y: across };

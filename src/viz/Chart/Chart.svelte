@@ -113,6 +113,28 @@
   export let yFormat = undefined;
 
   /**
+   * Specify the series to plot on a secondary y axis, with its own domain.
+   * A `ChartAxis` on the right, or on top of a horizontal chart, reads it.
+   * Use it when two series have different units, and never for two series
+   * that share one, since the eye compares their heights.
+   * @type {ReadonlyArray<string | number>}
+   */
+  export let secondary = [];
+
+  /**
+   * Override the secondary y domain. `"nice"` rounds it out to tick values.
+   * @type {[number, number] | "auto" | "nice"}
+   */
+  export let y2Domain = "nice";
+
+  /**
+   * Specify how secondary y values are written: `Intl.NumberFormat` options
+   * or a function.
+   * @type {Intl.NumberFormatOptions | ((value: number) => string)}
+   */
+  export let y2Format = undefined;
+
+  /**
    * Override the x tick label format.
    * @type {(value: number) => string}
    */
@@ -195,6 +217,7 @@
     buildScales,
     resolveDomain,
     sameDomain,
+    yScaleOf,
   } from "./model.js";
   import { joinSync } from "./sync.js";
 
@@ -208,6 +231,7 @@
     /** @type {import("./model.js").ChartDomain} */ ({
       x: [0, 1],
       y: [0, 1],
+      y2: null,
       kind: "linear",
       categories: [],
     }),
@@ -432,6 +456,7 @@
     yFormat,
     xFormat,
     xLabelFormat,
+    y2Format,
     orientation,
   });
   $: effectiveHeight = fullscreenHeight || height;
@@ -450,6 +475,8 @@
     $included,
     $bandRequests > 0,
     locale,
+    secondary,
+    y2Domain,
   );
 
   function rebuild(
@@ -466,12 +493,15 @@
     /** @type {number[]} */ include,
     /** @type {boolean} */ band,
     /** @type {string | undefined} */ bandLocale,
+    /** @type {ReadonlyArray<string | number>} */ secondaryKeys,
+    /** @type {any} */ y2D,
   ) {
     const built = buildGroups(rows, {
       x: xA,
       y: yA,
       series: sA,
       hidden: hiddenKeys,
+      secondary: secondaryKeys,
       colors: colorMap,
       palette: paletteOption,
       band,
@@ -480,6 +510,7 @@
     const next = resolveDomain(built, {
       xDomain: xD,
       yDomain: yD,
+      y2Domain: y2D,
       zero: includeZero,
       include,
     });
@@ -562,7 +593,7 @@
       if (group.hidden) return;
       for (let j = 0; j < group.xs.length; j++) {
         const along = current.x.map(group.xs[j]);
-        const across = current.y.map(group.ys[j]);
+        const across = yScaleOf(current, group).map(group.ys[j]);
         if (!Number.isFinite(along) || !Number.isFinite(across)) continue;
         flat.push(
           current.horizontal
@@ -603,7 +634,8 @@
       datum: group.rows[entry.j],
       index: entry.j,
       y: group.ys[entry.j],
-      py: current.y.map(group.ys[entry.j]),
+      py: yScaleOf(current, group).map(group.ys[entry.j]),
+      axis: group.axis,
       color: group.color,
     };
     hover.set({
@@ -659,7 +691,8 @@
         datum: group.rows[index],
         index,
         y: group.ys[index],
-        py: current.y.map(group.ys[index]),
+        py: yScaleOf(current, group).map(group.ys[index]),
+        axis: group.axis,
         color: group.color,
       });
     }
@@ -830,7 +863,9 @@
     ? `${$scales.xLabel($hover.x)}: ${$hover.points
         .map(
           (/** @type {any} */ point) =>
-            `${point.series} ${$scales.yFormat(point.y)}`,
+            `${point.series} ${(point.axis === "y2"
+              ? $scales.y2Format
+              : $scales.yFormat)(point.y)}`,
         )
         .join(", ")}`
     : "";

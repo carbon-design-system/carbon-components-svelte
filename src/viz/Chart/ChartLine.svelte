@@ -42,6 +42,7 @@
   import { getContext } from "svelte";
   import { CHART_CONTEXT } from "./context.js";
   import { buildLinePath } from "./line-geometry.js";
+  import { yScaleOf } from "./model.js";
 
   const MAX_POINTS = 500;
 
@@ -72,7 +73,7 @@
             at: group.xs
               .map((value, index) => {
                 const along = $scales.x.map(value);
-                const across = $scales.y.map(group.ys[index]);
+                const across = yScaleOf($scales, group).map(group.ys[index]);
                 return {
                   x: $scales.horizontal ? across : along,
                   y: $scales.horizontal ? along : across,

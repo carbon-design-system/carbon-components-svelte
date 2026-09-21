@@ -34,7 +34,17 @@ const DAY = 86_400_000;
  */
 export function buildGroups(
   rows,
-  { x, y, series, hidden = [], colors, palette = 1, band = false, locale },
+  {
+    x,
+    y,
+    series,
+    hidden = [],
+    secondary = [],
+    colors,
+    palette = 1,
+    band = false,
+    locale,
+  },
 ) {
   const grouped = groupBy(rows, series);
   const defaults = categoricalColors(grouped.size, palette);
@@ -49,12 +59,15 @@ export function buildGroups(
   let xMax = Number.NEGATIVE_INFINITY;
   let yMin = Number.POSITIVE_INFINITY;
   let yMax = Number.NEGATIVE_INFINITY;
+  let y2Min = Number.POSITIVE_INFINITY;
+  let y2Max = Number.NEGATIVE_INFINITY;
 
   /** @type {import("./model.d.ts").ChartGroup<T>[]} */
   const groups = [];
   let i = 0;
   for (const [key, groupRows] of grouped) {
     const isHidden = hidden.includes(key);
+    const onSecondary = secondary.includes(key);
     const n = groupRows.length;
     /** @type {number[]} */
     const xs = new Array(n);
@@ -83,7 +96,11 @@ export function buildGroups(
       if (isHidden) continue;
       if (xs[j] < xMin) xMin = xs[j];
       if (xs[j] > xMax) xMax = xs[j];
-      if (Number.isFinite(ys[j])) {
+      if (!Number.isFinite(ys[j])) continue;
+      if (onSecondary) {
+        if (ys[j] < y2Min) y2Min = ys[j];
+        if (ys[j] > y2Max) y2Max = ys[j];
+      } else {
         if (ys[j] < yMin) yMin = ys[j];
         if (ys[j] > yMax) yMax = ys[j];
       }
@@ -99,6 +116,7 @@ export function buildGroups(
         defaults[i] ??
         /** @type {string} */ (vizColor(i + 1)),
       hidden: isHidden,
+      axis: onSecondary ? "y2" : "y",
     });
     i++;
   }
@@ -140,7 +158,32 @@ export function buildGroups(
     categories,
     xExtent: xMin <= xMax ? [xMin, xMax] : null,
     yExtent: yMin <= yMax ? [yMin, yMax] : null,
+    y2Extent: y2Min <= y2Max ? [y2Min, y2Max] : null,
   };
+}
+
+/**
+ * The y scale a group is plotted on: the secondary one for a series the
+ * chart was told to put there, when it has one.
+ *
+ * @param {ChartScales} scales
+ * @param {{ axis?: "y" | "y2" }} group
+ * @returns {ChartScales["y"]}
+ */
+export function yScaleOf(scales, group) {
+  return group.axis === "y2" && scales.y2 ? scales.y2 : scales.y;
+}
+
+/**
+ * The groups a mark draws: all of them, or only the series it was given.
+ *
+ * @template G
+ * @param {ReadonlyArray<G & { key: string | number }>} groups
+ * @param {ReadonlyArray<string | number> | undefined} keys
+ * @returns {ReadonlyArray<G & { key: string | number }>}
+ */
+export function pickGroups(groups, keys) {
+  return keys ? groups.filter((group) => keys.includes(group.key)) : groups;
 }
 
 /**
@@ -179,7 +222,7 @@ function bandDateLabel(values, locale) {
  */
 export function resolveDomain(
   built,
-  { xDomain, yDomain = "nice", zero = true, include = [] },
+  { xDomain, yDomain = "nice", y2Domain = "nice", zero = true, include = [] },
 ) {
   let [y0, y1] = built.yExtent ?? [0, 1];
   for (const value of include) {
@@ -206,7 +249,19 @@ export function resolveDomain(
           ? niceDomain(measured[0], measured[1], 5)
           : [measured[0], measured[1]];
 
-  return { x, y, kind: built.kind, categories: built.categories };
+  /** @type {[number, number] | null} */
+  let y2 = null;
+  if (built.y2Extent) {
+    let [a, b] = built.y2Extent;
+    if (zero) {
+      a = Math.min(0, a);
+      b = Math.max(0, b);
+    }
+    y2 = Array.isArray(y2Domain) ? [y2Domain[0], y2Domain[1]] : [a, b];
+    if (y2Domain === "nice") y2 = niceDomain(y2[0], y2[1], 5);
+  }
+
+  return { x, y, y2, kind: built.kind, categories: built.categories };
 }
 
 /**
@@ -222,6 +277,10 @@ export function sameDomain(a, b) {
   if (a.kind !== b.kind) return false;
   if (a.x[0] !== b.x[0] || a.x[1] !== b.x[1]) return false;
   if (a.y[0] !== b.y[0] || a.y[1] !== b.y[1]) return false;
+  if ((a.y2 === null) !== (b.y2 === null)) return false;
+  if (a.y2 && b.y2 && (a.y2[0] !== b.y2[0] || a.y2[1] !== b.y2[1])) {
+    return false;
+  }
   if (a.categories.length !== b.categories.length) return false;
   for (let i = 0; i < a.categories.length; i++) {
     if (a.categories[i] !== b.categories[i]) return false;
@@ -249,9 +308,25 @@ export function buildScales(domain, size, options = {}) {
   // Space marks asked for, such as an axis title, on top of the defaults.
   const extra = { top: 0, right: 0, bottom: 0, left: 0 };
   for (const { side, px } of reserved) extra[side] += px;
-  const top = marginOverride.top ?? 8 + extra.top;
+  const y2Format = options.y2Format
+    ? resolveFormat(options.y2Format, locale)
+    : (/** @type {number} */ value) => formatCompact(value, { locale });
+  // A secondary axis sits opposite the first: on the right, or along the top
+  // of a horizontal chart. Its ticks share the first axis's count, so the
+  // two line up on the same grid lines.
+  const y2Guess = domain.y2 ? ticks(domain.y2[0], domain.y2[1], 5) : [];
+  let y2Width = 0;
+  for (const tick of y2Guess) {
+    y2Width = Math.max(y2Width, y2Format(tick).length);
+  }
+  const top =
+    marginOverride.top ?? 8 + extra.top + (domain.y2 && horizontal ? 20 : 0);
   const bottom = marginOverride.bottom ?? 28 + extra.bottom;
-  const right = marginOverride.right ?? 16 + extra.right;
+  const right =
+    marginOverride.right ??
+    (domain.y2 && !horizontal
+      ? Math.round(y2Width * GLYPH_WIDTH * 1.15 + 14)
+      : 16) + extra.right;
 
   const yFormat = options.yFormat
     ? resolveFormat(options.yFormat, locale)
@@ -405,9 +480,27 @@ export function buildScales(domain, size, options = {}) {
     range: horizontal ? [x0, x1] : [size.height - bottom, top],
   });
 
+  // Spread the secondary ticks over the same positions as the first axis's,
+  // so one set of grid lines serves both.
+  /** @type {ChartScales["y2"]} */
+  let y2 = null;
+  /** @type {number[]} */
+  let y2Ticks = [];
+  if (domain.y2) {
+    const secondary = scaleLinear({
+      domain: domain.y2,
+      range: horizontal ? [x0, x1] : [size.height - bottom, top],
+    });
+    y2 = { map: secondary.map, invert: secondary.invert };
+    y2Ticks = yTicks.map((tick) => secondary.invert(y.map(tick)));
+  }
+
   return {
     x: band.x,
     y: { map: y.map, invert: y.invert },
+    y2,
+    y2Ticks,
+    y2Format,
     xTicks: band.xTicks,
     yTicks,
     xFormat: band.xFormat,

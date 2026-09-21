@@ -16,9 +16,17 @@
   /** Specify the widest a bar may grow, in pixels */
   export let maxBarWidth = 48;
 
+  /**
+   * Specify the series to draw. Defaults to every series, so set it when
+   * marks share a chart, as bars and a line do in a combo.
+   * @type {ReadonlyArray<string | number>}
+   */
+  export let series = undefined;
+
   import { getContext, onMount } from "svelte";
   import { buildBars, stackedExtent } from "./bar-geometry.js";
   import { CHART_CONTEXT } from "./context.js";
+  import { pickGroups } from "./model.js";
 
   /** @type {import("./context.js").ChartContext} */
   const { groups, scales, hover, useBand, includeY } =
@@ -55,9 +63,10 @@
     registered = next;
   }
 
-  $: include($groups, mode);
+  $: mine = pickGroups($groups, series);
+  $: include(mine, mode);
   // Depends on groups and scales only, so hover never rebuilds a bar.
-  $: bars = buildBars($groups, $scales, { mode, padding, maxBarWidth });
+  $: bars = buildBars(mine, $scales, { mode, padding, maxBarWidth });
   $: band =
     $hover && $scales.step
       ? {

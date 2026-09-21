@@ -16,8 +16,10 @@ export type ChartHoverPoint<T> = {
   /** Index of the datum within its series. */
   index: number;
   y: number;
-  /** Pixel position of `y`. */
+  /** Pixel position of `y`, on the y scale its series is plotted on. */
   py: number;
+  /** Which y scale the series is plotted on. Defaults to the first. */
+  axis?: "y" | "y2";
   color: string;
 };
 

@@ -19,9 +19,17 @@
    */
   export let sizeRange = [4, 24];
 
+  /**
+   * Specify the series to draw. Defaults to every series, so set it when
+   * marks share a chart, as bars and a line do in a combo.
+   * @type {ReadonlyArray<string | number>}
+   */
+  export let series = undefined;
+
   import { getContext, onMount } from "svelte";
   import { toAccessor } from "../utils/accessor.js";
   import { CHART_CONTEXT } from "./context.js";
+  import { pickGroups } from "./model.js";
   import { buildPoints } from "./point-geometry.js";
 
   /** @type {import("./context.js").ChartContext} */
@@ -33,7 +41,7 @@
 
   $: sizeOf = size === undefined ? undefined : toAccessor(size);
   // Depends on groups and scales only, so hover never rebuilds a circle.
-  $: circles = buildPoints($groups, $scales, {
+  $: circles = buildPoints(pickGroups($groups, series), $scales, {
     radius,
     size: sizeOf,
     sizeRange,

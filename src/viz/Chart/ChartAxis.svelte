@@ -6,7 +6,8 @@
   /**
    * Specify which side of the plot the axis sits on.
    * Bottom and top read the x scale, left and right the y scale. A
-   * horizontal chart swaps them.
+   * horizontal chart swaps them. When the chart has a secondary y axis, the
+   * far side (right, or top when horizontal) reads that instead.
    * @type {"bottom" | "left" | "top" | "right"}
    */
   export let position = "bottom";
@@ -62,11 +63,25 @@
 
   $: horizontal = position === "bottom" || position === "top";
   $: readsX = horizontal !== $scales.horizontal;
-  $: values = readsX ? $scales.xTicks : $scales.yTicks;
-  $: write = format ?? (readsX ? $scales.xFormat : $scales.yFormat);
+  $: secondary =
+    !readsX &&
+    $scales.y2 !== null &&
+    (position === "right" || position === "top");
+  $: values = readsX
+    ? $scales.xTicks
+    : secondary
+      ? $scales.y2Ticks
+      : $scales.yTicks;
+  $: write =
+    format ??
+    (readsX ? $scales.xFormat : secondary ? $scales.y2Format : $scales.yFormat);
   $: labels = values.map((value) => write(value));
   $: positions = values.map((value) =>
-    readsX ? $scales.x.map(value) : $scales.y.map(value),
+    readsX
+      ? $scales.x.map(value)
+      : secondary && $scales.y2
+        ? $scales.y2.map(value)
+        : $scales.y.map(value),
   );
   // Labels run along a horizontal axis, so their width can crowd it. Down a
   // vertical axis only their height can, which matters once it holds the x

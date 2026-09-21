@@ -1,8 +1,10 @@
 import {
   buildGroups,
   buildScales,
+  pickGroups,
   resolveDomain,
   sameDomain,
+  yScaleOf,
 } from "../../../src/viz/Chart/model.js";
 
 type Row = { d: Date; r: string; v: number };
@@ -304,6 +306,68 @@ describe("buildScales", () => {
     );
 
     expect(scales.margin.left).toBe(160);
+  });
+
+  test("measures a secondary axis apart from the first", () => {
+    const rows = [
+      { q: "Q1", s: "Revenue", v: 1200 },
+      { q: "Q2", s: "Revenue", v: 1800 },
+      { q: "Q1", s: "Margin", v: 0.21 },
+      { q: "Q2", s: "Margin", v: 0.34 },
+    ];
+    const built = buildGroups(rows, {
+      x: (row) => row.q,
+      y: (row) => row.v,
+      series: (row) => row.s,
+      secondary: ["Margin"],
+    });
+
+    expect(built.groups.map((group) => group.axis)).toEqual(["y", "y2"]);
+    expect(built.yExtent).toEqual([1200, 1800]);
+    expect(built.y2Extent).toEqual([0.21, 0.34]);
+
+    const domain = resolveDomain(built, {});
+    expect(domain.y).toEqual([0, 2000]);
+    expect(domain.y2).toEqual([0, 0.35]);
+
+    const scales = buildScales(domain, { width: 480, height: 240 });
+    // Both scales share the plot, and the secondary ticks sit on the first
+    // axis's grid lines.
+    expect(scales.y2?.map(0)).toBeCloseTo(scales.y.map(0));
+    expect(scales.y2?.map(0.35)).toBeCloseTo(scales.y.map(2000));
+    expect(scales.y2Ticks).toHaveLength(scales.yTicks.length);
+    scales.yTicks.forEach((tick, i) => {
+      expect(scales.y2?.map(scales.y2Ticks[i])).toBeCloseTo(scales.y.map(tick));
+    });
+    // The right margin grows to fit the secondary labels.
+    expect(scales.margin.right).toBeGreaterThan(16);
+    expect(yScaleOf(scales, built.groups[1])).toBe(scales.y2);
+    expect(yScaleOf(scales, built.groups[0])).toBe(scales.y);
+  });
+
+  test("has no secondary axis unless a series is put on one", () => {
+    const built = buildGroups([{ q: "Q1", v: 3 }], {
+      x: (row) => row.q,
+      y: (row) => row.v,
+      series: () => "s",
+    });
+    const domain = resolveDomain(built, {});
+    const scales = buildScales(domain, { width: 480, height: 240 });
+
+    expect(domain.y2).toBeNull();
+    expect(scales.y2).toBeNull();
+    expect(scales.margin.right).toBe(16);
+    expect(sameDomain(domain, { ...domain, y2: [0, 1] })).toBe(false);
+  });
+
+  test("picks the series a mark was given, or all of them", () => {
+    const groups = [{ key: "a" }, { key: "b" }, { key: "c" }];
+
+    expect(pickGroups(groups, undefined)).toBe(groups);
+    expect(pickGroups(groups, ["c", "a"]).map((g) => g.key)).toEqual([
+      "a",
+      "c",
+    ]);
   });
 
   test("never produces NaN for an empty chart", () => {
