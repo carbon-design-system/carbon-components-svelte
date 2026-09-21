@@ -94,6 +94,10 @@ Time ticks land on calendar boundaries. When hourly ticks span several days, the
   <ChartLine points="none" />
 </Chart>
 
+### Secondary axis
+
+Set `secondary` to the series that belong on a second y axis, with its own domain. A `ChartAxis` on the right reads it, and so does the top one in a horizontal chart. Every mark takes a `series` prop, so each can draw its own share of the data. [ComboChart](/components/ComboChart) is the preset.
+
 ### Orientation
 
 Set `orientation` to `"horizontal"` to run the x scale down the left side and the y scale along the bottom. `x` and `y` keep their meaning, so the same marks work: an axis on the left or right then reads the x scale, and one on the bottom or top reads the y scale. `ChartArea` does not support it.

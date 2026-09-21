@@ -22,6 +22,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   CodeSnippet: "0.2.0",
   CohortTable: "0.113.0",
   ComboBox: "0.2.0",
+  ComboChart: "0.113.0",
   ComboButton: "0.110.0",
   ComparisonBar: "0.113.0",
   ComposedModal: "0.2.0",
