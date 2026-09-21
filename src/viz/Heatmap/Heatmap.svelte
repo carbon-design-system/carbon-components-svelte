@@ -114,6 +114,7 @@
   import { createEventDispatcher } from "svelte";
   import { toAccessor } from "../utils/accessor.js";
   import { resolveFormat } from "../utils/format-compact.js";
+  import { gridStep } from "../utils/grid-step.js";
   import { buildHeatGrid, heatColor } from "../utils/heat-grid.js";
 
   const dispatch = createEventDispatcher();
@@ -175,29 +176,18 @@
    * @param {KeyboardEvent} event
    */
   function onKeydown(event) {
-    const step = {
-      ArrowRight: [0, 1],
-      ArrowLeft: [0, -1],
-      ArrowDown: [1, 0],
-      ArrowUp: [-1, 0],
-    }[event.key];
-    if (!step || !ref) return;
-    let { r, c } = tabStop;
-    do {
-      r += step[0];
-      c += step[1];
-    } while (
-      grid.rows[r] &&
-      c >= 0 &&
-      c < grid.columns.length &&
-      !grid.rows[r].cells[c]
+    const next = gridStep(
+      event.key,
+      [tabStop.r, tabStop.c],
+      [grid.rows.length, grid.columns.length],
+      (r, c) => grid.rows[r].cells[c] !== null,
     );
-    if (!grid.rows[r]?.cells[c]) return;
+    if (!next || !ref) return;
     event.preventDefault();
-    focused = { r, c };
+    focused = { r: next[0], c: next[1] };
     /** @type {HTMLElement | null} */
-    const next = ref.querySelector(`[data-cell="${r}:${c}"]`);
-    next?.focus();
+    const node = ref.querySelector(`[data-cell="${next[0]}:${next[1]}"]`);
+    node?.focus();
   }
 </script>
 
