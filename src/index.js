@@ -76,6 +76,7 @@ export { default as FileUploaderButton } from "./FileUploader/FileUploaderButton
 export { default as FileUploaderDropContainer } from "./FileUploader/FileUploaderDropContainer.svelte";
 export { default as FileUploaderItem } from "./FileUploader/FileUploaderItem.svelte";
 export { default as FileUploaderSkeleton } from "./FileUploader/FileUploaderSkeleton.svelte";
+export { createUploadTasks } from "./FileUploader/upload-tasks.js";
 export { default as FluidForm } from "./FluidForm/FluidForm.svelte";
 export { default as Form } from "./Form/Form.svelte";
 export { default as FormGroup } from "./FormGroup/FormGroup.svelte";
