@@ -89,6 +89,7 @@ export { pivotLonger } from "./utils/pivot-longer.js";
 export { boxStats, quantile } from "./utils/quantiles.js";
 export { getRangeGeometry } from "./utils/range.js";
 export { getRanks } from "./utils/rank.js";
+export { sankey } from "./utils/sankey.js";
 export { scaleBand, scalePoint } from "./utils/scale-band.js";
 export { scaleLinear } from "./utils/scale-linear.js";
 export { logTicks, niceLogDomain, scaleLog } from "./utils/scale-log.js";
