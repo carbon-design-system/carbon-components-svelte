@@ -1,0 +1,81 @@
+/// TreeChart: a hierarchy as nodes joined by curves, drawn at a fixed
+/// logical size and scaled to the container.
+/// @access private
+/// @group viz
+@mixin viz-tree-chart {
+  .#{$prefix}--viz-tree {
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-tree .#{$prefix}--viz-chart__title {
+    margin-block-end: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--viz-tree__svg {
+    display: block;
+    overflow: visible;
+    block-size: auto;
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--viz-tree__svg:focus {
+    outline: 2px solid $focus;
+    outline-offset: 2px;
+  }
+
+  .#{$prefix}--viz-tree__link {
+    fill: none;
+    stroke: $ui-04;
+  }
+
+  .#{$prefix}--viz-tree__target {
+    fill: transparent;
+  }
+
+  .#{$prefix}--viz-tree__dot {
+    fill: $ui-background;
+    stroke: $interactive-04;
+    stroke-width: 2;
+  }
+
+  .#{$prefix}--viz-tree__node--branch {
+    cursor: pointer;
+  }
+
+  // Open branches are hollow. A filled dot holds children that are folded
+  // away, so the state never rests on color.
+  .#{$prefix}--viz-tree__node--collapsed .#{$prefix}--viz-tree__dot {
+    fill: $interactive-04;
+  }
+
+  .#{$prefix}--viz-tree__node--active .#{$prefix}--viz-tree__dot {
+    stroke: $focus;
+    stroke-width: 3;
+  }
+
+  // A halo of the page background keeps a label readable over a link.
+  .#{$prefix}--viz-tree__label {
+    fill: $text-primary;
+    paint-order: stroke;
+    stroke: $ui-background;
+    stroke-linejoin: round;
+    stroke-width: 3;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-tree__node--active .#{$prefix}--viz-tree__label {
+    font-weight: 600;
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-tree__node--collapsed .#{$prefix}--viz-tree__dot {
+      fill: CanvasText;
+    }
+  }
+}
+
+@include exports("viz-tree-chart") {
+  @include viz-tree-chart;
+}
