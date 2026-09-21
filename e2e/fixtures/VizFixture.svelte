@@ -6,6 +6,7 @@
     BoxplotChart,
     BulletChart,
     CalendarHeatmap,
+    CirclePackChart,
     CohortTable,
     ComboChart,
     ComparisonBar,
@@ -217,6 +218,15 @@
     markers={[{ x: 40000, label: "Goal" }]}
     title="Distribution of monthly revenue"
     height={220}
+  />
+
+  <CirclePackChart
+    data={revenue.filter((row) => row.date.getMonth() < 4)}
+    value="revenue"
+    label={(row) => row.date.toLocaleDateString("en-US", { month: "short" })}
+    group="region"
+    title="Monthly totals per region, packed"
+    size={320}
   />
 
   <AlluvialChart
