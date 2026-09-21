@@ -250,6 +250,25 @@
     stroke-dasharray: 4 4;
   }
 
+  // A faint wash of the rule's color. The rule itself marks the edge, so the
+  // range never rests on the tint alone.
+  .#{$prefix}--viz-threshold__range {
+    fill: $support-error;
+    fill-opacity: 0.08;
+  }
+
+  .#{$prefix}--viz-threshold--warning .#{$prefix}--viz-threshold__range {
+    fill: $support-warning;
+  }
+
+  .#{$prefix}--viz-threshold--success .#{$prefix}--viz-threshold__range {
+    fill: $support-success;
+  }
+
+  .#{$prefix}--viz-threshold--info .#{$prefix}--viz-threshold__range {
+    fill: $support-info;
+  }
+
   .#{$prefix}--viz-threshold__label {
     fill: $text-error;
 

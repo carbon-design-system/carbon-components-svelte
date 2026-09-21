@@ -20,6 +20,7 @@
   ];
   export let hidden: ReadonlyArray<string | number> = [];
   export let threshold: number | undefined = undefined;
+  export let thresholdTo: number | undefined = undefined;
   export let thresholdKind: "error" | "warning" = "error";
   export let customTooltip = false;
   export let ontoggle: (detail: unknown) => void = () => {};
@@ -38,6 +39,7 @@
   {#if threshold !== undefined}
     <ChartThreshold
       y={threshold}
+      to={thresholdTo}
       label="Target"
       kind={thresholdKind}
       data-testid="threshold"

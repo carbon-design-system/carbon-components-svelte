@@ -10,6 +10,14 @@
    */
   export let y;
 
+  /**
+   * Specify a second y value to mark a range, such as an acceptable band.
+   * The space between `y` and `to` is shaded, and both stay inside the
+   * y domain. The rule is drawn at `y`.
+   * @type {number}
+   */
+  export let to = undefined;
+
   /** Specify the label, drawn at the end of the rule */
   export let label = "";
 
@@ -25,13 +33,26 @@
   /** @type {import("./context.js").ChartContext} */
   const { scales, includeY, reserveMargin } = getContext(CHART_CONTEXT);
 
-  /** @type {(() => void) | undefined} */
-  let release;
+  /** @type {Array<() => void>} */
+  let releases = [];
+  /** @type {string} */
+  let registered = "";
 
-  /** @param {number} value */
-  function register(value) {
-    release?.();
-    release = Number.isFinite(value) ? includeY(value) : undefined;
+  // Registering changes the domain, which can run this again: only act when
+  // a value itself moved.
+  /**
+   * @param {number} value
+   * @param {number | undefined} end
+   */
+  function register(value, end) {
+    const values = [value, end].filter(
+      (n) => typeof n === "number" && Number.isFinite(n),
+    );
+    const key = values.join(",");
+    if (key === registered) return;
+    for (const release of releases) release();
+    releases = values.map((n) => includeY(/** @type {number} */ (n)));
+    registered = key;
   }
 
   /** @type {(() => void) | undefined} */
@@ -46,12 +67,14 @@
     releaseMargin = needed ? reserveMargin("top", 12) : undefined;
   }
 
-  $: register(y);
+  $: register(y, to);
   $: reserve(Boolean(label) && $scales.horizontal);
   $: py = $scales.y.map(y);
+  $: pTo =
+    typeof to === "number" && Number.isFinite(to) ? $scales.y.map(to) : null;
 
   onMount(() => () => {
-    release?.();
+    for (const release of releases) release();
     releaseMargin?.();
   });
 </script>
@@ -65,6 +88,19 @@
     aria-hidden="true"
     {...$$restProps}
   >
+    {#if pTo !== null}
+      <rect
+        class:bx--viz-threshold__range={true}
+        x={$scales.horizontal ? Math.min(py, pTo) : $scales.plot.x0}
+        y={$scales.horizontal ? $scales.plot.y0 : Math.min(py, pTo)}
+        width={$scales.horizontal
+          ? Math.abs(pTo - py)
+          : $scales.plot.x1 - $scales.plot.x0}
+        height={$scales.horizontal
+          ? $scales.plot.y1 - $scales.plot.y0
+          : Math.abs(pTo - py)}
+      />
+    {/if}
     <line
       class:bx--viz-threshold__line={true}
       x1={$scales.horizontal ? py : $scales.plot.x0}

@@ -187,6 +187,33 @@ describe("ChartThreshold", () => {
     expect(topTick()).toBeLessThan(high);
   });
 
+  it("shades a range between two values and keeps both in the y domain", async () => {
+    const { rerender } = render(ChartOverlays, { threshold: 50 });
+    const before = topTick();
+    expect(
+      screen
+        .getByTestId("threshold")
+        .querySelector(".bx--viz-threshold__range"),
+    ).toBeNull();
+
+    await rerender({ threshold: 50, thresholdTo: 400 });
+    const range = screen
+      .getByTestId("threshold")
+      .querySelector(".bx--viz-threshold__range");
+    const rule = screen
+      .getByTestId("threshold")
+      .querySelector(".bx--viz-threshold__line");
+    expect(range).not.toBeNull();
+    expect(topTick()).toBeGreaterThan(before);
+    // The band hangs from the far value down to the rule at `y`.
+    expect(
+      Number(range?.getAttribute("y")) + Number(range?.getAttribute("height")),
+    ).toBeCloseTo(Number(rule?.getAttribute("y1")));
+
+    await rerender({ threshold: 50, thresholdTo: undefined });
+    expect(topTick()).toBe(before);
+  });
+
   it("applies the kind modifier", () => {
     render(ChartOverlays, { threshold: 50, thresholdKind: "warning" });
 
