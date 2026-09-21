@@ -111,4 +111,61 @@ describe("createTimeoutDismiss", () => {
     dismiss.resume();
     expect(cb).toHaveBeenCalledTimes(1);
   });
+
+  describe("visibilitychange", () => {
+    function setHidden(hidden: boolean) {
+      Object.defineProperty(document, "hidden", {
+        value: hidden,
+        configurable: true,
+      });
+      document.dispatchEvent(new Event("visibilitychange"));
+    }
+
+    afterEach(() => {
+      setHidden(false);
+    });
+
+    test("pauses while the document is hidden and resumes when visible", () => {
+      const dismiss = createTimeoutDismiss();
+      const cb = vi.fn();
+
+      dismiss.sync(true, 1000, cb);
+      setHidden(true);
+      vi.advanceTimersByTime(1000);
+      expect(cb).not.toHaveBeenCalled();
+
+      setHidden(false);
+      vi.advanceTimersByTime(1000);
+      expect(cb).toHaveBeenCalledTimes(1);
+    });
+
+    test("does not resume on visible when the caller already paused", () => {
+      const dismiss = createTimeoutDismiss();
+      const cb = vi.fn();
+
+      dismiss.sync(true, 1000, cb);
+      dismiss.pause();
+      setHidden(true);
+      setHidden(false);
+      vi.advanceTimersByTime(1000);
+      expect(cb).not.toHaveBeenCalled();
+
+      dismiss.resume();
+      vi.advanceTimersByTime(1000);
+      expect(cb).toHaveBeenCalledTimes(1);
+    });
+
+    test("clear while hidden removes the listener", () => {
+      const dismiss = createTimeoutDismiss();
+      const cb = vi.fn();
+
+      dismiss.sync(true, 1000, cb);
+      setHidden(true);
+      dismiss.clear();
+      setHidden(false);
+
+      vi.advanceTimersByTime(1000);
+      expect(cb).not.toHaveBeenCalled();
+    });
+  });
 });
