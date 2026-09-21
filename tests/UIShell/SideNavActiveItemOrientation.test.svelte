@@ -5,9 +5,11 @@
   import SideNavMenuItem from "carbon-components-svelte/UIShell/SideNavMenuItem.svelte";
 
   export let activeItem: "none" | "shallow" | "nested" = "none";
+  export let activeItemScrollBlock: "start" | "center" | "end" | "nearest" =
+    "nearest";
 </script>
 
-<SideNav>
+<SideNav {activeItemScrollBlock}>
   <SideNavItems>
     <SideNavMenu text="Menu 1" data-testid="menu-1">
       <SideNavMenuItem

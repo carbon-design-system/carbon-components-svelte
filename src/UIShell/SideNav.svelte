@@ -42,6 +42,13 @@
    */
   export let theme = undefined;
 
+  /**
+   * Specify the scroll alignment used to bring the active item into view on mount.
+   * Defaults to `"nearest"`, which only scrolls when the active item is out of view.
+   * @type {"start" | "center" | "end" | "nearest"}
+   */
+  export let activeItemScrollBlock = "nearest";
+
   import { createEventDispatcher, onMount, tick } from "svelte";
   import {
     acquireBodyScrollLock,
@@ -102,7 +109,7 @@
     shouldRenderHamburgerMenu.set(!fixed);
     tick().then(() => {
       const activeItem = navRef?.querySelector('[aria-current="page"]');
-      activeItem?.scrollIntoView({ block: "nearest" });
+      activeItem?.scrollIntoView({ block: activeItemScrollBlock });
     });
     return () => {
       shouldRenderHamburgerMenu.set(false);
