@@ -331,7 +331,11 @@
     </HeaderUtilities>
   </Header>
 
-  <SideNav class="docs-sidenav" bind:isOpen={isSideNavOpen}>
+  <SideNav
+    class="docs-sidenav"
+    bind:isOpen={isSideNavOpen}
+    activeItemScrollBlock="center"
+  >
     <ScrollGradient
       color="var(--cds-background)"
       hideStartGradient

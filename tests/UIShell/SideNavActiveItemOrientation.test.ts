@@ -65,4 +65,16 @@ describe("SideNav active item orientation", () => {
     expect(scrollIntoView.mock.instances[0]).toBe(activeItem);
     expect(scrollIntoView).toHaveBeenCalledWith({ block: "nearest" });
   });
+
+  it("honors a custom activeItemScrollBlock", async () => {
+    render(SideNavActiveItemOrientationTest, {
+      props: { activeItem: "nested", activeItemScrollBlock: "center" },
+    });
+    await tick();
+    await tick();
+
+    const scrollIntoView = Element.prototype
+      .scrollIntoView as unknown as ReturnType<typeof vi.fn>;
+    expect(scrollIntoView).toHaveBeenCalledWith({ block: "center" });
+  });
 });
