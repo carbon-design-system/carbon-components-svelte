@@ -14,6 +14,7 @@
     HeatStrip,
     Histogram,
     LineChart,
+    LollipopChart,
     MicroDonut,
     MicroFunnel,
     MicroHistogram,
@@ -210,6 +211,14 @@
     bins={8}
     markers={[{ x: 40000, label: "Goal" }]}
     title="Distribution of monthly revenue"
+    height={220}
+  />
+
+  <LollipopChart
+    data={stages}
+    x="label"
+    y="value"
+    title="Users by stage, as lollipops"
     height={220}
   />
 
