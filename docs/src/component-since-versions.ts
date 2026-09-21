@@ -8,6 +8,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   BigNumber: "0.112.0",
   Bleed: "0.113.0",
   Box: "0.109.0",
+  BoxplotChart: "0.113.0",
   Breadcrumb: "0.2.0",
   Breakpoint: "0.40.0",
   BulletChart: "0.113.0",
