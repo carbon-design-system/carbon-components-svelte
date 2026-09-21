@@ -6,6 +6,7 @@
     BoxplotChart,
     BulletChart,
     CalendarHeatmap,
+    ChoroplethChart,
     CirclePackChart,
     CohortTable,
     ComboChart,
@@ -219,6 +220,30 @@
     markers={[{ x: 40000, label: "Goal" }]}
     title="Distribution of monthly revenue"
     height={220}
+  />
+
+  <ChoroplethChart
+    features={["EMEA", "APAC", "AMER"].map((name, i) => ({
+      id: name,
+      properties: { name },
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [
+            [i * 12, 40],
+            [i * 12 + 10, 42],
+            [i * 12 + 11, 33],
+            [i * 12 + 1, 32],
+            [i * 12, 40],
+          ],
+        ],
+      },
+    }))}
+    data={revenue}
+    region="region"
+    value="revenue"
+    title="Totals on a map"
+    height={200}
   />
 
   <TreeChart
