@@ -162,7 +162,7 @@ jobs:
     # Official image includes Chromium/Firefox/WebKit + system deps
     # Bump tag with @playwright/test in bun.lock.
     container:
-      image: mcr.microsoft.com/playwright:v1.62.1-noble
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
       options: --ipc=host --init
     timeout-minutes: 15
     env:
