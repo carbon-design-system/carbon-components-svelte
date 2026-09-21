@@ -63,6 +63,12 @@
     {...$$restProps}
     on:click
   >
-    <span class:bx--side-nav__link-text={true}>{#if labelHtml}{@html labelHtml}{:else}<slot>{text}</slot>{/if}</span>
+    <span class:bx--side-nav__link-text={true}
+      >{#if labelHtml}
+        {@html labelHtml}
+      {:else}
+        <slot>{text}</slot>
+      {/if}</span
+    >
   </a>
 </li>
