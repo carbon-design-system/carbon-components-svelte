@@ -1,4 +1,8 @@
-import { scaleLog } from "../../../src/viz/utils/scale-log.js";
+import {
+  logTicks,
+  niceLogDomain,
+  scaleLog,
+} from "../../../src/viz/utils/scale-log.js";
 
 describe("scaleLog", () => {
   test("maps powers of ten evenly", () => {
@@ -57,5 +61,39 @@ describe("scaleLog", () => {
     const scale = scaleLog({ domain: [1, 1000], range: [0, 300], clamp: true });
     expect(scale.map(1_000_000)).toBe(300);
     expect(scale.map(0.001)).toBe(0);
+  });
+});
+
+describe("niceLogDomain", () => {
+  test("rounds out to whole powers", () => {
+    expect(niceLogDomain(3, 4200)).toEqual([1, 10000]);
+    expect(niceLogDomain(1000, 1000000)).toEqual([1000, 1000000]);
+    expect(niceLogDomain(0.02, 0.9)).toEqual([0.01, 1]);
+    expect(niceLogDomain(3, 40, 2)).toEqual([2, 64]);
+  });
+
+  test("always spans at least one power", () => {
+    expect(niceLogDomain(10, 10)).toEqual([10, 100]);
+  });
+
+  test("leaves a domain that is not strictly positive alone", () => {
+    expect(niceLogDomain(0, 100)).toEqual([0, 100]);
+    expect(niceLogDomain(-5, 100)).toEqual([-5, 100]);
+  });
+});
+
+describe("logTicks", () => {
+  test("is every power over a wide domain", () => {
+    expect(logTicks(1, 100000)).toEqual([1, 10, 100, 1000, 10000, 100000]);
+  });
+
+  test("adds the 2 and 5 multiples over a narrow one", () => {
+    expect(logTicks(1, 100)).toEqual([1, 2, 5, 10, 20, 50, 100]);
+    expect(logTicks(3, 40)).toEqual([5, 10, 20]);
+  });
+
+  test("is empty without a positive span", () => {
+    expect(logTicks(0, 100)).toEqual([]);
+    expect(logTicks(10, 10)).toEqual([]);
   });
 });

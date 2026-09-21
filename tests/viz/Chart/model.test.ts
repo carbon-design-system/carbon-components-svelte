@@ -345,6 +345,35 @@ describe("buildScales", () => {
     expect(yScaleOf(scales, built.groups[0])).toBe(scales.y);
   });
 
+  test("plots strictly positive data on a log axis, and falls back otherwise", () => {
+    const rows = [
+      { q: "a", v: 3 },
+      { q: "b", v: 4200 },
+    ];
+    const built = buildGroups(rows, {
+      x: (row) => row.q,
+      y: (row) => row.v,
+      series: () => "s",
+    });
+
+    const domain = resolveDomain(built, { yScale: "log" });
+    // Zero has no logarithm, so the axis starts on a power instead.
+    expect(domain.y).toEqual([1, 10000]);
+    expect(domain.yScale).toBe("log");
+    const scales = buildScales(domain, { width: 480, height: 240 });
+    expect(scales.yTicks).toEqual([1, 10, 100, 1000, 10000]);
+    const gaps = scales.yTicks.map((tick) => scales.y.map(tick));
+    expect(gaps[0] - gaps[1]).toBeCloseTo(gaps[1] - gaps[2]);
+    expect(sameDomain(domain, resolveDomain(built, {}))).toBe(false);
+
+    const touching = buildGroups([...rows, { q: "c", v: 0 }], {
+      x: (row) => row.q,
+      y: (row) => row.v,
+      series: () => "s",
+    });
+    expect(resolveDomain(touching, { yScale: "log" }).yScale).toBe("linear");
+  });
+
   test("has no secondary axis unless a series is put on one", () => {
     const built = buildGroups([{ q: "Q1", v: 3 }], {
       x: (row) => row.q,

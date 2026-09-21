@@ -7,6 +7,7 @@ import { groupBy } from "../utils/accessor.js";
 import { formatCompact, resolveFormat } from "../utils/format-compact.js";
 import { scalePoint } from "../utils/scale-band.js";
 import { scaleLinear } from "../utils/scale-linear.js";
+import { logTicks, niceLogDomain, scaleLog } from "../utils/scale-log.js";
 import { scaleTime } from "../utils/scale-time.js";
 import { niceDomain, ticks } from "../utils/ticks.js";
 import { timeTickFormat, timeTicks } from "../utils/time-ticks.js";
@@ -222,7 +223,14 @@ function bandDateLabel(values, locale) {
  */
 export function resolveDomain(
   built,
-  { xDomain, yDomain = "nice", y2Domain = "nice", zero = true, include = [] },
+  {
+    xDomain,
+    yDomain = "nice",
+    y2Domain = "nice",
+    yScale = "linear",
+    zero = true,
+    include = [],
+  },
 ) {
   let [y0, y1] = built.yExtent ?? [0, 1];
   for (const value of include) {
@@ -230,13 +238,18 @@ export function resolveDomain(
     if (value < y0) y0 = value;
     if (value > y1) y1 = value;
   }
-  if (zero) {
+  // Zero has no logarithm, so a log axis over positive data never includes
+  // it. Data that touches zero falls back to a linear axis.
+  const log = yScale === "log" && y0 > 0;
+  if (zero && !log) {
     y0 = Math.min(0, y0);
     y1 = Math.max(0, y1);
   }
   /** @type {[number, number]} */
   let y = Array.isArray(yDomain) ? [yDomain[0], yDomain[1]] : [y0, y1];
-  if (yDomain === "nice") y = niceDomain(y[0], y[1], 5);
+  if (yDomain === "nice") {
+    y = log ? niceLogDomain(y[0], y[1]) : niceDomain(y[0], y[1], 5);
+  }
 
   const measured = built.xExtent ?? [0, 1];
   /** @type {[number, number]} */
@@ -261,7 +274,14 @@ export function resolveDomain(
     if (y2Domain === "nice") y2 = niceDomain(y2[0], y2[1], 5);
   }
 
-  return { x, y, y2, kind: built.kind, categories: built.categories };
+  return {
+    x,
+    y,
+    y2,
+    yScale: log && y[0] > 0 ? "log" : "linear",
+    kind: built.kind,
+    categories: built.categories,
+  };
 }
 
 /**
@@ -275,6 +295,7 @@ export function resolveDomain(
 export function sameDomain(a, b) {
   if (!a) return false;
   if (a.kind !== b.kind) return false;
+  if ((a.yScale ?? "linear") !== (b.yScale ?? "linear")) return false;
   if (a.x[0] !== b.x[0] || a.x[1] !== b.x[1]) return false;
   if (a.y[0] !== b.y[0] || a.y[1] !== b.y[1]) return false;
   if ((a.y2 === null) !== (b.y2 === null)) return false;
@@ -305,6 +326,7 @@ export function sameDomain(a, b) {
 export function buildScales(domain, size, options = {}) {
   const { locale, margin: marginOverride = {}, reserved = [] } = options;
   const horizontal = options.orientation === "horizontal";
+  const log = domain.yScale === "log" && domain.y[0] > 0;
   // Space marks asked for, such as an axis title, on top of the defaults.
   const extra = { top: 0, right: 0, bottom: 0, left: 0 };
   for (const { side, px } of reserved) extra[side] += px;
@@ -454,17 +476,21 @@ export function buildScales(domain, size, options = {}) {
       Math.round(size.width * 0.4),
     );
     const plotWidth = Math.max(1, size.width - right - left);
-    yTicks = ticks(
-      domain.y[0],
-      domain.y[1],
-      Math.max(2, Math.round(plotWidth / 90)),
-    );
+    yTicks = log
+      ? logTicks(domain.y[0], domain.y[1])
+      : ticks(
+          domain.y[0],
+          domain.y[1],
+          Math.max(2, Math.round(plotWidth / 90)),
+        );
   } else {
-    yTicks = ticks(
-      domain.y[0],
-      domain.y[1],
-      Math.max(2, Math.round(plotHeight / 56)),
-    );
+    yTicks = log
+      ? logTicks(domain.y[0], domain.y[1])
+      : ticks(
+          domain.y[0],
+          domain.y[1],
+          Math.max(2, Math.round(plotHeight / 56)),
+        );
     left = leftFor(yTicks.map((tick) => yFormat(tick)));
     const plotWidth = Math.max(1, size.width - right - left);
     band = buildX(
@@ -475,7 +501,7 @@ export function buildScales(domain, size, options = {}) {
 
   const x0 = left;
   const x1 = Math.max(left + 1, size.width - right);
-  const y = scaleLinear({
+  const y = (log ? scaleLog : scaleLinear)({
     domain: domain.y,
     range: horizontal ? [x0, x1] : [size.height - bottom, top],
   });

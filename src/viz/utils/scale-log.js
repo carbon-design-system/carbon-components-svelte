@@ -32,3 +32,58 @@ export function scaleLog({ domain, range, base = 10, clamp = false }) {
   );
   return { domain: [d0, d1], range, clamp, base, kind: "log", map, invert };
 }
+
+/**
+ * Round a positive domain out to whole powers of `base`, so a log axis
+ * starts and ends on a labelled tick. A domain that is not strictly positive
+ * comes back unchanged.
+ *
+ * @param {number} min
+ * @param {number} max
+ * @param {number} [base]
+ * @returns {[number, number]}
+ */
+export function niceLogDomain(min, max, base = 10) {
+  if (
+    !(min > 0) ||
+    !(max > 0) ||
+    !Number.isFinite(min) ||
+    !Number.isFinite(max)
+  ) {
+    return [min, max];
+  }
+  const logBase = Math.log(base);
+  // Guard against 1000 reading as 10^2.9999999999999996.
+  const low = Math.floor(Math.log(min) / logBase + 1e-9);
+  let high = Math.ceil(Math.log(max) / logBase - 1e-9);
+  if (high <= low) high = low + 1;
+  return [base ** low, base ** high];
+}
+
+/**
+ * Tick values for a log axis: every power of `base` inside the domain. Over
+ * fewer than three decades in base 10, the 2 and 5 multiples are added, since
+ * powers alone would leave the axis nearly empty.
+ *
+ * @param {number} min
+ * @param {number} max
+ * @param {number} [base]
+ * @returns {number[]}
+ */
+export function logTicks(min, max, base = 10) {
+  if (!(min > 0) || !(max > min) || !Number.isFinite(max)) return [];
+  const logBase = Math.log(base);
+  const low = Math.floor(Math.log(min) / logBase + 1e-9);
+  const high = Math.ceil(Math.log(max) / logBase - 1e-9);
+  const multiples = base === 10 && high - low < 3 ? [1, 2, 5] : [1];
+  /** @type {number[]} */
+  const out = [];
+  for (let power = low; power <= high; power++) {
+    for (const multiple of multiples) {
+      const value = multiple * base ** power;
+      if (value >= min * (1 - 1e-9) && value <= max * (1 + 1e-9))
+        out.push(value);
+    }
+  }
+  return out;
+}

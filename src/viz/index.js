@@ -88,7 +88,7 @@ export { getRangeGeometry } from "./utils/range.js";
 export { getRanks } from "./utils/rank.js";
 export { scaleBand, scalePoint } from "./utils/scale-band.js";
 export { scaleLinear } from "./utils/scale-linear.js";
-export { scaleLog } from "./utils/scale-log.js";
+export { logTicks, niceLogDomain, scaleLog } from "./utils/scale-log.js";
 export { scaleTime } from "./utils/scale-time.js";
 export { getShares } from "./utils/shares.js";
 export { stack } from "./utils/stack.js";

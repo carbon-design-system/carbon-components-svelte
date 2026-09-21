@@ -68,6 +68,8 @@ export type ChartDomain = {
   y: [number, number];
   /** Domain of the secondary y axis, or `null` without one. */
   y2: [number, number] | null;
+  /** `"log"` only when it was asked for and the data is strictly positive. */
+  yScale?: "linear" | "log";
   kind: ChartXKind;
   categories: string[];
 };
@@ -77,6 +79,8 @@ export type ResolveDomainOptions = {
   xDomain?: readonly [number | Date, number | Date] | "nice";
   yDomain?: readonly [number, number] | "auto" | "nice";
   y2Domain?: readonly [number, number] | "auto" | "nice";
+  /** @default "linear" */
+  yScale?: "linear" | "log";
   /** Include zero in the y domains. @default true */
   zero?: boolean;
   /** Extra y values marks asked to keep in view. */

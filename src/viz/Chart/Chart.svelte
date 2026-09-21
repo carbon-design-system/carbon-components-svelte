@@ -113,6 +113,14 @@
   export let yFormat = undefined;
 
   /**
+   * Specify the y scale. `"log"` suits values that span orders of magnitude,
+   * and needs strictly positive data: with a zero or a negative value the
+   * axis falls back to linear. A log axis never includes zero.
+   * @type {"linear" | "log"}
+   */
+  export let yScale = "linear";
+
+  /**
    * Specify the series to plot on a secondary y axis, with its own domain.
    * A `ChartAxis` on the right, or on top of a horizontal chart, reads it.
    * Use it when two series have different units, and never for two series
@@ -477,6 +485,7 @@
     locale,
     secondary,
     y2Domain,
+    yScale,
   );
 
   function rebuild(
@@ -495,6 +504,7 @@
     /** @type {string | undefined} */ bandLocale,
     /** @type {ReadonlyArray<string | number>} */ secondaryKeys,
     /** @type {any} */ y2D,
+    /** @type {"linear" | "log"} */ scaleKind,
   ) {
     const built = buildGroups(rows, {
       x: xA,
@@ -511,6 +521,7 @@
       xDomain: xD,
       yDomain: yD,
       y2Domain: y2D,
+      yScale: scaleKind,
       zero: includeZero,
       include,
     });
