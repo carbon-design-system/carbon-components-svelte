@@ -20,6 +20,7 @@ components: ["Header",
 "HeaderSwitcher",
 "SideNav",
 "SideNavItems",
+"SideNavFilter",
 "SideNavLink",
 "SideNavMenu",
 "SideNavMenuItem",
@@ -144,6 +145,26 @@ Combine `rail` with `fixed` to keep the rail at its narrow width even on hover, 
 `large` composes with `rail`, including its narrow, icon-only state.
 
 <FileSource src="/framed/UIShell/HeaderNavRailLarge" />
+
+### Filter
+
+Add `SideNavFilter` as a child of `SideNavItems`, alongside your `SideNavLink`/`SideNavMenu` markup, to live-filter a long nav by text. It fuzzy-matches against each `SideNavLink`/`SideNavMenuItem`'s `text` (or its rendered content, if you use the default slot instead), hides non-matches, and keeps a `SideNavMenu` visible and expanded whenever one of its items matches — collapsing it back to its original state once the filter is cleared.
+
+<FileSource src="/framed/UIShell/SideNavFilter" />
+
+When a `SideNavLink`/`SideNavMenuItem` uses the `text` prop, the matched substring is highlighted automatically (bolded), the same way `SearchMenuItem` highlights matches in its own label. This only applies to `text`; a custom default slot renders as-is.
+
+Once a link has focus, <DocKbd label="ArrowUp" />/<DocKbd label="ArrowDown" /> move between the currently-visible matches; hidden links are skipped and are not tab stops. <DocKbd label="ArrowDown" />/<DocKbd label="ArrowUp" /> from the filter input itself jump to the first/last visible match.
+
+Show a custom empty state with the `noResults` slot:
+
+```svelte
+<SideNavFilter>
+  <p slot="noResults">No matching pages.</p>
+</SideNavFilter>
+```
+
+In the [rail](#rail) variant, `SideNavFilter` does not render while the rail is in its narrow, icon-only state — there is no room for it, and nothing to filter against until it's expanded.
 
 ### Persisted hamburger
 

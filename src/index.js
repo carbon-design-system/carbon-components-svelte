@@ -241,6 +241,7 @@ export { default as ProfileMenuItem } from "./UIShell/ProfileMenuItem.svelte";
 export { default as ProfileMenuList } from "./UIShell/ProfileMenuList.svelte";
 export { default as SideNav } from "./UIShell/SideNav.svelte";
 export { default as SideNavDivider } from "./UIShell/SideNavDivider.svelte";
+export { default as SideNavFilter } from "./UIShell/SideNavFilter.svelte";
 export { default as SideNavItems } from "./UIShell/SideNavItems.svelte";
 export { default as SideNavLink } from "./UIShell/SideNavLink.svelte";
 export { default as SideNavMenu } from "./UIShell/SideNavMenu.svelte";

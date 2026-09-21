@@ -32,9 +32,45 @@
    * @bindable readonly
    */
   export let ref = null;
+
+  import { getContext, onMount } from "svelte";
+  import { readable } from "svelte/store";
+  import { fuzzyMatch, highlightSegmentsToHtml } from "../utils/fuzzy-match.js";
+  import { uniqueId } from "../utils/unique-id.js";
+
+  const filterCtx = getContext("carbon:SideNavItems");
+  const { query, setItemMatch, unregisterItem } = filterCtx ?? {
+    query: readable(""),
+    setItemMatch: () => {},
+    unregisterItem: () => {},
+  };
+  const id = uniqueId();
+
+  $: matchText = text ?? ref?.textContent ?? "";
+  $: matchResult = fuzzyMatch(matchText, $query);
+  $: matches = matchResult.matched;
+  $: setItemMatch(id, matches);
+  $: hiddenByFilter = $query.length > 0 && !matches;
+
+  // Highlighting only applies to the plain `text` prop; a custom default
+  // slot is rendered as-is.
+  $: labelHtml =
+    text && !$$slots.default && $query.length > 0
+      ? highlightSegmentsToHtml(
+          text,
+          matchResult.indices,
+          "bx--side-nav-filter__highlight",
+        )
+      : null;
+
+  onMount(() => () => unregisterItem(id));
 </script>
 
-<li class:bx--side-nav__item={true} class:bx--side-nav__item--large={large}>
+<li
+  hidden={hiddenByFilter || undefined}
+  class:bx--side-nav__item={true}
+  class:bx--side-nav__item--large={large}
+>
   <a
     bind:this={ref}
     aria-current={isSelected ? "page" : undefined}
@@ -53,6 +89,12 @@
         <slot name="icon"> <svelte:component this={icon} /> </slot>
       </div>
     {/if}
-    <span class:bx--side-nav__link-text={true}> <slot> {text} </slot> </span>
+    <span class:bx--side-nav__link-text={true}>
+      {#if labelHtml}
+        {@html labelHtml}
+      {:else}
+        <slot> {text} </slot>
+      {/if}
+    </span>
   </a>
 </li>

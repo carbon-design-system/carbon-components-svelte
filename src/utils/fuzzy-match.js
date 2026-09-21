@@ -205,3 +205,37 @@ export function highlightSegments(text, indices) {
   if (current) segments.push({ text: current, match: currentMatch });
   return segments;
 }
+
+/**
+ * Escape `&`, `<`, and `>` so `text` is safe to interpolate into HTML.
+ * @param {string} text
+ * @returns {string}
+ */
+function escapeHtml(text) {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+/**
+ * Render `text` as one HTML string, with matched runs (from `indices`)
+ * wrapped in a `<strong class={highlightClass}>`. Escapes `text` first.
+ * Building one string (rather than separate template nodes per segment)
+ * avoids Svelte inserting whitespace between siblings, which would corrupt
+ * the word.
+ *
+ * @param {string} text
+ * @param {number[]} indices - Ascending character indices to highlight (from `fuzzyMatch`).
+ * @param {string} highlightClass - Class applied to each matched `<strong>` run.
+ * @returns {string}
+ */
+export function highlightSegmentsToHtml(text, indices, highlightClass) {
+  return highlightSegments(text, indices)
+    .map((part) =>
+      part.match
+        ? `<strong class="${highlightClass}">${escapeHtml(part.text)}</strong>`
+        : escapeHtml(part.text),
+    )
+    .join("");
+}
