@@ -155,6 +155,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "MicroDonut",
       "MicroFunnel",
       "MicroHistogram",
+      "RadarChart",
       "RadialProgress",
       "RangeIndicator",
       "RankBars",
