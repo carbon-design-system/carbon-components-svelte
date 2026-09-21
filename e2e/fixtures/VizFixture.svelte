@@ -34,6 +34,7 @@
     TreeChart,
     TreemapChart,
     UptimeBar,
+    WordCloudChart,
   } from "carbon-components-svelte/viz";
 
   const stages = [
@@ -220,6 +221,14 @@
     markers={[{ x: 40000, label: "Goal" }]}
     title="Distribution of monthly revenue"
     height={220}
+  />
+
+  <WordCloudChart
+    data={stages}
+    word="label"
+    value="value"
+    title="Stages as words"
+    height={200}
   />
 
   <ChoroplethChart
