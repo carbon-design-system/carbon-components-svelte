@@ -113,3 +113,4 @@ export {
   VIZ_SEQUENTIAL_STEPS,
   vizColor,
 } from "./utils/tokens.js";
+export { squarify } from "./utils/treemap.js";
