@@ -6,6 +6,7 @@
   export let view: "chart" | "table" = "chart";
   export let hidden: ReadonlyArray<string | number> = [];
   export let csv = true;
+  export let image: "png" | "svg" | false = "svg";
 
   const data = [
     { quarter: "Q1", region: "a", revenue: 1200 },
@@ -26,7 +27,7 @@
   bind:view
 >
   <ChartLine />
-  <ChartToolbar slot="toolbar" {csv} filename="revenue" />
+  <ChartToolbar slot="toolbar" {csv} {image} filename="revenue" />
 </Chart>
 
 <output data-testid="view">{view}</output>

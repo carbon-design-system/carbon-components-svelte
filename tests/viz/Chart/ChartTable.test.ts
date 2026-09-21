@@ -125,4 +125,69 @@ describe("Chart table view", () => {
       screen.queryByRole("button", { name: "Download as CSV" }),
     ).toBeNull();
   });
+
+  it("downloads the plot as a standalone SVG with the title and the series", async () => {
+    render(ChartTable);
+
+    await user.click(screen.getByRole("button", { name: "Download as image" }));
+    await vi.waitFor(() => expect(download.calls).toHaveLength(1));
+    const [markup, filename, type] = download.calls[0] as string[];
+    expect(filename).toBe("revenue.svg");
+    expect(type).toContain("image/svg+xml");
+    expect(markup.startsWith("<svg xmlns=")).toBe(true);
+    expect(markup).toContain(">Revenue</text>");
+    expect(markup).toContain(">a</text>");
+    expect(markup).toContain(">b</text>");
+    expect(markup).not.toContain("class=");
+  });
+
+  it("offers no image of the table view, and can drop the button", () => {
+    const { unmount } = render(ChartTable, { view: "table" });
+    expect(
+      screen.queryByRole("button", { name: "Download as image" }),
+    ).toBeNull();
+    unmount();
+
+    render(ChartTable, { image: false });
+    expect(
+      screen.queryByRole("button", { name: "Download as image" }),
+    ).toBeNull();
+  });
+
+  it("offers fullscreen only where the browser supports it", async () => {
+    // jsdom has no Fullscreen API.
+    const { unmount } = render(ChartTable);
+    expect(
+      screen.queryByRole("button", { name: "Show fullscreen" }),
+    ).toBeNull();
+    unmount();
+
+    Object.defineProperty(document, "fullscreenEnabled", {
+      configurable: true,
+      value: true,
+    });
+    const request = vi.fn();
+    render(ChartTable);
+    const figure = document.querySelector("figure") as HTMLElement;
+    figure.requestFullscreen = request;
+
+    await user.click(
+      await screen.findByRole("button", { name: "Show fullscreen" }),
+    );
+    expect(request).toHaveBeenCalledTimes(1);
+
+    // The browser reports the change, and the button flips.
+    Object.defineProperty(document, "fullscreenElement", {
+      configurable: true,
+      value: figure,
+    });
+    figure.dispatchEvent(new Event("fullscreenchange"));
+    expect(
+      await screen.findByRole("button", { name: "Exit fullscreen" }),
+    ).toBeInTheDocument();
+    expect(figure).toHaveClass("bx--viz-chart--fullscreen");
+
+    Reflect.deleteProperty(document, "fullscreenEnabled");
+    Reflect.deleteProperty(document, "fullscreenElement");
+  });
 });

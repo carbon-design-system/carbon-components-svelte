@@ -180,6 +180,11 @@
   import { derived, get, writable } from "svelte/store";
   import { rafThrottle } from "../../utils/raf-throttle.js";
   import { toAccessor } from "../utils/accessor.js";
+  import {
+    backgroundBehind,
+    rasterizeSvg,
+    serializeSvg,
+  } from "../utils/export-svg.js";
   import { bisectNearest } from "../utils/nearest-point.js";
   import { observeResize } from "../utils/resize-pool.js";
   import ChartDataTable from "./ChartDataTable.svelte";
@@ -255,6 +260,73 @@
     if (!fromSync) sync?.publish(null);
   }
 
+  const fullscreenStore = writable(false);
+  /** Plot height while fullscreen, or 0 to use the `height` prop. */
+  let fullscreenHeight = 0;
+  /** @type {HTMLDivElement | null} */
+  let plot = null;
+
+  function toggleFullscreen() {
+    if (!ref) return;
+    if (document.fullscreenElement === ref) document.exitFullscreen();
+    else ref.requestFullscreen?.();
+  }
+
+  // The plot takes whatever the title, toolbar, and legend leave of the screen.
+  function onFullscreenChange() {
+    const on = ref !== null && document.fullscreenElement === ref;
+    fullscreenStore.set(on);
+    if (!on || !ref || !plot) {
+      fullscreenHeight = 0;
+      return;
+    }
+    const chrome = ref.scrollHeight - plot.clientHeight;
+    fullscreenHeight = Math.max(200, window.innerHeight - chrome);
+  }
+
+  /**
+   * The plot as an image, with the title above and the series below.
+   * @param {"svg" | "png"} format
+   * @returns {Promise<string | Blob>}
+   */
+  function exportImage(format) {
+    if (!svg || !ref) {
+      return Promise.reject(new Error("The chart is not mounted"));
+    }
+    const {
+      markup,
+      width: w,
+      height: h,
+    } = serializeSvg(svg, {
+      title,
+      legend: get(groups)
+        .filter((group) => !group.hidden)
+        .map((group) => ({
+          label: String(group.key),
+          color: resolveColor(group.color),
+        })),
+      background: backgroundBehind(ref),
+      color: getComputedStyle(ref).color,
+    });
+    return format === "svg"
+      ? Promise.resolve(markup)
+      : rasterizeSvg(markup, w, h);
+  }
+
+  /**
+   * A series color is a `var()` reference, which means nothing in a file.
+   * @param {string} color
+   */
+  function resolveColor(color) {
+    if (!ref) return color;
+    const probe = document.createElement("span");
+    probe.style.color = color;
+    ref.appendChild(probe);
+    const resolved = getComputedStyle(probe).color;
+    probe.remove();
+    return resolved || color;
+  }
+
   setContext(CHART_CONTEXT, {
     groups,
     scales,
@@ -264,10 +336,13 @@
     view: viewStore,
     title: titleStore,
     xHeader: xHeaderStore,
+    fullscreen: fullscreenStore,
     /** @param {"chart" | "table"} next */
     setView(next) {
       view = next;
     },
+    toggleFullscreen,
+    exportImage,
     /** @param {number} value */
     includeY(value) {
       included.update((list) => [...list, value]);
@@ -349,7 +424,8 @@
     xLabelFormat,
     orientation,
   });
-  $: resize(width, height);
+  $: effectiveHeight = fullscreenHeight || height;
+  $: resize(width, effectiveHeight);
   $: rebuild(
     data,
     xAccessor,
@@ -425,7 +501,7 @@
     if (width !== "auto" || !ref) return;
     return observeResize(ref, (measured) => {
       const rounded = Math.round(measured);
-      if (rounded > 0) resize(rounded, height, true);
+      if (rounded > 0) resize(rounded, effectiveHeight, true);
     });
   });
 
@@ -618,6 +694,8 @@
 <figure
   bind:this={ref}
   class:bx--viz-chart={true}
+  class:bx--viz-chart--fullscreen={$fullscreenStore}
+  on:fullscreenchange={onFullscreenChange}
   aria-busy={loading ? "true" : undefined}
   {...$$restProps}
 >
@@ -629,6 +707,7 @@
   </div>
   <!-- The plot stays mounted behind the table, so switching back is instant. -->
   <div
+    bind:this={plot}
     class:bx--viz-chart__plot={true}
     style:height="{$size.height}px"
     hidden={view === "table"}

@@ -55,6 +55,13 @@
     white-space: nowrap;
   }
 
+  // Fullscreen has no page behind it, so the figure brings its own surface.
+  .#{$prefix}--viz-chart--fullscreen {
+    overflow: auto;
+    padding: $carbon--spacing-07;
+    background: $ui-background;
+  }
+
   .#{$prefix}--viz-chart__plot {
     position: relative;
   }

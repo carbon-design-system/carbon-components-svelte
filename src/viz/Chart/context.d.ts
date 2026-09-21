@@ -45,6 +45,15 @@ export type ChartContext<T> = {
   title: Readable<string>;
   /** Header of the x column in the data table. Never empty. */
   xHeader: Readable<string>;
+  /** Whether the chart fills the screen. */
+  fullscreen: Readable<boolean>;
+  /** Enter or leave fullscreen. The plot grows to fill what the screen leaves. */
+  toggleFullscreen(): void;
+  /**
+   * The plot as a standalone image, with the title above and the visible
+   * series below: SVG markup, or a PNG blob at twice the pixel density.
+   */
+  exportImage(format: "svg" | "png"): Promise<string | Blob>;
   /** Switch between the chart and its data table. */
   setView(view: "chart" | "table"): void;
   /** Keep a y value inside the domain. Returns a function that releases it. */
