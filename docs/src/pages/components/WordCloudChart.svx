@@ -1,0 +1,67 @@
+---
+components: ["WordCloudChart"]
+description: Word cloud sizes words by value, for a first impression of which terms dominate a body of text.
+---
+
+<script>
+  import { WordCloudChart } from "carbon-components-svelte/viz";
+
+  const TERMS = [
+    ["latency", "symptom", 184], ["timeout", "symptom", 151], ["deploy", "cause", 139],
+    ["rollback", "fix", 118], ["cache", "cause", 96], ["queue", "cause", 88],
+    ["retry", "fix", 81], ["alert", "symptom", 74], ["oncall", "process", 69],
+    ["quota", "cause", 61], ["token", "cause", 55], ["shard", "cause", 49],
+    ["restart", "fix", 46], ["runbook", "process", 41], ["canary", "process", 38],
+    ["failover", "fix", 34], ["certificate", "cause", 31], ["dns", "cause", 29],
+    ["backlog", "symptom", 26], ["throttle", "fix", 24], ["schema", "cause", 21],
+    ["postmortem", "process", 19], ["paging", "process", 16], ["disk", "cause", 14],
+  ].map(([term, kind, mentions]) => ({ term, kind, mentions }));
+</script>
+
+`WordCloudChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+A word cloud gives an impression, not a reading: long words look bigger than short ones of the same value, and position means nothing. When the ranking matters, use [RankBars](/components/RankBars) or a horizontal [BarChart](/components/BarChart).
+
+## Basic
+
+Pass long `data` with `word` and `value` accessors. Rows that share a word are summed. Font size follows the square root of the value, so a word's area is what grows with it. Words are placed largest first on a spiral from the center, each on the first spot where it overlaps no other, and the result is the same on every render: nothing is random.
+
+<WordCloudChart data={TERMS} word="term" value="mentions" title="Terms in incident reports" />
+
+Without groups, words take the text color, which keeps the smallest at full contrast.
+
+## Groups
+
+Set `group` to color words by kind. The legend names the kinds. A group color lowers the contrast of small words, so raise `minSize` when you use one.
+
+<WordCloudChart
+  data={TERMS}
+  word="term"
+  value="mentions"
+  group="kind"
+  minSize={14}
+  title="Terms in incident reports, by kind"
+/>
+
+## Size
+
+The cloud is drawn at `width` by `height` and scales down with its container. `minSize` and `maxSize` set the font sizes at the ends, and `maxWords` keeps only the largest words. Text cannot be measured without a browser, and the layout also runs on the server, so widths are estimated from the character count, a little generously. A word that finds no room is left out rather than overlapped.
+
+<WordCloudChart
+  data={TERMS}
+  word="term"
+  value="mentions"
+  width={480}
+  height={200}
+  maxSize={40}
+  maxWords={12}
+  title="The dozen most common terms"
+/>
+
+## Interaction
+
+Hover a word, or focus the chart and use the arrow keys, to read its value: the rest dim. `hover` fires with the word, and `select` on click, Enter, or Space. Both carry the `rows` summed into it.
+
+## Accessibility
+
+The chart is a single tab stop. The arrow keys move through the words from the largest down, Home and End jump to the first and last, Enter or Space selects, and Escape clears. The focused word is announced with its value. The figure also holds the placed words as a visually hidden ordered list with their values, which is the ranking the picture only hints at.
