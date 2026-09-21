@@ -160,6 +160,17 @@ Set `orientation` to `"horizontal"` to run the x scale down the left side and th
   <ChartLine />
 </Chart>
 
+### Ranges
+
+Set `to` for a second value, and the space between the two is shaded: an acceptable band, a target zone, a forecast interval. The rule stays at `y`, so the range never rests on the tint alone, and both values stay inside the y domain.
+
+<Chart {data} x="date" y="revenue" series="region" title="An acceptable band" height={240}>
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartThreshold y={45000} to={60000} label="Target zone" kind="success" />
+  <ChartLine />
+</Chart>
+
 ## Loading and empty
 
 Set `loading` while the data is on its way. A skeleton covers the plot, the axes stay in place so nothing jumps when the data lands, and the chart is marked busy for assistive technology. The wrappers, such as `LineChart`, take the same props.
