@@ -30,6 +30,7 @@
     ShareOfTotal,
     Sparkline,
     StackedBar,
+    TreeChart,
     TreemapChart,
     UptimeBar,
   } from "carbon-components-svelte/viz";
@@ -218,6 +219,18 @@
     markers={[{ x: 40000, label: "Goal" }]}
     title="Distribution of monthly revenue"
     height={220}
+  />
+
+  <TreeChart
+    data={[
+      { id: "all", parent: null },
+      ...stages.map((stage) => ({ id: stage.label, parent: "all" })),
+      { id: "Trial", parent: "Activated" },
+    ]}
+    id="id"
+    parent="parent"
+    title="Stages as a tree"
+    height={240}
   />
 
   <CirclePackChart
