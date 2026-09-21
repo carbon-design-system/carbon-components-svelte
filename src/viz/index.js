@@ -120,4 +120,5 @@ export {
   VIZ_SEQUENTIAL_STEPS,
   vizColor,
 } from "./utils/tokens.js";
+export { treeLayout } from "./utils/tree-layout.js";
 export { squarify } from "./utils/treemap.js";
