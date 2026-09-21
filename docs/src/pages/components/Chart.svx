@@ -27,6 +27,13 @@ description: Chart is the root that chart primitives compose inside. It turns lo
       revenue: Math.round(30000 + r * 9000 + Math.sin(i / 5 + r) * 9000 + ((i * 7919 * (r + 1)) % 4000)),
     })),
   );
+  const growth = ["Free", "Team"].flatMap((product, p) =>
+    [2021, 2022, 2023, 2024, 2025, 2026].map((year, i) => ({
+      year: String(year),
+      product,
+      users: Math.round((p ? 40 : 900) * (p ? 3.1 : 2.2) ** i),
+    })),
+  );
   const byRegion = [
     { region: "Europe, Middle East, and Africa", revenue: 412 },
     { region: "Asia Pacific", revenue: 296 },
@@ -92,6 +99,19 @@ Time ticks land on calendar boundaries. When hourly ticks span several days, the
   <ChartAxis position="bottom" />
   <ChartAxis position="left" />
   <ChartLine points="none" />
+</Chart>
+
+### Log scale
+
+Set `yScale` to `"log"` for values that span orders of magnitude. The axis rounds out to whole powers of ten and never includes zero, which has no logarithm. It needs strictly positive data: with a zero or a negative value it falls back to a linear axis rather than dropping points.
+
+<Chart data={growth} x="year" y="users" series="product" title="Users, on a log axis" yScale="log" height={240}>
+  <ChartGrid />
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartLine points="all" />
+  <ChartLegend slot="legend" />
+  <svelte:fragment slot="tooltip"><ChartTooltip /></svelte:fragment>
 </Chart>
 
 ### Secondary axis
