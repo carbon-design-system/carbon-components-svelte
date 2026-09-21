@@ -155,6 +155,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "RadialProgress",
       "RangeIndicator",
       "RankBars",
+      "ScatterChart",
       "ShareOfTotal",
       "Sparkline",
       "StackedBar",
