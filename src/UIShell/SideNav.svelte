@@ -42,7 +42,7 @@
    */
   export let theme = undefined;
 
-  import { createEventDispatcher, onMount } from "svelte";
+  import { createEventDispatcher, onMount, tick } from "svelte";
   import {
     acquireBodyScrollLock,
     releaseBodyScrollLock,
@@ -69,6 +69,7 @@
   let navRef = undefined;
   let winWidth = undefined;
   let prevIsOpen = isOpen;
+  let navRef = null;
 
   $: if (prevIsOpen !== isOpen) {
     dispatch(isOpen ? "open" : "close");
@@ -101,6 +102,10 @@
 
   onMount(() => {
     shouldRenderHamburgerMenu.set(!fixed);
+    tick().then(() => {
+      const activeItem = navRef?.querySelector('[aria-current="page"]');
+      activeItem?.scrollIntoView({ block: "nearest" });
+    });
     return () => {
       shouldRenderHamburgerMenu.set(false);
       isSideNavMobile.set(false);

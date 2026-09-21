@@ -30,12 +30,21 @@
    */
   export let ref = null;
 
+  import { onMount } from "svelte";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import { isSideNavCollapsed, isSideNavRail } from "./nav-store.js";
+
+  let menuRef = null;
 
   $: if ($isSideNavRail && $isSideNavCollapsed) {
     expanded = false;
   }
+
+  onMount(() => {
+    if (menuRef?.querySelector('[aria-current="page"]')) {
+      expanded = true;
+    }
+  });
 </script>
 
 <li
@@ -69,6 +78,7 @@
     </span>
   </button>
   <ul
+    bind:this={menuRef}
     inert={expanded ? undefined : "true"}
     class:bx--side-nav__menu={true}
     style:max-height={expanded ? "none" : undefined}
