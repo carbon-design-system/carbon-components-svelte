@@ -141,7 +141,8 @@
   <a
     class="heading-anchor"
     href="#component-api-props"
-    aria-label="Copy link to this heading">#</a
+    aria-label="Copy link to this heading"
+    >#</a
   >
 </h2>
 
@@ -294,7 +295,8 @@
   <a
     class="heading-anchor"
     href="#component-api-typedefs"
-    aria-label="Copy link to this heading">#</a
+    aria-label="Copy link to this heading"
+    >#</a
   >
 </h2>
 
@@ -315,7 +317,8 @@
   <a
     class="heading-anchor"
     href="#component-api-slots"
-    aria-label="Copy link to this heading">#</a
+    aria-label="Copy link to this heading"
+    >#</a
   >
 </h2>
 {#if component.slots.length > 0}
@@ -356,7 +359,8 @@
   <a
     class="heading-anchor"
     href="#component-api-forwarded-events"
-    aria-label="Copy link to this heading">#</a
+    aria-label="Copy link to this heading"
+    >#</a
   >
 </h2>
 {#if forwarded_events.length > 0}
@@ -374,7 +378,8 @@
   <a
     class="heading-anchor"
     href="#component-api-dispatched-events"
-    aria-label="Copy link to this heading">#</a
+    aria-label="Copy link to this heading"
+    >#</a
   >
 </h2>
 
@@ -423,7 +428,8 @@
   <a
     class="heading-anchor"
     href="#component-api-rest-props"
-    aria-label="Copy link to this heading">#</a
+    aria-label="Copy link to this heading"
+    >#</a
   >
 </h2>
 

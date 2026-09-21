@@ -205,7 +205,8 @@
           <a
             class="heading-anchor"
             href="#component-api"
-            aria-label="Copy link to this heading">#</a
+            aria-label="Copy link to this heading"
+            >#</a
           >
         </Text>
         <Text type="body-long-02" color="secondary">
