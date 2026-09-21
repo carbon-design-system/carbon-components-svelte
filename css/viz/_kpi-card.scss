@@ -1,0 +1,50 @@
+/// KpiCard: a metric's name, value, change, trend, and target on one tile.
+/// @access private
+/// @group viz
+@mixin viz-kpi-card {
+  .#{$prefix}--viz-kpi {
+    display: flex;
+    flex-direction: column;
+    min-inline-size: to-rem(192px);
+    row-gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--viz-kpi__label {
+    color: $text-secondary;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-kpi__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: $carbon--spacing-02 $carbon--spacing-04;
+  }
+
+  .#{$prefix}--viz-kpi__value {
+    color: $text-primary;
+    font-variant-numeric: tabular-nums;
+
+    @include type-style("productive-heading-05");
+  }
+
+  .#{$prefix}--viz-kpi__skeleton {
+    // As tall as the value it stands in for, so nothing jumps on load.
+    min-block-size: to-rem(40px);
+  }
+
+  .#{$prefix}--viz-kpi__chart {
+    display: flex;
+    margin-block-start: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--viz-kpi__footer {
+    margin-block-start: auto;
+    padding-block-start: $carbon--spacing-03;
+  }
+}
+
+@include exports("viz-kpi-card") {
+  @include viz-kpi-card;
+}

@@ -40,6 +40,7 @@ export { default as FunnelChart } from "./FunnelChart/FunnelChart.svelte";
 export { default as Heatmap } from "./Heatmap/Heatmap.svelte";
 export { default as HeatStrip } from "./HeatStrip/HeatStrip.svelte";
 export { default as Histogram } from "./Histogram/Histogram.svelte";
+export { default as KpiCard } from "./KpiCard/KpiCard.svelte";
 export { default as LineChart } from "./LineChart/LineChart.svelte";
 export { default as LollipopChart } from "./LollipopChart/LollipopChart.svelte";
 export { default as MicroDonut } from "./MicroDonut/MicroDonut.svelte";
