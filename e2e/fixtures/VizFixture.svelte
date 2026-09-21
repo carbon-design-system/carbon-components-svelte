@@ -27,6 +27,7 @@
     ShareOfTotal,
     Sparkline,
     StackedBar,
+    TreemapChart,
     UptimeBar,
   } from "carbon-components-svelte/viz";
 
@@ -214,6 +215,15 @@
     markers={[{ x: 40000, label: "Goal" }]}
     title="Distribution of monthly revenue"
     height={220}
+  />
+
+  <TreemapChart
+    data={revenue}
+    value="revenue"
+    label={(row) => row.date.toLocaleDateString("en-US", { month: "short" })}
+    group="region"
+    title="Revenue by region and month"
+    selectable
   />
 
   <ComboChart
