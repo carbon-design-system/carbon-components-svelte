@@ -16,4 +16,5 @@ export { default as ChartThreshold } from "./ChartThreshold.svelte";
 export { default as ChartToolbar } from "./ChartToolbar.svelte";
 export { default as ChartTooltip } from "./ChartTooltip.svelte";
 export { default as ChartTooltipRow } from "./ChartTooltipRow.svelte";
+export { default as ChartZoomBar } from "./ChartZoomBar.svelte";
 export { CHART_CONTEXT } from "./context.js";

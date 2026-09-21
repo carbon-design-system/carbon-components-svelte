@@ -11,13 +11,18 @@
   import { CHART_CONTEXT } from "./context.js";
 
   /** @type {import("./context.js").ChartContext} */
-  const { groups, scales, hover } = getContext(CHART_CONTEXT);
+  const { groups, scales, hover, clip } = getContext(CHART_CONTEXT);
 
   // Depends on groups and scales only, so hover never rebuilds a bin.
   $: bins = buildBins($groups, $scales, { gap });
 </script>
 
-<g class:bx--viz-bars={true} class:bx--viz-bins={true} {...$$restProps}>
+<g
+  clip-path={$clip}
+  class:bx--viz-bars={true}
+  class:bx--viz-bins={true}
+  {...$$restProps}
+>
   {#each bins as bin (bin.key)}
     <rect
       class:bx--viz-bars__bar={true}

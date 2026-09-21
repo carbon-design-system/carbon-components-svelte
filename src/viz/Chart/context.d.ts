@@ -56,6 +56,17 @@ export type ChartContext<T> = {
    * series below: SVG markup, or a PNG blob at twice the pixel density.
    */
   exportImage(format: "svg" | "png"): Promise<string | Blob>;
+  /** The visible x range, or `null` when everything shows. */
+  zoom: Readable<[number, number] | null>;
+  /** The x range with no zoom applied, and how x values are read. */
+  fullX: Readable<{
+    domain: [number, number];
+    kind: "time" | "linear" | "category";
+  }>;
+  /** `clip-path` value that keeps a mark inside the plot. Set while zoomed. */
+  clip: Readable<string | undefined>;
+  /** Show an x range, or everything with `null`. */
+  setZoom(range: [number, number] | null): void;
   /** Switch between the chart and its data table. */
   setView(view: "chart" | "table"): void;
   /** Keep a y value inside the domain. Returns a function that releases it. */

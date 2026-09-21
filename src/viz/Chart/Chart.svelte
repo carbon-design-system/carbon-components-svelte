@@ -18,6 +18,7 @@
    * @slot {{}} legend
    * @slot {{}} table
    * @slot {{}} empty
+   * @slot {{}} zoom
    */
 
   /**
@@ -111,6 +112,15 @@
    * @type {Intl.NumberFormatOptions | ((value: number) => string)}
    */
   export let yFormat = undefined;
+
+  /**
+   * Specify the visible x range, as a `ChartZoomBar` sets it. `null` shows
+   * everything. Applies to a time or numeric x. Marks are clipped to the
+   * plot, and the y axis keeps its full range so values stay comparable
+   * while the range moves.
+   * @type {[number | Date, number | Date] | null}
+   */
+  export let zoom = null;
 
   /**
    * Specify the y scale. `"log"` suits values that span orders of magnitude,
@@ -217,6 +227,7 @@
     serializeSvg,
   } from "../utils/export-svg.js";
   import { bisectNearest, createGridIndex } from "../utils/nearest-point.js";
+  import { nextId } from "../utils/next-id.js";
   import { observeResize } from "../utils/resize-pool.js";
   import ChartDataTable from "./ChartDataTable.svelte";
   import { CHART_CONTEXT } from "./context.js";
@@ -296,6 +307,30 @@
     if (!fromSync) sync?.publish(null);
   }
 
+  const clipId = nextId("bx-viz-clip");
+  const zoomStore = writable(/** @type {[number, number] | null} */ (null));
+  // The x range with no zoom applied, which the zoom bar spans.
+  const fullX = writable(
+    /** @type {{ domain: [number, number]; kind: "time" | "linear" | "category" }} */ ({
+      domain: [0, 1],
+      kind: "linear",
+    }),
+  );
+  // Marks clip to the plot only while zoomed, when they can overflow it.
+  const clip = derived(zoomStore, ($zoom) =>
+    $zoom ? `url(#${clipId})` : undefined,
+  );
+
+  /** @param {[number, number] | null} range */
+  function setZoom(range) {
+    const full = get(fullX).domain;
+    // The whole range is no zoom at all.
+    zoom =
+      range && (range[0] > full[0] || range[1] < full[1])
+        ? [range[0], range[1]]
+        : null;
+  }
+
   const fullscreenStore = writable(false);
   /** Plot height while fullscreen, or 0 to use the `height` prop. */
   let fullscreenHeight = 0;
@@ -373,6 +408,10 @@
     title: titleStore,
     xHeader: xHeaderStore,
     fullscreen: fullscreenStore,
+    zoom: zoomStore,
+    fullX,
+    clip,
+    setZoom,
     /** @param {"chart" | "table"} next */
     setView(next) {
       view = next;
@@ -486,6 +525,7 @@
     secondary,
     y2Domain,
     yScale,
+    zoom,
   );
 
   function rebuild(
@@ -505,6 +545,7 @@
     /** @type {ReadonlyArray<string | number>} */ secondaryKeys,
     /** @type {any} */ y2D,
     /** @type {"linear" | "log"} */ scaleKind,
+    /** @type {[number | Date, number | Date] | null} */ zoomRange,
   ) {
     const built = buildGroups(rows, {
       x: xA,
@@ -517,8 +558,34 @@
       band,
       locale: bandLocale,
     });
+    // The zoom bar spans the range with no zoom applied.
+    const unzoomed = resolveDomain(built, { xDomain: xD }).x;
+    const before = get(fullX);
+    if (
+      before.kind !== built.kind ||
+      before.domain[0] !== unzoomed[0] ||
+      before.domain[1] !== unzoomed[1]
+    ) {
+      fullX.set({ domain: unzoomed, kind: built.kind });
+    }
+    const zoomed =
+      zoomRange && built.kind !== "category"
+        ? /** @type {[number, number]} */ ([
+            Number(zoomRange[0]),
+            Number(zoomRange[1]),
+          ])
+        : null;
+    const current = get(zoomStore);
+    if (
+      (zoomed === null) !== (current === null) ||
+      (zoomed &&
+        current &&
+        (zoomed[0] !== current[0] || zoomed[1] !== current[1]))
+    ) {
+      zoomStore.set(zoomed);
+    }
     const next = resolveDomain(built, {
-      xDomain: xD,
+      xDomain: zoomed ?? xD,
       yDomain: yD,
       y2Domain: y2D,
       yScale: scaleKind,
@@ -921,6 +988,16 @@
       on:keydown={onKeydown}
       on:blur={() => clearHover()}
     >
+      <defs>
+        <clipPath id={clipId}>
+          <rect
+            x={$scales.plot.x0}
+            y={$scales.plot.y0}
+            width={Math.max(0, $scales.plot.x1 - $scales.plot.x0)}
+            height={Math.max(0, $scales.plot.y1 - $scales.plot.y0)}
+          />
+        </clipPath>
+      </defs>
       <slot />
     </svg>
     <slot name="tooltip" />
@@ -937,6 +1014,9 @@
       </div>
     {/if}
   </div>
+  {#if view === "chart"}
+    <slot name="zoom" />
+  {/if}
   {#if view === "table"}
     <div class:bx--viz-chart__table={true} style:max-height="{$size.height}px">
       <slot name="table"><ChartDataTable /></slot>

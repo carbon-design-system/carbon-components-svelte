@@ -274,6 +274,94 @@
     fill: $text-secondary;
   }
 
+  .#{$prefix}--viz-zoom {
+    margin-block-start: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--viz-zoom__track {
+    position: relative;
+    background: $ui-01;
+    // Dragging scrubs the range. A vertical swipe still scrolls the page.
+    touch-action: pan-y;
+  }
+
+  .#{$prefix}--viz-zoom__overview {
+    display: block;
+    block-size: 100%;
+    fill: $ui-04;
+    inline-size: 100%;
+  }
+
+  // Physical offsets: the chart above does not mirror in RTL, so neither
+  // does the bar that lines up with it.
+  .#{$prefix}--viz-zoom__window {
+    position: absolute;
+    right: calc((100 - var(--bx-viz-end)) * 1%);
+    left: calc(var(--bx-viz-start) * 1%);
+    box-shadow: inset 0 0 0 to-rem(1px) $interactive-04;
+    cursor: grab;
+    inset-block: 0;
+  }
+
+  .#{$prefix}--viz-zoom__window::before {
+    position: absolute;
+    background: $interactive-04;
+    content: "";
+    inset: 0;
+    opacity: 0.12;
+  }
+
+  .#{$prefix}--viz-zoom--dragging .#{$prefix}--viz-zoom__window {
+    cursor: grabbing;
+  }
+
+  .#{$prefix}--viz-zoom__handle {
+    position: absolute;
+    padding: 0;
+    border: 0;
+    margin-left: to-rem(-4px);
+    appearance: none;
+    background: $interactive-04;
+    cursor: ew-resize;
+    inline-size: to-rem(8px);
+    inset-block: 0;
+    touch-action: none;
+  }
+
+  .#{$prefix}--viz-zoom__handle--start {
+    left: calc(var(--bx-viz-start) * 1%);
+  }
+
+  .#{$prefix}--viz-zoom__handle--end {
+    left: calc(var(--bx-viz-end) * 1%);
+  }
+
+  .#{$prefix}--viz-zoom__handle:focus {
+    outline: 2px solid $focus;
+    outline-offset: 1px;
+  }
+
+  .#{$prefix}--viz-zoom__reset {
+    padding: 0;
+    border: 0;
+    appearance: none;
+    background: none;
+    color: $link-01;
+    cursor: pointer;
+    margin-block-start: $carbon--spacing-02;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-zoom__reset:hover {
+    text-decoration: underline;
+  }
+
+  .#{$prefix}--viz-zoom__reset:focus {
+    outline: 2px solid $focus;
+    outline-offset: 1px;
+  }
+
   .#{$prefix}--viz-boxes__whisker {
     shape-rendering: crispEdges;
     stroke: var(--bx-viz-color, #{$interactive-04});
@@ -346,6 +434,17 @@
     fill-opacity: 1;
     stroke: $ui-background;
     stroke-width: 2;
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-zoom__handle {
+      background: Highlight;
+      forced-color-adjust: none;
+    }
+
+    .#{$prefix}--viz-zoom__window {
+      border: 1px solid Highlight;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {

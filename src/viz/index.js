@@ -25,6 +25,7 @@ export { default as ChartThreshold } from "./Chart/ChartThreshold.svelte";
 export { default as ChartToolbar } from "./Chart/ChartToolbar.svelte";
 export { default as ChartTooltip } from "./Chart/ChartTooltip.svelte";
 export { default as ChartTooltipRow } from "./Chart/ChartTooltipRow.svelte";
+export { default as ChartZoomBar } from "./Chart/ChartZoomBar.svelte";
 export { CHART_CONTEXT } from "./Chart/context.js";
 export { default as CohortTable } from "./CohortTable/CohortTable.svelte";
 export { default as ComboChart } from "./ComboChart/ComboChart.svelte";

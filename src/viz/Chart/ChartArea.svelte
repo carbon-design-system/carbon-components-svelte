@@ -40,7 +40,7 @@
   import { pickGroups } from "./model.js";
 
   /** @type {import("./context.js").ChartContext} */
-  const { groups, scales, hover, includeY } = getContext(CHART_CONTEXT);
+  const { groups, scales, hover, includeY, clip } = getContext(CHART_CONTEXT);
 
   /** @type {Array<() => void>} */
   let releases = [];
@@ -91,7 +91,7 @@
   });
 </script>
 
-<g class:bx--viz-area={true} {...$$restProps}>
+<g clip-path={$clip} class:bx--viz-area={true} {...$$restProps}>
   {#each layers as layer (layer.key)}
     <path
       class:bx--viz-area__fill={true}

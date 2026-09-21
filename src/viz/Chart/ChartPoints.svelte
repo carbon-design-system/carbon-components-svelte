@@ -33,7 +33,8 @@
   import { buildPoints } from "./point-geometry.js";
 
   /** @type {import("./context.js").ChartContext} */
-  const { groups, scales, hover, usePointHover } = getContext(CHART_CONTEXT);
+  const { groups, scales, hover, usePointHover, clip } =
+    getContext(CHART_CONTEXT);
 
   // Points rarely share an x, so hover follows the nearest point instead.
   const release = usePointHover();
@@ -53,6 +54,7 @@
 </script>
 
 <g
+  clip-path={$clip}
   class:bx--viz-points={true}
   class:bx--viz-points--sized={size !== undefined}
   {...$$restProps}

@@ -53,6 +53,17 @@
   export let toolbar = false;
 
   /**
+   * Set to `true` to show a zoom bar under the plot, for a time or numeric x.
+   */
+  export let zoomBar = false;
+
+  /**
+   * Specify the visible x range. `null` shows everything.
+   * @type {[number | Date, number | Date] | null}
+   */
+  export let zoom = null;
+
+  /**
    * Specify whether to show the chart or its data as a table.
    * @type {"chart" | "table"}
    */
@@ -91,10 +102,12 @@
   import ChartRuler from "../Chart/ChartRuler.svelte";
   import ChartToolbar from "../Chart/ChartToolbar.svelte";
   import ChartTooltip from "../Chart/ChartTooltip.svelte";
+  import ChartZoomBar from "../Chart/ChartZoomBar.svelte";
 </script>
 
 <Chart
   {zero}
+  bind:zoom
   bind:hidden
   bind:selected
   bind:view
@@ -123,6 +136,11 @@
   <svelte:fragment slot="tooltip">
     {#if tooltip}
       <slot name="tooltip"><ChartTooltip /></slot>
+    {/if}
+  </svelte:fragment>
+  <svelte:fragment slot="zoom">
+    {#if zoomBar}
+      <ChartZoomBar />
     {/if}
   </svelte:fragment>
   <svelte:fragment slot="legend">

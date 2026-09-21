@@ -47,7 +47,7 @@
   const MAX_POINTS = 500;
 
   /** @type {import("./context.js").ChartContext} */
-  const { groups, scales, hover } = getContext(CHART_CONTEXT);
+  const { groups, scales, hover, clip } = getContext(CHART_CONTEXT);
 
   $: drawn = $groups.filter(
     (group) => !group.hidden && (!series || series.includes(group.key)),
@@ -91,7 +91,7 @@
       : [];
 </script>
 
-<g class:bx--viz-line={true} {...$$restProps}>
+<g clip-path={$clip} class:bx--viz-line={true} {...$$restProps}>
   {#each paths as path (path.key)}
     <path
       class:bx--viz-line__path={true}
