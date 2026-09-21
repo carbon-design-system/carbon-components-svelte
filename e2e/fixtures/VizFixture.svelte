@@ -4,6 +4,7 @@
     BarChart,
     BulletChart,
     CalendarHeatmap,
+    CohortTable,
     ComparisonBar,
     DeltaIndicator,
     DonutChart,
@@ -176,6 +177,17 @@
     title="Revenue by region and month"
     rowHeader="Region"
     cellLabels
+    selectable
+  />
+
+  <CohortTable
+    rows={[
+      { id: "jan", label: "Jan", size: 1204, values: [1, 0.62, 0.48, 0.12] },
+      { id: "feb", label: "Feb", size: 1530, values: [1, 0.58, 0.44] },
+      { id: "mar", label: "Mar", size: 1377, values: [1, 0.65] },
+    ]}
+    title="Retention by signup month"
+    summary="average"
     selectable
   />
 
