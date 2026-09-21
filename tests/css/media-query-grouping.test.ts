@@ -14,10 +14,12 @@ describe("any-hover media query grouping", () => {
     // for tabs-container-disabled-hover, tabs-dismissible, and vertical
     // tabs' two breakpoint scopes, and 4 (one per size, from the `@each`
     // loop) for tabs-size.
+    // Raised again from 61 to 62 for ToggleButtonGroup's one hover block
+    // (_toggle-button-group.scss).
     // Whitespace-tolerant so the count holds for expanded and compressed
     // output; the lower bound fails the test if the pattern stops matching.
     const blocks = css.match(/@media\s*\(any-hover:\s*hover\)\s*\{/g) ?? [];
     expect(blocks.length).toBeGreaterThan(0);
-    expect(blocks.length).toBeLessThanOrEqual(61);
+    expect(blocks.length).toBeLessThanOrEqual(62);
   }, 30_000);
 });
