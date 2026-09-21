@@ -9,6 +9,7 @@
     DeltaIndicator,
     DonutChart,
     FunnelBars,
+    FunnelChart,
     Heatmap,
     HeatStrip,
     Histogram,
@@ -179,6 +180,8 @@
     cellLabels
     selectable
   />
+
+  <FunnelChart {stages} title="Signup funnel, tapered" rate="both" selectable />
 
   <CohortTable
     rows={[
