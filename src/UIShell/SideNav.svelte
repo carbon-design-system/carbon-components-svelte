@@ -8,7 +8,10 @@
   /** Set to `true` to use the fixed variant */
   export let fixed = false;
 
-  /** Set to `true` to use the rail variant */
+  /**
+   * Set to `true` to use the rail variant.
+   * @bindable writable
+   */
   export let rail = false;
 
   /**

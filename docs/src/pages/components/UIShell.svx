@@ -145,6 +145,12 @@ Combine `rail` with `fixed` to keep the rail at its narrow width even on hover, 
 
 <FileSource src="/framed/UIShell/HeaderNavRailLarge" />
 
+### Pin toggle
+
+`rail` is a plain bindable prop, so a consumer can flip it from a button click to let users pin a collapsed rail open (full width) or unpin it back to its narrow, hover-expand state — no dedicated pin API is needed on `SideNav` itself.
+
+<FileSource src="/framed/UIShell/HeaderNavRailPinToggle" />
+
 ### Persisted hamburger
 
 Create a header with a persistent hamburger menu state.
