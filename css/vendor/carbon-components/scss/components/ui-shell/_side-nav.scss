@@ -507,3 +507,21 @@
     @include carbon-side-nav;
   }
 }
+
+// carbon-components-svelte patch
+/// Expand `rail` mode on keyboard focus, matching the existing `:hover`
+/// expansion above. Carbon v10 only expands the collapsed rail on
+/// `:hover`, so a keyboard user tabbing through a rail-mode `SideNav`
+/// never gets the width change that reveals link text — the label stays
+/// visually clipped at the rail's icon-only width even while focused.
+/// @access private
+/// @group components
+@mixin side-nav-rail-focus {
+  .#{$prefix}--side-nav.#{$prefix}--side-nav--rail:not(.#{$prefix}--side-nav--fixed):focus-within {
+    width: mini-units(32);
+  }
+}
+
+@include exports('side-nav-rail-focus') {
+  @include side-nav-rail-focus;
+}
