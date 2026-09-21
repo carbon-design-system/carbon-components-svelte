@@ -1260,4 +1260,49 @@ describe("FileUploader", () => {
     expect(screen.getByText("Please try again.")).toBeInTheDocument();
     expect(rows[1].querySelector(".bx--file-invalid")).toBeInTheDocument();
   });
+
+  it("should not render file sizes by default", () => {
+    const file = new File([new Uint8Array(2048)], "big.txt", {
+      type: "text/plain",
+    });
+
+    const { container } = render(FileUploader, { props: { files: [file] } });
+
+    expect(container.querySelector(".bx--file-size")).not.toBeInTheDocument();
+  });
+
+  it("should render a decimal file size when fileSize is true", () => {
+    const file = new File([new Uint8Array(1500)], "big.txt", {
+      type: "text/plain",
+    });
+
+    render(FileUploader, { props: { files: [file], fileSize: true } });
+
+    expect(screen.getByText("1.5 kB")).toBeInTheDocument();
+  });
+
+  it("should render a binary file size when fileSize is binary", () => {
+    const file = new File([new Uint8Array(1536)], "big.txt", {
+      type: "text/plain",
+    });
+
+    render(FileUploader, { props: { files: [file], fileSize: "binary" } });
+
+    expect(screen.getByText("1.5 KiB")).toBeInTheDocument();
+  });
+
+  it("should render custom file size text from a function", () => {
+    const file = new File([new Uint8Array(2048)], "big.txt", {
+      type: "text/plain",
+    });
+
+    render(FileUploader, {
+      props: {
+        files: [file],
+        fileSize: (f: File, index: number) => `${f.size} octets (#${index})`,
+      },
+    });
+
+    expect(screen.getByText("2048 octets (#0)")).toBeInTheDocument();
+  });
 });

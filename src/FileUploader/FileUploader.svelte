@@ -43,6 +43,16 @@
    */
   export let fileErrorBody = undefined;
 
+  /**
+   * Show each file's size under its name.
+   * - `false` (default): show the name only
+   * - `true` or `"decimal"`: format `file.size` with decimal units (1000 bytes = 1 kB)
+   * - `"binary"`: format `file.size` with binary units (1024 bytes = 1 KiB)
+   * - A function receiving `(file, index)` that returns the text (e.g., a localized size)
+   * @type {boolean | "decimal" | "binary" | ((file: File, index: number) => string)}
+   */
+  export let fileSize = false;
+
   /** Set to `true` to disable the file uploader */
   export let disabled = false;
 
@@ -55,12 +65,13 @@
   /**
    * Specify the maximum file size in bytes.
    * Files exceeding this limit will be filtered out.
-   * File sizes use binary (base 2) units: 1024 bytes = 1 KiB, not 1000 bytes.
+   * The limit is a raw byte count: use `5 * 1000 * 1000` for 5 MB
+   * (decimal) or `5 * 1024 * 1024` for 5 MiB (binary).
    * @type {number | undefined}
    * @example
    * ```svelte
-   * <!-- 5 MB = 5 × 1024 × 1024 = 5,242,880 bytes -->
-   * <FileUploader maxFileSize={5 * 1024 * 1024} />
+   * <!-- 5 MB = 5 × 1000 × 1000 = 5,000,000 bytes -->
+   * <FileUploader maxFileSize={5 * 1000 * 1000} />
    * ```
    */
   export let maxFileSize = undefined;
@@ -163,6 +174,7 @@
 
   import { createEventDispatcher, tick } from "svelte";
   import { filterIncomingFiles } from "../utils/filter-incoming-files.js";
+  import { formatFileSize } from "../utils/format-file-size.js";
   import Filename from "./Filename.svelte";
   import FileUploaderButton from "./FileUploaderButton.svelte";
 
@@ -213,6 +225,20 @@
    */
   function resolveFileOverride(fn, fallback, file, index) {
     return typeof fn === "function" ? fn(file, index) : fallback;
+  }
+
+  /**
+   * @param {typeof fileSize} option
+   * @param {File} file
+   * @param {number} index
+   * @returns {string}
+   */
+  function resolveFileSize(option, file, index) {
+    if (typeof option === "function") return option(file, index);
+    if (!option) return "";
+    return formatFileSize(file.size, {
+      units: option === "binary" ? "binary" : "decimal",
+    });
   }
 
   $: {
@@ -314,11 +340,17 @@
       {@const rowInvalid = resolveFileOverride(fileInvalid, false, file, index)}
       {@const rowErrorSubject = resolveFileOverride(fileErrorSubject, "", file, index)}
       {@const rowErrorBody = resolveFileOverride(fileErrorBody, "", file, index)}
+      {@const rowFileSize = resolveFileSize(fileSize, file, index)}
       <span
         class:bx--file__selected-file={true}
         class:bx--file__selected-file--invalid={rowInvalid}
       >
-        <p class:bx--file-filename={true}>{file.name}</p>
+        <span class:bx--file-filename-group={true}>
+          <p class:bx--file-filename={true}>{file.name}</p>
+          {#if rowFileSize}
+            <p class:bx--file-size={true}>{rowFileSize}</p>
+          {/if}
+        </span>
         <span class:bx--file__state-container={true}>
           <Filename
             {file}

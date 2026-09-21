@@ -232,6 +232,38 @@ describe("FileUploaderItem", () => {
     expect(screen.getByText("custom-filename.txt")).toBeInTheDocument();
   });
 
+  it("should render the file size when provided", () => {
+    render(FileUploaderItem, {
+      props: { name: "test.txt", fileSize: 1500 },
+    });
+
+    expect(screen.getByText("1.5 kB")).toBeInTheDocument();
+  });
+
+  it("should render a string file size as-is", () => {
+    render(FileUploaderItem, {
+      props: { name: "test.txt", fileSize: "1,5 Kio" },
+    });
+
+    expect(screen.getByText("1,5 Kio")).toBeInTheDocument();
+  });
+
+  it("should not render a file size for an invalid number", () => {
+    const { container } = render(FileUploaderItem, {
+      props: { name: "test.txt", fileSize: Number.NaN },
+    });
+
+    expect(container.querySelector(".bx--file-size")).not.toBeInTheDocument();
+  });
+
+  it("should not render a file size when omitted", () => {
+    const { container } = render(FileUploaderItem, {
+      props: { name: "test.txt" },
+    });
+
+    expect(container.querySelector(".bx--file-size")).not.toBeInTheDocument();
+  });
+
   it("should handle mouse events", async () => {
     const consoleLog = vi.spyOn(console, "log");
     const { container } = render(FileUploaderItem, {
