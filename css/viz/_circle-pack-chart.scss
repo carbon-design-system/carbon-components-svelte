@@ -1,0 +1,85 @@
+/// CirclePackChart: values as circles packed inside their parents, drawn at a
+/// fixed logical size and scaled to the container. The legend reuses the
+/// treemap's.
+/// @access private
+/// @group viz
+@mixin viz-circle-pack-chart {
+  .#{$prefix}--viz-pack {
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-pack .#{$prefix}--viz-chart__title {
+    margin-block-end: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--viz-pack__plot {
+    position: relative;
+  }
+
+  .#{$prefix}--viz-pack__svg {
+    display: block;
+    block-size: auto;
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--viz-pack__svg:focus {
+    outline: 2px solid $focus;
+    outline-offset: 2px;
+  }
+
+  // A parent is an outline: its area is only the room its children need, so
+  // a fill would suggest a value it does not have.
+  .#{$prefix}--viz-pack__group {
+    fill: none;
+    stroke: var(--bx-viz-color, #{$interactive-04});
+    stroke-dasharray: 2 3;
+  }
+
+  .#{$prefix}--viz-pack__leaf {
+    fill: var(--bx-viz-color, #{$interactive-04});
+    fill-opacity: 0.3;
+    stroke: var(--bx-viz-color, #{$interactive-04});
+    stroke-width: 1.5;
+    transition: opacity $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  // Emphasis dims the rest instead of recoloring what is active.
+  .#{$prefix}--viz-pack__svg--emphasis
+    .#{$prefix}--viz-pack__leaf:not(.#{$prefix}--viz-pack__leaf--active) {
+    opacity: 0.3;
+  }
+
+  .#{$prefix}--viz-pack__leaf--active {
+    fill-opacity: 0.6;
+    stroke-width: 2.5;
+  }
+
+  // A halo of the page background keeps a label readable over any color.
+  .#{$prefix}--viz-pack__label {
+    fill: $text-primary;
+    paint-order: stroke;
+    pointer-events: none;
+    stroke: $ui-background;
+    stroke-linejoin: round;
+    stroke-width: 3;
+
+    @include type-style("label-01");
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-pack__leaf {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-pack__leaf {
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("viz-circle-pack-chart") {
+  @include viz-circle-pack-chart;
+}
