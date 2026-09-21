@@ -25,6 +25,8 @@ export function createTimeoutDismiss() {
   let startedAt = 0;
   let active = false;
   let paused = false;
+  let hiddenPause = false;
+  let listening = false;
 
   function schedule(ms) {
     clearTimeout(timeoutId);
@@ -40,6 +42,41 @@ export function createTimeoutDismiss() {
     }, ms);
   }
 
+  function pause() {
+    if (!active || paused || timeoutId === undefined) return;
+    clearTimeout(timeoutId);
+    timeoutId = undefined;
+    remaining = Math.max(0, remaining - (Date.now() - startedAt));
+    paused = true;
+  }
+
+  function resume() {
+    if (!paused || !active) return;
+    paused = false;
+    if (typeof window === "undefined") return;
+    if (remaining <= 0) {
+      active = false;
+      remaining = 0;
+      onTimeout();
+      return;
+    }
+    schedule(remaining);
+  }
+
+  function onVisibility() {
+    if (typeof document === "undefined") return;
+    if (document.hidden) {
+      if (!active || paused) return;
+      pause();
+      hiddenPause = true;
+      return;
+    }
+    if (hiddenPause) {
+      hiddenPause = false;
+      resume();
+    }
+  }
+
   return {
     get timeoutId() {
       return timeoutId;
@@ -50,9 +87,14 @@ export function createTimeoutDismiss() {
      * @param {() => void} callback
      */
     sync(open, timeout, callback) {
+      if (!listening && typeof document !== "undefined") {
+        listening = true;
+        document.addEventListener("visibilitychange", onVisibility);
+      }
       clearTimeout(timeoutId);
       timeoutId = undefined;
       paused = false;
+      hiddenPause = false;
       onTimeout = callback;
       active = typeof window !== "undefined" && open && timeout > 0;
       if (active) {
@@ -61,31 +103,19 @@ export function createTimeoutDismiss() {
         remaining = 0;
       }
     },
-    pause() {
-      if (!active || paused || timeoutId === undefined) return;
-      clearTimeout(timeoutId);
-      timeoutId = undefined;
-      remaining = Math.max(0, remaining - (Date.now() - startedAt));
-      paused = true;
-    },
-    resume() {
-      if (!paused || !active) return;
-      paused = false;
-      if (typeof window === "undefined") return;
-      if (remaining <= 0) {
-        active = false;
-        remaining = 0;
-        onTimeout();
-        return;
-      }
-      schedule(remaining);
-    },
+    pause,
+    resume,
     clear() {
+      if (listening && typeof document !== "undefined") {
+        listening = false;
+        document.removeEventListener("visibilitychange", onVisibility);
+      }
       clearTimeout(timeoutId);
       timeoutId = undefined;
       remaining = 0;
       active = false;
       paused = false;
+      hiddenPause = false;
     },
   };
 }
