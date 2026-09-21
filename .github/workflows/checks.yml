@@ -123,6 +123,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # test-changed.ts needs base-branch history to diff against.
+          fetch-depth: 0
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
       - run: bun ci
 
@@ -132,8 +135,19 @@ jobs:
       - name: Test types (Svelte 5)
         run: bun run test:types
 
+      # On PRs that don't touch css/** (not part of the JS module graph
+      # `--changed` walks), scope the run to tests affected by the diff
+      # against the PR's base branch (mapped by src/<X> <-> tests/<X>
+      # directory name — `vitest --changed` doesn't reliably resolve .svelte
+      # SFCs and falls back to running everything). Push/dispatch/css-touching
+      # PRs run the full suite.
       - name: Test (Svelte 5)
-        run: bun run test
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ] && [ "${{ needs.changes.outputs.css }}" != "true" ]; then
+            bun scripts/test-changed.ts "origin/${{ github.base_ref }}"
+          else
+            bun run test
+          fi
 
   test-e2e:
     needs: [static-checks, changes, test]
