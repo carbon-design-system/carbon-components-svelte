@@ -170,6 +170,25 @@ $viz-diverging: (
     }
   }
 
+  // Label color for text drawn on a ramp step: `--cds-viz-seq-on-<step>` and
+  // `--cds-viz-div-on-<step>`. The same for every hue, since ramps share
+  // their lightness steps. Which steps need dark text differs by mode, which
+  // is why this is a token and not a rule in JS. Every pairing is 4.5:1.
+  @for $s from 1 through 11 {
+    $dark-text: if($mode == dark, $s >= 6, $s <= 6);
+    $tokens: map-merge(
+      $tokens,
+      ("seq-on-#{viz-pad($s)}": if($dark-text, $gray-100, #ffffff))
+    );
+  }
+  @for $s from 1 through 17 {
+    $dark-text: if($mode == dark, $s <= 5 or $s >= 13, $s >= 4 and $s <= 14);
+    $tokens: map-merge(
+      $tokens,
+      ("div-on-#{viz-pad($s)}": if($dark-text, $gray-100, #ffffff))
+    );
+  }
+
   @return $tokens;
 }
 

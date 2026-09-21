@@ -77,18 +77,30 @@ export function divergingColor(t, palette = "red-cyan") {
 }
 
 /**
- * Text color, as a `var()` reference, that stays readable on a sequential
- * ramp step. The low half of
- * a ramp sits near the background, where body text already contrasts. The
- * high half needs the inverse. Dark themes reverse the ramp, so the same
- * rule holds there.
+ * 1-based diverging ramp step that `divergingColor` picks for `t`.
+ *
+ * @param {number} t
+ * @returns {number}
+ */
+export function divergingStep(t) {
+  const mid = (VIZ_DIVERGING_STEPS + 1) / 2;
+  const clamped = Number.isFinite(t) ? Math.min(1, Math.max(-1, t)) : 0;
+  return mid + Math.round(clamped * (mid - 1));
+}
+
+/**
+ * Text color, as a `var()` reference, that stays readable on a ramp step.
+ * Which steps need dark text differs between light and dark themes, so the
+ * choice lives in CSS: one `--cds-viz-seq-on-<step>` or
+ * `--cds-viz-div-on-<step>` token per step.
  *
  * @param {number} step 1-based ramp step.
- * @param {number} [steps]
+ * @param {"sequential" | "diverging"} [ramp]
  * @returns {string}
  */
-export function contrastTextColor(step, steps = VIZ_SEQUENTIAL_STEPS) {
-  return step > Math.ceil(steps / 2)
-    ? "var(--cds-viz-inverse-01)"
-    : "var(--cds-viz-text-01)";
+export function contrastTextColor(step, ramp = "sequential") {
+  const diverging = ramp === "diverging";
+  const steps = diverging ? VIZ_DIVERGING_STEPS : VIZ_SEQUENTIAL_STEPS;
+  const clamped = Math.min(steps, Math.max(1, Math.round(step)));
+  return `var(--cds-viz-${diverging ? "div" : "seq"}-on-${pad(clamped)})`;
 }

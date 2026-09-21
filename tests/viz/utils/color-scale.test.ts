@@ -1,6 +1,7 @@
 import {
   contrastTextColor,
   divergingColor,
+  divergingStep,
   sequentialColor,
   sequentialStep,
 } from "../../../src/viz/utils/color-scale.js";
@@ -83,13 +84,34 @@ describe("divergingColor", () => {
 });
 
 describe("contrastTextColor", () => {
-  test("the low half of the ramp uses text-01", () => {
-    expect(contrastTextColor(1)).toBe("var(--cds-viz-text-01)");
-    expect(contrastTextColor(6)).toBe("var(--cds-viz-text-01)");
+  test("names the label token for the step, so the theme decides the color", () => {
+    expect(contrastTextColor(1)).toBe("var(--cds-viz-seq-on-01)");
+    expect(contrastTextColor(6)).toBe("var(--cds-viz-seq-on-06)");
+    expect(contrastTextColor(11)).toBe("var(--cds-viz-seq-on-11)");
   });
 
-  test("the high half of the ramp uses inverse-01", () => {
-    expect(contrastTextColor(7)).toBe("var(--cds-viz-inverse-01)");
-    expect(contrastTextColor(11)).toBe("var(--cds-viz-inverse-01)");
+  test("covers the diverging ramp", () => {
+    expect(contrastTextColor(9, "diverging")).toBe("var(--cds-viz-div-on-09)");
+    expect(contrastTextColor(divergingStep(-1), "diverging")).toBe(
+      "var(--cds-viz-div-on-01)",
+    );
+    expect(contrastTextColor(divergingStep(1), "diverging")).toBe(
+      "var(--cds-viz-div-on-17)",
+    );
+  });
+
+  test("clamps a step outside the ramp", () => {
+    expect(contrastTextColor(0)).toBe("var(--cds-viz-seq-on-01)");
+    expect(contrastTextColor(99)).toBe("var(--cds-viz-seq-on-11)");
+    expect(contrastTextColor(99, "diverging")).toBe("var(--cds-viz-div-on-17)");
+  });
+});
+
+describe("divergingStep", () => {
+  test("matches the step divergingColor picks", () => {
+    for (const t of [-1, -0.4, 0, 0.3, 1, Number.NaN]) {
+      const color = divergingColor(Number.isFinite(t) ? t : 0);
+      expect(divergingStep(t)).toBe(extractStep(color));
+    }
   });
 });

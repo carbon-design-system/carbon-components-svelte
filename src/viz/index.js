@@ -44,6 +44,7 @@ export { getBulletGeometry } from "./utils/bullet.js";
 export {
   contrastTextColor,
   divergingColor,
+  divergingStep,
   sequentialColor,
   sequentialStep,
 } from "./utils/color-scale.js";

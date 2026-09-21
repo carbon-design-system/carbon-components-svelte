@@ -33,11 +33,16 @@ export function divergingColor(
   palette?: VizDivergingPalette,
 ): string;
 
+/** 1-based diverging ramp step that `divergingColor` picks for `t`. */
+export function divergingStep(t: number): number;
+
 /**
- * Text color, as a `var()` reference, that stays readable on a sequential
- * ramp step. The low half of
- * a ramp sits near the background, where body text already contrasts. The
- * high half needs the inverse. Dark themes reverse the ramp, so the same
- * rule holds there.
+ * Text color, as a `var()` reference, that stays readable on a ramp step.
+ * Which steps need dark text differs between light and dark themes, so the
+ * choice lives in CSS: one `--cds-viz-seq-on-<step>` or
+ * `--cds-viz-div-on-<step>` token per step.
  */
-export function contrastTextColor(step: number, steps?: number): string;
+export function contrastTextColor(
+  step: number,
+  ramp?: "sequential" | "diverging",
+): string;
