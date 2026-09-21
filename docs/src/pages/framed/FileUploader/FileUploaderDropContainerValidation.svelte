@@ -12,7 +12,7 @@
 <Stack gap={2}>
   <FileUploaderDropContainer
     multiple
-    maxFileSize={1024}
+    maxFileSize={1000}
     preventDuplicate
     labelText="Drag and drop files here or click to upload"
     bind:files
@@ -25,6 +25,7 @@
     <FileUploaderItem
       id={`accepted-${i}`}
       name={file.name}
+      fileSize={file.size}
       status="edit"
       on:delete={() => {
         files = files.filter((f) => f !== file);
@@ -37,6 +38,7 @@
       invalid
       id={`rejected-${i}`}
       name={file.name}
+      fileSize={file.size}
       errorSubject={reason === "size"
         ? "File exceeds 1 kB limit"
         : reason === "duplicate"
