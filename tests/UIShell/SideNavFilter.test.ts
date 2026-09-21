@@ -104,18 +104,44 @@ describe("SideNavFilter", () => {
     expect(screen.queryByText("No results found")).not.toBeInTheDocument();
   });
 
-  it("moves focus with the arrow keys only across currently-visible links", async () => {
+  it("moves focus with the arrow keys only across currently-visible rows", async () => {
     render(SideNavFilterTest);
 
     const input = screen.getByRole("searchbox", { name: "Filter" });
     await user.type(input, "clusters");
 
+    // Only the (now force-expanded) Kubernetes menu and its matching child
+    // remain visible; Dashboard, Resource list, and Worker pools are hidden.
     input.focus();
+    await user.keyboard("{ArrowDown}");
+    expect(screen.getByRole("button", { name: "Kubernetes" })).toHaveFocus();
+
     await user.keyboard("{ArrowDown}");
     expect(screen.getByRole("link", { name: "Clusters" })).toHaveFocus();
 
-    // Only one visible link remains; ArrowDown wraps back to it rather than
-    // landing on a hidden link.
+    // Wraps back to the first visible row rather than landing on a hidden one.
+    await user.keyboard("{ArrowDown}");
+    expect(screen.getByRole("button", { name: "Kubernetes" })).toHaveFocus();
+  });
+
+  it("moves focus onto a collapsed SideNavMenu's own toggle button, not its inert children", async () => {
+    render(SideNavFilterTest);
+
+    screen.getByRole("link", { name: "Dashboard" }).focus();
+    await user.keyboard("{ArrowDown}");
+    expect(screen.getByRole("link", { name: "Resource list" })).toHaveFocus();
+
+    await user.keyboard("{ArrowDown}");
+    expect(screen.getByRole("button", { name: "Kubernetes" })).toHaveFocus();
+
+    // Space toggles the now-focused button open, per native button
+    // semantics; the group's own items become reachable next.
+    await user.keyboard(" ");
+    expect(screen.getByRole("button", { name: "Kubernetes" })).toHaveAttribute(
+      "aria-expanded",
+      "true",
+    );
+
     await user.keyboard("{ArrowDown}");
     expect(screen.getByRole("link", { name: "Clusters" })).toHaveFocus();
   });

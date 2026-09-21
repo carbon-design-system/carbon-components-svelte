@@ -37,10 +37,17 @@
   /** @type {HTMLUListElement | null} */
   let itemsRef = null;
 
-  function getLinks() {
+  // Every visible row is a stop: plain links, and a `SideNavMenu` toggle
+  // button itself (whether the group is expanded or collapsed). A collapsed
+  // group's own items are `inert` (not `hidden`), so they're excluded here
+  // rather than being landed on and silently failing to focus.
+  const FOCUSABLE_SELECTOR =
+    "a.bx--side-nav__link, button.bx--side-nav__submenu";
+
+  function getFocusableItems() {
     if (!itemsRef) return [];
-    return Array.from(itemsRef.querySelectorAll("a.bx--side-nav__link")).filter(
-      (link) => !link.closest("[hidden]"),
+    return Array.from(itemsRef.querySelectorAll(FOCUSABLE_SELECTOR)).filter(
+      (item) => !item.closest("[hidden], [inert]"),
     );
   }
 
@@ -57,9 +64,9 @@
     },
     /** @param {1 | -1} direction */
     focusEdge(direction) {
-      const links = getLinks();
-      if (links.length === 0) return;
-      (direction === 1 ? links[0] : links[links.length - 1]).focus();
+      const items = getFocusableItems();
+      if (items.length === 0) return;
+      (direction === 1 ? items[0] : items[items.length - 1]).focus();
     },
   });
 </script>
@@ -68,9 +75,9 @@
   bind:this={itemsRef}
   class:bx--side-nav__items={true}
   use:rovingFocus={{
-    selector: "a.bx--side-nav__link",
-    getItems: () => (hasFilter ? getLinks() : []),
-    getActiveIndex: () => getLinks().indexOf(document.activeElement),
+    selector: FOCUSABLE_SELECTOR,
+    getItems: () => (hasFilter ? getFocusableItems() : []),
+    getActiveIndex: () => getFocusableItems().indexOf(document.activeElement),
     orientation: "vertical",
     focusOnMove: true,
   }}
