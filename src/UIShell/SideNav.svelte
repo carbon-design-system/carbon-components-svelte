@@ -76,7 +76,6 @@
   let navRef = undefined;
   let winWidth = undefined;
   let prevIsOpen = isOpen;
-  let navRef = null;
 
   $: if (prevIsOpen !== isOpen) {
     dispatch(isOpen ? "open" : "close");
