@@ -3,6 +3,10 @@
    * @template [Icon=any]
    */
 
+  /**
+   * @slot {{}} badge
+   */
+
   /** Set to `true` to select the current link */
   export let isSelected = false;
 
@@ -54,5 +58,8 @@
       </div>
     {/if}
     <span class:bx--side-nav__link-text={true}> <slot> {text} </slot> </span>
+    {#if $$slots.badge}
+      <div class:bx--side-nav__link-badge={true}><slot name="badge" /></div>
+    {/if}
   </a>
 </li>

@@ -525,3 +525,40 @@
 @include exports('side-nav-rail-focus') {
   @include side-nav-rail-focus;
 }
+
+// carbon-components-svelte patch
+/// Position a badge slot as a layout sibling to the link/submenu text,
+/// not nested inside it — nesting it in `bx--side-nav__link-text` would
+/// put it inside that element's single-line ellipsis truncation. The
+/// wrapper is pushed to the row's trailing edge with `margin-left: auto`
+/// (not `justify-content: space-between` on the row, which would also
+/// shove the text flex item away from the icon).
+///
+/// `BadgeIndicator` is `position: absolute; top: 0; right: 0`, meant to
+/// overlay the corner of a `position: relative` icon button (see
+/// `bx--btn__badge-wrapper`). Used here as a trailing row chip instead,
+/// so it must be reset to participate in normal flow — otherwise it
+/// escapes to the nearest positioned ancestor, which for `SideNavMenu`
+/// is `.bx--side-nav` itself (`position: fixed`), and renders pinned to
+/// the whole panel's top-right corner instead of next to its own item.
+/// @access private
+/// @group components
+@mixin side-nav-badge {
+  .#{$prefix}--side-nav__link-badge,
+  .#{$prefix}--side-nav__submenu-badge {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    margin-left: auto;
+    padding-left: $carbon--spacing-03;
+
+    .#{$prefix}--badge-indicator {
+      position: static;
+      margin: 0;
+    }
+  }
+}
+
+@include exports('side-nav-badge') {
+  @include side-nav-badge;
+}
