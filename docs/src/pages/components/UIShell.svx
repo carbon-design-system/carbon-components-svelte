@@ -91,6 +91,12 @@ Group related links behind a dropdown with `SideNavMenu`, wrapping `SideNavMenuI
 
 In the [rail](#rail) variant, an expanded `SideNavMenu` automatically collapses when the rail returns to its narrow state.
 
+### Badges
+
+Compose a `badge` named slot into `SideNavLink` or `SideNavMenu` to render a status or count indicator next to the label, such as [BadgeIndicator](/components/BadgeIndicator).
+
+<FileSource src="/framed/UIShell/SideNavBadge" />
+
 ### Current page
 
 Set `isSelected` on `SideNavLink` or `SideNavMenuItem` to mark the current page — see "Dashboard" in the example above. It adds `aria-current="page"` and a persistent highlight style so the current location stays visible even while hovering other items.
