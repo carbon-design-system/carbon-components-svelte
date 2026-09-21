@@ -128,10 +128,18 @@
   }}
   on:dragleave
   on:dragleave|preventDefault|stopPropagation={(event) => {
-    if (!disabled) {
-      over = false;
-      event.dataTransfer.dropEffect = "move";
+    if (disabled) return;
+    const next = event.relatedTarget;
+    const current = event.currentTarget;
+    if (
+      next instanceof Node &&
+      current instanceof Node &&
+      current.contains(next)
+    ) {
+      return;
     }
+    over = false;
+    if (event.dataTransfer) event.dataTransfer.dropEffect = "move";
   }}
   on:drop
   on:drop|preventDefault|stopPropagation={(event) => {
