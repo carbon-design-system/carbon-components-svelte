@@ -45,6 +45,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   FullPageError: "0.112.0",
   Form: "0.2.0",
   FunnelBars: "0.113.0",
+  FunnelChart: "0.113.0",
   Grid: "0.8.4",
   Heading: "0.98.0",
   Heatmap: "0.113.0",
