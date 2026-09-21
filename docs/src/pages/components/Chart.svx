@@ -179,6 +179,19 @@ While fullscreen, the plot grows to fill what the title, toolbar, and legend lea
 
 Both are on the chart context for a control of your own: `exportImage("png" | "svg")` resolves to a `Blob` or to markup, and `toggleFullscreen()` pairs with the `fullscreen` store.
 
+## Color palettes
+
+Every color is a `--cds-viz-*` custom property declared by `viz.css`, so it follows the theme and can be overridden like any other token. Pass a name without the prefix, such as `"cat-03"`, anywhere a color is accepted, or resolve one with `vizColor()`. Switch the theme in the page header to see each palette change.
+
+- **Categorical**: fourteen colors, in the order Carbon prescribes, for six series or more: `cat-01` to `cat-14`. A categorical index, as in `color={3}`, picks from these.
+- **Groups**: for one to five series, whole groups chosen to contrast with each other, several options each: `group-<size>-<option>-<index>`. Charts use option 1 unless `palette` says otherwise.
+- **Sequential**: eleven steps from low to high in four hues: `seq-<hue>-01` to `-11`. Low is the step nearest the background, so dark themes reverse the swatches.
+- **Diverging**: seventeen steps around a neutral midpoint at 09, in two palettes: `div-<low>-<high>-01` to `-17`. The midpoint matches the background, so the extremes are always the loudest steps.
+- **Labels on a ramp**: `seq-on-<step>` and `div-on-<step>` are the text colors that hold 4.5:1 on each step. Which steps need dark text differs by theme, which is why they are tokens. `contrastTextColor()` names the right one.
+- **Semantic**: `interactive`, `neutral`, `success`, `error`, `warning`, and `info`, aliases of core theme tokens for marks that carry status. Status never rests on these alone: components pair them with an icon, a shape, or text.
+
+<FileSource src="/framed/Chart/VizPalettes" />
+
 ## Writing a mark
 
 A mark is a component that reads the chart context and renders SVG. `groups` holds the series, `scales` maps data to pixels, and `hover` holds the focused point. Subscribe only to what you draw from: a mark that reads `groups` and `scales` but not `hover` never re-renders while the pointer moves.
