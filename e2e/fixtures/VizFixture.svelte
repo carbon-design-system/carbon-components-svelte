@@ -7,6 +7,7 @@
     DeltaIndicator,
     DonutChart,
     FunnelBars,
+    Heatmap,
     HeatStrip,
     Histogram,
     LineChart,
@@ -164,6 +165,17 @@
     title="Users by stage"
     orientation="horizontal"
     height={220}
+  />
+
+  <Heatmap
+    data={revenue.filter((row) => row.date.getMonth() < 6)}
+    x={(row) => row.date.toLocaleDateString("en-US", { month: "short" })}
+    y="region"
+    value="revenue"
+    title="Revenue by region and month"
+    rowHeader="Region"
+    cellLabels
+    selectable
   />
 
   <Histogram
