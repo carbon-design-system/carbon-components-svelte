@@ -126,3 +126,4 @@ export {
 export { treeLayout } from "./utils/tree-layout.js";
 export { squarify } from "./utils/treemap.js";
 export { layoutWords } from "./utils/word-cloud.js";
+export { default as WordCloudChart } from "./WordCloudChart/WordCloudChart.svelte";
