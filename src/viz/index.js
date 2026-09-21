@@ -42,6 +42,7 @@ export { default as UptimeBar } from "./UptimeBar/UptimeBar.svelte";
 export { groupBy, toAccessor } from "./utils/accessor.js";
 export { bin } from "./utils/bin.js";
 export { getBulletGeometry } from "./utils/bullet.js";
+export { buildCalendarGrid } from "./utils/calendar-grid.js";
 export {
   contrastTextColor,
   divergingColor,
