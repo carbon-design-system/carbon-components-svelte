@@ -4,6 +4,10 @@
    */
 
   /**
+   * @slot {{}} badge
+   */
+
+  /**
    * Set to `true` to toggle the expanded state.
    * @bindable writable
    */
@@ -69,6 +73,9 @@
       </span>
     {/if}
     <span class:bx--side-nav__submenu-title={true}>{text}</span>
+    {#if $$slots.badge}
+      <div class:bx--side-nav__submenu-badge={true}><slot name="badge" /></div>
+    {/if}
     <span
       class:bx--side-nav__icon={true}
       class:bx--side-nav__icon--small={true}
