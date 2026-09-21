@@ -121,4 +121,31 @@ test.describe("FileUploader (advanced)", () => {
       page.getByRole("button", { name: "Custom remove labeled.txt" }),
     ).toBeVisible();
   });
+
+  test("stacks the file size under a truncated name", async ({ page }) => {
+    const uploader = page.getByTestId("uploader-file-size");
+    const chooser = page.waitForEvent("filechooser");
+    await uploader.locator("button").filter({ hasText: "Add file" }).click();
+    await (await chooser).setFiles({
+      name: `${"very-long-file-name-".repeat(6)}.txt`,
+      mimeType: "text/plain",
+      buffer: Buffer.alloc(1500),
+    });
+
+    const name = uploader.locator(".bx--file-filename");
+    const size = uploader.locator(".bx--file-size");
+    await expect(size).toHaveText("1.5 kB");
+
+    const truncated = await name.evaluate(
+      (el) => el.scrollWidth > el.clientWidth,
+    );
+    expect(truncated).toBe(true);
+
+    const nameBox = await name.boundingBox();
+    const sizeBox = await size.boundingBox();
+    expect(sizeBox?.y).toBeGreaterThanOrEqual(
+      (nameBox?.y ?? 0) + (nameBox?.height ?? 0),
+    );
+    expect(sizeBox?.x).toBe(nameBox?.x);
+  });
 });

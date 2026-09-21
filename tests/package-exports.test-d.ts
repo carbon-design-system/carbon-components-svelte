@@ -3,6 +3,7 @@ import type {
   DataTable as BarrelDataTable,
   breakpointObserver,
   breakpoints,
+  formatFileSize,
   fuzzyMatch,
   getAvatarBackgroundColor,
   getInitials,
@@ -35,6 +36,7 @@ type _Button = Button;
 type _CarbonTheme = CarbonTheme;
 type _DataTable = DataTable;
 type _DataTableRow = DataTableRow<{ id: string; name: string }>;
+type _FormatFileSize = ReturnType<typeof formatFileSize>;
 type _FuzzyMatch = ReturnType<typeof fuzzyMatch>;
 type _GetAvatarBackgroundColor = ReturnType<typeof getAvatarBackgroundColor>;
 type _GetInitials = ReturnType<typeof getInitials>;

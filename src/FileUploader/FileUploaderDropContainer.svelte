@@ -25,12 +25,13 @@
    * Specify the maximum file size in bytes.
    * Files exceeding this limit are filtered out and reported via the
    * `rejected` event with `reason: 'size'`.
-   * File sizes use binary (base 2) units: 1024 bytes = 1 KiB, not 1000 bytes.
+   * The limit is a raw byte count: use `5 * 1000 * 1000` for 5 MB
+   * (decimal) or `5 * 1024 * 1024` for 5 MiB (binary).
    * @type {number | undefined}
    * @example
    * ```svelte
-   * <!-- 5 MB = 5 × 1024 × 1024 = 5,242,880 bytes -->
-   * <FileUploaderDropContainer maxFileSize={5 * 1024 * 1024} />
+   * <!-- 5 MB = 5 × 1000 × 1000 = 5,000,000 bytes -->
+   * <FileUploaderDropContainer maxFileSize={5 * 1000 * 1000} />
    * ```
    */
   export let maxFileSize = undefined;

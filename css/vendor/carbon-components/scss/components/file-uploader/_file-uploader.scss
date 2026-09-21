@@ -150,7 +150,7 @@
       @include type-style('body-short-01');
 
       overflow: hidden;
-      margin-left: $carbon--spacing-05;
+      // ccs: `margin-left` moved to `.bx--file-filename-group` (file size patch)
       text-overflow: ellipsis;
       white-space: nowrap;
     }
@@ -326,4 +326,33 @@
 
 @include exports('file-uploader') {
   @include file-uploader;
+}
+
+// carbon-components-svelte patch (file size)
+// Name and optional size stack in one grid cell; the group owns the inset
+// the name used to carry. `min-width: 0` lets the name's ellipsis apply.
+.#{$prefix}--file-filename-group {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  margin-left: $carbon--spacing-05;
+}
+
+.#{$prefix}--file-size {
+  @include type-style('label-01');
+
+  flex-shrink: 0;
+  color: $text-02;
+  white-space: nowrap;
+}
+
+// Two lines overflow the 32px small row; put the size beside the name.
+.#{$prefix}--file__selected-file--sm .#{$prefix}--file-filename-group {
+  flex-direction: row;
+  align-items: baseline;
+  gap: $carbon--spacing-03;
+}
+
+.#{$prefix}--file__selected-file--sm .#{$prefix}--file-filename {
+  min-width: 0;
 }

@@ -38,11 +38,25 @@
   /** Specify the file uploader name */
   export let name = "";
 
+  /**
+   * File size to show under the name.
+   * A number is bytes, formatted with decimal units (1000 bytes = 1 kB).
+   * A string is shown as-is; use `formatFileSize(bytes, { units: "binary" })`
+   * for binary units or a localized size.
+   * Omit to show the name only.
+   * @type {number | string | undefined}
+   */
+  export let fileSize = undefined;
+
   import { createEventDispatcher } from "svelte";
+  import { formatFileSize } from "../utils/format-file-size.js";
   import { uniqueId } from "../utils/unique-id.js";
   import Filename from "./Filename.svelte";
 
   const dispatch = createEventDispatcher();
+
+  $: fileSizeText =
+    typeof fileSize === "number" ? formatFileSize(fileSize) : (fileSize ?? "");
 </script>
 
 <span
@@ -56,7 +70,12 @@
   on:mouseenter
   on:mouseleave
 >
-  <p class:bx--file-filename={true}>{name}</p>
+  <span class:bx--file-filename-group={true}>
+    <p class:bx--file-filename={true}>{name}</p>
+    {#if fileSizeText}
+      <p class:bx--file-size={true}>{fileSizeText}</p>
+    {/if}
+  </span>
   <span class:bx--file__state-container={true}>
     <Filename
       fileName={name}

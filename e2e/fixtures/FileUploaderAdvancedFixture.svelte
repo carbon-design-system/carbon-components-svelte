@@ -9,6 +9,8 @@
   let filesPrepend = [];
 
   let filesIcon = [];
+
+  let filesSize = [];
 </script>
 
 <section data-testid="section-max">
@@ -53,5 +55,17 @@
     status="edit"
     buttonLabel="Add file"
     iconDescription={(ctx) => `Custom remove ${ctx.fileName}`}
+  />
+</section>
+
+<section data-testid="section-file-size">
+  <FileUploader
+    data-testid="uploader-file-size"
+    labelTitle="File size"
+    fileSize
+    bind:files={filesSize}
+    status="edit"
+    buttonLabel="Add file"
+    iconDescription="Remove file"
   />
 </section>
