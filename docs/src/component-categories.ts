@@ -148,6 +148,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "HeatStrip",
       "Histogram",
       "LineChart",
+      "LollipopChart",
       "Meter",
       "MicroDonut",
       "MicroFunnel",
