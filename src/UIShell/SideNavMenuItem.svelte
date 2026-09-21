@@ -22,7 +22,7 @@
 
   import { getContext, onMount } from "svelte";
   import { readable } from "svelte/store";
-  import { fuzzyMatch } from "../utils/fuzzy-match.js";
+  import { fuzzyMatch, highlightSegmentsToHtml } from "../utils/fuzzy-match.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const menuCtx = getContext("carbon:SideNavMenu");
@@ -34,9 +34,21 @@
   const id = uniqueId();
 
   $: matchText = text ?? ref?.textContent ?? "";
-  $: matches = fuzzyMatch(matchText, $query).matched;
+  $: matchResult = fuzzyMatch(matchText, $query);
+  $: matches = matchResult.matched;
   $: setChildMatch(id, matches);
   $: hiddenByFilter = $query.length > 0 && !matches;
+
+  // Highlighting only applies to the plain `text` prop; a custom default
+  // slot is rendered as-is.
+  $: labelHtml =
+    text && !$$slots.default && $query.length > 0
+      ? highlightSegmentsToHtml(
+          text,
+          matchResult.indices,
+          "bx--side-nav-filter__highlight",
+        )
+      : null;
 
   onMount(() => () => unregisterChild(id));
 </script>
@@ -51,6 +63,6 @@
     {...$$restProps}
     on:click
   >
-    <span class:bx--side-nav__link-text={true}><slot>{text}</slot></span>
+    <span class:bx--side-nav__link-text={true}>{#if labelHtml}{@html labelHtml}{:else}<slot>{text}</slot>{/if}</span>
   </a>
 </li>

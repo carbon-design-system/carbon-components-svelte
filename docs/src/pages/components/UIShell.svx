@@ -152,6 +152,8 @@ Add `SideNavFilter` as a child of `SideNavItems`, alongside your `SideNavLink`/`
 
 <FileSource src="/framed/UIShell/SideNavFilter" />
 
+When a `SideNavLink`/`SideNavMenuItem` uses the `text` prop, the matched substring is highlighted automatically (bolded), the same way `SearchMenuItem` highlights matches in its own label. This only applies to `text`; a custom default slot renders as-is.
+
 Once a link has focus, <DocKbd label="ArrowUp" />/<DocKbd label="ArrowDown" /> move between the currently-visible matches; hidden links are skipped and are not tab stops. <DocKbd label="ArrowDown" />/<DocKbd label="ArrowUp" /> from the filter input itself jump to the first/last visible match.
 
 Show a custom empty state with the `noResults` slot:

@@ -4,7 +4,10 @@
 
 /// SideNavFilter: a `Search` input rendered as a top-level `SideNavItems`
 /// child, with a no-results message shown below it. Not a Carbon component;
-/// spacing is chosen to sit flush with the side nav's own item padding.
+/// spacing is chosen to sit flush with the side nav's own item padding. The
+/// highlight class is rendered by `SideNavLink`/`SideNavMenuItem` themselves
+/// (on the matched substring of their own label), not by this component,
+/// mirroring `.bx--search-menu-item__highlight`.
 /// @access private
 /// @group components
 @mixin side-nav-filter {
@@ -16,6 +19,11 @@
     padding: $carbon--spacing-03 $carbon--spacing-05;
     color: $text-02;
     @include type-style("body-short-01");
+  }
+
+  .#{$prefix}--side-nav-filter__highlight {
+    color: $text-01;
+    font-weight: 600;
   }
 }
 

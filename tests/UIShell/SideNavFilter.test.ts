@@ -17,6 +17,21 @@ describe("SideNavFilter", () => {
     ).not.toBeInTheDocument();
   });
 
+  it("highlights the matched substring in a visible link's label", async () => {
+    render(SideNavFilterTest);
+
+    const link = screen.getByRole("link", { name: "Dashboard" });
+    expect(
+      link.querySelector(".bx--side-nav-filter__highlight"),
+    ).not.toBeInTheDocument();
+
+    await user.type(screen.getByRole("searchbox", { name: "Filter" }), "dash");
+
+    const highlight = link.querySelector(".bx--side-nav-filter__highlight");
+    expect(highlight).toHaveTextContent("Dash");
+    expect(link).toHaveTextContent("Dashboard");
+  });
+
   it("force-expands a collapsed SideNavMenu containing a match and hides it when no child matches", async () => {
     render(SideNavFilterTest);
 
