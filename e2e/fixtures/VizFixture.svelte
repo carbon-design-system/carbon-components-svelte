@@ -18,6 +18,7 @@
     Heatmap,
     HeatStrip,
     Histogram,
+    KpiCard,
     LineChart,
     LollipopChart,
     MicroDonut,
@@ -58,6 +59,23 @@
 
 <main data-testid="viz" style="padding: 1rem; max-width: 40rem">
   <h1>Data visualization</h1>
+
+  <KpiCard
+    label="Monthly revenue"
+    value={1280000}
+    delta={0.123}
+    deltaLabel="vs last month"
+  >
+    <Sparkline slot="chart" {values} />
+    <BulletChart
+      slot="footer"
+      value={1.28}
+      target={1.5}
+      max={2}
+      size="sm"
+      label="Against target"
+    />
+  </KpiCard>
 
   <p>
     <DeltaIndicator value={0.123} format="percent" label="vs last week" />
