@@ -1,5 +1,6 @@
 <script>
   import {
+    AlluvialChart,
     AreaChart,
     BarChart,
     BoxplotChart,
@@ -216,6 +217,20 @@
     markers={[{ x: 40000, label: "Goal" }]}
     title="Distribution of monthly revenue"
     height={220}
+  />
+
+  <AlluvialChart
+    data={[
+      { from: "Visitors", to: "Signup", users: 6000 },
+      { from: "Visitors", to: "Left", users: 4000 },
+      { from: "Signup", to: "Paid", users: 900 },
+      { from: "Signup", to: "Left", users: 5100 },
+    ]}
+    source="from"
+    target="to"
+    value="users"
+    title="Signup flow"
+    height={240}
   />
 
   <RadarChart
