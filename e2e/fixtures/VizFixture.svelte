@@ -2,6 +2,7 @@
   import {
     AreaChart,
     BarChart,
+    BoxplotChart,
     BulletChart,
     CalendarHeatmap,
     CohortTable,
@@ -212,6 +213,14 @@
     markers={[{ x: 40000, label: "Goal" }]}
     title="Distribution of monthly revenue"
     height={220}
+  />
+
+  <BoxplotChart
+    data={revenue}
+    x="region"
+    y="revenue"
+    title="Spread of monthly totals per region"
+    height={240}
   />
 
   <LollipopChart
