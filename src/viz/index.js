@@ -27,6 +27,7 @@ export { default as ChartTooltip } from "./Chart/ChartTooltip.svelte";
 export { default as ChartTooltipRow } from "./Chart/ChartTooltipRow.svelte";
 export { CHART_CONTEXT } from "./Chart/context.js";
 export { default as CohortTable } from "./CohortTable/CohortTable.svelte";
+export { default as ComboChart } from "./ComboChart/ComboChart.svelte";
 export { default as ComparisonBar } from "./ComparisonBar/ComparisonBar.svelte";
 export { default as DeltaIndicator } from "./DeltaIndicator/DeltaIndicator.svelte";
 export { default as DonutChart } from "./DonutChart/DonutChart.svelte";
