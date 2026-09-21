@@ -7,6 +7,7 @@ export { default as ChartDataTable } from "./ChartDataTable.svelte";
 export { default as ChartGrid } from "./ChartGrid.svelte";
 export { default as ChartLegend } from "./ChartLegend.svelte";
 export { default as ChartLine } from "./ChartLine.svelte";
+export { default as ChartLollipops } from "./ChartLollipops.svelte";
 export { default as ChartMarker } from "./ChartMarker.svelte";
 export { default as ChartPoints } from "./ChartPoints.svelte";
 export { default as ChartRuler } from "./ChartRuler.svelte";
