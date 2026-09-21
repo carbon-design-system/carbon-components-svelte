@@ -10,6 +10,7 @@ describe("FileUploaderDropContainer", () => {
   function createDragEvent(
     type: "dragover" | "dragleave" | "drop",
     files: File[] = [],
+    relatedTarget: EventTarget | null = null,
   ) {
     const dataTransfer = new DataTransfer();
     for (const file of files) {
@@ -24,6 +25,12 @@ describe("FileUploaderDropContainer", () => {
 
     Object.defineProperty(event, "dataTransfer", {
       value: dataTransfer,
+      writable: false,
+      configurable: true,
+    });
+
+    Object.defineProperty(event, "relatedTarget", {
+      value: relatedTarget,
       writable: false,
       configurable: true,
     });
@@ -158,6 +165,35 @@ describe("FileUploaderDropContainer", () => {
     });
 
     dropDiv.dispatchEvent(dragLeaveEvent);
+
+    await vi.waitFor(() => {
+      expect(dropContainer).not.toHaveClass(
+        "bx--file__drop-container--drag-over",
+      );
+    });
+  });
+
+  it("should keep drag-over state when dragleave moves onto a child element", async () => {
+    const { container } = render(FileUploaderDropContainer);
+
+    const dropDiv = container.querySelector(".bx--file");
+    assert(dropDiv instanceof HTMLElement);
+
+    const dropContainer = container.querySelector(".bx--file__drop-container");
+    assert(dropContainer instanceof HTMLElement);
+
+    const file = new File(["content"], "test.txt", { type: "text/plain" });
+    dropDiv.dispatchEvent(createDragEvent("dragover", [file]));
+
+    await vi.waitFor(() => {
+      expect(dropContainer).toHaveClass("bx--file__drop-container--drag-over");
+    });
+
+    dropDiv.dispatchEvent(createDragEvent("dragleave", [], dropContainer));
+
+    expect(dropContainer).toHaveClass("bx--file__drop-container--drag-over");
+
+    dropDiv.dispatchEvent(createDragEvent("dragleave", [], document.body));
 
     await vi.waitFor(() => {
       expect(dropContainer).not.toHaveClass(
