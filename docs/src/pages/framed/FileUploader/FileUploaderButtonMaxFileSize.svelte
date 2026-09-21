@@ -13,7 +13,7 @@
   <FileUploaderButton
     multiple
     disableLabelChanges
-    maxFileSize={1024 * 1024}
+    maxFileSize={1000 * 1000}
     labelText="Add files under 1 MB"
     bind:files
     on:rejected={(e) => {
@@ -25,6 +25,7 @@
     <FileUploaderItem
       id={`accepted-${i}`}
       name={file.name}
+      fileSize={file.size}
       status="edit"
       on:delete={() => {
         files = files.filter((f) => f !== file);
@@ -37,6 +38,7 @@
       invalid
       id={`rejected-size-${i}`}
       name={file.name}
+      fileSize={file.size}
       errorSubject="File exceeds 1 MB limit"
       errorBody="Please select a smaller file."
       status="edit"

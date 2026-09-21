@@ -4,7 +4,7 @@ description: File uploaders handle file uploads with a button trigger, drag-and-
 ---
 
 <script>
-  import { FileUploaderButton, FileUploader, FileUploaderDropContainer, FileUploaderItem, FileUploaderSkeleton, Stack } from "carbon-components-svelte";
+  import { FileUploaderButton, FileUploader, FileUploaderDropContainer, FileUploaderItem, FileUploaderSkeleton, Stack, formatFileSize } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
   import DocumentAdd from "carbon-icons-svelte/lib/DocumentAdd.svelte";
 </script>
@@ -38,9 +38,9 @@ selection rather than adding to it.
 Limit selected file size with `maxFileSize`. Files exceeding the limit (in
 bytes) are automatically filtered out.
 
-This example accepts files up to 1 MB (1,048,576 bytes). Files over the limit
+This example accepts files up to 1 MB (1,000,000 bytes). Files over the limit
 are not added, and a `rejected` event fires with `{ file, reason: "size" }` for
-each rejected file.
+each rejected file. Each row shows the file's size (see [File size](#file-size-1)).
 
 <FileSource src="/framed/FileUploader/FileUploaderButtonMaxFileSize" />
 
@@ -150,7 +150,7 @@ always undefined and fileName matches name.
   invalid
   id="server-logs"
   name="server-logs-2026-09.csv"
-  errorSubject="File size exceeds 500kb limit"
+  errorSubject="File size exceeds 500 kB limit"
   errorBody="Please select a new file."
   status="edit"
   iconDescription={({ fileName, invalid }) =>
@@ -181,15 +181,70 @@ programmatically.
 Limit uploaded file size with `maxFileSize`. Files exceeding the limit (in bytes)
 are automatically filtered out.
 
-Values are in bytes using binary (base 2) units, where 1024 bytes = 1 KiB
-(kibibyte), not 1000 bytes. This matches how operating systems measure file
-sizes.
+`maxFileSize` is a raw byte count, so pick the multiplier that matches how you
+label the limit: `1000 * 1000` for 1 MB (decimal, as macOS, iOS, and Android
+report sizes) or `1024 * 1024` for 1 MiB (binary, as Windows reports sizes,
+though it labels them "MB").
 
-This example accepts files up to 1 MB (1,048,576 bytes). Files over the limit
+This example accepts files up to 1 MB (1,000,000 bytes). Files over the limit
 are not added, and a `rejected` event fires with `{ file, reason: "size" }` for
-each rejected file.
+each rejected file. Both lists show each file's size (see [File size](#file-size)).
 
 <FileSource src="/framed/FileUploader/FileUploaderMaxFileSize" />
+
+### File size
+
+Set `fileSize` to show each file's size under its name. File sizes are hidden by
+default.
+
+`true` formats sizes with decimal units (1000 bytes = 1 kB). Set
+`fileSize="binary"` for binary units (1024 bytes = 1 KiB).
+
+<FileUploader
+  fileSize
+  multiple
+  labelTitle="Upload files"
+  buttonLabel="Add files"
+  status="edit"
+  files={[
+    new File([new Uint8Array(1500)], "notes.txt"),
+    new File([new Uint8Array(250_000)], "Q3-financial-report.pdf"),
+  ]}
+/>
+
+<FileUploader
+  fileSize="binary"
+  multiple
+  labelTitle="Upload files"
+  buttonLabel="Add files"
+  status="edit"
+  files={[
+    new File([new Uint8Array(1536)], "notes.txt"),
+    new File([new Uint8Array(250 * 1024)], "Q3-financial-report.pdf"),
+  ]}
+/>
+
+Pass a function to write the text yourself. It receives `(file, index)` and
+returns a string. The exported `formatFileSize(bytes, { units, locale })`
+helper does the unit math; `locale` formats the number (e.g., `1,5 kB` in
+German).
+
+```svelte
+<script>
+  import { FileUploader, formatFileSize } from "carbon-components-svelte";
+</script>
+
+<FileUploader fileSize={(file) => formatFileSize(file.size, { locale: "de-DE" })} />
+```
+
+<FileUploader
+  fileSize={(file) => formatFileSize(file.size, { locale: "de-DE" })}
+  multiple
+  labelTitle="Upload files"
+  buttonLabel="Add files"
+  status="edit"
+  files={[new File([new Uint8Array(1500)], "notes.txt")]}
+/>
 
 ### Duplicate detection
 
@@ -327,11 +382,24 @@ Provide detailed error messages for invalid files with `errorSubject` and
   invalid
   id="q3-report"
   name="Q3-financial-report.pdf"
-  errorSubject="File size exceeds 500kb limit"
+  fileSize={742_000}
+  errorSubject="File size exceeds 500 kB limit"
   errorBody="Please select a new file."
   status="edit"
   on:delete
 />
+
+### File size
+
+Set `fileSize` to show the file's size under its name. A number is bytes,
+formatted with decimal units (1000 bytes = 1 kB). A string is shown as-is: use
+`formatFileSize` for binary units or a localized number, or pass your own text.
+Small items show the size beside the name so the row keeps its height.
+
+<FileUploaderItem name="Q3-financial-report.pdf" fileSize={250_000} status="complete" />
+<FileUploaderItem name="Q3-financial-report.pdf" fileSize={formatFileSize(250 * 1024, { units: "binary" })} status="complete" />
+<FileUploaderItem name="Q3-financial-report.pdf" fileSize="250 Ko" status="complete" />
+<FileUploaderItem size="small" name="Q3-financial-report.pdf" fileSize={250_000} status="complete" />
 
 ### Sizes
 
