@@ -213,4 +213,48 @@ test.describe("Data visualization", () => {
     expect(file.subarray(1, 4).toString()).toBe("PNG");
     expect(file.length).toBeGreaterThan(5000);
   });
+
+  test("LineChart zooms by dragging a handle, pans by dragging the window, and resets", async ({
+    page,
+  }) => {
+    await page.goto("/viz.html");
+    const figure = page
+      .locator("figure")
+      .filter({ hasText: "Revenue by region" })
+      .last();
+    await figure.scrollIntoViewIfNeeded();
+    const start = figure.getByRole("slider", { name: "Range start" });
+    const end = figure.getByRole("slider", { name: "Range end" });
+    const track = await figure.locator(".bx--viz-zoom__track").boundingBox();
+    if (!track) throw new Error("no track");
+    const y = track.y + track.height / 2;
+    const before = Number(await start.getAttribute("aria-valuenow"));
+
+    // Drag the start handle to the middle.
+    await page.mouse.move(track.x + 1, y);
+    await page.mouse.down();
+    await page.mouse.move(track.x + track.width / 2, y, { steps: 5 });
+    await page.mouse.up();
+    const zoomed = Number(await start.getAttribute("aria-valuenow"));
+    expect(zoomed).toBeGreaterThan(before);
+    await expect(figure.locator(".bx--viz-line")).toHaveAttribute(
+      "clip-path",
+      /url\(#bx-viz-clip-/,
+    );
+
+    // Drag the window left: both ends move, and the width holds.
+    const width = Number(await end.getAttribute("aria-valuenow")) - zoomed;
+    await page.mouse.move(track.x + track.width * 0.75, y);
+    await page.mouse.down();
+    await page.mouse.move(track.x + track.width * 0.5, y, { steps: 5 });
+    await page.mouse.up();
+    const panned = Number(await start.getAttribute("aria-valuenow"));
+    expect(panned).toBeLessThan(zoomed);
+    expect(
+      Number(await end.getAttribute("aria-valuenow")) - panned,
+    ).toBeCloseTo(width, -3);
+
+    await figure.getByRole("button", { name: "Reset zoom" }).click();
+    await expect(start).toHaveAttribute("aria-valuenow", String(before));
+  });
 });

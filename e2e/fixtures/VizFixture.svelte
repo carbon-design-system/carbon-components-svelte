@@ -289,5 +289,6 @@
     title="Revenue by region"
     yTitle="Revenue"
     toolbar
+    zoomBar
   />
 </main>
