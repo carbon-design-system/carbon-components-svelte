@@ -103,6 +103,38 @@ test.describe("Data visualization", () => {
     );
   });
 
+  test("ScatterChart hovers the nearest point in both directions", async ({
+    page,
+  }) => {
+    await page.goto("/viz.html");
+    const figure = page
+      .locator("figure")
+      .filter({ hasText: "Revenue by month, as bubbles" })
+      .first();
+    const points = figure.locator(".bx--viz-points__point");
+    await expect(points).toHaveCount(36);
+
+    // Aim just beside a bubble: the chart, not the circle, finds it.
+    await figure.scrollIntoViewIfNeeded();
+    const box = await points.last().boundingBox();
+    if (!box) throw new Error("no point");
+    await page.mouse.move(box.x + box.width / 2 + 3, box.y + box.height / 2);
+    await expect(figure.locator(".bx--viz-points__point--active")).toHaveCount(
+      1,
+    );
+    await expect(figure.locator(".bx--viz-chart-tooltip")).toContainText(
+      "Month",
+    );
+
+    // Far from every point, nothing is hovered.
+    const plot = await figure.locator("svg").first().boundingBox();
+    if (!plot) throw new Error("no plot");
+    await page.mouse.move(plot.x + 2, plot.y + 2);
+    await expect(figure.locator(".bx--viz-points__point--active")).toHaveCount(
+      0,
+    );
+  });
+
   test("LineChart follows its container and shows a tooltip for the focused point", async ({
     page,
   }) => {

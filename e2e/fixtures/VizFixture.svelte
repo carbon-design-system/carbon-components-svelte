@@ -20,6 +20,7 @@
     RadialProgress,
     RangeIndicator,
     RankBars,
+    ScatterChart,
     ShareOfTotal,
     Sparkline,
     StackedBar,
@@ -210,6 +211,17 @@
     markers={[{ x: 40000, label: "Goal" }]}
     title="Distribution of monthly revenue"
     height={220}
+  />
+
+  <ScatterChart
+    data={revenue}
+    x={(row) => row.date.getMonth() + 1}
+    y="revenue"
+    series="region"
+    size="revenue"
+    title="Revenue by month, as bubbles"
+    xTitle="Month"
+    height={240}
   />
 
   <DonutChart
