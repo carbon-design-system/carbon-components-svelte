@@ -549,6 +549,23 @@ describe("NotificationQueue", () => {
     expect(screen.getByLabelText("Custom close")).toBeInTheDocument();
   });
 
+  it("should forward toast-only props (pauseOnHover, role, fullWidth)", async () => {
+    const { component } = render(NotificationQueueTest);
+
+    getQueue(component).add({
+      title: "Saved",
+      pauseOnHover: true,
+      role: "status",
+      fullWidth: true,
+      timeout: 0,
+    });
+    await tick();
+
+    const toast = screen.getByRole("status");
+    expect(toast).toBeInTheDocument();
+    expectInlineStyle(toast, { width: "100%" });
+  });
+
   it.each(["top-right", "top-left", "top-center"] as const)(
     "should prepend notifications for %s position",
     async (position) => {

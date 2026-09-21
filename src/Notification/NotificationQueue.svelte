@@ -10,6 +10,9 @@
    * @property {boolean} [lowContrast]
    * @property {string} [closeButtonDescription]
    * @property {boolean} [hideCloseButton]
+   * @property {boolean} [pauseOnHover]
+   * @property {"alert" | "log" | "status"} [role]
+   * @property {boolean} [fullWidth]
    */
 
   /**
