@@ -1,0 +1,182 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// ToggleButtonGroup / ToggleButton styles. Neither Carbon v10 nor v11 ships
+/// a toggle-button-group component, so this is an original visual design
+/// (see the component's docs page), not a port.
+/// @access private
+/// @group components
+@mixin toggle-button-group {
+  .#{$prefix}--toggle-button-group {
+    display: inline-flex;
+  }
+
+  .#{$prefix}--toggle-button-group--vertical {
+    flex-direction: column;
+  }
+
+  .#{$prefix}--toggle-button {
+    @include button-reset($omit: (display, padding, width, cursor));
+    @include type-style("body-short-01");
+    @include focus-outline("reset");
+
+    position: relative;
+    z-index: 0;
+    display: inline-flex;
+    min-width: 0;
+    height: to-rem(40px);
+    align-items: center;
+    justify-content: center;
+    column-gap: $carbon--spacing-03;
+    padding: 0 $carbon--spacing-05;
+    background-color: $field-01;
+    color: $text-02;
+    cursor: pointer;
+    transition: background-color $duration--fast-01 motion(standard, productive),
+      color $duration--fast-01 motion(standard, productive);
+  }
+
+  .#{$prefix}--toggle-button svg {
+    flex-shrink: 0;
+    fill: $icon-02;
+  }
+
+  // Divider between adjacent segments, suppressed next to a focused segment
+  // so the focus outline isn't visually bisected (mirrors `_combo-button.scss`).
+  // A pseudo-element rather than `box-shadow` (like ContentSwitcher's own
+  // divider) so it doesn't compete with the pressed indicator below for the
+  // same property: two rules each setting a single-value `box-shadow` don't
+  // combine, the higher-specificity one wins outright, and this selector's
+  // 2 classes always outrank `--pressed`'s 1 - silently dropping the pressed
+  // bottom bar on every segment but the first.
+  .#{$prefix}--toggle-button::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: to-rem(1px);
+    height: 100%;
+    background-color: $ui-03;
+    content: "";
+  }
+
+  .#{$prefix}--toggle-button:first-child::before {
+    display: none;
+  }
+
+  .#{$prefix}--toggle-button:focus::before,
+  .#{$prefix}--toggle-button:focus + .#{$prefix}--toggle-button::before {
+    background-color: transparent;
+  }
+
+  .#{$prefix}--toggle-button-group--vertical .#{$prefix}--toggle-button {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .#{$prefix}--toggle-button-group--vertical .#{$prefix}--toggle-button::before {
+    width: 100%;
+    height: to-rem(1px);
+  }
+
+  .#{$prefix}--toggle-button:focus {
+    z-index: 1;
+
+    @include focus-outline("outline");
+  }
+
+  // Hover only where a pointer can hover, so a tap doesn't leave a segment
+  // stuck in its hover state.
+  @media (any-hover: hover) {
+    .#{$prefix}--toggle-button:hover {
+      background-color: $hover-ui;
+    }
+
+    .#{$prefix}--toggle-button--pressed:hover {
+      background-color: $hover-selected-ui;
+    }
+  }
+
+  .#{$prefix}--toggle-button:active {
+    background-color: $active-ui;
+  }
+
+  .#{$prefix}--toggle-button--pressed {
+    background-color: $selected-ui;
+    color: $text-01;
+    // Non-color pressed cue (WCAG 1.4.11 fails on color alone against
+    // `$field-01` in some themes).
+    box-shadow: inset 0 to-rem(-2px) 0 0 $interactive-04;
+  }
+
+  .#{$prefix}--toggle-button--pressed svg {
+    fill: $icon-01;
+  }
+
+  .#{$prefix}--toggle-button-group--vertical .#{$prefix}--toggle-button--pressed {
+    box-shadow: inset to-rem(-2px) 0 0 0 $interactive-04;
+  }
+
+  .#{$prefix}--toggle-button:disabled {
+    background-color: $disabled-01;
+    color: $disabled-02;
+    cursor: not-allowed;
+  }
+
+  .#{$prefix}--toggle-button:disabled svg {
+    fill: $disabled-02;
+  }
+
+  .#{$prefix}--toggle-button--pressed:disabled {
+    box-shadow: inset 0 to-rem(-2px) 0 0 $disabled-02;
+  }
+
+  .#{$prefix}--toggle-button-group--vertical
+    .#{$prefix}--toggle-button--pressed:disabled {
+    box-shadow: inset to-rem(-2px) 0 0 0 $disabled-02;
+  }
+
+  .#{$prefix}--toggle-button--icon-only {
+    width: to-rem(40px);
+    padding: 0;
+  }
+
+  .#{$prefix}--toggle-button-group--sm .#{$prefix}--toggle-button {
+    height: to-rem(32px);
+  }
+
+  .#{$prefix}--toggle-button-group--sm .#{$prefix}--toggle-button--icon-only {
+    width: to-rem(32px);
+  }
+
+  .#{$prefix}--toggle-button-group--lg .#{$prefix}--toggle-button {
+    height: to-rem(48px);
+  }
+
+  .#{$prefix}--toggle-button-group--lg .#{$prefix}--toggle-button--icon-only {
+    width: to-rem(48px);
+  }
+
+  // Vertical's own width:100% rule above shares its 2-class specificity, so
+  // without this, icon-only segments would stretch full-width instead of
+  // staying square; re-center the icon accordingly.
+  .#{$prefix}--toggle-button-group--vertical .#{$prefix}--toggle-button--icon-only {
+    width: to-rem(40px);
+    justify-content: center;
+  }
+
+  .#{$prefix}--toggle-button-group--vertical.#{$prefix}--toggle-button-group--sm
+    .#{$prefix}--toggle-button--icon-only {
+    width: to-rem(32px);
+  }
+
+  .#{$prefix}--toggle-button-group--vertical.#{$prefix}--toggle-button-group--lg
+    .#{$prefix}--toggle-button--icon-only {
+    width: to-rem(48px);
+  }
+}
+
+@include exports("toggle-button-group") {
+  @include toggle-button-group;
+}
