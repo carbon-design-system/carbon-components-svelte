@@ -82,7 +82,6 @@ $list-box-menu-width: to-rem(300px);
     }
   }
 
-  // TODO V11: Remove xl selector
   .#{$prefix}--list-box--xl,
   .#{$prefix}--list-box--lg {
     height: to-rem(48px);
@@ -495,7 +494,6 @@ $list-box-menu-width: to-rem(300px);
     max-height: to-rem(220px);
   }
 
-  // TODO V11: Remove xl selector
   .#{$prefix}--list-box--expanded.#{$prefix}--list-box--xl
     .#{$prefix}--list-box__menu,
   .#{$prefix}--list-box--expanded.#{$prefix}--list-box--lg
@@ -537,7 +535,6 @@ $list-box-menu-width: to-rem(300px);
     height: to-rem(32px);
   }
 
-  // TODO V11: Remove xl selector
   .#{$prefix}--list-box--xl .#{$prefix}--list-box__menu-item,
   .#{$prefix}--list-box--lg .#{$prefix}--list-box__menu-item {
     height: to-rem(48px);
@@ -620,7 +617,6 @@ $list-box-menu-width: to-rem(300px);
     padding-bottom: to-rem(7px);
   }
 
-  // TODO V11: Remove xl selector
   .#{$prefix}--list-box--xl .#{$prefix}--list-box__menu-item__option,
   .#{$prefix}--list-box--lg .#{$prefix}--list-box__menu-item__option {
     height: to-rem(48px);
@@ -767,7 +763,6 @@ $list-box-menu-width: to-rem(300px);
     bottom: 2rem;
   }
 
-  // TODO V11: Remove xl selector
   .#{$prefix}--list-box--up.#{$prefix}--dropdown--xl
     .#{$prefix}--list-box__menu,
   .#{$prefix}--list-box--up.#{$prefix}--list-box--xl
@@ -783,7 +778,6 @@ $list-box-menu-width: to-rem(300px);
   // When handling input, we need to target nodes that specifically opt-in to
   // the type text in order to make sure the text input is styled
   // correctly.
-  // TODO: remove [role='combobox'] in v11
   .#{$prefix}--list-box input[role='combobox'],
   .#{$prefix}--list-box input[type='text'] {
     min-width: 0;

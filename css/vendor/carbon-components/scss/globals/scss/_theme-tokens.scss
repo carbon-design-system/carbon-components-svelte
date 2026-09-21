@@ -184,7 +184,6 @@ $snippet-background-color: $field-01 !default;
 /// @type Color
 /// @access public
 /// @group code-snippet
-/// TODO: Define for experimental
 $snippet-border-color: $ui-03 !default;
 
 /// @type Number
@@ -335,7 +334,6 @@ $tab-underline-disabled: 2px solid $disabled-01 !default;
 /// @type Color
 /// @access public
 /// @group skeleton
-/// TODO: Remove this in next major release
 $skeleton: $skeleton-01 !default;
 
 // Determine the "light" color for a given token.

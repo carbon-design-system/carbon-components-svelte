@@ -41,7 +41,6 @@
     }
   }
 
-  // TODO V11: Remove xl selector
   .#{$prefix}--text-input--xl {
     height: to-rem(48px);
   }
@@ -298,7 +297,6 @@
     margin-top: to-rem(9px);
   }
 
-  // TODO V11: Remove xl selector
   .#{$prefix}--text-input-wrapper .#{$prefix}--label--inline--xl {
     margin-top: to-rem(17px);
   }

@@ -58,7 +58,6 @@
     height: to-rem(32px);
   }
 
-  // TODO V11: Remove xl selector
   .#{$prefix}--overflow-menu--xl {
     width: to-rem(48px);
     height: to-rem(48px);
@@ -155,7 +154,6 @@
     }
   }
 
-  // TODO V11: Remove xl selector
   .#{$prefix}--overflow-menu-options--xl.#{$prefix}--overflow-menu-options {
     &[data-floating-menu-direction='bottom']::after,
     &[data-floating-menu-direction='top']::after {
@@ -201,7 +199,6 @@
     height: to-rem(32px);
   }
 
-  // TODO V11: Remove xl selector
   .#{$prefix}--overflow-menu-options--xl
     .#{$prefix}--overflow-menu-options__option {
     height: to-rem(48px);
