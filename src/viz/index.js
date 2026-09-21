@@ -81,6 +81,7 @@ export {
   resolveFormat,
 } from "./utils/format-compact.js";
 export { getFunnelStats } from "./utils/funnel.js";
+export { geoPaths } from "./utils/geo-path.js";
 export { gridStep } from "./utils/grid-step.js";
 export { buildHeatGrid, heatColor } from "./utils/heat-grid.js";
 export { getHistogramGeometry } from "./utils/histogram.js";
