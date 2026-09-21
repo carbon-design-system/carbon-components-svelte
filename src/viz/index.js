@@ -83,6 +83,7 @@ export { gridStep } from "./utils/grid-step.js";
 export { buildHeatGrid, heatColor } from "./utils/heat-grid.js";
 export { getHistogramGeometry } from "./utils/histogram.js";
 export { bisectNearest, createGridIndex } from "./utils/nearest-point.js";
+export { packCircles } from "./utils/pack-circles.js";
 export { arcCentroid, pathArc, pieAngles } from "./utils/path-arc.js";
 export { pathArea } from "./utils/path-area.js";
 export { pathLine } from "./utils/path-line.js";
