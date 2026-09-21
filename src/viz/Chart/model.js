@@ -200,9 +200,11 @@ export function resolveDomain(
   const x =
     built.kind === "category"
       ? [0, Math.max(0, built.categories.length - 1)]
-      : xDomain
+      : Array.isArray(xDomain)
         ? [Number(xDomain[0]), Number(xDomain[1])]
-        : [measured[0], measured[1]];
+        : xDomain === "nice" && built.kind === "linear"
+          ? niceDomain(measured[0], measured[1], 5)
+          : [measured[0], measured[1]];
 
   return { x, y, kind: built.kind, categories: built.categories };
 }

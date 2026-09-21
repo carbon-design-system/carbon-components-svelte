@@ -69,8 +69,9 @@
   export let margin = undefined;
 
   /**
-   * Override the x domain.
-   * @type {[number | Date, number | Date]}
+   * Override the x domain, or set to `"nice"` to round a numeric x out to
+   * tick values, as a scatter plot wants.
+   * @type {[number | Date, number | Date] | "nice"}
    */
   export let xDomain = undefined;
 
@@ -185,7 +186,7 @@
     rasterizeSvg,
     serializeSvg,
   } from "../utils/export-svg.js";
-  import { bisectNearest } from "../utils/nearest-point.js";
+  import { bisectNearest, createGridIndex } from "../utils/nearest-point.js";
   import { observeResize } from "../utils/resize-pool.js";
   import ChartDataTable from "./ChartDataTable.svelte";
   import { CHART_CONTEXT } from "./context.js";
@@ -224,6 +225,9 @@
   const included = writable(/** @type {number[]} */ ([]));
   // How many mounted marks need one slot per x, as bars do.
   const bandRequests = writable(0);
+  // How many mounted marks want hover to follow the nearest point in both
+  // directions, as points do, instead of the nearest x.
+  let pointRequests = 0;
   const reserved = writable(
     /** @type {Array<{ side: "top" | "right" | "bottom" | "left", px: number }>} */ ([]),
   );
@@ -382,6 +386,12 @@
         }
       }
     },
+    usePointHover() {
+      pointRequests += 1;
+      return () => {
+        pointRequests -= 1;
+      };
+    },
     useBand() {
       bandRequests.update((count) => count + 1);
       return () => bandRequests.update((count) => count - 1);
@@ -526,6 +536,94 @@
   let focusIndex = -1;
   let focusSeries = 0;
 
+  /** How far from the pointer a point may be and still be hovered. */
+  const POINT_REACH = 32;
+
+  /** @type {{ groups: unknown; scales: unknown; flat: Array<{ x: number; y: number; g: number; j: number }>; nearest: (x: number, y: number, max?: number) => number } | null} */
+  let pointIndex = null;
+  /** Position in `pointIndex.flat` of the keyboard focus. */
+  let focusPoint = -1;
+
+  // Built on first use and kept until the groups or the scales change, so a
+  // pointer move costs one grid lookup.
+  function getPointIndex() {
+    const currentGroups = get(groups);
+    const current = get(scales);
+    if (
+      pointIndex &&
+      pointIndex.groups === currentGroups &&
+      pointIndex.scales === current
+    ) {
+      return pointIndex;
+    }
+    /** @type {Array<{ x: number; y: number; g: number; j: number }>} */
+    const flat = [];
+    currentGroups.forEach((group, g) => {
+      if (group.hidden) return;
+      for (let j = 0; j < group.xs.length; j++) {
+        const along = current.x.map(group.xs[j]);
+        const across = current.y.map(group.ys[j]);
+        if (!Number.isFinite(along) || !Number.isFinite(across)) continue;
+        flat.push(
+          current.horizontal
+            ? { x: across, y: along, g, j }
+            : { x: along, y: across, g, j },
+        );
+      }
+    });
+    // Reading order, so the arrow keys sweep across the plot.
+    flat.sort((a, b) => a.x - b.x || a.y - b.y);
+    pointIndex = {
+      groups: currentGroups,
+      scales: current,
+      flat,
+      nearest: createGridIndex(flat, POINT_REACH).nearest,
+    };
+    return pointIndex;
+  }
+
+  /** @param {number} at Position in the point index, or -1 to clear. */
+  function hoverPoint(at) {
+    const index = getPointIndex();
+    const entry = index.flat[at];
+    if (!entry) return clearHover();
+    const group = get(groups)[entry.g];
+    const previous = get(hover);
+    if (
+      previous &&
+      previous.points.length === 1 &&
+      previous.points[0].series === group.key &&
+      previous.points[0].index === entry.j
+    ) {
+      return;
+    }
+    const current = get(scales);
+    const point = {
+      series: group.key,
+      datum: group.rows[entry.j],
+      index: entry.j,
+      y: group.ys[entry.j],
+      py: current.y.map(group.ys[entry.j]),
+      color: group.color,
+    };
+    hover.set({
+      x: group.xs[entry.j],
+      px: current.x.map(group.xs[entry.j]),
+      points: [point],
+    });
+    dispatch("hover", {
+      x: group.xs[entry.j],
+      points: [
+        {
+          datum: point.datum,
+          series: point.series,
+          index: point.index,
+          y: point.y,
+        },
+      ],
+    });
+  }
+
   /**
    * @param {number} xValue
    * @param {boolean} [fromSync] A synced chart must not echo back.
@@ -583,6 +681,13 @@
     const rect = svg.getBoundingClientRect();
     if (rect.width === 0) return;
     const current = get(scales);
+    if (pointRequests > 0) {
+      const sx = ((event.clientX - rect.left) / rect.width) * get(size).width;
+      const sy = ((event.clientY - rect.top) / rect.height) * get(size).height;
+      const at = getPointIndex().nearest(sx, sy, POINT_REACH);
+      focusPoint = at;
+      return hoverPoint(at);
+    }
     // The x scale runs down the plot when the chart is horizontal.
     const px = current.horizontal
       ? ((event.clientY - rect.top) / rect.height) * get(size).height
@@ -626,8 +731,48 @@
     });
   }
 
+  /**
+   * Points have no shared x to step along, so the arrow keys sweep through
+   * them in reading order.
+   * @param {KeyboardEvent} event
+   */
+  function onPointKeydown(event) {
+    const last = getPointIndex().flat.length - 1;
+    if (last < 0) return;
+    switch (event.key) {
+      case "ArrowRight":
+      case "ArrowDown":
+        focusPoint = Math.min(last, focusPoint + 1);
+        break;
+      case "ArrowLeft":
+      case "ArrowUp":
+        focusPoint = Math.max(0, focusPoint - 1);
+        break;
+      case "Home":
+        focusPoint = 0;
+        break;
+      case "End":
+        focusPoint = last;
+        break;
+      case "Enter":
+      case " ":
+        event.preventDefault();
+        selectCurrent(event);
+        return;
+      case "Escape":
+        focusPoint = -1;
+        clearHover();
+        return;
+      default:
+        return;
+    }
+    event.preventDefault();
+    hoverPoint(Math.max(0, focusPoint));
+  }
+
   /** @param {KeyboardEvent} event */
   function onKeydown(event) {
+    if (pointRequests > 0) return onPointKeydown(event);
     const visible = get(groups).filter(
       (group) => !group.hidden && group.xs.length > 0,
     );

@@ -16,6 +16,7 @@ export { default as ChartGrid } from "./Chart/ChartGrid.svelte";
 export { default as ChartLegend } from "./Chart/ChartLegend.svelte";
 export { default as ChartLine } from "./Chart/ChartLine.svelte";
 export { default as ChartMarker } from "./Chart/ChartMarker.svelte";
+export { default as ChartPoints } from "./Chart/ChartPoints.svelte";
 export { default as ChartRuler } from "./Chart/ChartRuler.svelte";
 export { default as ChartThreshold } from "./Chart/ChartThreshold.svelte";
 export { default as ChartToolbar } from "./Chart/ChartToolbar.svelte";

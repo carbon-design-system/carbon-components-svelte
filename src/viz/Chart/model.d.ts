@@ -65,7 +65,8 @@ export type ChartDomain = {
 };
 
 export type ResolveDomainOptions = {
-  xDomain?: readonly [number | Date, number | Date];
+  /** Fixed bounds, or `"nice"` to round a numeric x out to tick values. */
+  xDomain?: readonly [number | Date, number | Date] | "nice";
   yDomain?: readonly [number, number] | "auto" | "nice";
   /** Include zero in the y domain. @default true */
   zero?: boolean;

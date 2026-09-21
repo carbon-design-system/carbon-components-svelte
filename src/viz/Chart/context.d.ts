@@ -63,6 +63,11 @@ export type ChartContext<T> = {
    * becomes categories. Returns a release function.
    */
   useBand(): () => void;
+  /**
+   * Make hover follow the nearest point in both directions, as a scatter
+   * plot needs, instead of the nearest x. Returns a release function.
+   */
+  usePointHover(): () => void;
   /** Reserve margin space, as an axis title does. Returns a release function. */
   reserveMargin(side: keyof ChartMargins, px: number): () => void;
   /** Show or hide a series. The last visible series cannot be hidden. */
