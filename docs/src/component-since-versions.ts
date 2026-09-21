@@ -19,6 +19,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   CalendarHeatmap: "0.113.0",
   Chart: "0.113.0",
   Checkbox: "0.2.0",
+  ChoroplethChart: "0.113.0",
   CirclePackChart: "0.113.0",
   ClickableTile: "0.2.0",
   CodeSnippet: "0.2.0",

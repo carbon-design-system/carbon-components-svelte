@@ -1,0 +1,93 @@
+---
+components: ["ChoroplethChart"]
+description: Choropleth colors the regions of a map by value, to show where something runs high across a geography.
+---
+
+<script>
+  import { ChoroplethChart } from "carbon-components-svelte/viz";
+
+  // A small fictional country, in longitude and latitude. Real maps come as
+  // GeoJSON from a source such as Natural Earth.
+  const SHAPES = {
+    Northreach: [[[2, 50], [14, 52], [22, 49], [20, 44], [10, 43], [3, 45], [2, 50]]],
+    Westmarch: [[[3, 45], [10, 43], [11, 37], [6, 33], [1, 36], [0, 41], [3, 45]]],
+    Midlands: [[[10, 43], [20, 44], [23, 39], [18, 35], [11, 37], [10, 43]]],
+    Eastvale: [[[20, 44], [22, 49], [31, 47], [33, 40], [23, 39], [20, 44]]],
+    Southshore: [[[6, 33], [11, 37], [18, 35], [20, 30], [12, 27], [7, 29], [6, 33]]],
+    Lakeland: [
+      [[18, 35], [23, 39], [33, 40], [32, 33], [26, 29], [20, 30], [18, 35]],
+      // A lake, cut out of the region.
+      [[24, 36], [28, 36], [28, 33], [24, 33], [24, 36]],
+    ],
+    Isles: [[[35, 35], [38, 36], [39, 33], [36, 32], [35, 35]]],
+  };
+  const features = Object.entries(SHAPES).map(([name, coordinates]) => ({
+    type: "Feature",
+    id: name,
+    properties: { name },
+    geometry: { type: "Polygon", coordinates },
+  }));
+
+  const customers = [
+    { region: "Northreach", customers: 1840 },
+    { region: "Westmarch", customers: 920 },
+    { region: "Midlands", customers: 4210 },
+    { region: "Eastvale", customers: 2650 },
+    { region: "Southshore", customers: 3120 },
+    { region: "Lakeland", customers: 1380 },
+  ];
+</script>
+
+`ChoroplethChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+A large region draws the eye whatever its value, so a choropleth suits rates and densities better than raw counts. When geography is not the point, a sorted [BarChart](/components/BarChart) of the same regions is easier to read.
+
+## Basic
+
+The library ships no map geometry, which would outweigh everything else in it. Pass your own as `features`: GeoJSON features, or a `FeatureCollection`, with polygon geometries in longitude and latitude. Then pass `data` with `region` and `value` accessors. A row's region is matched against each feature's `id`. Rows that share a region are summed.
+
+<ChoroplethChart {features} data={customers} region="region" value="customers" title="Customers by region" />
+
+A region with no row, or with a `null` value, is drawn neutral with an outline, so it cannot be read as a low value. Here that is the Isles.
+
+## Matching and labels
+
+`featureId` reads the id a row is matched against, and `featureLabel` the name shown. By default the id is a feature's `id`, then its `properties.id`, then its `properties.name`, and the label is `properties.name`. Set them for maps keyed another way, such as by ISO code.
+
+## Projection
+
+`projection` is `"mercator"` by default, which keeps shapes true and suits countries and regions. `"equirectangular"` plots degrees as they are, which suits a whole world map. Either way the map is fitted to `width` by `height`, centered, and scales down with its container.
+
+<ChoroplethChart
+  {features}
+  data={customers}
+  region="region"
+  value="customers"
+  projection="equirectangular"
+  height={280}
+  title="Customers by region, degrees as they are"
+/>
+
+## Hue, domain, and format
+
+Set `hue` to `"blue"`, `"purple"`, `"cyan"`, or `"teal"`. The ramp spans the smallest to the largest region. Set `domain` to fix it, which keeps several maps comparable. `format` takes `Intl.NumberFormat` options or a function.
+
+<ChoroplethChart
+  {features}
+  data={customers}
+  region="region"
+  value="customers"
+  hue="teal"
+  domain={[0, 5000]}
+  format={{ notation: "compact" }}
+  height={280}
+  title="Customers by region, on a fixed scale"
+/>
+
+## Interaction
+
+Hover a region, or focus the map and use the arrow keys, to read its name and value: it gains an outline. `hover` fires with the region, and `select` on click, Enter, or Space. Both carry the feature and the `rows` summed into it.
+
+## Accessibility
+
+The map is a single tab stop. The arrow keys move through the regions by name, since a map has no reading order of its own, Home and End jump to the first and last, Enter or Space selects, and Escape clears. The focused region is announced with its value. A shape says nothing to assistive technology, so the figure also holds every region and its value as a visually hidden table, sorted by name. Set `headerLabels` and `noDataText` to translate it. Holes, such as a lake, are cut out of their region.
