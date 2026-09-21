@@ -125,3 +125,4 @@ export {
 } from "./utils/tokens.js";
 export { treeLayout } from "./utils/tree-layout.js";
 export { squarify } from "./utils/treemap.js";
+export { layoutWords } from "./utils/word-cloud.js";
