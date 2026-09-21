@@ -20,6 +20,7 @@
     MicroDonut,
     MicroFunnel,
     MicroHistogram,
+    RadarChart,
     RadialProgress,
     RangeIndicator,
     RankBars,
@@ -215,6 +216,14 @@
     markers={[{ x: 40000, label: "Goal" }]}
     title="Distribution of monthly revenue"
     height={220}
+  />
+
+  <RadarChart
+    data={revenue.filter((row) => row.date.getMonth() < 6)}
+    axis={(row) => row.date.toLocaleDateString("en-US", { month: "short" })}
+    value="revenue"
+    series="region"
+    title="Revenue by month, as a radar"
   />
 
   <TreemapChart
