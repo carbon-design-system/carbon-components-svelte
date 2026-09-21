@@ -53,6 +53,14 @@
   export let align = "start";
 
   /**
+   * Specify the shape. `"tapered"` centers the bars and joins each one to the
+   * next with a slope, so the stages read as one funnel. Bar widths stay
+   * honest: only the joins slope.
+   * @type {"bars" | "tapered"}
+   */
+  export let shape = "bars";
+
+  /**
    * Specify the bar length scale.
    * `"sqrt"` keeps a very small last stage visible, and adds a "Not to scale" note.
    * @type {"linear" | "sqrt"}
@@ -225,7 +233,8 @@
   class:bx--viz-funnel-bars={true}
   class:bx--viz-funnel-bars--sm={size === "sm"}
   class:bx--viz-funnel-bars--lg={size === "lg"}
-  class:bx--viz-funnel-bars--center={align === "center"}
+  class:bx--viz-funnel-bars--center={align === "center" || shape === "tapered"}
+  class:bx--viz-funnel-bars--tapered={shape === "tapered"}
   class:bx--viz-funnel-bars--selectable={selectable}
   aria-hidden={label ? undefined : "true"}
   style:--bx-viz-color={inlineColor(color)}
@@ -265,6 +274,9 @@
           stage.id === selectedId}
         style:--bx-viz-pct={stats.pct}
         style:--bx-viz-previous-pct={stats.previousPct}
+        style:--bx-viz-next-pct={shape === "tapered"
+          ? (funnel.rows[i + 1]?.stats.pct ?? stats.pct)
+          : undefined}
         style:--bx-viz-color={inlineColor(stage.color)}
         on:click={selectable ? () => select(row) : undefined}
         on:mouseenter={selectable ? () => dispatch("hover", row) : undefined}
@@ -296,7 +308,7 @@
         </th>
         <td class:bx--viz-funnel-bars__track-cell={true} aria-hidden="true">
           <div class:bx--viz-funnel-bars__track={true}>
-            {#if showDrop && i > 0 && stats.previousPct > stats.pct}
+            {#if shape !== "tapered" && showDrop && i > 0 && stats.previousPct > stats.pct}
               <div class:bx--viz-funnel-bars__drop={true}></div>
             {/if}
             <div class:bx--viz-funnel-bars__bar={true}></div>
