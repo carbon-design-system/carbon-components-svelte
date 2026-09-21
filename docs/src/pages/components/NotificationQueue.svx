@@ -45,6 +45,8 @@ Lower the value if the queue should render behind other fixed UI instead.
 
 The queue tracks notifications by id, so `add`, `update`, `remove`, and the `maxNotifications` limit all key off the same identifier.
 
+Since each queued notification renders as a [ToastNotification](/components/ToastNotification), `add` also accepts that component's `pauseOnHover`, `role`, and `fullWidth` props.
+
 ### Deduplication
 
 By default, id is optional; a unique id is generated for each notification. The queue [keys](https://svelte.dev/docs/svelte/each#Keyed-each-blocks) notifications by id for performance.
