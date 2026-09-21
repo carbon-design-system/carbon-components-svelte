@@ -131,6 +131,12 @@ Build a full breadcrumb trail with multiple items and a current page indicator.
 
 <FileSource src="/framed/Breadcrumbs/Breadcrumbs" />
 
+### With SideNav
+
+Derive `isCurrentPage` and [SideNav](/components/UIShell#side-navigation)'s `isSelected` from one shared trail array instead of hand-tracking two separate "current page" states that can drift apart.
+
+<FileSource src="/framed/UIShell/SideNavBreadcrumbSync" />
+
 ## Accessibility
 
 Preserve ARIA semantics when rendering custom link elements or renaming the nav's accessible label.
