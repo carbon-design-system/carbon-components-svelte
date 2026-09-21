@@ -22,6 +22,7 @@ export { default as ChartToolbar } from "./Chart/ChartToolbar.svelte";
 export { default as ChartTooltip } from "./Chart/ChartTooltip.svelte";
 export { default as ChartTooltipRow } from "./Chart/ChartTooltipRow.svelte";
 export { CHART_CONTEXT } from "./Chart/context.js";
+export { default as CohortTable } from "./CohortTable/CohortTable.svelte";
 export { default as ComparisonBar } from "./ComparisonBar/ComparisonBar.svelte";
 export { default as DeltaIndicator } from "./DeltaIndicator/DeltaIndicator.svelte";
 export { default as DonutChart } from "./DonutChart/DonutChart.svelte";
@@ -61,6 +62,7 @@ export {
   resolveFormat,
 } from "./utils/format-compact.js";
 export { getFunnelStats } from "./utils/funnel.js";
+export { gridStep } from "./utils/grid-step.js";
 export { buildHeatGrid, heatColor } from "./utils/heat-grid.js";
 export { getHistogramGeometry } from "./utils/histogram.js";
 export { bisectNearest, createGridIndex } from "./utils/nearest-point.js";
