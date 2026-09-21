@@ -159,4 +159,26 @@ test.describe("Data visualization", () => {
     await figure.getByRole("button", { name: "Show as chart" }).click();
     await expect(table).toHaveCount(0);
   });
+
+  test("LineChart downloads its plot as a PNG", async ({ page }) => {
+    await page.goto("/viz.html");
+    const figure = page
+      .locator("figure")
+      .filter({ hasText: "Revenue by region" })
+      .last();
+
+    const [download] = await Promise.all([
+      page.waitForEvent("download"),
+      figure.getByRole("button", { name: "Download as image" }).click(),
+    ]);
+    expect(download.suggestedFilename()).toBe("chart.png");
+
+    const stream = await download.createReadStream();
+    const chunks: Buffer[] = [];
+    for await (const chunk of stream) chunks.push(chunk as Buffer);
+    const file = Buffer.concat(chunks);
+    // A PNG signature, and enough bytes to hold more than a blank canvas.
+    expect(file.subarray(1, 4).toString()).toBe("PNG");
+    expect(file.length).toBeGreaterThan(5000);
+  });
 });
