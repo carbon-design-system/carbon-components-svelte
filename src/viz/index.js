@@ -55,6 +55,11 @@ export {
 } from "./utils/color-scale.js";
 export { describeSeries } from "./utils/describe-series.js";
 export { lttb } from "./utils/downsample-lttb.js";
+export {
+  backgroundBehind,
+  rasterizeSvg,
+  serializeSvg,
+} from "./utils/export-svg.js";
 export { extent, extentBy } from "./utils/extent.js";
 export {
   formatCompact,
