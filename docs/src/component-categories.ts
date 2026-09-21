@@ -138,6 +138,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "BulletChart",
       "CalendarHeatmap",
       "Chart",
+      "CohortTable",
       "ComparisonBar",
       "DeltaIndicator",
       "DonutChart",

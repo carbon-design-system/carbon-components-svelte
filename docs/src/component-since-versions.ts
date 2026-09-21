@@ -19,6 +19,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   Checkbox: "0.2.0",
   ClickableTile: "0.2.0",
   CodeSnippet: "0.2.0",
+  CohortTable: "0.113.0",
   ComboBox: "0.2.0",
   ComboButton: "0.110.0",
   ComparisonBar: "0.113.0",
