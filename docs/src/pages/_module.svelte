@@ -32,7 +32,7 @@
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";
   import LogoGithub from "carbon-icons-svelte/lib/LogoGithub.svelte";
   import MiniSearch from "minisearch";
-  import { onMount, tick } from "svelte";
+  import { onMount } from "svelte";
   import {
     assertCategoriesCover,
     COMPONENT_CATEGORIES,
@@ -61,13 +61,6 @@
   const routifyNav = subscribeRoutifyGoto(goto);
 
   onMount(() => {
-    tick().then(() => {
-      const selected = document.querySelector(
-        '.bx--side-nav [aria-current="page"]',
-      );
-      selected?.scrollIntoView({ block: "center" });
-    });
-
     return () => {
       routifyNav.unsubscribe();
     };
