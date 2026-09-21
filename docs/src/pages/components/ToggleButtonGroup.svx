@@ -1,0 +1,250 @@
+---
+components: ["ToggleButtonGroup", "ToggleButton"]
+description: A group of pressable buttons where zero, one, or many can be pressed at once, for immediate-effect on/off commands like text formatting, map-layer toggles, or chart-series toggles.
+---
+
+<script>
+  import {
+    ToggleButton,
+    ToggleButtonGroup,
+  } from "carbon-components-svelte";
+  import TextBold from "carbon-icons-svelte/lib/TextBold.svelte";
+  import TextItalic from "carbon-icons-svelte/lib/TextItalic.svelte";
+  import TextUnderline from "carbon-icons-svelte/lib/TextUnderline.svelte";
+</script>
+
+## Selection
+
+### Multiple (default)
+
+A group of pressable buttons where zero, one, or many can be pressed at once, for immediate-effect on/off commands like text formatting, map-layer visibility, or chart-series toggles. Wrap `ToggleButton` components in a `ToggleButtonGroup` and give each a unique `value`.
+
+The root renders `role="toolbar"`. Set `labelText` or `aria-label` so assistive technologies get a meaningful name, since there is no visible label otherwise. Arrow keys move focus between buttons, wrapping at the ends and skipping disabled ones, without changing the selection; Space/Enter presses the focused button.
+
+<ToggleButtonGroup labelText="Text formatting">
+  <ToggleButton value="bold">Bold</ToggleButton>
+  <ToggleButton value="italic">Italic</ToggleButton>
+  <ToggleButton value="underline">Underline</ToggleButton>
+</ToggleButtonGroup>
+
+### Initial selection
+
+Set `selected` to pre-press one or more buttons.
+
+<ToggleButtonGroup selected={["bold"]} labelText="Text formatting">
+  <ToggleButton value="bold">Bold</ToggleButton>
+  <ToggleButton value="italic">Italic</ToggleButton>
+  <ToggleButton value="underline">Underline</ToggleButton>
+</ToggleButtonGroup>
+
+### Single
+
+Set `selectionMode="single"` so at most one button is pressed. Pressing the pressed button clears the selection.
+
+<ToggleButtonGroup selectionMode="single" labelText="Alignment">
+  <ToggleButton value="left">Left</ToggleButton>
+  <ToggleButton value="center">Center</ToggleButton>
+  <ToggleButton value="right">Right</ToggleButton>
+</ToggleButtonGroup>
+
+### Required
+
+Set `required` so the last pressed button can't be cleared. Works in both `multiple` and `single` mode.
+
+<ToggleButtonGroup selectionMode="single" required selected={["center"]} labelText="Alignment (required)">
+  <ToggleButton value="left">Left</ToggleButton>
+  <ToggleButton value="center">Center</ToggleButton>
+  <ToggleButton value="right">Right</ToggleButton>
+</ToggleButtonGroup>
+
+### Reactive
+
+`selected` is bindable and always an array, even in `single` mode.
+
+<FileSource src="/framed/ToggleButtonGroup/ToggleButtonGroupReactive" />
+
+## Content
+
+### Text
+
+<ToggleButtonGroup labelText="Text formatting">
+  <ToggleButton value="bold">Bold</ToggleButton>
+  <ToggleButton value="italic">Italic</ToggleButton>
+</ToggleButtonGroup>
+
+### Icon-only
+
+An icon-only button needs `iconDescription`, which becomes both the accessible label and the hover/focus tooltip text.
+
+<ToggleButtonGroup labelText="Text formatting">
+  <ToggleButton value="bold" icon={TextBold} iconDescription="Bold" />
+  <ToggleButton value="italic" icon={TextItalic} iconDescription="Italic" />
+  <ToggleButton
+    value="underline"
+    icon={TextUnderline}
+    iconDescription="Underline"
+  />
+</ToggleButtonGroup>
+
+### Custom tooltip position
+
+Set `tooltipPosition` and `tooltipAlignment` on `ToggleButton` to control where its tooltip appears.
+
+<ToggleButtonGroup labelText="Text formatting">
+  <ToggleButton
+    value="bold"
+    icon={TextBold}
+    iconDescription="Bold"
+    tooltipPosition="top"
+    tooltipAlignment="start"
+  />
+  <ToggleButton
+    value="italic"
+    icon={TextItalic}
+    iconDescription="Italic"
+    tooltipPosition="top"
+  />
+  <ToggleButton
+    value="underline"
+    icon={TextUnderline}
+    iconDescription="Underline"
+    tooltipPosition="top"
+    tooltipAlignment="end"
+  />
+</ToggleButtonGroup>
+
+### With icon
+
+Set `icon` alongside default slot content to render both.
+
+<ToggleButtonGroup labelText="Text formatting">
+  <ToggleButton value="bold" icon={TextBold}>Bold</ToggleButton>
+  <ToggleButton value="italic" icon={TextItalic}>Italic</ToggleButton>
+</ToggleButtonGroup>
+
+## Sizes
+
+Set `size` to `"sm"`, `"md"` (default), or `"lg"`.
+
+### Small
+
+<ToggleButtonGroup size="sm" labelText="Text formatting">
+  <ToggleButton value="bold">Bold</ToggleButton>
+  <ToggleButton value="italic">Italic</ToggleButton>
+</ToggleButtonGroup>
+
+### Large
+
+<ToggleButtonGroup size="lg" labelText="Text formatting">
+  <ToggleButton value="bold">Bold</ToggleButton>
+  <ToggleButton value="italic">Italic</ToggleButton>
+</ToggleButtonGroup>
+
+## Layout
+
+### Vertical
+
+Set `orientation="vertical"` to stack the buttons and use Up/Down to move focus instead of Left/Right. Text is left-aligned in this orientation.
+
+<ToggleButtonGroup orientation="vertical" labelText="Text formatting">
+  <ToggleButton value="bold">Bold</ToggleButton>
+  <ToggleButton value="italic">Italic</ToggleButton>
+  <ToggleButton value="underline">Underline</ToggleButton>
+</ToggleButtonGroup>
+
+### Small
+
+<ToggleButtonGroup orientation="vertical" size="sm" labelText="Text formatting">
+  <ToggleButton value="bold">Bold</ToggleButton>
+  <ToggleButton value="italic">Italic</ToggleButton>
+  <ToggleButton value="underline">Underline</ToggleButton>
+</ToggleButtonGroup>
+
+### Large
+
+<ToggleButtonGroup orientation="vertical" size="lg" labelText="Text formatting">
+  <ToggleButton value="bold">Bold</ToggleButton>
+  <ToggleButton value="italic">Italic</ToggleButton>
+  <ToggleButton value="underline">Underline</ToggleButton>
+</ToggleButtonGroup>
+
+### Icon-only
+
+The tooltip defaults to `tooltipPosition="right"` in a vertical group instead of `"bottom"`, since a bottom tooltip would land on the next stacked segment. Set `tooltipPosition` and `tooltipAlignment` on `ToggleButton` to override it.
+
+<ToggleButtonGroup orientation="vertical" labelText="Text formatting">
+  <ToggleButton value="bold" icon={TextBold} iconDescription="Bold" />
+  <ToggleButton value="italic" icon={TextItalic} iconDescription="Italic" />
+  <ToggleButton
+    value="underline"
+    icon={TextUnderline}
+    iconDescription="Underline"
+  />
+</ToggleButtonGroup>
+
+### Custom tooltip position
+
+Override the `"right"` default with `tooltipPosition` and `tooltipAlignment`.
+
+<ToggleButtonGroup orientation="vertical" labelText="Text formatting">
+  <ToggleButton
+    value="bold"
+    icon={TextBold}
+    iconDescription="Bold"
+    tooltipPosition="right"
+    tooltipAlignment="start"
+  />
+  <ToggleButton
+    value="italic"
+    icon={TextItalic}
+    iconDescription="Italic"
+    tooltipPosition="right"
+  />
+  <ToggleButton
+    value="underline"
+    icon={TextUnderline}
+    iconDescription="Underline"
+    tooltipPosition="right"
+    tooltipAlignment="end"
+  />
+</ToggleButtonGroup>
+
+### With icon
+
+<ToggleButtonGroup orientation="vertical" labelText="Text formatting">
+  <ToggleButton value="bold" icon={TextBold}>Bold</ToggleButton>
+  <ToggleButton value="italic" icon={TextItalic}>Italic</ToggleButton>
+</ToggleButtonGroup>
+
+## States
+
+### Disabled buttons
+
+Set `disabled` on an individual `ToggleButton` to disable just that segment. Arrow-key navigation skips it.
+
+<ToggleButtonGroup labelText="Text formatting">
+  <ToggleButton value="bold">Bold</ToggleButton>
+  <ToggleButton value="italic" disabled>Italic</ToggleButton>
+  <ToggleButton value="underline">Underline</ToggleButton>
+</ToggleButtonGroup>
+
+### Disabled group
+
+Set `disabled` on `ToggleButtonGroup` to disable every button.
+
+<ToggleButtonGroup disabled labelText="Text formatting">
+  <ToggleButton value="bold">Bold</ToggleButton>
+  <ToggleButton value="italic">Italic</ToggleButton>
+</ToggleButtonGroup>
+
+## Rich text editor toolbar
+
+Compose `ToggleButtonGroup` with other components for a realistic toolbar. `Dropdown` handles the paragraph style picker, since it has many mutually exclusive options rather than a small icon set. `Button` handles undo, redo, and inserting a link, since those are momentary actions rather than persistent on/off state.
+
+<FileSource src="/framed/ToggleButtonGroup/RichTextEditorToolbar" />
+
+## Tool palette
+
+A vertical, icon-only, single-select group works well for a compact tool palette like Photoshop's or Figma's.
+
+<FileSource src="/framed/ToggleButtonGroup/ToolPalette" />
