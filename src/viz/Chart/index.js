@@ -3,6 +3,7 @@ export { default as ChartArea } from "./ChartArea.svelte";
 export { default as ChartAxis } from "./ChartAxis.svelte";
 export { default as ChartBars } from "./ChartBars.svelte";
 export { default as ChartBins } from "./ChartBins.svelte";
+export { default as ChartBoxes } from "./ChartBoxes.svelte";
 export { default as ChartDataTable } from "./ChartDataTable.svelte";
 export { default as ChartGrid } from "./ChartGrid.svelte";
 export { default as ChartLegend } from "./ChartLegend.svelte";
