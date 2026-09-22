@@ -47,7 +47,7 @@ Customize the ARIA labels used for accessibility.
 
 ### Landmark label
 
-The outer element has `role="search"`, and its accessible name comes from `labelText` via `aria-labelledby`, not a static `aria-label`. The label is visually hidden by default — see [Fluid](#fluid) for the variant with a visible label. Always set a descriptive `labelText`, especially when a page has more than one search region, so screen reader users can distinguish each landmark by name.
+The outer element has `role="search"`, and its accessible name comes from `labelText` via `aria-labelledby`, not a static `aria-label`. The label is visually hidden by default — see [Fluid](#fluid) for the variant with a visible label. Always set a descriptive `labelText`, especially when a page has more than one search region, so screen reader users can distinguish each landmark by name. When `labelText` is empty, the landmark falls back to `placeholder` as its accessible name.
 
 <Search labelText="Search catalog" />
 
