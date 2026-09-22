@@ -21,6 +21,19 @@
   export let rows = 4;
 
   /**
+   * Set to `true` to grow the textarea with its content.
+   * `rows` is the minimum height. Default `false`.
+   */
+  export let grow = false;
+
+  /**
+   * Maximum number of rows when `grow` is `true`.
+   * Unset means the field grows without a cap.
+   * @type {number | undefined}
+   */
+  export let maxRows = undefined;
+
+  /**
    * Specify the max character count.
    * @type {number}
    */
@@ -81,10 +94,11 @@
   /** Set to `true` to select the textarea's text when it receives focus */
   export let selectTextOnFocus = false;
 
-  import { getContext, tick } from "svelte";
+  import { afterUpdate, getContext, onMount, tick } from "svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { graphemeCount } from "../utils/grapheme-count.js";
+  import { rafThrottle } from "../utils/raf-throttle.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const formContext = getContext("carbon:Form");
@@ -117,6 +131,85 @@
       tick().then(() => ref?.select());
     }
   }
+
+  function resize() {
+    if (!ref) return;
+
+    const computed = getComputedStyle(ref);
+    const paddingTop = Number.parseFloat(computed.paddingTop) || 0;
+    const paddingBottom = Number.parseFloat(computed.paddingBottom) || 0;
+    const borderTop = Number.parseFloat(computed.borderTopWidth) || 0;
+    const borderBottom = Number.parseFloat(computed.borderBottomWidth) || 0;
+    const isBorderBox = computed.boxSizing === "border-box";
+
+    // `height` excludes padding/border under content-box but includes them
+    // under border-box, while `scrollHeight` always includes padding only.
+    const toStyleHeight = (contentAndPaddingHeight) =>
+      isBorderBox
+        ? contentAndPaddingHeight + borderTop + borderBottom
+        : contentAndPaddingHeight - paddingTop - paddingBottom;
+
+    ref.style.height = "auto";
+    const { scrollHeight } = ref;
+
+    let maxContentAndPaddingHeight;
+    if (typeof maxRows === "number" && maxRows > 0) {
+      let lineHeight = Number.parseFloat(computed.lineHeight);
+      if (Number.isNaN(lineHeight)) {
+        lineHeight = Number.parseFloat(computed.fontSize);
+      }
+      maxContentAndPaddingHeight =
+        maxRows * lineHeight + paddingTop + paddingBottom;
+    }
+
+    if (
+      maxContentAndPaddingHeight !== undefined &&
+      scrollHeight > maxContentAndPaddingHeight
+    ) {
+      ref.style.height = `${toStyleHeight(maxContentAndPaddingHeight)}px`;
+      ref.style.overflowY = "auto";
+    } else {
+      ref.style.height = `${toStyleHeight(scrollHeight)}px`;
+      ref.style.overflowY = "hidden";
+    }
+  }
+
+  const scheduleResize = rafThrottle(resize);
+
+  afterUpdate(() => {
+    if (!ref) return;
+
+    if (grow) {
+      scheduleResize();
+    } else {
+      ref.style.height = "";
+      ref.style.overflowY = "";
+    }
+  });
+
+  let lastWidth;
+
+  onMount(() => {
+    if (typeof ResizeObserver === "undefined") return;
+
+    const observer = new ResizeObserver(([entry]) => {
+      const { width } = entry.contentRect;
+      if (grow && width !== lastWidth) {
+        lastWidth = width;
+        scheduleResize();
+      }
+    });
+    if (ref) observer.observe(ref);
+
+    document.fonts?.ready?.then(() => {
+      if (grow) scheduleResize();
+    });
+
+    return () => {
+      observer.disconnect();
+      scheduleResize.cancel();
+    };
+  });
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -189,7 +282,7 @@
       class:bx--text-area--light={light}
       class:bx--text-area--invalid={showInvalid}
       class:bx--text-area--warning={showWarn}
-      style:resize={typeof cols === "number" ? "none" : undefined}
+      style:resize={typeof cols === "number" || grow ? "none" : undefined}
       maxlength={maxCount ?? undefined}
       {...$$restProps}
       on:change

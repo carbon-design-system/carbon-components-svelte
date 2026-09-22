@@ -6,6 +6,8 @@
   export let placeholder = "";
   export let cols: ComponentProps<TextArea>["cols"] = undefined;
   export let rows = 4;
+  export let grow = false;
+  export let maxRows: ComponentProps<TextArea>["maxRows"] = undefined;
   export let maxCount: ComponentProps<TextArea>["maxCount"] = undefined;
   export let light = false;
   export let disabled = false;
@@ -29,6 +31,8 @@
   {placeholder}
   {cols}
   {rows}
+  {grow}
+  {maxRows}
   {maxCount}
   {light}
   {disabled}
