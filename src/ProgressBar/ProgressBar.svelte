@@ -35,6 +35,12 @@
   /** Specify the helper text */
   export let helperText = "";
 
+  /**
+   * Specify the value text, at the end of the label row and used for `aria-valuetext`.
+   * Format it yourself, e.g. "40 MB of 100 MB".
+   */
+  export let valueText = "";
+
   /** Set an id for the progress bar element */
   export let id = uniqueId();
 
@@ -77,12 +83,12 @@
   class:bx--progress-bar--finished={status === "finished"}
   {...$$restProps}
 >
-  <div
-    id="{id}-label"
-    class:bx--progress-bar__label={true}
-    class:bx--visually-hidden={hideLabel}
-  >
-    <span class:bx--progress-bar__label-text={true}>
+  <div class:bx--progress-bar__label={true}>
+    <span
+      id="{id}-label"
+      class:bx--progress-bar__label-text={true}
+      class:bx--visually-hidden={hideLabel}
+    >
       <slot name="labelChildren"> {labelText} </slot>
     </span>
     {#if status === "error" || status === "finished"}
@@ -90,6 +96,11 @@
         this={statusIcons[status]}
         class="bx--progress-bar__status-icon"
       />
+    {/if}
+    {#if valueText.trim() || $$slots.valueChildren}
+      <span class:bx--progress-bar__value-text={true}>
+        <slot name="valueChildren">{valueText}</slot>
+      </span>
     {/if}
   </div>
   <div
@@ -101,6 +112,7 @@
     aria-valuemin={indeterminate ? undefined : 0}
     aria-valuemax={indeterminate ? undefined : max}
     aria-valuenow={indeterminate ? undefined : capped}
+    aria-valuetext={valueText.trim() ? valueText : undefined}
     aria-describedby={helperText ? helperId : null}
   >
     <div
