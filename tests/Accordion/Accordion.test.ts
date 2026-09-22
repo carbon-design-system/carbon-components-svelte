@@ -1,7 +1,9 @@
 import { render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { user } from "../utils/user";
 import AccordionBatchDisable from "./Accordion.batch-disable.test.svelte";
 import AccordionDisabled from "./Accordion.disabled.test.svelte";
+import AccordionDisabledOpen from "./Accordion.disabled-open.test.svelte";
 import AccordionLazy from "./Accordion.lazy.test.svelte";
 import AccordionProgrammatic from "./Accordion.programmatic.test.svelte";
 import AccordionSingle from "./Accordion.single.test.svelte";
@@ -553,5 +555,37 @@ describe("Accordion", () => {
     const content = document.getElementById(contentId);
     assert(content);
     expect(content).not.toHaveAttribute("role", "region");
+  });
+
+  it("does not mount a disabled item as open", async () => {
+    render(AccordionDisabledOpen, { props: { open: true, disabled: true } });
+
+    await tick();
+
+    const item = screen.getByText("Natural Language Classifier").closest("li");
+    expect(item).not.toHaveClass("bx--accordion__item--active");
+  });
+
+  it("closes an open item when it becomes disabled", async () => {
+    render(AccordionDisabledOpen, { props: { open: true, disabled: false } });
+
+    itemIsExpanded(/Natural Language Classifier/);
+
+    await user.click(screen.getByRole("button", { name: /Toggle disabled/ }));
+
+    itemIsCollapsed(/Natural Language Classifier/);
+  });
+
+  it("keeps a disabled, closed item closed on click", async () => {
+    render(AccordionDisabledOpen, { props: { open: false, disabled: true } });
+
+    itemIsDisabled(/Natural Language Classifier/);
+    itemIsCollapsed(/Natural Language Classifier/);
+
+    await user.click(
+      screen.getByRole("button", { name: /Natural Language Classifier/ }),
+    );
+
+    itemIsCollapsed(/Natural Language Classifier/);
   });
 });

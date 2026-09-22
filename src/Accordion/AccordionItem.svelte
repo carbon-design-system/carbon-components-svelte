@@ -65,6 +65,8 @@
     }
   });
 
+  $: if (disabled && open) open = false;
+
   $: if (open) {
     ctx.notifyOpen(id);
   }
