@@ -134,6 +134,13 @@ Replace the default search icon with a custom one.
 
 <Search icon={Query} />
 
+## Loading
+
+Set `loading` to show a small spinner in place of the search icon while
+results are loading. The input stays editable and gets `aria-busy="true"`.
+
+<Search loading value="Cloud functions" />
+
 ## Skeleton
 
 Show a loading state with the skeleton variant.
