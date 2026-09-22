@@ -3,6 +3,8 @@
 
   export let fluid = false;
   export let disabled = false;
+  export let labelText = "Expandable search";
+  export let placeholder = "Search expandable...";
 
   let expanded = false;
   let value = "";
@@ -14,8 +16,8 @@
   expandable
   {fluid}
   {disabled}
-  labelText="Expandable search"
-  placeholder="Search expandable..."
+  {labelText}
+  {placeholder}
   on:expand={() => {
     console.log("expanded");
   }}
