@@ -23,6 +23,7 @@
     Histogram,
     KpiCard,
     LineChart,
+    LiveSparkline,
     LollipopChart,
     MicroDonut,
     MicroFunnel,
@@ -184,6 +185,13 @@
     selectable
     label="Pick a stage"
     data-testid="stacked-bar"
+  />
+
+  <LiveSparkline
+    seed={values}
+    capacity={12}
+    label="Requests per minute, streaming"
+    data-testid="live-sparkline"
   />
 
   <WaffleChart
