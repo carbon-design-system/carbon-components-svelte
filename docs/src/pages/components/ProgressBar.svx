@@ -80,6 +80,12 @@ Indicate errors with an error icon and red styling.
 
 <ProgressBar value={0} status="error" labelText="Upload file" helperText="Invalid file format" />
 
+### Status announcements
+
+Status changes are announced to assistive technologies. Set `errorText` and `finishedText` to localize or customize the status text.
+
+<ProgressBar value={100} status="finished" labelText="Upload file" finishedText="Terminé" />
+
 ## Variants
 
 Change layout with `kind`.
