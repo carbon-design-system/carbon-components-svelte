@@ -147,6 +147,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "ComparisonBar",
       "DeltaIndicator",
       "DonutChart",
+      "DumbbellChart",
       "FunnelBars",
       "FunnelChart",
       "Heatmap",

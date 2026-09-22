@@ -1,0 +1,44 @@
+---
+components: ["DumbbellChart"]
+description: Dumbbell chart shows how each category moved between two points, as two dots joined by a bar.
+---
+
+<script>
+  import { DumbbellChart } from "carbon-components-svelte/viz";
+
+  const TEAMS = ["Web", "Data", "Platform", "Mobile", "Security", "Support"];
+  const BEFORE = [62, 71, 58, 44, 80, 67];
+  const AFTER = [78, 65, 73, 61, 82, 60];
+  const scores = TEAMS.flatMap((team, i) => [
+    { team, survey: "2025", score: BEFORE[i] },
+    { team, survey: "2026", score: AFTER[i] },
+  ]);
+</script>
+
+`DumbbellChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+It is a [Chart](/components/Chart) preset and takes the same props. Use it over a grouped [BarChart](/components/BarChart) when the change between two points is the story, since the bar is the gap itself.
+
+## Basic
+
+Pass long `data` with `x` for the category, `y` for the value, and `series` naming the two points. The first series is where the bar starts and the second where it ends. Categories read best down the left, so the chart is horizontal by default, and the axis is not forced to zero.
+
+<DumbbellChart data={scores} x="team" y="score" series="survey" title="Engagement score by team, 2025 to 2026" yTitle="Score" />
+
+## Which way
+
+Set `from` and `to` to name the series when they are not the first two, or come in the other order.
+
+<DumbbellChart data={scores} x="team" y="score" series="survey" from="2026" to="2025" title="Read the other way" height={260} />
+
+## Vertical
+
+<DumbbellChart data={scores} x="team" y="score" series="survey" orientation="vertical" title="Engagement score by team" height={280} />
+
+## Composition
+
+`DumbbellChart` is `ChartDumbbells` inside a `Chart` with `zero={false}`. The mark pairs two series by category, so more than two are ignored unless named. It is listed with the other primitives on the [Chart](/components/Chart) page.
+
+## Accessibility
+
+The chart is a single tab stop. Up and Down move between categories, Enter or Space selects, and Escape clears. The focused category is announced with both values, such as "Web: 2025 62, 2026 78", and the others are dimmed. The dots carry the series colors and the legend names them, so which end is which never rests on color alone. The data table view lists both values for every category.
