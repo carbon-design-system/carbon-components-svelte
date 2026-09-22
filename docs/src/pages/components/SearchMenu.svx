@@ -198,13 +198,19 @@ Provide a `noResults` slot to render an empty state when the search value matche
 
 ### Async results
 
-Combine an async data source with client-side highlighting. Bind to `value`, fetch on input (debounced here), and render the returned items. Because filtering happens on the server (`shouldFilter={false}`), the menu shows exactly what the server returns while the client-side matcher still highlights the query. Set `loading` to render a skeleton menu while fetching (customize the rows with `skeletonCount` or the `loading` slot), and use the `noResults` slot for the empty state.
+Combine an async data source with client-side highlighting. Set `debounce` to fetch only after typing pauses, and render the returned items on `search`. Because filtering happens on the server (`shouldFilter={false}`), the menu shows exactly what the server returns while the client-side matcher still highlights the query. Set `loading` to render a skeleton menu while fetching (customize the rows with `skeletonCount` or the `loading` slot), and use the `noResults` slot for the empty state.
 
 <FileSource src="/framed/SearchMenu/AsyncResults" />
 
+## Debounce
+
+Set `debounce` to delay the `search` event until typing pauses, in milliseconds — useful for triggering a fetch without firing one per keystroke. `value` and the fuzzy-match highlighting stay immediate; only `search` waits. The default `debounce` of `0` never dispatches `search`.
+
+Selecting an item or pressing <DocKbd label="Enter" /> with no active item cancels a pending `search` rather than also firing it — `select` and `submit` already cover those cases. Clearing the field with the clear icon is always instant and also cancels a pending `search`. <DocKbd label="Escape" /> only closes the menu here — it does not clear `value`.
+
 ## Events
 
-The `select` event fires when an item is activated, carrying the `value`, the `item`, and the originating `event`. The `submit` event fires when pressing <DocKbd label="Enter" /> without an active item, carrying the current `value`. The `close` event fires when the menu closes, with a `trigger` of `"escape-key"`, `"outside-click"`, `"select"`, or `"blur"`.
+The `select` event fires when an item is activated, carrying the `value`, the `item`, and the originating `event`. The `submit` event fires when pressing <DocKbd label="Enter" /> without an active item, carrying the current `value`. The `search` event fires after the `debounce` pause (see [Debounce](#debounce)), carrying the current `value`. The `close` event fires when the menu closes, with a `trigger` of `"escape-key"`, `"outside-click"`, `"select"`, or `"blur"`.
 
 ### Result links
 
