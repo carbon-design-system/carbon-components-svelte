@@ -41,6 +41,12 @@ The `clear` event fires when clicking the clear button or pressing <DocKbd label
 
 <Search value="Cloud functions" on:clear={() => console.log('clear')}/>
 
+## Search event
+
+The `search` event fires when pressing <DocKbd label="Enter" />, with `value` as the event detail. Set `debounce` (milliseconds) to also dispatch `search` after typing pauses, without delaying the `value` binding itself. The default `debounce` of `0` does not dispatch on input — only <DocKbd label="Enter" /> does.
+
+<Search debounce={300} on:search={(e) => console.log(e.detail)} />
+
 ## Custom labels
 
 Customize the ARIA labels used for accessibility.
