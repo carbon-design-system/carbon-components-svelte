@@ -308,6 +308,7 @@
       {/if}
       <span
         class:bx--menu-option__label={!$$slots.labelChildren}
+        class:bx--menu-option__label--slotted={!!$$slots.labelChildren}
         title={labelText}
       >
         <slot name="labelChildren">{labelText}</slot>
@@ -335,6 +336,7 @@
       {/if}
       <span
         class:bx--menu-option__label={!$$slots.labelChildren}
+        class:bx--menu-option__label--slotted={!!$$slots.labelChildren}
         title={labelText}
       >
         <slot name="labelChildren">{labelText}</slot>

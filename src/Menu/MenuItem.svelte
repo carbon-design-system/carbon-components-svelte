@@ -271,7 +271,10 @@
         <svelte:component this={icon} />
       </div>
     {/if}
-    <span class:bx--menu-option__label={!$$slots.labelChildren}>
+    <span
+      class:bx--menu-option__label={!$$slots.labelChildren}
+      class:bx--menu-option__label--slotted={!!$$slots.labelChildren}
+    >
       {#if labelText !== undefined}
         <slot name="labelChildren">{labelText}</slot>
       {:else}
