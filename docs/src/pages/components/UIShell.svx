@@ -275,9 +275,15 @@ Set `selectTextOnFocus` to select the full value when the search bar receives fo
 <HeaderSearch selectTextOnFocus bind:value />
 ```
 
+### Debounce
+
+Set `debounce` to delay a `search` event until typing pauses, in milliseconds — useful for fetching results (`results` or the `menu` slot) without a request per keystroke. `value` stays immediate; only `search` waits. The default `debounce` of `0` never dispatches `search`.
+
+Selecting a result or submitting with <DocKbd label="Enter" /> cancels a pending `search` rather than also firing it. Clearing the field is always instant and also cancels a pending `search` — with the clear icon, or with <DocKbd label="Escape" /> when it clears the value (pressing <DocKbd label="Escape" /> to close an open `menu` slot, like `SearchMenu`, leaves the value and any pending `search` untouched).
+
 ### Events
 
-`HeaderSearch` dispatches `active` and `inactive` as the search bar opens and closes, `clear` when the clear ("x") button is clicked, `select` when a result is chosen (from `results` or the `menu` slot), and `submit` when <DocKbd label="Enter" /> is pressed with no result selected (`menu` slot only).
+`HeaderSearch` dispatches `active` and `inactive` as the search bar opens and closes, `clear` when the clear ("x") button is clicked, `select` when a result is chosen (from `results` or the `menu` slot), `submit` when <DocKbd label="Enter" /> is pressed with no result selected (`menu` slot only), and `search` after the `debounce` pause (see [Debounce](#debounce)).
 
 It also dispatches `close` — with `event.detail.trigger` set to `"escape-key"`, `"outside-click"`, or `"select"` — whenever the search bar deactivates, whether the user dismissed it or selected a result:
 
