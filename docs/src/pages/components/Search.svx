@@ -1,12 +1,12 @@
 ---
-components: ["Search", "SearchSkeleton", "FluidSearchSkeleton"]
+components: ["Search", "SearchRecent", "SearchSkeleton", "FluidSearchSkeleton"]
 description: Search provides a flexible search input, with support for expandable and fluid variants, multiple sizes, and custom icons.
 ---
 
 <script>
   import Information from "carbon-icons-svelte/lib/Information.svelte";
   import Query from "carbon-icons-svelte/lib/Query.svelte";
-  import { Search, SearchSkeleton, FluidSearchSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import { Search, SearchRecent, SearchSkeleton, FluidSearchSkeleton, TooltipIcon } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -140,6 +140,60 @@ Set `loading` to show a small spinner in place of the search icon while
 results are loading. The input stays editable and gets `aria-busy="true"`.
 
 <Search loading value="Cloud functions" />
+
+## Recent searches
+
+Use `SearchRecent` to list recent query strings underneath a search input.
+The parent owns the `queries` array and renders it as given, newest first.
+
+<SearchRecent
+  queries={["Storage buckets", "Cloud functions"]}
+  on:select={(event) => console.log(event.detail.query)}
+/>
+
+### Custom label
+
+Set `labelText` to change the label shown above the list.
+
+<SearchRecent
+  queries={["Storage buckets", "Cloud functions"]}
+  labelText="Recently viewed"
+/>
+
+### Hidden label
+
+Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
+
+<SearchRecent queries={["Storage buckets", "Cloud functions"]} hideLabel />
+
+### Paired with Search
+
+Listen for `select` to fill the input from a row and return focus to it.
+
+<FileSource src="/framed/Search/SearchRecentPaired" />
+
+### Removable
+
+Set `removable` to show a remove button on each row, and listen for `remove`
+to drop one.
+
+<FileSource src="/framed/Search/SearchRecentRemovable" />
+
+### Clear all
+
+Use the `action` slot to render a header action such as a "Clear all"
+control. Clearing is just resetting the `queries` array, so `SearchRecent`
+has no dedicated clear-all event.
+
+<FileSource src="/framed/Search/SearchRecentClearAll" />
+
+### Persisted
+
+Combine `queries` with `addRecentQuery` for dedupe, re-ranking, and a cap, and
+pair it with [LocalStorage](/components/LocalStorage) to persist the list
+across sessions.
+
+<FileSource src="/framed/Search/SearchRecentPersisted" />
 
 ## Skeleton
 
