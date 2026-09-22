@@ -78,3 +78,12 @@
 />
 
 <Meter labelText="Storage" value={0} max={0} data-testid="zero-max" />
+
+<Meter labelText="Storage" value={-5} max={100} data-testid="negative-value" />
+
+<Meter
+  labelText="Storage"
+  value={Number.NaN}
+  max={100}
+  data-testid="nan-value"
+/>

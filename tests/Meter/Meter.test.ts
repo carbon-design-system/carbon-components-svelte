@@ -69,6 +69,23 @@ describe("Meter", () => {
     expect(el).toHaveClass("bx--meter--error");
   });
 
+  it("clamps aria-valuenow to zero when value is negative", () => {
+    render(Meter);
+
+    const el = screen.getByTestId("negative-value");
+    const meter = within(el).getByRole("meter");
+    expect(meter).toHaveAttribute("aria-valuenow", "0");
+    expect(meter).toHaveAttribute("aria-valuemin", "0");
+  });
+
+  it("clamps aria-valuenow to zero when value is NaN", () => {
+    render(Meter);
+
+    const el = screen.getByTestId("nan-value");
+    const meter = within(el).getByRole("meter");
+    expect(meter).toHaveAttribute("aria-valuenow", "0");
+  });
+
   it("visually hides only the label text when hideLabel is set", () => {
     render(Meter);
 
