@@ -57,3 +57,42 @@ export function buildLinePath(
     precision: 1,
   });
 }
+
+/**
+ * The series on either side of `at`, for a line that turns projected there.
+ * The datum at `at` belongs to both halves, so the two paths meet, and a
+ * series that never reaches `at` is all before it. Rows are sliced, never
+ * copied one by one, and a half with fewer than two points is `null`.
+ *
+ * @template T
+ * @param {import("./model.js").ChartGroup<T>} group
+ * @param {number} at
+ * @returns {{ before: import("./model.js").ChartGroup<T> | null, after: import("./model.js").ChartGroup<T> | null }}
+ */
+export function splitAt(group, at) {
+  const n = group.xs.length;
+  // First index at or past `at`, assuming ascending x as the chart keeps it.
+  let cut = 0;
+  while (cut < n && group.xs[cut] < at) cut++;
+  const touches = cut < n && group.xs[cut] === at;
+  const beforeEnd = touches ? cut + 1 : cut;
+  const before = beforeEnd >= 2 ? slice(group, 0, beforeEnd) : null;
+  const after = n - cut >= 2 ? slice(group, cut, n) : null;
+  return { before, after };
+}
+
+/**
+ * @template T
+ * @param {import("./model.js").ChartGroup<T>} group
+ * @param {number} from
+ * @param {number} to
+ * @returns {import("./model.js").ChartGroup<T>}
+ */
+function slice(group, from, to) {
+  return {
+    ...group,
+    rows: group.rows.slice(from, to),
+    xs: group.xs.slice(from, to),
+    ys: group.ys.slice(from, to),
+  };
+}

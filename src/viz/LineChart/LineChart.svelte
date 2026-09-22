@@ -35,6 +35,16 @@
   export let downsample = true;
 
   /**
+   * Specify the x from which the data is projected. The lines are dashed
+   * from there, and a marker stands at the boundary.
+   * @type {number | Date}
+   */
+  export let forecastFrom = undefined;
+
+  /** Specify the label of the marker at `forecastFrom` */
+  export let forecastLabel = "";
+
+  /**
    * Set to `true` to include zero in the y domain.
    * A line chart shows change, so by default it fits the data.
    */
@@ -99,6 +109,7 @@
   import ChartGrid from "../Chart/ChartGrid.svelte";
   import ChartLegend from "../Chart/ChartLegend.svelte";
   import ChartLine from "../Chart/ChartLine.svelte";
+  import ChartMarker from "../Chart/ChartMarker.svelte";
   import ChartRuler from "../Chart/ChartRuler.svelte";
   import ChartToolbar from "../Chart/ChartToolbar.svelte";
   import ChartTooltip from "../Chart/ChartTooltip.svelte";
@@ -124,7 +135,10 @@
   <ChartAxis position="bottom" title={xTitle} />
   <ChartAxis position="left" title={yTitle} />
   <slot />
-  <ChartLine {curve} {points} {dashed} {downsample} />
+  {#if forecastFrom !== undefined}
+    <ChartMarker x={forecastFrom} label={forecastLabel} />
+  {/if}
+  <ChartLine {curve} {points} {dashed} {downsample} {forecastFrom} />
   {#if tooltip}
     <ChartRuler />
   {/if}

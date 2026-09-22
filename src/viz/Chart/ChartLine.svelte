@@ -20,6 +20,13 @@
   export let dashed = false;
 
   /**
+   * Specify the x from which the line is projected. From there on it is
+   * dashed, whatever `dashed` says, so a forecast reads as one.
+   * @type {number | Date}
+   */
+  export let forecastFrom = undefined;
+
+  /**
    * Specify when to draw a point on each datum.
    * `"all"` falls back to `"hover"` for a series of more than 500 points.
    * @type {"none" | "hover" | "all"}
@@ -41,7 +48,7 @@
 
   import { getContext } from "svelte";
   import { CHART_CONTEXT } from "./context.js";
-  import { buildLinePath } from "./line-geometry.js";
+  import { buildLinePath, splitAt } from "./line-geometry.js";
   import { yScaleOf } from "./model.js";
 
   const MAX_POINTS = 500;
@@ -55,14 +62,46 @@
   $: budget = downsample
     ? Math.max(3, Math.round(($scales.plot.x1 - $scales.plot.x0) * 2))
     : undefined;
+  $: cut =
+    forecastFrom === undefined
+      ? undefined
+      : forecastFrom instanceof Date
+        ? forecastFrom.getTime()
+        : forecastFrom;
   // Depends on groups and scales only, so hover never rebuilds a path.
-  $: paths = drawn.map((group) => ({
-    key: group.key,
-    color: group.color,
-    dashed:
-      dashed === true || (Array.isArray(dashed) && dashed.includes(group.key)),
-    d: buildLinePath(group, $scales, { curve, budget }),
-  }));
+  $: paths = drawn.flatMap((group) => {
+    const wantsDash =
+      dashed === true || (Array.isArray(dashed) && dashed.includes(group.key));
+    if (cut === undefined) {
+      return [
+        {
+          key: group.key,
+          color: group.color,
+          dashed: wantsDash,
+          d: buildLinePath(group, $scales, { curve, budget }),
+        },
+      ];
+    }
+    const { before, after } = splitAt(group, cut);
+    const out = [];
+    if (before) {
+      out.push({
+        key: group.key,
+        color: group.color,
+        dashed: wantsDash,
+        d: buildLinePath(before, $scales, { curve, budget }),
+      });
+    }
+    if (after) {
+      out.push({
+        key: JSON.stringify([group.key, "forecast"]),
+        color: group.color,
+        dashed: true,
+        d: buildLinePath(after, $scales, { curve, budget }),
+      });
+    }
+    return out;
+  });
   $: dots =
     points === "all"
       ? drawn

@@ -14,3 +14,13 @@ export function buildLinePath(
   scales: ChartScales,
   options?: { curve?: Curve; budget?: number },
 ): string;
+
+/**
+ * The series on either side of `at`, for a line that turns projected there.
+ * The datum at `at` belongs to both halves. A half with fewer than two
+ * points is `null`.
+ */
+export function splitAt<T>(
+  group: ChartGroup<T>,
+  at: number,
+): { before: ChartGroup<T> | null; after: ChartGroup<T> | null };
