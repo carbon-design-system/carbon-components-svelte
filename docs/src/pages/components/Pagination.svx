@@ -85,6 +85,12 @@ This example also overrides `itemRangeText` and `pageRangeText` to format the it
 
 <FileSource src="/framed/Pagination/PageWindow" />
 
+## Page in the URL
+
+Mirror the current page to a `page` query parameter so a reload or shared link lands on the same page. Read the initial `page` from `window.location.href` on load, then `history.replaceState` on every change—so paging doesn't add a history entry per click—while preserving any other query parameters already present.
+
+<FileSource src="/framed/Pagination/PaginationQueryString" />
+
 ## Custom page select
 
 Use the `pageSelect` slot to replace the default page-number `Select` with your own control. The slot exposes `currentPage`, `totalPages`, `currentPageSize`, and `selectLabelText` for display; bind `page` on `Pagination` itself and set it from within the slot to navigate.
