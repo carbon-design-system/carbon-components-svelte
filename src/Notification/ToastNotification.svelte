@@ -53,6 +53,7 @@
   export let open = true;
 
   import { createEventDispatcher, onMount } from "svelte";
+  import { createHoverFocusPause } from "../utils/pause-on-hover-focus.js";
   import { createTimeoutDismiss } from "../utils/timeout-dismiss.js";
   import NotificationButton from "./NotificationButton.svelte";
   import NotificationIcon from "./NotificationIcon.svelte";
@@ -60,6 +61,9 @@
   const dispatch = createEventDispatcher();
 
   const dismiss = createTimeoutDismiss();
+
+  const { handleMouseenter, handleMouseleave, handleFocusIn, handleFocusOut } =
+    createHoverFocusPause(dismiss, () => pauseOnHover);
 
   function close(closeFromTimeout) {
     dismiss.clear();
@@ -72,44 +76,6 @@
     if (shouldContinue) {
       open = false;
     }
-  }
-
-  function pointerInside(event) {
-    const next = event.relatedTarget;
-    const current = event.currentTarget;
-    return (
-      next instanceof Node && current instanceof Node && current.contains(next)
-    );
-  }
-
-  function handleMouseenter() {
-    if (pauseOnHover) dismiss.pause();
-  }
-
-  function handleMouseleave(event) {
-    if (!pauseOnHover || pointerInside(event)) return;
-    if (
-      event.currentTarget instanceof Node &&
-      event.currentTarget.contains(document.activeElement)
-    ) {
-      return;
-    }
-    dismiss.resume();
-  }
-
-  function handleFocusIn() {
-    if (pauseOnHover) dismiss.pause();
-  }
-
-  function handleFocusOut(event) {
-    if (!pauseOnHover || pointerInside(event)) return;
-    if (
-      event.currentTarget instanceof Node &&
-      event.currentTarget.contains(document.activeElement)
-    ) {
-      return;
-    }
-    dismiss.resume();
   }
 
   $: dismiss.sync(open, timeout, () => close(true));
