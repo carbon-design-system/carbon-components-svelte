@@ -57,6 +57,7 @@ export { default as RadarChart } from "./RadarChart/RadarChart.svelte";
 export { default as RadialProgress } from "./RadialProgress/RadialProgress.svelte";
 export { default as RangeIndicator } from "./RangeIndicator/RangeIndicator.svelte";
 export { default as RankBars } from "./RankBars/RankBars.svelte";
+export { default as RetentionChart } from "./RetentionChart/RetentionChart.svelte";
 export { default as ScatterChart } from "./ScatterChart/ScatterChart.svelte";
 export { default as ShareOfTotal } from "./ShareOfTotal/ShareOfTotal.svelte";
 export { default as Sparkline } from "./Sparkline/Sparkline.svelte";
