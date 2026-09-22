@@ -82,9 +82,11 @@
 
   /**
    * Override the item range text.
+   * If overridden, the custom function must handle `total <= 0` itself.
    * @type {(min: number, max: number, total: number) => string}
    */
   export let itemRangeText = function itemRangeText(min, max, total) {
+    if (total <= 0) return "0 items";
     return `${min.toLocaleString()}–${max.toLocaleString()} of ${total.toLocaleString()} item${max === 1 ? "" : "s"}`;
   };
 
