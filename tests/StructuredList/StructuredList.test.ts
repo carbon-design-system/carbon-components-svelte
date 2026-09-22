@@ -122,6 +122,29 @@ describe("StructuredList", () => {
     ).toHaveTextContent("Row 2");
   });
 
+  it("should follow the `selected` prop when the parent changes it", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    const { rerender } = render(StructuredList, {
+      props: { selection: true, selected: "row-2-value" },
+    });
+
+    expect(
+      screen.getByRole("radio", { checked: true }).closest("label"),
+    ).toHaveTextContent("Row 2");
+
+    consoleLog.mockClear();
+    await rerender({ selected: "row-1-value" });
+
+    const radios = screen.getAllByRole("radio");
+    expect(radios[0]).toBeChecked();
+    expect(radios[1]).not.toBeChecked();
+    expect(consoleLog).not.toHaveBeenCalledWith("change", expect.anything());
+
+    await user.click(radios[1]);
+    expect(consoleLog).toHaveBeenCalledWith("change", "row-2-value");
+    expect(radios[1]).toBeChecked();
+  });
+
   it("should apply the selected class only to the selected row", async () => {
     const { container } = render(StructuredList, {
       props: { selection: true, selected: "row-1-value" },
