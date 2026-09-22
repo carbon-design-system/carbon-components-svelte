@@ -78,3 +78,5 @@
 />
 
 <Meter labelText="Storage" value={0} max={0} data-testid="zero-max" />
+
+<Meter value={812} max={1000} data-testid="no-label" />

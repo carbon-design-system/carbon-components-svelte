@@ -26,6 +26,7 @@
   }
 
   .#{$prefix}--meter__value-text {
+    margin-inline-start: auto;
     color: $text-secondary;
   }
 

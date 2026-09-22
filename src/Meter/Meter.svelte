@@ -76,6 +76,7 @@
       }));
   }
 
+  $: hasLabel = !!(labelText || $$slots.labelChildren);
   $: overCapacity = value > max;
   $: ratio = max > 0 ? Math.min(Math.max(value / max, 0), 1) : 0;
   $: resolvedStatus = status ?? deriveStatus(value, thresholds, overCapacity);
@@ -92,25 +93,29 @@
   class:bx--meter--over={overCapacity}
   {...$$restProps}
 >
-  <div class:bx--meter__label={true}>
-    <span
-      id="{id}-label"
-      class:bx--meter__label-text={true}
-      class:bx--visually-hidden={hideLabel}
-    >
-      <slot name="labelChildren">{labelText}</slot>
-    </span>
-    {#if valueText || $$slots.valueChildren}
-      <span class:bx--meter__value-text={true}>
-        <slot name="valueChildren">{valueText}</slot>
-      </span>
-    {/if}
-  </div>
+  {#if hasLabel || valueText || $$slots.valueChildren}
+    <div class:bx--meter__label={true}>
+      {#if hasLabel}
+        <span
+          id="{id}-label"
+          class:bx--meter__label-text={true}
+          class:bx--visually-hidden={hideLabel}
+        >
+          <slot name="labelChildren">{labelText}</slot>
+        </span>
+      {/if}
+      {#if valueText || $$slots.valueChildren}
+        <span class:bx--meter__value-text={true}>
+          <slot name="valueChildren">{valueText}</slot>
+        </span>
+      {/if}
+    </div>
+  {/if}
   <div
     role="meter"
     {id}
     class:bx--meter__track={true}
-    aria-labelledby="{id}-label"
+    aria-labelledby={hasLabel ? `${id}-label` : undefined}
     aria-valuemin={0}
     aria-valuemax={max}
     aria-valuenow={cappedValue}

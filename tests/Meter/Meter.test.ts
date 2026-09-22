@@ -108,4 +108,29 @@ describe("Meter", () => {
       transform: "scaleX(0)",
     });
   });
+
+  it("omits aria-labelledby when there is no label", () => {
+    render(Meter);
+
+    const el = screen.getByTestId("no-label");
+    const meter = within(el).getByRole("meter");
+    expect(meter).not.toHaveAttribute("aria-labelledby");
+    expect(el.querySelector(".bx--meter__label-text")).not.toBeInTheDocument();
+  });
+
+  it("renders no label row when there is no label and no value text", () => {
+    render(Meter);
+
+    const el = screen.getByTestId("no-label");
+    expect(el.querySelector(".bx--meter__label")).not.toBeInTheDocument();
+  });
+
+  it("keeps aria-labelledby pointing at the label when hideLabel is set", () => {
+    render(Meter);
+
+    const el = screen.getByTestId("hidden-label");
+    expect(
+      within(el).getByRole("meter", { name: "Storage" }),
+    ).toBeInTheDocument();
+  });
 });
