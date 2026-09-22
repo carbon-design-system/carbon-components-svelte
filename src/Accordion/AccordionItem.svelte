@@ -44,6 +44,7 @@
   export let lazy = false;
 
   import { getContext, onMount } from "svelte";
+  import { get } from "svelte/store";
   import ChevronRight from "../icons/ChevronRight.svelte";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -71,6 +72,20 @@
     ctx.notifyOpen(id);
   }
 
+  let previousType = get(ctx.typeStore);
+
+  const unsubscribeType = ctx.typeStore.subscribe((value) => {
+    if (
+      value === "single" &&
+      previousType !== "single" &&
+      open &&
+      !ctx.claimSingle(id)
+    ) {
+      open = false;
+    }
+    previousType = value;
+  });
+
   let animation = undefined;
   let openedOnce = open;
 
@@ -80,6 +95,7 @@
     return () => {
       unsubscribeDisableItems();
       unsubscribeOpenId();
+      unsubscribeType();
     };
   });
 </script>

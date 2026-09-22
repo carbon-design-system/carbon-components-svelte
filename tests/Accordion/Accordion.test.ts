@@ -9,6 +9,7 @@ import AccordionProgrammatic from "./Accordion.programmatic.test.svelte";
 import AccordionSingle from "./Accordion.single.test.svelte";
 import AccordionSkeleton from "./Accordion.skeleton.test.svelte";
 import Accordion from "./Accordion.test.svelte";
+import AccordionTypeToggle from "./Accordion.type-toggle.test.svelte";
 
 describe("Accordion", () => {
   const itemIsDisabled = (name: string | RegExp) => {
@@ -488,6 +489,27 @@ describe("Accordion", () => {
     // Clicking the open item again just collapses it.
     await user.click(lastItem);
     itemIsCollapsed(/Language Translator/);
+  });
+
+  it('closes the extra open panel when type changes from "multiple" to "single"', async () => {
+    const { rerender } = render(AccordionTypeToggle, {
+      props: { type: "multiple" },
+    });
+
+    itemIsExpanded(/First/);
+    itemIsExpanded(/Second/);
+
+    await rerender({ type: "single" });
+
+    itemIsExpanded(/First/);
+    itemIsCollapsed(/Second/);
+  });
+
+  it('keeps both panels open while type remains "multiple"', () => {
+    render(AccordionTypeToggle, { props: { type: "multiple" } });
+
+    itemIsExpanded(/First/);
+    itemIsExpanded(/Second/);
   });
 
   it("should defer mounting panel content until first opened when lazy", async () => {
