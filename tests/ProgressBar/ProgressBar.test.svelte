@@ -32,3 +32,44 @@
 <ProgressBar value={-10} data-testid="under-zero" />
 
 <ProgressBar status="active" value={5} max={0} data-testid="zero-max" />
+
+<ProgressBar
+  labelText="Upload"
+  value={40}
+  valueText="40 MB of 100 MB"
+  data-testid="value-text"
+/>
+
+<ProgressBar
+  labelText="Upload"
+  status="error"
+  value={40}
+  valueText="Failed at 40 MB"
+  data-testid="value-text-error"
+/>
+
+<ProgressBar labelText="Upload" value={40} data-testid="no-value-text" />
+
+<ProgressBar
+  labelText="Hidden upload label"
+  hideLabel
+  value={40}
+  valueText="40 MB of 100 MB"
+  data-testid="hidden-label-value-text"
+/>
+
+<ProgressBar
+  labelText="Rich upload value"
+  value={40}
+  valueText="40 MB of 100 MB"
+  data-testid="value-children"
+>
+  <strong slot="valueChildren">40 MB / 100 MB</strong>
+</ProgressBar>
+
+<ProgressBar
+  labelText="Whitespace value"
+  value={40}
+  valueText="   "
+  data-testid="whitespace-value-text"
+/>

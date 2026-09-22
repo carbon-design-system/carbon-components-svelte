@@ -161,3 +161,18 @@
 @include exports('progress-bar') {
   @include progress-bar;
 }
+
+// carbon-components-svelte patch
+// `valueText` sits after the (optional) status icon in the label row. Anchor
+// it to the row's end with its own margin so it doesn't compete with the
+// label/icon `space-between` for position.
+@mixin progress-bar-value-text {
+  .#{$prefix}--progress-bar__value-text {
+    margin-left: auto;
+    color: $text-secondary;
+  }
+}
+
+@include exports('progress-bar-value-text') {
+  @include progress-bar-value-text;
+}

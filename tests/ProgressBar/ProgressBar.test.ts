@@ -67,9 +67,7 @@ describe("ProgressBar", () => {
     render(ProgressBar);
 
     const label = screen.getByText("Hidden label");
-    expect(label.closest(".bx--progress-bar__label")).toHaveClass(
-      "bx--visually-hidden",
-    );
+    expect(label).toHaveClass("bx--visually-hidden");
   });
 
   it("should cap values appropriately", () => {
@@ -116,12 +114,10 @@ describe("ProgressBar", () => {
     const progressBar = within(screen.getByTestId("progress-40%")).getByRole(
       "progressbar",
     );
-    const label = screen
-      .getByText("Progress 40%")
-      .closest(".bx--progress-bar__label");
-    if (label === null) throw new Error("label not found");
+    const label = screen.getByText("Progress 40%");
     expect(progressBar).toHaveAttribute("aria-labelledby", label.id);
-    expect(label).toHaveClass("bx--progress-bar__label");
+    expect(label).toHaveClass("bx--progress-bar__label-text");
+    expect(label.parentElement).toHaveClass("bx--progress-bar__label");
     expect(progressBar).not.toHaveAttribute("for");
   });
 
@@ -130,5 +126,77 @@ describe("ProgressBar", () => {
 
     const customLabel = screen.getByText("Custom label content");
     expect(customLabel).toBeInTheDocument();
+  });
+
+  it("uses valueText for aria-valuetext and shows it in the label row", () => {
+    render(ProgressBar);
+
+    const el = screen.getByTestId("value-text");
+    const progressBar = within(el).getByRole("progressbar", {
+      name: "Upload",
+    });
+    expect(progressBar).toHaveAttribute("aria-valuetext", "40 MB of 100 MB");
+    expect(progressBar).toHaveAttribute("aria-valuenow", "40");
+    expect(el).toHaveTextContent("40 MB of 100 MB");
+  });
+
+  it("uses explicit valueText for an error status", () => {
+    render(ProgressBar);
+
+    const progressBar = within(
+      screen.getByTestId("value-text-error"),
+    ).getByRole("progressbar");
+    expect(progressBar).toHaveAttribute("aria-valuetext", "Failed at 40 MB");
+  });
+
+  it("omits aria-valuetext and the value-text node when valueText is unset", () => {
+    render(ProgressBar);
+
+    const progressBar = within(screen.getByTestId("no-value-text")).getByRole(
+      "progressbar",
+    );
+    expect(progressBar).not.toHaveAttribute("aria-valuetext");
+    expect(
+      screen
+        .getByTestId("no-value-text")
+        .querySelector(".bx--progress-bar__value-text"),
+    ).toBeNull();
+  });
+
+  it("keeps value text visible when the label is visually hidden", () => {
+    render(ProgressBar);
+
+    const el = screen.getByTestId("hidden-label-value-text");
+    const progressBar = within(el).getByRole("progressbar", {
+      name: "Hidden upload label",
+    });
+    const label = within(el).getByText("Hidden upload label");
+    const displayedValue = within(el).getByText("40 MB of 100 MB");
+
+    expect(label).toHaveClass("bx--visually-hidden");
+    expect(displayedValue).not.toHaveClass("bx--visually-hidden");
+    expect(progressBar).toHaveAttribute("aria-valuetext", "40 MB of 100 MB");
+  });
+
+  it("renders valueChildren while using valueText as its accessible equivalent", () => {
+    render(ProgressBar);
+
+    const el = screen.getByTestId("value-children");
+    const progressBar = within(el).getByRole("progressbar", {
+      name: "Rich upload value",
+    });
+
+    expect(within(el).getByText("40 MB / 100 MB")).toBeInTheDocument();
+    expect(progressBar).toHaveAttribute("aria-valuetext", "40 MB of 100 MB");
+  });
+
+  it("does not render a value-text node for whitespace-only valueText", () => {
+    render(ProgressBar);
+
+    const el = screen.getByTestId("whitespace-value-text");
+    expect(el.querySelector(".bx--progress-bar__value-text")).toBeNull();
+    expect(within(el).getByRole("progressbar")).not.toHaveAttribute(
+      "aria-valuetext",
+    );
   });
 });
