@@ -1,6 +1,8 @@
 export { default as Chart } from "./Chart.svelte";
+export { default as ChartAnomalies } from "./ChartAnomalies.svelte";
 export { default as ChartArea } from "./ChartArea.svelte";
 export { default as ChartAxis } from "./ChartAxis.svelte";
+export { default as ChartBand } from "./ChartBand.svelte";
 export { default as ChartBars } from "./ChartBars.svelte";
 export { default as ChartBins } from "./ChartBins.svelte";
 export { default as ChartBoxes } from "./ChartBoxes.svelte";
