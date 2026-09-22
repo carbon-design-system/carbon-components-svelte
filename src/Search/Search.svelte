@@ -106,6 +106,7 @@
   let prevExpanded = expanded;
 
   $: isFluid = !expandable && (fluid || !!formContext?.isFluid);
+  $: hasLabel = labelText.trim() !== "" || $$slots.labelChildren;
   $: if (expanded && ref) {
     tick().then(() => {
       if (expanded) ref?.focus();
@@ -131,7 +132,8 @@
 {:else}
   <div
     role="search"
-    aria-labelledby="{id}-search"
+    aria-label={hasLabel ? undefined : placeholder || "Search"}
+    aria-labelledby={hasLabel ? `${id}-search` : undefined}
     class:bx--search={true}
     class:bx--search--light={light}
     class:bx--search--disabled={disabled}
@@ -191,6 +193,7 @@
       {disabled}
       {id}
       {placeholder}
+      aria-label={hasLabel ? undefined : placeholder || "Search"}
       {...$$restProps}
       tabindex={expandable && !expanded ? -1 : $$restProps.tabindex}
       inert={expandable && !expanded ? true : $$restProps.inert}

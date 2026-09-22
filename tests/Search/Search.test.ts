@@ -10,6 +10,7 @@ import SearchSlot from "./Search.slot.test.svelte";
 import Search from "./Search.test.svelte";
 import SearchExpandable from "./SearchExpandable.test.svelte";
 import SearchInitialEvent from "./SearchInitialEvent.test.svelte";
+import SearchNoLabel from "./SearchNoLabel.test.svelte";
 import SearchSkeleton from "./SearchSkeleton.test.svelte";
 
 describe("Search", () => {
@@ -92,6 +93,26 @@ describe("Search", () => {
     expect(
       screen.getByRole("search", { name: "Disabled search" }),
     ).toBeInTheDocument();
+  });
+
+  it("names the search landmark from the placeholder when there is no label", () => {
+    render(SearchNoLabel);
+
+    expect(
+      screen.getByRole("search", { name: "Find users" }),
+    ).toBeInTheDocument();
+  });
+
+  it("names the search landmark from labelText when set", () => {
+    render(SearchNoLabel);
+
+    expect(screen.getByRole("search", { name: "Filter" })).toBeInTheDocument();
+  });
+
+  it("falls back to 'Search' when both labelText and placeholder are empty", () => {
+    render(SearchNoLabel);
+
+    expect(screen.getByRole("search", { name: "Search" })).toBeInTheDocument();
   });
 
   it("renders disabled state", () => {
