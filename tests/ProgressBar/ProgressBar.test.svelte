@@ -30,3 +30,5 @@
 <ProgressBar value={150} max={100} data-testid="over-max" />
 
 <ProgressBar value={-10} data-testid="under-zero" />
+
+<ProgressBar status="active" value={5} max={0} data-testid="zero-max" />
