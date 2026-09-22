@@ -117,6 +117,7 @@ export {
   statusAt,
 } from "./utils/thresholds.js";
 export { niceDomain, tickStep, ticks } from "./utils/ticks.js";
+export { resolveTiles, TILE_LAYOUTS } from "./utils/tile-grid.js";
 export {
   niceTimeDomain,
   timeTickFormat,
