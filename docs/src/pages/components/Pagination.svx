@@ -71,6 +71,12 @@ For example, with 9 total items and page sizes of `[5, 10, 15]`, only 5 and 10 a
 
 <Pagination totalItems={9} pageSizes={[5, 10, 15]} dynamicPageSizes />
 
+### Remember the page size
+
+`pageSize` holds no state of its own between page loads. Bind it to [`LocalStorage`](/components/LocalStorage) so a size the user picks—say, showing 50 rows instead of 10—survives a refresh. Include the stored value in `pageSizes`, or it won't appear in the select.
+
+<FileSource src="/framed/Pagination/PaginationPageSizePersist" />
+
 ## Unknown pages
 
 Set `pagesUnknown` when the total page count is unknown, such as with cursor-based APIs. The item range renders without a total, and the forward button is not constrained by totalItems.
