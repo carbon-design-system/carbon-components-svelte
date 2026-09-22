@@ -151,6 +151,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "EventTimeline",
       "FunnelBars",
       "FunnelChart",
+      "FunnelCompare",
       "Heatmap",
       "HeatStrip",
       "Histogram",
