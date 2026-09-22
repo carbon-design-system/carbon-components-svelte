@@ -66,6 +66,9 @@
       on:animationend={() => {
         console.log("item-animationend");
       }}
+      on:toggle={(e) => {
+        console.log("item-toggle", e.detail);
+      }}
       >3</AccordionItem
     >
   {/if}

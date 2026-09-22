@@ -610,4 +610,40 @@ describe("Accordion", () => {
 
     itemIsCollapsed(/Natural Language Classifier/);
   });
+
+  it("should dispatch toggle with the next open state on click", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Accordion);
+
+    const item = screen.getByText("Language Translator");
+
+    await user.click(item);
+    expect(consoleLog).toHaveBeenCalledWith("item-toggle", true);
+
+    await user.click(item);
+    expect(consoleLog).toHaveBeenCalledWith("item-toggle", false);
+  });
+
+  it("should not dispatch toggle when mounted open", () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(AccordionLazy, { props: { open: true } });
+
+    expect(consoleLog).not.toHaveBeenCalledWith(
+      "item-toggle",
+      expect.anything(),
+    );
+  });
+
+  it("should not dispatch toggle when open changes via a parent-driven prop update", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    const { rerender } = render(AccordionLazy, { props: { open: false } });
+
+    await rerender({ open: true });
+    await rerender({ open: false });
+
+    expect(consoleLog).not.toHaveBeenCalledWith(
+      "item-toggle",
+      expect.anything(),
+    );
+  });
 });
