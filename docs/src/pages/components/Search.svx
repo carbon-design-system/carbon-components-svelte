@@ -59,7 +59,7 @@ Set `closeButtonLabelText` to customize the accessible label of the clear button
 
 ## Expandable
 
-Enable the expandable variant to show a compact search icon that expands on focus. While collapsed, the input is marked `inert` and removed from the tab order, hiding it from assistive technology until it expands — only the search icon button is reachable.
+Enable the expandable variant to show a compact search icon that expands on focus. While collapsed, the input is marked `inert` and removed from the tab order, hiding it from assistive technology until it expands — only the search icon button is reachable. That icon renders as a `<button>`, so pressing <DocKbd label="Enter" /> opens the field without a pointer.
 
 <FileSource src="/framed/Search/SearchExpandableReactive" />
 
