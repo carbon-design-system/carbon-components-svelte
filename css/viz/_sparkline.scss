@@ -17,6 +17,10 @@
     stroke-linecap: round;
   }
 
+  .#{$prefix}--sparkline__line--forecast {
+    stroke-dasharray: 4 3;
+  }
+
   .#{$prefix}--sparkline__area {
     fill: currentColor;
     fill-opacity: 0.1;

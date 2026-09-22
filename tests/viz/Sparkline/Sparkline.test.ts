@@ -28,6 +28,19 @@ describe("Sparkline", () => {
     expect(path?.getAttribute("d")).toMatch(/^M/);
   });
 
+  it("dashes the tail from forecastFrom and joins it to the solid line", () => {
+    render(Sparkline);
+
+    const lines = screen
+      .getByTestId("forecast")
+      .querySelectorAll("path.bx--sparkline__line");
+    expect(lines).toHaveLength(2);
+    expect(lines[1]).toHaveClass("bx--sparkline__line--forecast");
+    const end = lines[0].getAttribute("d")?.split("L").pop();
+    const start = lines[1].getAttribute("d")?.slice(1).split("L")[0];
+    expect(end).toBe(start);
+  });
+
   it("renders an area path when fill is set", () => {
     render(Sparkline);
 

@@ -32,3 +32,5 @@
 <Sparkline values={[1, 5, Number.NaN, 8, 2]} kind="bar" data-testid="gap-bar" />
 
 <Sparkline values={[7]} kind="line" data-testid="single" />
+
+<Sparkline {values} kind="line" forecastFrom={4} data-testid="forecast" />

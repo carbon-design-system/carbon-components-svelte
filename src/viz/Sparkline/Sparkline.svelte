@@ -52,6 +52,13 @@
   export let barGap = 2;
 
   /**
+   * Index of the first projected value. The line is dashed from there on.
+   * Only applies when `kind` is `"line"`.
+   * @type {number}
+   */
+  export let forecastFrom = undefined;
+
+  /**
    * Accessible name for the chart, rendered as `aria-label`. Describe the
    * series ("Requests per minute, last 24 hours") whenever the chart conveys
    * information not stated elsewhere. Leave empty to mark the chart as
@@ -82,7 +89,20 @@
           max,
         })
       : [];
-  $: linePath = kind === "line" ? toLinePath(points) : "";
+  // The projected tail shares its first point with the solid line, so the
+  // two meet.
+  $: cut =
+    kind === "line" &&
+    forecastFrom !== undefined &&
+    forecastFrom > 0 &&
+    forecastFrom < points.length - 1
+      ? forecastFrom
+      : undefined;
+  $: linePath =
+    kind === "line"
+      ? toLinePath(cut === undefined ? points : points.slice(0, cut + 1))
+      : "";
+  $: forecastPath = cut === undefined ? "" : toLinePath(points.slice(cut));
   $: areaPath =
     kind === "line" && fill ? toAreaPath(points, height - linePadding) : "";
   $: bars =
@@ -126,6 +146,15 @@
       <path
         class:bx--sparkline__line={true}
         d={linePath}
+        stroke-width={strokeWidth}
+        vector-effect="non-scaling-stroke"
+      />
+    {/if}
+    {#if forecastPath}
+      <path
+        class:bx--sparkline__line={true}
+        class:bx--sparkline__line--forecast={true}
+        d={forecastPath}
         stroke-width={strokeWidth}
         vector-effect="non-scaling-stroke"
       />
