@@ -113,6 +113,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   Sparkline: "0.113.0",
   Stack: "0.93.0",
   StackedBar: "0.113.0",
+  StateTimeline: "0.113.0",
   StructuredList: "0.2.0",
   TableOfContents: "0.114.0",
   Tabs: "0.2.0",

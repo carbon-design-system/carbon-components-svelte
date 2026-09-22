@@ -168,6 +168,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "ShareOfTotal",
       "Sparkline",
       "StackedBar",
+      "StateTimeline",
       "TreeChart",
       "TreemapChart",
       "UptimeBar",
