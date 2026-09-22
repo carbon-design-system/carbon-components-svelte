@@ -172,6 +172,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "TreeChart",
       "TreemapChart",
       "UptimeBar",
+      "WaffleChart",
       "WaterfallChart",
       "WordCloudChart",
     ],

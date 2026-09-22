@@ -145,6 +145,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   UserAvatar: "0.110.0",
   UserAvatarGroup: "0.110.0",
   VirtualList: "0.113.0",
+  WaffleChart: "0.113.0",
   WaterfallChart: "0.113.0",
   WordCloudChart: "0.113.0",
 };
