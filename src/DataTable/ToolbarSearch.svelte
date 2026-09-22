@@ -3,6 +3,7 @@
    * @template {import("./DataTable.svelte").DataTableRow} [Row=import("./DataTable.svelte").DataTableRow]
    * @restProps {input}
    * @event {null} clear
+   * @event {number | string} search
    */
 
   /**
@@ -53,6 +54,9 @@
    * Milliseconds of quiet time before rows are filtered. Filtering waits
    * until typing pauses; `value` still updates immediately; clearing
    * applies at once. `0` filters synchronously on every keystroke.
+   *
+   * Unrelated to the `search` event, which fires on <kbd>Enter</kbd>
+   * regardless of this delay.
    */
   export let debounce = 0;
 
@@ -166,6 +170,7 @@
   on:clear={clear}
   on:change
   on:input
+  on:search
   on:focus
   on:focus={expandSearch}
   on:blur

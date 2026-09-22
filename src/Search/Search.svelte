@@ -4,6 +4,7 @@
    * @template [Icon=any]
    * @event {null} expand
    * @event {null} collapse
+   * @event {T} search
    * @restProps {input}
    */
 
@@ -98,10 +99,19 @@
    */
   export let loading = false;
 
-  import { createEventDispatcher, getContext, tick } from "svelte";
+  /**
+   * Milliseconds to wait after the last input before dispatching `search`.
+   * 0 (default) does not dispatch on input; Enter still dispatches
+   * immediately. When greater than 0, `search` also fires after the pause.
+   * `value` updates immediately either way.
+   */
+  export let debounce = 0;
+
+  import { createEventDispatcher, getContext, onMount, tick } from "svelte";
   import Close from "../icons/Close.svelte";
   import IconSearch from "../icons/IconSearch.svelte";
   import Loading from "../Loading/Loading.svelte";
+  import { debounce as debounceFn } from "../utils/debounce.js";
   import { uniqueId } from "../utils/unique-id.js";
   import SearchSkeleton from "./SearchSkeleton.svelte";
 
@@ -118,6 +128,22 @@
 
   let searchRef = null;
   let prevExpanded = expanded;
+  let dispatchSearch = null;
+
+  $: {
+    dispatchSearch?.cancel();
+    dispatchSearch =
+      debounce > 0
+        ? debounceFn(
+            (searchValue) => dispatch("search", searchValue ?? ""),
+            debounce,
+          )
+        : null;
+  }
+
+  onMount(() => {
+    return () => dispatchSearch?.cancel();
+  });
 
   $: isFluid = !expandable && (fluid || !!formContext?.isFluid);
   $: if (expanded && ref) {
@@ -224,6 +250,9 @@
       inert={expandable && !expanded ? true : $$restProps.inert}
       on:change
       on:input
+      on:input={() => {
+        dispatchSearch?.(value);
+      }}
       on:focus
       on:focus={() => {
         if (expandable && !disabled) expanded = true;
@@ -244,12 +273,17 @@
         if (event.key === "Escape") {
           if (!readonly && value !== "" && value != null) {
             value = "";
+            dispatchSearch?.cancel();
             dispatch("clear");
             event.preventDefault();
           } else if (expandable && expanded) {
             expanded = false;
             event.preventDefault();
           }
+        } else if (event.key === "Enter") {
+          event.preventDefault();
+          dispatchSearch?.cancel();
+          dispatch("search", value ?? "");
         }
       }}
       on:keyup
@@ -266,6 +300,7 @@
         if (readonly) return;
         value = "";
         ref.focus();
+        dispatchSearch?.cancel();
         dispatch("clear");
       }}
     >

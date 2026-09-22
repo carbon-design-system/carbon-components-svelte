@@ -366,6 +366,9 @@
     </div>
   {/if}
   <div bind:this={searchAnchorRef} class:bx--search-menu__search={true}>
+    <!-- The inner Search's `debounce`/`search` are not surfaced here: Enter
+      already drives `select` (active item) or `submit` (free text), and
+      surfacing `search` too would fire a redundant event on every Enter. -->
     <Search
       bind:this={search}
       {size}
