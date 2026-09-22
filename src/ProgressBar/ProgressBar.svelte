@@ -60,6 +60,10 @@
       capped = value;
     }
   }
+  $: ratio =
+    max > 0 && Number.isFinite(capped)
+      ? Math.min(Math.max(capped / max, 0), 1)
+      : 0;
 </script>
 
 <div
@@ -101,7 +105,7 @@
   >
     <div
       class:bx--progress-bar__bar={true}
-      style:transform={status === "active" && `scaleX(${capped / max})`}
+      style:transform={status === "active" && `scaleX(${ratio})`}
     ></div>
   </div>
   {#if helperText}

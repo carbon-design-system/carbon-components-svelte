@@ -86,6 +86,30 @@ describe("ProgressBar", () => {
     expect(underZero).toHaveAttribute("aria-valuenow", "0");
   });
 
+  it("should not scale the bar by NaN when max is 0", () => {
+    render(ProgressBar);
+
+    const zeroMaxBar = screen
+      .getByTestId("zero-max")
+      .querySelector(".bx--progress-bar__bar");
+    if (zeroMaxBar === null) throw new Error("bar not found");
+    expect(zeroMaxBar).toHaveStyle("transform: scaleX(0)");
+    expect(zeroMaxBar.getAttribute("style")).not.toContain("NaN");
+
+    const fortyPercentBar = screen
+      .getByTestId("progress-40%")
+      .querySelector(".bx--progress-bar__bar");
+    if (fortyPercentBar === null) throw new Error("bar not found");
+    expect(fortyPercentBar).toHaveStyle("transform: scaleX(0.4)");
+
+    const indeterminateBar = screen
+      .getByTestId("indeterminate-progress")
+      .querySelector(".bx--progress-bar__bar");
+    if (indeterminateBar === null) throw new Error("bar not found");
+    expect(indeterminateBar).toHaveStyle("transform: scaleX(0)");
+    expect(indeterminateBar.getAttribute("style")).not.toContain("NaN");
+  });
+
   it("associates the label with the progressbar via aria-labelledby", () => {
     render(ProgressBar);
 
