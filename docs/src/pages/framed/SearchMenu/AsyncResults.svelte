@@ -16,8 +16,7 @@
     "Key Protect",
   ];
 
-  // Simulate a server endpoint. The boolean predicate is the server-side match
-  // decision -- swap the body for a real `fetch()`.
+  // Simulate a server endpoint. Swap the body for a real `fetch()`.
   function fetchResults(query) {
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -27,33 +26,29 @@
     });
   }
 
-  // `input` fires immediately, before the debounce pause -- show loading
-  // as soon as typing starts so stale/empty results don't flash first.
+  function resetResults() {
+    results = [];
+    loading = false;
+  }
+
+  // Fires immediately, before the debounce pause. Reset right away on an
+  // empty value instead of waiting for the debounced `search`, so stale
+  // results don't linger. Otherwise show loading as soon as typing starts.
   function handleInput(event) {
-    if (event.target.value.trim() !== "") {
+    if (event.target.value.trim() === "") {
+      resetResults();
+    } else {
       loading = true;
     }
   }
 
-  // `debounce` fires `search` only after typing pauses; `shouldFilter={false}`
-  // defers filtering to the server, while the client still highlights the
-  // query within each returned result.
+  // `search` fires only after typing pauses. `shouldFilter={false}` defers
+  // filtering to the server; the client still highlights the query in
+  // each result.
   async function handleSearch(query) {
     const trimmed = query.trim();
-    if (trimmed === "") {
-      // Backspacing to empty still waits out the debounce, so skip the
-      // fetch instead of flashing a loading state for an empty query.
-      results = [];
-      loading = false;
-      return;
-    }
+    if (trimmed === "") return;
     results = await fetchResults(trimmed);
-    loading = false;
-  }
-
-  // Clearing is always instant, not debounced -- reset results immediately.
-  function handleClear() {
-    results = [];
     loading = false;
   }
 </script>
@@ -67,7 +62,7 @@
   placeholder="Search..."
   on:input={handleInput}
   on:search={(e) => handleSearch(e.detail)}
-  on:clear={handleClear}
+  on:clear={resetResults}
 >
   {#each results as result (result)}
     <SearchMenuItem text={result} />
