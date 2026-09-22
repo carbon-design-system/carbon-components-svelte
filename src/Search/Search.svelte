@@ -85,9 +85,17 @@
   /** Set to `true` to select the input's text when it receives focus */
   export let selectTextOnFocus = false;
 
+  /**
+   * Set to `true` while results are loading. Shows a small spinner in place
+   * of the search icon and sets `aria-busy` on the input. The field stays
+   * editable.
+   */
+  export let loading = false;
+
   import { createEventDispatcher, getContext, tick } from "svelte";
   import Close from "../icons/Close.svelte";
   import IconSearch from "../icons/IconSearch.svelte";
+  import Loading from "../Loading/Loading.svelte";
   import { uniqueId } from "../utils/unique-id.js";
   import SearchSkeleton from "./SearchSkeleton.svelte";
 
@@ -157,7 +165,13 @@
           expanded = true;
         }}
       >
-        <svelte:component this={icon} class="bx--search-magnifier-icon" />
+        {#if loading}
+          <span class="bx--search-magnifier-icon">
+            <Loading small withOverlay={false} description="Searching" />
+          </span>
+        {:else}
+          <svelte:component this={icon} class="bx--search-magnifier-icon" />
+        {/if}
       </button>
     {:else}
       <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -169,7 +183,13 @@
           if (expandable && !disabled) expanded = true;
         }}
       >
-        <svelte:component this={icon} class="bx--search-magnifier-icon" />
+        {#if loading}
+          <span class="bx--search-magnifier-icon">
+            <Loading small withOverlay={false} description="Searching" />
+          </span>
+        {:else}
+          <svelte:component this={icon} class="bx--search-magnifier-icon" />
+        {/if}
       </div>
     {/if}
     <label
@@ -191,6 +211,7 @@
       {disabled}
       {id}
       {placeholder}
+      aria-busy={loading || undefined}
       {...$$restProps}
       tabindex={expandable && !expanded ? -1 : $$restProps.tabindex}
       inert={expandable && !expanded ? true : $$restProps.inert}
