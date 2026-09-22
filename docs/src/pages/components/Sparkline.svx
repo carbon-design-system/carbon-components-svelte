@@ -75,6 +75,12 @@ Set `fill` to `true` to shade the area under a line sparkline.
 
 <Sparkline values={[4, 7, 3, 9, 5, 12, 8, 6, 10, 14, 9, 13]} kind="line" fill />
 
+## Forecast
+
+Set `forecastFrom` to the index of the first projected value. The line is dashed from there, and the two parts meet.
+
+<Sparkline values={[12, 14, 13, 17, 16, 19, 21, 22, 24]} forecastFrom={5} width={160} height={32} label="Projected signups" />
+
 ## Fixed domain
 
 Set `min` and `max` to plot two sparklines against the same domain instead of each scaling to its own data, so their heights compare directly.

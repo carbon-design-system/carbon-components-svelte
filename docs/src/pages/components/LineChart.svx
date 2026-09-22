@@ -4,7 +4,7 @@ description: Line chart shows how one or more series change over a continuous or
 ---
 
 <script>
-  import { ChartThreshold, LineChart } from "carbon-components-svelte/viz";
+  import { ChartAnomalies, ChartBand, ChartThreshold, LineChart, flagAnomalies } from "carbon-components-svelte/viz";
 
   const DAY = 86_400_000;
   const START = new Date(2026, 0, 1).getTime();
@@ -28,6 +28,20 @@ description: Line chart shows how one or more series change over a continuous or
   const single = make(48, ["EMEA"]);
   const gaps = make(24, ["EMEA"]).map((row, i) => (i > 8 && i < 12 ? { ...row, revenue: null } : row));
   const large = make(20000, ["EMEA"]);
+  const today = new Date(START + DAY * 240);
+  const forecast = make(48, ["EMEA"]).map((row, i) => {
+    const ahead = Math.max(0, i - 31);
+    const spread = ahead * 900;
+    return {
+      ...row,
+      lo80: ahead ? row.revenue - spread : null,
+      hi80: ahead ? row.revenue + spread : null,
+      lo95: ahead ? row.revenue - spread * 1.8 : null,
+      hi95: ahead ? row.revenue + spread * 1.8 : null,
+    };
+  });
+  const spiky = make(48, ["EMEA"]).map((row, i) => (i === 17 || i === 33 ? { ...row, revenue: row.revenue + 26000 } : row));
+  const flags = flagAnomalies(spiky.map((row) => row.revenue), { threshold: 2.5 });
   const quarters = ["Q1", "Q2", "Q3", "Q4"].flatMap((quarter, i) => [
     { quarter, kind: "Plan", value: 40 + i * 12 },
     { quarter, kind: "Actual", value: 36 + i * 15 },
@@ -124,6 +138,23 @@ Add marks in the default slot. A `ChartThreshold` draws a labelled rule and keep
 
 <LineChart {data} x="date" y="revenue" series="region" title="Revenue against target">
   <ChartThreshold y={65000} label="Target" />
+</LineChart>
+
+## Forecast
+
+Set `forecastFrom` to the x where the data turns projected. The lines are dashed from there, and a marker stands at the boundary with `forecastLabel`. Add a `ChartBand` for the interval around a projection: `lower` and `upper` read its bounds from each datum, and a datum without them is a gap, so the band starts where the forecast does. Nest bands with lower `opacity` outside for a fan.
+
+<LineChart data={forecast} x="date" y="revenue" series="region" title="Revenue, projected" forecastFrom={today} forecastLabel="Today">
+  <ChartBand lower="lo95" upper="hi95" opacity={0.1} />
+  <ChartBand lower="lo80" upper="hi80" />
+</LineChart>
+
+## Anomalies
+
+A `ChartAnomalies` mark puts a diamond on every datum `when` says is one: a key of a boolean field, or a function of the datum. The shape carries the meaning, so it reads without color. `flagAnomalies` scores a series by standard deviations from the mean, or from the values before each point with a `window`.
+
+<LineChart data={spiky} x="date" y="revenue" series="region" title="Revenue, with anomalies">
+  <ChartAnomalies when={(row, i) => flags[i]} />
 </LineChart>
 
 ## Colors
