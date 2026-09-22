@@ -6,6 +6,7 @@ description: Search provides a flexible search input, with support for expandabl
 <script>
   import Information from "carbon-icons-svelte/lib/Information.svelte";
   import Query from "carbon-icons-svelte/lib/Query.svelte";
+  import Time from "carbon-icons-svelte/lib/Time.svelte";
   import { Search, SearchRecent, SearchSkeleton, FluidSearchSkeleton, TooltipIcon } from "carbon-components-svelte";
 </script>
 
@@ -145,10 +146,32 @@ results are loading. The input stays editable and gets `aria-busy="true"`.
 
 Use `SearchRecent` to list recent query strings underneath a search input.
 The parent owns the `queries` array and renders it as given, newest first.
+Queries render as compact, wrapping chips by default.
 
 <SearchRecent
   queries={["Storage buckets", "Cloud functions"]}
   on:select={(event) => console.log(event.detail.query)}
+/>
+
+### Variant
+
+Set `variant` to `"list"` to stack queries as full-width rows instead of
+wrapping chips.
+
+<SearchRecent
+  queries={["Storage buckets", "Cloud functions"]}
+  variant="list"
+/>
+
+### Icon
+
+Set `icon` to render an icon before each query. Choose something distinct
+from the search input's own icon — a clock or history icon signals that a
+row is a past search rather than a live result.
+
+<SearchRecent
+  queries={["Storage buckets", "Cloud functions"]}
+  icon={Time}
 />
 
 ### Custom label
