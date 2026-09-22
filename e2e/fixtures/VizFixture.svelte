@@ -13,6 +13,7 @@
     ComparisonBar,
     DeltaIndicator,
     DonutChart,
+    DumbbellChart,
     FunnelBars,
     FunnelChart,
     Heatmap,
@@ -239,6 +240,15 @@
     bins={8}
     markers={[{ x: 40000, label: "Goal" }]}
     title="Distribution of monthly revenue"
+    height={220}
+  />
+
+  <DumbbellChart
+    data={revenue.filter((row) => [0, 5].includes(row.date.getMonth()))}
+    x="region"
+    y="revenue"
+    series={(row) => (row.date.getMonth() === 0 ? "Jan" : "Jun")}
+    title="January to June, by region"
     height={220}
   />
 
