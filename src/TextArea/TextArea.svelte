@@ -35,6 +35,9 @@
   /** Set to `true` to use the read-only variant */
   export let readonly = false;
 
+  /** Set to `true` to mark the field as required */
+  export let required = false;
+
   /** Specify the helper text */
   export let helperText = "";
 
@@ -183,6 +186,7 @@
       {rows}
       {placeholder}
       {readonly}
+      {required}
       class:bx--text-area={true}
       class:bx--text-area--light={light}
       class:bx--text-area--invalid={showInvalid}

@@ -10,6 +10,7 @@
   export let light = false;
   export let disabled = false;
   export let readonly = false;
+  export let required = false;
   export let helperText = "";
   export let labelText = "App description";
   export let hideLabel = false;
@@ -33,6 +34,7 @@
   {light}
   {disabled}
   {readonly}
+  {required}
   {helperText}
   {labelText}
   {hideLabel}

@@ -101,6 +101,18 @@ describe("TextArea", () => {
     );
   });
 
+  it("should handle required state", () => {
+    render(TextArea, { props: { required: true } });
+
+    expect(screen.getByRole("textbox")).toHaveAttribute("required");
+  });
+
+  it("should not have required attribute by default", () => {
+    render(TextArea);
+
+    expect(screen.getByRole("textbox")).not.toHaveAttribute("required");
+  });
+
   it("should handle helper text", () => {
     render(TextArea, { props: { helperText: "Helper text" } });
 
