@@ -89,3 +89,21 @@ describe("buildTimeline", () => {
     expect(timeline.domain).toEqual([0, 1]);
   });
 });
+
+test("keeps an instant on the domain boundary and drops one outside", () => {
+  const events = [0, 5, 10, 11].map((hour) => ({
+    lane: "deploys",
+    kind: "deploy",
+    at: new Date(2026, 0, 1, hour),
+  }));
+  const timeline = buildTimeline(events, {
+    row: (row) => row.lane,
+    state: (row) => row.kind,
+    start: (row) => row.at,
+    end: (row) => row.at,
+    domain: [new Date(2026, 0, 1, 0), new Date(2026, 0, 1, 10)],
+  });
+  const marks = timeline.rows[0].segments;
+  expect(marks.map((mark) => mark.startPct)).toEqual([0, 50, 100]);
+  expect(marks.every((mark) => mark.widthPct === 0)).toBe(true);
+});

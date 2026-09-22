@@ -29,8 +29,10 @@ function toTime(value) {
  * Group spans into rows, in first-seen order, and place each on a shared
  * time scale as percentages of the domain. The domain defaults to the
  * earliest start and the latest end. A span outside it is clipped, and one
- * entirely outside is dropped. States are colored in first-seen order, or
- * by the `states` map, whose values are semantic names or any color.
+ * entirely outside is dropped. A span that starts and ends at the same
+ * instant is an event: it has no width and stays as long as it is inside.
+ * States are colored in first-seen order, or by the `states` map, whose
+ * values are semantic names or any color.
  *
  * @template T
  * @param {ReadonlyArray<T>} rows
@@ -106,7 +108,12 @@ export function buildTimeline(rows, options) {
     rows: [...byRow].map(([key, spans]) => ({
       key,
       segments: spans
-        .filter((entry) => entry.to > domain[0] && entry.from < domain[1])
+        // An instant on the boundary is inside; a span must overlap it.
+        .filter((entry) =>
+          entry.to === entry.from
+            ? entry.from >= domain[0] && entry.from <= domain[1]
+            : entry.to > domain[0] && entry.from < domain[1],
+        )
         .sort((a, b) => a.from - b.from)
         .map((entry) => {
           const from = Math.max(entry.from, domain[0]);
