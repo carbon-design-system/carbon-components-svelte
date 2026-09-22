@@ -243,6 +243,15 @@ Set `disabled` on an individual `SearchMenuItem` to keep it visible but non-inte
 
 <FileSource src="/framed/SearchMenu/DisabledItems" />
 
+## Loading
+
+Set `searchLoading` to show a spinner in the search input while results are loading, independent of `loading`, which controls the skeleton menu (see [Async results](#async-results)). Combine both props when the menu is also loading.
+
+<SearchMenu searchLoading labelText="Search" placeholder="Search...">
+  <SearchMenuItem text="Databases for TestSQL" />
+  <SearchMenuItem text="Data Store for Memcache" />
+</SearchMenu>
+
 ## Skeleton
 
 ### Search input
