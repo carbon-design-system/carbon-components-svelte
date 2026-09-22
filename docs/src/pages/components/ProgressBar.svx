@@ -27,6 +27,18 @@ Set a custom maximum value for the progress bar.
 
 <ProgressBar value={40} max={200} labelText="Storage used" helperText="40 GB of 200 GB" />
 
+### Value text
+
+Set `valueText` to render a right-aligned value in the label row. Format it yourself; `valueText` also becomes the progress bar's `aria-valuetext`.
+
+<ProgressBar value={40} labelText="Upload status" valueText="40 MB of 100 MB" />
+
+Use the `valueChildren` slot to render custom value content. Also provide `valueText` as its plain-text equivalent for assistive technologies.
+
+<ProgressBar value={40} labelText="Upload status" valueText="40 MB of 100 MB">
+  <strong slot="valueChildren">40 MB / 100 MB</strong>
+</ProgressBar>
+
 ## Label
 
 ### Hidden label
