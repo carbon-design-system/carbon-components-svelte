@@ -73,6 +73,13 @@
   /** Specify the number of skeleton rows rendered while `loading` */
   export let skeletonCount = 4;
 
+  /**
+   * Set to `true` to show a spinner in the search input while results are
+   * loading. Independent of `loading`, which controls the skeleton menu —
+   * combine both to show the spinner while the menu is also loading.
+   */
+  export let searchLoading = false;
+
   /** Specify the placeholder text */
   export let placeholder = "Search...";
 
@@ -371,6 +378,7 @@
       {id}
       {searchClass}
       {selectTextOnFocus}
+      loading={searchLoading}
       bind:value
       bind:ref
       role="combobox"

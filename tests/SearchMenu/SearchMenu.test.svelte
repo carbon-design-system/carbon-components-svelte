@@ -8,6 +8,7 @@
   export let shouldFilter = true;
   export let disabled = false;
   export let loading = false;
+  export let searchLoading = false;
   export let size: ComponentProps<SearchMenu>["size"] = undefined;
   export let menuSize: ComponentProps<SearchMenu>["menuSize"] = undefined;
   export let portal: ComponentProps<SearchMenu>["portal"] = true;
@@ -33,6 +34,7 @@
   {shouldFilter}
   {disabled}
   {loading}
+  {searchLoading}
   {size}
   {menuSize}
   {portal}
