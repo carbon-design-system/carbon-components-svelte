@@ -41,6 +41,12 @@
    */
   export let valueText = "";
 
+  /** Specify the text announced and described when the status is `"error"`. */
+  export let errorText = "Error";
+
+  /** Specify the text announced and described when the status is `"finished"`. */
+  export let finishedText = "Complete";
+
   /** Set an id for the progress bar element */
   export let id = uniqueId();
 
@@ -54,6 +60,7 @@
   };
 
   let helperId = uniqueId();
+  let statusDescriptionId = uniqueId();
 
   $: indeterminate = value === undefined && status === "active";
   let capped;
@@ -73,6 +80,22 @@
     max > 0 && Number.isFinite(capped)
       ? Math.min(Math.max(capped / max, 0), 1)
       : 0;
+
+  $: statusText =
+    status === "error" ? errorText : status === "finished" ? finishedText : "";
+  $: describedBy =
+    [helperText && helperId, statusText && statusDescriptionId]
+      .filter(Boolean)
+      .join(" ") || undefined;
+
+  let prevStatus = status;
+  let statusAnnouncement = "";
+  $: {
+    if (status !== prevStatus) {
+      statusAnnouncement = statusText;
+      prevStatus = status;
+    }
+  }
 </script>
 
 <div
@@ -116,12 +139,20 @@
     aria-valuemax={indeterminate ? undefined : upper}
     aria-valuenow={indeterminate ? undefined : capped}
     aria-valuetext={valueText.trim() ? valueText : undefined}
-    aria-describedby={helperText ? helperId : null}
+    aria-describedby={describedBy}
   >
     <div
       class:bx--progress-bar__bar={true}
       style:transform={status === "active" && `scaleX(${ratio})`}
     ></div>
+  </div>
+  {#if statusText}
+    <div id={statusDescriptionId} class:bx--visually-hidden={true}>
+      {statusText}
+    </div>
+  {/if}
+  <div class:bx--visually-hidden={true} aria-live="polite" aria-atomic="true">
+    {statusAnnouncement}
   </div>
   {#if helperText}
     <div id={helperId} class:bx--progress-bar__helper-text={true}>
