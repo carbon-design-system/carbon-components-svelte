@@ -6,6 +6,7 @@
   /**
    * @event {{ value: string; item: { text?: string; value?: string; href?: string }; event: Event }} select
    * @event {{ value: T }} submit
+   * @event {T} search
    * @event {{ trigger: "escape-key" | "outside-click" | "select" | "blur" }} close
    * @restProps {input}
    * @slot {{}} before
@@ -127,11 +128,21 @@
   /** Set to `true` to select the input's text when it receives focus */
   export let selectTextOnFocus = false;
 
-  import { createEventDispatcher, setContext } from "svelte";
+  /**
+   * Milliseconds to wait after the last input before dispatching `search`.
+   * 0 (default) does not dispatch `search`. `value`, the fuzzy-match
+   * highlighting, and clearing all stay immediate regardless of this delay
+   * -- only the `search` event waits. Selecting an item or submitting with
+   * <kbd>Enter</kbd> cancels a pending `search` instead of also firing it.
+   */
+  export let debounce = 0;
+
+  import { createEventDispatcher, onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import Search from "../Search/Search.svelte";
   import SkeletonText from "../SkeletonText/SkeletonText.svelte";
+  import { debounce as debounceFn } from "../utils/debounce.js";
   import { dismiss } from "../utils/dismiss.js";
   import { fuzzyMatch } from "../utils/fuzzy-match.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
@@ -147,6 +158,20 @@
   let refocusOnBlur = false;
   /** @type {Search | null} */
   let search = null;
+
+  let dispatchSearch = null;
+
+  $: {
+    dispatchSearch?.cancel();
+    dispatchSearch =
+      debounce > 0
+        ? debounceFn((searchValue) => dispatch("search", searchValue), debounce)
+        : null;
+  }
+
+  onMount(() => {
+    return () => dispatchSearch?.cancel();
+  });
 
   const query = writable("");
   const sharedShouldFilter = writable(shouldFilter);
@@ -201,6 +226,7 @@
       highlightedId.set(next);
     },
     selectItem(detail) {
+      dispatchSearch?.cancel();
       value = detail.value ?? value;
       dispatch("select", detail);
       close("select");
@@ -276,6 +302,7 @@
           event.preventDefault();
           active.click();
         } else {
+          dispatchSearch?.cancel();
           dispatch("submit", { value });
         }
         break;
@@ -338,6 +365,11 @@
 
   function handleInput() {
     dismissed = false;
+    dispatchSearch?.(value);
+  }
+
+  function handleClear() {
+    dispatchSearch?.cancel();
   }
 
   function handleOutsideClick(event) {
@@ -366,9 +398,9 @@
     </div>
   {/if}
   <div bind:this={searchAnchorRef} class:bx--search-menu__search={true}>
-    <!-- The inner Search's `debounce`/`search` are not surfaced here: Enter
-      already drives `select` (active item) or `submit` (free text), and
-      surfacing `search` too would fire a redundant event on every Enter. -->
+    <!-- SearchMenu implements its own debounced `search` (below) rather than
+      forwarding the inner Search's `debounce`/`search`: Search dispatches
+      `search` on every Enter, which would duplicate `select`/`submit`. -->
     <Search
       bind:this={search}
       {size}
@@ -399,6 +431,7 @@
       on:input={handleInput}
       on:change
       on:clear
+      on:clear={handleClear}
       on:keydown
       on:keydown={handleKeydown}
       on:keyup
