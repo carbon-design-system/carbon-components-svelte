@@ -37,6 +37,7 @@
     Sparkline,
     StackedBar,
     StateTimeline,
+    TileGridMap,
     TreeChart,
     TreemapChart,
     UptimeBar,
@@ -317,6 +318,20 @@
     value="value"
     title="Stages as words"
     height={200}
+  />
+
+  <TileGridMap
+    data={[
+      { state: "CA", signups: 900 },
+      { state: "TX", signups: 640 },
+      { state: "NY", signups: 480 },
+      { state: "WA", signups: 210 },
+      { state: "FL", signups: 330 },
+    ]}
+    region="state"
+    value="signups"
+    title="Signups by state, as tiles"
+    selectable
   />
 
   <ChoroplethChart
