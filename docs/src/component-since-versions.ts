@@ -144,6 +144,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   UIShell: "0.3.0",
   UnorderedList: "0.2.0",
   UptimeBar: "0.113.0",
+  VarianceIndicator: "0.113.0",
   UserAvatar: "0.110.0",
   UserAvatarGroup: "0.110.0",
   VirtualList: "0.113.0",
