@@ -33,7 +33,7 @@
   export let type = "multiple";
 
   import { setContext } from "svelte";
-  import { writable } from "svelte/store";
+  import { get, writable } from "svelte/store";
   import AccordionSkeleton from "./AccordionSkeleton.svelte";
 
   /**
@@ -49,13 +49,36 @@
    */
   const openId = writable(null);
 
+  /** @type {import("svelte/store").Writable<"single" | "multiple">} */
+  const typeStore = writable(type);
+
+  $: if (type === "single") {
+    openId.set(null);
+  }
+  $: typeStore.set(type);
+
   function notifyOpen(id) {
     if (type === "single") {
       openId.set(id);
     }
   }
 
-  setContext("carbon:Accordion", { disableItems, openId, notifyOpen });
+  function claimSingle(id) {
+    const currentId = get(openId);
+    if (currentId === null) {
+      openId.set(id);
+      return true;
+    }
+    return currentId === id;
+  }
+
+  setContext("carbon:Accordion", {
+    disableItems,
+    openId,
+    typeStore,
+    notifyOpen,
+    claimSingle,
+  });
 </script>
 
 {#if skeleton}
