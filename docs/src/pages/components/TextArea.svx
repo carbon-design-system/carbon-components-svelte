@@ -30,6 +30,14 @@ Adjust visible columns with `cols`. Setting `cols` disables the default resize h
 
 <TextArea cols={40} labelText="Incident summary" placeholder="Describe what happened, the impact, and any mitigation steps taken so far..." />
 
+### Grow with content
+
+Set `grow` to expand the textarea as its content grows, using `rows` as the
+minimum height. Cap the height with `maxRows`; once the content exceeds it,
+the field scrolls instead of growing further.
+
+<TextArea grow maxRows={8} labelText="Incident summary" placeholder="Describe what happened, the impact, and any mitigation steps taken so far..." />
+
 ## Maximum character count
 
 Specify the max character count with `maxCount`. A character counter appears to the right of the label. Use the native maxlength attribute instead if you prefer not to show a counter.
