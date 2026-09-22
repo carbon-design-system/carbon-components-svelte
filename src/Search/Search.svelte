@@ -214,8 +214,14 @@
       on:keydown
       on:keydown={(event) => {
         if (event.key === "Escape") {
-          value = "";
-          dispatch("clear");
+          if (value !== "" && value != null) {
+            value = "";
+            dispatch("clear");
+            event.preventDefault();
+          } else if (expandable && expanded) {
+            expanded = false;
+            event.preventDefault();
+          }
         }
       }}
       on:keyup
