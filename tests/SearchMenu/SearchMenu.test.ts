@@ -282,6 +282,17 @@ describe("SearchMenu", () => {
     expect(screen.queryAllByRole("option")).toHaveLength(0);
   });
 
+  it("shows a busy state on the search input via searchLoading, independent of loading", () => {
+    render(SearchMenu, { props: { searchLoading: true } });
+    const input = screen.getByRole("combobox");
+    expect(input).toHaveAttribute("aria-busy", "true");
+    expect(screen.getByTitle("Searching")).toBeInTheDocument();
+    // Menu-level loading is untouched by searchLoading.
+    expect(
+      document.querySelectorAll(".bx--search-menu-item--skeleton"),
+    ).toHaveLength(0);
+  });
+
   it("renders all items but still highlights when shouldFilter is false", async () => {
     render(SearchMenu, { props: { shouldFilter: false } });
     const input = screen.getByRole("combobox");
