@@ -2,6 +2,10 @@
 description: Dialog provides a lightweight, native browser primitive for building custom modal and non-modal overlays.
 ---
 
+## When to use
+
+See [Choosing an overlay](/components/Modal#choosing-an-overlay) for how Dialog compares to Modal and ComposedModal.
+
 ## Basic
 
 Open the dialog by binding to `open`. `Dialog` opens non-modally by default, using the browser's `show()`: it renders without a backdrop, and the rest of the page stays interactive. `Dialog` has no built-in heading, so provide an `aria-label` or `aria-labelledby` attribute; both forward to the underlying dialog element.
@@ -14,9 +18,27 @@ Set `modal` to `true` to open the dialog with the browser's `showModal()`, which
 
 `Dialog` renders only what you put in its default slot, with no built-in header, footer, or action buttons. Use it to build a custom overlay, or as the top-layer host for portalled content such as DatePicker or FloatingPortal. For a ready-made dialog with a heading, body, and action buttons, use [Modal](/components/Modal) instead.
 
-When the dialog opens, focus moves into it (native modal focus trap). When it closes, focus returns to the element that opened it.
+When the dialog opens, focus moves into it (native modal focus trap). When it closes, focus returns to the element that opened it. Set `returnFocusTo` to an element, or a function returning one, to focus instead when the opener has unmounted while the dialog was open.
 
 <FileSource src="/framed/Dialog/ModalDialog" />
+
+## Return value
+
+Call `close(value)` on the dialog instance, obtained through `bind:this`, to close it and set `returnValue` in one step, matching the native `dialog.close(value)` API. `returnValue` is a readonly bindable prop; read it with `bind:returnValue`.
+
+<FileSource src="/framed/Dialog/DialogReturnValue" />
+
+## Light
+
+Set `light` to `true` to use the light variant, for placing the dialog on a light-themed surface alongside other light components.
+
+<FileSource src="/framed/Dialog/DialogLight" />
+
+## Closed by
+
+Set `closedby` to `"any"`, `"closerequest"`, or `"none"` to forward the native `closedby` attribute, which controls which user interactions can close the dialog. Browsers without support for the attribute ignore it. Set it to `"none"` to also disable this component's own backdrop light-dismiss, since that logic runs in Svelte rather than natively.
+
+<FileSource src="/framed/Dialog/DialogClosedBy" />
 
 ## Events
 
