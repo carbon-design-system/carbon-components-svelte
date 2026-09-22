@@ -25,6 +25,7 @@
    * @property {number} selectedResultIndex
    * @property {Result} selectedResult
    * @event {{ value: string }} submit
+   * @event {string} search
    * @slot {{ result: Result; index: number; selected: boolean; }}
    * @slot {{}} menu
    * @slot {{}} noResults
@@ -112,11 +113,20 @@
   /** Set to `true` to select the input's text when it receives focus */
   export let selectTextOnFocus = false;
 
-  import { createEventDispatcher, setContext, tick } from "svelte";
+  /**
+   * Milliseconds to wait after the last input before dispatching `search`.
+   * 0 (default) does not dispatch `search`. `value` stays immediate; only
+   * `search` waits. Selecting a result or submitting cancels a pending
+   * `search` instead of also firing it. Clearing is always instant.
+   */
+  export let debounce = 0;
+
+  import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
   import Close from "../icons/Close.svelte";
   import IconSearch from "../icons/IconSearch.svelte";
   import SkeletonText from "../SkeletonText/SkeletonText.svelte";
+  import { debounce as debounceFn } from "../utils/debounce.js";
   import { dismiss } from "../utils/dismiss.js";
   import { fuzzyMatch } from "../utils/fuzzy-match.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
@@ -140,6 +150,20 @@
 
   // `menu` slot shares SearchMenu context with SearchMenuItem/SearchMenuGroup.
   $: richMenu = Boolean($$slots.menu);
+
+  let dispatchSearch = null;
+
+  $: {
+    dispatchSearch?.cancel();
+    dispatchSearch =
+      debounce > 0
+        ? debounceFn((searchValue) => dispatch("search", searchValue), debounce)
+        : null;
+  }
+
+  onMount(() => {
+    return () => dispatchSearch?.cancel();
+  });
 
   const query = writable("");
   const sharedShouldFilter = writable(shouldFilter);
@@ -250,6 +274,7 @@
           event.preventDefault();
           active.click();
         } else {
+          dispatchSearch?.cancel();
           dispatch("submit", { value });
         }
         break;
@@ -263,6 +288,7 @@
           active = false;
           dispatch("close", { trigger: "escape-key" });
         } else {
+          dispatchSearch?.cancel();
           value = "";
         }
         break;
@@ -270,6 +296,7 @@
   }
 
   function reset() {
+    dispatchSearch?.cancel();
     active = false;
     value = "";
     selectedResultIndex = 0;
@@ -368,6 +395,7 @@
       on:input
       on:input={() => {
         if (richMenu) menuDismissed = false;
+        dispatchSearch?.(value);
       }}
       on:focus
       on:focus={() => {
@@ -415,6 +443,7 @@
 
             // Reset the search query but keep the search bar active.
             // Do not dispatch "clear" event as that should fire only on the "x" button.
+            dispatchSearch?.cancel();
             value = "";
             selectedResultIndex = 0;
             break;
