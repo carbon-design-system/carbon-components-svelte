@@ -144,17 +144,34 @@
     class:bx--search--fluid={isFluid}
     class={searchClass}
   >
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div
-      bind:this={searchRef}
-      class:bx--search-magnifier={true}
-      on:click={() => {
-        if (expandable && !disabled) expanded = true;
-      }}
-    >
-      <svelte:component this={icon} class="bx--search-magnifier-icon" />
-    </div>
+    {#if expandable && !expanded}
+      <button
+        type="button"
+        bind:this={searchRef}
+        class:bx--search-magnifier={true}
+        aria-label={labelText.trim() === ""
+          ? placeholder || "Open search"
+          : labelText}
+        {disabled}
+        on:click={() => {
+          expanded = true;
+        }}
+      >
+        <svelte:component this={icon} class="bx--search-magnifier-icon" />
+      </button>
+    {:else}
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <!-- svelte-ignore a11y-no-static-element-interactions -->
+      <div
+        bind:this={searchRef}
+        class:bx--search-magnifier={true}
+        on:click={() => {
+          if (expandable && !disabled) expanded = true;
+        }}
+      >
+        <svelte:component this={icon} class="bx--search-magnifier-icon" />
+      </div>
+    {/if}
     <label
       id="{id}-search"
       for={id}

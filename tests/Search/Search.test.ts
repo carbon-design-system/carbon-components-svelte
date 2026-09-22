@@ -169,6 +169,68 @@ describe("Search", () => {
     expect(search).toHaveFocus();
   });
 
+  it("renders a keyboard-reachable button to open the collapsed expandable search", () => {
+    render(SearchExpandable, { props: { labelText: "", placeholder: "Find" } });
+
+    const button = screen.getByRole("button", { name: "Find" });
+    expect(button).toBeInTheDocument();
+
+    const search = button
+      .closest(".bx--search")
+      ?.querySelector("input.bx--search-input");
+    expect(search).toHaveAttribute("tabindex", "-1");
+  });
+
+  it("expands the search when the open button is clicked", async () => {
+    render(SearchExpandable, { props: { labelText: "", placeholder: "Find" } });
+
+    const button = screen.getByRole("button", { name: "Find" });
+    const searchWrapper = button.closest(".bx--search");
+    assert(searchWrapper);
+
+    await user.click(button);
+
+    expect(searchWrapper).toHaveClass("bx--search--expanded");
+    const search = searchWrapper.querySelector("input.bx--search-input");
+    expect(search).not.toHaveAttribute("tabindex", "-1");
+  });
+
+  it("expands the search when the open button is activated from the keyboard", async () => {
+    render(SearchExpandable, { props: { labelText: "", placeholder: "Find" } });
+
+    const button = screen.getByRole("button", { name: "Find" });
+    const searchWrapper = button.closest(".bx--search");
+    assert(searchWrapper);
+
+    button.focus();
+    await user.keyboard("{Enter}");
+
+    expect(searchWrapper).toHaveClass("bx--search--expanded");
+  });
+
+  it("does not expand a disabled expandable search from the open button", async () => {
+    render(SearchExpandable, {
+      props: { labelText: "", placeholder: "Find", disabled: true },
+    });
+
+    const button = screen.getByRole("button", { name: "Find" });
+    expect(button).toBeDisabled();
+
+    const searchWrapper = button.closest(".bx--search");
+    assert(searchWrapper);
+
+    await user.click(button);
+    expect(searchWrapper).not.toHaveClass("bx--search--expanded");
+  });
+
+  it("does not render an open button when expandable is false", () => {
+    render(Search);
+
+    const magnifier = document.querySelector(".bx--search-magnifier");
+    assert(magnifier);
+    expect(magnifier.tagName).toBe("DIV");
+  });
+
   it("renders skeleton states", () => {
     render(SearchSkeleton);
 

@@ -311,12 +311,19 @@
   }
 
   .#{$prefix}--search--expandable .#{$prefix}--search-magnifier {
+    @include button-reset(false, $omit: (display, width, cursor));
+    @include focus-outline('reset');
+
     position: absolute;
     cursor: pointer;
   }
 
   .#{$prefix}--search--expandable .#{$prefix}--search-magnifier:hover {
     background-color: $hover-ui;
+  }
+
+  .#{$prefix}--search--expandable .#{$prefix}--search-magnifier:focus {
+    @include focus-outline('outline');
   }
 
   .#{$prefix}--search--expandable.#{$prefix}--search--expanded
