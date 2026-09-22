@@ -5,6 +5,10 @@
 
   export let portalTooltip: ComponentProps<CopyButton>["portalTooltip"] =
     undefined;
+  export let enterDelayMs: ComponentProps<CopyButton>["enterDelayMs"] =
+    undefined;
+  export let leaveDelayMs: ComponentProps<CopyButton>["leaveDelayMs"] =
+    undefined;
   export let onCopyError = (_detail: { error: unknown }) => {};
 </script>
 
@@ -12,6 +16,8 @@
   text="text"
   iconDescription="Basic"
   {portalTooltip}
+  {enterDelayMs}
+  {leaveDelayMs}
   on:copy={() => {
     console.log("copied");
   }}

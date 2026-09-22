@@ -120,6 +120,77 @@
       padding: 0;
     }
   }
+
+  // Reveal toggle sits between the value and the copy button, so the value
+  // needs room for one more button per size.
+  .#{$prefix}--copy-input__field-wrapper--toggle .#{$prefix}--text-input {
+    padding-right: to-rem(80px);
+  }
+
+  .#{$prefix}--copy-input__field-wrapper--toggle .#{$prefix}--text-input--sm {
+    padding-right: to-rem(64px);
+  }
+
+  .#{$prefix}--copy-input__field-wrapper--toggle .#{$prefix}--text-input--xl {
+    padding-right: to-rem(96px);
+  }
+
+  .#{$prefix}--copy-input__field-wrapper
+    .#{$prefix}--btn.#{$prefix}--copy-input__reveal-toggle.#{$prefix}--tooltip__trigger {
+    right: to-rem(40px);
+  }
+
+  .#{$prefix}--copy-input__field-wrapper
+    .#{$prefix}--text-input--sm
+    ~ .#{$prefix}--btn.#{$prefix}--copy-input__reveal-toggle.#{$prefix}--tooltip__trigger {
+    right: to-rem(32px);
+    width: to-rem(32px);
+  }
+
+  .#{$prefix}--copy-input__field-wrapper
+    .#{$prefix}--text-input--xl
+    ~ .#{$prefix}--btn.#{$prefix}--copy-input__reveal-toggle.#{$prefix}--tooltip__trigger {
+    right: to-rem(48px);
+    width: to-rem(48px);
+  }
+
+  .#{$prefix}--form--fluid,
+  .#{$prefix}--text-input--fluid {
+    .#{$prefix}--copy-input__field-wrapper--toggle .#{$prefix}--text-input {
+      padding-right: calc(#{$carbon--spacing-08} + #{to-rem(32px)});
+    }
+
+    .#{$prefix}--copy-input__field-wrapper
+      .#{$prefix}--btn.#{$prefix}--copy-input__reveal-toggle.#{$prefix}--tooltip__trigger {
+      block-size: to-rem(32px);
+      inline-size: to-rem(32px);
+      width: to-rem(32px);
+      height: to-rem(32px);
+      min-height: to-rem(32px);
+      inset-block-start: to-rem(26px);
+      inset-inline-end: calc(#{$spacing-03} + #{to-rem(32px)});
+      right: auto;
+      align-items: center;
+      padding: 0;
+    }
+  }
+
+  // Hide the copy button until intent is signaled, so dense key lists read
+  // cleaner; focus-within keeps it reachable by keyboard and visible after a
+  // tap on touch devices, and the animating class keeps feedback visible.
+  .#{$prefix}--copy-input__field-wrapper--copy-on-hover .#{$prefix}--copy-btn {
+    opacity: 0;
+    transition: opacity $duration--fast-01 motion(standard, productive);
+  }
+
+  .#{$prefix}--copy-input__field-wrapper--copy-on-hover:hover
+    .#{$prefix}--copy-btn,
+  .#{$prefix}--copy-input__field-wrapper--copy-on-hover:focus-within
+    .#{$prefix}--copy-btn,
+  .#{$prefix}--copy-input__field-wrapper--copy-on-hover
+    .#{$prefix}--copy-btn.#{$prefix}--copy-btn--animating {
+    opacity: 1;
+  }
 }
 
 @include exports("copy-input") {
