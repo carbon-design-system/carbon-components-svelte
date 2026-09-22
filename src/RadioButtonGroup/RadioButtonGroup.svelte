@@ -163,6 +163,8 @@
   on:mouseleave
 >
   <fieldset
+    role="radiogroup"
+    aria-orientation={orientation}
     class:bx--radio-button-group={true}
     class:bx--radio-button-group--vertical={orientation === "vertical"}
     class:bx--radio-button-group--label-left={labelPosition === "left"}
