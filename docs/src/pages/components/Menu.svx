@@ -84,6 +84,12 @@ Set `labelText` on a `MenuItem` and nest child `MenuItem` rows to get a submenu.
 
 <FileSource src="/framed/Menu/MenuItemNested" />
 
+### Custom label content
+
+Use the `labelChildren` slot to render custom label content, such as a tooltip icon, in place of `labelText`.
+
+<FileSource src="/framed/Menu/MenuItemLabelChildren" />
+
 ## Keyboard interactions
 
 Once open, arrow keys move focus between items without wrapping past the first or last item. <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the first and last enabled item, skipping disabled ones. <DocKbd label="Escape" /> closes the menu and returns focus to the anchor. See [Events](#events) for the full set of ways the menu can close, and how to keep it open after selection.
