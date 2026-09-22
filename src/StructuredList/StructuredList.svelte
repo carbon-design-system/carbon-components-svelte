@@ -80,7 +80,9 @@
   $: selected = $selectedValue;
   $: if (selected !== $selectedValue) {
     fromProp = true;
-    selectedValue.set(multiple ? (Array.isArray(selected) ? selected : []) : selected);
+    selectedValue.set(
+      multiple ? (Array.isArray(selected) ? selected : []) : selected,
+    );
   }
   $: {
     if (!initialRender && prevSelectedValue !== $selectedValue) {
