@@ -440,6 +440,28 @@
     opacity: 0.3;
   }
 
+  // The bar is neutral: the dots carry the series colors, and the direction
+  // is read from which dot is which.
+  .#{$prefix}--viz-dumbbells__bar {
+    stroke: $ui-04;
+    stroke-linecap: round;
+    stroke-width: 3;
+  }
+
+  .#{$prefix}--viz-dumbbells__dot {
+    fill: var(--bx-viz-color, #{$interactive-04});
+    stroke: $ui-background;
+    stroke-width: 1.5;
+  }
+
+  .#{$prefix}--viz-dumbbells__pair {
+    transition: opacity $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-dumbbells__pair--dimmed {
+    opacity: 0.3;
+  }
+
   .#{$prefix}--viz-lollipops__stem {
     shape-rendering: crispEdges;
     stroke: var(--bx-viz-color, #{$interactive-04});
@@ -491,6 +513,7 @@
 
   @media (prefers-reduced-motion: reduce) {
     .#{$prefix}--viz-points__point,
+    .#{$prefix}--viz-dumbbells__pair,
     .#{$prefix}--viz-waterfall__bar,
     .#{$prefix}--viz-boxes__box,
     .#{$prefix}--viz-lollipops__pop {
