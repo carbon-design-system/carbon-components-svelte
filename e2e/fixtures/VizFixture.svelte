@@ -19,6 +19,7 @@
     EventTimeline,
     FunnelBars,
     FunnelChart,
+    FunnelCompare,
     Heatmap,
     HeatStrip,
     Histogram,
@@ -220,6 +221,19 @@
     capacity={12}
     label="Requests per minute, streaming"
     data-testid="live-sparkline"
+  />
+
+  <FunnelCompare
+    funnels={[
+      { id: "organic", label: "Organic", stages },
+      {
+        id: "paid",
+        label: "Paid",
+        stages: stages.map((stage, i) => ({ ...stage, value: Math.round(stage.value * [0.8, 0.5, 0.4, 0.7][i]) })),
+      },
+    ]}
+    label="Signup funnel by channel"
+    selectable
   />
 
   <WaffleChart
