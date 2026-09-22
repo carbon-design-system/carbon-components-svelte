@@ -232,7 +232,12 @@ export function resolveDomain(
     include = [],
   },
 ) {
-  let [y0, y1] = built.yExtent ?? [0, 1];
+  // "marks": the data's own extent means nothing, as in a waterfall, and
+  // only what marks registered counts.
+  let [y0, y1] =
+    yDomain === "marks"
+      ? [Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY]
+      : (built.yExtent ?? [0, 1]);
   for (const value of include) {
     if (!Number.isFinite(value)) continue;
     if (value < y0) y0 = value;
@@ -240,6 +245,10 @@ export function resolveDomain(
   }
   // Zero has no logarithm, so a log axis over positive data never includes
   // it. Data that touches zero falls back to a linear axis.
+  if (y0 > y1) {
+    y0 = 0;
+    y1 = 1;
+  }
   const log = yScale === "log" && y0 > 0;
   if (zero && !log) {
     y0 = Math.min(0, y0);
@@ -247,7 +256,7 @@ export function resolveDomain(
   }
   /** @type {[number, number]} */
   let y = Array.isArray(yDomain) ? [yDomain[0], yDomain[1]] : [y0, y1];
-  if (yDomain === "nice") {
+  if (yDomain === "nice" || yDomain === "marks") {
     y = log ? niceLogDomain(y[0], y[1]) : niceDomain(y[0], y[1], 5);
   }
 

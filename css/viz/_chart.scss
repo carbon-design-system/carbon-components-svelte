@@ -381,6 +381,29 @@
     outline-offset: 1px;
   }
 
+  // Direction is the whole point of a waterfall, so it gets the status
+  // colors, and a total the neutral. Connectors keep the steps readable
+  // without them.
+  .#{$prefix}--viz-waterfall__bar {
+    fill: var(--cds-viz-neutral);
+    shape-rendering: crispEdges;
+    transition: opacity $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-waterfall__bar--increase {
+    fill: var(--cds-viz-success);
+  }
+
+  .#{$prefix}--viz-waterfall__bar--decrease {
+    fill: var(--cds-viz-error);
+  }
+
+  .#{$prefix}--viz-waterfall__connector {
+    shape-rendering: crispEdges;
+    stroke: $ui-04;
+    stroke-dasharray: 2 2;
+  }
+
   .#{$prefix}--viz-boxes__whisker {
     shape-rendering: crispEdges;
     stroke: var(--bx-viz-color, #{$interactive-04});
@@ -468,6 +491,7 @@
 
   @media (prefers-reduced-motion: reduce) {
     .#{$prefix}--viz-points__point,
+    .#{$prefix}--viz-waterfall__bar,
     .#{$prefix}--viz-boxes__box,
     .#{$prefix}--viz-lollipops__pop {
       transition: none;

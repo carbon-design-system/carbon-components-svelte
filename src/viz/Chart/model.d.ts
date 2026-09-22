@@ -77,7 +77,11 @@ export type ChartDomain = {
 export type ResolveDomainOptions = {
   /** Fixed bounds, or `"nice"` to round a numeric x out to tick values. */
   xDomain?: readonly [number | Date, number | Date] | "nice";
-  yDomain?: readonly [number, number] | "auto" | "nice";
+  /**
+   * Fixed bounds, `"auto"` for the data's extent, `"nice"` to round it out,
+   * or `"marks"` to measure only what marks register, as a waterfall wants.
+   */
+  yDomain?: readonly [number, number] | "auto" | "nice" | "marks";
   y2Domain?: readonly [number, number] | "auto" | "nice";
   /** @default "linear" */
   yScale?: "linear" | "log";

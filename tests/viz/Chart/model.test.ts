@@ -122,6 +122,21 @@ describe("resolveDomain", () => {
     expect(resolveDomain(built, { include: [Number.NaN] }).y).toEqual([0, 100]);
   });
 
+  test("measures only what marks register with the marks domain", () => {
+    const built = buildGroups(
+      [
+        { x: 1, v: -380 },
+        { x: 2, v: 900 },
+      ],
+      { x: (row) => row.x, y: (row) => row.v, series: () => "s" },
+    );
+
+    expect(
+      resolveDomain(built, { yDomain: "marks", include: [40, 630] }).y,
+    ).toEqual([0, 700]);
+    expect(resolveDomain(built, { yDomain: "marks" }).y).toEqual([0, 1]);
+  });
+
   test("never yields a non-finite domain for empty data", () => {
     const domain = resolveDomain(buildGroups([], accessors), {});
 

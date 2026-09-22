@@ -78,8 +78,9 @@
 
   /**
    * Specify the y domain: fixed bounds, `"auto"` for the data extent,
-   * or `"nice"` to round it out to tick boundaries.
-   * @type {[number, number] | "auto" | "nice"}
+   * `"nice"` to round it out to tick boundaries, or `"marks"` to ignore the
+   * data and measure only what marks register, as a waterfall's running total.
+   * @type {[number, number] | "auto" | "nice" | "marks"}
    */
   export let yDomain = "nice";
 
