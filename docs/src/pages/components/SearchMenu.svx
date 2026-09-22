@@ -198,9 +198,9 @@ Provide a `noResults` slot to render an empty state when the search value matche
 
 ### Async results
 
-Combine an async data source with client-side highlighting. Set `debounce` to delay the `search` event until typing pauses, in milliseconds, and fetch on `search` instead of firing a request per keystroke. `value` and the fuzzy-match highlighting stay immediate; only `search` waits. The default `debounce` of `0` never dispatches `search`. Because filtering happens on the server (`shouldFilter={false}`), the menu shows exactly what the server returns while the client-side matcher still highlights the query. Set `loading` to render a skeleton menu while fetching (customize the rows with `skeletonCount` or the `loading` slot), and use the `noResults` slot for the empty state.
+Combine an async data source with client-side highlighting. Set `debounce` (in milliseconds) to fetch on `search` after typing pauses, instead of on every keystroke. `value` and the fuzzy-match highlighting stay immediate; only `search` waits, and the default `debounce` of `0` never dispatches it. `shouldFilter={false}` defers filtering to the server, so the menu shows exactly what it returns while the client still highlights the query. Set `loading` to render a skeleton menu while fetching (customize the rows with `skeletonCount` or the `loading` slot), and use the `noResults` slot for the empty state.
 
-Selecting an item or pressing <DocKbd label="Enter" /> with no active item cancels a pending `search` rather than also firing it — `select` and `submit` already cover those cases. Clearing the field with the clear icon is always instant and also cancels a pending `search`. <DocKbd label="Escape" /> only closes the menu here — it does not clear `value`.
+Selecting an item or pressing <DocKbd label="Enter" /> with no active item cancels a pending `search` instead of also firing it, since `select` and `submit` already cover those cases. Clearing with the clear icon is instant and also cancels a pending `search`. <DocKbd label="Escape" /> only closes the menu here; it does not clear `value`.
 
 <FileSource src="/framed/SearchMenu/AsyncResults" />
 
