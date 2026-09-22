@@ -42,7 +42,8 @@
         {sortable}
         on:sort={() => {
           console.log("sort");
-        }}>Column A</StructuredListCell
+        }}
+        >Column A</StructuredListCell
       >
       <StructuredListCell head>Column B</StructuredListCell>
       <StructuredListCell head>Column C</StructuredListCell>
