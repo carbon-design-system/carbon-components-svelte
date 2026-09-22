@@ -169,6 +169,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "RetentionChart",
       "ScatterChart",
       "ShareOfTotal",
+      "SmallMultiples",
       "Sparkline",
       "StackedBar",
       "StateTimeline",

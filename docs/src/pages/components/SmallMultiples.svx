@@ -1,0 +1,62 @@
+---
+components: ["SmallMultiples"]
+description: Small multiples lay out one chart per facet on shared scales, so the eye compares shapes across a grid instead of lines tangled in one plot.
+---
+
+<script>
+  import { AreaChart, BarChart, LineChart, SmallMultiples } from "carbon-components-svelte/viz";
+
+  const DAY = 86_400_000;
+  const START = new Date(2026, 0, 1).getTime();
+  const REGIONS = ["EMEA", "APAC", "AMER", "LATAM", "MEA", "ANZ"];
+  const revenue = REGIONS.flatMap((region, r) =>
+    Array.from({ length: 24 }, (_, i) => ({
+      date: new Date(START + i * 14 * DAY),
+      region,
+      revenue: Math.round(20000 + r * 6000 + Math.sin(i / 4 + r) * 8000 + ((i * 7919 * (r + 1)) % 3000)),
+    })),
+  );
+  const quarters = ["Q1", "Q2", "Q3", "Q4"].flatMap((quarter, q) =>
+    REGIONS.slice(0, 3).map((region, r) => ({ quarter, region, deals: 12 + q * 4 + r * 7 })),
+  );
+</script>
+
+`SmallMultiples` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+It splits `data` by `facet` and renders the default slot once per facet, in a grid. The slot receives the facet's `rows` and, when `x` and `y` are given, a `yDomain` and an `xDomain` shared by every facet, plus a `syncId` so hover follows across the charts. Pass those to whichever chart you put inside.
+
+## Basic
+
+Set `facet`, `x`, and `y`. Every chart then shares one y scale from zero to the largest value anywhere, so a tall line means the same thing in every cell, and hovering one chart shows the same x in all of them.
+
+<SmallMultiples data={revenue} facet="region" x="date" y="revenue" columns={3} title="Revenue by region" let:facet let:rows let:yDomain let:xDomain let:syncId>
+  <LineChart data={rows} x="date" y="revenue" title={facet} {yDomain} {xDomain} {syncId} height={160} legend={false} />
+</SmallMultiples>
+
+## Columns
+
+Set `columns` for the grid. It collapses to one column on a narrow screen.
+
+<SmallMultiples data={revenue} facet="region" x="date" y="revenue" columns={2} title="Revenue by region, two across" let:facet let:rows let:yDomain let:xDomain let:syncId>
+  <AreaChart data={rows} x="date" y="revenue" title={facet} {yDomain} {xDomain} {syncId} height={140} legend={false} />
+</SmallMultiples>
+
+## Independent scales
+
+Set `sharedY` to `false` to let each chart fit its own data, when the shapes matter more than the sizes. Set `zero` to `false` to let the shared domain start above zero.
+
+<SmallMultiples data={revenue} facet="region" x="date" y="revenue" sharedY={false} title="Revenue by region, each to its own scale" let:facet let:rows let:xDomain let:syncId>
+  <LineChart data={rows} x="date" y="revenue" title={facet} {xDomain} {syncId} height={160} legend={false} zero={false} />
+</SmallMultiples>
+
+## Any chart
+
+The slot can hold any chart. A categorical x has no shared domain, so pass only `yDomain`.
+
+<SmallMultiples data={quarters} facet="region" y="deals" columns={3} title="Deals by quarter and region" let:facet let:rows let:yDomain>
+  <BarChart data={rows} x="quarter" y="deals" title={facet} {yDomain} height={160} legend={false} />
+</SmallMultiples>
+
+## Accessibility
+
+Each chart keeps its own name, its own tab stop, and its own data table, as it would on its own. The grid's `title` is a caption over the set. Hover shared across the charts is a pointer convenience; the keyboard reads each chart on its own.
