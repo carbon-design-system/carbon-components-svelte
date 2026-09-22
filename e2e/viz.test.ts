@@ -161,6 +161,32 @@ test.describe("Data visualization", () => {
     await expect(tooltip).toHaveCount(0);
   });
 
+  test("LineChart dashes the projected tail and names each anomaly", async ({
+    page,
+  }) => {
+    await page.goto("/viz.html");
+    const figure = page.locator("figure", {
+      has: page.getByRole("application", { name: "Revenue, projected" }),
+    });
+    await figure.scrollIntoViewIfNeeded();
+
+    const lines = figure.locator(".bx--viz-line__path");
+    await expect(lines).toHaveCount(2);
+    await expect(lines.nth(1)).toHaveClass(/--dashed/);
+    // The dashes come from CSS, not an attribute.
+    await expect
+      .poll(() =>
+        lines.nth(1).evaluate((node) => getComputedStyle(node).strokeDasharray),
+      )
+      .not.toBe("none");
+
+    await expect(figure.locator(".bx--viz-band__fill")).toHaveCount(1);
+    await expect(figure.getByText("Today")).toBeVisible();
+    await expect(
+      figure.getByRole("img", { name: /^Anomaly: Apr 1, 2026/ }),
+    ).toHaveCount(1);
+  });
+
   test("LineChart swaps to a data table and back from its toolbar", async ({
     page,
   }) => {

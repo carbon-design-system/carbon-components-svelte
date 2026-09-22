@@ -6,6 +6,8 @@
     BoxplotChart,
     BulletChart,
     CalendarHeatmap,
+    ChartAnomalies,
+    ChartBand,
     ChoroplethChart,
     CirclePackChart,
     CohortTable,
@@ -56,6 +58,16 @@
       revenue: 30000 + r * 9000 + Math.round(Math.sin(i / 2 + r) * 9000),
     })),
   );
+
+  const projectedFrom = new Date(2026, 8, 1);
+  const projected = revenue
+    .filter((row) => row.region === "EMEA")
+    .map((row, i) => ({
+      ...row,
+      odd: i === 3,
+      lo: i >= 8 ? row.revenue - (i - 7) * 2500 : null,
+      hi: i >= 8 ? row.revenue + (i - 7) * 2500 : null,
+    }));
 
   let selectedId = "activate";
 </script>
@@ -432,4 +444,17 @@
     toolbar
     zoomBar
   />
+
+  <LineChart
+    data={projected}
+    x="date"
+    y="revenue"
+    series="region"
+    title="Revenue, projected"
+    forecastFrom={projectedFrom}
+    forecastLabel="Today"
+  >
+    <ChartBand lower="lo" upper="hi" />
+    <ChartAnomalies when="odd" />
+  </LineChart>
 </main>
