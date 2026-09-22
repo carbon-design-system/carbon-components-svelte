@@ -1,0 +1,117 @@
+/// WaffleChart: parts of a whole as a grid of cells, one per percent.
+/// @access private
+/// @group viz
+@mixin viz-waffle-chart {
+  .#{$prefix}--viz-waffle {
+    --bx-viz-cell: #{to-rem(12px)};
+
+    display: inline-flex;
+    flex-direction: column;
+    row-gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--viz-waffle--sm {
+    --bx-viz-cell: #{to-rem(8px)};
+  }
+
+  .#{$prefix}--viz-waffle--lg {
+    --bx-viz-cell: #{to-rem(16px)};
+  }
+
+  .#{$prefix}--viz-waffle__grid {
+    display: grid;
+    // The gap separates neighbors without relying on color.
+    gap: to-rem(2px);
+    grid-template-columns: repeat(var(--bx-viz-columns, 10), var(--bx-viz-cell));
+  }
+
+  .#{$prefix}--viz-waffle__cell {
+    background: var(--bx-viz-color, #{$interactive-04});
+    block-size: var(--bx-viz-cell);
+    transition:
+      background-color $duration--moderate-01 carbon--motion(standard, productive),
+      opacity $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-waffle__cell--empty {
+    background: $ui-03;
+  }
+
+  .#{$prefix}--viz-waffle--has-selection
+    .#{$prefix}--viz-waffle__cell:not(.#{$prefix}--viz-waffle__cell--selected) {
+    opacity: 0.3;
+  }
+
+  .#{$prefix}--viz-waffle__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $carbon--spacing-02 $carbon--spacing-05;
+  }
+
+  .#{$prefix}--viz-waffle__item {
+    display: inline-flex;
+    align-items: center;
+    color: $text-secondary;
+    column-gap: $carbon--spacing-02;
+    white-space: nowrap;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-waffle__item--selected {
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-waffle__key {
+    display: inline-flex;
+    align-items: center;
+    padding: 0;
+    border: 0;
+    appearance: none;
+    background: none;
+    color: inherit;
+    column-gap: $carbon--spacing-02;
+    cursor: pointer;
+    font: inherit;
+  }
+
+  .#{$prefix}--viz-waffle__key:focus-visible {
+    outline: 2px solid $focus;
+    outline-offset: 2px;
+  }
+
+  .#{$prefix}--viz-waffle__swatch {
+    flex: none;
+    background: var(--bx-viz-color, #{$interactive-04});
+    block-size: to-rem(8px);
+    inline-size: to-rem(8px);
+    margin-inline-end: $carbon--spacing-01;
+  }
+
+  .#{$prefix}--viz-waffle__value {
+    color: $text-primary;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-waffle__cell {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-waffle__cell,
+    .#{$prefix}--viz-waffle__swatch {
+      border: 1px solid CanvasText;
+    }
+
+    .#{$prefix}--viz-waffle__cell--selected {
+      background: Highlight;
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("viz-waffle-chart") {
+  @include viz-waffle-chart;
+}
