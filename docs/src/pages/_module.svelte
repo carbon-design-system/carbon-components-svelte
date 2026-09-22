@@ -335,6 +335,7 @@
     class="docs-sidenav"
     bind:isOpen={isSideNavOpen}
     activeItemScrollBlock="center"
+    border
   >
     <ScrollGradient
       color="var(--cds-background)"
