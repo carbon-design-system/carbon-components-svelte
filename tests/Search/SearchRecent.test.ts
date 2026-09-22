@@ -97,4 +97,36 @@ describe("SearchRecent", () => {
       screen.getByRole("button", { name: "Clear all" }),
     ).toBeInTheDocument();
   });
+
+  it("defaults to the inline variant", () => {
+    render(SearchRecent, { props: { queries: ["b", "a"] } });
+
+    expect(document.querySelector(".bx--search-recent__list")).toHaveClass(
+      "bx--search-recent__list--inline",
+    );
+  });
+
+  it("renders the list variant without the inline modifier", () => {
+    render(SearchRecent, {
+      props: { queries: ["b", "a"], variant: "list" },
+    });
+
+    expect(document.querySelector(".bx--search-recent__list")).not.toHaveClass(
+      "bx--search-recent__list--inline",
+    );
+  });
+
+  it("does not render an icon by default", () => {
+    render(SearchRecent, { props: { queries: ["b", "a"] } });
+
+    expect(document.querySelector(".bx--search-recent__item-icon")).toBeNull();
+  });
+
+  it("renders an icon per row when icon is set", () => {
+    render(SearchRecent, { props: { queries: ["b", "a"], withIcon: true } });
+
+    expect(
+      document.querySelectorAll(".bx--search-recent__item-icon"),
+    ).toHaveLength(2);
+  });
 });

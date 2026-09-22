@@ -41,6 +41,21 @@
   /** Set to `true` to render a remove button on each row. */
   export let removable = false;
 
+  /**
+   * Specify the layout of the list. `"inline"` wraps queries as compact
+   * chips; `"list"` stacks them as full-width rows.
+   * @type {"inline" | "list"}
+   */
+  export let variant = "inline";
+
+  /**
+   * Specify an icon to render before each query. Choose something distinct
+   * from the paired Search input's own icon, such as a clock or history
+   * icon, to signal that the row is a past search rather than a live result.
+   * @type {any}
+   */
+  export let icon = undefined;
+
   import { createEventDispatcher } from "svelte";
   import Close from "../icons/Close.svelte";
   import { uniqueId } from "../utils/unique-id.js";
@@ -82,15 +97,26 @@
     {/if}
     <ul
       class:bx--search-recent__list={true}
+      class:bx--search-recent__list--inline={variant === "inline"}
       aria-labelledby={labelText ? labelId : undefined}
     >
       {#each queries as query, index (index)}
-        <li class:bx--search-recent__item={true}>
+        <li
+          class:bx--search-recent__item={true}
+          class:bx--search-recent__item--inline={variant === "inline"}
+        >
           <button
             type="button"
             class:bx--search-recent__item-label={true}
+            class:bx--search-recent__item-label--inline={variant ===
+              "inline"}
             on:click={() => handleSelect(query)}
           >
+            {#if icon}
+              <span class:bx--search-recent__item-icon={true}>
+                <svelte:component this={icon} />
+              </span>
+            {/if}
             <span class:bx--search-recent__item-label-text={true}>
               {query}
             </span>
@@ -99,6 +125,7 @@
             <button
               type="button"
               class:bx--search-recent__remove={true}
+              class:bx--search-recent__remove--inline={variant === "inline"}
               aria-label="Remove {query}"
               on:click={() => handleRemove(query)}
             >

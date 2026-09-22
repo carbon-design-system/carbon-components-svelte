@@ -39,10 +39,29 @@
     list-style: none;
   }
 
+  .#{$prefix}--search-recent__list--inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $carbon--spacing-03;
+    padding: $carbon--spacing-02 $carbon--spacing-05;
+  }
+
   .#{$prefix}--search-recent__item {
     position: relative;
     display: flex;
     align-items: stretch;
+  }
+
+  // Each chip is its own pill: the item itself carries the background and
+  // radius so the label and remove button share one continuous shape.
+  .#{$prefix}--search-recent__item--inline {
+    display: inline-flex;
+    align-items: center;
+    min-height: to-rem(24px);
+    padding-left: $carbon--spacing-03;
+    overflow: hidden;
+    background-color: $field-01;
+    border-radius: to-rem(15px);
   }
 
   .#{$prefix}--search-recent__item-label {
@@ -57,6 +76,25 @@
     padding-left: $carbon--spacing-05;
     color: $text-01;
     text-align: left;
+  }
+
+  .#{$prefix}--search-recent__item-label--inline {
+    @include type-style("label-01");
+
+    min-height: to-rem(24px);
+    padding-left: 0;
+  }
+
+  .#{$prefix}--search-recent__item-icon {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    margin-right: $carbon--spacing-02;
+    fill: $icon-02;
+
+    svg {
+      fill: inherit;
+    }
   }
 
   .#{$prefix}--search-recent__item-label-text {
@@ -80,12 +118,26 @@
     }
   }
 
+  .#{$prefix}--search-recent__remove--inline {
+    width: to-rem(24px);
+    height: to-rem(24px);
+    margin-left: to-rem(2px);
+    border-radius: 50%;
+
+    svg {
+      width: to-rem(12px);
+      height: to-rem(12px);
+    }
+  }
+
   .#{$prefix}--search-recent__item-label:focus,
   .#{$prefix}--search-recent__remove:focus {
     @include focus-outline("outline");
   }
 
   // Hover only where a pointer can hover, so a tap does not leave it stuck.
+  // The parent chip's `overflow: hidden` clips these square hover
+  // backgrounds to its own rounded shape in the inline variant.
   @media (any-hover: hover) {
     .#{$prefix}--search-recent__item-label:hover,
     .#{$prefix}--search-recent__remove:hover {
