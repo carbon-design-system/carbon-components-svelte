@@ -47,7 +47,7 @@ Set the current page with `page`.
 
 ### Custom sizes
 
-Specify custom page sizes and set a default page size.
+Specify custom page sizes and set a default page size. When the user picks a new size, `page` is recalculated so the first item that was visible stays on screen.
 
 <Pagination totalItems={102} pageSizes={[16, 36, 99]} pageSize={36} />
 
@@ -143,12 +143,12 @@ Respond to page and page-size changes.
 
 ### Change
 
-Use `on:change` to listen for direct user interaction—the previous/next buttons, or the page and page-size selects. The event detail includes whichever value changed.
+Use `on:change` to listen for direct user interaction—the previous/next buttons, or the page and page-size selects. The event detail includes whichever value changed; a page-size change includes both `pageSize` and the recalculated `page`.
 
 <Pagination
   totalItems={102}
   pageSizes={[10, 15, 20]}
-  on:change={(e) => console.log(e.detail)} // { page: number } | { pageSize: number }
+  on:change={(e) => console.log(e.detail)} // { page: number } | { pageSize: number, page: number }
 />
 
 ### Update
