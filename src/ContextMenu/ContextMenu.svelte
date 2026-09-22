@@ -73,6 +73,9 @@
   const hasPopup = writable(false);
   const ctx = getContext("carbon:ContextMenu");
 
+  const FOCUSABLE =
+    'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
   let options = [];
   let direction = 1;
   let prevX = 0;
@@ -80,6 +83,8 @@
   let prevOpen = false;
   let focusIndex = -1;
   let openDetail = null;
+  /** @type {HTMLElement | null} */
+  let returnFocus = null;
 
   /**
    * @type {(trigger: "escape-key" | "outside-click" | "select") => void}
@@ -92,6 +97,13 @@
     prevX = 0;
     prevY = 0;
     focusIndex = -1;
+
+    if (level === 1 && ref?.contains(document.activeElement)) {
+      if (returnFocus?.isConnected) returnFocus.focus({ preventScroll: true });
+      if (ref.contains(document.activeElement)) document.activeElement.blur();
+    }
+    returnFocus = null;
+
     dispatch("close", { trigger });
   }
 
@@ -161,6 +173,17 @@
       options = [...ref.querySelectorAll("li[data-nested='false']")];
 
       if (level === 1) {
+        if (!prevOpen) {
+          const active = document.activeElement;
+          returnFocus =
+            active instanceof HTMLElement &&
+            active !== document.body &&
+            !ref.contains(active)
+              ? active
+              : openDetail instanceof Element
+                ? openDetail.closest(FOCUSABLE)
+                : null;
+        }
         if (prevX !== x || prevY !== y) ref.focus();
         prevX = x;
         prevY = y;
