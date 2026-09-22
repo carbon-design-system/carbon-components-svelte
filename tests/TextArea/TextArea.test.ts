@@ -291,6 +291,61 @@ describe("TextArea", () => {
     expect(document.querySelector(".bx--text-area__label-counter")).toBeNull();
   });
 
+  it("marks a bound value that is already over maxCount", () => {
+    render(TextArea, { props: { maxCount: 2, value: "abcd" } });
+
+    const textarea = screen.getByRole("textbox");
+    expect(textarea).toHaveAttribute("aria-invalid", "true");
+    expect(textarea).not.toHaveClass("bx--text-area--invalid");
+    const counter = screen
+      .getByText("4/2")
+      .closest(".bx--text-area__label-counter");
+    expect(counter).toHaveClass("bx--text-area__label-counter--error");
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+  });
+
+  it("shows the warning class, not the invalid class, when warn is set with an over-limit value", () => {
+    render(TextArea, {
+      props: {
+        warn: true,
+        warnText: "Check length",
+        maxCount: 2,
+        value: "abcd",
+      },
+    });
+
+    const textarea = screen.getByRole("textbox");
+    expect(textarea).toHaveClass("bx--text-area--warning");
+    expect(textarea).not.toHaveClass("bx--text-area--invalid");
+    expect(
+      screen.getByText("4/2").closest(".bx--text-area__label-counter"),
+    ).toHaveClass("bx--text-area__label-counter--error");
+  });
+
+  it("shows both the counter error and the invalid message when invalid is also set", () => {
+    render(TextArea, {
+      props: {
+        invalid: true,
+        invalidText: "Required",
+        maxCount: 2,
+        value: "abcd",
+      },
+    });
+
+    expect(
+      screen.getByText("4/2").closest(".bx--text-area__label-counter"),
+    ).toHaveClass("bx--text-area__label-counter--error");
+    expect(screen.getByText("Required")).toBeInTheDocument();
+  });
+
+  it("does not mark aria-invalid for an over-limit value when disabled", () => {
+    render(TextArea, {
+      props: { disabled: true, maxCount: 2, value: "abcd" },
+    });
+
+    expect(screen.getByRole("textbox")).not.toHaveAttribute("aria-invalid");
+  });
+
   it("should not show helper text when invalid", () => {
     render(TextArea, {
       props: {

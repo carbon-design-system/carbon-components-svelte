@@ -107,6 +107,8 @@
   $: count = graphemeCount(value ?? "");
   $: showInvalid = invalid && !disabled && !readonly;
   $: showWarn = warn && !invalid && !disabled && !readonly;
+  $: overCount =
+    typeof maxCount === "number" && count > maxCount && !disabled && !readonly;
   $: isFluid = fluid || !!formContext?.isFluid;
   $: hasMaxCount = typeof maxCount === "number";
   $: errorMessageId = showInvalid ? errorId : undefined;
@@ -177,6 +179,7 @@
           class:bx--label={true}
           class:bx--label--disabled={disabled}
           class:bx--text-area__label-counter={true}
+          class:bx--text-area__label-counter--error={overCount}
         >
           <span aria-hidden="true">{count}/{maxCount}</span>
           <span id={counterId} class:bx--visually-hidden={true}>
@@ -210,7 +213,7 @@
     <textarea
       bind:this={ref}
       bind:value
-      aria-invalid={showInvalid || undefined}
+      aria-invalid={showInvalid || overCount || undefined}
       aria-errormessage={errorMessageId}
       aria-describedby={describedBy}
       data-warn={showWarn || undefined}
