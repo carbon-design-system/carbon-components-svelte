@@ -393,6 +393,49 @@ describe("TextArea", () => {
     expect(textarea).not.toHaveAttribute("cols");
   });
 
+  describe("grow", () => {
+    it("has no inline height when grow is unset", () => {
+      render(TextArea, { props: { value: "line 1\nline 2\nline 3" } });
+
+      const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+      expect(textarea.style.height).toBe("");
+    });
+
+    it("sets an inline height after tick when growing with a multi-line value", async () => {
+      const { rerender } = render(TextArea, { props: { grow: true } });
+
+      const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+      Object.defineProperty(textarea, "scrollHeight", {
+        configurable: true,
+        value: 120,
+      });
+
+      rerender({ grow: true, value: "line 1\nline 2\nline 3" });
+      await tick();
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+
+      expect(textarea.style.height).toBe("120px");
+    });
+
+    it("switches to overflow-y auto once content exceeds maxRows", async () => {
+      render(TextArea, { props: { grow: true, maxRows: 2 } });
+
+      const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+      textarea.style.lineHeight = "20px";
+      Object.defineProperty(textarea, "scrollHeight", {
+        configurable: true,
+        value: 200,
+      });
+
+      await user.type(textarea, "a long value that grows past the cap");
+      await tick();
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+
+      expect(textarea.style.height).toBe("40px");
+      expect(textarea.style.overflowY).toBe("auto");
+    });
+  });
+
   describe("fluid variant", () => {
     it("does not render fluid classes by default", () => {
       render(TextArea);
