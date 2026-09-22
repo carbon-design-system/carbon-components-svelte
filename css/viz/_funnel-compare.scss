@@ -1,0 +1,134 @@
+/// FunnelCompare: funnels side by side as columns of one table, stages as
+/// rows, so the same stage lines up across them.
+/// @access private
+/// @group viz
+@mixin viz-funnel-compare {
+  .#{$prefix}--viz-funnel-compare {
+    --bx-viz-row-size: #{to-rem(16px)};
+
+    inline-size: 100%;
+    border-collapse: collapse;
+    color: $text-primary;
+    font-variant-numeric: tabular-nums;
+
+    @include type-style("body-short-01");
+  }
+
+  .#{$prefix}--viz-funnel-compare--sm {
+    --bx-viz-row-size: #{to-rem(8px)};
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-funnel-compare--lg {
+    --bx-viz-row-size: #{to-rem(24px)};
+  }
+
+  .#{$prefix}--viz-funnel-compare th,
+  .#{$prefix}--viz-funnel-compare td {
+    padding-block: $carbon--spacing-02;
+    padding-inline: 0;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--viz-funnel-compare .#{$prefix}--viz-funnel-compare__head {
+    padding-inline-start: $carbon--spacing-05;
+    color: $text-secondary;
+    font-weight: 600;
+    text-align: start;
+  }
+
+  // Text columns ask for next to nothing, so the leftover width is shared
+  // by the bar columns and not handed to whichever column comes last.
+  .#{$prefix}--viz-funnel-compare .#{$prefix}--viz-funnel-compare__label {
+    padding-inline-end: $carbon--spacing-05;
+    font-weight: inherit;
+    text-align: start;
+  }
+
+  // One cell per funnel, each an equal share of what the labels leave, with
+  // the bar growing into the room the number does not take.
+  .#{$prefix}--viz-funnel-compare .#{$prefix}--viz-funnel-compare__cell {
+    padding-inline-start: $carbon--spacing-05;
+    inline-size: calc(100% / var(--bx-viz-funnels, 1));
+  }
+
+  .#{$prefix}--viz-funnel-compare__group {
+    display: flex;
+    align-items: center;
+    column-gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--viz-funnel-compare__track,
+  .#{$prefix}--viz-funnel-compare__button {
+    display: block;
+    flex: 1 1 auto;
+    block-size: var(--bx-viz-row-size);
+    min-inline-size: 0;
+  }
+
+  .#{$prefix}--viz-funnel-compare__bar {
+    display: block;
+    min-inline-size: to-rem(2px);
+    background: var(--bx-viz-color, #{$interactive-04});
+    block-size: 100%;
+    inline-size: calc(var(--bx-viz-pct) * 1%);
+    transition: inline-size $duration--moderate-01
+      carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-funnel-compare__value {
+    flex: none;
+    color: $text-secondary;
+    margin-inline-start: auto;
+    min-inline-size: 4ch;
+    text-align: end;
+  }
+
+  .#{$prefix}--viz-funnel-compare__foot th,
+  .#{$prefix}--viz-funnel-compare__foot td {
+    border-block-start: to-rem(1px) solid $ui-03;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-funnel-compare__button {
+    padding: 0;
+    border: 0;
+    appearance: none;
+    background: none;
+    cursor: pointer;
+  }
+
+  .#{$prefix}--viz-funnel-compare__button:hover .#{$prefix}--viz-funnel-compare__bar {
+    filter: brightness(1.15);
+  }
+
+  .#{$prefix}--viz-funnel-compare__button:focus-visible {
+    outline: 2px solid $focus;
+    outline-offset: 1px;
+  }
+
+  .#{$prefix}--viz-funnel-compare__cell--selected
+    .#{$prefix}--viz-funnel-compare__bar {
+    outline: 2px solid $focus;
+    outline-offset: 1px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-funnel-compare__bar {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-funnel-compare__bar {
+      background: CanvasText;
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("viz-funnel-compare") {
+  @include viz-funnel-compare;
+}
