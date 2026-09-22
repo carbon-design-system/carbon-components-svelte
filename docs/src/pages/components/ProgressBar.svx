@@ -47,6 +47,12 @@ Hide the label visually by setting `hideLabel` to `true`. The label remains avai
 
 <ProgressBar hideLabel value={40} labelText="Upload status" helperText="40 MB of 100 MB" />
 
+### Accessible label only
+
+Every progress bar needs an accessible name. When there is no visible label, provide one with `ariaLabel`.
+
+<ProgressBar ariaLabel="Background sync" value={40} />
+
 ### Custom label content
 
 Use the `labelChildren` slot to render custom label content, such as a tooltip icon.

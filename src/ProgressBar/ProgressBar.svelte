@@ -47,6 +47,12 @@
   /** Specify the text announced and described when the status is `"finished"`. */
   export let finishedText = "Complete";
 
+  /**
+   * Specify an accessible name when there is no visible or visually hidden label.
+   * @type {string}
+   */
+  export let ariaLabel = undefined;
+
   /** Set an id for the progress bar element */
   export let id = uniqueId();
 
@@ -63,6 +69,10 @@
   let statusDescriptionId = uniqueId();
 
   $: indeterminate = value === undefined && status === "active";
+  $: hasLabel = !!(labelText.trim() || $$slots.labelChildren);
+  $: hasValueText = !!(valueText.trim() || $$slots.valueChildren);
+  $: resolvedAriaLabel = ariaLabel?.trim() || undefined;
+  $: hasStatusIcon = status === "error" || status === "finished";
   let capped;
   let upper;
   $: {
@@ -109,32 +119,37 @@
   class:bx--progress-bar--finished={status === "finished"}
   {...$$restProps}
 >
-  <div class:bx--progress-bar__label={true}>
-    <span
-      id="{id}-label"
-      class:bx--progress-bar__label-text={true}
-      class:bx--visually-hidden={hideLabel}
-    >
-      <slot name="labelChildren"> {labelText} </slot>
-    </span>
-    {#if status === "error" || status === "finished"}
-      <svelte:component
-        this={statusIcons[status]}
-        class="bx--progress-bar__status-icon"
-      />
-    {/if}
-    {#if valueText.trim() || $$slots.valueChildren}
-      <span class:bx--progress-bar__value-text={true}>
-        <slot name="valueChildren">{valueText}</slot>
-      </span>
-    {/if}
-  </div>
+  {#if hasLabel || hasStatusIcon || hasValueText}
+    <div class:bx--progress-bar__label={true}>
+      {#if hasLabel}
+        <span
+          id="{id}-label"
+          class:bx--progress-bar__label-text={true}
+          class:bx--visually-hidden={hideLabel}
+        >
+          <slot name="labelChildren"> {labelText} </slot>
+        </span>
+      {/if}
+      {#if hasStatusIcon}
+        <svelte:component
+          this={statusIcons[status]}
+          class="bx--progress-bar__status-icon"
+        />
+      {/if}
+      {#if hasValueText}
+        <span class:bx--progress-bar__value-text={true}>
+          <slot name="valueChildren">{valueText}</slot>
+        </span>
+      {/if}
+    </div>
+  {/if}
   <div
     role="progressbar"
     {id}
     class:bx--progress-bar__track={true}
     aria-busy={status === "active"}
-    aria-labelledby="{id}-label"
+    aria-labelledby={hasLabel ? `${id}-label` : undefined}
+    aria-label={hasLabel ? undefined : resolvedAriaLabel}
     aria-valuemin={indeterminate ? undefined : 0}
     aria-valuemax={indeterminate ? undefined : upper}
     aria-valuenow={indeterminate ? undefined : capped}

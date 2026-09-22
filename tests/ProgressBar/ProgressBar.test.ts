@@ -24,10 +24,9 @@ describe("ProgressBar", () => {
   it("should render indeterminate if status is active", () => {
     render(ProgressBar);
 
-    const progressBar = screen.getByTestId("indeterminate-progress");
-    expect(progressBar.closest("div")).toHaveClass(
-      "bx--progress-bar--indeterminate",
-    );
+    const wrapper = screen.getByTestId("indeterminate-progress");
+    const progressBar = within(wrapper).getByRole("progressbar");
+    expect(wrapper).toHaveClass("bx--progress-bar--indeterminate");
     expect(progressBar).not.toHaveAttribute("aria-valuenow");
     expect(progressBar).not.toHaveAttribute("aria-valuemin");
     expect(progressBar).not.toHaveAttribute("aria-valuemax");
@@ -313,5 +312,59 @@ describe("ProgressBar", () => {
       "Échec",
     ]);
     expect(getLiveRegion(container)).toHaveTextContent("Échec");
+  });
+
+  it("uses ariaLabel when there is no visible label", () => {
+    render(ProgressBar);
+
+    const wrapper = screen.getByTestId("aria-label-progress");
+    const progressBar = within(wrapper).getByRole("progressbar", {
+      name: "Background sync",
+    });
+    expect(progressBar).not.toHaveAttribute("aria-labelledby");
+    expect(progressBar).toHaveAttribute("aria-label", "Background sync");
+    expect(wrapper.querySelector(".bx--progress-bar__label")).toBeNull();
+  });
+
+  it("prefers a visible label over ariaLabel", () => {
+    render(ProgressBar);
+
+    const progressBar = within(
+      screen.getByTestId("label-precedence"),
+    ).getByRole("progressbar", { name: "Visible label wins" });
+    expect(progressBar).toHaveAttribute("aria-labelledby");
+    expect(progressBar).not.toHaveAttribute("aria-label");
+  });
+
+  it("keeps the status icon when there is no label", () => {
+    render(ProgressBar);
+
+    const wrapper = screen.getByTestId("error-progress");
+    expect(
+      wrapper.querySelector(".bx--progress-bar__status-icon"),
+    ).toBeInTheDocument();
+  });
+
+  it("keeps aria-labelledby pointing at the label when hideLabel is set", () => {
+    render(ProgressBar);
+
+    const label = screen.getByText("Hidden label");
+    const progressBar = label
+      .closest(".bx--progress-bar")
+      ?.querySelector('[role="progressbar"]');
+    if (progressBar === null || progressBar === undefined)
+      throw new Error("progressbar not found");
+    expect(progressBar).toHaveAttribute("aria-labelledby", label.id);
+  });
+
+  it("keeps value text visible when ariaLabel supplies the name", () => {
+    render(ProgressBar);
+
+    const wrapper = screen.getByTestId("value-with-aria-label");
+    const progressBar = within(wrapper).getByRole("progressbar", {
+      name: "Background upload",
+    });
+    expect(within(wrapper).getByText("40 MB of 100 MB")).toBeInTheDocument();
+    expect(progressBar).toHaveAttribute("aria-valuetext", "40 MB of 100 MB");
   });
 });

@@ -31,6 +31,26 @@
 
 <ProgressBar status="error" value={5} max={0} data-testid="error-zero-max" />
 
+<ProgressBar
+  ariaLabel="Background sync"
+  value={40}
+  data-testid="aria-label-progress"
+/>
+
+<ProgressBar
+  ariaLabel="Ignored fallback"
+  labelText="Visible label wins"
+  value={40}
+  data-testid="label-precedence"
+/>
+
+<ProgressBar
+  ariaLabel="Background upload"
+  value={40}
+  valueText="40 MB of 100 MB"
+  data-testid="value-with-aria-label"
+/>
+
 <ProgressBar labelText="Hidden label" hideLabel value={50} />
 
 <ProgressBar value={150} max={100} data-testid="over-max" />
