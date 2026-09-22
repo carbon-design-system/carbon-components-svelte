@@ -63,6 +63,37 @@ describe("ProgressBar", () => {
     expect(finishedBar).toHaveClass("bx--progress-bar--finished");
   });
 
+  it("reports the actual value when errored and the maximum when finished", () => {
+    render(ProgressBar);
+
+    const errorBar = within(screen.getByTestId("error-progress")).getByRole(
+      "progressbar",
+    );
+    expect(errorBar).toHaveAttribute("aria-valuenow", "40");
+
+    const finishedBar = within(
+      screen.getByTestId("finished-progress"),
+    ).getByRole("progressbar");
+    expect(finishedBar).toHaveAttribute("aria-valuenow", "100");
+
+    const partiallyFinishedBar = within(
+      screen.getByTestId("finished-partial"),
+    ).getByRole("progressbar");
+    expect(partiallyFinishedBar).toHaveAttribute("aria-valuenow", "100");
+
+    const finishedWithoutValue = within(
+      screen.getByTestId("finished-without-value"),
+    ).getByRole("progressbar");
+    expect(finishedWithoutValue).toHaveAttribute("aria-valuenow", "100");
+
+    const zeroMaxError = within(screen.getByTestId("error-zero-max")).getByRole(
+      "progressbar",
+    );
+    expect(zeroMaxError).toHaveAttribute("aria-valuemin", "0");
+    expect(zeroMaxError).toHaveAttribute("aria-valuemax", "0");
+    expect(zeroMaxError).toHaveAttribute("aria-valuenow", "0");
+  });
+
   it("should handle hidden label", () => {
     render(ProgressBar);
 

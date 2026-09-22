@@ -25,6 +25,12 @@
 
 <ProgressBar status="finished" value={100} data-testid="finished-progress" />
 
+<ProgressBar status="finished" value={40} data-testid="finished-partial" />
+
+<ProgressBar status="finished" data-testid="finished-without-value" />
+
+<ProgressBar status="error" value={5} max={0} data-testid="error-zero-max" />
+
 <ProgressBar labelText="Hidden label" hideLabel value={50} />
 
 <ProgressBar value={150} max={100} data-testid="over-max" />

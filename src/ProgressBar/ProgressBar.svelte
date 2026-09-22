@@ -57,13 +57,16 @@
 
   $: indeterminate = value === undefined && status === "active";
   let capped;
+  let upper;
   $: {
-    if (status === "error" || value < 0) {
+    upper = Number.isFinite(max) && max > 0 ? max : 0;
+    const n = Number(value);
+    if (status === "finished") {
+      capped = upper;
+    } else if (!Number.isFinite(n) || n < 0 || upper === 0) {
       capped = 0;
-    } else if (value > max) {
-      capped = max;
     } else {
-      capped = value;
+      capped = Math.min(n, upper);
     }
   }
   $: ratio =
@@ -110,7 +113,7 @@
     aria-busy={status === "active"}
     aria-labelledby="{id}-label"
     aria-valuemin={indeterminate ? undefined : 0}
-    aria-valuemax={indeterminate ? undefined : max}
+    aria-valuemax={indeterminate ? undefined : upper}
     aria-valuenow={indeterminate ? undefined : capped}
     aria-valuetext={valueText.trim() ? valueText : undefined}
     aria-describedby={helperText ? helperId : null}
