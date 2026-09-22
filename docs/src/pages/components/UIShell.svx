@@ -97,6 +97,12 @@ Compose a `badge` named slot into `SideNavLink` or `SideNavMenu` to render a sta
 
 <FileSource src="/framed/UIShell/SideNavBadge" />
 
+### Border
+
+Set `border` on the side nav to render a border between it and the content. Useful when both share the same background and would otherwise blend together. Composes with `theme="classic"`, using a themed gray instead of white.
+
+<FileSource src="/framed/UIShell/SideNavBorder" />
+
 ### Current page
 
 Set `isSelected` on `SideNavLink` or `SideNavMenuItem` to mark the current page — see "Dashboard" in the example above. It adds `aria-current="page"` and a persistent highlight style so the current location stays visible even while hovering other items.

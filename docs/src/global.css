@@ -341,12 +341,12 @@ html {
   background-color: var(--cds-border-subtle);
 }
 
-/* Always-visible (not hover-triggered) thin scrollbar for the side nav. */
+/* Always-visible (not hover-triggered) thin scrollbar for the side nav.
+   The side nav's separator border comes from SideNav's `border` prop. */
 .docs-sidenav .bx--scroll-gradient__scroll-element {
   /* The side nav's own background differs from the `layer` token
      ScrollGradient paints by default; let the nav's background show through. */
   background-color: transparent;
-  border-right: 1px solid var(--cds-border-subtle);
   scrollbar-width: thin;
   scrollbar-color: var(--cds-border-subtle) transparent;
 }
