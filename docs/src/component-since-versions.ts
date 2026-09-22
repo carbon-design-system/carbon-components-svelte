@@ -67,6 +67,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   Link: "0.2.0",
   Loading: "0.2.0",
   LocalStorage: "0.30.0",
+  LiveSparkline: "0.113.0",
   LollipopChart: "0.113.0",
   Menu: "0.110.0",
   MenuButton: "0.110.0",

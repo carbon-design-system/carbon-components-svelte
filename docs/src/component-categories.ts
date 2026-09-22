@@ -155,6 +155,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "Histogram",
       "KpiCard",
       "LineChart",
+      "LiveSparkline",
       "LollipopChart",
       "Meter",
       "MicroDonut",
