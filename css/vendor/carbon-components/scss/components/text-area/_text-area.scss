@@ -154,3 +154,8 @@
 @include exports('text-area-warn') {
   @include text-area-warn;
 }
+
+// carbon-components-svelte patch
+.#{$prefix}--text-area__label-counter--error {
+  color: $text-error;
+}
