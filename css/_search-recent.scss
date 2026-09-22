@@ -1,0 +1,99 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Recent-search list rendered under a Search input. Row height and inset
+/// mirror `.#{$prefix}--search-menu-item` at the default (md, 40px) row
+/// height, and the header mirrors `.#{$prefix}--search-menu-group__header`,
+/// so a SearchRecent list reads like a continuation of that pattern.
+/// @access private
+/// @group components
+@mixin search-recent {
+  .#{$prefix}--search-recent__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: $carbon--spacing-07;
+    padding: $carbon--spacing-03 $carbon--spacing-05 $carbon--spacing-02;
+    color: $text-02;
+
+    @include type-style("label-01");
+  }
+
+  // No visible label to distribute space against: pin the action to the end.
+  .#{$prefix}--search-recent__header--action-only {
+    justify-content: flex-end;
+  }
+
+  .#{$prefix}--search-recent__action {
+    flex: 0 0 auto;
+    margin-left: $carbon--spacing-05;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--search-recent__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .#{$prefix}--search-recent__item {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+  }
+
+  .#{$prefix}--search-recent__item-label {
+    @include button-reset($omit: (padding, display));
+    @include type-style("body-short-01");
+
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    min-width: 0;
+    min-height: $carbon--spacing-08;
+    padding-left: $carbon--spacing-05;
+    color: $text-01;
+    text-align: left;
+  }
+
+  .#{$prefix}--search-recent__item-label-text {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .#{$prefix}--search-recent__remove {
+    @include button-reset(false, $omit: (padding, display));
+
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: $carbon--spacing-08;
+    fill: $icon-02;
+
+    svg {
+      fill: inherit;
+    }
+  }
+
+  .#{$prefix}--search-recent__item-label:focus,
+  .#{$prefix}--search-recent__remove:focus {
+    @include focus-outline("outline");
+  }
+
+  // Hover only where a pointer can hover, so a tap does not leave it stuck.
+  @media (any-hover: hover) {
+    .#{$prefix}--search-recent__item-label:hover,
+    .#{$prefix}--search-recent__remove:hover {
+      background-color: $hover-ui;
+    }
+  }
+}
+
+@include exports("search-recent") {
+  @include search-recent;
+}
