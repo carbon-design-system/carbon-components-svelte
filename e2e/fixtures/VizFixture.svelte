@@ -41,6 +41,7 @@
     TreeChart,
     TreemapChart,
     UptimeBar,
+    VarianceIndicator,
     WaffleChart,
     WaterfallChart,
     WordCloudChart,
@@ -160,6 +161,13 @@
     states={{ ok: "success", down: "error", degraded: "warning" }}
     title="Service health"
     selectable
+  />
+
+  <VarianceIndicator
+    value={-12000}
+    max={30000}
+    label="Revenue against plan"
+    data-testid="variance"
   />
 
   <UptimeBar
