@@ -98,6 +98,28 @@ describe("ComboButton", () => {
     expect(screen.queryByRole("menu")).not.toBeInTheDocument();
   });
 
+  it("returns focus to the trigger after a keyboard-driven selection, but not a mouse-driven one", async () => {
+    render(ComboButtonFixture);
+    const trigger = screen.getByRole("button", { name: "Additional actions" });
+
+    // Mouse: the trigger suppresses mousedown focus, so nothing had focus
+    // when the menu opened and nothing gets it back after selecting. The
+    // icon-only trigger would otherwise pop its tooltip.
+    await user.click(trigger);
+    await user.click(screen.getByRole("menuitem", { name: "Save as" }));
+    expect(trigger).not.toHaveFocus();
+
+    // Keyboard: Tab past the primary action to the trigger, open, select.
+    await user.tab();
+    await user.tab();
+    expect(trigger).toHaveFocus();
+    await user.keyboard("{Enter}");
+    expect(screen.getByRole("menuitem", { name: "Save as" })).toHaveFocus();
+    await user.keyboard("{Enter}");
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+    expect(trigger).toHaveFocus();
+  });
+
   it("disables both the primary action and trigger buttons", () => {
     render(ComboButtonFixture, { props: { disabled: true } });
 

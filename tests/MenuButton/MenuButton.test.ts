@@ -129,6 +129,27 @@ describe("MenuButton", () => {
     expect(screen.queryByRole("menu")).not.toBeInTheDocument();
   });
 
+  it("returns focus to the trigger after a keyboard-driven selection, but not a mouse-driven one", async () => {
+    render(MenuButtonFixture);
+    const trigger = screen.getByRole("button", { name: "Actions" });
+
+    // Mouse: the trigger suppresses mousedown focus, so nothing had focus
+    // when the menu opened and nothing gets it back after selecting.
+    await user.click(trigger);
+    await user.click(screen.getByRole("menuitem", { name: "Copy" }));
+    expect(trigger).not.toHaveFocus();
+
+    // Keyboard: the trigger had focus when the menu opened, so selecting
+    // hands it back and Tab continues from there.
+    await user.tab();
+    expect(trigger).toHaveFocus();
+    await user.keyboard("{Enter}");
+    expect(screen.getByRole("menuitem", { name: "Cut" })).toHaveFocus();
+    await user.keyboard("{Enter}");
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+    expect(trigger).toHaveFocus();
+  });
+
   it("dispatches close with an escape-key trigger and returns focus to the trigger", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(MenuButtonFixture);
