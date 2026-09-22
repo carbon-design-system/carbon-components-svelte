@@ -35,6 +35,7 @@
     TreeChart,
     TreemapChart,
     UptimeBar,
+    WaterfallChart,
     WordCloudChart,
   } from "carbon-components-svelte/viz";
 
@@ -238,6 +239,20 @@
     bins={8}
     markers={[{ x: 40000, label: "Goal" }]}
     title="Distribution of monthly revenue"
+    height={220}
+  />
+
+  <WaterfallChart
+    data={[
+      { step: "Visitors", change: 10000 },
+      { step: "Bounced", change: -4000 },
+      { step: "Left", change: -5100 },
+      { step: "Paid", change: 0 },
+    ]}
+    x="step"
+    y="change"
+    totals={["Paid"]}
+    title="Visitors to paid, as a waterfall"
     height={220}
   />
 
