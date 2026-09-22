@@ -165,6 +165,48 @@ describe("RadioButton", () => {
       expect(consoleLog).not.toHaveBeenCalledWith("change", "2");
     });
 
+    it("should set aria-readonly on the radiogroup when readonly, and not on the radios", () => {
+      render(RadioButtonGroupReadonly, { selected: "1", readonly: true });
+
+      expect(screen.getByRole("radiogroup")).toHaveAttribute(
+        "aria-readonly",
+        "true",
+      );
+
+      for (const name of ["Free", "Pro", "Team"]) {
+        expect(screen.getByRole("radio", { name })).not.toHaveAttribute(
+          "aria-readonly",
+        );
+      }
+    });
+
+    it("should not set aria-readonly on the radiogroup when not readonly", () => {
+      render(RadioButtonGroupReadonly, { selected: "1", readonly: false });
+
+      expect(screen.getByRole("radiogroup")).not.toHaveAttribute(
+        "aria-readonly",
+      );
+    });
+
+    it("should update aria-readonly on the radiogroup when readonly flips after mount", async () => {
+      const { rerender } = render(RadioButtonGroupReadonly, {
+        selected: "1",
+        readonly: false,
+      });
+
+      expect(screen.getByRole("radiogroup")).not.toHaveAttribute(
+        "aria-readonly",
+      );
+
+      await rerender({ selected: "1", readonly: true });
+      await tick();
+
+      expect(screen.getByRole("radiogroup")).toHaveAttribute(
+        "aria-readonly",
+        "true",
+      );
+    });
+
     it("should not forward a child RadioButton's on:change when the group is readonly", async () => {
       const consoleLog = vi.spyOn(console, "log");
       render(RadioButtonReadonlyChange);

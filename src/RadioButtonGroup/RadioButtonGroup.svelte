@@ -166,6 +166,7 @@
   <fieldset
     role="radiogroup"
     aria-orientation={orientation}
+    aria-readonly={readonly || undefined}
     class:bx--radio-button-group={true}
     class:bx--radio-button-group--vertical={orientation === "vertical"}
     class:bx--radio-button-group--label-left={labelPosition === "left"}
