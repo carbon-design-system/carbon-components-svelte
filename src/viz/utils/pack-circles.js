@@ -2,6 +2,8 @@
 // Circle packing: place circles of given radii close together, no overlap.
 
 const EPSILON = 1e-6;
+/** @type {Array<{ x: number; y: number }>} */
+const NONE = [];
 
 /**
  * The two points where a circle of radius `r` touches both `a` and `b`.
@@ -16,8 +18,13 @@ function tangentSpots(a, b, r) {
   const rb = b.r + r;
   const dx = b.x - a.x;
   const dy = b.y - a.y;
-  const d = Math.hypot(dx, dy);
-  if (d === 0 || d > ra + rb || d < Math.abs(ra - rb)) return [];
+  // Most pairs are too far apart for the new circle to touch both. Squares
+  // settle that before the square root is worth taking.
+  const d2 = dx * dx + dy * dy;
+  const reach = ra + rb;
+  if (d2 === 0 || d2 > reach * reach) return NONE;
+  const d = Math.sqrt(d2);
+  if (d < Math.abs(ra - rb)) return NONE;
   // Intersect the circles of radius `ra` around a and `rb` around b.
   const along = (ra * ra - rb * rb + d * d) / (2 * d);
   const off = Math.sqrt(Math.max(ra * ra - along * along, 0));
@@ -36,8 +43,9 @@ function tangentSpots(a, b, r) {
  * holds them all, centered on the origin. A radius that is not positive gets
  * a circle of radius 0 at the origin.
  *
- * Checking every pair for every circle is cubic, which is fine for the few
- * hundred circles a chart can show and keeps the result deterministic.
+ * Every pair is tried for every circle, which is cubic in the worst case and
+ * keeps the result deterministic. In practice almost every pair is rejected
+ * by one comparison, so a few hundred circles take a few milliseconds.
  *
  * @param {ReadonlyArray<number>} radii
  * @param {{ padding?: number }} [options]
@@ -56,34 +64,41 @@ export function packCircles(radii, { padding = 0 } = {}) {
   }
   order.sort((a, b) => circles[b].r - circles[a].r || a - b);
 
-  /** @type {Array<{ x: number; y: number; r: number }>} */
+  /** @type {Array<{ x: number; y: number; r: number; d: number }>} */
   const placed = [];
   for (const index of order) {
     const circle = circles[index];
     // Padding is a halo each circle carries while it is being placed.
     const r = circle.r + padding / 2;
     if (placed.length === 0) {
-      placed.push({ x: 0, y: 0, r });
+      placed.push({ x: 0, y: 0, r, d: 0 });
       continue;
     }
     if (placed.length === 1) {
       const first = placed[0];
       circle.x = first.r + r;
-      placed.push({ x: circle.x, y: 0, r });
+      placed.push({ x: circle.x, y: 0, r, d: circle.x });
       continue;
     }
 
     let best = null;
     let bestDistance = Number.POSITIVE_INFINITY;
+    let bestRadius = Number.POSITIVE_INFINITY;
     for (let i = 0; i < placed.length; i++) {
+      // A spot touching `placed[i]` is at least this far from the center, so
+      // once a nearer spot is known, circles further out cannot beat it.
+      if (placed[i].d - placed[i].r - r > bestRadius) continue;
       for (let j = i + 1; j < placed.length; j++) {
+        if (placed[j].d - placed[j].r - r > bestRadius) continue;
         for (const spot of tangentSpots(placed[i], placed[j], r)) {
           const distance = spot.x * spot.x + spot.y * spot.y;
           if (distance >= bestDistance) continue;
           let free = true;
           for (const other of placed) {
-            const gap = Math.hypot(spot.x - other.x, spot.y - other.y);
-            if (gap < other.r + r - EPSILON) {
+            const ox = spot.x - other.x;
+            const oy = spot.y - other.y;
+            const least = other.r + r - EPSILON;
+            if (ox * ox + oy * oy < least * least) {
               free = false;
               break;
             }
@@ -91,6 +106,7 @@ export function packCircles(radii, { padding = 0 } = {}) {
           if (free) {
             best = spot;
             bestDistance = distance;
+            bestRadius = Math.sqrt(distance);
           }
         }
       }
@@ -99,7 +115,7 @@ export function packCircles(radii, { padding = 0 } = {}) {
     const spot = best ?? { x: placed[placed.length - 1].x + r * 2, y: 0 };
     circle.x = spot.x;
     circle.y = spot.y;
-    placed.push({ x: spot.x, y: spot.y, r });
+    placed.push({ x: spot.x, y: spot.y, r, d: Math.hypot(spot.x, spot.y) });
   }
 
   if (order.length === 0) return { circles, radius: 0 };
