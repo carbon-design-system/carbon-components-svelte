@@ -74,6 +74,28 @@ describe("RadioButton", () => {
     expect(screen.getByRole("radio")).toHaveAttribute("value", "custom-value");
   });
 
+  it("should apply aria-label to the input when there is no label text", () => {
+    const { container } = render(RadioButton, {
+      props: { labelText: "", "aria-label": "CDN" },
+    });
+
+    expect(screen.getByRole("radio", { name: "CDN" })).toBeInTheDocument();
+    expect(
+      container.querySelector(".bx--radio-button-wrapper"),
+    ).not.toHaveAttribute("aria-label");
+  });
+
+  it("should prefer labelText as the accessible name and strip aria-label from the wrapper", () => {
+    const { container } = render(RadioButton, {
+      props: { labelText: "Standard", "aria-label": "CDN" },
+    });
+
+    expect(screen.getByRole("radio", { name: "Standard" })).toBeInTheDocument();
+    expect(
+      container.querySelector(".bx--radio-button-wrapper"),
+    ).not.toHaveAttribute("aria-label");
+  });
+
   it("should handle custom slots", () => {
     render(RadioButtonCustom);
 

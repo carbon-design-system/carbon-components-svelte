@@ -30,6 +30,7 @@
   {name}
   bind:ref
   class={customClass}
+  {...$$restProps}
   on:focus={() => {
     console.log("focus");
   }}

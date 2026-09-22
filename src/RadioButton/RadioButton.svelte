@@ -160,6 +160,7 @@
   class:bx--radio-button-wrapper={true}
   class:bx--radio-button-wrapper--label-left={labelPosition === "left"}
   {...$$restProps}
+  aria-label={undefined}
 >
   <input
     bind:this={ref}
@@ -171,6 +172,9 @@
     required={$groupRequired ?? required}
     {value}
     aria-describedby={$helperId}
+    aria-label={labelText || $$slots.labelChildren
+      ? undefined
+      : $$props["aria-label"] || undefined}
     class:bx--radio-button={true}
     on:focus
     on:blur
