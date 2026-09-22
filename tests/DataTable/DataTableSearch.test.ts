@@ -159,7 +159,7 @@ describe("DataTableSearch", () => {
     tableRows = getTableRows();
     expect(tableRows).toHaveLength(0);
 
-    expect(screen.getByText("0–0 of 0 items")).toBeInTheDocument();
+    expect(screen.getByText("0 items")).toBeInTheDocument();
     expect(screen.getByText("of 1 page")).toBeInTheDocument();
     expect(getNextPageButton()).toBeDisabled();
     expect(getPrevPageButton()).toBeDisabled();
