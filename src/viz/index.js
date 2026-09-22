@@ -62,6 +62,7 @@ export { default as TreeChart } from "./TreeChart/TreeChart.svelte";
 export { default as TreemapChart } from "./TreemapChart/TreemapChart.svelte";
 export { default as UptimeBar } from "./UptimeBar/UptimeBar.svelte";
 export { groupBy, toAccessor } from "./utils/accessor.js";
+export { flagAnomalies } from "./utils/anomaly.js";
 export { bin } from "./utils/bin.js";
 export { getBulletGeometry } from "./utils/bullet.js";
 export { buildCalendarGrid } from "./utils/calendar-grid.js";
