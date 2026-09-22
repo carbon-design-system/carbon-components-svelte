@@ -57,6 +57,7 @@ export { default as ScatterChart } from "./ScatterChart/ScatterChart.svelte";
 export { default as ShareOfTotal } from "./ShareOfTotal/ShareOfTotal.svelte";
 export { default as Sparkline } from "./Sparkline/Sparkline.svelte";
 export { default as StackedBar } from "./StackedBar/StackedBar.svelte";
+export { default as StateTimeline } from "./StateTimeline/StateTimeline.svelte";
 export { default as TreeChart } from "./TreeChart/TreeChart.svelte";
 export { default as TreemapChart } from "./TreemapChart/TreemapChart.svelte";
 export { default as UptimeBar } from "./UptimeBar/UptimeBar.svelte";
