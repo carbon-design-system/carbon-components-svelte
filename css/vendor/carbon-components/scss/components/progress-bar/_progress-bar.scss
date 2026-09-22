@@ -176,3 +176,20 @@
 @include exports('progress-bar-value-text') {
   @include progress-bar-value-text;
 }
+
+// carbon-components-svelte patch
+// A `labelChildren` slot can hold non-text content (e.g. a `TooltipIcon`),
+// which the default text-truncation layout does not vertically center.
+// Lay the row out as flex instead, matching how `BigNumber` centers its
+// slotted label content.
+@mixin progress-bar-label-text-slotted {
+  .#{$prefix}--progress-bar__label-text--slotted {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-02;
+  }
+}
+
+@include exports('progress-bar-label-text-slotted') {
+  @include progress-bar-label-text-slotted;
+}

@@ -90,6 +90,7 @@
     <span
       id="{id}-label"
       class:bx--progress-bar__label-text={!$$slots.labelChildren}
+      class:bx--progress-bar__label-text--slotted={!!$$slots.labelChildren}
       class:bx--visually-hidden={hideLabel}
     >
       <slot name="labelChildren"> {labelText} </slot>
