@@ -152,6 +152,12 @@ Display a non-editable value with `readonly`.
 
 <TextArea readonly labelText="Incident summary" value="Database connection pool exhausted during peak traffic; scaled up replicas to mitigate." />
 
+### Required
+
+Mark the field as required with `required`, opting the textarea into native constraint validation.
+
+<TextArea required labelText="Incident summary" placeholder="Describe what happened, the impact, and any mitigation steps taken so far..." />
+
 ## Skeleton
 
 Show a loading state with the default skeleton variant.
