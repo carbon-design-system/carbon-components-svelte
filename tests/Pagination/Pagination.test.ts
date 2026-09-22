@@ -421,7 +421,7 @@ describe("Pagination", () => {
     expect(screen.getByText("1–5 of 10 items")).toBeInTheDocument();
   });
 
-  it("should handle edge cases", () => {
+  it("shows '0 items' when totalItems is 0", () => {
     render(Pagination, {
       props: {
         totalItems: 0,
@@ -430,7 +430,31 @@ describe("Pagination", () => {
       },
     });
 
-    expect(screen.getByText("0–0 of 0 items")).toBeInTheDocument();
+    expect(screen.getByText("0 items")).toBeInTheDocument();
+    expect(screen.queryByText(/0–0/)).not.toBeInTheDocument();
+  });
+
+  it("shows singular item text for a single item", () => {
+    render(Pagination, {
+      props: {
+        totalItems: 1,
+        page: 1,
+        pageSize: 10,
+      },
+    });
+
+    expect(screen.getByText("1–1 of 1 item")).toBeInTheDocument();
+  });
+
+  it("still renders a custom itemRangeText when totalItems is 0", () => {
+    render(Pagination, {
+      props: {
+        totalItems: 0,
+        itemRangeText: () => "custom",
+      },
+    });
+
+    expect(screen.getByText("custom")).toBeInTheDocument();
   });
 
   it("renders a cap of 1000 page numbers by default", () => {
