@@ -1,5 +1,9 @@
 <script>
   /**
+   * @event {boolean} toggle - Dispatched with the next open state after a header click.
+   */
+
+  /**
    * Specify the title of the accordion item heading.
    * Alternatively, use the "title" slot.
    * @type {string | undefined}
@@ -43,10 +47,12 @@
    */
   export let lazy = false;
 
-  import { getContext, onMount } from "svelte";
+  import { createEventDispatcher, getContext, onMount } from "svelte";
   import { get } from "svelte/store";
   import ChevronRight from "../icons/ChevronRight.svelte";
   import { uniqueId } from "../utils/unique-id.js";
+
+  const dispatch = createEventDispatcher();
 
   let initialDisabled = disabled;
 
@@ -125,6 +131,7 @@
     on:click={() => {
       open = !open;
       animation = open ? "expanding" : "collapsing";
+      dispatch("toggle", open);
     }}
     on:mouseover
     on:mouseenter

@@ -11,7 +11,14 @@
 </script>
 
 <Accordion>
-  <AccordionItem title="Natural Language Classifier" {lazy} {open}>
+  <AccordionItem
+    title="Natural Language Classifier"
+    {lazy}
+    {open}
+    on:toggle={(e) => {
+      console.log("item-toggle", e.detail);
+    }}
+  >
     <p use:logMount>Lazy panel content</p>
   </AccordionItem>
 </Accordion>
