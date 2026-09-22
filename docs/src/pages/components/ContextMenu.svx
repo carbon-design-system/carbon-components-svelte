@@ -35,6 +35,12 @@ For options inside `ContextMenuGroup`, see [Selectable](#selectable), [Selectabl
 
 <FileSource src="/framed/ContextMenu/ContextMenuOptionProps" />
 
+### Custom label content
+
+Use the `labelChildren` slot to render custom label content, such as a tooltip icon, in place of `labelText`.
+
+<FileSource src="/framed/ContextMenu/ContextMenuLabelChildren" />
+
 ### Nested menu
 
 Put children inside a parent `ContextMenuOption` to open a flyout submenu. Use `indented` on the parent when it has no icon so the label aligns with other rows.

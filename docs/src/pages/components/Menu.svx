@@ -86,6 +86,12 @@ Set `labelText` on a `MenuItem` and nest child `MenuItem` rows to get a submenu.
 
 <FileSource src="/framed/Menu/MenuItemNested" />
 
+### Custom label content
+
+Use the `labelChildren` slot to render custom label content, such as a tooltip icon, in place of `labelText`.
+
+<FileSource src="/framed/Menu/MenuItemLabelChildren" />
+
 ## Scrollable
 
 Set `maxHeight` to cap the menu height and scroll the remaining items. A number is treated as pixels; a string is used as any CSS length, such as `"20rem"`. Keyboard navigation scrolls the focused item into view.
