@@ -5,7 +5,6 @@
 import { getDateTimeFormatter } from "../../utils/intl-formatter-cache.js";
 import { groupBy } from "../utils/accessor.js";
 import { formatCompact, resolveFormat } from "../utils/format-compact.js";
-import { scalePoint } from "../utils/scale-band.js";
 import { scaleLinear } from "../utils/scale-linear.js";
 import { logTicks, niceLogDomain, scaleLog } from "../utils/scale-log.js";
 import { scaleTime } from "../utils/scale-time.js";
@@ -215,6 +214,22 @@ function bandDateLabel(values, locale) {
 }
 
 /**
+ * The index range a category axis shows: every category, or the part of
+ * them a zoom asked for, kept inside what exists.
+ *
+ * @param {number} count
+ * @param {unknown} xDomain
+ * @returns {[number, number]}
+ */
+function categoryRange(count, xDomain) {
+  const last = Math.max(0, count - 1);
+  if (!Array.isArray(xDomain)) return [0, last];
+  const a = Math.max(0, Math.min(last, Number(xDomain[0])));
+  const b = Math.max(a, Math.min(last, Number(xDomain[1])));
+  return Number.isFinite(a) && Number.isFinite(b) ? [a, b] : [0, last];
+}
+
+/**
  * Resolve the domain to plot from measured extents and the chart's options.
  *
  * @param {import("./model.d.ts").BuiltGroups<any>} built
@@ -264,7 +279,7 @@ export function resolveDomain(
   /** @type {[number, number]} */
   const x =
     built.kind === "category"
-      ? [0, Math.max(0, built.categories.length - 1)]
+      ? categoryRange(built.categories.length, xDomain)
       : Array.isArray(xDomain)
         ? [Number(xDomain[0]), Number(xDomain[1])]
         : xDomain === "nice" && built.kind === "linear"
@@ -383,30 +398,31 @@ export function buildScales(domain, size, options = {}) {
     let step;
 
     if (domain.kind === "category") {
-      const point = scalePoint({
-        domain: domain.categories,
-        range,
-        padding: 0.5,
-      });
+      // Equal slots across the index range, each category at the center of
+      // its own. The range is every category unless zoomed to some of them,
+      // so a bar mark can use the same scale: `x.map(i)` is the slot center
+      // and `step` its width.
+      const [a, b] = domain.x;
       const last = domain.categories.length - 1;
+      const slots = Math.max(b - a + 1, 1);
+      const slot = (range[1] - range[0]) / slots;
       x = {
-        map: (index) =>
-          point.map(domain.categories[Math.round(Number(index))]) ?? range[0],
+        map: (index) => range[0] + (Number(index) - a + 0.5) * slot,
         invert: (px) => {
-          if (last < 0 || point.step === 0) return 0;
-          const first = point.map(domain.categories[0]) ?? range[0];
+          if (last < 0 || slot === 0) return 0;
           return Math.min(
             last,
-            Math.max(0, Math.round((px - first) / point.step)),
+            Math.max(0, Math.round(a + (px - range[0]) / slot - 0.5)),
           );
         },
       };
-      xTicks = domain.categories.map((_, index) => index);
-      xFormat = (index) => domain.categories[index] ?? "";
+      xTicks = [];
+      for (let index = Math.ceil(a); index <= Math.floor(b); index++) {
+        if (index >= 0 && index <= last) xTicks.push(index);
+      }
+      xFormat = (index) => domain.categories[Math.round(index)] ?? "";
       xLabel = xFormat;
-      // Categories sit at the centers of equal slots, so a bar mark can use
-      // the same scale: `x.map(i)` is the slot center and `step` its width.
-      step = point.step;
+      step = slot;
     } else if (domain.kind === "time") {
       const time = scaleTime({ domain: domain.x, range });
       const result = timeTicks(domain.x[0], domain.x[1], count);

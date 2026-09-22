@@ -29,7 +29,7 @@
   import { pickGroups } from "./model.js";
 
   /** @type {import("./context.js").ChartContext} */
-  const { groups, scales, hover, useBand, includeY } =
+  const { groups, scales, hover, useBand, includeY, clip } =
     getContext(CHART_CONTEXT);
 
   // Bars need one slot per x, asked for up front so the server render has it.
@@ -81,7 +81,7 @@
   });
 </script>
 
-<g class:bx--viz-bars={true} {...$$restProps}>
+<g clip-path={$clip} class:bx--viz-bars={true} {...$$restProps}>
   {#if band}
     <rect
       class:bx--viz-bars__band={true}

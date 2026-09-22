@@ -24,7 +24,7 @@
   import { buildWaterfall } from "./waterfall-geometry.js";
 
   /** @type {import("./context.js").ChartContext} */
-  const { groups, scales, hover, useBand, includeY } =
+  const { groups, scales, hover, useBand, includeY, clip } =
     getContext(CHART_CONTEXT);
 
   const releaseBand = useBand();
@@ -71,7 +71,7 @@
   });
 </script>
 
-<g class:bx--viz-waterfall={true} {...$$restProps}>
+<g clip-path={$clip} class:bx--viz-waterfall={true} {...$$restProps}>
   {#if band}
     <rect
       class:bx--viz-bars__band={true}

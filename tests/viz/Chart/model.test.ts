@@ -278,6 +278,30 @@ describe("buildScales", () => {
     expect(scales.x.invert(1e6)).toBe(2);
   });
 
+  test("zooms a category axis to a range of slots, kept inside what exists", () => {
+    const built = buildGroups(
+      ["Q1", "Q2", "Q3", "Q4", "Q5"].map((q, i) => ({ q, v: i })),
+      { x: (row) => row.q, y: (row) => row.v, series: () => "s" },
+    );
+    const full = buildScales(resolveDomain(built, {}), {
+      width: 400,
+      height: 200,
+    });
+    const zoomed = buildScales(resolveDomain(built, { xDomain: [1, 3] }), {
+      width: 400,
+      height: 200,
+    });
+
+    expect(zoomed.xTicks.map(zoomed.xFormat)).toEqual(["Q2", "Q3", "Q4"]);
+    // Three slots share the width five did: each is wider, still centered.
+    expect(zoomed.step).toBeCloseTo((full.step ?? 0) * (5 / 3));
+    expect(zoomed.x.map(1)).toBeCloseTo(full.plot.x0 + (zoomed.step ?? 0) / 2);
+    expect(zoomed.x.invert(zoomed.x.map(2) + 2)).toBe(2);
+    // A fractional or out-of-range zoom is kept to the categories that exist.
+    expect(resolveDomain(built, { xDomain: [-3, 9] }).x).toEqual([0, 4]);
+    expect(resolveDomain(built, { xDomain: [1.5, 2.5] }).x).toEqual([1.5, 2.5]);
+  });
+
   test("swaps the pixel axes for a horizontal chart", () => {
     const built = buildGroups(
       [

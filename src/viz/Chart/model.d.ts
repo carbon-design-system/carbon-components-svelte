@@ -75,7 +75,10 @@ export type ChartDomain = {
 };
 
 export type ResolveDomainOptions = {
-  /** Fixed bounds, or `"nice"` to round a numeric x out to tick values. */
+  /**
+   * Fixed bounds, or `"nice"` to round a numeric x out to tick values. On a
+   * category axis, bounds are category indexes, as a zoom sets them.
+   */
   xDomain?: readonly [number | Date, number | Date] | "nice";
   /**
    * Fixed bounds, `"auto"` for the data's extent, `"nice"` to round it out,

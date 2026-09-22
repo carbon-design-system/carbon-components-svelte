@@ -23,7 +23,7 @@
   import { buildDumbbells } from "./dumbbell-geometry.js";
 
   /** @type {import("./context.js").ChartContext} */
-  const { groups, scales, hover, useBand } = getContext(CHART_CONTEXT);
+  const { groups, scales, hover, useBand, clip } = getContext(CHART_CONTEXT);
 
   // A dumbbell sits in a slot like a bar, asked for up front so the server
   // render has it.
@@ -39,7 +39,7 @@
       : null;
 </script>
 
-<g class:bx--viz-dumbbells={true} {...$$restProps}>
+<g clip-path={$clip} class:bx--viz-dumbbells={true} {...$$restProps}>
   {#if band}
     <rect
       class:bx--viz-bars__band={true}

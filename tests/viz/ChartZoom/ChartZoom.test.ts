@@ -63,14 +63,24 @@ describe("ChartZoomBar", () => {
     expect(labels().at(-1)).toBe("60");
   });
 
-  it("renders nothing over categories", () => {
-    render(ChartZoom, {
-      data: [
-        { day: "Mon", revenue: 1 },
-        { day: "Tue", revenue: 2 },
-      ],
+  it("narrows a category axis to a range of slots", async () => {
+    const { rerender } = render(ChartZoom, {
+      data: ["Mon", "Tue", "Wed", "Thu", "Fri"].map((day, i) => ({
+        day,
+        revenue: 10 + i,
+      })),
     });
 
-    expect(screen.queryByRole("slider")).toBeNull();
+    const start = screen.getByRole("slider", { name: "Range start" });
+    expect(start).toHaveAttribute("aria-valuemax", "4");
+    expect(labels()).toEqual(["Mon", "Tue", "Wed", "Thu", "Fri"]);
+
+    await rerender({ zoom: [1, 3] });
+    expect(labels()).toEqual(["Tue", "Wed", "Thu"]);
+    expect(start).toHaveAttribute("aria-valuetext", "Tue");
+    expect(document.querySelector(".bx--viz-line")).toHaveAttribute(
+      "clip-path",
+      expect.stringMatching(/^url\(#bx-viz-clip-\d+\)$/),
+    );
   });
 });

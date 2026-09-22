@@ -21,7 +21,7 @@
   import { CHART_CONTEXT } from "./context.js";
 
   /** @type {import("./context.js").ChartContext} */
-  const { groups, scales, hover, useBand, includeY } =
+  const { groups, scales, hover, useBand, includeY, clip } =
     getContext(CHART_CONTEXT);
 
   const releaseBand = useBand();
@@ -73,7 +73,12 @@
   });
 </script>
 
-<g class:bx--viz-boxes={true} style:--bx-viz-color={color} {...$$restProps}>
+<g
+  clip-path={$clip}
+  class:bx--viz-boxes={true}
+  style:--bx-viz-color={color}
+  {...$$restProps}
+>
   {#each shapes as shape (shape.key)}
     {@const half = shape.width / 2}
     {@const cap = shape.width / 4}

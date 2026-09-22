@@ -116,7 +116,8 @@
 
   /**
    * Specify the visible x range, as a `ChartZoomBar` sets it. `null` shows
-   * everything. Applies to a time or numeric x. Marks are clipped to the
+   * everything. On a category axis the range is category indexes, and may
+   * be fractional. Marks are clipped to the
    * plot, and the y axis keeps its full range so values stay comparable
    * while the range moves.
    * @type {[number | Date, number | Date] | null}
@@ -559,8 +560,12 @@
       band,
       locale: bandLocale,
     });
-    // The zoom bar spans the range with no zoom applied.
-    const unzoomed = resolveDomain(built, { xDomain: xD }).x;
+    // The zoom bar spans the range with no zoom applied. A category axis
+    // has no domain of its own to fix: its bounds are only ever a zoom.
+    const category = built.kind === "category";
+    const unzoomed = resolveDomain(built, {
+      xDomain: category ? undefined : xD,
+    }).x;
     const before = get(fullX);
     if (
       before.kind !== built.kind ||
@@ -569,13 +574,12 @@
     ) {
       fullX.set({ domain: unzoomed, kind: built.kind });
     }
-    const zoomed =
-      zoomRange && built.kind !== "category"
-        ? /** @type {[number, number]} */ ([
-            Number(zoomRange[0]),
-            Number(zoomRange[1]),
-          ])
-        : null;
+    const zoomed = zoomRange
+      ? /** @type {[number, number]} */ ([
+          Number(zoomRange[0]),
+          Number(zoomRange[1]),
+        ])
+      : null;
     const current = get(zoomStore);
     if (
       (zoomed === null) !== (current === null) ||
@@ -586,7 +590,7 @@
       zoomStore.set(zoomed);
     }
     const next = resolveDomain(built, {
-      xDomain: zoomed ?? xD,
+      xDomain: zoomed ?? (category ? undefined : xD),
       yDomain: yD,
       y2Domain: y2D,
       yScale: scaleKind,

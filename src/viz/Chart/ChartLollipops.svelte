@@ -22,7 +22,7 @@
   import { pickGroups } from "./model.js";
 
   /** @type {import("./context.js").ChartContext} */
-  const { groups, scales, hover, useBand } = getContext(CHART_CONTEXT);
+  const { groups, scales, hover, useBand, clip } = getContext(CHART_CONTEXT);
 
   // A lollipop sits in a slot like a bar, asked for up front so the server
   // render has it.
@@ -56,7 +56,7 @@
       : null;
 </script>
 
-<g class:bx--viz-lollipops={true} {...$$restProps}>
+<g clip-path={$clip} class:bx--viz-lollipops={true} {...$$restProps}>
   {#if band}
     <rect
       class:bx--viz-bars__band={true}

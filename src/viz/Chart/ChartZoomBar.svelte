@@ -41,7 +41,7 @@
 
   $: full = $fullX.domain;
   $: span = full[1] - full[0];
-  $: usable = $fullX.kind !== "category" && span > 0;
+  $: usable = span > 0;
   $: current = $zoom ?? full;
   // The bar lines up with the plot above it.
   $: x0 = $scales.plot.x0;
