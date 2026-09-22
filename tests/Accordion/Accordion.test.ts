@@ -526,4 +526,32 @@ describe("Accordion", () => {
 
     expect(screen.getByText("Lazy panel content")).toBeInTheDocument();
   });
+
+  it("names an open panel as a region labelled by its header button", async () => {
+    render(Accordion);
+
+    const button = screen.getByRole("button", {
+      name: /Natural Language Classifier/,
+    });
+    await user.click(button);
+
+    const region = screen.getByRole("region", {
+      name: /Natural Language Classifier/,
+    });
+    expect(region).toHaveAttribute("aria-labelledby", button.id);
+  });
+
+  it("does not expose role='region' on a closed panel", () => {
+    render(Accordion);
+
+    const closedButton = screen.getByRole("button", {
+      name: /Language Translator/,
+    });
+    const contentId = closedButton.getAttribute("aria-controls");
+    assert(contentId);
+
+    const content = document.getElementById(contentId);
+    assert(content);
+    expect(content).not.toHaveAttribute("role", "region");
+  });
 });
