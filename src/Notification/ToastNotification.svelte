@@ -16,7 +16,7 @@
   /** Set the timeout duration (ms) to hide the notification after opening it */
   export let timeout = 0;
 
-  /** Set to `true` to pause the auto-dismiss timeout while the pointer is over the notification. */
+  /** Set to `true` to pause the auto-dismiss timeout while the pointer is over the notification or while focus is inside it. */
   export let pauseOnHover = false;
 
   /**
@@ -74,12 +74,42 @@
     }
   }
 
+  function pointerInside(event) {
+    const next = event.relatedTarget;
+    const current = event.currentTarget;
+    return (
+      next instanceof Node && current instanceof Node && current.contains(next)
+    );
+  }
+
   function handleMouseenter() {
     if (pauseOnHover) dismiss.pause();
   }
 
-  function handleMouseleave() {
-    if (pauseOnHover) dismiss.resume();
+  function handleMouseleave(event) {
+    if (!pauseOnHover || pointerInside(event)) return;
+    if (
+      event.currentTarget instanceof Node &&
+      event.currentTarget.contains(document.activeElement)
+    ) {
+      return;
+    }
+    dismiss.resume();
+  }
+
+  function handleFocusIn() {
+    if (pauseOnHover) dismiss.pause();
+  }
+
+  function handleFocusOut(event) {
+    if (!pauseOnHover || pointerInside(event)) return;
+    if (
+      event.currentTarget instanceof Node &&
+      event.currentTarget.contains(document.activeElement)
+    ) {
+      return;
+    }
+    dismiss.resume();
   }
 
   $: dismiss.sync(open, timeout, () => close(true));
@@ -106,6 +136,8 @@
     on:mouseenter={handleMouseenter}
     on:mouseleave
     on:mouseleave={handleMouseleave}
+    on:focusin={handleFocusIn}
+    on:focusout={handleFocusOut}
   >
     <NotificationIcon {kind} />
     <div class:bx--toast-notification__details={true}>

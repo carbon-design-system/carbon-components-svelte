@@ -245,6 +245,82 @@ describe("InlineNotification", () => {
     expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
   });
 
+  it("should pause timeout while focus is inside and resume after focus leaves", async () => {
+    const closeHandler = vi.fn();
+    render(InlineNotificationTest, {
+      props: { timeout: 1000, pauseOnHover: true, onclose: closeHandler },
+    });
+
+    const closeButton = screen.getByRole("button", {
+      name: "Close notification",
+    });
+
+    vi.advanceTimersByTime(400);
+    closeButton.focus();
+
+    vi.advanceTimersByTime(1000);
+    await tick();
+    expect(closeHandler).not.toHaveBeenCalled();
+
+    closeButton.blur();
+    vi.advanceTimersByTime(599);
+    await tick();
+    expect(closeHandler).not.toHaveBeenCalled();
+
+    vi.advanceTimersByTime(1);
+    await tick();
+    expect(closeHandler).toHaveBeenCalledTimes(1);
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
+  });
+
+  it("should not resume timeout when focus moves between focusable elements inside", async () => {
+    const closeHandler = vi.fn();
+    render(InlineNotificationTest, {
+      props: { timeout: 1000, pauseOnHover: true, onclose: closeHandler },
+    });
+
+    const notification = document.querySelector(".bx--inline-notification");
+    const closeButton = screen.getByRole("button", {
+      name: "Close notification",
+    });
+    assert(notification);
+
+    closeButton.focus();
+    vi.advanceTimersByTime(400);
+
+    await fireEvent(
+      closeButton,
+      new FocusEvent("focusout", {
+        bubbles: true,
+        relatedTarget: notification,
+      }),
+    );
+
+    vi.advanceTimersByTime(1000);
+    await tick();
+    expect(closeHandler).not.toHaveBeenCalled();
+  });
+
+  it("should not pause timeout on focus when pauseOnHover is false", async () => {
+    const closeHandler = vi.fn();
+    render(InlineNotificationTest, {
+      props: { timeout: 1000, pauseOnHover: false, onclose: closeHandler },
+    });
+
+    const closeButton = screen.getByRole("button", {
+      name: "Close notification",
+    });
+
+    vi.advanceTimersByTime(400);
+    closeButton.focus();
+
+    vi.advanceTimersByTime(600);
+    await tick();
+
+    expect(closeHandler).toHaveBeenCalledTimes(1);
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
+  });
+
   it("should use custom role", () => {
     render(InlineNotificationTest, {
       props: { role: "status" },
