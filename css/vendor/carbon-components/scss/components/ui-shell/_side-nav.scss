@@ -89,6 +89,12 @@
     transition: width 0.11s cubic-bezier(0.2, 0, 1, 0.9);
   }
 
+  // ccs: opt-in border separating the side nav from its content, since both
+  // typically share the same background and otherwise blend together.
+  .#{$prefix}--side-nav--border {
+    border-right: 1px solid $border-subtle;
+  }
+
   .#{$prefix}--side-nav--ux {
     top: 2.25rem; // ccs
     width: mini-units(32);
