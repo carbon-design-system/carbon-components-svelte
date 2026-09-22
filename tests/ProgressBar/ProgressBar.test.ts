@@ -1,6 +1,24 @@
 import { render, screen, within } from "@testing-library/svelte";
 import ProgressBarSlot from "./ProgressBar.slot.test.svelte";
 import ProgressBar from "./ProgressBar.test.svelte";
+import ProgressBarStatus from "./ProgressBarStatus.test.svelte";
+
+function getLiveRegion(container: HTMLElement) {
+  const region = container.querySelector('[aria-live="polite"]');
+  if (region === null) throw new Error("live region not found");
+  return region;
+}
+
+function getDescriptions(container: HTMLElement, progressBar: HTMLElement) {
+  return (progressBar.getAttribute("aria-describedby") ?? "")
+    .split(" ")
+    .filter(Boolean)
+    .map((id) => {
+      const description = container.querySelector(`#${id}`);
+      if (description === null) throw new Error(`description ${id} not found`);
+      return description;
+    });
+}
 
 describe("ProgressBar", () => {
   it("should render indeterminate if status is active", () => {
@@ -229,5 +247,71 @@ describe("ProgressBar", () => {
     expect(within(el).getByRole("progressbar")).not.toHaveAttribute(
       "aria-valuetext",
     );
+  });
+
+  it("announces a status change but not value ticks or the first render", async () => {
+    const { container, rerender } = render(ProgressBarStatus, {
+      props: { status: "active", value: 40 },
+    });
+
+    const liveRegion = getLiveRegion(container);
+    expect(liveRegion).toHaveTextContent("");
+    expect(liveRegion).toHaveAttribute("aria-atomic", "true");
+    expect(liveRegion).toHaveClass("bx--visually-hidden");
+
+    await rerender({ status: "error", value: 40 });
+    expect(liveRegion).toHaveTextContent("Error");
+
+    await rerender({ status: "active", value: 40 });
+    expect(liveRegion).toHaveTextContent("");
+
+    await rerender({ status: "finished", value: 40 });
+    expect(liveRegion).toHaveTextContent("Complete");
+
+    await rerender({ status: "active", value: 40 });
+    await rerender({ status: "active", value: 50 });
+    expect(liveRegion).toHaveTextContent("");
+  });
+
+  it("describes but does not announce a status the bar already mounted with", () => {
+    const { container } = render(ProgressBarStatus, {
+      props: { status: "error", value: 40 },
+    });
+
+    expect(getLiveRegion(container)).toHaveTextContent("");
+    const progressBar = within(container).getByRole("progressbar");
+    const descriptions = getDescriptions(container, progressBar);
+    expect(descriptions).toHaveLength(1);
+    expect(descriptions[0]).toHaveTextContent("Error");
+    expect(descriptions[0]).toHaveClass("bx--visually-hidden");
+  });
+
+  it("supports localized status text alongside helper text", async () => {
+    const { container, rerender } = render(ProgressBarStatus, {
+      props: {
+        status: "active",
+        value: 40,
+        helperText: "Uploading",
+        errorText: "Échec",
+        finishedText: "Terminé",
+      },
+    });
+
+    await rerender({
+      status: "error",
+      value: 40,
+      helperText: "Uploading",
+      errorText: "Échec",
+      finishedText: "Terminé",
+    });
+
+    const progressBar = within(container).getByRole("progressbar");
+    const descriptions = getDescriptions(container, progressBar);
+    expect(descriptions).toHaveLength(2);
+    expect(descriptions.map((description) => description.textContent)).toEqual([
+      "Uploading",
+      "Échec",
+    ]);
+    expect(getLiveRegion(container)).toHaveTextContent("Échec");
   });
 });
