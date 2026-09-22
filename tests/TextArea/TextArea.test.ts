@@ -132,7 +132,8 @@ describe("TextArea", () => {
     const ids = describedBy.split(" ");
 
     expect(screen.getByText("Helper text").id).toBe(ids[0]);
-    expect(screen.getByText("2/100").id).toBe(ids[1]);
+    expect(screen.getByText("2 of 100 characters").id).toBe(ids[1]);
+    expect(screen.getByText("2/100")).toBeInTheDocument();
   });
 
   it("should include the counter id in aria-describedby without helper text", () => {
@@ -140,8 +141,74 @@ describe("TextArea", () => {
 
     const textarea = screen.getByRole("textbox");
     expect(textarea.getAttribute("aria-describedby")).toBe(
-      screen.getByText("2/100").id,
+      screen.getByText("2 of 100 characters").id,
     );
+    expect(screen.getByText("2/100")).toBeInTheDocument();
+  });
+
+  it("does not describe the visible count twice; the sentence span carries the description", () => {
+    render(TextArea, { props: { maxCount: 100, value: "hi" } });
+
+    expect(screen.getByText("2/100")).toHaveAttribute("aria-hidden", "true");
+  });
+
+  it("announces the character limit only when the count reaches it", async () => {
+    render(TextArea, { props: { maxCount: 5, value: "" } });
+
+    const liveRegion = document.querySelector('[aria-live="polite"]');
+    assert(liveRegion);
+    expect(liveRegion).toHaveTextContent("");
+
+    const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+    textarea.value = "12345";
+    await fireEvent.input(textarea);
+    expect(liveRegion).toHaveTextContent("Character limit reached");
+
+    textarea.value = "1234";
+    await fireEvent.input(textarea);
+    expect(liveRegion).toHaveTextContent("");
+  });
+
+  it("does not announce the limit on mount when the initial value is already at the limit", () => {
+    render(TextArea, { props: { maxCount: 5, value: "12345" } });
+
+    const liveRegion = document.querySelector('[aria-live="polite"]');
+    assert(liveRegion);
+    expect(liveRegion).toHaveTextContent("");
+  });
+
+  it("uses a custom counterText for the description", () => {
+    render(TextArea, {
+      props: {
+        maxCount: 100,
+        value: "hi",
+        counterText: (count: number, max: number) =>
+          `${count} chars remaining of ${max}`,
+      },
+    });
+
+    expect(screen.getByText("2 chars remaining of 100")).toBeInTheDocument();
+  });
+
+  it("uses a custom limitReachedText when the limit is reached", async () => {
+    render(TextArea, {
+      props: { maxCount: 5, value: "", limitReachedText: "No more room" },
+    });
+
+    const liveRegion = document.querySelector('[aria-live="polite"]');
+    assert(liveRegion);
+
+    const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+    textarea.value = "12345";
+    await fireEvent.input(textarea);
+
+    expect(liveRegion).toHaveTextContent("No more room");
+  });
+
+  it("does not render a live region when maxCount is unset", () => {
+    render(TextArea);
+
+    expect(document.querySelector('[aria-live="polite"]')).toBeNull();
   });
 
   it("should handle invalid state", () => {
@@ -205,10 +272,9 @@ describe("TextArea", () => {
   it("should show the counter without a label", () => {
     render(TextArea, { props: { maxCount: 100, value: "hi", labelText: "" } });
 
-    const counter = screen.getByText("2/100");
-    expect(counter).toBeInTheDocument();
+    expect(screen.getByText("2/100")).toBeInTheDocument();
     expect(screen.getByRole("textbox").getAttribute("aria-describedby")).toBe(
-      counter.id,
+      screen.getByText("2 of 100 characters").id,
     );
   });
 
