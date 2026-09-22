@@ -40,6 +40,7 @@ export { default as ComparisonBar } from "./ComparisonBar/ComparisonBar.svelte";
 export { default as DeltaIndicator } from "./DeltaIndicator/DeltaIndicator.svelte";
 export { default as DonutChart } from "./DonutChart/DonutChart.svelte";
 export { default as DumbbellChart } from "./DumbbellChart/DumbbellChart.svelte";
+export { default as EventTimeline } from "./EventTimeline/EventTimeline.svelte";
 export { default as FunnelBars } from "./FunnelBars/FunnelBars.svelte";
 export { default as FunnelChart } from "./FunnelChart/FunnelChart.svelte";
 export { default as Heatmap } from "./Heatmap/Heatmap.svelte";
