@@ -57,6 +57,7 @@
 
   const id = {};
   const contentId = uniqueId();
+  const buttonId = uniqueId();
 
   const unsubscribeOpenId = ctx.openId.subscribe((openItemId) => {
     if (openItemId !== null && openItemId !== id) {
@@ -95,6 +96,7 @@
 >
   <button
     bind:this={ref}
+    id={buttonId}
     type="button"
     class:bx--accordion__heading={true}
     aria-label={ariaLabel}
@@ -118,7 +120,12 @@
       <slot name="title">{title ?? ""}</slot>
     </div>
   </button>
-  <div id={contentId} class:bx--accordion__content={true}>
+  <div
+    id={contentId}
+    class:bx--accordion__content={true}
+    role={open ? "region" : undefined}
+    aria-labelledby={open ? buttonId : undefined}
+  >
     {#if !lazy || openedOnce}
       <slot />
     {/if}
