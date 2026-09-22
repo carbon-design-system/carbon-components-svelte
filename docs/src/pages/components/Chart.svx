@@ -217,7 +217,7 @@ Both are on the chart context for a control of your own: `exportImage("png" | "s
 
 ## Zoom
 
-`ChartZoomBar` goes in the `zoom` slot, under the plot. It draws the whole dataset small, with a window over the visible range: drag a handle to resize it, drag the window to pan, and double click to reset. Bind `zoom` on the chart to read or set the range yourself. It applies to a time or numeric x, and renders nothing over categories.
+`ChartZoomBar` goes in the `zoom` slot, under the plot. It draws the whole dataset small, with a window over the visible range: drag a handle to resize it, drag the window to pan, and double click to reset. Bind `zoom` on the chart to read or set the range yourself. On a category axis the range is category indexes, and the slots shown grow to fill the plot.
 
 While zoomed, marks are clipped to the plot and the y axis keeps its full range, so values stay comparable as the window moves.
 

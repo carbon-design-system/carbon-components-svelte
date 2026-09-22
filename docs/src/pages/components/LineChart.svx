@@ -195,7 +195,7 @@ Reassign `data` to update. An appended point that stays inside the current domai
 
 ## Zoom
 
-Set `zoomBar` for a bar under the plot that narrows the x range: drag a handle, drag the window to pan, or use the arrow keys on a handle. Bind `zoom` to read or set the range. `AreaChart` and `ScatterChart` take the same props.
+Set `zoomBar` for a bar under the plot that narrows the x range: drag a handle, drag the window to pan, or use the arrow keys on a handle. Bind `zoom` to read or set the range. `AreaChart`, `BarChart`, and `ScatterChart` take the same props.
 
 <LineChart {data} x="date" y="revenue" series="region" title="Revenue by region" zoomBar points="none" />
 

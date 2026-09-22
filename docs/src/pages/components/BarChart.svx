@@ -27,6 +27,10 @@ description: Bar chart compares values across categories, grouped side by side, 
     month,
     net: [12, 18, -6, 9, -14, 21][i],
   }));
+  const daily = Array.from({ length: 60 }, (_, i) => ({
+    day: new Date(2026, 6, 1 + i).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+    orders: 40 + Math.round(Math.sin(i / 5) * 18) + ((i * 37) % 11),
+  }));
   const monthly = Array.from({ length: 12 }, (_, month) => ({
     date: new Date(2026, month, 1),
     signups: 300 + Math.round(Math.sin(month / 2) * 120) + month * 25,
@@ -117,6 +121,12 @@ Set `colors` to fix a color per series, and `yFormat` to `Intl.NumberFormat` opt
   yFormat={{ style: "currency", currency: "USD", maximumFractionDigits: 0 }}
   colors={{ Cloud: "cat-02", Data: "cat-07", Security: "cat-13" }}
 />
+
+## Zoom
+
+Set `zoomBar` for a bar under the plot that narrows the categories shown: drag a handle, drag the window to pan, or use the arrow keys on a handle. The slots left grow to fill the plot. Bind `zoom` to read or set the range, as category indexes.
+
+<BarChart data={daily} x="day" y="orders" title="Orders by day, sixty days" zoomBar zoom={[30, 59]} />
 
 ## Data table and export
 
