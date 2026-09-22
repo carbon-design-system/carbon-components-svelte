@@ -8,7 +8,11 @@ describe("RadioButtonGroup", () => {
   it("should render with default props", () => {
     render(RadioButtonGroup);
 
-    expect(screen.getByRole("group")).toBeInTheDocument();
+    expect(screen.getByRole("radiogroup")).toBeInTheDocument();
+    expect(screen.getByRole("radiogroup")).toHaveAttribute(
+      "aria-orientation",
+      "horizontal",
+    );
     expect(screen.getByRole("radio", { name: "Option 1" })).toBeInTheDocument();
     expect(screen.getByRole("radio", { name: "Option 2" })).toBeInTheDocument();
     expect(screen.getByRole("radio", { name: "Option 3" })).toBeInTheDocument();
@@ -78,7 +82,7 @@ describe("RadioButtonGroup", () => {
   it("should handle disabled state", () => {
     render(RadioButtonGroup, { props: { disabled: true } });
 
-    expect(screen.getByRole("group")).toBeDisabled();
+    expect(screen.getByRole("radiogroup")).toBeDisabled();
 
     // Native `<fieldset disabled>` propagates to nested inputs; individual
     // radio buttons should not carry their own `disabled` attribute.
@@ -110,6 +114,9 @@ describe("RadioButtonGroup", () => {
     render(RadioButtonGroup, { props: { legendText: "Choose an option" } });
 
     expect(screen.getByText("Choose an option")).toBeInTheDocument();
+    expect(
+      screen.getByRole("radiogroup", { name: "Choose an option" }),
+    ).toBeInTheDocument();
   });
 
   it("should hide legend visually", () => {
@@ -124,29 +131,31 @@ describe("RadioButtonGroup", () => {
   it("should handle label position left", () => {
     render(RadioButtonGroup, { props: { labelPosition: "left" } });
 
-    const fieldset = screen.getByRole("group");
+    const fieldset = screen.getByRole("radiogroup");
     expect(fieldset).toHaveClass("bx--radio-button-group--label-left");
   });
 
   it("should handle label position right", () => {
     render(RadioButtonGroup, { props: { labelPosition: "right" } });
 
-    const fieldset = screen.getByRole("group");
+    const fieldset = screen.getByRole("radiogroup");
     expect(fieldset).toHaveClass("bx--radio-button-group--label-right");
   });
 
   it("should handle vertical orientation", () => {
     render(RadioButtonGroup, { props: { orientation: "vertical" } });
 
-    const fieldset = screen.getByRole("group");
+    const fieldset = screen.getByRole("radiogroup");
     expect(fieldset).toHaveClass("bx--radio-button-group--vertical");
+    expect(fieldset).toHaveAttribute("aria-orientation", "vertical");
   });
 
   it("should handle horizontal orientation", () => {
     render(RadioButtonGroup, { props: { orientation: "horizontal" } });
 
-    const fieldset = screen.getByRole("group");
+    const fieldset = screen.getByRole("radiogroup");
     expect(fieldset).not.toHaveClass("bx--radio-button-group--vertical");
+    expect(fieldset).toHaveAttribute("aria-orientation", "horizontal");
   });
 
   it("should handle custom id", () => {
@@ -180,7 +189,7 @@ describe("RadioButtonGroup", () => {
       props: { customClass: "custom-group" },
     });
 
-    const fieldset = screen.getByRole("group");
+    const fieldset = screen.getByRole("radiogroup");
     const formItem = fieldset.closest(".bx--form-item");
     assert(formItem);
     expect(formItem).toHaveClass("custom-group");

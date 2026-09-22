@@ -6,7 +6,9 @@ test.describe("RadioButtonGroup", () => {
   });
 
   test("renders with legend", async ({ page }) => {
-    await expect(page.getByRole("group", { name: "Choose one" })).toBeVisible();
+    await expect(
+      page.getByRole("radiogroup", { name: "Choose one" }),
+    ).toBeVisible();
   });
 
   test("selects radio button", async ({ page }) => {
