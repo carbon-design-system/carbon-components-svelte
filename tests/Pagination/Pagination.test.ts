@@ -127,7 +127,10 @@ describe("Pagination", () => {
     const select = screen.getByRole("combobox", { name: "Items per page:" });
     await user.selectOptions(select, "15");
 
-    expect(consoleLog).toHaveBeenCalledWith("change", { pageSize: 15 });
+    expect(consoleLog).toHaveBeenCalledWith("change", {
+      pageSize: 15,
+      page: 1,
+    });
     expect(consoleLog).toHaveBeenCalledWith("update", {
       pageSize: 15,
       page: 1,
@@ -143,7 +146,10 @@ describe("Pagination", () => {
     const pageSelect = screen.getAllByRole("combobox");
     await user.selectOptions(pageSelect[0], "5");
 
-    expect(consoleLog).toHaveBeenCalledWith("change", { pageSize: 5 });
+    expect(consoleLog).toHaveBeenCalledWith("change", {
+      pageSize: 5,
+      page: 1,
+    });
     expect(consoleLog).toHaveBeenCalledWith("update", { pageSize: 5, page: 1 });
   });
 
@@ -352,7 +358,10 @@ describe("Pagination", () => {
     // Change page size
     const pageSizeSelect = screen.getAllByRole("combobox");
     await user.selectOptions(pageSizeSelect[0], "15");
-    expect(consoleLog).toHaveBeenCalledWith("change", { pageSize: 15 });
+    expect(consoleLog).toHaveBeenCalledWith("change", {
+      pageSize: 15,
+      page: 1,
+    });
     expect(consoleLog).toHaveBeenCalledWith("update", {
       pageSize: 15,
       page: 1,
@@ -592,7 +601,10 @@ describe("Pagination", () => {
     });
     await user.selectOptions(pageSizeSelect, "15");
 
-    expect(consoleLog).toHaveBeenCalledWith("change", { pageSize: 15 });
+    expect(consoleLog).toHaveBeenCalledWith("change", {
+      pageSize: 15,
+      page: 1,
+    });
 
     const pageSelect = screen.getAllByRole("combobox")[1];
     await user.selectOptions(pageSelect, "2");
@@ -758,15 +770,18 @@ describe("Pagination", () => {
 
     consoleLog.mockClear();
 
-    // Change page size from 10 to 15 while on page 4
-    // This should adjust page to 3 (since totalPages becomes 3)
-    // but should only trigger one update cycle.
+    // Change page size from 10 to 15 while on page 4 (items 31-40).
+    // The anchor computation keeps item 31 in view, landing on page 3
+    // (items 31-45 at 15 per page), and should only trigger one update cycle.
     const pageSizeSelect = screen.getByRole("combobox", {
       name: "Items per page:",
     });
     await user.selectOptions(pageSizeSelect, "15");
 
-    expect(consoleLog).toHaveBeenCalledWith("change", { pageSize: 15 });
+    expect(consoleLog).toHaveBeenCalledWith("change", {
+      pageSize: 15,
+      page: 3,
+    });
     expect(consoleLog).toHaveBeenCalledWith("update", {
       pageSize: 15,
       page: 3,
@@ -777,6 +792,76 @@ describe("Pagination", () => {
         call[0] === "update" && call[1].pageSize === 15 && call[1].page === 3,
     );
     expect(updateCalls.length).toBe(1);
+  });
+
+  it("keeps the first visible item on screen when the page size changes", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Pagination, {
+      props: {
+        totalItems: 100,
+        page: 5,
+        pageSize: 10,
+        pageSizes: [10, 50],
+      },
+    });
+
+    // Page 5 at 10 per page starts at item 41; at 50 per page that's page 1.
+    const pageSizeSelect = screen.getByRole("combobox", {
+      name: "Items per page:",
+    });
+    await user.selectOptions(pageSizeSelect, "50");
+
+    const pageSelect = screen.getByLabelText(/Page number, of \d+ pages/);
+    expect(pageSelect).toHaveValue("1");
+    expect(consoleLog).toHaveBeenCalledWith("change", {
+      pageSize: 50,
+      page: 1,
+    });
+  });
+
+  it("stays on page 1 when the page size changes while already on page 1", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Pagination, {
+      props: {
+        totalItems: 100,
+        page: 1,
+        pageSize: 10,
+        pageSizes: [10, 50],
+      },
+    });
+
+    const pageSizeSelect = screen.getByRole("combobox", {
+      name: "Items per page:",
+    });
+    await user.selectOptions(pageSizeSelect, "50");
+
+    expect(consoleLog).toHaveBeenCalledWith("change", {
+      pageSize: 50,
+      page: 1,
+    });
+  });
+
+  it("keeps the current page when pagesUnknown and the page size changes", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Pagination, {
+      props: {
+        pagesUnknown: true,
+        page: 4,
+        pageSize: 10,
+        pageSizes: [10, 50],
+      },
+    });
+
+    const pageSizeSelect = screen.getByRole("combobox", {
+      name: "Items per page:",
+    });
+    await user.selectOptions(pageSizeSelect, "50");
+
+    expect(screen.getByText("page 4")).toBeInTheDocument();
+    expect(consoleLog).toHaveBeenCalledWith("change", {
+      pageSize: 50,
+      page: 4,
+    });
   });
 
   describe("pageSelect slot", () => {

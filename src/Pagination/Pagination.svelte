@@ -1,6 +1,8 @@
 <script>
   /**
    * Dispatched when the user changes the page or page size through any interaction.
+   * A page-size change may include both `page` and `pageSize` together, since
+   * the current page is recalculated to keep the same items in view.
    * @event change
    * @type {object}
    * @property {number} [page]
@@ -303,10 +305,18 @@
           noLabel
           inline
           disabled={pageSizeInputDisabled || disabled}
+          selected={pageSize}
           on:update={(event) => {
-            dispatch("change", { pageSize: event.detail });
+            const nextSize = Number(event.detail);
+            if (!nextSize) return;
+            const firstIndex = (page - 1) * pageSize;
+            const nextPage = pagesUnknown
+              ? page
+              : Math.floor(firstIndex / nextSize) + 1;
+            pageSize = nextSize;
+            page = nextPage;
+            dispatch("change", { pageSize: nextSize, page: nextPage });
           }}
-          bind:selected={pageSize}
         >
           {#each effectivePageSizes as size (size)}
             <SelectItem value={size} text={size.toString()} />
