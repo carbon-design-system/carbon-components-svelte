@@ -77,6 +77,21 @@ describe("Search", () => {
     expect(consoleLog).toHaveBeenCalledTimes(1);
   });
 
+  it("shows a busy state while loading", () => {
+    render(Search, { props: { loading: true } });
+
+    const search = getSearchInput("Default search");
+    expect(search).toHaveAttribute("aria-busy", "true");
+    expect(screen.getByTitle("Searching")).toBeInTheDocument();
+  });
+
+  it("does not set aria-busy when not loading", () => {
+    render(Search);
+
+    const search = getSearchInput("Default search");
+    expect(search).not.toHaveAttribute("aria-busy", "true");
+  });
+
   it("uses a native type=search input", () => {
     render(Search);
 
