@@ -16,6 +16,7 @@
     DeltaIndicator,
     DonutChart,
     DumbbellChart,
+    EventTimeline,
     FunnelBars,
     FunnelChart,
     Heatmap,
@@ -146,6 +147,22 @@
   </p>
 
   <p><HeatStrip {values} label="Requests by hour" /></p>
+
+  <EventTimeline
+    data={[
+      { at: new Date(2026, 0, 1, 1), type: "deploy", name: "v1.4.0" },
+      { at: new Date(2026, 0, 1, 3), type: "alert", name: "Latency high" },
+      { at: new Date(2026, 0, 1, 3, 20), type: "alert", name: "Error rate" },
+      { at: new Date(2026, 0, 1, 4), type: "rollback", name: "v1.3.9" },
+      { at: new Date(2026, 0, 1, 9), type: "deploy", name: "v1.4.1" },
+    ]}
+    at="at"
+    kind="type"
+    label="name"
+    kinds={{ deploy: "info", alert: "warning", rollback: "error" }}
+    title="Release events"
+    selectable
+  />
 
   <StateTimeline
     data={[
