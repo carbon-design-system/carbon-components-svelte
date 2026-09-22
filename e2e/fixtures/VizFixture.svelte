@@ -39,6 +39,7 @@
     TreeChart,
     TreemapChart,
     UptimeBar,
+    WaffleChart,
     WaterfallChart,
     WordCloudChart,
   } from "carbon-components-svelte/viz";
@@ -183,6 +184,13 @@
     selectable
     label="Pick a stage"
     data-testid="stacked-bar"
+  />
+
+  <WaffleChart
+    data={stages}
+    selectable
+    label="Users by stage, as cells"
+    data-testid="waffle"
   />
 
   <FunnelBars
