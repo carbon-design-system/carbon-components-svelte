@@ -46,6 +46,13 @@
   export let theme = undefined;
 
   /**
+   * Set to `true` to render a border between the side nav and its content.
+   * Useful when the side nav and content share the same background and
+   * otherwise blend together.
+   */
+  export let border = false;
+
+  /**
    * Specify the scroll alignment used to bring the active item into view on mount.
    * Defaults to `"nearest"`, which only scrolls when the active item is out of view.
    * @type {"start" | "center" | "end" | "nearest"}
@@ -166,6 +173,7 @@
   class:bx--side-nav--rail={rail}
   class:bx--side-nav--fixed={fixed}
   class:bx--side-nav--ui-shell-classic={theme === "classic"}
+  class:bx--side-nav--border={border}
   style:visibility={winWidth !== undefined && !isOpen && !rail
     ? "hidden"
     : undefined}
