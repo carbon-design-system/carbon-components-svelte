@@ -27,6 +27,14 @@
     });
   }
 
+  // `input` fires immediately, before the debounce pause -- show loading
+  // as soon as typing starts so stale/empty results don't flash first.
+  function handleInput(event) {
+    if (event.target.value.trim() !== "") {
+      loading = true;
+    }
+  }
+
   // `debounce` fires `search` only after typing pauses; `shouldFilter={false}`
   // defers filtering to the server, while the client still highlights the
   // query within each returned result.
@@ -39,7 +47,6 @@
       loading = false;
       return;
     }
-    loading = true;
     results = await fetchResults(trimmed);
     loading = false;
   }
@@ -58,6 +65,7 @@
   shouldFilter={false}
   labelText="Search"
   placeholder="Search..."
+  on:input={handleInput}
   on:search={(e) => handleSearch(e.detail)}
   on:clear={handleClear}
 >
