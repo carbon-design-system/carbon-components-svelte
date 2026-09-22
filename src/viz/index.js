@@ -138,6 +138,7 @@ export { treeLayout } from "./utils/tree-layout.js";
 export { squarify } from "./utils/treemap.js";
 export { allocateCells, layoutCells } from "./utils/waffle.js";
 export { layoutWords } from "./utils/word-cloud.js";
+export { default as VarianceIndicator } from "./VarianceIndicator/VarianceIndicator.svelte";
 export { default as WaffleChart } from "./WaffleChart/WaffleChart.svelte";
 export { default as WaterfallChart } from "./WaterfallChart/WaterfallChart.svelte";
 export { default as WordCloudChart } from "./WordCloudChart/WordCloudChart.svelte";
