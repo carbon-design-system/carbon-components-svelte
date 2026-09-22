@@ -1,0 +1,93 @@
+---
+components: ["EventTimeline"]
+description: Event timeline marks when things happened along a shared stretch of time, such as deploys, alerts, and rollbacks.
+---
+
+<script>
+  import { EventTimeline } from "carbon-components-svelte/viz";
+
+  const at = (hour, minute = 0) => new Date(2026, 8, 21, hour, minute);
+  const release = [
+    { at: at(1), type: "deploy", name: "v1.4.0", env: "production" },
+    { at: at(3), type: "alert", name: "p95 latency above 400 ms", env: "production" },
+    { at: at(3, 20), type: "alert", name: "Error rate above 1%", env: "production" },
+    { at: at(4), type: "rollback", name: "v1.3.9", env: "production" },
+    { at: at(9), type: "deploy", name: "v1.4.1", env: "staging" },
+    { at: at(11), type: "deploy", name: "v1.4.1", env: "production" },
+    { at: at(15, 30), type: "deploy", name: "v1.4.2", env: "staging" },
+    { at: at(16), type: "alert", name: "Disk above 90%", env: "staging" },
+  ];
+
+  let selected = null;
+</script>
+
+`EventTimeline` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+Where a [StateTimeline](/components/StateTimeline) shows how long each state lasted, this marks instants: a dot per event on a line. It shares that component's table, axis, and legend.
+
+## Basic
+
+Pass one row per event and say how to read when it happened with `at`, as a `Date`, a timestamp, or a date string. Set `kind` to color and name events by type, and `label` for the text shown when one is hovered.
+
+<EventTimeline data={release} at="at" kind="type" label="name" title="Release events, today" />
+
+## Kind colors
+
+Kinds take the categorical colors in first-seen order. Set `kinds` to give each a color: a semantic name such as `"error"`, a categorical index, a viz token name, or any CSS color.
+
+<EventTimeline
+  data={release}
+  at="at"
+  kind="type"
+  label="name"
+  kinds={{ deploy: "info", alert: "warning", rollback: "error" }}
+  title="Release events, today"
+/>
+
+## Rows
+
+Set `row` to give each environment, service, or host its own lane. Rows keep first-seen order and share one time scale.
+
+<EventTimeline
+  data={release}
+  at="at"
+  kind="type"
+  label="name"
+  row="env"
+  kinds={{ deploy: "info", alert: "warning", rollback: "error" }}
+  title="Release events by environment"
+/>
+
+## Domain
+
+Set `domain` to show a fixed range. An event outside it is dropped, and one on the boundary is kept.
+
+<EventTimeline
+  data={release}
+  at="at"
+  kind="type"
+  label="name"
+  kinds={{ deploy: "info", alert: "warning", rollback: "error" }}
+  domain={[at(0), at(24)]}
+  title="Release events, the whole day"
+/>
+
+## Selectable
+
+Set `selectable` to turn marks into toggle buttons. Bind `selected`, an event's id, or listen for `select`, whose detail carries the event and its `datum`.
+
+<EventTimeline
+  data={release}
+  at="at"
+  kind="type"
+  label="name"
+  row="env"
+  kinds={{ deploy: "info", alert: "warning", rollback: "error" }}
+  title="Pick an event"
+  selectable
+  bind:selected
+/>
+
+## Accessibility
+
+The timeline is a table: the `title` is its caption and each row's name is a row header, hidden when there is only one lane. Every mark holds its kind, its label, and its time as text, such as "alert, Error rate above 1%, Sep 21, 2026, 3:20 AM", so nothing rests on color. Marks are ringed in the page background, so two that coincide still read as more than one. Set `locale` for the times and `utc` to place the axis ticks on UTC boundaries. When `selectable`, the marks share one tab stop and the arrow keys move between them.

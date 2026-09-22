@@ -50,6 +50,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   FluidForm: "0.15.0",
   FullPageError: "0.112.0",
   Form: "0.2.0",
+  EventTimeline: "0.113.0",
   FunnelBars: "0.113.0",
   FunnelChart: "0.113.0",
   Grid: "0.8.4",
