@@ -39,6 +39,18 @@
   export let toolbar = false;
 
   /**
+   * Set to `true` to show a zoom bar under the plot, which narrows the
+   * categories shown.
+   */
+  export let zoomBar = false;
+
+  /**
+   * Specify the visible range, as category indexes. `null` shows everything.
+   * @type {[number, number] | null}
+   */
+  export let zoom = null;
+
+  /**
    * Specify whether to show the chart or its data as a table.
    * @type {"chart" | "table"}
    */
@@ -83,6 +95,7 @@
   import ChartLegend from "../Chart/ChartLegend.svelte";
   import ChartToolbar from "../Chart/ChartToolbar.svelte";
   import ChartTooltip from "../Chart/ChartTooltip.svelte";
+  import ChartZoomBar from "../Chart/ChartZoomBar.svelte";
 
   const PERCENT = { style: "percent", maximumFractionDigits: 0 };
 
@@ -93,6 +106,7 @@
 </script>
 
 <Chart
+  bind:zoom
   bind:hidden
   bind:selected
   bind:view
@@ -127,6 +141,11 @@
   <svelte:fragment slot="tooltip">
     {#if tooltip}
       <slot name="tooltip"><ChartTooltip /></slot>
+    {/if}
+  </svelte:fragment>
+  <svelte:fragment slot="zoom">
+    {#if zoomBar}
+      <ChartZoomBar />
     {/if}
   </svelte:fragment>
   <svelte:fragment slot="legend">
