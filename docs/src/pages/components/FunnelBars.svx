@@ -16,6 +16,14 @@ description: Funnel bars show how a count narrows across ordered stages, such as
 
   const baseline = { visit: 1, signup: 0.55, activate: 0.52, paid: 0.33 };
 
+  const DAY = 86_400_000;
+  const pipeline = [
+    { id: "lead", label: "Lead", value: 1200 },
+    { id: "demo", label: "Demo", value: 640, medianDurationMs: 4 * DAY },
+    { id: "proposal", label: "Proposal", value: 310, medianDurationMs: 7 * DAY },
+    { id: "won", label: "Won", value: 96, medianDurationMs: 12 * DAY },
+  ];
+
   let selectedId = "activate";
   let live = stages;
 
@@ -67,6 +75,12 @@ Set `showDrop` to draw the lost portion as a hatched bar with its percentage.
 Set `highlight` to `"largest-drop"` to flag the stage that lost the most, or to a stage `id` to flag a specific one. The flag uses an icon as well as color.
 
 <FunnelBars {stages} label="Signup funnel" rate="step" showDrop highlight="largest-drop" />
+
+## Velocity
+
+Give each stage a `medianDurationMs`, the median time it took to reach from the previous one, and set `showDuration` to write it as a column. The first stage has no previous one, so its cell is blank.
+
+<FunnelBars stages={pipeline} label="Sales pipeline velocity" rate="step" showDuration />
 
 ## Shape
 

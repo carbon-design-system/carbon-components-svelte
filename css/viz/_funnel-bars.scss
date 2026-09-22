@@ -129,12 +129,14 @@
 
   .#{$prefix}--viz-funnel-bars .#{$prefix}--viz-funnel-bars__value,
   .#{$prefix}--viz-funnel-bars .#{$prefix}--viz-funnel-bars__rate,
+  .#{$prefix}--viz-funnel-bars .#{$prefix}--viz-funnel-bars__duration,
   .#{$prefix}--viz-funnel-bars .#{$prefix}--viz-funnel-bars__drop-label {
     padding-inline-start: $carbon--spacing-05;
     text-align: end;
   }
 
   .#{$prefix}--viz-funnel-bars__rate,
+  .#{$prefix}--viz-funnel-bars__duration,
   .#{$prefix}--viz-funnel-bars__drop-label {
     color: $text-secondary;
   }

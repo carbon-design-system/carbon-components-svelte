@@ -47,6 +47,12 @@
   export let showDrop = false;
 
   /**
+   * Set to `true` to show the median time each stage took to reach from the
+   * previous one, read from each stage's `medianDurationMs`.
+   */
+  export let showDuration = false;
+
+  /**
    * Specify the bar alignment. `"center"` gives the classic funnel silhouette.
    * @type {"start" | "center"}
    */
@@ -123,7 +129,11 @@
   import { createEventDispatcher, tick } from "svelte";
   import WarningAltFilled from "../../icons/WarningAltFilled.svelte";
   import { rovingFocus } from "../../utils/roving-focus.js";
-  import { formatPercent, resolveFormat } from "../utils/format-compact.js";
+  import {
+    formatDuration,
+    formatPercent,
+    resolveFormat,
+  } from "../utils/format-compact.js";
   import { getFunnelStats } from "../utils/funnel.js";
   import { VIZ_SEMANTIC_COLORS, vizColor } from "../utils/tokens.js";
 
@@ -148,6 +158,7 @@
     value: "Value",
     step: "Conversion from previous stage",
     overall: "Conversion from first stage",
+    duration: "Time from previous stage",
     ...headerLabels,
   };
   $: caption = [
@@ -257,6 +268,9 @@
       {#if rate === "overall" || rate === "both"}
         <th scope="col">{headers.overall}</th>
       {/if}
+      {#if showDuration}
+        <th scope="col">{headers.duration}</th>
+      {/if}
     </tr>
   </thead>
   <tbody>
@@ -337,6 +351,13 @@
             <slot name="rate" {stage} {stats} {index} kind="overall">
               {percent(stats.overallRate)}
             </slot>
+          </td>
+        {/if}
+        {#if showDuration}
+          <td class:bx--viz-funnel-bars__duration={true}>
+            {#if i > 0 && typeof stage.medianDurationMs === "number" && Number.isFinite(stage.medianDurationMs)}
+              {formatDuration(stage.medianDurationMs, { locale })}
+            {/if}
           </td>
         {/if}
         {#if showDrop || highlight !== "none"}

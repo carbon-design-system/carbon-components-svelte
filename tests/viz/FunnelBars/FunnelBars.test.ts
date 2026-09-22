@@ -78,6 +78,30 @@ describe("FunnelBars", () => {
     expect(activated).toHaveTextContent("50% drop");
   });
 
+  it("shows the median time each stage took, blank for the first", () => {
+    const DAY = 86_400_000;
+    render(FunnelBars, {
+      showDuration: true,
+      rate: "none",
+      stages: [
+        { id: "lead", label: "Lead", value: 100 },
+        { id: "demo", label: "Demo", value: 60, medianDurationMs: 4 * DAY },
+        { id: "won", label: "Won", value: 20, medianDurationMs: 12.5 * DAY },
+      ],
+    });
+
+    const table = screen.getByRole("table", { name: /Signup funnel/ });
+    expect(
+      within(table).getByRole("columnheader", {
+        name: "Time from previous stage",
+      }),
+    ).toBeInTheDocument();
+    const cells = Array.from(
+      table.querySelectorAll(".bx--viz-funnel-bars__duration"),
+    ).map((cell) => cell.textContent?.trim());
+    expect(cells).toEqual(["", "4d", "12d 12h"]);
+  });
+
   it("highlights a stage by id", () => {
     render(FunnelBars, { highlight: "paid" });
 

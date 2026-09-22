@@ -7,6 +7,7 @@
     value: number;
     color?: string;
     href?: string;
+    medianDurationMs?: number;
   };
 
   export let stages: ReadonlyArray<Stage> = [
@@ -18,6 +19,7 @@
   export let label = "Signup funnel";
   export let rate: "none" | "step" | "overall" | "both" = "overall";
   export let showDrop = false;
+  export let showDuration = false;
   export let highlight: string = "none";
   export let scale: "linear" | "sqrt" = "linear";
   export let align: "start" | "center" = "start";
@@ -49,6 +51,7 @@
     {label}
     {rate}
     {showDrop}
+    {showDuration}
     {highlight}
     {scale}
     {align}
