@@ -33,6 +33,7 @@
     ShareOfTotal,
     Sparkline,
     StackedBar,
+    StateTimeline,
     TreeChart,
     TreemapChart,
     UptimeBar,
@@ -129,6 +130,22 @@
   </p>
 
   <p><HeatStrip {values} label="Requests by hour" /></p>
+
+  <StateTimeline
+    data={[
+      { service: "api", status: "ok", from: new Date(2026, 0, 1, 0), to: new Date(2026, 0, 1, 6) },
+      { service: "api", status: "down", from: new Date(2026, 0, 1, 6), to: new Date(2026, 0, 1, 7) },
+      { service: "api", status: "ok", from: new Date(2026, 0, 1, 7), to: new Date(2026, 0, 1, 12) },
+      { service: "worker", status: "degraded", from: new Date(2026, 0, 1, 0), to: new Date(2026, 0, 1, 12) },
+    ]}
+    row="service"
+    state="status"
+    start="from"
+    end="to"
+    states={{ ok: "success", down: "error", degraded: "warning" }}
+    title="Service health"
+    selectable
+  />
 
   <UptimeBar
     data={[
