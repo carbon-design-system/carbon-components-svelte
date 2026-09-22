@@ -7,6 +7,9 @@
   export let cols: ComponentProps<TextArea>["cols"] = undefined;
   export let rows = 4;
   export let maxCount: ComponentProps<TextArea>["maxCount"] = undefined;
+  export let counterText: ComponentProps<TextArea>["counterText"] = undefined;
+  export let limitReachedText: ComponentProps<TextArea>["limitReachedText"] =
+    undefined;
   export let light = false;
   export let disabled = false;
   export let readonly = false;
@@ -30,6 +33,8 @@
   {cols}
   {rows}
   {maxCount}
+  {counterText}
+  {limitReachedText}
   {light}
   {disabled}
   {readonly}

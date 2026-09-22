@@ -26,6 +26,17 @@
    */
   export let maxCount = undefined;
 
+  /**
+   * Override the character counter text read by screen readers.
+   * @type {(count: number, max: number) => string}
+   */
+  export let counterText = function counterText(count, max) {
+    return `${count} of ${max} characters`;
+  };
+
+  /** Specify the text announced when the character limit is reached */
+  export let limitReachedText = "Character limit reached";
+
   /** Set to `true` to enable the light variant */
   export let light = false;
 
@@ -93,6 +104,7 @@
   $: counterId = `counter-${id}`;
   $: errorId = `error-${id}`;
   $: warnId = `warn-${id}`;
+  $: count = graphemeCount(value ?? "");
   $: showInvalid = invalid && !disabled && !readonly;
   $: showWarn = warn && !invalid && !disabled && !readonly;
   $: isFluid = fluid || !!formContext?.isFluid;
@@ -111,6 +123,23 @@
     ]
       .filter(Boolean)
       .join(" ") || undefined;
+
+  let prevCount = graphemeCount(value ?? "");
+  let limitAnnouncement = "";
+
+  $: {
+    if (
+      typeof maxCount === "number" &&
+      maxCount > 0 &&
+      count === maxCount &&
+      prevCount !== maxCount
+    ) {
+      limitAnnouncement = limitReachedText;
+    } else if (count !== maxCount) {
+      limitAnnouncement = "";
+    }
+    prevCount = count;
+  }
 
   function handleFocus() {
     if (selectTextOnFocus && !disabled) {
@@ -145,14 +174,21 @@
       {/if}
       {#if hasMaxCount}
         <div
-          id={counterId}
           class:bx--label={true}
           class:bx--label--disabled={disabled}
           class:bx--text-area__label-counter={true}
         >
-          {graphemeCount(value ?? "")}/{maxCount}
+          <span aria-hidden="true">{count}/{maxCount}</span>
+          <span id={counterId} class:bx--visually-hidden={true}>
+            {counterText(count, maxCount)}
+          </span>
         </div>
       {/if}
+    </div>
+  {/if}
+  {#if typeof maxCount === "number"}
+    <div class:bx--visually-hidden={true} aria-live="polite" aria-atomic="true">
+      {limitAnnouncement}
     </div>
   {/if}
   <div
