@@ -33,8 +33,10 @@
     RadialProgress,
     RangeIndicator,
     RankBars,
+    RetentionChart,
     ScatterChart,
     ShareOfTotal,
+    SmallMultiples,
     Sparkline,
     StackedBar,
     StateTimeline,
@@ -500,6 +502,46 @@
     toolbar
     zoomBar
   />
+
+  <RetentionChart
+    data={["Jan", "Feb", "Mar"].flatMap((cohort, c) =>
+      [0, 7, 14, 30].map((day, i) => ({
+        cohort,
+        day,
+        retained: [1, 0.62 - c * 0.04, 0.48 - c * 0.03, 0.41 - c * 0.02][i],
+      })),
+    )}
+    x="day"
+    y="retained"
+    series="cohort"
+    baseline={0.35}
+    title="Retention by signup cohort"
+  />
+
+  <SmallMultiples
+    data={revenue}
+    facet="region"
+    x="date"
+    y="revenue"
+    title="Regions side by side"
+    let:facet
+    let:rows
+    let:yDomain
+    let:xDomain
+    let:syncId
+  >
+    <LineChart
+      data={rows}
+      x="date"
+      y="revenue"
+      title={facet}
+      {yDomain}
+      {xDomain}
+      {syncId}
+      height={160}
+      legend={false}
+    />
+  </SmallMultiples>
 
   <LineChart
     data={projected}
