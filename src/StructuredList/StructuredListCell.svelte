@@ -91,7 +91,7 @@
 {#if head && sortable}
   <div
     role={selection ? undefined : "columnheader"}
-    aria-sort={active ? sortDirection : "none"}
+    aria-sort={selection ? undefined : active ? sortDirection : "none"}
     class:bx--structured-list-th={true}
     class:bx--structured-list-th--sortable={true}
     {...$$restProps}
