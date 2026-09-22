@@ -1,0 +1,74 @@
+---
+components: ["TileGridMap"]
+description: Tile grid map shows a value per region as equal squares laid out roughly where the regions are, with no map data.
+---
+
+<script>
+  import { TileGridMap } from "carbon-components-svelte/viz";
+
+  const SIGNUPS = [
+    ["CA", 9200], ["TX", 6400], ["NY", 5800], ["FL", 4100], ["IL", 2900], ["WA", 2700],
+    ["PA", 2500], ["MA", 2300], ["GA", 2100], ["CO", 1900], ["NC", 1700], ["VA", 1600],
+    ["AZ", 1500], ["OH", 1400], ["MI", 1300], ["NJ", 1250], ["MN", 1100], ["OR", 1050],
+    ["TN", 900], ["MD", 850], ["WI", 800], ["MO", 700], ["IN", 650], ["UT", 600],
+    ["SC", 500], ["NV", 480], ["CT", 450], ["KY", 400], ["OK", 380], ["LA", 350],
+    ["AL", 320], ["IA", 300], ["KS", 280], ["AR", 250], ["NE", 220], ["MS", 200],
+    ["NM", 190], ["ID", 180], ["HI", 170], ["NH", 160], ["WV", 140], ["ME", 130],
+    ["RI", 120], ["MT", 110], ["DE", 100], ["SD", 90], ["ND", 80], ["AK", 70],
+    ["DC", 260], ["VT", 60], ["WY", 50],
+  ].map(([state, signups]) => ({ state, signups }));
+
+  const partial = SIGNUPS.filter((row) => row.signups >= 1000);
+
+  const offices = [
+    { id: "lon", label: "London", row: 0, column: 1 },
+    { id: "ams", label: "Amsterdam", row: 0, column: 2 },
+    { id: "ber", label: "Berlin", row: 0, column: 3 },
+    { id: "par", label: "Paris", row: 1, column: 1 },
+    { id: "zrh", label: "Zurich", row: 1, column: 2 },
+    { id: "waw", label: "Warsaw", row: 1, column: 3 },
+    { id: "mad", label: "Madrid", row: 2, column: 0 },
+    { id: "mil", label: "Milan", row: 2, column: 2 },
+  ];
+  const headcount = [
+    { office: "lon", people: 240 }, { office: "ams", people: 80 }, { office: "ber", people: 130 },
+    { office: "par", people: 95 }, { office: "zrh", people: 40 }, { office: "waw", people: 160 },
+    { office: "mad", people: 70 }, { office: "mil", people: 55 },
+  ];
+
+  let selected = null;
+</script>
+
+`TileGridMap` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+Every region is the same size, so a small one is as easy to read as a large one, and the map needs no geometry, no projection, and no data file. When shapes matter, use a [ChoroplethChart](/components/ChoroplethChart) with your own GeoJSON.
+
+## Basic
+
+Pass long `data` with `region` and `value` accessors. The region is matched against each tile's id: for the built-in United States layout, the two-letter postal code. Rows that share a region are summed. A region with no row, or a `null` value, is drawn neutral with an outline, so it cannot be read as a low value.
+
+<TileGridMap data={SIGNUPS} region="state" value="signups" title="Signups by state" />
+
+<TileGridMap data={partial} region="state" value="signups" title="States with a thousand signups or more" />
+
+## Ramp
+
+Set `hue` to pick the sequential ramp, `domain` to fix its ends, and `format` to say how values are written. Set `legend` to `false` to hide the ramp.
+
+<TileGridMap data={SIGNUPS} region="state" value="signups" hue="purple" domain={[0, 10000]} format={{ notation: "compact" }} title="Signups by state, purple" />
+
+## Custom layout
+
+Pass `layout` as tiles of your own, each with an `id`, a `label`, and a zero-based `row` and `column`. The grid sizes itself to them.
+
+<TileGridMap layout={offices} data={headcount} region="office" value="people" width={240} title="Headcount by office" />
+
+## Selectable
+
+Set `selectable` to make each tile a toggle button. Bind `selected` or listen for `select`, which carries the region and its rows. Activating the selected tile clears the selection.
+
+<TileGridMap data={SIGNUPS} region="state" value="signups" selectable bind:selected title="Pick a state" />
+
+## Accessibility
+
+The tiles are hidden from assistive technology, which reads the same values as a table sorted by region name, captioned with the title. Hovering a tile shows a tooltip and announces the value. When `selectable`, the tiles are toggle buttons instead, each named with the region and its value, with arrow key navigation in reading order and a single tab stop. Tile text takes the dark or light label color that stays readable on its step of the ramp in every theme.
