@@ -4,6 +4,7 @@ import { type ComponentEvents, type ComponentProps, tick } from "svelte";
 import { user } from "../utils/user";
 import SelectableTileGroupSlot from "./SelectableTileGroup.slot.test.svelte";
 import SelectableTileGroup from "./SelectableTileGroup.test.svelte";
+import SelectableTileGroupRange from "./SelectableTileGroupRange.test.svelte";
 import SelectableTileGroupReactive from "./SelectableTileGroupReactive.test.svelte";
 
 describe("SelectableTileGroup", () => {
@@ -232,6 +233,85 @@ describe("SelectableTileGroup", () => {
     await tick();
 
     expect(component.groupSelected).toEqual(["b"]);
+  });
+
+  describe("shift+click range selection", () => {
+    it("selects, then deselects, a range between the anchor and the shift-clicked tile", async () => {
+      render(SelectableTileGroup);
+      const checkboxes = screen.getAllByRole("checkbox");
+
+      await user.click(checkboxes[0]);
+
+      await user.keyboard("{Shift>}");
+      await user.click(checkboxes[2]);
+      await user.keyboard("{/Shift}");
+
+      // Every tile between the anchor and the shift-clicked tile is selected.
+      expect(checkboxes[0]).toBeChecked();
+      expect(checkboxes[1]).toBeChecked();
+      expect(checkboxes[2]).toBeChecked();
+
+      // Shift+click the middle tile: the anchor is now the last-toggled
+      // tile (index 2), so this deselects the range back to it.
+      await user.keyboard("{Shift>}");
+      await user.click(checkboxes[1]);
+      await user.keyboard("{/Shift}");
+
+      expect(checkboxes[0]).toBeChecked();
+      expect(checkboxes[1]).not.toBeChecked();
+      expect(checkboxes[2]).not.toBeChecked();
+    });
+
+    it("falls back to a single toggle when there is no prior anchor", async () => {
+      render(SelectableTileGroup);
+      const checkboxes = screen.getAllByRole("checkbox");
+
+      await user.keyboard("{Shift>}");
+      await user.click(checkboxes[2]);
+      await user.keyboard("{/Shift}");
+
+      expect(checkboxes[0]).not.toBeChecked();
+      expect(checkboxes[1]).not.toBeChecked();
+      expect(checkboxes[2]).toBeChecked();
+    });
+
+    it("skips disabled tiles within the range", async () => {
+      const { component } = render(SelectableTileGroupRange);
+      const checkboxes = screen.getAllByRole("checkbox");
+      expect(checkboxes[2]).toBeDisabled();
+
+      await user.click(checkboxes[0]);
+      await user.keyboard("{Shift>}");
+      await user.click(checkboxes[3]);
+      await user.keyboard("{/Shift}");
+
+      expect(checkboxes[0]).toBeChecked();
+      expect(checkboxes[1]).toBeChecked();
+      expect(checkboxes[2]).not.toBeChecked();
+      expect(checkboxes[3]).toBeChecked();
+      expect(component.selected).not.toContain("option3");
+    });
+
+    it("supports range selection from the keyboard with Shift+Enter and Shift+Space", async () => {
+      render(SelectableTileGroup);
+      const checkboxes = screen.getAllByRole("checkbox");
+
+      checkboxes[0].focus();
+      await user.keyboard("{Enter}");
+
+      checkboxes[1].focus();
+      await user.keyboard("{Shift>}{Enter}{/Shift}");
+
+      expect(checkboxes[0]).toBeChecked();
+      expect(checkboxes[1]).toBeChecked();
+
+      checkboxes[2].focus();
+      await user.keyboard("{Shift>} {/Shift}");
+
+      // Anchor is now checkboxes[1] (the last tile toggled); Space extends
+      // the range to checkboxes[2].
+      expect(checkboxes[2]).toBeChecked();
+    });
   });
 
   describe("Generics", () => {
