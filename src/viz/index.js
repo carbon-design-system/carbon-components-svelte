@@ -65,6 +65,7 @@ export { default as RangeIndicator } from "./RangeIndicator/RangeIndicator.svelt
 export { default as RankBars } from "./RankBars/RankBars.svelte";
 export { default as RetentionChart } from "./RetentionChart/RetentionChart.svelte";
 export { default as ScatterChart } from "./ScatterChart/ScatterChart.svelte";
+export { default as SequenceDiagram } from "./SequenceDiagram/SequenceDiagram.svelte";
 export { default as ShareOfTotal } from "./ShareOfTotal/ShareOfTotal.svelte";
 export { default as SmallMultiples } from "./SmallMultiples/SmallMultiples.svelte";
 export { default as SpanWaterfall } from "./SpanWaterfall/SpanWaterfall.svelte";
