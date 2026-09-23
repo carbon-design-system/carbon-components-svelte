@@ -60,6 +60,47 @@ describe("ComposedModal", () => {
     expect(modal).toHaveAttribute("aria-label", "");
   });
 
+  it("keeps a rest aria-label off the presentation root", () => {
+    render(ComposedModalTest, {
+      props: {
+        open: true,
+        "aria-label": "Delete file",
+        "data-testid": "modal-root",
+      },
+    });
+
+    expect(screen.getByRole("dialog")).toHaveAttribute(
+      "aria-label",
+      "Delete file",
+    );
+    expect(screen.getByTestId("modal-root")).not.toHaveAttribute("aria-label");
+  });
+
+  it("keeps an empty rest aria-label off the presentation root", () => {
+    render(ComposedModalTest, {
+      props: { open: true, "aria-label": "", "data-testid": "modal-root" },
+    });
+
+    expect(screen.getByRole("dialog")).toHaveAttribute("aria-label", "");
+    expect(screen.getByTestId("modal-root")).not.toHaveAttribute("aria-label");
+  });
+
+  it("names the dialog from the title without labelling the root", () => {
+    render(ComposedModalTest, {
+      props: {
+        open: true,
+        headerTitle: "Title only",
+        "data-testid": "modal-root",
+      },
+    });
+
+    expect(screen.getByRole("dialog")).toHaveAttribute(
+      "aria-label",
+      "Title only",
+    );
+    expect(screen.getByTestId("modal-root")).not.toHaveAttribute("aria-label");
+  });
+
   it("should not have visible class when closed", () => {
     const { container } = render(ComposedModalTest, {
       props: {
