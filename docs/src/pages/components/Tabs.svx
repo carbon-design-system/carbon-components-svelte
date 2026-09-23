@@ -93,11 +93,15 @@ For dynamic tab sets, bind `selectedId` and give each `Tab` a stable `id`. Selec
 ### Query string
 
 Keep the selected tab in the URL so it survives a reload and can be shared.
-Bind `selectedId`, read the `tab` query parameter on mount, and write it back
-with `history.replaceState` so switching tabs does not add history entries. Use
-the query string rather than the hash: a hash that matches a tab `id` scrolls
-the page to that tab. In an app with a router, use the router's navigation API
-instead of `history`.
+`queryParam` returns a store mirrored to a query parameter: it reads the initial
+value from the URL and writes changes with `history.replaceState`, so switching
+tabs does not add history entries. Bind `selectedId` to the store. Use `parse`
+to reject unknown ids so they fall back to `defaultValue`; selecting
+`defaultValue` removes the parameter.
+
+Use the query string rather than the hash: a hash that matches a tab `id`
+scrolls the page to that tab. In an app with a router, pass the router's
+navigation API as `replace`.
 
 <FileSource src="/framed/Tabs/TabsQueryString" />
 
