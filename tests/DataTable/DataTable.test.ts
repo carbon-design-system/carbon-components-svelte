@@ -1252,6 +1252,62 @@ describe("DataTable", () => {
     expect(expandAllButton).toHaveAttribute("aria-expanded", "false");
   });
 
+  it("reads expand all when no row is expandable", () => {
+    render(DataTable, {
+      props: {
+        expandable: true,
+        batchExpansion: true,
+        headers,
+        rows,
+        nonExpandableRowIds: ["a", "b", "c"],
+      },
+    });
+
+    const button = screen.getByLabelText("Expand all rows");
+    expect(button).toHaveAttribute("aria-expanded", "false");
+  });
+
+  it("reads expand all when there are no rows", () => {
+    render(DataTable, {
+      props: { expandable: true, batchExpansion: true, headers, rows: [] },
+    });
+
+    const button = screen.getByLabelText("Expand all rows");
+    expect(button).toHaveAttribute("aria-expanded", "false");
+  });
+
+  it("ignores expanded ids that are not rows in the expand all state", async () => {
+    const { container } = render(DataTable, {
+      props: {
+        expandable: true,
+        batchExpansion: true,
+        headers,
+        rows,
+        expandedRowIds: ["a", "b", "zzz"],
+      },
+    });
+
+    await user.click(screen.getByLabelText("Expand all rows"));
+    expect(
+      container.querySelectorAll(".bx--child-row-inner-container"),
+    ).toHaveLength(3);
+    expect(screen.getByLabelText("Collapse all rows")).toBeInTheDocument();
+  });
+
+  it("reads collapse all when every row is expanded", () => {
+    render(DataTable, {
+      props: {
+        expandable: true,
+        batchExpansion: true,
+        headers,
+        rows,
+        expandedRowIds: ["a", "b", "c"],
+      },
+    });
+
+    const button = screen.getByLabelText("Collapse all rows");
+    expect(button).toHaveAttribute("aria-expanded", "true");
+  });
   it("sets aria-expanded on per-row expand buttons when virtualized", async () => {
     const largeRows = Array.from({ length: 150 }, (_, i) => ({
       id: String(i),
