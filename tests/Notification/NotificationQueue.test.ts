@@ -499,6 +499,137 @@ describe("NotificationQueue", () => {
     });
   });
 
+  describe("history", () => {
+    const getHistory = (component: Record<string, unknown>) =>
+      component.history as ComponentProps<NotificationQueueComponent>["history"];
+
+    it("should keep no history by default", async () => {
+      vi.useRealTimers();
+      const { component } = render(NotificationQueueTest);
+
+      getQueue(component.queue).add({ id: "a", title: "First" });
+      await tick();
+      await user.click(screen.getByLabelText("Close notification"));
+      await tick();
+
+      expect(getHistory(component)).toEqual([]);
+    });
+
+    it("should keep the newest dismissed notifications up to maxHistory", async () => {
+      vi.setSystemTime(1000);
+      const { component } = render(NotificationQueueTest, {
+        props: { maxHistory: 2 },
+      });
+      const queue = getQueue(component.queue);
+
+      for (const id of ["a", "b", "c"]) queue.add({ id, title: id });
+      for (const id of ["a", "b", "c"]) queue.remove(id);
+      await tick();
+
+      const history = getHistory(component);
+      expect(history?.map((n) => n.id)).toEqual(["c", "b"]);
+      expect(history?.[0]).toEqual({ id: "c", title: "c", dismissedAt: 1000 });
+    });
+
+    it("should record a toast closed by its close button or timeout", async () => {
+      const { component } = render(NotificationQueueTest, {
+        props: { maxHistory: 5 },
+      });
+      const queue = getQueue(component.queue);
+
+      queue.add({ id: "timed", title: "Timed", timeout: 1000 });
+      await tick();
+      vi.advanceTimersByTime(1000);
+      await tick();
+
+      expect(getHistory(component)?.map((n) => n.id)).toEqual(["timed"]);
+    });
+
+    it("should not record a toast whose close was cancelled", async () => {
+      vi.useRealTimers();
+      const { component } = render(NotificationQueueTest, {
+        props: {
+          maxHistory: 5,
+          onclose: (event: CustomEvent) => event.preventDefault(),
+        },
+      });
+
+      getQueue(component.queue).add({ id: "a", title: "Sticky" });
+      await tick();
+      await user.click(screen.getByLabelText("Close notification"));
+      await tick();
+
+      expect(getHistory(component)).toEqual([]);
+    });
+
+    it("should record notifications dropped by maxNotifications", async () => {
+      const { component } = render(NotificationQueueTest, {
+        props: { maxHistory: 5, maxNotifications: 1 },
+      });
+      const queue = getQueue(component.queue);
+
+      queue.add({ id: "a", title: "First" });
+      queue.add({ id: "b", title: "Second" });
+      await tick();
+
+      expect(getHistory(component)?.map((n) => n.id)).toEqual(["a"]);
+    });
+
+    it("should move cleared notifications into history, newest first", async () => {
+      const { component } = render(NotificationQueueTest, {
+        props: { maxHistory: 5, position: "bottom-right" },
+      });
+      const queue = getQueue(component.queue);
+
+      queue.add({ id: "a", title: "First" });
+      queue.add({ id: "b", title: "Second" });
+      queue.clear();
+      await tick();
+
+      expect(getHistory(component)?.map((n) => n.id)).toEqual(["b", "a"]);
+      expect(document.querySelectorAll(".bx--toast-notification")).toHaveLength(
+        0,
+      );
+    });
+
+    it("should not store internal fields in history", async () => {
+      const { component } = render(NotificationQueueTest, {
+        props: { maxHistory: 5, collapseDuplicates: true },
+      });
+      const queue = getQueue(component.queue);
+
+      queue.add({ id: "a", title: "Saved" });
+      queue.add({ title: "Saved" });
+      queue.update("a", { restartTimeout: true });
+      queue.remove("a");
+      await tick();
+
+      const [entry] = getHistory(component) ?? [];
+      expect(entry).not.toHaveProperty("count");
+      expect(entry).not.toHaveProperty("timeoutKey");
+    });
+
+    it("should empty history with clearHistory and trim it when maxHistory shrinks", async () => {
+      const { component, rerender } = render(NotificationQueueTest, {
+        props: { maxHistory: 3 },
+      });
+      const queue = getQueue(component.queue);
+
+      for (const id of ["a", "b", "c"]) queue.add({ id, title: id });
+      queue.clear();
+      await tick();
+      expect(getHistory(component)).toHaveLength(3);
+
+      await rerender({ maxHistory: 1 });
+      expect(getHistory(component)).toHaveLength(1);
+
+      queue.clearHistory();
+      await tick();
+      expect(getHistory(component)).toEqual([]);
+      expect(screen.queryByText("a")).not.toBeInTheDocument();
+    });
+  });
+
   it("should limit notifications to maxNotifications (top-right)", async () => {
     const { component } = render(NotificationQueueTest, {
       props: { maxNotifications: 2 },

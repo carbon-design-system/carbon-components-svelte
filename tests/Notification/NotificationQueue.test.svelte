@@ -21,6 +21,9 @@
 
   export let collapseDuplicates: ComponentProps<NotificationQueue>["collapseDuplicates"] =
     undefined;
+  export let maxHistory: ComponentProps<NotificationQueue>["maxHistory"] =
+    undefined;
+  export let history: ComponentProps<NotificationQueue>["history"] = [];
   export let onclose: ((event: CustomEvent) => void) | undefined = undefined;
   export let ondismiss: ((event: CustomEvent) => void) | undefined = undefined;
 
@@ -36,6 +39,8 @@
   {zIndex}
   {maxNotifications}
   {collapseDuplicates}
+  {maxHistory}
+  bind:history
   bind:this={queue}
   on:close={(e) => onclose?.(e)}
   on:dismiss={(e) => ondismiss?.(e)}

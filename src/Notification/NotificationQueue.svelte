@@ -64,6 +64,22 @@
   export let maxNotifications = 3;
 
   /**
+   * Specify how many dismissed notifications to keep in `history`.
+   * 0 (default) keeps none.
+   */
+  export let maxHistory = 0;
+
+  /**
+   * Dismissed notifications, newest first, each with the time it was
+   * dismissed (`dismissedAt`, in ms). Holds at most `maxHistory` entries.
+   * A notification counts as dismissed when it is closed, removed, cleared,
+   * or dropped by `maxNotifications`.
+   * @type {ReadonlyArray<NotificationData & { id: string; dismissedAt: number }>}
+   * @bindable readonly
+   */
+  export let history = [];
+
+  /**
    * Set to `true` to merge a new notification with the same `kind`, `title`,
    * and `subtitle` as a visible one into that row, showing a count on its
    * title and restarting its timeout. Id deduplication still runs first.
@@ -91,6 +107,40 @@
    */
   function toNotificationData({ timeoutKey, count, ...notification }) {
     return notification;
+  }
+
+  $: if (history.length > maxHistory) {
+    history = history.slice(0, Math.max(0, maxHistory));
+  }
+
+  /**
+   * Record rows leaving the queue in `history`, then dispatch `dismiss`
+   * for each. Every removal path goes through here.
+   * @param {Array<NotificationData & { id: string; timeoutKey?: number; count?: number }>} rows in display order
+   * @param {NotificationDismissTrigger} trigger
+   */
+  function dismissRows(rows, trigger) {
+    if (rows.length === 0) return;
+    const removed = rows.map(toNotificationData);
+
+    if (maxHistory > 0) {
+      const dismissedAt = Date.now();
+      // Display order is newest first only for top positions.
+      const newestFirst = isTopPosition(position)
+        ? removed
+        : [...removed].reverse();
+      history = [
+        ...newestFirst.map((notification) => ({
+          ...notification,
+          dismissedAt,
+        })),
+        ...history,
+      ].slice(0, maxHistory);
+    }
+
+    for (const notification of removed) {
+      dispatch("dismiss", { notification, trigger });
+    }
   }
 
   function isTopPosition(value) {
@@ -171,16 +221,11 @@
       ? notifications.slice(0, maxNotifications)
       : notifications.slice(excess);
 
-    for (const notification of dropped) {
-      dispatch("dismiss", {
-        notification: toNotificationData(notification),
-        trigger: "overflow",
-      });
-    }
+    dismissRows(dropped, "overflow");
   }
 
   /**
-   * Remove a notification by id and dispatch `dismiss`.
+   * Remove a notification by id, recording it as dismissed.
    * @param {string} id
    * @param {NotificationDismissTrigger} trigger
    * @returns {boolean}
@@ -189,12 +234,9 @@
     const index = notifications.findIndex((n) => n.id === id);
     if (index === -1) return false;
 
-    const [notification] = notifications.splice(index, 1);
+    const removed = notifications.splice(index, 1);
     notifications = notifications;
-    dispatch("dismiss", {
-      notification: toNotificationData(notification),
-      trigger,
-    });
+    dismissRows(removed, trigger);
     return true;
   }
 
@@ -247,17 +289,19 @@
   }
 
   /**
-   * Clear all notifications.
+   * Clear all notifications. Cleared notifications are added to `history`.
    */
   export function clear() {
     const cleared = notifications;
     notifications = [];
-    for (const notification of cleared) {
-      dispatch("dismiss", {
-        notification: toNotificationData(notification),
-        trigger: "programmatic",
-      });
-    }
+    dismissRows(cleared, "programmatic");
+  }
+
+  /**
+   * Empty `history` without changing the visible notifications.
+   */
+  export function clearHistory() {
+    history = [];
   }
 </script>
 
