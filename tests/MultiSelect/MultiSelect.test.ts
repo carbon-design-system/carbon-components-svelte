@@ -421,6 +421,66 @@ describe("MultiSelect", () => {
       expect(consoleLog).not.toHaveBeenCalled();
     });
 
+    it("does not fire select event for a programmatic selectedIds change", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      const { rerender } = render(MultiSelect, { props: { items } });
+
+      await rerender({ selectedIds: ["1", "2"] });
+      await tick();
+      expect(consoleLog).not.toHaveBeenCalledWith("select", expect.anything());
+
+      await openMenu();
+      const options = screen.getAllByRole("option");
+      expect(options[0]).toHaveTextContent("Email");
+      expect(options[0]).toHaveAttribute("aria-selected", "true");
+      expect(options[1]).toHaveTextContent("Fax");
+      expect(options[1]).toHaveAttribute("aria-selected", "true");
+    });
+
+    it("does not fire select for a programmatic change with selectionFeedback: top, but does for a toggle", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      const { rerender } = render(MultiSelect, {
+        props: { items, selectionFeedback: "top" },
+      });
+
+      await rerender({ selectedIds: ["2"] });
+      await tick();
+      expect(consoleLog).not.toHaveBeenCalledWith("select", expect.anything());
+
+      await openMenu();
+      await toggleOption("Slack");
+      const selectCalls = consoleLog.mock.calls.filter(
+        ([name]) => name === "select",
+      );
+      expect(selectCalls).toHaveLength(1);
+      expect(selectCalls[0][1].selectedIds).toEqual(
+        expect.arrayContaining(["0", "2"]),
+      );
+    });
+
+    it("still fires select when the selection is cleared", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(MultiSelect, { props: { items, selectedIds: ["0", "1"] } });
+
+      await user.click(screen.getByRole("button", { name: /clear/i }));
+      expect(consoleLog).toHaveBeenCalledWith(
+        "select",
+        expect.objectContaining({ selectedIds: [] }),
+      );
+    });
+
+    it("still fires select when the selection is cleared with Delete", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(MultiSelect, { props: { items, selectedIds: ["0", "1"] } });
+
+      screen.getByRole("combobox").focus();
+      await user.keyboard("{Delete}");
+      expect(consoleLog).toHaveBeenCalledWith(
+        "select",
+        expect.objectContaining({ selectedIds: [] }),
+      );
+    });
+
     it("handles item selection", async () => {
       const consoleLog = vi.spyOn(console, "log");
       render(MultiSelect, {
