@@ -109,4 +109,34 @@ describe("MultiSelect keyboard", () => {
       }
     });
   });
+
+  describe("first-character typeahead", () => {
+    it("non-filterable: typing a character moves the highlight without selecting", async () => {
+      render(MultiSelect, { props: { items } });
+
+      await openMenu();
+      await user.keyboard("c");
+
+      const combobox = screen.getByRole("combobox");
+      const charlieOption = screen.getByRole("option", { name: "Charlie" });
+      expect(combobox).toHaveAttribute(
+        "aria-activedescendant",
+        charlieOption.id,
+      );
+      expect(charlieOption).toHaveAttribute("aria-selected", "false");
+    });
+
+    it("non-filterable: Space still toggles the highlighted option, not consumed by typeahead", async () => {
+      render(MultiSelect, { props: { items } });
+
+      await openMenu();
+      await user.keyboard("c");
+      await user.keyboard(" ");
+
+      expect(screen.getByRole("option", { name: "Charlie" })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+    });
+  });
 });
