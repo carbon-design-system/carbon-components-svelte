@@ -170,15 +170,27 @@ Close the popover when clicking outside with `closeOnOutsideClick`.
     </Popover>
 </div>
 
+### Close on Escape
+
+Close the popover when pressing <DocKbd label="Escape" /> with `closeOnEscape`. The listener is attached to the window, so <DocKbd label="Escape" /> closes the popover even when focus is on the trigger rather than inside the popover content.
+
+<div>
+    Parent
+    <Popover open closeOnEscape on:close={() => {console.log('on:close')}}>
+        Content
+    </Popover>
+</div>
+
 ### Events
 
-`on:click:outside` fires whenever a click lands outside the popover, with `event.detail.target` set to the clicked element—regardless of whether `closeOnOutsideClick` is set. `on:close` fires only when the popover closes itself in response to `closeOnOutsideClick`, with `event.detail.trigger` set to `"outside-click"`.
+`on:click:outside` fires whenever a click lands outside the popover, with `event.detail.target` set to the clicked element, regardless of whether `closeOnOutsideClick` is set. `on:close` fires when the popover closes itself in response to `closeOnOutsideClick` or `closeOnEscape`, with `event.detail.trigger` set to `"outside-click"` or `"escape-key"`.
 
 <div>
     Parent
     <Popover
       open
       closeOnOutsideClick
+      closeOnEscape
       on:click:outside={(e) => console.log('on:click:outside', e.detail)}
       on:close={(e) => console.log('on:close', e.detail)}
     >
