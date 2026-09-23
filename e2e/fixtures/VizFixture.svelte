@@ -17,12 +17,14 @@
     DonutChart,
     DumbbellChart,
     EventTimeline,
+    FlameGraph,
     FunnelBars,
     FunnelChart,
     FunnelCompare,
     Heatmap,
     HeatStrip,
     Histogram,
+    IcicleChart,
     KpiCard,
     LineChart,
     LiveSparkline,
@@ -67,6 +69,17 @@
       revenue: 30000 + r * 9000 + Math.round(Math.sin(i / 2 + r) * 9000),
     })),
   );
+
+  const bundle = [
+    { id: "bundle", parent: null, name: "bundle" },
+    { id: "src", parent: "bundle", name: "src" },
+    { id: "viz", parent: "src", name: "viz", bytes: 410 },
+    { id: "core", parent: "src", name: "core", bytes: 230 },
+    { id: "vendor", parent: "bundle", name: "vendor", bytes: 380 },
+    { id: "assets", parent: "bundle", name: "assets" },
+    { id: "css", parent: "assets", name: "css", bytes: 60 },
+    { id: "img", parent: "assets", name: "img", bytes: 120 },
+  ];
 
   const projectedFrom = new Date(2026, 8, 1);
   const projected = revenue
@@ -166,6 +179,25 @@
     kinds={{ deploy: "info", alert: "warning", rollback: "error" }}
     title="Release events"
     selectable
+  />
+
+  <IcicleChart
+    data={bundle}
+    id="id"
+    parent="parent"
+    value="bytes"
+    label="name"
+    title="Bundle composition, as an icicle"
+    selectable
+  />
+
+  <FlameGraph
+    data={bundle}
+    id="id"
+    parent="parent"
+    value="bytes"
+    label="name"
+    title="Bundle composition, as a flame graph"
   />
 
   <SpanWaterfall
