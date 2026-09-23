@@ -726,6 +726,50 @@ describe("TreeView Props", () => {
     expect(blockchainItem).toHaveAttribute("aria-selected", "false");
   });
 
+  it("ctrl+click deselects a selected row that is not active", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    const { component } = render(TreeViewMultiselect, {
+      multiselect: true,
+      activeId: 0,
+      selectedIds: [0, 7, 9],
+    });
+
+    await user.keyboard("{Control>}");
+    await user.click(treeItemById(7));
+    await user.keyboard("{/Control}");
+
+    expect(treeItemById(7)).toHaveAttribute("aria-selected", "false");
+    expect(treeItemById(0)).toHaveAttribute("aria-selected", "true");
+    expect(treeItemById(9)).toHaveAttribute("aria-selected", "true");
+    expect(
+      [...(component.selectedIds ?? [])].sort((a, b) => Number(a) - Number(b)),
+    ).toEqual([0, 9]);
+    expect(consoleLog).toHaveBeenLastCalledWith(
+      "select",
+      expect.objectContaining({ id: 7, selected: false }),
+    );
+
+    await user.keyboard("{Control>}");
+    await user.click(treeItemById(7));
+    await user.keyboard("{/Control}");
+
+    expect(treeItemById(7)).toHaveAttribute("aria-selected", "true");
+  });
+
+  it("ctrl+space deselects a selected row that is not active", async () => {
+    render(TreeViewMultiselect, {
+      multiselect: true,
+      activeId: 0,
+      selectedIds: [0, 7, 9],
+    });
+
+    treeItemById(9).focus();
+    await user.keyboard("{Control>} {/Control}");
+
+    expect(treeItemById(9)).toHaveAttribute("aria-selected", "false");
+    expect(treeItemById(0)).toHaveAttribute("aria-selected", "true");
+  });
+
   it("select payload reports the post-click selected state when toggling in multiselect", async () => {
     const consoleLog = vi.spyOn(console, "log");
 

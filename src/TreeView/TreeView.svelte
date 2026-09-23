@@ -883,9 +883,19 @@
     prevCheckedIds = next;
   }
 
+  /**
+   * The `activeId` a user gesture (`clickNode`) last set. Rows auto-select a
+   * node when it becomes active, for a programmatic `activeId`. A gesture has
+   * already decided the selection (a Ctrl+click may have just removed the
+   * row), so `selectNode` skips it.
+   * @type {Node["id"] | undefined}
+   */
+  let gestureActiveId = undefined;
+
   /** @type {(node: Node, event?: Event) => void} */
   function clickNode(node, event) {
     activeId = node.id;
+    gestureActiveId = node.id;
 
     // Link nodes have no checkbox; they fire `select` like highlight mode.
     if (selectionMode === "checkbox") {
@@ -991,6 +1001,7 @@
   function selectNode(node) {
     // Focus movement must not check the node in checkbox mode.
     if (selectionMode === "checkbox") return;
+    if (node.id === gestureActiveId) return;
 
     if (isMultiselect) {
       const mode = multiselectMode === "node" ? "node" : multiselectMode;
@@ -2005,6 +2016,7 @@
     }
 
     if (activeId !== prevActiveIdPushed) {
+      if (activeId !== gestureActiveId) gestureActiveId = undefined;
       prevActiveIdPushed = activeId;
       activeNodeId.set(activeId);
     }

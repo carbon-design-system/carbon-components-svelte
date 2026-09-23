@@ -1,5 +1,6 @@
 import { render } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { user } from "../utils/user";
 import TreeViewActiveSelect from "./TreeViewActiveSelect.test.svelte";
 
 describe("TreeView auto-select on active node", () => {
@@ -27,5 +28,19 @@ describe("TreeView auto-select on active node", () => {
     component.selectedIds = [];
     await tick();
     expect(component.selectedIds).toEqual([]);
+  });
+
+  it("auto-selects a programmatic activeId after a click", async () => {
+    const { component } = render(TreeViewActiveSelect);
+    await tick();
+
+    const first = document.getElementById("1");
+    if (!first) throw new Error("expected node 1");
+    await user.click(first);
+    expect(component.selectedIds).toEqual([1]);
+
+    component.activeId = 2;
+    await tick();
+    expect(component.selectedIds).toEqual([2]);
   });
 });
