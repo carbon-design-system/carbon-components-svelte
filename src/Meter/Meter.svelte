@@ -50,6 +50,20 @@
   export let showThresholds = false;
 
   /**
+   * Override the visually hidden threshold description, used when `showThresholds` is `true`.
+   * Return an empty string to omit it.
+   * @type {(thresholds: MeterThresholds) => string}
+   */
+  export let thresholdsText = function thresholdsText({ warning, error }) {
+    if (warning !== undefined && error !== undefined) {
+      return `Warning at ${warning.toLocaleString()}, error at ${error.toLocaleString()}`;
+    }
+    if (warning !== undefined) return `Warning at ${warning.toLocaleString()}`;
+    if (error !== undefined) return `Error at ${error.toLocaleString()}`;
+    return "";
+  };
+
+  /**
    * Specify the size of the meter.
    * @type {"sm" | "md"}
    */
@@ -61,6 +75,7 @@
   import { uniqueId } from "../utils/unique-id.js";
 
   let helperId = uniqueId();
+  let thresholdsId = uniqueId();
 
   let prevStatus = undefined;
   let statusAnnouncement = "";
@@ -91,6 +106,15 @@
   $: markers = showThresholds && thresholds ? getMarkers(thresholds, max) : [];
   $: cappedValue =
     max > 0 && Number.isFinite(value) ? Math.min(Math.max(value, 0), max) : 0;
+  $: resolvedThresholdsText =
+    showThresholds && thresholds ? thresholdsText(thresholds) : "";
+  $: describedBy =
+    [
+      helperText ? helperId : undefined,
+      resolvedThresholdsText ? thresholdsId : undefined,
+    ]
+      .filter(Boolean)
+      .join(" ") || undefined;
   $: {
     if (prevStatus !== undefined && resolvedStatus !== prevStatus) {
       if (resolvedStatus === "warning") {
@@ -137,7 +161,7 @@
     aria-valuemax={max}
     aria-valuenow={cappedValue}
     aria-valuetext={valueText || undefined}
-    aria-describedby={helperText ? helperId : undefined}
+    aria-describedby={describedBy}
   >
     <div class:bx--meter__bar={true} style:transform="scaleX({ratio})"></div>
     {#each markers as marker (marker.kind)}
@@ -152,6 +176,11 @@
   </div>
   {#if helperText}
     <div id={helperId} class:bx--meter__helper-text={true}>{helperText}</div>
+  {/if}
+  {#if resolvedThresholdsText}
+    <div id={thresholdsId} class:bx--visually-hidden={true}>
+      {resolvedThresholdsText}
+    </div>
   {/if}
   <div class:bx--visually-hidden={true} aria-live="polite" aria-atomic="true">
     {statusAnnouncement}
