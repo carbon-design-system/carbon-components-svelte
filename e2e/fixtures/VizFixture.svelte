@@ -34,6 +34,7 @@
     LineChart,
     LiveSparkline,
     LollipopChart,
+    MarimekkoChart,
     MicroDonut,
     MicroFunnel,
     MicroHistogram,
@@ -275,6 +276,21 @@
     y="score"
     series="team"
     title="Engagement score by team, 2025 to 2026"
+  />
+
+  <MarimekkoChart
+    data={[
+      { segment: "Enterprise", vendor: "Acme", share: 60, size: 300 },
+      { segment: "Enterprise", vendor: "Beta", share: 40, size: 300 },
+      { segment: "Mid-market", vendor: "Acme", share: 25, size: 100 },
+      { segment: "Mid-market", vendor: "Beta", share: 50, size: 100 },
+      { segment: "Mid-market", vendor: "Ce", share: 25, size: 100 },
+    ]}
+    x="segment"
+    xValue="size"
+    y="share"
+    series="vendor"
+    title="Market map"
   />
 
   <ForestPlot
