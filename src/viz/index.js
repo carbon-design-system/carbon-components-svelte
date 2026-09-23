@@ -145,6 +145,7 @@ export {
 } from "./utils/tokens.js";
 export { treeLayout } from "./utils/tree-layout.js";
 export { squarify } from "./utils/treemap.js";
+export { upset } from "./utils/upset.js";
 export { allocateCells, layoutCells } from "./utils/waffle.js";
 export { layoutWords } from "./utils/word-cloud.js";
 export { default as VarianceIndicator } from "./VarianceIndicator/VarianceIndicator.svelte";
