@@ -158,13 +158,15 @@ SvelteKit's `enhance` (or any other action) to the underlying form element.
 </Form>
 ```
 
-Pass a submit callback as a `[action, parameter]` tuple:
+Pass a submit callback as a `[action, parameter]` tuple. The submit callback
+returns the function that runs after the response; call `update` in it to keep
+the default handling, here without resetting the form:
 
 ```svelte
 <Form
   method="POST"
   action="?/save"
-  actions={[[enhance, () => ({ reset: false })]]}
+  actions={[[enhance, () => async ({ update }) => update({ reset: false })]]}
 >
   <TextInput name="name" labelText="Name" />
   <Button type="submit">Save</Button>
