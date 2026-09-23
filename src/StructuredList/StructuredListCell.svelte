@@ -52,11 +52,12 @@
   };
 
   import { createEventDispatcher, getContext } from "svelte";
+  import { readable } from "svelte/store";
   import ArrowsVertical from "../icons/ArrowsVertical.svelte";
   import ArrowUp from "../icons/ArrowUp.svelte";
 
   const ctx = getContext("carbon:StructuredListWrapper");
-  const selection = ctx?.selection ?? false;
+  const selection = ctx?.selection ?? readable(false);
 
   const dispatch = createEventDispatcher();
 
@@ -90,8 +91,8 @@
 
 {#if head && sortable}
   <div
-    role={selection ? undefined : "columnheader"}
-    aria-sort={selection ? undefined : active ? sortDirection : "none"}
+    role={$selection ? undefined : "columnheader"}
+    aria-sort={$selection ? undefined : active ? sortDirection : "none"}
     class:bx--structured-list-th={true}
     class:bx--structured-list-th--sortable={true}
     {...$$restProps}
@@ -123,7 +124,7 @@
   </div>
 {:else}
   <div
-    role={selection ? undefined : head ? "columnheader" : "cell"}
+    role={$selection ? undefined : head ? "columnheader" : "cell"}
     class:bx--structured-list-th={head}
     class:bx--structured-list-td={!head}
     class:bx--structured-list-content--nowrap={noWrap}

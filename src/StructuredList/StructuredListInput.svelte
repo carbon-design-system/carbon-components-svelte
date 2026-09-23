@@ -40,12 +40,12 @@
   export let ref = null;
 
   import { getContext } from "svelte";
-  import { writable } from "svelte/store";
+  import { readable, writable } from "svelte/store";
   import { uniqueId } from "../utils/unique-id.js";
 
   const initialChecked = checked;
   const ctx = getContext("carbon:StructuredListWrapper");
-  const multiple = ctx?.multiple ?? false;
+  const multiple = ctx?.multiple ?? readable(false);
   // Standalone (no wrapper context) is always single-select.
   const selectedValue =
     ctx?.selectedValue ?? writable(initialChecked ? value : undefined);
@@ -56,7 +56,7 @@
     update(value);
   }
 
-  $: checked = multiple
+  $: checked = $multiple
     ? Array.isArray($selectedValue) && $selectedValue.includes(value)
     : $selectedValue === value;
   $: groupName = name || $inputName;
@@ -68,7 +68,7 @@
 >
   <input
     bind:this={ref}
-    type={multiple ? "checkbox" : "radio"}
+    type={$multiple ? "checkbox" : "radio"}
     {tabindex}
     {checked}
     {id}

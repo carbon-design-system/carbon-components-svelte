@@ -34,7 +34,7 @@
   export let icon = CheckmarkFilled;
 
   import { createEventDispatcher, onMount, setContext } from "svelte";
-  import { writable } from "svelte/store";
+  import { readonly, writable } from "svelte/store";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -49,8 +49,12 @@
   // Radios need a shared name to move on the arrow keys.
   const groupName = uniqueId("structured-list");
   const inputName = writable(selection && !multiple ? groupName : "");
+  const multipleValue = writable(multiple);
+  const selectionValue = writable(selection);
+  const iconValue = writable(icon);
 
   let prevSelectedValue = $selectedValue;
+  let prevMultiple = multiple;
   let initialRender = true;
   let fromProp = false;
 
@@ -73,9 +77,9 @@
   setContext("carbon:StructuredListWrapper", {
     selectedValue,
     update,
-    multiple,
-    selection,
-    icon,
+    multiple: readonly(multipleValue),
+    selection: readonly(selectionValue),
+    icon: readonly(iconValue),
     inputName,
   });
 
@@ -85,7 +89,30 @@
 
   $: inputName.set(selection && !multiple ? groupName : "");
   $: selected = $selectedValue;
-  $: if (selected !== $selectedValue) {
+  $: $multipleValue = multiple;
+  $: $selectionValue = selection;
+  $: $iconValue = icon;
+  $: if (multiple !== prevMultiple) {
+    prevMultiple = multiple;
+    // Coerce the value to the new mode. This is a parent write, not a
+    // user selection, so it must not dispatch `change`.
+    const next = multiple
+      ? Array.isArray(selected)
+        ? selected
+        : selected === undefined
+          ? []
+          : [selected]
+      : Array.isArray(selected)
+        ? selected[0]
+        : selected;
+    // Assign here too. On Svelte 3/4, `selected = $selectedValue` has
+    // already run this pass and would not see the store write.
+    selected = next;
+    if (next !== $selectedValue) {
+      fromProp = true;
+      selectedValue.set(next);
+    }
+  } else if (selected !== $selectedValue) {
     fromProp = true;
     selectedValue.set(
       multiple ? (Array.isArray(selected) ? selected : []) : selected,
