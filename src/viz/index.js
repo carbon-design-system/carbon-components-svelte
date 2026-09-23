@@ -1,4 +1,5 @@
 export { default as AlluvialChart } from "./AlluvialChart/AlluvialChart.svelte";
+export { default as ArcDiagram } from "./ArcDiagram/ArcDiagram.svelte";
 export { default as AreaChart } from "./AreaChart/AreaChart.svelte";
 export { default as BarChart } from "./BarChart/BarChart.svelte";
 // Data visualization subpackage: `carbon-components-svelte/viz`.

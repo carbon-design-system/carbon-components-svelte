@@ -1,0 +1,102 @@
+/// ArcDiagram: nodes on one line and a semicircle per link, drawn at a
+/// fixed logical size and scaled to the container.
+/// @access private
+/// @group viz
+@mixin viz-arc-diagram {
+  .#{$prefix}--viz-arc {
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-arc .#{$prefix}--viz-chart__title {
+    margin-block-end: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--viz-arc__svg {
+    display: block;
+    overflow: visible;
+    block-size: auto;
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--viz-arc__svg:focus {
+    outline: 2px solid $focus;
+    outline-offset: 2px;
+  }
+
+  .#{$prefix}--viz-arc__line {
+    stroke: $ui-03;
+    stroke-width: 1;
+  }
+
+  // A link takes its source's group color, else the neutral line.
+  .#{$prefix}--viz-arc__link {
+    fill: none;
+    stroke: var(--bx-viz-color, #{$ui-04});
+    stroke-opacity: 0.6;
+    transition: stroke-opacity $duration--fast-02
+      carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-arc__node {
+    cursor: pointer;
+  }
+
+  .#{$prefix}--viz-arc__dot {
+    fill: var(--bx-viz-color, #{$ui-05});
+    stroke: $ui-background;
+    stroke-width: 1.5;
+  }
+
+  .#{$prefix}--viz-arc__label {
+    fill: $text-primary;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-arc__node--active .#{$prefix}--viz-arc__label,
+  .#{$prefix}--viz-arc__node--selected .#{$prefix}--viz-arc__label {
+    font-weight: 600;
+  }
+
+  .#{$prefix}--viz-arc__node--active .#{$prefix}--viz-arc__dot,
+  .#{$prefix}--viz-arc__node--selected .#{$prefix}--viz-arc__dot {
+    stroke: $ui-05;
+    stroke-width: 2;
+  }
+
+  // Focus on a node fades every link not touching it.
+  .#{$prefix}--viz-arc--emphasis
+    .#{$prefix}--viz-arc__link:not(.#{$prefix}--viz-arc__link--active) {
+    stroke-opacity: 0.12;
+  }
+
+  .#{$prefix}--viz-arc--emphasis .#{$prefix}--viz-arc__link--active {
+    stroke-opacity: 0.9;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-arc__link {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-arc__link {
+      stroke: CanvasText;
+    }
+
+    .#{$prefix}--viz-arc__dot {
+      fill: CanvasText;
+    }
+
+    .#{$prefix}--viz-arc__node--selected .#{$prefix}--viz-arc__dot {
+      fill: Highlight;
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("viz-arc-diagram") {
+  @include viz-arc-diagram;
+}
