@@ -13,6 +13,7 @@ import TabSecondaryLabel from "./TabSecondaryLabel.test.svelte";
 import TabSlot from "./TabSlot.test.svelte";
 import Tabs from "./Tabs.test.svelte";
 import TabsAllDisabled from "./TabsAllDisabled.test.svelte";
+import TabsDismissible from "./TabsDismissible.test.svelte";
 import TabsDynamic from "./TabsDynamic.test.svelte";
 import TabsLazy from "./TabsLazy.test.svelte";
 import TabsSelectedId from "./TabsSelectedId.test.svelte";
@@ -737,6 +738,86 @@ describe("Tabs", () => {
     expect(screen.getByText("Content C")).toBeVisible();
     expect(screen.getByTestId("selected-id")).toHaveTextContent("tab-c");
     expect(screen.getByTestId("selected-index")).toHaveTextContent("2");
+  });
+});
+
+describe("Tabs dismissible", () => {
+  let consoleLog: Console["log"];
+
+  beforeEach(() => {
+    consoleLog = vi.spyOn(console, "log");
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("moves focus to the next tab after Delete on the selected tab", async () => {
+    render(TabsDismissible);
+
+    await user.click(screen.getByRole("tab", { name: "One" }));
+    await user.keyboard("{Delete}");
+    await tick();
+
+    expect(consoleLog).toHaveBeenCalledWith("dismiss", "one");
+    expect(screen.queryByRole("tab", { name: "One" })).not.toBeInTheDocument();
+    const two = screen.getByRole("tab", { name: "Two" });
+    expect(two).toHaveFocus();
+    expect(two).toHaveAttribute("aria-selected", "true");
+  });
+
+  it("moves focus to the new last tab after Delete on the last tab", async () => {
+    render(TabsDismissible);
+
+    await user.click(screen.getByRole("tab", { name: "Three" }));
+    await user.keyboard("{Delete}");
+    await tick();
+
+    expect(screen.getByRole("tab", { name: "Two" })).toHaveFocus();
+  });
+
+  it("moves focus without changing selection after a close button click", async () => {
+    render(TabsDismissible);
+    await tick();
+
+    await user.click(screen.getByRole("button", { name: "Dismiss Two" }));
+    await tick();
+
+    expect(screen.getByRole("tab", { name: "Three" })).toHaveFocus();
+    expect(screen.getByRole("tab", { name: "One" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+  });
+
+  it("leaves focus on the tab when the handler keeps it", async () => {
+    render(TabsDismissible, { props: { removeOnDismiss: false } });
+
+    const one = screen.getByRole("tab", { name: "One" });
+    await user.click(one);
+    await user.keyboard("{Delete}");
+    await tick();
+
+    expect(consoleLog).toHaveBeenCalledWith("dismiss", "one");
+    expect(one).toBeInTheDocument();
+    expect(one).toHaveFocus();
+  });
+
+  it("dismisses every tab in turn without throwing", async () => {
+    render(TabsDismissible);
+
+    await user.click(screen.getByRole("tab", { name: "One" }));
+    await user.keyboard("{Delete}");
+    await tick();
+    expect(screen.getByRole("tab", { name: "Two" })).toHaveFocus();
+
+    await user.keyboard("{Delete}");
+    await tick();
+    expect(screen.getByRole("tab", { name: "Three" })).toHaveFocus();
+
+    await user.keyboard("{Delete}");
+    await tick();
+    expect(screen.queryAllByRole("tab")).toHaveLength(0);
   });
 });
 
