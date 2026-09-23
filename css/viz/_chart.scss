@@ -436,6 +436,44 @@
     transition: opacity $duration--fast-02 carbon--motion(standard, productive);
   }
 
+  // A candle is a wick from low to high and a body from open to close.
+  // A rising candle is hollow by default, so direction never rests on
+  // color alone; a flat one is a hairline.
+  .#{$prefix}--viz-candles__candle {
+    --bx-viz-color: #{$ui-04};
+
+    transition: opacity $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-candles__candle--up {
+    --bx-viz-color: var(--bx-viz-up, var(--cds-viz-success));
+  }
+
+  .#{$prefix}--viz-candles__candle--down {
+    --bx-viz-color: var(--bx-viz-down, var(--cds-viz-error));
+  }
+
+  .#{$prefix}--viz-candles__wick {
+    shape-rendering: crispEdges;
+    stroke: var(--bx-viz-color);
+    stroke-width: 1;
+  }
+
+  .#{$prefix}--viz-candles__body {
+    fill: var(--bx-viz-color);
+    shape-rendering: crispEdges;
+    stroke: var(--bx-viz-color);
+    stroke-width: 1;
+  }
+
+  .#{$prefix}--viz-candles__candle--hollow .#{$prefix}--viz-candles__body {
+    fill: $ui-background;
+  }
+
+  .#{$prefix}--viz-candles__candle--dimmed {
+    opacity: 0.3;
+  }
+
   .#{$prefix}--viz-boxes__box--dimmed {
     opacity: 0.3;
   }

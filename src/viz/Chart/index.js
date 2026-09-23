@@ -6,6 +6,7 @@ export { default as ChartBand } from "./ChartBand.svelte";
 export { default as ChartBars } from "./ChartBars.svelte";
 export { default as ChartBins } from "./ChartBins.svelte";
 export { default as ChartBoxes } from "./ChartBoxes.svelte";
+export { default as ChartCandles } from "./ChartCandles.svelte";
 export { default as ChartDataTable } from "./ChartDataTable.svelte";
 export { default as ChartDumbbells } from "./ChartDumbbells.svelte";
 export { default as ChartGrid } from "./ChartGrid.svelte";
