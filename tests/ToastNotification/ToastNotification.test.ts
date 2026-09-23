@@ -4,6 +4,7 @@ import { user } from "../utils/user";
 import ToastNotificationTest from "./ToastNotification.test.svelte";
 import ToastNotificationCaptionSlotTest from "./ToastNotificationCaptionSlot.test.svelte";
 import ToastNotificationCustomTest from "./ToastNotificationCustom.test.svelte";
+import ToastNotificationEscapeTest from "./ToastNotificationEscape.test.svelte";
 import ToastNotificationReusableTest from "./ToastNotificationReusable.test.svelte";
 import ToastNotificationSubtitleSlotTest from "./ToastNotificationSubtitleSlot.test.svelte";
 import ToastNotificationTitleSlotTest from "./ToastNotificationTitleSlot.test.svelte";
@@ -228,7 +229,10 @@ describe("ToastNotification", () => {
     await tick();
 
     expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: false });
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({
+      timeout: false,
+      trigger: "close-button",
+    });
   });
 
   it("should auto-close after timeout", async () => {
@@ -243,7 +247,10 @@ describe("ToastNotification", () => {
     await tick();
 
     expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({
+      timeout: true,
+      trigger: "timeout",
+    });
   });
 
   it("should restart the timeout from its full duration when timeoutKey changes", async () => {
@@ -290,7 +297,10 @@ describe("ToastNotification", () => {
     vi.advanceTimersByTime(1);
     await tick();
     expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({
+      timeout: true,
+      trigger: "timeout",
+    });
   });
 
   it("should not pause timeout on hover when pauseOnHover is false", async () => {
@@ -309,7 +319,10 @@ describe("ToastNotification", () => {
     await tick();
 
     expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({
+      timeout: true,
+      trigger: "timeout",
+    });
   });
 
   it("should pause timeout while focus is inside and resume after focus leaves", async () => {
@@ -337,7 +350,10 @@ describe("ToastNotification", () => {
     vi.advanceTimersByTime(1);
     await tick();
     expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({
+      timeout: true,
+      trigger: "timeout",
+    });
   });
 
   it("should not resume timeout when focus moves between focusable elements inside", async () => {
@@ -385,7 +401,10 @@ describe("ToastNotification", () => {
     await tick();
 
     expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({
+      timeout: true,
+      trigger: "timeout",
+    });
   });
 
   it("should render with full width", () => {
@@ -496,5 +515,57 @@ describe("ToastNotification", () => {
     expect(
       document.querySelector(".bx--toast-notification"),
     ).not.toBeInTheDocument();
+  });
+  describe("Escape", () => {
+    it("should close when Escape is pressed with focus inside", async () => {
+      const onclose = vi.fn();
+      render(ToastNotificationEscapeTest, { props: { onclose } });
+
+      screen.getByRole("button", { name: "Close notification" }).focus();
+      await fireEvent.keyDown(document.activeElement as Element, {
+        key: "Escape",
+      });
+
+      expect(onclose).toHaveBeenCalledTimes(1);
+      expect(onclose.mock.calls[0][0].detail).toEqual({
+        timeout: false,
+        trigger: "escape-key",
+      });
+      expect(screen.queryByText("Escape test")).not.toBeInTheDocument();
+    });
+
+    it("should ignore Escape pressed in a nested text field", async () => {
+      const onclose = vi.fn();
+      render(ToastNotificationEscapeTest, { props: { onclose } });
+
+      const field = screen.getByRole("textbox", { name: "Nested field" });
+      field.focus();
+      await fireEvent.keyDown(field, { key: "Escape" });
+
+      expect(onclose).not.toHaveBeenCalled();
+      expect(screen.getByText("Escape test")).toBeInTheDocument();
+    });
+
+    it("should ignore Escape when the close button is hidden", async () => {
+      const onclose = vi.fn();
+      render(ToastNotificationEscapeTest, {
+        props: { onclose, hideCloseButton: true },
+      });
+
+      const notification = document.querySelector(".bx--toast-notification");
+      await fireEvent.keyDown(notification as Element, { key: "Escape" });
+
+      expect(onclose).not.toHaveBeenCalled();
+    });
+
+    it("should ignore Escape pressed outside the notification", async () => {
+      const onclose = vi.fn();
+      render(ToastNotificationEscapeTest, { props: { onclose } });
+
+      await fireEvent.keyDown(document.body, { key: "Escape" });
+
+      expect(onclose).not.toHaveBeenCalled();
+      expect(screen.getByText("Escape test")).toBeInTheDocument();
+    });
   });
 });

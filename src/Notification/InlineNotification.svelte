@@ -1,7 +1,9 @@
 <script>
   /**
    * @event close
+   * @type {object}
    * @property {boolean} timeout
+   * @property {"close-button" | "escape-key" | "timeout"} trigger
    */
 
   /**
@@ -58,17 +60,36 @@
   const { handleMouseenter, handleMouseleave, handleFocusIn, handleFocusOut } =
     createHoverFocusPause(dismiss, () => pauseOnHover);
 
-  function close(closeFromTimeout) {
+  /** @param {"close-button" | "escape-key" | "timeout"} trigger */
+  function close(trigger) {
     dismiss.clear();
 
     const shouldContinue = dispatch(
       "close",
-      { timeout: closeFromTimeout === true },
+      { timeout: trigger === "timeout", trigger },
       { cancelable: true },
     );
     if (shouldContinue) {
       open = false;
     }
+  }
+
+  /** @param {KeyboardEvent} event */
+  function handleKeydown(event) {
+    if (event.key !== "Escape" || hideCloseButton) return;
+    const target = event.target;
+    if (
+      target instanceof Element &&
+      target.closest(
+        "input, textarea, select, [contenteditable]:not([contenteditable='false'])",
+      )
+    ) {
+      return;
+    }
+    // Stop an enclosing Modal from also closing on the same Escape.
+    event.preventDefault();
+    event.stopPropagation();
+    close("escape-key");
   }
 
   $: resolvedRole =
@@ -77,7 +98,7 @@
       ? "alert"
       : "status");
 
-  $: dismiss.sync(open, timeout, () => close(true));
+  $: dismiss.sync(open, timeout, () => close("timeout"));
 
   onMount(() => () => dismiss.clear());
 </script>
@@ -103,6 +124,7 @@
     on:mouseleave={handleMouseleave}
     on:focusin={handleFocusIn}
     on:focusout={handleFocusOut}
+    on:keydown={handleKeydown}
   >
     <div class:bx--inline-notification__details={true}>
       <NotificationIcon notificationType="inline" {kind} />
@@ -125,7 +147,7 @@
       <NotificationButton
         iconDescription={closeButtonDescription}
         notificationType="inline"
-        on:click={close}
+        on:click={() => close("close-button")}
       />
     {/if}
   </div>

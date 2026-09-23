@@ -1,7 +1,9 @@
 <script>
   /**
    * @event close
+   * @type {object}
    * @property {boolean} timeout
+   * @property {"close-button" | "escape-key" | "timeout"} trigger
    */
 
   /**
@@ -74,17 +76,36 @@
   const { handleMouseenter, handleMouseleave, handleFocusIn, handleFocusOut } =
     createHoverFocusPause(dismiss, () => pauseOnHover);
 
-  function close(closeFromTimeout) {
+  /** @param {"close-button" | "escape-key" | "timeout"} trigger */
+  function close(trigger) {
     dismiss.clear();
 
     const shouldContinue = dispatch(
       "close",
-      { timeout: closeFromTimeout === true },
+      { timeout: trigger === "timeout", trigger },
       { cancelable: true },
     );
     if (shouldContinue) {
       open = false;
     }
+  }
+
+  /** @param {KeyboardEvent} event */
+  function handleKeydown(event) {
+    if (event.key !== "Escape" || hideCloseButton) return;
+    const target = event.target;
+    if (
+      target instanceof Element &&
+      target.closest(
+        "input, textarea, select, [contenteditable]:not([contenteditable='false'])",
+      )
+    ) {
+      return;
+    }
+    // Stop an enclosing Modal from also closing on the same Escape.
+    event.preventDefault();
+    event.stopPropagation();
+    close("escape-key");
   }
 
   $: resolvedRole =
@@ -97,7 +118,7 @@
   // restarts the timer from the full `timeout`.
   $: {
     timeoutKey;
-    dismiss.sync(open, timeout, () => close(true));
+    dismiss.sync(open, timeout, () => close("timeout"));
   }
 
   onMount(() => () => dismiss.clear());
@@ -124,6 +145,7 @@
     on:mouseleave={handleMouseleave}
     on:focusin={handleFocusIn}
     on:focusout={handleFocusOut}
+    on:keydown={handleKeydown}
   >
     <NotificationIcon {kind} />
     <div class:bx--toast-notification__details={true}>
@@ -145,7 +167,7 @@
     {#if !hideCloseButton}
       <NotificationButton
         iconDescription={closeButtonDescription}
-        on:click={close}
+        on:click={() => close("close-button")}
       />
     {/if}
   </div>

@@ -4,6 +4,8 @@ import { user } from "../utils/user";
 import InlineNotificationTest from "./InlineNotification.test.svelte";
 import InlineNotificationActionHrefTest from "./InlineNotificationActionHref.test.svelte";
 import InlineNotificationCustomTest from "./InlineNotificationCustom.test.svelte";
+import InlineNotificationEscapeTest from "./InlineNotificationEscape.test.svelte";
+import InlineNotificationInModalTest from "./InlineNotificationInModal.test.svelte";
 import InlineNotificationReusableTest from "./InlineNotificationReusable.test.svelte";
 import InlineNotificationSubtitleSlotTest from "./InlineNotificationSubtitleSlot.test.svelte";
 import InlineNotificationTitleSlotTest from "./InlineNotificationTitleSlot.test.svelte";
@@ -190,7 +192,10 @@ describe("InlineNotification", () => {
     await tick();
 
     expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: false });
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({
+      timeout: false,
+      trigger: "close-button",
+    });
   });
 
   it("should auto-close after timeout", async () => {
@@ -205,7 +210,10 @@ describe("InlineNotification", () => {
     await tick();
 
     expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({
+      timeout: true,
+      trigger: "timeout",
+    });
   });
 
   it("should pause timeout on hover when pauseOnHover is true", async () => {
@@ -232,7 +240,10 @@ describe("InlineNotification", () => {
     vi.advanceTimersByTime(1);
     await tick();
     expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({
+      timeout: true,
+      trigger: "timeout",
+    });
   });
 
   it("should not pause timeout on hover when pauseOnHover is false", async () => {
@@ -251,7 +262,10 @@ describe("InlineNotification", () => {
     await tick();
 
     expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({
+      timeout: true,
+      trigger: "timeout",
+    });
   });
 
   it("should pause timeout while focus is inside and resume after focus leaves", async () => {
@@ -279,7 +293,10 @@ describe("InlineNotification", () => {
     vi.advanceTimersByTime(1);
     await tick();
     expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({
+      timeout: true,
+      trigger: "timeout",
+    });
   });
 
   it("should not resume timeout when focus moves between focusable elements inside", async () => {
@@ -327,7 +344,10 @@ describe("InlineNotification", () => {
     await tick();
 
     expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({
+      timeout: true,
+      trigger: "timeout",
+    });
   });
 
   it("should use custom role", () => {
@@ -439,5 +459,71 @@ describe("InlineNotification", () => {
     expect(
       document.querySelector(".bx--inline-notification"),
     ).not.toBeInTheDocument();
+  });
+  describe("Escape", () => {
+    it("should close when Escape is pressed with focus inside", async () => {
+      const onclose = vi.fn();
+      render(InlineNotificationEscapeTest, { props: { onclose } });
+
+      screen.getByRole("button", { name: "Close notification" }).focus();
+      await fireEvent.keyDown(document.activeElement as Element, {
+        key: "Escape",
+      });
+
+      expect(onclose).toHaveBeenCalledTimes(1);
+      expect(onclose.mock.calls[0][0].detail).toEqual({
+        timeout: false,
+        trigger: "escape-key",
+      });
+      expect(screen.queryByText("Escape test")).not.toBeInTheDocument();
+    });
+
+    it("should ignore Escape pressed in a nested text field", async () => {
+      const onclose = vi.fn();
+      render(InlineNotificationEscapeTest, { props: { onclose } });
+
+      const field = screen.getByRole("textbox", { name: "Nested field" });
+      field.focus();
+      await fireEvent.keyDown(field, { key: "Escape" });
+
+      expect(onclose).not.toHaveBeenCalled();
+      expect(screen.getByText("Escape test")).toBeInTheDocument();
+    });
+
+    it("should ignore Escape when the close button is hidden", async () => {
+      const onclose = vi.fn();
+      render(InlineNotificationEscapeTest, {
+        props: { onclose, hideCloseButton: true },
+      });
+
+      const notification = document.querySelector(".bx--inline-notification");
+      await fireEvent.keyDown(notification as Element, { key: "Escape" });
+
+      expect(onclose).not.toHaveBeenCalled();
+    });
+
+    it("should ignore Escape pressed outside the notification", async () => {
+      const onclose = vi.fn();
+      render(InlineNotificationEscapeTest, { props: { onclose } });
+
+      await fireEvent.keyDown(document.body, { key: "Escape" });
+
+      expect(onclose).not.toHaveBeenCalled();
+      expect(screen.getByText("Escape test")).toBeInTheDocument();
+    });
+
+    it("should not also close an enclosing modal", async () => {
+      const onModalClose = vi.fn();
+      render(InlineNotificationInModalTest, { props: { onModalClose } });
+
+      const closeButton = screen.getByRole("button", {
+        name: "Close notification",
+      });
+      closeButton.focus();
+      await fireEvent.keyDown(closeButton, { key: "Escape" });
+
+      expect(screen.queryByText("Inside modal")).not.toBeInTheDocument();
+      expect(onModalClose).not.toHaveBeenCalled();
+    });
   });
 });

@@ -16,7 +16,7 @@
    */
 
   /**
-   * @typedef {"close-button" | "timeout" | "overflow" | "programmatic"} NotificationDismissTrigger
+   * @typedef {"close-button" | "escape-key" | "timeout" | "overflow" | "programmatic"} NotificationDismissTrigger
    */
 
   /**
@@ -24,7 +24,7 @@
    * @type {object}
    * @property {string} id
    * @property {boolean} timeout
-   * @property {"close-button" | "timeout"} trigger
+   * @property {"close-button" | "escape-key" | "timeout"} trigger
    * @event dismiss
    * @type {object}
    * @property {NotificationData & { id: string }} notification
@@ -169,12 +169,11 @@
   }
 
   /**
-   * @param {CustomEvent<{ timeout: boolean }>} event
+   * @param {CustomEvent<{ timeout: boolean; trigger: "close-button" | "escape-key" | "timeout" }>} event
    * @param {string} id
    */
   function handleClose(event, id) {
-    const timeout = event.detail?.timeout === true;
-    const trigger = timeout ? "timeout" : "close-button";
+    const { timeout, trigger } = event.detail;
     const shouldRemove = dispatch(
       "close",
       { id, timeout, trigger },

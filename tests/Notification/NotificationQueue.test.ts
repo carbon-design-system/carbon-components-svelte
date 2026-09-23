@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import type NotificationButtonComponent from "carbon-components-svelte/Notification/NotificationButton.svelte";
 import type NotificationQueueComponent from "carbon-components-svelte/Notification/NotificationQueue.svelte";
 import type { ComponentProps } from "svelte";
@@ -458,6 +458,24 @@ describe("NotificationQueue", () => {
       });
       expect(ondismiss.mock.calls[0][0].detail.trigger).toBe("timeout");
       expect(screen.queryByText("Timed")).not.toBeInTheDocument();
+    });
+
+    it("should report the escape-key trigger", async () => {
+      const onclose = vi.fn();
+      const ondismiss = vi.fn();
+      const { component } = render(NotificationQueueTest, {
+        props: { onclose, ondismiss },
+      });
+
+      getQueue(component.queue).add({ id: "a", title: "Escapable" });
+      await tick();
+
+      const closeButton = screen.getByLabelText("Close notification");
+      closeButton.focus();
+      await fireEvent.keyDown(closeButton, { key: "Escape" });
+
+      expect(onclose.mock.calls[0][0].detail.trigger).toBe("escape-key");
+      expect(ondismiss.mock.calls[0][0].detail.trigger).toBe("escape-key");
     });
 
     it("should dispatch dismiss with the overflow trigger for the dropped row", async () => {
