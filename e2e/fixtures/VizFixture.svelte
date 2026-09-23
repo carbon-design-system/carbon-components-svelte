@@ -45,6 +45,7 @@
     ScatterChart,
     SequenceDiagram,
     ShareOfTotal,
+    SlopeChart,
     SmallMultiples,
     SpanWaterfall,
     Sparkline,
@@ -255,6 +256,21 @@
     group="tier"
     status="health"
     title="Service dependencies"
+  />
+
+  <SlopeChart
+    data={[
+      { survey: "2025", team: "Web", score: 62 },
+      { survey: "2025", team: "Data", score: 71 },
+      { survey: "2025", team: "Mobile", score: 44 },
+      { survey: "2026", team: "Web", score: 78 },
+      { survey: "2026", team: "Data", score: 65 },
+      { survey: "2026", team: "Mobile", score: 61 },
+    ]}
+    x="survey"
+    y="score"
+    series="team"
+    title="Engagement score by team, 2025 to 2026"
   />
 
   <OrgChart
