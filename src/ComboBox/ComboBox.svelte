@@ -791,7 +791,6 @@
     class={comboBoxListBoxClass}
     id={comboId}
     aria-label={ariaLabel}
-    aria-disabled={readonly || undefined}
     {disabled}
     invalid={showInvalid}
     {open}
@@ -816,7 +815,7 @@
           aria-haspopup="listbox"
           aria-expanded={open}
           aria-activedescendant={highlightedId ?? ""}
-          aria-disabled={disabled || readonly}
+          aria-disabled={disabled || undefined}
           aria-readonly={readonly || undefined}
           aria-controls={open ? menuId : undefined}
           aria-errormessage={showInvalid && invalidText ? errorId : undefined}
