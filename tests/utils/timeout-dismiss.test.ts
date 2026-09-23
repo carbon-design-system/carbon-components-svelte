@@ -155,6 +155,64 @@ describe("createTimeoutDismiss", () => {
       expect(cb).toHaveBeenCalledTimes(1);
     });
 
+    describe("listener lifecycle", () => {
+      let add: ReturnType<typeof vi.spyOn>;
+      let remove: ReturnType<typeof vi.spyOn>;
+      const count = (spy: { mock: { calls: unknown[][] } }) =>
+        spy.mock.calls.filter(([type]) => type === "visibilitychange").length;
+
+      beforeEach(() => {
+        add = vi.spyOn(document, "addEventListener");
+        remove = vi.spyOn(document, "removeEventListener");
+      });
+
+      afterEach(() => {
+        vi.restoreAllMocks();
+      });
+
+      test("does not listen when timeout is 0", () => {
+        createTimeoutDismiss().sync(true, 0, vi.fn());
+        expect(count(add)).toBe(0);
+      });
+
+      test("does not listen when closed", () => {
+        createTimeoutDismiss().sync(false, 1000, vi.fn());
+        expect(count(add)).toBe(0);
+      });
+
+      test("listens once while a timer is active", () => {
+        const dismiss = createTimeoutDismiss();
+        const cb = vi.fn();
+
+        dismiss.sync(true, 1000, cb);
+        dismiss.sync(true, 1000, cb);
+        expect(count(add)).toBe(1);
+      });
+
+      test("stops listening when the timer fires", () => {
+        const dismiss = createTimeoutDismiss();
+        const cb = vi.fn();
+
+        dismiss.sync(true, 1000, cb);
+        vi.advanceTimersByTime(1000);
+        expect(cb).toHaveBeenCalledTimes(1);
+        expect(count(remove)).toBe(1);
+
+        dismiss.clear();
+        expect(count(remove)).toBe(1);
+      });
+
+      test("stops listening when re-synced without a timeout", () => {
+        const dismiss = createTimeoutDismiss();
+        const cb = vi.fn();
+
+        dismiss.sync(true, 1000, cb);
+        dismiss.sync(true, 0, cb);
+        expect(count(add)).toBe(1);
+        expect(count(remove)).toBe(1);
+      });
+    });
+
     test("clear while hidden removes the listener", () => {
       const dismiss = createTimeoutDismiss();
       const cb = vi.fn();

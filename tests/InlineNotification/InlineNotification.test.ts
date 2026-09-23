@@ -27,6 +27,16 @@ describe("InlineNotification", () => {
     expect(notification).toHaveAttribute("role", "alert");
   });
 
+  it("does not listen for visibilitychange with the default timeout", () => {
+    const add = vi.spyOn(document, "addEventListener");
+    render(InlineNotificationTest);
+
+    expect(
+      add.mock.calls.filter(([type]) => type === "visibilitychange"),
+    ).toHaveLength(0);
+    add.mockRestore();
+  });
+
   it("should render with all kinds", () => {
     const kinds = [
       "error",
