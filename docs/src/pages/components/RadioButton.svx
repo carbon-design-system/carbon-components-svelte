@@ -145,6 +145,26 @@ Display non-editable values with `readonly` on RadioButtonGroup.
   <RadioButton labelText="Pro (128 GB)" value="pro" />
 </RadioButtonGroup>
 
+### Invalid
+
+Set `invalid` to `true` and provide `invalidText` to show a validation error for the group. `aria-invalid` goes on the radiogroup, and each radio's `aria-describedby` points at the error message.
+
+<RadioButtonGroup invalid invalidText="Select a storage tier" legendText="Storage tier (disk)" name="plan-invalid">
+  <RadioButton labelText="Free (1 GB)" value="free" />
+  <RadioButton labelText="Standard (10 GB)" value="standard" />
+  <RadioButton labelText="Pro (128 GB)" value="pro" />
+</RadioButtonGroup>
+
+### Warning
+
+Set `warn` to `true` and provide `warnText` to show a warning message for the group. `invalid` takes precedence over `warn` when both are set.
+
+<RadioButtonGroup warn warnText="Pro tier billing starts immediately" legendText="Storage tier (disk)" name="plan-warn" selected="pro">
+  <RadioButton labelText="Free (1 GB)" value="free" />
+  <RadioButton labelText="Standard (10 GB)" value="standard" />
+  <RadioButton labelText="Pro (128 GB)" value="pro" />
+</RadioButtonGroup>
+
 ### Deselecting
 
 Radio buttons normally keep one option selected once a choice is made. Set `allowDeselect` on RadioButtonGroup to opt out of that: clicking the already-selected radio clears the selection instead of leaving it selected.
