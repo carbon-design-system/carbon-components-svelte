@@ -1,0 +1,58 @@
+---
+components: ["SunburstChart"]
+description: Sunburst chart shows a hierarchy as rings around a center, each node an arc as wide as its share, with drill into any node.
+---
+
+<script>
+  import { SunburstChart } from "carbon-components-svelte/viz";
+
+  const bundle = [
+    { id: "bundle", parent: null, name: "bundle" },
+    { id: "src", parent: "bundle", name: "src" },
+    { id: "viz", parent: "src", name: "viz" },
+    { id: "charts", parent: "viz", name: "charts", bytes: 210 },
+    { id: "micro", parent: "viz", name: "micrographics", bytes: 120 },
+    { id: "utils", parent: "viz", name: "utils", bytes: 80 },
+    { id: "core", parent: "src", name: "core" },
+    { id: "table", parent: "core", name: "DataTable", bytes: 96 },
+    { id: "shell", parent: "core", name: "UIShell", bytes: 74 },
+    { id: "rest", parent: "core", name: "everything else", bytes: 60 },
+    { id: "vendor", parent: "bundle", name: "vendor" },
+    { id: "svelte", parent: "vendor", name: "svelte", bytes: 42 },
+    { id: "flatpickr", parent: "vendor", name: "flatpickr", bytes: 58 },
+    { id: "assets", parent: "bundle", name: "assets" },
+    { id: "css", parent: "assets", name: "css", bytes: 140 },
+    { id: "fonts", parent: "assets", name: "fonts", bytes: 90 },
+  ];
+  const kb = { style: "unit", unit: "kilobyte", unitDisplay: "narrow" };
+
+  let root = null;
+</script>
+
+`SunburstChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+It is the [IcicleChart](/components/IcicleChart) wrapped around a center: the root in the middle, its children on the first ring, and so on outward, each arc as wide as its share. Rings hold less as they go out, so keep to three or four; the icicle keeps every level the same size.
+
+## Basic
+
+Pass long `data` with `id`, `parent`, and `value` accessors. Nodes take the color of their branch, the ancestor just under the center, and the center shows the total.
+
+<SunburstChart data={bundle} id="id" parent="parent" value="bytes" label="name" format={kb} title="Bundle composition" />
+
+## Drill
+
+Bind `root` to the node at the center. Its ancestors are not drawn; the center becomes a button back up, and Backspace does the same from the keyboard. The example sets `root` from `select`.
+
+<SunburstChart data={bundle} id="id" parent="parent" value="bytes" label="name" format={kb} bind:root title="Bundle composition, click to drill" on:select={(e) => (root = e.detail.node.id)} />
+
+## Rings and size
+
+`maxDepth` caps the rings drawn, `sort` puts the largest sibling first, `diameter` sets the size, and `innerRadius` the hole. Fill the default slot to write your own center; it receives `center`, `total`, and `formattedTotal`.
+
+<SunburstChart data={bundle} id="id" parent="parent" value="bytes" label="name" format={kb} maxDepth={2} sort="value" diameter={240} innerRadius={0.4} title="Bundle composition, two rings" let:formattedTotal>
+  <strong>{formattedTotal}</strong>
+</SunburstChart>
+
+## Accessibility
+
+The chart is a single tab stop. The arrow keys move arc by arc in reading order, Enter or Space selects, Backspace steps back up, and Escape clears. The focused arc is announced with its value and share. The figure also holds a visually hidden table of every arc with its ring, value, and share, captioned with the title.

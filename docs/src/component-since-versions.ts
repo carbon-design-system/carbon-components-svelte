@@ -148,6 +148,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   TooltipDefinition: "0.2.0",
   TooltipGroup: "0.114.0",
   TooltipIcon: "0.2.0",
+  SunburstChart: "0.113.0",
   TileGridMap: "0.113.0",
   TreeChart: "0.113.0",
   TreeView: "0.39.0",

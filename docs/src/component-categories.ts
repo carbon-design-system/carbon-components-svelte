@@ -182,6 +182,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "Sparkline",
       "StackedBar",
       "StateTimeline",
+      "SunburstChart",
       "TileGridMap",
       "TreeChart",
       "TreemapChart",
