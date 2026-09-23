@@ -1322,6 +1322,55 @@ describe("TabsSkeleton", () => {
     expect(skeleton).not.toHaveClass("bx--tabs--scrollable--container");
   });
 
+  it("should not apply a layout size class by default", () => {
+    const { container } = render(TabsSkeleton);
+
+    const skeleton = container.querySelector(".bx--tabs");
+    for (const size of ["sm", "md", "lg", "xl"]) {
+      expect(skeleton).not.toHaveClass(`bx--layout--size-${size}`);
+    }
+  });
+
+  it("should apply the layout size class for the size prop", () => {
+    const { container } = render(TabsSkeleton, { props: { size: "sm" } });
+
+    expect(container.querySelector(".bx--tabs")).toHaveClass(
+      "bx--layout--size-sm",
+    );
+  });
+
+  it("should clamp an out-of-range size to the max for line tabs", () => {
+    const { container } = render(TabsSkeleton, {
+      props: { type: "default", size: "xl" },
+    });
+
+    const skeleton = container.querySelector(".bx--tabs");
+    expect(skeleton).toHaveClass("bx--layout--size-lg");
+    expect(skeleton).not.toHaveClass("bx--layout--size-xl");
+  });
+
+  it("should allow the full size range for container tabs", () => {
+    const { container } = render(TabsSkeleton, {
+      props: { type: "container", size: "xl" },
+    });
+
+    expect(container.querySelector(".bx--tabs")).toHaveClass(
+      "bx--layout--size-xl",
+    );
+  });
+
+  it("should ignore an invalid size value", () => {
+    const { container } = render(TabsSkeleton, {
+      // @ts-expect-error - exercising the runtime fallback for an invalid value
+      props: { size: "invalid" },
+    });
+
+    const skeleton = container.querySelector(".bx--tabs");
+    for (const size of ["sm", "md", "lg", "xl"]) {
+      expect(skeleton).not.toHaveClass(`bx--layout--size-${size}`);
+    }
+  });
+
   it("should render skeleton nav items with correct structure", () => {
     const { container } = render(TabsSkeleton);
 

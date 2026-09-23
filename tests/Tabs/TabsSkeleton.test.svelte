@@ -4,6 +4,7 @@
 
   export let count = 4;
   export let type: ComponentProps<TabsSkeleton>["type"] = "default";
+  export let size: ComponentProps<TabsSkeleton>["size"] = undefined;
 </script>
 
-<TabsSkeleton {count} {type} />
+<TabsSkeleton {count} {type} {size} />
