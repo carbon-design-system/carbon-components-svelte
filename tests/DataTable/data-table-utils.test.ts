@@ -1,3 +1,4 @@
+import type { ToCsvHeader } from "../../src/DataTable/data-table-utils.js";
 import {
   compareValues,
   formatHeaderWidth,
@@ -1262,6 +1263,64 @@ describe("toCsv", () => {
     );
 
     expect(csv).toBe("Name\r\nLoad Balancer 1\r\nLoad Balancer 2");
+  });
+
+  it("skips hidden headers", () => {
+    const csv = toCsv(
+      [
+        { key: "name", value: "Name" },
+        { key: "port", value: "Port", columnHidden: true },
+        { key: "rule", value: "Rule" },
+      ],
+      [
+        { id: "a", name: "Load Balancer 1", port: 3000, rule: "Round robin" },
+        { id: "b", name: "Load Balancer 2", port: 443, rule: "DNS delegation" },
+      ],
+    );
+
+    expect(csv).toBe(
+      "Name,Rule\r\nLoad Balancer 1,Round robin\r\nLoad Balancer 2,DNS delegation",
+    );
+  });
+
+  it("keeps headers with columnHidden set to false", () => {
+    const csv = toCsv(
+      [
+        { key: "name", value: "Name" },
+        { key: "port", value: "Port", columnHidden: false },
+      ],
+      rows,
+    );
+
+    expect(csv).toBe(
+      "Name,Port\r\nLoad Balancer 1,3000\r\nLoad Balancer 2,443",
+    );
+  });
+
+  it("does not format values of hidden headers", () => {
+    const display = vi.fn((item: unknown) => `Port ${item}`);
+    const csv = toCsv(
+      [
+        { key: "name", value: "Name" },
+        { key: "port", value: "Port", columnHidden: true, display },
+      ],
+      rows,
+    );
+
+    expect(csv).toBe("Name\r\nLoad Balancer 1\r\nLoad Balancer 2");
+    expect(display).not.toHaveBeenCalled();
+  });
+
+  it("accepts columnHidden on typed headers", () => {
+    type Row = { id: string; name: string; port: number };
+    const typedHeaders: ToCsvHeader<Row>[] = [
+      { key: "name", value: "Name" },
+      { key: "port", value: "Port", columnHidden: true },
+    ];
+
+    expect(toCsv<Row>(typedHeaders, [{ id: "a", name: "A", port: 1 }])).toBe(
+      "Name\r\nA",
+    );
   });
 
   it("falls back to the header key when value is absent", () => {
