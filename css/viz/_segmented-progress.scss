@@ -1,0 +1,101 @@
+/// SegmentedProgress: one segment per step, filled as steps are done.
+/// @access private
+/// @group viz
+@mixin viz-segmented-progress {
+  .#{$prefix}--viz-segments {
+    --bx-viz-size: #{to-rem(8px)};
+    --bx-viz-color: #{$interactive-04};
+
+    display: flex;
+    align-items: center;
+    column-gap: $carbon--spacing-03;
+    min-inline-size: to-rem(64px);
+  }
+
+  .#{$prefix}--viz-segments--sm {
+    --bx-viz-size: #{to-rem(4px)};
+  }
+
+  .#{$prefix}--viz-segments--lg {
+    --bx-viz-size: #{to-rem(12px)};
+  }
+
+  .#{$prefix}--viz-segments--success {
+    --bx-viz-color: var(--cds-viz-success);
+  }
+
+  .#{$prefix}--viz-segments--warning {
+    --bx-viz-color: var(--cds-viz-warning);
+  }
+
+  .#{$prefix}--viz-segments--error {
+    --bx-viz-color: var(--cds-viz-error);
+  }
+
+  .#{$prefix}--viz-segments--info {
+    --bx-viz-color: var(--cds-viz-info);
+  }
+
+  .#{$prefix}--viz-segments--neutral {
+    --bx-viz-color: var(--cds-viz-neutral);
+  }
+
+  .#{$prefix}--viz-segments__track {
+    display: flex;
+    flex: 1 1 auto;
+    block-size: var(--bx-viz-size);
+    gap: to-rem(3px);
+  }
+
+  .#{$prefix}--viz-segments__segment {
+    flex: 1 1 0;
+    background: $ui-03;
+    block-size: 100%;
+    min-inline-size: to-rem(4px);
+  }
+
+  .#{$prefix}--viz-segments__segment--done {
+    background: var(--bx-viz-color);
+  }
+
+  // A step under way fills from its start edge.
+  .#{$prefix}--viz-segments__segment--partial {
+    background: linear-gradient(
+      to right,
+      var(--bx-viz-color) var(--bx-viz-pct),
+      #{$ui-03} var(--bx-viz-pct)
+    );
+  }
+
+  [dir="rtl"] .#{$prefix}--viz-segments__segment--partial {
+    background: linear-gradient(
+      to left,
+      var(--bx-viz-color) var(--bx-viz-pct),
+      #{$ui-03} var(--bx-viz-pct)
+    );
+  }
+
+  .#{$prefix}--viz-segments__value {
+    flex: none;
+    color: $text-primary;
+    font-variant-numeric: tabular-nums;
+
+    @include type-style("label-01");
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-segments__segment {
+      border: 1px solid CanvasText;
+      background: none;
+    }
+
+    .#{$prefix}--viz-segments__segment--done {
+      background: CanvasText;
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("viz-segmented-progress") {
+  @include viz-segmented-progress;
+}
