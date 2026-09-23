@@ -587,6 +587,20 @@
     }
   }
 
+  /**
+   * Mirror an external `selectedIds` change onto the checked state in place,
+   * without reordering, for the modes that defer re-sorting.
+   */
+  function syncCheckedFromSelectedIds() {
+    const ids = new Set(selectedIds);
+    sortedItems = sortedItems.map((entry) =>
+      entry.isSelectAll || entry.checked === ids.has(entry.id)
+        ? entry
+        : { ...entry, checked: ids.has(entry.id) },
+    );
+    syncSelectAllItem();
+  }
+
   /** Apply `selectionFeedback: "top"` bookkeeping after a checked-state change. */
   function applyTopSelectionFeedback() {
     if (selectionFeedback !== "top") return;
@@ -1088,6 +1102,9 @@
   ) {
     prevSelectedIds = selectedIds.slice();
     sortedItems = sort();
+  } else if (selectedIds && !sameSelectedIds(selectedIds, prevSelectedIds)) {
+    prevSelectedIds = selectedIds.slice();
+    syncCheckedFromSelectedIds();
   }
   $: hasSelectAll = items.some((item) => item.isSelectAll);
   $: checked = sortedItems.filter((item) => item.checked);
