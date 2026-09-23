@@ -1,0 +1,123 @@
+/// IcicleChart and FlameGraph: nested slices as absolutely positioned list
+/// items, one level per row, sized in percentages so the chart follows its
+/// container with no measurement. The legend reuses the treemap's.
+/// @access private
+/// @group viz
+@mixin viz-icicle-chart {
+  .#{$prefix}--viz-icicle {
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-icicle .#{$prefix}--viz-chart__title {
+    margin-block-end: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--viz-icicle__plot {
+    position: relative;
+  }
+
+  .#{$prefix}--viz-icicle__node {
+    position: absolute;
+    overflow: hidden;
+    // A hairline of the page background separates touching slices.
+    border: to-rem(1px) solid $ui-background;
+    background: var(--bx-viz-color, #{$interactive-04});
+    block-size: var(--bx-viz-row, 28px);
+    transition: opacity $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  // A step back up: dimmed, so the current root reads as the top.
+  .#{$prefix}--viz-icicle__node--ancestor {
+    background: $ui-03;
+  }
+
+  .#{$prefix}--viz-icicle__cell,
+  .#{$prefix}--viz-icicle__button {
+    display: flex;
+    align-items: center;
+    padding: 0 $carbon--spacing-02;
+    block-size: 100%;
+    column-gap: $carbon--spacing-02;
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--viz-icicle__button {
+    border: 0;
+    appearance: none;
+    background: none;
+    cursor: pointer;
+    font: inherit;
+    text-align: start;
+  }
+
+  .#{$prefix}--viz-icicle__button:focus {
+    outline: 2px solid $focus;
+    outline-offset: -2px;
+  }
+
+  // Text sits on a chip of the page background, so it is readable over any
+  // slice color in any theme.
+  .#{$prefix}--viz-icicle__label,
+  .#{$prefix}--viz-icicle__value {
+    overflow: hidden;
+    padding: 0 $carbon--spacing-02;
+    background: $ui-background;
+    color: $text-primary;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-icicle__label {
+    flex: 0 1 auto;
+    min-inline-size: 0;
+  }
+
+  .#{$prefix}--viz-icicle__value {
+    flex: none;
+    color: $text-secondary;
+    font-variant-numeric: tabular-nums;
+  }
+
+  // Too narrow to hold text, or only its label. The tooltip and assistive
+  // technology still read it all.
+  .#{$prefix}--viz-icicle__node--narrow .#{$prefix}--viz-icicle__label,
+  .#{$prefix}--viz-icicle__node--short .#{$prefix}--viz-icicle__value {
+    position: absolute;
+    overflow: hidden;
+    padding: 0;
+    block-size: 1px;
+    clip: rect(0, 0, 0, 0);
+    inline-size: 1px;
+  }
+
+  .#{$prefix}--viz-icicle--emphasis
+    .#{$prefix}--viz-icicle__node:not(.#{$prefix}--viz-icicle__node--active) {
+    opacity: 0.4;
+  }
+
+  .#{$prefix}--viz-icicle__node--selected {
+    box-shadow:
+      inset 0 0 0 to-rem(2px) $ui-05,
+      inset 0 0 0 to-rem(3px) $ui-background;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-icicle__node {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-icicle__node {
+      border-color: CanvasText;
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("viz-icicle-chart") {
+  @include viz-icicle-chart;
+}
