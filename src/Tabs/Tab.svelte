@@ -142,7 +142,9 @@
     });
   }
 
-  add({
+  // Re-register when these change so `bx--tabs--tall` and the `dismiss`
+  // detail follow the current props.
+  $: add({
     id,
     label,
     disabled,
