@@ -78,6 +78,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   ForestPlot: "0.113.0",
   MarimekkoChart: "0.113.0",
   TargetIndicator: "0.113.0",
+  ChordDiagram: "0.113.0",
   LineChart: "0.113.0",
   Link: "0.2.0",
   Loading: "0.2.0",
