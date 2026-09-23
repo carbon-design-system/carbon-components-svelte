@@ -55,7 +55,7 @@ Pass `nodes` with an `id`, a `label`, and `x` and `y` keys for their positions, 
 
 ## Edits and undo
 
-Every change fires `change` with the step's label and its `undo` and `redo`, so the graph can be persisted or replayed elsewhere. Ctrl or Cmd with Z undoes and with Shift or Y redoes, and the controls do the same. The arrange button lays the graph out in ranks, as the layered graph does, in one step. Set `snap` for the grid moves land on, and `readonly` to show a graph that cannot be changed.
+Every change fires `change` with the step's label and its `undo` and `redo`, so the graph can be persisted or replayed elsewhere. Ctrl or Cmd with Z undoes and with Shift or Y redoes, and the controls do the same. The arrange button lays the graph out in ranks, as the layered graph does, in one step. Set `snap` for the grid moves land on, and `readonly` to show a graph that cannot be changed. `edge` picks straight lines, right angles with rounded corners, or curves; an edge whose target sits behind its source goes around, and edges that share a port take channels of their own.
 
 <NodeEditor nodes={nodes.slice(0, 4)} edges={edges.slice(0, 3)} id="id" label="name" readonly height={260} minimap={false} title="Read only" />
 
