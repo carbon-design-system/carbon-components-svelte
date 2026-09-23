@@ -73,6 +73,8 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   OrgChart: "0.113.0",
   SlopeChart: "0.113.0",
   BumpChart: "0.113.0",
+  WinLoss: "0.113.0",
+  SegmentedProgress: "0.113.0",
   LineChart: "0.113.0",
   Link: "0.2.0",
   Loading: "0.2.0",
