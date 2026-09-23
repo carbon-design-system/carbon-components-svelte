@@ -49,6 +49,17 @@ describe("Dropdown close event", () => {
     expect(onClose.mock.calls[0][0].detail).toEqual({ trigger: "select" });
   });
 
+  it("does not dispatch close when clicking the already-selected item", async () => {
+    const onClose = vi.fn();
+    render(DropdownClose, { props: { onClose } });
+
+    await user.click(screen.getByRole("combobox"));
+    await user.click(screen.getByRole("option", { name: "Slack" }));
+
+    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
   it("does not dispatch close when the menu is already closed", async () => {
     const onClose = vi.fn();
     render(DropdownClose, { props: { onClose } });

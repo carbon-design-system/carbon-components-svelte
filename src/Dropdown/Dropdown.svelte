@@ -573,6 +573,21 @@
     }
   }
 
+  /**
+   * @param {Item} item
+   */
+  function selectItem(item) {
+    if (item.id === selectedId) {
+      // Same rule as selectHighlighted: re-picking the current item is not a
+      // selection, so close without `select` or `close`.
+      open = false;
+      return;
+    }
+    selectedId = item.id;
+    dispatchSelect();
+    close("select");
+  }
+
   function selectHighlighted() {
     if (!open) {
       open = true;
@@ -859,9 +874,7 @@
                       event.stopPropagation();
                       return;
                     }
-                    selectedId = item.id;
-                    dispatchSelect();
-                    close("select");
+                    selectItem(item);
                   }}
                   on:mousedown={(event) => {
                     // Keep focus on the field so screen readers don't
@@ -946,9 +959,7 @@
                   event.stopPropagation();
                   return;
                 }
-                selectedId = item.id;
-                dispatchSelect();
-                close("select");
+                selectItem(item);
               }}
               on:mousedown={(event) => {
                 // Keep focus on the field so screen readers don't
