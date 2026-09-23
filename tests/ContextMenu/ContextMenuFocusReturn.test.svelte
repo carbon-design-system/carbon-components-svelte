@@ -15,6 +15,8 @@
 
 <button type="button" id="host">Host</button>
 
+<button type="button" id="after-host">After host</button>
+
 <p id="non-focusable">Non-focusable target</p>
 
 <button type="button" id="icon-host" aria-label="Icon host">
