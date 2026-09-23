@@ -36,6 +36,7 @@
   import { createEventDispatcher, onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
   /**
@@ -44,6 +45,10 @@
   const selectedValue = writable(
     multiple ? (Array.isArray(selected) ? selected : []) : selected,
   );
+
+  // Radios need a shared name to move on the arrow keys.
+  const groupName = uniqueId("structured-list");
+  const inputName = writable(selection && !multiple ? groupName : "");
 
   let prevSelectedValue = $selectedValue;
   let initialRender = true;
@@ -71,12 +76,14 @@
     multiple,
     selection,
     icon,
+    inputName,
   });
 
   onMount(() => {
     initialRender = false;
   });
 
+  $: inputName.set(selection && !multiple ? groupName : "");
   $: selected = $selectedValue;
   $: if (selected !== $selectedValue) {
     fromProp = true;

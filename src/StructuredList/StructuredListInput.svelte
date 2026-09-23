@@ -50,6 +50,7 @@
   const selectedValue =
     ctx?.selectedValue ?? writable(initialChecked ? value : undefined);
   const update = ctx?.update ?? ((v) => selectedValue.set(v));
+  const inputName = ctx?.inputName ?? writable("");
 
   if (initialChecked && ctx) {
     update(value);
@@ -58,6 +59,7 @@
   $: checked = multiple
     ? Array.isArray($selectedValue) && $selectedValue.includes(value)
     : $selectedValue === value;
+  $: groupName = name || $inputName;
 </script>
 
 <span
@@ -70,7 +72,7 @@
     {tabindex}
     {checked}
     {id}
-    {name}
+    name={groupName}
     {title}
     {value}
     class:bx--structured-list-input={true}
