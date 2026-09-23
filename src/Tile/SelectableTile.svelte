@@ -71,6 +71,10 @@
 
   let prevValue = value;
 
+  // Captured from the checkbox's `click` event, which fires before `change`,
+  // so the group's `update` knows whether Shift was held for range selection.
+  let pendingShiftKey = false;
+
   $: if (hasGroup) {
     if (value !== prevValue) {
       remove(prevValue);
@@ -92,13 +96,16 @@
   name={$groupName ?? name}
   {title}
   {disabled}
+  on:click={(event) => {
+    pendingShiftKey = event.shiftKey;
+  }}
   on:change={() => {
     if (disabled) return;
     if (!ref) return;
     const newSelected = ref.checked;
     selected = newSelected;
     if (hasGroup) {
-      update({ value, selected: newSelected });
+      update({ value, selected: newSelected, shiftKey: pendingShiftKey });
     } else {
       if (newSelected) {
         dispatch("select", id);
@@ -106,13 +113,23 @@
         dispatch("deselect", id);
       }
     }
+    pendingShiftKey = false;
   }}
   on:keydown
   on:keydown={(event) => {
     if (disabled) return;
     if (event.key === "Enter") {
       event.preventDefault();
-      ref.click();
+      // Dispatching (rather than `ref.click()`) lets Shift be forwarded onto
+      // the resulting click, which still runs the checkbox's native
+      // pre-click activation (toggle + a follow-up "change").
+      ref.dispatchEvent(
+        new MouseEvent("click", {
+          shiftKey: event.shiftKey,
+          bubbles: true,
+          cancelable: true,
+        }),
+      );
     }
   }}
 >
