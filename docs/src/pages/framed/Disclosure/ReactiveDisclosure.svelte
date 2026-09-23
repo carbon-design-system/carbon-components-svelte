@@ -9,7 +9,7 @@
   <Disclosure
     bind:open
     summary="Show deployment details"
-    on:toggle={(e) => console.log("toggle", e.detail)}
+    on:toggle={(e) => console.log("toggle", e.detail.open)}
   >
     <p>
       Build #4213 deployed to production at 2:14 PM UTC. Rollback available for
