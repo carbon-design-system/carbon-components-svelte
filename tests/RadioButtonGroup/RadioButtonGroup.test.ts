@@ -283,6 +283,66 @@ describe("RadioButtonGroup", () => {
     }
   });
 
+  describe("Validation", () => {
+    it("should mark the radiogroup as invalid and describe each radio via the message", () => {
+      render(RadioButtonGroup, {
+        props: { invalid: true, invalidText: "Pick one" },
+      });
+
+      const message = screen.getByText("Pick one");
+      expect(message).toBeInTheDocument();
+
+      const radiogroup = screen.getByRole("radiogroup");
+      expect(radiogroup).toHaveAttribute("aria-invalid", "true");
+      expect(radiogroup).not.toHaveAttribute("aria-describedby");
+
+      for (const radio of screen.getAllByRole("radio")) {
+        expect(radio).not.toHaveAttribute("aria-invalid");
+        expect(radio).toHaveAttribute(
+          "aria-describedby",
+          message.getAttribute("id"),
+        );
+      }
+    });
+
+    it("should show warning message without marking the radiogroup as invalid", () => {
+      render(RadioButtonGroup, {
+        props: { warn: true, warnText: "Check the tier" },
+      });
+
+      expect(screen.getByText("Check the tier")).toBeInTheDocument();
+      expect(screen.getByRole("radiogroup")).not.toHaveAttribute(
+        "aria-invalid",
+      );
+
+      for (const radio of screen.getAllByRole("radio")) {
+        expect(radio).not.toHaveAttribute("aria-invalid");
+      }
+    });
+
+    it("should prioritize invalid over warn when both are set", () => {
+      render(RadioButtonGroup, {
+        props: {
+          invalid: true,
+          invalidText: "Pick one",
+          warn: true,
+          warnText: "Check the tier",
+        },
+      });
+
+      expect(screen.getByText("Pick one")).toBeInTheDocument();
+      expect(screen.queryByText("Check the tier")).not.toBeInTheDocument();
+    });
+
+    it("should not show the invalid message when disabled", () => {
+      render(RadioButtonGroup, {
+        props: { disabled: true, invalid: true, invalidText: "Pick one" },
+      });
+
+      expect(screen.queryByText("Pick one")).not.toBeInTheDocument();
+    });
+  });
+
   describe("Generics", () => {
     it("should support custom string literal types with generics", () => {
       type CustomValue = "option1" | "option2" | "option3";

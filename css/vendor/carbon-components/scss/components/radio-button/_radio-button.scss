@@ -202,3 +202,89 @@
 @include exports("radiobutton-readonly") {
   @include radiobutton-readonly;
 }
+
+// carbon-components-svelte patch
+// RadioButtonGroup `invalid`/`warn` states, ported from the analogous
+// Checkbox/CheckboxGroup patch in `_checkbox.scss` (v10 ships none of this
+// for radio buttons either).
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// RadioButtonGroup invalid and warning states.
+/// @access private
+/// @group components
+@mixin radio-button-validation {
+  // `.bx--radio-button-group` is a row flex container by default; without
+  // wrapping, the validation message would sit inline beside the radios
+  // instead of on its own line below them.
+  .#{$prefix}--radio-button-group--invalid,
+  .#{$prefix}--radio-button-group--warning {
+    flex-wrap: wrap;
+  }
+
+  .#{$prefix}--radio-button-group__validation-msg {
+    display: none;
+    flex: 0 0 100%;
+    align-items: flex-start;
+    inline-size: 100%;
+    margin-block-start: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--radio-button-group__invalid-icon {
+    margin: to-rem(1px) to-rem(1px) 0 to-rem(3px);
+    fill: $support-error;
+    min-inline-size: to-rem(16px);
+  }
+
+  .#{$prefix}--radio-button-group__invalid-icon--warning {
+    fill: $support-warning;
+  }
+
+  .#{$prefix}--radio-button-group__invalid-icon--warning path:first-of-type {
+    fill: $carbon__black-100;
+  }
+
+  .#{$prefix}--radio-button-group--invalid .#{$prefix}--radio-button__appearance {
+    border-color: $support-error;
+  }
+
+  // Must beat `.bx--radio-button:checked + .bx--radio-button__label
+  // .bx--radio-button__appearance` (specificity 0,4,0) from the base mixin,
+  // which otherwise wins over the single-class override above.
+  .#{$prefix}--radio-button-group--invalid
+    .#{$prefix}--radio-button:checked
+    + .#{$prefix}--radio-button__label
+    .#{$prefix}--radio-button__appearance {
+    border-color: $support-error;
+  }
+
+  .#{$prefix}--radio-button-group--invalid
+    .#{$prefix}--radio-button-group__validation-msg,
+  .#{$prefix}--radio-button-group--warning
+    .#{$prefix}--radio-button-group__validation-msg {
+    display: flex;
+  }
+
+  .#{$prefix}--radio-button-group--invalid
+    .#{$prefix}--radio-button-group__validation-msg
+    .#{$prefix}--form-requirement,
+  .#{$prefix}--radio-button-group--warning
+    .#{$prefix}--radio-button-group__validation-msg
+    .#{$prefix}--form-requirement {
+    display: block;
+    overflow: visible;
+    margin-block-start: 0;
+    margin-inline-start: $carbon--spacing-03;
+    max-block-size: 100%;
+  }
+
+  .#{$prefix}--radio-button-group--invalid
+    .#{$prefix}--radio-button-group__validation-msg
+    .#{$prefix}--form-requirement {
+    color: $text-error;
+  }
+}
+
+@include exports("radio-button-validation") {
+  @include radio-button-validation;
+}
