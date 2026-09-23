@@ -106,6 +106,7 @@ export { geoPaths } from "./utils/geo-path.js";
 export { gridStep } from "./utils/grid-step.js";
 export { buildHeatGrid, heatColor } from "./utils/heat-grid.js";
 export { getHistogramGeometry } from "./utils/histogram.js";
+export { layoutLayered } from "./utils/layout-layered.js";
 export { bisectNearest, createGridIndex } from "./utils/nearest-point.js";
 export { packCircles } from "./utils/pack-circles.js";
 export { partition } from "./utils/partition.js";
