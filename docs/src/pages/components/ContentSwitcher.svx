@@ -22,6 +22,12 @@ Create a content switcher with switch components. Each switch needs a text label
   <Switch text="Trending" />
 </ContentSwitcher>
 
+## Switching views
+
+Bind `selectedIndex` and render one panel per switch. Name the switcher with `aria-label`, give each `Switch` an `id` and an `aria-controls` that points at a `role="tabpanel"` element, and label each panel back with `aria-labelledby`.
+
+<FileSource src="/framed/ContentSwitcher/ContentSwitcherViews" />
+
 ## Selection
 
 Control which switch is selected by index, by a stable id, or by changing how arrow keys move the selection.
