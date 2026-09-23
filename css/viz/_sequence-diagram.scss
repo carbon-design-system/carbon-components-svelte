@@ -35,6 +35,19 @@
     stroke: $ui-04;
   }
 
+  // A grouped actor takes a wash of its color and a frame in it, and its
+  // lifeline follows.
+  .#{$prefix}--viz-sequence__actor--grouped {
+    fill: var(--bx-viz-color, #{$ui-01});
+    fill-opacity: 0.12;
+    stroke: var(--bx-viz-color, #{$ui-04});
+    stroke-width: 2;
+  }
+
+  .#{$prefix}--viz-sequence__lifeline--grouped {
+    stroke: var(--bx-viz-color, #{$ui-04});
+  }
+
   .#{$prefix}--viz-sequence__actor-label {
     fill: $text-primary;
     font-weight: 600;
@@ -60,6 +73,15 @@
 
   .#{$prefix}--viz-sequence__arrow {
     fill: $ui-05;
+  }
+
+  // A failure is drawn in the error color; the list says so in words too.
+  .#{$prefix}--viz-sequence__message--error .#{$prefix}--viz-sequence__line {
+    stroke: $support-error;
+  }
+
+  .#{$prefix}--viz-sequence__message--error .#{$prefix}--viz-sequence__label {
+    fill: $text-error;
   }
 
   // A halo of the page background keeps a label readable over a lifeline.

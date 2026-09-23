@@ -100,6 +100,47 @@ describe("SequenceDiagram", () => {
     expect(geometry.calls).toBe(built);
   });
 
+  it("colors actors by group with a legend, and draws a failure in the error color", async () => {
+    const { rerender } = render(SequenceDiagram);
+    expect(
+      document.querySelector(".bx--viz-sequence__actor--grouped"),
+    ).toBeNull();
+
+    await rerender({
+      groups: { client: "outside", api: "ours", db: "ours" },
+      data: [
+        { from: "client", to: "api", msg: "POST /orders" },
+        { from: "api", to: "client", msg: "500", kind: "error" },
+      ],
+    });
+    const actors = Array.from(
+      document.querySelectorAll<SVGRectElement>(".bx--viz-sequence__actor"),
+    );
+    expect(
+      actors.every((actor) =>
+        actor.classList.contains("bx--viz-sequence__actor--grouped"),
+      ),
+    ).toBe(true);
+    expect(actors).toHaveLength(2);
+    expect(
+      document.querySelectorAll(".bx--viz-sequence__lifeline--grouped"),
+    ).toHaveLength(2);
+    expect(actors[0].style.getPropertyValue("--bx-viz-color")).not.toBe(
+      actors[1].style.getPropertyValue("--bx-viz-color"),
+    );
+    expect(
+      Array.from(
+        screen
+          .getByTestId("sequence")
+          .querySelectorAll(".bx--viz-treemap__legend-item"),
+      ).map((n) => n.textContent?.trim()),
+    ).toEqual(["outside", "ours"]);
+    expect(messages()[1]).toHaveClass("bx--viz-sequence__message--error");
+    expect(
+      screen.getByTestId("sequence").querySelectorAll("ol li")[1],
+    ).toHaveTextContent("500, from api to client, fails");
+  });
+
   it("follows the pointer onto a message", async () => {
     const onhover = vi.fn();
     render(SequenceDiagram, { onhover });

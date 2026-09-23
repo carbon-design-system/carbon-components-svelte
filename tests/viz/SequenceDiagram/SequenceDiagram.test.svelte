@@ -10,6 +10,7 @@
     { from: "api", to: "api", msg: "audit" },
     { from: "api", to: "client", msg: "201", kind: "return" },
   ];
+  export let groups: Record<string, string> = {};
   export let onhover: (detail: unknown) => void = () => {};
   export let onselect: (detail: unknown) => void = () => {};
 </script>
@@ -20,6 +21,7 @@
   to="to"
   label="msg"
   kind="kind"
+  {groups}
   title="Create an order"
   data-testid="sequence"
   on:hover={(e) => onhover(e.detail)}

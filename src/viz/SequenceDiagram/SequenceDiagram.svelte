@@ -39,7 +39,8 @@
   export let label = undefined;
 
   /**
-   * Specify how to read a message's kind. `"return"` is drawn dashed.
+   * Specify how to read a message's kind. `"return"` is drawn dashed and
+   * `"error"` in the error color.
    * @type {import("../utils/accessor.js").Accessor<T, string>}
    */
   export let kind = undefined;
@@ -58,6 +59,28 @@
    */
   export let actors = undefined;
 
+  /**
+   * Specify a group per actor, which sets the color of its box and
+   * lifeline. Groups take the categorical colors in first-seen order.
+   * @type {Record<string, string | number>}
+   */
+  export let groups = {};
+
+  /**
+   * Specify a fixed color per group: a semantic name, a categorical index,
+   * a viz token name, or any CSS color.
+   * @type {Record<string, import("../utils/tokens.js").VizColor>}
+   */
+  export let colors = {};
+
+  /**
+   * Specify which of Carbon's prescribed color groups to use (1-based).
+   */
+  export let palette = 1;
+
+  /** Set to `false` to hide the legend, which lists the groups */
+  export let legend = true;
+
   /** Specify the title, shown as the caption and used as the accessible name */
   export let title = "";
 
@@ -72,7 +95,7 @@
 
   /**
    * Override the words used for assistive technology.
-   * @type {{ message?: string; from?: string; to?: string; returns?: string; self?: string }}
+   * @type {{ message?: string; from?: string; to?: string; returns?: string; error?: string; self?: string }}
    */
   export let words = {};
 
@@ -86,6 +109,7 @@
   import { createEventDispatcher } from "svelte";
   import { toAccessor } from "../utils/accessor.js";
   import { nextId } from "../utils/next-id.js";
+  import { categoricalColors, vizColor } from "../utils/tokens.js";
   import { buildSequence } from "./sequence-geometry.js";
 
   const dispatch = createEventDispatcher();
@@ -113,6 +137,24 @@
     rowHeight,
     top: ACTOR_HEIGHT,
   });
+  $: groupKeys = [
+    ...new Set(
+      sequence.actors
+        .map((actor) => groups[actor.name])
+        .filter((key) => key !== undefined)
+        .map(String),
+    ),
+  ];
+  $: groupColor = paint(groupKeys, palette, colors);
+  $: colorOfActor = new Map(
+    sequence.actors.map((actor) => {
+      const key = groups[actor.name];
+      return [
+        actor.name,
+        key === undefined ? undefined : groupColor.get(String(key)),
+      ];
+    }),
+  );
   $: width = sequence.width + PAD * 2;
   $: height = sequence.height + PAD;
   $: text = {
@@ -120,6 +162,7 @@
     from: "from",
     to: "to",
     returns: "returns",
+    error: "fails",
     self: "to itself",
     ...words,
   };
@@ -134,10 +177,31 @@
         ? `${message.from} ${text.self}`
         : `${text.from} ${message.from} ${text.to} ${message.to}`,
       message.kind === "return" ? text.returns : "",
+      message.kind === "error" ? text.error : "",
     ]
       .filter(Boolean)
       .join(", ");
   $: announcement = current ? describe(current) : "";
+
+  /**
+   * @param {ReadonlyArray<string>} keys
+   * @param {number} option
+   * @param {Record<string, import("../utils/tokens.js").VizColor>} fixed
+   */
+  function paint(keys, option, fixed) {
+    const assigned = categoricalColors(keys.length, option);
+    /** @type {Map<string, string>} */
+    const out = new Map();
+    keys.forEach((key, i) => {
+      out.set(
+        key,
+        fixed[key] === undefined
+          ? assigned[i]
+          : (vizColor(fixed[key]) ?? assigned[i]),
+      );
+    });
+    return out;
+  }
 
   /** @param {import("./sequence-geometry.js").SequenceMessage<T>} message */
   function detail(message) {
@@ -243,6 +307,8 @@
       {#each sequence.actors as actor (actor.name)}
         <line
           class:bx--viz-sequence__lifeline={true}
+          class:bx--viz-sequence__lifeline--grouped={colorOfActor.get(actor.name) !== undefined}
+          style:--bx-viz-color={colorOfActor.get(actor.name)}
           x1={actor.x}
           x2={actor.x}
           y1={ACTOR_HEIGHT}
@@ -250,6 +316,8 @@
         />
         <rect
           class:bx--viz-sequence__actor={true}
+          class:bx--viz-sequence__actor--grouped={colorOfActor.get(actor.name) !== undefined}
+          style:--bx-viz-color={colorOfActor.get(actor.name)}
           x={actor.x - actorWidth / 2}
           y="0"
           width={actorWidth}
@@ -270,6 +338,7 @@
         <g
           class:bx--viz-sequence__message={true}
           class:bx--viz-sequence__message--return={message.kind === "return"}
+          class:bx--viz-sequence__message--error={message.kind === "error"}
           class:bx--viz-sequence__message--active={i === active}
           on:mouseenter={() => setActive(i)}
         >
@@ -301,6 +370,19 @@
       {/each}
     </g>
   </svg>
+  {#if legend && groupKeys.length > 0}
+    <ul class:bx--viz-treemap__legend={true} aria-hidden="true">
+      {#each groupKeys as key (key)}
+        <li
+          class:bx--viz-treemap__legend-item={true}
+          style:--bx-viz-color={groupColor.get(key)}
+        >
+          <span class:bx--viz-treemap__swatch={true}></span>
+          {key}
+        </li>
+      {/each}
+    </ul>
+  {/if}
   <!-- Every message in order, for assistive technology. -->
   <ol class:bx--visually-hidden={true}>
     {#each sequence.messages as message (message.id)}
