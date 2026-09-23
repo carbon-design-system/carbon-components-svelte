@@ -14,6 +14,7 @@ import ContentSwitcherSelectedId from "./ContentSwitcher.selectedId.test.svelte"
 import ContentSwitcherSelectedIndex from "./ContentSwitcher.selectedIndex.test.svelte";
 import ContentSwitcherSelectionMode from "./ContentSwitcher.selectionMode.test.svelte";
 import ContentSwitcherSize from "./ContentSwitcher.size.test.svelte";
+import ContentSwitcherSwitchSelected from "./ContentSwitcher.switchSelected.test.svelte";
 import ContentSwitcher from "./ContentSwitcher.test.svelte";
 
 /** Child registration flushes on a microtask (`batchStoreUpdates`). */
@@ -884,6 +885,85 @@ describe("ContentSwitcher", () => {
       );
       expect(screen.getByTestId("selected-index")).toHaveTextContent("2");
       expect(consoleLog).toHaveBeenCalledWith("change", 2);
+    });
+  });
+
+  describe("Switch selected prop", () => {
+    const changed = (consoleLog: { mock: { calls: unknown[][] } }) =>
+      consoleLog.mock.calls.some(([event]) => event === "change");
+
+    it("selects the switch when `selected` turns true after mount", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      const { rerender } = await renderSwitcher(ContentSwitcherSwitchSelected);
+
+      await rerender({ second: true });
+
+      const a = screen.getByRole("tab", { name: "A" });
+      const b = screen.getByRole("tab", { name: "B" });
+      const c = screen.getByRole("tab", { name: "C" });
+      expect(b).toHaveAttribute("aria-selected", "true");
+      expect(b).toHaveAttribute("tabindex", "0");
+      for (const tab of [a, c]) {
+        expect(tab).toHaveAttribute("aria-selected", "false");
+        expect(tab).toHaveAttribute("tabindex", "-1");
+      }
+      expect(
+        screen
+          .getAllByRole("tab")
+          .filter((tab) => tab.getAttribute("aria-selected") === "true"),
+      ).toHaveLength(1);
+      expect(screen.getByTestId("selected-index")).toHaveTextContent("1");
+      expect(consoleLog).toHaveBeenCalledWith("change", 1);
+    });
+
+    it("re-selects after another switch was clicked", async () => {
+      const { rerender } = await renderSwitcher(ContentSwitcherSwitchSelected);
+      await rerender({ second: true });
+
+      const a = screen.getByRole("tab", { name: "A" });
+      const b = screen.getByRole("tab", { name: "B" });
+      await user.click(a);
+      expect(a).toHaveAttribute("aria-selected", "true");
+      expect(b).toHaveAttribute("aria-selected", "false");
+
+      await rerender({ second: false });
+      expect(a).toHaveAttribute("aria-selected", "true");
+
+      await rerender({ second: true });
+      expect(b).toHaveAttribute("aria-selected", "true");
+      expect(a).toHaveAttribute("aria-selected", "false");
+      expect(screen.getByTestId("selected-index")).toHaveTextContent("1");
+    });
+
+    it("keeps the current switch selected when `selected` turns false", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      const { rerender } = await renderSwitcher(ContentSwitcherSwitchSelected);
+      await rerender({ second: true });
+      consoleLog.mockClear();
+
+      await rerender({ second: false });
+
+      expect(screen.getByRole("tab", { name: "B" })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+      expect(screen.getByTestId("selected-index")).toHaveTextContent("1");
+      expect(changed(consoleLog)).toBe(false);
+    });
+
+    it("honors `selected` at mount without dispatching change", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      await renderSwitcher(ContentSwitcherSwitchSelected, {
+        props: { second: true },
+      });
+      await tick();
+
+      expect(screen.getByRole("tab", { name: "B" })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+      expect(screen.getByTestId("selected-index")).toHaveTextContent("1");
+      expect(changed(consoleLog)).toBe(false);
     });
   });
 });
