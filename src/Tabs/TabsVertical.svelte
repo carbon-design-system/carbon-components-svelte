@@ -160,6 +160,13 @@
    */
   function add(data) {
     batchedTabsUpdate((_) => {
+      // `Tab` re-registers when its props change. Check the batched
+      // accumulator, not `$tabsById`: a same-batch registration is not in the
+      // derived store yet. Only an insert needs a DOM-order sync.
+      const index = _.findIndex((tab) => tab.id === data.id);
+      if (index !== -1) {
+        return _.map((tab, i) => (i === index ? { ...tab, ...data } : tab));
+      }
       needsDomSync = true;
       return [..._, { ...data, index: _.length }];
     });

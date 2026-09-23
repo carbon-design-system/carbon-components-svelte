@@ -3,6 +3,7 @@ import { tick } from "svelte";
 import Calendar from "../../src/icons/Calendar.svelte";
 import { user } from "../utils/user";
 import TabsVertical from "./TabsVertical.test.svelte";
+import TabsVerticalRegistration from "./TabsVerticalRegistration.test.svelte";
 import TabsVerticalSelectedId from "./TabsVerticalSelectedId.test.svelte";
 import TabsVerticalSkeleton from "./TabsVerticalSkeleton.test.svelte";
 
@@ -205,6 +206,21 @@ describe("TabsVertical", () => {
     const tab1 = screen.getByRole("tab", { name: "Tab 1" });
     expect(await fireEvent.keyDown(tab1, { key: "ArrowDown" })).toBe(false);
     expect(await fireEvent.keyDown(tab1, { key: "ArrowUp" })).toBe(false);
+  });
+
+  it("applies the tall layout for a secondary label set after mount", async () => {
+    const { container } = render(TabsVerticalRegistration);
+    await tick();
+
+    const tabs = container.querySelector(".bx--tabs--vertical");
+    expect(tabs).not.toHaveClass("bx--tabs--tall");
+
+    await user.click(screen.getByRole("button", { name: "Load count" }));
+    await tick();
+    await tick();
+
+    expect(tabs).toHaveClass("bx--tabs--tall");
+    expect(screen.getByText("(3/4)")).toBeInTheDocument();
   });
 
   it("should render an icon for the tab", () => {

@@ -16,6 +16,7 @@ import TabsAllDisabled from "./TabsAllDisabled.test.svelte";
 import TabsDismissible from "./TabsDismissible.test.svelte";
 import TabsDynamic from "./TabsDynamic.test.svelte";
 import TabsLazy from "./TabsLazy.test.svelte";
+import TabsRegistration from "./TabsRegistration.test.svelte";
 import TabsSelectedId from "./TabsSelectedId.test.svelte";
 import TabsSkeleton from "./TabsSkeleton.test.svelte";
 
@@ -818,6 +819,76 @@ describe("Tabs dismissible", () => {
     await user.keyboard("{Delete}");
     await tick();
     expect(screen.queryAllByRole("tab")).toHaveLength(0);
+  });
+});
+
+describe("Tab registration", () => {
+  let consoleLog: Console["log"];
+
+  beforeEach(() => {
+    consoleLog = vi.spyOn(console, "log");
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("renders a secondary label set after mount", async () => {
+    render(TabsRegistration);
+    await tick();
+
+    const nav = screen.getByRole("navigation");
+    expect(nav).not.toHaveClass("bx--tabs--tall");
+    expect(screen.queryByText("(3/4)")).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Load count" }));
+    await tick();
+    await tick();
+
+    expect(nav).toHaveClass("bx--tabs--tall");
+    expect(screen.getByText("(3/4)")).toHaveClass(
+      "bx--tabs__nav-item-secondary-label",
+    );
+  });
+
+  it("drops the tall layout when the secondary label is cleared", async () => {
+    render(TabsRegistration);
+
+    await user.click(screen.getByRole("button", { name: "Load count" }));
+    await tick();
+    expect(screen.getByRole("navigation")).toHaveClass("bx--tabs--tall");
+
+    await user.click(screen.getByRole("button", { name: "Clear count" }));
+    await tick();
+    expect(screen.getByRole("navigation")).not.toHaveClass("bx--tabs--tall");
+  });
+
+  it("reports the current label in the dismiss detail", async () => {
+    render(TabsRegistration);
+
+    await user.click(screen.getByRole("button", { name: "Rename" }));
+    await tick();
+    await user.click(screen.getByRole("tab", { name: "Renamed" }));
+    await user.keyboard("{Delete}");
+
+    expect(consoleLog).toHaveBeenCalledWith(
+      "dismiss",
+      expect.objectContaining({ label: "Renamed", index: 0 }),
+    );
+  });
+
+  it("reports the current disabled state in the dismiss detail", async () => {
+    render(TabsRegistration);
+
+    await user.click(screen.getByRole("button", { name: "Enable" }));
+    await tick();
+    await user.click(screen.getByRole("tab", { name: "Analyze" }));
+    await user.keyboard("{Delete}");
+
+    expect(consoleLog).toHaveBeenCalledWith(
+      "dismiss",
+      expect.objectContaining({ label: "Analyze", disabled: false, index: 1 }),
+    );
   });
 });
 
