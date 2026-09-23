@@ -60,6 +60,10 @@ Customize the notification content using slots for more flexibility.
 
 Hide the close button or customize its behavior and label.
 
+Pressing <DocKbd label="Escape" /> while focus is inside the notification closes it the same way the close button does, including the cancelable `close` event. Escape pressed in a nested text field, or on a notification with a hidden close button, is ignored.
+
+The `close` event detail reports how the notification closed: `trigger` is `"close-button"`, `"escape-key"`, or `"timeout"`, and `timeout` is `true` for the timeout.
+
 ### Hidden
 
 Create a persistent notification by hiding the close button.

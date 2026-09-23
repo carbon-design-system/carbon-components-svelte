@@ -87,7 +87,7 @@ Use `remove(id)` to programmatically remove a specific notification, or `clear()
 
 ### Close
 
-The queue dispatches `close` with `{ id, timeout, trigger }` when a toast's close button is clicked or its timeout ends. The event is cancelable: call `preventDefault()` to keep the toast in the queue.
+The queue dispatches `close` with `{ id, timeout, trigger }` when a toast's close button is clicked, <DocKbd label="Escape" /> is pressed inside it, or its timeout ends. The event is cancelable: call `preventDefault()` to keep the toast in the queue.
 
 In this example, closing the "Unsaved changes" toast is blocked while the checkbox is checked.
 
@@ -98,6 +98,7 @@ In this example, closing the "Unsaved changes" toast is blocked while the checkb
 The queue dispatches `dismiss` with `{ notification, trigger }` after a notification leaves the queue, whatever the reason. `trigger` is one of:
 
 - `"close-button"`: the user clicked the close button
+- `"escape-key"`: the user pressed <DocKbd label="Escape" /> inside the toast
 - `"timeout"`: the toast's timeout ended
 - `"overflow"`: `maxNotifications` dropped it to make room
 - `"programmatic"`: `remove` or `clear` removed it
