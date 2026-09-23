@@ -333,6 +333,89 @@ describe("ComposedModal", () => {
     expect(primaryButton).toHaveFocus();
   });
 
+  it("moves focus into the modal on a post-mount open, without duplicating on:open", async () => {
+    const openHandler = vi.fn();
+    const { rerender } = render(ComposedModalTest, {
+      props: {
+        open: false,
+        headerTitle: "Post-mount Focus Test",
+        footerPrimaryButtonText: "Save",
+        includeInput: false,
+        onopen: openHandler,
+      },
+    });
+
+    rerender({ open: true });
+    await tick();
+    await tick();
+
+    expect(screen.getByRole("button", { name: "Save" })).toHaveFocus();
+    expect(openHandler).toHaveBeenCalledTimes(1);
+
+    rerender({ open: true, headerTitle: "Post-mount Focus Test Updated" });
+    await tick();
+    await tick();
+
+    expect(openHandler).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not move focus when a descendant transition ends", async () => {
+    render(ComposedModalTest, {
+      props: {
+        open: true,
+        headerTitle: "Descendant Transition",
+        footerPrimaryButtonText: "Save",
+        footerSecondaryButtonText: "Cancel",
+      },
+    });
+    await tick();
+
+    const cancel = screen.getByRole("button", { name: "Cancel" });
+    cancel.focus();
+    cancel.dispatchEvent(
+      new TransitionEvent("transitionend", {
+        propertyName: "background-color",
+        bubbles: true,
+      }),
+    );
+    await tick();
+
+    expect(cancel).toHaveFocus();
+  });
+
+  it("does not focus into a modal mounted closed", async () => {
+    render(ComposedModalTest, {
+      props: { open: false, headerTitle: "Closed" },
+    });
+    await tick();
+    await tick();
+
+    expect(screen.getByTestId("test-focus")).not.toHaveFocus();
+  });
+
+  it("returns focus to trigger without waiting for an open transition", async () => {
+    const { container } = render(ComposedModalFocusReturnTest);
+
+    const trigger = screen.getByRole("button", { name: "Open Modal" });
+    await user.click(trigger);
+    await tick();
+    await tick();
+
+    expect(screen.getByRole("button", { name: "Save" })).toHaveFocus();
+
+    await user.click(screen.getByLabelText("Close"));
+    await tick();
+
+    const modalWrapper = container.querySelector(".bx--modal");
+    assert(modalWrapper);
+    modalWrapper.dispatchEvent(
+      new TransitionEvent("transitionend", { propertyName: "transform" }),
+    );
+    await tick();
+
+    expect(trigger).toHaveFocus();
+  });
+
   it("returns focus to trigger when closed via close button", async () => {
     const { container } = render(ComposedModalFocusReturnTest, {
       props: {},
