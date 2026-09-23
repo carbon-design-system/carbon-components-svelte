@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import { user } from "../utils/user";
 import TreeViewVirtualizeHref from "./TreeView.virtualize.href.test.svelte";
 
 describe("TreeView virtualize + href", () => {
@@ -51,5 +52,40 @@ describe("TreeView virtualize + href", () => {
     const selfLink = screen.getByRole("treeitem", { name: /Self Target/ });
     expect(selfLink).toHaveAttribute("target", "_self");
     expect(selfLink).not.toHaveAttribute("rel");
+  });
+
+  it("does not cancel Enter on a focused link row", () => {
+    render(TreeViewVirtualizeHref);
+
+    const linkNode = screen.getByRole("treeitem", { name: /Link Node/ });
+    linkNode.focus();
+
+    const event = new KeyboardEvent("keydown", {
+      key: "Enter",
+      bubbles: true,
+      cancelable: true,
+    });
+    linkNode.dispatchEvent(event);
+
+    expect(event.defaultPrevented).toBe(false);
+  });
+
+  it("selects a link row exactly once on Enter", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+
+    render(TreeViewVirtualizeHref);
+
+    const linkNode = screen.getByRole("treeitem", { name: /Link Node/ });
+    linkNode.focus();
+
+    await user.keyboard("{Enter}");
+
+    const selectCalls = consoleLog.mock.calls.filter(
+      (call) => call[0] === "select",
+    );
+    expect(selectCalls).toHaveLength(1);
+    expect(selectCalls[0][1]).toEqual(
+      expect.objectContaining({ id: "link-1" }),
+    );
   });
 });

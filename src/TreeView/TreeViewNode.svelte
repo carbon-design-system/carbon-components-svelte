@@ -205,21 +205,21 @@
           event.preventDefault();
         }
 
-        if (
-          event.key === "ArrowLeft" ||
-          event.key === "ArrowRight" ||
-          event.key === "Enter"
-        ) {
+        if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
           event.preventDefault();
           event.stopPropagation();
         }
+
+        // Let the browser follow `href`: its synthesized click reaches
+        // `on:click`, which calls `clickNode`.
+        if (event.key === "Enter") event.stopPropagation();
 
         if (event.key === "ArrowLeft") {
           const parentNode = findParentTreeNode(ref.parentNode?.parentNode);
           if (parentNode) parentNode.focus();
         }
 
-        if (event.key === "Enter" || event.key === " ") {
+        if (event.key === " ") {
           event.preventDefault();
           if (disabled) return;
           clickNode(node, event);
