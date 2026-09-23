@@ -37,6 +37,8 @@ Use the `valueChildren` slot to render custom value content instead of `valueTex
   <strong slot="valueChildren">812 GB / 1 TB</strong>
 </Meter>
 
+When `valueText` is unset, `aria-valuetext` is generated automatically if the value is over capacity or the status is `"warning"` or `"error"`; otherwise it's omitted. Override the generated range (e.g., "420 of 1,000") with `valueRangeText`, and the status word with `warningText` or `errorText`.
+
 ## Helper text
 
 Set `helperText` to render supporting text below the track, linked to the meter through `aria-describedby`.
