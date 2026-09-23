@@ -77,6 +77,49 @@ describe("Search", () => {
     expect(consoleLog).toHaveBeenCalledTimes(1);
   });
 
+  describe("readonly", () => {
+    it("renders a readonly input and hides the clear button", () => {
+      render(Search, { props: { readonly: true, value: "abc" } });
+
+      expect(getSearchInput("Default search")).toHaveAttribute("readonly");
+      expect(getClearButton("Clear value")).toHaveClass(
+        "bx--search-close--hidden",
+      );
+    });
+
+    it("does not clear the value from the clear button", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(Search, { props: { readonly: true, value: "abc" } });
+
+      await user.click(getClearButton("Clear value"));
+
+      expect(getSearchInput("Default search")).toHaveValue("abc");
+      expect(consoleLog).not.toHaveBeenCalledWith("clear");
+    });
+
+    it("does not clear the value on Escape", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(Search, { props: { readonly: true, value: "abc" } });
+
+      await user.click(getSearchInput("Default search"));
+      await user.keyboard("{Escape}");
+
+      expect(getSearchInput("Default search")).toHaveValue("abc");
+      expect(consoleLog).not.toHaveBeenCalledWith("clear");
+    });
+
+    it("clears on Escape when not readonly", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(Search, { props: { value: "abc" } });
+
+      await user.click(getSearchInput("Default search"));
+      await user.keyboard("{Escape}");
+
+      expect(getSearchInput("Default search")).toHaveValue("");
+      expect(consoleLog).toHaveBeenCalledWith("clear");
+    });
+  });
+
   it("shows a busy state while loading", () => {
     render(Search, { props: { loading: true } });
 
