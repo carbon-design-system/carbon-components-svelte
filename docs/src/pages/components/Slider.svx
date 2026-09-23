@@ -73,7 +73,7 @@ Set `step` to control increment size.
 
 ### Step multiplier
 
-Set `stepMultiplier` to control how far Shift + Arrow key presses move the value. Holding Shift while pressing an arrow key moves the value by `(max - min) / stepMultiplier`, rounded to the nearest `step`, instead of a single step. Defaults to `4`.
+Set `stepMultiplier` to control how far <DocKbd label="Shift" /> + Arrow key presses, or <DocKbd label="PageUp" />/<DocKbd label="PageDown" />, move the value. Holding Shift while pressing an arrow key, or pressing <DocKbd label="PageUp" />/<DocKbd label="PageDown" /> alone, moves the value by `(max - min) / stepMultiplier`, rounded to the nearest `step`, instead of a single step. Defaults to `4`.
 
 <Slider labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100} step={10} stepMultiplier={2} />
 
