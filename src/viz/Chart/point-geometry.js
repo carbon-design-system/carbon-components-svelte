@@ -70,3 +70,38 @@ export function buildPoints(groups, scales, options = {}) {
   if (size) circles.sort((a, b) => b.r - a.r);
   return circles;
 }
+
+/**
+ * Paint circles onto a canvas, one path per color, so a series costs two
+ * operations however many points it has. Matches the SVG mark: a light
+ * fill and a solid outline in the series color.
+ *
+ * @param {CanvasRenderingContext2D} context
+ * @param {ReadonlyArray<import("./point-geometry.d.ts").PointCircle>} circles
+ * @param {(color: string) => string} resolve
+ */
+export function paintPoints(context, circles, resolve) {
+  /** @type {Map<string, import("./point-geometry.d.ts").PointCircle[]>} */
+  const byColor = new Map();
+  for (const circle of circles) {
+    const list = byColor.get(circle.color);
+    if (list) list.push(circle);
+    else byColor.set(circle.color, [circle]);
+  }
+  const TAU = Math.PI * 2;
+  for (const [color, list] of byColor) {
+    const style = resolve(color);
+    context.beginPath();
+    for (const circle of list) {
+      context.moveTo(circle.cx + circle.r, circle.cy);
+      context.arc(circle.cx, circle.cy, circle.r, 0, TAU);
+    }
+    context.globalAlpha = 0.3;
+    context.fillStyle = style;
+    context.fill();
+    context.globalAlpha = 1;
+    context.strokeStyle = style;
+    context.lineWidth = 1.5;
+    context.stroke();
+  }
+}

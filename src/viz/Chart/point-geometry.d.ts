@@ -34,3 +34,10 @@ export function buildPoints<T>(
   scales: ChartScales,
   options?: PointOptions<T>,
 ): PointCircle[];
+
+/** Paint circles onto a canvas, one path per color. */
+export function paintPoints(
+  context: CanvasRenderingContext2D,
+  circles: ReadonlyArray<PointCircle>,
+  resolve: (color: string) => string,
+): void;

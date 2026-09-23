@@ -14,6 +14,12 @@
    */
 
   /**
+   * Specify the rows, one per point.
+   * @type {ReadonlyArray<T>}
+   */
+  export let data = [];
+
+  /**
    * Specify how to read a size from a row, which makes this a bubble chart:
    * a key or a function. The circle's area follows the value.
    * @type {import("../utils/accessor.js").Accessor<T, number | null | undefined>}
@@ -57,6 +63,17 @@
    * @type {"behind" | "front" | "none"}
    */
   export let points = "behind";
+
+  /**
+   * Specify how the points are drawn: as SVG elements, as pixels on a
+   * canvas, or whichever suits the count. Hover, the keyboard, and the
+   * tooltip work the same either way.
+   * @type {"auto" | "svg" | "canvas"}
+   */
+  export let renderer = "auto";
+
+  /** Specify the point count above which `renderer="auto"` paints on a canvas */
+  export let canvasThreshold = 5000;
 
   /** Specify the label of the size in the tooltip */
   export let sizeLabel = "Size";
@@ -136,6 +153,9 @@
   import { resolveFormat } from "../utils/format-compact.js";
 
   $: sizeOf = size === undefined ? undefined : toAccessor(size);
+  $: painting =
+    renderer === "canvas" ||
+    (renderer === "auto" && data.length > canvasThreshold);
   $: writeSize = resolveFormat(sizeFormat, $$restProps.locale);
 </script>
 
@@ -148,6 +168,7 @@
   bind:ref
   xDomain="nice"
   zero={false}
+  {data}
   {...$$restProps}
   on:select
   on:hover
@@ -174,6 +195,7 @@
       ? "bx--viz-points--behind"
       : undefined}
     hidden={density !== "none" && points === "none"}
+    renderer={painting ? "canvas" : "svg"}
   />
   <slot />
   <svelte:fragment slot="toolbar">
