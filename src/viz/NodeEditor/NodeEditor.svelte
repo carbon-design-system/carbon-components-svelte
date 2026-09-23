@@ -109,8 +109,9 @@
   export let snap = 8;
 
   /**
-   * Specify how edges are drawn.
-   * @type {"straight" | "orthogonal"}
+   * Specify how edges are drawn: straight, with right angles and rounded
+   * corners, or as curves.
+   * @type {"straight" | "orthogonal" | "curved"}
    */
   export let edge = "orthogonal";
 
@@ -195,6 +196,8 @@
   let stageHeight = 0;
   let focusIndex = 0;
   let gesture = 0;
+  // Focus that came from a press must not pan the stage under the pointer.
+  let pressed = false;
   /** @type {{ from: string; port: string; x: number; y: number; over: { node: string; port: string } | null } | null} */
   let linking = null;
   /** @type {{ x0: number; y0: number; x1: number; y1: number } | null} */
@@ -256,24 +259,7 @@
     };
   });
   $: boxOf = new Map(boxes.map((box) => [box.id, box]));
-  $: wires = edges.flatMap((row, i) => {
-    const rec = /** @type {Record<string, unknown>} */ (row);
-    const from = boxOf.get(String(rec[source]));
-    const to = boxOf.get(String(rec[target]));
-    if (!from || !to) return [];
-    const a = portOn(from, String(rec[sourcePort] ?? ""), "out");
-    const b = portOn(to, String(rec[targetPort] ?? ""), "in");
-    return [
-      {
-        id: edgeKey(row),
-        source: from.id,
-        target: to.id,
-        d: routePorts(a, b, { kind: edge }),
-        datum: row,
-        index: i,
-      },
-    ];
-  });
+  $: wires = routeWires(edges, boxOf, edge);
   $: bounds = extent(boxes);
   $: view =
     transform ??
@@ -291,6 +277,60 @@
     b: toWorld(view, stageWidth, stageHeight),
   };
   $: linkPath = linking ? previewPath(linking) : "";
+
+  /**
+   * Every edge with its path. Edges that share a port take channels a few
+   * pixels apart, so they never lie on one another.
+   * @param {ReadonlyArray<E>} rows
+   * @param {Map<string, (typeof boxes)[number]>} at
+   * @param {"straight" | "orthogonal" | "curved"} kind
+   */
+  function routeWires(rows, at, kind) {
+    const resolved = rows.flatMap((row, i) => {
+      const rec = /** @type {Record<string, unknown>} */ (row);
+      const from = at.get(String(rec[source]));
+      const to = at.get(String(rec[target]));
+      if (!from || !to) return [];
+      const outKey = `${from.id}\u0000${rec[sourcePort] ?? ""}`;
+      const inKey = `${to.id}\u0000${rec[targetPort] ?? ""}`;
+      return [{ row, i, from, to, outKey, inKey }];
+    });
+    /** @type {Map<string, number>} */
+    const outCount = new Map();
+    /** @type {Map<string, number>} */
+    const inCount = new Map();
+    for (const entry of resolved) {
+      outCount.set(entry.outKey, (outCount.get(entry.outKey) ?? 0) + 1);
+      inCount.set(entry.inKey, (inCount.get(entry.inKey) ?? 0) + 1);
+    }
+    /** @type {Map<string, number>} */
+    const outSeen = new Map();
+    /** @type {Map<string, number>} */
+    const inSeen = new Map();
+    const GAP = 10;
+    return resolved.map(({ row, i, from, to, outKey, inKey }) => {
+      const rec = /** @type {Record<string, unknown>} */ (row);
+      const outIndex = outSeen.get(outKey) ?? 0;
+      const inIndex = inSeen.get(inKey) ?? 0;
+      outSeen.set(outKey, outIndex + 1);
+      inSeen.set(inKey, inIndex + 1);
+      const spread = (/** @type {number} */ index, /** @type {number} */ n) =>
+        (index - (n - 1) / 2) * GAP;
+      const offset =
+        spread(inIndex, inCount.get(inKey) ?? 1) +
+        spread(outIndex, outCount.get(outKey) ?? 1);
+      const a = portOn(from, String(rec[sourcePort] ?? ""), "out");
+      const b = portOn(to, String(rec[targetPort] ?? ""), "in");
+      return {
+        id: edgeKey(row),
+        source: from.id,
+        target: to.id,
+        d: routePorts(a, b, { kind, offset }),
+        datum: row,
+        index: i,
+      };
+    });
+  }
 
   /** @param {E} row */
   function edgeKey(row) {
@@ -1057,10 +1097,15 @@
           aria-pressed={selectedNodes.has(box.id)}
           aria-label="{text.node}: {box.label}"
           use:draggable={box.id}
+          on:pointerdown={() => {
+            pressed = true;
+          }}
           on:click|stopPropagation={(event) => clickNode(event, box.id)}
           on:focus={() => {
             focusIndex = i;
-            tick().then(() => reveal(box));
+            const byKeyboard = !pressed;
+            pressed = false;
+            if (byKeyboard) tick().then(() => reveal(box));
           }}
           on:keydown={(event) => onNodeKeydown(event, box)}
         >

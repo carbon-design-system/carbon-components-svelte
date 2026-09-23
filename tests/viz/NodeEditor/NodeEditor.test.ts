@@ -212,6 +212,65 @@ describe("NodeEditor", () => {
     expect(out("nodes")).toBe("a@500,300 b@0,0");
   });
 
+  it("gives edges that share a port separate channels, routes a backward edge around, and can curve", async () => {
+    const { rerender } = render(NodeEditor, {
+      nodes: [
+        { id: "a", name: "a", x: 0, y: 0 },
+        { id: "b", name: "b", x: 0, y: 200 },
+        { id: "c", name: "c", x: 300, y: 100 },
+        { id: "d", name: "d", x: -300, y: 100 },
+      ],
+      edges: [
+        { source: "a", target: "c" },
+        { source: "b", target: "c" },
+        { source: "c", target: "d" },
+      ],
+    });
+    const paths = () =>
+      Array.from(document.querySelectorAll(".bx--viz-editor__edge-line")).map(
+        (p) => p.getAttribute("d") ?? "",
+      );
+    // The two edges into c turn at different x, five pixels either side of
+    // the midpoint; the turn is the first rounded corner.
+    const channel = (d: string) => Number(d.match(/Q([\d.-]+),/)?.[1]);
+    expect(channel(paths()[0])).toBe(225);
+    expect(channel(paths()[1])).toBe(235);
+    // The backward edge climbs to a lane above the nodes and comes around,
+    // never crossing back through c or d.
+    expect(paths()[2]).toContain(",84L");
+    expect(paths()[2]).toContain("L-308,84");
+    await rerender({
+      nodes: [
+        { id: "a", name: "a", x: 0, y: 0 },
+        { id: "c", name: "c", x: 300, y: 100 },
+      ],
+      edges: [{ source: "a", target: "c" }],
+      edge: "curved",
+    });
+    expect(paths()[0]).toMatch(/^M[\d.]+,[\d.]+C/);
+  });
+
+  it("does not pan the stage when a node is clicked, only when focus comes from the keyboard", async () => {
+    const ontransform = vi.fn();
+    render(NodeEditor, {
+      nodes: [
+        { id: "a", name: "a", x: 0, y: 0 },
+        { id: "far", name: "far", x: 5000, y: 5000 },
+      ],
+      edges: [],
+      ontransform,
+    });
+    const stage = document.querySelector(
+      ".bx--viz-editor__stage",
+    ) as HTMLElement;
+    Object.defineProperty(stage, "clientWidth", {
+      value: 600,
+      configurable: true,
+    });
+    await user.click(nodes()[1]);
+    expect(ontransform).not.toHaveBeenCalled();
+  });
+
   it("is inert when readonly", async () => {
     render(NodeEditor, { readonly: true });
     expect(screen.queryByRole("button", { name: "Arrange" })).toBeNull();

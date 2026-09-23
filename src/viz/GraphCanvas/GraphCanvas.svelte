@@ -186,6 +186,8 @@
   /** @type {string | null} */
   let activeId = null;
   let focusIndex = -1;
+  // Focus that came from a press must not pan the stage under the pointer.
+  let pressed = false;
 
   $: idOf = toAccessor(id);
   $: labelOf = label === undefined ? undefined : toAccessor(label);
@@ -637,12 +639,17 @@
           tabindex={i === Math.max(focusIndex, 0) ? 0 : -1}
           aria-pressed={node.id === selected}
           aria-label={describe(node)}
+          on:pointerdown={() => {
+            pressed = true;
+          }}
           on:click={(event) => select(node, event)}
           on:dblclick={() => toggle(node)}
           on:focus={() => {
             focusIndex = i;
             setActive(node);
-            tick().then(() => reveal(node));
+            const byKeyboard = !pressed;
+            pressed = false;
+            if (byKeyboard) tick().then(() => reveal(node));
           }}
           on:blur={() => setActive(null)}
           on:mouseenter={() => setActive(node)}

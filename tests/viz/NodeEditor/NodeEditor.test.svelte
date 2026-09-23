@@ -17,6 +17,8 @@
   export let edges: Edge[] = [{ source: "src", target: "map" }];
   export let refuse: string | null = null;
   export let readonly = false;
+  export let edge: "straight" | "orthogonal" | "curved" = "orthogonal";
+  export let ontransform: (detail: unknown) => void = () => {};
   export let selected = { nodes: [] as string[], edges: [] as string[] };
   export let onmove: (detail: unknown) => void = () => {};
   export let onconnect: (detail: unknown) => void = () => {};
@@ -32,7 +34,9 @@
   id="id"
   label="name"
   {readonly}
+  {edge}
   transform={{ k: 1, tx: 0, ty: 0 }}
+  on:transform={(e) => ontransform(e.detail)}
   title="Pipeline"
   data-testid="editor"
   on:move={(e) => onmove(e.detail)}
