@@ -744,9 +744,20 @@
           // move the highlight to the first/last option, mirroring the
           // open-and-move convention already used for the plain arrow keys.
           event.preventDefault();
-          if (!open) open = true;
-          highlightedIndex = event.key === "Home" ? 0 : items.length - 1;
-          highlightOrigin = "keyboard";
+          const toFirst = event.key === "Home";
+          const moveToEdge = () => {
+            if (items.length === 0) return;
+            highlightedIndex = toFirst ? 0 : items.length - 1;
+            highlightOrigin = "keyboard";
+          };
+          if (open) {
+            moveToEdge();
+          } else {
+            open = true;
+            // `afterUpdate` highlights the selected item once the open state
+            // flushes; move to the edge after that so Home/End win.
+            tick().then(moveToEdge);
+          }
         } else if (event.key === "Escape") {
           close("escape-key");
         } else if (
