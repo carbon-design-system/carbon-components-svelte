@@ -8,8 +8,8 @@
   /**
    * The node type is written inline: a typedef cannot carry the generic
    * into the generated declarations.
-   * @event {{ id: string; parent: string | null; label: string; depth: number; value: number; own: number; share: number; leaf: boolean; datum: T; index: number } | null} hover Fires when the pointer or keyboard focus moves to another arc, and with `null` when it leaves.
-   * @event {{ node: { id: string; parent: string | null; label: string; depth: number; value: number; own: number; share: number; leaf: boolean; datum: T; index: number }; originalEvent: Event }} select Fires when the focused arc is activated by click, Enter, or Space.
+   * @event {{ id: string; parent: string | null; label: string; depth: number; value: number; own: number; share: number; leaf: boolean; color: string; datum: T; index: number } | null} hover Fires when the pointer or keyboard focus moves to another arc, and with `null` when it leaves.
+   * @event {{ node: { id: string; parent: string | null; label: string; depth: number; value: number; own: number; share: number; leaf: boolean; color: string; datum: T; index: number }; originalEvent: Event }} select Fires when the focused arc is activated by click, Enter, or Space.
    * @slot {{ center: { id: string; label: string; value: number } | null; total: number; formattedTotal: string }}
    */
 
@@ -177,6 +177,7 @@
       own: arc.own,
       share: arc.share,
       leaf: arc.leaf,
+      color: arc.color,
       datum: arc.datum,
       index: arc.index,
     };
@@ -273,7 +274,7 @@
             class:bx--viz-sunburst__arc--active={i === active}
             d={arc.d}
             style:--bx-viz-color={arc.color}
-            style:--bx-viz-ring={arc.ring}
+            style:--bx-viz-ring={group === undefined ? arc.ring : 0}
             on:mouseenter={() => setActive(i)}
           />
         {/each}

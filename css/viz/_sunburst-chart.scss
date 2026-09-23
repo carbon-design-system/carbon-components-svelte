@@ -30,6 +30,8 @@
 
   // A hairline of the page background separates touching arcs, and each
   // ring out is a little lighter, so the levels read apart within a branch.
+  // With a group accessor the chart keeps every ring flat, so one group is
+  // one color wherever it appears.
   .#{$prefix}--viz-sunburst__arc {
     fill: var(--bx-viz-color, #{$interactive-04});
     fill-opacity: calc(1 - var(--bx-viz-ring, 0) * 0.16);
