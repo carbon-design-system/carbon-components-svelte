@@ -55,7 +55,10 @@ describe("ArcDiagram", () => {
       ),
     ).toBe(true);
     expect(items()).toContain("Node: app, 3 links");
-    expect(items()).toContain("Link: config to app, 3");
+    expect(items()).toContain("Link: config to app: 3");
+    expect(links()[2].querySelector("title")).toHaveTextContent(
+      "config to app: 3",
+    );
     expect(nodes()[0]).not.toHaveClass("bx--viz-arc__node--grouped");
     expect(
       screen.getByTestId("arc").querySelector(".bx--viz-treemap__legend"),

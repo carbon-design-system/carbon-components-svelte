@@ -152,6 +152,12 @@
   $: activeKey = current ? current.key : null;
   $: announcement = current ? describe(current) : "";
   $: labelFor = new Map(arc.nodes.map((node) => [node.key, node.label]));
+  // Built in script: whitespace in a multi-line template would end up in
+  // the tooltip.
+  $: describeLink = (
+    /** @type {import("./arc-geometry.js").ArcLink<L>} */ link,
+  ) =>
+    `${labelFor.get(link.source)} ${text.to} ${labelFor.get(link.target)}: ${link.value}`;
 
   /** @param {import("./arc-geometry.js").ArcNode<N>} node */
   function describe(node) {
@@ -276,10 +282,7 @@
           stroke-width={link.stroke}
           style:--bx-viz-color={link.color}
         >
-          <title>
-            {labelFor.get(link.source)} {text.to} {labelFor.get(link.target)}:
-            {link.value}
-          </title>
+          <title>{describeLink(link)}</title>
         </path>
       {/each}
       {#each arc.nodes as node, i (node.key)}
@@ -328,11 +331,7 @@
       <li>{text.node}: {describe(node)}</li>
     {/each}
     {#each arc.links as link (link.id)}
-      <li>
-        {text.link}: {labelFor.get(link.source)}
-        {text.to}
-        {labelFor.get(link.target)}, {link.value}
-      </li>
+      <li>{text.link}: {describeLink(link)}</li>
     {/each}
   </ul>
   <div class:bx--visually-hidden={true} aria-live="polite">{announcement}</div>
