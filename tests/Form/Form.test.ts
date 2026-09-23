@@ -96,4 +96,24 @@ describe("Form", () => {
       expect(consoleLog).toHaveBeenCalled();
     });
   });
+
+  describe("form reset", () => {
+    it("forwards reset from a reset button", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(FormTest);
+
+      await user.click(screen.getByRole("button", { name: "Reset" }));
+
+      expect(consoleLog).toHaveBeenCalledWith("reset", expect.any(Event));
+    });
+
+    it("forwards reset from form.reset()", () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(FormTest);
+
+      (screen.getByTestId("form") as HTMLFormElement).reset();
+
+      expect(consoleLog).toHaveBeenCalledWith("reset", expect.any(Event));
+    });
+  });
 });
