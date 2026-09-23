@@ -37,12 +37,16 @@
   class:bx--data-table--max-width={stickyHeader}
   {...$$restProps}
 >
-  {#if title}
+  {#if title || description}
     <div class:bx--data-table-header={true}>
-      <h4 id={titleId} class:bx--data-table-header__title={true}>{title}</h4>
-      <p id={descriptionId} class:bx--data-table-header__description={true}>
-        {description}
-      </p>
+      {#if title}
+        <h4 id={titleId} class:bx--data-table-header__title={true}>{title}</h4>
+      {/if}
+      {#if description}
+        <p id={descriptionId} class:bx--data-table-header__description={true}>
+          {description}
+        </p>
+      {/if}
     </div>
   {/if}
   <slot />

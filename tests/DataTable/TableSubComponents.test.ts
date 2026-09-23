@@ -45,6 +45,53 @@ describe("Table Sub-Components", () => {
       );
     });
 
+    it("describes a Table by a TableContainer description without a title", () => {
+      const { container } = render(TableContainerWithTable, {
+        props: { title: "", description: "Container Desc" },
+      });
+
+      const table = screen.getByRole("table");
+      expect(screen.getByText("Container Desc")).toBeInTheDocument();
+
+      const describedbyId = table.getAttribute("aria-describedby");
+      assert(describedbyId);
+      expect(document.getElementById(describedbyId)).toHaveTextContent(
+        "Container Desc",
+      );
+      expect(table).not.toHaveAttribute("aria-labelledby");
+      expect(
+        container.querySelector(".bx--data-table-header__title"),
+      ).not.toBeInTheDocument();
+    });
+
+    it("omits the description paragraph for a TableContainer title alone", () => {
+      const { container } = render(TableContainerWithTable, {
+        props: { title: "Container Title", description: "" },
+      });
+
+      const table = screen.getByRole("table");
+      expect(
+        container.querySelector(".bx--data-table-header__description"),
+      ).not.toBeInTheDocument();
+      expect(table).not.toHaveAttribute("aria-describedby");
+
+      const labelledbyId = table.getAttribute("aria-labelledby");
+      assert(labelledbyId);
+      expect(document.getElementById(labelledbyId)).toHaveTextContent(
+        "Container Title",
+      );
+    });
+
+    it("renders no TableContainer header without a title or description", () => {
+      const { container } = render(TableContainerWithTable, {
+        props: { title: "", description: "" },
+      });
+
+      expect(
+        container.querySelector(".bx--data-table-header"),
+      ).not.toBeInTheDocument();
+    });
+
     it("should handle size variants", () => {
       const sizes = ["compact", "short", "medium", "tall"] as const;
 
