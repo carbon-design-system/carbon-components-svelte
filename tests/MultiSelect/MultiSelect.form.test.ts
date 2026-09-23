@@ -48,9 +48,50 @@ describe("MultiSelect native form serialization", () => {
     });
 
     const formData = new FormData(getForm());
-    expect(formData.getAll("items")).toHaveLength(2);
+    expect(formData.getAll("items")).toEqual(["0", "1"]);
     expect(formData.has("0")).toBe(false);
     expect(formData.has("1")).toBe(false);
+  });
+
+  it("submits numeric ids as strings under the `name` prop", () => {
+    render(MultiSelectForm, {
+      props: {
+        items: [
+          { id: 1, text: "One" },
+          { id: 2, text: "Two" },
+        ],
+        selectedIds: [2],
+        name: "n",
+      },
+    });
+
+    expect(new FormData(getForm()).getAll("n")).toEqual(["2"]);
+  });
+
+  it("lets an itemToInput value win over the id under the `name` prop", () => {
+    render(MultiSelectForm, {
+      props: {
+        items,
+        selectedIds: ["0", "1"],
+        name: "contact",
+        itemToInput: () => ({ value: "x" }),
+      },
+    });
+
+    expect(new FormData(getForm()).getAll("contact")).toEqual(["x", "x"]);
+  });
+
+  it("keeps an explicit empty itemToInput value under the `name` prop", () => {
+    render(MultiSelectForm, {
+      props: {
+        items,
+        selectedIds: ["0", "1"],
+        name: "contact",
+        itemToInput: () => ({ value: "" }),
+      },
+    });
+
+    expect(new FormData(getForm()).getAll("contact")).toEqual(["", ""]);
   });
 
   it("does not duplicate entries when the menu is open", async () => {
