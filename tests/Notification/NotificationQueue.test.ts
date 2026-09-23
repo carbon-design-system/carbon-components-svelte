@@ -321,6 +321,140 @@ describe("NotificationQueue", () => {
     expect(screen.getByText("Third")).toBeInTheDocument();
   });
 
+  describe("close and dismiss events", () => {
+    it("should dispatch close and dismiss when the close button is clicked", async () => {
+      vi.useRealTimers();
+      const onclose = vi.fn();
+      const ondismiss = vi.fn();
+      const { component } = render(NotificationQueueTest, {
+        props: { onclose, ondismiss },
+      });
+
+      getQueue(component.queue).add({ id: "a", title: "Closable" });
+      await tick();
+
+      await user.click(screen.getByLabelText("Close notification"));
+      await tick();
+
+      expect(onclose).toHaveBeenCalledTimes(1);
+      expect(onclose.mock.calls[0][0].detail).toEqual({
+        id: "a",
+        timeout: false,
+        trigger: "close-button",
+      });
+      expect(ondismiss).toHaveBeenCalledTimes(1);
+      expect(ondismiss.mock.calls[0][0].detail).toEqual({
+        notification: { id: "a", title: "Closable" },
+        trigger: "close-button",
+      });
+      expect(screen.queryByText("Closable")).not.toBeInTheDocument();
+    });
+
+    it("should keep the toast and skip dismiss when close is cancelled", async () => {
+      vi.useRealTimers();
+      const ondismiss = vi.fn();
+      const { component } = render(NotificationQueueTest, {
+        props: {
+          onclose: (event: CustomEvent) => event.preventDefault(),
+          ondismiss,
+        },
+      });
+
+      getQueue(component.queue).add({ id: "a", title: "Sticky" });
+      await tick();
+
+      await user.click(screen.getByLabelText("Close notification"));
+      await tick();
+
+      expect(screen.getByText("Sticky")).toBeInTheDocument();
+      expect(ondismiss).not.toHaveBeenCalled();
+      expect(getQueue(component.queue).remove("a")).toBe(true);
+    });
+
+    it("should dispatch close and dismiss with the timeout trigger", async () => {
+      const onclose = vi.fn();
+      const ondismiss = vi.fn();
+      const { component } = render(NotificationQueueTest, {
+        props: { onclose, ondismiss },
+      });
+
+      getQueue(component.queue).add({ id: "a", title: "Timed", timeout: 1000 });
+      await tick();
+
+      vi.advanceTimersByTime(1000);
+      await tick();
+
+      expect(onclose.mock.calls[0][0].detail).toEqual({
+        id: "a",
+        timeout: true,
+        trigger: "timeout",
+      });
+      expect(ondismiss.mock.calls[0][0].detail.trigger).toBe("timeout");
+      expect(screen.queryByText("Timed")).not.toBeInTheDocument();
+    });
+
+    it("should dispatch dismiss with the overflow trigger for the dropped row", async () => {
+      const ondismiss = vi.fn();
+      const { component } = render(NotificationQueueTest, {
+        props: { maxNotifications: 1, ondismiss },
+      });
+
+      getQueue(component.queue).add({ id: "first", title: "First" });
+      await tick();
+      expect(ondismiss).not.toHaveBeenCalled();
+
+      getQueue(component.queue).add({ id: "second", title: "Second" });
+      await tick();
+
+      expect(ondismiss).toHaveBeenCalledTimes(1);
+      expect(ondismiss.mock.calls[0][0].detail).toEqual({
+        notification: { id: "first", title: "First" },
+        trigger: "overflow",
+      });
+      expect(screen.getByText("Second")).toBeInTheDocument();
+    });
+
+    it("should drop the oldest row at bottom positions", async () => {
+      const ondismiss = vi.fn();
+      const { component } = render(NotificationQueueTest, {
+        props: { position: "bottom-right", maxNotifications: 1, ondismiss },
+      });
+
+      getQueue(component.queue).add({ id: "first", title: "First" });
+      getQueue(component.queue).add({ id: "second", title: "Second" });
+      await tick();
+
+      expect(ondismiss.mock.calls[0][0].detail.notification.id).toBe("first");
+    });
+
+    it("should dispatch dismiss with the programmatic trigger for remove and clear", async () => {
+      const ondismiss = vi.fn();
+      const { component } = render(NotificationQueueTest, {
+        props: { ondismiss },
+      });
+      const queue = getQueue(component.queue);
+
+      queue.add({ id: "a", title: "A" });
+      queue.add({ id: "b", title: "B" });
+      queue.add({ id: "c", title: "C" });
+      queue.remove("a");
+      queue.remove("missing");
+      queue.clear();
+      await tick();
+
+      expect(
+        ondismiss.mock.calls.map(([event]) => [
+          event.detail.notification.id,
+          event.detail.trigger,
+        ]),
+      ).toEqual([
+        ["a", "programmatic"],
+        ["c", "programmatic"],
+        ["b", "programmatic"],
+      ]);
+    });
+  });
+
   it("should limit notifications to maxNotifications (bottom-right)", async () => {
     const { component } = render(NotificationQueueTest, {
       props: { position: "bottom-right", maxNotifications: 2 },

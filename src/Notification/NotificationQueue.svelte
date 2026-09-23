@@ -16,6 +16,22 @@
    */
 
   /**
+   * @typedef {"close-button" | "timeout" | "overflow" | "programmatic"} NotificationDismissTrigger
+   */
+
+  /**
+   * @event close
+   * @type {object}
+   * @property {string} id
+   * @property {boolean} timeout
+   * @property {"close-button" | "timeout"} trigger
+   * @event dismiss
+   * @type {object}
+   * @property {NotificationData & { id: string }} notification
+   * @property {NotificationDismissTrigger} trigger
+   */
+
+  /**
    * Specify the position of the notification queue.
    * @type {"top-left" | "top-center" | "top-right" | "bottom-left" | "bottom-center" | "bottom-right"}
    */
@@ -45,7 +61,10 @@
    */
   export let maxNotifications = 3;
 
+  import { createEventDispatcher } from "svelte";
   import ToastNotification from "./ToastNotification.svelte";
+
+  const dispatch = createEventDispatcher();
 
   /** @type {Array<NotificationData & { id: string }>} */
   let notifications = [];
@@ -89,20 +108,69 @@
     /** @type {NotificationData & { id: string }} */
     const newNotification = { ...notification, id };
 
-    if (isTopPosition(position)) {
-      notifications = [newNotification, ...notifications];
-      if (notifications.length > maxNotifications) {
-        notifications.splice(maxNotifications);
-      }
-    } else {
-      notifications = [...notifications, newNotification];
-      if (notifications.length > maxNotifications) {
-        notifications.splice(0, notifications.length - maxNotifications);
-      }
-    }
-    notifications = notifications;
+    notifications = isTopPosition(position)
+      ? [newNotification, ...notifications]
+      : [...notifications, newNotification];
+    dropOverflow();
 
     return id;
+  }
+
+  /**
+   * Trim the queue to `maxNotifications`, dropping the oldest rows,
+   * and dispatch `dismiss` for each dropped row.
+   */
+  function dropOverflow() {
+    if (notifications.length <= maxNotifications) return;
+
+    const top = isTopPosition(position);
+    const excess = notifications.length - maxNotifications;
+    const dropped = top
+      ? notifications.slice(maxNotifications)
+      : notifications.slice(0, excess);
+    notifications = top
+      ? notifications.slice(0, maxNotifications)
+      : notifications.slice(excess);
+
+    for (const notification of dropped) {
+      dispatch("dismiss", { notification, trigger: "overflow" });
+    }
+  }
+
+  /**
+   * Remove a notification by id and dispatch `dismiss`.
+   * @param {string} id
+   * @param {NotificationDismissTrigger} trigger
+   * @returns {boolean}
+   */
+  function dismissById(id, trigger) {
+    const index = notifications.findIndex((n) => n.id === id);
+    if (index === -1) return false;
+
+    const [notification] = notifications.splice(index, 1);
+    notifications = notifications;
+    dispatch("dismiss", { notification, trigger });
+    return true;
+  }
+
+  /**
+   * @param {CustomEvent<{ timeout: boolean }>} event
+   * @param {string} id
+   */
+  function handleClose(event, id) {
+    const timeout = event.detail?.timeout === true;
+    const trigger = timeout ? "timeout" : "close-button";
+    const shouldRemove = dispatch(
+      "close",
+      { id, timeout, trigger },
+      { cancelable: true },
+    );
+    if (shouldRemove) {
+      dismissById(id, trigger);
+    } else {
+      // Keep the toast open too; otherwise the row stays queued but hidden.
+      event.preventDefault();
+    }
   }
 
   /**
@@ -126,19 +194,18 @@
    * @type {(id: string) => boolean}
    */
   export function remove(id) {
-    const index = notifications.findIndex((n) => n.id === id);
-    if (index === -1) return false;
-
-    notifications.splice(index, 1);
-    notifications = notifications;
-    return true;
+    return dismissById(id, "programmatic");
   }
 
   /**
    * Clear all notifications.
    */
   export function clear() {
+    const cleared = notifications;
     notifications = [];
+    for (const notification of cleared) {
+      dispatch("dismiss", { notification, trigger: "programmatic" });
+    }
   }
 </script>
 
@@ -168,7 +235,7 @@
     {#each notifications as notification (notification.id)}
       <ToastNotification
         {...notification}
-        on:close={() => remove(notification.id)}
+        on:close={(event) => handleClose(event, notification.id)}
       />
     {/each}
   </div>

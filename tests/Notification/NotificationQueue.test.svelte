@@ -19,6 +19,9 @@
   export let maxNotifications: ComponentProps<NotificationQueue>["maxNotifications"] =
     undefined;
 
+  export let onclose: ((event: CustomEvent) => void) | undefined = undefined;
+  export let ondismiss: ((event: CustomEvent) => void) | undefined = undefined;
+
   export let queue: NotificationQueueComponent | undefined = undefined;
 </script>
 
@@ -31,4 +34,6 @@
   {zIndex}
   {maxNotifications}
   bind:this={queue}
+  on:close={(e) => onclose?.(e)}
+  on:dismiss={(e) => ondismiss?.(e)}
 />
