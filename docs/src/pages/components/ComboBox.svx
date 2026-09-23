@@ -105,6 +105,8 @@ items={[
 
 Use `bind:this` to access the component instance and call `ComboBox.clear()` to clear the selection. Pass `focus: false` in the options to prevent re-focusing the input.
 
+Clearing a selection with the clear button, <DocKbd label="Escape" />, or `clear()` is announced to screen readers through a polite live region. Override the message with `selectionClearedText`.
+
 <FileSource src="/framed/ComboBox/ComboBoxClear" />
 
 ### Open on clear
