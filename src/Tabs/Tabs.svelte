@@ -313,23 +313,36 @@
   }
 
   /**
+   * Arrow keys move from the tab that holds focus. Fall back to the
+   * manual-mode focus index, then the selection, when focus is elsewhere.
+   * @type {() => number}
+   */
+  function getActiveIndex() {
+    const items = refTabList
+      ? Array.from(refTabList.querySelectorAll("[role='tab']"))
+      : [];
+    const index = items.indexOf(
+      /** @type {Element} */ (refTabList?.ownerDocument.activeElement),
+    );
+    if (index >= 0) return index;
+    return focusedIndex >= 0 ? focusedIndex : selectedIndex;
+  }
+
+  /**
    * Move selection/focus to a tab at an absolute index. Roving focus resolves
    * the index (skipping disabled, wrapping); selection follows focus.
    * @type {(index: number) => Promise<void>}
    */
   async function selectTab(index) {
-    if (index === selectedIndex) {
-      focusedIndex = -1;
-      return;
-    }
-
     focusedIndex = -1;
-    if (selectedId === undefined) {
-      selectedIndex = index;
-    } else {
-      const tab = $tabs[index];
-      if (!tab) return;
-      selectedId = tab.id;
+    if (index !== selectedIndex) {
+      if (selectedId === undefined) {
+        selectedIndex = index;
+      } else {
+        const tab = $tabs[index];
+        if (!tab) return;
+        selectedId = tab.id;
+      }
     }
 
     await tick();
@@ -498,7 +511,7 @@
       selector: "[role='tab']",
       orientation: "horizontal",
       skipDisabled: true,
-      getActiveIndex: () => (focusedIndex >= 0 ? focusedIndex : selectedIndex),
+      getActiveIndex,
       onMove: (index, event) => {
         // Prevent the arrow keys from also scrolling the page.
         event.preventDefault();
