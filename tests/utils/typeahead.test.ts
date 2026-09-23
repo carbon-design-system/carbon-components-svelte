@@ -1,4 +1,8 @@
-import { typeaheadIndex } from "../../src/utils/typeahead.js";
+import {
+  createTypeaheadBuffer,
+  isTypeaheadKey,
+  typeaheadIndex,
+} from "../../src/utils/typeahead.js";
 
 describe("typeaheadIndex", () => {
   const fruits = ["Apple", "Apricot", "Banana", "Cherry"].map((text, id) => ({
@@ -80,5 +84,47 @@ describe("typeaheadIndex", () => {
         isDisabled: (item) => !item.ok,
       }),
     ).toBe(1);
+  });
+});
+
+describe("isTypeaheadKey", () => {
+  const key = (init: KeyboardEventInit) => new KeyboardEvent("keydown", init);
+
+  test("accepts unmodified printable keys", () => {
+    expect(isTypeaheadKey(key({ key: "a" }))).toBe(true);
+    expect(isTypeaheadKey(key({ key: "A", shiftKey: true }))).toBe(true);
+  });
+
+  test("rejects Space, named keys, and modified keys", () => {
+    expect(isTypeaheadKey(key({ key: " " }))).toBe(false);
+    expect(isTypeaheadKey(key({ key: "Enter" }))).toBe(false);
+    expect(isTypeaheadKey(key({ key: "a", ctrlKey: true }))).toBe(false);
+    expect(isTypeaheadKey(key({ key: "a", metaKey: true }))).toBe(false);
+    expect(isTypeaheadKey(key({ key: "a", altKey: true }))).toBe(false);
+  });
+});
+
+describe("createTypeaheadBuffer", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  test("accumulates lowercase characters until the delay elapses", () => {
+    const typeahead = createTypeaheadBuffer(500);
+    expect(typeahead.push("A")).toBe("a");
+    expect(typeahead.push("p")).toBe("ap");
+    vi.advanceTimersByTime(500);
+    expect(typeahead.push("b")).toBe("b");
+  });
+
+  test("clear resets the query immediately", () => {
+    const typeahead = createTypeaheadBuffer();
+    typeahead.push("a");
+    typeahead.clear();
+    expect(typeahead.push("b")).toBe("b");
   });
 });
