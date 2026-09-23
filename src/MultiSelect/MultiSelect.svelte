@@ -249,7 +249,9 @@
   /**
    * Default group name for the hidden inputs that mirror the current
    * selection for native form submission (`FormData`). Used per item
-   * unless `itemToInput` returns its own `name`. Not applied to the
+   * unless `itemToInput` returns its own `name`. Each input's value
+   * defaults to the item `id` unless `itemToInput` returns a `value`.
+   * Not applied to the
    * filterable text input, which is a query box, not the form value.
    * Omitted from submission when the multi-select is disabled.
    * @type {string}
@@ -1268,7 +1270,7 @@
     <input
       type="hidden"
       name={itemInput.name ?? name ?? item.id}
-      value={itemInput.value ?? ""}
+      value={itemInput.value ?? (name ? item.id : "")}
       {disabled}
     >
   {/each}
