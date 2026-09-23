@@ -977,6 +977,12 @@ Pass a function to `shouldFilterRows` to implement custom filtering logic.
 
 <FileSource src="/framed/DataTable/DataTableFilterCustom" />
 
+### Debounced
+
+Set `debounce` on `ToolbarSearch` to the number of milliseconds to wait after typing stops before rows are filtered, which keeps large tables responsive. The `value` still updates on every keystroke, and clearing the search filters immediately. The default of `0` filters on every keystroke.
+
+<FileSource src="/framed/DataTable/DataTableFilterDebounce" />
+
 ### Strategy
 
 By default (`filterMode="remove"`), filtering unmounts non-matching rows, resetting focus, draft inputs, and open menus. This keeps the DOM small for large tables.
