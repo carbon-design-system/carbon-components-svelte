@@ -159,6 +159,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "HorizonChart",
       "IcicleChart",
       "KpiCard",
+      "LayeredGraph",
       "LineChart",
       "LiveSparkline",
       "LollipopChart",

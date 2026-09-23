@@ -1,0 +1,81 @@
+---
+components: ["LayeredGraph"]
+description: Layered graph lays a directed graph out in ranks, for service maps, pipelines, and dependency graphs, with no layout dependency.
+---
+
+<script>
+  import { LayeredGraph } from "carbon-components-svelte/viz";
+
+  const services = [
+    { id: "cdn", name: "CDN", tier: "edge" },
+    { id: "gateway", name: "API gateway", tier: "edge" },
+    { id: "web", name: "web", tier: "apps" },
+    { id: "checkout", name: "checkout", tier: "apps" },
+    { id: "catalog", name: "catalog", tier: "apps" },
+    { id: "auth", name: "auth", tier: "platform" },
+    { id: "pricing", name: "pricing", tier: "platform" },
+    { id: "search", name: "search", tier: "platform" },
+    { id: "pg", name: "postgres", tier: "data" },
+    { id: "redis", name: "redis", tier: "data" },
+    { id: "kafka", name: "kafka", tier: "data" },
+    { id: "es", name: "elasticsearch", tier: "data" },
+  ];
+  const calls = [
+    ["cdn", "web"], ["gateway", "web"], ["gateway", "checkout"], ["gateway", "catalog"],
+    ["web", "auth"], ["checkout", "auth"], ["checkout", "pricing"], ["checkout", "pg"],
+    ["checkout", "kafka"], ["catalog", "search"], ["catalog", "pg"], ["pricing", "redis"],
+    ["search", "es"], ["auth", "pg"], ["auth", "redis"], ["kafka", "search"],
+  ].map(([source, target]) => ({ source, target }));
+
+  const stages = [
+    { id: "lint", name: "lint" }, { id: "unit", name: "unit tests" }, { id: "build", name: "build" },
+    { id: "e2e", name: "e2e" }, { id: "a11y", name: "a11y" }, { id: "package", name: "package" },
+    { id: "deploy", name: "deploy staging" }, { id: "smoke", name: "smoke" }, { id: "promote", name: "promote" },
+  ];
+  const needs = [
+    ["lint", "build"], ["unit", "build"], ["build", "e2e"], ["build", "a11y"], ["build", "package"],
+    ["e2e", "deploy"], ["a11y", "deploy"], ["package", "deploy"], ["deploy", "smoke"], ["smoke", "promote"],
+    ["promote", "lint"],
+  ].map(([source, target]) => ({ source, target }));
+
+  let collapsed = ["checkout"];
+  let selected = null;
+</script>
+
+`LayeredGraph` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+It is Carbon's network diagram: nodes in ranks, every edge running one way, crossings kept down. A [TreeChart](/components/TreeChart) is the case where every node has one parent, and an [AlluvialChart](/components/AlluvialChart) the case where the edges carry amounts. This is the general directed graph, laid out here so no layout library is needed. It is read-only: pan, zoom, and dragging nodes belong to a viewport, not a chart.
+
+## Basic
+
+Pass the nodes as `data` with an `id` accessor and a `label`, and the edges as `links` read with `source` and `target`. Ranks are the longest path from a node with nothing pointing at it, so a dependency sits below everything that depends on it.
+
+<LayeredGraph data={services} links={calls} id="id" label="name" title="Service dependencies" />
+
+## Lanes
+
+Set `lane` to group nodes into bands that run across the ranks, and `lanes` to fix their order. A lane is a field on the node, not another chart.
+
+<LayeredGraph data={services} links={calls} id="id" label="name" lane="tier" lanes={["edge", "apps", "platform", "data"]} title="Service dependencies by tier" />
+
+## Direction and edges
+
+Set `rankDir` to `"LR"` to run ranks left to right, which suits a pipeline, and `edge` to `"orthogonal"` for right angles. An edge that would close a cycle is drawn dashed, pointing back up the ranks, rather than breaking the layout.
+
+<LayeredGraph data={stages} links={needs} id="id" label="name" rankDir="LR" edge="orthogonal" nodeWidth={112} title="Release pipeline" />
+
+## Folding
+
+Bind `collapsed`, a list of ids, to fold away everything reachable only through a node. A folded node shows how many it hides. Double click a node to fold it, or use the arrow keys.
+
+<LayeredGraph data={services} links={calls} id="id" label="name" lane="tier" lanes={["edge", "apps", "platform", "data"]} bind:collapsed title="Service dependencies, checkout folded" />
+
+## Selection and size
+
+Bind `selected` or listen for `select`, whose detail carries the node and its `datum`. `nodeWidth`, `nodeHeight`, `rankGap`, and `nodeGap` set the geometry; a label wider than its node is cut short, and the full text is in the tooltip.
+
+<LayeredGraph data={services} links={calls} id="id" label="name" bind:selected nodeWidth={100} nodeHeight={28} rankGap={32} title="Pick a service" />
+
+## Accessibility
+
+The graph is a single tab stop. Up and Down walk the nodes in reading order, by rank and then position, announcing each with its level, lane, and whether it is folded. Left folds a node with children and Right unfolds it. Enter or Space selects, Escape clears. The figure also holds a visually hidden list of every node and every edge, so the shape of the graph is readable without seeing it.
