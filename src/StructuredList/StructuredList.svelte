@@ -47,6 +47,7 @@
 
   let prevSelectedValue = $selectedValue;
   let initialRender = true;
+  let fromProp = false;
 
   /**
    * @type {(value: Value) => void}
@@ -77,9 +78,19 @@
   });
 
   $: selected = $selectedValue;
+  $: if (selected !== $selectedValue) {
+    fromProp = true;
+    selectedValue.set(
+      multiple ? (Array.isArray(selected) ? selected : []) : selected,
+    );
+  }
   $: {
     if (!initialRender && prevSelectedValue !== $selectedValue) {
-      dispatch("change", $selectedValue);
+      if (fromProp) {
+        fromProp = false;
+      } else {
+        dispatch("change", $selectedValue);
+      }
     }
     prevSelectedValue = $selectedValue;
   }
