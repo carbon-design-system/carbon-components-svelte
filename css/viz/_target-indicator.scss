@@ -1,0 +1,108 @@
+/// TargetIndicator: progress toward a target, with a tick for where the
+/// value should be by now.
+/// @access private
+/// @group viz
+@mixin viz-target-indicator {
+  .#{$prefix}--viz-target {
+    --bx-viz-size: #{to-rem(12px)};
+    --bx-viz-color: #{$interactive-04};
+
+    display: flex;
+    align-items: center;
+    column-gap: $carbon--spacing-03;
+    min-inline-size: to-rem(64px);
+  }
+
+  .#{$prefix}--viz-target--sm {
+    --bx-viz-size: #{to-rem(8px)};
+  }
+
+  .#{$prefix}--viz-target--lg {
+    --bx-viz-size: #{to-rem(16px)};
+  }
+
+  // Behind pace is the only state that changes the color; the tick says
+  // the same thing by position, so the state never rests on color alone.
+  .#{$prefix}--viz-target--behind {
+    --bx-viz-color: var(--cds-viz-warning);
+  }
+
+  .#{$prefix}--viz-target--met {
+    --bx-viz-color: var(--cds-viz-success);
+  }
+
+  .#{$prefix}--viz-target__track {
+    display: grid;
+    flex: 1 1 auto;
+    align-items: center;
+    background: $ui-03;
+    block-size: var(--bx-viz-size);
+  }
+
+  .#{$prefix}--viz-target__measure,
+  .#{$prefix}--viz-target__expected,
+  .#{$prefix}--viz-target__goal {
+    grid-area: 1 / 1;
+  }
+
+  .#{$prefix}--viz-target__measure {
+    background: var(--bx-viz-color);
+    block-size: 100%;
+    inline-size: calc(var(--bx-viz-pct) * 1%);
+    transition: inline-size $duration--moderate-01
+      carbon--motion(standard, productive);
+  }
+
+  // The pace tick stands taller than the track, so it reads on either
+  // side of the fill.
+  .#{$prefix}--viz-target__expected {
+    background: $ui-05;
+    block-size: 150%;
+    inline-size: to-rem(2px);
+    margin-inline-start: calc(
+      var(--bx-viz-pct) * 1% - #{to-rem(2px)} * var(--bx-viz-pct) / 100
+    );
+  }
+
+  // The target is the end of the track, unless the value has passed it:
+  // then a mark shows where it was.
+  .#{$prefix}--viz-target__goal {
+    background: $ui-05;
+    block-size: 100%;
+    inline-size: to-rem(2px);
+    margin-inline-start: calc(
+      var(--bx-viz-pct) * 1% - #{to-rem(2px)} * var(--bx-viz-pct) / 100
+    );
+  }
+
+  .#{$prefix}--viz-target__value {
+    flex: none;
+    color: $text-primary;
+    font-variant-numeric: tabular-nums;
+
+    @include type-style("label-01");
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-target__measure {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-target__track {
+      border: 1px solid CanvasText;
+    }
+
+    .#{$prefix}--viz-target__measure,
+    .#{$prefix}--viz-target__expected,
+    .#{$prefix}--viz-target__goal {
+      background: CanvasText;
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("viz-target-indicator") {
+  @include viz-target-indicator;
+}
