@@ -6,6 +6,7 @@ description: Layered graph lays a directed graph out in ranks, for service maps,
 <script>
   import { LayeredGraph } from "carbon-components-svelte/viz";
 
+  const health = { cdn: "success", gateway: "success", web: "success", checkout: "warning", catalog: "success", auth: "success", pricing: "error", search: "success", pg: "success", redis: "warning", kafka: "success", es: "info" };
   const services = [
     { id: "cdn", name: "CDN", tier: "edge" },
     { id: "gateway", name: "API gateway", tier: "edge" },
@@ -58,6 +59,12 @@ Set `lane` to group nodes into bands that run across the ranks, and `lanes` to f
 
 <LayeredGraph data={services} links={calls} id="id" label="name" lane="tier" lanes={["edge", "apps", "platform", "data"]} title="Service dependencies by tier" />
 
+## Color and status
+
+The graph is grayscale until told otherwise, so nothing is colored by accident. Set `group` to color nodes by a field: the frame, the edges leaving the node, and any lane of the same name take the group's color, and a legend names the groups. Set `status` to read a state per node, one of `"success"`, `"warning"`, `"error"`, `"info"`, or `"neutral"`: it colors the frame and adds a glyph, so the state reads without color too. `colors` fixes a group's color and `palette` picks another color group.
+
+<LayeredGraph data={services.map((s) => ({ ...s, health: health[s.id] }))} links={calls} id="id" label="name" lane="tier" lanes={["edge", "apps", "platform", "data"]} group="tier" status="health" title="Service dependencies, by tier and health" />
+
 ## Direction and edges
 
 Set `rankDir` to `"LR"` to run ranks left to right, which suits a pipeline, and `edge` to `"orthogonal"` for right angles. An edge that would close a cycle is drawn dashed, pointing back up the ranks, rather than breaking the layout.
@@ -78,4 +85,4 @@ Bind `selected` or listen for `select`, whose detail carries the node and its `d
 
 ## Accessibility
 
-The graph is a single tab stop. Up and Down walk the nodes in reading order, by rank and then position, announcing each with its level, lane, and whether it is folded. Left folds a node with children and Right unfolds it. Enter or Space selects, Escape clears. The figure also holds a visually hidden list of every node and every edge, so the shape of the graph is readable without seeing it.
+The graph is a single tab stop. Up and Down walk the nodes in reading order, by rank and then position, announcing each with its status, level, lane, group, and whether it is folded. Left folds a node with children and Right unfolds it. Enter or Space selects, Escape clears. The figure also holds a visually hidden list of every node and every edge, so the shape of the graph is readable without seeing it.

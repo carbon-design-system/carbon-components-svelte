@@ -41,6 +41,20 @@ Set `actors` to fix the order across the top, and `order` to sort the messages b
 
 <SequenceDiagram data={retry} from="from" to="to" label="msg" kind="kind" order="at" actors={["payments", "worker"]} title="Retry a charge" />
 
+## Color
+
+The diagram is grayscale until told otherwise. Set `groups`, a group per actor, to color each actor's box and lifeline by the group, with a legend; `colors` fixes a group's color. A message whose `kind` is `"error"` is drawn in the error color and read out as failing.
+
+<SequenceDiagram
+  data={[...order.slice(0, 4), { from: "api", to: "postgres", msg: "INSERT order" }, { from: "postgres", to: "api", msg: "deadlock", kind: "error" }, { from: "api", to: "browser", msg: "503", kind: "error" }]}
+  from="from"
+  to="to"
+  label="msg"
+  kind="kind"
+  groups={{ browser: "client", api: "ours", auth: "ours", postgres: "data" }}
+  title="Create an order, failing"
+/>
+
 ## Size
 
 `actorWidth`, `actorGap`, and `rowHeight` set the geometry, and the diagram scales down with its container.
