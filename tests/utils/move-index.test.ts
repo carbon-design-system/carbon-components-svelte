@@ -112,4 +112,34 @@ describe("nextEnabledIndex", () => {
   test("returns the original index for an empty items array", () => {
     expect(nextEnabledIndex({ items: [], index: -1, step: 1 })).toBe(-1);
   });
+
+  test("clamps at the end instead of wrapping when wrap is false", () => {
+    const result = nextEnabledIndex({
+      items: items(false, false, false),
+      index: 2,
+      step: 1,
+      wrap: false,
+    });
+    expect(result).toBe(2);
+  });
+
+  test("skips disabled items while clamping when wrap is false", () => {
+    const result = nextEnabledIndex({
+      items: items(false, true, false),
+      index: 0,
+      step: 1,
+      wrap: false,
+    });
+    expect(result).toBe(2);
+  });
+
+  test("returns the original index when clamping finds no enabled item", () => {
+    const result = nextEnabledIndex({
+      items: items(false, true, true),
+      index: 1,
+      step: 1,
+      wrap: false,
+    });
+    expect(result).toBe(1);
+  });
 });
