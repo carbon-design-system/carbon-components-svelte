@@ -9,6 +9,7 @@
   export let virtualize: ComponentProps<Dropdown>["virtualize"] = undefined;
   export let portalMenu: ComponentProps<Dropdown>["portalMenu"] = false;
   export let open: ComponentProps<Dropdown>["open"] = false;
+  export let disabled: ComponentProps<Dropdown>["disabled"] = false;
 </script>
 
 <form data-testid="form">
@@ -21,6 +22,7 @@
     {virtualize}
     {portalMenu}
     bind:open
+    {disabled}
     labelText="Contact"
   />
 </form>

@@ -211,7 +211,8 @@
    * Specify a name attribute for native form submission.
    * Mounts a hidden input whose value mirrors `selectedId`
    * (empty string when nothing is selected, or when the
-   * selected item is disabled).
+   * selected item is disabled). Omitted from submission
+   * when the dropdown is disabled.
    * @type {string}
    */
   export let name = undefined;
@@ -351,6 +352,8 @@
   $: selectedItem = itemsById.get(selectedId);
   // Mirrors native `<select><option value>`: a disabled selection is not a
   // successful control, so it serializes as empty like nothing being selected.
+  // A disabled Dropdown disables the input itself, so the field is omitted
+  // entirely, like a disabled `<select>`.
   $: hiddenInputValue =
     selectedId === undefined || selectedItem?.disabled ? "" : selectedId;
   $: if (!open) {
@@ -665,7 +668,7 @@
     </label>
   {/if}
   {#if name}
-    <input type="hidden" {name} value={hiddenInputValue}>
+    <input type="hidden" {name} value={hiddenInputValue} {disabled}>
   {/if}
   <ListBox
     {type}
