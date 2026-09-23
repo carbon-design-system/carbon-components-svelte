@@ -34,6 +34,8 @@ Adjust visible columns with `cols`. Setting `cols` disables the default resize h
 
 Specify the max character count with `maxCount`. A character counter appears to the right of the label. Use the native maxlength attribute instead if you prefer not to show a counter.
 
+Screen readers hear the count read as words (for example, "2 of 100 characters"), and hear "Character limit reached" once the limit is hit. Override either message with the `counterText` and `limitReachedText` props.
+
 <TextArea labelText="Incident summary" placeholder="Describe what happened, the impact, and any mitigation steps taken so far..." maxCount={100} />
 
 ### Hidden label
