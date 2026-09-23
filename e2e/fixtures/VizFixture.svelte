@@ -4,6 +4,7 @@
     ArcDiagram,
     AreaChart,
     BarChart,
+    BeeswarmChart,
     BoxplotChart,
     BulletChart,
     BumpChart,
@@ -67,6 +68,7 @@
     UpSetPlot,
     UptimeBar,
     VarianceIndicator,
+    ViolinPlot,
     WaffleChart,
     WaterfallChart,
     WinLoss,
@@ -811,6 +813,22 @@
     x="region"
     y="revenue"
     title="Spread of monthly totals per region"
+    height={240}
+  />
+
+  <ViolinPlot
+    data={revenue}
+    x="region"
+    y="revenue"
+    title="Shape of monthly totals per region"
+    height={240}
+  />
+
+  <BeeswarmChart
+    data={revenue}
+    x="region"
+    y="revenue"
+    title="Every monthly total per region"
     height={240}
   />
 
