@@ -790,9 +790,20 @@
           // is set, since that is what makes clearing possible at all.
           event.preventDefault();
           clear({ open: openOnClear });
-        } else if (open && isTypeaheadKey(event)) {
+        } else if (isTypeaheadKey(event)) {
+          // APG select-only combobox: typing on the closed field opens the
+          // listbox and highlights the first match.
           event.preventDefault();
-          typeaheadSearch(event.key);
+          const character = event.key;
+          if (open) {
+            typeaheadSearch(character);
+          } else {
+            open = true;
+            // `afterUpdate` highlights the selected item once the open state
+            // flushes; search after that so the match starts past the
+            // selection, the same way it does in an open menu.
+            tick().then(() => typeaheadSearch(character));
+          }
         }
       }}
         on:keyup={(event) => {
