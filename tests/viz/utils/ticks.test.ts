@@ -75,3 +75,21 @@ describe("niceDomain", () => {
     expect(niceDomain(Number.NaN, 1)).toEqual([Number.NaN, 1]);
   });
 });
+
+test("ticks never yield a negative zero", () => {
+  const values = ticks(-0.0001, 400, 5);
+  expect(values).toContain(0);
+  expect(
+    Object.is(
+      values.find((v) => v === 0),
+      -0,
+    ),
+  ).toBe(false);
+  const fine = ticks(-0.00001, 0.04, 5);
+  expect(
+    Object.is(
+      fine.find((v) => v === 0),
+      -0,
+    ),
+  ).toBe(false);
+});

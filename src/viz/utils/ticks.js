@@ -63,12 +63,14 @@ export function ticks(min, max, count = 5) {
   if (increment > 0) {
     const first = Math.ceil(lo / increment);
     const last = Math.floor(hi / increment);
-    for (let i = first; i <= last; i++) values.push(i * increment);
+    // A first index of -0 would make a "-0" tick.
+    for (let i = first; i <= last; i++)
+      values.push(i === 0 ? 0 : i * increment);
   } else {
     const inverse = -increment;
     const first = Math.ceil(lo * inverse);
     const last = Math.floor(hi * inverse);
-    for (let i = first; i <= last; i++) values.push(i / inverse);
+    for (let i = first; i <= last; i++) values.push(i === 0 ? 0 : i / inverse);
   }
   return values;
 }
