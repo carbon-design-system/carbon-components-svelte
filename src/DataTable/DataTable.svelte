@@ -1090,7 +1090,7 @@
               {/if}
             </th>
           {/if}
-          {#if isSelectionEnabled && !batchSelection}
+          {#if isSelectionEnabled && (radio || !batchSelection)}
             <th scope="col">
               <span class:bx--visually-hidden={true}>Select row</span>
             </th>
