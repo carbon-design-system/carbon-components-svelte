@@ -1,0 +1,100 @@
+/// MarimekkoChart: a column per category as wide as its total, split by
+/// series share, drawn at a fixed logical size and scaled to the container.
+/// @access private
+/// @group viz
+@mixin viz-marimekko-chart {
+  .#{$prefix}--viz-marimekko {
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-marimekko .#{$prefix}--viz-chart__title {
+    margin-block-end: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--viz-marimekko__plot {
+    position: relative;
+  }
+
+  .#{$prefix}--viz-marimekko__svg {
+    display: block;
+    overflow: visible;
+    block-size: auto;
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--viz-marimekko__svg:focus {
+    outline: 2px solid $focus;
+    outline-offset: 2px;
+  }
+
+  .#{$prefix}--viz-marimekko__column-label {
+    fill: $text-primary;
+    font-weight: 600;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-marimekko__column-share {
+    fill: $text-secondary;
+    font-weight: 400;
+  }
+
+  .#{$prefix}--viz-marimekko__cell {
+    cursor: pointer;
+  }
+
+  // A hairline of the page background separates touching cells.
+  .#{$prefix}--viz-marimekko__box {
+    fill: var(--bx-viz-color, #{$interactive-04});
+    stroke: $ui-background;
+    stroke-width: 1;
+    transition: fill-opacity $duration--fast-02
+      carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-marimekko__label {
+    fill: $text-on-color;
+    pointer-events: none;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-marimekko__label--share {
+    fill-opacity: 0.85;
+  }
+
+  .#{$prefix}--viz-marimekko--emphasis
+    .#{$prefix}--viz-marimekko__cell:not(
+      .#{$prefix}--viz-marimekko__cell--active
+    )
+    .#{$prefix}--viz-marimekko__box {
+    fill-opacity: 0.45;
+  }
+
+  .#{$prefix}--viz-marimekko__cell--selected .#{$prefix}--viz-marimekko__box {
+    stroke: $ui-05;
+    stroke-width: 2;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-marimekko__box {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-marimekko__box {
+      stroke: CanvasText;
+    }
+
+    .#{$prefix}--viz-marimekko__cell--selected .#{$prefix}--viz-marimekko__box {
+      stroke: Highlight;
+      stroke-width: 3;
+    }
+  }
+}
+
+@include exports("viz-marimekko-chart") {
+  @include viz-marimekko-chart;
+}

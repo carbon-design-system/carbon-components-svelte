@@ -58,6 +58,7 @@ export { default as LayeredGraph } from "./LayeredGraph/LayeredGraph.svelte";
 export { default as LineChart } from "./LineChart/LineChart.svelte";
 export { default as LiveSparkline } from "./LiveSparkline/LiveSparkline.svelte";
 export { default as LollipopChart } from "./LollipopChart/LollipopChart.svelte";
+export { default as MarimekkoChart } from "./MarimekkoChart/MarimekkoChart.svelte";
 export { default as MicroDonut } from "./MicroDonut/MicroDonut.svelte";
 export { default as MicroFunnel } from "./MicroFunnel/MicroFunnel.svelte";
 export { default as MicroHistogram } from "./MicroHistogram/MicroHistogram.svelte";
