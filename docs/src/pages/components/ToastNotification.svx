@@ -27,6 +27,12 @@ Automatically close the notification after a specified duration (in milliseconds
 
 Change `timeoutKey` (for example, increment it) to restart the timeout from its full duration after updating the message.
 
+### Timeout bar
+
+Set `showTimeout` to draw the time left as a bar along the bottom edge of the toast, in a faded version of the kind's color. The bar stops while the timeout is paused and is hidden from screen readers. The example shows every `kind` in the default and low contrast variants; hover a toast to pause it.
+
+<FileSource src="/framed/ToastNotification/ToastNotificationShowTimeout" />
+
 ## Full width
 
 Span the full container width with `fullWidth`.

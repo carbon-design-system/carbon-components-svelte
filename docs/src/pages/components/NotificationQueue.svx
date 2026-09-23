@@ -45,7 +45,7 @@ Lower the value if the queue should render behind other fixed UI instead.
 
 The queue tracks notifications by id, so `add`, `update`, `remove`, and the `maxNotifications` limit all key off the same identifier.
 
-Since each queued notification renders as a [ToastNotification](/components/ToastNotification), `add` also accepts that component's `pauseOnHover`, `role`, and `fullWidth` props.
+Since each queued notification renders as a [ToastNotification](/components/ToastNotification), `add` also accepts that component's `pauseOnHover`, `showTimeout`, `role`, and `fullWidth` props.
 
 ### Deduplication
 
