@@ -177,8 +177,8 @@ expanding and collapsing items based on user interactions or application state.
 ### Reacting to toggles
 
 Listen for `toggle` on an item to react when a user expands or collapses it.
-The event's `detail` is the item's next open state, so a parent can track
-which item was toggled and to what state without binding to `open`.
+The event's `detail.open` is the item's next open state, so a parent can
+track which item was toggled and to what state without binding to `open`.
 
 <FileSource src="/framed/Accordion/ToggleAccordion" />
 

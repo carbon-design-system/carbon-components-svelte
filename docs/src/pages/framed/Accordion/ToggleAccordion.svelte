@@ -29,8 +29,8 @@
       <AccordionItem
         title={item.title}
         on:toggle={(e) => {
-          const isOpen = e.detail;
-          lastToggled = `${item.title} (${isOpen ? "opened" : "closed"})`;
+          const { open } = e.detail;
+          lastToggled = `${item.title} (${open ? "opened" : "closed"})`;
         }}
       >
         <p>{item.description}</p>

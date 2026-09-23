@@ -16,7 +16,7 @@
     {lazy}
     {open}
     on:toggle={(e) => {
-      console.log("item-toggle", e.detail);
+      console.log("item-toggle", e.detail.open);
     }}
   >
     <p use:logMount>Lazy panel content</p>

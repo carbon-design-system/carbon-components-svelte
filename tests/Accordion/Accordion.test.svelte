@@ -67,7 +67,7 @@
         console.log("item-animationend");
       }}
       on:toggle={(e) => {
-        console.log("item-toggle", e.detail);
+        console.log("item-toggle", e.detail.open);
       }}
       >3</AccordionItem
     >
