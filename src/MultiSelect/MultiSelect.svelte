@@ -15,7 +15,7 @@
    * @property {Item["id"][]} selectedIds
    * @property {Item[]} selected
    * @property {Item[]} unselected
-   * @event {null} clear
+   * @event {KeyboardEvent | MouseEvent} clear
    * @event {FocusEvent | CustomEvent<FocusEvent>} blur
    * @event {{ trigger: "escape-key" | "outside-click" }} close
    * @event {{ scrollTop: number; scrollHeight: number; clientHeight: number }} scrollend
