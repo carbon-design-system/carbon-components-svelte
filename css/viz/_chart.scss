@@ -474,6 +474,51 @@
     opacity: 0.3;
   }
 
+  // A violin is the density mirrored about the category, with a slim
+  // quartile box and a median dot inside.
+  .#{$prefix}--viz-violins__violin {
+    transition: opacity $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-violins__body {
+    fill: var(--bx-viz-color, #{$interactive-04});
+    fill-opacity: 0.35;
+    stroke: var(--bx-viz-color, #{$interactive-04});
+    stroke-width: 1;
+  }
+
+  .#{$prefix}--viz-violins__box {
+    stroke: $ui-05;
+    stroke-linecap: round;
+    stroke-width: 4;
+  }
+
+  .#{$prefix}--viz-violins__median {
+    fill: $ui-background;
+    stroke: $ui-05;
+    stroke-width: 1.5;
+  }
+
+  .#{$prefix}--viz-violins__violin--dimmed {
+    opacity: 0.3;
+  }
+
+  // A swarm is one dot per value.
+  .#{$prefix}--viz-swarm__group {
+    transition: opacity $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-swarm__dot {
+    fill: var(--bx-viz-color, #{$interactive-04});
+    fill-opacity: 0.85;
+    stroke: $ui-background;
+    stroke-width: 0.5;
+  }
+
+  .#{$prefix}--viz-swarm__group--dimmed {
+    opacity: 0.3;
+  }
+
   .#{$prefix}--viz-boxes__box--dimmed {
     opacity: 0.3;
   }
