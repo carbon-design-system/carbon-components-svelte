@@ -21,7 +21,8 @@
   export let secondaryButtonLoadingDescription = "Loading";
   export let secondaryButtons: ComponentProps<Modal>["secondaryButtons"] =
     undefined;
-  export let selectorPrimaryFocus = "[data-modal-primary-focus]";
+  export let selectorPrimaryFocus: ComponentProps<Modal>["selectorPrimaryFocus"] =
+    "[data-modal-primary-focus]";
   export let preventCloseOnClickOutside = false;
   export let hideCloseButton = false;
   export let size: ComponentProps<Modal>["size"] = undefined;

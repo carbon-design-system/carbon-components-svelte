@@ -463,6 +463,41 @@ describe("Modal", () => {
     expect(trigger).toHaveFocus();
   });
 
+  it("skips initial focus when selectorPrimaryFocus is null", () => {
+    render(ModalTest, {
+      props: {
+        open: true,
+        modalHeading: "No Focus",
+        primaryButtonText: "Save",
+        selectorPrimaryFocus: null,
+      },
+    });
+
+    const dialog = screen.getByRole("dialog");
+    expect(dialog.contains(document.activeElement)).toBe(false);
+    expect(screen.getByRole("button", { name: "Save" })).not.toHaveFocus();
+    expect(screen.getByTestId("test-focus")).not.toHaveFocus();
+  });
+
+  it("skips focus on a post-mount open when selectorPrimaryFocus is null", async () => {
+    const { rerender } = render(ModalTest, {
+      props: {
+        open: false,
+        modalHeading: "No Focus",
+        primaryButtonText: "Save",
+        selectorPrimaryFocus: null,
+      },
+    });
+
+    rerender({ open: true });
+    await tick();
+    await tick();
+
+    expect(screen.getByRole("dialog").contains(document.activeElement)).toBe(
+      false,
+    );
+  });
+
   it("respects the selectorPrimaryFocus prop", () => {
     render(ModalTest, {
       props: {

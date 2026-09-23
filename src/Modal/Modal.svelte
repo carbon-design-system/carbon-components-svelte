@@ -127,7 +127,11 @@
    */
   export let secondaryButtons = [];
 
-  /** Specify a selector to be focused when opening the modal */
+  /**
+   * Specify a selector to be focused when opening the modal.
+   * Set to `null` to skip initial focus and move focus yourself.
+   * @type {null | string}
+   */
   export let selectorPrimaryFocus = "[data-modal-primary-focus]";
 
   /** Set to `true` to prevent the modal from closing when clicking outside */
