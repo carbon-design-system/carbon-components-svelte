@@ -196,7 +196,7 @@
   const dispatch = createEventDispatcher();
   const formContext = getContext("carbon:Form");
 
-  function updateValue(isIncrementing) {
+  function updateValue(isIncrementing, multiplier = 1) {
     // When the input is empty (null) or zero and stepStartValue is set,
     // jump directly to stepStartValue on the first step.
     if ((value === null || value === 0) && stepStartValue !== undefined) {
@@ -212,11 +212,12 @@
     }
 
     if (useTextMode) {
+      const stepAmount = step * multiplier;
       const currentValue = value ?? getDefaultValue(stepStartValue, min);
       const newValue = roundToStep(
         isIncrementing
-          ? clamp(currentValue + step, undefined, max)
-          : clamp(currentValue - step, min, undefined),
+          ? clamp(currentValue + stepAmount, undefined, max)
+          : clamp(currentValue - stepAmount, min, undefined),
         step,
       );
 
@@ -236,9 +237,9 @@
       }
 
       if (isIncrementing) {
-        ref.stepUp();
+        ref.stepUp(multiplier);
       } else {
-        ref.stepDown();
+        ref.stepDown(multiplier);
       }
       value = +ref.value;
 
@@ -388,14 +389,20 @@
   }
 
   function handleKeydown(event) {
-    if (
-      useTextMode &&
-      !readonly &&
-      !disabled &&
-      (event.key === "ArrowUp" || event.key === "ArrowDown")
-    ) {
+    if (readonly || disabled) return;
+
+    if (useTextMode && (event.key === "ArrowUp" || event.key === "ArrowDown")) {
       event.preventDefault();
       updateValue(event.key === "ArrowUp");
+      return;
+    }
+
+    if (event.key === "PageUp" || event.key === "PageDown") {
+      // Unlike Arrow keys, native number inputs don't step on Page Up/Down,
+      // so handle it here regardless of useTextMode. Steps by 10x `step`,
+      // clamped to min/max like a single step.
+      event.preventDefault();
+      updateValue(event.key === "PageUp", 10);
     }
   }
 

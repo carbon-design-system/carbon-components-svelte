@@ -339,6 +339,80 @@ describe("NumberInput", () => {
     expect(input).toHaveValue("50");
   });
 
+  it("should step by 10x step on PageUp and PageDown", async () => {
+    render(NumberInput, { props: { value: 0, step: 1 } });
+
+    const input = screen.getByRole("spinbutton");
+    input.focus();
+
+    await user.keyboard("{PageUp}");
+    expect(screen.getByTestId("value").textContent).toBe("10");
+
+    await user.keyboard("{PageDown}");
+    expect(screen.getByTestId("value").textContent).toBe("0");
+  });
+
+  it("should step by 10x step on PageUp and PageDown in allowDecimal mode", async () => {
+    render(NumberInput, { props: { allowDecimal: true, step: 0.1, value: 0 } });
+
+    const input = screen.getByRole("textbox");
+    input.focus();
+
+    await user.keyboard("{PageUp}");
+    expect(screen.getByTestId("value").textContent).toBe("1");
+
+    await user.keyboard("{PageDown}");
+    expect(screen.getByTestId("value").textContent).toBe("0");
+  });
+
+  it("should clamp PageUp/PageDown values to min and max", async () => {
+    render(NumberInput, { props: { value: 95, step: 1, min: 0, max: 100 } });
+
+    const input = screen.getByRole("spinbutton");
+    input.focus();
+    await user.keyboard("{PageUp}");
+
+    expect(screen.getByTestId("value").textContent).toBe("100");
+  });
+
+  it("should not change value via PageUp/PageDown when readonly", async () => {
+    render(NumberInput, { props: { readonly: true, value: 50 } });
+
+    const input = screen.getByRole("spinbutton");
+    input.focus();
+    await user.keyboard("{PageUp}");
+    expect(screen.getByTestId("value").textContent).toBe("50");
+
+    await user.keyboard("{PageDown}");
+    expect(screen.getByTestId("value").textContent).toBe("50");
+  });
+
+  it("should not change value via PageUp/PageDown when disabled", () => {
+    render(NumberInput, { props: { disabled: true, value: 50 } });
+
+    const input = screen.getByRole("spinbutton");
+    input.dispatchEvent(
+      new KeyboardEvent("keydown", { key: "PageUp", bubbles: true }),
+    );
+    expect(screen.getByTestId("value").textContent).toBe("50");
+  });
+
+  it("prevents PageUp/PageDown default actions (page scroll)", () => {
+    render(NumberInput);
+
+    const input = screen.getByRole("spinbutton");
+
+    for (const key of ["PageUp", "PageDown"]) {
+      const event = new KeyboardEvent("keydown", {
+        key,
+        bubbles: true,
+        cancelable: true,
+      });
+      input.dispatchEvent(event);
+      expect(event.defaultPrevented).toBe(true);
+    }
+  });
+
   it("should handle hidden steppers", () => {
     render(NumberInput, { props: { hideSteppers: true } });
 
