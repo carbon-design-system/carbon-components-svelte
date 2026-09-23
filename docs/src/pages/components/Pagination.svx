@@ -45,6 +45,18 @@ Set the current page with `page`.
 
 <Pagination totalItems={102} page={4} />
 
+### Query string
+
+Keep the page and page size in the URL so a reload or shared link lands on the
+same page. `queryParam` returns a store mirrored to a query parameter; bind
+`page` and `pageSize` to one each. Changes replace the current history entry,
+and other query parameters are preserved. `Pagination` clamps pages above the
+last one but not below 1, so `parse` rejects those. Default values remove their
+parameter. In an app with a router, pass the router's navigation API as
+`replace`.
+
+<FileSource src="/framed/Pagination/PaginationQueryString" />
+
 ### Custom sizes
 
 Specify custom page sizes and set a default page size. When the user picks a new size, `page` is recalculated so the first item that was visible stays on screen.
