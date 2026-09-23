@@ -176,6 +176,33 @@ describe("Menu", () => {
     expect(items[2]).toHaveFocus();
   });
 
+  it("moves focus to the item matching a typed character", async () => {
+    render(MenuFixture);
+
+    await user.click(screen.getByRole("button", { name: "Trigger" }));
+    const items = screen.getAllByRole("menuitem");
+
+    // The first item ("First") is already focused on open.
+    expect(items[0]).toHaveFocus();
+
+    // Types "t" to jump straight to "Third".
+    await user.keyboard("t");
+    expect(items[2]).toHaveFocus();
+  });
+
+  it("skips disabled items when searching by typed character", async () => {
+    // "Second" is disabled, so typing "s" should skip it.
+    render(MenuFixture, { props: { disabledIndex: 1 } });
+
+    await user.click(screen.getByRole("button", { name: "Trigger" }));
+    const items = screen.getAllByRole("menuitem");
+    expect(items[1]).toHaveAttribute("aria-disabled", "true");
+
+    await user.keyboard("s");
+    expect(items[1]).not.toHaveFocus();
+    expect(items[0]).toHaveFocus();
+  });
+
   it("focuses the first non-disabled item on open", async () => {
     render(MenuFixture, { props: { disabledIndex: 0 } });
 
