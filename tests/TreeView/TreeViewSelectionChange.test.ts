@@ -188,6 +188,33 @@ describe("TreeView select:change", () => {
     expect(detail.selectedIds).toContain(0);
   });
 
+  it("does nothing on Ctrl+A in single-select mode", async () => {
+    const onSelectChange = vi.fn();
+    render(TreeViewSelectionChange, { selectedIds: [], onSelectChange });
+
+    treeItemById(0).focus();
+    await user.keyboard("{Control>}a{/Control}");
+
+    await new Promise((resolve) => setTimeout(resolve));
+    expect(onSelectChange).not.toHaveBeenCalled();
+    expect(screen.queryAllByRole("treeitem", { selected: true })).toHaveLength(
+      0,
+    );
+  });
+
+  it("keeps the existing selection on Ctrl+A in single-select mode", async () => {
+    const onSelectChange = vi.fn();
+    render(TreeViewSelectionChange, { selectedIds: [7], onSelectChange });
+
+    treeItemById(0).focus();
+    await user.keyboard("{Control>}a{/Control}");
+
+    await new Promise((resolve) => setTimeout(resolve));
+    expect(onSelectChange).not.toHaveBeenCalled();
+    const selected = screen.getAllByRole("treeitem", { selected: true });
+    expect(selected).toEqual([treeItemById(7)]);
+  });
+
   it("selects numeric node ids on Ctrl+Shift+End", async () => {
     const onSelectChange = vi.fn();
     render(TreeViewSelectionChange, {

@@ -209,6 +209,23 @@ describe("TreeView (virtualize)", () => {
     );
   });
 
+  it("Ctrl+A does nothing when multiselect is off", async () => {
+    const { component } = render(TreeViewVirtualize, {
+      totalRoots: 40,
+      childrenPerRoot: 0,
+      selectedIds: [],
+    });
+
+    const first = findRowById(0);
+    if (!first) throw new Error("expected first row");
+    first.focus();
+
+    await user.keyboard("{Control>}a{/Control}");
+    await tick();
+
+    expect(component.selectedIds).toEqual([]);
+  });
+
   it("Shift+Ctrl+End extends selection toward the end of the visible list", async () => {
     const { component } = render(TreeViewVirtualize, {
       totalRoots: 40,
