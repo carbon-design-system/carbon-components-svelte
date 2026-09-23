@@ -7,7 +7,7 @@
   /**
    * @event close
    * @type {object}
-   * @property {"outside-click"} trigger
+   * @property {"outside-click" | "escape-key"} trigger
    */
 
   /**
@@ -18,6 +18,9 @@
 
   /** Set to `true` to close the popover on an outside click */
   export let closeOnOutsideClick = false;
+
+  /** Set to `true` to close the popover on the Escape key */
+  export let closeOnEscape = false;
 
   /** Set to `true` render a caret */
   export let caret = false;
@@ -76,11 +79,28 @@
       }
     }
   }
+
+  // Escape is listened for on `window` (via `dismiss`) rather than on the
+  // popover itself because focus is often on the trigger, not inside the
+  // popover content. Does not `stopPropagation`: other layers (e.g. `Modal`)
+  // rely on Escape bubbling to their own handlers.
+  function handleEscape(event) {
+    if (open && closeOnEscape && event.key === "Escape") {
+      open = false;
+      dispatch("close", { trigger: "escape-key" });
+    }
+  }
 </script>
 
 <div
   bind:this={popoverRef}
-  use:dismiss={{ enabled: open, type: "click", handler: handleOutsideClick }}
+  use:dismiss={{
+    enabled: open,
+    listeners: [
+      { type: "click", handler: handleOutsideClick },
+      { type: "keydown", handler: handleEscape },
+    ],
+  }}
   class:bx--popover={true}
   class:bx--popover--caret={caret}
   class:bx--popover--light={light}
