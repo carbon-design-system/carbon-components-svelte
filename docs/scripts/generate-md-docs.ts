@@ -9,6 +9,7 @@ import {
   COMPONENTS_PATH,
   RAW_COMPONENTS_OUT_DIR,
 } from "./constants";
+import { stripDocsOnly } from "./strip-docs-only.ts";
 import { getComponentNames } from "./utils";
 
 type ComponentApiProp = {
@@ -408,7 +409,7 @@ function inlineFileSources(body: string) {
     const filePath = path.join("src/pages", `${rel}.svelte`);
 
     try {
-      const source = fs.readFileSync(filePath, "utf8");
+      const source = stripDocsOnly(fs.readFileSync(filePath, "utf8"));
       out.push("```svelte");
       out.push(source.trimEnd());
       out.push("```");

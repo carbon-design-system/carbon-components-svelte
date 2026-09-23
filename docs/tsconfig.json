@@ -1,6 +1,7 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
+    "allowImportingTsExtensions": true,
     "paths": {
       "carbon-components-svelte": ["../src"],
       "carbon-components-svelte/*": ["../*"],
