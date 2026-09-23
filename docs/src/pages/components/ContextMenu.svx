@@ -14,6 +14,8 @@ The root element has `role="menu"`. Set `labelText` or `aria-label` on ContextMe
 
 `open`, `x`, and `y` are also bindable, letting you trigger the menu from something other than a right-click; see [Programmatic position](#programmatic-position).
 
+Once open, arrow keys move focus between options without wrapping past the first or last option. <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the first and last enabled option, skipping disabled ones. Type a character to move focus to the next enabled option whose label starts with it; type several characters quickly to match a longer prefix.
+
 <FileSource src="/framed/ContextMenu/ContextMenu" />
 
 ## Menu items
@@ -46,6 +48,8 @@ Submenus can contain:
 | Radio group      | A nested `ContextMenuRadioGroup` with `bind:selectedId` so only one choice is active. See [Radio group (nested)](#radio-group-nested).                                                                                                                                                                                                                           |
 
 Selecting an option closes only that option's own menu level. At the root, that closes the whole menu. Inside a submenu, it closes just that flyout and leaves the rest open. Call `event.preventDefault()` to keep a flyout open across several picks; see [Prevent menu from closing](#prevent-menu-from-closing).
+
+Typing a character inside an open submenu searches only that submenu's options.
 
 <FileSource src="/framed/ContextMenu/ContextMenuNested" />
 
