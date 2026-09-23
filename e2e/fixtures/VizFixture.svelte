@@ -48,6 +48,7 @@
     TileGridMap,
     TreeChart,
     TreemapChart,
+    UpSetPlot,
     UptimeBar,
     VarianceIndicator,
     WaffleChart,
@@ -232,6 +233,24 @@
     end="to"
     states={{ ok: "success", down: "error", degraded: "warning" }}
     title="Service health"
+    selectable
+  />
+
+  <UpSetPlot
+    sets={[
+      { id: "ent", label: "Enterprise" },
+      { id: "sso", label: "SSO" },
+      { id: "audit", label: "Audit log" },
+    ]}
+    data={[
+      { tags: ["ent", "sso", "audit"] },
+      { tags: ["ent", "sso"] },
+      { tags: ["ent", "sso"] },
+      { tags: ["sso"] },
+      { tags: ["ent", "audit"] },
+    ]}
+    membership="tags"
+    title="Account flag combinations"
     selectable
   />
 
