@@ -29,6 +29,7 @@
     Heatmap,
     HeatStrip,
     Histogram,
+    HivePlot,
     HorizonChart,
     IcicleChart,
     KpiCard,
@@ -279,6 +280,29 @@
     y="score"
     series="team"
     title="Engagement score by team, 2025 to 2026"
+  />
+
+  <HivePlot
+    nodes={[
+      { id: "api", kind: "service" },
+      { id: "worker", kind: "service" },
+      { id: "pg", kind: "datastore" },
+      { id: "redis", kind: "datastore" },
+      { id: "jobs", kind: "queue" },
+    ]}
+    links={[
+      { from: "api", to: "pg" },
+      { from: "api", to: "redis" },
+      { from: "worker", to: "jobs" },
+      { from: "jobs", to: "worker" },
+      { from: "worker", to: "pg" },
+    ]}
+    id="id"
+    axis="kind"
+    source="from"
+    target="to"
+    title="Runtime topology"
+    diameter={240}
   />
 
   <ArcDiagram
