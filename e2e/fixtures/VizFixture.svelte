@@ -234,11 +234,11 @@
 
   <LayeredGraph
     data={[
-      { id: "app", name: "app", tier: "edge" },
-      { id: "api", name: "api", tier: "services" },
-      { id: "web", name: "web", tier: "edge" },
-      { id: "db", name: "postgres", tier: "data" },
-      { id: "auth", name: "auth", tier: "services" },
+      { id: "app", name: "app", tier: "edge", health: "success" },
+      { id: "api", name: "api", tier: "services", health: "warning" },
+      { id: "web", name: "web", tier: "edge", health: "success" },
+      { id: "db", name: "postgres", tier: "data", health: "error" },
+      { id: "auth", name: "auth", tier: "services", health: "success" },
     ]}
     links={[
       { source: "app", target: "api" },
@@ -250,6 +250,8 @@
     id="id"
     label="name"
     lane="tier"
+    group="tier"
+    status="health"
     title="Service dependencies"
   />
 
