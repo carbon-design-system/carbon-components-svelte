@@ -91,6 +91,12 @@ Use `remove(id)` to programmatically remove a specific notification, or `clear()
 
 <FileSource src="/framed/NotificationQueue/NotificationQueueRemove" />
 
+### History
+
+Set `maxHistory` to keep the most recently dismissed notifications, and bind to the read-only `history` to render them, for example in a notifications panel. Entries are newest first and include `dismissedAt`, a timestamp in milliseconds. A notification enters history whenever the queue dispatches [dismiss](#dismiss) for it, so a cancelled `close` does not record one. Call `clearHistory()` to empty it.
+
+<FileSource src="/framed/NotificationQueue/NotificationQueueHistory" />
+
 ## Events
 
 ### Close
