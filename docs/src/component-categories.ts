@@ -162,6 +162,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "KpiCard",
       "LayeredGraph",
       "OrgChart",
+      "SlopeChart",
       "LineChart",
       "LiveSparkline",
       "LollipopChart",
