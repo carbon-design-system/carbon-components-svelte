@@ -21,6 +21,7 @@
     FunnelBars,
     FunnelChart,
     FunnelCompare,
+    GanttChart,
     Heatmap,
     HeatStrip,
     Histogram,
@@ -198,6 +199,23 @@
     y="cpu"
     series="host"
     title="CPU by host"
+  />
+
+  <GanttChart
+    data={[
+      { id: "spec", name: "spec", stream: "Design", from: new Date(2026, 8, 1), to: new Date(2026, 8, 8), done: 1 },
+      { id: "api", name: "checkout API", stream: "API", from: new Date(2026, 8, 8), to: new Date(2026, 8, 18), done: 0.5, after: "spec" },
+      { id: "web", name: "storefront", stream: "Web", from: new Date(2026, 8, 14), to: new Date(2026, 8, 24), after: "api" },
+    ]}
+    id="id"
+    label="name"
+    group="stream"
+    start="from"
+    end="to"
+    progress="done"
+    dependsOn="after"
+    today={new Date(2026, 8, 12)}
+    title="Launch plan"
   />
 
   <SequenceDiagram
