@@ -7,6 +7,7 @@
   export let selectTextOnFocus = false;
   export let value = "";
   export let loading = false;
+  export let readonly = false;
 </script>
 
 <Search
@@ -15,6 +16,7 @@
   {fluid}
   {selectTextOnFocus}
   {loading}
+  {readonly}
   labelText="Default search"
   placeholder="Search"
   closeButtonLabelText="Clear value"

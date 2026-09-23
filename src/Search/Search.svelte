@@ -32,6 +32,12 @@
   /** Set to `true` to disable the search input */
   export let disabled = false;
 
+  /**
+   * Set to `true` to use the read-only variant.
+   * The value cannot be edited or cleared, and still submits with the form.
+   */
+  export let readonly = false;
+
   /** Set to `true` to enable the expandable variant */
   export let expandable = false;
 
@@ -209,6 +215,7 @@
       autofocus={autofocus === true ? true : undefined}
       {autocomplete}
       {disabled}
+      {readonly}
       {id}
       {placeholder}
       aria-busy={loading || undefined}
@@ -235,7 +242,7 @@
       on:keydown
       on:keydown={(event) => {
         if (event.key === "Escape") {
-          if (value !== "" && value != null) {
+          if (!readonly && value !== "" && value != null) {
             value = "";
             dispatch("clear");
             event.preventDefault();
@@ -253,9 +260,10 @@
       aria-label={closeButtonLabelText}
       {disabled}
       class:bx--search-close={true}
-      class:bx--search-close--hidden={value === "" || value == null}
+      class:bx--search-close--hidden={readonly || value === "" || value == null}
       on:click
       on:click={() => {
+        if (readonly) return;
         value = "";
         ref.focus();
         dispatch("clear");
