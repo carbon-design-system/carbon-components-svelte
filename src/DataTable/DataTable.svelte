@@ -713,7 +713,9 @@
     selectedSelectableCount < selectableRowIds.length;
   $: if (batchExpansion) {
     expandable = true;
-    expanded = expandedRowIds.length === expandableRowIds.length;
+    expanded =
+      expandableRowIds.length > 0 &&
+      expandableRowIds.every((id) => expandedRowIdsSet.has(id));
   }
   $: isSelectionEnabled = selectable || radio || batchSelection;
 
@@ -1080,7 +1082,16 @@
                     .join(" ")}
                   on:click={() => {
                     expanded = !expanded;
-                    expandedRowIds = expanded ? expandableRowIds : [];
+                    if (expanded) {
+                      const next = new Set(expandedRowIds);
+                      for (const rid of expandableRowIds) next.add(rid);
+                      expandedRowIds = [...next];
+                    } else {
+                      const scope = new Set(expandableRowIds);
+                      expandedRowIds = expandedRowIds.filter(
+                        (rid) => !scope.has(rid),
+                      );
+                    }
 
                     dispatch("click:header--expand", { expanded });
                   }}
