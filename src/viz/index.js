@@ -73,6 +73,7 @@ export { default as MarimekkoChart } from "./MarimekkoChart/MarimekkoChart.svelt
 export { default as MicroDonut } from "./MicroDonut/MicroDonut.svelte";
 export { default as MicroFunnel } from "./MicroFunnel/MicroFunnel.svelte";
 export { default as MicroHistogram } from "./MicroHistogram/MicroHistogram.svelte";
+export { default as NodeEditor } from "./NodeEditor/NodeEditor.svelte";
 export { default as OrgChart } from "./OrgChart/OrgChart.svelte";
 export { default as ParallelCoordinates } from "./ParallelCoordinates/ParallelCoordinates.svelte";
 export { default as RadarChart } from "./RadarChart/RadarChart.svelte";
