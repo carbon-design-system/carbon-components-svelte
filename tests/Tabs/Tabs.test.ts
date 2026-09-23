@@ -75,6 +75,73 @@ describe("Tabs", () => {
     }
   });
 
+  it("makes only the selected tab tabbable", async () => {
+    render(Tabs);
+    await tick();
+
+    expect(screen.getByRole("tab", { name: "Tab 1" })).toHaveAttribute(
+      "tabindex",
+      "0",
+    );
+    expect(screen.getByRole("tab", { name: "Tab 2" })).toHaveAttribute(
+      "tabindex",
+      "-1",
+    );
+    expect(screen.getByRole("tab", { name: "Tab 3" })).toHaveAttribute(
+      "tabindex",
+      "-1",
+    );
+  });
+
+  it("moves the tab stop with the selection", async () => {
+    render(Tabs);
+
+    const tab1 = screen.getByRole("tab", { name: "Tab 1" });
+    const tab3 = screen.getByRole("tab", { name: "Tab 3" });
+
+    await user.click(tab3);
+    expect(tab3).toHaveAttribute("tabindex", "0");
+    expect(tab1).toHaveAttribute("tabindex", "-1");
+
+    await user.keyboard("{ArrowLeft}");
+    expect(tab1).toHaveAttribute("tabindex", "0");
+    expect(tab3).toHaveAttribute("tabindex", "-1");
+  });
+
+  it("enters and leaves the tab list with one Tab press each", async () => {
+    render(Tabs);
+    await tick();
+
+    await user.tab();
+    expect(screen.getByRole("tab", { name: "Tab 1" })).toHaveFocus();
+
+    await user.tab();
+    for (const tab of screen.getAllByRole("tab")) {
+      expect(tab).not.toHaveFocus();
+    }
+  });
+
+  it("puts the tab stop on the initially selected tab", async () => {
+    render(Tabs, { props: { selected: 2 } });
+    await tick();
+
+    await user.tab();
+    expect(screen.getByRole("tab", { name: "Tab 3" })).toHaveFocus();
+  });
+
+  it("keeps the tab stop on the selected tab in manual activation", async () => {
+    render(Tabs, { props: { activation: "manual" } });
+
+    const tab1 = screen.getByRole("tab", { name: "Tab 1" });
+    const tab3 = screen.getByRole("tab", { name: "Tab 3" });
+    await user.click(tab1);
+
+    await user.keyboard("{ArrowRight}");
+    expect(tab3).toHaveFocus();
+    expect(tab3).toHaveAttribute("tabindex", "-1");
+    expect(tab1).toHaveAttribute("tabindex", "0");
+  });
+
   it("should pass selected to the Tab default slot", async () => {
     render(TabSlot);
     await tick();
