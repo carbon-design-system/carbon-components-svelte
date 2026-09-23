@@ -44,6 +44,12 @@ The counter still shows when the label is hidden, and stays aligned to the trail
 
 <TextArea hideLabel labelText="Incident summary" placeholder="Describe what happened, the impact, and any mitigation steps taken so far..." maxCount={100} />
 
+### Value already over the limit
+
+`maxCount` only stops typing past the limit; it does not truncate a value that is set from script and already exceeds it. In that case the field is marked `aria-invalid` and the counter turns red, without rewriting the bound value.
+
+<TextArea labelText="Incident summary" maxCount={100} value="A previously saved draft that happens to be well over the current one hundred character limit for this field." />
+
 ## Helper text
 
 Add helper text below the textarea to provide additional context or instructions.
