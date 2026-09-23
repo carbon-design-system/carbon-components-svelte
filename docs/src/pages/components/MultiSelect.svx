@@ -12,6 +12,8 @@ description: Multi-selects provide a dropdown for selecting multiple options wit
 
 Create a basic multi-select dropdown with three contact methods. Every item must have a unique id. By default, items are ordered alphabetically.
 
+With the menu open, type a character to move the highlight to the next enabled item whose text starts with it; type several characters quickly to match a longer prefix. Typing highlights an item without selecting it.
+
 <MultiSelect labelText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"},
@@ -130,7 +132,20 @@ to the respective item's id, so a submission looks like `contact=0&contact=1`.
 
 ## Selection
 
-Control which items start selected, how selections reorder the list, and how to read the resolved order. Hold <DocKbd label="Shift" /> while clicking an item to select every item between it and the last item clicked.
+Control which items start selected, how selections reorder the list, and how to read the resolved order.
+
+### Range selection
+
+Hold <DocKbd label="Shift" /> while clicking an item to select every item between it and the last item clicked. From the keyboard, hold <DocKbd label="Shift" /> while pressing <DocKbd label="Enter" /> or <DocKbd label="Space" /> on the highlighted item. Press <DocKbd label="Ctrl" /> + <DocKbd label="A" /> (<DocKbd label="Cmd" /> + <DocKbd label="A" /> on macOS) with the menu open to select every enabled item, or to clear them if all are already selected. In a filterable multi-select, <DocKbd label="Ctrl" /> + <DocKbd label="A" /> selects the filter text instead.
+
+<MultiSelect labelText="Regions" label="Select regions..."
+    items="{[{id: "0", text: "Frankfurt"},
+    {id: "1", text: "London"},
+    {id: "2", text: "Mumbai"},
+    {id: "3", text: "Sydney"},
+    {id: "4", text: "Tokyo"},
+    {id: "5", text: "Toronto"}]}"
+  />
 
 ### Initial selection
 
