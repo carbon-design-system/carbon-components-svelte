@@ -324,17 +324,21 @@
   });
 
   /**
+   * Default typeahead filter: case-insensitive prefix match on the item's
+   * displayed label.
+   * @param {Item} item
+   * @param {string} inputValue
+   * @param {(item: Item) => string} getLabel
    * @returns {boolean}
    */
-  function autocompleteCustomFilter(item, inputValue) {
+  function autocompleteCustomFilter(item, inputValue, getLabel) {
     if (inputValue.length === 0) {
       return true;
     }
 
-    const lowercaseItem = item.text.toLowerCase();
-    const lowercaseInput = inputValue.toLowerCase();
-
-    return lowercaseItem.startsWith(lowercaseInput);
+    return String(getLabel(item) ?? "")
+      .toLowerCase()
+      .startsWith(inputValue.toLowerCase());
   }
 
   $: statusDescribedById = showInvalid
@@ -347,7 +351,8 @@
 
   $: filterFn =
     typeahead && shouldFilterItem === defaultShouldFilter
-      ? autocompleteCustomFilter
+      ? (item, inputValue) =>
+          autocompleteCustomFilter(item, inputValue, itemToString)
       : shouldFilterItem;
 
   /**

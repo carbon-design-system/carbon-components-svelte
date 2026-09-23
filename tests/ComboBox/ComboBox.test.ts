@@ -2187,6 +2187,113 @@ describe("ComboBox", () => {
       expect(screen.getByRole("option")).toHaveTextContent("Apricot");
     });
 
+    describe("default typeahead filter", () => {
+      const countries = [
+        { id: "de", text: "Germany" },
+        { id: "fr", text: "France" },
+      ];
+      const codeLabel = (item: ComboBoxItem) =>
+        `${String(item.id).toUpperCase()} ${item.text}`;
+
+      it("matches the prefix of the itemToString label", async () => {
+        render(ComboBoxReal, {
+          props: { typeahead: true, items: countries, itemToString: codeLabel },
+        });
+
+        const input = getInput();
+        await user.click(input);
+        await user.type(input, "DE");
+
+        const options = screen.getAllByRole("option");
+        expect(options).toHaveLength(1);
+        expect(options[0]).toHaveTextContent("DE Germany");
+        expect(input).toHaveValue("DE Germany");
+        expect(input.selectionStart).toBe(2);
+        expect(input.selectionEnd).toBe(10);
+      });
+
+      it("does not match the prefix of item.text when the label differs", async () => {
+        render(ComboBoxReal, {
+          props: { typeahead: true, items: countries, itemToString: codeLabel },
+        });
+
+        const input = getInput();
+        await user.click(input);
+        await user.type(input, "Ger");
+
+        expect(screen.queryAllByRole("option")).toHaveLength(0);
+        expect(input).toHaveValue("Ger");
+      });
+
+      it("filters items without text by their label", async () => {
+        type KeyItem = { id: string; key: string };
+        render(ComboBoxReal, {
+          props: {
+            typeahead: true,
+            items: [
+              { id: "0", key: "Slack" },
+              { id: "1", key: "Email" },
+            ] as unknown as ComboBoxItem[],
+            itemToString: (item: ComboBoxItem) =>
+              (item as unknown as KeyItem).key,
+          },
+        });
+
+        const input = getInput();
+        await user.click(input);
+        await user.type(input, "sl");
+
+        const options = screen.getAllByRole("option");
+        expect(options).toHaveLength(1);
+        expect(options[0]).toHaveTextContent("Slack");
+      });
+
+      it("keeps prefix matching on item.text with the default itemToString", async () => {
+        render(ComboBoxReal, {
+          props: {
+            typeahead: true,
+            items: [
+              { id: "1", text: "Apple" },
+              { id: "2", text: "Apricot" },
+              { id: "3", text: "Banana" },
+            ],
+          },
+        });
+
+        const input = getInput();
+        await user.click(input);
+        await user.type(input, "ap");
+
+        const options = screen.getAllByRole("option");
+        expect(options).toHaveLength(2);
+        expect(options[0]).toHaveTextContent("Apple");
+        expect(options[1]).toHaveTextContent("Apricot");
+      });
+
+      it("still prefers a custom shouldFilterItem", async () => {
+        render(ComboBoxReal, {
+          props: {
+            typeahead: true,
+            items: [
+              { id: "1", text: "Apple" },
+              { id: "2", text: "Apricot" },
+              { id: "3", text: "Banana" },
+            ],
+            shouldFilterItem: (item: ComboBoxItem, value: string) =>
+              item.text.toLowerCase().includes(value.toLowerCase()),
+          },
+        });
+
+        const input = getInput();
+        await user.click(input);
+        await user.type(input, "an");
+
+        const options = screen.getAllByRole("option");
+        expect(options).toHaveLength(1);
+        expect(options[0]).toHaveTextContent("Banana");
+      });
+    });
+
     it('should set aria-autocomplete to "list" without typeahead', () => {
       render(ComboBox, { props: { typeahead: false } });
       expect(getInput()).toHaveAttribute("aria-autocomplete", "list");
