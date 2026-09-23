@@ -1502,7 +1502,11 @@
               change(step);
             }
           } else if (event.key === "Enter") {
-            selectHighlightedItem(highlightedIndex, event.shiftKey);
+            if (open) {
+              selectHighlightedItem(highlightedIndex, event.shiftKey);
+            } else {
+              open = true;
+            }
           } else if (event.key === "Escape") {
             close("escape-key");
           } else if (event.key === "Home" || event.key === "End") {
