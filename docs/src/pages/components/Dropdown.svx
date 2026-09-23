@@ -17,7 +17,7 @@ description: Dropdowns provide a select input with a dropdown menu, with multipl
 
 Use the dropdown to create a select input with a dropdown menu. Each item needs a unique id.
 
-Type a character, with the menu open or closed, to highlight the next enabled item whose label starts with it; type quickly to match a longer prefix.
+With the field focused, <DocKbd label="Enter" /> or <DocKbd label="Space" /> opens the menu. <DocKbd label="ArrowDown" /> and <DocKbd label="ArrowUp" /> open it on the selected item, or on the first or last item when nothing is selected. <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the first and last item, and the arrow keys wrap at either end. Type a character, with the menu open or closed, to highlight the next enabled item whose label starts with it; type quickly to match a longer prefix.
 
 <Dropdown labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
@@ -37,7 +37,7 @@ Omit `selectedId` to render the dropdown with no item selected. The label appear
 
 ### Clearable
 
-Set `clearable` to `true` to show a clear button when an item is selected. Clearing resets `selectedId` and dispatches a `clear` event. The clear button is hidden when there is no selection.
+Set `clearable` to `true` to show a clear button when an item is selected. Clearing resets `selectedId` and dispatches a `clear` event. The clear button is hidden when there is no selection. With the field focused, <DocKbd label="Delete" /> or <DocKbd label="Backspace" /> also clears the selection.
 
 A long selected label truncates with an ellipsis before the clear button instead of running underneath it.
 
@@ -262,7 +262,7 @@ Respond to selection, clearing, and menu-close interactions.
 
 ### Select
 
-Use `on:select` to listen for a new selection. The event detail includes the selected item's id and the full item.
+Use `on:select` to listen for a new selection. The event detail includes the selected item's id and the full item. From the keyboard, <DocKbd label="Enter" /> or <DocKbd label="Space" /> selects the highlighted item. On an item highlighted only by hovering, or on the item that is already selected, they close the menu without dispatching `select`.
 
 <Dropdown
   labelText="Contact"
@@ -295,7 +295,7 @@ Use `on:clear` to listen for the selection being cleared, either via the clear b
 
 ### Close
 
-Use `on:close` to know when the menu closes and why. `event.detail.trigger` is `"escape-key"`, `"outside-click"`, or `"select"`. Pressing <DocKbd label="Tab" /> to leave an open menu reports `"escape-key"`.
+Use `on:close` to know when the menu closes and why. `event.detail.trigger` is `"escape-key"`, `"outside-click"`, or `"select"`. <DocKbd label="Escape" />, <DocKbd label="Alt" /> + <DocKbd label="ArrowUp" />, and <DocKbd label="Tab" /> close the menu without selecting and report `"escape-key"`.
 
 <Dropdown
   labelText="Contact"
@@ -365,7 +365,7 @@ Set `disabled` to `true` to prevent interaction with the dropdown.
 
 ### Disabled items
 
-Mark individual items with `disabled: true` for finer control over available selections.
+Mark individual items with `disabled: true` for finer control over available selections. The arrow keys still highlight disabled items so screen reader users can discover them, but they cannot be selected.
 
 <Dropdown
   selectedId="0"
@@ -379,7 +379,7 @@ Mark individual items with `disabled: true` for finer control over available sel
 
 ### Read-only
 
-Set `readonly` to `true` to display a non-editable value.
+Set `readonly` to `true` to display a non-editable value. The field stays focusable but ignores keyboard input.
 
 <Dropdown
   readonly
