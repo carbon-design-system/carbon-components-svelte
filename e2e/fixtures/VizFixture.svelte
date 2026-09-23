@@ -8,6 +8,7 @@
     BulletChart,
     BumpChart,
     CalendarHeatmap,
+    CandlestickChart,
     ChartAnomalies,
     ChartBand,
     ChordDiagram,
@@ -811,6 +812,22 @@
     y="revenue"
     title="Spread of monthly totals per region"
     height={240}
+  />
+
+  <CandlestickChart
+    data={[
+      { day: "Mon", o: 100, h: 108, l: 97, c: 106 },
+      { day: "Tue", o: 106, h: 110, l: 99, c: 101 },
+      { day: "Wed", o: 101, h: 103, l: 95, c: 101 },
+      { day: "Thu", o: 101, h: 112, l: 100, c: 111 },
+    ]}
+    x="day"
+    open="o"
+    high="h"
+    low="l"
+    close="c"
+    title="ACME, this week"
+    height={220}
   />
 
   <LollipopChart
