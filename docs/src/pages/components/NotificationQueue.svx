@@ -77,6 +77,31 @@ Use `remove(id)` to programmatically remove a specific notification, or `clear()
 
 <FileSource src="/framed/NotificationQueue/NotificationQueueRemove" />
 
+## Events
+
+### Close
+
+The queue dispatches `close` with `{ id, timeout, trigger }` when a toast's close button is clicked or its timeout ends. The event is cancelable: call `preventDefault()` to keep the toast in the queue.
+
+In this example, closing the "Unsaved changes" toast is blocked while the checkbox is checked.
+
+<FileSource src="/framed/NotificationQueue/NotificationQueueClose" />
+
+### Dismiss
+
+The queue dispatches `dismiss` with `{ notification, trigger }` after a notification leaves the queue, whatever the reason. `trigger` is one of:
+
+- `"close-button"`: the user clicked the close button
+- `"timeout"`: the toast's timeout ended
+- `"overflow"`: `maxNotifications` dropped it to make room
+- `"programmatic"`: `remove` or `clear` removed it
+
+A cancelled `close` does not dispatch `dismiss`.
+
+This example logs each dismissal with its trigger. The queue holds two notifications, so adding a third dismisses the oldest with `"overflow"`.
+
+<FileSource src="/framed/NotificationQueue/NotificationQueueDismiss" />
+
 ## Persistent
 
 Create persistent notifications that do not auto-dismiss by omitting timeout and hiding the close button with `hideCloseButton`.
