@@ -57,6 +57,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   FunnelCompare: "0.113.0",
   Grid: "0.8.4",
   Heading: "0.98.0",
+  GanttChart: "0.113.0",
   Heatmap: "0.113.0",
   HeatStrip: "0.113.0",
   Histogram: "0.113.0",

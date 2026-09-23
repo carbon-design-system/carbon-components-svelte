@@ -153,6 +153,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "FunnelBars",
       "FunnelChart",
       "FunnelCompare",
+      "GanttChart",
       "Heatmap",
       "HeatStrip",
       "Histogram",
