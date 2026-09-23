@@ -57,7 +57,13 @@ export function rovingFocus(node, options) {
     const index = currentOptions.getActiveIndex();
     if (currentOptions.skipDisabled) {
       const isDisabled = currentOptions.isDisabled ?? defaultIsDisabled;
-      return nextEnabledIndex({ items, index, step: direction, isDisabled });
+      return nextEnabledIndex({
+        items,
+        index,
+        step: direction,
+        isDisabled,
+        wrap: currentOptions.wrap !== false,
+      });
     }
     return currentOptions.wrap === false
       ? clampIndex(index, direction, items.length)
