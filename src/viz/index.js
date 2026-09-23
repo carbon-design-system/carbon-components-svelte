@@ -48,6 +48,7 @@ export { default as FunnelCompare } from "./FunnelCompare/FunnelCompare.svelte";
 export { default as Heatmap } from "./Heatmap/Heatmap.svelte";
 export { default as HeatStrip } from "./HeatStrip/HeatStrip.svelte";
 export { default as Histogram } from "./Histogram/Histogram.svelte";
+export { default as HorizonChart } from "./HorizonChart/HorizonChart.svelte";
 export { default as IcicleChart } from "./IcicleChart/IcicleChart.svelte";
 export { default as KpiCard } from "./KpiCard/KpiCard.svelte";
 export { default as LineChart } from "./LineChart/LineChart.svelte";
