@@ -44,7 +44,7 @@
   export let ref = null;
 
   import { afterUpdate, createEventDispatcher, setContext, tick } from "svelte";
-  import { writable } from "svelte/store";
+  import { get, writable } from "svelte/store";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { clampIndex } from "../utils/clamp-index.js";
   import { rovingFocus } from "../utils/roving-focus.js";
@@ -209,7 +209,14 @@
     if (needsDomSync && ref) {
       needsDomSync = false;
 
-      const preservedId = switches[selectedIndex]?.id;
+      // A selection requested in this flush (a `selected` Switch registering)
+      // indexes the registry before the reorder. Otherwise keep the switch
+      // that is rendered as selected; `switches[selectedIndex]` already points
+      // past a removed switch.
+      const preservedId =
+        selectedIndex === committedIndex
+          ? get(currentId)
+          : switches[selectedIndex]?.id;
       let next = switches;
       sharedSwitches.update((current) => {
         next = syncDomOrder({
