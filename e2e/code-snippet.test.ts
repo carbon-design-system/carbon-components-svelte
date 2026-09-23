@@ -76,6 +76,19 @@ test.describe("CodeSnippet", () => {
     ).toBeHidden();
   });
 
+  test("expand button appears when a hidden snippet becomes visible", async ({
+    page,
+  }) => {
+    const snippet = page.getByTestId("snippet-multi-hidden");
+    await expect(snippet.locator(".bx--snippet-btn--expand")).toHaveCount(0);
+
+    await page.getByTestId("toggle-hidden-snippet").click();
+
+    await expect(
+      snippet.getByRole("button", { name: /show more/i }),
+    ).toBeVisible();
+  });
+
   test("expand button appears when content grows past the threshold", async ({
     page,
   }) => {
