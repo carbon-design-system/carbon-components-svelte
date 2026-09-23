@@ -15,6 +15,8 @@
     (_, i) => `const line${i + 1} = ${i + 1};`,
   ).join("\n");
 
+  let hiddenShown = false;
+
   let dynamicExpanded = false;
   $: dynamicLines = dynamicExpanded ? 24 : 3;
   $: dynamicCode = Array.from(
@@ -66,6 +68,23 @@
     code={dynamicCode}
     data-testid="snippet-multi-dynamic"
   />
+</div>
+
+<div data-testid="hidden-multi-snippet">
+  <button
+    type="button"
+    data-testid="toggle-hidden-snippet"
+    on:click={() => (hiddenShown = !hiddenShown)}
+  >
+    Toggle hidden snippet
+  </button>
+  <div style:display={hiddenShown ? undefined : "none"}>
+    <CodeSnippet
+      type="multi"
+      code={longCode}
+      data-testid="snippet-multi-hidden"
+    />
+  </div>
 </div>
 
 <div data-testid="feedback-icon-snippet">

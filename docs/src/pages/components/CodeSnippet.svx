@@ -78,9 +78,7 @@ Use `code` instead of the default slot for dynamically updated code.
 
 ### Hidden content
 
-The "Show more" button relies on the element's computed height. For hidden content, the button won't appear because the height is `0`.
-
-Re-render the component to fix this issue.
+A multi-line snippet that mounts inside a hidden container (for example, `display: none` or an inactive tab) measures its height again when the container becomes visible. The "Show more" button appears once the content is shown. You do not need to re-render the component.
 
 <FileSource src="/framed/CodeSnippet/HiddenCodeSnippet" />
 
