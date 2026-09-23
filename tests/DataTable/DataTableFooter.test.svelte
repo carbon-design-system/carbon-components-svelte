@@ -13,6 +13,7 @@
     key: keyof Omit<Row, "id">;
     value: string;
     columnHidden?: boolean;
+    columnAlign?: "start" | "end";
   }[] = [
     { key: "name", value: "Name" },
     { key: "protocol", value: "Protocol" },

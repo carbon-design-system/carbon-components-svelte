@@ -1678,7 +1678,7 @@
               ></td>
             {/if}
             {#each visibleHeaders as header, index (header.key)}
-              <td>
+              <td class={formatAlignClass(header.columnAlign)}>
                 <slot name="footerCell" {header} {index} />
               </td>
             {/each}

@@ -3451,6 +3451,62 @@ describe("DataTable", () => {
       expect(footerCells).toHaveLength(headerCells.length);
     });
 
+    it("should apply the end alignment class to the column's footer cell", () => {
+      const { container } = render(DataTableFooter, {
+        props: {
+          headers: [
+            { key: "name", value: "Name" },
+            { key: "protocol", value: "Protocol" },
+            { key: "port", value: "Port", columnAlign: "end" },
+          ],
+        },
+      });
+
+      const cells = container.querySelectorAll("tfoot td");
+      expect(cells[2]).toHaveTextContent("3523");
+      expect(cells[2]).toHaveClass("bx--table-column--align-end");
+      expect(cells[0]).not.toHaveClass("bx--table-column--align-end");
+      expect(cells[1]).not.toHaveClass("bx--table-column--align-end");
+    });
+
+    it("should apply the start alignment class to the column's footer cell", () => {
+      const { container } = render(DataTableFooter, {
+        props: {
+          headers: [
+            { key: "name", value: "Name", columnAlign: "start" },
+            { key: "protocol", value: "Protocol" },
+            { key: "port", value: "Port" },
+          ],
+        },
+      });
+
+      const cells = container.querySelectorAll("tfoot td");
+      expect(cells[0]).toHaveClass("bx--table-column--align-start");
+    });
+
+    it("should leave the leading footer cells unaligned", () => {
+      const { container } = render(DataTableFooter, {
+        props: {
+          expandable: true,
+          selectable: true,
+          headers: [
+            { key: "name", value: "Name" },
+            { key: "protocol", value: "Protocol" },
+            { key: "port", value: "Port", columnAlign: "end" },
+          ],
+        },
+      });
+
+      const cells = container.querySelectorAll("tfoot td");
+      expect(cells[0]).toHaveClass("bx--table-expand");
+      expect(cells[0]).not.toHaveClass("bx--table-column--align-end");
+      expect(cells[1]).toHaveClass("bx--table-column-checkbox");
+      expect(cells[1]).not.toHaveClass("bx--table-column--align-end");
+      expect(cells[cells.length - 1]).toHaveClass(
+        "bx--table-column--align-end",
+      );
+    });
+
     it("should render once while virtualized rows scroll", () => {
       const largeRows = Array.from({ length: 500 }, (_, i) => ({
         id: String(i),
