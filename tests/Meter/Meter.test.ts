@@ -6,6 +6,9 @@ import { render, screen, within } from "@testing-library/svelte";
 // biome-ignore lint/suspicious/noTsIgnore: see comment above
 // @ts-ignore
 import Meter from "./Meter.test.svelte";
+// biome-ignore lint/suspicious/noTsIgnore: see comment above
+// @ts-ignore
+import MeterStatus from "./MeterStatus.test.svelte";
 
 describe("Meter", () => {
   it("renders ARIA min/max/now", () => {
@@ -124,5 +127,56 @@ describe("Meter", () => {
     expect(el.querySelector(".bx--meter__bar")).toHaveStyle({
       transform: "scaleX(0)",
     });
+  });
+
+  it("announces a status transition to warning and error, and stays quiet for default and value ticks", async () => {
+    const { rerender } = render(MeterStatus);
+
+    const getAnnouncement = () =>
+      screen
+        .getByTestId("status")
+        .querySelector(".bx--visually-hidden")
+        ?.textContent?.trim();
+
+    expect(getAnnouncement()).toBe("");
+
+    await rerender({ value: 10, status: "warning" });
+    expect(getAnnouncement()).toBe("Warning");
+
+    await rerender({ value: 10, status: "error" });
+    expect(getAnnouncement()).toBe("Error");
+
+    await rerender({ value: 10, status: "default" });
+    expect(getAnnouncement()).toBe("");
+
+    await rerender({ value: 20, status: "default" });
+    expect(getAnnouncement()).toBe("");
+  });
+
+  it("stays quiet when a meter mounts already in error", () => {
+    render(MeterStatus, { props: { value: 10, status: "error" } });
+
+    const announcement = screen
+      .getByTestId("status")
+      .querySelector(".bx--visually-hidden")
+      ?.textContent?.trim();
+    expect(announcement).toBe("");
+  });
+
+  it("announces a custom errorText on transition to error", async () => {
+    const { rerender } = render(MeterStatus, {
+      props: { value: 10, errorText: "Critical" },
+    });
+
+    const getAnnouncement = () =>
+      screen
+        .getByTestId("status")
+        .querySelector(".bx--visually-hidden")
+        ?.textContent?.trim();
+
+    expect(getAnnouncement()).toBe("");
+
+    await rerender({ value: 10, status: "error", errorText: "Critical" });
+    expect(getAnnouncement()).toBe("Critical");
   });
 });

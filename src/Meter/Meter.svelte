@@ -28,6 +28,12 @@
    */
   export let valueText = "";
 
+  /** Specify the text announced and described when the status is `"warning"`. */
+  export let warningText = "Warning";
+
+  /** Specify the text announced and described when the status is `"error"`. */
+  export let errorText = "Error";
+
   /**
    * Specify the warning and error thresholds, in the same units as `value`.
    * @type {MeterThresholds}
@@ -56,6 +62,9 @@
 
   let helperId = uniqueId();
 
+  let prevStatus = undefined;
+  let statusAnnouncement = "";
+
   function deriveStatus(value, thresholds, overCapacity) {
     if (overCapacity) return "error";
     if (thresholds?.error !== undefined && value >= thresholds.error) {
@@ -82,6 +91,18 @@
   $: markers = showThresholds && thresholds ? getMarkers(thresholds, max) : [];
   $: cappedValue =
     max > 0 && Number.isFinite(value) ? Math.min(Math.max(value, 0), max) : 0;
+  $: {
+    if (prevStatus !== undefined && resolvedStatus !== prevStatus) {
+      if (resolvedStatus === "warning") {
+        statusAnnouncement = warningText;
+      } else if (resolvedStatus === "error") {
+        statusAnnouncement = errorText;
+      } else {
+        statusAnnouncement = "";
+      }
+    }
+    prevStatus = resolvedStatus;
+  }
 </script>
 
 <div
@@ -132,4 +153,7 @@
   {#if helperText}
     <div id={helperId} class:bx--meter__helper-text={true}>{helperText}</div>
   {/if}
+  <div class:bx--visually-hidden={true} aria-live="polite" aria-atomic="true">
+    {statusAnnouncement}
+  </div>
 </div>
