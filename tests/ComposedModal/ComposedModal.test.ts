@@ -3,6 +3,7 @@ import { tick } from "svelte";
 import { absorbUnhandledRejection } from "../utils/absorb-unhandled-rejection";
 import { user } from "../utils/user";
 import ComposedModalTest from "./ComposedModal.test.svelte";
+import ComposedModalAlertNoBodyTest from "./ComposedModalAlertNoBody.test.svelte";
 import ComposedModalFocusReturnTest from "./ComposedModalFocusReturn.test.svelte";
 import ComposedModalFocusTrapTest from "./ComposedModalFocusTrap.test.svelte";
 import ComposedModalUnmountOnCloseTest from "./ComposedModalUnmountOnClose.test.svelte";
@@ -620,6 +621,40 @@ describe("ComposedModal", () => {
 
     await tick();
     expect(screen.getByRole("button", { name: "Delete" })).toHaveFocus();
+  });
+
+  describe("alert", () => {
+    it("renders a dialog with no aria-describedby by default", () => {
+      const { container } = render(ComposedModalTest, {
+        props: { open: true, headerTitle: "Title" },
+      });
+
+      expect(screen.getByRole("dialog")).not.toHaveAttribute(
+        "aria-describedby",
+      );
+      expect(container.querySelector(".bx--modal-content")?.id).toBeTruthy();
+    });
+
+    it("renders an alertdialog described by ModalBody", () => {
+      const { container } = render(ComposedModalTest, {
+        props: { open: true, headerTitle: "Title", alert: true },
+      });
+
+      const alertdialog = screen.getByRole("alertdialog");
+      const body = container.querySelector(".bx--modal-content");
+      assert(body);
+      expect(body.id).toBeTruthy();
+      expect(alertdialog).toHaveAttribute("aria-describedby", body.id);
+      expect(screen.queryByRole("dialog")).toBeNull();
+    });
+
+    it("omits aria-describedby when there is no ModalBody", () => {
+      render(ComposedModalAlertNoBodyTest);
+
+      expect(screen.getByRole("alertdialog")).not.toHaveAttribute(
+        "aria-describedby",
+      );
+    });
   });
 
   it("should have correct ARIA attributes", () => {

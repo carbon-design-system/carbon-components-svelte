@@ -162,6 +162,17 @@ describe("ModalBody", () => {
     expect(modalBody).toBeInTheDocument();
   });
 
+  it("uses a consumer id and reports it to ComposedModal", () => {
+    const { container } = render(ModalBodyTest, {
+      props: { id: "custom-body", slotContent: "Content" },
+    });
+
+    expect(container.querySelector(".bx--modal-content")).toHaveAttribute(
+      "id",
+      "custom-body",
+    );
+  });
+
   it("should handle both hasForm and hasScrollingContent", () => {
     render(ModalBodyTest, {
       props: {
