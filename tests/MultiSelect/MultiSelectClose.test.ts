@@ -47,6 +47,44 @@ describe("MultiSelect close event", () => {
     });
   });
 
+  it('dispatches close with trigger "escape-key" on Tab', async () => {
+    const onClose = vi.fn();
+    render(MultiSelectClose, { props: { onClose } });
+
+    const combobox = screen.getByRole("combobox");
+    await user.click(combobox);
+    expect(combobox).toHaveAttribute("aria-expanded", "true");
+
+    await user.keyboard("{Tab}");
+    expect(combobox).toHaveAttribute("aria-expanded", "false");
+    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(onClose.mock.calls[0][0].detail).toEqual({ trigger: "escape-key" });
+  });
+
+  it('filterable: dispatches close with trigger "escape-key" on Tab', async () => {
+    const onClose = vi.fn();
+    render(MultiSelectClose, { props: { onClose, filterable: true } });
+
+    const input = screen.getByPlaceholderText("Filter contacts");
+    await user.click(input);
+    expect(input).toHaveAttribute("aria-expanded", "true");
+
+    await user.keyboard("{Tab}");
+    expect(input).toHaveAttribute("aria-expanded", "false");
+    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(onClose.mock.calls[0][0].detail).toEqual({ trigger: "escape-key" });
+  });
+
+  it("does not dispatch close on Tab while collapsed", async () => {
+    const onClose = vi.fn();
+    render(MultiSelectClose, { props: { onClose } });
+
+    const combobox = screen.getByRole("combobox");
+    combobox.focus();
+    await user.keyboard("{Tab}");
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
   it("does not dispatch close when selecting an item (menu stays open)", async () => {
     const onClose = vi.fn();
     render(MultiSelectClose, { props: { onClose } });

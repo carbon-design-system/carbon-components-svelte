@@ -1360,7 +1360,9 @@
             if (event.key === "Enter") {
               selectHighlightedItem(highlightedIndex, event.shiftKey);
             } else if (event.key === "Tab") {
-              open = false;
+              // Tab dismisses without selecting; report it as a keyboard
+              // dismissal, like Dropdown and ComboBox.
+              close("escape-key");
             } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
               event.preventDefault();
               const step = event.key === "ArrowDown" ? 1 : -1;
@@ -1491,7 +1493,9 @@
               open = true;
             }
           } else if (event.key === "Tab") {
-            open = false;
+            // Tab dismisses without selecting; report it as a keyboard
+            // dismissal, like Dropdown and ComboBox.
+            close("escape-key");
           } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
             const step = event.key === "ArrowDown" ? 1 : -1;
             if (event.altKey) {
