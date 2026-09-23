@@ -140,6 +140,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "ViolinPlot",
       "BeeswarmChart",
       "RidgelineChart",
+      "SequenceSunburst",
       "CandlestickChart",
       "BulletChart",
       "CalendarHeatmap",

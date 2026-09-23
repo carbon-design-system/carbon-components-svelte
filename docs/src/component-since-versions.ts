@@ -17,6 +17,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   ChartHexbin: "0.113.0",
   ChartContours: "0.113.0",
   RidgelineChart: "0.113.0",
+  SequenceSunburst: "0.113.0",
   CandlestickChart: "0.113.0",
   ChartCandles: "0.113.0",
   Breadcrumb: "0.2.0",
