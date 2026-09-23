@@ -39,4 +39,5 @@
   bind:selectedIds
   labelText="Link Tree"
   virtualize={{ maxVisibleRows: 10 }}
+  on:select={({ detail }) => console.log("select", detail)}
 />

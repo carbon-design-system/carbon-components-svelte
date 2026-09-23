@@ -1808,6 +1808,77 @@ describe("TreeViewNode href", () => {
     );
   });
 
+  it("does not cancel Enter on an enabled link node", () => {
+    render(TreeViewHref);
+
+    const linkNode = screen.getByRole("treeitem", { name: /Link Node/ });
+    linkNode.focus();
+
+    const event = new KeyboardEvent("keydown", {
+      key: "Enter",
+      bubbles: true,
+      cancelable: true,
+    });
+    linkNode.dispatchEvent(event);
+
+    expect(event.defaultPrevented).toBe(false);
+  });
+
+  it("selects a link node exactly once on Enter", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+
+    render(TreeViewHref);
+
+    const linkNode = screen.getByRole("treeitem", { name: /Link Node/ });
+    linkNode.focus();
+
+    await user.keyboard("{Enter}");
+
+    const selectCalls = consoleLog.mock.calls.filter(
+      (call) => call[0] === "select",
+    );
+    expect(selectCalls).toHaveLength(1);
+    expect(selectCalls[0][1]).toEqual(
+      expect.objectContaining({ id: "link-1" }),
+    );
+  });
+
+  it("does not click a link node on Space", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+
+    render(TreeViewHref);
+
+    const linkNode = screen.getByRole("treeitem", { name: /Link Node/ });
+    let clicks = 0;
+    linkNode.addEventListener("click", () => clicks++, { capture: true });
+    linkNode.focus();
+
+    await user.keyboard(" ");
+
+    expect(clicks).toBe(0);
+    expect(
+      consoleLog.mock.calls.filter((call) => call[0] === "select"),
+    ).toHaveLength(1);
+  });
+
+  it("does nothing on Enter for a disabled link node", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+
+    render(TreeViewHref);
+
+    const disabledLink = screen.getByRole("treeitem", {
+      name: /Disabled Link/,
+    });
+    disabledLink.focus();
+
+    await user.keyboard("{Enter}");
+
+    expect(consoleLog).not.toHaveBeenCalledWith(
+      "select",
+      expect.objectContaining({ id: "link-disabled" }),
+    );
+  });
+
   it("sets target attribute on the anchor element", () => {
     render(TreeViewHref);
 

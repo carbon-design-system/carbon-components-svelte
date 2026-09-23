@@ -1918,6 +1918,17 @@
       case "Enter":
       case " ": {
         if (item.node.disabled) break;
+        // Enter on a focused link row: let the browser follow `href`. Its
+        // synthesized click reaches the anchor's `on:click`, which calls
+        // `clickNode`.
+        if (
+          event.key === "Enter" &&
+          event.target instanceof HTMLAnchorElement &&
+          event.target.hasAttribute("href")
+        ) {
+          event.stopPropagation();
+          break;
+        }
         event.preventDefault();
         event.stopPropagation();
         // Match recursive TreeViewNodeList: Space only activates (check /
