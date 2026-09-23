@@ -760,6 +760,28 @@
   let cachedChildIdsByParentId = null;
 
   /**
+   * `String(node.id)` → `node.id`, built on first use. Row elements carry
+   * `id={node.id}`, which the DOM stringifies; this recovers numeric ids.
+   * @type {Map<string, Node["id"]> | null}
+   */
+  let cachedIdByDomId = null;
+
+  /**
+   * The node id a row element renders, or `undefined` for an unknown row.
+   * @param {Element} element
+   * @returns {Node["id"] | undefined}
+   */
+  function nodeIdFromTreeItem(element) {
+    if (cachedIdByDomId == null) {
+      cachedIdByDomId = new Map();
+      for (const id of cachedNodeMap?.keys() ?? []) {
+        cachedIdByDomId.set(String(id), id);
+      }
+    }
+    return cachedIdByDomId.get(element.id);
+  }
+
+  /**
    * Finds sibling node IDs for a given node ID using the precomputed
    * parent/child-id caches (rebuilt alongside `cachedNodeMap` whenever
    * `nodes` changes identity). O(1) map lookups plus the sibling count,
@@ -1190,8 +1212,8 @@
           event.ctrlKey &&
           treeItem instanceof HTMLElement
         ) {
-          const hid = treeItem.id;
-          if (hid) nodeIds.push(hid);
+          const hid = nodeIdFromTreeItem(treeItem);
+          if (hid !== undefined) nodeIds.push(hid);
         }
         while (
           event.key === "Home"
@@ -1205,8 +1227,8 @@
             event.ctrlKey &&
             nextFocusNode instanceof Element
           ) {
-            const nid = nextFocusNode.id;
-            if (nid) nodeIds.push(nid);
+            const nid = nodeIdFromTreeItem(nextFocusNode);
+            if (nid !== undefined) nodeIds.push(nid);
           }
         }
       }
@@ -1343,6 +1365,7 @@
     cachedChildIdsByParentId = maps.childIdsByParentId;
     // Flat list stays null until expandAll / expandNodes / collapseNodes / Ctrl+A.
     cachedFlattenedNodes = null;
+    cachedIdByDomId = null;
   }
 
   $: sharedMultiselect.set(isMultiselect);
