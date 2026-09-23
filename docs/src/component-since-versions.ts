@@ -94,6 +94,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   Portal: "0.95.0",
   ProgressBar: "0.37.0",
   ProgressIndicator: "0.2.0",
+  ParallelCoordinates: "0.113.0",
   RadarChart: "0.113.0",
   RadialProgress: "0.113.0",
   RadioButton: "0.2.0",
