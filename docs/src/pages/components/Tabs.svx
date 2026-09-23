@@ -455,9 +455,18 @@ Show a loading state while tabs load.
 ### Sizes
 
 Pass the same `size` and `type` as the `Tabs` the skeleton replaces so the page
-does not shift when the tabs load.
+does not shift when the tabs load. Line skeletons support up to `"lg"`; for
+container sizes, see [Container skeleton sizes](#skeleton-sizes).
+
+#### Small
 
 <TabsSkeleton count={3} size="sm" />
+
+#### Medium
+
+<TabsSkeleton count={3} size="md" />
+
+#### Large
 
 <TabsSkeleton count={3} size="lg" />
 
@@ -661,6 +670,27 @@ and optional secondary line (for example, counts or status).
 Show a loading state for the container tab variant.
 
 <TabsSkeleton type="container" count={3} />
+
+### Skeleton sizes
+
+Container skeletons support the full size range up to `"xl"`, matching
+container tabs.
+
+#### Small
+
+<TabsSkeleton type="container" count={3} size="sm" />
+
+#### Medium
+
+<TabsSkeleton type="container" count={3} size="md" />
+
+#### Large
+
+<TabsSkeleton type="container" count={3} size="lg" />
+
+#### Extra large
+
+<TabsSkeleton type="container" count={3} size="xl" />
 
 ## Vertical
 
