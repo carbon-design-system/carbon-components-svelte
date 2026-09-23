@@ -8,6 +8,7 @@ import StructuredListCustom from "./StructuredListCustom.test.svelte";
 import StructuredListCustomIcon from "./StructuredListCustomIcon.test.svelte";
 import StructuredListInputStandalone from "./StructuredListInputStandalone.test.svelte";
 import StructuredListMultiple from "./StructuredListMultiple.test.svelte";
+import StructuredListUnnamed from "./StructuredListUnnamed.test.svelte";
 
 describe("StructuredList", () => {
   it("should render with default props", () => {
@@ -262,6 +263,39 @@ describe("StructuredList", () => {
     expect(inputs.length).toBeGreaterThan(0);
     for (const input of inputs) {
       expect(input).toHaveAttribute("tabindex", "0");
+    }
+  });
+
+  it("should group unnamed single-select inputs under one name", async () => {
+    render(StructuredListUnnamed);
+
+    const radios = screen.getAllByRole("radio");
+    const name = radios[0].getAttribute("name");
+    expect(name).toBeTruthy();
+    for (const radio of radios) {
+      expect(radio).toHaveAttribute("name", name);
+      expect(radio).toHaveAttribute("tabindex", "0");
+    }
+
+    radios[0].focus();
+    await user.keyboard("{ArrowDown}");
+    expect(radios[1]).toBeChecked();
+  });
+
+  it("should keep an author-set input name", () => {
+    render(StructuredList, { props: { selection: true } });
+
+    expect(screen.getByTitle("row-1-title")).toHaveAttribute(
+      "name",
+      "row-1-name",
+    );
+  });
+
+  it("should not share a name across multiple-select inputs", () => {
+    render(StructuredListMultiple);
+
+    for (const checkbox of screen.getAllByRole("checkbox")) {
+      expect(checkbox).toHaveAttribute("name", "");
     }
   });
 
