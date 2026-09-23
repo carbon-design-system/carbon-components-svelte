@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import type ModalComponent from "carbon-components-svelte/Modal/Modal.svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
@@ -1005,6 +1005,50 @@ describe("Modal", () => {
 
     expect(submitHandler).not.toHaveBeenCalled();
     expect(clickPrimaryHandler).not.toHaveBeenCalled();
+  });
+
+  describe("Enter during IME composition", () => {
+    function renderWithInput() {
+      const submitHandler = vi.fn();
+      const clickPrimaryHandler = vi.fn();
+      render(ModalTest, {
+        props: {
+          open: true,
+          modalHeading: "IME Modal",
+          primaryButtonText: "Save",
+          onsubmit: submitHandler,
+          onclickbuttonprimary: clickPrimaryHandler,
+        },
+      });
+      return {
+        input: screen.getByTestId("test-focus"),
+        submitHandler,
+        clickPrimaryHandler,
+      };
+    }
+
+    it("does not submit when isComposing is true", async () => {
+      const { input, submitHandler, clickPrimaryHandler } = renderWithInput();
+      await fireEvent.keyDown(input, { key: "Enter", isComposing: true });
+
+      expect(submitHandler).not.toHaveBeenCalled();
+      expect(clickPrimaryHandler).not.toHaveBeenCalled();
+    });
+
+    it("does not submit on Safari's keyCode 229 commit", async () => {
+      const { input, submitHandler, clickPrimaryHandler } = renderWithInput();
+      await fireEvent.keyDown(input, { key: "Enter", keyCode: 229 });
+
+      expect(submitHandler).not.toHaveBeenCalled();
+      expect(clickPrimaryHandler).not.toHaveBeenCalled();
+    });
+
+    it("still submits on a plain Enter", async () => {
+      const { input, submitHandler } = renderWithInput();
+      await fireEvent.keyDown(input, { key: "Enter", keyCode: 13 });
+
+      expect(submitHandler).toHaveBeenCalledTimes(1);
+    });
   });
 
   it("should NOT dispatch submit when pressing Enter on a link", async () => {
