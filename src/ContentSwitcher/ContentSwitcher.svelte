@@ -45,7 +45,7 @@
   export let ref = null;
 
   import { afterUpdate, createEventDispatcher, setContext, tick } from "svelte";
-  import { get, writable } from "svelte/store";
+  import { derived, get, writable } from "svelte/store";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { clampIndex } from "../utils/clamp-index.js";
   import { rovingFocus } from "../utils/roving-focus.js";
@@ -66,7 +66,7 @@
   let committedIndex = -1;
   let focusedIndex = -1;
   /**
-   * @type {import("svelte/store").Writable<Array<{ id: string; text: string; selected: boolean; icon: boolean }>>}
+   * @type {import("svelte/store").Writable<Array<{ id: string; text: string; selected: boolean; icon: boolean; disabled: boolean }>>}
    */
   const sharedSwitches = writable([]);
   // Batch child registration. Leave afterUpdate's syncDomOrder unbatched
@@ -99,6 +99,15 @@
     selectedIndex = clampIndex(selectedIndex, 0, switches.length);
   }
 
+  // The selected switch holds the tab stop unless it is disabled; then the
+  // first enabled switch does, so the switcher stays reachable by keyboard.
+  // Derived so it updates in the same flush as `currentId`.
+  const tabStopId = derived([sharedSwitches, currentId], ([list, id]) => {
+    const current = list.find((s) => s.id === id);
+    if (current && !current.disabled) return current.id;
+    return list.find((s) => !s.disabled)?.id ?? null;
+  });
+
   $: if (switches[committedIndex]) {
     if (prevIndex > -1 && prevIndex !== committedIndex) {
       dispatch("change", committedIndex);
@@ -108,9 +117,9 @@
   }
 
   /**
-   * @type {(data: { id: string; text: string; selected: boolean; icon: boolean }) => void}
+   * @type {(data: { id: string; text: string; selected: boolean; icon: boolean; disabled: boolean }) => void}
    */
-  function add({ id, text, selected, icon }) {
+  function add({ id, text, selected, icon, disabled }) {
     batchedSwitchesUpdate((current) => {
       if (current.some((s) => s.id === id)) {
         return current;
@@ -121,7 +130,7 @@
       }
 
       needsDomSync = true;
-      return [...current, { id, text, selected, icon }];
+      return [...current, { id, text, selected, icon, disabled }];
     });
   }
 
@@ -132,6 +141,19 @@
     batchedSwitchesUpdate((current) => {
       needsDomSync = true;
       return current.filter((s) => s.id !== id);
+    });
+  }
+
+  /**
+   * @type {(id: string, disabled: boolean) => void}
+   */
+  function setDisabled(id, disabled) {
+    batchedSwitchesUpdate((current) => {
+      const index = current.findIndex((s) => s.id === id);
+      if (index === -1 || current[index].disabled === disabled) return current;
+      const next = [...current];
+      next[index] = { ...current[index], disabled };
+      return next;
     });
   }
 
@@ -214,6 +236,8 @@
     add,
     remove,
     update,
+    setDisabled,
+    tabStopId,
   });
 
   afterUpdate(() => {
@@ -271,7 +295,16 @@
       switches
         .map((s) => document.getElementById(s.id))
         .filter((node) => node instanceof HTMLElement),
-    getActiveIndex: () => (focusedIndex >= 0 ? focusedIndex : committedIndex),
+    getActiveIndex: () => {
+      if (focusedIndex >= 0) return focusedIndex;
+      // Start from the fallback tab stop when the selected switch is disabled,
+      // so the first arrow press moves off it instead of re-selecting it.
+      if (switches[committedIndex]?.disabled) {
+        const index = switches.findIndex((s) => s.id === get(tabStopId));
+        if (index > -1) return index;
+      }
+      return committedIndex;
+    },
     onMove: (index, event) => {
       // Prevent the arrow keys from also scrolling the page.
       event.preventDefault();

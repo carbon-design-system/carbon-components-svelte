@@ -4,6 +4,7 @@ import { user } from "../utils/user";
 import ContentSwitcherCustom from "./ContentSwitcher.custom.test.svelte";
 import ContentSwitcherDisabled from "./ContentSwitcher.disabled.test.svelte";
 import ContentSwitcherDisabledNav from "./ContentSwitcher.disabledNav.test.svelte";
+import ContentSwitcherDisabledSelected from "./ContentSwitcher.disabledSelected.test.svelte";
 import ContentSwitcherDynamic from "./ContentSwitcher.dynamic.test.svelte";
 import ContentSwitcherDynamicBound from "./ContentSwitcher.dynamicBound.test.svelte";
 import ContentSwitcherLowContrast from "./ContentSwitcher.lowContrast.test.svelte";
@@ -994,6 +995,88 @@ describe("ContentSwitcher", () => {
       await user.click(screen.getByRole("tab", { name: "Icon two" }));
       expect(screen.getByTestId("icon-slot-one")).toHaveTextContent("off");
       expect(screen.getByTestId("icon-slot-two")).toHaveTextContent("on");
+    });
+  });
+
+  describe("disabled selected switch", () => {
+    const changed = (consoleLog: { mock: { calls: unknown[][] } }) =>
+      consoleLog.mock.calls.some(([event]) => event === "change");
+    const tab = (name: string) => screen.getByRole("tab", { name });
+
+    it("moves the tab stop to the first enabled switch", async () => {
+      await renderSwitcher(ContentSwitcherDisabledSelected);
+
+      expect(tab("A")).toHaveAttribute("aria-selected", "true");
+      expect(tab("A")).toHaveAttribute("tabindex", "-1");
+      expect(tab("B")).toHaveAttribute("tabindex", "0");
+      expect(tab("C")).toHaveAttribute("tabindex", "-1");
+    });
+
+    it("reaches the fallback with Tab without changing selection", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      await renderSwitcher(ContentSwitcherDisabledSelected);
+
+      await user.tab();
+      await user.tab();
+
+      expect(document.activeElement).toBe(tab("B"));
+      expect(tab("A")).toHaveAttribute("aria-selected", "true");
+      expect(changed(consoleLog)).toBe(false);
+    });
+
+    it("ArrowRight moves off the fallback (automatic)", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      await renderSwitcher(ContentSwitcherDisabledSelected);
+
+      await user.tab();
+      await user.tab();
+      await user.keyboard("{ArrowRight}");
+
+      expect(document.activeElement).toBe(tab("C"));
+      expect(tab("C")).toHaveAttribute("aria-selected", "true");
+      expect(tab("C")).toHaveAttribute("tabindex", "0");
+      expect(tab("B")).toHaveAttribute("tabindex", "-1");
+      expect(consoleLog).toHaveBeenCalledWith("change", 2);
+    });
+
+    it("ArrowRight moves focus off the fallback without selecting (manual)", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      await renderSwitcher(ContentSwitcherDisabledSelected, {
+        props: { selectionMode: "manual" },
+      });
+
+      await user.tab();
+      await user.tab();
+      await user.keyboard("{ArrowRight}");
+
+      expect(document.activeElement).toBe(tab("C"));
+      expect(tab("A")).toHaveAttribute("aria-selected", "true");
+      expect(changed(consoleLog)).toBe(false);
+    });
+
+    it("returns the tab stop to the selection when it is re-enabled", async () => {
+      const { rerender } = await renderSwitcher(
+        ContentSwitcherDisabledSelected,
+      );
+
+      await rerender({ disabledFirst: false });
+      await tick();
+
+      expect(tab("A")).toHaveAttribute("tabindex", "0");
+      expect(tab("B")).toHaveAttribute("tabindex", "-1");
+    });
+
+    it("has no tab stop when every switch is disabled", async () => {
+      const { rerender } = await renderSwitcher(
+        ContentSwitcherDisabledSelected,
+      );
+
+      await rerender({ allDisabled: true });
+      await tick();
+
+      for (const t of screen.getAllByRole("tab")) {
+        expect(t).toHaveAttribute("tabindex", "-1");
+      }
     });
   });
 });
