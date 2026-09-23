@@ -60,6 +60,7 @@
   const ctx = getContext("carbon:ContentSwitcher");
   const activeTooltip = ctx.activeTooltip;
   const tabStopId = ctx.tabStopId;
+  const pairs = ctx.pairs;
 
   const hasIcon = icon !== undefined;
 
@@ -150,6 +151,7 @@
   tabindex={$tabStopId === id ? "0" : "-1"}
   aria-selected={selected}
   aria-label={hasIcon ? text : undefined}
+  aria-controls={$pairs.panelBySwitch[id]}
   {disabled}
   {id}
   class:bx--content-switcher-btn={true}

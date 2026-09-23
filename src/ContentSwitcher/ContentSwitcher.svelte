@@ -77,6 +77,34 @@
   const batchedSwitchesUpdate = batchStoreUpdates(sharedSwitches);
   $: switches = $sharedSwitches;
 
+  /**
+   * `SwitchPanel`s in DOM order. A panel pairs with the switch at the same
+   * position.
+   * @type {import("svelte/store").Writable<Array<{ id: string }>>}
+   */
+  const panels = writable([]);
+  const batchedPanelsUpdate = batchStoreUpdates(panels);
+  // Subscribe so a panel registering triggers afterUpdate's DOM-order sync.
+  $: panelCount = $panels.length;
+  let needsPanelSync = false;
+
+  /**
+   * Switch-panel pairing by position, in both directions.
+   * @type {import("svelte/store").Readable<{ panelBySwitch: Record<string, string>; switchByPanel: Record<string, string> }>}
+   */
+  const pairs = derived([sharedSwitches, panels], ([list, panelList]) => {
+    /** @type {Record<string, string>} */
+    const panelBySwitch = {};
+    /** @type {Record<string, string>} */
+    const switchByPanel = {};
+    const count = Math.min(list.length, panelList.length);
+    for (let i = 0; i < count; i++) {
+      panelBySwitch[list[i].id] = panelList[i].id;
+      switchByPanel[panelList[i].id] = list[i].id;
+    }
+    return { panelBySwitch, switchByPanel };
+  });
+
   // Inferred when every registered switch provides an `icon`.
   $: iconOnly = switches.length > 0 && switches.every((s) => s.icon);
 
@@ -160,6 +188,24 @@
   /**
    * @type {(id: string) => void}
    */
+  function addPanel(id) {
+    batchedPanelsUpdate((current) => {
+      if (current.some((p) => p.id === id)) return current;
+      needsPanelSync = true;
+      return [...current, { id }];
+    });
+  }
+
+  /**
+   * @type {(id: string) => void}
+   */
+  function removePanel(id) {
+    batchedPanelsUpdate((current) => current.filter((p) => p.id !== id));
+  }
+
+  /**
+   * @type {(id: string) => void}
+   */
   function update(id) {
     if (selectedId !== undefined) {
       selectedId = id;
@@ -238,6 +284,9 @@
     update,
     setDisabled,
     tabStopId,
+    pairs,
+    addPanel,
+    removePanel,
   });
 
   afterUpdate(() => {
@@ -273,6 +322,21 @@
           selectedIndex = nextIndex;
         }
       }
+    }
+
+    // Panels render after the tablist, so order them within its parent.
+    // Tabpanels that are not registered here (e.g., from a nested Tabs) are
+    // dropped by id.
+    if (needsPanelSync && panelCount > 0 && ref?.parentElement) {
+      needsPanelSync = false;
+      const root = ref.parentElement;
+      panels.update((current) =>
+        syncDomOrder({
+          root,
+          selector: "[role='tabpanel']",
+          items: current,
+        }).map(({ id }) => ({ id })),
+      );
     }
 
     // Commit only once switches have registered. Committing the initial index
@@ -330,3 +394,4 @@
 >
   <slot />
 </div>
+<slot name="content" />
