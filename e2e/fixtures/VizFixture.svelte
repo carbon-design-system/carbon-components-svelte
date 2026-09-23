@@ -27,6 +27,7 @@
     HorizonChart,
     IcicleChart,
     KpiCard,
+    LayeredGraph,
     LineChart,
     LiveSparkline,
     LollipopChart,
@@ -196,6 +197,27 @@
     y="cpu"
     series="host"
     title="CPU by host"
+  />
+
+  <LayeredGraph
+    data={[
+      { id: "app", name: "app", tier: "edge" },
+      { id: "api", name: "api", tier: "services" },
+      { id: "web", name: "web", tier: "edge" },
+      { id: "db", name: "postgres", tier: "data" },
+      { id: "auth", name: "auth", tier: "services" },
+    ]}
+    links={[
+      { source: "app", target: "api" },
+      { source: "app", target: "web" },
+      { source: "api", target: "db" },
+      { source: "api", target: "auth" },
+      { source: "web", target: "auth" },
+    ]}
+    id="id"
+    label="name"
+    lane="tier"
+    title="Service dependencies"
   />
 
   <IcicleChart
