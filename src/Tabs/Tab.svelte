@@ -26,7 +26,9 @@
   export let disabled = false;
 
   /**
-   * Specify the tabindex
+   * Specify the tabindex of the selected tab.
+   * Unselected and disabled tabs use `-1`, so the tab list is a single
+   * Tab-key stop and arrow keys move between tabs.
    * @type {number | string | undefined}
    */
   export let tabindex = "0";
@@ -156,6 +158,9 @@
   });
 
   $: selected = $selectedTab === id;
+  // Only the selected tab is a Tab-key stop. Until a selection resolves
+  // (first render, SSR), keep every enabled tab reachable.
+  $: hasSelection = $selectedTab !== undefined;
   // Default href is the "#" placeholder, so tabs behave as selection controls.
   // Any other href is user-provided and should navigate like a link.
   $: isLink = !!href && href !== "#";
@@ -201,7 +206,7 @@
   <a
     bind:this={ref}
     role="tab"
-    tabindex={disabled ? "-1" : tabindex}
+    tabindex={disabled || (hasSelection && !selected) ? "-1" : tabindex}
     aria-selected={selected}
     aria-disabled={disabled}
     aria-controls={panelId}
