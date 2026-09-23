@@ -209,7 +209,7 @@ Modal dispatches events for its lifecycle and button interactions. Only the clos
 
 ### Open
 
-Listen for `on:open` to know when the modal has become visible and focus has moved into it.
+Listen for `on:open` to know when `open` becomes `true`. It fires before the modal is visible and before focus moves into it. To run code after focus has moved, listen for `on:transitionend` and check `event.detail.open`.
 
 ```svelte
 <Modal bind:open on:open={() => console.log("opened")}>
