@@ -132,6 +132,30 @@ Use `on:toggle:change`, `on:select:change`, and `on:check:change` to track every
 
 <FileSource src="/framed/TreeView/TreeViewEvents" />
 
+## Keyboard
+
+The tree is one tab stop; arrow keys move focus between visible rows, skipping disabled rows and rows under collapsed parents.
+
+| Key | Behavior |
+| --- | -------- |
+| <DocKbd label="Up" /> / <DocKbd label="Down" /> | Moves focus to the previous or next row. Selection does not change. |
+| <DocKbd label="Right" /> | On a collapsed parent, expands it (fires `on:toggle`). On an expanded parent, moves focus to its first child. |
+| <DocKbd label="Left" /> | On an expanded parent, collapses it. Otherwise moves focus to the parent row. |
+| <DocKbd label="Home" /> / <DocKbd label="End" /> | Moves focus to the first or last row. |
+| <DocKbd label="Enter" /> | Selects the row; on a parent, also expands or collapses it. In `selectionMode="checkbox"`, checks or unchecks the row instead. On a [link node](#links), follows the link. |
+| <DocKbd label="Space" /> | Selects the row without expanding or collapsing it. In checkbox mode, checks or unchecks the row. |
+| Letters | Moves focus to the next row whose text starts with the typed characters. Repeating one letter cycles through rows that start with it. The typed text resets after a short pause. |
+
+With `multiselect`, these keys also change the selection. A row's unit depends on `multiselectMode`; see [Multi-select](#multi-select).
+
+| Key | Behavior |
+| --- | -------- |
+| <DocKbd label="Ctrl" /> + <DocKbd label="Space" /> | Toggles the focused row's unit, as <DocKbd label="Ctrl" /> + click does. |
+| <DocKbd label="Shift" /> + <DocKbd label="Space" /> | Selects the range from the anchor to the focused row, as <DocKbd label="Shift" /> + click does. |
+| <DocKbd label="Shift" /> + <DocKbd label="Up" /> / <DocKbd label="Down" /> | Moves focus to the previous or next row and toggles that row's unit. |
+| <DocKbd label="Ctrl" /> + <DocKbd label="Shift" /> + <DocKbd label="Home" /> / <DocKbd label="End" /> | Adds every row from the focused row to the first or last row. |
+| <DocKbd label="Ctrl" /> + <DocKbd label="A" /> | Adds every visible, non-disabled row. |
+
 ## Multi-select
 
 Set `multiselect` to allow more than one selected row; `multiselectMode` controls the unit each gesture applies to.
