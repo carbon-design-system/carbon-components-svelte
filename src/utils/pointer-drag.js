@@ -18,7 +18,7 @@ export function trackPointerDrag(node, options) {
     onMove,
     onEnd,
   } = options;
-  /** @type {{ id: number; x: number; y: number; lastX: number; lastY: number; started: boolean } | null} */
+  /** @type {{ id: number; x: number; y: number; lastX: number; lastY: number; started: boolean; down: PointerEvent } | null} */
   let drag = null;
 
   /** @param {PointerEvent} event */
@@ -31,6 +31,7 @@ export function trackPointerDrag(node, options) {
       lastX: event.clientX,
       lastY: event.clientY,
       started: false,
+      down: event,
     };
     if (typeof node.setPointerCapture === "function") {
       try {
@@ -53,7 +54,7 @@ export function trackPointerDrag(node, options) {
         Math.abs(event.clientY - drag.y) >= threshold;
       if (!far) return;
       drag.started = true;
-      onStart?.(event);
+      onStart?.(drag.down);
     }
     const k = scale() || 1;
     const dx = (event.clientX - drag.lastX) / k;

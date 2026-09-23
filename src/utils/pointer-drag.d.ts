@@ -7,6 +7,7 @@ export type PointerDragOptions = {
   scale?: () => number;
   /** Whether a press may start a drag, given where it landed. */
   accept?: (event: PointerEvent) => boolean;
+  /** Called with the press that started the drag, once the threshold is passed. */
   onStart?: (event: PointerEvent) => void;
   /** Deltas since the last move, in world units. */
   onMove?: (dx: number, dy: number, event: PointerEvent) => void;
