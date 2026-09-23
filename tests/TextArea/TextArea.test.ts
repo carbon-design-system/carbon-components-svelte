@@ -263,10 +263,50 @@ describe("TextArea", () => {
     expect(screen.getByTestId("value").textContent).toBe("Test value");
   });
 
-  it("should handle maxlength attribute when maxCount is set", () => {
+  it("does not set a maxlength attribute when maxCount is set", () => {
     render(TextArea, { props: { maxCount: 100 } });
 
-    expect(screen.getByRole("textbox")).toHaveAttribute("maxlength", "100");
+    expect(screen.getByRole("textbox")).not.toHaveAttribute("maxlength");
+  });
+
+  it("blocks an insert at the start of a value already at its limit, leaving existing text untouched", async () => {
+    render(TextArea, { props: { maxCount: 5, value: "abcde" } });
+
+    const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+    await user.type(textarea, "X", {
+      initialSelectionStart: 0,
+      initialSelectionEnd: 0,
+    });
+
+    expect(textarea.value).toBe("abcde");
+  });
+
+  it("accepts graphemes up to maxCount and blocks the next one, by code unit not grapheme", async () => {
+    render(TextArea, { props: { maxCount: 3 } });
+
+    const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+    await user.type(textarea, "😀😀😀😀");
+
+    expect(textarea.value).toBe("😀😀😀");
+    expect(screen.getByText("3/3")).toBeInTheDocument();
+  });
+
+  it("does not clamp a value already over maxCount when set from a parent prop", () => {
+    render(TextArea, { props: { maxCount: 2, value: "😀😀😀😀" } });
+
+    const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+    expect(textarea.value).toBe("😀😀😀😀");
+  });
+
+  it("still allows deleting from a value already over maxCount", async () => {
+    render(TextArea, { props: { maxCount: 5, value: "abcdef" } });
+
+    const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+    textarea.focus();
+    textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+    await user.keyboard("{Backspace}");
+
+    expect(textarea.value).toBe("abcde");
   });
 
   it("should show the counter without a label", () => {

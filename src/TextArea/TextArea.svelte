@@ -108,7 +108,7 @@
   import { afterUpdate, getContext, onMount, tick } from "svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
-  import { graphemeCount } from "../utils/grapheme-count.js";
+  import { graphemeCount, truncateGraphemes } from "../utils/grapheme-count.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -241,6 +241,37 @@
       scheduleResize.cancel();
     };
   });
+
+  /** @param {InputEvent} event */
+  function handleBeforeInput(event) {
+    if (typeof maxCount !== "number" || event.isComposing || !ref) return;
+    if (!event.inputType.startsWith("insert")) return;
+
+    const data =
+      event.data ??
+      event.dataTransfer?.getData("text/plain") ??
+      (event.inputType === "insertLineBreak" ||
+      event.inputType === "insertParagraph"
+        ? "\n"
+        : "");
+    if (!data) return;
+
+    const { value: current, selectionStart: start, selectionEnd: end } = ref;
+    const kept = current.slice(0, start) + current.slice(end);
+    if (
+      graphemeCount(kept.slice(0, start) + data + kept.slice(start)) <= maxCount
+    ) {
+      return;
+    }
+
+    event.preventDefault();
+
+    const room = maxCount - graphemeCount(kept);
+    if (room <= 0) return;
+
+    ref.setRangeText(truncateGraphemes(data, room), start, end, "end");
+    ref.dispatchEvent(new Event("input", { bubbles: true }));
+  }
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -322,7 +353,6 @@
       class:bx--text-area--invalid={showInvalid}
       class:bx--text-area--warning={showWarn}
       style:resize={typeof cols === "number" || grow ? "none" : undefined}
-      maxlength={maxCount ?? undefined}
       {...$$restProps}
       on:change
       on:input
@@ -332,6 +362,7 @@
       on:focus={handleFocus}
       on:blur
       on:paste
+      on:beforeinput={handleBeforeInput}
     ></textarea>
     {#if isFluid}
       <hr class:bx--text-area__divider={true}>
