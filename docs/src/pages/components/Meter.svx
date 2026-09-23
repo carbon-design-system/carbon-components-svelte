@@ -61,7 +61,7 @@ The bar switches to the error color once `value` reaches `thresholds.error`.
 
 ### Threshold markers
 
-Set `showThresholds` to `true` to draw a tick at each defined threshold.
+Set `showThresholds` to `true` to draw a tick at each defined threshold. This also adds a visually hidden sentence describing the threshold amounts to the meter's `aria-describedby`, since the ticks themselves are decorative. Override that sentence with `thresholdsText`.
 
 <Meter labelText="Storage" value={820} max={1000} thresholds={{ warning: 800, error: 950 }} showThresholds />
 
