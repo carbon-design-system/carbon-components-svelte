@@ -151,6 +151,27 @@ describe("ContextMenu", () => {
     expect(options[0]).toHaveFocus();
   });
 
+  it("should skip disabled options with the arrow keys", async () => {
+    render(ContextMenu, { props: { open: true, optionDisabled: true } });
+
+    const menu = screen.getAllByRole("menu")[0];
+    menu.focus();
+
+    const options = screen.getAllByRole("menuitem");
+
+    // ArrowDown from the focused menu moves to the first option.
+    await user.keyboard("{ArrowDown}");
+    expect(options[0]).toHaveFocus();
+
+    // ArrowDown again skips the disabled middle option.
+    await user.keyboard("{ArrowDown}");
+    expect(options[2]).toHaveFocus();
+
+    // ArrowUp moves back to the first option.
+    await user.keyboard("{ArrowUp}");
+    expect(options[0]).toHaveFocus();
+  });
+
   it("should handle custom target", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(ContextMenu);
