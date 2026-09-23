@@ -29,7 +29,7 @@ After closing the modal, focus is returned to the element that triggered the mod
 
 ### Custom focus
 
-Use `selectorPrimaryFocus` to override the default and target a specific element when the automatic first-input focus is not desired.
+Use `selectorPrimaryFocus` to override the default and target a specific element when the automatic first-input focus is not desired. Set `selectorPrimaryFocus` to `null` to skip initial focus when you move focus yourself, for example in `on:transitionend`.
 
 <FileSource src="/framed/Modal/ModalCustomFocus" />
 
