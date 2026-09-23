@@ -201,6 +201,12 @@
    */
   export let translateWithIdSelection = undefined;
 
+  /**
+   * Specify the assistive text announced through the status live region when
+   * a selection is cleared via the clear button, the Escape key, or `clear()`.
+   */
+  export let selectionClearedText = "Selection cleared";
+
   /** Set an id for the list box component */
   export let id = uniqueId();
 
@@ -300,6 +306,7 @@
   let prevInputLength = 0;
   let listScrollTop = 0;
   let prevOpen = false;
+  let statusText = "";
 
   /** @type {null | HTMLDivElement} */
   let fieldRef = null;
@@ -405,6 +412,17 @@
   }
 
   /**
+   * Re-announce even when the text is unchanged: empty the region, flush,
+   * then set it.
+   * @param {string} text
+   */
+  async function announceStatus(text) {
+    statusText = "";
+    await tick();
+    statusText = text;
+  }
+
+  /**
    * Clear the combo box programmatically.
    * By default, focuses the combo box after clearing. Set `options.focus` to `false` to prevent focusing.
    * Set `options.open` to `true` to keep the dropdown open after clearing.
@@ -417,6 +435,18 @@
    * ```
    */
   export async function clear(options = {}) {
+    await resetSelection(options, true);
+  }
+
+  /**
+   * Shared by `clear()` and Escape. Escape runs this even with nothing
+   * selected, so it announces only when a selection existed. The clear button
+   * cannot gate that way: a controlled consumer may reset `selectedId` in its
+   * own `on:clear` handler before this runs.
+   * @param {{ focus?: boolean; open?: boolean }} options
+   * @param {boolean} announce
+   */
+  async function resetSelection(options, announce) {
     if (readonly) return;
     prevSelectedId = null;
     highlightedIndex = -1;
@@ -425,6 +455,7 @@
     selectedItem = undefined;
     open = false;
     value = "";
+    if (announce) announceStatus(selectionClearedText);
     // Ensure binding updates are complete before focusing.
     await tick();
     if (options?.open === true) open = true;
@@ -960,8 +991,9 @@
             }
           } else if (event.key === "Escape") {
             // Dispatch before `clear()` flips `open`, so the guard still sees it open.
+            const hadSelection = selectedId !== undefined;
             close("escape-key");
-            clear();
+            resetSelection({}, hadSelection);
           }
         }}
           on:keyup
@@ -1230,4 +1262,9 @@
       {helperText}
     </div>
   {/if}
+  <!-- Live region for selection announcements. Always rendered (even while
+       empty) so assistive tech registers the region before its text changes. -->
+  <span role="status" aria-live="polite" class:bx--visually-hidden={true}
+    >{statusText}</span
+  >
 </div>
