@@ -222,6 +222,44 @@ detection](#duplicate-detection)).
   on:rejected={(e) => console.log(e.detail)} // Array<{ file: File; reason: "size" | "duplicate" }>
 />
 
+## Form submission
+
+Set `name` so the selected files submit with the form. The native file input
+always holds exactly the files in `files`: rejected files are left out and
+removed files are dropped. Set `enctype="multipart/form-data"` on the form;
+without it the browser sends only the file names.
+
+```svelte
+<script>
+  import { Form, FileUploader, Button } from "carbon-components-svelte";
+</script>
+
+<Form method="POST" action="?/upload" enctype="multipart/form-data">
+  <FileUploader
+    name="attachments"
+    multiple
+    labelTitle="Attachments"
+    buttonLabel="Add files"
+  />
+  <Button type="submit">Upload</Button>
+</Form>
+```
+
+In a SvelteKit form action, read the files with `getAll`. A file input with
+nothing selected still submits one empty file, so filter by size:
+
+```js
+// +page.server.js
+export const actions = {
+  upload: async ({ request }) => {
+    const data = await request.formData();
+    const files = data
+      .getAll("attachments")
+      .filter((file) => file instanceof File && file.size > 0);
+  },
+};
+```
+
 ## File ordering
 
 Control the order of files in the list.
