@@ -630,6 +630,8 @@
     const next = new Set(selectedRowIds);
     for (const row of rowsToVirtualize.slice(start, end + 1)) {
       if (nonSelectableRowIdsSet.has(row.id)) continue;
+      // "hide" mode keeps filtered-out rows mounted (and in `rowsToVirtualize`).
+      if (hideMode && !matchedRowIdsSet.has(row.id)) continue;
       if (checked) {
         next.add(row.id);
       } else {
