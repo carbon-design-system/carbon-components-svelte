@@ -69,6 +69,35 @@ describe("Modal", () => {
     expect(modalContainer).toHaveAttribute("aria-label", "");
   });
 
+  it("keeps a rest aria-label off the presentation root", () => {
+    const { container } = render(ModalNullishAriaLabel, {
+      props: {
+        open: true,
+        ariaLabel: "Delete file",
+        primaryButtonText: "Save",
+      },
+    });
+
+    expect(screen.getByRole("dialog")).toHaveAttribute(
+      "aria-label",
+      "Delete file",
+    );
+    expect(container.querySelector(".bx--modal")).not.toHaveAttribute(
+      "aria-label",
+    );
+  });
+
+  it("keeps an empty rest aria-label off the presentation root", () => {
+    const { container } = render(ModalNullishAriaLabel, {
+      props: { open: true, ariaLabel: "", primaryButtonText: "Save" },
+    });
+
+    expect(screen.getByRole("dialog")).toHaveAttribute("aria-label", "");
+    expect(container.querySelector(".bx--modal")).not.toHaveAttribute(
+      "aria-label",
+    );
+  });
+
   it("renders with basic structure", () => {
     render(ModalTest, {
       props: {
