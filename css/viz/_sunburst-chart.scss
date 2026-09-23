@@ -1,0 +1,116 @@
+/// SunburstChart: the partition as rings around a center, drawn at a fixed
+/// logical size and scaled to the container. The legend reuses the
+/// treemap's and the tooltip the chart's.
+/// @access private
+/// @group viz
+@mixin viz-sunburst-chart {
+  .#{$prefix}--viz-sunburst {
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-sunburst .#{$prefix}--viz-chart__title {
+    margin-block-end: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--viz-sunburst__plot {
+    position: relative;
+  }
+
+  .#{$prefix}--viz-sunburst__svg {
+    display: block;
+    block-size: auto;
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--viz-sunburst__svg:focus {
+    outline: 2px solid $focus;
+    outline-offset: 2px;
+  }
+
+  // A hairline of the page background separates touching arcs.
+  .#{$prefix}--viz-sunburst__arc {
+    fill: var(--bx-viz-color, #{$interactive-04});
+    stroke: $ui-background;
+    stroke-width: 1;
+    transition: opacity $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-sunburst--emphasis
+    .#{$prefix}--viz-sunburst__arc:not(.#{$prefix}--viz-sunburst__arc--active) {
+    opacity: 0.4;
+  }
+
+  // The hole holds the center's name and total, or a button back up.
+  .#{$prefix}--viz-sunburst__center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    block-size: var(--bx-viz-hole);
+    inline-size: var(--bx-viz-hole);
+    pointer-events: none;
+    text-align: center;
+    transform: translate(-50%, -50%);
+  }
+
+  .#{$prefix}--viz-sunburst__up {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: $carbon--spacing-02;
+    border: 0;
+    border-radius: 50%;
+    appearance: none;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+    pointer-events: auto;
+  }
+
+  .#{$prefix}--viz-sunburst__up:hover {
+    background: $hover-ui;
+  }
+
+  .#{$prefix}--viz-sunburst__up:focus-visible {
+    outline: 2px solid $focus;
+    outline-offset: 2px;
+  }
+
+  .#{$prefix}--viz-sunburst__center-label {
+    overflow: hidden;
+    color: $text-secondary;
+    max-inline-size: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-sunburst__center-value {
+    color: $text-primary;
+    font-variant-numeric: tabular-nums;
+
+    @include type-style("productive-heading-03");
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-sunburst__arc {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-sunburst__arc {
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("viz-sunburst-chart") {
+  @include viz-sunburst-chart;
+}
