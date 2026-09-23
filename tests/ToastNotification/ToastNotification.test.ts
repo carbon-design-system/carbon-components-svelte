@@ -246,6 +246,26 @@ describe("ToastNotification", () => {
     expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
   });
 
+  it("should restart the timeout from its full duration when timeoutKey changes", async () => {
+    const onclose = vi.fn();
+    const { rerender } = render(ToastNotificationTest, {
+      props: { timeout: 1000, onclose },
+    });
+
+    vi.advanceTimersByTime(400);
+    await rerender({ timeout: 1000, onclose, timeoutKey: 1 });
+
+    vi.advanceTimersByTime(800);
+    await tick();
+    expect(onclose).not.toHaveBeenCalled();
+    expect(screen.getByRole("alert")).toBeInTheDocument();
+
+    vi.advanceTimersByTime(200);
+    await tick();
+    expect(onclose).toHaveBeenCalledTimes(1);
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+  });
+
   it("should pause timeout on hover when pauseOnHover is true", async () => {
     const closeHandler = vi.fn();
     render(ToastNotificationTest, {

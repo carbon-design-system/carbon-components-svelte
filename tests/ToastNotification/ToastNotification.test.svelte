@@ -5,6 +5,7 @@
   export let kind: ComponentProps<ToastNotification>["kind"] = "error";
   export let lowContrast: ComponentProps<ToastNotification>["lowContrast"] = false;
   export let timeout: ComponentProps<ToastNotification>["timeout"] = 0;
+  export let timeoutKey: ComponentProps<ToastNotification>["timeoutKey"] = 0;
   export let pauseOnHover: ComponentProps<ToastNotification>["pauseOnHover"] = false;
   export let role: ComponentProps<ToastNotification>["role"] = undefined;
   export let title: ComponentProps<ToastNotification>["title"] = "";
@@ -22,6 +23,7 @@
   {kind}
   {lowContrast}
   {timeout}
+  {timeoutKey}
   {pauseOnHover}
   {role}
   {title}

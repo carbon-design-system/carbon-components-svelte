@@ -49,6 +49,13 @@
   export let fullWidth = false;
 
   /**
+   * Change this value to restart the timeout from its full duration,
+   * for example after updating the message.
+   * @type {number}
+   */
+  export let timeoutKey = 0;
+
+  /**
    * Set to `true` to show the notification, `false` to hide it.
    * @bindable writable
    */
@@ -86,7 +93,12 @@
       ? "alert"
       : "status");
 
-  $: dismiss.sync(open, timeout, () => close(true));
+  // Reading `timeoutKey` makes a change to it re-run `sync`, which
+  // restarts the timer from the full `timeout`.
+  $: {
+    timeoutKey;
+    dismiss.sync(open, timeout, () => close(true));
+  }
 
   onMount(() => () => dismiss.clear());
 </script>

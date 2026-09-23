@@ -66,13 +66,22 @@
 
   const dispatch = createEventDispatcher();
 
-  /** @type {Array<NotificationData & { id: string }>} */
+  /** @type {Array<NotificationData & { id: string; timeoutKey?: number }>} */
   let notifications = [];
 
   let idCounter = 0;
 
   function generateId() {
     return `notification-${idCounter++}`;
+  }
+
+  /**
+   * A stored row without the queue's bookkeeping fields.
+   * @param {NotificationData & { id: string; timeoutKey?: number }} row
+   * @returns {NotificationData & { id: string }}
+   */
+  function toNotificationData({ timeoutKey, ...notification }) {
+    return notification;
   }
 
   function isTopPosition(value) {
@@ -133,7 +142,10 @@
       : notifications.slice(excess);
 
     for (const notification of dropped) {
-      dispatch("dismiss", { notification, trigger: "overflow" });
+      dispatch("dismiss", {
+        notification: toNotificationData(notification),
+        trigger: "overflow",
+      });
     }
   }
 
@@ -149,7 +161,10 @@
 
     const [notification] = notifications.splice(index, 1);
     notifications = notifications;
-    dispatch("dismiss", { notification, trigger });
+    dispatch("dismiss", {
+      notification: toNotificationData(notification),
+      trigger,
+    });
     return true;
   }
 
@@ -176,14 +191,19 @@
   /**
    * Update an existing notification by id, merging `patch` into it.
    * The id of the notification cannot be changed.
+   * Set `restartTimeout: true` in the patch to restart the timeout from its full duration.
    * Returns true if the notification was found and updated, false otherwise.
-   * @type {(id: string, patch: Partial<NotificationData>) => boolean}
+   * @type {(id: string, patch: Partial<NotificationData> & { restartTimeout?: boolean }) => boolean}
    */
   export function update(id, patch) {
     const index = notifications.findIndex((n) => n.id === id);
     if (index === -1) return false;
 
-    notifications[index] = { ...notifications[index], ...patch, id };
+    const { restartTimeout, ...rest } = patch;
+    const current = notifications[index];
+    const next = { ...current, ...rest, id };
+    if (restartTimeout) next.timeoutKey = (current.timeoutKey ?? 0) + 1;
+    notifications[index] = next;
     notifications = notifications;
     return true;
   }
@@ -204,7 +224,10 @@
     const cleared = notifications;
     notifications = [];
     for (const notification of cleared) {
-      dispatch("dismiss", { notification, trigger: "programmatic" });
+      dispatch("dismiss", {
+        notification: toNotificationData(notification),
+        trigger: "programmatic",
+      });
     }
   }
 </script>

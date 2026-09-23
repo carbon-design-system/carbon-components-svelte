@@ -293,6 +293,73 @@ describe("NotificationQueue", () => {
     expect(screen.queryByText("Second notification")).not.toBeInTheDocument();
   });
 
+  it("should restart the timeout when update sets restartTimeout", async () => {
+    const { component } = render(NotificationQueueTest);
+    const queue = getQueue(component.queue);
+
+    queue.add({ id: "a", title: "Saving", timeout: 1000 });
+    await tick();
+
+    vi.advanceTimersByTime(800);
+    queue.update("a", { title: "Saved", restartTimeout: true });
+    await tick();
+
+    vi.advanceTimersByTime(800);
+    await tick();
+    expect(screen.getByText("Saved")).toBeInTheDocument();
+
+    vi.advanceTimersByTime(200);
+    await tick();
+    expect(screen.queryByText("Saved")).not.toBeInTheDocument();
+  });
+
+  it("should keep the original timeout when update omits restartTimeout", async () => {
+    const { component } = render(NotificationQueueTest);
+    const queue = getQueue(component.queue);
+
+    queue.add({ id: "a", title: "Saving", timeout: 1000 });
+    await tick();
+
+    vi.advanceTimersByTime(800);
+    queue.update("a", { title: "Saved" });
+    await tick();
+
+    vi.advanceTimersByTime(200);
+    await tick();
+    expect(screen.queryByText("Saved")).not.toBeInTheDocument();
+  });
+
+  it("should not include timeoutKey in the dismiss payload", async () => {
+    const ondismiss = vi.fn();
+    const { component } = render(NotificationQueueTest, {
+      props: { ondismiss },
+    });
+    const queue = getQueue(component.queue);
+
+    queue.add({ id: "a", title: "Saving" });
+    queue.update("a", { restartTimeout: true });
+    queue.remove("a");
+    await tick();
+
+    expect(ondismiss.mock.calls[0][0].detail.notification).toEqual({
+      id: "a",
+      title: "Saving",
+    });
+  });
+
+  it("should not render restartTimeout as an attribute", async () => {
+    const { component } = render(NotificationQueueTest);
+    const queue = getQueue(component.queue);
+
+    queue.add({ id: "a", title: "Saving" });
+    queue.update("a", { restartTimeout: true });
+    await tick();
+
+    const toast = document.querySelector(".bx--toast-notification");
+    expect(toast).not.toHaveAttribute("restartTimeout");
+    expect(toast).not.toHaveAttribute("timeoutKey");
+  });
+
   it("should limit notifications to maxNotifications (top-right)", async () => {
     const { component } = render(NotificationQueueTest, {
       props: { maxNotifications: 2 },
