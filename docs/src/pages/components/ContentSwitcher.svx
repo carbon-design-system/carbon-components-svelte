@@ -10,6 +10,7 @@ description: Content switchers let users switch between views or sections of con
   import TableOfContents from "carbon-icons-svelte/lib/TableOfContents.svelte";
   import Dashboard from "carbon-icons-svelte/lib/Dashboard.svelte";
   import List from "carbon-icons-svelte/lib/List.svelte";
+  import Checkmark from "carbon-icons-svelte/lib/Checkmark.svelte";
 </script>
 
 ## Basic
@@ -97,6 +98,23 @@ Override the default slot in the switch to customize how each option displays.
   <Switch>
     <Stack orientation="horizontal" gap={3}>
       <Analytics /> Trending
+    </Stack>
+  </Switch>
+</ContentSwitcher>
+
+### Selected state
+
+The default slot exposes `selected`, so custom content can change with the selection.
+
+<ContentSwitcher>
+  <Switch text="Latest news" let:selected>
+    <Stack orientation="horizontal" gap={3}>
+      {#if selected}<Checkmark />{/if} Latest news
+    </Stack>
+  </Switch>
+  <Switch text="Trending" let:selected>
+    <Stack orientation="horizontal" gap={3}>
+      {#if selected}<Checkmark />{/if} Trending
     </Stack>
   </Switch>
 </ContentSwitcher>
