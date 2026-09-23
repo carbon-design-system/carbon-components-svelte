@@ -1,0 +1,55 @@
+---
+components: ["GraphCanvas"]
+description: Graph canvas draws a directed graph on a stage that pans and zooms, with HTML nodes, folding, and a minimap, for graphs too large for one view.
+---
+
+<script>
+  import { Tag } from "carbon-components-svelte";
+  import { GraphCanvas } from "carbon-components-svelte/viz";
+
+  const TIERS = { edge: ["cdn", "gateway", "waf"], apps: ["web", "checkout", "catalog", "account", "admin"], platform: ["auth", "pricing", "search", "mailer", "images"], data: ["postgres", "redis", "kafka", "elasticsearch", "s3"] };
+  const services = Object.entries(TIERS).flatMap(([tier, ids]) => ids.map((id) => ({ id, name: id, tier, health: id === "pricing" ? "error" : id === "redis" ? "warning" : "ok" })));
+  const calls = [
+    ["cdn", "web"], ["waf", "gateway"], ["gateway", "web"], ["gateway", "checkout"], ["gateway", "catalog"], ["gateway", "account"], ["gateway", "admin"],
+    ["web", "auth"], ["web", "images"], ["checkout", "auth"], ["checkout", "pricing"], ["checkout", "postgres"], ["checkout", "kafka"], ["checkout", "mailer"],
+    ["catalog", "search"], ["catalog", "postgres"], ["catalog", "images"], ["account", "auth"], ["account", "postgres"], ["admin", "auth"], ["admin", "postgres"],
+    ["pricing", "redis"], ["search", "elasticsearch"], ["auth", "postgres"], ["auth", "redis"], ["kafka", "search"], ["mailer", "kafka"], ["images", "s3"],
+  ].map(([source, target]) => ({ source, target }));
+
+  let collapsed = [];
+  let selected = null;
+  let transform = null;
+</script>
+
+`GraphCanvas` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+It is a [LayeredGraph](/components/LayeredGraph) on a stage: the same layout, but the view pans and zooms, the nodes are real buttons that can hold any Carbon content, and a minimap shows where you are. Reach for it when a graph no longer fits one drawing. It is still read-only: nothing is dragged or connected here.
+
+## Basic
+
+Pass `nodes` with an `id` and a `label`, and `links` read with `source` and `target`. The graph is fit to the stage until you pan or zoom. Drag the floor to pan, scroll to pan, pinch or hold Ctrl while scrolling to zoom about the pointer, and use the controls or the `+`, `-`, and `0` keys.
+
+<GraphCanvas nodes={services} links={calls} id="id" label="name" title="Service dependencies" />
+
+## Nodes with content
+
+Fill the `node` slot with your own markup. Group colors the node's edge; here a tag carries the health as well.
+
+<GraphCanvas nodes={services} links={calls} id="id" label="name" group="tier" rankDir="LR" nodeWidth={176} height={360} bind:collapsed bind:selected title="Service dependencies, by tier" let:node>
+  <span class="bx--viz-graph-canvas__label" slot="node" let:node>
+    {node.label}
+    {#if node.datum.health !== "ok"}
+      <Tag type={node.datum.health === "error" ? "red" : "magenta"} size="sm">{node.datum.health}</Tag>
+    {/if}
+  </span>
+</GraphCanvas>
+
+## View, folding, and selection
+
+Bind `transform` to keep the view across renders, or set it to `null` to fit again. Bind `collapsed` to fold subgraphs, as the layered graph does, and `selected` or `select` for the chosen node. Double click a node to fold it, or use Left and Right on a focused node. `lane` and `lanes` draw bands across the ranks, as on the layered graph; a laned layout is wide, which is what the stage is for.
+
+<GraphCanvas nodes={services} links={calls} id="id" label="name" lane="tier" lanes={["edge", "apps", "platform", "data"]} rankDir="LR" bind:transform bind:collapsed minimap={false} height={320} title="Pan and fold, by lane" />
+
+## Accessibility
+
+The nodes are one tab stop. Arrow keys move between them in reading order and the stage pans to keep the focused node in view; each node is announced with its level, lane, group, and whether it is folded. Left folds and Right unfolds a node with children, Enter or Space selects, and `+`, `-`, and `0` zoom in, out, and fit. The figure also holds a visually hidden list of every node and edge.
