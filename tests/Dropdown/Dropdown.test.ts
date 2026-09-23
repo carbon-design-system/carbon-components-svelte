@@ -700,6 +700,100 @@ describe("Dropdown", () => {
     expect(button).toHaveTextContent("Email");
   });
 
+  describe("clicking the selected option", () => {
+    it("closes without dispatching select", async () => {
+      const selectHandler = vi.fn();
+      render(Dropdown, {
+        props: { items, selectedId: "1", onselect: selectHandler },
+      });
+
+      const button = screen.getByRole("combobox");
+      await user.click(button);
+      await user.click(screen.getByRole("option", { name: "Email" }));
+
+      expect(selectHandler).not.toHaveBeenCalled();
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+      expect(button).toHaveTextContent("Email");
+    });
+
+    it("still dispatches select for a different option", async () => {
+      const selectHandler = vi.fn();
+      render(Dropdown, {
+        props: { items, selectedId: "1", onselect: selectHandler },
+      });
+
+      await user.click(screen.getByRole("combobox"));
+      await user.click(screen.getByRole("option", { name: "Fax" }));
+
+      expect(selectHandler).toHaveBeenCalledTimes(1);
+      expect(selectHandler).toHaveBeenCalledWith(
+        expect.objectContaining({
+          detail: { selectedId: "2", selectedItem: items[2] },
+        }),
+      );
+    });
+
+    it("closes a portaled menu without dispatching select", async () => {
+      const selectHandler = vi.fn();
+      render(Dropdown, {
+        props: {
+          items,
+          selectedId: "1",
+          portalMenu: true,
+          onselect: selectHandler,
+        },
+      });
+
+      await user.click(screen.getByRole("combobox"));
+      await user.click(screen.getByRole("option", { name: "Email" }));
+
+      expect(selectHandler).not.toHaveBeenCalled();
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    });
+
+    it("does not dispatch select in a virtualized list", async () => {
+      const selectHandler = vi.fn();
+      const largeItems = Array.from({ length: 150 }, (_, i) => ({
+        id: String(i),
+        text: `Item ${i + 1}`,
+      }));
+      render(Dropdown, {
+        props: {
+          items: largeItems,
+          selectedId: "3",
+          virtualize: true,
+          onselect: selectHandler,
+        },
+      });
+
+      await user.click(screen.getByRole("combobox"));
+      const option = await screen.findByRole("option", { name: "Item 4" });
+      await user.click(option);
+
+      expect(selectHandler).not.toHaveBeenCalled();
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    });
+
+    it("does not dispatch select for a selected numeric id of 0", async () => {
+      const selectHandler = vi.fn();
+      render(Dropdown, {
+        props: {
+          items: [
+            { id: 0, text: "Zero" },
+            { id: 1, text: "One" },
+          ],
+          selectedId: 0,
+          onselect: selectHandler,
+        },
+      });
+
+      await user.click(screen.getByRole("combobox"));
+      await user.click(screen.getByRole("option", { name: "Zero" }));
+
+      expect(selectHandler).not.toHaveBeenCalled();
+    });
+  });
+
   it("does not select a hover-highlighted item on Enter; closes without selecting", async () => {
     const selectHandler = vi.fn();
     render(Dropdown, {
@@ -1382,12 +1476,13 @@ describe("Dropdown", () => {
       expect(options[0]).toHaveTextContent("$999");
       expect(options[0]).toHaveTextContent("Electronics");
 
-      await user.click(options[0]);
+      // Laptop is already selected, so pick Phone to trigger `select`.
+      await user.click(options[1]);
 
       expect(consoleLog).toHaveBeenCalledWith("selected:", {
-        id: "1",
-        text: "Laptop",
-        price: 999,
+        id: "2",
+        text: "Phone",
+        price: 599,
         category: "Electronics",
       });
     });
