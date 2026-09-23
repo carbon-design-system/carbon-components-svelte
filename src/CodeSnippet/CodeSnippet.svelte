@@ -25,7 +25,7 @@
    * Set the code snippet text.
    * Alternatively, use the default slot.
    *
-   * NOTE: you *must* use the `code` prop for the copy-to-clipboard functionality.
+   * When `code` is unset, the copy button copies the rendered text of the default slot.
    * @type {string}
    * @example
    * ```svelte
@@ -261,6 +261,25 @@
 
   $: feedbackText = copyFailed ? errorFeedback : feedback;
 
+  /** @type {null | HTMLElement} */
+  let inlineCodeRef = null;
+
+  /**
+   * Text to copy: `code` when defined, otherwise the rendered slot text.
+   * @returns {string}
+   */
+  function getCopyText() {
+    if (code !== undefined) return code;
+    // The inline <code> pads the slot with template spaces; trim only there.
+    // Single/multi read the <pre>, where leading indentation is content.
+    if (type === "inline") return inlineCodeRef?.textContent?.trim() ?? "";
+    return ref?.textContent ?? "";
+  }
+
+  function copySnippet() {
+    return copy(getCopyText());
+  }
+
   function dismissFeedback() {
     copyFeedback.dismiss();
   }
@@ -445,10 +464,8 @@
         try {
           await copyFeedback.onClick(
             async () => {
-              if (copy === copyText ? code !== undefined : true) {
-                await copy(code ?? "");
-                dispatch("copy");
-              }
+              await copy(getCopyText());
+              dispatch("copy");
             },
             feedbackTimeout,
             effectivePortalTooltip,
@@ -466,7 +483,7 @@
       on:mouseenter={(event) => dispatch("mouseenter:copy-button", event)}
       on:mouseleave={(event) => dispatch("mouseleave:copy-button", event)}
     >
-      <code {id}> <slot>{code}</slot> </code>
+      <code bind:this={inlineCodeRef} {id}> <slot>{code}</slot> </code>
       {#if !effectivePortalTooltip}
         <span
           aria-hidden="true"
@@ -533,8 +550,7 @@
     {#if !hideCopyButton}
       <CopyButton
         bind:ref={copyRef}
-        text={code}
-        {copy}
+        copy={copySnippet}
         {disabled}
         {feedback}
         {errorFeedback}
