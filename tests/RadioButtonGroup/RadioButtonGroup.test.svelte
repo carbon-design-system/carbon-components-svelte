@@ -17,6 +17,10 @@
     "horizontal";
   export let id: ComponentProps<RadioButtonGroup>["id"] = undefined;
   export let helperText: ComponentProps<RadioButtonGroup>["helperText"] = "";
+  export let invalid: ComponentProps<RadioButtonGroup>["invalid"] = false;
+  export let invalidText: ComponentProps<RadioButtonGroup>["invalidText"] = "";
+  export let warn: ComponentProps<RadioButtonGroup>["warn"] = false;
+  export let warnText: ComponentProps<RadioButtonGroup>["warnText"] = "";
   export let allowDeselect: ComponentProps<RadioButtonGroup>["allowDeselect"] = false;
   export let customClass = "";
   export let useSlot = false;
@@ -33,6 +37,10 @@
     {orientation}
     {id}
     {helperText}
+    {invalid}
+    {invalidText}
+    {warn}
+    {warnText}
     {allowDeselect}
     class={customClass}
     on:change={(e) => {
@@ -56,6 +64,10 @@
     {orientation}
     {id}
     {helperText}
+    {invalid}
+    {invalidText}
+    {warn}
+    {warnText}
     {allowDeselect}
     class={customClass}
     on:change={(e) => {

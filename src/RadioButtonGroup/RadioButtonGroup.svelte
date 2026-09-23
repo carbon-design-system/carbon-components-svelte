@@ -47,6 +47,18 @@
   /** Specify the helper text */
   export let helperText = "";
 
+  /** Set to `true` to indicate an invalid state */
+  export let invalid = false;
+
+  /** Specify the invalid state text */
+  export let invalidText = "";
+
+  /** Set to `true` to indicate a warning state */
+  export let warn = false;
+
+  /** Specify the warning state text */
+  export let warnText = "";
+
   /** Set to `true` to use the read-only variant */
   export let readonly = false;
 
@@ -76,6 +88,8 @@
 
   import { createEventDispatcher, onMount, setContext } from "svelte";
   import { readonly as readOnly, writable } from "svelte/store";
+  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import WarningFilled from "../icons/WarningFilled.svelte";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -89,6 +103,8 @@
   const groupReadonly = writable(readonly);
   const groupAllowDeselect = writable(allowDeselect);
   const fallbackHelperId = uniqueId();
+  const fallbackErrorId = uniqueId();
+  const fallbackWarnId = uniqueId();
   /** @type {import("svelte/store").Writable<string | undefined>} */
   const helperId = writable(undefined);
   let initialRender = true;
@@ -147,11 +163,19 @@
   $: $groupRequired = required;
   $: $groupReadonly = readonly;
   $: $groupAllowDeselect = allowDeselect;
-  $: $helperId = helperText
-    ? id
-      ? `helper-${id}`
-      : fallbackHelperId
-    : undefined;
+  $: showInvalid = invalid && !disabled && !readonly;
+  $: showWarn = warn && !invalid && !disabled && !readonly;
+  $: errorId = id ? `error-${id}` : fallbackErrorId;
+  $: warnId = id ? `warn-${id}` : fallbackWarnId;
+  $: $helperId = showInvalid
+    ? errorId
+    : showWarn
+      ? warnId
+      : helperText
+        ? id
+          ? `helper-${id}`
+          : fallbackHelperId
+        : undefined;
 </script>
 
 <div
@@ -171,7 +195,11 @@
     class:bx--radio-button-group--label-left={labelPosition === "left"}
     class:bx--radio-button-group--label-right={labelPosition === "right"}
     class:bx--radio-button-group--readonly={readonly}
+    class:bx--radio-button-group--invalid={showInvalid}
+    class:bx--radio-button-group--warning={showWarn}
     {disabled}
+    data-invalid={showInvalid || undefined}
+    aria-invalid={showInvalid || undefined}
   >
     {#if legendText || $$slots.legendChildren}
       <legend class:bx--label={true} class:bx--visually-hidden={hideLegend}>
@@ -179,8 +207,19 @@
       </legend>
     {/if}
     <slot />
+    <div class:bx--radio-button-group__validation-msg={true}>
+      {#if showInvalid}
+        <WarningFilled class="bx--radio-button-group__invalid-icon" />
+        <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
+      {:else if showWarn}
+        <WarningAltFilled
+          class="bx--radio-button-group__invalid-icon bx--radio-button-group__invalid-icon--warning"
+        />
+        <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
+      {/if}
+    </div>
   </fieldset>
-  {#if helperText}
+  {#if helperText && !showInvalid && !showWarn}
     <div
       id={$helperId}
       class:bx--form__helper-text={true}
