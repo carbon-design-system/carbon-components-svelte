@@ -144,11 +144,11 @@ Set `hideCloseButton` on `ModalHeader` to remove the header close button. Use th
 
 ## Events
 
-ComposedModal and ModalFooter dispatch events for the modal's lifecycle and button interactions. Only the close button, <DocKbd label="Escape" />, and (by default) an outside click close the modal automatically. See [Closing](#closing) above. Every other action leaves `open` untouched; handle the event and set `open` to `false` yourself when the action should dismiss the dialog.
+ComposedModal and ModalFooter dispatch events for the modal's lifecycle and button interactions. The close button, <DocKbd label="Escape" />, (by default) an outside click, and `ModalFooter`'s `secondaryButtonText` button close the modal automatically. See [Closing](#closing) above. Every other action, including the primary button and `secondaryButtons` entries, leaves `open` untouched; handle the event and set `open` to `false` yourself when the action should dismiss the dialog.
 
 ### Open
 
-Listen for `on:open` to know when the modal has become visible and focus has moved into it.
+Listen for `on:open` to know when `open` becomes `true`. It fires before the modal is visible and before focus moves into it. To run code after focus has moved, listen for `on:transitionend` and check `event.detail.open`.
 
 ```svelte
 <ComposedModal bind:open on:open={() => console.log("opened")}>
@@ -156,18 +156,13 @@ Listen for `on:open` to know when the modal has become visible and focus has mov
 
 ### Submit and button clicks
 
-The primary button in `ModalFooter` dispatches both `submit` and `click:button--primary` when clicked. Secondary buttons dispatch `click:button--secondary` with the button's `text`.
+Clicking the primary button in `ModalFooter` dispatches `submit` and `click:button--primary` on `ComposedModal`. `ModalFooter` dispatches `click:button--secondary` with the button's `text`.
 
 ```svelte
-<ComposedModal bind:open>
+<ComposedModal bind:open on:submit={() => (open = false)}>
   <ModalHeader title="Confirm changes" />
   <ModalBody>...</ModalBody>
-  <ModalFooter
-    primaryButtonText="Confirm"
-    secondaryButtonText="Cancel"
-    on:click:button--secondary={() => (open = false)}
-    on:submit={() => (open = false)}
-  />
+  <ModalFooter primaryButtonText="Confirm" secondaryButtonText="Cancel" />
 </ComposedModal>
 ```
 
