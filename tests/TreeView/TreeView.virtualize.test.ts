@@ -209,6 +209,28 @@ describe("TreeView (virtualize)", () => {
     );
   });
 
+  it("Ctrl+click deselects a selected row that is not active", async () => {
+    const { component } = render(TreeViewVirtualize, {
+      totalRoots: 10,
+      childrenPerRoot: 0,
+      multiselect: true,
+      activeId: 0,
+      selectedIds: [0, 1, 2],
+    });
+
+    const row = findRowById(1);
+    if (!row) throw new Error("expected row 1");
+
+    await user.keyboard("{Control>}");
+    await user.click(row);
+    await user.keyboard("{/Control}");
+    await tick();
+
+    expect(
+      [...component.selectedIds].sort((a, b) => Number(a) - Number(b)),
+    ).toEqual([0, 2]);
+  });
+
   it("Ctrl+A does nothing when multiselect is off", async () => {
     const { component } = render(TreeViewVirtualize, {
       totalRoots: 40,
