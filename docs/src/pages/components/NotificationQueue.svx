@@ -117,6 +117,12 @@ This example logs each dismissal with its trigger. The queue holds two notificat
 
 <FileSource src="/framed/NotificationQueue/NotificationQueueDismiss" />
 
+## Accessibility
+
+The queue container is a polite live region (`aria-live="polite"`) that stays mounted even when empty, so screen readers announce each notification as it is added, including the first. Queued toasts render with `role="none"` by default so the stack is announced once by the container instead of once per toast.
+
+Errors in the queue are announced politely too. To interrupt for an urgent notification, pass `role: "alert"` to `add`, or render a standalone [ToastNotification](/components/ToastNotification) or [InlineNotification](/components/InlineNotification) outside the queue.
+
 ## Persistent
 
 Create persistent notifications that do not auto-dismiss by omitting timeout and hiding the close button with `hideCloseButton`.

@@ -102,7 +102,7 @@ Prevent the default close behavior using `e.preventDefault()` in the `on:close` 
 
 ## ARIA role
 
-The ARIA `role` follows `kind` by default: `error`, `warning`, and `warning-alt` use `"alert"`, which interrupts screen readers; `success`, `info`, and `info-square` use `"status"`, which waits for a pause. Set `role` to override the default, for example `"alert"` for an urgent success message or `"log"` for a running log of messages.
+The ARIA `role` follows `kind` by default: `error`, `warning`, and `warning-alt` use `"alert"`, which interrupts screen readers; `success`, `info`, and `info-square` use `"status"`, which waits for a pause. Set `role` to override the default, for example `"alert"` for an urgent success message, `"log"` for a running log of messages, or `"none"` when an ancestor is already the live region.
 
 <InlineNotification role="alert" kind="success" title="Success:" subtitle="Your profile has been updated." />
 
