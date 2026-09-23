@@ -1704,6 +1704,48 @@ describe("MultiSelect", () => {
       );
     });
 
+    it.each(["{ArrowDown}", "{ArrowUp}", "{Enter}", " ", "{End}"])(
+      "does not open a disabled field on %s after a click focuses it",
+      async (key) => {
+        render(MultiSelect, {
+          props: { items, disabled: true, selectedIds: ["1"] },
+        });
+
+        const field = screen.getByRole("combobox");
+        await user.click(field);
+        expect(field).toHaveFocus();
+
+        await user.keyboard(key);
+        expect(field).toHaveAttribute("aria-expanded", "false");
+      },
+    );
+
+    it.each(["{Delete}", "{Backspace}"])(
+      "does not clear a disabled field's selection on %s",
+      async (key) => {
+        const consoleLog = vi.spyOn(console, "log");
+        render(MultiSelect, {
+          props: { items, disabled: true, selectedIds: ["1"] },
+        });
+
+        await user.click(screen.getByRole("combobox"));
+        await user.keyboard(key);
+        expect(consoleLog).not.toHaveBeenCalledWith(
+          "select",
+          expect.anything(),
+        );
+      },
+    );
+
+    it("opens an enabled field on ArrowDown", async () => {
+      render(MultiSelect, { props: { items } });
+
+      const field = screen.getByRole("combobox");
+      field.focus();
+      await user.keyboard("{ArrowDown}");
+      expect(field).toHaveAttribute("aria-expanded", "true");
+    });
+
     it("handles disabled items", async () => {
       const itemsWithDisabled = [
         { id: "0", text: "Slack" },
