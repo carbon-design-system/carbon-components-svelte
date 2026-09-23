@@ -13,6 +13,8 @@ Create a group of radio buttons with a shared name and legend.
 
 See [Standalone usage](#standalone-usage) for individual usage or [Implicit grouping](#implicit-grouping) to group multiple standalone radio buttons by name without using a radio button group.
 
+If `name` is omitted, `RadioButtonGroup` generates and shares one internally, so grouped keyboard navigation still works. That generated name is random per component instance, so set `name` explicitly when the group is part of a submitted form.
+
 <RadioButtonGroup legendText="Storage tier (disk)" name="plan" selected="standard">
   <RadioButton labelText="Free (1 GB)" value="free" />
   <RadioButton labelText="Standard (10 GB)" value="standard" />
