@@ -892,6 +892,48 @@
    */
   let gestureActiveId = undefined;
 
+  /**
+   * Ctrl/Cmd+click semantics: toggle `node`'s multiselect unit and make it
+   * the range anchor.
+   * @type {(node: Node) => void}
+   */
+  function toggleSelectionUnit(node) {
+    const mode =
+      isMultiselect && multiselectMode !== "node" ? multiselectMode : "node";
+    const expansionSet = new Set(multiselectExpansionIds(node, mode));
+    const currentSet = new Set(selectedIds);
+    if (currentSet.has(node.id)) {
+      for (const id of expansionSet) currentSet.delete(id);
+    } else {
+      for (const id of expansionSet) currentSet.add(id);
+    }
+    setSelectedIds(Array.from(currentSet));
+    anchorId = node.id;
+  }
+
+  /**
+   * Shift+Up/Down in multiselect: toggle the row focus moved to, same as
+   * pressing Ctrl+Space on it.
+   * @type {(node: Node) => void}
+   */
+  function shiftArrowToggle(node) {
+    activeId = node.id;
+    gestureActiveId = node.id;
+    toggleSelectionUnit(node);
+    dispatch("select", withLiveState(node));
+  }
+
+  /** @param {KeyboardEvent} event */
+  function isShiftArrowSelect(event) {
+    return (
+      isMultiselect &&
+      event.shiftKey &&
+      !event.ctrlKey &&
+      !event.metaKey &&
+      (event.key === "ArrowUp" || event.key === "ArrowDown")
+    );
+  }
+
   /** @type {(node: Node, event?: Event) => void} */
   function clickNode(node, event) {
     activeId = node.id;
@@ -945,16 +987,7 @@
         .shiftKey;
 
       if (isMeta && !isShift) {
-        const expansion = multiselectExpansionIds(node, mode);
-        const expansionSet = new Set(expansion);
-        const currentSet = new Set(selectedIds);
-        if (currentSet.has(node.id)) {
-          for (const id of expansionSet) currentSet.delete(id);
-        } else {
-          for (const id of expansionSet) currentSet.add(id);
-        }
-        setSelectedIds(Array.from(currentSet));
-        anchorId = node.id;
+        toggleSelectionUnit(node);
       } else if (isShift && anchorId != null) {
         const visibleIds = traverseVisible(nodes, expandedIdsSet)
           .filter((n) => !n.disabled)
@@ -1271,6 +1304,11 @@
       if (nextFocusNode instanceof HTMLElement) {
         setRovingTabStop(nextFocusNode);
         nextFocusNode.focus();
+      }
+
+      if (isShiftArrowSelect(event) && nextFocusNode instanceof Element) {
+        const node = cachedNodeMap?.get(nodeIdFromTreeItem(nextFocusNode));
+        if (node && !node.disabled) shiftArrowToggle(node);
       }
     }
   }
@@ -1915,14 +1953,26 @@
         event.preventDefault();
         event.stopPropagation();
         const next = nextEnabled(activeIdx + 1, 1);
-        if (next >= 0) virtualMoveTo(next);
+        if (next >= 0) {
+          virtualMoveTo(next);
+          if (isShiftArrowSelect(event)) {
+            const row = virtualIndex.getRowAt(next);
+            if (row) shiftArrowToggle(row.node);
+          }
+        }
         break;
       }
       case "ArrowUp": {
         event.preventDefault();
         event.stopPropagation();
         const prev = nextEnabled(activeIdx - 1, -1);
-        if (prev >= 0) virtualMoveTo(prev);
+        if (prev >= 0) {
+          virtualMoveTo(prev);
+          if (isShiftArrowSelect(event)) {
+            const row = virtualIndex.getRowAt(prev);
+            if (row) shiftArrowToggle(row.node);
+          }
+        }
         break;
       }
       case "ArrowRight": {
