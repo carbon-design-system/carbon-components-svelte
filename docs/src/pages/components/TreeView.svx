@@ -147,6 +147,7 @@ With the default `multiselectMode="node"`, each gesture applies to the clicked r
 | Plain click | Replaces the selection with that row and sets the anchor used for the next range selection. |
 | <DocKbd label="CMD" /> or <DocKbd label="Ctrl" /> + click | Toggles that row's unit: deselect (remove the whole unit from the selection) if it is already selected, add it otherwise. Other selected rows stay selected. The anchor updates to the row you clicked. |
 | <DocKbd label="Shift" /> + click | Replaces the selection with all visible rows from the anchor through the clicked row, in tree order (only rows under expanded parents count; collapsed branches are not included). If no anchor exists yet, behavior matches a plain click. Holding <DocKbd label="Shift" /> together with <DocKbd label="Ctrl" /> or <DocKbd label="CMD" /> still applies range selection, not per-row toggle. |
+| <DocKbd label="Shift" /> + <DocKbd label="Up" /> or <DocKbd label="Down" /> | Moves focus to the previous or next row and toggles that row's unit, as <DocKbd label="Ctrl" /> + click does. |
 
 For selection that includes direct children or the full subtree on each gesture, see [Shallow](#shallow) and [Deep](#deep).
 
