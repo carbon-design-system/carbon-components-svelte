@@ -441,6 +441,15 @@ Show a loading state while tabs load.
 
 <TabsSkeleton count={3} />
 
+### Sizes
+
+Pass the same `size` and `type` as the `Tabs` the skeleton replaces so the page
+does not shift when the tabs load.
+
+<TabsSkeleton count={3} size="sm" />
+
+<TabsSkeleton count={3} size="lg" />
+
 ## Container
 
 Use the container type for a more prominent tab interface. By default, container types have an auto-width.
