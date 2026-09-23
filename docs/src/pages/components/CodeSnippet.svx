@@ -88,6 +88,12 @@ Re-render the component to fix this issue.
 
 Customize, replace, or disable the default clipboard behavior.
 
+### Slot content
+
+Omit `code` and pass the text in the default slot. The copy button copies the rendered text, with markup stripped. Set `code` to copy something other than what is shown.
+
+<CodeSnippet>npm i carbon-components-svelte</CodeSnippet>
+
 ### Async
 
 Pass an async function to `copy` when clipboard text is not ready at render time, such as a longer install command fetched on click. The copy feedback text appears after `copy()` resolves.
