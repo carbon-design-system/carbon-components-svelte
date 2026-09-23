@@ -76,6 +76,12 @@ Set `status` to override the derived status. An explicit `status` wins over `thr
   <Meter labelText="Error" value={420} max={1000} status="error" />
 </Stack>
 
+### Status announcements
+
+A move into warning or error is announced to assistive technologies. Set `warningText` and `errorText` to localize or customize the announced text.
+
+<Meter labelText="Storage" value={960} max={1000} thresholds={{ warning: 800, error: 950 }} errorText="Critique" />
+
 ## Over capacity
 
 When `value` exceeds `max`, the meter caps the bar and label at full width and switches to the error status.
