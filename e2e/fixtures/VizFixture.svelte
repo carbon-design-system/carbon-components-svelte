@@ -49,6 +49,7 @@
     Sparkline,
     StackedBar,
     StateTimeline,
+    SunburstChart,
     TileGridMap,
     TreeChart,
     TreemapChart,
@@ -263,6 +264,16 @@
     label="name"
     title="Bundle composition, as an icicle"
     selectable
+  />
+
+  <SunburstChart
+    data={bundle}
+    id="id"
+    parent="parent"
+    value="bytes"
+    label="name"
+    title="Bundle composition, as a sunburst"
+    diameter={240}
   />
 
   <FlameGraph
