@@ -10,7 +10,7 @@
   bind:open
   {align}
   on:toggle={(e) => {
-    console.log("toggle:", e.detail);
+    console.log("toggle:", e.detail.open);
   }}
   on:click
   on:keydown
