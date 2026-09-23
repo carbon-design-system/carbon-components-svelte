@@ -24,6 +24,7 @@
     Heatmap,
     HeatStrip,
     Histogram,
+    HorizonChart,
     IcicleChart,
     KpiCard,
     LineChart,
@@ -181,6 +182,20 @@
     kinds={{ deploy: "info", alert: "warning", rollback: "error" }}
     title="Release events"
     selectable
+  />
+
+  <HorizonChart
+    data={["web-1", "web-2", "db-1"].flatMap((host, h) =>
+      Array.from({ length: 48 }, (_, i) => ({
+        t: new Date(2026, 0, 1, 0, i * 30),
+        host,
+        cpu: 30 + h * 15 + Math.round(Math.sin(i / 4 + h) * 25) + ((i * 13) % 9),
+      })),
+    )}
+    x="t"
+    y="cpu"
+    series="host"
+    title="CPU by host"
   />
 
   <IcicleChart
