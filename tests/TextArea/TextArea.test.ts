@@ -202,6 +202,29 @@ describe("TextArea", () => {
     expect(screen.getByRole("textbox")).toHaveAttribute("maxlength", "100");
   });
 
+  it("should show the counter without a label", () => {
+    render(TextArea, { props: { maxCount: 100, value: "hi", labelText: "" } });
+
+    const counter = screen.getByText("2/100");
+    expect(counter).toBeInTheDocument();
+    expect(screen.getByRole("textbox").getAttribute("aria-describedby")).toBe(
+      counter.id,
+    );
+  });
+
+  it("should show a zero counter when maxCount is 0 and there is no label", () => {
+    render(TextArea, { props: { maxCount: 0, value: "", labelText: "" } });
+
+    expect(screen.getByText("0/0")).toBeInTheDocument();
+  });
+
+  it("should not show a counter when maxCount is unset and there is no label", () => {
+    render(TextArea, { props: { labelText: "" } });
+
+    expect(screen.queryByText(/\/0$/)).not.toBeInTheDocument();
+    expect(document.querySelector(".bx--text-area__label-counter")).toBeNull();
+  });
+
   it("should not show helper text when invalid", () => {
     render(TextArea, {
       props: {

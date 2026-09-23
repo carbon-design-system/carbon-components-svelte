@@ -96,7 +96,7 @@
   $: showInvalid = invalid && !disabled && !readonly;
   $: showWarn = warn && !invalid && !disabled && !readonly;
   $: isFluid = fluid || !!formContext?.isFluid;
-  $: showCounter = !!maxCount && !!(labelText || $$slots.labelChildren);
+  $: hasMaxCount = typeof maxCount === "number";
   $: errorMessageId = showInvalid ? errorId : undefined;
   $: describedBy =
     [
@@ -107,7 +107,7 @@
           : helperText && !isFluid
             ? helperId
             : null,
-      showCounter ? counterId : null,
+      hasMaxCount ? counterId : null,
     ]
       .filter(Boolean)
       .join(" ") || undefined;
@@ -130,18 +130,20 @@
   class:bx--form-item={true}
   class:bx--text-area--fluid={isFluid}
 >
-  {#if labelText || $$slots.labelChildren}
+  {#if labelText || $$slots.labelChildren || hasMaxCount}
     <div class:bx--text-area__label-wrapper={true}>
-      <label
-        for={id}
-        class:bx--label={true}
-        class:bx--visually-hidden={hideLabel && !isFluid}
-        class:bx--label--disabled={disabled}
-        class:bx--label--slotted={isFluid && $$slots.labelChildren}
-      >
-        <slot name="labelChildren"> {labelText} </slot>
-      </label>
-      {#if maxCount}
+      {#if labelText || $$slots.labelChildren}
+        <label
+          for={id}
+          class:bx--label={true}
+          class:bx--visually-hidden={hideLabel && !isFluid}
+          class:bx--label--disabled={disabled}
+          class:bx--label--slotted={isFluid && $$slots.labelChildren}
+        >
+          <slot name="labelChildren"> {labelText} </slot>
+        </label>
+      {/if}
+      {#if hasMaxCount}
         <div
           id={counterId}
           class:bx--label={true}

@@ -97,6 +97,13 @@
     width: 100%;
     justify-content: space-between;
   }
+
+  // carbon-components-svelte patch
+  // keeps the counter right-aligned when it is the only child
+  // (no visible label, or hideLabel removes the label from layout)
+  .#{$prefix}--text-area__label-counter {
+    margin-inline-start: auto;
+  }
 }
 
 @include exports('text-area') {
