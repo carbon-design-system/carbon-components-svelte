@@ -127,8 +127,8 @@
    * Specify a name attribute for native form participation.
    *
    * When set, a hidden input mirrors the assembled `value` so the code is
-   * included in FormData / form submissions. `required` is applied to the
-   * hidden input instead of each segment.
+   * included in FormData / form submissions. `required` stays on each
+   * segment, since hidden inputs take no part in constraint validation.
    * @type {string | undefined}
    */
   export let name = undefined;
@@ -478,7 +478,7 @@
       </legend>
     {/if}
     {#if name}
-      <input type="hidden" {name} {value} {required}>
+      <input type="hidden" {name} {value}>
     {/if}
     <div
       data-invalid={hasError || undefined}
@@ -503,7 +503,7 @@
             id={index === 0 ? id : `${id}-${index}`}
             {disabled}
             {readonly}
-            required={name ? undefined : required}
+            {required}
             aria-readonly={readonly || undefined}
             aria-label={`${labelText || "Pin code"} digit ${index + 1} of ${count}`}
             aria-invalid={hasError || undefined}
