@@ -8,9 +8,9 @@
   /**
    * The node type is written inline: a typedef cannot carry the generic
    * into the generated declarations.
-   * @event {{ node: { id: string; label: string; lane: string | undefined; rank: number; children: number; parents: number; collapsed: boolean; hidden: number; datum: T }; originalEvent: Event }} select Fires when the focused node is activated by click, Enter, or Space.
+   * @event {{ node: { id: string; label: string; lane: string | undefined; group: string | undefined; status: string | undefined; rank: number; children: number; parents: number; collapsed: boolean; hidden: number; datum: T }; originalEvent: Event }} select Fires when the focused node is activated by click, Enter, or Space.
    * @event {{ id: string; collapsed: boolean }} toggle Fires when a node's descendants are folded away or shown.
-   * @event {{ id: string; label: string; lane: string | undefined; rank: number; children: number; parents: number; collapsed: boolean; hidden: number; datum: T } | null} hover Fires when the pointer or keyboard focus moves to another node, and with `null` when it leaves.
+   * @event {{ id: string; label: string; lane: string | undefined; group: string | undefined; status: string | undefined; rank: number; children: number; parents: number; collapsed: boolean; hidden: number; datum: T } | null} hover Fires when the pointer or keyboard focus moves to another node, and with `null` when it leaves.
    */
 
   /** @restProps {figure} */
@@ -44,6 +44,36 @@
    * @type {import("../utils/accessor.js").Accessor<T, string | number>}
    */
   export let lane = undefined;
+
+  /**
+   * Specify how to read a node's group, which sets its color: a key or a
+   * function. Groups take the categorical colors in first-seen order.
+   * @type {import("../utils/accessor.js").Accessor<T, string | number>}
+   */
+  export let group = undefined;
+
+  /**
+   * Specify how to read a node's status: `"success"`, `"warning"`,
+   * `"error"`, `"info"`, or `"neutral"`. A status colors the node's frame
+   * and adds a glyph, so it never rests on color alone.
+   * @type {import("../utils/accessor.js").Accessor<T, "success" | "warning" | "error" | "info" | "neutral" | null | undefined>}
+   */
+  export let status = undefined;
+
+  /**
+   * Specify a fixed color per group: a semantic name, a categorical index,
+   * a viz token name, or any CSS color.
+   * @type {Record<string, import("../utils/tokens.js").VizColor>}
+   */
+  export let colors = {};
+
+  /**
+   * Specify which of Carbon's prescribed color groups to use (1-based).
+   */
+  export let palette = 1;
+
+  /** Set to `false` to hide the legend, which lists groups and statuses */
+  export let legend = true;
 
   /**
    * Specify how to read an edge's source id.
@@ -120,11 +150,13 @@
   import { toAccessor } from "../utils/accessor.js";
   import { layoutLayered } from "../utils/layout-layered.js";
   import { nextId } from "../utils/next-id.js";
+  import { categoricalColors, vizColor } from "../utils/tokens.js";
 
   const dispatch = createEventDispatcher();
   const PAD = 8;
   const LANE_LABEL = 20;
   const markerId = nextId("bx-viz-arrow");
+  const STATUSES = ["success", "warning", "error", "info", "neutral"];
 
   /** @type {string | null} */
   let activeId = null;
@@ -132,6 +164,8 @@
   $: idOf = toAccessor(id);
   $: labelOf = label === undefined ? undefined : toAccessor(label);
   $: laneOf = lane === undefined ? undefined : toAccessor(lane);
+  $: groupOf = group === undefined ? undefined : toAccessor(group);
+  $: statusOf = status === undefined ? undefined : toAccessor(status);
   $: sourceOf = toAccessor(source);
   $: targetOf = toAccessor(target);
   $: vertices = data.map((row, i) => ({
@@ -171,14 +205,42 @@
     back: "back",
     ...words,
   };
+  // Group and status per node, and a color per group in first-seen order.
+  $: groupKeys = groupOf
+    ? [...new Set(data.map((row, i) => String(groupOf(row, i))))]
+    : [];
+  $: groupColor = paint(groupKeys, palette, colors);
+  $: extra = new Map(
+    layout.nodes.map((node) => {
+      const key = groupOf ? String(groupOf(node.datum, node.index)) : undefined;
+      const raw = statusOf ? statusOf(node.datum, node.index) : undefined;
+      const kind =
+        raw !== null && raw !== undefined && STATUSES.includes(String(raw))
+          ? String(raw)
+          : undefined;
+      return [
+        node.id,
+        {
+          group: key,
+          status: kind,
+          color: key === undefined ? undefined : groupColor.get(key),
+        },
+      ];
+    }),
+  );
+  $: statusesShown = STATUSES.filter((kind) =>
+    layout.nodes.some((node) => extra.get(node.id)?.status === kind),
+  );
   $: active = layout.nodes.find((node) => node.id === activeId) ?? null;
   $: describe = (
     /** @type {import("../utils/layout-layered.js").LayeredNode<T>} */ node,
   ) =>
     [
       node.label,
+      extra.get(node.id)?.status ?? "",
       `${text.rank} ${node.rank + 1}`,
       node.lane === undefined ? "" : `${text.lane} ${node.lane}`,
+      extra.get(node.id)?.group ?? "",
       node.children > 0
         ? node.collapsed
           ? `${text.collapsed}, ${node.hidden} ${text.folded}`
@@ -217,12 +279,34 @@
     return d;
   }
 
+  /**
+   * @param {ReadonlyArray<string>} keys
+   * @param {number} option
+   * @param {Record<string, import("../utils/tokens.js").VizColor>} fixed
+   */
+  function paint(keys, option, fixed) {
+    const assigned = categoricalColors(keys.length, option);
+    /** @type {Map<string, string>} */
+    const out = new Map();
+    keys.forEach((key, i) => {
+      out.set(
+        key,
+        fixed[key] === undefined
+          ? assigned[i]
+          : (vizColor(fixed[key]) ?? assigned[i]),
+      );
+    });
+    return out;
+  }
+
   /** @param {import("../utils/layout-layered.js").LayeredNode<T>} node */
   function detail(node) {
     return {
       id: node.id,
       label: node.label,
       lane: node.lane,
+      group: extra.get(node.id)?.group,
+      status: extra.get(node.id)?.status,
       rank: node.rank,
       children: node.children,
       parents: node.parents,
@@ -309,8 +393,10 @@
 
   /** @param {import("../utils/layout-layered.js").LayeredNode<T>} node */
   function fits(node) {
-    // About seven pixels a character at the label size.
-    const room = Math.floor((node.width - 16) / 7);
+    // About seven pixels a character at the label size, less the glyph.
+    const room = Math.floor(
+      (node.width - 16 - (extra.get(node.id)?.status ? 12 : 0)) / 7,
+    );
     return node.label.length <= room
       ? node.label
       : `${node.label.slice(0, Math.max(room - 1, 1))}…`;
@@ -357,6 +443,8 @@
       {#each layout.lanes as band (band.key)}
         <rect
           class:bx--viz-graph__lane={true}
+          class:bx--viz-graph__lane--tinted={groupColor.has(band.key)}
+          style:--bx-viz-color={groupColor.get(band.key)}
           x={Math.min(band.x0, band.x1) - PAD / 2}
           y={Math.min(band.y0, band.y1) - PAD / 2}
           width={Math.abs(band.x1 - band.x0) + PAD}
@@ -380,6 +468,7 @@
             (entry.source === activeId || entry.target === activeId)}
           d={pathOf(entry)}
           marker-end="url(#{markerId})"
+          style:--bx-viz-color={extra.get(entry.source)?.color}
         />
       {/each}
       {#each layout.nodes as node (node.id)}
@@ -391,6 +480,10 @@
           class:bx--viz-graph__node--collapsed={node.collapsed}
           class:bx--viz-graph__node--active={node.id === activeId}
           class:bx--viz-graph__node--selected={node.id === selected}
+          class:bx--viz-graph__node--grouped={extra.get(node.id)?.color !==
+            undefined}
+          class="bx--viz-graph__node--{extra.get(node.id)?.status ?? 'plain'}"
+          style:--bx-viz-color={extra.get(node.id)?.color}
           transform="translate({node.x} {node.y})"
           on:click={(event) => select(node, event)}
           on:dblclick={() => toggle(node)}
@@ -403,12 +496,48 @@
             height={node.height}
           />
           <title>{describe(node)}</title>
+          {#if extra.get(node.id)?.status}
+            {@const kind = extra.get(node.id)?.status}
+            <!-- A glyph per status, so the state reads without color. -->
+            <g
+              class:bx--viz-graph__status={true}
+              transform="translate(10 {node.height / 2})"
+            >
+              {#if kind === "success"}
+                <circle r="5" />
+                <path
+                  class:bx--viz-graph__status-mark={true}
+                  d="M-2.5,0.5L-0.8,2.2L2.6,-1.6"
+                />
+              {:else if kind === "warning"}
+                <path d="M0,-5.5L5.5,4.5H-5.5Z" />
+                <path
+                  class:bx--viz-graph__status-mark={true}
+                  d="M0,-1.2V1.6M0,3V3.4"
+                />
+              {:else if kind === "error"}
+                <path d="M0,-6L6,0L0,6L-6,0Z" />
+                <path
+                  class:bx--viz-graph__status-mark={true}
+                  d="M-2,-2L2,2M2,-2L-2,2"
+                />
+              {:else if kind === "info"}
+                <circle r="5" />
+                <path
+                  class:bx--viz-graph__status-mark={true}
+                  d="M0,-1V2.6M0,-2.8V-2.2"
+                />
+              {:else}
+                <circle class:bx--viz-graph__status-hollow={true} r="4.5" />
+              {/if}
+            </g>
+          {/if}
           <text
             class:bx--viz-graph__label={true}
-            x={node.width / 2}
+            x={extra.get(node.id)?.status ? 20 : node.width / 2}
             y={node.height / 2}
             dy="0.32em"
-            text-anchor="middle"
+            text-anchor={extra.get(node.id)?.status ? "start" : "middle"}
           >
             {fits(node)}
           </text>
@@ -437,6 +566,62 @@
       {/each}
     </g>
   </svg>
+  {#if legend && (groupKeys.length > 0 || statusesShown.length > 0)}
+    <ul class:bx--viz-treemap__legend={true} aria-hidden="true">
+      {#each groupKeys as key (key)}
+        <li
+          class:bx--viz-treemap__legend-item={true}
+          style:--bx-viz-color={groupColor.get(key)}
+        >
+          <span class:bx--viz-treemap__swatch={true}></span>
+          {key}
+        </li>
+      {/each}
+      {#each statusesShown as kind (kind)}
+        <li class:bx--viz-treemap__legend-item={true}>
+          <svg
+            class:bx--viz-graph__legend-glyph={true}
+            viewBox="-7 -7 14 14"
+            aria-hidden="true"
+          >
+            <g
+              class:bx--viz-graph__status={true}
+              class="bx--viz-graph__legend-glyph--{kind}"
+            >
+              {#if kind === "success"}
+                <circle r="5" />
+                <path
+                  class:bx--viz-graph__status-mark={true}
+                  d="M-2.5,0.5L-0.8,2.2L2.6,-1.6"
+                />
+              {:else if kind === "warning"}
+                <path d="M0,-5.5L5.5,4.5H-5.5Z" />
+                <path
+                  class:bx--viz-graph__status-mark={true}
+                  d="M0,-1.2V1.6M0,3V3.4"
+                />
+              {:else if kind === "error"}
+                <path d="M0,-6L6,0L0,6L-6,0Z" />
+                <path
+                  class:bx--viz-graph__status-mark={true}
+                  d="M-2,-2L2,2M2,-2L-2,2"
+                />
+              {:else if kind === "info"}
+                <circle r="5" />
+                <path
+                  class:bx--viz-graph__status-mark={true}
+                  d="M0,-1V2.6M0,-2.8V-2.2"
+                />
+              {:else}
+                <circle class:bx--viz-graph__status-hollow={true} r="4.5" />
+              {/if}
+            </g>
+          </svg>
+          {kind}
+        </li>
+      {/each}
+    </ul>
+  {/if}
   <!-- The nodes in reading order and every edge, for assistive technology. -->
   <ul class:bx--visually-hidden={true}>
     {#each layout.nodes as node (node.id)}

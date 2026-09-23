@@ -125,6 +125,68 @@ describe("LayeredGraph", () => {
     expect(document.querySelector("[aria-live]")).not.toBeNull();
   });
 
+  it("is grayscale without a group or status, and colors frames, edges, and lanes by group", async () => {
+    const { rerender } = render(LayeredGraph, { withLanes: true });
+    expect(nodes()[0]).not.toHaveClass("bx--viz-graph__node--grouped");
+    expect(nodes()[0].style.getPropertyValue("--bx-viz-color")).toBe("");
+    expect(
+      screen.getByTestId("graph").querySelector(".bx--viz-treemap__legend"),
+    ).toBeNull();
+
+    await rerender({ withLanes: true, withGroups: true });
+    const named = (label: string) =>
+      nodes().find(
+        (node) =>
+          node.querySelector(".bx--viz-graph__label")?.textContent?.trim() ===
+          label,
+      ) as SVGGElement;
+    const color = (label: string) =>
+      named(label).style.getPropertyValue("--bx-viz-color");
+    expect(named("app")).toHaveClass("bx--viz-graph__node--grouped");
+    expect(color("app")).toBe(color("web"));
+    expect(color("app")).not.toBe(color("api"));
+    expect(edges()[0].style.getPropertyValue("--bx-viz-color")).toBe(
+      color("app"),
+    );
+    const lanes = Array.from(
+      document.querySelectorAll<SVGRectElement>(".bx--viz-graph__lane"),
+    );
+    expect(lanes[0]).toHaveClass("bx--viz-graph__lane--tinted");
+    expect(lanes[0].style.getPropertyValue("--bx-viz-color")).toBe(
+      color("app"),
+    );
+    expect(
+      Array.from(
+        screen
+          .getByTestId("graph")
+          .querySelectorAll(".bx--viz-treemap__legend-item"),
+      ).map((n) => n.textContent?.trim()),
+    ).toEqual(["edge", "services", "data"]);
+  });
+
+  it("frames a node by status with a glyph, says it in words, and ignores an unknown status", () => {
+    render(LayeredGraph, { withStatus: true });
+
+    expect(nodes()[0]).toHaveClass("bx--viz-graph__node--success");
+    expect(nodes()[0].querySelector(".bx--viz-graph__status")).not.toBeNull();
+    expect(nodes()[1]).toHaveClass("bx--viz-graph__node--warning");
+    expect(nodes()[3]).toHaveClass("bx--viz-graph__node--error");
+    expect(nodes()[2]).toHaveClass("bx--viz-graph__node--plain");
+    expect(nodes()[4]).toHaveClass("bx--viz-graph__node--plain");
+    expect(nodes()[4].querySelector(".bx--viz-graph__status")).toBeNull();
+    const items = within(screen.getByTestId("graph"))
+      .getAllByRole("listitem", { hidden: true })
+      .map((item) => item.textContent?.replace(/\s+/g, " ").trim());
+    expect(items).toContain("Node: postgres, error, level 3");
+    expect(
+      Array.from(
+        screen
+          .getByTestId("graph")
+          .querySelectorAll(".bx--viz-treemap__legend-item"),
+      ).map((n) => n.textContent?.trim()),
+    ).toEqual(["success", "warning", "error"]);
+  });
+
   it("routes with right angles and runs left to right when asked", () => {
     render(LayeredGraph, { rankDir: "LR", edge: "orthogonal" });
 

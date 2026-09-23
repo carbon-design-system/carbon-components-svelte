@@ -28,6 +28,12 @@
     fill: $ui-01;
   }
 
+  // A lane that shares a group's name takes a wash of its color.
+  .#{$prefix}--viz-graph__lane--tinted {
+    fill: var(--bx-viz-color, #{$ui-01});
+    fill-opacity: 0.08;
+  }
+
   .#{$prefix}--viz-graph__lane-label {
     fill: $text-secondary;
     font-weight: 600;
@@ -35,9 +41,10 @@
     @include type-style("label-01");
   }
 
+  // An edge takes its source's group color, else the neutral line.
   .#{$prefix}--viz-graph__edge {
     fill: none;
-    stroke: $ui-04;
+    stroke: var(--bx-viz-color, #{$ui-04});
     stroke-linejoin: round;
     stroke-width: 1.5;
     transition: stroke $duration--fast-02 carbon--motion(standard, productive);
@@ -65,6 +72,73 @@
     fill: $ui-background;
     stroke: $ui-04;
     stroke-width: 1;
+  }
+
+  // A group colors the frame. A status sets one variable on the node, and
+  // the frame and the glyph both read it.
+  .#{$prefix}--viz-graph__node--grouped .#{$prefix}--viz-graph__box {
+    stroke: var(--bx-viz-color, #{$ui-04});
+    stroke-width: 2;
+  }
+
+  .#{$prefix}--viz-graph__node--success,
+  .#{$prefix}--viz-graph__legend-glyph--success {
+    --bx-viz-status: var(--cds-viz-success);
+  }
+
+  .#{$prefix}--viz-graph__node--warning,
+  .#{$prefix}--viz-graph__legend-glyph--warning {
+    --bx-viz-status: var(--cds-viz-warning);
+  }
+
+  .#{$prefix}--viz-graph__node--error,
+  .#{$prefix}--viz-graph__legend-glyph--error {
+    --bx-viz-status: var(--cds-viz-error);
+  }
+
+  .#{$prefix}--viz-graph__node--info,
+  .#{$prefix}--viz-graph__legend-glyph--info {
+    --bx-viz-status: var(--cds-viz-info);
+  }
+
+  .#{$prefix}--viz-graph__node--neutral,
+  .#{$prefix}--viz-graph__legend-glyph--neutral {
+    --bx-viz-status: var(--cds-viz-neutral);
+  }
+
+  .#{$prefix}--viz-graph__node--success .#{$prefix}--viz-graph__box,
+  .#{$prefix}--viz-graph__node--warning .#{$prefix}--viz-graph__box,
+  .#{$prefix}--viz-graph__node--error .#{$prefix}--viz-graph__box,
+  .#{$prefix}--viz-graph__node--info .#{$prefix}--viz-graph__box,
+  .#{$prefix}--viz-graph__node--neutral .#{$prefix}--viz-graph__box {
+    stroke: var(--bx-viz-status);
+    stroke-width: 2;
+  }
+
+  .#{$prefix}--viz-graph__status {
+    fill: var(--bx-viz-status, #{$icon-secondary});
+  }
+
+  // The mark inside a glyph is cut in the page background.
+  .#{$prefix}--viz-graph__status-mark {
+    fill: none;
+    stroke: $ui-background;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.5;
+  }
+
+  .#{$prefix}--viz-graph__status-hollow {
+    fill: none;
+    stroke: var(--bx-viz-status, #{$icon-secondary});
+    stroke-width: 1.5;
+  }
+
+  .#{$prefix}--viz-graph__legend-glyph {
+    block-size: to-rem(14px);
+    inline-size: to-rem(14px);
+    margin-inline-end: $carbon--spacing-01;
+    vertical-align: middle;
   }
 
   // A node holding folded descendants has a heavier frame, so the state
