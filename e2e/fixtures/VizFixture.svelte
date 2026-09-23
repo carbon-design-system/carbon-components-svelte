@@ -19,6 +19,7 @@
     DumbbellChart,
     EventTimeline,
     FlameGraph,
+    ForestPlot,
     FunnelBars,
     FunnelChart,
     FunnelCompare,
@@ -274,6 +275,23 @@
     y="score"
     series="team"
     title="Engagement score by team, 2025 to 2026"
+  />
+
+  <ForestPlot
+    data={[
+      { study: "North", or: 1.12, lo: 0.91, hi: 1.38, n: 400 },
+      { study: "South", or: 0.94, lo: 0.8, hi: 1.1, n: 900 },
+      { study: "EU", or: 1.21, lo: 1.02, hi: 1.48, n: 300 },
+    ]}
+    label="study"
+    estimate="or"
+    lo="lo"
+    hi="hi"
+    weight="n"
+    overall={{ estimate: 1.06, lo: 1.01, hi: 1.16 }}
+    nullValue={1}
+    format={{ maximumFractionDigits: 2 }}
+    title="Odds ratio by region"
   />
 
   <BumpChart
