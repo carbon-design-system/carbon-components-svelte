@@ -279,6 +279,9 @@
         !primaryButtonDisabled &&
         !primaryButtonLoading
       ) {
+        // Enter that commits an IME composition is not a submit. Safari reports
+        // the committing keydown with isComposing false but keyCode 229.
+        if (event.isComposing || event.keyCode === 229) return;
         const target = event.target;
         const tag = target?.tagName;
         if (
