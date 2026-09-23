@@ -248,7 +248,10 @@
       }
     }
 
-    if (selectedIndex !== committedIndex) {
+    // Commit only once switches have registered. Committing the initial index
+    // against an empty list would make a mount-time `selected` Switch look
+    // like a change.
+    if (switches.length > 0 && selectedIndex !== committedIndex) {
       committedIndex = selectedIndex;
       focusedIndex = -1;
     }
