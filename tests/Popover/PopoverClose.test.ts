@@ -45,4 +45,47 @@ describe("Popover close event", () => {
 
     expect(onClose).not.toHaveBeenCalled();
   });
+
+  it('dispatches close with trigger "escape-key" and flips open', async () => {
+    const onClose = vi.fn();
+    render(PopoverClose, {
+      props: { open: true, closeOnEscape: true, onClose },
+    });
+
+    const popover = screen.getByTestId("parent").firstElementChild;
+    expect(popover).toHaveClass("bx--popover--open");
+
+    await user.keyboard("{Escape}");
+
+    expect(popover).not.toHaveClass("bx--popover--open");
+    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(onClose.mock.calls[0][0].detail).toEqual({
+      trigger: "escape-key",
+    });
+  });
+
+  it("does not dispatch close on Escape when closeOnEscape is false", async () => {
+    const onClose = vi.fn();
+    render(PopoverClose, {
+      props: { open: true, closeOnEscape: false, onClose },
+    });
+
+    const popover = screen.getByTestId("parent").firstElementChild;
+
+    await user.keyboard("{Escape}");
+
+    expect(popover).toHaveClass("bx--popover--open");
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
+  it("does not dispatch close on Escape when the popover is already closed", async () => {
+    const onClose = vi.fn();
+    render(PopoverClose, {
+      props: { open: false, closeOnEscape: true, onClose },
+    });
+
+    await user.keyboard("{Escape}");
+
+    expect(onClose).not.toHaveBeenCalled();
+  });
 });
