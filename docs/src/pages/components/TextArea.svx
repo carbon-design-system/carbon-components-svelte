@@ -36,6 +36,12 @@ Specify the max character count with `maxCount`. A character counter appears to 
 
 <TextArea labelText="Incident summary" placeholder="Describe what happened, the impact, and any mitigation steps taken so far..." maxCount={100} />
 
+### Hidden label
+
+The counter still shows when the label is hidden, and stays aligned to the trailing edge of the field. Prefer `hideLabel` over an empty `labelText` so the field keeps an accessible name for screen readers.
+
+<TextArea hideLabel labelText="Incident summary" placeholder="Describe what happened, the impact, and any mitigation steps taken so far..." maxCount={100} />
+
 ## Helper text
 
 Add helper text below the textarea to provide additional context or instructions.
