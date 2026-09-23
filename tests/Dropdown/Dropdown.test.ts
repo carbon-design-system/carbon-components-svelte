@@ -1831,6 +1831,122 @@ describe("Dropdown", () => {
     expect(cherryOption).toHaveClass("bx--list-box__menu-item--highlighted");
   });
 
+  describe("typeahead on a closed menu", () => {
+    const fruits = [
+      { id: "0", text: "Apple" },
+      { id: "1", text: "Banana" },
+      { id: "2", text: "Cherry" },
+    ];
+    const isHighlighted = (name: string) =>
+      screen
+        .getByRole("option", { name })
+        .classList.contains("bx--list-box__menu-item--highlighted");
+
+    it("opens the menu and highlights the first match without selecting", async () => {
+      const selectHandler = vi.fn();
+      render(Dropdown, { props: { items: fruits, onselect: selectHandler } });
+
+      const button = screen.getByRole("combobox");
+      button.focus();
+      await user.keyboard("b");
+      await tick();
+
+      expect(button).toHaveAttribute("aria-expanded", "true");
+      expect(isHighlighted("Banana")).toBe(true);
+      expect(selectHandler).not.toHaveBeenCalled();
+    });
+
+    it("selects the match with Enter", async () => {
+      const selectHandler = vi.fn();
+      render(Dropdown, { props: { items: fruits, onselect: selectHandler } });
+
+      const button = screen.getByRole("combobox");
+      button.focus();
+      await user.keyboard("b");
+      await tick();
+      await user.keyboard("{Enter}");
+
+      expect(button).toHaveTextContent("Banana");
+      expect(selectHandler).toHaveBeenCalledTimes(1);
+      expect(selectHandler).toHaveBeenCalledWith(
+        expect.objectContaining({
+          detail: expect.objectContaining({ selectedId: "1" }),
+        }),
+      );
+    });
+
+    it("starts the search past the selected item", async () => {
+      render(Dropdown, {
+        props: {
+          items: [
+            { id: "0", text: "Apple" },
+            { id: "1", text: "Banana" },
+            { id: "2", text: "Blueberry" },
+          ],
+          selectedId: "1",
+        },
+      });
+
+      screen.getByRole("combobox").focus();
+      await user.keyboard("b");
+      await tick();
+
+      expect(isHighlighted("Blueberry")).toBe(true);
+    });
+
+    it("skips disabled items", async () => {
+      render(Dropdown, {
+        props: {
+          items: [
+            { id: "0", text: "Apple" },
+            { id: "1", text: "Banana", disabled: true },
+            { id: "2", text: "Blueberry" },
+          ],
+        },
+      });
+
+      screen.getByRole("combobox").focus();
+      await user.keyboard("b");
+      await tick();
+
+      expect(isHighlighted("Blueberry")).toBe(true);
+    });
+
+    it("opens with nothing highlighted when nothing matches", async () => {
+      render(Dropdown, { props: { items: fruits } });
+
+      const button = screen.getByRole("combobox");
+      button.focus();
+      await user.keyboard("z");
+      await tick();
+
+      expect(button).toHaveAttribute("aria-expanded", "true");
+      for (const option of screen.getAllByRole("option")) {
+        expect(option).not.toHaveClass("bx--list-box__menu-item--highlighted");
+      }
+    });
+
+    it("does not open when readonly", async () => {
+      render(Dropdown, { props: { items: fruits, readonly: true } });
+
+      const button = screen.getByRole("combobox");
+      button.focus();
+      await user.keyboard("b");
+
+      expect(button).toHaveAttribute("aria-expanded", "false");
+    });
+
+    it("does not open for a modified key", async () => {
+      render(Dropdown, { props: { items: fruits } });
+
+      const button = screen.getByRole("combobox");
+      button.focus();
+      await user.keyboard("{Control>}b{/Control}");
+
+      expect(button).toHaveAttribute("aria-expanded", "false");
+    });
+  });
+
   it("should wrap around to beginning in typeahead search", async () => {
     render(Dropdown, {
       props: {
