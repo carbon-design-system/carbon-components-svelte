@@ -32,6 +32,7 @@
     MicroDonut,
     MicroFunnel,
     MicroHistogram,
+    ParallelCoordinates,
     RadarChart,
     RadialProgress,
     RangeIndicator,
@@ -483,6 +484,21 @@
     value="users"
     title="Signup flow"
     height={240}
+  />
+
+  <ParallelCoordinates
+    data={[
+      { name: "m5.large", tier: "general", cpu: 2, mem: 8, io: 40, cost: 96 },
+      { name: "m5.xlarge", tier: "general", cpu: 4, mem: 16, io: 60, cost: 192 },
+      { name: "c5.xlarge", tier: "compute", cpu: 4, mem: 8, io: 55, cost: 170 },
+      { name: "r5.xlarge", tier: "memory", cpu: 4, mem: 32, io: 50, cost: 252 },
+      { name: "i3.large", tier: "storage", cpu: 2, mem: 15, io: 95, cost: 156 },
+    ]}
+    dimensions={["cpu", "mem", "io", "cost"]}
+    series="tier"
+    label="name"
+    title="Instance profiles"
+    brushes={{ cpu: [3, 5] }}
   />
 
   <RadarChart
