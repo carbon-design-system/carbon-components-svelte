@@ -273,6 +273,7 @@
             class:bx--viz-sunburst__arc--active={i === active}
             d={arc.d}
             style:--bx-viz-color={arc.color}
+            style:--bx-viz-ring={arc.ring}
             on:mouseenter={() => setActive(i)}
           />
         {/each}

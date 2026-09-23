@@ -28,9 +28,11 @@
     outline-offset: 2px;
   }
 
-  // A hairline of the page background separates touching arcs.
+  // A hairline of the page background separates touching arcs, and each
+  // ring out is a little lighter, so the levels read apart within a branch.
   .#{$prefix}--viz-sunburst__arc {
     fill: var(--bx-viz-color, #{$interactive-04});
+    fill-opacity: calc(1 - var(--bx-viz-ring, 0) * 0.16);
     stroke: $ui-background;
     stroke-width: 1;
     transition: opacity $duration--fast-02 carbon--motion(standard, productive);
