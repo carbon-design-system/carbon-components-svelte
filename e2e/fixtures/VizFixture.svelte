@@ -38,6 +38,7 @@
     ScatterChart,
     ShareOfTotal,
     SmallMultiples,
+    SpanWaterfall,
     Sparkline,
     StackedBar,
     StateTimeline,
@@ -164,6 +165,24 @@
     label="name"
     kinds={{ deploy: "info", alert: "warning", rollback: "error" }}
     title="Release events"
+    selectable
+  />
+
+  <SpanWaterfall
+    data={[
+      { id: "gw", parent: null, name: "route", service: "gateway", start: 0, ms: 160 },
+      { id: "api", parent: "gw", name: "GET /checkout", service: "api", start: 20, ms: 90 },
+      { id: "db", parent: "api", name: "query orders", service: "db", start: 35, ms: 40 },
+      { id: "auth", parent: "gw", name: "session", service: "auth", start: 22, ms: 28 },
+      { id: "render", parent: "gw", name: "html", service: "api", start: 115, ms: 45 },
+    ]}
+    id="id"
+    parent="parent"
+    start="start"
+    duration="ms"
+    label="name"
+    group="service"
+    title="Checkout trace"
     selectable
   />
 
