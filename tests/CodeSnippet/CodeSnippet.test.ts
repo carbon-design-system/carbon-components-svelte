@@ -72,6 +72,55 @@ describe("CodeSnippet", () => {
     expect(screen.getByLabelText("Copy code")).toBeInTheDocument();
   });
 
+  test("describes the inline copy button with its code text", () => {
+    const { container } = render(CodeSnippetInline);
+    const button = screen.getByRole("button", { name: "Copy code" });
+    expect(button).toHaveAccessibleDescription("npm install -g @carbon/cli");
+    expect(button).toHaveAttribute(
+      "aria-describedby",
+      container.querySelector("code")?.id,
+    );
+  });
+
+  test("points aria-describedby at a custom id on the inline variant", () => {
+    render(CodeSnippet, {
+      props: { type: "inline", code: "x", id: "snippet-1" },
+    });
+    expect(screen.getByRole("button")).toHaveAttribute(
+      "aria-describedby",
+      "snippet-1",
+    );
+  });
+
+  test("lets a rest aria-describedby override the inline default", () => {
+    render(CodeSnippet, {
+      props: { type: "inline", code: "x", "aria-describedby": "hint" },
+    });
+    expect(screen.getByRole("button")).toHaveAttribute(
+      "aria-describedby",
+      "hint",
+    );
+  });
+
+  test("keeps aria-describedby on a disabled inline copy button", () => {
+    const { container } = render(CodeSnippetDisabled, {
+      props: { type: "inline" },
+    });
+    expect(container.querySelector("button")).toHaveAttribute(
+      "aria-describedby",
+      container.querySelector("code")?.id,
+    );
+  });
+
+  test("does not set aria-describedby on the inline span without a copy button", () => {
+    const { container } = render(CodeSnippet, {
+      props: { type: "inline", code: "x", hideCopyButton: true },
+    });
+    expect(container.querySelector(".bx--snippet--inline")).not.toHaveAttribute(
+      "aria-describedby",
+    );
+  });
+
   test.each([
     {
       variant: "inline",

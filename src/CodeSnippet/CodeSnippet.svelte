@@ -438,6 +438,7 @@
       class:bx--snippet--light={light}
       class:bx--snippet--wraptext={wrapText}
       aria-label={copyLabel}
+      aria-describedby={id}
       {...$$restProps}
       on:click
       on:click={async () => {
