@@ -12,6 +12,8 @@ Menu positions its content relative to an `anchor` element and does not render a
 
 The root element has `role="menu"`. Set `labelText` or `aria-label` on Menu so assistive technologies get a meaningful name, since there is no visible text the menu is otherwise associated with.
 
+Once open, arrow keys move focus between items without wrapping past the first or last item. <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the first and last enabled item, skipping disabled ones. Type a character to move focus to the next enabled item whose label starts with it; type several characters quickly to match a longer prefix. <DocKbd label="Escape" /> closes the menu and returns focus to the anchor. See [Events](#events) for the full set of ways the menu can close, and how to keep it open after selection.
+
 <FileSource src="/framed/Menu/MenuBasic" />
 
 ## Size
@@ -80,13 +82,9 @@ A selectable or radio item's checkmark and a `MenuItem`'s own `icon` sit in sepa
 
 ### Nested
 
-Set `labelText` on a `MenuItem` and nest child `MenuItem` rows to get a submenu. Use the `labelChildren` slot instead of plain text to customize the label's content; `labelText` is still used as the accessible name and title in that case. See [MenuButton menu items](/components/MenuButton#menu-items) for keyboard and hover behavior.
+Set `labelText` on a `MenuItem` and nest child `MenuItem` rows to get a submenu. Use the `labelChildren` slot instead of plain text to customize the label's content; `labelText` is still used as the accessible name and title in that case. See [MenuButton menu items](/components/MenuButton#menu-items) for keyboard and hover behavior. Typing a character inside an open submenu searches only that submenu's items.
 
 <FileSource src="/framed/Menu/MenuItemNested" />
-
-## Keyboard interactions
-
-Once open, arrow keys move focus between items without wrapping past the first or last item. <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the first and last enabled item, skipping disabled ones. <DocKbd label="Escape" /> closes the menu and returns focus to the anchor. See [Events](#events) for the full set of ways the menu can close, and how to keep it open after selection.
 
 ## Scrollable
 
