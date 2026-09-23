@@ -1,0 +1,44 @@
+---
+components: ["BeeswarmChart", "ChartSwarm"]
+description: Beeswarm chart draws one dot per value in each group, pushed sideways only as far as needed so none overlap.
+---
+
+<script>
+  import { BeeswarmChart, ChartThreshold } from "carbon-components-svelte/viz";
+
+  const TEAMS = ["Web", "Data", "Platform", "Mobile"];
+  const scores = TEAMS.flatMap((team, t) =>
+    Array.from({ length: 36 }, (_, i) => {
+      const u = ((i * 7919 + t * 131) % 97) / 97;
+      return { team, score: Math.round(45 + t * 8 + u * 40 + (i % 9 === 0 ? 12 : 0)) };
+    }),
+  );
+</script>
+
+`BeeswarmChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+It is a [Chart](/components/Chart) preset and takes the same props. Use it for a few hundred values at most, where every one deserves a dot: survey scores, response times per request, a small cohort. Beyond that a [ViolinPlot](/components/ViolinPlot) or [BoxplotChart](/components/BoxplotChart) reads better.
+
+## Basic
+
+Pass one row for each observation, with an `x` accessor for the group and a `y` accessor for the value. Dots that would overlap move sideways, nearest the center first, and a swarm wider than its slot is squeezed to fit. The y axis is not forced to zero.
+
+<BeeswarmChart data={scores} x="team" y="score" title="Engagement score by team" yTitle="Score" />
+
+## Dot size and composition
+
+Set `radius` for the dots and `padding` for the room around each swarm. Marks compose like any chart: add a `ChartThreshold` for a target.
+
+<BeeswarmChart data={scores} x="team" y="score" radius={4} title="Engagement score against the target" height={280}>
+  <ChartThreshold y={70} label="Target" kind="success" />
+</BeeswarmChart>
+
+## Orientation and export
+
+Set `orientation` to `"horizontal"` when the group names are long. The toolbar swaps in a table with the five statistics per group.
+
+<BeeswarmChart data={scores} x="team" y="score" orientation="horizontal" toolbar title="Engagement score by team" height={280} />
+
+## Accessibility
+
+The chart is a single tab stop. Left and Right move between groups, reading out the maximum, quartiles, median, minimum, and count. The table view lists the same statistics for every group.
