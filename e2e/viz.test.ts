@@ -240,6 +240,57 @@ test.describe("Data visualization", () => {
     expect(file.length).toBeGreaterThan(5000);
   });
 
+  test("a painted ScatterChart draws its points on a canvas, hovers one as an element, and exports them in the image", async ({
+    page,
+  }) => {
+    await page.goto("/viz.html");
+    const figure = page
+      .locator("figure")
+      .filter({ hasText: "Painted points" })
+      .last();
+    await figure.scrollIntoViewIfNeeded();
+    const canvas = figure.locator("canvas");
+    await expect(canvas).toBeVisible();
+    // The pixels are there, the elements are not.
+    await expect
+      .poll(() =>
+        canvas.evaluate((node) => {
+          const el = node as HTMLCanvasElement;
+          const data = el
+            .getContext("2d")
+            ?.getImageData(0, 0, el.width, el.height).data;
+          if (!data) return 0;
+          let painted = 0;
+          for (let i = 3; i < data.length; i += 4)
+            if (data[i] > 0) painted += 1;
+          return painted;
+        }),
+      )
+      .toBeGreaterThan(1000);
+    await expect(figure.locator(".bx--viz-points__point")).toHaveCount(0);
+
+    const svg = figure.getByRole("application");
+    await svg.focus();
+    await page.keyboard.press("ArrowRight");
+    await expect(figure.locator(".bx--viz-points__point--active")).toHaveCount(
+      1,
+    );
+    await expect(canvas).toHaveClass(/bx--viz-chart__canvas--dimmed/);
+    await expect(figure.locator(".bx--viz-chart-tooltip")).toBeVisible();
+
+    const [download] = await Promise.all([
+      page.waitForEvent("download"),
+      figure.getByRole("button", { name: "Download as image" }).click(),
+    ]);
+    const stream = await download.createReadStream();
+    const chunks: Buffer[] = [];
+    for await (const chunk of stream) chunks.push(chunk as Buffer);
+    const file = Buffer.concat(chunks);
+    expect(file.subarray(1, 4).toString()).toBe("PNG");
+    // Painted points make the image far larger than an empty plot.
+    expect(file.length).toBeGreaterThan(20000);
+  });
+
   test("LineChart zooms by dragging a handle, pans by dragging the window, and resets", async ({
     page,
   }) => {

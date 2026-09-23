@@ -23,7 +23,12 @@ test.describe("Data visualization a11y", () => {
     page,
   }) => {
     await page.goto("/viz.html");
-    await page.getByRole("button", { name: "Show as table" }).first().click();
+    await page
+      .locator("figure")
+      .filter({ hasText: "Revenue by region" })
+      .last()
+      .getByRole("button", { name: "Show as table" })
+      .click();
     await expect(
       page.getByRole("region", { name: "Revenue by region, data table" }),
     ).toBeVisible();

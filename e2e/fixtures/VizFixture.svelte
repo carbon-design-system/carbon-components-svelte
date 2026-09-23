@@ -876,6 +876,21 @@
     height={240}
   />
 
+  <ScatterChart
+    data={Array.from({ length: 600 }, (_, i) => ({
+      x: (i * 37) % 100,
+      y: ((i * 53) % 100) + (i % 3) * 40,
+      tier: i % 2 ? "east" : "west",
+    }))}
+    x="x"
+    y="y"
+    series="tier"
+    renderer="canvas"
+    title="Painted points"
+    height={240}
+    toolbar
+  />
+
   <DonutChart
     data={stages}
     value="value"
