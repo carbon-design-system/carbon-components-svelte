@@ -135,16 +135,19 @@
   }
 
   let prevOpen = false;
-  $: didOpen = open;
+  let mounted = false;
 
   const sharedOpen = writable(open);
   $: $sharedOpen = open;
   trackModal(sharedOpen);
 
   onMount(() => {
-    tick().then(() => {
-      focus();
-    });
+    mounted = true;
+    if (open) {
+      tick().then(() => {
+        if (open) focus();
+      });
+    }
   });
 
   $: {
@@ -160,7 +163,16 @@
       }
     } else if (open) {
       prevOpen = true;
+      // Capture the opener before the DOM commits; activeElement is still
+      // the element that opened the modal.
+      focusReturn.save();
       dispatch("open");
+      // onMount handles the initial mount; later opens need the committed DOM.
+      if (mounted) {
+        tick().then(() => {
+          if (open) focus();
+        });
+      }
     }
   }
 </script>
@@ -200,12 +212,6 @@
     if (event.propertyName === "transform") {
       dispatch("transitionend", { open });
       if (!open) focusReturn.restore();
-    }
-
-    if (didOpen) {
-      focusReturn.save();
-      focus(event.currentTarget);
-      didOpen = false;
     }
   }}
 >
