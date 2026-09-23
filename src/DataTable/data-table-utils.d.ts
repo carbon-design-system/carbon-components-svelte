@@ -67,6 +67,8 @@ export type ToCsvHeader<Row> = {
   value?: unknown;
   /** Whether the column renders no data. Empty columns are skipped. */
   empty?: boolean;
+  /** Whether the column is hidden. Hidden columns are skipped. */
+  columnHidden?: boolean;
   /** Formats the cell value, matching the rendered table. */
   display?: (item: unknown, row: Row) => unknown;
 };
@@ -98,8 +100,8 @@ export type ToCsvOptions = {
 
 /**
  * Serializes data table headers and rows to a CSV string.
- * Skips empty columns, resolves nested keys, and applies `display` formatting
- * so the export matches the rendered table.
+ * Skips empty and hidden columns, resolves nested keys, and applies `display`
+ * formatting so the export matches the rendered table.
  */
 export function toCsv<Row extends Record<string, unknown>>(
   headers: ReadonlyArray<ToCsvHeader<Row>>,

@@ -218,6 +218,7 @@ function escapeCsvField(field, delimiter, escapeFormulas) {
  * @property {string} key - Column key; supports nested paths like "contact.company"
  * @property {unknown} [value] - Column label; falls back to the key
  * @property {boolean} [empty] - Whether the column renders no data
+ * @property {boolean} [columnHidden] - Whether the column is hidden; hidden columns are skipped
  * @property {(item: unknown, row: Record<string, unknown>) => unknown} [display] - Formats the cell value
  */
 
@@ -231,8 +232,8 @@ function escapeCsvField(field, delimiter, escapeFormulas) {
 
 /**
  * Serializes data table headers and rows to a CSV string.
- * Skips empty columns, resolves nested keys, and applies `display` formatting
- * so the export matches the rendered table.
+ * Skips empty and hidden columns, resolves nested keys, and applies `display`
+ * formatting so the export matches the rendered table.
  * @template {Record<string, unknown>} Row
  * @param {ReadonlyArray<ToCsvHeader>} headers - The data table headers
  * @param {ReadonlyArray<Row>} rows - The rows to serialize
@@ -247,7 +248,9 @@ export function toCsv(headers, rows, options = {}) {
     newline = "\r\n",
   } = options;
 
-  const columns = headers.filter((header) => !header.empty);
+  const columns = headers.filter(
+    (header) => !header.empty && !header.columnHidden,
+  );
   /** @type {string[]} */
   const lines = [];
 
