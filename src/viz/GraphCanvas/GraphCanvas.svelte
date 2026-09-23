@@ -171,6 +171,7 @@
   import { layoutLayered } from "../utils/layout-layered.js";
   import { nextId } from "../utils/next-id.js";
   import { observeResize } from "../utils/resize-pool.js";
+  import { routePolyline } from "../utils/route-edge.js";
   import { categoricalColors, vizColor } from "../utils/tokens.js";
 
   const dispatch = createEventDispatcher();
@@ -485,25 +486,10 @@
    * @param {import("../utils/layout-layered.js").LayeredEdge} entry
    */
   function pathOf(entry) {
-    const points = entry.points;
-    if (edge !== "orthogonal" || points.length < 2) {
-      return points
-        .map((point, i) => `${i === 0 ? "M" : "L"}${point.x},${point.y}`)
-        .join("");
-    }
-    let d = `M${points[0].x},${points[0].y}`;
-    for (let i = 1; i < points.length; i++) {
-      const a = points[i - 1];
-      const b = points[i];
-      if (rankDir === "LR") {
-        const mid = (a.x + b.x) / 2;
-        d += `L${mid},${a.y}L${mid},${b.y}L${b.x},${b.y}`;
-      } else {
-        const mid = (a.y + b.y) / 2;
-        d += `L${a.x},${mid}L${b.x},${mid}L${b.x},${b.y}`;
-      }
-    }
-    return d;
+    return routePolyline(entry.points, {
+      kind: edge,
+      axis: rankDir === "LR" ? "x" : "y",
+    });
   }
 
   onMount(() => {
@@ -618,7 +604,6 @@
         {/each}
       </g>
     </svg>
-    <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
     <div
       class:bx--viz-graph-canvas__nodes={true}
       style:transform="translate({view.tx}px, {view.ty}px) scale({view.k})"
@@ -633,7 +618,6 @@
           focusIndex = index;
         },
       }}
-      on:keydown={onStageKeydown}
     >
       {#each layout.nodes as node, i (node.id)}
         <!-- svelte-ignore a11y-mouse-events-have-key-events -->
