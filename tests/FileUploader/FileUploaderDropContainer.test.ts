@@ -326,6 +326,88 @@ describe("FileUploaderDropContainer", () => {
     expect((input.files as FileList)[0].name).toBe("small.txt");
   });
 
+  describe("native input sync", () => {
+    const getInput = (container: HTMLElement) => {
+      const input = container.querySelector('input[type="file"]');
+      assert(input instanceof HTMLInputElement);
+      return input;
+    };
+    const names = (input: HTMLInputElement) =>
+      Array.from(input.files as FileList).map((file) => file.name);
+    const textFile = (name: string, size = 10) =>
+      new File(["x".repeat(size)], name, { type: "text/plain" });
+
+    it("leaves files rejected from a browse pick out of the native input", async () => {
+      const changeHandler = vi.fn();
+      const { container } = render(FileUploaderDropContainer, {
+        props: { multiple: true, maxFileSize: 1000, onchange: changeHandler },
+      });
+      const input = getInput(container);
+
+      simulateFileSelection(input, [
+        textFile("small.txt", 500),
+        textFile("large.txt", 2000),
+      ]);
+
+      await vi.waitFor(() => {
+        expect(names(input)).toEqual(["small.txt"]);
+      });
+      expect(changeHandler).toHaveBeenCalled();
+    });
+
+    it("accumulates browse picks in the native input with multiple", async () => {
+      const { container } = render(FileUploaderDropContainer, {
+        props: { multiple: true },
+      });
+      const input = getInput(container);
+
+      simulateFileSelection(input, [textFile("a.txt")]);
+      await vi.waitFor(() => {
+        expect(names(input)).toEqual(["a.txt"]);
+      });
+
+      simulateFileSelection(input, [textFile("b.txt")]);
+      await vi.waitFor(() => {
+        expect(names(input)).toEqual(["a.txt", "b.txt"]);
+      });
+    });
+
+    it("combines dropped and browsed files in the native input", async () => {
+      const { container } = render(FileUploaderDropContainer, {
+        props: { multiple: true },
+      });
+      const dropDiv = container.querySelector(".bx--file");
+      assert(dropDiv instanceof HTMLElement);
+      const input = getInput(container);
+
+      dropDiv.dispatchEvent(createDragEvent("drop", [textFile("a.txt")]));
+      await vi.waitFor(() => {
+        expect(names(input)).toEqual(["a.txt"]);
+      });
+
+      simulateFileSelection(input, [textFile("b.txt")]);
+      await vi.waitFor(() => {
+        expect(names(input)).toEqual(["a.txt", "b.txt"]);
+      });
+    });
+
+    it("empties the native input when files is cleared programmatically", async () => {
+      const { container, rerender } = render(FileUploaderDropContainer, {
+        props: { multiple: true },
+      });
+      const input = getInput(container);
+
+      simulateFileSelection(input, [textFile("a.txt")]);
+      await vi.waitFor(() => {
+        expect(names(input)).toEqual(["a.txt"]);
+      });
+
+      await rerender({ multiple: true, files: [] });
+
+      expect(input.files).toHaveLength(0);
+    });
+  });
+
   it("should not handle drag events when disabled", () => {
     const { container } = render(FileUploaderDropContainer, {
       props: { disabled: true },
