@@ -6,7 +6,7 @@
   export let lowContrast: ComponentProps<InlineNotification>["lowContrast"] = false;
   export let timeout: ComponentProps<InlineNotification>["timeout"] = 0;
   export let pauseOnHover: ComponentProps<InlineNotification>["pauseOnHover"] = false;
-  export let role: ComponentProps<InlineNotification>["role"] = "alert";
+  export let role: ComponentProps<InlineNotification>["role"] = undefined;
   export let title: ComponentProps<InlineNotification>["title"] = "";
   export let subtitle: ComponentProps<InlineNotification>["subtitle"] = "";
   export let closeButtonDescription: ComponentProps<InlineNotification>["closeButtonDescription"] =

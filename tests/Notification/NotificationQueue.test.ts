@@ -211,7 +211,9 @@ describe("NotificationQueue", () => {
     expect(screen.queryByText("0%")).not.toBeInTheDocument();
     expect(screen.getByText("Upload complete")).toBeInTheDocument();
     expect(screen.getByText("100%")).toBeInTheDocument();
-    expect(screen.getAllByRole("alert")).toHaveLength(1);
+    expect(document.querySelectorAll(".bx--toast-notification")).toHaveLength(
+      1,
+    );
   });
 
   it("should merge patch into existing notification on update", async () => {
@@ -582,7 +584,9 @@ describe("NotificationQueue", () => {
       });
       await tick();
 
-      const notifications = screen.getAllByRole("alert");
+      const notifications = document.querySelectorAll(
+        ".bx--toast-notification",
+      );
       expect(notifications[0]).toHaveTextContent("Second");
       expect(notifications[1]).toHaveTextContent("First");
     },
@@ -609,7 +613,9 @@ describe("NotificationQueue", () => {
       });
       await tick();
 
-      const notifications = screen.getAllByRole("alert");
+      const notifications = document.querySelectorAll(
+        ".bx--toast-notification",
+      );
       expect(notifications[0]).toHaveTextContent("First");
       expect(notifications[1]).toHaveTextContent("Second");
     },

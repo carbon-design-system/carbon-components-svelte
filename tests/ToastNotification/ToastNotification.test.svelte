@@ -6,7 +6,7 @@
   export let lowContrast: ComponentProps<ToastNotification>["lowContrast"] = false;
   export let timeout: ComponentProps<ToastNotification>["timeout"] = 0;
   export let pauseOnHover: ComponentProps<ToastNotification>["pauseOnHover"] = false;
-  export let role: ComponentProps<ToastNotification>["role"] = "alert";
+  export let role: ComponentProps<ToastNotification>["role"] = undefined;
   export let title: ComponentProps<ToastNotification>["title"] = "";
   export let subtitle: ComponentProps<ToastNotification>["subtitle"] = "";
   export let caption: ComponentProps<ToastNotification>["caption"] = "";

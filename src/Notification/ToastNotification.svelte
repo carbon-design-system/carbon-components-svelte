@@ -21,9 +21,11 @@
 
   /**
    * Specify the ARIA `role` for the notification container.
-   * @type {"alert" | "log" | "status"}
+   * When unset, `error`, `warning`, and `warning-alt` use `"alert"`;
+   * `success`, `info`, and `info-square` use `"status"`.
+   * @type {"alert" | "log" | "status" | undefined}
    */
-  export let role = "alert";
+  export let role = undefined;
 
   /** Specify the title text */
   export let title = "";
@@ -78,6 +80,12 @@
     }
   }
 
+  $: resolvedRole =
+    role ??
+    (kind === "error" || kind === "warning" || kind === "warning-alt"
+      ? "alert"
+      : "status");
+
   $: dismiss.sync(open, timeout, () => close(true));
 
   onMount(() => () => dismiss.clear());
@@ -85,7 +93,7 @@
 
 {#if open}
   <div
-    {role}
+    role={resolvedRole}
     class:bx--toast-notification={true}
     class:bx--toast-notification--low-contrast={lowContrast}
     class:bx--toast-notification--error={kind === "error"}

@@ -386,6 +386,29 @@ describe("ToastNotification", () => {
     expect(notification).toHaveAttribute("role", "status");
   });
 
+  it.each([
+    ["error", "alert"],
+    ["warning", "alert"],
+    ["warning-alt", "alert"],
+    ["success", "status"],
+    ["info", "status"],
+    ["info-square", "status"],
+  ] as const)("should default the role for kind %s to %s", (kind, role) => {
+    render(ToastNotificationTest, { props: { kind } });
+
+    const notification = document.querySelector(".bx--toast-notification");
+    expect(notification).toHaveAttribute("role", role);
+  });
+
+  it("should let an explicit role override the kind default", () => {
+    render(ToastNotificationTest, {
+      props: { kind: "success", role: "alert" },
+    });
+
+    const notification = document.querySelector(".bx--toast-notification");
+    expect(notification).toHaveAttribute("role", "alert");
+  });
+
   it("should remove notification from DOM when closed", async () => {
     vi.useRealTimers();
     render(ToastNotificationTest);
