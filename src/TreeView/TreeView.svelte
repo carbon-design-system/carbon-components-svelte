@@ -1198,6 +1198,7 @@
 
     const isHomeOrEnd = event.key === "Home" || event.key === "End";
     const isSelectAll =
+      isMultiselect &&
       (event.code === "KeyA" || event.key === "a" || event.key === "A") &&
       event.ctrlKey;
 
@@ -1853,6 +1854,7 @@
 
     const isHomeOrEnd = event.key === "Home" || event.key === "End";
     const isSelectAll =
+      isMultiselect &&
       (event.code === "KeyA" || event.key === "a" || event.key === "A") &&
       event.ctrlKey;
 
