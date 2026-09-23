@@ -112,7 +112,6 @@
       aria-posinset={posInSet}
       aria-setsize={setSize}
       aria-current={id === $activeNodeId ? "page" : undefined}
-      aria-selected={disabled ? undefined : selected}
       aria-disabled={disabled}
       class:bx--tree-node={true}
       class:bx--tree-leaf-node={true}

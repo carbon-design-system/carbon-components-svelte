@@ -88,4 +88,32 @@ describe("TreeView virtualize + href", () => {
       expect.objectContaining({ id: "link-1" }),
     );
   });
+
+  it("does not set aria-selected on a selected link row", () => {
+    render(TreeViewVirtualizeHref, { selectedIds: ["link-1"] });
+
+    const linkNode = screen.getByRole("treeitem", { name: /Link Node/ });
+    expect(linkNode).not.toHaveAttribute("aria-selected");
+  });
+
+  it("does not set aria-selected on an unselected link row", () => {
+    render(TreeViewVirtualizeHref);
+
+    const blankLink = screen.getByRole("treeitem", { name: /Blank Target/ });
+    expect(blankLink).not.toHaveAttribute("aria-selected");
+  });
+
+  it("keeps aria-selected on plain rows", () => {
+    render(TreeViewVirtualizeHref, { selectedIds: ["plain-1"] });
+
+    const plainNode = screen.getByRole("treeitem", { name: /Plain Node/ });
+    expect(plainNode).toHaveAttribute("aria-selected", "true");
+  });
+
+  it("uses aria-current='page' for the active link row", () => {
+    render(TreeViewVirtualizeHref, { activeId: "link-1" });
+
+    const linkNode = screen.getByRole("treeitem", { name: /Link Node/ });
+    expect(linkNode).toHaveAttribute("aria-current", "page");
+  });
 });
