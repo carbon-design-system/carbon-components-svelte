@@ -293,7 +293,7 @@ Use `on:clear` to listen for the selection being cleared, either via the clear b
 
 ### Close
 
-Use `on:close` to know when the menu closes and why. `event.detail.trigger` is `"escape-key"`, `"outside-click"`, or `"select"`.
+Use `on:close` to know when the menu closes and why. `event.detail.trigger` is `"escape-key"`, `"outside-click"`, or `"select"`. Pressing <DocKbd label="Tab" /> to leave an open menu reports `"escape-key"`.
 
 <Dropdown
   labelText="Contact"

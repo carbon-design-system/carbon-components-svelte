@@ -733,7 +733,9 @@
         if (event.key === "Enter") {
           selectHighlighted();
         } else if (event.key === "Tab") {
-          open = false;
+          // Tab dismisses without selecting; report it as a keyboard
+          // dismissal, like ComboBox does for a Tab that accepts nothing.
+          close("escape-key");
         } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
           const step = event.key === "ArrowDown" ? 1 : -1;
           if (event.altKey) {
