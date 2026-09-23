@@ -139,6 +139,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "BoxplotChart",
       "ViolinPlot",
       "BeeswarmChart",
+      "RidgelineChart",
       "CandlestickChart",
       "BulletChart",
       "CalendarHeatmap",
