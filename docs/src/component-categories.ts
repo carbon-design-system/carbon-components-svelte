@@ -171,6 +171,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "TargetIndicator",
       "ChordDiagram",
       "ArcDiagram",
+      "HivePlot",
       "LineChart",
       "LiveSparkline",
       "LollipopChart",
