@@ -25,7 +25,9 @@
    * Specify the ARIA `role` for the notification container.
    * When unset, `error`, `warning`, and `warning-alt` use `"alert"`;
    * `success`, `info`, and `info-square` use `"status"`.
-   * @type {"alert" | "log" | "status" | undefined}
+   * Use `"none"` to render no role, for example when an ancestor is
+   * already the live region that announces the notification.
+   * @type {"alert" | "log" | "status" | "none" | undefined}
    */
   export let role = undefined;
 
@@ -105,7 +107,7 @@
 
 {#if open}
   <div
-    role={resolvedRole}
+    role={resolvedRole === "none" ? undefined : resolvedRole}
     class:bx--inline-notification={true}
     class:bx--inline-notification--low-contrast={lowContrast}
     class:bx--inline-notification--hide-close-button={hideCloseButton}

@@ -373,6 +373,13 @@ describe("InlineNotification", () => {
     expect(notification).toHaveAttribute("role", role);
   });
 
+  it("should render no role when role is none", () => {
+    render(InlineNotificationTest, { props: { kind: "error", role: "none" } });
+
+    const notification = document.querySelector(".bx--inline-notification");
+    expect(notification).not.toHaveAttribute("role");
+  });
+
   it("should let an explicit role override the kind default", () => {
     render(InlineNotificationTest, {
       props: { kind: "success", role: "alert" },

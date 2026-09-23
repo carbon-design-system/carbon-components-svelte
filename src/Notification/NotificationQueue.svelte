@@ -12,7 +12,7 @@
    * @property {boolean} [hideCloseButton]
    * @property {boolean} [pauseOnHover]
    * @property {boolean} [showTimeout]
-   * @property {"alert" | "log" | "status"} [role]
+   * @property {"alert" | "log" | "status" | "none"} [role] - Defaults to `"none"` in the queue, which is itself the live region
    * @property {boolean} [fullWidth]
    */
 
@@ -260,38 +260,41 @@
   }
 </script>
 
-{#if notifications.length > 0}
-  <div
-    class:bx--notification-queue={true}
-    class:bx--notification-queue--top-left={position === "top-left"}
-    class:bx--notification-queue--top-center={position === "top-center"}
-    class:bx--notification-queue--top-right={position === "top-right"}
-    class:bx--notification-queue--bottom-left={position === "bottom-left"}
-    class:bx--notification-queue--bottom-center={position === "bottom-center"}
-    class:bx--notification-queue--bottom-right={position === "bottom-right"}
-    style:position="fixed"
-    style:left={isLeftPosition(position)
-      ? offsetLeft
-      : isCenterPosition(position)
-        ? "50%"
-        : undefined}
-    style:right={isRightPosition(position) ? offsetRight : undefined}
-    style:top={isTopPosition(position) ? offsetTop : undefined}
-    style:bottom={isTopPosition(position) ? undefined : offsetBottom}
-    style:transform={isCenterPosition(position)
-      ? "translateX(-50%)"
+<!-- Always mounted: a live region must exist before content is added to it,
+  or screen readers miss the first notification. -->
+<div
+  aria-live="polite"
+  aria-atomic="false"
+  class:bx--notification-queue={true}
+  class:bx--notification-queue--top-left={position === "top-left"}
+  class:bx--notification-queue--top-center={position === "top-center"}
+  class:bx--notification-queue--top-right={position === "top-right"}
+  class:bx--notification-queue--bottom-left={position === "bottom-left"}
+  class:bx--notification-queue--bottom-center={position === "bottom-center"}
+  class:bx--notification-queue--bottom-right={position === "bottom-right"}
+  style:position="fixed"
+  style:left={isLeftPosition(position)
+    ? offsetLeft
+    : isCenterPosition(position)
+      ? "50%"
       : undefined}
-    style:z-index={zIndex}
-  >
-    {#each notifications as notification (notification.id)}
-      {@const { count, ...toastProps } = notification}
-      <ToastNotification
-        {...toastProps}
-        title={count > 1
-          ? `${toastProps.title ? `${toastProps.title} ` : ""}(${count})`
-          : toastProps.title}
-        on:close={(event) => handleClose(event, notification.id)}
-      />
-    {/each}
-  </div>
-{/if}
+  style:right={isRightPosition(position) ? offsetRight : undefined}
+  style:top={isTopPosition(position) ? offsetTop : undefined}
+  style:bottom={isTopPosition(position) ? undefined : offsetBottom}
+  style:transform={isCenterPosition(position)
+    ? "translateX(-50%)"
+    : undefined}
+  style:z-index={zIndex}
+>
+  {#each notifications as notification (notification.id)}
+    {@const { count, ...toastProps } = notification}
+    <ToastNotification
+      {...toastProps}
+      role={toastProps.role ?? "none"}
+      title={count > 1
+        ? `${toastProps.title ? `${toastProps.title} ` : ""}(${count})`
+        : toastProps.title}
+      on:close={(event) => handleClose(event, notification.id)}
+    />
+  {/each}
+</div>

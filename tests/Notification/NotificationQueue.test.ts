@@ -23,13 +23,38 @@ describe("NotificationQueue", () => {
     vi.useRealTimers();
   });
 
-  it("should not render when no notifications are added", () => {
-    const { container } = render(NotificationQueueTest);
+  it("should render an empty live region before any notification is added", () => {
+    render(NotificationQueueTest);
 
-    const queueContainer = container.querySelector(
-      '[style*="position: fixed"]',
-    );
-    expect(queueContainer).not.toBeInTheDocument();
+    const queueContainer = document.querySelector(".bx--notification-queue");
+    expect(queueContainer).toBeInTheDocument();
+    expect(queueContainer).toHaveAttribute("aria-live", "polite");
+    expect(queueContainer?.children).toHaveLength(0);
+  });
+
+  it("should render queued toasts without their own live role", async () => {
+    const { component } = render(NotificationQueueTest);
+
+    getQueue(component.queue).add({ kind: "error", title: "Failed" });
+    getQueue(component.queue).add({ kind: "success", title: "Saved" });
+    await tick();
+
+    const toasts = document.querySelectorAll(".bx--toast-notification");
+    expect(toasts).toHaveLength(2);
+    for (const toast of toasts) {
+      expect(toast).not.toHaveAttribute("role");
+    }
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+  });
+
+  it("should keep an explicit role on a queued toast", async () => {
+    const { component } = render(NotificationQueueTest);
+
+    getQueue(component.queue).add({ kind: "error", title: "Failed", role: "alert" });
+    await tick();
+
+    expect(screen.getByRole("alert")).toHaveTextContent("Failed");
   });
 
   it("should render with default props", async () => {
@@ -120,7 +145,7 @@ describe("NotificationQueue", () => {
     expect(id).toBe("duplicate-id");
     expect(id2).toBe("duplicate-id");
 
-    const notifications = screen.getAllByRole("alert");
+    const notifications = document.querySelectorAll(".bx--toast-notification");
     expect(notifications).toHaveLength(1);
     expect(screen.getByText("First notification")).toBeInTheDocument();
     expect(screen.queryByText("Second notification")).not.toBeInTheDocument();
@@ -954,9 +979,9 @@ describe("NotificationQueue", () => {
     },
   );
 
-  it("should not render container when all notifications are removed", async () => {
+  it("should keep an empty container when all notifications are removed", async () => {
     vi.useRealTimers();
-    const { component, container } = render(NotificationQueueTest);
+    const { component } = render(NotificationQueueTest);
 
     getQueue(component.queue).add({
       kind: "success",
@@ -970,10 +995,9 @@ describe("NotificationQueue", () => {
     await user.click(closeButton);
     await tick();
 
-    const queueContainer = container.querySelector(
-      '[style*="position: fixed"]',
-    );
-    expect(queueContainer).not.toBeInTheDocument();
+    const queueContainer = document.querySelector(".bx--notification-queue");
+    expect(queueContainer).toBeInTheDocument();
+    expect(queueContainer?.children).toHaveLength(0);
   });
 
   describe("NotificationButton Generics", () => {

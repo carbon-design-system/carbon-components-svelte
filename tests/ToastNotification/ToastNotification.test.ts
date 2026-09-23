@@ -534,6 +534,13 @@ describe("ToastNotification", () => {
     expect(notification).toHaveAttribute("role", role);
   });
 
+  it("should render no role when role is none", () => {
+    render(ToastNotificationTest, { props: { kind: "error", role: "none" } });
+
+    const notification = document.querySelector(".bx--toast-notification");
+    expect(notification).not.toHaveAttribute("role");
+  });
+
   it("should let an explicit role override the kind default", () => {
     render(ToastNotificationTest, {
       props: { kind: "success", role: "alert" },
