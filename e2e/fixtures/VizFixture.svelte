@@ -28,6 +28,7 @@
     FunnelChart,
     FunnelCompare,
     GanttChart,
+    GraphCanvas,
     Heatmap,
     HeatStrip,
     Histogram,
@@ -824,6 +825,28 @@
     y="revenue"
     title="Shape of monthly totals per region"
     height={240}
+  />
+
+  <GraphCanvas
+    nodes={[
+      { id: "app", name: "app", tier: "edge" },
+      { id: "api", name: "api", tier: "services" },
+      { id: "web", name: "web", tier: "edge" },
+      { id: "db", name: "postgres", tier: "data" },
+      { id: "auth", name: "auth", tier: "services" },
+    ]}
+    links={[
+      { source: "app", target: "api" },
+      { source: "app", target: "web" },
+      { source: "api", target: "db" },
+      { source: "api", target: "auth" },
+      { source: "web", target: "auth" },
+    ]}
+    id="id"
+    label="name"
+    group="tier"
+    title="Service map on a stage"
+    height={260}
   />
 
   <SequenceSunburst
