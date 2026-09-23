@@ -95,6 +95,7 @@
     afterUpdate,
     createEventDispatcher,
     getContext,
+    onMount,
     setContext,
   } from "svelte";
   import { derived, writable } from "svelte/store";
@@ -102,10 +103,12 @@
   import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
+  import { debounce } from "../utils/debounce.js";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { keyBy } from "../utils/key-by.js";
   import { rovingFocus } from "../utils/roving-focus.js";
+  import { typeaheadIndex } from "../utils/typeahead.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const ctxBreadcrumbItem = getContext("carbon:BreadcrumbItem");
@@ -132,6 +135,20 @@
 
   let buttonWidth = undefined;
   let onMountAfterUpdate = true;
+  let typeaheadBuffer = "";
+
+  const TYPEAHEAD_DELAY = 500;
+
+  // Clear the typeahead buffer once the user stops typing for TYPEAHEAD_DELAY ms.
+  const resetTypeaheadBuffer = debounce(() => {
+    typeaheadBuffer = "";
+  }, TYPEAHEAD_DELAY);
+
+  onMount(() => {
+    return () => {
+      resetTypeaheadBuffer.cancel();
+    };
+  });
 
   /**
    * Everything the menu's position depends on. `afterUpdate` re-measures only
@@ -203,6 +220,28 @@
         return;
       }
     }
+  }
+
+  /**
+   * WAI-ARIA APG menu first-character navigation: move focus to the next
+   * enabled item whose text starts with the buffered characters typed so far.
+   * @param {string} character
+   */
+  function typeaheadSearch(character) {
+    if ($items.length === 0) return;
+
+    typeaheadBuffer += character.toLowerCase();
+    resetTypeaheadBuffer();
+
+    focusedIndex.set(
+      typeaheadIndex({
+        items: $items,
+        query: typeaheadBuffer,
+        itemToString: (item) => item.text,
+        index: $focusedIndex,
+        isDisabled: (item) => item.disabled,
+      }),
+    );
   }
 
   setContext("carbon:OverflowMenu", {
@@ -311,6 +350,15 @@
       ["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(event.key)
     ) {
       event.preventDefault();
+    } else if (
+      event.key.length === 1 &&
+      event.key !== " " &&
+      !event.ctrlKey &&
+      !event.metaKey &&
+      !event.altKey
+    ) {
+      event.preventDefault();
+      typeaheadSearch(event.key);
     } else if (event.key === "Escape") {
       event.stopPropagation();
       const shouldContinue = dispatch(

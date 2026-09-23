@@ -79,6 +79,21 @@ describe("OverflowMenu", () => {
     });
   });
 
+  it("moves focus to the item matching a typed character", async () => {
+    render(OverflowMenu);
+
+    const menuButton = screen.getByRole("button");
+    await user.click(menuButton);
+
+    const menuItems = screen.getAllByRole("menuitem");
+    // "Manage credentials" is already focused on open.
+    expect(menuItems[0]).toHaveFocus();
+
+    // Types "d" to jump straight to "Delete service".
+    await user.keyboard("d");
+    expect(menuItems[2]).toHaveFocus();
+  });
+
   it("renders the menu as a sibling of the button, not nested inside it", async () => {
     render(OverflowMenu);
 
