@@ -57,6 +57,7 @@ export { default as FunnelBars } from "./FunnelBars/FunnelBars.svelte";
 export { default as FunnelChart } from "./FunnelChart/FunnelChart.svelte";
 export { default as FunnelCompare } from "./FunnelCompare/FunnelCompare.svelte";
 export { default as GanttChart } from "./GanttChart/GanttChart.svelte";
+export { default as GraphCanvas } from "./GraphCanvas/GraphCanvas.svelte";
 export { default as Heatmap } from "./Heatmap/Heatmap.svelte";
 export { default as HeatStrip } from "./HeatStrip/HeatStrip.svelte";
 export { default as Histogram } from "./Histogram/Histogram.svelte";
