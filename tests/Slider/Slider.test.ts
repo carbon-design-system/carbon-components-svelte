@@ -585,6 +585,49 @@ describe("Slider", () => {
     expect(consoleLog).toHaveBeenCalledWith("change", 25);
   });
 
+  it("should move by the large step on PageUp and PageDown", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Slider);
+
+    const slider = screen.getByRole("slider");
+    await user.tab();
+    expect(slider).toHaveFocus();
+
+    await user.keyboard("{PageUp}");
+    expect(consoleLog).toHaveBeenCalledWith("change", 25);
+
+    await user.keyboard("{PageDown}");
+    expect(consoleLog).toHaveBeenCalledWith("change", 0);
+  });
+
+  it("should clamp PageUp/PageDown values to min and max", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Slider, { props: { min: 0, max: 100, value: 90 } });
+
+    const slider = screen.getByRole("slider");
+    await user.tab();
+    expect(slider).toHaveFocus();
+
+    await user.keyboard("{PageUp}");
+    expect(consoleLog).toHaveBeenCalledWith("change", 100);
+  });
+
+  it("prevents PageUp/PageDown default actions (page scroll)", () => {
+    render(Slider);
+
+    const slider = screen.getByRole("slider");
+
+    for (const key of ["PageUp", "PageDown"]) {
+      const event = new KeyboardEvent("keydown", {
+        key,
+        bubbles: true,
+        cancelable: true,
+      });
+      slider.dispatchEvent(event);
+      expect(event.defaultPrevented).toBe(true);
+    }
+  });
+
   it("should clamp values to min and max", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(Slider, {

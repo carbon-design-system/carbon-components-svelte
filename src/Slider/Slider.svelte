@@ -288,13 +288,19 @@
             ArrowLeft: -1,
             ArrowRight: 1,
             ArrowUp: 1,
+            PageDown: -1,
+            PageUp: 1,
           };
           if (keys[event.key]) {
-            // Prevent the arrow keys from also scrolling the page.
+            // Prevent the arrow/page keys from also scrolling the page.
             event.preventDefault();
+            const isLargeStep =
+              event.shiftKey ||
+              event.key === "PageUp" ||
+              event.key === "PageDown";
             const delta =
               step *
-              (event.shiftKey ? range / step / stepMultiplier : 1) *
+              (isLargeStep ? range / step / stepMultiplier : 1) *
               keys[event.key];
             let next = Math.round((value + delta) / step) * step;
             if (next < min) next = min;

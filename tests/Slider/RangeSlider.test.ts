@@ -280,6 +280,64 @@ describe("RangeSlider", () => {
     });
   });
 
+  it("should move the focused thumb by the large step on PageUp and PageDown", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(RangeSlider, { props: { value: 0, valueUpper: 100 } });
+
+    const [lowerThumb, upperThumb] = screen.getAllByRole("slider");
+
+    lowerThumb.focus();
+    await user.keyboard("{PageUp}");
+    expect(consoleLog).toHaveBeenCalledWith("change", {
+      value: 25,
+      valueUpper: 100,
+    });
+
+    vi.clearAllMocks();
+    upperThumb.focus();
+    await user.keyboard("{PageDown}");
+    expect(consoleLog).toHaveBeenCalledWith("change", {
+      value: 25,
+      valueUpper: 75,
+    });
+  });
+
+  it("should not push the lower handle past the upper bound via PageUp", async () => {
+    render(RangeSlider, { props: { value: 49, valueUpper: 50 } });
+
+    const [lowerThumb] = screen.getAllByRole("slider");
+    lowerThumb.focus();
+    await user.keyboard("{PageUp}");
+
+    expect(lowerThumb).toHaveAttribute("aria-valuenow", "50");
+  });
+
+  it("should not push the upper handle below the lower bound via PageDown", async () => {
+    render(RangeSlider, { props: { value: 50, valueUpper: 51 } });
+
+    const [, upperThumb] = screen.getAllByRole("slider");
+    upperThumb.focus();
+    await user.keyboard("{PageDown}");
+
+    expect(upperThumb).toHaveAttribute("aria-valuenow", "50");
+  });
+
+  it("prevents PageUp/PageDown default actions (page scroll)", () => {
+    render(RangeSlider);
+
+    const [lowerThumb] = screen.getAllByRole("slider");
+
+    for (const key of ["PageUp", "PageDown"]) {
+      const event = new KeyboardEvent("keydown", {
+        key,
+        bubbles: true,
+        cancelable: true,
+      });
+      lowerThumb.dispatchEvent(event);
+      expect(event.defaultPrevented).toBe(true);
+    }
+  });
+
   it("should allow the upper handle to reach max via keyboard when step doesn't evenly divide the range", async () => {
     render(RangeSlider, {
       props: { value: 0, valueUpper: 400, min: 0, max: 435, step: 50 },
