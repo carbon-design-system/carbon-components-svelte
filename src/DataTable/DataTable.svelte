@@ -696,12 +696,19 @@
 
   $: expandableRowIds = rowIds.filter((id) => !nonExpandableRowIdsSet.has(id));
   $: selectableRowIds = rowIds.filter((id) => !nonSelectableRowIdsSet.has(id));
+  // Count only the selectable rows matching the active filter: `selectedRowIds`
+  // may also hold rows the filter hides (or ids no longer in `rows`), which
+  // select all neither reflects nor touches.
+  $: selectedSelectableCount = selectableRowIds.reduce(
+    (count, id) => count + (selectedRowIdsSet.has(id) ? 1 : 0),
+    0,
+  );
   $: selectAll =
     selectableRowIds.length > 0 &&
-    selectedRowIds.length === selectableRowIds.length;
+    selectedSelectableCount === selectableRowIds.length;
   $: indeterminate =
-    selectedRowIds.length > 0 &&
-    selectedRowIds.length < selectableRowIds.length;
+    selectedSelectableCount > 0 &&
+    selectedSelectableCount < selectableRowIds.length;
   $: if (batchExpansion) {
     expandable = true;
     expanded = expandedRowIds.length === expandableRowIds.length;
@@ -1111,14 +1118,17 @@
 
                   if (indeterminate) {
                     event.target.checked = false;
-                    selectedRowIds = [];
-                    return;
                   }
 
                   if (event.target.checked) {
-                    selectedRowIds = selectableRowIds;
+                    const next = new Set(selectedRowIds);
+                    for (const id of selectableRowIds) next.add(id);
+                    selectedRowIds = [...next];
                   } else {
-                    selectedRowIds = [];
+                    const scope = new Set(selectableRowIds);
+                    selectedRowIds = selectedRowIds.filter(
+                      (id) => !scope.has(id),
+                    );
                   }
                 }}
               />

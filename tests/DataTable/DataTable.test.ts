@@ -1100,6 +1100,21 @@ describe("DataTable", () => {
     expect(unselectedRows.length).toBe(0);
   });
 
+  it("ignores selected ids that are not rows in the select all state", () => {
+    render(DataTable, {
+      props: {
+        batchSelection: true,
+        headers,
+        rows,
+        selectedRowIds: ["a", "b", "zzz"],
+      },
+    });
+
+    const selectAll = screen.getByRole("checkbox", { name: "Select all rows" });
+    expect(selectAll).toBePartiallyChecked();
+    expect(selectAll).not.toBeChecked();
+  });
+
   it("handles radio selection", async () => {
     const { container } = render(DataTable, {
       props: {
