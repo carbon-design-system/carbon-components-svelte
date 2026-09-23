@@ -65,6 +65,8 @@ export type ChartContext<T> = {
   }>;
   /** `clip-path` value that keeps a mark inside the plot. Set while zoomed. */
   clip: Readable<string | undefined>;
+  /** The shared canvas behind the SVG, for marks that paint pixels. */
+  canvas: import("./canvas-layer.js").CanvasLayer;
   /** Show an x range, or everything with `null`. */
   setZoom(range: [number, number] | null): void;
   /** Switch between the chart and its data table. */

@@ -66,6 +66,22 @@
     position: relative;
   }
 
+  // Pixels behind the SVG. Pointer events go to the SVG, which owns hover.
+  .#{$prefix}--viz-chart__canvas {
+    position: absolute;
+    display: block;
+    inline-size: 100%;
+    inset: 0;
+    pointer-events: none;
+    transition: opacity $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  // While a point is hovered the layer fades as the SVG points would, and
+  // the hovered point is drawn on top in the SVG.
+  .#{$prefix}--viz-chart__canvas--dimmed {
+    opacity: 0.3;
+  }
+
   // Covers the plot box only, so the axes stay visible while data loads.
   // The shimmer comes from the core skeleton class on the same element.
   .#{$prefix}--viz-chart__skeleton.#{$prefix}--skeleton__placeholder {
@@ -621,6 +637,7 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-chart__canvas,
     .#{$prefix}--viz-points__point,
     .#{$prefix}--viz-dumbbells__pair,
     .#{$prefix}--viz-waterfall__bar,

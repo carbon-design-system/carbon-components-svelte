@@ -56,6 +56,7 @@ export function serializeSvg(svg, options = {}) {
     legend = [],
     background = "#ffffff",
     color = "#161616",
+    underlay,
   } = options;
   const box = svg.viewBox.baseVal;
   const innerWidth = box?.width || svg.clientWidth || 640;
@@ -92,6 +93,16 @@ export function serializeSvg(svg, options = {}) {
   clone.setAttribute("width", String(innerWidth));
   clone.setAttribute("height", String(innerHeight));
   clone.setAttribute("overflow", "visible");
+  // Pixels painted behind the SVG go in first, so the elements stay on top.
+  if (underlay) {
+    const image = clone.ownerDocument.createElementNS(SVG_NS, "image");
+    image.setAttribute("href", underlay);
+    image.setAttribute("x", "0");
+    image.setAttribute("y", "0");
+    image.setAttribute("width", String(innerWidth));
+    image.setAttribute("height", String(innerHeight));
+    clone.insertBefore(image, clone.firstChild);
+  }
 
   const font =
     getComputedStyle(svg).getPropertyValue("font-family") || "sans-serif";

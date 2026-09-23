@@ -232,6 +232,7 @@
   import { nextId } from "../utils/next-id.js";
   import { observeResize } from "../utils/resize-pool.js";
   import ChartDataTable from "./ChartDataTable.svelte";
+  import { createCanvasLayer } from "./canvas-layer.js";
   import { CHART_CONTEXT } from "./context.js";
   import {
     buildGroups,
@@ -309,6 +310,13 @@
     if (!fromSync) sync?.publish(null);
   }
 
+  // Marks that paint pixels share one canvas behind the SVG.
+  const canvasLayer = createCanvasLayer();
+  const { count: painterCount, dimming: canvasDims } = canvasLayer;
+  $: canvasLayer.resize($size.width, $size.height);
+  // Anything a painter draws from: the data, the scales, the hidden series.
+  $: canvasLayer.invalidate($groups, $scales);
+
   const clipId = nextId("bx-viz-clip");
   const zoomStore = writable(/** @type {[number, number] | null} */ (null));
   // The x range with no zoom applied, which the zoom bar spans.
@@ -366,12 +374,14 @@
     if (!svg || !ref) {
       return Promise.reject(new Error("The chart is not mounted"));
     }
+    const snapshot = canvasLayer.snapshot();
     const {
       markup,
       width: w,
       height: h,
     } = serializeSvg(svg, {
       title,
+      underlay: snapshot ?? undefined,
       legend: get(groups)
         .filter((group) => !group.hidden)
         .map((group) => ({
@@ -413,6 +423,7 @@
     zoom: zoomStore,
     fullX,
     clip,
+    canvas: canvasLayer,
     setZoom,
     /** @param {"chart" | "table"} next */
     setView(next) {
@@ -620,6 +631,12 @@
 
   /** @type {SVGSVGElement} */
   let svg;
+
+  /** @param {HTMLCanvasElement} node */
+  function attachCanvas(node) {
+    const detach = canvasLayer.attach(node, /** @type {HTMLElement} */ (ref));
+    return { destroy: detach };
+  }
 
   onMount(() => {
     if (width !== "auto" || !ref) return;
@@ -975,6 +992,16 @@
     style:height="{$size.height}px"
     hidden={view === "table"}
   >
+    {#if $painterCount > 0}
+      <!-- Bulk marks paint here; the SVG above stays transparent. -->
+      <canvas
+        class:bx--viz-chart__canvas={true}
+        class:bx--viz-chart__canvas--dimmed={$canvasDims && $hover !== null}
+        style:height="{$size.height}px"
+        aria-hidden="true"
+        use:attachCanvas
+      ></canvas>
+    {/if}
     <!-- A chart is one tab stop. Arrow keys move between data points. -->
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
     <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->

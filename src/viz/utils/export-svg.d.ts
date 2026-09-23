@@ -7,6 +7,8 @@ export type ExportSvgOptions = {
   background?: string;
   /** Color of the title and the legend labels. @default "#161616" */
   color?: string;
+  /** A PNG data URL painted behind the elements, sized to the plot. */
+  underlay?: string;
 };
 
 /**
