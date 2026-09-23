@@ -100,7 +100,8 @@
 
   /**
    * Override the filtering logic.
-   * The default filtering is an exact string comparison.
+   * The default matches items whose `text` contains the typed value,
+   * ignoring case and leading or trailing whitespace.
    * @type {(item: Item, value: string) => boolean}
    */
   export let filterItem = function filterItem(item, value) {

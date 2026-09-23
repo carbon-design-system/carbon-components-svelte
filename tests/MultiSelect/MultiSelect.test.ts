@@ -1139,6 +1139,24 @@ describe("MultiSelect", () => {
       });
     });
 
+    it("filters case-insensitively and ignores surrounding whitespace by default", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          filterable: true,
+          placeholder: "Filter items...",
+        },
+      });
+
+      const input = screen.getByPlaceholderText("Filter items...");
+      await user.click(input);
+      await user.type(input, "  AX ");
+
+      expect(screen.getByText("Fax")).toBeInTheDocument();
+      expect(screen.queryByText("Slack")).not.toBeInTheDocument();
+      expect(screen.queryByText("Email")).not.toBeInTheDocument();
+    });
+
     it("uses custom filter function", async () => {
       const consoleLog = vi.spyOn(console, "log");
       const props = {
