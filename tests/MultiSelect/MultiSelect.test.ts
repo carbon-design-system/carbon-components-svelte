@@ -2560,6 +2560,48 @@ describe("MultiSelect", () => {
       expect(combobox).not.toHaveAttribute("aria-activedescendant");
     });
 
+    it("non-filterable: Enter opens the menu when closed without selecting", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(MultiSelect, { props: { items } });
+
+      const combobox = screen.getByRole("combobox");
+      combobox.focus();
+      await user.keyboard("{Enter}");
+      expect(combobox).toHaveAttribute("aria-expanded", "true");
+      expect(combobox).not.toHaveAttribute("aria-activedescendant");
+      expect(consoleLog).not.toHaveBeenCalledWith("select", expect.anything());
+
+      await user.keyboard("{ArrowDown}{Enter}");
+      expect(screen.getAllByRole("option")[0]).toHaveAttribute(
+        "aria-checked",
+        "true",
+      );
+      expect(combobox).toHaveAttribute("aria-expanded", "true");
+    });
+
+    it("non-filterable: Enter opens the menu for review when read-only", async () => {
+      render(MultiSelect, { props: { items, readonly: true } });
+
+      const combobox = screen.getByRole("combobox");
+      combobox.focus();
+      await user.keyboard("{Enter}");
+      expect(combobox).toHaveAttribute("aria-expanded", "true");
+    });
+
+    it("filterable: Enter does not open a closed menu", async () => {
+      render(MultiSelect, {
+        props: { items, filterable: true, placeholder: "Filter" },
+      });
+
+      const input = screen.getByPlaceholderText("Filter");
+      await user.click(input);
+      await user.keyboard("{Escape}");
+      expect(input).toHaveAttribute("aria-expanded", "false");
+
+      await user.keyboard("{Enter}");
+      expect(input).toHaveAttribute("aria-expanded", "false");
+    });
+
     it("non-filterable: Space does not toggle a hover-highlighted option", async () => {
       render(MultiSelect, { props: { items } });
 
