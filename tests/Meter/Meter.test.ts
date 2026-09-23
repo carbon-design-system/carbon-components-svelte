@@ -106,7 +106,7 @@ describe("Meter", () => {
 
     const el = screen.getByTestId("helper-text");
     const meter = within(el).getByRole("meter");
-    const helperText = screen.getByText("Approaching limit");
+    const helperText = within(el).getByText("Approaching limit");
     expect(meter).toHaveAttribute("aria-describedby", helperText.id);
   });
 
@@ -178,5 +178,71 @@ describe("Meter", () => {
 
     await rerender({ value: 10, status: "error", errorText: "Critical" });
     expect(getAnnouncement()).toBe("Critical");
+  });
+
+  it("describes both thresholds in a hidden sentence", () => {
+    render(Meter);
+
+    const el = screen.getByTestId("thresholds-both");
+    const meter = within(el).getByRole("meter");
+    const text = within(el).getByText("Warning at 700, error at 900");
+    expect(meter).toHaveAttribute("aria-describedby", text.id);
+  });
+
+  it("describes only the warning threshold when error is undefined", () => {
+    render(Meter);
+
+    const el = screen.getByTestId("thresholds-warning-only");
+    const meter = within(el).getByRole("meter");
+    const text = within(el).getByText("Warning at 700");
+    expect(meter).toHaveAttribute("aria-describedby", text.id);
+    expect(text).not.toHaveTextContent(/error at/i);
+  });
+
+  it("omits the threshold description when thresholds is unset", () => {
+    render(Meter);
+
+    const el = screen.getByTestId("no-thresholds");
+    const meter = within(el).getByRole("meter");
+    expect(meter).not.toHaveAttribute("aria-describedby");
+  });
+
+  it("lists the helper text before the threshold sentence in aria-describedby", () => {
+    render(Meter);
+
+    const el = screen.getByTestId("helper-and-thresholds");
+    const meter = within(el).getByRole("meter");
+    const helperText = within(el).getByText("Approaching limit");
+    const thresholdsText = within(el).getByText("Warning at 700, error at 900");
+    expect(meter).toHaveAttribute(
+      "aria-describedby",
+      `${helperText.id} ${thresholdsText.id}`,
+    );
+  });
+
+  it("omits the threshold description when showThresholds is not set", () => {
+    render(Meter);
+
+    const el = screen.getByTestId("thresholds-no-show");
+    const meter = within(el).getByRole("meter");
+    expect(meter).not.toHaveAttribute("aria-describedby");
+    expect(within(el).queryByText(/warning at/i)).not.toBeInTheDocument();
+  });
+
+  it("uses a custom thresholdsText function", () => {
+    render(Meter);
+
+    const el = screen.getByTestId("custom-thresholds-text");
+    const meter = within(el).getByRole("meter");
+    const text = within(el).getByText("Custom: 700/900");
+    expect(meter).toHaveAttribute("aria-describedby", text.id);
+  });
+
+  it("omits the threshold description when thresholdsText returns an empty string", () => {
+    render(Meter);
+
+    const el = screen.getByTestId("empty-thresholds-text");
+    const meter = within(el).getByRole("meter");
+    expect(meter).not.toHaveAttribute("aria-describedby");
   });
 });

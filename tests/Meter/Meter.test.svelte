@@ -87,3 +87,61 @@
   max={100}
   data-testid="nan-value"
 />
+
+<Meter
+  labelText="Storage"
+  value={812}
+  max={1000}
+  thresholds={{ warning: 700, error: 900 }}
+  showThresholds
+  data-testid="thresholds-both"
+/>
+
+<Meter
+  labelText="Storage"
+  value={812}
+  max={1000}
+  thresholds={{ warning: 700 }}
+  showThresholds
+  data-testid="thresholds-warning-only"
+/>
+
+<Meter labelText="Storage" value={812} max={1000} data-testid="no-thresholds" />
+
+<Meter
+  labelText="Storage"
+  value={812}
+  max={1000}
+  helperText="Approaching limit"
+  thresholds={{ warning: 700, error: 900 }}
+  showThresholds
+  data-testid="helper-and-thresholds"
+/>
+
+<Meter
+  labelText="Storage"
+  value={812}
+  max={1000}
+  thresholds={{ warning: 700, error: 900 }}
+  data-testid="thresholds-no-show"
+/>
+
+<Meter
+  labelText="Storage"
+  value={812}
+  max={1000}
+  thresholds={{ warning: 700, error: 900 }}
+  showThresholds
+  thresholdsText={({ warning, error }) => `Custom: ${warning}/${error}`}
+  data-testid="custom-thresholds-text"
+/>
+
+<Meter
+  labelText="Storage"
+  value={812}
+  max={1000}
+  thresholds={{ warning: 700, error: 900 }}
+  showThresholds
+  thresholdsText={() => ""}
+  data-testid="empty-thresholds-text"
+/>
