@@ -2,7 +2,7 @@
 
 <script>
   /**
-   * @template T
+   * @template [T=any]
    */
 
   /**
