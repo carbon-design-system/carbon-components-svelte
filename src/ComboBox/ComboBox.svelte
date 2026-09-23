@@ -207,6 +207,18 @@
    */
   export let selectionClearedText = "Selection cleared";
 
+  /**
+   * Build the assistive message announced through the status live region when
+   * typing changes how many options match. Only used while a filter is active
+   * (`typeahead` or a custom `shouldFilterItem`).
+   * @type {(count: number) => string}
+   */
+  export let filterResultsText = function filterResultsText(count) {
+    return count === 0
+      ? "No results"
+      : `${count} result${count === 1 ? "" : "s"} available`;
+  };
+
   /** Set an id for the list box component */
   export let id = uniqueId();
 
@@ -281,6 +293,7 @@
   import ListBoxSelection from "../ListBox/ListBoxSelection.svelte";
   import { shouldVirtualizeMenu } from "../ListBox/list-box-utils.js";
   import { createMenuWindow } from "../ListBox/menu-window.js";
+  import { debounce } from "../utils/debounce.js";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
@@ -326,6 +339,7 @@
 
   onMount(() => {
     return () => {
+      announceFilterResults.cancel();
       menuWindow.destroy();
     };
   });
@@ -421,6 +435,15 @@
     await tick();
     statusText = text;
   }
+
+  /** Filter result count last announced; null when the menu is closed so reopening announces again. */
+  let announcedFilterCount = null;
+
+  const announceFilterResults = debounce((count) => {
+    if (count === announcedFilterCount) return;
+    announcedFilterCount = count;
+    announceStatus(filterResultsText(count));
+  }, 800);
 
   /**
    * Clear the combo box programmatically.
@@ -603,6 +626,17 @@
   );
   $: menuItems = hideMode && open ? items : filteredItems;
   $: scrollEndTracker.noteItemCount(filteredItems.length);
+  // The default `shouldFilterItem` keeps every item, so only announce while a
+  // filter can actually narrow the list.
+  $: if (open && value.length > 0 && filterFn !== defaultShouldFilter) {
+    announceFilterResults(filteredItems.length);
+  } else {
+    announceFilterResults.cancel();
+  }
+  $: if (!open) {
+    announcedFilterCount = null;
+    statusText = "";
+  }
   $: highlightedId =
     filteredItems[highlightedIndex] == null
       ? undefined
