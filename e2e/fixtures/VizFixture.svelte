@@ -44,6 +44,7 @@
     RankBars,
     RetentionChart,
     ScatterChart,
+    SegmentedProgress,
     SequenceDiagram,
     ShareOfTotal,
     SlopeChart,
@@ -61,6 +62,7 @@
     VarianceIndicator,
     WaffleChart,
     WaterfallChart,
+    WinLoss,
     WordCloudChart,
   } from "carbon-components-svelte/viz";
 
@@ -396,6 +398,10 @@
     label="Revenue against plan"
     data-testid="variance"
   />
+
+  <WinLoss data={[1, 1, -1, 0, 1]} label="Last 5 experiments" showValue />
+
+  <SegmentedProgress value={4} max={8} label="Onboarding" showValue />
 
   <UptimeBar
     data={[
