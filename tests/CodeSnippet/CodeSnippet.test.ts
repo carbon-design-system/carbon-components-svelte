@@ -22,6 +22,7 @@ import CodeSnippetExpandable from "./CodeSnippetExpandable.test.svelte";
 import CodeSnippetExpandedByDefault from "./CodeSnippetExpandedByDefault.svelte";
 import CodeSnippetInitialEvent from "./CodeSnippetInitialEvent.test.svelte";
 import CodeSnippetInline from "./CodeSnippetInline.test.svelte";
+import CodeSnippetInlineSlotCopy from "./CodeSnippetInlineSlotCopy.test.svelte";
 import CodeSnippetMouseEnter from "./CodeSnippetMouseEnter.test.svelte";
 import CodeSnippetMultiline from "./CodeSnippetMultiline.test.svelte";
 import CodeSnippetNullishAriaLabel from "./CodeSnippetNullishAriaLabel.test.svelte";
@@ -668,6 +669,54 @@ yarn -v`,
     const copyButton = screen.getByLabelText("Copy to clipboard");
     await user.click(copyButton);
     expect(screen.getByText("Custom copied text!")).toBeInTheDocument();
+  });
+
+  describe("inline snippet without code", () => {
+    const originalClipboard = navigator.clipboard;
+    let writeText: ReturnType<typeof vi.fn>;
+
+    beforeEach(() => {
+      writeText = vi.fn().mockResolvedValue(undefined);
+      Object.defineProperty(navigator, "clipboard", {
+        configurable: true,
+        value: { writeText },
+      });
+    });
+
+    afterEach(() => {
+      Object.defineProperty(navigator, "clipboard", {
+        configurable: true,
+        value: originalClipboard,
+      });
+    });
+
+    test("does not write to the clipboard with the default copy", async () => {
+      const onCopy = vi.fn();
+      render(CodeSnippetInlineSlotCopy, { props: { onCopy } });
+
+      await user.click(screen.getByLabelText("Copy code"));
+
+      expect(writeText).not.toHaveBeenCalled();
+      expect(onCopy).not.toHaveBeenCalled();
+    });
+
+    test("passes an empty string to a custom copy", async () => {
+      const copy = vi.fn();
+      render(CodeSnippetInlineSlotCopy, { props: { copy } });
+
+      await user.click(screen.getByLabelText("Copy code"));
+
+      expect(copy).toHaveBeenCalledWith("");
+      expect(copy).not.toHaveBeenCalledWith(undefined);
+    });
+
+    test("copies an empty code string with the default copy", async () => {
+      render(CodeSnippet, { props: { type: "inline", code: "" } });
+
+      await user.click(screen.getByLabelText("Copy code"));
+
+      expect(writeText).toHaveBeenCalledWith("");
+    });
   });
 
   // Regression: rest props are spread to the span (inline, no copy button)

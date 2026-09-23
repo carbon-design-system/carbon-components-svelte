@@ -444,8 +444,10 @@
         try {
           await copyFeedback.onClick(
             async () => {
-              await copy(code);
-              dispatch("copy");
+              if (copy === copyText ? code !== undefined : true) {
+                await copy(code ?? "");
+                dispatch("copy");
+              }
             },
             feedbackTimeout,
             effectivePortalTooltip,
