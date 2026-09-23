@@ -59,6 +59,4 @@
   </StructuredListBody>
 </StructuredList>
 
-<div style="margin-top: 1rem;">
-  Selected: <strong>{selected.join(", ") || "None"}</strong>
-</div>
+<div>Selected: <strong>{selected.join(", ") || "None"}</strong></div>

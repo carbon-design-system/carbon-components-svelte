@@ -4,7 +4,7 @@ description: Displays a row of tags that collapses to fit the available width, m
 ---
 
 <script>
-  import { Stack, Tag, TagSet } from "carbon-components-svelte";
+  import { Box, Stack, Tag, TagSet } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -64,7 +64,7 @@ Set `measurementOffset` to subtract a fixed amount from the measured available w
 <Stack gap={5}>
   <div>
     <div>measurementOffset={0} (default)</div>
-    <div style="max-width: 14rem;">
+    <Box maxWidth="14rem">
       <TagSet>
         <Tag type="red">Production</Tag>
         <Tag type="blue">Staging</Tag>
@@ -72,11 +72,11 @@ Set `measurementOffset` to subtract a fixed amount from the measured available w
         <Tag type="green">QA</Tag>
         <Tag type="magenta">Sandbox</Tag>
       </TagSet>
-    </div>
+    </Box>
   </div>
   <div>
     <div>measurementOffset={80}</div>
-    <div style="max-width: 14rem;">
+    <Box maxWidth="14rem">
       <TagSet measurementOffset={80}>
         <Tag type="red">Production</Tag>
         <Tag type="blue">Staging</Tag>
@@ -84,7 +84,7 @@ Set `measurementOffset` to subtract a fixed amount from the measured available w
         <Tag type="green">QA</Tag>
         <Tag type="magenta">Sandbox</Tag>
       </TagSet>
-    </div>
+    </Box>
   </div>
 </Stack>
 
@@ -105,7 +105,7 @@ Set `overflowAlign` to align the tooltip relative to the "+N" indicator.
 <Stack gap={5}>
   <div>
     <div>overflowAlign="start"</div>
-    <div style="max-width: 12rem;">
+    <Box maxWidth="12rem">
       <TagSet overflowAlign="start">
         <Tag type="red">Production</Tag>
         <Tag type="blue">Staging</Tag>
@@ -113,11 +113,11 @@ Set `overflowAlign` to align the tooltip relative to the "+N" indicator.
         <Tag type="green">QA</Tag>
         <Tag type="magenta">Sandbox</Tag>
       </TagSet>
-    </div>
+    </Box>
   </div>
   <div>
     <div>overflowAlign="end"</div>
-    <div style="max-width: 12rem;">
+    <Box maxWidth="12rem">
       <TagSet overflowAlign="end">
         <Tag type="red">Production</Tag>
         <Tag type="blue">Staging</Tag>
@@ -125,7 +125,7 @@ Set `overflowAlign` to align the tooltip relative to the "+N" indicator.
         <Tag type="green">QA</Tag>
         <Tag type="magenta">Sandbox</Tag>
       </TagSet>
-    </div>
+    </Box>
   </div>
 </Stack>
 
@@ -133,7 +133,7 @@ Set `overflowAlign` to align the tooltip relative to the "+N" indicator.
 
 Set `overflowDirection` to `"top"` to show the tooltip above the indicator instead of below.
 
-<div style="max-width: 12rem;">
+<Box maxWidth="12rem">
   <TagSet overflowDirection="top">
     <Tag type="red">Production</Tag>
     <Tag type="blue">Staging</Tag>
@@ -141,7 +141,7 @@ Set `overflowDirection` to `"top"` to show the tooltip above the indicator inste
     <Tag type="green">QA</Tag>
     <Tag type="magenta">Sandbox</Tag>
   </TagSet>
-</div>
+</Box>
 
 ### Custom content
 
@@ -163,7 +163,7 @@ Respond to interactions with the "+N" overflow indicator.
 
 Use `on:click:overflow` to listen for clicks on the "+N" indicator. The event detail includes the current overflow count.
 
-<div style="max-width: 12rem;">
+<Box maxWidth="12rem">
   <TagSet on:click:overflow={(e) => console.log(e.detail.count)}>
     <Tag type="red">Production</Tag>
     <Tag type="blue">Staging</Tag>
@@ -171,13 +171,13 @@ Use `on:click:overflow` to listen for clicks on the "+N" indicator. The event de
     <Tag type="green">QA</Tag>
     <Tag type="magenta">Sandbox</Tag>
   </TagSet>
-</div>
+</Box>
 
 ### Overflow count change
 
 Use `on:overflow:change` to listen for changes to the overflow count, whether from a resize, a slotted-children change, or a `maxVisible` change. The event detail includes the new count.
 
-<div style="max-width: 12rem;">
+<Box maxWidth="12rem">
   <TagSet on:overflow:change={(e) => console.log(e.detail.count)}>
     <Tag type="red">Production</Tag>
     <Tag type="blue">Staging</Tag>
@@ -185,7 +185,7 @@ Use `on:overflow:change` to listen for changes to the overflow count, whether fr
     <Tag type="green">QA</Tag>
     <Tag type="magenta">Sandbox</Tag>
   </TagSet>
-</div>
+</Box>
 
 ## Sizes
 

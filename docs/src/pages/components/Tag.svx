@@ -4,7 +4,7 @@ description: Tags categorize content with a keyword or label, with various style
 ---
 
 <script>
-  import { Stack, Tag, SelectableTag, TagSkeleton, TooltipDefinition } from "carbon-components-svelte";
+  import { Box, Stack, Tag, SelectableTag, TagSkeleton, TooltipDefinition } from "carbon-components-svelte";
   import IbmCloud from "carbon-icons-svelte/lib/IbmCloud.svelte";
 </script>
 
@@ -117,11 +117,11 @@ Set `maxWidth` to a CSS length to ellipsis long labels. A tooltip with the full 
   </div>
   <div>
     <div>maxWidth="60%" (relative to the containing block)</div>
-    <div style="width: 200px;">
+    <Box width={200}>
       <Tag filter maxWidth="60%" on:close>
         status:active AND region:us-south AND service:cloud-object-storage
       </Tag>
-    </div>
+    </Box>
   </div>
 </Stack>
 

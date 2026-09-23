@@ -4,7 +4,7 @@ description: Copy inputs display a read-only value in a text field with a built-
 ---
 
 <script>
-  import { CopyInput, CopyInputSkeleton, FluidCopyInputSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import { Box, CopyInput, CopyInputSkeleton, FluidCopyInputSkeleton, TooltipIcon } from "carbon-components-svelte";
   import Checkmark from "carbon-icons-svelte/lib/Checkmark.svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
@@ -67,12 +67,12 @@ Use `"hover-focus"` to reveal while the input is hovered or focused.
 
 Long values truncate with an ellipsis when the field is narrower than the text. Focus or select the field to see the full value. Copy always uses the complete value.
 
-<div style="max-width: 20rem;">
+<Box maxWidth="20rem">
   <CopyInput
     labelText="Repository"
     value="git@github.com:carbon-design-system/carbon-components-svelte.git"
   />
-</div>
+</Box>
 
 ## Helper text
 
