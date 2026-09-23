@@ -1,6 +1,6 @@
 <script>
   /**
-   * @event {boolean} toggle - Dispatched with the next open state after a header click.
+   * @event {{ open: boolean }} toggle - Dispatched with the next open state after a header click.
    */
 
   /**
@@ -131,7 +131,7 @@
     on:click={() => {
       open = !open;
       animation = open ? "expanding" : "collapsing";
-      dispatch("toggle", open);
+      dispatch("toggle", { open });
     }}
     on:mouseover
     on:mouseenter
