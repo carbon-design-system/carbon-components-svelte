@@ -113,7 +113,7 @@ ContextMenu dispatches `open` once it finishes opening, and `close` on every clo
 
 ### Close event
 
-`close`'s detail contains `trigger`, one of `"escape-key"`, `"outside-click"`, or `"select"`, describing why the menu closed.
+`close`'s detail contains `trigger`, one of `"escape-key"`, `"outside-click"`, `"select"`, or `"tab"`, describing why the menu closed.
 
 ### Prevent menu from closing
 
