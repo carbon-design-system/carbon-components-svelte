@@ -1,6 +1,7 @@
 <script>
   import {
     AlluvialChart,
+    ArcDiagram,
     AreaChart,
     BarChart,
     BoxplotChart,
@@ -278,6 +279,28 @@
     y="score"
     series="team"
     title="Engagement score by team, 2025 to 2026"
+  />
+
+  <ArcDiagram
+    nodes={[
+      { id: "a", name: "app", bundle: "core" },
+      { id: "b", name: "button", bundle: "ui" },
+      { id: "c", name: "config", bundle: "core" },
+      { id: "d", name: "dialog", bundle: "ui" },
+    ]}
+    links={[
+      { from: "a", to: "b", n: 1 },
+      { from: "a", to: "d", n: 5 },
+      { from: "c", to: "a", n: 3 },
+    ]}
+    id="id"
+    label="name"
+    group="bundle"
+    source="from"
+    target="to"
+    value="n"
+    directed
+    title="Module imports"
   />
 
   <ChordDiagram
