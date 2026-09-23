@@ -11,6 +11,24 @@ describe("ToolbarDensity", () => {
     expect(trigger).toHaveClass("bx--toolbar-action");
   });
 
+  it("keeps the toolbar action class alongside a custom class", () => {
+    render(ToolbarDensity, {
+      props: { standalone: true, triggerClass: "custom" },
+    });
+
+    const trigger = screen.getByRole("button", { name: "Row height" });
+    expect(trigger).toHaveClass("bx--toolbar-action");
+    expect(trigger).toHaveClass("custom");
+  });
+
+  it("keeps the toolbar action class alongside a custom class inside a DataTable", () => {
+    render(ToolbarDensity, { props: { triggerClass: "custom" } });
+
+    const trigger = screen.getByRole("button", { name: "Row height" });
+    expect(trigger).toHaveClass("bx--toolbar-action");
+    expect(trigger).toHaveClass("custom");
+  });
+
   it("renders the default icon, replaced by a custom icon prop", () => {
     const { container, unmount } = render(ToolbarDensity, {
       props: { standalone: true },

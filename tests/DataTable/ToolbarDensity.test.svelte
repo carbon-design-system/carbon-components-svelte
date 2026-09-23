@@ -12,6 +12,7 @@
   export let icon: ComponentProps<ToolbarDensity>["icon"] = undefined;
   export let tableSize: ComponentProps<DataTable>["size"] = undefined;
   export let standalone = false;
+  export let triggerClass: string | undefined = undefined;
 </script>
 
 <p>Size: {size}</p>
@@ -24,6 +25,7 @@
         {sizes}
         {formatLabel}
         {icon}
+        class={triggerClass}
         on:change={({ detail }) => console.log("change", detail)}
       />
     </ToolbarContent>
@@ -41,6 +43,7 @@
           {sizes}
           {formatLabel}
           {icon}
+          class={triggerClass}
           on:change={({ detail }) => console.log("change", detail)}
         />
       </ToolbarContent>

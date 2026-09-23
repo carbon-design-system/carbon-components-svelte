@@ -4,6 +4,7 @@
    */
 
   /**
+   * @restProps {button}
    * @event change
    * @type {object}
    * @property {"compact" | "short" | "medium" | "tall"} size
@@ -96,8 +97,8 @@
   size={menuSize}
   {direction}
   bind:open
-  class="bx--toolbar-action"
   {...$$restProps}
+  class={["bx--toolbar-action", $$restProps.class].filter(Boolean).join(" ")}
   on:close
 >
   <MenuItemRadioGroup {labelText} {selectedId}>
