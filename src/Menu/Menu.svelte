@@ -101,12 +101,15 @@
   import { derived, writable } from "svelte/store";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
-  import { debounce } from "../utils/debounce.js";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { scrollIntoViewWithinMenu } from "../utils/scroll-into-view-within-menu.js";
-  import { typeaheadIndex } from "../utils/typeahead.js";
+  import {
+    createTypeaheadBuffer,
+    isTypeaheadKey,
+    typeaheadIndex,
+  } from "../utils/typeahead.js";
 
   // Selectable and radio items carry their own roles, so navigation and
   // initial focus must match all three.
@@ -122,18 +125,12 @@
 
   let focusIndex = -1;
   let prevOpen = false;
-  let typeaheadBuffer = "";
 
-  const TYPEAHEAD_DELAY = 500;
-
-  // Clear the typeahead buffer once the user stops typing for TYPEAHEAD_DELAY ms.
-  const resetTypeaheadBuffer = debounce(() => {
-    typeaheadBuffer = "";
-  }, TYPEAHEAD_DELAY);
+  const typeahead = createTypeaheadBuffer();
 
   onMount(() => {
     return () => {
-      resetTypeaheadBuffer.cancel();
+      typeahead.clear();
     };
   });
 
@@ -247,12 +244,11 @@
     );
     if (items.length === 0) return;
 
-    typeaheadBuffer += character.toLowerCase();
-    resetTypeaheadBuffer();
+    const query = typeahead.push(character);
 
     const index = typeaheadIndex({
       items,
-      query: typeaheadBuffer,
+      query,
       itemToString,
       index: focusIndex,
     });
@@ -344,13 +340,7 @@
         ["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)
       ) {
         event.preventDefault();
-      } else if (
-        event.key.length === 1 &&
-        event.key !== " " &&
-        !event.ctrlKey &&
-        !event.metaKey &&
-        !event.altKey
-      ) {
+      } else if (isTypeaheadKey(event)) {
         event.preventDefault();
         typeaheadSearch(event.key);
       }

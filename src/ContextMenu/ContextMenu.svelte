@@ -57,11 +57,14 @@
     setContext,
   } from "svelte";
   import { writable } from "svelte/store";
-  import { debounce } from "../utils/debounce.js";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { rovingFocus } from "../utils/roving-focus.js";
-  import { typeaheadIndex } from "../utils/typeahead.js";
+  import {
+    createTypeaheadBuffer,
+    isTypeaheadKey,
+    typeaheadIndex,
+  } from "../utils/typeahead.js";
 
   const dispatch = createEventDispatcher();
   /**
@@ -87,14 +90,8 @@
   let openDetail = null;
   /** @type {HTMLElement | null} */
   let returnFocus = null;
-  let typeaheadBuffer = "";
 
-  const TYPEAHEAD_DELAY = 500;
-
-  // Clear the typeahead buffer once the user stops typing for TYPEAHEAD_DELAY ms.
-  const resetTypeaheadBuffer = debounce(() => {
-    typeaheadBuffer = "";
-  }, TYPEAHEAD_DELAY);
+  const typeahead = createTypeaheadBuffer();
 
   /**
    * @param {HTMLElement} item
@@ -118,12 +115,11 @@
   function typeaheadSearch(character) {
     if (options.length === 0) return;
 
-    typeaheadBuffer += character.toLowerCase();
-    resetTypeaheadBuffer();
+    const query = typeahead.push(character);
 
     focusIndex = typeaheadIndex({
       items: options,
-      query: typeaheadBuffer,
+      query,
       itemToString,
       index: focusIndex,
       isDisabled: (item) => item.getAttribute("aria-disabled") === "true",
@@ -195,7 +191,7 @@
       for (const node of boundTargets) {
         node?.removeEventListener("contextmenu", openMenu);
       }
-      resetTypeaheadBuffer.cancel();
+      typeahead.clear();
     };
   });
 
@@ -316,10 +312,7 @@
     ) {
       event.preventDefault();
     } else if (
-      event.key.length === 1 &&
-      !event.ctrlKey &&
-      !event.metaKey &&
-      !event.altKey &&
+      isTypeaheadKey(event) &&
       // A submenu currently has its own focus/search; let it own this key
       // instead of also moving focus at this level.
       !$hasPopup

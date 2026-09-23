@@ -1,5 +1,10 @@
 // @ts-check
 
+import { debounce } from "./debounce.js";
+
+/** Quiet period (ms) after which the typed query resets. */
+const TYPEAHEAD_DELAY = 500;
+
 /**
  * Next enabled item whose text starts with `query`, searching forward from
  * `index` and wrapping once. Returns `index` if nothing matches.
@@ -34,4 +39,47 @@ export function typeaheadIndex({
     }
   }
   return index;
+}
+
+/**
+ * Whether `event` is an unmodified printable key that should feed typeahead.
+ * Space is excluded so it keeps activating the focused item.
+ *
+ * @param {KeyboardEvent} event
+ * @returns {boolean}
+ */
+export function isTypeaheadKey(event) {
+  return (
+    event.key.length === 1 &&
+    event.key !== " " &&
+    !event.ctrlKey &&
+    !event.metaKey &&
+    !event.altKey
+  );
+}
+
+/**
+ * Accumulate typed characters into a lowercase query that resets after
+ * `delay` ms without typing. Call `clear()` when the list closes or unmounts.
+ *
+ * @param {number} [delay]
+ * @returns {{ push: (character: string) => string; clear: () => void }}
+ */
+export function createTypeaheadBuffer(delay = TYPEAHEAD_DELAY) {
+  let query = "";
+  const reset = debounce(() => {
+    query = "";
+  }, delay);
+
+  return {
+    push(character) {
+      query += character.toLowerCase();
+      reset();
+      return query;
+    },
+    clear() {
+      query = "";
+      reset.cancel();
+    },
+  };
 }

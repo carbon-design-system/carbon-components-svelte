@@ -249,12 +249,15 @@
   } from "../ListBox/index.js";
   import { shouldVirtualizeMenu } from "../ListBox/list-box-utils.js";
   import { createMenuWindow } from "../ListBox/menu-window.js";
-  import { debounce } from "../utils/debounce.js";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { moveIndex } from "../utils/move-index.js";
-  import { typeaheadIndex } from "../utils/typeahead.js";
+  import {
+    createTypeaheadBuffer,
+    isTypeaheadKey,
+    typeaheadIndex,
+  } from "../utils/typeahead.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { resetVirtualScrollOnClose } from "../utils/virtualize.js";
 
@@ -272,7 +275,6 @@
   let highlightOrigin = /** @type {"keyboard" | "pointer" | null} */ (null);
   let prevHighlightedIndex = -1;
   let prevItemsLength = items.length;
-  let typeaheadBuffer = "";
   let listScrollTop = 0;
   let prevOpen = false;
   let fieldFocused = false;
@@ -292,16 +294,11 @@
     },
   });
 
-  const TYPEAHEAD_DELAY = 500;
-
-  // Clear the typeahead buffer once the user stops typing for TYPEAHEAD_DELAY ms.
-  const resetTypeaheadBuffer = debounce(() => {
-    typeaheadBuffer = "";
-  }, TYPEAHEAD_DELAY);
+  const typeahead = createTypeaheadBuffer();
 
   onMount(() => {
     return () => {
-      resetTypeaheadBuffer.cancel();
+      typeahead.clear();
       menuWindow.destroy();
     };
   });
@@ -360,8 +357,7 @@
     highlightedIndex = -1;
     highlightOrigin = null;
     prevHighlightedIndex = -1;
-    typeaheadBuffer = "";
-    resetTypeaheadBuffer.cancel();
+    typeahead.clear();
   }
 
   // Clamp a stale highlight when `items` shrinks while the menu is open, so a
@@ -513,12 +509,11 @@
   function typeaheadSearch(character) {
     if (items.length === 0) return;
 
-    typeaheadBuffer += character.toLowerCase();
-    resetTypeaheadBuffer();
+    const query = typeahead.push(character);
 
     highlightedIndex = typeaheadIndex({
       items,
-      query: typeaheadBuffer,
+      query,
       itemToString,
       index: highlightedIndex,
     });
@@ -764,14 +759,7 @@
           // is set, since that is what makes clearing possible at all.
           event.preventDefault();
           clear({ open: openOnClear });
-        } else if (
-          open &&
-          event.key.length === 1 &&
-          event.key !== " " &&
-          !event.ctrlKey &&
-          !event.metaKey &&
-          !event.altKey
-        ) {
+        } else if (open && isTypeaheadKey(event)) {
           event.preventDefault();
           typeaheadSearch(event.key);
         }
