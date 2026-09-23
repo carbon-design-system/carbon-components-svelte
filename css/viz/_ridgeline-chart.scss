@@ -1,0 +1,123 @@
+/// RidgelineChart: a density curve per series, rows overlapping, drawn at
+/// a fixed logical size and scaled to the container.
+/// @access private
+/// @group viz
+@mixin viz-ridgeline-chart {
+  .#{$prefix}--viz-ridgeline {
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-ridgeline .#{$prefix}--viz-chart__title {
+    margin-block-end: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--viz-ridgeline__svg {
+    display: block;
+    overflow: visible;
+    block-size: auto;
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--viz-ridgeline__svg:focus {
+    outline: 2px solid $focus;
+    outline-offset: 2px;
+  }
+
+  .#{$prefix}--viz-ridgeline__grid {
+    stroke: $ui-03;
+    stroke-width: 1;
+  }
+
+  .#{$prefix}--viz-ridgeline__axis-label {
+    fill: $text-secondary;
+    font-variant-numeric: tabular-nums;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-ridgeline__axis-title {
+    fill: $text-secondary;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-ridgeline__row {
+    cursor: pointer;
+    transition: opacity $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-ridgeline__label {
+    fill: $text-primary;
+
+    @include type-style("label-01");
+  }
+
+  // The page background under a wash of the color, so a ridge hides the
+  // one behind it and the overlap reads as depth.
+  .#{$prefix}--viz-ridgeline__mask {
+    fill: $ui-background;
+  }
+
+  .#{$prefix}--viz-ridgeline__area {
+    fill: var(--bx-viz-color, #{$interactive-04});
+    fill-opacity: 0.35;
+  }
+
+  .#{$prefix}--viz-ridgeline__line {
+    fill: none;
+    stroke: var(--bx-viz-color, #{$interactive-04});
+    stroke-linejoin: round;
+    stroke-width: 1.5;
+  }
+
+  .#{$prefix}--viz-ridgeline__baseline {
+    stroke: $ui-04;
+    stroke-width: 1;
+  }
+
+  .#{$prefix}--viz-ridgeline__row--active .#{$prefix}--viz-ridgeline__label,
+  .#{$prefix}--viz-ridgeline__row--selected .#{$prefix}--viz-ridgeline__label {
+    font-weight: 600;
+  }
+
+  .#{$prefix}--viz-ridgeline__row--active .#{$prefix}--viz-ridgeline__area,
+  .#{$prefix}--viz-ridgeline__row--selected .#{$prefix}--viz-ridgeline__area {
+    fill-opacity: 0.7;
+  }
+
+  .#{$prefix}--viz-ridgeline__row--selected .#{$prefix}--viz-ridgeline__line {
+    stroke: $ui-05;
+    stroke-width: 2;
+  }
+
+  .#{$prefix}--viz-ridgeline--emphasis
+    .#{$prefix}--viz-ridgeline__row:not(.#{$prefix}--viz-ridgeline__row--active) {
+    opacity: 0.4;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-ridgeline__row {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-ridgeline__mask,
+    .#{$prefix}--viz-ridgeline__area {
+      fill: Canvas;
+    }
+
+    .#{$prefix}--viz-ridgeline__line {
+      stroke: CanvasText;
+    }
+
+    .#{$prefix}--viz-ridgeline__row--selected .#{$prefix}--viz-ridgeline__line {
+      stroke: Highlight;
+    }
+  }
+}
+
+@include exports("viz-ridgeline-chart") {
+  @include viz-ridgeline-chart;
+}

@@ -77,6 +77,7 @@ export { default as RadialProgress } from "./RadialProgress/RadialProgress.svelt
 export { default as RangeIndicator } from "./RangeIndicator/RangeIndicator.svelte";
 export { default as RankBars } from "./RankBars/RankBars.svelte";
 export { default as RetentionChart } from "./RetentionChart/RetentionChart.svelte";
+export { default as RidgelineChart } from "./RidgelineChart/RidgelineChart.svelte";
 export { default as ScatterChart } from "./ScatterChart/ScatterChart.svelte";
 export { default as SegmentedProgress } from "./SegmentedProgress/SegmentedProgress.svelte";
 export { default as SequenceDiagram } from "./SequenceDiagram/SequenceDiagram.svelte";
