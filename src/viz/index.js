@@ -170,6 +170,7 @@ export { upset } from "./utils/upset.js";
 export { allocateCells, layoutCells } from "./utils/waffle.js";
 export { layoutWords } from "./utils/word-cloud.js";
 export { default as VarianceIndicator } from "./VarianceIndicator/VarianceIndicator.svelte";
+export { default as ViolinPlot } from "./ViolinPlot/ViolinPlot.svelte";
 export { default as WaffleChart } from "./WaffleChart/WaffleChart.svelte";
 export { default as WaterfallChart } from "./WaterfallChart/WaterfallChart.svelte";
 export { default as WinLoss } from "./WinLoss/WinLoss.svelte";
