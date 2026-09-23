@@ -519,6 +519,32 @@
     opacity: 0.3;
   }
 
+  // Density under a scatter: hexagons colored by count, or isolines.
+  .#{$prefix}--viz-hexbin__cell {
+    fill: var(--bx-viz-color);
+    stroke: $ui-background;
+    stroke-width: 0.5;
+  }
+
+  .#{$prefix}--viz-hexbin__cell--active {
+    stroke: $ui-05;
+    stroke-width: 1.5;
+  }
+
+  .#{$prefix}--viz-contours__line {
+    fill: none;
+    stroke: var(--bx-viz-color);
+    stroke-linecap: round;
+    stroke-width: 1.5;
+  }
+
+  // Points behind a density layer are a faint texture, not the picture.
+  .#{$prefix}--viz-points--behind
+    .#{$prefix}--viz-points__point:not(.#{$prefix}--viz-points__point--active) {
+    fill-opacity: 0.18;
+    stroke: none;
+  }
+
   .#{$prefix}--viz-boxes__box--dimmed {
     opacity: 0.3;
   }

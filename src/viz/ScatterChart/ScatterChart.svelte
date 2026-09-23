@@ -29,6 +29,35 @@
   /** Specify the radius, in pixels, when there is no `size` */
   export let radius = 4;
 
+  /**
+   * Specify a density layer for a crowded scatter: hexagons colored by
+   * count, or contour lines of a smoothed density.
+   * @type {"none" | "hexbin" | "contour"}
+   */
+  export let density = "none";
+
+  /** Specify the hexagon radius, in pixels, for `density="hexbin"` */
+  export let hexSize = 12;
+
+  /** Specify how many contour levels to draw for `density="contour"` */
+  export let contourLevels = 6;
+
+  /** Specify the contour smoothing bandwidth, in pixels */
+  export let bandwidth = 20;
+
+  /**
+   * Specify the sequential hue of the density layer.
+   * @type {import("../utils/tokens.js").VizSequentialHue}
+   */
+  export let densityHue = "blue";
+
+  /**
+   * Specify where the points sit against a density layer: faded behind
+   * it, in front of it, or not drawn. Hover and keyboard still find them.
+   * @type {"behind" | "front" | "none"}
+   */
+  export let points = "behind";
+
   /** Specify the label of the size in the tooltip */
   export let sizeLabel = "Size";
 
@@ -94,7 +123,9 @@
 
   import Chart from "../Chart/Chart.svelte";
   import ChartAxis from "../Chart/ChartAxis.svelte";
+  import ChartContours from "../Chart/ChartContours.svelte";
   import ChartGrid from "../Chart/ChartGrid.svelte";
+  import ChartHexbin from "../Chart/ChartHexbin.svelte";
   import ChartLegend from "../Chart/ChartLegend.svelte";
   import ChartPoints from "../Chart/ChartPoints.svelte";
   import ChartToolbar from "../Chart/ChartToolbar.svelte";
@@ -128,7 +159,22 @@
   {/if}
   <ChartAxis position="bottom" title={xTitle} />
   <ChartAxis position="left" title={yTitle} />
-  <ChartPoints {radius} {size} {sizeRange} />
+  <!-- The density layer is drawn first, so points sit over it unless
+       they are hidden. Hidden points still drive hover and the keyboard. -->
+  {#if density === "hexbin"}
+    <ChartHexbin radius={hexSize} hue={densityHue} />
+  {:else if density === "contour"}
+    <ChartContours levels={contourLevels} {bandwidth} hue={densityHue} />
+  {/if}
+  <ChartPoints
+    {radius}
+    {size}
+    {sizeRange}
+    class={density !== "none" && points === "behind"
+      ? "bx--viz-points--behind"
+      : undefined}
+    hidden={density !== "none" && points === "none"}
+  />
   <slot />
   <svelte:fragment slot="toolbar">
     {#if toolbar}

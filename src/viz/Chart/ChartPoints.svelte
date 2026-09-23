@@ -26,6 +26,12 @@
    */
   export let series = undefined;
 
+  /**
+   * Set to `true` to draw nothing while still answering hover and the
+   * keyboard, as under a density layer that stands in for the points.
+   */
+  export let hidden = false;
+
   import { getContext, onMount } from "svelte";
   import { toAccessor } from "../utils/accessor.js";
   import { CHART_CONTEXT } from "./context.js";
@@ -60,15 +66,18 @@
   {...$$restProps}
 >
   {#each circles as circle (circle.key)}
-    <circle
-      class:bx--viz-points__point={true}
-      class:bx--viz-points__point--active={circle.key === active}
-      class:bx--viz-points__point--dimmed={active !== null &&
-        circle.key !== active}
-      cx={circle.cx}
-      cy={circle.cy}
-      r={circle.r}
-      style:--bx-viz-color={circle.color}
-    />
+    {#if !hidden || circle.key === active}
+      <circle
+        class:bx--viz-points__point={true}
+        class:bx--viz-points__point--active={circle.key === active}
+        class:bx--viz-points__point--dimmed={!hidden &&
+          active !== null &&
+          circle.key !== active}
+        cx={circle.cx}
+        cy={circle.cy}
+        r={circle.r}
+        style:--bx-viz-color={circle.color}
+      />
+    {/if}
   {/each}
 </g>
