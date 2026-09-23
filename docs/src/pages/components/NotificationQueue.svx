@@ -55,6 +55,14 @@ Notifications are deduplicated by id. Adding a notification with an id that alre
 
 <FileSource src="/framed/NotificationQueue/NotificationQueueDeduplication" />
 
+### Collapse duplicates
+
+Notifications without a shared id stack even when their text is identical. Set `collapseDuplicates` to merge a new notification with the same `kind`, `title`, and `subtitle` as a visible one into that row instead. The row's title shows a count, for example "Connection lost (3)", its timeout restarts, and `add` returns the existing row's id.
+
+Click "Add duplicate" several times: one toast counts up instead of stacking. "Add different" gets its own row.
+
+<FileSource src="/framed/NotificationQueue/NotificationQueueCollapseDuplicates" />
+
 ### Update
 
 Use `update(id, patch)` to change an existing notification in place. The patch merges into the matching notification, useful for reflecting progress (for example, transitioning a loading toast to success without removing and re-adding it).
