@@ -56,6 +56,7 @@
     StackedBar,
     StateTimeline,
     SunburstChart,
+    TargetIndicator,
     TileGridMap,
     TreeChart,
     TreemapChart,
@@ -431,6 +432,14 @@
     max={30000}
     label="Revenue against plan"
     data-testid="variance"
+  />
+
+  <TargetIndicator
+    value={84}
+    target={100}
+    expected={78}
+    label="Quota attainment"
+    showValue
   />
 
   <WinLoss data={[1, 1, -1, 0, 1]} label="Last 5 experiments" showValue />
