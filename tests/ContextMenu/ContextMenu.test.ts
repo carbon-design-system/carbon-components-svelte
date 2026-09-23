@@ -172,6 +172,50 @@ describe("ContextMenu", () => {
     expect(options[0]).toHaveFocus();
   });
 
+  it("should move focus to the option matching a typed character", async () => {
+    render(ContextMenu, { props: { open: true } });
+
+    const menu = screen.getAllByRole("menu")[0];
+    menu.focus();
+
+    const options = screen.getAllByRole("menuitem");
+
+    await user.keyboard("{ArrowDown}");
+    expect(options[0]).toHaveFocus();
+
+    // All three options start with "o", so typing "o" again cycles
+    // forward from the currently-focused option to the next match.
+    await user.keyboard("o");
+    expect(options[1]).toHaveFocus();
+  });
+
+  it("should scope typeahead search to the open submenu's own options", async () => {
+    render(ContextMenu, {
+      props: { open: true, withSubmenu: true, x: 100, y: 100 },
+    });
+
+    const submenuTrigger = screen.getByRole("menuitem", {
+      name: "Option with submenu",
+    });
+    submenuTrigger.focus();
+    await user.keyboard("{ArrowRight}");
+
+    const submenuOption1 = screen.getByRole("menuitem", {
+      name: "Submenu option 1",
+    });
+    expect(submenuOption1).toHaveFocus();
+
+    // Both submenu options start with "s", so typing "s" again cycles
+    // forward to "Submenu option 2". Only the open submenu's items are
+    // searched, not the root level's options.
+    await user.keyboard("s");
+
+    const submenuOption2 = screen.getByRole("menuitem", {
+      name: "Submenu option 2",
+    });
+    expect(submenuOption2).toHaveFocus();
+  });
+
   it("should handle custom target", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(ContextMenu);

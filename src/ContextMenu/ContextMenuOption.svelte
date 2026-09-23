@@ -86,7 +86,9 @@
   import CaretRight from "../icons/CaretRight.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
   import { clampIndex } from "../utils/clamp-index.js";
+  import { debounce } from "../utils/debounce.js";
   import { createSubmenuHoverIntent } from "../utils/submenu-hover-intent.js";
+  import { typeaheadIndex } from "../utils/typeahead.js";
   import { uniqueId } from "../utils/unique-id.js";
   import ContextMenu from "./ContextMenu.svelte";
 
@@ -109,6 +111,14 @@
   let submenuPosition = [0, 0];
   /** @type {HTMLUListElement | null} */
   let submenuRef = null;
+  let typeaheadBuffer = "";
+
+  const TYPEAHEAD_DELAY = 500;
+
+  // Clear the typeahead buffer once the user stops typing for TYPEAHEAD_DELAY ms.
+  const resetTypeaheadBuffer = debounce(() => {
+    typeaheadBuffer = "";
+  }, TYPEAHEAD_DELAY);
 
   const hoverIntent = createSubmenuHoverIntent(
     (value) => {
@@ -116,6 +126,17 @@
     },
     { openDelay: moderate01, closeDelay },
   );
+
+  /**
+   * @param {HTMLElement} item
+   */
+  function itemToString(item) {
+    return (
+      item.querySelector(".bx--menu-option__label")?.textContent ??
+      item.textContent ??
+      ""
+    ).trim();
+  }
 
   const unsubPosition = ctx.position.subscribe((position) => {
     rootMenuPosition = position;
@@ -165,6 +186,7 @@
       if (unsubCurrentIds) unsubCurrentIds();
       if (unsubCurrentId) unsubCurrentId();
       hoverIntent.cancel();
+      resetTypeaheadBuffer.cancel();
     };
   });
 
@@ -262,6 +284,26 @@
         if (options.length > 0) focusIndex = 0;
       } else if (event.key === "End" && options.length > 0) {
         focusIndex = options.length - 1;
+      } else if (
+        event.key.length === 1 &&
+        event.key !== " " &&
+        !event.ctrlKey &&
+        !event.metaKey &&
+        !event.altKey
+      ) {
+        // WAI-ARIA APG menu first-character navigation, scoped to this
+        // submenu's own items (`options`) so it doesn't affect the parent
+        // level's typeahead search.
+        event.preventDefault();
+        typeaheadBuffer += event.key.toLowerCase();
+        resetTypeaheadBuffer();
+        focusIndex = typeaheadIndex({
+          items: options,
+          query: typeaheadBuffer,
+          itemToString,
+          index: focusIndex,
+          isDisabled: (item) => item.getAttribute("aria-disabled") === "true",
+        });
       }
 
       if (options[focusIndex]) options[focusIndex].focus();
