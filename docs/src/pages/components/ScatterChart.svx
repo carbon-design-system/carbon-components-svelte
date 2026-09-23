@@ -90,6 +90,14 @@ Above a few thousand points, dots pile up and the picture lies. Set `density` to
 
 `hexSize`, `contourLevels`, and `bandwidth` (in pixels) tune the layer, and `densityHue` picks its sequential ramp. The marks are `ChartHexbin` and `ChartContours`, so any chart can compose them.
 
+## Many points
+
+Above about five thousand points, SVG elements cost more to lay out than they are worth. `renderer="auto"` paints the points onto a canvas behind the chart past `canvasThreshold`, one path per series, and repaints only when the data, the scales, or the visible series change. Hover, the keyboard, the tooltip, the legend, the data table, and image export are unchanged: only the hovered point is an element, drawn on top, while the rest of the layer fades. Set `renderer` to `"canvas"` or `"svg"` to decide yourself.
+
+<ScatterChart data={crowd} x="cpu" y="latency" renderer="canvas" radius={2.5} title="Latency against CPU, painted" xTitle="CPU %" yTitle="Latency (ms)" legend={false} height={260} />
+
+Points painted on a canvas take the same tokens as the SVG marks, so themes and forced colors apply. They do not animate, and the server renders the axes with an empty plot until the page hydrates.
+
 ## Single series
 
 <ScatterChart data={instances.filter((row) => row.tier === "Standard")} x="cpu" y="latency" title="Standard tier" legend={false} height={240} />

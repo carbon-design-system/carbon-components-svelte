@@ -1,5 +1,5 @@
 ---
-components: ["Chart", "ChartAxis", "ChartGrid", "ChartLine", "ChartArea", "ChartBars", "ChartBins", "ChartBoxes", "ChartCandles", "ChartViolins", "ChartSwarm", "ChartDumbbells", "ChartLollipops", "ChartPoints", "ChartRuler", "ChartTooltip", "ChartTooltipRow", "ChartLegend", "ChartThreshold", "ChartMarker", "ChartBand", "ChartAnomalies", "ChartToolbar", "ChartDataTable", "ChartZoomBar", "ChartWaterfall"]
+components: ["Chart", "ChartAxis", "ChartGrid", "ChartLine", "ChartArea", "ChartBars", "ChartBins", "ChartBoxes", "ChartCandles", "ChartViolins", "ChartSwarm", "ChartHexbin", "ChartContours", "ChartDumbbells", "ChartLollipops", "ChartPoints", "ChartRuler", "ChartTooltip", "ChartTooltipRow", "ChartLegend", "ChartThreshold", "ChartMarker", "ChartBand", "ChartAnomalies", "ChartToolbar", "ChartDataTable", "ChartZoomBar", "ChartWaterfall"]
 description: Chart is the root that chart primitives compose inside. It turns long format rows into series, scales, and a plot box, and shares them with the marks you place in it.
 ---
 
