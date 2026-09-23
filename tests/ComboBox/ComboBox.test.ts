@@ -737,6 +737,90 @@ describe("ComboBox", () => {
     expect(container.querySelectorAll('[role="option"]')).toHaveLength(1);
   });
 
+  describe("selection cleared announcement", () => {
+    const getStatus = () => screen.getByRole("status");
+
+    it("renders an empty status region", () => {
+      render(ComboBox);
+
+      expect(getStatus()).toHaveTextContent("");
+    });
+
+    it("announces clearing via the clear button", async () => {
+      render(ComboBox, { props: { selectedId: "1" } });
+
+      await user.click(getClearButton());
+
+      await waitFor(() =>
+        expect(getStatus()).toHaveTextContent("Selection cleared"),
+      );
+    });
+
+    it("announces clearing a selection via Escape with the menu open", async () => {
+      render(ComboBox, { props: { selectedId: "1" } });
+
+      await user.click(getInput());
+      expect(screen.getByRole("listbox")).toBeInTheDocument();
+      await user.keyboard("{Escape}");
+
+      await waitFor(() =>
+        expect(getStatus()).toHaveTextContent("Selection cleared"),
+      );
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    });
+
+    it("stays silent when Escape clears typed text without a selection", async () => {
+      render(ComboBox);
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "sl");
+      await user.keyboard("{Escape}");
+      await tick();
+
+      expect(getStatus()).toHaveTextContent("");
+    });
+
+    it("announces a programmatic clear()", async () => {
+      render(ComboBoxCustom, { props: { selectedId: "1" } });
+
+      await user.click(screen.getByRole("button", { name: "Clear" }));
+
+      await waitFor(() =>
+        expect(getStatus()).toHaveTextContent("Selection cleared"),
+      );
+    });
+
+    it("uses selectionClearedText", async () => {
+      render(ComboBoxReal, {
+        props: {
+          items: [
+            { id: "0", text: "Slack" },
+            { id: "1", text: "Email" },
+          ],
+          selectedId: "1",
+          selectionClearedText: "Channel cleared",
+        },
+      });
+
+      await user.click(getClearButton());
+
+      await waitFor(() =>
+        expect(getStatus()).toHaveTextContent("Channel cleared"),
+      );
+    });
+
+    it("stays silent when readonly", async () => {
+      render(ComboBox, { props: { readonly: true, selectedId: "1" } });
+
+      getInput().focus();
+      await user.keyboard("{Escape}");
+      await tick();
+
+      expect(getStatus()).toHaveTextContent("");
+    });
+  });
+
   it("should clear input when clicking clear button", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(ComboBox, { props: { selectedId: "1" } });
