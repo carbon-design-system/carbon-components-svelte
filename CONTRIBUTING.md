@@ -336,6 +336,7 @@ Use a framed example whenever the demo contains script logic (state, handlers, a
 - Do not add JSDoc to framed examples. They are usage demos, not the public API. Save typed JSDoc for the components under `src/`.
 - Add short, concise, high-value code comments only where they earn their place, such as flagging that demo code is not production guidance: `// For demo purposes only: NEVER hardcode secrets in production.` Skip comments that restate the code.
 - Simulate API or async behavior with `await new Promise((resolve) => setTimeout(resolve, 300))` rather than wiring up a real network call. See [`CopyInputAsync.svelte`](docs/src/pages/framed/CopyInput/CopyInputAsync.svelte).
+- Wrap code that only works around the docs site itself (such as its router intercepting `history`) in `// docs-only:start` and `// docs-only:end` (or `<!-- docs-only:start -->` / `<!-- docs-only:end -->` in markup). The code still runs in the frame but is stripped from the displayed source and the generated Markdown docs. See [`TabsQueryString.svelte`](docs/src/pages/framed/Tabs/TabsQueryString.svelte).
 
 Other patterns:
 

@@ -17,6 +17,7 @@ import Prism from "prismjs";
 import rehypeSlug from "rehype-slug";
 import { parse } from "svelte/compiler";
 import visit from "unist-util-visit";
+import { stripDocsOnly } from "./scripts/strip-docs-only.ts";
 import componentApi from "./src/COMPONENT_API.json" with { type: "json" };
 import "prismjs/components/prism-markup.js";
 import "prismjs/components/prism-css.js";
@@ -285,7 +286,7 @@ function plugin() {
       const src = srcMatch ? srcMatch[1] : "";
 
       const filePath = path.join(__dirname, "src/pages", `${src}.svelte`);
-      const sourceCode = fs.readFileSync(filePath, "utf-8");
+      const sourceCode = stripDocsOnly(fs.readFileSync(filePath, "utf-8"));
       const mtimeMs = fs.statSync(filePath).mtimeMs;
       const { formattedCode, highlightedCode } =
         await formatAndHighlightFileSourceSvelte(src, sourceCode, mtimeMs);
