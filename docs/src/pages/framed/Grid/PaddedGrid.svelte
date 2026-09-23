@@ -1,11 +1,11 @@
 <script>
-  import { Column, Grid, Row, Stack } from "carbon-components-svelte";
+  import { Box, Column, Grid, Row, Stack } from "carbon-components-svelte";
 </script>
 
 <Stack gap={5}>
-  <div style="padding: var(--cds-spacing-05)">
+  <Box padding={5}>
     Adding padding to Grid applies it to columns in all rows:
-  </div>
+  </Box>
 
   <Grid padding>
     <Row>
@@ -16,9 +16,7 @@
     </Row>
   </Grid>
 
-  <div style="padding: var(--cds-spacing-05)">
-    Adding padding to a Row only applies to its columns:
-  </div>
+  <Box padding={5}> Adding padding to a Row only applies to its columns: </Box>
 
   <Grid>
     <Row padding>
@@ -35,9 +33,9 @@
     </Row>
   </Grid>
 
-  <div style="padding: var(--cds-spacing-05)">
+  <Box padding={5}>
     Adding padding to a specific column only applies it to the column:
-  </div>
+  </Box>
 
   <Grid>
     <Row>

@@ -1,5 +1,5 @@
 <script>
-  import { Button, ImageLoader } from "carbon-components-svelte";
+  import { Box, Button, ImageLoader, Stack } from "carbon-components-svelte";
 
   const images = [
     {
@@ -17,15 +17,17 @@
   $: image = images[index];
 </script>
 
-<Button
-  kind="ghost"
-  on:click={() => {
-    index = index === 0 ? 1 : 0;
-  }}
->
-  Toggle image
-</Button>
+<Stack gap={5} align="start">
+  <Button
+    kind="ghost"
+    on:click={() => {
+      index = index === 0 ? 1 : 0;
+    }}
+  >
+    Toggle image
+  </Button>
 
-<div style:margin-top="1rem" style:width="100%" style:max-width="120px">
-  <ImageLoader ratio="1x1" fadeIn src={image.src} alt={image.alt} />
-</div>
+  <Box width="100%" maxWidth="120px">
+    <ImageLoader ratio="1x1" fadeIn src={image.src} alt={image.alt} />
+  </Box>
+</Stack>

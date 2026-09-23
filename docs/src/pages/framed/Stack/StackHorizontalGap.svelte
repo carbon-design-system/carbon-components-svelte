@@ -4,7 +4,7 @@
   let gap = 5;
 </script>
 
-<div style="margin-bottom: 1.5rem">
+<Stack gap={6}>
   <Slider
     labelText="Gap"
     min={0}
@@ -13,10 +13,10 @@
     maxLabel="13"
     bind:value={gap}
   />
-</div>
 
-<Stack orientation="horizontal" {gap}>
-  <div>Item 1</div>
-  <div>Item 2</div>
-  <div>Item 3</div>
+  <Stack orientation="horizontal" {gap}>
+    <div>Item 1</div>
+    <div>Item 2</div>
+    <div>Item 3</div>
+  </Stack>
 </Stack>

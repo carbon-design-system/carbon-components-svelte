@@ -1,11 +1,11 @@
 <script>
-  import { Column, Grid, Row, Stack } from "carbon-components-svelte";
+  import { Box, Column, Grid, Row, Stack } from "carbon-components-svelte";
 </script>
 
 <Stack gap={5}>
-  <div style="padding: var(--cds-spacing-05)">
+  <Box padding={5}>
     Adding noGutter to Grid removes the gutter from every column:
-  </div>
+  </Box>
 
   <Grid noGutter>
     <Row>
@@ -16,10 +16,10 @@
     </Row>
   </Grid>
 
-  <div style="padding: var(--cds-spacing-05)">
+  <Box padding={5}>
     Adding noGutterLeft or noGutterRight to individual columns removes only that
     side's gutter—useful for flushing a column against a page edge or divider:
-  </div>
+  </Box>
 
   <Grid>
     <Row>
