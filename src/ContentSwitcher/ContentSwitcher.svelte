@@ -143,7 +143,10 @@
       selectedId = id;
       return;
     }
-    selectedIndex = switches.map(({ id }) => id).indexOf(id);
+    const index = switches.findIndex((s) => s.id === id);
+    // Ignore a select that lands before this switch's batched registration flushes.
+    if (index === -1) return;
+    selectedIndex = index;
   }
 
   /**

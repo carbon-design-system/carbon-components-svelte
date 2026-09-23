@@ -58,11 +58,25 @@
 
   const hasIcon = icon !== undefined;
 
+  // Last `selected` value seen here, so the block below reacts to caller writes
+  // and not to the currentId echo.
+  let prevSelected = selected;
+
   ctx.add({ id, text, selected, icon: hasIcon });
 
   const unsubscribe = ctx.currentId.subscribe((currentId) => {
-    selected = currentId === id;
+    selected = prevSelected = currentId === id;
   });
+
+  $: if (selected !== prevSelected) {
+    prevSelected = selected;
+    if (selected) {
+      ctx.update(id);
+    } else if (get(ctx.currentId) === id) {
+      // A content switcher always has one selected switch.
+      selected = prevSelected = true;
+    }
+  }
 
   // Icon-only switches show `text` as a portalled tooltip on hover/focus.
   // The portal keeps the tooltip from being clipped by overflow ancestors.
