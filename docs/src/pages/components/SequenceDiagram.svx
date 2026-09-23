@@ -1,0 +1,52 @@
+---
+components: ["SequenceDiagram"]
+description: Sequence diagram shows who sends what to whom, in order, as arrows between lifelines, drawn from rows of data rather than a text grammar.
+---
+
+<script>
+  import { SequenceDiagram } from "carbon-components-svelte/viz";
+
+  const order = [
+    { from: "browser", to: "api", msg: "POST /orders" },
+    { from: "api", to: "auth", msg: "verify token" },
+    { from: "auth", to: "api", msg: "claims", kind: "return" },
+    { from: "api", to: "api", msg: "validate cart" },
+    { from: "api", to: "postgres", msg: "INSERT order" },
+    { from: "postgres", to: "api", msg: "order id", kind: "return" },
+    { from: "api", to: "kafka", msg: "order.created" },
+    { from: "api", to: "browser", msg: "201 Created", kind: "return" },
+  ];
+  const retry = [
+    { from: "worker", to: "payments", msg: "charge", at: 1 },
+    { from: "payments", to: "worker", msg: "503", kind: "return", at: 2 },
+    { from: "worker", to: "worker", msg: "back off 2s", at: 3 },
+    { from: "worker", to: "payments", msg: "charge, attempt 2", at: 4 },
+    { from: "payments", to: "worker", msg: "200", kind: "return", at: 5 },
+  ];
+</script>
+
+`SequenceDiagram` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+Actors stand across the top, each with a lifeline down the page, and every message is an arrow from its sender to its receiver, one row each, in order. It takes rows rather than a diagram language, so a trace or an event log can draw itself.
+
+## Basic
+
+Pass one row per message with `from`, `to`, and `label` accessors. Actors appear as first seen; set `kind` and mark replies `"return"` to draw them dashed. A message an actor sends itself is a loop beside its lifeline.
+
+<SequenceDiagram data={order} from="from" to="to" label="msg" kind="kind" title="Create an order" />
+
+## Actors and order
+
+Set `actors` to fix the order across the top, and `order` to sort the messages by a field, such as a timestamp, rather than by their position in the data.
+
+<SequenceDiagram data={retry} from="from" to="to" label="msg" kind="kind" order="at" actors={["payments", "worker"]} title="Retry a charge" />
+
+## Size
+
+`actorWidth`, `actorGap`, and `rowHeight` set the geometry, and the diagram scales down with its container.
+
+<SequenceDiagram data={order} from="from" to="to" label="msg" kind="kind" actorWidth={96} actorGap={56} rowHeight={32} title="Create an order, compact" />
+
+## Accessibility
+
+The diagram is a single tab stop. The arrow keys move message by message, Home and End jump to the ends, Enter or Space selects, and Escape clears. Each message is announced as "3., row, from db to api, returns". The figure also holds a visually hidden ordered list of every message in the same words, so the whole exchange reads as prose.

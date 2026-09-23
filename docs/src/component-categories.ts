@@ -174,6 +174,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "RankBars",
       "RetentionChart",
       "ScatterChart",
+      "SequenceDiagram",
       "ShareOfTotal",
       "SmallMultiples",
       "SpanWaterfall",
