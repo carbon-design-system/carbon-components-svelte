@@ -402,6 +402,44 @@ describe("StructuredList", () => {
     expect(consoleLog).toHaveBeenCalledWith("sort");
   });
 
+  it("should switch input type and body role when `multiple` changes", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    const { container, rerender } = render(StructuredList, {
+      props: { selection: true, multiple: false, selected: "row-2-value" },
+    });
+    const body = container.querySelector(".bx--structured-list-tbody");
+
+    expect(screen.getAllByRole("radio")).toHaveLength(3);
+    expect(body).toHaveAttribute("role", "radiogroup");
+
+    consoleLog.mockClear();
+    await rerender({ multiple: true });
+
+    const checkboxes = screen.getAllByRole("checkbox");
+    expect(checkboxes).toHaveLength(3);
+    expect(screen.queryAllByRole("radio")).toHaveLength(0);
+    expect(body).toHaveAttribute("role", "group");
+    expect(checkboxes[1]).toBeChecked();
+    expect(consoleLog).not.toHaveBeenCalledWith("change", expect.anything());
+
+    await user.click(checkboxes[0]);
+    expect(consoleLog).toHaveBeenCalledWith("change", [
+      "row-2-value",
+      "row-1-value",
+    ]);
+
+    consoleLog.mockClear();
+    await rerender({ multiple: false });
+
+    const radios = screen.getAllByRole("radio");
+    expect(radios).toHaveLength(3);
+    expect(body).toHaveAttribute("role", "radiogroup");
+    expect(radios[1]).toBeChecked();
+    expect(radios[0]).not.toBeChecked();
+    expect(screen.getByTestId("value").textContent).toBe("row-2-value");
+    expect(consoleLog).not.toHaveBeenCalledWith("change", expect.anything());
+  });
+
   it("should support multi-select via the `multiple` prop", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(StructuredListMultiple);

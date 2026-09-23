@@ -28,20 +28,20 @@
   export const tabindex = "0";
 
   import { getContext } from "svelte";
-  import { writable } from "svelte/store";
+  import { readable, writable } from "svelte/store";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import StructuredListCell from "./StructuredListCell.svelte";
 
   const ctx = getContext("carbon:StructuredListWrapper");
-  const selection = ctx?.selection ?? false;
-  const icon = ctx?.icon ?? CheckmarkFilled;
-  const multiple = ctx?.multiple ?? false;
+  const selection = ctx?.selection ?? readable(false);
+  const icon = ctx?.icon ?? readable(CheckmarkFilled);
+  const multiple = ctx?.multiple ?? readable(false);
   // Standalone (no wrapper context) never matches, same as StructuredListInput.
   const selectedValue = ctx?.selectedValue ?? writable(undefined);
 
   $: isSelected =
     value !== undefined &&
-    (multiple
+    ($multiple
       ? Array.isArray($selectedValue) && $selectedValue.includes(value)
       : $selectedValue === value);
 </script>
@@ -58,15 +58,15 @@
     on:mouseleave
   >
     <slot />
-    {#if selection}
+    {#if $selection}
       <StructuredListCell style="width: 1px; white-space: nowrap;">
-        <svelte:component this={icon} class="bx--structured-list-svg" />
+        <svelte:component this={$icon} class="bx--structured-list-svg" />
       </StructuredListCell>
     {/if}
   </label>
 {:else}
   <div
-    role={selection ? undefined : "row"}
+    role={$selection ? undefined : "row"}
     class:bx--structured-list-row={true}
     class:bx--structured-list-row--header-row={head}
     class:bx--structured-list-row--selected={isSelected}
@@ -77,7 +77,7 @@
     on:mouseleave
   >
     <slot />
-    {#if selection && head}
+    {#if $selection && head}
       <StructuredListCell head style="width: 1px;">
         <span class:bx--visually-hidden={true}>Select row</span>
       </StructuredListCell>

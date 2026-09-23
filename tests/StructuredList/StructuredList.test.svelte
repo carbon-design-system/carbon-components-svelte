@@ -11,6 +11,7 @@
   export let condensed: ComponentProps<StructuredList>["condensed"] = false;
   export let flush: ComponentProps<StructuredList>["flush"] = false;
   export let selection: ComponentProps<StructuredList>["selection"] = false;
+  export let multiple: ComponentProps<StructuredList>["multiple"] = false;
   export let sortable = false;
 </script>
 
@@ -19,6 +20,7 @@
   {condensed}
   {flush}
   {selection}
+  {multiple}
   on:click={() => {
     console.log("click");
   }}
