@@ -113,6 +113,20 @@
     dispatch("add", files);
     dispatch("change", files);
   }
+
+  // Keep the native input equal to `files` so native form submission posts
+  // exactly the accepted files, whichever way they arrived (drop, browse, or
+  // a programmatic `files` update).
+  $: if (ref && files !== undefined) {
+    if (files.length === 0) ref.value = "";
+    try {
+      const dataTransfer = new DataTransfer();
+      for (const file of files) dataTransfer.items.add(file);
+      ref.files = dataTransfer.files;
+    } catch {
+      // Fail open if DataTransfer API is not supported.
+    }
+  }
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -146,13 +160,6 @@
     if (!disabled) {
       over = false;
       processIncoming([...event.dataTransfer.files]);
-      if (ref) {
-        const dataTransfer = new DataTransfer();
-        for (const file of files) {
-          dataTransfer.items.add(file);
-        }
-        ref.files = dataTransfer.files;
-      }
     }
   }}
 >
