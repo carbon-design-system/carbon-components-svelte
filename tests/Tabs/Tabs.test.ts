@@ -197,7 +197,52 @@ describe("Tabs", () => {
     expect(consoleLog).toHaveBeenCalledWith("change event", 0);
   });
 
+  it("moves ArrowLeft from the focused tab, not the selected one", async () => {
+    render(Tabs);
+    await tick();
+
+    const tab1 = screen.getByRole("tab", { name: "Tab 1" });
+    const tab3 = screen.getByRole("tab", { name: "Tab 3" });
+    tab3.focus();
+
+    await user.keyboard("{ArrowLeft}");
+    expect(tab1).toHaveFocus();
+    expect(tab1).toHaveAttribute("aria-selected", "true");
+    expect(tab3).toHaveAttribute("aria-selected", "false");
+    expect(consoleLog).not.toHaveBeenCalledWith("change event", 2);
+  });
+
+  it("wraps ArrowRight from the focused tab, not the selected one", async () => {
+    render(Tabs);
+    await tick();
+
+    const tab1 = screen.getByRole("tab", { name: "Tab 1" });
+    const tab3 = screen.getByRole("tab", { name: "Tab 3" });
+    tab3.focus();
+
+    await user.keyboard("{ArrowRight}");
+    expect(tab1).toHaveFocus();
+    expect(tab1).toHaveAttribute("aria-selected", "true");
+    expect(tab3).toHaveAttribute("aria-selected", "false");
+  });
+
   describe('activation="manual"', () => {
+    it("moves from the focused tab after focus returns to another tab", async () => {
+      render(Tabs, { props: { activation: "manual" } });
+
+      const tab1 = screen.getByRole("tab", { name: "Tab 1" });
+      const tab3 = screen.getByRole("tab", { name: "Tab 3" });
+      await user.click(tab1);
+
+      await user.keyboard("{ArrowRight}");
+      expect(tab3).toHaveFocus();
+
+      tab1.focus();
+      await user.keyboard("{ArrowRight}");
+      expect(tab3).toHaveFocus();
+      expect(tab1).toHaveAttribute("aria-selected", "true");
+    });
+
     it("ArrowRight moves focus without changing selection", async () => {
       render(Tabs, { props: { activation: "manual" } });
 
