@@ -11,6 +11,7 @@
   export let condensed: ComponentProps<StructuredList>["condensed"] = false;
   export let flush: ComponentProps<StructuredList>["flush"] = false;
   export let selection: ComponentProps<StructuredList>["selection"] = false;
+  export let sortable = false;
 </script>
 
 <StructuredList
@@ -36,7 +37,14 @@
 >
   <StructuredListHead>
     <StructuredListRow head>
-      <StructuredListCell head>Column A</StructuredListCell>
+      <StructuredListCell
+        head
+        {sortable}
+        on:sort={() => {
+          console.log("sort");
+        }}
+        >Column A</StructuredListCell
+      >
       <StructuredListCell head>Column B</StructuredListCell>
       <StructuredListCell head>Column C</StructuredListCell>
     </StructuredListRow>

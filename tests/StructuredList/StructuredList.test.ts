@@ -312,6 +312,39 @@ describe("StructuredList", () => {
     expect(consoleLog).not.toHaveBeenCalledWith("change", expect.anything());
   });
 
+  it("should expose aria-sort only on a sortable column header", () => {
+    const { container } = render(StructuredList, {
+      props: { sortable: true },
+    });
+
+    const sortableHeader = container.querySelector(
+      ".bx--structured-list-th--sortable",
+    );
+    expect(sortableHeader).toHaveAttribute("role", "columnheader");
+    expect(sortableHeader).toHaveAttribute("aria-sort", "none");
+  });
+
+  it("should not put aria-sort on a sortable header cell in a selection list", () => {
+    render(StructuredList, {
+      props: { sortable: true, selection: true },
+    });
+
+    const sortButton = screen.getByRole("button", { name: /sort rows/i });
+    const sortHeaderCell = sortButton.closest(
+      ".bx--structured-list-th--sortable",
+    );
+    expect(sortHeaderCell).not.toHaveAttribute("role", "columnheader");
+    expect(sortHeaderCell).not.toHaveAttribute("aria-sort");
+  });
+
+  it("should still fire the sort event when clicked in a selection list", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(StructuredList, { props: { sortable: true, selection: true } });
+
+    await user.click(screen.getByRole("button", { name: /sort rows/i }));
+    expect(consoleLog).toHaveBeenCalledWith("sort");
+  });
+
   it("should support multi-select via the `multiple` prop", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(StructuredListMultiple);
