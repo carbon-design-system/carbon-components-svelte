@@ -291,6 +291,56 @@ test.describe("Data visualization", () => {
     expect(file.length).toBeGreaterThan(20000);
   });
 
+  test("NodeEditor moves a node by dragging it and connects two nodes by dragging from a port", async ({
+    page,
+  }) => {
+    await page.goto("/viz.html");
+    const figure = page
+      .locator("figure")
+      .filter({ hasText: "Pipeline editor" })
+      .last();
+    await figure.scrollIntoViewIfNeeded();
+    type Box = { x: number; y: number; width: number; height: number };
+    const boxOf = async (target: typeof figure) =>
+      (await target.boundingBox()) as Box;
+    const map = figure.locator(".bx--viz-editor__node", { hasText: "map" });
+    const before = await boxOf(map);
+    const grab = {
+      x: before.x + before.width / 2,
+      y: before.y + before.height / 2,
+    };
+    await page.mouse.move(grab.x, grab.y);
+    await page.mouse.down();
+    await page.mouse.move(grab.x + 40, grab.y + 30, { steps: 6 });
+    await page.mouse.move(grab.x + 80, grab.y + 40, { steps: 4 });
+    await page.mouse.up();
+    const after = await boxOf(map);
+    expect(after.x - before.x).toBeGreaterThan(50);
+    expect(after.y - before.y).toBeGreaterThan(20);
+    await expect(figure.locator(".bx--viz-editor__edge")).toHaveCount(1);
+
+    // Drag from map's out port onto sink.
+    const port = map.locator(".bx--viz-editor__port--out");
+    const sink = figure.locator(".bx--viz-editor__node", { hasText: "sink" });
+    const from = await boxOf(port);
+    const to = await boxOf(sink);
+    await page.mouse.move(from.x + from.width / 2, from.y + from.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(to.x + to.width / 2, to.y + to.height / 2, {
+      steps: 8,
+    });
+    await expect(figure.locator(".bx--viz-editor__link")).toBeVisible();
+    await page.mouse.up();
+    await expect(figure.locator(".bx--viz-editor__edge")).toHaveCount(2);
+    await expect(figure.locator("[aria-live]")).toHaveText(
+      /connected map to sink/,
+    );
+
+    // Undo from the control puts the edge back where it was: gone.
+    await figure.getByRole("button", { name: "Undo" }).click();
+    await expect(figure.locator(".bx--viz-editor__edge")).toHaveCount(1);
+  });
+
   test("LineChart zooms by dragging a handle, pans by dragging the window, and resets", async ({
     page,
   }) => {

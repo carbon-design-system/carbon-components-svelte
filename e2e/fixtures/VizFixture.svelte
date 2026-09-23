@@ -44,6 +44,7 @@
     MicroDonut,
     MicroFunnel,
     MicroHistogram,
+    NodeEditor,
     OrgChart,
     ParallelCoordinates,
     RadarChart,
@@ -825,6 +826,19 @@
     y="revenue"
     title="Shape of monthly totals per region"
     height={240}
+  />
+
+  <NodeEditor
+    nodes={[
+      { id: "src", name: "source", x: 0, y: 0 },
+      { id: "map", name: "map", x: 240, y: 0 },
+      { id: "sink", name: "sink", x: 480, y: 0 },
+    ]}
+    edges={[{ source: "src", target: "map" }]}
+    id="id"
+    label="name"
+    title="Pipeline editor"
+    height={260}
   />
 
   <GraphCanvas
