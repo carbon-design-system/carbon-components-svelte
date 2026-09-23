@@ -229,6 +229,8 @@ Besides `matched`, `fuzzyMatch` returns the `indices` of the characters that mat
 
 By default, combobox filtering is synchronous and client-side. Customize the filter logic, label rendering, and when results reset.
 
+While a filter is active, the number of matching options is announced to screen readers once typing pauses. Override the message with `filterResultsText`, a function of the count.
+
 ### Filterable
 
 Enable filtering to let users search through the options.
