@@ -18,6 +18,16 @@ Bind to `page` for the current page number.
 
 <FileSource src="/framed/PaginationNav/PaginationNavReactive" />
 
+## Query string
+
+Keep the current page in the URL so it survives a reload and can be shared.
+`queryParam` returns a store mirrored to a query parameter; bind `page` to it.
+`PaginationNav` does not clamp `page`, so `parse` rejects values below 1 or
+above `total`. Page 1 removes the parameter. In an app with a router, pass the
+router's navigation API as `replace`.
+
+<FileSource src="/framed/PaginationNav/PaginationNavQueryString" />
+
 ## Page count
 
 ### Total pages
