@@ -50,6 +50,7 @@
     RangeIndicator,
     RankBars,
     RetentionChart,
+    RidgelineChart,
     ScatterChart,
     SegmentedProgress,
     SequenceDiagram,
@@ -822,6 +823,14 @@
     y="revenue"
     title="Shape of monthly totals per region"
     height={240}
+  />
+
+  <RidgelineChart
+    data={revenue}
+    x="revenue"
+    series="region"
+    title="Monthly totals per region, as ridges"
+    rowHeight={28}
   />
 
   <BeeswarmChart
