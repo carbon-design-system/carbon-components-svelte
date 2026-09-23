@@ -907,6 +907,60 @@ describe("Dropdown", () => {
     expect(button.getAttribute("aria-activedescendant")).toMatch(/-0$/);
   });
 
+  it.each([
+    { key: "{Home}", selectedId: "1", expected: /-0$/ },
+    { key: "{End}", selectedId: "1", expected: /-2$/ },
+    { key: "{Home}", selectedId: "2", expected: /-0$/ },
+  ])(
+    "should highlight the edge item, not the selection, when $key opens a closed menu (selectedId $selectedId)",
+    async ({ key, selectedId, expected }) => {
+      render(Dropdown, { props: { items, selectedId } });
+
+      const button = screen.getByRole("combobox");
+      button.focus();
+
+      await user.keyboard(key);
+      await tick();
+
+      expect(button).toHaveAttribute("aria-expanded", "true");
+      expect(button.getAttribute("aria-activedescendant")).toMatch(expected);
+    },
+  );
+
+  it("should highlight the last item of a virtualized list when End opens it past the selection", async () => {
+    const largeItems = Array.from({ length: 150 }, (_, i) => ({
+      id: String(i),
+      text: `Item ${i + 1}`,
+    }));
+    render(Dropdown, {
+      props: { items: largeItems, selectedId: "42", virtualize: true },
+    });
+
+    const button = screen.getByRole("combobox");
+    button.focus();
+
+    await user.keyboard("{End}");
+    await tick();
+
+    expect(button.getAttribute("aria-activedescendant")).toMatch(/-149$/);
+    await waitFor(() => {
+      expect(screen.getByRole("option", { name: "Item 150" })).toBeTruthy();
+    });
+  });
+
+  it("should open an empty menu with Home without highlighting anything", async () => {
+    render(Dropdown, { props: { items: [] } });
+
+    const button = screen.getByRole("combobox");
+    button.focus();
+
+    await user.keyboard("{Home}");
+    await tick();
+
+    expect(button).toHaveAttribute("aria-expanded", "true");
+    expect(button).toHaveAttribute("aria-activedescendant", "");
+  });
+
   it("should open the menu on Alt+ArrowDown without moving the highlight", async () => {
     render(Dropdown, { props: { items } });
 
