@@ -1118,6 +1118,43 @@ describe("DataTable", () => {
     expect(selectedRow).toBeInTheDocument();
   });
 
+  it("renders a selection header cell for radio batch selection", () => {
+    const { container } = render(DataTable, {
+      props: { radio: true, batchSelection: true, headers, rows },
+    });
+
+    const headerCells = container.querySelectorAll("thead th");
+    const bodyCells = container.querySelectorAll("tbody tr:first-child td");
+    expect(headerCells).toHaveLength(bodyCells.length);
+    expect(
+      screen.queryByRole("checkbox", { name: "Select all rows" }),
+    ).not.toBeInTheDocument();
+    expect(headerCells[0]).toHaveTextContent("Select row");
+  });
+
+  it("matches header and body cell counts for radio selection", () => {
+    const { container } = render(DataTable, {
+      props: { radio: true, headers, rows },
+    });
+
+    const headerCells = container.querySelectorAll("thead th");
+    const bodyCells = container.querySelectorAll("tbody tr:first-child td");
+    expect(headerCells).toHaveLength(bodyCells.length);
+  });
+
+  it("renders only the select all header cell for checkbox batch selection", () => {
+    const { container } = render(DataTable, {
+      props: { batchSelection: true, headers, rows },
+    });
+
+    expect(
+      screen.getAllByRole("checkbox", { name: "Select all rows" }),
+    ).toHaveLength(1);
+    expect(container.querySelector("thead")).not.toHaveTextContent(
+      "Select row",
+    );
+  });
+
   it("handles non-selectable and non-expandable rows", () => {
     const { container } = render(DataTable, {
       props: {
