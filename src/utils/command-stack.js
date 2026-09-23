@@ -31,11 +31,18 @@ export function createCommandStack(options = {}) {
       // Consecutive commands with the same key fold into one step that
       // undoes back to before the first.
       if (command.key !== undefined && last && last.key === command.key) {
+        const previous = last;
         done[done.length - 1] = {
           key: command.key,
-          label: command.label ?? last.label,
-          do: command.do,
-          undo: last.undo,
+          label: command.label ?? previous.label,
+          do: () => {
+            previous.do();
+            command.do();
+          },
+          undo: () => {
+            command.undo();
+            previous.undo();
+          },
         };
       } else {
         done.push(command);
