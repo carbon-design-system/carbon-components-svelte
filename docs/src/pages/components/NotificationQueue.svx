@@ -85,6 +85,16 @@ Customize the limit with `maxNotifications`.
 
 <FileSource src="/framed/NotificationQueue/NotificationQueueMax" />
 
+### Overflow policy
+
+By default the oldest notification is removed, even if it is an error under newer info toasts. Set `overflowPolicy="low-priority"` to remove `info`, `info-square`, and `success` notifications first, then `warning` and `warning-alt`, and `error` last, choosing the oldest within the same priority. A notification without `kind` counts as an error.
+
+With this policy, a new low-priority notification can be removed as soon as it is added when the queue is full of higher-priority ones. `add` still returns its id, and the queue dispatches `dismiss` for it with the `"overflow"` trigger.
+
+Add a few errors, then some info notifications. With "Low priority first", the errors stay and each new info replaces the previous one. Switch to "Oldest first" to compare.
+
+<FileSource src="/framed/NotificationQueue/NotificationQueueOverflowPolicy" />
+
 ### Remove and clear
 
 Use `remove(id)` to programmatically remove a specific notification, or `clear()` to remove all notifications at once.
