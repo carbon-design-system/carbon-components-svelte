@@ -90,6 +90,17 @@ For dynamic tab sets, bind `selectedId` and give each `Tab` a stable `id`. Selec
 
 <FileSource src="/framed/Tabs/TabsSelectedId" />
 
+### Query string
+
+Keep the selected tab in the URL so it survives a reload and can be shared.
+Bind `selectedId`, read the `tab` query parameter on mount, and write it back
+with `history.replaceState` so switching tabs does not add history entries. Use
+the query string rather than the hash: a hash that matches a tab `id` scrolls
+the page to that tab. In an app with a router, use the router's navigation API
+instead of `history`.
+
+<FileSource src="/framed/Tabs/TabsQueryString" />
+
 ### Manual activation
 
 By default, tabs use automatic activation: arrow keys move focus and select the
