@@ -33,6 +33,7 @@ export { default as ChartTooltipRow } from "./Chart/ChartTooltipRow.svelte";
 export { default as ChartWaterfall } from "./Chart/ChartWaterfall.svelte";
 export { default as ChartZoomBar } from "./Chart/ChartZoomBar.svelte";
 export { CHART_CONTEXT } from "./Chart/context.js";
+export { default as ChordDiagram } from "./ChordDiagram/ChordDiagram.svelte";
 export { default as ChoroplethChart } from "./ChoroplethChart/ChoroplethChart.svelte";
 export { default as CirclePackChart } from "./CirclePackChart/CirclePackChart.svelte";
 export { default as CohortTable } from "./CohortTable/CohortTable.svelte";
