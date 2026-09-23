@@ -22,6 +22,7 @@
   export let itemToString: NonNullable<
     ComponentProps<ComboBox>["itemToString"]
   > = (item: ComboBoxItem) => item.text;
+  export let typeahead = false;
 </script>
 
 <ComboBox
@@ -31,6 +32,7 @@
   {direction}
   {shouldFilterItem}
   {itemToString}
+  {typeahead}
   labelText="Contact with icons"
   placeholder="Select contact method"
   on:select={(e) => {

@@ -1014,6 +1014,124 @@ describe("ComboBox", () => {
     expect(input).toHaveValue("Item Banana");
   });
 
+  describe("typed text matches the itemToString label", () => {
+    const acceptAll = () => true;
+
+    it("selects the item whose custom label is typed, on Enter", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ComboBoxCustom, {
+        props: {
+          itemToString: (item: ComboBoxItem) => `Item ${item.text}`,
+          shouldFilterItem: acceptAll,
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "Item Email");
+      await user.keyboard("{Enter}");
+
+      expect(consoleLog).toHaveBeenCalledWith("select", {
+        selectedId: "1",
+        selectedItem: { id: "1", text: "Email" },
+      });
+      expect(input).toHaveValue("Item Email");
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    });
+
+    it("ignores case and normalizes the value to the label", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ComboBoxCustom, {
+        props: {
+          itemToString: (item: ComboBoxItem) => `Item ${item.text}`,
+          shouldFilterItem: acceptAll,
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "item email");
+      await user.keyboard("{Enter}");
+
+      expect(consoleLog).toHaveBeenCalledWith(
+        "select",
+        expect.objectContaining({ selectedId: "1" }),
+      );
+      expect(input).toHaveValue("Item Email");
+    });
+
+    it("does not throw for items without text", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      type KeyItem = { id: string; key: string };
+      render(ComboBoxCustom, {
+        props: {
+          items: [
+            { id: "0", key: "Slack" },
+            { id: "1", key: "Email" },
+          ] as unknown as ComboBoxItem[],
+          itemToString: (item: ComboBoxItem) =>
+            (item as unknown as KeyItem).key,
+          shouldFilterItem: acceptAll,
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "Email");
+      await user.keyboard("{Enter}");
+
+      expect(consoleLog).toHaveBeenCalledWith(
+        "select",
+        expect.objectContaining({ selectedId: "1" }),
+      );
+      expect(input).toHaveValue("Email");
+    });
+
+    it("does not select a disabled item whose label is typed", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ComboBoxCustom, {
+        props: {
+          itemToString: (item: ComboBoxItem) => `Item ${item.text}`,
+          shouldFilterItem: acceptAll,
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "Item Fax");
+      await user.keyboard("{Enter}");
+
+      expect(consoleLog).not.toHaveBeenCalledWith("select", expect.anything());
+    });
+
+    it("commits a typeahead suggestion with a custom label on Tab", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(ComboBoxCustom, {
+        props: {
+          typeahead: true,
+          items: [
+            { id: "1", text: "Apple" },
+            { id: "2", text: "Banana" },
+          ],
+          itemToString: (item: ComboBoxItem) => `${item.text} (${item.id})`,
+        },
+      });
+
+      const input = getInput();
+      await user.click(input);
+      await user.type(input, "Ap");
+      expect(input).toHaveValue("Apple (1)");
+
+      await user.keyboard("{Tab}");
+
+      expect(consoleLog).toHaveBeenCalledWith("select", {
+        selectedId: "1",
+        selectedItem: { id: "1", text: "Apple" },
+      });
+      expect(input).toHaveValue("Apple (1)");
+    });
+  });
+
   // Regression: ?? for itemToString so item.text "" is used (not id)
   it("should display empty string when item.text is empty (nullish coalescing)", async () => {
     render(ComboBox, {
