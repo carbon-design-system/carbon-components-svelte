@@ -81,6 +81,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   KpiCard: "0.113.0",
   LayeredGraph: "0.113.0",
   GraphCanvas: "0.113.0",
+  NodeEditor: "0.113.0",
   OrgChart: "0.113.0",
   SlopeChart: "0.113.0",
   BumpChart: "0.113.0",

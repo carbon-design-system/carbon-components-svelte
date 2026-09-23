@@ -1,0 +1,64 @@
+---
+components: ["NodeEditor"]
+description: Node editor lets people build a graph by hand, moving nodes on a stage and dragging connections between their ports, with undo and full keyboard control.
+---
+
+<script>
+  import { Tag } from "carbon-components-svelte";
+  import { NodeEditor } from "carbon-components-svelte/viz";
+
+  let nodes = [
+    { id: "orders", name: "orders.csv", kind: "source", x: 0, y: 40 },
+    { id: "customers", name: "customers", kind: "source", x: 0, y: 160 },
+    { id: "clean", name: "clean", kind: "transform", x: 240, y: 40 },
+    { id: "join", name: "join on customer", kind: "transform", x: 480, y: 100 },
+    { id: "enrich", name: "enrich", kind: "transform", x: 720, y: 100 },
+    { id: "warehouse", name: "warehouse", kind: "sink", x: 960, y: 40 },
+    { id: "report", name: "weekly report", kind: "sink", x: 960, y: 160 },
+  ];
+  let edges = [
+    { source: "orders", target: "clean" },
+    { source: "clean", target: "join" },
+    { source: "customers", target: "join" },
+    { source: "join", target: "enrich" },
+    { source: "enrich", target: "warehouse" },
+  ];
+  let selected = { nodes: [], edges: [] };
+  let log = [];
+
+  function onConnect(event) {
+    const target = nodes.find((node) => node.id === event.detail.target);
+    // A source has no input: refuse a connection into it.
+    if (target?.kind === "source") event.preventDefault();
+  }
+  function onChange(event) {
+    log = [event.detail.label, ...log].slice(0, 5);
+  }
+</script>
+
+`NodeEditor` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+It is a [GraphCanvas](/components/GraphCanvas) that edits: drag a node to move it, drag from a node's out port to another node to connect them, sweep a marquee with Shift to select several, and press Delete to remove. Every edit is one undo step, including a whole drag. The graph stays yours: bind `nodes` and `edges`, and the editor writes new rows back, never mutating the ones it was given.
+
+## Basic
+
+Pass `nodes` with an `id`, a `label`, and `x` and `y` keys for their positions, and `edges` read with `source` and `target`. Each node has an `in` port on the left and an `out` port on the right unless `ports` says otherwise. Listen for `connect` and call `preventDefault()` to refuse a connection; here a source refuses inputs.
+
+<NodeEditor bind:nodes bind:edges bind:selected id="id" label="name" title="Pipeline" on:connect={onConnect} on:change={onChange} let:node>
+  <span class="bx--viz-editor__label" slot="node" let:node>
+    {node.label}
+    <Tag size="sm" type={node.datum.kind === "source" ? "blue" : node.datum.kind === "sink" ? "green" : "gray"}>{node.datum.kind}</Tag>
+  </span>
+</NodeEditor>
+
+<p>Last edits: {log.join(", ") || "none yet"}. Selected: {[...selected.nodes, ...selected.edges].join(", ") || "nothing"}.</p>
+
+## Edits and undo
+
+Every change fires `change` with the step's label and its `undo` and `redo`, so the graph can be persisted or replayed elsewhere. Ctrl or Cmd with Z undoes and with Shift or Y redoes, and the controls do the same. The arrange button lays the graph out in ranks, as the layered graph does, in one step. Set `snap` for the grid moves land on, and `readonly` to show a graph that cannot be changed.
+
+<NodeEditor nodes={nodes.slice(0, 4)} edges={edges.slice(0, 3)} id="id" label="name" readonly height={260} minimap={false} title="Read only" />
+
+## Accessibility
+
+The nodes are one tab stop. Arrow keys move between them, Shift with an arrow nudges the focused node by the snap step, Enter or Space with a modifier adds to the selection, and Delete removes what is selected. Press `C` on a node to start a connection from it, move to the target with the arrows, and press Enter to land it, or Escape to give up; the result is announced. `+`, `-`, and `0` zoom in, out, and fit. The figure also holds a visually hidden list of every node and edge.
