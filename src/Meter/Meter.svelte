@@ -35,6 +35,15 @@
   export let errorText = "Error";
 
   /**
+   * Override the value text generated for `aria-valuetext` when `valueText` is not set.
+   * Used only when the value is over capacity or the status is `"warning"` or `"error"`.
+   * @type {(value: number, max: number) => string}
+   */
+  export let valueRangeText = function valueRangeText(value, max) {
+    return `${value.toLocaleString()} of ${max.toLocaleString()}`;
+  };
+
+  /**
    * Specify the warning and error thresholds, in the same units as `value`.
    * @type {MeterThresholds}
    */
@@ -115,6 +124,18 @@
     ]
       .filter(Boolean)
       .join(" ") || undefined;
+  $: statusText =
+    resolvedStatus === "warning"
+      ? warningText
+      : resolvedStatus === "error"
+        ? errorText
+        : undefined;
+  $: resolvedValueText = valueText?.trim()
+    ? valueText
+    : overCapacity || statusText
+      ? valueRangeText(overCapacity ? value : cappedValue, max) +
+        (statusText ? `, ${statusText}` : "")
+      : undefined;
   $: {
     if (prevStatus !== undefined && resolvedStatus !== prevStatus) {
       if (resolvedStatus === "warning") {
@@ -160,7 +181,7 @@
     aria-valuemin={0}
     aria-valuemax={max}
     aria-valuenow={cappedValue}
-    aria-valuetext={valueText || undefined}
+    aria-valuetext={resolvedValueText}
     aria-describedby={describedBy}
   >
     <div class:bx--meter__bar={true} style:transform="scaleX({ratio})"></div>

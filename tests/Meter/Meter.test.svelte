@@ -1,5 +1,9 @@
 <script>
   import Meter from "carbon-components-svelte/Meter/Meter.svelte";
+
+  function shortRangeText(value, max) {
+    return `${value}/${max}`;
+  }
 </script>
 
 <Meter labelText="Storage" value={812} max={1000} data-testid="basic" />
@@ -54,6 +58,14 @@
 
 <Meter
   labelText="Storage"
+  value={1200}
+  max={1000}
+  valueText="812 GB of 1 TB"
+  data-testid="over-capacity-value-text"
+/>
+
+<Meter
+  labelText="Storage"
   value={812}
   max={1000}
   hideLabel
@@ -95,6 +107,15 @@
   thresholds={{ warning: 700, error: 900 }}
   showThresholds
   data-testid="thresholds-both"
+/>
+
+<Meter
+  labelText="Storage"
+  value={960}
+  max={1000}
+  thresholds={{ warning: 800, error: 950 }}
+  errorText="Critical"
+  data-testid="custom-error-text"
 />
 
 <Meter
@@ -144,4 +165,12 @@
   showThresholds
   thresholdsText={() => ""}
   data-testid="empty-thresholds-text"
+/>
+
+<Meter
+  labelText="Storage"
+  value={1200}
+  max={1000}
+  valueRangeText={shortRangeText}
+  data-testid="custom-value-range-text"
 />

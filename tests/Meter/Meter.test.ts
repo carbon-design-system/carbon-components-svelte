@@ -89,6 +89,56 @@ describe("Meter", () => {
     expect(meter).toHaveAttribute("aria-valuenow", "0");
   });
 
+  it("announces the real value and status when over capacity and valueText is unset", () => {
+    render(Meter);
+
+    const meter = within(screen.getByTestId("over-capacity")).getByRole(
+      "meter",
+    );
+    expect(meter).toHaveAttribute("aria-valuetext", "1,200 of 1,000, Error");
+  });
+
+  it("keeps valueText for aria-valuetext even when the value is over capacity", () => {
+    render(Meter);
+
+    const meter = within(
+      screen.getByTestId("over-capacity-value-text"),
+    ).getByRole("meter");
+    expect(meter).toHaveAttribute("aria-valuetext", "812 GB of 1 TB");
+  });
+
+  it("omits aria-valuetext when the value is in range with no thresholds and no valueText", () => {
+    render(Meter);
+
+    const meter = within(screen.getByTestId("basic")).getByRole("meter");
+    expect(meter).not.toHaveAttribute("aria-valuetext");
+  });
+
+  it("appends the derived warning status to aria-valuetext when valueText is unset", () => {
+    render(Meter);
+
+    const meter = within(screen.getByTestId("warning")).getByRole("meter");
+    expect(meter).toHaveAttribute("aria-valuetext", "812 of 1,000, Warning");
+  });
+
+  it("uses a custom errorText in aria-valuetext", () => {
+    render(Meter);
+
+    const meter = within(screen.getByTestId("custom-error-text")).getByRole(
+      "meter",
+    );
+    expect(meter).toHaveAttribute("aria-valuetext", "960 of 1,000, Critical");
+  });
+
+  it("uses a custom valueRangeText in aria-valuetext", () => {
+    render(Meter);
+
+    const meter = within(
+      screen.getByTestId("custom-value-range-text"),
+    ).getByRole("meter");
+    expect(meter).toHaveAttribute("aria-valuetext", "1200/1000, Error");
+  });
+
   it("visually hides only the label text when hideLabel is set", () => {
     render(Meter);
 
