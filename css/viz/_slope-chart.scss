@@ -1,0 +1,125 @@
+/// SlopeChart: two columns of values and a line per series between them,
+/// drawn at a fixed logical size and scaled to the container.
+/// @access private
+/// @group viz
+@mixin viz-slope-chart {
+  .#{$prefix}--viz-slope {
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-slope .#{$prefix}--viz-chart__title {
+    margin-block-end: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--viz-slope__svg {
+    display: block;
+    overflow: visible;
+    block-size: auto;
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--viz-slope__svg:focus {
+    outline: 2px solid $focus;
+    outline-offset: 2px;
+  }
+
+  .#{$prefix}--viz-slope__period {
+    fill: $text-secondary;
+    font-weight: 600;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-slope__column {
+    stroke: $ui-03;
+    stroke-width: 1;
+  }
+
+  .#{$prefix}--viz-slope__series {
+    --bx-viz-color: #{$interactive-04};
+
+    cursor: pointer;
+  }
+
+  // Which way a line went: good, bad, or flat. The chart says which way
+  // is good.
+  .#{$prefix}--viz-slope__series--good {
+    --bx-viz-color: var(--cds-viz-success);
+  }
+
+  .#{$prefix}--viz-slope__series--bad {
+    --bx-viz-color: var(--cds-viz-error);
+  }
+
+  .#{$prefix}--viz-slope__series--flat,
+  .#{$prefix}--viz-slope__series--none {
+    --bx-viz-color: #{$ui-04};
+  }
+
+  .#{$prefix}--viz-slope__hit {
+    stroke: transparent;
+    stroke-width: 12;
+  }
+
+  .#{$prefix}--viz-slope__line {
+    stroke: var(--bx-viz-color);
+    stroke-linecap: round;
+    stroke-width: 2;
+    transition:
+      stroke-width $duration--fast-02 carbon--motion(standard, productive),
+      opacity $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-slope__dot {
+    fill: var(--bx-viz-color);
+    stroke: $ui-background;
+    stroke-width: 1.5;
+  }
+
+  .#{$prefix}--viz-slope__label {
+    fill: $text-primary;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-slope__value {
+    fill: $text-secondary;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .#{$prefix}--viz-slope__series--active .#{$prefix}--viz-slope__line,
+  .#{$prefix}--viz-slope__series--selected .#{$prefix}--viz-slope__line {
+    stroke-width: 3;
+  }
+
+  .#{$prefix}--viz-slope__series--active .#{$prefix}--viz-slope__label,
+  .#{$prefix}--viz-slope__series--selected .#{$prefix}--viz-slope__label {
+    font-weight: 600;
+  }
+
+  .#{$prefix}--viz-slope--emphasis
+    .#{$prefix}--viz-slope__series:not(.#{$prefix}--viz-slope__series--active) {
+    opacity: 0.35;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-slope__line {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-slope__line {
+      stroke: CanvasText;
+    }
+
+    .#{$prefix}--viz-slope__series--selected .#{$prefix}--viz-slope__line {
+      stroke: Highlight;
+    }
+  }
+}
+
+@include exports("viz-slope-chart") {
+  @include viz-slope-chart;
+}

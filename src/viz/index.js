@@ -69,6 +69,7 @@ export { default as RetentionChart } from "./RetentionChart/RetentionChart.svelt
 export { default as ScatterChart } from "./ScatterChart/ScatterChart.svelte";
 export { default as SequenceDiagram } from "./SequenceDiagram/SequenceDiagram.svelte";
 export { default as ShareOfTotal } from "./ShareOfTotal/ShareOfTotal.svelte";
+export { default as SlopeChart } from "./SlopeChart/SlopeChart.svelte";
 export { default as SmallMultiples } from "./SmallMultiples/SmallMultiples.svelte";
 export { default as SpanWaterfall } from "./SpanWaterfall/SpanWaterfall.svelte";
 export { default as Sparkline } from "./Sparkline/Sparkline.svelte";
