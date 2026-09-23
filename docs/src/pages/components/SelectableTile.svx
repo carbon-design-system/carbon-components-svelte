@@ -23,6 +23,25 @@ Group multiple selectable tiles together for multi-selection scenarios.
   </SelectableTile>
 </SelectableTileGroup>
 
+## Selection
+
+Hold <DocKbd label="Shift" /> while clicking a tile, or while pressing <DocKbd label="Enter" /> or <DocKbd label="Space" /> on a focused tile, to apply its new checked state to every tile between it and the last tile toggled. Disabled tiles are skipped.
+
+<SelectableTileGroup legendText="Deployment regions" name="options-range">
+  <SelectableTile value="us-east-1">
+    US East (N. Virginia)
+  </SelectableTile>
+  <SelectableTile value="us-west-2">
+    US West (Oregon)
+  </SelectableTile>
+  <SelectableTile value="eu-central-1">
+    EU Central (Frankfurt)
+  </SelectableTile>
+  <SelectableTile value="ap-south-1">
+    Asia Pacific (Mumbai)
+  </SelectableTile>
+</SelectableTileGroup>
+
 ## Reactive
 
 ### One-way binding
