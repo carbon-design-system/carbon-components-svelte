@@ -97,14 +97,16 @@
    */
   export let target = null;
 
-  import { createEventDispatcher, setContext, tick } from "svelte";
+  import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { derived, writable } from "svelte/store";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
+  import { debounce } from "../utils/debounce.js";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { scrollIntoViewWithinMenu } from "../utils/scroll-into-view-within-menu.js";
+  import { typeaheadIndex } from "../utils/typeahead.js";
 
   // Selectable and radio items carry their own roles, so navigation and
   // initial focus must match all three.
@@ -120,6 +122,20 @@
 
   let focusIndex = -1;
   let prevOpen = false;
+  let typeaheadBuffer = "";
+
+  const TYPEAHEAD_DELAY = 500;
+
+  // Clear the typeahead buffer once the user stops typing for TYPEAHEAD_DELAY ms.
+  const resetTypeaheadBuffer = debounce(() => {
+    typeaheadBuffer = "";
+  }, TYPEAHEAD_DELAY);
+
+  onMount(() => {
+    return () => {
+      resetTypeaheadBuffer.cancel();
+    };
+  });
 
   /**
    * @type {(trigger: "escape-key" | "outside-click" | "select") => void}
@@ -207,6 +223,44 @@
     scrollIntoViewWithinMenu(item, '[role="menu"]');
   }
 
+  /**
+   * @param {HTMLElement} item
+   */
+  function itemToString(item) {
+    return (
+      item.querySelector(".bx--menu-option__label")?.textContent ??
+      item.textContent ??
+      ""
+    ).trim();
+  }
+
+  /**
+   * WAI-ARIA APG menu first-character navigation: move focus to the next
+   * enabled item (in this menu's own level; a submenu is a separate,
+   * portaled `<ul>` so it is never among `items` here) whose label starts
+   * with the buffered characters typed so far.
+   * @param {string} character
+   */
+  function typeaheadSearch(character) {
+    const items = /** @type {HTMLElement[]} */ (
+      Array.from(ref?.querySelectorAll(NON_DISABLED_MENUITEM_SELECTOR) ?? [])
+    );
+    if (items.length === 0) return;
+
+    typeaheadBuffer += character.toLowerCase();
+    resetTypeaheadBuffer();
+
+    const index = typeaheadIndex({
+      items,
+      query: typeaheadBuffer,
+      itemToString,
+      index: focusIndex,
+    });
+    focusIndex = index;
+    const item = items[index];
+    if (item) focusMenuItem(item);
+  }
+
   function handleOutsideClick(event) {
     if (!open) return;
     // Clicks inside any menu (this one or a portalled submenu) are not outside
@@ -290,6 +344,15 @@
         ["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)
       ) {
         event.preventDefault();
+      } else if (
+        event.key.length === 1 &&
+        event.key !== " " &&
+        !event.ctrlKey &&
+        !event.metaKey &&
+        !event.altKey
+      ) {
+        event.preventDefault();
+        typeaheadSearch(event.key);
       }
     }}
     on:mouseenter
