@@ -3396,6 +3396,61 @@ describe("DataTable", () => {
       expect(footerCells[1]).toHaveAttribute("aria-hidden", "true");
     });
 
+    it("should skip hidden columns", () => {
+      const { container } = render(DataTableFooter, {
+        props: {
+          headers: [
+            { key: "name", value: "Name" },
+            { key: "protocol", value: "Protocol", columnHidden: true },
+            { key: "port", value: "Port" },
+          ],
+        },
+      });
+
+      const headerCells = container.querySelectorAll("thead th");
+      const cells = container.querySelectorAll("tfoot td");
+      expect(cells).toHaveLength(2);
+      expect(cells).toHaveLength(headerCells.length);
+      expect(cells[0]).toHaveTextContent("Total");
+      expect(cells[1]).toHaveTextContent("3523");
+    });
+
+    it("should pass the visible column index when the first column is hidden", () => {
+      const { container } = render(DataTableFooter, {
+        props: {
+          headers: [
+            { key: "name", value: "Name", columnHidden: true },
+            { key: "protocol", value: "Protocol" },
+            { key: "port", value: "Port" },
+          ],
+        },
+      });
+
+      const cells = container.querySelectorAll("tfoot td");
+      expect(cells).toHaveLength(2);
+      expect(cells[0]).toHaveTextContent("Total");
+      expect(cells[1]).toHaveTextContent("3523");
+    });
+
+    it("should match the header row with hidden columns and leading cells", () => {
+      const { container } = render(DataTableFooter, {
+        props: {
+          expandable: true,
+          selectable: true,
+          headers: [
+            { key: "name", value: "Name" },
+            { key: "protocol", value: "Protocol", columnHidden: true },
+            { key: "port", value: "Port" },
+          ],
+        },
+      });
+
+      const headerCells = container.querySelectorAll("thead tr th");
+      const footerCells = container.querySelectorAll("tfoot td");
+      expect(headerCells).toHaveLength(4);
+      expect(footerCells).toHaveLength(headerCells.length);
+    });
+
     it("should render once while virtualized rows scroll", () => {
       const largeRows = Array.from({ length: 500 }, (_, i) => ({
         id: String(i),

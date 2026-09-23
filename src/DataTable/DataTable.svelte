@@ -1677,7 +1677,7 @@
                 class:bx--table-column-radio={radio}
               ></td>
             {/if}
-            {#each stableHeaders as header, index (header.key)}
+            {#each visibleHeaders as header, index (header.key)}
               <td>
                 <slot name="footerCell" {header} {index} />
               </td>
