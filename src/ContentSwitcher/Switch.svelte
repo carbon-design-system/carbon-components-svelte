@@ -4,6 +4,10 @@
    */
 
   /**
+   * @slot {{ selected: boolean; }}
+   */
+
+  /**
    * Specify the switch text.
    * Alternatively, use the default slot.
    * @example
@@ -174,9 +178,11 @@
   on:keydown
 >
   {#if hasIcon}
-    <slot><svelte:component this={icon} /></slot>
+    <slot {selected}><svelte:component this={icon} /></slot>
   {:else}
-    <span class:bx--content-switcher__label={true}> <slot>{text}</slot> </span>
+    <span class:bx--content-switcher__label={true}>
+      <slot {selected}>{text}</slot>
+    </span>
   {/if}
 </button>
 

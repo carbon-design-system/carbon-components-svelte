@@ -14,6 +14,7 @@ import ContentSwitcherSelectedId from "./ContentSwitcher.selectedId.test.svelte"
 import ContentSwitcherSelectedIndex from "./ContentSwitcher.selectedIndex.test.svelte";
 import ContentSwitcherSelectionMode from "./ContentSwitcher.selectionMode.test.svelte";
 import ContentSwitcherSize from "./ContentSwitcher.size.test.svelte";
+import ContentSwitcherSlotSelected from "./ContentSwitcher.slotSelected.test.svelte";
 import ContentSwitcherSwitchSelected from "./ContentSwitcher.switchSelected.test.svelte";
 import ContentSwitcher from "./ContentSwitcher.test.svelte";
 
@@ -964,6 +965,35 @@ describe("ContentSwitcher", () => {
       );
       expect(screen.getByTestId("selected-index")).toHaveTextContent("1");
       expect(changed(consoleLog)).toBe(false);
+    });
+  });
+
+  describe("default slot `selected` prop", () => {
+    it("reflects selection in the text branch", async () => {
+      const { rerender } = await renderSwitcher(ContentSwitcherSlotSelected);
+
+      expect(screen.getByTestId("slot-one")).toHaveTextContent("on");
+      expect(screen.getByTestId("slot-two")).toHaveTextContent("off");
+
+      // The slot replaces `text`, so the tab's name is the slot content.
+      await user.click(screen.getByTestId("slot-two"));
+      expect(screen.getByTestId("slot-one")).toHaveTextContent("off");
+      expect(screen.getByTestId("slot-two")).toHaveTextContent("on");
+
+      await rerender({ selectedIndex: 0 });
+      expect(screen.getByTestId("slot-one")).toHaveTextContent("on");
+      expect(screen.getByTestId("slot-two")).toHaveTextContent("off");
+    });
+
+    it("reflects selection in the icon branch", async () => {
+      await renderSwitcher(ContentSwitcherSlotSelected);
+
+      expect(screen.getByTestId("icon-slot-one")).toHaveTextContent("on");
+      expect(screen.getByTestId("icon-slot-two")).toHaveTextContent("off");
+
+      await user.click(screen.getByRole("tab", { name: "Icon two" }));
+      expect(screen.getByTestId("icon-slot-one")).toHaveTextContent("off");
+      expect(screen.getByTestId("icon-slot-two")).toHaveTextContent("on");
     });
   });
 });
