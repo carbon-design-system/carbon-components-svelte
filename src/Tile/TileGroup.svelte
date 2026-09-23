@@ -22,6 +22,8 @@
 
   /**
    * Specify a name attribute for the radio button inputs.
+   * Defaults to a generated id so the tiles form one radio group;
+   * set it explicitly when form submission matters.
    * @type {string}
    */
   export let name = undefined;
@@ -40,6 +42,7 @@
 
   import { createEventDispatcher, setContext } from "svelte";
   import { readonly, writable } from "svelte/store";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
   /**
@@ -49,7 +52,10 @@
   /**
    * @type {import("svelte/store").Writable<string | undefined>}
    */
-  const groupName = writable(name);
+  // Unnamed radios are separate controls, so arrow keys would not move
+  // between tiles; share one generated name when `name` is omitted.
+  const fallbackName = uniqueId();
+  const groupName = writable(name || fallbackName);
   /**
    * @type {import("svelte/store").Writable<boolean | undefined>}
    */
@@ -90,7 +96,7 @@
 
   $: selected = $selectedValue;
   $: selectedValue.set(selected);
-  $: groupName.set(name);
+  $: groupName.set(name || fallbackName);
   $: groupRequired.set(required);
 </script>
 

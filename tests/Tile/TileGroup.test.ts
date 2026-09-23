@@ -4,6 +4,7 @@ import type { ComponentEvents, ComponentProps } from "svelte";
 import { user } from "../utils/user";
 import TileGroupSlot from "./TileGroup.slot.test.svelte";
 import TileGroup from "./TileGroup.test.svelte";
+import TileGroupTwoGroups from "./TileGroup.twoGroups.test.svelte";
 
 describe("TileGroup", () => {
   beforeEach(() => {
@@ -65,6 +66,37 @@ describe("TileGroup", () => {
     for (const radio of radios) {
       expect(radio).toHaveAttribute("name", "custom-group");
     }
+  });
+
+  it("shares a generated name when name is omitted", () => {
+    render(TileGroup);
+
+    const names = screen
+      .getAllByRole("radio")
+      .map((radio) => radio.getAttribute("name"));
+    expect(names[0]).toBeTruthy();
+    expect(new Set(names).size).toBe(1);
+  });
+
+  it("shares a generated name when name is empty", () => {
+    render(TileGroup, { props: { name: "" } });
+
+    const names = screen
+      .getAllByRole("radio")
+      .map((radio) => radio.getAttribute("name"));
+    expect(names[0]).toBeTruthy();
+    expect(new Set(names).size).toBe(1);
+  });
+
+  it("generates a different name per group", () => {
+    render(TileGroupTwoGroups);
+
+    const [a, b, c, d] = screen
+      .getAllByRole("radio")
+      .map((radio) => radio.getAttribute("name"));
+    expect(a).toBe(b);
+    expect(c).toBe(d);
+    expect(a).not.toBe(c);
   });
 
   it("should handle initial selected value", () => {
