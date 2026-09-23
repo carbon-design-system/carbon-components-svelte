@@ -115,6 +115,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   SkeletonText: "0.2.0",
   Slider: "0.2.0",
   SmallMultiples: "0.113.0",
+  SpanWaterfall: "0.113.0",
   Sparkline: "0.113.0",
   Stack: "0.93.0",
   StackedBar: "0.113.0",
