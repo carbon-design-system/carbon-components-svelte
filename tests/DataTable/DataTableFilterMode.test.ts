@@ -57,6 +57,41 @@ describe("DataTable filterMode", () => {
     expect(selectedCount()).toBe(6);
   });
 
+  const getSelectAll = () =>
+    screen.getByRole("checkbox", { name: "Select all rows" });
+
+  it.each(["hide", "remove"] as const)(
+    '"select all" ignores and keeps hidden selections with filterMode="%s"',
+    async (filterMode) => {
+      render(DataTableFilterMode, {
+        props: { filterMode, batchSelection: true, selectedRowIds: [0, 2, 4] },
+      });
+
+      await user.type(getSearch(), "round");
+      expect(getSelectAll()).not.toBeChecked();
+      expect(getSelectAll()).not.toBePartiallyChecked();
+
+      await user.click(getSelectAll());
+      expect(selectedCount()).toBe(6);
+
+      await user.click(getSelectAll());
+      expect(selectedCount()).toBe(3);
+    },
+  );
+
+  it('clearing a partial "select all" keeps hidden selections', async () => {
+    render(DataTableFilterMode, {
+      props: { batchSelection: true, selectedRowIds: [0, 1] },
+    });
+
+    await user.type(getSearch(), "round");
+    expect(getSelectAll()).toBePartiallyChecked();
+
+    await user.click(getSelectAll());
+    expect(selectedCount()).toBe(1);
+    expect(getSelectAll()).not.toBeChecked();
+  });
+
   it('falls back to "remove" when pageSize is set', async () => {
     render(DataTableFilterMode, {
       props: { filterMode: "hide", pageSize: 3 },
