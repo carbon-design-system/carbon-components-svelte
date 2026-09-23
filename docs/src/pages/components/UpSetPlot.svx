@@ -1,0 +1,69 @@
+---
+components: ["UpSetPlot"]
+description: UpSet plot shows which combinations of sets actually occur and how large each is, where a Venn diagram would overlap into a blur.
+---
+
+<script>
+  import { UpSetPlot } from "carbon-components-svelte/viz";
+
+  const flags = [
+    { id: "ent", label: "Enterprise" },
+    { id: "sso", label: "SSO" },
+    { id: "audit", label: "Audit log" },
+    { id: "api", label: "API access" },
+  ];
+  const combos = [
+    [["ent", "sso", "audit", "api"], 42],
+    [["ent", "sso", "audit"], 31],
+    [["ent", "sso"], 58],
+    [["ent", "api"], 12],
+    [["sso"], 26],
+    [["api"], 19],
+    [["ent"], 9],
+    [["sso", "api"], 7],
+    [["audit"], 3],
+  ];
+  const accounts = combos.flatMap(([tags, n], c) =>
+    Array.from({ length: n }, (_, i) => ({ id: `${c}-${i}`, tags })),
+  );
+
+  let selected = null;
+</script>
+
+`UpSetPlot` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead. The subpackage is experimental: its API may change in a minor release.
+
+Each row is one exact combination of sets: a bar for how many rows fall in it, and a dot under every set it involves, joined into a line. An account in Enterprise and SSO counts toward "Enterprise and SSO", not toward either alone, so the bars add up to everything in at least one set. It is a table, so it reads as one.
+
+## Basic
+
+Pass `sets`, in the order their columns should appear, and `data` with a `membership` accessor: the ids of the sets each row belongs to. Combinations come largest first.
+
+<UpSetPlot sets={flags} data={accounts} membership="tags" title="Account flag combinations" />
+
+## Order and limit
+
+Set `sort` to `"degree"` to put the combinations with fewest sets first. `maxCombinations` keeps the list short, and `showEmpty` lists the combinations no row falls in.
+
+<UpSetPlot sets={flags} data={accounts} membership="tags" sort="degree" maxCombinations={6} title="Account flag combinations, simplest first" />
+
+## Values and totals
+
+Set `valueType` to `"percent"` to write each combination's share of every row that is in at least one set. The totals under the matrix count every row in each set, whatever else it is in. Set `totals` to `false` to hide them, and `format` to say how numbers are written.
+
+<UpSetPlot sets={flags} data={accounts} membership="tags" valueType="percent" title="Account flag combinations, as shares" />
+
+## Color and size
+
+Set `color` to a semantic name, a categorical index, a viz token name, or any CSS color. `size` is `"sm"`, `"md"`, or `"lg"`.
+
+<UpSetPlot sets={flags} data={accounts} membership="tags" color={3} size="sm" totals={false} title="Account flag combinations, small" />
+
+## Selectable
+
+Set `selectable` to make each combination a toggle button. Bind `selected`, a combination's key, or listen for `select`, whose detail carries the combination and its rows, ready for a filter.
+
+<UpSetPlot sets={flags} data={accounts} membership="tags" selectable bind:selected title="Pick a combination" />
+
+## Accessibility
+
+The plot is a table captioned with the title: each combination is a row header that names its sets in words, such as "Enterprise and SSO", and every dot says in text whether the row is in that set, so nothing rests on the picture. When `selectable`, the row headers are toggle buttons with arrow key navigation and a single tab stop. Keep to six or so sets, or the matrix outgrows the eye.

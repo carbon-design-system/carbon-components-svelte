@@ -181,6 +181,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "TileGridMap",
       "TreeChart",
       "TreemapChart",
+      "UpSetPlot",
       "UptimeBar",
       "VarianceIndicator",
       "WaffleChart",
