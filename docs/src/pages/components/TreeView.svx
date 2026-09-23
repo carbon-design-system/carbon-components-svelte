@@ -77,7 +77,7 @@ Add icons to nodes by defining an `icon` property with a Carbon Svelte icon comp
 
 ### Links
 
-Add links to leaf nodes by defining an `href` property. Link nodes render as `<a>` elements with `role="treeitem"`. When a link node is active, `aria-current="page"` is used. Disabled link nodes omit the `href` attribute.
+Add links to leaf nodes by defining an `href` property. Link nodes render as `<a>` elements with `role="treeitem"`. When a link node is active, `aria-current="page"` is used. Disabled link nodes omit the `href` attribute. <DocKbd label="Enter" /> follows the link; <DocKbd label="Space" /> selects the node without navigating.
 
 <FileSource src="/framed/TreeView/TreeViewLinks" />
 
