@@ -41,6 +41,7 @@
     RankBars,
     RetentionChart,
     ScatterChart,
+    SequenceDiagram,
     ShareOfTotal,
     SmallMultiples,
     SpanWaterfall,
@@ -197,6 +198,20 @@
     y="cpu"
     series="host"
     title="CPU by host"
+  />
+
+  <SequenceDiagram
+    data={[
+      { from: "client", to: "api", msg: "POST /orders" },
+      { from: "api", to: "db", msg: "INSERT order" },
+      { from: "db", to: "api", msg: "row", kind: "return" },
+      { from: "api", to: "client", msg: "201 Created", kind: "return" },
+    ]}
+    from="from"
+    to="to"
+    label="msg"
+    kind="kind"
+    title="Create an order"
   />
 
   <LayeredGraph
