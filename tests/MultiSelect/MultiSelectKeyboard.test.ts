@@ -59,4 +59,54 @@ describe("MultiSelect keyboard", () => {
       );
     });
   });
+
+  describe("Ctrl+A select all", () => {
+    it("non-filterable: Ctrl+A selects all enabled items, and pressing it again deselects them", async () => {
+      render(MultiSelect, { props: { items } });
+
+      await openMenu();
+      await user.keyboard("{Control>}a{/Control}");
+      for (const option of screen.getAllByRole("option")) {
+        expect(option).toHaveAttribute("aria-selected", "true");
+      }
+
+      await user.keyboard("{Control>}a{/Control}");
+      for (const option of screen.getAllByRole("option")) {
+        expect(option).toHaveAttribute("aria-selected", "false");
+      }
+    });
+
+    it("non-filterable: Ctrl+A leaves a disabled item unselected", async () => {
+      const itemsWithDisabled = [
+        { id: "0", text: "Alpha" },
+        { id: "1", text: "Bravo", disabled: true },
+      ];
+      render(MultiSelect, { props: { items: itemsWithDisabled } });
+
+      await openMenu();
+      await user.keyboard("{Control>}a{/Control}");
+
+      expect(screen.getByRole("option", { name: "Alpha" })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+      expect(screen.getByRole("option", { name: "Bravo" })).toHaveAttribute(
+        "aria-selected",
+        "false",
+      );
+    });
+
+    it("filterable: Ctrl+A in the text input does not select options (keeps native text selection)", async () => {
+      render(MultiSelect, {
+        props: { items, filterable: true, placeholder: "Filter..." },
+      });
+
+      await user.click(screen.getByPlaceholderText("Filter..."));
+      await user.keyboard("{Control>}a{/Control}");
+
+      for (const option of screen.getAllByRole("option")) {
+        expect(option).toHaveAttribute("aria-selected", "false");
+      }
+    });
+  });
 });
