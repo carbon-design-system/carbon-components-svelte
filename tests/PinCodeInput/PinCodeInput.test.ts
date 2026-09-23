@@ -184,7 +184,7 @@ describe("PinCodeInput", () => {
     expect(fieldset?.querySelector('input[type="hidden"]')).toBeNull();
   });
 
-  it("applies required to the hidden input instead of segments when name is set", () => {
+  it("keeps required on the segments when name is set", () => {
     const { container } = render(PinCodeInput, {
       props: { name: "otp", required: true },
     });
@@ -192,9 +192,9 @@ describe("PinCodeInput", () => {
       'input[type="hidden"]',
     );
 
-    expect(hidden).toHaveAttribute("required");
+    expect(hidden).not.toHaveAttribute("required");
     for (const input of getInputs()) {
-      expect(input).not.toBeRequired();
+      expect(input).toBeRequired();
     }
   });
 

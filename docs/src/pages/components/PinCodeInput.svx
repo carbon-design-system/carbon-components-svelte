@@ -156,8 +156,8 @@ OS and password-manager autofill that inserts the whole code into one segment is
 
 Set `name` so the assembled code participates in native form submission
 (for example SvelteKit form actions and `FormData`). A hidden input mirrors
-`value`. When `name` is set, `required` is applied to the hidden input instead
-of each segment.
+`value`. `required` stays on each segment, so the browser blocks submission
+until every segment is filled.
 
 ```svelte
 <script>
