@@ -151,6 +151,85 @@ describe("MultiSelect native form serialization", () => {
     expect(formData.getAll("contact")).toEqual(["0", "1"]);
   });
 
+  describe("disabled", () => {
+    it("omits the field when a selection is present", () => {
+      const { container } = render(MultiSelectForm, {
+        props: {
+          items,
+          selectedIds: ["0", "1"],
+          name: "contact",
+          disabled: true,
+        },
+      });
+
+      expect(new FormData(getForm()).has("contact")).toBe(false);
+      const hiddenInputs = container.querySelectorAll('input[type="hidden"]');
+      expect(hiddenInputs).toHaveLength(2);
+      for (const input of hiddenInputs) {
+        expect(input).toBeDisabled();
+      }
+    });
+
+    it("omits the default per-item fields", () => {
+      render(MultiSelectForm, {
+        props: { items, selectedIds: ["0"], disabled: true },
+      });
+
+      expect(new FormData(getForm()).has("0")).toBe(false);
+    });
+
+    it("omits fields named by itemToInput", () => {
+      render(MultiSelectForm, {
+        props: {
+          items,
+          selectedIds: ["0", "1"],
+          disabled: true,
+          itemToInput: (item: MultiSelectItem) => ({
+            name: "contact",
+            value: item.id,
+          }),
+        },
+      });
+
+      expect(new FormData(getForm()).getAll("contact")).toEqual([]);
+    });
+
+    it("serializes the selection again once re-enabled", async () => {
+      const { rerender } = render(MultiSelectForm, {
+        props: {
+          items,
+          selectedIds: ["1"],
+          name: "contact",
+          disabled: true,
+        },
+      });
+
+      expect(new FormData(getForm()).has("contact")).toBe(false);
+
+      await rerender({
+        items,
+        selectedIds: ["1"],
+        name: "contact",
+        disabled: false,
+      });
+
+      expect(new FormData(getForm()).getAll("contact")).toHaveLength(1);
+    });
+
+    it("still submits a readonly multi-select", () => {
+      render(MultiSelectForm, {
+        props: {
+          items,
+          selectedIds: ["0"],
+          name: "contact",
+          readonly: true,
+        },
+      });
+
+      expect(new FormData(getForm()).getAll("contact")).toHaveLength(1);
+    });
+  });
+
   it("virtualize: serializes the full selection while closed, beyond the viewport window", () => {
     const manyItems = Array.from({ length: 150 }, (_, index) => ({
       id: String(index),

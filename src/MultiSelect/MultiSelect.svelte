@@ -251,6 +251,7 @@
    * selection for native form submission (`FormData`). Used per item
    * unless `itemToInput` returns its own `name`. Not applied to the
    * filterable text input, which is a query box, not the form value.
+   * Omitted from submission when the multi-select is disabled.
    * @type {string}
    */
   export let name = undefined;
@@ -1121,7 +1122,9 @@
   // `sortedItems`/`checked` (whose order shifts with `selectionFeedback`),
   // `filteredItems`, or the virtual window. Excludes the isSelectAll
   // pseudo-item and disabled items (matching native disabled checkboxes,
-  // which never submit).
+  // which never submit). A disabled MultiSelect disables the hidden inputs
+  // themselves, so the field is omitted entirely, like a disabled native
+  // control.
   $: selectedIdsSet = new Set(selectedIds);
   $: formItems = items.filter(
     (item) =>
@@ -1266,6 +1269,7 @@
       type="hidden"
       name={itemInput.name ?? name ?? item.id}
       value={itemInput.value ?? ""}
+      {disabled}
     >
   {/each}
   {#if labelText || $$slots.labelChildren}

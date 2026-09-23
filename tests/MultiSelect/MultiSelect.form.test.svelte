@@ -15,6 +15,8 @@
   export let virtualize: ComponentProps<MultiSelect>["virtualize"] = undefined;
   export let portalMenu: ComponentProps<MultiSelect>["portalMenu"] = false;
   export let value: ComponentProps<MultiSelect>["value"] = "";
+  export let disabled: ComponentProps<MultiSelect>["disabled"] = false;
+  export let readonly: ComponentProps<MultiSelect>["readonly"] = false;
 </script>
 
 <form data-testid="form">
@@ -31,5 +33,7 @@
     {virtualize}
     {portalMenu}
     bind:value
+    {disabled}
+    {readonly}
   />
 </form>
