@@ -3514,6 +3514,29 @@ describe("ComboBox", () => {
       expect(container.querySelector(".bx--combo-box--readonly")).toBeTruthy();
       expect(getInput()).toHaveAttribute("aria-readonly", "true");
       expect(getInput()).toHaveAttribute("readonly");
+      expect(getInput()).not.toHaveAttribute("aria-disabled");
+      expect(container.querySelector(".bx--combo-box")).not.toHaveAttribute(
+        "aria-disabled",
+      );
+    });
+
+    it("should keep aria-disabled when disabled", () => {
+      render(ComboBox, { disabled: true });
+
+      expect(getInput()).toHaveAttribute("aria-disabled", "true");
+      expect(getInput()).toBeDisabled();
+    });
+
+    it("should omit aria-disabled when neither disabled nor readonly", () => {
+      render(ComboBox);
+
+      expect(getInput()).not.toHaveAttribute("aria-disabled");
+    });
+
+    it("should set aria-disabled when both disabled and readonly", () => {
+      render(ComboBox, { disabled: true, readonly: true });
+
+      expect(getInput()).toHaveAttribute("aria-disabled", "true");
     });
 
     it("should not open menu on click when readonly", async () => {
