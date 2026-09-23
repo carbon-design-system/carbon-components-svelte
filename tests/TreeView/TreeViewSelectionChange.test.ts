@@ -21,6 +21,8 @@ function treeItemById(id: Id): HTMLElement {
   return el;
 }
 
+const byNumber = (a: Id, b: Id) => Number(a) - Number(b);
+
 const lastDetail = (spy: ReturnType<typeof vi.fn>): SelectChangeDetail =>
   spy.mock.calls.at(-1)?.[0] as SelectChangeDetail;
 
@@ -184,6 +186,76 @@ describe("TreeView select:change", () => {
     expect(detail.added.length).toBeGreaterThan(0);
     expect(detail.removed).toEqual([]);
     expect(detail.selectedIds).toContain(0);
+  });
+
+  it("selects numeric node ids on Ctrl+Shift+End", async () => {
+    const onSelectChange = vi.fn();
+    render(TreeViewSelectionChange, {
+      multiselect: true,
+      selectedIds: [],
+      onSelectChange,
+    });
+
+    treeItemById(0).focus();
+    await user.keyboard("{Control>}{Shift>}{End}{/Shift}{/Control}");
+
+    await vi.waitFor(() => expect(onSelectChange).toHaveBeenCalledTimes(1));
+    const detail = lastDetail(onSelectChange);
+    expect([...detail.selectedIds].sort(byNumber)).toEqual([0, 1, 7, 9]);
+    expect(detail.selectedIds.every((id) => typeof id === "number")).toBe(true);
+    expect(treeItemById(7)).toHaveAttribute("aria-selected", "true");
+  });
+
+  it("selects numeric node ids on Ctrl+Shift+Home", async () => {
+    const onSelectChange = vi.fn();
+    render(TreeViewSelectionChange, {
+      multiselect: true,
+      selectedIds: [],
+      onSelectChange,
+    });
+
+    treeItemById(9).focus();
+    await user.keyboard("{Control>}{Shift>}{Home}{/Shift}{/Control}");
+
+    await vi.waitFor(() => expect(onSelectChange).toHaveBeenCalledTimes(1));
+    expect([...lastDetail(onSelectChange).selectedIds].sort(byNumber)).toEqual([
+      0, 1, 7, 9,
+    ]);
+  });
+
+  it("selects numeric ids for visible children on Ctrl+Shift+End", async () => {
+    const onSelectChange = vi.fn();
+    render(TreeViewSelectionChange, {
+      multiselect: true,
+      selectedIds: [],
+      expandedIds: [1],
+      onSelectChange,
+    });
+
+    treeItemById(0).focus();
+    await user.keyboard("{Control>}{Shift>}{End}{/Shift}{/Control}");
+
+    await vi.waitFor(() => expect(onSelectChange).toHaveBeenCalledTimes(1));
+    expect([...lastDetail(onSelectChange).selectedIds].sort(byNumber)).toEqual([
+      0, 1, 2, 5, 6, 7, 9,
+    ]);
+  });
+
+  it("merges Ctrl+Shift+End into the existing selection without duplicates", async () => {
+    const onSelectChange = vi.fn();
+    render(TreeViewSelectionChange, {
+      multiselect: true,
+      selectedIds: [0],
+      onSelectChange,
+    });
+
+    treeItemById(0).focus();
+    await user.keyboard("{Control>}{Shift>}{End}{/Shift}{/Control}");
+
+    await vi.waitFor(() => expect(onSelectChange).toHaveBeenCalledTimes(1));
+    const detail = lastDetail(onSelectChange);
+    expect(detail.selectedIds.length).toBe(new Set(detail.selectedIds).size);
+    expect([...detail.added].sort(byNumber)).toEqual([1, 7, 9]);
   });
 
   it("fires for the imperative showNode(id, { select: true })", async () => {
