@@ -17,6 +17,8 @@ description: Combo boxes combine a text input with a dropdown menu to select fro
 
 Create a combobox with a title and placeholder text. Each item needs a unique id and display text. Combo boxes key items by id for performance.
 
+<DocKbd label="ArrowDown" /> or <DocKbd label="ArrowUp" /> opens the menu and highlights the selected item, or the first or last option. Once open, they move the highlight, and <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the first or last option. <DocKbd label="Alt" /> + <DocKbd label="ArrowDown" /> opens the menu without moving the highlight, and <DocKbd label="Alt" /> + <DocKbd label="ArrowUp" /> closes it. <DocKbd label="Enter" /> or <DocKbd label="Tab" /> selects the keyboard-highlighted option. With no keyboard highlight, <DocKbd label="Enter" /> selects the option whose label matches the typed text, ignoring case.
+
 <ComboBox labelText="Alert channel" placeholder="Select alert channel"
 items={[
   {id: "0", text: "Slack"},
@@ -105,6 +107,8 @@ items={[
 
 Use `bind:this` to access the component instance and call `ComboBox.clear()` to clear the selection. Pass `focus: false` in the options to prevent re-focusing the input.
 
+Pressing <DocKbd label="Escape" /> in the input closes the menu and also clears the selection and the text.
+
 Clearing a selection with the clear button, <DocKbd label="Escape" />, or `clear()` is announced to screen readers through a polite live region. Override the message with `selectionClearedText`.
 
 <FileSource src="/framed/ComboBox/ComboBoxClear" />
@@ -114,6 +118,8 @@ Clearing a selection with the clear button, <DocKbd label="Escape" />, or `clear
 By default, the dropdown menu is closed after clearing the selection.
 
 Set `openOnClear` to `true` to reopen the dropdown menu after clearing the selection. This lets users immediately browse all available items without needing to click the input again.
+
+Clearing with <DocKbd label="Escape" /> never reopens the menu, even with `openOnClear`.
 
 <ComboBox openOnClear labelText="Alert channel" placeholder="Select alert channel"
 selectedId="1"
@@ -511,6 +517,8 @@ items={[
 ### Disabled items
 
 Mark individual items with `disabled: true` to disable specific options.
+
+Disabled options can still be highlighted with <DocKbd label="ArrowDown" /> and <DocKbd label="ArrowUp" />, so screen reader users can find them, but <DocKbd label="Enter" /> and <DocKbd label="Tab" /> do not select them.
 
 <ComboBox
   labelText="Alert channel"
