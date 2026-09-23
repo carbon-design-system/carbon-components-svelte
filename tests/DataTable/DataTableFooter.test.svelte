@@ -12,6 +12,7 @@
   export let headers: readonly {
     key: keyof Omit<Row, "id">;
     value: string;
+    columnHidden?: boolean;
   }[] = [
     { key: "name", value: "Name" },
     { key: "protocol", value: "Protocol" },
