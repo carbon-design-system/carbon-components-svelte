@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import ContextMenuClose from "./ContextMenuClose.test.svelte";
 import ContextMenuFocusReturn from "./ContextMenuFocusReturn.test.svelte";
@@ -70,5 +70,15 @@ describe("ContextMenu close trigger", () => {
 
     await user.keyboard("{Tab}");
     expect(screen.getByRole("button", { name: "After host" })).toHaveFocus();
+  });
+
+  it("should block scroll keys but not letter keys", async () => {
+    render(ContextMenuClose, { props: { open: true, x: 100, y: 100 } });
+
+    const menu = screen.getAllByRole("menu")[0];
+
+    expect(await fireEvent.keyDown(menu, { key: "ArrowRight" })).toBe(false);
+    expect(await fireEvent.keyDown(menu, { key: "PageDown" })).toBe(false);
+    expect(await fireEvent.keyDown(menu, { key: "a" })).toBe(true);
   });
 });

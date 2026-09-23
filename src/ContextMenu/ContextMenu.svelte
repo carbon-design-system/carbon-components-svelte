@@ -260,8 +260,12 @@
     if (
       event.key === "ArrowUp" ||
       event.key === "ArrowDown" ||
+      event.key === "ArrowLeft" ||
+      event.key === "ArrowRight" ||
       event.key === "Home" ||
       event.key === "End" ||
+      event.key === "PageUp" ||
+      event.key === "PageDown" ||
       event.key === " " ||
       event.key === "Enter"
     ) {
