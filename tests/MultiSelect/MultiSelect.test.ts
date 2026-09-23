@@ -2190,6 +2190,14 @@ describe("MultiSelect", () => {
     expect(screen.queryByText("Help")).not.toBeInTheDocument();
   });
 
+  it("passes the click event as the clear event detail", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(MultiSelect, { props: { items, selectedIds: ["0", "1"] } });
+
+    await user.click(screen.getByRole("button", { name: /clear/i }));
+    expect(consoleLog).toHaveBeenCalledWith("clear", expect.any(MouseEvent));
+  });
+
   it("clears all selections when clear button is clicked", async () => {
     render(MultiSelect, {
       props: {
@@ -2931,6 +2939,13 @@ describe("MultiSelect", () => {
       expectTypeOf<
         SelectEventDetail["unselected"][0]
       >().toEqualTypeOf<Product>();
+    });
+
+    it("types the clear event detail as the originating DOM event", () => {
+      type Events = ComponentEvents<MultiSelectComponent>;
+      type ClearDetail =
+        Events["clear"] extends CustomEvent<infer T> ? T : never;
+      expectTypeOf<ClearDetail>().toEqualTypeOf<KeyboardEvent | MouseEvent>();
     });
 
     it("should default to MultiSelectItem when generic is not specified", () => {
