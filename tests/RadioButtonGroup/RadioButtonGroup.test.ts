@@ -110,6 +110,28 @@ describe("RadioButtonGroup", () => {
     }
   });
 
+  it("should share a generated name when name is omitted", () => {
+    render(RadioButtonGroup);
+
+    const radios = screen.getAllByRole("radio");
+    const names = radios.map((radio) => radio.getAttribute("name"));
+
+    expect(names[0]).toBeTruthy();
+    expect(new Set(names).size).toBe(1);
+  });
+
+  it("should move selection on arrow keys when name is omitted", async () => {
+    render(RadioButtonGroup);
+
+    const radio1 = screen.getByRole("radio", { name: "Option 1" });
+    const radio2 = screen.getByRole("radio", { name: "Option 2" });
+
+    await user.click(radio1);
+    await user.keyboard("{ArrowDown}");
+
+    expect(radio2).toBeChecked();
+  });
+
   it("should handle legend text", () => {
     render(RadioButtonGroup, { props: { legendText: "Choose an option" } });
 
