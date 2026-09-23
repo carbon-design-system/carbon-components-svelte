@@ -7,6 +7,7 @@
 
   /**
    * Specify the value of the checkbox.
+   * Submitted as `"on"` when empty, like a native checkbox.
    * @type {T}
    */
   export let value = /** @type {T} */ ("");
@@ -128,6 +129,10 @@
   };
 
   $: useGroup = !ctx && Array.isArray(group);
+  // A native checkbox with no value submits "on"; `""` would post an empty,
+  // falsy field for a checked box. Only the DOM attribute is mapped; group
+  // membership still compares `value` itself.
+  $: nativeValue = value === "" || value == null ? "on" : value;
   $: if (ctx) checked = $selectedValues.includes(value);
   $: if (useGroup) checked = group.includes(value);
 
@@ -182,7 +187,7 @@
     <input
       bind:this={ref}
       type="checkbox"
-      {value}
+      value={nativeValue}
       {checked}
       {disabled}
       {id}

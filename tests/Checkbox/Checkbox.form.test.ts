@@ -70,6 +70,38 @@ describe("Checkbox form participation", () => {
     });
   });
 
+  describe("submitted value", () => {
+    it('submits "on" for a checked checkbox with no value', () => {
+      render(CheckboxForm, { props: { checked: true } });
+
+      expect(new FormData(getForm()).get("agree")).toBe("on");
+    });
+
+    it("omits an unchecked checkbox", () => {
+      render(CheckboxForm, { props: { checked: false } });
+
+      expect(new FormData(getForm()).has("agree")).toBe(false);
+    });
+
+    it("submits an explicit value", () => {
+      render(CheckboxForm, { props: { checked: true, value: "yes" } });
+
+      expect(new FormData(getForm()).get("agree")).toBe("yes");
+    });
+
+    it("submits a numeric 0 value as a string", () => {
+      render(CheckboxForm, { props: { checked: true, value: 0 } });
+
+      expect(new FormData(getForm()).get("agree")).toBe("0");
+    });
+
+    it("submits bind:group members by value", () => {
+      render(CheckboxFormGroup, { props: { group: ["a"] } });
+
+      expect(new FormData(getForm()).getAll("channel")).toEqual(["a"]);
+    });
+  });
+
   it("ignores clicks while readonly", async () => {
     const onCheck = vi.fn();
     render(CheckboxForm, { props: { readonly: true, onCheck } });

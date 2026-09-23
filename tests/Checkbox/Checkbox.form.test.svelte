@@ -4,6 +4,7 @@
 
   export let checked: ComponentProps<Checkbox>["checked"] = false;
   export let readonly: ComponentProps<Checkbox>["readonly"] = false;
+  export let value: ComponentProps<Checkbox>["value"] = undefined;
   export let onCheck: (event: CustomEvent<boolean>) => void = () => {};
 </script>
 
@@ -11,6 +12,7 @@
   <Checkbox
     bind:checked
     {readonly}
+    {value}
     name="agree"
     labelText="Agree"
     on:check={onCheck}
