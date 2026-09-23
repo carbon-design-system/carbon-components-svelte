@@ -851,6 +851,46 @@ yarn -v`,
     expect(snippet).toHaveAttribute("aria-label", "Custom label");
   });
 
+  test.each(["single", "multi"] as const)(
+    "labels only the container, not the root, with a rest aria-label (%s)",
+    (type) => {
+      const { container } = render(CodeSnippet, {
+        props: { type, code: "test", "aria-label": "Custom label" },
+      });
+      expect(container.querySelector(".bx--snippet")).not.toHaveAttribute(
+        "aria-label",
+      );
+      expect(container.querySelector(".bx--snippet-container")).toHaveAttribute(
+        "aria-label",
+        "Custom label",
+      );
+      expect(screen.getAllByLabelText("Custom label")).toHaveLength(1);
+    },
+  );
+
+  test("keeps an empty rest aria-label off the root", () => {
+    const { container } = render(CodeSnippet, {
+      props: { type: "single", code: "test", "aria-label": "" },
+    });
+    expect(container.querySelector(".bx--snippet")).not.toHaveAttribute(
+      "aria-label",
+    );
+    expect(container.querySelector(".bx--snippet-container")).toHaveAttribute(
+      "aria-label",
+      "",
+    );
+  });
+
+  test("spreads a rest aria-label to the inline copy button", () => {
+    render(CodeSnippet, {
+      props: { type: "inline", code: "test", "aria-label": "Copy install" },
+    });
+    expect(screen.getByRole("button")).toHaveAttribute(
+      "aria-label",
+      "Copy install",
+    );
+  });
+
   test("copyLabel does not affect container aria-label", () => {
     const { container } = render(CodeSnippet, {
       props: {

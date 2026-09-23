@@ -12,7 +12,7 @@
    * @event {{ error: unknown }} copy:error
    * @event {MouseEvent} mouseenter:copy-button
    * @event {MouseEvent} mouseleave:copy-button
-   * @restProps {button | span} Rest props are spread to the span (inline variant) or the copy button (single/multi).
+   * @restProps {div | button | span} Rest props are spread to the root div (single/multi, except `aria-label`, which labels the code container), the copy button (inline), or the span (inline with `hideCopyButton`).
    */
 
   /**
@@ -505,6 +505,7 @@
     class:bx--snippet--multi={type === "multi"}
     class:bx--snippet--disabled={type !== "inline" && disabled}
     {...$$restProps}
+    aria-label={undefined}
     on:mouseover
     on:mouseenter
     on:mouseleave
