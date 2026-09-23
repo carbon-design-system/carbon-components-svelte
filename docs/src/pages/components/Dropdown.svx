@@ -483,7 +483,8 @@ Display a loading skeleton for the fluid dropdown variant.
 Set `name` so the selection participates in native form submission (for
 example SvelteKit form actions and `FormData`). A hidden input mirrors
 `selectedId`, submitting an empty string when nothing is selected or when
-the selected item is disabled.
+the selected item is disabled. A disabled dropdown is left out of the
+submission, like a disabled native `<select>`.
 
 ```svelte
 <script>

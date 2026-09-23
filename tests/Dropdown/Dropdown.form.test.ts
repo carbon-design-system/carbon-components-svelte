@@ -88,6 +88,42 @@ describe("Dropdown form participation", () => {
     expect(new FormData(getForm()).get("contact")).toBe("");
   });
 
+  describe("disabled", () => {
+    it("omits the field when a selection is present", () => {
+      const { container } = render(Dropdown, {
+        props: { items, selectedId: "1", name: "contact", disabled: true },
+      });
+
+      expect(new FormData(getForm()).has("contact")).toBe(false);
+      expect(container.querySelector('input[type="hidden"]')).toBeDisabled();
+    });
+
+    it("omits the field when nothing is selected", () => {
+      render(Dropdown, {
+        props: { items, name: "contact", disabled: true },
+      });
+
+      expect(new FormData(getForm()).has("contact")).toBe(false);
+    });
+
+    it("serializes the selection again once re-enabled", async () => {
+      const { rerender } = render(Dropdown, {
+        props: { items, selectedId: "1", name: "contact", disabled: true },
+      });
+
+      expect(new FormData(getForm()).has("contact")).toBe(false);
+
+      await rerender({
+        items,
+        selectedId: "1",
+        name: "contact",
+        disabled: false,
+      });
+
+      expect(new FormData(getForm()).get("contact")).toBe("1");
+    });
+  });
+
   it("serializes the selected id while closed with virtualize enabled", () => {
     const largeItems = Array.from({ length: 150 }, (_, i) => ({
       id: String(i),
