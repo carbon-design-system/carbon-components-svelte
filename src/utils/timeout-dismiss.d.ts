@@ -3,7 +3,9 @@ export type TimeoutDismiss = {
   sync: (open: boolean, timeout: number, onTimeout: () => void) => void;
   pause: () => void;
   resume: () => void;
+  remainingMs: () => number;
+  readonly running: boolean;
   clear: () => void;
 };
 
-export function createTimeoutDismiss(): TimeoutDismiss;
+export function createTimeoutDismiss(onChange?: () => void): TimeoutDismiss;

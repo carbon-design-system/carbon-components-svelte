@@ -9,16 +9,22 @@ import { noop } from "./noop.js";
  * `pause()` / `resume()` track remaining time so hover can suspend auto-dismiss.
  * The `document` `visibilitychange` listener (pauses while the tab is hidden) is
  * attached only while a timer is active (running or paused).
+ * `remainingMs()` and `running` read the timer, for example to draw a progress
+ * bar; `onChange` fires whenever it starts, pauses, resumes, or stops, so a
+ * caller can redraw on those transitions instead of polling.
  *
+ * @param {() => void} [onChange]
  * @returns {{
  *   get timeoutId(): ReturnType<typeof setTimeout> | undefined,
  *   sync: (open: boolean, timeout: number, onTimeout: () => void) => void,
  *   pause: () => void,
  *   resume: () => void,
+ *   remainingMs: () => number,
+ *   get running(): boolean,
  *   clear: () => void,
  * }}
  */
-export function createTimeoutDismiss() {
+export function createTimeoutDismiss(onChange = noop) {
   /** @type {ReturnType<typeof setTimeout> | undefined} */
   let timeoutId;
   /** @type {() => void} */
@@ -55,6 +61,7 @@ export function createTimeoutDismiss() {
       unlisten();
       onTimeout();
     }, ms);
+    onChange();
   }
 
   function pause() {
@@ -63,6 +70,7 @@ export function createTimeoutDismiss() {
     timeoutId = undefined;
     remaining = Math.max(0, remaining - (Date.now() - startedAt));
     paused = true;
+    onChange();
   }
 
   function resume() {
@@ -115,10 +123,24 @@ export function createTimeoutDismiss() {
       } else {
         unlisten();
         remaining = 0;
+        onChange();
       }
     },
     pause,
     resume,
+    /**
+     * Milliseconds left before `onTimeout` fires: 0 when no timer is
+     * active, frozen while paused.
+     */
+    remainingMs() {
+      if (!active) return 0;
+      if (paused) return remaining;
+      return Math.max(0, remaining - (Date.now() - startedAt));
+    },
+    /** Whether the timer is counting down (active and not paused). */
+    get running() {
+      return active && !paused;
+    },
     clear() {
       unlisten();
       clearTimeout(timeoutId);
@@ -127,6 +149,7 @@ export function createTimeoutDismiss() {
       active = false;
       paused = false;
       hiddenPause = false;
+      onChange();
     },
   };
 }

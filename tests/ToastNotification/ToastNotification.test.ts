@@ -273,6 +273,101 @@ describe("ToastNotification", () => {
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
 
+  describe("showTimeout", () => {
+    const getBar = () =>
+      document.querySelector(".bx--toast-notification__timeout");
+
+    it("should not render a timeout bar by default", () => {
+      render(ToastNotificationTest, { props: { timeout: 1000 } });
+
+      expect(getBar()).not.toBeInTheDocument();
+    });
+
+    it("should not render a timeout bar without a timeout", () => {
+      render(ToastNotificationTest, { props: { showTimeout: true } });
+
+      expect(getBar()).not.toBeInTheDocument();
+    });
+
+    it("should transition the bar to empty over the timeout", () => {
+      render(ToastNotificationTest, {
+        props: { showTimeout: true, timeout: 1000 },
+      });
+
+      const bar = getBar();
+      expect(bar).toHaveAttribute("aria-hidden", "true");
+      expect(bar).toHaveStyle({
+        transform: "scaleX(0)",
+        transitionDuration: "1000ms",
+      });
+      expect(document.querySelector(".bx--toast-notification")).toHaveClass(
+        "bx--toast-notification--timeout",
+      );
+    });
+
+    it("should not update the bar while the timer runs", async () => {
+      render(ToastNotificationTest, {
+        props: { showTimeout: true, timeout: 1000 },
+      });
+      const bar = getBar() as HTMLElement;
+      const writes = vi.fn();
+      new MutationObserver(writes).observe(bar, { attributes: true });
+
+      vi.advanceTimersByTime(900);
+      await tick();
+
+      expect(writes).not.toHaveBeenCalled();
+    });
+
+    it("should freeze the bar while paused and continue on resume", async () => {
+      render(ToastNotificationTest, {
+        props: { showTimeout: true, timeout: 1000, pauseOnHover: true },
+      });
+      const toast = document.querySelector(
+        ".bx--toast-notification",
+      ) as Element;
+
+      vi.advanceTimersByTime(300);
+      await fireEvent.mouseEnter(toast);
+      expect(getBar()).toHaveStyle({
+        transform: "scaleX(0.7)",
+        transitionDuration: "0ms",
+      });
+
+      vi.advanceTimersByTime(500);
+      await fireEvent.mouseLeave(toast);
+      expect(getBar()).toHaveStyle({
+        transform: "scaleX(0)",
+        transitionDuration: "700ms",
+      });
+    });
+
+    it("should refill the bar when timeoutKey restarts the timeout", async () => {
+      const { rerender } = render(ToastNotificationTest, {
+        props: { showTimeout: true, timeout: 1000 },
+      });
+
+      vi.advanceTimersByTime(600);
+      await rerender({ showTimeout: true, timeout: 1000, timeoutKey: 1 });
+
+      expect(getBar()).toHaveStyle({
+        transform: "scaleX(0)",
+        transitionDuration: "1000ms",
+      });
+    });
+
+    it("should remove the bar when the timeout ends", async () => {
+      render(ToastNotificationTest, {
+        props: { showTimeout: true, timeout: 1000 },
+      });
+
+      vi.advanceTimersByTime(1000);
+      await tick();
+
+      expect(getBar()).not.toBeInTheDocument();
+    });
+  });
+
   it("should pause timeout on hover when pauseOnHover is true", async () => {
     const closeHandler = vi.fn();
     render(ToastNotificationTest, {

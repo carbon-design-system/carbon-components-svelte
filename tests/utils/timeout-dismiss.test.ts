@@ -226,4 +226,51 @@ describe("createTimeoutDismiss", () => {
       expect(cb).not.toHaveBeenCalled();
     });
   });
+
+  it("remainingMs counts down while running and freezes while paused", () => {
+    const dismiss = createTimeoutDismiss();
+
+    expect(dismiss.remainingMs()).toBe(0);
+
+    dismiss.sync(true, 1000, vi.fn());
+    expect(dismiss.remainingMs()).toBe(1000);
+
+    vi.advanceTimersByTime(300);
+    expect(dismiss.remainingMs()).toBe(700);
+
+    dismiss.pause();
+    vi.advanceTimersByTime(500);
+    expect(dismiss.remainingMs()).toBe(700);
+
+    dismiss.resume();
+    vi.advanceTimersByTime(200);
+    expect(dismiss.remainingMs()).toBe(500);
+
+    dismiss.clear();
+    expect(dismiss.remainingMs()).toBe(0);
+  });
+
+  it("onChange fires on start, pause, resume, and stop, and running follows", () => {
+    const onChange = vi.fn();
+    const dismiss = createTimeoutDismiss(onChange);
+
+    dismiss.sync(true, 1000, vi.fn());
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(dismiss.running).toBe(true);
+
+    dismiss.pause();
+    expect(onChange).toHaveBeenCalledTimes(2);
+    expect(dismiss.running).toBe(false);
+
+    dismiss.resume();
+    expect(onChange).toHaveBeenCalledTimes(3);
+    expect(dismiss.running).toBe(true);
+
+    vi.advanceTimersByTime(400);
+    expect(onChange).toHaveBeenCalledTimes(3);
+
+    dismiss.clear();
+    expect(onChange).toHaveBeenCalledTimes(4);
+    expect(dismiss.running).toBe(false);
+  });
 });

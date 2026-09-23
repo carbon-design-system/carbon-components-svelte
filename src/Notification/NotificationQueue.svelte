@@ -11,6 +11,7 @@
    * @property {string} [closeButtonDescription]
    * @property {boolean} [hideCloseButton]
    * @property {boolean} [pauseOnHover]
+   * @property {boolean} [showTimeout]
    * @property {"alert" | "log" | "status"} [role]
    * @property {boolean} [fullWidth]
    */

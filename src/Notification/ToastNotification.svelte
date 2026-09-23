@@ -18,6 +18,12 @@
   /** Set the timeout duration (ms) to hide the notification after opening it */
   export let timeout = 0;
 
+  /**
+   * Set to `true` to show the time left before the notification closes
+   * as a bar along its bottom edge. Has no effect when `timeout` is 0.
+   */
+  export let showTimeout = false;
+
   /** Set to `true` to pause the auto-dismiss timeout while the pointer is over the notification or while focus is inside it. */
   export let pauseOnHover = false;
 
@@ -71,7 +77,7 @@
 
   const dispatch = createEventDispatcher();
 
-  const dismiss = createTimeoutDismiss();
+  const dismiss = createTimeoutDismiss(() => syncTimeoutBar());
 
   const { handleMouseenter, handleMouseleave, handleFocusIn, handleFocusOut } =
     createHoverFocusPause(dismiss, () => pauseOnHover);
@@ -121,6 +127,40 @@
     dismiss.sync(open, timeout, () => close("timeout"));
   }
 
+  /** @type {HTMLDivElement | null} */
+  let timeoutBar = null;
+
+  /**
+   * Draw the timeout bar from the timer's state. Runs only when the timer
+   * starts, pauses, resumes, or stops: the bar jumps to the time left, then
+   * a CSS transition shrinks it to 0 over that time, off the main thread.
+   */
+  function syncTimeoutBar() {
+    const bar = timeoutBar;
+    if (!bar || timeout <= 0) return;
+    const remaining = dismiss.remainingMs();
+    bar.style.transitionDuration = "0ms";
+    bar.style.transform = `scaleX(${remaining / timeout})`;
+    if (!dismiss.running) return;
+    // Commit the jump so the change below transitions from it.
+    bar.getBoundingClientRect();
+    bar.style.transitionDuration = `${remaining}ms`;
+    bar.style.transform = "scaleX(0)";
+  }
+
+  /** @param {HTMLDivElement} node */
+  function timeoutBarAction(node) {
+    timeoutBar = node;
+    syncTimeoutBar();
+    return {
+      destroy() {
+        timeoutBar = null;
+      },
+    };
+  }
+
+  $: showTimeoutBar = showTimeout && open && timeout > 0;
+
   onMount(() => () => dismiss.clear());
 </script>
 
@@ -129,6 +169,7 @@
     role={resolvedRole}
     class:bx--toast-notification={true}
     class:bx--toast-notification--low-contrast={lowContrast}
+    class:bx--toast-notification--timeout={showTimeoutBar}
     class:bx--toast-notification--error={kind === "error"}
     class:bx--toast-notification--info={kind === "info"}
     class:bx--toast-notification--info-square={kind === "info-square"}
@@ -169,6 +210,13 @@
         iconDescription={closeButtonDescription}
         on:click={() => close("close-button")}
       />
+    {/if}
+    {#if showTimeoutBar}
+      <div
+        aria-hidden="true"
+        class:bx--toast-notification__timeout={true}
+        use:timeoutBarAction
+      ></div>
     {/if}
   </div>
 {/if}
