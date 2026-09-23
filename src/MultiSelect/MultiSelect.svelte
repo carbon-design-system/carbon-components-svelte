@@ -1465,6 +1465,8 @@
           open = !open;
         }}
           on:keydown={(event) => {
+          // The field is only aria-disabled, so a click can still focus it.
+          if (disabled) return;
           if (
             event.key === " " ||
             event.key === "Enter" ||
