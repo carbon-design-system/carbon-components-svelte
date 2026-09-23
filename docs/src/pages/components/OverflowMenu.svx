@@ -16,6 +16,8 @@ description: Overflow menus present a list of actions in a compact dropdown, ide
 
 Create a basic overflow menu by wrapping overflow menu item components within the overflow menu. For menus that need submenus, use [MenuButton](/components/MenuButton#icon-only) instead.
 
+Once open, arrow keys move focus between items without wrapping past the first or last item. <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the first and last enabled item, skipping disabled ones. Type a character to move focus to the next enabled item whose text starts with it; type several characters quickly to match a longer prefix.
+
 <OverflowMenu>
   <OverflowMenuItem text="Manage credentials" />
   <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" target="_blank" text="API documentation" />
