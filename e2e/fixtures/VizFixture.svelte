@@ -9,6 +9,7 @@
     CalendarHeatmap,
     ChartAnomalies,
     ChartBand,
+    ChordDiagram,
     ChoroplethChart,
     CirclePackChart,
     CohortTable,
@@ -277,6 +278,21 @@
     y="score"
     series="team"
     title="Engagement score by team, 2025 to 2026"
+  />
+
+  <ChordDiagram
+    data={[
+      { from: "Eng", to: "Design", n: 12 },
+      { from: "Eng", to: "Sales", n: 4 },
+      { from: "Design", to: "Eng", n: 8 },
+      { from: "Sales", to: "Support", n: 3 },
+      { from: "Support", to: "Eng", n: 2 },
+    ]}
+    source="from"
+    target="to"
+    value="n"
+    title="Cross-team handoffs"
+    diameter={240}
   />
 
   <MarimekkoChart
