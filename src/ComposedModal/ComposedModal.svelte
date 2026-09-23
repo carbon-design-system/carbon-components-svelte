@@ -186,6 +186,7 @@
   class:bx--modal--danger={danger}
   inert={open ? undefined : true}
   {...$$restProps}
+  aria-label={undefined}
   on:keydown
   on:keydown={(event) => {
     if (open) {
