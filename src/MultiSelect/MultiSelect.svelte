@@ -599,6 +599,7 @@
         : { ...entry, checked: ids.has(entry.id) },
     );
     syncSelectAllItem();
+    prevChecked = sortedItems.filter((item) => item.checked);
   }
 
   /** Apply `selectionFeedback: "top"` bookkeeping after a checked-state change. */
@@ -729,6 +730,7 @@
   export async function clear(options = {}) {
     if (readonly || selectionCount === 0) return;
     selectedIds = [];
+    prevSelectedIds = [];
     prevSelectedItemId = null;
     sortedItems = sortedItems.map((item) => ({ ...item, checked: false }));
     announceStatus(selectionClearedText);
@@ -1100,8 +1102,12 @@
       !sameSelectedIds(selectedIds, prevSelectedIds)) ||
       (selectionFeedback === "top-after-reopen" && open === false))
   ) {
+    const external = !sameSelectedIds(selectedIds, prevSelectedIds);
     prevSelectedIds = selectedIds.slice();
     sortedItems = sort();
+    // Set by the consumer, not by a toggle or clear(): re-baseline so
+    // afterUpdate does not report it as a `select`.
+    if (external) prevChecked = sortedItems.filter((item) => item.checked);
   } else if (selectedIds && !sameSelectedIds(selectedIds, prevSelectedIds)) {
     prevSelectedIds = selectedIds.slice();
     syncCheckedFromSelectedIds();
