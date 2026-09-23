@@ -393,7 +393,8 @@ Set `dismissible` on Tabs to render a close button on each tab. Handle the
 dismiss event to remove the tab from your data. Bind `selectedId` with a stable
 `id` on each Tab so selection stays coherent without manual index math. The
 event detail includes `{ id, label, disabled, hasSecondaryLabel, index }`. Press
-<DocKbd label="Delete" /> on the focused tab to dismiss it.
+<DocKbd label="Delete" /> on the focused tab to dismiss it. Focus moves to the
+next tab, or to the previous tab when the last one is dismissed.
 
 ### Basic
 
