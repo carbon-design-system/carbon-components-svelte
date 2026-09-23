@@ -568,6 +568,23 @@
     sortedItems = sort();
   }
 
+  /**
+   * Set every non-disabled item within `selectAllScope` to `checked`
+   * (including the isSelectAll pseudo-item, if present, so its own checkbox
+   * follows along without a separate `syncSelectAllItem()` call). Shared by
+   * the isSelectAll pseudo-item's toggle and Ctrl+A.
+   * @param {boolean} checked
+   */
+  function setSelectAllScopeChecked(checked) {
+    sortedItems = sortedItems.map((sortedItem) =>
+      !selectAllScopeIds.has(sortedItem.id) ||
+      sortedItem.disabled ||
+      sortedItem.checked === checked
+        ? sortedItem
+        : { ...sortedItem, checked },
+    );
+  }
+
   /** Handle selection of an item, including isSelectAll logic. */
   function selectItem(item) {
     // Read-only allows opening and navigating the menu to review values, but
@@ -576,14 +593,7 @@
     if (readonly || isItemDisabled(item)) return;
 
     if (item.isSelectAll) {
-      const target = !allSelected;
-      sortedItems = sortedItems.map((sortedItem) =>
-        !selectAllScopeIds.has(sortedItem.id) ||
-        sortedItem.disabled ||
-        sortedItem.checked === target
-          ? sortedItem
-          : { ...sortedItem, checked: target },
-      );
+      setSelectAllScopeChecked(!allSelected);
     } else {
       const itemIndex = sortedItems.indexOf(item);
       if (itemIndex !== -1) {
@@ -594,6 +604,22 @@
       sortedItems = [...sortedItems];
     }
 
+    applyTopSelectionFeedback();
+  }
+
+  /**
+   * Select or deselect every selectable item currently in scope (filtered
+   * when `filterable` and `open`), toggling to the opposite of `allSelected`.
+   * Same semantics as clicking the isSelectAll pseudo-item, whether or not
+   * `items` declares one. Bound to Ctrl+A in
+   * the non-filterable field; the filterable text input intentionally never
+   * calls this so native text selection (Ctrl+A on the input) keeps working.
+   */
+  function selectAllViaKeyboard() {
+    if (readonly || hasMaxSelectedItems || selectableItems.length === 0) {
+      return;
+    }
+    setSelectAllScopeChecked(!allSelected);
     applyTopSelectionFeedback();
   }
 
@@ -1438,6 +1464,16 @@
             if (readonly) return;
             event.preventDefault();
             clear({ open: openOnClear });
+          } else if (
+            open &&
+            (event.key === "a" || event.key === "A") &&
+            (event.ctrlKey || event.metaKey)
+          ) {
+            // Only wired for the non-filterable field: the filterable text
+            // input's Ctrl+A must keep selecting the filter text, not the
+            // options, so it is deliberately left unhandled there.
+            event.preventDefault();
+            selectAllViaKeyboard();
           }
         }}
           on:blur={(event) => {
