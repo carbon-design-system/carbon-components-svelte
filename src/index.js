@@ -33,6 +33,7 @@ export { default as ContainedList } from "./ContainedList/ContainedList.svelte";
 export { default as ContainedListItem } from "./ContainedList/ContainedListItem.svelte";
 export { default as ContentSwitcher } from "./ContentSwitcher/ContentSwitcher.svelte";
 export { default as Switch } from "./ContentSwitcher/Switch.svelte";
+export { default as SwitchPanel } from "./ContentSwitcher/SwitchPanel.svelte";
 export { default as ContextMenu } from "./ContextMenu/ContextMenu.svelte";
 export { default as ContextMenuDivider } from "./ContextMenu/ContextMenuDivider.svelte";
 export { default as ContextMenuGroup } from "./ContextMenu/ContextMenuGroup.svelte";
