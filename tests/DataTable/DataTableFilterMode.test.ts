@@ -92,6 +92,45 @@ describe("DataTable filterMode", () => {
     expect(getSelectAll()).not.toBeChecked();
   });
 
+  const getRowCheckboxes = () =>
+    screen.getAllByRole("checkbox", { name: "Select row" });
+
+  it('shift+click range skips rows hidden by filterMode="hide"', async () => {
+    render(DataTableFilterMode, { props: { batchSelection: true } });
+
+    await user.type(getSearch(), "round");
+    const checkboxes = getRowCheckboxes();
+    expect(checkboxes).toHaveLength(3);
+
+    await user.click(checkboxes[0]);
+    await user.keyboard("{Shift>}");
+    await user.click(checkboxes[2]);
+    await user.keyboard("{/Shift}");
+    expect(selectedCount()).toBe(3);
+
+    await user.clear(getSearch());
+    const allCheckboxes = getRowCheckboxes();
+    expect(allCheckboxes).toHaveLength(6);
+    expect(allCheckboxes[0]).not.toBeChecked();
+    expect(allCheckboxes[2]).not.toBeChecked();
+    expect(allCheckboxes[4]).not.toBeChecked();
+  });
+
+  it('shift+click range selects the matching rows with filterMode="remove"', async () => {
+    render(DataTableFilterMode, {
+      props: { filterMode: "remove", batchSelection: true },
+    });
+
+    await user.type(getSearch(), "round");
+    const checkboxes = getRowCheckboxes();
+
+    await user.click(checkboxes[0]);
+    await user.keyboard("{Shift>}");
+    await user.click(checkboxes[2]);
+    await user.keyboard("{/Shift}");
+    expect(selectedCount()).toBe(3);
+  });
+
   it('falls back to "remove" when pageSize is set', async () => {
     render(DataTableFilterMode, {
       props: { filterMode: "hide", pageSize: 3 },
