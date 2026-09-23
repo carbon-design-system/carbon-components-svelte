@@ -72,13 +72,18 @@ describe("ContextMenu close trigger", () => {
     expect(screen.getByRole("button", { name: "After host" })).toHaveFocus();
   });
 
-  it("should block scroll keys but not letter keys", async () => {
+  it("should block scroll keys and letter keys used for typeahead", async () => {
     render(ContextMenuClose, { props: { open: true, x: 100, y: 100 } });
 
     const menu = screen.getAllByRole("menu")[0];
 
     expect(await fireEvent.keyDown(menu, { key: "ArrowRight" })).toBe(false);
     expect(await fireEvent.keyDown(menu, { key: "PageDown" })).toBe(false);
-    expect(await fireEvent.keyDown(menu, { key: "a" })).toBe(true);
+    // A plain letter key now drives typeahead search, so it is blocked too.
+    expect(await fireEvent.keyDown(menu, { key: "a" })).toBe(false);
+    // A modified letter key (e.g. a shortcut) is left alone.
+    expect(await fireEvent.keyDown(menu, { key: "a", ctrlKey: true })).toBe(
+      true,
+    );
   });
 });
