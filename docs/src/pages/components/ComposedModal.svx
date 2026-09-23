@@ -26,6 +26,18 @@ Use `selectorPrimaryFocus` on `ComposedModal` to override the default and target
 
 <FileSource src="/framed/Modal/ComposedModalCustomFocus" />
 
+## Alert mode
+
+Set `alert` to `true` on `ComposedModal` for a time-sensitive dialog. The ARIA `role` changes from `"dialog"` to `"alertdialog"` and `ModalBody` is linked with `aria-describedby`, so assistive technology announces the body when the modal opens.
+
+```svelte
+<ComposedModal bind:open alert>
+  <ModalHeader title="Session expiring" />
+  <ModalBody>Your session ends in 2 minutes. Save your work to continue.</ModalBody>
+  <ModalFooter primaryButtonText="Stay signed in" secondaryButtonText="Sign out" />
+</ComposedModal>
+```
+
 ## Variants
 
 Change the composed modal's tone and purpose.
