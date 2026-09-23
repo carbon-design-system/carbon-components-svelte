@@ -1,0 +1,130 @@
+/// LayeredGraph: a directed graph in ranks, drawn at a fixed logical size
+/// and scaled to the container.
+/// @access private
+/// @group viz
+@mixin viz-layered-graph {
+  .#{$prefix}--viz-graph {
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-graph .#{$prefix}--viz-chart__title {
+    margin-block-end: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--viz-graph__svg {
+    display: block;
+    overflow: visible;
+    block-size: auto;
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--viz-graph__svg:focus {
+    outline: 2px solid $focus;
+    outline-offset: 2px;
+  }
+
+  .#{$prefix}--viz-graph__lane {
+    fill: $ui-01;
+  }
+
+  .#{$prefix}--viz-graph__lane-label {
+    fill: $text-secondary;
+    font-weight: 600;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-graph__edge {
+    fill: none;
+    stroke: $ui-04;
+    stroke-linejoin: round;
+    stroke-width: 1.5;
+    transition: stroke $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  // An edge that would have closed a cycle points back up the ranks.
+  .#{$prefix}--viz-graph__edge--back {
+    stroke-dasharray: 4 3;
+  }
+
+  .#{$prefix}--viz-graph__edge--active {
+    stroke: $interactive-04;
+    stroke-width: 2;
+  }
+
+  .#{$prefix}--viz-graph__arrow {
+    fill: $ui-04;
+  }
+
+  .#{$prefix}--viz-graph__node {
+    cursor: pointer;
+  }
+
+  .#{$prefix}--viz-graph__box {
+    fill: $ui-background;
+    stroke: $ui-04;
+    stroke-width: 1;
+  }
+
+  // A node holding folded descendants has a heavier frame, so the state
+  // never rests on the badge alone.
+  .#{$prefix}--viz-graph__node--collapsed .#{$prefix}--viz-graph__box {
+    stroke: $interactive-04;
+    stroke-width: 2;
+  }
+
+  .#{$prefix}--viz-graph__node--active .#{$prefix}--viz-graph__box {
+    stroke: $interactive-04;
+    stroke-width: 2;
+  }
+
+  .#{$prefix}--viz-graph__node--selected .#{$prefix}--viz-graph__box {
+    fill: $selected-ui;
+    stroke: $ui-05;
+    stroke-width: 2;
+  }
+
+  .#{$prefix}--viz-graph__label {
+    fill: $text-primary;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-graph__badge {
+    fill: $interactive-04;
+  }
+
+  .#{$prefix}--viz-graph__badge-text {
+    fill: $text-on-color;
+    font-weight: 600;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-graph--emphasis
+    .#{$prefix}--viz-graph__edge:not(.#{$prefix}--viz-graph__edge--active) {
+    stroke-opacity: 0.4;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-graph__edge {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-graph__box {
+      stroke: CanvasText;
+    }
+
+    .#{$prefix}--viz-graph__node--selected .#{$prefix}--viz-graph__box {
+      fill: Highlight;
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("viz-layered-graph") {
+  @include viz-layered-graph;
+}

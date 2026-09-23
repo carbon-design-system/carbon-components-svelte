@@ -51,6 +51,7 @@ export { default as Histogram } from "./Histogram/Histogram.svelte";
 export { default as HorizonChart } from "./HorizonChart/HorizonChart.svelte";
 export { default as IcicleChart } from "./IcicleChart/IcicleChart.svelte";
 export { default as KpiCard } from "./KpiCard/KpiCard.svelte";
+export { default as LayeredGraph } from "./LayeredGraph/LayeredGraph.svelte";
 export { default as LineChart } from "./LineChart/LineChart.svelte";
 export { default as LiveSparkline } from "./LiveSparkline/LiveSparkline.svelte";
 export { default as LollipopChart } from "./LollipopChart/LollipopChart.svelte";
