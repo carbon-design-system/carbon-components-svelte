@@ -1,0 +1,108 @@
+/// ParallelCoordinates: one vertical axis per dimension and one polyline
+/// per row, drawn at a fixed logical size and scaled to the container. The
+/// legend and the tooltip reuse the chart's.
+/// @access private
+/// @group viz
+@mixin viz-parallel-coordinates {
+  .#{$prefix}--viz-parallel {
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-parallel .#{$prefix}--viz-chart__title {
+    margin-block-end: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--viz-parallel__plot {
+    position: relative;
+  }
+
+  .#{$prefix}--viz-parallel__svg {
+    display: block;
+    overflow: visible;
+    block-size: auto;
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--viz-parallel__svg:focus {
+    outline: 2px solid $focus;
+    outline-offset: 2px;
+  }
+
+  .#{$prefix}--viz-parallel__line {
+    fill: none;
+    stroke: var(--bx-viz-color, #{$interactive-04});
+    stroke-linejoin: round;
+    stroke-opacity: 0.7;
+    stroke-width: 1.5;
+    transition: stroke-opacity $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  // Outside a brush, or not the row under the pointer.
+  .#{$prefix}--viz-parallel__line--faded,
+  .#{$prefix}--viz-parallel--emphasis
+    .#{$prefix}--viz-parallel__line:not(.#{$prefix}--viz-parallel__line--active) {
+    stroke-opacity: 0.12;
+  }
+
+  .#{$prefix}--viz-parallel__line--active {
+    stroke-opacity: 1;
+    stroke-width: 2.5;
+  }
+
+  .#{$prefix}--viz-parallel__axis-line,
+  .#{$prefix}--viz-parallel__tick {
+    shape-rendering: crispEdges;
+    stroke: $ui-04;
+  }
+
+  .#{$prefix}--viz-parallel__tick-label {
+    fill: $text-helper;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-parallel__label {
+    fill: $text-secondary;
+    font-weight: 600;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-parallel__brush {
+    fill: $interactive-04;
+    fill-opacity: 0.2;
+    pointer-events: none;
+    stroke: $interactive-04;
+  }
+
+  .#{$prefix}--viz-parallel__hit {
+    cursor: ns-resize;
+    fill: transparent;
+  }
+
+  .#{$prefix}--viz-parallel--brushing {
+    user-select: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-parallel__line {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-parallel__line {
+      forced-color-adjust: none;
+    }
+
+    .#{$prefix}--viz-parallel__brush {
+      fill: Highlight;
+      stroke: Highlight;
+    }
+  }
+}
+
+@include exports("viz-parallel-coordinates") {
+  @include viz-parallel-coordinates;
+}
