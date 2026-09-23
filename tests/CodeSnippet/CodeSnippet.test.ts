@@ -29,6 +29,7 @@ import CodeSnippetNullishAriaLabel from "./CodeSnippetNullishAriaLabel.test.svel
 import CodeSnippetRestPropsButton from "./CodeSnippetRestPropsButton.test.svelte";
 import CodeSnippetRestPropsSingle from "./CodeSnippetRestPropsSingle.test.svelte";
 import CodeSnippetRestPropsSpan from "./CodeSnippetRestPropsSpan.test.svelte";
+import CodeSnippetSlotCopy from "./CodeSnippetSlotCopy.test.svelte";
 import CodeSnippetWithCustomCopyText from "./CodeSnippetWithCustomCopyText.test.svelte";
 import CodeSnippetWithHideShowMore from "./CodeSnippetWithHideShowMore.test.svelte";
 import CodeSnippetWithWrapText from "./CodeSnippetWithWrapText.test.svelte";
@@ -720,7 +721,7 @@ yarn -v`,
     expect(screen.getByText("Custom copied text!")).toBeInTheDocument();
   });
 
-  describe("inline snippet without code", () => {
+  describe("copying without code", () => {
     const originalClipboard = navigator.clipboard;
     let writeText: ReturnType<typeof vi.fn>;
 
@@ -739,24 +740,69 @@ yarn -v`,
       });
     });
 
-    test("does not write to the clipboard with the default copy", async () => {
+    test("copies inline slot text with the default copy", async () => {
       const onCopy = vi.fn();
       render(CodeSnippetInlineSlotCopy, { props: { onCopy } });
 
       await user.click(screen.getByLabelText("Copy code"));
 
-      expect(writeText).not.toHaveBeenCalled();
-      expect(onCopy).not.toHaveBeenCalled();
+      expect(writeText).toHaveBeenCalledWith("npm i foo");
+      expect(onCopy).toHaveBeenCalledTimes(1);
     });
 
-    test("passes an empty string to a custom copy", async () => {
+    test("passes inline slot text to a custom copy", async () => {
       const copy = vi.fn();
       render(CodeSnippetInlineSlotCopy, { props: { copy } });
 
       await user.click(screen.getByLabelText("Copy code"));
 
-      expect(copy).toHaveBeenCalledWith("");
+      expect(copy).toHaveBeenCalledWith("npm i foo");
       expect(copy).not.toHaveBeenCalledWith(undefined);
+    });
+
+    it.each(snippetVariants)(
+      "copies the rendered slot text ($type)",
+      async ({ type, label }) => {
+        const copy = vi.fn();
+        render(CodeSnippetSlotCopy, { props: { type, copy } });
+
+        await user.click(screen.getByLabelText(label));
+
+        expect(copy).toHaveBeenCalledWith("npm i foo");
+      },
+    );
+
+    it.each(snippetVariants)(
+      "prefers code over the slot text ($type)",
+      async ({ type, label }) => {
+        const copy = vi.fn();
+        render(CodeSnippetSlotCopy, {
+          props: { type, copy, code: "override" },
+        });
+
+        await user.click(screen.getByLabelText(label));
+
+        expect(copy).toHaveBeenCalledWith("override");
+      },
+    );
+
+    test("copies single slot text with the default copy", async () => {
+      render(CodeSnippetSlotCopy, { props: { type: "single" } });
+
+      await user.click(screen.getByLabelText("Copy to clipboard"));
+
+      expect(writeText).toHaveBeenCalledWith("npm i foo");
+    });
+
+    test("prefers an empty code string over the slot text", async () => {
+      const copy = vi.fn();
+      render(CodeSnippetSlotCopy, {
+        props: { type: "single", copy, code: "" },
+      });
+
+      await user.click(screen.getByLabelText("Copy to clipboard"));
+
+      expect(copy).toHaveBeenCalledWith("");
     });
 
     test("copies an empty code string with the default copy", async () => {
