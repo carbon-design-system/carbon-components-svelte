@@ -51,6 +51,16 @@ added or removed. When set, `selectedId` takes precedence over
 
 <FileSource src="/framed/ContentSwitcher/ContentSwitcherSelectedId" />
 
+### Query string
+
+Keep the selected switch in the URL so it survives a reload and can be shared.
+`queryParam` returns a store mirrored to a query parameter; bind `selectedId` to
+it. Use `parse` to reject unknown ids so they fall back to `defaultValue`;
+selecting `defaultValue` removes the parameter. In an app with a router, pass
+the router's navigation API as `replace`.
+
+<FileSource src="/framed/ContentSwitcher/ContentSwitcherQueryString" />
+
 ### Manual selection mode
 
 By default, the content switcher changes the selection when the user moves focus with the arrow keys.
