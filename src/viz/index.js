@@ -72,6 +72,7 @@ export { default as StateTimeline } from "./StateTimeline/StateTimeline.svelte";
 export { default as TileGridMap } from "./TileGridMap/TileGridMap.svelte";
 export { default as TreeChart } from "./TreeChart/TreeChart.svelte";
 export { default as TreemapChart } from "./TreemapChart/TreemapChart.svelte";
+export { default as UpSetPlot } from "./UpSetPlot/UpSetPlot.svelte";
 export { default as UptimeBar } from "./UptimeBar/UptimeBar.svelte";
 export { groupBy, toAccessor } from "./utils/accessor.js";
 export { flagAnomalies } from "./utils/anomaly.js";
