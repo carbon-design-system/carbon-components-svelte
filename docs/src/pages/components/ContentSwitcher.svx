@@ -1,10 +1,10 @@
 ---
-components: ["ContentSwitcher", "Switch"]
+components: ["ContentSwitcher", "Switch", "SwitchPanel"]
 description: Content switchers let users switch between views or sections of content, organizing related content into distinct categories.
 ---
 
 <script>
-  import { ContentSwitcher, Switch, Stack } from "carbon-components-svelte";
+  import { Box, ContentSwitcher, Switch, SwitchPanel, Stack } from "carbon-components-svelte";
   import Bullhorn from "carbon-icons-svelte/lib/Bullhorn.svelte";
   import Analytics from "carbon-icons-svelte/lib/Analytics.svelte";
   import TableOfContents from "carbon-icons-svelte/lib/TableOfContents.svelte";
@@ -24,9 +24,20 @@ Create a content switcher with switch components. Each switch needs a text label
 
 ## Switching views
 
-Bind `selectedIndex` and render one panel per switch. Name the switcher with `aria-label`, give each `Switch` an `id` and an `aria-controls` that points at a `role="tabpanel"` element, and label each panel back with `aria-labelledby`.
+Pass one `SwitchPanel` per switch to the `content` slot. Panels pair with switches by position. The component shows the panel for the selected switch and sets `role="tabpanel"`, `aria-labelledby`, and each switch's `aria-controls`. Name the switcher with `aria-label`.
 
-<FileSource src="/framed/ContentSwitcher/ContentSwitcherViews" />
+Set `lazy` to mount a panel's content the first time its switch is selected, or `unmountOnHide` to unmount it when the switch is deselected.
+
+<ContentSwitcher aria-label="News feed">
+  <Switch text="Latest news" />
+  <Switch text="Trending" />
+  <Switch text="Recommended" />
+  <Box slot="content" paddingY={5}>
+    <SwitchPanel>Headlines from the last 24 hours.</SwitchPanel>
+    <SwitchPanel>Stories with the most reads this week.</SwitchPanel>
+    <SwitchPanel>Picked from your reading history.</SwitchPanel>
+  </Box>
+</ContentSwitcher>
 
 ## Selection
 
