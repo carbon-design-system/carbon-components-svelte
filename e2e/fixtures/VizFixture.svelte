@@ -35,6 +35,7 @@
     MicroDonut,
     MicroFunnel,
     MicroHistogram,
+    OrgChart,
     ParallelCoordinates,
     RadarChart,
     RadialProgress,
@@ -254,6 +255,23 @@
     group="tier"
     status="health"
     title="Service dependencies"
+  />
+
+  <OrgChart
+    data={[
+      { id: "vp", manager: null, name: "A. Rivera", title: "VP Engineering" },
+      { id: "plat", manager: "vp", name: "K. Chen", title: "Director, Platform", team: "Platform" },
+      { id: "prod", manager: "vp", name: "J. Patel", title: "Director, Product", team: "Product" },
+      { id: "obs", manager: "plat", name: "M. Lee", title: "Observability", team: "Platform" },
+      { id: "checkout", manager: "prod", name: "S. Ng", title: "Checkout", team: "Product" },
+    ]}
+    id="id"
+    parent="manager"
+    label="name"
+    sublabel="title"
+    group="team"
+    collapsed={["plat"]}
+    title="Engineering org"
   />
 
   <IcicleChart
