@@ -470,6 +470,28 @@
   }
 
   /**
+   * Select the item keyboard-highlighted at `index` (into `itemsToUse`), or
+   * with `shiftKey` select the range from the anchor to it, matching
+   * shift+click (`handleOptionClick`). Ignored unless the highlight came
+   * from the keyboard: a hover highlight must not become selectable by
+   * pressing Enter/Space elsewhere.
+   * @param {number} index
+   * @param {boolean} shiftKey
+   */
+  function selectHighlightedItem(index, shiftKey) {
+    if (highlightOrigin !== "keyboard" || index < 0) return;
+    const item = itemsToUse[index];
+    if (!item) return;
+    const usedRange =
+      shiftKey &&
+      prevSelectedItemId !== null &&
+      !item.isSelectAll &&
+      selectItemRange(index, !item.checked);
+    if (!usedRange) selectItem(item);
+    prevSelectedItemId = item.id;
+  }
+
+  /**
    * @param {number} index Index into `itemsToUse`.
    * @param {boolean} itemDisabled
    */
@@ -1250,12 +1272,7 @@
               return;
             }
             if (event.key === "Enter") {
-              if (highlightOrigin === "keyboard" && highlightedId) {
-                const highlightedItem = sortedItems.find(
-                  (item) => item.id === highlightedId,
-                );
-                if (highlightedItem) selectItem(highlightedItem);
-              }
+              selectHighlightedItem(highlightedIndex, event.shiftKey);
             } else if (event.key === "Tab") {
               open = false;
             } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
@@ -1380,11 +1397,10 @@
           // Read-only still opens and navigates the menu; selectItem is the
           // single guard that blocks the actual selection change.
           if (event.key === " ") {
-            if (!open) {
+            if (open) {
+              selectHighlightedItem(highlightedIndex, event.shiftKey);
+            } else {
               open = true;
-            } else if (highlightOrigin === "keyboard" && highlightedIndex > -1) {
-              const item = itemsToUse[highlightedIndex];
-              if (item) selectItem(item);
             }
           } else if (event.key === "Tab") {
             open = false;
@@ -1403,10 +1419,7 @@
               change(step);
             }
           } else if (event.key === "Enter") {
-            if (highlightOrigin === "keyboard" && highlightedIndex > -1) {
-              const item = itemsToUse[highlightedIndex];
-              if (item) selectItem(item);
-            }
+            selectHighlightedItem(highlightedIndex, event.shiftKey);
           } else if (event.key === "Escape") {
             close("escape-key");
           } else if (event.key === "Home" || event.key === "End") {
