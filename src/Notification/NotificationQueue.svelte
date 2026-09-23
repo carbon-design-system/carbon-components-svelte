@@ -6,6 +6,7 @@
    * @property {string} [title]
    * @property {string} [subtitle]
    * @property {string} [caption]
+   * @property {Date | number | string} [captionDate]
    * @property {number} [timeout]
    * @property {boolean} [lowContrast]
    * @property {string} [closeButtonDescription]

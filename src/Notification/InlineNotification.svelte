@@ -37,6 +37,14 @@
   /** Specify the subtitle text */
   export let subtitle = "";
 
+  /**
+   * Specify a date to show as relative time (for example, "5 minutes ago")
+   * in the caption. Formatted once when the notification renders; it does
+   * not tick, so an open live region is not re-announced.
+   * @type {Date | number | string | undefined}
+   */
+  export let captionDate = undefined;
+
   /** Set to `true` to hide the close button */
   export let hideCloseButton = false;
 
@@ -50,6 +58,7 @@
   export let open = true;
 
   import { createEventDispatcher, onMount } from "svelte";
+  import RelativeTime from "../RelativeTime/RelativeTime.svelte";
   import { createHoverFocusPause } from "../utils/pause-on-hover-focus.js";
   import { createTimeoutDismiss } from "../utils/timeout-dismiss.js";
   import NotificationButton from "./NotificationButton.svelte";
@@ -139,6 +148,11 @@
         {#if subtitle || $$slots.subtitleChildren}
           <div class:bx--inline-notification__subtitle={true}>
             <slot name="subtitleChildren">{subtitle}</slot>
+          </div>
+        {/if}
+        {#if captionDate != null}
+          <div class:bx--inline-notification__caption={true}>
+            <RelativeTime date={captionDate} live={false} />
           </div>
         {/if}
         <slot />

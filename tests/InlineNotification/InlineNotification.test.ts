@@ -533,4 +533,23 @@ describe("InlineNotification", () => {
       expect(onModalClose).not.toHaveBeenCalled();
     });
   });
+  describe("captionDate", () => {
+    const date = new Date("2020-01-02T03:04:05.000Z");
+
+    it("should render a relative time caption from captionDate", () => {
+      render(InlineNotificationTest, { props: { captionDate: date } });
+
+      const time = document.querySelector(
+        ".bx--inline-notification__caption time",
+      );
+      expect(time).toHaveAttribute("datetime", date.toISOString());
+      expect(time?.textContent?.trim()).not.toBe("");
+    });
+
+    it("should not render a caption without captionDate", () => {
+      render(InlineNotificationTest);
+
+      expect(document.querySelector("time")).not.toBeInTheDocument();
+    });
+  });
 });

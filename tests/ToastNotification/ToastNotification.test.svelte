@@ -10,6 +10,8 @@
   export let pauseOnHover: ComponentProps<ToastNotification>["pauseOnHover"] = false;
   export let role: ComponentProps<ToastNotification>["role"] = undefined;
   export let title: ComponentProps<ToastNotification>["title"] = "";
+  export let captionDate: ComponentProps<ToastNotification>["captionDate"] =
+    undefined;
   export let subtitle: ComponentProps<ToastNotification>["subtitle"] = "";
   export let caption: ComponentProps<ToastNotification>["caption"] = "";
   export let closeButtonDescription: ComponentProps<ToastNotification>["closeButtonDescription"] =
@@ -30,6 +32,7 @@
   {role}
   {title}
   {subtitle}
+  {captionDate}
   {caption}
   {closeButtonDescription}
   {hideCloseButton}

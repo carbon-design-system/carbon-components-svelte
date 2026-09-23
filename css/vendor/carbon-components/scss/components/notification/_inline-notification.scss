@@ -317,3 +317,13 @@
 @include exports('inline-notifications') {
   @include inline-notifications;
 }
+
+// carbon-components-svelte patch
+// `captionDate` caption: its own line under the title and subtitle, which
+// share a wrapping flex row.
+.#{$prefix}--inline-notification__caption {
+  @include type-style('label-01');
+
+  flex-basis: 100%;
+  margin-top: $carbon--spacing-02;
+}

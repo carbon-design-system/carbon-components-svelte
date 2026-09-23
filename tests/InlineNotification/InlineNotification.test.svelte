@@ -8,6 +8,8 @@
   export let pauseOnHover: ComponentProps<InlineNotification>["pauseOnHover"] = false;
   export let role: ComponentProps<InlineNotification>["role"] = undefined;
   export let title: ComponentProps<InlineNotification>["title"] = "";
+  export let captionDate: ComponentProps<InlineNotification>["captionDate"] =
+    undefined;
   export let subtitle: ComponentProps<InlineNotification>["subtitle"] = "";
   export let closeButtonDescription: ComponentProps<InlineNotification>["closeButtonDescription"] =
     "Close notification";
@@ -24,6 +26,7 @@
   {role}
   {title}
   {subtitle}
+  {captionDate}
   {closeButtonDescription}
   {hideCloseButton}
   on:close={(e) => onclose?.(e)}

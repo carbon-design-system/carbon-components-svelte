@@ -670,4 +670,35 @@ describe("ToastNotification", () => {
       expect(screen.getByText("Escape test")).toBeInTheDocument();
     });
   });
+  describe("captionDate", () => {
+    const date = new Date("2020-01-02T03:04:05.000Z");
+
+    it("should render a relative time caption from captionDate", () => {
+      render(ToastNotificationTest, { props: { captionDate: date } });
+
+      const time = document.querySelector(
+        ".bx--toast-notification__caption time",
+      );
+      expect(time).toHaveAttribute("datetime", date.toISOString());
+      expect(time?.textContent?.trim()).not.toBe("");
+    });
+
+    it("should not render a caption without captionDate", () => {
+      render(ToastNotificationTest);
+
+      expect(document.querySelector("time")).not.toBeInTheDocument();
+    });
+
+    it("should prefer a string caption over captionDate", () => {
+      render(ToastNotificationTest, {
+        props: { caption: "static", captionDate: date },
+      });
+
+      const caption = document.querySelector(
+        ".bx--toast-notification__caption",
+      );
+      expect(caption).toHaveTextContent("static");
+      expect(document.querySelector("time")).not.toBeInTheDocument();
+    });
+  });
 });

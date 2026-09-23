@@ -46,6 +46,15 @@
   /** Specify the caption text */
   export let caption = "";
 
+  /**
+   * Specify a date to show as relative time (for example, "5 minutes ago")
+   * in the caption. Formatted once when the notification renders; it does
+   * not tick, so an open live region is not re-announced.
+   * Ignored when `caption` or the `captionChildren` slot is set.
+   * @type {Date | number | string | undefined}
+   */
+  export let captionDate = undefined;
+
   /** Specify the ARIA label for the close button */
   export let closeButtonDescription = "Close notification";
 
@@ -72,6 +81,7 @@
   export let open = true;
 
   import { createEventDispatcher, onMount } from "svelte";
+  import RelativeTime from "../RelativeTime/RelativeTime.svelte";
   import { createHoverFocusPause } from "../utils/pause-on-hover-focus.js";
   import { createTimeoutDismiss } from "../utils/timeout-dismiss.js";
   import NotificationButton from "./NotificationButton.svelte";
@@ -203,6 +213,10 @@
       {#if caption || $$slots.captionChildren}
         <div class:bx--toast-notification__caption={true}>
           <slot name="captionChildren">{caption}</slot>
+        </div>
+      {:else if captionDate != null}
+        <div class:bx--toast-notification__caption={true}>
+          <RelativeTime date={captionDate} live={false} />
         </div>
       {/if}
       <slot />
