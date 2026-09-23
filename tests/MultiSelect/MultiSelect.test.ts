@@ -1342,6 +1342,88 @@ describe("MultiSelect", () => {
       expect(nthRenderedOptionText(0)).toBe("A");
     });
 
+    describe("external selectedIds without re-sorting", () => {
+      const unsortedItems = [
+        { id: "3", text: "C" },
+        { id: "1", text: "A" },
+        { id: "2", text: "B" },
+      ];
+
+      const optionByText = (text: string) =>
+        screen
+          .getAllByRole("option")
+          .find((option) => option.textContent?.trim() === text);
+
+      it("checks externally selected items in place with selectionFeedback: fixed", async () => {
+        const { rerender } = render(MultiSelect, {
+          props: { items: unsortedItems, selectionFeedback: "fixed" },
+        });
+
+        await rerender({ selectedIds: ["2"] });
+        await openMenu();
+
+        expect(nthRenderedOptionText(0)).toBe("A");
+        expect(nthRenderedOptionText(1)).toBe("B");
+        expect(nthRenderedOptionText(2)).toBe("C");
+        expect(optionByText("A")).toHaveAttribute("aria-selected", "false");
+        expect(optionByText("B")).toHaveAttribute("aria-selected", "true");
+        expect(optionByText("C")).toHaveAttribute("aria-selected", "false");
+      });
+
+      it("keeps an external selection when the user then toggles another item", async () => {
+        const consoleLog = vi.spyOn(console, "log");
+        const { rerender } = render(MultiSelect, {
+          props: { items: unsortedItems, selectionFeedback: "fixed" },
+        });
+
+        await rerender({ selectedIds: ["2"] });
+        await openMenu();
+        await toggleOption("C");
+
+        const selectCalls = consoleLog.mock.calls.filter(
+          ([name]) => name === "select",
+        );
+        const selectedIds = selectCalls.at(-1)?.[1]?.selectedIds;
+        expect(selectedIds).toHaveLength(2);
+        expect(selectedIds).toEqual(expect.arrayContaining(["2", "3"]));
+      });
+
+      it("checks externally selected items while open with top-after-reopen, reordering on reopen", async () => {
+        const { rerender } = render(MultiSelect, {
+          props: { items: unsortedItems },
+        });
+
+        await openMenu();
+        await rerender({ selectedIds: ["3"] });
+
+        expect(nthRenderedOptionText(2)).toBe("C");
+        expect(optionByText("C")).toHaveAttribute("aria-selected", "true");
+
+        await closeMenu();
+        await openMenu();
+        expect(nthRenderedOptionText(0)).toBe("C");
+      });
+
+      it("syncs the select-all item with selectionFeedback: fixed", async () => {
+        const { rerender } = render(MultiSelect, {
+          props: {
+            items: [
+              { id: "all", text: "All", isSelectAll: true },
+              ...unsortedItems,
+            ],
+            selectionFeedback: "fixed",
+          },
+        });
+
+        await rerender({ selectedIds: ["1", "2", "3"] });
+        await openMenu();
+        expect(optionByText("All")).toHaveAttribute("aria-checked", "true");
+
+        await rerender({ selectedIds: ["1"] });
+        expect(optionByText("All")).toHaveAttribute("aria-checked", "mixed");
+      });
+    });
+
     it("recomputes sortedItems when the items prop changes", async () => {
       const { rerender } = render(MultiSelect, {
         props: {
