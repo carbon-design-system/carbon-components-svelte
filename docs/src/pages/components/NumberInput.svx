@@ -66,6 +66,12 @@ of 0.1.
 
 <NumberInput value="{1}" helperText="Step of 0.1" step={0.1} labelText="CPU cores allocated" />
 
+### Keyboard stepping
+
+With the input focused, <DocKbd label="ArrowUp" /> and <DocKbd label="ArrowDown" /> step by `step`. <DocKbd label="PageUp" /> and <DocKbd label="PageDown" /> step by 10 × `step`, clamped to `min`/`max`.
+
+<NumberInput value="{50}" step={1} min={0} max={100} helperText="Press PageUp or PageDown to step by 10" labelText="Clusters" />
+
 ### Step start
 
 Configure a starting point for stepping when the input is empty or zero with
