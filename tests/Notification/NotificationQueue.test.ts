@@ -360,6 +360,120 @@ describe("NotificationQueue", () => {
     expect(toast).not.toHaveAttribute("timeoutKey");
   });
 
+  describe("collapseDuplicates", () => {
+    it("should stack identical notifications by default", async () => {
+      const { component } = render(NotificationQueueTest);
+      const queue = getQueue(component.queue);
+
+      queue.add({ kind: "success", title: "Saved" });
+      queue.add({ kind: "success", title: "Saved" });
+      await tick();
+
+      expect(screen.getAllByText("Saved")).toHaveLength(2);
+    });
+
+    it("should collapse identical notifications into one row with a count", async () => {
+      const { component } = render(NotificationQueueTest, {
+        props: { collapseDuplicates: true },
+      });
+      const queue = getQueue(component.queue);
+
+      const first = queue.add({ kind: "success", title: "Saved" });
+      const second = queue.add({ kind: "success", title: "Saved" });
+      await tick();
+
+      expect(second).toBe(first);
+      expect(document.querySelectorAll(".bx--toast-notification")).toHaveLength(
+        1,
+      );
+      expect(screen.getByText("Saved (2)")).toBeInTheDocument();
+
+      queue.add({ kind: "success", title: "Saved" });
+      await tick();
+      expect(screen.getByText("Saved (3)")).toBeInTheDocument();
+    });
+
+    it("should not collapse notifications with a different kind or subtitle", async () => {
+      const { component } = render(NotificationQueueTest, {
+        props: { collapseDuplicates: true },
+      });
+      const queue = getQueue(component.queue);
+
+      queue.add({ kind: "success", title: "Saved" });
+      queue.add({ kind: "info", title: "Saved" });
+      queue.add({ kind: "success", title: "Saved", subtitle: "Draft" });
+      await tick();
+
+      expect(screen.getAllByText("Saved")).toHaveLength(3);
+    });
+
+    it("should still ignore a repeated id without counting it", async () => {
+      const { component } = render(NotificationQueueTest, {
+        props: { collapseDuplicates: true },
+      });
+      const queue = getQueue(component.queue);
+
+      queue.add({ id: "a", title: "Saved" });
+      queue.add({ id: "a", title: "Saved" });
+      await tick();
+
+      expect(screen.getByText("Saved")).toBeInTheDocument();
+      expect(screen.queryByText("Saved (2)")).not.toBeInTheDocument();
+    });
+
+    it("should restart the timeout when a duplicate is collapsed", async () => {
+      const { component } = render(NotificationQueueTest, {
+        props: { collapseDuplicates: true },
+      });
+      const queue = getQueue(component.queue);
+
+      queue.add({ title: "Retrying", timeout: 1000 });
+      await tick();
+      vi.advanceTimersByTime(800);
+
+      queue.add({ title: "Retrying", timeout: 1000 });
+      await tick();
+      vi.advanceTimersByTime(800);
+      await tick();
+      expect(screen.getByText("Retrying (2)")).toBeInTheDocument();
+
+      vi.advanceTimersByTime(200);
+      await tick();
+      expect(screen.queryByText("Retrying (2)")).not.toBeInTheDocument();
+    });
+
+    it("should not include count in the dismiss payload", async () => {
+      const ondismiss = vi.fn();
+      const { component } = render(NotificationQueueTest, {
+        props: { collapseDuplicates: true, ondismiss },
+      });
+      const queue = getQueue(component.queue);
+
+      const id = queue.add({ title: "Saved" });
+      queue.add({ title: "Saved" });
+      queue.remove(id);
+      await tick();
+
+      expect(ondismiss.mock.calls[0][0].detail.notification).not.toHaveProperty(
+        "count",
+      );
+    });
+
+    it("should not render count as an attribute", async () => {
+      const { component } = render(NotificationQueueTest, {
+        props: { collapseDuplicates: true },
+      });
+      const queue = getQueue(component.queue);
+
+      queue.add({ title: "Saved" });
+      queue.add({ title: "Saved" });
+      await tick();
+
+      const toast = document.querySelector(".bx--toast-notification");
+      expect(toast).not.toHaveAttribute("count");
+    });
+  });
+
   it("should limit notifications to maxNotifications (top-right)", async () => {
     const { component } = render(NotificationQueueTest, {
       props: { maxNotifications: 2 },

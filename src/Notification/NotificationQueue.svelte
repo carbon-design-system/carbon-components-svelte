@@ -61,12 +61,19 @@
    */
   export let maxNotifications = 3;
 
+  /**
+   * Set to `true` to merge a new notification with the same `kind`, `title`,
+   * and `subtitle` as a visible one into that row, showing a count on its
+   * title and restarting its timeout. Id deduplication still runs first.
+   */
+  export let collapseDuplicates = false;
+
   import { createEventDispatcher } from "svelte";
   import ToastNotification from "./ToastNotification.svelte";
 
   const dispatch = createEventDispatcher();
 
-  /** @type {Array<NotificationData & { id: string; timeoutKey?: number }>} */
+  /** @type {Array<NotificationData & { id: string; timeoutKey?: number; count?: number }>} */
   let notifications = [];
 
   let idCounter = 0;
@@ -77,10 +84,10 @@
 
   /**
    * A stored row without the queue's bookkeeping fields.
-   * @param {NotificationData & { id: string; timeoutKey?: number }} row
+   * @param {NotificationData & { id: string; timeoutKey?: number; count?: number }} row
    * @returns {NotificationData & { id: string }}
    */
-  function toNotificationData({ timeoutKey, ...notification }) {
+  function toNotificationData({ timeoutKey, count, ...notification }) {
     return notification;
   }
 
@@ -104,7 +111,9 @@
    * Add a notification to the queue.
    * If a notification with the same id already exists, the call is ignored.
    * To change an existing notification in place, use `update`.
-   * Returns the notification id (either the provided id or a generated one).
+   * With `collapseDuplicates`, a duplicate is merged into the existing row.
+   * Returns the notification id (the provided or generated id, or the
+   * existing row's id when collapsed).
    * @type {(notification: NotificationData) => string}
    */
   export function add(notification) {
@@ -112,6 +121,25 @@
 
     if (notifications.some((n) => n.id === id)) {
       return id;
+    }
+
+    if (collapseDuplicates) {
+      const index = notifications.findIndex(
+        (n) =>
+          n.kind === notification.kind &&
+          n.title === notification.title &&
+          n.subtitle === notification.subtitle,
+      );
+      if (index !== -1) {
+        const current = notifications[index];
+        notifications[index] = {
+          ...current,
+          count: (current.count ?? 1) + 1,
+          timeoutKey: (current.timeoutKey ?? 0) + 1,
+        };
+        notifications = notifications;
+        return current.id;
+      }
     }
 
     /** @type {NotificationData & { id: string }} */
@@ -255,8 +283,12 @@
     style:z-index={zIndex}
   >
     {#each notifications as notification (notification.id)}
+      {@const { count, ...toastProps } = notification}
       <ToastNotification
-        {...notification}
+        {...toastProps}
+        title={count > 1
+          ? `${toastProps.title ? `${toastProps.title} ` : ""}(${count})`
+          : toastProps.title}
         on:close={(event) => handleClose(event, notification.id)}
       />
     {/each}
