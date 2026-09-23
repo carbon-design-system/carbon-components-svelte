@@ -11,13 +11,19 @@
    */
   export let ref = null;
 
-  import { getContext } from "svelte";
+  import { getContext, onMount } from "svelte";
   import { writable } from "svelte/store";
   import { scrollIntoViewWithinMenu } from "../utils/scroll-into-view-within-menu.js";
 
   const composedModalCtx = getContext("carbon:ComposedModal");
   const modalLabel = composedModalCtx?.label ?? writable(undefined);
   const modalTitle = composedModalCtx?.title ?? writable(undefined);
+
+  // Give the body an id ComposedModal can reference from `aria-describedby`
+  // in alert mode. A consumer `id` wins and is reported instead.
+  $: resolvedId = $$restProps.id ?? composedModalCtx?.defaultBodyId;
+  $: composedModalCtx?.setBodyId?.(resolvedId);
+  onMount(() => () => composedModalCtx?.setBodyId?.(undefined));
 
   // Name the region with ModalHeader's label/title heading when the
   // consumer hasn't already supplied their own aria-label/aria-labelledby.
@@ -34,6 +40,7 @@
 <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 <div
   bind:this={ref}
+  id={resolvedId}
   tabindex={hasScrollingContent ? "0" : undefined}
   role={hasScrollingContent ? "region" : undefined}
   aria-labelledby={hasScrollingContent ? regionLabelledby : undefined}

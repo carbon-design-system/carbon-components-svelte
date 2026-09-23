@@ -21,6 +21,12 @@
   /** Set to `true` to use the danger variant */
   export let danger = false;
 
+  /**
+   * Set to `true` to enable alert mode.
+   * The dialog uses `role="alertdialog"` and is described by `ModalBody`.
+   */
+  export let alert = false;
+
   /** Set to `true` to remove the modal body padding so content spans edge to edge */
   export let fullWidth = false;
 
@@ -53,6 +59,7 @@
   const dispatch = createEventDispatcher();
   const label = writable(undefined);
   const title = writable(undefined);
+  const bodyId = writable(undefined);
   const focusReturn = restoreFocus();
 
   // Ids for ModalHeader's label/title headings, so ModalBody (when
@@ -107,6 +114,13 @@
     title.set(value);
   }
 
+  /**
+   * @type {(value: string | undefined) => void}
+   */
+  function setBodyId(value) {
+    bodyId.set(value);
+  }
+
   setContext("carbon:Modal", {});
   setContext("carbon:ComposedModal", {
     closeModal,
@@ -117,6 +131,9 @@
     titleId,
     label,
     title,
+    bodyId,
+    setBodyId,
+    defaultBodyId: `${modalId}-body`,
   });
 
   function focus(node) {
@@ -221,7 +238,8 @@
   <div
     bind:this={innerModalRef}
     tabindex="-1"
-    role="dialog"
+    role={alert ? "alertdialog" : "dialog"}
+    aria-describedby={alert ? $bodyId : undefined}
     aria-modal="true"
     aria-label={$$props["aria-label"] ?? ($label || $title || undefined)}
     class:bx--modal-container={true}
