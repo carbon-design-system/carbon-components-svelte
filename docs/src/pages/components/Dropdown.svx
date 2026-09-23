@@ -17,6 +17,8 @@ description: Dropdowns provide a select input with a dropdown menu, with multipl
 
 Use the dropdown to create a select input with a dropdown menu. Each item needs a unique id.
 
+Type a character, with the menu open or closed, to highlight the next enabled item whose label starts with it; type quickly to match a longer prefix.
+
 <Dropdown labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
