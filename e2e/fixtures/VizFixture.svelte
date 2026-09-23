@@ -54,6 +54,7 @@
     ScatterChart,
     SegmentedProgress,
     SequenceDiagram,
+    SequenceSunburst,
     ShareOfTotal,
     SlopeChart,
     SmallMultiples,
@@ -823,6 +824,20 @@
     y="revenue"
     title="Shape of monthly totals per region"
     height={240}
+  />
+
+  <SequenceSunburst
+    data={[
+      { path: "home/search/pdp/cart", users: 40 },
+      { path: "home/search/pdp", users: 25 },
+      { path: "home/pdp/cart", users: 20 },
+      { path: "home/search", users: 15 },
+    ]}
+    steps="path"
+    value="users"
+    rootLabel="Sessions"
+    title="Checkout paths"
+    diameter={220}
   />
 
   <RidgelineChart
