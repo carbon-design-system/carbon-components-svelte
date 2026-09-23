@@ -283,6 +283,7 @@
         const tag = target?.tagName;
         if (
           tag === "BUTTON" ||
+          tag === "A" ||
           tag === "TEXTAREA" ||
           tag === "SELECT" ||
           target?.isContentEditable

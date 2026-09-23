@@ -229,7 +229,7 @@ The primary button dispatches both `submit` and `click:button--primary` when cli
 >
 ```
 
-When `shouldSubmitOnEnter` is `true` (the default), pressing <DocKbd label="Enter" /> also dispatches `submit` and `click:button--primary`, unless focus is on a button, textarea, select, or contenteditable element. Set `shouldSubmitOnEnter` to `false` to disable this.
+When `shouldSubmitOnEnter` is `true` (the default), pressing <DocKbd label="Enter" /> also dispatches `submit` and `click:button--primary`, unless focus is on a button, link, textarea, select, or contenteditable element. Set `shouldSubmitOnEnter` to `false` to disable this.
 
 ### Transition end
 

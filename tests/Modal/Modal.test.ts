@@ -8,6 +8,7 @@ import ModalTest from "./Modal.test.svelte";
 import ModalFocusReturnTest from "./ModalFocusReturn.test.svelte";
 import ModalFocusTrapTest from "./ModalFocusTrap.test.svelte";
 import ModalFormIdTest from "./ModalFormId.test.svelte";
+import ModalLinkEnterTest from "./ModalLinkEnter.test.svelte";
 import ModalNullishAriaLabel from "./ModalNullishAriaLabel.test.svelte";
 import ModalSideNavBodyLockTest from "./ModalSideNavBodyLock.test.svelte";
 import ModalTextareaEnterTest from "./ModalTextareaEnter.test.svelte";
@@ -1004,6 +1005,38 @@ describe("Modal", () => {
 
     expect(submitHandler).not.toHaveBeenCalled();
     expect(clickPrimaryHandler).not.toHaveBeenCalled();
+  });
+
+  it("should NOT dispatch submit when pressing Enter on a link", async () => {
+    const submitHandler = vi.fn();
+    const clickPrimaryHandler = vi.fn();
+    render(ModalLinkEnterTest, {
+      props: {
+        open: true,
+        onsubmit: submitHandler,
+        onclickbuttonprimary: clickPrimaryHandler,
+      },
+    });
+
+    screen.getByTestId("modal-link").focus();
+    await user.keyboard("{Enter}");
+    await tick();
+
+    expect(submitHandler).not.toHaveBeenCalled();
+    expect(clickPrimaryHandler).not.toHaveBeenCalled();
+  });
+
+  it("still dispatches submit when pressing Enter in a text input next to a link", async () => {
+    const submitHandler = vi.fn();
+    render(ModalLinkEnterTest, {
+      props: { open: true, onsubmit: submitHandler },
+    });
+
+    screen.getByTestId("modal-input").focus();
+    await user.keyboard("{Enter}");
+    await tick();
+
+    expect(submitHandler).toHaveBeenCalledTimes(1);
   });
 
   describe("primaryButtonLoading", () => {
