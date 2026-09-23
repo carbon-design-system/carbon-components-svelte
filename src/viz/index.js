@@ -68,6 +68,7 @@ export { default as RangeIndicator } from "./RangeIndicator/RangeIndicator.svelt
 export { default as RankBars } from "./RankBars/RankBars.svelte";
 export { default as RetentionChart } from "./RetentionChart/RetentionChart.svelte";
 export { default as ScatterChart } from "./ScatterChart/ScatterChart.svelte";
+export { default as SegmentedProgress } from "./SegmentedProgress/SegmentedProgress.svelte";
 export { default as SequenceDiagram } from "./SequenceDiagram/SequenceDiagram.svelte";
 export { default as ShareOfTotal } from "./ShareOfTotal/ShareOfTotal.svelte";
 export { default as SlopeChart } from "./SlopeChart/SlopeChart.svelte";
@@ -161,4 +162,5 @@ export { layoutWords } from "./utils/word-cloud.js";
 export { default as VarianceIndicator } from "./VarianceIndicator/VarianceIndicator.svelte";
 export { default as WaffleChart } from "./WaffleChart/WaffleChart.svelte";
 export { default as WaterfallChart } from "./WaterfallChart/WaterfallChart.svelte";
+export { default as WinLoss } from "./WinLoss/WinLoss.svelte";
 export { default as WordCloudChart } from "./WordCloudChart/WordCloudChart.svelte";

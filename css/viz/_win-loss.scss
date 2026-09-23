@@ -1,0 +1,102 @@
+/// WinLoss: a tick per result, rising for a win, dropping for a loss, and
+/// a dash for a tie, so the outcome is in the position as well as the color.
+/// @access private
+/// @group viz
+@mixin viz-win-loss {
+  .#{$prefix}--viz-winloss {
+    --bx-viz-size: #{to-rem(24px)};
+    --bx-viz-mark: #{to-rem(6px)};
+
+    // Sized to its marks, so the midline ends where the run does.
+    display: inline-flex;
+    align-items: center;
+    column-gap: $carbon--spacing-03;
+    max-inline-size: 100%;
+  }
+
+  .#{$prefix}--viz-winloss--sm {
+    --bx-viz-size: #{to-rem(16px)};
+    --bx-viz-mark: #{to-rem(4px)};
+  }
+
+  .#{$prefix}--viz-winloss--lg {
+    --bx-viz-size: #{to-rem(32px)};
+    --bx-viz-mark: #{to-rem(8px)};
+  }
+
+  .#{$prefix}--viz-winloss__track {
+    display: flex;
+    flex: 0 1 auto;
+    align-items: center;
+    block-size: var(--bx-viz-size);
+    gap: to-rem(2px);
+    // The midline the marks rise from and drop under.
+    background: linear-gradient($ui-04, $ui-04) center / 100% 1px no-repeat;
+  }
+
+  .#{$prefix}--viz-winloss__result {
+    position: relative;
+    flex: 0 0 var(--bx-viz-mark);
+    padding: 0;
+    border: 0;
+    appearance: none;
+    background: none;
+    block-size: 100%;
+  }
+
+  .#{$prefix}--viz-winloss__result::before {
+    position: absolute;
+    display: block;
+    background: var(--cds-viz-success);
+    block-size: calc(50% - #{to-rem(1px)});
+    content: "";
+    inset-block-start: 0;
+    inset-inline: 0;
+  }
+
+  .#{$prefix}--viz-winloss__result--loss::before {
+    background: var(--cds-viz-error);
+    inset-block-end: 0;
+    inset-block-start: auto;
+  }
+
+  .#{$prefix}--viz-winloss__result--tie::before {
+    background: var(--cds-viz-neutral);
+    block-size: to-rem(3px);
+    inset-block-start: calc(50% - #{to-rem(1.5px)});
+  }
+
+  .#{$prefix}--viz-winloss--selectable .#{$prefix}--viz-winloss__result {
+    cursor: pointer;
+  }
+
+  .#{$prefix}--viz-winloss--selectable .#{$prefix}--viz-winloss__result:hover {
+    opacity: 0.7;
+  }
+
+  .#{$prefix}--viz-winloss--selectable
+    .#{$prefix}--viz-winloss__result:focus-visible,
+  .#{$prefix}--viz-winloss__result--selected {
+    outline: 2px solid $focus;
+    outline-offset: 1px;
+  }
+
+  .#{$prefix}--viz-winloss__value {
+    flex: none;
+    color: $text-primary;
+    font-variant-numeric: tabular-nums;
+
+    @include type-style("label-01");
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-winloss__result::before {
+      background: CanvasText;
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("viz-win-loss") {
+  @include viz-win-loss;
+}
