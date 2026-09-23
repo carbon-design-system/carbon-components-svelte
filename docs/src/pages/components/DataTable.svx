@@ -808,6 +808,12 @@ Set `size` on the toolbar to override the size inherited from the DataTable. Her
   </Toolbar>
 </DataTable>
 
+### Sticky
+
+Set `sticky` on `Toolbar` to keep it pinned while the page or its scroll container scrolls, so batch actions stay reachable on a long table. Set `stickyOffset` to the distance from the top edge while stuck; a number is treated as pixels and a string can be any CSS length. When a UI Shell `Header` is on the page, the offset defaults to the header's 48px height so the toolbar does not slide under it. Pass `stickyOffset={0}` to opt out.
+
+<FileSource src="/framed/DataTable/DataTableStickyToolbar" />
+
 ### Compact
 
 Use `size="compact"` for the table. The toolbar inherits the extra small (xs) size to match the compact row height.
