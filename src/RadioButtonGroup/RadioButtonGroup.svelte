@@ -83,7 +83,8 @@
    * @type {import("svelte/store").Writable<Value | undefined>}
    */
   const selectedValue = writable(selected);
-  const groupName = writable(name);
+  const fallbackName = uniqueId();
+  const groupName = writable(name || fallbackName);
   const groupRequired = writable(required);
   const groupReadonly = writable(readonly);
   const groupAllowDeselect = writable(allowDeselect);
@@ -142,7 +143,7 @@
     return unsubscribe;
   });
 
-  $: $groupName = name;
+  $: $groupName = name || fallbackName;
   $: $groupRequired = required;
   $: $groupReadonly = readonly;
   $: $groupAllowDeselect = allowDeselect;

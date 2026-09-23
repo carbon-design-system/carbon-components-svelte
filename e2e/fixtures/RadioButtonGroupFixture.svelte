@@ -29,3 +29,14 @@
 </RadioButtonGroup>
 
 <p data-testid="deselect-selected-value">Selected: {deselectSelected}</p>
+
+<RadioButtonGroup
+  data-testid="radio-group-readonly"
+  legendText="Readonly option"
+  readonly
+  selected="one"
+>
+  <RadioButton value="one" labelText="Option One" />
+  <RadioButton value="two" labelText="Option Two" />
+  <RadioButton value="three" labelText="Option Three" />
+</RadioButtonGroup>

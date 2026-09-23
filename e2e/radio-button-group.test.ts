@@ -74,4 +74,21 @@ test.describe("RadioButtonGroup", () => {
       group.getByRole("radio", { name: "Option One" }),
     ).not.toBeChecked();
   });
+
+  test("readonly group with no name keeps the preselected radio checked after a cancelled click", async ({
+    page,
+  }) => {
+    const group = page.getByTestId("radio-group-readonly");
+
+    await group
+      .getByRole("radio", { name: "Option Two" })
+      .evaluate((el: HTMLInputElement) => el.click());
+
+    await expect(
+      group.getByRole("radio", { name: "Option Two" }),
+    ).not.toBeChecked();
+    await expect(
+      group.getByRole("radio", { name: "Option One" }),
+    ).toBeChecked();
+  });
 });
