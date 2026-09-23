@@ -6,7 +6,7 @@
   /**
    * @event close
    * @type {object}
-   * @property {"escape-key" | "outside-click" | "select"} trigger
+   * @property {"escape-key" | "outside-click" | "select" | "tab"} trigger
    */
 
   /**
@@ -87,7 +87,7 @@
   let returnFocus = null;
 
   /**
-   * @type {(trigger: "escape-key" | "outside-click" | "select") => void}
+   * @type {(trigger: "escape-key" | "outside-click" | "select" | "tab") => void}
    */
   function close(trigger) {
     if (!open) return;
@@ -252,7 +252,21 @@
   on:click
   on:keydown
   on:keydown={(event) => {
-    if (open) event.preventDefault();
+    if (!open) return;
+    if (event.key === "Tab") {
+      close("tab");
+      return;
+    }
+    if (
+      event.key === "ArrowUp" ||
+      event.key === "ArrowDown" ||
+      event.key === "Home" ||
+      event.key === "End" ||
+      event.key === " " ||
+      event.key === "Enter"
+    ) {
+      event.preventDefault();
+    }
   }}
 >
   <slot />
