@@ -656,6 +656,20 @@
     .join(" ");
 
   /**
+   * Whether an item's displayed label equals the typed text, ignoring case.
+   * Compares `itemToString(item)`, the same string the input and option show.
+   * @param {Item} item
+   * @param {string | undefined} inputValue
+   * @returns {boolean}
+   */
+  function labelMatchesInput(item, inputValue) {
+    return (
+      String(itemToString(item) ?? "").toLowerCase() ===
+      (inputValue ?? "").toLowerCase()
+    );
+  }
+
+  /**
    * Commit the active typeahead suggestion when focus leaves the field.
    * Mirrors the inline completion shown in the input: the highlighted item, or
    * an exact case-insensitive match of the autocompleted value. Selecting
@@ -671,8 +685,7 @@
       const inputValue = ref?.value ?? value;
       item = filteredItems.find(
         (candidate) =>
-          candidate.text.toLowerCase() === inputValue?.toLowerCase() &&
-          !candidate.disabled,
+          labelMatchesInput(candidate, inputValue) && !candidate.disabled,
       );
     }
     if (!item || item.disabled) return false;
@@ -866,12 +879,10 @@
                 if (wasOpen) dispatch("close", { trigger: "select" });
               }
             } else {
-              // Match typed value case-insensitively against item text
+              // Match typed value case-insensitively against the item label
               const inputValue = ref?.value ?? value;
               const matchedItem = filteredItems.find(
-                (item) =>
-                  item.text.toLowerCase() === inputValue?.toLowerCase() &&
-                  !item.disabled,
+                (item) => labelMatchesInput(item, inputValue) && !item.disabled,
               );
               if (matchedItem) {
                 open = false;
