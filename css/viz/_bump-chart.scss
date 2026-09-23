@@ -1,0 +1,120 @@
+/// BumpChart: a rank per series per period, joined by lines, drawn at a
+/// fixed logical size and scaled to the container.
+/// @access private
+/// @group viz
+@mixin viz-bump-chart {
+  .#{$prefix}--viz-bump {
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-bump .#{$prefix}--viz-chart__title {
+    margin-block-end: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--viz-bump__svg {
+    display: block;
+    overflow: visible;
+    block-size: auto;
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--viz-bump__svg:focus {
+    outline: 2px solid $focus;
+    outline-offset: 2px;
+  }
+
+  .#{$prefix}--viz-bump__period {
+    fill: $text-secondary;
+    font-weight: 600;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-bump__row {
+    stroke: $ui-03;
+    stroke-width: 1;
+  }
+
+  .#{$prefix}--viz-bump__series {
+    cursor: pointer;
+    transition: opacity $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  .#{$prefix}--viz-bump__hit {
+    fill: none;
+    stroke: transparent;
+    stroke-width: 14;
+  }
+
+  .#{$prefix}--viz-bump__line {
+    fill: none;
+    stroke: var(--bx-viz-color, #{$interactive-04});
+    stroke-linecap: round;
+    stroke-width: 2.5;
+  }
+
+  // The rank sits inside each dot, so the number is on the mark itself.
+  .#{$prefix}--viz-bump__dot {
+    fill: var(--bx-viz-color, #{$interactive-04});
+    stroke: $ui-background;
+    stroke-width: 1.5;
+  }
+
+  .#{$prefix}--viz-bump__rank {
+    fill: $text-on-color;
+    font-weight: 600;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-bump__label {
+    fill: $text-primary;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-bump__series--active .#{$prefix}--viz-bump__line,
+  .#{$prefix}--viz-bump__series--selected .#{$prefix}--viz-bump__line {
+    stroke-width: 4;
+  }
+
+  .#{$prefix}--viz-bump__series--active .#{$prefix}--viz-bump__label,
+  .#{$prefix}--viz-bump__series--selected .#{$prefix}--viz-bump__label {
+    font-weight: 600;
+  }
+
+  .#{$prefix}--viz-bump--emphasis
+    .#{$prefix}--viz-bump__series:not(.#{$prefix}--viz-bump__series--active) {
+    opacity: 0.3;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-bump__series {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-bump__line {
+      stroke: CanvasText;
+    }
+
+    .#{$prefix}--viz-bump__dot {
+      fill: Canvas;
+      stroke: CanvasText;
+    }
+
+    .#{$prefix}--viz-bump__rank {
+      fill: CanvasText;
+    }
+
+    .#{$prefix}--viz-bump__series--selected .#{$prefix}--viz-bump__line {
+      stroke: Highlight;
+    }
+  }
+}
+
+@include exports("viz-bump-chart") {
+  @include viz-bump-chart;
+}

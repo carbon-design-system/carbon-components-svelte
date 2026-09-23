@@ -7,6 +7,7 @@ export { default as BarChart } from "./BarChart/BarChart.svelte";
 
 export { default as BoxplotChart } from "./BoxplotChart/BoxplotChart.svelte";
 export { default as BulletChart } from "./BulletChart/BulletChart.svelte";
+export { default as BumpChart } from "./BumpChart/BumpChart.svelte";
 export { default as CalendarHeatmap } from "./CalendarHeatmap/CalendarHeatmap.svelte";
 export { default as Chart } from "./Chart/Chart.svelte";
 export { default as ChartAnomalies } from "./Chart/ChartAnomalies.svelte";
