@@ -9,6 +9,7 @@ import ContentSwitcherDynamicBound from "./ContentSwitcher.dynamicBound.test.sve
 import ContentSwitcherLowContrast from "./ContentSwitcher.lowContrast.test.svelte";
 import ContentSwitcherLowContrastIconOnly from "./ContentSwitcher.lowContrastIconOnly.test.svelte";
 import ContentSwitcherNested from "./ContentSwitcher.nested.test.svelte";
+import ContentSwitcherOutOfRange from "./ContentSwitcher.outOfRange.test.svelte";
 import ContentSwitcherSelectedId from "./ContentSwitcher.selectedId.test.svelte";
 import ContentSwitcherSelectedIndex from "./ContentSwitcher.selectedIndex.test.svelte";
 import ContentSwitcherSelectionMode from "./ContentSwitcher.selectionMode.test.svelte";
@@ -799,6 +800,74 @@ describe("ContentSwitcher", () => {
       expect(consoleLog.mock.calls.some(([event]) => event === "change")).toBe(
         false,
       );
+    });
+  });
+
+  describe("out-of-range selectedIndex", () => {
+    const changed = (consoleLog: { mock: { calls: unknown[][] } }) =>
+      consoleLog.mock.calls.some(([event]) => event === "change");
+
+    it("clamps an index past the end to the last switch", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      await renderSwitcher(ContentSwitcherOutOfRange, {
+        props: { selectedIndex: 7 },
+      });
+      await tick();
+
+      const last = screen.getByRole("tab", { name: "Last" });
+      expect(last).toHaveAttribute("aria-selected", "true");
+      expect(last).toHaveAttribute("tabindex", "0");
+      expect(screen.getByTestId("selected-index")).toHaveTextContent("2");
+      expect(changed(consoleLog)).toBe(false);
+
+      await user.tab();
+      expect(document.activeElement).toBe(last);
+    });
+
+    it("clamps a negative index to the first switch", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      await renderSwitcher(ContentSwitcherOutOfRange, {
+        props: { selectedIndex: -1 },
+      });
+      await tick();
+
+      expect(screen.getByRole("tab", { name: "First" })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+      expect(screen.getByTestId("selected-index")).toHaveTextContent("0");
+      expect(changed(consoleLog)).toBe(false);
+    });
+
+    it("selects the new last switch when the selected trailing switch is removed", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      const { rerender } = await renderSwitcher(ContentSwitcherOutOfRange, {
+        props: { selectedIndex: 2 },
+      });
+
+      await rerender({ showLast: false });
+      await tick();
+
+      const middle = screen.getByRole("tab", { name: "Middle" });
+      expect(middle).toHaveAttribute("aria-selected", "true");
+      expect(middle).toHaveAttribute("tabindex", "0");
+      expect(screen.getByTestId("selected-index")).toHaveTextContent("1");
+      expect(consoleLog).toHaveBeenCalledWith("change", 1);
+    });
+
+    it("clamps a programmatic out-of-range write", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      const { rerender } = await renderSwitcher(ContentSwitcherOutOfRange);
+
+      await rerender({ selectedIndex: 9 });
+      await tick();
+
+      expect(screen.getByRole("tab", { name: "Last" })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+      expect(screen.getByTestId("selected-index")).toHaveTextContent("2");
+      expect(consoleLog).toHaveBeenCalledWith("change", 2);
     });
   });
 });

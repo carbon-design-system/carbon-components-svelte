@@ -6,6 +6,7 @@
   /**
    * Set the selected index of the switch item.
    * Ignored when `selectedId` is set.
+   * An out-of-range value selects the nearest switch.
    * @bindable writable
    */
   export let selectedIndex = 0;
@@ -86,6 +87,18 @@
   // Flag to trigger DOM reordering only when switches change.
   // This is necessary to avoid infinite loops in Svelte 5.
   let needsDomSync = false;
+
+  // Index mode: pull an out-of-range selectedIndex back into the list so one
+  // switch stays selected and in the Tab order. syncSelection() does the same
+  // for selectedId.
+  $: if (
+    selectedId === undefined &&
+    switches.length > 0 &&
+    (selectedIndex < 0 || selectedIndex >= switches.length)
+  ) {
+    selectedIndex = clampIndex(selectedIndex, 0, switches.length);
+  }
+
   $: if (switches[committedIndex]) {
     if (prevIndex > -1 && prevIndex !== committedIndex) {
       dispatch("change", committedIndex);
