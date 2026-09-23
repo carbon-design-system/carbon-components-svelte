@@ -25,6 +25,8 @@ Automatically close the notification after a specified duration (in milliseconds
 
 <FileSource src="/framed/ToastNotification/ToastNotificationTimeout" />
 
+Change `timeoutKey` (for example, increment it) to restart the timeout from its full duration after updating the message.
+
 ## Full width
 
 Span the full container width with `fullWidth`.

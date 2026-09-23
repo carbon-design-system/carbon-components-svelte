@@ -63,6 +63,12 @@ Use `update(id, patch)` to change an existing notification in place. The patch m
 
 <FileSource src="/framed/NotificationQueue/NotificationQueueUpdate" />
 
+An update keeps the toast's current timeout running. Set `restartTimeout: true` in the patch to start the timeout over from its full duration, so an updated message stays up as long as a new one would.
+
+```js
+queue.update(id, { kind: "success", title: "Saved", restartTimeout: true });
+```
+
 ### Max notifications
 
 By default, the queue displays a maximum of 3 notifications. When the limit is exceeded, the oldest notification is removed automatically.
