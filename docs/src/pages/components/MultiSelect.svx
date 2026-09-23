@@ -271,6 +271,43 @@ Manage multiple dropdowns in a form with coordinated state.
 
 <FileSource src="/framed/MultiSelect/MultipleMultiSelect" />
 
+## Events
+
+Respond to selection, clearing, and menu-close interactions.
+
+### Select
+
+Use `on:select` to listen for selection changes. `event.detail` includes `selectedIds`, `selected` (the checked items), and `unselected` (the rest). A [select-all](#select-all) item is left out of all three. It fires when the user toggles an option, selects a [range](#range-selection) with <DocKbd label="Shift" />, selects all with the select-all item or <DocKbd label="Ctrl" /> + <DocKbd label="A" />, or clears the selection.
+
+<MultiSelect labelText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+    on:select="{(e) => console.log(e.detail)}"
+  />
+
+### Clear
+
+Use `on:clear` to listen for the clear ("x") button that appears once there is a selection, activated by click or by keyboard. `event.detail` is the originating `MouseEvent` or `KeyboardEvent`. Clearing with <DocKbd label="Delete" /> or <DocKbd label="Backspace" />, or calling [`clear()`](#clear-selection), does not dispatch `clear`. All three still dispatch `select`.
+
+<MultiSelect selectedIds="{["0", "1"]}" labelText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+    on:clear="{(e) => console.log(e.detail)}"
+  />
+
+### Close
+
+Use `on:close` to know when the menu is dismissed and why. `event.detail.trigger` is `"escape-key"` (<DocKbd label="Escape" />, or <DocKbd label="Alt" /> + <DocKbd label="ArrowUp" /> on an open menu) or `"outside-click"` (a click or focus outside the multi-select and its menu). Selecting an option keeps the menu open. Clicking the field to collapse it, or pressing <DocKbd label="Tab" />, closes the menu without dispatching `close`.
+
+<MultiSelect labelText="Contact" label="Select contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+    on:close="{(e) => console.log(e.detail.trigger)}"
+  />
+
 ## Virtualization
 
 Virtualization renders only the items currently visible in the viewport, improving performance for large lists. By default, the multi-select virtualizes lists with more than 100 items.
