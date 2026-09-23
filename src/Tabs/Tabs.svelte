@@ -269,14 +269,32 @@
   }
 
   /**
-   * @type {(id: string) => void}
+   * Dispatch `dismiss`. When the handler removes the focused tab, move focus
+   * to the tab that took its place (or the new last tab) instead of `<body>`.
+   * @type {(id: string) => Promise<void>}
    */
-  function dismiss(id) {
+  async function dismiss(id) {
     const tab = get(tabsById)[id];
+    if (!tab) return;
 
-    if (tab) {
-      dispatch("dismiss", tab);
+    const doc = refTabList?.ownerDocument;
+    const hadFocus = Boolean(doc && refTabList.contains(doc.activeElement));
+    dispatch("dismiss", tab);
+    if (!hadFocus) return;
+
+    // Let the handler's removal render, then keep focus in the list.
+    await tick();
+    if (!refTabList || (doc.activeElement && doc.activeElement !== doc.body)) {
+      return;
     }
+
+    const items = refTabList.querySelectorAll("[role='tab']");
+    if (items.length === 0) return;
+    const next = /** @type {HTMLElement} */ (
+      items[Math.min(tab.index, items.length - 1)]
+    );
+    next.focus({ preventScroll: true });
+    scrollTabIntoView(next);
   }
 
   /**
