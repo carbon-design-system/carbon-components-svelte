@@ -59,6 +59,7 @@
 
   const ctx = getContext("carbon:ContentSwitcher");
   const activeTooltip = ctx.activeTooltip;
+  const tabStopId = ctx.tabStopId;
 
   const hasIcon = icon !== undefined;
 
@@ -66,7 +67,7 @@
   // and not to the currentId echo.
   let prevSelected = selected;
 
-  ctx.add({ id, text, selected, icon: hasIcon });
+  ctx.add({ id, text, selected, icon: hasIcon, disabled });
 
   const unsubscribe = ctx.currentId.subscribe((currentId) => {
     selected = prevSelected = currentId === id;
@@ -80,6 +81,13 @@
       // A content switcher always has one selected switch.
       selected = prevSelected = true;
     }
+  }
+
+  // Report later `disabled` changes; the initial value goes through `add()`.
+  let prevDisabled = disabled;
+  $: if (disabled !== prevDisabled) {
+    prevDisabled = disabled;
+    ctx.setDisabled(id, disabled);
   }
 
   // Icon-only switches show `text` as a portalled tooltip on hover/focus.
@@ -139,7 +147,7 @@
   bind:this={ref}
   type="button"
   role="tab"
-  tabindex={selected ? "0" : "-1"}
+  tabindex={$tabStopId === id ? "0" : "-1"}
   aria-selected={selected}
   aria-label={hasIcon ? text : undefined}
   {disabled}
