@@ -212,18 +212,23 @@
           event.stopImmediatePropagation();
           return;
         }
+        // Read the input, not the Svelte state: the two disagree after a
+        // form reset, and inverting stale state would undo the click.
+        const nextChecked = event.currentTarget.checked;
         if (ctxUpdate) {
-          ctxUpdate(value, !checked);
+          ctxUpdate(value, nextChecked);
         } else if (useGroup) {
-          group = group.includes(value)
-            ? group.filter((_value) => _value !== value)
-            : [...group, value];
+          const hasValue = group.includes(value);
+          if (nextChecked && !hasValue) {
+            group = [...group, value];
+          } else if (!nextChecked && hasValue) {
+            group = group.filter((_value) => _value !== value);
+          }
         } else {
-          const newChecked = !checked;
-          prevChecked = newChecked;
-          checked = newChecked;
+          prevChecked = nextChecked;
+          checked = nextChecked;
           // Dispatch directly for user-initiated changes to avoid duplicate events in Svelte 5
-          dispatch("check", newChecked);
+          dispatch("check", nextChecked);
         }
       }}
       on:change
