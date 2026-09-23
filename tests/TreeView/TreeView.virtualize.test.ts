@@ -231,6 +231,26 @@ describe("TreeView (virtualize)", () => {
     ).toEqual([0, 2]);
   });
 
+  it("Shift+Down toggles each row focus moves to", async () => {
+    const { component } = render(TreeViewVirtualize, {
+      totalRoots: 40,
+      childrenPerRoot: 0,
+      multiselect: true,
+      selectedIds: [],
+    });
+
+    const first = findRowById(0);
+    if (!first) throw new Error("expected first row");
+    first.focus();
+
+    await user.keyboard("{Shift>}{ArrowDown}{/Shift}");
+    await tick();
+    await user.keyboard("{Shift>}{ArrowDown}{/Shift}");
+    await tick();
+
+    expect(component.selectedIds).toEqual([1, 2]);
+  });
+
   it("Ctrl+A does nothing when multiselect is off", async () => {
     const { component } = render(TreeViewVirtualize, {
       totalRoots: 40,

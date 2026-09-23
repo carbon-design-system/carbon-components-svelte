@@ -770,6 +770,96 @@ describe("TreeView Props", () => {
     expect(treeItemById(0)).toHaveAttribute("aria-selected", "true");
   });
 
+  describe("Shift+Up/Down in multiselect", () => {
+    it("toggles rows as focus moves", async () => {
+      render(TreeViewMultiselect, {
+        multiselect: true,
+        activeId: "",
+        selectedIds: [],
+      });
+
+      treeItemById(0).focus();
+      await user.keyboard("{Shift>}{ArrowDown}{/Shift}");
+
+      expect(treeItemById(1)).toHaveFocus();
+      expect(treeItemById(1)).toHaveAttribute("aria-selected", "true");
+      expect(treeItemById(0)).toHaveAttribute("aria-selected", "false");
+
+      await user.keyboard("{Shift>}{ArrowDown}{/Shift}");
+      expect(treeItemById(7)).toHaveFocus();
+      expect(treeItemById(1)).toHaveAttribute("aria-selected", "true");
+      expect(treeItemById(7)).toHaveAttribute("aria-selected", "true");
+
+      await user.keyboard("{Shift>}{ArrowUp}{/Shift}");
+      expect(treeItemById(1)).toHaveFocus();
+      expect(treeItemById(1)).toHaveAttribute("aria-selected", "false");
+      expect(treeItemById(7)).toHaveAttribute("aria-selected", "true");
+    });
+
+    it("does not move onto or select a disabled row", async () => {
+      const { component } = render(TreeViewMultiselect, {
+        multiselect: true,
+        activeId: "",
+        selectedIds: [],
+      });
+
+      treeItemById(9).focus();
+      await user.keyboard("{Shift>}{ArrowDown}{/Shift}");
+
+      expect(treeItemById(9)).toHaveFocus();
+      expect(component.selectedIds).toEqual([]);
+    });
+
+    it("fires select with the destination row", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(TreeViewMultiselect, {
+        multiselect: true,
+        activeId: "",
+        selectedIds: [],
+      });
+
+      treeItemById(0).focus();
+      await user.keyboard("{Shift>}{ArrowDown}{/Shift}");
+
+      expect(consoleLog).toHaveBeenLastCalledWith(
+        "select",
+        expect.objectContaining({ id: 1, selected: true }),
+      );
+    });
+
+    it("toggles the shallow unit in shallow mode", async () => {
+      const { component } = render(TreeViewMultiselect, {
+        multiselect: true,
+        multiselectMode: "shallow",
+        activeId: "",
+        selectedIds: [],
+      });
+
+      treeItemById(0).focus();
+      await user.keyboard("{Shift>}{ArrowDown}{/Shift}");
+
+      expect(
+        [...(component.selectedIds ?? [])].sort(
+          (a, b) => Number(a) - Number(b),
+        ),
+      ).toEqual([1, 2, 5, 6]);
+    });
+
+    it("only moves focus when multiselect is off", async () => {
+      const { component } = render(TreeViewMultiselect, {
+        multiselect: false,
+        activeId: "",
+        selectedIds: [],
+      });
+
+      treeItemById(0).focus();
+      await user.keyboard("{Shift>}{ArrowDown}{/Shift}");
+
+      expect(treeItemById(1)).toHaveFocus();
+      expect(component.selectedIds).toEqual([]);
+    });
+  });
+
   it("select payload reports the post-click selected state when toggling in multiselect", async () => {
     const consoleLog = vi.spyOn(console, "log");
 
