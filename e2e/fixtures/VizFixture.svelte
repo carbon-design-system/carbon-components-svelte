@@ -5,6 +5,7 @@
     BarChart,
     BoxplotChart,
     BulletChart,
+    BumpChart,
     CalendarHeatmap,
     ChartAnomalies,
     ChartBand,
@@ -271,6 +272,24 @@
     y="score"
     series="team"
     title="Engagement score by team, 2025 to 2026"
+  />
+
+  <BumpChart
+    data={[
+      { week: "W1", team: "Ada", rank: 1 },
+      { week: "W1", team: "Bell", rank: 2 },
+      { week: "W1", team: "Cray", rank: 3 },
+      { week: "W2", team: "Ada", rank: 2 },
+      { week: "W2", team: "Bell", rank: 1 },
+      { week: "W2", team: "Cray", rank: 3 },
+      { week: "W3", team: "Ada", rank: 3 },
+      { week: "W3", team: "Bell", rank: 1 },
+      { week: "W3", team: "Cray", rank: 2 },
+    ]}
+    x="week"
+    rank="rank"
+    series="team"
+    title="League standings by week"
   />
 
   <OrgChart
