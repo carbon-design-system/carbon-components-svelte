@@ -630,6 +630,110 @@ describe("NotificationQueue", () => {
     });
   });
 
+  describe("overflowPolicy", () => {
+    const titles = () =>
+      [...document.querySelectorAll(".bx--toast-notification__title")].map(
+        (el) => el.textContent?.trim(),
+      );
+
+    it("should drop the oldest notification by default, whatever its kind", async () => {
+      const { component } = render(NotificationQueueTest, {
+        props: { maxNotifications: 1 },
+      });
+
+      getQueue(component.queue).add({ kind: "error", title: "Error" });
+      getQueue(component.queue).add({ kind: "info", title: "Info" });
+      await tick();
+
+      expect(titles()).toEqual(["Info"]);
+    });
+
+    it.each(["top-right", "bottom-right"] as const)(
+      "should drop low-priority kinds before errors (%s)",
+      async (position) => {
+        const ondismiss = vi.fn();
+        const { component } = render(NotificationQueueTest, {
+          props: {
+            position,
+            maxNotifications: 2,
+            overflowPolicy: "low-priority",
+            ondismiss,
+          },
+        });
+        const queue = getQueue(component.queue);
+
+        queue.add({ id: "error", kind: "error", title: "Error" });
+        queue.add({ id: "warning", kind: "warning", title: "Warning" });
+        queue.add({ id: "success", kind: "success", title: "Success" });
+        await tick();
+
+        expect(titles()).not.toContain("Success");
+        expect(titles()).toEqual(expect.arrayContaining(["Error", "Warning"]));
+        expect(ondismiss.mock.calls[0][0].detail).toMatchObject({
+          notification: { id: "success" },
+          trigger: "overflow",
+        });
+
+        queue.add({ id: "error-2", kind: "error", title: "Error 2" });
+        await tick();
+
+        expect(titles()).toEqual(expect.arrayContaining(["Error", "Error 2"]));
+        expect(titles()).toHaveLength(2);
+      },
+    );
+
+    it("should treat a missing kind as an error", async () => {
+      const { component } = render(NotificationQueueTest, {
+        props: { maxNotifications: 1, overflowPolicy: "low-priority" },
+      });
+
+      getQueue(component.queue).add({ title: "Default kind" });
+      getQueue(component.queue).add({ kind: "info", title: "Info" });
+      await tick();
+
+      expect(titles()).toEqual(["Default kind"]);
+    });
+
+    it.each(["top-right", "bottom-right"] as const)(
+      "should drop the oldest within the same priority (%s)",
+      async (position) => {
+        const { component } = render(NotificationQueueTest, {
+          props: {
+            position,
+            maxNotifications: 2,
+            overflowPolicy: "low-priority",
+          },
+        });
+        const queue = getQueue(component.queue);
+
+        queue.add({ kind: "error", title: "Error 1" });
+        queue.add({ kind: "error", title: "Error 2" });
+        queue.add({ kind: "error", title: "Error 3" });
+        await tick();
+
+        expect(titles()).not.toContain("Error 1");
+        expect(titles()).toHaveLength(2);
+      },
+    );
+
+    it("should record the dropped notification in history", async () => {
+      const { component } = render(NotificationQueueTest, {
+        props: {
+          maxNotifications: 1,
+          maxHistory: 5,
+          overflowPolicy: "low-priority",
+        },
+      });
+
+      getQueue(component.queue).add({ id: "error", kind: "error", title: "Error" });
+      getQueue(component.queue).add({ id: "info", kind: "info", title: "Info" });
+      await tick();
+
+      const history = component.history as ReadonlyArray<{ id: string }>;
+      expect(history.map((n) => n.id)).toEqual(["info"]);
+    });
+  });
+
   it("should limit notifications to maxNotifications (top-right)", async () => {
     const { component } = render(NotificationQueueTest, {
       props: { maxNotifications: 2 },

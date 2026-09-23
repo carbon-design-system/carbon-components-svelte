@@ -21,6 +21,8 @@
 
   export let collapseDuplicates: ComponentProps<NotificationQueue>["collapseDuplicates"] =
     undefined;
+  export let overflowPolicy: ComponentProps<NotificationQueue>["overflowPolicy"] =
+    undefined;
   export let maxHistory: ComponentProps<NotificationQueue>["maxHistory"] =
     undefined;
   export let history: ComponentProps<NotificationQueue>["history"] = [];
@@ -40,6 +42,7 @@
   {maxNotifications}
   {collapseDuplicates}
   {maxHistory}
+  {overflowPolicy}
   bind:history
   bind:this={queue}
   on:close={(e) => onclose?.(e)}

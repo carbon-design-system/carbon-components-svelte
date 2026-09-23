@@ -59,9 +59,19 @@
 
   /**
    * Specify the maximum number of notifications to display.
-   * When this limit is exceeded, the oldest notification is automatically removed.
+   * When this limit is exceeded, a notification is removed automatically;
+   * `overflowPolicy` decides which.
    */
   export let maxNotifications = 3;
+
+  /**
+   * Specify which notification to remove when `maxNotifications` is exceeded.
+   * `"oldest"` removes the oldest. `"low-priority"` removes `info`,
+   * `info-square`, and `success` before `warning` and `warning-alt`, and those
+   * before `error`, choosing the oldest within the same priority.
+   * @type {"oldest" | "low-priority"}
+   */
+  export let overflowPolicy = "oldest";
 
   /**
    * Specify how many dismissed notifications to keep in `history`.
@@ -205,21 +215,59 @@
     return id;
   }
 
+  /** Overflow priority by kind; lower is dropped first. */
+  const KIND_PRIORITY = {
+    info: 0,
+    "info-square": 0,
+    success: 0,
+    warning: 1,
+    "warning-alt": 1,
+    error: 2,
+  };
+
   /**
-   * Trim the queue to `maxNotifications`, dropping the oldest rows,
-   * and dispatch `dismiss` for each dropped row.
+   * @param {NotificationData} notification
+   * @returns {number}
+   */
+  function priorityOf(notification) {
+    // A missing kind renders as the toast's default, `error`.
+    return KIND_PRIORITY[notification.kind ?? "error"] ?? 2;
+  }
+
+  /**
+   * Index of the row to drop next. Top positions store the newest row first,
+   * bottom positions store it last.
+   * @param {Array<NotificationData>} list
+   * @returns {number}
+   */
+  function indexToDrop(list) {
+    const top = isTopPosition(position);
+    const oldest = top ? list.length - 1 : 0;
+    if (overflowPolicy !== "low-priority") return oldest;
+
+    let best = oldest;
+    for (let i = 0; i < list.length; i++) {
+      const rank = priorityOf(list[i]);
+      const bestRank = priorityOf(list[best]);
+      const older = top ? i > best : i < best;
+      if (rank < bestRank || (rank === bestRank && older)) best = i;
+    }
+    return best;
+  }
+
+  /**
+   * Trim the queue to `maxNotifications` per `overflowPolicy`,
+   * recording each dropped row as dismissed.
    */
   function dropOverflow() {
     if (notifications.length <= maxNotifications) return;
 
-    const top = isTopPosition(position);
-    const excess = notifications.length - maxNotifications;
-    const dropped = top
-      ? notifications.slice(maxNotifications)
-      : notifications.slice(0, excess);
-    notifications = top
-      ? notifications.slice(0, maxNotifications)
-      : notifications.slice(excess);
+    const next = [...notifications];
+    const dropped = [];
+    while (next.length > Math.max(0, maxNotifications)) {
+      dropped.push(...next.splice(indexToDrop(next), 1));
+    }
+    notifications = next;
 
     dismissRows(dropped, "overflow");
   }
