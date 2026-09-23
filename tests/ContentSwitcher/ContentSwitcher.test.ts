@@ -135,6 +135,22 @@ describe("ContentSwitcher", () => {
     );
   });
 
+  it("does not dispatch change event when a selected Switch mounts", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    await renderSwitcher(ContentSwitcherDynamicBound, {
+      props: { selectLast: true },
+    });
+    await tick();
+
+    expect(screen.getByRole("tab", { name: "Last" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(consoleLog.mock.calls.some(([event]) => event === "change")).toBe(
+      false,
+    );
+  });
+
   it("updates when selectedIndex changes", async () => {
     const { rerender } = await renderSwitcher(ContentSwitcherSelectedIndex);
 
