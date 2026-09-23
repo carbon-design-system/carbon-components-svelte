@@ -5,6 +5,7 @@ import ContentSwitcherCustom from "./ContentSwitcher.custom.test.svelte";
 import ContentSwitcherDisabled from "./ContentSwitcher.disabled.test.svelte";
 import ContentSwitcherDisabledNav from "./ContentSwitcher.disabledNav.test.svelte";
 import ContentSwitcherDynamic from "./ContentSwitcher.dynamic.test.svelte";
+import ContentSwitcherDynamicBound from "./ContentSwitcher.dynamicBound.test.svelte";
 import ContentSwitcherLowContrast from "./ContentSwitcher.lowContrast.test.svelte";
 import ContentSwitcherLowContrastIconOnly from "./ContentSwitcher.lowContrastIconOnly.test.svelte";
 import ContentSwitcherNested from "./ContentSwitcher.nested.test.svelte";
@@ -710,6 +711,94 @@ describe("ContentSwitcher", () => {
       );
       expect(screen.getByTestId("selected-id")).toHaveTextContent("switch-c");
       expect(screen.getByTestId("selected-index")).toHaveTextContent("2");
+    });
+  });
+
+  describe("removing a switch in index mode", () => {
+    it("re-anchors selectedIndex when an earlier switch is removed", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      const { rerender } = await renderSwitcher(ContentSwitcherDynamicBound, {
+        props: { selectedIndex: 2 },
+      });
+
+      await rerender({ show: false });
+      await tick();
+
+      expect(screen.getByTestId("selected-index")).toHaveTextContent("1");
+      const last = screen.getByRole("tab", { name: "Last" });
+      expect(last).toHaveAttribute("aria-selected", "true");
+      expect(last).toHaveAttribute("tabindex", "0");
+      expect(consoleLog).toHaveBeenCalledWith("change", 1);
+    });
+
+    it("does not dispatch change when clicking the re-anchored switch", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      const { rerender } = await renderSwitcher(ContentSwitcherDynamicBound, {
+        props: { selectedIndex: 2 },
+      });
+
+      await rerender({ show: false });
+      await tick();
+      consoleLog.mockClear();
+
+      await user.click(screen.getByRole("tab", { name: "Last" }));
+
+      expect(consoleLog.mock.calls.some(([event]) => event === "change")).toBe(
+        false,
+      );
+    });
+
+    it("moves to the next switch when the selected switch is removed", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      const { rerender } = await renderSwitcher(ContentSwitcherDynamicBound, {
+        props: { selectedIndex: 1 },
+      });
+      consoleLog.mockClear();
+
+      await rerender({ show: false });
+      await tick();
+
+      expect(screen.getByTestId("selected-index")).toHaveTextContent("1");
+      expect(screen.getByRole("tab", { name: "Last" })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+      expect(consoleLog.mock.calls.some(([event]) => event === "change")).toBe(
+        false,
+      );
+    });
+
+    it("keeps a Switch selected at mount", async () => {
+      await renderSwitcher(ContentSwitcherDynamicBound, {
+        props: { selectLast: true },
+      });
+      await tick();
+
+      expect(screen.getByRole("tab", { name: "Last" })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+      expect(screen.getByTestId("selected-index")).toHaveTextContent("2");
+    });
+
+    it("keeps selectedIndex when a later switch is removed", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      const { rerender } = await renderSwitcher(ContentSwitcherDynamicBound, {
+        props: { selectedIndex: 0 },
+      });
+      consoleLog.mockClear();
+
+      await rerender({ show: false });
+      await tick();
+
+      expect(screen.getByTestId("selected-index")).toHaveTextContent("0");
+      expect(screen.getByRole("tab", { name: "First" })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+      expect(consoleLog.mock.calls.some(([event]) => event === "change")).toBe(
+        false,
+      );
     });
   });
 });
