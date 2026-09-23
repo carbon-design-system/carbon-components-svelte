@@ -167,6 +167,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "WinLoss",
       "SegmentedProgress",
       "ForestPlot",
+      "MarimekkoChart",
       "LineChart",
       "LiveSparkline",
       "LollipopChart",

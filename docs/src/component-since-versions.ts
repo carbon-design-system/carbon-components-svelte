@@ -76,6 +76,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   WinLoss: "0.113.0",
   SegmentedProgress: "0.113.0",
   ForestPlot: "0.113.0",
+  MarimekkoChart: "0.113.0",
   LineChart: "0.113.0",
   Link: "0.2.0",
   Loading: "0.2.0",
