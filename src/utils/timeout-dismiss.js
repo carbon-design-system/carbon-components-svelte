@@ -7,6 +7,8 @@ import { noop } from "./noop.js";
  * `sync()` clears any pending timer and calls `setTimeout` when `open` and `timeout` > 0.
  * Skips `setTimeout` when `window` is undefined (SSR).
  * `pause()` / `resume()` track remaining time so hover can suspend auto-dismiss.
+ * The `document` `visibilitychange` listener (pauses while the tab is hidden) is
+ * attached only while a timer is active (running or paused).
  *
  * @returns {{
  *   get timeoutId(): ReturnType<typeof setTimeout> | undefined,
@@ -28,6 +30,18 @@ export function createTimeoutDismiss() {
   let hiddenPause = false;
   let listening = false;
 
+  function listen() {
+    if (listening || typeof document === "undefined") return;
+    listening = true;
+    document.addEventListener("visibilitychange", onVisibility);
+  }
+
+  function unlisten() {
+    if (!listening) return;
+    listening = false;
+    document.removeEventListener("visibilitychange", onVisibility);
+  }
+
   function schedule(ms) {
     clearTimeout(timeoutId);
     timeoutId = undefined;
@@ -38,6 +52,7 @@ export function createTimeoutDismiss() {
       active = false;
       remaining = 0;
       paused = false;
+      unlisten();
       onTimeout();
     }, ms);
   }
@@ -57,6 +72,7 @@ export function createTimeoutDismiss() {
     if (remaining <= 0) {
       active = false;
       remaining = 0;
+      unlisten();
       onTimeout();
       return;
     }
@@ -87,10 +103,6 @@ export function createTimeoutDismiss() {
      * @param {() => void} callback
      */
     sync(open, timeout, callback) {
-      if (!listening && typeof document !== "undefined") {
-        listening = true;
-        document.addEventListener("visibilitychange", onVisibility);
-      }
       clearTimeout(timeoutId);
       timeoutId = undefined;
       paused = false;
@@ -98,18 +110,17 @@ export function createTimeoutDismiss() {
       onTimeout = callback;
       active = typeof window !== "undefined" && open && timeout > 0;
       if (active) {
+        listen();
         schedule(timeout);
       } else {
+        unlisten();
         remaining = 0;
       }
     },
     pause,
     resume,
     clear() {
-      if (listening && typeof document !== "undefined") {
-        listening = false;
-        document.removeEventListener("visibilitychange", onVisibility);
-      }
+      unlisten();
       clearTimeout(timeoutId);
       timeoutId = undefined;
       remaining = 0;
