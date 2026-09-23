@@ -83,6 +83,7 @@ export { default as RidgelineChart } from "./RidgelineChart/RidgelineChart.svelt
 export { default as ScatterChart } from "./ScatterChart/ScatterChart.svelte";
 export { default as SegmentedProgress } from "./SegmentedProgress/SegmentedProgress.svelte";
 export { default as SequenceDiagram } from "./SequenceDiagram/SequenceDiagram.svelte";
+export { default as SequenceSunburst } from "./SequenceSunburst/SequenceSunburst.svelte";
 export { default as ShareOfTotal } from "./ShareOfTotal/ShareOfTotal.svelte";
 export { default as SlopeChart } from "./SlopeChart/SlopeChart.svelte";
 export { default as SmallMultiples } from "./SmallMultiples/SmallMultiples.svelte";
