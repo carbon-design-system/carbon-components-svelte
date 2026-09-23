@@ -105,6 +105,9 @@
       : Array.isArray(selected)
         ? selected[0]
         : selected;
+    // Assign here too. On Svelte 3/4, `selected = $selectedValue` has
+    // already run this pass and would not see the store write.
+    selected = next;
     if (next !== $selectedValue) {
       fromProp = true;
       selectedValue.set(next);
