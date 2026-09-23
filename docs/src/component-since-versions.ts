@@ -65,6 +65,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   InlineLoading: "0.2.0",
   InlineNotification: "0.2.0",
   InterstitialScreen: "0.112.0",
+  HorizonChart: "0.113.0",
   IcicleChart: "0.113.0",
   KpiCard: "0.113.0",
   LineChart: "0.113.0",

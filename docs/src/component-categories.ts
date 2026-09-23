@@ -156,6 +156,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "Heatmap",
       "HeatStrip",
       "Histogram",
+      "HorizonChart",
       "IcicleChart",
       "KpiCard",
       "LineChart",
