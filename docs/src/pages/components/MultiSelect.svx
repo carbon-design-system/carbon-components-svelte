@@ -85,7 +85,8 @@ matching the option checkbox's own defaults. Use `itemToInput` to override
 `name`/`value` per item, or set the `name` prop to give every hidden input a
 shared group name (unless `itemToInput` returns its own `name`). `name` is
 only used for the hidden inputs -- with `filterable`, the visible text input
-is a query box and is never included in `FormData`.
+is a query box and is never included in `FormData`. A disabled multi-select
+is left out of the submission, like a disabled native control.
 
 ```js
 itemToInput={(item) => {
