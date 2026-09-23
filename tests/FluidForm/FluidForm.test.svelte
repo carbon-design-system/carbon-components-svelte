@@ -19,6 +19,9 @@
     }
     console.log("submit", e);
   }}
+  on:reset={(e) => {
+    console.log("reset", e);
+  }}
 >
   <FormGroup legendText="Checkboxes">
     <Checkbox id="checkbox-0" labelText="Checkbox Label" checked />
@@ -26,4 +29,5 @@
     <Checkbox id="checkbox-2" labelText="Checkbox Label" disabled />
   </FormGroup>
   <Button type="submit">Submit</Button>
+  <Button type="reset" kind="secondary">Reset</Button>
 </FluidForm>
