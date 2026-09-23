@@ -70,6 +70,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   IcicleChart: "0.113.0",
   KpiCard: "0.113.0",
   LayeredGraph: "0.113.0",
+  OrgChart: "0.113.0",
   LineChart: "0.113.0",
   Link: "0.2.0",
   Loading: "0.2.0",
