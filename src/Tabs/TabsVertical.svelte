@@ -46,13 +46,13 @@
   import ChevronLeft from "../icons/ChevronLeft.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
-  import { clampIndex } from "../utils/clamp-index.js";
   import {
     computeScrollOverflow,
     scrollByViewport,
     scrollIntoViewX,
   } from "../utils/horizontal-scroll.js";
   import { keyBy } from "../utils/key-by.js";
+  import { resolveIdSelection } from "../utils/resolve-id-selection.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { syncDomOrder } from "../utils/sync-dom-order.js";
 
@@ -228,16 +228,14 @@
       return;
     }
 
-    const tab = $tabsById[selectedId];
-    if (tab) {
-      selectedIndex = tab.index;
-      return;
-    }
-
-    if ($tabs.length === 0) return;
-
-    selectedIndex = clampIndex(selectedIndex, 0, $tabs.length);
-    selectedId = $tabs[selectedIndex].id;
+    const resolved = resolveIdSelection({
+      items: $tabs,
+      selectedId,
+      currentIndex: selectedIndex,
+    });
+    if (!resolved) return;
+    selectedIndex = resolved.index;
+    selectedId = resolved.id;
   }
 
   // Vertical tabs are never dismissible; this no-op satisfies the `Tab` context.
