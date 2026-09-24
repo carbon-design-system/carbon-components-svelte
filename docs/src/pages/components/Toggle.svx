@@ -88,6 +88,23 @@ Use `on:toggle` to listen for state changes. The event dispatches `{ toggled: bo
 
 <Toggle labelText="Email digest" on:toggle={e => console.log(e.detail)} />
 
+## Form value
+
+Set `name` so the toggle submits with the form. A toggled switch submits
+`value` (`"on"` by default); an untoggled one submits nothing, so read it on
+the server with `formData.has(name)` or compare against `value`.
+
+```svelte
+<script>
+  import { Form, Toggle, Button } from "carbon-components-svelte";
+</script>
+
+<Form method="POST" action="?/preferences">
+  <Toggle name="digest" value="weekly" labelText="Weekly digest" />
+  <Button type="submit">Save</Button>
+</Form>
+```
+
 ## Skeleton
 
 Show a loading state with the skeleton component.
