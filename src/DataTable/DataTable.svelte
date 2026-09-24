@@ -1,3 +1,60 @@
+<script context="module">
+  import { deepEqual } from "../utils/deep-equal.js";
+
+  const alignClasses = {
+    start: "bx--table-column--align-start",
+    end: "bx--table-column--align-end",
+  };
+
+  function formatAlignClass(columnAlign) {
+    return alignClasses[columnAlign];
+  }
+
+  /**
+   * Whether `next` describes the same row values as `prev`. Unlike
+   * `rowsEqual` (used by `ToolbarSearch`), a same-reference element does NOT
+   * count as equal: `rowsEqual` short-circuits per element on `rowA ===
+   * rowB`, so `rows[0].name = "x"; rows = [...rows]` (a legitimate in-place
+   * edit copied into a new array) would read as unchanged even though row 0
+   * moved. Here, only an array of entirely DIFFERENT objects that are each
+   * value-equal to their predecessor counts as unchanged; any same-reference
+   * element means it could have been mutated in place, so fall through and
+   * redo the work, matching today's behavior.
+   * @param {ReadonlyArray<{ id: any }>} prev
+   * @param {ReadonlyArray<{ id: any }>} next
+   * @returns {boolean}
+   */
+  function rowsUnchanged(prev, next) {
+    if (prev === next) return true;
+    if (prev.length !== next.length) return false;
+
+    // Fast path: bail on the first id mismatch before paying for deep compares.
+    for (let i = 0; i < prev.length; i++) {
+      if (prev[i]?.id !== next[i]?.id) return false;
+    }
+
+    for (let i = 0; i < prev.length; i++) {
+      if (prev[i] === next[i]) return false;
+      if (!deepEqual(prev[i], next[i])) return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * @param {ReadonlyArray<{ id: any }> | undefined} a
+   * @param {ReadonlyArray<{ id: any }> | undefined} b
+   */
+  function paintedRowListChanged(a, b) {
+    if (a === b) return false;
+    if (!a || !b || a.length !== b.length) return true;
+    for (let i = 0; i < a.length; i++) {
+      if (a[i].id !== b[i].id) return true;
+    }
+    return false;
+  }
+</script>
+
 <script>
   /**
    * @template {DataTableRow} [Row=DataTableRow]
@@ -346,7 +403,6 @@
   import ChevronRight from "../icons/ChevronRight.svelte";
   import RadioButton from "../RadioButton/RadioButton.svelte";
   import { toCssLength } from "../utils/css-length.js";
-  import { deepEqual } from "../utils/deep-equal.js";
   import { rangeSlice } from "../utils/range-slice.js";
   import { uniqueId } from "../utils/unique-id.js";
   import {
@@ -483,35 +539,6 @@
   // A columnHidden header stays in `headers`, the column definition, and is
   // skipped everywhere the rendered column set is meant.
   $: visibleHeaders = stableHeaders.filter((header) => !header.columnHidden);
-
-  /**
-   * Whether `next` describes the same row values as `prev`. Unlike
-   * `rowsEqual` (used by `ToolbarSearch`), a same-reference element does NOT
-   * count as equal: `rowsEqual` short-circuits per element on `rowA ===
-   * rowB`, so `rows[0].name = "x"; rows = [...rows]` (a legitimate in-place
-   * edit copied into a new array) would read as unchanged even though row 0
-   * moved. Here, only an array of entirely DIFFERENT objects that are each
-   * value-equal to their predecessor counts as unchanged; any same-reference
-   * element means it could have been mutated in place, so fall through and
-   * redo the work, matching today's behavior.
-   * @type {(prev: ReadonlyArray<Row>, next: ReadonlyArray<Row>) => boolean}
-   */
-  function rowsUnchanged(prev, next) {
-    if (prev === next) return true;
-    if (prev.length !== next.length) return false;
-
-    // Fast path: bail on the first id mismatch before paying for deep compares.
-    for (let i = 0; i < prev.length; i++) {
-      if (prev[i]?.id !== next[i]?.id) return false;
-    }
-
-    for (let i = 0; i < prev.length; i++) {
-      if (prev[i] === next[i]) return false;
-      if (!deepEqual(prev[i], next[i])) return false;
-    }
-
-    return true;
-  }
 
   // A single stable reference that only moves when `rows` genuinely differs
   // by value, shared by the filter-replay block and the cell cache block
@@ -733,15 +760,6 @@
   let prevVisibleHeaders;
   let prevRowsToRender;
 
-  const alignClasses = {
-    start: "bx--table-column--align-start",
-    end: "bx--table-column--align-end",
-  };
-
-  function formatAlignClass(columnAlign) {
-    return alignClasses[columnAlign];
-  }
-
   /**
    * Resolve whether a header is sortable. `header.sort` overrides the
    * table-level `sortable` in either direction (`false` opts out, `true` or
@@ -806,19 +824,6 @@
    */
   export function refreshCells() {
     tableCellsByRowId = buildCellsForPaintedRows(rowsToRender ?? [], {});
-  }
-
-  /**
-   * @param {ReadonlyArray<Row> | undefined} a
-   * @param {ReadonlyArray<Row> | undefined} b
-   */
-  function paintedRowListChanged(a, b) {
-    if (a === b) return false;
-    if (!a || !b || a.length !== b.length) return true;
-    for (let i = 0; i < a.length; i++) {
-      if (a[i].id !== b[i].id) return true;
-    }
-    return false;
   }
 
   /**
