@@ -40,4 +40,22 @@ test.describe("Form reset", () => {
     await page.keyboard.type("9");
     await expect(bound).toContainText('"code":"9"');
   });
+
+  test("a reset button keeps the Slider value", async ({ page }) => {
+    const bound = page.getByTestId("bound");
+    const level = page.locator('input[name="level"]');
+
+    await level.fill("77");
+    await level.press("Enter");
+    await expect(bound).toContainText('"level":77');
+
+    await page.getByRole("button", { name: "Reset" }).click();
+
+    await expect(level).toHaveValue("77");
+    await expect(page.getByRole("slider")).toHaveAttribute(
+      "aria-valuenow",
+      "77",
+    );
+    await expect(bound).toContainText('"level":77');
+  });
 });

@@ -6,6 +6,7 @@
 
   /**
    * Specify the value of the slider.
+   * Kept when the owning form resets.
    * @bindable writable
    */
   export let value = 0;
@@ -114,6 +115,7 @@
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { dismiss } from "../utils/dismiss.js";
+  import { reflectDefaultValue } from "../utils/reflect-default-value.js";
   import { resolveSliderMarks } from "../utils/resolve-slider-marks.js";
   import {
     formatRangeLabel as formatSliderRangeLabel,
@@ -343,6 +345,7 @@
       {/if}
       <input
         bind:this={textInputRef}
+        use:reflectDefaultValue={value}
         type={hideTextInput ? "hidden" : inputType}
         id={inputId}
         {name}
