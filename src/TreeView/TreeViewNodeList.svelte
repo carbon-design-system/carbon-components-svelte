@@ -40,6 +40,7 @@
   import { getContext, tick } from "svelte";
   import Checkbox from "../Checkbox/Checkbox.svelte";
   import CaretDown from "../icons/CaretDown.svelte";
+  import { toAriaChecked } from "../utils/tree-aria-checked.js";
   import TreeViewNode, {
     computeTreeLeafDepth,
     findParentTreeNode,
@@ -83,15 +84,6 @@
   } = getContext("carbon:TreeView");
 
   let subtreeRendered = isInitialRender() && $expandedIdSet.has(id);
-
-  /**
-   * Tri-state value for `aria-checked` on the row.
-   * @returns {"true" | "false" | "mixed"}
-   */
-  function toAriaChecked(isSelected, isIndeterminate) {
-    if (isIndeterminate) return "mixed";
-    return isSelected ? "true" : "false";
-  }
 
   function offset() {
     const depth = computeTreeLeafDepth(refLabel) - 1;
