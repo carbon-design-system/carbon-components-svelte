@@ -6,6 +6,14 @@ export const isSideNavRail = writable(false);
 export const isSideNavMobile = writable(false);
 
 /**
+ * The resizable `SideNav`'s rendered width in pixels, so `Content` can
+ * offset its left margin by it. `undefined` when the side nav isn't
+ * resizable (or is a rail), leaving Carbon's fixed-width offset in place.
+ * @type {import("svelte/store").Writable<number | undefined>}
+ */
+export const sideNavWidth = writable(undefined);
+
+/**
  * Whether a `Header` is currently mounted, so unrelated components (for
  * example a sticky `Toolbar`) can default their offset below the fixed
  * header without requiring the consumer to wire it up manually.

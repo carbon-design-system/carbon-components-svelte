@@ -566,3 +566,117 @@
 @include exports('side-nav-badge') {
   @include side-nav-badge;
 }
+
+// carbon-components-svelte patch
+/// A draggable vertical handle at the resizable SideNav's trailing edge.
+/// @access private
+/// @group components
+@mixin side-nav-resize {
+  // The component sets `--ccs-side-nav-width` to its clamped `width`.
+  // `max-width` lifts Carbon's 16rem cap while keeping a mobile overlay
+  // within the viewport. No width transition: the drag should track the
+  // pointer, and `Content`'s margin (which doesn't animate) follows it.
+  .#{$prefix}--side-nav--resizable {
+    width: var(--ccs-side-nav-width, #{mini-units(32)});
+    max-width: 100vw;
+    transition: none;
+  }
+
+  // Below `lg`, Carbon collapses a side nav that isn't expanded to zero
+  // width. Keep that for the resizable variant too, since it's also what
+  // server-rendered markup shows before JS decides mobile vs. desktop.
+  @include carbon--breakpoint-down('lg') {
+    .#{$prefix}--side-nav--resizable:not(.#{$prefix}--side-nav--expanded) {
+      width: 0;
+    }
+  }
+
+  // Carbon hides a collapsed side nav with a fixed `translateX(-16rem)`,
+  // which leaves part of a wider nav on screen.
+  .#{$prefix}--side-nav--resizable.#{$prefix}--side-nav--collapsed {
+    transform: translateX(-100%);
+  }
+
+  // Let the handle straddle the trailing edge (below) instead of sitting
+  // fully inside it, where it would cover the item list's scrollbar. Only
+  // while expanded: a zero-width collapsed nav relies on `overflow: hidden`
+  // to hide its content.
+  .#{$prefix}--side-nav--resizable.#{$prefix}--side-nav--expanded {
+    overflow: visible;
+  }
+
+  // A wider hit/hover target than the visible accent line (below), so the
+  // handle stays easy to grab without widening what's drawn at the edge.
+  // Mostly outside the nav, over the content's padding.
+  .#{$prefix}--side-nav__resize-handle {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: to-rem(-6px);
+    width: to-rem(8px);
+    height: 100%;
+    // Without this, a touch drag pans or scrolls the page instead of
+    // delivering `pointermove` events to the handle.
+    touch-action: none;
+    // `cursor` can't be transitioned/delayed in CSS; the component sets
+    // this inline once the same hover delay as the accent line has passed.
+
+    // Drawn over the nav's own trailing 2px.
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: to-rem(2px);
+      height: 100%;
+      background-color: transparent;
+      // No delay leaving hover, so the highlight clears immediately.
+      transition: background-color $duration--fast-02 motion(standard, productive);
+    }
+
+    @media (any-hover: hover) {
+      // Delayed only on entry (the :hover rule's own transition-delay is
+      // what applies when entering this state) so a quick mouse pass-over
+      // doesn't flash the handle.
+      &:hover::after {
+        background-color: $focus;
+        transition-delay: $duration--moderate-01;
+      }
+    }
+
+    &:focus-visible {
+      @include focus-outline('outline');
+    }
+  }
+
+  // A fast drag can outrun `:hover` (the pointer ends up ahead of the
+  // handle's own repositioned bounds between pointermove events, e.g. past
+  // `minWidth`), which would otherwise flicker the accent line off
+  // mid-drag. Force it while actively resizing instead of relying on
+  // `:hover`, and skip the entry transition/delay for the same reason.
+  // The component toggles this class on `<body>`.
+  .#{$prefix}--side-nav-resizing {
+    // Dragging can otherwise select page text as the pointer crosses it.
+    user-select: none;
+    // Descendant links inside the side nav set their own `cursor`, which
+    // would otherwise win over this while the pointer passes over them;
+    // `pointer-events: none` below (so they stop capturing the cursor) is
+    // what makes this actually take effect everywhere during a drag.
+    cursor: col-resize;
+
+    .#{$prefix}--side-nav__resize-handle::after {
+      background-color: $focus;
+      transition: none;
+    }
+  }
+
+  // Prevent other side nav content (links, menus) from responding to
+  // hover/click while a drag is in progress.
+  .#{$prefix}--side-nav--resizing > *:not(.#{$prefix}--side-nav__resize-handle) {
+    pointer-events: none;
+  }
+}
+
+@include exports('side-nav-resize') {
+  @include side-nav-resize;
+}
