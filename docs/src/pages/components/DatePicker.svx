@@ -332,6 +332,12 @@ Set `selectTextOnFocus` on `DatePickerInput` to select the full value when the f
   <DatePickerInput selectTextOnFocus labelText="Contract start date" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
+## Clearable
+
+Set `clearable` to `true` on DatePicker to show a clear button while the field has a value. It takes the calendar icon's place, empties the date, dispatches `change` and then `clear`, and returns focus to the field. In a range picker, one button on the end input clears both dates. It is hidden while the input is read-only or disabled.
+
+<FileSource src="/framed/DatePicker/DatePickerClearable" />
+
 ## Hidden label
 
 Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
