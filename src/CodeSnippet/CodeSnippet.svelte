@@ -213,6 +213,7 @@
     COPY_FEEDBACK_TIMEOUT_MS,
     createCopyFeedbackState,
   } from "../utils/copy-feedback.js";
+  import { isScrollNearEnd } from "../utils/is-scroll-near-end.js";
   import { noop } from "../utils/noop.js";
   import { uniqueId } from "../utils/unique-id.js";
   import CodeSnippetSkeleton from "./CodeSnippetSkeleton.svelte";
@@ -319,9 +320,20 @@
     if (!containerRef) return;
     yScrollable = containerRef.scrollHeight > containerRef.clientHeight;
     atTop = containerRef.scrollTop <= 0;
+    // `isScrollNearEnd` itself returns false when the content doesn't
+    // overflow (`scrollHeight <= clientHeight`); the original inline
+    // formula didn't guard that case and always came out `true` there
+    // (`scrollTop` is pinned at 0 when there's nothing to scroll, so
+    // `clientHeight >= scrollHeight - 1` trivially holds). `!yScrollable ||`
+    // keeps that same "true when not scrollable" value.
     atBottom =
-      containerRef.scrollTop + containerRef.clientHeight >=
-      containerRef.scrollHeight - 1;
+      !yScrollable ||
+      isScrollNearEnd({
+        scrollTop: containerRef.scrollTop,
+        scrollHeight: containerRef.scrollHeight,
+        clientHeight: containerRef.clientHeight,
+        threshold: 1,
+      });
   }
 
   $: showTopFade = type === "multi" && yScrollable && !atTop;
