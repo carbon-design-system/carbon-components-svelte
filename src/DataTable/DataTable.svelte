@@ -347,6 +347,7 @@
   import RadioButton from "../RadioButton/RadioButton.svelte";
   import { toCssLength } from "../utils/css-length.js";
   import { deepEqual } from "../utils/deep-equal.js";
+  import { rangeSlice } from "../utils/range-slice.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { virtualize as virtualizeUtil } from "../utils/virtualize.js";
   import {
@@ -624,15 +625,19 @@
     const anchorIndex = rowsToVirtualize.findIndex(
       (row) => row.id === rangeAnchorRowId,
     );
-    if (anchorIndex === -1) return false;
+    const rows = rangeSlice(
+      rowsToVirtualize,
+      anchorIndex,
+      targetIndex,
+      (row) =>
+        !nonSelectableRowIdsSet.has(row.id) &&
+        // "hide" mode keeps filtered-out rows mounted (and in `rowsToVirtualize`).
+        (!hideMode || matchedRowIdsSet.has(row.id)),
+    );
+    if (rows === null) return false;
 
-    const start = Math.min(anchorIndex, targetIndex);
-    const end = Math.max(anchorIndex, targetIndex);
     const next = new Set(selectedRowIds);
-    for (const row of rowsToVirtualize.slice(start, end + 1)) {
-      if (nonSelectableRowIdsSet.has(row.id)) continue;
-      // "hide" mode keeps filtered-out rows mounted (and in `rowsToVirtualize`).
-      if (hideMode && !matchedRowIdsSet.has(row.id)) continue;
+    for (const row of rows) {
       if (checked) {
         next.add(row.id);
       } else {
