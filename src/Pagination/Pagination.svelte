@@ -1,22 +1,32 @@
 <script>
   /**
-   * Dispatched when the user changes the page or page size through any interaction.
-   * A page-size change may include both `page` and `pageSize` together, since
-   * the current page is recalculated to keep the same items in view.
+   * Dispatched when the user changes the page or page size through any
+   * interaction. A page-size change may include both `page` and
+   * `pageSize` together, since the current page is recalculated to keep
+   * the same items in view.
    * @event change
    * @type {object}
    * @property {number} [page]
    * @property {number} [pageSize]
-   * @event click:button--previous
+   */
+
+  /**
    * Dispatched when the user clicks the previous page button.
+   * @event click:button--previous
    * @type {object}
    * @property {number} page
-   * @event click:button--next
+   */
+
+  /**
    * Dispatched when the user clicks the next page button.
+   * @event click:button--next
    * @type {object}
    * @property {number} page
-   * @event update
+   */
+
+  /**
    * Dispatched reactively whenever the page or page size changes.
+   * @event update
    * @type {object}
    * @property {number} pageSize
    * @property {number} page
