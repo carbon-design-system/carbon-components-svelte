@@ -60,9 +60,26 @@
       ctx?.syncNativeSelectValue?.();
     };
   });
+
+  /**
+   * Keep the `selected` attribute on the current choice, so a form reset
+   * leaves the selection alone. Svelte 5 already renders `selected` as the
+   * attribute; Svelte 3 and 4 only set the property, so a reset jumped to
+   * the first option while the bound value stayed.
+   * @type {(node: HTMLOptionElement, isSelected: boolean) => { update: (isSelected: boolean) => void }}
+   */
+  function reflectSelected(node, isSelected) {
+    node.defaultSelected = isSelected;
+    return {
+      update(next) {
+        node.defaultSelected = next;
+      },
+    };
+  }
 </script>
 
 <option
+  use:reflectSelected={selected}
   {value}
   {disabled}
   {hidden}
