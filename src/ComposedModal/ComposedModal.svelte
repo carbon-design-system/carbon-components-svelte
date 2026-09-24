@@ -2,6 +2,7 @@
   /**
    * @event close
    * @property {"escape-key" | "outside-click" | "close-button" | "programmatic"} trigger
+   * @event {null} open
    * @event transitionend
    * @property {boolean} open
    */
@@ -52,8 +53,8 @@
   import { writable } from "svelte/store";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import { trackModal } from "../Modal/modal-store.js";
+  import { createDialogLifecycle } from "../utils/dialog-lifecycle.js";
   import { initialFocus, restoreFocus } from "../utils/focus.js";
-  import { createOutsideDismiss } from "../utils/outside-dismiss.js";
   import { trapFocus } from "../utils/trap-focus.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -70,21 +71,18 @@
   const titleId = `${modalId}-title`;
 
   let innerModalRef = null;
-  let closeDispatched = false;
 
-  function close(trigger) {
-    closeDispatched = true;
-    const shouldContinue = dispatch("close", { trigger }, { cancelable: true });
-    if (shouldContinue) {
-      open = false;
-    } else {
-      closeDispatched = false;
-    }
-  }
-
-  const outsideDismiss = createOutsideDismiss(() => {
-    if (!preventCloseOnClickOutside) close("outside-click");
+  const lifecycle = createDialogLifecycle({
+    dispatch,
+    setOpen: (value) => {
+      open = value;
+    },
+    preventCloseOnClickOutside: () => preventCloseOnClickOutside,
+    saveFocusReturn: focusReturn.save,
+    focus: () => focus(),
+    getOpen: () => open,
   });
+  const { close, outsideDismiss } = lifecycle;
 
   /**
    * @type {() => void}
@@ -152,15 +150,12 @@
     target?.focus();
   }
 
-  let prevOpen = false;
-  let mounted = false;
-
   const sharedOpen = writable(open);
   $: $sharedOpen = open;
   trackModal(sharedOpen);
 
   onMount(() => {
-    mounted = true;
+    lifecycle.setMounted();
     if (open) {
       tick().then(() => {
         if (open) focus();
@@ -168,31 +163,7 @@
     }
   });
 
-  $: {
-    if (prevOpen) {
-      if (!open) {
-        prevOpen = false;
-        if (!closeDispatched) {
-          tick().then(() => {
-            dispatch("close", { trigger: "programmatic" });
-          });
-        }
-        closeDispatched = false;
-      }
-    } else if (open) {
-      prevOpen = true;
-      // Capture the opener before the DOM commits; activeElement is still
-      // the element that opened the modal.
-      focusReturn.save();
-      dispatch("open");
-      // onMount handles the initial mount; later opens need the committed DOM.
-      if (mounted) {
-        tick().then(() => {
-          if (open) focus();
-        });
-      }
-    }
-  }
+  $: lifecycle.syncOpen(open);
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
