@@ -21,4 +21,15 @@ test.describe("RadioTile", () => {
     await page.getByTestId("radio-tile-b").click();
     await expect(page.getByTestId("selected-value")).toHaveText("b");
   });
+
+  test("moves the selection with arrow keys in a group without a name", async ({
+    page,
+  }) => {
+    await page.getByTestId("radio-tile-a").click();
+    await expect(page.getByTestId("selected-value")).toHaveText("a");
+
+    await page.keyboard.press("ArrowDown");
+    await expect(page.getByTestId("selected-value")).toHaveText("b");
+    await expect(page.getByRole("radio", { name: "Option B" })).toBeChecked();
+  });
 });
