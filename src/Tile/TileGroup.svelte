@@ -6,6 +6,8 @@
 
   /**
    * Specify the selected tile value.
+   * Follows the field after a reset — becomes the value of whichever tile
+   * is checked in the DOM, or `undefined`.
    * @type {T | undefined}
    * @bindable writable
    */
@@ -43,9 +45,12 @@
 
   import { createEventDispatcher, setContext } from "svelte";
   import { readonly, writable } from "svelte/store";
+  import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
+  /** @type {HTMLFieldSetElement | undefined} */
+  let fieldsetRef;
   /**
    * @type {import("svelte/store").Writable<T | undefined>}
    */
@@ -88,6 +93,20 @@
     dispatch("select", value);
   }
 
+  function handleFormReset() {
+    if (!fieldsetRef) return;
+    // formReset is task-deferred, so the browser has already restored every
+    // tile's radio to its own default: checked when the markup carried a
+    // `checked` attribute (server-rendered), unchecked otherwise. Read the
+    // winner back, or none. `selectedValue.set` alone reaches `selected` via
+    // the existing `$: selected = $selectedValue;` — do not call `update()`,
+    // which also dispatches `select`; a reset fires no events.
+    const checkedInput = /** @type {HTMLInputElement | null} */ (
+      fieldsetRef.querySelector('input[type="radio"]:checked')
+    );
+    selectedValue.set(checkedInput ? checkedInput.value : undefined);
+  }
+
   setContext("carbon:TileGroup", {
     selectedValue,
     groupName: groupNameReadonly,
@@ -103,7 +122,13 @@
   $: groupRequired.set(required);
 </script>
 
-<fieldset {disabled} class:bx--tile-group={true} {...$$restProps}>
+<fieldset
+  bind:this={fieldsetRef}
+  use:formReset={handleFormReset}
+  {disabled}
+  class:bx--tile-group={true}
+  {...$$restProps}
+>
   {#if legendText || $$slots.legendChildren}
     <legend class:bx--label={true}>
       <slot name="legendChildren">{legendText}</slot>
