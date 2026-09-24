@@ -1,6 +1,7 @@
 <script>
   /**
    * Specify the textarea value.
+   * Follows the field when the owning form resets.
    * @type {null | string}
    * @bindable writable
    */
@@ -108,6 +109,7 @@
   import { afterUpdate, getContext, onMount, tick } from "svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import { formReset } from "../utils/form-reset.js";
   import { graphemeCount, truncateGraphemes } from "../utils/grapheme-count.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -161,6 +163,12 @@
     if (selectTextOnFocus && !disabled) {
       tick().then(() => ref?.select());
     }
+  }
+
+  // A form reset restores the field without an input event. Svelte 5 syncs
+  // `bind:value` back on its own; Svelte 3 and 4 do not, so read the field.
+  function handleFormReset() {
+    if (ref) value = ref.value;
   }
 
   function resize() {
@@ -336,6 +344,7 @@
     {/if}
     <textarea
       bind:this={ref}
+      use:formReset={handleFormReset}
       bind:value
       aria-invalid={showInvalid || overCount || undefined}
       aria-errormessage={errorMessageId}
