@@ -4,26 +4,11 @@
     fingerprintTree,
     matchesFingerprint,
   } from "../utils/tree-fingerprint.js";
+  import { isTypeaheadKey } from "../utils/typeahead.js";
   import { TREE_ROW_ID_ATTR, treeRowIdSelector } from "./tree-row-id.js";
 
   function isUnderCollapsedSubtree(node) {
     return Boolean(node.closest("ul.bx--tree-node--hidden"));
-  }
-
-  /**
-   * Whether a keydown event should feed the type-ahead search buffer:
-   * a single printable character with no modifier (excludes Space, which
-   * is reserved for selection).
-   * @param {KeyboardEvent} event
-   */
-  function isTypeAheadKey(event) {
-    return (
-      event.key.length === 1 &&
-      event.key !== " " &&
-      !event.ctrlKey &&
-      !event.metaKey &&
-      !event.altKey
-    );
   }
 
   /**
@@ -259,6 +244,33 @@
     }
     walkDeep(node);
     return out;
+  }
+
+  /** Tabindex anchor: prefer the focused row when it is currently mounted
+   * and enabled; otherwise the first enabled row in the window. */
+  function resolveVirtualTabAnchorId(
+    virtualConfig,
+    virtualIndex,
+    virtualData,
+    virtualFocusedId,
+  ) {
+    if (!virtualConfig || !virtualIndex || !virtualData) return undefined;
+    const visible = virtualData.visibleItems;
+    if (
+      virtualFocusedId !== undefined &&
+      virtualFocusedId !== "" &&
+      virtualFocusedId != null
+    ) {
+      for (const row of visible) {
+        if (row.node.id === virtualFocusedId && !row.node.disabled) {
+          return virtualFocusedId;
+        }
+      }
+    }
+    for (const row of visible) {
+      if (!row.node.disabled) return row.node.id;
+    }
+    return undefined;
   }
 </script>
 
@@ -631,6 +643,8 @@
     tick,
   } from "svelte";
   import { writable } from "svelte/store";
+  import { TYPEAHEAD_RESET_MS } from "../constants/timing.js";
+  import { createDelayedSetter } from "../utils/delayed-setter.js";
   import {
     resolveCheckboxState,
     toggleCheckboxNode,
@@ -641,6 +655,7 @@
   } from "../utils/tree-virtual-index.js";
   import { uniqueId } from "../utils/unique-id.js";
   import {
+    DEFAULT_VIRTUAL_LIST_CONFIG,
     getVisibleRange,
     scrollHighlightedIntoView,
   } from "../utils/virtualize.js";
@@ -1133,10 +1148,9 @@
     return target.closest(".bx--tree-node");
   }
 
-  /** Type-ahead search buffer, reset after `typeAheadTimeoutMs` of inactivity. */
+  /** Type-ahead search buffer, reset after `TYPEAHEAD_RESET_MS` of inactivity. */
   let typeAheadBuffer = "";
-  let typeAheadTimeoutId = null;
-  const typeAheadTimeoutMs = 500;
+  const resetTypeAheadBuffer = createDelayedSetter();
 
   /**
    * Append the typed key to the buffer (re-arming the reset timer) and return
@@ -1147,11 +1161,10 @@
    * @returns {string}
    */
   function pushTypeAheadChar(event) {
-    if (typeAheadTimeoutId) clearTimeout(typeAheadTimeoutId);
     typeAheadBuffer += event.key.toLowerCase();
-    typeAheadTimeoutId = setTimeout(() => {
+    resetTypeAheadBuffer(TYPEAHEAD_RESET_MS, () => {
       typeAheadBuffer = "";
-    }, typeAheadTimeoutMs);
+    });
 
     const isRepeatedChar =
       typeAheadBuffer.length > 1 &&
@@ -1183,7 +1196,7 @@
    * @returns {boolean} Whether the event was handled as type-ahead input.
    */
   function handleTypeAhead(event, treeItem) {
-    if (!isTypeAheadKey(event)) return false;
+    if (!isTypeaheadKey(event)) return false;
 
     const query = pushTypeAheadChar(event);
 
@@ -1373,7 +1386,7 @@
 
     return () => {
       setMultiselectKeyListeners(false);
-      if (typeAheadTimeoutId) clearTimeout(typeAheadTimeoutId);
+      resetTypeAheadBuffer.cancel();
       resizeObserver?.disconnect();
     };
   });
@@ -1530,7 +1543,7 @@
     ? {
         maxVisibleRows: 10,
         containerHeight: undefined,
-        overscan: 3,
+        overscan: DEFAULT_VIRTUAL_LIST_CONFIG.overscan,
         ...(typeof virtualize === "object" ? virtualize : {}),
         itemHeight: size === "compact" ? 24 : 32,
       }
@@ -1669,32 +1682,6 @@
     if (!virtualConfig) measuredContainerHeight = 0;
   }
 
-  /** Tabindex anchor: prefer the focused row when it is currently mounted
-   * and enabled; otherwise the first enabled row in the window. */
-  function resolveVirtualTabAnchorId(
-    virtualConfig,
-    virtualIndex,
-    virtualData,
-    virtualFocusedId,
-  ) {
-    if (!virtualConfig || !virtualIndex || !virtualData) return undefined;
-    const visible = virtualData.visibleItems;
-    if (
-      virtualFocusedId !== undefined &&
-      virtualFocusedId !== "" &&
-      virtualFocusedId != null
-    ) {
-      for (const row of visible) {
-        if (row.node.id === virtualFocusedId && !row.node.disabled) {
-          return virtualFocusedId;
-        }
-      }
-    }
-    for (const row of visible) {
-      if (!row.node.disabled) return row.node.id;
-    }
-    return undefined;
-  }
   $: virtualTabAnchorId = resolveVirtualTabAnchorId(
     virtualConfig,
     virtualIndex,
@@ -1827,7 +1814,7 @@
    * @returns {boolean}
    */
   function handleVirtualTypeAhead(event, activeIdx) {
-    if (!virtualIndex || !isTypeAheadKey(event)) return false;
+    if (!virtualIndex || !isTypeaheadKey(event)) return false;
 
     const query = pushTypeAheadChar(event);
     const count = virtualIndex.totalCount;
