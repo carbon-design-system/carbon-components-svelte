@@ -5,7 +5,7 @@ import {
 } from "@testing-library/svelte";
 import type HeaderActionComponent from "carbon-components-svelte/UIShell/HeaderAction.svelte";
 import type { ComponentProps } from "svelte";
-import { flushDismiss } from "../utils/flushDismiss";
+import { flushDismiss } from "../utils/flush-dismiss";
 import { user } from "../utils/user";
 import HeaderActionOutsideClick from "./HeaderAction.outsideClick.test.svelte";
 import HeaderActionSlot from "./HeaderAction.slot.test.svelte";

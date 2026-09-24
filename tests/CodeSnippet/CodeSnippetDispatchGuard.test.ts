@@ -7,7 +7,7 @@ import {
 import {
   mockSnippetOverflowHeight,
   waitForSnippetMeasurement,
-} from "../utils/mockSnippetOverflowHeight";
+} from "../utils/mock-snippet-overflow-height";
 import { user } from "../utils/user";
 import CodeSnippetDispatchGuard from "./CodeSnippetDispatchGuard.test.svelte";
 

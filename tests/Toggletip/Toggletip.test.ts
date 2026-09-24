@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
-import { flushDismiss } from "../utils/flushDismiss";
+import { flushDismiss } from "../utils/flush-dismiss";
 import { user } from "../utils/user";
 import Toggletip from "./ToggletipDispatchGuard.test.svelte";
 import ToggletipWithInteractiveContent from "./ToggletipWithInteractiveContent.test.svelte";
