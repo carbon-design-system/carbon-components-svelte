@@ -98,6 +98,7 @@
   import ChevronDown from "../icons/ChevronDown.svelte";
   import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
   import Menu from "../Menu/Menu.svelte";
+  import { blurOnMouseClose } from "../utils/blur-on-mouse-close.js";
 
   /**
    * The overflow menu scale is offset from MenuButton's: its unclassed
@@ -129,13 +130,7 @@
   function toggle(event) {
     const wasOpen = open;
     open = !open;
-    // A keyboard-activated click (Enter/Space) reports detail 0; a real mouse
-    // click reports 1+. Blur only after a mouse-driven close, so the trigger
-    // doesn't linger with a visible focus ring - keyboard users still see
-    // focus stay put, as they should.
-    if (wasOpen && event.detail !== 0) {
-      ref?.blur();
-    }
+    blurOnMouseClose(wasOpen, event, ref);
   }
 </script>
 

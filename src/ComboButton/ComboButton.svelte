@@ -103,6 +103,7 @@
   import { BUTTON_SIZE_BY_MENU_SIZE } from "../constants/sizes.js";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import Menu from "../Menu/Menu.svelte";
+  import { blurOnMouseClose } from "../utils/blur-on-mouse-close.js";
 
   const dispatch = createEventDispatcher();
 
@@ -122,13 +123,7 @@
     const wasOpen = open;
     open = !open;
     dispatch("click:trigger", event);
-    // A keyboard-activated click (Enter/Space) reports detail 0; a real mouse
-    // click reports 1+. Blur only after a mouse-driven close, so the trigger
-    // doesn't linger with a visible focus ring and pop its own tooltip -
-    // keyboard users still see focus stay put, as they should.
-    if (wasOpen && event.detail !== 0) {
-      triggerRef?.blur();
-    }
+    blurOnMouseClose(wasOpen, event, triggerRef);
   }
 </script>
 
