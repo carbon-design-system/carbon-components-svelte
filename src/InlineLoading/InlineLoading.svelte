@@ -39,23 +39,22 @@
 
   const dispatch = createEventDispatcher();
   const schedule = createDelayedSetter();
+  const scheduleSuccess = createDelayedSetter();
 
-  let timeout = undefined;
   // `delay > 0` renders nothing during SSR while `status` is "active", since the timer only fires client-side.
   let visible = false;
 
   onMount(() => {
     return () => {
-      clearTimeout(timeout);
+      scheduleSuccess.cancel();
       schedule.cancel();
     };
   });
 
   $: if (status === "finished") {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => {
+    scheduleSuccess(successDelay, () => {
       dispatch("success");
-    }, successDelay);
+    });
   }
 
   $: if (status === "active") {
