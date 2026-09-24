@@ -7,7 +7,10 @@ function setup() {
   >([]);
   const content = writable<ReadonlyArray<{ id: string; index: number }>>([]);
   const onDomSyncNeeded = vi.fn();
-  const registration = createTabsRegistration({
+  const registration = createTabsRegistration<
+    { id: string; label?: string },
+    { id: string }
+  >({
     tabs,
     content,
     onDomSyncNeeded,

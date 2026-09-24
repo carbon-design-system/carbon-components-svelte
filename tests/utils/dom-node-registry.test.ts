@@ -33,7 +33,7 @@ describe("createDomNodeRegistry", () => {
 
   test("batches synchronous registrations into a single flush", async () => {
     const registry = createDomNodeRegistry();
-    const seen = [];
+    const seen: number[] = [];
     registry.items.subscribe((items) => seen.push(items.length));
 
     const a = node();
