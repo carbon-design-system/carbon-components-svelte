@@ -95,6 +95,11 @@
   import { readonly as readOnly, writable } from "svelte/store";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import {
+    buildFieldIds,
+    resolveStatusDescribedBy,
+    resolveValidationVisibility,
+  } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -212,19 +217,32 @@
   $: $groupRequired = required;
   $: $groupReadonly = readonly;
   $: $groupAllowDeselect = allowDeselect;
-  $: showInvalid = invalid && !disabled && !readonly;
-  $: showWarn = warn && !invalid && !disabled && !readonly;
-  $: errorId = id ? `error-${id}` : fallbackErrorId;
-  $: warnId = id ? `warn-${id}` : fallbackWarnId;
-  $: $helperId = showInvalid
-    ? errorId
-    : showWarn
-      ? warnId
-      : helperText
-        ? id
-          ? `helper-${id}`
-          : fallbackHelperId
-        : undefined;
+  $: ({ showInvalid, showWarn } = resolveValidationVisibility({
+    invalid,
+    warn,
+    disabled,
+    readonly,
+  }));
+  $: ({
+    errorId,
+    warnId,
+    helperId: rawHelperId,
+  } = buildFieldIds(id, {
+    helperId: fallbackHelperId,
+    errorId: fallbackErrorId,
+    warnId: fallbackWarnId,
+  }));
+  // The `helperId` store holds the *resolved* description id (not the
+  // raw helper id) — child RadioButtons point their own
+  // aria-describedby at whichever tier is currently showing.
+  $: $helperId = resolveStatusDescribedBy({
+    showInvalid,
+    showWarn,
+    helperText,
+    errorId,
+    warnId,
+    helperId: rawHelperId,
+  });
 </script>
 
 <div
