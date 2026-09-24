@@ -106,7 +106,7 @@
   const useFullWidth = writable(false);
   const useDismissible = writable(false);
   const useIconOnly = writable(false);
-  const activeTooltip = writable(undefined);
+  const activeTooltip = writable(null);
 
   let refTabList = null;
   let refRoot = null;

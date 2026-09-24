@@ -14,7 +14,7 @@ describe("createTooltipHandoff", () => {
     const activeTooltip = writable(null);
     const handoff = createTooltipHandoff({
       activeTooltip,
-      id: "a",
+      getId: () => "a",
       enterDelayMs: 100,
       leaveDelayMs: 300,
     });
@@ -33,7 +33,7 @@ describe("createTooltipHandoff", () => {
     const activeTooltip = writable("other");
     const handoff = createTooltipHandoff({
       activeTooltip,
-      id: "a",
+      getId: () => "a",
       enterDelayMs: 100,
       leaveDelayMs: 300,
     });
@@ -48,7 +48,7 @@ describe("createTooltipHandoff", () => {
     const activeTooltip = writable(null);
     const handoff = createTooltipHandoff({
       activeTooltip,
-      id: "a",
+      getId: () => "a",
       enterDelayMs: 100,
       leaveDelayMs: 300,
     });
@@ -64,7 +64,7 @@ describe("createTooltipHandoff", () => {
     const activeTooltip = writable("a");
     const handoff = createTooltipHandoff({
       activeTooltip,
-      id: "a",
+      getId: () => "a",
       enterDelayMs: 100,
       leaveDelayMs: 300,
     });
@@ -80,7 +80,7 @@ describe("createTooltipHandoff", () => {
     const activeTooltip = writable("a");
     const handoff = createTooltipHandoff({
       activeTooltip,
-      id: "a",
+      getId: () => "a",
       enterDelayMs: 100,
       leaveDelayMs: 300,
     });
@@ -98,7 +98,7 @@ describe("createTooltipHandoff", () => {
     const activeTooltip = writable(null);
     const handoff = createTooltipHandoff({
       activeTooltip,
-      id: "a",
+      getId: () => "a",
       enterDelayMs: 100,
       leaveDelayMs: 300,
     });
@@ -114,7 +114,7 @@ describe("createTooltipHandoff", () => {
 
   test("claim() sets the store unconditionally", () => {
     const activeTooltip = writable(null);
-    const handoff = createTooltipHandoff({ activeTooltip, id: "a" });
+    const handoff = createTooltipHandoff({ activeTooltip, getId: () => "a" });
 
     handoff.claim();
     expect(get(activeTooltip)).toBe("a");
@@ -122,7 +122,7 @@ describe("createTooltipHandoff", () => {
 
   test("release() clears the store only when this id still holds it", () => {
     const activeTooltip = writable("a");
-    const handoff = createTooltipHandoff({ activeTooltip, id: "a" });
+    const handoff = createTooltipHandoff({ activeTooltip, getId: () => "a" });
 
     handoff.release();
     expect(get(activeTooltip)).toBe(null);
@@ -130,41 +130,32 @@ describe("createTooltipHandoff", () => {
 
   test("release() is a no-op when another id holds the store", () => {
     const activeTooltip = writable("other");
-    const handoff = createTooltipHandoff({ activeTooltip, id: "a" });
+    const handoff = createTooltipHandoff({ activeTooltip, getId: () => "a" });
 
     handoff.release();
     expect(get(activeTooltip)).toBe("other");
   });
 
-  test("release() uses a custom emptyValue", () => {
-    const activeTooltip = writable("a");
-    const handoff = createTooltipHandoff({
-      activeTooltip,
-      id: "a",
-      emptyValue: "none",
-    });
+  test("reads the current id on each call", () => {
+    const activeTooltip = writable(null);
+    let id = "a";
+    const handoff = createTooltipHandoff({ activeTooltip, getId: () => id });
 
+    handoff.claim();
+    expect(get(activeTooltip)).toBe("a");
+    id = "b";
     handoff.release();
-    expect(get(activeTooltip)).toBe("none");
-  });
-
-  test("release() honors an explicit `emptyValue: undefined`", () => {
-    const activeTooltip = writable("a");
-    const handoff = createTooltipHandoff({
-      activeTooltip,
-      id: "a",
-      emptyValue: undefined,
-    });
-
+    expect(get(activeTooltip)).toBe("a");
+    handoff.claim();
     handoff.release();
-    expect(get(activeTooltip)).toBe(undefined);
+    expect(get(activeTooltip)).toBe(null);
   });
 
   test("cancel() discards a pending scheduleEnter() without claiming", () => {
     const activeTooltip = writable(null);
     const handoff = createTooltipHandoff({
       activeTooltip,
-      id: "a",
+      getId: () => "a",
       enterDelayMs: 100,
     });
     const onShow = vi.fn();
@@ -178,7 +169,7 @@ describe("createTooltipHandoff", () => {
 
   test("default enterDelayMs/leaveDelayMs match the shared timing constants", () => {
     const activeTooltip = writable(null);
-    const handoff = createTooltipHandoff({ activeTooltip, id: "a" });
+    const handoff = createTooltipHandoff({ activeTooltip, getId: () => "a" });
     const onShow = vi.fn();
 
     handoff.scheduleEnter(onShow);

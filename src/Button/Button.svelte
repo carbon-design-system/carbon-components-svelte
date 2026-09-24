@@ -178,7 +178,7 @@
   // tooltips (e.g. Pagination's adjacent buttons).
   const tooltipHandoff = createTooltipHandoff({
     activeTooltip: activeButtonTooltip,
-    id: tooltipId,
+    getId: () => tooltipId,
   });
 
   let hovered = false;
