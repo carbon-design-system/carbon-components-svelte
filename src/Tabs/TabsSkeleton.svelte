@@ -16,19 +16,10 @@
    */
   export let size = undefined;
 
-  const SIZE_SCALE = ["sm", "md", "lg", "xl"];
-
-  // Same clamping as `Tabs`: line tabs max out at `lg`, container tabs at
-  // `xl`. An unrecognized value is ignored (no class).
-  function resolveSize(size, maxSizeIndex) {
-    if (!size) return undefined;
-    const index = SIZE_SCALE.indexOf(size);
-    if (index === -1) return undefined;
-    return SIZE_SCALE[Math.min(index, maxSizeIndex)];
-  }
+  import { resolveTabsSize } from "../utils/resolve-tabs-size.js";
 
   $: maxSizeIndex = type === "container" ? 3 : 2;
-  $: resolvedSize = resolveSize(size, maxSizeIndex);
+  $: resolvedSize = resolveTabsSize(size, maxSizeIndex);
 </script>
 
 <div

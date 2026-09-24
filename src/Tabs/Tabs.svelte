@@ -86,12 +86,11 @@
   } from "../utils/horizontal-scroll.js";
   import { keyBy } from "../utils/key-by.js";
   import { resolveIdSelection } from "../utils/resolve-id-selection.js";
+  import { resolveTabsSize } from "../utils/resolve-tabs-size.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { syncDomOrder } from "../utils/sync-dom-order.js";
 
   const dispatch = createEventDispatcher();
-
-  const SIZE_SCALE = ["sm", "md", "lg", "xl"];
 
   /**
    * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean; index: number }>>}
@@ -477,18 +476,8 @@
   $: useDismissible.set(dismissible);
   $: useIconOnly.set(iconOnly);
 
-  // Line tabs support up to `lg`; container tabs support the full range up
-  // to `xl`. An out-of-range value clamps to the type's max, mirroring
-  // Carbon's own `layout.use($min, $max)` clamping. An unrecognized value is
-  // ignored (no class), same as leaving `size` unset.
   $: maxSizeIndex = type === "container" ? 3 : 2;
-  function resolveSize(size, maxSizeIndex) {
-    if (!size) return undefined;
-    const index = SIZE_SCALE.indexOf(size);
-    if (index === -1) return undefined;
-    return SIZE_SCALE[Math.min(index, maxSizeIndex)];
-  }
-  $: resolvedSize = resolveSize(size, maxSizeIndex);
+  $: resolvedSize = resolveTabsSize(size, maxSizeIndex);
 </script>
 
 <div
