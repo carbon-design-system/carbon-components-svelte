@@ -385,6 +385,7 @@
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { moveIndex } from "../utils/move-index.js";
+  import { rangeSlice } from "../utils/range-slice.js";
   import {
     createTypeaheadBuffer,
     isTypeaheadKey,
@@ -702,16 +703,15 @@
     const anchorIndex = itemsToUse.findIndex(
       (item) => item.id === prevSelectedItemId,
     );
-    if (anchorIndex === -1) return false;
-
-    const start = Math.min(anchorIndex, targetIndex);
-    const end = Math.max(anchorIndex, targetIndex);
-    const rangeIds = new Set(
-      itemsToUse
-        .slice(start, end + 1)
-        .filter((item) => !item.isSelectAll && !isItemDisabled(item))
-        .map((item) => item.id),
+    const eligible = rangeSlice(
+      itemsToUse,
+      anchorIndex,
+      targetIndex,
+      (item) => !item.isSelectAll && !isItemDisabled(item),
     );
+    if (eligible === null) return false;
+
+    const rangeIds = new Set(eligible.map((item) => item.id));
 
     sortedItems = sortedItems.map((sortedItem) =>
       rangeIds.has(sortedItem.id) && sortedItem.checked !== checked
