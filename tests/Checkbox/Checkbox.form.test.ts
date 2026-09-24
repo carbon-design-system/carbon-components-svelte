@@ -1,10 +1,10 @@
 import { render, screen } from "@testing-library/svelte";
 import { flushFormReset } from "../utils/flush-form-reset";
+import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import CheckboxForm from "./Checkbox.form.test.svelte";
 import CheckboxFormGroup from "./Checkbox.formGroup.test.svelte";
 
-const getForm = () => screen.getByTestId("form") as HTMLFormElement;
 describe("Checkbox form participation", () => {
   describe("change after the DOM and state disagree", () => {
     it("keeps the first click after a form reset", async () => {

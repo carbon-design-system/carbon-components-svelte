@@ -1,12 +1,7 @@
 import { render } from "@testing-library/svelte";
+import { treeItemById } from "../utils/tree-item-by-id";
 import { user } from "../utils/user";
 import TreeView from "./TreeView.typeahead.test.svelte";
-
-function treeItemById(id: string | number): HTMLElement {
-  const el = document.getElementById(String(id));
-  assert(el instanceof HTMLElement);
-  return el;
-}
 
 describe("TreeView type-ahead", () => {
   it("moves focus to the next visible node whose label starts with a digit", async () => {

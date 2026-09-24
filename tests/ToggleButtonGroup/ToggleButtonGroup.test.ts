@@ -1,14 +1,11 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { openTooltips } from "../utils/open-tooltips";
 import { user } from "../utils/user";
 import ToggleButtonGroupIconOnly from "./ToggleButtonGroup.iconOnly.test.svelte";
 import ToggleButtonGroupFixture from "./ToggleButtonGroup.test.svelte";
 
 /** Open tooltips currently rendered in the portal. */
-function openTooltips() {
-  return Array.from(document.querySelectorAll(".bx--tooltip-portal__content"));
-}
-
 describe("ToggleButtonGroup", () => {
   it("renders a toolbar with the accessible name from labelText", () => {
     render(ToggleButtonGroupFixture);

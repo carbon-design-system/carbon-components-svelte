@@ -1,15 +1,8 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { scssFiles } from "./scss-files";
 
 const CSS_DIR = join(__dirname, "../../css");
-
-function scssFiles(dir: string): string[] {
-  return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
-    const file = join(dir, entry.name);
-    if (entry.isDirectory()) return scssFiles(file);
-    return entry.name.endsWith(".scss") ? [file] : [];
-  });
-}
 
 // Upstream aliases and hooks no component renders. Button emits `--field` and
 // the single-dash `danger-ghost` / `danger-tertiary` kinds only.

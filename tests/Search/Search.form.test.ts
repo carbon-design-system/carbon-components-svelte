@@ -1,9 +1,9 @@
 import { render, screen } from "@testing-library/svelte";
 import { flushFormReset } from "../utils/flush-form-reset";
+import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import SearchForm from "./Search.form.test.svelte";
 
-const getForm = () => screen.getByTestId("form") as HTMLFormElement;
 const getBoundValue = () => screen.getByTestId("bound-value").textContent;
 const getBoundExpanded = () => screen.getByTestId("bound-expanded").textContent;
 describe("Search form reset", () => {

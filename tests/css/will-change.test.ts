@@ -1,19 +1,12 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { scssFiles } from "./scss-files";
 
 const CSS_DIR = join(__dirname, "../../css");
 
 // Only these get a compositor layer from the hint. On anything else it is a
 // no-op, and on an idle element it pins a layer for nothing.
 const COMPOSITABLE = new Set(["transform", "opacity"]);
-
-function scssFiles(dir: string): string[] {
-  return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
-    const file = join(dir, entry.name);
-    if (entry.isDirectory()) return scssFiles(file);
-    return entry.name.endsWith(".scss") ? [file] : [];
-  });
-}
 
 describe("will-change", () => {
   it("only hints compositable properties", () => {

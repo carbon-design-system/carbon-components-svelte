@@ -1,16 +1,11 @@
 import { render } from "@testing-library/svelte";
+import { treeItemById } from "../utils/tree-item-by-id";
 import { user } from "../utils/user";
 import TreeViewCheckbox from "./TreeView.checkbox.test.svelte";
 
 // Collapsed subtrees stay mounted, so accessible-name computation in jsdom
 // picks up descendant text. Look rows up by id instead, matching the
 // convention documented in TreeView.lazyLoad.test.ts.
-function treeItemById(id: string): HTMLElement {
-  const el = document.getElementById(id);
-  assert(el instanceof HTMLElement);
-  return el;
-}
-
 // Click the checkbox wrapper; row clicks outside it do not toggle.
 function checkboxFor(id: string): HTMLElement {
   const el = treeItemById(id).querySelector(".bx--checkbox-wrapper");

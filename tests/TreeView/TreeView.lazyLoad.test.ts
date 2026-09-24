@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import { treeItemById } from "../utils/tree-item-by-id";
 import { user } from "../utils/user";
 import TreeViewLazyLoad from "./TreeView.lazyLoad.test.svelte";
 
@@ -6,12 +7,6 @@ import TreeViewLazyLoad from "./TreeView.lazyLoad.test.svelte";
 // content once expanded, which pollutes accessible-name computation in jsdom
 // (no real stylesheet applies `.bx--tree-node--hidden`). Look it up by id
 // instead, matching this suite's existing convention for parent rows.
-function treeItemById(id: string): HTMLElement {
-  const el = document.getElementById(id);
-  assert(el instanceof HTMLElement);
-  return el;
-}
-
 describe("TreeView lazy loading (hasChildren + children slot)", () => {
   it("renders an expander for a hasChildren node with no nodes yet", () => {
     render(TreeViewLazyLoad);

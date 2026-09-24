@@ -1,10 +1,10 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { flushFormReset } from "../utils/flush-form-reset";
+import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import TimePickerForm from "./TimePicker.form.test.svelte";
 
-const getForm = () => screen.getByTestId("form") as HTMLFormElement;
 const getValue = () => screen.getByTestId("value").textContent;
 const getAmpm = () => screen.getByTestId("ampm").textContent;
 

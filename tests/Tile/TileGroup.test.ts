@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import type TileGroupComponent from "carbon-components-svelte/Tile/TileGroup.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
+import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import TileGroupSlot from "./TileGroup.slot.test.svelte";
 import TileGroup from "./TileGroup.test.svelte";
@@ -95,7 +96,7 @@ describe("TileGroup", () => {
     for (const radio of screen.getAllByRole("radio")) {
       expect(radio).toHaveAttribute("name", "plan");
     }
-    const form = screen.getByTestId("form") as HTMLFormElement;
+    const form = getForm();
     expect([...new FormData(form)]).toEqual([["plan", "pro"]]);
   });
 

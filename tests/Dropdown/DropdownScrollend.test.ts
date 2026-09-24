@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { setMenuMetrics } from "../utils/set-menu-metrics";
 import DropdownScrollend from "./DropdownScrollend.test.svelte";
 
 function createItems(count: number) {
@@ -7,25 +8,6 @@ function createItems(count: number) {
     id: String(i),
     text: `Item ${i + 1}`,
   }));
-}
-
-function setMenuMetrics(
-  menu: HTMLElement,
-  {
-    scrollTop,
-    scrollHeight,
-    clientHeight,
-  }: { scrollTop: number; scrollHeight: number; clientHeight: number },
-) {
-  Object.defineProperty(menu, "scrollHeight", {
-    value: scrollHeight,
-    configurable: true,
-  });
-  Object.defineProperty(menu, "clientHeight", {
-    value: clientHeight,
-    configurable: true,
-  });
-  menu.scrollTop = scrollTop;
 }
 
 describe("Dropdown scrollend", () => {

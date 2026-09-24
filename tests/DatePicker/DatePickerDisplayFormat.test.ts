@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import DatePicker from "./DatePickerDisplayFormat.test.svelte";
 
@@ -22,7 +23,7 @@ describe("DatePicker displayFormat", () => {
     render(DatePicker);
     await visibleInput();
 
-    const form = screen.getByTestId("form") as HTMLFormElement;
+    const form = getForm();
     expect(form.querySelectorAll("[name]")).toHaveLength(1);
     expect(new FormData(form).get("meeting")).toBe("2024-03-15");
   });

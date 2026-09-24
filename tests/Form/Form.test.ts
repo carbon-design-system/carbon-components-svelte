@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import FormActionsTest from "./Form.actions.test.svelte";
 import FormTest from "./Form.test.svelte";
@@ -111,7 +112,7 @@ describe("Form", () => {
       const consoleLog = vi.spyOn(console, "log");
       render(FormTest);
 
-      (screen.getByTestId("form") as HTMLFormElement).reset();
+      getForm().reset();
 
       expect(consoleLog).toHaveBeenCalledWith("reset", expect.any(Event));
     });

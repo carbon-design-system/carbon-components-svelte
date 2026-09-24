@@ -1,12 +1,9 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { openTooltips } from "../utils/open-tooltips";
 import TabsIconOnly from "./TabsIconOnly.test.svelte";
 
 /** Open tooltips currently rendered in the portal. */
-function openTooltips() {
-  return Array.from(document.querySelectorAll(".bx--tooltip-portal__content"));
-}
-
 describe("Tabs (icon-only)", () => {
   it("renders the icon-only variant when `iconOnly` is set", async () => {
     render(TabsIconOnly);

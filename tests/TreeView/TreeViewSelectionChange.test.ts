@@ -5,6 +5,7 @@ import type {
   TreeNode,
 } from "carbon-components-svelte/TreeView/TreeView.svelte";
 import type { ComponentEvents } from "svelte";
+import { treeItemById } from "../utils/tree-item-by-id";
 import { user } from "../utils/user";
 import TreeViewSelectionChange from "./TreeViewSelectionChange.test.svelte";
 
@@ -14,12 +15,6 @@ type SelectChangeDetail = {
   added: Id[];
   removed: Id[];
 };
-
-function treeItemById(id: Id): HTMLElement {
-  const el = document.getElementById(String(id));
-  assert(el instanceof HTMLElement);
-  return el;
-}
 
 const byNumber = (a: Id, b: Id) => Number(a) - Number(b);
 

@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import type { MultiSelectItem } from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
+import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import MultiSelectForm from "./MultiSelect.form.test.svelte";
 
@@ -10,8 +11,6 @@ const items = [
 ] as const;
 
 describe("MultiSelect native form serialization", () => {
-  const getForm = () => screen.getByTestId("form") as HTMLFormElement;
-
   const openMenu = async () =>
     await user.click(await screen.findByRole("combobox", { expanded: false }));
 

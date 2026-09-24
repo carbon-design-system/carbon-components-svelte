@@ -1,9 +1,9 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { flushFormReset } from "../utils/flush-form-reset";
+import { getForm } from "../utils/get-form";
 import DatePickerForm from "./DatePicker.form.test.svelte";
 
-const getForm = () => screen.getByTestId("form") as HTMLFormElement;
 const getValue = () => screen.getByTestId("value").textContent;
 const getValueFrom = () => screen.getByTestId("valueFrom").textContent;
 const getValueTo = () => screen.getByTestId("valueTo").textContent;

@@ -9,6 +9,7 @@ import type {
   ComponentProps,
   ComponentType as SvelteComponentType,
 } from "svelte";
+import { treeItemById } from "../utils/tree-item-by-id";
 import { user } from "../utils/user";
 import TreeViewAutoCollapse from "./TreeView.autoCollapse.test.svelte";
 import TreeViewHierarchy from "./TreeView.hierarchy.test.svelte";
@@ -19,12 +20,6 @@ import TreeViewSlot from "./TreeView.slot.test.svelte";
 import TreeView from "./TreeView.test.svelte";
 import TreeViewDuplicateIds from "./TreeViewDuplicateIds.test.svelte";
 import TreeViewGenerics from "./TreeViewGenerics.test.svelte";
-
-function treeItemById(id: string | number): HTMLElement {
-  const el = document.getElementById(String(id));
-  assert(el instanceof HTMLElement);
-  return el;
-}
 
 /**
  * Primary row label: parent markup uses `.bx--tree-node__label__text`.

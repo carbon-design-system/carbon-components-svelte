@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import Dropdown from "./Dropdown.form.test.svelte";
 
@@ -7,8 +8,6 @@ const items = [
   { id: "1", text: "Email" },
   { id: "2", text: "Fax" },
 ] as const;
-
-const getForm = () => screen.getByTestId("form") as HTMLFormElement;
 
 describe("Dropdown form participation", () => {
   it("does not render a hidden input when name is omitted", () => {
