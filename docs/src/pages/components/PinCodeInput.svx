@@ -66,7 +66,7 @@ The default input mode is `"numeric"`. Set `type` to `"alphanumeric"` to allow l
 
 ### Custom pattern
 
-Use `pattern` to override the per-character test used for typing and paste. Pass a `RegExp` or a string compiled with `new RegExp(...)`. The pattern is matched against each individual character, not the full assembled value. When `pattern` is unset, `type` selects the numeric or alphanumeric preset.
+Use `pattern` to override the per-character test used for typing and paste. Pass a `RegExp` or a string compiled with `new RegExp(...)`. The pattern is matched against each individual character, not the full assembled value. When `pattern` is unset, `type` selects the numeric or alphanumeric preset. `type` still sets the on-screen keyboard, so set `type="alphanumeric"` when the pattern accepts letters, as below.
 
 <PinCodeInput
   count={6}
