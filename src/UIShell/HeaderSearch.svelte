@@ -125,10 +125,11 @@
   export let selectTextOnFocus = false;
 
   /**
-   * Milliseconds to wait after the last input before dispatching `search`.
-   * 0 (default) does not dispatch `search`. `value` stays immediate; only
-   * `search` waits. Selecting a result or submitting cancels a pending
-   * `search` instead of also firing it. Clearing is always instant.
+   * Milliseconds to wait after the last input before dispatching
+   * `search`. 0 (default) does not dispatch `search`. `value` stays
+   * immediate; only `search` waits. Selecting a result or submitting
+   * cancels a pending `search` instead of also firing it. Clearing is
+   * always instant.
    */
   export let debounce = 0;
 

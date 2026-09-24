@@ -11,7 +11,9 @@
    * }} select
    * @event {{ value: T }} submit
    * @event {T} search
-   * @event {{ trigger: "escape-key" | "outside-click" | "select" | "blur" }} close
+   * @event {{
+   *   trigger: "escape-key" | "outside-click" | "select" | "blur";
+   * }} close
    * @restProps {input}
    * @slot {{}} before
    * @slot {{}} noResults
@@ -142,11 +144,12 @@
   export let selectTextOnFocus = false;
 
   /**
-   * Milliseconds to wait after the last input before dispatching `search`.
-   * 0 (default) does not dispatch `search`. `value`, the fuzzy-match
-   * highlighting, and clearing all stay immediate regardless of this delay
-   * -- only the `search` event waits. Selecting an item or submitting with
-   * <kbd>Enter</kbd> cancels a pending `search` instead of also firing it.
+   * Milliseconds to wait after the last input before dispatching
+   * `search`. 0 (default) does not dispatch `search`. `value`, the
+   * fuzzy-match highlighting, and clearing all stay immediate
+   * regardless of this delay -- only the `search` event waits.
+   * Selecting an item or submitting with <kbd>Enter</kbd> cancels a
+   * pending `search` instead of also firing it.
    */
   export let debounce = 0;
 

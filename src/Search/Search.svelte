@@ -101,10 +101,10 @@
   export let loading = false;
 
   /**
-   * Milliseconds to wait after the last input before dispatching `search`.
-   * 0 (default) does not dispatch on input; Enter still dispatches
-   * immediately. When greater than 0, `search` also fires after the pause.
-   * `value` updates immediately either way.
+   * Milliseconds to wait after the last input before dispatching
+   * `search`. 0 (default) does not dispatch on input; Enter still
+   * dispatches immediately. When greater than 0, `search` also fires
+   * after the pause. `value` updates immediately either way.
    */
   export let debounce = 0;
 

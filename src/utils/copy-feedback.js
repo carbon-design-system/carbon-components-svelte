@@ -3,7 +3,9 @@
 /** Default time (ms) copy feedback stays visible. */
 export const COPY_FEEDBACK_TIMEOUT_MS = 2000;
 
-/** @typedef {'fade-in' | 'fade-out' | undefined} CopyFeedbackAnimation */
+/**
+ * @typedef {"fade-in" | "fade-out" | undefined} CopyFeedbackAnimation
+ */
 
 /**
  * Copy-button feedback (fade-in/out, portal tooltip).
