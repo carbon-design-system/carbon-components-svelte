@@ -11,6 +11,7 @@
 
   /**
    * Set to `true` to check the radio button.
+   * Follows the radio button when the owning form resets.
    * @bindable writable
    */
   export let checked = false;
@@ -52,6 +53,7 @@
 
   import { getContext, onMount } from "svelte";
   import { readable } from "svelte/store";
+  import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
   import {
     registerRadioButton,
@@ -150,6 +152,17 @@
     checked = $selectedValue === value;
   }
 
+  // A form reset restores the radio button without a change event. Inside
+  // `RadioButtonGroup`, the group syncs `selected`; standalone, sync
+  // `checked` here.
+  function handleFormReset() {
+    if (!ref || update) return;
+    checked = ref.checked;
+    if (checked && name && registry) {
+      updateGroupSelection(name, instanceKey);
+    }
+  }
+
   onMount(() => {
     return () => {
       cleanupRegistry();
@@ -165,6 +178,7 @@
 >
   <input
     bind:this={ref}
+    use:formReset={handleFormReset}
     type="radio"
     {id}
     name={$groupName ?? (name || fallbackName)}
