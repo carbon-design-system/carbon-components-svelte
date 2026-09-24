@@ -554,6 +554,89 @@ describe("PinCodeInput", () => {
     }
   });
 
+  describe("mask toggle", () => {
+    const maskedCount = () =>
+      getInputs().filter((input) =>
+        input.classList.contains("bx--pin-code-input__field--masked"),
+      ).length;
+
+    it.each([
+      { props: { mask: true }, without: "maskToggle" },
+      { props: { maskToggle: true }, without: "mask" },
+    ])("is not rendered without $without", ({ props }) => {
+      render(PinCodeInput, { props });
+      expect(screen.queryByRole("button", { name: "Show code" })).toBeNull();
+    });
+
+    it("shows and hides the code", async () => {
+      const { component } = render(PinCodeInput, {
+        props: { mask: true, maskToggle: true },
+      });
+      expect(maskedCount()).toBe(4);
+
+      await user.click(screen.getByRole("button", { name: "Show code" }));
+      expect(maskedCount()).toBe(0);
+      expect(component.revealed).toBe(true);
+      const hide = screen.getByRole("button", { name: "Hide code" });
+      expect(hide).toHaveAttribute("aria-pressed", "true");
+
+      await user.click(hide);
+      expect(maskedCount()).toBe(4);
+      expect(component.revealed).toBe(false);
+    });
+
+    it("starts revealed when revealed is true", () => {
+      render(PinCodeInput, {
+        props: { mask: true, maskToggle: true, revealed: true },
+      });
+      expect(maskedCount()).toBe(0);
+    });
+
+    it("uses custom labels", () => {
+      render(PinCodeInput, {
+        props: {
+          mask: true,
+          maskToggle: true,
+          showCodeLabel: "Mostrar código",
+        },
+      });
+      expect(
+        screen.getByRole("button", { name: "Mostrar código" }),
+      ).toBeInTheDocument();
+    });
+
+    it("is disabled with the field", () => {
+      render(PinCodeInput, {
+        props: { mask: true, maskToggle: true, disabled: true },
+      });
+      expect(screen.getByRole("button")).toBeDisabled();
+    });
+
+    it("works when read-only", async () => {
+      render(PinCodeInput, {
+        props: { mask: true, maskToggle: true, readonly: true },
+      });
+      await user.click(screen.getByRole("button", { name: "Show code" }));
+      expect(maskedCount()).toBe(0);
+    });
+
+    it("does not change the value or fire change", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      const { component } = render(PinCodeInput, {
+        props: { mask: true, maskToggle: true, value: "1234" },
+      });
+      consoleLog.mockClear();
+
+      await user.click(screen.getByRole("button", { name: "Show code" }));
+      await user.click(screen.getByRole("button", { name: "Hide code" }));
+
+      expect(component.value).toBe("1234");
+      expect(consoleLog.mock.calls.some(([event]) => event === "change")).toBe(
+        false,
+      );
+    });
+  });
+
   it("does not mask the segments by default", () => {
     render(PinCodeInput);
     for (const input of getInputs()) {

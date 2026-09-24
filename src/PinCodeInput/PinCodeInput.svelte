@@ -77,6 +77,24 @@
   export let mask = false;
 
   /**
+   * Set to `true` to render a button that shows or hides the masked
+   * characters. Has no effect unless `mask` is `true`.
+   */
+  export let maskToggle = false;
+
+  /**
+   * `true` while the masked characters are shown.
+   * @bindable writable
+   */
+  export let revealed = false;
+
+  /** Specify the tooltip text for the button that shows the code */
+  export let showCodeLabel = "Show code";
+
+  /** Specify the tooltip text for the button that hides the code */
+  export let hideCodeLabel = "Hide code";
+
+  /**
    * `true` when every segment is filled.
    * @bindable readonly
    */
@@ -213,6 +231,9 @@
   export let ref = null;
 
   import { createEventDispatcher, getContext, onMount, tick } from "svelte";
+  import Button from "../Button/Button.svelte";
+  import View from "../icons/View.svelte";
+  import ViewOff from "../icons/ViewOff.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import Loading from "../Loading/Loading.svelte";
@@ -657,7 +678,7 @@
             data-warn={hasWarn || undefined}
             class:bx--text-input={true}
             class:bx--pin-code-input__field={true}
-            class:bx--pin-code-input__field--masked={mask}
+            class:bx--pin-code-input__field--masked={mask && !revealed}
             class:bx--pin-code-input__field--uppercase={uppercase}
             class:bx--text-input--light={light}
             class:bx--text-input--invalid={hasError}
@@ -677,6 +698,22 @@
             withOverlay={false}
             description={loadingDescription}
             class="bx--pin-code-input__loading"
+          />
+        {/if}
+        {#if mask && maskToggle}
+          <Button
+            kind="ghost"
+            size={size === "xs" || size === "sm" ? "small" : "field"}
+            icon={revealed ? ViewOff : View}
+            iconDescription={revealed ? hideCodeLabel : showCodeLabel}
+            tooltipPosition="bottom"
+            tooltipAlignment="end"
+            aria-pressed={revealed}
+            {disabled}
+            class="bx--pin-code-input__mask-toggle"
+            on:click={() => {
+              revealed = !revealed;
+            }}
           />
         {/if}
         {#if !isFluid}

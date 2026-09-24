@@ -92,6 +92,11 @@
     margin-left: $carbon--spacing-03;
   }
 
+  .#{$prefix}--pin-code-input__mask-toggle {
+    flex-shrink: 0;
+    margin-left: $carbon--spacing-03;
+  }
+
   // v10 only shows `.bx--form-requirement` for invalid direct siblings.
   // Pin code wraps fields, so target the wrapper instead.
   .#{$prefix}--pin-code-input__fields[data-invalid]
