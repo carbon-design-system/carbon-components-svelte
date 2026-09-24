@@ -4,6 +4,7 @@
    * @event close
    * @type {object}
    * @property {"escape-key" | "outside-click" | "close-button" | "programmatic"} trigger
+   * @event {null} open
    * @event transitionend
    * @type {object}
    * @property {boolean} open
@@ -152,14 +153,14 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher, onMount, setContext, tick } from "svelte";
+  import { createEventDispatcher, onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
   import Button from "../Button/Button.svelte";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import InlineLoading from "../InlineLoading/InlineLoading.svelte";
   import Close from "../icons/Close.svelte";
+  import { createDialogLifecycle } from "../utils/dialog-lifecycle.js";
   import { initialFocus, restoreFocus } from "../utils/focus.js";
-  import { createOutsideDismiss } from "../utils/outside-dismiss.js";
   import { scrollIntoViewWithinMenu } from "../utils/scroll-into-view-within-menu.js";
   import { trapFocus } from "../utils/trap-focus.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -171,9 +172,6 @@
   let buttonRef = null;
   let primaryButtonRef = null;
   let innerModalRef = null;
-  let prevOpen = false;
-  let closeDispatched = false;
-  let mounted = false;
 
   function focus(node) {
     const container = node || innerModalRef;
@@ -189,19 +187,17 @@
     target?.focus();
   }
 
-  function close(trigger) {
-    closeDispatched = true;
-    const shouldContinue = dispatch("close", { trigger }, { cancelable: true });
-    if (shouldContinue) {
-      open = false;
-    } else {
-      closeDispatched = false;
-    }
-  }
-
-  const outsideDismiss = createOutsideDismiss(() => {
-    if (!preventCloseOnClickOutside) close("outside-click");
+  const lifecycle = createDialogLifecycle({
+    dispatch,
+    setOpen: (value) => {
+      open = value;
+    },
+    preventCloseOnClickOutside: () => preventCloseOnClickOutside,
+    saveFocusReturn: focusReturn.save,
+    focus: () => focus(),
+    getOpen: () => open,
   });
+  const { close, outsideDismiss } = lifecycle;
 
   const sharedOpen = writable(open);
   $: $sharedOpen = open;
@@ -215,39 +211,13 @@
   // the DOM is committed, so `innerModalRef` isn't attached yet. `onMount`
   // runs after mount, so the DOM is already in place — no `tick()` needed.
   onMount(() => {
-    mounted = true;
+    lifecycle.setMounted();
     if (open) {
       focus();
     }
   });
 
-  $: {
-    if (prevOpen) {
-      if (!open) {
-        prevOpen = false;
-        if (!closeDispatched) {
-          tick().then(() => {
-            dispatch("close", { trigger: "programmatic" });
-          });
-        }
-        closeDispatched = false;
-      }
-    } else if (open) {
-      prevOpen = true;
-      // Reading `document.activeElement` doesn't depend on this modal's own
-      // DOM, so it's safe (and race-free) to capture it synchronously here.
-      focusReturn.save();
-      dispatch("open");
-      // Skip on the initial-mount run: `onMount` above already handles
-      // focusing an already-open modal. This only covers later open
-      // transitions, where `focus()` needs the committed DOM (`tick()`).
-      if (mounted) {
-        tick().then(() => {
-          if (open) focus();
-        });
-      }
-    }
-  }
+  $: lifecycle.syncOpen(open);
 
   $: modalLabelId = `bx--modal-header__label--modal-${id}`;
   $: modalHeadingId = `bx--modal-header__heading--modal-${id}`;
