@@ -1,3 +1,9 @@
+<script context="module">
+  export { breakpointObserver } from "./breakpoint-observer.js";
+  export { breakpoints } from "./breakpoints.js";
+  export { hideAtBreakpoint } from "./hide-at-breakpoint.js";
+</script>
+
 <script>
   /**
    * @typedef {"sm" | "md" | "lg" | "xlg" | "max"} BreakpointSize

@@ -1,3 +1,8 @@
+<script context="module">
+  export { getAvatarBackgroundColor } from "../utils/avatar-color.js";
+  export { getInitials } from "../utils/initials.js";
+</script>
+
 <script>
   /** @template [Icon=any] */
 

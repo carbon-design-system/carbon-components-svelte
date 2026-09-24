@@ -1,3 +1,7 @@
+<script context="module">
+  export { truncate } from "./truncate.js";
+</script>
+
 <script>
   /**
    * Specify `"end"` or `"front"`. `"front"` only works when `lines` is

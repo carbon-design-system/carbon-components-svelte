@@ -6,8 +6,8 @@
     Toolbar,
     ToolbarContent,
     ToolbarSearch,
-    toCsv,
   } from "carbon-components-svelte";
+  import { toCsv } from "carbon-components-svelte/src/DataTable/DataTable.svelte";
 
   const headers = [
     { key: "name", value: "Name" },

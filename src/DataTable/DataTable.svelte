@@ -1,4 +1,6 @@
 <script context="module">
+  export { toCsv } from "./data-table-utils.js";
+
   import { deepEqual } from "../utils/deep-equal.js";
 
   const alignClasses = {

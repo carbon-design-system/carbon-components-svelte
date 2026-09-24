@@ -2,12 +2,12 @@
   import {
     Button,
     ButtonSet,
-    filterTreeByText,
     Search,
     Stack,
     Toggle,
     TreeView,
   } from "carbon-components-svelte";
+  import { filterTreeByText } from "carbon-components-svelte/src/TreeView/TreeView.svelte";
   import Code from "carbon-icons-svelte/lib/Code.svelte";
   import Document from "carbon-icons-svelte/lib/Document.svelte";
   import DocumentBlank from "carbon-icons-svelte/lib/DocumentBlank.svelte";

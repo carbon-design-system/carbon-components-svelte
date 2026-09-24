@@ -1,3 +1,10 @@
+<script context="module">
+  export {
+    applyColumnSettings,
+    toColumnSettings,
+  } from "../utils/column-settings.js";
+</script>
+
 <script>
   /**
    * @template {import("./DataTable.svelte").DataTableRow}
