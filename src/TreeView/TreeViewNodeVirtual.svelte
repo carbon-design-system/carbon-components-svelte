@@ -25,6 +25,7 @@
   import { getContext } from "svelte";
   import Checkbox from "../Checkbox/Checkbox.svelte";
   import CaretDown from "../icons/CaretDown.svelte";
+  import { resolveLinkRel } from "../utils/link-rel.js";
   import { toAriaChecked } from "../utils/tree-aria-checked.js";
 
   const {
@@ -97,7 +98,7 @@
       {id}
       href={disabled ? undefined : href}
       target={disabled ? undefined : target}
-      rel={target === "_blank" ? "noopener noreferrer" : undefined}
+      rel={resolveLinkRel(target)}
       style:padding-left="{indentRem}rem"
       tabindex={disabled ? undefined : isTabAnchor ? 0 : -1}
       aria-level={depth + 1}

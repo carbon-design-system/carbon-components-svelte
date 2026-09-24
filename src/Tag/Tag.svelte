@@ -69,6 +69,7 @@
   import { readable } from "svelte/store";
   import Close from "../icons/Close.svelte";
   import TooltipDefinition from "../TooltipDefinition/TooltipDefinition.svelte";
+  import { resolveLinkRel } from "../utils/link-rel.js";
   import { uniqueId } from "../utils/unique-id.js";
   import TagSkeleton from "./TagSkeleton.svelte";
 
@@ -237,7 +238,7 @@
     role={disabled ? "link" : undefined}
     {id}
     aria-disabled={disabled || undefined}
-    rel={$$restProps.target === "_blank" ? "noopener noreferrer" : undefined}
+    rel={resolveLinkRel($$restProps.target)}
     data-overflow={groupOverflow ? "true" : undefined}
     title={nativeTitle}
     class:bx--tag={true}
