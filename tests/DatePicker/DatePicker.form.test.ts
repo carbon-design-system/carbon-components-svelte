@@ -1,12 +1,11 @@
 import { render, screen } from "@testing-library/svelte";
 import type { Instance } from "flatpickr/dist/types/instance";
+import { flushFormReset } from "../utils/flush-form-reset";
 import { user } from "../utils/user";
 import DatePickerForm from "./DatePicker.form.test.svelte";
 
 const getForm = () => screen.getByTestId("form") as HTMLFormElement;
 const getBound = () => screen.getByTestId("bound").textContent;
-/** The reset sync runs on the next task. */
-const flush = () => new Promise((resolve) => setTimeout(resolve));
 
 function renderWithCalendar(props: Record<string, unknown> = {}) {
   let calendar: Instance | null = null;
@@ -44,7 +43,7 @@ describe("DatePicker form reset", () => {
     expect(getBound()).not.toBe("||");
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(input).toHaveValue("");
     expect(getBound()).toBe("||");
@@ -62,7 +61,7 @@ describe("DatePicker form reset", () => {
     expect(calendar.selectedDates).toHaveLength(2);
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(screen.getByLabelText("Start")).toHaveValue("");
     expect(screen.getByLabelText("End")).toHaveValue("");
@@ -75,7 +74,7 @@ describe("DatePicker form reset", () => {
 
     await user.type(screen.getByLabelText("Date"), "01/15/2024");
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(getBound()).toBe("||");
   });
@@ -90,7 +89,7 @@ describe("DatePicker form reset", () => {
     expect(getBound()).not.toBe("01/15/2024||");
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(input).toHaveValue("01/15/2024");
     expect(getBound()).toBe("01/15/2024||");
@@ -107,7 +106,7 @@ describe("DatePicker form reset", () => {
     const bound = getBound();
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(getBound()).toBe(bound);
     expect(calendar.selectedDates).toHaveLength(1);
@@ -121,7 +120,7 @@ describe("DatePicker form reset", () => {
     onChange.mockClear();
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(onChange).not.toHaveBeenCalled();
   });
