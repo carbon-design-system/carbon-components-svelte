@@ -388,7 +388,7 @@
   use:dismiss={{ enabled: open, type: "click", handler: handleOutsideClick }}
 >
   {#if $$slots.before}
-    <!-- svelte-ignore a11y_no_static_element_interactions -->
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div
       class:bx--search-menu__before={true}
       on:mousedown={handleBeforeInteraction}
