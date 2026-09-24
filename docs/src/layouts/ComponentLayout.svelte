@@ -254,7 +254,12 @@
 </Content>
 
 <style>
+  /* The heading sits inside this wrapper, so the column's h2 padding rule in
+     global.css never reaches it. A top margin collapses with whatever the
+     last example ends with, so the section break is the same size on every
+     page. */
   .component-api-header {
+    margin-top: var(--cds-layout-06);
     margin-bottom: var(--cds-layout-02);
   }
 
