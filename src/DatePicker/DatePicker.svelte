@@ -561,9 +561,12 @@
   }
 
   /**
-   * @type {() => void}
+   * Returns `false` when there is no calendar to focus (simple mode, or a
+   * failed or pending flatpickr init).
+   * @type {() => boolean}
    */
   function focusCalendar() {
+    if (!calendar) return false;
     // Escape (or programmatic close) leaves the calendar in the DOM but
     // hidden via CSS, so focusing its elements is a no-op unless it's
     // reopened first.
@@ -576,6 +579,7 @@
       calendar.calendarContainer.querySelector(".flatpickr-day[tabindex]") ||
       calendar.calendarContainer
     ).focus();
+    return true;
   }
 
   /**
