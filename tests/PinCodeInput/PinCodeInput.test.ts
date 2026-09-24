@@ -264,6 +264,31 @@ describe("PinCodeInput", () => {
     expect(inputs[0].value).toBe("3");
   });
 
+  describe("inputmode", () => {
+    it("shows a numeric keypad by default", () => {
+      render(PinCodeInput);
+      for (const input of getInputs()) {
+        expect(input).toHaveAttribute("inputmode", "numeric");
+      }
+    });
+
+    it("keeps the type's keypad when pattern is set", () => {
+      render(PinCodeInput, { props: { pattern: /^[0-9a-fA-F]$/ } });
+      for (const input of getInputs()) {
+        expect(input).toHaveAttribute("inputmode", "numeric");
+      }
+    });
+
+    it("shows a text keyboard for an alphanumeric type with a pattern", () => {
+      render(PinCodeInput, {
+        props: { pattern: /^[0-9a-fA-F]$/, type: "alphanumeric" },
+      });
+      for (const input of getInputs()) {
+        expect(input).toHaveAttribute("inputmode", "text");
+      }
+    });
+  });
+
   it("filters pasted characters with a custom pattern", async () => {
     const { component } = render(PinCodeInput, {
       props: { pattern: /^[0-9a-fA-F]$/ },

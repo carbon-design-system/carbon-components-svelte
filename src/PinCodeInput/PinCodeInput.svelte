@@ -40,7 +40,9 @@
    * Specify the type of allowed characters.
    *
    * `"numeric"` allows `0-9`; `"alphanumeric"` allows `a-z`, `A-Z`, `0-9`.
-   * Ignored when `pattern` is set.
+   * When `pattern` is set, `pattern` decides which characters are accepted,
+   * and `type` still sets each segment's `inputmode` (`"numeric"` shows a
+   * numeric keypad on touch devices).
    * @type {"numeric" | "alphanumeric"}
    */
   export let type = "numeric";
@@ -51,7 +53,8 @@
    * Accepts a `RegExp` or a string compiled with `new RegExp(...)`. The
    * pattern is tested against each individual character, not the full
    * assembled value. When unset, `type` selects the preset (`"numeric"` or
-   * `"alphanumeric"`).
+   * `"alphanumeric"`). Set `type` to `"alphanumeric"` when the pattern
+   * accepts letters, so touch keyboards offer them.
    * @type {RegExp | string | undefined}
    */
   export let pattern = undefined;
