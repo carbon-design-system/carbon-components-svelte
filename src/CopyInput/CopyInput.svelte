@@ -136,6 +136,7 @@
   import { createEventDispatcher, getContext } from "svelte";
   import CopyButton from "../CopyButton/CopyButton.svelte";
   import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
+  import { buildFieldIds } from "../utils/field-status.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -152,7 +153,7 @@
         : false;
   $: inputType = type === "password" && !revealed ? "password" : "text";
   $: isFluid = !inline && (fluid || !!ctx?.isFluid);
-  $: helperId = `helper-${id}`;
+  $: ({ helperId } = buildFieldIds(id));
 
   function handleFocus() {
     focused = true;
