@@ -1,3 +1,22 @@
+<script context="module">
+  /**
+   * Fold the `invalid` prop, a custom `validate` result, and the
+   * auto-computed out-of-range state into one effective invalid flag.
+   * Explicit `invalid` wins, then a custom validator, then the
+   * auto-computed fallback.
+   * @param {boolean} isInvalid
+   * @param {boolean | undefined} isCustomValid
+   * @param {boolean} isAutoInvalid
+   * @returns {boolean}
+   */
+  function computeEffectiveInvalid(isInvalid, isCustomValid, isAutoInvalid) {
+    if (isInvalid) return true;
+    if (isCustomValid === false) return true;
+    if (isCustomValid === true) return false;
+    return isAutoInvalid;
+  }
+</script>
+
 <script>
   /**
    * @typedef {"increment" | "decrement"} NumberInputTranslationId
@@ -183,6 +202,11 @@
   import Subtract from "../icons/Subtract.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import {
+    buildFieldIds,
+    resolveStatusDescribedBy,
+    resolveValidationVisibility,
+  } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
   import { getNumberFormatter } from "../utils/intl-formatter-cache.js";
   import {
@@ -281,26 +305,24 @@
     typeof validate === "function"
       ? validate(useTextMode ? inputValue : String(value ?? ""), locale)
       : undefined;
-  function computeEffectiveInvalid(isInvalid, isCustomValid, isAutoInvalid) {
-    if (isInvalid) return true;
-    if (isCustomValid === false) return true;
-    if (isCustomValid === true) return false;
-    return isAutoInvalid;
-  }
 
-  $: effectiveInvalid =
-    computeEffectiveInvalid(invalid, customValid, autoInvalid) && !readonly;
+  $: effectiveInvalid = computeEffectiveInvalid(
+    invalid,
+    customValid,
+    autoInvalid,
+  );
   // Invalid/warn states are suppressed when the input is disabled or read-only.
-  // `effectiveInvalid` already excludes read-only.
-  $: showInvalid = effectiveInvalid && !disabled;
-  $: showWarn = warn && !effectiveInvalid && !disabled && !readonly;
+  $: ({ showInvalid, showWarn } = resolveValidationVisibility({
+    invalid: effectiveInvalid,
+    warn,
+    disabled,
+    readonly,
+  }));
   $: isFluid = fluid || !!formContext?.isFluid;
   // Neutral = neither invalid nor warn is showing.
   $: neutral = !showInvalid && !showWarn;
   $: hasErrorMessage = showInvalid && !!invalidText;
-  $: errorId = `error-${id}`;
-  $: warnId = `warn-${id}`;
-  $: helperId = `helper-${id}`;
+  $: ({ errorId, warnId, helperId } = buildFieldIds(id));
   $: ariaLabel =
     $$props["aria-label"] ||
     "Numeric input field with increment and decrement buttons";
@@ -507,13 +529,15 @@
           value={inputValue}
           type="text"
           inputmode="decimal"
-          aria-describedby={hasErrorMessage
-            ? errorId
-            : showWarn
-              ? warnId
-              : helperText && !isFluid
-                ? helperId
-                : undefined}
+          aria-describedby={resolveStatusDescribedBy({
+            showInvalid: hasErrorMessage,
+            showWarn,
+            helperText,
+            isFluid,
+            errorId,
+            warnId,
+            helperId,
+          })}
           data-invalid={showInvalid || undefined}
           aria-invalid={showInvalid || undefined}
           aria-label={labelText ? undefined : ariaLabel}
@@ -545,13 +569,15 @@
           use:reflectDefaultValue={allowEmpty ? undefined : value}
           type="number"
           inputmode="decimal"
-          aria-describedby={hasErrorMessage
-            ? errorId
-            : showWarn
-              ? warnId
-              : helperText && !isFluid
-                ? helperId
-                : undefined}
+          aria-describedby={resolveStatusDescribedBy({
+            showInvalid: hasErrorMessage,
+            showWarn,
+            helperText,
+            isFluid,
+            errorId,
+            warnId,
+            helperId,
+          })}
           data-invalid={showInvalid || undefined}
           aria-invalid={showInvalid || undefined}
           aria-label={labelText ? undefined : ariaLabel}
