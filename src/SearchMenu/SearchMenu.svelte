@@ -452,7 +452,10 @@
         {#if loading}
           <slot name="loading">
             {#each skeletonWidths as width, i (i)}
-              <div class="bx--search-menu-item bx--search-menu-item--skeleton">
+              <div
+                class:bx--search-menu-item={true}
+                class:bx--search-menu-item--skeleton={true}
+              >
                 <SkeletonText {width} />
               </div>
             {/each}
@@ -483,7 +486,10 @@
         {#if loading}
           <slot name="loading">
             {#each skeletonWidths as width, i (i)}
-              <div class="bx--search-menu-item bx--search-menu-item--skeleton">
+              <div
+                class:bx--search-menu-item={true}
+                class:bx--search-menu-item--skeleton={true}
+              >
                 <SkeletonText {width} />
               </div>
             {/each}
@@ -491,7 +497,7 @@
         {:else}
           <slot />
           {#if showNoResults}
-            <div class="bx--search-menu__no-results">
+            <div class:bx--search-menu__no-results={true}>
               <slot name="noResults" />
             </div>
           {/if}

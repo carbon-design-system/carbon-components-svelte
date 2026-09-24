@@ -477,13 +477,19 @@
       aria-label="Search"
       aria-busy={loading || undefined}
       hidden={!richMenuVisible}
-      class="bx--header__search-menu-rich bx--header__search-menu-rich--{size}"
+      class:bx--header__search-menu-rich={true}
+      class:bx--header__search-menu-rich--sm={size === "sm"}
+      class:bx--header__search-menu-rich--lg={size === "lg"}
+      class:bx--header__search-menu-rich--xl={size === "xl"}
       on:mousedown={handleMenuPointerDown}
     >
       {#if loading}
         <slot name="loading">
           {#each skeletonWidths as width, i (i)}
-            <div class="bx--search-menu-item bx--search-menu-item--skeleton">
+            <div
+              class:bx--search-menu-item={true}
+              class:bx--search-menu-item--skeleton={true}
+            >
               <SkeletonText {width} />
             </div>
           {/each}
@@ -491,7 +497,7 @@
       {:else}
         <slot name="menu" />
         {#if showNoResults}
-          <div class="bx--search-menu__no-results">
+          <div class:bx--search-menu__no-results={true}>
             <slot name="noResults" />
           </div>
         {/if}

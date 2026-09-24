@@ -364,7 +364,7 @@
   <slot props={buttonProps} />
 {:else if href && !isDisabled}
   {#if $$slots.badge}
-    <div class="bx--btn__badge-wrapper">
+    <div class:bx--btn__badge-wrapper={true}>
       <a
         bind:this={ref}
         {...buttonProps}
@@ -462,7 +462,7 @@
     </a>
   {/if}
 {:else if $$slots.badge}
-  <div class="bx--btn__badge-wrapper">
+  <div class:bx--btn__badge-wrapper={true}>
     <button
       type="button"
       bind:this={ref}

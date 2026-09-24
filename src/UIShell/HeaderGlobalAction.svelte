@@ -32,7 +32,7 @@
 </script>
 
 {#if $$slots.badge}
-  <div class="bx--btn__badge-wrapper">
+  <div class:bx--btn__badge-wrapper={true}>
     <Button bind:ref {...$$restProps} class={buttonClass} size="lg" on:click>
       <svelte:component this={icon} slot="icon" size={20} />
     </Button>

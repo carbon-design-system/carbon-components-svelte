@@ -183,11 +183,11 @@
   }}
 >
   {#if icon}
-    <span class="bx--search-menu-item__icon">
+    <span class:bx--search-menu-item__icon={true}>
       <svelte:component this={icon} />
     </span>
   {/if}
-  <span class="bx--search-menu-item__label">
+  <span class:bx--search-menu-item__label={true}>
     {#if $$slots.default}
       <slot
         query={$query}
@@ -200,7 +200,10 @@
     {/if}
   </span>
   {#if iconRight}
-    <span class="bx--search-menu-item__icon bx--search-menu-item__icon--right">
+    <span
+      class:bx--search-menu-item__icon={true}
+      class:bx--search-menu-item__icon--right={true}
+    >
       <svelte:component this={iconRight} />
     </span>
   {/if}

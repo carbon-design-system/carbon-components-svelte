@@ -206,7 +206,7 @@
         }}
       >
         {#if loading}
-          <span class="bx--search-magnifier-icon">
+          <span class:bx--search-magnifier-icon={true}>
             <Loading small withOverlay={false} description="Searching" />
           </span>
         {:else}
@@ -224,7 +224,7 @@
         }}
       >
         {#if loading}
-          <span class="bx--search-magnifier-icon">
+          <span class:bx--search-magnifier-icon={true}>
             <Loading small withOverlay={false} description="Searching" />
           </span>
         {:else}
