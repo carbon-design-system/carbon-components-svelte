@@ -349,7 +349,10 @@
   import { deepEqual } from "../utils/deep-equal.js";
   import { rangeSlice } from "../utils/range-slice.js";
   import { uniqueId } from "../utils/unique-id.js";
-  import { virtualize as virtualizeUtil } from "../utils/virtualize.js";
+  import {
+    DEFAULT_VIRTUAL_LIST_CONFIG,
+    virtualize as virtualizeUtil,
+  } from "../utils/virtualize.js";
   import {
     compareValues,
     formatHeaderWidth,
@@ -890,8 +893,8 @@
         itemHeight: defaultRowHeight,
         maxVisibleRows: 10,
         containerHeight: undefined,
-        overscan: 3,
-        threshold: 100,
+        overscan: DEFAULT_VIRTUAL_LIST_CONFIG.overscan,
+        threshold: DEFAULT_VIRTUAL_LIST_CONFIG.threshold,
         maxItems: undefined,
         ...(typeof virtualize === "object" ? virtualize : {}),
       }
