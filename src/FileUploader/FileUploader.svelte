@@ -1,3 +1,19 @@
+<script context="module">
+  /**
+   * Per-file override: call `fn(file, index)` when supplied, else `fallback`.
+   *
+   * @template T
+   * @param {((file: File, index: number) => T) | undefined} fn
+   * @param {T} fallback
+   * @param {File} file
+   * @param {number} index
+   * @returns {T}
+   */
+  function resolveFileOverride(fn, fallback, file, index) {
+    return typeof fn === "function" ? fn(file, index) : fallback;
+  }
+</script>
+
 <script>
   /**
    * @event {ReadonlyArray<File>} add
@@ -212,20 +228,6 @@
 
   /** Stable keys for `{#each}` (and Biome-safe: no commas in the each header). */
   $: filesWithKeys = keyFiles(files);
-
-  /**
-   * Per-file override: call `fn(file, index)` when supplied, else `fallback`.
-   *
-   * @template T
-   * @param {((file: File, index: number) => T) | undefined} fn
-   * @param {T} fallback
-   * @param {File} file
-   * @param {number} index
-   * @returns {T}
-   */
-  function resolveFileOverride(fn, fallback, file, index) {
-    return typeof fn === "function" ? fn(file, index) : fallback;
-  }
 
   /**
    * @param {typeof fileSize} option
