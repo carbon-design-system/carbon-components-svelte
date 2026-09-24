@@ -104,6 +104,11 @@
   import { readable } from "svelte/store";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import {
+    buildFieldIds,
+    resolveStatusDescribedBy,
+    resolveValidationVisibility,
+  } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
   import { overflowTitle } from "../utils/overflow-title.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -143,9 +148,12 @@
   $: effectiveReadonly = $groupReadonly || readonly;
   $: effectiveInvalid = $groupInvalid || invalid;
   $: effectiveWarn = $groupWarn || warn;
-  $: showInvalid = effectiveInvalid && !disabled && !effectiveReadonly;
-  $: showWarn =
-    effectiveWarn && !effectiveInvalid && !disabled && !effectiveReadonly;
+  $: ({ showInvalid, showWarn } = resolveValidationVisibility({
+    invalid: effectiveInvalid,
+    warn: effectiveWarn,
+    disabled,
+    readonly: effectiveReadonly,
+  }));
 
   // Track previous checked value to avoid duplicate dispatches in Svelte 5
   // The reactive statement will only dispatch when checked changes externally (e.g., via bind:checked)
@@ -190,9 +198,7 @@
     }
   }
 
-  $: helperId = `helper-${id}`;
-  $: errorId = `error-${id}`;
-  $: warnId = `warn-${id}`;
+  $: ({ helperId, errorId, warnId } = buildFieldIds(id));
 </script>
 
 {#if skeleton}
@@ -232,13 +238,14 @@
       aria-readonly={effectiveReadonly || undefined}
       aria-invalid={showInvalid || undefined}
       data-invalid={showInvalid || undefined}
-      aria-describedby={showInvalid
-        ? errorId
-        : showWarn
-          ? warnId
-          : helperText
-            ? helperId
-            : undefined}
+      aria-describedby={resolveStatusDescribedBy({
+        showInvalid,
+        showWarn,
+        helperText,
+        errorId,
+        warnId,
+        helperId,
+      })}
       class:bx--checkbox={true}
       on:click={(event) => {
         if (effectiveReadonly) {
