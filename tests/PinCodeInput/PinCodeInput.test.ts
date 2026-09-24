@@ -215,6 +215,54 @@ describe("PinCodeInput", () => {
     expect(inputs[1].value).toBe("");
   });
 
+  describe("Delete", () => {
+    const getChanges = (calls: unknown[][]) =>
+      calls.filter(([event]) => event === "change");
+
+    it("does not dispatch change on an empty segment", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(PinCodeInput);
+      const inputs = getInputs();
+
+      inputs[1].focus();
+      consoleLog.mockClear();
+      await user.keyboard("{Delete}");
+      await tick();
+
+      expect(getChanges(consoleLog.mock.calls)).toEqual([]);
+      expect(inputs[1]).toHaveFocus();
+    });
+
+    it("clears a filled segment with one change", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(PinCodeInput, { props: { value: "1234" } });
+      const inputs = getInputs();
+
+      inputs[1].focus();
+      consoleLog.mockClear();
+      await user.keyboard("{Delete}");
+      await tick();
+
+      expect(getChanges(consoleLog.mock.calls)).toEqual([
+        ["change", { value: "134", code: ["1", "", "3", "4"] }],
+      ]);
+    });
+
+    it("does not dispatch change when read-only", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(PinCodeInput, { props: { readonly: true, value: "1234" } });
+      const inputs = getInputs();
+
+      inputs[1].focus();
+      consoleLog.mockClear();
+      await user.keyboard("{Delete}");
+      await tick();
+
+      expect(getChanges(consoleLog.mock.calls)).toEqual([]);
+      expect(inputs[1].value).toBe("2");
+    });
+  });
+
   it("binds the assembled value and code", async () => {
     const { component } = render(PinCodeInput);
     const inputs = getInputs();
