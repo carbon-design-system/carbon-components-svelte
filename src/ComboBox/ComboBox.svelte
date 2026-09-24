@@ -1,3 +1,27 @@
+<script context="module">
+  function defaultShouldFilter() {
+    return true;
+  }
+
+  /**
+   * Default typeahead filter: case-insensitive prefix match on the item's
+   * displayed label.
+   * @param {any} item
+   * @param {string} inputValue
+   * @param {(item: any) => string} getLabel
+   * @returns {boolean}
+   */
+  function autocompleteCustomFilter(item, inputValue, getLabel) {
+    if (inputValue.length === 0) {
+      return true;
+    }
+
+    return String(getLabel(item) ?? "")
+      .toLowerCase()
+      .startsWith(inputValue.toLowerCase());
+  }
+</script>
+
 <script>
   /**
    * @template {ComboBoxItem<any>} [Item=ComboBoxItem<any>]
@@ -160,10 +184,6 @@
    * @type {"none" | "first-match"}
    */
   export let autoHighlight = "none";
-
-  function defaultShouldFilter() {
-    return true;
-  }
 
   /**
    * Determine if an item should be filtered given the current combobox value.
@@ -363,24 +383,6 @@
       menuWindow.destroy();
     };
   });
-
-  /**
-   * Default typeahead filter: case-insensitive prefix match on the item's
-   * displayed label.
-   * @param {Item} item
-   * @param {string} inputValue
-   * @param {(item: Item) => string} getLabel
-   * @returns {boolean}
-   */
-  function autocompleteCustomFilter(item, inputValue, getLabel) {
-    if (inputValue.length === 0) {
-      return true;
-    }
-
-    return String(getLabel(item) ?? "")
-      .toLowerCase()
-      .startsWith(inputValue.toLowerCase());
-  }
 
   $: statusDescribedById = resolveStatusDescribedBy({
     showInvalid,
