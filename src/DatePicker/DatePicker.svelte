@@ -996,6 +996,11 @@
       "aria-label",
       "calendar-container",
     );
+    calendar.calendarContainer?.addEventListener(
+      "keydown",
+      handleCalendarEscape,
+      { capture: true },
+    );
     if (calendar.config.inline) {
       for (const type of BLOCKED_EVENTS) {
         calendar.calendarContainer?.addEventListener(
@@ -1040,6 +1045,25 @@
 
   const BLOCKED_EVENTS = ["click", "mousedown", "keydown"];
 
+  /**
+   * flatpickr closes on Escape from inside the calendar before the wrapper's
+   * handler runs, and a portalled calendar never reaches the wrapper, so the
+   * close would be reported as an outside click.
+   *
+   * @param {KeyboardEvent} event
+   */
+  function handleCalendarEscape(event) {
+    if (event.key !== "Escape" || !calendar?.isOpen) return;
+    // Also keeps flatpickr's own handler from closing (and firing `onClose`)
+    // a second time, and keeps the key from reaching an enclosing Modal.
+    event.stopImmediatePropagation();
+    event.preventDefault();
+    // Focus first, as flatpickr does: focusing the input after closing would
+    // reopen it through `clickOpens`.
+    calendar._input.focus();
+    dismissCalendar("escape-key");
+  }
+
   function destroyCalendar() {
     detachFixedRepositionListeners();
     if (!calendar) return;
@@ -1057,6 +1081,11 @@
       clearRangePreview,
     );
     window.removeEventListener("keyup", handleShiftKeyUp);
+    calendar.calendarContainer?.removeEventListener(
+      "keydown",
+      handleCalendarEscape,
+      { capture: true },
+    );
     for (const type of BLOCKED_EVENTS) {
       calendar.calendarContainer?.removeEventListener(
         type,
