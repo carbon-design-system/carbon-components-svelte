@@ -83,6 +83,11 @@
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import Stack from "../Stack/Stack.svelte";
+  import {
+    buildFieldIds,
+    resolveStatusDescribedBy,
+    resolveValidationVisibility,
+  } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -121,11 +126,13 @@
     if (ref) value = ref.value;
   }
 
-  $: helperId = `helper-${id}`;
-  $: errorId = `error-${id}`;
-  $: warnId = `warn-${id}`;
-  $: showInvalid = invalid && !disabled && !readonly;
-  $: showWarn = warn && !invalid && !disabled && !readonly;
+  $: ({ helperId, errorId, warnId } = buildFieldIds(id));
+  $: ({ showInvalid, showWarn } = resolveValidationVisibility({
+    invalid,
+    warn,
+    disabled,
+    readonly,
+  }));
   $: isFluid = fluid || !!formContext?.isFluid;
   $: timePickerContext.isFluid = isFluid;
   $: groupReadonly.set(readonly);
@@ -182,11 +189,12 @@
                   bind:value
                   type="text"
                   aria-invalid={showInvalid || undefined}
-                  aria-describedby={showInvalid
-                    ? errorId
-                    : showWarn
-                      ? warnId
-                      : undefined}
+                  aria-describedby={resolveStatusDescribedBy({
+                    showInvalid,
+                    showWarn,
+                    errorId,
+                    warnId,
+                  })}
                   {pattern}
                   {placeholder}
                   {maxlength}
@@ -276,13 +284,14 @@
               type="text"
               data-invalid={showInvalid || undefined}
               aria-invalid={showInvalid || undefined}
-              aria-describedby={showInvalid
-                ? errorId
-                : showWarn
-                  ? warnId
-                  : helperText
-                    ? helperId
-                    : undefined}
+              aria-describedby={resolveStatusDescribedBy({
+                showInvalid,
+                showWarn,
+                helperText,
+                errorId,
+                warnId,
+                helperId,
+              })}
               {pattern}
               {placeholder}
               {maxlength}
