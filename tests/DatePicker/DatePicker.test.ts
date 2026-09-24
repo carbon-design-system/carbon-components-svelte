@@ -289,6 +289,79 @@ describe("DatePicker", () => {
     });
   });
 
+  describe("ArrowDown", () => {
+    /** Collects errors thrown by event listeners, which jsdom reports on window. */
+    function captureListenerErrors() {
+      const errors: unknown[] = [];
+      const onError = (event: ErrorEvent) => {
+        errors.push(event.error);
+        event.preventDefault();
+      };
+      window.addEventListener("error", onError);
+      return {
+        errors,
+        stop: () => window.removeEventListener("error", onError),
+      };
+    }
+
+    it("is ignored in simple mode", async () => {
+      const capture = captureListenerErrors();
+      render(DatePicker, { datePickerType: "simple" });
+      const input = screen.getByLabelText("Date");
+      input.focus();
+
+      const notPrevented = await fireEvent.keyDown(input, { key: "ArrowDown" });
+      capture.stop();
+
+      expect(notPrevented).toBe(true);
+      expect(capture.errors).toEqual([]);
+    });
+
+    it("is ignored when flatpickr failed to initialize", async () => {
+      const consoleError = vi
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
+      const capture = captureListenerErrors();
+      render(DatePicker, {
+        datePickerType: "single",
+        flatpickrProps: {
+          plugins: [
+            () => {
+              throw new Error("plugin failed");
+            },
+          ],
+        },
+      });
+      await vi.waitFor(() =>
+        expect(consoleError).toHaveBeenCalledWith(
+          expect.objectContaining({ message: "plugin failed" }),
+        ),
+      );
+      const input = screen.getByLabelText("Date");
+      input.focus();
+
+      const notPrevented = await fireEvent.keyDown(input, { key: "ArrowDown" });
+      capture.stop();
+      consoleError.mockRestore();
+
+      expect(notPrevented).toBe(true);
+      expect(capture.errors).toEqual([]);
+    });
+
+    it("opens the calendar and moves focus into it", async () => {
+      render(DatePicker, { datePickerType: "single" });
+      const calendar = await screen.findByLabelText("calendar-container");
+      const input = screen.getByLabelText("Date");
+      input.focus();
+
+      const notPrevented = await fireEvent.keyDown(input, { key: "ArrowDown" });
+
+      expect(notPrevented).toBe(false);
+      expect(calendar).toHaveClass("open");
+      expect(document.activeElement).toHaveClass("flatpickr-day");
+    });
+  });
+
   it("keeps a consumer allowInput: false across mount and readonly toggles", async () => {
     const props: ComponentProps<typeof DatePicker> = {
       datePickerType: "single",
