@@ -38,6 +38,7 @@
 
   import { createEventDispatcher, setContext } from "svelte";
   import { readonly, writable } from "svelte/store";
+  import { rangeSlice } from "../utils/range-slice.js";
 
   const dispatch = createEventDispatcher();
   /**
@@ -89,13 +90,13 @@
       (input) => input.value === rangeAnchorValue,
     );
     const targetIndex = inputs.findIndex((input) => input.value === value);
-    if (anchorIndex === -1 || targetIndex === -1) return false;
+    const range =
+      targetIndex === -1 ? null : rangeSlice(inputs, anchorIndex, targetIndex);
+    if (range === null) return false;
 
-    const start = Math.min(anchorIndex, targetIndex);
-    const end = Math.max(anchorIndex, targetIndex);
     const next = new Set($selectedValues);
     let changed = false;
-    for (const input of inputs.slice(start, end + 1)) {
+    for (const input of range) {
       if (input.disabled) continue;
       if (isSelected && !next.has(input.value)) {
         next.add(input.value);
