@@ -2,6 +2,7 @@ const PREFIX = "[carbon-components-svelte] DatePicker: ";
 
 /**
  * @typedef {{
+ *   datePickerType?: string;
  *   portalled: boolean;
  *   displayFormat: string | undefined;
  *   disabledDates: ReadonlyArray<unknown>;
@@ -28,6 +29,12 @@ export function getUnsupportedOptionWarnings(flatpickrProps, context) {
       "is not supported. Flatpickr is given the input element itself.",
     ],
     ["mode", true, "is ignored. Use datePickerType instead."],
+    [
+      "showMonths",
+      context.datePickerType === "week" &&
+        Number(flatpickrProps.showMonths) > 1,
+      'is not supported with datePickerType="week".',
+    ],
     [
       "positionElement",
       !context.portalled,

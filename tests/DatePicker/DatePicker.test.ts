@@ -1,5 +1,6 @@
 import { fireEvent, render, screen, within } from "@testing-library/svelte";
 import type DatePickerComponent from "carbon-components-svelte/DatePicker/DatePicker.svelte";
+import { english } from "flatpickr/dist/l10n/default";
 import type { Instance } from "flatpickr/dist/types/instance";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
@@ -11,6 +12,7 @@ import DatePickerFluidSlot from "./DatePicker.fluidSlot.test.svelte";
 import DatePicker from "./DatePicker.test.svelte";
 import DatePickerCalendar from "./DatePickerCalendar.test.svelte";
 import DatePickerDefaultDate from "./DatePickerDefaultDate.test.svelte";
+import DatePickerDisplayFormat from "./DatePickerDisplayFormat.test.svelte";
 import DatePickerIgnoredFocus from "./DatePickerIgnoredFocus.test.svelte";
 import DatePickerInlineOptions from "./DatePickerInlineOptions.test.svelte";
 import DatePickerInModal from "./DatePickerInModal.test.svelte";
@@ -2696,6 +2698,121 @@ describe("DatePicker", () => {
 
       await user.click(within(calendar).getByText("Jun"));
       expect(calendar).not.toHaveClass("open");
+    });
+  });
+
+  describe("week mode", () => {
+    /** A current-month day cell, by day of the month. */
+    function dayCell(calendar: HTMLElement, day: number) {
+      const now = new Date();
+      const date = new Date(now.getFullYear(), now.getMonth(), day);
+      const label = date.toLocaleDateString("en-US", {
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+      const cell = calendar.querySelector<HTMLElement>(
+        `[aria-label="${label}"]`,
+      );
+      if (!cell) throw new Error(`expected day ${day}`);
+      return { cell, date };
+    }
+
+    const formatted = (date: Date) =>
+      `${String(date.getMonth() + 1).padStart(2, "0")}/${String(date.getDate()).padStart(2, "0")}/${date.getFullYear()}`;
+
+    it("renders a single-width day grid", async () => {
+      const { container } = render(DatePicker, { datePickerType: "week" });
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+
+      expect(container.querySelector(".bx--date-picker")).toHaveClass(
+        "bx--date-picker--single",
+      );
+      expect(
+        calendar.querySelectorAll(".flatpickr-day").length,
+      ).toBeGreaterThan(27);
+    });
+
+    it("selects the first day of the picked week", async () => {
+      const onchange = vi.fn();
+      render(DatePicker, { datePickerType: "week", onchange });
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+      const { cell, date } = dayCell(calendar, 17);
+      const sunday = new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate() - date.getDay(),
+      );
+
+      await user.click(cell);
+
+      expect(screen.getByLabelText("Date")).toHaveValue(formatted(sunday));
+      expect(onchange).toHaveBeenCalledTimes(1);
+      expect(onchange.mock.calls[0][0].detail.selectedDates[0]).toEqual(sunday);
+    });
+
+    it("follows the locale's first day of the week", async () => {
+      render(DatePicker, {
+        datePickerType: "week",
+        locale: { ...english, firstDayOfWeek: 1 },
+      });
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+      const { cell, date } = dayCell(calendar, 17);
+      const monday = new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate() - ((date.getDay() + 6) % 7),
+      );
+
+      await user.click(cell);
+
+      expect(screen.getByLabelText("Date")).toHaveValue(formatted(monday));
+    });
+
+    it("highlights all seven days of the selected week", async () => {
+      render(DatePicker, { datePickerType: "week" });
+      const input = screen.getByLabelText("Date");
+      await user.click(input);
+      const calendar = await screen.findByLabelText("calendar-container");
+      await user.click(dayCell(calendar, 17).cell);
+
+      await user.click(input);
+
+      expect(
+        calendar.querySelectorAll(".flatpickr-day.week.selected"),
+      ).toHaveLength(7);
+    });
+
+    it("numbers the week by the days it shows", async () => {
+      // Sunday, September 13, 2026 starts a week that is mostly ISO week 38.
+      render(DatePickerDisplayFormat, {
+        datePickerType: "week",
+        displayFormat: "\\W\\e\\e\\k W, Y",
+        value: "2026-09-16",
+      });
+      const calendar = await screen.findByLabelText("calendar-container");
+      await user.click(screen.getByLabelText("Date"));
+      const day = calendar.querySelector<HTMLElement>(
+        '[aria-label="Wednesday, September 16, 2026"]',
+      );
+      if (!day) throw new Error("expected September 16, 2026");
+
+      await user.click(day);
+
+      expect(screen.getByLabelText("Date")).toHaveValue("Week 38, 2026");
+    });
+
+    it("keeps a value set from outside as given", async () => {
+      const { rerender } = render(DatePicker, { datePickerType: "week" });
+      await screen.findByLabelText("calendar-container");
+
+      await rerender({ value: "01/18/2024" });
+
+      expect(screen.getByLabelText("Date")).toHaveValue("01/18/2024");
     });
   });
 
