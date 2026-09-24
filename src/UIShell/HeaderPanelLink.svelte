@@ -13,13 +13,15 @@
    * @bindable readonly
    */
   export let ref = null;
+
+  import { resolveLinkRel } from "../utils/link-rel.js";
 </script>
 
 <li class:bx--switcher__item={true}>
   <a
     bind:this={ref}
     {href}
-    rel={$$restProps.target === "_blank" ? "noopener noreferrer" : undefined}
+    rel={resolveLinkRel($$restProps.target, $$restProps.rel)}
     aria-current={isSelected ? "page" : undefined}
     class:bx--switcher__item-link={true}
     class:bx--switcher__item-link--selected={isSelected}

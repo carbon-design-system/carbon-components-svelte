@@ -23,6 +23,8 @@
    * @bindable readonly
    */
   export let ref = null;
+
+  import { resolveLinkRel } from "../utils/link-rel.js";
 </script>
 
 <a
@@ -30,7 +32,7 @@
   class:bx--header__action={true}
   class:bx--header__action--active={linkIsActive}
   {href}
-  rel={$$restProps.target === "_blank" ? "noopener noreferrer" : undefined}
+  rel={resolveLinkRel($$restProps.target, $$restProps.rel)}
   {...$$restProps}
   on:click
 >

@@ -58,6 +58,7 @@
   import { slide } from "svelte/transition";
   import { PROFILE_MENU_CONTEXT_KEY } from "../constants/context-keys.js";
   import ChevronDown from "../icons/ChevronDown.svelte";
+  import { toCssLength } from "../utils/css-length.js";
   import { dismiss } from "../utils/dismiss.js";
   import { createDomNodeRegistry } from "../utils/dom-node-registry.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
@@ -81,7 +82,7 @@
     unregisterMenuItem,
   });
 
-  $: maxWidthStyle = typeof maxWidth === "number" ? `${maxWidth}px` : maxWidth;
+  $: maxWidthStyle = toCssLength(maxWidth);
 
   function close(trigger) {
     isOpen = false;
