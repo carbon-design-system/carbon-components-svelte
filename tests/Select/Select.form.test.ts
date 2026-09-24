@@ -1,14 +1,11 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { flushFormReset } from "../utils/flush-form-reset";
 import { user } from "../utils/user";
 import SelectForm from "./Select.form.test.svelte";
 
 const getForm = () => screen.getByTestId("form") as HTMLFormElement;
 const getBound = () => screen.getByTestId("bound").textContent;
-const flush = async () => {
-  await new Promise((resolve) => setTimeout(resolve));
-  await tick();
-};
 
 describe("Select form reset", () => {
   it("keeps the current choice and the bound value in step", async () => {
@@ -20,7 +17,7 @@ describe("Select form reset", () => {
     onUpdate.mockClear();
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(select).toHaveValue("l");
     expect(getBound()).toBe("l");
@@ -35,7 +32,7 @@ describe("Select form reset", () => {
     await rerender({ selected: "l" });
     await tick();
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(select).toHaveValue("l");
     expect(getBound()).toBe("l");
@@ -47,7 +44,7 @@ describe("Select form reset", () => {
 
     await user.selectOptions(select, "2");
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(select).toHaveValue("2");
     expect(getBound()).toBe("2");
@@ -59,7 +56,7 @@ describe("Select form reset", () => {
 
     await user.selectOptions(select, "s");
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(select).toHaveValue("s");
     expect(getBound()).toBe("s");
