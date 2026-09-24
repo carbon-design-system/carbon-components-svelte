@@ -391,6 +391,28 @@ describe("FileUploaderDropContainer", () => {
       });
     });
 
+    it("puts the current files back after a cancelled picker", async () => {
+      const { container } = render(FileUploaderDropContainer, {
+        props: { multiple: true },
+      });
+      const input = getInput(container);
+
+      simulateFileSelection(input, [textFile("a.txt")]);
+      await vi.waitFor(() => {
+        expect(names(input)).toEqual(["a.txt"]);
+      });
+
+      // Opening the picker clears the input; dismissing it fires `cancel`.
+      Object.defineProperty(input, "files", {
+        value: new DataTransfer().files,
+        writable: true,
+        configurable: true,
+      });
+      input.dispatchEvent(new Event("cancel"));
+
+      expect(names(input)).toEqual(["a.txt"]);
+    });
+
     it("empties the native input when files is cleared programmatically", async () => {
       const { container, rerender } = render(FileUploaderDropContainer, {
         props: { multiple: true },

@@ -84,6 +84,7 @@
 
   import { createEventDispatcher } from "svelte";
   import { filterIncomingFiles } from "../utils/filter-incoming-files.js";
+  import { syncInputFiles } from "../utils/sync-input-files.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -118,16 +119,7 @@
   // Keep the native input equal to `files` so native form submission posts
   // exactly the accepted files, whichever way they arrived (drop, browse, or
   // a programmatic `files` update).
-  $: if (ref && files !== undefined) {
-    if (files.length === 0) ref.value = "";
-    try {
-      const dataTransfer = new DataTransfer();
-      for (const file of files) dataTransfer.items.add(file);
-      ref.files = dataTransfer.files;
-    } catch {
-      // Fail open if DataTransfer API is not supported.
-    }
-  }
+  $: if (ref && files !== undefined) syncInputFiles(ref, files);
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -203,6 +195,11 @@
     on:click
     on:click={(event) => {
       event.target.value = null;
+    }}
+    on:cancel={() => {
+      // The click cleared the input so the same file can be picked again; a
+      // dismissed picker fires no change, so put the current files back.
+      if (ref) syncInputFiles(ref, files);
     }}
   >
 </div>
