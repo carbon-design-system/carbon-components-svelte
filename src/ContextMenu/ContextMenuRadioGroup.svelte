@@ -10,6 +10,8 @@
 
   import { setContext } from "svelte";
   import { writable } from "svelte/store";
+  import { addUniqueArrayItem } from "../utils/array-set-ops.js";
+  import { batchStoreUpdates } from "../utils/batch-store-updates.js";
 
   /**
    * @type {import("svelte/store").Writable<string>}
@@ -19,14 +21,16 @@
    * @type {import("svelte/store").Writable<ReadonlyArray<string>>}
    */
   const radioIds = writable([]);
+  // Every item in the group calls addOption once to register itself; batch
+  // same-microtask registrations into a single flush instead of notifying
+  // subscribers once per item.
+  const batchedRadioIdsUpdate = batchStoreUpdates(radioIds);
 
   /**
    * @type {(data: { id: string }) => void}
    */
   function addOption({ id }) {
-    if (!$radioIds.includes(id)) {
-      radioIds.update((_) => [..._, id]);
-    }
+    batchedRadioIdsUpdate((current) => addUniqueArrayItem(current, id));
   }
 
   /**
