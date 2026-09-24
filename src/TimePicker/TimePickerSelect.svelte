@@ -66,12 +66,7 @@
   }
 
   function handleSelectKeydown(event) {
-    if (
-      readonly &&
-      event.key !== "Tab" &&
-      event.key !== "Shift" &&
-      !(event.altKey && event.key === "ArrowDown")
-    ) {
+    if (readonly && event.key !== "Tab" && event.key !== "Shift") {
       event.preventDefault();
     }
   }
