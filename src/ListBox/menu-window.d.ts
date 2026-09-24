@@ -90,3 +90,25 @@ export type CreateMenuWindowOptions<
 export declare function createMenuWindow<
   Item extends Record<string, unknown> = Record<string, unknown>,
 >(options: CreateMenuWindowOptions<Item>): MenuWindow<Item>;
+
+export type ScheduleHighlightScrollOptions = {
+  open: boolean;
+  shouldVirtualize: boolean;
+  highlightedIndex: number;
+  prevHighlightedIndex: number;
+  listRef: HTMLElement | null | undefined;
+  isMeasured: boolean;
+  highlightOrigin: "keyboard" | "pointer" | null;
+  menuWindow: MenuWindow;
+};
+
+/**
+ * Call from `afterUpdate`. Schedules (via `tick`) a scroll of the newly
+ * highlighted option into view, unless an in-flight pointer-driven
+ * `menuWindow` measurement should win instead.
+ *
+ * @returns The value to store as `prevHighlightedIndex`.
+ */
+export declare function scheduleHighlightScroll(
+  options: ScheduleHighlightScrollOptions,
+): number;
