@@ -34,23 +34,26 @@ shows an application registration form with required fields. Supported inputs in
 
 <FluidForm>
   <TextInput
+    name="name"
     labelText="Application name"
     placeholder="customer-portal"
     required
   />
   <PasswordInput
+    name="password"
     required
     type="password"
     labelText="Admin password"
     placeholder="Enter admin password..."
   />
-  <Select labelText="Deployment region">
+  <Select name="region" labelText="Deployment region">
     <SelectItem value="us-east" text="US East (Washington DC)" />
     <SelectItem value="us-south" text="US South (Dallas)" />
     <SelectItem value="eu-de" text="EU Germany (Frankfurt)" />
   </Select>
-  <NumberInput labelText="Instance count" value={2} min={1} max={10} />
+  <NumberInput name="instances" labelText="Instance count" value={2} min={1} max={10} />
   <Dropdown
+    name="channel"
     labelText="Notification channel"
     selectedId="email"
     items="{[
@@ -60,6 +63,7 @@ shows an application registration form with required fields. Supported inputs in
     ]}"
   />
   <ComboBox
+    name="contact"
     labelText="Primary contact"
     placeholder="Select contact method"
     selectedId="email"
@@ -70,6 +74,7 @@ shows an application registration form with required fields. Supported inputs in
     ]}"
   />
   <MultiSelect
+    name="notify"
     labelText="Notification methods"
     label="Select notification methods..."
     selectedIds="{['email', 'slack']}"
@@ -80,6 +85,7 @@ shows an application registration form with required fields. Supported inputs in
     ]}"
   />
   <TextArea
+    name="description"
     labelText="Description"
     placeholder="Customer-facing web portal for account management and billing."
   />
@@ -88,14 +94,14 @@ shows an application registration form with required fields. Supported inputs in
     value="a1b2c3d4-e5f6-7890-abcd-ef1234567890"
   />
   <DatePicker datePickerType="single">
-    <DatePickerInput labelText="Go-live date" placeholder="mm/dd/yyyy" />
+    <DatePickerInput name="launch" labelText="Go-live date" placeholder="mm/dd/yyyy" />
   </DatePicker>
-  <TimePicker labelText="Maintenance window" placeholder="hh:mm">
-    <TimePickerSelect labelText="Clock" value="am">
+  <TimePicker name="window" labelText="Maintenance window" placeholder="hh:mm">
+    <TimePickerSelect name="period" labelText="Clock" value="am">
       <SelectItem value="am" text="AM" />
       <SelectItem value="pm" text="PM" />
     </TimePickerSelect>
-    <TimePickerSelect labelText="Timezone" value="et">
+    <TimePickerSelect name="timezone" labelText="Timezone" value="et">
       <SelectItem value="et" text="Eastern Time (ET)" />
       <SelectItem value="pt" text="Pacific Time (PT)" />
     </TimePickerSelect>
