@@ -100,6 +100,7 @@
 
   import { getContext } from "svelte";
   import Checkbox from "../Checkbox/Checkbox.svelte";
+  import { resolveLinkRel } from "../utils/link-rel.js";
   import { toAriaChecked } from "../utils/tree-aria-checked.js";
 
   let ref = null;
@@ -175,7 +176,7 @@
       {id}
       href={disabled ? undefined : href}
       target={disabled ? undefined : target}
-      rel={target === "_blank" ? "noopener noreferrer" : undefined}
+      rel={resolveLinkRel(target)}
       tabindex={disabled ? undefined : -1}
       aria-current={id === $activeNodeId ? "page" : undefined}
       aria-disabled={disabled}
