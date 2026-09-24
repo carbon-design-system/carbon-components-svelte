@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import type RadioButtonGroupComponent from "carbon-components-svelte/RadioButtonGroup/RadioButtonGroup.svelte";
 import { type ComponentEvents, type ComponentProps, tick } from "svelte";
 import { user } from "../utils/user";
+import RadioButtonGroupButtonNames from "./RadioButtonGroup.buttonNames.test.svelte";
 import RadioButtonGroup from "./RadioButtonGroup.test.svelte";
 
 describe("RadioButtonGroup", () => {
@@ -118,6 +119,24 @@ describe("RadioButtonGroup", () => {
 
     expect(names[0]).toBeTruthy();
     expect(new Set(names).size).toBe(1);
+  });
+
+  it("should keep the buttons' own name when the group has none", () => {
+    render(RadioButtonGroupButtonNames);
+
+    for (const radio of screen.getAllByRole("radio")) {
+      expect(radio).toHaveAttribute("name", "plan");
+    }
+    const form = screen.getByTestId("form") as HTMLFormElement;
+    expect([...new FormData(form)]).toEqual([["plan", "pro"]]);
+  });
+
+  it("should let the group name override the buttons' own name", () => {
+    render(RadioButtonGroupButtonNames, { props: { groupName: "tier" } });
+
+    for (const radio of screen.getAllByRole("radio")) {
+      expect(radio).toHaveAttribute("name", "tier");
+    }
   });
 
   it("should move selection on arrow keys when name is omitted", async () => {
