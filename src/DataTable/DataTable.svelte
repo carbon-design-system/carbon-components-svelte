@@ -345,6 +345,7 @@
   import InlineCheckbox from "../Checkbox/InlineCheckbox.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
   import RadioButton from "../RadioButton/RadioButton.svelte";
+  import { toCssLength } from "../utils/css-length.js";
   import { deepEqual } from "../utils/deep-equal.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { virtualize as virtualizeUtil } from "../utils/virtualize.js";
@@ -1040,7 +1041,7 @@
       describedBy={hasDescription ? descriptionId : undefined}
       tableStyle={fixedLayout ? "table-layout: fixed" : undefined}
       containerStyle={stickyHeader && stickyHeaderMaxHeight != null
-        ? `max-height: ${typeof stickyHeaderMaxHeight === "number" ? `${stickyHeaderMaxHeight}px` : stickyHeaderMaxHeight}`
+        ? `max-height: ${toCssLength(stickyHeaderMaxHeight)}`
         : undefined}
     >
       {#if hasCustomHeaderWidth}
