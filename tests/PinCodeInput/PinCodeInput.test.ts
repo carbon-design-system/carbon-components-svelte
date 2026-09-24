@@ -51,6 +51,77 @@ describe("PinCodeInput", () => {
     expect(inputs[2]).toHaveFocus();
   });
 
+  describe("typing into a filled segment", () => {
+    it("replaces the character after a click", async () => {
+      const { component } = render(PinCodeInput, { props: { value: "1234" } });
+      const inputs = getInputs();
+
+      await user.click(inputs[2]);
+      await user.keyboard("9");
+      await tick();
+
+      expect(component.code).toEqual(["1", "2", "9", "4"]);
+      expect(inputs[2].value).toBe("9");
+      expect(inputs[3]).toHaveFocus();
+    });
+
+    it("replaces the character after moving back with ArrowLeft", async () => {
+      const { component } = render(PinCodeInput);
+      const inputs = getInputs();
+
+      inputs[0].focus();
+      await user.keyboard("12{ArrowLeft}7");
+      await tick();
+
+      expect(component.code).toEqual(["1", "7", "", ""]);
+      expect(inputs[2]).toHaveFocus();
+    });
+
+    it("keeps the old character when the new one is invalid", async () => {
+      const { component } = render(PinCodeInput, { props: { value: "1234" } });
+      const inputs = getInputs();
+
+      await user.click(inputs[0]);
+      await user.keyboard("x");
+      await tick();
+
+      expect(component.code).toEqual(["1", "2", "3", "4"]);
+      expect(inputs[0].value).toBe("1");
+      expect(inputs[0]).toHaveFocus();
+    });
+
+    it("dispatches one change per overwrite", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(PinCodeInput, { props: { value: "1234" } });
+      const inputs = getInputs();
+
+      await user.click(inputs[2]);
+      consoleLog.mockClear();
+      await user.keyboard("9");
+      await tick();
+
+      const changes = consoleLog.mock.calls.filter(
+        ([event]) => event === "change",
+      );
+      expect(changes).toEqual([
+        ["change", { value: "1294", code: ["1", "2", "9", "4"] }],
+      ]);
+    });
+
+    it("does not overwrite when read-only", async () => {
+      const { component } = render(PinCodeInput, {
+        props: { readonly: true, value: "1234" },
+      });
+      const inputs = getInputs();
+
+      await user.click(inputs[1]);
+      await user.keyboard("9");
+      await tick();
+
+      expect(component.code).toEqual(["1", "2", "3", "4"]);
+    });
+  });
+
   it("rejects characters that do not match the numeric type", async () => {
     render(PinCodeInput);
     const inputs = getInputs();
