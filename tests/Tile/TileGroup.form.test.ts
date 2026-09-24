@@ -1,12 +1,10 @@
 import { render, screen } from "@testing-library/svelte";
+import { flushFormReset } from "../utils/flush-form-reset";
 import { user } from "../utils/user";
 import TileGroupForm from "./TileGroup.form.test.svelte";
 
 const getForm = () => screen.getByTestId("form") as HTMLFormElement;
 const getRadios = () => screen.getAllByRole("radio") as HTMLInputElement[];
-/** The reset sync runs on the next task. */
-const flush = () => new Promise((resolve) => setTimeout(resolve));
-
 describe("TileGroup form reset", () => {
   it("unchecks every tile and clears the bound value without firing select", async () => {
     const onSelect = vi.fn();
@@ -17,7 +15,7 @@ describe("TileGroup form reset", () => {
     onSelect.mockClear();
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(radioA).not.toBeChecked();
     expect(radioB).not.toBeChecked();
@@ -35,7 +33,7 @@ describe("TileGroup form reset", () => {
     expect(screen.getByTestId("bound").textContent).toBe("a");
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(radioA).not.toBeChecked();
     expect(screen.getByTestId("bound").textContent).toBe("undefined");
@@ -54,7 +52,7 @@ describe("TileGroup form reset", () => {
     onSelect.mockClear();
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(radioA).toBeChecked();
     expect(radioB).not.toBeChecked();
@@ -71,7 +69,7 @@ describe("TileGroup form reset", () => {
     onSelect.mockClear();
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(radioA).not.toBeChecked();
     expect(radioB).not.toBeChecked();
@@ -86,7 +84,7 @@ describe("TileGroup form reset", () => {
 
     const [radioA] = getRadios();
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(radioA).toBeChecked();
     expect(screen.getByTestId("bound").textContent).toBe("a");

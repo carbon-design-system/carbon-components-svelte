@@ -1,13 +1,12 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { flushFormReset } from "../utils/flush-form-reset";
 import { user } from "../utils/user";
 import TimePickerForm from "./TimePicker.form.test.svelte";
 
 const getForm = () => screen.getByTestId("form") as HTMLFormElement;
 const getValue = () => screen.getByTestId("value").textContent;
 const getAmpm = () => screen.getByTestId("ampm").textContent;
-/** The reset resync runs on the next task. */
-const flush = () => new Promise((resolve) => setTimeout(resolve, 20));
 
 describe("TimePicker form reset", () => {
   // Svelte 5 already passes case 1 with no fix: `handleFormReset` is a
@@ -24,7 +23,7 @@ describe("TimePicker form reset", () => {
     expect(input).toHaveValue("09:15");
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(input).toHaveValue("");
     expect(getValue()).toBe("");
@@ -43,7 +42,7 @@ describe("TimePicker form reset", () => {
     const input = screen.getByLabelText("Time");
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(input).toHaveValue("");
     expect(getValue()).toBe("");
@@ -58,7 +57,7 @@ describe("TimePicker form reset", () => {
     await tick();
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(input).toHaveValue("");
     expect(getValue()).toBe("");
@@ -73,7 +72,7 @@ describe("TimePicker form reset", () => {
     await tick();
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(input).toHaveValue("");
     expect(getValue()).toBe("");
@@ -87,7 +86,7 @@ describe("TimePicker form reset", () => {
     await user.clear(input);
     await user.type(input, "09:15");
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(input).toHaveValue("09:15");
     expect(getValue()).toBe("09:15");
@@ -105,7 +104,7 @@ describe("TimePicker form reset", () => {
     onChange.mockClear();
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(onInput).not.toHaveBeenCalled();
     expect(onChange).not.toHaveBeenCalled();
@@ -123,7 +122,7 @@ describe("TimePicker form reset", () => {
     expect(combobox).toHaveValue("am");
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(combobox).toHaveValue("am");
     expect(getAmpm()).toBe("am");

@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import { flushFormReset } from "../utils/flush-form-reset";
 import { user } from "../utils/user";
 import ComboBox from "./ComboBox.form.test.svelte";
 
@@ -109,16 +110,13 @@ describe("ComboBox form reset", () => {
     screen.getByTestId("bound-selected-id").textContent;
   const getBoundValue = () => screen.getByTestId("bound-value").textContent;
 
-  /** The reset resync runs on the next task. */
-  const flush = () => new Promise((resolve) => setTimeout(resolve));
-
   it("resets a client-rendered combo box to empty even with an initial selection", async () => {
     render(ComboBox, {
       props: { items, selectedId: "0", value: "Slack", name: "contact" },
     });
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(getInput()).toHaveValue("");
     expect(getBoundSelectedId()).toBe("undefined");
@@ -152,7 +150,7 @@ describe("ComboBox form reset", () => {
     const selectCountAfterSelecting = onSelect.mock.calls.length;
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(getInput()).toHaveValue("Fax");
     expect(getBoundSelectedId()).toBe("2");
@@ -176,7 +174,7 @@ describe("ComboBox form reset", () => {
     await user.click(document.body);
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(getInput()).toHaveValue("");
     expect(getBoundSelectedId()).toBe("undefined");
@@ -194,7 +192,7 @@ describe("ComboBox form reset", () => {
 
     getForm().addEventListener("reset", (event) => event.preventDefault());
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(getInput()).toHaveValue("Email");
     expect(getBoundSelectedId()).toBe("1");
@@ -219,7 +217,7 @@ describe("ComboBox form reset", () => {
     await user.click(option);
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(getBoundSelectedId()).toBe("0");
     expect(getInput()).toHaveValue("zero");
@@ -240,7 +238,7 @@ describe("ComboBox form reset", () => {
     await user.click(option);
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(getInput()).toHaveValue("custom text");
     expect(getBoundSelectedId()).toBe("undefined");

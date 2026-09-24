@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { flushFormReset } from "../utils/flush-form-reset";
 import { user } from "../utils/user";
 import PinCodeInputForm from "./PinCodeInput.form.test.svelte";
 
@@ -9,9 +10,6 @@ const getSegments = () =>
     (input) => input.value,
   );
 const getBound = () => screen.getByTestId("bound").textContent;
-/** The reset sync runs on the next task. */
-const flush = () => new Promise((resolve) => setTimeout(resolve));
-
 describe("PinCodeInput form participation", () => {
   describe("required with name", () => {
     it("is invalid while every segment is empty", () => {
@@ -56,7 +54,7 @@ describe("PinCodeInput form participation", () => {
       onChange.mockClear();
 
       getForm().reset();
-      await flush();
+      await flushFormReset();
 
       expect(getSegments()).toEqual(["", "", "", ""]);
       expect(getBound()).toBe("");
@@ -72,7 +70,7 @@ describe("PinCodeInput form participation", () => {
       await user.click(screen.getAllByRole("textbox")[0]);
       await user.keyboard("1234");
       getForm().reset();
-      await flush();
+      await flushFormReset();
 
       // user-event tracks what it typed and misses the native reset, so
       // type the next character with a plain input event.
@@ -97,7 +95,7 @@ describe("PinCodeInput form participation", () => {
       expect(getBound()).toBe("1234");
 
       getForm().reset();
-      await flush();
+      await flushFormReset();
 
       expect(getSegments()).toEqual(["1", "2", "", ""]);
       expect(getBound()).toBe("12");
@@ -111,7 +109,7 @@ describe("PinCodeInput form participation", () => {
       await user.click(screen.getAllByRole("textbox")[0]);
       await user.keyboard("12");
       getForm().reset();
-      await flush();
+      await flushFormReset();
 
       expect(getSegments()).toEqual(["1", "2", "", ""]);
       expect(getBound()).toBe("12");

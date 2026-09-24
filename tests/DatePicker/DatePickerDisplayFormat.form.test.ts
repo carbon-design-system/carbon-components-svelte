@@ -1,4 +1,5 @@
 import { render, screen, within } from "@testing-library/svelte";
+import { flushFormReset } from "../utils/flush-form-reset";
 import { user } from "../utils/user";
 import DatePickerDisplayFormatForm from "./DatePickerDisplayFormat.form.test.svelte";
 
@@ -6,9 +7,6 @@ const getForm = () => screen.getByTestId("form") as HTMLFormElement;
 const getValue = () => screen.getByTestId("value").textContent;
 const getHiddenInput = () =>
   document.querySelector<HTMLInputElement>("input[name='meeting']");
-/** The reset sync runs on the next task. */
-const flush = () => new Promise((resolve) => setTimeout(resolve));
-
 async function visibleInput() {
   await vi.waitFor(() =>
     expect(screen.getByLabelText("Date")).toHaveAttribute("type", "text"),
@@ -41,7 +39,7 @@ describe("DatePicker displayFormat form reset", () => {
     expect(hidden?.type).toBe("hidden");
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     const visible = await visibleInput();
     expect(visible).toHaveValue("");
@@ -56,7 +54,7 @@ describe("DatePicker displayFormat form reset", () => {
     await vi.waitFor(() => expect(visible).toHaveValue("March 15, 2024"));
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(visible).toHaveValue("");
     expect(getHiddenInput()).toHaveValue("");
@@ -71,7 +69,7 @@ describe("DatePicker displayFormat form reset", () => {
     const hiddenValue = hidden?.value;
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(getHiddenInput()).toHaveValue(hiddenValue);
     expect(getValue()).toBe(hiddenValue);
