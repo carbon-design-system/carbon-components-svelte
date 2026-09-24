@@ -53,8 +53,7 @@ describe("ContextMenuOption hover transfer to a flush submenu", () => {
     assert(submenu);
 
     // ContextMenuOption computes `x = rootMenuPosition[0] + width`, i.e. the
-    // parent option's own right edge - the same value plugged into
-    // `isInSafeTriangle` as both the anchor's and floating element's edge.
+    // parent option's own right edge.
     const submenuLeft = Number.parseInt(submenu.style.left, 10);
     expect(submenuLeft).toBe(trigger.getBoundingClientRect().right);
   });
