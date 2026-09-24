@@ -1,3 +1,25 @@
+<script context="module">
+  function deriveStatus(value, thresholds, overCapacity) {
+    if (overCapacity) return "error";
+    if (thresholds?.error !== undefined && value >= thresholds.error) {
+      return "error";
+    }
+    if (thresholds?.warning !== undefined && value >= thresholds.warning) {
+      return "warning";
+    }
+    return "default";
+  }
+
+  function getMarkers(thresholds, max) {
+    return Object.entries(thresholds)
+      .filter(([, threshold]) => threshold !== undefined)
+      .map(([kind, threshold]) => ({
+        kind,
+        pct: max > 0 ? Math.min(Math.max(threshold / max, 0), 1) * 100 : 0,
+      }));
+  }
+</script>
+
 <script>
   /**
    * @typedef {object} MeterThresholds
@@ -88,26 +110,6 @@
 
   let prevStatus = undefined;
   let statusAnnouncement = "";
-
-  function deriveStatus(value, thresholds, overCapacity) {
-    if (overCapacity) return "error";
-    if (thresholds?.error !== undefined && value >= thresholds.error) {
-      return "error";
-    }
-    if (thresholds?.warning !== undefined && value >= thresholds.warning) {
-      return "warning";
-    }
-    return "default";
-  }
-
-  function getMarkers(thresholds, max) {
-    return Object.entries(thresholds)
-      .filter(([, threshold]) => threshold !== undefined)
-      .map(([kind, threshold]) => ({
-        kind,
-        pct: max > 0 ? Math.min(Math.max(threshold / max, 0), 1) * 100 : 0,
-      }));
-  }
 
   $: overCapacity = value > max;
   $: resolvedStatus = status ?? deriveStatus(value, thresholds, overCapacity);
