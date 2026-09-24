@@ -309,6 +309,11 @@
   } from "../ListBox/menu-window.js";
   import { debounce } from "../utils/debounce.js";
   import { dismiss } from "../utils/dismiss.js";
+  import {
+    buildFieldIds,
+    resolveStatusDescribedBy,
+    resolveValidationVisibility,
+  } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
@@ -377,13 +382,18 @@
       .startsWith(inputValue.toLowerCase());
   }
 
-  $: statusDescribedById = showInvalid
-    ? undefined
-    : showWarn && warnText
-      ? warnId
-      : !isFluid && !showWarn && helperText
-        ? helperId
-        : undefined;
+  $: statusDescribedById = resolveStatusDescribedBy({
+    showInvalid,
+    showWarn,
+    helperText,
+    warnText,
+    isFluid,
+    errorId,
+    warnId,
+    helperId,
+    includeErrorId: false,
+    requireWarnText: true,
+  });
 
   $: filterFn =
     typeahead && shouldFilterItem === defaultShouldFilter
@@ -625,12 +635,14 @@
   $: ariaLabel = $$props["aria-label"] ?? (labelText || "Choose an item");
   $: menuId = `menu-${id}`;
   $: comboId = `combo-${id}`;
-  $: helperId = `helper-${id}`;
-  $: errorId = `error-${id}`;
-  $: warnId = `warn-${id}`;
+  $: ({ helperId, errorId, warnId } = buildFieldIds(id));
   // Invalid/warn states are suppressed when the combo box is disabled or read-only.
-  $: showInvalid = invalid && !disabled && !readonly;
-  $: showWarn = warn && !invalid && !disabled && !readonly;
+  $: ({ showInvalid, showWarn } = resolveValidationVisibility({
+    invalid,
+    warn,
+    disabled,
+    readonly,
+  }));
   $: isFluid = fluid || !!formContext?.isFluid;
   $: showFieldFocus = isFluid && (fieldFocused || open);
   // Neutral = default fluid state, i.e. none of the other wrapper modifiers apply.
