@@ -523,7 +523,7 @@
             {readonly}
             {required}
             aria-readonly={readonly || undefined}
-            aria-label={`${labelText || "Pin code"} digit ${index + 1} of ${count}`}
+            aria-label={`${labelText || "Pin code"} ${type === "numeric" ? "digit" : "character"} ${index + 1} of ${count}`}
             aria-invalid={hasError || undefined}
             data-invalid={hasError || undefined}
             data-warn={hasWarn || undefined}
