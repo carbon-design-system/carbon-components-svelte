@@ -542,3 +542,57 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
     destroy,
   };
 }
+
+/**
+ * Call from `afterUpdate`. Schedules (via `tick`) a scroll of the newly
+ * highlighted option into view, unless an in-flight pointer-driven
+ * `menuWindow` measurement should win instead.
+ *
+ * @param {Object} options
+ * @param {boolean} options.open
+ * @param {boolean} options.shouldVirtualize
+ * @param {number} options.highlightedIndex
+ * @param {number} options.prevHighlightedIndex
+ * @param {HTMLElement | null | undefined} options.listRef
+ * @param {boolean} options.isMeasured
+ * @param {"keyboard" | "pointer" | null} options.highlightOrigin
+ * @param {ReturnType<typeof createMenuWindow>} options.menuWindow
+ * @returns {number} The value to store as `prevHighlightedIndex`.
+ */
+export function scheduleHighlightScroll({
+  open,
+  shouldVirtualize,
+  highlightedIndex,
+  prevHighlightedIndex,
+  listRef,
+  isMeasured,
+  highlightOrigin,
+  menuWindow,
+}) {
+  if (
+    !(
+      open &&
+      shouldVirtualize &&
+      highlightedIndex !== prevHighlightedIndex &&
+      highlightedIndex >= 0 &&
+      listRef
+    )
+  ) {
+    return prevHighlightedIndex;
+  }
+
+  tick().then(() => {
+    if (!listRef || highlightedIndex < 0) return;
+    // Measured placement scrolls an option that is rendered but clipped
+    // fully into view, which would pull the list out from under the
+    // pointer. Cancel as well as return: the pointer has taken the
+    // highlight from the option an outstanding request was placing.
+    if (isMeasured && highlightOrigin === "pointer") {
+      menuWindow.cancelRequest();
+      return;
+    }
+    menuWindow.scrollIntoView(highlightedIndex, "nearest");
+  });
+
+  return highlightedIndex;
+}
