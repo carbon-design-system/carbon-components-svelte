@@ -10,6 +10,10 @@
 
   import { setContext } from "svelte";
   import { writable } from "svelte/store";
+  import {
+    addUniqueArrayItem,
+    toggleArrayItem,
+  } from "../utils/array-set-ops.js";
 
   /**
    * @type {import("svelte/store").Writable<ReadonlyArray<string>>}
@@ -20,20 +24,14 @@
    * @type {(data: { id: string }) => void}
    */
   function addOption({ id }) {
-    if (!selectedIds.includes(id)) {
-      selectedIds = [...selectedIds, id];
-    }
+    selectedIds = addUniqueArrayItem(selectedIds, id);
   }
 
   /**
    * @type {(data: { id: string }) => void}
    */
   function toggleOption({ id }) {
-    if (selectedIds.includes(id)) {
-      selectedIds = selectedIds.filter((_) => _ !== id);
-    } else {
-      selectedIds = [...selectedIds, id];
-    }
+    selectedIds = toggleArrayItem(selectedIds, id);
   }
 
   setContext("carbon:ContextMenuGroup", {
