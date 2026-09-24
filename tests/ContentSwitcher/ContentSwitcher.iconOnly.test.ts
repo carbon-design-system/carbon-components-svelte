@@ -1,14 +1,11 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import type SwitchComponent from "carbon-components-svelte/ContentSwitcher/Switch.svelte";
 import { type ComponentProps, tick } from "svelte";
+import { openTooltips } from "../utils/open-tooltips";
 import IconOnly from "./ContentSwitcher.iconOnly.test.svelte";
 import IconOnlyMixed from "./ContentSwitcher.iconOnlyMixed.test.svelte";
 
 /** Open tooltips currently rendered in the portal. */
-function openTooltips() {
-  return Array.from(document.querySelectorAll(".bx--tooltip-portal__content"));
-}
-
 describe("ContentSwitcher (icon-only)", () => {
   it("infers the icon-only variant when every Switch sets `icon`", async () => {
     render(IconOnly);

@@ -1,9 +1,9 @@
 import { render, screen } from "@testing-library/svelte";
 import { flushFormReset } from "../utils/flush-form-reset";
+import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import RadioButtonForm from "./RadioButton.form.test.svelte";
 
-const getForm = () => screen.getByTestId("form") as HTMLFormElement;
 const getBound = () => screen.getByTestId("bound").textContent;
 const getRadio = (name: string) =>
   screen.getByRole("radio", { name }) as HTMLInputElement;

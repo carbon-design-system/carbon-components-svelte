@@ -1,13 +1,8 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { treeItemById } from "../utils/tree-item-by-id";
 import { user } from "../utils/user";
 import TreeViewVirtualizeCheckbox from "./TreeView.virtualize.checkbox.test.svelte";
-
-function treeItemById(id: string): HTMLElement {
-  const el = document.getElementById(id);
-  assert(el instanceof HTMLElement);
-  return el;
-}
 
 function checkboxFor(id: string): HTMLElement {
   const el = treeItemById(id).querySelector(".bx--checkbox-wrapper");

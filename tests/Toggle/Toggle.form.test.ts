@@ -1,9 +1,9 @@
 import { render, screen } from "@testing-library/svelte";
 import { flushFormReset } from "../utils/flush-form-reset";
+import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import ToggleForm from "./Toggle.form.test.svelte";
 
-const getForm = () => screen.getByTestId("form") as HTMLFormElement;
 describe("Toggle form participation", () => {
   describe("submitted value", () => {
     it('submits "on" while toggled by default', () => {

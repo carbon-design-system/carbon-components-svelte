@@ -1,10 +1,10 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { flushFormReset } from "../utils/flush-form-reset";
+import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import SelectForm from "./Select.form.test.svelte";
 
-const getForm = () => screen.getByTestId("form") as HTMLFormElement;
 const getBound = () => screen.getByTestId("bound").textContent;
 describe("Select form reset", () => {
   it("keeps the current choice and the bound value in step", async () => {

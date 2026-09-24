@@ -2,7 +2,6 @@ import { createHash } from "node:crypto";
 import {
   existsSync,
   mkdirSync,
-  readdirSync,
   readFileSync,
   renameSync,
   rmSync,
@@ -10,17 +9,10 @@ import {
 } from "node:fs";
 import { join } from "node:path";
 import { compileAsync } from "sass-embedded";
+import { scssFiles } from "./scss-files";
 
 export const CSS_DIR = join(__dirname, "../../css");
 const CACHE_DIR = join(__dirname, "../../node_modules/.cache/ccs-css-tests");
-
-function scssFiles(dir: string): string[] {
-  return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
-    const file = join(dir, entry.name);
-    if (entry.isDirectory()) return scssFiles(file);
-    return entry.name.endsWith(".scss") ? [file] : [];
-  });
-}
 
 let sourceHash: string | undefined;
 function hashSources(): string {

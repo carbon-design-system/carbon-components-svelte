@@ -1,5 +1,6 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { scssFiles } from "./scss-files";
 
 const CSS_DIR = join(__dirname, "../../css");
 
@@ -13,14 +14,6 @@ const COSTLY_DOWNLEVELS = [
   /:not\([^()]*,/,
   /:(is|where)\(/,
 ];
-
-function scssFiles(dir: string): string[] {
-  return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
-    const file = join(dir, entry.name);
-    if (entry.isDirectory()) return scssFiles(file);
-    return entry.name.endsWith(".scss") ? [file] : [];
-  });
-}
 
 describe("css downlevel cost", () => {
   it("sources avoid features that lightningcss duplicates rules for", () => {

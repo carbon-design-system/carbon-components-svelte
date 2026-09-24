@@ -1,5 +1,6 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { scssFiles } from "./scss-files";
 
 const CSS_DIR = join(__dirname, "../../css");
 
@@ -379,14 +380,6 @@ describe("css partial conventions", () => {
 // and appended at the end of a component file, so they follow the same rules.
 const VENDOR_DIR = join(CSS_DIR, "vendor/carbon-components/scss");
 const PATCH_BANNER = "// carbon-components-svelte patch";
-
-function scssFiles(dir: string): string[] {
-  return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
-    const file = join(dir, entry.name);
-    if (entry.isDirectory()) return scssFiles(file);
-    return entry.name.endsWith(".scss") ? [file] : [];
-  });
-}
 
 /** Each patched file, blanked above its first banner so line numbers hold. */
 const PATCHES = scssFiles(VENDOR_DIR).flatMap((file) => {

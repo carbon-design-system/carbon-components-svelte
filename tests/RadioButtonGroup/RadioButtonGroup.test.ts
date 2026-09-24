@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import type RadioButtonGroupComponent from "carbon-components-svelte/RadioButtonGroup/RadioButtonGroup.svelte";
 import { type ComponentEvents, type ComponentProps, tick } from "svelte";
+import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import RadioButtonGroupButtonNames from "./RadioButtonGroup.buttonNames.test.svelte";
 import RadioButtonGroup from "./RadioButtonGroup.test.svelte";
@@ -127,7 +128,7 @@ describe("RadioButtonGroup", () => {
     for (const radio of screen.getAllByRole("radio")) {
       expect(radio).toHaveAttribute("name", "plan");
     }
-    const form = screen.getByTestId("form") as HTMLFormElement;
+    const form = getForm();
     expect([...new FormData(form)]).toEqual([["plan", "pro"]]);
   });
 

@@ -1,9 +1,9 @@
 import { render, screen } from "@testing-library/svelte";
 import { flushFormReset } from "../utils/flush-form-reset";
+import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import TileGroupForm from "./TileGroup.form.test.svelte";
 
-const getForm = () => screen.getByTestId("form") as HTMLFormElement;
 const getRadios = () => screen.getAllByRole("radio") as HTMLInputElement[];
 describe("TileGroup form reset", () => {
   it("unchecks every tile and clears the bound value without firing select", async () => {

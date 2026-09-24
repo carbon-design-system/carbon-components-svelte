@@ -1,10 +1,10 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { flushFormReset } from "../utils/flush-form-reset";
+import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import PinCodeInputForm from "./PinCodeInput.form.test.svelte";
 
-const getForm = () => screen.getByTestId("form") as HTMLFormElement;
 const getSegments = () =>
   (screen.getAllByRole("textbox") as HTMLInputElement[]).map(
     (input) => input.value,
