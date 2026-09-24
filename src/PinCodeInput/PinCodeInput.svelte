@@ -488,7 +488,7 @@
         class:bx--visually-hidden={hideLabel}
         class:bx--label--disabled={disabled}
         class:bx--label--slotted={isFluid && $$slots.labelChildren}
-        tabindex="0"
+        tabindex={hideLabel || disabled ? undefined : "0"}
         on:click={handleLegendClick}
         on:keydown={handleLegendKeydown}
       >
