@@ -43,6 +43,12 @@
   export let name = undefined;
 
   /**
+   * Specify the value submitted with the form while toggled.
+   * @type {string}
+   */
+  export let value = "on";
+
+  /**
    * Obtain a reference to the input HTML element.
    * @bindable readonly
    */
@@ -96,6 +102,7 @@
     {disabled}
     {id}
     {name}
+    {value}
   >
   <label
     aria-label={labelText ? undefined : $$props["aria-label"] ?? "Toggle"}
