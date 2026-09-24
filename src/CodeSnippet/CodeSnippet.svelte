@@ -12,7 +12,10 @@
    * @event {{ error: unknown }} copy:error
    * @event {MouseEvent} mouseenter:copy-button
    * @event {MouseEvent} mouseleave:copy-button
-   * @restProps {div | button | span} Rest props are spread to the root div (single/multi, except `aria-label`, which labels the code container), the copy button (inline), or the span (inline with `hideCopyButton`).
+   * @restProps {div | button | span} Rest props are spread to the root
+   *   div (single/multi, except `aria-label`, which labels the code
+   *   container), the copy button (inline), or the span (inline with
+   *   `hideCopyButton`).
    */
 
   /**

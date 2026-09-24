@@ -1,5 +1,8 @@
 <script>
-  /** @extends {"../OverflowMenu/OverflowMenuItem.svelte"} OverflowMenuItemProps */
+  /**
+   * @extends {"../OverflowMenu/OverflowMenuItem.svelte"}
+   *   OverflowMenuItemProps
+   */
 
   import OverflowMenuItem from "../OverflowMenu/OverflowMenuItem.svelte";
 </script>

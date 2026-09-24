@@ -1,7 +1,15 @@
 <script>
   /**
    * @event {MouseEvent} click
-   * @event {MouseEvent} click:trigger - Fires when the menu trigger button is clicked, separate from the primary action's `click` event.
+   */
+
+  /**
+   * Fires when the menu trigger button is clicked, separate from the
+   * primary action's `click` event.
+   * @event {MouseEvent} click:trigger
+   */
+
+  /**
    * @event {MouseEvent} mousedown
    * @event {MouseEvent} mousedown:trigger
    * @event {FocusEvent} focus
@@ -22,7 +30,12 @@
   /**
    * @restProps {div}
    * @slot {{}}
-   * @slot {{}} labelChildren - Custom content for the primary action button. `labelText` remains the accessible name.
+   */
+
+  /**
+   * Custom content for the primary action button. `labelText` remains
+   * the accessible name.
+   * @slot {{}} labelChildren
    */
 
   /**

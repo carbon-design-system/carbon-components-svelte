@@ -51,8 +51,12 @@
   /**
    * @event {null} open
    * @event {null} close
-   * @slot {{}} labelText - Set the toggletip label, rendered beside the button.
    * @slot {{}} icon - Override the button icon.
+   */
+
+  /**
+   * Set the toggletip label, rendered beside the button.
+   * @slot {{}} labelText
    */
 
   /**

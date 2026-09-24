@@ -189,7 +189,15 @@
     };
   });
 
-  /** @type {{ top: number, left: number, width?: number, actualDirection: "bottom" | "top" | "left" | "right", caretNudgePx?: number }} */
+  /**
+   * @type {{
+   *   top: number,
+   *   left: number,
+   *   width?: number,
+   *   actualDirection: "bottom" | "top" | "left" | "right",
+   *   caretNudgePx?: number,
+   * }}
+   */
   let pos = {
     top: 0,
     left: 0,

@@ -1,6 +1,7 @@
 <script>
   /**
-   * @restProps {div} Pass `role` or `aria-live` to override the status-derived defaults.
+   * @restProps {div} Pass `role` or `aria-live` to override the
+   *   status-derived defaults.
    */
 
   /**

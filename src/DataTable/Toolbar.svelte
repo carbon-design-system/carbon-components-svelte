@@ -42,10 +42,19 @@
   let ref = null;
 
   const dataTableCtx = getContext("carbon:DataTable");
-  /** @type {import("svelte/store").Writable<"compact" | "short" | "medium" | "tall" | undefined> | undefined} */
+  /**
+   * @type {import("svelte/store").Writable<
+   *   "compact" | "short" | "medium" | "tall" | undefined
+   * > | undefined}
+   */
   const tableSize = dataTableCtx?.tableSize;
 
-  /** @type {Record<"compact" | "short" | "medium" | "tall", "xs" | "sm" | "default">} */
+  /**
+   * @type {Record<
+   *   "compact" | "short" | "medium" | "tall",
+   *   "xs" | "sm" | "default"
+   * >}
+   */
   const TOOLBAR_SIZE_BY_TABLE_SIZE = {
     compact: "xs",
     short: "sm",

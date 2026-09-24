@@ -17,7 +17,8 @@
 
 <script>
   /**
-   * @generics {Id extends string | number = string | number, Icon = any} Id,Icon
+   * @generics {Id extends string | number = string | number,
+   *   Icon = any} Id,Icon
    * @typedef {{
    *   id: Id;
    *   text: string;
@@ -44,7 +45,9 @@
    * }} childNodes
    */
 
-  /** @type {ReadonlyArray<TreeNode<Id> & { nodes?: TreeNode<Id>[] }>} */
+  /**
+   * @type {ReadonlyArray<TreeNode<Id> & { nodes?: TreeNode<Id>[] }>}
+   */
   export let nodes = [];
 
   /** Set to `true` for the top-level list rendered by `TreeView`. */

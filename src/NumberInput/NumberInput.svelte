@@ -22,7 +22,10 @@
    * @typedef {"increment" | "decrement"} NumberInputTranslationId
    * @event {null | number} change
    * @event {null | number} input
-   * @event {{ value: null | number, direction: "up" | "down" }} click:stepper
+   * @event {{
+   *   value: null | number,
+   *   direction: "up" | "down",
+   * }} click:stepper
    * @event {{ event: FocusEvent, value: null | number }} blur
    * @event {{
    *   event: FocusEvent;
@@ -114,7 +117,11 @@
    * @type {Intl.NumberFormatOptions}
    * @example
    * ```svelte
-   * <NumberInput locale="en-US" formatOptions={{ minimumFractionDigits: 2 }} value={1234.5} />
+   * <NumberInput
+   *   locale="en-US"
+   *   formatOptions={{ minimumFractionDigits: 2 }}
+   *   value={1234.5}
+   * />
    * ```
    */
   export let formatOptions = undefined;
@@ -145,7 +152,10 @@
    * ) => boolean | undefined}
    * @example
    * ```svelte
-   * <NumberInput validate={(raw) => Number(raw) % 2 === 0} invalidText="Must be even" />
+   * <NumberInput
+   *   validate={(raw) => Number(raw) % 2 === 0}
+   *   invalidText="Must be even"
+   * />
    * ```
    */
   export let validate = undefined;

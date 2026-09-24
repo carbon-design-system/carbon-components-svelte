@@ -106,7 +106,12 @@
     );
     const validated = validateFiles(accepted);
     const acceptedSet = new Set(validated);
-    /** @type {Array<{ file: File; reason: "size" | "duplicate" | "invalid" }>} */
+    /**
+     * @type {Array<{
+     *   file: File;
+     *   reason: "size" | "duplicate" | "invalid";
+     * }>}
+     */
     const rejected = [
       ...builtInRejected,
       ...accepted

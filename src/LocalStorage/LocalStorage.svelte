@@ -2,10 +2,21 @@
   /**
    * @template [T=any]
    * @event {null} save
-   * @event update - Fires when the stored value changes, either from a bound value update or when localStorage is modified from another tab or window. Set `sync` to `"off"` to ignore updates from other tabs.
+   */
+
+  /**
+   * Fires when the stored value changes, either from a bound value
+   * update or when localStorage is modified from another tab or window.
+   * Set `sync` to `"off"` to ignore updates from other tabs.
+   * @event update
    * @property {T} prevValue
    * @property {T} value
-   * @event {{ error: unknown }} error - Fires when a write to localStorage fails (e.g. quota exceeded or access denied).
+   */
+
+  /**
+   * Fires when a write to localStorage fails (e.g. quota exceeded or
+   * access denied).
+   * @event {{ error: unknown }} error
    */
 
   /**
@@ -36,7 +47,9 @@
    * @example
    * ```svelte
    * <LocalStorage bind:this={storage} key="my-key" bind:value={data} />
-   * <button on:click={() => { storage.clearItem(); data = ""; }}>Clear Item</button>
+   * <button on:click={() => { storage.clearItem(); data = ""; }}>
+   *   Clear Item
+   * </button>
    * ```
    */
   export function clearItem() {
@@ -52,7 +65,9 @@
    * @example
    * ```svelte
    * <LocalStorage bind:this={storage} key="my-key" bind:value={data} />
-   * <button on:click={() => { storage.clearAll(); data = ""; }}>Clear All Storage</button>
+   * <button on:click={() => { storage.clearAll(); data = ""; }}>
+   *   Clear All Storage
+   * </button>
    * ```
    */
   export function clearAll() {

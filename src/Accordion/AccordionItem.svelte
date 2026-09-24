@@ -1,6 +1,7 @@
 <script>
   /**
-   * @event {{ open: boolean }} toggle - Dispatched with the next open state after a header click.
+   * Dispatched with the next open state after a header click.
+   * @event {{ open: boolean }} toggle
    */
 
   /**

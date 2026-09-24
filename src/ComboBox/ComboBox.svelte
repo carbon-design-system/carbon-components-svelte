@@ -240,7 +240,8 @@
    * Override the chevron icon label based on the open state.
    * Defaults to "Open menu" when closed and "Close menu" when open.
    * @type {(
-   *   id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId,
+   *   id: import("../ListBox/ListBoxMenuIcon.svelte")
+   *     .ListBoxMenuIconTranslationId,
    * ) => string}
    */
   export let translateWithId = undefined;
@@ -533,7 +534,9 @@
    * ```svelte
    * <ComboBox bind:this={comboBox} items={items} />
    * <button on:click={() => comboBox.clear()}>Clear</button>
-   * <button on:click={() => comboBox.clear({ focus: false })}>Clear (No Focus)</button>
+   * <button on:click={() => comboBox.clear({ focus: false })}>
+   *   Clear (No Focus)
+   * </button>
    * ```
    */
   export async function clear(options = {}) {

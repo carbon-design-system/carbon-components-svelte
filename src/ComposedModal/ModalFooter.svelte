@@ -1,7 +1,14 @@
 <script>
   /**
    * @template [Icon=any]
-   * @event {{ text: string }} click:button--secondary - Dispatched when a secondary button is clicked. For `secondaryButtonText`, the event is cancelable: call `preventDefault()` to keep the modal open. If not cancelled, the modal closes. Array `secondaryButtons` never auto-close.
+   */
+
+  /**
+   * Dispatched when a secondary button is clicked. For
+   * `secondaryButtonText`, the event is cancelable: call
+   * `preventDefault()` to keep the modal open. If not cancelled, the
+   * modal closes. Array `secondaryButtons` never auto-close.
+   * @event {{ text: string }} click:button--secondary
    */
 
   /** Specify the primary button text */

@@ -72,7 +72,8 @@
 
   /**
    * Override the default select props.
-   * @type {import("../Select/Select.svelte").SelectProps<CarbonTheme> & { themes?: CarbonTheme[]; }}
+   * @type {import("../Select/Select.svelte").SelectProps<CarbonTheme>
+   *   & { themes?: CarbonTheme[]; }}
    */
   export let select = {
     themes: themeKeys,

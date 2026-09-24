@@ -6,7 +6,11 @@
    * @event close
    * @type {object}
    * @property {"outside-click" | "toggle" | "escape-key"} trigger
-   * @slot {{}} avatar - Optional leading avatar. Renders nothing by default.
+   */
+
+  /**
+   * Optional leading avatar. Renders nothing by default.
+   * @slot {{}} avatar
    */
 
   /**
@@ -72,7 +76,9 @@
   let refMenu = null;
 
   const menuItemRegistry = createDomNodeRegistry();
-  /** @type {import("svelte/store").Writable<ReadonlyArray<HTMLElement>>} */
+  /**
+   * @type {import("svelte/store").Writable<ReadonlyArray<HTMLElement>>}
+   */
   const menuItems = menuItemRegistry.items;
   /** @type {(node: HTMLElement) => void} */
   const registerMenuItem = menuItemRegistry.register;

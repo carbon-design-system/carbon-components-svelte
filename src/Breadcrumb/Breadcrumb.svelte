@@ -3,7 +3,9 @@
    * @template [Separator=any]
    */
 
-  /** @extends {"./BreadcrumbSkeleton.svelte"} BreadcrumbSkeletonProps */
+  /**
+   * @extends {"./BreadcrumbSkeleton.svelte"} BreadcrumbSkeletonProps
+   */
 
   /**
    * Set to `true` to hide the separator after the last breadcrumb item

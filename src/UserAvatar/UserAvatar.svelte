@@ -4,7 +4,15 @@
   /**
    * Custom avatar content via the default slot overrides the computed
    * image, icon, and initials.
-   * @event {null} image:error - Dispatched when the `image` URL fails to load. The avatar then falls back to the icon or initials.
+   */
+
+  /**
+   * Dispatched when the `image` URL fails to load. The avatar then
+   * falls back to the icon or initials.
+   * @event {null} image:error
+   */
+
+  /**
    * @restProps {span | button | a}
    */
 

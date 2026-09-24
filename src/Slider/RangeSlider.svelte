@@ -159,12 +159,26 @@
   } from "../utils/slider-value.js";
   import { uniqueId } from "../utils/unique-id.js";
 
-  /** @typedef {{ value: number; valueUpper: number }} RangeSliderChangeDetail */
+  /**
+   * @typedef {{
+   *   value: number;
+   *   valueUpper: number;
+   * }} RangeSliderChangeDetail
+   */
   /** @typedef {"lower" | "upper"} ActiveHandle */
-  /** @typedef {RangeSliderChangeDetail & { handle: ActiveHandle }} RangeSliderFocusDetail */
+  /**
+   * @typedef {RangeSliderChangeDetail & {
+   *   handle: ActiveHandle;
+   * }} RangeSliderFocusDetail
+   */
   /** @typedef {MouseEvent | TouchEvent} PointerLikeEvent */
 
-  /** @type {(type: "change" | "input" | "focus" | "blur", detail: RangeSliderChangeDetail | RangeSliderFocusDetail) => void} */
+  /**
+   * @type {(
+   *   type: "change" | "input" | "focus" | "blur",
+   *   detail: RangeSliderChangeDetail | RangeSliderFocusDetail,
+   * ) => void}
+   */
   const dispatch = createEventDispatcher();
 
   /** @type {HTMLDivElement | null} */
@@ -184,7 +198,9 @@
   /** @type {PointerLikeEvent | null} */
   let currentEvent = null;
 
-  /** @type {(label: string, numericValue: number) => string | number} */
+  /**
+   * @type {(label: string, numericValue: number) => string | number}
+   */
   function formatRangeLabel(label, numericValue) {
     return formatSliderRangeLabel(label, numericValue, formatValue);
   }

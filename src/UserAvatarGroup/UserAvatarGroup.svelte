@@ -84,7 +84,11 @@
   import { sortByDomOrder } from "../utils/sort-by-dom-order.js";
   import UserAvatarGroupOverflow from "./UserAvatarGroupOverflow.svelte";
 
-  /** @type {import("svelte/store").Writable<Array<{ id: string; name: string; node?: HTMLElement }>>} */
+  /**
+   * @type {import("svelte/store").Writable<
+   *   Array<{ id: string; name: string; node?: HTMLElement }>
+   * >}
+   */
   const items = writable([]);
   const sharedMax = writable(0);
   const sharedSize = writable(size);

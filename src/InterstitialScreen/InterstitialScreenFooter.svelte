@@ -1,6 +1,11 @@
 <script>
   /**
-   * @event {{ actionType: "start" | "skip" | "back" | "next" }} action - Dispatched synchronously on any footer button press, before the default Skip/Back/Next/Get-Started behavior runs. Cancelable: call `preventDefault()` to take over the button press yourself (for example, to run async work and set `loadingAction`, then call `handleGotoStep`/close the screen manually).
+   * Dispatched synchronously on any footer button press, before the
+   * default Skip/Back/Next/Get-Started behavior runs. Cancelable: call
+   * `preventDefault()` to take over the button press yourself (for
+   * example, to run async work and set `loadingAction`, then call
+   * `handleGotoStep`/close the screen manually).
+   * @event {{ actionType: "start" | "skip" | "back" | "next" }} action
    */
 
   /** Specify the "Next" button text */

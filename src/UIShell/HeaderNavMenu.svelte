@@ -42,7 +42,9 @@
    */
   const selectedItems = writable({});
   const menuItemRegistry = createDomNodeRegistry();
-  /** @type {import("svelte/store").Writable<ReadonlyArray<HTMLElement>>} */
+  /**
+   * @type {import("svelte/store").Writable<ReadonlyArray<HTMLElement>>}
+   */
   const menuItems = menuItemRegistry.items;
   /** @type {(node: HTMLElement) => void} */
   const registerMenuItem = menuItemRegistry.register;

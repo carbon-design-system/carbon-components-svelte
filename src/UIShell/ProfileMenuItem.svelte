@@ -1,7 +1,12 @@
 <script>
   /**
    * @template [Icon=any]
-   * @slot {{}} avatar - Leading avatar rendered before the label. The label truncates to make room for it.
+   */
+
+  /**
+   * Leading avatar rendered before the label. The label truncates to
+   * make room for it.
+   * @slot {{}} avatar
    */
 
   /**

@@ -2,7 +2,10 @@
   /**
    * @template [Icon=any]
    * @event {ReadonlyArray<File>} change
-   * @event {Array<{ file: File; reason: "size" | "duplicate" }>} rejected
+   * @event {Array<{
+   *   file: File;
+   *   reason: "size" | "duplicate";
+   * }>} rejected
    * @restProps {input}
    */
 

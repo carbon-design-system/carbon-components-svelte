@@ -10,7 +10,14 @@
    * visually and functionally inert until there is something to show.
    *
    * @event {null} trigger - The indicator was clicked.
-   * @slot {{ tags: import("./TagSet.svelte").TagSetItem[]; count: number }} tooltip - Override the tooltip content.
+   */
+
+  /**
+   * Override the tooltip content.
+   * @slot {{
+   *   tags: import("./TagSet.svelte").TagSetItem[];
+   *   count: number;
+   * }} tooltip
    */
 
   /**

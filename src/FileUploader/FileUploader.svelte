@@ -21,7 +21,10 @@
    * @event {ReadonlyArray<File>} remove
    * @event {ReadonlyArray<File>} change
    * @event {void} clear
-   * @event {Array<{ file: File; reason: "size" | "duplicate" }>} rejected
+   * @event {Array<{
+   *   file: File;
+   *   reason: "size" | "duplicate";
+   * }>} rejected
    */
 
   /**

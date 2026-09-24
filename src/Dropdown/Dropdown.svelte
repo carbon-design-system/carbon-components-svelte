@@ -180,7 +180,8 @@
    * Override the chevron icon label based on the open state.
    * Defaults to "Open menu" when closed and "Close menu" when open.
    * @type {(
-   *   id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId,
+   *   id: import("../ListBox/ListBoxMenuIcon.svelte")
+   *     .ListBoxMenuIconTranslationId,
    * ) => string}
    */
   export let translateWithId = undefined;

@@ -1,6 +1,9 @@
 <script context="module">
   /**
-   * @typedef {import("svelte/action").Action<HTMLFormElement, any>} FormAction
+   * @typedef {import("svelte/action").Action<
+   *   HTMLFormElement,
+   *   any
+   * >} FormAction
    * @typedef {FormAction | [FormAction, any]} FormActionEntry
    */
 
@@ -34,7 +37,10 @@
 <script>
   /**
    * @restProps {form}
-   * @typedef {import("svelte/action").Action<HTMLFormElement, any>} FormAction
+   * @typedef {import("svelte/action").Action<
+   *   HTMLFormElement,
+   *   any
+   * >} FormAction
    * @typedef {FormAction | [FormAction, any]} FormActionEntry
    */
 

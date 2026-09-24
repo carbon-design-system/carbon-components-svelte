@@ -1,10 +1,13 @@
 <script>
   /**
-   * @typedef {"columnSortAscending" | "columnSortDescending"} StructuredListCellTranslationId
+   * @typedef {"columnSortAscending"
+   *   | "columnSortDescending"} StructuredListCellTranslationId
    */
 
   /**
-   * @event {{ direction: "none" | "ascending" | "descending" }} sort - Dispatched when the sortable header button is clicked, with the next direction in the sort cycle.
+   * Dispatched when the sortable header button is clicked, with the
+   * next direction in the sort cycle.
+   * @event {{ direction: "none" | "ascending" | "descending" }} sort
    */
 
   /** Set to `true` to use as a header */

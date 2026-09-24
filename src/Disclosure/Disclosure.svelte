@@ -3,7 +3,11 @@
    * @restProps {div}
    * @slot {{}} summary - Content for the always-visible trigger.
    * @slot {{}}
-   * @event {{ open: boolean }} toggle - Dispatched with the new open state.
+   */
+
+  /**
+   * Dispatched with the new open state.
+   * @event {{ open: boolean }} toggle
    */
 
   /**

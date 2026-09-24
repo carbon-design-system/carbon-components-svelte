@@ -433,7 +433,11 @@
   let prevDisplayFormat = displayFormat;
   let prevUsesDisplayFormat = !!displayFormat && datePickerType !== "range";
   let calendarUsesFixedPositioning = false;
-  /** @type {(ReturnType<typeof rafThrottle> & { cancel: () => void }) | null} */
+  /**
+   * @type {(ReturnType<typeof rafThrottle> & {
+   *   cancel: () => void;
+   * }) | null}
+   */
   let onCalendarReposition = null;
   /** @type {(() => void) | null} */
   let unlistenReposition = null;

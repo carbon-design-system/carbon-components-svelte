@@ -1,6 +1,11 @@
 <script>
   /**
-   * @event {{ actionType: "close" | "start" | "skip" | "back" | "next" }} close - Dispatched when the screen is about to close, from the header close button, Escape, or the footer's final Skip/Get Started action. Cancelable: call `preventDefault()` to keep it open.
+   * Dispatched when the screen is about to close, from the header close
+   * button, Escape, or the footer's final Skip/Get Started action.
+   * Cancelable: call `preventDefault()` to keep it open.
+   * @event {{
+   *   actionType: "close" | "start" | "skip" | "back" | "next";
+   * }} close
    */
 
   /**

@@ -292,7 +292,12 @@
     dispatch("change", { value: code.join(""), code });
   }
 
-  /** @type {(index: number, options?: { selectTextOnFocus?: boolean }) => void} */
+  /**
+   * @type {(
+   *   index: number,
+   *   options?: { selectTextOnFocus?: boolean },
+   * ) => void}
+   */
   function focusInput(index, options = {}) {
     const input = inputs[index];
     if (input) {

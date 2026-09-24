@@ -189,7 +189,11 @@
    * items. Page sizes larger than needed to display all items on a
    * single page are hidden.
    * @example
-   * <Pagination totalItems={9} pageSizes={[5, 10, 15]} dynamicPageSizes />
+   * <Pagination
+   *   totalItems={9}
+   *   pageSizes={[5, 10, 15]}
+   *   dynamicPageSizes
+   * />
    * <!-- renders [5, 10] -->
    */
   export let dynamicPageSizes = false;

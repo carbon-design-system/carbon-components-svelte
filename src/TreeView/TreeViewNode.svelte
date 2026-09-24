@@ -6,7 +6,9 @@
    * @type {(node: HTMLLIElement | null) => number}
    * @example
    * ```svelte
-   * import { computeTreeLeafDepth } from 'carbon-components-svelte/src/TreeView/TreeViewNode.svelte';
+   * import {
+   *   computeTreeLeafDepth,
+   * } from 'carbon-components-svelte/src/TreeView/TreeViewNode.svelte';
    * let nodeRef;
    * $: depth = computeTreeLeafDepth(nodeRef);
    *
@@ -57,8 +59,10 @@
 
 <script>
   /**
-   * @generics {Node extends TreeNode<any> = TreeNode<any>, Icon = any} Node,Icon
-   * @typedef {import('./TreeView.svelte').TreeNode<Id>} TreeNode<Id=(string|number)>
+   * @generics {Node extends TreeNode<any> = TreeNode<any>,
+   *   Icon = any} Node,Icon
+   * @typedef {import('./TreeView.svelte')
+   *   .TreeNode<Id>} TreeNode<Id=(string|number)>
    * @slot {{
    *   node: Node & {
    *     expanded: false;

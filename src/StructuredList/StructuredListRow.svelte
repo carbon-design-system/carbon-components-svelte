@@ -21,8 +21,8 @@
   /**
    * Specify the tabindex.
    * @deprecated no longer applied here -- the row's own `<label>` isn't
-   * a tab stop anymore. Set `tabindex` on `StructuredListInput` instead,
-   * which now owns focus for the selectable row.
+   * a tab stop anymore. Set `tabindex` on `StructuredListInput`
+   * instead, which now owns focus for the selectable row.
    * @type {number | string | undefined}
    */
   export const tabindex = "0";

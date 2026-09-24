@@ -16,11 +16,31 @@
    * indicator, with a hover tooltip listing the hidden labels by
    * default. Override the tooltip content with the `overflowTooltip`
    * slot, for example to add a link.
-   *
-   * @event {{ tag: TagSetItem; index: number }} close:tag - User clicks the close icon on a dismissible (`filter`) tag.
-   * @event {{ count: number }} click:overflow - User clicks the "+N" indicator.
-   * @event {{ count: number }} overflow:change - Dispatched when the number of overflowing tags changes, from a resize, a slotted-children change, or a `maxVisible` change.
-   * @slot {{ tags: TagSetItem[]; count: number }} overflowTooltip - Override the "+N" indicator's tooltip content. Defaults to a comma-separated list of the hidden labels.
+   */
+
+  /**
+   * User clicks the close icon on a dismissible (`filter`) tag.
+   * @event {{ tag: TagSetItem; index: number }} close:tag
+   */
+
+  /**
+   * User clicks the "+N" indicator.
+   * @event {{ count: number }} click:overflow
+   */
+
+  /**
+   * Dispatched when the number of overflowing tags changes, from a
+   * resize, a slotted-children change, or a `maxVisible` change.
+   * @event {{ count: number }} overflow:change
+   */
+
+  /**
+   * Override the "+N" indicator's tooltip content. Defaults to a
+   * comma-separated list of the hidden labels.
+   * @slot {{ tags: TagSetItem[]; count: number }} overflowTooltip
+   */
+
+  /**
    * @restProps {div}
    */
 

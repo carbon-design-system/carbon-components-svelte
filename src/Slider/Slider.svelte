@@ -141,7 +141,9 @@
   let holding = false;
   let currentEvent = null;
 
-  /** @type {(label: string, numericValue: number) => string | number} */
+  /**
+   * @type {(label: string, numericValue: number) => string | number}
+   */
   function formatRangeLabel(label, numericValue) {
     return formatSliderRangeLabel(label, numericValue, formatValue);
   }

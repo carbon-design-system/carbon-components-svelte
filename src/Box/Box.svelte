@@ -8,7 +8,11 @@
     return typeof value === "number" && value >= min && value <= 13;
   }
 
-  /** @param {string} kind @param {number | string | undefined} value @param {number} min */
+  /**
+   * @param {string} kind
+   * @param {number | string | undefined} value
+   * @param {number} min
+   */
   function scaleClass(kind, value, min) {
     if (value == null) return undefined;
     return isScaleStep(value, min) ? `bx--box-${kind}-${value}` : undefined;
@@ -22,7 +26,18 @@
     return undefined;
   }
 
-  /** @param {"p" | "px" | "py" | "m" | "mx" | "my" | "height" | "min-height" | "max-height"} kind @param {SpacingValue | undefined} value */
+  /**
+   * @param {"p"
+   *   | "px"
+   *   | "py"
+   *   | "m"
+   *   | "mx"
+   *   | "my"
+   *   | "height"
+   *   | "min-height"
+   *   | "max-height"} kind
+   * @param {SpacingValue | undefined} value
+   */
   function spacingClass(kind, value) {
     return scaleClass(kind, value, 1);
   }
@@ -45,7 +60,10 @@
     return border && borderSide === side ? toCssLength(borderWidth) : undefined;
   }
 
-  /** @param {"height" | "min-height"} kind @param {SpacingValue | "viewport" | undefined} value */
+  /**
+   * @param {"height" | "min-height"} kind
+   * @param {SpacingValue | "viewport" | undefined} value
+   */
   function viewportClass(kind, value) {
     if (value === "viewport") return `bx--box-${kind}-viewport`;
     return spacingClass(kind, value);
@@ -57,7 +75,10 @@
     return spacingStyle(value);
   }
 
-  /** @param {"top" | "bottom"} kind @param {OffsetValue | undefined} value */
+  /**
+   * @param {"top" | "bottom"} kind
+   * @param {OffsetValue | undefined} value
+   */
   function offsetClass(kind, value) {
     return scaleClass(kind, value, 0);
   }
@@ -70,7 +91,8 @@
 
 <script>
   /**
-   * @typedef {1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13} SpacingScale
+   * @typedef {1 | 2 | 3 | 4 | 5 | 6 | 7
+   *   | 8 | 9 | 10 | 11 | 12 | 13} SpacingScale
    * @typedef {SpacingScale | string} SpacingValue
    * @typedef {0 | SpacingScale | string} OffsetValue
    * @restProps {any}

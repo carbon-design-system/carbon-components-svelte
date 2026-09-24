@@ -70,7 +70,8 @@
     for (const input of popoverRef.querySelectorAll("input")) {
       if (
         /**
-         * @type {any} */ (input)._flatpickr?.calendarContainer === calendar
+         * @type {any}
+         */ (input)._flatpickr?.calendarContainer === calendar
       ) {
         return true;
       }

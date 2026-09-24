@@ -18,7 +18,12 @@
    *   };
    * }}
    * @slot {{ style: undefined | string; }} icon
-   * @slot {{}} badge - Compose a `BadgeIndicator` overlaid on an icon-only button. Size is set to `lg` automatically.
+   */
+
+  /**
+   * Compose a `BadgeIndicator` overlaid on an icon-only button. Size is
+   * set to `lg` automatically.
+   * @slot {{}} badge
    */
 
   /**

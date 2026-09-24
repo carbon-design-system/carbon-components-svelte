@@ -221,7 +221,8 @@
    * Override the chevron icon label based on the open state.
    * Defaults to "Open menu" when closed and "Close menu" when open.
    * @type {(
-   *   id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId,
+   *   id: import("../ListBox/ListBoxMenuIcon.svelte")
+   *     .ListBoxMenuIconTranslationId,
    * ) => string}
    */
   export let translateWithId = undefined;
@@ -231,7 +232,8 @@
    * selection. Defaults to "Clear selected item" and "Clear all items"
    * if more than one item is selected.
    * @type {(
-   *   id: import("../ListBox/ListBoxSelection.svelte").ListBoxSelectionTranslationId,
+   *   id: import("../ListBox/ListBoxSelection.svelte")
+   *     .ListBoxSelectionTranslationId,
    * ) => string}
    */
   export let translateWithIdSelection = undefined;

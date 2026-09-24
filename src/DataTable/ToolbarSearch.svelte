@@ -1,6 +1,7 @@
 <script>
   /**
-   * @template {import("./DataTable.svelte").DataTableRow} [Row=import("./DataTable.svelte").DataTableRow]
+   * @template {import("./DataTable.svelte").DataTableRow}
+   *   [Row=import("./DataTable.svelte").DataTableRow]
    * @restProps {input}
    * @event {null} clear
    * @event {number | string} search
