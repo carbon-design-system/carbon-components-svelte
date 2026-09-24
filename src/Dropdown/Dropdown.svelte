@@ -263,6 +263,11 @@
     scheduleHighlightScroll,
   } from "../ListBox/menu-window.js";
   import { dismiss } from "../utils/dismiss.js";
+  import {
+    buildFieldIds,
+    resolveStatusDescribedBy,
+    resolveValidationVisibility,
+  } from "../utils/field-status.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { moveIndex } from "../utils/move-index.js";
@@ -324,23 +329,32 @@
     }
   }
   $: menuId = `menu-${id}`;
-  $: helperId = `helper-${id}`;
-  $: errorId = `error-${id}`;
-  $: warnId = `warn-${id}`;
+  $: ({ helperId, errorId, warnId } = buildFieldIds(id));
   $: selectionId = `selection-${id}`;
   // Invalid/warn states are suppressed when the dropdown is disabled or read-only.
-  $: showInvalid = invalid && !disabled && !readonly;
-  $: showWarn = warn && !invalid && !disabled && !readonly;
+  $: ({ showInvalid, showWarn } = resolveValidationVisibility({
+    invalid,
+    warn,
+    disabled,
+    readonly,
+  }));
   $: hasSelectionDescription =
     clearable && !readonly && selectedId !== undefined;
-  $: statusDescribedById =
-    showInvalid && invalidText
-      ? errorId
-      : showWarn && warnText
-        ? warnId
-        : !inline && !isFluid && !showInvalid && !showWarn && helperText
-          ? helperId
-          : undefined;
+  $: statusDescribedById = resolveStatusDescribedBy({
+    showInvalid,
+    showWarn,
+    // `inline` mode never shows the helper fallback (it also forces
+    // `isFluid` off, but that alone wouldn't suppress the fallback).
+    helperText: inline ? undefined : helperText,
+    invalidText,
+    warnText,
+    isFluid,
+    errorId,
+    warnId,
+    helperId,
+    requireInvalidText: true,
+    requireWarnText: true,
+  });
   $: fieldDescribedById =
     [hasSelectionDescription ? selectionId : null, statusDescribedById]
       .filter(Boolean)
