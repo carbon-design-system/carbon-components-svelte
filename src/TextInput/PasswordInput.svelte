@@ -118,14 +118,23 @@
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
+  import {
+    buildFieldIds,
+    resolveStatusDescribedBy,
+    resolveValidationVisibility,
+  } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const ctx = getContext(FORM_CONTEXT_KEY);
   const insideModal = getContext(MODAL_CONTEXT_KEY);
 
-  $: showInvalid = invalid && !disabled && !readonly;
-  $: showWarn = warn && !invalid && !disabled && !readonly;
+  $: ({ showInvalid, showWarn } = resolveValidationVisibility({
+    invalid,
+    warn,
+    disabled,
+    readonly,
+  }));
   $: isFluid = !inline && (fluid || !!ctx?.isFluid);
   $: effectivePortalTooltip =
     portalTooltip === undefined ? !!insideModal : portalTooltip;
@@ -134,9 +143,7 @@
   let toggleButtonRef = null;
   let tooltipOpen = false;
 
-  $: helperId = `helper-${id}`;
-  $: errorId = `error-${id}`;
-  $: warnId = `warn-${id}`;
+  $: ({ helperId, errorId, warnId } = buildFieldIds(id));
   $: tooltipLabel = type === "text" ? hidePasswordLabel : showPasswordLabel;
 
   function handleFocus() {
@@ -235,13 +242,16 @@
         aria-invalid={showInvalid || undefined}
         data-warn={showWarn || undefined}
         aria-errormessage={showInvalid ? errorId : undefined}
-        aria-describedby={showInvalid
-          ? undefined
-          : showWarn
-            ? warnId
-            : helperText && !isFluid
-              ? helperId
-              : undefined}
+        aria-describedby={resolveStatusDescribedBy({
+          showInvalid,
+          showWarn,
+          helperText,
+          isFluid,
+          errorId,
+          warnId,
+          helperId,
+          includeErrorId: false,
+        })}
         {id}
         {name}
         {placeholder}
