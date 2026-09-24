@@ -40,7 +40,7 @@ describe("ContextMenu close trigger", () => {
     menu.focus();
 
     await user.keyboard("{Tab}");
-    expect(consoleLog).toHaveBeenCalledWith("close", "tab");
+    expect(consoleLog).toHaveBeenCalledWith("close", "escape-key");
     expect(menu).not.toHaveClass("bx--menu--open");
   });
 
