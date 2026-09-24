@@ -3,7 +3,7 @@ import type HeaderSearchComponent from "carbon-components-svelte/UIShell/HeaderS
 import type { HeaderSearchResult } from "carbon-components-svelte/UIShell/HeaderSearch.svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
-import { flushDismiss } from "../utils/flushDismiss";
+import { flushDismiss } from "../utils/flush-dismiss";
 import { user } from "../utils/user";
 import HeaderSearchTest from "./HeaderSearch.test.svelte";
 import HeaderSearchIconTest from "./HeaderSearchIcon.test.svelte";

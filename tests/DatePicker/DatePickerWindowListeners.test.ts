@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import type { Instance } from "flatpickr/dist/types/instance";
 import { tick } from "svelte";
-import { flushDismiss } from "../utils/flushDismiss";
+import { flushDismiss } from "../utils/flush-dismiss";
 import { user } from "../utils/user";
 import DatePicker from "./DatePicker.test.svelte";
 import DatePickerCalendar from "./DatePickerCalendar.test.svelte";

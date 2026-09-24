@@ -4,7 +4,7 @@ import { expectInlineStyle } from "../utils/inline-style";
 import {
   mockSnippetOverflowHeight,
   waitForSnippetMeasurement,
-} from "../utils/mockSnippetOverflowHeight";
+} from "../utils/mock-snippet-overflow-height";
 import { user } from "../utils/user";
 import CodeSnippetAsync from "./CodeSnippetAsync.test.svelte";
 import CodeSnippetAsyncDoubleClick from "./CodeSnippetAsyncDoubleClick.test.svelte";

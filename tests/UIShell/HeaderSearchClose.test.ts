@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
-import { flushDismiss } from "../utils/flushDismiss";
+import { flushDismiss } from "../utils/flush-dismiss";
 import { user } from "../utils/user";
 import HeaderSearchClose from "./HeaderSearchClose.test.svelte";
 
