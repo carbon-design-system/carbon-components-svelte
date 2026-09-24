@@ -29,6 +29,7 @@
   import { getContext, setContext } from "svelte";
   import { writable } from "svelte/store";
   import { isHeaderRendered } from "../UIShell/nav-store.js";
+  import { toCssLength } from "../utils/css-length.js";
 
   // Matches `.bx--header`'s fixed height (`mini-units(6)` in
   // _header.scss); Header has no prop to override it.
@@ -80,11 +81,6 @@
     if (ref) ref.style.overflow = visible ? "visible" : "inherit";
   }
 
-  /** @param {number | string} offset */
-  function formatOffset(offset) {
-    return typeof offset === "number" ? `${offset}px` : offset;
-  }
-
   setContext("carbon:Toolbar", {
     overflowVisible,
     setOverflowVisible,
@@ -104,7 +100,7 @@
   class:bx--table-toolbar--normal={effectiveSize === "default"}
   class:bx--table-toolbar--sticky={sticky}
   style:z-index={1}
-  style:top={sticky ? formatOffset(effectiveStickyOffset) : undefined}
+  style:top={sticky ? toCssLength(effectiveStickyOffset) : undefined}
   {...$$restProps}
 >
   <slot />
