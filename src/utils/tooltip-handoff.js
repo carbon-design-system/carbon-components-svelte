@@ -7,76 +7,47 @@ import {
 import { createDelayedSetter } from "./delayed-setter.js";
 
 /**
- * Create hover/focus scheduling for an icon tooltip that coordinates with
- * sibling tooltips through a shared "active tooltip" store (a plain Svelte
- * writable whose value is whichever tooltip's id/token currently "owns"
- * it): claiming the store lets other tooltips using it close immediately,
- * and entering a tooltip while another is already active skips the enter
- * delay ("warm handoff") so moving between adjacent triggers feels
- * instant. The store itself is owned by the caller — a module-level store
- * for a page-wide group (e.g. `Button`/`CopyButton`'s icon-only tooltips),
- * or a per-parent store handed down via context (e.g. one `Tabs` row's
- * icon-only tab tooltips).
+ * Hover and focus scheduling for icon tooltips that share an "active
+ * tooltip" store, so only one tooltip in the group shows at a time.
+ * Entering while another tooltip holds the store skips the enter delay
+ * (warm handoff). `null` in the store means nothing is claimed.
  *
- * The component keeps owning its own reactive `hovered`/`focused` state (so
- * it can drive a `$:` open condition); this only schedules the delayed
- * callbacks and the claim/release calls against the shared store.
+ * The component keeps its own `hovered`/`focused` state; this schedules
+ * the delayed callbacks and the claim/release calls.
+ *
  * @param {object} options
- * @param {import("svelte/store").Writable<*>} options.activeTooltip - Store
- *   holding the id of whichever tooltip using it may currently show.
- * @param {*} options.id - This tooltip's identity within `activeTooltip`.
+ * @param {import("svelte/store").Writable<*>} options.activeTooltip
+ * @param {() => *} options.getId Identity of this tooltip in the store.
+ *   A getter so a changed `id` prop is picked up.
  * @param {number} [options.enterDelayMs]
  * @param {number} [options.leaveDelayMs]
- * @param {*} [options.emptyValue] - Value written to `activeTooltip` on
- *   release, and treated as "nothing claimed" for warm-handoff detection.
- *   Defaults to `null`; must match the value the store was created with.
- *   Pass `emptyValue: undefined` explicitly for a store whose sentinel is
- *   `undefined` — unlike a plain destructuring default, an explicit
- *   `undefined` here is honored rather than falling back to `null`.
- * @returns {{
- *   scheduleEnter: (onShow: () => void) => void,
- *   scheduleLeave: (onHide: () => void) => void,
- *   claim: () => void,
- *   release: () => void,
- *   cancel: () => void,
- * }}
  */
-export function createTooltipHandoff(options) {
-  const {
-    activeTooltip,
-    id,
-    enterDelayMs = TOOLTIP_ENTER_DELAY_MS,
-    leaveDelayMs = TOOLTIP_LEAVE_DELAY_MS,
-  } = options;
-  // A destructuring default (`emptyValue = null`) can't be overridden by an
-  // explicit `emptyValue: undefined`, since JS applies the default whenever
-  // the value is `undefined` regardless of whether the key was passed. Read
-  // it via `in` instead so callers that want `undefined` as their sentinel
-  // (matching a pre-existing store) can actually get it.
-  const emptyValue = "emptyValue" in options ? options.emptyValue : null;
+export function createTooltipHandoff({
+  activeTooltip,
+  getId,
+  enterDelayMs = TOOLTIP_ENTER_DELAY_MS,
+  leaveDelayMs = TOOLTIP_LEAVE_DELAY_MS,
+}) {
   const scheduleTooltip = createDelayedSetter();
 
-  /** Claim the store for this tooltip, unconditionally. */
+  /** Claim the store for this tooltip. */
   function claim() {
-    activeTooltip.set(id);
+    activeTooltip.set(getId());
   }
 
-  /** Clear the store, but only if this tooltip still holds it. */
+  /** Clear the store if this tooltip holds it. */
   function release() {
-    if (get(activeTooltip) === id) {
-      activeTooltip.set(emptyValue);
-    }
+    if (get(activeTooltip) === getId()) activeTooltip.set(null);
   }
 
   /**
-   * Schedule showing the tooltip: after `enterDelayMs`, or immediately
-   * (0ms) when another tooltip already holds the store (warm handoff).
-   * Calls `onShow`, then claims the store, once the delay elapses.
+   * Call `onShow` and claim the store after the enter delay, or right
+   * away when another tooltip holds the store.
    * @param {() => void} onShow
    */
   function scheduleEnter(onShow) {
     const current = get(activeTooltip);
-    const warmHandoff = current !== emptyValue && current !== id;
+    const warmHandoff = current !== null && current !== getId();
     scheduleTooltip(warmHandoff ? 0 : enterDelayMs, () => {
       onShow();
       claim();
@@ -84,9 +55,7 @@ export function createTooltipHandoff(options) {
   }
 
   /**
-   * Schedule hiding the tooltip after `leaveDelayMs`. Callers typically
-   * clear their own `hovered` flag and conditionally call `release()`
-   * (skipping it while still focused) from within `onHide`.
+   * Call `onHide` after the leave delay.
    * @param {() => void} onHide
    */
   function scheduleLeave(onHide) {

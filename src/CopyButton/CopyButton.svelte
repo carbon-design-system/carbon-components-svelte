@@ -124,7 +124,7 @@
   const tooltipId = {};
   const tooltipHandoff = createTooltipHandoff({
     activeTooltip: activeButtonTooltip,
-    id: tooltipId,
+    getId: () => tooltipId,
   });
   let hovered = false;
   let focused = false;

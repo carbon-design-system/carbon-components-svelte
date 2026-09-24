@@ -138,9 +138,9 @@
   /**
    * Tracks which icon-only tab's tooltip is open so only one shows at a time.
    * Scoped per `Tabs` instance.
-   * @type {import("svelte/store").Writable<string | undefined>}
+   * @type {import("svelte/store").Writable<string | null>}
    */
-  const activeTooltip = writable(undefined);
+  const activeTooltip = writable(null);
 
   let refTabList = null;
   let refRoot = null;
