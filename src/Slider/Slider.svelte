@@ -6,6 +6,7 @@
 
   /**
    * Specify the value of the slider.
+   * Follows the number field when the owning form resets.
    * @bindable writable
    */
   export let value = 0;
@@ -114,6 +115,7 @@
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { dismiss } from "../utils/dismiss.js";
+  import { formReset } from "../utils/form-reset.js";
   import { resolveSliderMarks } from "../utils/resolve-slider-marks.js";
   import {
     formatRangeLabel as formatSliderRangeLabel,
@@ -162,6 +164,20 @@
       currentEvent = event;
       dragging = true;
     }
+  }
+
+  // A form reset restores the number field without a change event. Sync the
+  // value to it and fire no `change`. A field with no default resets to
+  // empty, which is not a slider value, and a read-only slider keeps its
+  // value; in both cases put the field back instead.
+  function handleFormReset() {
+    if (!textInputRef) return;
+    const raw = textInputRef.value;
+    if (readonly || raw === "" || !Number.isFinite(Number(raw))) {
+      textInputRef.value = String(value);
+      return;
+    }
+    value = Math.min(max, Math.max(min, Number(raw)));
   }
 
   function handleTextInputFocus() {
@@ -343,6 +359,7 @@
       {/if}
       <input
         bind:this={textInputRef}
+        use:formReset={handleFormReset}
         type={hideTextInput ? "hidden" : inputType}
         id={inputId}
         {name}
