@@ -53,34 +53,31 @@
   export let open = true;
 
   import { createEventDispatcher, onMount } from "svelte";
-  import { createHoverFocusPause } from "../utils/pause-on-hover-focus.js";
-  import { createTimeoutDismiss } from "../utils/timeout-dismiss.js";
+  import { createDismissibleNotification } from "../utils/dismissible-notification.js";
   import NotificationButton from "./NotificationButton.svelte";
   import NotificationIcon from "./NotificationIcon.svelte";
 
   const dispatch = createEventDispatcher();
 
-  const dismiss = createTimeoutDismiss();
+  const {
+    close,
+    sync,
+    handleMouseenter,
+    handleMouseleave,
+    handleFocusIn,
+    handleFocusOut,
+    dispose,
+  } = createDismissibleNotification({
+    dispatch,
+    getPauseOnHover: () => pauseOnHover,
+    setOpen: (value) => {
+      open = value;
+    },
+  });
 
-  const { handleMouseenter, handleMouseleave, handleFocusIn, handleFocusOut } =
-    createHoverFocusPause(dismiss, () => pauseOnHover);
+  $: sync(open, timeout);
 
-  function close(closeFromTimeout) {
-    dismiss.clear();
-
-    const shouldContinue = dispatch(
-      "close",
-      { timeout: closeFromTimeout === true },
-      { cancelable: true },
-    );
-    if (shouldContinue) {
-      open = false;
-    }
-  }
-
-  $: dismiss.sync(open, timeout, () => close(true));
-
-  onMount(() => () => dismiss.clear());
+  onMount(() => dispose);
 </script>
 
 {#if open}
