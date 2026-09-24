@@ -434,6 +434,41 @@ describe("TimePicker", () => {
     });
   });
 
+  describe("inherited disabled", () => {
+    it("disables the selects with the time picker", () => {
+      render(TimePicker, { props: { disabled: true } });
+
+      for (const select of screen.getAllByRole("combobox")) {
+        expect(select).toBeDisabled();
+      }
+    });
+
+    it("disables the fluid selects with the time picker", () => {
+      render(TimePicker, { props: { disabled: true, fluid: true } });
+
+      for (const select of screen.getAllByRole("combobox")) {
+        expect(select).toBeDisabled();
+      }
+      expect(document.querySelectorAll(".bx--select--disabled")).toHaveLength(
+        2,
+      );
+    });
+
+    it("leaves the selects enabled by default", () => {
+      render(TimePicker);
+
+      for (const select of screen.getAllByRole("combobox")) {
+        expect(select).toBeEnabled();
+      }
+    });
+
+    it("renders an enabled standalone select without a parent", () => {
+      render(TimePickerSelectEvents);
+
+      expect(screen.getByRole("combobox")).toBeEnabled();
+    });
+  });
+
   it("keeps a read-only select closed on Alt+Down", async () => {
     render(TimePickerCustom, { props: { selectReadonly: true } });
 

@@ -95,11 +95,13 @@
   }
 
   const groupReadonly = writable(readonly);
+  const groupDisabled = writable(disabled);
 
   const timePickerContext = {
     isFluid: false,
     registerSelect,
     readonly: readOnly(groupReadonly),
+    disabled: readOnly(groupDisabled),
   };
 
   setContext("carbon:TimePicker", timePickerContext);
@@ -118,6 +120,7 @@
   $: isFluid = fluid || !!formContext?.isFluid;
   $: timePickerContext.isFluid = isFluid;
   $: groupReadonly.set(readonly);
+  $: groupDisabled.set(disabled);
   $: equalWidth = $selectCount !== 2;
   $: fluidErrorText = showInvalid ? invalidText : showWarn ? warnText : "";
 </script>
