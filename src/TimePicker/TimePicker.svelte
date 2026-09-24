@@ -7,6 +7,7 @@
 
   /**
    * Specify the input value.
+   * Follows the field when the owning form resets.
    * @type {string}
    * @bindable writable
    */
@@ -81,6 +82,7 @@
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import Stack from "../Stack/Stack.svelte";
+  import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const formContext = getContext("carbon:Form");
@@ -97,6 +99,12 @@
   const timePickerContext = { isFluid: false, registerSelect };
 
   setContext("carbon:TimePicker", timePickerContext);
+
+  // A form reset restores the field without an input event. Svelte 5 syncs
+  // `bind:value` back on its own; Svelte 3 and 4 do not, so read the field.
+  function handleFormReset() {
+    if (ref) value = ref.value;
+  }
 
   function handleFocus() {
     if (selectTextOnFocus && !disabled) {
@@ -159,6 +167,7 @@
               <div class:bx--text-input__field-wrapper={true}>
                 <input
                   bind:this={ref}
+                  use:formReset={handleFormReset}
                   bind:value
                   type="text"
                   aria-invalid={showInvalid || undefined}
@@ -251,6 +260,7 @@
             {/if}
             <input
               bind:this={ref}
+              use:formReset={handleFormReset}
               bind:value
               type="text"
               data-invalid={showInvalid || undefined}
