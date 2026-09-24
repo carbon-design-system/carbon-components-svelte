@@ -9,7 +9,7 @@ describe("debounce", () => {
     vi.useRealTimers();
   });
 
-  test("invokes once after the quiet period", () => {
+  it("invokes once after the quiet period", () => {
     const fn = vi.fn();
     const debounced = debounce(fn, 100);
 
@@ -22,7 +22,7 @@ describe("debounce", () => {
     expect(fn).toHaveBeenCalledTimes(1);
   });
 
-  test("repeated calls reset the timer", () => {
+  it("repeated calls reset the timer", () => {
     const fn = vi.fn();
     const debounced = debounce(fn, 100);
 
@@ -36,7 +36,7 @@ describe("debounce", () => {
     expect(fn).toHaveBeenCalledTimes(1);
   });
 
-  test("invokes with the most recent arguments", () => {
+  it("invokes with the most recent arguments", () => {
     const fn = vi.fn();
     const debounced = debounce(fn, 100);
 
@@ -48,7 +48,7 @@ describe("debounce", () => {
     expect(fn).toHaveBeenCalledWith("b");
   });
 
-  test("cancel discards a pending invocation", () => {
+  it("cancel discards a pending invocation", () => {
     const fn = vi.fn();
     const debounced = debounce(fn, 100);
 
@@ -59,7 +59,7 @@ describe("debounce", () => {
     expect(fn).not.toHaveBeenCalled();
   });
 
-  test("flush invokes a pending call immediately", () => {
+  it("flush invokes a pending call immediately", () => {
     const fn = vi.fn();
     const debounced = debounce(fn, 100);
 
@@ -73,7 +73,7 @@ describe("debounce", () => {
     expect(fn).toHaveBeenCalledTimes(1);
   });
 
-  test("flush is a no-op when nothing is pending", () => {
+  it("flush is a no-op when nothing is pending", () => {
     const fn = vi.fn();
     const debounced = debounce(fn, 100);
 

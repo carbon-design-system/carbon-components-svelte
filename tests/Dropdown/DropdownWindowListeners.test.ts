@@ -10,7 +10,7 @@ const netClick = (
   remove.mock.calls.filter((c: unknown[]) => c[0] === "click").length;
 
 describe("Dropdown window listeners", () => {
-  test("closed dropdowns register no window click listener", () => {
+  it("closed dropdowns register no window click listener", () => {
     const add = vi.spyOn(window, "addEventListener");
     const remove = vi.spyOn(window, "removeEventListener");
 
@@ -21,7 +21,7 @@ describe("Dropdown window listeners", () => {
     remove.mockRestore();
   });
 
-  test("an open dropdown registers exactly one window click listener", async () => {
+  it("an open dropdown registers exactly one window click listener", async () => {
     const add = vi.spyOn(window, "addEventListener");
     const remove = vi.spyOn(window, "removeEventListener");
 

@@ -4,7 +4,7 @@ import {
 } from "../../src/utils/tree-fingerprint.js";
 
 describe("fingerprintTree / matchesFingerprint", () => {
-  test("matches a tree that has not changed", () => {
+  it("matches a tree that has not changed", () => {
     const tree = [
       { id: "a", text: "Alpha", nodes: [{ id: "a1", text: "Alpha 1" }] },
       { id: "b", text: "Beta" },
@@ -14,7 +14,7 @@ describe("fingerprintTree / matchesFingerprint", () => {
     expect(matchesFingerprint(fingerprint, tree)).toBe(true);
   });
 
-  test("does not match after a field is mutated in place", () => {
+  it("does not match after a field is mutated in place", () => {
     const tree = [{ id: "a", text: "Alpha" }];
     const fingerprint = fingerprintTree(tree);
 
@@ -23,7 +23,7 @@ describe("fingerprintTree / matchesFingerprint", () => {
     expect(matchesFingerprint(fingerprint, tree)).toBe(false);
   });
 
-  test("does not match after a nested child is mutated in place", () => {
+  it("does not match after a nested child is mutated in place", () => {
     const tree = [{ id: "a", nodes: [{ id: "a1", text: "Alpha 1" }] }];
     const fingerprint = fingerprintTree(tree);
 
@@ -32,7 +32,7 @@ describe("fingerprintTree / matchesFingerprint", () => {
     expect(matchesFingerprint(fingerprint, tree)).toBe(false);
   });
 
-  test("does not match a newly lazy-loaded subtree", () => {
+  it("does not match a newly lazy-loaded subtree", () => {
     const parent: { id: string; nodes?: Array<{ id: string }> } = {
       id: "p",
     };
@@ -44,7 +44,7 @@ describe("fingerprintTree / matchesFingerprint", () => {
     expect(matchesFingerprint(fingerprint, tree)).toBe(false);
   });
 
-  test("does not match when a node is added or removed", () => {
+  it("does not match when a node is added or removed", () => {
     const tree = [{ id: "a" }, { id: "b" }];
     const fingerprint = fingerprintTree(tree);
 
@@ -52,7 +52,7 @@ describe("fingerprintTree / matchesFingerprint", () => {
     expect(matchesFingerprint(fingerprint, [...tree, { id: "c" }])).toBe(false);
   });
 
-  test("does not match a field compared by identity, even if it looks equal", () => {
+  it("does not match a field compared by identity, even if it looks equal", () => {
     const formatA = () => "a";
     const tree = [{ id: "a", format: formatA }];
     const fingerprint = fingerprintTree(tree);
@@ -64,7 +64,7 @@ describe("fingerprintTree / matchesFingerprint", () => {
     expect(matchesFingerprint(fingerprint, tree)).toBe(false);
   });
 
-  test("matches an empty tree", () => {
+  it("matches an empty tree", () => {
     expect(matchesFingerprint(fingerprintTree([]), [])).toBe(true);
   });
 });

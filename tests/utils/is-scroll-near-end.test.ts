@@ -5,7 +5,7 @@ import {
 } from "../../src/utils/is-scroll-near-end.js";
 
 describe("isScrollNearEnd", () => {
-  test("false when content does not overflow", () => {
+  it("false when content does not overflow", () => {
     expect(
       isScrollNearEnd({
         scrollTop: 0,
@@ -22,7 +22,7 @@ describe("isScrollNearEnd", () => {
     ).toBe(false);
   });
 
-  test("false when scrolled away from the bottom", () => {
+  it("false when scrolled away from the bottom", () => {
     expect(
       isScrollNearEnd({
         scrollTop: 0,
@@ -40,7 +40,7 @@ describe("isScrollNearEnd", () => {
     ).toBe(false);
   });
 
-  test("true at and within the default threshold of the bottom", () => {
+  it("true at and within the default threshold of the bottom", () => {
     // Distance from bottom: 1000 - (768 + 200) = 32
     expect(
       isScrollNearEnd({
@@ -58,7 +58,7 @@ describe("isScrollNearEnd", () => {
     ).toBe(true);
   });
 
-  test("respects a custom threshold", () => {
+  it("respects a custom threshold", () => {
     expect(
       isScrollNearEnd({
         scrollTop: 750,
@@ -77,7 +77,7 @@ describe("isScrollNearEnd", () => {
     ).toBe(false);
   });
 
-  test("exports the default threshold constant", () => {
+  it("exports the default threshold constant", () => {
     expect(DEFAULT_SCROLL_END_THRESHOLD).toBe(32);
   });
 });
@@ -94,7 +94,7 @@ describe("createScrollEndTracker", () => {
     clientHeight: 200,
   };
 
-  test("fires once when approaching the bottom", () => {
+  it("fires once when approaching the bottom", () => {
     const tracker = createScrollEndTracker();
 
     expect(tracker.observe(nearBottom)).toEqual(nearBottom);
@@ -102,7 +102,7 @@ describe("createScrollEndTracker", () => {
     expect(tracker.observe({ ...nearBottom, scrollTop: 850 })).toBeNull();
   });
 
-  test("re-arms after scrolling away from the bottom", () => {
+  it("re-arms after scrolling away from the bottom", () => {
     const tracker = createScrollEndTracker();
 
     expect(tracker.observe(nearBottom)).toEqual(nearBottom);
@@ -110,7 +110,7 @@ describe("createScrollEndTracker", () => {
     expect(tracker.observe(nearBottom)).toEqual(nearBottom);
   });
 
-  test("re-arms when the item count grows", () => {
+  it("re-arms when the item count grows", () => {
     const tracker = createScrollEndTracker();
 
     expect(tracker.observe({ ...nearBottom, itemCount: 20 })).toEqual(
@@ -122,7 +122,7 @@ describe("createScrollEndTracker", () => {
     );
   });
 
-  test("re-arms via noteItemCount when the item count grows", () => {
+  it("re-arms via noteItemCount when the item count grows", () => {
     const tracker = createScrollEndTracker();
 
     tracker.noteItemCount(20);
@@ -132,7 +132,7 @@ describe("createScrollEndTracker", () => {
     expect(tracker.observe(nearBottom)).toEqual(nearBottom);
   });
 
-  test("does not re-arm when the item count stays the same or shrinks", () => {
+  it("does not re-arm when the item count stays the same or shrinks", () => {
     const tracker = createScrollEndTracker();
 
     tracker.noteItemCount(40);
@@ -145,7 +145,7 @@ describe("createScrollEndTracker", () => {
     expect(tracker.observe(nearBottom)).toBeNull();
   });
 
-  test("reset re-arms and clears the item count baseline", () => {
+  it("reset re-arms and clears the item count baseline", () => {
     const tracker = createScrollEndTracker();
 
     tracker.noteItemCount(20);
@@ -155,7 +155,7 @@ describe("createScrollEndTracker", () => {
     expect(tracker.observe(nearBottom)).toEqual(nearBottom);
   });
 
-  test("does not re-arm when leaving a non-overflowing list", () => {
+  it("does not re-arm when leaving a non-overflowing list", () => {
     const tracker = createScrollEndTracker();
 
     expect(tracker.observe(nearBottom)).toEqual(nearBottom);

@@ -9,7 +9,7 @@ describe("createSubmenuHoverIntent", () => {
     vi.useRealTimers();
   });
 
-  test("open() applies true immediately", () => {
+  it("open() applies true immediately", () => {
     const setOpen = vi.fn();
     const intent = createSubmenuHoverIntent(setOpen, {
       openDelay: 150,
@@ -19,7 +19,7 @@ describe("createSubmenuHoverIntent", () => {
     expect(setOpen).toHaveBeenCalledWith(true);
   });
 
-  test("scheduleOpen() applies true after openDelay", () => {
+  it("scheduleOpen() applies true after openDelay", () => {
     const setOpen = vi.fn();
     const intent = createSubmenuHoverIntent(setOpen, {
       openDelay: 150,
@@ -31,7 +31,7 @@ describe("createSubmenuHoverIntent", () => {
     expect(setOpen).toHaveBeenCalledWith(true);
   });
 
-  test("scheduleClose() applies false after closeDelay", () => {
+  it("scheduleClose() applies false after closeDelay", () => {
     const setOpen = vi.fn();
     const intent = createSubmenuHoverIntent(setOpen, {
       openDelay: 150,
@@ -43,7 +43,7 @@ describe("createSubmenuHoverIntent", () => {
     expect(setOpen).toHaveBeenCalledWith(false);
   });
 
-  test("scheduleClose() cancels a pending scheduleOpen()", () => {
+  it("scheduleClose() cancels a pending scheduleOpen()", () => {
     const setOpen = vi.fn();
     const intent = createSubmenuHoverIntent(setOpen, {
       openDelay: 150,
@@ -56,7 +56,7 @@ describe("createSubmenuHoverIntent", () => {
     expect(setOpen).toHaveBeenCalledWith(false);
   });
 
-  test("scheduleOpen() cancels a pending scheduleClose()", () => {
+  it("scheduleOpen() cancels a pending scheduleClose()", () => {
     const setOpen = vi.fn();
     const intent = createSubmenuHoverIntent(setOpen, {
       openDelay: 150,
@@ -69,7 +69,7 @@ describe("createSubmenuHoverIntent", () => {
     expect(setOpen).toHaveBeenCalledWith(true);
   });
 
-  test("cancelClose() discards a pending close without affecting open", () => {
+  it("cancelClose() discards a pending close without affecting open", () => {
     const setOpen = vi.fn();
     const intent = createSubmenuHoverIntent(setOpen, {
       openDelay: 150,
@@ -81,7 +81,7 @@ describe("createSubmenuHoverIntent", () => {
     expect(setOpen).not.toHaveBeenCalled();
   });
 
-  test("cancel() discards any pending open or close", () => {
+  it("cancel() discards any pending open or close", () => {
     const setOpen = vi.fn();
     const intent = createSubmenuHoverIntent(setOpen, {
       openDelay: 150,

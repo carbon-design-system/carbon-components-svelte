@@ -26,7 +26,7 @@ describe("Tooltip", () => {
     vi.useRealTimers();
   });
 
-  test("should render with default props", () => {
+  it("should render with default props", () => {
     render(TooltipDefault);
     const trigger = screen.getByRole("button", { name: "Information" });
     expect(trigger).toBeInTheDocument();
@@ -34,7 +34,7 @@ describe("Tooltip", () => {
     expect(trigger).toHaveClass("bx--tooltip__trigger");
   });
 
-  test("should hide icon when hideIcon is true", async () => {
+  it("should hide icon when hideIcon is true", async () => {
     render(TooltipHideIcon);
 
     const trigger = screen.getByRole("button");
@@ -49,7 +49,7 @@ describe("Tooltip", () => {
     ).toBeInTheDocument();
   });
 
-  test("should show tooltip when open is true", () => {
+  it("should show tooltip when open is true", () => {
     render(TooltipOpen);
 
     const tooltip = screen.getByRole("dialog");
@@ -60,7 +60,7 @@ describe("Tooltip", () => {
     ).toBeInTheDocument();
   });
 
-  test("should open tooltip on focus", async () => {
+  it("should open tooltip on focus", async () => {
     render(TooltipDefault);
 
     const trigger = screen.getByRole("button", { name: "Information" });
@@ -71,7 +71,7 @@ describe("Tooltip", () => {
     expect(tooltip.closest(".bx--tooltip")).toHaveClass("bx--tooltip--shown");
   });
 
-  test("should close tooltip on Escape key", async () => {
+  it("should close tooltip on Escape key", async () => {
     render(TooltipOpen);
 
     const tooltip = screen.getByRole("dialog");
@@ -81,7 +81,7 @@ describe("Tooltip", () => {
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 
-  test("should open tooltip on mouseenter", async () => {
+  it("should open tooltip on mouseenter", async () => {
     render(TooltipDefault);
 
     const trigger = screen.getByRole("button", { name: "Information" });
@@ -93,7 +93,7 @@ describe("Tooltip", () => {
     expect(screen.getByRole("dialog")).toBeInTheDocument();
   });
 
-  test("should close tooltip on mouseleave", async () => {
+  it("should close tooltip on mouseleave", async () => {
     const { container } = render(TooltipOpen);
 
     expect(screen.getByRole("dialog")).toBeInTheDocument();
@@ -107,7 +107,7 @@ describe("Tooltip", () => {
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 
-  test("should cancel close when re-entering tooltip", async () => {
+  it("should cancel close when re-entering tooltip", async () => {
     render(TooltipDefault);
 
     const trigger = screen.getByRole("button", { name: "Information" });
@@ -133,14 +133,14 @@ describe("Tooltip", () => {
     expect(screen.getByRole("dialog")).toBeInTheDocument();
   });
 
-  test("should render custom slot content", () => {
+  it("should render custom slot content", () => {
     render(TooltipCustomContent);
 
     expect(screen.getByTestId("tooltip-content")).toBeInTheDocument();
     expect(screen.getByText("Custom tooltip content")).toBeInTheDocument();
   });
 
-  test("should render custom icon via slot", async () => {
+  it("should render custom icon via slot", async () => {
     render(TooltipCustomIcon);
 
     expect(screen.getByTestId("custom-icon")).toBeInTheDocument();
@@ -153,7 +153,7 @@ describe("Tooltip", () => {
     expect(screen.getByText("Custom icon tooltip")).toBeInTheDocument();
   });
 
-  test("should apply correct direction classes", () => {
+  it("should apply correct direction classes", () => {
     render(TooltipDirections);
 
     const tooltips = screen.getAllByRole("dialog");
@@ -178,7 +178,7 @@ describe("Tooltip", () => {
     expect(leftTooltip).toHaveClass("bx--tooltip--left");
   });
 
-  test("should apply correct direction classes when using portal tooltip", async () => {
+  it("should apply correct direction classes when using portal tooltip", async () => {
     render(TooltipPortalDirections);
     await vi.advanceTimersByTimeAsync(0);
 
@@ -210,7 +210,7 @@ describe("Tooltip", () => {
     ).toBe(true);
   });
 
-  test("should apply correct alignment classes", () => {
+  it("should apply correct alignment classes", () => {
     render(TooltipAlignments);
 
     const tooltips = screen.getAllByRole("dialog");
@@ -231,7 +231,7 @@ describe("Tooltip", () => {
     expect(endTooltip).toHaveClass("bx--tooltip--align-end");
   });
 
-  test("should dispatch events when tooltip opens and closes", async () => {
+  it("should dispatch events when tooltip opens and closes", async () => {
     render(TooltipEvents);
 
     expect(screen.getByText("Open events: 0")).toBeInTheDocument();
@@ -247,7 +247,7 @@ describe("Tooltip", () => {
     expect(screen.getByText("Close events: 1")).toBeInTheDocument();
   });
 
-  test("should not open tooltip on focus caused by mouse", async () => {
+  it("should not open tooltip on focus caused by mouse", async () => {
     render(TooltipDefault);
 
     const trigger = screen.getByRole("button", { name: "Information" });
@@ -259,11 +259,11 @@ describe("Tooltip", () => {
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 
-  test("TooltipFooter should not throw when rendered outside a Tooltip", () => {
+  it("TooltipFooter should not throw when rendered outside a Tooltip", () => {
     expect(() => render(TooltipFooterStandalone)).not.toThrow();
   });
 
-  test("should move focus into the footer when opened via keyboard", async () => {
+  it("should move focus into the footer when opened via keyboard", async () => {
     render(TooltipFooterFocus);
 
     const trigger = screen.getByRole("button", { name: "Resource list" });
@@ -272,7 +272,7 @@ describe("Tooltip", () => {
     expect(screen.getByRole("link", { name: "Learn more" })).toHaveFocus();
   });
 
-  test("should not move focus into the footer when opened via mouse hover", async () => {
+  it("should not move focus into the footer when opened via mouse hover", async () => {
     render(TooltipFooterFocus);
 
     const trigger = screen.getByRole("button", { name: "Resource list" });
@@ -283,7 +283,7 @@ describe("Tooltip", () => {
     expect(screen.getByRole("link", { name: "Learn more" })).not.toHaveFocus();
   });
 
-  test("should close when focus tabs out of its content into another tooltip's trigger", async () => {
+  it("should close when focus tabs out of its content into another tooltip's trigger", async () => {
     render(TooltipTwoInstancesFocus);
 
     const trigger1 = screen.getByRole("button", { name: "First" });
@@ -309,14 +309,14 @@ describe("Tooltip", () => {
     ).not.toBeInTheDocument();
   });
 
-  test("should have a non-empty accessible name with no props set", () => {
+  it("should have a non-empty accessible name with no props set", () => {
     render(TooltipNoLabel);
 
     const trigger = screen.getByRole("button");
     expect(trigger.getAttribute("aria-label")).toBeTruthy();
   });
 
-  test("should label the interactive dialog with its trigger", () => {
+  it("should label the interactive dialog with its trigger", () => {
     render(TooltipOpen);
 
     const labelledby = screen
@@ -331,7 +331,7 @@ describe("Tooltip", () => {
       vi.restoreAllMocks();
     });
 
-    test("should not remeasure geometry on unrelated re-renders while open", async () => {
+    it("should not remeasure geometry on unrelated re-renders while open", async () => {
       const { rerender } = render(Tooltip, {
         open: true,
         iconDescription: "Information",

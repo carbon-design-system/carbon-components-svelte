@@ -21,12 +21,12 @@ describe("getScrollableAncestors", () => {
     document.body.innerHTML = "";
   });
 
-  test("returns an empty array when no ancestor is scrollable", () => {
+  it("returns an empty array when no ancestor is scrollable", () => {
     const leaf = buildChain([{ overflow: "visible" }, { overflow: "hidden" }]);
     expect(getScrollableAncestors(leaf)).toEqual([]);
   });
 
-  test("collects ancestors with overflow auto or scroll, nearest first", () => {
+  it("collects ancestors with overflow auto or scroll, nearest first", () => {
     const leaf = buildChain([
       { overflow: "scroll" },
       { overflow: "visible" },
@@ -40,13 +40,13 @@ describe("getScrollableAncestors", () => {
     expect((result[1] as HTMLElement).style.overflow).toBe("scroll");
   });
 
-  test("detects scrollability from overflowX or overflowY alone", () => {
+  it("detects scrollability from overflowX or overflowY alone", () => {
     const leaf = buildChain([{ overflowY: "auto" }, { overflowX: "scroll" }]);
 
     expect(getScrollableAncestors(leaf)).toHaveLength(2);
   });
 
-  test("does not include the node itself, only its ancestors", () => {
+  it("does not include the node itself, only its ancestors", () => {
     const leaf = buildChain([]);
     leaf.style.overflow = "scroll";
 

@@ -1,17 +1,17 @@
 import { keyBy } from "../../src/utils/key-by.js";
 
 describe("keyBy", () => {
-  test("indexes items by their id by default", () => {
+  it("indexes items by their id by default", () => {
     const a = { id: "a", index: 0 };
     const b = { id: "b", index: 1 };
     expect(keyBy([a, b])).toEqual({ a, b });
   });
 
-  test("returns an empty object for an empty array", () => {
+  it("returns an empty object for an empty array", () => {
     expect(keyBy([])).toEqual({});
   });
 
-  test("supports a custom key selector", () => {
+  it("supports a custom key selector", () => {
     const items = [
       { name: "x", value: 1 },
       { name: "y", value: 2 },
@@ -22,7 +22,7 @@ describe("keyBy", () => {
     });
   });
 
-  test("last item wins on duplicate keys", () => {
+  it("last item wins on duplicate keys", () => {
     const first = { id: "dup", index: 0 };
     const second = { id: "dup", index: 1 };
     expect(keyBy([first, second])).toEqual({ dup: second });

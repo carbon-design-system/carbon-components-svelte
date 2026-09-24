@@ -4,33 +4,33 @@ const dead = (css: string) =>
   deadDeclarations(css).map((d) => `${d.selector} ${d.property}:${d.value}`);
 
 describe("deadDeclarations", () => {
-  test("flags a declaration a later identical selector always overrides", () => {
+  it("flags a declaration a later identical selector always overrides", () => {
     expect(dead(".a { color: red; top: 0 } .a { color: blue }")).toEqual([
       ".a color:red",
     ]);
   });
 
-  test("needs every selector of the list to be overridden", () => {
+  it("needs every selector of the list to be overridden", () => {
     expect(dead(".a, .b { color: red } .a { color: blue }")).toEqual([]);
     expect(
       dead(".a, .b { color: red } .a { color: blue } .b { color: green }"),
     ).toEqual([".a,.b color:red"]);
   });
 
-  test("keeps contexts apart", () => {
+  it("keeps contexts apart", () => {
     const css =
       ".a { color: red } @media (min-width: 1px) { .a { color: blue } }";
     expect(dead(css)).toEqual([]);
   });
 
-  test("respects importance", () => {
+  it("respects importance", () => {
     expect(dead(".a { color: red !important } .a { color: blue }")).toEqual([]);
     expect(dead(".a { color: red } .a { color: blue !important }")).toEqual([
       ".a color:red",
     ]);
   });
 
-  test("a later shorthand kills its longhands, not the reverse", () => {
+  it("a later shorthand kills its longhands, not the reverse", () => {
     expect(dead(".a { padding-top: 1px } .a { padding: 0 }")).toEqual([
       ".a padding-top:1px",
     ]);
@@ -38,7 +38,7 @@ describe("deadDeclarations", () => {
     expect(covers("border", "border-radius")).toBe(false);
   });
 
-  test("flags in-rule repeats except progressive-enhancement fallbacks", () => {
+  it("flags in-rule repeats except progressive-enhancement fallbacks", () => {
     expect(dead(".a { font-weight: 400; font-weight: var(--w, 400) }")).toEqual(
       [".a font-weight:400"],
     );
@@ -47,13 +47,13 @@ describe("deadDeclarations", () => {
     );
   });
 
-  test("ignores keyframe selectors", () => {
+  it("ignores keyframe selectors", () => {
     const css =
       "@keyframes x { to { top: 0 } } @keyframes x { to { top: 1px } }";
     expect(dead(css)).toEqual([]);
   });
 
-  test("block-axis logical properties share a slot with their physical twin", () => {
+  it("block-axis logical properties share a slot with their physical twin", () => {
     expect(dead(".a { inset-block-start: 0; top: 1px }")).toEqual([
       ".a inset-block-start:0",
     ]);
@@ -66,12 +66,12 @@ describe("deadDeclarations", () => {
     expect(covers("border-block-end-color", "border-bottom-color")).toBe(true);
   });
 
-  test("leaves the inline axis alone, since it maps by dir", () => {
+  it("leaves the inline axis alone, since it maps by dir", () => {
     expect(dead(".a { margin-inline-start: 0; margin-left: 1px }")).toEqual([]);
     expect(covers("inset-inline-end", "right")).toBe(false);
   });
 
-  test("keeps overflow: hidden as the fallback for overflow: clip", () => {
+  it("keeps overflow: hidden as the fallback for overflow: clip", () => {
     expect(dead(".a { overflow: hidden; overflow: clip }")).toEqual([]);
     expect(dead(".a { overflow: hidden; overflow: auto }")).toEqual([
       ".a overflow:hidden",

@@ -1,7 +1,7 @@
 import { addPooledListener } from "../../src/utils/window-listener-pool.js";
 
 describe("addPooledListener", () => {
-  test("registers immediately and shares one listener across consumers", () => {
+  it("registers immediately and shares one listener across consumers", () => {
     const addSpy = vi.spyOn(window, "addEventListener");
     const a = vi.fn();
     const b = vi.fn();
@@ -20,7 +20,7 @@ describe("addPooledListener", () => {
     addSpy.mockRestore();
   });
 
-  test("removes the real listener only after the last consumer unregisters", () => {
+  it("removes the real listener only after the last consumer unregisters", () => {
     const removeSpy = vi.spyOn(window, "removeEventListener");
     const handler = vi.fn();
 
@@ -40,7 +40,7 @@ describe("addPooledListener", () => {
     removeSpy.mockRestore();
   });
 
-  test("keeps distinct options in separate pools", () => {
+  it("keeps distinct options in separate pools", () => {
     const addSpy = vi.spyOn(window, "addEventListener");
     const bubble = vi.fn();
     const capture = vi.fn();

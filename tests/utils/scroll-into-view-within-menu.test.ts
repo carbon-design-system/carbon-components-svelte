@@ -36,7 +36,7 @@ describe("scrollIntoViewWithinMenu", () => {
     document.body.innerHTML = "";
   });
 
-  test("is a no-op when the element has no listbox ancestor", () => {
+  it("is a no-op when the element has no listbox ancestor", () => {
     const item = document.createElement("div");
     item.getBoundingClientRect = () => ({ top: -100, bottom: -80 }) as DOMRect;
     document.body.appendChild(item);
@@ -44,7 +44,7 @@ describe("scrollIntoViewWithinMenu", () => {
     expect(() => scrollIntoViewWithinMenu(item)).not.toThrow();
   });
 
-  test("does not scroll when the menu is not scrollable", () => {
+  it("does not scroll when the menu is not scrollable", () => {
     const { container, item } = buildMenu({
       scrollable: false,
       containerTop: 0,
@@ -58,7 +58,7 @@ describe("scrollIntoViewWithinMenu", () => {
     expect(container.scrollTop).toBe(50);
   });
 
-  test("scrolls the container up when the item is above the viewport", () => {
+  it("scrolls the container up when the item is above the viewport", () => {
     const { container, item } = buildMenu({
       scrollable: true,
       containerTop: 0,
@@ -73,7 +73,7 @@ describe("scrollIntoViewWithinMenu", () => {
     expect(container.scrollTop).toBe(30);
   });
 
-  test("scrolls the container down when the item is below the viewport", () => {
+  it("scrolls the container down when the item is below the viewport", () => {
     const { container, item } = buildMenu({
       scrollable: true,
       containerTop: 0,
@@ -88,7 +88,7 @@ describe("scrollIntoViewWithinMenu", () => {
     expect(container.scrollTop).toBe(80);
   });
 
-  test("does not scroll when the item is already fully visible", () => {
+  it("does not scroll when the item is already fully visible", () => {
     const { container, item } = buildMenu({
       scrollable: true,
       containerTop: 0,
@@ -103,7 +103,7 @@ describe("scrollIntoViewWithinMenu", () => {
   });
 
   describe("container selector", () => {
-    test("resolves a listbox container by default", () => {
+    it("resolves a listbox container by default", () => {
       const { container, item } = buildMenu({
         scrollable: true,
         containerTop: 0,
@@ -117,7 +117,7 @@ describe("scrollIntoViewWithinMenu", () => {
       expect(container.scrollTop).toBe(80);
     });
 
-    test("ignores a menu container under the default selector", () => {
+    it("ignores a menu container under the default selector", () => {
       const { container, item } = buildMenu({
         scrollable: true,
         containerTop: 0,
@@ -132,7 +132,7 @@ describe("scrollIntoViewWithinMenu", () => {
       expect(container.scrollTop).toBe(50);
     });
 
-    test("resolves a menu container when the selector is passed", () => {
+    it("resolves a menu container when the selector is passed", () => {
       const { container, item } = buildMenu({
         scrollable: true,
         containerTop: 0,
@@ -147,7 +147,7 @@ describe("scrollIntoViewWithinMenu", () => {
       expect(container.scrollTop).toBe(80);
     });
 
-    test("does not scroll a non-scrollable menu container", () => {
+    it("does not scroll a non-scrollable menu container", () => {
       const { container, item } = buildMenu({
         scrollable: false,
         containerTop: 0,

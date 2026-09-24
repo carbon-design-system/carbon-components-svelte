@@ -5,7 +5,7 @@ import {
 } from "../../src/utils/horizontal-scroll.js";
 
 describe("computeScrollOverflow", () => {
-  test("no overflow when content fits exactly", () => {
+  it("no overflow when content fits exactly", () => {
     expect(
       computeScrollOverflow({
         scrollLeft: 0,
@@ -15,7 +15,7 @@ describe("computeScrollOverflow", () => {
     ).toEqual({ canScrollBackward: false, canScrollForward: false });
   });
 
-  test("can scroll backward once scrolled away from the start", () => {
+  it("can scroll backward once scrolled away from the start", () => {
     expect(
       computeScrollOverflow({
         scrollLeft: 10,
@@ -25,7 +25,7 @@ describe("computeScrollOverflow", () => {
     ).toEqual({ canScrollBackward: true, canScrollForward: true });
   });
 
-  test("can scroll forward when content overflows past the viewport", () => {
+  it("can scroll forward when content overflows past the viewport", () => {
     expect(
       computeScrollOverflow({
         scrollLeft: 0,
@@ -35,7 +35,7 @@ describe("computeScrollOverflow", () => {
     ).toBe(true);
   });
 
-  test("forwardEpsilon absorbs a sub-pixel rounding gap", () => {
+  it("forwardEpsilon absorbs a sub-pixel rounding gap", () => {
     const metrics = { scrollLeft: 0, scrollWidth: 201, clientWidth: 200 };
 
     expect(computeScrollOverflow(metrics).canScrollForward).toBe(true);
@@ -46,11 +46,11 @@ describe("computeScrollOverflow", () => {
 });
 
 describe("scrollByViewport", () => {
-  test("is a no-op when node is missing", () => {
+  it("is a no-op when node is missing", () => {
     expect(() => scrollByViewport(null, 1)).not.toThrow();
   });
 
-  test("scrolls by 75% of the node's own width, in the given direction", () => {
+  it("scrolls by 75% of the node's own width, in the given direction", () => {
     const node = document.createElement("div");
     Object.defineProperty(node, "clientWidth", { value: 400 });
     const scrollBy = vi.fn();
@@ -86,7 +86,7 @@ describe("scrollIntoViewX", () => {
     return { container, target };
   }
 
-  test("is a no-op when container or target is missing", () => {
+  it("is a no-op when container or target is missing", () => {
     const { container, target } = buildRow({
       containerLeft: 0,
       containerRight: 100,
@@ -97,7 +97,7 @@ describe("scrollIntoViewX", () => {
     expect(() => scrollIntoViewX(container, null)).not.toThrow();
   });
 
-  test("does not scroll when the target is already fully visible", () => {
+  it("does not scroll when the target is already fully visible", () => {
     const { container, target } = buildRow({
       containerLeft: 0,
       containerRight: 200,
@@ -109,7 +109,7 @@ describe("scrollIntoViewX", () => {
     expect(container.scrollLeft).toBe(0);
   });
 
-  test("scrolls left when the target overflows the left edge, honoring margin", () => {
+  it("scrolls left when the target overflows the left edge, honoring margin", () => {
     const { container, target } = buildRow({
       containerLeft: 0,
       containerRight: 300,
@@ -122,7 +122,7 @@ describe("scrollIntoViewX", () => {
     expect(container.scrollLeft).toBe(-18);
   });
 
-  test("scrolls right when the target overflows the right edge, honoring margin", () => {
+  it("scrolls right when the target overflows the right edge, honoring margin", () => {
     const { container, target } = buildRow({
       containerLeft: 0,
       containerRight: 300,

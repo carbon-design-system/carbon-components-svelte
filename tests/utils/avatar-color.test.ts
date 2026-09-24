@@ -5,13 +5,13 @@ import {
 } from "../../src/utils/avatar-color.js";
 
 describe("hashString", () => {
-  test("is deterministic for the same input", () => {
+  it("is deterministic for the same input", () => {
     expect(hashString("Richard Hendricks")).toBe(
       hashString("Richard Hendricks"),
     );
   });
 
-  test("returns a non-negative integer", () => {
+  it("returns a non-negative integer", () => {
     for (const value of ["", "a", "Jane Roe", "🚀"]) {
       const hash = hashString(value);
       expect(Number.isInteger(hash)).toBe(true);
@@ -19,25 +19,25 @@ describe("hashString", () => {
     }
   });
 
-  test("differs for different inputs", () => {
+  it("differs for different inputs", () => {
     expect(hashString("Monica")).not.toBe(hashString("Richard"));
   });
 });
 
 describe("getAvatarBackgroundColor", () => {
-  test("maps the same input to the same color", () => {
+  it("maps the same input to the same color", () => {
     expect(getAvatarBackgroundColor("Jane Roe")).toBe(
       getAvatarBackgroundColor("Jane Roe"),
     );
   });
 
-  test("returns a color from the default palette", () => {
+  it("returns a color from the default palette", () => {
     expect(AVATAR_BACKGROUND_COLORS).toContain(
       getAvatarBackgroundColor("Richard Hendricks"),
     );
   });
 
-  test("distributes varied inputs across more than one color", () => {
+  it("distributes varied inputs across more than one color", () => {
     const names = [
       "Monica",
       "Richard",
@@ -50,7 +50,7 @@ describe("getAvatarBackgroundColor", () => {
     expect(colors.size).toBeGreaterThan(1);
   });
 
-  test("returns the first palette entry for empty or nullish input", () => {
+  it("returns the first palette entry for empty or nullish input", () => {
     expect(getAvatarBackgroundColor("")).toBe(AVATAR_BACKGROUND_COLORS[0]);
     expect(getAvatarBackgroundColor(null)).toBe(AVATAR_BACKGROUND_COLORS[0]);
     expect(getAvatarBackgroundColor(undefined)).toBe(
@@ -58,13 +58,13 @@ describe("getAvatarBackgroundColor", () => {
     );
   });
 
-  test("supports a custom palette", () => {
+  it("supports a custom palette", () => {
     const palette = ["one", "two"] as const;
     const color = getAvatarBackgroundColor("anything", palette);
     expect(palette).toContain(color);
   });
 
-  test("falls back to the default palette for an empty palette", () => {
+  it("falls back to the default palette for an empty palette", () => {
     expect(AVATAR_BACKGROUND_COLORS).toContain(
       getAvatarBackgroundColor("anything", []),
     );

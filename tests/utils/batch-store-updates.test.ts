@@ -2,7 +2,7 @@ import { writable } from "svelte/store";
 import { batchStoreUpdates } from "../../src/utils/batch-store-updates.js";
 
 describe("batchStoreUpdates", () => {
-  test("collapses synchronous calls into a single store update", async () => {
+  it("collapses synchronous calls into a single store update", async () => {
     const store = writable<number[]>([]);
     let notifications = 0;
     store.subscribe(() => {
@@ -29,7 +29,7 @@ describe("batchStoreUpdates", () => {
     expect(current).toEqual([1, 2, 3]);
   });
 
-  test("applies queued operations in call order", async () => {
+  it("applies queued operations in call order", async () => {
     const store = writable<string[]>(["a"]);
     const batchedUpdate = batchStoreUpdates(store);
 
@@ -46,7 +46,7 @@ describe("batchStoreUpdates", () => {
     expect(current).toEqual(["b"]);
   });
 
-  test("a later batch flushes independently of an earlier one", async () => {
+  it("a later batch flushes independently of an earlier one", async () => {
     const store = writable<number[]>([]);
     const batchedUpdate = batchStoreUpdates(store);
 

@@ -4,7 +4,7 @@ import TreeView from "./TreeView.test.svelte";
 
 function treeItemById(id: string | number): HTMLElement {
   const el = document.getElementById(String(id));
-  expect.assert(el instanceof HTMLElement);
+  assert(el instanceof HTMLElement);
   return el;
 }
 
@@ -30,7 +30,7 @@ describe("TreeView WAI-ARIA completeness", () => {
     const analyticsToggle = treeItemById(1).querySelector(
       ".bx--tree-parent-node__toggle",
     );
-    expect.assert(analyticsToggle instanceof HTMLElement);
+    assert(analyticsToggle instanceof HTMLElement);
     await user.click(analyticsToggle);
 
     // Analytics' children: IBM Analytics Engine(2), IBM Cloud SQL Query(5), IBM Db2 Warehouse(6)

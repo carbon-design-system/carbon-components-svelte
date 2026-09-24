@@ -53,7 +53,7 @@ describe("Popover", () => {
     expect(popover).toHaveClass("bx--popover--open");
   });
 
-  test.each([
+  it.each([
     "top",
     "top-left",
     "top-right",

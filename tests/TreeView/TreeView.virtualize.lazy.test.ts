@@ -23,7 +23,7 @@ describe("TreeView virtualize + hasChildren lazy load", () => {
     const { component } = render(TreeViewVirtualizeLazy);
 
     const root = findRowById("root-a");
-    expect.assert(root instanceof HTMLElement);
+    assert(root instanceof HTMLElement);
     const caret = root.querySelector(
       ".bx--tree-parent-node__toggle",
     ) as HTMLElement;

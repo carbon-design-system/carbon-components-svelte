@@ -6,27 +6,27 @@ describe("queryParam", () => {
     history.replaceState(null, "", "/");
   });
 
-  test("reads the initial value from the URL", () => {
+  it("reads the initial value from the URL", () => {
     history.replaceState(null, "", "/?tab=settings");
     expect(get(queryParam("tab", { defaultValue: "overview" }))).toBe(
       "settings",
     );
   });
 
-  test("falls back to the default when the parameter is missing", () => {
+  it("falls back to the default when the parameter is missing", () => {
     expect(get(queryParam("tab", { defaultValue: "overview" }))).toBe(
       "overview",
     );
   });
 
-  test("coerces by the type of the default value", () => {
+  it("coerces by the type of the default value", () => {
     history.replaceState(null, "", "/?page=3&open=true&bad=abc");
     expect(get(queryParam("page", { defaultValue: 1 }))).toBe(3);
     expect(get(queryParam("open", { defaultValue: false }))).toBe(true);
     expect(get(queryParam("bad", { defaultValue: 1 }))).toBe(1);
   });
 
-  test("uses parse and falls back when it returns undefined", () => {
+  it("uses parse and falls back when it returns undefined", () => {
     history.replaceState(null, "", "/?tab=bogus");
     const store = queryParam("tab", {
       defaultValue: "overview",
@@ -35,7 +35,7 @@ describe("queryParam", () => {
     expect(get(store)).toBe("overview");
   });
 
-  test("set writes the parameter and keeps other parameters", () => {
+  it("set writes the parameter and keeps other parameters", () => {
     history.replaceState(null, "", "/?q=a");
     const store = queryParam("tab", { defaultValue: "overview" });
     store.set("settings");
@@ -43,14 +43,14 @@ describe("queryParam", () => {
     expect(location.search).toBe("?q=a&tab=settings");
   });
 
-  test("setting the default value removes the parameter", () => {
+  it("setting the default value removes the parameter", () => {
     history.replaceState(null, "", "/?tab=settings");
     const store = queryParam("tab", { defaultValue: "overview" });
     store.set("overview");
     expect(location.search).toBe("");
   });
 
-  test("replaces history instead of pushing", () => {
+  it("replaces history instead of pushing", () => {
     const length = history.length;
     const store = queryParam("page", { defaultValue: 1 });
     store.set(2);
@@ -59,7 +59,7 @@ describe("queryParam", () => {
     expect(history.length).toBe(length);
   });
 
-  test("uses a custom replace and serialize", () => {
+  it("uses a custom replace and serialize", () => {
     const replace = vi.fn();
     const store = queryParam("ids", {
       defaultValue: [] as string[],
@@ -71,7 +71,7 @@ describe("queryParam", () => {
     expect(replace).toHaveBeenCalledWith(`${location.origin}/?ids=a%2Cb`);
   });
 
-  test("skips replace when the URL is unchanged", () => {
+  it("skips replace when the URL is unchanged", () => {
     history.replaceState(null, "", "/?tab=settings");
     const replace = vi.fn();
     const store = queryParam("tab", { defaultValue: "overview", replace });
@@ -79,7 +79,7 @@ describe("queryParam", () => {
     expect(replace).not.toHaveBeenCalled();
   });
 
-  test("re-reads the URL on popstate while subscribed", () => {
+  it("re-reads the URL on popstate while subscribed", () => {
     const store = queryParam("tab", { defaultValue: "overview" });
     const values: string[] = [];
     const unsubscribe = store.subscribe((value) => values.push(value));

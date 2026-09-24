@@ -5,13 +5,13 @@ import TreeViewVirtualizeCheckbox from "./TreeView.virtualize.checkbox.test.svel
 
 function treeItemById(id: string): HTMLElement {
   const el = document.getElementById(id);
-  expect.assert(el instanceof HTMLElement);
+  assert(el instanceof HTMLElement);
   return el;
 }
 
 function checkboxFor(id: string): HTMLElement {
   const el = treeItemById(id).querySelector(".bx--checkbox-wrapper");
-  expect.assert(el instanceof HTMLElement);
+  assert(el instanceof HTMLElement);
   return el;
 }
 

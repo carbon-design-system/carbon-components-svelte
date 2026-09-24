@@ -9,7 +9,7 @@ describe("createTimeoutDismiss", () => {
     vi.useRealTimers();
   });
 
-  test("fires onTimeout once after the timeout while open", () => {
+  it("fires onTimeout once after the timeout while open", () => {
     const dismiss = createTimeoutDismiss();
     const cb = vi.fn();
 
@@ -20,7 +20,7 @@ describe("createTimeoutDismiss", () => {
     expect(cb).toHaveBeenCalledTimes(1);
   });
 
-  test("does not start a timer when timeout is 0", () => {
+  it("does not start a timer when timeout is 0", () => {
     const dismiss = createTimeoutDismiss();
     const cb = vi.fn();
 
@@ -31,7 +31,7 @@ describe("createTimeoutDismiss", () => {
     expect(cb).not.toHaveBeenCalled();
   });
 
-  test("does not start a timer when closed", () => {
+  it("does not start a timer when closed", () => {
     const dismiss = createTimeoutDismiss();
     const cb = vi.fn();
 
@@ -42,7 +42,7 @@ describe("createTimeoutDismiss", () => {
     expect(cb).not.toHaveBeenCalled();
   });
 
-  test("a second sync cancels the first pending timer", () => {
+  it("a second sync cancels the first pending timer", () => {
     const dismiss = createTimeoutDismiss();
     const first = vi.fn();
     const second = vi.fn();
@@ -55,7 +55,7 @@ describe("createTimeoutDismiss", () => {
     expect(second).toHaveBeenCalledTimes(1);
   });
 
-  test("clear cancels a pending timer", () => {
+  it("clear cancels a pending timer", () => {
     const dismiss = createTimeoutDismiss();
     const cb = vi.fn();
 
@@ -67,7 +67,7 @@ describe("createTimeoutDismiss", () => {
     expect(cb).not.toHaveBeenCalled();
   });
 
-  test("pause stops the timer and resume continues with remaining time", () => {
+  it("pause stops the timer and resume continues with remaining time", () => {
     const dismiss = createTimeoutDismiss();
     const cb = vi.fn();
 
@@ -87,7 +87,7 @@ describe("createTimeoutDismiss", () => {
     expect(cb).toHaveBeenCalledTimes(1);
   });
 
-  test("pause is a no-op when no timer is active", () => {
+  it("pause is a no-op when no timer is active", () => {
     const dismiss = createTimeoutDismiss();
     const cb = vi.fn();
 
@@ -99,7 +99,7 @@ describe("createTimeoutDismiss", () => {
     expect(cb).not.toHaveBeenCalled();
   });
 
-  test("resume fires immediately when remaining time is already zero", () => {
+  it("resume fires immediately when remaining time is already zero", () => {
     const dismiss = createTimeoutDismiss();
     const cb = vi.fn();
 
@@ -125,7 +125,7 @@ describe("createTimeoutDismiss", () => {
       setHidden(false);
     });
 
-    test("pauses while the document is hidden and resumes when visible", () => {
+    it("pauses while the document is hidden and resumes when visible", () => {
       const dismiss = createTimeoutDismiss();
       const cb = vi.fn();
 
@@ -139,7 +139,7 @@ describe("createTimeoutDismiss", () => {
       expect(cb).toHaveBeenCalledTimes(1);
     });
 
-    test("does not resume on visible when the caller already paused", () => {
+    it("does not resume on visible when the caller already paused", () => {
       const dismiss = createTimeoutDismiss();
       const cb = vi.fn();
 
@@ -170,17 +170,17 @@ describe("createTimeoutDismiss", () => {
         vi.restoreAllMocks();
       });
 
-      test("does not listen when timeout is 0", () => {
+      it("does not listen when timeout is 0", () => {
         createTimeoutDismiss().sync(true, 0, vi.fn());
         expect(count(add)).toBe(0);
       });
 
-      test("does not listen when closed", () => {
+      it("does not listen when closed", () => {
         createTimeoutDismiss().sync(false, 1000, vi.fn());
         expect(count(add)).toBe(0);
       });
 
-      test("listens once while a timer is active", () => {
+      it("listens once while a timer is active", () => {
         const dismiss = createTimeoutDismiss();
         const cb = vi.fn();
 
@@ -189,7 +189,7 @@ describe("createTimeoutDismiss", () => {
         expect(count(add)).toBe(1);
       });
 
-      test("stops listening when the timer fires", () => {
+      it("stops listening when the timer fires", () => {
         const dismiss = createTimeoutDismiss();
         const cb = vi.fn();
 
@@ -202,7 +202,7 @@ describe("createTimeoutDismiss", () => {
         expect(count(remove)).toBe(1);
       });
 
-      test("stops listening when re-synced without a timeout", () => {
+      it("stops listening when re-synced without a timeout", () => {
         const dismiss = createTimeoutDismiss();
         const cb = vi.fn();
 
@@ -213,7 +213,7 @@ describe("createTimeoutDismiss", () => {
       });
     });
 
-    test("clear while hidden removes the listener", () => {
+    it("clear while hidden removes the listener", () => {
       const dismiss = createTimeoutDismiss();
       const cb = vi.fn();
 

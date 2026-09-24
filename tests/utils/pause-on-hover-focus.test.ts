@@ -5,7 +5,7 @@ function fakeDismiss() {
 }
 
 describe("createHoverFocusPause", () => {
-  test("mouseenter/focusin pause only when pauseOnHover is true", () => {
+  it("mouseenter/focusin pause only when pauseOnHover is true", () => {
     const dismiss = fakeDismiss();
     const { handleMouseenter, handleFocusIn } = createHoverFocusPause(
       dismiss,
@@ -17,7 +17,7 @@ describe("createHoverFocusPause", () => {
     expect(dismiss.pause).not.toHaveBeenCalled();
   });
 
-  test("mouseleave/focusout resume when focus/pointer has left the root", () => {
+  it("mouseleave/focusout resume when focus/pointer has left the root", () => {
     const dismiss = fakeDismiss();
     const { handleMouseleave, handleFocusOut } = createHoverFocusPause(
       dismiss,
@@ -41,7 +41,7 @@ describe("createHoverFocusPause", () => {
     expect(dismiss.resume).toHaveBeenCalledTimes(2);
   });
 
-  test("does not resume when relatedTarget is still inside the root", () => {
+  it("does not resume when relatedTarget is still inside the root", () => {
     const dismiss = fakeDismiss();
     const { handleFocusOut } = createHoverFocusPause(dismiss, () => true);
 
@@ -56,7 +56,7 @@ describe("createHoverFocusPause", () => {
     expect(dismiss.resume).not.toHaveBeenCalled();
   });
 
-  test("does not resume when the root still contains document.activeElement", () => {
+  it("does not resume when the root still contains document.activeElement", () => {
     const dismiss = fakeDismiss();
     const { handleMouseleave } = createHoverFocusPause(dismiss, () => true);
 

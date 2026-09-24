@@ -19,7 +19,7 @@ describe("downloadFile", () => {
     vi.restoreAllMocks();
   });
 
-  test("wraps string data in a Blob with the given type", () => {
+  it("wraps string data in a Blob with the given type", () => {
     downloadFile("id,name\n1,Alpha", "items.csv", "text/csv;charset=utf-8");
 
     expect(createObjectURL).toHaveBeenCalledTimes(1);
@@ -28,14 +28,14 @@ describe("downloadFile", () => {
     expect(blob.type).toBe("text/csv;charset=utf-8");
   });
 
-  test("passes a Blob straight through without rewrapping it", () => {
+  it("passes a Blob straight through without rewrapping it", () => {
     const blob = new Blob(["custom"], { type: "application/json" });
     downloadFile(blob, "data.json");
 
     expect(createObjectURL).toHaveBeenCalledWith(blob);
   });
 
-  test("clicks a temporary anchor with the object URL and filename, then revokes it", () => {
+  it("clicks a temporary anchor with the object URL and filename, then revokes it", () => {
     downloadFile("content", "report.txt");
 
     expect(clickSpy).toHaveBeenCalledTimes(1);

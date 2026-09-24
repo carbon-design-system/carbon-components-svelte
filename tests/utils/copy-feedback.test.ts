@@ -9,7 +9,7 @@ describe("createCopyFeedbackState", () => {
     vi.useRealTimers();
   });
 
-  test("runs performCopy once and starts fade-in feedback", async () => {
+  it("runs performCopy once and starts fade-in feedback", async () => {
     const state = createCopyFeedbackState();
     const performCopy = vi.fn();
 
@@ -21,7 +21,7 @@ describe("createCopyFeedbackState", () => {
     expect(state.copyPending).toBe(false);
   });
 
-  test("ignores a second onClick while feedback is active", async () => {
+  it("ignores a second onClick while feedback is active", async () => {
     const state = createCopyFeedbackState();
     const performCopy = vi.fn();
 
@@ -31,7 +31,7 @@ describe("createCopyFeedbackState", () => {
     expect(performCopy).toHaveBeenCalledTimes(1);
   });
 
-  test("transitions to fade-out after feedbackTimeout", async () => {
+  it("transitions to fade-out after feedbackTimeout", async () => {
     const state = createCopyFeedbackState();
     const performCopy = vi.fn();
 
@@ -41,7 +41,7 @@ describe("createCopyFeedbackState", () => {
     expect(state.animation).toBe("fade-out");
   });
 
-  test("portalled closes feedback directly after feedbackTimeout", async () => {
+  it("portalled closes feedback directly after feedbackTimeout", async () => {
     const state = createCopyFeedbackState();
     const performCopy = vi.fn();
 
@@ -60,7 +60,7 @@ describe("createCopyFeedbackState", () => {
     expect(performCopy).toHaveBeenCalledTimes(2);
   });
 
-  test("resets on hide-feedback animation end", async () => {
+  it("resets on hide-feedback animation end", async () => {
     const state = createCopyFeedbackState();
     const performCopy = vi.fn();
 
@@ -74,7 +74,7 @@ describe("createCopyFeedbackState", () => {
     expect(performCopy).toHaveBeenCalledTimes(2);
   });
 
-  test("dismiss clears state and allows another copy", async () => {
+  it("dismiss clears state and allows another copy", async () => {
     const state = createCopyFeedbackState();
     const performCopy = vi.fn();
 
@@ -88,7 +88,7 @@ describe("createCopyFeedbackState", () => {
     expect(performCopy).toHaveBeenCalledTimes(2);
   });
 
-  test("cleanup clears timeout without calling onSync", async () => {
+  it("cleanup clears timeout without calling onSync", async () => {
     const onSync = vi.fn();
     const state = createCopyFeedbackState(onSync);
 
@@ -103,7 +103,7 @@ describe("createCopyFeedbackState", () => {
     expect(state.feedbackOpen).toBe(false);
   });
 
-  test("async performCopy delays feedback until resolved", async () => {
+  it("async performCopy delays feedback until resolved", async () => {
     const state = createCopyFeedbackState();
     let resolveCopy: () => void = () => {};
     const performCopy = vi.fn(
@@ -128,7 +128,7 @@ describe("createCopyFeedbackState", () => {
     expect(state.feedbackOpen).toBe(true);
   });
 
-  test("rejected performCopy shows error feedback then allows retry after dismiss", async () => {
+  it("rejected performCopy shows error feedback then allows retry after dismiss", async () => {
     const state = createCopyFeedbackState();
     const performCopy = vi
       .fn()

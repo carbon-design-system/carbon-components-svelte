@@ -269,7 +269,7 @@ describe("OverflowMenu", () => {
     }
   });
 
-  test.each([
+  it.each([
     ["xs", "bx--overflow-menu--xs"],
     ["sm", "bx--overflow-menu--sm"],
     ["xl", "bx--overflow-menu--xl"],
@@ -288,7 +288,7 @@ describe("OverflowMenu", () => {
     expect(menuButton).not.toHaveClass("bx--overflow-menu--xl");
   });
 
-  test.each([
+  it.each([
     ["sm", "bx--overflow-menu-options--sm"],
     ["xl", "bx--overflow-menu-options--xl"],
   ] as const)(

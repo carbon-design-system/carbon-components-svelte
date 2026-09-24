@@ -17,7 +17,7 @@ describe("RadioButtonRegistry", () => {
     registerRadioButton("group1", key, false);
 
     const group = getGroup("group1");
-    expect.assert(group);
+    assert(group);
     expect(group.members.size).toBe(1);
   });
 
@@ -28,7 +28,7 @@ describe("RadioButtonRegistry", () => {
     registerRadioButton("group1", key2, false);
 
     const group = getGroup("group1");
-    expect.assert(group);
+    assert(group);
     expect(group.members.size).toBe(2);
   });
 
@@ -66,7 +66,7 @@ describe("RadioButtonRegistry", () => {
 
     unregister1();
     const group1 = getGroup("group1");
-    expect.assert(group1);
+    assert(group1);
     expect(group1.members.size).toBe(1);
 
     unregister2();
@@ -93,8 +93,8 @@ describe("RadioButtonRegistry", () => {
     const group1 = getGroup("group1");
     const group2 = getGroup("group2");
 
-    expect.assert(group1);
-    expect.assert(group2);
+    assert(group1);
+    assert(group2);
 
     expect(get(group1.selectedKey)).toBe(key1);
     expect(get(group2.selectedKey)).toBe(key2);
@@ -113,7 +113,7 @@ describe("RadioButtonRegistry", () => {
     registerRadioButton("group1", key, false);
 
     const group = getGroup("group1");
-    expect.assert(group);
+    assert(group);
     // Set doesn't add duplicates
     expect(group.members.size).toBe(1);
   });
@@ -147,7 +147,7 @@ describe("RadioButtonRegistry", () => {
     registerRadioButton("group1", key2, false);
 
     const group = getGroup("group1");
-    expect.assert(group);
+    assert(group);
     expect(get(group.selectedKey)).toBe(key1);
 
     // Unregister the selected instance
@@ -168,7 +168,7 @@ describe("RadioButtonRegistry", () => {
     );
 
     const group = getGroup("group1");
-    expect.assert(group);
+    assert(group);
     expect(get(group.selectedKey)).toBe(key1);
 
     // Unregister the non-selected instance

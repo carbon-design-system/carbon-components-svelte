@@ -14,7 +14,7 @@ describe("bodyScrollLock", () => {
     document.body.classList.remove(CLASS);
   });
 
-  test("adds the class on first acquire and removes on last release", () => {
+  it("adds the class on first acquire and removes on last release", () => {
     expect(document.body).not.toHaveClass(CLASS);
     acquireBodyScrollLock();
     expect(document.body).toHaveClass(CLASS);
@@ -22,7 +22,7 @@ describe("bodyScrollLock", () => {
     expect(document.body).not.toHaveClass(CLASS);
   });
 
-  test("ref-counts so the class persists until every holder releases", () => {
+  it("ref-counts so the class persists until every holder releases", () => {
     acquireBodyScrollLock();
     acquireBodyScrollLock();
     expect(document.body).toHaveClass(CLASS);
@@ -34,7 +34,7 @@ describe("bodyScrollLock", () => {
     expect(document.body).not.toHaveClass(CLASS);
   });
 
-  test("ignores releases when no lock is held", () => {
+  it("ignores releases when no lock is held", () => {
     releaseBodyScrollLock();
     expect(document.body).not.toHaveClass(CLASS);
   });

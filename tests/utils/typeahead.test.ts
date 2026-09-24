@@ -12,37 +12,37 @@ describe("typeaheadIndex", () => {
   }));
   const itemToString = (item: { text: string }) => item.text;
 
-  test("finds the next prefix match after the current index", () => {
+  it("finds the next prefix match after the current index", () => {
     expect(
       typeaheadIndex({ items: fruits, query: "a", itemToString, index: 0 }),
     ).toBe(1);
   });
 
-  test("finds a match from the start when index is -1", () => {
+  it("finds a match from the start when index is -1", () => {
     expect(
       typeaheadIndex({ items: fruits, query: "b", itemToString, index: -1 }),
     ).toBe(2);
   });
 
-  test("wraps to the first prefix match after the end", () => {
+  it("wraps to the first prefix match after the end", () => {
     expect(
       typeaheadIndex({ items: fruits, query: "a", itemToString, index: 3 }),
     ).toBe(0);
   });
 
-  test("matches a multi-character prefix", () => {
+  it("matches a multi-character prefix", () => {
     expect(
       typeaheadIndex({ items: fruits, query: "apr", itemToString, index: -1 }),
     ).toBe(1);
   });
 
-  test("is case-insensitive", () => {
+  it("is case-insensitive", () => {
     expect(
       typeaheadIndex({ items: fruits, query: "B", itemToString, index: -1 }),
     ).toBe(2);
   });
 
-  test("skips disabled items", () => {
+  it("skips disabled items", () => {
     const items = [
       { text: "Banana", disabled: true },
       { text: "Blueberry", disabled: false },
@@ -52,25 +52,25 @@ describe("typeaheadIndex", () => {
     );
   });
 
-  test("returns the original index when nothing matches", () => {
+  it("returns the original index when nothing matches", () => {
     expect(
       typeaheadIndex({ items: fruits, query: "z", itemToString, index: 2 }),
     ).toBe(2);
   });
 
-  test("returns the original index for an empty query", () => {
+  it("returns the original index for an empty query", () => {
     expect(
       typeaheadIndex({ items: fruits, query: "", itemToString, index: 1 }),
     ).toBe(1);
   });
 
-  test("returns the original index for empty items", () => {
+  it("returns the original index for empty items", () => {
     expect(
       typeaheadIndex({ items: [], query: "a", itemToString, index: -1 }),
     ).toBe(-1);
   });
 
-  test("supports a custom isDisabled predicate", () => {
+  it("supports a custom isDisabled predicate", () => {
     const items = [
       { label: "Alpha", ok: false },
       { label: "Apex", ok: true },
@@ -90,12 +90,12 @@ describe("typeaheadIndex", () => {
 describe("isTypeaheadKey", () => {
   const key = (init: KeyboardEventInit) => new KeyboardEvent("keydown", init);
 
-  test("accepts unmodified printable keys", () => {
+  it("accepts unmodified printable keys", () => {
     expect(isTypeaheadKey(key({ key: "a" }))).toBe(true);
     expect(isTypeaheadKey(key({ key: "A", shiftKey: true }))).toBe(true);
   });
 
-  test("rejects Space, named keys, and modified keys", () => {
+  it("rejects Space, named keys, and modified keys", () => {
     expect(isTypeaheadKey(key({ key: " " }))).toBe(false);
     expect(isTypeaheadKey(key({ key: "Enter" }))).toBe(false);
     expect(isTypeaheadKey(key({ key: "a", ctrlKey: true }))).toBe(false);
@@ -113,7 +113,7 @@ describe("createTypeaheadBuffer", () => {
     vi.useRealTimers();
   });
 
-  test("accumulates lowercase characters until the delay elapses", () => {
+  it("accumulates lowercase characters until the delay elapses", () => {
     const typeahead = createTypeaheadBuffer(500);
     expect(typeahead.push("A")).toBe("a");
     expect(typeahead.push("p")).toBe("ap");
@@ -121,7 +121,7 @@ describe("createTypeaheadBuffer", () => {
     expect(typeahead.push("b")).toBe("b");
   });
 
-  test("clear resets the query immediately", () => {
+  it("clear resets the query immediately", () => {
     const typeahead = createTypeaheadBuffer();
     typeahead.push("a");
     typeahead.clear();

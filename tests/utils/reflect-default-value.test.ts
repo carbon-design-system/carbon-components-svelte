@@ -9,7 +9,7 @@ describe("reflectDefaultValue", () => {
     };
   };
 
-  test("keeps the value through a form reset", () => {
+  it("keeps the value through a form reset", () => {
     const { form, input } = setup();
     reflectDefaultValue(input, 40);
 
@@ -19,7 +19,7 @@ describe("reflectDefaultValue", () => {
     expect(input.value).toBe("40");
   });
 
-  test("follows updates", () => {
+  it("follows updates", () => {
     const { form, input } = setup();
     const action = reflectDefaultValue(input, 40);
 
@@ -29,14 +29,14 @@ describe("reflectDefaultValue", () => {
     expect(input.value).toBe("70");
   });
 
-  test("reflects null as empty", () => {
+  it("reflects null as empty", () => {
     const { input } = setup();
     reflectDefaultValue(input, null);
 
     expect(input.getAttribute("value")).toBe("");
   });
 
-  test("leaves the attribute alone for undefined", () => {
+  it("leaves the attribute alone for undefined", () => {
     const { input } = setup();
     input.defaultValue = "server";
 

@@ -11,7 +11,7 @@ const netClick = (
   remove.mock.calls.filter((c: unknown[]) => c[0] === "click").length;
 
 describe("ComboBox window listeners", () => {
-  test("closed combo boxes register no window click listener", () => {
+  it("closed combo boxes register no window click listener", () => {
     const add = vi.spyOn(window, "addEventListener");
     const remove = vi.spyOn(window, "removeEventListener");
 
@@ -22,7 +22,7 @@ describe("ComboBox window listeners", () => {
     remove.mockRestore();
   });
 
-  test("an open combo box registers exactly one window click listener", async () => {
+  it("an open combo box registers exactly one window click listener", async () => {
     const add = vi.spyOn(window, "addEventListener");
     const remove = vi.spyOn(window, "removeEventListener");
 
@@ -34,7 +34,7 @@ describe("ComboBox window listeners", () => {
     remove.mockRestore();
   });
 
-  test("closing a combo box removes the window click listener", async () => {
+  it("closing a combo box removes the window click listener", async () => {
     const add = vi.spyOn(window, "addEventListener");
     const remove = vi.spyOn(window, "removeEventListener");
 

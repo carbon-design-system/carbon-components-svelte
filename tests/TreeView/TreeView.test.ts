@@ -22,7 +22,7 @@ import TreeViewGenerics from "./TreeViewGenerics.test.svelte";
 
 function treeItemById(id: string | number): HTMLElement {
   const el = document.getElementById(String(id));
-  expect.assert(el instanceof HTMLElement);
+  assert(el instanceof HTMLElement);
   return el;
 }
 
@@ -51,7 +51,7 @@ function getNamedParentTreeitem(name: RegExp): HTMLElement {
         n instanceof HTMLElement &&
         n.classList.contains("bx--tree-parent-node"),
     );
-  expect.assert(found instanceof HTMLElement);
+  assert(found instanceof HTMLElement);
   return found;
 }
 
@@ -196,7 +196,7 @@ describe.each(testCases)("$name", ({ component }) => {
 
     expect(toggleButton).toBeInTheDocument();
 
-    expect.assert(toggleButton instanceof HTMLElement);
+    assert(toggleButton instanceof HTMLElement);
 
     const lastToggleDetail = () =>
       consoleLog.mock.calls.filter((call) => call[0] === "toggle").at(-1)?.[1];
@@ -561,7 +561,7 @@ describe("TreeView Props", () => {
 
       const activeNode = screen.getByRole("treeitem", { name: /Node 2/ });
       const label = activeNode.querySelector(".bx--tree-node__label");
-      expect.assert(label instanceof HTMLElement);
+      assert(label instanceof HTMLElement);
       expect(label.style.paddingLeft).toBe("2.5rem");
       expect(label.style.marginLeft).toBe("-2.5rem");
     });
@@ -585,7 +585,7 @@ describe("TreeView Props", () => {
 
       const activeNode = screen.getByRole("treeitem", { current: true });
       const label = activeNode.querySelector(".bx--tree-node__label");
-      expect.assert(label instanceof HTMLElement);
+      assert(label instanceof HTMLElement);
       // Nested at depth 2: offset = (2 - 1) + 2.5 = 3.5rem
       expect(label.style.paddingLeft).toBe("3.5rem");
       expect(label.style.marginLeft).toBe("-3.5rem");
@@ -606,7 +606,7 @@ describe("TreeView Props", () => {
 
       const activeNode = treeItemById(1);
       const label = activeNode.querySelector(".bx--tree-node__label");
-      expect.assert(label instanceof HTMLElement);
+      assert(label instanceof HTMLElement);
       // Root parent: offset = (1 - 1) + 1 = 1rem
       expect(label.style.paddingLeft).toBe("1rem");
       expect(label.style.marginLeft).toBe("-1rem");
@@ -941,10 +941,10 @@ describe("TreeView Props", () => {
     const engineItem = document.getElementById("2");
     const sqlItem = document.getElementById("5");
     const db2Item = document.getElementById("6");
-    expect.assert(analyticsItem instanceof HTMLElement);
-    expect.assert(engineItem instanceof HTMLElement);
-    expect.assert(sqlItem instanceof HTMLElement);
-    expect.assert(db2Item instanceof HTMLElement);
+    assert(analyticsItem instanceof HTMLElement);
+    assert(engineItem instanceof HTMLElement);
+    assert(sqlItem instanceof HTMLElement);
+    assert(db2Item instanceof HTMLElement);
 
     await user.click(analyticsItem);
 
@@ -968,9 +968,9 @@ describe("TreeView Props", () => {
     const analyticsItem = document.getElementById("1");
     const sparkItem = document.getElementById("3");
     const hadoopItem = document.getElementById("4");
-    expect.assert(analyticsItem instanceof HTMLElement);
-    expect.assert(sparkItem instanceof HTMLElement);
-    expect.assert(hadoopItem instanceof HTMLElement);
+    assert(analyticsItem instanceof HTMLElement);
+    assert(sparkItem instanceof HTMLElement);
+    assert(hadoopItem instanceof HTMLElement);
 
     await user.click(analyticsItem);
 
@@ -989,8 +989,8 @@ describe("TreeView Props", () => {
 
     const analyticsItem = document.getElementById("1");
     const sparkItem = document.getElementById("3");
-    expect.assert(analyticsItem instanceof HTMLElement);
-    expect.assert(sparkItem instanceof HTMLElement);
+    assert(analyticsItem instanceof HTMLElement);
+    assert(sparkItem instanceof HTMLElement);
 
     await user.click(analyticsItem);
     expect(sparkItem).toHaveAttribute("aria-selected", "true");
@@ -1084,9 +1084,9 @@ describe("TreeView Props", () => {
     const engineItem = document.getElementById("2");
     const sqlItem = document.getElementById("5");
     const db2Item = document.getElementById("6");
-    expect.assert(engineItem instanceof HTMLElement);
-    expect.assert(sqlItem instanceof HTMLElement);
-    expect.assert(db2Item instanceof HTMLElement);
+    assert(engineItem instanceof HTMLElement);
+    assert(sqlItem instanceof HTMLElement);
+    assert(db2Item instanceof HTMLElement);
 
     expect(engineItem).toHaveAttribute("aria-selected", "true");
     expect(sqlItem).toHaveAttribute("aria-selected", "true");
@@ -1137,10 +1137,10 @@ describe("TreeView Props", () => {
     const engineItem = document.getElementById("2");
     const sqlItem = document.getElementById("5");
     const db2Item = document.getElementById("6");
-    expect.assert(analyticsItem instanceof HTMLElement);
-    expect.assert(engineItem instanceof HTMLElement);
-    expect.assert(sqlItem instanceof HTMLElement);
-    expect.assert(db2Item instanceof HTMLElement);
+    assert(analyticsItem instanceof HTMLElement);
+    assert(engineItem instanceof HTMLElement);
+    assert(sqlItem instanceof HTMLElement);
+    assert(db2Item instanceof HTMLElement);
 
     // Click AI first
     await user.click(aiItem);
@@ -1517,7 +1517,7 @@ describe("TreeView Generics", () => {
 
       const electronics = treeItemById("electronics");
       const toggle = electronics.querySelector(".bx--tree-parent-node__toggle");
-      expect.assert(toggle instanceof HTMLElement);
+      assert(toggle instanceof HTMLElement);
 
       await user.click(toggle);
       expect(electronics).toHaveAttribute("aria-expanded", "true");
@@ -1540,7 +1540,7 @@ describe("TreeView Generics", () => {
       const toggle = treeItemById("electronics").querySelector(
         ".bx--tree-parent-node__toggle",
       );
-      expect.assert(toggle instanceof HTMLElement);
+      assert(toggle instanceof HTMLElement);
       await user.click(toggle);
 
       await user.click(treeItemById("laptop"));
@@ -2065,7 +2065,7 @@ describe("TreeViewNode href", () => {
 describe("TreeView autoCollapse", () => {
   const getToggleButton = (node: HTMLElement) => {
     const button = node.querySelector(".bx--tree-parent-node__toggle");
-    expect.assert(button instanceof HTMLElement);
+    assert(button instanceof HTMLElement);
     return button;
   };
 
@@ -2298,7 +2298,7 @@ describe("TreeView autoCollapse", () => {
     });
 
     const parent = container.querySelector("#p");
-    expect.assert(parent instanceof HTMLElement);
+    assert(parent instanceof HTMLElement);
     parent.focus();
 
     await user.keyboard("{ArrowRight}");

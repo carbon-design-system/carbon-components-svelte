@@ -9,7 +9,7 @@ describe("RadioButton (Standalone)", () => {
     });
 
     const input = screen.getByRole("radio");
-    expect.assert(input instanceof HTMLInputElement);
+    assert(input instanceof HTMLInputElement);
     expect(input).not.toBeChecked();
 
     component.checked = true;

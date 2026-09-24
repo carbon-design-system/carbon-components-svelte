@@ -28,7 +28,7 @@ describe("rafThrottle", () => {
     cb?.();
   }
 
-  test("runs fn once per frame when called repeatedly", () => {
+  it("runs fn once per frame when called repeatedly", () => {
     const fn = vi.fn();
     const throttled = rafThrottle(fn);
 
@@ -41,7 +41,7 @@ describe("rafThrottle", () => {
     expect(fn).toHaveBeenCalledTimes(1);
   });
 
-  test("passes the latest arguments to fn", () => {
+  it("passes the latest arguments to fn", () => {
     const fn = vi.fn();
     const throttled = rafThrottle(fn);
 
@@ -52,7 +52,7 @@ describe("rafThrottle", () => {
     expect(fn).toHaveBeenCalledExactlyOnceWith("b");
   });
 
-  test("can schedule again after the frame runs", () => {
+  it("can schedule again after the frame runs", () => {
     const fn = vi.fn();
     const throttled = rafThrottle(fn);
 
@@ -64,7 +64,7 @@ describe("rafThrottle", () => {
     expect(fn).toHaveBeenCalledTimes(2);
   });
 
-  test("cancel() clears a pending frame", () => {
+  it("cancel() clears a pending frame", () => {
     const fn = vi.fn();
     const throttled = rafThrottle(fn);
 
@@ -76,7 +76,7 @@ describe("rafThrottle", () => {
     expect(fn).not.toHaveBeenCalled();
   });
 
-  test("cancel() does nothing when no frame is pending", () => {
+  it("cancel() does nothing when no frame is pending", () => {
     const throttled = rafThrottle(vi.fn());
     expect(() => throttled.cancel()).not.toThrow();
     expect(cancelled).toBe(false);

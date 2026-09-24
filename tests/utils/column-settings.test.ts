@@ -15,7 +15,7 @@ const headers = [
 ];
 
 describe("toColumnSettings", () => {
-  test("returns key order and hidden keys", () => {
+  it("returns key order and hidden keys", () => {
     expect(toColumnSettings(headers)).toEqual({
       order: ["name", "protocol", "actions", "port"],
       hidden: ["port"],
@@ -24,7 +24,7 @@ describe("toColumnSettings", () => {
 });
 
 describe("applyColumnSettings", () => {
-  test("round trip equals the original headers by key/hidden", () => {
+  it("round trip equals the original headers by key/hidden", () => {
     const settings = toColumnSettings(headers);
     const result = applyColumnSettings(headers, settings);
 
@@ -33,7 +33,7 @@ describe("applyColumnSettings", () => {
     );
   });
 
-  test("ignores unknown keys in settings.order", () => {
+  it("ignores unknown keys in settings.order", () => {
     const result = applyColumnSettings(headers, {
       order: ["port", "name", "ghost"],
       hidden: [],
@@ -47,7 +47,7 @@ describe("applyColumnSettings", () => {
     ]);
   });
 
-  test("appends headers missing from settings.order, keeping their relative order", () => {
+  it("appends headers missing from settings.order, keeping their relative order", () => {
     const result = applyColumnSettings(headers, {
       order: ["port"],
       hidden: [],
@@ -61,7 +61,7 @@ describe("applyColumnSettings", () => {
     ]);
   });
 
-  test("keeps functions on headers", () => {
+  it("keeps functions on headers", () => {
     const settings = toColumnSettings(headers);
     const result = applyColumnSettings(headers, settings);
 
@@ -71,7 +71,7 @@ describe("applyColumnSettings", () => {
     expect(result.find((header) => header.key === "port")?.sort).toBe(sort);
   });
 
-  test("sets an explicit false on headers not in settings.hidden", () => {
+  it("sets an explicit false on headers not in settings.hidden", () => {
     const result = applyColumnSettings(headers, {
       order: ["name", "protocol", "actions", "port"],
       hidden: [],
@@ -84,19 +84,19 @@ describe("applyColumnSettings", () => {
 });
 
 describe("setColumnHidden", () => {
-  test("hides a visible column", () => {
+  it("hides a visible column", () => {
     const result = setColumnHidden(headers, "name", true);
     expect(result.find((header) => header.key === "name")?.columnHidden).toBe(
       true,
     );
   });
 
-  test("no-op returns the same reference when nothing changes", () => {
+  it("no-op returns the same reference when nothing changes", () => {
     expect(setColumnHidden(headers, "port", true)).toBe(headers);
     expect(setColumnHidden(headers, "name", false)).toBe(headers);
   });
 
-  test("returns the same reference when the key is missing", () => {
+  it("returns the same reference when the key is missing", () => {
     expect(setColumnHidden(headers, "ghost", true)).toBe(headers);
   });
 });

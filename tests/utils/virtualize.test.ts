@@ -11,7 +11,7 @@ import {
 } from "../../src/utils/virtualize.js";
 
 describe("virtualize", () => {
-  test("should return all items when below threshold", () => {
+  it("should return all items when below threshold", () => {
     const items = Array.from({ length: 50 }, (_, i) => ({
       id: i,
       name: `Item ${i}`,
@@ -32,7 +32,7 @@ describe("virtualize", () => {
     expect(result.isVirtualized).toBe(false);
   });
 
-  test("should virtualize items when above threshold", () => {
+  it("should virtualize items when above threshold", () => {
     const items = Array.from({ length: 500 }, (_, i) => ({
       id: i,
       name: `Item ${i}`,
@@ -54,7 +54,7 @@ describe("virtualize", () => {
     expect(result.isVirtualized).toBe(true);
   });
 
-  test("should calculate visible range based on scroll position", () => {
+  it("should calculate visible range based on scroll position", () => {
     const items = Array.from({ length: 500 }, (_, i) => ({
       id: i,
       name: `Item ${i}`,
@@ -73,7 +73,7 @@ describe("virtualize", () => {
     expect(result.isVirtualized).toBe(true);
   });
 
-  test("should apply overscan to render extra items", () => {
+  it("should apply overscan to render extra items", () => {
     const items = Array.from({ length: 500 }, (_, i) => ({
       id: i,
       name: `Item ${i}`,
@@ -94,7 +94,7 @@ describe("virtualize", () => {
     expect(result.isVirtualized).toBe(true);
   });
 
-  test("should cap maximum rendered items when maxItems is specified", () => {
+  it("should cap maximum rendered items when maxItems is specified", () => {
     const items = Array.from({ length: 500 }, (_, i) => ({
       id: i,
       name: `Item ${i}`,
@@ -113,7 +113,7 @@ describe("virtualize", () => {
     expect(result.isVirtualized).toBe(true);
   });
 
-  test("should handle scroll position at the end of the list", () => {
+  it("should handle scroll position at the end of the list", () => {
     const items = Array.from({ length: 500 }, (_, i) => ({
       id: i,
       name: `Item ${i}`,
@@ -133,7 +133,7 @@ describe("virtualize", () => {
     expect(result.isVirtualized).toBe(true);
   });
 
-  test("should clamp scroll position beyond the list to the last page", () => {
+  it("should clamp scroll position beyond the list to the last page", () => {
     const items = Array.from({ length: 500 }, (_, i) => ({
       id: i,
       name: `Item ${i}`,
@@ -155,7 +155,7 @@ describe("virtualize", () => {
     expect(result.isVirtualized).toBe(true);
   });
 
-  test("renders matching items when a stale deep scrollTop survives a filter narrowing", () => {
+  it("renders matching items when a stale deep scrollTop survives a filter narrowing", () => {
     // Reproduces the blank-menu bug: a list of 500 is scrolled deep, then the
     // filter narrows it to 150 items (still above the threshold) while the old
     // scrollTop lingers. Without clamping, startIndex (~397) exceeds the new
@@ -182,7 +182,7 @@ describe("virtualize", () => {
     expect(result.offsetY).toBe(result.startIndex * 40);
   });
 
-  test("should handle empty items array", () => {
+  it("should handle empty items array", () => {
     const result = virtualize({
       items: [],
       itemHeight: 40,
@@ -199,7 +199,7 @@ describe("virtualize", () => {
     expect(result.isVirtualized).toBe(false);
   });
 
-  test("should handle custom threshold", () => {
+  it("should handle custom threshold", () => {
     const items = Array.from({ length: 150 }, (_, i) => ({
       id: i,
       name: `Item ${i}`,
@@ -228,7 +228,7 @@ describe("virtualize", () => {
     expect(result2.visibleItems.length).toBeLessThan(150);
   });
 
-  test("should calculate correct offsetY for positioning", () => {
+  it("should calculate correct offsetY for positioning", () => {
     const items = Array.from({ length: 500 }, (_, i) => ({
       id: i,
       name: `Item ${i}`,
@@ -249,7 +249,7 @@ describe("virtualize", () => {
     expect(result.offsetY).toBeGreaterThanOrEqual(0);
   });
 
-  test("should handle different item heights", () => {
+  it("should handle different item heights", () => {
     const items = Array.from({ length: 500 }, (_, i) => ({
       id: i,
       name: `Item ${i}`,
@@ -279,7 +279,7 @@ describe("virtualize", () => {
     expect(result2.totalHeight).toBe(30000);
   });
 
-  test("should handle different container heights", () => {
+  it("should handle different container heights", () => {
     const items = Array.from({ length: 500 }, (_, i) => ({
       id: i,
       name: `Item ${i}`,
@@ -307,7 +307,7 @@ describe("virtualize", () => {
     );
   });
 
-  test("should preserve item references in visibleItems", () => {
+  it("should preserve item references in visibleItems", () => {
     const items = Array.from({ length: 500 }, (_, i) => ({
       id: i,
       name: `Item ${i}`,
@@ -327,7 +327,7 @@ describe("virtualize", () => {
     );
   });
 
-  test("should handle maxItems that is smaller than viewport capacity", () => {
+  it("should handle maxItems that is smaller than viewport capacity", () => {
     const items = Array.from({ length: 500 }, (_, i) => ({
       id: i,
       name: `Item ${i}`,
@@ -345,7 +345,7 @@ describe("virtualize", () => {
     expect(result.endIndex - result.startIndex).toBe(5);
   });
 
-  test("should handle negative scroll position", () => {
+  it("should handle negative scroll position", () => {
     const items = Array.from({ length: 500 }, (_, i) => ({
       id: i,
       name: `Item ${i}`,
@@ -363,7 +363,7 @@ describe("virtualize", () => {
     expect(result.isVirtualized).toBe(true);
   });
 
-  test("falls back to unvirtualized for a non-positive item height", () => {
+  it("falls back to unvirtualized for a non-positive item height", () => {
     const items = Array.from({ length: 500 }, (_, i) => ({
       id: i,
       name: `Item ${i}`,
@@ -386,7 +386,7 @@ describe("virtualize", () => {
     expect(result.totalHeight).toBe(0);
   });
 
-  test("should handle zero container height", () => {
+  it("should handle zero container height", () => {
     const items = Array.from({ length: 500 }, (_, i) => ({
       id: i,
       name: `Item ${i}`,
@@ -409,7 +409,7 @@ describe("virtualListState", () => {
   const makeItems = (length: number) =>
     Array.from({ length }, (_, i) => ({ id: i, name: `Item ${i}` }));
 
-  test("returns null config and full items when not virtualizing", () => {
+  it("returns null config and full items when not virtualizing", () => {
     const items = makeItems(10);
     const result = virtualListState({
       items,
@@ -423,7 +423,7 @@ describe("virtualListState", () => {
     expect(result.itemsToRender).toBe(items);
   });
 
-  test("merges object-virtualize overrides over the defaults", () => {
+  it("merges object-virtualize overrides over the defaults", () => {
     const result = virtualListState({
       items: makeItems(500),
       scrollTop: 0,
@@ -439,7 +439,7 @@ describe("virtualListState", () => {
     });
   });
 
-  test("applies caller defaults beneath the virtualize prop", () => {
+  it("applies caller defaults beneath the virtualize prop", () => {
     const result = virtualListState({
       items: makeItems(500),
       scrollTop: 0,
@@ -451,7 +451,7 @@ describe("virtualListState", () => {
     expect(result.config?.containerHeight).toBe(250);
   });
 
-  test("returns a visible slice when virtualized above the threshold", () => {
+  it("returns a visible slice when virtualized above the threshold", () => {
     const items = makeItems(500);
     const result = virtualListState({
       items,
@@ -464,7 +464,7 @@ describe("virtualListState", () => {
     expect(result.itemsToRender.length).toBeLessThan(items.length);
   });
 
-  test("renders all items when virtualized but below the threshold", () => {
+  it("renders all items when virtualized but below the threshold", () => {
     const items = makeItems(50);
     const result = virtualListState({
       items,
@@ -485,14 +485,14 @@ describe("getVisibleRange", () => {
     itemCount: 500,
   };
 
-  test("clamps startIndex to 0 with overscan at the top", () => {
+  it("clamps startIndex to 0 with overscan at the top", () => {
     expect(getVisibleRange({ ...base, scrollTop: 0 })).toEqual({
       startIndex: 0,
       endIndex: Math.ceil(300 / 40) + 3,
     });
   });
 
-  test("offsets the range by scroll position", () => {
+  it("offsets the range by scroll position", () => {
     // scrollTop 2000 => floor(50) - 3 = 47 start.
     const { startIndex, endIndex } = getVisibleRange({
       ...base,
@@ -502,7 +502,7 @@ describe("getVisibleRange", () => {
     expect(endIndex).toBe(Math.ceil((2000 + 300) / 40) + 3);
   });
 
-  test("clamps endIndex to itemCount", () => {
+  it("clamps endIndex to itemCount", () => {
     const { endIndex } = getVisibleRange({
       ...base,
       scrollTop: 500 * 40,
@@ -510,14 +510,14 @@ describe("getVisibleRange", () => {
     expect(endIndex).toBe(500);
   });
 
-  test("caps the window to maxItems", () => {
+  it("caps the window to maxItems", () => {
     expect(getVisibleRange({ ...base, scrollTop: 0, maxItems: 5 })).toEqual({
       startIndex: 0,
       endIndex: 5,
     });
   });
 
-  test("falls back to the full range for a non-positive or NaN itemHeight", () => {
+  it("falls back to the full range for a non-positive or NaN itemHeight", () => {
     for (const itemHeight of [0, -1, Number.NaN]) {
       expect(getVisibleRange({ ...base, itemHeight, scrollTop: 100 })).toEqual({
         startIndex: 0,
@@ -528,7 +528,7 @@ describe("getVisibleRange", () => {
 });
 
 describe("getBoundedScrollTop", () => {
-  test("returns the exact position for a mid-list item", () => {
+  it("returns the exact position for a mid-list item", () => {
     expect(
       getBoundedScrollTop({
         index: 10,
@@ -539,7 +539,7 @@ describe("getBoundedScrollTop", () => {
     ).toBe(400);
   });
 
-  test("clamps to 0 for a negative index", () => {
+  it("clamps to 0 for a negative index", () => {
     expect(
       getBoundedScrollTop({
         index: -5,
@@ -550,7 +550,7 @@ describe("getBoundedScrollTop", () => {
     ).toBe(0);
   });
 
-  test("clamps to maxScroll when past the end", () => {
+  it("clamps to maxScroll when past the end", () => {
     // maxScroll = 100 * 40 - 300 = 3700
     expect(
       getBoundedScrollTop({
@@ -562,7 +562,7 @@ describe("getBoundedScrollTop", () => {
     ).toBe(3700);
   });
 
-  test("floors maxScroll at 0 when content is shorter than the container", () => {
+  it("floors maxScroll at 0 when content is shorter than the container", () => {
     expect(
       getBoundedScrollTop({
         index: 4,
@@ -582,7 +582,7 @@ describe("scrollHighlightedIntoView", () => {
     overscan: 3,
   };
 
-  test("returns null when the highlighted item is already visible", () => {
+  it("returns null when the highlighted item is already visible", () => {
     // At scrollTop 0, the visible+overscan range covers the first several items.
     expect(
       scrollHighlightedIntoView({
@@ -593,7 +593,7 @@ describe("scrollHighlightedIntoView", () => {
     ).toBeNull();
   });
 
-  test("returns a bounded scrollTop when the item is below the viewport", () => {
+  it("returns a bounded scrollTop when the item is below the viewport", () => {
     expect(
       scrollHighlightedIntoView({
         ...base,
@@ -603,7 +603,7 @@ describe("scrollHighlightedIntoView", () => {
     ).toBe(4000);
   });
 
-  test("returns a bounded scrollTop when the item is above the viewport", () => {
+  it("returns a bounded scrollTop when the item is above the viewport", () => {
     // Scrolled to item 100; highlight item 10, which is above the range.
     expect(
       scrollHighlightedIntoView({
@@ -614,7 +614,7 @@ describe("scrollHighlightedIntoView", () => {
     ).toBe(400);
   });
 
-  test("respects overscan when deciding visibility", () => {
+  it("respects overscan when deciding visibility", () => {
     // scrollTop 4000 => floor(100) - 3 = 97 start. Item 96 is just outside.
     expect(
       scrollHighlightedIntoView({
@@ -633,7 +633,7 @@ describe("scrollHighlightedIntoView", () => {
     ).toBeNull();
   });
 
-  test("scrolls to an item inside the raw viewport but beyond the maxItems cap", () => {
+  it("scrolls to an item inside the raw viewport but beyond the maxItems cap", () => {
     // scrollTop 0 raw range is [0, 11), but maxItems caps the rendered window
     // to [0, 5). Item 7 looks visible to the raw formula yet is not rendered.
     expect(
@@ -656,7 +656,7 @@ describe("scrollHighlightedIntoView", () => {
 });
 
 describe("scrollSelectedIntoView", () => {
-  test("returns 0 when there is no selection", () => {
+  it("returns 0 when there is no selection", () => {
     expect(
       scrollSelectedIntoView({
         selectedIndex: -1,
@@ -667,7 +667,7 @@ describe("scrollSelectedIntoView", () => {
     ).toBe(0);
   });
 
-  test("returns the bounded position for a selected item", () => {
+  it("returns the bounded position for a selected item", () => {
     expect(
       scrollSelectedIntoView({
         selectedIndex: 50,
@@ -678,7 +678,7 @@ describe("scrollSelectedIntoView", () => {
     ).toBe(2000);
   });
 
-  test("clamps the selected position to maxScroll near the end", () => {
+  it("clamps the selected position to maxScroll near the end", () => {
     // maxScroll = 500 * 40 - 300 = 19700
     expect(
       scrollSelectedIntoView({
@@ -692,7 +692,7 @@ describe("scrollSelectedIntoView", () => {
 });
 
 describe("resetVirtualScrollOnClose", () => {
-  test("returns 0", () => {
+  it("returns 0", () => {
     expect(resetVirtualScrollOnClose()).toBe(0);
   });
 });
@@ -701,7 +701,7 @@ describe("virtualize with measured heights", () => {
   const makeItems = (length: number) =>
     Array.from({ length }, (_, i) => ({ id: i, name: `Item ${i}` }));
 
-  test("derives total height from the supplied heights", () => {
+  it("derives total height from the supplied heights", () => {
     // 100 options at 30px and 100 at 70px is 10000px, where a uniform 40px
     // item height would report 8000px.
     const items = makeItems(200);
@@ -734,7 +734,7 @@ describe("virtualize with measured heights", () => {
     measured: true,
   };
 
-  test("resolves the visible range at the start of the list", () => {
+  it("resolves the visible range at the start of the list", () => {
     const result = virtualize({ ...alternating, scrollTop: 0 });
 
     // Option 6 starts at 300, the first past the viewport, plus 3 overscan.
@@ -743,7 +743,7 @@ describe("virtualize with measured heights", () => {
     expect(result.offsetY).toBe(0);
   });
 
-  test("resolves the visible range mid-list", () => {
+  it("resolves the visible range mid-list", () => {
     const result = virtualize({ ...alternating, scrollTop: 1000 });
 
     // Option 20 starts at 1000, less 3 overscan; option 26 starts at 1300,
@@ -753,7 +753,7 @@ describe("virtualize with measured heights", () => {
     expect(result.offsetY).toBe(830);
   });
 
-  test("resolves the visible range at the end of the list", () => {
+  it("resolves the visible range at the end of the list", () => {
     // maxScroll is 10000 - 300; option 194 starts at 9700.
     const result = virtualize({ ...alternating, scrollTop: 50_000 });
 
@@ -763,7 +763,7 @@ describe("virtualize with measured heights", () => {
     expect(result.visibleItems[result.visibleItems.length - 1].id).toBe(199);
   });
 
-  test("falls back to the supplied item height while nothing is measured", () => {
+  it("falls back to the supplied item height while nothing is measured", () => {
     const result = virtualize({
       items: makeItems(200),
       itemHeight: 40,
@@ -781,7 +781,7 @@ describe("virtualize with measured heights", () => {
     expect(result.offsetY).toBe(880);
   });
 
-  test("estimates unmeasured options from the measured ones", () => {
+  it("estimates unmeasured options from the measured ones", () => {
     const heights = Array.from({ length: 200 }, (_, index) =>
       index < 10 ? 100 : undefined,
     );
@@ -801,7 +801,7 @@ describe("virtualize with measured heights", () => {
     expect(result.totalHeight).toBe(20_000);
   });
 
-  test("sharpens the estimate as more options are measured", () => {
+  it("sharpens the estimate as more options are measured", () => {
     const heights = Array.from({ length: 200 }, (_, index) => {
       if (index < 10) return 100;
       if (index < 20) return 20;
@@ -837,20 +837,20 @@ describe("scroll positions with measured heights", () => {
   };
 
   describe("getBoundedScrollTop", () => {
-    test("returns the accumulated position of a mid-list option", () => {
+    it("returns the accumulated position of a mid-list option", () => {
       expect(getBoundedScrollTop({ ...base, index: 20 })).toBe(1000);
     });
 
-    test("clamps an option near the end to maxScroll", () => {
+    it("clamps an option near the end to maxScroll", () => {
       // Option 199 starts at 9930, past the 10000 - 300 maximum.
       expect(getBoundedScrollTop({ ...base, index: 199 })).toBe(9700);
     });
 
-    test("clamps to 0 for a negative index", () => {
+    it("clamps to 0 for a negative index", () => {
       expect(getBoundedScrollTop({ ...base, index: -5 })).toBe(0);
     });
 
-    test("floors maxScroll at 0 when the list is shorter than the container", () => {
+    it("floors maxScroll at 0 when the list is shorter than the container", () => {
       expect(
         getBoundedScrollTop({
           index: 2,
@@ -864,15 +864,15 @@ describe("scroll positions with measured heights", () => {
   });
 
   describe("scrollSelectedIntoView", () => {
-    test("returns 0 when there is no selection", () => {
+    it("returns 0 when there is no selection", () => {
       expect(scrollSelectedIntoView({ ...base, selectedIndex: -1 })).toBe(0);
     });
 
-    test("returns the accumulated position of the selected option", () => {
+    it("returns the accumulated position of the selected option", () => {
       expect(scrollSelectedIntoView({ ...base, selectedIndex: 20 })).toBe(1000);
     });
 
-    test("clamps a selection near the end to maxScroll", () => {
+    it("clamps a selection near the end to maxScroll", () => {
       expect(scrollSelectedIntoView({ ...base, selectedIndex: 199 })).toBe(
         9700,
       );
@@ -880,7 +880,7 @@ describe("scroll positions with measured heights", () => {
   });
 
   describe("scrollHighlightedIntoView", () => {
-    test("returns null when the highlighted option is already visible", () => {
+    it("returns null when the highlighted option is already visible", () => {
       expect(
         scrollHighlightedIntoView({
           ...base,
@@ -890,7 +890,7 @@ describe("scroll positions with measured heights", () => {
       ).toBeNull();
     });
 
-    test("returns a bounded position when the option is below the viewport", () => {
+    it("returns a bounded position when the option is below the viewport", () => {
       expect(
         scrollHighlightedIntoView({
           ...base,
@@ -900,7 +900,7 @@ describe("scroll positions with measured heights", () => {
       ).toBe(5000);
     });
 
-    test("returns a bounded position when the option is above the viewport", () => {
+    it("returns a bounded position when the option is above the viewport", () => {
       expect(
         scrollHighlightedIntoView({
           ...base,
@@ -910,7 +910,7 @@ describe("scroll positions with measured heights", () => {
       ).toBe(500);
     });
 
-    test("respects overscan when deciding visibility", () => {
+    it("respects overscan when deciding visibility", () => {
       // At scrollTop 5000 the range starts at option 100 less 3 overscan.
       expect(
         scrollHighlightedIntoView({
@@ -944,7 +944,7 @@ describe("getMeasuredScrollCorrection: the anchor arithmetic", () => {
       index < count ? height : undefined,
     );
 
-  test("returns 0 at the top of the list, where nothing sits above", () => {
+  it("returns 0 at the top of the list, where nothing sits above", () => {
     expect(
       getMeasuredScrollCorrection({
         ...base,
@@ -955,7 +955,7 @@ describe("getMeasuredScrollCorrection: the anchor arithmetic", () => {
     ).toBe(0);
   });
 
-  test("returns 0 when the options above turn out to be the assumed height", () => {
+  it("returns 0 when the options above turn out to be the assumed height", () => {
     expect(
       getMeasuredScrollCorrection({
         ...base,
@@ -967,7 +967,7 @@ describe("getMeasuredScrollCorrection: the anchor arithmetic", () => {
     ).toBe(0);
   });
 
-  test("pushes the anchor down when options above it are taller than assumed", () => {
+  it("pushes the anchor down when options above it are taller than assumed", () => {
     // 20 options assumed at the 40px seed sat at 800; measured at 60px they
     // sit at 1200.
     expect(
@@ -980,7 +980,7 @@ describe("getMeasuredScrollCorrection: the anchor arithmetic", () => {
     ).toBe(400);
   });
 
-  test("pulls the anchor up when options above it are shorter than assumed", () => {
+  it("pulls the anchor up when options above it are shorter than assumed", () => {
     expect(
       getMeasuredScrollCorrection({
         ...base,
@@ -991,7 +991,7 @@ describe("getMeasuredScrollCorrection: the anchor arithmetic", () => {
     ).toBe(-400);
   });
 
-  test("corrects by the delta of the one option whose height changed", () => {
+  it("corrects by the delta of the one option whose height changed", () => {
     const previousHeights = measureFirst(20, 50);
     const heights = measureFirst(20, 50);
     heights[5] = 90;
@@ -1008,7 +1008,7 @@ describe("getMeasuredScrollCorrection: the anchor arithmetic", () => {
     ).toBe(40);
   });
 
-  test("ignores an option measured below the anchor", () => {
+  it("ignores an option measured below the anchor", () => {
     const previousHeights = measureFirst(20, 50);
     const heights = measureFirst(20, 50);
     heights[100] = 90;
@@ -1032,7 +1032,7 @@ describe("getMeasuredScrollCorrection", () => {
       index < count ? height : undefined,
     );
 
-  test("returns 0 at the top of the list, where nothing sits above", () => {
+  it("returns 0 at the top of the list, where nothing sits above", () => {
     expect(
       getMeasuredScrollCorrection({
         ...base,
@@ -1043,7 +1043,7 @@ describe("getMeasuredScrollCorrection", () => {
     ).toBe(0);
   });
 
-  test("returns 0 when the options above turn out to be the assumed height", () => {
+  it("returns 0 when the options above turn out to be the assumed height", () => {
     expect(
       getMeasuredScrollCorrection({
         ...base,
@@ -1054,7 +1054,7 @@ describe("getMeasuredScrollCorrection", () => {
     ).toBe(0);
   });
 
-  test("anchors on the option at the top of the viewport, not the window", () => {
+  it("anchors on the option at the top of the viewport, not the window", () => {
     // scrollTop 800 puts option 20 at the top of the viewport under the 40px
     // seed. Measured at 60px, the twenty options above it sit at 1200 instead
     // of 800, so the anchor has to come down by 400 to stay where it was. An
@@ -1070,7 +1070,7 @@ describe("getMeasuredScrollCorrection", () => {
     ).toBe(400);
   });
 
-  test("pulls back when the options above turn out shorter than assumed", () => {
+  it("pulls back when the options above turn out shorter than assumed", () => {
     expect(
       getMeasuredScrollCorrection({
         ...base,
@@ -1081,7 +1081,7 @@ describe("getMeasuredScrollCorrection", () => {
     ).toBe(-400);
   });
 
-  test("corrects by the delta of the one option whose height changed", () => {
+  it("corrects by the delta of the one option whose height changed", () => {
     const previousHeights = measureFirst(20, 50);
     const heights = measureFirst(20, 50);
     heights[5] = 90;
@@ -1096,7 +1096,7 @@ describe("getMeasuredScrollCorrection", () => {
     ).toBe(40);
   });
 
-  test("ignores a height change below the anchor", () => {
+  it("ignores a height change below the anchor", () => {
     const previousHeights = measureFirst(40, 50);
     const heights = measureFirst(40, 50);
     heights[30] = 200;
@@ -1118,7 +1118,7 @@ describe("virtualListState with measured heights", () => {
 
   const tallHeights = (length: number) => Array.from({ length }, () => 100);
 
-  test("measures a windowed list from the supplied heights", () => {
+  it("measures a windowed list from the supplied heights", () => {
     const result = virtualListState({
       items: makeItems(200),
       scrollTop: 0,
@@ -1131,7 +1131,7 @@ describe("virtualListState with measured heights", () => {
     expect(result.data?.totalHeight).toBe(20_000);
   });
 
-  test("does not window a list below the threshold that opts into measuring", () => {
+  it("does not window a list below the threshold that opts into measuring", () => {
     const items = makeItems(50);
     const result = virtualListState({
       items,
@@ -1148,7 +1148,7 @@ describe("virtualListState with measured heights", () => {
     expect(result.itemsToRender).toBe(items);
   });
 
-  test("ignores supplied heights unless the list opts into measuring", () => {
+  it("ignores supplied heights unless the list opts into measuring", () => {
     const result = virtualListState({
       items: makeItems(200),
       scrollTop: 0,
@@ -1161,7 +1161,7 @@ describe("virtualListState with measured heights", () => {
     expect(result.data?.totalHeight).toBe(8000);
   });
 
-  test("seeds the estimate from the size-based default when none is supplied", () => {
+  it("seeds the estimate from the size-based default when none is supplied", () => {
     const result = virtualListState({
       items: makeItems(200),
       scrollTop: 0,
@@ -1173,7 +1173,7 @@ describe("virtualListState with measured heights", () => {
     expect(result.data?.totalHeight).toBe(9600);
   });
 
-  test("seeds the estimate from the supplied item height over the default", () => {
+  it("seeds the estimate from the supplied item height over the default", () => {
     const result = virtualListState({
       items: makeItems(200),
       scrollTop: 0,
@@ -1197,7 +1197,7 @@ describe("virtualize with degenerate measured heights", () => {
     measured: true,
   };
 
-  test("handles an empty list", () => {
+  it("handles an empty list", () => {
     const result = virtualize({
       ...base,
       items: [],
@@ -1212,7 +1212,7 @@ describe("virtualize with degenerate measured heights", () => {
     expect(result.totalHeight).toBe(0);
   });
 
-  test("handles a single option", () => {
+  it("handles a single option", () => {
     const items = makeItems(1);
     const result = virtualize({
       ...base,
@@ -1228,7 +1228,7 @@ describe("virtualize with degenerate measured heights", () => {
     expect(result.totalHeight).toBe(90);
   });
 
-  test("handles every option measuring the same height", () => {
+  it("handles every option measuring the same height", () => {
     const result = virtualize({
       ...base,
       items: makeItems(200),
@@ -1245,7 +1245,7 @@ describe("virtualize with degenerate measured heights", () => {
     expect(result.offsetY).toBe(935);
   });
 
-  test("handles a single option measuring zero", () => {
+  it("handles a single option measuring zero", () => {
     const heights = Array.from({ length: 200 }, () => 50);
     heights[5] = 0;
 
@@ -1265,7 +1265,7 @@ describe("virtualize with degenerate measured heights", () => {
     expect(result.offsetY).toBe(300);
   });
 
-  test("renders every option when they all measure zero", () => {
+  it("renders every option when they all measure zero", () => {
     const result = virtualize({
       ...base,
       items: makeItems(200),
@@ -1280,7 +1280,7 @@ describe("virtualize with degenerate measured heights", () => {
     expect(result.offsetY).toBe(0);
   });
 
-  test("treats a negative or non-finite height as unmeasured", () => {
+  it("treats a negative or non-finite height as unmeasured", () => {
     const results = [-10, Number.NaN, Number.POSITIVE_INFINITY].map((bad) => {
       const heights = Array.from({ length: 200 }, () => 50);
       heights[5] = bad;
@@ -1303,7 +1303,7 @@ describe("virtualize with degenerate measured heights", () => {
     }
   });
 
-  test("handles a list shorter than its container", () => {
+  it("handles a list shorter than its container", () => {
     const items = makeItems(200);
     const result = virtualize({
       ...base,
@@ -1332,21 +1332,21 @@ describe("getVisibleRange with measured heights", () => {
     ),
   };
 
-  test("searches accumulated positions rather than dividing by itemHeight", () => {
+  it("searches accumulated positions rather than dividing by itemHeight", () => {
     expect(getVisibleRange({ ...base, scrollTop: 1000 })).toEqual({
       startIndex: 17,
       endIndex: 29,
     });
   });
 
-  test("clamps startIndex to 0 with overscan at the top", () => {
+  it("clamps startIndex to 0 with overscan at the top", () => {
     expect(getVisibleRange({ ...base, scrollTop: 0 })).toEqual({
       startIndex: 0,
       endIndex: 9,
     });
   });
 
-  test("clamps a negative scroll position to the top", () => {
+  it("clamps a negative scroll position to the top", () => {
     // Option 4 starts at 200, the first past a viewport bottom pulled up to
     // 200 by the negative offset, plus 3 overscan.
     expect(getVisibleRange({ ...base, scrollTop: -100 })).toEqual({
@@ -1355,14 +1355,14 @@ describe("getVisibleRange with measured heights", () => {
     });
   });
 
-  test("clamps endIndex to itemCount past the end of the list", () => {
+  it("clamps endIndex to itemCount past the end of the list", () => {
     expect(getVisibleRange({ ...base, scrollTop: 10_000 })).toEqual({
       startIndex: 196,
       endIndex: 200,
     });
   });
 
-  test("caps the window to maxItems", () => {
+  it("caps the window to maxItems", () => {
     expect(getVisibleRange({ ...base, scrollTop: 1000, maxItems: 5 })).toEqual({
       startIndex: 17,
       endIndex: 22,
@@ -1371,7 +1371,7 @@ describe("getVisibleRange with measured heights", () => {
 });
 
 describe("getMeasuredAverage", () => {
-  test("averages the measured heights, ignoring the unmeasured", () => {
+  it("averages the measured heights, ignoring the unmeasured", () => {
     // Sparse where nothing has been measured, which is every window that has
     // not been scrolled through yet.
     const heights = [40, undefined, 80, undefined, 120];
@@ -1379,15 +1379,15 @@ describe("getMeasuredAverage", () => {
     expect(getMeasuredAverage(heights)).toBe(80);
   });
 
-  test("counts a height of zero, since an option can collapse", () => {
+  it("counts a height of zero, since an option can collapse", () => {
     expect(getMeasuredAverage([0, 40])).toBe(20);
   });
 
-  test("reads only as far as asked", () => {
+  it("reads only as far as asked", () => {
     expect(getMeasuredAverage([40, 40, 400], 2)).toBe(40);
   });
 
-  test("reports nothing to average rather than a number", () => {
+  it("reports nothing to average rather than a number", () => {
     // The caller has to tell "no evidence" from "evidence that says zero",
     // because only one of them is worth keeping as a seed.
     expect(getMeasuredAverage([])).toBeNull();
@@ -1404,7 +1404,7 @@ describe("virtualListState estimate", () => {
     shouldVirtualize: true,
   };
 
-  test("seeds unmeasured options from the estimate under measured heights", () => {
+  it("seeds unmeasured options from the estimate under measured heights", () => {
     const { config, data } = virtualListState({
       ...base,
       virtualize: { measured: true, threshold: 1, itemHeight: 40 },
@@ -1419,7 +1419,7 @@ describe("virtualListState estimate", () => {
     expect(config?.itemHeight).toBe(90);
   });
 
-  test("leaves the fixed path's item height alone", () => {
+  it("leaves the fixed path's item height alone", () => {
     const { config, data } = virtualListState({
       ...base,
       virtualize: { threshold: 1, itemHeight: 40 },
@@ -1431,7 +1431,7 @@ describe("virtualListState estimate", () => {
     expect(config?.itemHeight).toBe(40);
   });
 
-  test("yields to a real measurement", () => {
+  it("yields to a real measurement", () => {
     const heights = Array.from({ length: items.length }, () => 50);
     const { data } = virtualListState({
       ...base,
@@ -1443,7 +1443,7 @@ describe("virtualListState estimate", () => {
     expect(data?.totalHeight).toBe(items.length * 50);
   });
 
-  test("ignores an estimate that could not be a height", () => {
+  it("ignores an estimate that could not be a height", () => {
     for (const estimate of [0, -10, Number.NaN, Number.POSITIVE_INFINITY]) {
       const { data } = virtualListState({
         ...base,

@@ -843,7 +843,7 @@ describe("NumberInput", () => {
     });
 
     const input = screen.getByRole("textbox");
-    expect.assert(input instanceof HTMLInputElement);
+    assert(input instanceof HTMLInputElement);
 
     await user.type(input, "1.0");
     expect(input.value).toBe("1.0");
@@ -867,7 +867,7 @@ describe("NumberInput", () => {
     });
 
     const input = screen.getByRole("textbox");
-    expect.assert(input instanceof HTMLInputElement);
+    assert(input instanceof HTMLInputElement);
     expect(input.value).toBe("1");
 
     await user.clear(input);
@@ -889,7 +889,7 @@ describe("NumberInput", () => {
     });
 
     const input = screen.getByRole("textbox");
-    expect.assert(input instanceof HTMLInputElement);
+    assert(input instanceof HTMLInputElement);
     expect(input.value).toBe("5");
 
     // Simulate parent changing value programmatically
@@ -1256,7 +1256,7 @@ describe("NumberInput", () => {
     });
 
     const input = screen.getByRole("textbox");
-    expect.assert(input instanceof HTMLInputElement);
+    assert(input instanceof HTMLInputElement);
 
     // Type a valid decimal
     await user.type(input, "1.5");
@@ -1279,7 +1279,7 @@ describe("NumberInput", () => {
     });
 
     const input = screen.getByRole("textbox");
-    expect.assert(input instanceof HTMLInputElement);
+    assert(input instanceof HTMLInputElement);
 
     // Type a valid decimal then an invalid character
     await user.type(input, "1.5.");
@@ -1293,7 +1293,7 @@ describe("NumberInput", () => {
   });
 
   describe("decimal separator normalization", () => {
-    test.each([
+    it.each([
       // Standard and locale decimal separators (comma, Arabic ٫)
       ["3.14", 3.14, "period (standard)"],
       ["3,14", 3.14, "comma (European)"],
@@ -1694,7 +1694,7 @@ describe("NumberInput", () => {
       render(NumberInput, { props: { locale: "de-DE", value: 1234.5 } });
 
       const input = screen.getByRole("textbox");
-      expect.assert(input instanceof HTMLInputElement);
+      assert(input instanceof HTMLInputElement);
       // German locale uses period for thousands and comma for decimal
       expect(input.value).toBe("1.234,5");
     });
@@ -1705,7 +1705,7 @@ describe("NumberInput", () => {
       });
 
       const input = screen.getByRole("textbox");
-      expect.assert(input instanceof HTMLInputElement);
+      assert(input instanceof HTMLInputElement);
       await user.type(input, "1234.5");
       await user.tab();
 
@@ -1720,7 +1720,7 @@ describe("NumberInput", () => {
       });
 
       const input = screen.getByRole("textbox");
-      expect.assert(input instanceof HTMLInputElement);
+      assert(input instanceof HTMLInputElement);
       await user.type(input, "3,14");
       await user.tab();
 
@@ -1733,7 +1733,7 @@ describe("NumberInput", () => {
       });
 
       const input = screen.getByRole("textbox");
-      expect.assert(input instanceof HTMLInputElement);
+      assert(input instanceof HTMLInputElement);
       expect(input.value).toBe("");
     });
 
@@ -1749,7 +1749,7 @@ describe("NumberInput", () => {
       await user.click(incrementButton);
 
       const input = screen.getByRole("textbox");
-      expect.assert(input instanceof HTMLInputElement);
+      assert(input instanceof HTMLInputElement);
       expect(input.value).toBe("1.001");
       expect(screen.getByTestId("value").textContent).toBe("1001");
     });
@@ -1766,7 +1766,7 @@ describe("NumberInput", () => {
       await user.click(decrementButton);
 
       const input = screen.getByRole("textbox");
-      expect.assert(input instanceof HTMLInputElement);
+      assert(input instanceof HTMLInputElement);
       expect(input.value).toBe("999");
       expect(screen.getByTestId("value").textContent).toBe("999");
     });
@@ -1798,7 +1798,7 @@ describe("NumberInput", () => {
       });
 
       const input = screen.getByRole("textbox");
-      expect.assert(input instanceof HTMLInputElement);
+      assert(input instanceof HTMLInputElement);
       expect(input.value).toBe("1,234.50");
     });
 
@@ -1808,7 +1808,7 @@ describe("NumberInput", () => {
       });
 
       const input = screen.getByRole("textbox");
-      expect.assert(input instanceof HTMLInputElement);
+      assert(input instanceof HTMLInputElement);
       expect(input.value).toBe("100");
 
       rerender({ locale: "de-DE", value: 1234.5, allowEmpty: true });
@@ -1826,7 +1826,7 @@ describe("NumberInput", () => {
       });
 
       const input = screen.getByRole("textbox");
-      expect.assert(input instanceof HTMLInputElement);
+      assert(input instanceof HTMLInputElement);
       await user.type(input, "1.234,56");
       await user.tab();
 
@@ -1839,7 +1839,7 @@ describe("NumberInput", () => {
       });
 
       const input = screen.getByRole("textbox");
-      expect.assert(input instanceof HTMLInputElement);
+      assert(input instanceof HTMLInputElement);
       await user.type(input, "1234,5");
       await user.tab();
 
@@ -1852,7 +1852,7 @@ describe("NumberInput", () => {
       });
 
       const input = screen.getByRole("textbox");
-      expect.assert(input instanceof HTMLInputElement);
+      assert(input instanceof HTMLInputElement);
 
       // Type in en-US format and blur
       await user.type(input, "1,234.5");
@@ -1877,7 +1877,7 @@ describe("NumberInput", () => {
       });
 
       const input = screen.getByRole("textbox");
-      expect.assert(input instanceof HTMLInputElement);
+      assert(input instanceof HTMLInputElement);
       await user.type(input, "١٢٣٤٫٥");
       await user.tab();
 
@@ -1890,7 +1890,7 @@ describe("NumberInput", () => {
       });
 
       const input = screen.getByRole("textbox");
-      expect.assert(input instanceof HTMLInputElement);
+      assert(input instanceof HTMLInputElement);
       expect(input.value).toBe("1.234,5");
 
       // Remove locale — should switch to number input

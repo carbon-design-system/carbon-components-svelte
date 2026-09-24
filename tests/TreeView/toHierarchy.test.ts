@@ -1,7 +1,7 @@
 import { toHierarchy } from "carbon-components-svelte/utils/to-hierarchy";
 
 describe("toHierarchy", () => {
-  test("should create a flat hierarchy when no items have parents", () => {
+  it("should create a flat hierarchy when no items have parents", () => {
     const input = [
       { id: 1, name: "Item 1" },
       { id: 2, name: "Item 2", parentId: "invalid" },
@@ -14,7 +14,7 @@ describe("toHierarchy", () => {
     ]);
   });
 
-  test("should create a nested hierarchy with parent-child relationships", () => {
+  it("should create a nested hierarchy with parent-child relationships", () => {
     const input = [
       { id: 1, name: "Parent" },
       { id: 2, name: "Child", pid: 1, randomKey: "randomValue" },
@@ -45,7 +45,7 @@ describe("toHierarchy", () => {
     ]);
   });
 
-  test("should handle multiple root nodes with children", () => {
+  it("should handle multiple root nodes with children", () => {
     const input = [
       { id: 1, name: "Root 1" },
       { id: 2, name: "Root 2" },
@@ -80,7 +80,7 @@ describe("toHierarchy", () => {
     ]);
   });
 
-  test("should remove empty nodes arrays", () => {
+  it("should remove empty nodes arrays", () => {
     const input = [
       { id: 1, name: "Root" },
       { id: 2, name: "Leaf", pid: 1 },
@@ -103,7 +103,7 @@ describe("toHierarchy", () => {
     expect(result[0].nodes?.[0]).not.toHaveProperty("nodes");
   });
 
-  test("should handle empty input array", () => {
+  it("should handle empty input array", () => {
     const result = toHierarchy<
       { id: string | number; parentId?: string | number },
       "parentId"
@@ -111,7 +111,7 @@ describe("toHierarchy", () => {
     expect(result).toEqual([]);
   });
 
-  test("should handle non-existent parent IDs", () => {
+  it("should handle non-existent parent IDs", () => {
     const input = [
       { id: 1, name: "Root" },
       { id: 2, name: "Child", pid: 999 },
@@ -123,7 +123,7 @@ describe("toHierarchy", () => {
     ]);
   });
 
-  test("should handle deeply nested structures", () => {
+  it("should handle deeply nested structures", () => {
     const input = [
       { id: 1, name: "Level 1" },
       { id: 2, name: "Level 2", pid: 1 },
@@ -168,7 +168,7 @@ describe("toHierarchy", () => {
     ]);
   });
 
-  test("should handle mixed ID types", () => {
+  it("should handle mixed ID types", () => {
     const input = [
       { id: "root", name: "Root" },
       { id: 1, name: "Child 1", pid: "root" },
@@ -195,7 +195,7 @@ describe("toHierarchy", () => {
     ]);
   });
 
-  test("should preserve additional properties", () => {
+  it("should preserve additional properties", () => {
     const input = [
       { id: 1, name: "Root", extra: "data", meta: { key: "value" } },
       { id: 2, name: "Child", pid: 1, flag: true, count: 42 },
@@ -220,7 +220,7 @@ describe("toHierarchy", () => {
     ]);
   });
 
-  test("should handle null/undefined parent IDs", () => {
+  it("should handle null/undefined parent IDs", () => {
     const input = [
       { id: 1, name: "Root 1" },
       { id: 2, name: "Root 2", pid: null },

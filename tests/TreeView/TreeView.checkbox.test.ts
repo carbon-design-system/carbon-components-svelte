@@ -7,14 +7,14 @@ import TreeViewCheckbox from "./TreeView.checkbox.test.svelte";
 // convention documented in TreeView.lazyLoad.test.ts.
 function treeItemById(id: string): HTMLElement {
   const el = document.getElementById(id);
-  expect.assert(el instanceof HTMLElement);
+  assert(el instanceof HTMLElement);
   return el;
 }
 
 // Click the checkbox wrapper; row clicks outside it do not toggle.
 function checkboxFor(id: string): HTMLElement {
   const el = treeItemById(id).querySelector(".bx--checkbox-wrapper");
-  expect.assert(el instanceof HTMLElement);
+  assert(el instanceof HTMLElement);
   return el;
 }
 

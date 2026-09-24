@@ -3398,7 +3398,7 @@ describe("DataTable", () => {
       expect(scrollContainer).toBeInstanceOf(HTMLElement);
       expect(scrollContainer?.style.overflowY).toBe("auto");
       expect(scrollContainer?.style.maxHeight).toBeDefined();
-      expect.assert(scrollContainer instanceof HTMLElement);
+      assert(scrollContainer instanceof HTMLElement);
       scrollContainer.scrollTop = 100;
       expect(scrollContainer.scrollTop).toBe(100);
     });
@@ -3431,7 +3431,7 @@ describe("DataTable", () => {
 
       const table = screen.getByRole("table");
       const scrollContainer = table.parentElement?.parentElement;
-      expect.assert(scrollContainer instanceof HTMLElement);
+      assert(scrollContainer instanceof HTMLElement);
       scrollContainer.scrollTop = 48 * 40;
       scrollContainer.dispatchEvent(new Event("scroll"));
       await tick();
