@@ -69,6 +69,7 @@
 
   import { getContext, tick } from "svelte";
   import Calendar from "../icons/Calendar.svelte";
+  import Close from "../icons/Close.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { formReset } from "../utils/form-reset.js";
@@ -96,6 +97,9 @@
     inputValueFrom,
     inputValueTo,
     isFluid,
+    clearable,
+    clearButtonLabelText,
+    clear,
   } = getContext("carbon:DatePicker");
 
   const dateFormatTokens = {
@@ -153,7 +157,19 @@
   // The invalid/warn/calendar icons all render after the input in the DOM
   // (see below), so the vendor CSS's `.icon ~ .input` padding-right rule
   // never matches. This class is the fix; see _date-picker.scss.
-  $: hasIcon = showInvalid || showWarn || $hasCalendar;
+  // While the clear button shows, it takes the decorative calendar icon's
+  // place, so a narrow (range) input keeps room for the date.
+  $: showCalendarIcon = $hasCalendar && !showInvalid && !showWarn && !showClear;
+  $: hasIcon = showInvalid || showWarn || showCalendarIcon;
+  // One button, on the last input, clears the whole selection.
+  $: showClear =
+    $clearable &&
+    !readonly &&
+    !disabled &&
+    $inputIds[$inputIds.length - 1] === id &&
+    ($range
+      ? $inputValueFrom !== "" || $inputValueTo !== ""
+      : $inputValue !== "");
   $: currentValue = $range
     ? $inputIds.indexOf(id) === 0
       ? $inputValueFrom
@@ -238,6 +254,7 @@
       class:bx--date-picker__input={true}
       class:bx--date-picker__input--invalid={showInvalid}
       class:bx--date-picker__input--with-icon={hasIcon}
+      class:bx--date-picker__input--with-clear={showClear}
       class:bx--date-picker__input--sm={size === "sm"}
       class:bx--date-picker__input--xl={size === "xl"}
       class:bx--date-picker__input--ghost-text={$multiple}
@@ -273,12 +290,24 @@
         class:bx--date-picker__input={true}
         class:bx--date-picker__input-overlay={true}
         class:bx--date-picker__input--with-icon={hasIcon}
+        class:bx--date-picker__input--with-clear={showClear}
         class:bx--date-picker__input--sm={size === "sm"}
         class:bx--date-picker__input--xl={size === "xl"}
         aria-hidden="true"
       >
         <span>{overlayValue}</span>
       </div>
+    {/if}
+    {#if showClear}
+      <button
+        type="button"
+        class:bx--date-picker__clear={true}
+        class:bx--date-picker__clear--with-icon={showInvalid || showWarn}
+        aria-label={$clearButtonLabelText}
+        on:click={clear}
+      >
+        <Close />
+      </button>
     {/if}
     {#if showInvalid}
       <WarningFilled
@@ -290,7 +319,7 @@
         class="bx--date-picker__icon bx--date-picker__icon--warn"
       />
     {/if}
-    {#if $hasCalendar && !showInvalid && !showWarn}
+    {#if showCalendarIcon}
       <Calendar
         class="bx--date-picker__icon"
         aria-label={iconDescription}

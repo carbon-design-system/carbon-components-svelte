@@ -14,6 +14,10 @@
    */
 
   /**
+   * @event {null} clear
+   */
+
+  /**
    * @event error
    * @type {object}
    * @property {Error} error
@@ -139,6 +143,16 @@
    */
   export let inline = false;
 
+  /**
+   * Set to `true` to show a button that clears the date. It appears while
+   * there is a value, and not while the input is read-only or disabled.
+   * In range mode it sits on the end input and clears both dates.
+   */
+  export let clearable = false;
+
+  /** Specify the ARIA label for the clear button. */
+  export let clearButtonLabelText = "Clear date";
+
   /** Set to `true` to use the short variant */
   export let short = false;
 
@@ -259,6 +273,8 @@
   const inputValueTo = writable(valueTo);
   const mode = writable(datePickerType);
   const sharedDateFormat = writable(dateFormat);
+  const sharedClearable = writable(clearable);
+  const sharedClearButtonLabelText = writable(clearButtonLabelText);
   /**
    * @type {import("svelte/store").Readable<boolean>}
    */
@@ -520,6 +536,32 @@
   }
 
   /**
+   * Empties the selection (both ends in range mode), then returns focus to
+   * the input, which opens the calendar the same way a click would.
+   */
+  function clear() {
+    if ($readonlyAny || $disabledAny) return;
+    if (calendar) {
+      // The range plugin empties the end input on a timer, after `onChange`,
+      // so the `change` detail would still carry the old end date.
+      if ($range && inputRefTo) inputRefTo.value = "";
+      // Fires `onChange`, which dispatches `change` like clearing by hand.
+      calendar.clear();
+      if ($range) {
+        inputValueFrom.set("");
+        inputValueTo.set("");
+      } else {
+        inputValue.set("");
+      }
+    } else {
+      inputValue.set("");
+      dispatch("change", "");
+    }
+    dispatch("clear");
+    (calendar?.altInput ?? inputRef)?.focus();
+  }
+
+  /**
    * A form reset restores each input's DOM value without firing any event,
    * and flatpickr's own `selectedDates` (and any `altInput` text) are
    * untouched by the browser entirely — neither the input DOM value change
@@ -767,6 +809,9 @@
     inputIds,
     hasCalendar,
     dateFormat: sharedDateFormat,
+    clearable: sharedClearable,
+    clearButtonLabelText: sharedClearButtonLabelText,
+    clear,
     isFluid: sharedFluid,
     add,
     setReadonly,
@@ -1253,6 +1298,8 @@
   });
 
   $: sharedDateFormat.set(dateFormat);
+  $: sharedClearable.set(clearable);
+  $: sharedClearButtonLabelText.set(clearButtonLabelText);
   $: inputValue.set(value);
   $: value = $inputValue;
   $: inputValueFrom.set(valueFrom);

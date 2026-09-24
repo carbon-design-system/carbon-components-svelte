@@ -19,10 +19,13 @@ describe("any-hover media query grouping", () => {
     // (_toggle-button-group.scss).
     // Raised again from 62 to 63 for the resizable SideNav handle's one
     // hover block (side-nav-resize in components/ui-shell/_side-nav.scss).
+    // Raised again from 63 to 64 for the DatePicker clear button's one
+    // hover block (date-picker-clear in
+    // components/date-picker/_date-picker.scss).
     // Whitespace-tolerant so the count holds for expanded and compressed
     // output; the lower bound fails the test if the pattern stops matching.
     const blocks = css.match(/@media\s*\(any-hover:\s*hover\)\s*\{/g) ?? [];
     expect(blocks.length).toBeGreaterThan(0);
-    expect(blocks.length).toBeLessThanOrEqual(63);
+    expect(blocks.length).toBeLessThanOrEqual(64);
   }, 30_000);
 });

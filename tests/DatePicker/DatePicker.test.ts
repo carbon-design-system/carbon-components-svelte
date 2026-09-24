@@ -474,6 +474,106 @@ describe("DatePicker", () => {
     });
   });
 
+  describe("clearable", () => {
+    const queryClear = () =>
+      screen.queryByRole("button", { name: "Clear date" });
+
+    it("renders no clear button by default or without a value", () => {
+      const { unmount } = render(DatePicker, { value: "01/15/2024" });
+      expect(queryClear()).not.toBeInTheDocument();
+      unmount();
+
+      render(DatePicker, { clearable: true });
+      expect(queryClear()).not.toBeInTheDocument();
+    });
+
+    it("clears a single date, dispatches change and clear, and refocuses the input", async () => {
+      const onchange = vi.fn();
+      const onclear = vi.fn();
+      render(DatePicker, {
+        datePickerType: "single",
+        value: "01/15/2024",
+        clearable: true,
+        onchange,
+        onclear,
+      });
+      const calendar = await screen.findByLabelText("calendar-container");
+      const input = screen.getByLabelText("Date");
+
+      await user.click(queryClear() as HTMLElement);
+
+      expect(input).toHaveValue("");
+      expect(onchange).toHaveBeenCalledTimes(1);
+      expect(onchange.mock.calls[0][0].detail.selectedDates).toEqual([]);
+      expect(onclear).toHaveBeenCalledTimes(1);
+      expect(input).toHaveFocus();
+      expect(calendar).toHaveClass("open");
+      expect(calendar.querySelector(".flatpickr-day.selected")).toBeNull();
+      expect(queryClear()).not.toBeInTheDocument();
+    });
+
+    it("clears a simple field", async () => {
+      const onchange = vi.fn();
+      const onclear = vi.fn();
+      render(DatePicker, { clearable: true, onchange, onclear });
+      const input = screen.getByLabelText("Date");
+      await user.type(input, "01/15/2024");
+
+      // Clicking the button first blurs the input, which commits the typed
+      // text with its own `change`.
+      await user.click(queryClear() as HTMLElement);
+
+      expect(input).toHaveValue("");
+      expect(onchange.mock.calls.at(-1)?.[0].detail).toBe("");
+      expect(onclear).toHaveBeenCalledTimes(1);
+    });
+
+    it("renders one button on the end input and clears both dates", async () => {
+      const onchange = vi.fn();
+      render(DatePickerRange, {
+        clearable: true,
+        valueFrom: "01/10/2024",
+        valueTo: "01/20/2024",
+        onchange,
+      });
+      await screen.findByLabelText("calendar-container");
+      const buttons = screen.getAllByRole("button", { name: "Clear date" });
+      expect(buttons).toHaveLength(1);
+      const endWrapper = screen
+        .getByLabelText("End date")
+        .closest(".bx--date-picker-input__wrapper");
+      expect(endWrapper).toContainElement(buttons[0]);
+
+      await user.click(buttons[0]);
+
+      expect(screen.getByLabelText("Start date")).toHaveValue("");
+      expect(screen.getByLabelText("End date")).toHaveValue("");
+      expect(onchange.mock.calls.at(-1)?.[0].detail.dateStr).toEqual({
+        from: "",
+        to: "",
+      });
+    });
+
+    it.each([
+      ["readonly", { readonly: true }],
+      ["disabled", { disabled: true }],
+    ])("renders no clear button when %s", (_, props) => {
+      render(DatePicker, { value: "01/15/2024", clearable: true, ...props });
+      expect(queryClear()).not.toBeInTheDocument();
+    });
+
+    it("uses clearButtonLabelText as the accessible name", () => {
+      render(DatePicker, {
+        value: "01/15/2024",
+        clearable: true,
+        clearButtonLabelText: "Remove date",
+      });
+      expect(
+        screen.getByRole("button", { name: "Remove date" }),
+      ).toBeInTheDocument();
+    });
+  });
+
   it("keeps a consumer allowInput: false across mount and readonly toggles", async () => {
     const props: ComponentProps<typeof DatePicker> = {
       datePickerType: "single",

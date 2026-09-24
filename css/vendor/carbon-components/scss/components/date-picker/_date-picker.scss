@@ -485,3 +485,57 @@
 @include exports('datepicker-year-select-height') {
   @include date-picker-year-select-height;
 }
+
+// carbon-components-svelte patch
+// `clearable`: a clear button, styled like Search's close button. It takes
+// the calendar icon's place, or sits before the invalid/warn icon.
+@mixin date-picker-clear {
+  .#{$prefix}--date-picker__clear {
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    // Centered where the 1rem icon at `right: 1rem` sits.
+    right: to-rem(12px);
+    display: flex;
+    width: $carbon--spacing-06;
+    height: $carbon--spacing-06;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    fill: $icon-01;
+    transform: translateY(-50%);
+
+    @media (any-hover: hover) {
+      &:hover {
+        background-color: $hover-field;
+      }
+    }
+
+    &:focus {
+      @include focus-outline('outline');
+    }
+  }
+
+  .#{$prefix}--date-picker__clear--with-icon {
+    right: to-rem(36px);
+  }
+
+  .#{$prefix}--date-picker--fluid .#{$prefix}--date-picker__clear {
+    top: to-rem(43px);
+  }
+
+  .#{$prefix}--date-picker__input--with-clear {
+    padding-right: $carbon--spacing-09;
+  }
+
+  .#{$prefix}--date-picker__input--with-clear.#{$prefix}--date-picker__input--with-icon {
+    padding-right: to-rem(64px);
+  }
+}
+
+@include exports('datepicker-clear') {
+  @include date-picker-clear;
+}
