@@ -28,7 +28,9 @@ const DIGIT_RANGES = [
 function normalizeDigits(raw) {
   let result = "";
   for (const char of raw) {
-    const code = char.codePointAt(0);
+    // `char` from `for...of` is always at least one code unit, so this is
+    // never undefined.
+    const code = /** @type {number} */ (char.codePointAt(0));
     const range = DIGIT_RANGES.find(
       ([start, end]) => code >= start && code <= end,
     );

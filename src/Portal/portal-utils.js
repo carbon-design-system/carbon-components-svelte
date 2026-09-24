@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Default z-index of floating portals. Sits above modals (9000) and list box
  * menus (9100).

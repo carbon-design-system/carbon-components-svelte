@@ -37,7 +37,7 @@ export function hashString(value) {
  * returns the first palette entry. An empty `palette` falls back to the
  * default palette so a `T` is always returned.
  *
- * @template {string} [T=AVATAR_BACKGROUND_COLORS[number]]
+ * @template {string} [T=(typeof AVATAR_BACKGROUND_COLORS)[number]]
  * @param {string | null | undefined} value
  * @param {ReadonlyArray<T>} [palette]
  * @returns {T}

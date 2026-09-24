@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * True when a tree node can expand: it has loaded children, or it is a lazy
  * parent marked with `hasChildren` before `nodes` are loaded.

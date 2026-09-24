@@ -31,11 +31,15 @@ export function createOptionListNavigator({
   function getOptionElements() {
     const menuRef = getMenuRef();
     if (!menuRef) return [];
-    return Array.from(menuRef.querySelectorAll(selector)).filter(
+    const options = /** @type {NodeListOf<HTMLElement>} */ (
+      menuRef.querySelectorAll(selector)
+    );
+    return Array.from(options).filter(
       (option) => option.getAttribute("aria-disabled") !== "true",
     );
   }
 
+  /** @param {1 | -1} step */
   function moveActive(step) {
     const els = getOptionElements();
     if (els.length === 0) {
@@ -46,6 +50,7 @@ export function createOptionListNavigator({
     highlightedId.set(els[moveIndex(current, step, els.length)].id);
   }
 
+  /** @param {"first" | "last"} edge */
   function setActiveEdge(edge) {
     const els = getOptionElements();
     if (els.length === 0) return;

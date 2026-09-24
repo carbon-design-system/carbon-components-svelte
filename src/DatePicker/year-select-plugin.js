@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Flatpickr plugin that replaces the day grid with a decade of years.
  * Mirrors the shape of flatpickr's bundled monthSelect plugin.
@@ -77,7 +78,7 @@ export function yearSelectPlugin(pluginConfig) {
     }
 
     function addListeners() {
-      fp._bind(fp.prevMonthNav, "click", (event) => {
+      fp._bind(fp.prevMonthNav, "click", (/** @type {Event} */ event) => {
         event.preventDefault();
         event.stopPropagation();
         // Rebuilding the grid happens in the `onYearChange` hook below, so
@@ -85,7 +86,7 @@ export function yearSelectPlugin(pluginConfig) {
         fp.changeYear(decadeStart() - 10);
       });
 
-      fp._bind(fp.nextMonthNav, "click", (event) => {
+      fp._bind(fp.nextMonthNav, "click", (/** @type {Event} */ event) => {
         event.preventDefault();
         event.stopPropagation();
         fp.changeYear(decadeStart() + 10);
@@ -98,9 +99,8 @@ export function yearSelectPlugin(pluginConfig) {
       if (self.yearsContainer) {
         self.yearsContainer.replaceChildren();
       } else {
-        self.yearsContainer = fp._createElement(
-          "div",
-          "flatpickr-yearSelect-years",
+        self.yearsContainer = /** @type {HTMLElement} */ (
+          fp._createElement("div", "flatpickr-yearSelect-years")
         );
         self.yearsContainer.tabIndex = -1;
         fp.calendarContainer.classList.add(
@@ -108,6 +108,10 @@ export function yearSelectPlugin(pluginConfig) {
         );
         fp.rContainer.appendChild(self.yearsContainer);
       }
+
+      // Narrowed once here: both branches above leave it non-null, but
+      // `self.yearsContainer` re-widens to nullable after later calls.
+      const yearsContainer = self.yearsContainer;
 
       const start = decadeStart() - 1;
 
@@ -137,7 +141,7 @@ export function yearSelectPlugin(pluginConfig) {
           yearCell.setAttribute("aria-disabled", "true");
         }
 
-        self.yearsContainer.appendChild(yearCell);
+        yearsContainer.appendChild(yearCell);
       }
 
       const firstYear = start;
@@ -196,6 +200,7 @@ export function yearSelectPlugin(pluginConfig) {
       setCurrentlySelected();
     }
 
+    /** @type {Record<number, number>} */
     const shifts = {
       37: -1,
       39: 1,

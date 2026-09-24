@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Native `<dialog>` / `[popover]` ancestors used when portalling the flatpickr
  * calendar with `portalMenu` so it participates in the correct top layer.
@@ -29,10 +30,8 @@ export function positionFlatpickrCalendarFixed(
   const calendarContainer = instance.calendarContainer;
   if (!calendarContainer || !anchor) return;
 
-  const calendarHeight = Array.prototype.reduce.call(
-    calendarContainer.children,
-    (/** @type {number} */ acc, /** @type {HTMLElement} */ child) =>
-      acc + child.offsetHeight,
+  const calendarHeight = Array.from(calendarContainer.children).reduce(
+    (acc, child) => acc + /** @type {HTMLElement} */ (child).offsetHeight,
     0,
   );
   const calendarWidth = calendarContainer.offsetWidth;

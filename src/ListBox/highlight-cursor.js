@@ -74,7 +74,10 @@ export function createHighlightCursor() {
 
     const prev = currentId ? nodes.get(currentId) : undefined;
     const next = nextId ? nodes.get(nextId) : undefined;
-    if (prev) applyClass(prev, false, activeIds.has(currentId));
+    if (prev) {
+      // `prev` is only set when `currentId` was truthy above.
+      applyClass(prev, false, activeIds.has(/** @type {string} */ (currentId)));
+    }
     if (next) {
       applyClass(next, true, true);
       if (scroll && !next.matches(":hover")) {

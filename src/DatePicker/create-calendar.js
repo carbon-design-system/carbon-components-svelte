@@ -1,3 +1,5 @@
+// @ts-check
+/// <reference path="./flatpickr-esm-plugins.d.ts" />
 import flatpickr from "flatpickr";
 
 /**
@@ -45,7 +47,12 @@ export function resolveLocale(locale) {
  *   currentMonth: number;
  *   monthNav: HTMLElement;
  *   monthsDropdownContainer: HTMLElement;
+ *   rContainer?: HTMLElement | null;
  * }} FlatpickrInstance
+ */
+
+/**
+ * @typedef {HTMLElement & { dateObj: Date }} MonthSelectMonthElement
  */
 
 /**
@@ -117,9 +124,11 @@ function markDisabledDayAriaState(_dObj, _dStr, _fp, dayElem) {
  */
 function markTodayMonth(instance) {
   const now = new Date();
-  for (const node of instance.rContainer?.querySelectorAll(
-    ".flatpickr-monthSelect-month",
-  ) ?? []) {
+  const monthNodes =
+    /** @type {NodeListOf<MonthSelectMonthElement> | undefined} */ (
+      instance.rContainer?.querySelectorAll(".flatpickr-monthSelect-month")
+    ) ?? [];
+  for (const node of monthNodes) {
     const isToday =
       node.dateObj.getFullYear() === now.getFullYear() &&
       node.dateObj.getMonth() === now.getMonth();
@@ -230,10 +239,17 @@ export function updateMonthNode(instance, locale) {
 
 /**
  * @typedef {{
- *   options: { locale?: string; mode?: string; [option: string]: unknown };
- *   base: HTMLElement;
+ *   options: {
+ *     locale?: string;
+ *     mode?: string;
+ *     dateFormat?: string;
+ *     altFormat?: string;
+ *     errorHandler?: (error: Error) => void;
+ *     [option: string]: unknown;
+ *   };
+ *   base: HTMLInputElement;
  *   input: HTMLInputElement;
- *   dispatch: (event: string) => void;
+ *   dispatch: (event: string, detail?: unknown) => void;
  *   isDayBlocked?: (date: Date, instance: FlatpickrInstance) => boolean;
  * }} CreateCalendarArgs
  */
@@ -321,7 +337,7 @@ const hooksByInstance = new WeakMap();
  */
 function toHookArray(hook) {
   if (Array.isArray(hook)) return hook;
-  return hook ? [hook] : [];
+  return hook ? [/** @type {Function} */ (hook)] : [];
 }
 
 /**
@@ -573,7 +589,12 @@ export async function createCalendar({
       markDisabledDayAriaState,
       // Days are rebuilt on every redraw (month change, `set`), not only on
       // open, so class them as they are created.
-      (_dObj, _dStr, _fp, /** @type {HTMLElement} */ dayElem) => {
+      (
+        /** @type {any} */ _dObj,
+        /** @type {any} */ _dStr,
+        /** @type {any} */ _fp,
+        /** @type {HTMLElement} */ dayElem,
+      ) => {
         dayElem.classList.add("bx--date-picker__day");
       },
     ],

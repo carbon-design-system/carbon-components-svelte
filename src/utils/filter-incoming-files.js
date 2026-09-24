@@ -47,6 +47,7 @@ export function filterIncomingFiles(incoming, options = {}) {
 
   if (preventDuplicate) {
     const existingKeys = new Set(existingFiles.map(fileIdentityKey));
+    /** @param {File} file */
     function isDuplicate(file) {
       return (
         !(carryRefs?.has(file) ?? false) &&

@@ -1,8 +1,11 @@
 // @ts-check
 import { BoundedFifoCache } from "./bounded-fifo-cache.js";
 
+/** @type {BoundedFifoCache<string, Intl.NumberFormat>} */
 const numberCache = new BoundedFifoCache(32);
+/** @type {BoundedFifoCache<string, Intl.RelativeTimeFormat>} */
 const relativeTimeCache = new BoundedFifoCache(32);
+/** @type {BoundedFifoCache<string, Intl.DateTimeFormat>} */
 const dateTimeCache = new BoundedFifoCache(32);
 
 /**
@@ -15,7 +18,7 @@ function cacheKey(locale, options) {
 
 /**
  * @template T
- * @param {Map<string, T>} cache
+ * @param {BoundedFifoCache<string, T>} cache
  * @param {new (locale: string | undefined, options?: any) => T} Ctor
  * @param {string | undefined} locale
  * @param {any} [options]
