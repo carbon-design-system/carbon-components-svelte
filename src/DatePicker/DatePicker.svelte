@@ -1038,7 +1038,7 @@
     );
     calendar.calendarContainer?.addEventListener(
       "keydown",
-      handleCalendarEscape,
+      handleCalendarKeydown,
       { capture: true },
     );
     if (calendar.config.inline) {
@@ -1086,6 +1086,42 @@
   const BLOCKED_EVENTS = ["click", "mousedown", "keydown"];
 
   /**
+   * @param {KeyboardEvent} event
+   */
+  function handleCalendarKeydown(event) {
+    if (event.key === "Escape") handleCalendarEscape(event);
+    else if (event.key === "Enter") keepFocusAfterEnter(event);
+  }
+
+  /**
+   * Selecting a day redraws the grid (flatpickr's own redraw in "multiple"
+   * mode, then Carbon's `setDate` sync in "range" mode), which drops focus
+   * on the page while the calendar stays open. Put it back on the same date
+   * once the updates settle. This runs in the capture phase, before
+   * flatpickr's handler, and browsers run microtasks between listeners, so
+   * wait a task rather than a `tick()`.
+   *
+   * @param {KeyboardEvent} event
+   */
+  function keepFocusAfterEnter(event) {
+    if (!calendar?.isOpen) return;
+    const time = /** @type {any} */ (event.target)?.dateObj?.getTime();
+    if (time === undefined) return;
+    setTimeout(() => {
+      if (!calendar?.isOpen) return;
+      if (calendar.calendarContainer.contains(document.activeElement)) return;
+      const day = [
+        ...calendar.calendarContainer.querySelectorAll(".flatpickr-day"),
+      ].find(
+        (el) =>
+          /** @type {any} */ (el).dateObj?.getTime() === time &&
+          isFocusableDay(/** @type {HTMLElement} */ (el)),
+      );
+      /** @type {HTMLElement | undefined} */ (day)?.focus();
+    });
+  }
+
+  /**
    * flatpickr closes on Escape from inside the calendar before the wrapper's
    * handler runs, and a portalled calendar never reaches the wrapper, so the
    * close would be reported as an outside click.
@@ -1093,7 +1129,7 @@
    * @param {KeyboardEvent} event
    */
   function handleCalendarEscape(event) {
-    if (event.key !== "Escape" || !calendar?.isOpen) return;
+    if (!calendar?.isOpen) return;
     // Also keeps flatpickr's own handler from closing (and firing `onClose`)
     // a second time, and keeps the key from reaching an enclosing Modal.
     event.stopImmediatePropagation();
@@ -1123,7 +1159,7 @@
     window.removeEventListener("keyup", handleShiftKeyUp);
     calendar.calendarContainer?.removeEventListener(
       "keydown",
-      handleCalendarEscape,
+      handleCalendarKeydown,
       { capture: true },
     );
     for (const type of BLOCKED_EVENTS) {

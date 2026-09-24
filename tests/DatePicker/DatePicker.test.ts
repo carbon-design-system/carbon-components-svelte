@@ -401,6 +401,71 @@ describe("DatePicker", () => {
     });
   });
 
+  describe("Enter in the calendar", () => {
+    // A browser's Enter carries `keyCode`, which flatpickr's grid handler
+    // switches on. user-event's `{Enter}` does not, so fire it by hand.
+    async function pressEnterOnFocusedDay() {
+      const day = document.activeElement as HTMLElement;
+      const label = day.getAttribute("aria-label");
+      await fireEvent.keyDown(day, { key: "Enter", keyCode: 13 });
+      await tick();
+      await new Promise((resolve) => setTimeout(resolve));
+      return label;
+    }
+
+    it("keeps focus on the day after adding it in multiple mode", async () => {
+      render(DatePicker, { datePickerType: "multiple" });
+      const input = screen.getByLabelText("Date");
+      const calendar = await screen.findByLabelText("calendar-container");
+      input.focus();
+      await fireEvent.keyDown(input, { key: "ArrowDown" });
+
+      const label = await pressEnterOnFocusedDay();
+
+      expect(calendar).toHaveClass("open");
+      expect(document.activeElement).toHaveClass("flatpickr-day");
+      expect(document.activeElement).toHaveClass("selected");
+      expect(document.activeElement).toHaveAttribute("aria-label", label);
+
+      // The next day can be added from the keyboard as well.
+      await fireEvent.keyDown(document.activeElement as HTMLElement, {
+        key: "ArrowRight",
+        keyCode: 39,
+      });
+      await pressEnterOnFocusedDay();
+      expect(calendar.querySelectorAll(".flatpickr-day.selected")).toHaveLength(
+        2,
+      );
+    });
+
+    it("keeps focus on the start day in range mode", async () => {
+      render(DatePickerRange);
+      const input = screen.getByLabelText("Start date");
+      const calendar = await screen.findByLabelText("calendar-container");
+      input.focus();
+      await fireEvent.keyDown(input, { key: "ArrowDown" });
+
+      const label = await pressEnterOnFocusedDay();
+
+      expect(calendar).toHaveClass("open");
+      expect(document.activeElement).toHaveClass("flatpickr-day");
+      expect(document.activeElement).toHaveAttribute("aria-label", label);
+    });
+
+    it("still returns focus to the input when a single pick closes", async () => {
+      render(DatePicker, { datePickerType: "single" });
+      const input = screen.getByLabelText("Date");
+      const calendar = await screen.findByLabelText("calendar-container");
+      input.focus();
+      await fireEvent.keyDown(input, { key: "ArrowDown" });
+
+      await pressEnterOnFocusedDay();
+
+      expect(calendar).not.toHaveClass("open");
+      expect(input).toHaveFocus();
+    });
+  });
+
   it("keeps a consumer allowInput: false across mount and readonly toggles", async () => {
     const props: ComponentProps<typeof DatePicker> = {
       datePickerType: "single",
