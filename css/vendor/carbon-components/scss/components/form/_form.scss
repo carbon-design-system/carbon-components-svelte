@@ -194,3 +194,40 @@
 @include exports('form') {
   @include form;
 }
+
+// carbon-components-svelte patch
+// FormGroup `message`: Carbon v10 renders `.bx--form__requirement` and
+// `data-invalid` on the fieldset but ships no styles for either, so the
+// message showed as plain body text and an invalid group looked valid.
+// Mirrors the RadioButtonGroup validation patch in `_radio-button.scss`.
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// FormGroup message and invalid state.
+/// @access private
+/// @group form
+@mixin form-group-message {
+  .#{$prefix}--fieldset > .#{$prefix}--form__requirement {
+    @include type-style('helper-text-01');
+
+    display: flex;
+    align-items: flex-start;
+    margin-block-start: $carbon--spacing-02;
+    color: $text-02;
+  }
+
+  .#{$prefix}--fieldset > .#{$prefix}--form__requirement--invalid {
+    color: $text-error;
+  }
+
+  .#{$prefix}--form__requirement-icon {
+    margin: to-rem(1px) $carbon--spacing-02 0 to-rem(3px);
+    fill: $support-error;
+    min-inline-size: to-rem(16px);
+  }
+}
+
+@include exports("form-group-message") {
+  @include form-group-message;
+}

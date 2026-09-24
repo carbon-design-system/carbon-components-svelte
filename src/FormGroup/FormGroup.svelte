@@ -7,7 +7,10 @@
   /** Set to `true` for to remove the bottom margin */
   export let noMargin = false;
 
-  /** Set to `true` to indicate an invalid state */
+  /**
+   * Set to `true` to indicate an invalid state.
+   * With `message`, shows the message as an error with a warning icon.
+   */
   export let invalid = false;
 
   /**
@@ -28,6 +31,11 @@
 
   /** Specify an id for the legend element */
   export let legendId = "";
+
+  import WarningFilled from "../icons/WarningFilled.svelte";
+  import { uniqueId } from "../utils/unique-id.js";
+
+  const messageId = `form-group-message-${uniqueId()}`;
 </script>
 
 <fieldset
@@ -36,6 +44,7 @@
   class:bx--fieldset={true}
   class:bx--fieldset--no-margin={noMargin}
   aria-labelledby={$$restProps["aria-labelledby"] ?? legendId}
+  aria-describedby={message ? messageId : undefined}
   {...$$restProps}
   on:click
   on:mouseover
@@ -52,6 +61,15 @@
   {/if}
   <slot />
   {#if message}
-    <div class:bx--form__requirement={true}>{messageText}</div>
+    <div
+      id={messageId}
+      class:bx--form__requirement={true}
+      class:bx--form__requirement--invalid={invalid}
+    >
+      {#if invalid}
+        <WarningFilled class="bx--form__requirement-icon" />
+      {/if}
+      {messageText}
+    </div>
   {/if}
 </fieldset>

@@ -243,6 +243,58 @@ describe("FormGroup", () => {
     expect(screen.getByText("Error message")).toBeInTheDocument();
   });
 
+  it("should show an invalid message as an error with an icon", () => {
+    render(FormGroupTest, {
+      props: {
+        invalid: true,
+        message: true,
+        messageText: "Select at least one",
+        slotContent: "Content",
+      },
+    });
+
+    const message = screen.getByText("Select at least one");
+    expect(message).toHaveClass("bx--form__requirement--invalid");
+    expect(message.querySelector("svg")).toHaveClass(
+      "bx--form__requirement-icon",
+    );
+  });
+
+  it("should not show the error icon when the group is valid", () => {
+    render(FormGroupTest, {
+      props: {
+        message: true,
+        messageText: "Pick any",
+        slotContent: "Content",
+      },
+    });
+
+    const message = screen.getByText("Pick any");
+    expect(message).not.toHaveClass("bx--form__requirement--invalid");
+    expect(message.querySelector("svg")).toBeNull();
+  });
+
+  it("should describe the fieldset with its message", () => {
+    render(FormGroupTest, {
+      props: {
+        invalid: true,
+        message: true,
+        messageText: "Select at least one",
+        slotContent: "Content",
+      },
+    });
+
+    expect(screen.getByRole("group")).toHaveAccessibleDescription(
+      "Select at least one",
+    );
+  });
+
+  it("should not set aria-describedby without a message", () => {
+    render(FormGroupTest, { props: { invalid: true, slotContent: "Content" } });
+
+    expect(screen.getByRole("group")).not.toHaveAttribute("aria-describedby");
+  });
+
   it("should handle legendId with aria-labelledby", () => {
     render(FormGroupTest, {
       props: {
