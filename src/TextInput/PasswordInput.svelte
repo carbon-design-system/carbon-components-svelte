@@ -7,6 +7,7 @@
 
   /**
    * Specify the input value.
+   * Follows the field when the owning form resets.
    * @type {number | string}
    * @bindable writable
    */
@@ -113,6 +114,7 @@
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
+  import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const ctx = getContext("carbon:Form");
@@ -132,6 +134,11 @@
   $: errorId = `error-${id}`;
   $: warnId = `warn-${id}`;
   $: tooltipLabel = type === "text" ? hidePasswordLabel : showPasswordLabel;
+
+  // A form reset restores the field without an input event, so read it back.
+  function handleFormReset() {
+    if (ref) value = ref.value;
+  }
 
   function handleFocus() {
     if (selectTextOnFocus && !disabled) {
@@ -216,6 +223,7 @@
       {/if}
       <input
         bind:this={ref}
+        use:formReset={handleFormReset}
         data-invalid={showInvalid || undefined}
         aria-invalid={showInvalid || undefined}
         data-warn={showWarn || undefined}
