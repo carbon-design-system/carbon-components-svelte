@@ -31,6 +31,7 @@
   import { writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import { dismiss } from "../utils/dismiss.js";
+  import { createDomNodeRegistry } from "../utils/dom-node-registry.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
 
   const dispatch = createEventDispatcher();
@@ -39,10 +40,13 @@
    * @type {import("svelte/store").Writable<Record<string, boolean>>}
    */
   const selectedItems = writable({});
-  /**
-   * @type {import("svelte/store").Writable<ReadonlyArray<HTMLElement>>}
-   */
-  const menuItems = writable([]);
+  const menuItemRegistry = createDomNodeRegistry();
+  /** @type {import("svelte/store").Writable<ReadonlyArray<HTMLElement>>} */
+  const menuItems = menuItemRegistry.items;
+  /** @type {(node: HTMLElement) => void} */
+  const registerMenuItem = menuItemRegistry.register;
+  /** @type {(node: HTMLElement) => void} */
+  const unregisterMenuItem = menuItemRegistry.unregister;
 
   let menuRef = null;
 
@@ -54,20 +58,6 @@
       ..._items,
       [item.id]: item.isSelected,
     }));
-  }
-
-  /**
-   * @type {(node: HTMLElement) => void}
-   */
-  function registerMenuItem(node) {
-    menuItems.update((items) => [...items, node]);
-  }
-
-  /**
-   * @type {(node: HTMLElement) => void}
-   */
-  function unregisterMenuItem(node) {
-    menuItems.update((items) => items.filter((item) => item !== node));
   }
 
   /**

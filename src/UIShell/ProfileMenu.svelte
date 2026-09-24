@@ -35,27 +35,25 @@
   export let preventCloseOnClickOutside = false;
 
   import { createEventDispatcher, setContext, tick } from "svelte";
-  import { get, writable } from "svelte/store";
+  import { get } from "svelte/store";
   import { slide } from "svelte/transition";
   import { PROFILE_MENU_CONTEXT_KEY } from "../constants/context-keys.js";
   import UserAvatar from "../UserAvatar/UserAvatar.svelte";
   import { dismiss } from "../utils/dismiss.js";
+  import { createDomNodeRegistry } from "../utils/dom-node-registry.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
 
   const dispatch = createEventDispatcher();
 
   let refMenu = null;
 
+  const menuItemRegistry = createDomNodeRegistry();
   /** @type {import("svelte/store").Writable<ReadonlyArray<HTMLElement>>} */
-  const menuItems = writable([]);
-
-  function registerMenuItem(node) {
-    menuItems.update((items) => [...items, node]);
-  }
-
-  function unregisterMenuItem(node) {
-    menuItems.update((items) => items.filter((item) => item !== node));
-  }
+  const menuItems = menuItemRegistry.items;
+  /** @type {(node: HTMLElement) => void} */
+  const registerMenuItem = menuItemRegistry.register;
+  /** @type {(node: HTMLElement) => void} */
+  const unregisterMenuItem = menuItemRegistry.unregister;
 
   setContext(PROFILE_MENU_CONTEXT_KEY, {
     menuItems,
