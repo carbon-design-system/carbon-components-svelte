@@ -76,9 +76,11 @@
     on:click={(event) => {
       if (readonly) event.preventDefault();
     }}
-    on:change={() => {
+    on:change={(event) => {
       if (readonly) return;
-      toggled = !toggled;
+      // Read the input, not the Svelte state: the two disagree after a form
+      // reset, and inverting stale state would undo the click.
+      toggled = event.currentTarget.checked;
       dispatch("toggle", { toggled });
     }}
     on:change
