@@ -75,7 +75,7 @@
   /** Set to `true` to disable the combobox */
   export let disabled = false;
 
-  /** Specify the title text of the combobox */
+  /** Specify the label text of the combobox */
   export let labelText = "";
 
   /** Set to `true` to visually hide the label text */
