@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { rect } from "../utils/rect";
 import { user } from "../utils/user";
 import SearchMenu from "./SearchMenu.test.svelte";
 import SearchMenuBar from "./SearchMenuBar.test.svelte";
@@ -119,6 +120,29 @@ describe("SearchMenu", () => {
     );
     expect(input).toHaveValue("Databases for TestSQL");
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+  });
+
+  it("scrolls the highlighted option within the menu, not the page", async () => {
+    render(SearchMenu);
+    const input = screen.getByRole("combobox");
+    await user.click(input);
+    const listbox = screen.getByRole("listbox");
+    Object.defineProperty(listbox, "scrollHeight", { value: 400 });
+    Object.defineProperty(listbox, "clientHeight", { value: 100 });
+    vi.spyOn(listbox, "getBoundingClientRect").mockReturnValue(
+      rect({ top: 0, height: 100 }),
+    );
+    for (const option of screen.getAllByRole("option")) {
+      vi.spyOn(option, "getBoundingClientRect").mockReturnValue(
+        rect({ top: 120, height: 40 }),
+      );
+    }
+    vi.mocked(Element.prototype.scrollIntoView).mockClear();
+
+    await user.keyboard("{ArrowDown}");
+
+    expect(Element.prototype.scrollIntoView).not.toHaveBeenCalled();
+    expect(listbox.scrollTop).toBe(60);
   });
 
   it("dispatches submit when Enter is pressed with no active item", async () => {
