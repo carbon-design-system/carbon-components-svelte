@@ -1,3 +1,72 @@
+<script context="module">
+  /**
+   * Whether `value` is a spacing-scale step (rendered as a class rather than
+   * inline style). Spacing steps start at 1; offsets also allow 0.
+   * @param {unknown} value @param {number} min
+   */
+  function isScaleStep(value, min) {
+    return typeof value === "number" && value >= min && value <= 13;
+  }
+
+  /** @param {string} kind @param {number | string | undefined} value @param {number} min */
+  function scaleClass(kind, value, min) {
+    if (value == null) return undefined;
+    return isScaleStep(value, min) ? `bx--box-${kind}-${value}` : undefined;
+  }
+
+  /** @param {number | string | undefined} value @param {number} min */
+  function scaleStyle(value, min) {
+    if (value == null) return undefined;
+    if (isScaleStep(value, min)) return undefined;
+    if (typeof value === "string") return value;
+    return undefined;
+  }
+
+  /** @param {"p" | "px" | "py" | "m" | "mx" | "my" | "height" | "min-height" | "max-height"} kind @param {SpacingValue | undefined} value */
+  function spacingClass(kind, value) {
+    return scaleClass(kind, value, 1);
+  }
+
+  /** @param {SpacingValue | undefined} value */
+  function spacingStyle(value) {
+    return scaleStyle(value, 1);
+  }
+
+  /**
+   * Resolve `border-{side}-width` for the one side `borderSide` targets;
+   * the other three sides are zeroed by the `bx--box-border-side-{side}` class.
+   * @param {"top" | "right" | "bottom" | "left"} side
+   * @param {string | undefined} border
+   * @param {"all" | "top" | "right" | "bottom" | "left"} borderSide
+   * @param {number | string | undefined} borderWidth
+   */
+  function borderSideWidth(side, border, borderSide, borderWidth) {
+    return border && borderSide === side ? toCssLength(borderWidth) : undefined;
+  }
+
+  /** @param {"height" | "min-height"} kind @param {SpacingValue | "viewport" | undefined} value */
+  function viewportClass(kind, value) {
+    if (value === "viewport") return `bx--box-${kind}-viewport`;
+    return spacingClass(kind, value);
+  }
+
+  /** @param {SpacingValue | "viewport" | undefined} value */
+  function viewportStyle(value) {
+    if (value === "viewport") return undefined;
+    return spacingStyle(value);
+  }
+
+  /** @param {"top" | "bottom"} kind @param {OffsetValue | undefined} value */
+  function offsetClass(kind, value) {
+    return scaleClass(kind, value, 0);
+  }
+
+  /** @param {OffsetValue | undefined} value */
+  function offsetStyle(value) {
+    return scaleStyle(value, 0);
+  }
+</script>
+
 <script>
   /**
    * @typedef {1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13} SpacingScale
@@ -158,78 +227,7 @@
    */
   export let ref = null;
 
-  /**
-   * Whether `value` is a spacing-scale step (rendered as a class rather than
-   * inline style). Spacing steps start at 1; offsets also allow 0.
-   * @param {unknown} value @param {number} min
-   */
-  function isScaleStep(value, min) {
-    return typeof value === "number" && value >= min && value <= 13;
-  }
-
-  /** @param {string} kind @param {number | string | undefined} value @param {number} min */
-  function scaleClass(kind, value, min) {
-    if (value == null) return undefined;
-    return isScaleStep(value, min) ? `bx--box-${kind}-${value}` : undefined;
-  }
-
-  /** @param {number | string | undefined} value @param {number} min */
-  function scaleStyle(value, min) {
-    if (value == null) return undefined;
-    if (isScaleStep(value, min)) return undefined;
-    if (typeof value === "string") return value;
-    return undefined;
-  }
-
-  /** @param {"p" | "px" | "py" | "m" | "mx" | "my" | "height" | "min-height" | "max-height"} kind @param {SpacingValue | undefined} value */
-  function spacingClass(kind, value) {
-    return scaleClass(kind, value, 1);
-  }
-
-  /** @param {SpacingValue | undefined} value */
-  function spacingStyle(value) {
-    return scaleStyle(value, 1);
-  }
-
-  /** @param {number | string | undefined} value */
-  function lengthStyle(value) {
-    if (value == null) return undefined;
-    return typeof value === "number" ? `${value}px` : value;
-  }
-
-  /**
-   * Resolve `border-{side}-width` for the one side `borderSide` targets;
-   * the other three sides are zeroed by the `bx--box-border-side-{side}` class.
-   * @param {"top" | "right" | "bottom" | "left"} side
-   * @param {string | undefined} border
-   * @param {"all" | "top" | "right" | "bottom" | "left"} borderSide
-   * @param {number | string | undefined} borderWidth
-   */
-  function borderSideWidth(side, border, borderSide, borderWidth) {
-    return border && borderSide === side ? lengthStyle(borderWidth) : undefined;
-  }
-
-  /** @param {"height" | "min-height"} kind @param {SpacingValue | "viewport" | undefined} value */
-  function viewportClass(kind, value) {
-    if (value === "viewport") return `bx--box-${kind}-viewport`;
-    return spacingClass(kind, value);
-  }
-
-  /** @param {SpacingValue | "viewport" | undefined} value */
-  function viewportStyle(value) {
-    if (value === "viewport") return undefined;
-    return spacingStyle(value);
-  }
-
-  /** @param {"top" | "bottom"} kind @param {OffsetValue | undefined} value */
-  function offsetClass(kind, value) {
-    return scaleClass(kind, value, 0);
-  }
-
-  /** @param {OffsetValue | undefined} value */
-  function offsetStyle(value) {
-    return scaleStyle(value, 0);
-  }
+  import { toCssLength } from "../utils/css-length.js";
 
   $: boxClass = [
     fill && `bx--box-fill-${fill}`,
@@ -257,11 +255,11 @@
     .filter(Boolean)
     .join(" ");
 
-  $: resolvedWidth = lengthStyle(width);
-  $: resolvedMaxWidth = lengthStyle(maxWidth);
-  $: resolvedMinWidth = lengthStyle(minWidth);
+  $: resolvedWidth = toCssLength(width);
+  $: resolvedMaxWidth = toCssLength(maxWidth);
+  $: resolvedMinWidth = toCssLength(minWidth);
   $: resolvedBorderWidth =
-    border && borderSide === "all" ? lengthStyle(borderWidth) : undefined;
+    border && borderSide === "all" ? toCssLength(borderWidth) : undefined;
   $: resolvedBorderTopWidth = borderSideWidth(
     "top",
     border,
