@@ -367,7 +367,8 @@
       }
     }
 
-    &.disabled {
+    // flatpickr's monthSelect plugin marks out-of-range months with this.
+    &.flatpickr-disabled {
       color: $disabled-02;
       cursor: not-allowed;
 
