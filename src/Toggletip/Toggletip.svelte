@@ -1,3 +1,47 @@
+<script context="module">
+  // Space (px) reserved for the caret between the anchor and the content.
+  const PORTAL_GAP = 10;
+  // Caret offset from the popover corner. 0.5rem keeps the caret clear of the
+  // rounded corner (the popover's default 1rem assumes a wider trigger). The
+  // popover is then nudged outward so this caret still points at the button
+  // center for start/end alignment.
+  const CARET_OFFSET_STYLE = "--cds-popover-caret-offset: 0.5rem;";
+  // Nudge the popover past the trigger so the caret lands on the button center:
+  // caretCenterFromCorner (0.5rem + caretHalfWidth = 12px) - buttonHalfWidth (8px) = 4px.
+  const CARET_NUDGE_PX = 4;
+  // Neutralizes the popover alignment transforms so the portal places it. The
+  // popover is rendered `relative` (in-flow) so the portal sizes to it.
+  const PORTAL_NEUTRALIZE_STYLE = "inset: auto; transform: none;";
+
+  /**
+   * Margin that nudges the popover outward so its caret points at the button
+   * center for start/end alignment. Center alignment needs no nudge.
+   */
+  function caretNudgeStyle(pAlign) {
+    if (pAlign.endsWith("-left")) return `margin-left: -${CARET_NUDGE_PX}px;`;
+    if (pAlign.endsWith("-right")) return `margin-right: -${CARET_NUDGE_PX}px;`;
+    if (pAlign.endsWith("-top")) return `margin-top: -${CARET_NUDGE_PX}px;`;
+    if (pAlign.endsWith("-bottom"))
+      return `margin-bottom: -${CARET_NUDGE_PX}px;`;
+    return "";
+  }
+
+  /** Inline style for the underlying popover (caret offset + nudge). */
+  function popoverStyleFor(pAlign) {
+    return `${CARET_OFFSET_STYLE} ${caretNudgeStyle(pAlign)}`.trim();
+  }
+
+  // Translate the Carbon `direction` + `align` pair into the underlying
+  // popover's combined alignment modifier (e.g. "bottom" + "start" -> "bottom-left").
+  function toPopoverAlign(dir, intrinsic) {
+    if (intrinsic === "center") return dir;
+    if (dir === "top" || dir === "bottom") {
+      return `${dir}-${intrinsic === "start" ? "left" : "right"}`;
+    }
+    return `${dir}-${intrinsic === "start" ? "top" : "bottom"}`;
+  }
+</script>
+
 <script>
   /**
    * @template [Icon=any]
@@ -78,54 +122,12 @@
   const contentId = uniqueId();
   const insideModal = getContext(MODAL_CONTEXT_KEY);
 
-  // Space (px) reserved for the caret between the anchor and the content.
-  const PORTAL_GAP = 10;
-  // Caret offset from the popover corner. 0.5rem keeps the caret clear of the
-  // rounded corner (the popover's default 1rem assumes a wider trigger). The
-  // popover is then nudged outward so this caret still points at the button
-  // center for start/end alignment.
-  const CARET_OFFSET_STYLE = "--cds-popover-caret-offset: 0.5rem;";
-  // Nudge the popover past the trigger so the caret lands on the button center:
-  // caretCenterFromCorner (0.5rem + caretHalfWidth = 12px) - buttonHalfWidth (8px) = 4px.
-  const CARET_NUDGE_PX = 4;
-  // Neutralizes the popover alignment transforms so the portal places it. The
-  // popover is rendered `relative` (in-flow) so the portal sizes to it.
-  const PORTAL_NEUTRALIZE_STYLE = "inset: auto; transform: none;";
-
-  /**
-   * Margin that nudges the popover outward so its caret points at the button
-   * center for start/end alignment. Center alignment needs no nudge.
-   */
-  function caretNudgeStyle(pAlign) {
-    if (pAlign.endsWith("-left")) return `margin-left: -${CARET_NUDGE_PX}px;`;
-    if (pAlign.endsWith("-right")) return `margin-right: -${CARET_NUDGE_PX}px;`;
-    if (pAlign.endsWith("-top")) return `margin-top: -${CARET_NUDGE_PX}px;`;
-    if (pAlign.endsWith("-bottom"))
-      return `margin-bottom: -${CARET_NUDGE_PX}px;`;
-    return "";
-  }
-
-  /** Inline style for the underlying popover (caret offset + nudge). */
-  function popoverStyleFor(pAlign) {
-    return `${CARET_OFFSET_STYLE} ${caretNudgeStyle(pAlign)}`.trim();
-  }
-
   let toggletipRef = null;
   let portalRef = null;
   let disconnectModalObserver = noop;
 
   $: effectivePortalTooltip =
     portalTooltip === undefined ? !!insideModal : portalTooltip;
-
-  // Translate the Carbon `direction` + `align` pair into the underlying
-  // popover's combined alignment modifier (e.g. "bottom" + "start" -> "bottom-left").
-  function toPopoverAlign(dir, intrinsic) {
-    if (intrinsic === "center") return dir;
-    if (dir === "top" || dir === "bottom") {
-      return `${dir}-${intrinsic === "start" ? "left" : "right"}`;
-    }
-    return `${dir}-${intrinsic === "start" ? "top" : "bottom"}`;
-  }
 
   $: popoverAlign = toPopoverAlign(direction, align);
   $: popoverStyle = popoverStyleFor(popoverAlign);

@@ -1,3 +1,21 @@
+<script context="module">
+  function isTopPosition(value) {
+    return value.startsWith("top");
+  }
+
+  function isLeftPosition(value) {
+    return value.endsWith("left");
+  }
+
+  function isRightPosition(value) {
+    return value.endsWith("right");
+  }
+
+  function isCenterPosition(value) {
+    return value.endsWith("center");
+  }
+</script>
+
 <script>
   /**
    * @typedef {object} NotificationData
@@ -54,22 +72,6 @@
 
   function generateId() {
     return `notification-${idCounter++}`;
-  }
-
-  function isTopPosition(value) {
-    return value.startsWith("top");
-  }
-
-  function isLeftPosition(value) {
-    return value.endsWith("left");
-  }
-
-  function isRightPosition(value) {
-    return value.endsWith("right");
-  }
-
-  function isCenterPosition(value) {
-    return value.endsWith("center");
   }
 
   /**
