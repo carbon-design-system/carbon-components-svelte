@@ -148,6 +148,15 @@ Set `enabledDates` for the inverse of [disabled dates](#disabled-dates): every d
 
 <FileSource src="/framed/DatePicker/DatePickerEnableDates" />
 
+### Range length
+
+Set `minRangeDays` and `maxRangeDays` on a range picker to limit how many days a range may span, counting both ends. Once the start is picked, days that would make the range too short or too long are disabled until the end is picked. Only picks in the calendar are limited; typed and programmatic ranges are not checked.
+
+<DatePicker datePickerType="range" minRangeDays={2} maxRangeDays={14}>
+  <DatePickerInput labelText="Check-in" placeholder="mm/dd/yyyy" />
+  <DatePickerInput labelText="Check-out" placeholder="mm/dd/yyyy" />
+</DatePicker>
+
 ### Keep out-of-range initial values
 
 By default, an initial `value` outside of `minDate` and `maxDate` (or matching `disable`) is cleared. Pass `allowInvalidPreload: true` via `flatpickrProps` to keep it, for example to display legacy data that predates a new constraint.
