@@ -177,6 +177,7 @@
   export let ref = null;
 
   import { createEventDispatcher, getContext, tick } from "svelte";
+  import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
   import Add from "../icons/Add.svelte";
   import EditOff from "../icons/EditOff.svelte";
   import Subtract from "../icons/Subtract.svelte";
@@ -200,7 +201,7 @@
   };
 
   const dispatch = createEventDispatcher();
-  const formContext = getContext("carbon:Form");
+  const formContext = getContext(FORM_CONTEXT_KEY);
 
   function updateValue(isIncrementing, multiplier = 1) {
     // When the input is empty (null) or zero and stepStartValue is set,

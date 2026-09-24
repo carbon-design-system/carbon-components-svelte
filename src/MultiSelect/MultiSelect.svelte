@@ -349,6 +349,10 @@
     tick,
   } from "svelte";
   import Checkbox from "../Checkbox/Checkbox.svelte";
+  import {
+    FORM_CONTEXT_KEY,
+    MODAL_CONTEXT_KEY,
+  } from "../constants/context-keys.js";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import HighlightSlot from "../ListBox/HighlightSlot.svelte";
@@ -378,8 +382,8 @@
 
   const dispatch = createEventDispatcher();
   const scrollEndTracker = createScrollEndTracker();
-  const formContext = getContext("carbon:Form");
-  const insideModal = getContext("carbon:Modal");
+  const formContext = getContext(FORM_CONTEXT_KEY);
+  const insideModal = getContext(MODAL_CONTEXT_KEY);
 
   $: effectivePortalMenu =
     portalMenu === undefined ? !!insideModal : portalMenu;

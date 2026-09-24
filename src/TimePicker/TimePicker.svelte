@@ -79,13 +79,14 @@
 
   import { getContext, setContext, tick } from "svelte";
   import { readonly as readOnly, writable } from "svelte/store";
+  import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import Stack from "../Stack/Stack.svelte";
   import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
 
-  const formContext = getContext("carbon:Form");
+  const formContext = getContext(FORM_CONTEXT_KEY);
   const selectCount = writable(0);
 
   /** @type {() => () => void} */

@@ -78,16 +78,12 @@
   export let ref = null;
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
+  import { SUBMENU_HOVER_DELAY_MS } from "../constants/timing.js";
   import CaretRight from "../icons/CaretRight.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
   import { createSubmenuHoverIntent } from "../utils/submenu-hover-intent.js";
   import { uniqueId } from "../utils/unique-id.js";
   import Menu from "./Menu.svelte";
-
-  // "moderate-01" duration (ms) from Carbon motion recommended for small
-  // expansion, short distance movements - matches the delay used for
-  // ContextMenuOption's own submenu hover.
-  const HOVER_DELAY_MS = 150;
 
   const dispatch = createEventDispatcher();
   const ctx = getContext("carbon:Menu");
@@ -99,7 +95,7 @@
     (value) => {
       submenuOpen = value;
     },
-    { openDelay: HOVER_DELAY_MS, closeDelay: HOVER_DELAY_MS },
+    { openDelay: SUBMENU_HOVER_DELAY_MS, closeDelay: SUBMENU_HOVER_DELAY_MS },
   );
   // `selected` implies the checkbox variant. Latch it instead of writing back
   // to `selectable` so deselecting the item keeps its role and indentation.

@@ -56,6 +56,7 @@
   import { createEventDispatcher, setContext, tick } from "svelte";
   import { get, writable } from "svelte/store";
   import { slide } from "svelte/transition";
+  import { PROFILE_MENU_CONTEXT_KEY } from "../constants/context-keys.js";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
@@ -75,7 +76,7 @@
     menuItems.update((items) => items.filter((item) => item !== node));
   }
 
-  setContext("carbon:ProfileMenu", {
+  setContext(PROFILE_MENU_CONTEXT_KEY, {
     menuItems,
     registerMenuItem,
     unregisterMenuItem,

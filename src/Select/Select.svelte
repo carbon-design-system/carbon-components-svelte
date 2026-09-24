@@ -87,13 +87,14 @@
     tick,
   } from "svelte";
   import { writable } from "svelte/store";
+  import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
-  const formContext = getContext("carbon:Form");
+  const formContext = getContext(FORM_CONTEXT_KEY);
   /**
    * @type {import("svelte/store").Writable<string | number | undefined>}
    */

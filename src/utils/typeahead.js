@@ -1,9 +1,7 @@
 // @ts-check
 
+import { TYPEAHEAD_RESET_MS } from "../constants/timing.js";
 import { debounce } from "./debounce.js";
-
-/** Quiet period (ms) after which the typed query resets. */
-const TYPEAHEAD_DELAY = 500;
 
 /**
  * Next enabled item whose text starts with `query`, searching forward from
@@ -65,7 +63,7 @@ export function isTypeaheadKey(event) {
  * @param {number} [delay]
  * @returns {{ push: (character: string) => string; clear: () => void }}
  */
-export function createTypeaheadBuffer(delay = TYPEAHEAD_DELAY) {
+export function createTypeaheadBuffer(delay = TYPEAHEAD_RESET_MS) {
   let query = "";
   const reset = debounce(() => {
     query = "";

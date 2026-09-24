@@ -109,6 +109,10 @@
   export let selectTextOnFocus = false;
 
   import { getContext, tick } from "svelte";
+  import {
+    FORM_CONTEXT_KEY,
+    MODAL_CONTEXT_KEY,
+  } from "../constants/context-keys.js";
   import View from "../icons/View.svelte";
   import ViewOff from "../icons/ViewOff.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
@@ -117,8 +121,8 @@
   import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
 
-  const ctx = getContext("carbon:Form");
-  const insideModal = getContext("carbon:Modal");
+  const ctx = getContext(FORM_CONTEXT_KEY);
+  const insideModal = getContext(MODAL_CONTEXT_KEY);
 
   $: showInvalid = invalid && !disabled && !readonly;
   $: showWarn = warn && !invalid && !disabled && !readonly;
