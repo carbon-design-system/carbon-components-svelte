@@ -15,6 +15,7 @@
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { createDelayedSetter } from "../utils/delayed-setter.js";
   import { dismiss } from "../utils/dismiss.js";
+  import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { activeTooltipIcon } from "./tooltip-icon-store.js";
 
@@ -88,9 +89,9 @@
   export let portalTooltip = undefined;
 
   const dispatch = createEventDispatcher();
+  const notifyOpenChange = createOpenCloseDispatcher(dispatch);
   const tooltipId = {};
 
-  let initialRender = true;
   let clicked = false;
 
   const scheduleOpen = createDelayedSetter();
@@ -138,14 +139,7 @@
     }
   }
 
-  $: {
-    const shouldDispatch = !initialRender;
-    const nextOpen = open;
-    initialRender = false;
-    if (shouldDispatch) {
-      dispatch(nextOpen ? "open" : "close");
-    }
-  }
+  $: notifyOpenChange(open);
 
   $: portalOpen =
     effectivePortalTooltip &&
