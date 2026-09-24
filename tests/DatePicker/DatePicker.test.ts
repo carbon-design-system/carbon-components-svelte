@@ -2493,6 +2493,46 @@ describe("DatePicker", () => {
       expect(currentYear).toHaveAttribute("aria-current", "date");
     });
 
+    it.each([
+      ["minDate", (year: number, current: number) => year < current],
+      ["maxDate", (year: number, current: number) => year > current],
+    ] as const)(
+      "marks years outside %s as aria-disabled",
+      async (bound, isOutside) => {
+        const current = new Date().getFullYear();
+        render(DatePicker, {
+          datePickerType: "year",
+          dateFormat: "Y",
+          [bound]: String(current),
+        });
+
+        await user.click(screen.getByLabelText("Date"));
+        const calendar = await screen.findByLabelText("calendar-container");
+
+        for (const cell of calendar.querySelectorAll(
+          ".flatpickr-yearSelect-year",
+        )) {
+          const year = Number(cell.getAttribute("data-year"));
+          if (isOutside(year, current)) {
+            expect(cell).toHaveAttribute("aria-disabled", "true");
+          } else {
+            expect(cell).not.toHaveAttribute("aria-disabled");
+          }
+        }
+      },
+    );
+
+    it("does not mark any year aria-disabled without bounds", async () => {
+      render(DatePicker, { datePickerType: "year", dateFormat: "Y" });
+
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+
+      expect(
+        calendar.querySelectorAll(".flatpickr-yearSelect-year[aria-disabled]"),
+      ).toHaveLength(0);
+    });
+
     it("labels the range to match the first and last rendered year", async () => {
       render(DatePicker, { datePickerType: "year", dateFormat: "Y" });
 
