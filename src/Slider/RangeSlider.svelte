@@ -326,6 +326,9 @@
     dispatch("change", { value, valueUpper });
   }
 
+  $: showInvalid = invalid && !disabled && !readonly;
+  $: showWarn = warn && !invalid && !disabled && !readonly;
+
   $: labelId = `label-${id}`;
   $: errorId = `error-${id}`;
   $: warnId = `warn-${id}`;
@@ -403,8 +406,8 @@
         class:bx--slider-text-input={true}
         class:bx--slider-text-input--lower={true}
         class:bx--text-input--light={light}
-        class:bx--text-input--invalid={invalid}
-        class:bx--slider-text-input--warn={warn && !invalid}
+        class:bx--text-input--invalid={showInvalid}
+        class:bx--slider-text-input--warn={showWarn}
         {value}
         aria-label={ariaLabelInput}
         {disabled}
@@ -423,16 +426,16 @@
           value = next;
           dispatch("change", { value, valueUpper });
         }}
-        data-invalid={invalid || null}
-        data-warn={(warn && !invalid) || null}
-        aria-invalid={invalid || null}
-        aria-describedby={invalid ? errorId : warn ? warnId : undefined}
+        data-invalid={showInvalid || null}
+        data-warn={showWarn || null}
+        aria-invalid={showInvalid || null}
+        aria-describedby={showInvalid ? errorId : showWarn ? warnId : undefined}
         on:focus={handleLowerInputFocus}
         on:blur={handleLowerInputBlur}
       >
-      {#if invalid}
+      {#if showInvalid}
         <WarningFilled class="bx--slider__invalid-icon" />
-      {:else if warn}
+      {:else if showWarn}
         <WarningAltFilled
           class="bx--slider__invalid-icon bx--slider__invalid-icon--warning"
         />
@@ -468,8 +471,8 @@
           aria-valuenow={value}
           aria-valuetext={getValueText(value)}
           aria-label={ariaLabelInput}
-          aria-describedby={invalid ? errorId : warn ? warnId : undefined}
-          aria-invalid={invalid || undefined}
+          aria-describedby={showInvalid ? errorId : showWarn ? warnId : undefined}
+          aria-invalid={showInvalid || undefined}
           on:focus={() => (activeHandle = "lower")}
           on:keydown={handleKeydown}
           {id}
@@ -518,8 +521,8 @@
           aria-valuenow={valueUpper}
           aria-valuetext={getValueText(valueUpper)}
           aria-label={ariaLabelInputUpper}
-          aria-describedby={invalid ? errorId : warn ? warnId : undefined}
-          aria-invalid={invalid || undefined}
+          aria-describedby={showInvalid ? errorId : showWarn ? warnId : undefined}
+          aria-invalid={showInvalid || undefined}
           on:focus={() => (activeHandle = "upper")}
           on:keydown={handleKeydown}
         >
@@ -589,8 +592,8 @@
         class:bx--slider-text-input={true}
         class:bx--slider-text-input--upper={true}
         class:bx--text-input--light={light}
-        class:bx--text-input--invalid={invalid}
-        class:bx--slider-text-input--warn={warn && !invalid}
+        class:bx--text-input--invalid={showInvalid}
+        class:bx--slider-text-input--warn={showWarn}
         value={valueUpper}
         aria-label={ariaLabelInputUpper}
         {disabled}
@@ -609,23 +612,23 @@
           valueUpper = next;
           dispatch("change", { value, valueUpper });
         }}
-        data-invalid={invalid || null}
-        data-warn={(warn && !invalid) || null}
-        aria-invalid={invalid || null}
-        aria-describedby={invalid ? errorId : warn ? warnId : undefined}
+        data-invalid={showInvalid || null}
+        data-warn={showWarn || null}
+        aria-invalid={showInvalid || null}
+        aria-describedby={showInvalid ? errorId : showWarn ? warnId : undefined}
         on:focus={handleUpperInputFocus}
         on:blur={handleUpperInputBlur}
       >
-      {#if invalid}
+      {#if showInvalid}
         <WarningFilled class="bx--slider__invalid-icon" />
-      {:else if warn}
+      {:else if showWarn}
         <WarningAltFilled
           class="bx--slider__invalid-icon bx--slider__invalid-icon--warning"
         />
       {/if}
     </div>
   </div>
-  {#if invalid}
+  {#if showInvalid}
     <div
       id={errorId}
       class:bx--slider__validation-msg={true}
@@ -635,7 +638,7 @@
       {invalidText}
     </div>
   {/if}
-  {#if warn && !invalid}
+  {#if showWarn}
     <div
       id={warnId}
       class:bx--slider__validation-msg={true}

@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import RangeSliderComponent from "carbon-components-svelte/Slider/RangeSlider.svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import RangeSlider from "./RangeSlider.test.svelte";
@@ -492,5 +493,26 @@ describe("RangeSlider", () => {
     const markEls = container.querySelectorAll(".bx--slider__mark");
     expect(markEls).toHaveLength(3);
     expect(markEls[1]).toHaveStyle({ left: "50%" });
+  });
+
+  it.each([
+    ["disabled", { disabled: true }],
+    ["readonly", { readonly: true }],
+  ])("hides invalid and warn states when %s", (_, props) => {
+    for (const status of [
+      { invalid: true, invalidText: "Invalid range" },
+      { warn: true, warnText: "Check range" },
+    ]) {
+      const { unmount } = render(RangeSliderComponent, {
+        props: { labelText: "Range", ...status, ...props },
+      });
+      expect(screen.queryByText("Invalid range")).not.toBeInTheDocument();
+      expect(screen.queryByText("Check range")).not.toBeInTheDocument();
+      for (const input of screen.getAllByRole("spinbutton")) {
+        expect(input).not.toHaveAttribute("aria-invalid");
+        expect(input).not.toHaveAttribute("data-warn");
+      }
+      unmount();
+    }
   });
 });
