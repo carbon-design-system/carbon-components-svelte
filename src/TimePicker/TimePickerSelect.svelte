@@ -41,6 +41,7 @@
   const formContext = getContext("carbon:Form");
   const timePickerContext = getContext("carbon:TimePicker");
   const parentReadonly = timePickerContext?.readonly ?? readable(false);
+  const parentDisabled = timePickerContext?.disabled ?? readable(false);
 
   /**
    * @type {import("svelte/store").Writable<number | string>}
@@ -86,6 +87,7 @@
   $: value = $selectedValue;
   $: isFluid = !!timePickerContext?.isFluid || !!formContext?.isFluid;
   $: effectiveReadonly = readonly || $parentReadonly;
+  $: effectiveDisabled = disabled || $parentDisabled;
 
   function handleSelectChange(event) {
     let next = event.target.value;
@@ -120,7 +122,7 @@
       class:bx--select={true}
       class:bx--time-picker__select={true}
       class:bx--select--readonly={effectiveReadonly}
-      class:bx--select--disabled={disabled}
+      class:bx--select--disabled={effectiveDisabled}
       {...$$restProps}
       on:click
       on:mouseover
@@ -131,7 +133,7 @@
         <label
           for={id}
           class:bx--label={true}
-          class:bx--label--disabled={disabled}
+          class:bx--label--disabled={effectiveDisabled}
           class:bx--label--slotted={$$slots.labelChildren}
         >
           <slot name="labelChildren"> {labelText} </slot>
@@ -142,7 +144,7 @@
           bind:this={ref}
           {id}
           {name}
-          {disabled}
+          disabled={effectiveDisabled}
           {value}
           aria-readonly={effectiveReadonly || undefined}
           class:bx--select-input={true}
@@ -184,7 +186,7 @@
       bind:this={ref}
       {id}
       {name}
-      {disabled}
+      disabled={effectiveDisabled}
       {value}
       aria-readonly={effectiveReadonly || undefined}
       class:bx--select-input={true}
