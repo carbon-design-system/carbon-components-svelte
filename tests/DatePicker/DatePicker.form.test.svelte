@@ -4,34 +4,29 @@
   import type { ComponentProps } from "svelte";
 
   export let datePickerType: ComponentProps<DatePicker>["datePickerType"] =
-    "single";
-  export let value: ComponentProps<DatePicker>["value"] = "";
+    "simple";
+  export let dateFormat = "Y-m-d";
+  export let value = "";
   export let valueFrom = "";
   export let valueTo = "";
-  export let onChange: (event: CustomEvent) => void = () => {};
-  export let oncalendar: (cal: ComponentProps<DatePicker>["calendar"]) => void =
-    () => {};
-
-  let calendar: ComponentProps<DatePicker>["calendar"] = null;
-
-  $: oncalendar(calendar);
+  export let onChange: ((event: CustomEvent) => void) | undefined = undefined;
 </script>
 
 <form data-testid="form">
   <DatePicker
     {datePickerType}
+    {dateFormat}
     bind:value
     bind:valueFrom
     bind:valueTo
-    bind:calendar
-    on:change={onChange}
+    on:change={(e) => onChange?.(e)}
   >
+    <DatePickerInput labelText="Start date" name="tripStart" />
     {#if datePickerType === "range"}
-      <DatePickerInput labelText="Start" name="start" />
-      <DatePickerInput labelText="End" name="end" />
-    {:else}
-      <DatePickerInput labelText="Date" name="date" />
+      <DatePickerInput labelText="End date" name="tripEnd" />
     {/if}
   </DatePicker>
 </form>
-<p data-testid="bound">{value}|{valueFrom}|{valueTo}</p>
+<p data-testid="value">{value}</p>
+<p data-testid="valueFrom">{valueFrom}</p>
+<p data-testid="valueTo">{valueTo}</p>
