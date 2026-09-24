@@ -47,6 +47,7 @@
 
   /**
    * Set the selected item by value id.
+   * Follows the field when the owning form resets.
    * @type {Item["id"]}
    * @bindable writable
    */
@@ -54,6 +55,7 @@
 
   /**
    * Specify the selected combobox value.
+   * Follows the field when the owning form resets.
    * @bindable writable
    */
   export let value = "";
@@ -295,6 +297,7 @@
   import { createMenuWindow } from "../ListBox/menu-window.js";
   import { debounce } from "../utils/debounce.js";
   import { dismiss } from "../utils/dismiss.js";
+  import { formReset } from "../utils/form-reset.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { moveIndex } from "../utils/move-index.js";
@@ -483,6 +486,34 @@
     await tick();
     if (options?.open === true) open = true;
     if (options?.focus !== false) ref?.focus();
+  }
+
+  // A form reset restores the input's real default — empty unless this
+  // ComboBox was server-rendered — without an input/change event. Resolve
+  // `selectedId` from the restored text the same way Enter/Tab typed-match
+  // commits do, and fire no `select`/`clear`.
+  //
+  // Read `defaultValue`, not `value`: `afterUpdate`'s restore-on-close block
+  // derives `value` from the (still stale, at this point) `selectedItem` and
+  // can overwrite `ref.value` before this callback runs. `defaultValue` is
+  // never written to by this component, so it cannot be caught in that race.
+  function handleFormReset() {
+    if (!ref) return;
+    const nextValue = ref.defaultValue;
+    const matchedItem = items.find(
+      (item) => !item.disabled && labelMatchesInput(item, nextValue),
+    );
+    const nextSelectedId = matchedItem ? matchedItem.id : undefined;
+    // Pre-sync `prevSelectedId` so the reactive `selectedId` block treats
+    // this as already seen and does not dispatch `select`; a reset fires no
+    // events.
+    prevSelectedId = nextSelectedId;
+    selectedId = nextSelectedId;
+    selectedItem = matchedItem;
+    value = nextValue;
+    // Write the DOM even when `value` did not change: `afterUpdate`'s
+    // restore-on-close block may have left stale text on the input.
+    ref.value = nextValue;
   }
 
   afterUpdate(() => {
@@ -872,6 +903,7 @@
         <input
           bind:this={ref}
           bind:value
+          use:formReset={handleFormReset}
           type="text"
           role="combobox"
           tabindex="0"

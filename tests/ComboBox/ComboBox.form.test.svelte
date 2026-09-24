@@ -9,6 +9,8 @@
   export let virtualize: ComponentProps<ComboBox>["virtualize"] = undefined;
   export let portalMenu: ComponentProps<ComboBox>["portalMenu"] = false;
   export let open: ComponentProps<ComboBox>["open"] = false;
+  export let onSelect: (event: CustomEvent) => void = () => {};
+  export let onClear: (event: CustomEvent) => void = () => {};
 </script>
 
 <form data-testid="form">
@@ -22,5 +24,9 @@
     {portalMenu}
     bind:open
     labelText="Contact"
+    on:select={onSelect}
+    on:clear={onClear}
   />
 </form>
+<p data-testid="bound-selected-id">{String(selectedId)}</p>
+<p data-testid="bound-value">{String(value)}</p>
