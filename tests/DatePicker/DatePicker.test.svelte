@@ -35,6 +35,10 @@
   export let onchange: ((event: CustomEvent) => void) | undefined = undefined;
   export let onfocus: ((event: FocusEvent) => void) | undefined = undefined;
   export let onerror: ((event: CustomEvent) => void) | undefined = undefined;
+  export let clearable = false;
+  export let clearButtonLabelText: ComponentProps<DatePicker>["clearButtonLabelText"] =
+    undefined;
+  export let onclear: ((event: CustomEvent) => void) | undefined = undefined;
 </script>
 
 <DatePicker
@@ -54,7 +58,10 @@
   {fluid}
   {flatpickrProps}
   {portalMenu}
+  {clearable}
+  {...clearButtonLabelText === undefined ? {} : { clearButtonLabelText }}
   on:change={(e) => onchange?.(e)}
+  on:clear={(e) => onclear?.(e)}
   on:error={(e) => onerror?.(e)}
 >
   <DatePickerInput
