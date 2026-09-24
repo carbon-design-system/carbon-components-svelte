@@ -1,0 +1,48 @@
+import { fireEvent, render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
+import RangeSliderForm from "./RangeSlider.form.test.svelte";
+
+const getForm = () => screen.getByTestId("form") as HTMLFormElement;
+const getBound = () => screen.getByTestId("bound").textContent;
+const flush = async () => {
+  await new Promise((resolve) => setTimeout(resolve));
+  await tick();
+};
+
+describe("RangeSlider form reset", () => {
+  it("keeps both current bounds", async () => {
+    const { container } = render(RangeSliderForm);
+    const lower = container.querySelector(
+      'input[name="low"]',
+    ) as HTMLInputElement;
+    const upper = container.querySelector(
+      'input[name="high"]',
+    ) as HTMLInputElement;
+
+    await fireEvent.change(lower, { target: { value: "30" } });
+    await fireEvent.change(upper, { target: { value: "70" } });
+    expect(getBound()).toBe("30-70");
+
+    getForm().reset();
+    await flush();
+
+    expect(lower.value).toBe("30");
+    expect(upper.value).toBe("70");
+    expect(getBound()).toBe("30-70");
+    const data = new FormData(getForm());
+    expect([data.get("low"), data.get("high")]).toEqual(["30", "70"]);
+  });
+
+  it("keeps bounds set by the parent after mount", async () => {
+    const { container, rerender } = render(RangeSliderForm);
+
+    await rerender({ value: 25, valueUpper: 75 });
+    getForm().reset();
+    await flush();
+
+    expect(
+      (container.querySelector('input[name="low"]') as HTMLInputElement).value,
+    ).toBe("25");
+    expect(getBound()).toBe("25-75");
+  });
+});

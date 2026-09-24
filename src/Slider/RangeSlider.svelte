@@ -8,12 +8,14 @@
 
   /**
    * Specify the lower bound value of the slider.
+   * Kept when the owning form resets.
    * @bindable writable
    */
   export let value = 0;
 
   /**
    * Specify the upper bound value of the slider.
+   * Kept when the owning form resets.
    * @bindable writable
    */
   export let valueUpper = 100;
@@ -131,6 +133,7 @@
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { dismiss } from "../utils/dismiss.js";
+  import { reflectDefaultValue } from "../utils/reflect-default-value.js";
   import { resolveSliderMarks } from "../utils/resolve-slider-marks.js";
   import {
     formatRangeLabel as formatSliderRangeLabel,
@@ -392,6 +395,7 @@
     >
       <input
         bind:this={lowerInputRef}
+        use:reflectDefaultValue={value}
         type={hideTextInput ? "hidden" : inputType}
         id={lowerInputId}
         {name}
@@ -571,6 +575,7 @@
     >
       <input
         bind:this={upperInputRef}
+        use:reflectDefaultValue={valueUpper}
         type={hideTextInput ? "hidden" : inputType}
         id={upperInputId}
         name={nameUpper}
