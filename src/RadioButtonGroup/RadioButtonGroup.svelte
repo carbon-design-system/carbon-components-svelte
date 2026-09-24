@@ -6,6 +6,8 @@
 
   /**
    * Set the selected radio button value.
+   * Follows the field after a reset — becomes the value of whichever radio
+   * is checked in the DOM, or `undefined`.
    * @type {Value | undefined}
    * @bindable writable
    */
@@ -93,6 +95,7 @@
   import { readonly as readOnly, writable } from "svelte/store";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -114,6 +117,12 @@
   /** @type {import("svelte/store").Writable<string | undefined>} */
   const helperId = writable(undefined);
   let initialRender = true;
+  /** @type {HTMLFieldSetElement | undefined} */
+  let fieldsetRef;
+  // Suppresses the store's own "change" dispatch (below) while a reset is
+  // rewriting `selectedValue` — a reset fires no events, like the other
+  // form controls.
+  let resettingFromForm = false;
 
   /**
    * @type {(data: { checked: boolean; value: Value }) => void}
@@ -137,6 +146,39 @@
     selected = undefined;
   }
 
+  function handleFormReset() {
+    if (!fieldsetRef) return;
+    if (readonly) {
+      // Read-only keeps its state; put the DOM back to match it instead of
+      // leaving the browser's native-reset default (every radio unchecked).
+      for (const input of fieldsetRef.querySelectorAll('input[type="radio"]')) {
+        input.checked =
+          selected !== undefined && String(selected) === input.value;
+      }
+      return;
+    }
+    // formReset is task-deferred, so the browser has already restored every
+    // radio to its own default: checked when the markup carried a `checked`
+    // attribute (server-rendered), unchecked otherwise. Read the winner back,
+    // or none.
+    const checkedInput = /** @type {HTMLInputElement | null} */ (
+      fieldsetRef.querySelector('input[type="radio"]:checked')
+    );
+    // The DOM only ever carries strings. `Value` is uniform across one
+    // group's RadioButtons, so coerce back to a number when the group was
+    // already using numeric values; otherwise (including "nothing was
+    // selected before this reset", where the type can't be known) keep the
+    // native string.
+    const nextSelected = checkedInput
+      ? typeof selected === "number"
+        ? Number(checkedInput.value)
+        : checkedInput.value
+      : undefined;
+    resettingFromForm = true;
+    selectedValue.set(nextSelected);
+    resettingFromForm = false;
+  }
+
   setContext("carbon:RadioButtonGroup", {
     selectedValue,
     groupName: readOnly(groupName),
@@ -155,7 +197,7 @@
   const unsubscribe = selectedValue.subscribe((value) => {
     if (readonly) return;
     selected = value;
-    if (!initialRender) {
+    if (!initialRender && !resettingFromForm) {
       dispatch("change", value);
     }
   });
@@ -195,6 +237,8 @@
   on:mouseleave
 >
   <fieldset
+    bind:this={fieldsetRef}
+    use:formReset={handleFormReset}
     role="radiogroup"
     aria-orientation={orientation}
     aria-readonly={readonly || undefined}
