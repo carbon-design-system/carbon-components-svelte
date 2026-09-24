@@ -124,4 +124,35 @@ describe("DatePicker form reset", () => {
 
     expect(onChange).not.toHaveBeenCalled();
   });
+
+  it("keeps a read-only picker as it was", async () => {
+    const getCalendar = renderWithCalendar({
+      value: "01/02/2024",
+      readonly: true,
+    });
+    await getCalendar();
+
+    getForm().reset();
+    await flushFormReset();
+
+    expect(screen.getByLabelText("Date")).toHaveValue("01/02/2024");
+    expect(getBound()).toBe("01/02/2024||");
+  });
+
+  it("keeps a read-only range as it was", async () => {
+    const getCalendar = renderWithCalendar({
+      datePickerType: "range",
+      valueFrom: "01/02/2024",
+      valueTo: "01/09/2024",
+      readonly: true,
+    });
+    await getCalendar();
+
+    getForm().reset();
+    await flushFormReset();
+
+    expect(screen.getByLabelText("Start")).toHaveValue("01/02/2024");
+    expect(screen.getByLabelText("End")).toHaveValue("01/09/2024");
+    expect(getBound()).toBe("|01/02/2024|01/09/2024");
+  });
 });

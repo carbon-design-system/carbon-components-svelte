@@ -525,6 +525,16 @@
    */
   function syncAfterFormReset() {
     if (!inputRef) return;
+    // A read-only picker keeps its value, so put the inputs back instead.
+    if ($readonlyAny) {
+      if ($range) {
+        inputRef.value = $inputValueFrom;
+        if (inputRefTo) inputRefTo.value = $inputValueTo;
+      } else {
+        inputRef.value = String($inputValue ?? "");
+      }
+      return;
+    }
     if ($range) {
       inputValueFrom.set(inputRef.value);
       inputValueTo.set(inputRefTo?.value ?? "");

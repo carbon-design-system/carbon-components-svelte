@@ -8,6 +8,7 @@
   export let value: ComponentProps<DatePicker>["value"] = "";
   export let valueFrom = "";
   export let valueTo = "";
+  export let readonly = false;
   export let onChange: (event: CustomEvent) => void = () => {};
   export let oncalendar: (cal: ComponentProps<DatePicker>["calendar"]) => void =
     () => {};
@@ -27,10 +28,10 @@
     on:change={onChange}
   >
     {#if datePickerType === "range"}
-      <DatePickerInput labelText="Start" name="start" />
-      <DatePickerInput labelText="End" name="end" />
+      <DatePickerInput {readonly} labelText="Start" name="start" />
+      <DatePickerInput {readonly} labelText="End" name="end" />
     {:else}
-      <DatePickerInput labelText="Date" name="date" />
+      <DatePickerInput {readonly} labelText="Date" name="date" />
     {/if}
   </DatePicker>
 </form>
