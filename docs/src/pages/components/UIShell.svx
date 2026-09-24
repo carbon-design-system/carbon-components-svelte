@@ -163,6 +163,18 @@ Combine `rail` with `fixed` to keep the rail at its narrow width even on hover, 
 
 <FileSource src="/framed/UIShell/HeaderNavRailPinToggle" />
 
+### Resizable
+
+Set `resizable` to let the user drag the side nav's trailing edge to resize it with a mouse, pen, or touch. `width` is a bindable prop in pixels (default `256`), rendered clamped to `[minWidth, maxWidth]`, and `Content` offsets its left margin to match.
+
+The handle is also focusable: <DocKbd label="ArrowLeft" />/<DocKbd label="ArrowRight" /> step by 16px (64px with <DocKbd label="Shift" />), <DocKbd label="Home" />/<DocKbd label="End" /> jump to `minWidth`/`maxWidth`, and double-clicking it restores the starting width. Customize its accessible name with `resizeHandleLabel`.
+
+`bind:width` updates on every step of a drag; the `resize` event fires once the gesture ends, with the final `width`. This example persists the width with `LocalStorage`, so it survives a reload.
+
+`resizable` has no effect when `rail` is set, since a rail's width is defined by its icon-only vs. hover-expanded state. On mobile, the overlay uses the same width, capped at the viewport width.
+
+<FileSource src="/framed/UIShell/SideNavResizable" />
+
 ### Persisted hamburger
 
 Create a header with a persistent hamburger menu state.
