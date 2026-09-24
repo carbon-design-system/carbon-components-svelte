@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/svelte";
+import { fireEvent, render, screen, within } from "@testing-library/svelte";
 import type SelectComponent from "carbon-components-svelte/Select/Select.svelte";
 import type SelectItemComponent from "carbon-components-svelte/Select/SelectItem.svelte";
 import type { ComponentProps } from "svelte";
@@ -198,7 +198,7 @@ describe("Select", () => {
     expect(screen.queryByText("Warning message")).not.toBeInTheDocument();
   });
 
-  it.each(["ArrowDown", "ArrowUp", " "])(
+  it.each(["ArrowDown", "ArrowUp", " ", "Home", "End", "p", "P"])(
     "prevents %s keydown when read-only",
     (key) => {
       render(Select, { readonly: true });
@@ -229,6 +229,36 @@ describe("Select", () => {
     selectElement.dispatchEvent(event);
 
     expect(preventDefault).not.toHaveBeenCalled();
+  });
+
+  it("prevents Alt+Down keydown when read-only", async () => {
+    render(Select, { readonly: true });
+    const selectElement = screen.getByLabelText("Select label");
+
+    expect(
+      await fireEvent.keyDown(selectElement, {
+        key: "ArrowDown",
+        altKey: true,
+      }),
+    ).toBe(false);
+  });
+
+  it.each([
+    { key: "Tab", shiftKey: true },
+    { key: "c", ctrlKey: true },
+    { key: "c", metaKey: true },
+  ])("does not prevent %o keydown when read-only", async (init) => {
+    render(Select, { readonly: true });
+    const selectElement = screen.getByLabelText("Select label");
+
+    expect(await fireEvent.keyDown(selectElement, init)).toBe(true);
+  });
+
+  it("does not prevent typeahead when not read-only", async () => {
+    render(Select);
+    const selectElement = screen.getByLabelText("Select label");
+
+    expect(await fireEvent.keyDown(selectElement, { key: "p" })).toBe(true);
   });
 
   it("prevents mousedown default and focuses when read-only", () => {
