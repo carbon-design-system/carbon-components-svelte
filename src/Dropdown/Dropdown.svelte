@@ -249,7 +249,10 @@
     ListBoxSelection,
   } from "../ListBox/index.js";
   import { shouldVirtualizeMenu } from "../ListBox/list-box-utils.js";
-  import { createMenuWindow } from "../ListBox/menu-window.js";
+  import {
+    createMenuWindow,
+    scheduleHighlightScroll,
+  } from "../ListBox/menu-window.js";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
@@ -403,29 +406,16 @@
   $: scrollEndTracker.noteItemCount(items.length);
 
   afterUpdate(() => {
-    // Scroll to highlighted item when it changes via keyboard navigation
-    // Only scroll if the item is outside the visible viewport
-    if (
-      open &&
-      shouldVirtualize &&
-      highlightedIndex !== prevHighlightedIndex &&
-      highlightedIndex >= 0 &&
-      listRef
-    ) {
-      tick().then(() => {
-        if (!listRef || highlightedIndex < 0) return;
-        // Measured placement scrolls an option that is rendered but clipped
-        // fully into view, which would pull the list out from under the
-        // pointer. Cancel as well as return: the pointer has taken the
-        // highlight from the option an outstanding request was placing.
-        if (isMeasured && highlightOrigin === "pointer") {
-          menuWindow.cancelRequest();
-          return;
-        }
-        menuWindow.scrollIntoView(highlightedIndex, "nearest");
-      });
-      prevHighlightedIndex = highlightedIndex;
-    }
+    prevHighlightedIndex = scheduleHighlightScroll({
+      open,
+      shouldVirtualize,
+      highlightedIndex,
+      prevHighlightedIndex,
+      listRef,
+      isMeasured,
+      highlightOrigin,
+      menuWindow,
+    });
 
     // Set highlighted index to selected item when menu opens
     const wasJustOpened = open && !prevOpen;
