@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import { user } from "../utils/user";
 import NumberInputForm from "./NumberInput.form.test.svelte";
 
 const getForm = () => screen.getByTestId("form") as HTMLFormElement;
@@ -15,6 +16,74 @@ describe("NumberInput form participation", () => {
       render(NumberInputForm, { props: { locale: "en-US", value: 1234.5 } });
 
       expect(getForm().checkValidity()).toBe(true);
+    });
+  });
+
+  describe("submitted value", () => {
+    const submitted = () => new FormData(getForm()).getAll("n");
+
+    it("submits the number, not the de-DE display text", () => {
+      render(NumberInputForm, { props: { locale: "de-DE", value: 1234.5 } });
+
+      expect(screen.getByRole("textbox", { name: "Amount" })).toHaveValue(
+        "1.234,5",
+      );
+      expect(submitted()).toEqual(["1234.5"]);
+    });
+
+    it("submits the number when formatOptions pad the display", () => {
+      render(NumberInputForm, {
+        props: {
+          locale: "en-US",
+          formatOptions: { minimumFractionDigits: 2 },
+          value: 1234.5,
+        },
+      });
+
+      expect(submitted()).toEqual(["1234.5"]);
+    });
+
+    it("submits an empty string when empty", () => {
+      render(NumberInputForm, { props: { locale: "en-US" } });
+
+      expect(submitted()).toEqual([""]);
+    });
+
+    it("submits 0", () => {
+      render(NumberInputForm, { props: { locale: "en-US", value: 0 } });
+
+      expect(submitted()).toEqual(["0"]);
+    });
+
+    it("follows typing before blur", async () => {
+      render(NumberInputForm, { props: { locale: "de-DE" } });
+      const input = screen.getByRole("textbox", { name: "Amount" });
+
+      await user.type(input, "12,5");
+
+      expect(submitted()).toEqual(["12.5"]);
+    });
+
+    it("omits the field while disabled", () => {
+      render(NumberInputForm, {
+        props: { locale: "en-US", value: 3, disabled: true },
+      });
+
+      expect(submitted()).toEqual([]);
+    });
+
+    it("keeps the name off the visible text input", () => {
+      render(NumberInputForm, { props: { locale: "en-US", value: 3 } });
+
+      expect(
+        screen.getByRole("textbox", { name: "Amount" }),
+      ).not.toHaveAttribute("name");
+    });
+
+    it("submits one entry in the default number mode", () => {
+      render(NumberInputForm, { props: { value: 7 } });
+
+      expect(submitted()).toEqual(["7"]);
     });
   });
 });

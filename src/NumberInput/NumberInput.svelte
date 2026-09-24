@@ -162,6 +162,8 @@
 
   /**
    * Specify a name attribute for the input.
+   * With `locale` or `allowDecimal`, the form submits the numeric value
+   * (for example `1234.5`), not the formatted display text.
    * @type {string}
    */
   export let name = undefined;
@@ -463,6 +465,17 @@
       class:bx--number__input-wrapper--warning={showWarn}
     >
       {#if useTextMode}
+        {#if name}
+          <!-- The visible input shows formatted text (for example 1,234.5);
+               submit the number itself, like a native number input. -->
+          <input
+            type="hidden"
+            {name}
+            value={value ?? ""}
+            {disabled}
+            form={$$restProps.form}
+          >
+        {/if}
         <input
           bind:this={ref}
           value={inputValue}
@@ -481,7 +494,6 @@
           aria-readonly={readonly || undefined}
           {disabled}
           {id}
-          {name}
           {max}
           {min}
           {step}
