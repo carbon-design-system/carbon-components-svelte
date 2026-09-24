@@ -299,6 +299,11 @@
   import ListBoxSelection from "../ListBox/ListBoxSelection.svelte";
   import { shouldVirtualizeMenu } from "../ListBox/list-box-utils.js";
   import {
+    applyPostClearOptions,
+    createMenuCloseHandler,
+    createStatusAnnouncer,
+  } from "../ListBox/menu-status.js";
+  import {
     createMenuWindow,
     scheduleHighlightScroll,
   } from "../ListBox/menu-window.js";
@@ -435,16 +440,7 @@
     highlightOrigin = "pointer";
   }
 
-  /**
-   * Re-announce even when the text is unchanged: empty the region, flush,
-   * then set it.
-   * @param {string} text
-   */
-  async function announceStatus(text) {
-    statusText = "";
-    await tick();
-    statusText = text;
-  }
+  const announceStatus = createStatusAnnouncer((text) => (statusText = text));
 
   /** Filter result count last announced; null when the menu is closed so reopening announces again. */
   let announcedFilterCount = null;
@@ -490,9 +486,11 @@
     value = "";
     if (announce) announceStatus(selectionClearedText);
     // Ensure binding updates are complete before focusing.
-    await tick();
-    if (options?.open === true) open = true;
-    if (options?.focus !== false) ref?.focus();
+    await applyPostClearOptions(
+      options,
+      (v) => (open = v),
+      () => ref,
+    );
   }
 
   // A form reset restores the input's real default — empty unless this
@@ -837,14 +835,13 @@
   /**
    * Close the dropdown and surface the dismissal cause.
    * Guarded on `open` so redundant assignments don't double-fire the event.
-   * @param {"escape-key" | "outside-click" | "select"} trigger
+   * @type {(trigger: "escape-key" | "outside-click" | "select") => void}
    */
-  function close(trigger) {
-    if (open) {
-      open = false;
-      dispatch("close", { trigger });
-    }
-  }
+  const close = createMenuCloseHandler({
+    getOpen: () => open,
+    setOpen: (v) => (open = v),
+    dispatch,
+  });
 
   function handleOutsideClick(event) {
     if (open && isOutsideClick(event, [ref, effectivePortalMenu && listRef])) {

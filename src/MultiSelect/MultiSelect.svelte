@@ -366,6 +366,11 @@
   } from "../ListBox/index.js";
   import { shouldVirtualizeMenu } from "../ListBox/list-box-utils.js";
   import {
+    applyPostClearOptions,
+    createMenuCloseHandler,
+    createStatusAnnouncer,
+  } from "../ListBox/menu-status.js";
+  import {
     createMenuWindow,
     scheduleHighlightScroll,
   } from "../ListBox/menu-window.js";
@@ -715,17 +720,7 @@
     return true;
   }
 
-  /**
-   * Announce a message through the visually-hidden status region. The text is
-   * reset first so announcing the same message twice still mutates the DOM —
-   * live regions only fire on an actual text change.
-   * @param {string} text
-   */
-  async function announceStatus(text) {
-    statusText = "";
-    await tick();
-    statusText = text;
-  }
+  const announceStatus = createStatusAnnouncer((text) => (statusText = text));
 
   /**
    * Clear the multiselect selection programmatically.
@@ -745,9 +740,11 @@
     prevSelectedItemId = null;
     sortedItems = sortedItems.map((item) => ({ ...item, checked: false }));
     announceStatus(selectionClearedText);
-    await tick();
-    if (options?.open === true) open = true;
-    if (options?.focus !== false) (filterable ? inputRef : fieldRef)?.focus();
+    await applyPostClearOptions(
+      options,
+      (v) => (open = v),
+      () => (filterable ? inputRef : fieldRef),
+    );
   }
 
   /** Filter result count last announced; null when the menu is closed so reopening announces again. */
@@ -1222,12 +1219,11 @@
    * dismissal gesture fired while already closed does not emit a phantom event.
    * @type {(trigger: "escape-key" | "outside-click") => void}
    */
-  function close(trigger) {
-    if (open) {
-      open = false;
-      dispatch("close", { trigger });
-    }
-  }
+  const close = createMenuCloseHandler({
+    getOpen: () => open,
+    setOpen: (v) => (open = v),
+    dispatch,
+  });
 
   function handleOutsideInteraction(event) {
     if (

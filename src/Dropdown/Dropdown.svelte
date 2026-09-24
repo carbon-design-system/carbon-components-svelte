@@ -254,6 +254,11 @@
   } from "../ListBox/index.js";
   import { shouldVirtualizeMenu } from "../ListBox/list-box-utils.js";
   import {
+    applyPostClearOptions,
+    createMenuCloseHandler,
+    createStatusAnnouncer,
+  } from "../ListBox/menu-status.js";
+  import {
     createMenuWindow,
     scheduleHighlightScroll,
   } from "../ListBox/menu-window.js";
@@ -524,17 +529,7 @@
     });
   }
 
-  /**
-   * Announce a message through the visually-hidden status region. The text is
-   * reset first so announcing the same message twice still mutates the DOM —
-   * live regions only fire on an actual text change.
-   * @param {string} text
-   */
-  async function announceStatus(text) {
-    statusText = "";
-    await tick();
-    statusText = text;
-  }
+  const announceStatus = createStatusAnnouncer((text) => (statusText = text));
 
   /**
    * Clear the dropdown selection programmatically.
@@ -552,23 +547,24 @@
     selectedId = undefined;
     open = false;
     announceStatus(selectionClearedText);
-    await tick();
-    if (options?.open === true) open = true;
-    if (options?.focus !== false) ref?.focus();
+    await applyPostClearOptions(
+      options,
+      (v) => (open = v),
+      () => ref,
+    );
   }
 
   /**
    * Close the menu and notify consumers of the dismissal cause.
    * Only dispatches when transitioning from open to closed so redundant
    * `open = false` assignments do not double-fire.
-   * @param {"escape-key" | "outside-click" | "select"} trigger
+   * @type {(trigger: "escape-key" | "outside-click" | "select") => void}
    */
-  function close(trigger) {
-    if (open) {
-      open = false;
-      dispatch("close", { trigger });
-    }
-  }
+  const close = createMenuCloseHandler({
+    getOpen: () => open,
+    setOpen: (v) => (open = v),
+    dispatch,
+  });
 
   /**
    * @param {Item} item
