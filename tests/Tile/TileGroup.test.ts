@@ -4,6 +4,7 @@ import type { ComponentEvents, ComponentProps } from "svelte";
 import { user } from "../utils/user";
 import TileGroupSlot from "./TileGroup.slot.test.svelte";
 import TileGroup from "./TileGroup.test.svelte";
+import TileGroupTileNames from "./TileGroup.tileNames.test.svelte";
 import TileGroupTwoGroups from "./TileGroup.twoGroups.test.svelte";
 
 describe("TileGroup", () => {
@@ -86,6 +87,24 @@ describe("TileGroup", () => {
       .map((radio) => radio.getAttribute("name"));
     expect(names[0]).toBeTruthy();
     expect(new Set(names).size).toBe(1);
+  });
+
+  it("keeps the tiles' own name when the group has none", () => {
+    render(TileGroupTileNames);
+
+    for (const radio of screen.getAllByRole("radio")) {
+      expect(radio).toHaveAttribute("name", "plan");
+    }
+    const form = screen.getByTestId("form") as HTMLFormElement;
+    expect([...new FormData(form)]).toEqual([["plan", "pro"]]);
+  });
+
+  it("lets the group name override the tiles' own name", () => {
+    render(TileGroupTileNames, { props: { groupName: "tier" } });
+
+    for (const radio of screen.getAllByRole("radio")) {
+      expect(radio).toHaveAttribute("name", "tier");
+    }
   });
 
   it("generates a different name per group", () => {

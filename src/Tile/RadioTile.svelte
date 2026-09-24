@@ -67,6 +67,7 @@
   const selectedValue =
     ctx?.selectedValue ?? readable(checked ? value : undefined);
   const groupName = ctx?.groupName ?? readable(undefined);
+  const fallbackName = ctx?.fallbackName;
   const groupRequired = ctx?.groupRequired ?? readable(undefined);
 
   add({ value, checked });
@@ -77,7 +78,7 @@
 <input
   type="radio"
   {id}
-  name={$groupName ?? name}
+  name={$groupName ?? (name || fallbackName)}
   {value}
   {checked}
   tabindex={disabled ? undefined : tabindex}

@@ -22,8 +22,9 @@
 
   /**
    * Specify a name attribute for the radio button inputs.
-   * Defaults to a generated id so the tiles form one radio group;
-   * set it explicitly when form submission matters.
+   * Overrides each tile's own `name`. When neither is set, the tiles share
+   * a generated id so they form one radio group; set a name explicitly when
+   * form submission matters.
    * @type {string}
    */
   export let name = undefined;
@@ -52,10 +53,11 @@
   /**
    * @type {import("svelte/store").Writable<string | undefined>}
    */
+  const groupName = writable(name || undefined);
   // Unnamed radios are separate controls, so arrow keys would not move
-  // between tiles; share one generated name when `name` is omitted.
+  // between tiles. Tiles with no name of their own share this one when the
+  // group has no `name` either.
   const fallbackName = uniqueId();
-  const groupName = writable(name || fallbackName);
   /**
    * @type {import("svelte/store").Writable<boolean | undefined>}
    */
@@ -89,6 +91,7 @@
   setContext("carbon:TileGroup", {
     selectedValue,
     groupName: groupNameReadonly,
+    fallbackName,
     groupRequired: groupRequiredReadonly,
     add,
     update,
@@ -96,7 +99,7 @@
 
   $: selected = $selectedValue;
   $: selectedValue.set(selected);
-  $: groupName.set(name || fallbackName);
+  $: groupName.set(name || undefined);
   $: groupRequired.set(required);
 </script>
 
