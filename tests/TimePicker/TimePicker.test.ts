@@ -404,6 +404,16 @@ describe("TimePicker", () => {
     ).toBe(true);
   });
 
+  it.each([
+    { key: "c", ctrlKey: true },
+    { key: "r", metaKey: true },
+  ])("lets %o through on a read-only select", async (init) => {
+    render(TimePickerCustom, { props: { selectReadonly: true } });
+
+    const [select] = screen.getAllByRole("combobox");
+    expect(await fireEvent.keyDown(select, init)).toBe(true);
+  });
+
   it("does not block Alt+Down when the select is not read-only", async () => {
     render(TimePickerCustom);
 
