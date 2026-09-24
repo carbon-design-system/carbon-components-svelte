@@ -39,6 +39,15 @@ Use the `labelChildren` slot to render custom label content.
   </span>
 </PinCodeInput>
 
+## Segment labels
+
+Screen readers announce each segment as "Verification code digit 1 of 4" by default, or "character" when `type` is `"alphanumeric"`. Use `segmentLabelText` to override the label, for example to translate it. The function receives the 1-based position, the segment count, `labelText`, and `type`.
+
+<PinCodeInput
+  labelText="Código de verificación"
+  segmentLabelText={(position, count) => `Dígito ${position} de ${count}`}
+/>
+
 ## Input rules
 
 Control how many segments render and which characters are accepted.
