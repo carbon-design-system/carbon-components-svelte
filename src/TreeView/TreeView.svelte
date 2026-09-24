@@ -645,6 +645,7 @@
   import { writable } from "svelte/store";
   import { TYPEAHEAD_RESET_MS } from "../constants/timing.js";
   import { createDelayedSetter } from "../utils/delayed-setter.js";
+  import { rangeSlice } from "../utils/range-slice.js";
   import {
     resolveCheckboxState,
     toggleCheckboxNode,
@@ -1010,10 +1011,14 @@
           .map((n) => n.id);
         const anchorIndex = visibleIds.indexOf(anchorId);
         const currentIndex = visibleIds.indexOf(node.id);
-        if (anchorIndex !== -1 && currentIndex !== -1) {
-          const start = Math.min(anchorIndex, currentIndex);
-          const end = Math.max(anchorIndex, currentIndex);
-          const sliceIds = visibleIds.slice(start, end + 1);
+        const sliceIds =
+          currentIndex === -1
+            ? null
+            : rangeSlice(visibleIds, anchorIndex, currentIndex);
+        if (sliceIds === null) {
+          setSelectedIds(multiselectExpansionIds(node, mode));
+          anchorId = node.id;
+        } else {
           if (mode === "node") {
             setSelectedIds(sliceIds);
           } else {
@@ -1031,9 +1036,6 @@
             }
             setSelectedIds(ordered);
           }
-        } else {
-          setSelectedIds(multiselectExpansionIds(node, mode));
-          anchorId = node.id;
         }
       } else {
         setSelectedIds(multiselectExpansionIds(node, mode));
