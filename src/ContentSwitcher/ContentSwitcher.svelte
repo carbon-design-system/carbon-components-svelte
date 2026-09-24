@@ -48,6 +48,7 @@
   import { derived, get, writable } from "svelte/store";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { clampIndex } from "../utils/clamp-index.js";
+  import { resolveIdSelection } from "../utils/resolve-id-selection.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { syncDomOrder } from "../utils/sync-dom-order.js";
 
@@ -226,16 +227,14 @@
   function syncSelection() {
     if (selectedId === undefined) return;
 
-    const index = switches.findIndex((s) => s.id === selectedId);
-    if (index > -1) {
-      selectedIndex = index;
-      return;
-    }
-
-    if (switches.length === 0) return;
-
-    selectedIndex = clampIndex(selectedIndex, 0, switches.length);
-    selectedId = switches[selectedIndex]?.id;
+    const resolved = resolveIdSelection({
+      items: switches,
+      selectedId,
+      currentIndex: selectedIndex,
+    });
+    if (!resolved) return;
+    selectedIndex = resolved.index;
+    selectedId = resolved.id;
   }
 
   /** @param {number} index */
