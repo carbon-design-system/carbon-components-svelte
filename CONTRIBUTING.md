@@ -658,9 +658,14 @@ tests/
     ComponentName.test.ts              # assertions
     ComponentName.test.svelte          # default fixture
     ComponentName.custom.test.svelte   # variant fixtures as needed
+    helpers.ts                         # helpers shared by this folder's tests
+  utils/
+    get-form.ts                        # helpers shared across components
 ```
 
 Mirror `src/` component folders. Put complex setups in `*.test.svelte`, not inline in the `.ts` file.
+
+A helper used by one test file stays in that file. Once a second file in the same folder needs it, move it to that folder's `helpers.ts`. Once a second component needs it, move it to `tests/utils/` as a kebab-case file with a named `function` export.
 
 #### Imports
 
@@ -682,6 +687,33 @@ import ComboBox from "./ComboBox.test.svelte";
 ```
 
 Import shared utilities (for example exported helpers) from the component file or [`src/utils/`](src/utils/) as appropriate.
+
+#### Style
+
+- Write cases with `it(...)`, not `test(...)`. `describe`, `it`, `expect`, `vi`, `assert`, and `expectTypeOf` are globals; do not import them from `vitest`.
+- Narrow types with an assertion, not a cast. Write `assert(input instanceof HTMLInputElement)` instead of `as HTMLInputElement`. The global `assert` fails the test with a clear message when the element is wrong, and TypeScript narrows the variable after it. Use `assert(el)` for a nullable lookup. Do not use `expect.assert` or non-null `!`.
+- Skip the narrowing when a jest-dom matcher does the job. `expect(input).toHaveValue("a")`, `toBeChecked()`, and `toHaveFocus()` accept any element, so reading `.value` or `.checked` through a cast is rarely needed.
+- Type `querySelector` through its generic: `container.querySelector<HTMLInputElement>("input")`, then `assert(input)`.
+- Reserve `as unknown as X` for partial mocks of browser objects (`DOMRect`, `ResizeObserver`, a flatpickr `Instance`). Wrap a repeated one in a typed helper, as [`flatpickr-instance.ts`](tests/DatePicker/flatpickr-instance.ts) does.
+- Spy on an instance, not a prototype. The config sets `clearMocks`, which resets call counts between tests but does not restore originals, so `vi.spyOn(HTMLInputElement.prototype, "select")` stays installed for the rest of the file. Narrow the element and spy on it, or call `mockRestore()` when a prototype or global spy is unavoidable.
+
+Check [`tests/utils/`](tests/utils/) before writing a helper:
+
+| Helper | Use |
+| --- | --- |
+| [`user`](tests/utils/user.ts) | Clicks and keyboard input |
+| [`getForm`](tests/utils/get-form.ts) | The fixture's `<form data-testid="form">`, narrowed |
+| [`getBoundText`](tests/utils/get-bound-text.ts) | Text of the `data-testid="bound"` element a `*.form.test.svelte` fixture renders |
+| [`flushFormReset`](tests/utils/flush-form-reset.ts) | Wait for `use:formReset` and the bound values it writes |
+| [`flushMacrotask`](tests/utils/flush-macrotask.ts) | Wait one macrotask for a timer or deferred listener; replaces `await new Promise((resolve) => setTimeout(resolve))` |
+| [`netListenerCalls`](tests/utils/net-listener-calls.ts) | Outstanding `window` listener count from an add/remove spy pair |
+| [`expectInlineStyle`](tests/utils/inline-style.ts) | Authored inline styles with relative units, which `toHaveStyle` resolves to `px` |
+| [`openTooltips`](tests/utils/open-tooltips.ts) | Every portalled tooltip in the document |
+| [`setMenuMetrics`](tests/utils/set-menu-metrics.ts) | Stub the scroll metrics jsdom leaves at zero |
+| [`treeItemById`](tests/utils/tree-item-by-id.ts) | A tree node by `id`, narrowed |
+| [`storage-mocks`](tests/utils/storage-mocks.ts) | `localStorage` and `sessionStorage` mocks |
+
+Component folders keep their own `helpers.ts` for queries such as `getBodyRows` in [`tests/DataTable/helpers.ts`](tests/DataTable/helpers.ts) and `openMenu` in [`tests/MultiSelect/helpers.ts`](tests/MultiSelect/helpers.ts).
 
 #### Queries and interactions
 
@@ -705,8 +737,11 @@ Skip or avoid:
 - Tests that mirror implementation details without asserting user-visible behavior
 - Redundant permutations of the same code path
 - Large fixture setups when a focused unit test on a util suffices
+- A case another test already covers. Search the component's folder before adding one, since behaviors such as close events often have a dedicated file (`OverflowMenuClose.test.ts`) beside the main one. Extend the existing test or add a row to its table instead.
 
-Add tests proportional to the change. Not every prop variant needs its own case.
+Add tests proportional to the change. Not every prop variant needs its own case. When cases differ only in their inputs (sizes, counts, close triggers), write one `it.each` table instead of copies.
+
+ComboBox, Dropdown, and MultiSelect tests started as copies of each other, so a duplicate in one usually exists in the other two. Check all three when you prune one.
 
 #### Generics and type tests
 
@@ -739,7 +774,7 @@ Common `expectTypeOf` matchers: `.toEqualTypeOf`, `.toExtend`, `.parameter(n)`, 
 
 #### Other patterns
 
-- `beforeEach(() => vi.clearAllMocks())` when tests use spies.
+- Do not add `beforeEach(() => vi.clearAllMocks())`. The shared config in [`tests/utils.ts`](tests/utils.ts) sets `clearMocks: true`, which already clears every mock before each test.
 - Scope runs: `bun run test ComboBox` (see [Checks](#checks)).
 - In the Svelte 5 suite, `rerender({ x: undefined })` falls back to the fixture's default for `x` instead of clearing it. To toggle an optional prop off, give the fixture a separate boolean and compute the prop from it. See `enabled` in [`DatePickerDisplayFormat.test.svelte`](tests/DatePicker/DatePickerDisplayFormat.test.svelte).
 - jsdom cannot select a flatpickr date by typing plus Enter, in popup or inline mode. Click a `.flatpickr-day` or call `calendar.setDate` in unit tests, and leave typed entry to e2e.
