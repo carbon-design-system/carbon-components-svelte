@@ -1,3 +1,26 @@
+<script context="module">
+  /** @param {unknown} value */
+  function isNegativeGap(value) {
+    return typeof value === "string" && value.trim().startsWith("-");
+  }
+
+  // A `tooltipText` avatar wraps its element in a `TooltipDefinition`, so the
+  // registered node is nested a couple of levels below the direct child that
+  // the group's `> *` overlap/stacking CSS targets. Walk up to that direct
+  // child so the stacking custom property lands where the CSS reads it.
+  /** @param {HTMLElement} node */
+  function overlapTarget(node) {
+    let current = node;
+    while (
+      current?.parentElement &&
+      !current.parentElement.classList.contains("bx--user-avatar-group")
+    ) {
+      current = current.parentElement;
+    }
+    return current ?? null;
+  }
+</script>
+
 <script>
   /**
    * Render a row of `UserAvatar` children. The group adds the "+N" overflow chip.
@@ -67,25 +90,6 @@
   // per group instance.
   /** @type {import("svelte/store").Writable<string | null>} */
   const activeTooltip = writable(null);
-
-  function isNegativeGap(value) {
-    return typeof value === "string" && value.trim().startsWith("-");
-  }
-
-  // A `tooltipText` avatar wraps its element in a `TooltipDefinition`, so the
-  // registered node is nested a couple of levels below the direct child that
-  // the group's `> *` overlap/stacking CSS targets. Walk up to that direct
-  // child so the stacking custom property lands where the CSS reads it.
-  function overlapTarget(node) {
-    let current = node;
-    while (
-      current?.parentElement &&
-      !current.parentElement.classList.contains("bx--user-avatar-group")
-    ) {
-      current = current.parentElement;
-    }
-    return current ?? null;
-  }
 
   // `max` of 0 (or non-positive) means "no limit"; mirror that as 0 in the
   // store so registered avatars never mark themselves as overflow.
