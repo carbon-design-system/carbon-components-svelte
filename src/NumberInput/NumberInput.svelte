@@ -17,6 +17,7 @@
   /**
    * Specify the input value.
    * Use `null` to denote "no value".
+   * Follows the field when the owning form resets.
    * @type {null | number}
    * @bindable writable
    */
@@ -180,6 +181,7 @@
   import Subtract from "../icons/Subtract.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import { formReset } from "../utils/form-reset.js";
   import { getNumberFormatter } from "../utils/intl-formatter-cache.js";
   import {
     clamp,
@@ -390,6 +392,32 @@
     dispatch("change", value);
   }
 
+  // A form reset restores the field without an input event. Sync the value
+  // to it and fire no `input` or `change`. An empty field is only a value
+  // with `allowEmpty`, and a read-only input keeps its value; otherwise put
+  // the field back.
+  function handleFormReset() {
+    if (!ref) return;
+    userInputActive = false;
+    const raw = ref.value;
+    const parsed = locale
+      ? parseLocaleValue(raw, groupSeparator, decimalSeparator)
+      : parse(raw, useTextMode);
+    if (readonly || (parsed === null && !(raw === "" && allowEmpty))) {
+      const display =
+        value == null
+          ? ""
+          : formatter
+            ? formatter.format(value)
+            : String(value);
+      ref.value = display;
+      if (useTextMode) inputValue = display;
+      return;
+    }
+    if (useTextMode) inputValue = raw;
+    value = parsed;
+  }
+
   function handleKeydown(event) {
     if (readonly || disabled) return;
 
@@ -478,6 +506,7 @@
         {/if}
         <input
           bind:this={ref}
+          use:formReset={handleFormReset}
           value={inputValue}
           type="text"
           inputmode="decimal"
@@ -515,6 +544,7 @@
       {:else}
         <input
           bind:this={ref}
+          use:formReset={handleFormReset}
           type="number"
           inputmode="decimal"
           aria-describedby={hasErrorMessage
