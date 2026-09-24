@@ -518,7 +518,7 @@
     aria-describedby={describedById}
   >
     {#if labelText || $$slots.labelChildren}
-      <!-- svelte-ignore a11y_no_noninteractive_tabindex a11y_no_noninteractive_element_interactions -->
+      <!-- svelte-ignore a11y-no-noninteractive-tabindex a11y-no-noninteractive-element-interactions -->
       <legend
         id={legendId}
         class:bx--label={true}
