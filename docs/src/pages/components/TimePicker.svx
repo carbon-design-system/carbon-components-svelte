@@ -252,11 +252,11 @@ Invalid and warning states are not displayed while the time picker is disabled.
 
 <div style:width="350px">
   <TimePicker fluid disabled invalid invalidText="A valid standup time is required" labelText="Time" placeholder="hh:mm">
-    <TimePickerSelect labelText="Period" value="am" disabled>
+    <TimePickerSelect labelText="Period" value="am">
       <SelectItem value="am" text="AM" />
       <SelectItem value="pm" text="PM" />
     </TimePickerSelect>
-    <TimePickerSelect labelText="Timezone" value="et" disabled>
+    <TimePickerSelect labelText="Timezone" value="et">
       <SelectItem value="et" text="Eastern Time (ET)" />
       <SelectItem value="pt" text="Pacific Time (PT)" />
     </TimePickerSelect>
@@ -360,14 +360,14 @@ Show a warning with `warn` and a message in `warnText`.
 
 ### Disabled
 
-Disable the time picker with `disabled`.
+Disable the time picker with `disabled`. Period and timezone selectors inherit it.
 
 <TimePicker labelText="Cron job" placeholder="hh:mm" disabled>
-  <TimePickerSelect labelText="Period" value="pm" disabled>
+  <TimePickerSelect labelText="Period" value="pm">
     <SelectItem value="am" text="AM" />
     <SelectItem value="pm" text="PM" />
   </TimePickerSelect>
-  <TimePickerSelect labelText="Timezone" value="pdt" disabled>
+  <TimePickerSelect labelText="Timezone" value="pdt">
     <SelectItem value="pdt" text="PDT" />
     <SelectItem value="gmt" text="GMT" />
   </TimePickerSelect>
