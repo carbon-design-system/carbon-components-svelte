@@ -4,6 +4,7 @@
     fingerprintTree,
     matchesFingerprint,
   } from "../utils/tree-fingerprint.js";
+  import { TREE_ROW_ID_ATTR, treeRowIdSelector } from "./tree-row-id.js";
 
   function isUnderCollapsedSubtree(node) {
     return Boolean(node.closest("ul.bx--tree-node--hidden"));
@@ -1778,9 +1779,7 @@
     if (nextScrollTop !== null) virtualSetScrollTop(nextScrollTop);
 
     tick().then(() => {
-      scrollContainerRef
-        ?.querySelector(`[data-tree-row-id="${CSS.escape(String(targetId))}"]`)
-        ?.focus();
+      scrollContainerRef?.querySelector(treeRowIdSelector(targetId))?.focus();
     });
   }
 
@@ -1816,9 +1815,7 @@
     await tick();
     if (gen !== virtualMoveGen) return;
     scrollContainerRef
-      ?.querySelector(
-        `[data-tree-row-id="${CSS.escape(String(target.node.id))}"]`,
-      )
+      ?.querySelector(treeRowIdSelector(target.node.id))
       ?.focus();
   }
 
@@ -1860,11 +1857,11 @@
     // from virtualFocusedId / first enabled row.
     let rowTarget =
       event.target instanceof Element
-        ? event.target.closest("[data-tree-row-id]")
+        ? event.target.closest(`[${TREE_ROW_ID_ATTR}]`)
         : null;
     let activeIdx = -1;
     if (rowTarget) {
-      const id = rowTarget.getAttribute("data-tree-row-id");
+      const id = rowTarget.getAttribute(TREE_ROW_ID_ATTR);
       activeIdx = virtualIndex.findIndexById(/** @type {string} */ (id));
     } else if (event.target === scrollContainerRef) {
       if (virtualFocusedId != null && virtualFocusedId !== "") {
