@@ -14,7 +14,7 @@
   export let errorFeedback = "Failed to copy";
 
   /** Set the timeout duration (ms) to display feedback text */
-  export let feedbackTimeout = 2000;
+  export let feedbackTimeout = COPY_FEEDBACK_TIMEOUT_MS;
 
   /**
    * Specify an icon to render during the feedback window (for example, after copying).
@@ -87,7 +87,10 @@
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
-  import { createCopyFeedbackState } from "../utils/copy-feedback.js";
+  import {
+    COPY_FEEDBACK_TIMEOUT_MS,
+    createCopyFeedbackState,
+  } from "../utils/copy-feedback.js";
   import { noop } from "../utils/noop.js";
   import {
     TOOLTIP_ENTER_DELAY_MS,
