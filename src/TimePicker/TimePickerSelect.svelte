@@ -52,15 +52,35 @@
    */
   const itemTypesByValue = {};
 
-  /** @type {(id: string, itemValue: string | number) => void} */
+  /** @type {string | null} */
+  let defaultItemId = null;
+  /** @type {string | number | undefined} */
+  let defaultItemValue = undefined;
+  let hasEmptyItem = false;
+
+  /**
+   * Record each `SelectItem`. The first item to register is the default
+   * when `value` is `""`, and keeps that role if its value changes, as in
+   * `Select`.
+   * @type {(id: string, itemValue: string | number) => void}
+   */
   function setDefaultValue(id, itemValue) {
     itemTypesByValue[itemValue] = typeof itemValue;
+    if (defaultItemId === null || defaultItemId === id) {
+      defaultItemId = id;
+      defaultItemValue = itemValue;
+    }
+    if (itemValue === "") hasEmptyItem = true;
   }
 
   setContext("carbon:TimePickerSelect", { selectedValue, setDefaultValue });
 
   onMount(() => timePickerContext?.registerSelect?.() ?? (() => {}));
 
+  // An item with the value "" makes "" a real choice, so leave it alone.
+  $: if (value === "" && !hasEmptyItem && defaultItemValue !== undefined) {
+    value = defaultItemValue;
+  }
   $: selectedValue.set(value);
   $: value = $selectedValue;
   $: isFluid = !!timePickerContext?.isFluid || !!formContext?.isFluid;
