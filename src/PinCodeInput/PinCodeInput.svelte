@@ -186,6 +186,11 @@
   import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import {
+    buildFieldIds,
+    resolveStatusDescribedBy,
+    resolveValidationVisibility,
+  } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -229,23 +234,23 @@
   $: complete = count > 0 && code.length === count && code.every(Boolean);
   // Validation states are suppressed in the read-only and disabled variants,
   // matching the other Carbon inputs.
-  $: hasError = invalid && !readonly && !disabled;
-  $: hasWarn = warn && !hasError && !readonly && !disabled;
+  $: ({ showInvalid: hasError, showWarn: hasWarn } =
+    resolveValidationVisibility({ invalid, warn, disabled, readonly }));
   $: isFluid = fluid || !!formContext?.isFluid;
   $: segmentPlaceholder =
     placeholder === undefined ? (isFluid ? "–" : "") : placeholder;
 
   $: legendId = `legend-${id}`;
-  $: helperId = `helper-${id}`;
-  $: errorId = `error-${id}`;
-  $: warnId = `warn-${id}`;
-  $: describedById = hasError
-    ? errorId
-    : hasWarn
-      ? warnId
-      : helperText && !isFluid
-        ? helperId
-        : undefined;
+  $: ({ helperId, errorId, warnId } = buildFieldIds(id));
+  $: describedById = resolveStatusDescribedBy({
+    showInvalid: hasError,
+    showWarn: hasWarn,
+    helperText,
+    isFluid,
+    errorId,
+    warnId,
+    helperId,
+  });
 
   // Emit "complete" once when all segments fill, "clear" once when emptied.
   $: if (mounted && complete && !prevComplete) {
