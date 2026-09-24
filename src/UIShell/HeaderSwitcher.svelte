@@ -61,6 +61,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import { createDomNodeRegistry } from "../utils/dom-node-registry.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
+  import { pickEdgeMenuItem } from "../utils/pick-edge-menu-item.js";
 
   const dispatch = createEventDispatcher();
 
@@ -112,12 +113,7 @@
         dispatch("open", { trigger: "toggle" });
       }
       await tick();
-      const items = get(menuItems);
-      if (event.key === "ArrowDown") {
-        items[0]?.focus();
-      } else {
-        items[items.length - 1]?.focus();
-      }
+      pickEdgeMenuItem(event.key, get(menuItems))?.focus();
     }
   }
 </script>

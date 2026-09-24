@@ -33,6 +33,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import { createDomNodeRegistry } from "../utils/dom-node-registry.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
+  import { pickEdgeMenuItem } from "../utils/pick-edge-menu-item.js";
 
   const dispatch = createEventDispatcher();
 
@@ -142,22 +143,13 @@
           await tick();
           $menuItems[0]?.focus();
         }
-      } else if (event.key === "ArrowDown") {
+      } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
         event.preventDefault();
         if (!expanded) {
           expanded = true;
         }
-        // Focus first item
         await tick();
-        $menuItems[0]?.focus();
-      } else if (event.key === "ArrowUp") {
-        event.preventDefault();
-        if (!expanded) {
-          expanded = true;
-        }
-        // Focus last item
-        await tick();
-        $menuItems[$menuItems.length - 1]?.focus();
+        pickEdgeMenuItem(event.key, $menuItems)?.focus();
       } else if (event.key === "Escape") {
         event.preventDefault();
         await closeMenu("escape-key");
