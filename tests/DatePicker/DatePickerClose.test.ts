@@ -1,4 +1,10 @@
-import { cleanup, render, screen, waitFor } from "@testing-library/svelte";
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import DatePickerClose from "./DatePickerClose.test.svelte";
@@ -69,6 +75,65 @@ describe("DatePicker close event", () => {
     expect(calendar).not.toHaveClass("open");
     expect(onClose).toHaveBeenCalledTimes(1);
     expect(onClose.mock.calls[0][0].detail.trigger).toBe("escape-key");
+  });
+
+  // A browser's Escape carries `keyCode`, which flatpickr's grid handler
+  // switches on. user-event's `{Escape}` does not, so fire it by hand.
+  async function pressEscapeInGrid() {
+    await fireEvent.keyDown(document.activeElement as HTMLElement, {
+      key: "Escape",
+      keyCode: 27,
+    });
+    await tick();
+    await Promise.resolve();
+  }
+
+  it.each([
+    ["in place", false],
+    ["portalled", true],
+  ])(
+    'dispatches close with trigger "escape-key" when Escape is pressed in the grid (%s)',
+    async (_, portalMenu) => {
+      const onClose = vi.fn();
+      render(DatePickerClose, { props: { onClose, portalMenu } });
+
+      const input = screen.getByLabelText("Date");
+      await user.click(input);
+      const calendar = await screen.findByLabelText("calendar-container");
+      expect(calendar.parentElement === document.body).toBe(portalMenu);
+      await user.keyboard("{ArrowDown}");
+      expect(calendar.contains(document.activeElement)).toBe(true);
+
+      await pressEscapeInGrid();
+
+      expect(calendar).not.toHaveClass("open");
+      expect(onClose).toHaveBeenCalledTimes(1);
+      expect(onClose.mock.calls[0][0].detail.trigger).toBe("escape-key");
+      expect(input).toHaveFocus();
+    },
+  );
+
+  it('reports "select" after an earlier Escape from the grid', async () => {
+    const onClose = vi.fn();
+    render(DatePickerClose, { props: { onClose } });
+
+    const input = screen.getByLabelText("Date");
+    await user.click(input);
+    const calendar = await screen.findByLabelText("calendar-container");
+    await user.keyboard("{ArrowDown}");
+    await pressEscapeInGrid();
+
+    await user.click(document.body);
+    await user.click(input);
+    await waitFor(() => expect(calendar).toHaveClass("open"));
+    const day = calendar.querySelector<HTMLElement>(
+      ".flatpickr-day:not(.prevMonthDay):not(.nextMonthDay)",
+    );
+    if (!day) throw new Error("expected a selectable day");
+    await user.click(day);
+
+    expect(onClose).toHaveBeenCalledTimes(2);
+    expect(onClose.mock.calls[1][0].detail.trigger).toBe("select");
   });
 
   it("reopens the calendar when ArrowDown is pressed after Escape closed it", async () => {
