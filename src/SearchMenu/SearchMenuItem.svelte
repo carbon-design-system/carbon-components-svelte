@@ -1,3 +1,35 @@
+<script context="module">
+  /**
+   * Tolerate custom matchers that omit `indices` so highlighting still works.
+   */
+  function normalizeMatch(result) {
+    return {
+      matched: Boolean(result?.matched),
+      indices: result?.indices ?? [],
+    };
+  }
+
+  function escapeHtml(raw) {
+    return raw
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
+  function segmentsToHtml(parts) {
+    // Build the highlighted label as one HTML string. Rendering matched and
+    // unmatched runs as separate template nodes pads the text with the
+    // whitespace Svelte inserts between siblings, which corrupts the word.
+    return parts
+      .map((part) =>
+        part.match
+          ? `<strong class="bx--search-menu-item__highlight">${escapeHtml(part.text)}</strong>`
+          : escapeHtml(part.text),
+      )
+      .join("");
+  }
+</script>
+
 <script>
   /**
    * @event {{ value: string; item: { text?: string; value?: string; href?: string }; event: Event }} select
@@ -106,36 +138,6 @@
   }
 
   onMount(() => () => updateRegistration(false, false, false));
-
-  /**
-   * Tolerate custom matchers that omit `indices` so highlighting still works.
-   */
-  function normalizeMatch(result) {
-    return {
-      matched: Boolean(result?.matched),
-      indices: result?.indices ?? [],
-    };
-  }
-
-  function escapeHtml(raw) {
-    return raw
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;");
-  }
-
-  function segmentsToHtml(parts) {
-    // Build the highlighted label as one HTML string. Rendering matched and
-    // unmatched runs as separate template nodes pads the text with the
-    // whitespace Svelte inserts between siblings, which corrupts the word.
-    return parts
-      .map((part) =>
-        part.match
-          ? `<strong class="bx--search-menu-item__highlight">${escapeHtml(part.text)}</strong>`
-          : escapeHtml(part.text),
-      )
-      .join("");
-  }
 
   function handleClick(event) {
     if (disabled) {
