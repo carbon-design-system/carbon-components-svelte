@@ -1,7 +1,7 @@
 import { iconTooltipPortalGaps } from "carbon-components-svelte/Portal/icon-tooltip-portal-gaps.js";
 
 describe("iconTooltipPortalGaps", () => {
-  test("vertical placements only add a top/bottom gap", () => {
+  it("vertical placements only add a top/bottom gap", () => {
     expect(iconTooltipPortalGaps("bottom", "center")).toEqual({
       horizontalGapLeft: 0,
       horizontalGapRight: 0,
@@ -14,7 +14,7 @@ describe("iconTooltipPortalGaps", () => {
     expect(iconTooltipPortalGaps("top", "center").horizontalGapLeft).toBe(0);
   });
 
-  test("horizontal placements only add a left/right gap", () => {
+  it("horizontal placements only add a left/right gap", () => {
     const gaps = iconTooltipPortalGaps("right", "center");
     expect(gaps.horizontalGapLeft).toBe(2);
     expect(gaps.horizontalGapRight).toBe(2);
@@ -22,7 +22,7 @@ describe("iconTooltipPortalGaps", () => {
     expect(gaps.gapBottom).toBe(0);
   });
 
-  test("nudges the caret only for left/start and right/end", () => {
+  it("nudges the caret only for left/start and right/end", () => {
     expect(iconTooltipPortalGaps("left", "start").verticalAlignOffsetLeft).toBe(
       -3,
     );

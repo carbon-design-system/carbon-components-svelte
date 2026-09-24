@@ -1,7 +1,7 @@
 import { isInSafeTriangle } from "../../src/utils/is-in-safe-triangle.js";
 
 describe("isInSafeTriangle", () => {
-  test("true for a point crossing diagonally toward a floating element on the right", () => {
+  it("true for a point crossing diagonally toward a floating element on the right", () => {
     const anchorRect = { left: 0, right: 100, top: 0, bottom: 40 };
     const floatingRect = {
       left: 120,
@@ -14,7 +14,7 @@ describe("isInSafeTriangle", () => {
     expect(isInSafeTriangle(113, 117, anchorRect, floatingRect)).toBe(true);
   });
 
-  test("false for a point far from the gap between anchor and floating element", () => {
+  it("false for a point far from the gap between anchor and floating element", () => {
     const anchorRect = { left: 0, right: 100, top: 0, bottom: 40 };
     const floatingRect = {
       left: 120,
@@ -27,7 +27,7 @@ describe("isInSafeTriangle", () => {
     expect(isInSafeTriangle(50, 500, anchorRect, floatingRect)).toBe(false);
   });
 
-  test("true for a point crossing diagonally toward a floating element on the left", () => {
+  it("true for a point crossing diagonally toward a floating element on the left", () => {
     const anchorRect = { left: 100, right: 200, top: 0, bottom: 40 };
     const floatingRect = {
       left: -20,
@@ -40,7 +40,7 @@ describe("isInSafeTriangle", () => {
     expect(isInSafeTriangle(95, 100, anchorRect, floatingRect)).toBe(true);
   });
 
-  test("false for a point on the wrong side of the anchor", () => {
+  it("false for a point on the wrong side of the anchor", () => {
     const anchorRect = { left: 100, right: 200, top: 0, bottom: 40 };
     const floatingRect = {
       left: -20,

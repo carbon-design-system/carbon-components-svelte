@@ -8,7 +8,7 @@ import TreeViewLazyLoad from "./TreeView.lazyLoad.test.svelte";
 // instead, matching this suite's existing convention for parent rows.
 function treeItemById(id: string): HTMLElement {
   const el = document.getElementById(id);
-  expect.assert(el instanceof HTMLElement);
+  assert(el instanceof HTMLElement);
   return el;
 }
 
@@ -28,7 +28,7 @@ describe("TreeView lazy loading (hasChildren + children slot)", () => {
 
     const root = treeItemById("root");
     const toggle = root.querySelector(".bx--tree-parent-node__toggle");
-    expect.assert(toggle instanceof HTMLElement);
+    assert(toggle instanceof HTMLElement);
 
     await user.click(toggle);
 

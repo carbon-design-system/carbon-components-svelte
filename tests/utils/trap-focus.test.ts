@@ -52,7 +52,7 @@ afterEach(() => {
 });
 
 describe("trapFocus", () => {
-  test("forward Tab from the last element wraps to the first", () => {
+  it("forward Tab from the last element wraps to the first", () => {
     const { container, buttons } = setup(3);
     buttons[2].focus();
     const { event, preventDefault } = tabEvent();
@@ -63,7 +63,7 @@ describe("trapFocus", () => {
     expect(preventDefault).toHaveBeenCalledOnce();
   });
 
-  test("Shift+Tab from the first element wraps to the last", () => {
+  it("Shift+Tab from the first element wraps to the last", () => {
     const { container, buttons } = setup(3);
     buttons[0].focus();
     const { event, preventDefault } = tabEvent(true);
@@ -74,7 +74,7 @@ describe("trapFocus", () => {
     expect(preventDefault).toHaveBeenCalledOnce();
   });
 
-  test("Tab advances to the next element mid-list", () => {
+  it("Tab advances to the next element mid-list", () => {
     const { container, buttons } = setup(3);
     buttons[0].focus();
     const { event } = tabEvent();
@@ -84,7 +84,7 @@ describe("trapFocus", () => {
     expect(document.activeElement).toBe(buttons[1]);
   });
 
-  test("Shift+Tab moves to the previous element mid-list", () => {
+  it("Shift+Tab moves to the previous element mid-list", () => {
     const { container, buttons } = setup(3);
     buttons[2].focus();
     const { event } = tabEvent(true);
@@ -94,7 +94,7 @@ describe("trapFocus", () => {
     expect(document.activeElement).toBe(buttons[1]);
   });
 
-  test("empty container calls preventDefault and focuses nothing", () => {
+  it("empty container calls preventDefault and focuses nothing", () => {
     const { container } = setup(0);
     const outside = document.createElement("button");
     document.body.appendChild(outside);
@@ -107,7 +107,7 @@ describe("trapFocus", () => {
     expect(preventDefault).toHaveBeenCalledOnce();
   });
 
-  test("active element outside the list: Tab focuses the first element", () => {
+  it("active element outside the list: Tab focuses the first element", () => {
     const { container, buttons } = setup(3);
     const outside = document.createElement("button");
     document.body.appendChild(outside);
@@ -119,7 +119,7 @@ describe("trapFocus", () => {
     expect(document.activeElement).toBe(buttons[0]);
   });
 
-  test("active element outside the list: Shift+Tab focuses the last element", () => {
+  it("active element outside the list: Shift+Tab focuses the last element", () => {
     const { container, buttons } = setup(3);
     const outside = document.createElement("button");
     document.body.appendChild(outside);
@@ -131,7 +131,7 @@ describe("trapFocus", () => {
     expect(document.activeElement).toBe(buttons[2]);
   });
 
-  test("hidden elements are excluded from the focus loop", () => {
+  it("hidden elements are excluded from the focus loop", () => {
     const { container, buttons } = setup(3);
     buttons[1].style.display = "none";
     buttons[0].focus();
@@ -143,7 +143,7 @@ describe("trapFocus", () => {
     expect(document.activeElement).toBe(buttons[2]);
   });
 
-  test("visibility:hidden and display:none elements are both excluded, only the visible one is focused", () => {
+  it("visibility:hidden and display:none elements are both excluded, only the visible one is focused", () => {
     const container = document.createElement("div");
     document.body.appendChild(container);
 
@@ -178,7 +178,7 @@ describe("trapFocus", () => {
     expect(document.activeElement).toBe(visible);
   });
 
-  test("uses checkVisibility when available instead of computed styles", () => {
+  it("uses checkVisibility when available instead of computed styles", () => {
     const { container, buttons } = setup(3);
     const getComputedStyle = vi.spyOn(window, "getComputedStyle");
     for (const [index, button] of buttons.entries()) {

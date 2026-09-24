@@ -10,14 +10,14 @@ function makeFile(name: string, size: number, lastModified = 1) {
 }
 
 describe("fileIdentityKey", () => {
-  test("joins name, size, and lastModified", () => {
+  it("joins name, size, and lastModified", () => {
     const file = makeFile("a.txt", 3, 42);
     expect(fileIdentityKey(file)).toBe("a.txt\u00003\u000042");
   });
 });
 
 describe("filterIncomingFiles", () => {
-  test("accepts all files when no options are set", () => {
+  it("accepts all files when no options are set", () => {
     const a = makeFile("a.txt", 10);
     const b = makeFile("b.txt", 20);
     const { accepted, rejected } = filterIncomingFiles([a, b]);
@@ -25,7 +25,7 @@ describe("filterIncomingFiles", () => {
     expect(rejected).toEqual([]);
   });
 
-  test("rejects oversized files with reason size", () => {
+  it("rejects oversized files with reason size", () => {
     const small = makeFile("small.txt", 500);
     const large = makeFile("large.txt", 2000);
     const { accepted, rejected } = filterIncomingFiles([small, large], {
@@ -35,7 +35,7 @@ describe("filterIncomingFiles", () => {
     expect(rejected).toEqual([{ file: large, reason: "size" }]);
   });
 
-  test("accepts files at exactly maxFileSize", () => {
+  it("accepts files at exactly maxFileSize", () => {
     const exact = makeFile("exact.txt", 1000);
     const { accepted, rejected } = filterIncomingFiles([exact], {
       maxFileSize: 1000,
@@ -44,7 +44,7 @@ describe("filterIncomingFiles", () => {
     expect(rejected).toEqual([]);
   });
 
-  test("honors a maxFileSize of 0", () => {
+  it("honors a maxFileSize of 0", () => {
     const empty = makeFile("empty.txt", 0);
     const nonEmpty = makeFile("a.txt", 1);
     const { accepted, rejected } = filterIncomingFiles([empty, nonEmpty], {
@@ -54,7 +54,7 @@ describe("filterIncomingFiles", () => {
     expect(rejected).toEqual([{ file: nonEmpty, reason: "size" }]);
   });
 
-  test("rejects duplicates against existing files", () => {
+  it("rejects duplicates against existing files", () => {
     const existing = makeFile("dup.txt", 10, 5);
     const duplicate = makeFile("dup.txt", 10, 5);
     const unique = makeFile("new.txt", 10, 5);
@@ -66,7 +66,7 @@ describe("filterIncomingFiles", () => {
     expect(rejected).toEqual([{ file: duplicate, reason: "duplicate" }]);
   });
 
-  test("does not reject same-reference files in carryRefs", () => {
+  it("does not reject same-reference files in carryRefs", () => {
     const existing = makeFile("kept.txt", 10, 5);
     const fresh = makeFile("kept.txt", 10, 5);
     const { accepted, rejected } = filterIncomingFiles([existing, fresh], {
@@ -78,7 +78,7 @@ describe("filterIncomingFiles", () => {
     expect(rejected).toEqual([{ file: fresh, reason: "duplicate" }]);
   });
 
-  test("applies size before duplicate", () => {
+  it("applies size before duplicate", () => {
     const existing = makeFile("big.txt", 2000, 1);
     const oversizedDup = makeFile("big.txt", 2000, 1);
     const { accepted, rejected } = filterIncomingFiles([oversizedDup], {

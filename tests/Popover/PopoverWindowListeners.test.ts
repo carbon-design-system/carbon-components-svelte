@@ -10,7 +10,7 @@ const netClick = (
   remove.mock.calls.filter((c: unknown[]) => c[0] === "click").length;
 
 describe("Popover window listeners", () => {
-  test("closed popovers register no window click listener", () => {
+  it("closed popovers register no window click listener", () => {
     const add = vi.spyOn(window, "addEventListener");
     const remove = vi.spyOn(window, "removeEventListener");
 
@@ -21,7 +21,7 @@ describe("Popover window listeners", () => {
     remove.mockRestore();
   });
 
-  test("an open popover registers exactly one window click listener", async () => {
+  it("an open popover registers exactly one window click listener", async () => {
     const add = vi.spyOn(window, "addEventListener");
     const remove = vi.spyOn(window, "removeEventListener");
 

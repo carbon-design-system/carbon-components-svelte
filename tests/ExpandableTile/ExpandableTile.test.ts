@@ -140,7 +140,7 @@ describe("ExpandableTile", () => {
       expect(tile).not.toHaveClass("bx--tile--is-expanded");
 
       const chevronButton = tile.querySelector("button.bx--tile__chevron");
-      expect.assert(chevronButton);
+      assert(chevronButton);
       expect(chevronButton).toHaveAttribute("aria-expanded", "false");
 
       await user.click(chevronButton);
@@ -157,7 +157,7 @@ describe("ExpandableTile", () => {
 
       const tile = screen.getByTestId("interactive");
       const chevronButton = tile.querySelector("button.bx--tile__chevron");
-      expect.assert(chevronButton);
+      assert(chevronButton);
       expect(chevronButton).toHaveAttribute(
         "aria-controls",
         "interactive-tile-content",
@@ -179,7 +179,7 @@ describe("ExpandableTile", () => {
 
       const tile = screen.getByTestId("interactive");
       const chevronButton = tile.querySelector("button.bx--tile__chevron");
-      expect.assert(chevronButton);
+      assert(chevronButton);
 
       expect(chevronButton).toHaveAttribute(
         "aria-label",

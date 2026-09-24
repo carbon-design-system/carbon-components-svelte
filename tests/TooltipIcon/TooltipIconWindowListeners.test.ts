@@ -11,7 +11,7 @@ const net = (
   remove.mock.calls.filter((c: unknown[]) => c[0] === type).length;
 
 describe("TooltipIcon window listeners", () => {
-  test("closed icon tooltips register no window keydown listener", () => {
+  it("closed icon tooltips register no window keydown listener", () => {
     const add = vi.spyOn(window, "addEventListener");
     const remove = vi.spyOn(window, "removeEventListener");
 
@@ -22,7 +22,7 @@ describe("TooltipIcon window listeners", () => {
     remove.mockRestore();
   });
 
-  test("an open icon tooltip registers exactly one window keydown listener", async () => {
+  it("an open icon tooltip registers exactly one window keydown listener", async () => {
     const add = vi.spyOn(window, "addEventListener");
     const remove = vi.spyOn(window, "removeEventListener");
 

@@ -17,7 +17,7 @@ type SelectChangeDetail = {
 
 function treeItemById(id: Id): HTMLElement {
   const el = document.getElementById(String(id));
-  expect.assert(el instanceof HTMLElement);
+  assert(el instanceof HTMLElement);
   return el;
 }
 

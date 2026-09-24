@@ -57,7 +57,7 @@ describe("ListBox", () => {
     expect(getRoot(container)).not.toHaveClass("bx--list-box--inline");
   });
 
-  test.each([
+  it.each([
     ["sm", "bx--list-box--sm"],
     ["xl", "bx--list-box--xl"],
   ] as const)("should handle size variants", (size, className) => {

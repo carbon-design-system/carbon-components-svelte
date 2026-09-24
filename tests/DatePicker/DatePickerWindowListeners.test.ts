@@ -37,7 +37,7 @@ const openCalendar = async (oncalendar: () => void): Promise<Instance> => {
 };
 
 describe("DatePicker window listeners", () => {
-  test("closed date pickers register no click listeners", async () => {
+  it("closed date pickers register no click listeners", async () => {
     const add = vi.spyOn(window, "addEventListener");
     const remove = vi.spyOn(window, "removeEventListener");
 
@@ -53,7 +53,7 @@ describe("DatePicker window listeners", () => {
     remove.mockRestore();
   });
 
-  test("an open calendar registers one shared click listener", async () => {
+  it("an open calendar registers one shared click listener", async () => {
     const add = vi.spyOn(window, "addEventListener");
     const remove = vi.spyOn(window, "removeEventListener");
 
@@ -66,7 +66,7 @@ describe("DatePicker window listeners", () => {
     remove.mockRestore();
   });
 
-  test("closing the calendar removes the click listener", async () => {
+  it("closing the calendar removes the click listener", async () => {
     const add = vi.spyOn(window, "addEventListener");
     const remove = vi.spyOn(window, "removeEventListener");
 
@@ -83,7 +83,7 @@ describe("DatePicker window listeners", () => {
     remove.mockRestore();
   });
 
-  test("an outside click dismisses an open calendar", async () => {
+  it("an outside click dismisses an open calendar", async () => {
     render(DatePicker, { props: { datePickerType: "single" } });
 
     const input = screen.getByLabelText("Date");
@@ -95,7 +95,7 @@ describe("DatePicker window listeners", () => {
     expect(calendar).not.toHaveClass("open");
   });
 
-  test("a click inside the calendar does not dismiss it", async () => {
+  it("a click inside the calendar does not dismiss it", async () => {
     render(DatePicker, { props: { datePickerType: "single" } });
 
     const input = screen.getByLabelText("Date");

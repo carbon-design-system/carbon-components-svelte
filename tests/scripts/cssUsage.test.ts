@@ -36,7 +36,7 @@ const rule = (
 });
 
 describe("authoredDeclarations", () => {
-  test("plain longhand", () => {
+  it("plain longhand", () => {
     expect(
       authoredDeclarations([
         { name: "color", value: "red", text: "color: red" },
@@ -51,7 +51,7 @@ describe("authoredDeclarations", () => {
     ]);
   });
 
-  test("skips disabled and unparsed entries", () => {
+  it("skips disabled and unparsed entries", () => {
     expect(
       authoredDeclarations([
         { name: "color", value: "red", text: "color: red", disabled: true },
@@ -65,7 +65,7 @@ describe("authoredDeclarations", () => {
     ).toEqual([]);
   });
 
-  test("skips implicit (text-less) entries", () => {
+  it("skips implicit (text-less) entries", () => {
     expect(
       authoredDeclarations([
         { name: "padding-top", value: "0px", implicit: true },
@@ -73,7 +73,7 @@ describe("authoredDeclarations", () => {
     ).toEqual([]);
   });
 
-  test("expands a shorthand via CDP's own longhandProperties", () => {
+  it("expands a shorthand via CDP's own longhandProperties", () => {
     const out = authoredDeclarations([
       {
         name: "padding",
@@ -102,7 +102,7 @@ describe("authoredDeclarations", () => {
     ]);
   });
 
-  test("falls back to the SHORTHANDS table via sibling implicit entries", () => {
+  it("falls back to the SHORTHANDS table via sibling implicit entries", () => {
     const out = authoredDeclarations([
       { name: "padding", value: "0", text: "padding: 0" },
       { name: "padding-top", value: "0px", implicit: true },
@@ -115,7 +115,7 @@ describe("authoredDeclarations", () => {
     );
   });
 
-  test("unresolvable shorthand falls back to its own property name", () => {
+  it("unresolvable shorthand falls back to its own property name", () => {
     expect(
       authoredDeclarations([
         { name: "padding", value: "0", text: "padding: 0" },
@@ -132,7 +132,7 @@ describe("authoredDeclarations", () => {
 });
 
 describe("cascadeWinners / replayWins", () => {
-  test("later declaration wins for the same property", () => {
+  it("later declaration wins for the same property", () => {
     const rules = [
       rule("", ".a", [{ property: "color", value: "red" }]),
       rule("", ".a.b", [{ property: "color", value: "blue" }]),
@@ -142,7 +142,7 @@ describe("cascadeWinners / replayWins", () => {
     expect(replayWins(rules)).toEqual([[false], [true]]);
   });
 
-  test("!important wins regardless of order", () => {
+  it("!important wins regardless of order", () => {
     const rules = [
       rule("", ".a", [{ property: "color", value: "red", important: true }]),
       rule("", ".a.b", [{ property: "color", value: "blue" }]),
@@ -150,7 +150,7 @@ describe("cascadeWinners / replayWins", () => {
     expect(replayWins(rules)).toEqual([[true], [false]]);
   });
 
-  test("later !important beats an earlier !important", () => {
+  it("later !important beats an earlier !important", () => {
     const rules = [
       rule("", ".a", [{ property: "color", value: "red", important: true }]),
       rule("", ".a.b", [{ property: "color", value: "blue", important: true }]),
@@ -158,7 +158,7 @@ describe("cascadeWinners / replayWins", () => {
     expect(replayWins(rules)).toEqual([[false], [true]]);
   });
 
-  test("a shorthand wins if it wins any one of its longhands", () => {
+  it("a shorthand wins if it wins any one of its longhands", () => {
     const rules = [
       rule("", ".a", [
         {
@@ -175,7 +175,7 @@ describe("cascadeWinners / replayWins", () => {
     expect(replayWins(rules)).toEqual([[true], [true]]);
   });
 
-  test("independent properties don't interact", () => {
+  it("independent properties don't interact", () => {
     const rules = [
       rule("", ".a", [{ property: "color", value: "red" }]),
       rule("", ".a", [{ property: "top", value: "0" }]),
@@ -185,7 +185,7 @@ describe("cascadeWinners / replayWins", () => {
 });
 
 describe("recordObservation", () => {
-  test("counts matches and wins across observations", () => {
+  it("counts matches and wins across observations", () => {
     const agg = createAggregate();
     recordObservation(agg, [
       rule("", ".a", [{ property: "color", value: "red" }]),
@@ -202,7 +202,7 @@ describe("recordObservation", () => {
     expect(blue).toMatchObject({ matched: 1, won: 1 });
   });
 
-  test("attributes a loss to the winning rule's label", () => {
+  it("attributes a loss to the winning rule's label", () => {
     const agg = createAggregate();
     recordObservation(agg, [
       rule("", ".a", [{ property: "color", value: "red" }]),
@@ -214,7 +214,7 @@ describe("recordObservation", () => {
     expect(red?.lostTo).toEqual({ "@media (min-width: 42em) .a.b": 1 });
   });
 
-  test("tracks rule identity for matched-rule lookups", () => {
+  it("tracks rule identity for matched-rule lookups", () => {
     const agg = createAggregate();
     recordObservation(agg, [
       rule("", ".a", [{ property: "color", value: "red" }]),
@@ -224,7 +224,7 @@ describe("recordObservation", () => {
 });
 
 describe("deadInFixtures / foldCandidates", () => {
-  test("losing only to a user-preference media rule is not dead", () => {
+  it("losing only to a user-preference media rule is not dead", () => {
     const agg = createAggregate();
     recordObservation(agg, [
       rule("", ".a", [{ property: "transition", value: "opacity 70ms" }]),
@@ -235,7 +235,7 @@ describe("deadInFixtures / foldCandidates", () => {
     expect(deadInFixtures(agg)).toEqual([]);
   });
 
-  test("a declaration that always loses is dead; one that sometimes wins is not", () => {
+  it("a declaration that always loses is dead; one that sometimes wins is not", () => {
     const agg = createAggregate();
     // .a color:red always loses to .a.b color:blue.
     recordObservation(agg, [
@@ -262,7 +262,7 @@ describe("deadInFixtures / foldCandidates", () => {
     expect(fold[0].lostTo).toEqual({ ".a.b": 2 });
   });
 
-  test("not a fold candidate when it loses to more than one rule", () => {
+  it("not a fold candidate when it loses to more than one rule", () => {
     const agg = createAggregate();
     recordObservation(agg, [
       rule("", ".a", [{ property: "color", value: "red" }]),
@@ -278,7 +278,7 @@ describe("deadInFixtures / foldCandidates", () => {
 });
 
 describe("inventoryFromRules / neverMatchedRules", () => {
-  test("flags inventory rules that never matched, keeps bytes for sorting", () => {
+  it("flags inventory rules that never matched, keeps bytes for sorting", () => {
     const agg = createAggregate();
     recordObservation(agg, [
       rule("", ".a", [{ property: "color", value: "red" }]),
@@ -296,7 +296,7 @@ describe("inventoryFromRules / neverMatchedRules", () => {
 });
 
 describe("summarize", () => {
-  test("reports totals consistent with the aggregate and inventory", () => {
+  it("reports totals consistent with the aggregate and inventory", () => {
     const agg = createAggregate();
     recordObservation(agg, [
       rule("", ".a", [{ property: "color", value: "red" }]),
@@ -328,17 +328,17 @@ describe("summarize", () => {
 });
 
 describe("normalizeSelector / normalizeContext", () => {
-  test("collapses insignificant whitespace so differently-formatted selectors compare equal", () => {
+  it("collapses insignificant whitespace so differently-formatted selectors compare equal", () => {
     expect(normalizeSelector(".a   .b")).toBe(normalizeSelector(".a .b"));
     expect(normalizeSelector("  .a.b  ")).toBe(normalizeSelector(".a.b"));
   });
 
-  test("falls back to a trimmed string when parsing throws", () => {
+  it("falls back to a trimmed string when parsing throws", () => {
     // css-tree throws on this rather than parsing it leniently.
     expect(normalizeSelector("{{{")).toBe("{{{");
   });
 
-  test("collapses whitespace in at-rule context text", () => {
+  it("collapses whitespace in at-rule context text", () => {
     expect(normalizeContext("@media  (min-width:   42em)")).toBe(
       "@media (min-width: 42em)",
     );

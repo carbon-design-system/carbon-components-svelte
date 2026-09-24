@@ -1,22 +1,22 @@
 import { moveIndex, nextEnabledIndex } from "../../src/utils/move-index.js";
 
 describe("moveIndex", () => {
-  test("moves forward and backward within range", () => {
+  it("moves forward and backward within range", () => {
     expect(moveIndex(0, 1, 3)).toBe(1);
     expect(moveIndex(2, -1, 3)).toBe(1);
   });
 
-  test("wraps from last to first and first to last", () => {
+  it("wraps from last to first and first to last", () => {
     expect(moveIndex(2, 1, 3)).toBe(0);
     expect(moveIndex(0, -1, 3)).toBe(2);
   });
 
-  test("treats -1 as 'nothing selected': step up lands on last, down on first", () => {
+  it("treats -1 as 'nothing selected': step up lands on last, down on first", () => {
     expect(moveIndex(-1, 1, 3)).toBe(0);
     expect(moveIndex(-1, -1, 3)).toBe(2);
   });
 
-  test("returns -1 for an empty range", () => {
+  it("returns -1 for an empty range", () => {
     expect(moveIndex(0, 1, 0)).toBe(-1);
     expect(moveIndex(0, -1, 0)).toBe(-1);
   });
@@ -26,7 +26,7 @@ describe("nextEnabledIndex", () => {
   const items = (...disabled: boolean[]) =>
     disabled.map((d, i) => ({ id: i, disabled: d }));
 
-  test("moves to the next enabled neighbor", () => {
+  it("moves to the next enabled neighbor", () => {
     const result = nextEnabledIndex({
       items: items(false, false, false),
       index: 0,
@@ -35,7 +35,7 @@ describe("nextEnabledIndex", () => {
     expect(result).toBe(1);
   });
 
-  test("skips a single disabled neighbor", () => {
+  it("skips a single disabled neighbor", () => {
     const result = nextEnabledIndex({
       items: items(false, true, false),
       index: 0,
@@ -44,7 +44,7 @@ describe("nextEnabledIndex", () => {
     expect(result).toBe(2);
   });
 
-  test("skips a run of disabled items", () => {
+  it("skips a run of disabled items", () => {
     const result = nextEnabledIndex({
       items: items(false, true, true, false),
       index: 0,
@@ -53,7 +53,7 @@ describe("nextEnabledIndex", () => {
     expect(result).toBe(3);
   });
 
-  test("wraps past the end, skipping disabled", () => {
+  it("wraps past the end, skipping disabled", () => {
     const result = nextEnabledIndex({
       items: items(false, false, true),
       index: 1,
@@ -62,7 +62,7 @@ describe("nextEnabledIndex", () => {
     expect(result).toBe(0);
   });
 
-  test("wraps backward past the start", () => {
+  it("wraps backward past the start", () => {
     const result = nextEnabledIndex({
       items: items(true, false, false),
       index: 1,
@@ -71,7 +71,7 @@ describe("nextEnabledIndex", () => {
     expect(result).toBe(2);
   });
 
-  test("returns the original index when every item is disabled", () => {
+  it("returns the original index when every item is disabled", () => {
     const result = nextEnabledIndex({
       items: items(true, true, true),
       index: 1,
@@ -80,7 +80,7 @@ describe("nextEnabledIndex", () => {
     expect(result).toBe(1);
   });
 
-  test("lands on the first enabled item when starting from -1", () => {
+  it("lands on the first enabled item when starting from -1", () => {
     const result = nextEnabledIndex({
       items: items(true, false, false),
       index: -1,
@@ -89,7 +89,7 @@ describe("nextEnabledIndex", () => {
     expect(result).toBe(1);
   });
 
-  test("lands on the last enabled item when starting from -1 going backward", () => {
+  it("lands on the last enabled item when starting from -1 going backward", () => {
     const result = nextEnabledIndex({
       items: items(false, false, true),
       index: -1,
@@ -98,7 +98,7 @@ describe("nextEnabledIndex", () => {
     expect(result).toBe(1);
   });
 
-  test("supports a custom isDisabled predicate", () => {
+  it("supports a custom isDisabled predicate", () => {
     const data = [{ ok: true }, { ok: false }, { ok: true }];
     const result = nextEnabledIndex({
       items: data,
@@ -109,11 +109,11 @@ describe("nextEnabledIndex", () => {
     expect(result).toBe(2);
   });
 
-  test("returns the original index for an empty items array", () => {
+  it("returns the original index for an empty items array", () => {
     expect(nextEnabledIndex({ items: [], index: -1, step: 1 })).toBe(-1);
   });
 
-  test("clamps at the end instead of wrapping when wrap is false", () => {
+  it("clamps at the end instead of wrapping when wrap is false", () => {
     const result = nextEnabledIndex({
       items: items(false, false, false),
       index: 2,
@@ -123,7 +123,7 @@ describe("nextEnabledIndex", () => {
     expect(result).toBe(2);
   });
 
-  test("skips disabled items while clamping when wrap is false", () => {
+  it("skips disabled items while clamping when wrap is false", () => {
     const result = nextEnabledIndex({
       items: items(false, true, false),
       index: 0,
@@ -133,7 +133,7 @@ describe("nextEnabledIndex", () => {
     expect(result).toBe(2);
   });
 
-  test("returns the original index when clamping finds no enabled item", () => {
+  it("returns the original index when clamping finds no enabled item", () => {
     const result = nextEnabledIndex({
       items: items(false, true, true),
       index: 1,

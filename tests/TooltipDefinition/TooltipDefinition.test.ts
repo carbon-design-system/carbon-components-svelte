@@ -223,7 +223,7 @@ describe("TooltipDefinition", () => {
 
       const trigger = screen.getByText("Tooltip trigger");
       const definition = trigger.closest(".bx--tooltip--definition");
-      expect.assert(definition instanceof HTMLElement);
+      assert(definition instanceof HTMLElement);
       await fireEvent.mouseEnter(definition);
 
       expect(trigger).toHaveClass("bx--tooltip--hidden");
@@ -240,7 +240,7 @@ describe("TooltipDefinition", () => {
 
       const trigger = screen.getByText("Tooltip trigger");
       const span = trigger.closest(".bx--tooltip--definition");
-      expect.assert(span instanceof HTMLElement);
+      assert(span instanceof HTMLElement);
 
       await fireEvent.mouseEnter(span);
 
@@ -315,7 +315,7 @@ describe("TooltipDefinition", () => {
 
       const trigger = screen.getByText("Tooltip trigger");
       const definition = trigger.closest(".bx--tooltip--definition");
-      expect.assert(definition instanceof HTMLElement);
+      assert(definition instanceof HTMLElement);
 
       await fireEvent.mouseEnter(definition);
       expect(screen.getByText("Test tooltip text")).toBeInTheDocument();
@@ -323,7 +323,7 @@ describe("TooltipDefinition", () => {
       await fireEvent.mouseLeave(definition);
 
       const portalContent = document.querySelector(".bx--tooltip-portal");
-      expect.assert(portalContent instanceof HTMLElement);
+      assert(portalContent instanceof HTMLElement);
       await fireEvent.mouseEnter(portalContent);
 
       await vi.advanceTimersByTimeAsync(200);
@@ -342,12 +342,12 @@ describe("TooltipDefinition", () => {
 
       const trigger = screen.getByText("Tooltip trigger");
       const definition = trigger.closest(".bx--tooltip--definition");
-      expect.assert(definition instanceof HTMLElement);
+      assert(definition instanceof HTMLElement);
 
       await fireEvent.mouseEnter(definition);
 
       const portalContent = document.querySelector(".bx--tooltip-portal");
-      expect.assert(portalContent instanceof HTMLElement);
+      assert(portalContent instanceof HTMLElement);
       await fireEvent.mouseEnter(portalContent);
       await fireEvent.mouseLeave(portalContent);
 

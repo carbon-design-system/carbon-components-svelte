@@ -27,21 +27,21 @@ describe("overflowTitle action", () => {
     node.remove();
   });
 
-  test("sets title to the text content when truncated", async () => {
+  it("sets title to the text content when truncated", async () => {
     mockSize(node, 50, 120);
     overflowTitle(node);
     await settle();
     expect(node.getAttribute("title")).toBe("A very long label");
   });
 
-  test("does not set title when the text fits", async () => {
+  it("does not set title when the text fits", async () => {
     mockSize(node, 120, 120);
     overflowTitle(node);
     await settle();
     expect(node.hasAttribute("title")).toBe(false);
   });
 
-  test("removes a stale title once no longer truncated on update", async () => {
+  it("removes a stale title once no longer truncated on update", async () => {
     mockSize(node, 50, 120);
     const { update } = overflowTitle(node);
     await settle();
@@ -53,19 +53,19 @@ describe("overflowTitle action", () => {
     expect(node.hasAttribute("title")).toBe(false);
   });
 
-  test("uses a provided title instead of overflow detection", () => {
+  it("uses a provided title instead of overflow detection", () => {
     mockSize(node, 120, 120);
     overflowTitle(node, { title: "Custom title" });
     expect(node.getAttribute("title")).toBe("Custom title");
   });
 
-  test('keeps title="" when truncated', () => {
+  it('keeps title="" when truncated', () => {
     mockSize(node, 50, 120);
     overflowTitle(node, { title: "" });
     expect(node.getAttribute("title")).toBe("");
   });
 
-  test("measures a descendant when `measure` is provided", async () => {
+  it("measures a descendant when `measure` is provided", async () => {
     const host = document.createElement("label");
     const span = document.createElement("span");
     span.textContent = "A very long label";
@@ -80,14 +80,14 @@ describe("overflowTitle action", () => {
     host.remove();
   });
 
-  test("falls back to measuring the node when `measure` is null", async () => {
+  it("falls back to measuring the node when `measure` is null", async () => {
     mockSize(node, 50, 120);
     expect(() => overflowTitle(node, { measure: null })).not.toThrow();
     await settle();
     expect(node.getAttribute("title")).toBe("A very long label");
   });
 
-  test("defers measurement so a batch of mounts reads layout once", async () => {
+  it("defers measurement so a batch of mounts reads layout once", async () => {
     const nodes = Array.from({ length: 5 }, () => {
       const el = document.createElement("div");
       el.textContent = "label";
@@ -122,7 +122,7 @@ describe("overflowTitle action", () => {
     for (const el of nodes) el.remove();
   });
 
-  test("applies an explicit title synchronously without measuring", () => {
+  it("applies an explicit title synchronously without measuring", () => {
     let reads = 0;
     Object.defineProperty(node, "offsetWidth", {
       configurable: true,
@@ -136,7 +136,7 @@ describe("overflowTitle action", () => {
     expect(reads).toBe(0);
   });
 
-  test("does not measure after destroy", async () => {
+  it("does not measure after destroy", async () => {
     let reads = 0;
     Object.defineProperty(node, "offsetWidth", {
       configurable: true,

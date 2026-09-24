@@ -29,7 +29,7 @@ describe("DataTable Generics", () => {
 
       // Get first table
       const firstTable = tables[0];
-      expect.assert(firstTable instanceof HTMLElement);
+      assert(firstTable instanceof HTMLElement);
       const firstTableContainer = within(firstTable);
 
       // Verify rows are rendered
@@ -65,7 +65,7 @@ describe("DataTable Generics", () => {
       // Click the first checkbox (row-1 should be pre-selected)
       if (firstTableCheckboxes.length > 0) {
         const firstCheckbox = firstTableCheckboxes[0];
-        expect.assert(firstCheckbox instanceof HTMLInputElement);
+        assert(firstCheckbox instanceof HTMLInputElement);
         expect(firstCheckbox.checked).toBe(true); // row-1 is pre-selected
 
         // Click to deselect
@@ -113,7 +113,7 @@ describe("DataTable Generics", () => {
 
       // Get second table
       const secondTable = tables[1];
-      expect.assert(secondTable instanceof HTMLElement);
+      assert(secondTable instanceof HTMLElement);
       const secondTableContainer = within(secondTable);
 
       // Verify rows are rendered in second table
@@ -143,7 +143,7 @@ describe("DataTable Generics", () => {
 
       // Verify pre-selected rows (1 and 2 should be pre-selected)
       const checkedBoxes = secondTableCheckboxes.filter((cb) => {
-        expect.assert(cb instanceof HTMLInputElement);
+        assert(cb instanceof HTMLInputElement);
         return cb.checked;
       });
       expect(checkedBoxes.length).toBeGreaterThanOrEqual(0);
@@ -184,7 +184,7 @@ describe("DataTable Generics", () => {
 
       // Get third table
       const thirdTable = tables[2];
-      expect.assert(thirdTable instanceof HTMLElement);
+      assert(thirdTable instanceof HTMLElement);
       const thirdTableContainer = within(thirdTable);
 
       // Verify rows are rendered in third table
@@ -217,7 +217,7 @@ describe("DataTable Generics", () => {
 
       // Verify pre-selected row (prod-1 should be pre-selected)
       const checkedBoxes = thirdTableCheckboxes.filter((cb) => {
-        expect.assert(cb instanceof HTMLInputElement);
+        assert(cb instanceof HTMLInputElement);
         return cb.checked;
       });
       expect(checkedBoxes.length).toBeGreaterThanOrEqual(0);
@@ -239,7 +239,7 @@ describe("DataTable Generics", () => {
 
       if (thirdTableExpandButtons.length > 0) {
         const firstExpandButton = thirdTableExpandButtons[0];
-        expect.assert(firstExpandButton instanceof HTMLButtonElement);
+        assert(firstExpandButton instanceof HTMLButtonElement);
         await user.click(firstExpandButton);
         await tick();
 
@@ -289,7 +289,7 @@ describe("DataTable Generics", () => {
 
       if (thirdTableExpandButtons.length > 0) {
         const expandButton = thirdTableExpandButtons[0];
-        expect.assert(expandButton instanceof HTMLButtonElement);
+        assert(expandButton instanceof HTMLButtonElement);
         await user.click(expandButton);
         await tick();
 
@@ -322,7 +322,7 @@ describe("DataTable Generics", () => {
 
       if (thirdTableExpandButtons.length > 0) {
         const expandButton = thirdTableExpandButtons[0];
-        expect.assert(expandButton instanceof HTMLButtonElement);
+        assert(expandButton instanceof HTMLButtonElement);
         await user.click(expandButton);
         await tick();
 
@@ -393,7 +393,7 @@ describe("DataTable Generics", () => {
       expect(tables.length).toBeGreaterThanOrEqual(4);
 
       const fourthTable = tables[3];
-      expect.assert(fourthTable instanceof HTMLElement);
+      assert(fourthTable instanceof HTMLElement);
       const headerCells = fourthTable.querySelectorAll("thead th");
       expect(headerCells).toHaveLength(2);
       expect(headerCells[0]?.textContent?.trim()).toBe("Name");

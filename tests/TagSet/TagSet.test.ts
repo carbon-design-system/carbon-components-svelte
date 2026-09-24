@@ -23,7 +23,7 @@ function stubMeasurements(
   tagWidth: number,
 ) {
   const wrapper = container.querySelector(".bx--tag-set");
-  expect.assert(wrapper instanceof HTMLElement);
+  assert(wrapper instanceof HTMLElement);
   stubWidth(wrapper, availableWidth);
 
   const tags = Array.from(
@@ -34,7 +34,7 @@ function stubMeasurements(
   const trigger = container.querySelector(
     ".bx--tag-set-overflow__popover-trigger",
   );
-  expect.assert(trigger instanceof HTMLElement);
+  assert(trigger instanceof HTMLElement);
   stubWidth(trigger, 40);
 }
 
@@ -161,7 +161,7 @@ describe("TagSet", () => {
     const { container } = render(TagSetFixture, { size: "lg" });
 
     const visibleRow = container.querySelector(".bx--tag-set__space");
-    expect.assert(visibleRow instanceof HTMLElement);
+    assert(visibleRow instanceof HTMLElement);
     for (const tag of within(visibleRow).getAllByText(/^Tag \d$/)) {
       expect(tag.closest(".bx--tag")).toHaveClass("bx--tag--lg");
     }

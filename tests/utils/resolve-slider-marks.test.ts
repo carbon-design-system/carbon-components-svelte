@@ -1,13 +1,13 @@
 import { resolveSliderMarks } from "../../src/utils/resolve-slider-marks.js";
 
 describe("resolveSliderMarks", () => {
-  test("returns empty array for falsy marks", () => {
+  it("returns empty array for falsy marks", () => {
     expect(resolveSliderMarks(false, 0, 100, 1)).toEqual([]);
     expect(resolveSliderMarks(undefined, 0, 100, 1)).toEqual([]);
     expect(resolveSliderMarks(null, 0, 100, 1)).toEqual([]);
   });
 
-  test("generates a tick at every step when marks is true", () => {
+  it("generates a tick at every step when marks is true", () => {
     expect(resolveSliderMarks(true, 0, 10, 5)).toEqual([
       { value: 0 },
       { value: 5 },
@@ -15,7 +15,7 @@ describe("resolveSliderMarks", () => {
     ]);
   });
 
-  test("filters array marks to the min/max range", () => {
+  it("filters array marks to the min/max range", () => {
     expect(
       resolveSliderMarks(
         [
@@ -34,7 +34,7 @@ describe("resolveSliderMarks", () => {
     ]);
   });
 
-  test("returns empty array when step is not positive in boolean mode", () => {
+  it("returns empty array when step is not positive in boolean mode", () => {
     expect(resolveSliderMarks(true, 0, 10, 0)).toEqual([]);
     expect(resolveSliderMarks(true, 0, 10, -1)).toEqual([]);
   });

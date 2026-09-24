@@ -218,7 +218,7 @@ afterEach(() => {
 });
 
 describe("createMenuWindow: the visible slice", () => {
-  test("renders every option, unwindowed, below the threshold", () => {
+  it("renders every option, unwindowed, below the threshold", () => {
     const { menu } = setup();
     const items = buildItems(99);
 
@@ -236,7 +236,7 @@ describe("createMenuWindow: the visible slice", () => {
     expect(state.totalHeight).toBe(99 * ITEM_HEIGHT);
   });
 
-  test("renders only the visible slice above the threshold", () => {
+  it("renders only the visible slice above the threshold", () => {
     const { menu } = setup();
     const items = buildItems(300);
 
@@ -258,7 +258,7 @@ describe("createMenuWindow: the visible slice", () => {
     );
   });
 
-  test("offsets the slice by the options scrolled past", () => {
+  it("offsets the slice by the options scrolled past", () => {
     const { menu } = setup();
 
     const state = menu.update({
@@ -272,7 +272,7 @@ describe("createMenuWindow: the visible slice", () => {
     expect(state.offsetY).toBe(state.startIndex * ITEM_HEIGHT);
   });
 
-  test("sizes options by the menu size and fluidity", () => {
+  it("sizes options by the menu size and fluidity", () => {
     const { menu } = setup();
     const items = buildItems(300);
 
@@ -298,7 +298,7 @@ describe("createMenuWindow: the visible slice", () => {
 });
 
 describe("createMenuWindow: the menu's maximum height", () => {
-  test("takes the size-based maximum when the list is not windowed", () => {
+  it("takes the size-based maximum when the list is not windowed", () => {
     const { menu } = setup();
 
     const state = menu.update({
@@ -312,7 +312,7 @@ describe("createMenuWindow: the menu's maximum height", () => {
     expect(state.menuMaxHeight).toBe("11rem");
   });
 
-  test("takes the windowed viewport once windowing is configured", () => {
+  it("takes the windowed viewport once windowing is configured", () => {
     const { menu } = setup();
 
     const state = menu.update({
@@ -326,7 +326,7 @@ describe("createMenuWindow: the menu's maximum height", () => {
     expect(state.menuMaxHeight).toBe("240px");
   });
 
-  test("reports a resolved configuration on a list too short to be windowed", () => {
+  it("reports a resolved configuration on a list too short to be windowed", () => {
     const { menu } = setup();
 
     const state = menu.update({
@@ -345,7 +345,7 @@ describe("createMenuWindow: the menu's maximum height", () => {
     expect(state.menuMaxHeight).toBe("240px");
   });
 
-  test("wrapping on its own resolves no windowing configuration", () => {
+  it("wrapping on its own resolves no windowing configuration", () => {
     const { menu } = setup();
 
     const state = menu.update({
@@ -366,7 +366,7 @@ describe("createMenuWindow: the menu's maximum height", () => {
     expect(state.menuMaxHeight).toBe("11rem");
   });
 
-  test("reports no configuration when the list is not windowed at all", () => {
+  it("reports no configuration when the list is not windowed at all", () => {
     const { menu } = setup();
 
     const state = menu.update({
@@ -382,7 +382,7 @@ describe("createMenuWindow: the menu's maximum height", () => {
 });
 
 describe("createMenuWindow: measured heights", () => {
-  test("re-enters the heights it measured without the caller carrying them", async () => {
+  it("re-enters the heights it measured without the caller carrying them", async () => {
     const observer = installManualResizeObserver();
     const { container, menu } = setup();
     const items = buildItems(300);
@@ -411,7 +411,7 @@ describe("createMenuWindow: measured heights", () => {
     expect(state.totalHeight).toBe(300 * MEASURED_HEIGHT);
   });
 
-  test("tells the caller when measurement moves what an update would return", async () => {
+  it("tells the caller when measurement moves what an update would return", async () => {
     const observer = installManualResizeObserver();
     const harness = setup();
     const items = buildItems(300);
@@ -436,7 +436,7 @@ describe("createMenuWindow: measured heights", () => {
     expect(state.totalHeight).toBe(300 * ITEM_HEIGHT);
   });
 
-  test("leaves offsets on the seed while the list is under the threshold", async () => {
+  it("leaves offsets on the seed while the list is under the threshold", async () => {
     const observer = installManualResizeObserver();
     const { container, menu } = setup();
     const items = buildItems(50);
@@ -467,7 +467,7 @@ describe("createMenuWindow: measured heights", () => {
     expect(next.totalHeight).toBe(50 * ITEM_HEIGHT);
   });
 
-  test("renders the list whole when nothing can be measured", async () => {
+  it("renders the list whole when nothing can be measured", async () => {
     // No `ResizeObserver` at all, and a layout engine that lays nothing out:
     // the one-shot fallback read measures every option at zero. Nothing can be
     // windowed against heights like those, and the list still renders.
@@ -497,7 +497,7 @@ describe("createMenuWindow: wrapping is the only thing that measures", () => {
     scrollTop: 0,
   } as const;
 
-  test("measures nothing when wrapping is off", () => {
+  it("measures nothing when wrapping is off", () => {
     const { menu } = setup();
 
     const state = menu.update({
@@ -509,7 +509,7 @@ describe("createMenuWindow: wrapping is the only thing that measures", () => {
     expect(state.isMeasured).toBe(false);
   });
 
-  test("measures when wrapping is on", () => {
+  it("measures when wrapping is on", () => {
     const { menu } = setup();
 
     const state = menu.update({
@@ -526,7 +526,7 @@ describe("createMenuWindow: wrapping is the only thing that measures", () => {
   // the `virtualize` shape the components document. A key that reached the
   // config anyway would be able to contradict the prop that is, in both
   // directions; neither of these two does anything.
-  test("ignores a measured key asking for it without wrapping", () => {
+  it("ignores a measured key asking for it without wrapping", () => {
     const { menu } = setup();
 
     const state = menu.update({
@@ -538,7 +538,7 @@ describe("createMenuWindow: wrapping is the only thing that measures", () => {
     expect(state.isMeasured).toBe(false);
   });
 
-  test("ignores a measured key contradicting wrapping", () => {
+  it("ignores a measured key contradicting wrapping", () => {
     const { menu } = setup();
 
     const state = menu.update({
@@ -551,7 +551,7 @@ describe("createMenuWindow: wrapping is the only thing that measures", () => {
     expect(state.isMeasured).toBe(true);
   });
 
-  test("a consumer who opted into neither pays for neither", () => {
+  it("a consumer who opted into neither pays for neither", () => {
     const observer = installManualResizeObserver();
     const getKey = vi.fn((item: Item) => item.id);
     const { container, menu } = setup();
@@ -572,7 +572,7 @@ describe("createMenuWindow: wrapping is the only thing that measures", () => {
 });
 
 describe("createMenuWindow: bringing an option into view", () => {
-  test("puts a top-aligned option at the top of a fixed-height menu", () => {
+  it("puts a top-aligned option at the top of a fixed-height menu", () => {
     const { container, menu, scrollTops } = setup();
 
     menu.update({
@@ -587,7 +587,7 @@ describe("createMenuWindow: bringing an option into view", () => {
     expect(scrollTops).toEqual([50 * ITEM_HEIGHT]);
   });
 
-  test("reports the position the container took, not the one asked for", () => {
+  it("reports the position the container took, not the one asked for", () => {
     const { container, menu, scrollTops, maxScroll } = setup({
       scrollHeight: 1000,
     });
@@ -607,7 +607,7 @@ describe("createMenuWindow: bringing an option into view", () => {
     expect(scrollTops).toEqual([maxScroll]);
   });
 
-  test("bounds a top-aligned request by the end of the list", () => {
+  it("bounds a top-aligned request by the end of the list", () => {
     const { container, menu } = setup();
 
     menu.update({
@@ -625,7 +625,7 @@ describe("createMenuWindow: bringing an option into view", () => {
     expect(container.scrollTop).toBe(300 * ITEM_HEIGHT - CONTAINER_HEIGHT);
   });
 
-  test("sends a measured menu to the top when there is nothing to show", () => {
+  it("sends a measured menu to the top when there is nothing to show", () => {
     const { container, menu } = setup();
 
     menu.update({
@@ -641,7 +641,7 @@ describe("createMenuWindow: bringing an option into view", () => {
     expect(container.scrollTop).toBe(0);
   });
 
-  test("sends a fixed-height menu to the top when there is nothing to show", () => {
+  it("sends a fixed-height menu to the top when there is nothing to show", () => {
     const { container, menu } = setup();
 
     menu.update({
@@ -656,7 +656,7 @@ describe("createMenuWindow: bringing an option into view", () => {
     expect(container.scrollTop).toBe(0);
   });
 
-  test("leaves a nearest option already on screen alone", () => {
+  it("leaves a nearest option already on screen alone", () => {
     const { container, menu, scrollTops } = setup();
 
     menu.update({
@@ -671,7 +671,7 @@ describe("createMenuWindow: bringing an option into view", () => {
     expect(scrollTops).toEqual([]);
   });
 
-  test("brings a nearest option off the window into a fixed-height menu", () => {
+  it("brings a nearest option off the window into a fixed-height menu", () => {
     const { container, menu } = setup();
 
     menu.update({
@@ -685,7 +685,7 @@ describe("createMenuWindow: bringing an option into view", () => {
     expect(container.scrollTop).toBe(80 * ITEM_HEIGHT);
   });
 
-  test("places a top-aligned option against the heights measured so far", async () => {
+  it("places a top-aligned option against the heights measured so far", async () => {
     const observer = installManualResizeObserver();
     const { container, menu } = setup();
     const items = buildItems(300);
@@ -712,7 +712,7 @@ describe("createMenuWindow: bringing an option into view", () => {
     expect(container.scrollTop).toBe(50 * MEASURED_HEIGHT);
   });
 
-  test("re-places a measured request as the heights sharpen", async () => {
+  it("re-places a measured request as the heights sharpen", async () => {
     const observer = installManualResizeObserver();
     const { container, menu } = setup();
     const items = buildItems(300);
@@ -748,7 +748,7 @@ describe("createMenuWindow: bringing an option into view", () => {
     expect(container.scrollTop).toBe(50 * MEASURED_HEIGHT);
   });
 
-  test("brings a nearest option into a measured menu, and only then", async () => {
+  it("brings a nearest option into a measured menu, and only then", async () => {
     const observer = installManualResizeObserver();
     const harness = setup();
     const items = buildItems(300);
@@ -773,7 +773,7 @@ describe("createMenuWindow: bringing an option into view", () => {
     expect(harness.container.scrollTop).not.toBe(50 * ITEM_HEIGHT);
   });
 
-  test("a reader's own scroll supersedes an outstanding request", async () => {
+  it("a reader's own scroll supersedes an outstanding request", async () => {
     const observer = installManualResizeObserver();
     const { container, menu } = setup();
     const items = buildItems(300);
@@ -806,7 +806,7 @@ describe("createMenuWindow: bringing an option into view", () => {
     expect(container.scrollTop).not.toBe(50 * MEASURED_HEIGHT);
   });
 
-  test("does nothing at all while the menu is not windowed", () => {
+  it("does nothing at all while the menu is not windowed", () => {
     const { container, menu, scrollTops } = setup();
 
     menu.update({
@@ -823,7 +823,7 @@ describe("createMenuWindow: bringing an option into view", () => {
 });
 
 describe("createMenuWindow: the collection the heights describe", () => {
-  test("keeps the measurements when a rebuild holds the same options", async () => {
+  it("keeps the measurements when a rebuild holds the same options", async () => {
     const observer = installManualResizeObserver();
     const harness = setup();
     const items = buildItems(300);
@@ -836,7 +836,7 @@ describe("createMenuWindow: the collection the heights describe", () => {
     expect(placeFifthOption(harness)).toBe(PLACED_ON_MEASURED);
   });
 
-  test("forgets the measurements when the collection holds other options", async () => {
+  it("forgets the measurements when the collection holds other options", async () => {
     const observer = installManualResizeObserver();
     const harness = setup();
 
@@ -850,7 +850,7 @@ describe("createMenuWindow: the collection the heights describe", () => {
     expect(placeFifthOption(harness)).toBeCloseTo(PLACED_ON_ESTIMATE, 6);
   });
 
-  test("identifies options by the supplied key across a rebuild", async () => {
+  it("identifies options by the supplied key across a rebuild", async () => {
     const observer = installManualResizeObserver();
     const harness = setup();
     const getKey = (item: Item) => item.id;
@@ -864,7 +864,7 @@ describe("createMenuWindow: the collection the heights describe", () => {
     expect(placeFifthOption(harness)).toBe(PLACED_ON_MEASURED);
   });
 
-  test("forgets when the keys themselves move", async () => {
+  it("forgets when the keys themselves move", async () => {
     const observer = installManualResizeObserver();
     const harness = setup();
     const getKey = (item: Item) => item.id;
@@ -877,7 +877,7 @@ describe("createMenuWindow: the collection the heights describe", () => {
     expect(placeFifthOption(harness)).toBeCloseTo(PLACED_ON_ESTIMATE, 6);
   });
 
-  test("a rebuilt collection with no key is told apart by the options themselves", async () => {
+  it("a rebuilt collection with no key is told apart by the options themselves", async () => {
     const observer = installManualResizeObserver();
     const harness = setup();
 
@@ -891,7 +891,7 @@ describe("createMenuWindow: the collection the heights describe", () => {
 });
 
 describe("createMenuWindow: closing and teardown", () => {
-  test("forgets the measurements on close but keeps the estimate", async () => {
+  it("forgets the measurements on close but keeps the estimate", async () => {
     const observer = installManualResizeObserver();
     const harness = setup();
     const items = buildItems(300);
@@ -908,7 +908,7 @@ describe("createMenuWindow: closing and teardown", () => {
     expect(placeFifthOption(harness)).toBeCloseTo(PLACED_ON_ESTIMATE, 6);
   });
 
-  test("withdrawing a request keeps the heights it was placed against", async () => {
+  it("withdrawing a request keeps the heights it was placed against", async () => {
     const observer = installManualResizeObserver();
     const harness = setup();
     const items = buildItems(300);
@@ -921,7 +921,7 @@ describe("createMenuWindow: closing and teardown", () => {
     expect(placeFifthOption(harness)).toBe(PLACED_ON_MEASURED);
   });
 
-  test("has nothing to say about an unmeasured list on close", () => {
+  it("has nothing to say about an unmeasured list on close", () => {
     const harness = setup();
     const items = buildItems(300);
 
@@ -935,7 +935,7 @@ describe("createMenuWindow: closing and teardown", () => {
     expect(update(harness, items).totalHeight).toBe(300 * ITEM_HEIGHT);
   });
 
-  test("a close that learns nothing new is not news for the caller", async () => {
+  it("a close that learns nothing new is not news for the caller", async () => {
     const observer = installManualResizeObserver();
     const harness = setup();
     const items = buildItems(300);
@@ -950,7 +950,7 @@ describe("createMenuWindow: closing and teardown", () => {
     expect(harness.changeCount).toBe(before);
   });
 
-  test("stops observing once torn down", async () => {
+  it("stops observing once torn down", async () => {
     const observer = installManualResizeObserver();
     const harness = setup();
     const items = buildItems(300);
@@ -1080,7 +1080,7 @@ describe("createMenuWindow: the measured scroll position", () => {
     return { container, menu, scrollTops, maxScroll, render };
   }
 
-  test("finishes a settled request by asking the DOM about the option itself", async () => {
+  it("finishes a settled request by asking the DOM about the option itself", async () => {
     // The option is mounted and the offsets agree with the arithmetic, but it
     // is eight times the assumed height and hangs past the viewport. Nothing
     // but its own rect can say so.
@@ -1101,7 +1101,7 @@ describe("createMenuWindow: the measured scroll position", () => {
     expect(container.scrollTop).toBe(100);
   });
 
-  test("a reader's move supersedes a request, reported or not", async () => {
+  it("a reader's move supersedes a request, reported or not", async () => {
     const observer = installManualResizeObserver();
     const { container, menu, render } = setupPlaced({
       optionHeights: { 2: 320 },
@@ -1124,7 +1124,7 @@ describe("createMenuWindow: the measured scroll position", () => {
     expect(container.scrollTop).toBe(4000);
   });
 
-  test("keeps a request through the scroll event its own write produced", async () => {
+  it("keeps a request through the scroll event its own write produced", async () => {
     installManualResizeObserver();
     const { container, menu, render } = setupPlaced({
       optionHeights: { 2: 320 },
@@ -1138,7 +1138,7 @@ describe("createMenuWindow: the measured scroll position", () => {
     expect(container.scrollTop).toBe(100);
   });
 
-  test("a withdrawn request is not placed later", async () => {
+  it("a withdrawn request is not placed later", async () => {
     installManualResizeObserver();
     const { container, menu, render } = setupPlaced({
       optionHeights: { 2: 320 },
@@ -1154,7 +1154,7 @@ describe("createMenuWindow: the measured scroll position", () => {
     expect(container.scrollTop).toBe(0);
   });
 
-  test("a close drops the request so nothing re-places the option", async () => {
+  it("a close drops the request so nothing re-places the option", async () => {
     installManualResizeObserver();
     const { container, menu, render } = setupPlaced({
       optionHeights: { 2: 320 },
@@ -1168,7 +1168,7 @@ describe("createMenuWindow: the measured scroll position", () => {
     expect(container.scrollTop).toBe(0);
   });
 
-  test("tearing down drops the request too", async () => {
+  it("tearing down drops the request too", async () => {
     installManualResizeObserver();
     const { container, menu, render } = setupPlaced({
       optionHeights: { 2: 320 },
@@ -1182,7 +1182,7 @@ describe("createMenuWindow: the measured scroll position", () => {
     expect(container.scrollTop).toBe(0);
   });
 
-  test("a changed collection drops the outstanding request", async () => {
+  it("a changed collection drops the outstanding request", async () => {
     installManualResizeObserver();
     const { container, menu, render } = setupPlaced({
       optionHeights: { 2: 320 },
@@ -1200,7 +1200,7 @@ describe("createMenuWindow: the measured scroll position", () => {
     expect(container.scrollTop).toBe(0);
   });
 
-  test("holds the reader's place when the options above them measure taller", async () => {
+  it("holds the reader's place when the options above them measure taller", async () => {
     const observer = installManualResizeObserver();
     const { container, menu, render } = setupPlaced({
       defaultHeight: MEASURED_HEIGHT,
@@ -1217,7 +1217,7 @@ describe("createMenuWindow: the measured scroll position", () => {
     expect(container.scrollTop).not.toBe(400);
   });
 
-  test("leaves the scroll position alone when the measurements are forgotten", async () => {
+  it("leaves the scroll position alone when the measurements are forgotten", async () => {
     const observer = installManualResizeObserver();
     const { container, menu, render } = setupPlaced({
       defaultHeight: MEASURED_HEIGHT,
@@ -1304,7 +1304,7 @@ describe("createMenuWindow: measured, below the threshold", () => {
     return harness;
   }
 
-  test("places a top-aligned option where the DOM has it", () => {
+  it("places a top-aligned option where the DOM has it", () => {
     const { container, menu } = setupUnwindowed();
 
     menu.scrollIntoView(5, "top");
@@ -1312,7 +1312,7 @@ describe("createMenuWindow: measured, below the threshold", () => {
     expect(container.scrollTop).toBe(5 * ITEM_HEIGHT);
   });
 
-  test("brings a nearest option off the window into view", () => {
+  it("brings a nearest option off the window into view", () => {
     const { container, menu } = setupUnwindowed();
 
     menu.scrollIntoView(20, "nearest");
@@ -1322,7 +1322,7 @@ describe("createMenuWindow: measured, below the threshold", () => {
     expect(container.scrollTop).toBe(21 * ITEM_HEIGHT - CONTAINER_HEIGHT);
   });
 
-  test("leaves a nearest option already on screen alone", () => {
+  it("leaves a nearest option already on screen alone", () => {
     const { container, menu, scrollTops } = setupUnwindowed();
 
     menu.scrollIntoView(2, "nearest");
@@ -1331,7 +1331,7 @@ describe("createMenuWindow: measured, below the threshold", () => {
     expect(scrollTops).toEqual([]);
   });
 
-  test("sends the menu to the top when there is nothing to show", () => {
+  it("sends the menu to the top when there is nothing to show", () => {
     const { container, menu } = setupUnwindowed();
     container.scrollTop = 400;
 
@@ -1340,7 +1340,7 @@ describe("createMenuWindow: measured, below the threshold", () => {
     expect(container.scrollTop).toBe(0);
   });
 
-  test("reports the position it took, so the caller's mirror keeps up", () => {
+  it("reports the position it took, so the caller's mirror keeps up", () => {
     const { menu, scrollTops } = setupUnwindowed();
 
     menu.scrollIntoView(5, "top");

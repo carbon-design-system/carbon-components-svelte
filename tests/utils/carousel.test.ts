@@ -12,7 +12,7 @@ function buildContainer(count: number) {
 }
 
 describe("initCarousel", () => {
-  test("shows only the first view on init", () => {
+  it("shows only the first view on init", () => {
     const container = buildContainer(3);
     initCarousel(container);
 
@@ -22,7 +22,7 @@ describe("initCarousel", () => {
     expect(views[2].hidden).toBe(true);
   });
 
-  test("next/prev move the active index and toggle visibility", () => {
+  it("next/prev move the active index and toggle visibility", () => {
     const container = buildContainer(3);
     const carousel = initCarousel(container);
     const views = Array.from(container.children) as HTMLElement[];
@@ -37,7 +37,7 @@ describe("initCarousel", () => {
     expect(views[0].hidden).toBe(false);
   });
 
-  test("clamps at the ends instead of wrapping", () => {
+  it("clamps at the ends instead of wrapping", () => {
     const container = buildContainer(2);
     const carousel = initCarousel(container);
 
@@ -49,7 +49,7 @@ describe("initCarousel", () => {
     expect(carousel.getActiveItem().index).toBe(1);
   });
 
-  test("goToIndex clamps out-of-range targets", () => {
+  it("goToIndex clamps out-of-range targets", () => {
     const container = buildContainer(3);
     const carousel = initCarousel(container);
 
@@ -60,7 +60,7 @@ describe("initCarousel", () => {
     expect(carousel.getActiveItem().index).toBe(0);
   });
 
-  test("reset returns to the first view", () => {
+  it("reset returns to the first view", () => {
     const container = buildContainer(3);
     const carousel = initCarousel(container);
 
@@ -69,7 +69,7 @@ describe("initCarousel", () => {
     expect(carousel.getActiveItem().index).toBe(0);
   });
 
-  test("fires onViewChangeStart/onViewChangeEnd only when the index actually changes", () => {
+  it("fires onViewChangeStart/onViewChangeEnd only when the index actually changes", () => {
     const container = buildContainer(3);
     const onViewChangeStart = vi.fn();
     const onViewChangeEnd = vi.fn();
@@ -95,7 +95,7 @@ describe("initCarousel", () => {
     });
   });
 
-  test("rapid step-advance calls resolve to the final index synchronously", () => {
+  it("rapid step-advance calls resolve to the final index synchronously", () => {
     const container = buildContainer(5);
     const carousel = initCarousel(container);
 
@@ -106,7 +106,7 @@ describe("initCarousel", () => {
     expect(carousel.getActiveItem().index).toBe(3);
   });
 
-  test("single view: next/prev are no-ops", () => {
+  it("single view: next/prev are no-ops", () => {
     const container = buildContainer(1);
     const carousel = initCarousel(container);
 
@@ -115,7 +115,7 @@ describe("initCarousel", () => {
     expect(carousel.getActiveItem().index).toBe(0);
   });
 
-  test("zero views: navigation and getActiveItem stay safe", () => {
+  it("zero views: navigation and getActiveItem stay safe", () => {
     const container = buildContainer(0);
     const carousel = initCarousel(container);
 
@@ -125,7 +125,7 @@ describe("initCarousel", () => {
     expect(carousel.getActiveItem()).toEqual({ index: -1, item: null });
   });
 
-  test("destroyEvents unhides every view", () => {
+  it("destroyEvents unhides every view", () => {
     const container = buildContainer(3);
     const carousel = initCarousel(container);
     const views = Array.from(container.children) as HTMLElement[];
@@ -136,7 +136,7 @@ describe("initCarousel", () => {
     expect(views.every((view) => !view.hidden)).toBe(true);
   });
 
-  test("useMaxHeight reads every height after all views are made measurable", () => {
+  it("useMaxHeight reads every height after all views are made measurable", () => {
     const container = buildContainer(3);
     const views = Array.from(container.children) as HTMLElement[];
     const heights = [30, 80, 50];

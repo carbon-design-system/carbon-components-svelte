@@ -9,7 +9,7 @@ describe("subscribeRelativeTimeTick", () => {
     vi.useRealTimers();
   });
 
-  test("shares one timer across subscribers at the same cadence", () => {
+  it("shares one timer across subscribers at the same cadence", () => {
     const a = vi.fn();
     const b = vi.fn();
 
@@ -29,7 +29,7 @@ describe("subscribeRelativeTimeTick", () => {
     expect(vi.getTimerCount()).toBe(0);
   });
 
-  test("keeps distinct cadences on separate timers", () => {
+  it("keeps distinct cadences on separate timers", () => {
     const second = vi.fn();
     const minute = vi.fn();
 

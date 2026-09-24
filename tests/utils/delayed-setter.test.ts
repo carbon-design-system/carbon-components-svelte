@@ -9,21 +9,21 @@ describe("createDelayedSetter", () => {
     vi.useRealTimers();
   });
 
-  test("runs fn synchronously when delay is 0", () => {
+  it("runs fn synchronously when delay is 0", () => {
     const schedule = createDelayedSetter();
     const fn = vi.fn();
     schedule(0, fn);
     expect(fn).toHaveBeenCalledTimes(1);
   });
 
-  test("runs fn synchronously when delay is negative", () => {
+  it("runs fn synchronously when delay is negative", () => {
     const schedule = createDelayedSetter();
     const fn = vi.fn();
     schedule(-1, fn);
     expect(fn).toHaveBeenCalledTimes(1);
   });
 
-  test("delays fn until the given delay elapses", () => {
+  it("delays fn until the given delay elapses", () => {
     const schedule = createDelayedSetter();
     const fn = vi.fn();
     schedule(100, fn);
@@ -34,7 +34,7 @@ describe("createDelayedSetter", () => {
     expect(fn).toHaveBeenCalledTimes(1);
   });
 
-  test("a later call cancels an earlier pending call", () => {
+  it("a later call cancels an earlier pending call", () => {
     const schedule = createDelayedSetter();
     const first = vi.fn();
     const second = vi.fn();
@@ -45,7 +45,7 @@ describe("createDelayedSetter", () => {
     expect(second).toHaveBeenCalledTimes(1);
   });
 
-  test("cancel() prevents a pending call from running", () => {
+  it("cancel() prevents a pending call from running", () => {
     const schedule = createDelayedSetter();
     const fn = vi.fn();
     schedule(100, fn);

@@ -11,7 +11,7 @@ const net = (
   remove.mock.calls.filter((c: unknown[]) => c[0] === type).length;
 
 describe("Slider window listeners", () => {
-  test("idle sliders register no drag listeners", () => {
+  it("idle sliders register no drag listeners", () => {
     const add = vi.spyOn(window, "addEventListener");
     const remove = vi.spyOn(window, "removeEventListener");
 
@@ -25,7 +25,7 @@ describe("Slider window listeners", () => {
     remove.mockRestore();
   });
 
-  test("a drag adds exactly one shared listener per type; releasing removes it", async () => {
+  it("a drag adds exactly one shared listener per type; releasing removes it", async () => {
     const add = vi.spyOn(window, "addEventListener");
     const remove = vi.spyOn(window, "removeEventListener");
 
@@ -65,7 +65,7 @@ describe("Slider window listeners", () => {
     remove.mockRestore();
   });
 
-  test("move listeners stay passive (scrolling is never blocked)", async () => {
+  it("move listeners stay passive (scrolling is never blocked)", async () => {
     const add = vi.spyOn(window, "addEventListener");
 
     const { container } = render(Slider);

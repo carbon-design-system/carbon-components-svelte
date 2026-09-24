@@ -2,7 +2,7 @@ import { render } from "@testing-library/svelte";
 import DataTableExpandableDuplicateIds from "./DataTableExpandableDuplicateIds.test.svelte";
 
 describe("DataTableExpandableDuplicateIds", () => {
-  test("scopes expandable-row ids per instance so they stay globally unique", () => {
+  it("scopes expandable-row ids per instance so they stay globally unique", () => {
     const { container } = render(DataTableExpandableDuplicateIds);
 
     const expandableRows = container.querySelectorAll<HTMLTableRowElement>(
@@ -15,7 +15,7 @@ describe("DataTableExpandableDuplicateIds", () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 
-  test("each per-row expand button's aria-controls resolves within the same table instance", () => {
+  it("each per-row expand button's aria-controls resolves within the same table instance", () => {
     const { container } = render(DataTableExpandableDuplicateIds);
 
     const tables = container.querySelectorAll("table");

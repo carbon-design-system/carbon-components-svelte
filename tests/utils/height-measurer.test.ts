@@ -108,7 +108,7 @@ describe("createHeightMeasurer", () => {
     document.body.innerHTML = "";
   });
 
-  test("reports each measured height against the item it renders", async () => {
+  it("reports each measured height against the item it renders", async () => {
     const resize = installResizeObserver();
     const onMeasure = vi.fn();
     const measurer = createHeightMeasurer({ onMeasure });
@@ -132,7 +132,7 @@ describe("createHeightMeasurer", () => {
     expect(previousHeights).toHaveLength(0);
   });
 
-  test("reports nothing from inside the observer's own callback", async () => {
+  it("reports nothing from inside the observer's own callback", async () => {
     const resize = installResizeObserver();
     const onMeasure = vi.fn();
     const measurer = createHeightMeasurer({ onMeasure });
@@ -154,7 +154,7 @@ describe("createHeightMeasurer", () => {
     expect(onMeasure.mock.calls[0][0][0]).toBe(40);
   });
 
-  test("reports the batches of one frame as a single measurement", async () => {
+  it("reports the batches of one frame as a single measurement", async () => {
     const resize = installResizeObserver();
     const onMeasure = vi.fn();
     const measurer = createHeightMeasurer({ onMeasure });
@@ -182,7 +182,7 @@ describe("createHeightMeasurer", () => {
     expect(heights[1]).toBe(88);
   });
 
-  test("drops a batch the frame has not reported when heights are forgotten", async () => {
+  it("drops a batch the frame has not reported when heights are forgotten", async () => {
     const resize = installResizeObserver();
     const onMeasure = vi.fn();
     const measurer = createHeightMeasurer({ onMeasure });
@@ -201,7 +201,7 @@ describe("createHeightMeasurer", () => {
     expect(onMeasure).not.toHaveBeenCalled();
   });
 
-  test("treats a height of zero as measured", async () => {
+  it("treats a height of zero as measured", async () => {
     const resize = installResizeObserver();
     const onMeasure = vi.fn();
     const measurer = createHeightMeasurer({ onMeasure });
@@ -214,7 +214,7 @@ describe("createHeightMeasurer", () => {
     expect(onMeasure.mock.calls[0][0][0]).toBe(0);
   });
 
-  test("reports nothing when the delivered heights are unchanged", async () => {
+  it("reports nothing when the delivered heights are unchanged", async () => {
     const resize = installResizeObserver();
     const onMeasure = vi.fn();
     const measurer = createHeightMeasurer({ onMeasure });
@@ -234,7 +234,7 @@ describe("createHeightMeasurer", () => {
     expect(onMeasure).toHaveBeenCalledTimes(1);
   });
 
-  test("keeps heights measured earlier when a later batch changes one", async () => {
+  it("keeps heights measured earlier when a later batch changes one", async () => {
     const resize = installResizeObserver();
     const onMeasure = vi.fn();
     const measurer = createHeightMeasurer({ onMeasure });
@@ -254,7 +254,7 @@ describe("createHeightMeasurer", () => {
     expect(previousHeights[1]).toBe(80);
   });
 
-  test("ignores a height reported for an element that has left the DOM", async () => {
+  it("ignores a height reported for an element that has left the DOM", async () => {
     const resize = installResizeObserver();
     const onMeasure = vi.fn();
     const measurer = createHeightMeasurer({ onMeasure });
@@ -276,7 +276,7 @@ describe("createHeightMeasurer", () => {
     expect(onMeasure).toHaveBeenCalledTimes(1);
   });
 
-  test("ignores a height reported after the element stopped being observed", async () => {
+  it("ignores a height reported after the element stopped being observed", async () => {
     const resize = installResizeObserver();
     const onMeasure = vi.fn();
     const measurer = createHeightMeasurer({ onMeasure });
@@ -290,7 +290,7 @@ describe("createHeightMeasurer", () => {
     expect(onMeasure).not.toHaveBeenCalled();
   });
 
-  test("ignores elements carrying no usable index", async () => {
+  it("ignores elements carrying no usable index", async () => {
     const resize = installResizeObserver();
     const onMeasure = vi.fn();
     const measurer = createHeightMeasurer({ onMeasure });
@@ -314,7 +314,7 @@ describe("createHeightMeasurer", () => {
     expect(onMeasure).not.toHaveBeenCalled();
   });
 
-  test("observes only the options currently in the rendered window", () => {
+  it("observes only the options currently in the rendered window", () => {
     const resize = installResizeObserver();
     const measurer = createHeightMeasurer({ onMeasure: vi.fn() });
     const container = buildWindow([0, 1, 2]);
@@ -338,7 +338,7 @@ describe("createHeightMeasurer", () => {
     expect(resize.instanceCount).toBe(1);
   });
 
-  test("stops observing when the window goes away", () => {
+  it("stops observing when the window goes away", () => {
     const resize = installResizeObserver();
     const measurer = createHeightMeasurer({ onMeasure: vi.fn() });
     const container = buildWindow([0, 1]);
@@ -351,7 +351,7 @@ describe("createHeightMeasurer", () => {
     expect(resize.observed.size).toBe(0);
   });
 
-  test("clear reports an empty set of heights exactly once", async () => {
+  it("clear reports an empty set of heights exactly once", async () => {
     const resize = installResizeObserver();
     const onMeasure = vi.fn();
     const measurer = createHeightMeasurer({ onMeasure });
@@ -369,7 +369,7 @@ describe("createHeightMeasurer", () => {
     expect(onMeasure).toHaveBeenCalledTimes(2);
   });
 
-  test("stops observing when cleared, so the next sync measures again", () => {
+  it("stops observing when cleared, so the next sync measures again", () => {
     const resize = installResizeObserver();
     const measurer = createHeightMeasurer({ onMeasure: vi.fn() });
     const container = buildWindow([0, 1]);
@@ -390,7 +390,7 @@ describe("createHeightMeasurer", () => {
     expect(resize.instanceCount).toBe(1);
   });
 
-  test("disconnect stops further reports", async () => {
+  it("disconnect stops further reports", async () => {
     const resize = installResizeObserver();
     const onMeasure = vi.fn();
     const measurer = createHeightMeasurer({ onMeasure });
@@ -403,7 +403,7 @@ describe("createHeightMeasurer", () => {
     expect(onMeasure).not.toHaveBeenCalled();
   });
 
-  test("falls back to a one-shot height read with no ResizeObserver", () => {
+  it("falls back to a one-shot height read with no ResizeObserver", () => {
     vi.stubGlobal("ResizeObserver", undefined);
     const onMeasure = vi.fn();
     const measurer = createHeightMeasurer({ onMeasure });

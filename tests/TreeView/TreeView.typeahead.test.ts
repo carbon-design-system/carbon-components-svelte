@@ -4,7 +4,7 @@ import TreeView from "./TreeView.typeahead.test.svelte";
 
 function treeItemById(id: string | number): HTMLElement {
   const el = document.getElementById(String(id));
-  expect.assert(el instanceof HTMLElement);
+  assert(el instanceof HTMLElement);
   return el;
 }
 

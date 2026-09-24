@@ -48,33 +48,33 @@ afterEach(() => {
 });
 
 describe("rovingFocus", () => {
-  test("ArrowRight moves to the next index", () => {
+  it("ArrowRight moves to the next index", () => {
     const { items, onMove } = setup(3);
     keydown(items[0], "ArrowRight");
     expect(onMove).toHaveBeenCalledWith(1, expect.any(KeyboardEvent));
   });
 
-  test("ArrowLeft wraps from the first item to the last", () => {
+  it("ArrowLeft wraps from the first item to the last", () => {
     const { items, onMove } = setup(3);
     keydown(items[0], "ArrowLeft");
     expect(onMove).toHaveBeenCalledWith(2, expect.any(KeyboardEvent));
   });
 
-  test("ArrowRight wraps from the last item to the first", () => {
+  it("ArrowRight wraps from the last item to the first", () => {
     const { items, onMove, setActive } = setup(3);
     setActive(2);
     keydown(items[2], "ArrowRight");
     expect(onMove).toHaveBeenCalledWith(0, expect.any(KeyboardEvent));
   });
 
-  test("horizontal orientation ignores ArrowUp/ArrowDown", () => {
+  it("horizontal orientation ignores ArrowUp/ArrowDown", () => {
     const { items, onMove } = setup(3);
     keydown(items[0], "ArrowDown");
     keydown(items[0], "ArrowUp");
     expect(onMove).not.toHaveBeenCalled();
   });
 
-  test("vertical orientation uses ArrowDown/ArrowUp, not Left/Right", () => {
+  it("vertical orientation uses ArrowDown/ArrowUp, not Left/Right", () => {
     const { items, onMove } = setup(3, { orientation: "vertical" });
     keydown(items[0], "ArrowDown");
     expect(onMove).toHaveBeenCalledWith(1, expect.any(KeyboardEvent));
@@ -84,14 +84,14 @@ describe("rovingFocus", () => {
     expect(onMove).not.toHaveBeenCalled();
   });
 
-  test("both orientation handles all four arrow keys", () => {
+  it("both orientation handles all four arrow keys", () => {
     const { items, onMove } = setup(3, { orientation: "both" });
     keydown(items[0], "ArrowRight");
     keydown(items[0], "ArrowDown");
     expect(onMove).toHaveBeenCalledTimes(2);
   });
 
-  test("Home jumps to the first item and calls preventDefault", () => {
+  it("Home jumps to the first item and calls preventDefault", () => {
     const { items, onMove, setActive } = setup(3);
     setActive(2);
     const { preventDefault } = keydown(items[2], "Home");
@@ -99,34 +99,34 @@ describe("rovingFocus", () => {
     expect(preventDefault).toHaveBeenCalledOnce();
   });
 
-  test("End jumps to the last item and calls preventDefault", () => {
+  it("End jumps to the last item and calls preventDefault", () => {
     const { items, onMove } = setup(3);
     const { preventDefault } = keydown(items[0], "End");
     expect(onMove).toHaveBeenCalledWith(2, expect.any(KeyboardEvent));
     expect(preventDefault).toHaveBeenCalledOnce();
   });
 
-  test("arrow keys do not call preventDefault", () => {
+  it("arrow keys do not call preventDefault", () => {
     const { items } = setup(3);
     const { preventDefault } = keydown(items[0], "ArrowRight");
     expect(preventDefault).not.toHaveBeenCalled();
   });
 
-  test("skipDisabled skips disabled items", () => {
+  it("skipDisabled skips disabled items", () => {
     const { items, onMove } = setup(3, { skipDisabled: true });
     items[1].disabled = true;
     keydown(items[0], "ArrowRight");
     expect(onMove).toHaveBeenCalledWith(2, expect.any(KeyboardEvent));
   });
 
-  test("without skipDisabled, navigation lands on a disabled item", () => {
+  it("without skipDisabled, navigation lands on a disabled item", () => {
     const { items, onMove } = setup(3);
     items[1].disabled = true;
     keydown(items[0], "ArrowRight");
     expect(onMove).toHaveBeenCalledWith(1, expect.any(KeyboardEvent));
   });
 
-  test("ignores keydown outside the selector", () => {
+  it("ignores keydown outside the selector", () => {
     const { container, onMove } = setup(3);
     const stray = document.createElement("input");
     container.appendChild(stray);
@@ -134,26 +134,26 @@ describe("rovingFocus", () => {
     expect(onMove).not.toHaveBeenCalled();
   });
 
-  test("ArrowRight on the container moves to the next index", () => {
+  it("ArrowRight on the container moves to the next index", () => {
     const { container, onMove } = setup(3);
     keydown(container, "ArrowRight");
     expect(onMove).toHaveBeenCalledWith(1, expect.any(KeyboardEvent));
   });
 
-  test("wrap: false clamps at the ends instead of wrapping", () => {
+  it("wrap: false clamps at the ends instead of wrapping", () => {
     const { items, onMove, setActive } = setup(3, { wrap: false });
     setActive(2);
     keydown(items[2], "ArrowRight");
     expect(onMove).toHaveBeenCalledWith(2, expect.any(KeyboardEvent));
   });
 
-  test("focusOnMove focuses the resolved item", () => {
+  it("focusOnMove focuses the resolved item", () => {
     const { items } = setup(3, { focusOnMove: true });
     keydown(items[0], "ArrowRight");
     expect(document.activeElement).toBe(items[1]);
   });
 
-  test("getItems sets the item list and count", () => {
+  it("getItems sets the item list and count", () => {
     const { items, onMove, setActive } = setup(4, {
       getItems: () => {
         const all = Array.from(
@@ -167,7 +167,7 @@ describe("rovingFocus", () => {
     expect(onMove).toHaveBeenCalledWith(0, expect.any(KeyboardEvent));
   });
 
-  test("destroy removes the keydown listener", () => {
+  it("destroy removes the keydown listener", () => {
     const { items, onMove, action } = setup(3);
     action.destroy();
     keydown(items[0], "ArrowRight");

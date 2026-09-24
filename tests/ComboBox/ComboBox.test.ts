@@ -657,7 +657,7 @@ describe("ComboBox", () => {
     expect(getInput()).toHaveClass("bx--text-input--light");
   });
 
-  test.each([
+  it.each([
     ["sm", "bx--list-box--sm"],
     ["xl", "bx--list-box--xl"],
   ] as const)("should handle size variants", (size, className) => {

@@ -5,18 +5,18 @@ import {
 } from "../../src/utils/storage.js";
 
 describe("parseStoredValue", () => {
-  test("parses valid JSON objects and arrays", () => {
+  it("parses valid JSON objects and arrays", () => {
     expect(parseStoredValue('{"a":1}')).toEqual({ a: 1 });
     expect(parseStoredValue("[1,2,3]")).toEqual([1, 2, 3]);
   });
 
-  test("parses JSON primitives back to their type", () => {
+  it("parses JSON primitives back to their type", () => {
     expect(parseStoredValue("5")).toBe(5);
     expect(parseStoredValue("true")).toBe(true);
     expect(parseStoredValue("null")).toBe(null);
   });
 
-  test("returns the raw string when JSON.parse fails", () => {
+  it("returns the raw string when JSON.parse fails", () => {
     expect(parseStoredValue("hello")).toBe("hello");
     expect(parseStoredValue("{not json")).toBe("{not json");
     expect(parseStoredValue("")).toBe("");
@@ -24,16 +24,16 @@ describe("parseStoredValue", () => {
 });
 
 describe("serializeStoredValue", () => {
-  test("JSON-stringifies objects and arrays", () => {
+  it("JSON-stringifies objects and arrays", () => {
     expect(serializeStoredValue({ a: 1 })).toBe('{"a":1}');
     expect(serializeStoredValue([1, 2, 3])).toBe("[1,2,3]");
   });
 
-  test("stringifies null (typeof null === 'object')", () => {
+  it("stringifies null (typeof null === 'object')", () => {
     expect(serializeStoredValue(null)).toBe("null");
   });
 
-  test("coerces non-object primitives to string", () => {
+  it("coerces non-object primitives to string", () => {
     expect(serializeStoredValue(5)).toBe("5");
     expect(serializeStoredValue(true)).toBe("true");
     expect(serializeStoredValue("hello")).toBe("hello");
@@ -42,7 +42,7 @@ describe("serializeStoredValue", () => {
 });
 
 describe("parse/serialize round-trip", () => {
-  test("parse(serialize(value)) equals value", () => {
+  it("parse(serialize(value)) equals value", () => {
     for (const value of [5, true, "raw string", { a: 1, b: [2] }, [1, 2]]) {
       expect(parseStoredValue(serializeStoredValue(value))).toEqual(value);
     }
@@ -56,7 +56,7 @@ describe("safeBrowserStorage (working storage)", () => {
     sessionStorage.clear();
   });
 
-  test("getItem/setItem/removeItem/clear delegate to the real store", () => {
+  it("getItem/setItem/removeItem/clear delegate to the real store", () => {
     const storage = safeBrowserStorage("localStorage");
 
     expect(storage.getItem("k")).toBe(null);
@@ -72,7 +72,7 @@ describe("safeBrowserStorage (working storage)", () => {
     expect(localStorage.getItem("a")).toBe(null);
   });
 
-  test("targets sessionStorage when requested", () => {
+  it("targets sessionStorage when requested", () => {
     const storage = safeBrowserStorage("sessionStorage");
     expect(storage.setItem("s", "v")).toBe(true);
     expect(sessionStorage.getItem("s")).toBe("v");
@@ -83,7 +83,7 @@ describe("safeBrowserStorage (working storage)", () => {
 describe("safeBrowserStorage (write throws)", () => {
   afterEach(() => vi.restoreAllMocks());
 
-  test("setItem returns false when the underlying store throws", () => {
+  it("setItem returns false when the underlying store throws", () => {
     vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
       throw new DOMException("QuotaExceededError");
     });
@@ -93,7 +93,7 @@ describe("safeBrowserStorage (write throws)", () => {
 });
 
 describe("safeBrowserStorage (no window)", () => {
-  test("getItem and setItem do not throw when window is undefined", () => {
+  it("getItem and setItem do not throw when window is undefined", () => {
     const originalWindow = globalThis.window;
     vi.stubGlobal("window", undefined);
 
@@ -112,7 +112,7 @@ describe("safeBrowserStorage (no window)", () => {
 describe("safeBrowserStorage (storage blocked)", () => {
   afterEach(() => vi.restoreAllMocks());
 
-  test("returns null and false when window.localStorage getter throws", () => {
+  it("returns null and false when window.localStorage getter throws", () => {
     const original = Object.getOwnPropertyDescriptor(window, "localStorage");
     Object.defineProperty(window, "localStorage", {
       configurable: true,
@@ -134,7 +134,7 @@ describe("safeBrowserStorage (storage blocked)", () => {
     }
   });
 
-  test("getItem returns null when the store's getItem throws", () => {
+  it("getItem returns null when the store's getItem throws", () => {
     vi.spyOn(Storage.prototype, "getItem").mockImplementation(() => {
       throw new Error("read failed");
     });

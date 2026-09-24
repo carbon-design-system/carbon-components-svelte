@@ -107,7 +107,7 @@ describe("OrderedList", () => {
       expect(mock).toHaveBeenCalled();
     });
 
-    test.each([
+    it.each([
       ["mouseover", "onmouseover"],
       ["mouseenter", "onmouseenter"],
       ["mouseleave", "onmouseleave"],

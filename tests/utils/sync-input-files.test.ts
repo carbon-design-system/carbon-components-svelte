@@ -9,7 +9,7 @@ describe("syncInputFiles", () => {
   const names = (input: HTMLInputElement) =>
     Array.from(input.files as FileList).map((file) => file.name);
 
-  test("sets the input's files", () => {
+  it("sets the input's files", () => {
     const input = fileInput();
 
     syncInputFiles(input, [new File(["a"], "a.txt"), new File(["b"], "b.txt")]);
@@ -17,7 +17,7 @@ describe("syncInputFiles", () => {
     expect(names(input)).toEqual(["a.txt", "b.txt"]);
   });
 
-  test("clears the input for an empty list", () => {
+  it("clears the input for an empty list", () => {
     const input = fileInput();
     syncInputFiles(input, [new File(["a"], "a.txt")]);
 

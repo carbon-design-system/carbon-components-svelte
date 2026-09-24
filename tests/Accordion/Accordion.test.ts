@@ -334,7 +334,7 @@ describe("Accordion", () => {
     );
   });
 
-  test.each([
+  it.each([
     ["sm", "bx--accordion--sm"],
     ["xl", "bx--accordion--xl"],
   ] as const)("should support %s size", (size, expectedClass) => {

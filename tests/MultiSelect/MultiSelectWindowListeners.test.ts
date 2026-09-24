@@ -11,7 +11,7 @@ const net = (
   remove.mock.calls.filter((c: unknown[]) => c[0] === type).length;
 
 describe("MultiSelect window listeners", () => {
-  test("closed MultiSelects register no window click/focusin listeners", () => {
+  it("closed MultiSelects register no window click/focusin listeners", () => {
     const add = vi.spyOn(window, "addEventListener");
     const remove = vi.spyOn(window, "removeEventListener");
 
@@ -26,7 +26,7 @@ describe("MultiSelect window listeners", () => {
     remove.mockRestore();
   });
 
-  test("an open MultiSelect registers one click and one focusin listener", async () => {
+  it("an open MultiSelect registers one click and one focusin listener", async () => {
     const add = vi.spyOn(window, "addEventListener");
     const remove = vi.spyOn(window, "removeEventListener");
 

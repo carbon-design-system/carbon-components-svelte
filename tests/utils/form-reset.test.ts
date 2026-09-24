@@ -20,7 +20,7 @@ describe("formReset action", () => {
     document.body.innerHTML = "";
   });
 
-  test("calls back on the next task, after the form restores its controls", async () => {
+  it("calls back on the next task, after the form restores its controls", async () => {
     const seen: string[] = [];
     const action = formReset(input, () => seen.push(input.value));
 
@@ -34,7 +34,7 @@ describe("formReset action", () => {
     action.destroy();
   });
 
-  test("ignores another form's reset", async () => {
+  it("ignores another form's reset", async () => {
     const onReset = vi.fn();
     const action = formReset(input, onReset);
 
@@ -45,7 +45,7 @@ describe("formReset action", () => {
     action.destroy();
   });
 
-  test("skips a canceled reset", async () => {
+  it("skips a canceled reset", async () => {
     const onReset = vi.fn();
     const action = formReset(input, onReset);
     form.addEventListener("reset", (event) => event.preventDefault());
@@ -57,7 +57,7 @@ describe("formReset action", () => {
     action.destroy();
   });
 
-  test("follows the form attribute", async () => {
+  it("follows the form attribute", async () => {
     const onReset = vi.fn();
     const outside = document.getElementById("outside") as HTMLInputElement;
     const action = formReset(outside, onReset);
@@ -69,7 +69,7 @@ describe("formReset action", () => {
     action.destroy();
   });
 
-  test("never calls back for a control without a form", async () => {
+  it("never calls back for a control without a form", async () => {
     const onReset = vi.fn();
     const orphan = document.getElementById("orphan") as HTMLInputElement;
     const action = formReset(orphan, onReset);
@@ -81,7 +81,7 @@ describe("formReset action", () => {
     action.destroy();
   });
 
-  test("works on a fieldset", async () => {
+  it("works on a fieldset", async () => {
     const onReset = vi.fn();
     const fieldset = document.getElementById("fs") as HTMLFieldSetElement;
     const action = formReset(fieldset, onReset);
@@ -93,7 +93,7 @@ describe("formReset action", () => {
     action.destroy();
   });
 
-  test("does not call back after destroy", async () => {
+  it("does not call back after destroy", async () => {
     const onReset = vi.fn();
     const action = formReset(input, onReset);
 
@@ -107,7 +107,7 @@ describe("formReset action", () => {
     expect(onReset).not.toHaveBeenCalled();
   });
 
-  test("calls the latest callback after update", async () => {
+  it("calls the latest callback after update", async () => {
     const first = vi.fn();
     const next = vi.fn();
     const action = formReset(input, first);
@@ -121,7 +121,7 @@ describe("formReset action", () => {
     action.destroy();
   });
 
-  test("shares one window listener across consumers", async () => {
+  it("shares one window listener across consumers", async () => {
     const addSpy = vi.spyOn(window, "addEventListener");
     const removeSpy = vi.spyOn(window, "removeEventListener");
     const first = vi.fn();

@@ -26,9 +26,9 @@ describe("TreeView toggle:change", () => {
     render(TreeViewExpandedChange, { onToggleChange, onToggle });
 
     const analytics = document.getElementById("1");
-    expect.assert(analytics instanceof HTMLElement);
+    assert(analytics instanceof HTMLElement);
     const toggle = analytics.querySelector(".bx--tree-parent-node__toggle");
-    expect.assert(toggle instanceof HTMLElement);
+    assert(toggle instanceof HTMLElement);
 
     await user.click(toggle);
     await waitFor(() => expect(onToggleChange).toHaveBeenCalledTimes(1));

@@ -5,7 +5,7 @@ import TruncateAction from "./TruncateAction.test.svelte";
 
 describe("Truncate", () => {
   describe("component", () => {
-    test.each([
+    it.each([
       ["end", "bx--text-truncate--end"],
       ["front", "bx--text-truncate--front"],
     ] as const)("should support %s clamp", (clamp, expectedClass) => {
@@ -55,7 +55,7 @@ describe("Truncate", () => {
   });
 
   describe("action", () => {
-    test.each([
+    it.each([
       ["end", "bx--text-truncate--end"],
       ["front", "bx--text-truncate--front"],
     ] as const)("should support %s clamp", (clamp, expectedClass) => {
@@ -65,7 +65,7 @@ describe("Truncate", () => {
       expect(element).toHaveClass(expectedClass);
     });
 
-    test.each([
+    it.each([
       ["h1", "H1"],
       ["h2", "H2"],
       ["h3", "H3"],

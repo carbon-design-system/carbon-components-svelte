@@ -198,7 +198,7 @@ describe("TooltipIcon", () => {
   });
 
   describe("tooltip positioning", () => {
-    test.each([
+    it.each([
       ["top", "bx--tooltip--top"],
       ["right", "bx--tooltip--right"],
       ["bottom", "bx--tooltip--bottom"],
@@ -212,7 +212,7 @@ describe("TooltipIcon", () => {
       expect(trigger).toHaveClass(expectedClass);
     });
 
-    test.each([
+    it.each([
       ["start", "bx--tooltip--align-start"],
       ["center", "bx--tooltip--align-center"],
       ["end", "bx--tooltip--align-end"],
@@ -284,7 +284,7 @@ describe("TooltipIcon", () => {
       expect(icon).toHaveAttribute("height", "16");
     });
 
-    test.each([
+    it.each([
       [16, "16"],
       [20, "20"],
       [24, "24"],

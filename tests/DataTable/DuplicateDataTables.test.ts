@@ -2,7 +2,7 @@ import { fireEvent, render } from "@testing-library/svelte";
 import DuplicateDataTables from "./DuplicateDataTables.test.svelte";
 
 describe("DuplicateDataTables", () => {
-  test("should allow independent radio selection in duplicate tables", async () => {
+  it("should allow independent radio selection in duplicate tables", async () => {
     const { container } = render(DuplicateDataTables);
 
     // Get all radio tables
@@ -26,7 +26,7 @@ describe("DuplicateDataTables", () => {
     expect(radioTables[3]).toBeChecked();
   });
 
-  test("should allow independent checkbox selection in duplicate tables", async () => {
+  it("should allow independent checkbox selection in duplicate tables", async () => {
     const { container } = render(DuplicateDataTables);
 
     // Get all checkbox tables
@@ -50,7 +50,7 @@ describe("DuplicateDataTables", () => {
     expect(checkboxTables[3]).toBeChecked();
   });
 
-  test("should maintain separate select-all checkboxes for each table", async () => {
+  it("should maintain separate select-all checkboxes for each table", async () => {
     const { container } = render(DuplicateDataTables);
 
     // Get all select-all checkboxes

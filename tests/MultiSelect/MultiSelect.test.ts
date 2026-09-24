@@ -3416,7 +3416,7 @@ describe("MultiSelect", () => {
       const firstCheckbox = firstOption.querySelector('input[type="checkbox"]');
 
       // Get the current checked state
-      expect.assert(firstCheckbox instanceof HTMLInputElement);
+      assert(firstCheckbox instanceof HTMLInputElement);
       const wasChecked = firstCheckbox.checked;
 
       // Click the option to toggle it
@@ -3429,7 +3429,7 @@ describe("MultiSelect", () => {
         const updatedCheckbox = firstOption.querySelector(
           'input[type="checkbox"]',
         );
-        expect.assert(updatedCheckbox instanceof HTMLInputElement);
+        assert(updatedCheckbox instanceof HTMLInputElement);
         expect(updatedCheckbox.checked).toBe(!wasChecked);
       });
     });
@@ -3512,7 +3512,7 @@ describe("MultiSelect", () => {
             .map((option) => option.querySelector('input[type="checkbox"]')),
         );
         const checkedCheckboxes = checkboxes.filter((cb) => {
-          expect.assert(cb instanceof HTMLInputElement);
+          assert(cb instanceof HTMLInputElement);
           return cb.checked;
         });
         expect(checkedCheckboxes.length).toBeGreaterThan(0);
@@ -3523,7 +3523,7 @@ describe("MultiSelect", () => {
           return label?.trim() === "Item 2";
         });
         if (item2Checkbox) {
-          expect.assert(item2Checkbox instanceof HTMLInputElement);
+          assert(item2Checkbox instanceof HTMLInputElement);
           expect(item2Checkbox.checked).toBe(true);
         }
       });

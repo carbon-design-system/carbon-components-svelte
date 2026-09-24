@@ -11,7 +11,7 @@ const net = (
   remove.mock.calls.filter((c: unknown[]) => c[0] === type).length;
 
 describe("ContextMenu window listeners", () => {
-  test("closed menus register no click/keydown listeners", () => {
+  it("closed menus register no click/keydown listeners", () => {
     const add = vi.spyOn(window, "addEventListener");
     const remove = vi.spyOn(window, "removeEventListener");
 
@@ -26,7 +26,7 @@ describe("ContextMenu window listeners", () => {
     remove.mockRestore();
   });
 
-  test("an open menu registers one click and one keydown listener", async () => {
+  it("an open menu registers one click and one keydown listener", async () => {
     const add = vi.spyOn(window, "addEventListener");
     const remove = vi.spyOn(window, "removeEventListener");
 

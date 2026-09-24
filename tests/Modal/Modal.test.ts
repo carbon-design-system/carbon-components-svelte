@@ -1062,7 +1062,7 @@ describe("Modal", () => {
     });
 
     const textarea = screen.getByTestId("modal-textarea");
-    expect.assert(textarea instanceof HTMLTextAreaElement);
+    assert(textarea instanceof HTMLTextAreaElement);
     textarea.focus();
     await user.keyboard("{Enter}");
     await tick();

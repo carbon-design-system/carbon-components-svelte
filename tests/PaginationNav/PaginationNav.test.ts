@@ -99,7 +99,7 @@ describe("PaginationNav", () => {
     expect(screen.getByRole("button", { name: "Next" })).toBeInTheDocument();
   });
 
-  test.each([
+  it.each([
     ["top", ["bx--btn--icon-only--top", "bx--btn--icon-only--top"]],
     ["right", ["bx--btn--icon-only--right", "bx--btn--icon-only--right"]],
     ["bottom", ["bx--btn--icon-only--bottom", "bx--btn--icon-only--bottom"]],
