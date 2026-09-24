@@ -1,3 +1,55 @@
+<script context="module">
+  import { deepEqual } from "../utils/deep-equal.js";
+
+  /**
+   * @param {string | { from: string; to: string }} atOpen
+   * @param {string | { from: string; to: string }} atClose
+   */
+  function dateStrChanged(atOpen, atClose) {
+    if (typeof atClose === "object") {
+      return atOpen.from !== atClose.from || atOpen.to !== atClose.to;
+    }
+    return atOpen !== atClose;
+  }
+
+  /**
+   * @param {number[]} atOpen
+   * @param {Date[]} dates
+   */
+  function selectedDatesChanged(atOpen, dates) {
+    const atClose = (dates || []).map((date) => date.getTime());
+    return (
+      atClose.length !== atOpen.length ||
+      atClose.some((time, index) => time !== atOpen[index])
+    );
+  }
+
+  /**
+   * A value rebuilt in a `$:` statement, forwarded through a wrapper, or
+   * built from a reassigned object arrives new but equal. Comparing contents
+   * avoids a `calendar.set` (a full day grid redraw) when nothing changed.
+   */
+  function optionChanged(prev, next) {
+    return !deepEqual(prev, next);
+  }
+
+  /**
+   * @param {number} year
+   * @param {number} month
+   */
+  function monthValue(year, month) {
+    return year * 12 + month;
+  }
+
+  /**
+   * @param {null | string | Date} a
+   * @param {null | string | Date} b
+   */
+  function initialMonthChanged(a, b) {
+    return !deepEqual(a, b);
+  }
+</script>
+
 <script>
   /**
    * @event {string | { selectedDates: [dateFrom: Date, dateTo?: Date]; dateStr: string | { from: string; to: string; } }} change
@@ -254,7 +306,6 @@
     FORM_CONTEXT_KEY,
     MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
-  import { deepEqual } from "../utils/deep-equal.js";
   import { dismiss } from "../utils/dismiss.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -397,29 +448,6 @@
   let dateStrAtOpen;
   /** @type {number[]} */
   let selectedDatesAtOpen = [];
-
-  /**
-   * @param {string | { from: string; to: string }} atOpen
-   * @param {string | { from: string; to: string }} atClose
-   */
-  function dateStrChanged(atOpen, atClose) {
-    if (typeof atClose === "object") {
-      return atOpen.from !== atClose.from || atOpen.to !== atClose.to;
-    }
-    return atOpen !== atClose;
-  }
-
-  /**
-   * @param {number[]} atOpen
-   * @param {Date[]} dates
-   */
-  function selectedDatesChanged(atOpen, dates) {
-    const atClose = (dates || []).map((date) => date.getTime());
-    return (
-      atClose.length !== atOpen.length ||
-      atClose.some((time, index) => time !== atOpen[index])
-    );
-  }
 
   /** The string flatpickr writes to the input for its current selection. */
   function formatSelectedDates() {
@@ -960,15 +988,6 @@
     focusCalendar,
   });
 
-  /**
-   * A value rebuilt in a `$:` statement, forwarded through a wrapper, or
-   * built from a reassigned object arrives new but equal. Comparing contents
-   * avoids a `calendar.set` (a full day grid redraw) when nothing changed.
-   */
-  function optionChanged(prev, next) {
-    return !deepEqual(prev, next);
-  }
-
   function applyOptionIfChanged(optionKey, value, appliedValue = value) {
     if (optionChanged(prevAppliedOptions[optionKey], value)) {
       calendar.set(optionKey, appliedValue);
@@ -1020,22 +1039,6 @@
         clearCalendarEnable();
       }
     }
-  }
-
-  /**
-   * @param {number} year
-   * @param {number} month
-   */
-  function monthValue(year, month) {
-    return year * 12 + month;
-  }
-
-  /**
-   * @param {null | string | Date} a
-   * @param {null | string | Date} b
-   */
-  function initialMonthChanged(a, b) {
-    return !deepEqual(a, b);
   }
 
   /**
