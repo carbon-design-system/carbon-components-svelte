@@ -1,7 +1,5 @@
 import { formReset } from "../../src/utils/form-reset.js";
-
-/** The callback is deferred by a macrotask; flush it before asserting. */
-const flush = () => new Promise((resolve) => setTimeout(resolve));
+import { flushFormReset } from "./flush-form-reset";
 
 describe("formReset action", () => {
   let form: HTMLFormElement;
@@ -30,7 +28,7 @@ describe("formReset action", () => {
     form.reset();
     expect(seen).toEqual([]);
 
-    await flush();
+    await flushFormReset();
     expect(seen).toEqual(["default"]);
 
     action.destroy();
@@ -41,7 +39,7 @@ describe("formReset action", () => {
     const action = formReset(input, onReset);
 
     (document.getElementById("g") as HTMLFormElement).reset();
-    await flush();
+    await flushFormReset();
     expect(onReset).not.toHaveBeenCalled();
 
     action.destroy();
@@ -53,7 +51,7 @@ describe("formReset action", () => {
     form.addEventListener("reset", (event) => event.preventDefault());
 
     form.reset();
-    await flush();
+    await flushFormReset();
     expect(onReset).not.toHaveBeenCalled();
 
     action.destroy();
@@ -65,7 +63,7 @@ describe("formReset action", () => {
     const action = formReset(outside, onReset);
 
     form.reset();
-    await flush();
+    await flushFormReset();
     expect(onReset).toHaveBeenCalledTimes(1);
 
     action.destroy();
@@ -77,7 +75,7 @@ describe("formReset action", () => {
     const action = formReset(orphan, onReset);
 
     form.reset();
-    await flush();
+    await flushFormReset();
     expect(onReset).not.toHaveBeenCalled();
 
     action.destroy();
@@ -89,7 +87,7 @@ describe("formReset action", () => {
     const action = formReset(fieldset, onReset);
 
     form.reset();
-    await flush();
+    await flushFormReset();
     expect(onReset).toHaveBeenCalledTimes(1);
 
     action.destroy();
@@ -101,11 +99,11 @@ describe("formReset action", () => {
 
     form.reset();
     action.destroy();
-    await flush();
+    await flushFormReset();
     expect(onReset).not.toHaveBeenCalled();
 
     form.reset();
-    await flush();
+    await flushFormReset();
     expect(onReset).not.toHaveBeenCalled();
   });
 
@@ -116,7 +114,7 @@ describe("formReset action", () => {
 
     action.update(next);
     form.reset();
-    await flush();
+    await flushFormReset();
     expect(first).not.toHaveBeenCalled();
     expect(next).toHaveBeenCalledTimes(1);
 
@@ -136,7 +134,7 @@ describe("formReset action", () => {
     expect(resetAdds).toHaveLength(1);
 
     form.reset();
-    await flush();
+    await flushFormReset();
     expect(first).toHaveBeenCalledTimes(1);
     expect(second).toHaveBeenCalledTimes(1);
 

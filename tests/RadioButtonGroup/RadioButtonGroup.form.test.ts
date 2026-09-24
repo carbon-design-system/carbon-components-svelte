@@ -1,11 +1,9 @@
 import { render, screen } from "@testing-library/svelte";
+import { flushFormReset } from "../utils/flush-form-reset";
 import { user } from "../utils/user";
 import RadioButtonGroupForm from "./RadioButtonGroup.form.test.svelte";
 
 const getForm = () => screen.getByTestId("form") as HTMLFormElement;
-/** The reset sync runs on the next task. */
-const flush = () => new Promise((resolve) => setTimeout(resolve));
-
 describe("RadioButtonGroup form reset", () => {
   it("unchecks every radio and clears the bound value without firing change", async () => {
     const onChange = vi.fn();
@@ -15,7 +13,7 @@ describe("RadioButtonGroup form reset", () => {
     onChange.mockClear();
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(screen.getByRole("radio", { name: "A" })).not.toBeChecked();
     expect(screen.getByRole("radio", { name: "B" })).not.toBeChecked();
@@ -32,7 +30,7 @@ describe("RadioButtonGroup form reset", () => {
     expect(screen.getByTestId("bound").textContent).toBe("a");
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(screen.getByRole("radio", { name: "A" })).not.toBeChecked();
     expect(screen.getByTestId("bound").textContent).toBe("undefined");
@@ -50,7 +48,7 @@ describe("RadioButtonGroup form reset", () => {
     onChange.mockClear();
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(radioA).toBeChecked();
     expect(screen.getByRole("radio", { name: "B" })).not.toBeChecked();
@@ -66,7 +64,7 @@ describe("RadioButtonGroup form reset", () => {
     onChange.mockClear();
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(screen.getByRole("radio", { name: "A" })).not.toBeChecked();
     expect(screen.getByRole("radio", { name: "B" })).not.toBeChecked();
@@ -80,7 +78,7 @@ describe("RadioButtonGroup form reset", () => {
     getForm().addEventListener("reset", (event) => event.preventDefault());
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(screen.getByRole("radio", { name: "A" })).toBeChecked();
     expect(screen.getByTestId("bound").textContent).toBe("a");
@@ -94,7 +92,7 @@ describe("RadioButtonGroup form reset", () => {
     });
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(screen.getByRole("radio", { name: "A" })).toBeChecked();
     expect(screen.getByRole("radio", { name: "B" })).not.toBeChecked();

@@ -1,11 +1,10 @@
 import { render, screen } from "@testing-library/svelte";
+import { flushFormReset } from "../utils/flush-form-reset";
 import { user } from "../utils/user";
 import NumberInputForm from "./NumberInput.form.test.svelte";
 
 const getForm = () => screen.getByTestId("form") as HTMLFormElement;
 const getBound = () => screen.getByTestId("bound").textContent;
-const flush = () => new Promise((resolve) => setTimeout(resolve));
-
 describe("NumberInput form participation", () => {
   describe("validity", () => {
     it("does not block submission for a decimal value", () => {
@@ -103,7 +102,7 @@ describe("NumberInput form participation", () => {
       expect(getBound()).toBe("8");
 
       getForm().reset();
-      await flush();
+      await flushFormReset();
 
       expect(input).toHaveValue(8);
       expect(getBound()).toBe("8");
@@ -114,7 +113,7 @@ describe("NumberInput form participation", () => {
       const input = screen.getByRole("textbox", { name: "Amount" });
 
       getForm().reset();
-      await flush();
+      await flushFormReset();
 
       expect(input).toHaveValue("1.234,5");
       expect(getBound()).toBe("1234.5");
@@ -127,7 +126,7 @@ describe("NumberInput form participation", () => {
 
       await setField(input, "8");
       getForm().reset();
-      await flush();
+      await flushFormReset();
 
       expect(input).toHaveValue(null);
       expect(getBound()).toBe("null");
@@ -140,7 +139,7 @@ describe("NumberInput form participation", () => {
       const input = screen.getByRole("textbox", { name: "Amount" });
 
       getForm().reset();
-      await flush();
+      await flushFormReset();
 
       expect(input).toHaveValue("");
       expect(getBound()).toBe("null");
@@ -154,7 +153,7 @@ describe("NumberInput form participation", () => {
       const input = screen.getByRole("spinbutton", { name: "Amount" });
 
       getForm().reset();
-      await flush();
+      await flushFormReset();
 
       expect(input).toHaveValue(5);
       expect(getBound()).toBe("5");

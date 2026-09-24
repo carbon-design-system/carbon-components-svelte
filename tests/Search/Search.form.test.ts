@@ -1,19 +1,17 @@
 import { render, screen } from "@testing-library/svelte";
+import { flushFormReset } from "../utils/flush-form-reset";
 import { user } from "../utils/user";
 import SearchForm from "./Search.form.test.svelte";
 
 const getForm = () => screen.getByTestId("form") as HTMLFormElement;
 const getBoundValue = () => screen.getByTestId("bound-value").textContent;
 const getBoundExpanded = () => screen.getByTestId("bound-expanded").textContent;
-/** The reset resync runs on the next task. */
-const flush = () => new Promise((resolve) => setTimeout(resolve));
-
 describe("Search form reset", () => {
   it("clears to empty even with an initial value and zero interaction", async () => {
     render(SearchForm, { props: { value: "ada" } });
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(screen.getByRole("searchbox", { name: "Search" })).toHaveValue("");
     expect(getBoundValue()).toBe("");
@@ -32,7 +30,7 @@ describe("Search form reset", () => {
     expect(getBoundValue()).toBe("adax");
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(input).toHaveValue("ada");
     expect(getBoundValue()).toBe("ada");
@@ -45,7 +43,7 @@ describe("Search form reset", () => {
 
     await user.type(input, "eric");
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(input).toHaveValue("eric");
     expect(getBoundValue()).toBe("eric");
@@ -72,7 +70,7 @@ describe("Search form reset", () => {
     onCollapse.mockClear();
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(input).toHaveValue("");
     expect(getBoundExpanded()).toBe("true");
@@ -95,7 +93,7 @@ describe("Search form reset", () => {
     onChange.mockClear();
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(onInput).not.toHaveBeenCalled();
     expect(onChange).not.toHaveBeenCalled();

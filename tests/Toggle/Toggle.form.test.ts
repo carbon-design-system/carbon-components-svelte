@@ -1,11 +1,9 @@
 import { render, screen } from "@testing-library/svelte";
+import { flushFormReset } from "../utils/flush-form-reset";
 import { user } from "../utils/user";
 import ToggleForm from "./Toggle.form.test.svelte";
 
 const getForm = () => screen.getByTestId("form") as HTMLFormElement;
-/** The reset sync runs on the next task. */
-const flush = () => new Promise((resolve) => setTimeout(resolve));
-
 describe("Toggle form participation", () => {
   describe("submitted value", () => {
     it('submits "on" while toggled by default', () => {
@@ -80,7 +78,7 @@ describe("Toggle form participation", () => {
       onToggle.mockClear();
 
       getForm().reset();
-      await flush();
+      await flushFormReset();
 
       expect(toggle).not.toBeChecked();
       expect(screen.getByTestId("bound").textContent).toBe("false");
@@ -96,7 +94,7 @@ describe("Toggle form participation", () => {
       expect(screen.getByTestId("bound").textContent).toBe("true");
 
       getForm().reset();
-      await flush();
+      await flushFormReset();
 
       expect(toggle).not.toBeChecked();
       expect(screen.getByTestId("bound").textContent).toBe("false");
@@ -115,7 +113,7 @@ describe("Toggle form participation", () => {
       onToggle.mockClear();
 
       getForm().reset();
-      await flush();
+      await flushFormReset();
 
       expect(toggle).toBeChecked();
       expect(screen.getByTestId("bound").textContent).toBe("true");
@@ -130,7 +128,7 @@ describe("Toggle form participation", () => {
       const toggle = screen.getByRole("switch");
 
       getForm().reset();
-      await flush();
+      await flushFormReset();
 
       expect(toggle).toBeChecked();
       expect(screen.getByTestId("bound").textContent).toBe("true");
@@ -144,7 +142,7 @@ describe("Toggle form participation", () => {
       getForm().addEventListener("reset", (event) => event.preventDefault());
 
       getForm().reset();
-      await flush();
+      await flushFormReset();
 
       expect(toggle).toBeChecked();
       expect(screen.getByTestId("bound").textContent).toBe("true");

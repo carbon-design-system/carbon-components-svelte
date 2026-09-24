@@ -1,14 +1,9 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
-import { tick } from "svelte";
+import { flushFormReset } from "../utils/flush-form-reset";
 import RangeSliderForm from "./RangeSlider.form.test.svelte";
 
 const getForm = () => screen.getByTestId("form") as HTMLFormElement;
 const getBound = () => screen.getByTestId("bound").textContent;
-const flush = async () => {
-  await new Promise((resolve) => setTimeout(resolve));
-  await tick();
-};
-
 describe("RangeSlider form reset", () => {
   it("keeps both current bounds", async () => {
     const { container } = render(RangeSliderForm);
@@ -24,7 +19,7 @@ describe("RangeSlider form reset", () => {
     expect(getBound()).toBe("30-70");
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(lower.value).toBe("30");
     expect(upper.value).toBe("70");
@@ -38,7 +33,7 @@ describe("RangeSlider form reset", () => {
 
     await rerender({ value: 25, valueUpper: 75 });
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(
       (container.querySelector('input[name="low"]') as HTMLInputElement).value,

@@ -1,12 +1,10 @@
 import { render, screen } from "@testing-library/svelte";
+import { flushFormReset } from "../utils/flush-form-reset";
 import { user } from "../utils/user";
 import TextInputForm from "./TextInput.form.test.svelte";
 
 const getForm = () => screen.getByTestId("form") as HTMLFormElement;
 const getBound = () => screen.getByTestId("bound").textContent;
-/** The reset sync runs on the next task. */
-const flush = () => new Promise((resolve) => setTimeout(resolve));
-
 describe("TextInput form reset", () => {
   it("syncs the bound value to the cleared field", async () => {
     render(TextInputForm);
@@ -16,7 +14,7 @@ describe("TextInput form reset", () => {
     expect(getBound()).toBe("eric");
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(input).toHaveValue("");
     expect(getBound()).toBe("");
@@ -29,7 +27,7 @@ describe("TextInput form reset", () => {
 
     await user.type(input, "x");
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(input).toHaveValue("");
     expect(getBound()).toBe("");
@@ -47,7 +45,7 @@ describe("TextInput form reset", () => {
     expect(getBound()).toBe("adax");
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(input).toHaveValue("ada");
     expect(getBound()).toBe("ada");
@@ -64,7 +62,7 @@ describe("TextInput form reset", () => {
     expect(getBound()).toBe("57");
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(input).toHaveValue(5);
     expect(getBound()).toBe("5");
@@ -76,7 +74,7 @@ describe("TextInput form reset", () => {
 
     await user.type(input, "7");
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(getBound()).toBe("null");
   });
@@ -88,7 +86,7 @@ describe("TextInput form reset", () => {
 
     await user.type(input, "eric");
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(input).toHaveValue("eric");
     expect(getBound()).toBe("eric");
@@ -103,7 +101,7 @@ describe("TextInput form reset", () => {
     onInput.mockClear();
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(onInput).not.toHaveBeenCalled();
   });

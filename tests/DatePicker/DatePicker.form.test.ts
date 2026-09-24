@@ -1,14 +1,12 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { flushFormReset } from "../utils/flush-form-reset";
 import DatePickerForm from "./DatePicker.form.test.svelte";
 
 const getForm = () => screen.getByTestId("form") as HTMLFormElement;
 const getValue = () => screen.getByTestId("value").textContent;
 const getValueFrom = () => screen.getByTestId("valueFrom").textContent;
 const getValueTo = () => screen.getByTestId("valueTo").textContent;
-/** The reset sync runs on the next task. */
-const flush = () => new Promise((resolve) => setTimeout(resolve));
-
 // Let the component's own pending re-render (triggered by `input`/`change`)
 // settle before a subsequent `form.reset()`, the same way an `await
 // user.type(...)` naturally would; otherwise that pending write can land
@@ -27,7 +25,7 @@ describe("DatePicker form reset", () => {
 
       await editInput(input, "2024-06-15");
       getForm().reset();
-      await flush();
+      await flushFormReset();
 
       expect(input).toHaveValue("");
       expect(getValue()).toBe("");
@@ -39,7 +37,7 @@ describe("DatePicker form reset", () => {
       const input = screen.getByLabelText("Start date") as HTMLInputElement;
 
       getForm().reset();
-      await flush();
+      await flushFormReset();
 
       expect(input).toHaveValue("");
       expect(getValue()).toBe("");
@@ -53,7 +51,7 @@ describe("DatePicker form reset", () => {
 
       await editInput(input, "2024-06-15");
       getForm().reset();
-      await flush();
+      await flushFormReset();
 
       expect(input).toHaveValue("2024-01-01");
       expect(getValue()).toBe("2024-01-01");
@@ -65,7 +63,7 @@ describe("DatePicker form reset", () => {
 
       await editInput(input, "2024-06-15");
       getForm().reset();
-      await flush();
+      await flushFormReset();
 
       expect(input).toHaveValue("");
       expect(getValue()).toBe("");
@@ -88,7 +86,7 @@ describe("DatePicker form reset", () => {
       await editInput(start, "2024-04-01");
       await editInput(end, "2024-04-10");
       getForm().reset();
-      await flush();
+      await flushFormReset();
 
       expect(start).toHaveValue("");
       expect(end).toHaveValue("");
@@ -111,7 +109,7 @@ describe("DatePicker form reset", () => {
 
       await editInput(end, "2024-04-10");
       getForm().reset();
-      await flush();
+      await flushFormReset();
 
       expect(start).toHaveValue("");
       expect(end).toHaveValue("");
@@ -129,7 +127,7 @@ describe("DatePicker form reset", () => {
       await editInput(start, "2024-04-01");
       await editInput(end, "2024-04-10");
       getForm().reset();
-      await flush();
+      await flushFormReset();
 
       expect(start).toHaveValue("");
       expect(end).toHaveValue("");
@@ -143,7 +141,7 @@ describe("DatePicker form reset", () => {
 
     await editInput(input, "2024-06-15");
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(input).toHaveValue("2024-06-15");
     expect(getValue()).toBe("2024-06-15");
@@ -158,7 +156,7 @@ describe("DatePicker form reset", () => {
     onChange.mockClear();
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(onChange).not.toHaveBeenCalled();
   });

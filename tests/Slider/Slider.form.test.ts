@@ -1,14 +1,9 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
-import { tick } from "svelte";
+import { flushFormReset } from "../utils/flush-form-reset";
 import SliderForm from "./Slider.form.test.svelte";
 
 const getForm = () => screen.getByTestId("form") as HTMLFormElement;
 const getBound = () => screen.getByTestId("bound").textContent;
-const flush = async () => {
-  await new Promise((resolve) => setTimeout(resolve));
-  await tick();
-};
-
 describe("Slider form reset", () => {
   const getInput = (container: HTMLElement) =>
     container.querySelector('input[name="level"]') as HTMLInputElement;
@@ -21,7 +16,7 @@ describe("Slider form reset", () => {
     expect(getBound()).toBe("77");
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(input.value).toBe("77");
     expect(getBound()).toBe("77");
@@ -34,7 +29,7 @@ describe("Slider form reset", () => {
 
     await rerender({ value: 55 });
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(getInput(container).value).toBe("55");
     expect(getBound()).toBe("55");
@@ -46,7 +41,7 @@ describe("Slider form reset", () => {
     });
 
     getForm().reset();
-    await flush();
+    await flushFormReset();
 
     expect(getInput(container).value).toBe("30");
     expect(getBound()).toBe("30");
