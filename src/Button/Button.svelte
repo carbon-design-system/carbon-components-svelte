@@ -143,17 +143,13 @@
   export let loadingDescription = undefined;
 
   import { getContext, onMount } from "svelte";
-  import { get } from "svelte/store";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
-  import {
-    TOOLTIP_ENTER_DELAY_MS,
-    TOOLTIP_LEAVE_DELAY_MS,
-  } from "../constants/timing.js";
   import Loading from "../Loading/Loading.svelte";
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
   import { noop } from "../utils/noop.js";
+  import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import ButtonSkeleton from "./ButtonSkeleton.svelte";
   import { activeButtonTooltip } from "./button-tooltip-store.js";
 
@@ -175,34 +171,29 @@
 
   const tooltipId = {};
 
+  // Warm-handoff hover/focus scheduling: gate on the shared store so only
+  // one icon-only tooltip can be open at a time. When another button claims
+  // the store, this one closes immediately — preventing overlapping
+  // tooltips (e.g. Pagination's adjacent buttons).
+  const tooltipHandoff = createTooltipHandoff({
+    activeTooltip: activeButtonTooltip,
+    id: tooltipId,
+  });
+
   let hovered = false;
   let focused = false;
-  let portalTimeout;
 
-  // Gate on the shared store so only one icon-only tooltip can be open at a
-  // time. When another button claims the store, this one closes immediately —
-  // preventing overlapping tooltips (e.g. Pagination's adjacent buttons).
   $: portalOpen =
     usePortal &&
     !disabled &&
     (hovered || focused) &&
     $activeButtonTooltip === tooltipId;
 
-  function claimActiveTooltip() {
-    activeButtonTooltip.set(tooltipId);
-  }
-
-  function releaseActiveTooltip() {
-    if (get(activeButtonTooltip) === tooltipId) {
-      activeButtonTooltip.set(null);
-    }
-  }
-
   function dismissPortalTooltip() {
-    clearTimeout(portalTimeout);
+    tooltipHandoff.cancel();
     hovered = false;
     focused = false;
-    releaseActiveTooltip();
+    tooltipHandoff.release();
   }
 
   // Re-attach the portal observer so the tooltip dismisses when an
@@ -225,62 +216,49 @@
 
   function handleMouseenter() {
     if (hasTooltip) {
-      claimActiveTooltip();
+      tooltipHandoff.claim();
     }
   }
 
   function handleMouseleave() {
     if (usePortal) return;
-    releaseActiveTooltip();
+    tooltipHandoff.release();
   }
 
   function handlePortalMouseEnter() {
     if (!usePortal || disabled) return;
-    clearTimeout(portalTimeout);
-    // Warm handoff: if another icon-only tooltip is already showing, skip the
-    // enter delay so moving between adjacent buttons feels instant.
-    const warmHandoff =
-      get(activeButtonTooltip) !== null &&
-      get(activeButtonTooltip) !== tooltipId;
-    portalTimeout = setTimeout(
-      () => {
-        hovered = true;
-        claimActiveTooltip();
-      },
-      warmHandoff ? 0 : TOOLTIP_ENTER_DELAY_MS,
-    );
+    tooltipHandoff.scheduleEnter(() => {
+      hovered = true;
+    });
   }
 
   function handlePortalMouseLeave() {
     if (!usePortal) return;
-    clearTimeout(portalTimeout);
-    portalTimeout = setTimeout(() => {
+    tooltipHandoff.scheduleLeave(() => {
       hovered = false;
-      if (!focused) releaseActiveTooltip();
-    }, TOOLTIP_LEAVE_DELAY_MS);
+      if (!focused) tooltipHandoff.release();
+    });
   }
 
   function handlePortalFocus() {
     if (!usePortal || disabled) return;
     focused = true;
-    claimActiveTooltip();
+    tooltipHandoff.claim();
   }
 
   function handlePortalBlur() {
     if (!usePortal) return;
     focused = false;
-    if (!hovered) releaseActiveTooltip();
+    if (!hovered) tooltipHandoff.release();
   }
 
   $: portalGaps = iconTooltipPortalGaps(tooltipPosition, tooltipAlignment);
 
   onMount(() => {
     return () => {
-      clearTimeout(portalTimeout);
+      tooltipHandoff.cancel();
       disconnectModalObserver();
-      if (get(activeButtonTooltip) === tooltipId) {
-        activeButtonTooltip.set(null);
-      }
+      tooltipHandoff.release();
     };
   });
 

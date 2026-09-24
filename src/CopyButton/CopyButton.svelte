@@ -81,12 +81,7 @@
   export let ref = null;
 
   import { createEventDispatcher, onMount } from "svelte";
-  import { get } from "svelte/store";
   import { activeButtonTooltip } from "../Button/button-tooltip-store.js";
-  import {
-    TOOLTIP_ENTER_DELAY_MS,
-    TOOLTIP_LEAVE_DELAY_MS,
-  } from "../constants/timing.js";
   import Copy from "../icons/Copy.svelte";
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
@@ -96,6 +91,7 @@
     createCopyFeedbackState,
   } from "../utils/copy-feedback.js";
   import { noop } from "../utils/noop.js";
+  import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
 
   const dispatch = createEventDispatcher();
 
@@ -126,9 +122,12 @@
   // with adjacent icon-only Buttons (warm handoff, no overlapping tooltips).
   // Mirrors Button's portal-tooltip timing.
   const tooltipId = {};
+  const tooltipHandoff = createTooltipHandoff({
+    activeTooltip: activeButtonTooltip,
+    id: tooltipId,
+  });
   let hovered = false;
   let focused = false;
-  let tooltipTimeout;
 
   // Feedback shares the proactive tooltip's portal surface whenever the tooltip
   // is portalled OR a non-default position/alignment is set, so the "Copied!"
@@ -149,55 +148,36 @@
   $: tooltipOpen = tooltipHoverActive || feedbackInPortal;
   $: tooltipText = feedbackOpen ? feedbackText : iconDescription;
 
-  function claimTooltip() {
-    activeButtonTooltip.set(tooltipId);
-  }
-
-  function releaseTooltip() {
-    if (get(activeButtonTooltip) === tooltipId) {
-      activeButtonTooltip.set(null);
-    }
-  }
-
   function handleTooltipMouseEnter() {
-    clearTimeout(tooltipTimeout);
     // Skip the enter delay when another icon tooltip is already open so moving
     // between adjacent buttons feels instant.
-    const warmHandoff =
-      get(activeButtonTooltip) !== null &&
-      get(activeButtonTooltip) !== tooltipId;
-    tooltipTimeout = setTimeout(
-      () => {
-        hovered = true;
-        claimTooltip();
-      },
-      warmHandoff ? 0 : TOOLTIP_ENTER_DELAY_MS,
-    );
+    tooltipHandoff.scheduleEnter(() => {
+      hovered = true;
+    });
   }
 
   function handleTooltipMouseLeave() {
-    clearTimeout(tooltipTimeout);
-    tooltipTimeout = setTimeout(() => {
+    tooltipHandoff.scheduleLeave(() => {
       hovered = false;
-      if (!focused) releaseTooltip();
-    }, TOOLTIP_LEAVE_DELAY_MS);
+      if (!focused) tooltipHandoff.release();
+    });
   }
 
   function handleTooltipFocus() {
     focused = true;
-    claimTooltip();
+    tooltipHandoff.claim();
   }
 
   function handleTooltipBlur() {
     focused = false;
-    if (!hovered) releaseTooltip();
+    if (!hovered) tooltipHandoff.release();
   }
 
   function dismissTooltip() {
-    clearTimeout(tooltipTimeout);
+    tooltipHandoff.cancel();
     hovered = false;
     focused = false;
-    releaseTooltip();
+    tooltipHandoff.release();
   }
 
   // Caret spacing + alignment nudges, mirroring Button's icon tooltip.
@@ -221,8 +201,8 @@
     return () => {
       copyFeedback.cleanup();
       disconnectModalObserver();
-      clearTimeout(tooltipTimeout);
-      releaseTooltip();
+      tooltipHandoff.cancel();
+      tooltipHandoff.release();
     };
   });
 </script>
