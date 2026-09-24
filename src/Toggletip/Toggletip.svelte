@@ -68,11 +68,13 @@
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
   import { dismiss } from "../utils/dismiss.js";
+  import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { noop } from "../utils/noop.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
+  const notifyOpenChange = createOpenCloseDispatcher(dispatch);
   const contentId = uniqueId();
   const insideModal = getContext(MODAL_CONTEXT_KEY);
 
@@ -110,7 +112,6 @@
 
   let toggletipRef = null;
   let portalRef = null;
-  let prevOpen = undefined;
   let disconnectModalObserver = noop;
 
   $: effectivePortalTooltip =
@@ -190,12 +191,7 @@
       listenersEnabled = false;
     }
   }
-  $: {
-    const shouldDispatch = prevOpen !== undefined;
-    const nextOpen = open;
-    prevOpen = open;
-    if (shouldDispatch) dispatch(nextOpen ? "open" : "close");
-  }
+  $: notifyOpenChange(open);
 
   onMount(() => {
     return () => {

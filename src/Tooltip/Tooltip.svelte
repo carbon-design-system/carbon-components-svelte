@@ -118,11 +118,13 @@
   import Information from "../icons/Information.svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { createDelayedSetter } from "../utils/delayed-setter.js";
+  import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const insideModal = getContext(MODAL_CONTEXT_KEY);
 
   const dispatch = createEventDispatcher();
+  const notifyOpenChange = createOpenCloseDispatcher(dispatch);
   /**
    * @type {import("svelte/store").Writable<boolean>}
    */
@@ -135,7 +137,6 @@
    */
   const openedByHover = writable(false);
 
-  let prevOpen = undefined;
   let focusByMouse = false;
 
   $: effectivePortalTooltip =
@@ -269,14 +270,7 @@
 
   $: tooltipOpen.set(open);
   $: if (!open) openedByHover.set(false);
-  $: {
-    const shouldDispatch = prevOpen !== undefined;
-    const nextOpen = open;
-    prevOpen = open;
-    if (shouldDispatch) {
-      dispatch(nextOpen ? "open" : "close");
-    }
-  }
+  $: notifyOpenChange(open);
   $: buttonProps = {
     role: "button",
     "aria-haspopup": "true",

@@ -70,6 +70,7 @@
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { createDelayedSetter } from "../utils/delayed-setter.js";
   import { dismiss } from "../utils/dismiss.js";
+  import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const insideModal = getContext(MODAL_CONTEXT_KEY);
@@ -81,6 +82,7 @@
   const PORTAL_VERTICAL_GAP_BOTTOM_PX = -3;
 
   const dispatch = createEventDispatcher();
+  const notifyOpenChange = createOpenCloseDispatcher(dispatch);
 
   const scheduleOpen = createDelayedSetter();
 
@@ -102,16 +104,7 @@
     open = !open;
   }
 
-  let initialRender = true;
-
-  $: {
-    const shouldDispatch = !initialRender;
-    const nextOpen = open;
-    initialRender = false;
-    if (shouldDispatch) {
-      dispatch(nextOpen ? "open" : "close");
-    }
-  }
+  $: notifyOpenChange(open);
 
   onMount(() => {
     return () => {
