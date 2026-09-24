@@ -1,3 +1,49 @@
+<script context="module">
+  /**
+   * Index `entries` by id, bucketing same-id entries in order so duplicate
+   * ids pair up positionally (first old duplicate reused for the first new
+   * occurrence) instead of one id silently overwriting another.
+   * @param {ReadonlyArray<{ id: any }>} entries
+   * @returns {Map<any, any[]>}
+   */
+  function indexById(entries) {
+    const map = new Map();
+    for (const entry of entries) {
+      const bucket = map.get(entry.id);
+      if (bucket) bucket.push(entry);
+      else map.set(entry.id, [entry]);
+    }
+    return map;
+  }
+
+  /**
+   * Whether `ids` holds exactly the ids in `idSet`, ignoring order and
+   * duplicates. Sizes are compared as sets, not by `ids.length`: a duplicate
+   * (`["1", "1"]` against `{"1", "2"}`) matches on length and membership
+   * while selecting something different.
+   * @param {ReadonlyArray<any>} ids
+   * @param {Set<any>} idSet
+   * @returns {boolean}
+   */
+  function sameIdSet(ids, idSet) {
+    if (ids.length < idSet.size) return false;
+    if (!ids.every((id) => idSet.has(id))) return false;
+    return new Set(ids).size === idSet.size;
+  }
+
+  /**
+   * Value-compare two `selectedIds` arrays, ignoring order: `sort()` only
+   * ever tests membership via a `Set`, so a reordered-but-otherwise-equal
+   * array produces the same result and shouldn't trigger a re-sort.
+   * @param {ReadonlyArray<any>} a
+   * @param {ReadonlyArray<any>} b
+   * @returns {boolean}
+   */
+  function sameSelectedIds(a, b) {
+    return sameIdSet(a, new Set(b));
+  }
+</script>
+
 <script>
   /**
    * @template {MultiSelectItem<any>} [Item=MultiSelectItem<any>]
@@ -859,22 +905,6 @@
   }
 
   /**
-   * Index `entries` by id, bucketing same-id entries in order so duplicate
-   * ids pair up positionally (first old duplicate reused for the first new
-   * occurrence) instead of one id silently overwriting another.
-   * @type {(entries: typeof sortedItems) => Map<string, typeof sortedItems>}
-   */
-  function indexById(entries) {
-    const map = new Map();
-    for (const entry of entries) {
-      const bucket = map.get(entry.id);
-      if (bucket) bucket.push(entry);
-      else map.set(entry.id, [entry]);
-    }
-    return map;
-  }
-
-  /**
    * Alphabetical order depends only on `items` and `sortItem`, never on
    * `selectedIds`, so it's cached across `sort()` calls that only change
    * selection (a toggle, an external `selectedIds` change, a close with
@@ -1000,29 +1030,6 @@
     }
 
     return sameIdSet(nextSelectedIds, checkedIds);
-  }
-
-  /**
-   * Whether `ids` holds exactly the ids in `idSet`, ignoring order and
-   * duplicates. Sizes are compared as sets, not by `ids.length`: a duplicate
-   * (`["1", "1"]` against `{"1", "2"}`) matches on length and membership
-   * while selecting something different.
-   * @type {(ids: typeof selectedIds, idSet: Set<typeof selectedIds[number]>) => boolean}
-   */
-  function sameIdSet(ids, idSet) {
-    if (ids.length < idSet.size) return false;
-    if (!ids.every((id) => idSet.has(id))) return false;
-    return new Set(ids).size === idSet.size;
-  }
-
-  /**
-   * Value-compare two `selectedIds` arrays, ignoring order: `sort()` only
-   * ever tests membership via a `Set`, so a reordered-but-otherwise-equal
-   * array produces the same result and shouldn't trigger a re-sort.
-   * @type {(a: typeof selectedIds, b: typeof selectedIds) => boolean}
-   */
-  function sameSelectedIds(a, b) {
-    return sameIdSet(a, new Set(b));
   }
 
   $: menuId = `menu-${id}`;
