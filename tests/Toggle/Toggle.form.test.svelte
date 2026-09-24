@@ -4,6 +4,7 @@
 
   export let toggled: ComponentProps<Toggle>["toggled"] = false;
   export let readonly: ComponentProps<Toggle>["readonly"] = false;
+  export let value: ComponentProps<Toggle>["value"] = undefined;
   export let onToggle: (event: CustomEvent<{ toggled: boolean }>) => void =
     () => {};
 </script>
@@ -12,6 +13,7 @@
   <Toggle
     bind:toggled
     {readonly}
+    {value}
     name="notify"
     labelText="Notify"
     on:toggle={onToggle}
