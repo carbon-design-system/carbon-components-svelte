@@ -56,13 +56,13 @@
 
   import { getContext, onMount } from "svelte";
   import { get, readable } from "svelte/store";
-  import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
-  import PortalTooltip from "../Portal/PortalTooltip.svelte";
-  import { createDelayedSetter } from "../utils/delayed-setter.js";
   import {
     TOOLTIP_ENTER_DELAY_MS,
     TOOLTIP_LEAVE_DELAY_MS,
-  } from "../utils/tooltip-delays.js";
+  } from "../constants/timing.js";
+  import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
+  import PortalTooltip from "../Portal/PortalTooltip.svelte";
+  import { createDelayedSetter } from "../utils/delayed-setter.js";
 
   // Standalone use (no ancestor `ToggleButtonGroup`) is undocumented but
   // must not throw; `pressed` just stays `false` and clicks are inert.

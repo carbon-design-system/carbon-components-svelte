@@ -145,15 +145,15 @@
   import { getContext, onMount } from "svelte";
   import { get } from "svelte/store";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
+  import {
+    TOOLTIP_ENTER_DELAY_MS,
+    TOOLTIP_LEAVE_DELAY_MS,
+  } from "../constants/timing.js";
   import Loading from "../Loading/Loading.svelte";
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
   import { noop } from "../utils/noop.js";
-  import {
-    TOOLTIP_ENTER_DELAY_MS,
-    TOOLTIP_LEAVE_DELAY_MS,
-  } from "../utils/tooltip-delays.js";
   import ButtonSkeleton from "./ButtonSkeleton.svelte";
   import { activeButtonTooltip } from "./button-tooltip-store.js";
 

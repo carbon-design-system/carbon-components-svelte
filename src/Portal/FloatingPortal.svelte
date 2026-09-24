@@ -115,12 +115,12 @@
   export let target = null;
 
   import { onMount, tick } from "svelte";
+  import { FLOATING_PORTAL_Z_INDEX } from "../constants/layout.js";
   import { floatingPosition } from "../utils/floating-position.js";
   import { getScrollableAncestors } from "../utils/get-scrollable-ancestors.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { addPooledListener } from "../utils/window-listener-pool.js";
   import Portal from "./Portal.svelte";
-  import { FLOATING_PORTAL_Z_INDEX } from "./portal-utils.js";
 
   let mounted = true;
 

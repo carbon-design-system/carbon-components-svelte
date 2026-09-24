@@ -1,11 +1,5 @@
 // @ts-check
 /**
- * Default z-index of floating portals. Sits above modals (9000) and list box
- * menus (9100).
- */
-export const FLOATING_PORTAL_Z_INDEX = 9200;
-
-/**
  * Observe the closest modal ancestor for close events.
  * Calls `onClose` when the modal loses the "is-visible" class.
  * Returns a cleanup function to disconnect the observer.

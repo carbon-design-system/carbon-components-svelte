@@ -83,6 +83,10 @@
   import { createEventDispatcher, onMount } from "svelte";
   import { get } from "svelte/store";
   import { activeButtonTooltip } from "../Button/button-tooltip-store.js";
+  import {
+    TOOLTIP_ENTER_DELAY_MS,
+    TOOLTIP_LEAVE_DELAY_MS,
+  } from "../constants/timing.js";
   import Copy from "../icons/Copy.svelte";
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
@@ -92,10 +96,6 @@
     createCopyFeedbackState,
   } from "../utils/copy-feedback.js";
   import { noop } from "../utils/noop.js";
-  import {
-    TOOLTIP_ENTER_DELAY_MS,
-    TOOLTIP_LEAVE_DELAY_MS,
-  } from "../utils/tooltip-delays.js";
 
   const dispatch = createEventDispatcher();
 

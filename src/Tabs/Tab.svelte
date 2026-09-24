@@ -78,13 +78,13 @@
 
   import { getContext, onMount } from "svelte";
   import { get } from "svelte/store";
-  import Close from "../icons/Close.svelte";
-  import PortalTooltip from "../Portal/PortalTooltip.svelte";
-  import { createDelayedSetter } from "../utils/delayed-setter.js";
   import {
     TOOLTIP_ENTER_DELAY_MS,
     TOOLTIP_LEAVE_DELAY_MS,
-  } from "../utils/tooltip-delays.js";
+  } from "../constants/timing.js";
+  import Close from "../icons/Close.svelte";
+  import PortalTooltip from "../Portal/PortalTooltip.svelte";
+  import { createDelayedSetter } from "../utils/delayed-setter.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const {
