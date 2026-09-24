@@ -22,7 +22,10 @@
  * @property {() => void} prev
  * @property {(index: number) => void} goToIndex
  * @property {() => void} reset
- * @property {() => { index: number; item: HTMLElement | null }} getActiveItem
+ * @property {() => {
+ *   index: number;
+ *   item: HTMLElement | null;
+ * }} getActiveItem
  * @property {() => void} destroyEvents
  */
 

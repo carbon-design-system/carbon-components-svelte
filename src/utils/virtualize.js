@@ -385,7 +385,9 @@ export const DEFAULT_VIRTUAL_LIST_CONFIG = {
  * @param {number} options.scrollTop
  * @param {boolean} options.shouldVirtualize
  * @param {boolean | object | undefined} options.virtualize
- * @param {Partial<typeof DEFAULT_VIRTUAL_LIST_CONFIG>} [options.defaults]
+ * @param {Partial<
+ *   typeof DEFAULT_VIRTUAL_LIST_CONFIG
+ * >} [options.defaults]
  * @param {ItemHeights} [options.heights] Per-option heights, indexed by
  *   item. Read only when the config opts into measuring and the list is
  *   windowed.
@@ -396,7 +398,9 @@ export const DEFAULT_VIRTUAL_LIST_CONFIG = {
  *   every option and nothing may displace it. Supply the average of
  *   heights measured earlier.
  * @returns {{
- *   config: (typeof DEFAULT_VIRTUAL_LIST_CONFIG & Record<string, unknown>) | null,
+ *   config:
+ *     | (typeof DEFAULT_VIRTUAL_LIST_CONFIG & Record<string, unknown>)
+ *     | null,
  *   data: ReturnType<typeof virtualize<Item>> | null,
  *   itemsToRender: Item[]
  * }}
@@ -576,7 +580,9 @@ export function scrollSelectedIntoView({
  * Per-option heights as they are now.
  * @param {ItemHeights | undefined} options.previousHeights
  * Per-option heights the current scroll position was computed against.
- * @param {ReturnType<typeof accumulateOffsets>} [options.accumulatedBefore]
+ * @param {ReturnType<
+ *   typeof accumulateOffsets
+ * >} [options.accumulatedBefore]
  * `previousHeights` already accumulated, when the caller has it.
  * @returns {number}
  */

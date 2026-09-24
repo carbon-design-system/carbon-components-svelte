@@ -2,7 +2,10 @@
 /**
  * Svelte action that truncates text on an element.
  * `lines` above 1 switches to multiline mode (end clamp only).
- * @typedef {{ clamp?: "end" | "front"; lines?: number }} TruncateOptions
+ * @typedef {{
+ *   clamp?: "end" | "front";
+ *   lines?: number;
+ * }} TruncateOptions
  * @param {HTMLElement} node
  * @param {TruncateOptions} [options]
  * @returns {{ update: (options?: TruncateOptions) => void }}

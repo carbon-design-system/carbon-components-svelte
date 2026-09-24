@@ -21,9 +21,20 @@ const HIGHLIGHT_CLASS = "bx--list-box__menu-item--highlighted";
  * the node yet by the time this cursor runs in the same update cycle.
  *
  * @returns {{
- *   register: (id: string, node: HTMLElement, isActive?: boolean) => () => void;
- *   set: (id: string | null | undefined, options?: { scroll?: boolean }) => void;
- *   highlightedId: { subscribe: import("svelte/store").Readable<string | null>["subscribe"] };
+ *   register: (
+ *     id: string,
+ *     node: HTMLElement,
+ *     isActive?: boolean,
+ *   ) => () => void;
+ *   set: (
+ *     id: string | null | undefined,
+ *     options?: { scroll?: boolean },
+ *   ) => void;
+ *   highlightedId: {
+ *     subscribe: import("svelte/store").Readable<
+ *       string | null
+ *     >["subscribe"];
+ *   };
  * }}
  */
 export function createHighlightCursor() {

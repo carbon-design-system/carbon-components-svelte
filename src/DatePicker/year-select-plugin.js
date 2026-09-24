@@ -8,7 +8,10 @@
  *   altFormat?: string;
  *   theme?: string;
  * }} YearSelectPluginConfig
- * @typedef {HTMLSpanElement & { dateObj: Date; $i: number }} YearElement
+ * @typedef {HTMLSpanElement & {
+ *   dateObj: Date;
+ *   $i: number;
+ * }} YearElement
  */
 
 const defaultConfig = {
@@ -39,7 +42,12 @@ export function yearSelectPlugin(pluginConfig) {
     fp.config.dateFormat = config.dateFormat;
     fp.config.altFormat = config.altFormat;
 
-    /** @type {{ yearsContainer: HTMLElement | null; rangeEl: HTMLElement | null }} */
+    /**
+     * @type {{
+     *   yearsContainer: HTMLElement | null;
+     *   rangeEl: HTMLElement | null;
+     * }}
+     */
     const self = { yearsContainer: null, rangeEl: null };
 
     function decadeStart(year = fp.currentYear) {

@@ -8,8 +8,8 @@
 /**
  * Create a nested array from a flat array.
  * @param {NodeLike[]} flatArray - Array of flat nodes to convert
- * @param {(node: NodeLike) => string | number | null} getParentId - Function
- *   to get parent ID for a node
+ * @param {(node: NodeLike) => string | number | null} getParentId
+ *   Function to get parent ID for a node
  * @returns {NodeLike[]} Hierarchical tree structure
  */
 export function toHierarchy(flatArray, getParentId) {

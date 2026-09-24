@@ -11,6 +11,8 @@
  * }} RectLike
  */
 
+/** @typedef {"bottom" | "top" | "left" | "right"} FloatingDirection */
+
 /**
  * Place a floating element next to an anchor. Caller passes both rects
  * and the viewport. Flips direction when the preferred side does not
@@ -27,18 +29,17 @@
  *   scrollX: number;
  *   scrollY: number;
  * }} options.viewport
- * @param {"bottom" | "top" | "left" | "right"} options.direction - Preferred
- *   direction.
- * @param {"bottom" | "top" | "left" | "right"} [options.lockedDirection] - When
- *   set, skip flip detection and place on this side. Used to keep a
+ * @param {FloatingDirection} options.direction - Preferred direction.
+ * @param {FloatingDirection} [options.lockedDirection] - When set, skip
+ *   flip detection and place on this side. Used to keep a
  *   side stable across content (width/height) changes while the
  *   floating element stays open.
  * @param {boolean} [options.useFixedPosition=false] - When true, scroll
  *   offsets are zeroed (the caller positions with `position: fixed`).
  * @param {boolean} [options.intrinsicWidth=false] - Use the floating
  *   element's own width instead of matching the anchor.
- * @param {"start" | "center" | "end"} [options.intrinsicAlign="center"] - Alignment
- *   along the anchor edge when `intrinsicWidth` is true.
+ * @param {"start" | "center" | "end"} [options.intrinsicAlign="center"]
+ *   Alignment along the anchor edge when `intrinsicWidth` is true.
  * @param {number} [options.gapTop=0]
  * @param {number} [options.gapBottom=0]
  * @param {number} [options.horizontalGapLeft=0]

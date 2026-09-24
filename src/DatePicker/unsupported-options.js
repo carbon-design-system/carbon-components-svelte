@@ -23,7 +23,11 @@ const PREFIX = "[carbon-components-svelte] DatePicker: ";
 export function getUnsupportedOptionWarnings(flatpickrProps, context) {
   if (!flatpickrProps) return [];
 
-  /** @type {Array<[option: string, applies: boolean, message: string]>} */
+  /**
+   * @type {Array<
+   *   [option: string, applies: boolean, message: string]
+   * >}
+   */
   const rules = [
     [
       "wrap",

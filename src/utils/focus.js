@@ -13,8 +13,8 @@ const selectorFirstInput =
  *   container to search within.
  * @param {string | null} [options.selectorPrimaryFocus] - Preferred
  *   focus target selector; `null` to focus nothing.
- * @param {Array<Element | null | undefined>} [options.fallbacks] - Fallback
- *   elements if no selector or input matches.
+ * @param {Array<Element | null | undefined>} [options.fallbacks]
+ *   Fallback elements if no selector or input matches.
  * @returns {HTMLElement | null}
  */
 export function initialFocus({

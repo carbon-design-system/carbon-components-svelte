@@ -53,9 +53,25 @@ function hasLoadedChildren(node) {
  * }>}
  */
 export function flattenVisibleRows(nodes, expandedIdsSet) {
-  /** @type {Array<{ node: T; depth: number; parentId: string | number | null; posInSet: number; setSize: number; hasChildren: boolean }>} */
+  /**
+   * @type {Array<{
+   *   node: T;
+   *   depth: number;
+   *   parentId: string | number | null;
+   *   posInSet: number;
+   *   setSize: number;
+   *   hasChildren: boolean;
+   * }>}
+   */
   const out = [];
-  /** @type {Array<{ list: ReadonlyArray<T>; depth: number; parentId: string | number | null; index: number }>} */
+  /**
+   * @type {Array<{
+   *   list: ReadonlyArray<T>;
+   *   depth: number;
+   *   parentId: string | number | null;
+   *   index: number;
+   * }>}
+   */
   const stack = [{ list: nodes, depth: 0, parentId: null, index: 0 }];
 
   while (stack.length > 0) {
@@ -106,8 +122,25 @@ export function flattenVisibleRows(nodes, expandedIdsSet) {
  * @param {Set<string | number>} expandedIdsSet
  * @returns {{
  *   totalCount: number,
- *   getRowAt: (index: number) => { node: T; depth: number; parentId: string | number | null; posInSet: number; setSize: number; hasChildren: boolean } | null,
- *   collectRows: (startIndex: number, endIndex: number) => Array<{ node: T; depth: number; parentId: string | number | null; posInSet: number; setSize: number; hasChildren: boolean }>,
+ *   getRowAt: (index: number) => {
+ *     node: T;
+ *     depth: number;
+ *     parentId: string | number | null;
+ *     posInSet: number;
+ *     setSize: number;
+ *     hasChildren: boolean;
+ *   } | null,
+ *   collectRows: (
+ *     startIndex: number,
+ *     endIndex: number,
+ *   ) => Array<{
+ *     node: T;
+ *     depth: number;
+ *     parentId: string | number | null;
+ *     posInSet: number;
+ *     setSize: number;
+ *     hasChildren: boolean;
+ *   }>,
  *   findIndexById: (id: string | number) => number,
  * }}
  */
@@ -206,11 +239,28 @@ export function createTreeVirtualIndex(nodes, expandedIdsSet) {
   function collectRows(startIndex, endIndex) {
     const start = Math.max(0, startIndex);
     const end = Math.min(totalCount, endIndex);
-    /** @type {Array<{ node: T; depth: number; parentId: string | number | null; posInSet: number; setSize: number; hasChildren: boolean }>} */
+    /**
+     * @type {Array<{
+     *   node: T;
+     *   depth: number;
+     *   parentId: string | number | null;
+     *   posInSet: number;
+     *   setSize: number;
+     *   hasChildren: boolean;
+     * }>}
+     */
     const rows = [];
     if (start >= end) return rows;
 
-    /** @type {Array<{ list: ReadonlyArray<T>; depth: number; parentId: string | number | null; index: number; offset: number }>} */
+    /**
+     * @type {Array<{
+     *   list: ReadonlyArray<T>;
+     *   depth: number;
+     *   parentId: string | number | null;
+     *   index: number;
+     *   offset: number;
+     * }>}
+     */
     const stack = [
       { list: nodes, depth: 0, parentId: null, index: 0, offset: 0 },
     ];

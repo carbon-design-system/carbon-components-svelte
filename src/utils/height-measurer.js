@@ -64,9 +64,12 @@ function readIndex(node) {
  * offsets accumulate once for all of them.
  *
  * @param {Object} options
- * @param {(heights: number[], prevHeights: number[]) => void} options.onMeasure
- * Called on the animation frame after a report that differs from the heights
- * already held.
+ * @param {(
+ *   heights: number[],
+ *   prevHeights: number[],
+ * ) => void} options.onMeasure
+ * Called on the animation frame after a report that differs from the
+ * heights already held.
  * @returns {{
  *   sync: (container: Element | null | undefined) => void,
  *   clear: () => void,

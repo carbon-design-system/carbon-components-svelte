@@ -44,7 +44,10 @@ export function resolveLocale(locale) {
  *   daysContainer?: HTMLElement;
  *   weekdayContainer: HTMLElement;
  *   selectedDates: unknown[];
- *   l10n: { months: { longhand: string[]; shorthand: string[] }; weekdays?: { shorthand?: string[] } };
+ *   l10n: {
+ *     months: { longhand: string[]; shorthand: string[] };
+ *     weekdays?: { shorthand?: string[] };
+ *   };
  *   config: { shorthandCurrentMonth?: boolean };
  *   currentMonth: number;
  *   monthNav: HTMLElement;
@@ -379,9 +382,20 @@ export async function createCalendar({
 }) {
   /** @type {((new (config: { position: string; input: HTMLInputElement }) => unknown) | undefined)} */
   let RangePlugin;
-  /** @type {((config?: { shorthand?: boolean; dateFormat?: string; altFormat?: string }) => unknown) | undefined} */
+  /**
+   * @type {((config?: {
+   *   shorthand?: boolean;
+   *   dateFormat?: string;
+   *   altFormat?: string;
+   * }) => unknown) | undefined}
+   */
   let monthSelectPlugin;
-  /** @type {((config?: { dateFormat?: string; altFormat?: string }) => unknown) | undefined} */
+  /**
+   * @type {((config?: {
+   *   dateFormat?: string;
+   *   altFormat?: string;
+   * }) => unknown) | undefined}
+   */
   let yearSelectPlugin;
   /** @type {(() => unknown) | undefined} */
   let weekSelectPlugin;

@@ -30,7 +30,11 @@ export function resolveValidationVisibility({
  * need stable ids when no `id` prop was passed).
  *
  * @param {string} [id]
- * @param {{ helperId: string, errorId: string, warnId: string }} [fallback]
+ * @param {{
+ *   helperId: string,
+ *   errorId: string,
+ *   warnId: string,
+ * }} [fallback]
  * @returns {{
  *   helperId: string | undefined,
  *   errorId: string | undefined,

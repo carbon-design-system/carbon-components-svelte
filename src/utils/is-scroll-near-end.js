@@ -40,7 +40,9 @@ export function isScrollNearEnd({
  * @param {number} [options.threshold=DEFAULT_SCROLL_END_THRESHOLD]
  * @returns {{
  *   noteItemCount: (itemCount: number) => void,
- *   observe: (metrics: ScrollEndDetail & { itemCount?: number }) => ScrollEndDetail | null,
+ *   observe: (
+ *     metrics: ScrollEndDetail & { itemCount?: number },
+ *   ) => ScrollEndDetail | null,
  *   reset: () => void,
  * }}
  */

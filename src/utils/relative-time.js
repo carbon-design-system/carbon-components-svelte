@@ -1,7 +1,15 @@
 // @ts-check
 import { getRelativeTimeFormatter } from "./intl-formatter-cache.js";
 
-/** @typedef {"second" | "minute" | "hour" | "day" | "week" | "month" | "year"} RelativeTimeUnit */
+/**
+ * @typedef {"second"
+ *   | "minute"
+ *   | "hour"
+ *   | "day"
+ *   | "week"
+ *   | "month"
+ *   | "year"} RelativeTimeUnit
+ */
 
 const SECOND = 1000;
 const MINUTE = 60 * SECOND;

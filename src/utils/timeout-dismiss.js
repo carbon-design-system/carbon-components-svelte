@@ -13,7 +13,11 @@ import { noop } from "./noop.js";
  *
  * @returns {{
  *   get timeoutId(): ReturnType<typeof setTimeout> | undefined,
- *   sync: (open: boolean, timeout: number, onTimeout: () => void) => void,
+ *   sync: (
+ *     open: boolean,
+ *     timeout: number,
+ *     onTimeout: () => void,
+ *   ) => void,
  *   pause: () => void,
  *   resume: () => void,
  *   clear: () => void,

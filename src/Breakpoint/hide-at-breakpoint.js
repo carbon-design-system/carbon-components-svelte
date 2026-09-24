@@ -8,7 +8,10 @@ import { breakpoints } from "./breakpoints.js";
 /**
  * Svelte action that hides the element when the current breakpoint is
  * larger than `above` or smaller than `below`.
- * @typedef {{ above?: BreakpointSize; below?: BreakpointSize }} HideAtBreakpointOptions
+ * @typedef {{
+ *   above?: BreakpointSize;
+ *   below?: BreakpointSize;
+ * }} HideAtBreakpointOptions
  * @type {(
  *   node: HTMLElement,
  *   options?: HideAtBreakpointOptions,

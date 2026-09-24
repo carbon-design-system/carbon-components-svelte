@@ -27,8 +27,8 @@ import { moveIndex, nextEnabledIndex } from "./move-index.js";
  * @property {(item: HTMLElement) => boolean} [isDisabled] - Default:
  *   `disabled` or `aria-disabled="true"`.
  * @property {() => number} getActiveIndex - Index to move from.
- * @property {(index: number, event: KeyboardEvent) => void} [onMove] - New
- *   index after a navigation key.
+ * @property {(index: number, event: KeyboardEvent) => void} [onMove]
+ *   New index after a navigation key.
  * @property {boolean} [focusOnMove] - Call `.focus()` on the new item.
  *   Default `false`.
  */

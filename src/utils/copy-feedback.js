@@ -19,7 +19,11 @@ export const COPY_FEEDBACK_TIMEOUT_MS = 2000;
  *   get copyPending(): boolean,
  *   get isError(): boolean,
  *   dismiss: () => void,
- *   onClick: (performCopy: () => void | Promise<void>, feedbackTimeout: number, portalled?: boolean) => Promise<void>,
+ *   onClick: (
+ *     performCopy: () => void | Promise<void>,
+ *     feedbackTimeout: number,
+ *     portalled?: boolean,
+ *   ) => Promise<void>,
  *   onAnimationEnd: (event: { animationName: string }) => void,
  *   cleanup: () => void,
  * }}

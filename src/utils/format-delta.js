@@ -2,7 +2,10 @@
 // Signed change formatting, such as the delta `BigNumber` shows under its value.
 import { getNumberFormatter } from "./intl-formatter-cache.js";
 
-/** @typedef {import("./format-delta.d.ts").FormatDeltaOptions} FormatDeltaOptions */
+/**
+ * @typedef {import("./format-delta.d.ts")
+ *   .FormatDeltaOptions} FormatDeltaOptions
+ */
 
 /**
  * Format a change with an explicit sign on non-zero values: `+1.2K`,

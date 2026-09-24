@@ -17,7 +17,9 @@ import { batchStoreUpdates } from "./batch-store-updates.js";
  * }}
  */
 export function createDomNodeRegistry() {
-  /** @type {import("svelte/store").Writable<ReadonlyArray<HTMLElement>>} */
+  /**
+   * @type {import("svelte/store").Writable<ReadonlyArray<HTMLElement>>}
+   */
   const items = writable([]);
   const batchedUpdate = batchStoreUpdates(items);
 

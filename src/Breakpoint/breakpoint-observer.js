@@ -65,7 +65,11 @@ export function observeBreakpoint(callback) {
  * comparisons.
  */
 export function breakpointObserver() {
-  /** @type {import("svelte/store").Writable<BreakpointSize | undefined>} */
+  /**
+   * @type {import("svelte/store").Writable<
+   *   BreakpointSize | undefined
+   * >}
+   */
   const store = writable(undefined);
 
   onMount(() => observeBreakpoint((size) => store.set(size)));

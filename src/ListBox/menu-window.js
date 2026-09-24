@@ -54,8 +54,8 @@ function withoutMeasured(virtualizeProp) {
  * `heightMeasurer.js`
  *
  * @param {Object} options
- * @param {() => HTMLElement | null | undefined} options.getContainer The
- *   menu's scroll container, or nothing when the menu is closed.
+ * @param {() => HTMLElement | null | undefined} options.getContainer
+ *   The menu's scroll container, or nothing when the menu is closed.
  *   Nothing here acts without one.
  * @param {(scrollTop: number) => void} options.onScrollTop The position
  *   the container actually took, so the caller's mirror stays in step.
@@ -354,9 +354,10 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
    * @param {any[]} options.items The collection the menu renders,
    *   filtered where there is a filter, since its positions are what
    *   heights and offsets are indexed against.
-   * @param {(item: any, index: number) => unknown} [options.getKey] What
-   *   identifies an option across a rebuild of `items`. Defaults to the
-   *   option itself; only called while heights are being measured.
+   * @param {(item: any, index: number) => unknown} [options.getKey]
+   *   What identifies an option across a rebuild of `items`. Defaults
+   *   to the option itself; only called while heights are being
+   *   measured.
    * @param {boolean} options.shouldVirtualize The threshold gate, from
    *   `shouldVirtualizeMenu`. The caller resolves it, needing the
    *   answer before it can work out `items`.

@@ -156,8 +156,9 @@ const collator = new Intl.Collator(undefined, {
  * @param {T} itemA - First value to compare
  * @param {T} itemB - Second value to compare
  * @param {boolean} ascending - Whether to sort in ascending order
- * @param {((a: T, b: T) => number) | false | undefined} customSort - Optional
- *   custom sort function
+ * @param {((a: T, b: T) => number)
+ *   | false
+ *   | undefined} customSort - Optional custom sort function
  * @returns {number} Negative if a < b (ascending) or a > b
  *   (descending), positive if a > b (ascending) or a < b (descending),
  *   0 if equal
@@ -237,8 +238,10 @@ function escapeCsvField(field, delimiter, escapeFormulas) {
  * @property {boolean} [empty] - Whether the column renders no data
  * @property {boolean} [columnHidden] - Whether the column is hidden;
  *   hidden columns are skipped
- * @property {(item: unknown, row: Record<string, unknown>) => unknown} [display] - Formats
- *   the cell value
+ * @property {(
+ *   item: unknown,
+ *   row: Record<string, unknown>,
+ * ) => unknown} [display] - Formats the cell value
  */
 
 /**

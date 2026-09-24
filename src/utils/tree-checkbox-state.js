@@ -151,8 +151,8 @@ export function resolveCheckboxState(nodes, checkedIds, options = {}) {
    * @param {TreeCheckboxNode} node
    * @param {boolean} inherited - Whether an ancestor cascaded a check
    *   down to `node`
-   * @returns {{ checked: boolean; indeterminate: boolean } | null} `null`
-   *   when the node is pruned
+   * @returns {{ checked: boolean; indeterminate: boolean } | null}
+   *   `null` when the node is pruned
    */
   function walk(node, inherited) {
     if (node.disabled) return null;

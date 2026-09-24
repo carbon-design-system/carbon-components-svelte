@@ -10,7 +10,9 @@ import { moveIndex } from "./move-index.js";
  *
  * @param {Object} options
  * @param {() => HTMLElement | null} options.getMenuRef
- * @param {import("svelte/store").Writable<string | null>} options.highlightedId
+ * @param {import("svelte/store").Writable<
+ *   string | null
+ * >} options.highlightedId
  * @param {boolean} [options.includeHidden=false] - include `[hidden]`
  *   `[role="option"]` elements instead of skipping them.
  * @returns {{

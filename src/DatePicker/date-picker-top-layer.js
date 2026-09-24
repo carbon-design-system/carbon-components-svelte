@@ -20,7 +20,8 @@ export function getTopLayerAncestor(root) {
  * ancestor — `position: absolute` would resolve against that element’s
  * containing block and mis-place the calendar.
  *
- * @param {import("./date-picker-top-layer.js").FlatpickrTopLayerPositionInstance} instance
+ * @param {import("./date-picker-top-layer.js")
+ *   .FlatpickrTopLayerPositionInstance} instance
  * @param {HTMLElement | undefined} customPositionElement
  */
 export function positionFlatpickrCalendarFixed(
