@@ -14,6 +14,7 @@
 
   /**
    * Specify whether the checkbox is checked.
+   * Follows the box when the owning form resets.
    * @bindable writable
    */
   export let checked = false;
@@ -103,6 +104,7 @@
   import { readable } from "svelte/store";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import { formReset } from "../utils/form-reset.js";
   import { overflowTitle } from "../utils/overflow-title.js";
   import { uniqueId } from "../utils/unique-id.js";
   import CheckboxSkeleton from "./CheckboxSkeleton.svelte";
@@ -158,6 +160,36 @@
 
   let labelRef = null;
 
+  /** @type {(nextChecked: boolean) => void} */
+  function setGroupMembership(nextChecked) {
+    const hasValue = group.includes(value);
+    if (nextChecked && !hasValue) {
+      group = [...group, value];
+    } else if (!nextChecked && hasValue) {
+      group = group.filter((_value) => _value !== value);
+    }
+  }
+
+  // A form reset restores the box without a change event. Sync the state to
+  // it, like the other form controls, and fire no `check`. A read-only
+  // checkbox keeps its state, so put the box back instead.
+  function handleFormReset() {
+    if (!ref) return;
+    if (effectiveReadonly) {
+      ref.checked = checked;
+      return;
+    }
+    const nextChecked = ref.checked;
+    if (ctxUpdate) {
+      ctxUpdate(value, nextChecked);
+    } else if (useGroup) {
+      setGroupMembership(nextChecked);
+    } else {
+      prevChecked = nextChecked;
+      checked = nextChecked;
+    }
+  }
+
   $: helperId = `helper-${id}`;
   $: errorId = `error-${id}`;
   $: warnId = `warn-${id}`;
@@ -186,6 +218,7 @@
   >
     <input
       bind:this={ref}
+      use:formReset={handleFormReset}
       type="checkbox"
       value={nativeValue}
       {checked}
@@ -223,12 +256,7 @@
         if (ctxUpdate) {
           ctxUpdate(value, nextChecked);
         } else if (useGroup) {
-          const hasValue = group.includes(value);
-          if (nextChecked && !hasValue) {
-            group = [...group, value];
-          } else if (!nextChecked && hasValue) {
-            group = group.filter((_value) => _value !== value);
-          }
+          setGroupMembership(nextChecked);
         } else {
           prevChecked = nextChecked;
           checked = nextChecked;
