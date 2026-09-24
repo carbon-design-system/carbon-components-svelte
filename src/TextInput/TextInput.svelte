@@ -97,6 +97,11 @@
   import EditOff from "../icons/EditOff.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import {
+    buildFieldIds,
+    resolveStatusDescribedBy,
+    resolveValidationVisibility,
+  } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
   import { graphemeCount } from "../utils/grapheme-count.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -132,12 +137,14 @@
     }
   }
 
-  $: showInvalid = invalid && !disabled && !readonly;
-  $: showWarn = warn && !invalid && !disabled && !readonly;
+  $: ({ showInvalid, showWarn } = resolveValidationVisibility({
+    invalid,
+    warn,
+    disabled,
+    readonly,
+  }));
   $: isFluid = !inline && (fluid || !!ctx?.isFluid);
-  $: helperId = `helper-${id}`;
-  $: errorId = `error-${id}`;
-  $: warnId = `warn-${id}`;
+  $: ({ helperId, errorId, warnId } = buildFieldIds(id));
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -247,13 +254,16 @@
         aria-invalid={showInvalid || undefined}
         data-warn={showWarn || undefined}
         aria-errormessage={showInvalid ? errorId : undefined}
-        aria-describedby={showInvalid
-          ? undefined
-          : showWarn
-            ? warnId
-            : helperText && !isFluid
-              ? helperId
-              : undefined}
+        aria-describedby={resolveStatusDescribedBy({
+          showInvalid,
+          showWarn,
+          helperText,
+          isFluid,
+          errorId,
+          warnId,
+          helperId,
+          includeErrorId: false,
+        })}
         {disabled}
         {id}
         {name}
