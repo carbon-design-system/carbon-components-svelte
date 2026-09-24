@@ -151,6 +151,7 @@ export { default as RelativeTime } from "./RelativeTime/RelativeTime.svelte";
 export { default as ScrollGradient } from "./ScrollGradient/ScrollGradient.svelte";
 export { default as FluidSearchSkeleton } from "./Search/FluidSearchSkeleton.svelte";
 export { default as Search } from "./Search/Search.svelte";
+export { default as SearchRecent } from "./Search/SearchRecent.svelte";
 export { default as SearchSkeleton } from "./Search/SearchSkeleton.svelte";
 export { default as SearchMenu } from "./SearchMenu/SearchMenu.svelte";
 export { default as SearchMenuGroup } from "./SearchMenu/SearchMenuGroup.svelte";

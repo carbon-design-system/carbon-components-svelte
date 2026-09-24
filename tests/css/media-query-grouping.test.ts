@@ -16,10 +16,12 @@ describe("any-hover media query grouping", () => {
     // loop) for tabs-size.
     // Raised again from 61 to 62 for ToggleButtonGroup's one hover block
     // (_toggle-button-group.scss).
+    // Raised again from 62 to 63 for SearchRecent's one hover block
+    // (_search-recent.scss).
     // Whitespace-tolerant so the count holds for expanded and compressed
     // output; the lower bound fails the test if the pattern stops matching.
     const blocks = css.match(/@media\s*\(any-hover:\s*hover\)\s*\{/g) ?? [];
     expect(blocks.length).toBeGreaterThan(0);
-    expect(blocks.length).toBeLessThanOrEqual(62);
+    expect(blocks.length).toBeLessThanOrEqual(63);
   }, 30_000);
 });
