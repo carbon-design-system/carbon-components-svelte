@@ -697,7 +697,12 @@
             small
             withOverlay={false}
             description={loadingDescription}
-            class="bx--pin-code-input__loading"
+            class={[
+              "bx--pin-code-input__loading",
+              size !== "default" && `bx--pin-code-input__loading--${size}`,
+            ]
+              .filter(Boolean)
+              .join(" ")}
           />
         {/if}
         {#if mask && maskToggle}

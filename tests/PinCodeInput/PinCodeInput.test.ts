@@ -1149,6 +1149,16 @@ describe("PinCodeInput", () => {
       }
     });
 
+    it("sizes the spinner slot with the segments", () => {
+      const { container } = render(PinCodeInput, {
+        props: { loading: true, size: "xl" },
+      });
+
+      expect(
+        container.querySelector(".bx--pin-code-input__loading"),
+      ).toHaveClass("bx--pin-code-input__loading--xl");
+    });
+
     it("is off by default", () => {
       const { container } = render(PinCodeInput);
 
