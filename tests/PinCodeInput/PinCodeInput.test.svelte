@@ -15,6 +15,7 @@
   export let disabled: ComponentProps<PinCodeInput>["disabled"] = false;
   export let readonly: ComponentProps<PinCodeInput>["readonly"] = false;
   export let loading: ComponentProps<PinCodeInput>["loading"] = false;
+  export let webOtp: ComponentProps<PinCodeInput>["webOtp"] = false;
   export let loadingDescription: ComponentProps<PinCodeInput>["loadingDescription"] =
     "Verifying code";
   export let invalid: ComponentProps<PinCodeInput>["invalid"] = false;
@@ -50,6 +51,7 @@
   {disabled}
   {readonly}
   {loading}
+  {webOtp}
   {loadingDescription}
   {invalid}
   {invalidText}

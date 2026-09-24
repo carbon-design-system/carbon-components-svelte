@@ -1076,6 +1076,131 @@ describe("PinCodeInput", () => {
     });
   });
 
+  describe("webOtp", () => {
+    let get: ReturnType<typeof vi.fn>;
+
+    const stubWebOtp = (
+      impl: () => Promise<unknown> = () => Promise.resolve({ code: "123456" }),
+    ) => {
+      Object.defineProperty(window, "OTPCredential", {
+        value: class {},
+        configurable: true,
+      });
+      get = vi.fn(impl);
+      Object.defineProperty(navigator, "credentials", {
+        value: { get },
+        configurable: true,
+      });
+    };
+
+    const lastSignal = () => {
+      const [options] = get.mock.calls[0];
+      assert(options.signal instanceof AbortSignal);
+      return options.signal;
+    };
+
+    afterEach(() => {
+      Reflect.deleteProperty(window, "OTPCredential");
+      Reflect.deleteProperty(navigator, "credentials");
+    });
+
+    it("requests the code over SMS on mount", () => {
+      stubWebOtp();
+      render(PinCodeInput, { props: { webOtp: true } });
+
+      expect(get).toHaveBeenCalledTimes(1);
+      expect(get).toHaveBeenCalledWith(
+        expect.objectContaining({
+          otp: { transport: ["sms"] },
+          signal: expect.any(AbortSignal),
+        }),
+      );
+    });
+
+    it("fills the segments without moving focus", async () => {
+      stubWebOtp();
+      const consoleLog = vi.spyOn(console, "log");
+      const { component } = render(PinCodeInput, {
+        props: { webOtp: true, count: 6 },
+      });
+      await tick();
+      await tick();
+
+      expect(component.code).toEqual(["1", "2", "3", "4", "5", "6"]);
+      expect(consoleLog).toHaveBeenCalledWith("change", {
+        value: "123456",
+        code: ["1", "2", "3", "4", "5", "6"],
+      });
+      expect(
+        consoleLog.mock.calls.some(([event]) => event === "complete"),
+      ).toBe(true);
+      expect(getInputs()).not.toContain(document.activeElement);
+    });
+
+    it("is off by default", () => {
+      stubWebOtp();
+      render(PinCodeInput);
+
+      expect(get).not.toHaveBeenCalled();
+    });
+
+    it("does nothing without the WebOTP API", () => {
+      stubWebOtp();
+      Reflect.deleteProperty(window, "OTPCredential");
+
+      expect(() =>
+        render(PinCodeInput, { props: { webOtp: true } }),
+      ).not.toThrow();
+      expect(get).not.toHaveBeenCalled();
+    });
+
+    it("aborts the request on unmount", () => {
+      stubWebOtp(() => new Promise(() => {}));
+      const { unmount } = render(PinCodeInput, { props: { webOtp: true } });
+
+      unmount();
+      expect(lastSignal().aborted).toBe(true);
+    });
+
+    it("aborts the request when turned off", async () => {
+      stubWebOtp(() => new Promise(() => {}));
+      const { component } = render(PinCodeInput, { props: { webOtp: true } });
+
+      component.webOtp = false;
+      await tick();
+      expect(lastSignal().aborted).toBe(true);
+    });
+
+    it("drops characters that do not match the type", async () => {
+      stubWebOtp(() => Promise.resolve({ code: "12ab34" }));
+      const { component } = render(PinCodeInput, { props: { webOtp: true } });
+      await tick();
+      await tick();
+
+      expect(component.code).toEqual(["1", "2", "3", "4"]);
+    });
+
+    it("does not fill when read-only", async () => {
+      stubWebOtp();
+      const { component } = render(PinCodeInput, {
+        props: { webOtp: true, readonly: true },
+      });
+      await tick();
+      await tick();
+
+      expect(component.code).toEqual(["", "", "", ""]);
+    });
+
+    it("ignores a rejected request", async () => {
+      stubWebOtp(() => Promise.reject(new DOMException("x", "AbortError")));
+      const { component } = render(PinCodeInput, { props: { webOtp: true } });
+      await tick();
+      await tick();
+
+      expect(component.code).toEqual(["", "", "", ""]);
+    });
+  });
+
   it("does not allow edits in the read-only state", async () => {
     const { component } = render(PinCodeInput, {
       props: { readonly: true, value: "0182" },

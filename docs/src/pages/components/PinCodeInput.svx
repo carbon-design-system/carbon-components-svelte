@@ -161,6 +161,14 @@ OS and password-manager autofill that inserts the whole code into one segment is
   on:paste={(e) => console.log("paste", e.detail)}
 />
 
+### SMS autofill (WebOTP)
+
+Set `webOtp` to `true` to fill the code from an incoming SMS on Chrome for Android. The browser asks the user to allow it, then the segments fill without moving focus. The SMS must end with a line like `@your-domain.com #123456`, where the domain matches the page. Other browsers ignore the prop and keep `autocomplete="one-time-code"`.
+
+```svelte
+<PinCodeInput webOtp count={6} labelText="Verification code" />
+```
+
 ## Form name
 
 Set `name` so the assembled code participates in native form submission

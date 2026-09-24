@@ -177,6 +177,14 @@
   export let selectTextOnFocus = false;
 
   /**
+   * Set to `true` to request the code from an incoming SMS with the WebOTP
+   * API (Chrome on Android). The request starts on mount and is aborted on
+   * unmount or when this prop turns `false`. Does nothing where the API is
+   * unavailable.
+   */
+  export let webOtp = false;
+
+  /**
    * Override the accessible label of each segment.
    *
    * `position` is 1-based. The default returns, for example,
@@ -535,8 +543,51 @@
     }
   }
 
+  /** @type {AbortController | null} */
+  let webOtpController = null;
+
+  function stopWebOtp() {
+    webOtpController?.abort();
+    webOtpController = null;
+  }
+
+  function startWebOtp() {
+    if (webOtpController) return;
+    if (typeof window === "undefined" || !("OTPCredential" in window)) return;
+    const controller = new AbortController();
+    webOtpController = controller;
+    navigator.credentials
+      .get(
+        /** @type {CredentialRequestOptions} */ ({
+          otp: { transport: ["sms"] },
+          signal: controller.signal,
+        }),
+      )
+      .then((credential) => {
+        if (controller.signal.aborted || locked) return;
+        const otp = /** @type {{ code?: string } | null} */ (credential)?.code;
+        if (!otp) return;
+        const chars = otp.split("").filter(isValidChar).slice(0, count);
+        if (chars.length === 0) return;
+        // Fill without moving focus; the user may be elsewhere on the page.
+        code = Array.from({ length: count }, (_, i) => chars[i] ?? "");
+        dispatch("change", { value: code.join(""), code });
+        submitIfComplete();
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (webOtpController === controller) webOtpController = null;
+      });
+  }
+
+  $: if (mounted) {
+    if (webOtp) startWebOtp();
+    else stopWebOtp();
+  }
+
   onMount(() => {
     mounted = true;
+    return stopWebOtp;
   });
 </script>
 
