@@ -468,7 +468,6 @@
           value={inputValue}
           type="text"
           inputmode="decimal"
-          pattern="[0-9]*"
           aria-describedby={hasErrorMessage
             ? errorId
             : showWarn
