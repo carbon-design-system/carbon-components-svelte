@@ -10,7 +10,7 @@
   /**
    * @event close
    * @type {object}
-   * @property {"escape-key" | "outside-click" | "select"} trigger
+   * @property {"escape-key" | "outside-click" | "select" | "programmatic"} trigger
    */
 
   /**
@@ -200,6 +200,15 @@
    */
   export let calendar = null;
 
+  /**
+   * Set to `true` to open the calendar. Updates when the user opens or
+   * closes it. Setting it to `false` closes the calendar and dispatches
+   * `close` with the `"programmatic"` trigger, as Modal does.
+   * Ignored by the "simple" type and inline calendars.
+   * @bindable writable
+   */
+  export let open = false;
+
   import {
     afterUpdate,
     createEventDispatcher,
@@ -331,9 +340,10 @@
   let topLayerAncestor = null;
   // Set from onOpen/onClose. Outside-click listener attaches only while open.
   let calendarOpen = false;
+  let prevOpen = open;
   // flatpickr onClose has no reason; explicit handlers set closeTrigger, else
   // infer from session baseline. Close dispatch is deferred for range sync.
-  /** @type {"escape-key" | "outside-click" | undefined} */
+  /** @type {"escape-key" | "outside-click" | "programmatic" | undefined} */
   let closeTrigger;
   /** @type {string | { from: string; to: string }} */
   let dateStrAtOpen;
@@ -532,6 +542,21 @@
       } else {
         dispatch("change", value);
       }
+    }
+  }
+
+  /**
+   * Opens or closes the calendar to match the `open` prop. A close through
+   * the prop reports the `"programmatic"` trigger, like Modal's.
+   */
+  function applyOpenProp() {
+    if (!calendar || usesInline || open === calendarOpen) return;
+    if (open) {
+      if ($readonlyAny || $disabledAny) return;
+      calendar.open();
+    } else {
+      closeTrigger = "programmatic";
+      calendar.close();
     }
   }
 
@@ -1042,11 +1067,13 @@
           if (usesInline && (event === "open" || event === "close")) return;
           if (event === "open") {
             calendarOpen = true;
+            open = true;
             closeTrigger = undefined;
             refreshCloseBaselineOnOpen();
             applyInitialMonth();
           } else if (event === "close") {
             calendarOpen = false;
+            open = false;
             if (calendarUsesFixedPositioning) {
               detachFixedRepositionListeners();
             }
@@ -1110,6 +1137,7 @@
     }
     snapshotCloseBaseline();
     applyInitialMonth();
+    if (open) applyOpenProp();
     calendar?.calendarContainer?.setAttribute("role", "application");
     calendar?.calendarContainer?.setAttribute(
       "aria-label",
@@ -1298,6 +1326,12 @@
   });
 
   $: sharedDateFormat.set(dateFormat);
+  // Runs only when `open` itself changes; the calendar's own open and close
+  // write it too, and then already match.
+  $: if (open !== prevOpen) {
+    prevOpen = open;
+    applyOpenProp();
+  }
   $: sharedClearable.set(clearable);
   $: sharedClearButtonLabelText.set(clearButtonLabelText);
   $: inputValue.set(value);
