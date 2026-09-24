@@ -8,6 +8,7 @@
 
   /**
    * Specify the lower bound value of the slider.
+   * Follows the number fields when the owning form resets.
    * @bindable writable
    */
   export let value = 0;
@@ -131,6 +132,7 @@
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { dismiss } from "../utils/dismiss.js";
+  import { formReset } from "../utils/form-reset.js";
   import { resolveSliderMarks } from "../utils/resolve-slider-marks.js";
   import {
     formatRangeLabel as formatSliderRangeLabel,
@@ -190,6 +192,31 @@
       ? Math.abs(upperRect.left + upperRect.width / 2 - clientX)
       : Number.POSITIVE_INFINITY;
     return dLower <= dUpper ? "lower" : "upper";
+  }
+
+  // A form reset restores both number fields without a change event. Sync
+  // the values to them together, so the upper bound clamps against the reset
+  // lower bound, and fire no `change`. A field with no default resets to
+  // empty, which is not a slider value, so it keeps its value; a read-only
+  // slider keeps both. Either way, write the kept values back to the fields.
+  function handleFormReset() {
+    if (!lowerInputRef || !upperInputRef) return;
+    if (!readonly) {
+      /** @type {(raw: string, fallback: number) => number} */
+      const parse = (raw, fallback) =>
+        raw !== "" && Number.isFinite(Number(raw)) ? Number(raw) : fallback;
+      const lower = Math.min(
+        max,
+        Math.max(min, parse(lowerInputRef.value, value)),
+      );
+      value = lower;
+      valueUpper = Math.min(
+        max,
+        Math.max(lower, parse(upperInputRef.value, valueUpper)),
+      );
+    }
+    lowerInputRef.value = String(value);
+    upperInputRef.value = String(valueUpper);
   }
 
   function handleLowerInputFocus() {
@@ -392,6 +419,7 @@
     >
       <input
         bind:this={lowerInputRef}
+        use:formReset={handleFormReset}
         type={hideTextInput ? "hidden" : inputType}
         id={lowerInputId}
         {name}
