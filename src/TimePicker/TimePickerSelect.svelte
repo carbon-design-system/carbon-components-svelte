@@ -46,7 +46,18 @@
    */
   const selectedValue = writable(value);
 
-  setContext("carbon:TimePickerSelect", { selectedValue });
+  /**
+   * `typeof` each `SelectItem` value, so a change keeps numeric values numeric.
+   * @type {Record<string, string>}
+   */
+  const itemTypesByValue = {};
+
+  /** @type {(id: string, itemValue: string | number) => void} */
+  function setDefaultValue(id, itemValue) {
+    itemTypesByValue[itemValue] = typeof itemValue;
+  }
+
+  setContext("carbon:TimePickerSelect", { selectedValue, setDefaultValue });
 
   onMount(() => timePickerContext?.registerSelect?.() ?? (() => {}));
 
@@ -55,7 +66,9 @@
   $: isFluid = !!timePickerContext?.isFluid || !!formContext?.isFluid;
 
   function handleSelectChange(event) {
-    selectedValue.set(event.target.value);
+    let next = event.target.value;
+    if (itemTypesByValue[next] === "number") next = Number(next);
+    selectedValue.set(next);
   }
 
   function handleSelectMousedown(event) {
