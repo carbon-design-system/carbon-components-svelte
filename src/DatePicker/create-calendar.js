@@ -1,6 +1,7 @@
 // @ts-check
 /// <reference path="./flatpickr-esm-plugins.d.ts" />
 import flatpickr from "flatpickr";
+import { getDateTimeFormatter } from "../utils/intl-formatter-cache.js";
 
 /**
  * Carbon-styled English locale: single-letter weekday abbreviations
@@ -191,7 +192,7 @@ function isoWeek(givenDate) {
 function isMonthFirst(locale) {
   if (typeof locale !== "string") return true;
   try {
-    const parts = new Intl.DateTimeFormat(locale, {
+    const parts = getDateTimeFormatter(locale, {
       year: "numeric",
       month: "long",
     }).formatToParts(new Date(2000, 0, 1));
