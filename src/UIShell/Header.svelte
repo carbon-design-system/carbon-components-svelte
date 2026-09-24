@@ -62,7 +62,7 @@
    * - x-large: 1312
    * - max: 1584.
    */
-  export let expansionBreakpoint = 1056;
+  export let expansionBreakpoint = EXPANSION_BREAKPOINT;
 
   /**
    * Obtain a reference to the HTML anchor element.
@@ -100,6 +100,7 @@
   import { onMount } from "svelte";
   import Close from "../icons/Close.svelte";
   import Menu from "../icons/MenuIcon.svelte";
+  import { EXPANSION_BREAKPOINT } from "./expansion-breakpoint.js";
   import HamburgerMenu from "./HamburgerMenu.svelte";
   import { isHeaderRendered, shouldRenderHamburgerMenu } from "./nav-store.js";
 

@@ -35,7 +35,7 @@
    * - x-large: 1312
    * - max: 1584.
    */
-  export let expansionBreakpoint = 1056;
+  export let expansionBreakpoint = EXPANSION_BREAKPOINT;
 
   /**
    * Set to `"classic"` for the mixed UI Shell theme (White side nav).
@@ -59,6 +59,7 @@
   } from "../utils/body-scroll-lock.js";
   import { dismiss } from "../utils/dismiss.js";
   import { trapFocus } from "../utils/trap-focus.js";
+  import { EXPANSION_BREAKPOINT } from "./expansion-breakpoint.js";
   import {
     hamburgerMenuRef,
     isSideNavCollapsed,
