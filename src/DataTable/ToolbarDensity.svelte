@@ -57,6 +57,7 @@
   export let open = false;
 
   import { createEventDispatcher, getContext } from "svelte";
+  import { MENU_SIZE_BY_TOOLBAR_SIZE } from "../constants/sizes.js";
   import RowExpand from "../icons/RowExpand.svelte";
   import MenuItem from "../Menu/MenuItem.svelte";
   import MenuItemRadioGroup from "../Menu/MenuItemRadioGroup.svelte";
@@ -71,14 +72,6 @@
 
   $: selectedId = size ?? $tableSize ?? "medium";
 
-  /**
-   * MenuButton's icon-only trigger sizes to a Toolbar's own CSS-driven
-   * width (24/32/48px for xs/sm/default), not to its own "md" (40px)
-   * default; pass the matching size so the menu's seam-hiding bridge
-   * lines up with the trigger's actual rendered width.
-   * @type {Record<"xs" | "sm" | "default", "xs" | "sm" | "lg">}
-   */
-  const MENU_SIZE_BY_TOOLBAR_SIZE = { xs: "xs", sm: "sm", default: "lg" };
   $: menuSize = MENU_SIZE_BY_TOOLBAR_SIZE[$toolbarSize ?? "default"] ?? "lg";
 
   /**

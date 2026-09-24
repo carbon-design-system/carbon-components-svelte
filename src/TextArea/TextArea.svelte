@@ -107,6 +107,7 @@
   export let selectTextOnFocus = false;
 
   import { afterUpdate, getContext, onMount, tick } from "svelte";
+  import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { formReset } from "../utils/form-reset.js";
@@ -114,7 +115,7 @@
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { uniqueId } from "../utils/unique-id.js";
 
-  const formContext = getContext("carbon:Form");
+  const formContext = getContext(FORM_CONTEXT_KEY);
 
   $: helperId = `helper-${id}`;
   $: counterId = `counter-${id}`;

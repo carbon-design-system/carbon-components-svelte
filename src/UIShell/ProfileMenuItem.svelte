@@ -26,9 +26,10 @@
   export let ref = null;
 
   import { getContext, onMount } from "svelte";
+  import { PROFILE_MENU_CONTEXT_KEY } from "../constants/context-keys.js";
   import { moveIndex } from "../utils/move-index.js";
 
-  const ctx = getContext("carbon:ProfileMenu");
+  const ctx = getContext(PROFILE_MENU_CONTEXT_KEY);
 
   let menuItems = [];
   const unsubMenuItems = ctx?.menuItems.subscribe((_menuItems) => {

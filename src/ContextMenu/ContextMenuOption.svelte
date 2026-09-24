@@ -83,6 +83,7 @@
   export let ref = null;
 
   import { createEventDispatcher, getContext, onMount, tick } from "svelte";
+  import { SUBMENU_HOVER_DELAY_MS } from "../constants/timing.js";
   import CaretRight from "../icons/CaretRight.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
   import { clampIndex } from "../utils/clamp-index.js";
@@ -99,10 +100,6 @@
   const ctx = getContext("carbon:ContextMenu");
   const ctxGroup = getContext("carbon:ContextMenuGroup");
   const ctxRadioGroup = getContext("carbon:ContextMenuRadioGroup");
-
-  // "moderate-01" duration (ms) from Carbon motion recommended for small expansion, short distance movements
-  const moderate01 = 150;
-  const closeDelay = moderate01;
 
   let unsubCurrentIds = undefined;
   let unsubCurrentId = undefined;
@@ -121,7 +118,7 @@
     (value) => {
       submenuOpen = value;
     },
-    { openDelay: moderate01, closeDelay },
+    { openDelay: SUBMENU_HOVER_DELAY_MS, closeDelay: SUBMENU_HOVER_DELAY_MS },
   );
 
   /**

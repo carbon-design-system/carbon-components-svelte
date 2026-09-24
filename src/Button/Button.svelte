@@ -144,6 +144,7 @@
 
   import { getContext, onMount } from "svelte";
   import { get } from "svelte/store";
+  import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import Loading from "../Loading/Loading.svelte";
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
@@ -156,7 +157,7 @@
   import ButtonSkeleton from "./ButtonSkeleton.svelte";
   import { activeButtonTooltip } from "./button-tooltip-store.js";
 
-  const insideModal = getContext("carbon:Modal");
+  const insideModal = getContext(MODAL_CONTEXT_KEY);
   const actionSetSize = getContext("carbon:ActionSet")?.size;
 
   $: hasIconOnly = (icon || $$slots.icon) && !$$slots.default;

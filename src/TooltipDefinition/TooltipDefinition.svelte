@@ -62,6 +62,7 @@
   export let portalTooltip = undefined;
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
+  import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { createDelayedSetter } from "../utils/delayed-setter.js";
   import { dismiss } from "../utils/dismiss.js";
@@ -71,7 +72,7 @@
   } from "../utils/tooltip-delays.js";
   import { uniqueId } from "../utils/unique-id.js";
 
-  const insideModal = getContext("carbon:Modal");
+  const insideModal = getContext(MODAL_CONTEXT_KEY);
 
   $: effectivePortalTooltip =
     portalTooltip === undefined ? !!insideModal : portalTooltip;

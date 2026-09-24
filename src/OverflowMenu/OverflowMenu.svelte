@@ -99,6 +99,7 @@
     setContext,
   } from "svelte";
   import { derived, writable } from "svelte/store";
+  import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import OverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
   import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
@@ -115,7 +116,7 @@
   import { uniqueId } from "../utils/unique-id.js";
 
   const ctxBreadcrumbItem = getContext("carbon:BreadcrumbItem");
-  const insideModal = getContext("carbon:Modal");
+  const insideModal = getContext(MODAL_CONTEXT_KEY);
 
   $: effectivePortalMenu =
     portalMenu === undefined ? !!insideModal : portalMenu;

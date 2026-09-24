@@ -62,6 +62,7 @@
   export let portalTooltip = undefined;
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
+  import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import Information from "../icons/Information.svelte";
   import Popover from "../Popover/Popover.svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
@@ -73,7 +74,7 @@
 
   const dispatch = createEventDispatcher();
   const contentId = uniqueId();
-  const insideModal = getContext("carbon:Modal");
+  const insideModal = getContext(MODAL_CONTEXT_KEY);
 
   // Space (px) reserved for the caret between the anchor and the content.
   const PORTAL_GAP = 10;
