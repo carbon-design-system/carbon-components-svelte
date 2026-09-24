@@ -3,6 +3,8 @@ import { user } from "../utils/user";
 import ToggleForm from "./Toggle.form.test.svelte";
 
 const getForm = () => screen.getByTestId("form") as HTMLFormElement;
+/** The reset sync runs on the next task. */
+const flush = () => new Promise((resolve) => setTimeout(resolve));
 
 describe("Toggle form participation", () => {
   describe("submitted value", () => {
@@ -64,5 +66,89 @@ describe("Toggle form participation", () => {
 
     expect(toggle).not.toBeChecked();
     expect(onToggle).not.toHaveBeenCalled();
+  });
+
+  describe("form reset", () => {
+    it("syncs toggled to the switch's default state without firing toggle", async () => {
+      const onToggle = vi.fn();
+      render(ToggleForm, { props: { toggled: true, onToggle } });
+      const toggle = screen.getByRole("switch");
+
+      // Click off, then on again, so the DOM and state still agree at true.
+      await user.click(toggle);
+      await user.click(toggle);
+      onToggle.mockClear();
+
+      getForm().reset();
+      await flush();
+
+      expect(toggle).not.toBeChecked();
+      expect(screen.getByTestId("bound").textContent).toBe("false");
+      expect(new FormData(getForm()).has("notify")).toBe(false);
+      expect(onToggle).not.toHaveBeenCalled();
+    });
+
+    it("unchecks the switch on reset even without prior interaction", async () => {
+      const onToggle = vi.fn();
+      render(ToggleForm, { props: { toggled: true, onToggle } });
+      const toggle = screen.getByRole("switch");
+
+      expect(screen.getByTestId("bound").textContent).toBe("true");
+
+      getForm().reset();
+      await flush();
+
+      expect(toggle).not.toBeChecked();
+      expect(screen.getByTestId("bound").textContent).toBe("false");
+      expect(onToggle).not.toHaveBeenCalled();
+    });
+
+    it("follows the switch's default state, as with server-rendered markup", async () => {
+      const onToggle = vi.fn();
+      render(ToggleForm, { props: { toggled: true, onToggle } });
+      const toggle = screen.getByRole("switch") as HTMLInputElement;
+      // Server-rendered markup carries the state as the `checked` attribute.
+      toggle.defaultChecked = true;
+
+      await user.click(toggle);
+      expect(screen.getByTestId("bound").textContent).toBe("false");
+      onToggle.mockClear();
+
+      getForm().reset();
+      await flush();
+
+      expect(toggle).toBeChecked();
+      expect(screen.getByTestId("bound").textContent).toBe("true");
+      expect(onToggle).not.toHaveBeenCalled();
+    });
+
+    it("keeps a read-only switch's state", async () => {
+      const onToggle = vi.fn();
+      render(ToggleForm, {
+        props: { toggled: true, readonly: true, onToggle },
+      });
+      const toggle = screen.getByRole("switch");
+
+      getForm().reset();
+      await flush();
+
+      expect(toggle).toBeChecked();
+      expect(screen.getByTestId("bound").textContent).toBe("true");
+      expect(onToggle).not.toHaveBeenCalled();
+    });
+
+    it("leaves the state alone when the reset is canceled", async () => {
+      const onToggle = vi.fn();
+      render(ToggleForm, { props: { toggled: true, onToggle } });
+      const toggle = screen.getByRole("switch");
+      getForm().addEventListener("reset", (event) => event.preventDefault());
+
+      getForm().reset();
+      await flush();
+
+      expect(toggle).toBeChecked();
+      expect(screen.getByTestId("bound").textContent).toBe("true");
+      expect(onToggle).not.toHaveBeenCalled();
+    });
   });
 });

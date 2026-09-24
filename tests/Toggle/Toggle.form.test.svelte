@@ -19,3 +19,4 @@
     on:toggle={onToggle}
   />
 </form>
+<p data-testid="bound">{String(toggled)}</p>
