@@ -1,4 +1,5 @@
 <script>
+  import { COPY_FEEDBACK_TIMEOUT_MS } from "../utils/copy-feedback.js";
   import { copyText } from "../utils/copy-text.js";
 
   /**
@@ -99,7 +100,7 @@
   export let feedbackIcon = /** @type {Icon} */ (undefined);
 
   /** Set the timeout duration (ms) to display the feedback text */
-  export let feedbackTimeout = 2000;
+  export let feedbackTimeout = COPY_FEEDBACK_TIMEOUT_MS;
 
   /** Set the title and ARIA label for the copy button */
   export let iconDescription = "Copy to clipboard";

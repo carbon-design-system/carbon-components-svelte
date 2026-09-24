@@ -1,5 +1,8 @@
 // @ts-check
 
+/** Default time (ms) copy feedback stays visible. */
+export const COPY_FEEDBACK_TIMEOUT_MS = 2000;
+
 /** @typedef {'fade-in' | 'fade-out' | undefined} CopyFeedbackAnimation */
 
 /**
