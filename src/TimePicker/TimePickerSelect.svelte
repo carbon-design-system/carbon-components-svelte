@@ -66,7 +66,14 @@
   }
 
   function handleSelectKeydown(event) {
-    if (readonly && event.key !== "Tab" && event.key !== "Shift") {
+    // Ctrl/Cmd shortcuts (copy, find, reload) never change the value.
+    if (
+      readonly &&
+      event.key !== "Tab" &&
+      event.key !== "Shift" &&
+      !event.ctrlKey &&
+      !event.metaKey
+    ) {
       event.preventDefault();
     }
   }
