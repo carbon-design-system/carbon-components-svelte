@@ -10,6 +10,7 @@
 
   /**
    * Specify the value of the search input.
+   * Follows the field when the owning form resets.
    * @type {T}
    * @bindable writable
    */
@@ -112,6 +113,7 @@
   import IconSearch from "../icons/IconSearch.svelte";
   import Loading from "../Loading/Loading.svelte";
   import { debounce as debounceFn } from "../utils/debounce.js";
+  import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
   import SearchSkeleton from "./SearchSkeleton.svelte";
 
@@ -129,6 +131,12 @@
   let searchRef = null;
   let prevExpanded = expanded;
   let dispatchSearch = null;
+
+  // A form reset restores the field without an input event. Svelte 5 syncs
+  // `bind:value` back on its own; Svelte 3 and 4 do not, so read the field.
+  function handleFormReset() {
+    if (ref) value = ref.value;
+  }
 
   $: {
     dispatchSearch?.cancel();
@@ -235,6 +243,7 @@
     <!-- svelte-ignore a11y-autofocus -->
     <input
       bind:this={ref}
+      use:formReset={handleFormReset}
       bind:value
       type="search"
       class:bx--search-input={true}
