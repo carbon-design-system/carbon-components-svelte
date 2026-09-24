@@ -32,8 +32,8 @@
   import { createEventDispatcher, setContext } from "svelte";
   import { derived, writable } from "svelte/store";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
-  import { clampIndex } from "../utils/clamp-index.js";
   import { keyBy } from "../utils/key-by.js";
+  import { resolveIdSelection } from "../utils/resolve-id-selection.js";
   import { rovingFocus } from "../utils/roving-focus.js";
 
   const dispatch = createEventDispatcher();
@@ -124,16 +124,14 @@
   function syncSelection() {
     if (selectedId === undefined) return;
 
-    const step = $stepsById[selectedId];
-    if (step) {
-      currentIndex = step.index;
-      return;
-    }
-
-    if ($steps.length === 0) return;
-
-    currentIndex = clampIndex(currentIndex, 0, $steps.length);
-    selectedId = $steps[currentIndex]?.id;
+    const resolved = resolveIdSelection({
+      items: $steps,
+      selectedId,
+      currentIndex,
+    });
+    if (!resolved) return;
+    currentIndex = resolved.index;
+    selectedId = resolved.id;
   }
 
   setContext("carbon:ProgressIndicator", {
