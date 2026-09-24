@@ -11,6 +11,7 @@
 
   /**
    * Set to `true` to toggle the checkbox input.
+   * Follows the switch when the owning form resets.
    * @bindable writable
    */
   export let toggled = false;
@@ -55,9 +56,22 @@
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";
+  import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
+
+  // A form reset restores the switch without a change event. Sync the state
+  // to it and fire no `toggle`. A read-only switch keeps its state, so put
+  // the switch back instead.
+  function handleFormReset() {
+    if (!ref) return;
+    if (readonly) {
+      ref.checked = toggled;
+      return;
+    }
+    toggled = ref.checked;
+  }
 </script>
 
 <div
@@ -72,6 +86,7 @@
 >
   <input
     bind:this={ref}
+    use:formReset={handleFormReset}
     role="switch"
     type="checkbox"
     class:bx--toggle-input={true}

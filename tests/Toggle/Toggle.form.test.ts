@@ -1,8 +1,10 @@
 import { render, screen } from "@testing-library/svelte";
+import { flushFormReset } from "../utils/flush-form-reset";
 import { user } from "../utils/user";
 import ToggleForm from "./Toggle.form.test.svelte";
 
 const getForm = () => screen.getByTestId("form") as HTMLFormElement;
+const getBound = () => screen.getByTestId("bound").textContent;
 
 describe("Toggle form participation", () => {
   describe("submitted value", () => {
@@ -64,5 +66,51 @@ describe("Toggle form participation", () => {
 
     expect(toggle).not.toBeChecked();
     expect(onToggle).not.toHaveBeenCalled();
+  });
+
+  describe("form reset", () => {
+    it("syncs the bound state to the reset switch without a toggle event", async () => {
+      const onToggle = vi.fn();
+      render(ToggleForm, { props: { onToggle } });
+      const toggle = screen.getByRole("switch");
+
+      await user.click(toggle);
+      expect(getBound()).toBe("true");
+      onToggle.mockClear();
+
+      getForm().reset();
+      await flushFormReset();
+
+      expect(toggle).not.toBeChecked();
+      expect(getBound()).toBe("false");
+      expect(onToggle).not.toHaveBeenCalled();
+    });
+
+    it("follows the switch's default state, as with server-rendered markup", async () => {
+      render(ToggleForm, { props: { toggled: true } });
+      const toggle = screen.getByRole("switch") as HTMLInputElement;
+      // Server-rendered markup carries the state as the `checked` attribute.
+      toggle.defaultChecked = true;
+
+      await user.click(toggle);
+      expect(getBound()).toBe("false");
+
+      getForm().reset();
+      await flushFormReset();
+
+      expect(toggle).toBeChecked();
+      expect(getBound()).toBe("true");
+    });
+
+    it("keeps a read-only switch as it was", async () => {
+      render(ToggleForm, { props: { toggled: true, readonly: true } });
+      const toggle = screen.getByRole("switch");
+
+      getForm().reset();
+      await flushFormReset();
+
+      expect(toggle).toBeChecked();
+      expect(getBound()).toBe("true");
+    });
   });
 });
