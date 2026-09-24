@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import SearchMenuSkeletonMenu from "carbon-components-svelte/SearchMenu/SearchMenuSkeleton.svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import SearchMenu from "./SearchMenu.test.svelte";
@@ -406,6 +407,20 @@ describe("SearchMenu groups", () => {
       ),
     ).toHaveLength(3);
     expect(screen.queryByRole("combobox")).not.toBeInTheDocument();
+  });
+
+  it("merges a custom class with the skeleton menu classes", () => {
+    const { container } = render(SearchMenuSkeletonMenu, {
+      props: { size: "sm", class: "custom" },
+    });
+    const menu = container.querySelector(".bx--search-menu__menu");
+    assert(menu);
+    expect(menu).toHaveClass(
+      "custom",
+      "bx--search-menu__menu--inline",
+      "bx--search-menu__menu--sm",
+    );
+    expect(menu).not.toHaveClass("bx--search-menu__menu--xl");
   });
 
   it("keeps a filter:false group unfiltered and hides empty group headers", async () => {

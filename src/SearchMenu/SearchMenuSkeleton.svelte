@@ -14,7 +14,12 @@
 </script>
 
 <div
-  class="bx--search-menu__menu bx--search-menu__menu--inline bx--search-menu__menu--{size}"
+  class:bx--search-menu__menu={true}
+  class:bx--search-menu__menu--inline={true}
+  class:bx--search-menu__menu--xs={size === "xs"}
+  class:bx--search-menu__menu--sm={size === "sm"}
+  class:bx--search-menu__menu--lg={size === "lg"}
+  class:bx--search-menu__menu--xl={size === "xl"}
   {...$$restProps}
   on:click
   on:mouseover
@@ -22,7 +27,10 @@
   on:mouseleave
 >
   {#each Array.from({ length: count }, (_, i) => i) as item (item)}
-    <div class="bx--search-menu-item bx--search-menu-item--skeleton">
+    <div
+      class:bx--search-menu-item={true}
+      class:bx--search-menu-item--skeleton={true}
+    >
       <SkeletonText width={widths[item % widths.length]} />
     </div>
   {/each}

@@ -369,7 +369,7 @@
           }}
         >
           {#each selectItems as pageNumber (pageNumber)}
-            <option class="bx--select-option" value={pageNumber}>
+            <option class:bx--select-option={true} value={pageNumber}>
               {pageNumber}
             </option>
           {/each}

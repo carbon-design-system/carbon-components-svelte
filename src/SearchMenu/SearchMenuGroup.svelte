@@ -57,12 +57,12 @@
   class:bx--search-menu-group--hidden={!hasChildren}
 >
   {#if showHeader}
-    <div class="bx--search-menu-group__header">
+    <div class:bx--search-menu-group__header={true}>
       {#if label}
-        <span class="bx--search-menu-group__label">{label}</span>
+        <span class:bx--search-menu-group__label={true}>{label}</span>
       {/if}
       {#if $$slots.action}
-        <span class="bx--search-menu-group__action">
+        <span class:bx--search-menu-group__action={true}>
           <slot name="action" />
         </span>
       {/if}

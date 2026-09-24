@@ -475,7 +475,8 @@
           {id}
         >
           <svg
-            class="bx--slider__thumb-icon bx--slider__thumb-icon--lower"
+            class:bx--slider__thumb-icon={true}
+            class:bx--slider__thumb-icon--lower={true}
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 16 24"
           >
@@ -485,7 +486,9 @@
             <path fill="none" d="M-4 0h24v24H-4z" />
           </svg>
           <svg
-            class="bx--slider__thumb-icon bx--slider__thumb-icon--lower bx--slider__thumb-icon--focus"
+            class:bx--slider__thumb-icon={true}
+            class:bx--slider__thumb-icon--lower={true}
+            class:bx--slider__thumb-icon--focus={true}
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 16 24"
           >
@@ -521,7 +524,8 @@
           on:keydown={handleKeydown}
         >
           <svg
-            class="bx--slider__thumb-icon bx--slider__thumb-icon--upper"
+            class:bx--slider__thumb-icon={true}
+            class:bx--slider__thumb-icon--upper={true}
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 16 24"
           >
@@ -531,7 +535,9 @@
             <path fill="none" d="M-4 0h24v24H-4z" />
           </svg>
           <svg
-            class="bx--slider__thumb-icon bx--slider__thumb-icon--upper bx--slider__thumb-icon--focus"
+            class:bx--slider__thumb-icon={true}
+            class:bx--slider__thumb-icon--upper={true}
+            class:bx--slider__thumb-icon--focus={true}
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 16 24"
           >
