@@ -215,6 +215,10 @@ files](#clear-files)), and `rejected` fires per file that fails validation
 detection](#duplicate-detection)).
 
 <FileUploader
+  multiple
+  labelTitle="Upload files"
+  buttonLabel="Add files"
+  labelDescription="Events are logged to the console."
   on:add={(e) => console.log(e.detail)} // File[]
   on:remove={(e) => console.log(e.detail)} // File[]
   on:change={(e) => console.log(e.detail)} // File[]
