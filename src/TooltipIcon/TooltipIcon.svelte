@@ -10,6 +10,10 @@
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { createDelayedSetter } from "../utils/delayed-setter.js";
   import { dismiss } from "../utils/dismiss.js";
+  import {
+    TOOLTIP_ENTER_DELAY_MS,
+    TOOLTIP_LEAVE_DELAY_MS,
+  } from "../utils/tooltip-delays.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { activeTooltipIcon } from "./tooltip-icon-store.js";
 
@@ -60,13 +64,13 @@
    * Specify the duration in milliseconds to delay before displaying the tooltip.
    * @type {number}
    */
-  export let enterDelayMs = 100;
+  export let enterDelayMs = TOOLTIP_ENTER_DELAY_MS;
 
   /**
    * Specify the duration in milliseconds to delay before hiding the tooltip.
    * @type {number}
    */
-  export let leaveDelayMs = 300;
+  export let leaveDelayMs = TOOLTIP_LEAVE_DELAY_MS;
 
   /**
    * Obtain a reference to the button HTML element.
