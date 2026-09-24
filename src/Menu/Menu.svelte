@@ -104,6 +104,7 @@
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
+  import { menuOptionLabel } from "../utils/menu-option-label.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { scrollIntoViewWithinMenu } from "../utils/scroll-into-view-within-menu.js";
   import {
@@ -222,17 +223,6 @@
   }
 
   /**
-   * @param {HTMLElement} item
-   */
-  function itemToString(item) {
-    return (
-      item.querySelector(".bx--menu-option__label")?.textContent ??
-      item.textContent ??
-      ""
-    ).trim();
-  }
-
-  /**
    * WAI-ARIA APG menu first-character navigation: move focus to the next
    * enabled item (in this menu's own level; a submenu is a separate,
    * portaled `<ul>` so it is never among `items` here) whose label starts
@@ -250,7 +240,7 @@
     const index = typeaheadIndex({
       items,
       query,
-      itemToString,
+      itemToString: menuOptionLabel,
       index: focusIndex,
     });
     focusIndex = index;
