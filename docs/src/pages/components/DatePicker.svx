@@ -24,11 +24,13 @@ The default `datePickerType` renders a text field without a dropdown calendar.
 
 Set `datePickerType` to `"single"` for one date with a dropdown calendar. Use a single DatePickerInput; clicking the field or calendar icon opens the calendar to pick one day. Bind `value` to read or set the formatted date string.
 
+From the keyboard, <DocKbd label="Down" /> in the field moves focus into the calendar, the arrow keys move by day and week, and <DocKbd label="Enter" /> picks the focused day and closes the calendar. <DocKbd label="Escape" /> closes it and returns focus to the field. To type a date instead, enter it and press <DocKbd label="Enter" />.
+
 <FileSource src="/framed/DatePicker/DatePickerSingle" />
 
 ### Multiple
 
-Set `datePickerType` to `"multiple"` to select several individual, non-contiguous dates from one calendar. Each click toggles that day; `value` holds the dates as a single string, joined with `", "`, formatted with the same `dateFormat` used by other calendar types. Shift-click a day to add the contiguous range between it and the last-clicked day to the selection; disabled dates within that range are skipped.
+Set `datePickerType` to `"multiple"` to select several individual, non-contiguous dates from one calendar. Each click toggles that day; `value` holds the dates as a single string, joined with `", "`, formatted with the same `dateFormat` used by other calendar types. Shift-click a day to add the contiguous range between it and the last-clicked day to the selection; disabled dates within that range are skipped. From the keyboard, <DocKbd label="Enter" /> adds or removes the focused day and the calendar stays open for the next one.
 
 <FileSource src="/framed/DatePicker/DatePickerMultiple" />
 
@@ -36,7 +38,7 @@ Selecting many dates never drops any of them from `value` or the `change` event'
 
 ### Range
 
-Set `datePickerType` to `"range"` for a start and end date. Provide two DatePickerInput components in order—start, then end—and bind `valueFrom` and `valueTo`. Both fields share one calendar: the user selects a span, and the start and end inputs update together.
+Set `datePickerType` to `"range"` for a start and end date. Provide two DatePickerInput components in order—start, then end—and bind `valueFrom` and `valueTo`. Both fields share one calendar: the user selects a span, and the start and end inputs update together. From the keyboard, <DocKbd label="Enter" /> picks the start, then the end, and focus stays in the calendar between the two.
 
 <FileSource src="/framed/DatePicker/DatePickerRange" />
 
