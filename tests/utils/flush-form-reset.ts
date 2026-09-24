@@ -1,4 +1,5 @@
 import { tick } from "svelte";
+import { flushMacrotask } from "./flush-macrotask";
 
 /**
  * `use:formReset` calls back on the next macrotask, once the form has
@@ -6,6 +7,6 @@ import { tick } from "svelte";
  * a tick for the bound values it writes to reach the DOM.
  */
 export const flushFormReset = async () => {
-  await new Promise((resolve) => setTimeout(resolve));
+  await flushMacrotask();
   await tick();
 };

@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
 import { stubPerOptionResizeObserver } from "../utils/stub-per-option-resize-observer";
 import { user } from "../utils/user";
+import { createItems } from "./helpers";
 import MultiSelect from "./MultiSelect.test.svelte";
 import MeasuredMultiSelect from "./MultiSelectMeasured.test.svelte";
 
@@ -34,13 +35,6 @@ const windowed = {
   itemHeight: ITEM_HEIGHT,
   containerHeight: CONTAINER_HEIGHT,
 };
-
-function makeItems(count: number) {
-  return Array.from({ length: count }, (_, index) => ({
-    id: String(index),
-    text: `Item ${index + 1}`,
-  }));
-}
 
 /**
  * A list whose select-all row is far taller than every other option, so a
@@ -108,7 +102,7 @@ describe("MultiSelect menu window wiring", () => {
   it("marks the menu so the option wrap styles reach its options", async () => {
     render(MultiSelect, {
       props: {
-        items: makeItems(UNWINDOWED_COUNT),
+        items: createItems(UNWINDOWED_COUNT),
         labelText: "Items",
         wrapOptions: true,
       },
@@ -122,7 +116,7 @@ describe("MultiSelect menu window wiring", () => {
   it("marks a portaled menu, which a class on the component root could not reach", async () => {
     render(MultiSelect, {
       props: {
-        items: makeItems(UNWINDOWED_COUNT),
+        items: createItems(UNWINDOWED_COUNT),
         labelText: "Items",
         wrapOptions: true,
         portalMenu: true,
@@ -138,7 +132,7 @@ describe("MultiSelect menu window wiring", () => {
 
   it("renders the menu as it does today when the prop is not set", async () => {
     render(MultiSelect, {
-      props: { items: makeItems(UNWINDOWED_COUNT), labelText: "Items" },
+      props: { items: createItems(UNWINDOWED_COUNT), labelText: "Items" },
     });
 
     await user.click(field());
@@ -152,7 +146,7 @@ describe("MultiSelect menu window wiring", () => {
   it("puts a list it windows itself on the measured path under the prop", async () => {
     render(MultiSelect, {
       props: {
-        items: makeItems(WINDOWED_COUNT),
+        items: createItems(WINDOWED_COUNT),
         labelText: "Items",
         wrapOptions: true,
       },
@@ -168,7 +162,7 @@ describe("MultiSelect menu window wiring", () => {
   });
 
   it("marks options with their item index only when wrapping measures them", async () => {
-    const items = makeItems(UNWINDOWED_COUNT);
+    const items = createItems(UNWINDOWED_COUNT);
     const { unmount } = render(MultiSelect, {
       props: {
         items,
@@ -206,7 +200,7 @@ describe("MultiSelect menu window wiring", () => {
   it("marks options of a measured list too short to window", async () => {
     render(MultiSelect, {
       props: {
-        items: makeItems(UNWINDOWED_COUNT),
+        items: createItems(UNWINDOWED_COUNT),
         labelText: "Items",
         virtualize: { ...windowed, threshold: UNWINDOWED_COUNT + 1 },
         wrapOptions: true,

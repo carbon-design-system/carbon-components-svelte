@@ -14,7 +14,7 @@ describe("SearchMenu debounce", () => {
     const onSearch = vi.fn();
     render(SearchMenuDebounce, { props: { debounce: 200, onSearch } });
 
-    const input = screen.getByRole("combobox") as HTMLInputElement;
+    const input = screen.getByRole("combobox");
     await fireEvent.focus(input);
     await fireEvent.input(input, { target: { value: "no-match-here" } });
     expect(input).toHaveValue("no-match-here");
@@ -56,7 +56,7 @@ describe("SearchMenu debounce", () => {
     const onSearch = vi.fn();
     render(SearchMenuDebounce, { props: { debounce: 200, onSearch } });
 
-    const input = screen.getByRole("combobox") as HTMLInputElement;
+    const input = screen.getByRole("combobox");
     await fireEvent.focus(input);
     await fireEvent.input(input, { target: { value: "Data" } });
     await fireEvent.keyDown(input, { key: "ArrowDown" });

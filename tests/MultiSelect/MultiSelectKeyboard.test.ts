@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
+import { openMenu } from "./helpers";
 import MultiSelect from "./MultiSelect.test.svelte";
 
 const items = [
@@ -10,9 +11,6 @@ const items = [
 ];
 
 describe("MultiSelect keyboard", () => {
-  const openMenu = async () =>
-    await user.click(await screen.findByRole("combobox", { expanded: false }));
-
   describe("Shift+Enter / Shift+Space range selection", () => {
     it("selects the range from the anchor to the keyboard-highlighted item on Shift+Enter", async () => {
       render(MultiSelect, { props: { items } });

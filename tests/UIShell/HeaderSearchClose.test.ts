@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { flushDismiss } from "../utils/flush-dismiss";
+import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import HeaderSearchClose from "./HeaderSearchClose.test.svelte";
 
@@ -27,7 +28,7 @@ describe("HeaderSearch close event", () => {
     const outside = document.createElement("div");
     document.body.appendChild(outside);
     fireEvent.mouseUp(outside);
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await flushMacrotask();
 
     expect(onClose).toHaveBeenCalledTimes(1);
     expect(onClose.mock.calls[0][0].detail).toEqual({
@@ -101,7 +102,7 @@ describe("HeaderSearch close event", () => {
     const outside = document.createElement("div");
     document.body.appendChild(outside);
     fireEvent.mouseUp(outside);
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await flushMacrotask();
 
     expect(onClose).not.toHaveBeenCalled();
 

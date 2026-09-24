@@ -1,13 +1,12 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import DataTableSearchNested from "./DataTableSearchNested.test.svelte";
+import { getTableRows } from "./helpers";
 
 describe("DataTableSearch with nested keys", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
-
-  const getTableRows = () => screen.getAllByRole("row").slice(1);
 
   it("filters rows by nested property values", async () => {
     render(DataTableSearchNested);

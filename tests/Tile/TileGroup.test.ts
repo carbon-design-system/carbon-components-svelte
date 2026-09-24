@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import type TileGroupComponent from "carbon-components-svelte/Tile/TileGroup.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
+import { flushMacrotask } from "../utils/flush-macrotask";
 import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import TileGroupSlot from "./TileGroup.slot.test.svelte";
@@ -162,13 +163,13 @@ describe("TileGroup", () => {
     const { component } = render(TileGroup);
 
     component.selected = "option2";
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await flushMacrotask();
 
     const radios = screen.getAllByRole("radio");
     expect(radios[1]).toBeChecked();
 
     component.selected = "option3";
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await flushMacrotask();
 
     expect(radios[2]).toBeChecked();
   });

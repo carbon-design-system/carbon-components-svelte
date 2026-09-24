@@ -1,15 +1,8 @@
-import { render, screen, within } from "@testing-library/svelte";
+import { render, within } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import DataTableTableCellsCache from "./DataTableTableCellsCache.test.svelte";
-
-function getFirstBodyRow(): HTMLElement {
-  const rows = screen
-    .getAllByRole("row")
-    .filter((r) => r.closest("tbody") !== null);
-  expect(rows.length).toBeGreaterThan(0);
-  return rows[0];
-}
+import { getFirstBodyRow } from "./helpers";
 
 describe("DataTable tableCellsByRowId caching", () => {
   const headers = [{ key: "name", value: "Name" }] as const;

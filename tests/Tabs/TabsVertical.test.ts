@@ -271,15 +271,11 @@ describe("TabsVerticalSkeleton", () => {
     expect(container.querySelectorAll(".bx--tabs__nav-item")).toHaveLength(4);
   });
 
-  it("should render a custom count", () => {
-    const { container } = render(TabsVerticalSkeleton, { props: { count: 6 } });
+  it.each([6, 0])("should render %i nav items for count", (count) => {
+    const { container } = render(TabsVerticalSkeleton, { props: { count } });
 
-    expect(container.querySelectorAll(".bx--tabs__nav-item")).toHaveLength(6);
-  });
-
-  it("should handle a zero count", () => {
-    const { container } = render(TabsVerticalSkeleton, { props: { count: 0 } });
-
-    expect(container.querySelectorAll(".bx--tabs__nav-item")).toHaveLength(0);
+    expect(container.querySelectorAll(".bx--tabs__nav-item")).toHaveLength(
+      count,
+    );
   });
 });

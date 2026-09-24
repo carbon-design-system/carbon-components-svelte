@@ -1,14 +1,10 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
+import { findRowById } from "./helpers";
 import TreeViewVirtualize from "./TreeView.virtualize.test.svelte";
 
 const countRows = () => screen.queryAllByRole("treeitem").length;
-
-const findRowById = (id: number | string) =>
-  document.querySelector(
-    `[data-tree-row-id="${CSS.escape(String(id))}"]`,
-  ) as HTMLElement | null;
 
 describe("TreeView (virtualize)", () => {
   it("windows the DOM to the overscan-bounded slice of a large tree", () => {
@@ -31,7 +27,8 @@ describe("TreeView (virtualize)", () => {
     const spacers = ul.querySelectorAll(':scope > li[aria-hidden="true"]');
     // At scrollTop=0 there's no leading spacer, only a trailing one.
     expect(spacers.length).toBe(1);
-    const trailing = spacers[0] as HTMLElement;
+    const trailing = spacers[0];
+    assert(trailing instanceof HTMLElement);
     const trailingHeight = Number.parseFloat(trailing.style.height);
     expect(trailingHeight).toBeGreaterThan(0);
   });
@@ -81,9 +78,10 @@ describe("TreeView (virtualize)", () => {
     // non-virtualized behavior where row-body click only selects).
     const root = findRowById(0);
     if (!root) throw new Error("expected root row");
-    const caret = root.querySelector(
+    const caret = root.querySelector<HTMLElement>(
       ".bx--tree-parent-node__toggle",
-    ) as HTMLElement;
+    );
+    assert(caret instanceof HTMLElement);
     await user.click(caret);
     await tick();
 
@@ -157,7 +155,7 @@ describe("TreeView (virtualize)", () => {
     expect(ul.contains(document.activeElement)).toBe(true);
 
     await user.keyboard("{ArrowDown}");
-    const focused = document.activeElement as HTMLElement | null;
+    const focused = document.activeElement;
     expect(focused?.getAttribute("data-tree-row-id")).toBeTruthy();
   });
 
@@ -300,7 +298,7 @@ describe("TreeView (virtualize)", () => {
     await user.keyboard("{ArrowDown}");
     await user.keyboard("{ArrowDown}");
 
-    const focused = document.activeElement as HTMLElement | null;
+    const focused = document.activeElement;
     expect(focused).not.toBe(first);
     expect(focused?.getAttribute("tabindex")).toBe("0");
     const focusedRowId = focused?.getAttribute("data-tree-row-id");

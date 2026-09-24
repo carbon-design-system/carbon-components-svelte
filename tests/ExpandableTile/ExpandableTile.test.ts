@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import ExpandableTile from "./ExpandableTile.test.svelte";
 import ExpandableTileCustom from "./ExpandableTileCustom.test.svelte";
@@ -279,7 +280,7 @@ describe("ExpandableTile", () => {
       props: { tilePadding: 50, tileMaxHeight: 300 },
     });
 
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await flushMacrotask();
     await tick();
 
     expect(component.tileMaxHeight).toBe(300);
@@ -320,21 +321,21 @@ describe("ExpandableTile", () => {
       const firstRefAbove = screen
         .getByTestId("toggle")
         .querySelector(".bx--tile-content");
-      expect(firstRefAbove).not.toBeNull();
-      expect(observed.has(firstRefAbove as Element)).toBe(true);
+      assert(firstRefAbove);
+      expect(observed.has(firstRefAbove)).toBe(true);
 
       await rerender({ interactive: true });
 
       const newRefAbove = screen
         .getByTestId("toggle")
         .querySelector(".bx--tile-content");
-      expect(newRefAbove).not.toBeNull();
+      assert(newRefAbove);
       // The root element is recreated, so the above-the-fold node is new.
       expect(newRefAbove).not.toBe(firstRefAbove);
       // The observer must follow the new node…
-      expect(observed.has(newRefAbove as Element)).toBe(true);
+      expect(observed.has(newRefAbove)).toBe(true);
       // …and let go of the detached original.
-      expect(observed.has(firstRefAbove as Element)).toBe(false);
+      expect(observed.has(firstRefAbove)).toBe(false);
     } finally {
       globalThis.ResizeObserver = OriginalResizeObserver;
     }

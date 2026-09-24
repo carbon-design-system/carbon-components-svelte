@@ -12,6 +12,7 @@ import { fuzzyMatch } from "carbon-components-svelte/utils/fuzzy-match";
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
+import { createItems, openMenu } from "./helpers";
 import MultiSelectFluidForm from "./MultiSelect.fluidForm.test.svelte";
 import MultiSelectFluidSkeleton from "./MultiSelect.fluidSkeleton.test.svelte";
 import MultiSelectFluidSlot from "./MultiSelect.fluidSlot.test.svelte";
@@ -34,9 +35,6 @@ const items = [
 ] as const;
 
 describe("MultiSelect", () => {
-  const openMenu = async () =>
-    await user.click(await screen.findByRole("combobox", { expanded: false }));
-
   const closeMenu = async () =>
     await user.click(await screen.findByRole("combobox", { expanded: true }));
 
@@ -74,7 +72,8 @@ describe("MultiSelect", () => {
       },
     });
 
-    const input = screen.getByRole("combobox") as HTMLInputElement;
+    const input = screen.getByRole("combobox");
+    assert(input instanceof HTMLInputElement);
     await user.click(input);
     await tick();
 
@@ -87,7 +86,8 @@ describe("MultiSelect", () => {
       props: { items: [], filterable: true, value: "Slack" },
     });
 
-    const input = screen.getByRole("combobox") as HTMLInputElement;
+    const input = screen.getByRole("combobox");
+    assert(input instanceof HTMLInputElement);
     await user.click(input);
     await tick();
 
@@ -105,7 +105,8 @@ describe("MultiSelect", () => {
       },
     });
 
-    const input = screen.getByRole("combobox") as HTMLInputElement;
+    const input = screen.getByRole("combobox");
+    assert(input instanceof HTMLInputElement);
     const select = vi.spyOn(input, "select");
     await fireEvent.focus(input);
 
@@ -1983,7 +1984,7 @@ describe("MultiSelect", () => {
         props: { items, filterable: true, placeholder: "Filter..." },
       });
 
-      const input = screen.getByRole("combobox") as HTMLInputElement;
+      const input = screen.getByRole("combobox");
       await user.click(input);
       await user.type(input, "Em");
       expect(input).toHaveValue("Em");
@@ -3094,15 +3095,8 @@ describe("MultiSelect", () => {
   });
 
   describe("virtualization", () => {
-    const createLargeItemList = (count: number) => {
-      return Array.from({ length: count }, (_, i) => ({
-        id: String(i),
-        text: `Item ${i + 1}`,
-      }));
-    };
-
     it("should enable virtualization for large lists", async () => {
-      const largeItems = createLargeItemList(500);
+      const largeItems = createItems(500);
       render(MultiSelect, {
         props: {
           items: largeItems,
@@ -3122,7 +3116,7 @@ describe("MultiSelect", () => {
     });
 
     it("should default itemHeight to the size row height", async () => {
-      const largeItems = createLargeItemList(500);
+      const largeItems = createItems(500);
       render(MultiSelect, {
         props: {
           items: largeItems,
@@ -3148,7 +3142,7 @@ describe("MultiSelect", () => {
     ])(
       "should scroll to selected item when menu opens $description",
       async ({ virtualize }) => {
-        const largeItems = createLargeItemList(500);
+        const largeItems = createItems(500);
         render(MultiSelect, {
           props: {
             items: largeItems,
@@ -3190,7 +3184,7 @@ describe("MultiSelect", () => {
     ])(
       "should scroll to selected item when menu reopens $description",
       async ({ virtualize }) => {
-        const largeItems = createLargeItemList(500);
+        const largeItems = createItems(500);
         const { rerender } = render(MultiSelect, {
           props: {
             items: largeItems,
@@ -3241,7 +3235,7 @@ describe("MultiSelect", () => {
     );
 
     it("should scroll to top when no items are selected", async () => {
-      const largeItems = createLargeItemList(500);
+      const largeItems = createItems(500);
       render(MultiSelect, {
         props: {
           items: largeItems,
@@ -3262,7 +3256,7 @@ describe("MultiSelect", () => {
     });
 
     it("should handle selected items at the end of list", async () => {
-      const largeItems = createLargeItemList(500);
+      const largeItems = createItems(500);
       render(MultiSelect, {
         props: {
           items: largeItems,
@@ -3294,7 +3288,7 @@ describe("MultiSelect", () => {
     });
 
     it("should accept virtualization configuration object", async () => {
-      const largeItems = createLargeItemList(500);
+      const largeItems = createItems(500);
       render(MultiSelect, {
         props: {
           items: largeItems,
@@ -3320,7 +3314,7 @@ describe("MultiSelect", () => {
     });
 
     it("should not virtualize lists below threshold", async () => {
-      const smallItems = createLargeItemList(50);
+      const smallItems = createItems(50);
       render(MultiSelect, {
         props: {
           items: smallItems,
@@ -3338,52 +3332,34 @@ describe("MultiSelect", () => {
       expect(options.length).toBe(50);
     });
 
-    it("should use default item height when not specified", async () => {
-      const largeItems = createLargeItemList(500);
-      render(MultiSelect, {
-        props: {
-          items: largeItems,
-          selectedIds: ["0"],
-          virtualize: true,
-        },
-      });
-
-      await openMenu();
-
-      const menu = screen.getByRole("listbox");
-      expect(menu).toBeVisible();
-
-      const options = screen.getAllByRole("option");
-      expect(options.length).toBeGreaterThan(0);
-      expect(options.length).toBeLessThan(500);
-    });
-
-    it("should handle virtualization with custom item height", async () => {
-      const largeItems = createLargeItemList(500);
-      render(MultiSelect, {
-        props: {
-          items: largeItems,
-          selectedIds: ["0"],
-          virtualize: {
-            itemHeight: 60,
-            containerHeight: 300,
+    it.each([
+      { itemHeight: 60, containerHeight: 300 },
+      { itemHeight: 100, containerHeight: 500 },
+    ])(
+      "renders far fewer than 500 options for a custom itemHeight of $itemHeight",
+      async ({ itemHeight, containerHeight }) => {
+        const largeItems = createItems(500);
+        render(MultiSelect, {
+          props: {
+            items: largeItems,
+            selectedIds: ["0"],
+            virtualize: { itemHeight, containerHeight },
           },
-        },
-      });
+        });
 
-      await openMenu();
+        await openMenu();
 
-      const menu = screen.getByRole("listbox");
-      expect(menu).toBeVisible();
+        const menu = screen.getByRole("listbox");
+        expect(menu).toBeVisible();
 
-      const options = screen.getAllByRole("option");
-      expect(options.length).toBeGreaterThan(0);
-      expect(options.length).toBeLessThan(500);
-      expect(options.length).toBeLessThan(15);
-    });
+        const options = screen.getAllByRole("option");
+        expect(options.length).toBeGreaterThan(0);
+        expect(options.length).toBeLessThan(15);
+      },
+    );
 
     it("should calculate scroll position correctly with custom item height", async () => {
-      const largeItems = createLargeItemList(500);
+      const largeItems = createItems(500);
       render(MultiSelect, {
         props: {
           items: largeItems,
@@ -3434,31 +3410,8 @@ describe("MultiSelect", () => {
       });
     });
 
-    it("should override default item height when specified", async () => {
-      const largeItems = createLargeItemList(500);
-      render(MultiSelect, {
-        props: {
-          items: largeItems,
-          selectedIds: ["0"],
-          virtualize: {
-            itemHeight: 100,
-            containerHeight: 500,
-          },
-        },
-      });
-
-      await openMenu();
-
-      const menu = screen.getByRole("listbox");
-      expect(menu).toBeVisible();
-
-      const options = screen.getAllByRole("option");
-      expect(options.length).toBeGreaterThan(0);
-      expect(options.length).toBeLessThan(15);
-    });
-
     it("should maintain selection when virtualized", async () => {
-      const largeItems = createLargeItemList(500);
+      const largeItems = createItems(500);
       render(MultiSelect, {
         props: {
           items: largeItems,
@@ -3482,7 +3435,7 @@ describe("MultiSelect", () => {
     });
 
     it("should handle keyboard navigation with virtualization", async () => {
-      const largeItems = createLargeItemList(500);
+      const largeItems = createItems(500);
       render(MultiSelect, {
         props: {
           items: largeItems,
@@ -3530,7 +3483,7 @@ describe("MultiSelect", () => {
     });
 
     it("should apply max-height style when virtualized", async () => {
-      const largeItems = createLargeItemList(500);
+      const largeItems = createItems(500);
       render(MultiSelect, {
         props: {
           items: largeItems,
@@ -3552,7 +3505,7 @@ describe("MultiSelect", () => {
     });
 
     it("should automatically enable virtualization for lists with more than 100 items when virtualize is undefined", async () => {
-      const largeItems = createLargeItemList(150);
+      const largeItems = createItems(150);
       render(MultiSelect, {
         props: {
           items: largeItems,
@@ -3575,7 +3528,7 @@ describe("MultiSelect", () => {
     });
 
     it("should not virtualize lists with 100 or fewer items when virtualize is undefined", async () => {
-      const smallItems = createLargeItemList(100);
+      const smallItems = createItems(100);
       render(MultiSelect, {
         props: {
           items: smallItems,
@@ -3595,24 +3548,8 @@ describe("MultiSelect", () => {
       expect(menu.style.maxHeight).toBeFalsy();
     });
 
-    it("should not virtualize lists with exactly 100 items when virtualize is undefined", async () => {
-      const items = createLargeItemList(100);
-      render(MultiSelect, {
-        props: {
-          items,
-          selectedIds: ["0"],
-        },
-      });
-
-      await openMenu();
-
-      const options = screen.getAllByRole("option");
-      // Should render all 100 items (threshold is 100, so > 100 is needed)
-      expect(options.length).toBe(100);
-    });
-
     it("should explicitly disable virtualization when virtualize is false, even with large lists", async () => {
-      const largeItems = createLargeItemList(100);
+      const largeItems = createItems(100);
       render(MultiSelect, {
         props: {
           items: largeItems,
@@ -3634,7 +3571,7 @@ describe("MultiSelect", () => {
     });
 
     it("should respect threshold when virtualize is true with fewer than 100 items", async () => {
-      const smallItems = createLargeItemList(50);
+      const smallItems = createItems(50);
       render(MultiSelect, {
         props: {
           items: smallItems,
@@ -3658,7 +3595,7 @@ describe("MultiSelect", () => {
     });
 
     it("should virtualize when virtualize is true with more than 100 items", async () => {
-      const largeItems = createLargeItemList(150);
+      const largeItems = createItems(150);
       render(MultiSelect, {
         props: {
           items: largeItems,
@@ -3686,7 +3623,7 @@ describe("MultiSelect", () => {
     // never fires when focus leaves the menu. The menu must close based
     // on focus leaving the wrapper, not blur of a specific list index.
     it("closes menu when focus moves outside the wrapper (virtualized)", async () => {
-      const largeItems = createLargeItemList(500);
+      const largeItems = createItems(500);
       render(MultiSelect, {
         props: { items: largeItems, virtualize: true },
       });

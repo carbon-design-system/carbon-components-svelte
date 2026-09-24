@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { flushFormReset } from "../utils/flush-form-reset";
+import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import CheckboxForm from "./Checkbox.form.test.svelte";
@@ -77,34 +78,33 @@ describe("Checkbox form participation", () => {
       const checkbox = screen.getByRole("checkbox", { name: "Agree" });
 
       await user.click(checkbox);
-      expect(screen.getByTestId("bound").textContent).toBe("true");
+      expect(getBoundText()).toBe("true");
       onCheck.mockClear();
 
       getForm().reset();
       await flushFormReset();
 
       expect(checkbox).not.toBeChecked();
-      expect(screen.getByTestId("bound").textContent).toBe("false");
+      expect(getBoundText()).toBe("false");
       expect(new FormData(getForm()).has("agree")).toBe(false);
       expect(onCheck).not.toHaveBeenCalled();
     });
 
     it("follows the box's default state, as with server-rendered markup", async () => {
       render(CheckboxForm, { props: { checked: true } });
-      const checkbox = screen.getByRole("checkbox", {
-        name: "Agree",
-      }) as HTMLInputElement;
+      const checkbox = screen.getByRole("checkbox", { name: "Agree" });
+      assert(checkbox instanceof HTMLInputElement);
       // Server-rendered markup carries the state as the `checked` attribute.
       checkbox.defaultChecked = true;
 
       await user.click(checkbox);
-      expect(screen.getByTestId("bound").textContent).toBe("false");
+      expect(getBoundText()).toBe("false");
 
       getForm().reset();
       await flushFormReset();
 
       expect(checkbox).toBeChecked();
-      expect(screen.getByTestId("bound").textContent).toBe("true");
+      expect(getBoundText()).toBe("true");
     });
 
     it("keeps a read-only checkbox's state", async () => {
@@ -115,7 +115,7 @@ describe("Checkbox form participation", () => {
       await flushFormReset();
 
       expect(checkbox).toBeChecked();
-      expect(screen.getByTestId("bound").textContent).toBe("true");
+      expect(getBoundText()).toBe("true");
     });
 
     it("leaves the state alone when the reset is canceled", async () => {
@@ -128,7 +128,7 @@ describe("Checkbox form participation", () => {
       await flushFormReset();
 
       expect(checkbox).toBeChecked();
-      expect(screen.getByTestId("bound").textContent).toBe("true");
+      expect(getBoundText()).toBe("true");
     });
 
     it("bind:group: removes the values of cleared boxes", async () => {

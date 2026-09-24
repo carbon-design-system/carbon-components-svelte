@@ -1,11 +1,11 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { flushFormReset } from "../utils/flush-form-reset";
+import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import SelectForm from "./Select.form.test.svelte";
 
-const getBound = () => screen.getByTestId("bound").textContent;
 describe("Select form reset", () => {
   it("keeps the current choice and the bound value in step", async () => {
     const onUpdate = vi.fn();
@@ -19,7 +19,7 @@ describe("Select form reset", () => {
     await flushFormReset();
 
     expect(select).toHaveValue("l");
-    expect(getBound()).toBe("l");
+    expect(getBoundText()).toBe("l");
     expect(new FormData(getForm()).get("size")).toBe("l");
     expect(onUpdate).not.toHaveBeenCalled();
   });
@@ -34,7 +34,7 @@ describe("Select form reset", () => {
     await flushFormReset();
 
     expect(select).toHaveValue("l");
-    expect(getBound()).toBe("l");
+    expect(getBoundText()).toBe("l");
   });
 
   it("keeps a numeric choice", async () => {
@@ -46,7 +46,7 @@ describe("Select form reset", () => {
     await flushFormReset();
 
     expect(select).toHaveValue("2");
-    expect(getBound()).toBe("2");
+    expect(getBoundText()).toBe("2");
   });
 
   it("keeps the inline variant's choice", async () => {
@@ -58,7 +58,7 @@ describe("Select form reset", () => {
     await flushFormReset();
 
     expect(select).toHaveValue("s");
-    expect(getBound()).toBe("s");
+    expect(getBoundText()).toBe("s");
   });
 
   it("marks only the current choice with the selected attribute", async () => {
@@ -71,7 +71,10 @@ describe("Select form reset", () => {
     const marked = screen
       .getAllByRole("option")
       .filter((option) => option.hasAttribute("selected"))
-      .map((option) => (option as HTMLOptionElement).value);
+      .map((option) => {
+        assert(option instanceof HTMLOptionElement);
+        return option.value;
+      });
     expect(marked).toEqual(["l"]);
   });
 });

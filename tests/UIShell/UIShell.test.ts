@@ -8,6 +8,7 @@ import SideNavLink from "carbon-components-svelte/UIShell/SideNavLink.svelte";
 import type SideNavMenuComponent from "carbon-components-svelte/UIShell/SideNavMenu.svelte";
 import SideNavMenu from "carbon-components-svelte/UIShell/SideNavMenu.svelte";
 import type { ComponentProps } from "svelte";
+import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import HeaderSlot from "./Header.slot.test.svelte";
 import HeaderSwitcher from "./HeaderSwitcher.test.svelte";
@@ -214,7 +215,7 @@ describe("UIShell", () => {
 
         // Simulate minor width change (like mobile address bar hide/show)
         setViewportWidth(520);
-        await new Promise((resolve) => setTimeout(resolve, 0));
+        await flushMacrotask();
 
         // SideNav should still be open
         expect(component.isSideNavOpen).toBe(true);
@@ -240,7 +241,7 @@ describe("UIShell", () => {
         // false. Without the gate, crossing to desktop would force-close
         // the nav the user just opened.
         setViewportWidth(1200);
-        await new Promise((resolve) => setTimeout(resolve, 0));
+        await flushMacrotask();
         expect(component.isSideNavOpen).toBe(true);
       });
 
@@ -253,12 +254,12 @@ describe("UIShell", () => {
         const { container, component } = render(UiShell, {
           props: { isSideNavOpen: true },
         });
-        await new Promise((resolve) => setTimeout(resolve, 0));
+        await flushMacrotask();
         expect(component.isSideNavOpen).toBe(true);
 
         // Desktop -> mobile: auto-collapses, hamburger appears.
         setViewportWidth(500);
-        await new Promise((resolve) => setTimeout(resolve, 0));
+        await flushMacrotask();
         expect(component.isSideNavOpen).toBe(false);
 
         const hamburgerButton = container.querySelector(
@@ -272,7 +273,7 @@ describe("UIShell", () => {
 
         // Mobile -> desktop: should auto-expand again.
         setViewportWidth(1200);
-        await new Promise((resolve) => setTimeout(resolve, 0));
+        await flushMacrotask();
         expect(component.isSideNavOpen).toBe(true);
       });
 
@@ -283,12 +284,12 @@ describe("UIShell", () => {
           props: { isSideNavOpen: false },
         });
 
-        await new Promise((resolve) => setTimeout(resolve, 0));
+        await flushMacrotask();
         expect(component.isSideNavOpen).toBe(false);
 
         // Cross to desktop
         setViewportWidth(1200);
-        await new Promise((resolve) => setTimeout(resolve, 0));
+        await flushMacrotask();
 
         // Should auto-expand on desktop
         expect(component.isSideNavOpen).toBe(true);
@@ -301,11 +302,11 @@ describe("UIShell", () => {
           props: { isSideNavOpen: true },
         });
 
-        await new Promise((resolve) => setTimeout(resolve, 0));
+        await flushMacrotask();
 
         // Cross to mobile
         setViewportWidth(500);
-        await new Promise((resolve) => setTimeout(resolve, 0));
+        await flushMacrotask();
 
         // Should auto-collapse on mobile
         expect(component.isSideNavOpen).toBe(false);
@@ -471,7 +472,7 @@ describe("UIShell", () => {
         const { component } = render(UiShell, {
           props: { sideNavIsOpen: true },
         });
-        await new Promise((resolve) => setTimeout(resolve, 0));
+        await flushMacrotask();
 
         const hamburgerButton = screen.getByRole("button", { name: /menu/i });
 
@@ -487,7 +488,7 @@ describe("UIShell", () => {
         const { component } = render(UiShell, {
           props: { sideNavIsOpen: true, sideNavFixed: true },
         });
-        await new Promise((resolve) => setTimeout(resolve, 0));
+        await flushMacrotask();
 
         await user.keyboard("{Escape}");
 
@@ -500,7 +501,7 @@ describe("UIShell", () => {
         const { component } = render(UiShell, {
           props: { sideNavIsOpen: true },
         });
-        await new Promise((resolve) => setTimeout(resolve, 0));
+        await flushMacrotask();
 
         await user.keyboard("{Escape}");
 
@@ -534,7 +535,7 @@ describe("UIShell", () => {
         expect(document.body).not.toHaveClass("bx--body--with-modal-open");
 
         component.sideNavIsOpen = true;
-        await new Promise((resolve) => setTimeout(resolve, 0));
+        await flushMacrotask();
 
         expect(document.body).toHaveClass("bx--body--with-modal-open");
       });
@@ -549,7 +550,7 @@ describe("UIShell", () => {
         expect(document.body).toHaveClass("bx--body--with-modal-open");
 
         component.sideNavIsOpen = false;
-        await new Promise((resolve) => setTimeout(resolve, 0));
+        await flushMacrotask();
 
         expect(document.body).not.toHaveClass("bx--body--with-modal-open");
       });
@@ -562,7 +563,7 @@ describe("UIShell", () => {
         });
 
         component.sideNavIsOpen = true;
-        await new Promise((resolve) => setTimeout(resolve, 0));
+        await flushMacrotask();
 
         expect(document.body).not.toHaveClass("bx--body--with-modal-open");
       });
@@ -574,7 +575,7 @@ describe("UIShell", () => {
           props: { sideNavIsOpen: true, sideNavFixed: true },
         });
 
-        await new Promise((resolve) => setTimeout(resolve, 0));
+        await flushMacrotask();
 
         expect(document.body).not.toHaveClass("bx--body--with-modal-open");
       });
@@ -586,7 +587,7 @@ describe("UIShell", () => {
           props: { sideNavIsOpen: true, sideNavRail: true },
         });
 
-        await new Promise((resolve) => setTimeout(resolve, 0));
+        await flushMacrotask();
 
         expect(document.body).not.toHaveClass("bx--body--with-modal-open");
       });
@@ -658,7 +659,7 @@ describe("UIShell", () => {
       const { component } = render(UiShell);
 
       component.sideNavIsOpen = true;
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await flushMacrotask();
 
       expect(consoleLog).toHaveBeenCalledWith("sidenav-open");
     });
@@ -670,7 +671,7 @@ describe("UIShell", () => {
       });
 
       component.sideNavIsOpen = false;
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await flushMacrotask();
 
       expect(consoleLog).toHaveBeenCalledWith("sidenav-close");
     });
@@ -716,7 +717,7 @@ describe("UIShell", () => {
           },
         });
 
-        await new Promise((resolve) => setTimeout(resolve, 0));
+        await flushMacrotask();
 
         const overlay = container.querySelector(".bx--side-nav__overlay");
         expect(overlay).toBeInTheDocument();
@@ -736,7 +737,7 @@ describe("UIShell", () => {
           },
         });
 
-        await new Promise((resolve) => setTimeout(resolve, 0));
+        await flushMacrotask();
 
         const overlay = container.querySelector(".bx--side-nav__overlay");
         assert(overlay);
@@ -817,7 +818,7 @@ describe("UIShell", () => {
         // Simulate hydration: viewport width becomes known.
         setInnerWidth(500);
         window.dispatchEvent(new Event("resize"));
-        await new Promise((resolve) => setTimeout(resolve, 0));
+        await flushMacrotask();
 
         expect(nav).toHaveClass("bx--side-nav--collapsed");
         expect(nav).toHaveStyle({ visibility: "hidden" });
@@ -863,7 +864,7 @@ describe("UIShell", () => {
           props: { sideNavIsOpen: true },
         });
 
-        await new Promise((resolve) => setTimeout(resolve, 0));
+        await flushMacrotask();
 
         const content = container.querySelector(".bx--content");
         expect(content).toHaveStyle({ marginLeft: "0px" });
@@ -876,7 +877,7 @@ describe("UIShell", () => {
           props: { sideNavIsOpen: true },
         });
 
-        await new Promise((resolve) => setTimeout(resolve, 0));
+        await flushMacrotask();
 
         const content = container.querySelector(".bx--content");
         // On desktop with SideNav open, margin should not be explicitly set to 0
@@ -892,7 +893,7 @@ describe("UIShell", () => {
           props: { sideNavIsOpen: true, sideNavFixed: true },
         });
 
-        await new Promise((resolve) => setTimeout(resolve, 0));
+        await flushMacrotask();
 
         const content = container.querySelector(".bx--content");
         // Fixed SideNav is always visible, so Content should keep its CSS margin
@@ -906,7 +907,7 @@ describe("UIShell", () => {
           props: { sideNavIsOpen: false },
         });
 
-        await new Promise((resolve) => setTimeout(resolve, 0));
+        await flushMacrotask();
 
         const content = container.querySelector(".bx--content");
         expect(content).toHaveStyle({ marginLeft: "0px" });

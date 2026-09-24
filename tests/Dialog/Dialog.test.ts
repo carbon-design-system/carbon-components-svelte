@@ -73,7 +73,8 @@ describe("Dialog", () => {
     const onclose = vi.fn();
     render(Dialog, { props: { open: true, modal: true, onclose } });
 
-    const dialogEl = screen.getByRole("dialog") as HTMLDialogElement;
+    const dialogEl = screen.getByRole("dialog");
+    assert(dialogEl instanceof HTMLDialogElement);
     dialogEl.dispatchEvent(new Event("cancel"));
     dialogEl.close();
 
@@ -146,7 +147,8 @@ describe("Dialog", () => {
     const onclose = vi.fn();
     render(Dialog, { props: { open: true, onclose } });
 
-    const dialogEl = screen.getByRole("dialog") as HTMLDialogElement;
+    const dialogEl = screen.getByRole("dialog");
+    assert(dialogEl instanceof HTMLDialogElement);
     dialogEl.close();
 
     expect(onclose).toHaveBeenCalledTimes(1);

@@ -1,7 +1,8 @@
-import { render, screen } from "@testing-library/svelte";
+import { render } from "@testing-library/svelte";
 import type MultiSelectComponent from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import type { MultiSelectItem } from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import type { ComponentProps } from "svelte";
+import { optionTexts } from "./helpers";
 import MultiSelect from "./MultiSelect.test.svelte";
 
 type SortItem = Exclude<
@@ -22,9 +23,6 @@ describe("MultiSelect sortItem opt-out", () => {
     ["false", false],
     ["a no-op function", () => {}],
   ];
-
-  const optionTexts = () =>
-    screen.queryAllByRole("option").map((el) => el.textContent?.trim());
 
   it.each(optOutForms)("keeps items order with %s", (_label, sortItem) => {
     render(MultiSelect, {

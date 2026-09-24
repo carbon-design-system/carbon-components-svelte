@@ -5,26 +5,12 @@ import FileUploaderPerFileStatusDemo from "./FileUploader.perFileStatus.test.sve
 import FileUploader from "./FileUploader.test.svelte";
 import FileUploaderButtonSlot from "./FileUploaderButton.slot.test.svelte";
 import FileUploaderDropContainerSlot from "./FileUploaderDropContainer.slot.test.svelte";
+import { simulateFileSelection } from "./helpers";
 
 describe("FileUploader", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
-
-  function simulateFileSelection(input: HTMLInputElement, files: File[]) {
-    const dataTransfer = new DataTransfer();
-    for (const file of files) {
-      dataTransfer.items.add(file);
-    }
-
-    Object.defineProperty(input, "files", {
-      value: dataTransfer.files,
-      writable: true,
-      configurable: true,
-    });
-
-    input.dispatchEvent(new Event("change", { bubbles: true }));
-  }
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1785
   it("should synchronize input.files when files are removed programmatically", async () => {
@@ -1166,9 +1152,8 @@ describe("FileUploader", () => {
       props: { delay: 50 },
     });
 
-    const input = container.querySelector(
-      "input[type=file]",
-    ) as HTMLInputElement;
+    const input = container.querySelector<HTMLInputElement>("input[type=file]");
+    assert(input);
     const file = new File(["a"], "a.txt", { type: "text/plain" });
     simulateFileSelection(input, [file]);
 

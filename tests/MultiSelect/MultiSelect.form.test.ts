@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import type { MultiSelectItem } from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
+import { openMenu } from "./helpers";
 import MultiSelectForm from "./MultiSelect.form.test.svelte";
 
 const items = [
@@ -11,9 +12,6 @@ const items = [
 ] as const;
 
 describe("MultiSelect native form serialization", () => {
-  const openMenu = async () =>
-    await user.click(await screen.findByRole("combobox", { expanded: false }));
-
   it("submits selected items while the menu is closed, keyed by item id by default", () => {
     render(MultiSelectForm, {
       props: { items, selectedIds: ["0", "1"] },
@@ -166,7 +164,7 @@ describe("MultiSelect native form serialization", () => {
       },
     });
 
-    const input = screen.getByRole("combobox") as HTMLInputElement;
+    const input = screen.getByRole("combobox");
     await user.type(input, "no-match-xyz");
 
     const formData = new FormData(getForm());

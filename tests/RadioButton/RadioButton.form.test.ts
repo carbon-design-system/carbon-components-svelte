@@ -1,25 +1,28 @@
 import { render, screen } from "@testing-library/svelte";
 import { flushFormReset } from "../utils/flush-form-reset";
+import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import RadioButtonForm from "./RadioButton.form.test.svelte";
 
-const getBound = () => screen.getByTestId("bound").textContent;
-const getRadio = (name: string) =>
-  screen.getByRole("radio", { name }) as HTMLInputElement;
+const getRadio = (name: string) => {
+  const radio = screen.getByRole("radio", { name });
+  assert(radio instanceof HTMLInputElement);
+  return radio;
+};
 
 describe("RadioButton form reset", () => {
   it("unchecks a standalone radio button with no default", async () => {
     render(RadioButtonForm);
 
     await user.click(getRadio("Large"));
-    expect(getBound()).toBe("false-true");
+    expect(getBoundText()).toBe("false-true");
 
     getForm().reset();
     await flushFormReset();
 
     expect(getRadio("Large")).not.toBeChecked();
-    expect(getBound()).toBe("false-false");
+    expect(getBoundText()).toBe("false-false");
   });
 
   it("follows the default checked radio button, as with server-rendered markup", async () => {
@@ -28,12 +31,12 @@ describe("RadioButton form reset", () => {
     getRadio("Small").defaultChecked = true;
 
     await user.click(getRadio("Large"));
-    expect(getBound()).toBe("false-true");
+    expect(getBoundText()).toBe("false-true");
 
     getForm().reset();
     await flushFormReset();
 
     expect(getRadio("Small")).toBeChecked();
-    expect(getBound()).toBe("true-false");
+    expect(getBoundText()).toBe("true-false");
   });
 });

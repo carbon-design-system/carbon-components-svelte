@@ -2,8 +2,11 @@ import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import ListBox from "./ListBox.test.svelte";
 
-const getRoot = (container: HTMLElement) =>
-  container.querySelector(".bx--list-box") as HTMLElement;
+function getRoot(container: HTMLElement) {
+  const el = container.querySelector<HTMLElement>(".bx--list-box");
+  assert(el);
+  return el;
+}
 
 describe("ListBox", () => {
   it("should render with default props", () => {

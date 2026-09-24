@@ -3,10 +3,11 @@ import { reflectDefaultValue } from "../../src/utils/reflect-default-value.js";
 describe("reflectDefaultValue", () => {
   const setup = () => {
     document.body.innerHTML = '<form id="f"><input id="i" /></form>';
-    return {
-      form: document.getElementById("f") as HTMLFormElement,
-      input: document.getElementById("i") as HTMLInputElement,
-    };
+    const form = document.querySelector<HTMLFormElement>("#f");
+    const input = document.querySelector<HTMLInputElement>("#i");
+    assert(form);
+    assert(input);
+    return { form, input };
   };
 
   it("keeps the value through a form reset", () => {

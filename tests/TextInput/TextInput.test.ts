@@ -59,7 +59,8 @@ describe("TextInput", () => {
       props: { selectTextOnFocus: true, value: "hello world" },
     });
 
-    const input = screen.getByLabelText("User name") as HTMLInputElement;
+    const input = screen.getByLabelText("User name");
+    assert(input instanceof HTMLInputElement);
     await user.click(input);
     await tick();
 
@@ -70,7 +71,8 @@ describe("TextInput", () => {
   it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {
     render(TextInput, { props: { value: "hello world" } });
 
-    const input = screen.getByLabelText("User name") as HTMLInputElement;
+    const input = screen.getByLabelText("User name");
+    assert(input instanceof HTMLInputElement);
     await user.click(input);
     await tick();
 
@@ -82,7 +84,8 @@ describe("TextInput", () => {
       props: { selectTextOnFocus: true, disabled: true, value: "hello world" },
     });
 
-    const input = screen.getByLabelText("User name") as HTMLInputElement;
+    const input = screen.getByLabelText("User name");
+    assert(input instanceof HTMLInputElement);
     const select = vi.spyOn(input, "select");
     await fireEvent.focus(input);
 

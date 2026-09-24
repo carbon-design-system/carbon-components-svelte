@@ -2,13 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { setMenuMetrics } from "../utils/set-menu-metrics";
 import DropdownScrollend from "./DropdownScrollend.test.svelte";
-
-function createItems(count: number) {
-  return Array.from({ length: count }, (_, i) => ({
-    id: String(i),
-    text: `Item ${i + 1}`,
-  }));
-}
+import { createItems } from "./helpers";
 
 describe("Dropdown scrollend", () => {
   it("dispatches scrollend when scrolled near the bottom", async () => {

@@ -8,12 +8,9 @@ import { user } from "../utils/user";
 import NotificationQueueTest from "./NotificationQueue.test.svelte";
 
 function getQueue(
-  component: Record<string, unknown>,
+  queue: NotificationQueueComponent | undefined,
 ): NotificationQueueComponent {
-  const queue = component.queue as NotificationQueueComponent | undefined;
-  if (!queue) {
-    throw new Error("Queue not bound");
-  }
+  assert(queue);
   return queue;
 }
 
@@ -39,7 +36,7 @@ describe("NotificationQueue", () => {
   it("should render with default props", async () => {
     const { component } = render(NotificationQueueTest);
 
-    getQueue(component).add({
+    getQueue(component.queue).add({
       kind: "success",
       title: "Test notification",
     });
@@ -58,7 +55,7 @@ describe("NotificationQueue", () => {
   it("should add a notification", async () => {
     const { component } = render(NotificationQueueTest);
 
-    const id = getQueue(component).add({
+    const id = getQueue(component.queue).add({
       kind: "success",
       title: "Success notification",
       subtitle: "Your changes have been saved.",
@@ -75,13 +72,13 @@ describe("NotificationQueue", () => {
   it("should generate unique ids when id is not provided", async () => {
     const { component } = render(NotificationQueueTest);
 
-    const id1 = getQueue(component).add({
+    const id1 = getQueue(component.queue).add({
       kind: "info",
       title: "Notification 1",
     });
     await tick();
 
-    const id2 = getQueue(component).add({
+    const id2 = getQueue(component.queue).add({
       kind: "info",
       title: "Notification 2",
     });
@@ -95,7 +92,7 @@ describe("NotificationQueue", () => {
   it("should use provided id", async () => {
     const { component } = render(NotificationQueueTest);
 
-    const id = getQueue(component).add({
+    const id = getQueue(component.queue).add({
       id: "custom-id",
       kind: "warning",
       title: "Custom ID notification",
@@ -108,13 +105,13 @@ describe("NotificationQueue", () => {
   it("should deduplicate notifications by id", async () => {
     const { component } = render(NotificationQueueTest);
 
-    const id = getQueue(component).add({
+    const id = getQueue(component.queue).add({
       id: "duplicate-id",
       kind: "error",
       title: "First notification",
     });
 
-    const id2 = getQueue(component).add({
+    const id2 = getQueue(component.queue).add({
       id: "duplicate-id",
       kind: "error",
       title: "Second notification",
@@ -133,19 +130,19 @@ describe("NotificationQueue", () => {
   it("should add multiple notifications", async () => {
     const { component } = render(NotificationQueueTest);
 
-    getQueue(component).add({
+    getQueue(component.queue).add({
       kind: "success",
       title: "First notification",
     });
     await tick();
 
-    getQueue(component).add({
+    getQueue(component.queue).add({
       kind: "info",
       title: "Second notification",
     });
     await tick();
 
-    getQueue(component).add({
+    getQueue(component.queue).add({
       kind: "warning",
       title: "Third notification",
     });
@@ -159,13 +156,13 @@ describe("NotificationQueue", () => {
   it("should remove a notification by id", async () => {
     const { component } = render(NotificationQueueTest);
 
-    const id1 = getQueue(component).add({
+    const id1 = getQueue(component.queue).add({
       kind: "success",
       title: "First notification",
     });
     await tick();
 
-    getQueue(component).add({
+    getQueue(component.queue).add({
       kind: "info",
       title: "Second notification",
     });
@@ -174,7 +171,7 @@ describe("NotificationQueue", () => {
     expect(screen.getByText("First notification")).toBeInTheDocument();
     expect(screen.getByText("Second notification")).toBeInTheDocument();
 
-    const removed = getQueue(component).remove(id1);
+    const removed = getQueue(component.queue).remove(id1);
     await tick();
     expect(removed).toBe(true);
 
@@ -185,14 +182,14 @@ describe("NotificationQueue", () => {
   it("should return false when removing non-existent notification", () => {
     const { component } = render(NotificationQueueTest);
 
-    const removed = getQueue(component).remove("non-existent-id");
+    const removed = getQueue(component.queue).remove("non-existent-id");
     expect(removed).toBe(false);
   });
 
   it("should update an existing notification in place", async () => {
     const { component } = render(NotificationQueueTest);
 
-    const id = getQueue(component).add({
+    const id = getQueue(component.queue).add({
       id: "progress",
       kind: "info",
       title: "Uploading...",
@@ -203,7 +200,7 @@ describe("NotificationQueue", () => {
     expect(screen.getByText("Uploading...")).toBeInTheDocument();
     expect(screen.getByText("0%")).toBeInTheDocument();
 
-    const updated = getQueue(component).update(id, {
+    const updated = getQueue(component.queue).update(id, {
       kind: "success",
       title: "Upload complete",
       subtitle: "100%",
@@ -221,7 +218,7 @@ describe("NotificationQueue", () => {
   it("should merge patch into existing notification on update", async () => {
     const { component } = render(NotificationQueueTest);
 
-    const id = getQueue(component).add({
+    const id = getQueue(component.queue).add({
       id: "merge",
       kind: "info",
       title: "Title",
@@ -229,7 +226,7 @@ describe("NotificationQueue", () => {
     });
     await tick();
 
-    getQueue(component).update(id, { kind: "success" });
+    getQueue(component.queue).update(id, { kind: "success" });
     await tick();
 
     expect(screen.getByText("Title")).toBeInTheDocument();
@@ -239,14 +236,14 @@ describe("NotificationQueue", () => {
   it("should ignore id changes on update", async () => {
     const { component } = render(NotificationQueueTest);
 
-    const id = getQueue(component).add({
+    const id = getQueue(component.queue).add({
       id: "original",
       kind: "info",
       title: "Original",
     });
     await tick();
 
-    const updated = getQueue(component).update(id, {
+    const updated = getQueue(component.queue).update(id, {
       id: "different",
       title: "Updated",
     });
@@ -255,7 +252,7 @@ describe("NotificationQueue", () => {
     expect(updated).toBe(true);
     expect(screen.getByText("Updated")).toBeInTheDocument();
 
-    const removed = getQueue(component).remove("original");
+    const removed = getQueue(component.queue).remove("original");
     await tick();
     expect(removed).toBe(true);
     expect(screen.queryByText("Updated")).not.toBeInTheDocument();
@@ -264,7 +261,7 @@ describe("NotificationQueue", () => {
   it("should return false when updating non-existent notification", () => {
     const { component } = render(NotificationQueueTest);
 
-    const updated = getQueue(component).update("non-existent-id", {
+    const updated = getQueue(component.queue).update("non-existent-id", {
       title: "New title",
     });
     expect(updated).toBe(false);
@@ -273,13 +270,13 @@ describe("NotificationQueue", () => {
   it("should clear all notifications", async () => {
     const { component } = render(NotificationQueueTest);
 
-    getQueue(component).add({
+    getQueue(component.queue).add({
       kind: "success",
       title: "First notification",
     });
     await tick();
 
-    getQueue(component).add({
+    getQueue(component.queue).add({
       kind: "info",
       title: "Second notification",
     });
@@ -288,7 +285,7 @@ describe("NotificationQueue", () => {
     expect(screen.getByText("First notification")).toBeInTheDocument();
     expect(screen.getByText("Second notification")).toBeInTheDocument();
 
-    getQueue(component).clear();
+    getQueue(component.queue).clear();
     await tick();
 
     expect(screen.queryByText("First notification")).not.toBeInTheDocument();
@@ -300,19 +297,19 @@ describe("NotificationQueue", () => {
       props: { maxNotifications: 2 },
     });
 
-    getQueue(component).add({
+    getQueue(component.queue).add({
       kind: "success",
       title: "First",
     });
     await tick();
 
-    getQueue(component).add({
+    getQueue(component.queue).add({
       kind: "info",
       title: "Second",
     });
     await tick();
 
-    getQueue(component).add({
+    getQueue(component.queue).add({
       kind: "warning",
       title: "Third",
     });
@@ -328,19 +325,19 @@ describe("NotificationQueue", () => {
       props: { position: "bottom-right", maxNotifications: 2 },
     });
 
-    getQueue(component).add({
+    getQueue(component.queue).add({
       kind: "success",
       title: "First",
     });
     await tick();
 
-    getQueue(component).add({
+    getQueue(component.queue).add({
       kind: "info",
       title: "Second",
     });
     await tick();
 
-    getQueue(component).add({
+    getQueue(component.queue).add({
       kind: "warning",
       title: "Third",
     });
@@ -407,7 +404,7 @@ describe("NotificationQueue", () => {
         props: { position },
       });
 
-      getQueue(component).add({
+      getQueue(component.queue).add({
         kind: "success",
         title: "Test",
       });
@@ -427,7 +424,7 @@ describe("NotificationQueue", () => {
   it("should position notifications at top-right by default", async () => {
     const { component } = render(NotificationQueueTest);
 
-    getQueue(component).add({
+    getQueue(component.queue).add({
       kind: "success",
       title: "Test",
     });
@@ -447,7 +444,7 @@ describe("NotificationQueue", () => {
       },
     });
 
-    getQueue(component).add({
+    getQueue(component.queue).add({
       kind: "success",
       title: "Test",
     });
@@ -462,7 +459,7 @@ describe("NotificationQueue", () => {
       props: { zIndex: 10000 },
     });
 
-    getQueue(component).add({
+    getQueue(component.queue).add({
       kind: "success",
       title: "Test",
     });
@@ -476,7 +473,7 @@ describe("NotificationQueue", () => {
     vi.useRealTimers();
     const { component } = render(NotificationQueueTest);
 
-    getQueue(component).add({
+    getQueue(component.queue).add({
       kind: "success",
       title: "Test notification",
     });
@@ -494,7 +491,7 @@ describe("NotificationQueue", () => {
   it("should remove notification after timeout", async () => {
     const { component } = render(NotificationQueueTest);
 
-    getQueue(component).add({
+    getQueue(component.queue).add({
       kind: "success",
       title: "Test notification",
       timeout: 1000,
@@ -512,7 +509,7 @@ describe("NotificationQueue", () => {
   it("should handle persistent notifications without timeout", async () => {
     const { component } = render(NotificationQueueTest);
 
-    getQueue(component).add({
+    getQueue(component.queue).add({
       kind: "warning",
       title: "Persistent notification",
       hideCloseButton: true,
@@ -530,7 +527,7 @@ describe("NotificationQueue", () => {
   it("should handle notifications with all properties", async () => {
     const { component } = render(NotificationQueueTest);
 
-    getQueue(component).add({
+    getQueue(component.queue).add({
       id: "full-notification",
       kind: "info-square",
       title: "Full notification",
@@ -552,7 +549,7 @@ describe("NotificationQueue", () => {
   it("should forward toast-only props (pauseOnHover, role, fullWidth)", async () => {
     const { component } = render(NotificationQueueTest);
 
-    getQueue(component).add({
+    getQueue(component.queue).add({
       title: "Saved",
       pauseOnHover: true,
       role: "status",
@@ -573,14 +570,14 @@ describe("NotificationQueue", () => {
         props: { position },
       });
 
-      getQueue(component).add({
+      getQueue(component.queue).add({
         id: "first",
         kind: "success",
         title: "First",
       });
       await tick();
 
-      getQueue(component).add({
+      getQueue(component.queue).add({
         id: "second",
         kind: "info",
         title: "Second",
@@ -600,14 +597,14 @@ describe("NotificationQueue", () => {
         props: { position },
       });
 
-      getQueue(component).add({
+      getQueue(component.queue).add({
         id: "first",
         kind: "success",
         title: "First",
       });
       await tick();
 
-      getQueue(component).add({
+      getQueue(component.queue).add({
         id: "second",
         kind: "info",
         title: "Second",
@@ -624,7 +621,7 @@ describe("NotificationQueue", () => {
     vi.useRealTimers();
     const { component, container } = render(NotificationQueueTest);
 
-    getQueue(component).add({
+    getQueue(component.queue).add({
       kind: "success",
       title: "Test notification",
     });

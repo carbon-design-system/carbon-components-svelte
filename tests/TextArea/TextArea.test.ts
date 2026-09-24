@@ -21,7 +21,8 @@ describe("TextArea", () => {
       props: { selectTextOnFocus: true, value: "hello world" },
     });
 
-    const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+    const textarea = screen.getByRole("textbox");
+    assert(textarea instanceof HTMLTextAreaElement);
     await user.click(textarea);
     await tick();
 
@@ -32,7 +33,8 @@ describe("TextArea", () => {
   it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {
     render(TextArea, { props: { value: "hello world" } });
 
-    const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+    const textarea = screen.getByRole("textbox");
+    assert(textarea instanceof HTMLTextAreaElement);
     await user.click(textarea);
     await tick();
 
@@ -44,7 +46,8 @@ describe("TextArea", () => {
       props: { selectTextOnFocus: true, disabled: true, value: "hello world" },
     });
 
-    const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+    const textarea = screen.getByRole("textbox");
+    assert(textarea instanceof HTMLTextAreaElement);
     const select = vi.spyOn(textarea, "select");
     await fireEvent.focus(textarea);
 
@@ -159,7 +162,8 @@ describe("TextArea", () => {
     assert(liveRegion);
     expect(liveRegion).toHaveTextContent("");
 
-    const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+    const textarea = screen.getByRole("textbox");
+    assert(textarea instanceof HTMLTextAreaElement);
     textarea.value = "12345";
     await fireEvent.input(textarea);
     expect(liveRegion).toHaveTextContent("Character limit reached");
@@ -198,7 +202,8 @@ describe("TextArea", () => {
     const liveRegion = document.querySelector('[aria-live="polite"]');
     assert(liveRegion);
 
-    const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+    const textarea = screen.getByRole("textbox");
+    assert(textarea instanceof HTMLTextAreaElement);
     textarea.value = "12345";
     await fireEvent.input(textarea);
 
@@ -272,7 +277,8 @@ describe("TextArea", () => {
   it("blocks an insert at the start of a value already at its limit, leaving existing text untouched", async () => {
     render(TextArea, { props: { maxCount: 5, value: "abcde" } });
 
-    const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+    const textarea = screen.getByRole("textbox");
+    assert(textarea instanceof HTMLTextAreaElement);
     await user.type(textarea, "X", {
       initialSelectionStart: 0,
       initialSelectionEnd: 0,
@@ -284,7 +290,8 @@ describe("TextArea", () => {
   it("accepts graphemes up to maxCount and blocks the next one, by code unit not grapheme", async () => {
     render(TextArea, { props: { maxCount: 3 } });
 
-    const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+    const textarea = screen.getByRole("textbox");
+    assert(textarea instanceof HTMLTextAreaElement);
     await user.type(textarea, "😀😀😀😀");
 
     expect(textarea.value).toBe("😀😀😀");
@@ -294,14 +301,16 @@ describe("TextArea", () => {
   it("does not clamp a value already over maxCount when set from a parent prop", () => {
     render(TextArea, { props: { maxCount: 2, value: "😀😀😀😀" } });
 
-    const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+    const textarea = screen.getByRole("textbox");
+    assert(textarea instanceof HTMLTextAreaElement);
     expect(textarea.value).toBe("😀😀😀😀");
   });
 
   it("still allows deleting from a value already over maxCount", async () => {
     render(TextArea, { props: { maxCount: 5, value: "abcdef" } });
 
-    const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+    const textarea = screen.getByRole("textbox");
+    assert(textarea instanceof HTMLTextAreaElement);
     textarea.focus();
     textarea.setSelectionRange(textarea.value.length, textarea.value.length);
     await user.keyboard("{Backspace}");
@@ -437,14 +446,16 @@ describe("TextArea", () => {
     it("has no inline height when grow is unset", () => {
       render(TextArea, { props: { value: "line 1\nline 2\nline 3" } });
 
-      const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+      const textarea = screen.getByRole("textbox");
+      assert(textarea instanceof HTMLTextAreaElement);
       expect(textarea.style.height).toBe("");
     });
 
     it("sets an inline height after tick when growing with a multi-line value", async () => {
       const { rerender } = render(TextArea, { props: { grow: true } });
 
-      const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+      const textarea = screen.getByRole("textbox");
+      assert(textarea instanceof HTMLTextAreaElement);
       Object.defineProperty(textarea, "scrollHeight", {
         configurable: true,
         value: 120,
@@ -460,7 +471,8 @@ describe("TextArea", () => {
     it("switches to overflow-y auto once content exceeds maxRows", async () => {
       render(TextArea, { props: { grow: true, maxRows: 2 } });
 
-      const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+      const textarea = screen.getByRole("textbox");
+      assert(textarea instanceof HTMLTextAreaElement);
       textarea.style.lineHeight = "20px";
       Object.defineProperty(textarea, "scrollHeight", {
         configurable: true,

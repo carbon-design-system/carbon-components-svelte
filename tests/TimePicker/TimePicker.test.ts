@@ -31,7 +31,8 @@ describe("TimePicker", () => {
   it("selects the full value on focus when selectTextOnFocus is true", async () => {
     render(TimePicker, { props: { selectTextOnFocus: true, value: "12:00" } });
 
-    const input = screen.getByRole("textbox") as HTMLInputElement;
+    const input = screen.getByRole("textbox");
+    assert(input instanceof HTMLInputElement);
     await user.click(input);
     await tick();
 
@@ -42,7 +43,8 @@ describe("TimePicker", () => {
   it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {
     render(TimePicker, { props: { value: "12:00" } });
 
-    const input = screen.getByRole("textbox") as HTMLInputElement;
+    const input = screen.getByRole("textbox");
+    assert(input instanceof HTMLInputElement);
     await user.click(input);
     await tick();
 
@@ -54,7 +56,8 @@ describe("TimePicker", () => {
       props: { selectTextOnFocus: true, disabled: true, value: "12:00" },
     });
 
-    const input = screen.getByRole("textbox") as HTMLInputElement;
+    const input = screen.getByRole("textbox");
+    assert(input instanceof HTMLInputElement);
     const select = vi.spyOn(input, "select");
     await fireEvent.focus(input);
 
@@ -582,7 +585,8 @@ describe("TimePicker", () => {
   it("keeps numeric select values numeric after a change", async () => {
     render(TimePickerSelectNumeric);
 
-    const select = screen.getByRole("combobox") as HTMLSelectElement;
+    const select = screen.getByRole("combobox");
+    assert(select instanceof HTMLSelectElement);
     const bound = screen.getByTestId("bound");
 
     await user.selectOptions(select, "-7");
@@ -598,8 +602,10 @@ describe("TimePicker", () => {
     const setup = async (props = {}) => {
       render(TimePickerSelectDefault, { props });
       await tick();
+      const select = screen.getByRole("combobox");
+      assert(select instanceof HTMLSelectElement);
       return {
-        select: screen.getByRole("combobox") as HTMLSelectElement,
+        select,
         bound: screen.getByTestId("bound"),
       };
     };

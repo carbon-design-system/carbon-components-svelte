@@ -3,6 +3,7 @@ import type { ComboBoxItem } from "carbon-components-svelte/ComboBox/ComboBox.sv
 import ComboBoxReal from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import { tick } from "svelte";
 import ComboBox from "./ComboBox.test.svelte";
+import { getInput } from "./helpers";
 
 describe("ComboBox filter result announcements", () => {
   beforeEach(() => {
@@ -26,7 +27,6 @@ describe("ComboBox filter result announcements", () => {
   const substring = (item: ComboBoxItem, value: string) =>
     item.text.toLowerCase().includes(value.toLowerCase());
 
-  const getInput = () => screen.getByRole("combobox");
   const getStatus = () => screen.getByRole("status");
 
   // user-event stalls under fake timers, so these tests drive the input with

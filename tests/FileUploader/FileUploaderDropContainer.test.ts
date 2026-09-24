@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import FileUploaderDropContainer from "./FileUploaderDropContainer.test.svelte";
+import { fileNames, simulateFileSelection } from "./helpers";
 
 describe("FileUploaderDropContainer", () => {
   beforeEach(() => {
@@ -36,21 +37,6 @@ describe("FileUploaderDropContainer", () => {
     });
 
     return event;
-  }
-
-  function simulateFileSelection(input: HTMLInputElement, files: File[]) {
-    const dataTransfer = new DataTransfer();
-    for (const file of files) {
-      dataTransfer.items.add(file);
-    }
-
-    Object.defineProperty(input, "files", {
-      value: dataTransfer.files,
-      writable: true,
-      configurable: true,
-    });
-
-    input.dispatchEvent(new Event("change", { bubbles: true }));
   }
 
   it("should render with default props", () => {
@@ -292,10 +278,7 @@ describe("FileUploaderDropContainer", () => {
     });
 
     expect(input.files).toHaveLength(2);
-    expect(Array.from(input.files as FileList).map((f) => f.name)).toEqual([
-      "file1.txt",
-      "file2.txt",
-    ]);
+    expect(fileNames(input)).toEqual(["file1.txt", "file2.txt"]);
   });
 
   it("should not include rejected files in the native input's files property", async () => {
@@ -323,7 +306,7 @@ describe("FileUploaderDropContainer", () => {
     });
 
     expect(input.files).toHaveLength(1);
-    expect((input.files as FileList)[0].name).toBe("small.txt");
+    expect(fileNames(input)).toEqual(["small.txt"]);
   });
 
   describe("native input sync", () => {
@@ -332,8 +315,6 @@ describe("FileUploaderDropContainer", () => {
       assert(input instanceof HTMLInputElement);
       return input;
     };
-    const names = (input: HTMLInputElement) =>
-      Array.from(input.files as FileList).map((file) => file.name);
     const textFile = (name: string, size = 10) =>
       new File(["x".repeat(size)], name, { type: "text/plain" });
 
@@ -350,7 +331,7 @@ describe("FileUploaderDropContainer", () => {
       ]);
 
       await vi.waitFor(() => {
-        expect(names(input)).toEqual(["small.txt"]);
+        expect(fileNames(input)).toEqual(["small.txt"]);
       });
       expect(changeHandler).toHaveBeenCalled();
     });
@@ -363,12 +344,12 @@ describe("FileUploaderDropContainer", () => {
 
       simulateFileSelection(input, [textFile("a.txt")]);
       await vi.waitFor(() => {
-        expect(names(input)).toEqual(["a.txt"]);
+        expect(fileNames(input)).toEqual(["a.txt"]);
       });
 
       simulateFileSelection(input, [textFile("b.txt")]);
       await vi.waitFor(() => {
-        expect(names(input)).toEqual(["a.txt", "b.txt"]);
+        expect(fileNames(input)).toEqual(["a.txt", "b.txt"]);
       });
     });
 
@@ -382,12 +363,12 @@ describe("FileUploaderDropContainer", () => {
 
       dropDiv.dispatchEvent(createDragEvent("drop", [textFile("a.txt")]));
       await vi.waitFor(() => {
-        expect(names(input)).toEqual(["a.txt"]);
+        expect(fileNames(input)).toEqual(["a.txt"]);
       });
 
       simulateFileSelection(input, [textFile("b.txt")]);
       await vi.waitFor(() => {
-        expect(names(input)).toEqual(["a.txt", "b.txt"]);
+        expect(fileNames(input)).toEqual(["a.txt", "b.txt"]);
       });
     });
 
@@ -399,7 +380,7 @@ describe("FileUploaderDropContainer", () => {
 
       simulateFileSelection(input, [textFile("a.txt")]);
       await vi.waitFor(() => {
-        expect(names(input)).toEqual(["a.txt"]);
+        expect(fileNames(input)).toEqual(["a.txt"]);
       });
 
       // Opening the picker clears the input; dismissing it fires `cancel`.
@@ -410,7 +391,7 @@ describe("FileUploaderDropContainer", () => {
       });
       input.dispatchEvent(new Event("cancel"));
 
-      expect(names(input)).toEqual(["a.txt"]);
+      expect(fileNames(input)).toEqual(["a.txt"]);
     });
 
     it("empties the native input when files is cleared programmatically", async () => {
@@ -421,7 +402,7 @@ describe("FileUploaderDropContainer", () => {
 
       simulateFileSelection(input, [textFile("a.txt")]);
       await vi.waitFor(() => {
-        expect(names(input)).toEqual(["a.txt"]);
+        expect(fileNames(input)).toEqual(["a.txt"]);
       });
 
       await rerender({ multiple: true, files: [] });

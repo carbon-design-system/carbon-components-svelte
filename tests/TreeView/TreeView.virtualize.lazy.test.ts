@@ -1,12 +1,8 @@
 import { render, waitFor } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
+import { findRowById } from "./helpers";
 import TreeViewVirtualizeLazy from "./TreeView.virtualize.lazy.test.svelte";
-
-const findRowById = (id: string) =>
-  document.querySelector(
-    `[data-tree-row-id="${CSS.escape(id)}"]`,
-  ) as HTMLElement | null;
 
 describe("TreeView virtualize + hasChildren lazy load", () => {
   it("renders an expander for unloaded hasChildren parents", () => {
@@ -24,9 +20,10 @@ describe("TreeView virtualize + hasChildren lazy load", () => {
 
     const root = findRowById("root-a");
     assert(root instanceof HTMLElement);
-    const caret = root.querySelector(
+    const caret = root.querySelector<HTMLElement>(
       ".bx--tree-parent-node__toggle",
-    ) as HTMLElement;
+    );
+    assert(caret instanceof HTMLElement);
     await user.click(caret);
     await tick();
 

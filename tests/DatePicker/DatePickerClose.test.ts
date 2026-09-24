@@ -80,7 +80,8 @@ describe("DatePicker close event", () => {
   // A browser's Escape carries `keyCode`, which flatpickr's grid handler
   // switches on. user-event's `{Escape}` does not, so fire it by hand.
   async function pressEscapeInGrid() {
-    await fireEvent.keyDown(document.activeElement as HTMLElement, {
+    assert(document.activeElement instanceof HTMLElement);
+    await fireEvent.keyDown(document.activeElement, {
       key: "Escape",
       keyCode: 27,
     });

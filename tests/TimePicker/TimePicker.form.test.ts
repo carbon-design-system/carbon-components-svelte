@@ -50,7 +50,8 @@ describe("TimePicker form reset", () => {
 
   it("resyncs a disabled field too", async () => {
     render(TimePickerForm, { props: { value: "10:30", disabled: true } });
-    const input = screen.getByLabelText("Time") as HTMLInputElement;
+    const input = screen.getByLabelText("Time");
+    assert(input instanceof HTMLInputElement);
 
     input.value = "09:15";
     input.dispatchEvent(new Event("input", { bubbles: true }));
@@ -65,7 +66,8 @@ describe("TimePicker form reset", () => {
 
   it("resyncs a readonly field too", async () => {
     render(TimePickerForm, { props: { value: "10:30", readonly: true } });
-    const input = screen.getByLabelText("Time") as HTMLInputElement;
+    const input = screen.getByLabelText("Time");
+    assert(input instanceof HTMLInputElement);
 
     input.value = "09:15";
     input.dispatchEvent(new Event("input", { bubbles: true }));
@@ -116,7 +118,7 @@ describe("TimePicker form reset", () => {
   // existing behavior so a later change doesn't silently regress it.
   it("leaves TimePickerSelect's selection untouched by a reset", async () => {
     render(TimePickerForm, { props: { ampm: "pm" } });
-    const combobox = screen.getByRole("combobox") as HTMLSelectElement;
+    const combobox = screen.getByRole("combobox");
 
     await user.selectOptions(combobox, "am");
     expect(combobox).toHaveValue("am");

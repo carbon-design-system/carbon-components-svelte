@@ -1,13 +1,12 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
+import { getPinCodeInputs as getInputs } from "./helpers";
 import PinCodeInputFluidForm from "./PinCodeInput.fluidForm.test.svelte";
 import PinCodeInputFluidSkeleton from "./PinCodeInput.fluidSkeleton.test.svelte";
 import PinCodeInputFluidSlot from "./PinCodeInput.fluidSlot.test.svelte";
 import PinCodeInputSkeleton from "./PinCodeInput.skeleton.test.svelte";
 import PinCodeInput from "./PinCodeInput.test.svelte";
-
-const getInputs = () => screen.getAllByRole("textbox") as HTMLInputElement[];
 
 const getFieldset = (container: HTMLElement) =>
   container.querySelector(".bx--pin-code-input__fieldset");
@@ -384,9 +383,9 @@ describe("PinCodeInput", () => {
       props: { name: "otp", value: "12" },
     });
     const fieldset = getFieldset(container);
-    const hidden = fieldset?.querySelector(
+    const hidden = fieldset?.querySelector<HTMLInputElement>(
       'input[type="hidden"]',
-    ) as HTMLInputElement | null;
+    );
 
     expect(hidden).not.toBeNull();
     expect(hidden).toHaveAttribute("name", "otp");

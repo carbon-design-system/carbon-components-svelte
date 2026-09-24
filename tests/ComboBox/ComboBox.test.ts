@@ -18,14 +18,9 @@ import ComboBoxIconSlots from "./ComboBoxIconSlots.test.svelte";
 import ComboBoxInModal from "./ComboBoxInModal.test.svelte";
 import ComboBoxItemIcon from "./ComboBoxItemIcon.test.svelte";
 import ComboBoxItemSlot from "./ComboBoxItemSlot.test.svelte";
+import { getInput } from "./helpers";
 
 describe("ComboBox", () => {
-  const getInput = () => {
-    const input = screen.getByRole("combobox");
-    assert(input instanceof HTMLInputElement);
-    return input;
-  };
-
   const getClearButton = () => {
     return screen.getByRole("button", { name: "Clear selected item" });
   };
@@ -2850,25 +2845,6 @@ describe("ComboBox", () => {
       expect(options.length).toBe(50);
     });
 
-    it("should use default item height when not specified", async () => {
-      const largeItems = createLargeItemList(500);
-      render(ComboBox, {
-        props: {
-          items: largeItems,
-          virtualize: true,
-        },
-      });
-
-      await user.click(getInput());
-
-      const menu = screen.getByRole("listbox");
-      expect(menu).toBeVisible();
-
-      const options = screen.getAllByRole("option");
-      expect(options.length).toBeGreaterThan(0);
-      expect(options.length).toBeLessThan(500);
-    });
-
     it("should handle virtualization with custom item height", async () => {
       const largeItems = createLargeItemList(500);
       render(ComboBox, {
@@ -3189,21 +3165,6 @@ describe("ComboBox", () => {
       expect(options.length).toBe(100);
       // Should not have max-height style when not virtualized
       expect(menu.style.maxHeight).toBeFalsy();
-    });
-
-    it("should not virtualize lists with exactly 100 items when virtualize is undefined", async () => {
-      const items = createLargeItemList(100);
-      render(ComboBox, {
-        props: {
-          items,
-        },
-      });
-
-      await user.click(getInput());
-
-      const options = screen.getAllByRole("option");
-      // Should render all 100 items (threshold is 100, so > 100 is needed)
-      expect(options.length).toBe(100);
     });
 
     it("should explicitly disable virtualization when virtualize is false, even with large lists", async () => {

@@ -5,30 +5,14 @@ import DocumentAdd from "carbon-icons-svelte/lib/DocumentAdd.svelte";
 import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
 import FileUploaderButton from "./FileUploaderButton.test.svelte";
+import { fileNames, simulateFileSelection } from "./helpers";
 
 describe("FileUploaderButton", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  function simulateFileSelection(input: HTMLInputElement, files: File[]) {
-    const dataTransfer = new DataTransfer();
-    for (const file of files) {
-      dataTransfer.items.add(file);
-    }
-
-    Object.defineProperty(input, "files", {
-      value: dataTransfer.files,
-      writable: true,
-      configurable: true,
-    });
-
-    input.dispatchEvent(new Event("change", { bubbles: true }));
-  }
-
   describe("cancelled picker", () => {
-    const names = (input: HTMLInputElement) =>
-      Array.from(input.files as FileList).map((file) => file.name);
     const emptyInput = (input: HTMLInputElement) =>
       Object.defineProperty(input, "files", {
         value: new DataTransfer().files,
@@ -45,14 +29,14 @@ describe("FileUploaderButton", () => {
 
       simulateFileSelection(input, [new File(["x"], "a.txt")]);
       await vi.waitFor(() => {
-        expect(names(input)).toEqual(["a.txt"]);
+        expect(fileNames(input)).toEqual(["a.txt"]);
       });
 
       // Opening the picker clears the input; dismissing it fires `cancel`.
       emptyInput(input);
       input.dispatchEvent(new Event("cancel"));
 
-      expect(names(input)).toEqual(["a.txt"]);
+      expect(fileNames(input)).toEqual(["a.txt"]);
     });
 
     it("leaves an empty input empty", () => {

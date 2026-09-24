@@ -66,8 +66,8 @@ describe.each(testCases)("$name", ({ component }) => {
     return screen.getAllByRole("treeitem", { expanded: true });
   };
 
-  const getItemByName = (name: string | RegExp): HTMLElement =>
-    screen.getByRole("treeitem", { name }) as HTMLElement;
+  const getItemByName = (name: string | RegExp) =>
+    screen.getByRole("treeitem", { name });
 
   it("can select a node", async () => {
     const consoleLog = vi.spyOn(console, "log");

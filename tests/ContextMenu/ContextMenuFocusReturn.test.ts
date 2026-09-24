@@ -54,8 +54,10 @@ describe("ContextMenu focus return", () => {
   it("should return focus to the enclosing button when an icon is right-clicked", async () => {
     const { container } = render(ContextMenuFocusReturn);
 
-    const iconHost = container.querySelector("#icon-host") as HTMLElement;
-    const icon = container.querySelector("#icon") as SVGElement;
+    const iconHost = container.querySelector<HTMLElement>("#icon-host");
+    assert(iconHost);
+    const icon = container.querySelector<SVGElement>("#icon");
+    assert(icon);
     await user.pointer({
       target: icon,
       coords: { x: 100, y: 100 },

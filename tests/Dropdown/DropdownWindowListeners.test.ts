@@ -1,13 +1,7 @@
 import { render } from "@testing-library/svelte";
 import { flushDismiss } from "../utils/flush-dismiss";
+import { netListenerCalls } from "../utils/net-listener-calls";
 import Dropdown from "./Dropdown.test.svelte";
-
-const netClick = (
-  add: ReturnType<typeof vi.spyOn>,
-  remove: ReturnType<typeof vi.spyOn>,
-) =>
-  add.mock.calls.filter((c: unknown[]) => c[0] === "click").length -
-  remove.mock.calls.filter((c: unknown[]) => c[0] === "click").length;
 
 describe("Dropdown window listeners", () => {
   it("closed dropdowns register no window click listener", () => {
@@ -15,7 +9,7 @@ describe("Dropdown window listeners", () => {
     const remove = vi.spyOn(window, "removeEventListener");
 
     for (let i = 0; i < 5; i++) render(Dropdown, { props: { open: false } });
-    expect(netClick(add, remove)).toBe(0);
+    expect(netListenerCalls(add, remove, "click")).toBe(0);
 
     add.mockRestore();
     remove.mockRestore();
@@ -27,7 +21,7 @@ describe("Dropdown window listeners", () => {
 
     render(Dropdown, { props: { open: true } });
     await flushDismiss();
-    expect(netClick(add, remove)).toBe(1);
+    expect(netListenerCalls(add, remove, "click")).toBe(1);
 
     add.mockRestore();
     remove.mockRestore();

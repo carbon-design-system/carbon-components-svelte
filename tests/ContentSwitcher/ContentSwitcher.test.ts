@@ -18,19 +18,11 @@ import ContentSwitcherSize from "./ContentSwitcher.size.test.svelte";
 import ContentSwitcherSlotSelected from "./ContentSwitcher.slotSelected.test.svelte";
 import ContentSwitcherSwitchSelected from "./ContentSwitcher.switchSelected.test.svelte";
 import ContentSwitcher from "./ContentSwitcher.test.svelte";
-
-/** Child registration flushes on a microtask (`batchStoreUpdates`). */
-async function renderSwitcher(
-  ...args: Parameters<typeof render>
-): Promise<ReturnType<typeof render>> {
-  const result = render(...args);
-  await tick();
-  return result;
-}
+import { renderAndFlush } from "./helpers";
 
 describe("ContentSwitcher", () => {
   it("renders with default props", async () => {
-    await renderSwitcher(ContentSwitcher);
+    await renderAndFlush(ContentSwitcher);
 
     const tablist = screen.getByRole("tablist");
     expect(tablist).toHaveClass("bx--content-switcher");
@@ -91,7 +83,7 @@ describe("ContentSwitcher", () => {
   });
 
   it("combines the low contrast and icon-only modifiers", async () => {
-    await renderSwitcher(ContentSwitcherLowContrastIconOnly);
+    await renderAndFlush(ContentSwitcherLowContrastIconOnly);
 
     // Both modifiers must coexist on the tablist; this is the precondition for
     // the low-contrast rule that recolors the selected icon to `$icon-primary`
@@ -102,7 +94,7 @@ describe("ContentSwitcher", () => {
   });
 
   it("renders with selectedIndex prop", async () => {
-    await renderSwitcher(ContentSwitcherSelectedIndex);
+    await renderAndFlush(ContentSwitcherSelectedIndex);
 
     const tabs = screen.getAllByRole("tab");
     expect(tabs).toHaveLength(3);
@@ -122,7 +114,7 @@ describe("ContentSwitcher", () => {
 
   it("does not dispatch change event on initial render", async () => {
     const consoleLog = vi.spyOn(console, "log");
-    await renderSwitcher(ContentSwitcher);
+    await renderAndFlush(ContentSwitcher);
 
     expect(consoleLog.mock.calls.some(([event]) => event === "change")).toBe(
       false,
@@ -131,7 +123,7 @@ describe("ContentSwitcher", () => {
 
   it("does not dispatch change event on initial render with selectedIndex", async () => {
     const consoleLog = vi.spyOn(console, "log");
-    await renderSwitcher(ContentSwitcher, { props: { selectedIndex: 1 } });
+    await renderAndFlush(ContentSwitcher, { props: { selectedIndex: 1 } });
 
     expect(consoleLog.mock.calls.some(([event]) => event === "change")).toBe(
       false,
@@ -140,7 +132,7 @@ describe("ContentSwitcher", () => {
 
   it("does not dispatch change event when a selected Switch mounts", async () => {
     const consoleLog = vi.spyOn(console, "log");
-    await renderSwitcher(ContentSwitcherDynamicBound, {
+    await renderAndFlush(ContentSwitcherDynamicBound, {
       props: { selectLast: true },
     });
     await tick();
@@ -155,7 +147,7 @@ describe("ContentSwitcher", () => {
   });
 
   it("updates when selectedIndex changes", async () => {
-    const { rerender } = await renderSwitcher(ContentSwitcherSelectedIndex);
+    const { rerender } = await renderAndFlush(ContentSwitcherSelectedIndex);
 
     let tabs = screen.getAllByRole("tab");
     expect(tabs[1]).toHaveClass("bx--content-switcher--selected");
@@ -170,7 +162,7 @@ describe("ContentSwitcher", () => {
   });
 
   it("handles click events", async () => {
-    await renderSwitcher(ContentSwitcher);
+    await renderAndFlush(ContentSwitcher);
 
     const tabs = screen.getAllByRole("tab");
     expect(tabs[0]).toHaveClass("bx--content-switcher--selected");
@@ -201,7 +193,7 @@ describe("ContentSwitcher", () => {
   });
 
   it("handles keyboard navigation", async () => {
-    await renderSwitcher(ContentSwitcher);
+    await renderAndFlush(ContentSwitcher);
 
     const tabs = screen.getAllByRole("tab");
     expect(tabs[0]).toHaveClass("bx--content-switcher--selected");
@@ -231,7 +223,7 @@ describe("ContentSwitcher", () => {
   });
 
   it("ignores nested [role='tab'] elements inside switch slots when navigating", async () => {
-    await renderSwitcher(ContentSwitcherNested);
+    await renderAndFlush(ContentSwitcherNested);
 
     const tablist = screen.getByRole("tablist");
     const switchTabs = within(tablist).getAllByRole("tab", {
@@ -537,7 +529,7 @@ describe("ContentSwitcher", () => {
 
   describe('selectionMode="manual"', () => {
     it("arrow keys move focus without changing selection", async () => {
-      await renderSwitcher(ContentSwitcherSelectionMode);
+      await renderAndFlush(ContentSwitcherSelectionMode);
 
       const tabs = screen.getAllByRole("tab");
       expect(tabs[0]).toHaveClass("bx--content-switcher--selected");
@@ -598,7 +590,7 @@ describe("ContentSwitcher", () => {
     });
 
     it("click selects a tab", async () => {
-      await renderSwitcher(ContentSwitcherSelectionMode);
+      await renderAndFlush(ContentSwitcherSelectionMode);
 
       const tabs = screen.getAllByRole("tab");
       expect(tabs[0]).toHaveClass("bx--content-switcher--selected");
@@ -657,7 +649,7 @@ describe("ContentSwitcher", () => {
 
   describe("selectedId", () => {
     it("keeps selectedId on the same logical switch when a prior switch is removed", async () => {
-      await renderSwitcher(ContentSwitcherSelectedId, {
+      await renderAndFlush(ContentSwitcherSelectedId, {
         props: { selectedId: "switch-b", showSwitchA: true },
       });
 
@@ -699,7 +691,7 @@ describe("ContentSwitcher", () => {
     });
 
     it("uses the index API when selectedId is unset", async () => {
-      await renderSwitcher(ContentSwitcherSelectedId, {
+      await renderAndFlush(ContentSwitcherSelectedId, {
         props: { selectedIndex: 2, selectedId: undefined },
       });
 
@@ -721,7 +713,7 @@ describe("ContentSwitcher", () => {
     });
 
     it("lets selectedId win over selectedIndex", async () => {
-      await renderSwitcher(ContentSwitcherSelectedId, {
+      await renderAndFlush(ContentSwitcherSelectedId, {
         props: { selectedIndex: 0, selectedId: "switch-c" },
       });
 
@@ -737,7 +729,7 @@ describe("ContentSwitcher", () => {
   describe("removing a switch in index mode", () => {
     it("re-anchors selectedIndex when an earlier switch is removed", async () => {
       const consoleLog = vi.spyOn(console, "log");
-      const { rerender } = await renderSwitcher(ContentSwitcherDynamicBound, {
+      const { rerender } = await renderAndFlush(ContentSwitcherDynamicBound, {
         props: { selectedIndex: 2 },
       });
 
@@ -753,7 +745,7 @@ describe("ContentSwitcher", () => {
 
     it("does not dispatch change when clicking the re-anchored switch", async () => {
       const consoleLog = vi.spyOn(console, "log");
-      const { rerender } = await renderSwitcher(ContentSwitcherDynamicBound, {
+      const { rerender } = await renderAndFlush(ContentSwitcherDynamicBound, {
         props: { selectedIndex: 2 },
       });
 
@@ -770,7 +762,7 @@ describe("ContentSwitcher", () => {
 
     it("moves to the next switch when the selected switch is removed", async () => {
       const consoleLog = vi.spyOn(console, "log");
-      const { rerender } = await renderSwitcher(ContentSwitcherDynamicBound, {
+      const { rerender } = await renderAndFlush(ContentSwitcherDynamicBound, {
         props: { selectedIndex: 1 },
       });
       consoleLog.mockClear();
@@ -789,7 +781,7 @@ describe("ContentSwitcher", () => {
     });
 
     it("keeps a Switch selected at mount", async () => {
-      await renderSwitcher(ContentSwitcherDynamicBound, {
+      await renderAndFlush(ContentSwitcherDynamicBound, {
         props: { selectLast: true },
       });
       await tick();
@@ -803,7 +795,7 @@ describe("ContentSwitcher", () => {
 
     it("keeps selectedIndex when a later switch is removed", async () => {
       const consoleLog = vi.spyOn(console, "log");
-      const { rerender } = await renderSwitcher(ContentSwitcherDynamicBound, {
+      const { rerender } = await renderAndFlush(ContentSwitcherDynamicBound, {
         props: { selectedIndex: 0 },
       });
       consoleLog.mockClear();
@@ -828,7 +820,7 @@ describe("ContentSwitcher", () => {
 
     it("clamps an index past the end to the last switch", async () => {
       const consoleLog = vi.spyOn(console, "log");
-      await renderSwitcher(ContentSwitcherOutOfRange, {
+      await renderAndFlush(ContentSwitcherOutOfRange, {
         props: { selectedIndex: 7 },
       });
       await tick();
@@ -845,7 +837,7 @@ describe("ContentSwitcher", () => {
 
     it("clamps a negative index to the first switch", async () => {
       const consoleLog = vi.spyOn(console, "log");
-      await renderSwitcher(ContentSwitcherOutOfRange, {
+      await renderAndFlush(ContentSwitcherOutOfRange, {
         props: { selectedIndex: -1 },
       });
       await tick();
@@ -860,7 +852,7 @@ describe("ContentSwitcher", () => {
 
     it("selects the new last switch when the selected trailing switch is removed", async () => {
       const consoleLog = vi.spyOn(console, "log");
-      const { rerender } = await renderSwitcher(ContentSwitcherOutOfRange, {
+      const { rerender } = await renderAndFlush(ContentSwitcherOutOfRange, {
         props: { selectedIndex: 2 },
       });
 
@@ -876,7 +868,7 @@ describe("ContentSwitcher", () => {
 
     it("clamps a programmatic out-of-range write", async () => {
       const consoleLog = vi.spyOn(console, "log");
-      const { rerender } = await renderSwitcher(ContentSwitcherOutOfRange);
+      const { rerender } = await renderAndFlush(ContentSwitcherOutOfRange);
 
       await rerender({ selectedIndex: 9 });
       await tick();
@@ -896,7 +888,7 @@ describe("ContentSwitcher", () => {
 
     it("selects the switch when `selected` turns true after mount", async () => {
       const consoleLog = vi.spyOn(console, "log");
-      const { rerender } = await renderSwitcher(ContentSwitcherSwitchSelected);
+      const { rerender } = await renderAndFlush(ContentSwitcherSwitchSelected);
 
       await rerender({ second: true });
 
@@ -919,7 +911,7 @@ describe("ContentSwitcher", () => {
     });
 
     it("re-selects after another switch was clicked", async () => {
-      const { rerender } = await renderSwitcher(ContentSwitcherSwitchSelected);
+      const { rerender } = await renderAndFlush(ContentSwitcherSwitchSelected);
       await rerender({ second: true });
 
       const a = screen.getByRole("tab", { name: "A" });
@@ -939,7 +931,7 @@ describe("ContentSwitcher", () => {
 
     it("keeps the current switch selected when `selected` turns false", async () => {
       const consoleLog = vi.spyOn(console, "log");
-      const { rerender } = await renderSwitcher(ContentSwitcherSwitchSelected);
+      const { rerender } = await renderAndFlush(ContentSwitcherSwitchSelected);
       await rerender({ second: true });
       consoleLog.mockClear();
 
@@ -955,7 +947,7 @@ describe("ContentSwitcher", () => {
 
     it("honors `selected` at mount without dispatching change", async () => {
       const consoleLog = vi.spyOn(console, "log");
-      await renderSwitcher(ContentSwitcherSwitchSelected, {
+      await renderAndFlush(ContentSwitcherSwitchSelected, {
         props: { second: true },
       });
       await tick();
@@ -971,7 +963,7 @@ describe("ContentSwitcher", () => {
 
   describe("default slot `selected` prop", () => {
     it("reflects selection in the text branch", async () => {
-      const { rerender } = await renderSwitcher(ContentSwitcherSlotSelected);
+      const { rerender } = await renderAndFlush(ContentSwitcherSlotSelected);
 
       expect(screen.getByTestId("slot-one")).toHaveTextContent("on");
       expect(screen.getByTestId("slot-two")).toHaveTextContent("off");
@@ -987,7 +979,7 @@ describe("ContentSwitcher", () => {
     });
 
     it("reflects selection in the icon branch", async () => {
-      await renderSwitcher(ContentSwitcherSlotSelected);
+      await renderAndFlush(ContentSwitcherSlotSelected);
 
       expect(screen.getByTestId("icon-slot-one")).toHaveTextContent("on");
       expect(screen.getByTestId("icon-slot-two")).toHaveTextContent("off");
@@ -1004,7 +996,7 @@ describe("ContentSwitcher", () => {
     const tab = (name: string) => screen.getByRole("tab", { name });
 
     it("moves the tab stop to the first enabled switch", async () => {
-      await renderSwitcher(ContentSwitcherDisabledSelected);
+      await renderAndFlush(ContentSwitcherDisabledSelected);
 
       expect(tab("A")).toHaveAttribute("aria-selected", "true");
       expect(tab("A")).toHaveAttribute("tabindex", "-1");
@@ -1014,7 +1006,7 @@ describe("ContentSwitcher", () => {
 
     it("reaches the fallback with Tab without changing selection", async () => {
       const consoleLog = vi.spyOn(console, "log");
-      await renderSwitcher(ContentSwitcherDisabledSelected);
+      await renderAndFlush(ContentSwitcherDisabledSelected);
 
       await user.tab();
       await user.tab();
@@ -1026,7 +1018,7 @@ describe("ContentSwitcher", () => {
 
     it("ArrowRight moves off the fallback (automatic)", async () => {
       const consoleLog = vi.spyOn(console, "log");
-      await renderSwitcher(ContentSwitcherDisabledSelected);
+      await renderAndFlush(ContentSwitcherDisabledSelected);
 
       await user.tab();
       await user.tab();
@@ -1041,7 +1033,7 @@ describe("ContentSwitcher", () => {
 
     it("ArrowRight moves focus off the fallback without selecting (manual)", async () => {
       const consoleLog = vi.spyOn(console, "log");
-      await renderSwitcher(ContentSwitcherDisabledSelected, {
+      await renderAndFlush(ContentSwitcherDisabledSelected, {
         props: { selectionMode: "manual" },
       });
 
@@ -1055,7 +1047,7 @@ describe("ContentSwitcher", () => {
     });
 
     it("returns the tab stop to the selection when it is re-enabled", async () => {
-      const { rerender } = await renderSwitcher(
+      const { rerender } = await renderAndFlush(
         ContentSwitcherDisabledSelected,
       );
 
@@ -1067,7 +1059,7 @@ describe("ContentSwitcher", () => {
     });
 
     it("has no tab stop when every switch is disabled", async () => {
-      const { rerender } = await renderSwitcher(
+      const { rerender } = await renderAndFlush(
         ContentSwitcherDisabledSelected,
       );
 

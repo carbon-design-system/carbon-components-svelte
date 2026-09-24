@@ -22,6 +22,7 @@ import DataTableCustomSlots from "./DataTableCustomSlots.test.svelte";
 import DataTableExpandIcon from "./DataTableExpandIcon.test.svelte";
 import DataTableFooter from "./DataTableFooter.test.svelte";
 import DataTableHiddenColumnSearch from "./DataTableHiddenColumnSearch.test.svelte";
+import { getBodyRows, getColumnHeaderText } from "./helpers";
 
 describe("DataTable", () => {
   beforeEach(() => {
@@ -73,9 +74,7 @@ describe("DataTable", () => {
     expect(table).toHaveClass("bx--data-table");
 
     // Check if table has correct number of rows
-    const tableRows = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    const tableRows = getBodyRows();
     expect(tableRows).toHaveLength(3);
 
     // Check if all rows contain the expected data
@@ -116,9 +115,7 @@ describe("DataTable", () => {
       );
     });
 
-    const bodyRows = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    const bodyRows = getBodyRows();
     for (const row of bodyRows) {
       const cells = within(row).getAllByRole("cell");
       cells.forEach((cell, i) => {
@@ -249,9 +246,7 @@ describe("DataTable", () => {
     await user.click(nameHeader);
 
     // Verify rows are sorted by name ascending
-    const rowsAfterNameSort = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    const rowsAfterNameSort = getBodyRows();
     const firstRowName = within(rowsAfterNameSort[0]).getByRole("cell", {
       name: "Load Balancer 1",
     });
@@ -259,9 +254,7 @@ describe("DataTable", () => {
 
     // Test sorting by name (descending)
     await user.click(nameHeader);
-    const rowsAfterNameDescSort = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    const rowsAfterNameDescSort = getBodyRows();
     const firstRowNameDesc = within(rowsAfterNameDescSort[0]).getByRole(
       "cell",
       {
@@ -275,17 +268,13 @@ describe("DataTable", () => {
     await user.click(portHeader);
 
     // Verify rows are sorted by port ascending
-    const rowsAfterPortSort = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    const rowsAfterPortSort = getBodyRows();
     const firstRowPort = within(rowsAfterPortSort[0]).getAllByRole("cell")[2];
     expect(firstRowPort).toHaveTextContent("80");
 
     // Test sorting by port (descending)
     await user.click(portHeader);
-    const rowsAfterPortDescSort = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    const rowsAfterPortDescSort = getBodyRows();
     const firstRowPortDesc = within(rowsAfterPortDescSort[0]).getAllByRole(
       "cell",
     )[2];
@@ -307,9 +296,7 @@ describe("DataTable", () => {
       direction: "ascending",
     });
 
-    const bodyRows = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    const bodyRows = getBodyRows();
     expect(within(bodyRows[0]).getByText("Zebra")).toBeInTheDocument();
   });
 
@@ -341,9 +328,7 @@ describe("DataTable", () => {
     await tick();
 
     expect(onsort).toHaveBeenCalledTimes(1);
-    const bodyRows = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    const bodyRows = getBodyRows();
     expect(within(bodyRows[0]).getByText("Alpha")).toBeInTheDocument();
   });
 
@@ -396,9 +381,7 @@ describe("DataTable", () => {
 
     // Verify custom display formatting
     const _table = screen.getByRole("table");
-    const tableRows = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    const tableRows = getBodyRows();
     const costCells = tableRows.map(
       (row) => within(row).getAllByRole("cell")[1],
     );
@@ -410,9 +393,7 @@ describe("DataTable", () => {
     await user.click(dateHeader);
 
     // Verify rows are sorted by date ascending
-    const rowsAfterDateSort = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    const rowsAfterDateSort = getBodyRows();
     expect(
       within(rowsAfterDateSort[0]).getByRole("cell", {
         name: "Load Balancer 2",
@@ -425,9 +406,7 @@ describe("DataTable", () => {
     ).toHaveTextContent("Load Balancer 3");
 
     await user.click(dateHeader);
-    const rowsAfterDateDescSort = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    const rowsAfterDateDescSort = getBodyRows();
     expect(
       within(rowsAfterDateDescSort[0]).getByRole("cell", {
         name: "Load Balancer 3",
@@ -478,9 +457,7 @@ describe("DataTable", () => {
     await user.click(portHeader);
 
     // Verify rows are sorted by port ascending
-    const rowsAfterPortSort = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    const rowsAfterPortSort = getBodyRows();
     expect(
       within(rowsAfterPortSort[0]).getAllByRole("cell")[2],
     ).toHaveTextContent("80");
@@ -511,9 +488,7 @@ describe("DataTable", () => {
     await user.click(protocolHeader);
 
     // Verify no sorting occurred
-    const tableRows = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    const tableRows = getBodyRows();
     const firstRow = tableRows[0];
     expect(
       within(firstRow).getByRole("cell", { name: "Load Balancer 3" }),
@@ -548,9 +523,7 @@ describe("DataTable", () => {
 
     expect(nameHeader.closest("th")).toHaveAttribute("aria-sort", "ascending");
 
-    const tableRows = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    const tableRows = getBodyRows();
     expect(
       within(tableRows[0]).getByRole("cell", { name: "Load Balancer 1" }),
     ).toBeInTheDocument();
@@ -576,9 +549,7 @@ describe("DataTable", () => {
     const valueHeader = screen.getByText("Value");
     await user.click(valueHeader);
 
-    const tableRows = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    const tableRows = getBodyRows();
     const sortedCells = tableRows.map((row) => within(row).getByRole("cell"));
     expect(sortedCells[0]).toHaveTextContent("2");
     expect(sortedCells[1]).toHaveTextContent("10");
@@ -598,9 +569,7 @@ describe("DataTable", () => {
     const nameHeader = screen.getByText("Name");
     await user.click(nameHeader);
 
-    const tableRows = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    const tableRows = getBodyRows();
     expect(within(tableRows[0]).getAllByRole("cell")[0]).toHaveTextContent(
       "Load Balancer 1",
     );
@@ -620,27 +589,21 @@ describe("DataTable", () => {
 
     // Click 1: none -> ascending
     await user.click(nameHeader);
-    let tableRows = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    let tableRows = getBodyRows();
     expect(within(tableRows[0]).getAllByRole("cell")[0]).toHaveTextContent(
       "Load Balancer 1",
     );
 
     // Click 2: ascending -> descending
     await user.click(nameHeader);
-    tableRows = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    tableRows = getBodyRows();
     expect(within(tableRows[0]).getAllByRole("cell")[0]).toHaveTextContent(
       "Load Balancer 3",
     );
 
     // Click 3: descending -> ascending (NOT back to none)
     await user.click(nameHeader);
-    tableRows = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    tableRows = getBodyRows();
     expect(within(tableRows[0]).getAllByRole("cell")[0]).toHaveTextContent(
       "Load Balancer 1",
     );
@@ -661,18 +624,14 @@ describe("DataTable", () => {
 
     // Sort by name ascending
     await user.click(nameHeader);
-    let tableRows = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    let tableRows = getBodyRows();
     expect(within(tableRows[0]).getAllByRole("cell")[0]).toHaveTextContent(
       "Load Balancer 1",
     );
 
     // Switch to port – should sort ascending
     await user.click(portHeader);
-    tableRows = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    tableRows = getBodyRows();
     expect(within(tableRows[0]).getAllByRole("cell")[2]).toHaveTextContent(
       "80",
     );
@@ -696,9 +655,7 @@ describe("DataTable", () => {
     // Click 3: none (original order)
     await user.click(nameHeader);
 
-    const tableRows = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    const tableRows = getBodyRows();
     // Original order: Load Balancer 3, Load Balancer 1, Load Balancer 2
     expect(within(tableRows[0]).getAllByRole("cell")[0]).toHaveTextContent(
       "Load Balancer 3",
@@ -759,9 +716,7 @@ describe("DataTable", () => {
     await user.click(nameHeader);
     await user.click(nameHeader);
     await user.click(nameHeader);
-    let tableRows = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    let tableRows = getBodyRows();
     expect(within(tableRows[0]).getAllByRole("cell")[0]).toHaveTextContent(
       "Load Balancer 1",
     );
@@ -770,9 +725,7 @@ describe("DataTable", () => {
     await user.click(portHeader);
     await user.click(portHeader);
     await user.click(portHeader);
-    tableRows = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    tableRows = getBodyRows();
     expect(within(tableRows[0]).getAllByRole("cell")[0]).toHaveTextContent(
       "Load Balancer 3",
     );
@@ -798,9 +751,7 @@ describe("DataTable", () => {
     await user.click(portHeader);
     await user.click(portHeader);
 
-    const tableRows = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    const tableRows = getBodyRows();
     expect(within(tableRows[0]).getAllByRole("cell")[0]).toHaveTextContent(
       "Load Balancer 3",
     );
@@ -848,9 +799,7 @@ describe("DataTable", () => {
     const nameHeader = screen.getByText("Name");
     await user.click(nameHeader);
 
-    const rowsAfterSort = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    const rowsAfterSort = getBodyRows();
     expect(within(rowsAfterSort[0]).getAllByRole("cell")[0]).toHaveTextContent(
       "Load Balancer 3",
     );
@@ -862,9 +811,7 @@ describe("DataTable", () => {
     const portHeader = screen.getByText("Port");
     await user.click(portHeader);
 
-    const rowsAfterPortSort = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    const rowsAfterPortSort = getBodyRows();
     expect(
       within(rowsAfterPortSort[0]).getAllByRole("cell")[2],
     ).toHaveTextContent("80");
@@ -927,9 +874,7 @@ describe("DataTable", () => {
     const nameHeader = screen.getByText("Name");
     await user.click(nameHeader);
 
-    const rowsAfterNameSort = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    const rowsAfterNameSort = getBodyRows();
     expect(
       within(rowsAfterNameSort[0]).getAllByRole("cell")[0],
     ).toHaveTextContent("Load Balancer 1");
@@ -941,9 +886,7 @@ describe("DataTable", () => {
     const portHeader = screen.getByText("Port");
     await user.click(portHeader);
 
-    const rowsAfterPortSort = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    const rowsAfterPortSort = getBodyRows();
     // Per-header sort reverses: ascending click → 3000 first
     expect(
       within(rowsAfterPortSort[0]).getAllByRole("cell")[2],
@@ -1515,9 +1458,6 @@ describe("DataTable", () => {
       { key: "rule", value: "Rule" },
     ] as const;
 
-    const getBodyRows = () =>
-      screen.getAllByRole("row").filter((row) => row.closest("tbody") !== null);
-
     it("aligns the header and every cell of an aligned column only", () => {
       render(DataTable, { props: { headers: alignedHeaders, rows } });
 
@@ -1715,9 +1655,7 @@ describe("DataTable", () => {
       },
     });
 
-    const tableRows = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    const tableRows = getBodyRows();
     const portCells = tableRows.map(
       (row) => within(row).getAllByRole("cell")[1],
     );
@@ -1748,9 +1686,7 @@ describe("DataTable", () => {
     expect(headerCells[4]).toHaveTextContent("");
 
     // Verify empty column cells exist in each row
-    const tableRows = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    const tableRows = getBodyRows();
     for (const row of tableRows) {
       const cells = within(row).getAllByRole("cell");
       expect(cells.length).toBe(5);
@@ -1825,9 +1761,7 @@ describe("DataTable", () => {
     });
 
     // Verify only 5 rows are displayed on first page
-    const firstPageRows = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    const firstPageRows = getBodyRows();
     expect(firstPageRows.length).toBe(5);
     expect(
       within(firstPageRows[0]).getByRole("cell", { name: "Load Balancer 1" }),
@@ -1841,9 +1775,7 @@ describe("DataTable", () => {
     await tick();
 
     // Verify 5 rows are displayed on second page
-    const secondPageRows = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    const secondPageRows = getBodyRows();
     expect(secondPageRows.length).toBe(5);
     expect(
       within(secondPageRows[0]).getByRole("cell", { name: "Load Balancer 6" }),
@@ -1857,9 +1789,7 @@ describe("DataTable", () => {
     await tick();
 
     // Verify remaining rows are displayed on third page
-    const thirdPageRows = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    const thirdPageRows = getBodyRows();
     expect(thirdPageRows.length).toBe(5);
     expect(
       within(thirdPageRows[0]).getByRole("cell", { name: "Load Balancer 11" }),
@@ -1886,9 +1816,7 @@ describe("DataTable", () => {
     await user.click(nameHeader);
 
     // Click row
-    const tableRows = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    const tableRows = getBodyRows();
     const firstRow = tableRows[0];
     await user.click(firstRow);
 
@@ -1911,9 +1839,7 @@ describe("DataTable", () => {
       },
     });
 
-    const tableRows = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    const tableRows = getBodyRows();
     const firstRow = tableRows[0];
     await user.hover(firstRow);
     await user.unhover(firstRow);
@@ -2290,9 +2216,7 @@ describe("DataTable", () => {
     const consoleLog = vi.spyOn(console, "log");
 
     // Add a button to the empty cell using slot
-    const tableRows = screen
-      .getAllByRole("row")
-      .filter((row) => row.closest("tbody") !== null);
+    const tableRows = getBodyRows();
     const firstRow = tableRows[0];
     const _emptyCell = within(firstRow).getAllByRole("cell").slice(-1)[0];
 
@@ -3061,9 +2985,7 @@ describe("DataTable", () => {
 
       // Should render fewer rows than total (only visible ones)
       // Note: This includes spacer rows, so we check that we have some data rows
-      const tableRows = screen
-        .getAllByRole("row")
-        .filter((row) => row.closest("tbody") !== null);
+      const tableRows = getBodyRows();
       // Should have some rows rendered (may include spacer rows)
       expect(tableRows.length).toBeGreaterThan(0);
       // Check that we have actual data rows (not just spacers)
@@ -3093,9 +3015,7 @@ describe("DataTable", () => {
       });
 
       // Should render all rows when below threshold
-      const tableRows = screen
-        .getAllByRole("row")
-        .filter((row) => row.closest("tbody") !== null);
+      const tableRows = getBodyRows();
       expect(tableRows.length).toBe(50);
     });
 
@@ -3120,9 +3040,7 @@ describe("DataTable", () => {
 
       const _tbody = container.querySelector("tbody");
       // With maxItems: 20, should render at most 20 data rows (excluding spacer rows)
-      const tableRows = screen
-        .getAllByRole("row")
-        .filter((row) => row.closest("tbody") !== null);
+      const tableRows = getBodyRows();
       const dataRows = tableRows.filter((row) => {
         const style = row.getAttribute("style");
         const isSpacer = style?.includes("height:");
@@ -3148,9 +3066,7 @@ describe("DataTable", () => {
       expect(table).toBeInTheDocument();
 
       // Should render rows (verifying virtualization works with compact size)
-      const tableRows = screen
-        .getAllByRole("row")
-        .filter((row) => row.closest("tbody") !== null);
+      const tableRows = getBodyRows();
       expect(tableRows.length).toBeGreaterThan(0);
       expect(tableRows.length).toBeLessThan(500);
     });
@@ -3171,9 +3087,7 @@ describe("DataTable", () => {
       const table = screen.getByRole("table");
       expect(table).toBeInTheDocument();
 
-      const tableRows = screen
-        .getAllByRole("row")
-        .filter((row) => row.closest("tbody") !== null);
+      const tableRows = getBodyRows();
       expect(tableRows.length).toBeGreaterThan(0);
       expect(tableRows.length).toBeLessThan(500);
     });
@@ -3213,9 +3127,7 @@ describe("DataTable", () => {
       expect(table).toBeInTheDocument();
 
       // Should render sorted rows (check data rows, not spacer rows)
-      const tableRows = screen
-        .getAllByRole("row")
-        .filter((row) => row.closest("tbody") !== null);
+      const tableRows = getBodyRows();
       const dataRows = tableRows.filter((row) => {
         const style = row.getAttribute("style");
         const isSpacer = style?.includes("height:");
@@ -3273,9 +3185,7 @@ describe("DataTable", () => {
       expect(table).toHaveClass("bx--data-table--sticky-header");
 
       // Should render rows (check data rows, not spacer rows)
-      const tableRows = screen
-        .getAllByRole("row")
-        .filter((row) => row.closest("tbody") !== null);
+      const tableRows = getBodyRows();
       const dataRows = tableRows.filter((row) => {
         const style = row.getAttribute("style");
         const isSpacer = style?.includes("height:");
@@ -3343,9 +3253,7 @@ describe("DataTable", () => {
       expect(table).toHaveClass("bx--data-table--zebra");
 
       // Should render rows
-      const tableRows = screen
-        .getAllByRole("row")
-        .filter((row) => row.closest("tbody") !== null);
+      const tableRows = getBodyRows();
       expect(tableRows.length).toBeGreaterThan(0);
     });
 
@@ -3362,9 +3270,7 @@ describe("DataTable", () => {
       });
 
       // Should render more than pageSize data rows (virtualization ignores pagination)
-      const tableRows = screen
-        .getAllByRole("row")
-        .filter((row) => row.closest("tbody") !== null);
+      const tableRows = getBodyRows();
       const dataRows = tableRows.filter((row) => {
         const style = row.getAttribute("style");
         const isSpacer = style?.includes("height:");
@@ -3651,14 +3557,6 @@ describe("DataTable", () => {
       { key: "port", value: "Port" },
       { key: "rule", value: "Rule" },
     ];
-
-    const getColumnHeaderText = () =>
-      screen
-        .getAllByRole("columnheader")
-        .map((columnHeader) => columnHeader.textContent?.trim());
-
-    const getBodyRows = () =>
-      screen.getAllByRole("row").filter((row) => row.closest("tbody") !== null);
 
     const getRowText = (row: HTMLElement) =>
       within(row)

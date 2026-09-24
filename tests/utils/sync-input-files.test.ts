@@ -6,8 +6,10 @@ describe("syncInputFiles", () => {
     input.type = "file";
     return input;
   };
-  const names = (input: HTMLInputElement) =>
-    Array.from(input.files as FileList).map((file) => file.name);
+  const names = (input: HTMLInputElement) => {
+    assert(input.files);
+    return Array.from(input.files).map((file) => file.name);
+  };
 
   it("sets the input's files", () => {
     const input = fileInput();

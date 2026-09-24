@@ -7,7 +7,7 @@ import FormTest from "./Form.test.svelte";
 describe("Form", () => {
   it("renders with default props", () => {
     render(FormTest);
-    const form = screen.getByTestId("form");
+    const form = getForm();
     expect(form).toBeInTheDocument();
     expect(form).toHaveClass("bx--form");
   });
@@ -16,7 +16,7 @@ describe("Form", () => {
     it("calls each action with the form element", () => {
       const action = vi.fn(() => ({ destroy: vi.fn() }));
       render(FormActionsTest, { props: { actions: [action] } });
-      const form = screen.getByTestId("form");
+      const form = getForm();
       expect(action).toHaveBeenCalledTimes(1);
       expect(action).toHaveBeenCalledWith(form);
     });
@@ -38,7 +38,7 @@ describe("Form", () => {
       render(FormActionsTest, {
         props: { actions: [[action, parameter]] },
       });
-      const form = screen.getByTestId("form");
+      const form = getForm();
       expect(action).toHaveBeenCalledWith(form, parameter);
     });
 
@@ -47,7 +47,7 @@ describe("Form", () => {
       const { component } = render(FormActionsTest, {
         props: { actions: [action] },
       });
-      const form = screen.getByTestId("form");
+      const form = getForm();
       expect(component.ref).toBe(form);
     });
   });

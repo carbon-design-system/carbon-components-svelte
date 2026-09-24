@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import CodeSnippetInlineInModal from "./CodeSnippetInlineInModal.test.svelte";
 import CodeSnippetPortalTooltipTimeout from "./CodeSnippetPortalTooltipTimeout.test.svelte";
@@ -100,7 +101,7 @@ describe("CodeSnippet portal tooltip", () => {
       ).toBeInTheDocument();
 
       rerender({ modalOpen: false, portalTooltip: true });
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await flushMacrotask();
 
       expect(
         document.querySelector("[data-floating-portal]"),

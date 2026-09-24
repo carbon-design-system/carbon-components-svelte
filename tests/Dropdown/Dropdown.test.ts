@@ -23,6 +23,7 @@ import DropdownIconSlots from "./DropdownIconSlots.test.svelte";
 import DropdownInModal from "./DropdownInModal.test.svelte";
 import DropdownItemIcon from "./DropdownItemIcon.test.svelte";
 import DropdownSlot from "./DropdownSlot.test.svelte";
+import { createItems } from "./helpers";
 
 const items = [
   { id: "0", text: "Slack" },
@@ -2038,15 +2039,8 @@ describe("Dropdown", () => {
   });
 
   describe("virtualization", () => {
-    const createLargeItemList = (count: number) => {
-      return Array.from({ length: count }, (_, i) => ({
-        id: String(i),
-        text: `Item ${i + 1}`,
-      }));
-    };
-
     it("should enable virtualization for large lists", async () => {
-      const largeItems = createLargeItemList(500);
+      const largeItems = createItems(500);
       render(Dropdown, {
         props: {
           items: largeItems,
@@ -2075,7 +2069,7 @@ describe("Dropdown", () => {
     ])(
       "should scroll to selected item when menu opens $description",
       async ({ virtualize }) => {
-        const largeItems = createLargeItemList(500);
+        const largeItems = createItems(500);
         render(Dropdown, {
           props: {
             items: largeItems,
@@ -2116,7 +2110,7 @@ describe("Dropdown", () => {
     ])(
       "should scroll to selected item when menu reopens $description",
       async ({ virtualize }) => {
-        const largeItems = createLargeItemList(500);
+        const largeItems = createItems(500);
         const { rerender } = render(Dropdown, {
           props: {
             items: largeItems,
@@ -2162,7 +2156,7 @@ describe("Dropdown", () => {
     );
 
     it("should scroll to top when no item is selected", async () => {
-      const largeItems = createLargeItemList(500);
+      const largeItems = createItems(500);
       render(Dropdown, {
         props: {
           items: largeItems,
@@ -2184,7 +2178,7 @@ describe("Dropdown", () => {
     });
 
     it("should handle selected item at the end of list", async () => {
-      const largeItems = createLargeItemList(500);
+      const largeItems = createItems(500);
       render(Dropdown, {
         props: {
           items: largeItems,
@@ -2215,7 +2209,7 @@ describe("Dropdown", () => {
     });
 
     it("should default itemHeight to the size row height", async () => {
-      const largeItems = createLargeItemList(500);
+      const largeItems = createItems(500);
       render(Dropdown, {
         props: {
           items: largeItems,
@@ -2234,7 +2228,7 @@ describe("Dropdown", () => {
     });
 
     it("should accept virtualization configuration object", async () => {
-      const largeItems = createLargeItemList(500);
+      const largeItems = createItems(500);
       render(Dropdown, {
         props: {
           items: largeItems,
@@ -2261,7 +2255,7 @@ describe("Dropdown", () => {
     });
 
     it("should not virtualize lists below threshold", async () => {
-      const smallItems = createLargeItemList(50);
+      const smallItems = createItems(50);
       render(Dropdown, {
         props: {
           items: smallItems,
@@ -2281,7 +2275,7 @@ describe("Dropdown", () => {
     });
 
     it("should use default item height when not specified", async () => {
-      const largeItems = createLargeItemList(500);
+      const largeItems = createItems(500);
       render(Dropdown, {
         props: {
           items: largeItems,
@@ -2302,7 +2296,7 @@ describe("Dropdown", () => {
     });
 
     it("should handle virtualization with custom item height", async () => {
-      const largeItems = createLargeItemList(500);
+      const largeItems = createItems(500);
       render(Dropdown, {
         props: {
           items: largeItems,
@@ -2327,7 +2321,7 @@ describe("Dropdown", () => {
     });
 
     it("should calculate scroll position correctly with custom item height", async () => {
-      const largeItems = createLargeItemList(500);
+      const largeItems = createItems(500);
       render(Dropdown, {
         props: {
           items: largeItems,
@@ -2360,7 +2354,7 @@ describe("Dropdown", () => {
     });
 
     it("should override default item height when specified in virtualize object", async () => {
-      const largeItems = createLargeItemList(500);
+      const largeItems = createItems(500);
       render(Dropdown, {
         props: {
           items: largeItems,
@@ -2384,7 +2378,7 @@ describe("Dropdown", () => {
     });
 
     it("should maintain selection when virtualized", async () => {
-      const largeItems = createLargeItemList(500);
+      const largeItems = createItems(500);
       render(Dropdown, {
         props: {
           items: largeItems,
@@ -2411,7 +2405,7 @@ describe("Dropdown", () => {
     });
 
     it("should handle keyboard navigation with virtualization", async () => {
-      const largeItems = createLargeItemList(500);
+      const largeItems = createItems(500);
       render(Dropdown, {
         props: {
           items: largeItems,
@@ -2434,7 +2428,7 @@ describe("Dropdown", () => {
     });
 
     it("should jump to the last item with End when virtualized", async () => {
-      const largeItems = createLargeItemList(500);
+      const largeItems = createItems(500);
       render(Dropdown, {
         props: {
           items: largeItems,
@@ -2460,7 +2454,7 @@ describe("Dropdown", () => {
     ])(
       "should start keyboard navigation at selected item $description",
       async ({ virtualize }) => {
-        const largeItems = createLargeItemList(500);
+        const largeItems = createItems(500);
         render(Dropdown, {
           props: {
             items: largeItems,
@@ -2487,7 +2481,7 @@ describe("Dropdown", () => {
     );
 
     it("should only scroll when highlighted item is outside viewport", async () => {
-      const largeItems = createLargeItemList(500);
+      const largeItems = createItems(500);
       render(Dropdown, {
         props: {
           items: largeItems,
@@ -2537,7 +2531,7 @@ describe("Dropdown", () => {
     });
 
     it("should apply max-height style when virtualized", async () => {
-      const largeItems = createLargeItemList(500);
+      const largeItems = createItems(500);
       render(Dropdown, {
         props: {
           items: largeItems,
@@ -2560,7 +2554,7 @@ describe("Dropdown", () => {
     });
 
     it("should automatically enable virtualization for lists with more than 100 items when virtualize is undefined", async () => {
-      const largeItems = createLargeItemList(150);
+      const largeItems = createItems(150);
       render(Dropdown, {
         props: {
           items: largeItems,
@@ -2584,7 +2578,7 @@ describe("Dropdown", () => {
     });
 
     it("should not virtualize lists with 100 or fewer items when virtualize is undefined", async () => {
-      const smallItems = createLargeItemList(100);
+      const smallItems = createItems(100);
       render(Dropdown, {
         props: {
           items: smallItems,
@@ -2606,7 +2600,7 @@ describe("Dropdown", () => {
     });
 
     it("should not virtualize lists with exactly 100 items when virtualize is undefined", async () => {
-      const items = createLargeItemList(100);
+      const items = createItems(100);
       render(Dropdown, {
         props: {
           items,
@@ -2623,7 +2617,7 @@ describe("Dropdown", () => {
     });
 
     it("should explicitly disable virtualization when virtualize is false, even with large lists", async () => {
-      const largeItems = createLargeItemList(500);
+      const largeItems = createItems(500);
       render(Dropdown, {
         props: {
           items: largeItems,
@@ -2646,7 +2640,7 @@ describe("Dropdown", () => {
     });
 
     it("should respect threshold when virtualize is true with fewer than 100 items", async () => {
-      const smallItems = createLargeItemList(50);
+      const smallItems = createItems(50);
       render(Dropdown, {
         props: {
           items: smallItems,
@@ -2671,7 +2665,7 @@ describe("Dropdown", () => {
     });
 
     it("should virtualize when virtualize is true with more than 100 items", async () => {
-      const largeItems = createLargeItemList(150);
+      const largeItems = createItems(150);
       render(Dropdown, {
         props: {
           items: largeItems,

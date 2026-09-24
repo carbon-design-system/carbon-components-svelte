@@ -2,16 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import DatePicker from "./DatePickerInline.test.svelte";
-
-function findDay(calendar: HTMLElement, label: string) {
-  const day = Array.from(
-    calendar.querySelectorAll<HTMLElement>(
-      ".flatpickr-day:not(.prevMonthDay):not(.nextMonthDay)",
-    ),
-  ).find((node) => node.textContent === label);
-  assert(day);
-  return day;
-}
+import { findDay } from "./helpers";
 
 describe("DatePicker inline", () => {
   it("renders the calendar without opening it and marks the root", async () => {

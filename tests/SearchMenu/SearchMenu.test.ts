@@ -23,7 +23,8 @@ describe("SearchMenu", () => {
       props: { selectTextOnFocus: true, value: "memcache" },
     });
 
-    const input = screen.getByRole("combobox") as HTMLInputElement;
+    const input = screen.getByRole("combobox");
+    assert(input instanceof HTMLInputElement);
     await user.click(input);
     await tick();
 
@@ -34,7 +35,8 @@ describe("SearchMenu", () => {
   it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {
     render(SearchMenu, { props: { value: "memcache" } });
 
-    const input = screen.getByRole("combobox") as HTMLInputElement;
+    const input = screen.getByRole("combobox");
+    assert(input instanceof HTMLInputElement);
     await user.click(input);
     await tick();
 
@@ -46,7 +48,8 @@ describe("SearchMenu", () => {
       props: { selectTextOnFocus: true, disabled: true, value: "memcache" },
     });
 
-    const input = screen.getByRole("combobox") as HTMLInputElement;
+    const input = screen.getByRole("combobox");
+    assert(input instanceof HTMLInputElement);
     const select = vi.spyOn(input, "select");
     await fireEvent.focus(input);
 

@@ -29,7 +29,8 @@ describe("PasswordInput", () => {
         selectTextOnFocus: true,
       });
 
-      const input = screen.getByLabelText("Password") as HTMLInputElement;
+      const input = screen.getByLabelText("Password");
+      assert(input instanceof HTMLInputElement);
       await user.click(input);
       await tick();
 
@@ -43,7 +44,8 @@ describe("PasswordInput", () => {
         value: "secret123",
       });
 
-      const input = screen.getByLabelText("Password") as HTMLInputElement;
+      const input = screen.getByLabelText("Password");
+      assert(input instanceof HTMLInputElement);
       await user.click(input);
       await tick();
 
@@ -58,7 +60,8 @@ describe("PasswordInput", () => {
         disabled: true,
       });
 
-      const input = screen.getByLabelText("Password") as HTMLInputElement;
+      const input = screen.getByLabelText("Password");
+      assert(input instanceof HTMLInputElement);
       const select = vi.spyOn(input, "select");
       await fireEvent.focus(input);
 

@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { flushFormReset } from "../utils/flush-form-reset";
+import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import ToggleForm from "./Toggle.form.test.svelte";
@@ -28,7 +29,8 @@ describe("Toggle form participation", () => {
   it("keeps the first click after the DOM changed without an event", async () => {
     const onToggle = vi.fn();
     render(ToggleForm, { props: { toggled: true, onToggle } });
-    const toggle = screen.getByRole("switch") as HTMLInputElement;
+    const toggle = screen.getByRole("switch");
+    assert(toggle instanceof HTMLInputElement);
 
     toggle.checked = false;
     await user.click(toggle);
@@ -81,7 +83,7 @@ describe("Toggle form participation", () => {
       await flushFormReset();
 
       expect(toggle).not.toBeChecked();
-      expect(screen.getByTestId("bound").textContent).toBe("false");
+      expect(getBoundText()).toBe("false");
       expect(new FormData(getForm()).has("notify")).toBe(false);
       expect(onToggle).not.toHaveBeenCalled();
     });
@@ -91,32 +93,33 @@ describe("Toggle form participation", () => {
       render(ToggleForm, { props: { toggled: true, onToggle } });
       const toggle = screen.getByRole("switch");
 
-      expect(screen.getByTestId("bound").textContent).toBe("true");
+      expect(getBoundText()).toBe("true");
 
       getForm().reset();
       await flushFormReset();
 
       expect(toggle).not.toBeChecked();
-      expect(screen.getByTestId("bound").textContent).toBe("false");
+      expect(getBoundText()).toBe("false");
       expect(onToggle).not.toHaveBeenCalled();
     });
 
     it("follows the switch's default state, as with server-rendered markup", async () => {
       const onToggle = vi.fn();
       render(ToggleForm, { props: { toggled: true, onToggle } });
-      const toggle = screen.getByRole("switch") as HTMLInputElement;
+      const toggle = screen.getByRole("switch");
+      assert(toggle instanceof HTMLInputElement);
       // Server-rendered markup carries the state as the `checked` attribute.
       toggle.defaultChecked = true;
 
       await user.click(toggle);
-      expect(screen.getByTestId("bound").textContent).toBe("false");
+      expect(getBoundText()).toBe("false");
       onToggle.mockClear();
 
       getForm().reset();
       await flushFormReset();
 
       expect(toggle).toBeChecked();
-      expect(screen.getByTestId("bound").textContent).toBe("true");
+      expect(getBoundText()).toBe("true");
       expect(onToggle).not.toHaveBeenCalled();
     });
 
@@ -131,7 +134,7 @@ describe("Toggle form participation", () => {
       await flushFormReset();
 
       expect(toggle).toBeChecked();
-      expect(screen.getByTestId("bound").textContent).toBe("true");
+      expect(getBoundText()).toBe("true");
       expect(onToggle).not.toHaveBeenCalled();
     });
 
@@ -145,7 +148,7 @@ describe("Toggle form participation", () => {
       await flushFormReset();
 
       expect(toggle).toBeChecked();
-      expect(screen.getByTestId("bound").textContent).toBe("true");
+      expect(getBoundText()).toBe("true");
       expect(onToggle).not.toHaveBeenCalled();
     });
   });

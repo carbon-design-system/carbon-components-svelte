@@ -144,9 +144,10 @@ describe("UserAvatarGroup", () => {
     // a `TooltipDefinition` wrapper. The stacking index must land on that
     // direct child wrapper (what the CSS `> *` selector targets), not on the
     // nested avatar span the CSS rule never reaches.
-    const wrappers = Array.from(root.children).filter((child) =>
-      child.classList.contains("bx--user-avatar-tooltip"),
-    ) as HTMLElement[];
+    const wrappers = Array.from(root.children).filter(
+      (child): child is HTMLElement =>
+        child.classList.contains("bx--user-avatar-tooltip"),
+    );
     expect(wrappers[0].style.getPropertyValue("--user-avatar-index")).toBe("0");
     expect(
       wrappers[0]

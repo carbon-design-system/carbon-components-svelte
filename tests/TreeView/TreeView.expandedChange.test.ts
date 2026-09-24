@@ -6,6 +6,7 @@ import type {
 } from "carbon-components-svelte/TreeView/TreeView.svelte";
 import type { ComponentEvents } from "svelte";
 import { tick } from "svelte";
+import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import TreeViewExpandedChange from "./TreeView.expandedChange.test.svelte";
 
@@ -224,9 +225,10 @@ describe("TreeView toggle:change", () => {
       );
 
       // Let Node emit the rejection from the deferred microtask.
-      await new Promise((resolve) => setTimeout(resolve));
+      await flushMacrotask();
       expect(rejections).toHaveLength(1);
-      expect((rejections[0] as Error).message).toBe("consumer boom");
+      assert(rejections[0] instanceof Error);
+      expect(rejections[0].message).toBe("consumer boom");
     } finally {
       process.removeListener("unhandledRejection", capture);
       for (const listener of priorListeners) {

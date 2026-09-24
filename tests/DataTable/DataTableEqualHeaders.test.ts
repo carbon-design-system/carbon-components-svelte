@@ -1,6 +1,7 @@
-import { render, screen, within } from "@testing-library/svelte";
+import { render, within } from "@testing-library/svelte";
 import type { DataTableValue } from "carbon-components-svelte/DataTable/DataTable.svelte";
 import DataTable from "./DataTable.test.svelte";
+import { getBodyRows, getColumnHeaderText } from "./helpers";
 
 describe("DataTable new-but-equal headers", () => {
   const buildRows = () => [
@@ -41,14 +42,6 @@ describe("DataTable new-but-equal headers", () => {
     { key: "port", value: "Port", columnHidden: portHidden },
     { key: "rule", value: "Rule" },
   ];
-
-  const getColumnHeaderText = () =>
-    screen
-      .getAllByRole("columnheader")
-      .map((columnHeader) => columnHeader.textContent?.trim());
-
-  const getBodyRows = () =>
-    screen.getAllByRole("row").filter((row) => row.closest("tbody") !== null);
 
   it("does not re-sort for a new-but-equal headers array, and re-sorts for a different one", async () => {
     const sortFn = createSortFn();

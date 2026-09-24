@@ -11,12 +11,18 @@ function buildContainer(count: number) {
   return container;
 }
 
+function getViews(container: HTMLElement): HTMLElement[] {
+  return Array.from(container.children).filter(
+    (child): child is HTMLElement => child instanceof HTMLElement,
+  );
+}
+
 describe("initCarousel", () => {
   it("shows only the first view on init", () => {
     const container = buildContainer(3);
     initCarousel(container);
 
-    const views = Array.from(container.children) as HTMLElement[];
+    const views = getViews(container);
     expect(views[0].hidden).toBe(false);
     expect(views[1].hidden).toBe(true);
     expect(views[2].hidden).toBe(true);
@@ -25,7 +31,7 @@ describe("initCarousel", () => {
   it("next/prev move the active index and toggle visibility", () => {
     const container = buildContainer(3);
     const carousel = initCarousel(container);
-    const views = Array.from(container.children) as HTMLElement[];
+    const views = getViews(container);
 
     carousel.next();
     expect(carousel.getActiveItem()).toEqual({ index: 1, item: views[1] });
@@ -128,7 +134,7 @@ describe("initCarousel", () => {
   it("destroyEvents unhides every view", () => {
     const container = buildContainer(3);
     const carousel = initCarousel(container);
-    const views = Array.from(container.children) as HTMLElement[];
+    const views = getViews(container);
 
     carousel.next();
     carousel.destroyEvents();
@@ -138,7 +144,7 @@ describe("initCarousel", () => {
 
   it("useMaxHeight reads every height after all views are made measurable", () => {
     const container = buildContainer(3);
-    const views = Array.from(container.children) as HTMLElement[];
+    const views = getViews(container);
     const heights = [30, 80, 50];
     // Whether every sibling was already in its measuring state at read time.
     const allMeasurableAtRead: boolean[] = [];

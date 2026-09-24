@@ -1,14 +1,9 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import ComboBoxClose from "./ComboBoxClose.test.svelte";
+import { getInput } from "./helpers";
 
 describe("ComboBox close event", () => {
-  const getInput = () => {
-    const input = screen.getByRole("combobox");
-    assert(input instanceof HTMLInputElement);
-    return input;
-  };
-
   it('dispatches close with trigger "escape-key" on Escape', async () => {
     const onClose = vi.fn();
     render(ComboBoxClose, { props: { onClose } });

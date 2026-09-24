@@ -6,7 +6,7 @@ describe("ToolbarSearch clear()", () => {
   it("resets value and collapses the search", async () => {
     render(ToolbarSearchClear);
 
-    const input = screen.getByRole("searchbox") as HTMLInputElement;
+    const input = screen.getByRole("searchbox");
     await user.type(input, "Alpha");
 
     await waitFor(() => {
@@ -31,7 +31,7 @@ describe("ToolbarSearch clear()", () => {
   it("keeps the search expanded when persistent", async () => {
     render(ToolbarSearchClear, { props: { persistent: true } });
 
-    const input = screen.getByRole("searchbox") as HTMLInputElement;
+    const input = screen.getByRole("searchbox");
     await user.type(input, "Bravo");
 
     await waitFor(() => {

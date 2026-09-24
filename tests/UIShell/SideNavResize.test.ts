@@ -6,8 +6,11 @@ const getHandle = () =>
   screen.getByRole("separator", { name: "Resize side navigation" });
 const queryHandle = () =>
   screen.queryByRole("separator", { name: "Resize side navigation" });
-const getNav = (container: HTMLElement) =>
-  container.querySelector(".bx--side-nav") as HTMLElement;
+const getNav = (container: HTMLElement) => {
+  const nav = container.querySelector<HTMLElement>(".bx--side-nav");
+  assert(nav);
+  return nav;
+};
 
 describe("SideNav resize", () => {
   afterEach(() => {
@@ -78,7 +81,8 @@ describe("SideNav resize", () => {
     const { container } = render(SideNavResizeTest, {
       props: { resizable: true, width: 320 },
     });
-    const content = container.querySelector(".bx--content") as HTMLElement;
+    const content = container.querySelector<HTMLElement>(".bx--content");
+    assert(content);
     expect(content.style.getPropertyValue("--ccs-side-nav-width")).toBe(
       "320px",
     );
@@ -95,7 +99,8 @@ describe("SideNav resize", () => {
     const { container } = render(SideNavResizeTest, {
       props: { resizable: false, width: 320 },
     });
-    const content = container.querySelector(".bx--content") as HTMLElement;
+    const content = container.querySelector<HTMLElement>(".bx--content");
+    assert(content);
     expect(content.style.getPropertyValue("--ccs-side-nav-width")).toBe("");
   });
 

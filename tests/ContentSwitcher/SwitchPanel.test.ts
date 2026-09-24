@@ -1,17 +1,8 @@
-import { render, screen } from "@testing-library/svelte";
+import { screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import ContentSwitcherPanels from "./ContentSwitcher.panels.test.svelte";
-
-/** Child registration flushes on a microtask (`batchStoreUpdates`). */
-async function renderPanels(
-  ...args: Parameters<typeof render>
-): Promise<ReturnType<typeof render>> {
-  const result = render(...args);
-  await tick();
-  await tick();
-  return result;
-}
+import { renderAndFlush } from "./helpers";
 
 function panel(id: string) {
   const element = document.getElementById(id);
@@ -21,7 +12,7 @@ function panel(id: string) {
 
 describe("SwitchPanel", () => {
   it("links each switch and panel by position", async () => {
-    await renderPanels(ContentSwitcherPanels);
+    await renderAndFlush(ContentSwitcherPanels);
 
     const tabs = screen.getAllByRole("tab");
     expect(tabs[0]).toHaveAttribute("aria-controls", "one-panel");
@@ -38,7 +29,7 @@ describe("SwitchPanel", () => {
   });
 
   it("keeps an aria-controls passed to Switch", async () => {
-    await renderPanels(ContentSwitcherPanels);
+    await renderAndFlush(ContentSwitcherPanels);
 
     expect(screen.getByRole("tab", { name: "Three" })).toHaveAttribute(
       "aria-controls",
@@ -47,7 +38,7 @@ describe("SwitchPanel", () => {
   });
 
   it("shows only the selected switch's panel", async () => {
-    await renderPanels(ContentSwitcherPanels);
+    await renderAndFlush(ContentSwitcherPanels);
 
     expect(screen.getByRole("tabpanel")).toHaveTextContent("Content 1");
     expect(panel("two-panel")).not.toBeVisible();
@@ -61,7 +52,7 @@ describe("SwitchPanel", () => {
   });
 
   it("follows arrow-key selection", async () => {
-    await renderPanels(ContentSwitcherPanels);
+    await renderAndFlush(ContentSwitcherPanels);
 
     await user.click(screen.getByRole("tab", { name: "One" }));
     await user.keyboard("{ArrowRight}");
@@ -71,7 +62,7 @@ describe("SwitchPanel", () => {
   });
 
   it("follows a selectedIndex set by the parent", async () => {
-    const { rerender } = await renderPanels(ContentSwitcherPanels);
+    const { rerender } = await renderAndFlush(ContentSwitcherPanels);
 
     await rerender({ selectedIndex: 2 });
     await tick();
@@ -80,7 +71,7 @@ describe("SwitchPanel", () => {
   });
 
   it("pairs panels in DOM order when one mounts late", async () => {
-    const { rerender } = await renderPanels(ContentSwitcherPanels, {
+    const { rerender } = await renderAndFlush(ContentSwitcherPanels, {
       props: { showFirstPanel: false },
     });
 
@@ -100,14 +91,14 @@ describe("SwitchPanel", () => {
   });
 
   it("mounts every panel's content by default", async () => {
-    await renderPanels(ContentSwitcherPanels);
+    await renderAndFlush(ContentSwitcherPanels);
 
     expect(panel("two-panel")).toHaveTextContent("Content 2");
     expect(panel("three-panel")).toHaveTextContent("Content 3");
   });
 
   it("defers lazy content until its switch is first selected", async () => {
-    await renderPanels(ContentSwitcherPanels, { props: { lazy: true } });
+    await renderAndFlush(ContentSwitcherPanels, { props: { lazy: true } });
 
     expect(panel("one-panel")).toHaveTextContent("Content 1");
     expect(panel("two-panel")).toBeEmptyDOMElement();
@@ -120,7 +111,7 @@ describe("SwitchPanel", () => {
   });
 
   it("unmounts content on deselect with unmountOnHide", async () => {
-    await renderPanels(ContentSwitcherPanels, {
+    await renderAndFlush(ContentSwitcherPanels, {
       props: { unmountOnHide: true },
     });
 

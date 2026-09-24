@@ -3,14 +3,13 @@ import type { DataTableRow } from "carbon-components-svelte/DataTable/DataTable.
 import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
 import DataTableSearch from "./DataTableSearch.test.svelte";
+import { getTableRows } from "./helpers";
 
 describe("DataTableSearch", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  // Remove first row since it's the header
-  const getTableRows = () => screen.getAllByRole("row").slice(1);
   const getNextPageButton = () =>
     screen.getByRole("button", { name: "Next page" });
   const getPrevPageButton = () =>

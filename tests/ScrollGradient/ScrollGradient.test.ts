@@ -121,7 +121,8 @@ describe("ScrollGradient", () => {
     const { container } = render(ScrollGradient);
     const scrollElement = container.querySelector(
       ".bx--scroll-gradient__scroll-element",
-    ) as HTMLElement;
+    );
+    assert(scrollElement instanceof HTMLElement);
 
     await markScrollable(scrollElement, { y: true });
     expect(
@@ -159,7 +160,8 @@ describe("ScrollGradient", () => {
     });
     const scrollElement = container.querySelector(
       ".bx--scroll-gradient__scroll-element",
-    ) as HTMLElement;
+    );
+    assert(scrollElement instanceof HTMLElement);
 
     await markScrollable(scrollElement, { x: true, y: true });
     const [top, bottom, left, right] = getSentinels(container);
@@ -191,16 +193,16 @@ describe("ScrollGradient", () => {
     });
     const scrollElement = container.querySelector(
       ".bx--scroll-gradient__scroll-element",
-    ) as HTMLElement;
+    );
+    assert(scrollElement instanceof HTMLElement);
 
     await markScrollable(scrollElement, { y: true });
     const [top] = getSentinels(container);
     getObserverFor(scrollElement).trigger(top, false);
     await tick();
 
-    const wrapper = container.querySelector(
-      ".bx--scroll-gradient",
-    ) as HTMLElement;
+    const wrapper = container.querySelector(".bx--scroll-gradient");
+    assert(wrapper instanceof HTMLElement);
     expect(wrapper.style.getPropertyValue("--cds-scroll-gradient-color")).toBe(
       "red",
     );
@@ -213,7 +215,8 @@ describe("ScrollGradient", () => {
 
     const scrollElement = container.querySelector(
       ".bx--scroll-gradient__scroll-element",
-    ) as HTMLElement;
+    );
+    assert(scrollElement instanceof HTMLElement);
     expect(scrollElement.style.backgroundColor).toBe("transparent");
   });
 
@@ -222,9 +225,8 @@ describe("ScrollGradient", () => {
       props: { height: "100vh" },
     });
 
-    const wrapper = container.querySelector(
-      ".bx--scroll-gradient",
-    ) as HTMLElement;
+    const wrapper = container.querySelector(".bx--scroll-gradient");
+    assert(wrapper instanceof HTMLElement);
     expect(wrapper.style.height).toBe("100vh");
   });
 });

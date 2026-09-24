@@ -3,14 +3,13 @@ import { flushFormReset } from "../utils/flush-form-reset";
 import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import ComboBox from "./ComboBox.form.test.svelte";
+import { getInput } from "./helpers";
 
 const items = [
   { id: "0", text: "Slack" },
   { id: "1", text: "Email" },
   { id: "2", text: "Fax" },
 ] as const;
-
-const getInput = () => screen.getByRole("combobox") as HTMLInputElement;
 
 describe("ComboBox form participation", () => {
   it("does not apply a name attribute to the input when name is omitted", () => {

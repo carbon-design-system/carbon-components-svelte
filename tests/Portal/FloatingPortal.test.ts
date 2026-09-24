@@ -111,9 +111,8 @@ describe("FloatingPortal", () => {
       });
 
       const content = await screen.findByText("Floating content");
-      const portalElement = content.closest(
-        "[data-floating-portal]",
-      ) as HTMLElement;
+      const portalElement = content.closest("[data-floating-portal]");
+      assert(portalElement instanceof HTMLElement);
       const anchor = screen.getByTestId("anchor");
       expect(portalElement).toHaveAttribute(
         "data-floating-direction",
@@ -155,9 +154,8 @@ describe("FloatingPortal", () => {
       });
 
       const content = await screen.findByText("Floating content");
-      const portalElement = content.closest(
-        "[data-floating-portal]",
-      ) as HTMLElement;
+      const portalElement = content.closest("[data-floating-portal]");
+      assert(portalElement instanceof HTMLElement);
       const anchor = screen.getByTestId("anchor");
       expect(portalElement).toHaveAttribute(
         "data-floating-direction",

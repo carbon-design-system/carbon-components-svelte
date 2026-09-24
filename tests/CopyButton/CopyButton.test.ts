@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
+import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import CopyButton from "./CopyButton.test.svelte";
 import CopyButtonAsync from "./CopyButtonAsync.test.svelte";
@@ -53,7 +54,7 @@ describe("CopyButton", () => {
     const feedback = button.querySelector(".bx--copy-btn__feedback");
     expect(feedback).toHaveTextContent("Copied to clipboard");
 
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await flushMacrotask();
     expect(button).toHaveClass("bx--copy-btn--fade-out");
   });
 
@@ -354,7 +355,7 @@ describe("CopyButton", () => {
       ).toBeInTheDocument();
 
       rerender({ modalOpen: false, portalTooltip: true });
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await flushMacrotask();
 
       expect(
         document.querySelector("[data-floating-portal]"),

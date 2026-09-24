@@ -1,11 +1,12 @@
 import { render, screen } from "@testing-library/svelte";
 import { flushFormReset } from "../utils/flush-form-reset";
+import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import SearchForm from "./Search.form.test.svelte";
 
-const getBoundValue = () => screen.getByTestId("bound-value").textContent;
-const getBoundExpanded = () => screen.getByTestId("bound-expanded").textContent;
+const getBoundValue = () => getBoundText("bound-value");
+const getBoundExpanded = () => getBoundText("bound-expanded");
 describe("Search form reset", () => {
   it("clears to empty even with an initial value and zero interaction", async () => {
     render(SearchForm, { props: { value: "ada" } });
@@ -22,7 +23,8 @@ describe("Search form reset", () => {
     render(SearchForm, { props: { value: "ada" } });
     const input = screen.getByRole("searchbox", {
       name: "Search",
-    }) as HTMLInputElement;
+    });
+    assert(input instanceof HTMLInputElement);
     // Simulates SSR markup, which carries the value as the `value` attribute.
     input.defaultValue = "ada";
 

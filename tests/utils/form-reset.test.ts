@@ -12,8 +12,12 @@ describe("formReset action", () => {
       <input id="outside" form="f" value="outside-default">
       <input id="orphan">
     `;
-    form = document.getElementById("f") as HTMLFormElement;
-    input = document.getElementById("i") as HTMLInputElement;
+    const foundForm = document.querySelector<HTMLFormElement>("#f");
+    const foundInput = document.querySelector<HTMLInputElement>("#i");
+    assert(foundForm);
+    assert(foundInput);
+    form = foundForm;
+    input = foundInput;
   });
 
   afterEach(() => {
@@ -38,7 +42,7 @@ describe("formReset action", () => {
     const onReset = vi.fn();
     const action = formReset(input, onReset);
 
-    (document.getElementById("g") as HTMLFormElement).reset();
+    document.querySelector<HTMLFormElement>("#g")?.reset();
     await flushFormReset();
     expect(onReset).not.toHaveBeenCalled();
 
@@ -59,7 +63,8 @@ describe("formReset action", () => {
 
   it("follows the form attribute", async () => {
     const onReset = vi.fn();
-    const outside = document.getElementById("outside") as HTMLInputElement;
+    const outside = document.querySelector<HTMLInputElement>("#outside");
+    assert(outside);
     const action = formReset(outside, onReset);
 
     form.reset();
@@ -71,7 +76,8 @@ describe("formReset action", () => {
 
   it("never calls back for a control without a form", async () => {
     const onReset = vi.fn();
-    const orphan = document.getElementById("orphan") as HTMLInputElement;
+    const orphan = document.querySelector<HTMLInputElement>("#orphan");
+    assert(orphan);
     const action = formReset(orphan, onReset);
 
     form.reset();
@@ -83,7 +89,8 @@ describe("formReset action", () => {
 
   it("works on a fieldset", async () => {
     const onReset = vi.fn();
-    const fieldset = document.getElementById("fs") as HTMLFieldSetElement;
+    const fieldset = document.querySelector<HTMLFieldSetElement>("#fs");
+    assert(fieldset);
     const action = formReset(fieldset, onReset);
 
     form.reset();
@@ -126,7 +133,8 @@ describe("formReset action", () => {
     const removeSpy = vi.spyOn(window, "removeEventListener");
     const first = vi.fn();
     const second = vi.fn();
-    const fieldset = document.getElementById("fs") as HTMLFieldSetElement;
+    const fieldset = document.querySelector<HTMLFieldSetElement>("#fs");
+    assert(fieldset);
 
     const a = formReset(input, first);
     const b = formReset(fieldset, second);

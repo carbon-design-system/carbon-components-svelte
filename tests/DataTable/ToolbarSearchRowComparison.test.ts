@@ -1,5 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { getFilteredIds } from "./helpers";
 import ToolbarSearchRowComparison from "./ToolbarSearchRowComparison.test.svelte";
 
 // Regression tests for https://github.com/carbon-design-system/carbon-components-svelte/issues/2143
@@ -7,11 +8,6 @@ describe("ToolbarSearch row comparison behavior", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
-
-  const getFilteredIds = () => {
-    const element = screen.getByTestId("filtered-ids");
-    return JSON.parse(element.textContent || "[]");
-  };
 
   const getUpdateCount = () => {
     const element = screen.getByTestId("update-count");
@@ -38,7 +34,7 @@ describe("ToolbarSearch row comparison behavior", () => {
     await tick();
 
     await waitFor(() => {
-      const filteredIds = getFilteredIds();
+      const filteredIds = getFilteredIds("filtered-ids");
       expect(filteredIds).toEqual(expect.arrayContaining([1, 2]));
     });
   });
@@ -64,7 +60,7 @@ describe("ToolbarSearch row comparison behavior", () => {
     await tick();
 
     await waitFor(() => {
-      const filteredIds = getFilteredIds();
+      const filteredIds = getFilteredIds("filtered-ids");
       expect(filteredIds).toContain(3);
       expect(filteredIds.length).toBe(3);
     });
@@ -90,7 +86,7 @@ describe("ToolbarSearch row comparison behavior", () => {
     await tick();
 
     await waitFor(() => {
-      const filteredIds = getFilteredIds();
+      const filteredIds = getFilteredIds("filtered-ids");
       expect(filteredIds).toContain(1);
       expect(filteredIds).toContain(2);
     });
@@ -119,7 +115,7 @@ describe("ToolbarSearch row comparison behavior", () => {
 
     await waitFor(() => {
       expect(getUpdateCount()).toBe(initialUpdateCount);
-      const filteredIds = getFilteredIds();
+      const filteredIds = getFilteredIds("filtered-ids");
       expect(filteredIds.length).toBeGreaterThan(0);
     });
   });
@@ -147,7 +143,7 @@ describe("ToolbarSearch row comparison behavior", () => {
 
     await waitFor(() => {
       expect(getUpdateCount()).toBe(initialUpdateCount);
-      const filteredIds = getFilteredIds();
+      const filteredIds = getFilteredIds("filtered-ids");
       expect(filteredIds).toEqual(expect.arrayContaining([1, 2]));
     });
   });
@@ -175,7 +171,7 @@ describe("ToolbarSearch row comparison behavior", () => {
     await tick();
 
     await waitFor(() => {
-      const filteredIds = getFilteredIds();
+      const filteredIds = getFilteredIds("filtered-ids");
       expect(filteredIds).toEqual(expect.arrayContaining([1, 2]));
     });
   });
@@ -232,7 +228,7 @@ describe("ToolbarSearch row comparison behavior", () => {
     await tick();
 
     await waitFor(() => {
-      const filteredIds = getFilteredIds();
+      const filteredIds = getFilteredIds("filtered-ids");
       expect(filteredIds).toEqual(expect.arrayContaining([1, 2]));
     });
   });
@@ -281,7 +277,7 @@ describe("ToolbarSearch row comparison behavior", () => {
     await tick();
 
     await waitFor(() => {
-      const filteredIds = getFilteredIds();
+      const filteredIds = getFilteredIds("filtered-ids");
       expect(filteredIds).toEqual(expect.arrayContaining([1, 2]));
     });
   });
@@ -369,7 +365,7 @@ describe("ToolbarSearch row comparison behavior", () => {
     await tick();
 
     await waitFor(() => {
-      const filteredIds = getFilteredIds();
+      const filteredIds = getFilteredIds("filtered-ids");
       expect(filteredIds).toEqual(expect.arrayContaining([1, 2]));
     });
   });
@@ -394,7 +390,7 @@ describe("ToolbarSearch row comparison behavior", () => {
     await tick();
 
     await waitFor(() => {
-      const filteredIds = getFilteredIds();
+      const filteredIds = getFilteredIds("filtered-ids");
       expect(filteredIds).toEqual(expect.arrayContaining([1, 2]));
     });
   });
@@ -421,7 +417,7 @@ describe("ToolbarSearch row comparison behavior", () => {
 
     await waitFor(() => {
       expect(getUpdateCount()).toBe(initialUpdateCount);
-      const filteredIds = getFilteredIds();
+      const filteredIds = getFilteredIds("filtered-ids");
       expect(filteredIds).toEqual(expect.arrayContaining([1, 2]));
     });
   });
@@ -448,7 +444,7 @@ describe("ToolbarSearch row comparison behavior", () => {
 
     await waitFor(() => {
       expect(getUpdateCount()).toBe(initialUpdateCount);
-      const filteredIds = getFilteredIds();
+      const filteredIds = getFilteredIds("filtered-ids");
       expect(filteredIds).toEqual(expect.arrayContaining([1, 2]));
     });
   });
@@ -475,7 +471,7 @@ describe("ToolbarSearch row comparison behavior", () => {
 
     await waitFor(() => {
       expect(getUpdateCount()).toBe(initialUpdateCount);
-      const filteredIds = getFilteredIds();
+      const filteredIds = getFilteredIds("filtered-ids");
       expect(filteredIds).toEqual(expect.arrayContaining([1, 2]));
     });
   });
@@ -503,7 +499,7 @@ describe("ToolbarSearch row comparison behavior", () => {
 
     await waitFor(() => {
       expect(getUpdateCount()).toBe(initialUpdateCount);
-      const filteredIds = getFilteredIds();
+      const filteredIds = getFilteredIds("filtered-ids");
       expect(filteredIds).toEqual(expect.arrayContaining([1, 2]));
     });
   });
@@ -542,7 +538,7 @@ describe("ToolbarSearch row comparison behavior", () => {
     await tick();
 
     await waitFor(() => {
-      const filteredIds = getFilteredIds();
+      const filteredIds = getFilteredIds("filtered-ids");
       expect(filteredIds).toEqual(expect.arrayContaining([1, 2]));
     });
   });
@@ -558,7 +554,7 @@ describe("ToolbarSearch row comparison behavior", () => {
     rerender({ rows: newRows });
     await tick();
 
-    const filteredIds = getFilteredIds();
+    const filteredIds = getFilteredIds("filtered-ids");
     expect(filteredIds.length).toBeGreaterThan(0);
   });
 
@@ -584,7 +580,7 @@ describe("ToolbarSearch row comparison behavior", () => {
     await tick();
 
     await waitFor(() => {
-      const filteredIds = getFilteredIds();
+      const filteredIds = getFilteredIds("filtered-ids");
       expect(filteredIds).toContain(1);
       expect(filteredIds).toContain(2);
       expect(filteredIds).toContain(4);
@@ -603,7 +599,7 @@ describe("ToolbarSearch row comparison behavior", () => {
     });
 
     await tick();
-    const initialFilteredIds = getFilteredIds();
+    const initialFilteredIds = getFilteredIds("filtered-ids");
 
     const sameRows = [
       { id: 1, name: "Row 1" },
@@ -614,7 +610,7 @@ describe("ToolbarSearch row comparison behavior", () => {
 
     await new Promise((resolve) => setTimeout(resolve, 100));
 
-    const finalFilteredIds = getFilteredIds();
+    const finalFilteredIds = getFilteredIds("filtered-ids");
     expect(finalFilteredIds).toEqual(initialFilteredIds);
   });
 
@@ -627,13 +623,13 @@ describe("ToolbarSearch row comparison behavior", () => {
     });
 
     await tick();
-    const initialFilteredIds = getFilteredIds();
+    const initialFilteredIds = getFilteredIds("filtered-ids");
 
     rerender({ rows: rows2 });
     await tick();
 
     await waitFor(() => {
-      const filteredIds = getFilteredIds();
+      const filteredIds = getFilteredIds("filtered-ids");
       expect(filteredIds).toEqual(initialFilteredIds);
     });
   });
