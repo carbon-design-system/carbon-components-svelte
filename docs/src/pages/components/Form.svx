@@ -107,7 +107,8 @@ useful when stacking form groups without extra spacing between them.
 
 Set `invalid` to `true` to mark the fieldset invalid via the `data-invalid`
 attribute. Set `message` to `true` with `messageText` to render a requirement
-below the fieldset's controls.
+below the fieldset's controls; when the group is invalid, the message shows as
+an error with a warning icon.
 
 <Form>
   <FormGroup
