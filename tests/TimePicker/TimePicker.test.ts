@@ -389,6 +389,28 @@ describe("TimePicker", () => {
     container.remove();
   });
 
+  it("keeps a read-only select closed on Alt+Down", async () => {
+    render(TimePickerCustom, { props: { selectReadonly: true } });
+
+    const [select] = screen.getAllByRole("combobox");
+    expect(
+      await fireEvent.keyDown(select, { key: "ArrowDown", altKey: true }),
+    ).toBe(false);
+    expect(await fireEvent.keyDown(select, { key: "Tab" })).toBe(true);
+    expect(
+      await fireEvent.keyDown(select, { key: "Tab", shiftKey: true }),
+    ).toBe(true);
+  });
+
+  it("does not block Alt+Down when the select is not read-only", async () => {
+    render(TimePickerCustom);
+
+    const [select] = screen.getAllByRole("combobox");
+    expect(
+      await fireEvent.keyDown(select, { key: "ArrowDown", altKey: true }),
+    ).toBe(true);
+  });
+
   describe("fluid variant", () => {
     it("does not render fluid classes by default", () => {
       render(TimePicker);
