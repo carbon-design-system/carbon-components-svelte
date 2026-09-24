@@ -6,6 +6,7 @@ import TimePickerFluidSkeleton from "./TimePicker.fluidSkeleton.test.svelte";
 import TimePickerFluidSlot from "./TimePicker.fluidSlot.test.svelte";
 import TimePicker from "./TimePicker.test.svelte";
 import TimePickerCustom from "./TimePickerCustom.test.svelte";
+import TimePickerSelectDefault from "./TimePickerSelect.default.test.svelte";
 import TimePickerSelectNumeric from "./TimePickerSelect.numeric.test.svelte";
 import TimePickerSelectSlot from "./TimePickerSelect.slot.test.svelte";
 import TimePickerSelectEvents from "./TimePickerSelectEvents.test.svelte";
@@ -559,6 +560,55 @@ describe("TimePicker", () => {
     await user.selectOptions(select, "0");
     expect(select.selectedIndex).toBe(0);
     expect(bound).toHaveTextContent(/^0$/);
+  });
+
+  describe("TimePickerSelect default value", () => {
+    const setup = async (props = {}) => {
+      render(TimePickerSelectDefault, { props });
+      await tick();
+      return {
+        select: screen.getByRole("combobox") as HTMLSelectElement,
+        bound: screen.getByTestId("bound"),
+      };
+    };
+
+    it("selects the first item when there is no value", async () => {
+      const { select, bound } = await setup();
+
+      expect(select.selectedIndex).toBe(0);
+      expect(bound).toHaveTextContent(/^"am"$/);
+    });
+
+    it("keeps an explicit value", async () => {
+      const { select, bound } = await setup({ value: "pm" });
+
+      expect(select.selectedIndex).toBe(1);
+      expect(bound).toHaveTextContent(/^"pm"$/);
+    });
+
+    it('keeps "" when an item has the value ""', async () => {
+      const { select, bound } = await setup({
+        items: [
+          { value: "am", text: "AM" },
+          { value: "", text: "None" },
+        ],
+      });
+
+      expect(select.selectedIndex).toBe(1);
+      expect(bound).toHaveTextContent(/^""$/);
+    });
+
+    it("adopts a numeric first item as a number", async () => {
+      const { select, bound } = await setup({
+        items: [
+          { value: 0, text: "UTC" },
+          { value: -7, text: "PDT" },
+        ],
+      });
+
+      expect(select.selectedIndex).toBe(0);
+      expect(bound).toHaveTextContent(/^0$/);
+    });
   });
 
   it("renders fluid skeleton state", () => {
