@@ -555,3 +555,18 @@
 @include exports('datepicker-week-select') {
   @include date-picker-week-select;
 }
+
+// carbon-components-svelte patch
+// `minRangeDays`: while a range start is pending, the start day itself can
+// be disabled (picking it again would make a one-day range). Keep its
+// selected look.
+@mixin date-picker-range-length {
+  .flatpickr-day.selected.flatpickr-disabled {
+    background-color: $interactive-01;
+    color: $text-04;
+  }
+}
+
+@include exports('datepicker-range-length') {
+  @include date-picker-range-length;
+}

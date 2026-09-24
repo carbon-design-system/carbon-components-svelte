@@ -234,6 +234,7 @@ export function updateMonthNode(instance, locale) {
  *   base: HTMLElement;
  *   input: HTMLInputElement;
  *   dispatch: (event: string) => void;
+ *   isDayBlocked?: (date: Date, instance: FlatpickrInstance) => boolean;
  * }} CreateCalendarArgs
  */
 
@@ -345,7 +346,13 @@ export function setErrorHandler(instance, handler) {
  * @param {CreateCalendarArgs} args
  * @returns {Promise<FlatpickrInstance | null>}
  */
-export async function createCalendar({ options, base, input, dispatch }) {
+export async function createCalendar({
+  options,
+  base,
+  input,
+  dispatch,
+  isDayBlocked,
+}) {
   /** @type {((new (config: { position: string; input: HTMLInputElement }) => unknown) | undefined)} */
   let RangePlugin;
   /** @type {((config?: { shorthand?: boolean; dateFormat?: string; altFormat?: string }) => unknown) | undefined} */
@@ -552,6 +559,17 @@ export async function createCalendar({ options, base, input, dispatch }) {
     onReady: [prepareOnReady],
     onDestroy: [disconnectAltInputObserver],
     onDayCreate: [
+      // Runs first so `markDisabledDayAriaState` also labels these days.
+      (
+        /** @type {any} */ _dObj,
+        /** @type {any} */ _dStr,
+        /** @type {FlatpickrInstance} */ instance,
+        /** @type {any} */ dayElem,
+      ) => {
+        if (isDayBlocked?.(dayElem.dateObj, instance)) {
+          dayElem.classList.add("flatpickr-disabled");
+        }
+      },
       markDisabledDayAriaState,
       // Days are rebuilt on every redraw (month change, `set`), not only on
       // open, so class them as they are created.

@@ -2701,6 +2701,111 @@ describe("DatePicker", () => {
     });
   });
 
+  describe("range length limits", () => {
+    function dayLabel(day: number) {
+      const now = new Date();
+      return new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        day,
+      ).toLocaleDateString("en-US", {
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+    }
+
+    /** The current-month cell for `day`, looked up fresh after redraws. */
+    function day(calendar: HTMLElement, n: number) {
+      const cell = calendar.querySelector<HTMLElement>(
+        `[aria-label="${dayLabel(n)}"]`,
+      );
+      if (!cell) throw new Error(`expected day ${n}`);
+      return cell;
+    }
+
+    async function pickStart(props: Record<string, unknown>) {
+      const result = render(DatePickerRange, props);
+      await user.click(screen.getByLabelText("Start date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+      await user.click(day(calendar, 10));
+      return { ...result, calendar };
+    }
+
+    it("disables days beyond maxRangeDays while the start is pending", async () => {
+      const { calendar } = await pickStart({ maxRangeDays: 7 });
+
+      expect(day(calendar, 16)).not.toHaveClass("flatpickr-disabled");
+      expect(day(calendar, 4)).not.toHaveClass("flatpickr-disabled");
+      for (const n of [17, 3]) {
+        expect(day(calendar, n)).toHaveClass("flatpickr-disabled");
+        expect(day(calendar, n)).toHaveAttribute("aria-disabled", "true");
+      }
+    });
+
+    it("only completes the range inside the window", async () => {
+      const { calendar } = await pickStart({ maxRangeDays: 7 });
+
+      await user.click(day(calendar, 17));
+      expect(screen.getByLabelText("End date")).toHaveValue("");
+      expect(calendar).toHaveClass("open");
+
+      await user.click(day(calendar, 16));
+      expect(screen.getByLabelText("End date")).not.toHaveValue("");
+    });
+
+    it("disables days closer than minRangeDays, including the start", async () => {
+      const { calendar } = await pickStart({ minRangeDays: 3 });
+
+      expect(day(calendar, 10)).toHaveClass("flatpickr-disabled");
+      expect(day(calendar, 10)).toHaveClass("selected");
+      expect(day(calendar, 11)).toHaveClass("flatpickr-disabled");
+      expect(day(calendar, 12)).not.toHaveClass("flatpickr-disabled");
+    });
+
+    it("drops the window once the range is complete", async () => {
+      const { calendar } = await pickStart({ maxRangeDays: 7 });
+      await user.click(day(calendar, 16));
+
+      await user.click(screen.getByLabelText("Start date"));
+
+      expect(day(calendar, 17)).not.toHaveClass("flatpickr-disabled");
+      expect(day(calendar, 3)).not.toHaveClass("flatpickr-disabled");
+    });
+
+    it("repaints a pending window when the limit changes", async () => {
+      const { calendar, rerender } = await pickStart({ maxRangeDays: 7 });
+
+      await rerender({ maxRangeDays: 3 });
+
+      expect(day(calendar, 12)).not.toHaveClass("flatpickr-disabled");
+      expect(day(calendar, 13)).toHaveClass("flatpickr-disabled");
+    });
+
+    it("ignores the limits outside range mode", async () => {
+      render(DatePickerRange, { datePickerType: "single", maxRangeDays: 2 });
+      await user.click(screen.getByLabelText("Start date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+      await user.click(day(calendar, 10));
+      await user.click(screen.getByLabelText("Start date"));
+
+      expect(calendar.querySelectorAll(".flatpickr-disabled")).toHaveLength(0);
+    });
+
+    it("does not check a range set from outside", async () => {
+      render(DatePickerRange, {
+        maxRangeDays: 7,
+        valueFrom: "01/01/2024",
+        valueTo: "03/01/2024",
+      });
+      await screen.findByLabelText("calendar-container");
+
+      expect(screen.getByLabelText("Start date")).toHaveValue("01/01/2024");
+      expect(screen.getByLabelText("End date")).toHaveValue("03/01/2024");
+    });
+  });
+
   describe("week mode", () => {
     /** A current-month day cell, by day of the month. */
     function dayCell(calendar: HTMLElement, day: number) {

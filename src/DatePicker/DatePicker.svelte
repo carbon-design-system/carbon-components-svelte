@@ -120,6 +120,24 @@
   export let enabledDates = [];
 
   /**
+   * Specify the fewest days a range may span, counting both ends.
+   * While the start is picked, days that would make a shorter range are
+   * disabled. Typed and programmatic values are not checked.
+   * Only works with the "range" date picker type.
+   * @type {number | undefined}
+   */
+  export let minRangeDays = undefined;
+
+  /**
+   * Specify the most days a range may span, counting both ends.
+   * While the start is picked, days that would make a longer range are
+   * disabled. Typed and programmatic values are not checked.
+   * Only works with the "range" date picker type.
+   * @type {number | undefined}
+   */
+  export let maxRangeDays = undefined;
+
+  /**
    * Specify the month to show when the calendar opens with no date
    * selected. Only the month and year are used; the day is ignored.
    * Values may be a Date, or a string in the same format as `dateFormat`.
@@ -360,6 +378,8 @@
   // The `selectedDates` array this component last wrote or applied, so a
   // consumer write can be told apart from its own echo.
   let prevSelectedDates = selectedDates;
+  let prevMinRangeDays = minRangeDays;
+  let prevMaxRangeDays = maxRangeDays;
   // flatpickr onClose has no reason; explicit handlers set closeTrigger, else
   // infer from session baseline. Close dispatch is deferred for range sync.
   /** @type {"escape-key" | "outside-click" | "programmatic" | undefined} */
@@ -562,6 +582,28 @@
         dispatch("change", value);
       }
     }
+  }
+
+  /**
+   * While a range start is pending, whether `date` would make the range
+   * shorter than `minRangeDays` or longer than `maxRangeDays`. Reads the
+   * current props on every call; flatpickr asks as it rebuilds the grid
+   * right after the start is picked.
+   *
+   * @param {Date} date
+   * @param {{ selectedDates: Date[] }} instance
+   */
+  function isOutsideRangeWindow(date, instance) {
+    if (!$range || instance.selectedDates.length !== 1) return false;
+    if (minRangeDays == null && maxRangeDays == null) return false;
+    const [start] = instance.selectedDates;
+    // Both are local midnight; rounding absorbs a daylight-saving hour.
+    const span =
+      Math.abs(Math.round((date.getTime() - start.getTime()) / 86_400_000)) + 1;
+    return (
+      (maxRangeDays != null && span > maxRangeDays) ||
+      (minRangeDays != null && span < minRangeDays)
+    );
   }
 
   /**
@@ -1113,6 +1155,7 @@
         },
         base: inputRef,
         input: inputRefTo,
+        isDayBlocked: isOutsideRangeWindow,
         dispatch: (event, eventDetail) => {
           if (event === "error") {
             return dispatch(event, eventDetail);
@@ -1392,6 +1435,15 @@
   });
 
   $: sharedDateFormat.set(dateFormat);
+  // Repaint a pending range's window when the limits change.
+  $: if (
+    minRangeDays !== prevMinRangeDays ||
+    maxRangeDays !== prevMaxRangeDays
+  ) {
+    prevMinRangeDays = minRangeDays;
+    prevMaxRangeDays = maxRangeDays;
+    if (calendar?.selectedDates.length === 1) calendar.redraw();
+  }
   $: if (calendar && selectedDates !== prevSelectedDates) {
     if (deepEqual(selectedDates, calendar.selectedDates)) {
       prevSelectedDates = selectedDates;

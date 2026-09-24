@@ -6,12 +6,17 @@
   export let valueTo = "";
   export let readonly = false;
   export let clearable = false;
+  export let datePickerType: "range" | "single" = "range";
+  export let minRangeDays: number | undefined = undefined;
+  export let maxRangeDays: number | undefined = undefined;
   export let onchange: ((event: CustomEvent) => void) | undefined = undefined;
   export let onerror: ((event: CustomEvent) => void) | undefined = undefined;
 </script>
 
 <DatePicker
-  datePickerType="range"
+  {datePickerType}
+  {minRangeDays}
+  {maxRangeDays}
   {valueFrom}
   {valueTo}
   {clearable}
