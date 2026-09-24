@@ -14,6 +14,7 @@
    * Specify the input value.
    *
    * `value` will be set to `null` if type="number" and the value is empty.
+   * Follows the field when the owning form resets.
    * @type {null | number | string}
    * @bindable writable
    */
@@ -95,6 +96,7 @@
   import EditOff from "../icons/EditOff.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import { formReset } from "../utils/form-reset.js";
   import { graphemeCount } from "../utils/grapheme-count.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -104,6 +106,12 @@
   function parse(raw) {
     if ($$restProps.type !== "number") return raw;
     return raw === "" ? null : Number(raw);
+  }
+
+  // A form reset restores the field without an input event. Svelte 5 syncs
+  // `bind:value` back on its own; Svelte 3 and 4 do not, so read the field.
+  function handleFormReset() {
+    if (ref) value = parse(ref.value);
   }
 
   /** @type {(e: Event) => void} */
@@ -233,6 +241,7 @@
       {/if}
       <input
         bind:this={ref}
+        use:formReset={handleFormReset}
         data-invalid={showInvalid || undefined}
         aria-invalid={showInvalid || undefined}
         data-warn={showWarn || undefined}
