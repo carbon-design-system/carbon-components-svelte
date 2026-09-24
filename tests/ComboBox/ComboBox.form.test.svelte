@@ -1,26 +1,28 @@
 <script lang="ts">
   import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
-  import type { ComponentProps } from "svelte";
 
-  export let items: ComponentProps<ComboBox>["items"] = [];
-  export let selectedId: ComponentProps<ComboBox>["selectedId"] = undefined;
-  export let value: ComponentProps<ComboBox>["value"] = "";
-  export let name: ComponentProps<ComboBox>["name"] = undefined;
-  export let virtualize: ComponentProps<ComboBox>["virtualize"] = undefined;
-  export let portalMenu: ComponentProps<ComboBox>["portalMenu"] = false;
-  export let open: ComponentProps<ComboBox>["open"] = false;
+  export let selectedId: string | undefined = undefined;
+  export let value = "";
+  export let readonly = false;
+  export let allowCustomValue = false;
+  export let onSelect: (event: CustomEvent) => void = () => {};
+
+  const items = [
+    { id: "apple", text: "Apple" },
+    { id: "banana", text: "Banana" },
+  ];
 </script>
 
 <form data-testid="form">
   <ComboBox
-    id="test-combobox"
-    {items}
     bind:selectedId
     bind:value
-    {name}
-    {virtualize}
-    {portalMenu}
-    bind:open
-    labelText="Contact"
+    {readonly}
+    {allowCustomValue}
+    {items}
+    name="fruit"
+    labelText="Fruit"
+    on:select={onSelect}
   />
 </form>
+<p data-testid="bound">{selectedId ?? "none"}|{value}</p>

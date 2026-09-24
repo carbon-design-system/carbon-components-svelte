@@ -54,6 +54,7 @@
 
   /**
    * Specify the selected combobox value.
+   * Follows the input when the owning form resets, along with `selectedId`.
    * @bindable writable
    */
   export let value = "";
@@ -295,6 +296,7 @@
   import { createMenuWindow } from "../ListBox/menu-window.js";
   import { debounce } from "../utils/debounce.js";
   import { dismiss } from "../utils/dismiss.js";
+  import { formReset } from "../utils/form-reset.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { moveIndex } from "../utils/move-index.js";
@@ -739,6 +741,40 @@
     );
   }
 
+  // A form reset restores the input without an input event. Select the item
+  // whose label matches the reset text, or clear the selection, and fire no
+  // `select`. Unmatched text only stays with `allowCustomValue`. A read-only
+  // combobox keeps its selection, so put its label back instead.
+  function handleFormReset() {
+    if (!ref) return;
+    open = false;
+    highlightedIndex = -1;
+    highlightOrigin = null;
+    if (readonly) {
+      if (selectedItem) value = itemToString(selectedItem);
+      ref.value = value;
+      return;
+    }
+    const text = ref.value;
+    const match =
+      text === ""
+        ? undefined
+        : items.find((item) => !item.disabled && labelMatchesInput(item, text));
+    if (match) {
+      // Matching `prevSelectedId` keeps the `selectedId` block from
+      // dispatching `select`.
+      prevSelectedId = match.id;
+      selectedId = match.id;
+      selectedItem = match;
+      value = itemToString(match);
+    } else {
+      selectedId = undefined;
+      selectedItem = undefined;
+      value = allowCustomValue ? text : "";
+    }
+    ref.value = value;
+  }
+
   /**
    * Commit the active typeahead suggestion when focus leaves the field.
    * Mirrors the inline completion shown in the input: the highlighted item, or
@@ -871,6 +907,7 @@
       <div bind:this={fieldRef} class:bx--list-box__field={true}>
         <input
           bind:this={ref}
+          use:formReset={handleFormReset}
           bind:value
           type="text"
           role="combobox"
