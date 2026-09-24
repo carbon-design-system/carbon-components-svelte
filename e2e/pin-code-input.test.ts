@@ -9,8 +9,9 @@ function segment(
   labelText: string,
   index: number,
   count = 4,
+  unit = "digit",
 ) {
-  return section.getByLabel(`${labelText} digit ${index} of ${count}`);
+  return section.getByLabel(`${labelText} ${unit} ${index} of ${count}`);
 }
 
 async function pasteInto(locator: Locator, text: string) {
@@ -97,7 +98,7 @@ test.describe("PinCodeInput", () => {
 
   test("accepts alphanumeric characters", async ({ page }) => {
     const section = page.getByTestId("pin-code-input-alphanumeric");
-    const first = segment(section, "Invite code", 1);
+    const first = segment(section, "Invite code", 1, 4, "character");
 
     await first.click();
     await page.keyboard.type("a1");

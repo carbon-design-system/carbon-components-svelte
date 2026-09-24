@@ -143,6 +143,40 @@ describe("PinCodeInput", () => {
     expect(inputs[0].value).toBe("a");
   });
 
+  describe("segment labels", () => {
+    it("labels numeric segments as digits", () => {
+      render(PinCodeInput);
+      expect(
+        screen.getByLabelText("Verification code digit 1 of 4"),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByLabelText("Verification code digit 4 of 4"),
+      ).toBeInTheDocument();
+    });
+
+    it("labels alphanumeric segments as characters", () => {
+      render(PinCodeInput, { props: { type: "alphanumeric" } });
+      expect(
+        screen.getByLabelText("Verification code character 1 of 4"),
+      ).toBeInTheDocument();
+      expect(screen.queryByLabelText(/digit/)).toBeNull();
+    });
+
+    it("falls back to a default label when labelText is empty", () => {
+      render(PinCodeInput, { props: { labelText: "" } });
+      expect(
+        screen.getByLabelText("Pin code digit 1 of 4"),
+      ).toBeInTheDocument();
+    });
+
+    it("includes the segment count", () => {
+      render(PinCodeInput, { props: { type: "alphanumeric", count: 6 } });
+      expect(
+        screen.getByLabelText("Verification code character 6 of 6"),
+      ).toBeInTheDocument();
+    });
+  });
+
   it("accepts and rejects characters against a custom pattern", async () => {
     render(PinCodeInput, { props: { pattern: /^[0-9a-fA-F]$/ } });
     const inputs = getInputs();
