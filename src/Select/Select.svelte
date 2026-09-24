@@ -139,8 +139,6 @@
     selectedValue.set(value);
   }
 
-  const selectReadOnlyKeys = ["ArrowDown", "ArrowUp", " "];
-
   /** @type {(e: MouseEvent) => void} */
   function handleMousedown(event) {
     if (readonly) {
@@ -151,7 +149,16 @@
 
   /** @type {(e: KeyboardEvent) => void} */
   function handleKeydown(event) {
-    if (readonly && selectReadOnlyKeys.includes(event.key)) {
+    // A closed select changes value on arrows, Space, Home/End, and
+    // typeahead letters, so block every key but focus movement. Ctrl/Cmd
+    // shortcuts (copy, find, reload) never change the value.
+    if (
+      readonly &&
+      event.key !== "Tab" &&
+      event.key !== "Shift" &&
+      !event.ctrlKey &&
+      !event.metaKey
+    ) {
       event.preventDefault();
     }
   }
