@@ -80,6 +80,12 @@
     padding: var(--cds-spacing-06) var(--cds-spacing-05);
   }
 
+  /* Every viewer shares one z-index, so a later one paints over an open
+     menu or calendar that overflows the one in use. Lift that one. */
+  .preview-viewer:not(.framed):focus-within {
+    z-index: 9101;
+  }
+
   .preview-viewer.framed {
     min-height: 20rem;
   }
