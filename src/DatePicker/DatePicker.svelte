@@ -201,6 +201,18 @@
   export let calendar = null;
 
   /**
+   * Bind to the selected dates as `Date` objects, in the same order as
+   * `calendar.selectedDates` (range: start, then end). Setting it selects
+   * those dates and updates `value` (or `valueFrom`/`valueTo`). At mount, a
+   * non-empty `value` takes precedence. Reassign the array to update; do not
+   * mutate it.
+   * Not supported with the "simple" date picker type.
+   * @type {ReadonlyArray<Date>}
+   * @bindable writable
+   */
+  export let selectedDates = [];
+
+  /**
    * Set to `true` to open the calendar. Updates when the user opens or
    * closes it. Setting it to `false` closes the calendar and dispatches
    * `close` with the `"programmatic"` trigger, as Modal does.
@@ -341,6 +353,9 @@
   // Set from onOpen/onClose. Outside-click listener attaches only while open.
   let calendarOpen = false;
   let prevOpen = open;
+  // The `selectedDates` array this component last wrote or applied, so a
+  // consumer write can be told apart from its own echo.
+  let prevSelectedDates = selectedDates;
   // flatpickr onClose has no reason; explicit handlers set closeTrigger, else
   // infer from session baseline. Close dispatch is deferred for range sync.
   /** @type {"escape-key" | "outside-click" | "programmatic" | undefined} */
@@ -363,10 +378,10 @@
 
   /**
    * @param {number[]} atOpen
-   * @param {Date[]} selectedDates
+   * @param {Date[]} dates
    */
-  function selectedDatesChanged(atOpen, selectedDates) {
-    const atClose = (selectedDates || []).map((date) => date.getTime());
+  function selectedDatesChanged(atOpen, dates) {
+    const atClose = (dates || []).map((date) => date.getTime());
     return (
       atClose.length !== atOpen.length ||
       atClose.some((time, index) => time !== atOpen[index])
@@ -546,6 +561,40 @@
   }
 
   /**
+   * Mirror the calendar's selection into `selectedDates`. The `Date`s are
+   * copies: flatpickr keeps its own, and a consumer mutating one in place
+   * would change the selection without a redraw.
+   */
+  function syncSelectedDatesFromCalendar() {
+    if (!calendar) return;
+    const next = calendar.selectedDates.map((date) => new Date(date));
+    if (!deepEqual(next, selectedDates)) selectedDates = next;
+    prevSelectedDates = selectedDates;
+  }
+
+  /**
+   * Select `selectedDates` in the calendar and write the matching strings,
+   * recorded as already applied so `afterUpdate` does not parse them back.
+   * A prop write is not a user change, so nothing is dispatched.
+   */
+  function applySelectedDates() {
+    prevSelectedDates = selectedDates;
+    calendar.setDate([...selectedDates], false);
+    if ($range) {
+      const [from = "", to = ""] = calendar.selectedDates.map((date) =>
+        calendar.formatDate(date, calendar.config.dateFormat),
+      );
+      prevValueFrom = from;
+      prevValueTo = to;
+      inputValueFrom.set(from);
+      inputValueTo.set(to);
+    } else {
+      prevValue = formatSelectedDates();
+      inputValue.set(prevValue);
+    }
+  }
+
+  /**
    * Opens or closes the calendar to match the `open` prop. A close through
    * the prop reports the `"programmatic"` trigger, like Modal's.
    */
@@ -612,6 +661,7 @@
       // even when the target is "".
       if (inputRef) inputRef.value = nextFrom;
       if (inputRefTo) inputRefTo.value = nextTo;
+      syncSelectedDatesFromCalendar();
       return;
     }
 
@@ -632,6 +682,7 @@
     // and self.altInput.value, so — unlike the range branch above — no
     // extra manual DOM write is needed here.
     if (calendar) calendar.setDate(next);
+    syncSelectedDatesFromCalendar();
   }
 
   /**
@@ -1086,6 +1137,7 @@
           const detail = buildCalendarDetail();
           syncRangeValues();
           if (event === "change") {
+            syncSelectedDatesFromCalendar();
             changeDispatchedByCalendar = true;
             // Cleared here in case flatpickr's native `change` never arrives.
             queueMicrotask(() => {
@@ -1134,6 +1186,14 @@
     if (calendar && !$range && $inputValue === "" && inputRef.value !== "") {
       prevValue = inputRef.value;
       inputValue.set(inputRef.value);
+    }
+    const stringValueEmpty = $range
+      ? $inputValueFrom === "" && $inputValueTo === ""
+      : $inputValue === "";
+    if (stringValueEmpty && selectedDates.length > 0) {
+      applySelectedDates();
+    } else {
+      syncSelectedDatesFromCalendar();
     }
     snapshotCloseBaseline();
     applyInitialMonth();
@@ -1312,6 +1372,7 @@
           if ($inputValueTo !== "") {
             inputRefTo.value = $inputValueTo;
           }
+          syncSelectedDatesFromCalendar();
         }
       } else if ($inputValue !== prevValue) {
         // A value the calendar itself just wrote is already in sync.
@@ -1319,6 +1380,7 @@
         // `formatDate` emits text that `dateFormat` cannot parse.
         if ($inputValue !== formatSelectedDates()) {
           calendar.setDate($inputValue);
+          syncSelectedDatesFromCalendar();
         }
         prevValue = $inputValue;
       }
@@ -1326,6 +1388,13 @@
   });
 
   $: sharedDateFormat.set(dateFormat);
+  $: if (calendar && selectedDates !== prevSelectedDates) {
+    if (deepEqual(selectedDates, calendar.selectedDates)) {
+      prevSelectedDates = selectedDates;
+    } else {
+      applySelectedDates();
+    }
+  }
   // Runs only when `open` itself changes; the calendar's own open and close
   // write it too, and then already match.
   $: if (open !== prevOpen) {
