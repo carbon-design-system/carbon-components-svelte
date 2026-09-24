@@ -55,7 +55,7 @@
   export let ref = null;
 
   import { getContext, onMount } from "svelte";
-  import { readable } from "svelte/store";
+  import { readable, writable } from "svelte/store";
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { noop } from "../utils/noop.js";
@@ -70,7 +70,7 @@
       /** @type {"horizontal" | "vertical"} */ ("horizontal"),
     ),
     tabStopElement: readable(/** @type {HTMLButtonElement | null} */ (null)),
-    activeTooltip: readable(/** @type {string | number | null} */ (null)),
+    activeTooltip: writable(/** @type {string | number | null} */ (null)),
     toggle: noop,
     notifyUnmount: noop,
   };
