@@ -8,11 +8,17 @@
 
   /** @type {ReadonlyArray<TreeNode<Id> & { nodes?: TreeNode<Id>[] }>} */
   export let nodes = [];
+
+  /** Set to `true` for the top-level list rendered by `TreeView`. */
   export let root = false;
 
   /** @type {Id} */
   export let id = "";
+
+  /** Specify the node text. */
   export let text = "";
+
+  /** Set to `true` to disable the node. */
   export let disabled = false;
 
   /** 1-based `aria-level` of this node within the tree. */

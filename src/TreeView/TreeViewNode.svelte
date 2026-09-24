@@ -5,7 +5,7 @@
    * @type {(node: HTMLLIElement | null) => number}
    * @example
    * ```svelte
-   * import { computeTreeLeafDepth } from 'carbon-components-svelte/TreeView/TreeViewNode.svelte';
+   * import { computeTreeLeafDepth } from 'carbon-components-svelte/src/TreeView/TreeViewNode.svelte';
    * let nodeRef;
    * $: depth = computeTreeLeafDepth(nodeRef);
    *
@@ -61,11 +61,16 @@
    * @slot {{ node: Node & { expanded: false; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean; } }}
    */
 
+  /** Set to `true` if the node has no children. */
   export let leaf = false;
 
   /** @type {Node["id"]} */
   export let id = "";
+
+  /** Specify the node text. */
   export let text = "";
+
+  /** Set to `true` to disable the node. */
   export let disabled = false;
 
   /** 1-based `aria-level` of this node within the tree. */

@@ -161,6 +161,10 @@
    */
   export let autoHighlight = "none";
 
+  function defaultShouldFilter() {
+    return true;
+  }
+
   /**
    * Determine if an item should be filtered given the current combobox value.
    * When `typeahead` is enabled and no custom function is provided,
@@ -168,10 +172,6 @@
    * When a custom function is provided, it is used even with `typeahead`.
    * @type {(item: Item, value: string) => boolean}
    */
-  function defaultShouldFilter() {
-    return true;
-  }
-
   export let shouldFilterItem = defaultShouldFilter;
 
   /**
