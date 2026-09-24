@@ -125,8 +125,8 @@ an error with a warning icon.
 
 ## Submission
 
-Handle form submission, including preventing the default browser behavior and
-integrating with SvelteKit's form actions.
+Handle form submission, including preventing the default browser behavior,
+reading what the form submits, and resetting it.
 
 ### Prevent default behavior
 
@@ -141,6 +141,147 @@ programmatically.
    <Checkbox id="checkbox-0" labelText="Send email confirmation" checked />
   <Button type="submit">Submit</Button>
 </Form>
+
+### Submitted values
+
+Every control that should reach the server needs a `name`. Submit this
+example to see the `FormData` entries the browser would send: a disabled field
+is left out, a read-only field is included, an unchecked checkbox is absent,
+and a multi-select sends one entry per selected item.
+
+<FileSource src="/framed/Form/FormSubmittedValues" />
+
+What each control submits under its `name`:
+
+| Component | Submitted value |
+| --- | --- |
+| `TextInput`, `PasswordInput`, `TextArea`, `Search` | The text, or `""` when empty. |
+| `NumberInput` | The number as a string (`1234.5`), or `""` when empty, even when `locale` formats the display. |
+| `Checkbox`, `Toggle` | `value` (`"on"` by default) while checked; nothing while unchecked. |
+| `RadioButtonGroup`, `TileGroup` | The selected option's `value`; nothing when none is selected. |
+| `Select` | The selected `SelectItem` value, as a string. |
+| `Dropdown` | `selectedId`, as a string; `""` when nothing is selected. |
+| `ComboBox` | The displayed text, not `selectedId`. |
+| `MultiSelect` | One entry per selected item `id`; read them with `getAll`. |
+| `DatePicker` | Each `DatePickerInput`'s text in `dateFormat`; a range picker's two inputs each take their own `name`. |
+| `TimePicker`, `TimePickerSelect` | The time text and each select's value, under their own names. |
+| `Slider` | The value as a string; `RangeSlider` uses `name` and `nameUpper`. |
+| `PinCodeInput` | The assembled code. |
+| `FileUploader` | `File` objects; the form needs `enctype="multipart/form-data"`. See [FileUploader](/components/FileUploader#form-submission). |
+
+Disabled controls submit nothing, like native disabled inputs. Read-only
+controls still submit their value.
+
+### Reset
+
+A `<Button type="reset">`, `form.reset()`, or SvelteKit's `enhance` after a
+successful action resets the form. The browser restores each field to its
+markup default: empty or unchecked when the value was set on the client, and
+the server-rendered value when the page came from the server. Every component
+then updates its bound value to match what the field shows, without firing
+events, so `bind:value`, `bind:checked`, and `bind:selected` stay in step.
+
+Controls that always hold a value keep it through a reset: `Select`,
+`Slider`, `RangeSlider`, `NumberInput` (unless `allowEmpty` is set),
+`Dropdown`, and `MultiSelect`. A read-only control keeps its value too.
+
+In this example, the name clears, the region stays, and the checkbox
+unchecks.
+
+<FileSource src="/framed/Form/FormReset" />
+
+## SvelteKit
+
+Forms work without JavaScript first: a `method="POST"` form posts its fields to
+a [form action](https://svelte.dev/docs/kit/form-actions), and `enhance` then
+upgrades it to submit in place.
+
+### Form actions
+
+Read the submission with `request.formData()`. Every value arrives as a string
+(or a `File`), so convert and validate on the server. Return `fail` with the
+submitted values and the errors so the page can show them.
+
+```js
+// src/routes/invite/+page.server.js
+import { fail } from "@sveltejs/kit";
+
+export const actions = {
+  default: async ({ request }) => {
+    const data = await request.formData();
+    const email = String(data.get("email") ?? "").trim();
+    const seats = Number(data.get("seats"));
+    const teams = data.getAll("teams").map(String);
+    const notify = data.has("notify");
+
+    const errors = {};
+    if (!email.includes("@")) errors.email = "Enter a valid email address.";
+    if (!Number.isInteger(seats) || seats < 1) errors.seats = "Enter at least 1 seat.";
+
+    if (Object.keys(errors).length > 0) {
+      return fail(400, { values: { email, seats: data.get("seats") }, errors });
+    }
+
+    // Save the invite here.
+    return { invited: email };
+  },
+};
+```
+
+In the page, feed the returned values back into the fields and map each error
+to `invalid` and `invalidText`:
+
+```svelte
+<!-- src/routes/invite/+page.svelte -->
+<script>
+  import { enhance } from "$app/forms";
+  import {
+    Button,
+    Checkbox,
+    Form,
+    MultiSelect,
+    TextInput,
+  } from "carbon-components-svelte";
+
+  export let form;
+
+  $: values = form?.values ?? {};
+  $: errors = form?.errors ?? {};
+</script>
+
+<Form method="POST" actions={[enhance]}>
+  <TextInput
+    name="email"
+    type="email"
+    labelText="Email"
+    value={values.email ?? ""}
+    invalid={!!errors.email}
+    invalidText={errors.email}
+  />
+  <TextInput
+    name="seats"
+    type="number"
+    labelText="Seats"
+    value={values.seats ?? "1"}
+    invalid={!!errors.seats}
+    invalidText={errors.seats}
+  />
+  <MultiSelect
+    name="teams"
+    labelText="Teams"
+    items={[
+      { id: "design", text: "Design" },
+      { id: "eng", text: "Engineering" },
+    ]}
+  />
+  <Checkbox name="notify" labelText="Email me a copy" />
+  <Button type="submit">Send invite</Button>
+</Form>
+
+{#if form?.invited}
+  <p>Invited {form.invited}.</p>
+{/if}
+```
 
 ### SvelteKit enhance
 
@@ -159,6 +300,9 @@ SvelteKit's `enhance` (or any other action) to the underlying form element.
 </Form>
 ```
 
+After a successful action, `enhance` resets the form (see [Reset](#reset)).
+A failed action leaves the fields as submitted.
+
 Pass a submit callback as a `[action, parameter]` tuple. The submit callback
 returns the function that runs after the response; call `update` in it to keep
 the default handling, here without resetting the form:
@@ -173,3 +317,74 @@ the default handling, here without resetting the form:
   <Button type="submit">Save</Button>
 </Form>
 ```
+
+### Pending state
+
+Use the submit callback to track the request and disable the submit button
+while it runs, so a second click cannot send a duplicate request. Disable the
+button, not the fields: a disabled field is left out of the submission.
+
+```svelte
+<script>
+  import { enhance } from "$app/forms";
+  import { Button, Form, InlineLoading, TextInput } from "carbon-components-svelte";
+
+  let submitting = false;
+
+  const trackSubmit = () => {
+    submitting = true;
+    return async ({ update }) => {
+      await update();
+      submitting = false;
+    };
+  };
+</script>
+
+<Form method="POST" actions={[[enhance, trackSubmit]]}>
+  <TextInput name="email" labelText="Email" />
+  <Button type="submit" disabled={submitting}>
+    {#if submitting}
+      <InlineLoading description="Saving..." />
+    {:else}
+      Save
+    {/if}
+  </Button>
+</Form>
+```
+
+### Server-side validation
+
+This example stands in for a form action in the browser. It validates on
+submit, shows the errors on the fields while keeping what was typed, and
+resets the form after a successful submission, the way `enhance` does. Set
+`novalidate` when the server owns validation, so the browser's own bubbles do
+not compete with `invalidText`.
+
+<FileSource src="/framed/Form/FormServerValidation" />
+
+### Multiple actions
+
+One form can post to different named actions. Set `formaction` on each submit
+button; `Button` passes it to the native `<button>`.
+
+```svelte
+<Form method="POST" actions={[enhance]}>
+  <TextInput name="title" labelText="Title" />
+  <Button type="submit" formaction="?/save">Save</Button>
+  <Button kind="danger" type="submit" formaction="?/delete">Delete</Button>
+</Form>
+```
+
+## Best practices
+
+| Do | Why |
+| --- | --- |
+| Give every field a `name` | Only named, enabled controls are submitted. Keep ids for labels and tests. |
+| Validate on the server | `required`, `type`, `min`, and `max` improve the form in the browser, but they are not a guarantee. |
+| Treat every value as a string | Convert numbers with `Number()` and check for `NaN`. Read checkboxes and toggles with `data.has(name)`. |
+| Read multi-value fields with `data.getAll(name)` | `MultiSelect` and checkboxes that share a `name` submit one entry per value. |
+| Use `readonly`, not `disabled`, for values the server needs | Disabled fields are left out of the submission; read-only fields are included. |
+| Return the submitted values with the errors | The user does not retype them, and `invalid` and `invalidText` can mark the field each error belongs to. |
+| Set `enctype="multipart/form-data"` with a `FileUploader` | Without it, the browser sends only the file names. |
+| Call `event.preventDefault()` in `on:reset` to reset to specific values | A reset restores the markup defaults; prevent it and set the bound values yourself instead. |
+| Prefer `method="POST"` plus `enhance` over custom `fetch` code | The form keeps working before JavaScript loads. |
