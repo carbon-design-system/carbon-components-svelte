@@ -87,6 +87,7 @@
   import CaretRight from "../icons/CaretRight.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
   import { clampIndex } from "../utils/clamp-index.js";
+  import { menuOptionLabel } from "../utils/menu-option-label.js";
   import { createSubmenuHoverIntent } from "../utils/submenu-hover-intent.js";
   import {
     createTypeaheadBuffer,
@@ -120,17 +121,6 @@
     },
     { openDelay: SUBMENU_HOVER_DELAY_MS, closeDelay: SUBMENU_HOVER_DELAY_MS },
   );
-
-  /**
-   * @param {HTMLElement} item
-   */
-  function itemToString(item) {
-    return (
-      item.querySelector(".bx--menu-option__label")?.textContent ??
-      item.textContent ??
-      ""
-    ).trim();
-  }
 
   const unsubPosition = ctx.position.subscribe((position) => {
     rootMenuPosition = position;
@@ -287,7 +277,7 @@
         focusIndex = typeaheadIndex({
           items: options,
           query,
-          itemToString,
+          itemToString: menuOptionLabel,
           index: focusIndex,
           isDisabled: (item) => item.getAttribute("aria-disabled") === "true",
         });

@@ -59,6 +59,7 @@
   import { writable } from "svelte/store";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
+  import { menuOptionLabel } from "../utils/menu-option-label.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import {
     createTypeaheadBuffer,
@@ -94,17 +95,6 @@
   const typeahead = createTypeaheadBuffer();
 
   /**
-   * @param {HTMLElement} item
-   */
-  function itemToString(item) {
-    return (
-      item.querySelector(".bx--menu-option__label")?.textContent ??
-      item.textContent ??
-      ""
-    ).trim();
-  }
-
-  /**
    * WAI-ARIA APG menu first-character navigation: move focus to the next
    * enabled item, in this menu level only, whose label starts with the
    * buffered characters typed so far. `options` (this level's own
@@ -120,7 +110,7 @@
     focusIndex = typeaheadIndex({
       items: options,
       query,
-      itemToString,
+      itemToString: menuOptionLabel,
       index: focusIndex,
       isDisabled: (item) => item.getAttribute("aria-disabled") === "true",
     });
