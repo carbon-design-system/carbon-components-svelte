@@ -1,3 +1,12 @@
+<script context="module">
+  /** @param {"default" | "lg" | "xl"} currentSize */
+  function getIconSize(currentSize) {
+    if (currentSize === "xl") return 24;
+    if (currentSize === "lg") return 20;
+    return 16;
+  }
+</script>
+
 <script>
   /**
    * @restProps {figure}
@@ -130,12 +139,6 @@
     }
     Object.assign(options, formatOptions);
     return getNumberFormatter(locale, options).format(num);
-  }
-
-  function getIconSize(currentSize) {
-    if (currentSize === "xl") return 24;
-    if (currentSize === "lg") return 20;
-    return 16;
   }
 
   $: hasTotal = typeof total === "number";
