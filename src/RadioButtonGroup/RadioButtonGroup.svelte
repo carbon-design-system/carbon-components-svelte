@@ -22,6 +22,9 @@
 
   /**
    * Specify a name attribute for the radio button inputs.
+   * Overrides each button's own `name`. When neither is set, the buttons
+   * share a generated id so they form one radio group; set a name
+   * explicitly when form submission matters.
    * @type {string}
    */
   export let name = undefined;
@@ -97,8 +100,11 @@
    * @type {import("svelte/store").Writable<Value | undefined>}
    */
   const selectedValue = writable(selected);
+  const groupName = writable(name || undefined);
+  // Unnamed radios are separate controls, so arrow keys would not move the
+  // selection. Buttons with no name of their own share this one when the
+  // group has no `name` either.
   const fallbackName = uniqueId();
-  const groupName = writable(name || fallbackName);
   const groupRequired = writable(required);
   const groupReadonly = writable(readonly);
   const groupAllowDeselect = writable(allowDeselect);
@@ -134,6 +140,7 @@
   setContext("carbon:RadioButtonGroup", {
     selectedValue,
     groupName: readOnly(groupName),
+    fallbackName,
     groupRequired: readOnly(groupRequired),
     readonly: readOnly(groupReadonly),
     allowDeselect: readOnly(groupAllowDeselect),
@@ -159,7 +166,7 @@
     return unsubscribe;
   });
 
-  $: $groupName = name || fallbackName;
+  $: $groupName = name || undefined;
   $: $groupRequired = required;
   $: $groupReadonly = readonly;
   $: $groupAllowDeselect = allowDeselect;

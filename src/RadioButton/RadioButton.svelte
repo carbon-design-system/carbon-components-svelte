@@ -66,6 +66,7 @@
     deselect,
     selectedValue,
     groupName,
+    fallbackName,
     groupRequired,
     readonly,
     allowDeselect,
@@ -166,7 +167,7 @@
     bind:this={ref}
     type="radio"
     {id}
-    name={$groupName ?? name}
+    name={$groupName ?? (name || fallbackName)}
     {checked}
     {disabled}
     required={$groupRequired ?? required}
