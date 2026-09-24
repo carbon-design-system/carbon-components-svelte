@@ -111,13 +111,13 @@
   } from "svelte";
   import { writable } from "svelte/store";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
-  import Information from "../icons/Information.svelte";
-  import FloatingPortal from "../Portal/FloatingPortal.svelte";
-  import { createDelayedSetter } from "../utils/delayed-setter.js";
   import {
     TOOLTIP_ENTER_DELAY_MS,
     TOOLTIP_LEAVE_DELAY_MS,
-  } from "../utils/tooltip-delays.js";
+  } from "../constants/timing.js";
+  import Information from "../icons/Information.svelte";
+  import FloatingPortal from "../Portal/FloatingPortal.svelte";
+  import { createDelayedSetter } from "../utils/delayed-setter.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const insideModal = getContext(MODAL_CONTEXT_KEY);

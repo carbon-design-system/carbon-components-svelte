@@ -8,13 +8,13 @@
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import { get } from "svelte/store";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
-  import PortalTooltip from "../Portal/PortalTooltip.svelte";
-  import { createDelayedSetter } from "../utils/delayed-setter.js";
-  import { dismiss } from "../utils/dismiss.js";
   import {
     TOOLTIP_ENTER_DELAY_MS,
     TOOLTIP_LEAVE_DELAY_MS,
-  } from "../utils/tooltip-delays.js";
+  } from "../constants/timing.js";
+  import PortalTooltip from "../Portal/PortalTooltip.svelte";
+  import { createDelayedSetter } from "../utils/delayed-setter.js";
+  import { dismiss } from "../utils/dismiss.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { activeTooltipIcon } from "./tooltip-icon-store.js";
 

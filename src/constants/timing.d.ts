@@ -1,10 +1,11 @@
 /**
- * Hover delay before an icon or button tooltip opens. Skipped when
- * another tooltip in the group is already open (warm handoff).
+ * Default hover/focus delay before a tooltip opens. Icon and button
+ * tooltips skip it when another tooltip in the group is already open
+ * (warm handoff).
  */
 export const TOOLTIP_ENTER_DELAY_MS: 100;
 
-/** Hover delay before an icon or button tooltip closes. */
+/** Default hover/focus delay before a tooltip closes. */
 export const TOOLTIP_LEAVE_DELAY_MS: 300;
 
 /** Hover-intent delay to open or close a submenu (Carbon moderate-01). */
