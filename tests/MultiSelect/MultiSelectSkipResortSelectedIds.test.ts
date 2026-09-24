@@ -1,15 +1,6 @@
 import { render } from "@testing-library/svelte";
+import { buildItems } from "./helpers";
 import MultiSelect from "./MultiSelect.test.svelte";
-
-function buildItems() {
-  return [
-    { id: "0", text: "Slack" },
-    { id: "1", text: "Email" },
-    { id: "2", text: "Fax" },
-    { id: "3", text: "Phone" },
-    { id: "4", text: "Mail" },
-  ];
-}
 
 describe("MultiSelect skips re-sorting for a new-but-equal selectedIds, selectionFeedback: top", () => {
   it("does not rebuild sortedItems when selectedIds is a new-but-equal array", async () => {

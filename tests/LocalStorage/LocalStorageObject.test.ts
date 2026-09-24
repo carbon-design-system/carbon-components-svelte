@@ -1,34 +1,10 @@
 import { render } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { setupLocalStorageMock } from "../utils/storage-mocks";
 import LocalStorageObject from "./LocalStorageObject.test.svelte";
 
 describe("LocalStorage - Object Values", () => {
-  let localStorageMock: { [key: string]: string };
-
-  beforeEach(() => {
-    localStorageMock = {};
-
-    vi.stubGlobal("localStorage", {
-      getItem: vi.fn((key) => localStorageMock[key] || null),
-      setItem: vi.fn((key, value) => {
-        localStorageMock[key] = value;
-      }),
-      removeItem: vi.fn((key) => {
-        delete localStorageMock[key];
-      }),
-      clear: vi.fn(() => {
-        localStorageMock = {};
-      }),
-      length: 0,
-      key: vi.fn(),
-    });
-  });
-
-  afterEach(() => {
-    vi.unstubAllGlobals();
-    vi.restoreAllMocks();
-    localStorageMock = {};
-  });
+  const { setMockItem } = setupLocalStorageMock();
 
   it("saves object value as JSON string", () => {
     render(LocalStorageObject);
@@ -41,7 +17,7 @@ describe("LocalStorage - Object Values", () => {
 
   it("loads existing object value from localStorage", async () => {
     const existingSettings = { theme: "light", fontSize: 14 };
-    localStorageMock["theme-settings"] = JSON.stringify(existingSettings);
+    setMockItem("theme-settings", JSON.stringify(existingSettings));
 
     const { component } = render(LocalStorageObject);
     await tick();

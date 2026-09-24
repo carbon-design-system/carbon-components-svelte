@@ -36,7 +36,8 @@ describe("DataTable virtualize + stickyHeader", () => {
     // `stickyHeader` makes the inner `<table>` the scrolling element, not
     // its wrapping `<section>`; scroll it directly, the same way a real
     // scroll would fire the listener attached to that element.
-    const table = document.querySelector("table") as HTMLTableElement;
+    const table = document.querySelector("table");
+    assert(table);
     table.scrollTop = 500;
     table.dispatchEvent(new Event("scroll"));
 

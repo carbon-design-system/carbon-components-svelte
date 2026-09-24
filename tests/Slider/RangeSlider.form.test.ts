@@ -1,29 +1,29 @@
-import { fireEvent, render, screen } from "@testing-library/svelte";
+import { fireEvent, render } from "@testing-library/svelte";
 import { flushFormReset } from "../utils/flush-form-reset";
+import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
 import RangeSliderForm from "./RangeSlider.form.test.svelte";
 
-const getBound = () => screen.getByTestId("bound").textContent;
 describe("RangeSlider form reset", () => {
   it("keeps both current bounds", async () => {
     const { container } = render(RangeSliderForm);
-    const lower = container.querySelector(
-      'input[name="low"]',
-    ) as HTMLInputElement;
-    const upper = container.querySelector(
-      'input[name="high"]',
-    ) as HTMLInputElement;
+    const lower =
+      container.querySelector<HTMLInputElement>('input[name="low"]');
+    assert(lower);
+    const upper =
+      container.querySelector<HTMLInputElement>('input[name="high"]');
+    assert(upper);
 
     await fireEvent.change(lower, { target: { value: "30" } });
     await fireEvent.change(upper, { target: { value: "70" } });
-    expect(getBound()).toBe("30-70");
+    expect(getBoundText()).toBe("30-70");
 
     getForm().reset();
     await flushFormReset();
 
     expect(lower.value).toBe("30");
     expect(upper.value).toBe("70");
-    expect(getBound()).toBe("30-70");
+    expect(getBoundText()).toBe("30-70");
     const data = new FormData(getForm());
     expect([data.get("low"), data.get("high")]).toEqual(["30", "70"]);
   });
@@ -35,9 +35,10 @@ describe("RangeSlider form reset", () => {
     getForm().reset();
     await flushFormReset();
 
-    expect(
-      (container.querySelector('input[name="low"]') as HTMLInputElement).value,
-    ).toBe("25");
-    expect(getBound()).toBe("25-75");
+    const lower =
+      container.querySelector<HTMLInputElement>('input[name="low"]');
+    assert(lower);
+    expect(lower.value).toBe("25");
+    expect(getBoundText()).toBe("25-75");
   });
 });

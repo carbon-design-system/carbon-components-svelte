@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import RadioButtonStandalone from "./RadioButtonStandalone.test.svelte";
 
@@ -13,12 +14,12 @@ describe("RadioButton (Standalone)", () => {
     expect(input).not.toBeChecked();
 
     component.checked = true;
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await flushMacrotask();
 
     expect(input).toBeChecked();
 
     component.checked = false;
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await flushMacrotask();
 
     expect(input).not.toBeChecked();
   });

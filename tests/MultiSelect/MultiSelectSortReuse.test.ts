@@ -1,16 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { isSvelte5 } from "../utils/svelte-version";
+import { buildItems } from "./helpers";
 import MultiSelect from "./MultiSelect.test.svelte";
-
-function buildItems() {
-  return [
-    { id: "0", text: "Slack" },
-    { id: "1", text: "Email" },
-    { id: "2", text: "Fax" },
-    { id: "3", text: "Phone" },
-    { id: "4", text: "Mail" },
-  ];
-}
 
 function observeMutations(target: Node) {
   const records: MutationRecord[] = [];
@@ -27,10 +18,12 @@ function observeMutations(target: Node) {
   };
 }
 
-const findOption = async (text: string) =>
-  screen
-    .findByText((content) => content.trim() === text)
-    .then((el) => el.closest('[role="option"]') as HTMLElement);
+const findOption = async (text: string) => {
+  const el = await screen.findByText((content) => content.trim() === text);
+  const option = el.closest('[role="option"]');
+  assert(option instanceof HTMLElement);
+  return option;
+};
 
 describe("MultiSelect sortedItems entry reuse", () => {
   it("leaves other options' DOM untouched when toggling one, with selectionFeedback=top", async () => {

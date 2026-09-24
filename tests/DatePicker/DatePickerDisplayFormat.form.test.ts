@@ -1,18 +1,14 @@
 import { render, screen, within } from "@testing-library/svelte";
 import { flushFormReset } from "../utils/flush-form-reset";
+import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import DatePickerDisplayFormatForm from "./DatePickerDisplayFormat.form.test.svelte";
+import { visibleInput } from "./helpers";
 
-const getValue = () => screen.getByTestId("value").textContent;
+const getValue = () => getBoundText("value");
 const getHiddenInput = () =>
   document.querySelector<HTMLInputElement>("input[name='meeting']");
-async function visibleInput() {
-  await vi.waitFor(() =>
-    expect(screen.getByLabelText("Date")).toHaveAttribute("type", "text"),
-  );
-  return screen.getByLabelText("Date") as HTMLInputElement;
-}
 
 async function pickDay20() {
   const input = await visibleInput();
@@ -25,7 +21,8 @@ async function pickDay20() {
         el.classList.contains("flatpickr-day") &&
         !el.classList.contains("prevMonthDay") &&
         !el.classList.contains("nextMonthDay"),
-    ) as HTMLElement;
+    );
+  assert(day);
   await user.click(day);
 }
 

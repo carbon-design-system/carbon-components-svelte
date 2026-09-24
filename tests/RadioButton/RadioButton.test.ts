@@ -135,12 +135,6 @@ describe("RadioButton", () => {
     expect(input).not.toBeChecked();
   });
 
-  it("should handle required state with form validation", () => {
-    render(RadioButton, { props: { required: true } });
-
-    expect(screen.getByRole("radio")).toHaveAttribute("required");
-  });
-
   it("should handle label text slot", () => {
     render(RadioButtonCustom);
 

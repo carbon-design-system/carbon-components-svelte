@@ -1,12 +1,13 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { flushFormReset } from "../utils/flush-form-reset";
+import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
 import DatePickerForm from "./DatePicker.form.test.svelte";
 
-const getValue = () => screen.getByTestId("value").textContent;
-const getValueFrom = () => screen.getByTestId("valueFrom").textContent;
-const getValueTo = () => screen.getByTestId("valueTo").textContent;
+const getValue = () => getBoundText("value");
+const getValueFrom = () => getBoundText("valueFrom");
+const getValueTo = () => getBoundText("valueTo");
 // Let the component's own pending re-render (triggered by `input`/`change`)
 // settle before a subsequent `form.reset()`, the same way an `await
 // user.type(...)` naturally would; otherwise that pending write can land
@@ -21,7 +22,7 @@ describe("DatePicker form reset", () => {
   describe("simple mode", () => {
     it("resyncs the bound value after editing then resetting", async () => {
       render(DatePickerForm, { props: { value: "2024-01-01" } });
-      const input = screen.getByLabelText("Start date") as HTMLInputElement;
+      const input = screen.getByLabelText("Start date");
 
       await editInput(input, "2024-06-15");
       getForm().reset();
@@ -34,7 +35,7 @@ describe("DatePicker form reset", () => {
 
     it("clears an untouched, non-empty client value, like a native input", async () => {
       render(DatePickerForm, { props: { value: "2024-01-01" } });
-      const input = screen.getByLabelText("Start date") as HTMLInputElement;
+      const input = screen.getByLabelText("Start date");
 
       getForm().reset();
       await flushFormReset();
@@ -45,7 +46,8 @@ describe("DatePicker form reset", () => {
 
     it("follows the field's default value, as with server-rendered markup", async () => {
       render(DatePickerForm, { props: { value: "2024-01-01" } });
-      const input = screen.getByLabelText("Start date") as HTMLInputElement;
+      const input = screen.getByLabelText("Start date");
+      assert(input instanceof HTMLInputElement);
       // Server-rendered markup carries the value as the `value` attribute.
       input.defaultValue = "2024-01-01";
 
@@ -59,7 +61,7 @@ describe("DatePicker form reset", () => {
 
     it("resets an empty initial value back to empty", async () => {
       render(DatePickerForm, { props: { value: "" } });
-      const input = screen.getByLabelText("Start date") as HTMLInputElement;
+      const input = screen.getByLabelText("Start date");
 
       await editInput(input, "2024-06-15");
       getForm().reset();
@@ -80,8 +82,8 @@ describe("DatePicker form reset", () => {
           valueTo: "2024-03-20",
         },
       });
-      const start = screen.getByLabelText("Start date") as HTMLInputElement;
-      const end = screen.getByLabelText("End date") as HTMLInputElement;
+      const start = screen.getByLabelText("Start date");
+      const end = screen.getByLabelText("End date");
 
       await editInput(start, "2024-04-01");
       await editInput(end, "2024-04-10");
@@ -104,8 +106,8 @@ describe("DatePicker form reset", () => {
           valueTo: "2024-03-20",
         },
       });
-      const start = screen.getByLabelText("Start date") as HTMLInputElement;
-      const end = screen.getByLabelText("End date") as HTMLInputElement;
+      const start = screen.getByLabelText("Start date");
+      const end = screen.getByLabelText("End date");
 
       await editInput(end, "2024-04-10");
       getForm().reset();
@@ -121,8 +123,8 @@ describe("DatePicker form reset", () => {
       render(DatePickerForm, {
         props: { datePickerType: "range", valueFrom: "", valueTo: "" },
       });
-      const start = screen.getByLabelText("Start date") as HTMLInputElement;
-      const end = screen.getByLabelText("End date") as HTMLInputElement;
+      const start = screen.getByLabelText("Start date");
+      const end = screen.getByLabelText("End date");
 
       await editInput(start, "2024-04-01");
       await editInput(end, "2024-04-10");
@@ -136,7 +138,7 @@ describe("DatePicker form reset", () => {
 
   it("leaves everything alone when the reset is canceled", async () => {
     render(DatePickerForm, { props: { value: "2024-01-01" } });
-    const input = screen.getByLabelText("Start date") as HTMLInputElement;
+    const input = screen.getByLabelText("Start date");
     getForm().addEventListener("reset", (event) => event.preventDefault());
 
     await editInput(input, "2024-06-15");
@@ -150,7 +152,7 @@ describe("DatePicker form reset", () => {
   it("does not dispatch change on reset", async () => {
     const onChange = vi.fn();
     render(DatePickerForm, { props: { value: "2024-01-01", onChange } });
-    const input = screen.getByLabelText("Start date") as HTMLInputElement;
+    const input = screen.getByLabelText("Start date");
 
     await editInput(input, "2024-06-15");
     onChange.mockClear();

@@ -1,8 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { getPinCodeInputs as getInputs } from "./helpers";
 import PinCodeInputProgrammatic from "./PinCodeInput.programmatic.test.svelte";
-
-const getInputs = () => screen.getAllByRole("textbox") as HTMLInputElement[];
 
 describe("PinCodeInput programmatic accessors", () => {
   it("focusFirstInput focuses the first segment", async () => {

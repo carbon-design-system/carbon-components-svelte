@@ -1,10 +1,9 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import ContextMenuOptionKeepOpenFixture from "./ContextMenuOption.keepOpen.test.svelte";
+import { getSelectedIds } from "./helpers";
 
 describe("ContextMenuOption keep open on selection", () => {
-  const getSelectedIds = () =>
-    JSON.parse(screen.getByTestId("selected-ids").textContent || "[]");
   const getSelectedId = () => screen.getByTestId("selected-id").textContent;
 
   it("keeps the menu open when click is prevented and still toggles selection", async () => {

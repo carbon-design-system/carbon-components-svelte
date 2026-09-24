@@ -514,7 +514,7 @@ describe("Tabs", () => {
     expect(next).not.toHaveClass("bx--tab--overflow-nav-button--hidden");
 
     // Scrolled to the end: backward shown, forward hidden.
-    (nav as HTMLElement).scrollLeft = 400;
+    nav.scrollLeft = 400;
     await fireEvent.scroll(nav);
     expect(prev).not.toHaveClass("bx--tab--overflow-nav-button--hidden");
     expect(next).toHaveClass("bx--tab--overflow-nav-button--hidden");
@@ -1368,13 +1368,13 @@ describe("TabsSkeleton", () => {
     expect(navItems).toHaveLength(4);
   });
 
-  it("should render with custom count", () => {
-    const { container } = render(TabsSkeleton, { props: { count: 6 } });
+  it.each([6, 0, 20])("should render %i nav items for count", (count) => {
+    const { container } = render(TabsSkeleton, { props: { count } });
 
     const navItems = container.querySelectorAll(
       ".bx--tabs--scrollable__nav-item",
     );
-    expect(navItems).toHaveLength(6);
+    expect(navItems).toHaveLength(count);
   });
 
   it("should render with container type", () => {
@@ -1455,24 +1455,6 @@ describe("TabsSkeleton", () => {
       expect(link).toBeInTheDocument();
       expect(span).toBeInTheDocument();
     }
-  });
-
-  it("should handle zero count", () => {
-    const { container } = render(TabsSkeleton, { props: { count: 0 } });
-
-    const navItems = container.querySelectorAll(
-      ".bx--tabs--scrollable__nav-item",
-    );
-    expect(navItems).toHaveLength(0);
-  });
-
-  it("should handle large count", () => {
-    const { container } = render(TabsSkeleton, { props: { count: 20 } });
-
-    const navItems = container.querySelectorAll(
-      ".bx--tabs--scrollable__nav-item",
-    );
-    expect(navItems).toHaveLength(20);
   });
 
   describe("Tab Generics", () => {

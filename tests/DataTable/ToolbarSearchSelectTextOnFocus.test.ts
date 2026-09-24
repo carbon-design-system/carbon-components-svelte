@@ -7,7 +7,8 @@ describe("ToolbarSearch selectTextOnFocus passthrough", () => {
   it("forwards selectTextOnFocus to the underlying Search field", async () => {
     render(ToolbarSearchSelectTextOnFocus);
 
-    const input = screen.getByRole("searchbox") as HTMLInputElement;
+    const input = screen.getByRole("searchbox");
+    assert(input instanceof HTMLInputElement);
     await user.click(input);
     await tick();
 

@@ -1,10 +1,10 @@
 import { render, screen } from "@testing-library/svelte";
 import { flushFormReset } from "../utils/flush-form-reset";
+import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import NumberInputForm from "./NumberInput.form.test.svelte";
 
-const getBound = () => screen.getByTestId("bound").textContent;
 describe("NumberInput form participation", () => {
   describe("validity", () => {
     it("does not block submission for a decimal value", () => {
@@ -99,13 +99,13 @@ describe("NumberInput form participation", () => {
       const input = screen.getByRole("spinbutton", { name: "Amount" });
 
       await setField(input, "8");
-      expect(getBound()).toBe("8");
+      expect(getBoundText()).toBe("8");
 
       getForm().reset();
       await flushFormReset();
 
       expect(input).toHaveValue(8);
-      expect(getBound()).toBe("8");
+      expect(getBoundText()).toBe("8");
     });
 
     it("keeps a locale-formatted value in text mode", async () => {
@@ -116,7 +116,7 @@ describe("NumberInput form participation", () => {
       await flushFormReset();
 
       expect(input).toHaveValue("1.234,5");
-      expect(getBound()).toBe("1234.5");
+      expect(getBoundText()).toBe("1234.5");
       expect(new FormData(getForm()).get("n")).toBe("1234.5");
     });
 
@@ -129,7 +129,7 @@ describe("NumberInput form participation", () => {
       await flushFormReset();
 
       expect(input).toHaveValue(null);
-      expect(getBound()).toBe("null");
+      expect(getBoundText()).toBe("null");
     });
 
     it("follows the cleared field with allowEmpty in text mode", async () => {
@@ -142,7 +142,7 @@ describe("NumberInput form participation", () => {
       await flushFormReset();
 
       expect(input).toHaveValue("");
-      expect(getBound()).toBe("null");
+      expect(getBoundText()).toBe("null");
       expect(new FormData(getForm()).get("n")).toBe("");
     });
 
@@ -156,7 +156,7 @@ describe("NumberInput form participation", () => {
       await flushFormReset();
 
       expect(input).toHaveValue(5);
-      expect(getBound()).toBe("5");
+      expect(getBoundText()).toBe("5");
     });
   });
 });

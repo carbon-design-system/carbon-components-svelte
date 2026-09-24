@@ -1,10 +1,11 @@
 import { render, screen } from "@testing-library/svelte";
 import { flushFormReset } from "../utils/flush-form-reset";
+import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import TileGroupForm from "./TileGroup.form.test.svelte";
 
-const getRadios = () => screen.getAllByRole("radio") as HTMLInputElement[];
+const getRadios = () => screen.getAllByRole("radio");
 describe("TileGroup form reset", () => {
   it("unchecks every tile and clears the bound value without firing select", async () => {
     const onSelect = vi.fn();
@@ -19,7 +20,7 @@ describe("TileGroup form reset", () => {
 
     expect(radioA).not.toBeChecked();
     expect(radioB).not.toBeChecked();
-    expect(screen.getByTestId("bound").textContent).toBe("undefined");
+    expect(getBoundText()).toBe("undefined");
     expect(new FormData(getForm()).has("a")).toBe(false);
     expect(new FormData(getForm()).has("b")).toBe(false);
     expect(onSelect).not.toHaveBeenCalled();
@@ -30,13 +31,13 @@ describe("TileGroup form reset", () => {
     render(TileGroupForm, { props: { selected: "a", onSelect } });
 
     const [radioA] = getRadios();
-    expect(screen.getByTestId("bound").textContent).toBe("a");
+    expect(getBoundText()).toBe("a");
 
     getForm().reset();
     await flushFormReset();
 
     expect(radioA).not.toBeChecked();
-    expect(screen.getByTestId("bound").textContent).toBe("undefined");
+    expect(getBoundText()).toBe("undefined");
     expect(onSelect).not.toHaveBeenCalled();
   });
 
@@ -45,6 +46,7 @@ describe("TileGroup form reset", () => {
     render(TileGroupForm, { props: { selected: "a", onSelect } });
 
     const [radioA, radioB] = getRadios();
+    assert(radioA instanceof HTMLInputElement);
     // Server-rendered markup carries the state as the `checked` attribute.
     radioA.defaultChecked = true;
 
@@ -56,7 +58,7 @@ describe("TileGroup form reset", () => {
 
     expect(radioA).toBeChecked();
     expect(radioB).not.toBeChecked();
-    expect(screen.getByTestId("bound").textContent).toBe("a");
+    expect(getBoundText()).toBe("a");
     expect(onSelect).not.toHaveBeenCalled();
   });
 
@@ -73,7 +75,7 @@ describe("TileGroup form reset", () => {
 
     expect(radioA).not.toBeChecked();
     expect(radioB).not.toBeChecked();
-    expect(screen.getByTestId("bound").textContent).toBe("undefined");
+    expect(getBoundText()).toBe("undefined");
     expect(onSelect).not.toHaveBeenCalled();
   });
 
@@ -87,7 +89,7 @@ describe("TileGroup form reset", () => {
     await flushFormReset();
 
     expect(radioA).toBeChecked();
-    expect(screen.getByTestId("bound").textContent).toBe("a");
+    expect(getBoundText()).toBe("a");
     expect(onSelect).not.toHaveBeenCalled();
   });
 });

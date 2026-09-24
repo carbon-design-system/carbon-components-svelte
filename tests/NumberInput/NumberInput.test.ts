@@ -20,7 +20,8 @@ describe("NumberInput", () => {
   it("selects the full value on focus when selectTextOnFocus is true", async () => {
     render(NumberInput, { props: { selectTextOnFocus: true, value: 42 } });
 
-    const input = screen.getByRole("spinbutton") as HTMLInputElement;
+    const input = screen.getByRole("spinbutton");
+    assert(input instanceof HTMLInputElement);
     const select = vi.spyOn(input, "select");
     await user.click(input);
     await tick();
@@ -31,7 +32,8 @@ describe("NumberInput", () => {
   it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {
     render(NumberInput, { props: { value: 42 } });
 
-    const input = screen.getByRole("spinbutton") as HTMLInputElement;
+    const input = screen.getByRole("spinbutton");
+    assert(input instanceof HTMLInputElement);
     const select = vi.spyOn(input, "select");
     await user.click(input);
     await tick();
@@ -44,7 +46,8 @@ describe("NumberInput", () => {
       props: { selectTextOnFocus: true, disabled: true, value: 42 },
     });
 
-    const input = screen.getByRole("spinbutton") as HTMLInputElement;
+    const input = screen.getByRole("spinbutton");
+    assert(input instanceof HTMLInputElement);
     const select = vi.spyOn(input, "select");
     await fireEvent.focus(input);
 

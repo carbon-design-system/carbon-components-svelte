@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import InterstitialScreenTest from "./InterstitialScreen.test.svelte";
 
@@ -147,7 +148,7 @@ describe("InterstitialScreen", () => {
     ).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "Get Started" }));
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await flushMacrotask();
     await tick();
 
     expect(launcher).toHaveFocus();

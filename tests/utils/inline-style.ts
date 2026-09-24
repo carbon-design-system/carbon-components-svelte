@@ -10,9 +10,9 @@ export function expectInlineStyle(
   element: Element | null,
   styles: Record<string, string>,
 ) {
-  expect(element).toBeInstanceOf(HTMLElement);
+  assert(element instanceof HTMLElement);
 
-  const { style } = element as HTMLElement;
+  const { style } = element;
   const actual: Record<string, string> = {};
 
   for (const property of Object.keys(styles)) {

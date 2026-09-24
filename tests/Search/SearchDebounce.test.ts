@@ -14,7 +14,7 @@ describe("Search debounce", () => {
     const onSearch = vi.fn();
     render(SearchDebounce, { props: { debounce: 200, onSearch } });
 
-    const input = screen.getByRole("searchbox") as HTMLInputElement;
+    const input = screen.getByRole("searchbox");
 
     await fireEvent.input(input, { target: { value: "a" } });
     expect(input).toHaveValue("a");
@@ -35,7 +35,7 @@ describe("Search debounce", () => {
     const onSearch = vi.fn();
     render(SearchDebounce, { props: { debounce: 200, onSearch } });
 
-    const input = screen.getByRole("searchbox") as HTMLInputElement;
+    const input = screen.getByRole("searchbox");
 
     await fireEvent.input(input, { target: { value: "cloud" } });
     await fireEvent.keyDown(input, { key: "Enter" });
@@ -51,7 +51,7 @@ describe("Search debounce", () => {
     const onSearch = vi.fn();
     render(SearchDebounce, { props: { onSearch } });
 
-    const input = screen.getByRole("searchbox") as HTMLInputElement;
+    const input = screen.getByRole("searchbox");
 
     await fireEvent.input(input, { target: { value: "test" } });
     await vi.advanceTimersByTimeAsync(1000);
@@ -63,7 +63,7 @@ describe("Search debounce", () => {
     const onSearch = vi.fn();
     render(SearchDebounce, { props: { debounce: 200, onSearch } });
 
-    const input = screen.getByRole("searchbox") as HTMLInputElement;
+    const input = screen.getByRole("searchbox");
 
     await fireEvent.input(input, { target: { value: "cloud" } });
     await fireEvent.keyDown(input, { key: "Escape" });
@@ -76,7 +76,7 @@ describe("Search debounce", () => {
     const onSearch = vi.fn();
     render(SearchDebounce, { props: { debounce: 200, onSearch } });
 
-    const input = screen.getByRole("searchbox") as HTMLInputElement;
+    const input = screen.getByRole("searchbox");
 
     await fireEvent.input(input, { target: { value: "cloud" } });
     await fireEvent.click(screen.getByRole("button", { name: "Clear" }));

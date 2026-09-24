@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import type { MultiSelectItem } from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
+import { optionTexts } from "./helpers";
 import MultiSelect from "./MultiSelect.test.svelte";
 
 describe("MultiSelect new-but-equal items", () => {
@@ -8,9 +9,6 @@ describe("MultiSelect new-but-equal items", () => {
     { id: "1", text: "A" },
     { id: "2", text: "B" },
   ];
-
-  const optionTexts = () =>
-    screen.queryAllByRole("option").map((el) => el.textContent?.trim());
 
   const createSortItem = () =>
     vi.fn((a: MultiSelectItem, b: MultiSelectItem) =>

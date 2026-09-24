@@ -2,17 +2,10 @@ import { render, screen } from "@testing-library/svelte";
 import type { Instance } from "flatpickr/dist/types/instance";
 import { tick } from "svelte";
 import { flushDismiss } from "../utils/flush-dismiss";
+import { netListenerCalls } from "../utils/net-listener-calls";
 import { user } from "../utils/user";
 import DatePicker from "./DatePicker.test.svelte";
 import DatePickerCalendar from "./DatePickerCalendar.test.svelte";
-
-const net = (
-  add: ReturnType<typeof vi.spyOn>,
-  remove: ReturnType<typeof vi.spyOn>,
-  type: string,
-) =>
-  add.mock.calls.filter((c: unknown[]) => c[0] === type).length -
-  remove.mock.calls.filter((c: unknown[]) => c[0] === type).length;
 
 const openCalendar = async (oncalendar: () => void): Promise<Instance> => {
   let captured: Instance | null = null;
@@ -47,7 +40,7 @@ describe("DatePicker window listeners", () => {
     }
     await tick();
 
-    expect(net(add, remove, "click")).toBe(0);
+    expect(netListenerCalls(add, remove, "click")).toBe(0);
 
     add.mockRestore();
     remove.mockRestore();
@@ -60,7 +53,7 @@ describe("DatePicker window listeners", () => {
     const instance = await openCalendar(() => {});
     await flushDismiss();
     expect(instance.isOpen).toBe(true);
-    expect(net(add, remove, "click")).toBe(1);
+    expect(netListenerCalls(add, remove, "click")).toBe(1);
 
     add.mockRestore();
     remove.mockRestore();
@@ -72,12 +65,12 @@ describe("DatePicker window listeners", () => {
 
     const instance = await openCalendar(() => {});
     await flushDismiss();
-    expect(net(add, remove, "click")).toBe(1);
+    expect(netListenerCalls(add, remove, "click")).toBe(1);
 
     instance.close();
     await tick();
     expect(instance.isOpen).toBe(false);
-    expect(net(add, remove, "click")).toBe(0);
+    expect(netListenerCalls(add, remove, "click")).toBe(0);
 
     add.mockRestore();
     remove.mockRestore();

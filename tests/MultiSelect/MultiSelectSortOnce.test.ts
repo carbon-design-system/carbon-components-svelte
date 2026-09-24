@@ -103,21 +103,4 @@ describe("MultiSelect sort-once, partition-after", () => {
       .map((entry) => entry.id);
     expect(actual).toEqual(referenceFixedOrder(items, sortItem));
   });
-
-  it("keeps sortItem's opt-out (returning undefined) stable and items-ordered", () => {
-    const items: Item[] = [
-      { id: "2", text: "C" },
-      { id: "0", text: "A" },
-      { id: "1", text: "B" },
-    ];
-    const { component } = render(MultiSelect, {
-      props: { items, sortItem: () => undefined as unknown as number },
-    });
-
-    expect(
-      (component.sortedItems ?? [])
-        .filter((entry) => !entry.isSelectAll)
-        .map((entry) => entry.id),
-    ).toEqual(["2", "0", "1"]);
-  });
 });

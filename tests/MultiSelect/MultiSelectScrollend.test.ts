@@ -1,14 +1,8 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { setMenuMetrics } from "../utils/set-menu-metrics";
+import { createItems } from "./helpers";
 import MultiSelectScrollend from "./MultiSelectScrollend.test.svelte";
-
-function createItems(count: number) {
-  return Array.from({ length: count }, (_, i) => ({
-    id: String(i),
-    text: `Item ${i + 1}`,
-  }));
-}
 
 describe("MultiSelect scrollend", () => {
   it("dispatches scrollend when scrolled near the bottom", async () => {

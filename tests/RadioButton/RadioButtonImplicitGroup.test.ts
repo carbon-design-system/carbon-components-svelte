@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { clearAllGroups } from "../../src/RadioButton/radio-button-registry";
+import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import RadioButtonImplicitGroup from "./RadioButtonImplicitGroup.test.svelte";
 
@@ -54,7 +55,7 @@ describe("RadioButton (Implicit Group via name)", () => {
     });
 
     // Wait for component to mount and registry to sync
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await flushMacrotask();
 
     const option1 = screen.getByRole("radio", { name: "Option 1" });
     const option2 = screen.getByRole("radio", { name: "Option 2" });
@@ -72,7 +73,7 @@ describe("RadioButton (Implicit Group via name)", () => {
 
     // Programmatically select option 2
     component.checked2 = true;
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await flushMacrotask();
 
     // Option 2 should be checked, option 1 should be unchecked
     // Note: programmatic updates to `checked` don't automatically uncheck siblings
@@ -91,7 +92,7 @@ describe("RadioButton (Implicit Group via name)", () => {
 
     // Re-render should start fresh (no stale state)
     const { component } = render(RadioButtonImplicitGroup);
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await flushMacrotask();
 
     // Should start with all unchecked
     expect(component.checked1).toBe(false);

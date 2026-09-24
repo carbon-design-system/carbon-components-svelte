@@ -1,23 +1,23 @@
 import { render, screen } from "@testing-library/svelte";
 import { flushFormReset } from "../utils/flush-form-reset";
+import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import TextInputForm from "./TextInput.form.test.svelte";
 
-const getBound = () => screen.getByTestId("bound").textContent;
 describe("TextInput form reset", () => {
   it("syncs the bound value to the cleared field", async () => {
     render(TextInputForm);
     const input = screen.getByRole("textbox", { name: "User" });
 
     await user.type(input, "eric");
-    expect(getBound()).toBe("eric");
+    expect(getBoundText()).toBe("eric");
 
     getForm().reset();
     await flushFormReset();
 
     expect(input).toHaveValue("");
-    expect(getBound()).toBe("");
+    expect(getBoundText()).toBe("");
     expect(new FormData(getForm()).get("user")).toBe("");
   });
 
@@ -30,42 +30,44 @@ describe("TextInput form reset", () => {
     await flushFormReset();
 
     expect(input).toHaveValue("");
-    expect(getBound()).toBe("");
+    expect(getBoundText()).toBe("");
   });
 
   it("follows the field's default value, as with server-rendered markup", async () => {
     render(TextInputForm, { props: { value: "ada" } });
     const input = screen.getByRole("textbox", {
       name: "User",
-    }) as HTMLInputElement;
+    });
+    assert(input instanceof HTMLInputElement);
     // Server-rendered markup carries the value as the `value` attribute.
     input.defaultValue = "ada";
 
     await user.type(input, "x");
-    expect(getBound()).toBe("adax");
+    expect(getBoundText()).toBe("adax");
 
     getForm().reset();
     await flushFormReset();
 
     expect(input).toHaveValue("ada");
-    expect(getBound()).toBe("ada");
+    expect(getBoundText()).toBe("ada");
   });
 
   it("parses a number field", async () => {
     render(TextInputForm, { props: { type: "number", value: 5 } });
     const input = screen.getByRole("spinbutton", {
       name: "User",
-    }) as HTMLInputElement;
+    });
+    assert(input instanceof HTMLInputElement);
     input.defaultValue = "5";
 
     await user.type(input, "7");
-    expect(getBound()).toBe("57");
+    expect(getBoundText()).toBe("57");
 
     getForm().reset();
     await flushFormReset();
 
     expect(input).toHaveValue(5);
-    expect(getBound()).toBe("5");
+    expect(getBoundText()).toBe("5");
   });
 
   it("sets an emptied number field to null", async () => {
@@ -76,7 +78,7 @@ describe("TextInput form reset", () => {
     getForm().reset();
     await flushFormReset();
 
-    expect(getBound()).toBe("null");
+    expect(getBoundText()).toBe("null");
   });
 
   it("leaves everything alone when the reset is canceled", async () => {
@@ -89,7 +91,7 @@ describe("TextInput form reset", () => {
     await flushFormReset();
 
     expect(input).toHaveValue("eric");
-    expect(getBound()).toBe("eric");
+    expect(getBoundText()).toBe("eric");
   });
 
   it("does not dispatch input on reset", async () => {

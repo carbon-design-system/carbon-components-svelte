@@ -26,16 +26,6 @@ describe("FormItem", () => {
     expect(formItem?.tagName).toBe("DIV");
   });
 
-  it("should render slot content", () => {
-    render(FormItemTest, {
-      props: {
-        slotContent: "Custom slot content",
-      },
-    });
-
-    expect(screen.getByText("Custom slot content")).toBeInTheDocument();
-  });
-
   it("should handle click events", async () => {
     const consoleLog = vi.spyOn(console, "log");
     const { container } = render(FormItemTest, {

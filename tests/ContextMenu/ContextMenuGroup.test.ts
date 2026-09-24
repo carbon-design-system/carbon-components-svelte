@@ -1,13 +1,9 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import ContextMenuGroup from "./ContextMenuGroup.test.svelte";
+import { getSelectedIds } from "./helpers";
 
 describe("ContextMenuGroup", () => {
-  const getSelectedIds = () => {
-    const element = screen.getByTestId("selected-ids");
-    return JSON.parse(element.textContent || "[]");
-  };
-
   it("should toggle option when clicking option that is not selected", async () => {
     render(ContextMenuGroup, { props: { selectedIds: [] } });
 

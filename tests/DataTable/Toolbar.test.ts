@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import type ToolbarBatchActionsComponent from "carbon-components-svelte/DataTable/ToolbarBatchActions.svelte";
 import type { ComponentProps } from "svelte";
+import { expectInlineStyle } from "../utils/inline-style";
 import Toolbar from "./Toolbar.test.svelte";
 
 describe("DataTable Toolbar", () => {
@@ -93,11 +94,9 @@ describe("DataTable Toolbar", () => {
         props: { testComponent: "Toolbar" },
       });
 
-      const toolbar = container.querySelector(
-        ".bx--table-toolbar",
-      ) as HTMLElement;
+      const toolbar = container.querySelector(".bx--table-toolbar");
       expect(toolbar).not.toHaveClass("bx--table-toolbar--sticky");
-      expect(toolbar.style.top).toBe("");
+      expectInlineStyle(toolbar, { top: "" });
     });
 
     it("should have the sticky class when sticky is set", () => {
@@ -127,12 +126,10 @@ describe("DataTable Toolbar", () => {
         },
       });
 
-      const toolbar = container.querySelector(
-        ".bx--table-toolbar",
-      ) as HTMLElement;
+      const toolbar = container.querySelector(".bx--table-toolbar");
       // jsdom's getComputedStyle resolves `rem` to `px`, so `toHaveStyle`
       // can't assert this; check the inline style directly instead.
-      expect(toolbar.style.top).toBe("3rem");
+      expectInlineStyle(toolbar, { top: "3rem" });
     });
 
     it("should default stickyOffset to 0 without a Header on the page", () => {
@@ -140,10 +137,8 @@ describe("DataTable Toolbar", () => {
         props: { testComponent: "Toolbar", sticky: true },
       });
 
-      const toolbar = container.querySelector(
-        ".bx--table-toolbar",
-      ) as HTMLElement;
-      expect(toolbar.style.top).toBe("0px");
+      const toolbar = container.querySelector(".bx--table-toolbar");
+      expectInlineStyle(toolbar, { top: "0px" });
     });
 
     it("should default stickyOffset to the UI Shell header height when a Header is rendered", () => {
@@ -151,10 +146,8 @@ describe("DataTable Toolbar", () => {
         props: { testComponent: "Toolbar", sticky: true, withHeader: true },
       });
 
-      const toolbar = container.querySelector(
-        ".bx--table-toolbar",
-      ) as HTMLElement;
-      expect(toolbar.style.top).toBe("48px");
+      const toolbar = container.querySelector(".bx--table-toolbar");
+      expectInlineStyle(toolbar, { top: "48px" });
     });
 
     it("should let an explicit stickyOffset override the Header default", () => {
@@ -167,10 +160,8 @@ describe("DataTable Toolbar", () => {
         },
       });
 
-      const toolbar = container.querySelector(
-        ".bx--table-toolbar",
-      ) as HTMLElement;
-      expect(toolbar.style.top).toBe("0px");
+      const toolbar = container.querySelector(".bx--table-toolbar");
+      expectInlineStyle(toolbar, { top: "0px" });
     });
   });
 

@@ -1,11 +1,9 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import DataTableRefilterOnRowsChange from "./DataTableRefilterOnRowsChange.test.svelte";
+import { getTableRows } from "./helpers";
 
 describe("DataTable re-filters when rows change", () => {
-  // Skip the header row.
-  const getTableRows = () => screen.getAllByRole("row").slice(1);
-
   it("preserves an active filter when the rows prop is reassigned", async () => {
     render(DataTableRefilterOnRowsChange);
 

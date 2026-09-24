@@ -3,63 +3,45 @@ import { user } from "../utils/user";
 import MultiSelectClose from "./MultiSelectClose.test.svelte";
 
 describe("MultiSelect close event", () => {
-  it('dispatches close with trigger "escape-key" on Escape', async () => {
-    const onClose = vi.fn();
-    render(MultiSelectClose, { props: { onClose } });
-
-    const combobox = screen.getByRole("combobox");
-    await user.click(combobox);
-    expect(combobox).toHaveAttribute("aria-expanded", "true");
-
-    await user.keyboard("{Escape}");
-    expect(combobox).toHaveAttribute("aria-expanded", "false");
-    expect(onClose).toHaveBeenCalledTimes(1);
-    expect(onClose.mock.calls[0][0].detail).toEqual({ trigger: "escape-key" });
-  });
-
-  it('dispatches close with trigger "escape-key" on Alt+ArrowUp', async () => {
-    const onClose = vi.fn();
-    render(MultiSelectClose, { props: { onClose } });
-
-    const combobox = screen.getByRole("combobox");
-    await user.click(combobox);
-    expect(combobox).toHaveAttribute("aria-expanded", "true");
-
-    await user.keyboard("{Alt>}{ArrowUp}{/Alt}");
-    expect(combobox).toHaveAttribute("aria-expanded", "false");
-    expect(onClose).toHaveBeenCalledTimes(1);
-    expect(onClose.mock.calls[0][0].detail).toEqual({ trigger: "escape-key" });
-  });
-
-  it('dispatches close with trigger "outside-click" when clicking outside', async () => {
-    const onClose = vi.fn();
-    render(MultiSelectClose, { props: { onClose } });
-
-    const combobox = screen.getByRole("combobox");
-    await user.click(combobox);
-    expect(combobox).toHaveAttribute("aria-expanded", "true");
-
-    await user.click(screen.getByRole("button", { name: "Outside" }));
-    expect(combobox).toHaveAttribute("aria-expanded", "false");
-    expect(onClose).toHaveBeenCalledTimes(1);
-    expect(onClose.mock.calls[0][0].detail).toEqual({
+  const triggers = [
+    {
+      description: "Escape",
+      act: () => user.keyboard("{Escape}"),
+      trigger: "escape-key",
+    },
+    {
+      description: "Alt+ArrowUp",
+      act: () => user.keyboard("{Alt>}{ArrowUp}{/Alt}"),
+      trigger: "escape-key",
+    },
+    {
+      description: "Tab",
+      act: () => user.keyboard("{Tab}"),
+      trigger: "escape-key",
+    },
+    {
+      description: "an outside click",
+      act: () => user.click(screen.getByRole("button", { name: "Outside" })),
       trigger: "outside-click",
-    });
-  });
+    },
+  ];
 
-  it('dispatches close with trigger "escape-key" on Tab', async () => {
-    const onClose = vi.fn();
-    render(MultiSelectClose, { props: { onClose } });
+  it.each(triggers)(
+    'dispatches close with trigger "$trigger" on $description',
+    async ({ act, trigger }) => {
+      const onClose = vi.fn();
+      render(MultiSelectClose, { props: { onClose } });
 
-    const combobox = screen.getByRole("combobox");
-    await user.click(combobox);
-    expect(combobox).toHaveAttribute("aria-expanded", "true");
+      const combobox = screen.getByRole("combobox");
+      await user.click(combobox);
+      expect(combobox).toHaveAttribute("aria-expanded", "true");
 
-    await user.keyboard("{Tab}");
-    expect(combobox).toHaveAttribute("aria-expanded", "false");
-    expect(onClose).toHaveBeenCalledTimes(1);
-    expect(onClose.mock.calls[0][0].detail).toEqual({ trigger: "escape-key" });
-  });
+      await act();
+      expect(combobox).toHaveAttribute("aria-expanded", "false");
+      expect(onClose).toHaveBeenCalledTimes(1);
+      expect(onClose.mock.calls[0][0].detail).toEqual({ trigger });
+    },
+  );
 
   it('filterable: dispatches close with trigger "escape-key" on Tab', async () => {
     const onClose = vi.fn();

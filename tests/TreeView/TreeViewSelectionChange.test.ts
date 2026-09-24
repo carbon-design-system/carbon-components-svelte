@@ -5,6 +5,7 @@ import type {
   TreeNode,
 } from "carbon-components-svelte/TreeView/TreeView.svelte";
 import type { ComponentEvents } from "svelte";
+import { flushMacrotask } from "../utils/flush-macrotask";
 import { treeItemById } from "../utils/tree-item-by-id";
 import { user } from "../utils/user";
 import TreeViewSelectionChange from "./TreeViewSelectionChange.test.svelte";
@@ -44,7 +45,7 @@ describe("TreeView select:change", () => {
     });
 
     // Give any deferred dispatch a chance to run.
-    await new Promise((resolve) => setTimeout(resolve));
+    await flushMacrotask();
     expect(onSelectChange).not.toHaveBeenCalled();
   });
 
@@ -52,7 +53,7 @@ describe("TreeView select:change", () => {
     const onSelectChange = vi.fn();
     render(TreeViewSelectionChange, { selectedIds: [], onSelectChange });
 
-    await new Promise((resolve) => setTimeout(resolve));
+    await flushMacrotask();
     expect(onSelectChange).not.toHaveBeenCalled();
     expect(screen.queryAllByRole("treeitem", { selected: true })).toHaveLength(
       0,
@@ -190,7 +191,7 @@ describe("TreeView select:change", () => {
     treeItemById(0).focus();
     await user.keyboard("{Control>}a{/Control}");
 
-    await new Promise((resolve) => setTimeout(resolve));
+    await flushMacrotask();
     expect(onSelectChange).not.toHaveBeenCalled();
     expect(screen.queryAllByRole("treeitem", { selected: true })).toHaveLength(
       0,
@@ -204,7 +205,7 @@ describe("TreeView select:change", () => {
     treeItemById(0).focus();
     await user.keyboard("{Control>}a{/Control}");
 
-    await new Promise((resolve) => setTimeout(resolve));
+    await flushMacrotask();
     expect(onSelectChange).not.toHaveBeenCalled();
     const selected = screen.getAllByRole("treeitem", { selected: true });
     expect(selected).toEqual([treeItemById(7)]);
@@ -314,7 +315,7 @@ describe("TreeView select:change", () => {
 
     await user.click(screen.getByTestId("set-same"));
 
-    await new Promise((resolve) => setTimeout(resolve));
+    await flushMacrotask();
     expect(onSelectChange).not.toHaveBeenCalled();
   });
 
@@ -324,7 +325,7 @@ describe("TreeView select:change", () => {
 
     await user.click(screen.getByTestId("expand-all"));
 
-    await new Promise((resolve) => setTimeout(resolve));
+    await flushMacrotask();
     expect(onSelectChange).not.toHaveBeenCalled();
   });
 
@@ -352,9 +353,10 @@ describe("TreeView select:change", () => {
       expect(treeItemById(0)).toHaveAttribute("aria-selected", "true");
 
       // Let Node emit the rejection from the deferred microtask.
-      await new Promise((resolve) => setTimeout(resolve));
+      await flushMacrotask();
       expect(rejections).toHaveLength(1);
-      expect((rejections[0] as Error).message).toBe("consumer boom");
+      assert(rejections[0] instanceof Error);
+      expect(rejections[0].message).toBe("consumer boom");
     } finally {
       process.removeListener("unhandledRejection", capture);
       for (const listener of priorListeners) {

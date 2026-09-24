@@ -11,31 +11,13 @@ describe("SkeletonIcon", () => {
     expect(element).toHaveStyle({ width: "16px", height: "16px" });
   });
 
-  it("should render with size 20", () => {
+  it.each([20, 24, 32])("should render with size %i", (size) => {
     render(SkeletonIcon, {
-      props: { size: 20 },
+      props: { size },
     });
 
     const element = screen.getByTestId("skeleton-icon");
-    expect(element).toHaveStyle({ width: "20px", height: "20px" });
-  });
-
-  it("should render with size 24", () => {
-    render(SkeletonIcon, {
-      props: { size: 24 },
-    });
-
-    const element = screen.getByTestId("skeleton-icon");
-    expect(element).toHaveStyle({ width: "24px", height: "24px" });
-  });
-
-  it("should render with size 32", () => {
-    render(SkeletonIcon, {
-      props: { size: 32 },
-    });
-
-    const element = screen.getByTestId("skeleton-icon");
-    expect(element).toHaveStyle({ width: "32px", height: "32px" });
+    expect(element).toHaveStyle({ width: `${size}px`, height: `${size}px` });
   });
 
   it("should handle mouse events", async () => {

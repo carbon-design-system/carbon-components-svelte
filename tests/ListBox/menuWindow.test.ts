@@ -1289,8 +1289,7 @@ describe("createMenuWindow: measured, below the threshold", () => {
     expect(state.itemsToRender).toHaveLength(UNWINDOWED_COUNT);
 
     renderOptions(container, state);
-    Array.from(container.children).forEach((child, index) => {
-      const option = child as HTMLElement;
+    Array.from(container.children).forEach((option, index) => {
       option.getBoundingClientRect = () => {
         const top = index * ITEM_HEIGHT - container.scrollTop;
         return {

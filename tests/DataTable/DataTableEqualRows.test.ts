@@ -3,6 +3,7 @@ import type { DataTableValue } from "carbon-components-svelte/DataTable/DataTabl
 import { user } from "../utils/user";
 import DataTable from "./DataTable.test.svelte";
 import DataTableActiveSearchEqualRows from "./DataTableActiveSearchEqualRows.test.svelte";
+import { getBodyRows } from "./helpers";
 
 describe("DataTable new-but-equal rows", () => {
   const createSortFn = () =>
@@ -20,9 +21,6 @@ describe("DataTable new-but-equal rows", () => {
     { id: "b", name: "Load Balancer 1", port: 443 },
     { id: "c", name: "Load Balancer 2", port: 80 },
   ];
-
-  const getBodyRows = () =>
-    screen.getAllByRole("row").filter((row) => row.closest("tbody") !== null);
 
   it("does not re-sort for a new-but-equal rows array, and re-sorts for a different one", async () => {
     const sortFn = createSortFn();

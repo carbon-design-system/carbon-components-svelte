@@ -67,9 +67,9 @@ describe("RangeSlider", () => {
       props: { selectTextOnFocus: true, value: 10, valueUpper: 90 },
     });
 
-    const [lower, upper] = screen.getAllByRole(
-      "spinbutton",
-    ) as HTMLInputElement[];
+    const [lower, upper] = screen.getAllByRole("spinbutton");
+    assert(lower instanceof HTMLInputElement);
+    assert(upper instanceof HTMLInputElement);
 
     const selectLower = vi.spyOn(lower, "select");
     await user.click(lower);
@@ -85,7 +85,8 @@ describe("RangeSlider", () => {
   it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {
     render(RangeSlider, { props: { value: 10, valueUpper: 90 } });
 
-    const [lower] = screen.getAllByRole("spinbutton") as HTMLInputElement[];
+    const [lower] = screen.getAllByRole("spinbutton");
+    assert(lower instanceof HTMLInputElement);
     const select = vi.spyOn(lower, "select");
     await user.click(lower);
     await tick();
@@ -103,9 +104,9 @@ describe("RangeSlider", () => {
       },
     });
 
-    const [lower, upper] = screen.getAllByRole(
-      "spinbutton",
-    ) as HTMLInputElement[];
+    const [lower, upper] = screen.getAllByRole("spinbutton");
+    assert(lower instanceof HTMLInputElement);
+    assert(upper instanceof HTMLInputElement);
     const selectLower = vi.spyOn(lower, "select");
     const selectUpper = vi.spyOn(upper, "select");
     await fireEvent.focus(lower);

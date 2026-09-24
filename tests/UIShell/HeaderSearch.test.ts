@@ -4,6 +4,7 @@ import type { HeaderSearchResult } from "carbon-components-svelte/UIShell/Header
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { flushDismiss } from "../utils/flush-dismiss";
+import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import HeaderSearchTest from "./HeaderSearch.test.svelte";
 import HeaderSearchIconTest from "./HeaderSearchIcon.test.svelte";
@@ -64,7 +65,8 @@ describe("HeaderSearch", () => {
       await user.click(screen.getByRole("button", { name: "Search" }));
       await tick();
 
-      const input = screen.getByRole("textbox") as HTMLInputElement;
+      const input = screen.getByRole("textbox");
+      assert(input instanceof HTMLInputElement);
       expect(input.selectionStart).toBe(0);
       expect(input.selectionEnd).toBe("clusters".length);
     });
@@ -75,7 +77,8 @@ describe("HeaderSearch", () => {
       await user.click(screen.getByRole("button", { name: "Search" }));
       await tick();
 
-      const input = screen.getByRole("textbox") as HTMLInputElement;
+      const input = screen.getByRole("textbox");
+      assert(input instanceof HTMLInputElement);
       expect(input.selectionStart).toBe(input.selectionEnd);
     });
 
@@ -461,7 +464,7 @@ describe("HeaderSearch", () => {
       const { component } = render(HeaderSearchTest);
 
       component.active = true;
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await flushMacrotask();
 
       const searchInput = screen.getByRole("textbox");
       expect(searchInput).toHaveFocus();
@@ -473,7 +476,7 @@ describe("HeaderSearch", () => {
       });
 
       component.active = false;
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await flushMacrotask();
 
       const searchInput = screen.getByRole("textbox");
       expect(searchInput).not.toHaveFocus();
@@ -584,7 +587,7 @@ describe("HeaderSearch", () => {
       fireEvent.mouseUp(outsideElement);
 
       // Wait for the event to be processed
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await flushMacrotask();
 
       expect(screen.getByTestId("inactive-event")).toHaveTextContent("true");
 

@@ -109,7 +109,9 @@ describe("FluidForm", () => {
       const consoleLog = vi.spyOn(console, "log");
       render(FluidFormTest);
 
-      (screen.getByTestId("fluid-form") as HTMLFormElement).reset();
+      const form = screen.getByTestId("fluid-form");
+      assert(form instanceof HTMLFormElement);
+      form.reset();
 
       expect(consoleLog).toHaveBeenCalledWith("reset", expect.any(Event));
     });

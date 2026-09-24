@@ -16,7 +16,7 @@ describe("HeaderSearch debounce", () => {
       const onSearch = vi.fn();
       render(HeaderSearchDebounce, { props: { debounce: 200, onSearch } });
 
-      const input = screen.getByRole("textbox") as HTMLInputElement;
+      const input = screen.getByRole("textbox");
       await fireEvent.input(input, { target: { value: "res" } });
       expect(input).toHaveValue("res");
 
@@ -55,7 +55,7 @@ describe("HeaderSearch debounce", () => {
       const onSearch = vi.fn();
       render(HeaderSearchDebounce, { props: { debounce: 200, onSearch } });
 
-      const input = screen.getByRole("textbox") as HTMLInputElement;
+      const input = screen.getByRole("textbox");
       await fireEvent.input(input, { target: { value: "res" } });
       await fireEvent.keyDown(input, { key: "Escape" });
       expect(input).toHaveValue("");
@@ -82,7 +82,7 @@ describe("HeaderSearch debounce", () => {
       const onSearch = vi.fn();
       render(HeaderSearchMenuDebounce, { props: { debounce: 200, onSearch } });
 
-      const input = screen.getByRole("combobox") as HTMLInputElement;
+      const input = screen.getByRole("combobox");
       await fireEvent.input(input, { target: { value: "no-match-here" } });
       expect(input).toHaveValue("no-match-here");
 
@@ -98,7 +98,7 @@ describe("HeaderSearch debounce", () => {
       const onSearch = vi.fn();
       render(HeaderSearchMenuDebounce, { props: { debounce: 200, onSearch } });
 
-      const input = screen.getByRole("combobox") as HTMLInputElement;
+      const input = screen.getByRole("combobox");
       await fireEvent.input(input, { target: { value: "Data" } });
       await fireEvent.keyDown(input, { key: "ArrowDown" });
       await fireEvent.keyDown(input, { key: "Enter" });

@@ -96,7 +96,9 @@ describe("restoreFocus", () => {
 
   it("restore() is a no-op when activeElement was not an HTMLElement at save time", () => {
     // No HTMLElement focused: document.activeElement is <body>.
-    (document.activeElement as HTMLElement | null)?.blur();
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
 
     const focusReturn = restoreFocus();
     focusReturn.save();

@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { flushFormReset } from "../utils/flush-form-reset";
+import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import RadioButtonGroupForm from "./RadioButtonGroup.form.test.svelte";
@@ -17,7 +18,7 @@ describe("RadioButtonGroup form reset", () => {
 
     expect(screen.getByRole("radio", { name: "A" })).not.toBeChecked();
     expect(screen.getByRole("radio", { name: "B" })).not.toBeChecked();
-    expect(screen.getByTestId("bound").textContent).toBe("undefined");
+    expect(getBoundText()).toBe("undefined");
     expect(new FormData(getForm()).has("a")).toBe(false);
     expect(new FormData(getForm()).has("b")).toBe(false);
     expect(onChange).not.toHaveBeenCalled();
@@ -27,20 +28,21 @@ describe("RadioButtonGroup form reset", () => {
     const onChange = vi.fn();
     render(RadioButtonGroupForm, { props: { selected: "a", onChange } });
 
-    expect(screen.getByTestId("bound").textContent).toBe("a");
+    expect(getBoundText()).toBe("a");
 
     getForm().reset();
     await flushFormReset();
 
     expect(screen.getByRole("radio", { name: "A" })).not.toBeChecked();
-    expect(screen.getByTestId("bound").textContent).toBe("undefined");
+    expect(getBoundText()).toBe("undefined");
     expect(onChange).not.toHaveBeenCalled();
   });
 
   it("follows the radio's default state, as with server-rendered markup", async () => {
     const onChange = vi.fn();
     render(RadioButtonGroupForm, { props: { selected: "a", onChange } });
-    const radioA = screen.getByRole("radio", { name: "A" }) as HTMLInputElement;
+    const radioA = screen.getByRole("radio", { name: "A" });
+    assert(radioA instanceof HTMLInputElement);
     // Server-rendered markup carries the state as the `checked` attribute.
     radioA.defaultChecked = true;
 
@@ -52,7 +54,7 @@ describe("RadioButtonGroup form reset", () => {
 
     expect(radioA).toBeChecked();
     expect(screen.getByRole("radio", { name: "B" })).not.toBeChecked();
-    expect(screen.getByTestId("bound").textContent).toBe("a");
+    expect(getBoundText()).toBe("a");
     expect(onChange).not.toHaveBeenCalled();
   });
 
@@ -68,7 +70,7 @@ describe("RadioButtonGroup form reset", () => {
 
     expect(screen.getByRole("radio", { name: "A" })).not.toBeChecked();
     expect(screen.getByRole("radio", { name: "B" })).not.toBeChecked();
-    expect(screen.getByTestId("bound").textContent).toBe("undefined");
+    expect(getBoundText()).toBe("undefined");
     expect(onChange).not.toHaveBeenCalled();
   });
 
@@ -81,7 +83,7 @@ describe("RadioButtonGroup form reset", () => {
     await flushFormReset();
 
     expect(screen.getByRole("radio", { name: "A" })).toBeChecked();
-    expect(screen.getByTestId("bound").textContent).toBe("a");
+    expect(getBoundText()).toBe("a");
     expect(onChange).not.toHaveBeenCalled();
   });
 
@@ -96,7 +98,7 @@ describe("RadioButtonGroup form reset", () => {
 
     expect(screen.getByRole("radio", { name: "A" })).toBeChecked();
     expect(screen.getByRole("radio", { name: "B" })).not.toBeChecked();
-    expect(screen.getByTestId("bound").textContent).toBe("a");
+    expect(getBoundText()).toBe("a");
     expect(onChange).not.toHaveBeenCalled();
   });
 });

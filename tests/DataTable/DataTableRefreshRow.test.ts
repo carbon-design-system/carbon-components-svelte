@@ -1,14 +1,7 @@
-import { render, screen, within } from "@testing-library/svelte";
+import { render, within } from "@testing-library/svelte";
 import { tick } from "svelte";
 import DataTableRefreshRow from "./DataTableRefreshRow.test.svelte";
-
-function getFirstBodyRow(): HTMLElement {
-  const rows = screen
-    .getAllByRole("row")
-    .filter((r) => r.closest("tbody") !== null);
-  expect(rows.length).toBeGreaterThan(0);
-  return rows[0];
-}
+import { getFirstBodyRow } from "./helpers";
 
 describe("DataTable refreshRow / refreshCells", () => {
   it("updates a row after in-place edit when refreshRow is called", async () => {

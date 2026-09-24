@@ -15,7 +15,7 @@ describe("ToolbarSearch debounce", () => {
       props: { debounce: 300 },
     });
 
-    const input = screen.getByRole("searchbox") as HTMLInputElement;
+    const input = screen.getByRole("searchbox");
     await fireEvent.input(input, { target: { value: "Balancer 1" } });
 
     expect(component.filteredRowIds).toHaveLength(6);
@@ -31,7 +31,7 @@ describe("ToolbarSearch debounce", () => {
     });
     const baseline = component.filterRowsCount;
 
-    const input = screen.getByRole("searchbox") as HTMLInputElement;
+    const input = screen.getByRole("searchbox");
     await fireEvent.input(input, { target: { value: "B" } });
     await vi.advanceTimersByTimeAsync(100);
     await fireEvent.input(input, { target: { value: "Ba" } });
@@ -46,7 +46,7 @@ describe("ToolbarSearch debounce", () => {
       props: { debounce: 300 },
     });
 
-    const input = screen.getByRole("searchbox") as HTMLInputElement;
+    const input = screen.getByRole("searchbox");
     await fireEvent.input(input, { target: { value: "Balancer 1" } });
     expect(component.filteredRowIds).toHaveLength(6);
 
@@ -61,7 +61,7 @@ describe("ToolbarSearch debounce", () => {
       props: { debounce: 300 },
     });
 
-    const input = screen.getByRole("searchbox") as HTMLInputElement;
+    const input = screen.getByRole("searchbox");
     await fireEvent.input(input, { target: { value: "Balancer 1" } });
 
     unmount();

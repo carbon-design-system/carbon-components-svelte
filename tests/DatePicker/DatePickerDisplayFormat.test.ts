@@ -2,13 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import DatePicker from "./DatePickerDisplayFormat.test.svelte";
-
-async function visibleInput() {
-  await vi.waitFor(() =>
-    expect(screen.getByLabelText("Date")).toHaveAttribute("type", "text"),
-  );
-  return screen.getByLabelText("Date") as HTMLInputElement;
-}
+import { visibleInput } from "./helpers";
 
 describe("DatePicker displayFormat", () => {
   it("shows the display format while value keeps dateFormat", async () => {

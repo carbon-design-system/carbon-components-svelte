@@ -1,15 +1,13 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { flushFormReset } from "../utils/flush-form-reset";
+import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
+import { getPinCodeInputs } from "./helpers";
 import PinCodeInputForm from "./PinCodeInput.form.test.svelte";
 
-const getSegments = () =>
-  (screen.getAllByRole("textbox") as HTMLInputElement[]).map(
-    (input) => input.value,
-  );
-const getBound = () => screen.getByTestId("bound").textContent;
+const getSegments = () => getPinCodeInputs().map((input) => input.value);
 describe("PinCodeInput form participation", () => {
   describe("required with name", () => {
     it("is invalid while every segment is empty", () => {
@@ -48,7 +46,7 @@ describe("PinCodeInput form participation", () => {
 
       await user.click(screen.getAllByRole("textbox")[0]);
       await user.keyboard("1234");
-      expect(getBound()).toBe("1234");
+      expect(getBoundText()).toBe("1234");
       onClear.mockClear();
       onComplete.mockClear();
       onChange.mockClear();
@@ -57,7 +55,7 @@ describe("PinCodeInput form participation", () => {
       await flushFormReset();
 
       expect(getSegments()).toEqual(["", "", "", ""]);
-      expect(getBound()).toBe("");
+      expect(getBoundText()).toBe("");
       expect(new FormData(getForm()).get("otp")).toBe("");
       expect(onClear).not.toHaveBeenCalled();
       expect(onComplete).not.toHaveBeenCalled();
@@ -74,31 +72,31 @@ describe("PinCodeInput form participation", () => {
 
       // user-event tracks what it typed and misses the native reset, so
       // type the next character with a plain input event.
-      const second = screen.getAllByRole("textbox")[1] as HTMLInputElement;
+      const second = getPinCodeInputs()[1];
       second.value = "9";
       second.dispatchEvent(new Event("input", { bubbles: true }));
       await tick();
 
       expect(getSegments()).toEqual(["", "9", "", ""]);
-      expect(getBound()).toBe("9");
+      expect(getBoundText()).toBe("9");
     });
 
     it("follows the segments' default values, as with server-rendered markup", async () => {
       render(PinCodeInputForm, { props: { value: "12" } });
-      const segments = screen.getAllByRole("textbox") as HTMLInputElement[];
+      const segments = getPinCodeInputs();
       // Server-rendered markup carries each character as the `value` attribute.
       segments[0].defaultValue = "1";
       segments[1].defaultValue = "2";
 
       await user.click(segments[2]);
       await user.keyboard("34");
-      expect(getBound()).toBe("1234");
+      expect(getBoundText()).toBe("1234");
 
       getForm().reset();
       await flushFormReset();
 
       expect(getSegments()).toEqual(["1", "2", "", ""]);
-      expect(getBound()).toBe("12");
+      expect(getBoundText()).toBe("12");
       expect(new FormData(getForm()).get("otp")).toBe("12");
     });
 
@@ -112,7 +110,7 @@ describe("PinCodeInput form participation", () => {
       await flushFormReset();
 
       expect(getSegments()).toEqual(["1", "2", "", ""]);
-      expect(getBound()).toBe("12");
+      expect(getBoundText()).toBe("12");
     });
   });
 });

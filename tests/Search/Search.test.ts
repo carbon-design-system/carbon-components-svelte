@@ -41,7 +41,8 @@ describe("Search", () => {
       props: { selectTextOnFocus: true, value: "Cloud functions" },
     });
 
-    const search = getSearchInput("Default search") as HTMLInputElement;
+    const search = getSearchInput("Default search");
+    assert(search instanceof HTMLInputElement);
     await user.click(search);
     await tick();
 
@@ -52,7 +53,8 @@ describe("Search", () => {
   it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {
     render(Search, { props: { value: "Cloud functions" } });
 
-    const search = getSearchInput("Default search") as HTMLInputElement;
+    const search = getSearchInput("Default search");
+    assert(search instanceof HTMLInputElement);
     await user.click(search);
     await tick();
 

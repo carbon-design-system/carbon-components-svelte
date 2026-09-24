@@ -26,9 +26,9 @@ describe("CopyInput", () => {
   it("renders a read-only field with the value", () => {
     render(CopyInput);
 
-    const input = screen.getByLabelText("API token") as HTMLInputElement;
+    const input = screen.getByLabelText("API token");
     expect(input).toHaveAttribute("readonly");
-    expect(input.value).toBe("secret-token-123");
+    expect(input).toHaveValue("secret-token-123");
   });
 
   it("copies the value and dispatches copy", async () => {
@@ -45,7 +45,8 @@ describe("CopyInput", () => {
   it("does not select the value on focus by default", async () => {
     render(CopyInput);
 
-    const input = screen.getByLabelText("API token") as HTMLInputElement;
+    const input = screen.getByLabelText("API token");
+    assert(input instanceof HTMLInputElement);
     const select = vi.spyOn(input, "select");
     await fireEvent.focus(input);
 
@@ -55,7 +56,8 @@ describe("CopyInput", () => {
   it("selects the full value on focus when selectOnFocus is true", async () => {
     render(CopyInput, { props: { selectOnFocus: true } });
 
-    const input = screen.getByLabelText("API token") as HTMLInputElement;
+    const input = screen.getByLabelText("API token");
+    assert(input instanceof HTMLInputElement);
     const select = vi.spyOn(input, "select");
     await fireEvent.focus(input);
 
@@ -65,7 +67,7 @@ describe("CopyInput", () => {
   it("stays obscured on focus when revealMode is unset", async () => {
     render(CopyInput, { props: { type: "password" } });
 
-    const input = screen.getByLabelText("API token") as HTMLInputElement;
+    const input = screen.getByLabelText("API token");
     expect(input).toHaveAttribute("type", "password");
 
     await fireEvent.focus(input);
@@ -75,7 +77,7 @@ describe("CopyInput", () => {
   it("reveals the value on focus when revealMode is focus", async () => {
     render(CopyInput, { props: { type: "password", revealMode: "focus" } });
 
-    const input = screen.getByLabelText("API token") as HTMLInputElement;
+    const input = screen.getByLabelText("API token");
     expect(input).toHaveAttribute("type", "password");
 
     await fireEvent.focus(input);
@@ -88,7 +90,7 @@ describe("CopyInput", () => {
   it("does not reveal the value on hover when revealMode is focus", async () => {
     render(CopyInput, { props: { type: "password", revealMode: "focus" } });
 
-    const input = screen.getByLabelText("API token") as HTMLInputElement;
+    const input = screen.getByLabelText("API token");
 
     await fireEvent.mouseEnter(input);
     expect(input).toHaveAttribute("type", "password");
@@ -99,7 +101,7 @@ describe("CopyInput", () => {
       props: { type: "password", revealMode: "hover-focus" },
     });
 
-    const input = screen.getByLabelText("API token") as HTMLInputElement;
+    const input = screen.getByLabelText("API token");
     expect(input).toHaveAttribute("type", "password");
 
     await fireEvent.mouseEnter(input);
@@ -118,12 +120,13 @@ describe("CopyInput", () => {
   it("does not reveal the obscured value on hover when revealMode is unset", async () => {
     render(CopyInput, { props: { type: "password" } });
 
-    const input = screen.getByLabelText("API token") as HTMLInputElement;
+    const input = screen.getByLabelText("API token");
     const fieldWrapper = input.closest(".bx--copy-input__field-wrapper");
+    assert(fieldWrapper);
     expect(fieldWrapper).toBeInTheDocument();
 
     await fireEvent.mouseEnter(input);
-    await fireEvent.mouseEnter(fieldWrapper as Element);
+    await fireEvent.mouseEnter(fieldWrapper);
     expect(input).toHaveAttribute("type", "password");
   });
 

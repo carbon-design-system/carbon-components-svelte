@@ -23,8 +23,8 @@ describe("downloadFile", () => {
     downloadFile("id,name\n1,Alpha", "items.csv", "text/csv;charset=utf-8");
 
     expect(createObjectURL).toHaveBeenCalledTimes(1);
-    const blob = createObjectURL.mock.calls[0][0] as Blob;
-    expect(blob).toBeInstanceOf(Blob);
+    const blob = createObjectURL.mock.calls[0][0];
+    assert(blob instanceof Blob);
     expect(blob.type).toBe("text/csv;charset=utf-8");
   });
 
@@ -39,7 +39,8 @@ describe("downloadFile", () => {
     downloadFile("content", "report.txt");
 
     expect(clickSpy).toHaveBeenCalledTimes(1);
-    const anchor = clickSpy.mock.instances[0] as HTMLAnchorElement;
+    const anchor = clickSpy.mock.instances[0];
+    assert(anchor instanceof HTMLAnchorElement);
     expect(anchor.download).toBe("report.txt");
     expect(anchor.href).toBe("blob:mock-url");
     expect(revokeObjectURL).toHaveBeenCalledWith("blob:mock-url");

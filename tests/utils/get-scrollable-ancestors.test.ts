@@ -36,8 +36,10 @@ describe("getScrollableAncestors", () => {
     const result = getScrollableAncestors(leaf);
 
     expect(result).toHaveLength(2);
-    expect((result[0] as HTMLElement).style.overflow).toBe("auto");
-    expect((result[1] as HTMLElement).style.overflow).toBe("scroll");
+    assert(result[0] instanceof HTMLElement);
+    assert(result[1] instanceof HTMLElement);
+    expect(result[0].style.overflow).toBe("auto");
+    expect(result[1].style.overflow).toBe("scroll");
   });
 
   it("detects scrollability from overflowX or overflowY alone", () => {

@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import type SelectableTileGroupComponent from "carbon-components-svelte/Tile/SelectableTileGroup.svelte";
 import { type ComponentEvents, type ComponentProps, tick } from "svelte";
+import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import SelectableTileGroupSlot from "./SelectableTileGroup.slot.test.svelte";
 import SelectableTileGroup from "./SelectableTileGroup.test.svelte";
@@ -149,7 +150,7 @@ describe("SelectableTileGroup", () => {
     const { component, container } = render(SelectableTileGroup);
 
     component.selected = ["option2"];
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await flushMacrotask();
 
     const checkboxes = container.querySelectorAll('input[type="checkbox"]');
     expect(checkboxes[0]).not.toBeChecked();
@@ -157,7 +158,7 @@ describe("SelectableTileGroup", () => {
     expect(checkboxes[2]).not.toBeChecked();
 
     component.selected = ["option1", "option3"];
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await flushMacrotask();
 
     expect(checkboxes[0]).toBeChecked();
     expect(checkboxes[1]).not.toBeChecked();

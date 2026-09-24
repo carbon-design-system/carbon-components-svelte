@@ -1,16 +1,12 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
 import { user } from "../utils/user";
+import { getFilteredIds } from "./helpers";
 import ToolbarSearchGenerics from "./ToolbarSearchGenerics.test.svelte";
 
 describe("ToolbarSearch Generics", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
-
-  const getFilteredIds = (testId: string) => {
-    const element = screen.getByTestId(testId);
-    return JSON.parse(element.textContent || "[]");
-  };
 
   describe("String literal IDs with `as const`", () => {
     it("should properly type filteredRowIds as string literal union", async () => {

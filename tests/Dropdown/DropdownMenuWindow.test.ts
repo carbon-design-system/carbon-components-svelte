@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import Dropdown from "./Dropdown.test.svelte";
+import { createItems } from "./helpers";
 
 /**
  * What is left of this component's measured-menu coverage once the behaviour
@@ -30,13 +31,6 @@ const windowed = {
   containerHeight: 200,
 };
 
-function makeItems(count: number) {
-  return Array.from({ length: count }, (_, index) => ({
-    id: String(index),
-    text: `Item ${index + 1}`,
-  }));
-}
-
 function menu() {
   return screen.getByRole("listbox");
 }
@@ -49,7 +43,7 @@ describe("Dropdown menu window wiring", () => {
   it("marks the menu so the option wrap styles reach its options", async () => {
     render(Dropdown, {
       props: {
-        items: makeItems(UNWINDOWED_COUNT),
+        items: createItems(UNWINDOWED_COUNT),
         labelText: "Items",
         wrapOptions: true,
       },
@@ -63,7 +57,7 @@ describe("Dropdown menu window wiring", () => {
   it("marks a portaled menu, which a class on the component root could not reach", async () => {
     render(Dropdown, {
       props: {
-        items: makeItems(UNWINDOWED_COUNT),
+        items: createItems(UNWINDOWED_COUNT),
         labelText: "Items",
         wrapOptions: true,
         portalMenu: true,
@@ -79,7 +73,7 @@ describe("Dropdown menu window wiring", () => {
 
   it("renders the menu as it does today when the prop is not set", async () => {
     render(Dropdown, {
-      props: { items: makeItems(UNWINDOWED_COUNT), labelText: "Items" },
+      props: { items: createItems(UNWINDOWED_COUNT), labelText: "Items" },
     });
 
     await user.click(screen.getByRole("combobox"));
@@ -93,7 +87,7 @@ describe("Dropdown menu window wiring", () => {
   it("puts a list it windows itself on the measured path under the prop", async () => {
     render(Dropdown, {
       props: {
-        items: makeItems(WINDOWED_COUNT),
+        items: createItems(WINDOWED_COUNT),
         labelText: "Items",
         wrapOptions: true,
       },
@@ -109,7 +103,7 @@ describe("Dropdown menu window wiring", () => {
   });
 
   it("marks options with their item index only when wrapping measures them", async () => {
-    const items = makeItems(UNWINDOWED_COUNT);
+    const items = createItems(UNWINDOWED_COUNT);
     const { unmount } = render(Dropdown, {
       props: {
         items,
@@ -147,7 +141,7 @@ describe("Dropdown menu window wiring", () => {
   it("marks options of a measured list too short to window", async () => {
     render(Dropdown, {
       props: {
-        items: makeItems(UNWINDOWED_COUNT),
+        items: createItems(UNWINDOWED_COUNT),
         labelText: "Items",
         virtualize: { ...windowed, threshold: UNWINDOWED_COUNT + 1 },
         wrapOptions: true,

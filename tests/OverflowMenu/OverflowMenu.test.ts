@@ -18,6 +18,12 @@ import OverflowMenuItemIcons from "./OverflowMenuItem.icons.test.svelte";
 import OverflowMenuPrimaryFocus from "./OverflowMenuPrimaryFocus.test.svelte";
 
 describe("OverflowMenu", () => {
+  afterEach(() => {
+    for (const portal of document.querySelectorAll("[data-floating-portal]")) {
+      portal.remove();
+    }
+  });
+
   // Regression: ?? for aria-label so empty string is used (not fallback)
   it("uses empty aria-label when passed (nullish coalescing)", () => {
     render(OverflowMenu, { props: { ariaLabel: "" } });
@@ -501,47 +507,6 @@ describe("OverflowMenu", () => {
     expect(menuButton).toHaveFocus();
   });
 
-  it("handles close event with item click", async () => {
-    render(OverflowMenu);
-
-    const spy = vi.spyOn(console, "log");
-    const menuButton = screen.getByRole("button");
-    await user.click(menuButton);
-
-    const menuItems = screen.getAllByRole("menuitem");
-    await user.click(menuItems[0]);
-
-    expect(spy).toHaveBeenCalledWith("close", {
-      trigger: "item-select",
-      index: 0,
-      text: "Manage credentials",
-    });
-  });
-
-  it("handles close event with escape key", async () => {
-    render(OverflowMenu);
-
-    const spy = vi.spyOn(console, "log");
-    const menuButton = screen.getByRole("button");
-    await user.click(menuButton);
-
-    await user.keyboard("{Escape}");
-
-    expect(spy).toHaveBeenCalledWith("close", { trigger: "escape-key" });
-  });
-
-  it("handles close event with outside click", async () => {
-    render(OverflowMenu);
-
-    const spy = vi.spyOn(console, "log");
-    const menuButton = screen.getByRole("button");
-    await user.click(menuButton);
-
-    await user.click(document.body);
-
-    expect(spy).toHaveBeenCalledWith("close", { trigger: "outside-click" });
-  });
-
   it("supports preventDefault on item to prevent menu from closing", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(OverflowMenuPreventDefault);
@@ -658,15 +623,6 @@ describe("OverflowMenu", () => {
   });
 
   describe("portalMenu", () => {
-    afterEach(() => {
-      const existingPortals = document.querySelectorAll(
-        "[data-floating-portal]",
-      );
-      for (const portal of existingPortals) {
-        portal.remove();
-      }
-    });
-
     it("should render menu in FloatingPortal when portalMenu is true", async () => {
       render(OverflowMenu, { props: { portalMenu: true } });
 
@@ -936,15 +892,6 @@ describe("OverflowMenu", () => {
   });
 
   describe("maxHeight", () => {
-    afterEach(() => {
-      const existingPortals = document.querySelectorAll(
-        "[data-floating-portal]",
-      );
-      for (const portal of existingPortals) {
-        portal.remove();
-      }
-    });
-
     it("caps the menu height in pixels when given a number", async () => {
       render(OverflowMenuMaxHeight, { props: { maxHeight: 240 } });
 

@@ -1,4 +1,5 @@
 import { observeModalClose } from "../../src/Portal/portal-utils.js";
+import { flushMacrotask } from "../utils/flush-macrotask";
 
 describe("observeModalClose", () => {
   it("returns no-op when element has no modal ancestor", () => {
@@ -26,7 +27,7 @@ describe("observeModalClose", () => {
     const disconnect = observeModalClose(element, onClose);
 
     modal.classList.remove("is-visible");
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await flushMacrotask();
 
     expect(onClose).toHaveBeenCalledTimes(1);
     disconnect();
@@ -44,7 +45,7 @@ describe("observeModalClose", () => {
     const disconnect = observeModalClose(element, onClose);
 
     modal.classList.add("some-other-class");
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await flushMacrotask();
     expect(onClose).not.toHaveBeenCalled();
 
     disconnect();
@@ -64,7 +65,7 @@ describe("observeModalClose", () => {
     disconnect();
 
     modal.classList.remove("is-visible");
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await flushMacrotask();
 
     expect(onClose).not.toHaveBeenCalled();
     modal.remove();
