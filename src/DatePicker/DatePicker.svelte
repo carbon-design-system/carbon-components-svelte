@@ -29,6 +29,7 @@
 
   /**
    * Specify the date picker input value.
+   * Follows the inputs when the owning form resets.
    * @type {number | string}
    * @bindable writable
    */
@@ -37,6 +38,7 @@
   /**
    * Specify the date picker start date value (from).
    * Only works with the "range" date picker type.
+   * Follows the inputs when the owning form resets.
    * @type {string}
    * @bindable writable
    */
@@ -45,6 +47,7 @@
   /**
    * Specify the date picker end date value (to).
    * Only works with the "range" date picker type.
+   * Follows the inputs when the owning form resets.
    * @type {string}
    * @bindable writable
    */
@@ -517,6 +520,20 @@
   }
 
   /**
+   * A form reset rewrites the inputs without an input or change event.
+   * Read them back once, so a range updates both ends together.
+   */
+  function syncAfterFormReset() {
+    if (!inputRef) return;
+    if ($range) {
+      inputValueFrom.set(inputRef.value);
+      inputValueTo.set(inputRefTo?.value ?? "");
+    } else {
+      inputValue.set(inputRef.value);
+    }
+  }
+
+  /**
    * Mirrors flatpickr's own `ignoredFocusElements` check so Carbon's
    * outside-click and blur dismissal honor the option too.
    *
@@ -705,6 +722,7 @@
     setValidation,
     declareRef,
     updateValue,
+    syncAfterFormReset,
     blurInput,
     openCalendar,
     focusCalendar,

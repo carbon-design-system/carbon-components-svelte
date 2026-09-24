@@ -71,6 +71,7 @@
   import Calendar from "../icons/Calendar.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const REGEX_SPECIAL_CHARS = /[/\\^$*+?.()|[\]{}]/g;
@@ -87,6 +88,7 @@
     declareRef,
     inputIds,
     updateValue,
+    syncAfterFormReset,
     blurInput,
     openCalendar,
     focusCalendar,
@@ -209,6 +211,7 @@
   >
     <input
       bind:this={ref}
+      use:formReset={syncAfterFormReset}
       data-invalid={showInvalid || undefined}
       aria-invalid={showInvalid || undefined}
       aria-errormessage={showInvalid ? errorId : undefined}
