@@ -58,4 +58,17 @@ test.describe("Form reset", () => {
     );
     await expect(bound).toContainText('"level":77');
   });
+
+  test("a reset button keeps the NumberInput value", async ({ page }) => {
+    const bound = page.getByTestId("bound");
+    const seats = page.getByRole("spinbutton", { name: "Seats" });
+
+    await seats.fill("8");
+    await expect(bound).toContainText('"seats":8');
+
+    await page.getByRole("button", { name: "Reset" }).click();
+
+    await expect(seats).toHaveValue("8");
+    await expect(bound).toContainText('"seats":8');
+  });
 });
