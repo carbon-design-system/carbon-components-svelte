@@ -1,3 +1,19 @@
+<script context="module">
+  /**
+   * First focusable tree item in a subtree `ul` — handles both bare
+   * `li.bx--tree-node` rows and the link variant (`li[role="none"] > a`).
+   * @param {Element} groupUl
+   * @returns {HTMLElement | null}
+   */
+  function firstTreeItemInGroup(groupUl) {
+    const row = groupUl.firstElementChild;
+    if (!(row instanceof HTMLElement)) return null;
+    if (row.classList.contains("bx--tree-node")) return row;
+    const nested = row.querySelector(".bx--tree-node");
+    return nested instanceof HTMLElement ? nested : null;
+  }
+</script>
+
 <script>
   /**
    * @generics {Id extends string | number = string | number, Icon = any} Id,Icon
@@ -49,19 +65,6 @@
   // a DOM wrapper) can only target a `Component`, not `<svelte:self>` — so
   // this recurses via a self-import instead.
   import Self from "./TreeViewNodeList.svelte";
-
-  /**
-   * First focusable tree item in a subtree `ul` — handles both bare
-   * `li.bx--tree-node` rows and the link variant (`li[role="none"] > a`).
-   * @returns {HTMLElement | null}
-   */
-  function firstTreeItemInGroup(groupUl) {
-    const row = groupUl.firstElementChild;
-    if (!(row instanceof HTMLElement)) return null;
-    if (row.classList.contains("bx--tree-node")) return row;
-    const nested = row.querySelector(".bx--tree-node");
-    return nested instanceof HTMLElement ? nested : null;
-  }
 
   let ref = null;
   let refLabel = null;
