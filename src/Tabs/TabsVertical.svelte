@@ -45,7 +45,6 @@
   import { breakpointObserver } from "../Breakpoint/breakpoint-observer.js";
   import ChevronLeft from "../icons/ChevronLeft.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
-  import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import {
     computeScrollOverflow,
     scrollByViewport,
@@ -55,6 +54,7 @@
   import { resolveIdSelection } from "../utils/resolve-id-selection.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { syncDomOrder } from "../utils/sync-dom-order.js";
+  import { createTabsRegistration } from "../utils/tabs-registration.js";
 
   const dispatch = createEventDispatcher();
 
@@ -152,55 +152,29 @@
   //
   // Set needsDomSync inside the batched update. afterUpdate runs once
   // after mount before this flush, while tabs is still [].
-  const batchedTabsUpdate = batchStoreUpdates(tabs);
-  const batchedContentUpdate = batchStoreUpdates(content);
+  const registration = createTabsRegistration({
+    tabs,
+    content,
+    onDomSyncNeeded: () => {
+      needsDomSync = true;
+    },
+  });
 
   /**
-   * @type {(data: { id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean }) => void}
+   * @type {(data: {
+   *   id: string;
+   *   label: string;
+   *   disabled: boolean;
+   *   hasSecondaryLabel: boolean;
+   * }) => void}
    */
-  function add(data) {
-    batchedTabsUpdate((_) => {
-      // `Tab` re-registers when its props change. Check the batched
-      // accumulator, not `$tabsById`: a same-batch registration is not in the
-      // derived store yet. Only an insert needs a DOM-order sync.
-      const index = _.findIndex((tab) => tab.id === data.id);
-      if (index !== -1) {
-        return _.map((tab, i) => (i === index ? { ...tab, ...data } : tab));
-      }
-      needsDomSync = true;
-      return [..._, { ...data, index: _.length }];
-    });
-  }
-
-  /**
-   * @type {(id: string) => void}
-   */
-  function remove(id) {
-    batchedTabsUpdate((_) => {
-      needsDomSync = true;
-      return _.filter((tab) => tab.id !== id);
-    });
-  }
-
-  /**
-   * @type {(data: { id: string }) => void}
-   */
-  function addContent(data) {
-    batchedContentUpdate((_) => {
-      needsDomSync = true;
-      return [..._, { ...data, index: _.length }];
-    });
-  }
-
-  /**
-   * @type {(id: string) => void}
-   */
-  function removeContent(id) {
-    batchedContentUpdate((_) => {
-      needsDomSync = true;
-      return _.filter((item) => item.id !== id);
-    });
-  }
+  const add = registration.add;
+  /** @type {(id: string) => void} */
+  const remove = registration.remove;
+  /** @type {(data: { id: string }) => void} */
+  const addContent = registration.addContent;
+  /** @type {(id: string) => void} */
+  const removeContent = registration.removeContent;
 
   /**
    * @type {(id: string) => void}
