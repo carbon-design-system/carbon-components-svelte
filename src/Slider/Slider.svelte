@@ -115,6 +115,12 @@
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { dismiss } from "../utils/dismiss.js";
+  import {
+    buildFieldIds,
+    resolveStatusDescribedBy,
+    resolveValidationVisibility,
+  } from "../utils/field-status.js";
+  import { clamp } from "../utils/numeric-format.js";
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
   import { resolveSliderMarks } from "../utils/resolve-slider-marks.js";
   import {
@@ -182,12 +188,15 @@
   }
 
   $: labelId = `label-${id}`;
-  $: errorId = `error-${id}`;
-  $: warnId = `warn-${id}`;
+  $: ({ errorId, warnId } = buildFieldIds(id));
   $: inputId = `input-${id}`;
   // Invalid/warn states are suppressed when the slider is disabled or read-only.
-  $: showInvalid = invalid && !disabled && !readonly;
-  $: showWarn = warn && !invalid && !disabled && !readonly;
+  $: ({ showInvalid, showWarn } = resolveValidationVisibility({
+    invalid,
+    warn,
+    disabled,
+    readonly,
+  }));
   $: range = max - min;
   $: left = range === 0 ? 0 : ((value - min) / range) * 100;
   $: resolvedMarks = resolveSliderMarks(marks, min, max, step);
@@ -195,11 +204,7 @@
     (mark) => mark.label != null && mark.label !== "",
   );
   $: {
-    if (value < min) {
-      value = min;
-    } else if (value > max) {
-      value = max;
-    }
+    value = clamp(value, min, max);
 
     if (dragging && currentEvent) {
       calcValue(currentEvent);
@@ -266,11 +271,12 @@
         aria-valuenow={value}
         aria-valuetext={getValueText(value)}
         aria-labelledby={labelId}
-        aria-describedby={showInvalid
-          ? errorId
-          : showWarn
-            ? warnId
-            : undefined}
+        aria-describedby={resolveStatusDescribedBy({
+          showInvalid,
+          showWarn,
+          errorId,
+          warnId,
+        })}
         aria-invalid={showInvalid || undefined}
         {id}
         on:keydown={(event) => {
@@ -375,11 +381,12 @@
         data-invalid={showInvalid || null}
         data-warn={showWarn || null}
         aria-invalid={showInvalid || null}
-        aria-describedby={showInvalid
-          ? errorId
-          : showWarn
-            ? warnId
-            : undefined}
+        aria-describedby={resolveStatusDescribedBy({
+          showInvalid,
+          showWarn,
+          errorId,
+          warnId,
+        })}
         on:focus
         on:focus={handleTextInputFocus}
         on:blur
