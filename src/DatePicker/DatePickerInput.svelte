@@ -88,7 +88,7 @@
     declareRef,
     inputIds,
     updateValue,
-    syncAfterFormReset,
+    handleFormReset,
     blurInput,
     openCalendar,
     focusCalendar,
@@ -182,6 +182,16 @@
       tick().then(() => ref?.select());
     }
   }
+
+  /**
+   * Range mode has two DatePickerInputs sharing one reset handler. Attach
+   * only to whichever declared itself first (the same check `declareRef`
+   * uses to split `inputRef` from `inputRefTo`), so the restore runs once.
+   */
+  function attachFormReset(node, onReset) {
+    if ($inputIds.indexOf(id) !== 0) return {};
+    return formReset(node, onReset);
+  }
 </script>
 
 <div
@@ -211,7 +221,7 @@
   >
     <input
       bind:this={ref}
-      use:formReset={syncAfterFormReset}
+      use:attachFormReset={handleFormReset}
       data-invalid={showInvalid || undefined}
       aria-invalid={showInvalid || undefined}
       aria-errormessage={showInvalid ? errorId : undefined}

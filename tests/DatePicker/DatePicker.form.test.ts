@@ -1,123 +1,160 @@
-import { render, screen } from "@testing-library/svelte";
-import type { Instance } from "flatpickr/dist/types/instance";
-import { user } from "../utils/user";
+import { fireEvent, render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
 import DatePickerForm from "./DatePicker.form.test.svelte";
 
 const getForm = () => screen.getByTestId("form") as HTMLFormElement;
-const getBound = () => screen.getByTestId("bound").textContent;
+const getValue = () => screen.getByTestId("value").textContent;
+const getValueFrom = () => screen.getByTestId("valueFrom").textContent;
+const getValueTo = () => screen.getByTestId("valueTo").textContent;
 /** The reset sync runs on the next task. */
 const flush = () => new Promise((resolve) => setTimeout(resolve));
 
-function renderWithCalendar(props: Record<string, unknown> = {}) {
-  let calendar: Instance | null = null;
-  render(DatePickerForm, {
-    props: {
-      ...props,
-      oncalendar: (cal: Instance | null | undefined) => {
-        calendar = cal ?? null;
-      },
-    },
-  });
-  return () =>
-    vi.waitFor(() => {
-      if (!calendar) throw new Error("calendar not set");
-      return calendar;
-    });
-}
-
-async function pickFirstDay() {
-  await user.click(screen.getByLabelText("Date"));
-  const calendar = await screen.findByLabelText("calendar-container");
-  const day = calendar.querySelector<HTMLElement>(
-    ".flatpickr-day:not(.prevMonthDay):not(.nextMonthDay):not(.selected)",
-  );
-  if (!day) throw new Error("expected a selectable day");
-  await user.click(day);
+// Let the component's own pending re-render (triggered by `input`/`change`)
+// settle before a subsequent `form.reset()`, the same way an `await
+// user.type(...)` naturally would; otherwise that pending write can land
+// after the browser's native reset and reintroduce the edited text.
+async function editInput(input: HTMLElement, value: string) {
+  fireEvent.input(input, { target: { value } });
+  fireEvent.change(input, { target: { value } });
+  await tick();
 }
 
 describe("DatePicker form reset", () => {
-  it("clears the bound value and the selection", async () => {
-    const getCalendar = renderWithCalendar();
-    const calendar = await getCalendar();
-    await pickFirstDay();
-    const input = screen.getByLabelText("Date");
-    expect(getBound()).not.toBe("||");
+  describe("simple mode", () => {
+    it("resyncs the bound value after editing then resetting", async () => {
+      render(DatePickerForm, { props: { value: "2024-01-01" } });
+      const input = screen.getByLabelText("Start date") as HTMLInputElement;
 
-    getForm().reset();
-    await flush();
+      await editInput(input, "2024-06-15");
+      getForm().reset();
+      await flush();
 
-    expect(input).toHaveValue("");
-    expect(getBound()).toBe("||");
-    expect(calendar.selectedDates).toEqual([]);
-    expect(new FormData(getForm()).get("date")).toBe("");
-  });
-
-  it("clears both ends of a range", async () => {
-    const getCalendar = renderWithCalendar({
-      datePickerType: "range",
-      valueFrom: "01/10/2024",
-      valueTo: "01/20/2024",
+      expect(input).toHaveValue("");
+      expect(getValue()).toBe("");
+      expect(new FormData(getForm()).get("tripStart")).toBe("");
     });
-    const calendar = await getCalendar();
-    expect(calendar.selectedDates).toHaveLength(2);
 
-    getForm().reset();
-    await flush();
+    it("clears an untouched, non-empty client value, like a native input", async () => {
+      render(DatePickerForm, { props: { value: "2024-01-01" } });
+      const input = screen.getByLabelText("Start date") as HTMLInputElement;
 
-    expect(screen.getByLabelText("Start")).toHaveValue("");
-    expect(screen.getByLabelText("End")).toHaveValue("");
-    expect(getBound()).toBe("||");
-    expect(calendar.selectedDates).toEqual([]);
+      getForm().reset();
+      await flush();
+
+      expect(input).toHaveValue("");
+      expect(getValue()).toBe("");
+    });
+
+    it("follows the field's default value, as with server-rendered markup", async () => {
+      render(DatePickerForm, { props: { value: "2024-01-01" } });
+      const input = screen.getByLabelText("Start date") as HTMLInputElement;
+      // Server-rendered markup carries the value as the `value` attribute.
+      input.defaultValue = "2024-01-01";
+
+      await editInput(input, "2024-06-15");
+      getForm().reset();
+      await flush();
+
+      expect(input).toHaveValue("2024-01-01");
+      expect(getValue()).toBe("2024-01-01");
+    });
+
+    it("resets an empty initial value back to empty", async () => {
+      render(DatePickerForm, { props: { value: "" } });
+      const input = screen.getByLabelText("Start date") as HTMLInputElement;
+
+      await editInput(input, "2024-06-15");
+      getForm().reset();
+      await flush();
+
+      expect(input).toHaveValue("");
+      expect(getValue()).toBe("");
+      expect(new FormData(getForm()).get("tripStart")).toBe("");
+    });
   });
 
-  it("clears a simple field", async () => {
-    render(DatePickerForm, { props: { datePickerType: "simple" } });
+  describe("range mode", () => {
+    it("clears both sides after both are edited", async () => {
+      render(DatePickerForm, {
+        props: {
+          datePickerType: "range",
+          valueFrom: "2024-03-15",
+          valueTo: "2024-03-20",
+        },
+      });
+      const start = screen.getByLabelText("Start date") as HTMLInputElement;
+      const end = screen.getByLabelText("End date") as HTMLInputElement;
 
-    await user.type(screen.getByLabelText("Date"), "01/15/2024");
-    getForm().reset();
-    await flush();
+      await editInput(start, "2024-04-01");
+      await editInput(end, "2024-04-10");
+      getForm().reset();
+      await flush();
 
-    expect(getBound()).toBe("||");
-  });
+      expect(start).toHaveValue("");
+      expect(end).toHaveValue("");
+      expect(getValueFrom()).toBe("");
+      expect(getValueTo()).toBe("");
+      expect(new FormData(getForm()).get("tripStart")).toBe("");
+      expect(new FormData(getForm()).get("tripEnd")).toBe("");
+    });
 
-  it("follows the field's default value, as with server-rendered markup", async () => {
-    const getCalendar = renderWithCalendar({ value: "01/15/2024" });
-    const calendar = await getCalendar();
-    const input = screen.getByLabelText("Date") as HTMLInputElement;
-    // Server-rendered markup carries the value as the `value` attribute.
-    input.defaultValue = "01/15/2024";
-    await pickFirstDay();
-    expect(getBound()).not.toBe("01/15/2024||");
+    it("clears both sides even when only one was edited", async () => {
+      render(DatePickerForm, {
+        props: {
+          datePickerType: "range",
+          valueFrom: "2024-03-15",
+          valueTo: "2024-03-20",
+        },
+      });
+      const start = screen.getByLabelText("Start date") as HTMLInputElement;
+      const end = screen.getByLabelText("End date") as HTMLInputElement;
 
-    getForm().reset();
-    await flush();
+      await editInput(end, "2024-04-10");
+      getForm().reset();
+      await flush();
 
-    expect(input).toHaveValue("01/15/2024");
-    expect(getBound()).toBe("01/15/2024||");
-    expect(calendar.selectedDates.map((date) => date.getTime())).toEqual([
-      new Date(2024, 0, 15).getTime(),
-    ]);
+      expect(start).toHaveValue("");
+      expect(end).toHaveValue("");
+      expect(getValueFrom()).toBe("");
+      expect(getValueTo()).toBe("");
+    });
+
+    it("resets empty initial values back to empty on both sides", async () => {
+      render(DatePickerForm, {
+        props: { datePickerType: "range", valueFrom: "", valueTo: "" },
+      });
+      const start = screen.getByLabelText("Start date") as HTMLInputElement;
+      const end = screen.getByLabelText("End date") as HTMLInputElement;
+
+      await editInput(start, "2024-04-01");
+      await editInput(end, "2024-04-10");
+      getForm().reset();
+      await flush();
+
+      expect(start).toHaveValue("");
+      expect(end).toHaveValue("");
+    });
   });
 
   it("leaves everything alone when the reset is canceled", async () => {
-    const getCalendar = renderWithCalendar();
-    const calendar = await getCalendar();
+    render(DatePickerForm, { props: { value: "2024-01-01" } });
+    const input = screen.getByLabelText("Start date") as HTMLInputElement;
     getForm().addEventListener("reset", (event) => event.preventDefault());
-    await pickFirstDay();
-    const bound = getBound();
 
+    await editInput(input, "2024-06-15");
     getForm().reset();
     await flush();
 
-    expect(getBound()).toBe(bound);
-    expect(calendar.selectedDates).toHaveLength(1);
+    expect(input).toHaveValue("2024-06-15");
+    expect(getValue()).toBe("2024-06-15");
   });
 
   it("does not dispatch change on reset", async () => {
     const onChange = vi.fn();
-    const getCalendar = renderWithCalendar({ onChange });
-    await getCalendar();
-    await pickFirstDay();
+    render(DatePickerForm, { props: { value: "2024-01-01", onChange } });
+    const input = screen.getByLabelText("Start date") as HTMLInputElement;
+
+    await editInput(input, "2024-06-15");
     onChange.mockClear();
 
     getForm().reset();

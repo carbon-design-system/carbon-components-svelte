@@ -520,17 +520,51 @@
   }
 
   /**
-   * A form reset rewrites the inputs without an input or change event.
-   * Read them back once, so a range updates both ends together.
+   * A form reset restores each input's DOM value without firing any event,
+   * and flatpickr's own `selectedDates` (and any `altInput` text) are
+   * untouched by the browser entirely — neither the input DOM value change
+   * nor the calendar-internal state gets pushed anywhere on its own. Read
+   * what the browser just put in the DOM (not a value captured at creation,
+   * so a value a parent sets after mount is never discarded), and push it
+   * through `calendar.setDate(...)`, the same call `afterUpdate` already
+   * uses for every other externally-set value change.
    */
-  function syncAfterFormReset() {
-    if (!inputRef) return;
+  function handleFormReset() {
     if ($range) {
-      inputValueFrom.set(inputRef.value);
-      inputValueTo.set(inputRefTo?.value ?? "");
-    } else {
-      inputValue.set(inputRef.value);
+      const nextFrom = inputRef?.value ?? "";
+      const nextTo = inputRefTo?.value ?? "";
+      inputValueFrom.set(nextFrom);
+      inputValueTo.set(nextTo);
+      // Pre-set so afterUpdate's own diff doesn't fire a second, redundant
+      // calendar.setDate right after this one.
+      prevValueFrom = nextFrom;
+      prevValueTo = nextTo;
+      if (calendar) calendar.setDate([nextFrom, nextTo]);
+      // calendar.setDate(["", ""]) only clears the FIRST input (a range
+      // plugin quirk) — write both back explicitly and unconditionally,
+      // even when the target is "".
+      if (inputRef) inputRef.value = nextFrom;
+      if (inputRefTo) inputRefTo.value = nextTo;
+      return;
     }
+
+    // usesDisplayFormat's altInput is the only element a native reset
+    // actually restores in that mode: a plain flatpickr-generated text
+    // input that never gets a `value` attribute or `defaultValue`, so it
+    // always resets to "". The underlying NAMED input, which flatpickr
+    // turns `type="hidden"`, is never touched by a native reset at all —
+    // browsers skip hidden inputs entirely — so reading `inputRef.value`
+    // here would read the stale, pre-reset text back in instead.
+    const next = calendar?.altInput
+      ? calendar.altInput.value
+      : (inputRef?.value ?? "");
+    inputValue.set(next);
+    prevValue = next;
+    // calendar.setDate's own updateValue() writes both self.input.value
+    // (== inputRef, including the hidden named input in displayFormat mode)
+    // and self.altInput.value, so — unlike the range branch above — no
+    // extra manual DOM write is needed here.
+    if (calendar) calendar.setDate(next);
   }
 
   /**
@@ -740,7 +774,7 @@
     setValidation,
     declareRef,
     updateValue,
-    syncAfterFormReset,
+    handleFormReset,
     blurInput,
     openCalendar,
     focusCalendar,
