@@ -91,6 +91,7 @@
   import ChevronDown from "../icons/ChevronDown.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import {
     buildFieldIds,
     resolveStatusDescribedBy,
@@ -107,6 +108,10 @@
   const defaultSelectId = writable(null);
   const defaultValue = writable(null);
   const itemTypesByValue = writable({});
+  // Every `SelectItem` registers itself from its own script body during the
+  // same synchronous mount pass; batch those updates into one flush instead
+  // of notifying subscribers once per item.
+  const batchedItemTypesUpdate = batchStoreUpdates(itemTypesByValue);
 
   /**
    * Use the first `SelectItem` value as the
@@ -123,7 +128,7 @@
       }
     }
 
-    itemTypesByValue.update((types) => ({
+    batchedItemTypesUpdate((types) => ({
       ...types,
       [value]: typeof value,
     }));
