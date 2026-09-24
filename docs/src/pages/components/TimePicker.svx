@@ -265,11 +265,11 @@ Invalid and warning states are not displayed while the time picker is read-only.
 
 <div style:width="350px">
   <TimePicker fluid readonly warn warnText="The selected standup time is outside business hours" labelText="Standup time" placeholder="hh:mm" value="10:30">
-    <TimePickerSelect labelText="Period" readonly value="am">
+    <TimePickerSelect labelText="Period" value="am">
       <SelectItem value="am" text="AM" />
       <SelectItem value="pm" text="PM" />
     </TimePickerSelect>
-    <TimePickerSelect labelText="Timezone" readonly value="et">
+    <TimePickerSelect labelText="Timezone" value="et">
       <SelectItem value="et" text="Eastern Time (ET)" />
       <SelectItem value="pt" text="Pacific Time (PT)" />
     </TimePickerSelect>
@@ -371,14 +371,14 @@ Disable the time picker with `disabled`.
 
 ### Read-only
 
-Set `readonly` to display a value while preventing edits. Unlike disabled, the input stays focusable and its value is submitted with the form. Period and timezone selectors accept the same flag so all fields match.
+Set `readonly` to display a value while preventing edits. Unlike disabled, the input stays focusable and its value is submitted with the form. Period and timezone selectors inherit it.
 
 <TimePicker readonly labelText="Cron job" placeholder="hh:mm" value="10:30">
-  <TimePickerSelect readonly value="pm">
+  <TimePickerSelect value="pm">
     <SelectItem value="am" text="AM" />
     <SelectItem value="pm" text="PM" />
   </TimePickerSelect>
-  <TimePickerSelect readonly value="pdt">
+  <TimePickerSelect value="pdt">
     <SelectItem value="pdt" text="PDT" />
     <SelectItem value="gmt" text="GMT" />
   </TimePickerSelect>

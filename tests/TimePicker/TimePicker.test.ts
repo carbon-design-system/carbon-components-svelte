@@ -391,6 +391,49 @@ describe("TimePicker", () => {
     container.remove();
   });
 
+  describe("inherited readonly", () => {
+    it("makes the selects read-only with the time picker", async () => {
+      render(TimePicker, { props: { readonly: true } });
+
+      const selects = screen.getAllByRole("combobox");
+      for (const select of selects) {
+        expect(select).toHaveAttribute("aria-readonly", "true");
+        expect(select.closest(".bx--time-picker__select")).toHaveClass(
+          "bx--select--readonly",
+        );
+      }
+
+      const [select] = selects;
+      assert.instanceOf(select, HTMLSelectElement);
+      const initialValue = select.value;
+      await user.click(select);
+      await user.keyboard("{ArrowDown}");
+      expect(select.value).toBe(initialValue);
+    });
+
+    it("makes the fluid selects read-only with the time picker", () => {
+      render(TimePicker, { props: { readonly: true, fluid: true } });
+
+      for (const select of screen.getAllByRole("combobox")) {
+        expect(select).toHaveAttribute("aria-readonly", "true");
+      }
+    });
+
+    it("leaves the selects editable by default", () => {
+      render(TimePicker);
+
+      for (const select of screen.getAllByRole("combobox")) {
+        expect(select).not.toHaveAttribute("aria-readonly");
+      }
+    });
+
+    it("renders a standalone select without a parent", () => {
+      render(TimePickerSelectEvents);
+
+      expect(screen.getByRole("combobox")).not.toHaveAttribute("aria-readonly");
+    });
+  });
+
   it("keeps a read-only select closed on Alt+Down", async () => {
     render(TimePickerCustom, { props: { selectReadonly: true } });
 
