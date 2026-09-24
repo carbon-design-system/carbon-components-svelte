@@ -1,3 +1,36 @@
+<script context="module">
+  /**
+   * @typedef {import("svelte/action").Action<HTMLFormElement, any>} FormAction
+   * @typedef {FormAction | [FormAction, any]} FormActionEntry
+   */
+
+  /**
+   * @param {HTMLFormElement} node
+   * @param {ReadonlyArray<FormActionEntry>} entries
+   * @returns {() => void}
+   */
+  function applyActions(node, entries) {
+    /** @type {Array<() => void>} */
+    const destroyers = [];
+
+    for (const entry of entries) {
+      const isTuple = Array.isArray(entry);
+      const action = isTuple ? entry[0] : entry;
+      const result = isTuple ? action(node, entry[1]) : action(node);
+
+      if (result && typeof result.destroy === "function") {
+        destroyers.push(result.destroy);
+      }
+    }
+
+    return () => {
+      for (const destroy of destroyers) {
+        destroy();
+      }
+    };
+  }
+</script>
+
 <script>
   /**
    * @restProps {form}
@@ -22,27 +55,6 @@
   export let actions = [];
 
   import { onMount } from "svelte";
-
-  function applyActions(node, entries) {
-    /** @type {Array<() => void>} */
-    const destroyers = [];
-
-    for (const entry of entries) {
-      const isTuple = Array.isArray(entry);
-      const action = isTuple ? entry[0] : entry;
-      const result = isTuple ? action(node, entry[1]) : action(node);
-
-      if (result && typeof result.destroy === "function") {
-        destroyers.push(result.destroy);
-      }
-    }
-
-    return () => {
-      for (const destroy of destroyers) {
-        destroy();
-      }
-    };
-  }
 
   onMount(() => {
     if (!ref || actions.length === 0) return;
