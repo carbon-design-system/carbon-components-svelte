@@ -578,6 +578,23 @@
   }
 
   /**
+   * flatpickr keeps `selectedDateElem` and `todayDateElem` after a redraw
+   * replaces them (a month change), and sets `todayDateElem` even when
+   * today is disabled, which is not focusable. Same test as flatpickr's own
+   * `isInView`, against the whole container so month and year cells count.
+   *
+   * @param {HTMLElement | undefined} elem
+   */
+  function isFocusableDay(elem) {
+    return (
+      !!elem &&
+      calendar.calendarContainer.contains(elem) &&
+      !elem.classList.contains("hidden") &&
+      !elem.classList.contains("flatpickr-disabled")
+    );
+  }
+
+  /**
    * Returns `false` when there is no calendar to focus (simple mode, or a
    * failed or pending flatpickr init).
    * @type {() => boolean}
@@ -591,8 +608,9 @@
       calendar.open();
     }
     (
-      calendar.selectedDateElem ||
-      calendar.todayDateElem ||
+      [calendar.selectedDateElem, calendar.todayDateElem].find(
+        isFocusableDay,
+      ) ||
       calendar.calendarContainer.querySelector(".flatpickr-day[tabindex]") ||
       calendar.calendarContainer
     ).focus();
