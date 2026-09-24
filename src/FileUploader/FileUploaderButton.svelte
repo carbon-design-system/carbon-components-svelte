@@ -104,6 +104,7 @@
 
   import { createEventDispatcher } from "svelte";
   import { filterIncomingFiles } from "../utils/filter-incoming-files.js";
+  import { syncInputFiles } from "../utils/sync-input-files.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -121,21 +122,8 @@
   };
 
   $: if (ref && files !== undefined) {
-    if (files.length === 0) {
-      labelText = initialLabelText;
-      ref.value = "";
-    }
-
-    // Sync input files with component files array.
-    try {
-      const dt = new DataTransfer();
-      for (const file of files) {
-        dt.items.add(file);
-      }
-      ref.files = dt.files;
-    } catch {
-      // Fail open if DataTransfer API is not supported.
-    }
+    if (files.length === 0) labelText = initialLabelText;
+    syncInputFiles(ref, files);
   }
   /** @param {ReadonlyArray<File>} incoming */
   function processIncoming(incoming) {
@@ -231,5 +219,10 @@
   on:click
   on:click={(event) => {
     event.target.value = "";
+  }}
+  on:cancel={() => {
+    // The click cleared the input so the same file can be picked again; a
+    // dismissed picker fires no change, so put the current files back.
+    if (ref) syncInputFiles(ref, files);
   }}
 >
