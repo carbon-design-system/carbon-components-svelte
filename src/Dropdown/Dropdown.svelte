@@ -82,7 +82,7 @@
   /** Set to `true` to disable the dropdown */
   export let disabled = false;
 
-  /** Specify the title text */
+  /** Specify the label text */
   export let labelText = "";
 
   /** Set to `true` to indicate an invalid state */
