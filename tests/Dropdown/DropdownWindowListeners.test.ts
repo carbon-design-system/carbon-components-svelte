@@ -1,5 +1,5 @@
 import { render } from "@testing-library/svelte";
-import { flushDismiss } from "../utils/flushDismiss";
+import { flushDismiss } from "../utils/flush-dismiss";
 import Dropdown from "./Dropdown.test.svelte";
 
 const netClick = (

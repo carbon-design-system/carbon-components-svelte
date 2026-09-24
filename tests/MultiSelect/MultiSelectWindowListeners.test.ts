@@ -1,5 +1,5 @@
 import { render } from "@testing-library/svelte";
-import { flushDismiss } from "../utils/flushDismiss";
+import { flushDismiss } from "../utils/flush-dismiss";
 import MultiSelect from "./MultiSelect.test.svelte";
 
 const net = (

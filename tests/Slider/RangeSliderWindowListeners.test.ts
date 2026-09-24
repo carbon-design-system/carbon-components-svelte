@@ -1,5 +1,5 @@
 import { fireEvent, render } from "@testing-library/svelte";
-import { flushDismiss } from "../utils/flushDismiss";
+import { flushDismiss } from "../utils/flush-dismiss";
 import RangeSlider from "./RangeSlider.test.svelte";
 
 const net = (

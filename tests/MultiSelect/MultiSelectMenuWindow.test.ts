@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
-import { stubPerOptionResizeObserver } from "../utils/stubPerOptionResizeObserver";
+import { stubPerOptionResizeObserver } from "../utils/stub-per-option-resize-observer";
 import { user } from "../utils/user";
 import MultiSelect from "./MultiSelect.test.svelte";
 import MeasuredMultiSelect from "./MultiSelectMeasured.test.svelte";

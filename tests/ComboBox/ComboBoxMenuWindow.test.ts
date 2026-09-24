@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
-import { stubPerOptionResizeObserver } from "../utils/stubPerOptionResizeObserver";
+import { stubPerOptionResizeObserver } from "../utils/stub-per-option-resize-observer";
 import { user } from "../utils/user";
 import ComboBox from "./ComboBox.test.svelte";
 import MeasuredComboBox from "./ComboBoxMeasured.test.svelte";
