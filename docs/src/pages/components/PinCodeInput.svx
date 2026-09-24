@@ -212,6 +212,12 @@ Set `readonly` to `true` to display a code that cannot be edited.
 
 <PinCodeInput readonly value="0182" labelText="Verification code" />
 
+### Loading
+
+Set `loading` to `true` while the code is being verified. A spinner appears after the segments and edits are blocked, but the segments stay enabled so focus does not move. Set `loadingDescription` to change the spinner's accessible description.
+
+<PinCodeInput loading value="0182" labelText="Verification code" />
+
 ## Skeleton
 
 Show a loading state with the default skeleton variant.

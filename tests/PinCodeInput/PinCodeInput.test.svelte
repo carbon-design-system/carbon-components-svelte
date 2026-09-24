@@ -14,6 +14,9 @@
   export let complete: ComponentProps<PinCodeInput>["complete"] = false;
   export let disabled: ComponentProps<PinCodeInput>["disabled"] = false;
   export let readonly: ComponentProps<PinCodeInput>["readonly"] = false;
+  export let loading: ComponentProps<PinCodeInput>["loading"] = false;
+  export let loadingDescription: ComponentProps<PinCodeInput>["loadingDescription"] =
+    "Verifying code";
   export let invalid: ComponentProps<PinCodeInput>["invalid"] = false;
   export let invalidText: ComponentProps<PinCodeInput>["invalidText"] = "";
   export let warn: ComponentProps<PinCodeInput>["warn"] = false;
@@ -46,6 +49,8 @@
   {uppercase}
   {disabled}
   {readonly}
+  {loading}
+  {loadingDescription}
   {invalid}
   {invalidText}
   {warn}

@@ -141,6 +141,18 @@
   export let readonly = false;
 
   /**
+   * Set to `true` while the code is being verified.
+   *
+   * Shows a small spinner after the segments and sets `aria-busy` on the
+   * fieldset. Edits are blocked, but the segments stay enabled so focus does
+   * not move. Invalid and warning states are hidden while loading.
+   */
+  export let loading = false;
+
+  /** Specify the accessible description of the loading spinner */
+  export let loadingDescription = "Verifying code";
+
+  /**
    * Set to `true` to use the fluid variant.
    * Inherited from the parent `FluidForm` context,
    * so it does not need to be set when used inside `FluidForm`.
@@ -185,6 +197,7 @@
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import Loading from "../Loading/Loading.svelte";
   import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -228,8 +241,10 @@
   $: complete = count > 0 && code.length === count && code.every(Boolean);
   // Validation states are suppressed in the read-only and disabled variants,
   // matching the other Carbon inputs.
-  $: hasError = invalid && !readonly && !disabled;
-  $: hasWarn = warn && !hasError && !readonly && !disabled;
+  $: hasError = invalid && !readonly && !disabled && !loading;
+  $: hasWarn = warn && !hasError && !readonly && !disabled && !loading;
+  // Edits are blocked while read-only, disabled, or verifying.
+  $: locked = readonly || disabled || loading;
   $: isFluid = fluid || !!formContext?.isFluid;
   $: segmentPlaceholder =
     placeholder === undefined ? (isFluid ? "–" : "") : placeholder;
@@ -324,7 +339,7 @@
   /** @type {(index: number, event: Event) => void} */
   function handleInput(index, event) {
     const input = /** @type {HTMLInputElement} */ (event.target);
-    if (readonly || disabled) {
+    if (locked) {
       input.value = code[index] ?? "";
       return;
     }
@@ -355,7 +370,7 @@
   function handleKeydown(index, event) {
     switch (event.key) {
       case "Backspace":
-        if (readonly || disabled) break;
+        if (locked) break;
         if (!code[index] && index > 0) {
           event.preventDefault();
           setChar(index - 1, "");
@@ -375,11 +390,11 @@
         }
         break;
       case "Delete":
-        if (readonly || disabled || !code[index]) break;
+        if (locked || !code[index]) break;
         setChar(index, "");
         break;
       default:
-        if (readonly || disabled) break;
+        if (locked) break;
         // maxlength="1" drops keystrokes into a filled segment; select its
         // content so the native insertion replaces the character.
         if (
@@ -402,7 +417,7 @@
   /** @type {(index: number, event: ClipboardEvent) => void} */
   function handlePaste(index, event) {
     event.preventDefault();
-    if (readonly || disabled) return;
+    if (locked) return;
     const text = (event.clipboardData?.getData("text") ?? "").replace(
       /\s/g,
       "",
@@ -516,6 +531,7 @@
     class:bx--pin-code-input__fieldset={true}
     {disabled}
     aria-describedby={describedById}
+    aria-busy={loading || undefined}
   >
     {#if labelText || $$slots.labelChildren}
       <!-- svelte-ignore a11y_no_noninteractive_tabindex a11y_no_noninteractive_element_interactions -->
@@ -557,9 +573,9 @@
             placeholder={segmentPlaceholder || undefined}
             id={index === 0 ? id : `${id}-${index}`}
             {disabled}
-            {readonly}
+            readonly={readonly || loading}
             {required}
-            aria-readonly={readonly || undefined}
+            aria-readonly={readonly || loading || undefined}
             aria-label={segmentLabelText(index + 1, count, labelText, type)}
             aria-invalid={hasError || undefined}
             data-invalid={hasError || undefined}
@@ -580,6 +596,14 @@
             on:focus={handleFocus}
           >
         {/each}
+        {#if loading}
+          <Loading
+            small
+            withOverlay={false}
+            description={loadingDescription}
+            class="bx--pin-code-input__loading"
+          />
+        {/if}
         {#if !isFluid}
           {#if hasError}
             <WarningFilled class="bx--pin-code-input__icon" />

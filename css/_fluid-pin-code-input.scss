@@ -156,6 +156,11 @@
     border-block-end: 1px solid transparent;
   }
 
+  // The segment row aligns to the bottom; center the spinner on the segments.
+  .#{$prefix}--pin-code-input--fluid .#{$prefix}--pin-code-input__loading {
+    align-self: center;
+  }
+
   .#{$prefix}--pin-code-input--fluid .#{$prefix}--pin-code-input__message {
     position: relative;
   }

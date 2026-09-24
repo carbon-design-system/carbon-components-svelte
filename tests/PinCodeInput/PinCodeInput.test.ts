@@ -1003,6 +1003,79 @@ describe("PinCodeInput", () => {
     }
   });
 
+  describe("loading", () => {
+    it("shows a spinner and marks the fieldset busy", async () => {
+      const { container } = render(PinCodeInput, { props: { loading: true } });
+
+      expect(await screen.findByTitle("Verifying code")).toBeInTheDocument();
+      expect(
+        container.querySelector(".bx--pin-code-input__loading"),
+      ).toBeInTheDocument();
+      expect(getFieldset(container)).toHaveAttribute("aria-busy", "true");
+    });
+
+    it("uses a custom loading description", async () => {
+      render(PinCodeInput, {
+        props: { loading: true, loadingDescription: "Checking" },
+      });
+
+      expect(await screen.findByTitle("Checking")).toBeInTheDocument();
+    });
+
+    it("keeps focus and leaves the segments enabled", async () => {
+      const { component } = render(PinCodeInput);
+      const inputs = getInputs();
+
+      inputs[1].focus();
+      component.loading = true;
+      await tick();
+
+      expect(inputs[1]).toHaveFocus();
+      for (const input of inputs) {
+        expect(input).not.toBeDisabled();
+        expect(input).toHaveAttribute("readonly");
+      }
+    });
+
+    it("blocks typing, paste, and backspace", async () => {
+      const { component } = render(PinCodeInput, {
+        props: { loading: true, value: "12" },
+      });
+      const inputs = getInputs();
+
+      inputs[2].focus();
+      await user.keyboard("3");
+      await fireEvent.paste(inputs[2], {
+        clipboardData: { getData: () => "9999" },
+      });
+      inputs[1].focus();
+      await user.keyboard("{Backspace}");
+      await tick();
+
+      expect(component.code).toEqual(["1", "2", "", ""]);
+    });
+
+    it("hides the invalid state while loading", () => {
+      const { container } = render(PinCodeInput, {
+        props: { loading: true, invalid: true, invalidText: "Wrong" },
+      });
+
+      expect(getRequirement(container)).not.toBeInTheDocument();
+      for (const input of getInputs()) {
+        expect(input).not.toHaveAttribute("aria-invalid");
+      }
+    });
+
+    it("is off by default", () => {
+      const { container } = render(PinCodeInput);
+
+      expect(
+        container.querySelector(".bx--pin-code-input__loading"),
+      ).not.toBeInTheDocument();
+      expect(getFieldset(container)).not.toHaveAttribute("aria-busy");
+    });
+  });
+
   it("does not allow edits in the read-only state", async () => {
     const { component } = render(PinCodeInput, {
       props: { readonly: true, value: "0182" },
