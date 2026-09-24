@@ -10,7 +10,7 @@ description: Date pickers collect dates through simple typed fields, single cale
 
 ## Calendar types
 
-DatePicker supports six `datePickerType` values: `"simple"` (default, no calendar), `"single"`, `"multiple"`, `"range"`, `"month"`, and `"year"`.
+DatePicker supports seven `datePickerType` values: `"simple"` (default, no calendar), `"single"`, `"multiple"`, `"range"`, `"month"`, `"year"`, and `"week"`.
 
 ### Simple
 
@@ -59,6 +59,12 @@ Pass a numeric `dateFormat`, such as `"Y-m"`, along with a matching `placeholder
 Set `datePickerType` to `"year"` to select a year instead of a day. The calendar shows a decade grid; use the prev/next controls to move between decades. Pair it with a year-only `dateFormat` such as `"Y"` (for example, "2026").
 
 <FileSource src="/framed/DatePicker/DatePickerYear" />
+
+### Week
+
+Set `datePickerType` to `"week"` to select a whole week. Picking any day selects the first day of its week, per the locale, so `value` is that date in `dateFormat`. Pair it with a `displayFormat` that uses the `W` token, such as `"\\W\\e\\e\\k W, Y"`, to show the week number; it is the ISO week of the days the row shows. A `value` set from outside is kept as given. Multiple months (`showMonths`) are not supported.
+
+<FileSource src="/framed/DatePicker/DatePickerWeek" />
 
 ### Inline calendar
 
