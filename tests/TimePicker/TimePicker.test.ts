@@ -394,7 +394,7 @@ describe("TimePicker", () => {
     container.remove();
   });
 
-  describe("inherited readonly", () => {
+  describe("inherited readonly and disabled", () => {
     it.each([{ fluid: false }, { fluid: true }])(
       "makes the selects read-only with the time picker (%o)",
       ({ fluid }) => {
@@ -416,18 +416,40 @@ describe("TimePicker", () => {
       expect(await fireEvent.keyDown(select, { key: "ArrowDown" })).toBe(false);
     });
 
-    it("leaves the selects editable by default", () => {
+    it("leaves the selects editable and enabled by default", () => {
       render(TimePicker);
 
       for (const select of screen.getAllByRole("combobox")) {
         expect(select).not.toHaveAttribute("aria-readonly");
+        expect(select).toBeEnabled();
       }
     });
 
-    it("leaves a standalone select editable", () => {
+    it("leaves a standalone select editable and enabled", () => {
       render(TimePickerSelectEvents);
 
-      expect(screen.getByRole("combobox")).not.toHaveAttribute("aria-readonly");
+      const select = screen.getByRole("combobox");
+      expect(select).not.toHaveAttribute("aria-readonly");
+      expect(select).toBeEnabled();
+    });
+
+    it("disables the selects with the time picker", () => {
+      render(TimePicker, { props: { disabled: true } });
+
+      for (const select of screen.getAllByRole("combobox")) {
+        expect(select).toBeDisabled();
+      }
+    });
+
+    it("disables the fluid select cells with the time picker", () => {
+      render(TimePicker, { props: { disabled: true, fluid: true } });
+
+      for (const select of screen.getAllByRole("combobox")) {
+        expect(select).toBeDisabled();
+        expect(select.closest(".bx--time-picker__select")).toHaveClass(
+          "bx--select--disabled",
+        );
+      }
     });
   });
 
