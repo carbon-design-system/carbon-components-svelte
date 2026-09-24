@@ -7,6 +7,7 @@
 
   /**
    * Specify the input value.
+   * Follows the field when the owning form resets.
    * @type {number | string}
    * @bindable writable
    */
@@ -113,6 +114,7 @@
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
+  import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const ctx = getContext("carbon:Form");
@@ -137,6 +139,14 @@
     if (selectTextOnFocus && !disabled) {
       tick().then(() => ref?.select());
     }
+  }
+
+  // A form reset restores the field without an input event, and this is a
+  // one-way value write, not bind:value, so no Svelte version syncs it back
+  // on its own (Svelte 5's built-in resync only instruments genuine two-way
+  // bindings — see the note in the TextArea prompt, item 23).
+  function handleFormReset() {
+    if (ref) value = ref.value;
   }
 </script>
 
@@ -216,6 +226,7 @@
       {/if}
       <input
         bind:this={ref}
+        use:formReset={handleFormReset}
         data-invalid={showInvalid || undefined}
         aria-invalid={showInvalid || undefined}
         data-warn={showWarn || undefined}
