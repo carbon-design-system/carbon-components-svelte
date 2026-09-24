@@ -117,7 +117,7 @@ ContextMenu dispatches `open` once it finishes opening, and `close` on every clo
 
 ### Close event
 
-`close`'s detail contains `trigger`, one of `"escape-key"`, `"outside-click"`, `"select"`, or `"tab"`, describing why the menu closed.
+`close`'s detail contains `trigger`, one of `"escape-key"`, `"outside-click"`, or `"select"`, describing why the menu closed. <DocKbd label="Tab" /> reports `"escape-key"`, like the other menus.
 
 ### Prevent menu from closing
 

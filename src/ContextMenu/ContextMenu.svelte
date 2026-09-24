@@ -6,7 +6,7 @@
   /**
    * @event close
    * @type {object}
-   * @property {"escape-key" | "outside-click" | "select" | "tab"} trigger
+   * @property {"escape-key" | "outside-click" | "select"} trigger
    */
 
   /**
@@ -127,7 +127,7 @@
   }
 
   /**
-   * @type {(trigger: "escape-key" | "outside-click" | "select" | "tab") => void}
+   * @type {(trigger: "escape-key" | "outside-click" | "select") => void}
    */
   function close(trigger) {
     if (!open) return;
@@ -295,7 +295,7 @@
   on:keydown={(event) => {
     if (!open) return;
     if (event.key === "Tab") {
-      close("tab");
+      close("escape-key");
       return;
     }
     if (
