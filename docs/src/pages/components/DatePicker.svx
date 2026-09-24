@@ -94,6 +94,12 @@ Use `bind:valueFrom` and `bind:valueTo` to update the range from outside the com
 
 <FileSource src="/framed/DatePicker/DatePickerProgrammatic" />
 
+### Selected dates
+
+Use `bind:selectedDates` to read and set the selection as `Date` objects instead of strings in `dateFormat`. It stays in sync with `value` (or `valueFrom` and `valueTo`) both ways; setting it does not dispatch `change`. At mount, a non-empty `value` takes precedence. It is not supported by the `"simple"` type.
+
+<FileSource src="/framed/DatePicker/DatePickerSelectedDates" />
+
 ### Range presets
 
 Build preset range buttons (for example "Last 7 days" or "This month") by setting `valueFrom` and `valueTo` from outside the component, the same way as the programmatic example above.
