@@ -65,7 +65,7 @@
    * By default, this value supersedes the z-index
    * of modals (9000) and list box menus (9100).
    */
-  export let zIndex = 9200;
+  export let zIndex = FLOATING_PORTAL_Z_INDEX;
 
   /**
    * Set to `true` to use the content's intrinsic width instead of the anchor width.
@@ -120,6 +120,7 @@
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { addPooledListener } from "../utils/window-listener-pool.js";
   import Portal from "./Portal.svelte";
+  import { FLOATING_PORTAL_Z_INDEX } from "./portal-utils.js";
 
   let mounted = true;
 

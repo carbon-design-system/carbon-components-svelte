@@ -61,7 +61,7 @@
   export let verticalAlignOffsetRight = 0;
 
   /** Specify the z-index of the menu. */
-  export let zIndex = 9200;
+  export let zIndex = FLOATING_PORTAL_Z_INDEX;
 
   /**
    * Specify the size of the menu, which controls each item's row height.
@@ -100,6 +100,7 @@
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { derived, writable } from "svelte/store";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
+  import { FLOATING_PORTAL_Z_INDEX } from "../Portal/portal-utils.js";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
