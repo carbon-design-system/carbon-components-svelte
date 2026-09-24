@@ -34,12 +34,13 @@
   export let ref = null;
 
   import { getContext, onMount, setContext } from "svelte";
-  import { writable } from "svelte/store";
+  import { readable, writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import { uniqueId } from "../utils/unique-id.js";
 
   const formContext = getContext("carbon:Form");
   const timePickerContext = getContext("carbon:TimePicker");
+  const parentReadonly = timePickerContext?.readonly ?? readable(false);
 
   /**
    * @type {import("svelte/store").Writable<number | string>}
@@ -84,6 +85,7 @@
   $: selectedValue.set(value);
   $: value = $selectedValue;
   $: isFluid = !!timePickerContext?.isFluid || !!formContext?.isFluid;
+  $: effectiveReadonly = readonly || $parentReadonly;
 
   function handleSelectChange(event) {
     let next = event.target.value;
@@ -92,7 +94,7 @@
   }
 
   function handleSelectMousedown(event) {
-    if (readonly) {
+    if (effectiveReadonly) {
       event.preventDefault();
       event.currentTarget.focus();
     }
@@ -101,7 +103,7 @@
   function handleSelectKeydown(event) {
     // Ctrl/Cmd shortcuts (copy, find, reload) never change the value.
     if (
-      readonly &&
+      effectiveReadonly &&
       event.key !== "Tab" &&
       event.key !== "Shift" &&
       !event.ctrlKey &&
@@ -117,7 +119,7 @@
     <div
       class:bx--select={true}
       class:bx--time-picker__select={true}
-      class:bx--select--readonly={readonly}
+      class:bx--select--readonly={effectiveReadonly}
       class:bx--select--disabled={disabled}
       {...$$restProps}
       on:click
@@ -142,7 +144,7 @@
           {name}
           {disabled}
           {value}
-          aria-readonly={readonly || undefined}
+          aria-readonly={effectiveReadonly || undefined}
           class:bx--select-input={true}
           on:change={handleSelectChange}
           on:change
@@ -166,7 +168,7 @@
   <div
     class:bx--select={true}
     class:bx--time-picker__select={true}
-    class:bx--select--readonly={readonly}
+    class:bx--select--readonly={effectiveReadonly}
     {...$$restProps}
     on:click
     on:mouseover
@@ -184,7 +186,7 @@
       {name}
       {disabled}
       {value}
-      aria-readonly={readonly || undefined}
+      aria-readonly={effectiveReadonly || undefined}
       class:bx--select-input={true}
       on:change={handleSelectChange}
       on:change
