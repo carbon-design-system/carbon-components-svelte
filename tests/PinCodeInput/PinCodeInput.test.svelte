@@ -21,6 +21,7 @@
   export let labelText: ComponentProps<PinCodeInput>["labelText"] =
     "Verification code";
   export let helperText: ComponentProps<PinCodeInput>["helperText"] = "";
+  export let hideLabel: ComponentProps<PinCodeInput>["hideLabel"] = false;
   export let placeholder: ComponentProps<PinCodeInput>["placeholder"] =
     undefined;
   export let id: ComponentProps<PinCodeInput>["id"] = undefined;
@@ -49,6 +50,7 @@
   {warnText}
   {labelText}
   {helperText}
+  {hideLabel}
   {placeholder}
   {id}
   {selectTextOnFocus}

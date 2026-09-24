@@ -490,6 +490,36 @@ describe("PinCodeInput", () => {
     expect(inputs[0]).toHaveFocus();
   });
 
+  describe("legend tab stop", () => {
+    const getLegend = () => screen.getByText("Verification code");
+
+    it("is a tab stop when the label is visible", () => {
+      render(PinCodeInput);
+      expect(getLegend()).toHaveAttribute("tabindex", "0");
+    });
+
+    it("is not a tab stop when the label is hidden", async () => {
+      render(PinCodeInput, { props: { hideLabel: true } });
+      expect(getLegend()).not.toHaveAttribute("tabindex");
+
+      await user.tab();
+      expect(getInputs()[0]).toHaveFocus();
+    });
+
+    it("is not a tab stop when disabled", async () => {
+      render(PinCodeInput, { props: { disabled: true } });
+      expect(getLegend()).not.toHaveAttribute("tabindex");
+
+      await user.tab();
+      expect(getLegend()).not.toHaveFocus();
+    });
+
+    it("is a tab stop when read-only", () => {
+      render(PinCodeInput, { props: { readonly: true } });
+      expect(getLegend()).toHaveAttribute("tabindex", "0");
+    });
+  });
+
   it("exposes OTP-friendly input attributes on every segment", () => {
     render(PinCodeInput);
     for (const input of getInputs()) {
