@@ -132,8 +132,9 @@
    * Specify a name attribute for native form participation.
    *
    * When set, a hidden input mirrors the assembled `value` so the code
-   * is included in FormData / form submissions. `required` stays on each
-   * segment, since hidden inputs take no part in constraint validation.
+   * is included in FormData / form submissions. `required` stays on
+   * each segment, since hidden inputs take no part in constraint
+   * validation.
    * @type {string | undefined}
    */
   export let name = undefined;

@@ -63,39 +63,74 @@
 
   /**
    * @typedef {any} DataTableValue
-   * @typedef {{ id: Id; [key: string]: DataTableValue; }} DataTableRow<Id=any>
+   * @typedef {{
+   *   id: Id;
+   *   [key: string]: DataTableValue;
+   * }} DataTableRow<Id=any>
    * @typedef {(
-   *   [keyof import('./data-table-utils.d.ts').KeysWithoutIndexSignature<Row>] extends [never]
-   *     ? import('./data-table-utils.d.ts').PropertyPath<Row>
-   *     : keyof import('./data-table-utils.d.ts').KeysWithoutIndexSignature<Row> extends "id"
-   *       ? import('./data-table-utils.d.ts').PropertyPath<Row>
+   *   [keyof import("./data-table-utils.d.ts")
+   *     .KeysWithoutIndexSignature<Row>] extends [never]
+   *     ? import("./data-table-utils.d.ts").PropertyPath<Row>
+   *     : keyof import("./data-table-utils.d.ts")
+   *           .KeysWithoutIndexSignature<Row> extends "id"
+   *       ? import("./data-table-utils.d.ts").PropertyPath<Row>
    *       : Row extends DataTableRow
-   *         ? import('./data-table-utils.d.ts').PropertyPathIgnoringIndexSignatures<Row>
-   *         : import('./data-table-utils.d.ts').PropertyPath<Row>
-   * )} DataTableKey<Row=DataTableRow> Path keys for sort, headers, and cells; mirrors PropertyPath / PropertyPathIgnoringIndexSignatures in ./data-table-utils.d.ts.
-   * @typedef {import('./data-table-utils.d.ts').DataTableSortValue<Row>} DataTableSortValue<Row=DataTableRow>
+   *         ? import("./data-table-utils.d.ts")
+   *             .PropertyPathIgnoringIndexSignatures<Row>
+   *         : import("./data-table-utils.d.ts").PropertyPath<Row>
+   * )} DataTableKey<Row=DataTableRow> Path keys for sort, headers, and
+   *   cells; mirrors PropertyPath / PropertyPathIgnoringIndexSignatures
+   *   in ./data-table-utils.d.ts.
+   * @typedef {import("./data-table-utils.d.ts")
+   *   .DataTableSortValue<Row>} DataTableSortValue<Row=DataTableRow>
+   * @typedef {(
+   *   a: DataTableSortValue<Row>,
+   *   b: DataTableSortValue<Row>,
+   * ) => number} DataTableSortComparator<Row=DataTableRow>
    * @typedef {object} DataTableEmptyHeader<Row=DataTableRow>
    * @property {DataTableKey<Row> | (string & {})} key
    * @property {true} empty - Whether the header is empty
-   * @property {(item: DataTableValue, row: Row) => DataTableValue} [display]
-   * @property {boolean | ((a: DataTableSortValue<Row>, b: DataTableSortValue<Row>) => number)} [sort] - `false` disables sorting for this column even when the table is sortable; `true` enables it even when the table is not; a comparator both enables sorting and provides it. Unset inherits the table-level `sortable`.
-   * @property {boolean} [sortAlways] - Override table-level sortAlways for this column
-   * @property {boolean} [columnMenu] - Whether the column menu is enabled
-   * @property {boolean} [columnHidden] - Whether the column is skipped in render while remaining in `headers`
+   * @property {(
+   *   item: DataTableValue,
+   *   row: Row,
+   * ) => DataTableValue} [display]
+   * @property {boolean | DataTableSortComparator<Row>} [sort]
+   *   `false` disables sorting for this column even when the table is
+   *   sortable; `true` enables it even when the table is not; a
+   *   comparator both enables sorting and provides it. Unset inherits
+   *   the table-level `sortable`.
+   * @property {boolean} [sortAlways] - Override table-level sortAlways
+   *   for this column
+   * @property {boolean} [columnMenu] - Whether the column menu is
+   *   enabled
+   * @property {boolean} [columnHidden] - Whether the column is skipped
+   *   in render while remaining in `headers`
    * @property {string} [width]
    * @property {string} [minWidth]
    * @typedef {object} DataTableNonEmptyHeader<Row=DataTableRow>
    * @property {DataTableKey<Row>} key
    * @property {false} [empty]
    * @property {DataTableValue} value
-   * @property {(item: DataTableValue, row: Row) => DataTableValue} [display]
-   * @property {boolean | ((a: DataTableSortValue<Row>, b: DataTableSortValue<Row>) => number)} [sort] - `false` disables sorting for this column even when the table is sortable; `true` enables it even when the table is not; a comparator both enables sorting and provides it. Unset inherits the table-level `sortable`.
-   * @property {boolean} [sortAlways] - Override table-level sortAlways for this column
-   * @property {boolean} [columnMenu] - Whether the column menu is enabled
-   * @property {boolean} [columnHidden] - Whether the column is skipped in render while remaining in `headers`
+   * @property {(
+   *   item: DataTableValue,
+   *   row: Row,
+   * ) => DataTableValue} [display]
+   * @property {boolean | DataTableSortComparator<Row>} [sort]
+   *   `false` disables sorting for this column even when the table is
+   *   sortable; `true` enables it even when the table is not; a
+   *   comparator both enables sorting and provides it. Unset inherits
+   *   the table-level `sortable`.
+   * @property {boolean} [sortAlways] - Override table-level sortAlways
+   *   for this column
+   * @property {boolean} [columnMenu] - Whether the column menu is
+   *   enabled
+   * @property {boolean} [columnHidden] - Whether the column is skipped
+   *   in render while remaining in `headers`
    * @property {string} [width]
    * @property {string} [minWidth]
-   * @property {"start" | "end"} [columnAlign] - Horizontal alignment of the column header and cells. Logical, so `end` is the right edge in LTR and the left edge in RTL. Defaults to `"start"`.
+   * @property {"start" | "end"} [columnAlign] - Horizontal alignment of
+   *   the column header and cells. Logical, so `end` is the right edge
+   *   in LTR and the left edge in RTL. Defaults to `"start"`.
    * @typedef {DataTableNonEmptyHeader<Row>
    *   | DataTableEmptyHeader<Row>} DataTableHeader<Row=DataTableRow>
    * @typedef {object} DataTableCell<Row=DataTableRow>
@@ -120,7 +155,10 @@
    *   rowSelected: boolean;
    *   rowExpanded: boolean;
    * }} cell
-   * @slot {{ header: DataTableNonEmptyHeader; index: number; }} footerCell
+   * @slot {{
+   *   header: DataTableNonEmptyHeader;
+   *   index: number;
+   * }} footerCell
    * @event click
    * @type {object}
    * @property {DataTableHeader<Row>} [header]
@@ -132,7 +170,9 @@
    * @event click:header
    * @type {object}
    * @property {DataTableHeader<Row>} header
-   * @property {"ascending" | "descending" | "none"} [sortDirection] - The intended next sort direction for this click, reported regardless of whether the `sort` event was cancelled.
+   * @property {"ascending" | "descending" | "none"} [sortDirection]
+   *   The intended next sort direction for this click, reported
+   *   regardless of whether the `sort` event was cancelled.
    * @property {EventTarget} target
    * @property {EventTarget} currentTarget
    * @event click:header--select
@@ -154,9 +194,6 @@
    * @type {object}
    * @property {boolean} selected
    * @property {Row} row
-   * @event {{ key: null; direction: "none" } | { key: DataTableKey<Row>; direction: "ascending" | "descending" }} sort - Dispatched when a sortable column header would change the active sort. The event is cancelable: call `preventDefault()` to skip updating `sortKey` / `sortDirection` and skip client side sorting for that click (for example full server side sorting while still reading `detail.key` / `detail.direction` for your API). If not cancelled, the table applies the new sort and sorts the current `rows` client side. Typical uses: server side sorting, URL or query string sync, analytics, and persisting sort preferences.
-   * @property {DataTableKey<Row> | null} key - Proposed sort column (`header.key`), or `null` when the proposed `direction` is `none`.
-   * @property {"ascending" | "descending" | "none"} direction - Proposed sort direction for this click (applied internally unless the event is cancelled).
    * @event click:cell
    * @type {object}
    * @property {DataTableCell<Row>} cell
@@ -169,10 +206,34 @@
    *   expanded: boolean;
    * }} DataTableRowClassArgs<Row=DataTableRow>
    * @typedef {string
-   *   | ((row: DataTableRowClassArgs<Row>) => string | undefined)} DataTableRowClass<Row=DataTableRow>
+   *   | ((
+   *       row: DataTableRowClassArgs<Row>,
+   *     ) => string | undefined)} DataTableRowClass<Row=DataTableRow>
    * @type {object}
    * @property {DataTableRowClass<Row>} [rowClass]
    * @restProps {div}
+   */
+
+  /**
+   * Dispatched when a sortable column header would change the active
+   * sort. The event is cancelable: call `preventDefault()` to skip
+   * updating `sortKey` / `sortDirection` and skip client side sorting
+   * for that click (for example full server side sorting while still
+   * reading `detail.key` / `detail.direction` for your API). If not
+   * cancelled, the table applies the new sort and sorts the current
+   * `rows` client side. Typical uses: server side sorting, URL or query
+   * string sync, analytics, and persisting sort preferences.
+   * @event {{ key: null; direction: "none" }
+   *   | {
+   *       key: DataTableKey<Row>;
+   *       direction: "ascending" | "descending";
+   *     }} sort
+   * @property {DataTableKey<Row> | null} key - Proposed sort column
+   *   (`header.key`), or `null` when the proposed `direction` is
+   *   `none`.
+   * @property {"ascending" | "descending" | "none"} direction
+   *   Proposed sort direction for this click (applied internally unless
+   *   the event is cancelled).
    */
 
   /**
@@ -207,9 +268,16 @@
    * based on selected/expanded state.
    * @example
    * ```svelte
-   * <DataTable rowClass={({ row, rowIndex, selected, expanded }) => {
-   *   return `row-${rowIndex} ${selected ? 'selected' : ''} ${expanded ? 'expanded' : ''}`;
-   * }} />
+   * <DataTable
+   *   rowClass={({ rowIndex, selected, expanded }) =>
+   *     [
+   *       `row-${rowIndex}`,
+   *       selected && "selected",
+   *       expanded && "expanded",
+   *     ]
+   *       .filter(Boolean)
+   *       .join(" ")}
+   * />
    * ```
    * @type {DataTableRowClass<Row>}
    */
@@ -896,7 +964,11 @@
    * @example
    * ```svelte
    * <DataTable bind:this={dataTable} {headers} {rows} />
-   * <NumberInput min={0} bind:value={row.qty} on:input={() => dataTable.refreshRow(row.id)} />
+   * <NumberInput
+   *   min={0}
+   *   bind:value={row.qty}
+   *   on:input={() => dataTable.refreshRow(row.id)}
+   * />
    * ```
    */
   export function refreshRow(id) {
@@ -915,7 +987,9 @@
    * @example
    * ```svelte
    * <DataTable bind:this={dataTable} {headers} {rows} />
-   * <button on:click={() => dataTable.refreshCells()}>Refresh table</button>
+   * <button on:click={() => dataTable.refreshCells()}>
+   *   Refresh table
+   * </button>
    * ```
    */
   export function refreshCells() {

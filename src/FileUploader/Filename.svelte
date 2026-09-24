@@ -32,8 +32,10 @@
 
   /**
    * @typedef {Object} FilenameIconDescriptionContext
-   * @property {File | undefined} [file] Set when rendered from `FileUploader` rows; otherwise `undefined`.
-   * @property {string} fileName Display name (`file.name` or `FileUploaderItem` `name`).
+   * @property {File | undefined} [file] Set when rendered from
+   *   `FileUploader` rows; otherwise `undefined`.
+   * @property {string} fileName Display name (`file.name` or
+   *   `FileUploaderItem` `name`).
    * @property {"uploading" | "edit" | "complete"} status
    * @property {boolean} invalid
    */

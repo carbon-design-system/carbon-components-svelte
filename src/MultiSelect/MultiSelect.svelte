@@ -57,7 +57,8 @@
    * @property {Id} id
    * @property {MultiSelectItemText} text
    * @property {boolean} [disabled] - Whether the item is disabled
-   * @property {boolean} [isSelectAll] - Whether this item acts as a "select all" toggle
+   * @property {boolean} [isSelectAll] - Whether this item acts as a
+   *   "select all" toggle
    * @event select
    * @type {object}
    * @property {Item["id"][]} selectedIds

@@ -12,7 +12,8 @@
 
   /**
    * @typedef {object} HeaderSearchResult
-   * @property {string | number} [id] - Unique result identifier; used as the each-block key when provided
+   * @property {string | number} [id] - Unique result identifier; used
+   *   as the each-block key when provided
    * @property {string} href
    * @property {string} text
    * @property {string} [description]

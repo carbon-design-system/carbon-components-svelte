@@ -13,7 +13,8 @@
 
   /**
    * Creates a TreeWalker instance for keyboard navigation.
-   * @returns {TreeWalker} A TreeWalker configured to navigate tree nodes
+   * @returns {TreeWalker} A TreeWalker configured to navigate tree
+   *   nodes
    */
   function createTreeWalkerInstance(root) {
     return document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT, {
@@ -108,8 +109,14 @@
    * @param {ReadonlyArray<TNode>} nodes
    * @returns {{
    *   nodeMap: Map<TNode["id"], TNode>,
-   *   parentIdById: Map<TNode["id"], TNode["id"] | typeof ROOT_PARENT_ID>,
-   *   childIdsByParentId: Map<TNode["id"] | typeof ROOT_PARENT_ID, Array<TNode["id"]>>,
+   *   parentIdById: Map<
+   *     TNode["id"],
+   *     TNode["id"] | typeof ROOT_PARENT_ID
+   *   >,
+   *   childIdsByParentId: Map<
+   *     TNode["id"] | typeof ROOT_PARENT_ID,
+   *     Array<TNode["id"]>
+   *   >,
    * }}
    */
   function buildTreeMaps(nodes) {
@@ -117,7 +124,12 @@
     const nodeMap = new Map();
     /** @type {Map<TNode["id"], TNode["id"] | typeof ROOT_PARENT_ID>} */
     const parentIdById = new Map();
-    /** @type {Map<TNode["id"] | typeof ROOT_PARENT_ID, Array<TNode["id"]>>} */
+    /**
+     * @type {Map<
+     *   TNode["id"] | typeof ROOT_PARENT_ID,
+     *   Array<TNode["id"]>
+     * >}
+     */
     const childIdsByParentId = new Map();
 
     const rootIds = [];
@@ -126,7 +138,12 @@
     }
     childIdsByParentId.set(ROOT_PARENT_ID, rootIds);
 
-    /** @type {Array<{ node: TNode; parentId: TNode["id"] | typeof ROOT_PARENT_ID }>} */
+    /**
+     * @type {Array<{
+     *   node: TNode;
+     *   parentId: TNode["id"] | typeof ROOT_PARENT_ID;
+     * }>}
+     */
     const stack = [];
     for (let i = nodes.length - 1; i >= 0; i--) {
       stack.push({ node: nodes[i], parentId: ROOT_PARENT_ID });
@@ -291,25 +308,41 @@
    * @property {boolean} [disabled] - Whether the node is disabled
    * @property {string} [href] - Optional URL the node links to
    * @property {string} [target] - Optional link target (e.g., "_blank")
-   * @property {boolean} [hasChildren] - Whether the node has children that have not been loaded yet. Renders an expander even without a `nodes` array; expanding fires `toggle` so children can be loaded lazily.
+   * @property {boolean} [hasChildren] - Whether the node has children
+   *   that have not been loaded yet. Renders an expander even without a
+   *   `nodes` array; expanding fires `toggle` so children can be loaded
+   *   lazily.
    * @property {TreeNode<Id>[]} [nodes]
    * @typedef {object} ShowNodeOptions
-   * @property {boolean} [expand] - Whether to expand the node and its ancestors (default: true)
-   * @property {boolean} [select] - Whether to select the node (default: true)
-   * @property {boolean} [focus] - Whether to focus the node (default: true)
+   * @property {boolean} [expand] - Whether to expand the node and its
+   *   ancestors (default: true)
+   * @property {boolean} [select] - Whether to select the node (default:
+   *   true)
+   * @property {boolean} [focus] - Whether to focus the node (default:
+   *   true)
    * @typedef {object} TreeViewExpandedChange<Id=(string|number)>
-   * @property {ReadonlyArray<Id>} expandedIds - The full set of expanded node ids after the change
-   * @property {Array<Id>} added - Node ids expanded since the previous change
-   * @property {Array<Id>} removed - Node ids collapsed since the previous change
+   * @property {ReadonlyArray<Id>} expandedIds - The full set of
+   *   expanded node ids after the change
+   * @property {Array<Id>} added - Node ids expanded since the previous
+   *   change
+   * @property {Array<Id>} removed - Node ids collapsed since the
+   *   previous change
    * @typedef {object} TreeViewSelectionChange<Id=(string|number)>
-   * @property {ReadonlyArray<Id>} selectedIds - The full set of selected node ids after the change
-   * @property {Array<Id>} added - Node ids selected since the previous change
-   * @property {Array<Id>} removed - Node ids deselected since the previous change
+   * @property {ReadonlyArray<Id>} selectedIds - The full set of
+   *   selected node ids after the change
+   * @property {Array<Id>} added - Node ids selected since the previous
+   *   change
+   * @property {Array<Id>} removed - Node ids deselected since the
+   *   previous change
    * @typedef {object} TreeViewCheckChange<Id=(string|number)>
-   * @property {ReadonlyArray<Id>} checkedIds - The full set of checked node ids after the change
-   * @property {Array<Id>} added - Node ids checked since the previous change
-   * @property {Array<Id>} removed - Node ids unchecked since the previous change
-   * @property {ReadonlyArray<Id>} indeterminateIds - The partially checked node ids after the change
+   * @property {ReadonlyArray<Id>} checkedIds - The full set of checked
+   *   node ids after the change
+   * @property {Array<Id>} added - Node ids checked since the previous
+   *   change
+   * @property {Array<Id>} removed - Node ids unchecked since the
+   *   previous change
+   * @property {ReadonlyArray<Id>} indeterminateIds - The partially
+   *   checked node ids after the change
    * @slot {{
    *   node: Node & {
    *     expanded: boolean;
@@ -531,7 +564,9 @@
    * @example
    * ```svelte
    * <TreeView bind:this={treeView} {nodes} />
-   * <button on:click={() => treeView.collapseAll()}>Collapse All</button>
+   * <button on:click={() => treeView.collapseAll()}>
+   *   Collapse All
+   * </button>
    * ```
    */
   export function collapseAll() {
@@ -548,7 +583,10 @@
    * @example
    * ```svelte
    * <TreeView bind:this={treeView} {nodes} />
-   * <button on:click={() => treeView.expandNodes((node) => node.id.startsWith('folder-'))}>
+   * <button
+   *   on:click={() =>
+   *     treeView.expandNodes((node) => node.id.startsWith("folder-"))}
+   * >
    *   Expand Folders
    * </button>
    * ```
@@ -576,7 +614,12 @@
    * @example
    * ```svelte
    * <TreeView bind:this={treeView} {nodes} />
-   * <button on:click={() => treeView.collapseNodes((node) => node.id.startsWith('folder-'))}>
+   * <button
+   *   on:click={() =>
+   *     treeView.collapseNodes((node) =>
+   *       node.id.startsWith("folder-"),
+   *     )}
+   * >
    *   Collapse Folders
    * </button>
    * ```
@@ -603,7 +646,10 @@
    * <button on:click={() => treeView.showNode('node-123')}>
    *   Show Node
    * </button>
-   * <button on:click={() => treeView.showNode('node-123', { expand: false, focus: false })}>
+   * <button
+   *   on:click={() =>
+   *     treeView.showNode("node-123", { expand: false, focus: false })}
+   * >
    *   Show Node (No Expand/Focus)
    * </button>
    * ```
@@ -680,7 +726,9 @@
    * @example
    * ```svelte
    * <TreeView bind:this={treeView} {nodes} />
-   * <button on:click={() => console.log(treeView.getNodes(selectedIds))}>
+   * <button
+   *   on:click={() => console.log(treeView.getNodes(selectedIds))}
+   * >
    *   Log Selected Nodes
    * </button>
    * ```
@@ -724,14 +772,20 @@
 
   /** @type {import("svelte/store").Writable<boolean>} */
   const sharedMultiselect = writable(multiselect);
-  /** @type {import("svelte/store").Writable<"highlight" | "checkbox">} */
+  /**
+   * @type {import("svelte/store").Writable<"highlight" | "checkbox">}
+   */
   const sharedSelectionMode = writable(selectionMode);
 
   /** @type {import("svelte/store").Writable<Node["id"]>} */
   const activeNodeId = writable(activeId);
-  /** @type {import("svelte/store").Writable<ReadonlyArray<Node["id"]>>} */
+  /**
+   * @type {import("svelte/store").Writable<ReadonlyArray<Node["id"]>>}
+   */
   const selectedNodeIds = writable(selectedIds);
-  /** @type {import("svelte/store").Writable<ReadonlyArray<Node["id"]>>} */
+  /**
+   * @type {import("svelte/store").Writable<ReadonlyArray<Node["id"]>>}
+   */
   const expandedNodeIds = writable(expandedIds);
   /** @type {import("svelte/store").Writable<Set<Node["id"]>>} */
   const selectedIdSet = writable(new Set(selectedIds));
@@ -829,9 +883,16 @@
   let cachedFlattenedNodes = null;
   /** @type {Map<Node["id"], Node> | null} */
   let cachedNodeMap = null;
-  /** @type {Map<Node["id"], Node["id"] | typeof ROOT_PARENT_ID> | null} */
+  /**
+   * @type {Map<Node["id"], Node["id"] | typeof ROOT_PARENT_ID> | null}
+   */
   let cachedParentIdById = null;
-  /** @type {Map<Node["id"] | typeof ROOT_PARENT_ID, Array<Node["id"]>> | null} */
+  /**
+   * @type {Map<
+   *   Node["id"] | typeof ROOT_PARENT_ID,
+   *   Array<Node["id"]>
+   * > | null}
+   */
   let cachedChildIdsByParentId = null;
 
   /**
@@ -1247,7 +1308,10 @@
     return isRepeatedChar ? typeAheadBuffer[0] : typeAheadBuffer;
   }
 
-  /** @returns {Element[]} Visible (non-disabled, non-hidden) tree items in document order. */
+  /**
+   * @returns {Element[]} Visible (non-disabled, non-hidden) tree items
+   *   in document order.
+   */
   function collectVisibleTreeItems() {
     if (!treeWalker || !ref) return [];
     treeWalker.currentNode = ref;
@@ -1268,7 +1332,8 @@
    * matching native `<select>`-style type-ahead.
    * @param {KeyboardEvent} event
    * @param {Element} treeItem
-   * @returns {boolean} Whether the event was handled as type-ahead input.
+   * @returns {boolean} Whether the event was handled as type-ahead
+   *   input.
    */
   function handleTypeAhead(event, treeItem) {
     if (!isTypeaheadKey(event)) return false;

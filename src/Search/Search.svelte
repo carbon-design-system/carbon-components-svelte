@@ -35,8 +35,8 @@
   export let disabled = false;
 
   /**
-   * Set to `true` to use the read-only variant.
-   * The value cannot be edited or cleared, and still submits with the form.
+   * Set to `true` to use the read-only variant. The value cannot be
+   * edited or cleared, and still submits with the form.
    */
   export let readonly = false;
 
