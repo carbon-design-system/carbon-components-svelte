@@ -28,6 +28,14 @@
   .#{$prefix}--side-nav.#{$prefix}--side-nav--expanded ~ .#{$prefix}--content {
     margin-left: mini-units(32);
   }
+
+  // carbon-components-svelte patch
+  // Follow a resizable side nav's width. `Content` sets the custom property
+  // from the side nav's store, since a sibling can't inherit it.
+  .#{$prefix}--side-nav.#{$prefix}--side-nav--resizable.#{$prefix}--side-nav--expanded
+    ~ .#{$prefix}--content {
+    margin-left: var(--ccs-side-nav-width, #{mini-units(32)});
+  }
 }
 
 @include exports('carbon-content') {

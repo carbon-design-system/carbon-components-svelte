@@ -6,6 +6,7 @@
     isSideNavCollapsed,
     isSideNavMobile,
     isSideNavRail,
+    sideNavWidth,
   } from "./nav-store.js";
 
   /**
@@ -18,12 +19,18 @@
    */
   $: unsetLeftMargin =
     ($isSideNavCollapsed && !$isSideNavRail) || $isSideNavMobile;
+
+  // A resizable `SideNav` shares its width so the CSS margin can follow it;
+  // custom properties don't inherit across siblings.
+  $: sideNavWidthStyle =
+    $sideNavWidth === undefined ? undefined : `${$sideNavWidth}px`;
 </script>
 
 <main
   {id}
   class:bx--content={true}
   style:margin-left={unsetLeftMargin ? 0 : undefined}
+  style:--ccs-side-nav-width={sideNavWidthStyle}
   {...$$restProps}
 >
   <slot />
