@@ -1,4 +1,5 @@
 import { render, screen, within } from "@testing-library/svelte";
+import MeterComponent from "carbon-components-svelte/Meter/Meter.svelte";
 // svelte-check's Svelte 4 compat pass can't resolve this fixture's
 // declaration file, for reasons independent of file content (reproduces
 // even for a trivial one-line fixture unrelated to Meter). @ts-expect-error
@@ -175,6 +176,15 @@ describe("Meter", () => {
 
     const el = screen.getByTestId("zero-max");
     expect(el.querySelector(".bx--meter__bar")).toHaveStyle({
+      transform: "scaleX(0)",
+    });
+  });
+
+  it("renders an empty bar for a non-finite value", () => {
+    const { container } = render(MeterComponent, {
+      props: { labelText: "Storage", value: Number.NaN, max: 100 },
+    });
+    expect(container.querySelector(".bx--meter__bar")).toHaveStyle({
       transform: "scaleX(0)",
     });
   });
