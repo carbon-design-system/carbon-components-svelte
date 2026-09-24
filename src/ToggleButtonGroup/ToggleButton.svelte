@@ -59,6 +59,10 @@
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { createDelayedSetter } from "../utils/delayed-setter.js";
+  import {
+    TOOLTIP_ENTER_DELAY_MS,
+    TOOLTIP_LEAVE_DELAY_MS,
+  } from "../utils/tooltip-delays.js";
 
   // Standalone use (no ancestor `ToggleButtonGroup`) is undocumented but
   // must not throw; `pressed` just stays `false` and clicks are inert.
@@ -107,9 +111,6 @@
   // stacking context - same technique ContentSwitcher's icon-only Switch
   // uses, including the shared `activeTooltip` claim (only one segment's
   // tooltip shows at a time) and the warm-handoff delay skip.
-  const ENTER_DELAY_MS = 100;
-  const LEAVE_DELAY_MS = 300;
-
   let hovered = false;
   let focused = false;
   const scheduleTooltip = createDelayedSetter();
@@ -139,11 +140,11 @@
     // Skip the enter delay when another tooltip is already open (warm handoff).
     const warmHandoff =
       get(activeTooltip) !== null && get(activeTooltip) !== value;
-    scheduleTooltip(warmHandoff ? 0 : ENTER_DELAY_MS, reveal);
+    scheduleTooltip(warmHandoff ? 0 : TOOLTIP_ENTER_DELAY_MS, reveal);
   }
 
   function hideTooltip() {
-    scheduleTooltip(LEAVE_DELAY_MS, () => {
+    scheduleTooltip(TOOLTIP_LEAVE_DELAY_MS, () => {
       hovered = false;
       release();
     });

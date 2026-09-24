@@ -89,6 +89,10 @@
   import { observeModalClose } from "../Portal/portal-utils.js";
   import { createCopyFeedbackState } from "../utils/copy-feedback.js";
   import { noop } from "../utils/noop.js";
+  import {
+    TOOLTIP_ENTER_DELAY_MS,
+    TOOLTIP_LEAVE_DELAY_MS,
+  } from "../utils/tooltip-delays.js";
 
   const dispatch = createEventDispatcher();
 
@@ -119,8 +123,6 @@
   // with adjacent icon-only Buttons (warm handoff, no overlapping tooltips).
   // Mirrors Button's portal-tooltip timing.
   const tooltipId = {};
-  const ENTER_DELAY_MS = 100;
-  const LEAVE_DELAY_MS = 300;
   let hovered = false;
   let focused = false;
   let tooltipTimeout;
@@ -166,7 +168,7 @@
         hovered = true;
         claimTooltip();
       },
-      warmHandoff ? 0 : ENTER_DELAY_MS,
+      warmHandoff ? 0 : TOOLTIP_ENTER_DELAY_MS,
     );
   }
 
@@ -175,7 +177,7 @@
     tooltipTimeout = setTimeout(() => {
       hovered = false;
       if (!focused) releaseTooltip();
-    }, LEAVE_DELAY_MS);
+    }, TOOLTIP_LEAVE_DELAY_MS);
   }
 
   function handleTooltipFocus() {

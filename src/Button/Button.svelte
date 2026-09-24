@@ -149,6 +149,10 @@
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
   import { noop } from "../utils/noop.js";
+  import {
+    TOOLTIP_ENTER_DELAY_MS,
+    TOOLTIP_LEAVE_DELAY_MS,
+  } from "../utils/tooltip-delays.js";
   import ButtonSkeleton from "./ButtonSkeleton.svelte";
   import { activeButtonTooltip } from "./button-tooltip-store.js";
 
@@ -169,10 +173,6 @@
   $: hasTooltip = hasTooltipContent && !hideTooltip && !usePortal;
 
   const tooltipId = {};
-
-  // Hardcoded for parity with TooltipIcon defaults; not exposed as props yet.
-  const ENTER_DELAY_MS = 100;
-  const LEAVE_DELAY_MS = 300;
 
   let hovered = false;
   let focused = false;
@@ -246,7 +246,7 @@
         hovered = true;
         claimActiveTooltip();
       },
-      warmHandoff ? 0 : ENTER_DELAY_MS,
+      warmHandoff ? 0 : TOOLTIP_ENTER_DELAY_MS,
     );
   }
 
@@ -256,7 +256,7 @@
     portalTimeout = setTimeout(() => {
       hovered = false;
       if (!focused) releaseActiveTooltip();
-    }, LEAVE_DELAY_MS);
+    }, TOOLTIP_LEAVE_DELAY_MS);
   }
 
   function handlePortalFocus() {
