@@ -1,3 +1,30 @@
+<script context="module">
+  /**
+   * @param {File | undefined} file
+   * @param {string} fileName
+   * @param {"uploading" | "edit" | "complete"} status
+   * @param {boolean} invalid
+   * @param {string | undefined | ((ctx: {
+   *   file: File | undefined,
+   *   fileName: string,
+   *   status: "uploading" | "edit" | "complete",
+   *   invalid: boolean,
+   * }) => string | undefined)} iconDescription
+   * @returns {string | null}
+   */
+  function resolveIconLabel(file, fileName, status, invalid, iconDescription) {
+    const ctx = { file, fileName, status, invalid };
+    const raw =
+      typeof iconDescription === "function"
+        ? iconDescription(ctx)
+        : iconDescription;
+    if (raw != null && `${raw}`.trim() !== "") {
+      return `${raw}`.trim();
+    }
+    return null;
+  }
+</script>
+
 <script>
   /**
    * @restProps {div | button | svg}
@@ -40,18 +67,6 @@
   /** Set to `true` to indicate an invalid state */
   export let invalid = false;
 
-  function resolveIconLabel(file, fileName, status, invalid, iconDescription) {
-    /** @type {FilenameIconDescriptionContext} */
-    const ctx = { file, fileName, status, invalid };
-    const raw =
-      typeof iconDescription === "function"
-        ? iconDescription(ctx)
-        : iconDescription;
-    if (raw != null && `${raw}`.trim() !== "") {
-      return `${raw}`.trim();
-    }
-    return null;
-  }
   $: resolvedIconLabel = resolveIconLabel(
     file,
     fileName,
