@@ -3,6 +3,8 @@ import { user } from "../utils/user";
 import NumberInputForm from "./NumberInput.form.test.svelte";
 
 const getForm = () => screen.getByTestId("form") as HTMLFormElement;
+const getBound = () => screen.getByTestId("bound").textContent;
+const flush = () => new Promise((resolve) => setTimeout(resolve));
 
 describe("NumberInput form participation", () => {
   describe("validity", () => {
@@ -84,6 +86,78 @@ describe("NumberInput form participation", () => {
       render(NumberInputForm, { props: { value: 7 } });
 
       expect(submitted()).toEqual(["7"]);
+    });
+  });
+
+  describe("form reset", () => {
+    const setField = async (input: HTMLElement, text: string) => {
+      await user.clear(input);
+      await user.type(input, text);
+    };
+
+    it("keeps the value when the field cannot be empty", async () => {
+      render(NumberInputForm, { props: { value: 5 } });
+      const input = screen.getByRole("spinbutton", { name: "Amount" });
+
+      await setField(input, "8");
+      expect(getBound()).toBe("8");
+
+      getForm().reset();
+      await flush();
+
+      expect(input).toHaveValue(8);
+      expect(getBound()).toBe("8");
+    });
+
+    it("keeps a locale-formatted value in text mode", async () => {
+      render(NumberInputForm, { props: { locale: "de-DE", value: 1234.5 } });
+      const input = screen.getByRole("textbox", { name: "Amount" });
+
+      getForm().reset();
+      await flush();
+
+      expect(input).toHaveValue("1.234,5");
+      expect(getBound()).toBe("1234.5");
+      expect(new FormData(getForm()).get("n")).toBe("1234.5");
+    });
+
+    it("follows the cleared field with allowEmpty", async () => {
+      render(NumberInputForm, { props: { allowEmpty: true, value: 5 } });
+      const input = screen.getByRole("spinbutton", { name: "Amount" });
+
+      await setField(input, "8");
+      getForm().reset();
+      await flush();
+
+      expect(input).toHaveValue(null);
+      expect(getBound()).toBe("null");
+    });
+
+    it("follows the cleared field with allowEmpty in text mode", async () => {
+      render(NumberInputForm, {
+        props: { allowEmpty: true, locale: "en-US", value: 1234.5 },
+      });
+      const input = screen.getByRole("textbox", { name: "Amount" });
+
+      getForm().reset();
+      await flush();
+
+      expect(input).toHaveValue("");
+      expect(getBound()).toBe("null");
+      expect(new FormData(getForm()).get("n")).toBe("");
+    });
+
+    it("keeps a read-only value with allowEmpty", async () => {
+      render(NumberInputForm, {
+        props: { allowEmpty: true, readonly: true, value: 5 },
+      });
+      const input = screen.getByRole("spinbutton", { name: "Amount" });
+
+      getForm().reset();
+      await flush();
+
+      expect(input).toHaveValue(5);
+      expect(getBound()).toBe("5");
     });
   });
 });

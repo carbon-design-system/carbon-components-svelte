@@ -8,6 +8,8 @@
   export let formatOptions: ComponentProps<NumberInput>["formatOptions"] =
     undefined;
   export let disabled: ComponentProps<NumberInput>["disabled"] = false;
+  export let allowEmpty: ComponentProps<NumberInput>["allowEmpty"] = false;
+  export let readonly: ComponentProps<NumberInput>["readonly"] = false;
 </script>
 
 <form data-testid="form">
@@ -17,7 +19,10 @@
     {allowDecimal}
     {formatOptions}
     {disabled}
+    {allowEmpty}
+    {readonly}
     name="n"
     labelText="Amount"
   />
 </form>
+<p data-testid="bound">{String(value)}</p>

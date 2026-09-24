@@ -17,6 +17,8 @@
   /**
    * Specify the input value.
    * Use `null` to denote "no value".
+   * Kept when the owning form resets; with `allowEmpty`, follows the field
+   * instead.
    * @type {null | number}
    * @bindable writable
    */
@@ -180,6 +182,7 @@
   import Subtract from "../icons/Subtract.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import { formReset } from "../utils/form-reset.js";
   import { getNumberFormatter } from "../utils/intl-formatter-cache.js";
   import {
     clamp,
@@ -188,6 +191,7 @@
     parseLocaleValue,
     roundToStep,
   } from "../utils/numeric-format.js";
+  import { reflectDefaultValue } from "../utils/reflect-default-value.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const defaultTranslations = {
@@ -324,6 +328,25 @@
     } else if (value == null && inputValue !== "") {
       inputValue = "";
     }
+  }
+
+  // A form reset restores the field without an input event. Without
+  // `allowEmpty` the field cannot be empty, so its value attribute follows
+  // the current value (reflectDefaultValue) and a reset keeps it; with
+  // `allowEmpty` the reset clears it. Either way, read the field back, and
+  // keep a read-only field's state.
+  function handleFormReset() {
+    if (!ref) return;
+    if (readonly) {
+      ref.value = useTextMode ? inputValue : String(value ?? "");
+      return;
+    }
+    userInputActive = false;
+    const raw = ref.value;
+    value =
+      useTextMode && locale
+        ? parseLocaleValue(raw, groupSeparator, decimalSeparator)
+        : parse(raw);
   }
 
   function handleInput(event) {
@@ -478,6 +501,8 @@
         {/if}
         <input
           bind:this={ref}
+          use:formReset={handleFormReset}
+          use:reflectDefaultValue={allowEmpty ? undefined : inputValue}
           value={inputValue}
           type="text"
           inputmode="decimal"
@@ -515,6 +540,8 @@
       {:else}
         <input
           bind:this={ref}
+          use:formReset={handleFormReset}
+          use:reflectDefaultValue={allowEmpty ? undefined : value}
           type="number"
           inputmode="decimal"
           aria-describedby={hasErrorMessage
