@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Virtualization helpers for TreeView: iterative visible flatten (oracle /
  * small trees), and a size-cache index that avoids materializing a full
@@ -19,7 +20,7 @@ export { isExpandableNode } from "./is-expandable-node.js";
 /**
  * @template {{ id: string | number; nodes?: T[]; hasChildren?: boolean }} T
  * @param {T} node
- * @returns {boolean}
+ * @returns {node is T & { nodes: T[] }}
  */
 function hasLoadedChildren(node) {
   return Array.isArray(node.nodes) && node.nodes.length > 0;

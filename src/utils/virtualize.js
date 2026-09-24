@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Per-option heights indexed by item.
  * @typedef {ArrayLike<number | undefined>} ItemHeights

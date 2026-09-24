@@ -21,6 +21,10 @@ import { getMenuItemHeight, getMenuMaxHeight } from "./list-box-utils.js";
  */
 
 /**
+ * @typedef {import("./menu-window.js").MenuWindowState} MenuWindowState
+ */
+
+/**
  * The consumer's `virtualize` prop with any `measured` key dropped.
  *
  * `wrapOptions` is the only thing that turns measuring on.

@@ -43,10 +43,13 @@ export function nextEnabledIndex({
 }) {
   const length = items.length;
   if (length === 0) return index;
-  const disabled = isDisabled ?? ((item) => Boolean(item?.disabled));
+  const disabled =
+    isDisabled ??
+    ((/** @type {T} */ item) =>
+      Boolean(/** @type {{ disabled?: boolean }} */ (item)?.disabled));
   const advance = wrap
-    ? (i) => moveIndex(i, step, length)
-    : (i) => clampIndex(i, step, length);
+    ? (/** @type {number} */ i) => moveIndex(i, step, length)
+    : (/** @type {number} */ i) => clampIndex(i, step, length);
 
   let candidate = advance(index);
   let attempts = 0;

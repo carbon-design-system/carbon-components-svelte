@@ -1,6 +1,10 @@
 // @ts-check
 
 /**
+ * @typedef {import("./overflow-title.js").OverflowTitleParams} Params
+ */
+
+/**
  * Svelte action: set `title` while text overflows horizontally.
  * `options.title` wins over auto-detection, including `""`.
  * `options.measure` checks a descendant instead of `node`.
@@ -38,6 +42,7 @@ export function overflowTitle(node, options = {}) {
     }
   }
 
+  /** @param {Params} [next] */
   function update(next = {}) {
     latest = next;
     if (next.title != null) {

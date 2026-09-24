@@ -42,6 +42,7 @@ export function createTimeoutDismiss() {
     document.removeEventListener("visibilitychange", onVisibility);
   }
 
+  /** @param {number} ms */
   function schedule(ms) {
     clearTimeout(timeoutId);
     timeoutId = undefined;

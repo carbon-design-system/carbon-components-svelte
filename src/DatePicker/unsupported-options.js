@@ -1,3 +1,4 @@
+// @ts-check
 const PREFIX = "[carbon-components-svelte] DatePicker: ";
 
 /**

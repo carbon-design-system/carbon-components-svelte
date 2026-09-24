@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Pixel sizes of Carbon grid breakpoints.
  * @typedef {"sm" | "md" | "lg" | "xlg" | "max"} BreakpointSize

@@ -1,3 +1,4 @@
+// @ts-check
 import { onMount } from "svelte";
 import { get, writable } from "svelte/store";
 import {

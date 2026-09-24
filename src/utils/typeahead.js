@@ -26,7 +26,10 @@ export function typeaheadIndex({
   isDisabled,
 }) {
   if (items.length === 0 || query === "") return index;
-  const disabled = isDisabled ?? ((item) => Boolean(item?.disabled));
+  const disabled =
+    isDisabled ??
+    ((/** @type {T} */ item) =>
+      Boolean(/** @type {{ disabled?: boolean }} */ (item)?.disabled));
   const needle = query.toLowerCase();
   const start = index >= 0 ? index + 1 : 0;
   for (let offset = 0; offset < items.length; offset++) {

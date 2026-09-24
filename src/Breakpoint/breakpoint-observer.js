@@ -1,3 +1,4 @@
+// @ts-check
 import { onMount } from "svelte";
 import { derived, writable } from "svelte/store";
 import { breakpoints } from "./breakpoints.js";

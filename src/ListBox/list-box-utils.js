@@ -1,3 +1,4 @@
+// @ts-check
 import { DEFAULT_VIRTUAL_LIST_CONFIG } from "../utils/virtualize.js";
 
 /**

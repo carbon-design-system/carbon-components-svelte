@@ -1,8 +1,11 @@
+// @ts-check
 /**
  * Svelte action that truncates text on an element.
  * `lines` above 1 switches to multiline mode (end clamp only).
  * @typedef {{ clamp?: "end" | "front"; lines?: number }} TruncateOptions
- * @type {(node: HTMLElement, options?: TruncateOptions) => { update: (options?: TruncateOptions) => void; }}
+ * @param {HTMLElement} node
+ * @param {TruncateOptions} [options]
+ * @returns {{ update: (options?: TruncateOptions) => void }}
  * @example
  * <h1 use:truncate>...</h1>
  * <h1 use:truncate={{ clamp: "front" }}>...</h1>
@@ -11,6 +14,7 @@
 export function truncate(node, options = {}) {
   const prefix = "bx--text-truncate--";
 
+  /** @param {TruncateOptions} [options] */
   function update(options = {}) {
     const lines = options.lines ?? 1;
     const multiline = lines > 1;

@@ -27,6 +27,7 @@ export function filterTreeNodes(
 ) {
   const { includeChildren = false, includeAncestors = true } = options;
 
+  /** @param {TreeNode} node */
   function cloneNode(node) {
     const cloned = { ...node };
     if (Array.isArray(node.nodes)) {
@@ -35,6 +36,7 @@ export function filterTreeNodes(
     return cloned;
   }
 
+  /** @param {TreeNode} node */
   function filterNode(node) {
     const matches = predicate(node);
 
