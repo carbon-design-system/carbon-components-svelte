@@ -342,6 +342,24 @@
         if (readonly || disabled) break;
         setChar(index, "");
         break;
+      default:
+        if (readonly || disabled) break;
+        // maxlength="1" drops keystrokes into a filled segment; select its
+        // content so the native insertion replaces the character.
+        if (
+          event.key.length === 1 &&
+          !event.ctrlKey &&
+          !event.metaKey &&
+          !event.altKey &&
+          !event.isComposing &&
+          code[index]
+        ) {
+          const input = inputs[index];
+          if (input && input.selectionStart === input.selectionEnd) {
+            input.select();
+          }
+        }
+        break;
     }
   }
 
