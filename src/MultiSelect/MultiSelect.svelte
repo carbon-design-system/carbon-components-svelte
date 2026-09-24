@@ -377,6 +377,11 @@
   import { debounce } from "../utils/debounce.js";
   import { deepEqual } from "../utils/deep-equal.js";
   import { dismiss } from "../utils/dismiss.js";
+  import {
+    buildFieldIds,
+    resolveStatusDescribedBy,
+    resolveValidationVisibility,
+  } from "../utils/field-status.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { moveIndex } from "../utils/move-index.js";
@@ -1027,23 +1032,26 @@
 
   $: menuId = `menu-${id}`;
   $: comboId = `combo-${id}`;
-  $: helperId = `helper-${id}`;
-  $: errorId = `error-${id}`;
-  $: warnId = `warn-${id}`;
+  $: ({ helperId, errorId, warnId } = buildFieldIds(id));
   $: readonlyId = `readonly-${id}`;
   $: selectionId = `selection-${id}`;
   // `aria-readonly` on a combobox/listbox does not reliably surface read-only state,
   // so the read-only state is also exposed as a visually-hidden description. The
   // single status/help id is combined with the read-only id (a describedby
   // may reference multiple ids) so it works in every state.
-  $: statusDescribedById =
-    showInvalid && invalidText
-      ? errorId
-      : showWarn && warnText
-        ? warnId
-        : !isFluid && !showInvalid && !showWarn && helperText
-          ? helperId
-          : undefined;
+  $: statusDescribedById = resolveStatusDescribedBy({
+    showInvalid,
+    showWarn,
+    helperText,
+    invalidText,
+    warnText,
+    isFluid,
+    errorId,
+    warnId,
+    helperId,
+    requireInvalidText: true,
+    requireWarnText: true,
+  });
   $: hasSelectionDescription = !readonly && selectionCount > 0;
   $: fieldDescribedById =
     [
@@ -1071,8 +1079,12 @@
   // Portaled menus render outside the fluid wrapper, so they keep default heights.
   $: hasFluidMenuItems = isFluid && !condensed && !effectivePortalMenu;
   // Invalid/warn states are suppressed when the multi-select is disabled or read-only.
-  $: showInvalid = invalid && !disabled && !readonly;
-  $: showWarn = warn && !invalid && !disabled && !readonly;
+  $: ({ showInvalid, showWarn } = resolveValidationVisibility({
+    invalid,
+    warn,
+    disabled,
+    readonly,
+  }));
   // Neutral = default fluid state, i.e. none of the other wrapper modifiers apply.
   $: fluidNeutral =
     isFluid && !showInvalid && !showWarn && !disabled && !readonly;
