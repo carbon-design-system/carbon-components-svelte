@@ -10,12 +10,14 @@
    * @type {"default" | "field" | "small" | "lg" | "xl"}
    */
   export let size = "default";
+
+  import { resolveLinkRel } from "../utils/link-rel.js";
 </script>
 
 {#if href}
   <a
     {href}
-    rel={$$restProps.target === "_blank" ? "noopener noreferrer" : undefined}
+    rel={resolveLinkRel($$restProps.target)}
     role="button"
     class:bx--skeleton={true}
     class:bx--btn={true}

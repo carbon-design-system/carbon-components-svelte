@@ -153,6 +153,7 @@
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
+  import { resolveLinkRel } from "../utils/link-rel.js";
   import { noop } from "../utils/noop.js";
   import ButtonSkeleton from "./ButtonSkeleton.svelte";
   import { activeButtonTooltip } from "./button-tooltip-store.js";
@@ -313,10 +314,7 @@
     tabindex,
     disabled: isDisabled ? true : undefined,
     href: href && !isDisabled ? href : undefined,
-    rel:
-      href && !isDisabled && $$restProps.target === "_blank"
-        ? "noopener noreferrer"
-        : undefined,
+    rel: href && !isDisabled ? resolveLinkRel($$restProps.target) : undefined,
     "aria-pressed":
       hasIconOnly && kind === "ghost" && !href ? isSelected : undefined,
     "aria-busy": loading || undefined,
