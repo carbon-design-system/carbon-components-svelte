@@ -31,6 +31,7 @@
    * either an empty string (unfilled segment) or a single character matching
    * `pattern` when set, otherwise the active `type`: `0-9` for `"numeric"`,
    * `a-zA-Z0-9` for `"alphanumeric"`.
+   * Follows the segments when the owning form resets.
    * @type {string[]}
    * @bindable writable
    */
@@ -184,6 +185,7 @@
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -256,6 +258,19 @@
     dispatch("clear");
   }
   $: if (anyValue) hadValue = true;
+
+  // A form reset restores the segments without an input event, and the
+  // hidden input keeps its value, so rebuild `code` from the segments.
+  // Like the other form controls, a reset fires no events.
+  function handleFormReset() {
+    const next = Array.from({ length: count }, (_, index) => {
+      const char = inputs[index]?.value ?? "";
+      return char.length === 1 && isValidChar(char) ? char : "";
+    });
+    prevComplete = count > 0 && next.every(Boolean);
+    hadValue = next.some(Boolean);
+    code = next;
+  }
 
   /** @type {(char: string) => boolean} */
   function isValidChar(char) {
@@ -497,6 +512,7 @@
   {...$$restProps}
 >
   <fieldset
+    use:formReset={handleFormReset}
     class:bx--pin-code-input__fieldset={true}
     {disabled}
     aria-describedby={describedById}
