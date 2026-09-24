@@ -348,6 +348,45 @@ describe("DatePicker", () => {
       expect(capture.errors).toEqual([]);
     });
 
+    it("focuses an enabled day when today is disabled", async () => {
+      const now = new Date();
+      render(DatePicker, {
+        datePickerType: "single",
+        disabledDates: [
+          new Date(now.getFullYear(), now.getMonth(), now.getDate()),
+        ],
+      });
+      const calendar = await screen.findByLabelText("calendar-container");
+      const input = screen.getByLabelText("Date");
+      input.focus();
+
+      await fireEvent.keyDown(input, { key: "ArrowDown" });
+
+      expect(calendar).toHaveClass("open");
+      expect(document.activeElement).toHaveClass("flatpickr-day");
+      expect(document.activeElement).not.toHaveClass("flatpickr-disabled");
+    });
+
+    it("focuses a day in the displayed month after navigating away from today", async () => {
+      render(DatePicker, { datePickerType: "single" });
+      const input = screen.getByLabelText("Date");
+      await user.click(input);
+      const calendar = await screen.findByLabelText("calendar-container");
+      const next = calendar.querySelector<HTMLElement>(".flatpickr-next-month");
+      if (!next) throw new Error("expected a next-month button");
+      await user.click(next);
+      const shownMonth = calendar.querySelector(".cur-month")?.textContent;
+      input.focus();
+
+      await fireEvent.keyDown(input, { key: "ArrowDown" });
+
+      expect(calendar.contains(document.activeElement)).toBe(true);
+      expect(document.activeElement).toHaveClass("flatpickr-day");
+      expect(calendar.querySelector(".cur-month")?.textContent).toBe(
+        shownMonth,
+      );
+    });
+
     it("opens the calendar and moves focus into it", async () => {
       render(DatePicker, { datePickerType: "single" });
       const calendar = await screen.findByLabelText("calendar-container");
