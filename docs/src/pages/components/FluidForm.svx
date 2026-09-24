@@ -231,7 +231,29 @@ Place a fluid form inside a [modal](/components/Modal#full-width) to keep inputs
 
 <FileSource src="/framed/FluidForm/FluidFormModal" />
 
-## SvelteKit enhance
+## Submission
+
+Fluid inputs submit exactly like their default variants: give each field a
+`name`, and read the values with `request.formData()` in a SvelteKit form
+action. See [Form](/components/Form#submitted-values) for what each component
+submits and [Form](/components/Form#form-actions) for a complete action.
+
+### Server-side validation
+
+This example stands in for a form action in the browser. Fluid inputs do not
+show `helperText`, so put formatting hints in the `labelText` or `placeholder`
+and let the server's message appear through `invalidText`. The actions sit
+below the fluid form in a full-width
+[ActionSet](/components/ActionSet) and target it with `form`, the way a
+modal footer would.
+
+<FileSource src="/framed/FluidForm/FluidFormServerValidation" />
+
+`Dropdown` keeps its selection through a reset. To clear it after a
+successful submission, reset its bound value in `on:reset`, as `region` is
+here.
+
+### SvelteKit enhance
 
 Set `actions` to apply SvelteKit's `enhance` (or any other action) to the
 underlying form element. See [Form](/components/Form#sveltekit-enhance) for
@@ -248,3 +270,80 @@ usage details.
   <Button type="submit">Save</Button>
 </FluidForm>
 ```
+
+A complete fluid form action, returning the submitted values and the errors
+on failure:
+
+```svelte
+<!-- src/routes/apps/new/+page.svelte -->
+<script>
+  import { enhance } from "$app/forms";
+  import {
+    Button,
+    Dropdown,
+    FluidForm,
+    TextInput,
+  } from "carbon-components-svelte";
+
+  export let form;
+
+  $: values = form?.values ?? {};
+  $: errors = form?.errors ?? {};
+</script>
+
+<FluidForm method="POST" novalidate actions={[enhance]}>
+  <TextInput
+    name="name"
+    labelText="Application name (lowercase, dashes)"
+    value={values.name ?? ""}
+    invalid={!!errors.name}
+    invalidText={errors.name}
+  />
+  <Dropdown
+    name="region"
+    labelText="Deployment region"
+    selectedId={values.region || undefined}
+    items={[
+      { id: "us-east", text: "US East (Washington DC)" },
+      { id: "eu-de", text: "EU Germany (Frankfurt)" },
+    ]}
+    invalid={!!errors.region}
+    invalidText={errors.region}
+  />
+  <Button type="submit">Create application</Button>
+</FluidForm>
+```
+
+```js
+// src/routes/apps/new/+page.server.js
+import { fail } from "@sveltejs/kit";
+
+export const actions = {
+  default: async ({ request }) => {
+    const data = await request.formData();
+    const name = String(data.get("name") ?? "").trim();
+    const region = String(data.get("region") ?? "");
+
+    const errors = {};
+    if (!/^[a-z][a-z0-9-]{2,}$/.test(name)) errors.name = "Use 3 or more lowercase letters, numbers, or dashes.";
+    if (region === "") errors.region = "Choose a deployment region.";
+
+    if (Object.keys(errors).length > 0) {
+      return fail(400, { values: { name, region }, errors });
+    }
+
+    // Create the application here.
+    return { created: name };
+  },
+};
+```
+
+## Best practices
+
+| Do | Why |
+| --- | --- |
+| Follow the [Form best practices](/components/Form#best-practices) | Name every field, validate on the server, and return the submitted values with the errors. |
+| Put hints in the label or placeholder | Fluid inputs hide `helperText`, so guidance placed there never reaches the user. |
+| Show one clear `invalidText` per field | The fluid variant renders it inside the field's border, next to the value it describes. |
+| Mirror the loaded form with the fluid skeletons | The layout does not shift when the initial values arrive. |
+| Inside a modal, give the form an `id` and set the modal's `formId` | The modal's primary button then submits the form (see [Modal](/components/Modal#with-form-submission)). |
