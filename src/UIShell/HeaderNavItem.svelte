@@ -32,6 +32,7 @@
   export let ref = null;
 
   import { getContext, onMount } from "svelte";
+  import { resolveLinkRel } from "../utils/link-rel.js";
   import { moveIndex } from "../utils/move-index.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -71,7 +72,7 @@
     role="menuitem"
     tabindex="0"
     {href}
-    rel={$$restProps.target === "_blank" ? "noopener noreferrer" : undefined}
+    rel={resolveLinkRel($$restProps.target, $$restProps.rel)}
     class:bx--header__menu-item={true}
     class:bx--header__menu-item--icon={icon || $$slots.icon}
     class:bx--header__menu-item--current={isSelected}

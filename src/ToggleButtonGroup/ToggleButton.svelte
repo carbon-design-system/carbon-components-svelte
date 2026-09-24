@@ -63,6 +63,7 @@
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { createDelayedSetter } from "../utils/delayed-setter.js";
+  import { noop } from "../utils/noop.js";
 
   // Standalone use (no ancestor `ToggleButtonGroup`) is undocumented but
   // must not throw; `pressed` just stays `false` and clicks are inert.
@@ -74,8 +75,8 @@
     ),
     tabStopElement: readable(/** @type {HTMLButtonElement | null} */ (null)),
     activeTooltip: writable(/** @type {string | number | null} */ (null)),
-    toggle: () => {},
-    notifyUnmount: () => {},
+    toggle: noop,
+    notifyUnmount: noop,
   };
   const {
     selectedValues,

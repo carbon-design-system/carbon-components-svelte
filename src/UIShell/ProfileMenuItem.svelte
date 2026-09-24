@@ -27,6 +27,7 @@
 
   import { getContext, onMount } from "svelte";
   import { PROFILE_MENU_CONTEXT_KEY } from "../constants/context-keys.js";
+  import { resolveLinkRel } from "../utils/link-rel.js";
   import { moveIndex } from "../utils/move-index.js";
 
   const ctx = getContext(PROFILE_MENU_CONTEXT_KEY);
@@ -70,7 +71,7 @@
   <a
     bind:this={ref}
     {href}
-    rel={$$restProps.target === "_blank" ? "noopener noreferrer" : undefined}
+    rel={resolveLinkRel($$restProps.target, $$restProps.rel)}
     class:bx--profile-menu__item={true}
     {...$$restProps}
     on:click
