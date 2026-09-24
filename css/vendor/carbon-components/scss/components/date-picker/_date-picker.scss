@@ -539,3 +539,19 @@
 @include exports('datepicker-clear') {
   @include date-picker-clear;
 }
+
+// carbon-components-svelte patch
+// `datePickerType="week"`: flatpickr's week plugin marks all seven days
+// `.week.selected`. Keep the row's ends selected and give the days between
+// them the in-range look, so the week reads as one span like a range. Rows
+// start on the locale's first day, so `7n + 1` and `7n` are the week's ends.
+@mixin date-picker-week-select {
+  .flatpickr-day.week.selected:not(:nth-child(7n + 1)):not(:nth-child(7n)) {
+    color: $text-01;
+    background-color: $highlight;
+  }
+}
+
+@include exports('datepicker-week-select') {
+  @include date-picker-week-select;
+}

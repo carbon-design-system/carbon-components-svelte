@@ -65,4 +65,19 @@ describe("getUnsupportedOptionWarnings", () => {
       getUnsupportedOptionWarnings({ disable: ["x"], altInput: true }, base),
     ).toEqual([]);
   });
+
+  it("flags showMonths only with the week type", () => {
+    expect(
+      getUnsupportedOptionWarnings(
+        { showMonths: 2 },
+        { ...base, datePickerType: "week" },
+      ),
+    ).toEqual([expect.stringMatching(/showMonths.*datePickerType="week"/)]);
+    expect(
+      getUnsupportedOptionWarnings(
+        { showMonths: 2 },
+        { ...base, datePickerType: "single" },
+      ),
+    ).toEqual([]);
+  });
 });

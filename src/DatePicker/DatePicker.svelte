@@ -27,7 +27,10 @@
   /**
    * Specify the date picker type.
    * Changing it after mount rebuilds the calendar.
-   * @type {"simple" | "single" | "range" | "month" | "year" | "multiple"}
+   * `"week"` selects a whole week: a picked day becomes the first day of its
+   * week, so `value` is that date in `dateFormat`. A `value` set from outside
+   * is kept as given.
+   * @type {"simple" | "single" | "range" | "month" | "year" | "week" | "multiple"}
    */
   export let datePickerType = "simple";
 
@@ -314,6 +317,7 @@
       _ === "range" ||
       _ === "month" ||
       _ === "year" ||
+      _ === "week" ||
       _ === "multiple",
   );
 
@@ -1440,6 +1444,7 @@
   // equal contents, so each message is only reported once per instance.
   $: if ($hasCalendar) {
     for (const message of getUnsupportedOptionWarnings(flatpickrProps, {
+      datePickerType,
       portalled: effectivePortalMenu,
       displayFormat,
       disabledDates,
@@ -1574,6 +1579,7 @@
     class:bx--date-picker--single={datePickerType === "single" ||
       datePickerType === "month" ||
       datePickerType === "year" ||
+      datePickerType === "week" ||
       datePickerType === "multiple"}
     class:bx--date-picker--range={datePickerType === "range"}
     class:bx--date-picker--inline={usesInline && $hasCalendar}

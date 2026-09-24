@@ -1,4 +1,5 @@
 export interface UnsupportedOptionContext {
+  datePickerType?: string;
   portalled: boolean;
   displayFormat: string | undefined;
   disabledDates: ReadonlyArray<unknown>;

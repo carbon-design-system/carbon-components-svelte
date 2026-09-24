@@ -133,6 +133,46 @@ function markTodayMonth(instance) {
 }
 
 /**
+ * flatpickr's week plugin highlights the whole week but keeps the clicked
+ * day selected. Move the selection to the week's first day (per locale) so
+ * every day of a week gives the same value. `setDate` without a change
+ * event, since the caller is already inside `onChange`.
+ *
+ * @param {any} instance
+ */
+function snapToWeekStart(instance) {
+  const [date] = instance.selectedDates;
+  if (!date) return;
+  const offset = (date.getDay() - instance.l10n.firstDayOfWeek + 7) % 7;
+  if (offset === 0) return;
+  instance.setDate(
+    new Date(date.getFullYear(), date.getMonth(), date.getDate() - offset),
+    false,
+  );
+}
+
+/**
+ * ISO 8601 week number, as flatpickr's default `getWeek` computes it.
+ *
+ * @param {Date} givenDate
+ */
+function isoWeek(givenDate) {
+  const date = new Date(givenDate.getTime());
+  date.setHours(0, 0, 0, 0);
+  date.setDate(date.getDate() + 3 - ((date.getDay() + 6) % 7));
+  const week1 = new Date(date.getFullYear(), 0, 4);
+  return (
+    1 +
+    Math.round(
+      ((date.getTime() - week1.getTime()) / 86400000 -
+        3 +
+        ((week1.getDay() + 6) % 7)) /
+        7,
+    )
+  );
+}
+
+/**
  * Whether `locale` orders the month before the year (e.g. "January 2000"),
  * as opposed to year before month (e.g. "2000年1月" in Japanese).
  *
@@ -312,6 +352,8 @@ export async function createCalendar({ options, base, input, dispatch }) {
   let monthSelectPlugin;
   /** @type {((config?: { dateFormat?: string; altFormat?: string }) => unknown) | undefined} */
   let yearSelectPlugin;
+  /** @type {(() => unknown) | undefined} */
+  let weekSelectPlugin;
 
   if (options.mode === "range") {
     const importee = await import("flatpickr/dist/esm/plugins/rangePlugin");
@@ -326,6 +368,13 @@ export async function createCalendar({ options, base, input, dispatch }) {
   if (options.mode === "year") {
     const importee = await import("./year-select-plugin.js");
     yearSelectPlugin = importee.yearSelectPlugin;
+  }
+
+  if (options.mode === "week") {
+    const importee = await import(
+      "flatpickr/dist/esm/plugins/weekSelect/weekSelect"
+    );
+    weekSelectPlugin = importee.default;
   }
 
   const plugins = [
@@ -345,10 +394,14 @@ export async function createCalendar({ options, base, input, dispatch }) {
           altFormat: options.altFormat ?? options.dateFormat,
         })
       : false,
+    options.mode === "week" && weekSelectPlugin ? weekSelectPlugin() : false,
   ].filter(Boolean);
 
   /** @type {MutationObserver | undefined} */
   let altInputObserver;
+  /** Set once flatpickr returns; read lazily by the week-mode `getWeek`. */
+  /** @type {any} */
+  let createdInstance;
 
   /**
    * Runs before flatpickr removes the `altInput`, so hand the id back or the
@@ -446,7 +499,12 @@ export async function createCalendar({ options, base, input, dispatch }) {
    */
   const carbonHooks = {
     onChange: [
-      () => {
+      (
+        /** @type {any} */ _s,
+        /** @type {any} */ _d,
+        /** @type {FlatpickrInstance} */ instance,
+      ) => {
+        if (options.mode === "week") snapToWeekStart(instance);
         dispatch("change");
       },
     ],
@@ -539,8 +597,27 @@ export async function createCalendar({ options, base, input, dispatch }) {
     // `flatpickrProps`) can never replace this wrapper; it is still called,
     // via `errorHandlerBox`, from inside `handleParseError`.
     errorHandler: handleParseError,
+    // A week's value is its first day, which for a Sunday-first locale sits
+    // in the previous ISO week. Number the week the row shows instead: the
+    // ISO week of its middle day. flatpickr's week column passes a row's
+    // last day, which lands on the same middle day.
+    ...(options.mode === "week" &&
+      !options.getWeek && {
+        getWeek: (/** @type {Date} */ date) => {
+          const firstDayOfWeek = createdInstance?.l10n.firstDayOfWeek ?? 0;
+          const offset = (date.getDay() - firstDayOfWeek + 7) % 7;
+          return isoWeek(
+            new Date(
+              date.getFullYear(),
+              date.getMonth(),
+              date.getDate() - offset + 3,
+            ),
+          );
+        },
+      }),
   };
   const instance = new /** @type {any} */ (flatpickr)(base, config);
+  createdInstance = instance;
   // flatpickr catches its own init errors, logs them, and returns an empty
   // array. Report that as "no calendar" so callers never treat it as one.
   if (Array.isArray(instance)) return null;
