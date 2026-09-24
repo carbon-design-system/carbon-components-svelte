@@ -91,6 +91,11 @@
   import ChevronDown from "../icons/ChevronDown.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import {
+    buildFieldIds,
+    resolveStatusDescribedBy,
+    resolveValidationVisibility,
+  } from "../utils/field-status.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -191,24 +196,28 @@
     });
   }
 
-  $: errorId = `error-${id}`;
-  $: warnId = `warn-${id}`;
-  $: helperId = `helper-${id}`;
+  $: ({ errorId, warnId, helperId } = buildFieldIds(id));
   $: {
     selectedValue.set(selected ?? $defaultValue);
     syncNativeSelectValue();
   }
   // Invalid/warn states are suppressed when the select is disabled or read-only.
-  $: showInvalid = invalid && !disabled && !readonly;
-  $: showWarn = warn && !invalid && !disabled && !readonly;
+  $: ({ showInvalid, showWarn } = resolveValidationVisibility({
+    invalid,
+    warn,
+    disabled,
+    readonly,
+  }));
   $: isFluid = !inline && (fluid || !!formContext?.isFluid);
-  $: describedById = showInvalid
-    ? errorId
-    : showWarn
-      ? warnId
-      : helperText && !isFluid
-        ? helperId
-        : undefined;
+  $: describedById = resolveStatusDescribedBy({
+    showInvalid,
+    showWarn,
+    helperText,
+    isFluid,
+    errorId,
+    warnId,
+    helperId,
+  });
 </script>
 
 <div class:bx--form-item={true} class:bx--select--fluid={isFluid}>
