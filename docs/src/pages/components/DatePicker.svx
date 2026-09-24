@@ -70,9 +70,15 @@ Set `inline` to `true` to render the calendar permanently below the input instea
 
 Drive the calendar from outside the component—set values, select many dates at once, or read the underlying Flatpickr instance.
 
+### Open and close
+
+Use `bind:open` to open or close the calendar from outside the component. It also updates when the user opens or dismisses the calendar. Opening through the prop dispatches `open`, and closing through it dispatches `close` with the `"programmatic"` trigger.
+
+<FileSource src="/framed/DatePicker/DatePickerOpen" />
+
 ### Programmatic access
 
-Use `bind:calendar` to access the underlying [Flatpickr instance](https://flatpickr.js.org/instance-methods-properties-elements/) for programmatic control, such as opening the calendar from an external trigger or updating options at runtime via `set`.
+For everything else, use `bind:calendar` to access the underlying [Flatpickr instance](https://flatpickr.js.org/instance-methods-properties-elements/) for programmatic control, such as opening the calendar from an external trigger or updating options at runtime via `set`.
 
 <FileSource src="/framed/DatePicker/DatePickerCalendarInstance" />
 
@@ -302,7 +308,7 @@ Listen for `on:change` to respond to value updates. For the `"simple"` date pick
 
 ### Close
 
-Listen for `on:close` to know when the calendar closes and why. This event is only dispatched for calendar types (not `"simple"`). `event.detail.trigger` is `"escape-key"`, `"outside-click"`, or `"select"`; the detail also includes `selectedDates` and `dateStr`.
+Listen for `on:close` to know when the calendar closes and why. This event is only dispatched for calendar types (not `"simple"`). `event.detail.trigger` is `"escape-key"`, `"outside-click"`, `"select"`, or `"programmatic"` (closed through `bind:open`); the detail also includes `selectedDates` and `dateStr`.
 
 <DatePicker datePickerType="single" on:close={(e) => console.log(e.detail.trigger)}>
   <DatePickerInput labelText="Maintenance window date" placeholder="mm/dd/yyyy" />
