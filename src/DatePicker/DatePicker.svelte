@@ -258,6 +258,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { uniqueId } from "../utils/unique-id.js";
+  import { addPooledListener } from "../utils/window-listener-pool.js";
   import {
     createCalendar,
     resolveLocale,
@@ -368,6 +369,10 @@
   let calendarUsesFixedPositioning = false;
   /** @type {(ReturnType<typeof rafThrottle> & { cancel: () => void }) | null} */
   let onCalendarReposition = null;
+  /** @type {(() => void) | null} */
+  let unlistenReposition = null;
+  /** @type {(() => void) | null} */
+  let unlistenRepositionResize = null;
   const SCROLL_LISTENER_OPTIONS = { capture: true, passive: true };
   // datePickerType="multiple": anchor for shift-click range selection. Only
   // moves on a plain click, so consecutive shift-clicks all extend from the
@@ -490,18 +495,22 @@
       if (calendar) positionFlatpickrCalendarFixed(calendar);
     });
     onCalendarReposition = reposition;
-    window.addEventListener("scroll", reposition, SCROLL_LISTENER_OPTIONS);
-    window.addEventListener("resize", reposition, { passive: true });
+    unlistenReposition = addPooledListener(
+      "scroll",
+      reposition,
+      SCROLL_LISTENER_OPTIONS,
+    );
+    unlistenRepositionResize = addPooledListener("resize", reposition, {
+      passive: true,
+    });
   }
 
   function detachFixedRepositionListeners() {
     if (!onCalendarReposition) return;
-    window.removeEventListener(
-      "scroll",
-      onCalendarReposition,
-      SCROLL_LISTENER_OPTIONS,
-    );
-    window.removeEventListener("resize", onCalendarReposition);
+    unlistenReposition?.();
+    unlistenReposition = null;
+    unlistenRepositionResize?.();
+    unlistenRepositionResize = null;
     onCalendarReposition.cancel();
     onCalendarReposition = null;
   }
