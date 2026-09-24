@@ -1,3 +1,31 @@
+<script context="module">
+  // Compute the visible page window directly instead of
+  // materializing a `total`-length array and slicing it down,
+  // since the rendered window is bounded by `shown`.
+  function computePageWindow(total, startOffset, front, back) {
+    const start = startOffset + front;
+    const end = total - back - 1;
+    const window = [];
+
+    for (let i = start; i < end; i++) {
+      window.push(i);
+    }
+
+    return window;
+  }
+
+  /**
+   * Resolve "inside"/"outside" to a concrete side for the previous ("start")
+   * or next ("end") button; concrete positions pass through.
+   * @param {string} position @param {"start" | "end"} edge
+   */
+  function edgeTooltipPosition(position, edge) {
+    if (position === "inside") return edge === "start" ? "right" : "left";
+    if (position === "outside") return edge === "start" ? "left" : "right";
+    return position;
+  }
+</script>
+
 <script>
   /**
    * @event change - Fires after every user interaction
@@ -75,35 +103,9 @@
     }
   }
 
-  // Compute the visible page window directly instead of
-  // materializing a `total`-length array and slicing it down,
-  // since the rendered window is bounded by `shown`.
-  function computePageWindow(total, startOffset, front, back) {
-    const start = startOffset + front;
-    const end = total - back - 1;
-    const window = [];
-
-    for (let i = start; i < end; i++) {
-      window.push(i);
-    }
-
-    return window;
-  }
-
   // all enumerable items to render in between
   // overflow menus
   $: items = computePageWindow(total, startOffset, front, back);
-
-  /**
-   * Resolve "inside"/"outside" to a concrete side for the previous ("start")
-   * or next ("end") button; concrete positions pass through.
-   * @param {string} position @param {"start" | "end"} edge
-   */
-  function edgeTooltipPosition(position, edge) {
-    if (position === "inside") return edge === "start" ? "right" : "left";
-    if (position === "outside") return edge === "start" ? "left" : "right";
-    return position;
-  }
 </script>
 
 <nav aria-label="pagination" class:bx--pagination-nav={true} {...$$restProps}>

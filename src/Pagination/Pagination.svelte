@@ -1,3 +1,55 @@
+<script context="module">
+  import { tick } from "svelte";
+
+  /**
+   * When a nav button becomes disabled as a result of its own click, the
+   * browser blurs it (moving focus to the body). Refocus the other button
+   * so keyboard/AT users don't lose their place.
+   * @param {HTMLElement | null} clickedRef
+   * @param {HTMLElement | null} otherRef
+   */
+  async function refocusIfDisabled(clickedRef, otherRef) {
+    const wasFocused = document.activeElement === clickedRef;
+    await tick();
+    if (wasFocused && clickedRef?.disabled && otherRef) {
+      otherRef.focus();
+    }
+  }
+
+  /**
+   * Returns a subset of page numbers centered around the current page to prevent
+   * performance issues with large datasets. Creates a capped window of pages
+   * instead of potentially thousands, improving render speed and memory usage.
+   * @param {number} currentPage - The current page number.
+   * @param {number} totalPages - Total number of pages.
+   * @param {number} window - Maximum number of pages to render.
+   * @returns {number[]} Array of page numbers to display.
+   */
+  function getWindowedPages(currentPage, totalPages, window) {
+    const size = Math.min(window, totalPages);
+    const half = Math.floor(size / 2);
+    let start = Math.max(1, currentPage - half);
+    const end = Math.min(totalPages, start + size - 1);
+    start = Math.max(1, end - size + 1);
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+  }
+
+  /**
+   * Filters page sizes to remove redundant options based on total items.
+   * Keeps all sizes up to and including the first one >= totalItems.
+   * @returns {number[]} Filtered array of page sizes.
+   */
+  function getFilteredPageSizes(sizes, total) {
+    if (total <= 0) return sizes.slice(0, 1);
+    const filtered = [];
+    for (const size of sizes) {
+      filtered.push(size);
+      if (size >= total) break;
+    }
+    return filtered.length ? filtered : sizes.slice(0, 1);
+  }
+</script>
+
 <script>
   /**
    * Dispatched when the user changes the page or page size through any
@@ -185,7 +237,7 @@
    */
   export let size = "md";
 
-  import { createEventDispatcher, tick } from "svelte";
+  import { createEventDispatcher } from "svelte";
   import Button from "../Button/Button.svelte";
   import CaretLeft from "../icons/CaretLeft.svelte";
   import CaretRight from "../icons/CaretRight.svelte";
@@ -200,54 +252,6 @@
   let prevPageSizesKey;
   let backBtnRef = null;
   let forwardBtnRef = null;
-
-  /**
-   * When a nav button becomes disabled as a result of its own click, the
-   * browser blurs it (moving focus to the body). Refocus the other button
-   * so keyboard/AT users don't lose their place.
-   * @param {HTMLElement | null} clickedRef
-   * @param {HTMLElement | null} otherRef
-   */
-  async function refocusIfDisabled(clickedRef, otherRef) {
-    const wasFocused = document.activeElement === clickedRef;
-    await tick();
-    if (wasFocused && clickedRef?.disabled && otherRef) {
-      otherRef.focus();
-    }
-  }
-
-  /**
-   * Returns a subset of page numbers centered around the current page to prevent
-   * performance issues with large datasets. Creates a capped window of pages
-   * instead of potentially thousands, improving render speed and memory usage.
-   * @param {number} currentPage - The current page number.
-   * @param {number} totalPages - Total number of pages.
-   * @param {number} window - Maximum number of pages to render.
-   * @returns {number[]} Array of page numbers to display.
-   */
-  function getWindowedPages(currentPage, totalPages, window) {
-    const size = Math.min(window, totalPages);
-    const half = Math.floor(size / 2);
-    let start = Math.max(1, currentPage - half);
-    const end = Math.min(totalPages, start + size - 1);
-    start = Math.max(1, end - size + 1);
-    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
-  }
-
-  /**
-   * Filters page sizes to remove redundant options based on total items.
-   * Keeps all sizes up to and including the first one >= totalItems.
-   * @returns {number[]} Filtered array of page sizes.
-   */
-  function getFilteredPageSizes(sizes, total) {
-    if (total <= 0) return sizes.slice(0, 1);
-    const filtered = [];
-    for (const size of sizes) {
-      filtered.push(size);
-      if (size >= total) break;
-    }
-    return filtered.length ? filtered : sizes.slice(0, 1);
-  }
 
   $: effectivePageSizes = dynamicPageSizes
     ? getFilteredPageSizes(pageSizes, totalItems)
