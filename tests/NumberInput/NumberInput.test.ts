@@ -2102,13 +2102,16 @@ describe("NumberInput", () => {
       expect(input).not.toHaveAttribute("max");
     });
 
-    it("should have pattern attribute in text mode", () => {
+    it("should not set a pattern in text mode", () => {
       render(NumberInput, {
         props: { allowDecimal: true, value: 5 },
       });
 
+      // A digits-only pattern would make decimal and formatted values
+      // invalid and block form submission; inputmode already picks the
+      // numeric keypad.
       const input = screen.getByLabelText("Clusters");
-      expect(input).toHaveAttribute("pattern", "[0-9]*");
+      expect(input).not.toHaveAttribute("pattern");
     });
   });
 
