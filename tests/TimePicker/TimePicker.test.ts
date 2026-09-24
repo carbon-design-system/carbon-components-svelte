@@ -394,6 +394,43 @@ describe("TimePicker", () => {
     container.remove();
   });
 
+  describe("inherited readonly", () => {
+    it.each([{ fluid: false }, { fluid: true }])(
+      "makes the selects read-only with the time picker (%o)",
+      ({ fluid }) => {
+        render(TimePicker, { props: { readonly: true, fluid } });
+
+        for (const select of screen.getAllByRole("combobox")) {
+          expect(select).toHaveAttribute("aria-readonly", "true");
+          expect(select.closest(".bx--time-picker__select")).toHaveClass(
+            "bx--select--readonly",
+          );
+        }
+      },
+    );
+
+    it("blocks keyboard changes on an inherited read-only select", async () => {
+      render(TimePicker, { props: { readonly: true } });
+
+      const [select] = screen.getAllByRole("combobox");
+      expect(await fireEvent.keyDown(select, { key: "ArrowDown" })).toBe(false);
+    });
+
+    it("leaves the selects editable by default", () => {
+      render(TimePicker);
+
+      for (const select of screen.getAllByRole("combobox")) {
+        expect(select).not.toHaveAttribute("aria-readonly");
+      }
+    });
+
+    it("leaves a standalone select editable", () => {
+      render(TimePickerSelectEvents);
+
+      expect(screen.getByRole("combobox")).not.toHaveAttribute("aria-readonly");
+    });
+  });
+
   it("keeps a read-only select closed on Alt+Down", async () => {
     render(TimePickerCustom, { props: { selectReadonly: true } });
 

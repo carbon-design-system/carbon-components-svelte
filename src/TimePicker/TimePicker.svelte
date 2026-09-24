@@ -78,7 +78,7 @@
   export let selectTextOnFocus = false;
 
   import { getContext, setContext, tick } from "svelte";
-  import { writable } from "svelte/store";
+  import { readonly as readOnly, writable } from "svelte/store";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import Stack from "../Stack/Stack.svelte";
@@ -96,7 +96,13 @@
     };
   }
 
-  const timePickerContext = { isFluid: false, registerSelect };
+  const groupReadonly = writable(readonly);
+
+  const timePickerContext = {
+    isFluid: false,
+    registerSelect,
+    readonly: readOnly(groupReadonly),
+  };
 
   setContext("carbon:TimePicker", timePickerContext);
 
@@ -119,6 +125,7 @@
   $: showWarn = warn && !invalid && !disabled && !readonly;
   $: isFluid = fluid || !!formContext?.isFluid;
   $: timePickerContext.isFluid = isFluid;
+  $: groupReadonly.set(readonly);
   $: equalWidth = $selectCount !== 2;
   $: fluidErrorText = showInvalid ? invalidText : showWarn ? warnText : "";
 </script>
