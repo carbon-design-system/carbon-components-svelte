@@ -26,6 +26,48 @@ describe("FileUploaderButton", () => {
     input.dispatchEvent(new Event("change", { bubbles: true }));
   }
 
+  describe("cancelled picker", () => {
+    const names = (input: HTMLInputElement) =>
+      Array.from(input.files as FileList).map((file) => file.name);
+    const emptyInput = (input: HTMLInputElement) =>
+      Object.defineProperty(input, "files", {
+        value: new DataTransfer().files,
+        writable: true,
+        configurable: true,
+      });
+
+    it("puts the current files back into the native input", async () => {
+      const { container } = render(FileUploaderButton, {
+        props: { labelText: "Add file" },
+      });
+      const input = container.querySelector('input[type="file"]');
+      assert(input instanceof HTMLInputElement);
+
+      simulateFileSelection(input, [new File(["x"], "a.txt")]);
+      await vi.waitFor(() => {
+        expect(names(input)).toEqual(["a.txt"]);
+      });
+
+      // Opening the picker clears the input; dismissing it fires `cancel`.
+      emptyInput(input);
+      input.dispatchEvent(new Event("cancel"));
+
+      expect(names(input)).toEqual(["a.txt"]);
+    });
+
+    it("leaves an empty input empty", () => {
+      const { container } = render(FileUploaderButton, {
+        props: { labelText: "Add file" },
+      });
+      const input = container.querySelector('input[type="file"]');
+      assert(input instanceof HTMLInputElement);
+
+      input.dispatchEvent(new Event("cancel"));
+
+      expect(input.files).toHaveLength(0);
+    });
+  });
+
   it("should render with default props", () => {
     const { container } = render(FileUploaderButton);
 

@@ -46,6 +46,37 @@ test.describe("FileUploader", () => {
     await page.getByRole("button", { name: "Remove file" }).click();
     await expect(page.getByText("remove-me.txt")).not.toBeVisible();
   });
+
+  test("keeps the selected files in the input after a dismissed picker", async ({
+    page,
+  }) => {
+    const addFile = page
+      .getByTestId("file-uploader")
+      .locator("button")
+      .filter({ hasText: "Add file" });
+    const input = page
+      .getByTestId("file-uploader")
+      .locator('input[type="file"]');
+
+    const firstChooser = page.waitForEvent("filechooser");
+    await addFile.click();
+    await (await firstChooser).setFiles({
+      name: "kept.txt",
+      mimeType: "text/plain",
+      buffer: Buffer.from("content"),
+    });
+    await expect(page.getByText("kept.txt")).toBeVisible();
+
+    // Open the picker again and dismiss it without choosing.
+    const secondChooser = page.waitForEvent("filechooser");
+    await addFile.click();
+    await secondChooser;
+    await input.dispatchEvent("cancel");
+
+    await expect
+      .poll(() => input.evaluate((el: HTMLInputElement) => el.files?.length))
+      .toBe(1);
+  });
 });
 
 test.describe("FileUploader (advanced)", () => {
