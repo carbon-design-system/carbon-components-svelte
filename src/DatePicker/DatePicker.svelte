@@ -175,8 +175,8 @@
 
   /**
    * Bind to the Flatpickr calendar instance for programmatic control.
-   * Only available when `datePickerType` is `"single"`, `"range"`, `"month"`,
-   * or `"year"`.
+   * Available for every `datePickerType` except `"simple"`, where it stays
+   * `null`.
    * @see https://flatpickr.js.org/instance-methods-properties-elements/
    * @type {import("flatpickr/dist/types/instance").Instance | null}
    * @bindable readonly

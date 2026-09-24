@@ -1964,6 +1964,26 @@ describe("DatePicker", () => {
       expect(calendar).not.toHaveClass("open");
     });
 
+    it("exposes the flatpickr instance in multiple mode", async () => {
+      let captured: Instance | null | undefined = null;
+      render(DatePickerCalendar, {
+        props: {
+          datePickerType: "multiple",
+          oncalendar: (cal: Instance | null | undefined) => {
+            captured = cal;
+          },
+        },
+      });
+
+      const instance = await vi.waitFor(() => {
+        if (!captured) throw new Error("calendar not set");
+        return captured;
+      });
+
+      expect(instance.config.mode).toBe("multiple");
+      expect(typeof instance.setDate).toBe("function");
+    });
+
     it("exposes the flatpickr instance in range mode", async () => {
       let captured: Instance | null | undefined = null;
       render(DatePickerCalendar, {
