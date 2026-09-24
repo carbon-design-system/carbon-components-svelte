@@ -20,9 +20,9 @@
   export let text = "Provide text";
 
   /**
-   * Render an icon-only switch.
-   * The parent `ContentSwitcher` becomes icon-only when every `Switch` sets `icon`.
-   * `text` is used as the accessible label and the tooltip shown on hover and focus.
+   * Render an icon-only switch. The parent `ContentSwitcher` becomes
+   * icon-only when every `Switch` sets `icon`. `text` is used as the
+   * accessible label and the tooltip shown on hover and focus.
    * @type {Icon}
    */
   export let icon = /** @type {Icon} */ (undefined);

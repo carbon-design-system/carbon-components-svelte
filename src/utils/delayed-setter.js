@@ -1,11 +1,13 @@
 // @ts-check
 
 /**
- * Create a canceling delayed-call scheduler for hover-intent style UI (e.g.
- * opening/closing a tooltip after a delay). Each call clears any pending
- * invocation before scheduling the next one; a non-positive `delay` runs
- * `callback` synchronously instead of queuing a timer.
- * @returns {((delay: number, callback: () => void) => void) & { cancel: () => void }}
+ * Create a canceling delayed-call scheduler for hover-intent style UI
+ * (e.g. opening/closing a tooltip after a delay). Each call clears any
+ * pending invocation before scheduling the next one; a non-positive
+ * `delay` runs `callback` synchronously instead of queuing a timer.
+ * @returns {((delay: number, callback: () => void) => void) & {
+ *   cancel: () => void;
+ * }}
  */
 export function createDelayedSetter() {
   /** @type {ReturnType<typeof setTimeout> | undefined} */

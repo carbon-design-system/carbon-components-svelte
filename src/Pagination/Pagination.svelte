@@ -2,9 +2,9 @@
   import { tick } from "svelte";
 
   /**
-   * When a nav button becomes disabled as a result of its own click, the
-   * browser blurs it (moving focus to the body). Refocus the other button
-   * so keyboard/AT users don't lose their place.
+   * When a nav button becomes disabled as a result of its own click,
+   * the browser blurs it (moving focus to the body). Refocus the other
+   * button so keyboard/AT users don't lose their place.
    * @param {HTMLElement | null} clickedRef
    * @param {HTMLElement | null} otherRef
    */
@@ -17,9 +17,10 @@
   }
 
   /**
-   * Returns a subset of page numbers centered around the current page to prevent
-   * performance issues with large datasets. Creates a capped window of pages
-   * instead of potentially thousands, improving render speed and memory usage.
+   * Returns a subset of page numbers centered around the current page
+   * to prevent performance issues with large datasets. Creates a capped
+   * window of pages instead of potentially thousands, improving render
+   * speed and memory usage.
    * @param {number} currentPage - The current page number.
    * @param {number} totalPages - Total number of pages.
    * @param {number} window - Maximum number of pages to render.
@@ -35,8 +36,9 @@
   }
 
   /**
-   * Filters page sizes to remove redundant options based on total items.
-   * Keeps all sizes up to and including the first one >= totalItems.
+   * Filters page sizes to remove redundant options based on total
+   * items. Keeps all sizes up to and including the first one >=
+   * totalItems.
    * @returns {number[]} Filtered array of page sizes.
    */
   function getFilteredPageSizes(sizes, total) {
@@ -88,7 +90,12 @@
    * Override the page-selection control.
    * Falls back to the default page number `Select` when unset.
    * Use the bound `page` prop to navigate from within the slot.
-   * @slot {{ currentPage: number; totalPages: number; currentPageSize: number; selectLabelText: string; }} pageSelect
+   * @slot {{
+   *   currentPage: number;
+   *   totalPages: number;
+   *   currentPageSize: number;
+   *   selectLabelText: string;
+   * }} pageSelect
    */
 
   /**
@@ -159,8 +166,9 @@
   export let pageSizeInputDisabled = false;
 
   /**
-   * Set to `true` for a compact prev/next control with page status text.
-   * Hides the page size and page selects. Suited to toolbars and cards.
+   * Set to `true` for a compact prev/next control with page status
+   * text. Hides the page size and page selects. Suited to toolbars and
+   * cards.
    */
   export let simple = false;
 
@@ -177,8 +185,9 @@
   export let pageSizes = [10];
 
   /**
-   * Set to `true` to dynamically filter page sizes based on total items.
-   * Page sizes larger than needed to display all items on a single page are hidden.
+   * Set to `true` to dynamically filter page sizes based on total
+   * items. Page sizes larger than needed to display all items on a
+   * single page are hidden.
    * @example
    * <Pagination totalItems={9} pageSizes={[5, 10, 15]} dynamicPageSizes />
    * <!-- renders [5, 10] -->
@@ -190,16 +199,16 @@
 
   /**
    * Override the disabled state of the forward (next page) button.
-   * Intended for use with `pagesUnknown` (controlled), where the consumer
-   * knows when there is no more data to load.
+   * Intended for use with `pagesUnknown` (controlled), where the
+   * consumer knows when there is no more data to load.
    * @type {boolean | undefined}
    */
   export let forwardButtonDisabled = undefined;
 
   /**
    * Override the disabled state of the backward (previous page) button.
-   * Intended for use with `pagesUnknown` (controlled), where the consumer
-   * manages page bounds.
+   * Intended for use with `pagesUnknown` (controlled), where the
+   * consumer manages page bounds.
    * @type {boolean | undefined}
    */
   export let backButtonDisabled = undefined;

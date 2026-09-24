@@ -11,8 +11,8 @@
   export let disabled = false;
 
   /**
-   * Specify the `href` attribute.
-   * Renders an anchor with clickable styles. Takes precedence over `interactive`.
+   * Specify the `href` attribute. Renders an anchor with clickable
+   * styles. Takes precedence over `interactive`.
    * @type {string}
    */
   export let href = undefined;

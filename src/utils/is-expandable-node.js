@@ -1,7 +1,7 @@
 // @ts-check
 /**
- * True when a tree node can expand: it has loaded children, or it is a lazy
- * parent marked with `hasChildren` before `nodes` are loaded.
+ * True when a tree node can expand: it has loaded children, or it is a
+ * lazy parent marked with `hasChildren` before `nodes` are loaded.
  *
  * @template {{ nodes?: unknown[]; hasChildren?: boolean }} T
  * @param {T} node

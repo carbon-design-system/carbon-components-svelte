@@ -26,21 +26,24 @@
    */
 
   /**
-   * Required. Specify the primary action button text.
-   * Alternatively, use the "labelChildren" slot for custom button content;
-   * `labelText` is still used as the accessible name in that case.
+   * Required. Specify the primary action button text. Alternatively,
+   * use the "labelChildren" slot for custom button content; `labelText`
+   * is still used as the accessible name in that case.
    * @type {string}
    */
   export let labelText;
 
-  /** Set to `true` to disable both the primary action and trigger buttons. */
+  /**
+   * Set to `true` to disable both the primary action and trigger
+   * buttons.
+   */
   export let disabled = false;
 
   /**
-   * Set to `true` to show a loading spinner on the primary action button
-   * and prevent it from being activated. Unlike `disabled`, the trigger
-   * button is unaffected — the menu can still be opened while the primary
-   * action is in flight.
+   * Set to `true` to show a loading spinner on the primary action
+   * button and prevent it from being activated. Unlike `disabled`, the
+   * trigger button is unaffected — the menu can still be opened while
+   * the primary action is in flight.
    */
   export let loading = false;
 
@@ -58,8 +61,8 @@
   export let size = "md";
 
   /**
-   * Set the preferred direction the menu opens toward.
-   * The menu flips to the opposite direction if there is not enough space.
+   * Set the preferred direction the menu opens toward. The menu flips
+   * to the opposite direction if there is not enough space.
    * @type {"top" | "bottom"}
    */
   export let direction = "bottom";
@@ -77,11 +80,11 @@
   export let open = false;
 
   /**
-   * Specify the accessible label for the icon-only trigger button.
-   * Set to an empty string to render the trigger without a tooltip, the
-   * same way `Button` handles an empty `iconDescription` - the trigger then
-   * has no accessible name of its own, so only do this when something else
-   * in the surrounding context labels it.
+   * Specify the accessible label for the icon-only trigger button. Set
+   * to an empty string to render the trigger without a tooltip, the
+   * same way `Button` handles an empty `iconDescription` - the trigger
+   * then has no accessible name of its own, so only do this when
+   * something else in the surrounding context labels it.
    */
   export let iconDescription = "Additional actions";
 

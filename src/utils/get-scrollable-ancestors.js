@@ -3,8 +3,9 @@
 const SCROLLABLE_OVERFLOW_REGEX = /(auto|scroll)/;
 
 /**
- * Walk up from `node` and return ancestors whose `overflow`, `overflowX`, or
- * `overflowY` is `auto` or `scroll`. Nearest first. Skips `node` itself.
+ * Walk up from `node` and return ancestors whose `overflow`,
+ * `overflowX`, or `overflowY` is `auto` or `scroll`. Nearest first.
+ * Skips `node` itself.
  *
  * @param {HTMLElement} node
  * @returns {Array<HTMLElement | Document>}

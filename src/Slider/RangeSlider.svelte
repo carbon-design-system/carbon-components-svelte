@@ -2,8 +2,16 @@
   /**
    * @event {{ value: number; valueUpper: number }} change
    * @event {{ value: number; valueUpper: number }} input
-   * @event {{ value: number; valueUpper: number; handle: "lower" | "upper" }} focus
-   * @event {{ value: number; valueUpper: number; handle: "lower" | "upper" }} blur
+   * @event {{
+   *   value: number;
+   *   valueUpper: number;
+   *   handle: "lower" | "upper";
+   * }} focus
+   * @event {{
+   *   value: number;
+   *   valueUpper: number;
+   *   handle: "lower" | "upper";
+   * }} blur
    */
 
   /**
@@ -43,10 +51,10 @@
   export let step = 1;
 
   /**
-   * Show tick marks along the track.
-   * Set to `true` to place a tick at every `step`, or pass an array of
-   * `{ value, label? }` for specific stops with optional labels below the track.
-   * Marks are visual only; snapping still follows `step`.
+   * Show tick marks along the track. Set to `true` to place a tick at
+   * every `step`, or pass an array of `{ value, label? }` for specific
+   * stops with optional labels below the track. Marks are visual only;
+   * snapping still follows `step`.
    * @type {boolean | ReadonlyArray<{ value: number; label?: string }>}
    */
   export let marks = false;
@@ -126,7 +134,9 @@
    */
   export let ref = null;
 
-  /** Set to `true` to select a text input's text when it receives focus */
+  /**
+   * Set to `true` to select a text input's text when it receives focus
+   */
   export let selectTextOnFocus = false;
 
   import { createEventDispatcher, tick } from "svelte";

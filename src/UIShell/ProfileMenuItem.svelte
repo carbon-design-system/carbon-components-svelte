@@ -5,8 +5,8 @@
    */
 
   /**
-   * Specify the `href` attribute to render an anchor.
-   * Omit it to render a button (for actions like "Log out" or "Change theme").
+   * Specify the `href` attribute to render an anchor. Omit it to render
+   * a button (for actions like "Log out" or "Change theme").
    * @type {string}
    */
   export let href = undefined;

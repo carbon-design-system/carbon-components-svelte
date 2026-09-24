@@ -1,7 +1,13 @@
 <script>
   /**
    * @event {number} change
-   * @event {{ id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean; index: number }} dismiss
+   * @event {{
+   *   id: string;
+   *   label: string;
+   *   disabled: boolean;
+   *   hasSecondaryLabel: boolean;
+   *   index: number;
+   * }} dismiss
    */
 
   /**
@@ -12,18 +18,18 @@
   export let selected = 0;
 
   /**
-   * Specify the selected tab by id.
-   * When set, takes precedence over `selected` and stays on the same logical
-   * tab as tabs are added or removed. Pair with a stable `id` on each `Tab`.
+   * Specify the selected tab by id. When set, takes precedence over
+   * `selected` and stays on the same logical tab as tabs are added or
+   * removed. Pair with a stable `id` on each `Tab`.
    * @bindable writable
    * @type {string | undefined}
    */
   export let selectedId = undefined;
 
   /**
-   * Choose whether arrow keys change the selection on focus.
-   * Defaults to `"automatic"`. Set to `"manual"` so arrow keys only move
-   * focus; press Enter or Space to select.
+   * Choose whether arrow keys change the selection on focus. Defaults
+   * to `"automatic"`. Set to `"manual"` so arrow keys only move focus;
+   * press Enter or Space to select.
    * @type {"automatic" | "manual"}
    */
   export let activation = "automatic";
@@ -44,9 +50,9 @@
   export let fullWidth = false;
 
   /**
-   * Set to `true` to render icon-only tabs.
-   * Each `Tab` displays only its `icon`; the `label` is used as the accessible
-   * name and the tooltip shown on hover and focus.
+   * Set to `true` to render icon-only tabs. Each `Tab` displays only
+   * its `icon`; the `label` is used as the accessible name and the
+   * tooltip shown on hover and focus.
    */
   export let iconOnly = false;
 
@@ -93,7 +99,15 @@
   const dispatch = createEventDispatcher();
 
   /**
-   * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean; index: number }>>}
+   * @type {import("svelte/store").Writable<
+   *   ReadonlyArray<{
+   *     id: string;
+   *     label: string;
+   *     disabled: boolean;
+   *     hasSecondaryLabel: boolean;
+   *     index: number;
+   *   }>
+   * >}
    */
   const tabs = writable([]);
   const tabsById = derived(tabs, (_) => keyBy(_));
@@ -114,11 +128,15 @@
    */
   const selectedTab = writable(undefined);
   /**
-   * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; index: number }>>}
+   * @type {import("svelte/store").Writable<
+   *   ReadonlyArray<{ id: string; index: number }>
+   * >}
    */
   const content = writable([]);
   /**
-   * @type {import("svelte/store").Readable<Record<string, { id: string; index: number }>>}
+   * @type {import("svelte/store").Readable<
+   *   Record<string, { id: string; index: number }>
+   * >}
    */
   const contentById = derived(content, (_) => keyBy(_));
   /**
@@ -136,8 +154,8 @@
    */
   const selectedContent = writable(undefined);
   /**
-   * Tracks which icon-only tab's tooltip is open so only one shows at a time.
-   * Scoped per `Tabs` instance.
+   * Tracks which icon-only tab's tooltip is open so only one shows at a
+   * time. Scoped per `Tabs` instance.
    * @type {import("svelte/store").Writable<string | null>}
    */
   const activeTooltip = writable(null);
@@ -176,7 +194,8 @@
   );
 
   /**
-   * Mirror the `iconOnly` prop into the context so each `Tab` reacts to it.
+   * Mirror the `iconOnly` prop into the context so each `Tab` reacts to
+   * it.
    * @type {import("svelte/store").Writable<boolean>}
    */
   const useIconOnly = writable(iconOnly);
@@ -226,8 +245,9 @@
   }
 
   /**
-   * Resolve selection from `selectedId` when set; otherwise use `selected`.
-   * If the selected id was removed, keep the same index (next tab) or clamp.
+   * Resolve selection from `selectedId` when set; otherwise use
+   * `selected`. If the selected id was removed, keep the same index
+   * (next tab) or clamp.
    * @type {() => void}
    */
   function syncSelection() {
@@ -247,8 +267,9 @@
   }
 
   /**
-   * Dispatch `dismiss`. When the handler removes the focused tab, move focus
-   * to the tab that took its place (or the new last tab) instead of `<body>`.
+   * Dispatch `dismiss`. When the handler removes the focused tab, move
+   * focus to the tab that took its place (or the new last tab) instead
+   * of `<body>`.
    * @type {(id: string) => Promise<void>}
    */
   async function dismiss(id) {
@@ -282,10 +303,11 @@
   const SCROLL_INTO_VIEW_MARGIN = 48;
 
   /**
-   * Scroll the tab list so `tab` is fully visible, inset from each edge so it is
-   * not tucked under an overflow button. The browser's native focus scroll moves
-   * a fixed step that lags variable-width tabs, eventually pushing the focused
-   * tab off-screen, so selection is scrolled explicitly instead.
+   * Scroll the tab list so `tab` is fully visible, inset from each edge
+   * so it is not tucked under an overflow button. The browser's native
+   * focus scroll moves a fixed step that lags variable-width tabs,
+   * eventually pushing the focused tab off-screen, so selection is
+   * scrolled explicitly instead.
    * @type {(tab: HTMLElement | undefined) => void}
    */
   function scrollTabIntoView(tab) {
@@ -310,7 +332,8 @@
 
   /**
    * Arrow keys move from the tab that holds focus. Fall back to the
-   * manual-mode focus index, then the selection, when focus is elsewhere.
+   * manual-mode focus index, then the selection, when focus is
+   * elsewhere.
    * @type {() => number}
    */
   function getActiveIndex() {
@@ -325,8 +348,9 @@
   }
 
   /**
-   * Move selection/focus to a tab at an absolute index. Roving focus resolves
-   * the index (skipping disabled, wrapping); selection follows focus.
+   * Move selection/focus to a tab at an absolute index. Roving focus
+   * resolves the index (skipping disabled, wrapping); selection follows
+   * focus.
    * @type {(index: number) => Promise<void>}
    */
   async function selectTab(index) {

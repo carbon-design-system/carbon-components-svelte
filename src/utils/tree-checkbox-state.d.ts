@@ -18,7 +18,10 @@ type TreeCheckboxState<Id extends string | number> = {
   indeterminateIds: Id[];
 };
 
-/** Derive the checked and indeterminate ids of a tree from a set of checked ids. */
+/**
+ * Derive the checked and indeterminate ids of a tree from a set of
+ * checked ids.
+ */
 export function resolveCheckboxState<T extends NodeLike>(
   nodes: readonly T[],
   checkedIds: readonly T["id"][],

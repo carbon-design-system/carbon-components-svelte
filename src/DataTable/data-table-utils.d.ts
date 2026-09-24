@@ -1,7 +1,8 @@
 /**
  * Lightweight deep equality check optimized for DataTable rows.
  * Compares arrays of row objects by first checking IDs (fast path),
- * then falling back to deep object comparison to handle nested structures.
+ * then falling back to deep object comparison to handle nested
+ * structures.
  */
 export function rowsEqual<T>(
   a: ReadonlyArray<T> | null,
@@ -10,13 +11,14 @@ export function rowsEqual<T>(
 
 /**
  * Returns true if the element's class list indicates the click target
- * is an overflow menu, checkbox, or radio button (row click should be ignored).
+ * is an overflow menu, checkbox, or radio button (row click should be
+ * ignored).
  */
 export function shouldIgnoreRowClick(target: EventTarget | null): boolean;
 
 /**
- * Resolves a nested property path in an object.
- * Supports both direct property access and nested paths like "contact.company".
+ * Resolves a nested property path in an object. Supports both direct
+ * property access and nested paths like "contact.company".
  */
 export function resolvePath<T extends Record<string, unknown>>(
   object: T,
@@ -49,9 +51,11 @@ export function formatHeaderWidth<
 >(header: Header): string | undefined;
 
 /**
- * Compares two values for sorting in a data table.
- * Handles numbers, strings, null/undefined values, and custom sort functions.
- * @returns {number} Negative if a < b (ascending) or a > b (descending), positive if a > b (ascending) or a < b (descending), 0 if equal
+ * Compares two values for sorting in a data table. Handles numbers,
+ * strings, null/undefined values, and custom sort functions.
+ * @returns {number} Negative if a < b (ascending) or a > b
+ *   (descending), positive if a > b (ascending) or a < b (descending),
+ *   0 if equal
  */
 export function compareValues<T = unknown>(
   itemA: T,
@@ -86,21 +90,23 @@ export type ToCsvOptions = {
    */
   includeHeaders?: boolean;
   /**
-   * Prefix a field starting with `=`, `+`, `-`, `@`, tab, or carriage return
-   * with a single quote so spreadsheets do not evaluate it as a formula.
+   * Prefix a field starting with `=`, `+`, `-`, `@`, tab, or carriage
+   * return with a single quote so spreadsheets do not evaluate it as a
+   * formula.
    * @default true
    */
   escapeFormulas?: boolean;
   /**
-   * Line ending. RFC 4180 specifies `"\r\n"`, which is what Excel expects.
+   * Line ending. RFC 4180 specifies `"\r\n"`, which is what Excel
+   * expects.
    * @default "\r\n"
    */
   newline?: string;
 };
 
 /**
- * Serializes data table headers and rows to a CSV string.
- * Skips empty and hidden columns, resolves nested keys, and applies `display`
+ * Serializes data table headers and rows to a CSV string. Skips empty
+ * and hidden columns, resolves nested keys, and applies `display`
  * formatting so the export matches the rendered table.
  */
 export function toCsv<Row extends Record<string, unknown>>(
@@ -118,9 +124,9 @@ type Join<K, P> = K extends string | number
   : never;
 
 /**
- * Drops string/number index signatures so `keyof` is only declared keys.
- * Used for paths on `DataTableRow` and subtypes, whose index signature would
- * otherwise widen `PropertyPath` to plain `string`.
+ * Drops string/number index signatures so `keyof` is only declared
+ * keys. Used for paths on `DataTableRow` and subtypes, whose index
+ * signature would otherwise widen `PropertyPath` to plain `string`.
  */
 export type KeysWithoutIndexSignature<T> = {
   [K in keyof T as string extends K
@@ -142,8 +148,9 @@ export type PropertyPath<T, D extends number = 3> = [D] extends [never]
     : "";
 
 /**
- * Like {@link PropertyPath}, but ignores string/number index signatures at
- * each object level so declared keys stay as literal unions (for `DataTableRow` subtypes).
+ * Like {@link PropertyPath}, but ignores string/number index signatures
+ * at each object level so declared keys stay as literal unions (for
+ * `DataTableRow` subtypes).
  */
 export type PropertyPathIgnoringIndexSignatures<T, D extends number = 3> = [
   D,
@@ -166,7 +173,8 @@ export type PropertyPathIgnoringIndexSignatures<T, D extends number = 3> = [
     : "";
 
 /**
- * Cell value type at a column path (e.g. `"port"` or `"contact.company"`).
+ * Cell value type at a column path (e.g. `"port"` or
+ * `"contact.company"`).
  */
 export type DataTableValueAtPath<Row, Path extends string> = Row extends object
   ? Path extends keyof Row & string
@@ -182,7 +190,8 @@ export type DataTableValueAtPath<Row, Path extends string> = Row extends object
  * Union of cell value types for all column paths on `Row`.
  * Used for default and per-column `sort` comparators.
  *
- * `Row` is unconstrained so generated `DataTableSortValue<Row = DataTableRow>` aliases stay valid;
+ * `Row` is unconstrained so generated
+ * `DataTableSortValue<Row = DataTableRow>` aliases stay valid;
  * non-object `Row` resolves to `never`.
  */
 export type DataTableSortValue<Row> = Row extends object

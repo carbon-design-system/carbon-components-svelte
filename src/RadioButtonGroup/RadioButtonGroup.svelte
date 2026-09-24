@@ -68,8 +68,8 @@
   export let readonly = false;
 
   /**
-   * Set to `true` so clicking an already-selected radio clears the selection
-   * instead of leaving it selected.
+   * Set to `true` so clicking an already-selected radio clears the
+   * selection instead of leaving it selected.
    */
   export let allowDeselect = false;
 

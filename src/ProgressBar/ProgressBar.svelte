@@ -36,15 +36,21 @@
   export let helperText = "";
 
   /**
-   * Specify the value text, at the end of the label row and used for `aria-valuetext`.
-   * Format it yourself, e.g. "40 MB of 100 MB".
+   * Specify the value text, at the end of the label row and used for
+   * `aria-valuetext`. Format it yourself, e.g. "40 MB of 100 MB".
    */
   export let valueText = "";
 
-  /** Specify the text announced and described when the status is `"error"`. */
+  /**
+   * Specify the text announced and described when the status is
+   * `"error"`.
+   */
   export let errorText = "Error";
 
-  /** Specify the text announced and described when the status is `"finished"`. */
+  /**
+   * Specify the text announced and described when the status is
+   * `"finished"`.
+   */
   export let finishedText = "Complete";
 
   /** Set an id for the progress bar element */

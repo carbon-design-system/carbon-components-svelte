@@ -79,7 +79,9 @@
 
   const dispatch = createEventDispatcher();
   /**
-   * @type {import("svelte/store").Writable<ReadonlyArray<string | number>>}
+   * @type {import("svelte/store").Writable<
+   *   ReadonlyArray<string | number>
+   * >}
    */
   const selectedValues = writable(selected);
   const groupName = writable(name);

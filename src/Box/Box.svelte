@@ -1,7 +1,7 @@
 <script context="module">
   /**
-   * Whether `value` is a spacing-scale step (rendered as a class rather than
-   * inline style). Spacing steps start at 1; offsets also allow 0.
+   * Whether `value` is a spacing-scale step (rendered as a class rather
+   * than inline style). Spacing steps start at 1; offsets also allow 0.
    * @param {unknown} value @param {number} min
    */
   function isScaleStep(value, min) {
@@ -33,8 +33,9 @@
   }
 
   /**
-   * Resolve `border-{side}-width` for the one side `borderSide` targets;
-   * the other three sides are zeroed by the `bx--box-border-side-{side}` class.
+   * Resolve `border-{side}-width` for the one side `borderSide`
+   * targets; the other three sides are zeroed by the
+   * `bx--box-border-side-{side}` class.
    * @param {"top" | "right" | "bottom" | "left"} side
    * @param {string | undefined} border
    * @param {"all" | "top" | "right" | "bottom" | "left"} borderSide
@@ -78,42 +79,53 @@
 
   /**
    * Set the background fill using a Carbon theme token.
-   * @type {"background" | "layer-01" | "layer-02" | "layer-03" | "field" | "inverse"}
+   * @type {"background"
+   *   | "layer-01"
+   *   | "layer-02"
+   *   | "layer-03"
+   *   | "field"
+   *   | "inverse"}
    */
   export let fill = undefined;
 
   /**
-   * Set padding on all sides. Numbers `1`–`13` use the shared layout scale; strings accept any CSS length.
+   * Set padding on all sides. Numbers `1`–`13` use the shared layout
+   * scale; strings accept any CSS length.
    * @type {SpacingValue | undefined}
    */
   export let padding = undefined;
 
   /**
-   * Set horizontal padding. Numbers `1`–`13` use the shared layout scale; strings accept any CSS length.
+   * Set horizontal padding. Numbers `1`–`13` use the shared layout
+   * scale; strings accept any CSS length.
    * @type {SpacingValue | undefined}
    */
   export let paddingX = undefined;
 
   /**
-   * Set vertical padding. Numbers `1`–`13` use the shared layout scale; strings accept any CSS length.
+   * Set vertical padding. Numbers `1`–`13` use the shared layout scale;
+   * strings accept any CSS length.
    * @type {SpacingValue | undefined}
    */
   export let paddingY = undefined;
 
   /**
-   * Set margin on all sides. Numbers `1`–`13` use the shared layout scale; strings accept any CSS length.
+   * Set margin on all sides. Numbers `1`–`13` use the shared layout
+   * scale; strings accept any CSS length.
    * @type {SpacingValue | undefined}
    */
   export let margin = undefined;
 
   /**
-   * Set horizontal margin. Numbers `1`–`13` use the shared layout scale; strings accept any CSS length.
+   * Set horizontal margin. Numbers `1`–`13` use the shared layout
+   * scale; strings accept any CSS length.
    * @type {SpacingValue | undefined}
    */
   export let marginX = undefined;
 
   /**
-   * Set vertical margin. Numbers `1`–`13` use the shared layout scale; strings accept any CSS length.
+   * Set vertical margin. Numbers `1`–`13` use the shared layout scale;
+   * strings accept any CSS length.
    * @type {SpacingValue | undefined}
    */
   export let marginY = undefined;
@@ -131,13 +143,15 @@
   export let borderStyle = "solid";
 
   /**
-   * Set the border width. Only takes effect when `border` is set. Numbers are treated as pixels; strings accept any CSS length.
+   * Set the border width. Only takes effect when `border` is set.
+   * Numbers are treated as pixels; strings accept any CSS length.
    * @type {number | string | undefined}
    */
   export let borderWidth = undefined;
 
   /**
-   * Set which side the border applies to. Only takes effect when `border` is set.
+   * Set which side the border applies to. Only takes effect when
+   * `border` is set.
    * @type {"all" | "top" | "right" | "bottom" | "left"}
    */
   export let borderSide = "all";
@@ -146,19 +160,22 @@
   export let shadow = false;
 
   /**
-   * Set the width. Numbers are treated as pixels; strings accept any CSS length.
+   * Set the width. Numbers are treated as pixels; strings accept any
+   * CSS length.
    * @type {number | string | undefined}
    */
   export let width = undefined;
 
   /**
-   * Set the max width. Numbers are treated as pixels; strings accept any CSS length.
+   * Set the max width. Numbers are treated as pixels; strings accept
+   * any CSS length.
    * @type {number | string | undefined}
    */
   export let maxWidth = undefined;
 
   /**
-   * Set the min width. Numbers are treated as pixels; strings accept any CSS length.
+   * Set the min width. Numbers are treated as pixels; strings accept
+   * any CSS length.
    * @type {number | string | undefined}
    */
   export let minWidth = undefined;
@@ -167,25 +184,31 @@
   export let fullWidth = false;
 
   /**
-   * Set the height. Numbers `1`–`13` use the shared layout scale; strings accept any CSS length; `"viewport"` sets the full viewport height (`100dvh`, with a `100vh` fallback).
+   * Set the height. Numbers `1`–`13` use the shared layout scale;
+   * strings accept any CSS length; `"viewport"` sets the full viewport
+   * height (`100dvh`, with a `100vh` fallback).
    * @type {SpacingValue | "viewport" | undefined}
    */
   export let height = undefined;
 
   /**
-   * Set the min height. Numbers `1`–`13` use the shared layout scale; strings accept any CSS length; `"viewport"` sets the full viewport height (`100dvh`, with a `100vh` fallback).
+   * Set the min height. Numbers `1`–`13` use the shared layout scale;
+   * strings accept any CSS length; `"viewport"` sets the full viewport
+   * height (`100dvh`, with a `100vh` fallback).
    * @type {SpacingValue | "viewport" | undefined}
    */
   export let minHeight = undefined;
 
   /**
-   * Set the max height. Numbers `1`–`13` use the shared layout scale; strings accept any CSS length.
+   * Set the max height. Numbers `1`–`13` use the shared layout scale;
+   * strings accept any CSS length.
    * @type {SpacingValue | undefined}
    */
   export let maxHeight = undefined;
 
   /**
-   * Set the CSS position. `"sticky"` is relative to the nearest scroll container, not the viewport.
+   * Set the CSS position. `"sticky"` is relative to the nearest scroll
+   * container, not the viewport.
    * @type {"relative" | "sticky" | undefined}
    */
   export let position = undefined;
@@ -203,13 +226,17 @@
   export let overflow = undefined;
 
   /**
-   * Set the offset from the top when `position` is set. Numbers `0`–`13` use the shared layout scale; strings accept any CSS length.
+   * Set the offset from the top when `position` is set. Numbers
+   * `0`–`13` use the shared layout scale; strings accept any CSS
+   * length.
    * @type {OffsetValue | undefined}
    */
   export let top = undefined;
 
   /**
-   * Set the offset from the bottom when `position` is set. Numbers `0`–`13` use the shared layout scale; strings accept any CSS length.
+   * Set the offset from the bottom when `position` is set. Numbers
+   * `0`–`13` use the shared layout scale; strings accept any CSS
+   * length.
    * @type {OffsetValue | undefined}
    */
   export let bottom = undefined;

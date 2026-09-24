@@ -6,7 +6,8 @@
   export let name = undefined;
 
   /**
-   * Specify the secondary text below the name (for example, a username).
+   * Specify the secondary text below the name (for example, a
+   * username).
    * @type {string}
    */
   export let username = undefined;

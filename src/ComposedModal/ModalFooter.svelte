@@ -17,8 +17,8 @@
   export let primaryButtonDisabled = false;
 
   /**
-   * Set to `true` to show a loading state on the primary button.
-   * While loading, the button is non-interactive and submit is suppressed.
+   * Set to `true` to show a loading state on the primary button. While
+   * loading, the button is non-interactive and submit is suppressed.
    */
   export let primaryButtonLoading = false;
 
@@ -38,8 +38,8 @@
   export let secondaryButtonText = "";
 
   /**
-   * Set to `true` to show a loading state on the secondary button.
-   * Only applies to the `secondaryButtonText` path (not `secondaryButtons`).
+   * Set to `true` to show a loading state on the secondary button. Only
+   * applies to the `secondaryButtonText` path (not `secondaryButtons`).
    * While loading, the button is non-interactive.
    */
   export let secondaryButtonLoading = false;
@@ -51,13 +51,19 @@
   export let secondaryButtonLoadingDescription = "Loading";
 
   /**
-   * One or two secondary buttons for the modal footer.
-   * Supersedes `secondaryButtonText`. Each entry needs `text`; optional
-   * `kind` (defaults to `"secondary"`), `disabled`, `loading`, and
-   * `loadingDescription` (defaults to `"Loading"`) pass through to Button /
-   * the loading state. With two entries plus a primary button, the footer
-   * uses the three-button layout.
-   * @type {ReadonlyArray<{ text: string; kind?: string; disabled?: boolean; loading?: boolean; loadingDescription?: string }>}
+   * One or two secondary buttons for the modal footer. Supersedes
+   * `secondaryButtonText`. Each entry needs `text`; optional `kind`
+   * (defaults to `"secondary"`), `disabled`, `loading`, and
+   * `loadingDescription` (defaults to `"Loading"`) pass through to
+   * Button / the loading state. With two entries plus a primary button,
+   * the footer uses the three-button layout.
+   * @type {ReadonlyArray<{
+   *   text: string;
+   *   kind?: string;
+   *   disabled?: boolean;
+   *   loading?: boolean;
+   *   loadingDescription?: string;
+   * }>}
    */
   export let secondaryButtons = [];
 

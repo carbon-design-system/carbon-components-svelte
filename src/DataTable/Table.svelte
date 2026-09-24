@@ -18,7 +18,8 @@
   export let stickyHeader = false;
 
   /**
-   * Set to `true` to use a fixed table layout, typically when headers specify an explicit `width`/`minWidth`.
+   * Set to `true` to use a fixed table layout, typically when headers
+   * specify an explicit `width`/`minWidth`.
    */
   export let fixedLayout = false;
 
@@ -29,30 +30,34 @@
   export let tableStyle = undefined;
 
   /**
-   * Set the style attribute on the outer `section` element when `stickyHeader` is `true`.
+   * Set the style attribute on the outer `section` element when
+   * `stickyHeader` is `true`.
    * @type {string}
    */
   export let containerStyle = undefined;
 
   /**
-   * Obtain a reference to the section HTML element (when stickyHeader is enabled) or table HTML element.
+   * Obtain a reference to the section HTML element (when stickyHeader
+   * is enabled) or table HTML element.
    * @type {null | HTMLElement | HTMLTableElement}
    * @bindable readonly
    */
   export let ref = null;
 
   /**
-   * Id of an element that labels the table (e.g. `DataTable`'s title heading).
-   * Internal: set directly by `DataTable`. Standalone compositions
-   * (`TableContainer` wrapping `Table`) get this from context instead.
+   * Id of an element that labels the table (e.g. `DataTable`'s title
+   * heading). Internal: set directly by `DataTable`. Standalone
+   * compositions (`TableContainer` wrapping `Table`) get this from
+   * context instead.
    * @type {string | undefined}
    */
   export let labelledBy = undefined;
 
   /**
-   * Id of an element that describes the table (e.g. `DataTable`'s description text).
-   * Internal: set directly by `DataTable`. Standalone compositions
-   * (`TableContainer` wrapping `Table`) get this from context instead.
+   * Id of an element that describes the table (e.g. `DataTable`'s
+   * description text). Internal: set directly by `DataTable`.
+   * Standalone compositions (`TableContainer` wrapping `Table`) get
+   * this from context instead.
    * @type {string | undefined}
    */
   export let describedBy = undefined;

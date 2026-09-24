@@ -3,19 +3,23 @@
 import { batchStoreUpdates } from "./batch-store-updates.js";
 
 /**
- * Shared, batched child-registration logic for `Tabs`/`TabsVertical`: adds
- * and removes tabs and their paired content panels into/from the given
- * stores. Registrations made within the same microtask (every tab/panel
- * registering itself during one synchronous mount pass) are batched into a
- * single store flush. Calls `onDomSyncNeeded()` whenever the DOM order
- * needs to be resynced afterwards (an insert or removal, not a same-id
- * re-registration).
+ * Shared, batched child-registration logic for `Tabs`/`TabsVertical`:
+ * adds and removes tabs and their paired content panels into/from the
+ * given stores. Registrations made within the same microtask (every
+ * tab/panel registering itself during one synchronous mount pass) are
+ * batched into a single store flush. Calls `onDomSyncNeeded()` whenever
+ * the DOM order needs to be resynced afterwards (an insert or removal,
+ * not a same-id re-registration).
  *
  * @template {{ id: string }} Tab
  * @template {{ id: string }} Content
  * @param {object} params
- * @param {import("svelte/store").Writable<ReadonlyArray<Tab & { index: number }>>} params.tabs
- * @param {import("svelte/store").Writable<ReadonlyArray<Content & { index: number }>>} params.content
+ * @param {import("svelte/store").Writable<
+ *   ReadonlyArray<Tab & { index: number }>
+ * >} params.tabs
+ * @param {import("svelte/store").Writable<
+ *   ReadonlyArray<Content & { index: number }>
+ * >} params.content
  * @param {() => void} params.onDomSyncNeeded
  * @returns {{
  *   add: (data: Tab) => void,

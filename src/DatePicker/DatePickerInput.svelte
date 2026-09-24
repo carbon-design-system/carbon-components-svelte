@@ -30,9 +30,10 @@
   }
 
   /**
-   * `datePickerType="multiple"` joins each selected date with Flatpickr's
-   * default `", "` conjunction into one input value, so the derived pattern
-   * must allow one or more repetitions instead of a single date.
+   * `datePickerType="multiple"` joins each selected date with
+   * Flatpickr's default `", "` conjunction into one input value, so the
+   * derived pattern must allow one or more repetitions instead of a
+   * single date.
    */
   function dateFormatToMultiplePattern(fmt) {
     const single = dateFormatToPattern(fmt);

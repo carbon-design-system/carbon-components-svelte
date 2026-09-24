@@ -12,10 +12,9 @@
   export let selectedIndex = 0;
 
   /**
-   * Specify the selected switch by id.
-   * When set, takes precedence over `selectedIndex` and stays on the same
-   * logical switch as switches are added or removed. Pair with a stable `id`
-   * on each `Switch`.
+   * Specify the selected switch by id. When set, takes precedence over
+   * `selectedIndex` and stays on the same logical switch as switches
+   * are added or removed. Pair with a stable `id` on each `Switch`.
    * @bindable writable
    * @type {string | undefined}
    */
@@ -67,7 +66,15 @@
   let committedIndex = -1;
   let focusedIndex = -1;
   /**
-   * @type {import("svelte/store").Writable<Array<{ id: string; text: string; selected: boolean; icon: boolean; disabled: boolean }>>}
+   * @type {import("svelte/store").Writable<
+   *   Array<{
+   *     id: string;
+   *     text: string;
+   *     selected: boolean;
+   *     icon: boolean;
+   *     disabled: boolean;
+   *   }>
+   * >}
    */
   const sharedSwitches = writable([]);
   // Batch child registration. Leave afterUpdate's syncDomOrder unbatched
@@ -79,8 +86,8 @@
   $: switches = $sharedSwitches;
 
   /**
-   * `SwitchPanel`s in DOM order. A panel pairs with the switch at the same
-   * position.
+   * `SwitchPanel`s in DOM order. A panel pairs with the switch at the
+   * same position.
    * @type {import("svelte/store").Writable<Array<{ id: string }>>}
    */
   const panels = writable([]);
@@ -91,7 +98,10 @@
 
   /**
    * Switch-panel pairing by position, in both directions.
-   * @type {import("svelte/store").Readable<{ panelBySwitch: Record<string, string>; switchByPanel: Record<string, string> }>}
+   * @type {import("svelte/store").Readable<{
+   *   panelBySwitch: Record<string, string>;
+   *   switchByPanel: Record<string, string>;
+   * }>}
    */
   const pairs = derived([sharedSwitches, panels], ([list, panelList]) => {
     /** @type {Record<string, string>} */
@@ -146,7 +156,13 @@
   }
 
   /**
-   * @type {(data: { id: string; text: string; selected: boolean; icon: boolean; disabled: boolean }) => void}
+   * @type {(data: {
+   *   id: string;
+   *   text: string;
+   *   selected: boolean;
+   *   icon: boolean;
+   *   disabled: boolean;
+   * }) => void}
    */
   function add({ id, text, selected, icon, disabled }) {
     batchedSwitchesUpdate((current) => {
@@ -219,9 +235,9 @@
   }
 
   /**
-   * Resolve `selectedIndex` from `selectedId` when set. If the selected id was
-   * removed, keep the same index (next switch) or clamp, and re-anchor
-   * `selectedId` to whatever switch that resolves to.
+   * Resolve `selectedIndex` from `selectedId` when set. If the selected
+   * id was removed, keep the same index (next switch) or clamp, and
+   * re-anchor `selectedId` to whatever switch that resolves to.
    * @type {() => void}
    */
   function syncSelection() {
@@ -265,7 +281,8 @@
   }
 
   /**
-   * Move focus to a switch at an absolute index without changing selection.
+   * Move focus to a switch at an absolute index without changing
+   * selection.
    * @type {(index: number) => Promise<void>}
    */
   async function focusTo(index) {

@@ -1,9 +1,9 @@
 // @ts-check
 
 /**
- * A Map-like cache that evicts the oldest-inserted entry once `maxSize` is
- * reached. Eviction order is insertion order (FIFO) — a cache hit does not
- * bump an entry's recency, unlike an LRU cache.
+ * A Map-like cache that evicts the oldest-inserted entry once `maxSize`
+ * is reached. Eviction order is insertion order (FIFO) — a cache hit
+ * does not bump an entry's recency, unlike an LRU cache.
  * @template K
  * @template V
  */

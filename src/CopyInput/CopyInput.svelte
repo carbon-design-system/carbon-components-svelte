@@ -28,13 +28,15 @@
    * Has no effect unless `type` is `"password"`.
    * - `"focus"`: reveal while the input is focused.
    * - `"hover-focus"`: reveal while the input is hovered or focused.
-   * When unset, the value stays obscured; the copy button still copies the full value.
+   *   When unset, the value stays obscured; the copy button still
+   *   copies the full value.
    * @type {"focus" | "hover-focus"}
    */
   export let revealMode = undefined;
 
   /**
-   * Set to `true` to select the full value when the input receives focus.
+   * Set to `true` to select the full value when the input receives
+   * focus.
    * @type {boolean}
    */
   export let selectOnFocus = false;
@@ -93,8 +95,8 @@
   export let errorFeedback = "Failed to copy";
 
   /**
-   * Specify an icon to render during the feedback window (for example, after copying).
-   * When unset, the copy icon is always shown.
+   * Specify an icon to render during the feedback window (for example,
+   * after copying). When unset, the copy icon is always shown.
    * @type {Icon}
    */
   export let feedbackIcon = /** @type {Icon} */ (undefined);
@@ -106,9 +108,9 @@
   export let iconDescription = "Copy to clipboard";
 
   /**
-   * Override the default copy behavior (`navigator.clipboard.writeText` with
-   * a `document.execCommand("copy")` fallback). Failures reject so the control
-   * can show `errorFeedback` and dispatch `copy:error`.
+   * Override the default copy behavior (`navigator.clipboard.writeText`
+   * with a `document.execCommand("copy")` fallback). Failures reject so
+   * the control can show `errorFeedback` and dispatch `copy:error`.
    * @type {(text: string) => void | Promise<void>}
    */
   export let copy = copyText;

@@ -6,7 +6,10 @@
   /**
    * @event close
    * @type {object}
-   * @property {"escape-key" | "outside-click" | "toggle" | "item-select"} trigger
+   * @property {"escape-key"
+   *   | "outside-click"
+   *   | "toggle"
+   *   | "item-select"} trigger
    * @property {number} [index] only present when an item is selected
    * @property {string} [text] only present when an item is selected
    */
@@ -84,9 +87,9 @@
   export let menuRef = null;
 
   /**
-   * Set to `true` to render the menu in a portal,
-   * allowing it to escape containers with `overflow: hidden`.
-   * When inside a Modal, defaults to `true` unless explicitly set to `false`.
+   * Set to `true` to render the menu in a portal, allowing it to escape
+   * containers with `overflow: hidden`. When inside a Modal, defaults
+   * to `true` unless explicitly set to `false`.
    * @type {boolean | undefined}
    */
   export let portalMenu = undefined;
@@ -128,11 +131,30 @@
 
   const dispatch = createEventDispatcher();
   /**
-   * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; text: string; primaryFocus: boolean; disabled: boolean; index: number }>>}
+   * @type {import("svelte/store").Writable<
+   *   ReadonlyArray<{
+   *     id: string;
+   *     text: string;
+   *     primaryFocus: boolean;
+   *     disabled: boolean;
+   *     index: number;
+   *   }>
+   * >}
    */
   const items = writable([]);
   /**
-   * @type {import("svelte/store").Readable<Record<string, { id: string; text: string; primaryFocus: boolean; disabled: boolean; index: number }>>}
+   * @type {import("svelte/store").Readable<
+   *   Record<
+   *     string,
+   *     {
+   *       id: string;
+   *       text: string;
+   *       primaryFocus: boolean;
+   *       disabled: boolean;
+   *       index: number;
+   *     }
+   *   >
+   * >}
    */
   const itemsById = derived(items, (_) => keyBy(_));
   const currentId = writable(undefined);
@@ -154,9 +176,9 @@
   });
 
   /**
-   * Everything the menu's position depends on. `afterUpdate` re-measures only
-   * when this changes; it used to re-read offset dimensions on every update
-   * while open (each arrow key, hover).
+   * Everything the menu's position depends on. `afterUpdate`
+   * re-measures only when this changes; it used to re-read offset
+   * dimensions on every update while open (each arrow key, hover).
    */
   $: positionKey = open
     ? `${direction}|${flipped}|${size}|${effectivePortalMenu}|${menuRef ? 1 : 0}`
@@ -164,9 +186,9 @@
 
   /**
    * Key last measured against. Read and written only in `afterUpdate`.
-   * The menu's `style` uses directives rather than a `style="..."` string so
-   * a re-render (e.g. `buttonWidth` settling) never wipes the `top`/`left`
-   * written here.
+   * The menu's `style` uses directives rather than a `style="..."`
+   * string so a re-render (e.g. `buttonWidth` settling) never wipes the
+   * `top`/`left` written here.
    */
   let measuredPositionKey = null;
 
@@ -178,7 +200,12 @@
   const batchedItemsUpdate = batchStoreUpdates(items);
 
   /**
-   * @type {(data: { id: string; text: string; primaryFocus: boolean; disabled: boolean }) => void}
+   * @type {(data: {
+   *   id: string;
+   *   text: string;
+   *   primaryFocus: boolean;
+   *   disabled: boolean;
+   * }) => void}
    */
   function add({ id, text, primaryFocus, disabled }) {
     batchedItemsUpdate((_) => {
@@ -196,7 +223,16 @@
   }
 
   /**
-   * @type {(id: string, item: { id: string; text: string; primaryFocus: boolean; disabled: boolean; index: number }) => void}
+   * @type {(
+   *   id: string,
+   *   item: {
+   *     id: string;
+   *     text: string;
+   *     primaryFocus: boolean;
+   *     disabled: boolean;
+   *     index: number;
+   *   },
+   * ) => void}
    */
   function update(id, item) {
     currentId.set(id);
@@ -234,8 +270,9 @@
   }
 
   /**
-   * WAI-ARIA APG menu first-character navigation: move focus to the next
-   * enabled item whose text starts with the buffered characters typed so far.
+   * WAI-ARIA APG menu first-character navigation: move focus to the
+   * next enabled item whose text starts with the buffered characters
+   * typed so far.
    * @param {string} character
    */
   function typeaheadSearch(character) {

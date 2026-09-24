@@ -103,7 +103,9 @@
    */
   export let ref = null;
 
-  /** Set to `true` to select the textarea's text when it receives focus */
+  /**
+   * Set to `true` to select the textarea's text when it receives focus
+   */
   export let selectTextOnFocus = false;
 
   import { afterUpdate, getContext, onMount, tick } from "svelte";

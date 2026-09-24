@@ -33,8 +33,8 @@ export function isScrollNearEnd({
 
 /**
  * Fire-once-per-approach tracker for listbox near-bottom `scrollend`.
- * Re-arms after the user scrolls away from the bottom, and when the item
- * count grows so another page can be requested.
+ * Re-arms after the user scrolls away from the bottom, and when the
+ * item count grows so another page can be requested.
  *
  * @param {Object} [options]
  * @param {number} [options.threshold=DEFAULT_SCROLL_END_THRESHOLD]

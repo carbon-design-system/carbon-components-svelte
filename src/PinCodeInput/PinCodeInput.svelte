@@ -14,12 +14,12 @@
   /**
    * The concatenated code value.
    *
-   * Derived from `code` (i.e. `code.join("")`); bind to read the assembled
-   * value. When `complete` is `true`, its length equals `count`. Each
-   * character matches `pattern` when set, otherwise the active `type`:
-   * `0-9` for `"numeric"`, `a-zA-Z0-9` for `"alphanumeric"`. Original casing
-   * is preserved regardless of `uppercase`, which only affects the visual
-   * rendering.
+   * Derived from `code` (i.e. `code.join("")`); bind to read the
+   * assembled value. When `complete` is `true`, its length equals
+   * `count`. Each character matches `pattern` when set, otherwise the
+   * active `type`: `0-9` for `"numeric"`, `a-zA-Z0-9` for
+   * `"alphanumeric"`. Original casing is preserved regardless of
+   * `uppercase`, which only affects the visual rendering.
    * @bindable readonly
    */
   export let value = "";
@@ -64,15 +64,16 @@
    * Set to `true` to visually display the characters in uppercase
    * while retaining the original casing of `value` and `code`.
    *
-   * Only affects letters, so it is most useful with `type="alphanumeric"`.
+   * Only affects letters, so it is most useful with
+   * `type="alphanumeric"`.
    */
   export let uppercase = false;
 
   /**
    * Set to `true` to mask the segments.
    *
-   * Each segment is masked when it is not focused, revealing its character
-   * only while focused.
+   * Each segment is masked when it is not focused, revealing its
+   * character only while focused.
    */
   export let mask = false;
 
@@ -106,8 +107,8 @@
   /**
    * Placeholder shown in empty segments.
    *
-   * Defaults to a placeholder in the fluid variant; non-fluid segments have no
-   * placeholder unless this prop is set.
+   * Defaults to a placeholder in the fluid variant; non-fluid segments
+   * have no placeholder unless this prop is set.
    * @type {string | undefined}
    */
   export let placeholder = undefined;
@@ -130,8 +131,8 @@
   /**
    * Specify a name attribute for native form participation.
    *
-   * When set, a hidden input mirrors the assembled `value` so the code is
-   * included in FormData / form submissions. `required` stays on each
+   * When set, a hidden input mirrors the assembled `value` so the code
+   * is included in FormData / form submissions. `required` stays on each
    * segment, since hidden inputs take no part in constraint validation.
    * @type {string | undefined}
    */
@@ -149,8 +150,8 @@
 
   /**
    * Set to `true` to select a segment's value when it receives focus,
-   * including on click. Without this prop, browsers typically select the
-   * value only on keyboard focus (for example, via Tab).
+   * including on click. Without this prop, browsers typically select
+   * the value only on keyboard focus (for example, via Tab).
    */
   export let selectTextOnFocus = false;
 
@@ -305,8 +306,9 @@
   }
 
   /**
-   * Distribute valid characters across segments, matching paste behavior:
-   * a full-length code replaces every segment; otherwise fill from `index`.
+   * Distribute valid characters across segments, matching paste
+   * behavior: a full-length code replaces every segment; otherwise fill
+   * from `index`.
    * @type {(index: number, chars: string[]) => void}
    */
   function fillFromChars(index, chars) {
@@ -490,8 +492,9 @@
   }
 
   /**
-   * Clear all segments programmatically.
-   * By default, focus is not moved. Set `options.focus` to `true` to focus the first segment after clearing.
+   * Clear all segments programmatically. By default, focus is not
+   * moved. Set `options.focus` to `true` to focus the first segment
+   * after clearing.
    * @param {{ focus?: boolean }} [options]
    */
   export function clear(options = {}) {

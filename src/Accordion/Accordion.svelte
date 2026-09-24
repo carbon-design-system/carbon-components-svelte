@@ -14,8 +14,9 @@
   export let size = undefined;
 
   /**
-   * Set to `true` to remove the gutter around the accordion, aligning it flush with its container.
-   * Has no effect when `align` is `"start"`.
+   * Set to `true` to remove the gutter around the accordion, aligning
+   * it flush with its container. Has no effect when `align` is
+   * `"start"`.
    */
   export let flush = false;
 
@@ -44,7 +45,8 @@
   $: disableItems.set(disabled);
 
   /**
-   * Tracks the identity of the currently open item when `type` is `"single"`.
+   * Tracks the identity of the currently open item when `type` is
+   * `"single"`.
    * @type {import("svelte/store").Writable<object | null>}
    */
   const openId = writable(null);

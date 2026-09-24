@@ -6,21 +6,37 @@
   /**
    * @extends {"./ButtonSkeleton.svelte"} ButtonSkeletonProps
    * @restProps {button | a | div}
-   * @slot {{ props: { role: "button"; type?: string; tabindex: any; disabled: boolean; href?: string; class: string; [key: string]: any; } }}
+   * @slot {{
+   *   props: {
+   *     role: "button";
+   *     type?: string;
+   *     tabindex: any;
+   *     disabled: boolean;
+   *     href?: string;
+   *     class: string;
+   *     [key: string]: any;
+   *   };
+   * }}
    * @slot {{ style: undefined | string; }} icon
    * @slot {{}} badge - Compose a `BadgeIndicator` overlaid on an icon-only button. Size is set to `lg` automatically.
    */
 
   /**
    * Specify the kind of button.
-   * @type {"primary" | "secondary" | "tertiary" | "ghost" | "danger" | "danger-tertiary" | "danger-ghost"}
+   * @type {"primary"
+   *   | "secondary"
+   *   | "tertiary"
+   *   | "ghost"
+   *   | "danger"
+   *   | "danger-tertiary"
+   *   | "danger-ghost"}
    */
   export let kind = "primary";
 
   /**
-   * Specify the size of button.
-   * When the `badge` slot is used, size is set to `lg` per Carbon design guidelines.
-   * Falls back to the size set by an ancestor `ActionSet` when unset.
+   * Specify the size of button. When the `badge` slot is used, size is
+   * set to `lg` per Carbon design guidelines. Falls back to the size
+   * set by an ancestor `ActionSet` when unset.
    * @type {"default" | "field" | "small" | "lg" | "xl"}
    * @default "default"
    */
@@ -30,7 +46,8 @@
   export let expressive = false;
 
   /**
-   * Set to `true` to enable the selected state for an icon-only, ghost button.
+   * Set to `true` to enable the selected state for an icon-only, ghost
+   * button.
    */
   export let isSelected = false;
 
@@ -52,10 +69,10 @@
   export let icon = /** @type {Icon} */ (undefined);
 
   /**
-   * Specify the ARIA label for the button icon.
-   * On an icon-only button, this also drives Carbon's tooltip. If omitted,
-   * the icon-only button renders without a tooltip; supply your own
-   * `aria-label` or `aria-labelledby` for accessibility in that case.
+   * Specify the ARIA label for the button icon. On an icon-only button,
+   * this also drives Carbon's tooltip. If omitted, the icon-only button
+   * renders without a tooltip; supply your own `aria-label` or
+   * `aria-labelledby` for accessibility in that case.
    * @type {string}
    */
   export let iconDescription = undefined;
@@ -75,8 +92,9 @@
 
   /**
    * Set to `true` to hide the tooltip while maintaining accessibility.
-   * Only applies to icon-only buttons.
-   * When `true`, the tooltip is visually hidden but the `iconDescription` remains accessible to screen readers.
+   * Only applies to icon-only buttons. When `true`, the tooltip is
+   * visually hidden but the `iconDescription` remains accessible to
+   * screen readers.
    */
   export let hideTooltip = false;
 
@@ -122,8 +140,8 @@
   /**
    * Set to `true` to render the icon-only tooltip in a portal,
    * preventing it from being clipped by `overflow: hidden` containers
-   * and enabling auto-flipping when the preferred direction lacks space.
-   * By default, the tooltip is portalled when inside a `Modal`.
+   * and enabling auto-flipping when the preferred direction lacks
+   * space. By default, the tooltip is portalled when inside a `Modal`.
    * @type {boolean | undefined}
    */
   export let portalTooltip = undefined;

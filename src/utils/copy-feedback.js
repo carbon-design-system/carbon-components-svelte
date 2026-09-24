@@ -11,7 +11,8 @@ export const COPY_FEEDBACK_TIMEOUT_MS = 2000;
  * On copy failure, still opens feedback (`isError`) so callers can show
  * error text in the same tooltip slot, then rethrows.
  *
- * @param {() => void} [onSync] - Run after internal state changes (sync component `let`s).
+ * @param {() => void} [onSync] - Run after internal state changes (sync
+ *   component `let`s).
  * @returns {{
  *   get animation(): CopyFeedbackAnimation,
  *   get feedbackOpen(): boolean,
@@ -80,10 +81,11 @@ export function createCopyFeedbackState(onSync) {
   /**
    * @param {() => void | Promise<void>} performCopy
    * @param {number} feedbackTimeout
-   * @param {boolean} [portalled] - When `true`, close feedback directly on
-   *   timeout instead of awaiting the `hide-feedback` animation. The portalled
-   *   tooltip hides the feedback element, so that animation (and its
-   *   `animationend`) never fires and the tooltip would otherwise stay open.
+   * @param {boolean} [portalled] - When `true`, close feedback directly
+   *   on timeout instead of awaiting the `hide-feedback` animation. The
+   *   portalled tooltip hides the feedback element, so that animation
+   *   (and its `animationend`) never fires and the tooltip would
+   *   otherwise stay open.
    * @returns {Promise<void>}
    */
   async function handleClick(performCopy, feedbackTimeout, portalled = false) {

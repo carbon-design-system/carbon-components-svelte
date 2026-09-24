@@ -45,23 +45,30 @@
   export let status = "uploading";
 
   /**
-   * Accessible label for the status icons (spinner, remove control, checkmark).
-   * Pass a string, or a function receiving {@link FilenameIconDescriptionContext}.
-   * When the resolved value is omitted or blank after trim, defaults are used:
+   * Accessible label for the status icons (spinner, remove control,
+   * checkmark). Pass a string, or a function receiving {@link
+   * FilenameIconDescriptionContext}. When the resolved value is omitted
+   * or blank after trim, defaults are used:
    * - `uploading`: passed to `Loading` as `"uploading"`
    * - `edit`: close button `aria-label` is `"Remove file"`
-   * - `complete`: checkmark `aria-label` / `title` are `"Upload complete"`
-   * @type {string | undefined | ((ctx: FilenameIconDescriptionContext) => string | undefined)}
+   * - `complete`: checkmark `aria-label` / `title` are
+   *   `"Upload complete"`
+   * @type {string
+   *   | undefined
+   *   | ((ctx: FilenameIconDescriptionContext) => string | undefined)}
    */
   export let iconDescription = undefined;
 
   /**
-   * Current file when rendered inside `FileUploader`; omit when using `FileUploaderItem` only.
+   * Current file when rendered inside `FileUploader`; omit when using
+   * `FileUploaderItem` only.
    * @type {File | undefined}
    */
   export let file = undefined;
 
-  /** Display file name (e.g. `file.name` or `FileUploaderItem` `name`). */
+  /**
+   * Display file name (e.g. `file.name` or `FileUploaderItem` `name`).
+   */
   export let fileName = "";
 
   /** Set to `true` to indicate an invalid state */

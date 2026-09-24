@@ -23,9 +23,10 @@ interface SafeStorage {
 }
 
 /**
- * Use localStorage or sessionStorage without throwing. getItem is null when
- * there is no window, storage is blocked, or the read throws. setItem is
- * false when the write throws. removeItem and clear ignore errors.
+ * Use localStorage or sessionStorage without throwing. getItem is null
+ * when there is no window, storage is blocked, or the read throws.
+ * setItem is false when the write throws. removeItem and clear ignore
+ * errors.
  */
 export function safeBrowserStorage(
   type: "localStorage" | "sessionStorage",

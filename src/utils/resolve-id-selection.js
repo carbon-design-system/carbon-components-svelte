@@ -4,9 +4,9 @@ import { clampIndex } from "./clamp-index.js";
 
 /**
  * Resolve a selected index from a selected id within an ordered list of
- * items. If the id is missing from the list (its item was removed), clamp
- * the previous index into range and re-anchor to whatever item that index
- * now resolves to.
+ * items. If the id is missing from the list (its item was removed),
+ * clamp the previous index into range and re-anchor to whatever item
+ * that index now resolves to.
  *
  * @template {{ id: string }} T
  * @param {object} params

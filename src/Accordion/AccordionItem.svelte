@@ -29,8 +29,8 @@
   export let disabled = false;
 
   /**
-   * Specify a custom label for the accordion button.
-   * This is important for accessibility when the accordion has no visible title.
+   * Specify a custom label for the accordion button. This is important
+   * for accessibility when the accordion has no visible title.
    * @type {string}
    */
   export let ariaLabel = undefined;
@@ -42,8 +42,9 @@
   export let ref = null;
 
   /**
-   * Set to `true` to defer mounting the panel content until the item is first opened.
-   * Once mounted, the content stays mounted for subsequent collapses.
+   * Set to `true` to defer mounting the panel content until the item is
+   * first opened. Once mounted, the content stays mounted for
+   * subsequent collapses.
    */
   export let lazy = false;
 

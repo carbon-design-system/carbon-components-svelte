@@ -4,16 +4,18 @@ import { TYPEAHEAD_RESET_MS } from "../constants/timing.js";
 import { debounce } from "./debounce.js";
 
 /**
- * Next enabled item whose text starts with `query`, searching forward from
- * `index` and wrapping once. Returns `index` if nothing matches.
+ * Next enabled item whose text starts with `query`, searching forward
+ * from `index` and wrapping once. Returns `index` if nothing matches.
  *
  * @template T
  * @param {object} options
  * @param {ReadonlyArray<T>} options.items
  * @param {string} options.query
  * @param {(item: T) => string} options.itemToString
- * @param {number} options.index - May be -1 when nothing is highlighted.
- * @param {(item: T) => boolean} [options.isDisabled] - Defaults to `item.disabled`.
+ * @param {number} options.index - May be -1 when nothing is
+ *   highlighted.
+ * @param {(item: T) => boolean} [options.isDisabled] - Defaults to
+ *   `item.disabled`.
  * @returns {number}
  */
 export function typeaheadIndex({
@@ -43,8 +45,8 @@ export function typeaheadIndex({
 }
 
 /**
- * Whether `event` is an unmodified printable key that should feed typeahead.
- * Space is excluded so it keeps activating the focused item.
+ * Whether `event` is an unmodified printable key that should feed
+ * typeahead. Space is excluded so it keeps activating the focused item.
  *
  * @param {KeyboardEvent} event
  * @returns {boolean}
@@ -61,7 +63,8 @@ export function isTypeaheadKey(event) {
 
 /**
  * Accumulate typed characters into a lowercase query that resets after
- * `delay` ms without typing. Call `clear()` when the list closes or unmounts.
+ * `delay` ms without typing. Call `clear()` when the list closes or
+ * unmounts.
  *
  * @param {number} [delay]
  * @returns {{ push: (character: string) => string; clear: () => void }}

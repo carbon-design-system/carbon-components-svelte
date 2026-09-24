@@ -21,8 +21,8 @@ export interface QueryParamOptions<T> {
 }
 
 /**
- * A writable store mirrored to a URL query parameter. The initial value is
- * read from the URL; each `set` replaces the current history entry.
+ * A writable store mirrored to a URL query parameter. The initial value
+ * is read from the URL; each `set` replaces the current history entry.
  * Back/forward navigation re-reads the parameter while subscribed.
  */
 export function queryParam<T>(

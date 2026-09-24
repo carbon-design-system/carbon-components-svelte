@@ -10,8 +10,8 @@
 
 /**
  * Scroll `node` into view within its nearest scroll container matching
- * `containerSelector` using `block: "nearest"` semantics. Never scrolls the
- * document.
+ * `containerSelector` using `block: "nearest"` semantics. Never scrolls
+ * the document.
  *
  * @param {HTMLElement} node
  * @param {string} [containerSelector] defaults to `[role="listbox"]`

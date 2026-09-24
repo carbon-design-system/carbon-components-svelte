@@ -1,20 +1,21 @@
 <script>
   /**
-   * Internal: the "+N" overflow indicator. Not exported from the package;
-   * only `TagSet` ships. Hovering shows a tooltip (a comma-separated list of
-   * the hidden labels by default, or custom content via the forwarded
-   * `overflowTooltip` slot); clicking dispatches `trigger`.
+   * Internal: the "+N" overflow indicator. Not exported from the
+   * package; only `TagSet` ships. Hovering shows a tooltip (a
+   * comma-separated list of the hidden labels by default, or custom
+   * content via the forwarded `overflowTooltip` slot); clicking
+   * dispatches `trigger`.
    *
-   * Always mounted (even when `count` is 0) so it stays measurable; visually
-   * and functionally inert until there is something to show.
+   * Always mounted (even when `count` is 0) so it stays measurable;
+   * visually and functionally inert until there is something to show.
    *
    * @event {null} trigger - The indicator was clicked.
    * @slot {{ tags: import("./TagSet.svelte").TagSetItem[]; count: number }} tooltip - Override the tooltip content.
    */
 
   /**
-   * Obtain a reference to the indicator's HTML element, so the parent can
-   * measure its natural width for the fit calculation.
+   * Obtain a reference to the indicator's HTML element, so the parent
+   * can measure its natural width for the fit calculation.
    * @bindable readonly
    * @type {null | HTMLElement}
    */

@@ -1,7 +1,8 @@
 <script context="module">
   /**
    * First focusable tree item in a subtree `ul` — handles both bare
-   * `li.bx--tree-node` rows and the link variant (`li[role="none"] > a`).
+   * `li.bx--tree-node` rows and the link variant (`li[role="none"] >
+   * a`).
    * @param {Element} groupUl
    * @returns {HTMLElement | null}
    */
@@ -17,9 +18,30 @@
 <script>
   /**
    * @generics {Id extends string | number = string | number, Icon = any} Id,Icon
-   * @typedef {{ id: Id; text: string; disabled?: boolean; expanded?: boolean; }} TreeNode<Id>
-   * @slot {{ node: TreeNode<Id> & { expanded: boolean; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean; } }}
-   * @slot {{ node: TreeNode<Id> & { expanded: boolean; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean; } }} childNodes
+   * @typedef {{
+   *   id: Id;
+   *   text: string;
+   *   disabled?: boolean;
+   *   expanded?: boolean;
+   * }} TreeNode<Id>
+   * @slot {{
+   *   node: TreeNode<Id> & {
+   *     expanded: boolean;
+   *     leaf: boolean;
+   *     selected: boolean;
+   *     checked: boolean;
+   *     indeterminate: boolean;
+   *   };
+   * }}
+   * @slot {{
+   *   node: TreeNode<Id> & {
+   *     expanded: boolean;
+   *     leaf: boolean;
+   *     selected: boolean;
+   *     checked: boolean;
+   *     indeterminate: boolean;
+   *   };
+   * }} childNodes
    */
 
   /** @type {ReadonlyArray<TreeNode<Id> & { nodes?: TreeNode<Id>[] }>} */

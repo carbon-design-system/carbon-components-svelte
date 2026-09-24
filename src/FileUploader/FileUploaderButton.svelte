@@ -97,8 +97,9 @@
 
   /**
    * Set to `true` to hide the tooltip while maintaining accessibility.
-   * Only applies to icon-only buttons.
-   * When `true`, the tooltip is visually hidden but the `iconDescription` remains accessible to screen readers.
+   * Only applies to icon-only buttons. When `true`, the tooltip is
+   * visually hidden but the `iconDescription` remains accessible to
+   * screen readers.
    */
   export let hideTooltip = false;
 

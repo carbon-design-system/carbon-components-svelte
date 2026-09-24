@@ -2,7 +2,10 @@
   /** Set to `true` to enable the light variant */
   export let light = false;
 
-  /** Set to `true` to stretch the tile to fill the height of its container */
+  /**
+   * Set to `true` to stretch the tile to fill the height of its
+   * container
+   */
   export let fullHeight = false;
 
   /** Set to `true` to remove the tile's padding */

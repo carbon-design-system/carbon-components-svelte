@@ -7,7 +7,8 @@ export interface UnsupportedOptionContext {
 }
 
 /**
- * Messages for `flatpickrProps` options that Carbon overrides or ignores.
+ * Messages for `flatpickrProps` options that Carbon overrides or
+ * ignores.
  */
 export function getUnsupportedOptionWarnings(
   flatpickrProps: Record<string, unknown> | undefined,

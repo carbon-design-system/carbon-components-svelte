@@ -1,5 +1,8 @@
 <script>
-  /** Specify the step's label, shown in the header's progress indicator when there is more than one view */
+  /**
+   * Specify the step's label, shown in the header's progress indicator
+   * when there is more than one view
+   */
   export let stepTitle = "";
 
   import { getContext, onMount } from "svelte";

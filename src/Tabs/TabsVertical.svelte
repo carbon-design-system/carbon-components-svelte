@@ -11,18 +11,18 @@
   export let selected = 0;
 
   /**
-   * Specify the selected tab by id.
-   * When set, takes precedence over `selected` and stays on the same logical
-   * tab as tabs are added or removed. Pair with a stable `id` on each `Tab`.
+   * Specify the selected tab by id. When set, takes precedence over
+   * `selected` and stays on the same logical tab as tabs are added or
+   * removed. Pair with a stable `id` on each `Tab`.
    * @bindable writable
    * @type {string | undefined}
    */
   export let selectedId = undefined;
 
   /**
-   * Choose whether arrow keys change the selection on focus.
-   * Defaults to `"automatic"`. Set to `"manual"` so arrow keys only move
-   * focus; press Enter or Space to select.
+   * Choose whether arrow keys change the selection on focus. Defaults
+   * to `"automatic"`. Set to `"manual"` so arrow keys only move focus;
+   * press Enter or Space to select.
    * @type {"automatic" | "manual"}
    */
   export let activation = "automatic";
@@ -59,7 +59,15 @@
   const dispatch = createEventDispatcher();
 
   /**
-   * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean; index: number }>>}
+   * @type {import("svelte/store").Writable<
+   *   ReadonlyArray<{
+   *     id: string;
+   *     label: string;
+   *     disabled: boolean;
+   *     hasSecondaryLabel: boolean;
+   *     index: number;
+   *   }>
+   * >}
    */
   const tabs = writable([]);
   const tabsById = derived(tabs, (_) => keyBy(_));
@@ -68,11 +76,15 @@
    */
   const selectedTab = writable(undefined);
   /**
-   * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; index: number }>>}
+   * @type {import("svelte/store").Writable<
+   *   ReadonlyArray<{ id: string; index: number }>
+   * >}
    */
   const content = writable([]);
   /**
-   * @type {import("svelte/store").Readable<Record<string, { id: string; index: number }>>}
+   * @type {import("svelte/store").Readable<
+   *   Record<string, { id: string; index: number }>
+   * >}
    */
   const contentById = derived(content, (_) => keyBy(_));
   /**
@@ -135,8 +147,8 @@
   const SCROLL_INTO_VIEW_MARGIN = 48;
 
   /**
-   * Scroll the horizontal tab row so `tab` is fully visible, inset from each
-   * edge so it is not tucked under an overflow button.
+   * Scroll the horizontal tab row so `tab` is fully visible, inset from
+   * each edge so it is not tucked under an overflow button.
    * @type {(tab: HTMLElement | undefined) => void}
    */
   function scrollTabIntoView(tab) {
@@ -192,8 +204,9 @@
   }
 
   /**
-   * Resolve selection from `selectedId` when set; otherwise use `selected`.
-   * If the selected id was removed, keep the same index (next tab) or clamp.
+   * Resolve selection from `selectedId` when set; otherwise use
+   * `selected`. If the selected id was removed, keep the same index
+   * (next tab) or clamp.
    * @type {() => void}
    */
   function syncSelection() {
@@ -233,7 +246,8 @@
 
   /**
    * Arrow keys move from the tab that holds focus. Fall back to the
-   * manual-mode focus index, then the selection, when focus is elsewhere.
+   * manual-mode focus index, then the selection, when focus is
+   * elsewhere.
    * @type {() => number}
    */
   function getActiveIndex() {
@@ -248,8 +262,9 @@
   }
 
   /**
-   * Move selection/focus to a tab at an absolute index. Roving focus resolves
-   * the index (skipping disabled, wrapping); selection follows focus.
+   * Move selection/focus to a tab at an absolute index. Roving focus
+   * resolves the index (skipping disabled, wrapping); selection follows
+   * focus.
    * @type {(index: number) => Promise<void>}
    */
   async function selectTab(index) {

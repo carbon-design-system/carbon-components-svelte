@@ -1,6 +1,6 @@
 /**
- * Cyclic index movement for keyboard navigation. `moveIndex` wraps at list
- * ends; `nextEnabledIndex` skips disabled items.
+ * Cyclic index movement for keyboard navigation. `moveIndex` wraps at
+ * list ends; `nextEnabledIndex` skips disabled items.
  */
 
 /** Move `index` by `step` and wrap once at either end. */

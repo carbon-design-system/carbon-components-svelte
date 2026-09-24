@@ -102,7 +102,9 @@
   const dispatch = createEventDispatcher();
   const formContext = getContext(FORM_CONTEXT_KEY);
   /**
-   * @type {import("svelte/store").Writable<string | number | undefined>}
+   * @type {import("svelte/store").Writable<
+   *   string | number | undefined
+   * >}
    */
   const selectedValue = writable(selected);
   const defaultSelectId = writable(null);

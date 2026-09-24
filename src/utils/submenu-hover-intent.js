@@ -1,11 +1,12 @@
 // @ts-check
 
 /**
- * Create an open/close scheduler for hover-intent submenus (Menu/ContextMenu
- * items with a nested submenu): entering schedules an open after
- * `openDelay`, leaving schedules a close after `closeDelay`, and each
- * cancels the other's pending timer.
- * @param {(open: boolean) => void} setOpen - Applies the resolved open state.
+ * Create an open/close scheduler for hover-intent submenus
+ * (Menu/ContextMenu items with a nested submenu): entering schedules an
+ * open after `openDelay`, leaving schedules a close after `closeDelay`,
+ * and each cancels the other's pending timer.
+ * @param {(open: boolean) => void} setOpen - Applies the resolved open
+ *   state.
  * @param {{ openDelay: number; closeDelay: number }} delays
  */
 export function createSubmenuHoverIntent(setOpen, delays) {

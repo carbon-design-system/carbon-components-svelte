@@ -9,7 +9,9 @@
   /** Specify the "Back" button text */
   export let previousButtonText = "Back";
 
-  /** Specify the "Skip" button text. Set to `""` to hide the Skip button */
+  /**
+   * Specify the "Skip" button text. Set to `""` to hide the Skip button
+   */
   export let skipButtonText = "Skip";
 
   /** Specify the final step's button text */
@@ -17,8 +19,8 @@
 
   /**
    * Set to the action name of a pending async button press to show that
-   * button's `InlineLoading` state and disable the other buttons. Pair with
-   * `preventDefault()` on the `action` event.
+   * button's `InlineLoading` state and disable the other buttons. Pair
+   * with `preventDefault()` on the `action` event.
    * @bindable writable
    * @type {"" | "start" | "skip" | "back" | "next"}
    */

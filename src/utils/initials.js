@@ -50,8 +50,9 @@ function firstGrapheme(word, locale) {
 }
 
 /**
- * Derive initials from a full name: the first user-perceived character of
- * each whitespace-separated word, in order, capped at `max`, upper cased.
+ * Derive initials from a full name: the first user-perceived character
+ * of each whitespace-separated word, in order, capped at `max`, upper
+ * cased.
  *
  * @param {string | null | undefined} name
  * @param {InitialsOptions} [options]

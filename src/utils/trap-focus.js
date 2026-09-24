@@ -9,11 +9,12 @@ const selectorTabbable = `
 `;
 
 /**
- * Trap Tab/Shift+Tab focus within `container`. Call on Tab keydown; always
- * calls `event.preventDefault()`.
+ * Trap Tab/Shift+Tab focus within `container`. Call on Tab keydown;
+ * always calls `event.preventDefault()`.
  *
  * @param {Object} options
- * @param {Element} options.container - Element whose tabbable descendants form the focus loop.
+ * @param {Element} options.container - Element whose tabbable
+ *   descendants form the focus loop.
  * @param {KeyboardEvent} options.event - The Tab keydown event.
  * @returns {void}
  */

@@ -4,15 +4,16 @@ import { writable } from "svelte/store";
 /**
  * @template T
  * @typedef {Object} QueryParamOptions
- * @property {T} defaultValue Value used when the parameter is missing or
- *   invalid. Setting the store to this value removes the parameter.
+ * @property {T} defaultValue Value used when the parameter is missing
+ *   or invalid. Setting the store to this value removes the parameter.
  * @property {(raw: string) => T | undefined} [parse] Convert the raw
- *   parameter; return `undefined` to reject it. Defaults to coercing by the
- *   type of `defaultValue` (string, number, or boolean).
+ *   parameter; return `undefined` to reject it. Defaults to coercing by
+ *   the type of `defaultValue` (string, number, or boolean).
  * @property {(value: T) => string} [serialize] Convert a value to the
  *   parameter string. Defaults to `String`.
- * @property {(href: string) => void} [replace] Write the new URL. Defaults
- *   to `history.replaceState`; pass a router's navigation API instead.
+ * @property {(href: string) => void} [replace] Write the new URL.
+ *   Defaults to `history.replaceState`; pass a router's navigation API
+ *   instead.
  */
 
 /**
@@ -42,10 +43,11 @@ function replaceHistory(href) {
 }
 
 /**
- * A writable store mirrored to a URL query parameter. The initial value is
- * read from the URL; each `set` replaces the current history entry, so a
- * reload or shared link restores it without adding history entries.
- * Back/forward navigation re-reads the parameter while subscribed.
+ * A writable store mirrored to a URL query parameter. The initial value
+ * is read from the URL; each `set` replaces the current history entry,
+ * so a reload or shared link restores it without adding history
+ * entries. Back/forward navigation re-reads the parameter while
+ * subscribed.
  *
  * Create it inside a component, not at module scope, so server-rendered
  * requests don't share one store.

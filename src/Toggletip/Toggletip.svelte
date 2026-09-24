@@ -14,8 +14,9 @@
   const PORTAL_NEUTRALIZE_STYLE = "inset: auto; transform: none;";
 
   /**
-   * Margin that nudges the popover outward so its caret points at the button
-   * center for start/end alignment. Center alignment needs no nudge.
+   * Margin that nudges the popover outward so its caret points at the
+   * button center for start/end alignment. Center alignment needs no
+   * nudge.
    */
   function caretNudgeStyle(pAlign) {
     if (pAlign.endsWith("-left")) return `margin-left: -${CARET_NUDGE_PX}px;`;

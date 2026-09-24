@@ -2,7 +2,10 @@
   /**
    * @event {ReadonlyArray<File>} add
    * @event {ReadonlyArray<File>} change
-   * @event {Array<{ file: File; reason: "size" | "duplicate" | "invalid" }>} rejected
+   * @event {Array<{
+   *   file: File;
+   *   reason: "size" | "duplicate" | "invalid";
+   * }>} rejected
    */
 
   /**

@@ -6,17 +6,28 @@
 
   /**
    * Specify the kind of notification.
-   * @type {"error" | "info" | "info-square" | "success" | "warning" | "warning-alt"}
+   * @type {"error"
+   *   | "info"
+   *   | "info-square"
+   *   | "success"
+   *   | "warning"
+   *   | "warning-alt"}
    */
   export let kind = "error";
 
   /** Set to `true` to use the low contrast variant */
   export let lowContrast = false;
 
-  /** Set the timeout duration (ms) to hide the notification after opening it */
+  /**
+   * Set the timeout duration (ms) to hide the notification after
+   * opening it
+   */
   export let timeout = 0;
 
-  /** Set to `true` to pause the auto-dismiss timeout while the pointer is over the notification or while focus is inside it. */
+  /**
+   * Set to `true` to pause the auto-dismiss timeout while the pointer
+   * is over the notification or while focus is inside it.
+   */
   export let pauseOnHover = false;
 
   /**

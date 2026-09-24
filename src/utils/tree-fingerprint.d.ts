@@ -10,12 +10,17 @@ type TreeFingerprint = {
   children: TreeFingerprint[];
 };
 
-/** Cheap per-node snapshot of a tree (shallow, `Object.is`-compared fields). */
+/**
+ * Cheap per-node snapshot of a tree (shallow, `Object.is`-compared
+ * fields).
+ */
 export function fingerprintTree<T extends TreeFingerprintNode>(
   list: readonly T[],
 ): TreeFingerprint[];
 
-/** Whether `list` still matches a snapshot taken by `fingerprintTree`. */
+/**
+ * Whether `list` still matches a snapshot taken by `fingerprintTree`.
+ */
 export function matchesFingerprint<T extends TreeFingerprintNode>(
   fingerprint: TreeFingerprint[],
   list: readonly T[],

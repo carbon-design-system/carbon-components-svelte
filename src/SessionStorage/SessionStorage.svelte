@@ -21,17 +21,17 @@
   export let value = /** @type {T} */ ("");
 
   /**
-   * `"off"` ignores storage events from other documents in this tab (e.g. an
-   * iframe). `"on"` (default) keeps the previous behavior.
+   * `"off"` ignores storage events from other documents in this tab
+   * (e.g. an iframe). `"on"` (default) keeps the previous behavior.
    * @type {"on" | "off"}
    */
   export let sync = "on";
 
   /**
    * Remove the persisted key value from the browser's session storage.
-   * Note: this only clears storage; the bound `value` is left untouched.
-   * If `value` mutates afterwards, it will be re-persisted. Reset `value`
-   * yourself if you want it cleared as well.
+   * Note: this only clears storage; the bound `value` is left
+   * untouched. If `value` mutates afterwards, it will be re-persisted.
+   * Reset `value` yourself if you want it cleared as well.
    * @type {() => void}
    * @example
    * ```svelte
@@ -44,9 +44,9 @@
   }
 
   /**
-   * Clear all key values from the browser's session storage.
-   * Note: this only clears storage; the bound `value` is left untouched.
-   * If `value` mutates afterwards, it will be re-persisted. Reset `value`
+   * Clear all key values from the browser's session storage. Note: this
+   * only clears storage; the bound `value` is left untouched. If
+   * `value` mutates afterwards, it will be re-persisted. Reset `value`
    * yourself if you want it cleared as well.
    * @type {() => void}
    * @example

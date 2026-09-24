@@ -1,6 +1,7 @@
 <script context="module">
   /**
-   * Tolerate custom matchers that omit `indices` so highlighting still works.
+   * Tolerate custom matchers that omit `indices` so highlighting still
+   * works.
    */
   function normalizeMatch(result) {
     return {
@@ -32,13 +33,23 @@
 
 <script>
   /**
-   * @event {{ value: string; item: { text?: string; value?: string; href?: string }; event: Event }} select
-   * @slot {{ query: string; matched: boolean; indices: number[]; segments: Array<{ text: string; match: boolean }> }}
+   * @event {{
+   *   value: string;
+   *   item: { text?: string; value?: string; href?: string };
+   *   event: Event;
+   * }} select
+   * @slot {{
+   *   query: string;
+   *   matched: boolean;
+   *   indices: number[];
+   *   segments: Array<{ text: string; match: boolean }>;
+   * }}
    */
 
   /**
-   * Specify the result label. The portion matching the search value is highlighted.
-   * Omit `text` and use the default slot to render custom content.
+   * Specify the result label. The portion matching the search value is
+   * highlighted. Omit `text` and use the default slot to render custom
+   * content.
    * @type {string | undefined}
    */
   export let text = undefined;
@@ -62,7 +73,8 @@
   export let icon = undefined;
 
   /**
-   * Specify the icon rendered after the label, for example an external-link affordance.
+   * Specify the icon rendered after the label, for example an
+   * external-link affordance.
    * @type {any}
    */
   export let iconRight = undefined;

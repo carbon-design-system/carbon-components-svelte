@@ -151,17 +151,17 @@
   }
 
   /**
-   * Whether `nextNodes` is value-equal to `prevNodes` at every depth via
-   * nodes that are each a DIFFERENT object reference from their
+   * Whether `nextNodes` is value-equal to `prevNodes` at every depth
+   * via nodes that are each a DIFFERENT object reference from their
    * counterpart — the shape a rebuilt-from-equal-config prop or a `$:`
    * derivation that re-runs for an unrelated reason produces.
    *
-   * If any node at any depth is the SAME object reference as before, it may
-   * have been mutated in place — the documented lazy-load idiom
-   * (`node.nodes = children; nodes = nodes`) and `nodes = [...nodes]` after
-   * mutating an entry both keep sharing node objects — so this returns
-   * `false` and the caller redoes the work from scratch. No snapshot is
-   * kept, so it is never stale at the top level.
+   * If any node at any depth is the SAME object reference as before, it
+   * may have been mutated in place — the documented lazy-load idiom
+   * (`node.nodes = children; nodes = nodes`) and `nodes = [...nodes]`
+   * after mutating an entry both keep sharing node objects — so this
+   * returns `false` and the caller redoes the work from scratch. No
+   * snapshot is kept, so it is never stale at the top level.
    * @template {{ id: string | number; nodes?: TNode[] }} TNode
    * @param {ReadonlyArray<TNode>} prevNodes
    * @param {ReadonlyArray<TNode>} nextNodes
@@ -216,9 +216,14 @@
   }
 
   /**
-   * IDs to select for multiselect expansion from `node` (non-disabled only).
-   * Disabled nodes are omitted; subtrees under a disabled node are not traversed.
-   * @template {{ id: string | number; disabled?: boolean; nodes?: TNode[] }} TNode
+   * IDs to select for multiselect expansion from `node` (non-disabled
+   * only). Disabled nodes are omitted; subtrees under a disabled node
+   * are not traversed.
+   * @template {{
+   *   id: string | number;
+   *   disabled?: boolean;
+   *   nodes?: TNode[];
+   * }} TNode
    * @returns {Array<string | number>}
    */
   function multiselectExpansionIds(node, mode) {
@@ -246,8 +251,10 @@
     return out;
   }
 
-  /** Tabindex anchor: prefer the focused row when it is currently mounted
-   * and enabled; otherwise the first enabled row in the window. */
+  /**
+   * Tabindex anchor: prefer the focused row when it is currently
+   * mounted and enabled; otherwise the first enabled row in the window.
+   */
   function resolveVirtualTabAnchorId(
     virtualConfig,
     virtualIndex,
@@ -303,20 +310,60 @@
    * @property {Array<Id>} added - Node ids checked since the previous change
    * @property {Array<Id>} removed - Node ids unchecked since the previous change
    * @property {ReadonlyArray<Id>} indeterminateIds - The partially checked node ids after the change
-   * @slot {{ node: Node & { expanded: boolean; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean; } }}
-   * @slot {{ node: Node & { expanded: boolean; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean; } }} childNodes
+   * @slot {{
+   *   node: Node & {
+   *     expanded: boolean;
+   *     leaf: boolean;
+   *     selected: boolean;
+   *     checked: boolean;
+   *     indeterminate: boolean;
+   *   };
+   * }}
+   * @slot {{
+   *   node: Node & {
+   *     expanded: boolean;
+   *     leaf: boolean;
+   *     selected: boolean;
+   *     checked: boolean;
+   *     indeterminate: boolean;
+   *   };
+   * }} childNodes
    * @event select
-   * @type {Node & { expanded: boolean; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean }}
+   * @type {Node & {
+   *   expanded: boolean;
+   *   leaf: boolean;
+   *   selected: boolean;
+   *   checked: boolean;
+   *   indeterminate: boolean;
+   * }}
    * @event toggle
-   * @type {Node & { expanded: boolean; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean }}
+   * @type {Node & {
+   *   expanded: boolean;
+   *   leaf: boolean;
+   *   selected: boolean;
+   *   checked: boolean;
+   *   indeterminate: boolean;
+   * }}
    * @event toggle:change
    * @type {TreeViewExpandedChange<Node["id"]>}
    * @event focus
-   * @type {Node & { expanded: boolean; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean }}
+   * @type {Node & {
+   *   expanded: boolean;
+   *   leaf: boolean;
+   *   selected: boolean;
+   *   checked: boolean;
+   *   indeterminate: boolean;
+   * }}
    * @event select:change
    * @type {TreeViewSelectionChange<Node["id"]>}
    * @event check
-   * @type {Node & { expanded: boolean; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean }}
+   * @type {Node & {
+   *   expanded: boolean;
+   *   leaf: boolean;
+   *   selected: boolean;
+   *   checked: boolean;
+   *   indeterminate: boolean;
+   * }}
    * @event check:change
    * @type {TreeViewCheckChange<Node["id"]>}
    */
@@ -362,8 +409,9 @@
   export let hideLabel = false;
 
   /**
-   * Set to `true` to automatically collapse sibling nodes when expanding a node.
-   * When enabled, only one node at each level can be expanded at a time.
+   * Set to `true` to automatically collapse sibling nodes when
+   * expanding a node. When enabled, only one node at each level can be
+   * expanded at a time.
    */
   export let autoCollapse = false;
 
@@ -374,7 +422,8 @@
   export let multiselect = false;
 
   /**
-   * When `multiselect` is true, `multiselectMode` controls how many nodes a selection gesture includes:
+   * When `multiselect` is true, `multiselectMode` controls how many
+   * nodes a selection gesture includes:
    * - `'node'`: only the clicked/active node (default)
    * - `'shallow'`: the node plus its direct non-disabled children
    * - `'deep'`: the node plus all non-disabled descendants
@@ -383,54 +432,58 @@
   export let multiselectMode = "node";
 
   /**
-   * Specify how a selection is presented.
-   * `"checkbox"` renders a tri-state checkbox on every node and implies
-   * multi-selection; `multiselect` and `multiselectMode` are ignored in that mode.
+   * Specify how a selection is presented. `"checkbox"` renders a
+   * tri-state checkbox on every node and implies multi-selection;
+   * `multiselect` and `multiselectMode` are ignored in that mode.
    * @type {"highlight" | "checkbox"}
    */
   export let selectionMode = "highlight";
 
   /**
-   * In `selectionMode="checkbox"`, `checkMode` controls how far a check propagates:
-   * - `'node'`: only the clicked node; parents and children never follow each other
-   * - `'deep'`: the node plus all non-disabled descendants, with ancestors deriving
-   *   an indeterminate state (default)
+   * In `selectionMode="checkbox"`, `checkMode` controls how far a check
+   * propagates:
+   * - `'node'`: only the clicked node; parents and children never
+   *   follow each other
+   * - `'deep'`: the node plus all non-disabled descendants, with
+   *   ancestors deriving an indeterminate state (default)
    * @type {'node' | 'deep'}
    */
   export let checkMode = "deep";
 
   /**
-   * The node ids that are checked in `selectionMode="checkbox"`. Distinct from
-   * `selectedIds`, which tracks row highlighting and is unused in checkbox mode.
+   * The node ids that are checked in `selectionMode="checkbox"`.
+   * Distinct from `selectedIds`, which tracks row highlighting and is
+   * unused in checkbox mode.
    * @type {ReadonlyArray<Node["id"]>}
    * @bindable writable
    */
   export let checkedIds = [];
 
   /**
-   * The node ids that are partially checked in `selectionMode="checkbox"`.
-   * Derived from `checkedIds`; writes to this prop are overwritten.
+   * The node ids that are partially checked in
+   * `selectionMode="checkbox"`. Derived from `checkedIds`; writes to
+   * this prop are overwritten.
    * @type {ReadonlyArray<Node["id"]>}
    * @bindable readonly
    */
   export let indeterminateIds = [];
 
   /**
-   * Enable virtualization for large trees. Virtualization renders only the
-   * rows currently visible in the viewport, improving performance for large
-   * datasets.
+   * Enable virtualization for large trees. Virtualization renders only
+   * the rows currently visible in the viewport, improving performance
+   * for large datasets.
    *
-   * Virtualization is opt-in. TreeView cannot tell from `nodes` alone whether
-   * the tree will stay small or grow through expansion, so it does not
-   * auto-enable based on row count. Set `virtualize={true}` to enable with
-   * default settings, or pass a configuration object to customize. Leave
-   * `undefined` for the default recursive rendering.
+   * Virtualization is opt-in. TreeView cannot tell from `nodes` alone
+   * whether the tree will stay small or grow through expansion, so it
+   * does not auto-enable based on row count. Set `virtualize={true}` to
+   * enable with default settings, or pass a configuration object to
+   * customize. Leave `undefined` for the default recursive rendering.
    *
    * Row height is derived from `size` (32px default, 24px compact).
    *
-   * Collapsed subtrees mount lazily on first expansion and stay mounted.
-   * Virtualization is per subtree. Enable it when a node may hold a large
-   * child list.
+   * Collapsed subtrees mount lazily on first expansion and stay
+   * mounted. Virtualization is per subtree. Enable it when a node may
+   * hold a large child list.
    *
    * @type {undefined | boolean | {
    *   maxVisibleRows?: number,
@@ -449,9 +502,9 @@
   export let scrollContainerRef = null;
 
   /**
-   * Programmatically expand all expandable nodes (those with loaded children
-   * or `hasChildren: true`). Leaf ids are omitted — they do not affect
-   * expansion.
+   * Programmatically expand all expandable nodes (those with loaded
+   * children or `hasChildren: true`). Leaf ids are omitted — they do
+   * not affect expansion.
    * @type {() => void}
    * @example
    * ```svelte
@@ -488,9 +541,9 @@
   }
 
   /**
-   * Programmatically expand a subset of nodes.
-   * Expands all nodes if no argument is provided.
-   * Filter function should return `true` for nodes to expand. If not provided, expands all nodes.
+   * Programmatically expand a subset of nodes. Expands all nodes if no
+   * argument is provided. Filter function should return `true` for
+   * nodes to expand. If not provided, expands all nodes.
    * @type {(filterNode?: (node: Node) => boolean) => void}
    * @example
    * ```svelte
@@ -516,9 +569,9 @@
   }
 
   /**
-   * Programmatically collapse a subset of nodes.
-   * Collapses all nodes if no argument is provided.
-   * Filter function should return `true` for nodes to collapse. If not provided, collapses all nodes.
+   * Programmatically collapse a subset of nodes. Collapses all nodes if
+   * no argument is provided. Filter function should return `true` for
+   * nodes to collapse. If not provided, collapses all nodes.
    * @type {(filterNode?: (node: Node) => boolean) => void}
    * @example
    * ```svelte
@@ -540,9 +593,9 @@
   }
 
   /**
-   * Programmatically show a node by `id`.
-   * By default, the matching node will be expanded, selected, and focused.
-   * Use the options parameter to customize this behavior.
+   * Programmatically show a node by `id`. By default, the matching node
+   * will be expanded, selected, and focused. Use the options parameter
+   * to customize this behavior.
    * @type {(id: Node["id"], options?: ShowNodeOptions) => void}
    * @example
    * ```svelte
@@ -621,7 +674,8 @@
   }
 
   /**
-   * Look up multiple nodes by `id`. Ids without a matching node are omitted.
+   * Look up multiple nodes by `id`. Ids without a matching node are
+   * omitted.
    * @type {(ids: ReadonlyArray<Node["id"]>) => Array<Node>}
    * @example
    * ```svelte
@@ -695,7 +749,10 @@
   // Checkbox mode is already multi-select; ignore highlight multiselect.
   $: isMultiselect = multiselect && !isCheckboxMode;
 
-  /** While true (Ctrl/Cmd/Shift held), node labels use user-select: none for multiselect clicks. */
+  /**
+   * While true (Ctrl/Cmd/Shift held), node labels use user-select: none
+   * for multiselect clicks.
+   */
   let multiselectModifierActive = false;
 
   /** @param {KeyboardEvent | MouseEvent} event */
@@ -748,19 +805,20 @@
   let treeWalker = null;
 
   /**
-   * `nodes`, but kept at the SAME reference across a "new but equal" update
-   * (same tree by value, every node at every depth a different object) so
-   * the markup and every derived block below skip their update entirely.
-   * Reassigned to `nodes` on any real change, including one this can't
-   * safely rule out (a node reused by reference, which may have been
-   * mutated in place). See `sameTreeDifferentObjects`.
+   * `nodes`, but kept at the SAME reference across a "new but equal"
+   * update (same tree by value, every node at every depth a different
+   * object) so the markup and every derived block below skip their
+   * update entirely. Reassigned to `nodes` on any real change,
+   * including one this can't safely rule out (a node reused by
+   * reference, which may have been mutated in place). See
+   * `sameTreeDifferentObjects`.
    * @type {ReadonlyArray<Node>}
    */
   let stableNodes = nodes;
 
   /**
-   * Snapshot of `stableNodes`, refreshed every time `stableNodes` is set.
-   * See `fingerprintTree` / `matchesFingerprint`.
+   * Snapshot of `stableNodes`, refreshed every time `stableNodes` is
+   * set. See `fingerprintTree` / `matchesFingerprint`.
    * @type {ReturnType<typeof fingerprintTree>}
    */
   let stableNodesFingerprint = fingerprintTree(stableNodes);
@@ -777,14 +835,16 @@
   let cachedChildIdsByParentId = null;
 
   /**
-   * `String(node.id)` → `node.id`, built on first use. Row elements carry
-   * `id={node.id}`, which the DOM stringifies; this recovers numeric ids.
+   * `String(node.id)` → `node.id`, built on first use. Row elements
+   * carry `id={node.id}`, which the DOM stringifies; this recovers
+   * numeric ids.
    * @type {Map<string, Node["id"]> | null}
    */
   let cachedIdByDomId = null;
 
   /**
-   * The node id a row element renders, or `undefined` for an unknown row.
+   * The node id a row element renders, or `undefined` for an unknown
+   * row.
    * @param {Element} element
    * @returns {Node["id"] | undefined}
    */
@@ -813,8 +873,8 @@
   }
 
   /**
-   * Build `cachedFlattenedNodes` when expand APIs need them. The `nodes`
-   * reactive path only builds maps.
+   * Build `cachedFlattenedNodes` when expand APIs need them. The
+   * `nodes` reactive path only builds maps.
    */
   function ensureFlatIndex() {
     if (cachedFlattenedNodes != null) return;
@@ -859,12 +919,20 @@
   }
 
   /**
-   * Re-derive the `expanded`/`selected`/`checked`/`indeterminate` flags from
-   * the source-of-truth state at dispatch time. The `node` object passed by
-   * the child components is computed reactively, so its flags still reflect
-   * the pre-action state when a handler mutates
-   * `selectedIds`/`checkedIds`/`expandedIds` and then dispatches synchronously.
-   * @type {(node: Node) => Node & { expanded: boolean; selected: boolean; checked: boolean; indeterminate: boolean }}
+   * Re-derive the `expanded`/`selected`/`checked`/`indeterminate` flags
+   * from the source-of-truth state at dispatch time. The `node` object
+   * passed by the child components is computed reactively, so its flags
+   * still reflect the pre-action state when a handler mutates
+   * `selectedIds`/`checkedIds`/`expandedIds` and then dispatches
+   * synchronously.
+   * @type {(
+   *   node: Node,
+   * ) => Node & {
+   *   expanded: boolean;
+   *   selected: boolean;
+   *   checked: boolean;
+   *   indeterminate: boolean;
+   * }}
    */
   function withLiveState(node) {
     return {
@@ -877,11 +945,11 @@
   }
 
   /**
-   * Reassign `selectedIds` and keep `selectedIdsSet` (used for O(1) lookups
-   * in `withLiveState`) synchronously in sync. `selectedIdSet` is only
-   * refreshed reactively (see below), which lags behind handlers that mutate
-   * `selectedIds` and dispatch in the same synchronous call, so it can't be
-   * used for `withLiveState`.
+   * Reassign `selectedIds` and keep `selectedIdsSet` (used for O(1)
+   * lookups in `withLiveState`) synchronously in sync. `selectedIdSet`
+   * is only refreshed reactively (see below), which lags behind
+   * handlers that mutate `selectedIds` and dispatch in the same
+   * synchronous call, so it can't be used for `withLiveState`.
    * @type {(next: ReadonlyArray<Node["id"]>) => void}
    */
   function setSelectedIds(next) {
@@ -901,17 +969,18 @@
   }
 
   /**
-   * The `activeId` a user gesture (`clickNode`) last set. Rows auto-select a
-   * node when it becomes active, for a programmatic `activeId`. A gesture has
-   * already decided the selection (a Ctrl+click may have just removed the
-   * row), so `selectNode` skips it.
+   * The `activeId` a user gesture (`clickNode`) last set. Rows
+   * auto-select a node when it becomes active, for a programmatic
+   * `activeId`. A gesture has already decided the selection (a
+   * Ctrl+click may have just removed the row), so `selectNode` skips
+   * it.
    * @type {Node["id"] | undefined}
    */
   let gestureActiveId = undefined;
 
   /**
-   * Ctrl/Cmd+click semantics: toggle `node`'s multiselect unit and make it
-   * the range anchor.
+   * Ctrl/Cmd+click semantics: toggle `node`'s multiselect unit and make
+   * it the range anchor.
    * @type {(node: Node) => void}
    */
   function toggleSelectionUnit(node) {
@@ -929,8 +998,8 @@
   }
 
   /**
-   * Shift+Up/Down in multiselect: toggle the row focus moved to, same as
-   * pressing Ctrl+Space on it.
+   * Shift+Up/Down in multiselect: toggle the row focus moved to, same
+   * as pressing Ctrl+Space on it.
    * @type {(node: Node) => void}
    */
   function shiftArrowToggle(node) {
@@ -1124,9 +1193,9 @@
 
   /**
    * Elements this component set to `tabindex="0"`. Every row renders
-   * `tabindex="-1"`, so these are the only tab stops in the tree and the
-   * roving reset can clear them directly instead of querying the whole tree
-   * on every arrow key.
+   * `tabindex="-1"`, so these are the only tab stops in the tree and
+   * the roving reset can clear them directly instead of querying the
+   * whole tree on every arrow key.
    * @type {Set<HTMLElement>}
    */
   const rovingTabStops = new Set();
@@ -1150,14 +1219,18 @@
     return target.closest(".bx--tree-node");
   }
 
-  /** Type-ahead search buffer, reset after `TYPEAHEAD_RESET_MS` of inactivity. */
+  /**
+   * Type-ahead search buffer, reset after `TYPEAHEAD_RESET_MS` of
+   * inactivity.
+   */
   let typeAheadBuffer = "";
   const resetTypeAheadBuffer = createDelayedSetter();
 
   /**
-   * Append the typed key to the buffer (re-arming the reset timer) and return
-   * the query to match: a repeated single character (e.g. "bbb") collapses to
-   * that character so repeated presses cycle through matches.
+   * Append the typed key to the buffer (re-arming the reset timer) and
+   * return the query to match: a repeated single character (e.g. "bbb")
+   * collapses to that character so repeated presses cycle through
+   * matches.
    *
    * @param {KeyboardEvent} event
    * @returns {string}
@@ -1333,13 +1406,14 @@
   let prevNodesForFirstTab = null;
 
   /**
-   * A connected roving tab stop already exists — either the first node from
-   * a previous run of this function, or one the user arrowed to. Leave it
-   * alone: querying and overwriting it here would both redo work for
-   * nothing (new-but-equal `nodes`) and, without a `resetNodeTabIndices()`
-   * call, leave two `tabindex="0"` elements when the tab stop is elsewhere
-   * in the tree. No connected tab stop (initial render, or the previous one
-   * was removed by the new `nodes`) falls back to the first focusable node.
+   * A connected roving tab stop already exists — either the first node
+   * from a previous run of this function, or one the user arrowed to.
+   * Leave it alone: querying and overwriting it here would both redo
+   * work for nothing (new-but-equal `nodes`) and, without a
+   * `resetNodeTabIndices()` call, leave two `tabindex="0"` elements
+   * when the tab stop is elsewhere in the tree. No connected tab stop
+   * (initial render, or the previous one was removed by the new
+   * `nodes`) falls back to the first focusable node.
    */
   function assignFirstTabStopIfNeeded() {
     if (!ref) return;
@@ -1594,8 +1668,10 @@
     }
   }
 
-  /** CSS height value applied to the scroll container. Strings pass through;
-   * numbers/undefined become px. */
+  /**
+   * CSS height value applied to the scroll container. Strings pass
+   * through; numbers/undefined become px.
+   */
   $: containerHeightStyle = virtualConfig
     ? typeof virtualConfig.containerHeight === "string"
       ? virtualConfig.containerHeight
@@ -1693,8 +1769,8 @@
 
   /**
    * Set both the DOM scrollTop and the reactive mirror so the windowed
-   * slice updates synchronously (the browser's scroll event is async, and
-   * jsdom doesn't fire one at all on programmatic assignment).
+   * slice updates synchronously (the browser's scroll event is async,
+   * and jsdom doesn't fire one at all on programmatic assignment).
    * @param {number} top
    */
   function virtualSetScrollTop(top) {
@@ -1744,8 +1820,9 @@
   }
 
   /**
-   * Scroll a virtual row into view and focus it. Callers schedule this on a
-   * `tick`, so the virtual index already reflects the ancestors `showNode` expanded.
+   * Scroll a virtual row into view and focus it. Callers schedule this
+   * on a `tick`, so the virtual index already reflects the ancestors
+   * `showNode` expanded.
    * @param {string | number} targetId
    */
   function focusVirtualRowById(targetId) {

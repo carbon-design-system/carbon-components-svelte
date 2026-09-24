@@ -27,7 +27,18 @@
 
   /**
    * Specify the alignment of the caret.
-   * @type {"top" | "top-left" | "top-right" | "bottom" | "bottom-left" | "bottom-right" | "left" | "left-bottom" | "left-top" | "right" | "right-bottom" | "right-top"}
+   * @type {"top"
+   *   | "top-left"
+   *   | "top-right"
+   *   | "bottom"
+   *   | "bottom-left"
+   *   | "bottom-right"
+   *   | "left"
+   *   | "left-bottom"
+   *   | "left-top"
+   *   | "right"
+   *   | "right-bottom"
+   *   | "right-top"}
    */
   export let align = "top";
 
@@ -58,7 +69,8 @@
     if (!calendar) return false;
     for (const input of popoverRef.querySelectorAll("input")) {
       if (
-        /** @type {any} */ (input)._flatpickr?.calendarContainer === calendar
+        /**
+         * @type {any} */ (input)._flatpickr?.calendarContainer === calendar
       ) {
         return true;
       }

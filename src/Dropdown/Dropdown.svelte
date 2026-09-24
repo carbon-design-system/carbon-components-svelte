@@ -14,9 +14,24 @@
    * @property {Item["id"]} selectedId
    * @property {Item} selectedItem
    * @event {KeyboardEvent | MouseEvent} clear
-   * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }}
-   * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }} icon
-   * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }} iconRight
+   * @slot {{
+   *   item: Item;
+   *   index: number;
+   *   selected: boolean;
+   *   highlighted: boolean;
+   * }}
+   * @slot {{
+   *   item: Item;
+   *   index: number;
+   *   selected: boolean;
+   *   highlighted: boolean;
+   * }} icon
+   * @slot {{
+   *   item: Item;
+   *   index: number;
+   *   selected: boolean;
+   *   highlighted: boolean;
+   * }} iconRight
    */
 
   /**
@@ -26,9 +41,13 @@
    */
 
   /**
-   * Dispatched when the menu is scrolled near the bottom (load-more signal).
-   * Not the browser's native `scrollend` (scroll stopped).
-   * @event {{ scrollTop: number; scrollHeight: number; clientHeight: number }} scrollend
+   * Dispatched when the menu is scrolled near the bottom (load-more
+   * signal). Not the browser's native `scrollend` (scroll stopped).
+   * @event {{
+   *   scrollTop: number;
+   *   scrollHeight: number;
+   *   clientHeight: number;
+   * }} scrollend
    */
 
   /**
@@ -111,24 +130,25 @@
   export let clearable = false;
 
   /**
-   * Specify the assistive text advertising the keyboard shortcut that clears
-   * the selection. Appended to the field's description whenever there is a
-   * selection to clear. Only used when `clearable` is `true`.
+   * Specify the assistive text advertising the keyboard shortcut that
+   * clears the selection. Appended to the field's description whenever
+   * there is a selection to clear. Only used when `clearable` is
+   * `true`.
    */
   export let clearSelectionText =
     "To clear the selection, press Delete or Backspace";
 
   /**
-   * Specify the assistive text announced through the status live region when
-   * the selection is cleared via the keyboard or the clear button. Only used
-   * when `clearable` is `true`.
+   * Specify the assistive text announced through the status live region
+   * when the selection is cleared via the keyboard or the clear button.
+   * Only used when `clearable` is `true`.
    */
   export let selectionClearedText = "Selection cleared";
 
   /**
-   * Set to `true` to reopen the dropdown menu after clearing the selection.
-   * This allows users to immediately see all available items after clearing.
-   * Only used when `clearable` is `true`.
+   * Set to `true` to reopen the dropdown menu after clearing the
+   * selection. This allows users to immediately see all available items
+   * after clearing. Only used when `clearable` is `true`.
    */
   export let openOnClear = false;
 
@@ -142,8 +162,8 @@
 
   /**
    * Set to `true` to render condensed menu items in the fluid variant.
-   * Menu items use the default height instead of the taller fluid height.
-   * Only applies when the fluid variant is active.
+   * Menu items use the default height instead of the taller fluid
+   * height. Only applies when the fluid variant is active.
    */
   export let condensed = false;
 
@@ -159,47 +179,73 @@
   /**
    * Override the chevron icon label based on the open state.
    * Defaults to "Open menu" when closed and "Close menu" when open.
-   * @type {(id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId) => string}
+   * @type {(
+   *   id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId,
+   * ) => string}
    */
   export let translateWithId = undefined;
 
   /**
    * Override the label of the clear button when a selection is present.
-   * Defaults to "Clear selected item" since a dropdown can only have one selection.
+   * Defaults to "Clear selected item" since a dropdown can only have
+   * one selection.
    * @type {(id: "clearSelection") => string}
    */
   export let translateWithIdSelection = undefined;
 
   /**
-   * Enable virtualization for large lists. Virtualization renders only the items currently visible in the viewport, improving performance for large lists.
+   * Enable virtualization for large lists. Virtualization renders only
+   * the items currently visible in the viewport, improving performance
+   * for large lists.
    *
-   * By default, virtualization is automatically enabled for lists with more than 100 items.
+   * By default, virtualization is automatically enabled for lists with
+   * more than 100 items.
    *
-   * Set `virtualize={false}` to explicitly disable virtualization, even for large lists.
+   * Set `virtualize={false}` to explicitly disable virtualization, even
+   * for large lists.
    *
-   * Set `virtualize={true}` to explicitly enable virtualization with default settings.
+   * Set `virtualize={true}` to explicitly enable virtualization with
+   * default settings.
    *
    * Provide an object to customize virtualization behavior:
-   * - `itemHeight` (default: size-based, or 64px for fluid unless `condensed`): Height of each item in pixels. Override when custom slots change row height. Under `wrapOptions`, heights are measured from the rendered options and this serves as the starting estimate for ones not yet measured.
-   * - `containerHeight` (default: 300): The maximum height in pixels of the dropdown container.
-   * - `overscan` (default: 3): The number of extra items to render above and below the viewport for smoother scrolling. Higher values may cause more flickering during very fast scrolling.
-   * - `threshold` (default: 100): The minimum number of items required before virtualization activates. Lists with fewer items will render all items normally without virtualization.
-   * - `maxItems` (default: undefined): The maximum number of items to render. When undefined, all visible items are rendered.
-   * @type {undefined | boolean | { itemHeight?: number, containerHeight?: number, overscan?: number, threshold?: number, maxItems?: number }}
+   * - `itemHeight` (default: size-based, or 64px for fluid unless
+   *   `condensed`): Height of each item in pixels. Override when custom
+   *   slots change row height. Under `wrapOptions`, heights are
+   *   measured from the rendered options and this serves as the
+   *   starting estimate for ones not yet measured.
+   * - `containerHeight` (default: 300): The maximum height in pixels of
+   *   the dropdown container.
+   * - `overscan` (default: 3): The number of extra items to render
+   *   above and below the viewport for smoother scrolling. Higher
+   *   values may cause more flickering during very fast scrolling.
+   * - `threshold` (default: 100): The minimum number of items required
+   *   before virtualization activates. Lists with fewer items will
+   *   render all items normally without virtualization.
+   * - `maxItems` (default: undefined): The maximum number of items to
+   *   render. When undefined, all visible items are rendered.
+   * @type {undefined
+   *   | boolean
+   *   | {
+   *       itemHeight?: number;
+   *       containerHeight?: number;
+   *       overscan?: number;
+   *       threshold?: number;
+   *       maxItems?: number;
+   *     }}
    */
   export let virtualize = undefined;
 
   /**
-   * Set to `true` to let an option's label wrap onto as many lines as it needs
-   * instead of being truncated with an ellipsis.
+   * Set to `true` to let an option's label wrap onto as many lines as
+   * it needs instead of being truncated with an ellipsis.
    * @type {boolean}
    */
   export let wrapOptions = false;
 
   /**
-   * Set to `true` to render the dropdown menu in a portal,
-   * allowing it to escape containers with `overflow: hidden`.
-   * When inside a Modal, defaults to `true` unless explicitly set to `false`.
+   * Set to `true` to render the dropdown menu in a portal, allowing it
+   * to escape containers with `overflow: hidden`. When inside a Modal,
+   * defaults to `true` unless explicitly set to `false`.
    * @type {boolean | undefined}
    */
   export let portalMenu = undefined;
@@ -546,10 +592,14 @@
   const announceStatus = createStatusAnnouncer((text) => (statusText = text));
 
   /**
-   * Clear the dropdown selection programmatically.
-   * By default, focuses the dropdown after clearing. Set `options.focus` to `false` to prevent focusing.
-   * Set `options.open` to `true` to open the dropdown menu after clearing.
-   * @type {(options?: { focus?: boolean; open?: boolean; }) => Promise<void>}
+   * Clear the dropdown selection programmatically. By default, focuses
+   * the dropdown after clearing. Set `options.focus` to `false` to
+   * prevent focusing. Set `options.open` to `true` to open the dropdown
+   * menu after clearing.
+   * @type {(options?: {
+   *   focus?: boolean;
+   *   open?: boolean;
+   * }) => Promise<void>}
    * @example
    * ```svelte
    * <Dropdown bind:this={dropdown} items={items} />
@@ -572,7 +622,9 @@
    * Close the menu and notify consumers of the dismissal cause.
    * Only dispatches when transitioning from open to closed so redundant
    * `open = false` assignments do not double-fire.
-   * @type {(trigger: "escape-key" | "outside-click" | "select") => void}
+   * @type {(
+   *   trigger: "escape-key" | "outside-click" | "select",
+   * ) => void}
    */
   const close = createMenuCloseHandler({
     getOpen: () => open,

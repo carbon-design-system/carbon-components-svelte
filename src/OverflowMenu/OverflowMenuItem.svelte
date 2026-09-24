@@ -64,7 +64,9 @@
    */
   export let rel = undefined;
 
-  /** Set to `true` if the item should be focused when opening the menu */
+  /**
+   * Set to `true` if the item should be focused when opening the menu
+   */
   export let primaryFocus = false;
 
   /** Set to `true` to disable the item */

@@ -9,15 +9,21 @@
  * `options.title` wins over auto-detection, including `""`.
  * `options.measure` checks a descendant instead of `node`.
  *
- * Measurement is deferred to a microtask. Svelte 3/4 run actions inline while
- * mounting each item, so measuring synchronously forces one layout per item in
- * a list (a 99-option menu paid for 100 layouts). Deferring lets every item
- * mount first, so the batch shares a single layout. An explicit `title` needs
- * no measurement and is applied synchronously.
+ * Measurement is deferred to a microtask. Svelte 3/4 run actions inline
+ * while mounting each item, so measuring synchronously forces one
+ * layout per item in a list (a 99-option menu paid for 100 layouts).
+ * Deferring lets every item mount first, so the batch shares a single
+ * layout. An explicit `title` needs no measurement and is applied
+ * synchronously.
  *
  * @param {HTMLElement} node Element that gets the `title` attribute.
  * @param {import("./overflow-title.js").OverflowTitleParams} [options]
- * @returns {{ update: (options?: import("./overflow-title.js").OverflowTitleParams) => void, destroy: () => void }}
+ * @returns {{
+ *   update: (
+ *     options?: import("./overflow-title.js").OverflowTitleParams,
+ *   ) => void;
+ *   destroy: () => void;
+ * }}
  * @example
  * <div use:overflowTitle>{text}</div>
  * <label use:overflowTitle={{ title, measure: labelText }}>...</label>

@@ -5,11 +5,13 @@ import { deepEqual } from "../utils/deep-equal.js";
 /**
  * Lightweight deep equality check optimized for DataTable rows.
  * Compares arrays of row objects by first checking IDs (fast path),
- * then falling back to deep object comparison to handle nested structures.
+ * then falling back to deep object comparison to handle nested
+ * structures.
  * @template T
  * @param {ReadonlyArray<T> | null} a - First array of rows to compare
  * @param {ReadonlyArray<T> | null} b - Second array of rows to compare
- * @returns {boolean} True if row arrays are deeply equal, false otherwise
+ * @returns {boolean} True if row arrays are deeply equal, false
+ *   otherwise
  */
 export function rowsEqual(a, b) {
   if (a === b) return true;
@@ -44,8 +46,10 @@ const RE_IGNORE_ROW_CLICK = /^bx--(overflow-menu|checkbox|radio-button)/;
 
 /**
  * Returns true if the element's class list indicates the click target
- * is an overflow menu, checkbox, or radio button (row click should be ignored).
- * @param {EventTarget | null} target - The event target (e.g., from a click event)
+ * is an overflow menu, checkbox, or radio button (row click should be
+ * ignored).
+ * @param {EventTarget | null} target - The event target (e.g., from a
+ *   click event)
  * @returns {boolean}
  */
 export function shouldIgnoreRowClick(target) {
@@ -60,12 +64,14 @@ const MAX_PATH_CACHE_SIZE = 1000;
 const pathCache = new BoundedFifoCache(MAX_PATH_CACHE_SIZE);
 
 /**
- * Resolves a nested property path in an object.
- * Supports both direct property access and nested paths like "contact.company".
+ * Resolves a nested property path in an object. Supports both direct
+ * property access and nested paths like "contact.company".
  * @template {Record<string, unknown>} T
  * @param {T} object - The object to resolve the path from
- * @param {string} path - The property path (e.g., "name" or "contact.company")
- * @returns {unknown} The resolved value, or undefined if the path doesn't exist
+ * @param {string} path - The property path (e.g., "name" or
+ *   "contact.company")
+ * @returns {unknown} The resolved value, or undefined if the path
+ *   doesn't exist
  */
 export function resolvePath(object, path) {
   if (path in object) return object[path];
@@ -98,7 +104,8 @@ export function resolvePath(object, path) {
  * @param {ReadonlyArray<Row>} rows - The rows to paginate
  * @param {number} page - The current page number (1-indexed)
  * @param {number} pageSize - The number of items per page
- * @returns {ReadonlyArray<Row>} The paginated rows, or all rows if pagination is disabled
+ * @returns {ReadonlyArray<Row>} The paginated rows, or all rows if
+ *   pagination is disabled
  */
 export function getDisplayedRows(rows, page, pageSize) {
   if (page && pageSize) {
@@ -111,8 +118,13 @@ export function getDisplayedRows(rows, page, pageSize) {
  * Formats header width styles for table headers.
  * Combines width and minWidth into a CSS style string.
  * @template {object} Header
- * @param {Header & { width?: string | null | number; minWidth?: string | null | number; [key: string]: unknown }} header - The header object
- * @returns {string | undefined} The formatted style string, or undefined if no width styles
+ * @param {Header & {
+ *   width?: string | null | number;
+ *   minWidth?: string | null | number;
+ *   [key: string]: unknown;
+ * }} header - The header object
+ * @returns {string | undefined} The formatted style string, or
+ *   undefined if no width styles
  */
 export function formatHeaderWidth(header) {
   const styles = [
@@ -138,14 +150,17 @@ const collator = new Intl.Collator(undefined, {
 });
 
 /**
- * Compares two values for sorting in a data table.
- * Handles numbers, strings, null/undefined values, and custom sort functions.
+ * Compares two values for sorting in a data table. Handles numbers,
+ * strings, null/undefined values, and custom sort functions.
  * @template T
  * @param {T} itemA - First value to compare
  * @param {T} itemB - Second value to compare
  * @param {boolean} ascending - Whether to sort in ascending order
- * @param {((a: T, b: T) => number) | false | undefined} customSort - Optional custom sort function
- * @returns {number} Negative if a < b (ascending) or a > b (descending), positive if a > b (ascending) or a < b (descending), 0 if equal
+ * @param {((a: T, b: T) => number) | false | undefined} customSort - Optional
+ *   custom sort function
+ * @returns {number} Negative if a < b (ascending) or a > b
+ *   (descending), positive if a > b (ascending) or a < b (descending),
+ *   0 if equal
  */
 export function compareValues(itemA, itemB, ascending, customSort) {
   if (customSort) {
@@ -194,7 +209,8 @@ function stringifyCsvValue(value) {
  * Quotes and escapes a single CSV field per RFC 4180.
  * @param {string} field - The stringified field value
  * @param {string} delimiter - The field delimiter
- * @param {boolean} escapeFormulas - Whether to neutralize spreadsheet formulas
+ * @param {boolean} escapeFormulas - Whether to neutralize spreadsheet
+ *   formulas
  * @returns {string} The escaped field
  */
 function escapeCsvField(field, delimiter, escapeFormulas) {
@@ -215,24 +231,30 @@ function escapeCsvField(field, delimiter, escapeFormulas) {
 
 /**
  * @typedef {object} ToCsvHeader
- * @property {string} key - Column key; supports nested paths like "contact.company"
+ * @property {string} key - Column key; supports nested paths like
+ *   "contact.company"
  * @property {unknown} [value] - Column label; falls back to the key
  * @property {boolean} [empty] - Whether the column renders no data
- * @property {boolean} [columnHidden] - Whether the column is hidden; hidden columns are skipped
- * @property {(item: unknown, row: Record<string, unknown>) => unknown} [display] - Formats the cell value
+ * @property {boolean} [columnHidden] - Whether the column is hidden;
+ *   hidden columns are skipped
+ * @property {(item: unknown, row: Record<string, unknown>) => unknown} [display] - Formats
+ *   the cell value
  */
 
 /**
  * @typedef {object} ToCsvOptions
  * @property {string} [delimiter] - Field delimiter. Defaults to ","
- * @property {boolean} [includeHeaders] - Whether to emit the header row. Defaults to true
- * @property {boolean} [escapeFormulas] - Whether to prefix fields starting with "=", "+", "-", "@", tab, or carriage return with a single quote. Defaults to true
+ * @property {boolean} [includeHeaders] - Whether to emit the header
+ *   row. Defaults to true
+ * @property {boolean} [escapeFormulas] - Whether to prefix fields
+ *   starting with "=", "+", "-", "@", tab, or carriage return with a
+ *   single quote. Defaults to true
  * @property {string} [newline] - Line ending. Defaults to "\r\n"
  */
 
 /**
- * Serializes data table headers and rows to a CSV string.
- * Skips empty and hidden columns, resolves nested keys, and applies `display`
+ * Serializes data table headers and rows to a CSV string. Skips empty
+ * and hidden columns, resolves nested keys, and applies `display`
  * formatting so the export matches the rendered table.
  * @template {Record<string, unknown>} Row
  * @param {ReadonlyArray<ToCsvHeader>} headers - The data table headers

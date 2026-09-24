@@ -15,8 +15,9 @@
   export let size = undefined;
 
   /**
-   * Set to `true` to remove the gutter around the accordion, aligning it flush with its container.
-   * Has no effect when `align` is `"start"`.
+   * Set to `true` to remove the gutter around the accordion, aligning
+   * it flush with its container. Has no effect when `align` is
+   * `"start"`.
    */
   export let flush = false;
 

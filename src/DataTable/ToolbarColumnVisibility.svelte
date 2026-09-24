@@ -4,7 +4,9 @@
    * @restProps {button}
    * @event change
    * @type {object}
-   * @property {ReadonlyArray<import("./DataTable.svelte").DataTableHeader<Row>>} headers
+   * @property {ReadonlyArray<
+   *   import("./DataTable.svelte").DataTableHeader<Row>
+   * >} headers
    * @property {import("../utils/column-settings.js").ColumnSettings} settings
    * @event close
    * @type {object}
@@ -14,15 +16,17 @@
   /**
    * Bind the table's header definitions.
    * Pass the same array to `DataTable`.
-   * @type {ReadonlyArray<import("./DataTable.svelte").DataTableHeader<Row>>}
+   * @type {ReadonlyArray<
+   *   import("./DataTable.svelte").DataTableHeader<Row>
+   * >}
    * @bindable writable
    */
   export let headers = [];
 
   /**
-   * Restrict which columns can be toggled, by key.
-   * Headers outside this list are omitted from the menu and keep their
-   * current visibility. Unset (the default) makes every column toggleable.
+   * Restrict which columns can be toggled, by key. Headers outside this
+   * list are omitted from the menu and keep their current visibility.
+   * Unset (the default) makes every column toggleable.
    * @type {ReadonlyArray<string> | undefined}
    */
   export let toggleableKeys = undefined;

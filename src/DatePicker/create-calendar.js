@@ -33,8 +33,9 @@ export function resolveLocale(locale) {
 }
 
 /**
- * Minimal flatpickr instance shape used by updateClasses and updateMonthNode.
- * Matches flatpickr's Instance where some elements may be optional.
+ * Minimal flatpickr instance shape used by updateClasses and
+ * updateMonthNode. Matches flatpickr's Instance where some elements may
+ * be optional.
  * @typedef {{
  *   calendarContainer: HTMLElement;
  *   input: HTMLInputElement;
@@ -116,10 +117,11 @@ function markDisabledDayAriaState(_dObj, _dStr, _fp, dayElem) {
 }
 
 /**
- * flatpickr's bundled monthSelect plugin has no concept of "today"; mark
- * the current year's current month the same way flatpickr core marks the
- * current day, since the month cells persist (and their `dateObj` year is
- * mutated in place) across `onYearChange` instead of being rebuilt.
+ * flatpickr's bundled monthSelect plugin has no concept of "today";
+ * mark the current year's current month the same way flatpickr core
+ * marks the current day, since the month cells persist (and their
+ * `dateObj` year is mutated in place) across `onYearChange` instead of
+ * being rebuilt.
  *
  * @param {FlatpickrInstance} instance
  */
@@ -267,10 +269,10 @@ const MIRRORED_ATTRIBUTES = [
 ];
 
 /**
- * flatpickr copies the original input's attributes onto its `altInput` once,
- * at creation. Svelte keeps updating the original, which is hidden, so keep
- * the visible one in sync for state that changes later (`disabled`,
- * `readonly`, `invalid`).
+ * flatpickr copies the original input's attributes onto its `altInput`
+ * once, at creation. Svelte keeps updating the original, which is
+ * hidden, so keep the visible one in sync for state that changes later
+ * (`disabled`, `readonly`, `invalid`).
  *
  * @param {HTMLInputElement} source
  * @param {HTMLInputElement} target
@@ -309,9 +311,10 @@ function mirrorInputState(source, target) {
 const FORWARDED_EVENTS = ["focus", "blur", "keydown", "keyup", "paste"];
 
 /**
- * Consumer handlers (`on:focus`, `on:keydown`, ...) and Carbon's own are
- * bound to the original input, which `altInput` hides. Replay what happens
- * on the visible input there. The listeners die with the `altInput`.
+ * Consumer handlers (`on:focus`, `on:keydown`, ...) and Carbon's own
+ * are bound to the original input, which `altInput` hides. Replay what
+ * happens on the visible input there. The listeners die with the
+ * `altInput`.
  *
  * @param {HTMLInputElement} source
  * @param {HTMLInputElement} target
@@ -342,11 +345,15 @@ function toHookArray(hook) {
 }
 
 /**
- * Carries the current `errorHandler` for a running calendar. flatpickr's own
- * `calendar.set("errorHandler", fn)` replaces `config.errorHandler` outright,
- * which would drop Carbon's wrapper (and the `error` event it dispatches), so
- * reactive updates go through `setErrorHandler` and this map instead.
- * @type {WeakMap<FlatpickrInstance, { current: ((error: Error) => void) | undefined }>}
+ * Carries the current `errorHandler` for a running calendar.
+ * flatpickr's own `calendar.set("errorHandler", fn)` replaces
+ * `config.errorHandler` outright, which would drop Carbon's wrapper
+ * (and the `error` event it dispatches), so reactive updates go through
+ * `setErrorHandler` and this map instead.
+ * @type {WeakMap<
+ *   FlatpickrInstance,
+ *   { current: ((error: Error) => void) | undefined }
+ * >}
  */
 const errorHandlerBoxes = new WeakMap();
 
@@ -428,8 +435,9 @@ export async function createCalendar({
   let createdInstance;
 
   /**
-   * Runs before flatpickr removes the `altInput`, so hand the id back or the
-   * label would point at nothing once the calendar is rebuilt without one.
+   * Runs before flatpickr removes the `altInput`, so hand the id back
+   * or the label would point at nothing once the calendar is rebuilt
+   * without one.
    *
    * @param {any} _s
    * @param {any} _d
@@ -454,10 +462,11 @@ export async function createCalendar({
   const errorHandlerBox = { current: options.errorHandler };
 
   /**
-   * flatpickr's `errorHandler` is a single function, not a hook array, and
-   * it never says which input produced the bad text. The focused range
-   * input (if any) is assumed to be the source, since that is the field
-   * flatpickr just tried to parse; `base` is the only candidate otherwise.
+   * flatpickr's `errorHandler` is a single function, not a hook array,
+   * and it never says which input produced the bad text. The focused
+   * range input (if any) is assumed to be the source, since that is the
+   * field flatpickr just tried to parse; `base` is the only candidate
+   * otherwise.
    * @param {Error} error
    */
   function handleParseError(error) {
@@ -515,9 +524,10 @@ export async function createCalendar({
   }
 
   /**
-   * Carbon's own flatpickr hooks. They are merged with the consumer's rather
-   * than spread under `...options`, where a `flatpickrProps.onOpen` or an
-   * inline `onDayCreate` would silently replace them.
+   * Carbon's own flatpickr hooks. They are merged with the consumer's
+   * rather than spread under `...options`, where a
+   * `flatpickrProps.onOpen` or an inline `onDayCreate` would silently
+   * replace them.
    *
    * @type {Record<string, Function[]>}
    */
@@ -667,8 +677,9 @@ export async function createCalendar({
 }
 
 /**
- * Value to pass to `calendar.set(name, ...)` for a consumer option, keeping
- * Carbon's hooks in front of a consumer hook instead of replacing them.
+ * Value to pass to `calendar.set(name, ...)` for a consumer option,
+ * keeping Carbon's hooks in front of a consumer hook instead of
+ * replacing them.
  *
  * @param {object} instance
  * @param {string} name

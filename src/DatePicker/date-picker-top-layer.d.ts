@@ -1,5 +1,6 @@
 /**
- * Minimal flatpickr instance shape for {@link positionFlatpickrCalendarFixed}.
+ * Minimal flatpickr instance shape for {@link
+ * positionFlatpickrCalendarFixed}.
  */
 export interface FlatpickrTopLayerPositionInstance {
   calendarContainer: HTMLElement;

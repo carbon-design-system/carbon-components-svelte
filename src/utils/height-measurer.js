@@ -1,17 +1,18 @@
 // @ts-check
 
 /**
- * Attribute a virtualized component stamps on every element in its window,
- * carrying the index of the item it renders. Measured heights are attributed
- * back through it, so nothing here reasons about DOM order. The listbox
- * components emit this name as a literal.
+ * Attribute a virtualized component stamps on every element in its
+ * window, carrying the index of the item it renders. Measured heights
+ * are attributed back through it, so nothing here reasons about DOM
+ * order. The listbox components emit this name as a literal.
  */
 export const VIRTUAL_INDEX_ATTRIBUTE = "data-virtual-index";
 
 /**
- * The height a resize entry reports. Offsets need `borderBoxSize`, since an
- * option's padding and border occupy scroll height too. `contentRect` is the
- * fallback for environments that leave `borderBoxSize` empty.
+ * The height a resize entry reports. Offsets need `borderBoxSize`,
+ * since an option's padding and border occupy scroll height too.
+ * `contentRect` is the fallback for environments that leave
+ * `borderBoxSize` empty.
  *
  * @param {ResizeObserverEntry} entry
  * @returns {number}
@@ -37,28 +38,30 @@ function readIndex(node) {
  * Track the heights the elements of a virtualized window render at, so
  * measured virtualization has real heights to place offsets from.
  *
- * All height reading lives here, which keeps `virtualize.js` pure: this reports
- * heights, that turns them into positions. Scroll position belongs to
- * `menuWindow.js`, which owns the container element.
+ * All height reading lives here, which keeps `virtualize.js` pure: this
+ * reports heights, that turns them into positions. Scroll position
+ * belongs to `menuWindow.js`, which owns the container element.
  *
- * Reports are an array indexed by item, sparse where unmeasured, matching the
- * shape `virtualize.js` takes as `heights`. They carry the heights they replace
- * so a caller can work out how far the options above the viewport moved.
+ * Reports are an array indexed by item, sparse where unmeasured,
+ * matching the shape `virtualize.js` takes as `heights`. They carry the
+ * heights they replace so a caller can work out how far the options
+ * above the viewport moved.
  *
- * One observer covers the whole window rather than one per element. Besides
- * being cheaper, it catches height changes no render pass would reveal: a web
- * font swapping in, a container resize, or the reader changing browser zoom
- * with the window still on screen.
+ * One observer covers the whole window rather than one per element.
+ * Besides being cheaper, it catches height changes no render pass would
+ * reveal: a web font swapping in, a container resize, or the reader
+ * changing browser zoom with the window still on screen.
  *
- * A batch is held until the next animation frame rather than reported from
- * inside the observer's callback. Acting on heights moves the window, since the
- * caller corrects the scroll position and re-resolves which options render.
- * Doing that during a delivery both scrolls the container and observes the
- * newly rendered options, leaving observations the browser cannot deliver in
- * that pass. It then reports `ResizeObserver loop completed with undelivered
- * notifications` as an uncatchable window error, on every scroll of a measured
- * menu. Waiting for the frame also coalesces the batches one scroll arrives in,
- * so offsets accumulate once for all of them.
+ * A batch is held until the next animation frame rather than reported
+ * from inside the observer's callback. Acting on heights moves the
+ * window, since the caller corrects the scroll position and re-resolves
+ * which options render. Doing that during a delivery both scrolls the
+ * container and observes the newly rendered options, leaving
+ * observations the browser cannot deliver in that pass. It then reports
+ * `ResizeObserver loop completed with undelivered notifications` as an
+ * uncatchable window error, on every scroll of a measured menu. Waiting
+ * for the frame also coalesces the batches one scroll arrives in, so
+ * offsets accumulate once for all of them.
  *
  * @param {Object} options
  * @param {(heights: number[], prevHeights: number[]) => void} options.onMeasure
@@ -78,9 +81,9 @@ export function createHeightMeasurer({ onMeasure }) {
   /** @type {ResizeObserver | null} */
   let observer = null;
   /**
-   * Heights measured since the last frame, by item index. A Map so a second
-   * batch reporting the same option supersedes the first rather than queueing
-   * behind it.
+   * Heights measured since the last frame, by item index. A Map so a
+   * second batch reporting the same option supersedes the first rather
+   * than queueing behind it.
    * @type {Map<number, number> | null}
    */
   let batched = null;
@@ -88,7 +91,8 @@ export function createHeightMeasurer({ onMeasure }) {
   let frame = 0;
 
   /**
-   * @param {Iterable<[number, number]>} measurements Index/height pairs.
+   * @param {Iterable<[number, number]>} measurements Index/height
+   *   pairs.
    */
   function record(measurements) {
     /** @type {number[] | null} */
@@ -107,7 +111,9 @@ export function createHeightMeasurer({ onMeasure }) {
     onMeasure(heights, prevHeights);
   }
 
-  /** Report everything batched since the last frame, as one measurement. */
+  /**
+   * Report everything batched since the last frame, as one measurement.
+   */
   function flush() {
     frame = 0;
     const measurements = batched;
@@ -138,9 +144,9 @@ export function createHeightMeasurer({ onMeasure }) {
   }
 
   /**
-   * Drop a batch that has not been reported yet. Whatever stops the window
-   * being observed also leaves those heights describing options no longer
-   * rendered there.
+   * Drop a batch that has not been reported yet. Whatever stops the
+   * window being observed also leaves those heights describing options
+   * no longer rendered there.
    */
   function cancelBatch() {
     if (frame !== 0) cancelAnimationFrame(frame);
@@ -148,7 +154,9 @@ export function createHeightMeasurer({ onMeasure }) {
     batched = null;
   }
 
-  /** Stop observing every element, dropping any batch not yet reported. */
+  /**
+   * Stop observing every element, dropping any batch not yet reported.
+   */
   function unobserveAll() {
     cancelBatch();
     observer?.disconnect();
@@ -156,9 +164,10 @@ export function createHeightMeasurer({ onMeasure }) {
   }
 
   /**
-   * Reconcile what is observed against what `container` currently renders.
-   * Call it after the DOM has been committed, since the elements have to exist
-   * to have a height. Pass a falsy container when the window is gone.
+   * Reconcile what is observed against what `container` currently
+   * renders. Call it after the DOM has been committed, since the
+   * elements have to exist to have a height. Pass a falsy container
+   * when the window is gone.
    *
    * @param {Element | null | undefined} container
    */
@@ -202,13 +211,14 @@ export function createHeightMeasurer({ onMeasure }) {
   }
 
   /**
-   * Forget every measurement, as when a menu closes or its collection is
-   * replaced. Heights are indexed by item, so a new collection leaves each of
-   * them describing the wrong element.
+   * Forget every measurement, as when a menu closes or its collection
+   * is replaced. Heights are indexed by item, so a new collection
+   * leaves each of them describing the wrong element.
    *
-   * Observation stops too, so the next `sync` starts it over. A keyed list
-   * keeps the elements of surviving entries in place, and an element that does
-   * not resize is never reported again, so observing it afresh asks once more.
+   * Observation stops too, so the next `sync` starts it over. A keyed
+   * list keeps the elements of surviving entries in place, and an
+   * element that does not resize is never reported again, so observing
+   * it afresh asks once more.
    */
   function clear() {
     unobserveAll();
@@ -220,7 +230,10 @@ export function createHeightMeasurer({ onMeasure }) {
     onMeasure(heights, prevHeights);
   }
 
-  /** Stop observing for good. Measurements are kept but never updated again. */
+  /**
+   * Stop observing for good. Measurements are kept but never updated
+   * again.
+   */
   function disconnect() {
     unobserveAll();
     observer = null;

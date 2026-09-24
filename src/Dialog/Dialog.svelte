@@ -1,6 +1,9 @@
 <script>
   /**
-   * @typedef {"escape-key" | "backdrop" | "close-button" | "programmatic"} DialogCloseTrigger
+   * @typedef {"escape-key"
+   *   | "backdrop"
+   *   | "close-button"
+   *   | "programmatic"} DialogCloseTrigger
    * @restProps {dialog}
    * @slot {{}}
    * @event {null} open
@@ -15,14 +18,15 @@
 
   /**
    * Set to `true` to render the dialog as a modal using `showModal()`.
-   * When `false`, the dialog opens non-modally using `show()`.
-   * Changing `modal` while `open` is `true` has no effect until the dialog closes and reopens.
+   * When `false`, the dialog opens non-modally using `show()`. Changing
+   * `modal` while `open` is `true` has no effect until the dialog
+   * closes and reopens.
    */
   export let modal = false;
 
   /**
-   * Set to `true` to prevent the dialog from closing when clicking the backdrop.
-   * Only applies when `modal` is `true`.
+   * Set to `true` to prevent the dialog from closing when clicking the
+   * backdrop. Only applies when `modal` is `true`.
    */
   export let preventCloseOnClickOutside = false;
 
@@ -36,11 +40,12 @@
   let pendingTrigger = null;
 
   /**
-   * Calls `showModal()`/`show()`/`close()` on the native `<dialog>` element
-   * so its open state tracks `open`/`modal`. Svelte re-invokes this on every
-   * reassignment of `open`/`modal`, not just real transitions, so the guard
-   * on the element's own `open` state stops `dispatch("open")` from firing
-   * again on a redundant re-run while the dialog is already open.
+   * Calls `showModal()`/`show()`/`close()` on the native `<dialog>`
+   * element so its open state tracks `open`/`modal`. Svelte re-invokes
+   * this on every reassignment of `open`/`modal`, not just real
+   * transitions, so the guard on the element's own `open` state stops
+   * `dispatch("open")` from firing again on a redundant re-run while
+   * the dialog is already open.
    */
   function dialogAction(node, options) {
     sync(options);
@@ -73,9 +78,9 @@
   }
 
   /**
-   * Light-dismiss on backdrop: clicks on `::backdrop` are retargeted to the
-   * `<dialog>` element, so `event.target === event.currentTarget` means the
-   * click was outside the dialog's content children.
+   * Light-dismiss on backdrop: clicks on `::backdrop` are retargeted to
+   * the `<dialog>` element, so `event.target === event.currentTarget`
+   * means the click was outside the dialog's content children.
    * @param {MouseEvent} event
    */
   function handleClick(event) {

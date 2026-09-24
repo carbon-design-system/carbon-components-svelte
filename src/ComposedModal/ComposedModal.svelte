@@ -1,7 +1,10 @@
 <script>
   /**
    * @event close
-   * @property {"escape-key" | "outside-click" | "close-button" | "programmatic"} trigger
+   * @property {"escape-key"
+   *   | "outside-click"
+   *   | "close-button"
+   *   | "programmatic"} trigger
    * @event {null} open
    * @event transitionend
    * @property {boolean} open
@@ -23,15 +26,21 @@
   export let danger = false;
 
   /**
-   * Set to `true` to enable alert mode.
-   * The dialog uses `role="alertdialog"` and is described by `ModalBody`.
+   * Set to `true` to enable alert mode. The dialog uses
+   * `role="alertdialog"` and is described by `ModalBody`.
    */
   export let alert = false;
 
-  /** Set to `true` to remove the modal body padding so content spans edge to edge */
+  /**
+   * Set to `true` to remove the modal body padding so content spans
+   * edge to edge
+   */
   export let fullWidth = false;
 
-  /** Set to `true` to prevent the modal from closing when clicking outside */
+  /**
+   * Set to `true` to prevent the modal from closing when clicking
+   * outside
+   */
   export let preventCloseOnClickOutside = false;
 
   /** Specify a class for the inner modal */

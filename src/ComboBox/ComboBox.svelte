@@ -4,8 +4,8 @@
   }
 
   /**
-   * Default typeahead filter: case-insensitive prefix match on the item's
-   * displayed label.
+   * Default typeahead filter: case-insensitive prefix match on the
+   * item's displayed label.
    * @param {any} item
    * @param {string} inputValue
    * @param {(item: any) => string} getLabel
@@ -38,9 +38,24 @@
    * @property {Item["id"]} selectedId
    * @property {Item} selectedItem
    * @event {KeyboardEvent | MouseEvent} clear
-   * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }}
-   * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }} icon
-   * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }} iconRight
+   * @slot {{
+   *   item: Item;
+   *   index: number;
+   *   selected: boolean;
+   *   highlighted: boolean;
+   * }}
+   * @slot {{
+   *   item: Item;
+   *   index: number;
+   *   selected: boolean;
+   *   highlighted: boolean;
+   * }} icon
+   * @slot {{
+   *   item: Item;
+   *   index: number;
+   *   selected: boolean;
+   *   highlighted: boolean;
+   * }} iconRight
    */
 
   /**
@@ -50,9 +65,13 @@
    */
 
   /**
-   * Dispatched when the menu is scrolled near the bottom (load-more signal).
-   * Not the browser's native `scrollend` (scroll stopped).
-   * @event {{ scrollTop: number; scrollHeight: number; clientHeight: number }} scrollend
+   * Dispatched when the menu is scrolled near the bottom (load-more
+   * signal). Not the browser's native `scrollend` (scroll stopped).
+   * @event {{
+   *   scrollTop: number;
+   *   scrollHeight: number;
+   *   clientHeight: number;
+   * }} scrollend
    */
 
   /**
@@ -144,33 +163,37 @@
 
   /**
    * Set to `true` to render condensed menu items in the fluid variant.
-   * Menu items use the default height instead of the taller fluid height.
-   * Only applies when the fluid variant is active.
+   * Menu items use the default height instead of the taller fluid
+   * height. Only applies when the fluid variant is active.
    */
   export let condensed = false;
 
   /**
-   * Set to `true` to allow custom values that are not in the items list.
-   * By default, user-entered text is cleared when the combobox loses focus without selecting an item.
-   * When enabled, custom text is preserved.
+   * Set to `true` to allow custom values that are not in the items
+   * list. By default, user-entered text is cleared when the combobox
+   * loses focus without selecting an item. When enabled, custom text is
+   * preserved.
    */
   export let allowCustomValue = false;
 
   /**
    * Set to `true` to clear the input value when opening the dropdown.
-   * This allows users to see all available items instead of only filtered results.
-   * The original value is restored if the dropdown is closed without making a selection.
+   * This allows users to see all available items instead of only
+   * filtered results. The original value is restored if the dropdown is
+   * closed without making a selection.
    */
   export let clearFilterOnOpen = false;
 
   /**
-   * Set to `true` to select all text in the input when it receives focus (e.g. on tab or click).
+   * Set to `true` to select all text in the input when it receives
+   * focus (e.g. on tab or click).
    */
   export let selectTextOnFocus = false;
 
   /**
-   * Set to `true` to reopen the dropdown menu after clearing the selection.
-   * This allows users to immediately see all available items after clearing.
+   * Set to `true` to reopen the dropdown menu after clearing the
+   * selection. This allows users to immediately see all available items
+   * after clearing.
    */
   export let openOnClear = false;
 
@@ -178,33 +201,37 @@
   export let typeahead = false;
 
   /**
-   * Control whether the first matching item is automatically highlighted as the user types.
-   * - `"none"`: No auto-highlighting (default). The user must use arrow keys or hover to highlight items.
-   * - `"first-match"`: Automatically highlight the first non-disabled filtered item on each input change.
+   * Control whether the first matching item is automatically
+   * highlighted as the user types.
+   * - `"none"`: No auto-highlighting (default). The user must use arrow
+   *   keys or hover to highlight items.
+   * - `"first-match"`: Automatically highlight the first non-disabled
+   *   filtered item on each input change.
    * @type {"none" | "first-match"}
    */
   export let autoHighlight = "none";
 
   /**
-   * Determine if an item should be filtered given the current combobox value.
-   * When `typeahead` is enabled and no custom function is provided,
-   * the default case-insensitive prefix matching is used.
-   * When a custom function is provided, it is used even with `typeahead`.
+   * Determine if an item should be filtered given the current combobox
+   * value. When `typeahead` is enabled and no custom function is
+   * provided, the default case-insensitive prefix matching is used.
+   * When a custom function is provided, it is used even with
+   * `typeahead`.
    * @type {(item: Item, value: string) => boolean}
    */
   export let shouldFilterItem = defaultShouldFilter;
 
   /**
    * Set the filtering strategy used while the menu is open.
-   * - `"remove"`: unmount non-matching options and recreate them when they
-   *   match again.
-   * - `"hide"`: keep all options mounted and hide non-matching ones with the
-   *   `hidden` attribute.
+   * - `"remove"`: unmount non-matching options and recreate them when
+   *   they match again.
+   * - `"hide"`: keep all options mounted and hide non-matching ones
+   *   with the `hidden` attribute.
    *
-   * `"hide"` falls back to `"remove"` when virtualization is enabled, which
-   * also keeps `wrapOptions` correct on a windowed list: a hidden option has no
-   * rendered height, so measuring one would put a zero into offsets it does not
-   * occupy.
+   * `"hide"` falls back to `"remove"` when virtualization is enabled,
+   * which also keeps `wrapOptions` correct on a windowed list: a hidden
+   * option has no rendered height, so measuring one would put a zero
+   * into offsets it does not occupy.
    * @type {"remove" | "hide"}
    */
   export let filterMode = "remove";
@@ -212,27 +239,31 @@
   /**
    * Override the chevron icon label based on the open state.
    * Defaults to "Open menu" when closed and "Close menu" when open.
-   * @type {(id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId) => string}
+   * @type {(
+   *   id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId,
+   * ) => string}
    */
   export let translateWithId = undefined;
 
   /**
-   * Override the label of the clear button when the input has a selection.
-   * Defaults to "Clear selected item" since a combo box can only have one selection.
+   * Override the label of the clear button when the input has a
+   * selection. Defaults to "Clear selected item" since a combo box can
+   * only have one selection.
    * @type {(id: "clearSelection") => string}
    */
   export let translateWithIdSelection = undefined;
 
   /**
-   * Specify the assistive text announced through the status live region when
-   * a selection is cleared via the clear button, the Escape key, or `clear()`.
+   * Specify the assistive text announced through the status live region
+   * when a selection is cleared via the clear button, the Escape key,
+   * or `clear()`.
    */
   export let selectionClearedText = "Selection cleared";
 
   /**
-   * Build the assistive message announced through the status live region when
-   * typing changes how many options match. Only used while a filter is active
-   * (`typeahead` or a custom `shouldFilterItem`).
+   * Build the assistive message announced through the status live
+   * region when typing changes how many options match. Only used while
+   * a filter is active (`typeahead` or a custom `shouldFilterItem`).
    * @type {(count: number) => string}
    */
   export let filterResultsText = function filterResultsText(count) {
@@ -264,35 +295,58 @@
   export let listRef = null;
 
   /**
-   * Enable virtualization for large lists. Virtualization renders only the items currently visible in the viewport, improving performance for large lists.
+   * Enable virtualization for large lists. Virtualization renders only
+   * the items currently visible in the viewport, improving performance
+   * for large lists.
    *
-   * By default, virtualization is automatically enabled for lists with more than 100 items.
+   * By default, virtualization is automatically enabled for lists with
+   * more than 100 items.
    *
-   * Set `virtualize={false}` to explicitly disable virtualization, even for large lists.
+   * Set `virtualize={false}` to explicitly disable virtualization, even
+   * for large lists.
    *
-   * Set `virtualize={true}` to explicitly enable virtualization with default settings.
+   * Set `virtualize={true}` to explicitly enable virtualization with
+   * default settings.
    *
    * Provide an object to customize virtualization behavior:
-   * - `itemHeight` (default: size-based, or 64px for fluid unless `condensed`): Height of each item in pixels. Override when custom slots change row height. Under `wrapOptions`, heights are measured from the rendered options and this serves as the starting estimate for ones not yet measured.
-   * - `containerHeight` (default: 300): The maximum height in pixels of the dropdown container.
-   * - `overscan` (default: 3): The number of extra items to render above and below the viewport for smoother scrolling. Higher values may cause more flickering during very fast scrolling.
-   * - `threshold` (default: 100): The minimum number of items required before virtualization activates. Lists with fewer items will render all items normally without virtualization.
-   * - `maxItems` (default: undefined): The maximum number of items to render. When undefined, all visible items are rendered.
-   * @type {undefined | boolean | { itemHeight?: number, containerHeight?: number, overscan?: number, threshold?: number, maxItems?: number }}
+   * - `itemHeight` (default: size-based, or 64px for fluid unless
+   *   `condensed`): Height of each item in pixels. Override when custom
+   *   slots change row height. Under `wrapOptions`, heights are
+   *   measured from the rendered options and this serves as the
+   *   starting estimate for ones not yet measured.
+   * - `containerHeight` (default: 300): The maximum height in pixels of
+   *   the dropdown container.
+   * - `overscan` (default: 3): The number of extra items to render
+   *   above and below the viewport for smoother scrolling. Higher
+   *   values may cause more flickering during very fast scrolling.
+   * - `threshold` (default: 100): The minimum number of items required
+   *   before virtualization activates. Lists with fewer items will
+   *   render all items normally without virtualization.
+   * - `maxItems` (default: undefined): The maximum number of items to
+   *   render. When undefined, all visible items are rendered.
+   * @type {undefined
+   *   | boolean
+   *   | {
+   *       itemHeight?: number;
+   *       containerHeight?: number;
+   *       overscan?: number;
+   *       threshold?: number;
+   *       maxItems?: number;
+   *     }}
    */
   export let virtualize = undefined;
 
   /**
-   * Set to `true` to let an option's label wrap onto as many lines as it needs
-   * instead of being truncated with an ellipsis.
+   * Set to `true` to let an option's label wrap onto as many lines as
+   * it needs instead of being truncated with an ellipsis.
    * @type {boolean}
    */
   export let wrapOptions = false;
 
   /**
-   * Set to `true` to render the dropdown menu in a portal,
-   * allowing it to escape containers with `overflow: hidden`.
-   * When inside a Modal, defaults to `true` unless explicitly set to `false`.
+   * Set to `true` to render the dropdown menu in a portal, allowing it
+   * to escape containers with `overflow: hidden`. When inside a Modal,
+   * defaults to `true` unless explicitly set to `false`.
    * @type {boolean | undefined}
    */
   export let portalMenu = undefined;
@@ -454,7 +508,10 @@
 
   const announceStatus = createStatusAnnouncer((text) => (statusText = text));
 
-  /** Filter result count last announced; null when the menu is closed so reopening announces again. */
+  /**
+   * Filter result count last announced; null when the menu is closed so
+   * reopening announces again.
+   */
   let announcedFilterCount = null;
 
   const announceFilterResults = debounce((count) => {
@@ -464,10 +521,14 @@
   }, 800);
 
   /**
-   * Clear the combo box programmatically.
-   * By default, focuses the combo box after clearing. Set `options.focus` to `false` to prevent focusing.
-   * Set `options.open` to `true` to keep the dropdown open after clearing.
-   * @type {(options?: { focus?: boolean; open?: boolean; }) => Promise<void>}
+   * Clear the combo box programmatically. By default, focuses the combo
+   * box after clearing. Set `options.focus` to `false` to prevent
+   * focusing. Set `options.open` to `true` to keep the dropdown open
+   * after clearing.
+   * @type {(options?: {
+   *   focus?: boolean;
+   *   open?: boolean;
+   * }) => Promise<void>}
    * @example
    * ```svelte
    * <ComboBox bind:this={comboBox} items={items} />
@@ -481,9 +542,9 @@
 
   /**
    * Shared by `clear()` and Escape. Escape runs this even with nothing
-   * selected, so it announces only when a selection existed. The clear button
-   * cannot gate that way: a controlled consumer may reset `selectedId` in its
-   * own `on:clear` handler before this runs.
+   * selected, so it announces only when a selection existed. The clear
+   * button cannot gate that way: a controlled consumer may reset
+   * `selectedId` in its own `on:clear` handler before this runs.
    * @param {{ focus?: boolean; open?: boolean }} options
    * @param {boolean} announce
    */
@@ -765,8 +826,9 @@
     .join(" ");
 
   /**
-   * Whether an item's displayed label equals the typed text, ignoring case.
-   * Compares `itemToString(item)`, the same string the input and option show.
+   * Whether an item's displayed label equals the typed text, ignoring
+   * case. Compares `itemToString(item)`, the same string the input and
+   * option show.
    * @param {Item} item
    * @param {string | undefined} inputValue
    * @returns {boolean}
@@ -780,10 +842,11 @@
 
   /**
    * Commit the active typeahead suggestion when focus leaves the field.
-   * Mirrors the inline completion shown in the input: the highlighted item, or
-   * an exact case-insensitive match of the autocompleted value. Selecting
-   * normalizes the value to the item's casing and fires `select` reactively.
-   * Returns `true` when an item was committed.
+   * Mirrors the inline completion shown in the input: the highlighted
+   * item, or an exact case-insensitive match of the autocompleted
+   * value. Selecting normalizes the value to the item's casing and
+   * fires `select` reactively. Returns `true` when an item was
+   * committed.
    * @returns {boolean}
    */
   function acceptTypeaheadSuggestion() {
@@ -828,10 +891,10 @@
   }
 
   /**
-   * Restore the selected item's label, or clear a non-matching custom value.
-   * The Tab handler calls this itself. Tab moves focus after `close()`
-   * flips `open`, so the `afterUpdate` open watcher can still see the
-   * input as focused and skip the restore.
+   * Restore the selected item's label, or clear a non-matching custom
+   * value. The Tab handler calls this itself. Tab moves focus after
+   * `close()` flips `open`, so the `afterUpdate` open watcher can still
+   * see the input as focused and skip the restore.
    */
   function normalizeValue() {
     // Read `selectedId` from `itemsById`, not the reactive `selectedItem`.
@@ -847,9 +910,11 @@
   }
 
   /**
-   * Close the dropdown and surface the dismissal cause.
-   * Guarded on `open` so redundant assignments don't double-fire the event.
-   * @type {(trigger: "escape-key" | "outside-click" | "select") => void}
+   * Close the dropdown and surface the dismissal cause. Guarded on
+   * `open` so redundant assignments don't double-fire the event.
+   * @type {(
+   *   trigger: "escape-key" | "outside-click" | "select",
+   * ) => void}
    */
   const close = createMenuCloseHandler({
     getOpen: () => open,

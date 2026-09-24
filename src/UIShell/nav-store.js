@@ -22,8 +22,8 @@ export const sideNavWidth = writable(undefined);
 export const isHeaderRendered = writable(false);
 
 /**
- * The most recently mounted `HamburgerMenu` trigger button, so `SideNav` can
- * return focus to it when the overlay closes via Escape.
+ * The most recently mounted `HamburgerMenu` trigger button, so
+ * `SideNav` can return focus to it when the overlay closes via Escape.
  * @type {import("svelte/store").Writable<HTMLButtonElement | null>}
  */
 export const hamburgerMenuRef = writable(null);

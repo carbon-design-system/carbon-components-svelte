@@ -79,8 +79,8 @@
   export let iconClose = /** @type {Icon} */ (Close);
 
   /**
-   * Specify the ARIA label for the hamburger menu.
-   * Defaults to "Open menu" or "Close menu" based on `isSideNavOpen` state.
+   * Specify the ARIA label for the hamburger menu. Defaults to "Open
+   * menu" or "Close menu" based on `isSideNavOpen` state.
    * @type {string}
    */
   export let ariaLabelMenu = undefined;

@@ -6,7 +6,8 @@
   export let id = uniqueId();
 
   /**
-   * Set to `true` to defer mounting panel content until this tab is first selected
+   * Set to `true` to defer mounting panel content until this tab is
+   * first selected
    */
   export let lazy = false;
 

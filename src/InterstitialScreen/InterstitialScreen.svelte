@@ -9,7 +9,10 @@
    */
   export let open = false;
 
-  /** Set to `true` to render as a full-screen takeover instead of a modal-hosted dialog */
+  /**
+   * Set to `true` to render as a full-screen takeover instead of a
+   * modal-hosted dialog
+   */
   export let isFullScreen = false;
 
   /**
@@ -42,7 +45,9 @@
    */
   const progStep = writable(0);
   /**
-   * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; stepTitle: string }>>}
+   * @type {import("svelte/store").Writable<
+   *   ReadonlyArray<{ id: string; stepTitle: string }>
+   * >}
    */
   const views = writable([]);
 
@@ -80,7 +85,9 @@
   }
 
   /**
-   * @type {(actionType: "close" | "start" | "skip" | "back" | "next") => void}
+   * @type {(
+   *   actionType: "close" | "start" | "skip" | "back" | "next",
+   * ) => void}
    */
   function handleClose(actionType) {
     const shouldContinue = dispatch(

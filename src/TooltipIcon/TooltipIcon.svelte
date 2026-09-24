@@ -38,8 +38,8 @@
   export let icon = /** @type {Icon} */ (undefined);
 
   /**
-   * Specify the icon size.
-   * Carbon icons use a 16/20/24/32 scale, but any number (pixels) can be used.
+   * Specify the icon size. Carbon icons use a 16/20/24/32 scale, but
+   * any number (pixels) can be used.
    * @type {(16 | 20 | 24 | 32 | (number & {}))}
    */
   export let size = 16;
@@ -63,13 +63,15 @@
   export let id = uniqueId();
 
   /**
-   * Specify the duration in milliseconds to delay before displaying the tooltip.
+   * Specify the duration in milliseconds to delay before displaying the
+   * tooltip.
    * @type {number}
    */
   export let enterDelayMs = TOOLTIP_ENTER_DELAY_MS;
 
   /**
-   * Specify the duration in milliseconds to delay before hiding the tooltip.
+   * Specify the duration in milliseconds to delay before hiding the
+   * tooltip.
    * @type {number}
    */
   export let leaveDelayMs = TOOLTIP_LEAVE_DELAY_MS;

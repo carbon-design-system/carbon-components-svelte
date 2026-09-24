@@ -5,8 +5,10 @@ import { get, writable } from "svelte/store";
  * Unique key type for component instance identity.
  * @typedef {{}} InstanceKey
  * @typedef {Object} RadioGroup
- * @property {import("svelte/store").Writable<InstanceKey | undefined>} selectedKey - Key of the currently selected instance
- * @property {Set<InstanceKey>} members - Set of instance keys registered to this group
+ * @property {import("svelte/store").Writable<InstanceKey | undefined>} selectedKey - Key
+ *   of the currently selected instance
+ * @property {Set<InstanceKey>} members - Set of instance keys
+ *   registered to this group
  */
 
 /** @type {Map<string, RadioGroup>} */

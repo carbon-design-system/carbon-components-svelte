@@ -23,8 +23,8 @@ export function graphemeCount(value) {
 }
 
 /**
- * Truncate `value` to at most `max` grapheme clusters.
- * Returns `value` unchanged if `max` is not a finite, non-negative number.
+ * Truncate `value` to at most `max` grapheme clusters. Returns `value`
+ * unchanged if `max` is not a finite, non-negative number.
  *
  * @param {string} value
  * @param {number} max

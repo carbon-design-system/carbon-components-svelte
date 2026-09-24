@@ -55,7 +55,9 @@
 
   /**
    * Override the default toggle props.
-   * @type {import("../Toggle/Toggle.svelte").ToggleProps & { themes?: [labelA: CarbonTheme, labelB: CarbonTheme]; }}
+   * @type {import("../Toggle/Toggle.svelte").ToggleProps & {
+   *   themes?: [labelA: CarbonTheme, labelB: CarbonTheme];
+   * }}
    */
   export let toggle = {
     themes: ["white", "g100"],
@@ -80,7 +82,10 @@
 
   /**
    * Override the default dropdown props.
-   * @type {Omit<import("../Dropdown/Dropdown.svelte").DropdownProps, "items" | "selectedId"> & { themes?: CarbonTheme[]; }}
+   * @type {Omit<
+   *   import("../Dropdown/Dropdown.svelte").DropdownProps,
+   *   "items" | "selectedId"
+   * > & { themes?: CarbonTheme[] }}
    */
   export let dropdown = {
     themes: themeKeys,

@@ -24,7 +24,11 @@
    * @event {null | number} input
    * @event {{ value: null | number, direction: "up" | "down" }} click:stepper
    * @event {{ event: FocusEvent, value: null | number }} blur
-   * @event {{ event: FocusEvent, value: null | number, direction: "up" | "down" }} blur:stepper
+   * @event {{
+   *   event: FocusEvent;
+   *   value: null | number;
+   *   direction: "up" | "down";
+   * }} blur:stepper
    */
 
   /**
@@ -81,8 +85,8 @@
   export let allowEmpty = false;
 
   /**
-   * Set to `true` to preserve decimal input formatting.
-   * When enabled, uses type="text" with inputmode="decimal" instead of type="number".
+   * Set to `true` to preserve decimal input formatting. When enabled,
+   * uses type="text" with inputmode="decimal" instead of type="number".
    * @type {boolean}
    * @example
    * ```svelte
@@ -121,7 +125,10 @@
   /** Set to `true` to hide the input stepper buttons */
   export let hideSteppers = false;
 
-  /** Set to `true` to prevent the scroll wheel from changing the input value */
+  /**
+   * Set to `true` to prevent the scroll wheel from changing the input
+   * value
+   */
   export let disableWheel = false;
 
   /** Set to `true` to select the input's text when it receives focus */
@@ -132,7 +139,10 @@
    * Receives the current raw input string and locale.
    * Return `true` to force valid, `false` to force invalid,
    * or `undefined` to defer to built-in validation.
-   * @type {(value: string, locale: string | undefined) => boolean | undefined}
+   * @type {(
+   *   value: string,
+   *   locale: string | undefined,
+   * ) => boolean | undefined}
    * @example
    * ```svelte
    * <NumberInput validate={(raw) => Number(raw) % 2 === 0} invalidText="Must be even" />

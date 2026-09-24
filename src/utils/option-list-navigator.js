@@ -5,8 +5,8 @@ import { moveIndex } from "./move-index.js";
 /**
  * Build ArrowUp/ArrowDown/Home/End navigation over the enabled
  * `[role="option"]` descendants of a menu element, tracking the active
- * option by id in `highlightedId`. Options marked `aria-disabled="true"`
- * are skipped.
+ * option by id in `highlightedId`. Options marked
+ * `aria-disabled="true"` are skipped.
  *
  * @param {Object} options
  * @param {() => HTMLElement | null} options.getMenuRef

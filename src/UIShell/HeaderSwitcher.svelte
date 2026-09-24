@@ -22,9 +22,9 @@
   export let text = undefined;
 
   /**
-   * Specify the maximum width of `text` before it truncates with an ellipsis.
-   * A number is treated as pixels; a string is used as a CSS length.
-   * Set to `"none"` to let the trigger grow with the text.
+   * Specify the maximum width of `text` before it truncates with an
+   * ellipsis. A number is treated as pixels; a string is used as a CSS
+   * length. Set to `"none"` to let the trigger grow with the text.
    * @type {number | string}
    */
   export let maxWidth = "10rem";
@@ -44,13 +44,16 @@
   export let ref = null;
 
   /**
-   * Customize the menu slide transition (for example, `{ duration: 200 }`).
-   * By default, the menu does not animate.
+   * Customize the menu slide transition (for example,
+   * `{ duration: 200 }`). By default, the menu does not animate.
    * @type {false | import("svelte/transition").SlideParams}
    */
   export let transition = false;
 
-  /** Set to `true` to prevent the menu from closing when clicking outside */
+  /**
+   * Set to `true` to prevent the menu from closing when clicking
+   * outside
+   */
   export let preventCloseOnClickOutside = false;
 
   import { createEventDispatcher, setContext, tick } from "svelte";

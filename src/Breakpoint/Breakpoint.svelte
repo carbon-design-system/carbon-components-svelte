@@ -6,7 +6,10 @@
    * @type {object}
    * @property {BreakpointSize} size
    * @property {BreakpointValue} breakpointValue
-   * @slot {{ size: BreakpointSize; sizes: Record<BreakpointSize, boolean>; }}
+   * @slot {{
+   *   size: BreakpointSize;
+   *   sizes: Record<BreakpointSize, boolean>;
+   * }}
    */
 
   /**

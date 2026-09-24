@@ -18,7 +18,8 @@
   export let filename = "download";
 
   /**
-   * Specify the MIME type used to build the `Blob` when `data` is a string.
+   * Specify the MIME type used to build the `Blob` when `data` is a
+   * string.
    * @type {string}
    */
   export let type = undefined;
@@ -29,7 +30,11 @@
   /**
    * Override the default download behavior (creates an object URL for
    * `data` and clicks a temporary anchor).
-   * @type {(data: string | Blob, filename: string, type: string) => void | Promise<void>}
+   * @type {(
+   *   data: string | Blob,
+   *   filename: string,
+   *   type: string,
+   * ) => void | Promise<void>}
    */
   export let download = downloadFile;
 

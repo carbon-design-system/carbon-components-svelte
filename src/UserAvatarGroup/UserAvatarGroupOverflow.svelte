@@ -1,7 +1,8 @@
 <script>
   /**
-   * Internal "+N" overflow avatar for `UserAvatarGroup`. Shadows the group
-   * context so the inner `UserAvatar` does not register as a group item.
+   * Internal "+N" overflow avatar for `UserAvatarGroup`. Shadows the
+   * group context so the inner `UserAvatar` does not register as a
+   * group item.
    */
 
   /** @type {string} */

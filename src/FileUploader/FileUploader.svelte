@@ -1,6 +1,7 @@
 <script context="module">
   /**
-   * Per-file override: call `fn(file, index)` when supplied, else `fallback`.
+   * Per-file override: call `fn(file, index)` when supplied, else
+   * `fallback`.
    *
    * @template T
    * @param {((file: File, index: number) => T) | undefined} fn
@@ -31,10 +32,14 @@
   export let status = "uploading";
 
   /**
-   * Override the global `status` for an individual file.
-   * Receives `(file, index)` and returns `"uploading" | "edit" | "complete"`.
+   * Override the global `status` for an individual file. Receives
+   * `(file, index)` and returns `"uploading" | "edit" | "complete"`.
    * When omitted, every row uses `status`.
-   * @type {undefined | ((file: File, index: number) => "uploading" | "edit" | "complete")}
+   * @type {undefined
+   *   | ((
+   *       file: File,
+   *       index: number,
+   *     ) => "uploading" | "edit" | "complete")}
    */
   export let fileStatus = undefined;
 
@@ -113,8 +118,14 @@
    * Control how newly added files are ordered in the list.
    * - `"append"` (default): new files appear at the end
    * - `"prepend"`: new files appear at the beginning
-   * - A custom function receiving (existingFiles, newFiles) that returns the merged array
-   * @type {"append" | "prepend" | ((existing: ReadonlyArray<File>, added: ReadonlyArray<File>) => ReadonlyArray<File>)}
+   * - A custom function receiving (existingFiles, newFiles) that
+   *   returns the merged array
+   * @type {"append"
+   *   | "prepend"
+   *   | ((
+   *       existing: ReadonlyArray<File>,
+   *       added: ReadonlyArray<File>,
+   *     ) => ReadonlyArray<File>)}
    */
   export let orderFiles = "append";
 
@@ -171,11 +182,20 @@
   export let buttonLabel = "";
 
   /**
-   * Accessible label for file row status icons (spinner, remove control, checkmark).
-   * Forwarded to `Filename`. Use a string, or a function with context `{ file, fileName, status, invalid }`
-   * where `file` is the row's `File` (only set from `FileUploader`, not from `FileUploaderItem`).
-   * When omitted or the resolved value is blank after trim, `Filename` uses built-in defaults.
-   * @type {string | undefined | ((ctx: { file?: File; fileName: string; status: "uploading" | "edit" | "complete"; invalid: boolean }) => string | undefined)}
+   * Accessible label for file row status icons (spinner, remove
+   * control, checkmark). Forwarded to `Filename`. Use a string, or a
+   * function with context `{ file, fileName, status, invalid }` where
+   * `file` is the row's `File` (only set from `FileUploader`, not from
+   * `FileUploaderItem`). When omitted or the resolved value is blank
+   * after trim, `Filename` uses built-in defaults.
+   * @type {string
+   *   | undefined
+   *   | ((ctx: {
+   *       file?: File;
+   *       fileName: string;
+   *       status: "uploading" | "edit" | "complete";
+   *       invalid: boolean;
+   *     }) => string | undefined)}
    */
   export let iconDescription = undefined;
 
@@ -226,7 +246,10 @@
     });
   }
 
-  /** Stable keys for `{#each}` (and Biome-safe: no commas in the each header). */
+  /**
+   * Stable keys for `{#each}` (and Biome-safe: no commas in the each
+   * header).
+   */
   $: filesWithKeys = keyFiles(files);
 
   /**

@@ -1,8 +1,9 @@
 // @ts-check
 
 /**
- * Generate a random id string, e.g. `ccs-4f2k9x1z`.
- * Not cryptographically secure; intended for DOM ids (aria-* pairing, label `for`, etc.).
+ * Generate a random id string, e.g. `ccs-4f2k9x1z`. Not
+ * cryptographically secure; intended for DOM ids (aria-* pairing, label
+ * `for`, etc.).
  * @param {string} [prefix]
  * @returns {string}
  */

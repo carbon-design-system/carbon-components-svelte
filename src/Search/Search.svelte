@@ -94,9 +94,9 @@
   export let selectTextOnFocus = false;
 
   /**
-   * Set to `true` while results are loading. Shows a small spinner in place
-   * of the search icon and sets `aria-busy` on the input. The field stays
-   * editable.
+   * Set to `true` while results are loading. Shows a small spinner in
+   * place of the search icon and sets `aria-busy` on the input. The
+   * field stays editable.
    */
   export let loading = false;
 
@@ -122,7 +122,10 @@
 
   let skipSelectOnFocus = false;
 
-  /** Focus the input without selecting text, even when `selectTextOnFocus` is set. */
+  /**
+   * Focus the input without selecting text, even when
+   * `selectTextOnFocus` is set.
+   */
   export function focusWithoutSelect() {
     skipSelectOnFocus = true;
     ref?.focus();

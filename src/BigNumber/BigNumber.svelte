@@ -26,27 +26,35 @@
   export let value = undefined;
 
   /**
-   * The number to render after the slash (the "denominator" of a fraction).
-   * Hidden when it formats identically to `value`, or when `percentage` is `true`;
-   * see `forceShowTotal`.
+   * The number to render after the slash (the "denominator" of a
+   * fraction). Hidden when it formats identically to `value`, or when
+   * `percentage` is `true`; see `forceShowTotal`.
    * @type {number}
    */
   export let total = undefined;
 
   /**
-   * Set to `true` to append a percent sign (%) after `value` and hide `total`.
+   * Set to `true` to append a percent sign (%) after `value` and hide
+   * `total`.
    */
   export let percentage = false;
 
   /**
-   * Set to `true` to show `total` even when the default visibility rule would hide it.
+   * Set to `true` to show `total` even when the default visibility rule
+   * would hide it.
    */
   export let forceShowTotal = false;
 
-  /** Specify the number of fraction digits used when formatting `value` and `total`. */
+  /**
+   * Specify the number of fraction digits used when formatting `value`
+   * and `total`.
+   */
   export let fractionDigits = 1;
 
-  /** Set to `true` to render the full number instead of an abbreviated one (e.g. `1,000` instead of `1K`). */
+  /**
+   * Set to `true` to render the full number instead of an abbreviated
+   * one (e.g. `1,000` instead of `1K`).
+   */
   export let fullNumber = false;
 
   /**
@@ -56,10 +64,11 @@
   export let trend = undefined;
 
   /**
-   * Override the trend indicator's color. Defaults to `"success"` for `trend="up"`,
-   * `"error"` for `trend="down"`, and `"neutral"` for `trend="flat"` — set this when
-   * the direction's meaning is reversed for the metric (e.g. a falling error rate,
-   * or a rising failure count).
+   * Override the trend indicator's color. Defaults to `"success"` for
+   * `trend="up"`, `"error"` for `trend="down"`, and `"neutral"` for
+   * `trend="flat"` — set this when the direction's meaning is reversed
+   * for the metric (e.g. a falling error rate, or a rising failure
+   * count).
    * @type {"success" | "error" | "neutral"}
    */
   export let trendColor = undefined;
@@ -70,21 +79,28 @@
    */
   export let size = "default";
 
-  /** Specify the tooltip text. When set, an information icon renders next to `labelText`. */
+  /**
+   * Specify the tooltip text. When set, an information icon renders
+   * next to `labelText`.
+   */
   export let tooltipDescription = "";
 
   /**
-   * Determines how `value` and `total` are formatted. Defaults to the runtime locale.
+   * Determines how `value` and `total` are formatted. Defaults to the
+   * runtime locale.
    * @type {string}
    */
   export let locale = undefined;
 
-  /** Set to `true` to render the loading skeleton in place of the value. */
+  /**
+   * Set to `true` to render the loading skeleton in place of the value.
+   */
   export let loading = false;
 
   /**
-   * Additional options merged into the `Intl.NumberFormat` options used to format
-   * `value` and `total`. Consumer keys take precedence over the component's defaults.
+   * Additional options merged into the `Intl.NumberFormat` options used
+   * to format `value` and `total`. Consumer keys take precedence over
+   * the component's defaults.
    * @type {Intl.NumberFormatOptions}
    * @example
    * `{ style: "currency", currency: "USD" }`
@@ -94,15 +110,16 @@
   export let formatOptions = undefined;
 
   /**
-   * Provide a custom formatter for `value` and `total`, replacing Intl formatting
-   * entirely. Non-number inputs still render the dash.
+   * Provide a custom formatter for `value` and `total`, replacing Intl
+   * formatting entirely. Non-number inputs still render the dash.
    * @type {(value: number) => string}
    */
   export let format = undefined;
 
   /**
-   * Override the text announced to assistive technology for the trend indicator.
-   * Defaults to "Trending up", "Trending down", or "No change" based on `trend`.
+   * Override the text announced to assistive technology for the trend
+   * indicator. Defaults to "Trending up", "Trending down", or "No
+   * change" based on `trend`.
    * @type {string}
    */
   export let trendDescription = undefined;
@@ -113,10 +130,16 @@
    */
   export let delta = undefined;
 
-  /** Set to `true` to format `delta` as a percentage instead of a plain number. */
+  /**
+   * Set to `true` to format `delta` as a percentage instead of a plain
+   * number.
+   */
   export let deltaPercentage = false;
 
-  /** Trailing context rendered after the formatted `delta`, such as "vs last week". */
+  /**
+   * Trailing context rendered after the formatted `delta`, such as "vs
+   * last week".
+   */
   export let deltaLabel = "";
 
   import ArrowDown from "../icons/ArrowDown.svelte";

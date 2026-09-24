@@ -5,7 +5,10 @@ export interface DismissListener {
   options?: boolean | AddEventListenerOptions;
 }
 
-/** Params for `dismiss`. Use `listeners` or the `type` + `handler` shorthand. */
+/**
+ * Params for `dismiss`. Use `listeners` or the `type` + `handler`
+ * shorthand.
+ */
 export interface DismissParams {
   enabled: boolean;
   listeners?: DismissListener[];

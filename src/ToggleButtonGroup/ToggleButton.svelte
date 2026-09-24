@@ -9,7 +9,8 @@
    */
 
   /**
-   * Specify the value used to identify this button in the group's `selected` array.
+   * Specify the value used to identify this button in the group's
+   * `selected` array.
    * @type {string | number}
    */
   export let value = "";
@@ -33,16 +34,17 @@
   export let disabled = false;
 
   /**
-   * Set the position of the portalled tooltip relative to the icon. Icon-only buttons only.
-   * Defaults to `"bottom"` when the group is horizontal and `"right"` when
-   * vertical, since a top/bottom tooltip would otherwise land on top of the
-   * next stacked segment.
+   * Set the position of the portalled tooltip relative to the icon.
+   * Icon-only buttons only. Defaults to `"bottom"` when the group is
+   * horizontal and `"right"` when vertical, since a top/bottom tooltip
+   * would otherwise land on top of the next stacked segment.
    * @type {"top" | "right" | "bottom" | "left" | undefined}
    */
   export let tooltipPosition = undefined;
 
   /**
-   * Set the alignment of the portalled tooltip relative to the icon. Icon-only buttons only.
+   * Set the alignment of the portalled tooltip relative to the icon.
+   * Icon-only buttons only.
    * @type {"start" | "center" | "end"}
    */
   export let tooltipAlignment = "center";

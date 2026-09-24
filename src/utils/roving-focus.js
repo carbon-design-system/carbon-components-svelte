@@ -9,24 +9,35 @@ import { moveIndex, nextEnabledIndex } from "./move-index.js";
 
 /**
  * @typedef {Object} RovingFocusOptions
- * @property {string} selector - Items inside `node`. Also filters which keydown events count.
- * @property {() => HTMLElement[]} [getItems] - Item list in tab order. Default: `node.querySelectorAll(selector)`.
- * @property {RovingFocusOrientation} [orientation] - "horizontal" = Left/Right, "vertical" = Up/Down, "both" = all four. Default "horizontal".
- * @property {boolean} [wrap] - Wrap at the ends. Default `true`; `false` clamps.
- * @property {boolean} [skipDisabled] - Skip disabled items. Default `false`.
- * @property {boolean} [home] - Home jumps to the first item. Default `true`.
- * @property {boolean} [end] - End jumps to the last item. Default `true`.
- * @property {(item: HTMLElement) => boolean} [isDisabled] - Default: `disabled` or `aria-disabled="true"`.
+ * @property {string} selector - Items inside `node`. Also filters which
+ *   keydown events count.
+ * @property {() => HTMLElement[]} [getItems] - Item list in tab order.
+ *   Default: `node.querySelectorAll(selector)`.
+ * @property {RovingFocusOrientation} [orientation] - "horizontal" =
+ *   Left/Right, "vertical" = Up/Down, "both" = all four. Default
+ *   "horizontal".
+ * @property {boolean} [wrap] - Wrap at the ends. Default `true`;
+ *   `false` clamps.
+ * @property {boolean} [skipDisabled] - Skip disabled items. Default
+ *   `false`.
+ * @property {boolean} [home] - Home jumps to the first item. Default
+ *   `true`.
+ * @property {boolean} [end] - End jumps to the last item. Default
+ *   `true`.
+ * @property {(item: HTMLElement) => boolean} [isDisabled] - Default:
+ *   `disabled` or `aria-disabled="true"`.
  * @property {() => number} getActiveIndex - Index to move from.
- * @property {(index: number, event: KeyboardEvent) => void} [onMove] - New index after a navigation key.
- * @property {boolean} [focusOnMove] - Call `.focus()` on the new item. Default `false`.
+ * @property {(index: number, event: KeyboardEvent) => void} [onMove] - New
+ *   index after a navigation key.
+ * @property {boolean} [focusOnMove] - Call `.focus()` on the new item.
+ *   Default `false`.
  */
 
 /**
- * Svelte action for arrow-key roving focus inside `node`.
- * Listens for keydown on matching items and on `node` when the list holds focus.
- * Calls `onMove(index, event)`. Index math uses moveIndex, clampIndex, and
- * nextEnabledIndex. Only Home/End call `preventDefault`.
+ * Svelte action for arrow-key roving focus inside `node`. Listens for
+ * keydown on matching items and on `node` when the list holds focus.
+ * Calls `onMove(index, event)`. Index math uses moveIndex, clampIndex,
+ * and nextEnabledIndex. Only Home/End call `preventDefault`.
  *
  * @param {HTMLElement} node
  * @param {RovingFocusOptions} options

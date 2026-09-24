@@ -12,7 +12,8 @@
 
 /**
  * @typedef {Object} TreeCheckboxOptions
- * @property {boolean} [cascade] - Propagate checks to descendants and derive ancestor state
+ * @property {boolean} [cascade] - Propagate checks to descendants and
+ *   derive ancestor state
  */
 
 /**
@@ -35,8 +36,9 @@ function visit(nodes, visitor) {
 }
 
 /**
- * Ids of `node` and every non-disabled descendant. A disabled node prunes its
- * whole subtree, matching how a disabled node blocks multiselect expansion.
+ * Ids of `node` and every non-disabled descendant. A disabled node
+ * prunes its whole subtree, matching how a disabled node blocks
+ * multiselect expansion.
  * @param {TreeCheckboxNode} node
  * @returns {Array<TreeCheckboxNodeId>}
  */
@@ -69,7 +71,8 @@ function subtreeIds(node) {
 }
 
 /**
- * Nodes from a root down to the node matching `id`, or `null` if no node matches.
+ * Nodes from a root down to the node matching `id`, or `null` if no
+ * node matches.
  * @param {ReadonlyArray<TreeCheckboxNode>} nodes
  * @param {TreeCheckboxNodeId} id
  * @returns {Array<TreeCheckboxNode> | null}
@@ -114,17 +117,19 @@ function retainKnownIds(nodes, checkedIds) {
 /**
  * Derive the full check state of a tree from a set of checked ids.
  *
- * With `cascade`, a checked node checks every non-disabled descendant, a node
- * is checked when all of its cascadable children are, and indeterminate when
- * only some are. Disabled nodes and their subtrees are excluded from the result
- * and from their ancestors' state. Ids with no matching node are dropped.
+ * With `cascade`, a checked node checks every non-disabled descendant,
+ * a node is checked when all of its cascadable children are, and
+ * indeterminate when only some are. Disabled nodes and their subtrees
+ * are excluded from the result and from their ancestors' state. Ids
+ * with no matching node are dropped.
  *
- * With `cascade: false`, the checked set is passed through untouched and nothing
- * is indeterminate.
+ * With `cascade: false`, the checked set is passed through untouched
+ * and nothing is indeterminate.
  * @param {ReadonlyArray<TreeCheckboxNode>} nodes
  * @param {ReadonlyArray<TreeCheckboxNodeId>} checkedIds
  * @param {TreeCheckboxOptions} [options]
- * @returns {TreeCheckboxState} Checked and indeterminate ids, in document order
+ * @returns {TreeCheckboxState} Checked and indeterminate ids, in
+ *   document order
  */
 export function resolveCheckboxState(nodes, checkedIds, options = {}) {
   const { cascade = true } = options;
@@ -144,8 +149,10 @@ export function resolveCheckboxState(nodes, checkedIds, options = {}) {
 
   /**
    * @param {TreeCheckboxNode} node
-   * @param {boolean} inherited - Whether an ancestor cascaded a check down to `node`
-   * @returns {{ checked: boolean; indeterminate: boolean } | null} `null` when the node is pruned
+   * @param {boolean} inherited - Whether an ancestor cascaded a check
+   *   down to `node`
+   * @returns {{ checked: boolean; indeterminate: boolean } | null} `null`
+   *   when the node is pruned
    */
   function walk(node, inherited) {
     if (node.disabled) return null;
@@ -204,11 +211,12 @@ export function resolveCheckboxState(nodes, checkedIds, options = {}) {
  * `checkedIds` change.
  *
  * With `cascade`, checking adds non-disabled descendants and unchecking
- * clears the subtree plus ancestors so resolve can mark them indeterminate.
- * Without cascade, only `id` changes.
+ * clears the subtree plus ancestors so resolve can mark them
+ * indeterminate. Without cascade, only `id` changes.
  * @param {ReadonlyArray<TreeCheckboxNode>} nodes
  * @param {ReadonlyArray<TreeCheckboxNodeId>} checkedIds
- * @param {TreeCheckboxNodeId} id - The node the user checked or unchecked
+ * @param {TreeCheckboxNodeId} id - The node the user checked or
+ *   unchecked
  * @param {boolean} checked - The node's state after the gesture
  * @param {TreeCheckboxOptions} [options]
  * @returns {Array<TreeCheckboxNodeId>}

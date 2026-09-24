@@ -7,10 +7,15 @@ export type RelativeTimeUnit =
   | "month"
   | "year";
 
-/** Convert a `Date`, epoch number, or date string to epoch milliseconds. */
+/**
+ * Convert a `Date`, epoch number, or date string to epoch milliseconds.
+ */
 export function toTimestamp(input: Date | number | string): number;
 
-/** Select the `Intl.RelativeTimeFormat` unit and value for a time difference. */
+/**
+ * Select the `Intl.RelativeTimeFormat` unit and value for a time
+ * difference.
+ */
 export function getRelativeTimeParts(diffMs: number): {
   value: number;
   unit: RelativeTimeUnit;
@@ -27,5 +32,8 @@ export function formatRelativeTime(
   },
 ): string;
 
-/** Adaptive refresh interval: only fire when the displayed unit can change. */
+/**
+ * Adaptive refresh interval: only fire when the displayed unit can
+ * change.
+ */
 export function getRelativeTimeRefreshMs(diffMs: number): number;

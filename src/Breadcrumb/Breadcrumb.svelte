@@ -5,7 +5,9 @@
 
   /** @extends {"./BreadcrumbSkeleton.svelte"} BreadcrumbSkeletonProps */
 
-  /** Set to `true` to hide the separator after the last breadcrumb item */
+  /**
+   * Set to `true` to hide the separator after the last breadcrumb item
+   */
   export let noTrailingSlash = false;
 
   /** Set to `true` to display skeleton state */

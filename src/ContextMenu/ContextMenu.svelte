@@ -11,7 +11,8 @@
 
   /**
    * Specify an element or list of elements to trigger the context menu.
-   * If no element is specified, the context menu applies to the entire window.
+   * If no element is specified, the context menu applies to the entire
+   * window.
    * @type {null | ReadonlyArray<null | HTMLElement>}
    */
   export let target = null;
@@ -42,9 +43,9 @@
   export let ref = null;
 
   /**
-   * Accessible name for the menu.
-   * Prefer setting this (or `aria-label`) when the menu is opened from the window
-   * (`target` unset), where there is no visible trigger for `aria-labelledby`.
+   * Accessible name for the menu. Prefer setting this (or `aria-label`)
+   * when the menu is opened from the window (`target` unset), where
+   * there is no visible trigger for `aria-labelledby`.
    * @type {string | undefined}
    */
   export let labelText = undefined;
@@ -95,11 +96,11 @@
   const typeahead = createTypeaheadBuffer();
 
   /**
-   * WAI-ARIA APG menu first-character navigation: move focus to the next
-   * enabled item, in this menu level only, whose label starts with the
-   * buffered characters typed so far. `options` (this level's own
-   * `data-nested="false"` items) already excludes any open submenu's items,
-   * so a submenu owns its own search once it has focus.
+   * WAI-ARIA APG menu first-character navigation: move focus to the
+   * next enabled item, in this menu level only, whose label starts with
+   * the buffered characters typed so far. `options` (this level's own
+   * `data-nested="false"` items) already excludes any open submenu's
+   * items, so a submenu owns its own search once it has focus.
    * @param {string} character
    */
   function typeaheadSearch(character) {

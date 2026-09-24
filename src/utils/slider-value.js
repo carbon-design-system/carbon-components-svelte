@@ -29,8 +29,8 @@ export function formatRangeLabel(label, numericValue, formatValue) {
 
 /**
  * Read the horizontal client coordinate from a mouse or touch event.
- * Returns `null` for a touch event with no active touch point (for example
- * a `touchend` whose `touches` list is already empty).
+ * Returns `null` for a touch event with no active touch point (for
+ * example a `touchend` whose `touches` list is already empty).
  *
  * @param {MouseEvent | TouchEvent} event
  * @returns {number | null}
@@ -47,7 +47,8 @@ export function getClientX(event) {
  * @param {Object} options
  * @param {number} options.clientX
  * @param {number} options.left - track's `getBoundingClientRect().left`
- * @param {number} options.width - track's `getBoundingClientRect().width`
+ * @param {number} options.width - track's
+ *   `getBoundingClientRect().width`
  * @param {number} options.min
  * @param {number} options.max
  * @param {number} options.step

@@ -11,10 +11,9 @@
   export let currentIndex = 0;
 
   /**
-   * Specify the current step by id.
-   * When set, takes precedence over `currentIndex` and stays on the same
-   * logical step as steps are added or removed. Pair with a stable `id` on
-   * each `ProgressStep`.
+   * Specify the current step by id. When set, takes precedence over
+   * `currentIndex` and stays on the same logical step as steps are
+   * added or removed. Pair with a stable `id` on each `ProgressStep`.
    * @bindable writable
    * @type {string | undefined}
    */
@@ -23,7 +22,10 @@
   /** Set to `true` to use the vertical variant */
   export let vertical = false;
 
-  /** Set to `true` to specify whether the progress steps should be split equally in size in the div */
+  /**
+   * Set to `true` to specify whether the progress steps should be split
+   * equally in size in the div
+   */
   export let spaceEqually = false;
 
   /** Set to `true` to prevent `currentIndex` from updating */
@@ -38,11 +40,30 @@
 
   const dispatch = createEventDispatcher();
   /**
-   * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; complete: boolean; disabled: boolean; index: number; current: boolean }>>}
+   * @type {import("svelte/store").Writable<
+   *   ReadonlyArray<{
+   *     id: string;
+   *     complete: boolean;
+   *     disabled: boolean;
+   *     index: number;
+   *     current: boolean;
+   *   }>
+   * >}
    */
   const steps = writable([]);
   /**
-   * @type {import("svelte/store").Readable<Record<string, { id: string; complete: boolean; disabled: boolean; index: number; current: boolean }>>}
+   * @type {import("svelte/store").Readable<
+   *   Record<
+   *     string,
+   *     {
+   *       id: string;
+   *       complete: boolean;
+   *       disabled: boolean;
+   *       index: number;
+   *       current: boolean;
+   *     }
+   *   >
+   * >}
    */
   const stepsById = derived(steps, (steps) => keyBy(steps));
   const sharedPreventChangeOnClick = writable(preventChangeOnClick);
@@ -62,7 +83,11 @@
   const batchedStepsUpdate = batchStoreUpdates(steps);
 
   /**
-   * @type {(step: { id: string; complete: boolean; disabled: boolean }) => void}
+   * @type {(step: {
+   *   id: string;
+   *   complete: boolean;
+   *   disabled: boolean;
+   * }) => void}
    */
   function add(step) {
     batchedStepsUpdate((_) => {
@@ -116,9 +141,9 @@
   }
 
   /**
-   * Resolve `currentIndex` from `selectedId` when set. If the selected id was
-   * removed, keep the same index (next step) or clamp, and re-anchor
-   * `selectedId` to whatever step that resolves to.
+   * Resolve `currentIndex` from `selectedId` when set. If the selected
+   * id was removed, keep the same index (next step) or clamp, and
+   * re-anchor `selectedId` to whatever step that resolves to.
    * @type {() => void}
    */
   function syncSelection() {

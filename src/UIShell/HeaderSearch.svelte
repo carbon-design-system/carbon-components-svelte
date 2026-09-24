@@ -72,24 +72,32 @@
   /** Specify the `placeholder` attribute of the search input. */
   export let placeholder = "Search...";
 
-  /** Specify the text for the assistive label associated with the search input. */
+  /**
+   * Specify the text for the assistive label associated with the search
+   * input.
+   */
   export let labelText = "Search";
 
   /** Specify the label for the clear button. */
   export let closeButtonLabelText = "Clear search input";
 
   /**
-   * Set to `true` to filter `menu`-slot items by the search value using fuzzy
-   * matching. Requires the `menu` slot; ignored when using the `results` prop.
+   * Set to `true` to filter `menu`-slot items by the search value using
+   * fuzzy matching. Requires the `menu` slot; ignored when using the
+   * `results` prop.
    */
   export let shouldFilter = true;
 
   /**
-   * Override how the search value is matched against each `menu`-slot item's
-   * `text`. Receives the item `text` and the current search value, and returns
-   * whether the item `matched` along with the `indices` of characters to
-   * highlight. Defaults to fuzzy matching. Requires the `menu` slot.
-   * @type {(text: string, query: string) => { matched: boolean; indices?: number[] }}
+   * Override how the search value is matched against each `menu`-slot
+   * item's `text`. Receives the item `text` and the current search
+   * value, and returns whether the item `matched` along with the
+   * `indices` of characters to highlight. Defaults to fuzzy matching.
+   * Requires the `menu` slot.
+   * @type {(
+   *   text: string,
+   *   query: string,
+   * ) => { matched: boolean; indices?: number[] }}
    */
   export let match = fuzzyMatch;
 
@@ -100,12 +108,14 @@
    */
   export let loading = false;
 
-  /** Number of skeleton rows while `loading`. Requires the `menu` slot. */
+  /**
+   * Number of skeleton rows while `loading`. Requires the `menu` slot.
+   */
   export let skeletonCount = 4;
 
   /**
-   * Row density for the `menu` slot. Result text stays flush with the header
-   * input; smaller sizes shorten rows to fit more results.
+   * Row density for the `menu` slot. Result text stays flush with the
+   * header input; smaller sizes shorten rows to fit more results.
    * @type {"sm" | "lg" | "xl"}
    */
   export let size = "sm";

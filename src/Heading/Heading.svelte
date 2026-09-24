@@ -5,12 +5,13 @@
    */
 
   /**
-   * Heading component that automatically adjusts its semantic heading level
-   * based on the nesting level of the `Section` component.
+   * Heading component that automatically adjusts its semantic heading
+   * level based on the nesting level of the `Section` component.
    *
-   * The heading level is determined by the context provided by the nearest
-   * `Section` component. If no `Section` context is available, it defaults to `h1`.
-   * Heading levels are automatically incremented for nested sections and capped at `h6`.
+   * The heading level is determined by the context provided by the
+   * nearest `Section` component. If no `Section` context is available,
+   * it defaults to `h1`. Heading levels are automatically incremented
+   * for nested sections and capped at `h6`.
    *
    * @example
    * ```svelte
@@ -30,9 +31,29 @@
    */
 
   /**
-   * Set the visual size using a Carbon type token. The semantic heading level
-   * stays driven by `Section` context; this only changes how the heading looks.
-   * @type {"heading-01" | "heading-02" | "productive-heading-01" | "productive-heading-02" | "productive-heading-03" | "productive-heading-04" | "productive-heading-05" | "productive-heading-06" | "productive-heading-07" | "expressive-heading-01" | "expressive-heading-02" | "expressive-heading-03" | "expressive-heading-04" | "expressive-heading-05" | "expressive-heading-06" | "display-01" | "display-02" | "display-03" | "display-04" | undefined}
+   * Set the visual size using a Carbon type token. The semantic heading
+   * level stays driven by `Section` context; this only changes how the
+   * heading looks.
+   * @type {"heading-01"
+   *   | "heading-02"
+   *   | "productive-heading-01"
+   *   | "productive-heading-02"
+   *   | "productive-heading-03"
+   *   | "productive-heading-04"
+   *   | "productive-heading-05"
+   *   | "productive-heading-06"
+   *   | "productive-heading-07"
+   *   | "expressive-heading-01"
+   *   | "expressive-heading-02"
+   *   | "expressive-heading-03"
+   *   | "expressive-heading-04"
+   *   | "expressive-heading-05"
+   *   | "expressive-heading-06"
+   *   | "display-01"
+   *   | "display-02"
+   *   | "display-03"
+   *   | "display-04"
+   *   | undefined}
    */
   export let type = undefined;
 

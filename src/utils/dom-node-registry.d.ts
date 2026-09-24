@@ -7,8 +7,8 @@ export interface DomNodeRegistry {
 }
 
 /**
- * A writable-array registry of DOM nodes: push on register, filter out on
- * unregister. Registrations made within the same microtask are batched
- * into a single store flush.
+ * A writable-array registry of DOM nodes: push on register, filter out
+ * on unregister. Registrations made within the same microtask are
+ * batched into a single store flush.
  */
 export function createDomNodeRegistry(): DomNodeRegistry;

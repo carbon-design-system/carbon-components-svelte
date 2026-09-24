@@ -14,8 +14,8 @@
   export let noWrap = false;
 
   /**
-   * Set to `true` to render the header cell as a sortable column button.
-   * Only applies when `head` is `true`.
+   * Set to `true` to render the header cell as a sortable column
+   * button. Only applies when `head` is `true`.
    */
   export let sortable = false;
 

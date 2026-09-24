@@ -17,8 +17,8 @@
   export let feedbackTimeout = COPY_FEEDBACK_TIMEOUT_MS;
 
   /**
-   * Specify an icon to render during the feedback window (for example, after copying).
-   * When unset, the copy icon is always shown.
+   * Specify an icon to render during the feedback window (for example,
+   * after copying). When unset, the copy icon is always shown.
    * @type {Icon}
    */
   export let feedbackIcon = /** @type {Icon} */ (undefined);
@@ -34,8 +34,8 @@
   export let kind = "primary";
 
   /**
-   * Specify the size of the copy button.
-   * `"md"` keeps Carbon's native 2.5rem square; the other sizes match `Button`.
+   * Specify the size of the copy button. `"md"` keeps Carbon's native
+   * 2.5rem square; the other sizes match `Button`.
    * @type {"sm" | "md" | "lg" | "xl"}
    */
   export let size = "md";
@@ -47,20 +47,21 @@
   export let text = undefined;
 
   /**
-   * Override the default copy behavior (`navigator.clipboard.writeText` with
-   * a `document.execCommand("copy")` fallback). Failures reject so the button
-   * can show `errorFeedback` and dispatch `copy:error`.
+   * Override the default copy behavior (`navigator.clipboard.writeText`
+   * with a `document.execCommand("copy")` fallback). Failures reject so
+   * the button can show `errorFeedback` and dispatch `copy:error`.
    * @type {(text: string) => void | Promise<void>}
    */
   export let copy = copyText;
 
   /**
-   * Set how the "Copied!" feedback tooltip is rendered.
-   * By default, it is rendered in a portal so it shares the same surface as the
-   * hover tooltip (the text swaps in place) and is never clipped by an
-   * `overflow: hidden` container. Set to `false` to use Carbon's inline feedback
-   * caret instead; a non-default `tooltipPosition`/`tooltipAlignment` still
-   * portals because the inline caret only supports the default placement.
+   * Set how the "Copied!" feedback tooltip is rendered. By default, it
+   * is rendered in a portal so it shares the same surface as the hover
+   * tooltip (the text swaps in place) and is never clipped by an
+   * `overflow: hidden` container. Set to `false` to use Carbon's inline
+   * feedback caret instead; a non-default
+   * `tooltipPosition`/`tooltipAlignment` still portals because the
+   * inline caret only supports the default placement.
    * @type {boolean | undefined}
    */
   export let portalTooltip = undefined;

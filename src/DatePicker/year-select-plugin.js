@@ -3,7 +3,11 @@
  * Flatpickr plugin that replaces the day grid with a decade of years.
  * Mirrors the shape of flatpickr's bundled monthSelect plugin.
  *
- * @typedef {{ dateFormat?: string; altFormat?: string; theme?: string }} YearSelectPluginConfig
+ * @typedef {{
+ *   dateFormat?: string;
+ *   altFormat?: string;
+ *   theme?: string;
+ * }} YearSelectPluginConfig
  * @typedef {HTMLSpanElement & { dateObj: Date; $i: number }} YearElement
  */
 

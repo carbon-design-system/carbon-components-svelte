@@ -6,8 +6,8 @@ export interface InitialsOptions {
 }
 
 /**
- * Derive initials from a full name: the first user-perceived character of
- * each word, capped at `max`, upper cased.
+ * Derive initials from a full name: the first user-perceived character
+ * of each word, capped at `max`, upper cased.
  */
 export function getInitials(
   name: string | null | undefined,

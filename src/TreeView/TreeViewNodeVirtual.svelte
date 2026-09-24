@@ -1,11 +1,20 @@
 <script>
   /**
-   * Flat-row renderer used by `<TreeView virtualize>`. Consumes the same
-   * `carbon:TreeView` context as TreeViewNode / TreeViewNodeList so all
-   * selection / expansion / focus / checkbox callbacks behave identically.
+   * Flat-row renderer used by `<TreeView virtualize>`. Consumes the
+   * same `carbon:TreeView` context as TreeViewNode / TreeViewNodeList
+   * so all selection / expansion / focus / checkbox callbacks behave
+   * identically.
    *
    * @typedef {object} Row
-   * @property {{ id: string | number; text?: any; icon?: any; disabled?: boolean; href?: string; target?: string; nodes?: any[] }} node
+   * @property {{
+   *   id: string | number;
+   *   text?: any;
+   *   icon?: any;
+   *   disabled?: boolean;
+   *   href?: string;
+   *   target?: string;
+   *   nodes?: any[];
+   * }} node
    * @property {number} depth
    * @property {string | number | null} parentId
    * @property {number} posInSet

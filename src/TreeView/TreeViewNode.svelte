@@ -1,7 +1,8 @@
 <script context="module">
   /**
-   * Computes the depth of a tree leaf node relative to <ul role="tree" />.
-   * Returns the depth of the node (0-based, where 0 is the root level).
+   * Computes the depth of a tree leaf node relative to <ul role="tree"
+   * />. Returns the depth of the node (0-based, where 0 is the root
+   * level).
    * @type {(node: HTMLLIElement | null) => number}
    * @example
    * ```svelte
@@ -58,7 +59,15 @@
   /**
    * @generics {Node extends TreeNode<any> = TreeNode<any>, Icon = any} Node,Icon
    * @typedef {import('./TreeView.svelte').TreeNode<Id>} TreeNode<Id=(string|number)>
-   * @slot {{ node: Node & { expanded: false; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean; } }}
+   * @slot {{
+   *   node: Node & {
+   *     expanded: false;
+   *     leaf: boolean;
+   *     selected: boolean;
+   *     checked: boolean;
+   *     indeterminate: boolean;
+   *   };
+   * }}
    */
 
   /** Set to `true` if the node has no children. */

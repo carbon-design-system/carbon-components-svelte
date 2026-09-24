@@ -16,18 +16,22 @@
   export let description = undefined;
 
   /**
-   * Specify a description for the loading icon.
-   * Defaults to the `status` prop for the "error" and "finished" states.
+   * Specify a description for the loading icon. Defaults to the
+   * `status` prop for the "error" and "finished" states.
    * @type {string}
    */
   export let iconDescription = undefined;
 
-  /** Specify the timeout delay (ms) before the `success` event fires after `status` is set to "finished" */
+  /**
+   * Specify the timeout delay (ms) before the `success` event fires
+   * after `status` is set to "finished"
+   */
   export let successDelay = 1500;
 
   /**
-   * Specify the delay (ms) before rendering while `status` is `"active"`.
-   * Operations that finish within the delay never show the pending state.
+   * Specify the delay (ms) before rendering while `status` is
+   * `"active"`. Operations that finish within the delay never show the
+   * pending state.
    */
   export let delay = 0;
 

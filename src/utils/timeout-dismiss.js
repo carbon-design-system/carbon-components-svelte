@@ -3,12 +3,13 @@
 import { noop } from "./noop.js";
 
 /**
- * Auto-close timer for notifications with a `timeout` prop.
- * `sync()` clears any pending timer and calls `setTimeout` when `open` and `timeout` > 0.
- * Skips `setTimeout` when `window` is undefined (SSR).
- * `pause()` / `resume()` track remaining time so hover can suspend auto-dismiss.
- * The `document` `visibilitychange` listener (pauses while the tab is hidden) is
- * attached only while a timer is active (running or paused).
+ * Auto-close timer for notifications with a `timeout` prop. `sync()`
+ * clears any pending timer and calls `setTimeout` when `open` and
+ * `timeout` > 0. Skips `setTimeout` when `window` is undefined (SSR).
+ * `pause()` / `resume()` track remaining time so hover can suspend
+ * auto-dismiss. The `document` `visibilitychange` listener (pauses
+ * while the tab is hidden) is attached only while a timer is active
+ * (running or paused).
  *
  * @returns {{
  *   get timeoutId(): ReturnType<typeof setTimeout> | undefined,

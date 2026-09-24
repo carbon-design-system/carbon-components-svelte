@@ -1,7 +1,8 @@
 <script>
   /**
-   * Dispatched on selection. Cancelable: call `preventDefault()` to keep
-   * the menu open. A selectable or radio item's selection still updates.
+   * Dispatched on selection. Cancelable: call `preventDefault()` to
+   * keep the menu open. A selectable or radio item's selection still
+   * updates.
    * @event {MouseEvent} click
    */
 
@@ -26,11 +27,11 @@
   export let icon = /** @type {Icon} */ (undefined);
 
   /**
-   * Specify the label text.
-   * Required to nest `MenuItem` children and create a submenu: once set,
-   * the default slot holds the nested items instead of the label.
-   * Alternatively, use the "labelChildren" slot for custom label content;
-   * `labelText` is still used as the accessible name and title in that case.
+   * Specify the label text. Required to nest `MenuItem` children and
+   * create a submenu: once set, the default slot holds the nested items
+   * instead of the label. Alternatively, use the "labelChildren" slot
+   * for custom label content; `labelText` is still used as the
+   * accessible name and title in that case.
    * @type {string | undefined}
    */
   export let labelText = undefined;

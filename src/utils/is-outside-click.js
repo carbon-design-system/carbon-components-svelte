@@ -5,12 +5,16 @@
  * Skips falsy entries. Pass `portalMenu && listRef` inline.
  * Returns false when `event.target` is not a Node.
  *
- * Listeners outside a shadow root see `event.target` as the shadow host,
- * not the clicked node. Also check `event.composedPath()` so a click
- * inside a shadow descendant is not treated as outside.
+ * Listeners outside a shadow root see `event.target` as the shadow
+ * host, not the clicked node. Also check `event.composedPath()` so a
+ * click inside a shadow descendant is not treated as outside.
  *
  * @param {Event} event
- * @param {Element | null | undefined | false | Array<Element | null | undefined | false>} elements
+ * @param {Element
+ *   | null
+ *   | undefined
+ *   | false
+ *   | Array<Element | null | undefined | false>} elements
  * @returns {boolean}
  */
 export function isOutsideClick(event, elements) {

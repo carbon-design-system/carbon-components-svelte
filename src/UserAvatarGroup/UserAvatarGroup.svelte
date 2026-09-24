@@ -23,38 +23,40 @@
 
 <script>
   /**
-   * Render a row of `UserAvatar` children. The group adds the "+N" overflow chip.
+   * Render a row of `UserAvatar` children. The group adds the "+N"
+   * overflow chip.
    * @restProps {div}
    */
 
   /**
-   * Specify the maximum number of avatars to show before collapsing the rest
-   * into a "+N" overflow avatar. Set to `0` to show every avatar.
+   * Specify the maximum number of avatars to show before collapsing the
+   * rest into a "+N" overflow avatar. Set to `0` to show every avatar.
    * @type {number}
    */
   export let max = 5;
 
   /**
-   * Specify the total number of people represented. Defaults to the number of
-   * slotted avatars. Set this when you render only a subset (large groups) so
-   * the overflow count stays right without mounting every avatar.
+   * Specify the total number of people represented. Defaults to the
+   * number of slotted avatars. Set this when you render only a subset
+   * (large groups) so the overflow count stays right without mounting
+   * every avatar.
    * @type {number}
    */
   export let total = undefined;
 
   /**
    * Specify the spacing between avatars. Leave unset for the default
-   * overlapping (stacked) layout. A positive value spaces the avatars apart,
-   * accepting a Carbon layout scale (`0`–`13`) or a CSS length string. A
-   * negative length string (for example `"-1rem"`) overlaps them by that
-   * amount.
+   * overlapping (stacked) layout. A positive value spaces the avatars
+   * apart, accepting a Carbon layout scale (`0`–`13`) or a CSS length
+   * string. A negative length string (for example `"-1rem"`) overlaps
+   * them by that amount.
    * @type {import("../Stack/Stack.svelte").StackScale | string}
    */
   export let gap = undefined;
 
   /**
-   * Specify the size of the avatars. Applies to slotted avatars without their
-   * own `size`, and to the "+N" overflow chip.
+   * Specify the size of the avatars. Applies to slotted avatars without
+   * their own `size`, and to the "+N" overflow chip.
    * @type {"sm" | "md" | "lg" | "xl"}
    */
   export let size = "md";
@@ -68,9 +70,9 @@
   export let stackOrder = "last";
 
   /**
-   * Specify the tooltip text for the "+N" overflow avatar. Defaults to a
-   * comma-separated list of hidden slotted `name` values. Set this when using
-   * `total` for people who are not mounted.
+   * Specify the tooltip text for the "+N" overflow avatar. Defaults to
+   * a comma-separated list of hidden slotted `name` values. Set this
+   * when using `total` for people who are not mounted.
    * @type {string}
    */
   export let overflowTooltipText = undefined;

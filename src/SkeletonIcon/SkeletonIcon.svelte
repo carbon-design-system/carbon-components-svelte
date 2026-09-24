@@ -4,8 +4,8 @@
   import SkeletonPlaceholder from "../SkeletonPlaceholder/SkeletonPlaceholder.svelte";
 
   /**
-   * Specify the icon size.
-   * Carbon icons use a 16/20/24/32 scale, but any number (pixels) can be used.
+   * Specify the icon size. Carbon icons use a 16/20/24/32 scale, but
+   * any number (pixels) can be used.
    * @type {(16 | 20 | 24 | 32 | (number & {}))}
    */
   export let size = 16;

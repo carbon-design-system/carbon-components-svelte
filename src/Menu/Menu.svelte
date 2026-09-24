@@ -10,14 +10,15 @@
    */
 
   /**
-   * Required. Specify the anchor element to position the menu relative to.
+   * Required. Specify the anchor element to position the menu relative
+   * to.
    * @type {null | HTMLElement}
    */
   export let anchor = null;
 
   /**
-   * Set the preferred direction of the menu.
-   * The menu flips to the opposite direction if there is not enough space.
+   * Set the preferred direction of the menu. The menu flips to the
+   * opposite direction if there is not enough space.
    * @type {"bottom" | "top" | "left" | "right"}
    */
   export let direction = "bottom";
@@ -35,9 +36,8 @@
   export let ref = null;
 
   /**
-   * Accessible name for the menu.
-   * Prefer setting this (or `aria-label`) when there is no visible trigger
-   * text for `aria-labelledby`.
+   * Accessible name for the menu. Prefer setting this (or `aria-label`)
+   * when there is no visible trigger text for `aria-labelledby`.
    * @type {string | undefined}
    */
   export let labelText = undefined;
@@ -64,14 +64,16 @@
   export let zIndex = FLOATING_PORTAL_Z_INDEX;
 
   /**
-   * Specify the size of the menu, which controls each item's row height.
-   * `"xs"` has no Carbon v10 equivalent and is hand-authored (see `css/_menu-xs.scss`).
+   * Specify the size of the menu, which controls each item's row
+   * height. `"xs"` has no Carbon v10 equivalent and is hand-authored
+   * (see `css/_menu-xs.scss`).
    * @type {"xs" | "sm" | "md" | "lg"}
    */
   export let size = "sm";
 
   /**
-   * Set to `true` to use the menu's intrinsic width instead of matching the anchor width.
+   * Set to `true` to use the menu's intrinsic width instead of matching
+   * the anchor width.
    * @type {boolean}
    */
   export let intrinsicWidth = false;
@@ -91,8 +93,8 @@
   export let maxHeight = undefined;
 
   /**
-   * DOM node to mount the menu into.
-   * When unset, uses the anchor's nearest `<dialog>` or `[popover]`, else `document.body`.
+   * DOM node to mount the menu into. When unset, uses the anchor's
+   * nearest `<dialog>` or `[popover]`, else `document.body`.
    * @type {HTMLElement | null}
    */
   export let target = null;
@@ -138,7 +140,9 @@
   });
 
   /**
-   * @type {(trigger: "escape-key" | "outside-click" | "select") => void}
+   * @type {(
+   *   trigger: "escape-key" | "outside-click" | "select",
+   * ) => void}
    */
   function close(trigger) {
     if (!open) return;
@@ -148,14 +152,19 @@
   }
 
   /**
-   * A menu-wide "does any item need this column" registry: a selectable/
-   * radio sibling reserves the checkmark column for every item, and an
-   * icon-bearing sibling reserves the icon column for every item, so the
-   * whole menu keeps both columns aligned instead of just the row that
-   * needs them shifting its own label over. Items register by an internal
-   * id (not the consumer-facing `id` prop), since a plain item never
-   * registers and multiple items may share no `id` at all.
-   * @returns {{ hasAny: import("svelte/store").Readable<boolean>, register: (id: string) => void, unregister: (id: string) => void }}
+   * A menu-wide "does any item need this column" registry: a
+   * selectable/ radio sibling reserves the checkmark column for every
+   * item, and an icon-bearing sibling reserves the icon column for
+   * every item, so the whole menu keeps both columns aligned instead of
+   * just the row that needs them shifting its own label over. Items
+   * register by an internal id (not the consumer-facing `id` prop),
+   * since a plain item never registers and multiple items may share no
+   * `id` at all.
+   * @returns {{
+   *   hasAny: import("svelte/store").Readable<boolean>;
+   *   register: (id: string) => void;
+   *   unregister: (id: string) => void;
+   * }}
    */
   function createColumnRegistry() {
     const ids = writable(/** @type {Set<string>} */ (new Set()));
@@ -223,10 +232,10 @@
   }
 
   /**
-   * WAI-ARIA APG menu first-character navigation: move focus to the next
-   * enabled item (in this menu's own level; a submenu is a separate,
-   * portaled `<ul>` so it is never among `items` here) whose label starts
-   * with the buffered characters typed so far.
+   * WAI-ARIA APG menu first-character navigation: move focus to the
+   * next enabled item (in this menu's own level; a submenu is a
+   * separate, portaled `<ul>` so it is never among `items` here) whose
+   * label starts with the buffered characters typed so far.
    * @param {string} character
    */
   function typeaheadSearch(character) {

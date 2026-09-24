@@ -9,7 +9,13 @@ import { breakpoints } from "./breakpoints.js";
  * Svelte action that hides the element when the current breakpoint is
  * larger than `above` or smaller than `below`.
  * @typedef {{ above?: BreakpointSize; below?: BreakpointSize }} HideAtBreakpointOptions
- * @type {(node: HTMLElement, options?: HideAtBreakpointOptions) => { update: (options?: HideAtBreakpointOptions) => void; destroy: () => void }}
+ * @type {(
+ *   node: HTMLElement,
+ *   options?: HideAtBreakpointOptions,
+ * ) => {
+ *   update: (options?: HideAtBreakpointOptions) => void;
+ *   destroy: () => void;
+ * }}
  * @example
  * <div use:hideAtBreakpoint={{ above: "md" }}>Hidden at md and up</div>
  * <div use:hideAtBreakpoint={{ below: "lg" }}>Hidden below lg</div>

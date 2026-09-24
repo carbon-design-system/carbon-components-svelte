@@ -34,8 +34,8 @@
   export let tabindex = "0";
 
   /**
-   * Set an id for the top-level element.
-   * Use a stable value with `Tabs` `selectedId` when tabs are added or removed dynamically.
+   * Set an id for the top-level element. Use a stable value with `Tabs`
+   * `selectedId` when tabs are added or removed dynamically.
    */
   export let id = uniqueId();
 
@@ -47,11 +47,11 @@
   export let secondaryLabel = "";
 
   /**
-   * Specify the icon to render.
-   * Icon is rendered to the right of the label by default.
-   * When the parent `Tabs` is `dismissible`, the icon is rendered to the left.
-   * When the parent `Tabs` is `iconOnly`, only the icon is rendered and the
-   * `label` is used as the accessible name and the tooltip shown on hover/focus.
+   * Specify the icon to render. Icon is rendered to the right of the
+   * label by default. When the parent `Tabs` is `dismissible`, the icon
+   * is rendered to the left. When the parent `Tabs` is `iconOnly`, only
+   * the icon is rendered and the `label` is used as the accessible name
+   * and the tooltip shown on hover/focus.
    * @type {Icon}
    */
   export let icon = /** @type {Icon} */ (undefined);

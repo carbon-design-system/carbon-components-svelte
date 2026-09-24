@@ -22,7 +22,9 @@
    */
   export let href = undefined;
 
-  /** Set to `true` if the breadcrumb item represents the current page */
+  /**
+   * Set to `true` if the breadcrumb item represents the current page
+   */
   export let isCurrentPage = false;
 
   /**
