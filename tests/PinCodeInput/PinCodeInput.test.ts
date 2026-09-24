@@ -175,6 +175,51 @@ describe("PinCodeInput", () => {
         screen.getByLabelText("Verification code character 6 of 6"),
       ).toBeInTheDocument();
     });
+
+    it("uses a custom segmentLabelText", () => {
+      render(PinCodeInput, {
+        props: {
+          segmentLabelText: (position: number, count: number) =>
+            `Dígito ${position} de ${count}`,
+        },
+      });
+      const inputs = getInputs();
+      expect(inputs[0]).toHaveAttribute("aria-label", "Dígito 1 de 4");
+      expect(inputs[3]).toHaveAttribute("aria-label", "Dígito 4 de 4");
+    });
+
+    it("passes the label text and type to segmentLabelText", () => {
+      const segmentLabelText = vi.fn(() => "x");
+      render(PinCodeInput, {
+        props: {
+          segmentLabelText,
+          labelText: "Código",
+          type: "alphanumeric",
+          count: 2,
+        },
+      });
+      expect(segmentLabelText).toHaveBeenCalledWith(
+        1,
+        2,
+        "Código",
+        "alphanumeric",
+      );
+      expect(segmentLabelText).toHaveBeenCalledWith(
+        2,
+        2,
+        "Código",
+        "alphanumeric",
+      );
+    });
+
+    it("updates the default label when labelText changes", async () => {
+      const { component } = render(PinCodeInput);
+      component.labelText = "Invite code";
+      await tick();
+      expect(
+        screen.getByLabelText("Invite code digit 1 of 4"),
+      ).toBeInTheDocument();
+    });
   });
 
   it("accepts and rejects characters against a custom pattern", async () => {

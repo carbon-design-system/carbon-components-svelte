@@ -150,6 +150,24 @@
    */
   export let selectTextOnFocus = false;
 
+  /**
+   * Override the accessible label of each segment.
+   *
+   * `position` is 1-based. The default returns, for example,
+   * `"Verification code digit 1 of 4"`, using `"Pin code"` when `labelText`
+   * is empty and `"character"` instead of `"digit"` when `type` is
+   * `"alphanumeric"`.
+   * @type {(position: number, count: number, labelText: string, type: "numeric" | "alphanumeric") => string}
+   */
+  export let segmentLabelText = function segmentLabelText(
+    position,
+    count,
+    labelText,
+    type,
+  ) {
+    return `${labelText || "Pin code"} ${type === "numeric" ? "digit" : "character"} ${position} of ${count}`;
+  };
+
   /** Set an id for the input group */
   export let id = uniqueId();
 
@@ -523,7 +541,7 @@
             {readonly}
             {required}
             aria-readonly={readonly || undefined}
-            aria-label={`${labelText || "Pin code"} ${type === "numeric" ? "digit" : "character"} ${index + 1} of ${count}`}
+            aria-label={segmentLabelText(index + 1, count, labelText, type)}
             aria-invalid={hasError || undefined}
             data-invalid={hasError || undefined}
             data-warn={hasWarn || undefined}
