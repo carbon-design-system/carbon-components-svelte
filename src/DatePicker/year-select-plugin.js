@@ -134,6 +134,7 @@ export function yearSelectPlugin(pluginConfig) {
             yearCell.dateObj.getFullYear() > fp.config.maxDate.getFullYear())
         ) {
           yearCell.classList.add("disabled");
+          yearCell.setAttribute("aria-disabled", "true");
         }
 
         self.yearsContainer.appendChild(yearCell);
