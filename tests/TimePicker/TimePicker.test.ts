@@ -6,6 +6,7 @@ import TimePickerFluidSkeleton from "./TimePicker.fluidSkeleton.test.svelte";
 import TimePickerFluidSlot from "./TimePicker.fluidSlot.test.svelte";
 import TimePicker from "./TimePicker.test.svelte";
 import TimePickerCustom from "./TimePickerCustom.test.svelte";
+import TimePickerSelectNumeric from "./TimePickerSelect.numeric.test.svelte";
 import TimePickerSelectSlot from "./TimePickerSelect.slot.test.svelte";
 import TimePickerSelectEvents from "./TimePickerSelectEvents.test.svelte";
 
@@ -575,6 +576,21 @@ describe("TimePicker", () => {
 
     select.blur();
     expect(selectBlur).toHaveBeenCalled();
+  });
+
+  it("keeps numeric select values numeric after a change", async () => {
+    render(TimePickerSelectNumeric);
+
+    const select = screen.getByRole("combobox") as HTMLSelectElement;
+    const bound = screen.getByTestId("bound");
+
+    await user.selectOptions(select, "-7");
+    expect(select.selectedIndex).toBe(1);
+    expect(bound).toHaveTextContent(/^-7$/);
+
+    await user.selectOptions(select, "0");
+    expect(select.selectedIndex).toBe(0);
+    expect(bound).toHaveTextContent(/^0$/);
   });
 
   it("renders fluid skeleton state", () => {
