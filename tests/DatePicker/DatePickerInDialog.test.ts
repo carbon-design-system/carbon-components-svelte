@@ -16,10 +16,14 @@ describe("DatePicker inside a top-layer dialog", () => {
 
     const scrollCall = add.mock.calls.find(([type]) => type === "scroll");
     expect(scrollCall?.[2]).toEqual({ capture: true, passive: true });
-    // Other components register their own resize listeners; match the one
-    // sharing the calendar's reposition handler.
+    // Pooled listeners are shared per `(type, options)`, so scroll and
+    // resize no longer share one function reference.
     const resizeCall = add.mock.calls.find(
-      ([type, listener]) => type === "resize" && listener === scrollCall?.[1],
+      ([type, , options]) =>
+        type === "resize" &&
+        typeof options === "object" &&
+        options?.passive === true &&
+        !("capture" in options),
     );
     expect(resizeCall?.[2]).toEqual({ passive: true });
 
