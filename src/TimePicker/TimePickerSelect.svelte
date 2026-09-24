@@ -37,6 +37,7 @@
   import { readable, writable } from "svelte/store";
   import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
   import ChevronDown from "../icons/ChevronDown.svelte";
+  import { noop } from "../utils/noop.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const formContext = getContext(FORM_CONTEXT_KEY);
@@ -78,7 +79,7 @@
 
   setContext("carbon:TimePickerSelect", { selectedValue, setDefaultValue });
 
-  onMount(() => timePickerContext?.registerSelect?.() ?? (() => {}));
+  onMount(() => timePickerContext?.registerSelect?.() ?? noop);
 
   // An item with the value "" makes "" a real choice, so leave it alone.
   $: if (value === "" && !hasEmptyItem && defaultItemValue !== undefined) {
