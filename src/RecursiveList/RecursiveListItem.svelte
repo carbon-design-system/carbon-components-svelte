@@ -22,6 +22,7 @@
   export let rel = undefined;
 
   import ListItem from "../ListItem/ListItem.svelte";
+  import { resolveLinkRel } from "../utils/link-rel.js";
 </script>
 
 <ListItem>
@@ -29,12 +30,7 @@
     {text}
   {/if}
   {#if href}
-    <a
-      class:bx--link={true}
-      {href}
-      {target}
-      rel={rel ?? (target === "_blank" ? "noopener noreferrer" : undefined)}
-    >
+    <a class:bx--link={true} {href} {target} rel={resolveLinkRel(target, rel)}>
       {text || href}
     </a>
   {/if}
