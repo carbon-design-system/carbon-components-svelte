@@ -339,7 +339,7 @@
         }
         break;
       case "Delete":
-        if (readonly || disabled) break;
+        if (readonly || disabled || !code[index]) break;
         setChar(index, "");
         break;
       default:
