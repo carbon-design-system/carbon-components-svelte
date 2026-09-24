@@ -32,6 +32,7 @@
   import CircleDash from "../icons/CircleDash.svelte";
   import Incomplete from "../icons/Incomplete.svelte";
   import Warning from "../icons/Warning.svelte";
+  import { noop } from "../utils/noop.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   let step = {};
@@ -40,9 +41,9 @@
 
   const ctx = getContext("carbon:ProgressIndicator");
   const stepsById = ctx?.stepsById ?? writable({});
-  const add = ctx?.add ?? (() => {});
-  const remove = ctx?.remove ?? (() => {});
-  const change = ctx?.change ?? (() => {});
+  const add = ctx?.add ?? noop;
+  const remove = ctx?.remove ?? noop;
+  const change = ctx?.change ?? noop;
   const preventChangeOnClick = ctx?.preventChangeOnClick ?? writable(false);
 
   $: add({ id, complete, disabled });

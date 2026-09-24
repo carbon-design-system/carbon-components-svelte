@@ -130,6 +130,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import { fuzzyMatch } from "../utils/fuzzy-match.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
+  import { moveIndex } from "../utils/move-index.js";
   import { createOptionListNavigator } from "../utils/option-list-navigator.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -420,19 +421,19 @@
             break;
           case "ArrowDown":
             event.preventDefault();
-            if (selectedResultIndex === results.length - 1) {
-              selectedResultIndex = 0;
-            } else {
-              selectedResultIndex += 1;
-            }
+            selectedResultIndex = moveIndex(
+              selectedResultIndex,
+              1,
+              results.length,
+            );
             break;
           case "ArrowUp":
             event.preventDefault();
-            if (selectedResultIndex === 0) {
-              selectedResultIndex = results.length - 1;
-            } else {
-              selectedResultIndex -= 1;
-            }
+            selectedResultIndex = moveIndex(
+              selectedResultIndex,
+              -1,
+              results.length,
+            );
             break;
           case "Escape":
             if (value === "") {

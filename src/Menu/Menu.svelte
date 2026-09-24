@@ -102,6 +102,7 @@
   import { FLOATING_PORTAL_Z_INDEX } from "../constants/layout.js";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
+  import { toCssLength } from "../utils/css-length.js";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { menuOptionLabel } from "../utils/menu-option-label.js";
@@ -209,8 +210,7 @@
   }
 
   $: menuAriaLabel = ($$props["aria-label"] ?? labelText) || undefined;
-  $: maxHeightStyle =
-    typeof maxHeight === "number" ? `${maxHeight}px` : maxHeight;
+  $: maxHeightStyle = toCssLength(maxHeight);
 
   /**
    * @param {HTMLElement} item

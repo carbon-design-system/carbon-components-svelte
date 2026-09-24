@@ -104,9 +104,11 @@
   import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
+  import { toCssLength } from "../utils/css-length.js";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { keyBy } from "../utils/key-by.js";
+  import { nextEnabledIndex } from "../utils/move-index.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import {
     createTypeaheadBuffer,
@@ -117,6 +119,9 @@
 
   const ctxBreadcrumbItem = getContext("carbon:BreadcrumbItem");
   const insideModal = getContext(MODAL_CONTEXT_KEY);
+
+  // Arrow keys the menu owns while open, so the page doesn't also scroll.
+  const ARROW_KEYS = ["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"];
 
   $: effectivePortalMenu =
     portalMenu === undefined ? !!insideModal : portalMenu;
@@ -207,17 +212,25 @@
   }
 
   function first() {
-    const index = $items.findIndex((_) => !_.disabled);
+    const index = nextEnabledIndex({
+      items: $items,
+      index: -1,
+      step: 1,
+      isDisabled: (item) => item.disabled,
+      wrap: false,
+    });
     if (index >= 0) focusedIndex.set(index);
   }
 
   function last() {
-    for (let index = $items.length - 1; index >= 0; index--) {
-      if (!$items[index].disabled) {
-        focusedIndex.set(index);
-        return;
-      }
-    }
+    const index = nextEnabledIndex({
+      items: $items,
+      index: -1,
+      step: -1,
+      isDisabled: (item) => item.disabled,
+      wrap: false,
+    });
+    if (index >= 0) focusedIndex.set(index);
   }
 
   /**
@@ -325,8 +338,7 @@
   // performance. The previous approach created individual `style` tags per
   // instance, causing overhead when many OverflowMenu components are rendered.
   $: overflowMenuOptionsAfterWidth = buttonWidth ? `${buttonWidth}px` : "2rem";
-  $: maxHeightStyle =
-    typeof maxHeight === "number" ? `${maxHeight}px` : maxHeight;
+  $: maxHeightStyle = toCssLength(maxHeight);
 
   function handleOutsideClick(event) {
     if (menuRef && isOutsideClick(event, [buttonRef, menuRef])) {
@@ -343,9 +355,7 @@
 
   /** @param {KeyboardEvent} event */
   function handleMenuKeydown(event) {
-    if (
-      ["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(event.key)
-    ) {
+    if (ARROW_KEYS.includes(event.key)) {
       event.preventDefault();
     } else if (isTypeaheadKey(event)) {
       event.preventDefault();
@@ -405,7 +415,7 @@
   on:keydown
   on:keydown={(event) => {
     if (open) {
-      if (["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(event.key)) {
+      if (ARROW_KEYS.includes(event.key)) {
         event.preventDefault();
       } else if (event.key === "Home") {
         event.preventDefault();

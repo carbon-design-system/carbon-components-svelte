@@ -32,13 +32,14 @@
   export let ref = null;
 
   import UserAvatar from "../UserAvatar/UserAvatar.svelte";
+  import { resolveLinkRel } from "../utils/link-rel.js";
 </script>
 
 {#if href}
   <a
     bind:this={ref}
     {href}
-    rel={$$restProps.target === "_blank" ? "noopener noreferrer" : undefined}
+    rel={resolveLinkRel($$restProps.target, $$restProps.rel)}
     class:bx--profile-menu__header={true}
     class:bx--profile-menu__header--link={true}
     {...$$restProps}
