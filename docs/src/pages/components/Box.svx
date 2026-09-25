@@ -254,6 +254,15 @@ Set `gap` to space out flex or grid children without nesting a [Stack](/componen
   <Box fill="layer-01" padding={4} border="subtle">Flex item</Box>
 </Box>
 
+### Alignment
+
+Set `align` (`align-items`) and `justify` (`justify-content`) to position flex or grid children. They take the same values as [Stack](/components/Stack)'s `align` and `justify`. A grid whose `columns` are all `fr` tracks fills the row, so `justify` has no free space to distribute there.
+
+<Box display="flex" align="center" justify="space-between" height="4rem" paddingX={5} border="subtle">
+  <Text type="body-short-01">Storage used</Text>
+  <Text type="body-short-01" color="secondary">42 of 100 GB</Text>
+</Box>
+
 ### Grid columns
 
 With `display="grid"`, set `columns` to a number for that many equal-width tracks, or to a string used as-is for `grid-template-columns`. `columns` has no effect on other display modes.
@@ -387,6 +396,8 @@ Apply Box utilities directly when you do not need the component. Classes use the
 | `bx--box-display-inline-flex` | `display: inline-flex` |
 | `bx--box-display-grid` | `display: grid` |
 | `bx--box-gap-{1-13}` | Gap between flex or grid children |
+| `bx--box-align-{start,center,end,stretch,baseline}` | `align-items` for flex or grid children |
+| `bx--box-justify-{start,center,end,space-between,space-around,space-evenly}` | `justify-content` for flex or grid children |
 | `bx--box-overflow-visible` | `overflow: visible` |
 | `bx--box-overflow-hidden` | `overflow: hidden` |
 | `bx--box-overflow-auto` | `overflow: auto` |
