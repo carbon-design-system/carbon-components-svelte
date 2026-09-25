@@ -56,7 +56,13 @@ Use the `labelChildren` slot to provide custom label content instead of `labelTe
 
 ## States
 
-Reflect interaction states.
+Reflect validation and interaction states.
+
+### Warning
+
+Set `warn` to `true` and provide `warnText` when a setting is valid but has consequences worth calling out. Tie `warn` to the state it describes so the message clears when the toggle changes.
+
+<FileSource src="/framed/Toggle/ToggleWarning" />
 
 ### Disabled
 
