@@ -41,6 +41,12 @@
   /** Set to `true` for the checkbox to be read-only */
   export let readonly = false;
 
+  /**
+   * Specify the assistive text announced to screen readers when read-only.
+   * Exposed because VoiceOver does not announce `aria-readonly`.
+   */
+  export let readonlyText = "Read-only";
+
   /** Set to `true` to disable the checkbox */
   export let disabled = false;
 
@@ -106,6 +112,7 @@
   import WarningFilled from "../icons/WarningFilled.svelte";
   import {
     buildFieldIds,
+    joinDescribedBy,
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
@@ -198,7 +205,10 @@
     }
   }
 
-  $: ({ helperId, errorId, warnId } = buildFieldIds(id));
+  $: ({ helperId, errorId, warnId, readonlyId } = buildFieldIds(id));
+  // A decorative checkbox's owner (e.g. a MultiSelect option) already
+  // announces read-only, so skip the per-checkbox description.
+  $: describeReadonly = effectiveReadonly && !decorative;
 </script>
 
 {#if skeleton}
@@ -238,14 +248,17 @@
       aria-readonly={effectiveReadonly || undefined}
       aria-invalid={showInvalid || undefined}
       data-invalid={showInvalid || undefined}
-      aria-describedby={resolveStatusDescribedBy({
-        showInvalid,
-        showWarn,
-        helperText,
-        errorId,
-        warnId,
-        helperId,
-      })}
+      aria-describedby={joinDescribedBy(
+        describeReadonly ? readonlyId : null,
+        resolveStatusDescribedBy({
+          showInvalid,
+          showWarn,
+          helperText,
+          errorId,
+          warnId,
+          helperId,
+        }),
+      )}
       class:bx--checkbox={true}
       on:click={(event) => {
         if (effectiveReadonly) {
@@ -288,6 +301,11 @@
         <slot name="labelChildren"> {labelText} </slot>
       </span>
     </label>
+    {#if describeReadonly}
+      <span id={readonlyId} class:bx--visually-hidden={true}
+        >{readonlyText}</span
+      >
+    {/if}
     <div class:bx--checkbox__validation-msg={true}>
       {#if showInvalid}
         <WarningFilled class="bx--checkbox__invalid-icon" />
