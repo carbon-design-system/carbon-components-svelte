@@ -391,6 +391,7 @@
   class:bx--overflow-menu--xs={size === "xs"}
   class:bx--overflow-menu--sm={size === "sm"}
   class:bx--overflow-menu--xl={size === "xl"}
+  class:bx--overflow-menu--custom-trigger={$$slots.menu}
   {...$$restProps}
   on:click
   on:click={({ target }) => {
