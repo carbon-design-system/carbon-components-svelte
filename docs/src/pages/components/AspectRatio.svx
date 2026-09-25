@@ -98,6 +98,14 @@ Set `align` or `justify` to position content that doesn't fill the aspect box, s
   <Tile>Centered</Tile>
 </AspectRatio>
 
+## Custom element
+
+The outer element renders a `<div>` by default. Set `tag` to render a semantic element such as `figure`, `section`, or `article` without wrapping the component in an extra element.
+
+<AspectRatio tag="figure" ratio="16x9" fill>
+  <Tile>Rendered as a `figure`.</Tile>
+</AspectRatio>
+
 ## Usage
 
 Wrap content like tiles, images, or videos in an aspect ratio container to maintain consistent proportions across screen sizes. See [Fill](#fill) above for making that content stretch to the container.
