@@ -217,6 +217,31 @@
   export let columns = undefined;
 
   /**
+   * Set the cross-axis alignment of children. Only takes effect when
+   * `display` is `"flex"`, `"inline-flex"`, or `"grid"`.
+   * @type {"start"
+   *   | "center"
+   *   | "end"
+   *   | "stretch"
+   *   | "baseline"
+   *   | undefined}
+   */
+  export let align = undefined;
+
+  /**
+   * Set the main-axis alignment of children. Only takes effect when
+   * `display` is `"flex"`, `"inline-flex"`, or `"grid"`.
+   * @type {"start"
+   *   | "center"
+   *   | "end"
+   *   | "space-between"
+   *   | "space-around"
+   *   | "space-evenly"
+   *   | undefined}
+   */
+  export let justify = undefined;
+
+  /**
    * Set the CSS overflow behavior.
    * @type {"visible" | "hidden" | "auto" | "scroll" | undefined}
    */
@@ -304,6 +329,8 @@
     position && `bx--box-position-${position}`,
     display && `bx--box-display-${display}`,
     spacingClass("gap", gap),
+    align && `bx--box-align-${align}`,
+    justify && `bx--box-justify-${justify}`,
     overflow && `bx--box-overflow-${overflow}`,
     overflowX && `bx--box-overflow-x-${overflowX}`,
     overflowY && `bx--box-overflow-y-${overflowY}`,

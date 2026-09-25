@@ -241,6 +241,25 @@ describe("Box", () => {
     );
   });
 
+  it("applies align and justify classes", () => {
+    render(Box);
+
+    expect(screen.getByTestId("align-center")).toHaveClass(
+      "bx--box-align-center",
+    );
+    expect(screen.getByTestId("justify-between")).toHaveClass(
+      "bx--box-justify-space-between",
+    );
+  });
+
+  it("omits align and justify classes by default", () => {
+    render(Box);
+
+    expect(screen.getByText("Flex display").className).not.toMatch(
+      /bx--box-(align|justify)-/,
+    );
+  });
+
   it("merges multiple modifier classes", () => {
     render(Box);
 

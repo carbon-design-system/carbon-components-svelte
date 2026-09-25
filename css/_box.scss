@@ -172,6 +172,35 @@
     display: grid;
   }
 
+  $align-values: (
+    start: flex-start,
+    center: center,
+    end: flex-end,
+    stretch: stretch,
+    baseline: baseline,
+  );
+
+  @each $name, $value in $align-values {
+    .#{$prefix}--box-align-#{$name} {
+      align-items: $value;
+    }
+  }
+
+  $justify-values: (
+    start: flex-start,
+    center: center,
+    end: flex-end,
+    space-between: space-between,
+    space-around: space-around,
+    space-evenly: space-evenly,
+  );
+
+  @each $name, $value in $justify-values {
+    .#{$prefix}--box-justify-#{$name} {
+      justify-content: $value;
+    }
+  }
+
   // After the `display` rules so hiding wins at equal specificity. Nothing is
   // below `sm` or above `max`, so those two classes are never emitted.
   $hide-breakpoints: sm, md, lg, xlg, max;
