@@ -165,6 +165,39 @@ describe("Select", () => {
     expect(selectElement).not.toBeDisabled();
   });
 
+  it("describes the field as read-only for screen readers that ignore aria-readonly", () => {
+    const { container } = render(Select, { readonly: true });
+
+    const selectElement = screen.getByLabelText("Select label");
+    expect(selectElement).toHaveAttribute(
+      "aria-describedby",
+      "readonly-test-select",
+    );
+
+    const description = container.querySelector("#readonly-test-select");
+    expect(description).toHaveTextContent("Read-only");
+    expect(description).toHaveClass("bx--visually-hidden");
+  });
+
+  it("supports overriding the read-only assistive text", () => {
+    const { container } = render(Select, {
+      readonly: true,
+      readonlyText: "Schreibgeschützt",
+    });
+
+    expect(container.querySelector("#readonly-test-select")).toHaveTextContent(
+      "Schreibgeschützt",
+    );
+  });
+
+  it("does not render a read-only description or aria-describedby when not readonly", () => {
+    const { container } = render(Select);
+
+    const selectElement = screen.getByLabelText("Select label");
+    expect(selectElement).not.toHaveAttribute("aria-describedby");
+    expect(container.querySelector("#readonly-test-select")).toBeNull();
+  });
+
   it("suppresses invalid and warn states when read-only", () => {
     render(Select, {
       readonly: true,
