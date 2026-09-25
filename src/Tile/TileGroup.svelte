@@ -5,9 +5,9 @@
    */
 
   /**
-   * Specify the selected tile value.
-   * Follows the field after a reset — becomes the value of whichever tile
-   * is checked in the DOM, or `undefined`.
+   * Specify the selected tile value. Follows the field after a reset —
+   * becomes the value of whichever tile is checked in the DOM, or
+   * `undefined`.
    * @type {T | undefined}
    * @bindable writable
    */
@@ -23,10 +23,10 @@
   export let required = undefined;
 
   /**
-   * Specify a name attribute for the radio button inputs.
-   * Overrides each tile's own `name`. When neither is set, the tiles share
-   * a generated id so they form one radio group; set a name explicitly when
-   * form submission matters.
+   * Specify a name attribute for the radio button inputs. Overrides
+   * each tile's own `name`. When neither is set, the tiles share a
+   * generated id so they form one radio group; set a name explicitly
+   * when form submission matters.
    * @type {string}
    */
   export let name = undefined;

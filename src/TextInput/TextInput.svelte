@@ -13,8 +13,8 @@
   /**
    * Specify the input value.
    *
-   * `value` will be set to `null` if type="number" and the value is empty.
-   * Follows the field when the owning form resets.
+   * `value` will be set to `null` if type="number" and the value is
+   * empty. Follows the field when the owning form resets.
    * @type {null | number | string}
    * @bindable writable
    */

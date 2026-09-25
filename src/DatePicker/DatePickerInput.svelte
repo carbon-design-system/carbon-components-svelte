@@ -215,9 +215,10 @@
   }
 
   /**
-   * Range mode has two DatePickerInputs sharing one reset handler. Attach
-   * only to whichever declared itself first (the same check `declareRef`
-   * uses to split `inputRef` from `inputRefTo`), so the restore runs once.
+   * Range mode has two DatePickerInputs sharing one reset handler.
+   * Attach only to whichever declared itself first (the same check
+   * `declareRef` uses to split `inputRef` from `inputRefTo`), so the
+   * restore runs once.
    */
   function attachFormReset(node, onReset) {
     if ($inputIds.indexOf(id) !== 0) return {};

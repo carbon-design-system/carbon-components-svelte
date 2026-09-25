@@ -118,7 +118,9 @@
   }
 
   /**
-   * @type {(trigger: "escape-key" | "outside-click" | "select") => void}
+   * @type {(
+   *   trigger: "escape-key" | "outside-click" | "select",
+   * ) => void}
    */
   function close(trigger) {
     if (!open) return;

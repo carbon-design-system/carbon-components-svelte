@@ -1,6 +1,6 @@
 /**
- * Keeps an input's `value` attribute on `value`, so a form reset leaves the
- * current value in place. `undefined` leaves the attribute alone.
+ * Keeps an input's `value` attribute on `value`, so a form reset leaves
+ * the current value in place. `undefined` leaves the attribute alone.
  */
 export function reflectDefaultValue(
   node: HTMLInputElement,

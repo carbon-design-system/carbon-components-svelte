@@ -280,8 +280,8 @@
 
   /**
    * Bind to the Flatpickr calendar instance for programmatic control.
-   * Available for every `datePickerType` except `"simple"`, where it stays
-   * `null`.
+   * Available for every `datePickerType` except `"simple"`, where it
+   * stays `null`.
    * @see https://flatpickr.js.org/instance-methods-properties-elements/
    * @type {import("flatpickr/dist/types/instance").Instance | null}
    * @bindable readonly
@@ -838,10 +838,11 @@
   }
 
   /**
-   * flatpickr keeps `selectedDateElem` and `todayDateElem` after a redraw
-   * replaces them (a month change), and sets `todayDateElem` even when
-   * today is disabled, which is not focusable. Same test as flatpickr's own
-   * `isInView`, against the whole container so month and year cells count.
+   * flatpickr keeps `selectedDateElem` and `todayDateElem` after a
+   * redraw replaces them (a month change), and sets `todayDateElem`
+   * even when today is disabled, which is not focusable. Same test as
+   * flatpickr's own `isInView`, against the whole container so month
+   * and year cells count.
    *
    * @param {HTMLElement | undefined} elem
    */
@@ -855,8 +856,8 @@
   }
 
   /**
-   * Returns `false` when there is no calendar to focus (simple mode, or a
-   * failed or pending flatpickr init).
+   * Returns `false` when there is no calendar to focus (simple mode, or
+   * a failed or pending flatpickr init).
    * @type {() => boolean}
    */
   function focusCalendar() {
@@ -1350,12 +1351,13 @@
   }
 
   /**
-   * Selecting a day redraws the grid (flatpickr's own redraw in "multiple"
-   * mode, then Carbon's `setDate` sync in "range" mode), which drops focus
-   * on the page while the calendar stays open. Put it back on the same date
-   * once the updates settle. This runs in the capture phase, before
-   * flatpickr's handler, and browsers run microtasks between listeners, so
-   * wait a task rather than a `tick()`.
+   * Selecting a day redraws the grid (flatpickr's own redraw in
+   * "multiple" mode, then Carbon's `setDate` sync in "range" mode),
+   * which drops focus on the page while the calendar stays open. Put it
+   * back on the same date once the updates settle. This runs in the
+   * capture phase, before flatpickr's handler, and browsers run
+   * microtasks between listeners, so wait a task rather than a
+   * `tick()`.
    *
    * @param {KeyboardEvent} event
    */
@@ -1378,9 +1380,9 @@
   }
 
   /**
-   * flatpickr closes on Escape from inside the calendar before the wrapper's
-   * handler runs, and a portalled calendar never reaches the wrapper, so the
-   * close would be reported as an outside click.
+   * flatpickr closes on Escape from inside the calendar before the
+   * wrapper's handler runs, and a portalled calendar never reaches the
+   * wrapper, so the close would be reported as an outside click.
    *
    * @param {KeyboardEvent} event
    */

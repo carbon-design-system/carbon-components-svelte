@@ -70,10 +70,16 @@
   /**
    * Show each file's size under its name.
    * - `false` (default): show the name only
-   * - `true` or `"decimal"`: format `file.size` with decimal units (1000 bytes = 1 kB)
-   * - `"binary"`: format `file.size` with binary units (1024 bytes = 1 KiB)
-   * - A function receiving `(file, index)` that returns the text (e.g., a localized size)
-   * @type {boolean | "decimal" | "binary" | ((file: File, index: number) => string)}
+   * - `true` or `"decimal"`: format `file.size` with decimal units
+   *   (1000 bytes = 1 kB)
+   * - `"binary"`: format `file.size` with binary units (1024 bytes = 1
+   *   KiB)
+   * - A function receiving `(file, index)` that returns the text (e.g.,
+   *   a localized size)
+   * @type {boolean
+   *   | "decimal"
+   *   | "binary"
+   *   | ((file: File, index: number) => string)}
    */
   export let fileSize = false;
 

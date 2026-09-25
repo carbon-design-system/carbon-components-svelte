@@ -6,8 +6,8 @@
   export let size = undefined;
 
   /**
-   * Specify the input value.
-   * Follows the field's value after the owning form resets, on every Svelte version.
+   * Specify the input value. Follows the field's value after the owning
+   * form resets, on every Svelte version.
    * @type {string}
    * @bindable writable
    */

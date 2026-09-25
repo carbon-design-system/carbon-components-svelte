@@ -41,9 +41,8 @@
   export let size = undefined;
 
   /**
-   * Specify the input value.
-   * Use `null` to denote "no value".
-   * Kept when the owning form resets; with `allowEmpty`, follows the field
+   * Specify the input value. Use `null` to denote "no value". Kept when
+   * the owning form resets; with `allowEmpty`, follows the field
    * instead.
    * @type {null | number}
    * @bindable writable

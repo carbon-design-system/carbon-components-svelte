@@ -27,11 +27,11 @@
   /**
    * The individual segment characters.
    *
-   * `code` is the source of truth; its length tracks `count`. Each element is
-   * either an empty string (unfilled segment) or a single character matching
-   * `pattern` when set, otherwise the active `type`: `0-9` for `"numeric"`,
-   * `a-zA-Z0-9` for `"alphanumeric"`.
-   * Follows the segments when the owning form resets.
+   * `code` is the source of truth; its length tracks `count`. Each
+   * element is either an empty string (unfilled segment) or a single
+   * character matching `pattern` when set, otherwise the active `type`:
+   * `0-9` for `"numeric"`, `a-zA-Z0-9` for `"alphanumeric"`. Follows
+   * the segments when the owning form resets.
    * @type {string[]}
    * @bindable writable
    */
@@ -40,10 +40,10 @@
   /**
    * Specify the type of allowed characters.
    *
-   * `"numeric"` allows `0-9`; `"alphanumeric"` allows `a-z`, `A-Z`, `0-9`.
-   * When `pattern` is set, `pattern` decides which characters are accepted,
-   * and `type` still sets each segment's `inputmode` (`"numeric"` shows a
-   * numeric keypad on touch devices).
+   * `"numeric"` allows `0-9`; `"alphanumeric"` allows `a-z`, `A-Z`,
+   * `0-9`. When `pattern` is set, `pattern` decides which characters
+   * are accepted, and `type` still sets each segment's `inputmode`
+   * (`"numeric"` shows a numeric keypad on touch devices).
    * @type {"numeric" | "alphanumeric"}
    */
   export let type = "numeric";
@@ -53,9 +53,9 @@
    *
    * Accepts a `RegExp` or a string compiled with `new RegExp(...)`. The
    * pattern is tested against each individual character, not the full
-   * assembled value. When unset, `type` selects the preset (`"numeric"` or
-   * `"alphanumeric"`). Set `type` to `"alphanumeric"` when the pattern
-   * accepts letters, so touch keyboards offer them.
+   * assembled value. When unset, `type` selects the preset (`"numeric"`
+   * or `"alphanumeric"`). Set `type` to `"alphanumeric"` when the
+   * pattern accepts letters, so touch keyboards offer them.
    * @type {RegExp | string | undefined}
    */
   export let pattern = undefined;
@@ -160,10 +160,15 @@
    * Override the accessible label of each segment.
    *
    * `position` is 1-based. The default returns, for example,
-   * `"Verification code digit 1 of 4"`, using `"Pin code"` when `labelText`
-   * is empty and `"character"` instead of `"digit"` when `type` is
-   * `"alphanumeric"`.
-   * @type {(position: number, count: number, labelText: string, type: "numeric" | "alphanumeric") => string}
+   * `"Verification code digit 1 of 4"`, using `"Pin code"` when
+   * `labelText` is empty and `"character"` instead of `"digit"` when
+   * `type` is `"alphanumeric"`.
+   * @type {(
+   *   position: number,
+   *   count: number,
+   *   labelText: string,
+   *   type: "numeric" | "alphanumeric",
+   * ) => string}
    */
   export let segmentLabelText = function segmentLabelText(
     position,

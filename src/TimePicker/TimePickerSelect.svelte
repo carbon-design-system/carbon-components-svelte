@@ -51,7 +51,8 @@
   const selectedValue = writable(value);
 
   /**
-   * `typeof` each `SelectItem` value, so a change keeps numeric values numeric.
+   * `typeof` each `SelectItem` value, so a change keeps numeric values
+   * numeric.
    * @type {Record<string, string>}
    */
   const itemTypesByValue = {};
@@ -64,8 +65,8 @@
 
   /**
    * Record each `SelectItem`. The first item to register is the default
-   * when `value` is `""`, and keeps that role if its value changes, as in
-   * `Select`.
+   * when `value` is `""`, and keeps that role if its value changes, as
+   * in `Select`.
    * @type {(id: string, itemValue: string | number) => void}
    */
   function setDefaultValue(id, itemValue) {
