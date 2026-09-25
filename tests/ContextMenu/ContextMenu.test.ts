@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { render, screen, waitFor } from "@testing-library/svelte";
 import type ContextMenuOptionComponent from "carbon-components-svelte/ContextMenu/ContextMenuOption.svelte";
 import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
@@ -441,12 +441,15 @@ describe("ContextMenu", () => {
 
     const submenuTrigger = screen.getByText("Option with submenu");
     await user.hover(submenuTrigger);
-    await new Promise((resolve) => setTimeout(resolve, 150));
 
-    const submenu = screen
-      .getAllByRole("menu")
-      .find((menu) => menu.getAttribute("data-level") === "2");
-    assert(submenu);
+    // The submenu opens after a 150ms hover-intent delay.
+    const submenu = await waitFor(() => {
+      const menu = screen
+        .getAllByRole("menu")
+        .find((menu) => menu.getAttribute("data-level") === "2");
+      assert(menu);
+      return menu;
+    });
 
     const rootMenu = screen
       .getAllByRole("menu")
@@ -455,10 +458,13 @@ describe("ContextMenu", () => {
 
     const rootX = Number.parseInt(rootMenu.style.left, 10);
     const rootWidth = rootMenu.getBoundingClientRect().width;
-    const submenuX = Number.parseInt(submenu.style.left, 10);
 
-    // Submenu should be positioned to the right of the parent menu.
-    expect(submenuX).toBeGreaterThanOrEqual(rootX + rootWidth);
+    // Submenu should be positioned to the right of the parent menu once it
+    // has measured itself, a moment after it mounts.
+    await waitFor(() => {
+      const submenuX = Number.parseInt(submenu.style.left, 10);
+      expect(submenuX).toBeGreaterThanOrEqual(rootX + rootWidth);
+    });
   });
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1847
@@ -552,6 +558,7 @@ describe("ContextMenu", () => {
 
       const submenuTrigger = screen.getByText("Option with submenu");
       await user.hover(submenuTrigger);
+      // Outlast the 150ms hover-intent delay before asserting it never opened.
       await new Promise((resolve) => setTimeout(resolve, 200));
 
       const trigger = submenuTrigger.closest("li");

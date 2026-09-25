@@ -1,5 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import ComboBox from "./ComboBox.test.svelte";
 import { getInput } from "./helpers";
@@ -59,14 +60,14 @@ describe("ComboBox", () => {
         expect(menu.style.overflowY).toBe("auto");
 
         menu.scrollTop = 1000;
-        await new Promise((resolve) => setTimeout(resolve, 100));
+        await flushMacrotask();
 
         const scrollBeforeClose = menu.scrollTop;
         expect(scrollBeforeClose).toBeGreaterThan(0);
 
         rerender({ open: false });
         await tick();
-        await new Promise((resolve) => setTimeout(resolve, 100));
+        await flushMacrotask();
 
         rerender({ open: true });
         await tick();

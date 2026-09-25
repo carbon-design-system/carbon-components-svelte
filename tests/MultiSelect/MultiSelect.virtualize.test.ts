@@ -1,5 +1,6 @@
 import { render, screen, waitFor, within } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import { createItems, openMenu } from "./helpers";
 import MultiSelect from "./MultiSelect.test.svelte";
@@ -115,16 +116,14 @@ describe("MultiSelect", () => {
 
         // Scroll away from the selected item
         menu.scrollTop = 0;
-        await new Promise((resolve) => setTimeout(resolve, 100));
+        await flushMacrotask();
 
         rerender({ open: false });
         await tick();
-        await new Promise((resolve) => setTimeout(resolve, 100));
+        await flushMacrotask();
 
         rerender({ open: true });
         await tick();
-        await new Promise((resolve) => setTimeout(resolve, 200));
-
         await waitFor(
           () => {
             const menuAfterReopen = screen.getByRole("listbox");
@@ -293,7 +292,7 @@ describe("MultiSelect", () => {
 
       menu.scrollTop = 800;
       await tick();
-      await new Promise((resolve) => setTimeout(resolve, 50));
+      await flushMacrotask();
 
       const optionsAfterScroll = screen.getAllByRole("option");
       expect(optionsAfterScroll.length).toBeGreaterThan(0);
@@ -310,8 +309,6 @@ describe("MultiSelect", () => {
       // Click the option to toggle it
       await user.click(firstOption);
       await tick();
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
       // Verify selection works - the checkbox should have toggled
       await waitFor(() => {
         const updatedCheckbox = firstOption.querySelector(
@@ -363,8 +360,6 @@ describe("MultiSelect", () => {
       await user.keyboard("{ArrowDown}");
       await user.keyboard("{Enter}");
       await tick();
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
       // ArrowDown twice selects index 1, which is "Item 2" (items are 0-indexed)
       // Verify the item is selected - check if any checkbox is checked.
       // The option checkboxes are decorative (hidden from the accessibility
