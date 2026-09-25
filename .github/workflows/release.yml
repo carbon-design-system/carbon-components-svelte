@@ -32,6 +32,10 @@ jobs:
       - name: Prune package.json
         run: bunx culls --preserve=svelte
 
+      # culls prunes package.json scripts, so call the file directly.
+      - name: Check package contents
+        run: bun scripts/check-package-contents.ts
+
       - name: Publish package (stable)
         if: ${{ ! contains(github.ref, '-next') }}
         env:
