@@ -51,6 +51,7 @@
   };
 
   import {
+    Box,
     ListItem,
     OutboundLink,
     StructuredList,
@@ -129,12 +130,12 @@
   );
 </script>
 
-<p style="margin-bottom: var(--cds-layout-02)">
+<Box tag="p" marginBottom={6}>
   Source code:
   <OutboundLink size="lg" inline href={source}>
     {component.filePath}
   </OutboundLink>
-</p>
+</Box>
 
 <h2 id="component-api-props" class="bx--type-productive-heading-04">
   Props
@@ -174,15 +175,15 @@
             <StructuredListCell noWrap>
               <InlineSnippet code={prop.name} portalTooltip />
               {#if prop.reactive}
-                <div
-                  style="white-space: nowrap; margin-top: var(--cds-spacing-03); margin-bottom: var(--cds-spacing-{prop.isRequired
-                    ? '01'
-                    : '03'})"
+                <Box
+                  marginTop={3}
+                  marginBottom={prop.isRequired ? 1 : 3}
+                  style="white-space: nowrap"
                 >
                   <Tag style="margin-left: 0" size="sm" type="cyan">
                     Reactive
                   </Tag>
-                </div>
+                </Box>
               {/if}
               {#if prop.isRequired}
                 <Tag size="sm" type="magenta">Required</Tag>
@@ -238,16 +239,10 @@
                   </div>
                 {/if}
                 {#if parsed.exampleCode}
-                  <div
-                    style:margin-top="var(--cds-layout-02)"
-                    style:margin-bottom="var(--cds-spacing-03)"
-                  >
+                  <Box marginTop={6} marginBottom={3}>
                     <strong>Example</strong>
-                  </div>
-                  <div
-                    style:margin-bottom="var(--cds-layout-02)"
-                    style:max-width="85%"
-                  >
+                  </Box>
+                  <Box marginBottom={6} maxWidth="85%">
                     <svelte:component
                       this={AsyncCodeBlock}
                       language="typescript"
@@ -255,19 +250,13 @@
                       code={parsed.exampleCode}
                       portalTooltip
                     />
-                  </div>
+                  </Box>
                 {/if}
               {/if}
-              <div
-                style:margin-top="var(--cds-layout-02)"
-                style:margin-bottom="var(--cds-spacing-03)"
-              >
+              <Box marginTop={6} marginBottom={3}>
                 <strong>Default value</strong>
-              </div>
-              <div
-                style:margin-bottom="var(--cds-layout-01)"
-                style:max-width="85%"
-              >
+              </Box>
+              <Box marginBottom={5} maxWidth="85%">
                 {#if prop.value === undefined}
                   <em>undefined</em>
                 {:else}
@@ -279,7 +268,7 @@
                     portalTooltip
                   />
                 {/if}
-              </div>
+              </Box>
             </StructuredListCell>
           </StructuredListRow>
         {/each}
