@@ -55,7 +55,7 @@
   export let ref = null;
 
   import { getContext, onMount } from "svelte";
-  import { get, readable } from "svelte/store";
+  import { get, readable, writable } from "svelte/store";
   import {
     TOOLTIP_ENTER_DELAY_MS,
     TOOLTIP_LEAVE_DELAY_MS,
@@ -73,7 +73,7 @@
       /** @type {"horizontal" | "vertical"} */ ("horizontal"),
     ),
     tabStopElement: readable(/** @type {HTMLButtonElement | null} */ (null)),
-    activeTooltip: readable(/** @type {string | number | null} */ (null)),
+    activeTooltip: writable(/** @type {string | number | null} */ (null)),
     toggle: () => {},
     notifyUnmount: () => {},
   };
