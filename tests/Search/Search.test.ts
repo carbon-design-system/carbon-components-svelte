@@ -161,6 +161,62 @@ describe("Search", () => {
     expect(search).toBeDisabled();
   });
 
+  it("should handle helper text", () => {
+    render(Search, { props: { helperText: "Search across all catalogs" } });
+
+    const helper = screen.getByText("Search across all catalogs");
+    expect(getSearchInput("Default search")).toHaveAttribute(
+      "aria-describedby",
+      helper.id,
+    );
+  });
+
+  it("should set aria-errormessage (not aria-describedby) to the error id when invalid", () => {
+    render(Search, {
+      props: { invalid: true, invalidText: "A search term is required" },
+    });
+
+    const search = getSearchInput("Default search");
+    expect(search).toHaveAttribute("aria-invalid", "true");
+    const message = screen.getByText("A search term is required");
+    expect(message).toHaveClass("bx--form-requirement");
+    expect(message).toHaveAttribute("role", "alert");
+    expect(search).toHaveAttribute("aria-errormessage", message.id);
+    expect(search).not.toHaveAttribute("aria-describedby");
+  });
+
+  it("should handle warning state", () => {
+    render(Search, { props: { warn: true, warnText: "Results may be stale" } });
+
+    const message = screen.getByText("Results may be stale");
+    expect(message).toHaveClass("bx--form-requirement");
+    expect(getSearchInput("Default search")).toHaveAttribute(
+      "aria-describedby",
+      message.id,
+    );
+  });
+
+  it("should suppress invalid state when readonly", () => {
+    render(Search, {
+      props: { readonly: true, invalid: true, invalidText: "Required" },
+    });
+
+    const search = getSearchInput("Default search");
+    expect(search).not.toHaveAttribute("aria-invalid");
+    expect(screen.queryByText("Required")).not.toBeInTheDocument();
+  });
+
+  it.each([false, true])(
+    "should visually hide the label (fluid: %s)",
+    (fluid) => {
+      render(Search, { props: { hideLabel: true, fluid } });
+
+      expect(screen.getByText("Default search")).toHaveClass(
+        "bx--visually-hidden",
+      );
+    },
+  );
+
   it("supports the extra-small size", () => {
     render(Search, { props: { size: "xs" } });
 

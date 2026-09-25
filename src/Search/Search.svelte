@@ -34,6 +34,9 @@
   /** Set to `true` to disable the search input */
   export let disabled = false;
 
+  /** Specify the helper text */
+  export let helperText = "";
+
   /**
    * Set to `true` to use the read-only variant.
    * The value cannot be edited or cleared, and still submits with the form.
@@ -75,6 +78,21 @@
   /** Specify the label text */
   export let labelText = "";
 
+  /** Set to `true` to visually hide the label text */
+  export let hideLabel = false;
+
+  /** Set to `true` to indicate an invalid state */
+  export let invalid = false;
+
+  /** Specify the invalid state text */
+  export let invalidText = "";
+
+  /** Set to `true` to indicate a warning state */
+  export let warn = false;
+
+  /** Specify the warning state text */
+  export let warnText = "";
+
   /**
    * Specify the icon to render.
    * @type {Icon}
@@ -112,8 +130,15 @@
   import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
   import Close from "../icons/Close.svelte";
   import IconSearch from "../icons/IconSearch.svelte";
+  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import WarningFilled from "../icons/WarningFilled.svelte";
   import Loading from "../Loading/Loading.svelte";
   import { debounce as debounceFn } from "../utils/debounce.js";
+  import {
+    buildFieldIds,
+    resolveStatusDescribedBy,
+    resolveValidationVisibility,
+  } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
   import SearchSkeleton from "./SearchSkeleton.svelte";
@@ -155,6 +180,23 @@
   });
 
   $: isFluid = !expandable && (fluid || !!formContext?.isFluid);
+  $: ({ showInvalid, showWarn } = resolveValidationVisibility({
+    invalid,
+    warn,
+    disabled,
+    readonly,
+  }));
+  $: ({ errorId, warnId, helperId } = buildFieldIds(id));
+  $: describedById = resolveStatusDescribedBy({
+    showInvalid,
+    showWarn,
+    helperText,
+    isFluid,
+    errorId,
+    warnId,
+    helperId,
+    includeErrorId: false,
+  });
   $: if (expanded && ref) {
     tick().then(() => {
       if (expanded) ref?.focus();
@@ -181,6 +223,8 @@
   <div
     role="search"
     aria-labelledby="{id}-search"
+    data-invalid={showInvalid || undefined}
+    data-warn={showWarn || undefined}
     class:bx--search={true}
     class:bx--search--light={light}
     class:bx--search--disabled={disabled}
@@ -237,6 +281,7 @@
       id="{id}-search"
       for={id}
       class:bx--label={true}
+      class:bx--visually-hidden={hideLabel}
       class:bx--label--slotted={isFluid && $$slots.labelChildren}
     >
       <slot name="labelChildren"> {labelText} </slot>
@@ -255,6 +300,11 @@
       {id}
       {placeholder}
       aria-busy={loading || undefined}
+      data-invalid={showInvalid || undefined}
+      aria-invalid={showInvalid || undefined}
+      data-warn={showWarn || undefined}
+      aria-errormessage={showInvalid ? errorId : undefined}
+      aria-describedby={describedById}
       {...$$restProps}
       tabindex={expandable && !expanded ? -1 : $$restProps.tabindex}
       inert={expandable && !expanded ? true : $$restProps.inert}
@@ -299,6 +349,14 @@
       on:keyup
       on:paste
     >
+    {#if showInvalid}
+      <WarningFilled class="bx--search__invalid-icon" />
+    {/if}
+    {#if showWarn}
+      <WarningAltFilled
+        class="bx--search__invalid-icon bx--search__invalid-icon--warning"
+      />
+    {/if}
     <button
       type="button"
       aria-label={closeButtonLabelText}
@@ -317,4 +375,21 @@
       <svelte:component this={Close} size={size === "xl" ? 20 : 16} />
     </button>
   </div>
+  {#if !showInvalid && !showWarn && helperText}
+    <div
+      id={helperId}
+      class:bx--form__helper-text={true}
+      class:bx--form__helper-text--disabled={disabled}
+    >
+      {helperText}
+    </div>
+  {/if}
+  {#if showInvalid}
+    <div id={errorId} class:bx--form-requirement={true} role="alert">
+      {invalidText}
+    </div>
+  {/if}
+  {#if showWarn}
+    <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
+  {/if}
 {/if}

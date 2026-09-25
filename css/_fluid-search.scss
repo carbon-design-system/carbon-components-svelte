@@ -16,10 +16,13 @@
   }
 
   // The base v10 styles visually hide the search label (the `hidden`
-  // mixin); the fluid variant embeds it at the top of the field.
+  // mixin); the fluid variant embeds it at the top of the field unless
+  // `hideLabel` keeps it hidden.
   .#{$prefix}--search--fluid .#{$prefix}--label {
     @include fluid-label;
+  }
 
+  .#{$prefix}--search--fluid .#{$prefix}--label:not(.#{$prefix}--visually-hidden) {
     clip: initial;
   }
 
