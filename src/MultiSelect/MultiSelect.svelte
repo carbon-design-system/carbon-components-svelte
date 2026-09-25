@@ -425,6 +425,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import {
     buildFieldIds,
+    joinDescribedBy,
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
@@ -1039,8 +1040,7 @@
 
   $: menuId = `menu-${id}`;
   $: comboId = `combo-${id}`;
-  $: ({ helperId, errorId, warnId } = buildFieldIds(id));
-  $: readonlyId = `readonly-${id}`;
+  $: ({ helperId, errorId, warnId, readonlyId } = buildFieldIds(id));
   $: selectionId = `selection-${id}`;
   // `aria-readonly` on a combobox/listbox does not reliably surface read-only state,
   // so the read-only state is also exposed as a visually-hidden description. The
@@ -1060,14 +1060,11 @@
     requireWarnText: true,
   });
   $: hasSelectionDescription = !readonly && selectionCount > 0;
-  $: fieldDescribedById =
-    [
-      readonly ? readonlyId : null,
-      hasSelectionDescription ? selectionId : null,
-      statusDescribedById,
-    ]
-      .filter(Boolean)
-      .join(" ") || undefined;
+  $: fieldDescribedById = joinDescribedBy(
+    readonly ? readonlyId : null,
+    hasSelectionDescription ? selectionId : null,
+    statusDescribedById,
+  );
   // The selection count badge is hidden from assistive tech in read-only.
   // Fold the count into the read-only description so the
   // collapsed field still announces how much there is to review.
