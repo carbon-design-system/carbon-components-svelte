@@ -4,16 +4,16 @@ import TreeViewShowNode from "./TreeView.deepReveal.test.svelte";
 describe("TreeView deep reveal", () => {
   const DEPTH = 200;
 
-  it("showNode reveals and focuses a node 200 levels deep without overflowing the stack", async () => {
+  it("setting expandedIds directly reveals a deep chain without overflowing the stack", async () => {
     const { component } = render(TreeViewShowNode, { props: { depth: DEPTH } });
 
-    component.showDeepest();
+    component.expandAllViaProp();
 
     await waitFor(
       () => {
-        const el = document.getElementById(String(DEPTH - 1));
-        expect(el).toBeInstanceOf(HTMLElement);
-        expect(el).toHaveFocus();
+        expect(document.getElementById(String(DEPTH - 1))).toBeInstanceOf(
+          HTMLElement,
+        );
       },
       { timeout: 15_000 },
     );
