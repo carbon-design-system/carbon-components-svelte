@@ -17,6 +17,13 @@
     { id: "reader", text: "Reader", disabled: true },
   ];
 
+  const groupedItems = [
+    { id: "global", text: "Global edge network" },
+    { id: "us-east-1", text: "US East (N. Virginia)", group: "Americas" },
+    { id: "eu-west-1", text: "Europe (Ireland)", group: "Europe" },
+    { id: "us-west-2", text: "US West (Oregon)", group: "Americas" },
+  ];
+
   let selectedIds = [];
   let selectedRoleIds = [];
 </script>
@@ -60,5 +67,16 @@
     {items}
     filterable={true}
     placeholder="Filter produce"
+  />
+</div>
+
+<div data-testid="multiselect-grouped">
+  <MultiSelect
+    data-testid="multiselect-regions"
+    labelText="Regions"
+    label="Choose regions"
+    items={groupedItems}
+    filterable={true}
+    placeholder="Filter regions"
   />
 </div>

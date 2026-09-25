@@ -910,3 +910,42 @@ $list-box-menu-width: to-rem(300px);
 @include exports("list-box-xs") {
   @include list-box-xs;
 }
+
+// carbon-components-svelte patch
+// Group headers for MultiSelect's grouped items. Carbon v10 has no grouped
+// list box, so this is new markup rather than a backport.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Non-selectable label above each group of list box options.
+/// @access private
+/// @group components
+@mixin list-box-menu-group-header {
+  // Spaced with padding, not margin: measured virtualization reads each row's
+  // border box, which leaves margins out.
+  .#{$prefix}--list-box__menu-group-header {
+    @include type-style("label-01");
+
+    padding: $carbon--spacing-05 $carbon--spacing-05 $carbon--spacing-03;
+    color: $text-02;
+    cursor: default;
+  }
+
+  .#{$prefix}--list-box--inline .#{$prefix}--list-box__menu-group-header {
+    padding-right: $carbon--spacing-03;
+    padding-left: $carbon--spacing-03;
+  }
+
+  // The header takes the divider's place above a group's first option.
+  .#{$prefix}--list-box__menu-group-header
+    + .#{$prefix}--list-box__menu-item
+    .#{$prefix}--list-box__menu-item__option {
+    border-top-color: transparent;
+  }
+}
+
+@include exports("list-box-menu-group-header") {
+  @include list-box-menu-group-header;
+}
