@@ -3,7 +3,7 @@ description: Stacks arrange elements vertically or horizontally with a consisten
 ---
 
 <script>
-  import { Stack } from "carbon-components-svelte";
+  import { Stack, Tile } from "carbon-components-svelte";
 </script>
 
 ## Gap
@@ -250,6 +250,18 @@ The stack renders a div by default. Set `tag` to use a different element.
   <li>Item 1</li>
   <li>Item 2</li>
   <li>Item 3</li>
+</Stack>
+
+## Custom element or component
+
+Set `as` to apply the stack classes to your own element or component instead. The computed `class` and `style` arrive as `props` in the default slot; spread them onto the target. `tag` is ignored when `as` is `true`.
+
+<Stack as orientation="horizontal" gap={5} let:props>
+  <Tile {...props}>
+    <div>Item 1</div>
+    <div>Item 2</div>
+    <div>Item 3</div>
+  </Tile>
 </Stack>
 
 ## Obtain a reference
