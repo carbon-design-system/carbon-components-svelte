@@ -18,6 +18,8 @@ export { hideAtBreakpoint } from "./Breakpoint/hide-at-breakpoint.js";
 export { default as Button } from "./Button/Button.svelte";
 export { default as ButtonSet } from "./Button/ButtonSet.svelte";
 export { default as ButtonSkeleton } from "./Button/ButtonSkeleton.svelte";
+export { default as Carousel } from "./Carousel/Carousel.svelte";
+export { default as CarouselItem } from "./Carousel/CarouselItem.svelte";
 export { default as Checkbox } from "./Checkbox/Checkbox.svelte";
 export { default as CheckboxGroup } from "./Checkbox/CheckboxGroup.svelte";
 export { default as CheckboxSkeleton } from "./Checkbox/CheckboxSkeleton.svelte";
