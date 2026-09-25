@@ -32,12 +32,16 @@ jobs:
       - name: Prune package.json
         run: bunx culls --preserve=svelte
 
+      # culls prunes package.json scripts, so call the file directly.
+      - name: Check package contents
+        run: bun scripts/check-package-contents.ts
+
       - name: Publish package (stable)
         if: ${{ ! contains(github.ref, '-next') }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
         run: |
-          npm publish --provenance --access public
+          npm publish --provenance --access public --tag stable-0-110
 
       - name: Publish package (next)
         if: ${{ contains(github.ref, '-next') }}

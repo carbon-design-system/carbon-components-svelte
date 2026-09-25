@@ -38,6 +38,8 @@ jobs:
 
       - run: bun run test:package-exports
 
+      - run: bun run check:package
+
   changes:
     runs-on: macos-15
     outputs:
