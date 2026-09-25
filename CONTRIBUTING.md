@@ -509,7 +509,7 @@ Values:
 - Type: `type-style("…")`.
 - Motion: `$duration--*` with `motion(standard, productive)` and friends, never a literal `ms` or `cubic-bezier()`. Never `transition: all`: list the properties, and leave out `border-color`/`box-shadow`/`outline` when they double as the focus ring so the ring snaps instead of fading.
 - `will-change`: only `transform` or `opacity`, the two properties the hint can promote to a compositor layer. Not on an element that is idle most of the time, and not on one whose running animation already promotes it (skeletons).
-- No `!important`. When a vendored rule or an inline style leaves no other way, add a comment naming what it has to beat.
+- No `!important`; `conventions.test.ts` rejects it outright. A consumer can only override one with another `!important`. See [Winning the cascade](#winning-the-cascade).
 - Focus rings: `@include focus-outline("outline")` / `("invalid")`, not a hand-written `outline`.
 - Set one spelling of a box property per rule. `width` and `inline-size` (likewise `top`/`inset-block-start`, `height`/`block-size`) share a cascade slot, so the earlier one is dead; `check:css:overrides` reports it.
 - `z-index`: `z("floating")`, `z("dropdown")`, … for anything that floats over the page. A literal `1`/`-1` is fine for stacking inside the component's own box.
@@ -534,6 +534,27 @@ Naming:
 - Token utilities are `bx--{block}-{property}-{step}` (`bx--box-p-5`, `bx--type-mono`). Map v11 token names in docs and props to v10 theme variables in SCSS where needed (for example `layer-01` → `$ui-01`). Share spacing scale values through [`css/_spacing-scale.scss`](css/_spacing-scale.scss).
 
 Document the mixin with SassDoc (`/// @access private`, `/// @group components`) and use `//` for everything else. Use double quotes. When a partial overrides a single vendored component, say in its header why it could not live in the vendored file.
+
+#### Winning the cascade
+
+When your rule loses, try these in order:
+
+1. **Stop the competing rule from matching.** If a hover or state rule overrides the state you are styling, exclude that state there (`.#{$prefix}--select:not(.#{$prefix}--select--readonly)`) instead of out-weighing it. The fluid TimePicker's readonly divider works this way.
+2. **Tie, then win on order.** Adding the variant wrapper you already scope under (`.#{$prefix}--time-picker--fluid`) often matches the rule you need to beat. Place yours after it in the same partial.
+3. **Edit the vendored rule** when that is where the competitor lives.
+
+Count specificity before choosing: `:not(x)`, `:nth-child()`, and `:hover` each count as a class. A positional selector like `> *:nth-child(2):not(:last-child) .x::before` weighs `0,4,1`, though it reads as one class.
+
+Not acceptable fixes:
+
+| Don't | Why |
+| --- | --- |
+| `!important` | Consumers cannot override it. |
+| Repeated classes or `tag.class` | Padding; see above. |
+| `:where()` to lower the competitor | Lightning CSS duplicates the rule (`downlevel.test.ts`). |
+| `var(--ccs-x, #{$token})` to route around the cascade | The precompiled theme sheets compile `$token` to a hex, so this ships a `var()` with a literal fallback, plus a private hook nobody documented. |
+
+The `not-chains` budget targets state chains that a marker class could replace. A structural `:not(:last-child)` can be written `:nth-last-child(n + 2)`: same match, same weight. Do not drop a `:not()` because a combinator already implies it. Removing it lowers that selector's weight against its siblings in the list, and `check:css` reports the resulting cascade flips.
 
 #### Where a patch lives
 
@@ -573,6 +594,8 @@ When `check:css:overrides` reports a pair, work out which of the two values is t
 Delete a selector family only after confirming no component in `src/` renders the class, including classes built from interpolated strings. Then add its pattern to `tests/css/unrendered-selectors.test.ts` so a vendored re-sync cannot bring it back, and drop its class from `KNOWN_UNRENDERED` in `tests/css/unrendered-classes.test.ts`.
 
 A guard that asserts absence (`not.toMatch`, an upper bound on a count, an empty offender list) needs a positive assertion beside it that fails when the pattern stops matching: a lower bound, or a count of the declarations it inspected. Match whole declarations up to `;` instead of single lines, since the formatter wraps long values. Then break the source on purpose once and confirm the test fails.
+
+jsdom does not resolve `::before`/`::after` or `:hover` cascades. To confirm one, load the built `css/all.css` into Playwright with `page.setContent(...)` and a minimal copy of the component markup, `page.hover()` the trigger, and read `getComputedStyle(el, "::before")`. Record the values before your change and compare them after.
 
 #### Rebuild
 
