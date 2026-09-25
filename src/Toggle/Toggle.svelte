@@ -43,6 +43,12 @@
    */
   export let readonlyText = "Read-only";
 
+  /** Set to `true` to indicate a warning state */
+  export let warn = false;
+
+  /** Specify the warning state text */
+  export let warnText = "";
+
   /**
    * Specify a name attribute for the checkbox input.
    * @type {string}
@@ -62,6 +68,7 @@
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";
+  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import { buildFieldIds, joinDescribedBy } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -81,12 +88,14 @@
     toggled = ref.checked;
   }
 
-  $: ({ readonlyId } = buildFieldIds(id));
+  $: showWarn = warn && !disabled && !readonly;
+  $: ({ readonlyId, warnId } = buildFieldIds(id));
 </script>
 
 <div
   class:bx--form-item={true}
   class:bx--toggle--readonly={readonly}
+  class:bx--toggle--warning={showWarn}
   style:user-select="none"
   {...$$restProps}
   on:click
@@ -103,7 +112,10 @@
     class:bx--toggle-input--small={size === "sm"}
     checked={toggled}
     aria-readonly={readonly || undefined}
-    aria-describedby={joinDescribedBy(readonly ? readonlyId : null)}
+    aria-describedby={joinDescribedBy(
+      readonly ? readonlyId : null,
+      showWarn ? warnId : null,
+    )}
     on:click={(event) => {
       if (readonly) event.preventDefault();
     }}
@@ -154,4 +166,12 @@
   {#if readonly}
     <span id={readonlyId} class:bx--visually-hidden={true}>{readonlyText}</span>
   {/if}
+  <div class:bx--toggle__validation-msg={true}>
+    {#if showWarn}
+      <WarningAltFilled
+        class="bx--toggle__invalid-icon bx--toggle__invalid-icon--warning"
+      />
+      <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
+    {/if}
+  </div>
 </div>

@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import ToggleReadonly from "./Toggle.readonly.test.svelte";
 import Toggle from "./Toggle.test.svelte";
+import ToggleValidation from "./Toggle.validation.test.svelte";
 import ToggleNullishAriaLabel from "./ToggleNullishAriaLabel.test.svelte";
 import ToggleSkeletonSlot from "./ToggleSkeleton.slot.test.svelte";
 import ToggleSkeletonNullishAriaLabel from "./ToggleSkeletonNullishAriaLabel.test.svelte";
@@ -412,5 +413,33 @@ describe("Toggle", () => {
     render(ToggleSkeletonNullishAriaLabel, { props: { ariaLabel: "" } });
     const label = document.querySelector("label[aria-label]");
     expect(label).toHaveAttribute("aria-label", "");
+  });
+
+  describe("warning", () => {
+    it("renders the warning message and describes the switch with it", () => {
+      render(ToggleValidation, { warn: true, warnText: "Heads up" });
+
+      const toggle = screen.getByRole("switch");
+      expect(toggle.closest(".bx--form-item")).toHaveClass(
+        "bx--toggle--warning",
+      );
+      expect(toggle).not.toHaveAttribute("aria-invalid");
+
+      const message = screen.getByText("Heads up");
+      expect(message).toHaveClass("bx--form-requirement");
+      expect(toggle).toHaveAttribute("aria-describedby", message.id);
+    });
+
+    it.each([
+      { disabled: true, readonly: false },
+      { disabled: false, readonly: true },
+    ])("suppresses the warning when %o", (state) => {
+      render(ToggleValidation, { warn: true, warnText: "Heads up", ...state });
+
+      expect(
+        screen.getByRole("switch").closest(".bx--form-item"),
+      ).not.toHaveClass("bx--toggle--warning");
+      expect(screen.queryByText("Heads up")).not.toBeInTheDocument();
+    });
   });
 });
