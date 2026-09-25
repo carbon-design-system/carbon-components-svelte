@@ -16,7 +16,7 @@ import prettierPluginSvelte from "prettier-plugin-svelte";
 import Prism from "prismjs";
 import rehypeSlug from "rehype-slug";
 import { parse } from "svelte/compiler";
-import visit from "unist-util-visit";
+import { visit } from "unist-util-visit";
 import { stripDocsOnly } from "./scripts/strip-docs-only.ts";
 import componentApi from "./src/COMPONENT_API.json" with { type: "json" };
 import "prismjs/components/prism-markup.js";
