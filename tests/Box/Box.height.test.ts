@@ -31,4 +31,19 @@ describe("Box height", () => {
     const node = screen.getByTestId("sticky-top");
     expect(node).toHaveClass("bx--box-position-sticky", "bx--box-top-0");
   });
+
+  it("applies the left offset class", () => {
+    render(Box);
+
+    const node = screen.getByTestId("sticky-left");
+    expect(node).toHaveClass("bx--box-position-sticky", "bx--box-left-0");
+  });
+
+  it("applies a custom right offset via inline style", () => {
+    render(Box);
+
+    expectInlineStyle(screen.getByTestId("relative-right"), {
+      right: "2rem",
+    });
+  });
 });

@@ -57,7 +57,7 @@
     return spacingStyle(value);
   }
 
-  /** @param {"top" | "bottom"} kind @param {OffsetValue | undefined} value */
+  /** @param {"top" | "bottom" | "left" | "right"} kind @param {OffsetValue | undefined} value */
   function offsetClass(kind, value) {
     return scaleClass(kind, value, 0);
   }
@@ -228,6 +228,18 @@
   export let bottom = undefined;
 
   /**
+   * Set the offset from the left when `position` is set. Numbers `0`–`13` use the shared layout scale; strings accept any CSS length.
+   * @type {OffsetValue | undefined}
+   */
+  export let left = undefined;
+
+  /**
+   * Set the offset from the right when `position` is set. Numbers `0`–`13` use the shared layout scale; strings accept any CSS length.
+   * @type {OffsetValue | undefined}
+   */
+  export let right = undefined;
+
+  /**
    * Specify the tag name.
    * @type {keyof HTMLElementTagNameMap}
    */
@@ -265,6 +277,8 @@
     overflowY && `bx--box-overflow-y-${overflowY}`,
     offsetClass("top", top),
     offsetClass("bottom", bottom),
+    offsetClass("left", left),
+    offsetClass("right", right),
     $$restProps.class,
   ]
     .filter(Boolean)
@@ -310,6 +324,8 @@
   $: resolvedMaxHeight = spacingStyle(maxHeight);
   $: resolvedTop = offsetStyle(top);
   $: resolvedBottom = offsetStyle(bottom);
+  $: resolvedLeft = offsetStyle(left);
+  $: resolvedRight = offsetStyle(right);
 </script>
 
 <svelte:element
@@ -335,6 +351,8 @@
   style:max-height={resolvedMaxHeight}
   style:top={resolvedTop}
   style:bottom={resolvedBottom}
+  style:left={resolvedLeft}
+  style:right={resolvedRight}
   class={boxClass}
   on:click
   on:mouseover
