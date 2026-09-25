@@ -1,10 +1,10 @@
 ---
-components: ["MultiSelect", "FluidMultiSelectSkeleton"]
+components: ["MultiSelect", "MultiSelectSkeleton", "FluidMultiSelectSkeleton"]
 description: Multi-selects provide a dropdown for selecting multiple options with checkboxes, with filtering, custom formatting, and multiple states.
 ---
 
 <script>
-  import { MultiSelect, FluidMultiSelectSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import { MultiSelect, MultiSelectSkeleton, FluidMultiSelectSkeleton, TooltipIcon } from "carbon-components-svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
@@ -613,3 +613,9 @@ Set `readonly` to `true` to display non-editable values. The menu can still be o
     { id: "2", text: "Fax" },
   ]}
 />
+
+## Skeleton
+
+Show a loading state with `MultiSelectSkeleton`.
+
+<MultiSelectSkeleton />
