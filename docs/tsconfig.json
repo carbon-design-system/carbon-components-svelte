@@ -4,6 +4,7 @@
     "allowImportingTsExtensions": true,
     "paths": {
       "carbon-components-svelte": ["../src"],
+      "carbon-components-svelte/viz": ["../src/viz"],
       "carbon-components-svelte/*": ["../*"],
       "*": ["./*"]
     }

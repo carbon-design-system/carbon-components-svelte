@@ -1,0 +1,26 @@
+// Data visualization styles for `carbon-components-svelte/viz`.
+// Pairs with `all.css`, which declares the `--cds-*` tokens these partials
+// read. With a single-theme stylesheet, load the matching `viz-<theme>.css`.
+
+$feature-flags: (
+  enable-css-custom-properties: true,
+);
+
+// `all.css` always declares every token, so `var()` needs no fallback.
+$ccs-omit-token-fallbacks: true;
+
+@import "./viz/config";
+@import "./viz/tokens";
+@import "./viz/styles";
+
+// Default: white. g10 shares the light palettes.
+:root {
+  @include viz-semantic-tokens;
+  @include viz-tokens(light);
+}
+
+:root[theme="g80"],
+:root[theme="g90"],
+:root[theme="g100"] {
+  @include viz-tokens(dark, light);
+}
