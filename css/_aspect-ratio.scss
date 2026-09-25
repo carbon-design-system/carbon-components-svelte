@@ -38,6 +38,11 @@
       justify-content: $value;
     }
   }
+
+  // carbon-components-svelte patch (aspect-ratio-custom)
+  .#{$prefix}--aspect-ratio--custom::before {
+    padding-top: var(--ccs-aspect-ratio);
+  }
 }
 
 @include exports("aspect-ratio-fill") {
