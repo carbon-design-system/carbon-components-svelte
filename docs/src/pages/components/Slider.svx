@@ -13,6 +13,12 @@ Create a basic slider with a label and the default range from 0 to 100.
 
 <Slider labelText="Instances" value={0} />
 
+## Helper text
+
+Add helper text below the slider to provide additional context or instructions.
+
+<Slider labelText="Instances" helperText="Applies to new deployments only" value={4} />
+
 ## Labels and layout
 
 Control how the slider label, text input, and width render.
