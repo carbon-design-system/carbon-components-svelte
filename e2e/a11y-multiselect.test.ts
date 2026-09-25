@@ -20,4 +20,19 @@ test.describe("MultiSelect a11y", () => {
       .analyze();
     expect(openResults.violations).toEqual([]);
   });
+
+  test("grouped options have no detectable accessibility violations", async ({
+    page,
+  }) => {
+    await page.goto("/multiselect.html");
+    await page.getByRole("combobox", { name: "Regions" }).click();
+    await expect(
+      page.getByRole("group", { name: "Americas" }).getByRole("option"),
+    ).toHaveCount(2);
+
+    const results = await new AxeBuilder({ page })
+      .include('[data-testid="multiselect-grouped"]')
+      .analyze();
+    expect(results.violations).toEqual([]);
+  });
 });

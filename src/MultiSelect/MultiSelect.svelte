@@ -56,6 +56,7 @@
    * @property {MultiSelectItemText} text
    * @property {boolean} [disabled] - Whether the item is disabled
    * @property {boolean} [isSelectAll] - Whether this item acts as a "select all" toggle
+   * @property {string} [group] - Group label. Items sharing a label render together under a non-selectable header, groups in order of first appearance and `sortItem` sorting within each group.
    * @event select
    * @type {object}
    * @property {Item["id"][]} selectedIds
@@ -66,6 +67,7 @@
    * @event {{ trigger: "escape-key" | "outside-click" }} close
    * @event {{ scrollTop: number; scrollHeight: number; clientHeight: number }} scrollend
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }}
+   * @slot {{ group: string; items: ReadonlyArray<Item & { checked: boolean }>; }} group
    * @restProps {input | button}
    */
 
@@ -410,7 +412,14 @@
     ListBoxMenuItem,
     ListBoxSelection,
   } from "../ListBox/index.js";
+  import ListBoxMenuGroup from "../ListBox/ListBoxMenuGroup.svelte";
   import { shouldVirtualizeMenu } from "../ListBox/list-box-utils.js";
+  import {
+    createGroupRows,
+    hoistWithinGroups,
+    orderByGroup,
+    splitGroupRuns,
+  } from "../ListBox/menu-groups.js";
   import {
     applyPostClearOptions,
     createMenuCloseHandler,
@@ -462,6 +471,7 @@
   let fieldFocused = false;
   let highlightedIndex = -1;
   let highlightOrigin = /** @type {"keyboard" | "pointer" | null} */ (null);
+  /** Row index (see `toRowIndex`) last scrolled into view. */
   let prevHighlightedIndex = -1;
   let prevChecked = [];
   let initialRender = true;
@@ -490,6 +500,7 @@
   });
 
   const typeahead = createTypeaheadBuffer();
+  const buildGroupRows = createGroupRows();
 
   /**
    * @type {(data: { key: "field" | "selection"; ref: HTMLDivElement | HTMLButtonElement }) => void}
@@ -853,7 +864,7 @@
     prevHighlightedIndex = scheduleHighlightScroll({
       open,
       shouldVirtualize,
-      highlightedIndex,
+      highlightedIndex: toRowIndex(highlightedIndex),
       prevHighlightedIndex,
       listRef,
       isMeasured,
@@ -872,7 +883,12 @@
           selectedIds && selectedIds.length > 0
             ? itemsToUse.findIndex((item) => item.id === selectedIds[0])
             : -1;
-        menuWindow.scrollIntoView(selectedIndex, "top");
+        const row = toRowIndex(selectedIndex);
+        // Keep the group header in view above the first option of a group.
+        menuWindow.scrollIntoView(
+          groupRows?.itemIndexByRow[row - 1] === -1 ? row - 1 : row,
+          "top",
+        );
       });
     }
     prevOpen = open;
@@ -891,6 +907,16 @@
       menuWindow.reset();
     }
   });
+
+  /**
+   * Row position of the option at `index` in `itemsToUse`. Group headers are
+   * rows too, so the two differ once items are grouped.
+   * @param {number} index
+   * @returns {number}
+   */
+  function toRowIndex(index) {
+    return groupRows && index >= 0 ? groupRows.rowIndexByItem[index] : index;
+  }
 
   /**
    * @param {Event} event
@@ -936,13 +962,14 @@
       item,
       snapshot: regularSnapshots[index],
     }));
-    if (sortItem !== false) {
-      pairs.sort((a, b) => sortItem(a.item, b.item));
-    }
 
     baseOrderItems = items;
-    baseOrderPairs = pairs;
-    return pairs;
+    baseOrderPairs = orderByGroup(
+      pairs,
+      (pair) => pair.item.group,
+      sortItem === false ? undefined : (a, b) => sortItem(a.item, b.item),
+    );
+    return baseOrderPairs;
   }
 
   function sort() {
@@ -984,35 +1011,25 @@
       reuseOrBuildEntry(item, selectAllSnapshots[index], allChecked),
     );
 
-    const baseOrder = getBaseOrderPairs();
+    const entries = getBaseOrderPairs().map(({ item, snapshot }) =>
+      reuseOrBuildEntry(item, snapshot, selectedIdsSet.has(item.id)),
+    );
 
     if (
       selectionFeedback === "top" ||
       selectionFeedback === "top-after-reopen"
     ) {
-      // Stable partition of the cached alphabetical order: checked entries
-      // first (in base order), then unchecked (in base order). Zero
-      // comparator calls, and equivalent to sorting each group separately
-      // (as before) because `baseOrder` is already sorted by the same
-      // comparator and `Array.prototype.sort` is stable, so ties keep
-      // `items` order in both designs.
-      const checkedItems = [];
-      const uncheckedItems = [];
-      for (const { item, snapshot } of baseOrder) {
-        const checked = selectedIdsSet.has(item.id);
-        const entry = reuseOrBuildEntry(item, snapshot, checked);
-        (checked ? checkedItems : uncheckedItems).push(entry);
-      }
-
-      return [...selectAllEntries, ...checkedItems, ...uncheckedItems];
+      // Stable partition of the cached base order: checked entries first
+      // within each group. Zero comparator calls, and equivalent to sorting
+      // checked and unchecked separately because the base order is already
+      // sorted by the same comparator and `Array.prototype.sort` is stable.
+      return [
+        ...selectAllEntries,
+        ...hoistWithinGroups(entries, (entry) => entry.checked),
+      ];
     }
 
-    return [
-      ...selectAllEntries,
-      ...baseOrder.map(({ item, snapshot }) =>
-        reuseOrBuildEntry(item, snapshot, selectedIdsSet.has(item.id)),
-      ),
-    ];
+    return [...selectAllEntries, ...entries];
   }
 
   // Shallow copies, so an item mutated in place and handed over in a new
@@ -1195,12 +1212,20 @@
   $: itemsToUse = filterable ? filteredItems : sortedItems;
   $: scrollEndTracker.noteItemCount(itemsToUse.length);
 
+  $: grouped = items.some((item) => !!item.group);
+  // Group headers render as rows of their own, so the menu window indexes
+  // rows, not items. `toRowIndex` maps between the two.
+  $: groupRows = grouped && open ? buildGroupRows(itemsToUse) : null;
+  $: menuRows = groupRows ? groupRows.rows : itemsToUse;
+
   $: menuState = menuWindow.update({
-    items: itemsToUse,
-    getKey: (item) => item.id,
+    items: menuRows,
+    getKey: (row) => row.id,
     shouldVirtualize,
     virtualize,
-    wrapOptions,
+    // A header is not as tall as an option, so a grouped menu measures its
+    // rows the way a menu of wrapped options does.
+    wrapOptions: wrapOptions || grouped,
     size,
     fluid: hasFluidMenuItems,
     scrollTop: listScrollTop,
@@ -1215,6 +1240,12 @@
     isWindowed,
     isMeasured,
   } = menuState);
+  // Each group's rendered rows sit inside one `role="group"` element.
+  $: menuRuns = splitGroupRuns(
+    itemsToRender,
+    isVirtualized ? startIndex : 0,
+    groupRows,
+  );
 
   $: multiSelectListBoxClass = [
     "bx--multi-select",
@@ -1614,133 +1645,200 @@
         {#if isVirtualized}
           <div style:height="{totalHeight}px" style:position="relative">
             <div style:transform="translateY({offsetY}px)">
-              {#each itemsToRender as item, index (item.id)}
-                {@const actualIndex = startIndex + index}
-                {@const optionId = `${id}-${item.id}`}
-                {@const itemDisabled =
-                  item.disabled ||
-                  (hasMaxSelectedItems && !!item.isSelectAll) ||
-                  (isAtSelectionCap && !item.checked)}
-                {@const capDisabled =
-                  isAtSelectionCap &&
-                  !item.checked &&
-                  !item.disabled &&
-                  !item.isSelectAll}
-                <ListBoxMenuItem
-                  id={optionId}
-                  role="option"
-                  aria-labelledby="checkbox-{id}-{item.id}"
-                  aria-describedby={capDisabled ? maxSelectedId : undefined}
-                  aria-selected={item.isSelectAll ? allSelected : item.checked}
-                  aria-checked={item.isSelectAll
-                    ? selectAllIndeterminate
-                      ? "mixed"
-                      : allSelected
-                    : item.checked}
-                  aria-setsize={itemsToUse.length}
-                  aria-posinset={actualIndex + 1}
-                  data-virtual-index={isMeasured ? actualIndex : undefined}
-                  active={item.isSelectAll ? false : item.checked}
-                  disabled={itemDisabled}
-                  on:click={(event) => handleOptionClick(event, item, actualIndex, itemDisabled)}
-                  on:mousedown={(event) => {
-                    // Keep focus on the field so screen readers don't
-                    // re-announce it on every option click.
-                    event.preventDefault();
-                  }}
-                  on:mouseenter={() => handleOptionMouseenter(actualIndex, itemDisabled)}
+              {#each menuRuns as run (run.key)}
+                <ListBoxMenuGroup
+                  labelledBy={run.groupIndex > -1
+                    ? `group-${id}-${run.groupIndex}`
+                    : undefined}
                 >
-                  <HighlightSlot {optionId} let:highlighted>
-                    <Checkbox
-                      title={useTitleInItem ? itemToString(item) : undefined}
-                      {...itemToInput(item)}
-                      name={undefined}
-                      tabindex="-1"
-                      decorative
-                      id="checkbox-{id}-{item.id}"
-                      checked={item.isSelectAll ? allSelected : item.checked}
-                      indeterminate={item.isSelectAll
-                        ? selectAllIndeterminate
-                        : false}
-                      disabled={itemDisabled}
-                      {readonly}
-                    >
-                      <slot
-                        slot="labelChildren"
-                        {item}
-                        index={actualIndex}
-                        selected={item.isSelectAll ? allSelected : item.checked}
-                        {highlighted}
+                  {#each run.rows as item, runIndex (item.id)}
+                    {@const rowIndex = run.start + runIndex}
+                    {@const actualIndex = groupRows
+                      ? groupRows.itemIndexByRow[rowIndex]
+                      : rowIndex}
+                    {#if actualIndex === -1}
+                      <!-- Hidden from assistive tech: the enclosing group is named
+                           by a hidden label, which stays rendered when a virtualized
+                           window leaves this header out. -->
+                      <div
+                        role="presentation"
+                        aria-hidden="true"
+                        data-virtual-index={isMeasured ? rowIndex : undefined}
+                        class:bx--list-box__menu-group-header={true}
+                        on:mousedown={(event) => {
+                          // Keep focus on the field, as options do.
+                          event.preventDefault();
+                        }}
                       >
-                        {itemToString(item)}
-                      </slot>
-                    </Checkbox>
-                  </HighlightSlot>
-                </ListBoxMenuItem>
+                        <slot
+                          name="group"
+                          group={item.group}
+                          items={item.items}
+                        >
+                          {item.group}
+                        </slot>
+                      </div>
+                    {:else}
+                      {@const optionId = `${id}-${item.id}`}
+                      {@const itemDisabled =
+                        item.disabled ||
+                        (hasMaxSelectedItems && !!item.isSelectAll) ||
+                        (isAtSelectionCap && !item.checked)}
+                      {@const capDisabled =
+                        isAtSelectionCap &&
+                        !item.checked &&
+                        !item.disabled &&
+                        !item.isSelectAll}
+                      <ListBoxMenuItem
+                        id={optionId}
+                        role="option"
+                        aria-labelledby="checkbox-{id}-{item.id}"
+                        aria-describedby={capDisabled ? maxSelectedId : undefined}
+                        aria-selected={item.isSelectAll ? allSelected : item.checked}
+                        aria-checked={item.isSelectAll
+                          ? selectAllIndeterminate
+                            ? "mixed"
+                            : allSelected
+                          : item.checked}
+                        aria-setsize={itemsToUse.length}
+                        aria-posinset={actualIndex + 1}
+                        data-virtual-index={isMeasured ? rowIndex : undefined}
+                        active={item.isSelectAll ? false : item.checked}
+                        disabled={itemDisabled}
+                        on:click={(event) => handleOptionClick(event, item, actualIndex, itemDisabled)}
+                        on:mousedown={(event) => {
+                          // Keep focus on the field so screen readers don't
+                          // re-announce it on every option click.
+                          event.preventDefault();
+                        }}
+                        on:mouseenter={() => handleOptionMouseenter(actualIndex, itemDisabled)}
+                      >
+                        <HighlightSlot {optionId} let:highlighted>
+                          <Checkbox
+                            title={useTitleInItem ? itemToString(item) : undefined}
+                            {...itemToInput(item)}
+                            name={undefined}
+                            tabindex="-1"
+                            decorative
+                            id="checkbox-{id}-{item.id}"
+                            checked={item.isSelectAll ? allSelected : item.checked}
+                            indeterminate={item.isSelectAll
+                              ? selectAllIndeterminate
+                              : false}
+                            disabled={itemDisabled}
+                            {readonly}
+                          >
+                            <slot
+                              slot="labelChildren"
+                              {item}
+                              index={actualIndex}
+                              selected={item.isSelectAll ? allSelected : item.checked}
+                              {highlighted}
+                            >
+                              {itemToString(item)}
+                            </slot>
+                          </Checkbox>
+                        </HighlightSlot>
+                      </ListBoxMenuItem>
+                    {/if}
+                  {/each}
+                </ListBoxMenuGroup>
               {/each}
             </div>
           </div>
         {:else}
-          {#each itemsToRender as item, index (item.id)}
-            {@const optionId = `${id}-${item.id}`}
-            {@const itemDisabled =
-              item.disabled ||
-              (hasMaxSelectedItems && !!item.isSelectAll) ||
-              (isAtSelectionCap && !item.checked)}
-            {@const capDisabled =
-              isAtSelectionCap &&
-              !item.checked &&
-              !item.disabled &&
-              !item.isSelectAll}
-            <ListBoxMenuItem
-              id={optionId}
-              role="option"
-              aria-labelledby="checkbox-{id}-{item.id}"
-              aria-describedby={capDisabled ? maxSelectedId : undefined}
-              aria-selected={item.isSelectAll ? allSelected : item.checked}
-              aria-checked={item.isSelectAll
-                ? selectAllIndeterminate
-                  ? "mixed"
-                  : allSelected
-                : item.checked}
-              data-virtual-index={isMeasured ? index : undefined}
-              active={item.isSelectAll ? false : item.checked}
-              disabled={itemDisabled}
-              on:click={(event) => handleOptionClick(event, item, index, itemDisabled)}
-              on:mousedown={(event) => {
-                // Keep focus on the field so screen readers don't
-                // re-announce it on every option click.
-                event.preventDefault();
-              }}
-              on:mouseenter={() => handleOptionMouseenter(index, itemDisabled)}
+          {#each menuRuns as run (run.key)}
+            <ListBoxMenuGroup
+              labelledBy={run.groupIndex > -1
+                ? `group-${id}-${run.groupIndex}`
+                : undefined}
             >
-              <HighlightSlot {optionId} let:highlighted>
-                <Checkbox
-                  title={useTitleInItem ? itemToString(item) : undefined}
-                  {...itemToInput(item)}
-                  name={undefined}
-                  tabindex="-1"
-                  decorative
-                  id="checkbox-{id}-{item.id}"
-                  checked={item.isSelectAll ? allSelected : item.checked}
-                  indeterminate={item.isSelectAll
-                    ? selectAllIndeterminate
-                    : false}
-                  disabled={itemDisabled}
-                  {readonly}
-                >
-                  <slot
-                    slot="labelChildren"
-                    {item}
-                    {index}
-                    selected={item.isSelectAll ? allSelected : item.checked}
-                    {highlighted}
+              {#each run.rows as item, runIndex (item.id)}
+                {@const rowIndex = run.start + runIndex}
+                {@const index = groupRows
+                  ? groupRows.itemIndexByRow[rowIndex]
+                  : rowIndex}
+                {#if index === -1}
+                  <!-- Hidden from assistive tech: the enclosing group is named
+                       by a hidden label, which stays rendered when a virtualized
+                       window leaves this header out. -->
+                  <div
+                    role="presentation"
+                    aria-hidden="true"
+                    data-virtual-index={isMeasured ? rowIndex : undefined}
+                    class:bx--list-box__menu-group-header={true}
+                    on:mousedown={(event) => {
+                      // Keep focus on the field, as options do.
+                      event.preventDefault();
+                    }}
                   >
-                    {itemToString(item)}
-                  </slot>
-                </Checkbox>
-              </HighlightSlot>
-            </ListBoxMenuItem>
+                    <slot name="group" group={item.group} items={item.items}>
+                      {item.group}
+                    </slot>
+                  </div>
+                {:else}
+                  {@const optionId = `${id}-${item.id}`}
+                  {@const itemDisabled =
+                    item.disabled ||
+                    (hasMaxSelectedItems && !!item.isSelectAll) ||
+                    (isAtSelectionCap && !item.checked)}
+                  {@const capDisabled =
+                    isAtSelectionCap &&
+                    !item.checked &&
+                    !item.disabled &&
+                    !item.isSelectAll}
+                  <ListBoxMenuItem
+                    id={optionId}
+                    role="option"
+                    aria-labelledby="checkbox-{id}-{item.id}"
+                    aria-describedby={capDisabled ? maxSelectedId : undefined}
+                    aria-selected={item.isSelectAll ? allSelected : item.checked}
+                    aria-checked={item.isSelectAll
+                      ? selectAllIndeterminate
+                        ? "mixed"
+                        : allSelected
+                      : item.checked}
+                    data-virtual-index={isMeasured ? rowIndex : undefined}
+                    active={item.isSelectAll ? false : item.checked}
+                    disabled={itemDisabled}
+                    on:click={(event) => handleOptionClick(event, item, index, itemDisabled)}
+                    on:mousedown={(event) => {
+                      // Keep focus on the field so screen readers don't
+                      // re-announce it on every option click.
+                      event.preventDefault();
+                    }}
+                    on:mouseenter={() => handleOptionMouseenter(index, itemDisabled)}
+                  >
+                    <HighlightSlot {optionId} let:highlighted>
+                      <Checkbox
+                        title={useTitleInItem ? itemToString(item) : undefined}
+                        {...itemToInput(item)}
+                        name={undefined}
+                        tabindex="-1"
+                        decorative
+                        id="checkbox-{id}-{item.id}"
+                        checked={item.isSelectAll ? allSelected : item.checked}
+                        indeterminate={item.isSelectAll
+                          ? selectAllIndeterminate
+                          : false}
+                        disabled={itemDisabled}
+                        {readonly}
+                      >
+                        <slot
+                          slot="labelChildren"
+                          {item}
+                          {index}
+                          selected={item.isSelectAll ? allSelected : item.checked}
+                          {highlighted}
+                        >
+                          {itemToString(item)}
+                        </slot>
+                      </Checkbox>
+                    </HighlightSlot>
+                  </ListBoxMenuItem>
+                {/if}
+              {/each}
+            </ListBoxMenuGroup>
           {/each}
         {/if}
       </ListBoxMenu>
@@ -1763,6 +1861,11 @@
     >
       {helperText}
     </div>
+  {/if}
+  {#if groupRows}
+    {#each groupRows.headers as header, groupIndex (header.id)}
+      <span id="group-{id}-{groupIndex}" hidden>{header.group}</span>
+    {/each}
   {/if}
   {#if hasMaxSelectedItems}
     <span id={maxSelectedId} class:bx--visually-hidden={true}
