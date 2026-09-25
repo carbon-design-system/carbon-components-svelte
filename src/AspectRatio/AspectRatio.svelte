@@ -16,7 +16,7 @@
 
   /**
    * Justify the slotted content along the main axis. Makes the aspect box a flex container.
-   * @type {"start" | "center" | "end" | undefined}
+   * @type {"start" | "center" | "end" | "space-between" | "space-around" | "space-evenly" | undefined}
    */
   export let justify = undefined;
 
@@ -50,6 +50,9 @@
     class:bx--aspect-ratio--justify-start={justify === "start"}
     class:bx--aspect-ratio--justify-center={justify === "center"}
     class:bx--aspect-ratio--justify-end={justify === "end"}
+    class:bx--aspect-ratio--justify-space-between={justify === "space-between"}
+    class:bx--aspect-ratio--justify-space-around={justify === "space-around"}
+    class:bx--aspect-ratio--justify-space-evenly={justify === "space-evenly"}
   >
     <slot />
   </div>
