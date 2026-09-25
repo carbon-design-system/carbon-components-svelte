@@ -38,6 +38,12 @@
   export let readonly = false;
 
   /**
+   * Specify the assistive text announced to screen readers when read-only.
+   * Exposed because VoiceOver does not announce `aria-readonly`.
+   */
+  export let readonlyText = "Read-only";
+
+  /**
    * Specify a name attribute for the checkbox input.
    * @type {string}
    */
@@ -56,6 +62,7 @@
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";
+  import { buildFieldIds, joinDescribedBy } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -73,6 +80,8 @@
     }
     toggled = ref.checked;
   }
+
+  $: ({ readonlyId } = buildFieldIds(id));
 </script>
 
 <div
@@ -93,8 +102,8 @@
     class:bx--toggle-input={true}
     class:bx--toggle-input--small={size === "sm"}
     checked={toggled}
-    aria-disabled={readonly || undefined}
     aria-readonly={readonly || undefined}
+    aria-describedby={joinDescribedBy(readonly ? readonlyId : null)}
     on:click={(event) => {
       if (readonly) event.preventDefault();
     }}
@@ -142,4 +151,7 @@
       </span>
     </span>
   </label>
+  {#if readonly}
+    <span id={readonlyId} class:bx--visually-hidden={true}>{readonlyText}</span>
+  {/if}
 </div>

@@ -308,7 +308,47 @@ describe("Toggle", () => {
       expect(container.querySelector(".bx--toggle--readonly")).toBeTruthy();
       const toggle = screen.getByRole("switch", { name: /Readonly toggle/i });
       expect(toggle).toHaveAttribute("aria-readonly", "true");
-      expect(toggle).toHaveAttribute("aria-disabled", "true");
+      expect(toggle).not.toHaveAttribute("aria-disabled");
+    });
+
+    it("describes the field as read-only for screen readers that ignore aria-readonly", () => {
+      const { container } = render(ToggleReadonly, {
+        id: "readonly-toggle",
+        readonly: true,
+      });
+
+      const toggle = screen.getByRole("switch", { name: /Readonly toggle/i });
+      expect(toggle).toHaveAttribute(
+        "aria-describedby",
+        "readonly-readonly-toggle",
+      );
+
+      const description = container.querySelector("#readonly-readonly-toggle");
+      expect(description).toHaveTextContent("Read-only");
+      expect(description).toHaveClass("bx--visually-hidden");
+    });
+
+    it("supports overriding the read-only assistive text", () => {
+      const { container } = render(ToggleReadonly, {
+        id: "readonly-toggle",
+        readonly: true,
+        readonlyText: "Custom read-only text",
+      });
+
+      expect(
+        container.querySelector("#readonly-readonly-toggle"),
+      ).toHaveTextContent("Custom read-only text");
+    });
+
+    it("does not render a read-only description or aria-describedby when not readonly", () => {
+      const { container } = render(ToggleReadonly, {
+        id: "readonly-toggle",
+        readonly: false,
+      });
+
+      const toggle = screen.getByRole("switch", { name: /Readonly toggle/i });
+      expect(toggle).not.toHaveAttribute("aria-describedby");
+      expect(container.querySelector("#readonly-readonly-toggle")).toBeNull();
     });
 
     it("should not toggle on click when readonly", async () => {
