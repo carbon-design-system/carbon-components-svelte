@@ -231,6 +231,11 @@
     }
   }
 
+  // Double class so it outranks the vertical and scrollable panel rules.
+  .#{$prefix}--tab-content.#{$prefix}--tab-content--flush {
+    padding-inline: 0;
+  }
+
   .#{$prefix}--tabs.#{$prefix}--skeleton {
     cursor: default;
     pointer-events: none;
