@@ -1,4 +1,5 @@
 import { scrollIntoViewWithinMenu } from "../../src/utils/scroll-into-view-within-menu.js";
+import { rect } from "./rect";
 
 /**
  * Build a container with a single item, stubbing the layout jsdom does not
@@ -20,11 +21,11 @@ function buildMenu(options: {
   });
   container.scrollTop = 50;
   container.getBoundingClientRect = () =>
-    ({ top: options.containerTop, bottom: options.containerBottom }) as DOMRect;
+    rect({ top: options.containerTop, bottom: options.containerBottom });
 
   const item = document.createElement("div");
   item.getBoundingClientRect = () =>
-    ({ top: options.itemTop, bottom: options.itemBottom }) as DOMRect;
+    rect({ top: options.itemTop, bottom: options.itemBottom });
 
   container.appendChild(item);
   document.body.appendChild(container);
@@ -38,7 +39,7 @@ describe("scrollIntoViewWithinMenu", () => {
 
   it("is a no-op when the element has no listbox ancestor", () => {
     const item = document.createElement("div");
-    item.getBoundingClientRect = () => ({ top: -100, bottom: -80 }) as DOMRect;
+    item.getBoundingClientRect = () => rect({ top: -100, bottom: -80 });
     document.body.appendChild(item);
 
     expect(() => scrollIntoViewWithinMenu(item)).not.toThrow();

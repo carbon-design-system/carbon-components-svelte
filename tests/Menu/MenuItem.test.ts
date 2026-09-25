@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import { rect } from "../utils/rect";
 import { user } from "../utils/user";
 import MenuItemRadioGroupFixture from "./MenuItem.radioGroup.test.svelte";
 import MenuItemSelectableFixture from "./MenuItem.selectable.test.svelte";
@@ -153,29 +154,14 @@ describe("MenuItem", () => {
       vi.spyOn(Element.prototype, "getBoundingClientRect").mockImplementation(
         function (this: Element) {
           if (this === parent) {
-            return {
+            return rect({
               top: 100,
-              bottom: 130,
-              left: window.innerWidth - 10,
-              right: window.innerWidth,
-              width: 10,
               height: 30,
-              x: window.innerWidth - 10,
-              y: 100,
-              toJSON: () => {},
-            } as DOMRect;
+              left: window.innerWidth - 10,
+              width: 10,
+            });
           }
-          return {
-            top: 0,
-            bottom: 200,
-            left: 0,
-            right: 200,
-            width: 200,
-            height: 200,
-            x: 0,
-            y: 0,
-            toJSON: () => {},
-          } as DOMRect;
+          return rect({ bottom: 200, right: 200 });
         },
       );
 

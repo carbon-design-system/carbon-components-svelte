@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { absorbUnhandledRejection } from "../utils/absorb-unhandled-rejection";
+import { rect } from "../utils/rect";
 import { user } from "../utils/user";
 import ComposedModalTest from "./ComposedModal.test.svelte";
 import ComposedModalAlertNoBodyTest from "./ComposedModalAlertNoBody.test.svelte";
@@ -314,11 +315,10 @@ describe("ComposedModal", () => {
     Object.defineProperty(modalContent, "clientHeight", { value: 100 });
     Object.defineProperty(modalContent, "scrollHeight", { value: 300 });
     modalContent.scrollTop = 50;
-    modalContent.getBoundingClientRect = () =>
-      ({ top: 0, bottom: 100 }) as DOMRect;
+    modalContent.getBoundingClientRect = () => rect({ top: 0, bottom: 100 });
 
     const input = screen.getByTestId("test-focus");
-    input.getBoundingClientRect = () => ({ top: 110, bottom: 130 }) as DOMRect;
+    input.getBoundingClientRect = () => rect({ top: 110, bottom: 130 });
 
     input.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
 

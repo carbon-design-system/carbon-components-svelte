@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { rect } from "../utils/rect";
 import FloatingPortalTest from "./FloatingPortal.test.svelte";
 
 describe("FloatingPortal", () => {
@@ -119,28 +120,12 @@ describe("FloatingPortal", () => {
         "bottom",
       );
 
-      vi.spyOn(anchor, "getBoundingClientRect").mockReturnValue({
-        top: 750,
-        bottom: 790,
-        left: 0,
-        right: 100,
-        width: 100,
-        height: 40,
-        x: 0,
-        y: 750,
-        toJSON: () => {},
-      } as DOMRect);
-      vi.spyOn(portalElement, "getBoundingClientRect").mockReturnValue({
-        top: 0,
-        bottom: 200,
-        left: 0,
-        right: 100,
-        width: 100,
-        height: 200,
-        x: 0,
-        y: 0,
-        toJSON: () => {},
-      } as DOMRect);
+      vi.spyOn(anchor, "getBoundingClientRect").mockReturnValue(
+        rect({ top: 750, bottom: 790, width: 100 }),
+      );
+      vi.spyOn(portalElement, "getBoundingClientRect").mockReturnValue(
+        rect({ top: 0, bottom: 200, width: 100 }),
+      );
 
       window.dispatchEvent(new Event("scroll"));
       await new Promise((resolve) => requestAnimationFrame(resolve));
@@ -164,28 +149,12 @@ describe("FloatingPortal", () => {
 
       // Anchor now sits near the bottom of the viewport (insufficient room
       // below), as if the page scrolled. Without the lock this flips to "top".
-      vi.spyOn(anchor, "getBoundingClientRect").mockReturnValue({
-        top: 750,
-        bottom: 790,
-        left: 0,
-        right: 100,
-        width: 100,
-        height: 40,
-        x: 0,
-        y: 750,
-        toJSON: () => {},
-      } as DOMRect);
-      vi.spyOn(portalElement, "getBoundingClientRect").mockReturnValue({
-        top: 0,
-        bottom: 200,
-        left: 0,
-        right: 100,
-        width: 100,
-        height: 200,
-        x: 0,
-        y: 0,
-        toJSON: () => {},
-      } as DOMRect);
+      vi.spyOn(anchor, "getBoundingClientRect").mockReturnValue(
+        rect({ top: 750, bottom: 790, width: 100 }),
+      );
+      vi.spyOn(portalElement, "getBoundingClientRect").mockReturnValue(
+        rect({ top: 0, bottom: 200, width: 100 }),
+      );
 
       window.dispatchEvent(new Event("scroll"));
       await new Promise((resolve) => requestAnimationFrame(resolve));

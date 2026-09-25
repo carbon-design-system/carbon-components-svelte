@@ -1,3 +1,5 @@
+import { rect } from "./rect";
+
 const COLLAPSED_HEIGHT = 16 * 15;
 
 // Capture the native implementation at module load. `vi.spyOn` on an
@@ -15,17 +17,7 @@ export function mockSnippetOverflowHeight(height = COLLAPSED_HEIGHT + 1) {
     .spyOn(Element.prototype, "getBoundingClientRect")
     .mockImplementation(function (this: Element) {
       if (this.tagName === "PRE") {
-        return {
-          height,
-          width: 100,
-          top: 0,
-          left: 0,
-          right: 100,
-          bottom: height,
-          x: 0,
-          y: 0,
-          toJSON: () => ({}),
-        } as DOMRect;
+        return rect({ height, width: 100 });
       }
 
       return nativeGetBoundingClientRect.call(this);

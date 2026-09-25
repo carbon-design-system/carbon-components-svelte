@@ -9,6 +9,7 @@ import type DropdownComponent from "carbon-components-svelte/Dropdown/Dropdown.s
 import type { DropdownItem } from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
+import { rect } from "../utils/rect";
 import { isSvelte5 } from "../utils/svelte-version";
 import { user } from "../utils/user";
 import DropdownFluidForm from "./Dropdown.fluidForm.test.svelte";
@@ -1989,30 +1990,10 @@ describe("Dropdown", () => {
           // (a numeric string here) is the last hyphen-delimited segment.
           const index = Number(this.getAttribute("id")?.split("-").pop());
           const top = index * ITEM_HEIGHT;
-          return {
-            top,
-            bottom: top + ITEM_HEIGHT,
-            height: ITEM_HEIGHT,
-            left: 0,
-            right: 0,
-            width: 0,
-            x: 0,
-            y: top,
-            toJSON: () => ({}),
-          } as DOMRect;
+          return rect({ top, height: ITEM_HEIGHT });
         }
         if (role === "listbox") {
-          return {
-            top: 0,
-            bottom: 0,
-            height: 0,
-            left: 0,
-            right: 0,
-            width: 0,
-            x: 0,
-            y: 0,
-            toJSON: () => ({}),
-          } as DOMRect;
+          return rect();
         }
         return new DOMRect();
       });

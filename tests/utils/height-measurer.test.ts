@@ -2,6 +2,7 @@ import {
   createHeightMeasurer,
   VIRTUAL_INDEX_ATTRIBUTE,
 } from "../../src/utils/height-measurer.js";
+import { rect } from "./rect";
 
 /** A rendered window: one element per item index, inside a scroll container. */
 function buildWindow(indices: number[]) {
@@ -87,7 +88,7 @@ function installResizeObserver() {
       instance.callback(
         measurements.map(({ target, height }) => ({
           target,
-          contentRect: { height } as DOMRectReadOnly,
+          contentRect: rect({ height }),
           borderBoxSize: [{ blockSize: height, inlineSize: 0 }],
           contentBoxSize: [],
           devicePixelContentBoxSize: [],
@@ -408,10 +409,8 @@ describe("createHeightMeasurer", () => {
     const onMeasure = vi.fn();
     const measurer = createHeightMeasurer({ onMeasure });
     const container = buildWindow([0, 1]);
-    optionAt(container, 0).getBoundingClientRect = () =>
-      ({ height: 40 }) as DOMRect;
-    optionAt(container, 1).getBoundingClientRect = () =>
-      ({ height: 88 }) as DOMRect;
+    optionAt(container, 0).getBoundingClientRect = () => rect({ height: 40 });
+    optionAt(container, 1).getBoundingClientRect = () => rect({ height: 88 });
 
     measurer.sync(container);
 

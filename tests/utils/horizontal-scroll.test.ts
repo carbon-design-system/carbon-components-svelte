@@ -3,6 +3,7 @@ import {
   scrollByViewport,
   scrollIntoViewX,
 } from "../../src/utils/horizontal-scroll.js";
+import { rect } from "./rect";
 
 describe("computeScrollOverflow", () => {
   it("no overflow when content fits exactly", () => {
@@ -73,15 +74,12 @@ describe("scrollIntoViewX", () => {
   }) {
     const container = document.createElement("div");
     container.getBoundingClientRect = () =>
-      ({
-        left: options.containerLeft,
-        right: options.containerRight,
-      }) as DOMRect;
+      rect({ left: options.containerLeft, right: options.containerRight });
     container.scrollLeft = 0;
 
     const target = document.createElement("div");
     target.getBoundingClientRect = () =>
-      ({ left: options.targetLeft, right: options.targetRight }) as DOMRect;
+      rect({ left: options.targetLeft, right: options.targetRight });
 
     return { container, target };
   }
