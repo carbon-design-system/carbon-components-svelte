@@ -1,13 +1,15 @@
 <script>
   import {
-    applyColumnSettings,
     DataTable,
     LocalStorage,
     Toolbar,
     ToolbarColumnVisibility,
     ToolbarContent,
-    toColumnSettings,
   } from "carbon-components-svelte";
+  import {
+    applyColumnSettings,
+    toColumnSettings,
+  } from "carbon-components-svelte/src/DataTable/ToolbarColumnVisibility.svelte";
 
   const defaultHeaders = [
     { key: "name", value: "Name" },

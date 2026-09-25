@@ -1,5 +1,8 @@
 <script>
-  import { breakpointObserver, breakpoints } from "carbon-components-svelte";
+  import {
+    breakpointObserver,
+    breakpoints,
+  } from "carbon-components-svelte/src/Breakpoint/Breakpoint.svelte";
 
   const size = breakpointObserver();
   const smaller = size.smallerThan("md");

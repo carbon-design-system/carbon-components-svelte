@@ -1,11 +1,6 @@
 <script>
-  import {
-    Button,
-    ButtonSet,
-    filterTreeNodes,
-    Stack,
-    TreeView,
-  } from "carbon-components-svelte";
+  import { Button, ButtonSet, Stack, TreeView } from "carbon-components-svelte";
+  import { filterTreeNodes } from "carbon-components-svelte/src/TreeView/TreeView.svelte";
 
   const allNodes = [
     {
