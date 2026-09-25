@@ -17,6 +17,7 @@
   export let inline = false;
   export let light = false;
   export let readonly = false;
+  export let readonlyText: ComponentProps<Select>["readonlyText"] = undefined;
   export let fluid = false;
 </script>
 
@@ -35,6 +36,7 @@
   {inline}
   {light}
   {readonly}
+  {readonlyText}
   {fluid}
   on:change={() => console.log("change")}
   on:input={() => console.log("input")}

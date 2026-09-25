@@ -72,6 +72,12 @@
   export let readonly = false;
 
   /**
+   * Specify the assistive text announced to screen readers when read-only.
+   * Exposed because VoiceOver does not announce `aria-readonly`.
+   */
+  export let readonlyText = "Read-only";
+
+  /**
    * Set to `true` to use the fluid variant.
    * Inherited from the parent `FluidForm` context,
    * so it does not need to be set when used inside `FluidForm`.
@@ -94,6 +100,7 @@
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import {
     buildFieldIds,
+    joinDescribedBy,
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
@@ -201,7 +208,7 @@
     });
   }
 
-  $: ({ errorId, warnId, helperId } = buildFieldIds(id));
+  $: ({ errorId, warnId, helperId, readonlyId } = buildFieldIds(id));
   $: {
     selectedValue.set(selected ?? $defaultValue);
     syncNativeSelectValue();
@@ -214,7 +221,7 @@
     readonly,
   }));
   $: isFluid = !inline && (fluid || !!formContext?.isFluid);
-  $: describedById = resolveStatusDescribedBy({
+  $: statusDescribedById = resolveStatusDescribedBy({
     showInvalid,
     showWarn,
     helperText,
@@ -223,6 +230,10 @@
     warnId,
     helperId,
   });
+  $: describedById = joinDescribedBy(
+    readonly ? readonlyId : null,
+    statusDescribedById,
+  );
 </script>
 
 <div class:bx--form-item={true} class:bx--select--fluid={isFluid}>
@@ -286,6 +297,11 @@
             />
           {/if}
         </div>
+        {#if readonly}
+          <span id={readonlyId} class:bx--visually-hidden={true}
+            >{readonlyText}</span
+          >
+        {/if}
         {#if showInvalid}
           <div class:bx--form-requirement={true} id={errorId}>
             {invalidText}
@@ -359,6 +375,11 @@
           {/if}
         {/if}
       </div>
+      {#if readonly}
+        <span id={readonlyId} class:bx--visually-hidden={true}
+          >{readonlyText}</span
+        >
+      {/if}
       {#if !isFluid && helperText && !showInvalid && !showWarn}
         <div
           id={helperId}
