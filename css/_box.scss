@@ -106,6 +106,14 @@
     .#{$prefix}--box-bottom-#{$step} {
       bottom: $size;
     }
+
+    .#{$prefix}--box-left-#{$step} {
+      left: $size;
+    }
+
+    .#{$prefix}--box-right-#{$step} {
+      right: $size;
+    }
   }
 
   .#{$prefix}--box-top-0 {
@@ -114,6 +122,14 @@
 
   .#{$prefix}--box-bottom-0 {
     bottom: 0;
+  }
+
+  .#{$prefix}--box-left-0 {
+    left: 0;
+  }
+
+  .#{$prefix}--box-right-0 {
+    right: 0;
   }
 
   // 100vh first as a fallback for browsers without dvh support; 100dvh
