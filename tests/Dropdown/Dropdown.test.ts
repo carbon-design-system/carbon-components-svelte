@@ -9,6 +9,7 @@ import type DropdownComponent from "carbon-components-svelte/Dropdown/Dropdown.s
 import type { DropdownItem } from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
+import { flushMacrotask } from "../utils/flush-macrotask";
 import { rect } from "../utils/rect";
 import { isSvelte5 } from "../utils/svelte-version";
 import { user } from "../utils/user";
@@ -1741,6 +1742,11 @@ describe("Dropdown", () => {
     const button = screen.getByRole("combobox");
     await user.click(button);
 
+    vi.useFakeTimers();
+    onTestFinished(() => {
+      vi.useRealTimers();
+    });
+
     // Fire keydown only (no keyup) so the menu stays open between keystrokes.
     await fireEvent.keyDown(button, { key: "b" });
     expect(screen.getByRole("option", { name: "Banana" })).toHaveClass(
@@ -1748,7 +1754,7 @@ describe("Dropdown", () => {
     );
 
     // Wait past the delay so the buffer clears.
-    await new Promise((resolve) => setTimeout(resolve, 600));
+    vi.advanceTimersByTime(600);
 
     // A fresh keystroke starts a new search ("c" -> Cherry) rather than
     // appending to the stale buffer ("bc" -> no match -> Banana highlighted).
@@ -2109,11 +2115,11 @@ describe("Dropdown", () => {
 
         // Scroll away from the selected item
         menu.scrollTop = 0;
-        await new Promise((resolve) => setTimeout(resolve, 100));
+        await flushMacrotask();
 
         rerender({ open: false });
         await tick();
-        await new Promise((resolve) => setTimeout(resolve, 100));
+        await flushMacrotask();
 
         rerender({ open: true });
         await tick();
