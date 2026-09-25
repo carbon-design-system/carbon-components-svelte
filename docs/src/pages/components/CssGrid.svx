@@ -89,3 +89,32 @@ displays or image grids.
 `narrow` grid the row gap is halved to match.
 
 <FileSource src="/framed/CssGrid/CssGridRowGap" />
+
+## Subgrid
+
+### Nested grid
+
+Nest a `CssGrid` inside a `CssColumn` to split that column into its own grid.
+The nested grid renders as a subgrid (`bx--subgrid`): it has one track per
+column the parent spans, and it cancels the parent column's gutter so its
+columns line up with the outer grid. Below, the subgrid's columns sit on the
+same tracks as the outer columns in the next row.
+
+<FileSource src="/framed/CssGrid/CssSubgrid" />
+
+| Do | Why |
+| --- | --- |
+| Give the parent `CssColumn` a span at every breakpoint | The subgrid takes its track count from the parent's span. A parent with no span, or with `span={true}`, gives the subgrid the full grid's column count |
+| Use numeric spans for columns inside a subgrid | Percentage spans resolve against the page grid's column count, not the subgrid's. `"50%"` at `lg` is 8 tracks even in a 12-track subgrid |
+| Use `mode` on a nested `CssGrid`, not `narrow` or `condensed` | `narrow`, `condensed`, and `fullWidth` only apply to a top-level grid and are ignored on a subgrid |
+
+### Modes
+
+Without `mode`, a subgrid keeps the gutters of the grid around it. Set `mode`
+to `"wide"`, `"narrow"`, or `"condensed"` to give the subgrid's columns their
+own gutters: `wide` is the default 32px gutter, `narrow` removes the gutter on
+the leading side, and `condensed` collapses it to 1px. `withRowGap` on a
+subgrid adds a 32px row gap, 16px for `narrow` and 1px for `condensed`. `mode`
+has no effect on a top-level grid.
+
+<FileSource src="/framed/CssGrid/CssSubgridModes" />
