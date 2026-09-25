@@ -1,0 +1,36 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "./spacing-scale";
+
+/// Bleed negative-margin classes. Generated from the same
+/// $ccs-spacing-scale as Box's padding classes, so Bleed step N exactly
+/// cancels Box padding step N.
+/// @access private
+/// @group components
+@mixin bleed {
+  .#{$prefix}--bleed {
+    display: block;
+  }
+
+  @each $step, $size in $ccs-spacing-scale {
+    .#{$prefix}--bleed-top-#{$step} {
+      margin-top: -$size;
+    }
+
+    .#{$prefix}--bleed-right-#{$step} {
+      margin-right: -$size;
+    }
+
+    .#{$prefix}--bleed-bottom-#{$step} {
+      margin-bottom: -$size;
+    }
+
+    .#{$prefix}--bleed-left-#{$step} {
+      margin-left: -$size;
+    }
+  }
+}
+
+@include exports("bleed") {
+  @include bleed;
+}
