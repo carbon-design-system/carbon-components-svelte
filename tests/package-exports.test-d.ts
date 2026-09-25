@@ -20,6 +20,7 @@ import type {
   ThemeProps,
   themes,
 } from "carbon-components-svelte/src/Theme/Theme.svelte";
+import type TimePickerSkeleton from "carbon-components-svelte/src/TimePicker/TimePickerSkeleton.svelte";
 import type { HeaderSearchResult } from "carbon-components-svelte/src/UIShell/HeaderSearch.svelte";
 
 import "carbon-components-svelte/css/all.css";
@@ -48,3 +49,4 @@ type _QueryParam = ReturnType<typeof queryParam<string>>;
 type _HeaderSearchResult = HeaderSearchResult;
 type _ThemeProps = ThemeProps;
 type _Themes = typeof themes;
+type _TimePickerSkeleton = TimePickerSkeleton;
