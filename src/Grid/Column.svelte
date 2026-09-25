@@ -10,10 +10,6 @@
    */
 
   /**
-   * @slot {{ props?: { class: string; } }}
-   */
-
-  /**
    * Set to `true` to render a custom HTML element.
    * Props are destructured as `props` in the default slot.
    * @example
