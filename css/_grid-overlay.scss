@@ -1,0 +1,87 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/layout/breakpoint";
+
+/// GridOverlay: a fixed, full-viewport, non-interactive column overlay for
+/// checking layout against the real breakpoint grid.
+/// @access private
+/// @group components
+@mixin grid-overlay {
+  .#{$prefix}--grid-overlay {
+    position: fixed;
+    inset: 0;
+    // One above the highest layer in $z-indexes, so the overlay sits over
+    // dropdowns and modals.
+    z-index: z("dropdown") + 1;
+    pointer-events: none;
+  }
+
+  // Each column draws only its left edge and the row draws the right edge,
+  // so a shared boundary is one 1px line, not two adjacent outlines. The
+  // lines are pseudo-elements, so they take no space in the layout.
+  .#{$prefix}--grid-overlay__row {
+    position: relative;
+    height: 100%;
+  }
+
+  .#{$prefix}--grid-overlay__col {
+    position: relative;
+    // Literal color, not a theme token: the overlay must read the same in
+    // every theme, not shift with the page it is drawn over.
+    background-color: rgba(15, 98, 254, 0.1);
+  }
+
+  .#{$prefix}--grid-overlay__col::before,
+  .#{$prefix}--grid-overlay__row::after {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    content: "";
+  }
+
+  // Physical sides: every column's left edge plus the row's right edge
+  // covers each boundary in either direction.
+  .#{$prefix}--grid-overlay__col::before {
+    left: 0;
+    border-left: 1px dashed rgba(15, 98, 254, 0.4);
+  }
+
+  .#{$prefix}--grid-overlay__row::after {
+    right: 0;
+    border-right: 1px dashed rgba(15, 98, 254, 0.4);
+  }
+
+  // Shade each column's padding (its gutter) on top of the column tint.
+  // The stop widths repeat the column padding from carbon--make-col-ready,
+  // built from the same gutter variables. That padding is physical
+  // (padding-left/right), so the gradient runs `to right` in RTL too.
+  .#{$prefix}--grid-overlay--gutters .#{$prefix}--grid-overlay__col {
+    --ccs-grid-overlay-gutter-left: #{$carbon--grid-gutter * 0.5};
+    --ccs-grid-overlay-gutter-right: #{$carbon--grid-gutter * 0.5};
+
+    background-image: linear-gradient(
+      to right,
+      rgba(15, 98, 254, 0.15) var(--ccs-grid-overlay-gutter-left),
+      transparent var(--ccs-grid-overlay-gutter-left),
+      transparent calc(100% - var(--ccs-grid-overlay-gutter-right)),
+      rgba(15, 98, 254, 0.15) calc(100% - var(--ccs-grid-overlay-gutter-right))
+    );
+  }
+
+  .#{$prefix}--grid-overlay--gutters.#{$prefix}--grid--condensed
+    .#{$prefix}--grid-overlay__col {
+    --ccs-grid-overlay-gutter-left: #{$carbon--grid-gutter--condensed * 0.5};
+    --ccs-grid-overlay-gutter-right: #{$carbon--grid-gutter--condensed * 0.5};
+  }
+
+  // Narrow wins over condensed, matching the column padding rules' order.
+  .#{$prefix}--grid-overlay--gutters.#{$prefix}--grid--narrow
+    .#{$prefix}--grid-overlay__col {
+    --ccs-grid-overlay-gutter-left: 0;
+    --ccs-grid-overlay-gutter-right: #{$carbon--grid-gutter * 0.5};
+  }
+}
+
+@include exports("grid-overlay") {
+  @include grid-overlay;
+}
