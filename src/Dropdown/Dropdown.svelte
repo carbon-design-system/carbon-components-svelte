@@ -65,6 +65,15 @@
   export let direction = "bottom";
 
   /**
+   * Specify which edge of the field the menu lines up with.
+   * Only visible when the menu is wider than the field, as with `type="inline"`.
+   * Set to `"end"` to open the menu toward the start side, e.g. for an inline
+   * dropdown near the right edge of its container.
+   * @type {"start" | "end"}
+   */
+  export let align = "start";
+
+  /**
    * Specify the size of the dropdown field.
    * @type {"xs" | "sm" | "lg" | "xl"}
    */
@@ -857,6 +866,7 @@
         {open}
         anchor={ref}
         {direction}
+        {align}
         {highlightedId}
         {wrapOptions}
         highlightScroll={highlightOrigin !== "pointer"}
