@@ -1,4 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import ToggleButton from "carbon-components-svelte/ToggleButtonGroup/ToggleButton.svelte";
+import TextBold from "carbon-icons-svelte/lib/TextBold.svelte";
 import { tick } from "svelte";
 import { openTooltips } from "../utils/open-tooltips";
 import { user } from "../utils/user";
@@ -247,5 +249,16 @@ describe("ToggleButtonGroup", () => {
       const portal = document.querySelector(".bx--tooltip-portal");
       expect(portal).toHaveAttribute("data-direction", "top");
     });
+  });
+
+  it("does not throw when a standalone icon-only button gets focus", async () => {
+    render(ToggleButton, {
+      props: { value: "bold", icon: TextBold, iconDescription: "Bold" },
+    });
+    const button = screen.getByRole("button");
+    await fireEvent.focus(button);
+    await fireEvent.mouseEnter(button);
+    await fireEvent.blur(button);
+    expect(button).toBeInTheDocument();
   });
 });
