@@ -38,6 +38,7 @@
 
   import { createEventDispatcher, setContext } from "svelte";
   import { readonly, writable } from "svelte/store";
+  import { rangeSlice } from "../utils/range-slice.js";
 
   const dispatch = createEventDispatcher();
   /**
@@ -57,18 +58,19 @@
   let fieldsetRef = null;
 
   /**
-   * Anchor value for Shift+click/Shift+keyboard range selection: the last
-   * tile toggled, with or without Shift. `null` until the first toggle, or
-   * once resolved to a value that no longer maps to a tile in the group.
+   * Anchor value for Shift+click/Shift+keyboard range selection: the
+   * last tile toggled, with or without Shift. `null` until the first
+   * toggle, or once resolved to a value that no longer maps to a tile
+   * in the group.
    * @type {T | null}
    */
   let rangeAnchorValue = null;
 
   /**
-   * The group's tile `<input>` elements in DOM order. Queried live from the
-   * DOM (rather than tracked via registration order) because tiles can be
-   * added, removed, or reordered dynamically, and registration order isn't
-   * guaranteed to match DOM order afterward.
+   * The group's tile `<input>` elements in DOM order. Queried live from
+   * the DOM (rather than tracked via registration order) because tiles
+   * can be added, removed, or reordered dynamically, and registration
+   * order isn't guaranteed to match DOM order afterward.
    * @type {() => HTMLInputElement[]}
    */
   function getOrderedInputs() {
@@ -77,10 +79,10 @@
   }
 
   /**
-   * Apply `isSelected` to every enabled tile between the anchor tile and
-   * `value` (inclusive, DOM order). Returns `false` if the anchor tile is no
-   * longer present (for example, unmounted or filtered out elsewhere), so the
-   * caller can fall back to a single toggle.
+   * Apply `isSelected` to every enabled tile between the anchor tile
+   * and `value` (inclusive, DOM order). Returns `false` if the anchor
+   * tile is no longer present (for example, unmounted or filtered out
+   * elsewhere), so the caller can fall back to a single toggle.
    * @type {(value: T, isSelected: boolean) => boolean}
    */
   function selectRange(value, isSelected) {
@@ -89,13 +91,13 @@
       (input) => input.value === rangeAnchorValue,
     );
     const targetIndex = inputs.findIndex((input) => input.value === value);
-    if (anchorIndex === -1 || targetIndex === -1) return false;
+    const range =
+      targetIndex === -1 ? null : rangeSlice(inputs, anchorIndex, targetIndex);
+    if (range === null) return false;
 
-    const start = Math.min(anchorIndex, targetIndex);
-    const end = Math.max(anchorIndex, targetIndex);
     const next = new Set($selectedValues);
     let changed = false;
-    for (const input of inputs.slice(start, end + 1)) {
+    for (const input of range) {
       if (input.disabled) continue;
       if (isSelected && !next.has(input.value)) {
         next.add(input.value);
@@ -133,7 +135,11 @@
   }
 
   /**
-   * @type {(data: { value: T; selected: boolean; shiftKey?: boolean }) => void}
+   * @type {(data: {
+   *   value: T;
+   *   selected: boolean;
+   *   shiftKey?: boolean;
+   * }) => void}
    */
   function update({ value, selected: isSelected, shiftKey }) {
     const usedRange =
@@ -154,7 +160,11 @@
     rangeAnchorValue = value;
   }
 
-  /** True while Shift is held during a mousedown gesture inside the group; suppresses the browser's native Shift+click text-selection highlight spanning multiple tiles. */
+  /**
+   * True while Shift is held during a mousedown gesture inside the
+   * group; suppresses the browser's native Shift+click text-selection
+   * highlight spanning multiple tiles.
+   */
   let shiftMouseActive = false;
 
   setContext("carbon:SelectableTileGroup", {

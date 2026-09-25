@@ -1,9 +1,15 @@
 import type { BreakpointSize } from "./breakpoints.js";
 
 export interface HideAtBreakpointOptions {
-  /** Hide the element when the current breakpoint is larger than this size. */
+  /**
+   * Hide the element when the current breakpoint is larger than this
+   * size.
+   */
   above?: BreakpointSize;
-  /** Hide the element when the current breakpoint is smaller than this size. */
+  /**
+   * Hide the element when the current breakpoint is smaller than this
+   * size.
+   */
   below?: BreakpointSize;
 }
 

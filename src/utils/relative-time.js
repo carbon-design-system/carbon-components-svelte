@@ -1,7 +1,15 @@
 // @ts-check
 import { getRelativeTimeFormatter } from "./intl-formatter-cache.js";
 
-/** @typedef {"second" | "minute" | "hour" | "day" | "week" | "month" | "year"} RelativeTimeUnit */
+/**
+ * @typedef {"second"
+ *   | "minute"
+ *   | "hour"
+ *   | "day"
+ *   | "week"
+ *   | "month"
+ *   | "year"} RelativeTimeUnit
+ */
 
 const SECOND = 1000;
 const MINUTE = 60 * SECOND;
@@ -25,7 +33,8 @@ export function toTimestamp(input) {
 }
 
 /**
- * Select the `Intl.RelativeTimeFormat` unit and value for a time difference.
+ * Select the `Intl.RelativeTimeFormat` unit and value for a time
+ * difference.
  *
  * @param {number} diffMs - `target - now`; negative for the past.
  * @returns {{ value: number; unit: RelativeTimeUnit }}
@@ -48,7 +57,12 @@ export function getRelativeTimeParts(diffMs) {
  * Format `target` relative to `now` using `Intl.RelativeTimeFormat`.
  *
  * @param {Date | number | string} target
- * @param {{ now?: number, locale?: string, numeric?: "always" | "auto", style?: "long" | "short" | "narrow" }} [options]
+ * @param {{
+ *   now?: number;
+ *   locale?: string;
+ *   numeric?: "always" | "auto";
+ *   style?: "long" | "short" | "narrow";
+ * }} [options]
  * @returns {string} `""` when `target` is invalid.
  */
 export function formatRelativeTime(target, options = {}) {
@@ -69,7 +83,8 @@ export function formatRelativeTime(target, options = {}) {
 }
 
 /**
- * Adaptive refresh interval: only fire when the displayed unit can change.
+ * Adaptive refresh interval: only fire when the displayed unit can
+ * change.
  *
  * @param {number} diffMs
  * @returns {number}

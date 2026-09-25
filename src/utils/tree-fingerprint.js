@@ -17,22 +17,23 @@
  */
 
 /**
- * Cheap per-node snapshot of a tree, recorded whenever a tree reference is
- * accepted as changed for a genuine reason. Compared back against the live
- * tree only when a new `nodes` value is the SAME reference as before (the
- * lazy-load / in-place-mutation idiom, `node.nodes = children; nodes =
- * nodes`): diffing that reference against itself with a same-vs-different
- * object walk always reports "equal" (it can only bail out on `prev ===
- * next`, since a shared node object may have been mutated). A snapshot lets
- * the caller tell "reassigned, nothing touched" (a wrapper forwarding
- * `nodes`, or a `$:` that re-runs for an unrelated reason and yields the
- * same array) apart from "reassigned after a real in-place mutation".
+ * Cheap per-node snapshot of a tree, recorded whenever a tree reference
+ * is accepted as changed for a genuine reason. Compared back against
+ * the live tree only when a new `nodes` value is the SAME reference as
+ * before (the lazy-load / in-place-mutation idiom, `node.nodes =
+ * children; nodes = nodes`): diffing that reference against itself with
+ * a same-vs-different object walk always reports "equal" (it can only
+ * bail out on `prev === next`, since a shared node object may have been
+ * mutated). A snapshot lets the caller tell "reassigned, nothing
+ * touched" (a wrapper forwarding `nodes`, or a `$:` that re-runs for an
+ * unrelated reason and yields the same array) apart from "reassigned
+ * after a real in-place mutation".
  *
- * Shallow: fields are compared with `Object.is`, so a nested non-`nodes`
- * object replaced with a new-but-equal one still counts as changed. This
- * keeps the walk O(n) instead of a full deep-equal, at the cost of treating
- * an identity-compared field (a new function, a new object) as a real
- * change even when its shape didn't.
+ * Shallow: fields are compared with `Object.is`, so a nested
+ * non-`nodes` object replaced with a new-but-equal one still counts as
+ * changed. This keeps the walk O(n) instead of a full deep-equal, at
+ * the cost of treating an identity-compared field (a new function, a
+ * new object) as a real change even when its shape didn't.
  * @param {ReadonlyArray<TreeFingerprintNode>} list
  * @returns {TreeFingerprint[]}
  */

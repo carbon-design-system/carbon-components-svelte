@@ -91,17 +91,29 @@
   import ChevronDown from "../icons/ChevronDown.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import { batchStoreUpdates } from "../utils/batch-store-updates.js";
+  import {
+    buildFieldIds,
+    resolveStatusDescribedBy,
+    resolveValidationVisibility,
+  } from "../utils/field-status.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
   const formContext = getContext(FORM_CONTEXT_KEY);
   /**
-   * @type {import("svelte/store").Writable<string | number | undefined>}
+   * @type {import("svelte/store").Writable<
+   *   string | number | undefined
+   * >}
    */
   const selectedValue = writable(selected);
   const defaultSelectId = writable(null);
   const defaultValue = writable(null);
   const itemTypesByValue = writable({});
+  // Every `SelectItem` registers itself from its own script body during the
+  // same synchronous mount pass; batch those updates into one flush instead
+  // of notifying subscribers once per item.
+  const batchedItemTypesUpdate = batchStoreUpdates(itemTypesByValue);
 
   /**
    * Use the first `SelectItem` value as the
@@ -118,7 +130,7 @@
       }
     }
 
-    itemTypesByValue.update((types) => ({
+    batchedItemTypesUpdate((types) => ({
       ...types,
       [value]: typeof value,
     }));
@@ -191,24 +203,28 @@
     });
   }
 
-  $: errorId = `error-${id}`;
-  $: warnId = `warn-${id}`;
-  $: helperId = `helper-${id}`;
+  $: ({ errorId, warnId, helperId } = buildFieldIds(id));
   $: {
     selectedValue.set(selected ?? $defaultValue);
     syncNativeSelectValue();
   }
   // Invalid/warn states are suppressed when the select is disabled or read-only.
-  $: showInvalid = invalid && !disabled && !readonly;
-  $: showWarn = warn && !invalid && !disabled && !readonly;
+  $: ({ showInvalid, showWarn } = resolveValidationVisibility({
+    invalid,
+    warn,
+    disabled,
+    readonly,
+  }));
   $: isFluid = !inline && (fluid || !!formContext?.isFluid);
-  $: describedById = showInvalid
-    ? errorId
-    : showWarn
-      ? warnId
-      : helperText && !isFluid
-        ? helperId
-        : undefined;
+  $: describedById = resolveStatusDescribedBy({
+    showInvalid,
+    showWarn,
+    helperText,
+    isFluid,
+    errorId,
+    warnId,
+    helperId,
+  });
 </script>
 
 <div class:bx--form-item={true} class:bx--select--fluid={isFluid}>

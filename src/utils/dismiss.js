@@ -16,9 +16,13 @@ import {
  * Controls with the same `(type, options)` share one listener.
  * Handler updates in place without re-registering. SSR-safe.
  *
- * @param {unknown} _node Host element (unused; listeners attach to `window`).
+ * @param {unknown} _node Host element (unused; listeners attach to
+ *   `window`).
  * @param {import("./dismiss.js").DismissParams} options
- * @returns {{ update: (options: import("./dismiss.js").DismissParams) => void, destroy: () => void }}
+ * @returns {{
+ *   update: (options: import("./dismiss.js").DismissParams) => void;
+ *   destroy: () => void;
+ * }}
  */
 export function dismiss(_node, options) {
   let specs = normalize(options);
@@ -91,7 +95,11 @@ export function dismiss(_node, options) {
 
 /**
  * @param {import("./dismiss.js").DismissParams} options
- * @returns {Array<{ type: string, handler: (event: Event) => void, options: boolean | AddEventListenerOptions | undefined }>}
+ * @returns {Array<{
+ *   type: string;
+ *   handler: (event: Event) => void;
+ *   options: boolean | AddEventListenerOptions | undefined;
+ * }>}
  */
 function normalize(options) {
   if (options.listeners) {

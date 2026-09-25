@@ -1,9 +1,23 @@
+<script context="module">
+  export { getAvatarBackgroundColor } from "../utils/avatar-color.js";
+  export { getInitials } from "../utils/initials.js";
+</script>
+
 <script>
   /** @template [Icon=any] */
 
   /**
-   * Custom avatar content via the default slot overrides the computed image, icon, and initials.
-   * @event {null} image:error - Dispatched when the `image` URL fails to load. The avatar then falls back to the icon or initials.
+   * Custom avatar content via the default slot overrides the computed
+   * image, icon, and initials.
+   */
+
+  /**
+   * Dispatched when the `image` URL fails to load. The avatar then
+   * falls back to the icon or initials.
+   * @event {null} image:error
+   */
+
+  /**
    * @restProps {span | button | a}
    */
 
@@ -17,27 +31,38 @@
   /**
    * Specify the background color rendered behind the initials or icon.
    * Set to `"auto"` to pick a stable color from `name` (or `initials`).
-   * @type {"auto" | "red" | "magenta" | "purple" | "blue" | "cyan" | "teal" | "green" | "gray" | "cool-gray" | "warm-gray"}
+   * @type {"auto"
+   *   | "red"
+   *   | "magenta"
+   *   | "purple"
+   *   | "blue"
+   *   | "cyan"
+   *   | "teal"
+   *   | "green"
+   *   | "gray"
+   *   | "cool-gray"
+   *   | "warm-gray"}
    */
   export let backgroundColor = "gray";
 
   /**
-   * Specify the user's full name. Initials are derived from the name when `initials` is not set.
+   * Specify the user's full name. Initials are derived from the name
+   * when `initials` is not set.
    * @type {string}
    */
   export let name = undefined;
 
   /**
-   * Specify the initials to display. Takes priority over initials derived from `name`.
+   * Specify the initials to display. Takes priority over initials
+   * derived from `name`.
    * @type {string}
    */
   export let initials = undefined;
 
   /**
-   * Specify an image source to render a photo.
-   * Takes priority over the icon and initials.
-   * If the image fails to load, the avatar falls back to the icon or initials
-   * and dispatches `image:error`.
+   * Specify an image source to render a photo. Takes priority over the
+   * icon and initials. If the image fails to load, the avatar falls
+   * back to the icon or initials and dispatches `image:error`.
    * @type {string}
    */
   export let image = undefined;
@@ -49,9 +74,9 @@
   export let imageDescription = undefined;
 
   /**
-   * Pass additional attributes through to the image element
-   * (for example `loading`, `srcset`, or `referrerPolicy`).
-   * Does not replace `image` or `imageDescription`. Rest props stay on the host.
+   * Pass additional attributes through to the image element (for
+   * example `loading`, `srcset`, or `referrerPolicy`). Does not replace
+   * `image` or `imageDescription`. Rest props stay on the host.
    * @type {Record<string, string>}
    */
   export let imageAttributes = undefined;
@@ -63,9 +88,10 @@
   export let icon = /** @type {Icon} */ (undefined);
 
   /**
-   * Specify the tooltip text. When set, the avatar is wrapped in a tooltip.
-   * Do not combine with `interactive` or `href` — the tooltip trigger is already
-   * focusable, and nesting an interactive avatar inside it is invalid.
+   * Specify the tooltip text. When set, the avatar is wrapped in a
+   * tooltip. Do not combine with `interactive` or `href` — the tooltip
+   * trigger is already focusable, and nesting an interactive avatar
+   * inside it is invalid.
    * @type {string}
    */
   export let tooltipText = undefined;
@@ -83,18 +109,19 @@
   export let direction = "bottom";
 
   /**
-   * Set to `false` to render the tooltip inline instead of in a floating portal.
-   * The portal prevents the tooltip from being clipped by the avatar's `overflow: hidden`
-   * frame or an `overflow: hidden` container such as a `Modal`.
+   * Set to `false` to render the tooltip inline instead of in a
+   * floating portal. The portal prevents the tooltip from being clipped
+   * by the avatar's `overflow: hidden` frame or an `overflow: hidden`
+   * container such as a `Modal`.
    * @type {boolean}
    */
   export let portalTooltip = true;
 
   /**
-   * Set to `true` to render a `button` element instead of a `span`.
-   * Use when the avatar is a clickable control (for example, a custom profile menu
-   * trigger). Prefer this over attaching `on:click` to a non-interactive `span`.
-   * Ignored when `href` is set.
+   * Set to `true` to render a `button` element instead of a `span`. Use
+   * when the avatar is a clickable control (for example, a custom
+   * profile menu trigger). Prefer this over attaching `on:click` to a
+   * non-interactive `span`. Ignored when `href` is set.
    */
   export let interactive = false;
 

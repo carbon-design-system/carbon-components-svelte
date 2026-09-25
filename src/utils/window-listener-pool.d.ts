@@ -17,14 +17,19 @@ export function poolKey(
   options: boolean | AddEventListenerOptions | undefined,
 ): string;
 
-/** Add a consumer to the pool for `(type, options)`. Creates the pool on first use. */
+/**
+ * Add a consumer to the pool for `(type, options)`. Creates the pool on
+ * first use.
+ */
 export function registerConsumer(spec: {
   type: string;
   handler: (event: Event) => void;
   options: boolean | AddEventListenerOptions | undefined;
 }): { key: string; pool: Pool; consumer: Consumer };
 
-/** Remove a consumer. Drops the window listener when the pool is empty. */
+/**
+ * Remove a consumer. Drops the window listener when the pool is empty.
+ */
 export function unregisterConsumer(entry: {
   key: string;
   pool: Pool;
@@ -34,8 +39,8 @@ export function unregisterConsumer(entry: {
 /**
  * Add a pooled `window` listener, registered immediately (no deferral).
  * Consumers sharing the same `(type, options)` share one real
- * `addEventListener` call; the underlying listener is removed once the last
- * consumer unregisters.
+ * `addEventListener` call; the underlying listener is removed once the
+ * last consumer unregisters.
  */
 export function addPooledListener(
   type: string,

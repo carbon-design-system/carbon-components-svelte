@@ -11,7 +11,9 @@
  * @typedef {Object} CarouselConfig
  * @property {(response: CarouselResponse) => void} [onViewChangeStart]
  * @property {(response: CarouselResponse) => void} [onViewChangeEnd]
- * @property {boolean} [useMaxHeight] Size the container to the tallest view instead of the active view's own height, so switching views does not resize the container.
+ * @property {boolean} [useMaxHeight] Size the container to the tallest
+ *   view instead of the active view's own height, so switching views
+ *   does not resize the container.
  */
 
 /**
@@ -20,7 +22,10 @@
  * @property {() => void} prev
  * @property {(index: number) => void} goToIndex
  * @property {() => void} reset
- * @property {() => { index: number; item: HTMLElement | null }} getActiveItem
+ * @property {() => {
+ *   index: number;
+ *   item: HTMLElement | null;
+ * }} getActiveItem
  * @property {() => void} destroyEvents
  */
 
@@ -31,13 +36,14 @@ const activeClass = "carousel__view--active";
  * carousel. Ported from `@carbon/utilities`' `initCarousel`, which
  * `InterstitialScreen` uses to page through steps.
  *
- * This keeps upstream's index/callback contract (`goToIndex`/`next`/`prev`/
- * `getActiveItem`, `onViewChangeStart`/`onViewChangeEnd`) but drops its
- * DOM-recycling transition machinery (a stack of in/out CSS classes with no
- * matching shipped SCSS even upstream) in favor of plain `hidden` toggling,
- * since nothing here has motion to drive yet. Swipe/touch support is also
- * not ported: `InterstitialScreen` always disables it upstream too, and
- * nothing else in this repo needs it.
+ * This keeps upstream's index/callback contract
+ * (`goToIndex`/`next`/`prev`/ `getActiveItem`,
+ * `onViewChangeStart`/`onViewChangeEnd`) but drops its DOM-recycling
+ * transition machinery (a stack of in/out CSS classes with no matching
+ * shipped SCSS even upstream) in favor of plain `hidden` toggling,
+ * since nothing here has motion to drive yet. Swipe/touch support is
+ * also not ported: `InterstitialScreen` always disables it upstream
+ * too, and nothing else in this repo needs it.
  *
  * @param {HTMLElement} container
  * @param {CarouselConfig} [options]

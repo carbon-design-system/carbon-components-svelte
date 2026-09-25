@@ -37,6 +37,7 @@
   import { readable, writable } from "svelte/store";
   import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
   import ChevronDown from "../icons/ChevronDown.svelte";
+  import { noop } from "../utils/noop.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const formContext = getContext(FORM_CONTEXT_KEY);
@@ -50,7 +51,8 @@
   const selectedValue = writable(value);
 
   /**
-   * `typeof` each `SelectItem` value, so a change keeps numeric values numeric.
+   * `typeof` each `SelectItem` value, so a change keeps numeric values
+   * numeric.
    * @type {Record<string, string>}
    */
   const itemTypesByValue = {};
@@ -63,8 +65,8 @@
 
   /**
    * Record each `SelectItem`. The first item to register is the default
-   * when `value` is `""`, and keeps that role if its value changes, as in
-   * `Select`.
+   * when `value` is `""`, and keeps that role if its value changes, as
+   * in `Select`.
    * @type {(id: string, itemValue: string | number) => void}
    */
   function setDefaultValue(id, itemValue) {
@@ -78,7 +80,7 @@
 
   setContext("carbon:TimePickerSelect", { selectedValue, setDefaultValue });
 
-  onMount(() => timePickerContext?.registerSelect?.() ?? (() => {}));
+  onMount(() => timePickerContext?.registerSelect?.() ?? noop);
 
   // An item with the value "" makes "" a real choice, so leave it alone.
   $: if (value === "" && !hasEmptyItem && defaultItemValue !== undefined) {

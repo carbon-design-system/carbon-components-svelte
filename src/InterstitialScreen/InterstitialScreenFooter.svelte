@@ -1,6 +1,11 @@
 <script>
   /**
-   * @event {{ actionType: "start" | "skip" | "back" | "next" }} action - Dispatched synchronously on any footer button press, before the default Skip/Back/Next/Get-Started behavior runs. Cancelable: call `preventDefault()` to take over the button press yourself (for example, to run async work and set `loadingAction`, then call `handleGotoStep`/close the screen manually).
+   * Dispatched synchronously on any footer button press, before the
+   * default Skip/Back/Next/Get-Started behavior runs. Cancelable: call
+   * `preventDefault()` to take over the button press yourself (for
+   * example, to run async work and set `loadingAction`, then call
+   * `handleGotoStep`/close the screen manually).
+   * @event {{ actionType: "start" | "skip" | "back" | "next" }} action
    */
 
   /** Specify the "Next" button text */
@@ -9,7 +14,9 @@
   /** Specify the "Back" button text */
   export let previousButtonText = "Back";
 
-  /** Specify the "Skip" button text. Set to `""` to hide the Skip button */
+  /**
+   * Specify the "Skip" button text. Set to `""` to hide the Skip button
+   */
   export let skipButtonText = "Skip";
 
   /** Specify the final step's button text */
@@ -17,8 +24,8 @@
 
   /**
    * Set to the action name of a pending async button press to show that
-   * button's `InlineLoading` state and disable the other buttons. Pair with
-   * `preventDefault()` on the `action` event.
+   * button's `InlineLoading` state and disable the other buttons. Pair
+   * with `preventDefault()` on the `action` event.
    * @bindable writable
    * @type {"" | "start" | "skip" | "back" | "next"}
    */

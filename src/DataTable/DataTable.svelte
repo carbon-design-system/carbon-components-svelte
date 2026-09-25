@@ -1,3 +1,63 @@
+<script context="module">
+  export { toCsv } from "./data-table-utils.js";
+
+  import { deepEqual } from "../utils/deep-equal.js";
+
+  const alignClasses = {
+    start: "bx--table-column--align-start",
+    end: "bx--table-column--align-end",
+  };
+
+  function formatAlignClass(columnAlign) {
+    return alignClasses[columnAlign];
+  }
+
+  /**
+   * Whether `next` describes the same row values as `prev`. Unlike
+   * `rowsEqual` (used by `ToolbarSearch`), a same-reference element
+   * does NOT count as equal: `rowsEqual` short-circuits per element on
+   * `rowA === rowB`, so `rows[0].name = "x"; rows = [...rows]` (a
+   * legitimate in-place edit copied into a new array) would read as
+   * unchanged even though row 0 moved. Here, only an array of entirely
+   * DIFFERENT objects that are each value-equal to their predecessor
+   * counts as unchanged; any same-reference element means it could have
+   * been mutated in place, so fall through and redo the work, matching
+   * today's behavior.
+   * @param {ReadonlyArray<{ id: any }>} prev
+   * @param {ReadonlyArray<{ id: any }>} next
+   * @returns {boolean}
+   */
+  function rowsUnchanged(prev, next) {
+    if (prev === next) return true;
+    if (prev.length !== next.length) return false;
+
+    // Fast path: bail on the first id mismatch before paying for deep compares.
+    for (let i = 0; i < prev.length; i++) {
+      if (prev[i]?.id !== next[i]?.id) return false;
+    }
+
+    for (let i = 0; i < prev.length; i++) {
+      if (prev[i] === next[i]) return false;
+      if (!deepEqual(prev[i], next[i])) return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * @param {ReadonlyArray<{ id: any }> | undefined} a
+   * @param {ReadonlyArray<{ id: any }> | undefined} b
+   */
+  function paintedRowListChanged(a, b) {
+    if (a === b) return false;
+    if (!a || !b || a.length !== b.length) return true;
+    for (let i = 0; i < a.length; i++) {
+      if (a[i].id !== b[i].id) return true;
+    }
+    return false;
+  }
+</script>
+
 <script>
   /**
    * @template {DataTableRow} [Row=DataTableRow]
@@ -5,49 +65,102 @@
 
   /**
    * @typedef {any} DataTableValue
-   * @typedef {{ id: Id; [key: string]: DataTableValue; }} DataTableRow<Id=any>
+   * @typedef {{
+   *   id: Id;
+   *   [key: string]: DataTableValue;
+   * }} DataTableRow<Id=any>
    * @typedef {(
-   *   [keyof import('./data-table-utils.d.ts').KeysWithoutIndexSignature<Row>] extends [never]
-   *     ? import('./data-table-utils.d.ts').PropertyPath<Row>
-   *     : keyof import('./data-table-utils.d.ts').KeysWithoutIndexSignature<Row> extends "id"
-   *       ? import('./data-table-utils.d.ts').PropertyPath<Row>
+   *   [keyof import("./data-table-utils.d.ts")
+   *     .KeysWithoutIndexSignature<Row>] extends [never]
+   *     ? import("./data-table-utils.d.ts").PropertyPath<Row>
+   *     : keyof import("./data-table-utils.d.ts")
+   *           .KeysWithoutIndexSignature<Row> extends "id"
+   *       ? import("./data-table-utils.d.ts").PropertyPath<Row>
    *       : Row extends DataTableRow
-   *         ? import('./data-table-utils.d.ts').PropertyPathIgnoringIndexSignatures<Row>
-   *         : import('./data-table-utils.d.ts').PropertyPath<Row>
-   * )} DataTableKey<Row=DataTableRow> Path keys for sort, headers, and cells; mirrors PropertyPath / PropertyPathIgnoringIndexSignatures in ./data-table-utils.d.ts.
-   * @typedef {import('./data-table-utils.d.ts').DataTableSortValue<Row>} DataTableSortValue<Row=DataTableRow>
+   *         ? import("./data-table-utils.d.ts")
+   *             .PropertyPathIgnoringIndexSignatures<Row>
+   *         : import("./data-table-utils.d.ts").PropertyPath<Row>
+   * )} DataTableKey<Row=DataTableRow> Path keys for sort, headers, and
+   *   cells; mirrors PropertyPath / PropertyPathIgnoringIndexSignatures
+   *   in ./data-table-utils.d.ts.
+   * @typedef {import("./data-table-utils.d.ts")
+   *   .DataTableSortValue<Row>} DataTableSortValue<Row=DataTableRow>
+   * @typedef {(
+   *   a: DataTableSortValue<Row>,
+   *   b: DataTableSortValue<Row>,
+   * ) => number} DataTableSortComparator<Row=DataTableRow>
    * @typedef {object} DataTableEmptyHeader<Row=DataTableRow>
    * @property {DataTableKey<Row> | (string & {})} key
    * @property {true} empty - Whether the header is empty
-   * @property {(item: DataTableValue, row: Row) => DataTableValue} [display]
-   * @property {boolean | ((a: DataTableSortValue<Row>, b: DataTableSortValue<Row>) => number)} [sort] - `false` disables sorting for this column even when the table is sortable; `true` enables it even when the table is not; a comparator both enables sorting and provides it. Unset inherits the table-level `sortable`.
-   * @property {boolean} [sortAlways] - Override table-level sortAlways for this column
-   * @property {boolean} [columnMenu] - Whether the column menu is enabled
-   * @property {boolean} [columnHidden] - Whether the column is skipped in render while remaining in `headers`
+   * @property {(
+   *   item: DataTableValue,
+   *   row: Row,
+   * ) => DataTableValue} [display]
+   * @property {boolean | DataTableSortComparator<Row>} [sort]
+   *   `false` disables sorting for this column even when the table is
+   *   sortable; `true` enables it even when the table is not; a
+   *   comparator both enables sorting and provides it. Unset inherits
+   *   the table-level `sortable`.
+   * @property {boolean} [sortAlways] - Override table-level sortAlways
+   *   for this column
+   * @property {boolean} [columnMenu] - Whether the column menu is
+   *   enabled
+   * @property {boolean} [columnHidden] - Whether the column is skipped
+   *   in render while remaining in `headers`
    * @property {string} [width]
    * @property {string} [minWidth]
    * @typedef {object} DataTableNonEmptyHeader<Row=DataTableRow>
    * @property {DataTableKey<Row>} key
    * @property {false} [empty]
    * @property {DataTableValue} value
-   * @property {(item: DataTableValue, row: Row) => DataTableValue} [display]
-   * @property {boolean | ((a: DataTableSortValue<Row>, b: DataTableSortValue<Row>) => number)} [sort] - `false` disables sorting for this column even when the table is sortable; `true` enables it even when the table is not; a comparator both enables sorting and provides it. Unset inherits the table-level `sortable`.
-   * @property {boolean} [sortAlways] - Override table-level sortAlways for this column
-   * @property {boolean} [columnMenu] - Whether the column menu is enabled
-   * @property {boolean} [columnHidden] - Whether the column is skipped in render while remaining in `headers`
+   * @property {(
+   *   item: DataTableValue,
+   *   row: Row,
+   * ) => DataTableValue} [display]
+   * @property {boolean | DataTableSortComparator<Row>} [sort]
+   *   `false` disables sorting for this column even when the table is
+   *   sortable; `true` enables it even when the table is not; a
+   *   comparator both enables sorting and provides it. Unset inherits
+   *   the table-level `sortable`.
+   * @property {boolean} [sortAlways] - Override table-level sortAlways
+   *   for this column
+   * @property {boolean} [columnMenu] - Whether the column menu is
+   *   enabled
+   * @property {boolean} [columnHidden] - Whether the column is skipped
+   *   in render while remaining in `headers`
    * @property {string} [width]
    * @property {string} [minWidth]
-   * @property {"start" | "end"} [columnAlign] - Horizontal alignment of the column header and cells. Logical, so `end` is the right edge in LTR and the left edge in RTL. Defaults to `"start"`.
-   * @typedef {DataTableNonEmptyHeader<Row> | DataTableEmptyHeader<Row>} DataTableHeader<Row=DataTableRow>
+   * @property {"start" | "end"} [columnAlign] - Horizontal alignment of
+   *   the column header and cells. Logical, so `end` is the right edge
+   *   in LTR and the left edge in RTL. Defaults to `"start"`.
+   * @typedef {DataTableNonEmptyHeader<Row>
+   *   | DataTableEmptyHeader<Row>} DataTableHeader<Row=DataTableRow>
    * @typedef {object} DataTableCell<Row=DataTableRow>
    * @property {DataTableKey<Row> | (string & {})} key
    * @property {DataTableValue} value
-   * @property {(item: DataTableValue, row: DataTableRow) => DataTableValue} [display]
-   * @slot {{ expanded: boolean; row: Row | undefined; props: { "aria-hidden": "true" | "false"; class: string; }; }} expandIcon
+   * @property {(
+   *   item: DataTableValue,
+   *   row: DataTableRow,
+   * ) => DataTableValue} [display]
+   * @slot {{
+   *   expanded: boolean;
+   *   row: Row | undefined;
+   *   props: { "aria-hidden": "true" | "false"; class: string };
+   * }} expandIcon
    * @slot {{ row: Row; rowSelected: boolean; }} expandedRow
    * @slot {{ header: DataTableNonEmptyHeader; }} cellHeader
-   * @slot {{ row: Row; cell: DataTableCell<Row>; rowIndex: number; cellIndex: number; rowSelected: boolean; rowExpanded: boolean; }} cell
-   * @slot {{ header: DataTableNonEmptyHeader; index: number; }} footerCell
+   * @slot {{
+   *   row: Row;
+   *   cell: DataTableCell<Row>;
+   *   rowIndex: number;
+   *   cellIndex: number;
+   *   rowSelected: boolean;
+   *   rowExpanded: boolean;
+   * }} cell
+   * @slot {{
+   *   header: DataTableNonEmptyHeader;
+   *   index: number;
+   * }} footerCell
    * @event click
    * @type {object}
    * @property {DataTableHeader<Row>} [header]
@@ -59,7 +172,9 @@
    * @event click:header
    * @type {object}
    * @property {DataTableHeader<Row>} header
-   * @property {"ascending" | "descending" | "none"} [sortDirection] - The intended next sort direction for this click, reported regardless of whether the `sort` event was cancelled.
+   * @property {"ascending" | "descending" | "none"} [sortDirection]
+   *   The intended next sort direction for this click, reported
+   *   regardless of whether the `sort` event was cancelled.
    * @property {EventTarget} target
    * @property {EventTarget} currentTarget
    * @event click:header--select
@@ -81,19 +196,46 @@
    * @type {object}
    * @property {boolean} selected
    * @property {Row} row
-   * @event {{ key: null; direction: "none" } | { key: DataTableKey<Row>; direction: "ascending" | "descending" }} sort - Dispatched when a sortable column header would change the active sort. The event is cancelable: call `preventDefault()` to skip updating `sortKey` / `sortDirection` and skip client side sorting for that click (for example full server side sorting while still reading `detail.key` / `detail.direction` for your API). If not cancelled, the table applies the new sort and sorts the current `rows` client side. Typical uses: server side sorting, URL or query string sync, analytics, and persisting sort preferences.
-   * @property {DataTableKey<Row> | null} key - Proposed sort column (`header.key`), or `null` when the proposed `direction` is `none`.
-   * @property {"ascending" | "descending" | "none"} direction - Proposed sort direction for this click (applied internally unless the event is cancelled).
    * @event click:cell
    * @type {object}
    * @property {DataTableCell<Row>} cell
    * @property {EventTarget} target
    * @property {EventTarget} currentTarget
-   * @typedef {{ row: Row, rowIndex: number, selected: boolean, expanded: boolean }} DataTableRowClassArgs<Row=DataTableRow>
-   * @typedef {string | ((row: DataTableRowClassArgs<Row>) => string | undefined)} DataTableRowClass<Row=DataTableRow>
+   * @typedef {{
+   *   row: Row;
+   *   rowIndex: number;
+   *   selected: boolean;
+   *   expanded: boolean;
+   * }} DataTableRowClassArgs<Row=DataTableRow>
+   * @typedef {string
+   *   | ((
+   *       row: DataTableRowClassArgs<Row>,
+   *     ) => string | undefined)} DataTableRowClass<Row=DataTableRow>
    * @type {object}
    * @property {DataTableRowClass<Row>} [rowClass]
    * @restProps {div}
+   */
+
+  /**
+   * Dispatched when a sortable column header would change the active
+   * sort. The event is cancelable: call `preventDefault()` to skip
+   * updating `sortKey` / `sortDirection` and skip client side sorting
+   * for that click (for example full server side sorting while still
+   * reading `detail.key` / `detail.direction` for your API). If not
+   * cancelled, the table applies the new sort and sorts the current
+   * `rows` client side. Typical uses: server side sorting, URL or query
+   * string sync, analytics, and persisting sort preferences.
+   * @event {{ key: null; direction: "none" }
+   *   | {
+   *       key: DataTableKey<Row>;
+   *       direction: "ascending" | "descending";
+   *     }} sort
+   * @property {DataTableKey<Row> | null} key - Proposed sort column
+   *   (`header.key`), or `null` when the proposed `direction` is
+   *   `none`.
+   * @property {"ascending" | "descending" | "none"} direction
+   *   Proposed sort direction for this click (applied internally unless
+   *   the event is cancelled).
    */
 
   /**
@@ -128,9 +270,16 @@
    * based on selected/expanded state.
    * @example
    * ```svelte
-   * <DataTable rowClass={({ row, rowIndex, selected, expanded }) => {
-   *   return `row-${rowIndex} ${selected ? 'selected' : ''} ${expanded ? 'expanded' : ''}`;
-   * }} />
+   * <DataTable
+   *   rowClass={({ rowIndex, selected, expanded }) =>
+   *     [
+   *       `row-${rowIndex}`,
+   *       selected && "selected",
+   *       expanded && "expanded",
+   *     ]
+   *       .filter(Boolean)
+   *       .join(" ")}
+   * />
    * ```
    * @type {DataTableRowClass<Row>}
    */
@@ -147,7 +296,10 @@
   /** Set to `true` to use zebra styles */
   export let zebra = false;
 
-  /** Set to `true` for the sortable variant. Individual columns can opt out (or, if this is `false`, opt in) via `header.sort`. */
+  /**
+   * Set to `true` for the sortable variant. Individual columns can opt
+   * out (or, if this is `false`, opt in) via `header.sort`.
+   */
   export let sortable = false;
 
   /**
@@ -174,7 +326,10 @@
    * Specify a default sort comparator for all sortable columns.
    * Per-header `sort` functions take precedence over this prop.
    *
-   * With a typed row generic, `a` and `b` are {@link DataTableSortValue} (the union of cell value types over every {@link DataTableKey} on `Row`). Narrow using `context.key` (typed as {@link DataTableKey}) or runtime checks.
+   * With a typed row generic, `a` and `b` are {@link
+   * DataTableSortValue} (the union of cell value types over every
+   * {@link DataTableKey} on `Row`). Narrow using `context.key` (typed
+   * as {@link DataTableKey}) or runtime checks.
    *
    * @example
    * ```svelte
@@ -191,7 +346,16 @@
    *   }}
    * />
    * ```
-   * @type {(a: DataTableSortValue<Row>, b: DataTableSortValue<Row>, context: { key: DataTableKey<Row>; ascending: boolean; row_a: Row; row_b: Row }) => number}
+   * @type {(
+   *   a: DataTableSortValue<Row>,
+   *   b: DataTableSortValue<Row>,
+   *   context: {
+   *     key: DataTableKey<Row>;
+   *     ascending: boolean;
+   *     row_a: Row;
+   *     row_b: Row;
+   *   },
+   * ) => number}
    */
   export let sort = undefined;
 
@@ -227,14 +391,16 @@
   export let radio = false;
 
   /**
-   * Set to `true` so clicking an already-selected `radio` row clears the
-   * selection instead of leaving it selected. Only applies with `radio`.
+   * Set to `true` so clicking an already-selected `radio` row clears
+   * the selection instead of leaving it selected. Only applies with
+   * `radio`.
    */
   export let allowDeselect = false;
 
   /**
-   * Set to `true` for the selectable variant.
-   * Shift-clicking a row checkbox extends selection to every row between it and the last row clicked (not supported with `radio`).
+   * Set to `true` for the selectable variant. Shift-clicking a row
+   * checkbox extends selection to every row between it and the last row
+   * clicked (not supported with `radio`).
    * @bindable writable
    */
   export let selectable = false;
@@ -259,8 +425,9 @@
   export let nonSelectableRowIds = [];
 
   /**
-   * Specify the row ids to highlight.
-   * Adds `bx--data-table--highlighted-row`. The highlighted row class is themed by default.
+   * Specify the row ids to highlight. Adds
+   * `bx--data-table--highlighted-row`. The highlighted row class is
+   * themed by default.
    * @type {ReadonlyArray<Row["id"]>}
    * @bindable writable
    */
@@ -270,9 +437,10 @@
   export let stickyHeader = false;
 
   /**
-   * Override the maximum height of the sticky header table, replacing the
-   * default `300px`. Only applies when `stickyHeader` is `true`. Pass a number
-   * (interpreted as `px`) or a CSS length string (e.g. `"100%"`, `"24rem"`).
+   * Override the maximum height of the sticky header table, replacing
+   * the default `300px`. Only applies when `stickyHeader` is `true`.
+   * Pass a number (interpreted as `px`) or a CSS length string (e.g.
+   * `"100%"`, `"24rem"`).
    * @type {number | string}
    */
   export let stickyHeaderMaxHeight = undefined;
@@ -281,24 +449,26 @@
   export let useStaticWidth = false;
 
   /**
-   * Set to `true` to use a fixed table layout, where a header's `width`/`minWidth`
-   * is the column's exact rendered size instead of a floor that content can grow past.
-   * Unset columns share the remaining space equally.
+   * Set to `true` to use a fixed table layout, where a header's
+   * `width`/`minWidth` is the column's exact rendered size instead of a
+   * floor that content can grow past. Unset columns share the remaining
+   * space equally.
    */
   export let fixedLayout = false;
 
   /**
    * Set the filtering strategy used by `ToolbarSearch`.
-   * - `"remove"`: remove non-matching rows from the DOM and recreate them when the
-   *   filter clears.
-   * - `"hide"`: keep all rows mounted and hide non-matching rows with the `hidden`
-   *   attribute, preserving focus, inputs, and open menus.
+   * - `"remove"`: remove non-matching rows from the DOM and recreate
+   *   them when the filter clears.
+   * - `"hide"`: keep all rows mounted and hide non-matching rows with
+   *   the `hidden` attribute, preserving focus, inputs, and open menus.
    *
-   * `"hide"` falls back to `"remove"` when `pageSize` is set or `virtualize` is enabled.
+   * `"hide"` falls back to `"remove"` when `pageSize` is set or
+   * `virtualize` is enabled.
    *
-   * Because `"hide"` keeps every row mounted, each keystroke re-renders all
-   * rows, not just matching ones. For large row counts (hundreds or more),
-   * prefer `"remove"`, pagination, or virtualization.
+   * Because `"hide"` keeps every row mounted, each keystroke re-renders
+   * all rows, not just matching ones. For large row counts (hundreds or
+   * more), prefer `"remove"`, pagination, or virtualization.
    * @type {"remove" | "hide"}
    */
   export let filterMode = "remove";
@@ -310,25 +480,63 @@
   export let page = 0;
 
   /**
-   * Enable virtualization for large row lists. Virtualization renders only the rows currently visible in the viewport, improving performance for large datasets.
+   * Enable virtualization for large row lists. Virtualization renders
+   * only the rows currently visible in the viewport, improving
+   * performance for large datasets.
    *
-   * Virtualization is opt-in. Set `virtualize={true}` to enable with default settings, or pass a configuration object to customize.
-   * Virtualized tables are intended for use with `stickyHeader={true}` so the header stays visible while scrolling. Pagination is ignored when virtualization is enabled.
-   * Virtualization assumes a uniform row height; combining it with `expandable` rows is not supported and may cause incorrect scroll-spacer sizing when rows are expanded mid-list.
+   * Virtualization is opt-in. Set `virtualize={true}` to enable with
+   * default settings, or pass a configuration object to customize.
+   * Virtualized tables are intended for use with `stickyHeader={true}`
+   * so the header stays visible while scrolling. Pagination is ignored
+   * when virtualization is enabled. Virtualization assumes a uniform
+   * row height; combining it with `expandable` rows is not supported
+   * and may cause incorrect scroll-spacer sizing when rows are expanded
+   * mid-list.
    *
    * Provide an object to customize virtualization behavior:
-   * - `itemHeight` (default: 48 for medium size, adjusted for size variant): The height in pixels of each row. Specify a custom value when using custom slots with multi-line content or different heights.
-   * - `maxVisibleRows` (default: 10): The maximum number of rows to display in the viewport. The container height will be calculated as `itemHeight * maxVisibleRows`. Overridden by `containerHeight` if explicitly provided.
-   * - `containerHeight` (default: calculated from maxVisibleRows): The maximum height in pixels of the table body container. If not provided and `stickyHeader` is `true` with a numeric `stickyHeaderMaxHeight`, that value is used instead so the virtual window matches the visible scroll area; otherwise calculated from `itemHeight * maxVisibleRows`. A string `stickyHeaderMaxHeight` (e.g. `"50vh"`) does not feed virtualization.
-   * - `overscan` (default: 3): The number of extra rows to render above and below the viewport for smoother scrolling. Higher values may cause more flickering during very fast scrolling.
-   * - `threshold` (default: 100): The minimum number of rows required before virtualization activates. Tables with fewer rows will render all rows normally without virtualization.
-   * - `maxItems` (default: undefined): The maximum number of rows to render. When undefined, all visible rows are rendered.
-   * @type {undefined | boolean | { itemHeight?: number, maxVisibleRows?: number, containerHeight?: number, overscan?: number, threshold?: number, maxItems?: number }}
+   * - `itemHeight` (default: 48 for medium size, adjusted for size
+   *   variant): The height in pixels of each row. Specify a custom
+   *   value when using custom slots with multi-line content or
+   *   different heights.
+   * - `maxVisibleRows` (default: 10): The maximum number of rows to
+   *   display in the viewport. The container height will be calculated
+   *   as `itemHeight * maxVisibleRows`. Overridden by `containerHeight`
+   *   if explicitly provided.
+   * - `containerHeight` (default: calculated from maxVisibleRows): The
+   *   maximum height in pixels of the table body container. If not
+   *   provided and `stickyHeader` is `true` with a numeric
+   *   `stickyHeaderMaxHeight`, that value is used instead so the
+   *   virtual window matches the visible scroll area; otherwise
+   *   calculated from `itemHeight * maxVisibleRows`. A string
+   *   `stickyHeaderMaxHeight` (e.g. `"50vh"`) does not feed
+   *   virtualization.
+   * - `overscan` (default: 3): The number of extra rows to render above
+   *   and below the viewport for smoother scrolling. Higher values may
+   *   cause more flickering during very fast scrolling.
+   * - `threshold` (default: 100): The minimum number of rows required
+   *   before virtualization activates. Tables with fewer rows will
+   *   render all rows normally without virtualization.
+   * - `maxItems` (default: undefined): The maximum number of rows to
+   *   render. When undefined, all visible rows are rendered.
+   * @type {undefined
+   *   | boolean
+   *   | {
+   *       itemHeight?: number;
+   *       maxVisibleRows?: number;
+   *       containerHeight?: number;
+   *       overscan?: number;
+   *       threshold?: number;
+   *       maxItems?: number;
+   *     }}
    */
   export let virtualize = undefined;
 
   /**
-   * Obtain a reference to the table wrapper element. When virtualization is enabled and `stickyHeader` is false, this element is the scroll container—use `bind:scrollContainerRef` to programmatically control scroll position (e.g. `scrollContainerRef.scrollTop = 0`).
+   * Obtain a reference to the table wrapper element. When
+   * virtualization is enabled and `stickyHeader` is false, this element
+   * is the scroll container—use `bind:scrollContainerRef` to
+   * programmatically control scroll position (e.g.
+   * `scrollContainerRef.scrollTop = 0`).
    * @type {null | HTMLDivElement}
    * @bindable readonly
    */
@@ -336,7 +544,9 @@
 
   /**
    * Override the default table header translation ids.
-   * @type {(id: import("./TableHeader.svelte").TableHeaderTranslationId) => string}
+   * @type {(
+   *   id: import("./TableHeader.svelte").TableHeaderTranslationId,
+   * ) => string}
    */
   export let tableHeaderTranslateWithId = undefined;
 
@@ -346,9 +556,12 @@
   import ChevronRight from "../icons/ChevronRight.svelte";
   import RadioButton from "../RadioButton/RadioButton.svelte";
   import { toCssLength } from "../utils/css-length.js";
-  import { deepEqual } from "../utils/deep-equal.js";
+  import { rangeSlice } from "../utils/range-slice.js";
   import { uniqueId } from "../utils/unique-id.js";
-  import { virtualize as virtualizeUtil } from "../utils/virtualize.js";
+  import {
+    DEFAULT_VIRTUAL_LIST_CONFIG,
+    virtualize as virtualizeUtil,
+  } from "../utils/virtualize.js";
   import {
     compareValues,
     formatHeaderWidth,
@@ -377,7 +590,9 @@
   /**
    * Exposes the table size to slotted content (e.g. `Toolbar`)
    * so it can derive a matching size unless explicitly overridden.
-   * @type {import("svelte/store").Writable<"compact" | "short" | "medium" | "tall" | undefined>}
+   * @type {import("svelte/store").Writable<
+   *   "compact" | "short" | "medium" | "tall" | undefined
+   * >}
    */
   const tableSize = writable(size);
   $: $tableSize = size;
@@ -480,35 +695,6 @@
   // skipped everywhere the rendered column set is meant.
   $: visibleHeaders = stableHeaders.filter((header) => !header.columnHidden);
 
-  /**
-   * Whether `next` describes the same row values as `prev`. Unlike
-   * `rowsEqual` (used by `ToolbarSearch`), a same-reference element does NOT
-   * count as equal: `rowsEqual` short-circuits per element on `rowA ===
-   * rowB`, so `rows[0].name = "x"; rows = [...rows]` (a legitimate in-place
-   * edit copied into a new array) would read as unchanged even though row 0
-   * moved. Here, only an array of entirely DIFFERENT objects that are each
-   * value-equal to their predecessor counts as unchanged; any same-reference
-   * element means it could have been mutated in place, so fall through and
-   * redo the work, matching today's behavior.
-   * @type {(prev: ReadonlyArray<Row>, next: ReadonlyArray<Row>) => boolean}
-   */
-  function rowsUnchanged(prev, next) {
-    if (prev === next) return true;
-    if (prev.length !== next.length) return false;
-
-    // Fast path: bail on the first id mismatch before paying for deep compares.
-    for (let i = 0; i < prev.length; i++) {
-      if (prev[i]?.id !== next[i]?.id) return false;
-    }
-
-    for (let i = 0; i < prev.length; i++) {
-      if (prev[i] === next[i]) return false;
-      if (!deepEqual(prev[i], next[i])) return false;
-    }
-
-    return true;
-  }
-
   // A single stable reference that only moves when `rows` genuinely differs
   // by value, shared by the filter-replay block and the cell cache block
   // below. Sharing one signal matters: if each block tracked its own "last
@@ -531,7 +717,10 @@
   let prevCustomFilter = undefined;
 
   /**
-   * @type {(searchValue: string, customFilter?: (row: Row, value: string) => boolean) => ReadonlyArray<Row["id"]>}
+   * @type {(
+   *   searchValue: string,
+   *   customFilter?: (row: Row, value: string) => boolean,
+   * ) => ReadonlyArray<Row["id"]>}
    */
   function filterRows(searchValue, customFilter) {
     prevSearchValue = searchValue;
@@ -611,28 +800,37 @@
     rangeAnchorRowId = null;
   }
 
-  /** Anchor row id for shift+click range selection; cleared when the anchor no longer exists in the current row order. */
+  /**
+   * Anchor row id for shift+click range selection; cleared when the
+   * anchor no longer exists in the current row order.
+   */
   let rangeAnchorRowId = null;
 
   /**
-   * Apply `checked` to every selectable row between the anchor row and `targetIndex` (inclusive),
-   * where `targetIndex` is a position in `rowsToVirtualize`. Returns `false` if the anchor row
-   * is no longer present (for example, filtered out), so the caller can fall back to a single toggle.
+   * Apply `checked` to every selectable row between the anchor row and
+   * `targetIndex` (inclusive), where `targetIndex` is a position in
+   * `rowsToVirtualize`. Returns `false` if the anchor row is no longer
+   * present (for example, filtered out), so the caller can fall back to
+   * a single toggle.
    * @type {(targetIndex: number, checked: boolean) => boolean}
    */
   function selectRowRange(targetIndex, checked) {
     const anchorIndex = rowsToVirtualize.findIndex(
       (row) => row.id === rangeAnchorRowId,
     );
-    if (anchorIndex === -1) return false;
+    const rows = rangeSlice(
+      rowsToVirtualize,
+      anchorIndex,
+      targetIndex,
+      (row) =>
+        !nonSelectableRowIdsSet.has(row.id) &&
+        // "hide" mode keeps filtered-out rows mounted (and in `rowsToVirtualize`).
+        (!hideMode || matchedRowIdsSet.has(row.id)),
+    );
+    if (rows === null) return false;
 
-    const start = Math.min(anchorIndex, targetIndex);
-    const end = Math.max(anchorIndex, targetIndex);
     const next = new Set(selectedRowIds);
-    for (const row of rowsToVirtualize.slice(start, end + 1)) {
-      if (nonSelectableRowIdsSet.has(row.id)) continue;
-      // "hide" mode keeps filtered-out rows mounted (and in `rowsToVirtualize`).
-      if (hideMode && !matchedRowIdsSet.has(row.id)) continue;
+    for (const row of rows) {
       if (checked) {
         next.add(row.id);
       } else {
@@ -644,13 +842,13 @@
   }
 
   /**
-   * With `allowDeselect`, clicking an already-selected radio row clears the
-   * selection. This listens for `click` rather than `change`: clicking a
-   * radio's associated `<label>` re-dispatches the click onto the hidden
-   * input, whose native activation behavior re-checks it and fires `change`
-   * right after this handler clears the selection. `preventDefault` stops
-   * that native activation (and the label's re-dispatch) so the clear
-   * sticks.
+   * With `allowDeselect`, clicking an already-selected radio row clears
+   * the selection. This listens for `click` rather than `change`:
+   * clicking a radio's associated `<label>` re-dispatches the click
+   * onto the hidden input, whose native activation behavior re-checks
+   * it and fires `change` right after this handler clears the
+   * selection. `preventDefault` stops that native activation (and the
+   * label's re-dispatch) so the clear sticks.
    * @type {(row: Row, event: MouseEvent) => void}
    */
   function handleRadioColumnClick(row, event) {
@@ -725,19 +923,10 @@
   let prevVisibleHeaders;
   let prevRowsToRender;
 
-  const alignClasses = {
-    start: "bx--table-column--align-start",
-    end: "bx--table-column--align-end",
-  };
-
-  function formatAlignClass(columnAlign) {
-    return alignClasses[columnAlign];
-  }
-
   /**
    * Resolve whether a header is sortable. `header.sort` overrides the
-   * table-level `sortable` in either direction (`false` opts out, `true` or
-   * a comparator opts in); unset inherits `sortable`.
+   * table-level `sortable` in either direction (`false` opts out,
+   * `true` or a comparator opts in); unset inherits `sortable`.
    */
   function isHeaderSortable(header) {
     if (header.sort === false) return false;
@@ -747,7 +936,10 @@
     return sortable;
   }
 
-  /** Build cell objects for one row. Always new objects so `display` columns re-run. */
+  /**
+   * Build cell objects for one row. Always new objects so `display`
+   * columns re-run.
+   */
   function computeRowCells(row) {
     const cells = [];
 
@@ -774,7 +966,11 @@
    * @example
    * ```svelte
    * <DataTable bind:this={dataTable} {headers} {rows} />
-   * <NumberInput min={0} bind:value={row.qty} on:input={() => dataTable.refreshRow(row.id)} />
+   * <NumberInput
+   *   min={0}
+   *   bind:value={row.qty}
+   *   on:input={() => dataTable.refreshRow(row.id)}
+   * />
    * ```
    */
   export function refreshRow(id) {
@@ -787,13 +983,15 @@
   }
 
   /**
-   * Rebuild cells for currently painted rows after batch in-place edits to
-   * `rows`. Offscreen rows are computed when they enter the window.
+   * Rebuild cells for currently painted rows after batch in-place edits
+   * to `rows`. Offscreen rows are computed when they enter the window.
    * @type {() => void}
    * @example
    * ```svelte
    * <DataTable bind:this={dataTable} {headers} {rows} />
-   * <button on:click={() => dataTable.refreshCells()}>Refresh table</button>
+   * <button on:click={() => dataTable.refreshCells()}>
+   *   Refresh table
+   * </button>
    * ```
    */
   export function refreshCells() {
@@ -801,21 +999,8 @@
   }
 
   /**
-   * @param {ReadonlyArray<Row> | undefined} a
-   * @param {ReadonlyArray<Row> | undefined} b
-   */
-  function paintedRowListChanged(a, b) {
-    if (a === b) return false;
-    if (!a || !b || a.length !== b.length) return true;
-    for (let i = 0; i < a.length; i++) {
-      if (a[i].id !== b[i].id) return true;
-    }
-    return false;
-  }
-
-  /**
-   * Build cell records for the painted row list, reusing cached cell objects
-   * when the resolved values are unchanged.
+   * Build cell records for the painted row list, reusing cached cell
+   * objects when the resolved values are unchanged.
    * @param {ReadonlyArray<Row>} paintedRows
    * @param {Record<string, ReturnType<typeof computeRowCells>>} cache
    */
@@ -885,8 +1070,8 @@
         itemHeight: defaultRowHeight,
         maxVisibleRows: 10,
         containerHeight: undefined,
-        overscan: 3,
-        threshold: 100,
+        overscan: DEFAULT_VIRTUAL_LIST_CONFIG.overscan,
+        threshold: DEFAULT_VIRTUAL_LIST_CONFIG.threshold,
         maxItems: undefined,
         ...(typeof virtualize === "object" ? virtualize : {}),
       }

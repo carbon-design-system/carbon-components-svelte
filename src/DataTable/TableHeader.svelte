@@ -1,6 +1,7 @@
 <script>
   /**
-   * @typedef {"columnSortAscending" | "columnSortDescending"} TableHeaderTranslationId
+   * @typedef {"columnSortAscending"
+   *   | "columnSortDescending"} TableHeaderTranslationId
    */
 
   /** Set to `true` for the sortable variant */

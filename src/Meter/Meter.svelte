@@ -1,3 +1,25 @@
+<script context="module">
+  function deriveStatus(value, thresholds, overCapacity) {
+    if (overCapacity) return "error";
+    if (thresholds?.error !== undefined && value >= thresholds.error) {
+      return "error";
+    }
+    if (thresholds?.warning !== undefined && value >= thresholds.warning) {
+      return "warning";
+    }
+    return "default";
+  }
+
+  function getMarkers(thresholds, max) {
+    return Object.entries(thresholds)
+      .filter(([, threshold]) => threshold !== undefined)
+      .map(([kind, threshold]) => ({
+        kind,
+        pct: max > 0 ? Math.min(Math.max(threshold / max, 0), 1) * 100 : 0,
+      }));
+  }
+</script>
+
 <script>
   /**
    * @typedef {object} MeterThresholds
@@ -16,27 +38,37 @@
   /** Specify the label text. */
   export let labelText = "";
 
-  /** Set to `true` to visually hide the label text. The label remains available to screen readers. */
+  /**
+   * Set to `true` to visually hide the label text. The label remains
+   * available to screen readers.
+   */
   export let hideLabel = false;
 
   /** Specify the helper text, rendered below the track. */
   export let helperText = "";
 
   /**
-   * Specify the value text, right-aligned in the label row and used for `aria-valuetext`.
-   * Format it yourself, e.g. "812 GB of 1 TB".
+   * Specify the value text, right-aligned in the label row and used for
+   * `aria-valuetext`. Format it yourself, e.g. "812 GB of 1 TB".
    */
   export let valueText = "";
 
-  /** Specify the text announced and described when the status is `"warning"`. */
+  /**
+   * Specify the text announced and described when the status is
+   * `"warning"`.
+   */
   export let warningText = "Warning";
 
-  /** Specify the text announced and described when the status is `"error"`. */
+  /**
+   * Specify the text announced and described when the status is
+   * `"error"`.
+   */
   export let errorText = "Error";
 
   /**
-   * Override the value text generated for `aria-valuetext` when `valueText` is not set.
-   * Used only when the value is over capacity or the status is `"warning"` or `"error"`.
+   * Override the value text generated for `aria-valuetext` when
+   * `valueText` is not set. Used only when the value is over capacity
+   * or the status is `"warning"` or `"error"`.
    * @type {(value: number, max: number) => string}
    */
   export let valueRangeText = function valueRangeText(value, max) {
@@ -44,13 +76,15 @@
   };
 
   /**
-   * Specify the warning and error thresholds, in the same units as `value`.
+   * Specify the warning and error thresholds, in the same units as
+   * `value`.
    * @type {MeterThresholds}
    */
   export let thresholds = undefined;
 
   /**
-   * Override the derived status. When unset, the status is derived from `thresholds`.
+   * Override the derived status. When unset, the status is derived from
+   * `thresholds`.
    * @type {"default" | "success" | "warning" | "error"}
    */
   export let status = undefined;
@@ -59,8 +93,8 @@
   export let showThresholds = false;
 
   /**
-   * Override the visually hidden threshold description, used when `showThresholds` is `true`.
-   * Return an empty string to omit it.
+   * Override the visually hidden threshold description, used when
+   * `showThresholds` is `true`. Return an empty string to omit it.
    * @type {(thresholds: MeterThresholds) => string}
    */
   export let thresholdsText = function thresholdsText({ warning, error }) {
@@ -88,26 +122,6 @@
 
   let prevStatus = undefined;
   let statusAnnouncement = "";
-
-  function deriveStatus(value, thresholds, overCapacity) {
-    if (overCapacity) return "error";
-    if (thresholds?.error !== undefined && value >= thresholds.error) {
-      return "error";
-    }
-    if (thresholds?.warning !== undefined && value >= thresholds.warning) {
-      return "warning";
-    }
-    return "default";
-  }
-
-  function getMarkers(thresholds, max) {
-    return Object.entries(thresholds)
-      .filter(([, threshold]) => threshold !== undefined)
-      .map(([kind, threshold]) => ({
-        kind,
-        pct: max > 0 ? Math.min(Math.max(threshold / max, 0), 1) * 100 : 0,
-      }));
-  }
 
   $: overCapacity = value > max;
   $: resolvedStatus = status ?? deriveStatus(value, thresholds, overCapacity);

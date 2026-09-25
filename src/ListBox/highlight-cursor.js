@@ -9,20 +9,32 @@ const HIGHLIGHT_CLASS = "bx--list-box__menu-item--highlighted";
 /**
  * Two-node highlight cursor for listbox options.
  *
- * Arrow/hover changes write a class on the previous and next option nodes
- * instead of passing `highlighted` through the `{#each}` so Svelte does not
- * invalidate every `ListBoxMenuItem` (and re-run `overflowTitle`) per key.
+ * Arrow/hover changes write a class on the previous and next option
+ * nodes instead of passing `highlighted` through the `{#each}` so
+ * Svelte does not invalidate every `ListBoxMenuItem` (and re-run
+ * `overflowTitle`) per key.
  *
  * Selected options keep the highlight class while `active`; this cursor
- * tracks active ids itself instead of reading the `--active` class back off
- * the DOM, since that class is written by `ListBoxMenuItem`'s own `class:`
- * directive and is not guaranteed to have been patched onto the node yet by
- * the time this cursor runs in the same update cycle.
+ * tracks active ids itself instead of reading the `--active` class back
+ * off the DOM, since that class is written by `ListBoxMenuItem`'s own
+ * `class:` directive and is not guaranteed to have been patched onto
+ * the node yet by the time this cursor runs in the same update cycle.
  *
  * @returns {{
- *   register: (id: string, node: HTMLElement, isActive?: boolean) => () => void;
- *   set: (id: string | null | undefined, options?: { scroll?: boolean }) => void;
- *   highlightedId: { subscribe: import("svelte/store").Readable<string | null>["subscribe"] };
+ *   register: (
+ *     id: string,
+ *     node: HTMLElement,
+ *     isActive?: boolean,
+ *   ) => () => void;
+ *   set: (
+ *     id: string | null | undefined,
+ *     options?: { scroll?: boolean },
+ *   ) => void;
+ *   highlightedId: {
+ *     subscribe: import("svelte/store").Readable<
+ *       string | null
+ *     >["subscribe"];
+ *   };
  * }}
  */
 export function createHighlightCursor() {

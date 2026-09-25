@@ -1,7 +1,8 @@
 <script>
   /**
-   * Internal "+N" overflow avatar for `UserAvatarGroup`. Shadows the group
-   * context so the inner `UserAvatar` does not register as a group item.
+   * Internal "+N" overflow avatar for `UserAvatarGroup`. Shadows the
+   * group context so the inner `UserAvatar` does not register as a
+   * group item.
    */
 
   /** @type {string} */
@@ -13,6 +14,7 @@
   import { getContext, setContext } from "svelte";
   import { readable } from "svelte/store";
   import UserAvatar from "../UserAvatar/UserAvatar.svelte";
+  import { noop } from "../utils/noop.js";
 
   const parent = getContext("carbon:UserAvatarGroup");
 
@@ -24,9 +26,9 @@
     max: readable(0),
     size: parent?.size ?? readable(undefined),
     activeTooltip: parent?.activeTooltip ?? readable(null),
-    register: () => {},
-    unregister: () => {},
-    updateName: () => {},
+    register: noop,
+    unregister: noop,
+    updateName: noop,
   });
 </script>
 

@@ -20,9 +20,9 @@
   export let text = "Provide text";
 
   /**
-   * Render an icon-only switch.
-   * The parent `ContentSwitcher` becomes icon-only when every `Switch` sets `icon`.
-   * `text` is used as the accessible label and the tooltip shown on hover and focus.
+   * Render an icon-only switch. The parent `ContentSwitcher` becomes
+   * icon-only when every `Switch` sets `icon`. `text` is used as the
+   * accessible label and the tooltip shown on hover and focus.
    * @type {Icon}
    */
   export let icon = /** @type {Icon} */ (undefined);
@@ -53,12 +53,8 @@
 
   import { getContext, onMount } from "svelte";
   import { get } from "svelte/store";
-  import {
-    TOOLTIP_ENTER_DELAY_MS,
-    TOOLTIP_LEAVE_DELAY_MS,
-  } from "../constants/timing.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
-  import { createDelayedSetter } from "../utils/delayed-setter.js";
+  import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const ctx = getContext("carbon:ContentSwitcher");
@@ -97,48 +93,36 @@
 
   // Icon-only switches show `text` as a portalled tooltip on hover/focus.
   // The portal keeps the tooltip from being clipped by overflow ancestors.
+
   let hovered = false;
   let focused = false;
-  const scheduleTooltip = createDelayedSetter();
+  const tooltipHandoff = createTooltipHandoff({
+    activeTooltip,
+    getId: () => id,
+  });
 
   // Gate on `activeTooltip` so only one switch tooltip shows at a time. When a
   // neighbor claims the active slot, this one closes even while still hovered.
   $: tooltipOpen =
     hasIcon && !disabled && (hovered || focused) && $activeTooltip === id;
 
-  function claim() {
-    activeTooltip.set(id);
-  }
-
-  function release() {
-    if (!hovered && !focused && get(activeTooltip) === id) {
-      activeTooltip.set(null);
-    }
-  }
-
-  function reveal() {
-    hovered = true;
-    claim();
-  }
-
   function showTooltip() {
-    // Skip the enter delay when another tooltip is already open (warm handoff).
-    const warmHandoff =
-      get(activeTooltip) !== null && get(activeTooltip) !== id;
-    scheduleTooltip(warmHandoff ? 0 : TOOLTIP_ENTER_DELAY_MS, reveal);
+    tooltipHandoff.scheduleEnter(() => {
+      hovered = true;
+    });
   }
 
   function hideTooltip() {
-    scheduleTooltip(TOOLTIP_LEAVE_DELAY_MS, () => {
+    tooltipHandoff.scheduleLeave(() => {
       hovered = false;
-      release();
+      if (!focused) tooltipHandoff.release();
     });
   }
 
   onMount(() => {
     return () => {
-      scheduleTooltip.cancel();
-      if (get(activeTooltip) === id) activeTooltip.set(null);
+      tooltipHandoff.cancel();
+      tooltipHandoff.release();
       ctx.remove(id);
       unsubscribe();
     };
@@ -175,14 +159,14 @@
   on:focus={() => {
     if (hasIcon) {
       focused = true;
-      claim();
+      tooltipHandoff.claim();
     }
   }}
   on:blur
   on:blur={() => {
     if (hasIcon) {
       focused = false;
-      release();
+      if (!hovered) tooltipHandoff.release();
     }
   }}
   on:keyup

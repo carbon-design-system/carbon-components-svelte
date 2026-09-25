@@ -44,8 +44,8 @@
   export let portalHostClass = undefined;
 
   /**
-   * Set to `true` to let an option's label wrap onto as many lines as it
-   * needs instead of being truncated with an ellipsis.
+   * Set to `true` to let an option's label wrap onto as many lines as
+   * it needs instead of being truncated with an ellipsis.
    * @type {boolean}
    */
   export let wrapOptions = false;

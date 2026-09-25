@@ -3,7 +3,9 @@
    * @template [Separator=any]
    */
 
-  /** Set to `true` to hide the separator after the last breadcrumb item */
+  /**
+   * Set to `true` to hide the separator after the last breadcrumb item
+   */
   export let noTrailingSlash = false;
 
   /** Specify the number of breadcrumb items to render */
@@ -16,8 +18,8 @@
   export let size = "md";
 
   /**
-   * Specify the separator rendered between breadcrumb items.
-   * A component reference renders as no separator in the skeleton state.
+   * Specify the separator rendered between breadcrumb items. A
+   * component reference renders as no separator in the skeleton state.
    * @type {string | Separator}
    */
   export let separator = /** @type {string | Separator} */ ("/");

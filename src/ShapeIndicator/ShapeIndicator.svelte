@@ -3,7 +3,17 @@
 
   /**
    * Specify the kind of the shape indicator.
-   * @type {"failed" | "critical" | "high" | "medium" | "low" | "cautious" | "undefined" | "stable" | "informative" | "incomplete" | "draft"}
+   * @type {"failed"
+   *   | "critical"
+   *   | "high"
+   *   | "medium"
+   *   | "low"
+   *   | "cautious"
+   *   | "undefined"
+   *   | "stable"
+   *   | "informative"
+   *   | "incomplete"
+   *   | "draft"}
    */
   export let kind;
 

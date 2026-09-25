@@ -1,5 +1,7 @@
 <script>
-  /** @extends {"../OverflowMenu/OverflowMenu.svelte"} OverflowMenuProps */
+  /**
+   * @extends {"../OverflowMenu/OverflowMenu.svelte"} OverflowMenuProps
+   */
 
   import { getContext, onMount } from "svelte";
   import Settings from "../icons/Settings.svelte";

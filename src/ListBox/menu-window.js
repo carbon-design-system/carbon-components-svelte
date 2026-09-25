@@ -17,7 +17,8 @@ import { getMenuItemHeight, getMenuMaxHeight } from "./list-box-utils.js";
 
 /**
  * The windowing configuration once one has been resolved.
- * @typedef {import("../utils/virtualize.js").VirtualListConfig & Record<string, unknown>} ResolvedConfig
+ * @typedef {import("../utils/virtualize.js").VirtualListConfig &
+ *   Record<string, unknown>} ResolvedConfig
  */
 
 /**
@@ -48,32 +49,32 @@ function withoutMeasured(virtualizeProp) {
 }
 
 /**
- * Which options a listbox menu renders and where they sit. Wraps the offset
- * arithmetic in `virtualize.js` and the height observation in
+ * Which options a listbox menu renders and where they sit. Wraps the
+ * offset arithmetic in `virtualize.js` and the height observation in
  * `heightMeasurer.js`
  *
  * @param {Object} options
- * @param {() => HTMLElement | null | undefined} options.getContainer The menu's
- * scroll container, or nothing when the menu is closed. Nothing here acts
- * without one.
- * @param {(scrollTop: number) => void} options.onScrollTop The position the
- * container actually took, so the caller's mirror stays in step.
- * @param {(state: MenuWindowState) => void} [options.onState] Called when
- * measurement moves the state, resolved against the arguments `update` was last
- * given.
+ * @param {() => HTMLElement | null | undefined} options.getContainer
+ *   The menu's scroll container, or nothing when the menu is closed.
+ *   Nothing here acts without one.
+ * @param {(scrollTop: number) => void} options.onScrollTop The position
+ *   the container actually took, so the caller's mirror stays in step.
+ * @param {(state: MenuWindowState) => void} [options.onState] Called
+ *   when measurement moves the state, resolved against the arguments
+ *   `update` was last given.
  */
 export function createMenuWindow({ getContainer, onScrollTop, onState }) {
   /** @type {number[]} Per-option heights, by position, sparse. */
   let heights = [];
   /**
-   * Height to assume for an unmeasured option: the average of the heights last
-   * held.
+   * Height to assume for an unmeasured option: the average of the
+   * heights last held.
    * @type {number | undefined}
    */
   let estimate;
   /**
-   * The keys the held heights are indexed against, or the collection itself
-   * when no key function was supplied.
+   * The keys the held heights are indexed against, or the collection
+   * itself when no key function was supplied.
    * @type {ArrayLike<unknown>}
    */
   let knownKeys = [];
@@ -84,16 +85,20 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
   /** Whether that update resolved to measured heights. */
   let measured = false;
   /**
-   * Whether the list it resolved them for is also windowed. Every measured
-   * scroll path gates on this: a list under the threshold is laid out by the
-   * browser, so it has no place to hold and no request to satisfy.
+   * Whether the list it resolved them for is also windowed. Every
+   * measured scroll path gates on this: a list under the threshold is
+   * laid out by the browser, so it has no place to hold and no request
+   * to satisfy.
    */
   let measuredWindow = false;
-  /** Set while `resolve` runs, which the caller reads from the return value. */
+  /**
+   * Set while `resolve` runs, which the caller reads from the return
+   * value.
+   */
   let updating = false;
   /**
-   * The arguments `update` was last given, so measurement can resolve the state
-   * again without asking the caller to re-supply them.
+   * The arguments `update` was last given, so measurement can resolve
+   * the state again without asking the caller to re-supply them.
    * @type {Parameters<typeof update>[0] | null}
    */
   let prevOptions = null;
@@ -108,14 +113,17 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
    */
   let pending = null;
   /**
-   * The position this last vouched for: written here, or read from a container
-   * this left where it was. Anything else is the reader's.
+   * The position this last vouched for: written here, or read from a
+   * container this left where it was. Anything else is the reader's.
    */
   let prevWrittenScrollTop = -1;
 
   const measurer = createHeightMeasurer({ onMeasure: handleMeasured });
 
-  /** Hand the caller a state resolved again, unless it is about to be told. */
+  /**
+   * Hand the caller a state resolved again, unless it is about to be
+   * told.
+   */
   function notifyChange() {
     if (updating || !prevOptions) return;
     onState?.(resolve(prevOptions));
@@ -134,8 +142,9 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
   }
 
   /**
-   * Where the option at `index` has to sit for the requested alignment under
-   * measured heights, or `null` when it is already close enough to leave alone.
+   * Where the option at `index` has to sit for the requested alignment
+   * under measured heights, or `null` when it is already close enough
+   * to leave alone.
    * @param {number} index
    * @param {"top" | "nearest"} align
    * @param {number} currentScrollTop
@@ -192,8 +201,8 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
   }
 
   /**
-   * Place the option at `index` by reading the DOM: the measured path for a
-   * list that was never windowed.
+   * Place the option at `index` by reading the DOM: the measured path
+   * for a list that was never windowed.
    * @param {number} index
    * @param {"top" | "nearest"} align
    */
@@ -226,7 +235,8 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
   }
 
   /**
-   * Take the heights just measured and hold the reader's place against them.
+   * Take the heights just measured and hold the reader's place against
+   * them.
    * @param {number[]} next
    * @param {number[]} previous
    */
@@ -261,9 +271,9 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
   }
 
   /**
-   * Re-satisfy the outstanding request. Runs on every pass while one stands,
-   * because measurement arrives in batches and each batch can move the option
-   * out from under the last answer.
+   * Re-satisfy the outstanding request. Runs on every pass while one
+   * stands, because measurement arrives in batches and each batch can
+   * move the option out from under the last answer.
    */
   function settle() {
     const container = getContainer();
@@ -300,10 +310,11 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
   }
 
   /**
-   * Note the collection the menu renders, forgetting the measurements when it
-   * holds other options than the ones they describe. `getKey` is for a consumer
-   * whose option objects are rebuilt as well, such as a checkbox toggle
-   * replacing the toggled item, where what stays put is an id.
+   * Note the collection the menu renders, forgetting the measurements
+   * when it holds other options than the ones they describe. `getKey`
+   * is for a consumer whose option objects are rebuilt as well, such as
+   * a checkbox toggle replacing the toggled item, where what stays put
+   * is an id.
    *
    * @param {ArrayLike<unknown>} items
    * @param {((item: any, index: number) => unknown) | undefined} getKey
@@ -315,9 +326,10 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
   }
 
   /**
-   * Whether the keys held still describe the options the menu renders, asked
-   * without materialising a key per option: `update` runs on every scroll
-   * event, and a long list would allocate an array per event to learn nothing.
+   * Whether the keys held still describe the options the menu renders,
+   * asked without materialising a key per option: `update` runs on
+   * every scroll event, and a long list would allocate an array per
+   * event to learn nothing.
    *
    * @param {ArrayLike<unknown>} items
    * @param {((item: any, index: number) => unknown) | undefined} getKey
@@ -339,23 +351,26 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
    * Resolve the window for the options the menu is about to render.
    *
    * @param {Object} options
-   * @param {any[]} options.items The collection the menu renders, filtered
-   * where there is a filter, since its positions are what heights and offsets
-   * are indexed against.
-   * @param {(item: any, index: number) => unknown} [options.getKey] What
-   * identifies an option across a rebuild of `items`. Defaults to the option
-   * itself; only called while heights are being measured.
+   * @param {any[]} options.items The collection the menu renders,
+   *   filtered where there is a filter, since its positions are what
+   *   heights and offsets are indexed against.
+   * @param {(item: any, index: number) => unknown} [options.getKey]
+   *   What identifies an option across a rebuild of `items`. Defaults
+   *   to the option itself; only called while heights are being
+   *   measured.
    * @param {boolean} options.shouldVirtualize The threshold gate, from
-   * `shouldVirtualizeMenu`. The caller resolves it, needing the answer before
-   * it can work out `items`.
-   * @param {boolean | object | undefined} options.virtualize The consumer's
-   * `virtualize` prop.
-   * @param {boolean} [options.wrapOptions] The consumer's `wrapOptions` prop.
-   * Wrapping makes options unequal in height, so it is what turns measuring on.
+   *   `shouldVirtualizeMenu`. The caller resolves it, needing the
+   *   answer before it can work out `items`.
+   * @param {boolean | object | undefined} options.virtualize The
+   *   consumer's `virtualize` prop.
+   * @param {boolean} [options.wrapOptions] The consumer's `wrapOptions`
+   *   prop. Wrapping makes options unequal in height, so it is what
+   *   turns measuring on.
    * @param {"xs" | "sm" | "md" | "lg" | "xl"} [options.size]
-   * @param {boolean} [options.fluid] Whether menu items render at the fluid
-   * height.
-   * @param {number} options.scrollTop The menu's current scroll position.
+   * @param {boolean} [options.fluid] Whether menu items render at the
+   *   fluid height.
+   * @param {number} options.scrollTop The menu's current scroll
+   *   position.
    * @returns {import("./menu-window.js").MenuWindowState}
    */
   function update(options) {
@@ -468,8 +483,8 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
   }
 
   /**
-   * Reconcile height observation against the options the menu now renders, and
-   * re-satisfy any outstanding scroll request..
+   * Reconcile height observation against the options the menu now
+   * renders, and re-satisfy any outstanding scroll request..
    *
    * @returns {void | Promise<void>}
    */
@@ -479,8 +494,8 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
   }
 
   /**
-   * Reconcile measurement against the options now rendered, then re-satisfy any
-   * outstanding request.
+   * Reconcile measurement against the options now rendered, then
+   * re-satisfy any outstanding request.
    */
   function syncMeasurement() {
     measurer.sync(measuredWindow ? getContainer() : null);
@@ -488,12 +503,13 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
   }
 
   /**
-   * Note where the menu is scrolled to. A position other than the one last
-   * written here is the reader's, and the reader's intent is more recent than
-   * an outstanding request, so it supersedes one.
+   * Note where the menu is scrolled to. A position other than the one
+   * last written here is the reader's, and the reader's intent is more
+   * recent than an outstanding request, so it supersedes one.
    *
-   * Called from the scroll handler, and called directly by the paths that read
-   * the container themselves, where waiting for the event would be too late.
+   * Called from the scroll handler, and called directly by the paths
+   * that read the container themselves, where waiting for the event
+   * would be too late.
    *
    * @param {number} scrollTop
    */
@@ -504,19 +520,20 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
   }
 
   /**
-   * Drop the outstanding request, keeping everything measured for it. For a
-   * caller that knows the request is spent when no scroll position says so:
-   * a pointer landing on another option takes the highlight away from the one
-   * that asked, and moves nothing this could read.
+   * Drop the outstanding request, keeping everything measured for it.
+   * For a caller that knows the request is spent when no scroll
+   * position says so: a pointer landing on another option takes the
+   * highlight away from the one that asked, and moves nothing this
+   * could read.
    */
   function cancelRequest() {
     pending = null;
   }
 
   /**
-   * Forget the measurements and any outstanding request, keeping the estimate
-   * they averaged to. Called on close, and by `noteCollection` when the
-   * collection comes to hold other options.
+   * Forget the measurements and any outstanding request, keeping the
+   * estimate they averaged to. Called on close, and by `noteCollection`
+   * when the collection comes to hold other options.
    */
   function reset() {
     pending = null;

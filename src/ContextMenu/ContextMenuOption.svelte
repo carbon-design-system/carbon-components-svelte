@@ -1,8 +1,8 @@
 <script>
   /**
-   * Dispatched on selection. Cancelable: call `preventDefault()` to keep
-   * this menu level open. A selectable or radio option's selection still
-   * updates.
+   * Dispatched on selection. Cancelable: call `preventDefault()` to
+   * keep this menu level open. A selectable or radio option's selection
+   * still updates.
    * @event {Event} click
    */
 
@@ -20,15 +20,16 @@
   export let disabled = false;
 
   /**
-   * Set to `true` to indent the label.
-   * Rendered indented regardless when `icon` is set, or when the option is selectable or part of a radio group.
+   * Set to `true` to indent the label. Rendered indented regardless
+   * when `icon` is set, or when the option is selectable or part of a
+   * radio group.
    */
   export let indented = false;
 
   /**
-   * Specify the icon to render.
-   * Icon is rendered to the left of the label text.
-   * Overridden with a checkmark icon when the option is selectable or part of a radio group.
+   * Specify the icon to render. Icon is rendered to the left of the
+   * label text. Overridden with a checkmark icon when the option is
+   * selectable or part of a radio group.
    * @type {Icon}
    */
   export let icon = /** @type {Icon} */ (undefined);
@@ -71,8 +72,8 @@
   export let shortcutText = "";
 
   /**
-   * Specify the id.
-   * It's recommended to provide an id as a value to bind to within a selectable/radio menu group.
+   * Specify the id. It's recommended to provide an id as a value to
+   * bind to within a selectable/radio menu group.
    */
   export let id = uniqueId();
 
@@ -87,6 +88,7 @@
   import CaretRight from "../icons/CaretRight.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
   import { clampIndex } from "../utils/clamp-index.js";
+  import { menuOptionLabel } from "../utils/menu-option-label.js";
   import { createSubmenuHoverIntent } from "../utils/submenu-hover-intent.js";
   import {
     createTypeaheadBuffer,
@@ -120,17 +122,6 @@
     },
     { openDelay: SUBMENU_HOVER_DELAY_MS, closeDelay: SUBMENU_HOVER_DELAY_MS },
   );
-
-  /**
-   * @param {HTMLElement} item
-   */
-  function itemToString(item) {
-    return (
-      item.querySelector(".bx--menu-option__label")?.textContent ??
-      item.textContent ??
-      ""
-    ).trim();
-  }
 
   const unsubPosition = ctx.position.subscribe((position) => {
     rootMenuPosition = position;
@@ -287,7 +278,7 @@
         focusIndex = typeaheadIndex({
           items: options,
           query,
-          itemToString,
+          itemToString: menuOptionLabel,
           index: focusIndex,
           isDisabled: (item) => item.getAttribute("aria-disabled") === "true",
         });

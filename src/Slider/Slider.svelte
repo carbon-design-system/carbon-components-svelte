@@ -34,10 +34,10 @@
   export let step = 1;
 
   /**
-   * Show tick marks along the track.
-   * Set to `true` to place a tick at every `step`, or pass an array of
-   * `{ value, label? }` for specific stops with optional labels below the track.
-   * Marks are visual only; snapping still follows `step`.
+   * Show tick marks along the track. Set to `true` to place a tick at
+   * every `step`, or pass an array of `{ value, label? }` for specific
+   * stops with optional labels below the track. Marks are visual only;
+   * snapping still follows `step`.
    * @type {boolean | ReadonlyArray<{ value: number; label?: string }>}
    */
   export let marks = false;
@@ -108,13 +108,22 @@
    */
   export let ref = null;
 
-  /** Set to `true` to select the number input's text when it receives focus */
+  /**
+   * Set to `true` to select the number input's text when it receives
+   * focus
+   */
   export let selectTextOnFocus = false;
 
   import { createEventDispatcher, tick } from "svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { dismiss } from "../utils/dismiss.js";
+  import {
+    buildFieldIds,
+    resolveStatusDescribedBy,
+    resolveValidationVisibility,
+  } from "../utils/field-status.js";
+  import { clamp } from "../utils/numeric-format.js";
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
   import { resolveSliderMarks } from "../utils/resolve-slider-marks.js";
   import {
@@ -132,7 +141,9 @@
   let holding = false;
   let currentEvent = null;
 
-  /** @type {(label: string, numericValue: number) => string | number} */
+  /**
+   * @type {(label: string, numericValue: number) => string | number}
+   */
   function formatRangeLabel(label, numericValue) {
     return formatSliderRangeLabel(label, numericValue, formatValue);
   }
@@ -182,12 +193,15 @@
   }
 
   $: labelId = `label-${id}`;
-  $: errorId = `error-${id}`;
-  $: warnId = `warn-${id}`;
+  $: ({ errorId, warnId } = buildFieldIds(id));
   $: inputId = `input-${id}`;
   // Invalid/warn states are suppressed when the slider is disabled or read-only.
-  $: showInvalid = invalid && !disabled && !readonly;
-  $: showWarn = warn && !invalid && !disabled && !readonly;
+  $: ({ showInvalid, showWarn } = resolveValidationVisibility({
+    invalid,
+    warn,
+    disabled,
+    readonly,
+  }));
   $: range = max - min;
   $: left = range === 0 ? 0 : ((value - min) / range) * 100;
   $: resolvedMarks = resolveSliderMarks(marks, min, max, step);
@@ -195,11 +209,7 @@
     (mark) => mark.label != null && mark.label !== "",
   );
   $: {
-    if (value < min) {
-      value = min;
-    } else if (value > max) {
-      value = max;
-    }
+    value = clamp(value, min, max);
 
     if (dragging && currentEvent) {
       calcValue(currentEvent);
@@ -266,11 +276,12 @@
         aria-valuenow={value}
         aria-valuetext={getValueText(value)}
         aria-labelledby={labelId}
-        aria-describedby={showInvalid
-          ? errorId
-          : showWarn
-            ? warnId
-            : undefined}
+        aria-describedby={resolveStatusDescribedBy({
+          showInvalid,
+          showWarn,
+          errorId,
+          warnId,
+        })}
         aria-invalid={showInvalid || undefined}
         {id}
         on:keydown={(event) => {
@@ -375,11 +386,12 @@
         data-invalid={showInvalid || null}
         data-warn={showWarn || null}
         aria-invalid={showInvalid || null}
-        aria-describedby={showInvalid
-          ? errorId
-          : showWarn
-            ? warnId
-            : undefined}
+        aria-describedby={resolveStatusDescribedBy({
+          showInvalid,
+          showWarn,
+          errorId,
+          warnId,
+        })}
         on:focus
         on:focus={handleTextInputFocus}
         on:blur

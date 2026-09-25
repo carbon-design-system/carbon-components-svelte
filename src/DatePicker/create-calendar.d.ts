@@ -21,8 +21,10 @@ export interface CreateCalendarArgs {
 }
 
 /**
- * Creates a flatpickr calendar instance with Carbon styling and optional range plugin.
- * @param args - Destructured options, base element, input, and dispatch callback
+ * Creates a flatpickr calendar instance with Carbon styling and
+ * optional range plugin.
+ * @param args - Destructured options, base element, input, and dispatch
+ *   callback
  * @returns Promise resolving to the flatpickr instance
  */
 export function createCalendar(
@@ -36,8 +38,9 @@ export function createCalendar(
 export function resolveLocale(locale: unknown): unknown;
 
 /**
- * Value to pass to `calendar.set(name, ...)` for a consumer option, keeping
- * Carbon's hooks in front of a consumer hook instead of replacing them.
+ * Value to pass to `calendar.set(name, ...)` for a consumer option,
+ * keeping Carbon's hooks in front of a consumer hook instead of
+ * replacing them.
  */
 export function resolveOptionValue(
   instance: object,

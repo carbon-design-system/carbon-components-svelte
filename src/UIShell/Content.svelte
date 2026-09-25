@@ -10,8 +10,9 @@
   } from "./nav-store.js";
 
   /**
-   * By default, the `SideNav` applies a left margin of `3rem` to `Content`
-   * if it's a sibling component (e.g., .bx--side-nav ~ .bx--content).
+   * By default, the `SideNav` applies a left margin of `3rem` to
+   * `Content` if it's a sibling component (e.g., .bx--side-nav ~
+   * .bx--content).
    *
    * Unset the left margin if:
    * - `SideNav` is collapsed and it's not the `rail` variant, OR

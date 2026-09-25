@@ -23,7 +23,9 @@
   /**
    * Set the column headers.
    * Supersedes `columns` if value is a non-empty array.
-   * @type {ReadonlyArray<string | Partial<import('./DataTable.svelte').DataTableHeader>>}
+   * @type {ReadonlyArray<
+   *   string | Partial<import("./DataTable.svelte").DataTableHeader>
+   * >}
    */
   export let headers = [];
 

@@ -1,12 +1,18 @@
+<script context="module">
+  export { truncate } from "./truncate.js";
+</script>
+
 <script>
   /**
-   * Specify `"end"` or `"front"`. `"front"` only works when `lines` is `1`.
+   * Specify `"end"` or `"front"`. `"front"` only works when `lines` is
+   * `1`.
    * @type {"end" | "front"}
    */
   export let clamp = "end";
 
   /**
-   * Number of visible lines before truncating. Values above `1` use multiline mode (end clamp only).
+   * Number of visible lines before truncating. Values above `1` use
+   * multiline mode (end clamp only).
    * @type {number}
    */
   export let lines = 1;

@@ -1,7 +1,8 @@
 // @ts-check
 /**
- * Native `<dialog>` / `[popover]` ancestors used when portalling the flatpickr
- * calendar with `portalMenu` so it participates in the correct top layer.
+ * Native `<dialog>` / `[popover]` ancestors used when portalling the
+ * flatpickr calendar with `portalMenu` so it participates in the
+ * correct top layer.
  */
 export const TOP_LAYER_ANCESTOR_SELECTOR = "dialog,[popover]";
 
@@ -14,11 +15,13 @@ export function getTopLayerAncestor(root) {
 }
 
 /**
- * Flatpickr `position` hook: `position: fixed` with viewport-relative coordinates.
- * Used when the calendar is appended into a top-layer ancestor — `position: absolute`
- * would resolve against that element’s containing block and mis-place the calendar.
+ * Flatpickr `position` hook: `position: fixed` with viewport-relative
+ * coordinates. Used when the calendar is appended into a top-layer
+ * ancestor — `position: absolute` would resolve against that element’s
+ * containing block and mis-place the calendar.
  *
- * @param {import("./date-picker-top-layer.js").FlatpickrTopLayerPositionInstance} instance
+ * @param {import("./date-picker-top-layer.js")
+ *   .FlatpickrTopLayerPositionInstance} instance
  * @param {HTMLElement | undefined} customPositionElement
  */
 export function positionFlatpickrCalendarFixed(
@@ -66,15 +69,16 @@ export function positionFlatpickrCalendarFixed(
 }
 
 /**
- * Whether a click/focus event target is still “inside” the date picker UI when
- * the calendar is portalled into a top-layer ancestor — including the subtree
- * of that ancestor so brief hit-testing quirks during open animations do not
- * close the calendar.
+ * Whether a click/focus event target is still “inside” the date picker
+ * UI when the calendar is portalled into a top-layer ancestor —
+ * including the subtree of that ancestor so brief hit-testing quirks
+ * during open animations do not close the calendar.
  *
  * @param {HTMLElement | null | undefined} datePickerRef
  * @param {HTMLElement} calendarContainer
  * @param {EventTarget | null} target
- * @param {HTMLElement | null} [cachedTopLayer] Pre-computed ancestor; avoids a `.closest()` query per event.
+ * @param {HTMLElement | null} [cachedTopLayer] Pre-computed ancestor;
+ *   avoids a `.closest()` query per event.
  */
 export function isEventTargetInsidePortaledCalendar(
   datePickerRef,

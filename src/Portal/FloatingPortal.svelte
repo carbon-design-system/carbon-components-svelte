@@ -4,8 +4,9 @@
    */
 
   /**
-   * Required. Specify the anchor element to position the floating content relative to.
-   * When using `bind:this`, this may be `null` initially until the element is mounted.
+   * Required. Specify the anchor element to position the floating
+   * content relative to. When using `bind:this`, this may be `null`
+   * initially until the element is mounted.
    * @type {null | HTMLElement}
    */
   export let anchor;
@@ -37,13 +38,15 @@
   export let gapBottom = 0;
 
   /**
-   * Horizontal gap in pixels when direction is left (space between anchor left and tooltip right).
+   * Horizontal gap in pixels when direction is left (space between
+   * anchor left and tooltip right).
    * @type {number}
    */
   export let horizontalGapLeft = 0;
 
   /**
-   * Horizontal gap in pixels when direction is right (space between anchor right and tooltip left).
+   * Horizontal gap in pixels when direction is right (space between
+   * anchor right and tooltip left).
    * @type {number}
    */
   export let horizontalGapRight = 0;
@@ -68,34 +71,40 @@
   export let zIndex = FLOATING_PORTAL_Z_INDEX;
 
   /**
-   * Set to `true` to use the content's intrinsic width instead of the anchor width.
-   * Position along the anchor edge is controlled by `intrinsicAlign`.
-   * When `false` (default), the portal width matches the anchor.
+   * Set to `true` to use the content's intrinsic width instead of the
+   * anchor width. Position along the anchor edge is controlled by
+   * `intrinsicAlign`. When `false` (default), the portal width matches
+   * the anchor.
    * @type {boolean}
    */
   export let intrinsicWidth = false;
 
   /**
-   * When `intrinsicWidth` is true, align the floating box to the anchor (Carbon-style):
-   * - `top` / `bottom`: horizontal alignment (`start` = anchor left, `center`, `end` = anchor right).
-   * - `left` / `right`: vertical alignment (`start` = anchor top, `center`, `end` = anchor bottom).
-   * Ignored when `intrinsicWidth` is false.
+   * When `intrinsicWidth` is true, align the floating box to the anchor
+   * (Carbon-style):
+   * - `top` / `bottom`: horizontal alignment (`start` = anchor left,
+   *   `center`, `end` = anchor right).
+   * - `left` / `right`: vertical alignment (`start` = anchor top,
+   *   `center`, `end` = anchor bottom). Ignored when `intrinsicWidth`
+   *   is false.
    * @type {"start" | "center" | "end"}
    */
   export let intrinsicAlign = "center";
 
   /**
-   * Control when a resolved flip side is reused instead of recomputed on the
-   * next position update:
+   * Control when a resolved flip side is reused instead of recomputed
+   * on the next position update:
    * - `"none"` (default): recompute the flip on every update.
    * - `"after-flip"`: once the content flips away from `direction` (the
-   *   preferred side does not fit), reuse that side for the rest of the open
-   *   session. Recomputes freely until a flip actually happens, so a floating
-   *   element whose content resizes (e.g. a tooltip whose text changes to
-   *   something narrower) does not snap back to the preferred side mid-session.
-   * - `"always"`: lock whichever side the initial open settles on (flipped or
-   *   not) for the rest of the open session, so later scroll/resize updates
-   *   only reposition along that side instead of re-evaluating the flip.
+   *   preferred side does not fit), reuse that side for the rest of the
+   *   open session. Recomputes freely until a flip actually happens, so
+   *   a floating element whose content resizes (e.g. a tooltip whose
+   *   text changes to something narrower) does not snap back to the
+   *   preferred side mid-session.
+   * - `"always"`: lock whichever side the initial open settles on
+   *   (flipped or not) for the rest of the open session, so later
+   *   scroll/resize updates only reposition along that side instead of
+   *   re-evaluating the flip.
    * @type {"none" | "after-flip" | "always"}
    */
   export let lockDirection = "none";
@@ -108,8 +117,8 @@
   export let ref = null;
 
   /**
-   * DOM node to mount the portal into. When unset, uses the anchor's nearest
-   * `<dialog>` or `[popover]`, else `document.body`.
+   * DOM node to mount the portal into. When unset, uses the anchor's
+   * nearest `<dialog>` or `[popover]`, else `document.body`.
    * @type {HTMLElement | null}
    */
   export let target = null;
@@ -180,7 +189,15 @@
     };
   });
 
-  /** @type {{ top: number, left: number, width?: number, actualDirection: "bottom" | "top" | "left" | "right", caretNudgePx?: number }} */
+  /**
+   * @type {{
+   *   top: number,
+   *   left: number,
+   *   width?: number,
+   *   actualDirection: "bottom" | "top" | "left" | "right",
+   *   caretNudgePx?: number,
+   * }}
+   */
   let pos = {
     top: 0,
     left: 0,

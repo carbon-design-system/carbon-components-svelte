@@ -5,13 +5,15 @@
    */
 
   /**
-   * Target instant. Invalid or missing renders an empty `<time>` with no `datetime`.
+   * Target instant. Invalid or missing renders an empty `<time>` with
+   * no `datetime`.
    * @type {Date | number | string}
    */
   export let date = undefined;
 
   /**
-   * Fixed reference instant. When set, live updates are off (deterministic docs and tests).
+   * Fixed reference instant. When set, live updates are off
+   * (deterministic docs and tests).
    * @type {Date | number}
    */
   export let now = undefined;

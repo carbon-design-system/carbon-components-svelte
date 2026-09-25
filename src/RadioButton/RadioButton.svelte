@@ -38,9 +38,9 @@
   export let id = uniqueId();
 
   /**
-   * Specify a name attribute for the radio button input.
-   * When multiple standalone RadioButton components share the same `name`,
-   * they form an implicit group and their `checked` state will be synchronized.
+   * Specify a name attribute for the radio button input. When multiple
+   * standalone RadioButton components share the same `name`, they form
+   * an implicit group and their `checked` state will be synchronized.
    * @type {string}
    */
   export let name = undefined;

@@ -4,7 +4,8 @@
    */
 
   /**
-   * @typedef {"clearAll" | "clearSelection"} ListBoxSelectionTranslationId
+   * @typedef {"clearAll"
+   *   | "clearSelection"} ListBoxSelectionTranslationId
    */
 
   /**

@@ -2,22 +2,29 @@
 
 /**
  * @typedef {object} FuzzyMatch
- * @property {boolean} matched - Whether `query` matches `text` at or above the threshold.
- * @property {number} score - Normalized match quality from 0 to 1; higher is better. 0 for an empty query.
- * @property {number[]} indices - Ascending character indices in `text` that matched `query`.
+ * @property {boolean} matched - Whether `query` matches `text` at or
+ *   above the threshold.
+ * @property {number} score - Normalized match quality from 0 to 1;
+ *   higher is better. 0 for an empty query.
+ * @property {number[]} indices - Ascending character indices in `text`
+ *   that matched `query`.
  */
 
 /**
- * Quality tiers (normalized 0-1) used to rank a match and to gate it against the
- * `threshold`. A contiguous substring outranks a scattered subsequence, and an
- * earlier/word-boundary position outranks a mid-word one.
+ * Quality tiers (normalized 0-1) used to rank a match and to gate it
+ * against the `threshold`. A contiguous substring outranks a scattered
+ * subsequence, and an earlier/word-boundary position outranks a
+ * mid-word one.
  */
 const QUALITY = {
   exact: 1,
   prefix: 0.9,
   wordBoundary: 0.7,
   midWord: 0.5,
-  /** Subsequence falls in [0.2, 0.4] scaled by how clustered the characters are. */
+  /**
+   * Subsequence falls in [0.2, 0.4] scaled by how clustered the
+   * characters are.
+   */
   subsequenceBase: 0.2,
   subsequenceSpan: 0.2,
 };
@@ -26,7 +33,8 @@ const QUALITY = {
 const SEPARATORS = new Set([" ", "-", "_", "/", ".", ":", "@", "&"]);
 
 /**
- * Whether the character at `index` starts a word (index 0 or preceded by a separator).
+ * Whether the character at `index` starts a word (index 0 or preceded
+ * by a separator).
  *
  * @param {string} text
  * @param {number} index
@@ -37,8 +45,9 @@ function isWordBoundary(text, index) {
 }
 
 /**
- * Best contiguous substring occurrence of `query` in `text`, preferring a prefix,
- * then a word boundary, then the earliest position. Returns `null` when absent.
+ * Best contiguous substring occurrence of `query` in `text`, preferring
+ * a prefix, then a word boundary, then the earliest position. Returns
+ * `null` when absent.
  *
  * @param {string} lowerText
  * @param {string} lowerQuery
@@ -60,7 +69,8 @@ function bestSubstringMatch(lowerText, lowerQuery) {
 }
 
 /**
- * Greedy forward subsequence match. Returns `null` when `query` is not a subsequence.
+ * Greedy forward subsequence match. Returns `null` when `query` is not
+ * a subsequence.
  *
  * @param {string} lowerText
  * @param {string} lowerQuery
@@ -107,8 +117,8 @@ function substringQuality(haystack, pattern, index) {
 }
 
 /**
- * Normalized quality (0-1) of a subsequence, scaled by how clustered the matched
- * characters are (more adjacent characters score higher).
+ * Normalized quality (0-1) of a subsequence, scaled by how clustered
+ * the matched characters are (more adjacent characters score higher).
  *
  * @param {number[]} indices
  * @returns {number}
@@ -125,19 +135,20 @@ function subsequenceQuality(indices) {
 
 /**
  * @typedef {object} FuzzyMatchOptions
- * @property {number} [threshold=0] - Minimum normalized `score` (0-1) required to
- *   match. `0` (default) accepts any match. Raise toward `1` to require stronger
- *   matches: roughly `0.5` requires a contiguous substring (excluding scattered
- *   subsequences), `0.7` requires a word-boundary substring, and `0.9` requires
- *   a prefix.
+ * @property {number} [threshold=0] - Minimum normalized `score` (0-1)
+ *   required to match. `0` (default) accepts any match. Raise toward
+ *   `1` to require stronger matches: roughly `0.5` requires a
+ *   contiguous substring (excluding scattered subsequences), `0.7`
+ *   requires a word-boundary substring, and `0.9` requires a prefix.
  * @property {boolean} [caseSensitive=false] - Match case-sensitively.
  */
 
 /**
  * Fuzzy match of `query` against `text`. Prefers a contiguous substring
- * (highlighted as one run) and falls back to subsequence matching, scoring each
- * match on a normalized 0-1 quality scale. An empty query always matches with no
- * highlighted indices. Pass `options` to tune the sensitivity.
+ * (highlighted as one run) and falls back to subsequence matching,
+ * scoring each match on a normalized 0-1 quality scale. An empty query
+ * always matches with no highlighted indices. Pass `options` to tune
+ * the sensitivity.
  *
  * @param {string} text
  * @param {string} query
@@ -176,11 +187,12 @@ export function fuzzyMatch(text, query, options = {}) {
 }
 
 /**
- * Split `text` into consecutive matched/unmatched segments from `indices`, for
- * rendering highlighted runs.
+ * Split `text` into consecutive matched/unmatched segments from
+ * `indices`, for rendering highlighted runs.
  *
  * @param {string} text
- * @param {number[]} indices - Ascending character indices to highlight (from `fuzzyMatch`).
+ * @param {number[]} indices - Ascending character indices to highlight
+ *   (from `fuzzyMatch`).
  * @returns {Array<{ text: string, match: boolean }>}
  */
 export function highlightSegments(text, indices) {

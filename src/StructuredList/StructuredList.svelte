@@ -26,9 +26,9 @@
   export let multiple = false;
 
   /**
-   * Specify the icon rendered in the selection column of selectable rows.
-   * Only used when `selection` is `true`.
-   * The icon is decorative; selection state is conveyed by each row's `aria-checked`.
+   * Specify the icon rendered in the selection column of selectable
+   * rows. Only used when `selection` is `true`. The icon is decorative;
+   * selection state is conveyed by each row's `aria-checked`.
    * @type {Icon}
    */
   export let icon = CheckmarkFilled;
@@ -40,7 +40,9 @@
 
   const dispatch = createEventDispatcher();
   /**
-   * @type {import("svelte/store").Writable<Value | Value[] | undefined>}
+   * @type {import("svelte/store").Writable<
+   *   Value | Value[] | undefined
+   * >}
    */
   const selectedValue = writable(
     multiple ? (Array.isArray(selected) ? selected : []) : selected,

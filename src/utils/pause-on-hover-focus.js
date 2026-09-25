@@ -1,16 +1,16 @@
 // @ts-check
 
 /**
- * Pause/resume a `createTimeoutDismiss()` timer while the pointer is over a
- * root element or focus is inside it. Shared by `ToastNotification` and
- * `InlineNotification`, whose `pauseOnHover` mouse/focus handling was
- * previously duplicated verbatim.
+ * Pause/resume a `createTimeoutDismiss()` timer while the pointer is
+ * over a root element or focus is inside it. Shared by
+ * `ToastNotification` and `InlineNotification`, whose `pauseOnHover`
+ * mouse/focus handling was previously duplicated verbatim.
  *
- * `focusout`/`mouseleave` only resume the timer once focus has actually left
- * the root: a `relatedTarget` still inside the root (tabbing, or the pointer
- * moving between two focusables) and the root still containing
- * `document.activeElement` (pointer leaving while a child keeps focus) both
- * block the resume.
+ * `focusout`/`mouseleave` only resume the timer once focus has actually
+ * left the root: a `relatedTarget` still inside the root (tabbing, or
+ * the pointer moving between two focusables) and the root still
+ * containing `document.activeElement` (pointer leaving while a child
+ * keeps focus) both block the resume.
  *
  * @param {{ pause: () => void, resume: () => void }} dismiss
  * @param {() => boolean} getPauseOnHover

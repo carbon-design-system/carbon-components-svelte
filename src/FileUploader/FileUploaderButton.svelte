@@ -2,7 +2,10 @@
   /**
    * @template [Icon=any]
    * @event {ReadonlyArray<File>} change
-   * @event {Array<{ file: File; reason: "size" | "duplicate" }>} rejected
+   * @event {Array<{
+   *   file: File;
+   *   reason: "size" | "duplicate";
+   * }>} rejected
    * @restProps {input}
    */
 
@@ -97,8 +100,9 @@
 
   /**
    * Set to `true` to hide the tooltip while maintaining accessibility.
-   * Only applies to icon-only buttons.
-   * When `true`, the tooltip is visually hidden but the `iconDescription` remains accessible to screen readers.
+   * Only applies to icon-only buttons. When `true`, the tooltip is
+   * visually hidden but the `iconDescription` remains accessible to
+   * screen readers.
    */
   export let hideTooltip = false;
 

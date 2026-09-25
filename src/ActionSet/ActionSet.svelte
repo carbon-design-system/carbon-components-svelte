@@ -1,3 +1,18 @@
+<script context="module">
+  /**
+   * Button's own size scale ("default"/"field"/"small"/"lg"/"xl") is
+   * offset from ActionSet's v11-derived scale. Same idea as the size
+   * table in ComboButton.svelte.
+   */
+  const BUTTON_SIZES = {
+    sm: "small",
+    md: "field",
+    lg: "default",
+    xl: "lg",
+    "2xl": "xl",
+  };
+</script>
+
 <script>
   /**
    * @restProps {div}
@@ -5,10 +20,10 @@
    */
 
   /**
-   * Specify the size of the action set. Different button arrangements are
-   * used at different sizes to make the best use of available space. Also
-   * sets the default size for child `Button`s that don't set their own
-   * `size`.
+   * Specify the size of the action set. Different button arrangements
+   * are used at different sizes to make the best use of available
+   * space. Also sets the default size for child `Button`s that don't
+   * set their own `size`.
    * @type {"sm" | "md" | "lg" | "xl" | "2xl"}
    */
   export let size = "md";
@@ -28,19 +43,6 @@
   import { onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
   import ButtonSet from "../Button/ButtonSet.svelte";
-
-  /**
-   * Button's own size scale ("default"/"field"/"small"/"lg"/"xl") is offset
-   * from ActionSet's v11-derived scale. Same idea as the size table in
-   * ComboButton.svelte.
-   */
-  const BUTTON_SIZES = {
-    sm: "small",
-    md: "field",
-    lg: "default",
-    xl: "lg",
-    "2xl": "xl",
-  };
 
   const buttonSize = writable(BUTTON_SIZES[size]);
   $: buttonSize.set(BUTTON_SIZES[size]);

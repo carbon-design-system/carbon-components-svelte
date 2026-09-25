@@ -3,8 +3,8 @@ import type { Writable } from "svelte/store";
 /**
  * Build ArrowUp/ArrowDown/Home/End navigation over the enabled
  * `[role="option"]` descendants of a menu element, tracking the active
- * option by id in `highlightedId`. Options marked `aria-disabled="true"`
- * are skipped.
+ * option by id in `highlightedId`. Options marked
+ * `aria-disabled="true"` are skipped.
  */
 export function createOptionListNavigator(options: {
   getMenuRef: () => HTMLElement | null;

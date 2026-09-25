@@ -1,3 +1,9 @@
+<script context="module">
+  export { breakpointObserver } from "./breakpoint-observer.js";
+  export { breakpoints } from "./breakpoints.js";
+  export { hideAtBreakpoint } from "./hide-at-breakpoint.js";
+</script>
+
 <script>
   /**
    * @typedef {"sm" | "md" | "lg" | "xlg" | "max"} BreakpointSize
@@ -6,7 +12,10 @@
    * @type {object}
    * @property {BreakpointSize} size
    * @property {BreakpointValue} breakpointValue
-   * @slot {{ size: BreakpointSize; sizes: Record<BreakpointSize, boolean>; }}
+   * @slot {{
+   *   size: BreakpointSize;
+   *   sizes: Record<BreakpointSize, boolean>;
+   * }}
    */
 
   /**

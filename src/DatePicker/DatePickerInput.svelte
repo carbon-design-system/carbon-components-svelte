@@ -1,3 +1,46 @@
+<script context="module">
+  const REGEX_SPECIAL_CHARS = /[/\\^$*+?.()|[\]{}]/g;
+
+  const dateFormatTokens = {
+    d: "\\d{1,2}",
+    j: "\\d{1,2}",
+    m: "\\d{1,2}",
+    n: "\\d{1,2}",
+    Y: "\\d{4}",
+    y: "\\d{2}",
+    F: "\\w+",
+    M: "\\w+",
+    D: "\\w+",
+    l: "\\w+",
+  };
+
+  function dateFormatToPattern(fmt) {
+    let result = "";
+    for (let i = 0; i < fmt.length; i++) {
+      const ch = fmt[i];
+      if (ch === "\\" && i + 1 < fmt.length) {
+        result += fmt[++i].replace(REGEX_SPECIAL_CHARS, "\\$&");
+      } else if (dateFormatTokens[ch]) {
+        result += dateFormatTokens[ch];
+      } else {
+        result += ch.replace(REGEX_SPECIAL_CHARS, "\\$&");
+      }
+    }
+    return result;
+  }
+
+  /**
+   * `datePickerType="multiple"` joins each selected date with
+   * Flatpickr's default `", "` conjunction into one input value, so the
+   * derived pattern must allow one or more repetitions instead of a
+   * single date.
+   */
+  function dateFormatToMultiplePattern(fmt) {
+    const single = dateFormatToPattern(fmt);
+    return `${single}(, ${single})*`;
+  }
+</script>
+
 <script>
   /**
    * Set the size of the input.
@@ -72,10 +115,13 @@
   import Close from "../icons/Close.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import {
+    buildFieldIds,
+    resolveStatusDescribedBy,
+    resolveValidationVisibility,
+  } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
-
-  const REGEX_SPECIAL_CHARS = /[/\\^$*+?.()|[\]{}]/g;
 
   const {
     range,
@@ -102,44 +148,6 @@
     clear,
   } = getContext("carbon:DatePicker");
 
-  const dateFormatTokens = {
-    d: "\\d{1,2}",
-    j: "\\d{1,2}",
-    m: "\\d{1,2}",
-    n: "\\d{1,2}",
-    Y: "\\d{4}",
-    y: "\\d{2}",
-    F: "\\w+",
-    M: "\\w+",
-    D: "\\w+",
-    l: "\\w+",
-  };
-
-  function dateFormatToPattern(fmt) {
-    let result = "";
-    for (let i = 0; i < fmt.length; i++) {
-      const ch = fmt[i];
-      if (ch === "\\" && i + 1 < fmt.length) {
-        result += fmt[++i].replace(REGEX_SPECIAL_CHARS, "\\$&");
-      } else if (dateFormatTokens[ch]) {
-        result += dateFormatTokens[ch];
-      } else {
-        result += ch.replace(REGEX_SPECIAL_CHARS, "\\$&");
-      }
-    }
-    return result;
-  }
-
-  /**
-   * `datePickerType="multiple"` joins each selected date with Flatpickr's
-   * default `", "` conjunction into one input value, so the derived pattern
-   * must allow one or more repetitions instead of a single date.
-   */
-  function dateFormatToMultiplePattern(fmt) {
-    const single = dateFormatToPattern(fmt);
-    return `${single}(, ${single})*`;
-  }
-
   add({ id, labelText });
 
   $: actualPattern =
@@ -151,8 +159,12 @@
   $: setReadonly(id, readonly);
   $: setDisabled(id, disabled);
   // Invalid/warn states are suppressed when the input is disabled or read-only.
-  $: showInvalid = invalid && !disabled && !readonly;
-  $: showWarn = warn && !invalid && !disabled && !readonly;
+  $: ({ showInvalid, showWarn } = resolveValidationVisibility({
+    invalid,
+    warn,
+    disabled,
+    readonly,
+  }));
   $: setValidation(id, showInvalid, showWarn);
   // The invalid/warn/calendar icons all render after the input in the DOM
   // (see below), so the vendor CSS's `.icon ~ .input` padding-right rule
@@ -182,16 +194,19 @@
   // deliberate lag would otherwise leave the overlay showing stale text
   // while the (invisible) real input already has the freshly typed value.
   $: overlayValue = currentValue;
-  $: errorId = `error-${id}`;
-  $: warnId = `warn-${id}`;
-  $: helperId = `helper-${id}`;
-  $: describedBy = showInvalid
-    ? undefined
-    : showWarn
-      ? warnId
-      : helperText
-        ? helperId
-        : undefined;
+  $: ({ errorId, warnId, helperId } = buildFieldIds(id));
+  // Unlike its siblings, this field does not suppress the helper
+  // fallback while fluid (no `isFluid` passed here) — the helper
+  // text block below has the same omission.
+  $: describedBy = resolveStatusDescribedBy({
+    showInvalid,
+    showWarn,
+    helperText,
+    errorId,
+    warnId,
+    helperId,
+    includeErrorId: false,
+  });
 
   function handleFocus() {
     if (selectTextOnFocus && !disabled && !$multiple) {
@@ -200,9 +215,10 @@
   }
 
   /**
-   * Range mode has two DatePickerInputs sharing one reset handler. Attach
-   * only to whichever declared itself first (the same check `declareRef`
-   * uses to split `inputRef` from `inputRefTo`), so the restore runs once.
+   * Range mode has two DatePickerInputs sharing one reset handler.
+   * Attach only to whichever declared itself first (the same check
+   * `declareRef` uses to split `inputRef` from `inputRefTo`), so the
+   * restore runs once.
    */
   function attachFormReset(node, onReset) {
     if ($inputIds.indexOf(id) !== 0) return {};

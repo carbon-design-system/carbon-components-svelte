@@ -17,11 +17,11 @@
    */
 
   /**
-   * Required. Specify the trigger button text.
-   * Alternatively, use the "labelChildren" slot for custom trigger content;
-   * `labelText` is still used as the accessible name in that case.
-   * When `iconOnly` is `true`, the text is not rendered but remains the
-   * trigger's accessible name.
+   * Required. Specify the trigger button text. Alternatively, use the
+   * "labelChildren" slot for custom trigger content; `labelText` is
+   * still used as the accessible name in that case. When `iconOnly` is
+   * `true`, the text is not rendered but remains the trigger's
+   * accessible name.
    * @type {string}
    */
   export let labelText;
@@ -60,8 +60,8 @@
   export let disabled = false;
 
   /**
-   * Set the preferred direction the menu opens toward.
-   * The menu flips to the opposite direction if there is not enough space.
+   * Set the preferred direction the menu opens toward. The menu flips
+   * to the opposite direction if there is not enough space.
    * @type {"top" | "bottom"}
    */
   export let direction = "bottom";
@@ -98,10 +98,12 @@
   import ChevronDown from "../icons/ChevronDown.svelte";
   import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
   import Menu from "../Menu/Menu.svelte";
+  import { blurOnMouseClose } from "../utils/blur-on-mouse-close.js";
 
   /**
    * The overflow menu scale is offset from MenuButton's: its unclassed
-   * default is 40px ("md" here) and its largest, "xl", is 48px ("lg" here).
+   * default is 40px ("md" here) and its largest, "xl", is 48px ("lg"
+   * here).
    */
   const ICON_TRIGGER_SIZE_CLASSES = {
     xs: "bx--overflow-menu--xs",
@@ -129,13 +131,7 @@
   function toggle(event) {
     const wasOpen = open;
     open = !open;
-    // A keyboard-activated click (Enter/Space) reports detail 0; a real mouse
-    // click reports 1+. Blur only after a mouse-driven close, so the trigger
-    // doesn't linger with a visible focus ring - keyboard users still see
-    // focus stay put, as they should.
-    if (wasOpen && event.detail !== 0) {
-      ref?.blur();
-    }
+    blurOnMouseClose(wasOpen, event, ref);
   }
 </script>
 

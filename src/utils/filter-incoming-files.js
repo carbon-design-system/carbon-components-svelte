@@ -1,7 +1,8 @@
 // @ts-check
 
 /**
- * Stable identity key for duplicate detection (name, size, lastModified).
+ * Stable identity key for duplicate detection (name, size,
+ * lastModified).
  * @param {File} file
  * @returns {string}
  */

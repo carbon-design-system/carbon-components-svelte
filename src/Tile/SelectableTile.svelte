@@ -16,7 +16,10 @@
   /** Set to `true` to disable the tile */
   export let disabled = false;
 
-  /** Set to `true` to stretch the tile to fill the height of its container */
+  /**
+   * Set to `true` to stretch the tile to fill the height of its
+   * container
+   */
   export let fullHeight = false;
 
   /**
@@ -55,15 +58,16 @@
   import { createEventDispatcher, getContext } from "svelte";
   import { readable } from "svelte/store";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
+  import { noop } from "../utils/noop.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
 
   const ctx = getContext("carbon:SelectableTileGroup");
   const hasGroup = ctx !== undefined;
-  const add = ctx?.add ?? (() => {});
-  const remove = ctx?.remove ?? (() => {});
-  const update = ctx?.update ?? (() => {});
+  const add = ctx?.add ?? noop;
+  const remove = ctx?.remove ?? noop;
+  const update = ctx?.update ?? noop;
   const selectedValues = ctx?.selectedValues ?? readable([]);
   const groupName = ctx?.groupName ?? readable(undefined);
 

@@ -1,9 +1,10 @@
 // @ts-check
 
 /**
- * Make a native file input hold exactly `files`, so native form submission
- * posts what the component shows. Clears the input when `files` is empty.
- * Fails open when the `DataTransfer` constructor is unavailable.
+ * Make a native file input hold exactly `files`, so native form
+ * submission posts what the component shows. Clears the input when
+ * `files` is empty. Fails open when the `DataTransfer` constructor is
+ * unavailable.
  *
  * @param {HTMLInputElement} input
  * @param {ReadonlyArray<File>} files

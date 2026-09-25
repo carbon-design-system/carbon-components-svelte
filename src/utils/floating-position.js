@@ -1,29 +1,58 @@
 // @ts-check
 
 /**
- * @typedef {{ top: number, bottom: number, left: number, right: number, width: number, height: number }} RectLike
+ * @typedef {{
+ *   top: number;
+ *   bottom: number;
+ *   left: number;
+ *   right: number;
+ *   width: number;
+ *   height: number;
+ * }} RectLike
  */
 
+/** @typedef {"bottom" | "top" | "left" | "right"} FloatingDirection */
+
 /**
- * Place a floating element next to an anchor. Caller passes both rects and the
- * viewport. Flips direction when the preferred side does not fit.
+ * Place a floating element next to an anchor. Caller passes both rects
+ * and the viewport. Flips direction when the preferred side does not
+ * fit.
  *
  * @param {Object} options
- * @param {RectLike} options.anchorRect - The anchor's `getBoundingClientRect()`.
- * @param {RectLike} options.floatingRect - The floating element's `getBoundingClientRect()`.
- * @param {{ innerWidth: number, innerHeight: number, scrollX: number, scrollY: number }} options.viewport
- * @param {"bottom" | "top" | "left" | "right"} options.direction - Preferred direction.
- * @param {"bottom" | "top" | "left" | "right"} [options.lockedDirection] - When set, skip flip detection and place on this side. Used to keep a side stable across content (width/height) changes while the floating element stays open.
- * @param {boolean} [options.useFixedPosition=false] - When true, scroll offsets are zeroed (the caller positions with `position: fixed`).
- * @param {boolean} [options.intrinsicWidth=false] - Use the floating element's own width instead of matching the anchor.
- * @param {"start" | "center" | "end"} [options.intrinsicAlign="center"] - Alignment along the anchor edge when `intrinsicWidth` is true.
+ * @param {RectLike} options.anchorRect - The anchor's
+ *   `getBoundingClientRect()`.
+ * @param {RectLike} options.floatingRect - The floating element's
+ *   `getBoundingClientRect()`.
+ * @param {{
+ *   innerWidth: number;
+ *   innerHeight: number;
+ *   scrollX: number;
+ *   scrollY: number;
+ * }} options.viewport
+ * @param {FloatingDirection} options.direction - Preferred direction.
+ * @param {FloatingDirection} [options.lockedDirection] - When set, skip
+ *   flip detection and place on this side. Used to keep a
+ *   side stable across content (width/height) changes while the
+ *   floating element stays open.
+ * @param {boolean} [options.useFixedPosition=false] - When true, scroll
+ *   offsets are zeroed (the caller positions with `position: fixed`).
+ * @param {boolean} [options.intrinsicWidth=false] - Use the floating
+ *   element's own width instead of matching the anchor.
+ * @param {"start" | "center" | "end"} [options.intrinsicAlign="center"]
+ *   Alignment along the anchor edge when `intrinsicWidth` is true.
  * @param {number} [options.gapTop=0]
  * @param {number} [options.gapBottom=0]
  * @param {number} [options.horizontalGapLeft=0]
  * @param {number} [options.horizontalGapRight=0]
  * @param {number} [options.verticalAlignOffsetLeft=0]
  * @param {number} [options.verticalAlignOffsetRight=0]
- * @returns {{ top: number, left: number, width?: number, actualDirection: "bottom" | "top" | "left" | "right", caretNudgePx?: number }}
+ * @returns {{
+ *   top: number;
+ *   left: number;
+ *   width?: number;
+ *   actualDirection: "bottom" | "top" | "left" | "right";
+ *   caretNudgePx?: number;
+ * }}
  */
 export function floatingPosition({
   anchorRect: rect,
@@ -96,8 +125,9 @@ export function floatingPosition({
   let width;
 
   /**
-   * Vertical position for a left/right-anchored floating element: aligned to
-   * the reference's top/bottom edge when it has intrinsic width, else centered.
+   * Vertical position for a left/right-anchored floating element:
+   * aligned to the reference's top/bottom edge when it has intrinsic
+   * width, else centered.
    *
    * @param {number} alignOffset
    * @returns {number}

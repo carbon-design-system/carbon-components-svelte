@@ -1,7 +1,10 @@
 <script>
   /**
    * @restProps {form}
-   * @typedef {import("svelte/action").Action<HTMLFormElement, any>} FormAction
+   * @typedef {import("svelte/action").Action<
+   *   HTMLFormElement,
+   *   any
+   * >} FormAction
    * @typedef {FormAction | [FormAction, any]} FormActionEntry
    */
 
@@ -26,10 +29,10 @@
   import Form from "../Form/Form.svelte";
 
   /**
-   * Context published under the key `"carbon:Form"` for descendant inputs.
-   * Custom fluid-aware inputs can subscribe with:
-   * `const ctx = getContext("carbon:Form");`
-   * and read `ctx.isFluid` to adapt their rendering.
+   * Context published under the key `"carbon:Form"` for descendant
+   * inputs. Custom fluid-aware inputs can subscribe with:
+   * `const ctx = getContext("carbon:Form");` and read `ctx.isFluid` to
+   * adapt their rendering.
    * @type {{ isFluid: boolean }}
    */
   const formContext = { isFluid: true };

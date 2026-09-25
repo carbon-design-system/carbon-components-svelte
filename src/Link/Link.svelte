@@ -42,6 +42,8 @@
    * @bindable readonly
    */
   export let ref = null;
+
+  import { resolveLinkRel } from "../utils/link-rel.js";
 </script>
 
 {#if disabled}
@@ -84,7 +86,7 @@
     class:bx--link--muted={muted}
     class:bx--link--sm={size === "sm"}
     class:bx--link--lg={size === "lg"}
-    rel={$$restProps.target === "_blank" ? "noopener noreferrer" : undefined}
+    rel={resolveLinkRel($$restProps.target)}
     {href}
     {...$$restProps}
     on:click

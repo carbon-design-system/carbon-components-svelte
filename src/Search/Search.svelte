@@ -35,8 +35,8 @@
   export let disabled = false;
 
   /**
-   * Set to `true` to use the read-only variant.
-   * The value cannot be edited or cleared, and still submits with the form.
+   * Set to `true` to use the read-only variant. The value cannot be
+   * edited or cleared, and still submits with the form.
    */
   export let readonly = false;
 
@@ -94,17 +94,17 @@
   export let selectTextOnFocus = false;
 
   /**
-   * Set to `true` while results are loading. Shows a small spinner in place
-   * of the search icon and sets `aria-busy` on the input. The field stays
-   * editable.
+   * Set to `true` while results are loading. Shows a small spinner in
+   * place of the search icon and sets `aria-busy` on the input. The
+   * field stays editable.
    */
   export let loading = false;
 
   /**
-   * Milliseconds to wait after the last input before dispatching `search`.
-   * 0 (default) does not dispatch on input; Enter still dispatches
-   * immediately. When greater than 0, `search` also fires after the pause.
-   * `value` updates immediately either way.
+   * Milliseconds to wait after the last input before dispatching
+   * `search`. 0 (default) does not dispatch on input; Enter still
+   * dispatches immediately. When greater than 0, `search` also fires
+   * after the pause. `value` updates immediately either way.
    */
   export let debounce = 0;
 
@@ -122,7 +122,10 @@
 
   let skipSelectOnFocus = false;
 
-  /** Focus the input without selecting text, even when `selectTextOnFocus` is set. */
+  /**
+   * Focus the input without selecting text, even when
+   * `selectTextOnFocus` is set.
+   */
   export function focusWithoutSelect() {
     skipSelectOnFocus = true;
     ref?.focus();

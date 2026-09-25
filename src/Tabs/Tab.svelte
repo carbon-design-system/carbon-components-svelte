@@ -34,8 +34,8 @@
   export let tabindex = "0";
 
   /**
-   * Set an id for the top-level element.
-   * Use a stable value with `Tabs` `selectedId` when tabs are added or removed dynamically.
+   * Set an id for the top-level element. Use a stable value with `Tabs`
+   * `selectedId` when tabs are added or removed dynamically.
    */
   export let id = uniqueId();
 
@@ -47,11 +47,11 @@
   export let secondaryLabel = "";
 
   /**
-   * Specify the icon to render.
-   * Icon is rendered to the right of the label by default.
-   * When the parent `Tabs` is `dismissible`, the icon is rendered to the left.
-   * When the parent `Tabs` is `iconOnly`, only the icon is rendered and the
-   * `label` is used as the accessible name and the tooltip shown on hover/focus.
+   * Specify the icon to render. Icon is rendered to the right of the
+   * label by default. When the parent `Tabs` is `dismissible`, the icon
+   * is rendered to the left. When the parent `Tabs` is `iconOnly`, only
+   * the icon is rendered and the `label` is used as the accessible name
+   * and the tooltip shown on hover/focus.
    * @type {Icon}
    */
   export let icon = /** @type {Icon} */ (undefined);
@@ -77,14 +77,9 @@
   export let tooltipAlignment = "center";
 
   import { getContext, onMount } from "svelte";
-  import { get } from "svelte/store";
-  import {
-    TOOLTIP_ENTER_DELAY_MS,
-    TOOLTIP_LEAVE_DELAY_MS,
-  } from "../constants/timing.js";
   import Close from "../icons/Close.svelte";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
-  import { createDelayedSetter } from "../utils/delayed-setter.js";
+  import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const {
@@ -105,41 +100,29 @@
 
   // Icon-only tabs show `label` as a portalled tooltip on hover/focus.
   // The portal keeps the tooltip from being clipped by the tab nav's overflow.
+
   let hovered = false;
   let focused = false;
-  const scheduleTooltip = createDelayedSetter();
+  const tooltipHandoff = createTooltipHandoff({
+    activeTooltip,
+    getId: () => id,
+  });
 
   // Gate on `activeTooltip` so only one tab tooltip shows at a time. When a
   // neighbor claims the active slot, this one closes even while still hovered.
   $: tooltipOpen =
     $iconOnly && !disabled && (hovered || focused) && $activeTooltip === id;
 
-  function claim() {
-    activeTooltip.set(id);
-  }
-
-  function release() {
-    if (!hovered && !focused && get(activeTooltip) === id) {
-      activeTooltip.set(undefined);
-    }
-  }
-
-  function reveal() {
-    hovered = true;
-    claim();
-  }
-
   function showTooltip() {
-    // Skip the enter delay when another tooltip is already open (warm handoff).
-    const warmHandoff =
-      get(activeTooltip) !== undefined && get(activeTooltip) !== id;
-    scheduleTooltip(warmHandoff ? 0 : TOOLTIP_ENTER_DELAY_MS, reveal);
+    tooltipHandoff.scheduleEnter(() => {
+      hovered = true;
+    });
   }
 
   function hideTooltip() {
-    scheduleTooltip(TOOLTIP_LEAVE_DELAY_MS, () => {
+    tooltipHandoff.scheduleLeave(() => {
       hovered = false;
-      release();
+      if (!focused) tooltipHandoff.release();
     });
   }
 
@@ -154,8 +137,8 @@
 
   onMount(() => {
     return () => {
-      scheduleTooltip.cancel();
-      if (get(activeTooltip) === id) activeTooltip.set(undefined);
+      tooltipHandoff.cancel();
+      tooltipHandoff.release();
       remove(id);
     };
   });
@@ -231,13 +214,13 @@
     on:focus={$iconOnly
       ? () => {
           focused = true;
-          claim();
+          tooltipHandoff.claim();
         }
       : undefined}
     on:blur={$iconOnly
       ? () => {
           focused = false;
-          release();
+          if (!hovered) tooltipHandoff.release();
         }
       : undefined}
   >

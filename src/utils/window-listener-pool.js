@@ -1,11 +1,12 @@
 // @ts-check
 
 /**
- * One `window` listener per `(type, options)`. Callers register as consumers;
- * the first consumer calls `addEventListener`, the last calls
- * `removeEventListener`. Shared by the `dismiss` action (outside-click/escape)
- * and any other code that wants a `window` listener without adding one per
- * component instance (e.g. `FloatingPortal`'s scroll/resize reposition).
+ * One `window` listener per `(type, options)`. Callers register as
+ * consumers; the first consumer calls `addEventListener`, the last
+ * calls `removeEventListener`. Shared by the `dismiss` action
+ * (outside-click/escape) and any other code that wants a `window`
+ * listener without adding one per component instance (e.g.
+ * `FloatingPortal`'s scroll/resize reposition).
  *
  * @typedef {{ handler: (event: Event) => void }} Consumer
  * @typedef {{
@@ -20,8 +21,8 @@
 const pools = new Map();
 
 /**
- * Pool key from type plus `capture`, `passive`, and `once`. Those are the only
- * options that change how the listener runs.
+ * Pool key from type plus `capture`, `passive`, and `once`. Those are
+ * the only options that change how the listener runs.
  *
  * @param {string} type
  * @param {boolean | AddEventListenerOptions | undefined} options
@@ -42,9 +43,14 @@ export function poolKey(type, options) {
 }
 
 /**
- * Add a consumer to the pool for `(type, options)`. Creates the pool on first use.
+ * Add a consumer to the pool for `(type, options)`. Creates the pool on
+ * first use.
  *
- * @param {{ type: string, handler: (event: Event) => void, options: boolean | AddEventListenerOptions | undefined }} spec
+ * @param {{
+ *   type: string;
+ *   handler: (event: Event) => void;
+ *   options: boolean | AddEventListenerOptions | undefined;
+ * }} spec
  * @returns {{ key: string, pool: Pool, consumer: Consumer }}
  */
 export function registerConsumer(spec) {
@@ -85,8 +91,9 @@ export function unregisterConsumer({ key, pool, consumer }) {
 /**
  * Add a pooled `window` listener, registered immediately (no deferral).
  * Consumers sharing the same `(type, options)` share one real
- * `addEventListener` call; the underlying listener is removed once the last
- * consumer unregisters. SSR-unsafe: call only where `window` exists.
+ * `addEventListener` call; the underlying listener is removed once the
+ * last consumer unregisters. SSR-unsafe: call only where `window`
+ * exists.
  *
  * @param {string} type
  * @param {(event: Event) => void} handler

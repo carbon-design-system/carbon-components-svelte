@@ -1,8 +1,31 @@
+<script context="module">
+  function isTopPosition(value) {
+    return value.startsWith("top");
+  }
+
+  function isLeftPosition(value) {
+    return value.endsWith("left");
+  }
+
+  function isRightPosition(value) {
+    return value.endsWith("right");
+  }
+
+  function isCenterPosition(value) {
+    return value.endsWith("center");
+  }
+</script>
+
 <script>
   /**
    * @typedef {object} NotificationData
    * @property {string} [id] - Optional id for deduplication
-   * @property {"error" | "info" | "info-square" | "success" | "warning" | "warning-alt"} [kind]
+   * @property {"error"
+   *   | "info"
+   *   | "info-square"
+   *   | "success"
+   *   | "warning"
+   *   | "warning-alt"} [kind]
    * @property {string} [title]
    * @property {string} [subtitle]
    * @property {string} [caption]
@@ -17,7 +40,12 @@
 
   /**
    * Specify the position of the notification queue.
-   * @type {"top-left" | "top-center" | "top-right" | "bottom-left" | "bottom-center" | "bottom-right"}
+   * @type {"top-left"
+   *   | "top-center"
+   *   | "top-right"
+   *   | "bottom-left"
+   *   | "bottom-center"
+   *   | "bottom-right"}
    */
   export let position = "top-right";
 
@@ -40,8 +68,9 @@
   export let zIndex = 9000;
 
   /**
-   * Specify the maximum number of notifications to display.
-   * When this limit is exceeded, the oldest notification is automatically removed.
+   * Specify the maximum number of notifications to display. When this
+   * limit is exceeded, the oldest notification is automatically
+   * removed.
    */
   export let maxNotifications = 3;
 
@@ -56,27 +85,11 @@
     return `notification-${idCounter++}`;
   }
 
-  function isTopPosition(value) {
-    return value.startsWith("top");
-  }
-
-  function isLeftPosition(value) {
-    return value.endsWith("left");
-  }
-
-  function isRightPosition(value) {
-    return value.endsWith("right");
-  }
-
-  function isCenterPosition(value) {
-    return value.endsWith("center");
-  }
-
   /**
-   * Add a notification to the queue.
-   * If a notification with the same id already exists, the call is ignored.
-   * To change an existing notification in place, use `update`.
-   * Returns the notification id (either the provided id or a generated one).
+   * Add a notification to the queue. If a notification with the same id
+   * already exists, the call is ignored. To change an existing
+   * notification in place, use `update`. Returns the notification id
+   * (either the provided id or a generated one).
    * @type {(notification: NotificationData) => string}
    */
   export function add(notification) {
@@ -106,9 +119,9 @@
   }
 
   /**
-   * Update an existing notification by id, merging `patch` into it.
-   * The id of the notification cannot be changed.
-   * Returns true if the notification was found and updated, false otherwise.
+   * Update an existing notification by id, merging `patch` into it. The
+   * id of the notification cannot be changed. Returns true if the
+   * notification was found and updated, false otherwise.
    * @type {(id: string, patch: Partial<NotificationData>) => boolean}
    */
   export function update(id, patch) {
@@ -121,8 +134,8 @@
   }
 
   /**
-   * Remove a notification by id.
-   * Returns true if the notification was found and removed, false otherwise.
+   * Remove a notification by id. Returns true if the notification was
+   * found and removed, false otherwise.
    * @type {(id: string) => boolean}
    */
   export function remove(id) {

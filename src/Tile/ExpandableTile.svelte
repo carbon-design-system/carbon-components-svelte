@@ -63,9 +63,10 @@
   let resizeObserver;
 
   /**
-   * Internal, measured fallbacks. These are only used when the consumer has
-   * not explicitly set the corresponding public prop, so that `bind:` values
-   * used to *control* the layout are never clobbered by measurements.
+   * Internal, measured fallbacks. These are only used when the consumer
+   * has not explicitly set the corresponding public prop, so that
+   * `bind:` values used to *control* the layout are never clobbered by
+   * measurements.
    */
   let measuredMaxHeight = 0;
   let measuredPadding = 0;
@@ -73,7 +74,8 @@
   /**
    * Read the tile's vertical padding. `getComputedStyle` forces a style
    * recalc, so this runs when the tile mounts or resizes rather than in
-   * `afterUpdate`, which fired on every re-render (hover, slot content).
+   * `afterUpdate`, which fired on every re-render (hover, slot
+   * content).
    */
   function measurePadding() {
     if (!ref) return;

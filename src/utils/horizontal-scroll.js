@@ -9,9 +9,9 @@
  * @param {number} options.scrollWidth
  * @param {number} options.clientWidth
  * @param {number} [options.forwardEpsilon=0] - extra px of slack before
- *   reporting forward overflow, to absorb a browser's sub-pixel rounding
- *   (Firefox can report scrollWidth 1px larger than clientWidth with
- *   nowhere left to scroll).
+ *   reporting forward overflow, to absorb a browser's sub-pixel
+ *   rounding (Firefox can report scrollWidth 1px larger than
+ *   clientWidth with nowhere left to scroll).
  * @returns {{ canScrollBackward: boolean; canScrollForward: boolean }}
  */
 export function computeScrollOverflow({
@@ -28,7 +28,8 @@ export function computeScrollOverflow({
 }
 
 /**
- * Scroll `node` by roughly 75% of its own width, in the given direction.
+ * Scroll `node` by roughly 75% of its own width, in the given
+ * direction.
  *
  * @param {HTMLElement | null | undefined} node
  * @param {1 | -1} direction
@@ -42,8 +43,9 @@ export function scrollByViewport(node, direction) {
 }
 
 /**
- * Scroll `container` horizontally so `target` is fully visible, inset from
- * each edge by `margin` so it isn't tucked under an overflow button.
+ * Scroll `container` horizontally so `target` is fully visible, inset
+ * from each edge by `margin` so it isn't tucked under an overflow
+ * button.
  *
  * @param {HTMLElement | null | undefined} container
  * @param {HTMLElement | null | undefined} target

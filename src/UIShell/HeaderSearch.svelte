@@ -12,7 +12,8 @@
 
   /**
    * @typedef {object} HeaderSearchResult
-   * @property {string | number} [id] - Unique result identifier; used as the each-block key when provided
+   * @property {string | number} [id] - Unique result identifier; used
+   *   as the each-block key when provided
    * @property {string} href
    * @property {string} text
    * @property {string} [description]
@@ -72,24 +73,32 @@
   /** Specify the `placeholder` attribute of the search input. */
   export let placeholder = "Search...";
 
-  /** Specify the text for the assistive label associated with the search input. */
+  /**
+   * Specify the text for the assistive label associated with the search
+   * input.
+   */
   export let labelText = "Search";
 
   /** Specify the label for the clear button. */
   export let closeButtonLabelText = "Clear search input";
 
   /**
-   * Set to `true` to filter `menu`-slot items by the search value using fuzzy
-   * matching. Requires the `menu` slot; ignored when using the `results` prop.
+   * Set to `true` to filter `menu`-slot items by the search value using
+   * fuzzy matching. Requires the `menu` slot; ignored when using the
+   * `results` prop.
    */
   export let shouldFilter = true;
 
   /**
-   * Override how the search value is matched against each `menu`-slot item's
-   * `text`. Receives the item `text` and the current search value, and returns
-   * whether the item `matched` along with the `indices` of characters to
-   * highlight. Defaults to fuzzy matching. Requires the `menu` slot.
-   * @type {(text: string, query: string) => { matched: boolean; indices?: number[] }}
+   * Override how the search value is matched against each `menu`-slot
+   * item's `text`. Receives the item `text` and the current search
+   * value, and returns whether the item `matched` along with the
+   * `indices` of characters to highlight. Defaults to fuzzy matching.
+   * Requires the `menu` slot.
+   * @type {(
+   *   text: string,
+   *   query: string,
+   * ) => { matched: boolean; indices?: number[] }}
    */
   export let match = fuzzyMatch;
 
@@ -100,12 +109,14 @@
    */
   export let loading = false;
 
-  /** Number of skeleton rows while `loading`. Requires the `menu` slot. */
+  /**
+   * Number of skeleton rows while `loading`. Requires the `menu` slot.
+   */
   export let skeletonCount = 4;
 
   /**
-   * Row density for the `menu` slot. Result text stays flush with the header
-   * input; smaller sizes shorten rows to fit more results.
+   * Row density for the `menu` slot. Result text stays flush with the
+   * header input; smaller sizes shorten rows to fit more results.
    * @type {"sm" | "lg" | "xl"}
    */
   export let size = "sm";
@@ -114,10 +125,11 @@
   export let selectTextOnFocus = false;
 
   /**
-   * Milliseconds to wait after the last input before dispatching `search`.
-   * 0 (default) does not dispatch `search`. `value` stays immediate; only
-   * `search` waits. Selecting a result or submitting cancels a pending
-   * `search` instead of also firing it. Clearing is always instant.
+   * Milliseconds to wait after the last input before dispatching
+   * `search`. 0 (default) does not dispatch `search`. `value` stays
+   * immediate; only `search` waits. Selecting a result or submitting
+   * cancels a pending `search` instead of also firing it. Clearing is
+   * always instant.
    */
   export let debounce = 0;
 
@@ -130,6 +142,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import { fuzzyMatch } from "../utils/fuzzy-match.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
+  import { moveIndex } from "../utils/move-index.js";
   import { createOptionListNavigator } from "../utils/option-list-navigator.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -420,19 +433,19 @@
             break;
           case "ArrowDown":
             event.preventDefault();
-            if (selectedResultIndex === results.length - 1) {
-              selectedResultIndex = 0;
-            } else {
-              selectedResultIndex += 1;
-            }
+            selectedResultIndex = moveIndex(
+              selectedResultIndex,
+              1,
+              results.length,
+            );
             break;
           case "ArrowUp":
             event.preventDefault();
-            if (selectedResultIndex === 0) {
-              selectedResultIndex = results.length - 1;
-            } else {
-              selectedResultIndex -= 1;
-            }
+            selectedResultIndex = moveIndex(
+              selectedResultIndex,
+              -1,
+              results.length,
+            );
             break;
           case "Escape":
             if (value === "") {

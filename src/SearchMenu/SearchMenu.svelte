@@ -4,10 +4,16 @@
    */
 
   /**
-   * @event {{ value: string; item: { text?: string; value?: string; href?: string }; event: Event }} select
+   * @event {{
+   *   value: string;
+   *   item: { text?: string; value?: string; href?: string };
+   *   event: Event;
+   * }} select
    * @event {{ value: T }} submit
    * @event {T} search
-   * @event {{ trigger: "escape-key" | "outside-click" | "select" | "blur" }} close
+   * @event {{
+   *   trigger: "escape-key" | "outside-click" | "select" | "blur";
+   * }} close
    * @restProps {input}
    * @slot {{}} before
    * @slot {{}} noResults
@@ -22,26 +28,31 @@
   export let value = /** @type {T} */ ("");
 
   /**
-   * Whether the results menu is visible. Driven by focus and available content.
+   * Whether the results menu is visible. Driven by focus and available
+   * content.
    * @bindable readonly
    */
   export let open = false;
 
   /**
-   * Set to `true` to filter items by the search value using fuzzy matching.
-   * Unmatched items stay mounted and are hidden so later keystrokes do not
-   * recreate option nodes.
+   * Set to `true` to filter items by the search value using fuzzy
+   * matching. Unmatched items stay mounted and are hidden so later
+   * keystrokes do not recreate option nodes.
    */
   export let shouldFilter = true;
 
   /**
-   * Override how the search value is matched against each item's `text`.
-   * Receives the item `text` and the current search value, and returns whether
-   * the item `matched` along with the `indices` of characters to highlight.
-   * Defaults to fuzzy matching. Supply your own function for custom filtering
-   * and highlighting, or pass a no-op like `() => ({ matched: true })` to keep
-   * every item and disable highlighting.
-   * @type {(text: string, query: string) => { matched: boolean; indices?: number[] }}
+   * Override how the search value is matched against each item's
+   * `text`. Receives the item `text` and the current search value, and
+   * returns whether the item `matched` along with the `indices` of
+   * characters to highlight. Defaults to fuzzy matching. Supply your
+   * own function for custom filtering and highlighting, or pass a no-op
+   * like `() => ({ matched: true })` to keep every item and disable
+   * highlighting.
+   * @type {(
+   *   text: string,
+   *   query: string,
+   * ) => { matched: boolean; indices?: number[] }}
    */
   export let match = fuzzyMatch;
 
@@ -52,8 +63,8 @@
   export let size = "xl";
 
   /**
-   * Specify the size of the results menu, independent of the input `size`.
-   * Defaults to the input `size`.
+   * Specify the size of the results menu, independent of the input
+   * `size`. Defaults to the input `size`.
    * @type {"xs" | "sm" | "lg" | "xl"}
    */
   export let menuSize = undefined;
@@ -65,9 +76,9 @@
   export let disabled = false;
 
   /**
-   * Set to `true` to render a skeleton menu while results are loading, for
-   * example while fetching server-side results. Override the placeholder rows
-   * with the `loading` slot.
+   * Set to `true` to render a skeleton menu while results are loading,
+   * for example while fetching server-side results. Override the
+   * placeholder rows with the `loading` slot.
    */
   export let loading = false;
 
@@ -75,9 +86,10 @@
   export let skeletonCount = 4;
 
   /**
-   * Set to `true` to show a spinner in the search input while results are
-   * loading. Independent of `loading`, which controls the skeleton menu —
-   * combine both to show the spinner while the menu is also loading.
+   * Set to `true` to show a spinner in the search input while results
+   * are loading. Independent of `loading`, which controls the skeleton
+   * menu — combine both to show the spinner while the menu is also
+   * loading.
    */
   export let searchLoading = false;
 
@@ -102,7 +114,10 @@
    */
   export let direction = "bottom";
 
-  /** Set to `true` to render the menu in a portal to escape `overflow: hidden` containers */
+  /**
+   * Set to `true` to render the menu in a portal to escape
+   * `overflow: hidden` containers
+   */
   export let portal = true;
 
   /** Specify a class passed to the inner Search element */
@@ -129,11 +144,12 @@
   export let selectTextOnFocus = false;
 
   /**
-   * Milliseconds to wait after the last input before dispatching `search`.
-   * 0 (default) does not dispatch `search`. `value`, the fuzzy-match
-   * highlighting, and clearing all stay immediate regardless of this delay
-   * -- only the `search` event waits. Selecting an item or submitting with
-   * <kbd>Enter</kbd> cancels a pending `search` instead of also firing it.
+   * Milliseconds to wait after the last input before dispatching
+   * `search`. 0 (default) does not dispatch `search`. `value`, the
+   * fuzzy-match highlighting, and clearing all stay immediate
+   * regardless of this delay -- only the `search` event waits.
+   * Selecting an item or submitting with <kbd>Enter</kbd> cancels a
+   * pending `search` instead of also firing it.
    */
   export let debounce = 0;
 

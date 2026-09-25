@@ -5,7 +5,10 @@
   /** Specify the header subtitle */
   export let subTitle = "";
 
-  /** Set to `true` to hide the step progress indicator (only relevant when there is more than one `InterstitialScreenView`) */
+  /**
+   * Set to `true` to hide the step progress indicator (only relevant
+   * when there is more than one `InterstitialScreenView`)
+   */
   export let hideProgressIndicator = false;
 
   /** Specify the ARIA label for the close icon */

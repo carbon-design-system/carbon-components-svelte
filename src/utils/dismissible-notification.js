@@ -5,9 +5,9 @@ import { createTimeoutDismiss } from "./timeout-dismiss.js";
 /**
  * Shared open/close + auto-dismiss-timeout + pause-on-hover wiring for
  * `InlineNotification` and `ToastNotification`: closing dispatches a
- * cancelable "close" event (detail `{ timeout }`) and only applies `setOpen(false)`
- * when no listener calls `preventDefault()`; an auto-dismiss timeout closes
- * the same way, with `timeout: true`.
+ * cancelable "close" event (detail `{ timeout }`) and only applies
+ * `setOpen(false)` when no listener calls `preventDefault()`; an
+ * auto-dismiss timeout closes the same way, with `timeout: true`.
  * @param {object} options
  * @param {(
  *   name: string,
@@ -37,9 +37,9 @@ export function createDismissibleNotification({
     createHoverFocusPause(dismiss, getPauseOnHover);
 
   /**
-   * Close the notification. `closeFromTimeout` is passed through verbatim
-   * as the click handler for the close button (so it commonly receives a
-   * `MouseEvent`, which is intentionally not `=== true`).
+   * Close the notification. `closeFromTimeout` is passed through
+   * verbatim as the click handler for the close button (so it commonly
+   * receives a `MouseEvent`, which is intentionally not `=== true`).
    * @param {unknown} [closeFromTimeout]
    */
   function close(closeFromTimeout) {

@@ -3,7 +3,10 @@
    * @template [Icon=any]
    * @event close
    * @type {object}
-   * @property {"escape-key" | "outside-click" | "close-button" | "programmatic"} trigger
+   * @property {"escape-key"
+   *   | "outside-click"
+   *   | "close-button"
+   *   | "programmatic"} trigger
    * @event {null} open
    * @event transitionend
    * @type {object}
@@ -34,7 +37,10 @@
   /** Set to `true` to use the passive variant */
   export let passiveModal = false;
 
-  /** Set to `true` to remove the modal body padding so content spans edge to edge */
+  /**
+   * Set to `true` to remove the modal body padding so content spans
+   * edge to edge
+   */
   export let fullWidth = false;
 
   /**
@@ -62,8 +68,9 @@
   export let hasForm = false;
 
   /**
-   * Specify the ID of a form element to associate with the primary button.
-   * This enables the primary button to submit the form from outside the form element.
+   * Specify the ID of a form element to associate with the primary
+   * button. This enables the primary button to submit the form from
+   * outside the form element.
    * @type {string}
    */
   export let formId = undefined;
@@ -78,8 +85,8 @@
   export let primaryButtonDisabled = false;
 
   /**
-   * Set to `true` to show a loading state on the primary button.
-   * While loading, the button is non-interactive and submit is suppressed.
+   * Set to `true` to show a loading state on the primary button. While
+   * loading, the button is non-interactive and submit is suppressed.
    */
   export let primaryButtonLoading = false;
 
@@ -105,8 +112,8 @@
   export let secondaryButtonText = "";
 
   /**
-   * Set to `true` to show a loading state on the secondary button.
-   * Only applies to the `secondaryButtonText` path (not `secondaryButtons`).
+   * Set to `true` to show a loading state on the secondary button. Only
+   * applies to the `secondaryButtonText` path (not `secondaryButtons`).
    * While loading, the button is non-interactive.
    */
   export let secondaryButtonLoading = false;
@@ -118,13 +125,19 @@
   export let secondaryButtonLoadingDescription = "Loading";
 
   /**
-   * One or two secondary buttons for the modal footer.
-   * Supersedes `secondaryButtonText`. Each entry needs `text`; optional
-   * `kind` (defaults to `"secondary"`), `disabled`, `loading`, and
-   * `loadingDescription` (defaults to `"Loading"`) pass through to Button /
-   * the loading state. With two entries plus a primary button, the footer
-   * uses the three-button layout.
-   * @type {ReadonlyArray<{ text: string; kind?: string; disabled?: boolean; loading?: boolean; loadingDescription?: string }>}
+   * One or two secondary buttons for the modal footer. Supersedes
+   * `secondaryButtonText`. Each entry needs `text`; optional `kind`
+   * (defaults to `"secondary"`), `disabled`, `loading`, and
+   * `loadingDescription` (defaults to `"Loading"`) pass through to
+   * Button / the loading state. With two entries plus a primary button,
+   * the footer uses the three-button layout.
+   * @type {ReadonlyArray<{
+   *   text: string;
+   *   kind?: string;
+   *   disabled?: boolean;
+   *   loading?: boolean;
+   *   loadingDescription?: string;
+   * }>}
    */
   export let secondaryButtons = [];
 
@@ -135,7 +148,10 @@
    */
   export let selectorPrimaryFocus = "[data-modal-primary-focus]";
 
-  /** Set to `true` to prevent the modal from closing when clicking outside */
+  /**
+   * Set to `true` to prevent the modal from closing when clicking
+   * outside
+   */
   export let preventCloseOnClickOutside = false;
 
   /**

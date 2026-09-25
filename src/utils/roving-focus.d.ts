@@ -5,7 +5,9 @@ export type RovingFocusOrientation = "horizontal" | "vertical" | "both";
 export type RovingFocusOptions = {
   /** Items inside `node`. Also filters which keydown events count. */
   selector: string;
-  /** Item list in tab order. Default: `node.querySelectorAll(selector)`. */
+  /**
+   * Item list in tab order. Default: `node.querySelectorAll(selector)`.
+   */
   getItems?: () => HTMLElement[];
   /** @default "horizontal" */
   orientation?: RovingFocusOrientation;
@@ -25,7 +27,9 @@ export type RovingFocusOptions = {
   focusOnMove?: boolean;
 };
 
-/** Arrow/Home/End keydown on `node` calls `onMove` with the next index. */
+/**
+ * Arrow/Home/End keydown on `node` calls `onMove` with the next index.
+ */
 export function rovingFocus(
   node: HTMLElement,
   options: RovingFocusOptions,

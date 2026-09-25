@@ -4,10 +4,10 @@ import { createOutsideDismiss } from "./outside-dismiss.js";
 
 /**
  * Shared open/close lifecycle for `Modal` and `ComposedModal`: the
- * cancelable `close(trigger)` dispatch, outside-click dismiss wiring, and
- * the prevOpen/closeDispatched/mounted state machine that dispatches
- * "open"/"close" on external `open` changes and re-focuses the dialog on
- * later (post-mount) open transitions.
+ * cancelable `close(trigger)` dispatch, outside-click dismiss wiring,
+ * and the prevOpen/closeDispatched/mounted state machine that
+ * dispatches "open"/"close" on external `open` changes and re-focuses
+ * the dialog on later (post-mount) open transitions.
  *
  * Each component still owns, and calls into this factory's return value
  * from, its own:
@@ -16,15 +16,17 @@ import { createOutsideDismiss } from "./outside-dismiss.js";
  * - The `sharedOpen`/`trackModal` registration (`const sharedOpen =
  *   writable(open); $: $sharedOpen = open; trackModal(sharedOpen);`).
  *   `trackModal` calls Svelte's `onMount` internally, which must run
- *   during real component initialization — bundling it into this factory
- *   would make the factory untestable outside a mounted component for a
- *   3-line saving, so it stays inline in each component.
+ *   during real component initialization — bundling it into this
+ *   factory would make the factory untestable outside a mounted
+ *   component for a 3-line saving, so it stays inline in each
+ *   component.
  * - `onMount`: call `setMounted()`, then this component's own *initial*
- *   focus — Modal focuses synchronously there ("DOM is already in place —
- *   no `tick()` needed"), ComposedModal wraps it in `tick()`. That drift
- *   is deliberate (flagged, not unified) and stays in each component.
- * - `$: syncOpen(open);` — Svelte reactive statements can't live inside a
- *   plain factory function; call the returned `syncOpen` from one.
+ *   focus — Modal focuses synchronously there ("DOM is already in place
+ *   — no `tick()` needed"), ComposedModal wraps it in `tick()`. That
+ *   drift is deliberate (flagged, not unified) and stays in each
+ *   component.
+ * - `$: syncOpen(open);` — Svelte reactive statements can't live inside
+ *   a plain factory function; call the returned `syncOpen` from one.
  *
  * @param {object} options
  * @param {(

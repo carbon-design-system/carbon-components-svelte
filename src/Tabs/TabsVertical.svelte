@@ -11,18 +11,18 @@
   export let selected = 0;
 
   /**
-   * Specify the selected tab by id.
-   * When set, takes precedence over `selected` and stays on the same logical
-   * tab as tabs are added or removed. Pair with a stable `id` on each `Tab`.
+   * Specify the selected tab by id. When set, takes precedence over
+   * `selected` and stays on the same logical tab as tabs are added or
+   * removed. Pair with a stable `id` on each `Tab`.
    * @bindable writable
    * @type {string | undefined}
    */
   export let selectedId = undefined;
 
   /**
-   * Choose whether arrow keys change the selection on focus.
-   * Defaults to `"automatic"`. Set to `"manual"` so arrow keys only move
-   * focus; press Enter or Space to select.
+   * Choose whether arrow keys change the selection on focus. Defaults
+   * to `"automatic"`. Set to `"manual"` so arrow keys only move focus;
+   * press Enter or Space to select.
    * @type {"automatic" | "manual"}
    */
   export let activation = "automatic";
@@ -45,21 +45,29 @@
   import { breakpointObserver } from "../Breakpoint/breakpoint-observer.js";
   import ChevronLeft from "../icons/ChevronLeft.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
-  import { batchStoreUpdates } from "../utils/batch-store-updates.js";
-  import { clampIndex } from "../utils/clamp-index.js";
   import {
     computeScrollOverflow,
     scrollByViewport,
     scrollIntoViewX,
   } from "../utils/horizontal-scroll.js";
   import { keyBy } from "../utils/key-by.js";
+  import { resolveIdSelection } from "../utils/resolve-id-selection.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { syncDomOrder } from "../utils/sync-dom-order.js";
+  import { createTabsRegistration } from "../utils/tabs-registration.js";
 
   const dispatch = createEventDispatcher();
 
   /**
-   * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean; index: number }>>}
+   * @type {import("svelte/store").Writable<
+   *   ReadonlyArray<{
+   *     id: string;
+   *     label: string;
+   *     disabled: boolean;
+   *     hasSecondaryLabel: boolean;
+   *     index: number;
+   *   }>
+   * >}
    */
   const tabs = writable([]);
   const tabsById = derived(tabs, (_) => keyBy(_));
@@ -68,11 +76,15 @@
    */
   const selectedTab = writable(undefined);
   /**
-   * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; index: number }>>}
+   * @type {import("svelte/store").Writable<
+   *   ReadonlyArray<{ id: string; index: number }>
+   * >}
    */
   const content = writable([]);
   /**
-   * @type {import("svelte/store").Readable<Record<string, { id: string; index: number }>>}
+   * @type {import("svelte/store").Readable<
+   *   Record<string, { id: string; index: number }>
+   * >}
    */
   const contentById = derived(content, (_) => keyBy(_));
   /**
@@ -106,7 +118,7 @@
   const useFullWidth = writable(false);
   const useDismissible = writable(false);
   const useIconOnly = writable(false);
-  const activeTooltip = writable(undefined);
+  const activeTooltip = writable(null);
 
   let refTabList = null;
   let refRoot = null;
@@ -135,8 +147,8 @@
   const SCROLL_INTO_VIEW_MARGIN = 48;
 
   /**
-   * Scroll the horizontal tab row so `tab` is fully visible, inset from each
-   * edge so it is not tucked under an overflow button.
+   * Scroll the horizontal tab row so `tab` is fully visible, inset from
+   * each edge so it is not tucked under an overflow button.
    * @type {(tab: HTMLElement | undefined) => void}
    */
   function scrollTabIntoView(tab) {
@@ -152,55 +164,29 @@
   //
   // Set needsDomSync inside the batched update. afterUpdate runs once
   // after mount before this flush, while tabs is still [].
-  const batchedTabsUpdate = batchStoreUpdates(tabs);
-  const batchedContentUpdate = batchStoreUpdates(content);
+  const registration = createTabsRegistration({
+    tabs,
+    content,
+    onDomSyncNeeded: () => {
+      needsDomSync = true;
+    },
+  });
 
   /**
-   * @type {(data: { id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean }) => void}
+   * @type {(data: {
+   *   id: string;
+   *   label: string;
+   *   disabled: boolean;
+   *   hasSecondaryLabel: boolean;
+   * }) => void}
    */
-  function add(data) {
-    batchedTabsUpdate((_) => {
-      // `Tab` re-registers when its props change. Check the batched
-      // accumulator, not `$tabsById`: a same-batch registration is not in the
-      // derived store yet. Only an insert needs a DOM-order sync.
-      const index = _.findIndex((tab) => tab.id === data.id);
-      if (index !== -1) {
-        return _.map((tab, i) => (i === index ? { ...tab, ...data } : tab));
-      }
-      needsDomSync = true;
-      return [..._, { ...data, index: _.length }];
-    });
-  }
-
-  /**
-   * @type {(id: string) => void}
-   */
-  function remove(id) {
-    batchedTabsUpdate((_) => {
-      needsDomSync = true;
-      return _.filter((tab) => tab.id !== id);
-    });
-  }
-
-  /**
-   * @type {(data: { id: string }) => void}
-   */
-  function addContent(data) {
-    batchedContentUpdate((_) => {
-      needsDomSync = true;
-      return [..._, { ...data, index: _.length }];
-    });
-  }
-
-  /**
-   * @type {(id: string) => void}
-   */
-  function removeContent(id) {
-    batchedContentUpdate((_) => {
-      needsDomSync = true;
-      return _.filter((item) => item.id !== id);
-    });
-  }
+  const add = registration.add;
+  /** @type {(id: string) => void} */
+  const remove = registration.remove;
+  /** @type {(data: { id: string }) => void} */
+  const addContent = registration.addContent;
+  /** @type {(id: string) => void} */
+  const removeContent = registration.removeContent;
 
   /**
    * @type {(id: string) => void}
@@ -218,8 +204,9 @@
   }
 
   /**
-   * Resolve selection from `selectedId` when set; otherwise use `selected`.
-   * If the selected id was removed, keep the same index (next tab) or clamp.
+   * Resolve selection from `selectedId` when set; otherwise use
+   * `selected`. If the selected id was removed, keep the same index
+   * (next tab) or clamp.
    * @type {() => void}
    */
   function syncSelection() {
@@ -228,16 +215,14 @@
       return;
     }
 
-    const tab = $tabsById[selectedId];
-    if (tab) {
-      selectedIndex = tab.index;
-      return;
-    }
-
-    if ($tabs.length === 0) return;
-
-    selectedIndex = clampIndex(selectedIndex, 0, $tabs.length);
-    selectedId = $tabs[selectedIndex].id;
+    const resolved = resolveIdSelection({
+      items: $tabs,
+      selectedId,
+      currentIndex: selectedIndex,
+    });
+    if (!resolved) return;
+    selectedIndex = resolved.index;
+    selectedId = resolved.id;
   }
 
   // Vertical tabs are never dismissible; this no-op satisfies the `Tab` context.
@@ -261,7 +246,8 @@
 
   /**
    * Arrow keys move from the tab that holds focus. Fall back to the
-   * manual-mode focus index, then the selection, when focus is elsewhere.
+   * manual-mode focus index, then the selection, when focus is
+   * elsewhere.
    * @type {() => number}
    */
   function getActiveIndex() {
@@ -276,8 +262,9 @@
   }
 
   /**
-   * Move selection/focus to a tab at an absolute index. Roving focus resolves
-   * the index (skipping disabled, wrapping); selection follows focus.
+   * Move selection/focus to a tab at an absolute index. Roving focus
+   * resolves the index (skipping disabled, wrapping); selection follows
+   * focus.
    * @type {(index: number) => Promise<void>}
    */
   async function selectTab(index) {

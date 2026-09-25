@@ -11,7 +11,8 @@
 
   /**
    * Specify an element or list of elements to trigger the context menu.
-   * If no element is specified, the context menu applies to the entire window.
+   * If no element is specified, the context menu applies to the entire
+   * window.
    * @type {null | ReadonlyArray<null | HTMLElement>}
    */
   export let target = null;
@@ -42,9 +43,9 @@
   export let ref = null;
 
   /**
-   * Accessible name for the menu.
-   * Prefer setting this (or `aria-label`) when the menu is opened from the window
-   * (`target` unset), where there is no visible trigger for `aria-labelledby`.
+   * Accessible name for the menu. Prefer setting this (or `aria-label`)
+   * when the menu is opened from the window (`target` unset), where
+   * there is no visible trigger for `aria-labelledby`.
    * @type {string | undefined}
    */
   export let labelText = undefined;
@@ -59,6 +60,7 @@
   import { writable } from "svelte/store";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
+  import { menuOptionLabel } from "../utils/menu-option-label.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import {
     createTypeaheadBuffer,
@@ -94,22 +96,11 @@
   const typeahead = createTypeaheadBuffer();
 
   /**
-   * @param {HTMLElement} item
-   */
-  function itemToString(item) {
-    return (
-      item.querySelector(".bx--menu-option__label")?.textContent ??
-      item.textContent ??
-      ""
-    ).trim();
-  }
-
-  /**
-   * WAI-ARIA APG menu first-character navigation: move focus to the next
-   * enabled item, in this menu level only, whose label starts with the
-   * buffered characters typed so far. `options` (this level's own
-   * `data-nested="false"` items) already excludes any open submenu's items,
-   * so a submenu owns its own search once it has focus.
+   * WAI-ARIA APG menu first-character navigation: move focus to the
+   * next enabled item, in this menu level only, whose label starts with
+   * the buffered characters typed so far. `options` (this level's own
+   * `data-nested="false"` items) already excludes any open submenu's
+   * items, so a submenu owns its own search once it has focus.
    * @param {string} character
    */
   function typeaheadSearch(character) {
@@ -120,14 +111,16 @@
     focusIndex = typeaheadIndex({
       items: options,
       query,
-      itemToString,
+      itemToString: menuOptionLabel,
       index: focusIndex,
       isDisabled: (item) => item.getAttribute("aria-disabled") === "true",
     });
   }
 
   /**
-   * @type {(trigger: "escape-key" | "outside-click" | "select") => void}
+   * @type {(
+   *   trigger: "escape-key" | "outside-click" | "select",
+   * ) => void}
    */
   function close(trigger) {
     if (!open) return;

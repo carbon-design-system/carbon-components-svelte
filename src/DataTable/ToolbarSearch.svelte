@@ -1,6 +1,7 @@
 <script>
   /**
-   * @template {import("./DataTable.svelte").DataTableRow} [Row=import("./DataTable.svelte").DataTableRow]
+   * @template {import("./DataTable.svelte").DataTableRow}
+   *   [Row=import("./DataTable.svelte").DataTableRow]
    * @restProps {input}
    * @event {null} clear
    * @event {number | string} search
@@ -51,9 +52,10 @@
   export let tabindex = "0";
 
   /**
-   * Milliseconds of quiet time before rows are filtered. Filtering waits
-   * until typing pauses; `value` still updates immediately; clearing
-   * applies at once. `0` filters synchronously on every keystroke.
+   * Milliseconds of quiet time before rows are filtered. Filtering
+   * waits until typing pauses; `value` still updates immediately;
+   * clearing applies at once. `0` filters synchronously on every
+   * keystroke.
    *
    * Unrelated to the `search` event, which fires on <kbd>Enter</kbd>
    * regardless of this delay.

@@ -6,10 +6,11 @@ import { breakpoints } from "./breakpoints.js";
 /** @typedef {import("./breakpoints").BreakpointSize} BreakpointSize */
 
 /**
- * Attaches `matchMedia` listeners for every breakpoint and invokes `callback`
- * with the current size immediately, then again on every subsequent change.
- * Framework-agnostic (no `onMount`), so it can be called from a Svelte action
- * as well as from {@link breakpointObserver}.
+ * Attaches `matchMedia` listeners for every breakpoint and invokes
+ * `callback` with the current size immediately, then again on every
+ * subsequent change. Framework-agnostic (no `onMount`), so it can be
+ * called from a Svelte action as well as from {@link
+ * breakpointObserver}.
  * @param {(size: BreakpointSize) => void} callback
  * @returns {() => void} Cleanup function that removes the listeners.
  */
@@ -59,11 +60,16 @@ export function observeBreakpoint(callback) {
 }
 
 /**
- * Creates a readable store that returns the current breakpoint size.
- * It also provides functions for creating derived stores used to do comparisons.
+ * Creates a readable store that returns the current breakpoint size. It
+ * also provides functions for creating derived stores used to do
+ * comparisons.
  */
 export function breakpointObserver() {
-  /** @type {import("svelte/store").Writable<BreakpointSize | undefined>} */
+  /**
+   * @type {import("svelte/store").Writable<
+   *   BreakpointSize | undefined
+   * >}
+   */
   const store = writable(undefined);
 
   onMount(() => observeBreakpoint((size) => store.set(size)));

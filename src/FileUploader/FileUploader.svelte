@@ -1,10 +1,30 @@
+<script context="module">
+  /**
+   * Per-file override: call `fn(file, index)` when supplied, else
+   * `fallback`.
+   *
+   * @template T
+   * @param {((file: File, index: number) => T) | undefined} fn
+   * @param {T} fallback
+   * @param {File} file
+   * @param {number} index
+   * @returns {T}
+   */
+  function resolveFileOverride(fn, fallback, file, index) {
+    return typeof fn === "function" ? fn(file, index) : fallback;
+  }
+</script>
+
 <script>
   /**
    * @event {ReadonlyArray<File>} add
    * @event {ReadonlyArray<File>} remove
    * @event {ReadonlyArray<File>} change
    * @event {void} clear
-   * @event {Array<{ file: File; reason: "size" | "duplicate" }>} rejected
+   * @event {Array<{
+   *   file: File;
+   *   reason: "size" | "duplicate";
+   * }>} rejected
    */
 
   /**
@@ -15,10 +35,14 @@
   export let status = "uploading";
 
   /**
-   * Override the global `status` for an individual file.
-   * Receives `(file, index)` and returns `"uploading" | "edit" | "complete"`.
+   * Override the global `status` for an individual file. Receives
+   * `(file, index)` and returns `"uploading" | "edit" | "complete"`.
    * When omitted, every row uses `status`.
-   * @type {undefined | ((file: File, index: number) => "uploading" | "edit" | "complete")}
+   * @type {undefined
+   *   | ((
+   *       file: File,
+   *       index: number,
+   *     ) => "uploading" | "edit" | "complete")}
    */
   export let fileStatus = undefined;
 
@@ -46,10 +70,16 @@
   /**
    * Show each file's size under its name.
    * - `false` (default): show the name only
-   * - `true` or `"decimal"`: format `file.size` with decimal units (1000 bytes = 1 kB)
-   * - `"binary"`: format `file.size` with binary units (1024 bytes = 1 KiB)
-   * - A function receiving `(file, index)` that returns the text (e.g., a localized size)
-   * @type {boolean | "decimal" | "binary" | ((file: File, index: number) => string)}
+   * - `true` or `"decimal"`: format `file.size` with decimal units
+   *   (1000 bytes = 1 kB)
+   * - `"binary"`: format `file.size` with binary units (1024 bytes = 1
+   *   KiB)
+   * - A function receiving `(file, index)` that returns the text (e.g.,
+   *   a localized size)
+   * @type {boolean
+   *   | "decimal"
+   *   | "binary"
+   *   | ((file: File, index: number) => string)}
    */
   export let fileSize = false;
 
@@ -97,8 +127,14 @@
    * Control how newly added files are ordered in the list.
    * - `"append"` (default): new files appear at the end
    * - `"prepend"`: new files appear at the beginning
-   * - A custom function receiving (existingFiles, newFiles) that returns the merged array
-   * @type {"append" | "prepend" | ((existing: ReadonlyArray<File>, added: ReadonlyArray<File>) => ReadonlyArray<File>)}
+   * - A custom function receiving (existingFiles, newFiles) that
+   *   returns the merged array
+   * @type {"append"
+   *   | "prepend"
+   *   | ((
+   *       existing: ReadonlyArray<File>,
+   *       added: ReadonlyArray<File>,
+   *     ) => ReadonlyArray<File>)}
    */
   export let orderFiles = "append";
 
@@ -155,11 +191,20 @@
   export let buttonLabel = "";
 
   /**
-   * Accessible label for file row status icons (spinner, remove control, checkmark).
-   * Forwarded to `Filename`. Use a string, or a function with context `{ file, fileName, status, invalid }`
-   * where `file` is the row's `File` (only set from `FileUploader`, not from `FileUploaderItem`).
-   * When omitted or the resolved value is blank after trim, `Filename` uses built-in defaults.
-   * @type {string | undefined | ((ctx: { file?: File; fileName: string; status: "uploading" | "edit" | "complete"; invalid: boolean }) => string | undefined)}
+   * Accessible label for file row status icons (spinner, remove
+   * control, checkmark). Forwarded to `Filename`. Use a string, or a
+   * function with context `{ file, fileName, status, invalid }` where
+   * `file` is the row's `File` (only set from `FileUploader`, not from
+   * `FileUploaderItem`). When omitted or the resolved value is blank
+   * after trim, `Filename` uses built-in defaults.
+   * @type {string
+   *   | undefined
+   *   | ((ctx: {
+   *       file?: File;
+   *       fileName: string;
+   *       status: "uploading" | "edit" | "complete";
+   *       invalid: boolean;
+   *     }) => string | undefined)}
    */
   export let iconDescription = undefined;
 
@@ -210,22 +255,11 @@
     });
   }
 
-  /** Stable keys for `{#each}` (and Biome-safe: no commas in the each header). */
-  $: filesWithKeys = keyFiles(files);
-
   /**
-   * Per-file override: call `fn(file, index)` when supplied, else `fallback`.
-   *
-   * @template T
-   * @param {((file: File, index: number) => T) | undefined} fn
-   * @param {T} fallback
-   * @param {File} file
-   * @param {number} index
-   * @returns {T}
+   * Stable keys for `{#each}` (and Biome-safe: no commas in the each
+   * header).
    */
-  function resolveFileOverride(fn, fallback, file, index) {
-    return typeof fn === "function" ? fn(file, index) : fallback;
-  }
+  $: filesWithKeys = keyFiles(files);
 
   /**
    * @param {typeof fileSize} option

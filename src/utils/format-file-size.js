@@ -22,11 +22,11 @@ function getFormatter(locale) {
 }
 
 /**
- * Format a byte count as a human-readable size.
- * `units: "decimal"` (default) uses 1000 (B, kB, MB, GB, TB);
- * `units: "binary"` uses 1024 (B, KiB, MiB, GiB, TiB).
- * Rounds to one fractional digit and drops a trailing ".0".
- * Pass `locale` to format the number with that locale's decimal separator.
+ * Format a byte count as a human-readable size. `units: "decimal"`
+ * (default) uses 1000 (B, kB, MB, GB, TB); `units: "binary"` uses 1024
+ * (B, KiB, MiB, GiB, TiB). Rounds to one fractional digit and drops a
+ * trailing ".0". Pass `locale` to format the number with that locale's
+ * decimal separator.
  * @param {number} bytes
  * @param {{ units?: "decimal" | "binary"; locale?: string }} [options]
  * @returns {string}

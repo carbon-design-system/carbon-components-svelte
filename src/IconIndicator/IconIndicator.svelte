@@ -3,7 +3,18 @@
 
   /**
    * Specify the kind of the icon indicator.
-   * @type {"failed" | "caution-major" | "caution-minor" | "undefined" | "succeeded" | "normal" | "in-progress" | "incomplete" | "not-started" | "pending" | "unknown" | "informative"}
+   * @type {"failed"
+   *   | "caution-major"
+   *   | "caution-minor"
+   *   | "undefined"
+   *   | "succeeded"
+   *   | "normal"
+   *   | "in-progress"
+   *   | "incomplete"
+   *   | "not-started"
+   *   | "pending"
+   *   | "unknown"
+   *   | "informative"}
    */
   export let kind;
 

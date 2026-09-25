@@ -1,28 +1,17 @@
-<script>
+<script context="module">
   /**
-   * @restProps {form}
-   * @typedef {import("svelte/action").Action<HTMLFormElement, any>} FormAction
+   * @typedef {import("svelte/action").Action<
+   *   HTMLFormElement,
+   *   any
+   * >} FormAction
    * @typedef {FormAction | [FormAction, any]} FormActionEntry
    */
 
   /**
-   * Obtain a reference to the form element.
-   * @type {null | HTMLFormElement}
-   * @bindable readonly
+   * @param {HTMLFormElement} node
+   * @param {ReadonlyArray<FormActionEntry>} entries
+   * @returns {() => void}
    */
-  export let ref = null;
-
-  /**
-   * Apply Svelte actions to the underlying form element.
-   * Each entry is an action or a `[action, parameter]` tuple.
-   * Use this for SvelteKit's `enhance` and other form actions that
-   * cannot target components with `use:`.
-   * @type {ReadonlyArray<FormActionEntry>}
-   */
-  export let actions = [];
-
-  import { onMount } from "svelte";
-
   function applyActions(node, entries) {
     /** @type {Array<() => void>} */
     const destroyers = [];
@@ -43,6 +32,35 @@
       }
     };
   }
+</script>
+
+<script>
+  /**
+   * @restProps {form}
+   * @typedef {import("svelte/action").Action<
+   *   HTMLFormElement,
+   *   any
+   * >} FormAction
+   * @typedef {FormAction | [FormAction, any]} FormActionEntry
+   */
+
+  /**
+   * Obtain a reference to the form element.
+   * @type {null | HTMLFormElement}
+   * @bindable readonly
+   */
+  export let ref = null;
+
+  /**
+   * Apply Svelte actions to the underlying form element.
+   * Each entry is an action or a `[action, parameter]` tuple.
+   * Use this for SvelteKit's `enhance` and other form actions that
+   * cannot target components with `use:`.
+   * @type {ReadonlyArray<FormActionEntry>}
+   */
+  export let actions = [];
+
+  import { onMount } from "svelte";
 
   onMount(() => {
     if (!ref || actions.length === 0) return;

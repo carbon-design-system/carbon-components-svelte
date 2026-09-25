@@ -11,15 +11,36 @@
    */
 
   /**
-   * Render a row of `Tag` children. `TagSet` measures the available width and
-   * collapses whatever no longer fits into a "+N" overflow indicator, with a
-   * hover tooltip listing the hidden labels by default. Override the tooltip
-   * content with the `overflowTooltip` slot, for example to add a link.
-   *
-   * @event {{ tag: TagSetItem; index: number }} close:tag - User clicks the close icon on a dismissible (`filter`) tag.
-   * @event {{ count: number }} click:overflow - User clicks the "+N" indicator.
-   * @event {{ count: number }} overflow:change - Dispatched when the number of overflowing tags changes, from a resize, a slotted-children change, or a `maxVisible` change.
-   * @slot {{ tags: TagSetItem[]; count: number }} overflowTooltip - Override the "+N" indicator's tooltip content. Defaults to a comma-separated list of the hidden labels.
+   * Render a row of `Tag` children. `TagSet` measures the available
+   * width and collapses whatever no longer fits into a "+N" overflow
+   * indicator, with a hover tooltip listing the hidden labels by
+   * default. Override the tooltip content with the `overflowTooltip`
+   * slot, for example to add a link.
+   */
+
+  /**
+   * User clicks the close icon on a dismissible (`filter`) tag.
+   * @event {{ tag: TagSetItem; index: number }} close:tag
+   */
+
+  /**
+   * User clicks the "+N" indicator.
+   * @event {{ count: number }} click:overflow
+   */
+
+  /**
+   * Dispatched when the number of overflowing tags changes, from a
+   * resize, a slotted-children change, or a `maxVisible` change.
+   * @event {{ count: number }} overflow:change
+   */
+
+  /**
+   * Override the "+N" indicator's tooltip content. Defaults to a
+   * comma-separated list of the hidden labels.
+   * @slot {{ tags: TagSetItem[]; count: number }} overflowTooltip
+   */
+
+  /**
    * @restProps {div}
    */
 
@@ -45,10 +66,14 @@
    */
   export let maxVisible = undefined;
 
-  /** Set to `true` to wrap all tags instead of collapsing to overflow. */
+  /**
+   * Set to `true` to wrap all tags instead of collapsing to overflow.
+   */
   export let multiline = false;
 
-  /** Subtracted from the measured available width before fitting tags. */
+  /**
+   * Subtracted from the measured available width before fitting tags.
+   */
   export let measurementOffset = 0;
 
   /** Custom element to measure instead of `TagSet`'s own wrapper.
@@ -57,15 +82,15 @@
   export let containingElement = undefined;
 
   /**
-   * Size of every tag, including the "+N" overflow indicator. Applies to
-   * slotted `Tag` children without their own `size`.
+   * Size of every tag, including the "+N" overflow indicator. Applies
+   * to slotted `Tag` children without their own `size`.
    * @type {"sm" | "default" | "lg"}
    */
   export let size = undefined;
 
   /**
-   * Spacing between tags. Accepts a Carbon layout scale (`0`–`13`) or a CSS
-   * length string.
+   * Spacing between tags. Accepts a Carbon layout scale (`0`–`13`) or a
+   * CSS length string.
    * @type {import("../Stack/Stack.svelte").StackScale | string}
    */
   export let gap = 3;

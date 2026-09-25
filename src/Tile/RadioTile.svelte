@@ -16,7 +16,10 @@
   /** Set to `true` to disable the tile */
   export let disabled = false;
 
-  /** Set to `true` to stretch the tile to fill the height of its container */
+  /**
+   * Set to `true` to stretch the tile to fill the height of its
+   * container
+   */
   export let fullHeight = false;
 
   /** Set to `true` to mark the field as required */
@@ -49,6 +52,7 @@
   import { getContext } from "svelte";
   import { readable } from "svelte/store";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
+  import { noop } from "../utils/noop.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   // aria attributes should go to the input element, not the label.
@@ -62,8 +66,8 @@
   );
 
   const ctx = getContext("carbon:TileGroup");
-  const add = ctx?.add ?? (() => {});
-  const update = ctx?.update ?? (() => {});
+  const add = ctx?.add ?? noop;
+  const update = ctx?.update ?? noop;
   const selectedValue =
     ctx?.selectedValue ?? readable(checked ? value : undefined);
   const groupName = ctx?.groupName ?? readable(undefined);

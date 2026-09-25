@@ -6,12 +6,14 @@
   export let id = uniqueId();
 
   /**
-   * Set to `true` to defer mounting panel content until its switch is first selected
+   * Set to `true` to defer mounting panel content until its switch is
+   * first selected
    */
   export let lazy = false;
 
   /**
-   * Set to `true` to unmount panel content when its switch is deselected
+   * Set to `true` to unmount panel content when its switch is
+   * deselected
    */
   export let unmountOnHide = false;
 

@@ -70,11 +70,18 @@
   import { readonly as readOnly, writable } from "svelte/store";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import {
+    buildFieldIds,
+    resolveStatusDescribedBy,
+    resolveValidationVisibility,
+  } from "../utils/field-status.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
   /**
-   * @type {import("svelte/store").Writable<ReadonlyArray<string | number>>}
+   * @type {import("svelte/store").Writable<
+   *   ReadonlyArray<string | number>
+   * >}
    */
   const selectedValues = writable(selected);
   const groupName = writable(name);
@@ -129,15 +136,21 @@
   $: $groupReadonly = readonly;
   $: $groupInvalid = invalid;
   $: $groupWarn = warn;
-  $: showInvalid = invalid && !disabled && !readonly;
-  $: showWarn = warn && !invalid && !disabled && !readonly;
+  $: ({ showInvalid, showWarn } = resolveValidationVisibility({
+    invalid,
+    warn,
+    disabled,
+    readonly,
+  }));
 
   const fallbackHelperId = uniqueId();
   const fallbackErrorId = uniqueId();
   const fallbackWarnId = uniqueId();
-  $: helperId = id ? `helper-${id}` : fallbackHelperId;
-  $: errorId = id ? `error-${id}` : fallbackErrorId;
-  $: warnId = id ? `warn-${id}` : fallbackWarnId;
+  $: ({ helperId, errorId, warnId } = buildFieldIds(id, {
+    helperId: fallbackHelperId,
+    errorId: fallbackErrorId,
+    warnId: fallbackWarnId,
+  }));
 </script>
 
 <div
@@ -156,13 +169,14 @@
     class:bx--checkbox-group--warning={showWarn}
     {disabled}
     data-invalid={showInvalid || undefined}
-    aria-describedby={showInvalid
-      ? errorId
-      : showWarn
-        ? warnId
-        : helperText
-          ? helperId
-          : undefined}
+    aria-describedby={resolveStatusDescribedBy({
+      showInvalid,
+      showWarn,
+      helperText,
+      errorId,
+      warnId,
+      helperId,
+    })}
   >
     {#if legendText || $$slots.legendChildren}
       <legend class:bx--label={true} class:bx--visually-hidden={hideLegend}>

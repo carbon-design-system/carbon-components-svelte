@@ -25,37 +25,41 @@
   export let ref = null;
 
   /**
-   * Customize the menu slide transition (for example, `{ duration: 200 }`).
-   * By default, the menu does not animate.
+   * Customize the menu slide transition (for example,
+   * `{ duration: 200 }`). By default, the menu does not animate.
    * @type {false | import("svelte/transition").SlideParams}
    */
   export let transition = false;
 
-  /** Set to `true` to prevent the menu from closing when clicking outside */
+  /**
+   * Set to `true` to prevent the menu from closing when clicking
+   * outside
+   */
   export let preventCloseOnClickOutside = false;
 
   import { createEventDispatcher, setContext, tick } from "svelte";
-  import { get, writable } from "svelte/store";
+  import { get } from "svelte/store";
   import { slide } from "svelte/transition";
   import { PROFILE_MENU_CONTEXT_KEY } from "../constants/context-keys.js";
   import UserAvatar from "../UserAvatar/UserAvatar.svelte";
   import { dismiss } from "../utils/dismiss.js";
+  import { createDomNodeRegistry } from "../utils/dom-node-registry.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
+  import { pickEdgeMenuItem } from "../utils/pick-edge-menu-item.js";
 
   const dispatch = createEventDispatcher();
 
   let refMenu = null;
 
-  /** @type {import("svelte/store").Writable<ReadonlyArray<HTMLElement>>} */
-  const menuItems = writable([]);
-
-  function registerMenuItem(node) {
-    menuItems.update((items) => [...items, node]);
-  }
-
-  function unregisterMenuItem(node) {
-    menuItems.update((items) => items.filter((item) => item !== node));
-  }
+  const menuItemRegistry = createDomNodeRegistry();
+  /**
+   * @type {import("svelte/store").Writable<ReadonlyArray<HTMLElement>>}
+   */
+  const menuItems = menuItemRegistry.items;
+  /** @type {(node: HTMLElement) => void} */
+  const registerMenuItem = menuItemRegistry.register;
+  /** @type {(node: HTMLElement) => void} */
+  const unregisterMenuItem = menuItemRegistry.unregister;
 
   setContext(PROFILE_MENU_CONTEXT_KEY, {
     menuItems,
@@ -93,12 +97,7 @@
         dispatch("open");
       }
       await tick();
-      const items = get(menuItems);
-      if (event.key === "ArrowDown") {
-        items[0]?.focus();
-      } else {
-        items[items.length - 1]?.focus();
-      }
+      pickEdgeMenuItem(event.key, get(menuItems))?.focus();
     }
   }
 </script>

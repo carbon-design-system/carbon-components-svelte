@@ -10,7 +10,8 @@ export function computeScrollOverflow(options: {
 }): { canScrollBackward: boolean; canScrollForward: boolean };
 
 /**
- * Scroll `node` by roughly 75% of its own width, in the given direction.
+ * Scroll `node` by roughly 75% of its own width, in the given
+ * direction.
  */
 export function scrollByViewport(
   node: HTMLElement | null | undefined,
@@ -18,8 +19,9 @@ export function scrollByViewport(
 ): void;
 
 /**
- * Scroll `container` horizontally so `target` is fully visible, inset from
- * each edge by `margin` so it isn't tucked under an overflow button.
+ * Scroll `container` horizontally so `target` is fully visible, inset
+ * from each edge by `margin` so it isn't tucked under an overflow
+ * button.
  */
 export function scrollIntoViewX(
   container: HTMLElement | null | undefined,

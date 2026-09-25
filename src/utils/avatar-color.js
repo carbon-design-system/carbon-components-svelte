@@ -2,9 +2,11 @@
 // Pick a stable avatar background color from a name or id. Same string, same color.
 
 /**
- * Chromatic `UserAvatar` background colors for auto mode. Grays are left out.
- * Each entry is a valid `UserAvatar` `backgroundColor` value.
- * @type {ReadonlyArray<"red" | "magenta" | "purple" | "blue" | "cyan" | "teal" | "green">}
+ * Chromatic `UserAvatar` background colors for auto mode. Grays are
+ * left out. Each entry is a valid `UserAvatar` `backgroundColor` value.
+ * @type {ReadonlyArray<
+ *   "red" | "magenta" | "purple" | "blue" | "cyan" | "teal" | "green"
+ * >}
  */
 export const AVATAR_BACKGROUND_COLORS = [
   "red",
@@ -17,7 +19,8 @@ export const AVATAR_BACKGROUND_COLORS = [
 ];
 
 /**
- * Hash a string to a non-negative 32-bit integer (djb2). Same string in, same hash out.
+ * Hash a string to a non-negative 32-bit integer (djb2). Same string
+ * in, same hash out.
  *
  * @param {string} value
  * @returns {number}
@@ -33,9 +36,9 @@ export function hashString(value) {
 }
 
 /**
- * Pick a stable avatar background color from a string. Empty or falsy input
- * returns the first palette entry. An empty `palette` falls back to the
- * default palette so a `T` is always returned.
+ * Pick a stable avatar background color from a string. Empty or falsy
+ * input returns the first palette entry. An empty `palette` falls back
+ * to the default palette so a `T` is always returned.
  *
  * @template {string} [T=(typeof AVATAR_BACKGROUND_COLORS)[number]]
  * @param {string | null | undefined} value

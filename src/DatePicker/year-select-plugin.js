@@ -3,8 +3,15 @@
  * Flatpickr plugin that replaces the day grid with a decade of years.
  * Mirrors the shape of flatpickr's bundled monthSelect plugin.
  *
- * @typedef {{ dateFormat?: string; altFormat?: string; theme?: string }} YearSelectPluginConfig
- * @typedef {HTMLSpanElement & { dateObj: Date; $i: number }} YearElement
+ * @typedef {{
+ *   dateFormat?: string;
+ *   altFormat?: string;
+ *   theme?: string;
+ * }} YearSelectPluginConfig
+ * @typedef {HTMLSpanElement & {
+ *   dateObj: Date;
+ *   $i: number;
+ * }} YearElement
  */
 
 const defaultConfig = {
@@ -35,7 +42,12 @@ export function yearSelectPlugin(pluginConfig) {
     fp.config.dateFormat = config.dateFormat;
     fp.config.altFormat = config.altFormat;
 
-    /** @type {{ yearsContainer: HTMLElement | null; rangeEl: HTMLElement | null }} */
+    /**
+     * @type {{
+     *   yearsContainer: HTMLElement | null;
+     *   rangeEl: HTMLElement | null;
+     * }}
+     */
     const self = { yearsContainer: null, rangeEl: null };
 
     function decadeStart(year = fp.currentYear) {

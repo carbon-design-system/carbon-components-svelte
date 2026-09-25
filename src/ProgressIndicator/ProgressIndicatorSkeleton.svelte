@@ -2,7 +2,10 @@
   /** Set to `true` to use the vertical variant */
   export let vertical = false;
 
-  /** Set to `true` to specify whether the progress steps should be split equally in size in the div */
+  /**
+   * Set to `true` to specify whether the progress steps should be split
+   * equally in size in the div
+   */
   export let spaceEqually = false;
 
   /** Specify the number of steps to render */

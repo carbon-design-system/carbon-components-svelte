@@ -6,7 +6,18 @@
 
   /**
    * Specify the type of tag.
-   * @type {"red" | "magenta" | "purple" | "blue" | "cyan" | "teal" | "green" | "gray" | "cool-gray" | "warm-gray" | "high-contrast" | "outline"}
+   * @type {"red"
+   *   | "magenta"
+   *   | "purple"
+   *   | "blue"
+   *   | "cyan"
+   *   | "teal"
+   *   | "green"
+   *   | "gray"
+   *   | "cool-gray"
+   *   | "warm-gray"
+   *   | "high-contrast"
+   *   | "outline"}
    */
   export let type = undefined;
 
@@ -28,7 +39,8 @@
 
   /**
    * Specify the `href` attribute to render the tag as an anchor.
-   * Mutually exclusive with `filter`; when both are set, `filter` takes precedence.
+   * Mutually exclusive with `filter`; when both are set, `filter` takes
+   * precedence.
    * @type {string}
    */
   export let href = undefined;
@@ -43,8 +55,9 @@
   export let title = "Clear filter";
 
   /**
-   * Cap the tag width. When the label overflows, a tooltip shows the full text.
-   * Accepts any CSS length (for example `"8rem"`, `"120px"`).
+   * Cap the tag width. When the label overflows, a tooltip shows the
+   * full text. Accepts any CSS length (for example `"8rem"`,
+   * `"120px"`).
    * @type {string | undefined}
    */
   export let maxWidth = undefined;
@@ -69,6 +82,7 @@
   import { readable } from "svelte/store";
   import Close from "../icons/Close.svelte";
   import TooltipDefinition from "../TooltipDefinition/TooltipDefinition.svelte";
+  import { resolveLinkRel } from "../utils/link-rel.js";
   import { uniqueId } from "../utils/unique-id.js";
   import TagSkeleton from "./TagSkeleton.svelte";
 
@@ -237,7 +251,7 @@
     role={disabled ? "link" : undefined}
     {id}
     aria-disabled={disabled || undefined}
-    rel={$$restProps.target === "_blank" ? "noopener noreferrer" : undefined}
+    rel={resolveLinkRel($$restProps.target)}
     data-overflow={groupOverflow ? "true" : undefined}
     title={nativeTitle}
     class:bx--tag={true}

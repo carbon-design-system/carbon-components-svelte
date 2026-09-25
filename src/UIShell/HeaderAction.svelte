@@ -68,10 +68,16 @@
    */
   export let transition = false;
 
-  /** Set to `true` to prevent the panel from closing when clicking outside */
+  /**
+   * Set to `true` to prevent the panel from closing when clicking
+   * outside
+   */
   export let preventCloseOnClickOutside = false;
 
-  /** Set an id for the trigger button element. Also used to label the panel. */
+  /**
+   * Set an id for the trigger button element. Also used to label the
+   * panel.
+   */
   export let id = uniqueId();
 
   import { createEventDispatcher } from "svelte";

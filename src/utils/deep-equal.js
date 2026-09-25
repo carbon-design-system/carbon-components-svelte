@@ -4,7 +4,8 @@
  * Deep equality check for values (nested objects and arrays).
  * @param {*} a - First value to compare
  * @param {*} b - Second value to compare
- * @param {WeakMap<*, Set<*>>} [stack] - WeakMap used to track circular references
+ * @param {WeakMap<*, Set<*>>} [stack] - WeakMap used to track circular
+ *   references
  * @returns {boolean} True if values are deeply equal, false otherwise
  */
 export function deepEqual(a, b, stack = new WeakMap()) {

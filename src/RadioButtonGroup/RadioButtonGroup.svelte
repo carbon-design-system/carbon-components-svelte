@@ -5,9 +5,9 @@
    */
 
   /**
-   * Set the selected radio button value.
-   * Follows the field after a reset — becomes the value of whichever radio
-   * is checked in the DOM, or `undefined`.
+   * Set the selected radio button value. Follows the field after a
+   * reset — becomes the value of whichever radio is checked in the DOM,
+   * or `undefined`.
    * @type {Value | undefined}
    * @bindable writable
    */
@@ -23,10 +23,10 @@
   export let required = undefined;
 
   /**
-   * Specify a name attribute for the radio button inputs.
-   * Overrides each button's own `name`. When neither is set, the buttons
-   * share a generated id so they form one radio group; set a name
-   * explicitly when form submission matters.
+   * Specify a name attribute for the radio button inputs. Overrides
+   * each button's own `name`. When neither is set, the buttons share a
+   * generated id so they form one radio group; set a name explicitly
+   * when form submission matters.
    * @type {string}
    */
   export let name = undefined;
@@ -68,8 +68,8 @@
   export let readonly = false;
 
   /**
-   * Set to `true` so clicking an already-selected radio clears the selection
-   * instead of leaving it selected.
+   * Set to `true` so clicking an already-selected radio clears the
+   * selection instead of leaving it selected.
    */
   export let allowDeselect = false;
 
@@ -95,6 +95,11 @@
   import { readonly as readOnly, writable } from "svelte/store";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import {
+    buildFieldIds,
+    resolveStatusDescribedBy,
+    resolveValidationVisibility,
+  } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -212,19 +217,32 @@
   $: $groupRequired = required;
   $: $groupReadonly = readonly;
   $: $groupAllowDeselect = allowDeselect;
-  $: showInvalid = invalid && !disabled && !readonly;
-  $: showWarn = warn && !invalid && !disabled && !readonly;
-  $: errorId = id ? `error-${id}` : fallbackErrorId;
-  $: warnId = id ? `warn-${id}` : fallbackWarnId;
-  $: $helperId = showInvalid
-    ? errorId
-    : showWarn
-      ? warnId
-      : helperText
-        ? id
-          ? `helper-${id}`
-          : fallbackHelperId
-        : undefined;
+  $: ({ showInvalid, showWarn } = resolveValidationVisibility({
+    invalid,
+    warn,
+    disabled,
+    readonly,
+  }));
+  $: ({
+    errorId,
+    warnId,
+    helperId: rawHelperId,
+  } = buildFieldIds(id, {
+    helperId: fallbackHelperId,
+    errorId: fallbackErrorId,
+    warnId: fallbackWarnId,
+  }));
+  // The `helperId` store holds the *resolved* description id (not the
+  // raw helper id) — child RadioButtons point their own
+  // aria-describedby at whichever tier is currently showing.
+  $: $helperId = resolveStatusDescribedBy({
+    showInvalid,
+    showWarn,
+    helperText,
+    errorId,
+    warnId,
+    helperId: rawHelperId,
+  });
 </script>
 
 <div

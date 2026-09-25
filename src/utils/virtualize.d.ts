@@ -1,7 +1,7 @@
 /**
  * Per-option heights indexed by item. An entry that is not a finite,
- * non-negative number means the option has not been measured yet and takes an
- * estimated height instead. Zero is a real height.
+ * non-negative number means the option has not been measured yet and
+ * takes an estimated height instead. Zero is a real height.
  */
 export type ItemHeights = ArrayLike<number | undefined>;
 
@@ -18,8 +18,8 @@ export type VirtualizeConfig<
   /** @default 100 */
   threshold?: number;
   /**
-   * Derive offsets from `heights` instead of applying `itemHeight` to every
-   * option. Read only while the list is windowed.
+   * Derive offsets from `heights` instead of applying `itemHeight` to
+   * every option. Read only while the list is windowed.
    * @default false
    */
   measured?: boolean;
@@ -46,17 +46,18 @@ export type GetVisibleRangeOptions = {
   overscan?: number;
   maxItems?: number;
   /**
-   * Resolve the range by searching accumulated positions instead of dividing
-   * by `itemHeight`, which then serves only as the estimate for options with
-   * no entry.
+   * Resolve the range by searching accumulated positions instead of
+   * dividing by `itemHeight`, which then serves only as the estimate
+   * for options with no entry.
    */
   heights?: ItemHeights;
 };
 
 /**
- * The mean of the measured entries in `heights`, or `null` when none are.
- * Outlives the heights it came from: a caller forgetting per-option heights can
- * keep this and hand it back as `virtualListState`'s `estimate`.
+ * The mean of the measured entries in `heights`, or `null` when none
+ * are. Outlives the heights it came from: a caller forgetting
+ * per-option heights can keep this and hand it back as
+ * `virtualListState`'s `estimate`.
  */
 export function getMeasuredAverage(
   heights: ItemHeights | undefined,
@@ -94,11 +95,15 @@ export type VirtualListStateOptions<
   shouldVirtualize: boolean;
   virtualize: boolean | Partial<VirtualListConfig> | undefined;
   defaults?: Partial<VirtualListConfig>;
-  /** Read only when the config opts into measuring and the list is windowed. */
+  /**
+   * Read only when the config opts into measuring and the list is
+   * windowed.
+   */
   heights?: ItemHeights;
   /**
-   * Height to assume for options nothing has measured yet, in place of the
-   * config's `itemHeight`. The returned config carries the seed actually used.
+   * Height to assume for options nothing has measured yet, in place of
+   * the config's `itemHeight`. The returned config carries the seed
+   * actually used.
    */
   estimate?: number;
 };
@@ -111,7 +116,10 @@ export type VirtualListStateResult<
   itemsToRender: Item[];
 };
 
-/** Resolve config, virtualize result, and items to render for a listbox menu. */
+/**
+ * Resolve config, virtualize result, and items to render for a listbox
+ * menu.
+ */
 export function virtualListState<
   Item extends Record<string, unknown> = Record<string, unknown>,
 >(options: VirtualListStateOptions<Item>): VirtualListStateResult<Item>;
@@ -121,11 +129,17 @@ export type GetBoundedScrollTopOptions = {
   itemHeight: number;
   containerHeight: number;
   itemCount: number;
-  /** Position by accumulated height instead of multiplying by `itemHeight`. */
+  /**
+   * Position by accumulated height instead of multiplying by
+   * `itemHeight`.
+   */
   heights?: ItemHeights;
 };
 
-/** `scrollTop` to place the item at `index` at the top of the viewport, clamped. */
+/**
+ * `scrollTop` to place the item at `index` at the top of the viewport,
+ * clamped.
+ */
 export function getBoundedScrollTop(
   options: GetBoundedScrollTopOptions,
 ): number;
@@ -143,8 +157,8 @@ export type ScrollHighlightedIntoViewOptions = {
 };
 
 /**
- * `scrollTop` to bring a keyboard-highlighted item into view, or `null` if
- * already visible.
+ * `scrollTop` to bring a keyboard-highlighted item into view, or `null`
+ * if already visible.
  */
 export function scrollHighlightedIntoView(
   options: ScrollHighlightedIntoViewOptions,
@@ -158,7 +172,10 @@ export type ScrollSelectedIntoViewOptions = {
   heights?: ItemHeights;
 };
 
-/** `scrollTop` for the selected item on open, or `0` when `selectedIndex < 0`. */
+/**
+ * `scrollTop` for the selected item on open, or `0` when
+ * `selectedIndex < 0`.
+ */
 export function scrollSelectedIntoView(
   options: ScrollSelectedIntoViewOptions,
 ): number;
@@ -177,9 +194,9 @@ export type GetMeasuredScrollCorrectionOptions = {
 };
 
 /**
- * `getScrollCorrection` for a caller that knows its scroll position but not
- * which option to anchor on: the anchor is the topmost option on screen at
- * `scrollTop`. Returns the delta to add to `scrollTop`.
+ * `getScrollCorrection` for a caller that knows its scroll position but
+ * not which option to anchor on: the anchor is the topmost option on
+ * screen at `scrollTop`. Returns the delta to add to `scrollTop`.
  */
 export function getMeasuredScrollCorrection(
   options: GetMeasuredScrollCorrectionOptions,

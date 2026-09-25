@@ -12,7 +12,10 @@
    * @event {{ error: unknown }} copy:error
    * @event {MouseEvent} mouseenter:copy-button
    * @event {MouseEvent} mouseleave:copy-button
-   * @restProps {div | button | span} Rest props are spread to the root div (single/multi, except `aria-label`, which labels the code container), the copy button (inline), or the span (inline with `hideCopyButton`).
+   * @restProps {div | button | span} Rest props are spread to the root
+   *   div (single/multi, except `aria-label`, which labels the code
+   *   container), the copy button (inline), or the span (inline with
+   *   `hideCopyButton`).
    */
 
   /**
@@ -25,7 +28,8 @@
    * Set the code snippet text.
    * Alternatively, use the default slot.
    *
-   * When `code` is unset, the copy button copies the rendered text of the default slot.
+   * When `code` is unset, the copy button copies the rendered text of
+   * the default slot.
    * @type {string}
    * @example
    * ```svelte
@@ -35,9 +39,10 @@
   export let code = undefined;
 
   /**
-   * By default, this component uses `navigator.clipboard.writeText` API to copy text to the user's clipboard,
-   * with a `document.execCommand("copy")` fallback. Failures reject so the component can show
-   * `errorFeedback` and dispatch `copy:error`.
+   * By default, this component uses `navigator.clipboard.writeText` API
+   * to copy text to the user's clipboard, with a
+   * `document.execCommand("copy")` fallback. Failures reject so the
+   * component can show `errorFeedback` and dispatch `copy:error`.
    *
    * Provide a custom function to override this behavior.
    * @type {(code: string) => void | Promise<void>}
@@ -82,7 +87,8 @@
   export let copyLabel = "Copy code";
 
   /**
-   * Specify the ARIA label of the code snippet container (single/multi variants).
+   * Specify the ARIA label of the code snippet container (single/multi
+   * variants).
    */
   export let codeLabel = "Code snippet";
 
@@ -96,8 +102,9 @@
   export let feedbackTimeout = COPY_FEEDBACK_TIMEOUT_MS;
 
   /**
-   * Specify an icon to render on the copy button during the feedback window
-   * (e.g. after copying). When unset, the copy icon is always shown.
+   * Specify an icon to render on the copy button during the feedback
+   * window (e.g. after copying). When unset, the copy icon is always
+   * shown.
    *
    * NOTE: this prop does not apply to the `type="inline"` variant.
    * @type {Icon}
@@ -191,13 +198,15 @@
   export let portalTooltip = undefined;
 
   /**
-   * Set the position of the feedback tooltip relative to the copy button.
+   * Set the position of the feedback tooltip relative to the copy
+   * button.
    * @type {"top" | "right" | "bottom" | "left"}
    */
   export let tooltipPosition = "bottom";
 
   /**
-   * Set the alignment of the feedback tooltip relative to the copy button.
+   * Set the alignment of the feedback tooltip relative to the copy
+   * button.
    * @type {"start" | "center" | "end"}
    */
   export let tooltipAlignment = "center";
@@ -269,7 +278,8 @@
   let inlineCodeRef = null;
 
   /**
-   * Text to copy: `code` when defined, otherwise the rendered slot text.
+   * Text to copy: `code` when defined, otherwise the rendered slot
+   * text.
    * @returns {string}
    */
   function getCopyText() {

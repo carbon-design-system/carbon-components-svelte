@@ -17,8 +17,8 @@
   export let feedbackTimeout = COPY_FEEDBACK_TIMEOUT_MS;
 
   /**
-   * Specify an icon to render during the feedback window (for example, after copying).
-   * When unset, the copy icon is always shown.
+   * Specify an icon to render during the feedback window (for example,
+   * after copying). When unset, the copy icon is always shown.
    * @type {Icon}
    */
   export let feedbackIcon = /** @type {Icon} */ (undefined);
@@ -34,8 +34,8 @@
   export let kind = "primary";
 
   /**
-   * Specify the size of the copy button.
-   * `"md"` keeps Carbon's native 2.5rem square; the other sizes match `Button`.
+   * Specify the size of the copy button. `"md"` keeps Carbon's native
+   * 2.5rem square; the other sizes match `Button`.
    * @type {"sm" | "md" | "lg" | "xl"}
    */
   export let size = "md";
@@ -47,20 +47,21 @@
   export let text = undefined;
 
   /**
-   * Override the default copy behavior (`navigator.clipboard.writeText` with
-   * a `document.execCommand("copy")` fallback). Failures reject so the button
-   * can show `errorFeedback` and dispatch `copy:error`.
+   * Override the default copy behavior (`navigator.clipboard.writeText`
+   * with a `document.execCommand("copy")` fallback). Failures reject so
+   * the button can show `errorFeedback` and dispatch `copy:error`.
    * @type {(text: string) => void | Promise<void>}
    */
   export let copy = copyText;
 
   /**
-   * Set how the "Copied!" feedback tooltip is rendered.
-   * By default, it is rendered in a portal so it shares the same surface as the
-   * hover tooltip (the text swaps in place) and is never clipped by an
-   * `overflow: hidden` container. Set to `false` to use Carbon's inline feedback
-   * caret instead; a non-default `tooltipPosition`/`tooltipAlignment` still
-   * portals because the inline caret only supports the default placement.
+   * Set how the "Copied!" feedback tooltip is rendered. By default, it
+   * is rendered in a portal so it shares the same surface as the hover
+   * tooltip (the text swaps in place) and is never clipped by an
+   * `overflow: hidden` container. Set to `false` to use Carbon's inline
+   * feedback caret instead; a non-default
+   * `tooltipPosition`/`tooltipAlignment` still portals because the
+   * inline caret only supports the default placement.
    * @type {boolean | undefined}
    */
   export let portalTooltip = undefined;
@@ -81,12 +82,7 @@
   export let ref = null;
 
   import { createEventDispatcher, onMount } from "svelte";
-  import { get } from "svelte/store";
   import { activeButtonTooltip } from "../Button/button-tooltip-store.js";
-  import {
-    TOOLTIP_ENTER_DELAY_MS,
-    TOOLTIP_LEAVE_DELAY_MS,
-  } from "../constants/timing.js";
   import Copy from "../icons/Copy.svelte";
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
@@ -96,6 +92,7 @@
     createCopyFeedbackState,
   } from "../utils/copy-feedback.js";
   import { noop } from "../utils/noop.js";
+  import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
 
   const dispatch = createEventDispatcher();
 
@@ -126,9 +123,12 @@
   // with adjacent icon-only Buttons (warm handoff, no overlapping tooltips).
   // Mirrors Button's portal-tooltip timing.
   const tooltipId = {};
+  const tooltipHandoff = createTooltipHandoff({
+    activeTooltip: activeButtonTooltip,
+    getId: () => tooltipId,
+  });
   let hovered = false;
   let focused = false;
-  let tooltipTimeout;
 
   // Feedback shares the proactive tooltip's portal surface whenever the tooltip
   // is portalled OR a non-default position/alignment is set, so the "Copied!"
@@ -149,55 +149,36 @@
   $: tooltipOpen = tooltipHoverActive || feedbackInPortal;
   $: tooltipText = feedbackOpen ? feedbackText : iconDescription;
 
-  function claimTooltip() {
-    activeButtonTooltip.set(tooltipId);
-  }
-
-  function releaseTooltip() {
-    if (get(activeButtonTooltip) === tooltipId) {
-      activeButtonTooltip.set(null);
-    }
-  }
-
   function handleTooltipMouseEnter() {
-    clearTimeout(tooltipTimeout);
     // Skip the enter delay when another icon tooltip is already open so moving
     // between adjacent buttons feels instant.
-    const warmHandoff =
-      get(activeButtonTooltip) !== null &&
-      get(activeButtonTooltip) !== tooltipId;
-    tooltipTimeout = setTimeout(
-      () => {
-        hovered = true;
-        claimTooltip();
-      },
-      warmHandoff ? 0 : TOOLTIP_ENTER_DELAY_MS,
-    );
+    tooltipHandoff.scheduleEnter(() => {
+      hovered = true;
+    });
   }
 
   function handleTooltipMouseLeave() {
-    clearTimeout(tooltipTimeout);
-    tooltipTimeout = setTimeout(() => {
+    tooltipHandoff.scheduleLeave(() => {
       hovered = false;
-      if (!focused) releaseTooltip();
-    }, TOOLTIP_LEAVE_DELAY_MS);
+      if (!focused) tooltipHandoff.release();
+    });
   }
 
   function handleTooltipFocus() {
     focused = true;
-    claimTooltip();
+    tooltipHandoff.claim();
   }
 
   function handleTooltipBlur() {
     focused = false;
-    if (!hovered) releaseTooltip();
+    if (!hovered) tooltipHandoff.release();
   }
 
   function dismissTooltip() {
-    clearTimeout(tooltipTimeout);
+    tooltipHandoff.cancel();
     hovered = false;
     focused = false;
-    releaseTooltip();
+    tooltipHandoff.release();
   }
 
   // Caret spacing + alignment nudges, mirroring Button's icon tooltip.
@@ -221,8 +202,8 @@
     return () => {
       copyFeedback.cleanup();
       disconnectModalObserver();
-      clearTimeout(tooltipTimeout);
-      releaseTooltip();
+      tooltipHandoff.cancel();
+      tooltipHandoff.release();
     };
   });
 </script>

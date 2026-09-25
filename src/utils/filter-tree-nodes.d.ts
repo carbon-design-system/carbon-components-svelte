@@ -12,7 +12,10 @@ type FilterOptions = {
   includeAncestors?: boolean;
 };
 
-/** Filter tree nodes by a predicate; returns matching nodes and their ancestors. */
+/**
+ * Filter tree nodes by a predicate; returns matching nodes and their
+ * ancestors.
+ */
 export function filterTreeNodes<T extends NodeLike>(
   tree: T[],
   predicate: (node: T) => boolean,

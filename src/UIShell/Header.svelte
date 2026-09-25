@@ -54,13 +54,9 @@
   export let persistentHamburgerMenu = false;
 
   /**
-   * The window width (px) at which the SideNav is expanded and the hamburger menu is hidden.
-   * 1056 represents the "large" breakpoint in pixels from the Carbon Design System:
-   * - small: 320
-   * - medium: 672
-   * - large: 1056
-   * - x-large: 1312
-   * - max: 1584.
+   * The window width (px) at which the SideNav is expanded and the
+   * hamburger menu is hidden. Defaults to Carbon's "large" breakpoint
+   * (`breakpoints.lg` in `src/Breakpoint/breakpoints.js`).
    */
   export let expansionBreakpoint = EXPANSION_BREAKPOINT;
 
@@ -83,8 +79,8 @@
   export let iconClose = /** @type {Icon} */ (Close);
 
   /**
-   * Specify the ARIA label for the hamburger menu.
-   * Defaults to "Open menu" or "Close menu" based on `isSideNavOpen` state.
+   * Specify the ARIA label for the hamburger menu. Defaults to "Open
+   * menu" or "Close menu" based on `isSideNavOpen` state.
    * @type {string}
    */
   export let ariaLabelMenu = undefined;

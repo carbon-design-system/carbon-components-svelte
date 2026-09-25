@@ -65,13 +65,15 @@
   export let triggerText = "";
 
   /**
-   * Specify the duration in milliseconds to delay before displaying the tooltip.
+   * Specify the duration in milliseconds to delay before displaying the
+   * tooltip.
    * @type {number}
    */
   export let enterDelayMs = TOOLTIP_ENTER_DELAY_MS;
 
   /**
-   * Specify the duration in milliseconds to delay before hiding the tooltip.
+   * Specify the duration in milliseconds to delay before hiding the
+   * tooltip.
    * @type {number}
    */
   export let leaveDelayMs = TOOLTIP_LEAVE_DELAY_MS;
@@ -130,9 +132,10 @@
    */
   const tooltipOpen = writable(open);
   /**
-   * Tracks whether the latest open was triggered by mouse hover. TooltipFooter
-   * reads this to avoid stealing focus on hover; focus only moves into the
-   * footer when the tooltip is opened via keyboard or programmatically.
+   * Tracks whether the latest open was triggered by mouse hover.
+   * TooltipFooter reads this to avoid stealing focus on hover; focus
+   * only moves into the footer when the tooltip is opened via keyboard
+   * or programmatically.
    * @type {import("svelte/store").Writable<boolean>}
    */
   const openedByHover = writable(false);

@@ -5,10 +5,11 @@
  */
 
 /**
- * A supplied height counts as measured when it is a finite, non-negative
- * number. A hole in a sparse array, `undefined`, or a negative value means the
- * option has not been measured yet and falls back to the estimate. Zero is a
- * real height: an option can collapse to nothing.
+ * A supplied height counts as measured when it is a finite,
+ * non-negative number. A hole in a sparse array, `undefined`, or a
+ * negative value means the option has not been measured yet and falls
+ * back to the estimate. Zero is a real height: an option can collapse
+ * to nothing.
  *
  * @param {unknown} height
  * @returns {height is number}
@@ -18,11 +19,12 @@ function isMeasuredHeight(height) {
 }
 
 /**
- * The mean of the measured entries in `heights`, or `null` when none of them
- * are measured.
+ * The mean of the measured entries in `heights`, or `null` when none of
+ * them are measured.
  *
  * @param {ItemHeights | undefined} heights
- * @param {number} [count] How many entries to read, defaulting to all of them.
+ * @param {number} [count] How many entries to read, defaulting to all
+ *   of them.
  * @returns {number | null}
  */
 export function getMeasuredAverage(heights, count = heights?.length ?? 0) {
@@ -41,8 +43,8 @@ export function getMeasuredAverage(heights, count = heights?.length ?? 0) {
 }
 
 /**
- * The height to assume for an option that has not been measured: the running
- * average of the measured ones.
+ * The height to assume for an option that has not been measured: the
+ * running average of the measured ones.
  *
  * @param {Object} options
  * @param {number} options.itemCount
@@ -55,10 +57,10 @@ function getEstimatedHeight({ itemCount, heights, itemHeight }) {
 }
 
 /**
- * A seed estimate is usable when it is a positive, finite number. Zero and
- * below are refused: `virtualize` reads a non-positive `itemHeight` as
- * unwindowable and renders the list whole, which an average of nothing should
- * not cause.
+ * A seed estimate is usable when it is a positive, finite number. Zero
+ * and below are refused: `virtualize` reads a non-positive `itemHeight`
+ * as unwindowable and renders the list whole, which an average of
+ * nothing should not cause.
  *
  * @param {unknown} estimate
  * @returns {estimate is number}
@@ -70,14 +72,16 @@ function isUsableEstimate(estimate) {
 }
 
 /**
- * Accumulated positions for a list whose options each have their own height.
- * `offsets[i]` is the distance from the top of the list to the top of option
- * `i`, so `offsets[itemCount]` is the total scroll height.
+ * Accumulated positions for a list whose options each have their own
+ * height. `offsets[i]` is the distance from the top of the list to the
+ * top of option `i`, so `offsets[itemCount]` is the total scroll
+ * height.
  *
  * @param {Object} options
  * @param {number} options.itemCount
  * @param {ItemHeights | undefined} options.heights
- * @param {number} options.itemHeight Seed estimate for unmeasured options.
+ * @param {number} options.itemHeight Seed estimate for unmeasured
+ *   options.
  * @returns {{ offsets: Float64Array, totalHeight: number }}
  */
 function accumulateOffsets({ itemCount, heights, itemHeight }) {
@@ -110,8 +114,8 @@ function capToMaxItems(startIndex, endIndex, maxItems) {
 }
 
 /**
- * Index of the first entry in `offsets[0..size)` greater than `target`, or
- * `size` when none is.
+ * Index of the first entry in `offsets[0..size)` greater than `target`,
+ * or `size` when none is.
  *
  * @param {Float64Array} offsets
  * @param {number} size
@@ -132,8 +136,8 @@ function upperBound(offsets, size, target) {
 }
 
 /**
- * Index of the first entry in `offsets[0..size)` at or above `target`, or
- * `size` when none is.
+ * Index of the first entry in `offsets[0..size)` at or above `target`,
+ * or `size` when none is.
  *
  * @param {Float64Array} offsets
  * @param {number} size
@@ -154,8 +158,8 @@ function lowerBound(offsets, size, target) {
 }
 
 /**
- * `getVisibleRange` against already-accumulated positions, so a caller that
- * has built them once does not build them again.
+ * `getVisibleRange` against already-accumulated positions, so a caller
+ * that has built them once does not build them again.
  *
  * @param {Object} options
  * @param {ReturnType<typeof accumulateOffsets>} options.accumulated
@@ -199,8 +203,9 @@ function measuredVisibleRange({
 }
 
 /**
- * Compute the `[startIndex, endIndex)` slice of items to render for a given
- * scroll position, including `overscan` padding and an optional `maxItems` cap.
+ * Compute the `[startIndex, endIndex)` slice of items to render for a
+ * given scroll position, including `overscan` padding and an optional
+ * `maxItems` cap.
  *
  * @param {Object} options
  * @param {number} options.scrollTop
@@ -209,10 +214,10 @@ function measuredVisibleRange({
  * @param {number} options.itemCount
  * @param {number} [options.overscan=3]
  * @param {number} [options.maxItems]
- * @param {ItemHeights} [options.heights] Per-option heights,
- * indexed by item. Supplying them resolves the range by searching accumulated
- * positions instead of dividing by `itemHeight`, which then serves only as the
- * estimate for options with no entry.
+ * @param {ItemHeights} [options.heights] Per-option heights, indexed by
+ *   item. Supplying them resolves the range by searching accumulated
+ *   positions instead of dividing by `itemHeight`, which then serves
+ *   only as the estimate for options with no entry.
  * @returns {{ startIndex: number, endIndex: number }}
  */
 export function getVisibleRange({
@@ -254,8 +259,9 @@ export function getVisibleRange({
 }
 
 /**
- * Render only the visible slice of a list. Every option is `itemHeight` tall
- * unless `measured` is set, in which case offsets come from `heights`.
+ * Render only the visible slice of a list. Every option is `itemHeight`
+ * tall unless `measured` is set, in which case offsets come from
+ * `heights`.
  *
  * @template {Record<string, unknown>} Item
  * @param {Object} options
@@ -266,13 +272,14 @@ export function getVisibleRange({
  * @param {number} [options.overscan=3]
  * @param {number} [options.maxItems]
  * @param {number} [options.threshold=100]
- * @param {boolean} [options.measured=false] Derive offsets from `heights`
- * instead of applying `itemHeight` to every option. Read only while the list
- * is windowed; below `threshold` the browser lays the options out itself.
- * The options-level opt-in. The standalone helpers here (`getVisibleRange`,
- * `getBoundedScrollTop`, `scrollSelectedIntoView`, `scrollHighlightedIntoView`)
- * take no options and go measured whenever `heights` is supplied, so a caller
- * that opts in must pass `heights` to all of them.
+ * @param {boolean} [options.measured=false] Derive offsets from
+ *   `heights` instead of applying `itemHeight` to every option. Read
+ *   only while the list is windowed; below `threshold` the browser lays
+ *   the options out itself. The options-level opt-in. The standalone
+ *   helpers here (`getVisibleRange`, `getBoundedScrollTop`,
+ *   `scrollSelectedIntoView`, `scrollHighlightedIntoView`) take no
+ *   options and go measured whenever `heights` is supplied, so a caller
+ *   that opts in must pass `heights` to all of them.
  * @param {ItemHeights} [options.heights] Per-option heights,
  * indexed by item. Options with no entry take an estimated height.
  * @returns {{
@@ -368,8 +375,9 @@ export const DEFAULT_VIRTUAL_LIST_CONFIG = {
 };
 
 /**
- * Resolve config, virtualize result, and items to render for a listbox menu.
- * When disabled, `config` and `data` are `null` and `itemsToRender` is all `items`.
+ * Resolve config, virtualize result, and items to render for a listbox
+ * menu. When disabled, `config` and `data` are `null` and
+ * `itemsToRender` is all `items`.
  *
  * @template {Record<string, unknown>} Item
  * @param {Object} options
@@ -377,17 +385,22 @@ export const DEFAULT_VIRTUAL_LIST_CONFIG = {
  * @param {number} options.scrollTop
  * @param {boolean} options.shouldVirtualize
  * @param {boolean | object | undefined} options.virtualize
- * @param {Partial<typeof DEFAULT_VIRTUAL_LIST_CONFIG>} [options.defaults]
- * @param {ItemHeights} [options.heights] Per-option heights,
- * indexed by item. Read only when the config opts into measuring and the list
- * is windowed.
- * @param {number} [options.estimate] Height to assume for options nothing has
- * measured yet, in place of the config's `itemHeight`. Read only when the
- * config opts into measuring, where `itemHeight` is only the seed. On the fixed
- * path `itemHeight` is the height of every option and nothing may displace it.
- * Supply the average of heights measured earlier.
+ * @param {Partial<
+ *   typeof DEFAULT_VIRTUAL_LIST_CONFIG
+ * >} [options.defaults]
+ * @param {ItemHeights} [options.heights] Per-option heights, indexed by
+ *   item. Read only when the config opts into measuring and the list is
+ *   windowed.
+ * @param {number} [options.estimate] Height to assume for options
+ *   nothing has measured yet, in place of the config's `itemHeight`.
+ *   Read only when the config opts into measuring, where `itemHeight`
+ *   is only the seed. On the fixed path `itemHeight` is the height of
+ *   every option and nothing may displace it. Supply the average of
+ *   heights measured earlier.
  * @returns {{
- *   config: (typeof DEFAULT_VIRTUAL_LIST_CONFIG & Record<string, unknown>) | null,
+ *   config:
+ *     | (typeof DEFAULT_VIRTUAL_LIST_CONFIG & Record<string, unknown>)
+ *     | null,
  *   data: ReturnType<typeof virtualize<Item>> | null,
  *   itemsToRender: Item[]
  * }}
@@ -427,17 +440,17 @@ export function virtualListState({
 }
 
 /**
- * `scrollTop` to place the item at `index` at the top of the viewport, clamped
- * to the scrollable range.
+ * `scrollTop` to place the item at `index` at the top of the viewport,
+ * clamped to the scrollable range.
  *
  * @param {Object} options
  * @param {number} options.index
  * @param {number} options.itemHeight
  * @param {number} options.containerHeight
  * @param {number} options.itemCount
- * @param {ItemHeights} [options.heights] Per-option heights,
- * indexed by item. Supplying them positions by accumulated height instead of
- * multiplying by `itemHeight`.
+ * @param {ItemHeights} [options.heights] Per-option heights, indexed by
+ *   item. Supplying them positions by accumulated height instead of
+ *   multiplying by `itemHeight`.
  * @returns {number}
  */
 export function getBoundedScrollTop({
@@ -463,8 +476,8 @@ export function getBoundedScrollTop({
 }
 
 /**
- * `scrollTop` to bring a keyboard-highlighted item into view, or `null` if it
- * is already within the visible range (including overscan).
+ * `scrollTop` to bring a keyboard-highlighted item into view, or `null`
+ * if it is already within the visible range (including overscan).
  *
  * @param {Object} options
  * @param {number} options.highlightedIndex
@@ -516,7 +529,8 @@ export function scrollHighlightedIntoView({
 }
 
 /**
- * `scrollTop` for the selected item on open, or `0` when `selectedIndex < 0`.
+ * `scrollTop` for the selected item on open, or `0` when
+ * `selectedIndex < 0`.
  *
  * @param {Object} options
  * @param {number} options.selectedIndex
@@ -546,24 +560,29 @@ export function scrollSelectedIntoView({
 }
 
 /**
- * The `scrollTop` delta that keeps the option at `index`, and everything below
- * it, where the reader last saw it once the options above it measure to heights
- * other than the ones assumed. Add the result to the current scroll position.
+ * The `scrollTop` delta that keeps the option at `index`, and
+ * everything below it, where the reader last saw it once the options
+ * above it measure to heights other than the ones assumed. Add the
+ * result to the current scroll position.
  *
- * Positive means the options above grew and the anchor moved down. Each height
- * set is read with its own estimate for anything unmeasured, so a sharper
- * estimate shifting unmeasured options is corrected too.
+ * Positive means the options above grew and the anchor moved down. Each
+ * height set is read with its own estimate for anything unmeasured, so
+ * a sharper estimate shifting unmeasured options is corrected too.
  *
  * @param {Object} options
- * @param {number} options.index Index anchoring the viewport. Options before
- * it are the ones whose height changes shift what is on screen.
+ * @param {number} options.index Index anchoring the viewport. Options
+ *   before it are the ones whose height changes shift what is on
+ *   screen.
  * @param {number} options.itemCount
- * @param {number} options.itemHeight Seed estimate for unmeasured options.
+ * @param {number} options.itemHeight Seed estimate for unmeasured
+ *   options.
  * @param {ItemHeights | undefined} options.heights
  * Per-option heights as they are now.
  * @param {ItemHeights | undefined} options.previousHeights
  * Per-option heights the current scroll position was computed against.
- * @param {ReturnType<typeof accumulateOffsets>} [options.accumulatedBefore]
+ * @param {ReturnType<
+ *   typeof accumulateOffsets
+ * >} [options.accumulatedBefore]
  * `previousHeights` already accumulated, when the caller has it.
  * @returns {number}
  */
@@ -587,24 +606,28 @@ function getScrollCorrection({
 }
 
 /**
- * `getScrollCorrection` for a caller that knows its scroll position but not
- * which option to anchor on. The anchor is the topmost option on screen at
- * `scrollTop` under the heights that position was computed against: the one
- * the reader is looking at, and so the one that must not move.
+ * `getScrollCorrection` for a caller that knows its scroll position but
+ * not which option to anchor on. The anchor is the topmost option on
+ * screen at `scrollTop` under the heights that position was computed
+ * against: the one the reader is looking at, and so the one that must
+ * not move.
  *
  * Every consumer of measured heights needs this pairing. Note that the
- * rendered window starts `overscan` options earlier than the viewport does, so
- * correcting against that index leaves the visible options shifting anyway.
+ * rendered window starts `overscan` options earlier than the viewport
+ * does, so correcting against that index leaves the visible options
+ * shifting anyway.
  *
  * @param {Object} options
- * @param {number} options.scrollTop Position the correction is relative to.
+ * @param {number} options.scrollTop Position the correction is relative
+ *   to.
  * @param {number} options.itemCount
- * @param {number} options.itemHeight Seed estimate for unmeasured options.
+ * @param {number} options.itemHeight Seed estimate for unmeasured
+ *   options.
  * @param {number} options.containerHeight
- * @param {ItemHeights | undefined} options.heights Per-option heights as they
- * are now.
- * @param {ItemHeights | undefined} options.previousHeights Per-option heights
- * `scrollTop` was computed against.
+ * @param {ItemHeights | undefined} options.heights Per-option heights
+ *   as they are now.
+ * @param {ItemHeights | undefined} options.previousHeights Per-option
+ *   heights `scrollTop` was computed against.
  * @returns {number} The delta to add to `scrollTop`.
  */
 export function getMeasuredScrollCorrection({

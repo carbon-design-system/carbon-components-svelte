@@ -7,13 +7,16 @@
   export let label = "";
 
   /**
-   * Override whether items in this group are filtered by the search value.
-   * For example, set to `false` for a recent searches group.
+   * Override whether items in this group are filtered by the search
+   * value. For example, set to `false` for a recent searches group.
    * @type {boolean | undefined}
    */
   export let filter = undefined;
 
-  /** Set to `true` to render a top divider, for example a footer actions group */
+  /**
+   * Set to `true` to render a top divider, for example a footer actions
+   * group
+   */
   export let divider = false;
 
   import { getContext, setContext } from "svelte";

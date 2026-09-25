@@ -1,13 +1,22 @@
+<script context="module">
+  export { toHierarchy } from "../utils/to-hierarchy.js";
+</script>
+
 <script>
   /**
    * @template {RecursiveListNode} [Node=RecursiveListNode]
    * @typedef {object} RecursiveListNode
-   * @property {string | number} [id] - Unique node identifier; used as the each-block key when provided
+   * @property {string | number} [id] - Unique node identifier; used as
+   *   the each-block key when provided
    * @property {string} [text] - Node text content
    * @property {string} [href] - Node link URL
    * @property {string} [html] - Node HTML content
-   * @property {import("svelte/elements").SvelteHTMLElements["a"]["target"]} [target] - Node link target
-   * @property {import("svelte/elements").SvelteHTMLElements["a"]["rel"]} [rel] - Node link rel
+   * @property {import("svelte/elements")
+   *   .SvelteHTMLElements["a"]["target"]} [target]
+   *   Node link target
+   * @property {import("svelte/elements")
+   *   .SvelteHTMLElements["a"]["rel"]} [rel]
+   *   Node link rel
    * @property {RecursiveListNode[]} [nodes] - Child nodes
    * @restProps {ul | ol}
    */

@@ -1,16 +1,17 @@
 // @ts-check
 /**
- * Virtualization helpers for TreeView: iterative visible flatten (oracle /
- * small trees), and a size-cache index that avoids materializing a full
- * visible row array.
+ * Virtualization helpers for TreeView: iterative visible flatten
+ * (oracle / small trees), and a size-cache index that avoids
+ * materializing a full visible row array.
  *
  * Complexity (after build):
  * - build: O(n) time and one size entry per node
- * - getRowAt: O(siblings along the path) — flat/wide lists are O(index),
- *   not O(depth)
- * - findIndexById: O(n) worst case — a linear document-order search with no
- *   reverse id→index map, so unlike getRowAt/collectRows it can't use
- *   sizeById to skip a subtree before finding the id inside it
+ * - getRowAt: O(siblings along the path) — flat/wide lists are
+ *   O(index), not O(depth)
+ * - findIndexById: O(n) worst case — a linear document-order search
+ *   with no reverse id→index map, so unlike getRowAt/collectRows it
+ *   can't use sizeById to skip a subtree before finding the id inside
+ *   it
  * - collectRows: one cursor walk — O(path-to-start + window), not
  *   O(width × window) from independent getRowAt calls
  */
@@ -18,7 +19,11 @@
 export { isExpandableNode } from "./is-expandable-node.js";
 
 /**
- * @template {{ id: string | number; nodes?: T[]; hasChildren?: boolean }} T
+ * @template {{
+ *   id: string | number;
+ *   nodes?: T[];
+ *   hasChildren?: boolean;
+ * }} T
  * @param {T} node
  * @returns {node is T & { nodes: T[] }}
  */
@@ -30,15 +35,43 @@ function hasLoadedChildren(node) {
  * Flatten visible (expanded-only) nodes into annotated rows.
  * Iterative walk — one output array, no recursive `push(...spread)`.
  *
- * @template {{ id: string | number; nodes?: T[]; disabled?: boolean; hasChildren?: boolean }} T
+ * @template {{
+ *   id: string | number;
+ *   nodes?: T[];
+ *   disabled?: boolean;
+ *   hasChildren?: boolean;
+ * }} T
  * @param {ReadonlyArray<T>} nodes
  * @param {Set<string | number>} expandedIdsSet
- * @returns {Array<{ node: T; depth: number; parentId: string | number | null; posInSet: number; setSize: number; hasChildren: boolean }>}
+ * @returns {Array<{
+ *   node: T;
+ *   depth: number;
+ *   parentId: string | number | null;
+ *   posInSet: number;
+ *   setSize: number;
+ *   hasChildren: boolean;
+ * }>}
  */
 export function flattenVisibleRows(nodes, expandedIdsSet) {
-  /** @type {Array<{ node: T; depth: number; parentId: string | number | null; posInSet: number; setSize: number; hasChildren: boolean }>} */
+  /**
+   * @type {Array<{
+   *   node: T;
+   *   depth: number;
+   *   parentId: string | number | null;
+   *   posInSet: number;
+   *   setSize: number;
+   *   hasChildren: boolean;
+   * }>}
+   */
   const out = [];
-  /** @type {Array<{ list: ReadonlyArray<T>; depth: number; parentId: string | number | null; index: number }>} */
+  /**
+   * @type {Array<{
+   *   list: ReadonlyArray<T>;
+   *   depth: number;
+   *   parentId: string | number | null;
+   *   index: number;
+   * }>}
+   */
   const stack = [{ list: nodes, depth: 0, parentId: null, index: 0 }];
 
   while (stack.length > 0) {
@@ -75,17 +108,39 @@ export function flattenVisibleRows(nodes, expandedIdsSet) {
 }
 
 /**
- * Build a size cache and row lookup for virtualized trees.
- * Allocates one number per node (visible subtree size), not a row object
- * per visible line — so expand-all on 100k+ nodes stays cheap.
+ * Build a size cache and row lookup for virtualized trees. Allocates
+ * one number per node (visible subtree size), not a row object per
+ * visible line — so expand-all on 100k+ nodes stays cheap.
  *
- * @template {{ id: string | number; nodes?: T[]; disabled?: boolean; hasChildren?: boolean }} T
+ * @template {{
+ *   id: string | number;
+ *   nodes?: T[];
+ *   disabled?: boolean;
+ *   hasChildren?: boolean;
+ * }} T
  * @param {ReadonlyArray<T>} nodes
  * @param {Set<string | number>} expandedIdsSet
  * @returns {{
  *   totalCount: number,
- *   getRowAt: (index: number) => { node: T; depth: number; parentId: string | number | null; posInSet: number; setSize: number; hasChildren: boolean } | null,
- *   collectRows: (startIndex: number, endIndex: number) => Array<{ node: T; depth: number; parentId: string | number | null; posInSet: number; setSize: number; hasChildren: boolean }>,
+ *   getRowAt: (index: number) => {
+ *     node: T;
+ *     depth: number;
+ *     parentId: string | number | null;
+ *     posInSet: number;
+ *     setSize: number;
+ *     hasChildren: boolean;
+ *   } | null,
+ *   collectRows: (
+ *     startIndex: number,
+ *     endIndex: number,
+ *   ) => Array<{
+ *     node: T;
+ *     depth: number;
+ *     parentId: string | number | null;
+ *     posInSet: number;
+ *     setSize: number;
+ *     hasChildren: boolean;
+ *   }>,
  *   findIndexById: (id: string | number) => number,
  * }}
  */
@@ -123,7 +178,14 @@ export function createTreeVirtualIndex(nodes, expandedIdsSet) {
    * @param {string | number | null} parentId
    * @param {number} targetIndex
    * @param {number} indexOffset
-   * @returns {{ node: T; depth: number; parentId: string | number | null; posInSet: number; setSize: number; hasChildren: boolean } | null}
+   * @returns {{
+   *   node: T;
+   *   depth: number;
+   *   parentId: string | number | null;
+   *   posInSet: number;
+   *   setSize: number;
+   *   hasChildren: boolean;
+   * } | null}
    */
   function rowAtInList(list, depth, parentId, targetIndex, indexOffset) {
     let offset = indexOffset;
@@ -177,11 +239,28 @@ export function createTreeVirtualIndex(nodes, expandedIdsSet) {
   function collectRows(startIndex, endIndex) {
     const start = Math.max(0, startIndex);
     const end = Math.min(totalCount, endIndex);
-    /** @type {Array<{ node: T; depth: number; parentId: string | number | null; posInSet: number; setSize: number; hasChildren: boolean }>} */
+    /**
+     * @type {Array<{
+     *   node: T;
+     *   depth: number;
+     *   parentId: string | number | null;
+     *   posInSet: number;
+     *   setSize: number;
+     *   hasChildren: boolean;
+     * }>}
+     */
     const rows = [];
     if (start >= end) return rows;
 
-    /** @type {Array<{ list: ReadonlyArray<T>; depth: number; parentId: string | number | null; index: number; offset: number }>} */
+    /**
+     * @type {Array<{
+     *   list: ReadonlyArray<T>;
+     *   depth: number;
+     *   parentId: string | number | null;
+     *   index: number;
+     *   offset: number;
+     * }>}
+     */
     const stack = [
       { list: nodes, depth: 0, parentId: null, index: 0, offset: 0 },
     ];

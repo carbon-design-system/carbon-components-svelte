@@ -12,8 +12,9 @@ const PREFIX = "[carbon-components-svelte] DatePicker: ";
  */
 
 /**
- * `flatpickrProps` is typed as flatpickr's options, but Carbon overrides or
- * ignores some of them. Without a message those fail silently.
+ * `flatpickrProps` is typed as flatpickr's options, but Carbon
+ * overrides or ignores some of them. Without a message those fail
+ * silently.
  *
  * @param {Record<string, unknown> | undefined} flatpickrProps
  * @param {UnsupportedOptionContext} context
@@ -22,7 +23,11 @@ const PREFIX = "[carbon-components-svelte] DatePicker: ";
 export function getUnsupportedOptionWarnings(flatpickrProps, context) {
   if (!flatpickrProps) return [];
 
-  /** @type {Array<[option: string, applies: boolean, message: string]>} */
+  /**
+   * @type {Array<
+   *   [option: string, applies: boolean, message: string]
+   * >}
+   */
   const rules = [
     [
       "wrap",

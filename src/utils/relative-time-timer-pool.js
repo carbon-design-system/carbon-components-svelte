@@ -2,7 +2,8 @@
 
 /**
  * One `setInterval` per refresh cadence. Live `RelativeTime` instances
- * subscribe; the first consumer starts the interval, the last clears it.
+ * subscribe; the first consumer starts the interval, the last clears
+ * it.
  *
  * @typedef {{ callback: () => void }} Consumer
  * @typedef {{

@@ -14,7 +14,8 @@
 
   /**
    * Specify the selection behavior. `single` allows at most one pressed
-   * button; pressing the pressed button clears it unless `required` is set.
+   * button; pressing the pressed button clears it unless `required` is
+   * set.
    * @type {"multiple" | "single"}
    */
   export let selectionMode = "multiple";
@@ -118,10 +119,10 @@
   }
 
   /**
-   * The default tab stop: the first pressed, non-disabled button, else the
-   * first non-disabled button. Read straight from the DOM (like
-   * `rovingFocus`'s own item lookup) instead of keeping a child registry in
-   * sync.
+   * The default tab stop: the first pressed, non-disabled button, else
+   * the first non-disabled button. Read straight from the DOM (like
+   * `rovingFocus`'s own item lookup) instead of keeping a child
+   * registry in sync.
    * @type {() => HTMLButtonElement | null}
    */
   function findDefaultTabStop() {

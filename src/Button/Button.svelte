@@ -6,21 +6,42 @@
   /**
    * @extends {"./ButtonSkeleton.svelte"} ButtonSkeletonProps
    * @restProps {button | a | div}
-   * @slot {{ props: { role: "button"; type?: string; tabindex: any; disabled: boolean; href?: string; class: string; [key: string]: any; } }}
+   * @slot {{
+   *   props: {
+   *     role: "button";
+   *     type?: string;
+   *     tabindex: any;
+   *     disabled: boolean;
+   *     href?: string;
+   *     class: string;
+   *     [key: string]: any;
+   *   };
+   * }}
    * @slot {{ style: undefined | string; }} icon
-   * @slot {{}} badge - Compose a `BadgeIndicator` overlaid on an icon-only button. Size is set to `lg` automatically.
+   */
+
+  /**
+   * Compose a `BadgeIndicator` overlaid on an icon-only button. Size is
+   * set to `lg` automatically.
+   * @slot {{}} badge
    */
 
   /**
    * Specify the kind of button.
-   * @type {"primary" | "secondary" | "tertiary" | "ghost" | "danger" | "danger-tertiary" | "danger-ghost"}
+   * @type {"primary"
+   *   | "secondary"
+   *   | "tertiary"
+   *   | "ghost"
+   *   | "danger"
+   *   | "danger-tertiary"
+   *   | "danger-ghost"}
    */
   export let kind = "primary";
 
   /**
-   * Specify the size of button.
-   * When the `badge` slot is used, size is set to `lg` per Carbon design guidelines.
-   * Falls back to the size set by an ancestor `ActionSet` when unset.
+   * Specify the size of button. When the `badge` slot is used, size is
+   * set to `lg` per Carbon design guidelines. Falls back to the size
+   * set by an ancestor `ActionSet` when unset.
    * @type {"default" | "field" | "small" | "lg" | "xl"}
    * @default "default"
    */
@@ -30,7 +51,8 @@
   export let expressive = false;
 
   /**
-   * Set to `true` to enable the selected state for an icon-only, ghost button.
+   * Set to `true` to enable the selected state for an icon-only, ghost
+   * button.
    */
   export let isSelected = false;
 
@@ -52,10 +74,10 @@
   export let icon = /** @type {Icon} */ (undefined);
 
   /**
-   * Specify the ARIA label for the button icon.
-   * On an icon-only button, this also drives Carbon's tooltip. If omitted,
-   * the icon-only button renders without a tooltip; supply your own
-   * `aria-label` or `aria-labelledby` for accessibility in that case.
+   * Specify the ARIA label for the button icon. On an icon-only button,
+   * this also drives Carbon's tooltip. If omitted, the icon-only button
+   * renders without a tooltip; supply your own `aria-label` or
+   * `aria-labelledby` for accessibility in that case.
    * @type {string}
    */
   export let iconDescription = undefined;
@@ -75,8 +97,9 @@
 
   /**
    * Set to `true` to hide the tooltip while maintaining accessibility.
-   * Only applies to icon-only buttons.
-   * When `true`, the tooltip is visually hidden but the `iconDescription` remains accessible to screen readers.
+   * Only applies to icon-only buttons. When `true`, the tooltip is
+   * visually hidden but the `iconDescription` remains accessible to
+   * screen readers.
    */
   export let hideTooltip = false;
 
@@ -122,8 +145,8 @@
   /**
    * Set to `true` to render the icon-only tooltip in a portal,
    * preventing it from being clipped by `overflow: hidden` containers
-   * and enabling auto-flipping when the preferred direction lacks space.
-   * By default, the tooltip is portalled when inside a `Modal`.
+   * and enabling auto-flipping when the preferred direction lacks
+   * space. By default, the tooltip is portalled when inside a `Modal`.
    * @type {boolean | undefined}
    */
   export let portalTooltip = undefined;
@@ -143,17 +166,14 @@
   export let loadingDescription = undefined;
 
   import { getContext, onMount } from "svelte";
-  import { get } from "svelte/store";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
-  import {
-    TOOLTIP_ENTER_DELAY_MS,
-    TOOLTIP_LEAVE_DELAY_MS,
-  } from "../constants/timing.js";
   import Loading from "../Loading/Loading.svelte";
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
+  import { resolveLinkRel } from "../utils/link-rel.js";
   import { noop } from "../utils/noop.js";
+  import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import ButtonSkeleton from "./ButtonSkeleton.svelte";
   import { activeButtonTooltip } from "./button-tooltip-store.js";
 
@@ -175,34 +195,29 @@
 
   const tooltipId = {};
 
+  // Warm-handoff hover/focus scheduling: gate on the shared store so only
+  // one icon-only tooltip can be open at a time. When another button claims
+  // the store, this one closes immediately — preventing overlapping
+  // tooltips (e.g. Pagination's adjacent buttons).
+  const tooltipHandoff = createTooltipHandoff({
+    activeTooltip: activeButtonTooltip,
+    getId: () => tooltipId,
+  });
+
   let hovered = false;
   let focused = false;
-  let portalTimeout;
 
-  // Gate on the shared store so only one icon-only tooltip can be open at a
-  // time. When another button claims the store, this one closes immediately —
-  // preventing overlapping tooltips (e.g. Pagination's adjacent buttons).
   $: portalOpen =
     usePortal &&
     !disabled &&
     (hovered || focused) &&
     $activeButtonTooltip === tooltipId;
 
-  function claimActiveTooltip() {
-    activeButtonTooltip.set(tooltipId);
-  }
-
-  function releaseActiveTooltip() {
-    if (get(activeButtonTooltip) === tooltipId) {
-      activeButtonTooltip.set(null);
-    }
-  }
-
   function dismissPortalTooltip() {
-    clearTimeout(portalTimeout);
+    tooltipHandoff.cancel();
     hovered = false;
     focused = false;
-    releaseActiveTooltip();
+    tooltipHandoff.release();
   }
 
   // Re-attach the portal observer so the tooltip dismisses when an
@@ -225,62 +240,49 @@
 
   function handleMouseenter() {
     if (hasTooltip) {
-      claimActiveTooltip();
+      tooltipHandoff.claim();
     }
   }
 
   function handleMouseleave() {
     if (usePortal) return;
-    releaseActiveTooltip();
+    tooltipHandoff.release();
   }
 
   function handlePortalMouseEnter() {
     if (!usePortal || disabled) return;
-    clearTimeout(portalTimeout);
-    // Warm handoff: if another icon-only tooltip is already showing, skip the
-    // enter delay so moving between adjacent buttons feels instant.
-    const warmHandoff =
-      get(activeButtonTooltip) !== null &&
-      get(activeButtonTooltip) !== tooltipId;
-    portalTimeout = setTimeout(
-      () => {
-        hovered = true;
-        claimActiveTooltip();
-      },
-      warmHandoff ? 0 : TOOLTIP_ENTER_DELAY_MS,
-    );
+    tooltipHandoff.scheduleEnter(() => {
+      hovered = true;
+    });
   }
 
   function handlePortalMouseLeave() {
     if (!usePortal) return;
-    clearTimeout(portalTimeout);
-    portalTimeout = setTimeout(() => {
+    tooltipHandoff.scheduleLeave(() => {
       hovered = false;
-      if (!focused) releaseActiveTooltip();
-    }, TOOLTIP_LEAVE_DELAY_MS);
+      if (!focused) tooltipHandoff.release();
+    });
   }
 
   function handlePortalFocus() {
     if (!usePortal || disabled) return;
     focused = true;
-    claimActiveTooltip();
+    tooltipHandoff.claim();
   }
 
   function handlePortalBlur() {
     if (!usePortal) return;
     focused = false;
-    if (!hovered) releaseActiveTooltip();
+    if (!hovered) tooltipHandoff.release();
   }
 
   $: portalGaps = iconTooltipPortalGaps(tooltipPosition, tooltipAlignment);
 
   onMount(() => {
     return () => {
-      clearTimeout(portalTimeout);
+      tooltipHandoff.cancel();
       disconnectModalObserver();
-      if (get(activeButtonTooltip) === tooltipId) {
-        activeButtonTooltip.set(null);
-      }
+      tooltipHandoff.release();
     };
   });
 
@@ -313,10 +315,7 @@
     tabindex,
     disabled: isDisabled ? true : undefined,
     href: href && !isDisabled ? href : undefined,
-    rel:
-      href && !isDisabled && $$restProps.target === "_blank"
-        ? "noopener noreferrer"
-        : undefined,
+    rel: href && !isDisabled ? resolveLinkRel($$restProps.target) : undefined,
     "aria-pressed":
       hasIconOnly && kind === "ghost" && !href ? isSelected : undefined,
     "aria-busy": loading || undefined,

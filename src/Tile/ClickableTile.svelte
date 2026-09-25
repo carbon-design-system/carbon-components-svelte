@@ -14,7 +14,10 @@
   /** Set to `true` to disable the tile */
   export let disabled = false;
 
-  /** Set to `true` to stretch the tile to fill the height of its container */
+  /**
+   * Set to `true` to stretch the tile to fill the height of its
+   * container
+   */
   export let fullHeight = false;
 
   /** Set to `true` to remove the tile's padding */

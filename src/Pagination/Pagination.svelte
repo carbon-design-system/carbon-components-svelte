@@ -1,3 +1,57 @@
+<script context="module">
+  import { tick } from "svelte";
+
+  /**
+   * When a nav button becomes disabled as a result of its own click,
+   * the browser blurs it (moving focus to the body). Refocus the other
+   * button so keyboard/AT users don't lose their place.
+   * @param {HTMLElement | null} clickedRef
+   * @param {HTMLElement | null} otherRef
+   */
+  async function refocusIfDisabled(clickedRef, otherRef) {
+    const wasFocused = document.activeElement === clickedRef;
+    await tick();
+    if (wasFocused && clickedRef?.disabled && otherRef) {
+      otherRef.focus();
+    }
+  }
+
+  /**
+   * Returns a subset of page numbers centered around the current page
+   * to prevent performance issues with large datasets. Creates a capped
+   * window of pages instead of potentially thousands, improving render
+   * speed and memory usage.
+   * @param {number} currentPage - The current page number.
+   * @param {number} totalPages - Total number of pages.
+   * @param {number} window - Maximum number of pages to render.
+   * @returns {number[]} Array of page numbers to display.
+   */
+  function getWindowedPages(currentPage, totalPages, window) {
+    const size = Math.min(window, totalPages);
+    const half = Math.floor(size / 2);
+    let start = Math.max(1, currentPage - half);
+    const end = Math.min(totalPages, start + size - 1);
+    start = Math.max(1, end - size + 1);
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+  }
+
+  /**
+   * Filters page sizes to remove redundant options based on total
+   * items. Keeps all sizes up to and including the first one >=
+   * totalItems.
+   * @returns {number[]} Filtered array of page sizes.
+   */
+  function getFilteredPageSizes(sizes, total) {
+    if (total <= 0) return sizes.slice(0, 1);
+    const filtered = [];
+    for (const size of sizes) {
+      filtered.push(size);
+      if (size >= total) break;
+    }
+    return filtered.length ? filtered : sizes.slice(0, 1);
+  }
+</script>
+
 <script>
   /**
    * Dispatched when the user changes the page or page size through any
@@ -36,7 +90,12 @@
    * Override the page-selection control.
    * Falls back to the default page number `Select` when unset.
    * Use the bound `page` prop to navigate from within the slot.
-   * @slot {{ currentPage: number; totalPages: number; currentPageSize: number; selectLabelText: string; }} pageSelect
+   * @slot {{
+   *   currentPage: number;
+   *   totalPages: number;
+   *   currentPageSize: number;
+   *   selectLabelText: string;
+   * }} pageSelect
    */
 
   /**
@@ -107,8 +166,9 @@
   export let pageSizeInputDisabled = false;
 
   /**
-   * Set to `true` for a compact prev/next control with page status text.
-   * Hides the page size and page selects. Suited to toolbars and cards.
+   * Set to `true` for a compact prev/next control with page status
+   * text. Hides the page size and page selects. Suited to toolbars and
+   * cards.
    */
   export let simple = false;
 
@@ -125,10 +185,15 @@
   export let pageSizes = [10];
 
   /**
-   * Set to `true` to dynamically filter page sizes based on total items.
-   * Page sizes larger than needed to display all items on a single page are hidden.
+   * Set to `true` to dynamically filter page sizes based on total
+   * items. Page sizes larger than needed to display all items on a
+   * single page are hidden.
    * @example
-   * <Pagination totalItems={9} pageSizes={[5, 10, 15]} dynamicPageSizes />
+   * <Pagination
+   *   totalItems={9}
+   *   pageSizes={[5, 10, 15]}
+   *   dynamicPageSizes
+   * />
    * <!-- renders [5, 10] -->
    */
   export let dynamicPageSizes = false;
@@ -138,16 +203,16 @@
 
   /**
    * Override the disabled state of the forward (next page) button.
-   * Intended for use with `pagesUnknown` (controlled), where the consumer
-   * knows when there is no more data to load.
+   * Intended for use with `pagesUnknown` (controlled), where the
+   * consumer knows when there is no more data to load.
    * @type {boolean | undefined}
    */
   export let forwardButtonDisabled = undefined;
 
   /**
    * Override the disabled state of the backward (previous page) button.
-   * Intended for use with `pagesUnknown` (controlled), where the consumer
-   * manages page bounds.
+   * Intended for use with `pagesUnknown` (controlled), where the
+   * consumer manages page bounds.
    * @type {boolean | undefined}
    */
   export let backButtonDisabled = undefined;
@@ -185,7 +250,7 @@
    */
   export let size = "md";
 
-  import { createEventDispatcher, tick } from "svelte";
+  import { createEventDispatcher } from "svelte";
   import Button from "../Button/Button.svelte";
   import CaretLeft from "../icons/CaretLeft.svelte";
   import CaretRight from "../icons/CaretRight.svelte";
@@ -200,54 +265,6 @@
   let prevPageSizesKey;
   let backBtnRef = null;
   let forwardBtnRef = null;
-
-  /**
-   * When a nav button becomes disabled as a result of its own click, the
-   * browser blurs it (moving focus to the body). Refocus the other button
-   * so keyboard/AT users don't lose their place.
-   * @param {HTMLElement | null} clickedRef
-   * @param {HTMLElement | null} otherRef
-   */
-  async function refocusIfDisabled(clickedRef, otherRef) {
-    const wasFocused = document.activeElement === clickedRef;
-    await tick();
-    if (wasFocused && clickedRef?.disabled && otherRef) {
-      otherRef.focus();
-    }
-  }
-
-  /**
-   * Returns a subset of page numbers centered around the current page to prevent
-   * performance issues with large datasets. Creates a capped window of pages
-   * instead of potentially thousands, improving render speed and memory usage.
-   * @param {number} currentPage - The current page number.
-   * @param {number} totalPages - Total number of pages.
-   * @param {number} window - Maximum number of pages to render.
-   * @returns {number[]} Array of page numbers to display.
-   */
-  function getWindowedPages(currentPage, totalPages, window) {
-    const size = Math.min(window, totalPages);
-    const half = Math.floor(size / 2);
-    let start = Math.max(1, currentPage - half);
-    const end = Math.min(totalPages, start + size - 1);
-    start = Math.max(1, end - size + 1);
-    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
-  }
-
-  /**
-   * Filters page sizes to remove redundant options based on total items.
-   * Keeps all sizes up to and including the first one >= totalItems.
-   * @returns {number[]} Filtered array of page sizes.
-   */
-  function getFilteredPageSizes(sizes, total) {
-    if (total <= 0) return sizes.slice(0, 1);
-    const filtered = [];
-    for (const size of sizes) {
-      filtered.push(size);
-      if (size >= total) break;
-    }
-    return filtered.length ? filtered : sizes.slice(0, 1);
-  }
 
   $: effectivePageSizes = dynamicPageSizes
     ? getFilteredPageSizes(pageSizes, totalItems)

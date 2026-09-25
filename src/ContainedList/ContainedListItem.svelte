@@ -11,8 +11,8 @@
   export let disabled = false;
 
   /**
-   * Specify the `href` attribute.
-   * Renders an anchor with clickable styles. Takes precedence over `interactive`.
+   * Specify the `href` attribute. Renders an anchor with clickable
+   * styles. Takes precedence over `interactive`.
    * @type {string}
    */
   export let href = undefined;
@@ -24,6 +24,8 @@
    */
   export let icon = /** @type {Icon} */ (undefined);
 
+  import { resolveLinkRel } from "../utils/link-rel.js";
+
   $: isLink = Boolean(href);
   $: isClickable = isLink || interactive;
   $: tag = isLink ? "a" : interactive ? "button" : "div";
@@ -31,10 +33,7 @@
     type: tag === "button" ? "button" : undefined,
     disabled: tag === "button" ? disabled : undefined,
     href: isLink ? href : undefined,
-    rel:
-      isLink && $$restProps.target === "_blank"
-        ? "noopener noreferrer"
-        : undefined,
+    rel: isLink ? resolveLinkRel($$restProps.target) : undefined,
   };
 </script>
 

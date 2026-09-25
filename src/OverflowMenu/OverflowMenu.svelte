@@ -6,7 +6,10 @@
   /**
    * @event close
    * @type {object}
-   * @property {"escape-key" | "outside-click" | "toggle" | "item-select"} trigger
+   * @property {"escape-key"
+   *   | "outside-click"
+   *   | "toggle"
+   *   | "item-select"} trigger
    * @property {number} [index] only present when an item is selected
    * @property {string} [text] only present when an item is selected
    */
@@ -84,9 +87,9 @@
   export let menuRef = null;
 
   /**
-   * Set to `true` to render the menu in a portal,
-   * allowing it to escape containers with `overflow: hidden`.
-   * When inside a Modal, defaults to `true` unless explicitly set to `false`.
+   * Set to `true` to render the menu in a portal, allowing it to escape
+   * containers with `overflow: hidden`. When inside a Modal, defaults
+   * to `true` unless explicitly set to `false`.
    * @type {boolean | undefined}
    */
   export let portalMenu = undefined;
@@ -104,9 +107,11 @@
   import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
+  import { toCssLength } from "../utils/css-length.js";
   import { dismiss } from "../utils/dismiss.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { keyBy } from "../utils/key-by.js";
+  import { nextEnabledIndex } from "../utils/move-index.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import {
     createTypeaheadBuffer,
@@ -118,16 +123,38 @@
   const ctxBreadcrumbItem = getContext("carbon:BreadcrumbItem");
   const insideModal = getContext(MODAL_CONTEXT_KEY);
 
+  // Arrow keys the menu owns while open, so the page doesn't also scroll.
+  const ARROW_KEYS = ["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"];
+
   $: effectivePortalMenu =
     portalMenu === undefined ? !!insideModal : portalMenu;
 
   const dispatch = createEventDispatcher();
   /**
-   * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; text: string; primaryFocus: boolean; disabled: boolean; index: number }>>}
+   * @type {import("svelte/store").Writable<
+   *   ReadonlyArray<{
+   *     id: string;
+   *     text: string;
+   *     primaryFocus: boolean;
+   *     disabled: boolean;
+   *     index: number;
+   *   }>
+   * >}
    */
   const items = writable([]);
   /**
-   * @type {import("svelte/store").Readable<Record<string, { id: string; text: string; primaryFocus: boolean; disabled: boolean; index: number }>>}
+   * @type {import("svelte/store").Readable<
+   *   Record<
+   *     string,
+   *     {
+   *       id: string;
+   *       text: string;
+   *       primaryFocus: boolean;
+   *       disabled: boolean;
+   *       index: number;
+   *     }
+   *   >
+   * >}
    */
   const itemsById = derived(items, (_) => keyBy(_));
   const currentId = writable(undefined);
@@ -149,9 +176,9 @@
   });
 
   /**
-   * Everything the menu's position depends on. `afterUpdate` re-measures only
-   * when this changes; it used to re-read offset dimensions on every update
-   * while open (each arrow key, hover).
+   * Everything the menu's position depends on. `afterUpdate`
+   * re-measures only when this changes; it used to re-read offset
+   * dimensions on every update while open (each arrow key, hover).
    */
   $: positionKey = open
     ? `${direction}|${flipped}|${size}|${effectivePortalMenu}|${menuRef ? 1 : 0}`
@@ -159,9 +186,9 @@
 
   /**
    * Key last measured against. Read and written only in `afterUpdate`.
-   * The menu's `style` uses directives rather than a `style="..."` string so
-   * a re-render (e.g. `buttonWidth` settling) never wipes the `top`/`left`
-   * written here.
+   * The menu's `style` uses directives rather than a `style="..."`
+   * string so a re-render (e.g. `buttonWidth` settling) never wipes the
+   * `top`/`left` written here.
    */
   let measuredPositionKey = null;
 
@@ -173,7 +200,12 @@
   const batchedItemsUpdate = batchStoreUpdates(items);
 
   /**
-   * @type {(data: { id: string; text: string; primaryFocus: boolean; disabled: boolean }) => void}
+   * @type {(data: {
+   *   id: string;
+   *   text: string;
+   *   primaryFocus: boolean;
+   *   disabled: boolean;
+   * }) => void}
    */
   function add({ id, text, primaryFocus, disabled }) {
     batchedItemsUpdate((_) => {
@@ -191,7 +223,16 @@
   }
 
   /**
-   * @type {(id: string, item: { id: string; text: string; primaryFocus: boolean; disabled: boolean; index: number }) => void}
+   * @type {(
+   *   id: string,
+   *   item: {
+   *     id: string;
+   *     text: string;
+   *     primaryFocus: boolean;
+   *     disabled: boolean;
+   *     index: number;
+   *   },
+   * ) => void}
    */
   function update(id, item) {
     currentId.set(id);
@@ -207,22 +248,31 @@
   }
 
   function first() {
-    const index = $items.findIndex((_) => !_.disabled);
+    const index = nextEnabledIndex({
+      items: $items,
+      index: -1,
+      step: 1,
+      isDisabled: (item) => item.disabled,
+      wrap: false,
+    });
     if (index >= 0) focusedIndex.set(index);
   }
 
   function last() {
-    for (let index = $items.length - 1; index >= 0; index--) {
-      if (!$items[index].disabled) {
-        focusedIndex.set(index);
-        return;
-      }
-    }
+    const index = nextEnabledIndex({
+      items: $items,
+      index: -1,
+      step: -1,
+      isDisabled: (item) => item.disabled,
+      wrap: false,
+    });
+    if (index >= 0) focusedIndex.set(index);
   }
 
   /**
-   * WAI-ARIA APG menu first-character navigation: move focus to the next
-   * enabled item whose text starts with the buffered characters typed so far.
+   * WAI-ARIA APG menu first-character navigation: move focus to the
+   * next enabled item whose text starts with the buffered characters
+   * typed so far.
    * @param {string} character
    */
   function typeaheadSearch(character) {
@@ -325,8 +375,7 @@
   // performance. The previous approach created individual `style` tags per
   // instance, causing overhead when many OverflowMenu components are rendered.
   $: overflowMenuOptionsAfterWidth = buttonWidth ? `${buttonWidth}px` : "2rem";
-  $: maxHeightStyle =
-    typeof maxHeight === "number" ? `${maxHeight}px` : maxHeight;
+  $: maxHeightStyle = toCssLength(maxHeight);
 
   function handleOutsideClick(event) {
     if (menuRef && isOutsideClick(event, [buttonRef, menuRef])) {
@@ -343,9 +392,7 @@
 
   /** @param {KeyboardEvent} event */
   function handleMenuKeydown(event) {
-    if (
-      ["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(event.key)
-    ) {
+    if (ARROW_KEYS.includes(event.key)) {
       event.preventDefault();
     } else if (isTypeaheadKey(event)) {
       event.preventDefault();
@@ -405,7 +452,7 @@
   on:keydown
   on:keydown={(event) => {
     if (open) {
-      if (["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"].includes(event.key)) {
+      if (ARROW_KEYS.includes(event.key)) {
         event.preventDefault();
       } else if (event.key === "Home") {
         event.preventDefault();

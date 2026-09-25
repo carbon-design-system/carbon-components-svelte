@@ -1,3 +1,30 @@
+<script context="module">
+  /**
+   * @param {File | undefined} file
+   * @param {string} fileName
+   * @param {"uploading" | "edit" | "complete"} status
+   * @param {boolean} invalid
+   * @param {string | undefined | ((ctx: {
+   *   file: File | undefined,
+   *   fileName: string,
+   *   status: "uploading" | "edit" | "complete",
+   *   invalid: boolean,
+   * }) => string | undefined)} iconDescription
+   * @returns {string | null}
+   */
+  function resolveIconLabel(file, fileName, status, invalid, iconDescription) {
+    const ctx = { file, fileName, status, invalid };
+    const raw =
+      typeof iconDescription === "function"
+        ? iconDescription(ctx)
+        : iconDescription;
+    if (raw != null && `${raw}`.trim() !== "") {
+      return `${raw}`.trim();
+    }
+    return null;
+  }
+</script>
+
 <script>
   /**
    * @restProps {div | button | svg}
@@ -5,8 +32,10 @@
 
   /**
    * @typedef {Object} FilenameIconDescriptionContext
-   * @property {File | undefined} [file] Set when rendered from `FileUploader` rows; otherwise `undefined`.
-   * @property {string} fileName Display name (`file.name` or `FileUploaderItem` `name`).
+   * @property {File | undefined} [file] Set when rendered from
+   *   `FileUploader` rows; otherwise `undefined`.
+   * @property {string} fileName Display name (`file.name` or
+   *   `FileUploaderItem` `name`).
    * @property {"uploading" | "edit" | "complete"} status
    * @property {boolean} invalid
    */
@@ -18,40 +47,35 @@
   export let status = "uploading";
 
   /**
-   * Accessible label for the status icons (spinner, remove control, checkmark).
-   * Pass a string, or a function receiving {@link FilenameIconDescriptionContext}.
-   * When the resolved value is omitted or blank after trim, defaults are used:
+   * Accessible label for the status icons (spinner, remove control,
+   * checkmark). Pass a string, or a function receiving {@link
+   * FilenameIconDescriptionContext}. When the resolved value is omitted
+   * or blank after trim, defaults are used:
    * - `uploading`: passed to `Loading` as `"uploading"`
    * - `edit`: close button `aria-label` is `"Remove file"`
-   * - `complete`: checkmark `aria-label` / `title` are `"Upload complete"`
-   * @type {string | undefined | ((ctx: FilenameIconDescriptionContext) => string | undefined)}
+   * - `complete`: checkmark `aria-label` / `title` are
+   *   `"Upload complete"`
+   * @type {string
+   *   | undefined
+   *   | ((ctx: FilenameIconDescriptionContext) => string | undefined)}
    */
   export let iconDescription = undefined;
 
   /**
-   * Current file when rendered inside `FileUploader`; omit when using `FileUploaderItem` only.
+   * Current file when rendered inside `FileUploader`; omit when using
+   * `FileUploaderItem` only.
    * @type {File | undefined}
    */
   export let file = undefined;
 
-  /** Display file name (e.g. `file.name` or `FileUploaderItem` `name`). */
+  /**
+   * Display file name (e.g. `file.name` or `FileUploaderItem` `name`).
+   */
   export let fileName = "";
 
   /** Set to `true` to indicate an invalid state */
   export let invalid = false;
 
-  function resolveIconLabel(file, fileName, status, invalid, iconDescription) {
-    /** @type {FilenameIconDescriptionContext} */
-    const ctx = { file, fileName, status, invalid };
-    const raw =
-      typeof iconDescription === "function"
-        ? iconDescription(ctx)
-        : iconDescription;
-    if (raw != null && `${raw}`.trim() !== "") {
-      return `${raw}`.trim();
-    }
-    return null;
-  }
   $: resolvedIconLabel = resolveIconLabel(
     file,
     fileName,

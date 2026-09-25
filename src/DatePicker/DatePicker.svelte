@@ -1,16 +1,79 @@
+<script context="module">
+  import { deepEqual } from "../utils/deep-equal.js";
+
+  /**
+   * @param {string | { from: string; to: string }} atOpen
+   * @param {string | { from: string; to: string }} atClose
+   */
+  function dateStrChanged(atOpen, atClose) {
+    if (typeof atClose === "object") {
+      return atOpen.from !== atClose.from || atOpen.to !== atClose.to;
+    }
+    return atOpen !== atClose;
+  }
+
+  /**
+   * @param {number[]} atOpen
+   * @param {Date[]} dates
+   */
+  function selectedDatesChanged(atOpen, dates) {
+    const atClose = (dates || []).map((date) => date.getTime());
+    return (
+      atClose.length !== atOpen.length ||
+      atClose.some((time, index) => time !== atOpen[index])
+    );
+  }
+
+  /**
+   * A value rebuilt in a `$:` statement, forwarded through a wrapper,
+   * or built from a reassigned object arrives new but equal. Comparing
+   * contents avoids a `calendar.set` (a full day grid redraw) when
+   * nothing changed.
+   */
+  function optionChanged(prev, next) {
+    return !deepEqual(prev, next);
+  }
+
+  /**
+   * @param {number} year
+   * @param {number} month
+   */
+  function monthValue(year, month) {
+    return year * 12 + month;
+  }
+
+  /**
+   * @param {null | string | Date} a
+   * @param {null | string | Date} b
+   */
+  function initialMonthChanged(a, b) {
+    return !deepEqual(a, b);
+  }
+</script>
+
 <script>
   /**
-   * @event {string | { selectedDates: [dateFrom: Date, dateTo?: Date]; dateStr: string | { from: string; to: string; } }} change
+   * @event {string
+   *   | {
+   *       selectedDates: [dateFrom: Date, dateTo?: Date];
+   *       dateStr: string | { from: string; to: string };
+   *     }} change
    */
 
   /**
-   * @event {{ selectedDates: Date[]; dateStr: string | { from: string; to: string; } }} open
+   * @event {{
+   *   selectedDates: Date[];
+   *   dateStr: string | { from: string; to: string };
+   * }} open
    */
 
   /**
    * @event close
    * @type {object}
-   * @property {"escape-key" | "outside-click" | "select" | "programmatic"} trigger
+   * @property {"escape-key"
+   *   | "outside-click"
+   *   | "select"
+   *   | "programmatic"} trigger
    */
 
   /**
@@ -25,12 +88,17 @@
    */
 
   /**
-   * Specify the date picker type.
-   * Changing it after mount rebuilds the calendar.
-   * `"week"` selects a whole week: a picked day becomes the first day of its
-   * week, so `value` is that date in `dateFormat`. A `value` set from outside
-   * is kept as given.
-   * @type {"simple" | "single" | "range" | "month" | "year" | "week" | "multiple"}
+   * Specify the date picker type. Changing it after mount rebuilds the
+   * calendar. `"week"` selects a whole week: a picked day becomes the
+   * first day of its week, so `value` is that date in `dateFormat`. A
+   * `value` set from outside is kept as given.
+   * @type {"simple"
+   *   | "single"
+   *   | "range"
+   *   | "month"
+   *   | "year"
+   *   | "week"
+   *   | "multiple"}
    */
   export let datePickerType = "simple";
 
@@ -61,17 +129,16 @@
   export let valueTo = "";
 
   /**
-   * Specify the date format.
-   * Use `"F Y"` or `"m/Y"` with `datePickerType="month"`, and `"Y"` with
-   * `datePickerType="year"`.
+   * Specify the date format. Use `"F Y"` or `"m/Y"` with
+   * `datePickerType="month"`, and `"Y"` with `datePickerType="year"`.
    */
   export let dateFormat = "m/d/Y";
 
   /**
-   * Specify a separate format for the text shown in the input, using the
-   * same tokens as `dateFormat`. `value` and the submitted form field keep
-   * using `dateFormat`.
-   * Not supported with the "simple" and "range" date picker types.
+   * Specify a separate format for the text shown in the input, using
+   * the same tokens as `dateFormat`. `value` and the submitted form
+   * field keep using `dateFormat`. Not supported with the "simple" and
+   * "range" date picker types.
    * @type {string | undefined}
    */
   export let displayFormat = undefined;
@@ -89,32 +156,35 @@
   export let minDate = null;
 
   /**
-   * @typedef {string | Date | { from: string | Date; to: string | Date } | ((date: Date) => boolean)} DatePickerDateRule
+   * @typedef {string
+   *   | Date
+   *   | { from: string | Date; to: string | Date }
+   *   | ((date: Date) => boolean)} DatePickerDateRule
    */
 
   /**
-   * Specify dates to disable in the calendar. A date matches a rule when it
-   * equals a string or `Date`, falls within a `{ from, to }` range, or a
-   * predicate function returns `true`. Strings follow `dateFormat`.
-   * When `enabledDates` is also non-empty, `enabledDates` takes priority and
-   * `disabledDates` is ignored, matching flatpickr.
+   * Specify dates to disable in the calendar. A date matches a rule
+   * when it equals a string or `Date`, falls within a `{ from, to }`
+   * range, or a predicate function returns `true`. Strings follow
+   * `dateFormat`. When `enabledDates` is also non-empty, `enabledDates`
+   * takes priority and `disabledDates` is ignored, matching flatpickr.
    * Reassign the array to update an open calendar; mutating it in place
    * (`push`) is not reactive. If the currently selected date becomes
-   * disabled by a rule change, it stays selected.
-   * Only works with the "single", "range", and "multiple" date picker types.
+   * disabled by a rule change, it stays selected. Only works with the
+   * "single", "range", and "multiple" date picker types.
    * @type {ReadonlyArray<DatePickerDateRule>}
    */
   export let disabledDates = [];
 
   /**
-   * Specify the only dates to enable in the calendar; every other date is
-   * disabled. Takes the same rule shapes as `disabledDates`. When both are
-   * non-empty, `enabledDates` takes priority and `disabledDates` is ignored,
-   * matching flatpickr.
-   * Reassign the array to update an open calendar; mutating it in place
-   * (`push`) is not reactive. If the currently selected date becomes
-   * disabled by a rule change, it stays selected.
-   * Only works with the "single", "range", and "multiple" date picker types.
+   * Specify the only dates to enable in the calendar; every other date
+   * is disabled. Takes the same rule shapes as `disabledDates`. When
+   * both are non-empty, `enabledDates` takes priority and
+   * `disabledDates` is ignored, matching flatpickr. Reassign the array
+   * to update an open calendar; mutating it in place (`push`) is not
+   * reactive. If the currently selected date becomes disabled by a rule
+   * change, it stays selected. Only works with the "single", "range",
+   * and "multiple" date picker types.
    * @type {ReadonlyArray<DatePickerDateRule>}
    */
   export let enabledDates = [];
@@ -140,34 +210,36 @@
   /**
    * Specify the month to show when the calendar opens with no date
    * selected. Only the month and year are used; the day is ignored.
-   * Values may be a Date, or a string in the same format as `dateFormat`.
-   * Clamped into `minDate` / `maxDate` when it falls outside them.
-   * Ignored once a date is selected, until the selection is cleared.
-   * Only works with the "single", "range", and "multiple" date picker
-   * types.
+   * Values may be a Date, or a string in the same format as
+   * `dateFormat`. Clamped into `minDate` / `maxDate` when it falls
+   * outside them. Ignored once a date is selected, until the selection
+   * is cleared. Only works with the "single", "range", and "multiple"
+   * date picker types.
    * @type {null | string | Date}
    */
   export let initialMonth = null;
 
   /**
    * Specify the locale.
-   * @type {import("flatpickr/dist/types/locale").CustomLocale | import("flatpickr/dist/types/locale").key}
+   * @type {import("flatpickr/dist/types/locale").CustomLocale
+   *   | import("flatpickr/dist/types/locale").key}
    */
   export let locale = "en";
 
   /**
    * Set to `true` to render the calendar permanently below the input
-   * instead of in a popup. `open` and `close` events are not dispatched,
-   * `portalMenu` is ignored, and the calendar stops accepting input while
-   * the input is read-only or disabled.
-   * Not supported with the "simple" date picker type.
+   * instead of in a popup. `open` and `close` events are not
+   * dispatched, `portalMenu` is ignored, and the calendar stops
+   * accepting input while the input is read-only or disabled. Not
+   * supported with the "simple" date picker type.
    */
   export let inline = false;
 
   /**
-   * Set to `true` to show a button that clears the date. It appears while
-   * there is a value, and not while the input is read-only or disabled.
-   * In range mode it sits on the end input and clears both dates.
+   * Set to `true` to show a button that clears the date. It appears
+   * while there is a value, and not while the input is read-only or
+   * disabled. In range mode it sits on the end input and clears both
+   * dates.
    */
   export let clearable = false;
 
@@ -188,13 +260,14 @@
   export let fluid = false;
 
   /**
-   * Set to `true` to render the calendar in a portal to prevent clipping.
-   * When inside a Modal, defaults to `true` unless explicitly set to `false`.
+   * Set to `true` to render the calendar in a portal to prevent
+   * clipping. When inside a Modal, defaults to `true` unless explicitly
+   * set to `false`.
    *
    * When the date picker is inside a native `<dialog>` (opened with
-   * `showModal()`) or an open `[popover]` element, the calendar auto-mounts
-   * into that top-layer ancestor and uses `position: fixed` so it renders
-   * above the backdrop instead of behind it.
+   * `showModal()`) or an open `[popover]` element, the calendar
+   * auto-mounts into that top-layer ancestor and uses `position: fixed`
+   * so it renders above the backdrop instead of behind it.
    * @type {boolean | undefined}
    */
   export let portalMenu = undefined;
@@ -207,14 +280,17 @@
    * `mode` is set by `datePickerType`, and `wrap` is not supported
    * because Flatpickr is given the input element itself.
    * @see https://flatpickr.js.org/options
-   * @type {Omit<import("flatpickr/dist/types/options").Options, "mode" | "wrap">}
+   * @type {Omit<
+   *   import("flatpickr/dist/types/options").Options,
+   *   "mode" | "wrap"
+   * >}
    */
   export let flatpickrProps = { static: true };
 
   /**
    * Bind to the Flatpickr calendar instance for programmatic control.
-   * Available for every `datePickerType` except `"simple"`, where it stays
-   * `null`.
+   * Available for every `datePickerType` except `"simple"`, where it
+   * stays `null`.
    * @see https://flatpickr.js.org/instance-methods-properties-elements/
    * @type {import("flatpickr/dist/types/instance").Instance | null}
    * @bindable readonly
@@ -223,11 +299,11 @@
 
   /**
    * Bind to the selected dates as `Date` objects, in the same order as
-   * `calendar.selectedDates` (range: start, then end). Setting it selects
-   * those dates and updates `value` (or `valueFrom`/`valueTo`). At mount, a
-   * non-empty `value` takes precedence. Reassign the array to update; do not
-   * mutate it.
-   * Not supported with the "simple" date picker type.
+   * `calendar.selectedDates` (range: start, then end). Setting it
+   * selects those dates and updates `value` (or `valueFrom`/`valueTo`).
+   * At mount, a non-empty `value` takes precedence. Reassign the array
+   * to update; do not mutate it. Not supported with the "simple" date
+   * picker type.
    * @type {ReadonlyArray<Date>}
    * @bindable writable
    */
@@ -254,10 +330,10 @@
     FORM_CONTEXT_KEY,
     MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
-  import { deepEqual } from "../utils/deep-equal.js";
   import { dismiss } from "../utils/dismiss.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { uniqueId } from "../utils/unique-id.js";
+  import { addPooledListener } from "../utils/window-listener-pool.js";
   import {
     createCalendar,
     resolveLocale,
@@ -366,8 +442,16 @@
   let prevDisplayFormat = displayFormat;
   let prevUsesDisplayFormat = !!displayFormat && datePickerType !== "range";
   let calendarUsesFixedPositioning = false;
-  /** @type {(ReturnType<typeof rafThrottle> & { cancel: () => void }) | null} */
+  /**
+   * @type {(ReturnType<typeof rafThrottle> & {
+   *   cancel: () => void;
+   * }) | null}
+   */
   let onCalendarReposition = null;
+  /** @type {(() => void) | null} */
+  let unlistenReposition = null;
+  /** @type {(() => void) | null} */
+  let unlistenRepositionResize = null;
   const SCROLL_LISTENER_OPTIONS = { capture: true, passive: true };
   // datePickerType="multiple": anchor for shift-click range selection. Only
   // moves on a plain click, so consecutive shift-clicks all extend from the
@@ -386,7 +470,12 @@
   let prevMaxRangeDays = maxRangeDays;
   // flatpickr onClose has no reason; explicit handlers set closeTrigger, else
   // infer from session baseline. Close dispatch is deferred for range sync.
-  /** @type {"escape-key" | "outside-click" | "programmatic" | undefined} */
+  /**
+   * @type {"escape-key"
+   *   | "outside-click"
+   *   | "programmatic"
+   *   | undefined}
+   */
   let closeTrigger;
   /** @type {string | { from: string; to: string }} */
   let dateStrAtOpen;
@@ -394,29 +483,8 @@
   let selectedDatesAtOpen = [];
 
   /**
-   * @param {string | { from: string; to: string }} atOpen
-   * @param {string | { from: string; to: string }} atClose
+   * The string flatpickr writes to the input for its current selection.
    */
-  function dateStrChanged(atOpen, atClose) {
-    if (typeof atClose === "object") {
-      return atOpen.from !== atClose.from || atOpen.to !== atClose.to;
-    }
-    return atOpen !== atClose;
-  }
-
-  /**
-   * @param {number[]} atOpen
-   * @param {Date[]} dates
-   */
-  function selectedDatesChanged(atOpen, dates) {
-    const atClose = (dates || []).map((date) => date.getTime());
-    return (
-      atClose.length !== atOpen.length ||
-      atClose.some((time, index) => time !== atOpen[index])
-    );
-  }
-
-  /** The string flatpickr writes to the input for its current selection. */
   function formatSelectedDates() {
     const { dateFormat, conjunction } = calendar.config;
     return calendar.selectedDates
@@ -490,18 +558,22 @@
       if (calendar) positionFlatpickrCalendarFixed(calendar);
     });
     onCalendarReposition = reposition;
-    window.addEventListener("scroll", reposition, SCROLL_LISTENER_OPTIONS);
-    window.addEventListener("resize", reposition, { passive: true });
+    unlistenReposition = addPooledListener(
+      "scroll",
+      reposition,
+      SCROLL_LISTENER_OPTIONS,
+    );
+    unlistenRepositionResize = addPooledListener("resize", reposition, {
+      passive: true,
+    });
   }
 
   function detachFixedRepositionListeners() {
     if (!onCalendarReposition) return;
-    window.removeEventListener(
-      "scroll",
-      onCalendarReposition,
-      SCROLL_LISTENER_OPTIONS,
-    );
-    window.removeEventListener("resize", onCalendarReposition);
+    unlistenReposition?.();
+    unlistenReposition = null;
+    unlistenRepositionResize?.();
+    unlistenRepositionResize = null;
     onCalendarReposition.cancel();
     onCalendarReposition = null;
   }
@@ -590,9 +662,9 @@
 
   /**
    * While a range start is pending, whether `date` would make the range
-   * shorter than `minRangeDays` or longer than `maxRangeDays`. Reads the
-   * current props on every call; flatpickr asks as it rebuilds the grid
-   * right after the start is picked.
+   * shorter than `minRangeDays` or longer than `maxRangeDays`. Reads
+   * the current props on every call; flatpickr asks as it rebuilds the
+   * grid right after the start is picked.
    *
    * @param {Date} date
    * @param {{ selectedDates: Date[] }} instance
@@ -611,9 +683,9 @@
   }
 
   /**
-   * Mirror the calendar's selection into `selectedDates`. The `Date`s are
-   * copies: flatpickr keeps its own, and a consumer mutating one in place
-   * would change the selection without a redraw.
+   * Mirror the calendar's selection into `selectedDates`. The `Date`s
+   * are copies: flatpickr keeps its own, and a consumer mutating one in
+   * place would change the selection without a redraw.
    */
   function syncSelectedDatesFromCalendar() {
     if (!calendar) return;
@@ -623,9 +695,10 @@
   }
 
   /**
-   * Select `selectedDates` in the calendar and write the matching strings,
-   * recorded as already applied so `afterUpdate` does not parse them back.
-   * A prop write is not a user change, so nothing is dispatched.
+   * Select `selectedDates` in the calendar and write the matching
+   * strings, recorded as already applied so `afterUpdate` does not
+   * parse them back. A prop write is not a user change, so nothing is
+   * dispatched.
    */
   function applySelectedDates() {
     prevSelectedDates = selectedDates;
@@ -645,8 +718,9 @@
   }
 
   /**
-   * Opens or closes the calendar to match the `open` prop. A close through
-   * the prop reports the `"programmatic"` trigger, like Modal's.
+   * Opens or closes the calendar to match the `open` prop. A close
+   * through the prop reports the `"programmatic"` trigger, like
+   * Modal's.
    */
   function applyOpenProp() {
     if (!calendar || usesInline || open === calendarOpen) return;
@@ -660,8 +734,8 @@
   }
 
   /**
-   * Empties the selection (both ends in range mode), then returns focus to
-   * the input, which opens the calendar the same way a click would.
+   * Empties the selection (both ends in range mode), then returns focus
+   * to the input, which opens the calendar the same way a click would.
    */
   function clear() {
     if ($readonlyAny || $disabledAny) return;
@@ -686,14 +760,15 @@
   }
 
   /**
-   * A form reset restores each input's DOM value without firing any event,
-   * and flatpickr's own `selectedDates` (and any `altInput` text) are
-   * untouched by the browser entirely — neither the input DOM value change
-   * nor the calendar-internal state gets pushed anywhere on its own. Read
-   * what the browser just put in the DOM (not a value captured at creation,
-   * so a value a parent sets after mount is never discarded), and push it
-   * through `calendar.setDate(...)`, the same call `afterUpdate` already
-   * uses for every other externally-set value change.
+   * A form reset restores each input's DOM value without firing any
+   * event, and flatpickr's own `selectedDates` (and any `altInput`
+   * text) are untouched by the browser entirely — neither the input DOM
+   * value change nor the calendar-internal state gets pushed anywhere
+   * on its own. Read what the browser just put in the DOM (not a value
+   * captured at creation, so a value a parent sets after mount is never
+   * discarded), and push it through `calendar.setDate(...)`, the same
+   * call `afterUpdate` already uses for every other externally-set
+   * value change.
    */
   function handleFormReset() {
     if ($range) {
@@ -780,10 +855,11 @@
   }
 
   /**
-   * flatpickr keeps `selectedDateElem` and `todayDateElem` after a redraw
-   * replaces them (a month change), and sets `todayDateElem` even when
-   * today is disabled, which is not focusable. Same test as flatpickr's own
-   * `isInView`, against the whole container so month and year cells count.
+   * flatpickr keeps `selectedDateElem` and `todayDateElem` after a
+   * redraw replaces them (a month change), and sets `todayDateElem`
+   * even when today is disabled, which is not focusable. Same test as
+   * flatpickr's own `isInView`, against the whole container so month
+   * and year cells count.
    *
    * @param {HTMLElement | undefined} elem
    */
@@ -797,8 +873,8 @@
   }
 
   /**
-   * Returns `false` when there is no calendar to focus (simple mode, or a
-   * failed or pending flatpickr init).
+   * Returns `false` when there is no calendar to focus (simple mode, or
+   * a failed or pending flatpickr init).
    * @type {() => boolean}
    */
   function focusCalendar() {
@@ -820,12 +896,12 @@
   }
 
   /**
-   * Extends a "multiple" mode selection to a contiguous range on shift-click.
-   * Flatpickr's own day-click handler only toggles the single clicked day, so
-   * a shift-click is intercepted here (capture phase, ahead of flatpickr's
-   * own listener) and handled entirely ourselves. Disabled dates within the
-   * range are skipped silently; the range is added to, not swapped with, the
-   * existing selection.
+   * Extends a "multiple" mode selection to a contiguous range on
+   * shift-click. Flatpickr's own day-click handler only toggles the
+   * single clicked day, so a shift-click is intercepted here (capture
+   * phase, ahead of flatpickr's own listener) and handled entirely
+   * ourselves. Disabled dates within the range are skipped silently;
+   * the range is added to, not swapped with, the existing selection.
    * @type {(event: MouseEvent) => void}
    */
   function handleMultipleDayClick(event) {
@@ -878,9 +954,9 @@
   }
 
   /**
-   * Previews a pending shift-click range by marking the days between the
-   * anchor and the hovered day with flatpickr's own `inRange` class — the
-   * same one "range" mode already uses, so no new CSS is needed.
+   * Previews a pending shift-click range by marking the days between
+   * the anchor and the hovered day with flatpickr's own `inRange` class
+   * — the same one "range" mode already uses, so no new CSS is needed.
    * @type {(event: MouseEvent) => void}
    */
   function updateRangePreview(event) {
@@ -951,15 +1027,6 @@
     focusCalendar,
   });
 
-  /**
-   * A value rebuilt in a `$:` statement, forwarded through a wrapper, or
-   * built from a reassigned object arrives new but equal. Comparing contents
-   * avoids a `calendar.set` (a full day grid redraw) when nothing changed.
-   */
-  function optionChanged(prev, next) {
-    return !deepEqual(prev, next);
-  }
-
   function applyOptionIfChanged(optionKey, value, appliedValue = value) {
     if (optionChanged(prevAppliedOptions[optionKey], value)) {
       calendar.set(optionKey, appliedValue);
@@ -968,25 +1035,28 @@
   }
 
   /**
-   * flatpickr treats an empty `enable` array as "nothing is enabled", since
-   * merely having an `enable` array (even an empty one) switches it into
-   * allow-list mode, unlike `disable`, where empty is the natural "no rule"
-   * state. Resetting `enable` back to "no rule" needs `undefined`, but
-   * flatpickr's own `calendar.set("enable", undefined)` throws (its setter
-   * always calls `.slice()` on the value), so write the private backing
-   * field directly and redraw.
+   * flatpickr treats an empty `enable` array as "nothing is enabled",
+   * since merely having an `enable` array (even an empty one) switches
+   * it into allow-list mode, unlike `disable`, where empty is the
+   * natural "no rule" state. Resetting `enable` back to "no rule" needs
+   * `undefined`, but flatpickr's own
+   * `calendar.set("enable", undefined)` throws (its setter always calls
+   * `.slice()` on the value), so write the private backing field
+   * directly and redraw.
    */
   function clearCalendarEnable() {
     calendar.config._enable = undefined;
     calendar.redraw();
   }
 
-  /** `disabledDates`/`enabledDates` win over the same key in `flatpickrProps`
-   * while non-empty; the `flatpickrProps` loop in `initCalendar` skips those
-   * keys in that case. Track each prop with its own `prev*` reference so
-   * clearing one back to `[]` restores `flatpickrProps` (or the natural "no
-   * rule" state) exactly once, instead of fighting the loop's own tracking
-   * of the same option key. */
+  /**
+   * `disabledDates`/`enabledDates` win over the same key in
+   * `flatpickrProps` while non-empty; the `flatpickrProps` loop in
+   * `initCalendar` skips those keys in that case. Track each prop with
+   * its own `prev*` reference so clearing one back to `[]` restores
+   * `flatpickrProps` (or the natural "no rule" state) exactly once,
+   * instead of fighting the loop's own tracking of the same option key.
+   */
   function applyDisabledDates() {
     if (disabledDates === prevDisabledDates) return;
     const hadOverride = prevDisabledDates.length > 0;
@@ -1014,25 +1084,10 @@
   }
 
   /**
-   * @param {number} year
-   * @param {number} month
-   */
-  function monthValue(year, month) {
-    return year * 12 + month;
-  }
-
-  /**
-   * @param {null | string | Date} a
-   * @param {null | string | Date} b
-   */
-  function initialMonthChanged(a, b) {
-    return !deepEqual(a, b);
-  }
-
-  /**
-   * Parses `initialMonth` with the active `dateFormat`, the same parsing
-   * `minDate` / `maxDate` use, and clamps it into the calendar's resolved
-   * bounds so the view never lands on a fully disabled month.
+   * Parses `initialMonth` with the active `dateFormat`, the same
+   * parsing `minDate` / `maxDate` use, and clamps it into the
+   * calendar's resolved bounds so the view never lands on a fully
+   * disabled month.
    * @returns {Date | null}
    */
   function resolveInitialMonth() {
@@ -1064,9 +1119,10 @@
   }
 
   /**
-   * Moves the calendar's visible month to `initialMonth` while there is no
-   * selection. `jumpToDate`'s second argument suppresses flatpickr's own
-   * `onMonthChange` hook, so the Carbon header label is resynced by hand.
+   * Moves the calendar's visible month to `initialMonth` while there is
+   * no selection. `jumpToDate`'s second argument suppresses flatpickr's
+   * own `onMonthChange` hook, so the Carbon header label is resynced by
+   * hand.
    */
   function applyInitialMonth() {
     if (!calendar || calendar.selectedDates.length > 0) return;
@@ -1288,8 +1344,8 @@
 
   /**
    * An inline calendar stays on screen while its input is read-only or
-   * disabled, unlike the popup, which simply never opens. Stop flatpickr's
-   * own listeners from seeing the interaction.
+   * disabled, unlike the popup, which simply never opens. Stop
+   * flatpickr's own listeners from seeing the interaction.
    *
    * @param {Event} event
    */
@@ -1312,12 +1368,13 @@
   }
 
   /**
-   * Selecting a day redraws the grid (flatpickr's own redraw in "multiple"
-   * mode, then Carbon's `setDate` sync in "range" mode), which drops focus
-   * on the page while the calendar stays open. Put it back on the same date
-   * once the updates settle. This runs in the capture phase, before
-   * flatpickr's handler, and browsers run microtasks between listeners, so
-   * wait a task rather than a `tick()`.
+   * Selecting a day redraws the grid (flatpickr's own redraw in
+   * "multiple" mode, then Carbon's `setDate` sync in "range" mode),
+   * which drops focus on the page while the calendar stays open. Put it
+   * back on the same date once the updates settle. This runs in the
+   * capture phase, before flatpickr's handler, and browsers run
+   * microtasks between listeners, so wait a task rather than a
+   * `tick()`.
    *
    * @param {KeyboardEvent} event
    */
@@ -1340,9 +1397,9 @@
   }
 
   /**
-   * flatpickr closes on Escape from inside the calendar before the wrapper's
-   * handler runs, and a portalled calendar never reaches the wrapper, so the
-   * close would be reported as an outside click.
+   * flatpickr closes on Escape from inside the calendar before the
+   * wrapper's handler runs, and a portalled calendar never reaches the
+   * wrapper, so the close would be reported as an outside click.
    *
    * @param {KeyboardEvent} event
    */
@@ -1393,8 +1450,9 @@
   }
 
   /**
-   * flatpickr reads `mode` and its plugins once, at creation, so options
-   * like these need a new instance. The init block below builds it.
+   * flatpickr reads `mode` and its plugins once, at creation, so
+   * options like these need a new instance. The init block below builds
+   * it.
    */
   function recreateCalendar() {
     destroyCalendar();
@@ -1562,8 +1620,8 @@
   }
 
   /**
-   * Returns true when `event.target` is outside both the date-picker element
-   * and the (possibly portalled) calendar container.
+   * Returns true when `event.target` is outside both the date-picker
+   * element and the (possibly portalled) calendar container.
    *
    * @param {Event} event
    */
@@ -1579,9 +1637,10 @@
   }
 
   /**
-   * flatpickr closes on document `mousedown` before our `click` handler runs.
-   * Set `closeTrigger` in capture phase so single-mode outside dismiss is not
-   * inferred as select when selectedDates differ from the session baseline.
+   * flatpickr closes on document `mousedown` before our `click` handler
+   * runs. Set `closeTrigger` in capture phase so single-mode outside
+   * dismiss is not inferred as select when selectedDates differ from
+   * the session baseline.
    *
    * @type {(event: Event) => void}
    */

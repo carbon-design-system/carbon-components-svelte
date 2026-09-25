@@ -28,8 +28,8 @@ export type ScrollEndTracker = {
 
 /**
  * Fire-once-per-approach tracker for listbox near-bottom `scrollend`.
- * Re-arms after the user scrolls away from the bottom, and when the item
- * count grows so another page can be requested.
+ * Re-arms after the user scrolls away from the bottom, and when the
+ * item count grows so another page can be requested.
  */
 export function createScrollEndTracker(options?: {
   threshold?: number;

@@ -2,7 +2,10 @@
   /**
    * @event {ReadonlyArray<File>} add
    * @event {ReadonlyArray<File>} change
-   * @event {Array<{ file: File; reason: "size" | "duplicate" | "invalid" }>} rejected
+   * @event {Array<{
+   *   file: File;
+   *   reason: "size" | "duplicate" | "invalid";
+   * }>} rejected
    */
 
   /**
@@ -103,7 +106,12 @@
     );
     const validated = validateFiles(accepted);
     const acceptedSet = new Set(validated);
-    /** @type {Array<{ file: File; reason: "size" | "duplicate" | "invalid" }>} */
+    /**
+     * @type {Array<{
+     *   file: File;
+     *   reason: "size" | "duplicate" | "invalid";
+     * }>}
+     */
     const rejected = [
       ...builtInRejected,
       ...accepted

@@ -1,16 +1,22 @@
 // @ts-check
 
 /**
- * @typedef {{ key: string; columnHidden?: boolean; empty?: boolean; [key: string]: unknown }} ColumnHeader
+ * @typedef {{
+ *   key: string;
+ *   columnHidden?: boolean;
+ *   empty?: boolean;
+ *   [key: string]: unknown;
+ * }} ColumnHeader
  * @typedef {object} ColumnSettings
  * @property {string[]} order - Header keys in display order
  * @property {string[]} hidden - Keys of hidden columns
  */
 
 /**
- * Convert a header array into a serializable settings object: key order and
- * which keys are hidden. Other header fields (including functions like
- * `display`/`sort`) are dropped, so the result can be persisted as JSON.
+ * Convert a header array into a serializable settings object: key order
+ * and which keys are hidden. Other header fields (including functions
+ * like `display`/`sort`) are dropped, so the result can be persisted as
+ * JSON.
  * @param {ReadonlyArray<ColumnHeader>} headers
  * @returns {ColumnSettings}
  */
@@ -25,9 +31,10 @@ export function toColumnSettings(headers) {
 
 /**
  * Apply a settings object back onto a header array: reorder by
- * `settings.order` (headers missing from `order` keep their relative order,
- * appended after the ordered ones; keys in `order` with no matching header
- * are ignored) and set `columnHidden` from `settings.hidden`.
+ * `settings.order` (headers missing from `order` keep their relative
+ * order, appended after the ordered ones; keys in `order` with no
+ * matching header are ignored) and set `columnHidden` from
+ * `settings.hidden`.
  * @param {ReadonlyArray<ColumnHeader>} headers
  * @param {ColumnSettings} settings
  * @returns {ColumnHeader[]}
@@ -47,8 +54,9 @@ export function applyColumnSettings(headers, settings) {
 }
 
 /**
- * Set `columnHidden` on the header matching `key`. Returns the same array
- * reference when the header is missing or already at the requested state.
+ * Set `columnHidden` on the header matching `key`. Returns the same
+ * array reference when the header is missing or already at the
+ * requested state.
  * @param {ReadonlyArray<ColumnHeader>} headers
  * @param {string} key
  * @param {boolean} hidden

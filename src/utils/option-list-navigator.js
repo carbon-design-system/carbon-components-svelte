@@ -5,12 +5,14 @@ import { moveIndex } from "./move-index.js";
 /**
  * Build ArrowUp/ArrowDown/Home/End navigation over the enabled
  * `[role="option"]` descendants of a menu element, tracking the active
- * option by id in `highlightedId`. Options marked `aria-disabled="true"`
- * are skipped.
+ * option by id in `highlightedId`. Options marked
+ * `aria-disabled="true"` are skipped.
  *
  * @param {Object} options
  * @param {() => HTMLElement | null} options.getMenuRef
- * @param {import("svelte/store").Writable<string | null>} options.highlightedId
+ * @param {import("svelte/store").Writable<
+ *   string | null
+ * >} options.highlightedId
  * @param {boolean} [options.includeHidden=false] - include `[hidden]`
  *   `[role="option"]` elements instead of skipping them.
  * @returns {{

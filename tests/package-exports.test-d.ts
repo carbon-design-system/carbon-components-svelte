@@ -1,14 +1,14 @@
 import type {
   Button as BarrelButton,
   DataTable as BarrelDataTable,
-  breakpointObserver,
-  breakpoints,
   formatFileSize,
   fuzzyMatch,
-  getAvatarBackgroundColor,
-  getInitials,
   queryParam,
 } from "carbon-components-svelte";
+import type {
+  breakpointObserver,
+  breakpoints,
+} from "carbon-components-svelte/src/Breakpoint/Breakpoint.svelte";
 import type { BreakpointSize } from "carbon-components-svelte/src/Breakpoint/breakpoints.js";
 import type Button from "carbon-components-svelte/src/Button/Button.svelte";
 import type DataTable from "carbon-components-svelte/src/DataTable/DataTable.svelte";
@@ -19,6 +19,10 @@ import type {
   themes,
 } from "carbon-components-svelte/src/Theme/Theme.svelte";
 import type { HeaderSearchResult } from "carbon-components-svelte/src/UIShell/HeaderSearch.svelte";
+import type {
+  getAvatarBackgroundColor,
+  getInitials,
+} from "carbon-components-svelte/src/UserAvatar/UserAvatar.svelte";
 
 import "carbon-components-svelte/css/all.css";
 import "carbon-components-svelte/css/g100.css";

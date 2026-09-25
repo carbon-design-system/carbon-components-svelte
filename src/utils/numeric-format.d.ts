@@ -5,7 +5,10 @@
 /** Parse a raw string; `null` for `""`, `"-"`, or NaN. */
 export function parse(raw: string, useLocaleNormalize?: boolean): number | null;
 
-/** Parse with explicit group and decimal separators; `null` for empty or NaN. */
+/**
+ * Parse with explicit group and decimal separators; `null` for empty or
+ * NaN.
+ */
 export function parseLocaleValue(
   raw: string,
   groupSeparator: string,

@@ -28,7 +28,10 @@ export function createStatusAnnouncer(setStatusText) {
  * @param {Object} options
  * @param {() => boolean} options.getOpen
  * @param {(open: boolean) => void} options.setOpen
- * @param {(event: "close", detail: { trigger: string }) => void} options.dispatch
+ * @param {(
+ *   event: "close",
+ *   detail: { trigger: string },
+ * ) => void} options.dispatch
  * @returns {(trigger: string) => void}
  */
 export function createMenuCloseHandler({ getOpen, setOpen, dispatch }) {

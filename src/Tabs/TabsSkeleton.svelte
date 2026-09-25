@@ -9,26 +9,18 @@
   export let type = "default";
 
   /**
-   * Specify the size to match a sized `Tabs`. Unset by default.
-   * Line tabs (`type="default"`) support up to `"lg"`; container tabs
-   * support up to `"xl"`. An out-of-range value clamps to the type's max.
+   * Specify the size to match a sized `Tabs`. Unset by default. Line
+   * tabs (`type="default"`) support up to `"lg"`; container tabs
+   * support up to `"xl"`. An out-of-range value clamps to the type's
+   * max.
    * @type {"sm" | "md" | "lg" | "xl"}
    */
   export let size = undefined;
 
-  const SIZE_SCALE = ["sm", "md", "lg", "xl"];
-
-  // Same clamping as `Tabs`: line tabs max out at `lg`, container tabs at
-  // `xl`. An unrecognized value is ignored (no class).
-  function resolveSize(size, maxSizeIndex) {
-    if (!size) return undefined;
-    const index = SIZE_SCALE.indexOf(size);
-    if (index === -1) return undefined;
-    return SIZE_SCALE[Math.min(index, maxSizeIndex)];
-  }
+  import { resolveTabsSize } from "../utils/resolve-tabs-size.js";
 
   $: maxSizeIndex = type === "container" ? 3 : 2;
-  $: resolvedSize = resolveSize(size, maxSizeIndex);
+  $: resolvedSize = resolveTabsSize(size, maxSizeIndex);
 </script>
 
 <div

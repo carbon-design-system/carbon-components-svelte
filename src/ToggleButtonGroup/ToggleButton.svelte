@@ -9,7 +9,8 @@
    */
 
   /**
-   * Specify the value used to identify this button in the group's `selected` array.
+   * Specify the value used to identify this button in the group's
+   * `selected` array.
    * @type {string | number}
    */
   export let value = "";
@@ -33,16 +34,17 @@
   export let disabled = false;
 
   /**
-   * Set the position of the portalled tooltip relative to the icon. Icon-only buttons only.
-   * Defaults to `"bottom"` when the group is horizontal and `"right"` when
-   * vertical, since a top/bottom tooltip would otherwise land on top of the
-   * next stacked segment.
+   * Set the position of the portalled tooltip relative to the icon.
+   * Icon-only buttons only. Defaults to `"bottom"` when the group is
+   * horizontal and `"right"` when vertical, since a top/bottom tooltip
+   * would otherwise land on top of the next stacked segment.
    * @type {"top" | "right" | "bottom" | "left" | undefined}
    */
   export let tooltipPosition = undefined;
 
   /**
-   * Set the alignment of the portalled tooltip relative to the icon. Icon-only buttons only.
+   * Set the alignment of the portalled tooltip relative to the icon.
+   * Icon-only buttons only.
    * @type {"start" | "center" | "end"}
    */
   export let tooltipAlignment = "center";
@@ -55,14 +57,11 @@
   export let ref = null;
 
   import { getContext, onMount } from "svelte";
-  import { get, readable } from "svelte/store";
-  import {
-    TOOLTIP_ENTER_DELAY_MS,
-    TOOLTIP_LEAVE_DELAY_MS,
-  } from "../constants/timing.js";
+  import { readable, writable } from "svelte/store";
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
-  import { createDelayedSetter } from "../utils/delayed-setter.js";
+  import { noop } from "../utils/noop.js";
+  import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
 
   // Standalone use (no ancestor `ToggleButtonGroup`) is undocumented but
   // must not throw; `pressed` just stays `false` and clicks are inert.
@@ -73,9 +72,9 @@
       /** @type {"horizontal" | "vertical"} */ ("horizontal"),
     ),
     tabStopElement: readable(/** @type {HTMLButtonElement | null} */ (null)),
-    activeTooltip: readable(/** @type {string | number | null} */ (null)),
-    toggle: () => {},
-    notifyUnmount: () => {},
+    activeTooltip: writable(/** @type {string | number | null} */ (null)),
+    toggle: noop,
+    notifyUnmount: noop,
   };
   const {
     selectedValues,
@@ -111,9 +110,13 @@
   // stacking context - same technique ContentSwitcher's icon-only Switch
   // uses, including the shared `activeTooltip` claim (only one segment's
   // tooltip shows at a time) and the warm-handoff delay skip.
+
   let hovered = false;
   let focused = false;
-  const scheduleTooltip = createDelayedSetter();
+  const tooltipHandoff = createTooltipHandoff({
+    activeTooltip,
+    getId: () => value,
+  });
 
   $: tooltipOpen =
     hasTooltipContent &&
@@ -121,32 +124,16 @@
     (hovered || focused) &&
     $activeTooltip === value;
 
-  function claim() {
-    activeTooltip.set(value);
-  }
-
-  function release() {
-    if (!hovered && !focused && get(activeTooltip) === value) {
-      activeTooltip.set(null);
-    }
-  }
-
-  function reveal() {
-    hovered = true;
-    claim();
-  }
-
   function showTooltip() {
-    // Skip the enter delay when another tooltip is already open (warm handoff).
-    const warmHandoff =
-      get(activeTooltip) !== null && get(activeTooltip) !== value;
-    scheduleTooltip(warmHandoff ? 0 : TOOLTIP_ENTER_DELAY_MS, reveal);
+    tooltipHandoff.scheduleEnter(() => {
+      hovered = true;
+    });
   }
 
   function hideTooltip() {
-    scheduleTooltip(TOOLTIP_LEAVE_DELAY_MS, () => {
+    tooltipHandoff.scheduleLeave(() => {
       hovered = false;
-      release();
+      if (!focused) tooltipHandoff.release();
     });
   }
 
@@ -161,14 +148,14 @@
   function handleFocus() {
     if (hasTooltipContent) {
       focused = true;
-      claim();
+      tooltipHandoff.claim();
     }
   }
 
   function handleBlur() {
     if (hasTooltipContent) {
       focused = false;
-      release();
+      if (!hovered) tooltipHandoff.release();
     }
   }
 
@@ -179,8 +166,8 @@
 
   onMount(() => {
     return () => {
-      scheduleTooltip.cancel();
-      if (get(activeTooltip) === value) activeTooltip.set(null);
+      tooltipHandoff.cancel();
+      tooltipHandoff.release();
       notifyUnmount(ref);
     };
   });

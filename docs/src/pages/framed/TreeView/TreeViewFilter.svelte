@@ -1,10 +1,6 @@
 <script>
-  import {
-    filterTreeByText,
-    Search,
-    Stack,
-    TreeView,
-  } from "carbon-components-svelte";
+  import { Search, Stack, TreeView } from "carbon-components-svelte";
+  import { filterTreeByText } from "carbon-components-svelte/src/TreeView/TreeView.svelte";
 
   const allNodes = [
     {

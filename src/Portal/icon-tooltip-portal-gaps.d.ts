@@ -7,7 +7,10 @@ export interface IconTooltipPortalGaps {
   verticalAlignOffsetRight: number;
 }
 
-/** Caret spacing + alignment nudges for an icon tooltip rendered through `PortalTooltip`. */
+/**
+ * Caret spacing + alignment nudges for an icon tooltip rendered through
+ * `PortalTooltip`.
+ */
 export function iconTooltipPortalGaps(
   tooltipPosition: "top" | "right" | "bottom" | "left",
   tooltipAlignment: "start" | "center" | "end",

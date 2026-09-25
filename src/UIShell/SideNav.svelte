@@ -3,7 +3,12 @@
    * @event {null} open
    * @event {null} close
    * @event {null} click:overlay
-   * @event {{ width: number }} resize - Fires once the user finishes resizing the side nav (drag release, key press or double click) and the width changed.
+   */
+
+  /**
+   * Fires once the user finishes resizing the side nav (drag release,
+   * key press or double click) and the width changed.
+   * @event {{ width: number }} resize
    */
 
   /** Set to `true` to use the fixed variant */
@@ -28,13 +33,9 @@
   export let isOpen = false;
 
   /**
-   * The window width (px) at which the SideNav is expanded and the hamburger menu is hidden.
-   * 1056 represents the "large" breakpoint in pixels from the Carbon Design System:
-   * - small: 320
-   * - medium: 672
-   * - large: 1056
-   * - x-large: 1312
-   * - max: 1584.
+   * The window width (px) at which the SideNav is expanded and the
+   * hamburger menu is hidden. Defaults to Carbon's "large" breakpoint
+   * (`breakpoints.lg` in `src/Breakpoint/breakpoints.js`).
    */
   export let expansionBreakpoint = EXPANSION_BREAKPOINT;
 
@@ -47,29 +48,31 @@
   export let theme = undefined;
 
   /**
-   * Set to `true` to render a border between the side nav and its content.
-   * Useful when the side nav and content share the same background and
-   * otherwise blend together.
+   * Set to `true` to render a border between the side nav and its
+   * content. Useful when the side nav and content share the same
+   * background and otherwise blend together.
    */
   export let border = false;
 
   /**
-   * Specify the scroll alignment used to bring the active item into view on mount.
-   * Defaults to `"nearest"`, which only scrolls when the active item is out of view.
+   * Specify the scroll alignment used to bring the active item into
+   * view on mount. Defaults to `"nearest"`, which only scrolls when the
+   * active item is out of view.
    * @type {"start" | "center" | "end" | "nearest"}
    */
   export let activeItemScrollBlock = "nearest";
 
   /**
-   * Set to `true` to allow the user to resize the side nav by dragging its
-   * edge. Has no effect when `rail` is `true`.
+   * Set to `true` to allow the user to resize the side nav by dragging
+   * its edge. Has no effect when `rail` is `true`.
    */
   export let resizable = false;
 
   /**
-   * The side nav's width in pixels, when `resizable` is `true`. Rendered
-   * clamped to `[minWidth, maxWidth]`. Ignored otherwise; non-resizable
-   * widths stay fixed by CSS per mode (`rail` vs. expanded).
+   * The side nav's width in pixels, when `resizable` is `true`.
+   * Rendered clamped to `[minWidth, maxWidth]`. Ignored otherwise;
+   * non-resizable widths stay fixed by CSS per mode (`rail` vs.
+   * expanded).
    * @bindable writable
    */
   export let width = 256;

@@ -1,12 +1,53 @@
+<script context="module">
+  /**
+   * First focusable tree item in a subtree `ul` — handles both bare
+   * `li.bx--tree-node` rows and the link variant (`li[role="none"] >
+   * a`).
+   * @param {Element} groupUl
+   * @returns {HTMLElement | null}
+   */
+  function firstTreeItemInGroup(groupUl) {
+    const row = groupUl.firstElementChild;
+    if (!(row instanceof HTMLElement)) return null;
+    if (row.classList.contains("bx--tree-node")) return row;
+    const nested = row.querySelector(".bx--tree-node");
+    return nested instanceof HTMLElement ? nested : null;
+  }
+</script>
+
 <script>
   /**
-   * @generics {Id extends string | number = string | number, Icon = any} Id,Icon
-   * @typedef {{ id: Id; text: string; disabled?: boolean; expanded?: boolean; }} TreeNode<Id>
-   * @slot {{ node: TreeNode<Id> & { expanded: boolean; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean; } }}
-   * @slot {{ node: TreeNode<Id> & { expanded: boolean; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean; } }} childNodes
+   * @generics {Id extends string | number = string | number,
+   *   Icon = any} Id,Icon
+   * @typedef {{
+   *   id: Id;
+   *   text: string;
+   *   disabled?: boolean;
+   *   expanded?: boolean;
+   * }} TreeNode<Id>
+   * @slot {{
+   *   node: TreeNode<Id> & {
+   *     expanded: boolean;
+   *     leaf: boolean;
+   *     selected: boolean;
+   *     checked: boolean;
+   *     indeterminate: boolean;
+   *   };
+   * }}
+   * @slot {{
+   *   node: TreeNode<Id> & {
+   *     expanded: boolean;
+   *     leaf: boolean;
+   *     selected: boolean;
+   *     checked: boolean;
+   *     indeterminate: boolean;
+   *   };
+   * }} childNodes
    */
 
-  /** @type {ReadonlyArray<TreeNode<Id> & { nodes?: TreeNode<Id>[] }>} */
+  /**
+   * @type {ReadonlyArray<TreeNode<Id> & { nodes?: TreeNode<Id>[] }>}
+   */
   export let nodes = [];
 
   /** Set to `true` for the top-level list rendered by `TreeView`. */
@@ -40,6 +81,7 @@
   import { getContext, tick } from "svelte";
   import Checkbox from "../Checkbox/Checkbox.svelte";
   import CaretDown from "../icons/CaretDown.svelte";
+  import { toAriaChecked } from "../utils/tree-aria-checked.js";
   import TreeViewNode, {
     computeTreeLeafDepth,
     findParentTreeNode,
@@ -48,19 +90,6 @@
   // a DOM wrapper) can only target a `Component`, not `<svelte:self>` — so
   // this recurses via a self-import instead.
   import Self from "./TreeViewNodeList.svelte";
-
-  /**
-   * First focusable tree item in a subtree `ul` — handles both bare
-   * `li.bx--tree-node` rows and the link variant (`li[role="none"] > a`).
-   * @returns {HTMLElement | null}
-   */
-  function firstTreeItemInGroup(groupUl) {
-    const row = groupUl.firstElementChild;
-    if (!(row instanceof HTMLElement)) return null;
-    if (row.classList.contains("bx--tree-node")) return row;
-    const nested = row.querySelector(".bx--tree-node");
-    return nested instanceof HTMLElement ? nested : null;
-  }
 
   let ref = null;
   let refLabel = null;
@@ -83,15 +112,6 @@
   } = getContext("carbon:TreeView");
 
   let subtreeRendered = isInitialRender() && $expandedIdSet.has(id);
-
-  /**
-   * Tri-state value for `aria-checked` on the row.
-   * @returns {"true" | "false" | "mixed"}
-   */
-  function toAriaChecked(isSelected, isIndeterminate) {
-    if (isIndeterminate) return "mixed";
-    return isSelected ? "true" : "false";
-  }
 
   function offset() {
     const depth = computeTreeLeafDepth(refLabel) - 1;

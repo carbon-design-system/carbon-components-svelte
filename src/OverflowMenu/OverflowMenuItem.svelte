@@ -64,7 +64,9 @@
    */
   export let rel = undefined;
 
-  /** Set to `true` if the item should be focused when opening the menu */
+  /**
+   * Set to `true` if the item should be focused when opening the menu
+   */
   export let primaryFocus = false;
 
   /** Set to `true` to disable the item */
@@ -94,6 +96,7 @@
     getContext,
     onMount,
   } from "svelte";
+  import { resolveLinkRel } from "../utils/link-rel.js";
   import { scrollIntoViewWithinMenu } from "../utils/scroll-into-view-within-menu.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -128,12 +131,7 @@
     "aria-disabled": href && disabled ? "true" : undefined,
     href: href ? href : undefined,
     target: href && target ? target : undefined,
-    rel:
-      rel === undefined
-        ? target === "_blank"
-          ? "noopener noreferrer"
-          : undefined
-        : rel,
+    rel: resolveLinkRel(target, rel),
     title: requireTitle ? ($$slots.default ? undefined : text) : undefined,
   };
 

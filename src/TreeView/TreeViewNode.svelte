@@ -1,11 +1,14 @@
 <script context="module">
   /**
-   * Computes the depth of a tree leaf node relative to <ul role="tree" />.
-   * Returns the depth of the node (0-based, where 0 is the root level).
+   * Computes the depth of a tree leaf node relative to <ul role="tree"
+   * />. Returns the depth of the node (0-based, where 0 is the root
+   * level).
    * @type {(node: HTMLLIElement | null) => number}
    * @example
    * ```svelte
-   * import { computeTreeLeafDepth } from 'carbon-components-svelte/src/TreeView/TreeViewNode.svelte';
+   * import {
+   *   computeTreeLeafDepth,
+   * } from 'carbon-components-svelte/src/TreeView/TreeViewNode.svelte';
    * let nodeRef;
    * $: depth = computeTreeLeafDepth(nodeRef);
    *
@@ -56,9 +59,19 @@
 
 <script>
   /**
-   * @generics {Node extends TreeNode<any> = TreeNode<any>, Icon = any} Node,Icon
-   * @typedef {import('./TreeView.svelte').TreeNode<Id>} TreeNode<Id=(string|number)>
-   * @slot {{ node: Node & { expanded: false; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean; } }}
+   * @generics {Node extends TreeNode<any> = TreeNode<any>,
+   *   Icon = any} Node,Icon
+   * @typedef {import('./TreeView.svelte')
+   *   .TreeNode<Id>} TreeNode<Id=(string|number)>
+   * @slot {{
+   *   node: Node & {
+   *     expanded: false;
+   *     leaf: boolean;
+   *     selected: boolean;
+   *     checked: boolean;
+   *     indeterminate: boolean;
+   *   };
+   * }}
    */
 
   /** Set to `true` if the node has no children. */
@@ -100,6 +113,8 @@
 
   import { getContext } from "svelte";
   import Checkbox from "../Checkbox/Checkbox.svelte";
+  import { resolveLinkRel } from "../utils/link-rel.js";
+  import { toAriaChecked } from "../utils/tree-aria-checked.js";
 
   let ref = null;
   let refLabel = null;
@@ -115,15 +130,6 @@
     selectNode,
     focusNode,
   } = getContext("carbon:TreeView");
-
-  /**
-   * Tri-state value for `aria-checked` on the row.
-   * @returns {"true" | "false" | "mixed"}
-   */
-  function toAriaChecked(isSelected, isIndeterminate) {
-    if (isIndeterminate) return "mixed";
-    return isSelected ? "true" : "false";
-  }
 
   function offset() {
     const depth = computeTreeLeafDepth(refLabel) - 1;
@@ -183,7 +189,7 @@
       {id}
       href={disabled ? undefined : href}
       target={disabled ? undefined : target}
-      rel={target === "_blank" ? "noopener noreferrer" : undefined}
+      rel={resolveLinkRel(target)}
       tabindex={disabled ? undefined : -1}
       aria-current={id === $activeNodeId ? "page" : undefined}
       aria-disabled={disabled}

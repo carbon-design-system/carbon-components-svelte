@@ -13,10 +13,11 @@
  */
 
 /**
- * Filter tree nodes by a predicate function.
- * Returns a new tree containing only matching nodes and their ancestors.
+ * Filter tree nodes by a predicate function. Returns a new tree
+ * containing only matching nodes and their ancestors.
  * @param {TreeNode[]} tree - Hierarchical tree structure to filter
- * @param {(node: TreeNode) => boolean} predicate - Function to test each node
+ * @param {(node: TreeNode) => boolean} predicate - Function to test
+ *   each node
  * @param {FilterOptions} [options] - Filtering options
  * @returns {TreeNode[]} Filtered tree structure
  */
@@ -84,7 +85,8 @@ export function filterTreeNodes(
 /**
  * Filter tree nodes by node ID
  * @param {TreeNode[]} tree - Hierarchical tree structure to filter
- * @param {string | number | (string | number)[]} id - Single ID or array of IDs to match
+ * @param {string | number | (string | number)[]} id - Single ID or
+ *   array of IDs to match
  * @param {FilterOptions} [options] - Filtering options
  * @returns {TreeNode[]} Filtered tree structure
  */

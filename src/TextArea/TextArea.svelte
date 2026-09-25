@@ -103,13 +103,20 @@
    */
   export let ref = null;
 
-  /** Set to `true` to select the textarea's text when it receives focus */
+  /**
+   * Set to `true` to select the textarea's text when it receives focus
+   */
   export let selectTextOnFocus = false;
 
   import { afterUpdate, getContext, onMount, tick } from "svelte";
   import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import {
+    buildFieldIds,
+    resolveStatusDescribedBy,
+    resolveValidationVisibility,
+  } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
   import { graphemeCount, truncateGraphemes } from "../utils/grapheme-count.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
@@ -117,13 +124,15 @@
 
   const formContext = getContext(FORM_CONTEXT_KEY);
 
-  $: helperId = `helper-${id}`;
+  $: ({ helperId, errorId, warnId } = buildFieldIds(id));
   $: counterId = `counter-${id}`;
-  $: errorId = `error-${id}`;
-  $: warnId = `warn-${id}`;
   $: count = graphemeCount(value ?? "");
-  $: showInvalid = invalid && !disabled && !readonly;
-  $: showWarn = warn && !invalid && !disabled && !readonly;
+  $: ({ showInvalid, showWarn } = resolveValidationVisibility({
+    invalid,
+    warn,
+    disabled,
+    readonly,
+  }));
   $: overCount =
     typeof maxCount === "number" && count > maxCount && !disabled && !readonly;
   $: isFluid = fluid || !!formContext?.isFluid;
@@ -131,13 +140,17 @@
   $: errorMessageId = showInvalid ? errorId : undefined;
   $: describedBy =
     [
-      showInvalid
-        ? null
-        : showWarn && !isFluid
-          ? warnId
-          : helperText && !isFluid
-            ? helperId
-            : null,
+      resolveStatusDescribedBy({
+        showInvalid,
+        showWarn,
+        helperText,
+        isFluid,
+        errorId,
+        warnId,
+        helperId,
+        includeErrorId: false,
+        hideWarnWhenFluid: true,
+      }),
       hasMaxCount ? counterId : null,
     ]
       .filter(Boolean)

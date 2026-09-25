@@ -4,10 +4,12 @@
    */
 
   /**
-   * Section component that provides heading level context to nested `Heading` components.
+   * Section component that provides heading level context to nested
+   * `Heading` components.
    *
-   * The section automatically increments the heading level for nested sections,
-   * ensuring proper semantic heading hierarchy. Heading levels are capped at `h6`.
+   * The section automatically increments the heading level for nested
+   * sections, ensuring proper semantic heading hierarchy. Heading
+   * levels are capped at `h6`.
    *
    * @example
    * ```svelte
@@ -21,9 +23,9 @@
    */
 
   /**
-   * Specify the heading level the section should start at.
-   * When nested, child sections automatically increment from this level.
-   * Levels are capped at 6 (h6).
+   * Specify the heading level the section should start at. When nested,
+   * child sections automatically increment from this level. Levels are
+   * capped at 6 (h6).
    *
    * @type {SectionLevel}
    * @default 1
@@ -40,9 +42,9 @@
   export let level = 1;
 
   /**
-   * Specify the HTML tag name to render instead of the default `section` element.
-   * Useful when you need to use a different semantic element while maintaining
-   * the heading level context functionality.
+   * Specify the HTML tag name to render instead of the default
+   * `section` element. Useful when you need to use a different semantic
+   * element while maintaining the heading level context functionality.
    *
    * @type {keyof HTMLElementTagNameMap}
    * @default "section"

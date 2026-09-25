@@ -1,12 +1,55 @@
+<script context="module">
+  /**
+   * Tolerate custom matchers that omit `indices` so highlighting still
+   * works.
+   */
+  function normalizeMatch(result) {
+    return {
+      matched: Boolean(result?.matched),
+      indices: result?.indices ?? [],
+    };
+  }
+
+  function escapeHtml(raw) {
+    return raw
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
+  function segmentsToHtml(parts) {
+    // Build the highlighted label as one HTML string. Rendering matched and
+    // unmatched runs as separate template nodes pads the text with the
+    // whitespace Svelte inserts between siblings, which corrupts the word.
+    return parts
+      .map((part) =>
+        part.match
+          ? `<strong class="bx--search-menu-item__highlight">${escapeHtml(part.text)}</strong>`
+          : escapeHtml(part.text),
+      )
+      .join("");
+  }
+</script>
+
 <script>
   /**
-   * @event {{ value: string; item: { text?: string; value?: string; href?: string }; event: Event }} select
-   * @slot {{ query: string; matched: boolean; indices: number[]; segments: Array<{ text: string; match: boolean }> }}
+   * @event {{
+   *   value: string;
+   *   item: { text?: string; value?: string; href?: string };
+   *   event: Event;
+   * }} select
+   * @slot {{
+   *   query: string;
+   *   matched: boolean;
+   *   indices: number[];
+   *   segments: Array<{ text: string; match: boolean }>;
+   * }}
    */
 
   /**
-   * Specify the result label. The portion matching the search value is highlighted.
-   * Omit `text` and use the default slot to render custom content.
+   * Specify the result label. The portion matching the search value is
+   * highlighted. Omit `text` and use the default slot to render custom
+   * content.
    * @type {string | undefined}
    */
   export let text = undefined;
@@ -30,7 +73,8 @@
   export let icon = undefined;
 
   /**
-   * Specify the icon rendered after the label, for example an external-link affordance.
+   * Specify the icon rendered after the label, for example an
+   * external-link affordance.
    * @type {any}
    */
   export let iconRight = undefined;
@@ -106,36 +150,6 @@
   }
 
   onMount(() => () => updateRegistration(false, false, false));
-
-  /**
-   * Tolerate custom matchers that omit `indices` so highlighting still works.
-   */
-  function normalizeMatch(result) {
-    return {
-      matched: Boolean(result?.matched),
-      indices: result?.indices ?? [],
-    };
-  }
-
-  function escapeHtml(raw) {
-    return raw
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;");
-  }
-
-  function segmentsToHtml(parts) {
-    // Build the highlighted label as one HTML string. Rendering matched and
-    // unmatched runs as separate template nodes pads the text with the
-    // whitespace Svelte inserts between siblings, which corrupts the word.
-    return parts
-      .map((part) =>
-        part.match
-          ? `<strong class="bx--search-menu-item__highlight">${escapeHtml(part.text)}</strong>`
-          : escapeHtml(part.text),
-      )
-      .join("");
-  }
 
   function handleClick(event) {
     if (disabled) {

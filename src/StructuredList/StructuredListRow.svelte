@@ -10,10 +10,10 @@
   export let label = false;
 
   /**
-   * Specify the value of the nested `StructuredListInput`, so a selectable
-   * row can reflect its own selected state (e.g. suppressing the hover
-   * highlight when already selected). Only relevant when `selection` is
-   * `true` on the parent `StructuredList`.
+   * Specify the value of the nested `StructuredListInput`, so a
+   * selectable row can reflect its own selected state (e.g. suppressing
+   * the hover highlight when already selected). Only relevant when
+   * `selection` is `true` on the parent `StructuredList`.
    * @type {Value}
    */
   export let value = undefined;
@@ -21,8 +21,8 @@
   /**
    * Specify the tabindex.
    * @deprecated no longer applied here -- the row's own `<label>` isn't
-   * a tab stop anymore. Set `tabindex` on `StructuredListInput` instead,
-   * which now owns focus for the selectable row.
+   * a tab stop anymore. Set `tabindex` on `StructuredListInput`
+   * instead, which now owns focus for the selectable row.
    * @type {number | string | undefined}
    */
   export const tabindex = "0";

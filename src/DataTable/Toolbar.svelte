@@ -12,16 +12,20 @@
    */
   export let ariaLabel = "data table toolbar";
 
-  /** Set to `true` to keep the toolbar pinned while its scroll container scrolls. */
+  /**
+   * Set to `true` to keep the toolbar pinned while its scroll container
+   * scrolls.
+   */
   export let sticky = false;
 
   /**
-   * Distance from the top edge while stuck. Numbers are treated as pixels;
-   * strings may be any CSS length (for example `"3rem"`).
+   * Distance from the top edge while stuck. Numbers are treated as
+   * pixels; strings may be any CSS length (for example `"3rem"`).
    *
    * If unset, defaults to `0`, or to the fixed UI Shell header height
-   * (48px) when a `Header` is rendered on the page, so the toolbar doesn't
-   * stick underneath it. Set explicitly (including `0`) to opt out.
+   * (48px) when a `Header` is rendered on the page, so the toolbar
+   * doesn't stick underneath it. Set explicitly (including `0`) to opt
+   * out.
    * @type {number | string}
    */
   export let stickyOffset = undefined;
@@ -38,10 +42,19 @@
   let ref = null;
 
   const dataTableCtx = getContext("carbon:DataTable");
-  /** @type {import("svelte/store").Writable<"compact" | "short" | "medium" | "tall" | undefined> | undefined} */
+  /**
+   * @type {import("svelte/store").Writable<
+   *   "compact" | "short" | "medium" | "tall" | undefined
+   * > | undefined}
+   */
   const tableSize = dataTableCtx?.tableSize;
 
-  /** @type {Record<"compact" | "short" | "medium" | "tall", "xs" | "sm" | "default">} */
+  /**
+   * @type {Record<
+   *   "compact" | "short" | "medium" | "tall",
+   *   "xs" | "sm" | "default"
+   * >}
+   */
   const TOOLBAR_SIZE_BY_TABLE_SIZE = {
     compact: "xs",
     short: "sm",

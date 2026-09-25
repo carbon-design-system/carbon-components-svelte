@@ -14,12 +14,12 @@
   /**
    * The concatenated code value.
    *
-   * Derived from `code` (i.e. `code.join("")`); bind to read the assembled
-   * value. When `complete` is `true`, its length equals `count`. Each
-   * character matches `pattern` when set, otherwise the active `type`:
-   * `0-9` for `"numeric"`, `a-zA-Z0-9` for `"alphanumeric"`. Original casing
-   * is preserved regardless of `uppercase`, which only affects the visual
-   * rendering.
+   * Derived from `code` (i.e. `code.join("")`); bind to read the
+   * assembled value. When `complete` is `true`, its length equals
+   * `count`. Each character matches `pattern` when set, otherwise the
+   * active `type`: `0-9` for `"numeric"`, `a-zA-Z0-9` for
+   * `"alphanumeric"`. Original casing is preserved regardless of
+   * `uppercase`, which only affects the visual rendering.
    * @bindable readonly
    */
   export let value = "";
@@ -27,11 +27,11 @@
   /**
    * The individual segment characters.
    *
-   * `code` is the source of truth; its length tracks `count`. Each element is
-   * either an empty string (unfilled segment) or a single character matching
-   * `pattern` when set, otherwise the active `type`: `0-9` for `"numeric"`,
-   * `a-zA-Z0-9` for `"alphanumeric"`.
-   * Follows the segments when the owning form resets.
+   * `code` is the source of truth; its length tracks `count`. Each
+   * element is either an empty string (unfilled segment) or a single
+   * character matching `pattern` when set, otherwise the active `type`:
+   * `0-9` for `"numeric"`, `a-zA-Z0-9` for `"alphanumeric"`. Follows
+   * the segments when the owning form resets.
    * @type {string[]}
    * @bindable writable
    */
@@ -40,10 +40,10 @@
   /**
    * Specify the type of allowed characters.
    *
-   * `"numeric"` allows `0-9`; `"alphanumeric"` allows `a-z`, `A-Z`, `0-9`.
-   * When `pattern` is set, `pattern` decides which characters are accepted,
-   * and `type` still sets each segment's `inputmode` (`"numeric"` shows a
-   * numeric keypad on touch devices).
+   * `"numeric"` allows `0-9`; `"alphanumeric"` allows `a-z`, `A-Z`,
+   * `0-9`. When `pattern` is set, `pattern` decides which characters
+   * are accepted, and `type` still sets each segment's `inputmode`
+   * (`"numeric"` shows a numeric keypad on touch devices).
    * @type {"numeric" | "alphanumeric"}
    */
   export let type = "numeric";
@@ -53,9 +53,9 @@
    *
    * Accepts a `RegExp` or a string compiled with `new RegExp(...)`. The
    * pattern is tested against each individual character, not the full
-   * assembled value. When unset, `type` selects the preset (`"numeric"` or
-   * `"alphanumeric"`). Set `type` to `"alphanumeric"` when the pattern
-   * accepts letters, so touch keyboards offer them.
+   * assembled value. When unset, `type` selects the preset (`"numeric"`
+   * or `"alphanumeric"`). Set `type` to `"alphanumeric"` when the
+   * pattern accepts letters, so touch keyboards offer them.
    * @type {RegExp | string | undefined}
    */
   export let pattern = undefined;
@@ -64,15 +64,16 @@
    * Set to `true` to visually display the characters in uppercase
    * while retaining the original casing of `value` and `code`.
    *
-   * Only affects letters, so it is most useful with `type="alphanumeric"`.
+   * Only affects letters, so it is most useful with
+   * `type="alphanumeric"`.
    */
   export let uppercase = false;
 
   /**
    * Set to `true` to mask the segments.
    *
-   * Each segment is masked when it is not focused, revealing its character
-   * only while focused.
+   * Each segment is masked when it is not focused, revealing its
+   * character only while focused.
    */
   export let mask = false;
 
@@ -106,8 +107,8 @@
   /**
    * Placeholder shown in empty segments.
    *
-   * Defaults to a placeholder in the fluid variant; non-fluid segments have no
-   * placeholder unless this prop is set.
+   * Defaults to a placeholder in the fluid variant; non-fluid segments
+   * have no placeholder unless this prop is set.
    * @type {string | undefined}
    */
   export let placeholder = undefined;
@@ -130,9 +131,10 @@
   /**
    * Specify a name attribute for native form participation.
    *
-   * When set, a hidden input mirrors the assembled `value` so the code is
-   * included in FormData / form submissions. `required` stays on each
-   * segment, since hidden inputs take no part in constraint validation.
+   * When set, a hidden input mirrors the assembled `value` so the code
+   * is included in FormData / form submissions. `required` stays on
+   * each segment, since hidden inputs take no part in constraint
+   * validation.
    * @type {string | undefined}
    */
   export let name = undefined;
@@ -149,8 +151,8 @@
 
   /**
    * Set to `true` to select a segment's value when it receives focus,
-   * including on click. Without this prop, browsers typically select the
-   * value only on keyboard focus (for example, via Tab).
+   * including on click. Without this prop, browsers typically select
+   * the value only on keyboard focus (for example, via Tab).
    */
   export let selectTextOnFocus = false;
 
@@ -158,10 +160,15 @@
    * Override the accessible label of each segment.
    *
    * `position` is 1-based. The default returns, for example,
-   * `"Verification code digit 1 of 4"`, using `"Pin code"` when `labelText`
-   * is empty and `"character"` instead of `"digit"` when `type` is
-   * `"alphanumeric"`.
-   * @type {(position: number, count: number, labelText: string, type: "numeric" | "alphanumeric") => string}
+   * `"Verification code digit 1 of 4"`, using `"Pin code"` when
+   * `labelText` is empty and `"character"` instead of `"digit"` when
+   * `type` is `"alphanumeric"`.
+   * @type {(
+   *   position: number,
+   *   count: number,
+   *   labelText: string,
+   *   type: "numeric" | "alphanumeric",
+   * ) => string}
    */
   export let segmentLabelText = function segmentLabelText(
     position,
@@ -186,6 +193,11 @@
   import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import {
+    buildFieldIds,
+    resolveStatusDescribedBy,
+    resolveValidationVisibility,
+  } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -229,23 +241,23 @@
   $: complete = count > 0 && code.length === count && code.every(Boolean);
   // Validation states are suppressed in the read-only and disabled variants,
   // matching the other Carbon inputs.
-  $: hasError = invalid && !readonly && !disabled;
-  $: hasWarn = warn && !hasError && !readonly && !disabled;
+  $: ({ showInvalid: hasError, showWarn: hasWarn } =
+    resolveValidationVisibility({ invalid, warn, disabled, readonly }));
   $: isFluid = fluid || !!formContext?.isFluid;
   $: segmentPlaceholder =
     placeholder === undefined ? (isFluid ? "–" : "") : placeholder;
 
   $: legendId = `legend-${id}`;
-  $: helperId = `helper-${id}`;
-  $: errorId = `error-${id}`;
-  $: warnId = `warn-${id}`;
-  $: describedById = hasError
-    ? errorId
-    : hasWarn
-      ? warnId
-      : helperText && !isFluid
-        ? helperId
-        : undefined;
+  $: ({ helperId, errorId, warnId } = buildFieldIds(id));
+  $: describedById = resolveStatusDescribedBy({
+    showInvalid: hasError,
+    showWarn: hasWarn,
+    helperText,
+    isFluid,
+    errorId,
+    warnId,
+    helperId,
+  });
 
   // Emit "complete" once when all segments fill, "clear" once when emptied.
   $: if (mounted && complete && !prevComplete) {
@@ -286,7 +298,12 @@
     dispatch("change", { value: code.join(""), code });
   }
 
-  /** @type {(index: number, options?: { selectTextOnFocus?: boolean }) => void} */
+  /**
+   * @type {(
+   *   index: number,
+   *   options?: { selectTextOnFocus?: boolean },
+   * ) => void}
+   */
   function focusInput(index, options = {}) {
     const input = inputs[index];
     if (input) {
@@ -300,8 +317,9 @@
   }
 
   /**
-   * Distribute valid characters across segments, matching paste behavior:
-   * a full-length code replaces every segment; otherwise fill from `index`.
+   * Distribute valid characters across segments, matching paste
+   * behavior: a full-length code replaces every segment; otherwise fill
+   * from `index`.
    * @type {(index: number, chars: string[]) => void}
    */
   function fillFromChars(index, chars) {
@@ -485,8 +503,9 @@
   }
 
   /**
-   * Clear all segments programmatically.
-   * By default, focus is not moved. Set `options.focus` to `true` to focus the first segment after clearing.
+   * Clear all segments programmatically. By default, focus is not
+   * moved. Set `options.focus` to `true` to focus the first segment
+   * after clearing.
    * @param {{ focus?: boolean }} [options]
    */
   export function clear(options = {}) {

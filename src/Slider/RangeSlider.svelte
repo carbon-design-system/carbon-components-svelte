@@ -2,8 +2,16 @@
   /**
    * @event {{ value: number; valueUpper: number }} change
    * @event {{ value: number; valueUpper: number }} input
-   * @event {{ value: number; valueUpper: number; handle: "lower" | "upper" }} focus
-   * @event {{ value: number; valueUpper: number; handle: "lower" | "upper" }} blur
+   * @event {{
+   *   value: number;
+   *   valueUpper: number;
+   *   handle: "lower" | "upper";
+   * }} focus
+   * @event {{
+   *   value: number;
+   *   valueUpper: number;
+   *   handle: "lower" | "upper";
+   * }} blur
    */
 
   /**
@@ -43,10 +51,10 @@
   export let step = 1;
 
   /**
-   * Show tick marks along the track.
-   * Set to `true` to place a tick at every `step`, or pass an array of
-   * `{ value, label? }` for specific stops with optional labels below the track.
-   * Marks are visual only; snapping still follows `step`.
+   * Show tick marks along the track. Set to `true` to place a tick at
+   * every `step`, or pass an array of `{ value, label? }` for specific
+   * stops with optional labels below the track. Marks are visual only;
+   * snapping still follows `step`.
    * @type {boolean | ReadonlyArray<{ value: number; label?: string }>}
    */
   export let marks = false;
@@ -126,13 +134,21 @@
    */
   export let ref = null;
 
-  /** Set to `true` to select a text input's text when it receives focus */
+  /**
+   * Set to `true` to select a text input's text when it receives focus
+   */
   export let selectTextOnFocus = false;
 
   import { createEventDispatcher, tick } from "svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { dismiss } from "../utils/dismiss.js";
+  import {
+    buildFieldIds,
+    resolveStatusDescribedBy,
+    resolveValidationVisibility,
+  } from "../utils/field-status.js";
+  import { clamp } from "../utils/numeric-format.js";
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
   import { resolveSliderMarks } from "../utils/resolve-slider-marks.js";
   import {
@@ -143,12 +159,26 @@
   } from "../utils/slider-value.js";
   import { uniqueId } from "../utils/unique-id.js";
 
-  /** @typedef {{ value: number; valueUpper: number }} RangeSliderChangeDetail */
+  /**
+   * @typedef {{
+   *   value: number;
+   *   valueUpper: number;
+   * }} RangeSliderChangeDetail
+   */
   /** @typedef {"lower" | "upper"} ActiveHandle */
-  /** @typedef {RangeSliderChangeDetail & { handle: ActiveHandle }} RangeSliderFocusDetail */
+  /**
+   * @typedef {RangeSliderChangeDetail & {
+   *   handle: ActiveHandle;
+   * }} RangeSliderFocusDetail
+   */
   /** @typedef {MouseEvent | TouchEvent} PointerLikeEvent */
 
-  /** @type {(type: "change" | "input" | "focus" | "blur", detail: RangeSliderChangeDetail | RangeSliderFocusDetail) => void} */
+  /**
+   * @type {(
+   *   type: "change" | "input" | "focus" | "blur",
+   *   detail: RangeSliderChangeDetail | RangeSliderFocusDetail,
+   * ) => void}
+   */
   const dispatch = createEventDispatcher();
 
   /** @type {HTMLDivElement | null} */
@@ -168,7 +198,9 @@
   /** @type {PointerLikeEvent | null} */
   let currentEvent = null;
 
-  /** @type {(label: string, numericValue: number) => string | number} */
+  /**
+   * @type {(label: string, numericValue: number) => string | number}
+   */
   function formatRangeLabel(label, numericValue) {
     return formatSliderRangeLabel(label, numericValue, formatValue);
   }
@@ -326,12 +358,15 @@
     dispatch("change", { value, valueUpper });
   }
 
-  $: showInvalid = invalid && !disabled && !readonly;
-  $: showWarn = warn && !invalid && !disabled && !readonly;
+  $: ({ showInvalid, showWarn } = resolveValidationVisibility({
+    invalid,
+    warn,
+    disabled,
+    readonly,
+  }));
 
   $: labelId = `label-${id}`;
-  $: errorId = `error-${id}`;
-  $: warnId = `warn-${id}`;
+  $: ({ errorId, warnId } = buildFieldIds(id));
   $: lowerInputId = `lower-input-${id}`;
   $: upperInputId = `upper-input-${id}`;
   $: range = max - min;
@@ -342,10 +377,8 @@
     (mark) => mark.label != null && mark.label !== "",
   );
   $: {
-    if (value < min) value = min;
-    if (value > max) value = max;
-    if (valueUpper < min) valueUpper = min;
-    if (valueUpper > max) valueUpper = max;
+    value = clamp(value, min, max);
+    valueUpper = clamp(valueUpper, min, max);
     if (value > valueUpper) value = valueUpper;
 
     if (dragging && currentEvent) {
@@ -429,7 +462,7 @@
         data-invalid={showInvalid || null}
         data-warn={showWarn || null}
         aria-invalid={showInvalid || null}
-        aria-describedby={showInvalid ? errorId : showWarn ? warnId : undefined}
+        aria-describedby={resolveStatusDescribedBy({ showInvalid, showWarn, errorId, warnId })}
         on:focus={handleLowerInputFocus}
         on:blur={handleLowerInputBlur}
       >
@@ -471,7 +504,7 @@
           aria-valuenow={value}
           aria-valuetext={getValueText(value)}
           aria-label={ariaLabelInput}
-          aria-describedby={showInvalid ? errorId : showWarn ? warnId : undefined}
+          aria-describedby={resolveStatusDescribedBy({ showInvalid, showWarn, errorId, warnId })}
           aria-invalid={showInvalid || undefined}
           on:focus={() => (activeHandle = "lower")}
           on:keydown={handleKeydown}
@@ -521,7 +554,7 @@
           aria-valuenow={valueUpper}
           aria-valuetext={getValueText(valueUpper)}
           aria-label={ariaLabelInputUpper}
-          aria-describedby={showInvalid ? errorId : showWarn ? warnId : undefined}
+          aria-describedby={resolveStatusDescribedBy({ showInvalid, showWarn, errorId, warnId })}
           aria-invalid={showInvalid || undefined}
           on:focus={() => (activeHandle = "upper")}
           on:keydown={handleKeydown}
@@ -615,7 +648,7 @@
         data-invalid={showInvalid || null}
         data-warn={showWarn || null}
         aria-invalid={showInvalid || null}
-        aria-describedby={showInvalid ? errorId : showWarn ? warnId : undefined}
+        aria-describedby={resolveStatusDescribedBy({ showInvalid, showWarn, errorId, warnId })}
         on:focus={handleUpperInputFocus}
         on:blur={handleUpperInputBlur}
       >

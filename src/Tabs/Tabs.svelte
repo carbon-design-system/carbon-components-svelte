@@ -1,7 +1,13 @@
 <script>
   /**
    * @event {number} change
-   * @event {{ id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean; index: number }} dismiss
+   * @event {{
+   *   id: string;
+   *   label: string;
+   *   disabled: boolean;
+   *   hasSecondaryLabel: boolean;
+   *   index: number;
+   * }} dismiss
    */
 
   /**
@@ -12,18 +18,18 @@
   export let selected = 0;
 
   /**
-   * Specify the selected tab by id.
-   * When set, takes precedence over `selected` and stays on the same logical
-   * tab as tabs are added or removed. Pair with a stable `id` on each `Tab`.
+   * Specify the selected tab by id. When set, takes precedence over
+   * `selected` and stays on the same logical tab as tabs are added or
+   * removed. Pair with a stable `id` on each `Tab`.
    * @bindable writable
    * @type {string | undefined}
    */
   export let selectedId = undefined;
 
   /**
-   * Choose whether arrow keys change the selection on focus.
-   * Defaults to `"automatic"`. Set to `"manual"` so arrow keys only move
-   * focus; press Enter or Space to select.
+   * Choose whether arrow keys change the selection on focus. Defaults
+   * to `"automatic"`. Set to `"manual"` so arrow keys only move focus;
+   * press Enter or Space to select.
    * @type {"automatic" | "manual"}
    */
   export let activation = "automatic";
@@ -44,9 +50,9 @@
   export let fullWidth = false;
 
   /**
-   * Set to `true` to render icon-only tabs.
-   * Each `Tab` displays only its `icon`; the `label` is used as the accessible
-   * name and the tooltip shown on hover and focus.
+   * Set to `true` to render icon-only tabs. Each `Tab` displays only
+   * its `icon`; the `label` is used as the accessible name and the
+   * tooltip shown on hover and focus.
    */
   export let iconOnly = false;
 
@@ -78,23 +84,30 @@
   import { derived, get, writable } from "svelte/store";
   import ChevronLeft from "../icons/ChevronLeft.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
-  import { batchStoreUpdates } from "../utils/batch-store-updates.js";
-  import { clampIndex } from "../utils/clamp-index.js";
   import {
     computeScrollOverflow,
     scrollByViewport,
     scrollIntoViewX,
   } from "../utils/horizontal-scroll.js";
   import { keyBy } from "../utils/key-by.js";
+  import { resolveIdSelection } from "../utils/resolve-id-selection.js";
+  import { resolveTabsSize } from "../utils/resolve-tabs-size.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { syncDomOrder } from "../utils/sync-dom-order.js";
+  import { createTabsRegistration } from "../utils/tabs-registration.js";
 
   const dispatch = createEventDispatcher();
 
-  const SIZE_SCALE = ["sm", "md", "lg", "xl"];
-
   /**
-   * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean; index: number }>>}
+   * @type {import("svelte/store").Writable<
+   *   ReadonlyArray<{
+   *     id: string;
+   *     label: string;
+   *     disabled: boolean;
+   *     hasSecondaryLabel: boolean;
+   *     index: number;
+   *   }>
+   * >}
    */
   const tabs = writable([]);
   const tabsById = derived(tabs, (_) => keyBy(_));
@@ -115,11 +128,15 @@
    */
   const selectedTab = writable(undefined);
   /**
-   * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; index: number }>>}
+   * @type {import("svelte/store").Writable<
+   *   ReadonlyArray<{ id: string; index: number }>
+   * >}
    */
   const content = writable([]);
   /**
-   * @type {import("svelte/store").Readable<Record<string, { id: string; index: number }>>}
+   * @type {import("svelte/store").Readable<
+   *   Record<string, { id: string; index: number }>
+   * >}
    */
   const contentById = derived(content, (_) => keyBy(_));
   /**
@@ -137,11 +154,11 @@
    */
   const selectedContent = writable(undefined);
   /**
-   * Tracks which icon-only tab's tooltip is open so only one shows at a time.
-   * Scoped per `Tabs` instance.
-   * @type {import("svelte/store").Writable<string | undefined>}
+   * Tracks which icon-only tab's tooltip is open so only one shows at a
+   * time. Scoped per `Tabs` instance.
+   * @type {import("svelte/store").Writable<string | null>}
    */
-  const activeTooltip = writable(undefined);
+  const activeTooltip = writable(null);
 
   let refTabList = null;
   let refRoot = null;
@@ -177,7 +194,8 @@
   );
 
   /**
-   * Mirror the `iconOnly` prop into the context so each `Tab` reacts to it.
+   * Mirror the `iconOnly` prop into the context so each `Tab` reacts to
+   * it.
    * @type {import("svelte/store").Writable<boolean>}
    */
   const useIconOnly = writable(iconOnly);
@@ -187,55 +205,29 @@
   //
   // Set needsDomSync inside the batched update. afterUpdate runs once
   // after mount before this flush, while tabs is still [].
-  const batchedTabsUpdate = batchStoreUpdates(tabs);
-  const batchedContentUpdate = batchStoreUpdates(content);
+  const registration = createTabsRegistration({
+    tabs,
+    content,
+    onDomSyncNeeded: () => {
+      needsDomSync = true;
+    },
+  });
 
   /**
-   * @type {(data: { id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean }) => void}
+   * @type {(data: {
+   *   id: string;
+   *   label: string;
+   *   disabled: boolean;
+   *   hasSecondaryLabel: boolean;
+   * }) => void}
    */
-  function add(data) {
-    batchedTabsUpdate((_) => {
-      // `Tab` re-registers when its props change. Check the batched
-      // accumulator, not `$tabsById`: a same-batch registration is not in the
-      // derived store yet. Only an insert needs a DOM-order sync.
-      const index = _.findIndex((tab) => tab.id === data.id);
-      if (index !== -1) {
-        return _.map((tab, i) => (i === index ? { ...tab, ...data } : tab));
-      }
-      needsDomSync = true;
-      return [..._, { ...data, index: _.length }];
-    });
-  }
-
-  /**
-   * @type {(id: string) => void}
-   */
-  function remove(id) {
-    batchedTabsUpdate((_) => {
-      needsDomSync = true;
-      return _.filter((tab) => tab.id !== id);
-    });
-  }
-
-  /**
-   * @type {(data: { id: string }) => void}
-   */
-  function addContent(data) {
-    batchedContentUpdate((_) => {
-      needsDomSync = true;
-      return [..._, { ...data, index: _.length }];
-    });
-  }
-
-  /**
-   * @type {(id: string) => void}
-   */
-  function removeContent(id) {
-    batchedContentUpdate((_) => {
-      needsDomSync = true;
-      return _.filter((item) => item.id !== id);
-    });
-  }
+  const add = registration.add;
+  /** @type {(id: string) => void} */
+  const remove = registration.remove;
+  /** @type {(data: { id: string }) => void} */
+  const addContent = registration.addContent;
+  /** @type {(id: string) => void} */
+  const removeContent = registration.removeContent;
 
   /**
    * @type {(id: string) => void}
@@ -253,8 +245,9 @@
   }
 
   /**
-   * Resolve selection from `selectedId` when set; otherwise use `selected`.
-   * If the selected id was removed, keep the same index (next tab) or clamp.
+   * Resolve selection from `selectedId` when set; otherwise use
+   * `selected`. If the selected id was removed, keep the same index
+   * (next tab) or clamp.
    * @type {() => void}
    */
   function syncSelection() {
@@ -263,21 +256,20 @@
       return;
     }
 
-    const tab = $tabsById[selectedId];
-    if (tab) {
-      selectedIndex = tab.index;
-      return;
-    }
-
-    if ($tabs.length === 0) return;
-
-    selectedIndex = clampIndex(selectedIndex, 0, $tabs.length);
-    selectedId = $tabs[selectedIndex].id;
+    const resolved = resolveIdSelection({
+      items: $tabs,
+      selectedId,
+      currentIndex: selectedIndex,
+    });
+    if (!resolved) return;
+    selectedIndex = resolved.index;
+    selectedId = resolved.id;
   }
 
   /**
-   * Dispatch `dismiss`. When the handler removes the focused tab, move focus
-   * to the tab that took its place (or the new last tab) instead of `<body>`.
+   * Dispatch `dismiss`. When the handler removes the focused tab, move
+   * focus to the tab that took its place (or the new last tab) instead
+   * of `<body>`.
    * @type {(id: string) => Promise<void>}
    */
   async function dismiss(id) {
@@ -311,10 +303,11 @@
   const SCROLL_INTO_VIEW_MARGIN = 48;
 
   /**
-   * Scroll the tab list so `tab` is fully visible, inset from each edge so it is
-   * not tucked under an overflow button. The browser's native focus scroll moves
-   * a fixed step that lags variable-width tabs, eventually pushing the focused
-   * tab off-screen, so selection is scrolled explicitly instead.
+   * Scroll the tab list so `tab` is fully visible, inset from each edge
+   * so it is not tucked under an overflow button. The browser's native
+   * focus scroll moves a fixed step that lags variable-width tabs,
+   * eventually pushing the focused tab off-screen, so selection is
+   * scrolled explicitly instead.
    * @type {(tab: HTMLElement | undefined) => void}
    */
   function scrollTabIntoView(tab) {
@@ -339,7 +332,8 @@
 
   /**
    * Arrow keys move from the tab that holds focus. Fall back to the
-   * manual-mode focus index, then the selection, when focus is elsewhere.
+   * manual-mode focus index, then the selection, when focus is
+   * elsewhere.
    * @type {() => number}
    */
   function getActiveIndex() {
@@ -354,8 +348,9 @@
   }
 
   /**
-   * Move selection/focus to a tab at an absolute index. Roving focus resolves
-   * the index (skipping disabled, wrapping); selection follows focus.
+   * Move selection/focus to a tab at an absolute index. Roving focus
+   * resolves the index (skipping disabled, wrapping); selection follows
+   * focus.
    * @type {(index: number) => Promise<void>}
    */
   async function selectTab(index) {
@@ -479,18 +474,8 @@
   $: useDismissible.set(dismissible);
   $: useIconOnly.set(iconOnly);
 
-  // Line tabs support up to `lg`; container tabs support the full range up
-  // to `xl`. An out-of-range value clamps to the type's max, mirroring
-  // Carbon's own `layout.use($min, $max)` clamping. An unrecognized value is
-  // ignored (no class), same as leaving `size` unset.
   $: maxSizeIndex = type === "container" ? 3 : 2;
-  function resolveSize(size, maxSizeIndex) {
-    if (!size) return undefined;
-    const index = SIZE_SCALE.indexOf(size);
-    if (index === -1) return undefined;
-    return SIZE_SCALE[Math.min(index, maxSizeIndex)];
-  }
-  $: resolvedSize = resolveSize(size, maxSizeIndex);
+  $: resolvedSize = resolveTabsSize(size, maxSizeIndex);
 </script>
 
 <div

@@ -8,8 +8,8 @@ export type CarouselConfig = {
   onViewChangeStart?: (response: CarouselResponse) => void;
   onViewChangeEnd?: (response: CarouselResponse) => void;
   /**
-   * Size the container to the tallest view instead of the active view's own
-   * height, so switching views does not resize the container.
+   * Size the container to the tallest view instead of the active view's
+   * own height, so switching views does not resize the container.
    */
   useMaxHeight?: boolean;
 };

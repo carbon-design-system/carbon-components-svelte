@@ -31,7 +31,9 @@
   import { writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import { dismiss } from "../utils/dismiss.js";
+  import { createDomNodeRegistry } from "../utils/dom-node-registry.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
+  import { pickEdgeMenuItem } from "../utils/pick-edge-menu-item.js";
 
   const dispatch = createEventDispatcher();
 
@@ -39,10 +41,15 @@
    * @type {import("svelte/store").Writable<Record<string, boolean>>}
    */
   const selectedItems = writable({});
+  const menuItemRegistry = createDomNodeRegistry();
   /**
    * @type {import("svelte/store").Writable<ReadonlyArray<HTMLElement>>}
    */
-  const menuItems = writable([]);
+  const menuItems = menuItemRegistry.items;
+  /** @type {(node: HTMLElement) => void} */
+  const registerMenuItem = menuItemRegistry.register;
+  /** @type {(node: HTMLElement) => void} */
+  const unregisterMenuItem = menuItemRegistry.unregister;
 
   let menuRef = null;
 
@@ -54,20 +61,6 @@
       ..._items,
       [item.id]: item.isSelected,
     }));
-  }
-
-  /**
-   * @type {(node: HTMLElement) => void}
-   */
-  function registerMenuItem(node) {
-    menuItems.update((items) => [...items, node]);
-  }
-
-  /**
-   * @type {(node: HTMLElement) => void}
-   */
-  function unregisterMenuItem(node) {
-    menuItems.update((items) => items.filter((item) => item !== node));
   }
 
   /**
@@ -152,22 +145,13 @@
           await tick();
           $menuItems[0]?.focus();
         }
-      } else if (event.key === "ArrowDown") {
+      } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
         event.preventDefault();
         if (!expanded) {
           expanded = true;
         }
-        // Focus first item
         await tick();
-        $menuItems[0]?.focus();
-      } else if (event.key === "ArrowUp") {
-        event.preventDefault();
-        if (!expanded) {
-          expanded = true;
-        }
-        // Focus last item
-        await tick();
-        $menuItems[$menuItems.length - 1]?.focus();
+        pickEdgeMenuItem(event.key, $menuItems)?.focus();
       } else if (event.key === "Escape") {
         event.preventDefault();
         await closeMenu("escape-key");

@@ -1,5 +1,8 @@
 <script>
-  /** Specify a selector to be focused inside the footer when opening the tooltip */
+  /**
+   * Specify a selector to be focused inside the footer when opening the
+   * tooltip
+   */
   export let selectorPrimaryFocus = "a[href], button:not([disabled])";
 
   import { getContext, onMount } from "svelte";

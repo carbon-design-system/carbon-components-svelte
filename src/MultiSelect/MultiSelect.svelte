@@ -1,3 +1,51 @@
+<script context="module">
+  /**
+   * Index `entries` by id, bucketing same-id entries in order so
+   * duplicate ids pair up positionally (first old duplicate reused for
+   * the first new occurrence) instead of one id silently overwriting
+   * another.
+   * @param {ReadonlyArray<{ id: any }>} entries
+   * @returns {Map<any, any[]>}
+   */
+  function indexById(entries) {
+    const map = new Map();
+    for (const entry of entries) {
+      const bucket = map.get(entry.id);
+      if (bucket) bucket.push(entry);
+      else map.set(entry.id, [entry]);
+    }
+    return map;
+  }
+
+  /**
+   * Whether `ids` holds exactly the ids in `idSet`, ignoring order and
+   * duplicates. Sizes are compared as sets, not by `ids.length`: a
+   * duplicate (`["1", "1"]` against `{"1", "2"}`) matches on length and
+   * membership while selecting something different.
+   * @param {ReadonlyArray<any>} ids
+   * @param {Set<any>} idSet
+   * @returns {boolean}
+   */
+  function sameIdSet(ids, idSet) {
+    if (ids.length < idSet.size) return false;
+    if (!ids.every((id) => idSet.has(id))) return false;
+    return new Set(ids).size === idSet.size;
+  }
+
+  /**
+   * Value-compare two `selectedIds` arrays, ignoring order: `sort()`
+   * only ever tests membership via a `Set`, so a
+   * reordered-but-otherwise-equal array produces the same result and
+   * shouldn't trigger a re-sort.
+   * @param {ReadonlyArray<any>} a
+   * @param {ReadonlyArray<any>} b
+   * @returns {boolean}
+   */
+  function sameSelectedIds(a, b) {
+    return sameIdSet(a, new Set(b));
+  }
+</script>
+
 <script>
   /**
    * @template {MultiSelectItem<any>} [Item=MultiSelectItem<any>]
@@ -9,7 +57,8 @@
    * @property {Id} id
    * @property {MultiSelectItemText} text
    * @property {boolean} [disabled] - Whether the item is disabled
-   * @property {boolean} [isSelectAll] - Whether this item acts as a "select all" toggle
+   * @property {boolean} [isSelectAll] - Whether this item acts as a
+   *   "select all" toggle
    * @event select
    * @type {object}
    * @property {Item["id"][]} selectedIds
@@ -18,8 +67,17 @@
    * @event {KeyboardEvent | MouseEvent} clear
    * @event {FocusEvent | CustomEvent<FocusEvent>} blur
    * @event {{ trigger: "escape-key" | "outside-click" }} close
-   * @event {{ scrollTop: number; scrollHeight: number; clientHeight: number }} scrollend
-   * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }}
+   * @event {{
+   *   scrollTop: number;
+   *   scrollHeight: number;
+   *   clientHeight: number;
+   * }} scrollend
+   * @slot {{
+   *   item: Item;
+   *   index: number;
+   *   selected: boolean;
+   *   highlighted: boolean;
+   * }}
    * @restProps {input | button}
    */
 
@@ -38,12 +96,17 @@
   };
 
   /**
-   * Override `name`/`value` for the hidden inputs that mirror the current
-   * selection for native form submission, and `title`/`labelText` for the
-   * visible option checkbox. `name`/`value` do not reach the option
-   * checkbox itself -- it is decorative and excluded from form
-   * participation, even while the menu is open.
-   * @type {(item: Item) => { name?: string; labelText?: any; title?: string; value?: string }}
+   * Override `name`/`value` for the hidden inputs that mirror the
+   * current selection for native form submission, and
+   * `title`/`labelText` for the visible option checkbox. `name`/`value`
+   * do not reach the option checkbox itself -- it is decorative and
+   * excluded from form participation, even while the menu is open.
+   * @type {(item: Item) => {
+   *   name?: string;
+   *   labelText?: any;
+   *   title?: string;
+   *   value?: string;
+   * }}
    */
   export let itemToInput = function itemToInput(_item) {};
 
@@ -85,9 +148,9 @@
   export let selectionFeedback = "top-after-reopen";
 
   /**
-   * Cap how many items can be selected at once.
-   * Unset or a non-positive value means unlimited.
-   * When set, select-all is unavailable and unchecked items disable once the cap is reached.
+   * Cap how many items can be selected at once. Unset or a non-positive
+   * value means unlimited. When set, select-all is unavailable and
+   * unchecked items disable once the cap is reached.
    * @type {number | undefined}
    */
   export let maxSelectedItems = undefined;
@@ -109,8 +172,9 @@
   };
 
   /**
-   * Set to `true` to select all text in the filter input when it receives
-   * focus (e.g. on tab or click). Only applies when `filterable` is `true`.
+   * Set to `true` to select all text in the filter input when it
+   * receives focus (e.g. on tab or click). Only applies when
+   * `filterable` is `true`.
    */
   export let selectTextOnFocus = false;
 
@@ -133,8 +197,8 @@
 
   /**
    * Set to `true` to render condensed menu items in the fluid variant.
-   * Menu items use the default height instead of the taller fluid height.
-   * Only applies when the fluid variant is active.
+   * Menu items use the default height instead of the taller fluid
+   * height. Only applies when the fluid variant is active.
    */
   export let condensed = false;
 
@@ -157,21 +221,30 @@
   /**
    * Override the chevron icon label based on the open state.
    * Defaults to "Open menu" when closed and "Close menu" when open.
-   * @type {(id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId) => string}
+   * @type {(
+   *   id: import("../ListBox/ListBoxMenuIcon.svelte")
+   *     .ListBoxMenuIconTranslationId,
+   * ) => string}
    */
   export let translateWithId = undefined;
 
   /**
-   * Override the label of the clear button when the input has a selection.
-   * Defaults to "Clear selected item" and "Clear all items" if more than one item is selected.
-   * @type {(id: import("../ListBox/ListBoxSelection.svelte").ListBoxSelectionTranslationId) => string}
+   * Override the label of the clear button when the input has a
+   * selection. Defaults to "Clear selected item" and "Clear all items"
+   * if more than one item is selected.
+   * @type {(
+   *   id: import("../ListBox/ListBoxSelection.svelte")
+   *     .ListBoxSelectionTranslationId,
+   * ) => string}
    */
   export let translateWithIdSelection = undefined;
 
   /** Specify the label text */
   export let labelText = "";
 
-  /** Set to `true` to pass the item to `itemToString` in the checkbox */
+  /**
+   * Set to `true` to pass the item to `itemToString` in the checkbox
+   */
   export let useTitleInItem = false;
 
   /** Set to `true` to indicate an invalid state */
@@ -202,42 +275,44 @@
   export let readonly = false;
 
   /**
-   * Specify the assistive text announced to screen readers when read-only.
-   * Exposed because VoiceOver does not announce `aria-readonly`.
+   * Specify the assistive text announced to screen readers when
+   * read-only. Exposed because VoiceOver does not announce
+   * `aria-readonly`.
    */
   export let readonlyText = "Read-only";
 
   /**
-   * Specify the assistive text describing options disabled by `maxSelectedItems`.
-   * Announced so screen reader users learn why an option refuses selection,
-   * not just that it is disabled.
+   * Specify the assistive text describing options disabled by
+   * `maxSelectedItems`. Announced so screen reader users learn why an
+   * option refuses selection, not just that it is disabled.
    */
   export let maxSelectedText = "Maximum items selected";
 
   /**
-   * Specify the assistive text advertising the keyboard shortcut that clears
-   * the selection. Appended to the field's visually-hidden description
-   * whenever there is a selection to clear.
+   * Specify the assistive text advertising the keyboard shortcut that
+   * clears the selection. Appended to the field's visually-hidden
+   * description whenever there is a selection to clear.
    */
   export let clearSelectionText =
     "To clear the selection, press Delete or Backspace";
 
   /**
-   * Specify the assistive text announced through the status live region when
-   * the selection is cleared via the keyboard or the clear button.
+   * Specify the assistive text announced through the status live region
+   * when the selection is cleared via the keyboard or the clear button.
    */
   export let selectionClearedText = "All items cleared";
 
   /**
-   * Set to `true` to reopen the dropdown menu after clearing the selection.
-   * This allows users to immediately see all available items after clearing.
+   * Set to `true` to reopen the dropdown menu after clearing the
+   * selection. This allows users to immediately see all available items
+   * after clearing.
    */
   export let openOnClear = false;
 
   /**
-   * Build the assistive message announced through the status live region when
-   * typing in the filterable variant changes how many options match.
-   * The count excludes any "select all" item.
+   * Build the assistive message announced through the status live
+   * region when typing in the filterable variant changes how many
+   * options match. The count excludes any "select all" item.
    * @type {(count: number) => string}
    */
   export let filterResultsText = function filterResultsText(count) {
@@ -292,43 +367,67 @@
   export let highlightedId = null;
 
   /**
-   * The post-sort, post-selection-feedback list of items rendered by the dropdown.
-   * Bind to read the resolved order without recomputing it from `items`, `selectedIds`, and `sortItem`.
+   * The post-sort, post-selection-feedback list of items rendered by
+   * the dropdown. Bind to read the resolved order without recomputing
+   * it from `items`, `selectedIds`, and `sortItem`.
    * @type {ReadonlyArray<Item & { checked: boolean }>}
    * @bindable readonly
    */
   export let sortedItems = [];
 
   /**
-   * Enable virtualization for large lists. Virtualization renders only the items currently visible in the viewport, improving performance for large lists.
+   * Enable virtualization for large lists. Virtualization renders only
+   * the items currently visible in the viewport, improving performance
+   * for large lists.
    *
-   * By default, virtualization is automatically enabled for lists with more than 100 items.
+   * By default, virtualization is automatically enabled for lists with
+   * more than 100 items.
    *
-   * Set `virtualize={false}` to explicitly disable virtualization, even for large lists.
+   * Set `virtualize={false}` to explicitly disable virtualization, even
+   * for large lists.
    *
-   * Set `virtualize={true}` to explicitly enable virtualization with default settings.
+   * Set `virtualize={true}` to explicitly enable virtualization with
+   * default settings.
    *
    * Provide an object to customize virtualization behavior:
-   * - `itemHeight` (default: size-based, or 64px for fluid unless `condensed`): Height of each item in pixels. Override when custom slots change row height. Under `wrapOptions`, heights are measured from the rendered options and this serves as the starting estimate for ones not yet measured.
-   * - `containerHeight` (default: 300): The maximum height in pixels of the dropdown container.
-   * - `overscan` (default: 3): The number of extra items to render above and below the viewport for smoother scrolling. Higher values may cause more flickering during very fast scrolling.
-   * - `threshold` (default: 100): The minimum number of items required before virtualization activates. Lists with fewer items will render all items normally without virtualization.
-   * - `maxItems` (default: undefined): The maximum number of items to render. When undefined, all visible items are rendered.
-   * @type {undefined | boolean | { itemHeight?: number, containerHeight?: number, overscan?: number, threshold?: number, maxItems?: number }}
+   * - `itemHeight` (default: size-based, or 64px for fluid unless
+   *   `condensed`): Height of each item in pixels. Override when custom
+   *   slots change row height. Under `wrapOptions`, heights are
+   *   measured from the rendered options and this serves as the
+   *   starting estimate for ones not yet measured.
+   * - `containerHeight` (default: 300): The maximum height in pixels of
+   *   the dropdown container.
+   * - `overscan` (default: 3): The number of extra items to render
+   *   above and below the viewport for smoother scrolling. Higher
+   *   values may cause more flickering during very fast scrolling.
+   * - `threshold` (default: 100): The minimum number of items required
+   *   before virtualization activates. Lists with fewer items will
+   *   render all items normally without virtualization.
+   * - `maxItems` (default: undefined): The maximum number of items to
+   *   render. When undefined, all visible items are rendered.
+   * @type {undefined
+   *   | boolean
+   *   | {
+   *       itemHeight?: number;
+   *       containerHeight?: number;
+   *       overscan?: number;
+   *       threshold?: number;
+   *       maxItems?: number;
+   *     }}
    */
   export let virtualize = undefined;
 
   /**
-   * Set to `true` to let an option's label wrap onto as many lines as it needs
-   * instead of being truncated with an ellipsis.
+   * Set to `true` to let an option's label wrap onto as many lines as
+   * it needs instead of being truncated with an ellipsis.
    * @type {boolean}
    */
   export let wrapOptions = false;
 
   /**
-   * Set to `true` to render the dropdown menu in a portal,
-   * allowing it to escape containers with `overflow: hidden`.
-   * When inside a Modal, defaults to `true` unless explicitly set to `false`.
+   * Set to `true` to render the dropdown menu in a portal, allowing it
+   * to escape containers with `overflow: hidden`. When inside a Modal,
+   * defaults to `true` unless explicitly set to `false`.
    * @type {boolean | undefined}
    */
   export let portalMenu = undefined;
@@ -377,9 +476,15 @@
   import { debounce } from "../utils/debounce.js";
   import { deepEqual } from "../utils/deep-equal.js";
   import { dismiss } from "../utils/dismiss.js";
+  import {
+    buildFieldIds,
+    resolveStatusDescribedBy,
+    resolveValidationVisibility,
+  } from "../utils/field-status.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { moveIndex } from "../utils/move-index.js";
+  import { rangeSlice } from "../utils/range-slice.js";
   import {
     createTypeaheadBuffer,
     isTypeaheadKey,
@@ -418,11 +523,17 @@
   // this, and a live reference would silently track any in-place mutation a
   // consumer made to the array it previously handed over.
   let prevSelectedIds = selectedIds.slice();
-  /** Anchor item id for shift+click range selection; cleared when selection is reset entirely. */
+  /**
+   * Anchor item id for shift+click range selection; cleared when
+   * selection is reset entirely.
+   */
   let prevSelectedItemId = null;
   /** Text content of the visually-hidden status live region. */
   let statusText = "";
-  /** Accumulated characters for first-character typeahead in the non-filterable field. */
+  /**
+   * Accumulated characters for first-character typeahead in the
+   * non-filterable field.
+   */
   /** @type {import("../ListBox/menu-window.js").MenuWindowState} */
   let menuState;
 
@@ -439,7 +550,10 @@
   const typeahead = createTypeaheadBuffer();
 
   /**
-   * @type {(data: { key: "field" | "selection"; ref: HTMLDivElement | HTMLButtonElement }) => void}
+   * @type {(data: {
+   *   key: "field" | "selection";
+   *   ref: HTMLDivElement | HTMLButtonElement;
+   * }) => void}
    */
   function declareRef({ key, ref }) {
     switch (key) {
@@ -457,8 +571,9 @@
   });
 
   /**
-   * Whether an item should be treated as disabled for selection and keyboard nav.
-   * Checked items stay enabled at the cap so they can be cleared.
+   * Whether an item should be treated as disabled for selection and
+   * keyboard nav. Checked items stay enabled at the cap so they can be
+   * cleared.
    * @param {Item & { checked?: boolean }} item
    */
   function isItemDisabled(item) {
@@ -494,11 +609,11 @@
   }
 
   /**
-   * Select the item keyboard-highlighted at `index` (into `itemsToUse`), or
-   * with `shiftKey` select the range from the anchor to it, matching
-   * shift+click (`handleOptionClick`). Ignored unless the highlight came
-   * from the keyboard: a hover highlight must not become selectable by
-   * pressing Enter/Space elsewhere.
+   * Select the item keyboard-highlighted at `index` (into
+   * `itemsToUse`), or with `shiftKey` select the range from the anchor
+   * to it, matching shift+click (`handleOptionClick`). Ignored unless
+   * the highlight came from the keyboard: a hover highlight must not
+   * become selectable by pressing Enter/Space elsewhere.
    * @param {number} index
    * @param {boolean} shiftKey
    */
@@ -542,11 +657,11 @@
   }
 
   /**
-   * Move the (keyboard) highlight to the next enabled item whose text starts
-   * with the accumulating typed characters, wrapping once. Only wired for
-   * the non-filterable field, since the filterable text input filters as
-   * you type. Matches Dropdown's `typeaheadSearch`: it moves the highlight,
-   * it never selects.
+   * Move the (keyboard) highlight to the next enabled item whose text
+   * starts with the accumulating typed characters, wrapping once. Only
+   * wired for the non-filterable field, since the filterable text input
+   * filters as you type. Matches Dropdown's `typeaheadSearch`: it moves
+   * the highlight, it never selects.
    * @param {string} character
    */
   function typeaheadSearch(character) {
@@ -564,8 +679,9 @@
   }
 
   /**
-   * Sync the isSelectAll pseudo-item's checked state to whether every selectable item is
-   * checked. Mutates `sortedItems` in place; callers reassign it afterward.
+   * Sync the isSelectAll pseudo-item's checked state to whether every
+   * selectable item is checked. Mutates `sortedItems` in place; callers
+   * reassign it afterward.
    */
   function syncSelectAllItem() {
     if (!hasSelectAll) return;
@@ -604,8 +720,8 @@
   }
 
   /**
-   * Mirror an external `selectedIds` change onto the checked state in place,
-   * without reordering, for the modes that defer re-sorting.
+   * Mirror an external `selectedIds` change onto the checked state in
+   * place, without reordering, for the modes that defer re-sorting.
    */
   function syncCheckedFromSelectedIds() {
     const ids = new Set(selectedIds);
@@ -618,7 +734,10 @@
     prevChecked = sortedItems.filter((item) => item.checked);
   }
 
-  /** Apply `selectionFeedback: "top"` bookkeeping after a checked-state change. */
+  /**
+   * Apply `selectionFeedback: "top"` bookkeeping after a checked-state
+   * change.
+   */
   function applyTopSelectionFeedback() {
     if (selectionFeedback !== "top") return;
 
@@ -631,9 +750,9 @@
 
   /**
    * Set every non-disabled item within `selectAllScope` to `checked`
-   * (including the isSelectAll pseudo-item, if present, so its own checkbox
-   * follows along without a separate `syncSelectAllItem()` call). Shared by
-   * the isSelectAll pseudo-item's toggle and Ctrl+A.
+   * (including the isSelectAll pseudo-item, if present, so its own
+   * checkbox follows along without a separate `syncSelectAllItem()`
+   * call). Shared by the isSelectAll pseudo-item's toggle and Ctrl+A.
    * @param {boolean} checked
    */
   function setSelectAllScopeChecked(checked) {
@@ -669,12 +788,13 @@
   }
 
   /**
-   * Select or deselect every selectable item currently in scope (filtered
-   * when `filterable` and `open`), toggling to the opposite of `allSelected`.
-   * Same semantics as clicking the isSelectAll pseudo-item, whether or not
-   * `items` declares one. Bound to Ctrl+A in
-   * the non-filterable field; the filterable text input intentionally never
-   * calls this so native text selection (Ctrl+A on the input) keeps working.
+   * Select or deselect every selectable item currently in scope
+   * (filtered when `filterable` and `open`), toggling to the opposite
+   * of `allSelected`. Same semantics as clicking the isSelectAll
+   * pseudo-item, whether or not `items` declares one. Bound to Ctrl+A
+   * in the non-filterable field; the filterable text input
+   * intentionally never calls this so native text selection (Ctrl+A on
+   * the input) keeps working.
    */
   function selectAllViaKeyboard() {
     if (readonly || hasMaxSelectedItems || selectableItems.length === 0) {
@@ -685,10 +805,11 @@
   }
 
   /**
-   * Apply `checked` to every selectable item between the anchor item and `targetIndex`
-   * (inclusive), where `targetIndex` is a position in `itemsToUse`. Returns `false` if the
-   * anchor item is no longer present (for example, filtered out), so the caller can fall
-   * back to a single toggle.
+   * Apply `checked` to every selectable item between the anchor item
+   * and `targetIndex` (inclusive), where `targetIndex` is a position in
+   * `itemsToUse`. Returns `false` if the anchor item is no longer
+   * present (for example, filtered out), so the caller can fall back to
+   * a single toggle.
    * @type {(targetIndex: number, checked: boolean) => boolean}
    */
   function selectItemRange(targetIndex, checked) {
@@ -697,16 +818,15 @@
     const anchorIndex = itemsToUse.findIndex(
       (item) => item.id === prevSelectedItemId,
     );
-    if (anchorIndex === -1) return false;
-
-    const start = Math.min(anchorIndex, targetIndex);
-    const end = Math.max(anchorIndex, targetIndex);
-    const rangeIds = new Set(
-      itemsToUse
-        .slice(start, end + 1)
-        .filter((item) => !item.isSelectAll && !isItemDisabled(item))
-        .map((item) => item.id),
+    const eligible = rangeSlice(
+      itemsToUse,
+      anchorIndex,
+      targetIndex,
+      (item) => !item.isSelectAll && !isItemDisabled(item),
     );
+    if (eligible === null) return false;
+
+    const rangeIds = new Set(eligible.map((item) => item.id));
 
     sortedItems = sortedItems.map((sortedItem) =>
       rangeIds.has(sortedItem.id) && sortedItem.checked !== checked
@@ -723,10 +843,14 @@
   const announceStatus = createStatusAnnouncer((text) => (statusText = text));
 
   /**
-   * Clear the multiselect selection programmatically.
-   * By default, focuses the multiselect after clearing. Set `options.focus` to `false` to prevent focusing.
-   * Set `options.open` to `true` to open the dropdown menu after clearing.
-   * @type {(options?: { focus?: boolean; open?: boolean; }) => Promise<void>}
+   * Clear the multiselect selection programmatically. By default,
+   * focuses the multiselect after clearing. Set `options.focus` to
+   * `false` to prevent focusing. Set `options.open` to `true` to open
+   * the dropdown menu after clearing.
+   * @type {(options?: {
+   *   focus?: boolean;
+   *   open?: boolean;
+   * }) => Promise<void>}
    * @example
    * ```svelte
    * <MultiSelect bind:this={multiSelect} items={items} />
@@ -747,7 +871,10 @@
     );
   }
 
-  /** Filter result count last announced; null when the menu is closed so reopening announces again. */
+  /**
+   * Filter result count last announced; null when the menu is closed so
+   * reopening announces again.
+   */
   let announcedFilterCount = null;
 
   const announceFilterResults = debounce((count) => {
@@ -859,33 +986,18 @@
   }
 
   /**
-   * Index `entries` by id, bucketing same-id entries in order so duplicate
-   * ids pair up positionally (first old duplicate reused for the first new
-   * occurrence) instead of one id silently overwriting another.
-   * @type {(entries: typeof sortedItems) => Map<string, typeof sortedItems>}
-   */
-  function indexById(entries) {
-    const map = new Map();
-    for (const entry of entries) {
-      const bucket = map.get(entry.id);
-      if (bucket) bucket.push(entry);
-      else map.set(entry.id, [entry]);
-    }
-    return map;
-  }
-
-  /**
    * Alphabetical order depends only on `items` and `sortItem`, never on
-   * `selectedIds`, so it's cached across `sort()` calls that only change
-   * selection (a toggle, an external `selectedIds` change, a close with
-   * `top-after-reopen`). Keyed on `items` reference: `sort()` only runs for
-   * a genuinely different `items` value (see `isAlreadySorted`), so a
-   * reference change here always means the order needs recomputing.
+   * `selectedIds`, so it's cached across `sort()` calls that only
+   * change selection (a toggle, an external `selectedIds` change, a
+   * close with `top-after-reopen`). Keyed on `items` reference:
+   * `sort()` only runs for a genuinely different `items` value (see
+   * `isAlreadySorted`), so a reference change here always means the
+   * order needs recomputing.
    *
-   * `sortItem` is intentionally NOT part of the cache key: like today, a new
-   * `sortItem` function does nothing until some other change forces a
-   * re-sort (define it outside the markup, as with `filterItem`/date rules
-   * elsewhere in this library).
+   * `sortItem` is intentionally NOT part of the cache key: like today,
+   * a new `sortItem` function does nothing until some other change
+   * forces a re-sort (define it outside the markup, as with
+   * `filterItem`/date rules elsewhere in this library).
    */
   let baseOrderItems;
   let baseOrderPairs;
@@ -987,9 +1099,13 @@
   let prevItems = items;
 
   /**
-   * Whether `sortedItems` already describes `nextItems` and `nextSelectedIds`,
-   * so sorting again would only rebuild every option for the same result.
-   * @type {(nextItems: typeof items, nextSelectedIds: typeof selectedIds) => boolean}
+   * Whether `sortedItems` already describes `nextItems` and
+   * `nextSelectedIds`, so sorting again would only rebuild every option
+   * for the same result.
+   * @type {(
+   *   nextItems: typeof items,
+   *   nextSelectedIds: typeof selectedIds,
+   * ) => boolean}
    */
   function isAlreadySorted(nextItems, nextSelectedIds) {
     if (!deepEqual(prevItemsSnapshot, nextItems)) return false;
@@ -1002,48 +1118,28 @@
     return sameIdSet(nextSelectedIds, checkedIds);
   }
 
-  /**
-   * Whether `ids` holds exactly the ids in `idSet`, ignoring order and
-   * duplicates. Sizes are compared as sets, not by `ids.length`: a duplicate
-   * (`["1", "1"]` against `{"1", "2"}`) matches on length and membership
-   * while selecting something different.
-   * @type {(ids: typeof selectedIds, idSet: Set<typeof selectedIds[number]>) => boolean}
-   */
-  function sameIdSet(ids, idSet) {
-    if (ids.length < idSet.size) return false;
-    if (!ids.every((id) => idSet.has(id))) return false;
-    return new Set(ids).size === idSet.size;
-  }
-
-  /**
-   * Value-compare two `selectedIds` arrays, ignoring order: `sort()` only
-   * ever tests membership via a `Set`, so a reordered-but-otherwise-equal
-   * array produces the same result and shouldn't trigger a re-sort.
-   * @type {(a: typeof selectedIds, b: typeof selectedIds) => boolean}
-   */
-  function sameSelectedIds(a, b) {
-    return sameIdSet(a, new Set(b));
-  }
-
   $: menuId = `menu-${id}`;
   $: comboId = `combo-${id}`;
-  $: helperId = `helper-${id}`;
-  $: errorId = `error-${id}`;
-  $: warnId = `warn-${id}`;
+  $: ({ helperId, errorId, warnId } = buildFieldIds(id));
   $: readonlyId = `readonly-${id}`;
   $: selectionId = `selection-${id}`;
   // `aria-readonly` on a combobox/listbox does not reliably surface read-only state,
   // so the read-only state is also exposed as a visually-hidden description. The
   // single status/help id is combined with the read-only id (a describedby
   // may reference multiple ids) so it works in every state.
-  $: statusDescribedById =
-    showInvalid && invalidText
-      ? errorId
-      : showWarn && warnText
-        ? warnId
-        : !isFluid && !showInvalid && !showWarn && helperText
-          ? helperId
-          : undefined;
+  $: statusDescribedById = resolveStatusDescribedBy({
+    showInvalid,
+    showWarn,
+    helperText,
+    invalidText,
+    warnText,
+    isFluid,
+    errorId,
+    warnId,
+    helperId,
+    requireInvalidText: true,
+    requireWarnText: true,
+  });
   $: hasSelectionDescription = !readonly && selectionCount > 0;
   $: fieldDescribedById =
     [
@@ -1071,8 +1167,12 @@
   // Portaled menus render outside the fluid wrapper, so they keep default heights.
   $: hasFluidMenuItems = isFluid && !condensed && !effectivePortalMenu;
   // Invalid/warn states are suppressed when the multi-select is disabled or read-only.
-  $: showInvalid = invalid && !disabled && !readonly;
-  $: showWarn = warn && !invalid && !disabled && !readonly;
+  $: ({ showInvalid, showWarn } = resolveValidationVisibility({
+    invalid,
+    warn,
+    disabled,
+    readonly,
+  }));
   // Neutral = default fluid state, i.e. none of the other wrapper modifiers apply.
   $: fluidNeutral =
     isFluid && !showInvalid && !showWarn && !disabled && !readonly;
@@ -1215,8 +1315,9 @@
     .join(" ");
 
   /**
-   * Dismiss the menu and notify consumers of the cause. Guarded on `open` so a
-   * dismissal gesture fired while already closed does not emit a phantom event.
+   * Dismiss the menu and notify consumers of the cause. Guarded on
+   * `open` so a dismissal gesture fired while already closed does not
+   * emit a phantom event.
    * @type {(trigger: "escape-key" | "outside-click") => void}
    */
   const close = createMenuCloseHandler({

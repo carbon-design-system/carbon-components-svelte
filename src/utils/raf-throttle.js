@@ -1,12 +1,14 @@
 // @ts-check
 
 /**
- * Run `fn` at most once per animation frame. Calls in the same frame keep only
- * the latest arguments. Exposes `cancel()`.
+ * Run `fn` at most once per animation frame. Calls in the same frame
+ * keep only the latest arguments. Exposes `cancel()`.
  *
  * @template {(...args: unknown[]) => void} Fn
  * @param {Fn} callback
- * @returns {((...args: Parameters<Fn>) => void) & { cancel: () => void }}
+ * @returns {((...args: Parameters<Fn>) => void) & {
+ *   cancel: () => void;
+ * }}
  */
 export function rafThrottle(callback) {
   /** @type {number | null} */

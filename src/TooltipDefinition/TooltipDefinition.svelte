@@ -29,20 +29,22 @@
   export let id = uniqueId();
 
   /**
-   * By default, the tooltip is opened on hover or focus.
-   * Set to `true` to open the tooltip on click/focus instead of on hover.
-   * Unhovering or blurring the tooltip will close it.
+   * By default, the tooltip is opened on hover or focus. Set to `true`
+   * to open the tooltip on click/focus instead of on hover. Unhovering
+   * or blurring the tooltip will close it.
    */
   export let clickToOpen = false;
 
   /**
-   * Specify the duration in milliseconds to delay before displaying the tooltip.
+   * Specify the duration in milliseconds to delay before displaying the
+   * tooltip.
    * @type {number}
    */
   export let enterDelayMs = TOOLTIP_ENTER_DELAY_MS;
 
   /**
-   * Specify the duration in milliseconds to delay before hiding the tooltip.
+   * Specify the duration in milliseconds to delay before hiding the
+   * tooltip.
    * @type {number}
    */
   export let leaveDelayMs = TOOLTIP_LEAVE_DELAY_MS;

@@ -15,7 +15,20 @@
    * - 11 --> 5rem
    * - 12 --> 6rem
    * - 13 --> 10rem
-   * @typedef {0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13} StackScale
+   * @typedef {0
+   *   | 1
+   *   | 2
+   *   | 3
+   *   | 4
+   *   | 5
+   *   | 6
+   *   | 7
+   *   | 8
+   *   | 9
+   *   | 10
+   *   | 11
+   *   | 12
+   *   | 13} StackScale
    */
 
   /**
@@ -42,7 +55,12 @@
 
   /**
    * Specify the main-axis alignment of items in the stack.
-   * @type {"start" | "center" | "end" | "space-between" | "space-around" | "space-evenly"}
+   * @type {"start"
+   *   | "center"
+   *   | "end"
+   *   | "space-between"
+   *   | "space-around"
+   *   | "space-evenly"}
    */
   export let justify = "start";
 
@@ -54,7 +72,8 @@
   export let wrap = "nowrap";
 
   /**
-   * Set to `true` to use `display: inline-flex` instead of `display: flex`.
+   * Set to `true` to use `display: inline-flex` instead of
+   * `display: flex`.
    */
   export let inline = false;
 
