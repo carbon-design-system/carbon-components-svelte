@@ -74,13 +74,7 @@
   }
 
   a {
-    @if global-variable-exists('carbon--theme') and
-      map-has-key($carbon--theme, 'link-01')
-    {
-      color: map-get($carbon--theme, 'link-01');
-    } @else {
-      color: #0062fe;
-    }
+    color: $link-01; // ccs: token, not the compile-time theme map, so plain links follow runtime theming
   }
 
   em {
