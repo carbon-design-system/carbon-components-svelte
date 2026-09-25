@@ -1,5 +1,23 @@
 <script>
   /**
+   * @restProps {any}
+   * @slot {{ props: { class: string; [key: string]: any; } }}
+   */
+
+  /**
+   * Set to `true` to apply Stack's layout classes to a caller-supplied element or component
+   * instead of the element named by `tag`. Props (including the computed classes and gap style)
+   * are destructured as `props` in the default slot. `tag` is ignored when `as` is `true`.
+   * @example
+   * ```svelte
+   * <Stack as orientation="horizontal" gap={3} let:props>
+   *   <a {...props} href="/">Content</a>
+   * </Stack>
+   * ```
+   */
+  export let as = false;
+
+  /**
    * The stack scale maps to the following `@carbon/layout` values:
    * - 0  --> 0 (no gap)
    * - 1  --> 0.125rem
@@ -71,42 +89,54 @@
    * @bindable readonly
    */
   export let ref = null;
+
+  $: props = {
+    ...$$restProps,
+    class: [
+      $$restProps.class,
+      "bx--stack",
+      inline && "bx--stack-inline",
+      orientation === "vertical" && "bx--stack-vertical",
+      orientation === "horizontal" && "bx--stack-horizontal",
+      gap === 1 && "bx--stack-scale-1",
+      gap === 2 && "bx--stack-scale-2",
+      gap === 3 && "bx--stack-scale-3",
+      gap === 4 && "bx--stack-scale-4",
+      gap === 5 && "bx--stack-scale-5",
+      gap === 6 && "bx--stack-scale-6",
+      gap === 7 && "bx--stack-scale-7",
+      gap === 8 && "bx--stack-scale-8",
+      gap === 9 && "bx--stack-scale-9",
+      gap === 10 && "bx--stack-scale-10",
+      gap === 11 && "bx--stack-scale-11",
+      gap === 12 && "bx--stack-scale-12",
+      gap === 13 && "bx--stack-scale-13",
+      align === "start" && "bx--stack-align-start",
+      align === "center" && "bx--stack-align-center",
+      align === "end" && "bx--stack-align-end",
+      align === "baseline" && "bx--stack-align-baseline",
+      justify === "start" && "bx--stack-justify-start",
+      justify === "center" && "bx--stack-justify-center",
+      justify === "end" && "bx--stack-justify-end",
+      justify === "space-between" && "bx--stack-justify-space-between",
+      justify === "space-around" && "bx--stack-justify-space-around",
+      justify === "space-evenly" && "bx--stack-justify-space-evenly",
+      wrap === "wrap" && "bx--stack-wrap",
+      wrap === "wrap-reverse" && "bx--stack-wrap-reverse",
+    ]
+      .filter(Boolean)
+      .join(" "),
+    style:
+      [$$restProps.style, typeof gap === "string" && `gap: ${gap}`]
+        .filter(Boolean)
+        .join("; ") || undefined,
+  };
 </script>
 
-<svelte:element
-  this={tag}
-  bind:this={ref}
-  class:bx--stack={true}
-  class:bx--stack-inline={inline}
-  class:bx--stack-vertical={orientation === "vertical"}
-  class:bx--stack-horizontal={orientation === "horizontal"}
-  class:bx--stack-scale-1={gap === 1}
-  class:bx--stack-scale-2={gap === 2}
-  class:bx--stack-scale-3={gap === 3}
-  class:bx--stack-scale-4={gap === 4}
-  class:bx--stack-scale-5={gap === 5}
-  class:bx--stack-scale-6={gap === 6}
-  class:bx--stack-scale-7={gap === 7}
-  class:bx--stack-scale-8={gap === 8}
-  class:bx--stack-scale-9={gap === 9}
-  class:bx--stack-scale-10={gap === 10}
-  class:bx--stack-scale-11={gap === 11}
-  class:bx--stack-scale-12={gap === 12}
-  class:bx--stack-scale-13={gap === 13}
-  class:bx--stack-align-start={align === "start"}
-  class:bx--stack-align-center={align === "center"}
-  class:bx--stack-align-end={align === "end"}
-  class:bx--stack-align-baseline={align === "baseline"}
-  class:bx--stack-justify-start={justify === "start"}
-  class:bx--stack-justify-center={justify === "center"}
-  class:bx--stack-justify-end={justify === "end"}
-  class:bx--stack-justify-space-between={justify === "space-between"}
-  class:bx--stack-justify-space-around={justify === "space-around"}
-  class:bx--stack-justify-space-evenly={justify === "space-evenly"}
-  class:bx--stack-wrap={wrap === "wrap"}
-  class:bx--stack-wrap-reverse={wrap === "wrap-reverse"}
-  style:gap={typeof gap === "string" ? gap : undefined}
-  {...$$restProps}
->
-  <slot />
-</svelte:element>
+{#if as}
+  <slot {props} />
+{:else}
+  <svelte:element this={tag} bind:this={ref} {...props}>
+    <slot />
+  </svelte:element>
+{/if}
