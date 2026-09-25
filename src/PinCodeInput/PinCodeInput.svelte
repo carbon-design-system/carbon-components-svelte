@@ -77,6 +77,24 @@
   export let mask = false;
 
   /**
+   * Set to `true` to render a button that shows or hides the masked
+   * characters. Has no effect unless `mask` is `true`.
+   */
+  export let maskToggle = false;
+
+  /**
+   * `true` while the masked characters are shown.
+   * @bindable writable
+   */
+  export let revealed = false;
+
+  /** Specify the tooltip text for the button that shows the code */
+  export let showCodeLabel = "Show code";
+
+  /** Specify the tooltip text for the button that hides the code */
+  export let hideCodeLabel = "Hide code";
+
+  /**
    * `true` when every segment is filled.
    * @bindable readonly
    */
@@ -137,8 +155,30 @@
    */
   export let name = undefined;
 
+  /**
+   * Set to `true` to submit the closest form after a user edit (typing,
+   * paste, or autofill) leaves every segment filled.
+   *
+   * Uses `form.requestSubmit()`, so constraint validation and `submit`
+   * listeners run as for a submit button. Programmatic `code` changes do
+   * not submit.
+   */
+  export let submitOnComplete = false;
+
   /** Set to `true` to use the read-only variant */
   export let readonly = false;
+
+  /**
+   * Set to `true` while the code is being verified.
+   *
+   * Shows a small spinner after the segments and sets `aria-busy` on the
+   * fieldset. Edits are blocked, but the segments stay enabled so focus does
+   * not move. Invalid and warning states are hidden while loading.
+   */
+  export let loading = false;
+
+  /** Specify the accessible description of the loading spinner */
+  export let loadingDescription = "Verifying code";
 
   /**
    * Set to `true` to use the fluid variant.
@@ -153,6 +193,14 @@
    * value only on keyboard focus (for example, via Tab).
    */
   export let selectTextOnFocus = false;
+
+  /**
+   * Set to `true` to request the code from an incoming SMS with the WebOTP
+   * API (Chrome on Android). The request starts on mount and is aborted on
+   * unmount or when this prop turns `false`. Does nothing where the API is
+   * unavailable.
+   */
+  export let webOtp = false;
 
   /**
    * Override the accessible label of each segment.
@@ -182,9 +230,13 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher, getContext, onMount } from "svelte";
+  import { createEventDispatcher, getContext, onMount, tick } from "svelte";
+  import Button from "../Button/Button.svelte";
+  import View from "../icons/View.svelte";
+  import ViewOff from "../icons/ViewOff.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import Loading from "../Loading/Loading.svelte";
   import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -228,8 +280,10 @@
   $: complete = count > 0 && code.length === count && code.every(Boolean);
   // Validation states are suppressed in the read-only and disabled variants,
   // matching the other Carbon inputs.
-  $: hasError = invalid && !readonly && !disabled;
-  $: hasWarn = warn && !hasError && !readonly && !disabled;
+  $: hasError = invalid && !readonly && !disabled && !loading;
+  $: hasWarn = warn && !hasError && !readonly && !disabled && !loading;
+  // Edits are blocked while read-only, disabled, or verifying.
+  $: locked = readonly || disabled || loading;
   $: isFluid = fluid || !!formContext?.isFluid;
   $: segmentPlaceholder =
     placeholder === undefined ? (isFluid ? "–" : "") : placeholder;
@@ -283,6 +337,19 @@
     next[index] = char;
     code = next;
     dispatch("change", { value: code.join(""), code });
+    submitIfComplete();
+  }
+
+  // Wait for the flush so the hidden `name` input holds the new value and
+  // `complete` listeners run before the form submits.
+  async function submitIfComplete() {
+    if (!submitOnComplete) return;
+    if (!(count > 0 && code.length === count && code.every(Boolean))) return;
+    await tick();
+    const form = inputs[0]?.form;
+    if (form && typeof form.requestSubmit === "function") {
+      form.requestSubmit();
+    }
   }
 
   /** @type {(index: number, options?: { selectTextOnFocus?: boolean }) => void} */
@@ -316,6 +383,7 @@
     }
     code = next;
     dispatch("change", { value: code.join(""), code });
+    submitIfComplete();
 
     const firstEmpty = code.findIndex((char) => !char);
     focusInput(firstEmpty === -1 ? count - 1 : firstEmpty);
@@ -324,7 +392,7 @@
   /** @type {(index: number, event: Event) => void} */
   function handleInput(index, event) {
     const input = /** @type {HTMLInputElement} */ (event.target);
-    if (readonly || disabled) {
+    if (locked) {
       input.value = code[index] ?? "";
       return;
     }
@@ -355,7 +423,7 @@
   function handleKeydown(index, event) {
     switch (event.key) {
       case "Backspace":
-        if (readonly || disabled) break;
+        if (locked) break;
         if (!code[index] && index > 0) {
           event.preventDefault();
           setChar(index - 1, "");
@@ -375,11 +443,11 @@
         }
         break;
       case "Delete":
-        if (readonly || disabled || !code[index]) break;
+        if (locked || !code[index]) break;
         setChar(index, "");
         break;
       default:
-        if (readonly || disabled) break;
+        if (locked) break;
         // maxlength="1" drops keystrokes into a filled segment; select its
         // content so the native insertion replaces the character.
         if (
@@ -402,7 +470,7 @@
   /** @type {(index: number, event: ClipboardEvent) => void} */
   function handlePaste(index, event) {
     event.preventDefault();
-    if (readonly || disabled) return;
+    if (locked) return;
     const text = (event.clipboardData?.getData("text") ?? "").replace(
       /\s/g,
       "",
@@ -496,8 +564,51 @@
     }
   }
 
+  /** @type {AbortController | null} */
+  let webOtpController = null;
+
+  function stopWebOtp() {
+    webOtpController?.abort();
+    webOtpController = null;
+  }
+
+  function startWebOtp() {
+    if (webOtpController) return;
+    if (typeof window === "undefined" || !("OTPCredential" in window)) return;
+    const controller = new AbortController();
+    webOtpController = controller;
+    navigator.credentials
+      .get(
+        /** @type {CredentialRequestOptions} */ ({
+          otp: { transport: ["sms"] },
+          signal: controller.signal,
+        }),
+      )
+      .then((credential) => {
+        if (controller.signal.aborted || locked) return;
+        const otp = /** @type {{ code?: string } | null} */ (credential)?.code;
+        if (!otp) return;
+        const chars = otp.split("").filter(isValidChar).slice(0, count);
+        if (chars.length === 0) return;
+        // Fill without moving focus; the user may be elsewhere on the page.
+        code = Array.from({ length: count }, (_, i) => chars[i] ?? "");
+        dispatch("change", { value: code.join(""), code });
+        submitIfComplete();
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (webOtpController === controller) webOtpController = null;
+      });
+  }
+
+  $: if (mounted) {
+    if (webOtp) startWebOtp();
+    else stopWebOtp();
+  }
+
   onMount(() => {
     mounted = true;
+    return stopWebOtp;
   });
 </script>
 
@@ -516,6 +627,7 @@
     class:bx--pin-code-input__fieldset={true}
     {disabled}
     aria-describedby={describedById}
+    aria-busy={loading || undefined}
   >
     {#if labelText || $$slots.labelChildren}
       <!-- svelte-ignore a11y_no_noninteractive_tabindex a11y_no_noninteractive_element_interactions -->
@@ -557,16 +669,16 @@
             placeholder={segmentPlaceholder || undefined}
             id={index === 0 ? id : `${id}-${index}`}
             {disabled}
-            {readonly}
+            readonly={readonly || loading}
             {required}
-            aria-readonly={readonly || undefined}
+            aria-readonly={readonly || loading || undefined}
             aria-label={segmentLabelText(index + 1, count, labelText, type)}
             aria-invalid={hasError || undefined}
             data-invalid={hasError || undefined}
             data-warn={hasWarn || undefined}
             class:bx--text-input={true}
             class:bx--pin-code-input__field={true}
-            class:bx--pin-code-input__field--masked={mask}
+            class:bx--pin-code-input__field--masked={mask && !revealed}
             class:bx--pin-code-input__field--uppercase={uppercase}
             class:bx--text-input--light={light}
             class:bx--text-input--invalid={hasError}
@@ -580,6 +692,35 @@
             on:focus={handleFocus}
           >
         {/each}
+        {#if loading}
+          <Loading
+            small
+            withOverlay={false}
+            description={loadingDescription}
+            class={[
+              "bx--pin-code-input__loading",
+              size !== "default" && `bx--pin-code-input__loading--${size}`,
+            ]
+              .filter(Boolean)
+              .join(" ")}
+          />
+        {/if}
+        {#if mask && maskToggle}
+          <Button
+            kind="ghost"
+            size={size === "xs" || size === "sm" ? "small" : "field"}
+            icon={revealed ? ViewOff : View}
+            iconDescription={revealed ? hideCodeLabel : showCodeLabel}
+            tooltipPosition="bottom"
+            tooltipAlignment="end"
+            aria-pressed={revealed}
+            {disabled}
+            class="bx--pin-code-input__mask-toggle"
+            on:click={() => {
+              revealed = !revealed;
+            }}
+          />
+        {/if}
         {#if !isFluid}
           {#if hasError}
             <WarningFilled class="bx--pin-code-input__icon" />

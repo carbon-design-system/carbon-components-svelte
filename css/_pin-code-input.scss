@@ -87,6 +87,30 @@
     opacity: 1;
   }
 
+  // The spinner sits in a slot as wide as one segment, so its side spacing
+  // is (segment width - 16px spinner) / 2 and scales with `size`.
+  .#{$prefix}--pin-code-input__loading {
+    flex-shrink: 0;
+    margin-inline: to-rem(12px);
+  }
+
+  .#{$prefix}--pin-code-input__loading--xs {
+    margin-inline: to-rem(4px);
+  }
+
+  .#{$prefix}--pin-code-input__loading--sm {
+    margin-inline: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--pin-code-input__loading--xl {
+    margin-inline: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--pin-code-input__mask-toggle {
+    flex-shrink: 0;
+    margin-left: $carbon--spacing-03;
+  }
+
   // v10 only shows `.bx--form-requirement` for invalid direct siblings.
   // Pin code wraps fields, so target the wrapper instead.
   .#{$prefix}--pin-code-input__fields[data-invalid]

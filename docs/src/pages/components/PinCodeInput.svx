@@ -89,6 +89,10 @@ Set `mask` to `true` to obscure the entered characters. Each segment is masked w
 
 <PinCodeInput mask labelText="Security code" />
 
+Set `maskToggle` to `true` to add a button that shows or hides the whole code. Bind `revealed` to read or control it, and set `showCodeLabel` and `hideCodeLabel` to change the button's tooltip.
+
+<PinCodeInput mask maskToggle value="0182" labelText="Security code" />
+
 ## Placeholder
 
 Non-fluid pin code inputs do not show a placeholder by default. Set `placeholder` to hint at empty segments and indicate expected length.
@@ -161,6 +165,14 @@ OS and password-manager autofill that inserts the whole code into one segment is
   on:paste={(e) => console.log("paste", e.detail)}
 />
 
+### SMS autofill (WebOTP)
+
+Set `webOtp` to `true` to fill the code from an incoming SMS on Chrome for Android. The browser asks the user to allow it, then the segments fill without moving focus. The SMS must end with a line like `@your-domain.com #123456`, where the domain matches the page. Other browsers ignore the prop and keep `autocomplete="one-time-code"`.
+
+```svelte
+<PinCodeInput webOtp count={6} labelText="Verification code" />
+```
+
 ## Form name
 
 Set `name` so the assembled code participates in native form submission
@@ -181,6 +193,16 @@ until every segment is filled.
     labelText="Verification code"
   />
   <Button type="submit">Verify</Button>
+</Form>
+```
+
+### Submit on complete
+
+Set `submitOnComplete` to `true` to submit the form when the user fills the last segment, pastes a full code, or corrects a character in a full code. It calls `form.requestSubmit()`, so validation and `on:submit` handlers run as usual. Setting `code` from script does not submit.
+
+```svelte
+<Form method="POST" action="?/verify">
+  <PinCodeInput name="code" submitOnComplete count={6} labelText="Verification code" />
 </Form>
 ```
 
@@ -211,6 +233,12 @@ Set `disabled` to `true` to disable every segment.
 Set `readonly` to `true` to display a code that cannot be edited.
 
 <PinCodeInput readonly value="0182" labelText="Verification code" />
+
+### Loading
+
+Set `loading` to `true` while the code is being verified. A spinner appears after the segments and edits are blocked, but the segments stay enabled so focus does not move. Set `loadingDescription` to change the spinner's accessible description.
+
+<PinCodeInput loading value="0182" labelText="Verification code" />
 
 ## Skeleton
 

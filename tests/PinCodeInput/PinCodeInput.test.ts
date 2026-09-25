@@ -554,6 +554,89 @@ describe("PinCodeInput", () => {
     }
   });
 
+  describe("mask toggle", () => {
+    const maskedCount = () =>
+      getInputs().filter((input) =>
+        input.classList.contains("bx--pin-code-input__field--masked"),
+      ).length;
+
+    it.each([
+      { props: { mask: true }, without: "maskToggle" },
+      { props: { maskToggle: true }, without: "mask" },
+    ])("is not rendered without $without", ({ props }) => {
+      render(PinCodeInput, { props });
+      expect(screen.queryByRole("button", { name: "Show code" })).toBeNull();
+    });
+
+    it("shows and hides the code", async () => {
+      const { component } = render(PinCodeInput, {
+        props: { mask: true, maskToggle: true },
+      });
+      expect(maskedCount()).toBe(4);
+
+      await user.click(screen.getByRole("button", { name: "Show code" }));
+      expect(maskedCount()).toBe(0);
+      expect(component.revealed).toBe(true);
+      const hide = screen.getByRole("button", { name: "Hide code" });
+      expect(hide).toHaveAttribute("aria-pressed", "true");
+
+      await user.click(hide);
+      expect(maskedCount()).toBe(4);
+      expect(component.revealed).toBe(false);
+    });
+
+    it("starts revealed when revealed is true", () => {
+      render(PinCodeInput, {
+        props: { mask: true, maskToggle: true, revealed: true },
+      });
+      expect(maskedCount()).toBe(0);
+    });
+
+    it("uses custom labels", () => {
+      render(PinCodeInput, {
+        props: {
+          mask: true,
+          maskToggle: true,
+          showCodeLabel: "Mostrar código",
+        },
+      });
+      expect(
+        screen.getByRole("button", { name: "Mostrar código" }),
+      ).toBeInTheDocument();
+    });
+
+    it("is disabled with the field", () => {
+      render(PinCodeInput, {
+        props: { mask: true, maskToggle: true, disabled: true },
+      });
+      expect(screen.getByRole("button")).toBeDisabled();
+    });
+
+    it("works when read-only", async () => {
+      render(PinCodeInput, {
+        props: { mask: true, maskToggle: true, readonly: true },
+      });
+      await user.click(screen.getByRole("button", { name: "Show code" }));
+      expect(maskedCount()).toBe(0);
+    });
+
+    it("does not change the value or fire change", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      const { component } = render(PinCodeInput, {
+        props: { mask: true, maskToggle: true, value: "1234" },
+      });
+      consoleLog.mockClear();
+
+      await user.click(screen.getByRole("button", { name: "Show code" }));
+      await user.click(screen.getByRole("button", { name: "Hide code" }));
+
+      expect(component.value).toBe("1234");
+      expect(consoleLog.mock.calls.some(([event]) => event === "change")).toBe(
+        false,
+      );
+    });
+  });
+
   it("does not mask the segments by default", () => {
     render(PinCodeInput);
     for (const input of getInputs()) {
@@ -1001,6 +1084,214 @@ describe("PinCodeInput", () => {
     for (const input of getInputs()) {
       expect(input).toBeDisabled();
     }
+  });
+
+  describe("loading", () => {
+    it("shows a spinner and marks the fieldset busy", async () => {
+      const { container } = render(PinCodeInput, { props: { loading: true } });
+
+      expect(await screen.findByTitle("Verifying code")).toBeInTheDocument();
+      expect(
+        container.querySelector(".bx--pin-code-input__loading"),
+      ).toBeInTheDocument();
+      expect(getFieldset(container)).toHaveAttribute("aria-busy", "true");
+    });
+
+    it("uses a custom loading description", async () => {
+      render(PinCodeInput, {
+        props: { loading: true, loadingDescription: "Checking" },
+      });
+
+      expect(await screen.findByTitle("Checking")).toBeInTheDocument();
+    });
+
+    it("keeps focus and leaves the segments enabled", async () => {
+      const { component } = render(PinCodeInput);
+      const inputs = getInputs();
+
+      inputs[1].focus();
+      component.loading = true;
+      await tick();
+
+      expect(inputs[1]).toHaveFocus();
+      for (const input of inputs) {
+        expect(input).not.toBeDisabled();
+        expect(input).toHaveAttribute("readonly");
+      }
+    });
+
+    it("blocks typing, paste, and backspace", async () => {
+      const { component } = render(PinCodeInput, {
+        props: { loading: true, value: "12" },
+      });
+      const inputs = getInputs();
+
+      inputs[2].focus();
+      await user.keyboard("3");
+      await fireEvent.paste(inputs[2], {
+        clipboardData: { getData: () => "9999" },
+      });
+      inputs[1].focus();
+      await user.keyboard("{Backspace}");
+      await tick();
+
+      expect(component.code).toEqual(["1", "2", "", ""]);
+    });
+
+    it("hides the invalid state while loading", () => {
+      const { container } = render(PinCodeInput, {
+        props: { loading: true, invalid: true, invalidText: "Wrong" },
+      });
+
+      expect(getRequirement(container)).not.toBeInTheDocument();
+      for (const input of getInputs()) {
+        expect(input).not.toHaveAttribute("aria-invalid");
+      }
+    });
+
+    it("sizes the spinner slot with the segments", () => {
+      const { container } = render(PinCodeInput, {
+        props: { loading: true, size: "xl" },
+      });
+
+      expect(
+        container.querySelector(".bx--pin-code-input__loading"),
+      ).toHaveClass("bx--pin-code-input__loading--xl");
+    });
+
+    it("is off by default", () => {
+      const { container } = render(PinCodeInput);
+
+      expect(
+        container.querySelector(".bx--pin-code-input__loading"),
+      ).not.toBeInTheDocument();
+      expect(getFieldset(container)).not.toHaveAttribute("aria-busy");
+    });
+  });
+
+  describe("webOtp", () => {
+    let get: ReturnType<typeof vi.fn>;
+
+    const stubWebOtp = (
+      impl: () => Promise<unknown> = () => Promise.resolve({ code: "123456" }),
+    ) => {
+      Object.defineProperty(window, "OTPCredential", {
+        value: class {},
+        configurable: true,
+      });
+      get = vi.fn(impl);
+      Object.defineProperty(navigator, "credentials", {
+        value: { get },
+        configurable: true,
+      });
+    };
+
+    const lastSignal = () => {
+      const [options] = get.mock.calls[0];
+      assert(options.signal instanceof AbortSignal);
+      return options.signal;
+    };
+
+    afterEach(() => {
+      Reflect.deleteProperty(window, "OTPCredential");
+      Reflect.deleteProperty(navigator, "credentials");
+    });
+
+    it("requests the code over SMS on mount", () => {
+      stubWebOtp();
+      render(PinCodeInput, { props: { webOtp: true } });
+
+      expect(get).toHaveBeenCalledTimes(1);
+      expect(get).toHaveBeenCalledWith(
+        expect.objectContaining({
+          otp: { transport: ["sms"] },
+          signal: expect.any(AbortSignal),
+        }),
+      );
+    });
+
+    it("fills the segments without moving focus", async () => {
+      stubWebOtp();
+      const consoleLog = vi.spyOn(console, "log");
+      const { component } = render(PinCodeInput, {
+        props: { webOtp: true, count: 6 },
+      });
+      await tick();
+      await tick();
+
+      expect(component.code).toEqual(["1", "2", "3", "4", "5", "6"]);
+      expect(consoleLog).toHaveBeenCalledWith("change", {
+        value: "123456",
+        code: ["1", "2", "3", "4", "5", "6"],
+      });
+      expect(
+        consoleLog.mock.calls.some(([event]) => event === "complete"),
+      ).toBe(true);
+      expect(getInputs()).not.toContain(document.activeElement);
+    });
+
+    it("is off by default", () => {
+      stubWebOtp();
+      render(PinCodeInput);
+
+      expect(get).not.toHaveBeenCalled();
+    });
+
+    it("does nothing without the WebOTP API", () => {
+      stubWebOtp();
+      Reflect.deleteProperty(window, "OTPCredential");
+
+      expect(() =>
+        render(PinCodeInput, { props: { webOtp: true } }),
+      ).not.toThrow();
+      expect(get).not.toHaveBeenCalled();
+    });
+
+    it("aborts the request on unmount", () => {
+      stubWebOtp(() => new Promise(() => {}));
+      const { unmount } = render(PinCodeInput, { props: { webOtp: true } });
+
+      unmount();
+      expect(lastSignal().aborted).toBe(true);
+    });
+
+    it("aborts the request when turned off", async () => {
+      stubWebOtp(() => new Promise(() => {}));
+      const { component } = render(PinCodeInput, { props: { webOtp: true } });
+
+      component.webOtp = false;
+      await tick();
+      expect(lastSignal().aborted).toBe(true);
+    });
+
+    it("drops characters that do not match the type", async () => {
+      stubWebOtp(() => Promise.resolve({ code: "12ab34" }));
+      const { component } = render(PinCodeInput, { props: { webOtp: true } });
+      await tick();
+      await tick();
+
+      expect(component.code).toEqual(["1", "2", "3", "4"]);
+    });
+
+    it("does not fill when read-only", async () => {
+      stubWebOtp();
+      const { component } = render(PinCodeInput, {
+        props: { webOtp: true, readonly: true },
+      });
+      await tick();
+      await tick();
+
+      expect(component.code).toEqual(["", "", "", ""]);
+    });
+
+    it("ignores a rejected request", async () => {
+      stubWebOtp(() => Promise.reject(new DOMException("x", "AbortError")));
+      const { component } = render(PinCodeInput, { props: { webOtp: true } });
+      await tick();
+      await tick();
+
+      expect(component.code).toEqual(["", "", "", ""]);
+    });
   });
 
   it("does not allow edits in the read-only state", async () => {

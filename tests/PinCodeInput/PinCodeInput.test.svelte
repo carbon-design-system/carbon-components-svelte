@@ -10,10 +10,20 @@
   export let type: ComponentProps<PinCodeInput>["type"] = "numeric";
   export let pattern: ComponentProps<PinCodeInput>["pattern"] = undefined;
   export let mask: ComponentProps<PinCodeInput>["mask"] = false;
+  export let maskToggle: ComponentProps<PinCodeInput>["maskToggle"] = false;
+  export let revealed: ComponentProps<PinCodeInput>["revealed"] = false;
+  export let showCodeLabel: ComponentProps<PinCodeInput>["showCodeLabel"] =
+    "Show code";
+  export let hideCodeLabel: ComponentProps<PinCodeInput>["hideCodeLabel"] =
+    "Hide code";
   export let uppercase: ComponentProps<PinCodeInput>["uppercase"] = false;
   export let complete: ComponentProps<PinCodeInput>["complete"] = false;
   export let disabled: ComponentProps<PinCodeInput>["disabled"] = false;
   export let readonly: ComponentProps<PinCodeInput>["readonly"] = false;
+  export let loading: ComponentProps<PinCodeInput>["loading"] = false;
+  export let webOtp: ComponentProps<PinCodeInput>["webOtp"] = false;
+  export let loadingDescription: ComponentProps<PinCodeInput>["loadingDescription"] =
+    "Verifying code";
   export let invalid: ComponentProps<PinCodeInput>["invalid"] = false;
   export let invalidText: ComponentProps<PinCodeInput>["invalidText"] = "";
   export let warn: ComponentProps<PinCodeInput>["warn"] = false;
@@ -43,9 +53,16 @@
   {type}
   {pattern}
   {mask}
+  {maskToggle}
+  bind:revealed
+  {showCodeLabel}
+  {hideCodeLabel}
   {uppercase}
   {disabled}
   {readonly}
+  {loading}
+  {webOtp}
+  {loadingDescription}
   {invalid}
   {invalidText}
   {warn}

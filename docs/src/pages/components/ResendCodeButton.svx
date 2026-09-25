@@ -1,0 +1,63 @@
+---
+components: ["ResendCodeButton"]
+description: Resend code buttons let users request a new verification code, with a cooldown after each request so codes are not sent in a burst.
+---
+
+<script>
+  import { PinCodeInput, ResendCodeButton, Stack } from "carbon-components-svelte";
+</script>
+
+## Default
+
+The cooldown starts on mount, since the page usually sends a code just before it renders. The button counts down, then dispatches `on:resend` when clicked and starts the cooldown again. During the cooldown the button stays focusable and ignores clicks, so keyboard focus does not jump away after a resend.
+
+<Stack gap={5}>
+  <PinCodeInput count={6} labelText="Verification code" />
+  <ResendCodeButton
+    cooldown={10}
+    on:resend={() => console.log("resend")}
+  />
+</Stack>
+
+## Available on mount
+
+Set `startOnMount` to `false` to make the button available right away.
+
+<ResendCodeButton startOnMount={false} cooldown={10} />
+
+## Custom cooldown
+
+Set `cooldown` to the number of seconds to wait after each resend. The default is `30`. Set it to `0` to disable the cooldown.
+
+<ResendCodeButton cooldown={60} />
+
+## Custom text
+
+Set `labelText` for the available state and `cooldownText` to format the countdown, for example to translate it.
+
+<ResendCodeButton
+  cooldown={10}
+  labelText="Reenviar código"
+  cooldownText={(seconds) => `Reenviar en ${seconds}s`}
+/>
+
+## Cancel the cooldown
+
+`on:resend` is cancelable. Call `e.preventDefault()` when the code could not be sent, and the button stays available.
+
+```svelte
+<ResendCodeButton
+  on:resend={(e) => {
+    if (!sendCode()) e.preventDefault();
+  }}
+/>
+```
+
+## Programmatic usage
+
+Use `bind:this` to call the component's methods, and bind `remaining` to read the seconds left.
+
+| Method | Description | Signature |
+| --- | --- | --- |
+| `start` | Start or restart the cooldown. | `() => void` |
+| `reset` | End the cooldown so a resend is available now. | `() => void` |

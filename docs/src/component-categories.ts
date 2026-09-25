@@ -79,6 +79,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "NumberInput",
       "PasswordInput",
       "PinCodeInput",
+      "ResendCodeButton",
       "Slider",
       "TextArea",
       "TextInput",
