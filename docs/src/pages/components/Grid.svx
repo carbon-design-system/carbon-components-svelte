@@ -1,5 +1,5 @@
 ---
-components: ["Grid", "Row", "Column"]
+components: ["Grid", "Row", "Column", "GridOverlay"]
 description: The Carbon grid system provides a responsive layout structure using row and column components.
 ---
 
@@ -172,6 +172,47 @@ grid classes.
   </main>
 </Grid>
 ```
+
+## GridOverlay
+
+Draw the real breakpoint grid over the page to check content against the
+actual columns instead of eyeballing it. `GridOverlay` renders a fixed,
+`pointer-events: none` layer of 16 columns — hidden or shown per breakpoint
+the same way a regular `Column`'s numeric span does — so it lines up with
+`sm`/`md`/`lg`/`xlg`/`max` exactly.
+
+`GridOverlay` never toggles its own visibility; the caller owns `open`.
+
+<FileSource src="/framed/Grid/GridOverlay" />
+
+| Do                                                  | Why                                                                 |
+| ---------------------------------------------------- | -------------------------------------------------------------------- |
+| Gate `open` behind a dev-only control, then remove it before shipping | The overlay has no built-in toggle or guard, so anything left wired to `open` renders in production |
+| Match `condensed` / `narrow` / `fullWidth` to the `Grid` underneath | The overlay's columns only line up with a mismatched `Grid`'s columns by coincidence |
+
+### Gutters
+
+Set `gutters` to shade each column's padding a step darker than its content area, so you can check that content sits inside the columns rather than in the gutters.
+
+<FileSource src="/framed/Grid/GridOverlayGutters" />
+
+### Condensed
+
+Set `condensed` to match a condensed `Grid`. The columns sit in the same place, but the gutters shrink to 1px (0.5px of padding on each side). This example also sets `gutters`: compared with the Gutters example, the 32px bands all but disappear.
+
+<FileSource src="/framed/Grid/GridOverlayCondensed" />
+
+### Narrow
+
+Set `narrow` to match a narrow `Grid`, where each column drops its 16px left padding so its content hangs into the gutter. This example also sets `gutters`, so only the right-hand 16px of each gutter is shaded.
+
+<FileSource src="/framed/Grid/GridOverlayNarrow" />
+
+### Full width
+
+Set `fullWidth` to match a full-width `Grid`. It only differs from the default at the `max` breakpoint (1584px and above), where the default grid stops growing and the full-width grid keeps spanning the viewport.
+
+<FileSource src="/framed/Grid/GridOverlayFullWidth" />
 
 ## Breakpoints reference
 
