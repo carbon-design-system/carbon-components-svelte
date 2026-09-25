@@ -63,6 +63,30 @@
     height: to-rem(48px);
   }
 
+  // A custom `menu` slot trigger grows to fit its content, but never
+  // shrinks below the square the default icon trigger occupies.
+  .#{$prefix}--overflow-menu.#{$prefix}--overflow-menu--custom-trigger {
+    width: auto;
+    min-width: to-rem(40px);
+    height: auto;
+    min-height: to-rem(40px);
+
+    &.#{$prefix}--overflow-menu--xs {
+      min-width: to-rem(24px);
+      min-height: to-rem(24px);
+    }
+
+    &.#{$prefix}--overflow-menu--sm {
+      min-width: to-rem(32px);
+      min-height: to-rem(32px);
+    }
+
+    &.#{$prefix}--overflow-menu--xl {
+      min-width: to-rem(48px);
+      min-height: to-rem(48px);
+    }
+  }
+
   .#{$prefix}--overflow-menu.#{$prefix}--overflow-menu--open {
     @include box-shadow;
 
