@@ -230,6 +230,17 @@ describe("Box", () => {
     });
   });
 
+  it("applies hideBelow and hideAbove classes", () => {
+    render(Box);
+
+    expect(screen.getByTestId("hide-below-md")).toHaveClass(
+      "bx--box-hide-below-md",
+    );
+    expect(screen.getByTestId("hide-above-md")).toHaveClass(
+      "bx--box-hide-above-md",
+    );
+  });
+
   it("merges multiple modifier classes", () => {
     render(Box);
 
