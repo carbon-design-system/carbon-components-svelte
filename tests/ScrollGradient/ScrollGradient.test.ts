@@ -1,5 +1,6 @@
-import { render } from "@testing-library/svelte";
+import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import ScrollGradientRef from "./ScrollGradient.ref.test.svelte";
 import ScrollGradient from "./ScrollGradient.test.svelte";
 
 class IntersectionObserverMock {
@@ -228,5 +229,14 @@ describe("ScrollGradient", () => {
     const wrapper = container.querySelector(".bx--scroll-gradient");
     assert(wrapper instanceof HTMLElement);
     expect(wrapper.style.height).toBe("100vh");
+  });
+
+  it("binds `scrollElementRef` to the inner scrollable element", async () => {
+    render(ScrollGradientRef);
+    await tick();
+
+    expect(screen.getByTestId("scroll-element-class")).toHaveTextContent(
+      "bx--scroll-gradient__scroll-element",
+    );
   });
 });
