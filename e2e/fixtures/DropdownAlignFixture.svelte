@@ -11,10 +11,13 @@
   const cases = [
     { key: "inline-start", portalMenu: false },
     { key: "portal-start", portalMenu: true },
+    // Last, so the rows above leave room for the menu to open upward.
+    { key: "inline-start-top", portalMenu: false, direction: "top" },
+    { key: "portal-start-top", portalMenu: true, direction: "top" },
   ];
 </script>
 
-{#each cases as { key, portalMenu } (key)}
+{#each cases as { key, portalMenu, direction } (key)}
   <!-- Centered in a wide row so the menu has room on either side. -->
   <div style="display: flex; justify-content: center; padding: 1rem">
     <Dropdown
@@ -25,6 +28,7 @@
       selectedId="a"
       {items}
       {portalMenu}
+      {direction}
     />
   </div>
 {/each}
