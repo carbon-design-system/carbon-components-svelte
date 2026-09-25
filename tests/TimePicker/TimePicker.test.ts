@@ -4,6 +4,7 @@ import { user } from "../utils/user";
 import TimePickerFluidForm from "./TimePicker.fluidForm.test.svelte";
 import TimePickerFluidSkeleton from "./TimePicker.fluidSkeleton.test.svelte";
 import TimePickerFluidSlot from "./TimePicker.fluidSlot.test.svelte";
+import TimePickerSkeleton from "./TimePicker.skeleton.test.svelte";
 import TimePicker from "./TimePicker.test.svelte";
 import TimePickerCustom from "./TimePickerCustom.test.svelte";
 import TimePickerSelectDefault from "./TimePickerSelect.default.test.svelte";
@@ -746,6 +747,25 @@ describe("TimePicker", () => {
       expect(select.selectedIndex).toBe(0);
       expect(bound).toHaveTextContent(/^0$/);
     });
+  });
+
+  it("renders skeleton state", () => {
+    render(TimePickerSkeleton);
+
+    const skeleton = screen.getByTestId("time-picker-skeleton");
+    expect(skeleton).toBeInTheDocument();
+    expect(skeleton).toHaveClass("bx--time-picker");
+    expect(skeleton.children).toHaveLength(3);
+
+    const [inputWrapper, firstSelect, secondSelect] = skeleton.children;
+    expect(inputWrapper).toHaveClass("bx--time-picker__input");
+    expect(
+      inputWrapper.querySelector(".bx--skeleton.bx--text-input"),
+    ).toBeTruthy();
+    expect(firstSelect).toHaveClass("bx--time-picker__select");
+    expect(firstSelect.querySelector(".bx--skeleton.bx--select")).toBeTruthy();
+    expect(secondSelect).toHaveClass("bx--time-picker__select");
+    expect(secondSelect.querySelector(".bx--skeleton.bx--select")).toBeTruthy();
   });
 
   it("renders fluid skeleton state", () => {
