@@ -26,6 +26,10 @@ jobs:
       - name: Build package
         run: bun run release:build
 
+      # release:build prunes package.json scripts, so call the file directly.
+      - name: Check package contents
+        run: bun scripts/check-package-contents.ts
+
       - name: Publish package (stable)
         if: ${{ ! contains(github.ref, '-next') }}
         env:
