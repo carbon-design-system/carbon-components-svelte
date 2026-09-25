@@ -19,6 +19,7 @@
     if (value == null) return undefined;
     if (isScaleStep(value, min)) return undefined;
     if (typeof value === "string") return value;
+    if (value === 0) return "0";
     return undefined;
   }
 
@@ -70,7 +71,7 @@
 <script>
   /**
    * @typedef {1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13} SpacingScale
-   * @typedef {SpacingScale | string} SpacingValue
+   * @typedef {0 | SpacingScale | string} SpacingValue
    * @typedef {0 | SpacingScale | string} OffsetValue
    * @restProps {any}
    * @slot {{}}
@@ -83,37 +84,37 @@
   export let fill = undefined;
 
   /**
-   * Set padding on all sides. Numbers `1`–`13` use the shared layout scale; strings accept any CSS length.
+   * Set padding on all sides. Numbers `1`–`13` use the shared layout scale, `0` clears it; strings accept any CSS length.
    * @type {SpacingValue | undefined}
    */
   export let padding = undefined;
 
   /**
-   * Set horizontal padding. Numbers `1`–`13` use the shared layout scale; strings accept any CSS length.
+   * Set horizontal padding. Numbers `1`–`13` use the shared layout scale, `0` clears it; strings accept any CSS length.
    * @type {SpacingValue | undefined}
    */
   export let paddingX = undefined;
 
   /**
-   * Set vertical padding. Numbers `1`–`13` use the shared layout scale; strings accept any CSS length.
+   * Set vertical padding. Numbers `1`–`13` use the shared layout scale, `0` clears it; strings accept any CSS length.
    * @type {SpacingValue | undefined}
    */
   export let paddingY = undefined;
 
   /**
-   * Set margin on all sides. Numbers `1`–`13` use the shared layout scale; strings accept any CSS length.
+   * Set margin on all sides. Numbers `1`–`13` use the shared layout scale, `0` clears it; strings accept any CSS length.
    * @type {SpacingValue | undefined}
    */
   export let margin = undefined;
 
   /**
-   * Set horizontal margin. Numbers `1`–`13` use the shared layout scale; strings accept any CSS length.
+   * Set horizontal margin. Numbers `1`–`13` use the shared layout scale, `0` clears it; strings accept any CSS length.
    * @type {SpacingValue | undefined}
    */
   export let marginX = undefined;
 
   /**
-   * Set vertical margin. Numbers `1`–`13` use the shared layout scale; strings accept any CSS length.
+   * Set vertical margin. Numbers `1`–`13` use the shared layout scale, `0` clears it; strings accept any CSS length.
    * @type {SpacingValue | undefined}
    */
   export let marginY = undefined;
@@ -167,19 +168,19 @@
   export let fullWidth = false;
 
   /**
-   * Set the height. Numbers `1`–`13` use the shared layout scale; strings accept any CSS length; `"viewport"` sets the full viewport height (`100dvh`, with a `100vh` fallback).
+   * Set the height. Numbers `1`–`13` use the shared layout scale, `0` clears it; strings accept any CSS length; `"viewport"` sets the full viewport height (`100dvh`, with a `100vh` fallback).
    * @type {SpacingValue | "viewport" | undefined}
    */
   export let height = undefined;
 
   /**
-   * Set the min height. Numbers `1`–`13` use the shared layout scale; strings accept any CSS length; `"viewport"` sets the full viewport height (`100dvh`, with a `100vh` fallback).
+   * Set the min height. Numbers `1`–`13` use the shared layout scale, `0` clears it; strings accept any CSS length; `"viewport"` sets the full viewport height (`100dvh`, with a `100vh` fallback).
    * @type {SpacingValue | "viewport" | undefined}
    */
   export let minHeight = undefined;
 
   /**
-   * Set the max height. Numbers `1`–`13` use the shared layout scale; strings accept any CSS length.
+   * Set the max height. Numbers `1`–`13` use the shared layout scale, `0` clears it; strings accept any CSS length.
    * @type {SpacingValue | undefined}
    */
   export let maxHeight = undefined;

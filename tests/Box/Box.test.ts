@@ -143,6 +143,21 @@ describe("Box", () => {
     });
   });
 
+  it("resolves 0 to an inline style instead of dropping it", () => {
+    render(Box);
+
+    // jsdom normalizes a unitless `0` to `0px` when reading it back.
+    expectInlineStyle(screen.getByTestId("padding-zero"), { padding: "0px" });
+    expectInlineStyle(screen.getByTestId("margin-zero"), { margin: "0px" });
+    expectInlineStyle(screen.getByTestId("min-height-zero"), {
+      minHeight: "0px",
+    });
+
+    expect(screen.getByTestId("padding-zero").className).not.toMatch(
+      /bx--box-p-\d/,
+    );
+  });
+
   it("merges multiple modifier classes", () => {
     render(Box);
 

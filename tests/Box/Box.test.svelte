@@ -24,3 +24,6 @@
 <Box fill="layer-02" padding={6} border="subtle" class="combined"
   >Combined modifiers</Box
 >
+<Box padding={0} data-testid="padding-zero">Padding zero</Box>
+<Box margin={0} data-testid="margin-zero">Margin zero</Box>
+<Box minHeight={0} data-testid="min-height-zero">Min height zero</Box>
