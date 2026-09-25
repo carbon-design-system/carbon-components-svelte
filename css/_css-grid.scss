@@ -1,0 +1,252 @@
+// @use rules must precede every other rule in the file, including @import,
+// the same ordering the vendored @carbon/elements grid mixins use. math.div
+// computes the per-breakpoint percent spans (bare `/` division is
+// deprecated in Dart Sass).
+@use "sass:math";
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/layout/breakpoint";
+
+/// Carbon v11's CSS Grid layout mode, hand-ported to this repo's
+/// @import-based Sass (not @carbon/grid's @use module tree, which this repo
+/// has never vendored). Selectors and declarations are copied from the
+/// compiled @carbon/styles output (unpkg.com/@carbon/styles/css/styles.css),
+/// `cds--` renamed to `bx--`. Breakpoint widths, column counts, and margins
+/// come from the vendored $carbon--grid-breakpoints map, so this partial and
+/// the flexbox grid cannot drift apart.
+///
+/// Deviations from upstream:
+/// - Upstream declares --cds-grid-gutter/-columns/-margin on :root. This
+///   repo scopes custom properties to the component's own class (see
+///   css/_tooltip.scss's --ccs-tooltip-caret-nudge), so they live on
+///   .bx--css-grid instead. Columns inherit them either way.
+/// - Upstream's `[dir=rtl]` overrides for .cds--css-grid-column and
+///   .cds--grid-column-hang are not ported. Every rule here already uses
+///   logical properties, which mirror in RTL on their own; upstream's
+///   override swaps start/end a second time and undoes that mirroring.
+/// @access private
+/// @group components
+@mixin css-grid {
+  .#{$prefix}--css-grid {
+    --ccs-grid-gutter: #{$carbon--grid-gutter};
+    --ccs-grid-gutter-start: calc(var(--ccs-grid-gutter) / 2);
+    --ccs-grid-gutter-end: calc(var(--ccs-grid-gutter) / 2);
+    --ccs-grid-column-hang: calc(var(--ccs-grid-gutter) / 2);
+
+    display: grid;
+    grid-template-columns: repeat(var(--ccs-grid-columns), minmax(0, 1fr));
+    inline-size: 100%;
+    margin-inline: auto;
+    max-inline-size: map-get(map-get($carbon--grid-breakpoints, max), width);
+    padding-inline: var(--ccs-grid-margin);
+  }
+
+  // Column count and outer margin per breakpoint. Like upstream, a value is
+  // only re-declared at the breakpoint where it changes (columns at md and
+  // lg, margin at md and max).
+  $prev-columns: null;
+  $prev-margin: null;
+  @each $bp, $values in $carbon--grid-breakpoints {
+    $columns: map-get($values, columns);
+    $margin: map-get($values, margin);
+
+    @if $columns != $prev-columns or $margin != $prev-margin {
+      @include carbon--breakpoint($bp) {
+        .#{$prefix}--css-grid {
+          @if $columns != $prev-columns {
+            --ccs-grid-columns: #{$columns};
+          }
+          @if $margin != $prev-margin {
+            --ccs-grid-margin: #{$margin};
+          }
+        }
+      }
+    }
+
+    $prev-columns: $columns;
+    $prev-margin: $margin;
+  }
+
+  .#{$prefix}--css-grid--full-width {
+    max-inline-size: 100%;
+  }
+
+  .#{$prefix}--css-grid-column {
+    // Where a subgrid nested in this column lands its negative margin.
+    // Upstream declares it on every column, subgrid or not.
+    --ccs-grid-mode-start: var(--ccs-grid-gutter-start);
+    --ccs-grid-mode-end: var(--ccs-grid-gutter-end);
+
+    margin-inline: var(--ccs-grid-gutter-start) var(--ccs-grid-gutter-end);
+  }
+
+  .#{$prefix}--css-grid--narrow {
+    --ccs-grid-gutter-start: 0rem;
+  }
+
+  .#{$prefix}--css-grid--condensed {
+    --ccs-grid-gutter: 0.0625rem;
+    --ccs-grid-column-hang: 0.96875rem;
+  }
+
+  .#{$prefix}--css-grid--with-row-gap {
+    row-gap: var(--ccs-grid-gutter);
+  }
+
+  // Narrow halves the row gap too, rather than letting the plain
+  // --with-row-gap rule win.
+  .#{$prefix}--css-grid--narrow.#{$prefix}--css-grid--with-row-gap {
+    row-gap: calc(var(--ccs-grid-gutter) / 2);
+  }
+
+  .#{$prefix}--grid-column-hang {
+    margin-inline-start: var(--ccs-grid-column-hang);
+  }
+
+  // Source order matches upstream: every span rule (unprefixed, then each
+  // breakpoint) comes before every start/end rule. `grid-column: span N`
+  // is a shorthand that also sets grid-column-start, so a col-start class
+  // only survives alongside a col-span class if it comes later.
+
+  // Column span, unprefixed (the constant `span` prop). 0 hides the column;
+  // 16 is the widest breakpoint's column count.
+  @for $i from 0 through 16 {
+    .#{$prefix}--col-span-#{$i} {
+      @if $i == 0 {
+        display: none;
+      } @else {
+        --ccs-grid-columns: #{$i};
+
+        display: block;
+        grid-column: span #{$i} / span #{$i};
+      }
+    }
+  }
+
+  // Column span per breakpoint. Class names carry a colon
+  // (bx--md:col-span-4); `\:` keeps it a literal character instead of a
+  // pseudo-class separator. The upper bound is that breakpoint's own column
+  // count (sm 4, md 8, lg/xlg/max 16), and percent spans resolve against it
+  // (md 50% -> 4, lg 50% -> 8). 100% is always the full track.
+  @each $bp, $values in $carbon--grid-breakpoints {
+    $columns: map-get($values, columns);
+
+    @include carbon--breakpoint($bp) {
+      @for $i from 0 through $columns {
+        .#{$prefix}--#{$bp}\:col-span-#{$i} {
+          @if $i == 0 {
+            display: none;
+          } @else {
+            --ccs-grid-columns: #{$i};
+
+            display: block;
+            grid-column: span #{$i} / span #{$i};
+          }
+        }
+      }
+
+      .#{$prefix}--#{$bp}\:col-span-auto {
+        grid-column: auto;
+      }
+
+      .#{$prefix}--#{$bp}\:col-span-100 {
+        grid-column: 1 / -1;
+      }
+
+      @each $pct in (75, 50, 25) {
+        $span: math.div($columns * $pct, 100);
+
+        .#{$prefix}--#{$bp}\:col-span-#{$pct} {
+          --ccs-grid-columns: #{$span};
+
+          grid-column: span #{$span} / span #{$span};
+        }
+      }
+    }
+  }
+
+  .#{$prefix}--col-span-auto {
+    grid-column: auto;
+  }
+
+  .#{$prefix}--col-span-100 {
+    grid-column: 1 / -1;
+  }
+
+  // Percent spans, unprefixed. Responsive like upstream: re-resolved at
+  // every breakpoint where the column count changes (sm 4, md 8, lg 16),
+  // so span="50%" is half the grid at every width.
+  @each $pct in (75, 50, 25) {
+    $prev-columns: null;
+
+    @each $bp, $values in $carbon--grid-breakpoints {
+      $columns: map-get($values, columns);
+
+      @if $columns != $prev-columns {
+        $span: math.div($columns * $pct, 100);
+
+        @include carbon--breakpoint($bp) {
+          .#{$prefix}--col-span-#{$pct} {
+            --ccs-grid-columns: #{$span};
+
+            grid-column: span #{$span} / span #{$span};
+          }
+        }
+      }
+
+      $prev-columns: $columns;
+    }
+  }
+
+  // Column start/end. The range is a flat 1-16 / 2-17 plus `auto`,
+  // unprefixed and at every breakpoint, not capped by that breakpoint's own
+  // column count.
+  @for $i from 1 through 16 {
+    .#{$prefix}--col-start-#{$i} {
+      grid-column-start: #{$i};
+    }
+  }
+
+  @for $i from 2 through 17 {
+    .#{$prefix}--col-end-#{$i} {
+      grid-column-end: #{$i};
+    }
+  }
+
+  .#{$prefix}--col-start-auto {
+    grid-column-start: auto;
+  }
+
+  .#{$prefix}--col-end-auto {
+    grid-column-end: auto;
+  }
+
+  @each $bp, $values in $carbon--grid-breakpoints {
+    @include carbon--breakpoint($bp) {
+      @for $i from 1 through 16 {
+        .#{$prefix}--#{$bp}\:col-start-#{$i} {
+          grid-column-start: #{$i};
+        }
+      }
+
+      @for $i from 2 through 17 {
+        .#{$prefix}--#{$bp}\:col-end-#{$i} {
+          grid-column-end: #{$i};
+        }
+      }
+
+      .#{$prefix}--#{$bp}\:col-start-auto {
+        grid-column-start: auto;
+      }
+
+      .#{$prefix}--#{$bp}\:col-end-auto {
+        grid-column-end: auto;
+      }
+    }
+  }
+}
+
+@include exports("css-grid") {
+  @include css-grid;
+}
