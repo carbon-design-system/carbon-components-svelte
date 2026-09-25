@@ -461,6 +461,50 @@ describe("Checkbox", () => {
     expect(input).toHaveAttribute("aria-readonly", "true");
   });
 
+  it("describes the field as read-only for screen readers that ignore aria-readonly", () => {
+    const { container } = render(CheckboxReadonly, {
+      id: "readonly-checkbox",
+      readonly: true,
+    });
+
+    const input = screen.getByRole("checkbox");
+    expect(input).toHaveAttribute(
+      "aria-describedby",
+      "readonly-readonly-checkbox",
+    );
+
+    const description = container.querySelector("#readonly-readonly-checkbox");
+    expect(description).toHaveTextContent("Read-only");
+    expect(description).toHaveClass("bx--visually-hidden");
+  });
+
+  it("supports overriding the read-only assistive text", () => {
+    const { container } = render(CheckboxReadonly, {
+      id: "readonly-checkbox",
+      readonly: true,
+      readonlyText: "Custom read-only text",
+    });
+
+    expect(
+      container.querySelector("#readonly-readonly-checkbox"),
+    ).toHaveTextContent("Custom read-only text");
+  });
+
+  it("omits the read-only description when decorative", () => {
+    const { container } = render(CheckboxReadonly, {
+      id: "readonly-checkbox",
+      readonly: true,
+      decorative: true,
+    });
+
+    expect(container.querySelector("#readonly-checkbox")).not.toHaveAttribute(
+      "aria-describedby",
+    );
+    expect(
+      container.querySelector("#readonly-readonly-checkbox"),
+    ).not.toBeInTheDocument();
+  });
+
   it("prevents state change when readonly and unchecked", async () => {
     render(CheckboxReadonly, { checked: false, readonly: true });
 
