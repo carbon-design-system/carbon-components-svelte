@@ -431,6 +431,11 @@
   on:mouseover
   on:mouseenter
   on:mouseleave
+  on:scroll
+  on:keydown
+  on:keyup
+  on:focusin
+  on:focusout
 >
   <slot />
 </svelte:element>
