@@ -17,6 +17,12 @@ To build a search typeahead with a results menu — suggestions, grouped results
 
 <Search />
 
+## Helper text
+
+Provide context below the input with `helperText`.
+
+<Search labelText="Search catalog" helperText="Searches every connected data catalog" />
+
 ## Initial value
 
 Set an initial value with `value`.
@@ -128,13 +134,29 @@ Set `size` to `"xs"` for an extra-small search input.
 
 <Search size="xs" />
 
-## Disabled
+## States
 
-Disable the search input with `disabled`.
+Reflect validation and interaction states.
+
+### Invalid
+
+Indicate an invalid state with an error message by setting `invalid` and providing `invalidText`.
+
+<Search invalid invalidText="Enter at least 3 characters to search the catalog." labelText="Search catalog" value="db" />
+
+### Warning
+
+Indicate a warning state with a message by setting `warn` and providing `warnText`.
+
+<Search warn warnText="Results may be up to 5 minutes behind the primary index." labelText="Search catalog" value="billing-api" />
+
+### Disabled
+
+Set `disabled` to `true` to prevent user interaction.
 
 <Search disabled />
 
-## Read-only
+### Read-only
 
 Set `readonly` to show a value that cannot be edited or cleared. The clear
 button is hidden and <DocKbd label="Escape" /> leaves the value in place. A
