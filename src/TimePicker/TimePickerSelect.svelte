@@ -12,6 +12,12 @@
   /** Set to `true` for the select to be read-only */
   export let readonly = false;
 
+  /**
+   * Specify the assistive text announced to screen readers when read-only.
+   * Exposed because VoiceOver does not announce `aria-readonly`.
+   */
+  export let readonlyText = "Read-only";
+
   /** Specify the ARIA label for the chevron icon */
   export let iconDescription = "Open list of options";
 
@@ -37,6 +43,7 @@
   import { readable, writable } from "svelte/store";
   import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
   import ChevronDown from "../icons/ChevronDown.svelte";
+  import { buildFieldIds, joinDescribedBy } from "../utils/field-status.js";
   import { noop } from "../utils/noop.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -90,6 +97,7 @@
   $: isFluid = !!timePickerContext?.isFluid || !!formContext?.isFluid;
   $: effectiveReadonly = readonly || $parentReadonly;
   $: effectiveDisabled = disabled || $parentDisabled;
+  $: ({ readonlyId } = buildFieldIds(id));
 
   function handleSelectChange(event) {
     let next = event.target.value;
@@ -149,6 +157,7 @@
           disabled={effectiveDisabled}
           {value}
           aria-readonly={effectiveReadonly || undefined}
+          aria-describedby={joinDescribedBy(effectiveReadonly ? readonlyId : null)}
           class:bx--select-input={true}
           on:change={handleSelectChange}
           on:change
@@ -166,6 +175,11 @@
           class="bx--select__arrow"
         />
       </div>
+      {#if effectiveReadonly}
+        <span id={readonlyId} class:bx--visually-hidden={true}
+          >{readonlyText}</span
+        >
+      {/if}
     </div>
   </div>
 {:else}
@@ -191,6 +205,7 @@
       disabled={effectiveDisabled}
       {value}
       aria-readonly={effectiveReadonly || undefined}
+      aria-describedby={joinDescribedBy(effectiveReadonly ? readonlyId : null)}
       class:bx--select-input={true}
       on:change={handleSelectChange}
       on:change
@@ -207,5 +222,10 @@
       title={iconDescription}
       class="bx--select__arrow"
     />
+    {#if effectiveReadonly}
+      <span id={readonlyId} class:bx--visually-hidden={true}
+        >{readonlyText}</span
+      >
+    {/if}
   </div>
 {/if}

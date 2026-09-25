@@ -387,6 +387,48 @@ describe("TimePicker", () => {
     expect(await fireEvent.keyDown(select, { key: "ArrowDown" })).toBe(false);
   });
 
+  it("describes a read-only TimePickerSelect for screen readers that ignore aria-readonly", () => {
+    render(TimePickerCustom, {
+      props: { selectReadonly: true, id: "test-time-picker-select" },
+    });
+
+    const [select] = screen.getAllByRole("combobox");
+    expect(select).toHaveAttribute(
+      "aria-describedby",
+      "readonly-test-time-picker-select",
+    );
+
+    const description = document.getElementById(
+      "readonly-test-time-picker-select",
+    );
+    expect(description).toHaveTextContent("Read-only");
+    expect(description).toHaveClass("bx--visually-hidden");
+  });
+
+  it("supports overriding a TimePickerSelect's read-only assistive text", () => {
+    render(TimePickerCustom, {
+      props: {
+        selectReadonly: true,
+        id: "test-time-picker-select",
+        readonlyText: "Custom text",
+      },
+    });
+
+    expect(screen.getByText("Custom text")).toBeInTheDocument();
+  });
+
+  it("does not set aria-describedby on an editable TimePickerSelect", () => {
+    render(TimePickerCustom, {
+      props: { id: "test-time-picker-select" },
+    });
+
+    const [select] = screen.getAllByRole("combobox");
+    expect(select).not.toHaveAttribute("aria-describedby");
+    expect(
+      document.getElementById("readonly-test-time-picker-select"),
+    ).toBeNull();
+  });
+
   describe("inherited readonly and disabled", () => {
     it.each([{ fluid: false }, { fluid: true }])(
       "makes the selects read-only with the time picker (%o)",
@@ -397,6 +439,11 @@ describe("TimePicker", () => {
           expect(select).toHaveAttribute("aria-readonly", "true");
           expect(select.closest(".bx--time-picker__select")).toHaveClass(
             "bx--select--readonly",
+          );
+          const describedBy = select.getAttribute("aria-describedby");
+          assert(describedBy);
+          expect(document.getElementById(describedBy)).toHaveTextContent(
+            "Read-only",
           );
         }
       },
