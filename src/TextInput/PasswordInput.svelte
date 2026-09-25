@@ -113,6 +113,7 @@
     FORM_CONTEXT_KEY,
     MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
+  import EditOff from "../icons/EditOff.svelte";
   import View from "../icons/View.svelte";
   import ViewOff from "../icons/ViewOff.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
@@ -170,6 +171,7 @@
   class:bx--password-input-wrapper={true}
   class:bx--text-input-wrapper--light={light}
   class:bx--text-input-wrapper--inline={inline}
+  class:bx--text-input-wrapper--readonly={readonly}
   class:bx--text-input--fluid={isFluid}
   on:click
   on:mouseover
@@ -226,14 +228,18 @@
       data-invalid={showInvalid || undefined}
       data-warn={showWarn || undefined}
     >
-      {#if showInvalid}
-        <WarningFilled class="bx--text-input__invalid-icon" />
-      {/if}
-      {#if showWarn}
-        <WarningAltFilled
-          class="bx--text-input__invalid-icon
-            bx--text-input__invalid-icon--warning"
-        />
+      {#if readonly}
+        <EditOff class="bx--text-input__readonly-icon" />
+      {:else}
+        {#if showInvalid}
+          <WarningFilled class="bx--text-input__invalid-icon" />
+        {/if}
+        {#if showWarn}
+          <WarningAltFilled
+            class="bx--text-input__invalid-icon
+              bx--text-input__invalid-icon--warning"
+          />
+        {/if}
       {/if}
       <input
         bind:this={ref}

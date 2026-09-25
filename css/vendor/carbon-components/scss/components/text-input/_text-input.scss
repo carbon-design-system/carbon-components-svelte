@@ -397,3 +397,18 @@
 @include exports("text-input-counter") {
   @include text-input-counter;
 }
+
+/// Reposition PasswordInput's read-only icon (`EditOff`) the same way the
+/// invalid icon is already repositioned above, so it clears the 40px
+/// visibility-toggle button instead of sitting underneath it.
+/// @access private
+/// @group components
+@mixin password-input-readonly-icon {
+  .#{$prefix}--password-input-wrapper .#{$prefix}--text-input__readonly-icon {
+    right: $carbon--spacing-08;
+  }
+}
+
+@include exports("password-input-readonly-icon") {
+  @include password-input-readonly-icon;
+}
