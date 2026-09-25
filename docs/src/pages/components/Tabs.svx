@@ -4,7 +4,7 @@ description: Tabs organize content into separate views that can be switched betw
 ---
 
 <script>
-  import { Tabs, Tab, TabContent, TabsVertical, TabsSkeleton, TabsVerticalSkeleton, DataTable } from "carbon-components-svelte";
+  import { CodeSnippet, Tabs, Tab, TabContent, TabsVertical, TabsSkeleton, TabsVerticalSkeleton, DataTable } from "carbon-components-svelte";
   import Calendar from "carbon-icons-svelte/lib/Calendar.svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
   import Settings from "carbon-icons-svelte/lib/Settings.svelte";
@@ -238,6 +238,23 @@ By default, every `TabContent` panel stays mounted and toggles visibility with t
           },
         ]}"
       />
+    </TabContent>
+  </svelte:fragment>
+</Tabs>
+
+## Flush content
+
+Set `flush` on `TabContent` to drop the panel's horizontal padding so content, such as a code snippet or table, lines up with the first tab.
+
+<Tabs>
+  <Tab label="npm" />
+  <Tab label="pnpm" />
+  <svelte:fragment slot="content">
+    <TabContent flush>
+      <CodeSnippet code="npm i carbon-components-svelte" />
+    </TabContent>
+    <TabContent flush>
+      <CodeSnippet code="pnpm i carbon-components-svelte" />
     </TabContent>
   </svelte:fragment>
 </Tabs>

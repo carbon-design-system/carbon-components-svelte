@@ -251,12 +251,12 @@
               <Tab label="Rollup" />
               <Tab label="Webpack" />
               <svelte:fragment slot="content">
-                <TabContent style="padding-left: 0; padding-right: 0;">
+                <TabContent flush>
                   <DocCodeBox>
                     <CodeBlock language="javascript" code={viteConfig} />
                   </DocCodeBox>
                 </TabContent>
-                <TabContent style="padding-left: 0; padding-right: 0;">
+                <TabContent flush>
                   <Stack gap={3}>
                     <DocCodeBox>
                       <CodeBlock language="javascript" code={sveltekitConfig} />
@@ -269,12 +269,12 @@
                     </DocCodeBox>
                   </Stack>
                 </TabContent>
-                <TabContent style="padding-left: 0; padding-right: 0;">
+                <TabContent flush>
                   <DocCodeBox>
                     <CodeBlock language="javascript" code={rollupConfig} />
                   </DocCodeBox>
                 </TabContent>
-                <TabContent style="padding-left: 0; padding-right: 0;">
+                <TabContent flush>
                   <DocCodeBox>
                     <CodeBlock language="javascript" code={webpackConfig} />
                   </DocCodeBox>
