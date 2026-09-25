@@ -229,9 +229,11 @@ Set `href` on a `SearchMenuItem` to render it as a link. Selecting the item with
   <SearchMenuItem text="Data Store for Memcache" />
 </SearchMenu>
 
-## Disabled
+## States
 
-### Disabled input
+Reflect interaction states.
+
+### Disabled
 
 Disable the entire search input with `disabled`. The menu does not open.
 
@@ -244,6 +246,14 @@ Disable the entire search input with `disabled`. The menu does not open.
 Set `disabled` on an individual `SearchMenuItem` to keep it visible but non-interactive. Disabled items are skipped during keyboard navigation and cannot be selected.
 
 <FileSource src="/framed/SearchMenu/DisabledItems" />
+
+### Read-only
+
+Set `readonly` to prevent opening the results menu or selecting a value. The current value stays visible and still submits with the form.
+
+<SearchMenu readonly labelText="Search" placeholder="Search..." value="Cloud functions">
+  <SearchMenuItem text="Cloud functions" />
+</SearchMenu>
 
 ## Loading
 
