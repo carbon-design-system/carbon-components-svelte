@@ -269,6 +269,22 @@ With `display="grid"`, set `columns` to a number for that many equal-width track
   <Box fill="layer-01" padding={4} border="subtle">Main content</Box>
 </Box>
 
+## Responsive visibility
+
+Set `hideBelow` to hide the box on viewports narrower than a breakpoint, or `hideAbove` to hide it on viewports wider than one. The box stays visible at the named breakpoint itself. Both resolve in CSS, so the box is correct on first paint with no JavaScript viewport measuring. Resize the window to see each box toggle.
+
+| Prop | Hidden at |
+| ---- | --------- |
+| `hideBelow="md"` | `sm` |
+| `hideBelow="lg"` | `sm`, `md` |
+| `hideAbove="md"` | `lg`, `xlg`, `max` |
+| `hideAbove="sm"` | `md` and wider |
+
+<Box display="flex" gap={5}>
+  <Box hideBelow="lg" fill="layer-01" padding={4} border="subtle">Visible at lg and wider</Box>
+  <Box hideAbove="md" fill="layer-01" padding={4} border="subtle">Visible at md and narrower</Box>
+</Box>
+
 ## Overflow
 
 Set `overflow` to control how content that exceeds the box's bounds is handled.
@@ -381,6 +397,8 @@ Apply Box utilities directly when you do not need the component. Classes use the
 | `bx--box-bottom-{0-13}` | Offset from the bottom |
 | `bx--box-left-{0-13}` | Offset from the left |
 | `bx--box-right-{0-13}` | Offset from the right |
+| `bx--box-hide-below-{md,lg,xlg,max}` | `display: none` below the breakpoint |
+| `bx--box-hide-above-{sm,md,lg,xlg}` | `display: none` above the breakpoint |
 
 <div class="bx--box-fill-layer-01 bx--box-p-5 bx--box-border-subtle">
   Styled with utility classes
