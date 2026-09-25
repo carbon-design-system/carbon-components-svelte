@@ -8,10 +8,6 @@ import ContainedListItemAction from "./ContainedListItem.action.test.svelte";
 import ContainedListItemHref from "./ContainedListItem.href.test.svelte";
 
 describe("ContainedList", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   it("should render with default props", () => {
     render(ContainedList);
 

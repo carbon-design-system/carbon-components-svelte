@@ -14,10 +14,6 @@ async function flushProgrammaticClose() {
 }
 
 describe("ComposedModal", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   it("should render with default props", () => {
     render(ComposedModalTest, {
       props: {

@@ -5,10 +5,6 @@ import Pagination from "./Pagination.test.svelte";
 import PaginationPageSelectSlot from "./PaginationPageSelectSlot.test.svelte";
 
 describe("Pagination", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   // Regression test for initial event dispatch in Svelte 5
   // https://github.com/carbon-design-system/carbon-components-svelte/issues/2528
   it("does not fire update event on initial render", () => {

@@ -3,10 +3,6 @@ import { user } from "../utils/user";
 import Tile from "./Tile.test.svelte";
 
 describe("Tile", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   it("should render with default class", () => {
     render(Tile);
 

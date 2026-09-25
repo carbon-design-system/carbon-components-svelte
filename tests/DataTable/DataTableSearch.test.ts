@@ -6,10 +6,6 @@ import DataTableSearch from "./DataTableSearch.test.svelte";
 import { getTableRows } from "./helpers";
 
 describe("DataTableSearch", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   const getNextPageButton = () =>
     screen.getByRole("button", { name: "Next page" });
   const getPrevPageButton = () =>

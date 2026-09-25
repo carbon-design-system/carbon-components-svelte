@@ -4,10 +4,6 @@ import { user } from "../utils/user";
 import DataTableBatchSelectionToolbar from "./DataTableBatchSelectionToolbar.test.svelte";
 
 describe("DataTableBatchSelectionToolbar", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   it("renders toolbar when rows are selected", () => {
     const { container } = render(DataTableBatchSelectionToolbar, {
       props: {

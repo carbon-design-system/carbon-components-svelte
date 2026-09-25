@@ -4,10 +4,6 @@ import { user } from "../utils/user";
 import Slider from "./Slider.test.svelte";
 
 describe("Slider", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   it("should render with default props", () => {
     render(Slider);
 

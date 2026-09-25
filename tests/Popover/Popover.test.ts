@@ -3,10 +3,6 @@ import { user } from "../utils/user";
 import Popover from "./Popover.test.svelte";
 
 describe("Popover", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   it("should render when open", () => {
     render(Popover, { props: { open: true } });
 

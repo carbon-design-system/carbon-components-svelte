@@ -14,10 +14,6 @@ import Select from "./Select.test.svelte";
 import SelectToggle from "./Select.toggle.test.svelte";
 
 describe("Select", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   it("renders with default props", () => {
     render(Select);
 

@@ -10,10 +10,6 @@ import TileGroupTileNames from "./TileGroup.tileNames.test.svelte";
 import TileGroupTwoGroups from "./TileGroup.twoGroups.test.svelte";
 
 describe("TileGroup", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   it("should render with default props", () => {
     render(TileGroup);
 

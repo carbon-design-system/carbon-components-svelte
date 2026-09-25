@@ -17,10 +17,6 @@ import MultipleCheckboxes from "./MultipleCheckboxes.test.svelte";
 import MultipleCheckboxesObject from "./MultipleCheckboxesObject.test.svelte";
 
 describe("Checkbox", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   it("renders with default props", () => {
     render(Checkbox);
 

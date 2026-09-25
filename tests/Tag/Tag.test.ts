@@ -8,10 +8,6 @@ import Tag from "./Tag.test.svelte";
 import TagMaxWidth from "./TagMaxWidth.test.svelte";
 
 describe("Tag", () => {
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
   it("renders all tag variants with correct styles", () => {
     render(Tag);
 

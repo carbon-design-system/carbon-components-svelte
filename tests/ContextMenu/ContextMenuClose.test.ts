@@ -4,10 +4,6 @@ import ContextMenuClose from "./ContextMenuClose.test.svelte";
 import ContextMenuFocusReturn from "./ContextMenuFocusReturn.test.svelte";
 
 describe("ContextMenu close trigger", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   it("should surface 'escape-key' when closed via Escape", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(ContextMenuClose, { props: { open: true, x: 100, y: 100 } });

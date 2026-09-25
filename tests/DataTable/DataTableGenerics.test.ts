@@ -4,10 +4,6 @@ import { user } from "../utils/user";
 import DataTableGenerics from "./DataTableGenerics.test.svelte";
 
 describe("DataTable Generics", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   const getTableRows = (container: HTMLElement, tableIndex = 0) => {
     const tables = container.querySelectorAll("table.bx--data-table");
     const table = tables[tableIndex];

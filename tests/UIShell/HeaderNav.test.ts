@@ -3,10 +3,6 @@ import { user } from "../utils/user";
 import HeaderNavTest from "./HeaderNavKeyboard.test.svelte";
 
 describe("HeaderNav keyboard navigation", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   describe("HeaderNavMenu", () => {
     it("should open menu and focus first item when Down Arrow is pressed", async () => {
       render(HeaderNavTest);

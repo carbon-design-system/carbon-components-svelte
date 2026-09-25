@@ -10,7 +10,6 @@ import InlineNotificationTitleSlotTest from "./InlineNotificationTitleSlot.test.
 
 describe("InlineNotification", () => {
   beforeEach(() => {
-    vi.clearAllMocks();
     vi.useFakeTimers();
   });
 
