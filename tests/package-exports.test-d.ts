@@ -11,6 +11,7 @@ import type {
 } from "carbon-components-svelte";
 import type { BreakpointSize } from "carbon-components-svelte/src/Breakpoint/breakpoints.js";
 import type Button from "carbon-components-svelte/src/Button/Button.svelte";
+import type ComboBoxSkeleton from "carbon-components-svelte/src/ComboBox/ComboBoxSkeleton.svelte";
 import type DataTable from "carbon-components-svelte/src/DataTable/DataTable.svelte";
 import type { DataTableRow } from "carbon-components-svelte/src/DataTable/DataTable.svelte";
 import type {
@@ -34,6 +35,7 @@ type _BreakpointSize = BreakpointSize;
 type _Breakpoints = typeof breakpoints;
 type _Button = Button;
 type _CarbonTheme = CarbonTheme;
+type _ComboBoxSkeleton = ComboBoxSkeleton;
 type _DataTable = DataTable;
 type _DataTableRow = DataTableRow<{ id: string; name: string }>;
 type _FormatFileSize = ReturnType<typeof formatFileSize>;
