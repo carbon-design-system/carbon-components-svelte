@@ -216,6 +216,13 @@
     width: to-rem(143.5px);
   }
 
+  // ccs: the icon spans 16-32px from the right edge. The 3rem default
+  // leaves a 143.5px range input ~80px of text, clipping a code-02
+  // `mm/dd/yyyy` (~87px); 2rem still keeps the text clear of the icon.
+  .#{$prefix}--date-picker--range .#{$prefix}--date-picker__input--with-icon {
+    padding-right: $carbon--spacing-07;
+  }
+
   .#{$prefix}--date-picker.#{$prefix}--skeleton input,
   .#{$prefix}--date-picker__input.#{$prefix}--skeleton {
     @include skeleton;
@@ -529,6 +536,12 @@
 
   .#{$prefix}--date-picker__input--with-clear {
     padding-right: $carbon--spacing-09;
+  }
+
+  // The clear button spans 12-36px from the right edge; see the range
+  // `--with-icon` rule above. Must precede the clear+icon rule below.
+  .#{$prefix}--date-picker--range .#{$prefix}--date-picker__input--with-clear {
+    padding-right: to-rem(36px);
   }
 
   .#{$prefix}--date-picker__input--with-clear.#{$prefix}--date-picker__input--with-icon {
