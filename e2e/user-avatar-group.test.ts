@@ -70,15 +70,19 @@ test.describe("UserAvatarGroup", () => {
 
   test("shows only one avatar tooltip at a time", async ({ page }) => {
     const avatars = page.getByTestId("coord").locator(".bx--user-avatar");
+    // Tooltips are portalled out of the group and only coordinate within
+    // it, so query this group's tooltips by name.
+    const alpha = page.getByRole("tooltip", { name: "Alpha" });
+    const beta = page.getByRole("tooltip", { name: "Beta" });
 
     await avatars.nth(0).hover();
-    await expect(page.getByRole("tooltip")).toHaveText("Alpha");
+    await expect(alpha).toBeVisible();
 
     // Hovering a different avatar replaces the open tooltip rather than
     // stacking a second one.
     await avatars.nth(1).hover();
-    await expect(page.getByRole("tooltip")).toHaveText("Beta");
-    await expect(page.getByRole("tooltip")).toHaveCount(1);
+    await expect(beta).toBeVisible();
+    await expect(alpha).toBeHidden();
   });
 
   test("caps the overflow label at 99+", async ({ page }) => {
