@@ -254,6 +254,15 @@ Set `gap` to space out flex or grid children without nesting a [Stack](/componen
   <Box fill="layer-01" padding={4} border="subtle">Flex item</Box>
 </Box>
 
+### Direction
+
+Set `direction="column"` to stack flex children vertically, the same layout as a vertical [Stack](/components/Stack). Combine it with `gap`, `align`, and `justify` when a styled container would otherwise wrap a single `Stack`.
+
+<Box display="flex" direction="column" gap={3} fill="layer-01" padding={5} border="subtle">
+  <Text type="productive-heading-02">Backups</Text>
+  <Text type="body-short-01" color="secondary">Last snapshot completed 12 minutes ago.</Text>
+</Box>
+
 ### Alignment
 
 Set `align` (`align-items`) and `justify` (`justify-content`) to position flex or grid children. They take the same values as [Stack](/components/Stack)'s `align` and `justify`. A grid whose `columns` are all `fr` tracks fills the row, so `justify` has no free space to distribute there.
