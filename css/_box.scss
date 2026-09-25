@@ -80,6 +80,10 @@
     .#{$prefix}--box-my-#{$step} {
       margin-block: $size;
     }
+
+    .#{$prefix}--box-gap-#{$step} {
+      gap: $size;
+    }
   }
 
   .#{$prefix}--box-full-width {

@@ -14,6 +14,9 @@
 <Box border="strong" borderSide="left" borderWidth={3}>Thick left border</Box>
 <Box shadow>Raised shadow</Box>
 <Box display="flex">Flex display</Box>
+<Box display="flex" gap={3} data-testid="gap-scale">Gap scale</Box>
+<Box display="flex" gap="2rem" data-testid="gap-custom">Gap custom</Box>
+<Box display="flex" gap={0} data-testid="gap-zero">Gap zero</Box>
 <Box overflow="auto">Auto overflow</Box>
 <Box overflowX="auto" overflowY="hidden">Axis overflow</Box>
 <Box overflow="hidden" overflowX="auto">Overflow with x override</Box>
