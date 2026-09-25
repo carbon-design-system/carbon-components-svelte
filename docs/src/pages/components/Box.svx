@@ -144,6 +144,12 @@ Use `margin` for all sides, or `marginX`/`marginY` to target an axis.
   <Box fill="layer-01" padding={5} marginY={5}>Vertical margin</Box>
 </Stack>
 
+Set `marginTop`, `marginRight`, `marginBottom`, or `marginLeft` to offset a single side. A side prop overrides `margin`, `marginX`, and `marginY` on that side.
+
+<Box border="subtle" borderStyle="dashed" padding={3}>
+  <Box fill="layer-01" padding={5} marginY={3} marginTop={9}>Extra space above only</Box>
+</Box>
+
 ## Width
 
 Set `width`, `maxWidth`, or `minWidth` to any CSS length. Numbers are treated as pixels. Use `fullWidth` to span the container (`width: 100%`).
@@ -400,6 +406,10 @@ Apply Box utilities directly when you do not need the component. Classes use the
 | `bx--box-m-{1-13}` | Margin on all sides |
 | `bx--box-mx-{1-13}` | Horizontal margin |
 | `bx--box-my-{1-13}` | Vertical margin |
+| `bx--box-mt-{1-13}` | Top margin, overriding the all-sides and axis classes |
+| `bx--box-mr-{1-13}` | Right margin, overriding the all-sides and axis classes |
+| `bx--box-mb-{1-13}` | Bottom margin, overriding the all-sides and axis classes |
+| `bx--box-ml-{1-13}` | Left margin, overriding the all-sides and axis classes |
 | `bx--box-full-width` | Span the full container width |
 | `bx--box-height-{1-13}` | Height |
 | `bx--box-height-viewport` | Full viewport height (`100dvh`, `100vh` fallback) |
