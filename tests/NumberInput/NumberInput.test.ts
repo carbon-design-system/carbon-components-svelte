@@ -174,11 +174,11 @@ describe("NumberInput", () => {
 
       const message = screen.getByText("Invalid input");
       expect(message).toHaveClass("bx--form-requirement");
+      expect(message).toHaveAttribute("role", "alert");
       expect(message.closest(".bx--number__input-wrapper")).not.toBeNull();
-      expect(screen.getByLabelText("Clusters")).toHaveAttribute(
-        "aria-describedby",
-        "error-test-input",
-      );
+      const input = screen.getByLabelText("Clusters");
+      expect(input).toHaveAttribute("aria-errormessage", "error-test-input");
+      expect(input).not.toHaveAttribute("aria-describedby");
     });
 
     it("renders the warning message inside the input wrapper", () => {
@@ -618,13 +618,14 @@ describe("NumberInput", () => {
     expect(true).toBe(true);
   });
 
-  it("should set aria-describedby to error id when invalid", () => {
+  it("should set aria-errormessage (not aria-describedby) to the error id when invalid", () => {
     render(NumberInput, {
       props: { id: "test-input", invalid: true, invalidText: "Error" },
     });
 
     const input = screen.getByRole("spinbutton");
-    expect(input).toHaveAttribute("aria-describedby", "error-test-input");
+    expect(input).toHaveAttribute("aria-errormessage", "error-test-input");
+    expect(input).not.toHaveAttribute("aria-describedby");
   });
 
   it("should set aria-describedby to warn id when warn", () => {
@@ -816,6 +817,7 @@ describe("NumberInput", () => {
 
     const input = screen.getByRole("spinbutton");
     expect(input).toHaveAttribute("aria-invalid", "true");
+    expect(input).not.toHaveAttribute("aria-errormessage");
     expect(input.closest(".bx--number")).toHaveAttribute(
       "data-invalid",
       "true",
