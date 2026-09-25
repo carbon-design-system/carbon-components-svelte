@@ -302,6 +302,8 @@ Set `overflow` to control how content that exceeds the box's bounds is handled.
   <Box height="12rem" padding={3}>Scroll to see the clipped content below.</Box>
 </Box>
 
+Box forwards `on:scroll`, `on:keydown`, `on:keyup`, `on:focusin`, and `on:focusout`, alongside click and mouse events, so a scrolling Box can react to its own scroll position.
+
 ### Axis overflow
 
 Set `overflowX` or `overflowY` to control one axis only. Each overrides `overflow` on its own axis, so `overflow="hidden"` with `overflowX="auto"` scrolls horizontally while clipping vertically.
