@@ -313,6 +313,82 @@ describe("RadioButton", () => {
     });
   });
 
+  describe("readonly (standalone)", () => {
+    it("prevents checking on click when readonly", async () => {
+      render(RadioButton, { props: { readonly: true, id: "readonly-radio" } });
+
+      const radio = screen.getByRole("radio");
+      await user.click(radio);
+
+      expect(radio).not.toBeChecked();
+    });
+
+    it("allows checking when not readonly", async () => {
+      render(RadioButton, { props: { readonly: false, id: "readonly-radio" } });
+
+      const radio = screen.getByRole("radio");
+      await user.click(radio);
+
+      expect(radio).toBeChecked();
+    });
+
+    it("does not set aria-readonly on the radio (unsupported by role radio)", () => {
+      render(RadioButton, { props: { readonly: true, id: "readonly-radio" } });
+
+      expect(screen.getByRole("radio")).not.toHaveAttribute("aria-readonly");
+    });
+
+    it("describes the field as read-only for screen readers", () => {
+      const { container } = render(RadioButton, {
+        props: { readonly: true, id: "readonly-radio" },
+      });
+
+      const radio = screen.getByRole("radio");
+      expect(radio).toHaveAttribute(
+        "aria-describedby",
+        "readonly-readonly-radio",
+      );
+
+      const description = container.querySelector("#readonly-readonly-radio");
+      expect(description).toHaveTextContent("Read-only");
+      expect(description).toHaveClass("bx--visually-hidden");
+    });
+
+    it("supports overriding the read-only assistive text", () => {
+      const { container } = render(RadioButton, {
+        props: {
+          readonly: true,
+          id: "readonly-radio",
+          readonlyText: "Custom read-only text",
+        },
+      });
+
+      expect(
+        container.querySelector("#readonly-readonly-radio"),
+      ).toHaveTextContent("Custom read-only text");
+    });
+
+    it("applies the readonly wrapper class", () => {
+      render(RadioButton, { props: { readonly: true } });
+
+      const wrapper = screen
+        .getByRole("radio")
+        .closest(".bx--radio-button-wrapper");
+      expect(wrapper).toHaveClass("bx--radio-button-wrapper--readonly");
+    });
+
+    it("leaves the read-only description to a read-only group's fieldset", () => {
+      render(RadioButtonGroupReadonly, { readonly: true });
+
+      for (const radio of screen.getAllByRole("radio")) {
+        expect(radio).not.toHaveAttribute("aria-describedby");
+        expect(radio.closest(".bx--radio-button-wrapper")).toHaveClass(
+          "bx--radio-button-wrapper--readonly",
+        );
+      }
+    });
+  });
+
   describe("Generics", () => {
     it("should support custom string literal types with generics", () => {
       type CustomValue = "option1" | "option2" | "option3";

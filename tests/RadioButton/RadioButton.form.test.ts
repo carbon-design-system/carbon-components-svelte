@@ -4,6 +4,7 @@ import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import RadioButtonForm from "./RadioButton.form.test.svelte";
+import RadioButtonReadonlyForm from "./RadioButtonReadonly.form.test.svelte";
 
 const getRadio = (name: string) => {
   const radio = screen.getByRole("radio", { name });
@@ -38,5 +39,17 @@ describe("RadioButton form reset", () => {
 
     expect(getRadio("Small")).toBeChecked();
     expect(getBoundText()).toBe("true-false");
+  });
+
+  it("keeps a readonly radio button's state across a form reset", async () => {
+    render(RadioButtonReadonlyForm);
+
+    expect(getRadio("Readonly")).toBeChecked();
+
+    getForm().reset();
+    await flushFormReset();
+
+    expect(getRadio("Readonly")).toBeChecked();
+    expect(getBoundText()).toBe("true");
   });
 });
