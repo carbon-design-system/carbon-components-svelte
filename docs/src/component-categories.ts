@@ -19,6 +19,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "RecursiveList",
       "UnorderedList",
       "DescriptionList",
+      "VirtualList",
     ],
   },
   {

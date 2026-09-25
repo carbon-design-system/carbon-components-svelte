@@ -102,4 +102,5 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   UnorderedList: "0.2.0",
   UserAvatar: "0.110.0",
   UserAvatarGroup: "0.110.0",
+  VirtualList: "0.113.0",
 };
