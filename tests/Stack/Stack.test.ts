@@ -150,6 +150,14 @@ describe("Stack", () => {
     expect(stackElement).not.toHaveClass("bx--stack-wrap");
   });
 
+  it("applies the wrap class to a vertical stack", () => {
+    render(Stack);
+
+    const stackElement = screen.getByText("vertical-wrap").parentElement;
+    expect(stackElement).toHaveClass("bx--stack-vertical");
+    expect(stackElement).toHaveClass("bx--stack-wrap");
+  });
+
   it("should not apply any wrap class by default", () => {
     render(Stack);
 

@@ -48,3 +48,7 @@
 <Stack orientation="horizontal" wrap="wrap-reverse" gap={3}>
   <span>wrap-reverse</span>
 </Stack>
+
+<Stack orientation="vertical" wrap="wrap" gap={3}>
+  <span>vertical-wrap</span>
+</Stack>
