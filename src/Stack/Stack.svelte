@@ -64,10 +64,18 @@
    * @type {keyof HTMLElementTagNameMap}
    */
   export let tag = "div";
+
+  /**
+   * Obtain a reference to the HTML element.
+   * @type {null | HTMLElement}
+   * @bindable readonly
+   */
+  export let ref = null;
 </script>
 
 <svelte:element
   this={tag}
+  bind:this={ref}
   class:bx--stack={true}
   class:bx--stack-inline={inline}
   class:bx--stack-vertical={orientation === "vertical"}
