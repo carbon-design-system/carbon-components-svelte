@@ -7,11 +7,16 @@
 
   export let selected: ComponentProps<RadioButtonGroup>["selected"] = "1";
   export let readonly = false;
+  export let id: ComponentProps<RadioButtonGroup>["id"] = undefined;
+  export let readonlyText: ComponentProps<RadioButtonGroup>["readonlyText"] =
+    undefined;
 </script>
 
 <RadioButtonGroup
   legendText="Plan"
   {readonly}
+  {id}
+  {readonlyText}
   bind:selected
   on:change={(e) => console.log("change", e.detail)}
 >

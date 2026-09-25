@@ -168,6 +168,40 @@ describe("RadioButton", () => {
       ).toBeTruthy();
     });
 
+    it("describes the group as read-only for screen readers that ignore aria-readonly", () => {
+      render(RadioButtonGroupReadonly, {
+        id: "readonly-group",
+        readonly: true,
+      });
+
+      const radiogroup = screen.getByRole("radiogroup");
+      expect(radiogroup).toHaveAttribute(
+        "aria-describedby",
+        "readonly-readonly-group",
+      );
+
+      const description = document.getElementById("readonly-readonly-group");
+      expect(description).toHaveTextContent("Read-only");
+      expect(description).toHaveClass("bx--visually-hidden");
+
+      // ARIA does not support aria-readonly on role "radio"; only the fieldset carries it.
+      for (const radio of screen.getAllByRole("radio")) {
+        expect(radio).not.toHaveAttribute("aria-readonly");
+      }
+    });
+
+    it("supports overriding the group's read-only assistive text", () => {
+      render(RadioButtonGroupReadonly, {
+        id: "readonly-group",
+        readonly: true,
+        readonlyText: "Custom read-only text",
+      });
+
+      expect(
+        document.getElementById("readonly-readonly-group"),
+      ).toHaveTextContent("Custom read-only text");
+    });
+
     it("should not change selection when clicking another radio", async () => {
       const consoleLog = vi.spyOn(console, "log");
       render(RadioButtonGroupReadonly, { selected: "1", readonly: true });
