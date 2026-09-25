@@ -204,6 +204,18 @@
   export let overflow = undefined;
 
   /**
+   * Set the CSS horizontal overflow behavior. Overrides `overflow` on that axis.
+   * @type {"visible" | "hidden" | "auto" | "scroll" | undefined}
+   */
+  export let overflowX = undefined;
+
+  /**
+   * Set the CSS vertical overflow behavior. Overrides `overflow` on that axis.
+   * @type {"visible" | "hidden" | "auto" | "scroll" | undefined}
+   */
+  export let overflowY = undefined;
+
+  /**
    * Set the offset from the top when `position` is set. Numbers `0`–`13` use the shared layout scale; strings accept any CSS length.
    * @type {OffsetValue | undefined}
    */
@@ -249,6 +261,8 @@
     position && `bx--box-position-${position}`,
     display && `bx--box-display-${display}`,
     overflow && `bx--box-overflow-${overflow}`,
+    overflowX && `bx--box-overflow-x-${overflowX}`,
+    overflowY && `bx--box-overflow-y-${overflowY}`,
     offsetClass("top", top),
     offsetClass("bottom", bottom),
     $$restProps.class,

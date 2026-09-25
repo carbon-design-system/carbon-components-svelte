@@ -169,6 +169,24 @@ describe("Box", () => {
     expect(consoleLog).toHaveBeenCalledTimes(1);
   });
 
+  it("applies axis-specific overflow classes", () => {
+    render(Box);
+
+    expect(screen.getByText("Axis overflow")).toHaveClass(
+      "bx--box-overflow-x-auto",
+      "bx--box-overflow-y-hidden",
+    );
+  });
+
+  it("keeps both overflow and the axis override class when both are set", () => {
+    render(Box);
+
+    expect(screen.getByText("Overflow with x override")).toHaveClass(
+      "bx--box-overflow-hidden",
+      "bx--box-overflow-x-auto",
+    );
+  });
+
   it("merges multiple modifier classes", () => {
     render(Box);
 
