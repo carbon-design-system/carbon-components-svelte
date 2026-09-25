@@ -187,6 +187,25 @@ describe("Box", () => {
     );
   });
 
+  it("applies the gap scale class", () => {
+    render(Box);
+
+    expect(screen.getByTestId("gap-scale")).toHaveClass("bx--box-gap-3");
+  });
+
+  it("applies a custom gap via inline style", () => {
+    render(Box);
+
+    expectInlineStyle(screen.getByTestId("gap-custom"), { gap: "2rem" });
+  });
+
+  it("resolves gap 0 to an inline style instead of dropping it", () => {
+    render(Box);
+
+    // jsdom normalizes a unitless `0` to `0px` when reading it back.
+    expectInlineStyle(screen.getByTestId("gap-zero"), { gap: "0px" });
+  });
+
   it("merges multiple modifier classes", () => {
     render(Box);
 

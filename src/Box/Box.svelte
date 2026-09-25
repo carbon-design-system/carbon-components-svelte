@@ -23,7 +23,7 @@
     return undefined;
   }
 
-  /** @param {"p" | "px" | "py" | "m" | "mx" | "my" | "height" | "min-height" | "max-height"} kind @param {SpacingValue | undefined} value */
+  /** @param {"p" | "px" | "py" | "m" | "mx" | "my" | "gap" | "height" | "min-height" | "max-height"} kind @param {SpacingValue | undefined} value */
   function spacingClass(kind, value) {
     return scaleClass(kind, value, 1);
   }
@@ -198,6 +198,12 @@
   export let display = undefined;
 
   /**
+   * Set the gap between children. Numbers `1`–`13` use the shared layout scale, `0` clears it; strings accept any CSS length. Only takes effect when `display` is `"flex"`, `"inline-flex"`, or `"grid"`.
+   * @type {SpacingValue | undefined}
+   */
+  export let gap = undefined;
+
+  /**
    * Set the CSS overflow behavior.
    * @type {"visible" | "hidden" | "auto" | "scroll" | undefined}
    */
@@ -272,6 +278,7 @@
     spacingClass("max-height", maxHeight),
     position && `bx--box-position-${position}`,
     display && `bx--box-display-${display}`,
+    spacingClass("gap", gap),
     overflow && `bx--box-overflow-${overflow}`,
     overflowX && `bx--box-overflow-x-${overflowX}`,
     overflowY && `bx--box-overflow-y-${overflowY}`,
@@ -322,6 +329,7 @@
   $: resolvedHeight = viewportStyle(height);
   $: resolvedMinHeight = viewportStyle(minHeight);
   $: resolvedMaxHeight = spacingStyle(maxHeight);
+  $: resolvedGap = spacingStyle(gap);
   $: resolvedTop = offsetStyle(top);
   $: resolvedBottom = offsetStyle(bottom);
   $: resolvedLeft = offsetStyle(left);
@@ -349,6 +357,7 @@
   style:height={resolvedHeight}
   style:min-height={resolvedMinHeight}
   style:max-height={resolvedMaxHeight}
+  style:gap={resolvedGap}
   style:top={resolvedTop}
   style:bottom={resolvedBottom}
   style:left={resolvedLeft}
