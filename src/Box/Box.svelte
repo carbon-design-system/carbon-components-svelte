@@ -322,6 +322,10 @@
   style:top={resolvedTop}
   style:bottom={resolvedBottom}
   class={boxClass}
+  on:click
+  on:mouseover
+  on:mouseenter
+  on:mouseleave
 >
   <slot />
 </svelte:element>
