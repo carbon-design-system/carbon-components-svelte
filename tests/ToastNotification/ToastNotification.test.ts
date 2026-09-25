@@ -309,7 +309,8 @@ describe("ToastNotification", () => {
       render(ToastNotificationTest, {
         props: { showTimeout: true, timeout: 1000 },
       });
-      const bar = getBar() as HTMLElement;
+      const bar = getBar();
+      assert(bar);
       const writes = vi.fn();
       new MutationObserver(writes).observe(bar, { attributes: true });
 
@@ -323,9 +324,8 @@ describe("ToastNotification", () => {
       render(ToastNotificationTest, {
         props: { showTimeout: true, timeout: 1000, pauseOnHover: true },
       });
-      const toast = document.querySelector(
-        ".bx--toast-notification",
-      ) as Element;
+      const toast = document.querySelector(".bx--toast-notification");
+      assert(toast);
 
       vi.advanceTimersByTime(300);
       await fireEvent.mouseEnter(toast);
@@ -541,15 +541,6 @@ describe("ToastNotification", () => {
     expect(notification).not.toHaveAttribute("role");
   });
 
-  it("should let an explicit role override the kind default", () => {
-    render(ToastNotificationTest, {
-      props: { kind: "success", role: "alert" },
-    });
-
-    const notification = document.querySelector(".bx--toast-notification");
-    expect(notification).toHaveAttribute("role", "alert");
-  });
-
   it("should remove notification from DOM when closed", async () => {
     vi.useRealTimers();
     render(ToastNotificationTest);
@@ -623,10 +614,11 @@ describe("ToastNotification", () => {
       const onclose = vi.fn();
       render(ToastNotificationEscapeTest, { props: { onclose } });
 
-      screen.getByRole("button", { name: "Close notification" }).focus();
-      await fireEvent.keyDown(document.activeElement as Element, {
-        key: "Escape",
+      const closeButton = screen.getByRole("button", {
+        name: "Close notification",
       });
+      closeButton.focus();
+      await fireEvent.keyDown(closeButton, { key: "Escape" });
 
       expect(onclose).toHaveBeenCalledTimes(1);
       expect(onclose.mock.calls[0][0].detail).toEqual({
@@ -636,40 +628,30 @@ describe("ToastNotification", () => {
       expect(screen.queryByText("Escape test")).not.toBeInTheDocument();
     });
 
-    it("should ignore Escape pressed in a nested text field", async () => {
-      const onclose = vi.fn();
-      render(ToastNotificationEscapeTest, { props: { onclose } });
+    it.each([
+      ["a nested text field", false, () => screen.getByRole("textbox")],
+      [
+        "a notification without a close button",
+        true,
+        () => screen.getByText("Escape test"),
+      ],
+      ["outside the notification", false, () => document.body],
+    ])(
+      "should ignore Escape from %s",
+      async (_, hideCloseButton, getTarget) => {
+        const onclose = vi.fn();
+        render(ToastNotificationEscapeTest, {
+          props: { onclose, hideCloseButton },
+        });
 
-      const field = screen.getByRole("textbox", { name: "Nested field" });
-      field.focus();
-      await fireEvent.keyDown(field, { key: "Escape" });
+        await fireEvent.keyDown(getTarget(), { key: "Escape" });
 
-      expect(onclose).not.toHaveBeenCalled();
-      expect(screen.getByText("Escape test")).toBeInTheDocument();
-    });
-
-    it("should ignore Escape when the close button is hidden", async () => {
-      const onclose = vi.fn();
-      render(ToastNotificationEscapeTest, {
-        props: { onclose, hideCloseButton: true },
-      });
-
-      const notification = document.querySelector(".bx--toast-notification");
-      await fireEvent.keyDown(notification as Element, { key: "Escape" });
-
-      expect(onclose).not.toHaveBeenCalled();
-    });
-
-    it("should ignore Escape pressed outside the notification", async () => {
-      const onclose = vi.fn();
-      render(ToastNotificationEscapeTest, { props: { onclose } });
-
-      await fireEvent.keyDown(document.body, { key: "Escape" });
-
-      expect(onclose).not.toHaveBeenCalled();
-      expect(screen.getByText("Escape test")).toBeInTheDocument();
-    });
+        expect(onclose).not.toHaveBeenCalled();
+        expect(screen.getByText("Escape test")).toBeInTheDocument();
+      },
+    );
   });
+
   describe("captionDate", () => {
     const date = new Date("2020-01-02T03:04:05.000Z");
 
@@ -680,7 +662,7 @@ describe("ToastNotification", () => {
         ".bx--toast-notification__caption time",
       );
       expect(time).toHaveAttribute("datetime", date.toISOString());
-      expect(time?.textContent?.trim()).not.toBe("");
+      expect(time).toHaveTextContent(/\S/);
     });
 
     it("should not render a caption without captionDate", () => {

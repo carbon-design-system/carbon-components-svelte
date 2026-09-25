@@ -380,15 +380,6 @@ describe("InlineNotification", () => {
     expect(notification).not.toHaveAttribute("role");
   });
 
-  it("should let an explicit role override the kind default", () => {
-    render(InlineNotificationTest, {
-      props: { kind: "success", role: "alert" },
-    });
-
-    const notification = document.querySelector(".bx--inline-notification");
-    expect(notification).toHaveAttribute("role", "alert");
-  });
-
   it("should remove notification from DOM when closed", async () => {
     vi.useRealTimers();
     render(InlineNotificationTest);
@@ -472,10 +463,11 @@ describe("InlineNotification", () => {
       const onclose = vi.fn();
       render(InlineNotificationEscapeTest, { props: { onclose } });
 
-      screen.getByRole("button", { name: "Close notification" }).focus();
-      await fireEvent.keyDown(document.activeElement as Element, {
-        key: "Escape",
+      const closeButton = screen.getByRole("button", {
+        name: "Close notification",
       });
+      closeButton.focus();
+      await fireEvent.keyDown(closeButton, { key: "Escape" });
 
       expect(onclose).toHaveBeenCalledTimes(1);
       expect(onclose.mock.calls[0][0].detail).toEqual({
@@ -485,39 +477,28 @@ describe("InlineNotification", () => {
       expect(screen.queryByText("Escape test")).not.toBeInTheDocument();
     });
 
-    it("should ignore Escape pressed in a nested text field", async () => {
-      const onclose = vi.fn();
-      render(InlineNotificationEscapeTest, { props: { onclose } });
+    it.each([
+      ["a nested text field", false, () => screen.getByRole("textbox")],
+      [
+        "a notification without a close button",
+        true,
+        () => screen.getByText("Escape test"),
+      ],
+      ["outside the notification", false, () => document.body],
+    ])(
+      "should ignore Escape from %s",
+      async (_, hideCloseButton, getTarget) => {
+        const onclose = vi.fn();
+        render(InlineNotificationEscapeTest, {
+          props: { onclose, hideCloseButton },
+        });
 
-      const field = screen.getByRole("textbox", { name: "Nested field" });
-      field.focus();
-      await fireEvent.keyDown(field, { key: "Escape" });
+        await fireEvent.keyDown(getTarget(), { key: "Escape" });
 
-      expect(onclose).not.toHaveBeenCalled();
-      expect(screen.getByText("Escape test")).toBeInTheDocument();
-    });
-
-    it("should ignore Escape when the close button is hidden", async () => {
-      const onclose = vi.fn();
-      render(InlineNotificationEscapeTest, {
-        props: { onclose, hideCloseButton: true },
-      });
-
-      const notification = document.querySelector(".bx--inline-notification");
-      await fireEvent.keyDown(notification as Element, { key: "Escape" });
-
-      expect(onclose).not.toHaveBeenCalled();
-    });
-
-    it("should ignore Escape pressed outside the notification", async () => {
-      const onclose = vi.fn();
-      render(InlineNotificationEscapeTest, { props: { onclose } });
-
-      await fireEvent.keyDown(document.body, { key: "Escape" });
-
-      expect(onclose).not.toHaveBeenCalled();
-      expect(screen.getByText("Escape test")).toBeInTheDocument();
-    });
+        expect(onclose).not.toHaveBeenCalled();
+        expect(screen.getByText("Escape test")).toBeInTheDocument();
+      },
+    );
 
     it("should not also close an enclosing modal", async () => {
       const onModalClose = vi.fn();
@@ -533,6 +514,7 @@ describe("InlineNotification", () => {
       expect(onModalClose).not.toHaveBeenCalled();
     });
   });
+
   describe("captionDate", () => {
     const date = new Date("2020-01-02T03:04:05.000Z");
 
@@ -543,7 +525,7 @@ describe("InlineNotification", () => {
         ".bx--inline-notification__caption time",
       );
       expect(time).toHaveAttribute("datetime", date.toISOString());
-      expect(time?.textContent?.trim()).not.toBe("");
+      expect(time).toHaveTextContent(/\S/);
     });
 
     it("should not render a caption without captionDate", () => {

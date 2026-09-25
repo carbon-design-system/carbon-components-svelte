@@ -51,7 +51,11 @@ describe("NotificationQueue", () => {
   it("should keep an explicit role on a queued toast", async () => {
     const { component } = render(NotificationQueueTest);
 
-    getQueue(component.queue).add({ kind: "error", title: "Failed", role: "alert" });
+    getQueue(component.queue).add({
+      kind: "error",
+      title: "Failed",
+      role: "alert",
+    });
     await tick();
 
     expect(screen.getByRole("alert")).toHaveTextContent("Failed");
@@ -354,35 +358,31 @@ describe("NotificationQueue", () => {
     expect(screen.queryByText("Saved")).not.toBeInTheDocument();
   });
 
-  it("should not include timeoutKey in the dismiss payload", async () => {
+  it("should keep bookkeeping fields out of attributes, dismiss, and history", async () => {
     const ondismiss = vi.fn();
     const { component } = render(NotificationQueueTest, {
-      props: { ondismiss },
+      props: { collapseDuplicates: true, maxHistory: 5, ondismiss },
     });
     const queue = getQueue(component.queue);
 
-    queue.add({ id: "a", title: "Saving" });
-    queue.update("a", { restartTimeout: true });
-    queue.remove("a");
-    await tick();
-
-    expect(ondismiss.mock.calls[0][0].detail.notification).toEqual({
-      id: "a",
-      title: "Saving",
-    });
-  });
-
-  it("should not render restartTimeout as an attribute", async () => {
-    const { component } = render(NotificationQueueTest);
-    const queue = getQueue(component.queue);
-
-    queue.add({ id: "a", title: "Saving" });
+    queue.add({ id: "a", title: "Saved" });
+    queue.add({ title: "Saved" });
     queue.update("a", { restartTimeout: true });
     await tick();
 
     const toast = document.querySelector(".bx--toast-notification");
-    expect(toast).not.toHaveAttribute("restartTimeout");
-    expect(toast).not.toHaveAttribute("timeoutKey");
+    for (const field of ["count", "restartTimeout", "timeoutKey"]) {
+      expect(toast).not.toHaveAttribute(field);
+    }
+
+    queue.remove("a");
+    await tick();
+
+    const expected = { id: "a", title: "Saved" };
+    expect(ondismiss.mock.calls[0][0].detail.notification).toEqual(expected);
+    expect(component.history).toEqual([
+      { ...expected, dismissedAt: expect.any(Number) },
+    ]);
   });
 
   describe("collapseDuplicates", () => {
@@ -466,43 +466,9 @@ describe("NotificationQueue", () => {
       await tick();
       expect(screen.queryByText("Retrying (2)")).not.toBeInTheDocument();
     });
-
-    it("should not include count in the dismiss payload", async () => {
-      const ondismiss = vi.fn();
-      const { component } = render(NotificationQueueTest, {
-        props: { collapseDuplicates: true, ondismiss },
-      });
-      const queue = getQueue(component.queue);
-
-      const id = queue.add({ title: "Saved" });
-      queue.add({ title: "Saved" });
-      queue.remove(id);
-      await tick();
-
-      expect(ondismiss.mock.calls[0][0].detail.notification).not.toHaveProperty(
-        "count",
-      );
-    });
-
-    it("should not render count as an attribute", async () => {
-      const { component } = render(NotificationQueueTest, {
-        props: { collapseDuplicates: true },
-      });
-      const queue = getQueue(component.queue);
-
-      queue.add({ title: "Saved" });
-      queue.add({ title: "Saved" });
-      await tick();
-
-      const toast = document.querySelector(".bx--toast-notification");
-      expect(toast).not.toHaveAttribute("count");
-    });
   });
 
   describe("history", () => {
-    const getHistory = (component: Record<string, unknown>) =>
-      component.history as ComponentProps<NotificationQueueComponent>["history"];
-
     it("should keep no history by default", async () => {
       vi.useRealTimers();
       const { component } = render(NotificationQueueTest);
@@ -512,7 +478,7 @@ describe("NotificationQueue", () => {
       await user.click(screen.getByLabelText("Close notification"));
       await tick();
 
-      expect(getHistory(component)).toEqual([]);
+      expect(component.history).toEqual([]);
     });
 
     it("should keep the newest dismissed notifications up to maxHistory", async () => {
@@ -526,12 +492,12 @@ describe("NotificationQueue", () => {
       for (const id of ["a", "b", "c"]) queue.remove(id);
       await tick();
 
-      const history = getHistory(component);
+      const history = component.history;
       expect(history?.map((n) => n.id)).toEqual(["c", "b"]);
       expect(history?.[0]).toEqual({ id: "c", title: "c", dismissedAt: 1000 });
     });
 
-    it("should record a toast closed by its close button or timeout", async () => {
+    it("should record a toast that times out", async () => {
       const { component } = render(NotificationQueueTest, {
         props: { maxHistory: 5 },
       });
@@ -542,7 +508,7 @@ describe("NotificationQueue", () => {
       vi.advanceTimersByTime(1000);
       await tick();
 
-      expect(getHistory(component)?.map((n) => n.id)).toEqual(["timed"]);
+      expect(component.history?.map((n) => n.id)).toEqual(["timed"]);
     });
 
     it("should not record a toast whose close was cancelled", async () => {
@@ -559,7 +525,7 @@ describe("NotificationQueue", () => {
       await user.click(screen.getByLabelText("Close notification"));
       await tick();
 
-      expect(getHistory(component)).toEqual([]);
+      expect(component.history).toEqual([]);
     });
 
     it("should record notifications dropped by maxNotifications", async () => {
@@ -572,7 +538,7 @@ describe("NotificationQueue", () => {
       queue.add({ id: "b", title: "Second" });
       await tick();
 
-      expect(getHistory(component)?.map((n) => n.id)).toEqual(["a"]);
+      expect(component.history?.map((n) => n.id)).toEqual(["a"]);
     });
 
     it("should move cleared notifications into history, newest first", async () => {
@@ -586,27 +552,10 @@ describe("NotificationQueue", () => {
       queue.clear();
       await tick();
 
-      expect(getHistory(component)?.map((n) => n.id)).toEqual(["b", "a"]);
+      expect(component.history?.map((n) => n.id)).toEqual(["b", "a"]);
       expect(document.querySelectorAll(".bx--toast-notification")).toHaveLength(
         0,
       );
-    });
-
-    it("should not store internal fields in history", async () => {
-      const { component } = render(NotificationQueueTest, {
-        props: { maxHistory: 5, collapseDuplicates: true },
-      });
-      const queue = getQueue(component.queue);
-
-      queue.add({ id: "a", title: "Saved" });
-      queue.add({ title: "Saved" });
-      queue.update("a", { restartTimeout: true });
-      queue.remove("a");
-      await tick();
-
-      const [entry] = getHistory(component) ?? [];
-      expect(entry).not.toHaveProperty("count");
-      expect(entry).not.toHaveProperty("timeoutKey");
     });
 
     it("should empty history with clearHistory and trim it when maxHistory shrinks", async () => {
@@ -618,14 +567,14 @@ describe("NotificationQueue", () => {
       for (const id of ["a", "b", "c"]) queue.add({ id, title: id });
       queue.clear();
       await tick();
-      expect(getHistory(component)).toHaveLength(3);
+      expect(component.history).toHaveLength(3);
 
       await rerender({ maxHistory: 1 });
-      expect(getHistory(component)).toHaveLength(1);
+      expect(component.history).toHaveLength(1);
 
       queue.clearHistory();
       await tick();
-      expect(getHistory(component)).toEqual([]);
+      expect(component.history).toEqual([]);
       expect(screen.queryByText("a")).not.toBeInTheDocument();
     });
   });
@@ -725,21 +674,30 @@ describe("NotificationQueue", () => {
         },
       });
 
-      getQueue(component.queue).add({ id: "error", kind: "error", title: "Error" });
-      getQueue(component.queue).add({ id: "info", kind: "info", title: "Info" });
+      getQueue(component.queue).add({
+        id: "error",
+        kind: "error",
+        title: "Error",
+      });
+      getQueue(component.queue).add({
+        id: "info",
+        kind: "info",
+        title: "Info",
+      });
       await tick();
 
-      const history = component.history as ReadonlyArray<{ id: string }>;
-      expect(history.map((n) => n.id)).toEqual(["info"]);
+      expect(component.history?.map((n) => n.id)).toEqual(["info"]);
     });
   });
 
   it("should limit notifications to maxNotifications (top-right)", async () => {
+    const ondismiss = vi.fn();
     const { component } = render(NotificationQueueTest, {
-      props: { maxNotifications: 2 },
+      props: { maxNotifications: 2, ondismiss },
     });
 
     getQueue(component.queue).add({
+      id: "first",
       kind: "success",
       title: "First",
     });
@@ -760,37 +718,14 @@ describe("NotificationQueue", () => {
     expect(screen.queryByText("First")).not.toBeInTheDocument();
     expect(screen.getByText("Second")).toBeInTheDocument();
     expect(screen.getByText("Third")).toBeInTheDocument();
+    expect(ondismiss).toHaveBeenCalledTimes(1);
+    expect(ondismiss.mock.calls[0][0].detail).toEqual({
+      notification: { id: "first", kind: "success", title: "First" },
+      trigger: "overflow",
+    });
   });
 
   describe("close and dismiss events", () => {
-    it("should dispatch close and dismiss when the close button is clicked", async () => {
-      vi.useRealTimers();
-      const onclose = vi.fn();
-      const ondismiss = vi.fn();
-      const { component } = render(NotificationQueueTest, {
-        props: { onclose, ondismiss },
-      });
-
-      getQueue(component.queue).add({ id: "a", title: "Closable" });
-      await tick();
-
-      await user.click(screen.getByLabelText("Close notification"));
-      await tick();
-
-      expect(onclose).toHaveBeenCalledTimes(1);
-      expect(onclose.mock.calls[0][0].detail).toEqual({
-        id: "a",
-        timeout: false,
-        trigger: "close-button",
-      });
-      expect(ondismiss).toHaveBeenCalledTimes(1);
-      expect(ondismiss.mock.calls[0][0].detail).toEqual({
-        notification: { id: "a", title: "Closable" },
-        trigger: "close-button",
-      });
-      expect(screen.queryByText("Closable")).not.toBeInTheDocument();
-    });
-
     it("should keep the toast and skip dismiss when close is cancelled", async () => {
       vi.useRealTimers();
       const ondismiss = vi.fn();
@@ -812,28 +747,6 @@ describe("NotificationQueue", () => {
       expect(getQueue(component.queue).remove("a")).toBe(true);
     });
 
-    it("should dispatch close and dismiss with the timeout trigger", async () => {
-      const onclose = vi.fn();
-      const ondismiss = vi.fn();
-      const { component } = render(NotificationQueueTest, {
-        props: { onclose, ondismiss },
-      });
-
-      getQueue(component.queue).add({ id: "a", title: "Timed", timeout: 1000 });
-      await tick();
-
-      vi.advanceTimersByTime(1000);
-      await tick();
-
-      expect(onclose.mock.calls[0][0].detail).toEqual({
-        id: "a",
-        timeout: true,
-        trigger: "timeout",
-      });
-      expect(ondismiss.mock.calls[0][0].detail.trigger).toBe("timeout");
-      expect(screen.queryByText("Timed")).not.toBeInTheDocument();
-    });
-
     it("should report the escape-key trigger", async () => {
       const onclose = vi.fn();
       const ondismiss = vi.fn();
@@ -850,40 +763,6 @@ describe("NotificationQueue", () => {
 
       expect(onclose.mock.calls[0][0].detail.trigger).toBe("escape-key");
       expect(ondismiss.mock.calls[0][0].detail.trigger).toBe("escape-key");
-    });
-
-    it("should dispatch dismiss with the overflow trigger for the dropped row", async () => {
-      const ondismiss = vi.fn();
-      const { component } = render(NotificationQueueTest, {
-        props: { maxNotifications: 1, ondismiss },
-      });
-
-      getQueue(component.queue).add({ id: "first", title: "First" });
-      await tick();
-      expect(ondismiss).not.toHaveBeenCalled();
-
-      getQueue(component.queue).add({ id: "second", title: "Second" });
-      await tick();
-
-      expect(ondismiss).toHaveBeenCalledTimes(1);
-      expect(ondismiss.mock.calls[0][0].detail).toEqual({
-        notification: { id: "first", title: "First" },
-        trigger: "overflow",
-      });
-      expect(screen.getByText("Second")).toBeInTheDocument();
-    });
-
-    it("should drop the oldest row at bottom positions", async () => {
-      const ondismiss = vi.fn();
-      const { component } = render(NotificationQueueTest, {
-        props: { position: "bottom-right", maxNotifications: 1, ondismiss },
-      });
-
-      getQueue(component.queue).add({ id: "first", title: "First" });
-      getQueue(component.queue).add({ id: "second", title: "Second" });
-      await tick();
-
-      expect(ondismiss.mock.calls[0][0].detail.notification.id).toBe("first");
     });
 
     it("should dispatch dismiss with the programmatic trigger for remove and clear", async () => {
@@ -1064,9 +943,14 @@ describe("NotificationQueue", () => {
 
   it("should remove notification when close button is clicked", async () => {
     vi.useRealTimers();
-    const { component } = render(NotificationQueueTest);
+    const onclose = vi.fn();
+    const ondismiss = vi.fn();
+    const { component } = render(NotificationQueueTest, {
+      props: { onclose, ondismiss },
+    });
 
     getQueue(component.queue).add({
+      id: "a",
       kind: "success",
       title: "Test notification",
     });
@@ -1079,12 +963,26 @@ describe("NotificationQueue", () => {
     await tick();
 
     expect(screen.queryByText("Test notification")).not.toBeInTheDocument();
+    expect(onclose.mock.calls[0][0].detail).toEqual({
+      id: "a",
+      timeout: false,
+      trigger: "close-button",
+    });
+    expect(ondismiss.mock.calls[0][0].detail).toEqual({
+      notification: { id: "a", kind: "success", title: "Test notification" },
+      trigger: "close-button",
+    });
   });
 
   it("should remove notification after timeout", async () => {
-    const { component } = render(NotificationQueueTest);
+    const onclose = vi.fn();
+    const ondismiss = vi.fn();
+    const { component } = render(NotificationQueueTest, {
+      props: { onclose, ondismiss },
+    });
 
     getQueue(component.queue).add({
+      id: "a",
       kind: "success",
       title: "Test notification",
       timeout: 1000,
@@ -1097,6 +995,12 @@ describe("NotificationQueue", () => {
     await tick();
 
     expect(screen.queryByText("Test notification")).not.toBeInTheDocument();
+    expect(onclose.mock.calls[0][0].detail).toEqual({
+      id: "a",
+      timeout: true,
+      trigger: "timeout",
+    });
+    expect(ondismiss.mock.calls[0][0].detail.trigger).toBe("timeout");
   });
 
   it("should handle persistent notifications without timeout", async () => {
