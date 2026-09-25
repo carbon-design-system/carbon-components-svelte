@@ -529,6 +529,7 @@
           value={inputValue}
           type="text"
           inputmode="decimal"
+          aria-errormessage={hasErrorMessage ? errorId : undefined}
           aria-describedby={resolveStatusDescribedBy({
             showInvalid: hasErrorMessage,
             showWarn,
@@ -537,6 +538,7 @@
             errorId,
             warnId,
             helperId,
+            includeErrorId: false,
           })}
           data-invalid={showInvalid || undefined}
           aria-invalid={showInvalid || undefined}
@@ -569,6 +571,7 @@
           use:reflectDefaultValue={allowEmpty ? undefined : value}
           type="number"
           inputmode="decimal"
+          aria-errormessage={hasErrorMessage ? errorId : undefined}
           aria-describedby={resolveStatusDescribedBy({
             showInvalid: hasErrorMessage,
             showWarn,
@@ -577,6 +580,7 @@
             errorId,
             warnId,
             helperId,
+            includeErrorId: false,
           })}
           data-invalid={showInvalid || undefined}
           aria-invalid={showInvalid || undefined}
@@ -658,7 +662,7 @@
       {#if isFluid}
         <hr class:bx--number-input__divider={true}>
         {#if hasErrorMessage}
-          <div id={errorId} class:bx--form-requirement={true}>
+          <div id={errorId} class:bx--form-requirement={true} role="alert">
             {invalidText}
           </div>
         {/if}
@@ -677,7 +681,9 @@
       </div>
     {/if}
     {#if !isFluid && hasErrorMessage}
-      <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
+      <div id={errorId} class:bx--form-requirement={true} role="alert">
+        {invalidText}
+      </div>
     {/if}
     {#if !isFluid && showWarn}
       <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
