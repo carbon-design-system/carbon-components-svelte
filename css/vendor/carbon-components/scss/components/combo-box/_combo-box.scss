@@ -74,3 +74,20 @@
 @include exports("combobox-readonly") {
   @include combobox-readonly;
 }
+
+// carbon-components-svelte patch (combo-box-skeleton)
+/// Skeleton state for the plain (non-fluid) ComboBoxSkeleton. The
+/// upstream Carbon combo-box partial never shipped a `.bx--skeleton`
+/// rule (only Dropdown and Select did), so ComboBoxSkeleton renders
+/// with no shimmer without this.
+/// @access private
+/// @group combo-box
+@mixin combobox-skeleton {
+  .#{$prefix}--combo-box.#{$prefix}--skeleton {
+    @include skeleton;
+  }
+}
+
+@include exports("combobox-skeleton") {
+  @include combobox-skeleton;
+}
