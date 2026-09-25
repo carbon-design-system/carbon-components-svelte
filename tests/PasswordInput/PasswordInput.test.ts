@@ -166,6 +166,16 @@ describe("PasswordInput", () => {
       expect(input).toHaveAttribute("readonly");
       expect(input).toHaveValue("readonly-password");
 
+      const wrapper = input.closest(".bx--text-input-wrapper");
+      expect(wrapper).toHaveClass("bx--text-input-wrapper--readonly");
+
+      const fieldWrapper = input.closest(".bx--text-input__field-wrapper");
+      // Icon is decorative (aria-hidden) so check by class within the wrapper,
+      // matching tests/TextInput/TextInput.test.ts's "should render readonly icon".
+      expect(
+        fieldWrapper?.querySelector(".bx--text-input__readonly-icon"),
+      ).toBeInTheDocument();
+
       const toggleButton = screen.getByRole("button");
       expect(toggleButton).not.toBeDisabled();
 
