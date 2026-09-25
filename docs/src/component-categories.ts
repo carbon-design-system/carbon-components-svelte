@@ -31,6 +31,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "ScrollGradient",
       "Accordion",
       "Disclosure",
+      "Bleed",
     ],
   },
   {
