@@ -244,6 +244,16 @@ Set `display` to control the CSS display mode. Use `"flex"` or `"inline-flex"` t
   <Box fill="layer-01" padding={4} border="subtle" marginX={2}>Flex item</Box>
 </Box>
 
+### Gap
+
+Set `gap` to space out flex or grid children without nesting a [Stack](/components/Stack). It uses the same `1`–`13` layout scale as `Stack`'s `gap`; strings accept any CSS length.
+
+<Box display="flex" gap={5}>
+  <Box fill="layer-01" padding={4} border="subtle">Flex item</Box>
+  <Box fill="layer-01" padding={4} border="subtle">Flex item</Box>
+  <Box fill="layer-01" padding={4} border="subtle">Flex item</Box>
+</Box>
+
 ## Overflow
 
 Set `overflow` to control how content that exceeds the box's bounds is handled.
@@ -345,6 +355,7 @@ Apply Box utilities directly when you do not need the component. Classes use the
 | `bx--box-display-flex` | `display: flex` |
 | `bx--box-display-inline-flex` | `display: inline-flex` |
 | `bx--box-display-grid` | `display: grid` |
+| `bx--box-gap-{1-13}` | Gap between flex or grid children |
 | `bx--box-overflow-visible` | `overflow: visible` |
 | `bx--box-overflow-hidden` | `overflow: hidden` |
 | `bx--box-overflow-auto` | `overflow: auto` |
