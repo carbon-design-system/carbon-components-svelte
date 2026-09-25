@@ -75,4 +75,18 @@ describe("css grid", () => {
     const firstStart = css.search(/\.bx--(?:[a-z]+\\:)?col-start-/);
     expect(firstStart).toBeGreaterThan(lastSpan);
   }, 30_000);
+
+  it("generates subgrid rules that consume css-grid's mode custom properties", async () => {
+    const css = await compileEntry("all.scss");
+
+    expect(css).toMatch(
+      /\.bx--subgrid\s*\{[^}]*margin-inline:\s*calc\(var\(--ccs-grid-mode-start\)/,
+    );
+    expect(css).toMatch(
+      /\.bx--subgrid--condensed\s*\{[^}]*--ccs-grid-column-hang:\s*0\.96875rem/,
+    );
+    expect(css).toMatch(
+      /\.bx--subgrid--narrow\.bx--subgrid--with-row-gap\s*\{[^}]*row-gap:\s*1rem/,
+    );
+  }, 30_000);
 });

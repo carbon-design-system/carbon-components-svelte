@@ -12,6 +12,12 @@
    * @slot {{ props: { class: string; [key: string]: any; } }}
    */
 
+  import { setContext } from "svelte";
+
+  // Any CssGrid nested inside this column, at any depth, renders as a
+  // subgrid. Set unconditionally: every column provides it.
+  setContext("carbon:CssColumn", true);
+
   /**
    * Set to `true` to render a custom HTML element.
    * Props are destructured as `props` in the default slot.

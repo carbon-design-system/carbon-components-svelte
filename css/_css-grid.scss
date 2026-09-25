@@ -250,3 +250,67 @@
 @include exports("css-grid") {
   @include css-grid;
 }
+
+// carbon-components-svelte patch (css-grid-subgrid)
+
+/// A CssGrid nested inside a CssColumn (Svelte context, see
+/// CssColumn.svelte/CssGrid.svelte) renders these classes instead of the
+/// base .bx--css-grid family. Every declaration is copied from the
+/// compiled output of @carbon/styles' .cds--subgrid* rules.
+///
+/// The custom properties resolve the same way as upstream's, even though
+/// this repo scopes them to .bx--css-grid instead of :root: a subgrid is
+/// used inside a .bx--css-grid-column inside a .bx--css-grid, so it
+/// inherits --ccs-grid-gutter from the grid, --ccs-grid-mode-start/-end
+/// from the column, and --ccs-grid-columns from the column's span class
+/// (or, with no span class, the grid's per-breakpoint count).
+///
+/// Like the css-grid mixin above, upstream's `[dir=rtl] .cds--subgrid`
+/// override is not ported: margin-inline is already logical.
+/// @access private
+/// @group components
+@mixin css-grid-subgrid {
+  .#{$prefix}--subgrid {
+    display: grid;
+    grid-template-columns: repeat(var(--ccs-grid-columns), minmax(0, 1fr));
+    margin-inline: calc(var(--ccs-grid-mode-start) * -1)
+      calc(var(--ccs-grid-mode-end) * -1);
+  }
+
+  .#{$prefix}--subgrid--wide {
+    --ccs-grid-gutter-start: 1rem;
+    --ccs-grid-gutter-end: 1rem;
+    --ccs-grid-column-hang: 0;
+  }
+
+  .#{$prefix}--subgrid--narrow {
+    --ccs-grid-gutter-start: 0rem;
+    --ccs-grid-gutter-end: 1rem;
+    --ccs-grid-column-hang: 1rem;
+  }
+
+  .#{$prefix}--subgrid--condensed {
+    --ccs-grid-gutter: 0.0625rem;
+    --ccs-grid-gutter-start: 0.03125rem;
+    --ccs-grid-gutter-end: 0.03125rem;
+    --ccs-grid-column-hang: 0.96875rem;
+  }
+
+  // Upstream hardcodes these row gaps (2rem, 1rem, 1px) instead of
+  // reading --ccs-grid-gutter the way .bx--css-grid--with-row-gap does.
+  .#{$prefix}--subgrid--with-row-gap {
+    row-gap: to-rem(32px);
+  }
+
+  .#{$prefix}--subgrid--narrow.#{$prefix}--subgrid--with-row-gap {
+    row-gap: to-rem(16px);
+  }
+
+  .#{$prefix}--subgrid--condensed.#{$prefix}--subgrid--with-row-gap {
+    row-gap: to-rem(1px);
+  }
+}
+
+@include exports("css-grid-subgrid") {
+  @include css-grid-subgrid;
+}
