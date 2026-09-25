@@ -30,6 +30,7 @@
   export let useSlot = false;
   export let invalidText = "";
   export let warnText = "";
+  export let helperText = "";
   export let id: ComponentProps<Slider>["id"] = undefined;
   export let readonlyText: ComponentProps<Slider>["readonlyText"] = undefined;
   export let ariaLabel: ComponentProps<Slider>["aria-label"] = undefined;
@@ -54,6 +55,7 @@
     {invalidText}
     {warn}
     {warnText}
+    {helperText}
     {required}
     {minLabel}
     {maxLabel}
@@ -91,6 +93,7 @@
     {invalidText}
     {warn}
     {warnText}
+    {helperText}
     {required}
     {minLabel}
     {maxLabel}

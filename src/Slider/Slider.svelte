@@ -90,6 +90,9 @@
   /** Specify the warning state text */
   export let warnText = "";
 
+  /** Specify the helper text */
+  export let helperText = "";
+
   /**
    * Specify the label text.
    * Alternatively, use the "labelChildren" slot.
@@ -195,7 +198,7 @@
   }
 
   $: labelId = `label-${id}`;
-  $: ({ errorId, warnId, readonlyId } = buildFieldIds(id));
+  $: ({ errorId, warnId, readonlyId, helperId } = buildFieldIds(id));
   $: inputId = `input-${id}`;
   // Invalid/warn states are suppressed when the slider is disabled or read-only.
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
@@ -283,8 +286,10 @@
           resolveStatusDescribedBy({
             showInvalid,
             showWarn,
+            helperText,
             errorId,
             warnId,
+            helperId,
           }),
         )}
         aria-invalid={showInvalid || undefined}
@@ -395,8 +400,10 @@
         aria-describedby={resolveStatusDescribedBy({
           showInvalid,
           showWarn,
+          helperText,
           errorId,
           warnId,
+          helperId,
         })}
         on:focus
         on:focus={handleTextInputFocus}
@@ -421,6 +428,15 @@
       class:bx--form-requirement={true}
     >
       {warnText}
+    </div>
+  {/if}
+  {#if helperText && !showInvalid && !showWarn}
+    <div
+      id={helperId}
+      class:bx--form__helper-text={true}
+      class:bx--form__helper-text--disabled={disabled}
+    >
+      {helperText}
     </div>
   {/if}
   {#if readonly}

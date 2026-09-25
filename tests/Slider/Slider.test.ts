@@ -424,6 +424,32 @@ describe("Slider", () => {
     expect(warnText).not.toBeInTheDocument();
   });
 
+  it("shows helper text", () => {
+    render(Slider, {
+      props: { id: "test-slider", helperText: "Drag to adjust" },
+    });
+
+    const helper = screen.getByText("Drag to adjust");
+    expect(helper).toHaveClass("bx--form__helper-text");
+    expect(screen.getByRole("slider")).toHaveAttribute(
+      "aria-describedby",
+      "helper-test-slider",
+    );
+  });
+
+  it("hides helper text when invalid text is shown", () => {
+    render(Slider, {
+      props: {
+        id: "test-slider",
+        helperText: "Drag to adjust",
+        invalid: true,
+        invalidText: "Required",
+      },
+    });
+
+    expect(screen.queryByText("Drag to adjust")).not.toBeInTheDocument();
+  });
+
   it("should associate warn text with slider via aria-describedby", () => {
     render(Slider, {
       props: { warn: true, warnText: "Warning message" },
