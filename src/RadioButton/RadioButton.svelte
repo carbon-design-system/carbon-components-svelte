@@ -19,6 +19,16 @@
   /** Set to `true` to disable the radio button */
   export let disabled = false;
 
+  /** Set to `true` for the radio button to be read-only */
+  export let readonly = false;
+
+  /**
+   * Specify the assistive text announced to screen readers when read-only.
+   * Exposed because VoiceOver does not announce `aria-readonly`, and ARIA
+   * does not support `aria-readonly` on role "radio" at all.
+   */
+  export let readonlyText = "Read-only";
+
   /** Set to `true` to mark the field as required */
   export let required = false;
 
@@ -53,6 +63,7 @@
 
   import { getContext, onMount } from "svelte";
   import { readable } from "svelte/store";
+  import { buildFieldIds, joinDescribedBy } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
   import {
@@ -70,7 +81,7 @@
     groupName,
     fallbackName,
     groupRequired,
-    readonly,
+    readonly: groupReadonly,
     allowDeselect,
     helperId,
   } = ctx ?? {
@@ -88,6 +99,13 @@
   // Unique key for this component instance (used for registry identity)
   // Using an object reference guarantees uniqueness across all instances
   const instanceKey = {};
+
+  $: effectiveReadonly = $groupReadonly || readonly;
+  // A read-only `RadioButtonGroup` already describes itself on the
+  // fieldset; only describe the radio when its own `readonly` is the
+  // source, so the state is not announced twice.
+  $: describeReadonly = readonly && !$groupReadonly;
+  $: ({ readonlyId } = buildFieldIds(id));
 
   // Registry state for standalone mode with name
   /** @type {import("svelte/store").Writable<{} | undefined> | null} */
@@ -157,6 +175,10 @@
   // `checked` here.
   function handleFormReset() {
     if (!ref || update) return;
+    if (effectiveReadonly) {
+      ref.checked = checked;
+      return;
+    }
     checked = ref.checked;
     if (checked && name && registry) {
       updateGroupSelection(name, instanceKey);
@@ -173,6 +195,7 @@
 <div
   class:bx--radio-button-wrapper={true}
   class:bx--radio-button-wrapper--label-left={labelPosition === "left"}
+  class:bx--radio-button-wrapper--readonly={effectiveReadonly}
   {...$$restProps}
   aria-label={undefined}
 >
@@ -186,7 +209,10 @@
     {disabled}
     required={$groupRequired ?? required}
     {value}
-    aria-describedby={$helperId}
+    aria-describedby={joinDescribedBy(
+      describeReadonly ? readonlyId : null,
+      $helperId,
+    )}
     aria-label={labelText || $$slots.labelChildren
       ? undefined
       : $$props["aria-label"] || undefined}
@@ -194,7 +220,7 @@
     on:focus
     on:blur
     on:click={(event) => {
-      if ($readonly) {
+      if (effectiveReadonly) {
         event.preventDefault();
         return;
       }
@@ -207,7 +233,7 @@
       }
     }}
     on:change={(event) => {
-      if ($readonly) {
+      if (effectiveReadonly) {
         event.stopImmediatePropagation();
         return;
       }
@@ -236,4 +262,7 @@
       </span>
     {/if}
   </label>
+  {#if describeReadonly}
+    <span id={readonlyId} class:bx--visually-hidden={true}>{readonlyText}</span>
+  {/if}
 </div>

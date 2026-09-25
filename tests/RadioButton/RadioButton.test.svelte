@@ -15,6 +15,9 @@
   export let id: ComponentProps<RadioButton>["id"] = "ccs-test";
   export let name: ComponentProps<RadioButton>["name"] = "test-group";
   export let ref: ComponentProps<RadioButton>["ref"] = null;
+  export let readonly: ComponentProps<RadioButton>["readonly"] = false;
+  export let readonlyText: ComponentProps<RadioButton>["readonlyText"] =
+    undefined;
   export let customClass = "";
 </script>
 
@@ -28,6 +31,8 @@
   {hideLabel}
   {id}
   {name}
+  {readonly}
+  {readonlyText}
   bind:ref
   class={customClass}
   {...$$restProps}

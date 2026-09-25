@@ -184,15 +184,22 @@
   .#{$prefix}--radio-button-group--readonly
     .#{$prefix}--radio-button
     + .#{$prefix}--radio-button__label
+    .#{$prefix}--radio-button__appearance,
+  .#{$prefix}--radio-button-wrapper--readonly
+    .#{$prefix}--radio-button
+    + .#{$prefix}--radio-button__label
     .#{$prefix}--radio-button__appearance {
     border-color: $icon-disabled;
   }
 
-  .#{$prefix}--radio-button-group--readonly .#{$prefix}--radio-button__label {
+  .#{$prefix}--radio-button-group--readonly .#{$prefix}--radio-button__label,
+  .#{$prefix}--radio-button-wrapper--readonly .#{$prefix}--radio-button__label {
     cursor: default;
   }
 
   .#{$prefix}--radio-button-group--readonly
+    .#{$prefix}--radio-button__label-text,
+  .#{$prefix}--radio-button-wrapper--readonly
     .#{$prefix}--radio-button__label-text {
     cursor: text;
     user-select: text;
