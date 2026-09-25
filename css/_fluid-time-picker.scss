@@ -133,14 +133,12 @@
     transition: opacity $duration--fast-01 motion(standard, productive);
   }
 
-  // `!important` keeps a readonly select's divider visible against the
-  // hover rules below, which out-weigh any selector this could reasonably use.
-  .#{$prefix}--time-picker--fluid__wrapper
+  // The root class matches the divider rule above, and source order wins.
+  .#{$prefix}--time-picker--fluid
+    .#{$prefix}--time-picker--fluid__wrapper
     .#{$prefix}--select--readonly
     .#{$prefix}--select-input__wrapper::before {
-    background-color: $ui-03 !important;
-    opacity: 1 !important;
-    transition: none;
+    background-color: $ui-03;
   }
 
   .#{$prefix}--time-picker--fluid__wrapper
@@ -227,18 +225,23 @@
 
   // Hover only where a pointer can hover, so a tap does not leave it stuck.
   @media (any-hover: hover) {
+    // Readonly selects keep their divider. `:nth-last-child(n + 2)` stands in
+    // for `:not(:last-child)` to keep the chain at two `:not()`s.
     .#{$prefix}--time-picker--fluid:not(.#{$prefix}--time-picker--fluid--disabled)
       .#{$prefix}--time-picker--fluid__wrapper
-      > *:nth-child(2):not(:last-child):hover
+      > *:nth-child(2):nth-last-child(n + 2):hover
+      .#{$prefix}--select:not(.#{$prefix}--select--readonly)
       .#{$prefix}--select-input__wrapper::before,
     .#{$prefix}--time-picker--fluid:not(.#{$prefix}--time-picker--fluid--disabled)
       .#{$prefix}--time-picker--fluid__wrapper
-      > *:nth-child(2):hover:not(:last-child)
+      > *:nth-child(2):nth-last-child(n + 2):hover
       ~ *
+      .#{$prefix}--select:not(.#{$prefix}--select--readonly)
       .#{$prefix}--select-input__wrapper::before,
     .#{$prefix}--time-picker--fluid:not(.#{$prefix}--time-picker--fluid--disabled)
       .#{$prefix}--time-picker--fluid__wrapper
       > *:last-child:hover
+      .#{$prefix}--select:not(.#{$prefix}--select--readonly)
       .#{$prefix}--select-input__wrapper::before {
       opacity: 0;
     }

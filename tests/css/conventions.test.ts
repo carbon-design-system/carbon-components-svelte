@@ -546,16 +546,9 @@ const SHARED_RULES: Record<string, (lines: string[]) => number[]> = {
         ? [index + 1]
         : [],
     ),
-  // Allowed only under a comment that names what it has to beat.
-  "unexplained !important": (lines) =>
-    lines.flatMap((line, index) =>
-      line.split("//")[0].includes("!important") &&
-      !lines
-        .slice(Math.max(0, index - 8), index)
-        .some((above) => /^\s*\/\/.*!important/.test(above))
-        ? [index + 1]
-        : [],
-    ),
+  // Win on specificity or custom-property inheritance instead; consumers
+  // cannot override an `!important` without one of their own.
+  "!important": matching(/!important/),
 };
 
 // Same contract as KNOWN_PATCH_VIOLATIONS: exact counts that only shrink.
@@ -587,10 +580,9 @@ describe("hand-authored conventions (partials and patch blocks)", () => {
     expect(counts).toEqual(KNOWN_SHARED_VIOLATIONS);
   });
 
-  it("still sees the !important declarations it vets", () => {
-    const total = HAND_AUTHORED.flatMap(({ lines }) =>
-      lines.filter((line) => line.split("//")[0].includes("!important")),
-    );
-    expect(total.length).toBeGreaterThan(0);
+  it("still flags an !important declaration", () => {
+    expect(
+      SHARED_RULES["!important"](["  a {", "    opacity: 1 !important;"]),
+    ).toEqual([2]);
   });
 });
