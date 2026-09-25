@@ -35,6 +35,15 @@ describe("Text", () => {
     expect(node.className).not.toMatch(/bx--type-(?!text-)/);
   });
 
+  it("applies success and link color classes", () => {
+    render(Text);
+
+    expect(screen.getByText("Success text")).toHaveClass(
+      "bx--type-text-success",
+    );
+    expect(screen.getByText("Link text")).toHaveClass("bx--type-text-link");
+  });
+
   it("merges type, color, and rest class", () => {
     render(Text);
 

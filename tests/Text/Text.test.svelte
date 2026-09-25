@@ -9,6 +9,8 @@
 <Text tag="span">Inline span</Text>
 <Text tag="span" type="inherit" color="error">Inherited type</Text>
 <Text color="helper">Color only</Text>
+<Text color="success">Success text</Text>
+<Text color="link">Link text</Text>
 <Text type="body-long-01" weight="semibold">Semibold text</Text>
 <Text type="body-long-01" italic>Italic text</Text>
 <Text type="body-long-01" family="mono">Mono text</Text>
