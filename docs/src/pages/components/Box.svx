@@ -259,6 +259,20 @@ The box renders a `<div>` by default. Set `tag` to use a different element.
   Rendered as a `section`.
 </Box>
 
+## Element reference
+
+Use `bind:ref` to get the rendered element, for example to measure it, scroll it into view, or hand it to a non-Svelte library. `ref` follows `tag`, so it updates if `tag` swaps the element.
+
+```svelte
+<script>
+  let ref = null;
+</script>
+
+<Box bind:ref fill="layer-01" padding={5}>
+  Referenced box
+</Box>
+```
+
 ## Composition
 
 <Box fill="layer-01" padding={6} border="subtle" maxWidth="42rem">
