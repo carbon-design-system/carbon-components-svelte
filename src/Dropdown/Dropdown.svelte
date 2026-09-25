@@ -113,6 +113,12 @@
   export let readonly = false;
 
   /**
+   * Specify the assistive text announced to screen readers when read-only.
+   * Exposed because VoiceOver does not announce `aria-readonly`.
+   */
+  export let readonlyText = "Read-only";
+
+  /**
    * Set to `true` to show a clear button when an item is selected.
    * Clears `selectedId` and dispatches a `clear` event.
    * Also enables clearing the selection with Delete/Backspace.
@@ -274,6 +280,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import {
     buildFieldIds,
+    joinDescribedBy,
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
@@ -338,7 +345,7 @@
     }
   }
   $: menuId = `menu-${id}`;
-  $: ({ helperId, errorId, warnId } = buildFieldIds(id));
+  $: ({ helperId, errorId, warnId, readonlyId } = buildFieldIds(id));
   $: selectionId = `selection-${id}`;
   // Invalid/warn states are suppressed when the dropdown is disabled or read-only.
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
@@ -364,10 +371,11 @@
     requireInvalidText: true,
     requireWarnText: true,
   });
-  $: fieldDescribedById =
-    [hasSelectionDescription ? selectionId : null, statusDescribedById]
-      .filter(Boolean)
-      .join(" ") || undefined;
+  $: fieldDescribedById = joinDescribedBy(
+    readonly ? readonlyId : null,
+    hasSelectionDescription ? selectionId : null,
+    statusDescribedById,
+  );
   $: isFluid = !inline && (fluid || !!formContext?.isFluid);
   $: showFieldFocus = isFluid && (fieldFocused || open);
   // Neutral = default fluid state, i.e. none of the other wrapper modifiers apply.
@@ -719,7 +727,6 @@
         class:bx--list-box__field--clearable={clearable && selectedId !== undefined}
         tabindex="0"
         aria-expanded={open}
-        aria-disabled={readonly || undefined}
         aria-readonly={readonly || undefined}
         aria-haspopup="listbox"
         aria-activedescendant={highlightedId ?? ""}
@@ -1068,6 +1075,9 @@
     >
       {helperText}
     </div>
+  {/if}
+  {#if readonly}
+    <span id={readonlyId} class:bx--visually-hidden={true}>{readonlyText}</span>
   {/if}
   {#if hasSelectionDescription}
     <span id={selectionId} class:bx--visually-hidden={true}

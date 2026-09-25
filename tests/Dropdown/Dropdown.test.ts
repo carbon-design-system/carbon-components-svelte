@@ -2953,6 +2953,56 @@ describe("Dropdown", () => {
       );
     });
 
+    it("does not set aria-disabled when readonly", () => {
+      render(Dropdown, {
+        props: { items, labelText: "Contact", readonly: true },
+      });
+
+      expect(screen.getByRole("combobox")).not.toHaveAttribute("aria-disabled");
+    });
+
+    it("describes the field as read-only for screen readers that ignore aria-readonly", () => {
+      const { container } = render(Dropdown, {
+        props: { items, labelText: "Contact", readonly: true },
+      });
+
+      const trigger = screen.getByRole("combobox");
+      expect(trigger).toHaveAttribute(
+        "aria-describedby",
+        "readonly-test-dropdown",
+      );
+
+      const description = container.querySelector("#readonly-test-dropdown");
+      expect(description).toHaveTextContent("Read-only");
+      expect(description).toHaveClass("bx--visually-hidden");
+    });
+
+    it("supports overriding the read-only assistive text", () => {
+      const { container } = render(Dropdown, {
+        props: {
+          items,
+          labelText: "Contact",
+          readonly: true,
+          readonlyText: "Schreibgeschützt",
+        },
+      });
+
+      expect(
+        container.querySelector("#readonly-test-dropdown"),
+      ).toHaveTextContent("Schreibgeschützt");
+    });
+
+    it("does not render a read-only description or aria-describedby when not readonly", () => {
+      const { container } = render(Dropdown, {
+        props: { items, labelText: "Contact" },
+      });
+
+      expect(screen.getByRole("combobox")).not.toHaveAttribute(
+        "aria-describedby",
+      );
+      expect(container.querySelector("#readonly-test-dropdown")).toBeNull();
+    });
+
     it("should not open menu on click when readonly", async () => {
       render(Dropdown, {
         props: { items, labelText: "Contact", readonly: true },
