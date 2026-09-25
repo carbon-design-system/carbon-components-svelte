@@ -256,6 +256,29 @@ describe("Box", () => {
     );
   });
 
+  it("applies single-side margin classes and styles", () => {
+    render(Box);
+
+    expect(screen.getByTestId("margin-top-scale")).toHaveClass(
+      "bx--box-my-7",
+      "bx--box-mt-3",
+    );
+    expectInlineStyle(screen.getByTestId("margin-side-custom"), {
+      marginBottom: "1.5rem",
+      marginLeft: "0px",
+      marginTop: "",
+    });
+
+    const overCustom = screen.getByTestId("margin-side-over-custom");
+    expect(overCustom).toHaveClass("bx--box-mt-3");
+    expectInlineStyle(overCustom, {
+      marginTop: "",
+      marginRight: "1rem",
+      marginBottom: "1rem",
+      marginLeft: "1rem",
+    });
+  });
+
   it("applies align and justify classes", () => {
     render(Box);
 
