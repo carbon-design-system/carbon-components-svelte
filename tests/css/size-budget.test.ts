@@ -11,8 +11,8 @@ import { compileEntry } from "./compile";
 // trips one, raise it to the new size plus 2% and say why in the commit.
 // `bun run check:css` prints the current numbers.
 const BUDGETS: Record<string, { min: number; gzip: number }> = {
-  // measured 670,582 / 72,122
-  "all.scss": { min: 683_000, gzip: 73_500 },
+  // measured 681,790 / 73,620 (raised for DescriptionList)
+  "all.scss": { min: 695_000, gzip: 75_100 },
   // measured 590,103 / 64,003
   "white.scss": { min: 602_000, gzip: 65_300 },
 };

@@ -1,0 +1,55 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "./spacing-scale";
+
+/// DescriptionList renders real dl/dt/dd term-value pairs. Gap uses the same
+/// $ccs-spacing-scale Box and Stack key their own spacing props to. dt/dd
+/// type classes (bx--type-label-01/body-short-01) are set directly in the
+/// component markup, matching how ModalHeader hardcodes its own type class.
+/// @access private
+/// @group components
+@mixin description-list {
+  .#{$prefix}--description-list {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+  }
+
+  .#{$prefix}--description-list--columns {
+    display: grid;
+  }
+
+  @each $step, $size in $ccs-spacing-scale {
+    .#{$prefix}--description-list-gap-#{$step} {
+      gap: $size;
+    }
+  }
+
+  .#{$prefix}--description-list-item dt,
+  .#{$prefix}--description-list-item dd {
+    margin: 0;
+  }
+
+  .#{$prefix}--description-list-item dt {
+    color: $text-02;
+  }
+
+  .#{$prefix}--description-list-item dd {
+    color: $text-01;
+  }
+
+  .#{$prefix}--description-list--horizontal .#{$prefix}--description-list-item {
+    display: flex;
+    align-items: baseline;
+    column-gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--description-list--horizontal .#{$prefix}--description-list-item dt {
+    flex: 0 0 auto;
+    min-width: 30%;
+  }
+}
+
+@include exports("description-list") {
+  @include description-list;
+}
