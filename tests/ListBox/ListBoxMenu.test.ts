@@ -166,6 +166,25 @@ describe("ListBoxMenu", () => {
       expect(component.ref).toContainElement(menu);
     });
 
+    it("should keep a portaled menu static when a style is passed", async () => {
+      render(ListBoxMenu, {
+        props: {
+          slotContent: "Styled portal menu",
+          portal: true,
+          open: true,
+          style: "max-height: 100px;",
+        },
+      });
+
+      const menu = (await screen.findByText("Styled portal menu")).closest(
+        ".bx--list-box__menu",
+      );
+      // Read the attribute: jsdom loads no Carbon CSS, so the computed
+      // `position` is `static` whether or not the inline style set it.
+      expect(menu?.getAttribute("style")).toContain("position: static");
+      expect(menu).toHaveStyle({ maxHeight: "100px" });
+    });
+
     it("should wrap menu with portalHostClass so descendant CSS selectors match", async () => {
       render(ListBoxMenu, {
         props: {
