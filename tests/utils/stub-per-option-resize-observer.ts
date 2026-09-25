@@ -1,5 +1,7 @@
 /// <reference types="vitest/globals" />
 
+import { rect } from "./rect";
+
 /**
  * Letting a rendered listbox option report a height in the unit environment.
  *
@@ -25,7 +27,7 @@ function entryFor(element: Element) {
   const height = readMarkedHeight(element);
   return {
     target: element,
-    contentRect: { height } as DOMRectReadOnly,
+    contentRect: rect({ height }),
     borderBoxSize: [{ blockSize: height, inlineSize: 0 }],
     contentBoxSize: [],
     devicePixelContentBoxSize: [],

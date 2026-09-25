@@ -2,6 +2,7 @@ import { render, screen, waitFor } from "@testing-library/svelte";
 import type OverflowMenuComponent from "carbon-components-svelte/OverflowMenu/OverflowMenu.svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
+import { rect } from "../utils/rect";
 import { user } from "../utils/user";
 import OverflowMenuAllDisabled from "./OverflowMenu.allDisabled.test.svelte";
 import OverflowMenuDisabled from "./OverflowMenu.disabled.test.svelte";
@@ -795,34 +796,10 @@ describe("OverflowMenu", () => {
       const original = Element.prototype.getBoundingClientRect;
       Element.prototype.getBoundingClientRect = function () {
         if (this.hasAttribute?.("data-floating-portal")) {
-          return {
-            x: 0,
-            y: 0,
-            width: 160,
-            height: 200,
-            top: 0,
-            right: 160,
-            bottom: 200,
-            left: 0,
-            toJSON() {
-              return this;
-            },
-          } as DOMRect;
+          return rect({ width: 160, height: 200 });
         }
         if (this.classList?.contains("bx--overflow-menu")) {
-          return {
-            x: 0,
-            y: 30,
-            width: 40,
-            height: 32,
-            top: 30,
-            right: 40,
-            bottom: 62,
-            left: 0,
-            toJSON() {
-              return this;
-            },
-          } as DOMRect;
+          return rect({ top: 30, width: 40, height: 32 });
         }
         return original.call(this);
       };

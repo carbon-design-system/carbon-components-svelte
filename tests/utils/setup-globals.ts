@@ -1,5 +1,7 @@
 /// <reference types="vitest/globals" />
 
+import { rect } from "./rect";
+
 Element.prototype.scrollIntoView = vi.fn();
 
 // jsdom does not implement matchMedia. Default to "no match" so components that
@@ -37,7 +39,7 @@ class ResizeObserverMock {
         [
           {
             target: element,
-            contentRect: { height: 100 } as DOMRectReadOnly,
+            contentRect: rect({ height: 100 }),
             borderBoxSize: [],
             contentBoxSize: [],
             devicePixelContentBoxSize: [],
@@ -147,6 +149,3 @@ if (
     }
   };
 }
-
-// Loaded with a dynamic `import()`, which needs a module.
-export {};

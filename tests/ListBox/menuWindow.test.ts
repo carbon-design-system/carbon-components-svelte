@@ -1,6 +1,7 @@
 import { tick } from "svelte";
 import { createMenuWindow } from "../../src/ListBox/menu-window.js";
 import { VIRTUAL_INDEX_ATTRIBUTE } from "../../src/utils/height-measurer.js";
+import { rect } from "../utils/rect";
 
 type Item = { id: number; text: string };
 
@@ -38,8 +39,7 @@ function buildContainer(scrollHeight = 100_000) {
     value: CONTAINER_HEIGHT,
     configurable: true,
   });
-  container.getBoundingClientRect = () =>
-    ({ top: 0, bottom: CONTAINER_HEIGHT }) as DOMRect;
+  container.getBoundingClientRect = () => rect({ bottom: CONTAINER_HEIGHT });
 
   document.body.appendChild(container);
   return { container, maxScroll };
@@ -60,8 +60,7 @@ function renderOptions(
     }
     option.textContent = item.text;
     const height = heightAt(itemIndex);
-    option.getBoundingClientRect = () =>
-      ({ top: 0, bottom: height, height }) as DOMRect;
+    option.getBoundingClientRect = () => rect({ height });
     container.appendChild(option);
   });
 }
@@ -119,7 +118,7 @@ function installManualResizeObserver() {
         const { height } = target.getBoundingClientRect();
         return {
           target,
-          contentRect: { height } as DOMRectReadOnly,
+          contentRect: rect({ height }),
           borderBoxSize: [{ blockSize: height, inlineSize: 0 }],
           contentBoxSize: [],
           devicePixelContentBoxSize: [],
@@ -1037,8 +1036,7 @@ describe("createMenuWindow: the measured scroll position", () => {
       },
       configurable: true,
     });
-    container.getBoundingClientRect = () =>
-      ({ top: 0, bottom: CONTAINER_HEIGHT }) as DOMRect;
+    container.getBoundingClientRect = () => rect({ bottom: CONTAINER_HEIGHT });
     document.body.appendChild(container);
 
     const scrollTops: number[] = [];
@@ -1064,11 +1062,7 @@ describe("createMenuWindow: the measured scroll position", () => {
         option.setAttribute(VIRTUAL_INDEX_ATTRIBUTE, String(itemIndex));
         option.textContent = item.text;
         option.getBoundingClientRect = () =>
-          ({
-            top: topOf(itemIndex) - container.scrollTop,
-            bottom: topOf(itemIndex) - container.scrollTop + height,
-            height,
-          }) as DOMRect;
+          rect({ top: topOf(itemIndex) - container.scrollTop, height });
         const marker = document.createElement("span");
         marker.setAttribute("data-measured-height", String(height));
         option.appendChild(marker);
@@ -1292,11 +1286,7 @@ describe("createMenuWindow: measured, below the threshold", () => {
     Array.from(container.children).forEach((option, index) => {
       option.getBoundingClientRect = () => {
         const top = index * ITEM_HEIGHT - container.scrollTop;
-        return {
-          top,
-          bottom: top + ITEM_HEIGHT,
-          height: ITEM_HEIGHT,
-        } as DOMRect;
+        return rect({ top, height: ITEM_HEIGHT });
       };
     });
 
