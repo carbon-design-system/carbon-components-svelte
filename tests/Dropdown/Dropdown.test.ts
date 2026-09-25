@@ -2731,6 +2731,26 @@ describe("Dropdown", () => {
       });
     });
 
+    it("should mark the portal host of an inline menu so it keeps the inline width", () => {
+      render(Dropdown, {
+        props: { items, type: "inline", portalMenu: true, open: true },
+      });
+
+      expect(screen.getByRole("listbox").parentElement).toHaveClass(
+        "bx--dropdown__menu-host--inline",
+      );
+    });
+
+    it("should not mark the portal host of a default menu", () => {
+      render(Dropdown, {
+        props: { items, portalMenu: true, open: true },
+      });
+
+      expect(screen.getByRole("listbox").parentElement).not.toHaveClass(
+        "bx--dropdown__menu-host--inline",
+      );
+    });
+
     it("should close portaled menu when clicking outside", async () => {
       render(Dropdown, {
         props: {

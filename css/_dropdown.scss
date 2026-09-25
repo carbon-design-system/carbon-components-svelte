@@ -18,3 +18,25 @@
 @include exports("dropdown-clearable") {
   @include dropdown-clearable;
 }
+
+/// Carbon sizes the inline dropdown's menu through
+/// `.bx--dropdown--inline .bx--list-box__menu`, a descendant selector a
+/// portaled menu can no longer match. Left to the base rule, a portaled
+/// inline menu shrinks to the width of its trigger, which for a short
+/// selected label is too narrow to read the options. `Dropdown` puts this
+/// class on the portal host so the menu keeps Carbon's inline width bounds.
+///
+/// `bx--dropdown--inline` itself can't be reused on the host: it also sets
+/// `display`, `width`, and a hover background meant for the field.
+/// @access private
+/// @group components
+@mixin dropdown-inline-portal {
+  .#{$prefix}--dropdown__menu-host--inline .#{$prefix}--list-box__menu {
+    min-width: to-rem(288px);
+    max-width: to-rem(480px);
+  }
+}
+
+@include exports("dropdown-inline-portal") {
+  @include dropdown-inline-portal;
+}

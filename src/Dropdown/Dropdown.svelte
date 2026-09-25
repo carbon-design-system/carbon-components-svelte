@@ -853,6 +853,7 @@
         aria-label={menuAriaLabel}
         {id}
         portal={effectivePortalMenu}
+        portalHostClass={inline ? "bx--dropdown__menu-host--inline" : undefined}
         {open}
         anchor={ref}
         {direction}
