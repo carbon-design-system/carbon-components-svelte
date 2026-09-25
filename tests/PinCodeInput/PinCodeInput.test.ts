@@ -646,6 +646,18 @@ describe("PinCodeInput", () => {
     select.mockRestore();
   });
 
+  it("should set aria-errormessage (not aria-describedby) to the error id on each segment when invalid", () => {
+    const { container } = render(PinCodeInput, {
+      props: { id: "test-pin", invalid: true, invalidText: "Incorrect code" },
+    });
+
+    for (const input of getInputs()) {
+      expect(input).toHaveAttribute("aria-invalid", "true");
+      expect(input).toHaveAttribute("aria-errormessage", "error-test-pin");
+    }
+    expect(getFieldset(container)).not.toHaveAttribute("aria-describedby");
+  });
+
   describe("invalid and warning states", () => {
     it("renders the invalid state with visible requirement text after the fields wrapper", () => {
       const { container } = render(PinCodeInput, {
@@ -664,6 +676,7 @@ describe("PinCodeInput", () => {
       expect(fields?.nextElementSibling).toBe(message);
       expect(message).toHaveClass("bx--form-requirement");
       expect(message).toHaveAttribute("id", "error-pin-invalid");
+      expect(message).toHaveAttribute("role", "alert");
       expect(message).toBeVisible();
       expect(
         container.querySelector(".bx--pin-code-input__icon"),
@@ -675,12 +688,10 @@ describe("PinCodeInput", () => {
         expect(input).toHaveAttribute("aria-invalid", "true");
       }
 
-      expect(getFieldset(container)).toHaveAttribute(
-        "aria-describedby",
-        "error-pin-invalid",
-      );
+      expect(getFieldset(container)).not.toHaveAttribute("aria-describedby");
       for (const input of inputs) {
         expect(input).not.toHaveAttribute("aria-describedby");
+        expect(input).toHaveAttribute("aria-errormessage", "error-pin-invalid");
       }
       expect(
         container.querySelector(".bx--pin-code-input__icon"),
@@ -926,10 +937,16 @@ describe("PinCodeInput", () => {
           .closest(".bx--pin-code-input__message")
           ?.querySelector(".bx--pin-code-input__icon"),
       ).toBeInTheDocument();
-      expect(getFieldset(document.body)).toHaveAttribute(
+      expect(message).toHaveAttribute("role", "alert");
+      expect(getFieldset(document.body)).not.toHaveAttribute(
         "aria-describedby",
-        "error-pin-fluid-invalid",
       );
+      for (const input of getInputs()) {
+        expect(input).toHaveAttribute(
+          "aria-errormessage",
+          "error-pin-fluid-invalid",
+        );
+      }
     });
 
     it("renders the warning message inside the fields wrapper", () => {
