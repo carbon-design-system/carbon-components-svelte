@@ -373,9 +373,7 @@ describe("TimePicker", () => {
   });
 
   it("should support readonly on TimePickerSelect", async () => {
-    const { container } = render(TimePickerCustom, {
-      props: { selectReadonly: true },
-    });
+    render(TimePickerCustom, { props: { selectReadonly: true } });
 
     const selects = screen.getAllByRole("combobox");
     for (const select of selects) {
@@ -386,12 +384,7 @@ describe("TimePicker", () => {
     }
 
     const [select] = selects;
-    assert.instanceOf(select, HTMLSelectElement);
-    const initialValue = select.value;
-    await user.click(select);
-    await user.keyboard("{ArrowDown}");
-    expect(select.value).toBe(initialValue);
-    container.remove();
+    expect(await fireEvent.keyDown(select, { key: "ArrowDown" })).toBe(false);
   });
 
   describe("inherited readonly and disabled", () => {
