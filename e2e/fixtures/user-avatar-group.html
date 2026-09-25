@@ -6,7 +6,9 @@
     <title>UserAvatarGroup Test</title>
   </head>
   <body>
-    <div id="app"></div>
+    <!-- Keep avatars off the page origin, where Playwright's cursor
+         starts: one there can open its tooltip before a test hovers. -->
+    <div id="app" style="padding: 1rem"></div>
     <script type="module" src="./user-avatar-group.ts"></script>
   </body>
 </html>
