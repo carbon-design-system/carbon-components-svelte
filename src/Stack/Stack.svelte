@@ -136,7 +136,20 @@
 {#if as}
   <slot {props} />
 {:else}
-  <svelte:element this={tag} bind:this={ref} {...props}>
+  <svelte:element
+    this={tag}
+    bind:this={ref}
+    {...props}
+    on:click
+    on:mouseover
+    on:mouseenter
+    on:mouseleave
+    on:scroll
+    on:keydown
+    on:keyup
+    on:focusin
+    on:focusout
+  >
     <slot />
   </svelte:element>
 {/if}
