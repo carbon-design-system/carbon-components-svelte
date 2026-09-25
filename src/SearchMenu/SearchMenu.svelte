@@ -65,6 +65,19 @@
   export let disabled = false;
 
   /**
+   * Set to `true` to use the read-only variant.
+   * Blocks opening the results menu and selecting or submitting a value;
+   * the current value still submits with the form.
+   */
+  export let readonly = false;
+
+  /**
+   * Specify the assistive text announced to screen readers when read-only.
+   * Exposed because VoiceOver does not announce `aria-readonly`.
+   */
+  export let readonlyText = "Read-only";
+
+  /**
    * Set to `true` to render a skeleton menu while results are loading, for
    * example while fetching server-side results. Override the placeholder rows
    * with the `loading` slot.
@@ -86,6 +99,9 @@
 
   /** Specify the label text */
   export let labelText = "";
+
+  /** Set to `true` to visually hide the label text */
+  export let hideLabel = false;
 
   /** Specify the close button label text */
   export let closeButtonLabelText = "Clear search input";
@@ -144,6 +160,7 @@
   import SkeletonText from "../SkeletonText/SkeletonText.svelte";
   import { debounce as debounceFn } from "../utils/debounce.js";
   import { dismiss } from "../utils/dismiss.js";
+  import { buildFieldIds, joinDescribedBy } from "../utils/field-status.js";
   import { fuzzyMatch } from "../utils/fuzzy-match.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { createOptionListNavigator } from "../utils/option-list-navigator.js";
@@ -203,9 +220,11 @@
     filterableIds.size === 0 &&
     itemCount === 0 &&
     $$slots.noResults;
-  $: open = !disabled && focused && !dismissed;
+  $: open = !disabled && !readonly && focused && !dismissed;
   $: menuVisible = open && (loading || itemCount > 0 || showNoResults);
   $: menuDomId = `menu-${id}`;
+  $: ({ readonlyId } = buildFieldIds(id));
+  $: describedById = joinDescribedBy(readonly ? readonlyId : null);
   $: menuLabel = labelText || placeholder;
   $: menuAnchor = $$slots.before ? searchAnchorRef : anchorRef;
   $: resolvedMenuSize = menuSize ?? size;
@@ -258,7 +277,7 @@
   // synchronously to guard `close` against emitting twice for one dismissal
   // (e.g. a blur immediately followed by an outside-click handler).
   function isMenuOpen() {
-    return !disabled && focused && !dismissed;
+    return !disabled && !readonly && focused && !dismissed;
   }
 
   function close(trigger) {
@@ -272,7 +291,7 @@
     });
 
   function handleKeydown(event) {
-    if (disabled) return;
+    if (disabled || readonly) return;
     switch (event.key) {
       case "ArrowDown":
         event.preventDefault();
@@ -406,6 +425,8 @@
       {size}
       {light}
       {disabled}
+      {readonly}
+      {hideLabel}
       {placeholder}
       {labelText}
       {closeButtonLabelText}
@@ -422,6 +443,7 @@
       aria-expanded={menuVisible}
       aria-controls={menuVisible ? menuDomId : undefined}
       aria-activedescendant={$highlightedId ?? undefined}
+      aria-describedby={describedById}
       {...$$restProps}
       on:focus
       on:focus={handleFocus}
@@ -437,6 +459,11 @@
       on:keyup
       on:paste
     />
+    {#if readonly}
+      <span id={readonlyId} class:bx--visually-hidden={true}
+        >{readonlyText}</span
+      >
+    {/if}
     {#if open && !portal}
       <div
         bind:this={menuRef}

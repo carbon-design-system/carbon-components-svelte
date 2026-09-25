@@ -58,6 +58,36 @@ describe("SearchMenu", () => {
     expect(select).not.toHaveBeenCalled();
   });
 
+  it("does not open the menu or submit when readonly", async () => {
+    render(SearchMenu, { props: { readonly: true } });
+
+    const input = screen.getByRole("combobox");
+    await user.click(input);
+
+    expect(input).toHaveAttribute("aria-expanded", "false");
+    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+
+    await user.keyboard("{Enter}");
+    expect(screen.getByTestId("result")).not.toHaveTextContent("submit:");
+  });
+
+  it("announces a read-only description", () => {
+    render(SearchMenu, { props: { readonly: true } });
+
+    const input = screen.getByRole("combobox");
+    const describedById = input.getAttribute("aria-describedby");
+    assert(describedById);
+    expect(document.getElementById(describedById)).toHaveTextContent(
+      "Read-only",
+    );
+  });
+
+  it("hides the label visually", () => {
+    render(SearchMenu, { props: { hideLabel: true } });
+
+    expect(screen.getByText("Search")).toHaveClass("bx--visually-hidden");
+  });
+
   it("opens the menu on focus and renders all items for an empty value", async () => {
     render(SearchMenu);
     const input = screen.getByRole("combobox");
