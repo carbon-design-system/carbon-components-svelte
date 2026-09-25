@@ -664,3 +664,53 @@
 @include exports("toggle-readonly") {
   @include toggle-readonly;
 }
+
+// carbon-components-svelte patch (toggle-validation)
+// Toggle warning state. v10 ships none of this for Toggle; the reveal shape
+// and tokens follow Checkbox's `checkbox-validation` patch in
+// css/vendor/carbon-components/scss/components/checkbox/_checkbox.scss.
+
+/// Toggle warning state.
+/// @access private
+/// @group toggle
+@mixin toggle-validation {
+  // 8px, not the 4px text fields use: the switch's 3px focus ring is a
+  // box-shadow drawn outside the track and would nearly touch the message.
+  .#{$prefix}--toggle__validation-msg {
+    display: none;
+    align-items: flex-start;
+    inline-size: 100%;
+    margin-block-start: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--toggle--warning .#{$prefix}--toggle__validation-msg {
+    display: flex;
+  }
+
+  .#{$prefix}--toggle--warning
+    .#{$prefix}--toggle__validation-msg
+    .#{$prefix}--form-requirement {
+    display: block;
+    overflow: visible;
+    margin-block-start: 0;
+    margin-inline-start: $carbon--spacing-03;
+    max-block-size: 100%;
+  }
+
+  .#{$prefix}--toggle__invalid-icon {
+    margin: to-rem(1px) to-rem(1px) 0 to-rem(3px);
+    min-inline-size: to-rem(16px);
+  }
+
+  .#{$prefix}--toggle__invalid-icon--warning {
+    fill: $support-warning;
+  }
+
+  .#{$prefix}--toggle__invalid-icon--warning path:first-of-type {
+    fill: $carbon__black-100;
+  }
+}
+
+@include exports("toggle-validation") {
+  @include toggle-validation;
+}
