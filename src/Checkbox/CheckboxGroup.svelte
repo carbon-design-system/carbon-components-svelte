@@ -61,6 +61,12 @@
   export let readonly = false;
 
   /**
+   * Specify the assistive text announced to screen readers when read-only.
+   * Exposed because VoiceOver does not announce `aria-readonly`.
+   */
+  export let readonlyText = "Read-only";
+
+  /**
    * Set an id for the container div element.
    * @type {string}
    */
@@ -72,6 +78,7 @@
   import WarningFilled from "../icons/WarningFilled.svelte";
   import {
     buildFieldIds,
+    joinDescribedBy,
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
@@ -144,10 +151,12 @@
   const fallbackHelperId = uniqueId();
   const fallbackErrorId = uniqueId();
   const fallbackWarnId = uniqueId();
-  $: ({ helperId, errorId, warnId } = buildFieldIds(id, {
+  const fallbackReadonlyId = uniqueId();
+  $: ({ helperId, errorId, warnId, readonlyId } = buildFieldIds(id, {
     helperId: fallbackHelperId,
     errorId: fallbackErrorId,
     warnId: fallbackWarnId,
+    readonlyId: fallbackReadonlyId,
   }));
 </script>
 
@@ -167,14 +176,17 @@
     class:bx--checkbox-group--warning={showWarn}
     {disabled}
     data-invalid={showInvalid || undefined}
-    aria-describedby={resolveStatusDescribedBy({
-      showInvalid,
-      showWarn,
-      helperText,
-      errorId,
-      warnId,
-      helperId,
-    })}
+    aria-describedby={joinDescribedBy(
+      readonly ? readonlyId : null,
+      resolveStatusDescribedBy({
+        showInvalid,
+        showWarn,
+        helperText,
+        errorId,
+        warnId,
+        helperId,
+      }),
+    )}
   >
     {#if legendText || $$slots.legendChildren}
       <legend class:bx--label={true} class:bx--visually-hidden={hideLegend}>
@@ -193,6 +205,11 @@
         <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
       {/if}
     </div>
+    {#if readonly}
+      <span id={readonlyId} class:bx--visually-hidden={true}
+        >{readonlyText}</span
+      >
+    {/if}
   </fieldset>
   {#if helperText && !showInvalid && !showWarn}
     <div
