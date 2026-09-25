@@ -70,7 +70,10 @@
   /**
    * @event close
    * @type {object}
-   * @property {"escape-key" | "outside-click" | "select" | "programmatic"} trigger
+   * @property {"escape-key"
+   *   | "outside-click"
+   *   | "select"
+   *   | "programmatic"} trigger
    */
 
   /**
@@ -85,12 +88,17 @@
    */
 
   /**
-   * Specify the date picker type.
-   * Changing it after mount rebuilds the calendar.
-   * `"week"` selects a whole week: a picked day becomes the first day of its
-   * week, so `value` is that date in `dateFormat`. A `value` set from outside
-   * is kept as given.
-   * @type {"simple" | "single" | "range" | "month" | "year" | "week" | "multiple"}
+   * Specify the date picker type. Changing it after mount rebuilds the
+   * calendar. `"week"` selects a whole week: a picked day becomes the
+   * first day of its week, so `value` is that date in `dateFormat`. A
+   * `value` set from outside is kept as given.
+   * @type {"simple"
+   *   | "single"
+   *   | "range"
+   *   | "month"
+   *   | "year"
+   *   | "week"
+   *   | "multiple"}
    */
   export let datePickerType = "simple";
 
@@ -228,9 +236,10 @@
   export let inline = false;
 
   /**
-   * Set to `true` to show a button that clears the date. It appears while
-   * there is a value, and not while the input is read-only or disabled.
-   * In range mode it sits on the end input and clears both dates.
+   * Set to `true` to show a button that clears the date. It appears
+   * while there is a value, and not while the input is read-only or
+   * disabled. In range mode it sits on the end input and clears both
+   * dates.
    */
   export let clearable = false;
 
@@ -290,11 +299,11 @@
 
   /**
    * Bind to the selected dates as `Date` objects, in the same order as
-   * `calendar.selectedDates` (range: start, then end). Setting it selects
-   * those dates and updates `value` (or `valueFrom`/`valueTo`). At mount, a
-   * non-empty `value` takes precedence. Reassign the array to update; do not
-   * mutate it.
-   * Not supported with the "simple" date picker type.
+   * `calendar.selectedDates` (range: start, then end). Setting it
+   * selects those dates and updates `value` (or `valueFrom`/`valueTo`).
+   * At mount, a non-empty `value` takes precedence. Reassign the array
+   * to update; do not mutate it. Not supported with the "simple" date
+   * picker type.
    * @type {ReadonlyArray<Date>}
    * @bindable writable
    */
@@ -461,7 +470,12 @@
   let prevMaxRangeDays = maxRangeDays;
   // flatpickr onClose has no reason; explicit handlers set closeTrigger, else
   // infer from session baseline. Close dispatch is deferred for range sync.
-  /** @type {"escape-key" | "outside-click" | "programmatic" | undefined} */
+  /**
+   * @type {"escape-key"
+   *   | "outside-click"
+   *   | "programmatic"
+   *   | undefined}
+   */
   let closeTrigger;
   /** @type {string | { from: string; to: string }} */
   let dateStrAtOpen;
@@ -648,9 +662,9 @@
 
   /**
    * While a range start is pending, whether `date` would make the range
-   * shorter than `minRangeDays` or longer than `maxRangeDays`. Reads the
-   * current props on every call; flatpickr asks as it rebuilds the grid
-   * right after the start is picked.
+   * shorter than `minRangeDays` or longer than `maxRangeDays`. Reads
+   * the current props on every call; flatpickr asks as it rebuilds the
+   * grid right after the start is picked.
    *
    * @param {Date} date
    * @param {{ selectedDates: Date[] }} instance
@@ -669,9 +683,9 @@
   }
 
   /**
-   * Mirror the calendar's selection into `selectedDates`. The `Date`s are
-   * copies: flatpickr keeps its own, and a consumer mutating one in place
-   * would change the selection without a redraw.
+   * Mirror the calendar's selection into `selectedDates`. The `Date`s
+   * are copies: flatpickr keeps its own, and a consumer mutating one in
+   * place would change the selection without a redraw.
    */
   function syncSelectedDatesFromCalendar() {
     if (!calendar) return;
@@ -681,9 +695,10 @@
   }
 
   /**
-   * Select `selectedDates` in the calendar and write the matching strings,
-   * recorded as already applied so `afterUpdate` does not parse them back.
-   * A prop write is not a user change, so nothing is dispatched.
+   * Select `selectedDates` in the calendar and write the matching
+   * strings, recorded as already applied so `afterUpdate` does not
+   * parse them back. A prop write is not a user change, so nothing is
+   * dispatched.
    */
   function applySelectedDates() {
     prevSelectedDates = selectedDates;
@@ -703,8 +718,9 @@
   }
 
   /**
-   * Opens or closes the calendar to match the `open` prop. A close through
-   * the prop reports the `"programmatic"` trigger, like Modal's.
+   * Opens or closes the calendar to match the `open` prop. A close
+   * through the prop reports the `"programmatic"` trigger, like
+   * Modal's.
    */
   function applyOpenProp() {
     if (!calendar || usesInline || open === calendarOpen) return;
@@ -718,8 +734,8 @@
   }
 
   /**
-   * Empties the selection (both ends in range mode), then returns focus to
-   * the input, which opens the calendar the same way a click would.
+   * Empties the selection (both ends in range mode), then returns focus
+   * to the input, which opens the calendar the same way a click would.
    */
   function clear() {
     if ($readonlyAny || $disabledAny) return;
@@ -744,14 +760,15 @@
   }
 
   /**
-   * A form reset restores each input's DOM value without firing any event,
-   * and flatpickr's own `selectedDates` (and any `altInput` text) are
-   * untouched by the browser entirely — neither the input DOM value change
-   * nor the calendar-internal state gets pushed anywhere on its own. Read
-   * what the browser just put in the DOM (not a value captured at creation,
-   * so a value a parent sets after mount is never discarded), and push it
-   * through `calendar.setDate(...)`, the same call `afterUpdate` already
-   * uses for every other externally-set value change.
+   * A form reset restores each input's DOM value without firing any
+   * event, and flatpickr's own `selectedDates` (and any `altInput`
+   * text) are untouched by the browser entirely — neither the input DOM
+   * value change nor the calendar-internal state gets pushed anywhere
+   * on its own. Read what the browser just put in the DOM (not a value
+   * captured at creation, so a value a parent sets after mount is never
+   * discarded), and push it through `calendar.setDate(...)`, the same
+   * call `afterUpdate` already uses for every other externally-set
+   * value change.
    */
   function handleFormReset() {
     if ($range) {

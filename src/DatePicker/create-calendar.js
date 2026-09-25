@@ -148,10 +148,11 @@ function markTodayMonth(instance) {
 }
 
 /**
- * flatpickr's week plugin highlights the whole week but keeps the clicked
- * day selected. Move the selection to the week's first day (per locale) so
- * every day of a week gives the same value. `setDate` without a change
- * event, since the caller is already inside `onChange`.
+ * flatpickr's week plugin highlights the whole week but keeps the
+ * clicked day selected. Move the selection to the week's first day (per
+ * locale) so every day of a week gives the same value. `setDate`
+ * without a change event, since the caller is already inside
+ * `onChange`.
  *
  * @param {any} instance
  */
@@ -188,8 +189,8 @@ function isoWeek(givenDate) {
 }
 
 /**
- * Whether `locale` orders the month before the year (e.g. "January 2000"),
- * as opposed to year before month (e.g. "2000年1月" in Japanese).
+ * Whether `locale` orders the month before the year (e.g. "January
+ * 2000"), as opposed to year before month (e.g. "2000年1月" in Japanese).
  *
  * @param {unknown} locale
  * @returns {boolean}
@@ -256,7 +257,10 @@ export function updateMonthNode(instance, locale) {
  *   base: HTMLInputElement;
  *   input: HTMLInputElement;
  *   dispatch: (event: string, detail?: unknown) => void;
- *   isDayBlocked?: (date: Date, instance: FlatpickrInstance) => boolean;
+ *   isDayBlocked?: (
+ *     date: Date,
+ *     instance: FlatpickrInstance,
+ *   ) => boolean;
  * }} CreateCalendarArgs
  */
 
@@ -380,7 +384,12 @@ export async function createCalendar({
   dispatch,
   isDayBlocked,
 }) {
-  /** @type {((new (config: { position: string; input: HTMLInputElement }) => unknown) | undefined)} */
+  /**
+   * @type {(new (config: {
+   *   position: string;
+   *   input: HTMLInputElement;
+   * }) => unknown) | undefined}
+   */
   let RangePlugin;
   /**
    * @type {((config?: {
@@ -444,7 +453,9 @@ export async function createCalendar({
 
   /** @type {MutationObserver | undefined} */
   let altInputObserver;
-  /** Set once flatpickr returns; read lazily by the week-mode `getWeek`. */
+  /**
+   * Set once flatpickr returns; read lazily by the week-mode `getWeek`.
+   */
   /** @type {any} */
   let createdInstance;
 
