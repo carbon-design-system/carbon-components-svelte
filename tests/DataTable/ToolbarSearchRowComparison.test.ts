@@ -1,5 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { flushMacrotask } from "../utils/flush-macrotask";
 import { getFilteredIds } from "./helpers";
 import ToolbarSearchRowComparison from "./ToolbarSearchRowComparison.test.svelte";
 
@@ -604,7 +605,7 @@ describe("ToolbarSearch row comparison behavior", () => {
     rerender({ rows: sameRows });
     await tick();
 
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await flushMacrotask();
 
     const finalFilteredIds = getFilteredIds("filtered-ids");
     expect(finalFilteredIds).toEqual(initialFilteredIds);

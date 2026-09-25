@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import Slider from "./Slider.test.svelte";
 
@@ -659,7 +660,7 @@ describe("Slider", () => {
     });
 
     await user.pointer({ target: container, keys: "[/MouseLeft]" });
-    await new Promise((resolve) => setTimeout(resolve, 10));
+    await flushMacrotask();
 
     expect(container).toBeInTheDocument();
   });
