@@ -1,10 +1,10 @@
 ---
-components: ["TimePicker", "TimePickerSelect", "SelectItem", "FluidTimePickerSkeleton"]
+components: ["TimePicker", "TimePickerSelect", "SelectItem", "TimePickerSkeleton", "FluidTimePickerSkeleton"]
 description: Time pickers provide a time input field with optional period (AM/PM) and timezone selectors, with various sizes and states.
 ---
 
 <script>
-  import { TimePicker, TimePickerSelect, SelectItem, FluidTimePickerSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import { TimePicker, TimePickerSelect, SelectItem, TimePickerSkeleton, FluidTimePickerSkeleton, TooltipIcon } from "carbon-components-svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
@@ -387,3 +387,9 @@ Set `readonly` to display a value while preventing edits. Unlike disabled, the i
     <SelectItem value="gmt" text="GMT" />
   </TimePickerSelect>
 </TimePicker>
+
+## Skeleton
+
+Show a loading state with `TimePickerSkeleton`.
+
+<TimePickerSkeleton />
