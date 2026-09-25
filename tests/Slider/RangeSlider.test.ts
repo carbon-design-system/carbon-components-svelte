@@ -515,4 +515,30 @@ describe("RangeSlider", () => {
       unmount();
     }
   });
+
+  it("describes the field as read-only for screen readers that ignore aria-readonly", () => {
+    const { container } = render(RangeSliderComponent, {
+      props: { labelText: "Range", id: "test-range", readonly: true },
+    });
+
+    const [lower, upper] = screen.getAllByRole("slider");
+    expect(lower).toHaveAttribute("aria-readonly", "true");
+    expect(lower).toHaveAttribute("aria-describedby", "readonly-test-range");
+    expect(upper).toHaveAttribute("aria-readonly", "true");
+    expect(upper).toHaveAttribute("aria-describedby", "readonly-test-range");
+
+    const description = container.querySelector("#readonly-test-range");
+    expect(description).toHaveTextContent("Read-only");
+    expect(description).toHaveClass("bx--visually-hidden");
+  });
+
+  it("does not set aria-readonly when not readonly", () => {
+    render(RangeSliderComponent, {
+      props: { labelText: "Range", id: "test-range" },
+    });
+
+    for (const thumb of screen.getAllByRole("slider")) {
+      expect(thumb).not.toHaveAttribute("aria-readonly");
+    }
+  });
 });

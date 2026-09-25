@@ -57,6 +57,12 @@
   /** Set to `true` to use the read-only variant */
   export let readonly = false;
 
+  /**
+   * Specify the assistive text announced to screen readers when read-only.
+   * Exposed because VoiceOver does not announce `aria-readonly`.
+   */
+  export let readonlyText = "Read-only";
+
   /** Set to `true` to enable the light variant */
   export let light = false;
 
@@ -117,6 +123,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import {
     buildFieldIds,
+    joinDescribedBy,
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
@@ -188,7 +195,7 @@
   }
 
   $: labelId = `label-${id}`;
-  $: ({ errorId, warnId } = buildFieldIds(id));
+  $: ({ errorId, warnId, readonlyId } = buildFieldIds(id));
   $: inputId = `input-${id}`;
   // Invalid/warn states are suppressed when the slider is disabled or read-only.
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
@@ -271,13 +278,17 @@
         aria-valuenow={value}
         aria-valuetext={getValueText(value)}
         aria-labelledby={labelId}
-        aria-describedby={resolveStatusDescribedBy({
-          showInvalid,
-          showWarn,
-          errorId,
-          warnId,
-        })}
+        aria-describedby={joinDescribedBy(
+          readonly ? readonlyId : null,
+          resolveStatusDescribedBy({
+            showInvalid,
+            showWarn,
+            errorId,
+            warnId,
+          }),
+        )}
         aria-invalid={showInvalid || undefined}
+        aria-readonly={readonly || undefined}
         {id}
         on:keydown={(event) => {
           if (disabled || readonly) return;
@@ -411,5 +422,8 @@
     >
       {warnText}
     </div>
+  {/if}
+  {#if readonly}
+    <span id={readonlyId} class:bx--visually-hidden={true}>{readonlyText}</span>
   {/if}
 </div>

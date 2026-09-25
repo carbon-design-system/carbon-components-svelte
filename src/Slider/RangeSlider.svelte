@@ -66,6 +66,12 @@
   /** Set to `true` to use the read-only variant */
   export let readonly = false;
 
+  /**
+   * Specify the assistive text announced to screen readers when read-only.
+   * Exposed because VoiceOver does not announce `aria-readonly`.
+   */
+  export let readonlyText = "Read-only";
+
   /** Set to `true` to enable the light variant */
   export let light = false;
 
@@ -135,6 +141,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import {
     buildFieldIds,
+    joinDescribedBy,
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
@@ -340,7 +347,7 @@
   }));
 
   $: labelId = `label-${id}`;
-  $: ({ errorId, warnId } = buildFieldIds(id));
+  $: ({ errorId, warnId, readonlyId } = buildFieldIds(id));
   $: lowerInputId = `lower-input-${id}`;
   $: upperInputId = `upper-input-${id}`;
   $: range = max - min;
@@ -478,8 +485,12 @@
           aria-valuenow={value}
           aria-valuetext={getValueText(value)}
           aria-label={ariaLabelInput}
-          aria-describedby={resolveStatusDescribedBy({ showInvalid, showWarn, errorId, warnId })}
+          aria-describedby={joinDescribedBy(
+            readonly ? readonlyId : null,
+            resolveStatusDescribedBy({ showInvalid, showWarn, errorId, warnId }),
+          )}
           aria-invalid={showInvalid || undefined}
+          aria-readonly={readonly || undefined}
           on:focus={() => (activeHandle = "lower")}
           on:keydown={handleKeydown}
           {id}
@@ -528,8 +539,12 @@
           aria-valuenow={valueUpper}
           aria-valuetext={getValueText(valueUpper)}
           aria-label={ariaLabelInputUpper}
-          aria-describedby={resolveStatusDescribedBy({ showInvalid, showWarn, errorId, warnId })}
+          aria-describedby={joinDescribedBy(
+            readonly ? readonlyId : null,
+            resolveStatusDescribedBy({ showInvalid, showWarn, errorId, warnId }),
+          )}
           aria-invalid={showInvalid || undefined}
+          aria-readonly={readonly || undefined}
           on:focus={() => (activeHandle = "upper")}
           on:keydown={handleKeydown}
         >
@@ -653,5 +668,8 @@
     >
       {warnText}
     </div>
+  {/if}
+  {#if readonly}
+    <span id={readonlyId} class:bx--visually-hidden={true}>{readonlyText}</span>
   {/if}
 </div>

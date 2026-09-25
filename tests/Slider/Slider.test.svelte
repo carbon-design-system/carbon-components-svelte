@@ -31,6 +31,7 @@
   export let invalidText = "";
   export let warnText = "";
   export let id: ComponentProps<Slider>["id"] = undefined;
+  export let readonlyText: ComponentProps<Slider>["readonlyText"] = undefined;
   export let ariaLabel: ComponentProps<Slider>["aria-label"] = undefined;
   export let selectTextOnFocus = false;
   export let onfocus: ((event: FocusEvent) => void) | undefined = undefined;
@@ -48,6 +49,7 @@
     {marks}
     {disabled}
     {readonly}
+    {readonlyText}
     {invalid}
     {invalidText}
     {warn}
@@ -84,6 +86,7 @@
     {marks}
     {disabled}
     {readonly}
+    {readonlyText}
     {invalid}
     {invalidText}
     {warn}

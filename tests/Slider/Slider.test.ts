@@ -246,6 +246,43 @@ describe("Slider", () => {
     expect(slider).not.toHaveAttribute("tabindex");
   });
 
+  it("describes the field as read-only for screen readers that ignore aria-readonly", () => {
+    const { container } = render(Slider, {
+      props: { id: "test-slider", readonly: true },
+    });
+
+    const slider = screen.getByRole("slider");
+    expect(slider).toHaveAttribute("aria-readonly", "true");
+    expect(slider).toHaveAttribute("aria-describedby", "readonly-test-slider");
+
+    const description = container.querySelector("#readonly-test-slider");
+    expect(description).toHaveTextContent("Read-only");
+    expect(description).toHaveClass("bx--visually-hidden");
+  });
+
+  it("supports overriding the read-only assistive text", () => {
+    const { container } = render(Slider, {
+      props: {
+        id: "test-slider",
+        readonly: true,
+        readonlyText: "Schreibgeschützt",
+      },
+    });
+
+    expect(container.querySelector("#readonly-test-slider")).toHaveTextContent(
+      "Schreibgeschützt",
+    );
+  });
+
+  it("does not set aria-readonly or a read-only description when not readonly", () => {
+    const { container } = render(Slider, { props: { id: "test-slider" } });
+
+    expect(screen.getByRole("slider")).not.toHaveAttribute("aria-readonly");
+    expect(
+      container.querySelector("#readonly-test-slider"),
+    ).not.toBeInTheDocument();
+  });
+
   it("should not allow keyboard interaction when readonly", async () => {
     render(Slider, {
       props: { readonly: true, value: 50 },
@@ -484,6 +521,7 @@ describe("Slider", () => {
   it("should suppress invalid/warn state when readonly", () => {
     const { container } = render(Slider, {
       props: {
+        id: "test-slider",
         readonly: true,
         invalid: true,
         invalidText: "Error message",
@@ -498,7 +536,7 @@ describe("Slider", () => {
 
     const slider = container.querySelector('[role="slider"]');
     expect(slider).not.toHaveAttribute("aria-invalid");
-    expect(slider).not.toHaveAttribute("aria-describedby");
+    expect(slider).toHaveAttribute("aria-describedby", "readonly-test-slider");
   });
 
   it("should suppress warn state when disabled", () => {
