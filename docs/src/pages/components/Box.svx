@@ -254,6 +254,21 @@ Set `gap` to space out flex or grid children without nesting a [Stack](/componen
   <Box fill="layer-01" padding={4} border="subtle">Flex item</Box>
 </Box>
 
+### Grid columns
+
+With `display="grid"`, set `columns` to a number for that many equal-width tracks, or to a string used as-is for `grid-template-columns`. `columns` has no effect on other display modes.
+
+<Box display="grid" columns={3} gap={5}>
+  <Box fill="layer-01" padding={4} border="subtle">Grid item</Box>
+  <Box fill="layer-01" padding={4} border="subtle">Grid item</Box>
+  <Box fill="layer-01" padding={4} border="subtle">Grid item</Box>
+</Box>
+
+<Box display="grid" columns="12rem 1fr" gap={5} marginY={5}>
+  <Box fill="layer-01" padding={4} border="subtle">Sidebar</Box>
+  <Box fill="layer-01" padding={4} border="subtle">Main content</Box>
+</Box>
+
 ## Overflow
 
 Set `overflow` to control how content that exceeds the box's bounds is handled.
