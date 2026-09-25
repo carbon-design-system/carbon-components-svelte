@@ -172,6 +172,14 @@
     display: grid;
   }
 
+  .#{$prefix}--box-direction-row {
+    flex-direction: row;
+  }
+
+  .#{$prefix}--box-direction-column {
+    flex-direction: column;
+  }
+
   $align-values: (
     start: flex-start,
     center: center,
