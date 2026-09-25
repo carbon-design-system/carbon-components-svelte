@@ -71,6 +71,7 @@ export { default as DescriptionList } from "./DescriptionList/DescriptionList.sv
 export { default as DescriptionListItem } from "./DescriptionList/DescriptionListItem.svelte";
 export { default as Dialog } from "./Dialog/Dialog.svelte";
 export { default as Disclosure } from "./Disclosure/Disclosure.svelte";
+export { default as Divider } from "./Divider/Divider.svelte";
 export { default as Dropdown } from "./Dropdown/Dropdown.svelte";
 export { default as DropdownSkeleton } from "./Dropdown/DropdownSkeleton.svelte";
 export { default as FluidDropdownSkeleton } from "./Dropdown/FluidDropdownSkeleton.svelte";

@@ -1,0 +1,41 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "./spacing-scale";
+
+/// Divider renders a standalone `role="separator"` rule, or a fully
+/// decorative one via `aria-hidden`. Border color matches Box's
+/// `border="subtle"` token (`css/_box.scss`); margin uses the same
+/// `$ccs-spacing-scale` Box's padding/margin classes use.
+/// @access private
+/// @group components
+@mixin divider {
+  .#{$prefix}--divider {
+    margin: 0;
+    border: 0;
+    flex-shrink: 0;
+  }
+
+  .#{$prefix}--divider--horizontal {
+    width: 100%;
+    border-top: 1px solid $border-subtle;
+  }
+
+  .#{$prefix}--divider--vertical {
+    align-self: stretch;
+    border-left: 1px solid $border-subtle;
+  }
+
+  @each $step, $size in $ccs-spacing-scale {
+    .#{$prefix}--divider-margin-y-#{$step} {
+      margin-block: $size;
+    }
+
+    .#{$prefix}--divider-margin-x-#{$step} {
+      margin-inline: $size;
+    }
+  }
+}
+
+@include exports("divider") {
+  @include divider;
+}
