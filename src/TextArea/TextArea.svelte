@@ -311,7 +311,7 @@
         <label
           for={id}
           class:bx--label={true}
-          class:bx--visually-hidden={hideLabel && !isFluid}
+          class:bx--visually-hidden={hideLabel}
           class:bx--label--disabled={disabled}
           class:bx--label--slotted={isFluid && $$slots.labelChildren}
         >

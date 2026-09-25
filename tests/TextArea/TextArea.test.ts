@@ -235,6 +235,13 @@ describe("TextArea", () => {
     expect(screen.getByLabelText("App description")).toBeInTheDocument();
   });
 
+  it("should handle hidden label in fluid mode", () => {
+    render(TextArea, { props: { fluid: true, hideLabel: true } });
+
+    const label = screen.getByText("App description");
+    expect(label).toHaveClass("bx--visually-hidden");
+  });
+
   it("should handle custom id", () => {
     render(TextArea, { props: { id: "custom-id" } });
 
