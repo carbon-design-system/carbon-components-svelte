@@ -30,3 +30,20 @@ export function buildItems(): MultiSelectItem[] {
     { id: "4", text: "Mail" },
   ];
 }
+
+/** Clicks the open combobox trigger to close the menu. */
+export async function closeMenu() {
+  await user.click(await screen.findByRole("combobox", { expanded: true }));
+}
+
+/** Clicks the option whose trimmed text matches `optionText`. */
+export async function toggleOption(optionText: string) {
+  await user.click(
+    await screen.findByText((text) => text.trim() === optionText),
+  );
+}
+
+/** Trimmed text of the rendered option at `index` (negative counts from the end). */
+export function nthRenderedOptionText(index: number) {
+  return screen.queryAllByRole("option").at(index)?.textContent?.trim();
+}
