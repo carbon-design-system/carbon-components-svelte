@@ -36,6 +36,10 @@ describe("Box", () => {
     expect(screen.getByText("Fill and border")).toHaveClass(
       "bx--box-fill-background",
     );
+    expect(screen.getByText("Accent fill")).toHaveClass(
+      "bx--box-fill-layer-accent",
+    );
+    expect(screen.getByText("Brand fill")).toHaveClass("bx--box-fill-brand");
   });
 
   it("applies border utility classes", () => {

@@ -13,8 +13,10 @@
     layer-01: $ui-01,
     layer-02: $ui-02,
     layer-03: $ui-03,
+    layer-accent: $layer-accent,
     field: $field-01,
     inverse: $background-inverse,
+    brand: $background-brand,
   );
 
   @each $name, $value in $fill-tokens {
