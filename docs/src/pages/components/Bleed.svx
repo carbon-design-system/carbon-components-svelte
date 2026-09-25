@@ -1,0 +1,71 @@
+---
+description: Bleed pulls content past its container's padding with negative margins, for full-width media and dividers inside padded panels.
+---
+
+<script>
+  import { Bleed, Box, Stack, Text } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Set `horizontal` and `vertical` to the same step as the surrounding `Box` padding. Bleed step `N` resolves to the negative of `Box` padding step `N`, so the content reaches the box's edges exactly.
+
+<Box fill="layer-01" padding={5} border="subtle">
+  <Bleed horizontal={5} vertical={5}>
+    <Box fill="inverse" padding={7}>
+      <Text type="body-short-01" color="inverse">Full bleed</Text>
+    </Box>
+  </Bleed>
+</Box>
+
+## Horizontal only
+
+Set only `horizontal` to span the full width while keeping the vertical inset, for example a banner between padded paragraphs.
+
+<Box fill="layer-01" padding={5} border="subtle">
+  <Stack gap={5}>
+    <Text type="body-long-01">Content above keeps its inset.</Text>
+    <Bleed horizontal={5}>
+      <Box fill="inverse" padding={5}>
+        <Text type="body-short-01" color="inverse">Edge to edge</Text>
+      </Box>
+    </Bleed>
+    <Text type="body-long-01">Content below keeps its inset.</Text>
+  </Stack>
+</Box>
+
+## Per-side override
+
+Set `top`, `right`, `bottom`, or `left` to override the axis value for one edge. Here `vertical={5}` bleeds top and bottom, and `top={0}` pins the top edge back inside the padding.
+
+<Box fill="layer-01" padding={5} border="subtle">
+  <Bleed horizontal={5} vertical={5} top={0}>
+    <Box fill="inverse" padding={7}>
+      <Text type="body-short-01" color="inverse">Top stays inset</Text>
+    </Box>
+  </Bleed>
+</Box>
+
+## Custom length
+
+Strings accept any CSS length, including CSS variables and `calc()` expressions. The value is negated with `calc(-1 * (value))`.
+
+<Box fill="layer-01" padding="1.25rem" border="subtle">
+  <Bleed horizontal="1.25rem" vertical="1.25rem">
+    <Box fill="inverse" padding={7}>
+      <Text type="body-short-01" color="inverse">1.25rem bleed</Text>
+    </Box>
+  </Bleed>
+</Box>
+
+## Custom element
+
+The bleed renders a `<div>` by default. Set `tag` to use a different element.
+
+<Box fill="layer-01" padding={5} border="subtle">
+  <Bleed tag="section" horizontal={5} vertical={5}>
+    <Box fill="inverse" padding={7}>
+      <Text type="body-short-01" color="inverse">Rendered as a `section`.</Text>
+    </Box>
+  </Bleed>
+</Box>
