@@ -251,3 +251,9 @@ The stack renders a div by default. Set `tag` to use a different element.
   <li>Item 2</li>
   <li>Item 3</li>
 </Stack>
+
+## Obtain a reference
+
+Use `bind:ref` to get the rendered element, for example to measure, focus, or scroll to it.
+
+<FileSource src="/framed/Stack/StackRef" />
