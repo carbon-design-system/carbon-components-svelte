@@ -88,6 +88,8 @@ export { default as FormItem } from "./FormItem/FormItem.svelte";
 export { default as FormLabel } from "./FormLabel/FormLabel.svelte";
 export { default as FullPageError } from "./FullPageError/FullPageError.svelte";
 export { default as Column } from "./Grid/Column.svelte";
+export { default as CssColumn } from "./Grid/CssColumn.svelte";
+export { default as CssGrid } from "./Grid/CssGrid.svelte";
 export { default as Grid } from "./Grid/Grid.svelte";
 export { default as Row } from "./Grid/Row.svelte";
 export { default as Heading } from "./Heading/Heading.svelte";

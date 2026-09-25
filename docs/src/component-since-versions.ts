@@ -21,6 +21,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   ContextMenu: "0.31.0",
   CopyButton: "0.2.0",
   CopyInput: "0.109.0",
+  CssGrid: "0.113.0",
   DataTable: "0.5.0",
   DatePicker: "0.2.0",
   DescriptionList: "0.113.0",

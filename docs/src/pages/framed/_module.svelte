@@ -71,7 +71,8 @@
     padding: var(--cds-spacing-06) var(--cds-spacing-05);
   }
 
-  :global(.framed :not(.bx--content) [class^="bx--col"]) {
+  :global(.framed :not(.bx--content) [class^="bx--col"]),
+  :global(.framed .bx--css-grid-column) {
     outline: 1px solid var(--cds-interactive-04);
   }
 
