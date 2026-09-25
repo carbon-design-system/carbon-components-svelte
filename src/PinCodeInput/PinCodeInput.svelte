@@ -250,6 +250,7 @@
     errorId,
     warnId,
     helperId,
+    includeErrorId: false,
   });
 
   // Emit "complete" once when all segments fill, "clear" once when emptied.
@@ -568,6 +569,7 @@
             aria-readonly={readonly || undefined}
             aria-label={segmentLabelText(index + 1, count, labelText, type)}
             aria-invalid={hasError || undefined}
+            aria-errormessage={hasError ? errorId : undefined}
             data-invalid={hasError || undefined}
             data-warn={hasWarn || undefined}
             class:bx--text-input={true}
@@ -601,7 +603,7 @@
         {#if hasError}
           <div class:bx--pin-code-input__message={true}>
             <WarningFilled class="bx--pin-code-input__icon" />
-            <div class:bx--form-requirement={true} id={errorId}>
+            <div class:bx--form-requirement={true} id={errorId} role="alert">
               {invalidText}
             </div>
           </div>
@@ -626,7 +628,9 @@
       </div>
     {/if}
     {#if !isFluid && hasError}
-      <div class:bx--form-requirement={true} id={errorId}>{invalidText}</div>
+      <div class:bx--form-requirement={true} id={errorId} role="alert">
+        {invalidText}
+      </div>
     {/if}
     {#if !isFluid && hasWarn}
       <div class:bx--form-requirement={true} id={warnId}>{warnText}</div>
