@@ -3,7 +3,7 @@ description: Stacks arrange elements vertically or horizontally with a consisten
 ---
 
 <script>
-  import { Stack, Tile } from "carbon-components-svelte";
+  import { Divider, Stack, Tile } from "carbon-components-svelte";
 </script>
 
 ## Gap
@@ -229,6 +229,30 @@ Set `inline` to use inline-flex so the stack shrinks to its content width instea
 <Stack inline gap={3}>
   <div>Item 1</div>
   <div>Item 2</div>
+  <div>Item 3</div>
+</Stack>
+
+## Divider
+
+Place a [Divider](/components/Divider) between items to draw a rule. The gap applies on both sides, so the rule sits centered. Use a vertical divider in a horizontal stack.
+
+### Vertical
+
+<Stack gap={3}>
+  <div>Item 1</div>
+  <Divider />
+  <div>Item 2</div>
+  <Divider />
+  <div>Item 3</div>
+</Stack>
+
+### Horizontal
+
+<Stack orientation="horizontal" gap={3}>
+  <div>Item 1</div>
+  <Divider orientation="vertical" />
+  <div>Item 2</div>
+  <Divider orientation="vertical" />
   <div>Item 3</div>
 </Stack>
 

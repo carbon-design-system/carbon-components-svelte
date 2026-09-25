@@ -414,7 +414,10 @@ html {
 }
 
 [data-component="Popover"] .preview-viewer > div:not(.bx--stack),
-[data-component="Stack"] .preview-viewer .bx--stack > * {
+[data-component="Stack"]
+  .preview-viewer
+  .bx--stack:not(:has(> .bx--divider))
+  > * {
   padding: 0.125rem 0.25rem;
   outline: 1px solid var(--cds-interactive-04);
 }
