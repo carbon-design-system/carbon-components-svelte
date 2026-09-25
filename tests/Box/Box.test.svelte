@@ -17,6 +17,15 @@
 <Box display="flex" gap={3} data-testid="gap-scale">Gap scale</Box>
 <Box display="flex" gap="2rem" data-testid="gap-custom">Gap custom</Box>
 <Box display="flex" gap={0} data-testid="gap-zero">Gap zero</Box>
+<Box display="grid" columns={3} data-testid="grid-columns-number"
+  >Grid columns number</Box
+>
+<Box display="grid" columns="200px 1fr 200px" data-testid="grid-columns-string"
+  >Grid columns string</Box
+>
+<Box columns={3} data-testid="grid-columns-no-grid"
+  >Columns without grid display</Box
+>
 <Box overflow="auto">Auto overflow</Box>
 <Box overflowX="auto" overflowY="hidden">Axis overflow</Box>
 <Box overflow="hidden" overflowX="auto">Overflow with x override</Box>

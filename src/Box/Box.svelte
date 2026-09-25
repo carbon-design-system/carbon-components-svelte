@@ -45,6 +45,13 @@
     return border && borderSide === side ? toCssLength(borderWidth) : undefined;
   }
 
+  /** @param {number | string | undefined} value */
+  function gridColumns(value) {
+    if (value == null) return undefined;
+    if (typeof value === "number") return `repeat(${value}, minmax(0, 1fr))`;
+    return value;
+  }
+
   /** @param {"height" | "min-height"} kind @param {SpacingValue | "viewport" | undefined} value */
   function viewportClass(kind, value) {
     if (value === "viewport") return `bx--box-${kind}-viewport`;
@@ -204,6 +211,12 @@
   export let gap = undefined;
 
   /**
+   * Set the grid columns. Numbers create that many equal-width columns; strings set `grid-template-columns` directly. Only takes effect when `display` is `"grid"`.
+   * @type {number | string | undefined}
+   */
+  export let columns = undefined;
+
+  /**
    * Set the CSS overflow behavior.
    * @type {"visible" | "hidden" | "auto" | "scroll" | undefined}
    */
@@ -330,6 +343,7 @@
   $: resolvedMinHeight = viewportStyle(minHeight);
   $: resolvedMaxHeight = spacingStyle(maxHeight);
   $: resolvedGap = spacingStyle(gap);
+  $: resolvedColumns = display === "grid" ? gridColumns(columns) : undefined;
   $: resolvedTop = offsetStyle(top);
   $: resolvedBottom = offsetStyle(bottom);
   $: resolvedLeft = offsetStyle(left);
@@ -358,6 +372,7 @@
   style:min-height={resolvedMinHeight}
   style:max-height={resolvedMaxHeight}
   style:gap={resolvedGap}
+  style:grid-template-columns={resolvedColumns}
   style:top={resolvedTop}
   style:bottom={resolvedBottom}
   style:left={resolvedLeft}
