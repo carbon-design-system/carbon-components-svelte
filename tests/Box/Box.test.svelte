@@ -44,6 +44,15 @@
 <Box padding="1.5rem">Custom padding</Box>
 <Box paddingX={3} paddingY={5}>Axis padding</Box>
 <Box margin={4}>Margin scale</Box>
+<Box marginY={7} marginTop={3} data-testid="margin-top-scale"
+  >Margin top scale</Box
+>
+<Box marginBottom="1.5rem" marginLeft={0} data-testid="margin-side-custom"
+  >Margin side custom</Box
+>
+<Box margin="1rem" marginTop={3} data-testid="margin-side-over-custom"
+  >Margin side over custom</Box
+>
 <Box fullWidth maxWidth={480}>Full width capped</Box>
 <Box width="12rem" minWidth="8rem">Custom width</Box>
 <Box fill="layer-02" padding={6} border="subtle" class="combined"

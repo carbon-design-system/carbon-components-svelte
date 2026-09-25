@@ -23,7 +23,7 @@
     return undefined;
   }
 
-  /** @param {"p" | "px" | "py" | "m" | "mx" | "my" | "gap" | "height" | "min-height" | "max-height"} kind @param {SpacingValue | undefined} value */
+  /** @param {"p" | "px" | "py" | "m" | "mx" | "my" | "mt" | "mr" | "mb" | "ml" | "gap" | "height" | "min-height" | "max-height"} kind @param {SpacingValue | undefined} value */
   function spacingClass(kind, value) {
     return scaleClass(kind, value, 1);
   }
@@ -125,6 +125,30 @@
    * @type {SpacingValue | undefined}
    */
   export let marginY = undefined;
+
+  /**
+   * Set the top margin, overriding `margin` and `marginY` on that side. Numbers `1`–`13` use the shared layout scale, `0` clears it; strings accept any CSS length.
+   * @type {SpacingValue | undefined}
+   */
+  export let marginTop = undefined;
+
+  /**
+   * Set the right margin, overriding `margin` and `marginX` on that side. Numbers `1`–`13` use the shared layout scale, `0` clears it; strings accept any CSS length.
+   * @type {SpacingValue | undefined}
+   */
+  export let marginRight = undefined;
+
+  /**
+   * Set the bottom margin, overriding `margin` and `marginY` on that side. Numbers `1`–`13` use the shared layout scale, `0` clears it; strings accept any CSS length.
+   * @type {SpacingValue | undefined}
+   */
+  export let marginBottom = undefined;
+
+  /**
+   * Set the left margin, overriding `margin` and `marginX` on that side. Numbers `1`–`13` use the shared layout scale, `0` clears it; strings accept any CSS length.
+   * @type {SpacingValue | undefined}
+   */
+  export let marginLeft = undefined;
 
   /**
    * Set the border using a Carbon border token.
@@ -329,6 +353,10 @@
     spacingClass("m", margin),
     spacingClass("mx", marginX),
     spacingClass("my", marginY),
+    spacingClass("mt", marginTop),
+    spacingClass("mr", marginRight),
+    spacingClass("mb", marginBottom),
+    spacingClass("ml", marginLeft),
     fullWidth && "bx--box-full-width",
     viewportClass("height", height),
     viewportClass("min-height", minHeight),
@@ -385,9 +413,28 @@
   $: resolvedPadding = spacingStyle(padding);
   $: resolvedPaddingX = spacingStyle(paddingX);
   $: resolvedPaddingY = spacingStyle(paddingY);
-  $: resolvedMargin = spacingStyle(margin);
-  $: resolvedMarginX = spacingStyle(marginX);
-  $: resolvedMarginY = spacingStyle(marginY);
+  // An inline `margin` or `margin-inline` would beat a side's scale class, so
+  // once any side is set, every inline margin resolves per side instead.
+  $: marginSplit =
+    marginTop != null ||
+    marginRight != null ||
+    marginBottom != null ||
+    marginLeft != null;
+  $: resolvedMargin = marginSplit ? undefined : spacingStyle(margin);
+  $: resolvedMarginX = marginSplit ? undefined : spacingStyle(marginX);
+  $: resolvedMarginY = marginSplit ? undefined : spacingStyle(marginY);
+  $: resolvedMarginTop = marginSplit
+    ? spacingStyle(marginTop ?? marginY ?? margin)
+    : undefined;
+  $: resolvedMarginRight = marginSplit
+    ? spacingStyle(marginRight ?? marginX ?? margin)
+    : undefined;
+  $: resolvedMarginBottom = marginSplit
+    ? spacingStyle(marginBottom ?? marginY ?? margin)
+    : undefined;
+  $: resolvedMarginLeft = marginSplit
+    ? spacingStyle(marginLeft ?? marginX ?? margin)
+    : undefined;
   $: resolvedHeight = viewportStyle(height);
   $: resolvedMinHeight = viewportStyle(minHeight);
   $: resolvedMaxHeight = spacingStyle(maxHeight);
@@ -417,6 +464,10 @@
   style:margin={resolvedMargin}
   style:margin-inline={resolvedMarginX}
   style:margin-block={resolvedMarginY}
+  style:margin-top={resolvedMarginTop}
+  style:margin-right={resolvedMarginRight}
+  style:margin-bottom={resolvedMarginBottom}
+  style:margin-left={resolvedMarginLeft}
   style:height={resolvedHeight}
   style:min-height={resolvedMinHeight}
   style:max-height={resolvedMaxHeight}
