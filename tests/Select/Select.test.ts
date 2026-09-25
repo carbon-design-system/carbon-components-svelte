@@ -448,7 +448,6 @@ describe("Select", () => {
         "warn-test-select",
       );
 
-      // Helper text should not be rendered when warn is true
       expect(screen.queryByText("Helper text")).not.toBeInTheDocument();
     });
 

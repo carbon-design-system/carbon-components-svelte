@@ -190,7 +190,6 @@ describe("Search", () => {
     expect(searchWrapper).not.toHaveClass("bx--search--expanded");
     expect(consoleLog).toHaveBeenCalledWith("collapsed");
 
-    // Don't collapse when has value
     await user.click(magnifier);
     await user.type(search, "test");
     await user.click(document.body);
@@ -297,16 +296,12 @@ describe("Search", () => {
     const skeletons = document.querySelectorAll(".bx--skeleton");
     expect(skeletons).toHaveLength(4);
 
-    // Default (xl) skeleton
     expect(skeletons[0]).toHaveClass("bx--search--xl");
 
-    // Large (lg) skeleton
     expect(skeletons[1]).toHaveClass("bx--search--lg");
 
-    // Small (sm) skeleton
     expect(skeletons[2]).toHaveClass("bx--search--sm");
 
-    // Skeleton with hidden label has no label element
     const hideLabelSkeleton = screen.getByTestId("skeleton-hide-label");
     expect(hideLabelSkeleton.querySelector(".bx--label")).toBeNull();
   });

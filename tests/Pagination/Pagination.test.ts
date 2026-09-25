@@ -351,7 +351,6 @@ describe("Pagination", () => {
       props: { totalItems: 102, pageSizes: [5, 10, 15] },
     });
 
-    // Change page size
     const pageSizeSelect = screen.getAllByRole("combobox");
     await user.selectOptions(pageSizeSelect[0], "15");
     expect(consoleLog).toHaveBeenCalledWith("change", {
@@ -363,7 +362,6 @@ describe("Pagination", () => {
       page: 1,
     });
 
-    // Change page
     const pageSelect = screen.getAllByRole("combobox");
     await user.selectOptions(pageSelect[1], "2");
     expect(consoleLog).toHaveBeenCalledWith("change", { page: 2 });

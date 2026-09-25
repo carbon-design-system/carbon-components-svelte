@@ -189,7 +189,6 @@ describe("CheckboxGroup", () => {
     await user.click(checkbox3);
     expect(component.selected).toEqual(["1", "3"]);
 
-    // Deselect checkbox1
     await user.click(checkbox1);
     expect(component.selected).toEqual(["3"]);
   });

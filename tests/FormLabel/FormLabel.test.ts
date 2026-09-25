@@ -168,7 +168,6 @@ describe("FormLabel", () => {
       },
     });
 
-    // Create an input with matching id
     const input = document.createElement("input");
     input.id = "test-input";
     container.appendChild(input);

@@ -11,7 +11,6 @@ describe("ToolbarSearch Generics", () => {
       const searchInputs = screen.getAllByRole("searchbox");
       const firstSearchInput = searchInputs[0];
 
-      // Initially, all rows should be filtered (no search)
       await waitFor(() => {
         const filteredIds = getFilteredIds("filtered-ids-1");
         expect(filteredIds).toEqual(
@@ -20,8 +19,6 @@ describe("ToolbarSearch Generics", () => {
         expect(filteredIds.length).toBe(3);
       });
 
-      // Type check: filteredIds should be typed as ReadonlyArray<"row-1" | "row-2" | "row-3">
-      // This is verified by TypeScript at compile time, but we can verify the runtime values
       await user.type(firstSearchInput, "Laptop");
 
       await waitFor(() => {
@@ -53,7 +50,6 @@ describe("ToolbarSearch Generics", () => {
         expect(filteredIds).toEqual(["row-1"]);
       });
 
-      // Clear and search for something that matches multiple rows
       await user.clear(firstSearchInput);
       await user.type(firstSearchInput, "row");
 
@@ -74,14 +70,12 @@ describe("ToolbarSearch Generics", () => {
       const searchInputs = screen.getAllByRole("searchbox");
       const secondSearchInput = searchInputs[1];
 
-      // Initially, all rows should be filtered
       await waitFor(() => {
         const filteredIds = getFilteredIds("filtered-ids-2");
         expect(filteredIds).toEqual(expect.arrayContaining([1, 2, 3]));
         expect(filteredIds.length).toBe(3);
       });
 
-      // Type check: filteredIds should be typed as ReadonlyArray<1 | 2 | 3>
       await user.type(secondSearchInput, "Item 1");
 
       await waitFor(() => {
@@ -122,7 +116,6 @@ describe("ToolbarSearch Generics", () => {
       const searchInputs = screen.getAllByRole("searchbox");
       const thirdSearchInput = searchInputs[2];
 
-      // Initially, all rows should be filtered
       await waitFor(() => {
         const filteredIds = getFilteredIds("filtered-ids-3");
         expect(filteredIds).toEqual(
@@ -131,7 +124,6 @@ describe("ToolbarSearch Generics", () => {
         expect(filteredIds.length).toBe(3);
       });
 
-      // Type check: filteredIds should be typed as ReadonlyArray<string>
       await user.type(thirdSearchInput, "Widget");
 
       await waitFor(() => {
@@ -203,34 +195,26 @@ describe("ToolbarSearch Generics", () => {
     it("should maintain type safety across different row types", async () => {
       render(ToolbarSearchGenerics);
 
-      // Verify that each DataTable maintains its own typed filteredRowIds
       const searchInputs = screen.getAllByRole("searchbox");
 
-      // First table: string literal IDs
       await user.type(searchInputs[0], "Laptop");
       await waitFor(() => {
         const filteredIds1 = getFilteredIds("filtered-ids-1");
         expect(filteredIds1).toEqual(["row-1"]);
-        // Type: ReadonlyArray<"row-1" | "row-2" | "row-3">
       });
 
-      // Second table: numeric IDs
       await user.type(searchInputs[1], "Item 2");
       await waitFor(() => {
         const filteredIds2 = getFilteredIds("filtered-ids-2");
         expect(filteredIds2).toEqual([2]);
-        // Type: ReadonlyArray<1 | 2 | 3>
       });
 
-      // Third table: string IDs with custom filter
       await user.type(searchInputs[2], "Widget");
       await waitFor(() => {
         const filteredIds3 = getFilteredIds("filtered-ids-3");
         expect(filteredIds3).toEqual(["prod-1"]);
-        // Type: ReadonlyArray<string>
       });
 
-      // Verify all three maintain their distinct types
       const filteredIds1 = getFilteredIds("filtered-ids-1");
       const filteredIds2 = getFilteredIds("filtered-ids-2");
       const filteredIds3 = getFilteredIds("filtered-ids-3");

@@ -165,8 +165,6 @@ describe("ComboBox", () => {
     // assistive-tech users can discover it.
     expect(input.getAttribute("aria-activedescendant")).toMatch(/-0$/);
 
-    // Enter on the highlighted disabled item selects nothing and leaves the
-    // menu open
     await user.keyboard("{Enter}");
     expect(input).toHaveValue("");
     expect(input).toHaveAttribute("aria-expanded", "true");
@@ -212,7 +210,6 @@ describe("ComboBox", () => {
     // Opening highlights the selected item (Email, id="1"), not the first item.
     expect(input.getAttribute("aria-activedescendant")).toMatch(/-1$/);
 
-    // Subsequent navigation moves from the selected item.
     await user.keyboard("{ArrowDown}");
     expect(input.getAttribute("aria-activedescendant")).toMatch(/-2$/);
   });
@@ -279,7 +276,6 @@ describe("ComboBox", () => {
 
     await user.keyboard("{Alt>}{ArrowDown}{/Alt}");
     expect(input).toHaveAttribute("aria-expanded", "true");
-    // The highlight does not move.
     expect(input.getAttribute("aria-activedescendant")).toMatch(/-0$/);
   });
 
@@ -477,8 +473,6 @@ describe("ComboBox", () => {
     const input = getInput();
     await user.click(input);
 
-    // Keyboard nav starts at selected item (index 0, Slack)
-    // ArrowDown once: 0 -> 1 (Email)
     await user.keyboard("{ArrowDown}");
     await user.keyboard("{Enter}");
 
@@ -880,7 +874,6 @@ describe("ComboBox", () => {
     await user.click(disabledOption);
     expect(getInput()).toHaveValue("");
 
-    // Dropdown remains open
     const dropdown = screen.getByRole("listbox");
     expect(dropdown).toBeVisible();
   });
@@ -1315,8 +1308,6 @@ describe("ComboBox", () => {
     await user.keyboard("{ArrowUp}");
     expect(input.getAttribute("aria-activedescendant")).toMatch(/-3$/);
 
-    // Enter on a highlighted disabled item selects nothing and leaves the
-    // menu open
     await user.keyboard("{Enter}");
     expect(input).toHaveValue("");
     expect(input).toHaveAttribute("aria-expanded", "true");
@@ -1365,10 +1356,8 @@ describe("ComboBox", () => {
     // highlight steps through the filtered list and includes disabled items.
     await user.keyboard("{ArrowDown}");
     expect(input.getAttribute("aria-activedescendant")).toMatch(/-3$/);
-    // Enter on the highlighted disabled item is a no-op.
     await user.keyboard("{Enter}");
     expect(input).toHaveValue("a");
-    // ArrowDown reaches Az, which selects normally.
     await user.keyboard("{ArrowDown}");
     await user.keyboard("{Enter}");
     expect(input).toHaveValue("Az");
@@ -1388,8 +1377,6 @@ describe("ComboBox", () => {
     await user.click(input);
     await user.keyboard("{ArrowDown}"); // highlights A
     await user.keyboard("{ArrowDown}"); // highlights disabled B
-    // Enter on the highlighted disabled item selects nothing and leaves the
-    // menu open, matching click.
     await user.keyboard("{Enter}");
     expect(input).toHaveValue("");
     expect(input).toHaveAttribute("aria-expanded", "true");
@@ -1478,7 +1465,6 @@ describe("ComboBox", () => {
     await user.click(input);
     await tick();
 
-    // With selectTextOnFocus false, cursor is at end; no full selection
     expect(input.selectionStart).toBe(input.selectionEnd);
     expect(input.selectionEnd).toBe(5);
   });
@@ -1711,21 +1697,18 @@ describe("ComboBox", () => {
       });
 
       it("should support different ID types (string, number, union)", () => {
-        // String ID
         type StringItem = { id: string; text: string };
         type StringComponent = ComboBoxComponent<StringItem>;
         expectTypeOf<
           ComponentProps<StringComponent>["selectedId"]
         >().toEqualTypeOf<string | undefined>();
 
-        // Number ID
         type NumberItem = { id: number; text: string };
         type NumberComponent = ComboBoxComponent<NumberItem>;
         expectTypeOf<
           ComponentProps<NumberComponent>["selectedId"]
         >().toEqualTypeOf<number | undefined>();
 
-        // Union ID
         type UnionId = "a" | "b" | "c";
         type UnionItem = { id: UnionId; text: string };
         type UnionComponent = ComboBoxComponent<UnionItem>;
@@ -1865,7 +1848,6 @@ describe("ComboBox", () => {
   it("should not trap focus when tabbing away from an open menu", async () => {
     const { container } = render(ComboBox);
 
-    // Add an external focusable element after the combobox.
     const externalButton = document.createElement("button");
     externalButton.textContent = "Outside";
     container.appendChild(externalButton);
@@ -1873,7 +1855,6 @@ describe("ComboBox", () => {
     const input = getInput();
     await user.click(input);
 
-    // Menu should be open.
     expect(screen.getByRole("listbox")).toBeVisible();
 
     // Simulate a blur where focus moves to an element outside the combobox.
@@ -1884,7 +1865,6 @@ describe("ComboBox", () => {
       new FocusEvent("blur", { relatedTarget: externalButton, bubbles: true }),
     );
 
-    // The blur handler should NOT refocus the input when focus leaves the component.
     expect(focusSpy).not.toHaveBeenCalled();
   });
 
@@ -1914,7 +1894,6 @@ describe("ComboBox", () => {
 
       await tick();
 
-      // No item should be highlighted (only filtered items visible, none highlighted)
       const highlighted = getHighlightedItems();
       expect(highlighted.length).toBe(0);
     });
@@ -1952,7 +1931,6 @@ describe("ComboBox", () => {
       await user.click(input);
       await user.type(input, "b");
 
-      // "Banana" should be highlighted, not "Apple"
       const highlighted = getHighlightedOption();
       expect(highlighted).not.toBeNull();
       expect(highlighted?.textContent).toContain("Banana");
@@ -2018,27 +1996,22 @@ describe("ComboBox", () => {
 
       const input = getInput();
 
-      // Select "Email"
       await user.click(input);
       await user.click(screen.getByText("Email"));
       expect(input).toHaveValue("Email");
 
-      // Re-open the menu
       await user.click(input);
       await tick();
 
-      // The selected item (Email) should be highlighted (via active+highlighted class)
       const emailOption = screen
         .getAllByRole("option")
         .find((el) => el.textContent?.includes("Email"));
       expect(emailOption).toHaveClass("bx--list-box__menu-item--highlighted");
 
-      // Clear and type a new value
       await user.clear(input);
       await user.type(input, "f");
       await tick();
 
-      // Now "Fax" should be highlighted
       const highlighted = getHighlightedOption();
       expect(highlighted).not.toBeNull();
       expect(highlighted?.textContent).toContain("Fax");
@@ -2062,12 +2035,10 @@ describe("ComboBox", () => {
 
       await tick();
 
-      // First filtered item "Slack" should be auto-highlighted
       let highlighted = getHighlightedOption();
       expect(highlighted).not.toBeNull();
       expect(highlighted?.textContent).toContain("Slack");
 
-      // ArrowDown should move to Signal
       await user.keyboard("{ArrowDown}");
       await tick();
 
@@ -2095,19 +2066,16 @@ describe("ComboBox", () => {
 
       await tick();
 
-      // Typeahead should autocomplete the input with the suggestion appended
       // User typed "sl" (lowercase), typeahead appends "ack" from "Slack"
       expect(input.value).toBe("slack");
       // The typed portion ends at index 2, suggestion fills the rest
       expect(input.selectionStart).toBe(2);
       expect(input.selectionEnd).toBe(5);
 
-      // Auto-highlight should highlight "Slack" (first filtered match)
       const highlighted = getHighlightedOption();
       expect(highlighted).not.toBeNull();
       expect(highlighted?.textContent).toContain("Slack");
 
-      // Pressing Enter should select the highlighted item
       await user.keyboard("{Enter}");
       expect(input).toHaveValue("Slack");
     });

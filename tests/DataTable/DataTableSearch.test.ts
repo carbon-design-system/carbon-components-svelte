@@ -127,7 +127,6 @@ describe("DataTableSearch", () => {
     expect(searchInput).toHaveValue("round");
     expect(searchInput).not.toHaveFocus();
 
-    // Search bar should be active.
     const searchBar = screen.getByRole("search");
     expect(searchBar).toHaveClass("bx--toolbar-search-container-active");
 

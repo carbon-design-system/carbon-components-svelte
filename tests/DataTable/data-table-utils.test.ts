@@ -513,7 +513,6 @@ describe("rowsEqual", () => {
       const result = rowsEqual(rowsA, rowsB);
       expectTypeOf<typeof result>().toEqualTypeOf<boolean>();
 
-      // Verify optional id is handled
       expectTypeOf<(typeof rowsA)[number]["id"]>().toEqualTypeOf<
         string | undefined
       >();
@@ -536,7 +535,6 @@ describe("rowsEqual", () => {
       const result = rowsEqual(rowsA, rowsB);
       expectTypeOf<typeof result>().toEqualTypeOf<boolean>();
 
-      // Verify extended properties are accessible
       expectTypeOf<(typeof rowsA)[number]>().toHaveProperty("id");
       expectTypeOf<(typeof rowsA)[number]>().toHaveProperty("name");
     });
@@ -549,7 +547,6 @@ describe("rowsEqual", () => {
 
       const rows: readonly CustomRow[] = [{ id: 1, name: "Row 1" }];
 
-      // Verify null is accepted for both parameters
       const result1 = rowsEqual(null, rows);
       const result2 = rowsEqual(rows, null);
       const result3 = rowsEqual(null, null);
@@ -823,7 +820,6 @@ describe("compareValues", () => {
     });
 
     it("handles numeric strings with locale-aware sorting", () => {
-      // "10" should come after "2" with numeric sorting
       expect(compareValues("2", "10", true)).toBeLessThan(0);
       expect(compareValues("10", "2", true)).toBeGreaterThan(0);
     });
@@ -959,7 +955,6 @@ describe("compareValues", () => {
   describe("custom sort function", () => {
     it("uses custom sort function when provided", () => {
       const customSort = (a: number, b: number) => {
-        // Reverse numeric order
         return b - a;
       };
       expect(compareValues(1, 2, true, customSort)).toBe(1);
@@ -967,7 +962,7 @@ describe("compareValues", () => {
     });
 
     it("applies ascending/descending to custom sort like the default comparator", () => {
-      const customSort = (a: string, b: string) => a.length - b.length; // Ascending by length
+      const customSort = (a: string, b: string) => a.length - b.length;
       expect(compareValues("a", "abc", true, customSort)).toBeLessThan(0);
       expect(compareValues("a", "abc", false, customSort)).toBeGreaterThan(0);
     });
@@ -1038,7 +1033,6 @@ describe("compareValues", () => {
     });
 
     it("sorts alphabetically ignoring case", () => {
-      // Verifies case-insensitive alphabetical sorting
       // With sensitivity: "base", "Apple" and "apple" are equal,
       // so their relative order depends on sort stability
       const sorted = ["banana", "Apple", "cherry", "Banana", "apple"].sort(
@@ -1050,11 +1044,11 @@ describe("compareValues", () => {
 
     it("handles unicode characters", () => {
       // With sensitivity: "base", umlauts are treated as their base letters
-      expect(compareValues("ä", "a", true)).toBe(0); // ä equals a
-      expect(compareValues("ö", "o", true)).toBe(0); // ö equals o
-      expect(compareValues("ü", "u", true)).toBe(0); // ü equals u
+      expect(compareValues("ä", "a", true)).toBe(0);
+      expect(compareValues("ö", "o", true)).toBe(0);
+      expect(compareValues("ü", "u", true)).toBe(0);
       // But different base letters are still distinct
-      expect(compareValues("ä", "z", true)).toBeLessThan(0); // a < z
+      expect(compareValues("ä", "z", true)).toBeLessThan(0);
     });
   });
 });

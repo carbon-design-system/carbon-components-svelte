@@ -15,7 +15,6 @@
     category: string;
   };
 
-  // Discriminated union type to represent either a category node or a product leaf node.
   type ProductNode = CategoryNode | ProductLeafNode;
 
   const nodes = [
@@ -45,7 +44,6 @@
     selected: boolean;
   };
 
-  // Use a type guard to check if the node is a product leaf.
   function isProductLeaf(node: ProductNode): node is ProductLeafNode {
     return "price" in node;
   }

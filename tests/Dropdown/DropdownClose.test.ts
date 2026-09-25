@@ -112,7 +112,6 @@ describe("Dropdown close event", () => {
     const onClose = vi.fn();
     render(DropdownClose, { props: { onClose } });
 
-    // Menu starts closed; Escape and outside clicks must be no-ops.
     const button = screen.getByRole("combobox");
     button.focus();
     await user.keyboard("{Escape}");

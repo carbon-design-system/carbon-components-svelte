@@ -117,8 +117,6 @@ describe("filterTreeNodes", () => {
     it("should match root nodes", () => {
       const result = filterTreeNodes(sampleTree, (node) => node.id === 1);
 
-      // When a root node matches, without includeChildren,
-      // it only includes the node itself (no children unless they also match)
       expect(result).toEqual([
         {
           id: 1,
@@ -193,7 +191,6 @@ describe("filterTreeNodes", () => {
     it("should work with includeChildren option", () => {
       const result = filterTreeById(sampleTree, 1, { includeChildren: true });
 
-      // Only the first tree (id=1) matches, so we get just that tree with all children
       expect(result).toEqual([sampleTree[0]]);
     });
 
@@ -222,7 +219,6 @@ describe("filterTreeNodes", () => {
     it("should filter by text (case-insensitive)", () => {
       const result = filterTreeByText(sampleTree, "work");
 
-      // Without includeChildren, only the matching node is included (and ancestors)
       expect(result).toEqual([
         {
           id: 1,
@@ -283,7 +279,6 @@ describe("filterTreeNodes", () => {
         includeChildren: true,
       });
 
-      // Only "Documents" node matches, so we get just the first tree with all children
       expect(result).toEqual([sampleTree[0]]);
     });
 

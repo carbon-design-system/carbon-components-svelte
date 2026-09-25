@@ -24,7 +24,6 @@ describe("ComboBox", () => {
       await user.click(input);
       await user.type(input, "Ap");
 
-      // Should show "Apple" with "ple" highlighted
       expect(input).toHaveValue("Apple");
       expect(input.selectionStart).toBe(2);
       expect(input.selectionEnd).toBe(5);
@@ -136,7 +135,6 @@ describe("ComboBox", () => {
       await user.click(input);
       await user.type(input, "apple");
 
-      // Custom "includes" filter should match both Apple and Pineapple
       const options = screen.getAllByRole("option");
       expect(options).toHaveLength(2);
       expect(customFilter).toHaveBeenCalled();
@@ -181,19 +179,15 @@ describe("ComboBox", () => {
       await user.type(input, "A");
       expect(input).toHaveValue("Apple");
 
-      // Delete all characters
       await user.clear(input);
       await user.type(input, "A");
 
-      // Type another character
       await user.keyboard("p");
       expect(input).toHaveValue("Apple");
 
-      // Now delete the suggestion and one character
       await user.keyboard("{Backspace}");
       await user.keyboard("{Backspace}");
 
-      // Should have just "A" after deleting
       expect(input).toHaveValue("A");
     });
 
@@ -233,12 +227,10 @@ describe("ComboBox", () => {
       await user.type(input, "A");
       expect(input).toHaveValue("Apple");
 
-      // Clear and type "Ap" - should suggest "Apple"
       await user.clear(input);
       await user.type(input, "Ap");
       expect(input).toHaveValue("Apple");
 
-      // Clear and type "Apr" - should suggest "Apricot"
       await user.clear(input);
       await user.type(input, "Apr");
       expect(input).toHaveValue("Apricot");
@@ -304,7 +296,6 @@ describe("ComboBox", () => {
       await user.type(input, "A");
       expect(input).toHaveValue("Apple");
 
-      // Navigate down to next item
       await user.keyboard("{ArrowDown}");
       await user.keyboard("{ArrowDown}");
       await user.keyboard("{Enter}");

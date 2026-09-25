@@ -5,10 +5,8 @@
   import ImageLoader from "carbon-components-svelte/ImageLoader/ImageLoader.svelte";
   import InlineLoading from "carbon-components-svelte/InlineLoading/InlineLoading.svelte";
 
-  // Valid image URL for testing successful loads
   const validImageSrc =
     "https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg";
-  // Invalid image URL for testing error states
   const invalidImageSrc = "https://invalid-url/nonexistent.png";
 
   export let imageLoader: ImageLoaderComponent | undefined = undefined;
@@ -16,7 +14,6 @@
   export let onerror: ((event: Event) => void) | undefined = undefined;
 </script>
 
-<!-- Default image loader -->
 <div data-testid="default-loader">
   <ImageLoader
     src={validImageSrc}
@@ -26,7 +23,6 @@
   />
 </div>
 
-<!-- Image loader with loading and error slots -->
 <div data-testid="loader-with-slots">
   <ImageLoader src={validImageSrc} alt="IBM Logo with slots">
     <svelte:fragment slot="loading">
@@ -38,7 +34,6 @@
   </ImageLoader>
 </div>
 
-<!-- Image loader with aspect ratio -->
 <div data-testid="loader-with-ratio">
   <ImageLoader
     ratio="16x9"
@@ -47,12 +42,10 @@
   />
 </div>
 
-<!-- Image loader with fade in effect -->
 <div data-testid="loader-with-fade">
   <ImageLoader fadeIn src={validImageSrc} alt="IBM Logo with fade" />
 </div>
 
-<!-- Image loader with programmatic control -->
 <div data-testid="programmatic-loader">
   <ImageLoader
     bind:this={imageLoader}
@@ -61,7 +54,6 @@
   />
 </div>
 
-<!-- Image loader that will trigger error state -->
 <div data-testid="error-loader">
   <ImageLoader src={invalidImageSrc} alt="Error state image">
     <svelte:fragment slot="error">

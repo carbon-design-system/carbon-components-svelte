@@ -615,7 +615,6 @@ describe("NumberInput", () => {
   it("should have translationIds constant", () => {
     render(NumberInput);
 
-    // translationIds is exported from the component, available for external use
     expect(true).toBe(true);
   });
 
@@ -753,7 +752,6 @@ describe("NumberInput", () => {
 
     const input = screen.getByLabelText("Clusters");
     const numberWrapper = input.closest(".bx--number");
-    // When invalid, only invalid icon should be present, not warning icon
     expect(
       numberWrapper?.querySelector(".bx--number__invalid--warning"),
     ).not.toBeInTheDocument();
@@ -770,7 +768,6 @@ describe("NumberInput", () => {
 
     const input = screen.getByLabelText("Clusters");
     const numberWrapper = input.closest(".bx--number");
-    // Should have readonly icon but not invalid icon
     expect(
       numberWrapper?.querySelector(".bx--number__invalid"),
     ).not.toBeInTheDocument();
@@ -799,7 +796,6 @@ describe("NumberInput", () => {
   });
 
   it("should show invalid state when invalid prop is true and invalidText is provided", () => {
-    // NumberInput should require both invalid=true AND invalidText to show invalid state
     render(NumberInput, {
       props: { invalid: true, invalidText: "This field is invalid" },
     });
@@ -819,13 +815,11 @@ describe("NumberInput", () => {
     });
 
     const input = screen.getByRole("spinbutton");
-    // Visual invalid state (border, icon) shows even without invalidText
     expect(input).toHaveAttribute("aria-invalid", "true");
     expect(input.closest(".bx--number")).toHaveAttribute(
       "data-invalid",
       "true",
     );
-    // But no error message div should be rendered
     expect(
       container.querySelector(".bx--form-requirement"),
     ).not.toBeInTheDocument();
@@ -876,7 +870,6 @@ describe("NumberInput", () => {
     await user.clear(input);
     expect(input.value).toBe("");
 
-    // Value should be null when cleared
     if (isSvelte5) {
       expect(screen.getByTestId("value").textContent).toBe("");
     } else {
@@ -895,17 +888,14 @@ describe("NumberInput", () => {
     assert(input instanceof HTMLInputElement);
     expect(input.value).toBe("5");
 
-    // Simulate parent changing value programmatically
     rerender({ allowDecimal: true, allowEmpty: true, value: 10 });
     await tick();
     expect(input.value).toBe("10");
 
-    // Set to null
     rerender({ allowDecimal: true, allowEmpty: true, value: null });
     await tick();
     expect(input.value).toBe("");
 
-    // Set back to a value
     rerender({ allowDecimal: true, allowEmpty: true, value: 2.5 });
     await tick();
     expect(input.value).toBe("2.5");
@@ -1053,7 +1043,6 @@ describe("NumberInput", () => {
     render(NumberInput, { props: { value: null, allowEmpty: false } });
 
     const input = screen.getByRole("spinbutton");
-    // Should NOT automatically show invalid state - requires explicit invalid={true}
     expect(input).not.toHaveAttribute("aria-invalid");
     expect(input.closest(".bx--number")).not.toHaveAttribute("data-invalid");
   });
@@ -1073,7 +1062,6 @@ describe("NumberInput", () => {
     await user.clear(input);
     await user.tab();
 
-    // Value should default to 0 when allowEmpty is false
     expect(screen.getByTestId("value").textContent).toBe("0");
     expect(input).toHaveValue(0);
   });
@@ -1088,7 +1076,6 @@ describe("NumberInput", () => {
     await user.clear(input);
     await user.tab();
 
-    // Value should default to min (4) when allowEmpty is false and min is defined
     expect(screen.getByTestId("value").textContent).toBe("4");
     expect(input).toHaveValue(4);
   });
@@ -1105,7 +1092,6 @@ describe("NumberInput", () => {
 
     await user.click(incrementButton);
 
-    // Should use min (5) as starting point, then increment to 6
     expect(screen.getByTestId("value").textContent).toBe("6");
   });
 
@@ -1121,7 +1107,6 @@ describe("NumberInput", () => {
 
     await user.click(decrementButton);
 
-    // Should use 0 as default, then decrement to -1
     expect(screen.getByTestId("value").textContent).toBe("-1");
   });
 
@@ -1251,9 +1236,6 @@ describe("NumberInput", () => {
   });
 
   it("should preserve last valid value when typing invalid input in allowDecimal mode", async () => {
-    // When allowDecimal is true and user types invalid input like "1.5." (two decimals),
-    // the value should preserve the last valid number (1.5) instead of becoming null.
-    // The input field can show "1.5." but value should stay at 1.5.
     render(NumberInput, {
       props: { allowDecimal: true, allowEmpty: true, value: null },
     });
@@ -1261,22 +1243,17 @@ describe("NumberInput", () => {
     const input = screen.getByRole("textbox");
     assert(input instanceof HTMLInputElement);
 
-    // Type a valid decimal
     await user.type(input, "1.5");
     expect(input.value).toBe("1.5");
     expect(screen.getByTestId("value").textContent).toBe("1.5");
 
-    // Type an additional decimal point (invalid)
     await user.type(input, ".");
     expect(input.value).toBe("1.5.");
 
-    // Value should preserve the last valid value (1.5), not become null
     expect(screen.getByTestId("value").textContent).toBe("1.5");
   });
 
   it("should normalize invalid input to last valid value on blur in allowDecimal mode", async () => {
-    // When allowDecimal is true and user types invalid input like "1.5." and then blurs,
-    // the input should normalize back to the last valid value "1.5".
     render(NumberInput, {
       props: { allowDecimal: true, allowEmpty: true, value: null },
     });
@@ -1284,12 +1261,10 @@ describe("NumberInput", () => {
     const input = screen.getByRole("textbox");
     assert(input instanceof HTMLInputElement);
 
-    // Type a valid decimal then an invalid character
     await user.type(input, "1.5.");
     expect(input.value).toBe("1.5.");
     expect(screen.getByTestId("value").textContent).toBe("1.5");
 
-    // Blur the input - should normalize back to last valid value
     await user.tab();
     expect(input.value).toBe("1.5");
     expect(screen.getByTestId("value").textContent).toBe("1.5");
@@ -1297,24 +1272,19 @@ describe("NumberInput", () => {
 
   describe("decimal separator normalization", () => {
     it.each([
-      // Standard and locale decimal separators (comma, Arabic ٫)
       ["3.14", 3.14, "period (standard)"],
       ["3,14", 3.14, "comma (European)"],
       ["3\u066B14", 3.14, "Arabic decimal separator"],
       ["0,5", 0.5, "leading zero with comma"],
       ["0\u066B5", 0.5, "leading zero with Arabic separator"],
-      // Integers and trailing zeros
       ["12", 12, "integer (no separator)"],
       ["1,0", 1, "trailing zero with comma"],
       ["1\u066B0", 1, "trailing zero with Arabic separator"],
-      // Mixed separators: thousands + decimal
       ["1.000,5", 1000.5, "European thousands with comma decimal"],
       ["1,000.5", 1000.5, "English thousands with period decimal"],
       ["1.000.000,5", 1000000.5, "European millions"],
       ["1,000,000.5", 1000000.5, "English millions"],
-      // Comma-only as decimal (single comma, no dot)
       ["1,5", 1.5, "comma as decimal"],
-      // Invalid input
       ["abc", null, "invalid input"],
     ] as const)(
       "should parse '%s' as %s (%s)",
@@ -1363,7 +1333,6 @@ describe("NumberInput", () => {
 
       await user.click(incrementButton);
 
-      // First step from empty jumps directly to stepStartValue
       expect(screen.getByTestId("value").textContent).toBe("10");
     });
 
@@ -1378,7 +1347,6 @@ describe("NumberInput", () => {
 
       await user.click(decrementButton);
 
-      // First step from empty jumps directly to stepStartValue
       expect(screen.getByTestId("value").textContent).toBe("10");
     });
 
@@ -1393,7 +1361,6 @@ describe("NumberInput", () => {
 
       await user.click(incrementButton);
 
-      // First step from 0 jumps directly to stepStartValue
       expect(screen.getByTestId("value").textContent).toBe("10");
     });
 
@@ -1447,7 +1414,6 @@ describe("NumberInput", () => {
 
       await user.click(incrementButton);
 
-      // Should jump to stepStartValue (10), not min (0)
       expect(screen.getByTestId("value").textContent).toBe("10");
     });
 
@@ -1462,7 +1428,6 @@ describe("NumberInput", () => {
 
       await user.click(incrementButton);
 
-      // Should start from min (5), then increment to 6
       expect(screen.getByTestId("value").textContent).toBe("6");
     });
   });
@@ -1503,11 +1468,9 @@ describe("NumberInput", () => {
 
       const input = screen.getByLabelText("Clusters");
       const numberWrapper = input.closest(".bx--number");
-      // Icon should be present
       expect(
         numberWrapper?.querySelector(".bx--number__invalid"),
       ).toBeInTheDocument();
-      // No error message text
       expect(
         numberWrapper?.querySelector(".bx--form-requirement"),
       ).not.toBeInTheDocument();
@@ -1712,7 +1675,6 @@ describe("NumberInput", () => {
       await user.type(input, "1234.5");
       await user.tab();
 
-      // After blur, value should be formatted according to locale
       expect(screen.getByTestId("value").textContent).toBe("1234.5");
       expect(input.value).toBe("1,234.5");
     });
@@ -1786,7 +1748,6 @@ describe("NumberInput", () => {
     it("should fall back to standard behavior when locale is undefined", () => {
       render(NumberInput, { props: { value: 5 } });
 
-      // Should be a number input, not text
       const input = screen.getByRole("spinbutton");
       expect(input).toHaveAttribute("type", "number");
     });
@@ -1857,12 +1818,10 @@ describe("NumberInput", () => {
       const input = screen.getByRole("textbox");
       assert(input instanceof HTMLInputElement);
 
-      // Type in en-US format and blur
       await user.type(input, "1,234.5");
       await user.tab();
       expect(screen.getByTestId("value").textContent).toBe("1234.5");
 
-      // Switch to de-DE
       rerender({ locale: "de-DE", value: null, allowEmpty: true });
       await tick();
 
@@ -1896,7 +1855,6 @@ describe("NumberInput", () => {
       assert(input instanceof HTMLInputElement);
       expect(input.value).toBe("1.234,5");
 
-      // Remove locale — should switch to number input
       rerender({ locale: undefined, value: 1234.5, allowEmpty: true });
       await tick();
 

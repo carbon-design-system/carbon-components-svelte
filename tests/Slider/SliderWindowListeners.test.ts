@@ -37,7 +37,6 @@ describe("Slider window listeners", () => {
       expect(net(add, remove, type)).toBe(0);
     }
 
-    // Begin a drag on one slider.
     const sliderA = containers[0].querySelector(".bx--slider");
     assert(sliderA instanceof HTMLElement);
     await fireEvent.mouseDown(sliderA);

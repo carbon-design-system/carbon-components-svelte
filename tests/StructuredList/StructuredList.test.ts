@@ -18,14 +18,12 @@ describe("StructuredList", () => {
     expect(list).toBeInTheDocument();
     expect(list).toHaveClass("bx--structured-list");
 
-    // Check header cells
     const headerCells = screen.getAllByRole("columnheader");
     expect(headerCells).toHaveLength(3);
     expect(headerCells[0]).toHaveTextContent("Column A");
     expect(headerCells[1]).toHaveTextContent("Column B");
     expect(headerCells[2]).toHaveTextContent("Column C");
 
-    // Check body cells
     const cells = screen.getAllByRole("cell");
     expect(cells).toHaveLength(9); // 3 rows x 3 columns
     expect(cells[0]).toHaveTextContent("Row 1");
@@ -464,7 +462,6 @@ describe("StructuredList", () => {
     );
     expect(checkboxes[2]).toBeChecked();
 
-    // toggling re-selects off
     await user.click(checkboxes[0]);
     expect(screen.getByTestId("value").textContent).toBe('["row-3-value"]');
     expect(checkboxes[0]).not.toBeChecked();

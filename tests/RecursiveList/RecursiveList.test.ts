@@ -22,7 +22,6 @@ describe.each(testCases)("$name", ({ component }) => {
 
     expect(screen.getAllByRole("list")).toHaveLength(4);
 
-    // Nested items
     expect(screen.getByText("Item 1a")).toBeInTheDocument();
   });
 
@@ -39,11 +38,9 @@ describe.each(testCases)("$name", ({ component }) => {
     const links = screen.getAllByRole("link");
     expect(links).toHaveLength(4);
 
-    // Link with custom text
     const customLink = screen.getByText("Link with custom text");
     expect(customLink).toHaveAttribute("href", "https://svelte.dev/");
 
-    // Plain link
     const plainLink = links.find(
       (link) => link.textContent?.trim() === "https://svelte.dev/",
     );
@@ -135,7 +132,6 @@ describe("RecursiveList Generics", () => {
 
     expectTypeOf<typeof customNodes>().toEqualTypeOf<CustomNode[]>();
 
-    // Test that nodes prop accepts CustomNode type
     // Using type assertion to avoid DOM Node type conflict
     type NodesPropType =
       | ReadonlyArray<CustomNode & { nodes?: CustomNode[] }>

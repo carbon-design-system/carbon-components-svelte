@@ -21,7 +21,6 @@ describe("Tabs (icon-only)", () => {
     expect(screen.getByRole("navigation")).not.toHaveClass(
       "bx--tabs--icon-only",
     );
-    // The beside-label feature is preserved: labels stay visible.
     expect(screen.getByRole("tab", { name: "Calendar" })).toHaveTextContent(
       "Calendar",
     );

@@ -268,7 +268,6 @@ describe("Slider", () => {
     assert(container);
     await user.click(container);
 
-    // Value should not change
     expect(slider.getAttribute("aria-valuenow")).toBe(initialValue);
   });
 
@@ -282,7 +281,6 @@ describe("Slider", () => {
     assert(input);
 
     expect(input).toHaveAttribute("readonly");
-    // Input should be readonly and not allow changes
     expect(input).toHaveProperty("readOnly", true);
   });
 
@@ -934,8 +932,6 @@ describe("Slider", () => {
     await user.tab();
     expect(slider).toHaveFocus();
 
-    // With step=1, all values should be integers
-    // Using Shift+ArrowRight should increment by whole numbers only
     await user.keyboard("{Shift>}{ArrowRight}{/Shift}");
     const firstCall = consoleLog.mock.calls.find(
       (call) => call[0] === "change",
@@ -944,7 +940,6 @@ describe("Slider", () => {
     assert(firstCall);
     const firstValue = firstCall[1];
 
-    // Value should be a whole number when step=1
     expect(Number.isInteger(firstValue)).toBe(true);
     expect(firstValue % 1).toBe(0);
 
@@ -958,7 +953,6 @@ describe("Slider", () => {
     assert(secondCall);
     const secondValue = secondCall[1];
 
-    // Value should still be a whole number
     expect(Number.isInteger(secondValue)).toBe(true);
     expect(secondValue % 1).toBe(0);
   });

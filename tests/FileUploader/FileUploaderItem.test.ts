@@ -28,7 +28,6 @@ describe("FileUploaderItem", () => {
       props: { name: "test.txt", status: "complete" },
     });
 
-    // All should render
     expect(
       container1.querySelector(".bx--file__selected-file"),
     ).toBeInTheDocument();

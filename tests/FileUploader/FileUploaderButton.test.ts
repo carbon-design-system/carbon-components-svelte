@@ -183,7 +183,6 @@ describe("FileUploaderButton", () => {
 
     await vi.waitFor(() => {
       const button = screen.getByRole("button");
-      // Label should remain unchanged
       expect(button).toHaveTextContent("Add file");
     });
   });
@@ -396,7 +395,6 @@ describe("FileUploaderButton", () => {
     button.focus();
     await user.keyboard("{Enter}");
 
-    // Button should be focusable and handle keyboard events
     expect(button).toHaveFocus();
   });
 

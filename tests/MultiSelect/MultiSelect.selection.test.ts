@@ -911,17 +911,14 @@ describe("MultiSelect", () => {
       const combobox = screen.getByRole("combobox");
       combobox.focus();
 
-      // Alt+ArrowUp while closed does nothing.
       await user.keyboard("{Alt>}{ArrowUp}{/Alt}");
       expect(combobox).toHaveAttribute("aria-expanded", "false");
 
-      // Plain ArrowDown opens and highlights the first item.
       await user.keyboard("{ArrowDown}");
       await tick();
       const firstOptionId = screen.getAllByRole("option")[0].id;
       expect(combobox).toHaveAttribute("aria-activedescendant", firstOptionId);
 
-      // Alt+ArrowDown while open keeps the menu open without moving the highlight.
       await user.keyboard("{Alt>}{ArrowDown}{/Alt}");
       expect(combobox).toHaveAttribute("aria-expanded", "true");
       expect(combobox).toHaveAttribute("aria-activedescendant", firstOptionId);
@@ -1176,11 +1173,9 @@ describe("MultiSelect", () => {
       await user.click(input);
       await user.type(input, "Sl");
 
-      // Backspace should remove a character, not clear selection
       await user.keyboard("{Backspace}");
 
       // Re-open to check all options since filter may hide some
-      // The selection should still be intact
       await user.clear(input);
 
       const options = screen.getAllByRole("option");
@@ -1204,7 +1199,6 @@ describe("MultiSelect", () => {
 
       await user.keyboard("{Delete}");
 
-      // Delete clears the entire input value when menu is open
       expect(input).toHaveValue("");
     });
 
@@ -1219,14 +1213,12 @@ describe("MultiSelect", () => {
       });
 
       const input = screen.getByPlaceholderText("Filter...");
-      // Focus input then close menu
       await user.click(input);
       await user.keyboard("{Escape}");
       expect(input).toHaveAttribute("aria-expanded", "false");
 
       await user.keyboard("{Delete}");
 
-      // Open menu to verify selections were cleared
       await user.click(input);
       const options = screen.getAllByRole("option");
       expect(options[0]).toHaveAttribute("aria-selected", "false");
@@ -1280,7 +1272,6 @@ describe("MultiSelect", () => {
         ),
       );
 
-      // Open the menu to verify every option was unchecked.
       await user.click(combobox);
       for (const option of screen.getAllByRole("option")) {
         expect(option).toHaveAttribute("aria-selected", "false");

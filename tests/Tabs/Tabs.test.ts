@@ -505,15 +505,12 @@ describe("Tabs", () => {
     );
     const next = container.querySelector(".bx--tab--overflow-nav-button--next");
 
-    // Decorative: out of the tab order and hidden from assistive tech.
     expect(next).toHaveAttribute("aria-hidden", "true");
     expect(next).toHaveAttribute("tabindex", "-1");
 
-    // At the start: forward shown, backward hidden.
     expect(prev).toHaveClass("bx--tab--overflow-nav-button--hidden");
     expect(next).not.toHaveClass("bx--tab--overflow-nav-button--hidden");
 
-    // Scrolled to the end: backward shown, forward hidden.
     nav.scrollLeft = 400;
     await fireEvent.scroll(nav);
     expect(prev).not.toHaveClass("bx--tab--overflow-nav-button--hidden");
@@ -565,29 +562,23 @@ describe("Tabs", () => {
   it("should maintain correct indices when tabs are dynamically removed and re-added", async () => {
     render(TabsDynamic, { props: { showTab1: true } });
 
-    // Initial state: Tab 1, Tab 2, Tab 3
     expect(screen.getByRole("tab", { name: "Tab 1" })).toBeInTheDocument();
     expect(screen.getByRole("tab", { name: "Tab 2" })).toBeInTheDocument();
     expect(screen.getByRole("tab", { name: "Tab 3" })).toBeInTheDocument();
 
-    // Toggle Tab 1 off
     const toggleButton = screen.getByTestId("toggle-tab1");
     await user.click(toggleButton);
 
-    // Tab 1 should be removed
     expect(
       screen.queryByRole("tab", { name: "Tab 1" }),
     ).not.toBeInTheDocument();
     expect(screen.getByRole("tab", { name: "Tab 2" })).toBeInTheDocument();
     expect(screen.getByRole("tab", { name: "Tab 3" })).toBeInTheDocument();
 
-    // Toggle Tab 1 back on
     await user.click(toggleButton);
 
-    // Tab 1 should be back at index 0
     expect(screen.getByRole("tab", { name: "Tab 1" })).toBeInTheDocument();
 
-    // Click Tab 1 and verify it has the correct index (0)
     const tab1 = screen.getByRole("tab", { name: "Tab 1" });
     await user.click(tab1);
 
@@ -600,20 +591,16 @@ describe("Tabs", () => {
       props: { selected: 1, showTab1: true, showTab2: true },
     });
 
-    // Initial state: Tab 1 (0), Tab 2 (1), Tab 3 (2) - Tab 2 is selected
     const selectedIndex = screen.getByTestId("selected-index");
     expect(selectedIndex).toHaveTextContent("1");
 
-    // Toggle Tab 2 off (the currently selected tab)
     const toggleTab2Button = screen.getByTestId("toggle-tab2");
     await user.click(toggleTab2Button);
 
-    // Tab 2 should be removed
     expect(
       screen.queryByRole("tab", { name: "Tab 2" }),
     ).not.toBeInTheDocument();
 
-    // Only Tab 1 and Tab 3 should remain
     expect(screen.getByRole("tab", { name: "Tab 1" })).toBeInTheDocument();
     expect(screen.getByRole("tab", { name: "Tab 3" })).toBeInTheDocument();
   });
@@ -624,19 +611,16 @@ describe("Tabs", () => {
     const toggleTab1 = screen.getByTestId("toggle-tab1");
     const toggleTab2 = screen.getByTestId("toggle-tab2");
 
-    // Remove Tab 1
     await user.click(toggleTab1);
     expect(
       screen.queryByRole("tab", { name: "Tab 1" }),
     ).not.toBeInTheDocument();
 
-    // Remove Tab 2
     await user.click(toggleTab2);
     expect(
       screen.queryByRole("tab", { name: "Tab 2" }),
     ).not.toBeInTheDocument();
 
-    // Only Tab 3 should remain and it should be at index 0
     expect(screen.getByRole("tab", { name: "Tab 3" })).toBeInTheDocument();
     const tab3 = screen.getByRole("tab", { name: "Tab 3" });
     await user.click(tab3);
@@ -644,7 +628,6 @@ describe("Tabs", () => {
     const selectedIndex = screen.getByTestId("selected-index");
     expect(selectedIndex).toHaveTextContent("0");
 
-    // Add Tab 1 back - it should get index 0 and Tab 3 should move to index 1
     await user.click(toggleTab1);
     expect(screen.getByRole("tab", { name: "Tab 1" })).toBeInTheDocument();
 
@@ -927,7 +910,6 @@ describe("Tab", () => {
     const tab = screen.getByRole("tab");
     expect(await fireEvent.click(tab)).toBe(true);
     expect(await fireEvent.keyDown(tab, { key: "Enter" })).toBe(true);
-    // selection still happens alongside navigation
     expect(tab).toHaveAttribute("aria-selected", "true");
   });
 
@@ -1051,7 +1033,6 @@ describe("Tab icon", () => {
   it("should not render icon wrapper when no icon is provided", () => {
     const { container } = render(TabIcon, { props: { icon: Calendar } });
 
-    // The second tab ("No Icon") should not have an icon wrapper
     const navItems = container.querySelectorAll(".bx--tabs__nav-item");
     const secondTab = navItems[1];
     const iconWrapper = secondTab?.querySelector(".bx--tabs__nav-item--icon");
@@ -1070,7 +1051,6 @@ describe("Tab icon", () => {
     const { container } = render(TabIcon, { props: { icon: Calendar } });
 
     const navLinks = container.querySelectorAll(".bx--tabs__nav-link");
-    // First tab has an icon, second ("No Icon") does not.
     expect(navLinks[0]).toHaveClass("bx--tabs__nav-link--icon");
     expect(navLinks[1]).not.toHaveClass("bx--tabs__nav-link--icon");
   });

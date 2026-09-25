@@ -1397,21 +1397,18 @@ describe("MultiSelect", () => {
       });
 
       it("should support different ID types (string, number, union)", () => {
-        // String ID
         type StringItem = { id: string; text: string };
         type StringComponent = MultiSelectComponent<StringItem>;
         expectTypeOf<
           ComponentProps<StringComponent>["selectedIds"]
         >().toEqualTypeOf<readonly string[] | undefined>();
 
-        // Number ID
         type NumberItem = { id: number; text: string };
         type NumberComponent = MultiSelectComponent<NumberItem>;
         expectTypeOf<
           ComponentProps<NumberComponent>["selectedIds"]
         >().toEqualTypeOf<readonly number[] | undefined>();
 
-        // Union ID
         type UnionId = "a" | "b" | "c";
         type UnionItem = { id: UnionId; text: string };
         type UnionComponent = MultiSelectComponent<UnionItem>;
@@ -1712,7 +1709,6 @@ describe("MultiSelect", () => {
 
     // Two instances of 3 items each.
     expect(ids).toHaveLength(6);
-    // Every id is unique across instances.
     expect(new Set(ids).size).toBe(ids.length);
     // Ids are scoped by the instance `id` prop.
     expect(ids).toEqual(
@@ -1760,8 +1756,6 @@ describe("MultiSelect", () => {
     );
     expect(comboboxes).toHaveLength(2);
 
-    // Highlight the first item of an instance and verify the active descendant
-    // resolves to an option belonging to that same instance.
     const expectScopedActiveDescendant = async (
       combobox: HTMLElement,
       prefix: string,
@@ -1776,7 +1770,6 @@ describe("MultiSelect", () => {
       const active = container.querySelector(`#${activeDescendant}`);
       expect(active).not.toBeNull();
       expect(active?.getAttribute("role")).toBe("option");
-      // The resolved option lives inside the same instance's list box.
       expect(combobox.closest(".bx--list-box")).toBe(
         active?.closest(".bx--list-box"),
       );

@@ -16,12 +16,10 @@ describe("RadioButton (Implicit Group via name)", () => {
     const option2 = screen.getByRole("radio", { name: "Option 2" });
     const option3 = screen.getByRole("radio", { name: "Option 3" });
 
-    // Initially all unchecked
     expect(option1).not.toBeChecked();
     expect(option2).not.toBeChecked();
     expect(option3).not.toBeChecked();
 
-    // Click option 1
     await user.click(option1);
     expect(option1).toBeChecked();
     expect(option2).not.toBeChecked();
@@ -30,7 +28,6 @@ describe("RadioButton (Implicit Group via name)", () => {
     expect(component.checked2).toBe(false);
     expect(component.checked3).toBe(false);
 
-    // Click option 2 - option 1 should uncheck
     await user.click(option2);
     expect(option1).not.toBeChecked();
     expect(option2).toBeChecked();
@@ -39,7 +36,6 @@ describe("RadioButton (Implicit Group via name)", () => {
     expect(component.checked2).toBe(true);
     expect(component.checked3).toBe(false);
 
-    // Click option 3 - option 2 should uncheck
     await user.click(option3);
     expect(option1).not.toBeChecked();
     expect(option2).not.toBeChecked();
@@ -71,11 +67,9 @@ describe("RadioButton (Implicit Group via name)", () => {
 
     const option2 = screen.getByRole("radio", { name: "Option 2" });
 
-    // Programmatically select option 2
     component.checked2 = true;
     await flushMacrotask();
 
-    // Option 2 should be checked, option 1 should be unchecked
     // Note: programmatic updates to `checked` don't automatically uncheck siblings
     // because the binding goes RadioButton -> component, not component -> registry
     expect(option2).toBeChecked();
@@ -87,21 +81,18 @@ describe("RadioButton (Implicit Group via name)", () => {
     const option1 = screen.getByRole("radio", { name: "Option 1" });
     await user.click(option1);
 
-    // Unmount should clean up
     unmount();
 
     // Re-render should start fresh (no stale state)
     const { component } = render(RadioButtonImplicitGroup);
     await flushMacrotask();
 
-    // Should start with all unchecked
     expect(component.checked1).toBe(false);
     expect(component.checked2).toBe(false);
     expect(component.checked3).toBe(false);
   });
 
   it("should handle multiple independent groups", async () => {
-    // Render two groups with different names
     const { component: group1 } = render(RadioButtonImplicitGroup, {
       props: { groupName: "group-a" },
     });

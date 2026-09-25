@@ -35,7 +35,6 @@ describe("LocalStorage cross-tab sync", () => {
     });
     await tick();
 
-    // Simulate a storage event from another tab
     dispatchStorageEvent("test-key", "updated-from-another-tab");
     await tick();
 
@@ -48,7 +47,6 @@ describe("LocalStorage cross-tab sync", () => {
     });
     await tick();
 
-    // Simulate a storage event with JSON value
     dispatchStorageEvent("json-key", JSON.stringify({ theme: "dark" }));
     await tick();
 
@@ -61,7 +59,6 @@ describe("LocalStorage cross-tab sync", () => {
     });
     await tick();
 
-    // Simulate a storage event for a different key
     dispatchStorageEvent("other-key", "some-value");
     await tick();
 
@@ -124,7 +121,6 @@ describe("LocalStorage cross-tab sync", () => {
     });
     await tick();
 
-    // Simulate a storage event with invalid JSON
     dispatchStorageEvent("invalid-json-key", "{invalid-json}");
     await tick();
 

@@ -68,7 +68,6 @@ describe("TreeView select:change", () => {
       onSelectChange,
     });
 
-    // Plain click selects node 0.
     await user.click(treeItemById(0));
     await vi.waitFor(() => expect(onSelectChange).toHaveBeenCalledTimes(1));
     expect(lastDetail(onSelectChange)).toEqual({
@@ -77,7 +76,6 @@ describe("TreeView select:change", () => {
       removed: [],
     });
 
-    // Ctrl+click adds node 7.
     await user.keyboard("{Control>}");
     await user.click(treeItemById(7));
     await user.keyboard("{/Control}");
@@ -88,7 +86,6 @@ describe("TreeView select:change", () => {
       removed: [],
     });
 
-    // Ctrl+click again removes node 7.
     await user.keyboard("{Control>}");
     await user.click(treeItemById(7));
     await user.keyboard("{/Control}");

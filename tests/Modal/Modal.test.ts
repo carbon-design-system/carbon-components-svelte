@@ -31,22 +31,17 @@ describe("Modal", () => {
       },
     });
 
-    // Check if modal container is rendered
     const modalContainer = screen.getByRole("dialog");
     expect(modalContainer).toBeInTheDocument();
 
-    // Check if modal heading is rendered
     expect(screen.getByText("Test Modal")).toBeInTheDocument();
 
-    // Check if buttons are rendered
     expect(screen.getByText("Save")).toBeInTheDocument();
     expect(screen.getByText("Cancel")).toBeInTheDocument();
 
-    // Check if close button is rendered
     const closeButton = screen.getByLabelText("Close the modal");
     expect(closeButton).toBeInTheDocument();
 
-    // Check if modal has correct ARIA attributes
     expect(modalContainer).toHaveAttribute("role", "dialog");
     expect(modalContainer).toHaveAttribute("aria-modal", "true");
     expect(modalContainer).toHaveAttribute("aria-label", "Test Modal");
@@ -125,13 +120,11 @@ describe("Modal", () => {
       },
     });
 
-    // Open the modal
     rerender({ open: true });
     await tick();
     expect(screen.getByRole("dialog")).toBeInTheDocument();
     expect(openHandler).toHaveBeenCalledTimes(1);
 
-    // Close the modal
     rerender({ open: false });
     await flushProgrammaticClose();
     expect(closeHandler).toHaveBeenCalledTimes(1);
@@ -270,7 +263,6 @@ describe("Modal", () => {
       lg: "bx--modal-container--lg",
     } as const;
 
-    // Test specific sizes
     for (const size of Object.keys(sizeMappings) as Size[]) {
       const { unmount } = render(ModalTest, {
         props: {
@@ -285,7 +277,6 @@ describe("Modal", () => {
       unmount();
     }
 
-    // Test default (medium) size
     const { unmount } = render(ModalTest, {
       props: {
         open: true,
@@ -583,7 +574,6 @@ describe("Modal", () => {
       },
     });
 
-    // Click outside the modal
     await user.click(document.body);
     expect(closeHandler).not.toHaveBeenCalled();
   });
@@ -599,13 +589,11 @@ describe("Modal", () => {
       },
     });
 
-    // Verify close button is in header
     const closeButton = screen.getByLabelText("Close the modal");
     const heading = screen.getByText("Passive Modal");
     expect(heading.closest(".bx--modal-header")).toBeInTheDocument();
     expect(closeButton.closest(".bx--modal-header")).toBeInTheDocument();
 
-    // Verify no footer is present
     expect(
       screen.queryByRole("button", { name: "Save" }),
     ).not.toBeInTheDocument();
@@ -654,7 +642,6 @@ describe("Modal", () => {
       },
     });
 
-    // Click on the modal overlay
     const modalOverlay = container.querySelector(".bx--modal");
     assert(modalOverlay);
     await user.click(modalOverlay);
@@ -812,13 +799,11 @@ describe("Modal", () => {
       },
     });
 
-    // Close via escape key.
     await user.keyboard("{Escape}");
     await tick();
     expect(closeHandler).toHaveBeenCalledTimes(1);
     expect(screen.getByRole("dialog")).toBeInTheDocument();
 
-    // Close via outside click.
     const modalOverlay = container.querySelector(".bx--modal");
     assert(modalOverlay);
     await user.click(modalOverlay);
@@ -826,7 +811,6 @@ describe("Modal", () => {
     expect(closeHandler).toHaveBeenCalledTimes(2);
     expect(screen.getByRole("dialog")).toBeInTheDocument();
 
-    // Close via close button.
     const closeButton = screen.getByLabelText("Close the modal");
     await user.click(closeButton);
     await tick();
@@ -909,26 +893,21 @@ describe("Modal", () => {
       const cancelButton = screen.getByRole("button", { name: "Cancel" });
       const okButton = screen.getByRole("button", { name: "OK" });
 
-      // Start from dropdown.
       dropdownButton.focus();
       expect(dropdownButton).toHaveFocus();
 
-      // Tab to login input.
       await user.keyboard("{Tab}");
       await tick();
       expect(loginInput).toHaveFocus();
 
-      // Tab to password input.
       await user.keyboard("{Tab}");
       await tick();
       expect(passwordInput).toHaveFocus();
 
-      // Tab to Cancel button.
       await user.keyboard("{Tab}");
       await tick();
       expect(cancelButton).toHaveFocus();
 
-      // Tab to OK button.
       await user.keyboard("{Tab}");
       await tick();
       expect(okButton).toHaveFocus();
@@ -966,7 +945,6 @@ describe("Modal", () => {
       const primaryButton = screen.getByRole("button", { name: "Submit" });
       await user.click(primaryButton);
 
-      // Without formId, the form should not be submitted
       expect(formSubmitHandler).not.toHaveBeenCalled();
     });
 
@@ -981,7 +959,6 @@ describe("Modal", () => {
         },
       });
 
-      // Focus an input in the modal and press Enter
       const usernameInput = screen.getByTestId("username-input");
       usernameInput.focus();
       await user.keyboard("{Enter}");
@@ -1000,12 +977,10 @@ describe("Modal", () => {
         },
       });
 
-      // Focus an input in the modal and press Enter
       const usernameInput = screen.getByTestId("username-input");
       usernameInput.focus();
       await user.keyboard("{Enter}");
 
-      // Without formId, the form should not be submitted
       expect(formSubmitHandler).not.toHaveBeenCalled();
     });
 
@@ -1039,7 +1014,6 @@ describe("Modal", () => {
       const primaryButton = screen.getByRole("button", { name: "Submit" });
       await user.click(primaryButton);
 
-      // Both Modal events should occur
       expect(submitHandler).toHaveBeenCalledTimes(1);
       expect(clickPrimaryHandler).toHaveBeenCalledTimes(1);
     });

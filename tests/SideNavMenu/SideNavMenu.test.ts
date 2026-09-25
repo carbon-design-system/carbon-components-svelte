@@ -41,11 +41,9 @@ describe("SideNavMenu", () => {
     // Menu starts expanded (from the `expanded` prop).
     expect(menuButton).toHaveAttribute("aria-expanded", "true");
 
-    // Collapse it.
     await user.click(menuButton);
     expect(menuButton).toHaveAttribute("aria-expanded", "false");
 
-    // Expand it again.
     await user.click(menuButton);
     expect(menuButton).toHaveAttribute("aria-expanded", "true");
   });

@@ -112,12 +112,10 @@ describe("Tooltip", () => {
 
     const trigger = screen.getByRole("button", { name: "Information" });
 
-    // Open via hover.
     await fireEvent.mouseEnter(trigger);
     await vi.advanceTimersByTimeAsync(100);
     expect(screen.getByRole("dialog")).toBeInTheDocument();
 
-    // Start leaving.
     const tooltipEl = screen.getByRole("dialog").closest(".bx--tooltip");
     if (!(tooltipEl instanceof Element)) expect.fail("Expected element");
     const wrapper = tooltipEl.parentElement;

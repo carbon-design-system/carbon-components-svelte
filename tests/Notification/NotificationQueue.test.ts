@@ -342,7 +342,6 @@ describe("NotificationQueue", () => {
     });
     await tick();
 
-    // Should only show the last 2 (most recent)
     expect(screen.queryByText("First")).not.toBeInTheDocument();
     expect(screen.getByText("Second")).toBeInTheDocument();
     expect(screen.getByText("Third")).toBeInTheDocument();
