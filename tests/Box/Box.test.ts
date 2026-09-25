@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { expectInlineStyle } from "../utils/inline-style";
+import { user } from "../utils/user";
 import BoxRef from "./Box.ref.test.svelte";
 import Box from "./Box.test.svelte";
 
@@ -156,6 +157,16 @@ describe("Box", () => {
     expect(screen.getByTestId("padding-zero").className).not.toMatch(
       /bx--box-p-\d/,
     );
+  });
+
+  it("forwards click events", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Box);
+
+    const box = screen.getByTestId("click-test");
+    await user.click(box);
+    expect(consoleLog).toHaveBeenCalledWith("clicked");
+    expect(consoleLog).toHaveBeenCalledTimes(1);
   });
 
   it("merges multiple modifier classes", () => {
