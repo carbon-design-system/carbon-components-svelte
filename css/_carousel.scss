@@ -1,0 +1,65 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Carousel drives `src/utils/carousel.js`'s `initCarousel`, which toggles
+/// the native `hidden` attribute on each view, so this partial owns only the
+/// viewport/controls layout and the prev/next buttons' chrome.
+/// @access private
+/// @group components
+@mixin carousel {
+  .#{$prefix}--carousel {
+    display: flex;
+    flex-direction: column;
+    row-gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--carousel__viewport {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .#{$prefix}--carousel__controls {
+    display: flex;
+    justify-content: flex-end;
+    column-gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--carousel__button {
+    display: flex;
+    width: $carbon--spacing-08;
+    height: $carbon--spacing-08;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid $border-subtle;
+    margin: 0;
+    background: transparent;
+    color: $icon-01;
+    cursor: pointer;
+    transition: background-color $duration--fast-01 motion(standard, productive);
+
+    svg {
+      fill: currentColor;
+    }
+
+    &:focus {
+      @include focus-outline("outline");
+    }
+
+    &:disabled {
+      color: $icon-disabled;
+      cursor: not-allowed;
+    }
+
+    @media (any-hover: hover) {
+      &:hover:not(:disabled) {
+        background-color: $hover-ui;
+      }
+    }
+  }
+}
+
+@include exports("carousel") {
+  @include carousel;
+}
