@@ -4,7 +4,7 @@ description: Data tables display structured data in rows and columns, with sorti
 ---
 
 <script>
-  import { DataTable, DataTableSkeleton, Pagination, Toolbar, ToolbarContent, ToolbarSearch, ToolbarMenu, ToolbarMenuItem, Button, Link, Tooltip, OverflowMenu, OverflowMenuItem } from "carbon-components-svelte";
+  import { DataTable, DataTableSkeleton, Pagination, Toolbar, ToolbarContent, ToolbarSearch, ToolbarMenu, ToolbarMenuItem, Button, Link, Text, Tooltip, OverflowMenu, OverflowMenuItem } from "carbon-components-svelte";
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";
 </script>
 
@@ -284,7 +284,7 @@ Use slots to customize the elements and styles. Destructure the original classes
   ]}"
 >
     <h1 slot="titleChildren" let:props {...props}>Load balancers</h1>
-    <span slot="descriptionChildren" let:props {...props} style="font-size: 1rem">Your organization's active load balancers.</span>
+    <Text slot="descriptionChildren" let:props {...props} tag="span" type="body-long-02">Your organization's active load balancers.</Text>
 </DataTable>
 
 ## Width

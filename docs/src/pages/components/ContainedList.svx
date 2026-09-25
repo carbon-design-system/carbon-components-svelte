@@ -4,7 +4,7 @@ description: Contained lists display items within a labeled container, with supp
 ---
 
 <script>
-  import { Button, Search, ContainedList, ContainedListItem } from "carbon-components-svelte";
+  import { Button, Search, ContainedList, ContainedListItem, Text } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
   import Close from "carbon-icons-svelte/lib/Close.svelte";
 </script>
@@ -24,7 +24,7 @@ Display a basic contained list with a header label and list items. The default s
 Use the `labelChildren` slot for custom label content instead of plain label text.
 
 <ContainedList>
-  <span slot="labelChildren" style:font-weight="normal">Team members</span>
+  <Text slot="labelChildren" tag="span" type="inherit" weight="regular">Team members</Text>
   <ContainedListItem>Jane Cooper</ContainedListItem>
   <ContainedListItem>Devon Lane</ContainedListItem>
   <ContainedListItem>Esther Howard</ContainedListItem>
