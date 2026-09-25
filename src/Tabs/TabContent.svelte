@@ -15,6 +15,12 @@
    */
   export let unmountOnHide = false;
 
+  /**
+   * Set to `true` to remove the panel's horizontal padding so its content
+   * lines up with the tab list's leading edge
+   */
+  export let flush = false;
+
   import { getContext, onMount } from "svelte";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -45,6 +51,7 @@
   hidden={selected ? undefined : ""}
   {id}
   class:bx--tab-content={true}
+  class:bx--tab-content--flush={flush}
   {...$$restProps}
 >
   {#if shouldMount}
