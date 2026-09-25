@@ -3,7 +3,7 @@ description: Tooltip icons show contextual information on hover or focus of an i
 ---
 
 <script>
-  import { TooltipIcon } from "carbon-components-svelte";
+  import { Box, Text, TooltipIcon } from "carbon-components-svelte";
   import Carbon from "carbon-icons-svelte/lib/Carbon.svelte";
   import Filter from "carbon-icons-svelte/lib/Filter.svelte";
 </script>
@@ -65,7 +65,7 @@ Align the tooltip content with `align`.
 Use the `tooltipText` slot to customize the tooltip content with additional styling.
 
 <TooltipIcon icon={Carbon}>
-  <span slot="tooltipText" style="color: red">Metrics are aggregated across every workspace in your organization.</span>
+  <Text slot="tooltipText" tag="span" type="inherit" weight="semibold">Metrics are aggregated across every workspace in your organization.</Text>
 </TooltipIcon>
 
 ## Custom icon
@@ -73,7 +73,7 @@ Use the `tooltipText` slot to customize the tooltip content with additional styl
 Use the default slot to fully customize the trigger content, replacing what the `icon` prop would otherwise render.
 
 <TooltipIcon tooltipText="Custom icon content">
-  <div style="width: 1rem; height: 1rem; outline: 1px solid red;"></div>
+  <Box width="1rem" height="1rem" border="interactive" />
 </TooltipIcon>
 
 ## Custom delay

@@ -3,7 +3,7 @@ description: Tooltip definitions show an inline tooltip for a defined term on ho
 ---
 
 <script>
-  import { TooltipDefinition } from "carbon-components-svelte";
+  import { Text, TooltipDefinition } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -93,9 +93,9 @@ Use the `tooltip` slot to customize tooltip content with additional styling or s
 
 <TooltipDefinition>
   SSO
-  <span slot="tooltip" style="color: red">
+  <Text slot="tooltip" tag="span" type="inherit" weight="semibold">
     Single sign-on: one login for all connected applications.
-  </span>
+  </Text>
 </TooltipDefinition>
 
 ## Portal

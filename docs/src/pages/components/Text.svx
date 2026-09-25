@@ -3,7 +3,7 @@ description: Text applies Carbon typography to any element — type scale, seman
 ---
 
 <script>
-  import { Box, Stack, Text, Truncate } from "carbon-components-svelte";
+  import { Box, Stack, Text, Toggle, Truncate } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -35,6 +35,15 @@ Set `color` to a Carbon semantic text token. Each token describes intent and res
 <Text color="helper">Helper text</Text>
 <Text color="error">Error text</Text>
 <Text color="disabled">Disabled text</Text>
+
+### Inherit type
+
+Set `type="inherit"` to color or weight text without resetting its size, for example inside a component slot that already has its own type style.
+
+<Toggle labelText="Automatic backups">
+  <Text slot="labelA" tag="span" type="inherit" color="error">Off</Text>
+  <Text slot="labelB" tag="span" type="inherit" weight="semibold">On</Text>
+</Toggle>
 
 ### On-color and inverse surfaces
 

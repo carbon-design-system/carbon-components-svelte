@@ -4,7 +4,7 @@ description: Tooltips display contextual information on hover or focus, with sup
 ---
 
 <script>
-  import { Tooltip, TooltipFooter, Link, Button } from "carbon-components-svelte";
+  import { Box, Tooltip, TooltipFooter, Link, Button } from "carbon-components-svelte";
   import Catalog from "carbon-icons-svelte/lib/Catalog.svelte";
 </script>
 
@@ -119,7 +119,7 @@ Use a custom icon component with `icon`.
 Customize the icon using the `icon` slot for more flexibility.
 
 <Tooltip triggerText="Resource list">
-  <div slot="icon" style="width: 1rem; height: 1rem; outline: 1px solid red;"></div>
+  <Box slot="icon" width="1rem" height="1rem" border="interactive" />
   <p>
     Resources are provisioned based on your account's organization.
   </p>
