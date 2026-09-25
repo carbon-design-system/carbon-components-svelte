@@ -27,6 +27,8 @@ Set `color` to a Carbon semantic text token. Each token describes intent and res
 | `on-color`    | Text on a colored background, such as a button or tag         |
 | `inverse`     | Text on an inverse surface, such as a tooltip or notification |
 | `error`       | Error and validation text                                     |
+| `success`     | Success and positive status text                              |
+| `link`        | Link-colored text that is not itself a link                   |
 | `disabled`    | Disabled text                                                 |
 
 <Text color="primary">Primary text</Text>
@@ -34,6 +36,8 @@ Set `color` to a Carbon semantic text token. Each token describes intent and res
 <Text color="placeholder">Placeholder text</Text>
 <Text color="helper">Helper text</Text>
 <Text color="error">Error text</Text>
+<Text color="success">Success text</Text>
+<Text color="link">Link text</Text>
 <Text color="disabled">Disabled text</Text>
 
 ### Inherit type
