@@ -4,7 +4,7 @@ description: Overflow menus present a list of actions in a compact dropdown, ide
 ---
 
 <script>
-  import { OverflowMenu, OverflowMenuItem } from "carbon-components-svelte";
+  import { Box, OverflowMenu, OverflowMenuItem } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
   import Document from "carbon-icons-svelte/lib/Document.svelte";
   import Edit from "carbon-icons-svelte/lib/Edit.svelte";
@@ -128,10 +128,10 @@ Replace the default vertical overflow menu icon with a custom icon.
 
 ### Slot
 
-Use the `menu` slot to customize the trigger button content.
+Use the `menu` slot to customize the trigger button content. The trigger grows to fit custom content, and never shrinks below the default icon trigger's size.
 
-<OverflowMenu style="width: auto;">
-  <div slot="menu" style="padding: 1rem; color: red;">Custom trigger</div>
+<OverflowMenu>
+  <Box slot="menu" paddingX={5}>Custom trigger</Box>
   <OverflowMenuItem text="Manage credentials" />
   <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" target="_blank" text="API documentation" />
   <OverflowMenuItem danger text="Delete service" />
