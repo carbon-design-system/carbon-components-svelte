@@ -7,6 +7,8 @@
   export let open = false;
   export let shouldFilter = true;
   export let disabled = false;
+  export let readonly = false;
+  export let hideLabel = false;
   export let loading = false;
   export let searchLoading = false;
   export let size: ComponentProps<SearchMenu>["size"] = undefined;
@@ -33,6 +35,8 @@
   bind:open
   {shouldFilter}
   {disabled}
+  {readonly}
+  {hideLabel}
   {loading}
   {searchLoading}
   {size}
