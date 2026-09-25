@@ -39,7 +39,7 @@
 
   /**
    * Specify the aspect ratio of the column.
-   * @type {"2x1" | "16x9" | "9x16" | "1x2" | "4x3" | "3x4" | "1x1"}
+   * @type {"2x1" | "2x3" | "16x9" | "9x16" | "1x2" | "4x3" | "3x4" | "3x2" | "1x1"}
    */
   export let aspectRatio = undefined;
 
