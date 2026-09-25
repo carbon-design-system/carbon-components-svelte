@@ -4,7 +4,7 @@ description: Dropdowns provide a select input with a dropdown menu, with multipl
 ---
 
 <script>
-  import { Dropdown, DropdownSkeleton, FluidDropdownSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import { Box, Dropdown, DropdownSkeleton, FluidDropdownSkeleton, TooltipIcon } from "carbon-components-svelte";
   import Chat from "carbon-icons-svelte/lib/Chat.svelte";
   import Email from "carbon-icons-svelte/lib/Email.svelte";
   import Document from "carbon-icons-svelte/lib/Document.svelte";
@@ -160,6 +160,16 @@ Set `direction` to `"top"` to open the menu above the input. Useful when space b
 <Dropdown direction="top" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
+
+### End alignment
+
+The [inline](#inline) menu is at least 288px wide, so it can be wider than its field. It lines up with the field's left edge by default. Set `align` to `"end"` to line it up with the right edge, so an inline dropdown at the end of a row opens toward the row instead of past it. Combine with `direction="top"` for the upper corner.
+
+<Box display="flex" justify="end">
+  <Dropdown type="inline" align="end" labelText="Sort" selectedId="0" items="{[{id: "0", text: "Name"},
+    {id: "1", text: "Date modified (newest first)"},
+    {id: "2", text: "Size"}]}" />
+</Box>
 
 ### Portal menu
 
@@ -402,7 +412,7 @@ Use the light variant for light backgrounds.
 
 ## Inline
 
-Set `type` to `"inline"` to display the dropdown inline with other content. This variant removes the background and border.
+Set `type` to `"inline"` to display the dropdown inline with other content. This variant removes the background and border. Its menu is at least 288px wide; use [end alignment](#end-alignment) when the field sits at the end of a row.
 
 <Dropdown type="inline" labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
