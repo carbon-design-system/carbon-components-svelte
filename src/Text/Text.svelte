@@ -7,8 +7,10 @@
    */
 
   /**
-   * Set the Carbon type style.
-   * @type {"caption-01" | "caption-02" | "label-01" | "label-02" | "helper-text-01" | "helper-text-02" | "body-short-01" | "body-short-02" | "body-long-01" | "body-long-02" | "code-01" | "code-02" | "heading-01" | "heading-02" | "productive-heading-01" | "productive-heading-02" | "productive-heading-03" | "productive-heading-04" | "productive-heading-05" | "productive-heading-06" | "productive-heading-07" | "expressive-paragraph-01" | "expressive-heading-01" | "expressive-heading-02" | "expressive-heading-03" | "expressive-heading-04" | "expressive-heading-05" | "expressive-heading-06" | "quotation-01" | "quotation-02" | "display-01" | "display-02" | "display-03" | "display-04"}
+   * Set the Carbon type style. Use `"inherit"` to apply no type style and
+   * keep the parent's font size, weight, and line height, for example to
+   * recolor text inside a component slot.
+   * @type {"inherit" | "caption-01" | "caption-02" | "label-01" | "label-02" | "helper-text-01" | "helper-text-02" | "body-short-01" | "body-short-02" | "body-long-01" | "body-long-02" | "code-01" | "code-02" | "heading-01" | "heading-02" | "productive-heading-01" | "productive-heading-02" | "productive-heading-03" | "productive-heading-04" | "productive-heading-05" | "productive-heading-06" | "productive-heading-07" | "expressive-paragraph-01" | "expressive-heading-01" | "expressive-heading-02" | "expressive-heading-03" | "expressive-heading-04" | "expressive-heading-05" | "expressive-heading-06" | "quotation-01" | "quotation-02" | "display-01" | "display-02" | "display-03" | "display-04"}
    */
   export let type = "body-long-01";
 
@@ -80,7 +82,7 @@
         : maxWidth;
 
   $: textClass = [
-    type && `bx--type-${type}`,
+    type && type !== "inherit" && `bx--type-${type}`,
     color && `bx--type-text-${color}`,
     weight && `bx--type-${weight}`,
     italic && "bx--type-italic",

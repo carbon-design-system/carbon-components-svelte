@@ -7,6 +7,7 @@
 <Text color="secondary">Secondary text</Text>
 <Text type="code-01" color="error" class="custom">Code</Text>
 <Text tag="span">Inline span</Text>
+<Text tag="span" type="inherit" color="error">Inherited type</Text>
 <Text color="helper">Color only</Text>
 <Text type="body-long-01" weight="semibold">Semibold text</Text>
 <Text type="body-long-01" italic>Italic text</Text>

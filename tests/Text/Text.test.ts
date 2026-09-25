@@ -27,6 +27,14 @@ describe("Text", () => {
     );
   });
 
+  it("omits the type class when `type` is inherit", () => {
+    render(Text);
+
+    const node = screen.getByText("Inherited type");
+    expect(node).toHaveClass("bx--type-text-error");
+    expect(node.className).not.toMatch(/bx--type-(?!text-)/);
+  });
+
   it("merges type, color, and rest class", () => {
     render(Text);
 
