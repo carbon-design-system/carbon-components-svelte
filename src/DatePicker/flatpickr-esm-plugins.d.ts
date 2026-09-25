@@ -5,3 +5,4 @@
 // matching the implicit-`any` behavior before `// @ts-check`.
 declare module "flatpickr/dist/esm/plugins/rangePlugin";
 declare module "flatpickr/dist/esm/plugins/monthSelect";
+declare module "flatpickr/dist/esm/plugins/weekSelect/weekSelect";
