@@ -1,6 +1,7 @@
 // @vitest-environment node
 import {
   buildFieldIds,
+  joinDescribedBy,
   resolveStatusDescribedBy,
   resolveValidationVisibility,
 } from "../../src/utils/field-status.js";
@@ -59,11 +60,17 @@ describe("buildFieldIds", () => {
       helperId: "helper-x",
       errorId: "error-x",
       warnId: "warn-x",
+      readonlyId: "readonly-x",
     });
   });
 
   it("uses fallback ids when id is falsy", () => {
-    const fallback = { helperId: "h1", errorId: "e1", warnId: "w1" };
+    const fallback = {
+      helperId: "h1",
+      errorId: "e1",
+      warnId: "w1",
+      readonlyId: "r1",
+    };
     expect(buildFieldIds(undefined, fallback)).toEqual(fallback);
     expect(buildFieldIds("", fallback)).toEqual(fallback);
   });
@@ -73,7 +80,23 @@ describe("buildFieldIds", () => {
       helperId: undefined,
       errorId: undefined,
       warnId: undefined,
+      readonlyId: undefined,
     });
+  });
+});
+
+describe("joinDescribedBy", () => {
+  it.each<[Array<string | null | undefined | false>, string | undefined]>([
+    [
+      ["readonly-x", "selection-x", "error-x"],
+      "readonly-x selection-x error-x",
+    ],
+    [["readonly-x", null, undefined, false, "error-x"], "readonly-x error-x"],
+    [[null, undefined, false], undefined],
+    [[], undefined],
+    [[null, "error-x"], "error-x"],
+  ])("joinDescribedBy(...%o) -> %o", (ids, expected) => {
+    expect(joinDescribedBy(...ids)).toBe(expected);
   });
 });
 
