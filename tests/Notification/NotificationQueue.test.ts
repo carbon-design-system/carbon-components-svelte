@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import type NotificationButtonComponent from "carbon-components-svelte/Notification/NotificationButton.svelte";
 import type NotificationQueueComponent from "carbon-components-svelte/Notification/NotificationQueue.svelte";
 import type { ComponentProps } from "svelte";
@@ -23,13 +23,42 @@ describe("NotificationQueue", () => {
     vi.useRealTimers();
   });
 
-  it("should not render when no notifications are added", () => {
-    const { container } = render(NotificationQueueTest);
+  it("should render an empty live region before any notification is added", () => {
+    render(NotificationQueueTest);
 
-    const queueContainer = container.querySelector(
-      '[style*="position: fixed"]',
-    );
-    expect(queueContainer).not.toBeInTheDocument();
+    const queueContainer = document.querySelector(".bx--notification-queue");
+    expect(queueContainer).toBeInTheDocument();
+    expect(queueContainer).toHaveAttribute("aria-live", "polite");
+    expect(queueContainer?.children).toHaveLength(0);
+  });
+
+  it("should render queued toasts without their own live role", async () => {
+    const { component } = render(NotificationQueueTest);
+
+    getQueue(component.queue).add({ kind: "error", title: "Failed" });
+    getQueue(component.queue).add({ kind: "success", title: "Saved" });
+    await tick();
+
+    const toasts = document.querySelectorAll(".bx--toast-notification");
+    expect(toasts).toHaveLength(2);
+    for (const toast of toasts) {
+      expect(toast).not.toHaveAttribute("role");
+    }
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+  });
+
+  it("should keep an explicit role on a queued toast", async () => {
+    const { component } = render(NotificationQueueTest);
+
+    getQueue(component.queue).add({
+      kind: "error",
+      title: "Failed",
+      role: "alert",
+    });
+    await tick();
+
+    expect(screen.getByRole("alert")).toHaveTextContent("Failed");
   });
 
   it("should render with default props", async () => {
@@ -120,7 +149,7 @@ describe("NotificationQueue", () => {
     expect(id).toBe("duplicate-id");
     expect(id2).toBe("duplicate-id");
 
-    const notifications = screen.getAllByRole("alert");
+    const notifications = document.querySelectorAll(".bx--toast-notification");
     expect(notifications).toHaveLength(1);
     expect(screen.getByText("First notification")).toBeInTheDocument();
     expect(screen.queryByText("Second notification")).not.toBeInTheDocument();
@@ -211,7 +240,9 @@ describe("NotificationQueue", () => {
     expect(screen.queryByText("0%")).not.toBeInTheDocument();
     expect(screen.getByText("Upload complete")).toBeInTheDocument();
     expect(screen.getByText("100%")).toBeInTheDocument();
-    expect(screen.getAllByRole("alert")).toHaveLength(1);
+    expect(document.querySelectorAll(".bx--toast-notification")).toHaveLength(
+      1,
+    );
   });
 
   it("should merge patch into existing notification on update", async () => {
@@ -291,12 +322,382 @@ describe("NotificationQueue", () => {
     expect(screen.queryByText("Second notification")).not.toBeInTheDocument();
   });
 
-  it("should limit notifications to maxNotifications (top-right)", async () => {
+  it("should restart the timeout when update sets restartTimeout", async () => {
+    const { component } = render(NotificationQueueTest);
+    const queue = getQueue(component.queue);
+
+    queue.add({ id: "a", title: "Saving", timeout: 1000 });
+    await tick();
+
+    vi.advanceTimersByTime(800);
+    queue.update("a", { title: "Saved", restartTimeout: true });
+    await tick();
+
+    vi.advanceTimersByTime(800);
+    await tick();
+    expect(screen.getByText("Saved")).toBeInTheDocument();
+
+    vi.advanceTimersByTime(200);
+    await tick();
+    expect(screen.queryByText("Saved")).not.toBeInTheDocument();
+  });
+
+  it("should keep the original timeout when update omits restartTimeout", async () => {
+    const { component } = render(NotificationQueueTest);
+    const queue = getQueue(component.queue);
+
+    queue.add({ id: "a", title: "Saving", timeout: 1000 });
+    await tick();
+
+    vi.advanceTimersByTime(800);
+    queue.update("a", { title: "Saved" });
+    await tick();
+
+    vi.advanceTimersByTime(200);
+    await tick();
+    expect(screen.queryByText("Saved")).not.toBeInTheDocument();
+  });
+
+  it("should keep bookkeeping fields out of attributes, dismiss, and history", async () => {
+    const ondismiss = vi.fn();
     const { component } = render(NotificationQueueTest, {
-      props: { maxNotifications: 2 },
+      props: { collapseDuplicates: true, maxHistory: 5, ondismiss },
+    });
+    const queue = getQueue(component.queue);
+
+    queue.add({ id: "a", title: "Saved" });
+    queue.add({ title: "Saved" });
+    queue.update("a", { restartTimeout: true });
+    await tick();
+
+    const toast = document.querySelector(".bx--toast-notification");
+    for (const field of ["count", "restartTimeout", "timeoutKey"]) {
+      expect(toast).not.toHaveAttribute(field);
+    }
+
+    queue.remove("a");
+    await tick();
+
+    const expected = { id: "a", title: "Saved" };
+    expect(ondismiss.mock.calls[0][0].detail.notification).toEqual(expected);
+    expect(component.history).toEqual([
+      { ...expected, dismissedAt: expect.any(Number) },
+    ]);
+  });
+
+  describe("collapseDuplicates", () => {
+    it("should stack identical notifications by default", async () => {
+      const { component } = render(NotificationQueueTest);
+      const queue = getQueue(component.queue);
+
+      queue.add({ kind: "success", title: "Saved" });
+      queue.add({ kind: "success", title: "Saved" });
+      await tick();
+
+      expect(screen.getAllByText("Saved")).toHaveLength(2);
+    });
+
+    it("should collapse identical notifications into one row with a count", async () => {
+      const { component } = render(NotificationQueueTest, {
+        props: { collapseDuplicates: true },
+      });
+      const queue = getQueue(component.queue);
+
+      const first = queue.add({ kind: "success", title: "Saved" });
+      const second = queue.add({ kind: "success", title: "Saved" });
+      await tick();
+
+      expect(second).toBe(first);
+      expect(document.querySelectorAll(".bx--toast-notification")).toHaveLength(
+        1,
+      );
+      expect(screen.getByText("Saved (2)")).toBeInTheDocument();
+
+      queue.add({ kind: "success", title: "Saved" });
+      await tick();
+      expect(screen.getByText("Saved (3)")).toBeInTheDocument();
+    });
+
+    it("should not collapse notifications with a different kind or subtitle", async () => {
+      const { component } = render(NotificationQueueTest, {
+        props: { collapseDuplicates: true },
+      });
+      const queue = getQueue(component.queue);
+
+      queue.add({ kind: "success", title: "Saved" });
+      queue.add({ kind: "info", title: "Saved" });
+      queue.add({ kind: "success", title: "Saved", subtitle: "Draft" });
+      await tick();
+
+      expect(screen.getAllByText("Saved")).toHaveLength(3);
+    });
+
+    it("should still ignore a repeated id without counting it", async () => {
+      const { component } = render(NotificationQueueTest, {
+        props: { collapseDuplicates: true },
+      });
+      const queue = getQueue(component.queue);
+
+      queue.add({ id: "a", title: "Saved" });
+      queue.add({ id: "a", title: "Saved" });
+      await tick();
+
+      expect(screen.getByText("Saved")).toBeInTheDocument();
+      expect(screen.queryByText("Saved (2)")).not.toBeInTheDocument();
+    });
+
+    it("should restart the timeout when a duplicate is collapsed", async () => {
+      const { component } = render(NotificationQueueTest, {
+        props: { collapseDuplicates: true },
+      });
+      const queue = getQueue(component.queue);
+
+      queue.add({ title: "Retrying", timeout: 1000 });
+      await tick();
+      vi.advanceTimersByTime(800);
+
+      queue.add({ title: "Retrying", timeout: 1000 });
+      await tick();
+      vi.advanceTimersByTime(800);
+      await tick();
+      expect(screen.getByText("Retrying (2)")).toBeInTheDocument();
+
+      vi.advanceTimersByTime(200);
+      await tick();
+      expect(screen.queryByText("Retrying (2)")).not.toBeInTheDocument();
+    });
+  });
+
+  describe("history", () => {
+    it("should keep no history by default", async () => {
+      vi.useRealTimers();
+      const { component } = render(NotificationQueueTest);
+
+      getQueue(component.queue).add({ id: "a", title: "First" });
+      await tick();
+      await user.click(screen.getByLabelText("Close notification"));
+      await tick();
+
+      expect(component.history).toEqual([]);
+    });
+
+    it("should keep the newest dismissed notifications up to maxHistory", async () => {
+      vi.setSystemTime(1000);
+      const { component } = render(NotificationQueueTest, {
+        props: { maxHistory: 2 },
+      });
+      const queue = getQueue(component.queue);
+
+      for (const id of ["a", "b", "c"]) queue.add({ id, title: id });
+      for (const id of ["a", "b", "c"]) queue.remove(id);
+      await tick();
+
+      const history = component.history;
+      expect(history?.map((n) => n.id)).toEqual(["c", "b"]);
+      expect(history?.[0]).toEqual({ id: "c", title: "c", dismissedAt: 1000 });
+    });
+
+    it("should record a toast that times out", async () => {
+      const { component } = render(NotificationQueueTest, {
+        props: { maxHistory: 5 },
+      });
+      const queue = getQueue(component.queue);
+
+      queue.add({ id: "timed", title: "Timed", timeout: 1000 });
+      await tick();
+      vi.advanceTimersByTime(1000);
+      await tick();
+
+      expect(component.history?.map((n) => n.id)).toEqual(["timed"]);
+    });
+
+    it("should not record a toast whose close was cancelled", async () => {
+      vi.useRealTimers();
+      const { component } = render(NotificationQueueTest, {
+        props: {
+          maxHistory: 5,
+          onclose: (event: CustomEvent) => event.preventDefault(),
+        },
+      });
+
+      getQueue(component.queue).add({ id: "a", title: "Sticky" });
+      await tick();
+      await user.click(screen.getByLabelText("Close notification"));
+      await tick();
+
+      expect(component.history).toEqual([]);
+    });
+
+    it("should record notifications dropped by maxNotifications", async () => {
+      const { component } = render(NotificationQueueTest, {
+        props: { maxHistory: 5, maxNotifications: 1 },
+      });
+      const queue = getQueue(component.queue);
+
+      queue.add({ id: "a", title: "First" });
+      queue.add({ id: "b", title: "Second" });
+      await tick();
+
+      expect(component.history?.map((n) => n.id)).toEqual(["a"]);
+    });
+
+    it("should move cleared notifications into history, newest first", async () => {
+      const { component } = render(NotificationQueueTest, {
+        props: { maxHistory: 5, position: "bottom-right" },
+      });
+      const queue = getQueue(component.queue);
+
+      queue.add({ id: "a", title: "First" });
+      queue.add({ id: "b", title: "Second" });
+      queue.clear();
+      await tick();
+
+      expect(component.history?.map((n) => n.id)).toEqual(["b", "a"]);
+      expect(document.querySelectorAll(".bx--toast-notification")).toHaveLength(
+        0,
+      );
+    });
+
+    it("should empty history with clearHistory and trim it when maxHistory shrinks", async () => {
+      const { component, rerender } = render(NotificationQueueTest, {
+        props: { maxHistory: 3 },
+      });
+      const queue = getQueue(component.queue);
+
+      for (const id of ["a", "b", "c"]) queue.add({ id, title: id });
+      queue.clear();
+      await tick();
+      expect(component.history).toHaveLength(3);
+
+      await rerender({ maxHistory: 1 });
+      expect(component.history).toHaveLength(1);
+
+      queue.clearHistory();
+      await tick();
+      expect(component.history).toEqual([]);
+      expect(screen.queryByText("a")).not.toBeInTheDocument();
+    });
+  });
+
+  describe("overflowPolicy", () => {
+    const titles = () =>
+      [...document.querySelectorAll(".bx--toast-notification__title")].map(
+        (el) => el.textContent?.trim(),
+      );
+
+    it("should drop the oldest notification by default, whatever its kind", async () => {
+      const { component } = render(NotificationQueueTest, {
+        props: { maxNotifications: 1 },
+      });
+
+      getQueue(component.queue).add({ kind: "error", title: "Error" });
+      getQueue(component.queue).add({ kind: "info", title: "Info" });
+      await tick();
+
+      expect(titles()).toEqual(["Info"]);
+    });
+
+    it.each(["top-right", "bottom-right"] as const)(
+      "should drop low-priority kinds before errors (%s)",
+      async (position) => {
+        const ondismiss = vi.fn();
+        const { component } = render(NotificationQueueTest, {
+          props: {
+            position,
+            maxNotifications: 2,
+            overflowPolicy: "low-priority",
+            ondismiss,
+          },
+        });
+        const queue = getQueue(component.queue);
+
+        queue.add({ id: "error", kind: "error", title: "Error" });
+        queue.add({ id: "warning", kind: "warning", title: "Warning" });
+        queue.add({ id: "success", kind: "success", title: "Success" });
+        await tick();
+
+        expect(titles()).not.toContain("Success");
+        expect(titles()).toEqual(expect.arrayContaining(["Error", "Warning"]));
+        expect(ondismiss.mock.calls[0][0].detail).toMatchObject({
+          notification: { id: "success" },
+          trigger: "overflow",
+        });
+
+        queue.add({ id: "error-2", kind: "error", title: "Error 2" });
+        await tick();
+
+        expect(titles()).toEqual(expect.arrayContaining(["Error", "Error 2"]));
+        expect(titles()).toHaveLength(2);
+      },
+    );
+
+    it("should treat a missing kind as an error", async () => {
+      const { component } = render(NotificationQueueTest, {
+        props: { maxNotifications: 1, overflowPolicy: "low-priority" },
+      });
+
+      getQueue(component.queue).add({ title: "Default kind" });
+      getQueue(component.queue).add({ kind: "info", title: "Info" });
+      await tick();
+
+      expect(titles()).toEqual(["Default kind"]);
+    });
+
+    it.each(["top-right", "bottom-right"] as const)(
+      "should drop the oldest within the same priority (%s)",
+      async (position) => {
+        const { component } = render(NotificationQueueTest, {
+          props: {
+            position,
+            maxNotifications: 2,
+            overflowPolicy: "low-priority",
+          },
+        });
+        const queue = getQueue(component.queue);
+
+        queue.add({ kind: "error", title: "Error 1" });
+        queue.add({ kind: "error", title: "Error 2" });
+        queue.add({ kind: "error", title: "Error 3" });
+        await tick();
+
+        expect(titles()).not.toContain("Error 1");
+        expect(titles()).toHaveLength(2);
+      },
+    );
+
+    it("should record the dropped notification in history", async () => {
+      const { component } = render(NotificationQueueTest, {
+        props: {
+          maxNotifications: 1,
+          maxHistory: 5,
+          overflowPolicy: "low-priority",
+        },
+      });
+
+      getQueue(component.queue).add({
+        id: "error",
+        kind: "error",
+        title: "Error",
+      });
+      getQueue(component.queue).add({
+        id: "info",
+        kind: "info",
+        title: "Info",
+      });
+      await tick();
+
+      expect(component.history?.map((n) => n.id)).toEqual(["info"]);
+    });
+  });
+
+  it("should limit notifications to maxNotifications (top-right)", async () => {
+    const ondismiss = vi.fn();
+    const { component } = render(NotificationQueueTest, {
+      props: { maxNotifications: 2, ondismiss },
     });
 
     getQueue(component.queue).add({
+      id: "first",
       kind: "success",
       title: "First",
     });
@@ -317,6 +718,79 @@ describe("NotificationQueue", () => {
     expect(screen.queryByText("First")).not.toBeInTheDocument();
     expect(screen.getByText("Second")).toBeInTheDocument();
     expect(screen.getByText("Third")).toBeInTheDocument();
+    expect(ondismiss).toHaveBeenCalledTimes(1);
+    expect(ondismiss.mock.calls[0][0].detail).toEqual({
+      notification: { id: "first", kind: "success", title: "First" },
+      trigger: "overflow",
+    });
+  });
+
+  describe("close and dismiss events", () => {
+    it("should keep the toast and skip dismiss when close is cancelled", async () => {
+      vi.useRealTimers();
+      const ondismiss = vi.fn();
+      const { component } = render(NotificationQueueTest, {
+        props: {
+          onclose: (event: CustomEvent) => event.preventDefault(),
+          ondismiss,
+        },
+      });
+
+      getQueue(component.queue).add({ id: "a", title: "Sticky" });
+      await tick();
+
+      await user.click(screen.getByLabelText("Close notification"));
+      await tick();
+
+      expect(screen.getByText("Sticky")).toBeInTheDocument();
+      expect(ondismiss).not.toHaveBeenCalled();
+      expect(getQueue(component.queue).remove("a")).toBe(true);
+    });
+
+    it("should report the escape-key trigger", async () => {
+      const onclose = vi.fn();
+      const ondismiss = vi.fn();
+      const { component } = render(NotificationQueueTest, {
+        props: { onclose, ondismiss },
+      });
+
+      getQueue(component.queue).add({ id: "a", title: "Escapable" });
+      await tick();
+
+      const closeButton = screen.getByLabelText("Close notification");
+      closeButton.focus();
+      await fireEvent.keyDown(closeButton, { key: "Escape" });
+
+      expect(onclose.mock.calls[0][0].detail.trigger).toBe("escape-key");
+      expect(ondismiss.mock.calls[0][0].detail.trigger).toBe("escape-key");
+    });
+
+    it("should dispatch dismiss with the programmatic trigger for remove and clear", async () => {
+      const ondismiss = vi.fn();
+      const { component } = render(NotificationQueueTest, {
+        props: { ondismiss },
+      });
+      const queue = getQueue(component.queue);
+
+      queue.add({ id: "a", title: "A" });
+      queue.add({ id: "b", title: "B" });
+      queue.add({ id: "c", title: "C" });
+      queue.remove("a");
+      queue.remove("missing");
+      queue.clear();
+      await tick();
+
+      expect(
+        ondismiss.mock.calls.map(([event]) => [
+          event.detail.notification.id,
+          event.detail.trigger,
+        ]),
+      ).toEqual([
+        ["a", "programmatic"],
+        ["c", "programmatic"],
+        ["b", "programmatic"],
+      ]);
+    });
   });
 
   it("should limit notifications to maxNotifications (bottom-right)", async () => {
@@ -469,9 +943,14 @@ describe("NotificationQueue", () => {
 
   it("should remove notification when close button is clicked", async () => {
     vi.useRealTimers();
-    const { component } = render(NotificationQueueTest);
+    const onclose = vi.fn();
+    const ondismiss = vi.fn();
+    const { component } = render(NotificationQueueTest, {
+      props: { onclose, ondismiss },
+    });
 
     getQueue(component.queue).add({
+      id: "a",
       kind: "success",
       title: "Test notification",
     });
@@ -484,12 +963,26 @@ describe("NotificationQueue", () => {
     await tick();
 
     expect(screen.queryByText("Test notification")).not.toBeInTheDocument();
+    expect(onclose.mock.calls[0][0].detail).toEqual({
+      id: "a",
+      timeout: false,
+      trigger: "close-button",
+    });
+    expect(ondismiss.mock.calls[0][0].detail).toEqual({
+      notification: { id: "a", kind: "success", title: "Test notification" },
+      trigger: "close-button",
+    });
   });
 
   it("should remove notification after timeout", async () => {
-    const { component } = render(NotificationQueueTest);
+    const onclose = vi.fn();
+    const ondismiss = vi.fn();
+    const { component } = render(NotificationQueueTest, {
+      props: { onclose, ondismiss },
+    });
 
     getQueue(component.queue).add({
+      id: "a",
       kind: "success",
       title: "Test notification",
       timeout: 1000,
@@ -502,6 +995,12 @@ describe("NotificationQueue", () => {
     await tick();
 
     expect(screen.queryByText("Test notification")).not.toBeInTheDocument();
+    expect(onclose.mock.calls[0][0].detail).toEqual({
+      id: "a",
+      timeout: true,
+      trigger: "timeout",
+    });
+    expect(ondismiss.mock.calls[0][0].detail.trigger).toBe("timeout");
   });
 
   it("should handle persistent notifications without timeout", async () => {
@@ -582,7 +1081,9 @@ describe("NotificationQueue", () => {
       });
       await tick();
 
-      const notifications = screen.getAllByRole("alert");
+      const notifications = document.querySelectorAll(
+        ".bx--toast-notification",
+      );
       expect(notifications[0]).toHaveTextContent("Second");
       expect(notifications[1]).toHaveTextContent("First");
     },
@@ -609,15 +1110,17 @@ describe("NotificationQueue", () => {
       });
       await tick();
 
-      const notifications = screen.getAllByRole("alert");
+      const notifications = document.querySelectorAll(
+        ".bx--toast-notification",
+      );
       expect(notifications[0]).toHaveTextContent("First");
       expect(notifications[1]).toHaveTextContent("Second");
     },
   );
 
-  it("should not render container when all notifications are removed", async () => {
+  it("should keep an empty container when all notifications are removed", async () => {
     vi.useRealTimers();
-    const { component, container } = render(NotificationQueueTest);
+    const { component } = render(NotificationQueueTest);
 
     getQueue(component.queue).add({
       kind: "success",
@@ -631,10 +1134,9 @@ describe("NotificationQueue", () => {
     await user.click(closeButton);
     await tick();
 
-    const queueContainer = container.querySelector(
-      '[style*="position: fixed"]',
-    );
-    expect(queueContainer).not.toBeInTheDocument();
+    const queueContainer = document.querySelector(".bx--notification-queue");
+    expect(queueContainer).toBeInTheDocument();
+    expect(queueContainer?.children).toHaveLength(0);
   });
 
   describe("NotificationButton Generics", () => {

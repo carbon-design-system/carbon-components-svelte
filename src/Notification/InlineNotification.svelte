@@ -1,7 +1,9 @@
 <script>
   /**
    * @event close
+   * @type {object}
    * @property {boolean} timeout
+   * @property {"close-button" | "escape-key" | "timeout"} trigger
    */
 
   /**
@@ -21,15 +23,27 @@
 
   /**
    * Specify the ARIA `role` for the notification container.
-   * @type {"alert" | "log" | "status"}
+   * When unset, `error`, `warning`, and `warning-alt` use `"alert"`;
+   * `success`, `info`, and `info-square` use `"status"`.
+   * Use `"none"` to render no role, for example when an ancestor is
+   * already the live region that announces the notification.
+   * @type {"alert" | "log" | "status" | "none" | undefined}
    */
-  export let role = "alert";
+  export let role = undefined;
 
   /** Specify the title text */
   export let title = "";
 
   /** Specify the subtitle text */
   export let subtitle = "";
+
+  /**
+   * Specify a date to show as relative time (for example, "5 minutes ago")
+   * in the caption. Formatted once when the notification renders; it does
+   * not tick, so an open live region is not re-announced.
+   * @type {Date | number | string | undefined}
+   */
+  export let captionDate = undefined;
 
   /** Set to `true` to hide the close button */
   export let hideCloseButton = false;
@@ -44,6 +58,7 @@
   export let open = true;
 
   import { createEventDispatcher, onMount } from "svelte";
+  import RelativeTime from "../RelativeTime/RelativeTime.svelte";
   import { createHoverFocusPause } from "../utils/pause-on-hover-focus.js";
   import { createTimeoutDismiss } from "../utils/timeout-dismiss.js";
   import NotificationButton from "./NotificationButton.svelte";
@@ -56,12 +71,13 @@
   const { handleMouseenter, handleMouseleave, handleFocusIn, handleFocusOut } =
     createHoverFocusPause(dismiss, () => pauseOnHover);
 
-  function close(closeFromTimeout) {
+  /** @param {"close-button" | "escape-key" | "timeout"} trigger */
+  function close(trigger) {
     dismiss.clear();
 
     const shouldContinue = dispatch(
       "close",
-      { timeout: closeFromTimeout === true },
+      { timeout: trigger === "timeout", trigger },
       { cancelable: true },
     );
     if (shouldContinue) {
@@ -69,14 +85,38 @@
     }
   }
 
-  $: dismiss.sync(open, timeout, () => close(true));
+  /** @param {KeyboardEvent} event */
+  function handleKeydown(event) {
+    if (event.key !== "Escape" || hideCloseButton) return;
+    const target = event.target;
+    if (
+      target instanceof Element &&
+      target.closest(
+        "input, textarea, select, [contenteditable]:not([contenteditable='false'])",
+      )
+    ) {
+      return;
+    }
+    // Stop an enclosing Modal from also closing on the same Escape.
+    event.preventDefault();
+    event.stopPropagation();
+    close("escape-key");
+  }
+
+  $: resolvedRole =
+    role ??
+    (kind === "error" || kind === "warning" || kind === "warning-alt"
+      ? "alert"
+      : "status");
+
+  $: dismiss.sync(open, timeout, () => close("timeout"));
 
   onMount(() => () => dismiss.clear());
 </script>
 
 {#if open}
   <div
-    {role}
+    role={resolvedRole === "none" ? undefined : resolvedRole}
     class:bx--inline-notification={true}
     class:bx--inline-notification--low-contrast={lowContrast}
     class:bx--inline-notification--hide-close-button={hideCloseButton}
@@ -95,6 +135,7 @@
     on:mouseleave={handleMouseleave}
     on:focusin={handleFocusIn}
     on:focusout={handleFocusOut}
+    on:keydown={handleKeydown}
   >
     <div class:bx--inline-notification__details={true}>
       <NotificationIcon notificationType="inline" {kind} />
@@ -109,6 +150,11 @@
             <slot name="subtitleChildren">{subtitle}</slot>
           </div>
         {/if}
+        {#if captionDate != null}
+          <div class:bx--inline-notification__caption={true}>
+            <RelativeTime date={captionDate} live={false} />
+          </div>
+        {/if}
         <slot />
       </div>
     </div>
@@ -117,7 +163,7 @@
       <NotificationButton
         iconDescription={closeButtonDescription}
         notificationType="inline"
-        on:click={close}
+        on:click={() => close("close-button")}
       />
     {/if}
   </div>

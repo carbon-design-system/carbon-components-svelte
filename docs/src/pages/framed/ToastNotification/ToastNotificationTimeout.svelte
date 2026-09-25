@@ -25,7 +25,7 @@
       caption={new Date().toLocaleString()}
       on:close={(e) => {
         timeout = undefined;
-        console.log(e.detail.timeout); // true if closed via timeout
+        console.log(e.detail.trigger); // "timeout" if closed via timeout
       }}
     />
   </div>

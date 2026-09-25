@@ -4,6 +4,7 @@ import { user } from "../utils/user";
 import ToastNotificationTest from "./ToastNotification.test.svelte";
 import ToastNotificationCaptionSlotTest from "./ToastNotificationCaptionSlot.test.svelte";
 import ToastNotificationCustomTest from "./ToastNotificationCustom.test.svelte";
+import ToastNotificationEscapeTest from "./ToastNotificationEscape.test.svelte";
 import ToastNotificationReusableTest from "./ToastNotificationReusable.test.svelte";
 import ToastNotificationSubtitleSlotTest from "./ToastNotificationSubtitleSlot.test.svelte";
 import ToastNotificationTitleSlotTest from "./ToastNotificationTitleSlot.test.svelte";
@@ -228,7 +229,10 @@ describe("ToastNotification", () => {
     await tick();
 
     expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: false });
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({
+      timeout: false,
+      trigger: "close-button",
+    });
   });
 
   it("should auto-close after timeout", async () => {
@@ -243,7 +247,125 @@ describe("ToastNotification", () => {
     await tick();
 
     expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({
+      timeout: true,
+      trigger: "timeout",
+    });
+  });
+
+  it("should restart the timeout from its full duration when timeoutKey changes", async () => {
+    const onclose = vi.fn();
+    const { rerender } = render(ToastNotificationTest, {
+      props: { timeout: 1000, onclose },
+    });
+
+    vi.advanceTimersByTime(400);
+    await rerender({ timeout: 1000, onclose, timeoutKey: 1 });
+
+    vi.advanceTimersByTime(800);
+    await tick();
+    expect(onclose).not.toHaveBeenCalled();
+    expect(screen.getByRole("alert")).toBeInTheDocument();
+
+    vi.advanceTimersByTime(200);
+    await tick();
+    expect(onclose).toHaveBeenCalledTimes(1);
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+  });
+
+  describe("showTimeout", () => {
+    const getBar = () =>
+      document.querySelector(".bx--toast-notification__timeout");
+
+    it("should not render a timeout bar by default", () => {
+      render(ToastNotificationTest, { props: { timeout: 1000 } });
+
+      expect(getBar()).not.toBeInTheDocument();
+    });
+
+    it("should not render a timeout bar without a timeout", () => {
+      render(ToastNotificationTest, { props: { showTimeout: true } });
+
+      expect(getBar()).not.toBeInTheDocument();
+    });
+
+    it("should transition the bar to empty over the timeout", () => {
+      render(ToastNotificationTest, {
+        props: { showTimeout: true, timeout: 1000 },
+      });
+
+      const bar = getBar();
+      expect(bar).toHaveAttribute("aria-hidden", "true");
+      expect(bar).toHaveStyle({
+        transform: "scaleX(0)",
+        transitionDuration: "1000ms",
+      });
+      expect(document.querySelector(".bx--toast-notification")).toHaveClass(
+        "bx--toast-notification--timeout",
+      );
+    });
+
+    it("should not update the bar while the timer runs", async () => {
+      render(ToastNotificationTest, {
+        props: { showTimeout: true, timeout: 1000 },
+      });
+      const bar = getBar();
+      assert(bar);
+      const writes = vi.fn();
+      new MutationObserver(writes).observe(bar, { attributes: true });
+
+      vi.advanceTimersByTime(900);
+      await tick();
+
+      expect(writes).not.toHaveBeenCalled();
+    });
+
+    it("should freeze the bar while paused and continue on resume", async () => {
+      render(ToastNotificationTest, {
+        props: { showTimeout: true, timeout: 1000, pauseOnHover: true },
+      });
+      const toast = document.querySelector(".bx--toast-notification");
+      assert(toast);
+
+      vi.advanceTimersByTime(300);
+      await fireEvent.mouseEnter(toast);
+      expect(getBar()).toHaveStyle({
+        transform: "scaleX(0.7)",
+        transitionDuration: "0ms",
+      });
+
+      vi.advanceTimersByTime(500);
+      await fireEvent.mouseLeave(toast);
+      expect(getBar()).toHaveStyle({
+        transform: "scaleX(0)",
+        transitionDuration: "700ms",
+      });
+    });
+
+    it("should refill the bar when timeoutKey restarts the timeout", async () => {
+      const { rerender } = render(ToastNotificationTest, {
+        props: { showTimeout: true, timeout: 1000 },
+      });
+
+      vi.advanceTimersByTime(600);
+      await rerender({ showTimeout: true, timeout: 1000, timeoutKey: 1 });
+
+      expect(getBar()).toHaveStyle({
+        transform: "scaleX(0)",
+        transitionDuration: "1000ms",
+      });
+    });
+
+    it("should remove the bar when the timeout ends", async () => {
+      render(ToastNotificationTest, {
+        props: { showTimeout: true, timeout: 1000 },
+      });
+
+      vi.advanceTimersByTime(1000);
+      await tick();
+
+      expect(getBar()).not.toBeInTheDocument();
+    });
   });
 
   it("should pause timeout on hover when pauseOnHover is true", async () => {
@@ -270,7 +392,10 @@ describe("ToastNotification", () => {
     vi.advanceTimersByTime(1);
     await tick();
     expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({
+      timeout: true,
+      trigger: "timeout",
+    });
   });
 
   it("should not pause timeout on hover when pauseOnHover is false", async () => {
@@ -289,7 +414,10 @@ describe("ToastNotification", () => {
     await tick();
 
     expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({
+      timeout: true,
+      trigger: "timeout",
+    });
   });
 
   it("should pause timeout while focus is inside and resume after focus leaves", async () => {
@@ -317,7 +445,10 @@ describe("ToastNotification", () => {
     vi.advanceTimersByTime(1);
     await tick();
     expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({
+      timeout: true,
+      trigger: "timeout",
+    });
   });
 
   it("should not resume timeout when focus moves between focusable elements inside", async () => {
@@ -365,7 +496,10 @@ describe("ToastNotification", () => {
     await tick();
 
     expect(closeHandler).toHaveBeenCalledTimes(1);
-    expect(closeHandler.mock.calls[0][0].detail).toEqual({ timeout: true });
+    expect(closeHandler.mock.calls[0][0].detail).toEqual({
+      timeout: true,
+      trigger: "timeout",
+    });
   });
 
   it("should render with full width", () => {
@@ -384,6 +518,27 @@ describe("ToastNotification", () => {
 
     const notification = document.querySelector(".bx--toast-notification");
     expect(notification).toHaveAttribute("role", "status");
+  });
+
+  it.each([
+    ["error", "alert"],
+    ["warning", "alert"],
+    ["warning-alt", "alert"],
+    ["success", "status"],
+    ["info", "status"],
+    ["info-square", "status"],
+  ] as const)("should default the role for kind %s to %s", (kind, role) => {
+    render(ToastNotificationTest, { props: { kind } });
+
+    const notification = document.querySelector(".bx--toast-notification");
+    expect(notification).toHaveAttribute("role", role);
+  });
+
+  it("should render no role when role is none", () => {
+    render(ToastNotificationTest, { props: { kind: "error", role: "none" } });
+
+    const notification = document.querySelector(".bx--toast-notification");
+    expect(notification).not.toHaveAttribute("role");
   });
 
   it("should remove notification from DOM when closed", async () => {
@@ -453,5 +608,79 @@ describe("ToastNotification", () => {
     expect(
       document.querySelector(".bx--toast-notification"),
     ).not.toBeInTheDocument();
+  });
+  describe("Escape", () => {
+    it("should close when Escape is pressed with focus inside", async () => {
+      const onclose = vi.fn();
+      render(ToastNotificationEscapeTest, { props: { onclose } });
+
+      const closeButton = screen.getByRole("button", {
+        name: "Close notification",
+      });
+      closeButton.focus();
+      await fireEvent.keyDown(closeButton, { key: "Escape" });
+
+      expect(onclose).toHaveBeenCalledTimes(1);
+      expect(onclose.mock.calls[0][0].detail).toEqual({
+        timeout: false,
+        trigger: "escape-key",
+      });
+      expect(screen.queryByText("Escape test")).not.toBeInTheDocument();
+    });
+
+    it.each([
+      ["a nested text field", false, () => screen.getByRole("textbox")],
+      [
+        "a notification without a close button",
+        true,
+        () => screen.getByText("Escape test"),
+      ],
+      ["outside the notification", false, () => document.body],
+    ])(
+      "should ignore Escape from %s",
+      async (_, hideCloseButton, getTarget) => {
+        const onclose = vi.fn();
+        render(ToastNotificationEscapeTest, {
+          props: { onclose, hideCloseButton },
+        });
+
+        await fireEvent.keyDown(getTarget(), { key: "Escape" });
+
+        expect(onclose).not.toHaveBeenCalled();
+        expect(screen.getByText("Escape test")).toBeInTheDocument();
+      },
+    );
+  });
+
+  describe("captionDate", () => {
+    const date = new Date("2020-01-02T03:04:05.000Z");
+
+    it("should render a relative time caption from captionDate", () => {
+      render(ToastNotificationTest, { props: { captionDate: date } });
+
+      const time = document.querySelector(
+        ".bx--toast-notification__caption time",
+      );
+      expect(time).toHaveAttribute("datetime", date.toISOString());
+      expect(time).toHaveTextContent(/\S/);
+    });
+
+    it("should not render a caption without captionDate", () => {
+      render(ToastNotificationTest);
+
+      expect(document.querySelector("time")).not.toBeInTheDocument();
+    });
+
+    it("should prefer a string caption over captionDate", () => {
+      render(ToastNotificationTest, {
+        props: { caption: "static", captionDate: date },
+      });
+
+      const caption = document.querySelector(
+        ".bx--toast-notification__caption",
+      );
+      expect(caption).toHaveTextContent("static");
+      expect(document.querySelector("time")).not.toBeInTheDocument();
+    });
   });
 });

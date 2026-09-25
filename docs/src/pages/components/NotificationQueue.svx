@@ -45,7 +45,7 @@ Lower the value if the queue should render behind other fixed UI instead.
 
 The queue tracks notifications by id, so `add`, `update`, `remove`, and the `maxNotifications` limit all key off the same identifier.
 
-Since each queued notification renders as a [ToastNotification](/components/ToastNotification), `add` also accepts that component's `pauseOnHover`, `role`, and `fullWidth` props.
+Since each queued notification renders as a [ToastNotification](/components/ToastNotification), `add` also accepts that component's `captionDate`, `pauseOnHover`, `showTimeout`, `role`, and `fullWidth` props.
 
 ### Deduplication
 
@@ -55,6 +55,14 @@ Notifications are deduplicated by id. Adding a notification with an id that alre
 
 <FileSource src="/framed/NotificationQueue/NotificationQueueDeduplication" />
 
+### Collapse duplicates
+
+Notifications without a shared id stack even when their text is identical. Set `collapseDuplicates` to merge a new notification with the same `kind`, `title`, and `subtitle` as a visible one into that row instead. The row's title shows a count, for example "Connection lost (3)", its timeout restarts, and `add` returns the existing row's id.
+
+Click "Add duplicate" several times: one toast counts up instead of stacking. "Add different" gets its own row.
+
+<FileSource src="/framed/NotificationQueue/NotificationQueueCollapseDuplicates" />
+
 ### Update
 
 Use `update(id, patch)` to change an existing notification in place. The patch merges into the matching notification, useful for reflecting progress (for example, transitioning a loading toast to success without removing and re-adding it).
@@ -62,6 +70,12 @@ Use `update(id, patch)` to change an existing notification in place. The patch m
 `update` returns true if a notification with the given id was found, false otherwise.
 
 <FileSource src="/framed/NotificationQueue/NotificationQueueUpdate" />
+
+An update keeps the toast's current timeout running. Set `restartTimeout: true` in the patch to start the timeout over from its full duration, so an updated message stays up as long as a new one would.
+
+```js
+queue.update(id, { kind: "success", title: "Saved", restartTimeout: true });
+```
 
 ### Max notifications
 
@@ -71,11 +85,59 @@ Customize the limit with `maxNotifications`.
 
 <FileSource src="/framed/NotificationQueue/NotificationQueueMax" />
 
+### Overflow policy
+
+By default the oldest notification is removed, even if it is an error under newer info toasts. Set `overflowPolicy="low-priority"` to remove `info`, `info-square`, and `success` notifications first, then `warning` and `warning-alt`, and `error` last, choosing the oldest within the same priority. A notification without `kind` counts as an error.
+
+With this policy, a new low-priority notification can be removed as soon as it is added when the queue is full of higher-priority ones. `add` still returns its id, and the queue dispatches `dismiss` for it with the `"overflow"` trigger.
+
+Add a few errors, then some info notifications. With "Low priority first", the errors stay and each new info replaces the previous one. Switch to "Oldest first" to compare.
+
+<FileSource src="/framed/NotificationQueue/NotificationQueueOverflowPolicy" />
+
 ### Remove and clear
 
 Use `remove(id)` to programmatically remove a specific notification, or `clear()` to remove all notifications at once.
 
 <FileSource src="/framed/NotificationQueue/NotificationQueueRemove" />
+
+### History
+
+Set `maxHistory` to keep the most recently dismissed notifications, and bind to the read-only `history` to render them, for example in a notifications panel. Entries are newest first and include `dismissedAt`, a timestamp in milliseconds. A notification enters history whenever the queue dispatches [dismiss](#dismiss) for it, so a cancelled `close` does not record one. Call `clearHistory()` to empty it.
+
+<FileSource src="/framed/NotificationQueue/NotificationQueueHistory" />
+
+## Events
+
+### Close
+
+The queue dispatches `close` with `{ id, timeout, trigger }` when a toast's close button is clicked, <DocKbd label="Escape" /> is pressed inside it, or its timeout ends. The event is cancelable: call `preventDefault()` to keep the toast in the queue.
+
+In this example, closing the "Unsaved changes" toast is blocked while the checkbox is checked.
+
+<FileSource src="/framed/NotificationQueue/NotificationQueueClose" />
+
+### Dismiss
+
+The queue dispatches `dismiss` with `{ notification, trigger }` after a notification leaves the queue, whatever the reason. `trigger` is one of:
+
+- `"close-button"`: the user clicked the close button
+- `"escape-key"`: the user pressed <DocKbd label="Escape" /> inside the toast
+- `"timeout"`: the toast's timeout ended
+- `"overflow"`: `maxNotifications` dropped it to make room
+- `"programmatic"`: `remove` or `clear` removed it
+
+A cancelled `close` does not dispatch `dismiss`.
+
+This example logs each dismissal with its trigger. The queue holds two notifications, so adding a third dismisses the oldest with `"overflow"`.
+
+<FileSource src="/framed/NotificationQueue/NotificationQueueDismiss" />
+
+## Accessibility
+
+The queue container is a polite live region (`aria-live="polite"`) that stays mounted even when empty, so screen readers announce each notification as it is added, including the first. Queued toasts render with `role="none"` by default so the stack is announced once by the container instead of once per toast.
+
+Errors in the queue are announced politely too. To interrupt for an urgent notification, pass `role: "alert"` to `add`, or render a standalone [ToastNotification](/components/ToastNotification) or [InlineNotification](/components/InlineNotification) outside the queue.
 
 ## Persistent
 

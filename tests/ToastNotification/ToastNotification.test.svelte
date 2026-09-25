@@ -5,9 +5,13 @@
   export let kind: ComponentProps<ToastNotification>["kind"] = "error";
   export let lowContrast: ComponentProps<ToastNotification>["lowContrast"] = false;
   export let timeout: ComponentProps<ToastNotification>["timeout"] = 0;
+  export let showTimeout: ComponentProps<ToastNotification>["showTimeout"] = false;
+  export let timeoutKey: ComponentProps<ToastNotification>["timeoutKey"] = 0;
   export let pauseOnHover: ComponentProps<ToastNotification>["pauseOnHover"] = false;
-  export let role: ComponentProps<ToastNotification>["role"] = "alert";
+  export let role: ComponentProps<ToastNotification>["role"] = undefined;
   export let title: ComponentProps<ToastNotification>["title"] = "";
+  export let captionDate: ComponentProps<ToastNotification>["captionDate"] =
+    undefined;
   export let subtitle: ComponentProps<ToastNotification>["subtitle"] = "";
   export let caption: ComponentProps<ToastNotification>["caption"] = "";
   export let closeButtonDescription: ComponentProps<ToastNotification>["closeButtonDescription"] =
@@ -22,10 +26,13 @@
   {kind}
   {lowContrast}
   {timeout}
+  {timeoutKey}
+  {showTimeout}
   {pauseOnHover}
   {role}
   {title}
   {subtitle}
+  {captionDate}
   {caption}
   {closeButtonDescription}
   {hideCloseButton}

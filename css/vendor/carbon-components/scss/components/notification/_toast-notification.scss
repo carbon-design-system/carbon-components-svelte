@@ -247,3 +247,63 @@
 @include exports('toast-notifications') {
   @include toast-notifications;
 }
+
+// carbon-components-svelte patch
+// Opt-in `showTimeout` bar: the time left before the toast auto-closes,
+// drawn along the bottom edge in the kind's support color (the left border's
+// color), faded with `opacity: 0.6` as Carbon fades the structured list's
+// unsorted icon (_structured-list.scss). It is positioned inside the padding
+// box, so it starts after the left border.
+.#{$prefix}--toast-notification--timeout {
+  position: relative;
+}
+
+.#{$prefix}--toast-notification__timeout {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: to-rem(3px);
+  opacity: 0.6;
+  pointer-events: none;
+  transform-origin: left;
+  // The toast sets the duration and target scale inline from the timer.
+  transition-property: transform;
+  transition-timing-function: linear;
+}
+
+.#{$prefix}--toast-notification--error .#{$prefix}--toast-notification__timeout {
+  background-color: $inverse-support-01;
+}
+
+.#{$prefix}--toast-notification--success .#{$prefix}--toast-notification__timeout {
+  background-color: $inverse-support-02;
+}
+
+.#{$prefix}--toast-notification--warning .#{$prefix}--toast-notification__timeout,
+.#{$prefix}--toast-notification--warning-alt .#{$prefix}--toast-notification__timeout {
+  background-color: $inverse-support-03;
+}
+
+.#{$prefix}--toast-notification--info .#{$prefix}--toast-notification__timeout,
+.#{$prefix}--toast-notification--info-square .#{$prefix}--toast-notification__timeout {
+  background-color: $inverse-support-04;
+}
+
+.#{$prefix}--toast-notification--low-contrast.#{$prefix}--toast-notification--error .#{$prefix}--toast-notification__timeout {
+  background-color: $support-01;
+}
+
+.#{$prefix}--toast-notification--low-contrast.#{$prefix}--toast-notification--success .#{$prefix}--toast-notification__timeout {
+  background-color: $support-02;
+}
+
+.#{$prefix}--toast-notification--low-contrast.#{$prefix}--toast-notification--warning .#{$prefix}--toast-notification__timeout,
+.#{$prefix}--toast-notification--low-contrast.#{$prefix}--toast-notification--warning-alt .#{$prefix}--toast-notification__timeout {
+  background-color: $support-03;
+}
+
+.#{$prefix}--toast-notification--low-contrast.#{$prefix}--toast-notification--info .#{$prefix}--toast-notification__timeout,
+.#{$prefix}--toast-notification--low-contrast.#{$prefix}--toast-notification--info-square .#{$prefix}--toast-notification__timeout {
+  background-color: $support-04;
+}

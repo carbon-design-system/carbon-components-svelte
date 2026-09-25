@@ -45,6 +45,12 @@ Customize the notification content using slots for more flexibility.
   <strong slot="subtitleChildren">Your API key has expired.</strong>
 </InlineNotification>
 
+### Relative time caption
+
+Set `captionDate` to add a caption line with relative time, for example "5 minutes ago", formatted by [RelativeTime](/components/RelativeTime). The caption is formatted when the notification renders and does not keep updating, so screen readers do not re-announce it.
+
+<InlineNotification kind="info" title="Sync paused:" subtitle="Reconnect to resume syncing." captionDate={Date.now() - 5 * 60_000} />
+
 ## Actions
 
 Add interactive elements to notifications using the actions slot.
@@ -70,6 +76,10 @@ The notification action button accepts an href prop to render as a link instead 
 ## Close button
 
 Hide the close button or customize its behavior and label.
+
+Pressing <DocKbd label="Escape" /> while focus is inside the notification closes it the same way the close button does, including the cancelable `close` event. Escape pressed in a nested text field, or on a notification with a hidden close button, is ignored.
+
+The `close` event detail reports how the notification closed: `trigger` is `"close-button"`, `"escape-key"`, or `"timeout"`, and `timeout` is `true` for the timeout.
 
 ### Hidden
 
@@ -98,9 +108,9 @@ Prevent the default close behavior using `e.preventDefault()` in the `on:close` 
 
 ## ARIA role
 
-Specify the ARIA `role` for the notification container to control how screen readers announce it. Defaults to `"alert"` for interruptive announcements. Use `"status"` for polite live-region updates, or `"log"` for a running log of messages.
+The ARIA `role` follows `kind` by default: `error`, `warning`, and `warning-alt` use `"alert"`, which interrupts screen readers; `success`, `info`, and `info-square` use `"status"`, which waits for a pause. Set `role` to override the default, for example `"alert"` for an urgent success message, `"log"` for a running log of messages, or `"none"` when an ancestor is already the live region.
 
-<InlineNotification role="status" kind="success" title="Success:" subtitle="Your profile has been updated." />
+<InlineNotification role="alert" kind="success" title="Success:" subtitle="Your profile has been updated." />
 
 ## Variants
 

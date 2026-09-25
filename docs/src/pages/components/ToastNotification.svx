@@ -25,6 +25,14 @@ Automatically close the notification after a specified duration (in milliseconds
 
 <FileSource src="/framed/ToastNotification/ToastNotificationTimeout" />
 
+Change `timeoutKey` (for example, increment it) to restart the timeout from its full duration after updating the message.
+
+### Timeout bar
+
+Set `showTimeout` to draw the time left as a bar along the bottom edge of the toast, in a faded version of the kind's color. The bar stops while the timeout is paused and is hidden from screen readers. The example shows every `kind` in the default and low contrast variants; hover a toast to pause it.
+
+<FileSource src="/framed/ToastNotification/ToastNotificationShowTimeout" />
+
 ## Full width
 
 Span the full container width with `fullWidth`.
@@ -54,9 +62,19 @@ Customize the notification content using slots for more flexibility.
   <strong slot="captionChildren">{new Date().toLocaleString()}</strong>
 </ToastNotification>
 
+### Relative time caption
+
+Set `captionDate` to show the caption as relative time, for example "5 minutes ago", formatted by [RelativeTime](/components/RelativeTime). A `caption` string or `captionChildren` slot takes precedence. The caption is formatted when the toast renders and does not keep updating, so screen readers do not re-announce the toast.
+
+<ToastNotification kind="info" title="Build finished" subtitle="All checks passed." captionDate={Date.now() - 5 * 60_000} />
+
 ## Close button
 
 Hide the close button or customize its behavior and label.
+
+Pressing <DocKbd label="Escape" /> while focus is inside the notification closes it the same way the close button does, including the cancelable `close` event. Escape pressed in a nested text field, or on a notification with a hidden close button, is ignored.
+
+The `close` event detail reports how the notification closed: `trigger` is `"close-button"`, `"escape-key"`, or `"timeout"`, and `timeout` is `true` for the timeout.
 
 ### Hidden
 
@@ -85,9 +103,9 @@ Prevent the default close behavior using `e.preventDefault()` in the `on:close` 
 
 ## ARIA role
 
-Specify the ARIA `role` for the notification container to control how screen readers announce it. Defaults to `"alert"` for interruptive announcements. Use `"status"` for polite live-region updates, or `"log"` for a running log of messages.
+The ARIA `role` follows `kind` by default: `error`, `warning`, and `warning-alt` use `"alert"`, which interrupts screen readers; `success`, `info`, and `info-square` use `"status"`, which waits for a pause. Set `role` to override the default, for example `"alert"` for an urgent success message, `"log"` for a running log of messages, or `"none"` when an ancestor is already the live region.
 
-<ToastNotification role="status" kind="success" title="Export complete" subtitle="Your report has been exported and is ready for download." caption="{new Date().toLocaleString()}" />
+<ToastNotification role="alert" kind="success" title="Export complete" subtitle="Your report has been exported and is ready for download." caption="{new Date().toLocaleString()}" />
 
 ## Variants
 
