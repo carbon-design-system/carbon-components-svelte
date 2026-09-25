@@ -99,6 +99,9 @@
   /** Specify the warning state text */
   export let warnText = "";
 
+  /** Specify the helper text */
+  export let helperText = "";
+
   /**
    * Specify the label text.
    * Alternatively, use the "labelChildren" slot.
@@ -347,7 +350,7 @@
   }));
 
   $: labelId = `label-${id}`;
-  $: ({ errorId, warnId, readonlyId } = buildFieldIds(id));
+  $: ({ errorId, warnId, readonlyId, helperId } = buildFieldIds(id));
   $: lowerInputId = `lower-input-${id}`;
   $: upperInputId = `upper-input-${id}`;
   $: range = max - min;
@@ -443,7 +446,14 @@
         data-invalid={showInvalid || null}
         data-warn={showWarn || null}
         aria-invalid={showInvalid || null}
-        aria-describedby={resolveStatusDescribedBy({ showInvalid, showWarn, errorId, warnId })}
+        aria-describedby={resolveStatusDescribedBy({
+          showInvalid,
+          showWarn,
+          helperText,
+          errorId,
+          warnId,
+          helperId,
+        })}
         on:focus={handleLowerInputFocus}
         on:blur={handleLowerInputBlur}
       >
@@ -487,7 +497,14 @@
           aria-label={ariaLabelInput}
           aria-describedby={joinDescribedBy(
             readonly ? readonlyId : null,
-            resolveStatusDescribedBy({ showInvalid, showWarn, errorId, warnId }),
+            resolveStatusDescribedBy({
+              showInvalid,
+              showWarn,
+              helperText,
+              errorId,
+              warnId,
+              helperId,
+            }),
           )}
           aria-invalid={showInvalid || undefined}
           aria-readonly={readonly || undefined}
@@ -541,7 +558,14 @@
           aria-label={ariaLabelInputUpper}
           aria-describedby={joinDescribedBy(
             readonly ? readonlyId : null,
-            resolveStatusDescribedBy({ showInvalid, showWarn, errorId, warnId }),
+            resolveStatusDescribedBy({
+              showInvalid,
+              showWarn,
+              helperText,
+              errorId,
+              warnId,
+              helperId,
+            }),
           )}
           aria-invalid={showInvalid || undefined}
           aria-readonly={readonly || undefined}
@@ -637,7 +661,14 @@
         data-invalid={showInvalid || null}
         data-warn={showWarn || null}
         aria-invalid={showInvalid || null}
-        aria-describedby={resolveStatusDescribedBy({ showInvalid, showWarn, errorId, warnId })}
+        aria-describedby={resolveStatusDescribedBy({
+          showInvalid,
+          showWarn,
+          helperText,
+          errorId,
+          warnId,
+          helperId,
+        })}
         on:focus={handleUpperInputFocus}
         on:blur={handleUpperInputBlur}
       >
@@ -667,6 +698,15 @@
       class:bx--form-requirement={true}
     >
       {warnText}
+    </div>
+  {/if}
+  {#if helperText && !showInvalid && !showWarn}
+    <div
+      id={helperId}
+      class:bx--form__helper-text={true}
+      class:bx--form__helper-text--disabled={disabled}
+    >
+      {helperText}
     </div>
   {/if}
   {#if readonly}

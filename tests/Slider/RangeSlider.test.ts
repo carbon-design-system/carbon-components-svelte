@@ -541,4 +541,21 @@ describe("RangeSlider", () => {
       expect(thumb).not.toHaveAttribute("aria-readonly");
     }
   });
+
+  it("shows helper text", () => {
+    render(RangeSliderComponent, {
+      props: {
+        labelText: "Range",
+        id: "test-range",
+        helperText: "Drag both ends",
+      },
+    });
+
+    expect(screen.getByText("Drag both ends")).toHaveClass(
+      "bx--form__helper-text",
+    );
+    for (const thumb of screen.getAllByRole("slider")) {
+      expect(thumb).toHaveAttribute("aria-describedby", "helper-test-range");
+    }
+  });
 });
