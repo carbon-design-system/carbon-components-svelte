@@ -95,6 +95,8 @@
   ],
   "files": [
     "src",
+    "!src/**/node_modules",
+    "!src/**/.cache",
     "css",
     "telemetry.yml"
   ],
