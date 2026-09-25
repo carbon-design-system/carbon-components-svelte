@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { compileEntry } from "./compile";
 
 describe("any-hover media query grouping", () => {

@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { iconTooltipPortalGaps } from "carbon-components-svelte/Portal/icon-tooltip-portal-gaps.js";
 
 describe("iconTooltipPortalGaps", () => {

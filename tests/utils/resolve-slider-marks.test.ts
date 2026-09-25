@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { resolveSliderMarks } from "../../src/utils/resolve-slider-marks.js";
 
 describe("resolveSliderMarks", () => {

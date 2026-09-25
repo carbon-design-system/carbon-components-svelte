@@ -1,3 +1,4 @@
+// @vitest-environment node
 import {
   floatingPosition,
   type RectLike,

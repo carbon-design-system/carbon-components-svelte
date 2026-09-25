@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { deadDeclarations } from "../../scripts/lib/css-overrides";
 import { compileEntry } from "./compile";
 

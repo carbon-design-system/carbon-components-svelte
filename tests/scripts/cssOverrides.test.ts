@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { covers, deadDeclarations } from "../../scripts/lib/css-overrides";
 
 const dead = (css: string) =>

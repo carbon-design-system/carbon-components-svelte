@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { uniqueId } from "../../src/utils/unique-id.js";
 
 describe("uniqueId", () => {

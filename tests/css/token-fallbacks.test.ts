@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { compileEntry } from "./compile";
 
 describe("all.scss token fallbacks", () => {

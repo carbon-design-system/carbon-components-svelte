@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { keyBy } from "../../src/utils/key-by.js";
 
 describe("keyBy", () => {

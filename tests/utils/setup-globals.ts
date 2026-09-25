@@ -147,3 +147,6 @@ if (
     }
   };
 }
+
+// Loaded with a dynamic `import()`, which needs a module.
+export {};

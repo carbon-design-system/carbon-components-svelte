@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { gzipSync } from "node:zlib";
 import { transform } from "lightningcss";
 import { targets } from "../../scripts/lib/css-targets";

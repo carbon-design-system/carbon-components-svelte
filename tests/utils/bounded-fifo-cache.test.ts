@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { BoundedFifoCache } from "../../src/utils/bounded-fifo-cache.js";
 
 describe("BoundedFifoCache", () => {

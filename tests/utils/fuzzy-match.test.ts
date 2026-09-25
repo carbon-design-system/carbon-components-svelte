@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { fuzzyMatch, highlightSegments } from "../../src/utils/fuzzy-match.js";
 
 describe("fuzzyMatch", () => {

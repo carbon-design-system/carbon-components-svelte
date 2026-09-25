@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { isInSafeTriangle } from "../../src/utils/is-in-safe-triangle.js";
 
 describe("isInSafeTriangle", () => {

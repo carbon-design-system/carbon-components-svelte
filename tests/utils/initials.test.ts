@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { getInitials } from "../../src/utils/initials.js";
 
 describe("getInitials", () => {
