@@ -5,6 +5,8 @@
 <Box>Default box</Box>
 <Box tag="section" fill="layer-01">Layer fill</Box>
 <Box fill="background" border="subtle">Fill and border</Box>
+<Box fill="layer-accent">Accent fill</Box>
+<Box fill="brand">Brand fill</Box>
 <Box border="strong" borderStyle="dashed">Dashed border</Box>
 <Box borderStyle="dashed">No border, dashed style</Box>
 <Box border="strong" borderWidth={2}>Thick border</Box>

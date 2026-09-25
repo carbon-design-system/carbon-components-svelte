@@ -86,7 +86,7 @@
 
   /**
    * Set the background fill using a Carbon theme token.
-   * @type {"background" | "layer-01" | "layer-02" | "layer-03" | "field" | "inverse"}
+   * @type {"background" | "layer-01" | "layer-02" | "layer-03" | "layer-accent" | "field" | "inverse" | "brand"}
    */
   export let fill = undefined;
 
