@@ -206,6 +206,30 @@ describe("Box", () => {
     expectInlineStyle(screen.getByTestId("gap-zero"), { gap: "0px" });
   });
 
+  it("resolves a numeric columns value to repeat(...) when display is grid", () => {
+    render(Box);
+
+    expectInlineStyle(screen.getByTestId("grid-columns-number"), {
+      gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+    });
+  });
+
+  it("passes a string columns value through as-is", () => {
+    render(Box);
+
+    expectInlineStyle(screen.getByTestId("grid-columns-string"), {
+      gridTemplateColumns: "200px 1fr 200px",
+    });
+  });
+
+  it("does nothing when columns is set without display=grid", () => {
+    render(Box);
+
+    expectInlineStyle(screen.getByTestId("grid-columns-no-grid"), {
+      gridTemplateColumns: "",
+    });
+  });
+
   it("merges multiple modifier classes", () => {
     render(Box);
 
