@@ -1,0 +1,21 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// VirtualList's own windowing math is entirely inline styles (matching
+/// virtualize.js's other consumers); this class only owns the scroll
+/// container's overflow behavior.
+/// @access private
+/// @group components
+@mixin virtual-list {
+  .#{$prefix}--virtual-list {
+    overflow-y: auto;
+    position: relative;
+  }
+}
+
+@include exports("virtual-list") {
+  @include virtual-list;
+}

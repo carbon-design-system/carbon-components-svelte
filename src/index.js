@@ -277,3 +277,4 @@ export {
   resolveCheckboxState,
   toggleCheckboxNode,
 } from "./utils/tree-checkbox-state.js";
+export { default as VirtualList } from "./VirtualList/VirtualList.svelte";
