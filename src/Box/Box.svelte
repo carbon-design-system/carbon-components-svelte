@@ -273,6 +273,23 @@
   export let justify = undefined;
 
   /**
+   * Set how flex children wrap onto multiple lines. Only takes effect when
+   * `display` is `"flex"` or `"inline-flex"`.
+   * @type {"nowrap" | "wrap" | "wrap-reverse" | undefined}
+   */
+  export let wrap = undefined;
+
+  /**
+   * Set this box's own cross-axis alignment inside a flex or grid parent,
+   * overriding the parent's `align`.
+   * @type {"start" | "center" | "end" | "stretch" | "baseline" | undefined}
+   */
+  export let alignSelf = undefined;
+
+  /** Set to `true` to let this box grow to fill free space inside a flex parent. */
+  export let grow = false;
+
+  /**
    * Set the CSS overflow behavior.
    * @type {"visible" | "hidden" | "auto" | "scroll" | undefined}
    */
@@ -367,6 +384,9 @@
     spacingClass("gap", gap),
     align && `bx--box-align-${align}`,
     justify && `bx--box-justify-${justify}`,
+    wrap && `bx--box-wrap-${wrap}`,
+    alignSelf && `bx--box-align-self-${alignSelf}`,
+    grow && "bx--box-grow",
     overflow && `bx--box-overflow-${overflow}`,
     overflowX && `bx--box-overflow-x-${overflowX}`,
     overflowY && `bx--box-overflow-y-${overflowY}`,

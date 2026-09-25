@@ -231,6 +231,24 @@
     }
   }
 
+  $wrap-values: nowrap, wrap, wrap-reverse;
+
+  @each $value in $wrap-values {
+    .#{$prefix}--box-wrap-#{$value} {
+      flex-wrap: $value;
+    }
+  }
+
+  @each $name, $value in $align-values {
+    .#{$prefix}--box-align-self-#{$name} {
+      align-self: $value;
+    }
+  }
+
+  .#{$prefix}--box-grow {
+    flex-grow: 1;
+  }
+
   // After the `display` rules so hiding wins at equal specificity. Nothing is
   // below `sm` or above `max`, so those two classes are never emitted.
   $hide-breakpoints: sm, md, lg, xlg, max;

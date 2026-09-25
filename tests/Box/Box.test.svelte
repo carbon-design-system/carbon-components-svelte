@@ -22,6 +22,8 @@
 <Box display="flex" direction="column" data-testid="direction-column"
   >Direction column</Box
 >
+<Box display="flex" wrap="wrap" data-testid="wrap">Wrap</Box>
+<Box alignSelf="stretch" grow data-testid="flex-item">Flex item props</Box>
 <Box display="flex" align="center" data-testid="align-center">Align center</Box>
 <Box display="flex" justify="space-between" data-testid="justify-between"
   >Justify space-between</Box

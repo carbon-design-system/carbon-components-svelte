@@ -279,6 +279,19 @@ describe("Box", () => {
     });
   });
 
+  it("applies wrap and flex item classes", () => {
+    render(Box);
+
+    expect(screen.getByTestId("wrap")).toHaveClass("bx--box-wrap-wrap");
+    expect(screen.getByTestId("flex-item")).toHaveClass(
+      "bx--box-align-self-stretch",
+      "bx--box-grow",
+    );
+    expect(screen.getByText("Flex display").className).not.toMatch(
+      /bx--box-(wrap|align-self|grow)/,
+    );
+  });
+
   it("applies align and justify classes", () => {
     render(Box);
 
