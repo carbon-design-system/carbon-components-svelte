@@ -1,0 +1,35 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// End alignment, reached by the `bx--list-box__menu--align-end` marker class
+/// that `ListBoxMenu`'s `align="end"` puts on its menu.
+///
+/// Carbon pins the menu with `left: 0; right: 0; width: 100%`. That only
+/// shows when the menu is wider than the field, as the inline dropdown's
+/// 288px minimum makes it: the box is overconstrained, `left` wins, and the
+/// menu runs past the field's right edge. Releasing `left` hands the position
+/// to `right: 0`, so the menu's right edge lines up with the field's instead.
+///
+/// Physical, not `inset-inline-start`: lightningcss expands flow-relative
+/// insets into `:lang()` RTL rules for the Safari 14 baseline, and Carbon's
+/// rule it overrides is physical too.
+///
+/// A portaled menu is static inside a host as wide as the field, so `left`
+/// has no effect there. `ListBoxMenu` marks that host instead, and a flex
+/// host justified to the end lets the wider menu overflow toward the start.
+/// @access private
+/// @group list-box
+@mixin list-box-menu-align {
+  .#{$prefix}--list-box__menu--align-end {
+    left: auto;
+  }
+
+  .#{$prefix}--list-box__menu-host--align-end {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+@include exports("list-box-menu-align") {
+  @include list-box-menu-align;
+}

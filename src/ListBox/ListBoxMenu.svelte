@@ -37,6 +37,14 @@
   export let direction = "bottom";
 
   /**
+   * Specify which edge of the field the menu lines up with when it is wider
+   * than the field, as the inline `Dropdown` menu is. `"end"` opens the menu
+   * toward the start side instead of past the field's end.
+   * @type {"start" | "end"}
+   */
+  export let align = "start";
+
+  /**
    * Class applied to a wrapper element inside the portal.
    * Only used when `portal` is `true`.
    * @type {string}
@@ -81,12 +89,16 @@
 
 {#if portal}
   <FloatingPortal {anchor} {direction} {open}>
-    <div class={portalHostClass}>
+    <div
+      class={portalHostClass}
+      class:bx--list-box__menu-host--align-end={align === "end"}
+    >
       <div
         bind:this={ref}
         role="listbox"
         id="menu-{id}"
         class:bx--list-box__menu={true}
+        class:bx--list-box__menu--align-end={align === "end"}
         class:bx--list-box__menu--wrap-options={wrapOptions}
         {...$$restProps}
         style="position: static; {$$restProps.style || ''}"
@@ -103,6 +115,7 @@
     role="listbox"
     id="menu-{id}"
     class:bx--list-box__menu={true}
+    class:bx--list-box__menu--align-end={align === "end"}
     class:bx--list-box__menu--wrap-options={wrapOptions}
     {...$$restProps}
     on:scroll
