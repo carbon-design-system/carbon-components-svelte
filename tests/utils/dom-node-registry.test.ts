@@ -6,12 +6,12 @@ function node() {
 }
 
 describe("createDomNodeRegistry", () => {
-  test("starts empty", () => {
+  it("starts empty", () => {
     const registry = createDomNodeRegistry();
     expect(get(registry.items)).toEqual([]);
   });
 
-  test("adds a node on register", async () => {
+  it("adds a node on register", async () => {
     const registry = createDomNodeRegistry();
     const a = node();
     registry.register(a);
@@ -19,7 +19,7 @@ describe("createDomNodeRegistry", () => {
     expect(get(registry.items)).toEqual([a]);
   });
 
-  test("removes a node on unregister", async () => {
+  it("removes a node on unregister", async () => {
     const registry = createDomNodeRegistry();
     const a = node();
     const b = node();
@@ -31,7 +31,7 @@ describe("createDomNodeRegistry", () => {
     expect(get(registry.items)).toEqual([b]);
   });
 
-  test("batches synchronous registrations into a single flush", async () => {
+  it("batches synchronous registrations into a single flush", async () => {
     const registry = createDomNodeRegistry();
     const seen: number[] = [];
     registry.items.subscribe((items) => seen.push(items.length));

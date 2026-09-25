@@ -1,3 +1,4 @@
+// @vitest-environment node
 import {
   buildFieldIds,
   resolveStatusDescribedBy,
@@ -5,7 +6,7 @@ import {
 } from "../../src/utils/field-status.js";
 
 describe("resolveValidationVisibility", () => {
-  test.each([
+  it.each([
     [
       { invalid: false, warn: false, disabled: false, readonly: false },
       { showInvalid: false, showWarn: false },
@@ -42,7 +43,7 @@ describe("resolveValidationVisibility", () => {
     expect(resolveValidationVisibility(options)).toEqual(expected);
   });
 
-  test("defaults disabled/readonly to false", () => {
+  it("defaults disabled/readonly to false", () => {
     expect(resolveValidationVisibility({ invalid: true, warn: false })).toEqual(
       {
         showInvalid: true,
@@ -53,7 +54,7 @@ describe("resolveValidationVisibility", () => {
 });
 
 describe("buildFieldIds", () => {
-  test("derives ids from the field id", () => {
+  it("derives ids from the field id", () => {
     expect(buildFieldIds("x")).toEqual({
       helperId: "helper-x",
       errorId: "error-x",
@@ -61,13 +62,13 @@ describe("buildFieldIds", () => {
     });
   });
 
-  test("uses fallback ids when id is falsy", () => {
+  it("uses fallback ids when id is falsy", () => {
     const fallback = { helperId: "h1", errorId: "e1", warnId: "w1" };
     expect(buildFieldIds(undefined, fallback)).toEqual(fallback);
     expect(buildFieldIds("", fallback)).toEqual(fallback);
   });
 
-  test("returns undefined fields when id and fallback are both absent", () => {
+  it("returns undefined fields when id and fallback are both absent", () => {
     expect(buildFieldIds()).toEqual({
       helperId: undefined,
       errorId: undefined,
@@ -79,7 +80,7 @@ describe("buildFieldIds", () => {
 describe("resolveStatusDescribedBy", () => {
   const base = { errorId: "error-x", warnId: "warn-x", helperId: "helper-x" };
 
-  test("prioritizes invalid over warn over helper", () => {
+  it("prioritizes invalid over warn over helper", () => {
     expect(
       resolveStatusDescribedBy({
         ...base,
@@ -90,7 +91,7 @@ describe("resolveStatusDescribedBy", () => {
     ).toBe("error-x");
   });
 
-  test("falls back to warn when not invalid", () => {
+  it("falls back to warn when not invalid", () => {
     expect(
       resolveStatusDescribedBy({
         ...base,
@@ -101,7 +102,7 @@ describe("resolveStatusDescribedBy", () => {
     ).toBe("warn-x");
   });
 
-  test("falls back to helper when neither invalid nor warn", () => {
+  it("falls back to helper when neither invalid nor warn", () => {
     expect(
       resolveStatusDescribedBy({
         ...base,
@@ -112,7 +113,7 @@ describe("resolveStatusDescribedBy", () => {
     ).toBe("helper-x");
   });
 
-  test("returns undefined when nothing applies", () => {
+  it("returns undefined when nothing applies", () => {
     expect(
       resolveStatusDescribedBy({
         ...base,
@@ -123,7 +124,7 @@ describe("resolveStatusDescribedBy", () => {
     ).toBeUndefined();
   });
 
-  test("isFluid suppresses only the helper fallback by default", () => {
+  it("isFluid suppresses only the helper fallback by default", () => {
     expect(
       resolveStatusDescribedBy({
         ...base,
@@ -144,7 +145,7 @@ describe("resolveStatusDescribedBy", () => {
     ).toBeUndefined();
   });
 
-  test("hideWarnWhenFluid also suppresses the warn id while fluid", () => {
+  it("hideWarnWhenFluid also suppresses the warn id while fluid", () => {
     expect(
       resolveStatusDescribedBy({
         ...base,
@@ -167,7 +168,7 @@ describe("resolveStatusDescribedBy", () => {
     ).toBe("warn-x");
   });
 
-  test("includeErrorId=false skips the invalid tier, but showInvalid still suppresses helper", () => {
+  it("includeErrorId=false skips the invalid tier, but showInvalid still suppresses helper", () => {
     expect(
       resolveStatusDescribedBy({
         ...base,
@@ -179,7 +180,7 @@ describe("resolveStatusDescribedBy", () => {
     ).toBeUndefined();
   });
 
-  test("requireWarnText fall-through still reaches helper once warn is false", () => {
+  it("requireWarnText fall-through still reaches helper once warn is false", () => {
     expect(
       resolveStatusDescribedBy({
         ...base,
@@ -192,7 +193,7 @@ describe("resolveStatusDescribedBy", () => {
     ).toBe("helper-x");
   });
 
-  test("requireInvalidText fall-through does not reach helper while showInvalid is true", () => {
+  it("requireInvalidText fall-through does not reach helper while showInvalid is true", () => {
     expect(
       resolveStatusDescribedBy({
         ...base,
@@ -215,7 +216,7 @@ describe("resolveStatusDescribedBy", () => {
     ).toBeUndefined();
   });
 
-  test("requireInvalidText/requireWarnText pass through when text is present", () => {
+  it("requireInvalidText/requireWarnText pass through when text is present", () => {
     expect(
       resolveStatusDescribedBy({
         ...base,

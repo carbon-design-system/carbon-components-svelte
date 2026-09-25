@@ -1,24 +1,25 @@
+// @vitest-environment node
 import { resolveTabsSize } from "../../src/utils/resolve-tabs-size.js";
 
 describe("resolveTabsSize", () => {
-  test("returns undefined when size is unset", () => {
+  it("returns undefined when size is unset", () => {
     expect(resolveTabsSize(undefined, 2)).toBeUndefined();
   });
 
-  test("returns undefined for an unrecognized size", () => {
+  it("returns undefined for an unrecognized size", () => {
     // @ts-expect-error intentionally invalid for the test
     expect(resolveTabsSize("xxl", 2)).toBeUndefined();
   });
 
-  test("passes through a size within range", () => {
+  it("passes through a size within range", () => {
     expect(resolveTabsSize("md", 2)).toBe("md");
   });
 
-  test("clamps to the max size index for the type", () => {
+  it("clamps to the max size index for the type", () => {
     expect(resolveTabsSize("xl", 2)).toBe("lg");
   });
 
-  test("allows the full scale when maxSizeIndex is 3", () => {
+  it("allows the full scale when maxSizeIndex is 3", () => {
     expect(resolveTabsSize("xl", 3)).toBe("xl");
   });
 });

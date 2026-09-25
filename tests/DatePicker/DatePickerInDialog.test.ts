@@ -16,10 +16,8 @@ describe("DatePicker inside a top-layer dialog", () => {
 
     const scrollCall = add.mock.calls.find(([type]) => type === "scroll");
     expect(scrollCall?.[2]).toEqual({ capture: true, passive: true });
-    // Pooled `window` listeners (see `window-listener-pool.js`) register one
-    // real listener per `(type, options)` pair, shared across consumers, so
-    // the scroll and resize registrations no longer share a function
-    // reference the way an unpooled `addEventListener` pair would.
+    // Pooled listeners are shared per `(type, options)`, so scroll and
+    // resize no longer share one function reference.
     const resizeCall = add.mock.calls.find(
       ([type, , options]) =>
         type === "resize" &&

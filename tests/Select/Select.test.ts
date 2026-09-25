@@ -8,12 +8,24 @@ import SelectFluidForm from "./Select.fluidForm.test.svelte";
 import SelectFluidSkeleton from "./Select.fluidSkeleton.test.svelte";
 import SelectFluidSlot from "./Select.fluidSlot.test.svelte";
 import SelectGroup from "./Select.group.test.svelte";
+import SelectManyItems from "./Select.manyItems.test.svelte";
 import SelectSkeleton from "./Select.skeleton.test.svelte";
 import SelectSlot from "./Select.slot.test.svelte";
 import Select from "./Select.test.svelte";
 import SelectToggle from "./Select.toggle.test.svelte";
 
 describe("Select", () => {
+  // Items register in one batched flush on mount. A dropped or reordered
+  // registration shows up as a late item coerced to a string.
+  it("keeps a late item's numeric value after many items register at once", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(SelectManyItems, { count: 40 });
+
+    await user.selectOptions(screen.getByLabelText("Select label"), "39");
+
+    expect(consoleLog).toHaveBeenCalledWith("update", 39);
+  });
+
   it("renders with default props", () => {
     render(Select);
 

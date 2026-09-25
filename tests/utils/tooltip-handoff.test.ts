@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { get, writable } from "svelte/store";
 import { createTooltipHandoff } from "../../src/utils/tooltip-handoff.js";
 
@@ -10,7 +11,7 @@ describe("createTooltipHandoff", () => {
     vi.useRealTimers();
   });
 
-  test("scheduleEnter() calls onShow and claims after enterDelayMs", () => {
+  it("scheduleEnter() calls onShow and claims after enterDelayMs", () => {
     const activeTooltip = writable(null);
     const handoff = createTooltipHandoff({
       activeTooltip,
@@ -29,7 +30,7 @@ describe("createTooltipHandoff", () => {
     expect(get(activeTooltip)).toBe("a");
   });
 
-  test("scheduleEnter() skips the delay on warm handoff from another id", () => {
+  it("scheduleEnter() skips the delay on warm handoff from another id", () => {
     const activeTooltip = writable("other");
     const handoff = createTooltipHandoff({
       activeTooltip,
@@ -44,7 +45,7 @@ describe("createTooltipHandoff", () => {
     expect(get(activeTooltip)).toBe("a");
   });
 
-  test("scheduleEnter() does not warm-handoff when the store is empty", () => {
+  it("scheduleEnter() does not warm-handoff when the store is empty", () => {
     const activeTooltip = writable(null);
     const handoff = createTooltipHandoff({
       activeTooltip,
@@ -60,7 +61,7 @@ describe("createTooltipHandoff", () => {
     expect(onShow).toHaveBeenCalledTimes(1);
   });
 
-  test("scheduleEnter() does not warm-handoff when the store already holds this id", () => {
+  it("scheduleEnter() does not warm-handoff when the store already holds this id", () => {
     const activeTooltip = writable("a");
     const handoff = createTooltipHandoff({
       activeTooltip,
@@ -76,7 +77,7 @@ describe("createTooltipHandoff", () => {
     expect(onShow).toHaveBeenCalledTimes(1);
   });
 
-  test("scheduleLeave() calls onHide after leaveDelayMs", () => {
+  it("scheduleLeave() calls onHide after leaveDelayMs", () => {
     const activeTooltip = writable("a");
     const handoff = createTooltipHandoff({
       activeTooltip,
@@ -94,7 +95,7 @@ describe("createTooltipHandoff", () => {
     expect(onHide).toHaveBeenCalledTimes(1);
   });
 
-  test("scheduleLeave() cancels a pending scheduleEnter()", () => {
+  it("scheduleLeave() cancels a pending scheduleEnter()", () => {
     const activeTooltip = writable(null);
     const handoff = createTooltipHandoff({
       activeTooltip,
@@ -112,7 +113,7 @@ describe("createTooltipHandoff", () => {
     expect(onHide).toHaveBeenCalledTimes(1);
   });
 
-  test("claim() sets the store unconditionally", () => {
+  it("claim() sets the store unconditionally", () => {
     const activeTooltip = writable(null);
     const handoff = createTooltipHandoff({ activeTooltip, getId: () => "a" });
 
@@ -120,7 +121,7 @@ describe("createTooltipHandoff", () => {
     expect(get(activeTooltip)).toBe("a");
   });
 
-  test("release() clears the store only when this id still holds it", () => {
+  it("release() clears the store only when this id still holds it", () => {
     const activeTooltip = writable("a");
     const handoff = createTooltipHandoff({ activeTooltip, getId: () => "a" });
 
@@ -128,7 +129,7 @@ describe("createTooltipHandoff", () => {
     expect(get(activeTooltip)).toBe(null);
   });
 
-  test("release() is a no-op when another id holds the store", () => {
+  it("release() is a no-op when another id holds the store", () => {
     const activeTooltip = writable("other");
     const handoff = createTooltipHandoff({ activeTooltip, getId: () => "a" });
 
@@ -136,7 +137,7 @@ describe("createTooltipHandoff", () => {
     expect(get(activeTooltip)).toBe("other");
   });
 
-  test("reads the current id on each call", () => {
+  it("reads the current id on each call", () => {
     const activeTooltip = writable(null);
     let id = "a";
     const handoff = createTooltipHandoff({ activeTooltip, getId: () => id });
@@ -151,7 +152,7 @@ describe("createTooltipHandoff", () => {
     expect(get(activeTooltip)).toBe(null);
   });
 
-  test("cancel() discards a pending scheduleEnter() without claiming", () => {
+  it("cancel() discards a pending scheduleEnter() without claiming", () => {
     const activeTooltip = writable(null);
     const handoff = createTooltipHandoff({
       activeTooltip,
@@ -167,7 +168,7 @@ describe("createTooltipHandoff", () => {
     expect(get(activeTooltip)).toBe(null);
   });
 
-  test("default enterDelayMs/leaveDelayMs match the shared timing constants", () => {
+  it("default enterDelayMs/leaveDelayMs match the shared timing constants", () => {
     const activeTooltip = writable(null);
     const handoff = createTooltipHandoff({ activeTooltip, getId: () => "a" });
     const onShow = vi.fn();

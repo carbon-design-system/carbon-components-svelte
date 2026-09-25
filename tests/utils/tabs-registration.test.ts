@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { get, writable } from "svelte/store";
 import { createTabsRegistration } from "../../src/utils/tabs-registration.js";
 
@@ -19,7 +20,7 @@ function setup() {
 }
 
 describe("createTabsRegistration", () => {
-  test("adds a tab and assigns it a sequential index", async () => {
+  it("adds a tab and assigns it a sequential index", async () => {
     const { add, tabs, onDomSyncNeeded } = setup();
     add({ id: "a" });
     add({ id: "b" });
@@ -31,7 +32,7 @@ describe("createTabsRegistration", () => {
     expect(onDomSyncNeeded).toHaveBeenCalled();
   });
 
-  test("re-registering the same id patches it in place, no DOM sync", async () => {
+  it("re-registering the same id patches it in place, no DOM sync", async () => {
     const { add, tabs, onDomSyncNeeded } = setup();
     add({ id: "a", label: "First" });
     await Promise.resolve();
@@ -43,7 +44,7 @@ describe("createTabsRegistration", () => {
     expect(onDomSyncNeeded).not.toHaveBeenCalled();
   });
 
-  test("removes a tab by id", async () => {
+  it("removes a tab by id", async () => {
     const { add, remove, tabs } = setup();
     add({ id: "a" });
     add({ id: "b" });
@@ -54,7 +55,7 @@ describe("createTabsRegistration", () => {
     expect(get(tabs)).toEqual([{ id: "b", index: 1 }]);
   });
 
-  test("adds and removes content panels independently of tabs", async () => {
+  it("adds and removes content panels independently of tabs", async () => {
     const { addContent, removeContent, content } = setup();
     addContent({ id: "panel-a" });
     addContent({ id: "panel-b" });
@@ -69,7 +70,7 @@ describe("createTabsRegistration", () => {
     expect(get(content)).toEqual([{ id: "panel-b", index: 1 }]);
   });
 
-  test("batches synchronous registrations into a single flush", async () => {
+  it("batches synchronous registrations into a single flush", async () => {
     const { add, tabs } = setup();
     const seen: number[] = [];
     tabs.subscribe((current) => seen.push(current.length));
