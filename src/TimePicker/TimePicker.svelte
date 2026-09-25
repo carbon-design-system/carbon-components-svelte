@@ -189,11 +189,13 @@
                   bind:value
                   type="text"
                   aria-invalid={showInvalid || undefined}
+                  aria-errormessage={showInvalid ? errorId : undefined}
                   aria-describedby={resolveStatusDescribedBy({
                     showInvalid,
                     showWarn,
                     errorId,
                     warnId,
+                    includeErrorId: false,
                   })}
                   {pattern}
                   {placeholder}
@@ -224,6 +226,7 @@
         <hr class:bx--time-picker__divider={true}>
         <div
           id={showInvalid ? errorId : warnId}
+          role={showInvalid ? "alert" : undefined}
           class:bx--form-requirement={true}
         >
           {fluidErrorText}
@@ -284,6 +287,7 @@
               type="text"
               data-invalid={showInvalid || undefined}
               aria-invalid={showInvalid || undefined}
+              aria-errormessage={showInvalid ? errorId : undefined}
               aria-describedby={resolveStatusDescribedBy({
                 showInvalid,
                 showWarn,
@@ -291,6 +295,7 @@
                 errorId,
                 warnId,
                 helperId,
+                includeErrorId: false,
               })}
               {pattern}
               {placeholder}
@@ -320,7 +325,9 @@
       </div>
     </div>
     {#if showInvalid}
-      <div id={errorId} class:bx--form-requirement={true}>{invalidText}</div>
+      <div id={errorId} class:bx--form-requirement={true} role="alert">
+        {invalidText}
+      </div>
     {:else if showWarn}
       <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
     {:else if helperText}
