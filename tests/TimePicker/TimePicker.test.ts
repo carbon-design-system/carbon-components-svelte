@@ -126,10 +126,12 @@ describe("TimePicker", () => {
     expect(input).toHaveClass("bx--text-input--invalid");
     expect(input).toHaveAttribute("data-invalid");
     expect(input).toHaveAttribute("aria-invalid", "true");
-    expect(input).toHaveAttribute("aria-describedby", "error-time-input");
+    expect(input).toHaveAttribute("aria-errormessage", "error-time-input");
+    expect(input).not.toHaveAttribute("aria-describedby");
     const errorText = screen.getByText("Invalid time");
     expect(errorText).toHaveClass("bx--form-requirement");
     expect(errorText).toHaveAttribute("id", "error-time-input");
+    expect(errorText).toHaveAttribute("role", "alert");
   });
 
   it("should not set aria-describedby when valid", () => {
@@ -287,17 +289,17 @@ describe("TimePicker", () => {
     );
   });
 
-  it("should associate error message via aria-describedby when invalid", () => {
+  it("should set aria-errormessage (not aria-describedby) to the error id when invalid", () => {
     render(TimePicker, {
       props: { id: "test-id", invalid: true, invalidText: "Invalid time" },
     });
 
-    expect(screen.getByText("Invalid time")).toHaveAttribute(
-      "id",
-      "error-test-id",
-    );
+    const message = screen.getByText("Invalid time");
+    expect(message).toHaveAttribute("id", "error-test-id");
+    expect(message).toHaveAttribute("role", "alert");
     const input = screen.getByRole("textbox");
-    expect(input).toHaveAttribute("aria-describedby", "error-test-id");
+    expect(input).toHaveAttribute("aria-errormessage", "error-test-id");
+    expect(input).not.toHaveAttribute("aria-describedby");
     expect(input).toHaveAttribute("aria-invalid", "true");
   });
 
@@ -565,14 +567,14 @@ describe("TimePicker", () => {
 
       const message = screen.getByText("Invalid time");
       expect(message).toHaveClass("bx--form-requirement");
+      expect(message).toHaveAttribute("role", "alert");
       expect(message.closest(".bx--time-picker--fluid")).not.toBeNull();
       expect(
         document.querySelector(".bx--time-picker__divider"),
       ).toBeInTheDocument();
-      expect(screen.getByRole("textbox")).toHaveAttribute(
-        "aria-describedby",
-        "error-fluid-time",
-      );
+      const input = screen.getByRole("textbox");
+      expect(input).toHaveAttribute("aria-errormessage", "error-fluid-time");
+      expect(input).not.toHaveAttribute("aria-describedby");
     });
 
     it("does not render an icon when neither invalid nor warn", () => {
@@ -593,6 +595,7 @@ describe("TimePicker", () => {
 
       const message = screen.getByText("Warning message");
       expect(message).toHaveClass("bx--form-requirement");
+      expect(message).not.toHaveAttribute("role");
       expect(message.closest(".bx--time-picker--fluid")).not.toBeNull();
     });
 
