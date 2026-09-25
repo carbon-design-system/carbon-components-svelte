@@ -53,9 +53,9 @@ Set `type="inherit"` to color or weight text without resetting its size, for exa
 
 On-color and inverse tokens are meant for colored or inverse surfaces, where the default text tokens would be unreadable. Both read light in the white theme but track different surfaces, so they diverge in other themes. Each example places the token on the surface it is designed for.
 
-Use `on-color` for text on a colored background, such as a button or tag fill. [Box](/components/Box) has no fill token for interactive surfaces, so set the background on the container:
+Use `on-color` for text on a colored background, such as a button or tag fill:
 
-<Box padding={5} style="background-color: var(--cds-interactive-01)">
+<Box fill="brand" padding={5}>
   <Text color="on-color">Text on a colored background</Text>
 </Box>
 

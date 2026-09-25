@@ -33,20 +33,24 @@ Apply Carbon fill and border tokens.
 
 Set `fill` to a Carbon background token. Tokens resolve through the active theme.
 
-| Token        | Description                          |
-| ------------ | ------------------------------------ |
-| `background` | Default page background              |
-| `layer-01`   | First layer surface                  |
-| `layer-02`   | Second layer surface                 |
-| `layer-03`   | Third layer surface                  |
-| `field`      | Form field background                |
-| `inverse`    | Inverse surface background           |
+| Token          | Description                                                         |
+| -------------- | ------------------------------------------------------------------- |
+| `background`   | Default page background                                             |
+| `layer-01`     | First layer surface                                                 |
+| `layer-02`     | Second layer surface                                                |
+| `layer-03`     | Third layer surface                                                 |
+| `layer-accent` | Accent surface, such as a placeholder tile. Matches `layer-03` in v10 themes |
+| `field`        | Form field background                                               |
+| `inverse`      | Inverse surface background                                          |
+| `brand`        | Brand-colored surface. Pair with on-color text                      |
 
 <Stack gap={3}>
   <Box fill="background" padding={5}>background</Box>
   <Box fill="layer-01" padding={5}>layer-01</Box>
   <Box fill="layer-02" padding={5}>layer-02</Box>
   <Box fill="layer-03" padding={5}>layer-03</Box>
+  <Box fill="layer-accent" padding={5}>layer-accent</Box>
+  <Box fill="brand" padding={5}><Text color="on-color">brand</Text></Box>
 </Stack>
 
 Nested fills stack Carbon layer surfaces. Contrast depends on the active theme: on white, layer-02 matches the page background, so pair a darker outer fill with border to show depth.
@@ -376,8 +380,10 @@ Apply Box utilities directly when you do not need the component. Classes use the
 | `bx--box-fill-layer-01` | First layer surface |
 | `bx--box-fill-layer-02` | Second layer surface |
 | `bx--box-fill-layer-03` | Third layer surface |
+| `bx--box-fill-layer-accent` | Accent surface |
 | `bx--box-fill-field` | Form field background |
 | `bx--box-fill-inverse` | Inverse surface background |
+| `bx--box-fill-brand` | Brand-colored surface |
 | `bx--box-border-subtle` | Subtle 1px border |
 | `bx--box-border-strong` | Strong 1px border |
 | `bx--box-border-interactive` | Interactive 1px border |
