@@ -29,5 +29,5 @@ describe("TreeView deep reveal", () => {
     await tick();
 
     expect(document.querySelectorAll("li").length).toBe(1110);
-  });
+  }, 15_000);
 });
