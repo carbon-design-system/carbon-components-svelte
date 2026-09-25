@@ -1,0 +1,54 @@
+---
+description: Description lists display term and detail pairs, such as metadata or properties, using native dl, dt, and dd elements.
+---
+
+<script>
+  import { DescriptionList, DescriptionListItem } from "carbon-components-svelte";
+</script>
+
+`DescriptionList` renders a native `<dl>`. Each `DescriptionListItem` wraps one `<dt>` term and its `<dd>` detail, so screen readers announce them as a description list rather than a table. Use [StructuredList](/components/StructuredList) instead when rows need selection or tabular columns.
+
+## Layouts
+
+### Vertical
+
+By default, each term sits above its detail. Set the term with the `term` prop; slot the detail as children.
+
+<DescriptionList>
+  <DescriptionListItem term="Name">postgres-prod-01</DescriptionListItem>
+  <DescriptionListItem term="Engine">PostgreSQL 16.2</DescriptionListItem>
+  <DescriptionListItem term="Region">us-east-1</DescriptionListItem>
+  <DescriptionListItem term="Created">March 14, 2026</DescriptionListItem>
+</DescriptionList>
+
+### Horizontal
+
+Set `layout` to `"horizontal"` to place each term beside its detail.
+
+<DescriptionList layout="horizontal">
+  <DescriptionListItem term="Name">postgres-prod-01</DescriptionListItem>
+  <DescriptionListItem term="Engine">PostgreSQL 16.2</DescriptionListItem>
+  <DescriptionListItem term="Region">us-east-1</DescriptionListItem>
+  <DescriptionListItem term="Created">March 14, 2026</DescriptionListItem>
+</DescriptionList>
+
+### Columns
+
+Set `columns` to arrange items in an equal-width grid.
+
+<DescriptionList columns={2}>
+  <DescriptionListItem term="Name">postgres-prod-01</DescriptionListItem>
+  <DescriptionListItem term="Engine">PostgreSQL 16.2</DescriptionListItem>
+  <DescriptionListItem term="Region">us-east-1</DescriptionListItem>
+  <DescriptionListItem term="Created">March 14, 2026</DescriptionListItem>
+</DescriptionList>
+
+## Gap
+
+Use `gap` to pick a spacing step from 1–13 (the same scale as [Stack](/components/Stack)), or pass a custom value such as `"22px"`. The default is step 5 (16px).
+
+<DescriptionList gap={7}>
+  <DescriptionListItem term="Name">postgres-prod-01</DescriptionListItem>
+  <DescriptionListItem term="Engine">PostgreSQL 16.2</DescriptionListItem>
+  <DescriptionListItem term="Region">us-east-1</DescriptionListItem>
+</DescriptionList>
