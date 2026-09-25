@@ -24,17 +24,18 @@ export function resolveValidationVisibility({
 }
 
 /**
- * Build the `helper-`/`error-`/`warn-` id triple derived from a
- * field's `id`. When `id` is falsy, `fallback` ids are used instead
- * (for components, like CheckboxGroup/RadioButtonGroup, that still
- * need stable ids when no `id` prop was passed).
+ * Build the `helper-`/`error-`/`warn-`/`readonly-` id quartet derived
+ * from a field's `id`. When `id` is falsy, `fallback` ids are used
+ * instead (for components, like CheckboxGroup/RadioButtonGroup, that
+ * still need stable ids when no `id` prop was passed).
  *
  * @param {string} [id]
- * @param {{ helperId: string, errorId: string, warnId: string }} [fallback]
+ * @param {{ helperId: string, errorId: string, warnId: string, readonlyId: string }} [fallback]
  * @returns {{
  *   helperId: string | undefined,
  *   errorId: string | undefined,
  *   warnId: string | undefined,
+ *   readonlyId: string | undefined,
  * }}
  */
 export function buildFieldIds(id, fallback) {
@@ -43,13 +44,29 @@ export function buildFieldIds(id, fallback) {
       helperId: fallback?.helperId,
       errorId: fallback?.errorId,
       warnId: fallback?.warnId,
+      readonlyId: fallback?.readonlyId,
     };
   }
   return {
     helperId: `helper-${id}`,
     errorId: `error-${id}`,
     warnId: `warn-${id}`,
+    readonlyId: `readonly-${id}`,
   };
+}
+
+/**
+ * Space-join the truthy `aria-describedby` ids from a field's readonly
+ * description, selection description, and validation/helper status id,
+ * so callers can spread the result straight into `aria-describedby`
+ * without hand-rolling `.filter(Boolean).join(" ") || undefined`.
+ *
+ * @param {...(string | null | undefined | false)} ids
+ * @returns {string | undefined}
+ */
+export function joinDescribedBy(...ids) {
+  const joined = ids.filter(Boolean).join(" ");
+  return joined || undefined;
 }
 
 /**

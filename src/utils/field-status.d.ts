@@ -11,19 +11,35 @@ export function resolveValidationVisibility(options: {
 }): { showInvalid: boolean; showWarn: boolean };
 
 /**
- * Build the `helper-`/`error-`/`warn-` id triple derived from a
- * field's `id`. When `id` is falsy, `fallback` ids are used instead
- * (for components, like CheckboxGroup/RadioButtonGroup, that still
- * need stable ids when no `id` prop was passed).
+ * Build the `helper-`/`error-`/`warn-`/`readonly-` id quartet derived
+ * from a field's `id`. When `id` is falsy, `fallback` ids are used
+ * instead (for components, like CheckboxGroup/RadioButtonGroup, that
+ * still need stable ids when no `id` prop was passed).
  */
 export function buildFieldIds(
   id?: string,
-  fallback?: { helperId: string; errorId: string; warnId: string },
+  fallback?: {
+    helperId: string;
+    errorId: string;
+    warnId: string;
+    readonlyId: string;
+  },
 ): {
   helperId: string | undefined;
   errorId: string | undefined;
   warnId: string | undefined;
+  readonlyId: string | undefined;
 };
+
+/**
+ * Space-join the truthy `aria-describedby` ids from a field's readonly
+ * description, selection description, and validation/helper status id,
+ * so callers can spread the result straight into `aria-describedby`
+ * without hand-rolling `.filter(Boolean).join(" ") || undefined`.
+ */
+export function joinDescribedBy(
+  ...ids: Array<string | null | undefined | false>
+): string | undefined;
 
 /**
  * Resolve the single id that a field's `aria-describedby` (or
