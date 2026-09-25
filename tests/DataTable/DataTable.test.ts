@@ -25,10 +25,6 @@ import DataTableHiddenColumnSearch from "./DataTableHiddenColumnSearch.test.svel
 import { getBodyRows, getColumnHeaderText } from "./helpers";
 
 describe("DataTable", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   const headers = [
     { key: "name", value: "Name" },
     { key: "protocol", value: "Protocol" },

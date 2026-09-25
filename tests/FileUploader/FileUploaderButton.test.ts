@@ -8,10 +8,6 @@ import FileUploaderButton from "./FileUploaderButton.test.svelte";
 import { fileNames, simulateFileSelection } from "./helpers";
 
 describe("FileUploaderButton", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   describe("cancelled picker", () => {
     const emptyInput = (input: HTMLInputElement) =>
       Object.defineProperty(input, "files", {

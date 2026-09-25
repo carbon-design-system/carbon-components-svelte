@@ -4,10 +4,6 @@ import FileUploaderDropContainer from "./FileUploaderDropContainer.test.svelte";
 import { fileNames, simulateFileSelection } from "./helpers";
 
 describe("FileUploaderDropContainer", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   function createDragEvent(
     type: "dragover" | "dragleave" | "drop",
     files: File[] = [],

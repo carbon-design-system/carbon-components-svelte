@@ -3,10 +3,6 @@ import { user } from "../utils/user";
 import Filename from "./Filename.test.svelte";
 
 describe("Filename", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   it("should render uploading status with loading indicator", () => {
     const { container } = render(Filename, {
       props: { status: "uploading" },

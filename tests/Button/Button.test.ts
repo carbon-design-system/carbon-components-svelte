@@ -10,10 +10,6 @@ import ButtonPortalAdjacent from "./ButtonPortalAdjacent.test.svelte";
 import HeaderGlobalActionPortal from "./HeaderGlobalActionPortal.test.svelte";
 
 describe("Button", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   it("should render with various kinds", () => {
     render(Button);
 

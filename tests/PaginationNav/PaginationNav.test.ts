@@ -3,10 +3,6 @@ import { user } from "../utils/user";
 import PaginationNav from "./PaginationNav.test.svelte";
 
 describe("PaginationNav", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   it("should render with default props", () => {
     render(PaginationNav);
 

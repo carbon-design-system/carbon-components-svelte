@@ -11,10 +11,6 @@ import HeaderActionOutsideClick from "./HeaderAction.outsideClick.test.svelte";
 import HeaderActionSlot from "./HeaderAction.slot.test.svelte";
 
 describe("HeaderAction", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   it("supports custom textChildren slot", () => {
     render(HeaderActionSlot);
 

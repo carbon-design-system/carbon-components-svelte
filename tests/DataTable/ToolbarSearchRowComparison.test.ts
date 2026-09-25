@@ -5,10 +5,6 @@ import ToolbarSearchRowComparison from "./ToolbarSearchRowComparison.test.svelte
 
 // Regression tests for https://github.com/carbon-design-system/carbon-components-svelte/issues/2143
 describe("ToolbarSearch row comparison behavior", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   const getUpdateCount = () => {
     const element = screen.getByTestId("update-count");
     return Number.parseInt(element.textContent || "0", 10);

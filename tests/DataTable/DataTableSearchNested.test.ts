@@ -4,10 +4,6 @@ import DataTableSearchNested from "./DataTableSearchNested.test.svelte";
 import { getTableRows } from "./helpers";
 
 describe("DataTableSearch with nested keys", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   it("filters rows by nested property values", async () => {
     render(DataTableSearchNested);
 

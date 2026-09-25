@@ -8,10 +8,6 @@ import FileUploaderDropContainerSlot from "./FileUploaderDropContainer.slot.test
 import { simulateFileSelection } from "./helpers";
 
 describe("FileUploader", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1785
   it("should synchronize input.files when files are removed programmatically", async () => {
     const { component } = render(FileUploader);

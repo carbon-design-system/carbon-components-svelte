@@ -4,10 +4,6 @@ import { user } from "../utils/user";
 import RangeSlider from "./RangeSlider.test.svelte";
 
 describe("RangeSlider", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   it("should render two thumbs and two text inputs", () => {
     render(RangeSlider, { props: { value: 10, valueUpper: 90 } });
 

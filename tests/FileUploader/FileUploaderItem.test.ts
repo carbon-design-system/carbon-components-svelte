@@ -3,10 +3,6 @@ import { user } from "../utils/user";
 import FileUploaderItem from "./FileUploaderItem.test.svelte";
 
 describe("FileUploaderItem", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   it("should render with default props", () => {
     const { container } = render(FileUploaderItem, {
       props: { name: "test.txt" },

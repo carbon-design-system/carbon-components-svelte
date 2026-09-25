@@ -16,7 +16,6 @@ function getQueue(
 
 describe("NotificationQueue", () => {
   beforeEach(() => {
-    vi.clearAllMocks();
     vi.useFakeTimers();
   });
 

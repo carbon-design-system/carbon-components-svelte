@@ -16,10 +16,6 @@ import HeaderUtilities from "./HeaderUtilities.test.svelte";
 import UiShell from "./UIShell.test.svelte";
 
 describe("UIShell", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   describe("Header", () => {
     it("should render with default props", () => {
       render(UiShell);

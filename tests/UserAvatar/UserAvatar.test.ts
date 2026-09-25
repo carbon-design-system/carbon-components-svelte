@@ -7,10 +7,6 @@ import UserAvatar from "./UserAvatar.test.svelte";
 import UserAvatarImageError from "./UserAvatarImageError.test.svelte";
 
 describe("UserAvatar", () => {
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
   it("renders the default user icon with no content", () => {
     render(UserAvatar);
 

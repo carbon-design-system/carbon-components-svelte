@@ -4,10 +4,6 @@ import { getFilteredIds } from "./helpers";
 import ToolbarSearchGenerics from "./ToolbarSearchGenerics.test.svelte";
 
 describe("ToolbarSearch Generics", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   describe("String literal IDs with `as const`", () => {
     it("should properly type filteredRowIds as string literal union", async () => {
       render(ToolbarSearchGenerics);

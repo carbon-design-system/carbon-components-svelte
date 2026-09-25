@@ -10,7 +10,6 @@ import ToastNotificationTitleSlotTest from "./ToastNotificationTitleSlot.test.sv
 
 describe("ToastNotification", () => {
   beforeEach(() => {
-    vi.clearAllMocks();
     vi.useFakeTimers();
   });
 

@@ -10,10 +10,6 @@ import ContextMenuOptionRole from "./ContextMenuOption.role.test.svelte";
 import ContextMenuOptionSlot from "./ContextMenuOption.slot.test.svelte";
 
 describe("ContextMenu", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   it("should render with default props", () => {
     render(ContextMenu);
 

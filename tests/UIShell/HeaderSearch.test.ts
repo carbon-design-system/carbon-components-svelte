@@ -10,10 +10,6 @@ import HeaderSearchTest from "./HeaderSearch.test.svelte";
 import HeaderSearchIconTest from "./HeaderSearchIcon.test.svelte";
 
 describe("HeaderSearch", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   // Regression test for initial event dispatch in Svelte 5
   // https://github.com/carbon-design-system/carbon-components-svelte/issues/2532
   it("does not fire active/inactive event on initial render", () => {
