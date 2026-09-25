@@ -16,7 +16,7 @@
 
   /**
    * Set the text color using a Carbon text token.
-   * @type {"primary" | "secondary" | "placeholder" | "helper" | "on-color" | "inverse" | "error" | "disabled"}
+   * @type {"primary" | "secondary" | "placeholder" | "helper" | "on-color" | "inverse" | "error" | "success" | "link" | "disabled"}
    */
   export let color = undefined;
 
