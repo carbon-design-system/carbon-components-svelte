@@ -9,3 +9,7 @@
 <AspectRatio align="center" justify="end">
   <div data-testid="aligned-content">Aligned content</div>
 </AspectRatio>
+
+<AspectRatio justify="space-between">
+  <div data-testid="space-between-content">Space between</div>
+</AspectRatio>

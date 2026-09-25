@@ -19,4 +19,12 @@ describe("AspectRatio fill", () => {
       "bx--aspect-ratio--justify-end",
     );
   });
+
+  it("applies the space-between justify class to the object wrapper", () => {
+    render(AspectRatioFill);
+
+    expect(
+      screen.getByTestId("space-between-content").parentElement,
+    ).toHaveClass("bx--aspect-ratio--justify-space-between");
+  });
 });

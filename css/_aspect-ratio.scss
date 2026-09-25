@@ -27,6 +27,9 @@
     start: flex-start,
     center: center,
     end: flex-end,
+    space-between: space-between,
+    space-around: space-around,
+    space-evenly: space-evenly,
   );
 
   @each $name, $value in $justify-content {
