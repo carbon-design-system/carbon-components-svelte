@@ -37,9 +37,15 @@
    */
   export let scrollElementClassName = undefined;
 
+  /**
+   * Obtain a reference to the inner scrollable element.
+   * @type {null | HTMLDivElement}
+   * @bindable readonly
+   */
+  export let scrollElementRef = null;
+
   import { onMount } from "svelte";
 
-  let scrollRef = null;
   let contentRef = null;
   let sentinelTop = null;
   let sentinelBottom = null;
@@ -70,9 +76,9 @@
     : $$restProps.style;
 
   function updateScrollable() {
-    if (!scrollRef) return;
-    xScrollable = scrollRef.scrollWidth > scrollRef.clientWidth;
-    yScrollable = scrollRef.scrollHeight > scrollRef.clientHeight;
+    if (!scrollElementRef) return;
+    xScrollable = scrollElementRef.scrollWidth > scrollElementRef.clientWidth;
+    yScrollable = scrollElementRef.scrollHeight > scrollElementRef.clientHeight;
   }
 
   onMount(() => {
@@ -84,7 +90,7 @@
     // scrollWidth/scrollHeight read) on every DOM mutation inside the
     // content, e.g. each row update of a wrapped DataTable.
     const resizeObserver = new ResizeObserver(updateScrollable);
-    resizeObserver.observe(scrollRef);
+    resizeObserver.observe(scrollElementRef);
     resizeObserver.observe(contentRef);
 
     const intersectionObserver = new IntersectionObserver(
@@ -101,7 +107,7 @@
           }
         }
       },
-      { root: scrollRef },
+      { root: scrollElementRef },
     );
 
     for (const sentinel of [
@@ -130,7 +136,7 @@
     class:bx--scroll-gradient__scroll-element={true}
     class={scrollElementClassName}
     style:background-color={background}
-    bind:this={scrollRef}
+    bind:this={scrollElementRef}
     on:scroll
   >
     <div
