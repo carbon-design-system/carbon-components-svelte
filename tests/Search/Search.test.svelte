@@ -8,6 +8,12 @@
   export let value = "";
   export let loading = false;
   export let readonly = false;
+  export let helperText = "";
+  export let hideLabel = false;
+  export let invalid = false;
+  export let invalidText = "";
+  export let warn = false;
+  export let warnText = "";
 </script>
 
 <Search
@@ -17,6 +23,12 @@
   {selectTextOnFocus}
   {loading}
   {readonly}
+  {helperText}
+  {hideLabel}
+  {invalid}
+  {invalidText}
+  {warn}
+  {warnText}
   labelText="Default search"
   placeholder="Search"
   closeButtonLabelText="Clear value"

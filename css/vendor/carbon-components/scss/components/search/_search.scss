@@ -404,3 +404,78 @@
 @include exports("search-native-decoration") {
   @include search-native-decoration;
 }
+
+/// Invalid and warn icons for `Search`. v10 ships no validation variant for
+/// this component; the tokens match `.bx--text-input__invalid-icon`, and each
+/// `right` offset equals that size's close button width.
+/// @access private
+/// @group components
+@mixin search-validation {
+  // v10 reveals `.bx--form-requirement` only after the field wrappers it
+  // lists in `_form.scss`; `.bx--search` isn't one of them.
+  .#{$prefix}--search[data-invalid] ~ .#{$prefix}--form-requirement,
+  .#{$prefix}--search[data-warn] ~ .#{$prefix}--form-requirement {
+    display: block;
+    overflow: visible;
+    max-height: to-rem(200px);
+    font-weight: 400;
+  }
+
+  .#{$prefix}--search[data-invalid] ~ .#{$prefix}--form-requirement {
+    color: $text-error;
+  }
+
+  .#{$prefix}--search-input[data-invalid],
+  .#{$prefix}--search-input[data-warn] {
+    padding-right: to-rem(64px);
+  }
+
+  .#{$prefix}--search__invalid-icon {
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    right: to-rem(40px);
+    fill: $support-01;
+    transform: translateY(-50%);
+  }
+
+  .#{$prefix}--search__invalid-icon--warning {
+    fill: $support-03;
+  }
+
+  .#{$prefix}--search__invalid-icon--warning path:first-of-type {
+    fill: $carbon__black-100;
+    opacity: 1;
+  }
+
+  .#{$prefix}--search--sm .#{$prefix}--search-input[data-invalid],
+  .#{$prefix}--search--sm .#{$prefix}--search-input[data-warn] {
+    padding-right: to-rem(56px);
+  }
+
+  .#{$prefix}--search--sm .#{$prefix}--search__invalid-icon {
+    right: to-rem(32px);
+  }
+
+  .#{$prefix}--search--xl .#{$prefix}--search-input[data-invalid],
+  .#{$prefix}--search--xl .#{$prefix}--search-input[data-warn] {
+    padding-right: to-rem(72px);
+  }
+
+  .#{$prefix}--search--xl .#{$prefix}--search__invalid-icon {
+    right: to-rem(48px);
+  }
+
+  .#{$prefix}--search--xs .#{$prefix}--search-input[data-invalid],
+  .#{$prefix}--search--xs .#{$prefix}--search-input[data-warn] {
+    padding-right: to-rem(44px);
+  }
+
+  .#{$prefix}--search--xs .#{$prefix}--search__invalid-icon {
+    right: to-rem(24px);
+  }
+}
+
+@include exports("search-validation") {
+  @include search-validation;
+}
