@@ -15,6 +15,8 @@
 <Box shadow>Raised shadow</Box>
 <Box display="flex">Flex display</Box>
 <Box overflow="auto">Auto overflow</Box>
+<Box overflowX="auto" overflowY="hidden">Axis overflow</Box>
+<Box overflow="hidden" overflowX="auto">Overflow with x override</Box>
 <Box padding={5}>Padding scale</Box>
 <Box padding="1.5rem">Custom padding</Box>
 <Box paddingX={3} paddingY={5}>Axis padding</Box>

@@ -167,6 +167,19 @@
   .#{$prefix}--box-overflow-scroll {
     overflow: scroll;
   }
+
+  // After the `overflow` rules so a per-axis class wins at equal specificity.
+  $overflow-values: visible, hidden, auto, scroll;
+
+  @each $value in $overflow-values {
+    .#{$prefix}--box-overflow-x-#{$value} {
+      overflow-x: $value;
+    }
+
+    .#{$prefix}--box-overflow-y-#{$value} {
+      overflow-y: $value;
+    }
+  }
 }
 
 @include exports("box") {
