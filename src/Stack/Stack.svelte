@@ -48,7 +48,8 @@
 
   /**
    * Specify how items wrap onto multiple lines.
-   * Only applies to horizontal stacks that overflow their container.
+   * Items wrap when they overflow the main axis: the container width for a
+   * horizontal stack, or a constrained height for a vertical stack.
    * @type {"nowrap" | "wrap" | "wrap-reverse"}
    */
   export let wrap = "nowrap";
