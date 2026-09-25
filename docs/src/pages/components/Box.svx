@@ -210,15 +210,28 @@ viewport, such as a sign-in card.
 
 ## Position
 
-Set `position` to `"relative"` or `"sticky"`, then use `top` or `bottom` to
-offset the box using the same layout scale as padding and margin (`0`–`13`),
-or pass a string for any CSS length. A sticky box sticks to the nearest
-scroll container, not the browser viewport.
+Set `position` to `"relative"` or `"sticky"`, then use `top`, `bottom`,
+`left`, or `right` to offset the box using the same layout scale as padding
+and margin (`0`–`13`), or pass a string for any CSS length. A sticky box
+sticks to the nearest scroll container, not the browser viewport.
 
 <Box height="8rem" border="subtle" overflow="auto">
   <Box height="12rem">Scroll to see the sticky box below.</Box>
   <Box position="sticky" bottom={0} fill="layer-01" padding={3} border="subtle" borderSide="top">
     Sticky footer bar
+  </Box>
+</Box>
+
+### Horizontal offsets
+
+Use `left` or `right` to pin a box to a horizontal edge, such as a sticky first column in a sideways-scrolling strip.
+
+<Box width="16rem" border="subtle" overflowX="auto" overflowY="hidden">
+  <Box display="flex" width="32rem">
+    <Box position="sticky" left={0} fill="layer-01" padding={3} border="subtle" borderSide="right">
+      Sticky column
+    </Box>
+    <Box padding={3}>Scroll sideways; the first column stays pinned to the left edge.</Box>
   </Box>
 </Box>
 
@@ -340,6 +353,8 @@ Apply Box utilities directly when you do not need the component. Classes use the
 | `bx--box-overflow-y-{visible,hidden,auto,scroll}` | `overflow-y` on the vertical axis only |
 | `bx--box-top-{0-13}` | Offset from the top |
 | `bx--box-bottom-{0-13}` | Offset from the bottom |
+| `bx--box-left-{0-13}` | Offset from the left |
+| `bx--box-right-{0-13}` | Offset from the right |
 
 <div class="bx--box-fill-layer-01 bx--box-p-5 bx--box-border-subtle">
   Styled with utility classes
