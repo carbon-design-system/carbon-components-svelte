@@ -241,6 +241,17 @@ describe("Box", () => {
     );
   });
 
+  it("applies the direction class", () => {
+    render(Box);
+
+    expect(screen.getByTestId("direction-column")).toHaveClass(
+      "bx--box-direction-column",
+    );
+    expect(screen.getByText("Flex display").className).not.toMatch(
+      /bx--box-direction-/,
+    );
+  });
+
   it("applies align and justify classes", () => {
     render(Box);
 

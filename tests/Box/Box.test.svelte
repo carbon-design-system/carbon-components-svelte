@@ -17,6 +17,9 @@
 <Box display="flex" gap={3} data-testid="gap-scale">Gap scale</Box>
 <Box display="flex" gap="2rem" data-testid="gap-custom">Gap custom</Box>
 <Box display="flex" gap={0} data-testid="gap-zero">Gap zero</Box>
+<Box display="flex" direction="column" data-testid="direction-column"
+  >Direction column</Box
+>
 <Box display="flex" align="center" data-testid="align-center">Align center</Box>
 <Box display="flex" justify="space-between" data-testid="justify-between"
   >Justify space-between</Box

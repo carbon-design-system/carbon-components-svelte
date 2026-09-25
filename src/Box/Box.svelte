@@ -205,6 +205,13 @@
   export let display = undefined;
 
   /**
+   * Set the flex direction of children. Only takes effect when `display` is
+   * `"flex"` or `"inline-flex"`.
+   * @type {"row" | "column" | undefined}
+   */
+  export let direction = undefined;
+
+  /**
    * Set the gap between children. Numbers `1`–`13` use the shared layout scale, `0` clears it; strings accept any CSS length. Only takes effect when `display` is `"flex"`, `"inline-flex"`, or `"grid"`.
    * @type {SpacingValue | undefined}
    */
@@ -328,6 +335,7 @@
     spacingClass("max-height", maxHeight),
     position && `bx--box-position-${position}`,
     display && `bx--box-display-${display}`,
+    direction && `bx--box-direction-${direction}`,
     spacingClass("gap", gap),
     align && `bx--box-align-${align}`,
     justify && `bx--box-justify-${justify}`,
