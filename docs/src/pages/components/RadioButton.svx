@@ -27,6 +27,12 @@ Use a radio button individually with bindable checked state for simple use cases
 
 <FileSource src="/framed/RadioButton/RadioButtonStandalone" />
 
+Set `readonly` to `true` on a standalone radio button to display a non-editable value. It merges with a parent `RadioButtonGroup`'s own `readonly` the same way `Checkbox` merges its own `readonly` with a group's.
+
+<Stack align="start">
+  <RadioButton labelText="Production deployment window approved" checked readonly />
+</Stack>
+
 ## Implicit grouping
 
 Multiple standalone radio buttons sharing the same name automatically form a group and synchronize their checked state — no radio button group component required.
