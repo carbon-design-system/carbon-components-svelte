@@ -19,9 +19,16 @@
    * @type {"start" | "center" | "end" | undefined}
    */
   export let justify = undefined;
+
+  /**
+   * Specify the HTML tag to render for the outer element.
+   * @type {keyof HTMLElementTagNameMap}
+   */
+  export let tag = "div";
 </script>
 
-<div
+<svelte:element
+  this={tag}
   class:bx--aspect-ratio={true}
   class:bx--aspect-ratio--2x1={ratio === "2x1"}
   class:bx--aspect-ratio--2x3={ratio === "2x3"}
@@ -46,4 +53,4 @@
   >
     <slot />
   </div>
-</div>
+</svelte:element>
