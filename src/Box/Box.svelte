@@ -259,6 +259,18 @@
   export let right = undefined;
 
   /**
+   * Hide the box below this breakpoint. It stays visible at the breakpoint and above.
+   * @type {"sm" | "md" | "lg" | "xlg" | "max" | undefined}
+   */
+  export let hideBelow = undefined;
+
+  /**
+   * Hide the box above this breakpoint. It stays visible at the breakpoint and below.
+   * @type {"sm" | "md" | "lg" | "xlg" | "max" | undefined}
+   */
+  export let hideAbove = undefined;
+
+  /**
    * Specify the tag name.
    * @type {keyof HTMLElementTagNameMap}
    */
@@ -299,6 +311,8 @@
     offsetClass("bottom", bottom),
     offsetClass("left", left),
     offsetClass("right", right),
+    hideBelow && `bx--box-hide-below-${hideBelow}`,
+    hideAbove && `bx--box-hide-above-${hideAbove}`,
     $$restProps.class,
   ]
     .filter(Boolean)

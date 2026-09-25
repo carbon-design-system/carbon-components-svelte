@@ -172,6 +172,29 @@
     display: grid;
   }
 
+  // After the `display` rules so hiding wins at equal specificity. Nothing is
+  // below `sm` or above `max`, so those two classes are never emitted.
+  $hide-breakpoints: sm, md, lg, xlg, max;
+
+  @each $bp in $hide-breakpoints {
+    @if $bp != nth($hide-breakpoints, 1) {
+      .#{$prefix}--box-hide-below-#{$bp} {
+        @include carbon--breakpoint-down($bp) {
+          display: none;
+        }
+      }
+    }
+
+    $next: carbon--breakpoint-next($bp);
+    @if $next != null {
+      .#{$prefix}--box-hide-above-#{$bp} {
+        @include carbon--breakpoint-up($next) {
+          display: none;
+        }
+      }
+    }
+  }
+
   .#{$prefix}--box-overflow-visible {
     overflow: visible;
   }

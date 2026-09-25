@@ -27,6 +27,8 @@
   >Columns without grid display</Box
 >
 <Box overflow="auto">Auto overflow</Box>
+<Box hideBelow="md" data-testid="hide-below-md">Hide below md</Box>
+<Box hideAbove="md" data-testid="hide-above-md">Hide above md</Box>
 <Box overflowX="auto" overflowY="hidden">Axis overflow</Box>
 <Box overflow="hidden" overflowX="auto">Overflow with x override</Box>
 <Box padding={5}>Padding scale</Box>
