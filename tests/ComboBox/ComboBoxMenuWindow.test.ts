@@ -11,7 +11,7 @@ import MeasuredComboBox from "./ComboBoxMeasured.test.svelte";
  * Offsets across the windowing threshold, both scroll alignments, the identity
  * of the options a height was measured on, wrapping being the only thing that
  * turns measuring on, and what a close forgets are all asserted against
- * `createMenuWindow` in tests/ListBox/menuWindow.test.ts. What is left
+ * `createMenuWindow` in tests/ListBox/menu-window.test.ts. What is left
  * here is that this component is connected to it: the wrapping prop reaches
  * the menu, options are stamped for measurement only when heights are being
  * measured, and this component's own filtered collection is one the menu

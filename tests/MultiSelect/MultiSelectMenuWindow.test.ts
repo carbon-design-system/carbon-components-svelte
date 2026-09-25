@@ -12,7 +12,7 @@ import MeasuredMultiSelect from "./MultiSelectMeasured.test.svelte";
  * Offsets across the windowing threshold, both scroll alignments, the identity
  * of the options a height was measured on, wrapping being the only thing that
  * turns measuring on, and what a close forgets are all asserted against
- * `createMenuWindow` in tests/ListBox/menuWindow.test.ts. What is left
+ * `createMenuWindow` in tests/ListBox/menu-window.test.ts. What is left
  * here is that this component is connected to it: the wrapping prop reaches
  * the menu, options are stamped for measurement only when heights are being
  * measured, and the identity key it supplies is the one its collection needs,
