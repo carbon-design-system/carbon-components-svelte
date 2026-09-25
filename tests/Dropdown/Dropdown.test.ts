@@ -1222,6 +1222,24 @@ describe("Dropdown", () => {
     expect(dropdown).toHaveClass("bx--list-box--up");
   });
 
+  it("should align the menu to the start of the field by default", () => {
+    render(Dropdown, { props: { items, type: "inline", open: true } });
+
+    expect(screen.getByRole("listbox")).not.toHaveClass(
+      "bx--list-box__menu--align-end",
+    );
+  });
+
+  it("should align the menu to the end of the field", () => {
+    render(Dropdown, {
+      props: { items, type: "inline", align: "end", open: true },
+    });
+
+    expect(screen.getByRole("listbox")).toHaveClass(
+      "bx--list-box__menu--align-end",
+    );
+  });
+
   it("should select nothing when all items are disabled", async () => {
     const allDisabledItems = [
       { id: "0", text: "Slack", disabled: true },

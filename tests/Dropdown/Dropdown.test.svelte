@@ -7,6 +7,7 @@
   export let selectedId: ComponentProps<Dropdown>["selectedId"] = undefined;
   export let type: ComponentProps<Dropdown>["type"] = "default";
   export let direction: ComponentProps<Dropdown>["direction"] = "bottom";
+  export let align: ComponentProps<Dropdown>["align"] = "start";
   export let size: ComponentProps<Dropdown>["size"] = undefined;
   export let open: ComponentProps<Dropdown>["open"] = false;
   export let light: ComponentProps<Dropdown>["light"] = false;
@@ -47,6 +48,7 @@
   bind:selectedId
   {type}
   {direction}
+  {align}
   {size}
   bind:open
   {light}

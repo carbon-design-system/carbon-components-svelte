@@ -34,5 +34,19 @@ test.describe("Dropdown menu alignment", () => {
       expect(menu.y + menu.height).toBeLessThanOrEqual(field.y + 1);
       expect(menu.x).toBeCloseTo(field.x, 0);
     });
+
+    test(`${prefix}: end aligns the menu's right edge to the field`, async ({
+      page,
+    }) => {
+      const { field, menu } = await openMenu(page, `${prefix}-end`);
+      expect(menu.width).toBeCloseTo(288, 0);
+      expect(menu.x + menu.width).toBeCloseTo(field.x + field.width, 0);
+    });
+
+    test(`${prefix}: end combines with direction top`, async ({ page }) => {
+      const { field, menu } = await openMenu(page, `${prefix}-end-top`);
+      expect(menu.y + menu.height).toBeLessThanOrEqual(field.y + 1);
+      expect(menu.x + menu.width).toBeCloseTo(field.x + field.width, 0);
+    });
   }
 });
