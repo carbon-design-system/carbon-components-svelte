@@ -374,6 +374,32 @@ describe("CheckboxGroup", () => {
       ).toBeTruthy();
     });
 
+    it("describes the group as read-only for screen readers that ignore aria-readonly", () => {
+      render(CheckboxGroupReadonly, { id: "readonly-group", readonly: true });
+
+      const fieldset = screen.getByRole("group");
+      expect(fieldset).toHaveAttribute(
+        "aria-describedby",
+        "readonly-readonly-group",
+      );
+
+      const description = document.getElementById("readonly-readonly-group");
+      expect(description).toHaveTextContent("Read-only");
+      expect(description).toHaveClass("bx--visually-hidden");
+    });
+
+    it("supports overriding the group's read-only assistive text", () => {
+      render(CheckboxGroupReadonly, {
+        id: "readonly-group",
+        readonly: true,
+        readonlyText: "Custom read-only text",
+      });
+
+      expect(
+        document.getElementById("readonly-readonly-group"),
+      ).toHaveTextContent("Custom read-only text");
+    });
+
     it("should not change selection when clicking another checkbox", async () => {
       const consoleLog = vi.spyOn(console, "log");
       render(CheckboxGroupReadonly, { selected: ["1"], readonly: true });
