@@ -82,6 +82,14 @@ Display content with a 1:2 aspect ratio.
   1x2
 </AspectRatio>
 
+### Custom ratio
+
+Set `ratio` to any positive `"WxH"` string for a ratio outside the named list, such as `"21x9"` for ultrawide video. Decimals are allowed, for example `"2.35x1"`. A value that is neither a named ratio nor a valid `WxH` pair falls back to `2x1`.
+
+<AspectRatio ratio="21x9">
+  21x9
+</AspectRatio>
+
 ## Fill
 
 Set `fill` to `true` so the slotted content stretches to fill the aspect box, instead of sizing to its own content. This replaces setting `height: 100%` by hand on the content.
