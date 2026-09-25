@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { createOutsideDismiss } from "../../src/utils/outside-dismiss.js";
 
 describe("createOutsideDismiss", () => {

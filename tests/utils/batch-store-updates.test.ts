@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { writable } from "svelte/store";
 import { batchStoreUpdates } from "../../src/utils/batch-store-updates.js";
 

@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { createSubmenuHoverIntent } from "../../src/utils/submenu-hover-intent.js";
 
 describe("createSubmenuHoverIntent", () => {

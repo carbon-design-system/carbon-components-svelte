@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { moveIndex, nextEnabledIndex } from "../../src/utils/move-index.js";
 
 describe("moveIndex", () => {

@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { clampIndex } from "../../src/utils/clamp-index.js";
 
 describe("clampIndex", () => {

@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { parseRules, type Rule } from "../../scripts/lib/css-cascade";
 import { compileEntry } from "./compile";
 

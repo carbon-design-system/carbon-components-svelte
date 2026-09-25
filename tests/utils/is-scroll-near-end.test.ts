@@ -1,3 +1,4 @@
+// @vitest-environment node
 import {
   createScrollEndTracker,
   DEFAULT_SCROLL_END_THRESHOLD,

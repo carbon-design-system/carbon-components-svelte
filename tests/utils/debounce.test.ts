@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { debounce } from "../../src/utils/debounce.js";
 
 describe("debounce", () => {

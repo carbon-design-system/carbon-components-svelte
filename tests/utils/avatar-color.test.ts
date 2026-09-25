@@ -1,3 +1,4 @@
+// @vitest-environment node
 import {
   AVATAR_BACKGROUND_COLORS,
   getAvatarBackgroundColor,

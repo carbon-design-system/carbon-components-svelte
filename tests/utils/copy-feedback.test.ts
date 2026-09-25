@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { createCopyFeedbackState } from "../../src/utils/copy-feedback.js";
 
 describe("createCopyFeedbackState", () => {

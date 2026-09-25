@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { getVisibleTagCount } from "../../src/utils/tag-overflow.js";
 
 describe("getVisibleTagCount", () => {

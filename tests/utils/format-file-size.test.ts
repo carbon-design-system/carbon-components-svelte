@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { formatFileSize } from "../../src/utils/format-file-size.js";
 
 describe("formatFileSize", () => {

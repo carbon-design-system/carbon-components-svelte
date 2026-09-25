@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { formatDelta } from "../../src/utils/format-delta.js";
 
 describe("formatDelta", () => {

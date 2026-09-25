@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { subscribeRelativeTimeTick } from "../../src/utils/relative-time-timer-pool.js";
 
 describe("subscribeRelativeTimeTick", () => {
