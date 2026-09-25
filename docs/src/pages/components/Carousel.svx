@@ -1,0 +1,254 @@
+---
+description: Carousels show one slide at a time from a set, with previous and next controls.
+---
+
+<script>
+  import {
+    BigNumber,
+    Button,
+    Carousel,
+    CarouselItem,
+    Link,
+    Stack,
+    Tag,
+    Tile,
+    UserAvatar,
+  } from "carbon-components-svelte";
+  import ContinuousDelivery from "carbon-pictograms-svelte/lib/ContinuousDelivery.svelte";
+  import Dashboard from "carbon-pictograms-svelte/lib/Dashboard.svelte";
+  import Rocket from "carbon-pictograms-svelte/lib/Rocket.svelte";
+  import Security from "carbon-pictograms-svelte/lib/Security.svelte";
+</script>
+
+## Basic
+
+Wrap each slide in a `CarouselItem`. Only the active slide is visible, and the
+previous and next buttons are disabled on the first and last slide; the
+carousel does not wrap around. When focus is inside the carousel, press <DocKbd label="Left" />
+and <DocKbd label="Right" /> to move to the previous and next slide, except
+inside form fields, which keep their own arrow key behavior.
+
+<Carousel labelText="What's new in 4.2">
+  <CarouselItem>
+    <Stack gap={3}>
+      <div><Tag type="green" size="sm">New</Tag></div>
+      <h4>Scheduled deployments</h4>
+      <p>Queue a release for a maintenance window and it ships automatically, with a rollback point created five minutes before it starts.</p>
+      <Link href="#scheduled-deployments">Read the release notes</Link>
+    </Stack>
+  </CarouselItem>
+  <CarouselItem>
+    <Stack gap={3}>
+      <div><Tag type="blue" size="sm">Improved</Tag></div>
+      <h4>Faster log search</h4>
+      <p>Queries across 30 days of logs now return in under two seconds, and saved searches can be pinned to a dashboard.</p>
+      <Link href="#log-search">Try log search</Link>
+    </Stack>
+  </CarouselItem>
+  <CarouselItem>
+    <Stack gap={3}>
+      <div><Tag type="purple" size="sm">Beta</Tag></div>
+      <h4>Cost anomaly alerts</h4>
+      <p>Get notified when a service's daily spend moves more than 20% from its 14-day baseline.</p>
+      <Link href="#cost-alerts">Join the beta</Link>
+    </Stack>
+  </CarouselItem>
+</Carousel>
+
+## Usage
+
+| Do | Why |
+| --- | --- |
+| Use a carousel for a short, ordered set of related content, such as release highlights or a first-run tour. | Only one slide is visible at a time, so content the user must compare side by side belongs in a grid or table. |
+| Keep the set small, typically three to five slides. | There is no slide picker; reaching the last slide takes one press per slide. |
+| Put a call to action on the slide it belongs to. | The prev/next buttons only move between slides; they do not confirm or submit anything. |
+| Set `labelText` to describe the set, for example "What's new in 4.2". | Screen readers announce the region as a carousel with this name. |
+
+## Content
+
+Slides accept any markup. Combine them with other components to fit the
+context the carousel sits in.
+
+### Feature tour
+
+Pair a pictogram with short copy for a first-run tour, and end on the slide
+that starts the task.
+
+<Carousel labelText="Getting started">
+  <CarouselItem>
+    <Stack orientation="horizontal" gap={6} align="center">
+      <Rocket />
+      <Stack gap={3}>
+        <h4>Deploy from any branch</h4>
+        <p>Connect a repository and every push to a branch gets its own preview URL.</p>
+      </Stack>
+    </Stack>
+  </CarouselItem>
+  <CarouselItem>
+    <Stack orientation="horizontal" gap={6} align="center">
+      <ContinuousDelivery />
+      <Stack gap={3}>
+        <h4>Promote with confidence</h4>
+        <p>Promote a preview to production once checks pass. Every promotion can be rolled back in one click.</p>
+      </Stack>
+    </Stack>
+  </CarouselItem>
+  <CarouselItem>
+    <Stack orientation="horizontal" gap={6} align="center">
+      <Security />
+      <Stack gap={3}>
+        <h4>Secrets stay secret</h4>
+        <p>Environment variables are encrypted at rest and only exposed to the environments you choose.</p>
+      </Stack>
+    </Stack>
+  </CarouselItem>
+  <CarouselItem>
+    <Stack orientation="horizontal" gap={6} align="center">
+      <Dashboard />
+      <Stack gap={3}>
+        <h4>You're all set</h4>
+        <p>Create your first project to see builds, logs, and usage in one place.</p>
+        <div><Button size="small">Create project</Button></div>
+      </Stack>
+    </Stack>
+  </CarouselItem>
+</Carousel>
+
+### Metrics
+
+Cycle through key metrics in a space that only fits one. Each slide is
+labeled "Slide N of M" by default; set `label` on a `CarouselItem` to name it
+after its content instead.
+
+<Tile>
+  <Carousel labelText="Service health" prevButtonLabelText="Previous metric" nextButtonLabelText="Next metric">
+    <CarouselItem label="Requests">
+      <BigNumber labelText="Requests (24h)" value={1843200} size="lg" trend="up" />
+    </CarouselItem>
+    <CarouselItem label="Latency">
+      <BigNumber labelText="p95 latency (ms)" value={212} size="lg" trend="down" trendColor="success" />
+    </CarouselItem>
+    <CarouselItem label="Error rate">
+      <BigNumber labelText="Error rate" value={0.4} percentage size="lg" trend="flat" />
+    </CarouselItem>
+  </Carousel>
+</Tile>
+
+## Height
+
+By default, the viewport is sized to the tallest slide so the controls stay
+put while slides of different lengths cycle through.
+
+<Carousel labelText="Customer stories">
+  <CarouselItem>
+    <Stack gap={4}>
+      <p>"We cut our release cycle from two weeks to two days."</p>
+      <Stack orientation="horizontal" gap={3} align="center">
+        <UserAvatar name="Priya Raman" size="sm" />
+        <span>Priya Raman, Platform Lead at Northwind</span>
+      </Stack>
+    </Stack>
+  </CarouselItem>
+  <CarouselItem>
+    <Stack gap={4}>
+      <p>"Before the migration, every deploy meant a late night and a runbook nobody trusted. Now previews catch most regressions before review, rollbacks take seconds, and on-call has gone from the most dreaded rotation on the team to one people barely notice."</p>
+      <Stack orientation="horizontal" gap={3} align="center">
+        <UserAvatar name="Tomás Ferreira" size="sm" />
+        <span>Tomás Ferreira, SRE at Contoso</span>
+      </Stack>
+    </Stack>
+  </CarouselItem>
+  <CarouselItem>
+    <Stack gap={4}>
+      <p>"Onboarding a new engineer takes an afternoon, not a week."</p>
+      <Stack orientation="horizontal" gap={3} align="center">
+        <UserAvatar name="Amara Okafor" size="sm" />
+        <span>Amara Okafor, Engineering Manager at Fabrikam</span>
+      </Stack>
+    </Stack>
+  </CarouselItem>
+</Carousel>
+
+Set `useMaxHeight` to `false` to size the viewport to the active slide
+instead. The controls then move with the content, so use it where the
+carousel is the last thing in its container.
+
+<Carousel labelText="Customer stories" useMaxHeight={false}>
+  <CarouselItem>
+    <p>"We cut our release cycle from two weeks to two days."</p>
+  </CarouselItem>
+  <CarouselItem>
+    <p>"Before the migration, every deploy meant a late night and a runbook nobody trusted. Now previews catch most regressions before review, rollbacks take seconds, and on-call has gone from the most dreaded rotation on the team to one people barely notice."</p>
+  </CarouselItem>
+  <CarouselItem>
+    <p>"Onboarding a new engineer takes an afternoon, not a week."</p>
+  </CarouselItem>
+</Carousel>
+
+## Selection
+
+Choose which slide is active, and read or drive it from outside the carousel.
+
+### Initial slide
+
+Set `selectedIndex` to start on a slide other than the first, for example to
+resume a checklist where the user left off. Out-of-range values are clamped
+to the first or last slide.
+
+<Carousel labelText="Account setup checklist" selectedIndex={2}>
+  <CarouselItem>
+    <Stack gap={3}>
+      <div><Tag type="green" size="sm">Done</Tag></div>
+      <h4>Verify your email</h4>
+      <p>Confirmed on March 4.</p>
+    </Stack>
+  </CarouselItem>
+  <CarouselItem>
+    <Stack gap={3}>
+      <div><Tag type="green" size="sm">Done</Tag></div>
+      <h4>Add a payment method</h4>
+      <p>Visa ending in 4242.</p>
+    </Stack>
+  </CarouselItem>
+  <CarouselItem>
+    <Stack gap={3}>
+      <div><Tag type="red" size="sm">Required</Tag></div>
+      <h4>Turn on two-factor authentication</h4>
+      <p>Protect your account with an authenticator app or a security key.</p>
+      <div><Button size="small">Set up 2FA</Button></div>
+    </Stack>
+  </CarouselItem>
+  <CarouselItem>
+    <Stack gap={3}>
+      <div><Tag type="gray" size="sm">Optional</Tag></div>
+      <h4>Invite your team</h4>
+      <p>Add collaborators now or later from project settings.</p>
+    </Stack>
+  </CarouselItem>
+</Carousel>
+
+### Two-way binding
+
+Bind `selectedIndex` to keep the carousel in sync with another control. Here,
+a `ProgressIndicator` tracks the active step and moves the carousel when a
+completed step is clicked. Arrow keys typed in the text input and radio
+buttons stay in those fields instead of changing the slide.
+
+<FileSource src="/framed/Carousel/CarouselWizard" />
+
+## Dynamic slides
+
+Add or remove `CarouselItem`s with `{#each}` or `{#if}`. The carousel keeps
+the active index, clamps it if the last slide is removed, and renumbers the
+default slide labels.
+
+<FileSource src="/framed/Carousel/CarouselAnnouncements" />
+
+## Events
+
+Listen for `change` to react to navigation from the buttons, arrow keys, or a
+bound `selectedIndex`. `event.detail` contains `currentIndex`,
+`previousIndex`, and `totalViews`. It does not fire for the initial
+`selectedIndex`.
+
+<FileSource src="/framed/Carousel/CarouselChange" />
