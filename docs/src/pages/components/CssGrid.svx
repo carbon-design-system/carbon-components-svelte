@@ -1,0 +1,91 @@
+---
+components: ["CssGrid", "CssColumn"]
+description: CssGrid is Carbon v11's CSS Grid layout mode, a display:grid alternative to the flexbox Grid with column spans, start/end placement, and percentage spans.
+---
+
+## Basic
+
+`CssGrid` is Carbon v11's `display: grid` layout mode. It uses the same
+breakpoints, column counts, gutters, and margins as the flexbox
+[Grid](/components/Grid), but each `CssColumn` is a grid item placed directly
+on the grid's tracks. No `Row` is needed: columns wrap onto a new row when the
+current one is full.
+
+Set a numeric `span` for a width that stays the same at every breakpoint.
+Below, each column spans 4 tracks: the full row at `sm` (4 columns), half at
+`md` (8 columns), and a quarter at `lg` and up (16 columns). `span={0}` hides
+the column, and `span={true}` sizes it to its content (`grid-column: auto`).
+
+<FileSource src="/framed/CssGrid/CssGrid" />
+
+| Do | Why |
+| --- | --- |
+| Place `CssColumn` as a direct child of `CssGrid` | Only direct children are grid items. A wrapper element takes the column's track and the `CssColumn` inside it is laid out as a block |
+| Use `CssGrid` when you need start/end placement or percentage spans | The flexbox `Grid` has neither. It only has spans and offsets |
+| Stay with `Grid`/`Row`/`Column` in a layout that already uses them | The two modes do not mix: a `CssColumn` inside a `Row`, or a `Column` inside a `CssGrid`, is not sized by the grid around it |
+
+## Spans
+
+### Percentage
+
+Set `span` to `"25%"`, `"50%"`, `"75%"`, or `"100%"` for a width relative to
+the current column count. `"50%"` is 2 of 4 columns at `sm`, 4 of 8 at `md`,
+and 8 of 16 at `lg` and up.
+
+<FileSource src="/framed/CssGrid/CssGridPercent" />
+
+### Responsive
+
+Set `sm`, `md`, `lg`, `xlg`, or `max` to change the span per breakpoint. Each
+breakpoint takes the same values as `span`: a number, a percentage, `true`, or
+a descriptor object (see [Placement](#placement)). A value applies from its
+breakpoint up until a larger breakpoint overrides it. `sm={0}` hides the last
+column below `md`.
+
+<FileSource src="/framed/CssGrid/CssGridResponsive" />
+
+## Placement
+
+Pass a descriptor object (`{ span, start, end, offset }`) to `span` or to a
+breakpoint prop to place a column on specific grid lines. Grid lines are
+numbered from 1, so a 16-column grid has lines 1 to 17.
+
+### Start and end
+
+`start` and `end` are grid line numbers. Combine `start` with `span` to set a
+start line and a width, or `start` with `end` to set both edges. `start: 0`
+resets to automatic placement.
+
+<FileSource src="/framed/CssGrid/CssGridStartEnd" />
+
+### Offset
+
+`offset` is a column count, not a line number: `offset: 2` skips 2 columns and
+starts the column on line 3. `offset: 0` resets to automatic placement. Set
+either `offset` or `start`, not both: if both are set, both start lines are
+applied and the higher one wins.
+
+<FileSource src="/framed/CssGrid/CssGridOffset" />
+
+## Variants
+
+### Narrow
+
+`narrow` removes the gutter on the leading side of each column, so column
+content hangs into the gutter.
+
+<FileSource src="/framed/CssGrid/NarrowCssGrid" />
+
+### Condensed
+
+`condensed` collapses the gutter to 1px, for dense layouts such as data
+displays or image grids.
+
+<FileSource src="/framed/CssGrid/CondensedCssGrid" />
+
+### Row gap
+
+`withRowGap` adds vertical space between rows equal to the gutter width. On a
+`narrow` grid the row gap is halved to match.
+
+<FileSource src="/framed/CssGrid/CssGridRowGap" />
