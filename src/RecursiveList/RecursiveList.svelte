@@ -1,3 +1,7 @@
+<script context="module">
+  export { toHierarchy } from "../utils/to-hierarchy.js";
+</script>
+
 <script>
   /**
    * @template {RecursiveListNode} [Node=RecursiveListNode]

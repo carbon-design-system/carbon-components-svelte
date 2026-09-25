@@ -12,9 +12,6 @@ export { default as Breadcrumb } from "./Breadcrumb/Breadcrumb.svelte";
 export { default as BreadcrumbItem } from "./Breadcrumb/BreadcrumbItem.svelte";
 export { default as BreadcrumbSkeleton } from "./Breadcrumb/BreadcrumbSkeleton.svelte";
 export { default as Breakpoint } from "./Breakpoint/Breakpoint.svelte";
-export { breakpointObserver } from "./Breakpoint/breakpoint-observer.js";
-export { breakpoints } from "./Breakpoint/breakpoints.js";
-export { hideAtBreakpoint } from "./Breakpoint/hide-at-breakpoint.js";
 export { default as Button } from "./Button/Button.svelte";
 export { default as ButtonSet } from "./Button/ButtonSet.svelte";
 export { default as ButtonSkeleton } from "./Button/ButtonSkeleton.svelte";
@@ -46,7 +43,6 @@ export { default as CopyInputSkeleton } from "./CopyInput/CopyInputSkeleton.svel
 export { default as FluidCopyInputSkeleton } from "./CopyInput/FluidCopyInputSkeleton.svelte";
 export { default as DataTable } from "./DataTable/DataTable.svelte";
 export { default as DataTableSkeleton } from "./DataTable/DataTableSkeleton.svelte";
-export { toCsv } from "./DataTable/data-table-utils.js";
 export { default as Table } from "./DataTable/Table.svelte";
 export { default as TableBody } from "./DataTable/TableBody.svelte";
 export { default as TableCell } from "./DataTable/TableCell.svelte";
@@ -225,7 +221,6 @@ export { default as TooltipDefinition } from "./TooltipDefinition/TooltipDefinit
 export { default as TooltipIcon } from "./TooltipIcon/TooltipIcon.svelte";
 export { default as TreeView } from "./TreeView/TreeView.svelte";
 export { default as Truncate } from "./Truncate/Truncate.svelte";
-export { truncate } from "./Truncate/truncate.js";
 export { default as Content } from "./UIShell/Content.svelte";
 export { default as Header } from "./UIShell/Header.svelte";
 export { default as HeaderAction } from "./UIShell/HeaderAction.svelte";
@@ -257,24 +252,8 @@ export { default as SkipToContent } from "./UIShell/SkipToContent.svelte";
 export { default as UnorderedList } from "./UnorderedList/UnorderedList.svelte";
 export { default as UserAvatar } from "./UserAvatar/UserAvatar.svelte";
 export { default as UserAvatarGroup } from "./UserAvatarGroup/UserAvatarGroup.svelte";
-export { getAvatarBackgroundColor } from "./utils/avatar-color.js";
-export {
-  applyColumnSettings,
-  toColumnSettings,
-} from "./utils/column-settings.js";
 export { downloadFile } from "./utils/download-file.js";
-export {
-  filterTreeById,
-  filterTreeByText,
-  filterTreeNodes,
-} from "./utils/filter-tree-nodes.js";
 export { formatFileSize } from "./utils/format-file-size.js";
 export { fuzzyMatch, highlightSegments } from "./utils/fuzzy-match.js";
-export { getInitials } from "./utils/initials.js";
 export { queryParam } from "./utils/query-param.js";
-export { toHierarchy } from "./utils/to-hierarchy.js";
-export {
-  resolveCheckboxState,
-  toggleCheckboxNode,
-} from "./utils/tree-checkbox-state.js";
 export { default as VirtualList } from "./VirtualList/VirtualList.svelte";
