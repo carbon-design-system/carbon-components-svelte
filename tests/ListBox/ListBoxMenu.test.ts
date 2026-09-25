@@ -202,6 +202,77 @@ describe("ListBoxMenu", () => {
       expect(wrapper?.parentElement).toHaveAttribute("data-floating-portal");
     });
   });
+  describe("align", () => {
+    it("should not mark the menu by default", () => {
+      render(ListBoxMenu, { props: { slotContent: "Start menu" } });
+
+      expect(
+        screen.getByText("Start menu").closest(".bx--list-box__menu"),
+      ).not.toHaveClass("bx--list-box__menu--align-end");
+    });
+
+    it("should mark the menu when aligned to the end", () => {
+      render(ListBoxMenu, {
+        props: { slotContent: "End menu", align: "end" },
+      });
+
+      expect(
+        screen.getByText("End menu").closest(".bx--list-box__menu"),
+      ).toHaveClass("bx--list-box__menu--align-end");
+    });
+
+    it("should mark a portaled menu's host to justify it to the end", async () => {
+      render(ListBoxMenu, {
+        props: {
+          slotContent: "Portaled end menu",
+          align: "end",
+          portal: true,
+          open: true,
+        },
+      });
+
+      const menu = (await screen.findByText("Portaled end menu")).closest(
+        ".bx--list-box__menu",
+      );
+      expect(menu).toHaveClass("bx--list-box__menu--align-end");
+      // No stray `undefined` from the unset `portalHostClass`.
+      expect(menu?.parentElement?.className).toBe(
+        "bx--list-box__menu-host--align-end",
+      );
+    });
+
+    it("should not mark a portaled menu's host by default", async () => {
+      render(ListBoxMenu, {
+        props: { slotContent: "Portaled start menu", portal: true, open: true },
+      });
+
+      const menu = (await screen.findByText("Portaled start menu")).closest(
+        ".bx--list-box__menu",
+      );
+      expect(menu?.parentElement).not.toHaveClass(
+        "bx--list-box__menu-host--align-end",
+      );
+    });
+
+    it("should mark a portaled menu's host alongside portalHostClass", async () => {
+      render(ListBoxMenu, {
+        props: {
+          slotContent: "Portaled host classes",
+          align: "end",
+          portal: true,
+          open: true,
+          portalHostClass: "bx--multi-select",
+        },
+      });
+
+      const host = (await screen.findByText("Portaled host classes")).closest(
+        ".bx--list-box__menu",
+      )?.parentElement;
+      expect(host).toHaveClass("bx--multi-select");
+      expect(host).toHaveClass("bx--list-box__menu-host--align-end");
+    });
+  });
+
   describe("wrapOptions", () => {
     it("should not mark the menu by default", () => {
       render(ListBoxMenu, { props: { slotContent: "Plain menu" } });
