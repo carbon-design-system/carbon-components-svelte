@@ -202,3 +202,20 @@
 @include exports("multiselect-readonly") {
   @include multiselect-readonly;
 }
+
+// carbon-components-svelte patch (multi-select-skeleton)
+/// Skeleton state for the plain (non-fluid) MultiSelectSkeleton. The
+/// upstream Carbon multi-select partial never shipped a
+/// `.bx--skeleton` rule (only Dropdown and Select did), so
+/// MultiSelectSkeleton renders with no shimmer without this.
+/// @access private
+/// @group multi-select
+@mixin multiselect-skeleton {
+  .#{$prefix}--multi-select.#{$prefix}--skeleton {
+    @include skeleton;
+  }
+}
+
+@include exports("multiselect-skeleton") {
+  @include multiselect-skeleton;
+}

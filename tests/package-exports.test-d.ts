@@ -14,6 +14,7 @@ import type Button from "carbon-components-svelte/src/Button/Button.svelte";
 import type ComboBoxSkeleton from "carbon-components-svelte/src/ComboBox/ComboBoxSkeleton.svelte";
 import type DataTable from "carbon-components-svelte/src/DataTable/DataTable.svelte";
 import type { DataTableRow } from "carbon-components-svelte/src/DataTable/DataTable.svelte";
+import type MultiSelectSkeleton from "carbon-components-svelte/src/MultiSelect/MultiSelectSkeleton.svelte";
 import type {
   CarbonTheme,
   ThemeProps,
@@ -42,6 +43,7 @@ type _FormatFileSize = ReturnType<typeof formatFileSize>;
 type _FuzzyMatch = ReturnType<typeof fuzzyMatch>;
 type _GetAvatarBackgroundColor = ReturnType<typeof getAvatarBackgroundColor>;
 type _GetInitials = ReturnType<typeof getInitials>;
+type _MultiSelectSkeleton = MultiSelectSkeleton;
 type _QueryParam = ReturnType<typeof queryParam<string>>;
 type _HeaderSearchResult = HeaderSearchResult;
 type _ThemeProps = ThemeProps;
