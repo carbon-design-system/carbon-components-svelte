@@ -48,12 +48,10 @@ describe("Accordion", () => {
   it("renders and functions correctly", async () => {
     render(Accordion);
 
-    // Initial items are collapsed.
     itemIsCollapsed(/Natural Language Classifier/);
     itemIsCollapsed(/Natural Language Understanding/);
     itemIsCollapsed(/Language Translator/);
 
-    // Check ARIA attributes and structure.
     const accordion = screen.getByRole("list");
     expect(accordion).toHaveAttribute(
       "class",
@@ -63,23 +61,18 @@ describe("Accordion", () => {
     const buttons = screen.getAllByRole("button");
     expect(buttons).toHaveLength(3);
 
-    // Check disabled state.
     itemIsDisabled(/Natural Language Understanding/);
 
-    // Verify children content is visible initially (expanded state)
     expect(screen.getByText("1")).toBeVisible();
     expect(screen.getByText("2")).toBeVisible();
     expect(screen.getByText("3")).toBeVisible();
-    // Test interaction with accordion items.
     const firstItem = screen.getByText("Natural Language Classifier");
     const lastItem = screen.getByText("Language Translator");
 
-    // Click first item and verify content.
     await user.click(firstItem);
     itemIsExpanded(/Natural Language Classifier/);
     expect(screen.getByText("1")).toBeVisible();
 
-    // Click last item and verify both contents are visible (testing multiple open items).
     await user.click(lastItem);
     itemIsExpanded(/Natural Language Classifier/);
     itemIsExpanded(/Language Translator/);
@@ -90,7 +83,6 @@ describe("Accordion", () => {
   it("programmatically expands and collapses all items", async () => {
     render(AccordionProgrammatic);
 
-    // Initially all items should be collapsed
     itemIsCollapsed(/Natural Language Classifier/);
     itemIsCollapsed(/Natural Language Understanding/);
     itemIsCollapsed(/Language Translator/);
@@ -107,16 +99,13 @@ describe("Accordion", () => {
       screen.queryByText("Translate text, documents, and websites"),
     ).not.toBeInTheDocument();
 
-    // Click expand button
     const expandButton = screen.getByRole("button", { name: /Expand all/i });
     await user.click(expandButton);
 
-    // Verify all items are expanded
     itemIsExpanded(/Natural Language Classifier/);
     itemIsExpanded(/Natural Language Understanding/);
     itemIsExpanded(/Language Translator/);
 
-    // Verify all children content is visible when expanded
     expect(screen.getByText(/Natural Language Classifier uses/)).toBeVisible();
     expect(screen.getByText(/Analyze text to extract meta-data/)).toBeVisible();
     expect(
@@ -127,15 +116,12 @@ describe("Accordion", () => {
       screen.getByRole("button", { name: /Collapse all/i }),
     ).toBeInTheDocument();
 
-    // Click collapse button.
     await user.click(screen.getByRole("button", { name: /Collapse all/i }));
 
-    // Verify all items are collapsed again.
     itemIsCollapsed(/Natural Language Classifier/);
     itemIsCollapsed(/Natural Language Understanding/);
     itemIsCollapsed(/Language Translator/);
 
-    // Verify children content is hidden again when collapsed
     expect(
       screen.queryByText(
         "Natural Language Classifier uses advanced natural language processing",
@@ -269,7 +255,6 @@ describe("Accordion", () => {
     const items = screen.getAllByRole("listitem");
     expect(items).toHaveLength(4);
 
-    // First item is open.
     expect(items[0]).toHaveAttribute(
       "class",
       expect.stringContaining(
@@ -277,7 +262,6 @@ describe("Accordion", () => {
       ),
     );
 
-    // All other items are collapsed.
     expect(items[1]).toHaveAttribute(
       "class",
       expect.not.stringContaining("bx--accordion__item--active"),
@@ -486,7 +470,6 @@ describe("Accordion", () => {
     itemIsExpanded(/Language Translator/);
     itemIsCollapsed(/Natural Language Classifier/);
 
-    // Clicking the open item again just collapses it.
     await user.click(lastItem);
     itemIsCollapsed(/Language Translator/);
   });

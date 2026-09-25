@@ -759,7 +759,6 @@ describe("ComposedModal", () => {
       },
     });
 
-    // Close via outside click.
     const modalOverlay = container.querySelector(".bx--modal");
     assert(modalOverlay);
     await user.click(modalOverlay);
@@ -767,7 +766,6 @@ describe("ComposedModal", () => {
     expect(closeHandler).toHaveBeenCalledTimes(1);
     expect(screen.getByRole("dialog")).toBeInTheDocument();
 
-    // Close via close button.
     const closeButton = screen.getByLabelText("Close");
     await user.click(closeButton);
     await tick();
@@ -938,26 +936,21 @@ describe("ComposedModal", () => {
       const cancelButton = screen.getByRole("button", { name: "Cancel" });
       const okButton = screen.getByRole("button", { name: "OK" });
 
-      // Start from dropdown.
       dropdownButton.focus();
       expect(dropdownButton).toHaveFocus();
 
-      // Tab to login input.
       await user.keyboard("{Tab}");
       await tick();
       expect(loginInput).toHaveFocus();
 
-      // Tab to password input.
       await user.keyboard("{Tab}");
       await tick();
       expect(passwordInput).toHaveFocus();
 
-      // Tab to Cancel button.
       await user.keyboard("{Tab}");
       await tick();
       expect(cancelButton).toHaveFocus();
 
-      // Tab to OK button.
       await user.keyboard("{Tab}");
       await tick();
       expect(okButton).toHaveFocus();

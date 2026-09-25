@@ -102,7 +102,6 @@ describe("Dropdown", () => {
 
     const label = screen.getByText("Contact");
     expect(label).toHaveClass("bx--visually-hidden");
-    // Even with hidden label, the button should still be accessible via labelText
     const button = screen.getByLabelText("Contact");
     expect(button).toBeInTheDocument();
   });
@@ -1115,7 +1114,6 @@ describe("Dropdown", () => {
 
     await user.keyboard("{Alt>}{ArrowDown}{/Alt}");
     expect(button).toHaveAttribute("aria-expanded", "true");
-    // The highlight does not move.
     expect(button.getAttribute("aria-activedescendant")).toMatch(/-0$/);
   });
 
@@ -1327,17 +1325,14 @@ describe("Dropdown", () => {
     });
 
     const button = screen.getByLabelText("Contact");
-    // Should display the label placeholder, not any item text
     expect(within(button).getByText("Choose an option")).toBeInTheDocument();
 
-    // Open the dropdown and select an item
     await user.click(button);
     const menuItemText = screen.getByText("Email");
     const menuItem = menuItemText.closest(".bx--list-box__menu-item");
     assert(menuItem);
     await user.click(menuItem);
 
-    // After selection, should display the selected item
     expect(within(button).getByText("Email")).toBeInTheDocument();
   });
 
@@ -1562,15 +1557,12 @@ describe("Dropdown", () => {
         type ComponentType = DropdownComponent;
         type Props = ComponentProps<ComponentType>;
 
-        // selectedId should accept undefined
         expectTypeOf<undefined>().toExtend<Props["selectedId"]>();
 
-        // Should be an optional property (not required)
         expectTypeOf<Record<string, never>>().toExtend<
           Pick<Props, "selectedId">
         >();
 
-        // With a specific item type, selectedId should still accept undefined
         type StringItem = { id: string; text: string };
         type StringComponent = DropdownComponent<StringItem>;
         type StringProps = ComponentProps<StringComponent>;
@@ -1593,21 +1585,18 @@ describe("Dropdown", () => {
       });
 
       it("should support different ID types (string, number, union)", () => {
-        // String ID
         type StringItem = { id: string; text: string };
         type StringComponent = DropdownComponent<StringItem>;
         expectTypeOf<
           ComponentProps<StringComponent>["selectedId"]
         >().toEqualTypeOf<string | undefined>();
 
-        // Number ID
         type NumberItem = { id: number; text: string };
         type NumberComponent = DropdownComponent<NumberItem>;
         expectTypeOf<
           ComponentProps<NumberComponent>["selectedId"]
         >().toEqualTypeOf<number | undefined>();
 
-        // Union ID
         type UnionId = "a" | "b" | "c";
         type UnionItem = { id: UnionId; text: string };
         type UnionComponent = DropdownComponent<UnionItem>;
@@ -1669,17 +1658,13 @@ describe("Dropdown", () => {
     const button = screen.getByRole("combobox");
     await user.click(button);
 
-    // Type 'b' to find Banana
     await user.keyboard("b");
 
-    // Banana should be highlighted (not selected)
     const bananaOption = screen.getByRole("option", { name: "Banana" });
     expect(bananaOption).toHaveClass("bx--list-box__menu-item--highlighted");
 
-    // Selected item should still be Apple
     expect(button).toHaveTextContent("Apple");
 
-    // Press Enter to select Banana
     await user.keyboard("{Enter}");
     expect(button).toHaveTextContent("Banana");
   });
@@ -1713,7 +1698,6 @@ describe("Dropdown", () => {
     const button = screen.getByRole("combobox");
     await user.click(button);
 
-    // Type 'apr' to find Apricot
     await user.keyboard("apr");
 
     const apricotOption = screen.getByRole("option", { name: "Apricot" });
@@ -1782,7 +1766,6 @@ describe("Dropdown", () => {
     const button = screen.getByRole("combobox");
     await user.click(button);
 
-    // Type 'b' - should skip Banana and find Blueberry
     await user.keyboard("b");
 
     const blueberryText = screen.getByText("Blueberry");
@@ -1804,7 +1787,6 @@ describe("Dropdown", () => {
     const button = screen.getByRole("combobox");
     await user.click(button);
 
-    // Type 'B' (uppercase) to find Banana
     await user.keyboard("B");
 
     const bananaText = screen.getByText("Banana");
@@ -1970,10 +1952,8 @@ describe("Dropdown", () => {
     const button = screen.getByRole("combobox");
     await user.click(button);
 
-    // Navigate down to beyond the last item, which should wrap
     await user.keyboard("{ArrowDown}");
 
-    // Now type 'b' - should wrap around to find Banana
     await user.keyboard("b");
 
     const bananaText = screen.getByText("Banana");
@@ -2073,14 +2053,12 @@ describe("Dropdown", () => {
           expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
           expect(menu).toBeVisible();
 
-          // The selected item should be visible
           const selectedOption = within(menu).getByRole("option", {
             name: "Item 251",
           });
           expect(selectedOption).toBeInTheDocument();
           expect(selectedOption).toHaveAttribute("aria-selected", "true");
 
-          // The scroll position should be set to show the selected item at the top
           // Item 251 is at index 250, itemHeight=40
           // Expected scroll: 250 * 40 = 10000
           expect(menu.scrollTop).toBe(10000);
@@ -2113,7 +2091,6 @@ describe("Dropdown", () => {
         expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
         expect(menu).toBeVisible();
 
-        // Scroll away from the selected item
         menu.scrollTop = 0;
         await flushMacrotask();
 
@@ -2128,14 +2105,12 @@ describe("Dropdown", () => {
           const menuAfterReopen = screen.getByRole("listbox");
           expectTypeOf(menuAfterReopen).toEqualTypeOf<HTMLElement>();
 
-          // Selected item should be visible after reopening
           const selectedOption = within(menuAfterReopen).getByRole("option", {
             name: "Item 251",
           });
           expect(selectedOption).toBeInTheDocument();
           expect(selectedOption).toHaveAttribute("aria-selected", "true");
 
-          // Should have scrolled back to show the selected item at the top
           // Item 251 is at index 250, itemHeight=40, so scroll should be 10000
           expect(menuAfterReopen.scrollTop).toBe(10000);
         });
@@ -2159,7 +2134,6 @@ describe("Dropdown", () => {
         const menu = screen.getByRole("listbox");
         expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
         expect(menu).toBeVisible();
-        // Should scroll to top when no selection
         expect(menu.scrollTop).toBe(0);
       });
     });
@@ -2181,14 +2155,12 @@ describe("Dropdown", () => {
         const menu = screen.getByRole("listbox");
         expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
 
-        // The selected item should be visible
         const selectedOption = within(menu).getByRole("option", {
           name: "Item 500",
         });
         expect(selectedOption).toBeInTheDocument();
         expect(selectedOption).toHaveAttribute("aria-selected", "true");
 
-        // Scroll should be at the position to show last item at top
         // Item 500 is at index 499, itemHeight=40, so scroll should be 499 * 40 = 19960
         // But max scroll is 500 * 40 - 300 = 19700, so it should be capped at 19700
         expect(menu.scrollTop).toBe(19700);
@@ -2237,7 +2209,6 @@ describe("Dropdown", () => {
       expect(menu).toBeVisible();
 
       const options = screen.getAllByRole("option");
-      // With maxItems: 20, should render at most 20 items
       expect(options.length).toBeLessThanOrEqual(20);
     });
 
@@ -2248,7 +2219,7 @@ describe("Dropdown", () => {
           items: smallItems,
           selectedId: "0",
           virtualize: {
-            threshold: 100, // Threshold is 100, list has 50 items
+            threshold: 100,
           },
         },
       });
@@ -2257,7 +2228,6 @@ describe("Dropdown", () => {
       await user.click(button);
 
       const options = screen.getAllByRole("option");
-      // Should render all items when below threshold
       expect(options.length).toBe(50);
     });
 
@@ -2379,7 +2349,6 @@ describe("Dropdown", () => {
 
       await user.click(button);
 
-      // With auto-scroll, the selected item should be visible without manual scrolling
       await waitFor(() => {
         const menu = screen.getByRole("listbox");
         expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
@@ -2505,14 +2474,11 @@ describe("Dropdown", () => {
         expect(Math.abs(newScrollTop - initialScrollTop)).toBeLessThan(200);
       });
 
-      // Now navigate far outside viewport - should scroll
-      // Navigate down many items to go outside visible range
       await user.keyboard(
         "{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}",
       );
 
       await waitFor(() => {
-        // Should have scrolled significantly to show the new highlighted item
         expect(menu.scrollTop).toBeGreaterThan(initialScrollTop + 500);
       });
     });
@@ -2532,7 +2498,6 @@ describe("Dropdown", () => {
       const button = screen.getByRole("combobox");
       await user.click(button);
 
-      // The ListBoxMenu itself has the style applied
       const menu = screen.getByRole("listbox");
       expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
       expect(menu).toBeInTheDocument();
@@ -2556,10 +2521,8 @@ describe("Dropdown", () => {
       expect(menu).toBeVisible();
 
       const options = screen.getAllByRole("option");
-      // Should virtualize, so fewer than 150 items rendered
       expect(options.length).toBeLessThan(150);
       expect(options.length).toBeGreaterThan(0);
-      // Should have max-height style applied
       expect(menu.style.maxHeight).toBeTruthy();
       expect(menu.style.overflowY).toBe("auto");
     });
@@ -2580,9 +2543,7 @@ describe("Dropdown", () => {
       expect(menu).toBeVisible();
 
       const options = screen.getAllByRole("option");
-      // Should render all items when at or below threshold
       expect(options.length).toBe(100);
-      // Should not have max-height style when not virtualized
       expect(menu.style.maxHeight).toBeFalsy();
     });
 
@@ -2599,7 +2560,6 @@ describe("Dropdown", () => {
       await user.click(button);
 
       const options = screen.getAllByRole("option");
-      // Should render all 100 items (threshold is 100, so > 100 is needed)
       expect(options.length).toBe(100);
     });
 
@@ -2620,9 +2580,7 @@ describe("Dropdown", () => {
       expect(menu).toBeVisible();
 
       const options = screen.getAllByRole("option");
-      // Should render all items when explicitly disabled
       expect(options.length).toBe(500);
-      // Should not have max-height style when not virtualized
       expect(menu.style.maxHeight).toBeFalsy();
     });
 
@@ -2643,10 +2601,8 @@ describe("Dropdown", () => {
       expect(menu).toBeVisible();
 
       const options = screen.getAllByRole("option");
-      // Should render all items because threshold (100) is not met
       // Even though virtualize=true, the threshold check prevents virtualization
       expect(options.length).toBe(50);
-      // Should have max-height style applied (virtualConfig is created)
       expect(menu.style.maxHeight).toBeTruthy();
       expect(menu.style.overflowY).toBe("auto");
     });
@@ -2668,10 +2624,8 @@ describe("Dropdown", () => {
       expect(menu).toBeVisible();
 
       const options = screen.getAllByRole("option");
-      // Should virtualize when above threshold
       expect(options.length).toBeLessThan(150);
       expect(options.length).toBeGreaterThan(0);
-      // Should have max-height style applied
       expect(menu.style.maxHeight).toBeTruthy();
       expect(menu.style.overflowY).toBe("auto");
     });
@@ -2859,7 +2813,6 @@ describe("Dropdown", () => {
       );
       expect(checkmark).toBeInTheDocument();
 
-      // Non-selected options should not have the checkmark icon
       expect(
         options[0].querySelector(".bx--list-box__menu-item__selected-icon"),
       ).not.toBeInTheDocument();
@@ -2883,10 +2836,8 @@ describe("Dropdown", () => {
         options[1].querySelector(".bx--list-box__menu-item__selected-icon"),
       ).not.toBeInTheDocument();
 
-      // Select "Email"
       await user.click(options[1]);
 
-      // Re-open the menu
       await user.click(screen.getByRole("combobox"));
 
       options = screen.getAllByRole("option");

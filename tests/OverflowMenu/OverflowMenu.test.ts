@@ -264,10 +264,9 @@ describe("OverflowMenu", () => {
 
     const styleTagsAfter = document.querySelectorAll("style").length;
 
-    // Verify no additional style tags created (old approach would create 3+)
+    // Old approach would create 3+ style tags.
     expect(styleTagsAfter).toBe(styleTagsBefore);
 
-    // Verify all menus have CSS custom property set.
     const allMenus = screen.getAllByRole("menu");
 
     expect(allMenus.length).toBeGreaterThan(0);

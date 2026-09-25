@@ -196,11 +196,9 @@ describe("Toggle", () => {
   it("handles aria-label fallback correctly", () => {
     render(Toggle);
 
-    // Test toggle without labelText but with aria-label.
     const toggle = getToggle("Hidden label toggle");
     expect(toggle).toHaveAccessibleName("Hidden label toggle");
 
-    // Test toggle without labelText and without aria-label (should fallback to "Toggle").
     const defaultToggle = getToggle("Default toggle");
     expect(defaultToggle).toHaveAccessibleName("Default toggle");
   });
@@ -364,7 +362,6 @@ describe("Toggle", () => {
     });
     const label = container.querySelector("label.bx--toggle-input__label");
     expect(label).toBeInTheDocument();
-    // Only the switch span should be a direct child of the label.
     const directSpans = label?.querySelectorAll(":scope > span") ?? [];
     expect(directSpans).toHaveLength(1);
     expect(directSpans[0]).toHaveClass("bx--toggle__switch");

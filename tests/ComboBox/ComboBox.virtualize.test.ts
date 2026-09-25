@@ -102,10 +102,8 @@ describe("ComboBox", () => {
       await user.click(input);
       await user.type(input, "Item 1");
 
-      // Should show filtered results
       const options = screen.getAllByRole("option");
       expect(options.length).toBeGreaterThan(0);
-      // All visible options should match the filter
       for (const option of options) {
         expect(option.textContent).toMatch(/Item 1/i);
       }
@@ -132,7 +130,6 @@ describe("ComboBox", () => {
       expect(menu).toBeVisible();
 
       const options = screen.getAllByRole("option");
-      // With maxItems: 20, should render at most 20 items
       expect(options.length).toBeLessThanOrEqual(20);
     });
 
@@ -142,7 +139,7 @@ describe("ComboBox", () => {
         props: {
           items: smallItems,
           virtualize: {
-            threshold: 100, // Threshold is 100, list has 50 items
+            threshold: 100,
           },
         },
       });
@@ -150,7 +147,6 @@ describe("ComboBox", () => {
       await user.click(getInput());
 
       const options = screen.getAllByRole("option");
-      // Should render all items when below threshold
       expect(options.length).toBe(50);
     });
 
@@ -280,7 +276,6 @@ describe("ComboBox", () => {
 
       await user.click(input);
 
-      // Selected item should be visible and marked as active
       const selectedOption = screen.getByRole("option", { name: "Item 251" });
       expect(selectedOption).toHaveAttribute("aria-selected", "true");
     });
@@ -352,11 +347,9 @@ describe("ComboBox", () => {
           expect(menu).toBeVisible();
         });
 
-        // Press ArrowDown - should move to next item (250 -> 251)
         await user.keyboard("{ArrowDown}");
         await user.keyboard("{Enter}");
 
-        // Should have selected Item 252 (index 251)
         expect(input).toHaveValue("Item 252");
       },
     );
@@ -408,7 +401,6 @@ describe("ComboBox", () => {
       );
 
       await waitFor(() => {
-        // Should have scrolled significantly to show the new highlighted item
         expect(menu.scrollTop).toBeGreaterThan(initialScrollTop + 500);
       });
     });
@@ -448,10 +440,8 @@ describe("ComboBox", () => {
       expect(menu).toBeVisible();
 
       const options = screen.getAllByRole("option");
-      // Should virtualize, so fewer than 150 items rendered
       expect(options.length).toBeLessThan(150);
       expect(options.length).toBeGreaterThan(0);
-      // Should have max-height style applied
       expect(menu.style.maxHeight).toBeTruthy();
       expect(menu.style.overflowY).toBe("auto");
     });
@@ -470,9 +460,7 @@ describe("ComboBox", () => {
       expect(menu).toBeVisible();
 
       const options = screen.getAllByRole("option");
-      // Should render all items when at or below threshold
       expect(options.length).toBe(100);
-      // Should not have max-height style when not virtualized
       expect(menu.style.maxHeight).toBeFalsy();
     });
 
@@ -491,9 +479,7 @@ describe("ComboBox", () => {
       expect(menu).toBeVisible();
 
       const options = screen.getAllByRole("option");
-      // Should render all items when explicitly disabled
       expect(options.length).toBe(500);
-      // Should not have max-height style when not virtualized
       expect(menu.style.maxHeight).toBeFalsy();
     });
 
@@ -502,7 +488,7 @@ describe("ComboBox", () => {
       render(ComboBox, {
         props: {
           items: smallItems,
-          virtualize: true, // Explicitly enabled, but below threshold
+          virtualize: true,
         },
       });
 
@@ -512,10 +498,9 @@ describe("ComboBox", () => {
       expect(menu).toBeVisible();
 
       const options = screen.getAllByRole("option");
-      // Should render all items because threshold (100) is not met
       // Even though virtualize=true, the threshold check prevents virtualization
       expect(options.length).toBe(50);
-      // Should have max-height style applied (virtualConfig is created)
+      // virtualConfig is still created, so max-height applies even though it isn't virtualized
       expect(menu.style.maxHeight).toBeTruthy();
       expect(menu.style.overflowY).toBe("auto");
     });
@@ -525,7 +510,7 @@ describe("ComboBox", () => {
       render(ComboBox, {
         props: {
           items: largeItems,
-          virtualize: true, // Explicitly enabled, above threshold
+          virtualize: true,
         },
       });
 
@@ -535,10 +520,8 @@ describe("ComboBox", () => {
       expect(menu).toBeVisible();
 
       const options = screen.getAllByRole("option");
-      // Should virtualize when above threshold
       expect(options.length).toBeLessThan(150);
       expect(options.length).toBeGreaterThan(0);
-      // Should have max-height style applied
       expect(menu.style.maxHeight).toBeTruthy();
       expect(menu.style.overflowY).toBe("auto");
     });

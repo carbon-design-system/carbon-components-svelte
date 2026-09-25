@@ -18,7 +18,6 @@
 
   export let rows: Row[] = [{ id: "a", name: "alpha" }];
 
-  // In-place edit, then refreshRow.
   export function mutateAndRefreshRow() {
     rows[0].name = "beta";
     table.refreshRow("a");

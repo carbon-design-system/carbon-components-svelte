@@ -867,7 +867,6 @@ describe("DatePicker", () => {
     expect(inputStart).toHaveValue("01/15/2024");
     expect(inputEnd).toHaveValue("01/20/2024");
 
-    // Clear the dates by setting both values to empty strings
     rerender({ valueFrom: "", valueTo: "" });
     await tick();
 
@@ -901,7 +900,6 @@ describe("DatePicker", () => {
     expect(inputStart).toHaveValue("01/01/2024");
     expect(inputEnd).toHaveValue("01/31/2024");
 
-    // Update again to verify continued sync.
     rerender({ valueFrom: "03/01/2024", valueTo: "03/31/2024" });
     await tick();
 

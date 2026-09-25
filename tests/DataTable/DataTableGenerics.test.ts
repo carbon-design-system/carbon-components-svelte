@@ -19,37 +19,28 @@ describe("DataTable Generics", () => {
     it("should properly type selectedRowIds as string literal union", () => {
       const { container } = render(DataTableGenerics);
 
-      // Verify table renders
       const tables = container.querySelectorAll("table.bx--data-table");
       expect(tables.length).toBeGreaterThanOrEqual(1);
 
-      // Get first table
       const firstTable = tables[0];
       assert(firstTable instanceof HTMLElement);
       const firstTableContainer = within(firstTable);
 
-      // Verify rows are rendered
       const rows = getTableRows(container, 0);
       expect(rows.length).toBe(3);
 
-      // Verify headers within first table
       expect(firstTableContainer.getByText("ID")).toBeInTheDocument();
       expect(firstTableContainer.getByText("Name")).toBeInTheDocument();
       expect(firstTableContainer.getByText("Price")).toBeInTheDocument();
 
-      // Verify row content within first table
       expect(firstTableContainer.getByText("Laptop")).toBeInTheDocument();
       expect(firstTableContainer.getByText("Phone")).toBeInTheDocument();
       expect(firstTableContainer.getByText("Desk")).toBeInTheDocument();
-
-      // Type check: selectedRowIds should be typed as ReadonlyArray<"row-1" | "row-2" | "row-3">
-      // This is verified by TypeScript at compile time
     });
 
     it("should handle row selection with string literal IDs", async () => {
       const { container } = render(DataTableGenerics);
 
-      // Find checkboxes in the first table
       const checkboxes = container.querySelectorAll('input[type="checkbox"]');
       const firstTableCheckboxes = Array.from(checkboxes).filter((cb) => {
         const row = cb.closest("tr");
@@ -58,17 +49,14 @@ describe("DataTable Generics", () => {
 
       expect(firstTableCheckboxes.length).toBeGreaterThan(0);
 
-      // Click the first checkbox (row-1 should be pre-selected)
       if (firstTableCheckboxes.length > 0) {
         const firstCheckbox = firstTableCheckboxes[0];
         assert(firstCheckbox instanceof HTMLInputElement);
         expect(firstCheckbox.checked).toBe(true); // row-1 is pre-selected
 
-        // Click to deselect
         await user.click(firstCheckbox);
         await tick();
 
-        // Click to select again
         await user.click(firstCheckbox);
         await tick();
       }
@@ -79,7 +67,6 @@ describe("DataTable Generics", () => {
 
       render(DataTableGenerics);
 
-      // Find and click a checkbox in the first table
       const checkboxes = screen.getAllByRole("checkbox");
       const firstDataCheckbox = checkboxes.find((cb) => {
         const row = cb.closest("tr");
@@ -90,7 +77,6 @@ describe("DataTable Generics", () => {
         await user.click(firstDataCheckbox);
         await tick();
 
-        // Verify console.log was called (event handler logs row data)
         // The event handler should receive a row typed as Row, not DataTableRow<any>
         expect(consoleLog).toHaveBeenCalled();
       }
@@ -103,32 +89,24 @@ describe("DataTable Generics", () => {
     it("should properly type selectedRowIds as numeric literal union", () => {
       const { container } = render(DataTableGenerics);
 
-      // Verify second table renders
       const tables = container.querySelectorAll("table.bx--data-table");
       expect(tables.length).toBeGreaterThanOrEqual(2);
 
-      // Get second table
       const secondTable = tables[1];
       assert(secondTable instanceof HTMLElement);
       const secondTableContainer = within(secondTable);
 
-      // Verify rows are rendered in second table
       const rows = getTableRows(container, 1);
       expect(rows.length).toBe(3);
 
-      // Verify row content within second table
       expect(secondTableContainer.getByText("Item 1")).toBeInTheDocument();
       expect(secondTableContainer.getByText("Item 2")).toBeInTheDocument();
       expect(secondTableContainer.getByText("Item 3")).toBeInTheDocument();
-
-      // Type check: numericSelectedRowIds should be typed as ReadonlyArray<1 | 2 | 3>
-      // This is verified by TypeScript at compile time
     });
 
     it("should handle row selection with numeric IDs", () => {
       const { container } = render(DataTableGenerics);
 
-      // Find checkboxes in the second table
       const checkboxes = container.querySelectorAll('input[type="checkbox"]');
       const secondTableCheckboxes = Array.from(checkboxes).filter((cb) => {
         const row = cb.closest("tr");
@@ -150,7 +128,6 @@ describe("DataTable Generics", () => {
 
       render(DataTableGenerics);
 
-      // Find and click a checkbox in the second table
       const checkboxes = screen.getAllByRole("checkbox");
       const secondTableCheckbox = checkboxes.find((cb) => {
         const row = cb.closest("tr");
@@ -161,7 +138,6 @@ describe("DataTable Generics", () => {
         await user.click(secondTableCheckbox);
         await tick();
 
-        // Verify console.log was called
         // The event handler should receive a row typed as NumericRow, not DataTableRow<any>
         expect(consoleLog).toHaveBeenCalled();
       }
@@ -174,35 +150,25 @@ describe("DataTable Generics", () => {
     it("should properly type selectedRowIds and expandedRowIds as string arrays", () => {
       const { container } = render(DataTableGenerics);
 
-      // Verify third table renders
       const tables = container.querySelectorAll("table.bx--data-table");
       expect(tables.length).toBeGreaterThanOrEqual(3);
 
-      // Get third table
       const thirdTable = tables[2];
       assert(thirdTable instanceof HTMLElement);
       const thirdTableContainer = within(thirdTable);
 
-      // Verify rows are rendered in third table
       const rows = getTableRows(container, 2);
       expect(rows.length).toBe(2);
 
-      // Verify row content within third table
       expect(thirdTableContainer.getByText("Widget")).toBeInTheDocument();
       expect(thirdTableContainer.getByText("Gadget")).toBeInTheDocument();
 
-      // Verify headers within third table
       expect(thirdTableContainer.getByText("In Stock")).toBeInTheDocument();
-
-      // Type check: productSelectedRowIds should be typed as ReadonlyArray<string>
-      // productExpandedRowIds should be typed as ReadonlyArray<string>
-      // This is verified by TypeScript at compile time
     });
 
     it("should handle row selection with string IDs", () => {
       const { container } = render(DataTableGenerics);
 
-      // Find checkboxes in the third table
       const checkboxes = container.querySelectorAll('input[type="checkbox"]');
       const thirdTableCheckboxes = Array.from(checkboxes).filter((cb) => {
         const row = cb.closest("tr");
@@ -222,7 +188,6 @@ describe("DataTable Generics", () => {
     it("should handle row expansion with string IDs", async () => {
       const { container } = render(DataTableGenerics);
 
-      // Find expand buttons in the third table
       const expandButtons = container.querySelectorAll(
         'button[aria-label*="Expand"]',
       );
@@ -239,7 +204,6 @@ describe("DataTable Generics", () => {
         await user.click(firstExpandButton);
         await tick();
 
-        // Verify expanded content is rendered
         const expandedContent = container.querySelector(
           ".bx--child-row-inner-container",
         );
@@ -253,13 +217,11 @@ describe("DataTable Generics", () => {
 
       const { container } = render(DataTableGenerics);
 
-      // Find a row in the third table and click it
       const rows = getTableRows(container, 2);
       if (rows.length > 0) {
         await user.click(rows[0]);
         await tick();
 
-        // Verify console.log was called
         // The event handler should receive a row typed as ProductRow, not DataTableRow<any>
         expect(consoleLog).toHaveBeenCalled();
       }
@@ -272,7 +234,6 @@ describe("DataTable Generics", () => {
 
       const { container } = render(DataTableGenerics);
 
-      // Find expand button in the third table
       const expandButtons = container.querySelectorAll(
         'button[aria-label*="Expand"]',
       );
@@ -289,7 +250,6 @@ describe("DataTable Generics", () => {
         await user.click(expandButton);
         await tick();
 
-        // Verify console.log was called with "Expanded:" prefix
         // The event handler should receive a row typed as ProductRow
         expect(consoleLog).toHaveBeenCalled();
         const logCalls = consoleLog.mock.calls.flat();
@@ -305,7 +265,6 @@ describe("DataTable Generics", () => {
     it("should provide correctly typed row to expandedRow slot", async () => {
       const { container } = render(DataTableGenerics);
 
-      // Find expand button in the third table
       const expandButtons = container.querySelectorAll(
         'button[aria-label*="Expand"]',
       );
@@ -322,7 +281,6 @@ describe("DataTable Generics", () => {
         await user.click(expandButton);
         await tick();
 
-        // Verify expanded content shows row name
         // The slot should receive a row typed as ProductRow
         const expandedContent = container.querySelector(
           ".bx--child-row-inner-container",
@@ -340,11 +298,9 @@ describe("DataTable Generics", () => {
     it("should maintain type safety across different row types", () => {
       const { container } = render(DataTableGenerics);
 
-      // Verify all three tables render independently
       const tables = container.querySelectorAll("table.bx--data-table");
       expect(tables.length).toBe(4);
 
-      // Verify each table has its own rows
       const firstTableRows = getTableRows(container, 0);
       const secondTableRows = getTableRows(container, 1);
       const thirdTableRows = getTableRows(container, 2);
@@ -352,12 +308,6 @@ describe("DataTable Generics", () => {
       expect(firstTableRows.length).toBe(3);
       expect(secondTableRows.length).toBe(3);
       expect(thirdTableRows.length).toBe(2);
-
-      // Verify each table maintains its own typed selectedRowIds
-      // Type: First table: ReadonlyArray<"row-1" | "row-2" | "row-3">
-      // Type: Second table: ReadonlyArray<1 | 2 | 3>
-      // Type: Third table: ReadonlyArray<string>
-      // This is verified by TypeScript at compile time
     });
 
     it("should not allow mixing ID types between tables", () => {
@@ -368,9 +318,6 @@ describe("DataTable Generics", () => {
       const tables = container.querySelectorAll("table.bx--data-table");
       expect(tables.length).toBe(4);
 
-      // Each table should have its own selection state
-      // TypeScript prevents assigning wrong ID types at compile time
-      // Runtime verification: tables are independent
       const firstTable = tables[0];
       const secondTable = tables[1];
       const thirdTable = tables[2];
@@ -403,13 +350,11 @@ describe("DataTable Generics", () => {
 
       const { container } = render(DataTableGenerics);
 
-      // Test click:row event on third table (ProductRow)
       const rows = getTableRows(container, 2);
       if (rows.length > 0) {
         await user.click(rows[0]);
         await tick();
 
-        // Verify the event handler received a ProductRow with all properties
         expect(consoleLog).toHaveBeenCalled();
       }
 

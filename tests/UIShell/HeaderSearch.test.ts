@@ -577,12 +577,10 @@ describe("HeaderSearch", () => {
 
       await flushDismiss();
 
-      // Click outside the search component
       const outsideElement = document.createElement("div");
       document.body.appendChild(outsideElement);
       fireEvent.mouseUp(outsideElement);
 
-      // Wait for the event to be processed
       await flushMacrotask();
 
       expect(screen.getByTestId("inactive-event")).toHaveTextContent("true");

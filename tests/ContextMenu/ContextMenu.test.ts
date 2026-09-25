@@ -130,19 +130,15 @@ describe("ContextMenu", () => {
 
     const options = screen.getAllByRole("menuitem");
 
-    // ArrowDown from the focused menu moves to the first option.
     await user.keyboard("{ArrowDown}");
     expect(options[0]).toHaveFocus();
 
-    // ArrowUp clamps at the first option (no wrap).
     await user.keyboard("{ArrowUp}");
     expect(options[0]).toHaveFocus();
 
-    // End jumps to the last option.
     await user.keyboard("{End}");
     expect(options[options.length - 1]).toHaveFocus();
 
-    // Home jumps back to the first option.
     await user.keyboard("{Home}");
     expect(options[0]).toHaveFocus();
   });
@@ -155,7 +151,6 @@ describe("ContextMenu", () => {
 
     const options = screen.getAllByRole("menuitem");
 
-    // ArrowDown from the focused menu moves to the first option.
     await user.keyboard("{ArrowDown}");
     expect(options[0]).toHaveFocus();
 
@@ -163,7 +158,6 @@ describe("ContextMenu", () => {
     await user.keyboard("{ArrowDown}");
     expect(options[2]).toHaveFocus();
 
-    // ArrowUp moves back to the first option.
     await user.keyboard("{ArrowUp}");
     expect(options[0]).toHaveFocus();
   });
@@ -232,7 +226,6 @@ describe("ContextMenu", () => {
     // Initial target is [A]. Swap to [B].
     await user.click(screen.getByTestId("swap"));
 
-    // Right-clicking A should no longer open the menu.
     const targetA = screen.getByTestId("target-a");
     await user.pointer({ target: targetA, keys: "[MouseRight]" });
 
@@ -264,7 +257,6 @@ describe("ContextMenu", () => {
     const menus = screen.getAllByRole("menu");
     expect(menus[0]).toHaveAttribute("data-level", "1");
 
-    // Simulate nested menu
     const nestedMenu = document.createElement("ul");
     nestedMenu.setAttribute("data-level", "2");
     menus[0].appendChild(nestedMenu);
@@ -356,11 +348,9 @@ describe("ContextMenu", () => {
       },
     });
 
-    // Click a regular option
     const option = screen.getByText("Option 1");
     await user.click(option);
 
-    // Menu should close
     expect(consoleLog).toHaveBeenCalledWith("close");
   });
 
@@ -418,7 +408,6 @@ describe("ContextMenu", () => {
     const submenuX = Number.parseInt(submenu.style.left, 10);
     const submenuWidth = submenu.getBoundingClientRect().width;
 
-    // Submenu should not overflow the right edge of viewport
     expect(submenuX + submenuWidth).toBeLessThanOrEqual(400);
   });
 
@@ -493,7 +482,6 @@ describe("ContextMenu", () => {
     assert(submenu);
 
     const submenuX = Number.parseInt(submenu.style.left, 10);
-    // Submenu should be positioned at or near 0 (left edge of viewport).
     expect(submenuX).toBeGreaterThanOrEqual(0);
   });
 

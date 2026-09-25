@@ -154,18 +154,15 @@ describe("Button", () => {
     const btnB = screen.getByTestId("btn-icon-b");
     const btnC = screen.getByTestId("btn-icon-c");
 
-    // Initially no button should have bx--tooltip--hidden.
     expect(btnA).not.toHaveClass("bx--tooltip--hidden");
     expect(btnB).not.toHaveClass("bx--tooltip--hidden");
     expect(btnC).not.toHaveClass("bx--tooltip--hidden");
 
-    // Hover button A: others should get bx--tooltip--hidden.
     await fireEvent.mouseEnter(btnA);
     expect(btnA).not.toHaveClass("bx--tooltip--hidden");
     expect(btnB).toHaveClass("bx--tooltip--hidden");
     expect(btnC).toHaveClass("bx--tooltip--hidden");
 
-    // Hover button B: A and C should get bx--tooltip--hidden.
     await fireEvent.mouseEnter(btnB);
     expect(btnA).toHaveClass("bx--tooltip--hidden");
     expect(btnB).not.toHaveClass("bx--tooltip--hidden");
@@ -192,13 +189,11 @@ describe("Button", () => {
     const iconButton = screen.getByTestId("btn-icon-only-hide-tooltip");
     expect(iconButton).toHaveClass("bx--btn--icon-only");
 
-    // Should NOT have tooltip classes.
     expect(iconButton).not.toHaveClass("bx--tooltip__trigger");
     expect(iconButton).not.toHaveClass("bx--tooltip--a11y");
     expect(iconButton).not.toHaveClass("bx--btn--icon-only--bottom");
     expect(iconButton).not.toHaveClass("bx--tooltip--align-center");
 
-    // Should still have accessible text for screen readers.
     const assistiveText = iconButton.querySelector(".bx--assistive-text");
     assert(assistiveText);
     expect(assistiveText).toHaveTextContent("Add item");
@@ -210,14 +205,12 @@ describe("Button", () => {
     const button = screen.getByTestId("btn-icon-no-description");
     expect(button).toHaveClass("bx--btn--icon-only");
 
-    // No tooltip apparatus without a description to show or announce.
     expect(button).not.toHaveClass("bx--tooltip__trigger");
     expect(button).not.toHaveClass("bx--tooltip--a11y");
     expect(button).not.toHaveClass("bx--btn--icon-only--bottom");
     expect(button).not.toHaveClass("bx--tooltip--align-center");
     expect(button.querySelector(".bx--assistive-text")).not.toBeInTheDocument();
 
-    // Still accessible via a consumer-supplied aria-label.
     expect(button).toHaveAttribute("aria-label", "Custom accessible name");
     expect(screen.getByRole("button", { name: "Custom accessible name" })).toBe(
       button,
@@ -299,7 +292,6 @@ describe("Button", () => {
 
       const button = screen.getByTestId("btn-icon-modal");
       expect(button).toHaveClass("bx--btn--icon-only");
-      // Portal mode suppresses the inline CSS tooltip classes.
       expect(button).not.toHaveClass("bx--tooltip__trigger");
       expect(button).not.toHaveClass("bx--tooltip--a11y");
     });
@@ -317,7 +309,6 @@ describe("Button", () => {
     it("should not portal outside a Modal by default", () => {
       render(Button);
 
-      // Default icon-only button (no portalTooltip, no Modal) stays inline.
       const button = screen.getByText("Tooltip text").parentElement;
       assert(button);
       expect(button).toHaveClass("bx--tooltip__trigger");
@@ -332,7 +323,6 @@ describe("Button", () => {
       const button = screen.getByTestId("header-global-action");
       expect(button).toHaveClass("bx--header__action");
       expect(button).toHaveClass("bx--btn--icon-only");
-      // portalTooltip reached the Button: inline CSS tooltip classes suppressed.
       expect(button).not.toHaveClass("bx--tooltip__trigger");
       expect(button).not.toHaveClass("bx--tooltip--a11y");
     });

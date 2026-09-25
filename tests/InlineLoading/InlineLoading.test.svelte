@@ -2,15 +2,12 @@
   import InlineLoading from "carbon-components-svelte/InlineLoading/InlineLoading.svelte";
 </script>
 
-<!-- Default inline loading -->
 <div data-testid="default-loader"><InlineLoading /></div>
 
-<!-- Inline loading with description -->
 <div data-testid="loader-with-description">
   <InlineLoading description="Loading metrics..." />
 </div>
 
-<!-- Inline loading with different states -->
 <div data-testid="loader-active">
   <InlineLoading status="active" description="Submitting..." />
 </div>
@@ -29,7 +26,6 @@
   />
 </div>
 
-<!-- Inline loading with custom success delay -->
 <div data-testid="loader-custom-success-delay">
   <InlineLoading
     status="finished"
@@ -50,7 +46,6 @@
   <InlineLoading status="active" description="Submitting..." role="none" />
 </div>
 
-<!-- Inline loading with custom icon description -->
 <div data-testid="loader-custom-icon">
   <InlineLoading
     status="finished"

@@ -88,7 +88,7 @@ describe("virtualize", () => {
       threshold: 100,
     });
 
-    // Should render visible items (300px / 40px = 7.5, so ~8 items) + overscan above and below
+    // (300px / 40px = 7.5, so ~8 items) + overscan above and below
     expect(result.visibleItems.length).toBeGreaterThan(8);
     expect(result.startIndex).toBe(0); // With overscan, startIndex can go negative but is clamped to 0
     expect(result.isVirtualized).toBe(true);
@@ -205,7 +205,6 @@ describe("virtualize", () => {
       name: `Item ${i}`,
     }));
 
-    // With threshold 200, should not virtualize
     const result1 = virtualize({
       items,
       itemHeight: 40,
@@ -216,7 +215,6 @@ describe("virtualize", () => {
     expect(result1.isVirtualized).toBe(false);
     expect(result1.visibleItems.length).toBe(150);
 
-    // With threshold 100, should virtualize
     const result2 = virtualize({
       items,
       itemHeight: 40,
@@ -271,7 +269,6 @@ describe("virtualize", () => {
       threshold: 100,
     });
 
-    // With smaller item height, more items fit in viewport
     expect(result1.visibleItems.length).toBeGreaterThan(
       result2.visibleItems.length,
     );
@@ -301,7 +298,6 @@ describe("virtualize", () => {
       threshold: 100,
     });
 
-    // Larger container should show more items
     expect(result2.visibleItems.length).toBeGreaterThan(
       result1.visibleItems.length,
     );
@@ -320,7 +316,6 @@ describe("virtualize", () => {
       threshold: 100,
     });
 
-    // visibleItems should be a slice of the original items array
     expect(result.visibleItems[0]).toBe(items[result.startIndex]);
     expect(result.visibleItems[result.visibleItems.length - 1]).toBe(
       items[result.endIndex - 1],
@@ -354,11 +349,11 @@ describe("virtualize", () => {
       items,
       itemHeight: 40,
       containerHeight: 300,
-      scrollTop: -100, // Negative scroll
+      scrollTop: -100,
       threshold: 100,
     });
 
-    expect(result.startIndex).toBe(0); // Should be clamped to 0
+    expect(result.startIndex).toBe(0);
     expect(result.offsetY).toBe(0);
     expect(result.isVirtualized).toBe(true);
   });

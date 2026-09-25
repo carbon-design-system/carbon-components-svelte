@@ -90,7 +90,6 @@ describe("Section", () => {
     expect(heading1.tagName).toBe("H1");
     expect(heading2.tagName).toBe("H2");
 
-    // Verify heading2 is nested inside a section that is a child of heading1's section
     const section1 = heading1.closest("section");
     const section2 = heading2.closest("section");
     expect(section1).toBeTruthy();

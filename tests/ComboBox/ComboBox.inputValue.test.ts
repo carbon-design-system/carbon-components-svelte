@@ -75,7 +75,6 @@ describe("ComboBox", () => {
     await rerender({ selectedId: "2" });
     expect(input).toHaveValue("Fax");
 
-    // Open then dismiss the menu without making a new selection.
     await user.click(input);
     await user.click(document.body);
 
@@ -173,7 +172,6 @@ describe("ComboBox", () => {
     const input = getInput();
     expect(input).toHaveValue("Email");
 
-    // Open via chevron
     const openChevron = screen.getByTitle("Open menu");
     await user.click(openChevron);
     expect(input).toHaveValue("");
@@ -181,7 +179,7 @@ describe("ComboBox", () => {
     const options = screen.getAllByRole("option");
     expect(options).toHaveLength(3);
 
-    // Close via chevron (input may still have focus)
+    // Input may still have focus when closing via chevron (no blur occurs).
     const closeChevron = screen.getByTitle("Close menu");
     await user.click(closeChevron);
     expect(input).toHaveValue("Email");
@@ -220,10 +218,6 @@ describe("ComboBox", () => {
     await user.click(document.body);
     expect(input).not.toHaveFocus();
 
-    // Value should be reset when:
-    // - no selectedItem
-    // - input is not focused (ref.contains(document.activeElement) is false)
-    // - allowCustomValue is false
     expect(input).toHaveValue("");
   });
 

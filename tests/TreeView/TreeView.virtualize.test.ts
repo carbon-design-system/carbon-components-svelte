@@ -49,7 +49,6 @@ describe("TreeView (virtualize)", () => {
   it("shifts the windowed slice when the container is scrolled", async () => {
     render(TreeViewVirtualize, { totalRoots: 500, childrenPerRoot: 3 });
 
-    // Initially: row 0 mounted, row ~200 not mounted.
     expect(findRowById(0)).not.toBeNull();
     expect(findRowById(200)).toBeNull();
 
@@ -61,7 +60,7 @@ describe("TreeView (virtualize)", () => {
     ul.dispatchEvent(new Event("scroll"));
     await tick();
 
-    expect(findRowById(0)).toBeNull(); // scrolled out
+    expect(findRowById(0)).toBeNull();
     // root #100's id = 100 * (1 + 3) = 400.
     expect(findRowById(400)).not.toBeNull();
   });
@@ -90,7 +89,6 @@ describe("TreeView (virtualize)", () => {
     expect(findRowById(2)).not.toBeNull();
     expect(findRowById(3)).not.toBeNull();
 
-    // Children show aria-level=2.
     expect(findRowById(1)).toHaveAttribute("aria-level", "2");
   });
 
@@ -363,7 +361,6 @@ describe("TreeView (virtualize)", () => {
     await tick();
 
     expect(countRows()).toBeGreaterThan(0);
-    // The first root of the new tree should be mounted.
     expect(findRowById(0)).not.toBeNull();
   });
 

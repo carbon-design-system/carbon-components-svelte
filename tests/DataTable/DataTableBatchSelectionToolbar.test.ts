@@ -11,12 +11,10 @@ describe("DataTableBatchSelectionToolbar", () => {
       },
     });
 
-    // Verify toolbar is visible
     const toolbar = container.querySelector(".bx--batch-actions");
     expect(toolbar).toBeInTheDocument();
     expect(toolbar).toHaveClass("bx--batch-actions--active");
 
-    // Verify selected count is displayed
     expect(screen.getByText("2 items selected")).toBeInTheDocument();
   });
 
@@ -27,7 +25,6 @@ describe("DataTableBatchSelectionToolbar", () => {
       },
     });
 
-    // Verify toolbar is not visible
     const toolbar = container.querySelector(".bx--batch-actions");
     expect(toolbar).not.toHaveClass("bx--batch-actions--active");
   });
@@ -39,13 +36,11 @@ describe("DataTableBatchSelectionToolbar", () => {
       },
     });
 
-    // Click cancel button
     const cancelButton = screen.getByText("Cancel");
     await user.click(cancelButton);
     // Wait for binding updates to complete
     await tick();
 
-    // Verify selected rows are cleared by checking the displayed value
     const selectedIdsElement = screen.getByTestId("selected-ids");
     expect(selectedIdsElement.textContent).toBe("[]");
   });
@@ -77,11 +72,9 @@ describe("DataTableBatchSelectionToolbar", () => {
       },
     });
 
-    // Click custom action button
     const actionButton = screen.getByText("Delete");
     await user.click(actionButton);
 
-    // Verify action was triggered
     expect(consoleLog).toHaveBeenCalledWith("delete", ["a", "b"]);
   });
 
@@ -93,15 +86,12 @@ describe("DataTableBatchSelectionToolbar", () => {
       },
     });
 
-    // Verify toolbar is not active despite selected rows
     const toolbar = container.querySelector(".bx--batch-actions");
     expect(toolbar).not.toHaveClass("bx--batch-actions--active");
 
-    // Update active state
     rerender({ active: true });
     await tick();
 
-    // Verify toolbar is now active
     expect(toolbar).toHaveClass("bx--batch-actions--active");
   });
 
@@ -129,12 +119,10 @@ describe("DataTableBatchSelectionToolbar", () => {
       },
     });
 
-    // Click cancel button
     const cancelButton = screen.getByText("Cancel");
     await user.click(cancelButton);
     await tick();
 
-    // Verify selected rows are not cleared by checking the displayed value
     const selectedIdsElement = screen.getByTestId("selected-ids");
     expect(selectedIdsElement.textContent).toBe('["a","b"]');
   });
@@ -147,12 +135,10 @@ describe("DataTableBatchSelectionToolbar", () => {
       },
     });
 
-    // Click first action button
     const deleteButton = screen.getByText("Delete");
     await user.click(deleteButton);
     expect(consoleLog).toHaveBeenCalledWith("delete", ["a", "b"]);
 
-    // Click second action button
     const restartButton = screen.getByText("Restart");
     await user.click(restartButton);
     expect(consoleLog).toHaveBeenCalledWith("restart", ["a", "b"]);
@@ -165,14 +151,11 @@ describe("DataTableBatchSelectionToolbar", () => {
       },
     });
 
-    // Verify initial count
     expect(screen.getByText("1 item selected")).toBeInTheDocument();
 
-    // Update selection
     rerender({ selectedRowIds: ["a", "b", "c"] });
     await tick();
 
-    // Verify updated count
     expect(screen.getByText("3 items selected")).toBeInTheDocument();
   });
 
@@ -183,15 +166,12 @@ describe("DataTableBatchSelectionToolbar", () => {
       },
     });
 
-    // Focus cancel button
     const cancelButton = screen.getByText("Cancel");
     cancelButton.focus();
 
-    // Press tab to move to next action
     await user.keyboard("{Tab}");
     expect(screen.getByText("Create balancer")).toHaveFocus();
 
-    // Press tab again to move to next action
     await user.keyboard("{Tab}");
     expect(
       screen.getByRole("checkbox", { name: "Select all rows" }),

@@ -24,10 +24,8 @@ describe("Theme cross-tab sync", () => {
     });
     await tick();
 
-    // Verify initial theme
     expect(documentMock.setAttribute).toHaveBeenCalledWith("theme", "white");
 
-    // Simulate theme change from another tab
     dispatchStorageEvent("theme", "g100");
     await tick();
 
@@ -40,18 +38,15 @@ describe("Theme cross-tab sync", () => {
     });
     await tick();
 
-    // Should not respond to default "theme" key
     dispatchStorageEvent("theme", "g90");
     await tick();
 
-    // Theme should still be white
     const lastCall =
       documentMock.setAttribute.mock.calls[
         documentMock.setAttribute.mock.calls.length - 1
       ];
     expect(lastCall).toEqual(["theme", "white"]);
 
-    // Should respond to custom key
     dispatchStorageEvent("my-custom-theme-key", "g90");
     await tick();
 
@@ -71,7 +66,6 @@ describe("Theme cross-tab sync", () => {
     dispatchStorageEvent("theme", "g100");
     await tick();
 
-    // No additional calls should have been made
     expect(documentMock.setAttribute.mock.calls.length).toBe(initialCallCount);
   });
 });

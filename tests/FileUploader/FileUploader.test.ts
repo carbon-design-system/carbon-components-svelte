@@ -46,7 +46,6 @@ describe("FileUploader", () => {
       expect(fileNames).toHaveLength(2);
     });
 
-    // After removing file2.txt, input.files should only contain file1.txt and file3.txt
     expect(input.files).toHaveLength(2);
     expect(input.files[0].name).toBe("file1.txt");
     expect(input.files[1].name).toBe("file3.txt");
@@ -68,7 +67,6 @@ describe("FileUploader", () => {
       expect(fileNames).toHaveLength(3);
     });
 
-    // Click the close button for the middle file (file2.txt)
     const closeButtons = document.querySelectorAll(
       ".bx--file__state-container button, .bx--file__state-container .bx--file-close",
     );
@@ -82,7 +80,6 @@ describe("FileUploader", () => {
       expect(fileNames).toHaveLength(2);
     });
 
-    // Verify the remaining files are the first and third
     expect(screen.queryByText("file1.txt")).toBeInTheDocument();
     expect(screen.queryByText("file2.txt")).not.toBeInTheDocument();
     expect(screen.queryByText("file3.txt")).toBeInTheDocument();
@@ -378,7 +375,6 @@ describe("FileUploader", () => {
 
     await vi.waitFor(() => {
       const fileNames = screen.queryAllByText(/file\d\.txt/);
-      // When multiple is false, only one file should be selected
       expect(fileNames.length).toBeGreaterThanOrEqual(1);
     });
   });
@@ -435,7 +431,6 @@ describe("FileUploader", () => {
       props: { status: "complete", files: [new File(["content"], "test.txt")] },
     });
 
-    // Check that components render with different statuses
     expect(container1.querySelector(".bx--file-container")).toBeInTheDocument();
     expect(container2.querySelector(".bx--file-container")).toBeInTheDocument();
     expect(container3.querySelector(".bx--file-container")).toBeInTheDocument();
@@ -865,13 +860,11 @@ describe("FileUploader", () => {
       expect(changeHandler).toHaveBeenCalled();
     });
 
-    // Only the large file should be rejected
     const rejectedEvent = rejectedHandler.mock.calls[0][0];
     expect(rejectedEvent.detail).toHaveLength(1);
     expect(rejectedEvent.detail[0].file.name).toBe("large.txt");
     expect(rejectedEvent.detail[0].reason).toBe("size");
 
-    // The two small files should be accepted
     const changeEvent = changeHandler.mock.calls[0][0];
     expect(changeEvent.detail).toHaveLength(2);
     expect(changeEvent.detail[0].name).toBe("small1.txt");
@@ -901,7 +894,6 @@ describe("FileUploader", () => {
       expect(screen.queryByText("file1.txt")).toBeInTheDocument();
     });
 
-    // Select the same file again.
     const duplicate = new File(["content1"], "file1.txt", {
       type: "text/plain",
       lastModified: 1000,
@@ -917,7 +909,6 @@ describe("FileUploader", () => {
     expect(event.detail[0].file.name).toBe("file1.txt");
     expect(event.detail[0].reason).toBe("duplicate");
 
-    // Only the original file should remain.
     const fileNames = screen.queryAllByText("file1.txt");
     expect(fileNames).toHaveLength(1);
   });

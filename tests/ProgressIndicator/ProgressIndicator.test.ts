@@ -24,19 +24,15 @@ describe("ProgressIndicator", () => {
 
       const listItems = screen.getAllByRole("listitem");
 
-      // Check if all steps are rendered
       expect(listItems).toHaveLength(4);
 
-      // Check completed steps
       const completedSteps = listItems.filter((step) =>
         step.classList.contains("bx--progress-step--complete"),
       );
       expect(completedSteps).toHaveLength(3);
 
-      // Check current step
       expect(listItems[2]).toHaveTextContent("Step 3");
 
-      // Check incomplete step
       const incompleteStep = screen.getByText("Step 4");
       expect(incompleteStep).toBeInTheDocument();
       expect(incompleteStep.closest("li")).not.toHaveClass(
@@ -84,7 +80,6 @@ describe("ProgressIndicator", () => {
 
       expect(consoleLog).not.toHaveBeenCalled();
 
-      // Click on a completed step
       await user.click(screen.getByText("Step 1"));
       expect(consoleLog).toHaveBeenCalledWith("change", 0);
     });
@@ -105,7 +100,6 @@ describe("ProgressIndicator", () => {
         },
       });
 
-      // Click on a completed step
       await user.click(screen.getByText("Step 1"));
       expect(changeHandler).not.toHaveBeenCalled();
     });
@@ -218,19 +212,16 @@ describe("ProgressIndicator", () => {
 
       const buttons = screen.getAllByRole("button");
 
-      // Complete step button should be clickable
       expect(buttons[0]).toHaveAttribute("tabindex", "0");
       expect(buttons[0]).toHaveAttribute("aria-disabled", "false");
       expect(buttons[0]).not.toHaveClass(
         "bx--progress-step-button--unclickable",
       );
 
-      // Current step is unclickable but stays in tab order.
       expect(buttons[1]).toHaveAttribute("tabindex", "0");
       expect(buttons[1]).toHaveAttribute("aria-disabled", "false");
       expect(buttons[1]).toHaveClass("bx--progress-step-button--unclickable");
 
-      // Incomplete step button should be unclickable
       expect(buttons[2]).toHaveAttribute("tabindex", "0");
       expect(buttons[2]).toHaveAttribute("aria-disabled", "false");
       expect(buttons[2]).toHaveClass("bx--progress-step-button--unclickable");
@@ -562,7 +553,6 @@ describe("ProgressIndicator", () => {
       });
       expect(listItems[2]).not.toHaveClass("bx--progress-step--complete");
 
-      // Step 3 should become complete immediately.
       const button = screen.getByText("Click me twice");
       await user.click(button);
 

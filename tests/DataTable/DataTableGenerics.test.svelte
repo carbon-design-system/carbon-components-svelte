@@ -106,7 +106,6 @@
   batchSelection
   bind:selectedRowIds
   on:click:row--select={(e) => {
-    // e.detail.row should be typed as Row
     const row = e.detail.row;
     console.log(row.id, row.name, row.price);
   }}
@@ -119,7 +118,6 @@
   batchSelection
   bind:selectedRowIds={numericSelectedRowIds}
   on:click:row--select={(e) => {
-    // e.detail.row should be typed as NumericRow
     const row = e.detail.row;
     console.log(row.id, row.name);
   }}
@@ -136,12 +134,10 @@
   bind:selectedRowIds={productSelectedRowIds}
   bind:expandedRowIds={productExpandedRowIds}
   on:click:row={(e) => {
-    // e.detail.row should be typed as ProductRow
     const row = e.detail.row;
     console.log(row.id, row.name, row.price, row.inStock);
   }}
   on:click:row--expand={(e) => {
-    // e.detail.row should be typed as ProductRow
     const row = e.detail.row;
     console.log("Expanded:", row.id);
   }}

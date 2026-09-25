@@ -7,7 +7,6 @@ export function getInput() {
   return input;
 }
 
-/** Returns the button that clears the selection. */
 export function getClearButton() {
   return screen.getByRole("button", { name: "Clear selected item" });
 }

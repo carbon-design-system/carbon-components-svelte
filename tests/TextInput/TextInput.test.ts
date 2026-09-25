@@ -531,7 +531,6 @@ describe("TextInput", () => {
 
     const input = screen.getByLabelText("User name");
     const fieldWrapper = input.closest(".bx--text-input__field-wrapper");
-    // When invalid, only invalid icon should be present, not warning icon
     expect(
       fieldWrapper?.querySelector(".bx--text-input__invalid-icon--warning"),
     ).not.toBeInTheDocument();
@@ -607,7 +606,6 @@ describe("TextInput", () => {
   it("should support restProps on input element", () => {
     render(TextInput);
 
-    // The input element should exist and be able to receive additional props via restProps
     const input = screen.getByLabelText("User name");
     expect(input).toBeInTheDocument();
     expect(input).toHaveAttribute("type", "text");

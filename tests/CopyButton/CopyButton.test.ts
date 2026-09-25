@@ -151,7 +151,7 @@ describe("CopyButton", () => {
       portal?.querySelector(".bx--tooltip-portal__content"),
     ).toHaveTextContent("Failed to copy");
 
-    // Error feedback holds the button until timeout/dismiss; a second click is ignored.
+    // Error feedback holds the button until timeout/dismiss.
     await user.click(button);
     expect(copy).toHaveBeenCalledTimes(1);
   });

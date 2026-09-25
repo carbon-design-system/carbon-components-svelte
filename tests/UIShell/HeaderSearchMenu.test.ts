@@ -8,7 +8,6 @@ describe("HeaderSearch (menu slot)", () => {
 
     const listbox = await screen.findByRole("listbox");
     expect(listbox).toBeInTheDocument();
-    // role="menu" is not used when the menu slot is present.
     expect(screen.queryByRole("menu")).not.toBeInTheDocument();
     // Four filterable items + one persistent footer item.
     expect(screen.getAllByRole("option")).toHaveLength(5);
@@ -28,7 +27,6 @@ describe("HeaderSearch (menu slot)", () => {
     const options = screen.getAllByRole("option");
     expect(options).toHaveLength(2);
     expect(options[0]).toHaveTextContent("Data Store for Memcache");
-    // Persistent footer item stays visible when other items match.
     expect(options[1]).toHaveTextContent("Search everywhere");
   });
 
@@ -69,7 +67,6 @@ describe("HeaderSearch (menu slot)", () => {
     expect(screen.getByTestId("result")).toHaveTextContent(
       "Databases for TestSQL",
     );
-    // Selecting an item closes the menu (the bar collapses).
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
   });
 

@@ -56,24 +56,19 @@ describe("DataTable", () => {
     },
   ];
 
-  // Basic rendering and structure tests
   it("renders with default props", () => {
     render(DataTable);
-    // Check if table headers are rendered
     for (const header of headers) {
       expect(screen.getByText(header.value)).toBeInTheDocument();
     }
 
-    // Check if table has correct structure
     const table = screen.getByRole("table");
     expect(table).toBeInTheDocument();
     expect(table).toHaveClass("bx--data-table");
 
-    // Check if table has correct number of rows
     const tableRows = getBodyRows();
     expect(tableRows).toHaveLength(3);
 
-    // Check if all rows contain the expected data
     for (const row of rows) {
       const rowElement = screen.getByText(row.name).closest("tr");
       expect(rowElement).toBeInTheDocument();
@@ -99,7 +94,6 @@ describe("DataTable", () => {
     }
   });
 
-  // a11y: each data cell should reference its column header via headers/id
   it("associates data cells with their column headers", () => {
     render(DataTable);
 
@@ -223,7 +217,6 @@ describe("DataTable", () => {
     expect(longCell).toBeInTheDocument();
   });
 
-  // Sorting tests
   it("handles sorting functionality", async () => {
     render(DataTable, {
       props: {
@@ -233,22 +226,18 @@ describe("DataTable", () => {
       },
     });
 
-    // Get all header cells
     const headerCells = screen.getAllByRole("columnheader");
     expect(headerCells.length).toBe(4);
 
-    // Test sorting by name (ascending)
     const nameHeader = screen.getByText("Name");
     await user.click(nameHeader);
 
-    // Verify rows are sorted by name ascending
     const rowsAfterNameSort = getBodyRows();
     const firstRowName = within(rowsAfterNameSort[0]).getByRole("cell", {
       name: "Load Balancer 1",
     });
     expect(firstRowName).toHaveTextContent("Load Balancer 1");
 
-    // Test sorting by name (descending)
     await user.click(nameHeader);
     const rowsAfterNameDescSort = getBodyRows();
     const firstRowNameDesc = within(rowsAfterNameDescSort[0]).getByRole(
@@ -259,16 +248,13 @@ describe("DataTable", () => {
     );
     expect(firstRowNameDesc).toHaveTextContent("Load Balancer 3");
 
-    // Test sorting by port (ascending)
     const portHeader = screen.getByText("Port");
     await user.click(portHeader);
 
-    // Verify rows are sorted by port ascending
     const rowsAfterPortSort = getBodyRows();
     const firstRowPort = within(rowsAfterPortSort[0]).getAllByRole("cell")[2];
     expect(firstRowPort).toHaveTextContent("80");
 
-    // Test sorting by port (descending)
     await user.click(portHeader);
     const rowsAfterPortDescSort = getBodyRows();
     const firstRowPortDesc = within(rowsAfterPortDescSort[0]).getAllByRole(
@@ -375,7 +361,6 @@ describe("DataTable", () => {
       },
     });
 
-    // Verify custom display formatting
     const _table = screen.getByRole("table");
     const tableRows = getBodyRows();
     const costCells = tableRows.map(
@@ -384,11 +369,9 @@ describe("DataTable", () => {
     expect(costCells[0]).toHaveTextContent("100 €");
     expect(costCells[1]).toHaveTextContent("200 €");
 
-    // Test sorting by expireDate
     const dateHeader = screen.getByText("Expire date");
     await user.click(dateHeader);
 
-    // Verify rows are sorted by date ascending
     const rowsAfterDateSort = getBodyRows();
     expect(
       within(rowsAfterDateSort[0]).getByRole("cell", {
@@ -448,11 +431,9 @@ describe("DataTable", () => {
       },
     });
 
-    // Test sorting by nested port value
     const portHeader = screen.getByText("Port");
     await user.click(portHeader);
 
-    // Verify rows are sorted by port ascending
     const rowsAfterPortSort = getBodyRows();
     expect(
       within(rowsAfterPortSort[0]).getAllByRole("cell")[2],
@@ -483,7 +464,6 @@ describe("DataTable", () => {
     const protocolHeader = screen.getByText("Protocol");
     await user.click(protocolHeader);
 
-    // Verify no sorting occurred
     const tableRows = getBodyRows();
     const firstRow = tableRows[0];
     expect(
@@ -583,14 +563,12 @@ describe("DataTable", () => {
 
     const nameHeader = screen.getByText("Name");
 
-    // Click 1: none -> ascending
     await user.click(nameHeader);
     let tableRows = getBodyRows();
     expect(within(tableRows[0]).getAllByRole("cell")[0]).toHaveTextContent(
       "Load Balancer 1",
     );
 
-    // Click 2: ascending -> descending
     await user.click(nameHeader);
     tableRows = getBodyRows();
     expect(within(tableRows[0]).getAllByRole("cell")[0]).toHaveTextContent(
@@ -618,14 +596,12 @@ describe("DataTable", () => {
     const nameHeader = screen.getByText("Name");
     const portHeader = screen.getByText("Port");
 
-    // Sort by name ascending
     await user.click(nameHeader);
     let tableRows = getBodyRows();
     expect(within(tableRows[0]).getAllByRole("cell")[0]).toHaveTextContent(
       "Load Balancer 1",
     );
 
-    // Switch to port – should sort ascending
     await user.click(portHeader);
     tableRows = getBodyRows();
     expect(within(tableRows[0]).getAllByRole("cell")[2]).toHaveTextContent(
@@ -929,7 +905,6 @@ describe("DataTable", () => {
     expect(tableSort).not.toHaveBeenCalled();
   });
 
-  // Selection tests
   it("handles selectable rows", async () => {
     const { container } = render(DataTable, {
       props: {
@@ -939,14 +914,11 @@ describe("DataTable", () => {
       },
     });
 
-    // Verify checkboxes are present in each row
     const checkboxes = screen.getAllByRole("checkbox");
     expect(checkboxes.length).toBe(3);
 
-    // Select first row
     await user.click(checkboxes[0]);
 
-    // Verify row is selected
     const selectedRow = container.querySelector(".bx--data-table--selected");
     expect(selectedRow).toBeInTheDocument();
   });
@@ -1015,24 +987,19 @@ describe("DataTable", () => {
       },
     });
 
-    // Verify batch selection checkbox is present
     const batchCheckbox = screen.getByRole("checkbox", {
       name: /select all/i,
     });
 
-    // Click batch selection checkbox
     await user.click(batchCheckbox);
 
-    // Verify all rows are selected
     const selectedRows = container.querySelectorAll(
       ".bx--data-table--selected",
     );
     expect(selectedRows.length).toBe(3);
 
-    // Click batch selection checkbox again
     await user.click(batchCheckbox);
 
-    // Verify no rows are selected
     const unselectedRows = container.querySelectorAll(
       ".bx--data-table--selected",
     );
@@ -1121,14 +1088,12 @@ describe("DataTable", () => {
       },
     });
 
-    // Verify non-selectable row doesn't have a checkbox
     const nonSelectableRow = container.querySelector("tr[data-row='b']");
     assert(nonSelectableRow instanceof HTMLTableRowElement);
     const nonSelectableCheckbox =
       within(nonSelectableRow).queryByRole("checkbox");
     expect(nonSelectableCheckbox).not.toBeInTheDocument();
 
-    // Verify non-expandable row doesn't have an expand button
     const nonExpandableRow = container.querySelector("tr[data-row='c']");
     assert(nonExpandableRow instanceof HTMLTableRowElement);
     const nonExpandableButton = within(nonExpandableRow).queryByRole("button", {
@@ -1137,7 +1102,6 @@ describe("DataTable", () => {
     expect(nonExpandableButton).not.toBeInTheDocument();
   });
 
-  // Expandable rows tests
   it("handles expandable rows", async () => {
     const { container } = render(DataTable, {
       props: {
@@ -1147,12 +1111,10 @@ describe("DataTable", () => {
       },
     });
 
-    // Verify expand button is present in each row
     const expandButtons = screen.getAllByRole("button", { name: /expand/i });
     expect(expandButtons.length).toBe(3);
     expect(expandButtons[0]).toHaveAttribute("aria-expanded", "false");
 
-    // Click expand button on first row
     await user.click(expandButtons[0]);
 
     const expandedRow = container.querySelector(".bx--expandable-row");
@@ -1313,7 +1275,6 @@ describe("DataTable", () => {
     }
   });
 
-  // Styling and layout tests
   it("applies zebra stripe styling", () => {
     render(DataTable, {
       props: {
@@ -1323,7 +1284,6 @@ describe("DataTable", () => {
       },
     });
 
-    // Verify zebra stripe classes are applied
     const table = screen.getByRole("table");
     expect(table).toHaveClass("bx--data-table--zebra");
   });
@@ -1346,7 +1306,6 @@ describe("DataTable", () => {
         },
       });
 
-      // Verify size class is applied
       const table = screen.getByRole("table");
       expect(table).toHaveClass(expectedClass);
       unmount();
@@ -1410,11 +1369,9 @@ describe("DataTable", () => {
     const table = screen.getByRole("table");
     expect(table).not.toHaveStyle({ "table-layout": "fixed" });
 
-    // Verify name column has correct width
     const nameHeader = screen.getByRole("columnheader", { name: "Name" });
     expect(nameHeader).toHaveStyle({ width: "200px" });
 
-    // Verify protocol column has correct min-width
     const protocolHeader = screen.getByRole("columnheader", {
       name: "Protocol",
     });
@@ -1633,7 +1590,6 @@ describe("DataTable", () => {
     expect(table).toHaveClass("bx--data-table--static");
   });
 
-  // Custom cell display tests
   it("handles custom cell display", () => {
     const customHeaders = [
       { key: "name", value: "Name" },
@@ -1676,12 +1632,10 @@ describe("DataTable", () => {
       },
     });
 
-    // Verify empty column header exists and has no text content
     const headerCells = screen.getAllByRole("columnheader");
     expect(headerCells.length).toBe(5); // 4 regular headers + 1 empty column
     expect(headerCells[4]).toHaveTextContent("");
 
-    // Verify empty column cells exist in each row
     const tableRows = getBodyRows();
     for (const row of tableRows) {
       const cells = within(row).getAllByRole("cell");
@@ -1737,7 +1691,6 @@ describe("DataTable", () => {
     });
   });
 
-  // Pagination tests
   it("handles pagination", async () => {
     const paginatedRows = Array.from({ length: 15 }).map((_, i) => ({
       id: `row-${i}`,
@@ -1756,7 +1709,6 @@ describe("DataTable", () => {
       },
     });
 
-    // Verify only 5 rows are displayed on first page
     const firstPageRows = getBodyRows();
     expect(firstPageRows.length).toBe(5);
     expect(
@@ -1766,11 +1718,9 @@ describe("DataTable", () => {
       within(firstPageRows[4]).getByRole("cell", { name: "Load Balancer 5" }),
     ).toHaveTextContent("Load Balancer 5");
 
-    // Update page to 2
     rerender({ headers, rows: paginatedRows, pageSize: 5, page: 2 });
     await tick();
 
-    // Verify 5 rows are displayed on second page
     const secondPageRows = getBodyRows();
     expect(secondPageRows.length).toBe(5);
     expect(
@@ -1780,11 +1730,9 @@ describe("DataTable", () => {
       within(secondPageRows[4]).getByRole("cell", { name: "Load Balancer 10" }),
     ).toHaveTextContent("Load Balancer 10");
 
-    // Update page to 3
     rerender({ page: 3 });
     await tick();
 
-    // Verify remaining rows are displayed on third page
     const thirdPageRows = getBodyRows();
     expect(thirdPageRows.length).toBe(5);
     expect(
@@ -1795,7 +1743,6 @@ describe("DataTable", () => {
     ).toHaveTextContent("Load Balancer 15");
   });
 
-  // Event handling tests
   it("emits proper events", async () => {
     const consoleLog = vi.spyOn(console, "log");
 
@@ -1807,20 +1754,16 @@ describe("DataTable", () => {
       },
     });
 
-    // Click header
     const nameHeader = screen.getByText("Name");
     await user.click(nameHeader);
 
-    // Click row
     const tableRows = getBodyRows();
     const firstRow = tableRows[0];
     await user.click(firstRow);
 
-    // Click cell
     const firstCell = within(firstRow).getAllByRole("cell")[0];
     await user.click(firstCell);
 
-    // Verify events were logged
     expect(consoleLog).toHaveBeenCalledWith("click:header", expect.any(Object));
     expect(consoleLog).toHaveBeenCalledWith("click:row", expect.any(Object));
     expect(consoleLog).toHaveBeenCalledWith("click:cell", expect.any(Object));
@@ -1889,10 +1832,8 @@ describe("DataTable", () => {
       },
     });
 
-    // First render with 5 headers
     expect(component).toBeTruthy();
 
-    // Change to 3 headers - this should not crash
     await rerender({
       rows,
       headers: headers3,
@@ -1900,7 +1841,6 @@ describe("DataTable", () => {
 
     expect(component).toBeTruthy();
 
-    // Change back to 5 headers - this should not crash
     await rerender({
       rows,
       headers: headers5,
@@ -1971,7 +1911,6 @@ describe("DataTable", () => {
     expect(customDescription).toHaveClass("bx--data-table-header__description");
   });
 
-  // Slot prop tests
   it("passes rowSelected and rowExpanded props to cell slot", () => {
     const { container } = render(DataTable, {
       props: {
@@ -1984,7 +1923,6 @@ describe("DataTable", () => {
       },
     });
 
-    // Verify the component renders with selected and expanded rows
     const selectedRow = container.querySelector("tr[data-row='a']");
     expect(selectedRow).toHaveClass("bx--data-table--selected");
 
@@ -2004,12 +1942,10 @@ describe("DataTable", () => {
       },
     });
 
-    // Verify both selected and expanded classes are present on the same row
     const row = container.querySelector("tr[data-row='a']");
     expect(row).toHaveClass("bx--data-table--selected");
     expect(row).toHaveClass("bx--expandable-row");
 
-    // Verify expanded content is visible
     const expandedContent = container.querySelector(
       "[id$='-expandable-row-a'] .bx--child-row-inner-container",
     );
@@ -2028,15 +1964,12 @@ describe("DataTable", () => {
       },
     });
 
-    // Initially no rows selected
     let selectedRow = container.querySelector(".bx--data-table--selected");
     expect(selectedRow).not.toBeInTheDocument();
 
-    // Select row 'a'
     rerender({ selectedRowIds: ["a"] });
     await tick();
 
-    // Verify row is now selected
     selectedRow = container.querySelector("tr[data-row='a']");
     expect(selectedRow).toHaveClass("bx--data-table--selected");
   });
@@ -2053,17 +1986,14 @@ describe("DataTable", () => {
       },
     });
 
-    // Initially no rows expanded
     let expandedContent = container.querySelector(
       ".bx--child-row-inner-container",
     );
     expect(expandedContent).not.toBeInTheDocument();
 
-    // Expand row 'a'
     rerender({ expandedRowIds: ["a"] });
     await tick();
 
-    // Verify row is now expanded
     expandedContent = container.querySelector(
       "[id$='-expandable-row-a'] .bx--child-row-inner-container",
     );
@@ -2193,7 +2123,6 @@ describe("DataTable", () => {
       const detail = callArgs[1];
       expect(detail.target).toBeInstanceOf(HTMLElement);
       expect(detail.currentTarget).toBeInstanceOf(HTMLElement);
-      // Non-sortable headers should not include sortDirection
       expect(detail.sortDirection).toBeUndefined();
     }
   });
@@ -2219,7 +2148,6 @@ describe("DataTable", () => {
     // Click on the row but not on an interactive element
     await user.click(firstRow);
 
-    // Should have dispatched click:row
     const clickRowCalls = consoleLog.mock.calls.filter(
       (call) => call[0] === "click:row",
     );
@@ -2626,14 +2554,12 @@ describe("DataTable", () => {
       type Props = ComponentProps<ComponentType>;
       type Headers = NonNullable<Props["headers"]>;
 
-      // Headers should accept nested paths as keys
       const validHeaders: Headers = [
         { key: "id", value: "ID" },
         { key: "user.name", value: "Name" },
         { key: "contact.company", value: "Company" },
       ] as const;
 
-      // Verify headers accept nested property paths as keys
       type HeaderKeyType = DataTableKey<NestedRow> | (string & {});
       expectTypeOf<
         (typeof validHeaders)[0]["key"]
@@ -2664,14 +2590,11 @@ describe("DataTable", () => {
       type ClickCellEventDetail =
         ClickCellEvent extends CustomEvent<infer T> ? T : never;
 
-      // Cell key should accept nested paths
       type CellKey = ClickCellEventDetail["cell"]["key"];
       type ExpectedCellKey = DataTableKey<NestedRow> | (string & {});
 
-      // Verify CellKey matches expected type
       expectTypeOf<CellKey>().toEqualTypeOf<ExpectedCellKey>();
 
-      // Verify specific nested paths are valid cell keys
       expectTypeOf<Extract<CellKey, "id">>().toEqualTypeOf<"id">();
       expectTypeOf<
         Extract<CellKey, "user.name">
@@ -2759,7 +2682,6 @@ describe("DataTable", () => {
     });
 
     it("should infer Row ID type from Row generic", () => {
-      // Test with string IDs
       type StringIdRow = {
         id: string;
         name: string;
@@ -2779,7 +2701,6 @@ describe("DataTable", () => {
         NonNullable<StringIdProps["nonExpandableRowIds"]>
       >().toEqualTypeOf<readonly string[]>();
 
-      // Test with number IDs
       type NumberIdRow = {
         id: number;
         name: string;
@@ -2804,7 +2725,6 @@ describe("DataTable", () => {
       type Row = (typeof rows)[number];
       type RowId = Row["id"];
 
-      // Verify literal union type
       expectTypeOf<RowId>().toEqualTypeOf<"row-1" | "row-2" | "row-3">();
 
       type Props = ComponentProps<DataTableComponent<Row>>;
@@ -2814,14 +2734,12 @@ describe("DataTable", () => {
     });
 
     it("should support DataTableRow<Id> generic interface", () => {
-      // Test that DataTableRow accepts a generic Id parameter
       type StringDataTableRow = DataTableRow<string>;
       expectTypeOf<StringDataTableRow["id"]>().toEqualTypeOf<string>();
 
       type NumberDataTableRow = DataTableRow<number>;
       expectTypeOf<NumberDataTableRow["id"]>().toEqualTypeOf<number>();
 
-      // Default should be any
       type DefaultDataTableRow = DataTableRow;
       // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
       expectTypeOf<DefaultDataTableRow["id"]>().toEqualTypeOf<any>();
@@ -2979,12 +2897,8 @@ describe("DataTable", () => {
         expect(scrollStyle).toContain("480px");
       }
 
-      // Should render fewer rows than total (only visible ones)
-      // Note: This includes spacer rows, so we check that we have some data rows
       const tableRows = getBodyRows();
-      // Should have some rows rendered (may include spacer rows)
       expect(tableRows.length).toBeGreaterThan(0);
-      // Check that we have actual data rows (not just spacers)
       // Spacer rows have a single td with colspan and a style attribute with height
       const dataRows = tableRows.filter((row) => {
         const style = row.getAttribute("style");
@@ -3010,7 +2924,6 @@ describe("DataTable", () => {
         },
       });
 
-      // Should render all rows when below threshold
       const tableRows = getBodyRows();
       expect(tableRows.length).toBe(50);
     });
@@ -3035,7 +2948,6 @@ describe("DataTable", () => {
       expect(table).toBeInTheDocument();
 
       const _tbody = container.querySelector("tbody");
-      // With maxItems: 20, should render at most 20 data rows (excluding spacer rows)
       const tableRows = getBodyRows();
       const dataRows = tableRows.filter((row) => {
         const style = row.getAttribute("style");
@@ -3061,7 +2973,6 @@ describe("DataTable", () => {
       const table = screen.getByRole("table");
       expect(table).toBeInTheDocument();
 
-      // Should render rows (verifying virtualization works with compact size)
       const tableRows = getBodyRows();
       expect(tableRows.length).toBeGreaterThan(0);
       expect(tableRows.length).toBeLessThan(500);
@@ -3122,7 +3033,6 @@ describe("DataTable", () => {
       const table = screen.getByRole("table");
       expect(table).toBeInTheDocument();
 
-      // Should render sorted rows (check data rows, not spacer rows)
       const tableRows = getBodyRows();
       const dataRows = tableRows.filter((row) => {
         const style = row.getAttribute("style");
@@ -3180,7 +3090,6 @@ describe("DataTable", () => {
       expect(table).toBeInTheDocument();
       expect(table).toHaveClass("bx--data-table--sticky-header");
 
-      // Should render rows (check data rows, not spacer rows)
       const tableRows = getBodyRows();
       const dataRows = tableRows.filter((row) => {
         const style = row.getAttribute("style");
@@ -3207,7 +3116,6 @@ describe("DataTable", () => {
 
       await tick();
 
-      // Find the sticky header scroll container (section.bx--data-table_inner-container)
       const innerContainer = document.querySelector(
         ".bx--data-table_inner-container",
       );
@@ -3248,7 +3156,6 @@ describe("DataTable", () => {
       expect(table).toBeInTheDocument();
       expect(table).toHaveClass("bx--data-table--zebra");
 
-      // Should render rows
       const tableRows = getBodyRows();
       expect(tableRows.length).toBeGreaterThan(0);
     });
@@ -3265,7 +3172,6 @@ describe("DataTable", () => {
         },
       });
 
-      // Should render more than pageSize data rows (virtualization ignores pagination)
       const tableRows = getBodyRows();
       const dataRows = tableRows.filter((row) => {
         const style = row.getAttribute("style");

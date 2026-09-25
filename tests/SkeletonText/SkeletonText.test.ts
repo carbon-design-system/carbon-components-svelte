@@ -20,7 +20,7 @@ describe("SkeletonText", () => {
     render(SkeletonText, { props: { paragraph: true } });
 
     const elements = screen.getAllByRole("paragraph", { hidden: true });
-    expect(elements).toHaveLength(3); // default lines is 3
+    expect(elements).toHaveLength(3);
     for (const element of elements) {
       expect(element).toHaveClass("bx--skeleton__text");
     }

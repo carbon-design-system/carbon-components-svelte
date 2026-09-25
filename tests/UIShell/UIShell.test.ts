@@ -200,7 +200,6 @@ describe("UIShell", () => {
           },
         });
 
-        // User clicks hamburger to open
         const hamburgerButton = container.querySelector(
           ".bx--header__menu-trigger",
         );
@@ -213,7 +212,6 @@ describe("UIShell", () => {
         setViewportWidth(520);
         await flushMacrotask();
 
-        // SideNav should still be open
         expect(component.isSideNavOpen).toBe(true);
       });
 
@@ -262,12 +260,11 @@ describe("UIShell", () => {
           ".bx--header__menu-trigger",
         );
         assert(hamburgerButton);
-        await user.click(hamburgerButton); // open
+        await user.click(hamburgerButton);
         expect(component.isSideNavOpen).toBe(true);
-        await user.click(hamburgerButton); // close
+        await user.click(hamburgerButton);
         expect(component.isSideNavOpen).toBe(false);
 
-        // Mobile -> desktop: should auto-expand again.
         setViewportWidth(1200);
         await flushMacrotask();
         expect(component.isSideNavOpen).toBe(true);
@@ -283,11 +280,9 @@ describe("UIShell", () => {
         await flushMacrotask();
         expect(component.isSideNavOpen).toBe(false);
 
-        // Cross to desktop
         setViewportWidth(1200);
         await flushMacrotask();
 
-        // Should auto-expand on desktop
         expect(component.isSideNavOpen).toBe(true);
       });
 
@@ -300,11 +295,9 @@ describe("UIShell", () => {
 
         await flushMacrotask();
 
-        // Cross to mobile
         setViewportWidth(500);
         await flushMacrotask();
 
-        // Should auto-collapse on mobile
         expect(component.isSideNavOpen).toBe(false);
       });
     });
@@ -516,7 +509,6 @@ describe("UIShell", () => {
       };
 
       afterEach(() => {
-        // Reset viewport and cleanup body class
         setViewportWidth(1024);
         document.body.classList.remove("bx--body--with-modal-open");
       });

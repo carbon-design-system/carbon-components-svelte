@@ -73,14 +73,12 @@ describe("MultiSelect", () => {
           expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
           expect(menu).toBeVisible();
 
-          // The selected item should be visible
           const selectedOption = within(menu).getByRole("option", {
             name: "Item 251",
           });
           expect(selectedOption).toBeInTheDocument();
           expect(selectedOption).toHaveAttribute("aria-selected", "true");
 
-          // The scroll position should be set to show the selected item at the top
           // Item 251 is at index 250, itemHeight=40
           // Expected scroll: 250 * 40 = 10000
           expect(menu.scrollTop).toBe(10000);
@@ -114,7 +112,6 @@ describe("MultiSelect", () => {
         expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
         expect(menu).toBeVisible();
 
-        // Scroll away from the selected item
         menu.scrollTop = 0;
         await flushMacrotask();
 
@@ -129,14 +126,12 @@ describe("MultiSelect", () => {
             const menuAfterReopen = screen.getByRole("listbox");
             expectTypeOf(menuAfterReopen).toEqualTypeOf<HTMLElement>();
 
-            // Selected item should be visible after reopening
             const selectedOption = within(menuAfterReopen).getByRole("option", {
               name: "Item 251",
             });
             expect(selectedOption).toBeInTheDocument();
             expect(selectedOption).toHaveAttribute("aria-selected", "true");
 
-            // Should have scrolled back to show the selected item at the top
             // Item 251 is at index 250, itemHeight=40, so scroll should be 10000
             expect(menuAfterReopen.scrollTop).toBe(10000);
           },
@@ -161,7 +156,6 @@ describe("MultiSelect", () => {
         const menu = screen.getByRole("listbox");
         expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
         expect(menu).toBeVisible();
-        // Should scroll to top when no selection
         expect(menu.scrollTop).toBe(0);
       });
     });
@@ -184,14 +178,12 @@ describe("MultiSelect", () => {
         const menu = screen.getByRole("listbox");
         expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
 
-        // The selected item should be visible
         const selectedOption = within(menu).getByRole("option", {
           name: "Item 500",
         });
         expect(selectedOption).toBeInTheDocument();
         expect(selectedOption).toHaveAttribute("aria-selected", "true");
 
-        // Scroll should be at the position to show last item at top
         // Item 500 is at index 499, itemHeight=40, so scroll should be 499 * 40 = 19960
         // But max scroll is 500 * 40 - 300 = 19700, so it should be capped at 19700
         expect(menu.scrollTop).toBe(19700);
@@ -220,7 +212,6 @@ describe("MultiSelect", () => {
       expect(menu).toBeVisible();
 
       const options = screen.getAllByRole("option");
-      // With maxItems: 20, should render at most 20 items
       expect(options.length).toBeLessThanOrEqual(20);
     });
 
@@ -239,7 +230,6 @@ describe("MultiSelect", () => {
       await openMenu();
 
       const options = screen.getAllByRole("option");
-      // Should render all items when below threshold
       expect(options.length).toBe(50);
     });
 
@@ -302,14 +292,11 @@ describe("MultiSelect", () => {
       const firstOption = optionsAfterScroll[0];
       const firstCheckbox = firstOption.querySelector('input[type="checkbox"]');
 
-      // Get the current checked state
       assert(firstCheckbox instanceof HTMLInputElement);
       const wasChecked = firstCheckbox.checked;
 
-      // Click the option to toggle it
       await user.click(firstOption);
       await tick();
-      // Verify selection works - the checkbox should have toggled
       await waitFor(() => {
         const updatedCheckbox = firstOption.querySelector(
           'input[type="checkbox"]',
@@ -361,7 +348,6 @@ describe("MultiSelect", () => {
       await user.keyboard("{Enter}");
       await tick();
       // ArrowDown twice selects index 1, which is "Item 2" (items are 0-indexed)
-      // Verify the item is selected - check if any checkbox is checked.
       // The option checkboxes are decorative (hidden from the accessibility
       // tree), so query the underlying <input> elements directly rather than
       // via role.
@@ -403,7 +389,6 @@ describe("MultiSelect", () => {
 
       await openMenu();
 
-      // The ListBoxMenu itself has the style applied
       const menu = screen.getByRole("listbox");
       expectTypeOf(menu).toEqualTypeOf<HTMLElement>();
       expect(menu).toBeInTheDocument();
@@ -426,10 +411,8 @@ describe("MultiSelect", () => {
       expect(menu).toBeVisible();
 
       const options = screen.getAllByRole("option");
-      // Should virtualize, so fewer than 150 items rendered
       expect(options.length).toBeLessThan(150);
       expect(options.length).toBeGreaterThan(0);
-      // Should have max-height style applied
       expect(menu.style.maxHeight).toBeTruthy();
       expect(menu.style.overflowY).toBe("auto");
     });
@@ -449,9 +432,7 @@ describe("MultiSelect", () => {
       expect(menu).toBeVisible();
 
       const options = screen.getAllByRole("option");
-      // Should render all items when at or below threshold
       expect(options.length).toBe(100);
-      // Should not have max-height style when not virtualized
       expect(menu.style.maxHeight).toBeFalsy();
     });
 
@@ -471,9 +452,7 @@ describe("MultiSelect", () => {
       expect(menu).toBeVisible();
 
       const options = screen.getAllByRole("option");
-      // Should render all items when explicitly disabled
       expect(options.length).toBe(100);
-      // Should not have max-height style when not virtualized
       expect(menu.style.maxHeight).toBeFalsy();
     });
 
@@ -483,7 +462,7 @@ describe("MultiSelect", () => {
         props: {
           items: smallItems,
           selectedIds: ["0"],
-          virtualize: true, // Explicitly enabled, but below threshold
+          virtualize: true,
         },
       });
 
@@ -493,10 +472,8 @@ describe("MultiSelect", () => {
       expect(menu).toBeVisible();
 
       const options = screen.getAllByRole("option");
-      // Should render all items because threshold (100) is not met
-      // Even though virtualize=true, the threshold check prevents virtualization
       expect(options.length).toBe(50);
-      // Should have max-height style applied (virtualConfig is created)
+      // virtualConfig is created
       expect(menu.style.maxHeight).toBeTruthy();
       expect(menu.style.overflowY).toBe("auto");
     });
@@ -507,7 +484,7 @@ describe("MultiSelect", () => {
         props: {
           items: largeItems,
           selectedIds: ["0"],
-          virtualize: true, // Explicitly enabled, above threshold
+          virtualize: true,
         },
       });
 
@@ -517,10 +494,8 @@ describe("MultiSelect", () => {
       expect(menu).toBeVisible();
 
       const options = screen.getAllByRole("option");
-      // Should virtualize when above threshold
       expect(options.length).toBeLessThan(150);
       expect(options.length).toBeGreaterThan(0);
-      // Should have max-height style applied
       expect(menu.style.maxHeight).toBeTruthy();
       expect(menu.style.overflowY).toBe("auto");
     });

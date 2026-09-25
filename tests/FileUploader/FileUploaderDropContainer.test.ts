@@ -455,7 +455,6 @@ describe("FileUploaderDropContainer", () => {
     });
 
     const event = changeHandler.mock.calls[0][0];
-    // Only small file should pass validation
     expect(event.detail).toHaveLength(1);
     expect(event.detail[0].name).toBe("small.txt");
   });
@@ -669,7 +668,6 @@ describe("FileUploaderDropContainer", () => {
       expect(changeHandler).toHaveBeenCalled();
     });
 
-    // validateFiles should only see files that passed size/duplicate
     expect(validateFiles).toHaveBeenCalledWith([skipped, ok]);
 
     const rejected = rejectedHandler.mock.calls[0][0].detail;

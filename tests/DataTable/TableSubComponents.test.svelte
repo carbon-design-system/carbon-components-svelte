@@ -17,7 +17,6 @@
     | "TableFoot"
     | "TableContainer" = "Table";
 
-  // Table props
   export let size: ComponentProps<Table>["size"] = undefined;
   export let zebra: ComponentProps<Table>["zebra"] = false;
   export let useStaticWidth: ComponentProps<Table>["useStaticWidth"] = false;
@@ -25,7 +24,6 @@
   export let stickyHeader: ComponentProps<Table>["stickyHeader"] = false;
   export let tableStyle: ComponentProps<Table>["tableStyle"] = undefined;
 
-  // TableContainer props
   export let title: ComponentProps<TableContainer>["title"] = "";
   export let description: ComponentProps<TableContainer>["description"] = "";
 

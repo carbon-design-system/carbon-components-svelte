@@ -88,7 +88,6 @@ describe.each(testCases)("$name", ({ component }) => {
       id: 0,
       indeterminate: false,
       leaf: true,
-      // The `select` payload reflects the post-click state: the node is now selected.
       selected: true,
       text: "AI / Machine learning",
     });
@@ -198,7 +197,6 @@ describe.each(testCases)("$name", ({ component }) => {
 
     await user.click(toggleButton);
 
-    // Expanding reports the post-toggle state: `expanded: true`.
     expect(lastToggleDetail()).toEqual(
       expect.objectContaining({
         id: 1,
@@ -209,7 +207,6 @@ describe.each(testCases)("$name", ({ component }) => {
     );
     expect(analyticsNode).toHaveAttribute("aria-expanded", "true");
 
-    // Collapsing reports `expanded: false`.
     await user.click(toggleButton);
     expect(lastToggleDetail()).toEqual(
       expect.objectContaining({
@@ -629,7 +626,6 @@ describe("TreeView Props", () => {
       "Blockchain",
       "Databases",
     ]);
-    // Integration is disabled and excluded.
     expect(
       screen.getByRole("treeitem", { name: /Integration/ }),
     ).toHaveAttribute("aria-disabled", "true");
@@ -712,7 +708,6 @@ describe("TreeView Props", () => {
     expect(aiItem).toHaveAttribute("aria-selected", "true");
     expect(blockchainItem).toHaveAttribute("aria-selected", "true");
 
-    // Ctrl+click again to deselect
     await user.keyboard("{Control>}");
     await user.click(blockchainItem);
     await user.keyboard("{/Control}");
@@ -865,7 +860,6 @@ describe("TreeView Props", () => {
 
     const blockchainItem = treeItemById(7);
 
-    // Ctrl+click to select: payload reports `selected: true`.
     await user.keyboard("{Control>}");
     await user.click(blockchainItem);
     await user.keyboard("{/Control}");
@@ -874,7 +868,6 @@ describe("TreeView Props", () => {
       expect.objectContaining({ id: 7, selected: true }),
     );
 
-    // Ctrl+click again to deselect: payload reports `selected: false`.
     await user.keyboard("{Control>}");
     await user.click(blockchainItem);
     await user.keyboard("{/Control}");
@@ -919,7 +912,6 @@ describe("TreeView Props", () => {
     await user.click(blockchainItem);
     await user.keyboard("{/Control}");
 
-    // Should replace, not toggle
     expect(aiItem).toHaveAttribute("aria-selected", "false");
     expect(blockchainItem).toHaveAttribute("aria-selected", "true");
   });
@@ -1017,11 +1009,9 @@ describe("TreeView Props", () => {
     const blockchainItem = treeItemById(7);
     const analyticsItem = treeItemById(1);
 
-    // Plain click sets anchor on AI
     await user.click(aiItem);
     expect(aiItem).toHaveAttribute("aria-selected", "true");
 
-    // Shift+click on Blockchain selects range: AI, Analytics, Blockchain
     await user.keyboard("{Shift>}");
     await user.click(blockchainItem);
     await user.keyboard("{/Shift}");
@@ -1099,7 +1089,7 @@ describe("TreeView Props", () => {
     const blockchainItem = treeItemById(7);
     const databasesItem = treeItemById(9);
 
-    // Click AI, then plain click Databases (resets anchor to Databases)
+    // Resets anchor to Databases
     await user.click(aiItem);
     await user.click(databasesItem);
 
@@ -1137,7 +1127,6 @@ describe("TreeView Props", () => {
     assert(sqlItem instanceof HTMLElement);
     assert(db2Item instanceof HTMLElement);
 
-    // Click AI first
     await user.click(aiItem);
     expect(aiItem).toHaveAttribute("aria-selected", "true");
 
@@ -1175,7 +1164,6 @@ describe("TreeView Props", () => {
 
     await user.click(disabledNode);
 
-    // Disabled node should not become selected
     expect(disabledNode).not.toHaveAttribute("aria-selected", "true");
   });
 
@@ -1189,10 +1177,9 @@ describe("TreeView Props", () => {
 
     const aiItem = treeItemById(0);
 
-    // Click AI first
     await user.click(aiItem);
 
-    // Shift+click to select range to Databases (Integration is disabled in between)
+    // Integration is disabled in between
     const databasesItem = treeItemById(9);
 
     await user.keyboard("{Shift>}");
@@ -1202,7 +1189,6 @@ describe("TreeView Props", () => {
     expect(aiItem).toHaveAttribute("aria-selected", "true");
     expect(databasesItem).toHaveAttribute("aria-selected", "true");
 
-    // Integration is disabled and should not be selected
     const disabledNode = treeItemById(14);
     expect(disabledNode).not.toHaveAttribute("aria-selected", "true");
   });
@@ -1600,7 +1586,6 @@ describe("TreeView Generics", () => {
     });
 
     it("should support different ID types (string, number, union)", () => {
-      // String ID
       type StringNode = { id: string; text: string };
       type StringComponent = TreeViewComponent<StringNode>;
       type StringProps = ComponentProps<StringComponent>;
@@ -1629,7 +1614,6 @@ describe("TreeView Generics", () => {
         }
       >();
 
-      // Number ID
       type NumberNode = { id: number; text: string };
       type NumberComponent = TreeViewComponent<NumberNode>;
       type NumberProps = ComponentProps<NumberComponent>;
@@ -1644,7 +1628,6 @@ describe("TreeView Generics", () => {
         ReadonlyArray<number> | undefined
       >();
 
-      // Union ID
       type UnionId = "a" | "b" | "c";
       type UnionNode = { id: UnionId; text: string };
       type UnionComponent = TreeViewComponent<UnionNode>;
@@ -1715,7 +1698,6 @@ describe("TreeView Generics", () => {
     });
 
     it("should type showNode method correctly with different ID types", () => {
-      // String ID - verify the component accepts string IDs
       type StringNode = { id: string; text: string };
       type StringComponent = TreeViewComponent<StringNode>;
       type StringProps = ComponentProps<StringComponent>;
@@ -1724,7 +1706,6 @@ describe("TreeView Generics", () => {
         string | undefined
       >();
 
-      // Number ID
       type NumberNode = { id: number; text: string };
       type NumberComponent = TreeViewComponent<NumberNode>;
       type NumberProps = ComponentProps<NumberComponent>;
@@ -1732,7 +1713,6 @@ describe("TreeView Generics", () => {
         number | undefined
       >();
 
-      // Union ID
       type UnionId = "folder1" | "folder2" | "file1";
       type UnionNode = { id: UnionId; text: string };
       type UnionComponent = TreeViewComponent<UnionNode>;

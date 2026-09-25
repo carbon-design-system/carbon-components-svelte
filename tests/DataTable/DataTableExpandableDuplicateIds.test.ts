@@ -31,7 +31,6 @@ describe("DataTableExpandableDuplicateIds", () => {
         const controls = button.getAttribute("aria-controls") ?? "";
         expect(controls).toBeTruthy();
 
-        // The controlled expandable row must exist within the same table.
         const controlledRow = table.querySelector(
           `tr[data-child-row]#${CSS.escape(controls)}`,
         );

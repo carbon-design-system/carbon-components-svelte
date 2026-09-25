@@ -150,10 +150,8 @@ describe("RadioButtonRegistry", () => {
     assert(group);
     expect(get(group.selectedKey)).toBe(key1);
 
-    // Unregister the selected instance
     unregister1();
 
-    // selectedKey should be reset to undefined
     expect(get(group.selectedKey)).toBeUndefined();
   });
 
@@ -171,10 +169,8 @@ describe("RadioButtonRegistry", () => {
     assert(group);
     expect(get(group.selectedKey)).toBe(key1);
 
-    // Unregister the non-selected instance
     unregister2();
 
-    // selectedKey should still be key1
     expect(get(group.selectedKey)).toBe(key1);
   });
 });

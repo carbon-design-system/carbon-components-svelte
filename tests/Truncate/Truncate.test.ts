@@ -91,7 +91,6 @@ describe("Truncate", () => {
       const element = screen.getByText("Test");
       element.classList.add("custom-class");
 
-      // Trigger update
       element.dispatchEvent(new Event("update"));
 
       expect(element).toHaveClass("custom-class");

@@ -52,19 +52,16 @@ describe("FluidForm", () => {
   it("renders form elements correctly", () => {
     render(FluidFormTest);
 
-    // Check form group
     const formGroup = screen.getByRole("group");
     expect(formGroup).toBeInTheDocument();
     expect(formGroup).toHaveTextContent("Checkboxes");
 
-    // Check checkboxes
     const checkboxes = screen.getAllByRole("checkbox");
     expect(checkboxes).toHaveLength(3);
     expect(checkboxes[0]).toBeChecked();
     expect(checkboxes[1]).not.toBeChecked();
     expect(checkboxes[2]).toBeDisabled();
 
-    // Check submit button
     const submitButton = screen.getByRole("button", { name: "Submit" });
     expect(submitButton).toBeInTheDocument();
     expect(submitButton).toHaveAttribute("type", "submit");

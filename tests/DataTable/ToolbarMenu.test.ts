@@ -101,7 +101,6 @@ describe("DataTable Toolbar Menu", () => {
         },
       });
 
-      // Click to open the menu
       const button = container.querySelector(".bx--overflow-menu");
       assert(button);
       await user.click(button);
@@ -148,7 +147,6 @@ describe("DataTable Toolbar Menu", () => {
         },
       });
 
-      // Click to open the menu
       const button = container.querySelector(".bx--overflow-menu");
       assert(button);
       await user.click(button);

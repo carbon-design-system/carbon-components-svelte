@@ -60,12 +60,10 @@ describe("TreeView type-ahead", () => {
     const aiItem = treeItemById(0);
     aiItem.focus();
 
-    // First "a" moves from AI/ML(0) to the next match, Analytics(1).
     await user.keyboard("a");
     const analyticsItem = treeItemById(1);
     expect(analyticsItem).toHaveFocus();
 
-    // Second "a" cycles back around to AI/ML(0).
     await user.keyboard("a");
     expect(aiItem).toHaveFocus();
   });

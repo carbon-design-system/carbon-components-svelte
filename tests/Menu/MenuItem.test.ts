@@ -133,7 +133,6 @@ describe("MenuItem", () => {
       expect(
         screen.getByRole("menuitem", { name: "Export as" }),
       ).toHaveAttribute("aria-expanded", "true");
-      // Root menu is still open.
       expect(
         screen.getByRole("menuitem", { name: "Add item" }),
       ).toBeInTheDocument();
@@ -299,14 +298,12 @@ describe("MenuItem", () => {
           screen.getByRole("menuitem", { name: "PDF" }),
         ).toBeInTheDocument();
 
-        // Leave the parent item without re-entering the submenu.
         await fireEvent.mouseLeave(parent);
         await vi.advanceTimersByTimeAsync(HOVER_DELAY_MS);
 
         expect(
           screen.queryByRole("menuitem", { name: "PDF" }),
         ).not.toBeInTheDocument();
-        // Root menu (its own item) is still open.
         expect(
           screen.getByRole("menuitem", { name: "Add item" }),
         ).toBeInTheDocument();
