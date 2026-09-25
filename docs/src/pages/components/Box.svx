@@ -239,6 +239,14 @@ Set `overflow` to control how content that exceeds the box's bounds is handled.
   <Box height="12rem" padding={3}>Scroll to see the clipped content below.</Box>
 </Box>
 
+### Axis overflow
+
+Set `overflowX` or `overflowY` to control one axis only. Each overrides `overflow` on its own axis, so `overflow="hidden"` with `overflowX="auto"` scrolls horizontally while clipping vertically.
+
+<Box width="16rem" border="subtle" overflowX="auto" overflowY="hidden">
+  <Box width="32rem" padding={3}>Scroll sideways to see the rest of this wide row; the vertical axis never scrolls.</Box>
+</Box>
+
 ### Scroll gradient
 
 Compose `Box` with [ScrollGradient](/components/ScrollGradient) to hint at overflow with a fading edge instead of a plain scrollbar. `Box` supplies the panel styling; `ScrollGradient` owns the scroll behavior, so leave `overflow` unset on it.
@@ -328,6 +336,8 @@ Apply Box utilities directly when you do not need the component. Classes use the
 | `bx--box-overflow-hidden` | `overflow: hidden` |
 | `bx--box-overflow-auto` | `overflow: auto` |
 | `bx--box-overflow-scroll` | `overflow: scroll` |
+| `bx--box-overflow-x-{visible,hidden,auto,scroll}` | `overflow-x` on the horizontal axis only |
+| `bx--box-overflow-y-{visible,hidden,auto,scroll}` | `overflow-y` on the vertical axis only |
 | `bx--box-top-{0-13}` | Offset from the top |
 | `bx--box-bottom-{0-13}` | Offset from the bottom |
 
