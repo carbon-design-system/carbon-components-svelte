@@ -691,6 +691,7 @@ Import shared utilities (for example exported helpers) from the component file o
 #### Style
 
 - Write cases with `it(...)`, not `test(...)`. `describe`, `it`, `expect`, `vi`, `assert`, and `expectTypeOf` are globals; do not import them from `vitest`.
+- Start a test file that never touches the DOM (pure utils, CSS compile checks, scripts) with `// @vitest-environment node`. Creating a jsdom environment is the largest fixed cost per file, and setup skips the DOM stubs when there is no `document`. Leave the pragma off if the file needs `Element`, `KeyboardEvent`, `localStorage`, or a rendered component, even indirectly.
 - Narrow types with an assertion, not a cast. Write `assert(input instanceof HTMLInputElement)` instead of `as HTMLInputElement`. The global `assert` fails the test with a clear message when the element is wrong, and TypeScript narrows the variable after it. Use `assert(el)` for a nullable lookup. Do not use `expect.assert` or non-null `!`.
 - Skip the narrowing when a jest-dom matcher does the job. `expect(input).toHaveValue("a")`, `toBeChecked()`, and `toHaveFocus()` accept any element, so reading `.value` or `.checked` through a cast is rarely needed.
 - Type `querySelector` through its generic: `container.querySelector<HTMLInputElement>("input")`, then `assert(input)`.
