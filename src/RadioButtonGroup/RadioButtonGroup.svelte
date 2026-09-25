@@ -68,6 +68,12 @@
   export let readonly = false;
 
   /**
+   * Specify the assistive text announced to screen readers when read-only.
+   * Exposed because VoiceOver does not announce `aria-readonly`.
+   */
+  export let readonlyText = "Read-only";
+
+  /**
    * Set to `true` so clicking an already-selected radio clears the selection
    * instead of leaving it selected.
    */
@@ -97,6 +103,7 @@
   import WarningFilled from "../icons/WarningFilled.svelte";
   import {
     buildFieldIds,
+    joinDescribedBy,
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
@@ -119,6 +126,7 @@
   const fallbackHelperId = uniqueId();
   const fallbackErrorId = uniqueId();
   const fallbackWarnId = uniqueId();
+  const fallbackReadonlyId = uniqueId();
   /** @type {import("svelte/store").Writable<string | undefined>} */
   const helperId = writable(undefined);
   let initialRender = true;
@@ -227,10 +235,12 @@
     errorId,
     warnId,
     helperId: rawHelperId,
+    readonlyId,
   } = buildFieldIds(id, {
     helperId: fallbackHelperId,
     errorId: fallbackErrorId,
     warnId: fallbackWarnId,
+    readonlyId: fallbackReadonlyId,
   }));
   // The `helperId` store holds the *resolved* description id (not the
   // raw helper id) — child RadioButtons point their own
@@ -260,6 +270,7 @@
     role="radiogroup"
     aria-orientation={orientation}
     aria-readonly={readonly || undefined}
+    aria-describedby={joinDescribedBy(readonly ? readonlyId : null)}
     class:bx--radio-button-group={true}
     class:bx--radio-button-group--vertical={orientation === "vertical"}
     class:bx--radio-button-group--label-left={labelPosition === "left"}
@@ -288,6 +299,11 @@
         <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
       {/if}
     </div>
+    {#if readonly}
+      <span id={readonlyId} class:bx--visually-hidden={true}
+        >{readonlyText}</span
+      >
+    {/if}
   </fieldset>
   {#if helperText && !showInvalid && !showWarn}
     <div
