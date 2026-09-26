@@ -26,11 +26,11 @@ const ALLOWED: RegExp[] = [
 ];
 
 /**
- * Release builds (all themes) unpack to ~6.2 MB as of 0.112.0. The budget
- * leaves room for real source growth while still tripping on an artifact the
- * size of the parse cache.
+ * Release builds (all themes, doc comments stripped) unpack to ~5.7 MB as of
+ * 0.112.1. The budget leaves room for real source growth while still
+ * tripping on an artifact the size of the parse cache.
  */
-export const UNPACKED_SIZE_BUDGET = 7_000_000;
+export const UNPACKED_SIZE_BUDGET = 6_500_000;
 
 export function packageContentProblems(
   files: PackedFile[],

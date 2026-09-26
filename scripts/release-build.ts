@@ -70,6 +70,8 @@ async function prunePackageJson(): Promise<void> {
 console.time("[release-build]");
 
 await $`bun run build:docs`;
+// After build:docs, which reads the doc comments to generate the .d.ts files.
+await $`bun scripts/strip-doc-comments.ts --write`;
 await $`bun run build:css:themes`;
 await prunePackageJson();
 
