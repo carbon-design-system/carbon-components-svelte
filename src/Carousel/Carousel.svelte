@@ -34,6 +34,18 @@
    */
   export let wrap = false;
 
+  /**
+   * Set to `true` to show the active slide's position next to the buttons.
+   * Pair it with `wrap`, where the buttons no longer disable at the bounds.
+   */
+  export let showCounter = false;
+
+  /**
+   * Override the counter text.
+   * @type {(current: number, total: number) => string}
+   */
+  export let counterText = (current, total) => `${current} of ${total}`;
+
   import {
     afterUpdate,
     createEventDispatcher,
@@ -206,6 +218,11 @@
     <slot />
   </div>
   <div class:bx--carousel__controls={true}>
+    {#if showCounter && $views.length > 0}
+      <span class:bx--carousel__counter={true}>
+        {counterText(currentIndex + 1, $views.length)}
+      </span>
+    {/if}
     <button
       bind:this={prevButton}
       type="button"

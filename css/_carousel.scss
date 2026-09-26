@@ -1,5 +1,6 @@
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
 /// Carousel drives `src/utils/carousel.js`'s `initCarousel`, which toggles
@@ -23,6 +24,15 @@
     display: flex;
     justify-content: flex-end;
     column-gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--carousel__counter {
+    @include type-style("body-short-01");
+
+    align-self: center;
+    margin-inline-end: $carbon--spacing-03;
+    color: $text-02;
+    font-variant-numeric: tabular-nums;
   }
 
   .#{$prefix}--carousel__button {
