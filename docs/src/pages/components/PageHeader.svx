@@ -1,0 +1,582 @@
+---
+components: ["PageHeader", "PageHeaderSkeleton"]
+description: Page headers identify the current page with a title and subtitle, with optional breadcrumb, tabs, and page actions.
+---
+
+<script>
+  import {
+    PageHeader,
+    PageHeaderSkeleton,
+    Breadcrumb,
+    BreadcrumbItem,
+    Tabs,
+    Tab,
+    TabContent,
+    ButtonSet,
+    Button,
+    Box,
+    Text,
+    Link,
+    Tag,
+    IconIndicator,
+    UserAvatar,
+    OverflowMenu,
+    OverflowMenuItem,
+    ComboButton,
+    MenuButton,
+    MenuItem,
+    MenuDivider,
+    Search,
+    ContainedList,
+    ContainedListItem,
+    Row,
+    Column,
+    Tile,
+    BigNumber,
+    DescriptionList,
+    DescriptionListItem,
+    MenuItemRadioGroup,
+  } from "carbon-components-svelte";
+  import Download from "carbon-icons-svelte/lib/Download.svelte";
+  import Renew from "carbon-icons-svelte/lib/Renew.svelte";
+  import Add from "carbon-icons-svelte/lib/Add.svelte";
+  import DataBase from "carbon-icons-svelte/lib/DataBase.svelte";
+  import Copy from "carbon-icons-svelte/lib/Copy.svelte";
+  import Edit from "carbon-icons-svelte/lib/Edit.svelte";
+  import Folder from "carbon-icons-svelte/lib/Folder.svelte";
+  import Share from "carbon-icons-svelte/lib/Share.svelte";
+  import Star from "carbon-icons-svelte/lib/Star.svelte";
+
+  const databases = [
+    { name: "db-prod-01", engine: "PostgreSQL 16", region: "us-south" },
+    { name: "db-prod-02", engine: "PostgreSQL 16", region: "eu-de" },
+    { name: "analytics", engine: "MySQL 8", region: "us-east" },
+    { name: "cache-sessions", engine: "Redis 7", region: "us-south" },
+  ];
+
+  const timeRanges = [
+    { id: "1h", text: "Last hour" },
+    { id: "24h", text: "Last 24 hours" },
+    { id: "7d", text: "Last 7 days" },
+  ];
+
+  let timeRange = "24h";
+
+  $: timeRangeLabel = timeRanges.find((range) => range.id === timeRange)?.text;
+
+  let databaseFilter = "";
+
+  $: filteredDatabases = databases.filter((db) =>
+    [db.name, db.engine, db.region].some((field) =>
+      field.toLowerCase().includes(databaseFilter.trim().toLowerCase()),
+    ),
+  );
+</script>
+
+## Basic
+
+Set `title` and `subtitle`. The title renders as a `Heading`, so its level follows the nearest `Section` (an `h1` by default).
+
+<PageHeader title="Databases" subtitle="Manage your database instances" />
+
+## Breadcrumb
+
+Place a `Breadcrumb` in the `breadcrumb` slot to render it above the title.
+
+<PageHeader title="Databases" subtitle="Manage your database instances">
+  <svelte:fragment slot="breadcrumb">
+    <Breadcrumb noTrailingSlash>
+      <BreadcrumbItem href="/">Home</BreadcrumbItem>
+      <BreadcrumbItem href="/">Resources</BreadcrumbItem>
+      <BreadcrumbItem href="/" isCurrentPage>Databases</BreadcrumbItem>
+    </Breadcrumb>
+  </svelte:fragment>
+</PageHeader>
+
+### Breadcrumb actions
+
+Use the `breadcrumbEnd` slot for small, page-wide actions such as share or favorite. They sit at the end of the breadcrumb row, away from the main page actions.
+
+<PageHeader title="db-prod-01" subtitle="PostgreSQL 16 · us-south">
+  <svelte:fragment slot="breadcrumb">
+    <Breadcrumb noTrailingSlash>
+      <BreadcrumbItem href="/">Home</BreadcrumbItem>
+      <BreadcrumbItem href="/">Databases</BreadcrumbItem>
+      <BreadcrumbItem href="/" isCurrentPage>db-prod-01</BreadcrumbItem>
+    </Breadcrumb>
+  </svelte:fragment>
+  <svelte:fragment slot="breadcrumbEnd">
+    <Button kind="ghost" size="small" iconOnly icon={Share} iconDescription="Share" />
+    <Button kind="ghost" size="small" iconOnly icon={Star} iconDescription="Add to favorites" />
+  </svelte:fragment>
+</PageHeader>
+
+## Tabs and panels
+
+### Tabs
+
+Place a `Tabs` in the `tabs` slot to render page-level navigation along the header's bottom edge.
+
+<PageHeader title="Databases" subtitle="Manage your database instances">
+  <svelte:fragment slot="tabs">
+    <Tabs>
+      <Tab label="Overview" />
+      <Tab label="Backups" />
+      <Tab label="Settings" />
+    </Tabs>
+  </svelte:fragment>
+</PageHeader>
+
+### Tab panels
+
+Content in the default slot renders after the header, outside the `<header>` element. Place one `TabContent` per tab there to pair each panel with its tab in the `tabs` slot, as you would in the `Tabs` `content` slot. Panels stay out of the header, so a `sticky` header does not pin them.
+
+<PageHeader title="Databases" subtitle="Manage your database instances">
+  <svelte:fragment slot="tabs">
+    <Tabs>
+      <Tab label="Overview" />
+      <Tab label="Backups" />
+      <Tab label="Settings" />
+    </Tabs>
+  </svelte:fragment>
+  <TabContent>Overview: 4 instances, 2 regions.</TabContent>
+  <TabContent>Backups: nightly, kept for 30 days.</TabContent>
+  <TabContent>Settings: maintenance window Sunday 02:00 UTC.</TabContent>
+</PageHeader>
+
+### Tabs end
+
+Use the `tabsEnd` slot for controls that apply to every tab, such as a time range. They sit at the end of the tabs row, lined up with the actions. A ghost `MenuButton` matches the tab height, and `intrinsicAlign="end"` opens its menu toward the page.
+
+<PageHeader title="db-prod-01" subtitle="PostgreSQL 16 · us-south">
+  <svelte:fragment slot="tabs">
+    <Tabs>
+      <Tab label="Overview" />
+      <Tab label="Metrics" />
+      <Tab label="Logs" />
+    </Tabs>
+  </svelte:fragment>
+  <svelte:fragment slot="tabsEnd">
+    <MenuButton kind="ghost" intrinsicAlign="end" labelText={timeRangeLabel}>
+      <MenuItemRadioGroup labelText="Time range" bind:selectedId={timeRange}>
+        {#each timeRanges as range (range.id)}
+          <MenuItem id={range.id} labelText={range.text} />
+        {/each}
+      </MenuItemRadioGroup>
+    </MenuButton>
+  </svelte:fragment>
+</PageHeader>
+
+### Container tabs
+
+Set `type="container"` on the slotted `Tabs` to use container tabs. The header drops its divider, and panels in the default slot take the `"layer-01"` surface of the selected tab.
+
+<PageHeader title="Databases" subtitle="Manage your database instances">
+  <svelte:fragment slot="tabs">
+    <Tabs type="container">
+      <Tab label="Overview" />
+      <Tab label="Backups" />
+      <Tab label="Settings" />
+    </Tabs>
+  </svelte:fragment>
+  <TabContent>Overview: 4 instances, 2 regions.</TabContent>
+  <TabContent>Backups: nightly, kept for 30 days.</TabContent>
+  <TabContent>Settings: maintenance window Sunday 02:00 UTC.</TabContent>
+</PageHeader>
+
+On a layered header (`fill="layer-01"`), the selected tab and its panel switch to the page `"background"` instead, so they still stand apart from the header.
+
+<PageHeader fill="layer-01" title="Databases" subtitle="Manage your database instances">
+  <svelte:fragment slot="tabs">
+    <Tabs type="container">
+      <Tab label="Overview" />
+      <Tab label="Backups" />
+      <Tab label="Settings" />
+    </Tabs>
+  </svelte:fragment>
+  <TabContent>Overview: 4 instances, 2 regions.</TabContent>
+  <TabContent>Backups: nightly, kept for 30 days.</TabContent>
+  <TabContent>Settings: maintenance window Sunday 02:00 UTC.</TabContent>
+</PageHeader>
+
+## Actions
+
+The `actions` slot aligns page actions with the title and wraps them below it on narrow screens. Children sit side by side with no gap, like a `ButtonSet`, so wrap them in a `Stack` or `Box` when they need space between them. Match control heights, for example `size="lg"` on `ComboButton` and `MenuButton` and `size="xl"` on `OverflowMenu`, to line up with default-size buttons.
+
+### Single action
+
+<PageHeader title="Databases" subtitle="Manage your database instances">
+  <svelte:fragment slot="actions">
+    <Button icon={Add}>Create database</Button>
+  </svelte:fragment>
+</PageHeader>
+
+### Button set
+
+Place a `ButtonSet` or `ActionSet` in the slot for a secondary and a primary action. Each button sizes to its label.
+
+<PageHeader title="Databases" subtitle="Manage your database instances">
+  <svelte:fragment slot="actions">
+    <ButtonSet>
+      <Button kind="secondary">Import</Button>
+      <Button icon={Add}>Create database</Button>
+    </ButtonSet>
+  </svelte:fragment>
+</PageHeader>
+
+### Icon buttons
+
+Pair ghost icon-only buttons with the primary action for frequent secondary tasks.
+
+<PageHeader title="Databases" subtitle="Manage your database instances">
+  <svelte:fragment slot="actions">
+    <Button kind="ghost" iconOnly icon={Renew} iconDescription="Refresh" tooltipPosition="bottom" />
+    <Button kind="ghost" iconOnly icon={Download} iconDescription="Export" tooltipPosition="bottom" />
+    <Button icon={Add}>Create database</Button>
+  </svelte:fragment>
+</PageHeader>
+
+### Overflow menu
+
+Move less frequent actions into an `OverflowMenu` beside the primary action. Set `flipped` so the menu opens toward the page, not off its edge.
+
+<PageHeader title="db-prod-01" subtitle="PostgreSQL 16 · us-south">
+  <svelte:fragment slot="actions">
+    <ButtonSet>
+      <Button kind="secondary">Restart</Button>
+      <Button>Connect</Button>
+    </ButtonSet>
+    <OverflowMenu size="xl" flipped iconDescription="More actions">
+      <OverflowMenuItem text="Rename" />
+      <OverflowMenuItem text="Clone" />
+      <OverflowMenuItem danger text="Delete" />
+    </OverflowMenu>
+  </svelte:fragment>
+</PageHeader>
+
+### Combo button
+
+Use a `ComboButton` when one action is most common and related variants belong in its menu. Set `tooltipAlignment="end"` so the trigger's tooltip stays on screen at the page's right edge.
+
+<PageHeader title="Deployments" subtitle="Release builds to your environments">
+  <svelte:fragment slot="actions">
+    <ComboButton
+      size="lg"
+      labelText="Deploy"
+      iconDescription="More deploy options"
+      tooltipAlignment="end"
+    >
+      <MenuItem>Deploy to staging</MenuItem>
+      <MenuItem>Deploy to production</MenuItem>
+      <MenuDivider />
+      <MenuItem>Schedule deploy</MenuItem>
+    </ComboButton>
+  </svelte:fragment>
+</PageHeader>
+
+### Menu button
+
+Use a `MenuButton` to group several actions of equal weight behind one trigger. Set `intrinsicAlign="end"` so the menu opens aligned to the trigger's right edge, toward the page.
+
+<PageHeader title="db-prod-01" subtitle="PostgreSQL 16 · us-south">
+  <svelte:fragment slot="actions">
+    <MenuButton size="lg" kind="tertiary" labelText="Actions" intrinsicAlign="end">
+      <MenuItem>Restart</MenuItem>
+      <MenuItem>Create backup</MenuItem>
+      <MenuItem>Scale</MenuItem>
+      <MenuDivider />
+      <MenuItem kind="danger">Delete</MenuItem>
+    </MenuButton>
+  </svelte:fragment>
+</PageHeader>
+
+### Filter
+
+Place a `Search` in the slot to filter the content below the header in place. Wrap it in a `Box` with a fixed `width`, since a `Search` otherwise shrinks to its placeholder in the actions row.
+
+<PageHeader
+  title="Databases"
+  subtitle="{filteredDatabases.length} of {databases.length} instances"
+>
+  <svelte:fragment slot="actions">
+    <Box width="20rem">
+      <Search
+        labelText="Filter databases"
+        placeholder="Filter by name, engine, or region"
+        bind:value={databaseFilter}
+      />
+    </Box>
+  </svelte:fragment>
+  <ContainedList labelText="Instances" hideLabel>
+    {#each filteredDatabases as db (db.name)}
+      <ContainedListItem>{db.name} · {db.engine} · {db.region}</ContainedListItem>
+    {:else}
+      <ContainedListItem>No databases match "{databaseFilter}".</ContainedListItem>
+    {/each}
+  </ContainedList>
+</PageHeader>
+
+## Title content
+
+### Title only
+
+Omit `subtitle` for a title-only header.
+
+<PageHeader title="Databases" />
+
+### Custom title
+
+Use the `titleChildren` slot for rich title content. It renders inside the heading and overrides `title`. Place a `Text` with `tag="span"` in the slot to give the title a different type style.
+
+<PageHeader subtitle="Manage your database instances">
+  <svelte:fragment slot="titleChildren">
+    <Text tag="span" type="productive-heading-03">Databases</Text>
+  </svelte:fragment>
+</PageHeader>
+
+### Title icon
+
+Use the `titleStart` slot to place an icon before the title.
+
+<PageHeader title="Databases" subtitle="Manage your database instances">
+  <svelte:fragment slot="titleStart">
+    <DataBase size={24} aria-hidden="true" />
+  </svelte:fragment>
+</PageHeader>
+
+### Eyebrow
+
+Set `eyebrow` for short text above the title, such as the parent section or resource type.
+
+<PageHeader eyebrow="Resources" title="Databases" subtitle="Manage your database instances" />
+
+### Eyebrow with icon
+
+Set `eyebrowIcon` to place an icon before the eyebrow text. The icon always renders at 16px, whatever size the icon component is given.
+
+<PageHeader
+  eyebrow="Resources"
+  eyebrowIcon={Folder}
+  title="Databases"
+  subtitle="Manage your database instances"
+/>
+
+### Avatar
+
+Place a `UserAvatar` in the `titleStart` slot for a person or account page.
+
+<PageHeader title="Richard Hendricks" subtitle="Administrator · richard.hendricks@example.com">
+  <svelte:fragment slot="titleStart">
+    <UserAvatar
+      name="Richard Hendricks"
+      image="https://i.pravatar.cc/300?img=12"
+      imageDescription="Richard Hendricks"
+    />
+  </svelte:fragment>
+</PageHeader>
+
+### Status
+
+Use the `titleEnd` slot for a status `Tag` or `IconIndicator` beside the title.
+
+<PageHeader title="db-prod-01" subtitle="PostgreSQL 16 · us-south">
+  <svelte:fragment slot="titleEnd">
+    <Tag type="green" size="sm">Running</Tag>
+  </svelte:fragment>
+</PageHeader>
+
+<PageHeader title="Nightly backup" subtitle="Last run 2 hours ago">
+  <svelte:fragment slot="titleEnd">
+    <IconIndicator kind="in-progress" label="Running" />
+  </svelte:fragment>
+</PageHeader>
+
+### Contextual actions
+
+Use the `titleEnd` slot for small ghost icon buttons that act on the title itself, such as rename or copy. Keep page-wide actions in the `actions` slot.
+
+<PageHeader title="db-prod-01" subtitle="PostgreSQL 16 · us-south">
+  <svelte:fragment slot="titleEnd">
+    <Button kind="ghost" size="small" iconOnly icon={Edit} iconDescription="Rename" />
+    <Button kind="ghost" size="small" iconOnly icon={Copy} iconDescription="Copy name" />
+  </svelte:fragment>
+</PageHeader>
+
+### Description
+
+Use the `description` slot for longer rich text, such as a link to more help, in place of a one-line `subtitle`.
+
+<PageHeader title="Databases">
+  <svelte:fragment slot="description">
+    Provision, scale, and back up managed PostgreSQL and MySQL instances.
+    Backups run nightly and are kept for 30 days. <Link href="/">Learn about backups</Link>
+  </svelte:fragment>
+</PageHeader>
+
+### Metadata
+
+Use the `meta` slot for key facts between the title and the tabs, such as a `DescriptionList` with `columns`.
+
+<PageHeader title="db-prod-01" subtitle="PostgreSQL 16 · us-south">
+  <svelte:fragment slot="titleEnd">
+    <Tag type="green" size="sm">Running</Tag>
+  </svelte:fragment>
+  <svelte:fragment slot="meta">
+    <DescriptionList columns={4}>
+      <DescriptionListItem term="Region">us-south</DescriptionListItem>
+      <DescriptionListItem term="Plan">Standard</DescriptionListItem>
+      <DescriptionListItem term="Storage">42 GB</DescriptionListItem>
+      <DescriptionListItem term="Created">March 14, 2026</DescriptionListItem>
+    </DescriptionList>
+  </svelte:fragment>
+</PageHeader>
+
+## Appearance
+
+### Fill
+
+Set `fill` to `"layer-01"` or `"layer-02"` to set the header apart from the page body. The default is `"background"`.
+
+<PageHeader fill="layer-01" title="Databases" subtitle="Manage your database instances">
+  <svelte:fragment slot="breadcrumb">
+    <Breadcrumb noTrailingSlash>
+      <BreadcrumbItem href="/">Home</BreadcrumbItem>
+      <BreadcrumbItem href="/" isCurrentPage>Databases</BreadcrumbItem>
+    </Breadcrumb>
+  </svelte:fragment>
+  <svelte:fragment slot="actions">
+    <Button icon={Add}>Create database</Button>
+  </svelte:fragment>
+</PageHeader>
+
+### Small
+
+Set `size` to `"sm"` for a compact header on nested or detail pages. It uses a smaller title and tighter vertical spacing, and keeps the same inline padding so the title stays aligned.
+
+<PageHeader size="sm" title="Edit rule" subtitle="Alert rules / CPU above 90%">
+  <svelte:fragment slot="actions">
+    <Button kind="secondary" size="field">Cancel</Button>
+    <Button size="field">Save</Button>
+  </svelte:fragment>
+</PageHeader>
+
+### Hidden divider
+
+Set `hideDivider` to `true` to hide the border below the header, such as when the content below already starts with its own edge.
+
+<PageHeader hideDivider title="Databases" subtitle="Manage your database instances" />
+
+## Skeleton
+
+Use `PageHeaderSkeleton` while the page's data loads. It renders a title and subtitle placeholder by default; set `breadcrumb`, `actions`, and `tabs` (a count) to match the header it stands in for, and set `grid`, `fill`, and `hideDivider` the same way so it swaps in without shifting the layout.
+
+<PageHeaderSkeleton />
+
+<PageHeaderSkeleton breadcrumb actions tabs={3} />
+
+## Grid alignment
+
+Set `grid` to line the header up with a `Grid`. The header content and the page body in the default slot both become grid containers, with a `Grid`'s max width, centering, and breakpoint padding, so the title lines up with each `Column`'s content. Place `Row`s in the body directly, without another `Grid`. Set `grid` to `"full-width"` to match `Grid fullWidth`.
+
+<PageHeader grid title="db-prod-01" subtitle="PostgreSQL 16 · us-south">
+  <svelte:fragment slot="tabs">
+    <Tabs>
+      <Tab label="Overview" />
+      <Tab label="Metrics" />
+    </Tabs>
+  </svelte:fragment>
+  <TabContent>
+    <Row>
+      <Column><Tile><BigNumber labelText="Connections" value={128} /></Tile></Column>
+      <Column><Tile><BigNumber labelText="Queries per second" value={2400} /></Tile></Column>
+      <Column><Tile><BigNumber labelText="Replicas" value={3} /></Tile></Column>
+    </Row>
+  </TabContent>
+  <TabContent>
+    <Row>
+      <Column><Text>Metrics charts go here.</Text></Column>
+    </Row>
+  </TabContent>
+</PageHeader>
+
+In grid mode, default-tab panels drop their inline padding so a `Row` in them lines up with the title. Container-tab panels keep it and line up with the container tab labels instead.
+
+## Sticky
+
+Set `sticky` to `true` to pin the header to the top of its nearest scroll container while the content below it scrolls.
+
+<Box height="20rem" border="subtle" overflow="auto">
+  <PageHeader sticky title="Databases" subtitle="Manage your database instances">
+    <svelte:fragment slot="breadcrumb">
+      <Breadcrumb noTrailingSlash>
+        <BreadcrumbItem href="/">Home</BreadcrumbItem>
+        <BreadcrumbItem href="/" isCurrentPage>Databases</BreadcrumbItem>
+      </Breadcrumb>
+    </svelte:fragment>
+    <svelte:fragment slot="tabs">
+      <Tabs>
+        <Tab label="Overview" />
+        <Tab label="Backups" />
+      </Tabs>
+    </svelte:fragment>
+    <TabContent>
+      <Box height="40rem">
+        <Text>Scroll this area; the header and its tabs stay pinned to the top.</Text>
+      </Box>
+    </TabContent>
+    <TabContent>
+      <Box height="40rem">
+        <Text>Backups panel. The header stays pinned here too.</Text>
+      </Box>
+    </TabContent>
+  </PageHeader>
+</Box>
+
+### Sticky offset
+
+Set `stickyOffset` to stick the header below other fixed chrome, such as `"3rem"` to clear a UI Shell `Header`. Numbers `0`–`13` use the shared layout scale; strings accept any CSS length. Scroll the frame below: the page header stays under the app header. The example removes `Content`'s padding so the header spans the page.
+
+<FileSource src="/framed/PageHeader/StickyUIShell" />
+
+## Page layouts
+
+Full pages built from `PageHeader` with `grid`, so the header lines up with the `Row`s in its body.
+
+### Resource detail
+
+A detail page with a breadcrumb, an eyebrow, a status tag, key facts in `meta`, a `ComboButton`, and tabs whose panels hold `Tile`s and a `DataTable`.
+
+<FileSource src="/framed/PageHeader/ResourceDetail" />
+
+### List page
+
+A list page with the instance count in the subtitle and a create action. Filtering lives in the `DataTable` toolbar, next to the rows it filters.
+
+<FileSource src="/framed/PageHeader/ListPage" />
+
+### Settings page
+
+A compact (`size="sm"`) header over a two-column body: section links on the left and the form on the right.
+
+<FileSource src="/framed/PageHeader/SettingsPage" />
+
+### Dashboard
+
+A layered header (`fill="layer-01"`) with a time range in `tabsEnd` that applies to every tab.
+
+<FileSource src="/framed/PageHeader/Dashboard" />
+
+## Patterns
+
+### Responsive actions
+
+Use `Breakpoint` to swap a `ButtonSet` for an `OverflowMenu` on small screens. Narrow the window to see the actions collapse below the `lg` breakpoint.
+
+<FileSource src="/framed/PageHeader/ResponsiveActions" />
+
+### Tabs in the URL
+
+Bind the header's `Tabs` to `queryParam` so the selected tab survives a reload and can be linked to. The body panels follow the selection as usual.
+
+<FileSource src="/framed/PageHeader/QueryStringTabs" />
+

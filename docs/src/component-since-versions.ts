@@ -53,6 +53,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   NumberInput: "0.2.0",
   OrderedList: "0.2.0",
   OverflowMenu: "0.2.0",
+  PageHeader: "0.113.0",
   Pagination: "0.2.0",
   PaginationNav: "0.8.4",
   PasswordInput: "0.2.0",

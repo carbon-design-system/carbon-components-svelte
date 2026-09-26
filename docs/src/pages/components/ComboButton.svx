@@ -57,6 +57,13 @@ Set `tooltipPosition` to control where the trigger's tooltip appears. This is in
   <MenuItem on:click={() => console.log("Save a copy")}>Save a copy</MenuItem>
 </ComboButton>
 
+Set `tooltipAlignment` to `"end"` to align the tooltip with the trigger's right edge, so it stays on screen when the button sits at the right edge of a page.
+
+<ComboButton labelText="Save" tooltipAlignment="end">
+  <MenuItem on:click={() => console.log("Save as")}>Save as</MenuItem>
+  <MenuItem on:click={() => console.log("Save a copy")}>Save a copy</MenuItem>
+</ComboButton>
+
 ### No tooltip
 
 Set `iconDescription` to an empty string to render the trigger without Carbon's tooltip, the same way [Button](/components/Button#icons) handles an empty `iconDescription`. The trigger then has no accessible name of its own, so only do this when something else in the surrounding context labels it.
