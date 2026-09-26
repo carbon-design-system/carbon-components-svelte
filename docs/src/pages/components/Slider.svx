@@ -210,6 +210,12 @@ Set `min`, `max`, and `step` to customize the range.
 
 <RangeSlider labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" step={10} value={100} valueUpper={500} />
 
+### Minimum gap
+
+Set `minGap` to keep the handles at least that far apart. Dragging, arrow keys, <DocKbd label="Home" />/<DocKbd label="End" />, and both text inputs stop a handle `minGap` short of the other. A `value` or `valueUpper` set programmatically that closes the gap is corrected by moving `valueUpper` up (or `value` down when `valueUpper` is already at `max`). Defaults to `0`, which lets the handles meet.
+
+<RangeSlider labelText="Alert threshold (%)" minGap={10} value={40} valueUpper={60} />
+
 ### Select on focus
 
 Set `selectTextOnFocus` to select the full value in either number input when it receives focus.
