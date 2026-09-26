@@ -831,4 +831,59 @@ describe("RangeSlider", () => {
       expect(lowerThumb).toHaveAttribute("aria-valuenow", "19");
     });
   });
+
+  describe("grabbing a handle", () => {
+    const rect = (overrides: Partial<DOMRect>): DOMRect => ({
+      top: 0,
+      bottom: 0,
+      height: 0,
+      left: 0,
+      right: 0,
+      width: 0,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+      ...overrides,
+    });
+
+    it.each([
+      {
+        orientation: "horizontal" as const,
+        track: rect({ right: 200, width: 200, height: 2 }),
+        // Value point of 20 is x=40; the lower handle hangs left of it.
+        press: { clientX: 32 },
+        move: { clientX: 52 },
+      },
+      {
+        orientation: "vertical" as const,
+        track: rect({ bottom: 200, height: 200, width: 2 }),
+        // Value point of 20 is y=160; the lower handle hangs below it.
+        press: { clientY: 168 },
+        move: { clientY: 148 },
+      },
+    ])(
+      "should not jump the handle when pressed off its value point ($orientation)",
+      async ({ orientation, track, press, move }) => {
+        const { container } = render(RangeSlider, {
+          props: { orientation, value: 20, valueUpper: 70 },
+        });
+
+        const trackEl = container.querySelector(".bx--slider__track");
+        assert(trackEl instanceof HTMLElement);
+        vi.spyOn(trackEl, "getBoundingClientRect").mockReturnValue(track);
+        const [lowerThumb] = screen.getAllByRole("slider");
+
+        await fireEvent.mouseDown(lowerThumb, press);
+        await tick();
+        expect(lowerThumb).toHaveAttribute("aria-valuenow", "20");
+
+        // Moving 20px keeps the grab offset: 10 units, not 10 plus the offset.
+        await flushDismiss();
+        await fireEvent.mouseMove(window, move);
+        await tick();
+        await fireEvent.mouseUp(window);
+        expect(lowerThumb).toHaveAttribute("aria-valuenow", "30");
+      },
+    );
+  });
 });

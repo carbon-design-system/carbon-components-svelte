@@ -193,6 +193,9 @@
   let holding = false;
   /** @type {PointerLikeEvent | null} */
   let currentEvent = null;
+  // Pointer distance from the active handle's value point when the press
+  // started on the handle itself, so grabbing a handle doesn't jump it.
+  let grabOffset = 0;
 
   /** @type {(label: string, numericValue: number) => string | number} */
   function formatRangeLabel(label, numericValue) {
@@ -224,8 +227,9 @@
 
   /** @type {(e: PointerLikeEvent) => ActiveHandle} */
   function pickHandle(event) {
-    if (event.target === lowerThumbRef) return "lower";
-    if (event.target === upperThumbRef) return "upper";
+    const target = /** @type {Node | null} */ (event.target);
+    if (target && lowerThumbRef?.contains(target)) return "lower";
+    if (target && upperThumbRef?.contains(target)) return "upper";
     const vertical = orientation === "vertical";
     const point = getPointerPosition(event);
     if (point == null) return activeHandle;
@@ -270,6 +274,15 @@
     activeHandle = pickHandle(event);
     const thumbRef = activeHandle === "lower" ? lowerThumbRef : upperThumbRef;
     thumbRef?.focus({ preventScroll: true });
+
+    grabOffset = 0;
+    const target = /** @type {Node | null} */ (event.target);
+    const point = getPointerPosition(event);
+    if (trackRef && point != null && target && thumbRef?.contains(target)) {
+      const { start, length } = getTrackAxis();
+      const percent = activeHandle === "lower" ? left : leftUpper;
+      grabOffset = point - (start + (length * percent) / 100);
+    }
     currentEvent = event;
     holding = true;
     dragging = true;
@@ -281,6 +294,7 @@
     holding = false;
     dragging = false;
     currentEvent = null;
+    grabOffset = 0;
     if (wasHolding && !disabled && !readonly) {
       dispatch("change", { value, valueUpper });
     }
@@ -304,7 +318,7 @@
     // valueFromTrackPosition is axis-agnostic: a negative `width` (vertical)
     // flips the interpolation so the bottom edge is `min`.
     let nextValue = valueFromTrackPosition({
-      clientX: point,
+      clientX: point - grabOffset,
       left: start,
       width: length,
       min,
