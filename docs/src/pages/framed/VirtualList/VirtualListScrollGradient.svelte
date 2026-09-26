@@ -1,10 +1,5 @@
 <script>
-  import {
-    Box,
-    ScrollGradient,
-    Stack,
-    VirtualList,
-  } from "carbon-components-svelte";
+  import { Box, ScrollGradient, VirtualList } from "carbon-components-svelte";
 
   const items = Array.from({ length: 5000 }, (_, i) => ({
     id: i,
@@ -23,23 +18,17 @@
     scrollElement={scrollElementRef}
     let:item
   >
-    <Stack
-      as
-      orientation="horizontal"
+    <Box
+      display="flex"
       align="center"
       justify="space-between"
-      let:props
+      height="40px"
+      paddingX={5}
+      border="subtle"
+      borderSide="bottom"
     >
-      <Box
-        {...props}
-        height="40px"
-        paddingX={5}
-        border="subtle"
-        borderSide="bottom"
-      >
-        <span>{item.name}</span>
-        <span>{item.size}</span>
-      </Box>
-    </Stack>
+      <span>{item.name}</span>
+      <span>{item.size}</span>
+    </Box>
   </VirtualList>
 </ScrollGradient>

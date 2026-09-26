@@ -3,7 +3,7 @@ description: VirtualList renders only the rows in view for long lists of arbitra
 ---
 
 <script>
-  import { Box, Stack, VirtualList } from "carbon-components-svelte";
+  import { Box, VirtualList } from "carbon-components-svelte";
 
   const regions = ["us-south", "us-east", "eu-de", "eu-gb", "jp-tok", "au-syd"];
 
@@ -40,12 +40,10 @@ description: VirtualList renders only the rows in view for long lists of arbitra
 Set `containerHeight` for the viewport and `itemHeight` for each row, both in pixels. Every row must render at exactly `itemHeight` for the scroll position to line up.
 
 <VirtualList items={instances} itemHeight={40} containerHeight={240} let:item let:index>
-  <Stack as orientation="horizontal" align="center" justify="space-between" let:props>
-    <Box {...props} height="40px" paddingX={5} border="subtle" borderSide="bottom">
-      <span>{index + 1}. {item.name}</span>
-      <span>{item.region}</span>
-    </Box>
-  </Stack>
+  <Box display="flex" align="center" justify="space-between" height="40px" paddingX={5} border="subtle" borderSide="bottom">
+    <span>{index + 1}. {item.name}</span>
+    <span>{item.region}</span>
+  </Box>
 </VirtualList>
 
 ## Item height
@@ -55,12 +53,10 @@ Set `containerHeight` for the viewport and `itemHeight` for each row, both in pi
 Set `measured` to `true` when rows vary in height, such as wrapping text. Each rendered row is measured with `ResizeObserver` and `itemHeight` becomes the estimate for rows not yet measured.
 
 <VirtualList items={comments} itemHeight={72} containerHeight={320} measured let:item>
-  <Stack as gap={2} let:props>
-    <Box {...props} paddingX={5} paddingY={4} border="subtle" borderSide="bottom">
-      <strong>{item.author}</strong>
-      <p>{item.message}</p>
-    </Box>
-  </Stack>
+  <Box display="flex" direction="column" gap={2} paddingX={5} paddingY={4} border="subtle" borderSide="bottom">
+    <strong>{item.author}</strong>
+    <p>{item.message}</p>
+  </Box>
 </VirtualList>
 
 | Do | Why |
@@ -73,12 +69,10 @@ Set `measured` to `true` when rows vary in height, such as wrapping text. Each r
 Every list is windowed by default. Set `threshold` to render lists shorter than it in full, which keeps every row in the DOM for find-in-page.
 
 <VirtualList items={instances.slice(0, 20)} itemHeight={40} containerHeight={240} threshold={100} let:item>
-  <Stack as orientation="horizontal" align="center" justify="space-between" let:props>
-    <Box {...props} height="40px" paddingX={5} border="subtle" borderSide="bottom">
-      <span>{item.name}</span>
-      <span>{item.region}</span>
-    </Box>
-  </Stack>
+  <Box display="flex" align="center" justify="space-between" height="40px" paddingX={5} border="subtle" borderSide="bottom">
+    <span>{item.name}</span>
+    <span>{item.region}</span>
+  </Box>
 </VirtualList>
 
 ## Load more
