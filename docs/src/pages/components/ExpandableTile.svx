@@ -15,7 +15,7 @@ to determine the height of the above-the-fold content.
 By default, the tile is collapsed. Use the above and below slots to define content that appears before and after expansion.
 
 <ExpandableTile>
-  <div slot="above">
+  <svelte:fragment slot="above">
     <div>
       Payments API
     </div>
@@ -24,8 +24,8 @@ By default, the tile is collapsed. Use the above and below slots to define conte
     <div>
       Operational — 99.98% uptime over the last 30 days
     </div>
-  </div>
-  <div slot="below">No open incidents. Last deployment: 2 hours ago.</div>
+  </svelte:fragment>
+  <svelte:fragment slot="below">No open incidents. Last deployment: 2 hours ago.</svelte:fragment>
 </ExpandableTile>
 
 ## Expanded state
@@ -45,8 +45,8 @@ and update the tile height.
 Display the tile expanded by default with `expanded`.
 
 <ExpandableTile expanded>
-  <div slot="above">Payments API — Operational, 99.98% uptime over the last 30 days</div>
-  <div slot="below">No open incidents. Last deployment: 2 hours ago.</div>
+  <svelte:fragment slot="above">Payments API — Operational, 99.98% uptime over the last 30 days</svelte:fragment>
+  <svelte:fragment slot="below">No open incidents. Last deployment: 2 hours ago.</svelte:fragment>
 </ExpandableTile>
 
 ## Light
@@ -54,8 +54,8 @@ Display the tile expanded by default with `expanded`.
 Use the light variant for light backgrounds.
 
 <ExpandableTile light>
-  <div slot="above">Payments API — Operational, 99.98% uptime over the last 30 days</div>
-  <div slot="below">No open incidents. Last deployment: 2 hours ago.</div>
+  <svelte:fragment slot="above">Payments API — Operational, 99.98% uptime over the last 30 days</svelte:fragment>
+  <svelte:fragment slot="below">No open incidents. Last deployment: 2 hours ago.</svelte:fragment>
 </ExpandableTile>
 
 ## Content height
@@ -80,8 +80,8 @@ padding automatically with a resize observer. Set `tileMaxHeight` and
 the collapsed height ahead of time instead of relying on the observer.
 
 <ExpandableTile tileMaxHeight={64} tilePadding={32}>
-  <div slot="above">Payments API — Operational, 99.98% uptime over the last 30 days</div>
-  <div slot="below">No open incidents. Last deployment: 2 hours ago.</div>
+  <svelte:fragment slot="above">Payments API — Operational, 99.98% uptime over the last 30 days</svelte:fragment>
+  <svelte:fragment slot="below">No open incidents. Last deployment: 2 hours ago.</svelte:fragment>
 </ExpandableTile>
 
 ## Labels
@@ -93,8 +93,8 @@ Customize the chevron's visible label text and the tile's accessible tooltip tex
 Customize expand/collapse button labels with `tileExpandedLabel` and `tileCollapsedLabel`.
 
 <ExpandableTile tileExpandedLabel="View less" tileCollapsedLabel="View more">
-  <div slot="above">Payments API — Operational, 99.98% uptime over the last 30 days</div>
-  <div slot="below">No open incidents. Last deployment: 2 hours ago.</div>
+  <svelte:fragment slot="above">Payments API — Operational, 99.98% uptime over the last 30 days</svelte:fragment>
+  <svelte:fragment slot="below">No open incidents. Last deployment: 2 hours ago.</svelte:fragment>
 </ExpandableTile>
 
 ### Accessible text
@@ -108,8 +108,8 @@ button when `hasInteractiveContent` is set.
   tileCollapsedIconText="Show more details"
   tileExpandedIconText="Show fewer details"
 >
-  <div slot="above">Payments API — Operational, 99.98% uptime over the last 30 days</div>
-  <div slot="below">No open incidents. Last deployment: 2 hours ago.</div>
+  <svelte:fragment slot="above">Payments API — Operational, 99.98% uptime over the last 30 days</svelte:fragment>
+  <svelte:fragment slot="below">No open incidents. Last deployment: 2 hours ago.</svelte:fragment>
 </ExpandableTile>
 
 ## Interactive content
@@ -129,5 +129,5 @@ Only the expand/collapse toggle affects the tile state.
       Acknowledge alert
     </Button>
   </Stack>
-  <div slot="below">Escalated to the on-call engineer at 2:14 AM UTC.</div>
+  <svelte:fragment slot="below">Escalated to the on-call engineer at 2:14 AM UTC.</svelte:fragment>
 </ExpandableTile>

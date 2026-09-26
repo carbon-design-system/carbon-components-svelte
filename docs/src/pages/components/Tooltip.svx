@@ -37,7 +37,7 @@ Use custom trigger text instead of the default icon with `triggerText`.
 Alternatively, use the `"triggerText"` slot for custom markup.
 
 <Tooltip>
-  <span slot="triggerText"><strong>Resource list</strong></span>
+  <strong slot="triggerText">Resource list</strong>
   <p>
     Resources are provisioned based on your account's organization.
   </p>
