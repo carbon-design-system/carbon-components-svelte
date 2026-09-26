@@ -42,6 +42,7 @@
   import { readable, writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import { isImeComposition } from "../utils/ime-composition.js";
+  import { overflowTitle } from "../utils/overflow-title.js";
   import { isSideNavCollapsed, isSideNavRail } from "./nav-store.js";
 
   // Follow the enclosing `SideNav`; the module stores cover a menu rendered
@@ -84,6 +85,8 @@
 
   /** @type {null | HTMLUListElement} */
   let menuRef = null;
+  /** @type {null | HTMLSpanElement} */
+  let textRef = null;
 
   $: if ($rail && $collapsed) {
     expanded = false;
@@ -124,6 +127,11 @@
     bind:this={ref}
     aria-expanded={expanded ? "true" : "false"}
     class:bx--side-nav__submenu={true}
+    use:overflowTitle={{
+      measure: textRef,
+      lazy: true,
+      title: $$restProps.title,
+    }}
     {...$$restProps}
     on:click
     on:click={() => {
@@ -135,7 +143,9 @@
         <slot name="icon"><svelte:component this={icon} /></slot>
       </span>
     {/if}
-    <span class:bx--side-nav__submenu-title={true}>{text}</span>
+    <span bind:this={textRef} class:bx--side-nav__submenu-title={true}
+      >{text}</span
+    >
     {#if $$slots.badge}
       <div class:bx--side-nav__submenu-badge={true}><slot name="badge" /></div>
     {/if}
