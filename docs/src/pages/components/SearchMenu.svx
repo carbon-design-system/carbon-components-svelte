@@ -208,6 +208,16 @@ Selecting an item or pressing <DocKbd label="Enter" /> with no active item cance
 
 The `select` event fires when an item is activated, carrying the `value`, the `item`, and the originating `event`. The `submit` event fires when pressing <DocKbd label="Enter" /> without an active item, carrying the current `value`. The `search` event fires after the `debounce` pause (see [Async results](#async-results)), carrying the current `value`. The `close` event fires when the menu closes, with a `trigger` of `"escape-key"`, `"outside-click"`, `"select"`, or `"blur"`.
 
+### Load more
+
+`scrollend` fires when the results menu is scrolled near the bottom. Use it to append the next page of `SearchMenuItem`s to the slot.
+
+This is a library load-more signal, not the browser's native `scrollend` (scroll stopped). It fires once per approach to the bottom, re-arming after the user scrolls away and when more items are slotted.
+
+While the menu already has results, set `loading` to append a loading row below them. `loading` only swaps in the full skeleton menu when there are no results yet.
+
+<FileSource src="/framed/SearchMenu/ScrollEndSearchMenu" />
+
 ### Result links
 
 Set `href` on a `SearchMenuItem` to render it as a link. Selecting the item with the mouse or <DocKbd label="Enter" /> follows the link.
