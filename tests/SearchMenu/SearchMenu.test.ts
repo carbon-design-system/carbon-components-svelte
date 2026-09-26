@@ -340,6 +340,20 @@ describe("SearchMenu", () => {
     expect(screen.queryAllByRole("option")).toHaveLength(0);
   });
 
+  it("appends one loading row below existing results while loading", async () => {
+    const { rerender } = render(SearchMenu);
+    await user.click(screen.getByRole("combobox"));
+    expect(screen.getAllByRole("option")).toHaveLength(4);
+
+    await rerender({ loading: true });
+
+    expect(screen.getByRole("listbox")).toHaveAttribute("aria-busy", "true");
+    expect(screen.getAllByRole("option")).toHaveLength(4);
+    expect(
+      document.querySelectorAll(".bx--search-menu-item--skeleton"),
+    ).toHaveLength(1);
+  });
+
   it("shows a busy state on the search input via searchLoading, independent of loading", () => {
     render(SearchMenu, { props: { searchLoading: true } });
     const input = screen.getByRole("combobox");
