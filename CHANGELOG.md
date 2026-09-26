@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. This project follows [Conventional Commits](https://www.conventionalcommits.org/); run `bun scripts/release-changelog` to bump the version and prepend release notes.
 
+### [0.111.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.111.1...v0.111.2) (2026-09-25)
+
+### Bug Fixes
+
+- **package:** stop publishing sveld's parse cache ([3a60c5c](https://github.com/carbon-design-system/carbon-components-svelte/commit/3a60c5ce786a5b30e64d4e8980515dbdd7322b48))
+
 ### [0.111.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.111.0...v0.111.1) (2026-08-23)
 
 ### Bug Fixes
