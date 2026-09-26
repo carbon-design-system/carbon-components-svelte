@@ -41,3 +41,20 @@ export function resolveSliderMarks(marks, min, max, step) {
   }
   return resolved;
 }
+
+/**
+ * Find the mark whose `value` is closest to `value`. Ties resolve to the
+ * earlier (lower-index) mark. Returns `undefined` when `marks` is empty.
+ *
+ * @param {number} value
+ * @param {ReadonlyArray<SliderMark>} marks
+ * @returns {SliderMark | undefined}
+ */
+export function nearestMark(value, marks) {
+  if (!marks.length) return undefined;
+  return marks.reduce((closest, mark) =>
+    Math.abs(mark.value - value) < Math.abs(closest.value - value)
+      ? mark
+      : closest,
+  );
+}

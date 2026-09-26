@@ -1074,4 +1074,176 @@ describe("Slider", () => {
 
     expect(container.querySelector(".bx--slider__marks")).toBeNull();
   });
+
+  describe("snapToMarks", () => {
+    const mockTrackRect = (container: HTMLElement) => {
+      const track = container.querySelector(".bx--slider__track");
+      assert(track instanceof HTMLElement);
+      vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
+        left: 0,
+        right: 200,
+        width: 200,
+        top: 0,
+        bottom: 0,
+        height: 2,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      });
+    };
+
+    const clickTrack = async (container: HTMLElement, clientX: number) => {
+      const slider = container.querySelector(".bx--slider");
+      assert(slider instanceof HTMLElement);
+      await fireEvent.mouseDown(slider, { clientX });
+      await tick();
+      await fireEvent.mouseUp(window);
+    };
+
+    it("should snap a click to the nearest mark", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      const { container } = render(Slider, {
+        props: {
+          value: 0,
+          min: 0,
+          max: 100,
+          step: 1,
+          marks: [{ value: 0 }, { value: 25 }, { value: 100 }],
+          snapToMarks: true,
+        },
+      });
+      mockTrackRect(container);
+
+      await clickTrack(container, 55);
+
+      expect(consoleLog).toHaveBeenCalledWith("input", 25);
+      expect(screen.getByRole("spinbutton")).toHaveValue(25);
+    });
+
+    it("should keep step-based snapping when snapToMarks is off", async () => {
+      const { container } = render(Slider, {
+        props: {
+          value: 0,
+          min: 0,
+          max: 100,
+          step: 1,
+          marks: [{ value: 0 }, { value: 25 }, { value: 100 }],
+        },
+      });
+      mockTrackRect(container);
+
+      await clickTrack(container, 55);
+
+      expect(screen.getByRole("spinbutton")).toHaveValue(28);
+    });
+
+    it("should ignore snapToMarks when marks is not set", async () => {
+      const { container } = render(Slider, {
+        props: { value: 0, min: 0, max: 100, step: 1, snapToMarks: true },
+      });
+      mockTrackRect(container);
+
+      await clickTrack(container, 55);
+
+      expect(screen.getByRole("spinbutton")).toHaveValue(28);
+    });
+
+    it("should move to the adjacent mark with arrow keys", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(Slider, {
+        props: {
+          value: 0,
+          min: 0,
+          max: 100,
+          step: 1,
+          marks: [{ value: 0 }, { value: 10 }, { value: 50 }],
+          snapToMarks: true,
+        },
+      });
+
+      await user.tab();
+      expect(screen.getByRole("slider")).toHaveFocus();
+
+      await user.keyboard("{ArrowRight}");
+      expect(consoleLog).toHaveBeenCalledWith("change", 10);
+      expect(consoleLog).not.toHaveBeenCalledWith("change", 1);
+
+      await user.keyboard("{ArrowRight}");
+      expect(consoleLog).toHaveBeenLastCalledWith("change", 50);
+
+      await user.keyboard("{ArrowRight}");
+      expect(consoleLog).toHaveBeenLastCalledWith("change", 50);
+
+      await user.keyboard("{ArrowLeft}");
+      expect(consoleLog).toHaveBeenLastCalledWith("change", 10);
+    });
+
+    it("should walk unsorted marks in value order", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(Slider, {
+        props: {
+          value: 0,
+          marks: [{ value: 50 }, { value: 0 }, { value: 10 }],
+          snapToMarks: true,
+        },
+      });
+
+      await user.tab();
+      await user.keyboard("{ArrowRight}");
+      expect(consoleLog).toHaveBeenLastCalledWith("change", 10);
+    });
+
+    it("should jump by stepMultiplier marks with Shift+Arrow", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(Slider, {
+        props: {
+          value: 0,
+          marks: [
+            { value: 0 },
+            { value: 5 },
+            { value: 10 },
+            { value: 15 },
+            { value: 20 },
+          ],
+          stepMultiplier: 2,
+          snapToMarks: true,
+        },
+      });
+
+      await user.tab();
+      await user.keyboard("{Shift>}{ArrowRight}{/Shift}");
+      expect(consoleLog).toHaveBeenLastCalledWith("change", 10);
+    });
+
+    it("should not snap a programmatic value that sits between marks", () => {
+      render(Slider, {
+        props: {
+          value: 7,
+          marks: [{ value: 0 }, { value: 10 }],
+          snapToMarks: true,
+        },
+      });
+
+      expect(screen.getByRole("slider")).toHaveAttribute("aria-valuenow", "7");
+    });
+
+    it("should keep Home and End jumping to min and max", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(Slider, {
+        props: {
+          value: 10,
+          min: 0,
+          max: 100,
+          marks: [{ value: 10 }, { value: 50 }],
+          snapToMarks: true,
+        },
+      });
+
+      await user.tab();
+      await user.keyboard("{End}");
+      expect(consoleLog).toHaveBeenLastCalledWith("change", 100);
+      await user.keyboard("{Home}");
+      expect(consoleLog).toHaveBeenLastCalledWith("change", 0);
+    });
+  });
 });

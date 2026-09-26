@@ -15,3 +15,12 @@ export function resolveSliderMarks(
   max: number,
   step: number,
 ): SliderMark[];
+
+/**
+ * Find the mark whose `value` is closest to `value`. Ties resolve to the
+ * earlier (lower-index) mark. Returns `undefined` when `marks` is empty.
+ */
+export function nearestMark(
+  value: number,
+  marks: ReadonlyArray<SliderMark>,
+): SliderMark | undefined;
