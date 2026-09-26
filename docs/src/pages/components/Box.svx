@@ -134,6 +134,10 @@ Use `padding` for all sides, or `paddingX`/`paddingY` to target an axis.
   <Box fill="layer-01" paddingX={6} paddingY={3}>Axis padding</Box>
 </Stack>
 
+Set `paddingTop`, `paddingRight`, `paddingBottom`, or `paddingLeft` to pad a single side. A side prop overrides `padding`, `paddingX`, and `paddingY` on that side.
+
+<Box fill="layer-01" padding={5} paddingLeft={9}>Extra space on the left only</Box>
+
 ### Margin
 
 Use `margin` for all sides, or `marginX`/`marginY` to target an axis.
@@ -403,6 +407,10 @@ Apply Box utilities directly when you do not need the component. Classes use the
 | `bx--box-p-{1-13}` | Padding on all sides |
 | `bx--box-px-{1-13}` | Horizontal padding |
 | `bx--box-py-{1-13}` | Vertical padding |
+| `bx--box-pt-{1-13}` | Top padding, overriding the all-sides and axis classes |
+| `bx--box-pr-{1-13}` | Right padding, overriding the all-sides and axis classes |
+| `bx--box-pb-{1-13}` | Bottom padding, overriding the all-sides and axis classes |
+| `bx--box-pl-{1-13}` | Left padding, overriding the all-sides and axis classes |
 | `bx--box-m-{1-13}` | Margin on all sides |
 | `bx--box-mx-{1-13}` | Horizontal margin |
 | `bx--box-my-{1-13}` | Vertical margin |
