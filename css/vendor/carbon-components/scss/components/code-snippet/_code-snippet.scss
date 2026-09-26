@@ -222,7 +222,10 @@
     width: to-rem(16px);
     height: to-rem(16px);
     fill: $icon-01;
-    transition: all $duration--fast-01 motion(standard, productive);
+    // ccs: only fill differs (disabled, ghost copy button); the expand
+    // chevron's rotation has its own transition. Avoid `all` so the browser
+    // doesn't interpolate the rest of the animatable property set.
+    transition: fill $duration--fast-01 motion(standard, productive);
   }
 
   .#{$prefix}--snippet .#{$prefix}--copy-btn {
