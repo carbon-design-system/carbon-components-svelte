@@ -39,6 +39,32 @@ describe("FullPageError", () => {
     ).toBeInTheDocument();
   });
 
+  it.each([
+    ["default", "custom", "0 0 750 506"],
+    ["kind-403", "403", "0 0 750 570"],
+    ["kind-404", "404", "0 0 751 549"],
+  ])(
+    "keeps the %s illustration scalable, hidden and self-referencing",
+    (testId, kind, viewBox) => {
+      render(FullPageError);
+      const svg = screen
+        .getByTestId(testId)
+        .querySelector(`svg.bx--full-page-error__${kind}`);
+
+      expect(svg).toHaveAttribute("viewBox", viewBox);
+      expect(svg).toHaveAttribute("aria-hidden", "true");
+
+      const refs = [...(svg?.querySelectorAll("[clip-path]") ?? [])].map((el) =>
+        el.getAttribute("clip-path"),
+      );
+      expect(refs.length).toBeGreaterThan(0);
+      for (const ref of refs) {
+        const id = ref?.match(/^url\(#(.+)\)$/)?.[1];
+        expect(svg?.querySelector(`clipPath[id="${id}"]`)).not.toBeNull();
+      }
+    },
+  );
+
   it("renders extra body content passed via the default slot", () => {
     render(FullPageError);
     const root = screen.getByTestId("with-body");
