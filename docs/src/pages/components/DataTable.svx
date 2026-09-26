@@ -555,6 +555,16 @@ By default, the table shows 10 rows in the viewport. Set `maxVisibleRows` to con
 
 <FileSource src="/framed/DataTable/VirtualizeMaxVisibleRows" />
 
+### Load more
+
+`scrollend` fires when the virtualized table body is scrolled near the bottom. Use it to append the next page of `rows`. The component does not fetch or mutate `rows` for you.
+
+This is a library load-more signal, not the browser's native `scrollend` (scroll stopped). It fires once per approach to the bottom, re-arming after the user scrolls away and when `rows` grows so another page can be requested.
+
+`scrollend` only fires when `virtualize` is enabled. `pageSize` tables paginate instead of scroll-appending, and there is no scroll listener at all when both are off.
+
+<FileSource src="/framed/DataTable/ScrollEndDataTable" />
+
 ## Toolbar
 
 Add a Toolbar above the table for search, menus, and actions.
