@@ -215,6 +215,31 @@ Set `readonly` to `true` to display a value while preventing changes.
 
 <Slider labelText="Volume" orientation="vertical" readonly value={40} />
 
+### Vertical range slider
+
+`RangeSlider` accepts `orientation` too. The lower handle sits below its value and the upper handle above it, with the filled track between them. Clicking or dragging moves whichever handle is vertically closer to the pointer.
+
+<RangeSlider labelText="Alert threshold (%)" orientation="vertical" value={20} valueUpper={70} />
+
+### Vertical range slider with marks
+
+<RangeSlider
+  labelText="Log verbosity"
+  orientation="vertical"
+  hideTextInput
+  min={0}
+  max={3}
+  step={1}
+  value={0}
+  valueUpper={2}
+  marks={[
+    { value: 0, label: "Off" },
+    { value: 1, label: "Low" },
+    { value: 2, label: "Med" },
+    { value: 3, label: "High" },
+  ]}
+/>
+
 ## Light
 
 Use the light variant for light backgrounds.
@@ -264,7 +289,7 @@ Set `readonly` to `true` to display a value while preventing changes.
 
 ## Range slider
 
-Use `RangeSlider` to select a range with two handles. Bind to `value` for the lower bound and `valueUpper` for the upper bound. `RangeSlider` supports the same layout and state options as `Slider`.
+Use `RangeSlider` to select a range with two handles. Bind to `value` for the lower bound and `valueUpper` for the upper bound. `RangeSlider` supports the same layout and state options as `Slider`, including a [vertical orientation](#vertical-range-slider).
 
 <RangeSlider labelText="Alert threshold (%)" value={10} valueUpper={90} />
 
