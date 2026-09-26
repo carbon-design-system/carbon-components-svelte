@@ -1,0 +1,243 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/grid/mixins";
+
+/// PageHeader composes Box (fill/position/sticky), Heading, Text, and
+/// whatever the caller slots into breadcrumb/tabs/actions. This partial only
+/// owns row layout inside the header and its bottom border, which matches
+/// what Box's own border="subtle" token resolves to. Tab-dependent rules key
+/// off `--container-tabs`, which the component sets from the slotted `Tabs`'
+/// `type`, rather than a relational selector.
+/// @access private
+/// @group components
+@mixin page-header {
+  // `--ccs-page-header-padding-block` is shared with the tabs row, which
+  // cancels it to sit flush on the header's bottom edge.
+  .#{$prefix}--page-header {
+    --ccs-page-header-padding-block: #{$carbon--spacing-05};
+    --ccs-page-header-row-gap: #{$carbon--spacing-05};
+
+    padding-block: var(--ccs-page-header-padding-block);
+    padding-inline: $carbon--spacing-05;
+    // z-index only takes effect once Box sets position: sticky; harmless
+    // (no-op) on the default static position.
+    z-index: 2;
+  }
+
+  .#{$prefix}--page-header__content {
+    display: flex;
+    flex-direction: column;
+    row-gap: var(--ccs-page-header-row-gap);
+  }
+
+  // Compact header: tighter vertical rhythm; inline padding stays so the
+  // title keeps its alignment.
+  .#{$prefix}--page-header--sm {
+    --ccs-page-header-padding-block: #{$carbon--spacing-04};
+    --ccs-page-header-row-gap: #{$carbon--spacing-04};
+  }
+
+  // Grid mode: the content and the body become Grid containers (Carbon's own
+  // `carbon--make-container`: 99rem max width, centered, breakpoint padding).
+  // A `Column`'s content starts at that padding (Row's -1rem margin cancels
+  // the column gutter), so the title lines up with it.
+  .#{$prefix}--page-header--grid {
+    padding-inline: 0;
+  }
+
+  .#{$prefix}--page-header--grid > .#{$prefix}--page-header__content,
+  .#{$prefix}--page-header--grid + .#{$prefix}--page-header__body {
+    @include carbon--make-container;
+  }
+
+  .#{$prefix}--page-header--grid-full-width
+    > .#{$prefix}--page-header__content,
+  .#{$prefix}--page-header--grid-full-width + .#{$prefix}--page-header__body {
+    max-width: 100%;
+  }
+
+  // Default-tab panels drop their inline padding in grid mode, so content
+  // (or a `Row`) in them lines up with the title and tab labels. Container
+  // panels keep it, lining up with the container tab labels.
+  .#{$prefix}--page-header--grid:not(.#{$prefix}--page-header--container-tabs)
+    + .#{$prefix}--page-header__body
+    > .#{$prefix}--tab-content {
+    padding-inline: 0;
+  }
+
+  .#{$prefix}--page-header--divider {
+    border-bottom: 1px solid $border-subtle;
+  }
+
+  // On a layered header, the panel below is the page `background`, so the
+  // selected container tab matches that instead of `layer-01`. Outranks
+  // Carbon's selected and selected-hover rules.
+  .#{$prefix}--page-header:not(.#{$prefix}--box-fill-background)
+    .#{$prefix}--tabs--container
+    .#{$prefix}--tabs__nav-item--selected:not(
+      .#{$prefix}--tabs__nav-item--disabled
+    ) {
+    background-color: $ui-background;
+  }
+
+  .#{$prefix}--page-header__breadcrumb-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--page-header__breadcrumb-end {
+    display: flex;
+    align-items: center;
+    margin-inline-start: auto;
+  }
+
+  .#{$prefix}--page-header__title-row {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--page-header__title-group {
+    display: flex;
+    flex-direction: column;
+    row-gap: $carbon--spacing-02;
+    min-width: 0;
+  }
+
+  // Skeleton text widths are percentages, so the title group spans the row.
+  .#{$prefix}--page-header-skeleton .#{$prefix}--page-header__title-group {
+    flex: 1 1 auto;
+  }
+
+  .#{$prefix}--page-header__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: $carbon--spacing-02 + $carbon--spacing-01;
+  }
+
+  // One icon size regardless of the icon component's own `size` prop.
+  .#{$prefix}--page-header__eyebrow svg {
+    flex-shrink: 0;
+    width: to-rem(16px);
+    height: to-rem(16px);
+    fill: currentColor;
+  }
+
+  .#{$prefix}--page-header__title-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--page-header__title-start,
+  .#{$prefix}--page-header__title-end {
+    display: flex;
+    align-items: center;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--page-header__title {
+    min-width: 0;
+  }
+
+  .#{$prefix}--page-header__description {
+    max-width: to-rem(640px);
+    margin-block-start: $carbon--spacing-03;
+  }
+
+  // Container tabs keep the header's inline padding, so the body matches it
+  // and panels line up with the tabs instead of jutting past them.
+  .#{$prefix}--page-header--container-tabs:not(
+      .#{$prefix}--page-header--grid
+    )
+    + .#{$prefix}--page-header__body {
+    padding-inline: $carbon--spacing-05;
+  }
+
+  // Tab panels in the body continue the selected container tab's surface
+  // (Carbon's own `.bx--tabs--container ~ .bx--tab-content`).
+  .#{$prefix}--page-header--container-tabs
+    + .#{$prefix}--page-header__body
+    > .#{$prefix}--tab-content {
+    background-color: $ui-01;
+  }
+
+  .#{$prefix}--page-header--container-tabs:not(
+      .#{$prefix}--box-fill-background
+    )
+    + .#{$prefix}--page-header__body
+    > .#{$prefix}--tab-content {
+    background-color: $ui-background;
+  }
+
+  // Controls sit side by side with no gap, like a ButtonSet, so a ButtonSet
+  // and an OverflowMenu (or icon buttons and a primary) read as one group.
+  .#{$prefix}--page-header__actions {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+  }
+
+  // ButtonSet/ActionSet buttons are `width: 100%; flex: 1 1 0`, which sizes
+  // the shrink-to-fit actions column too narrow and wraps button labels.
+  // Size each button to its own label instead.
+  .#{$prefix}--page-header__actions .#{$prefix}--btn-set .#{$prefix}--btn {
+    flex: 0 1 auto;
+    width: auto;
+  }
+
+  // Tabs sit flush on the header's bottom edge.
+  .#{$prefix}--page-header__tabs-row {
+    margin-block-end: calc(-1 * var(--ccs-page-header-padding-block));
+  }
+
+  // With `tabsEnd`, tabs fill the row and scroll within it, and the controls
+  // sit after them, centered on the tab height. Scoped to that case since
+  // `Tabs` renders its `content` slot as a sibling of its root.
+  .#{$prefix}--page-header__tabs-row--with-end {
+    display: flex;
+    align-items: center;
+  }
+
+  .#{$prefix}--page-header__tabs-row > .#{$prefix}--tabs {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .#{$prefix}--page-header__tabs-end {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: $carbon--spacing-03;
+  }
+
+  // Default tabs bleed through the header's inline padding so each tab's
+  // label (inset by the tab's own `$spacing-05` padding) aligns with the
+  // title. Container tabs keep the header's padding.
+  .#{$prefix}--page-header:not(.#{$prefix}--page-header--container-tabs)
+    .#{$prefix}--page-header__tabs-row {
+    margin-inline: -$carbon--spacing-05;
+  }
+
+  // Undo the bleed at the end so `tabsEnd` lines up with the actions.
+  .#{$prefix}--page-header:not(.#{$prefix}--page-header--container-tabs)
+    .#{$prefix}--page-header__tabs-end {
+    margin-inline-end: $carbon--spacing-05;
+  }
+
+  // Default tabs overlap the divider by 1px so their 2px underline sits on
+  // it instead of floating above it. Container tabs drop the divider.
+  .#{$prefix}--page-header--divider .#{$prefix}--page-header__tabs-row {
+    margin-block-end: calc(-1 * var(--ccs-page-header-padding-block) - 1px);
+  }
+}
+
+@include exports("page-header") {
+  @include page-header;
+}

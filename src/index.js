@@ -137,6 +137,8 @@ export { default as NumberInputSkeleton } from "./NumberInput/NumberInputSkeleto
 export { default as OrderedList } from "./OrderedList/OrderedList.svelte";
 export { default as OverflowMenu } from "./OverflowMenu/OverflowMenu.svelte";
 export { default as OverflowMenuItem } from "./OverflowMenu/OverflowMenuItem.svelte";
+export { default as PageHeader } from "./PageHeader/PageHeader.svelte";
+export { default as PageHeaderSkeleton } from "./PageHeader/PageHeaderSkeleton.svelte";
 export { default as Pagination } from "./Pagination/Pagination.svelte";
 export { default as PaginationSkeleton } from "./Pagination/PaginationSkeleton.svelte";
 export { default as PaginationNav } from "./PaginationNav/PaginationNav.svelte";

@@ -93,6 +93,13 @@
   export let tooltipPosition = "bottom";
 
   /**
+   * Set the alignment of the icon-only trigger's tooltip relative to the
+   * trigger. Use `"end"` when the button sits at the right edge of a page.
+   * @type {"start" | "center" | "end"}
+   */
+  export let tooltipAlignment = "center";
+
+  /**
    * Obtain a reference to the outer HTML element.
    * @bindable readonly
    */
@@ -160,6 +167,7 @@
     {disabled}
     hideTooltip={open}
     {tooltipPosition}
+    {tooltipAlignment}
     class="bx--combo-button__trigger {open
       ? 'bx--combo-button__trigger--open'
       : ''}"
