@@ -125,6 +125,18 @@ describe("Box", () => {
     expect(screen.getByText("Margin scale")).toHaveClass("bx--box-m-4");
   });
 
+  it("lets an axis scale step override a custom all-sides value", () => {
+    render(Box);
+
+    const padding = screen.getByTestId("padding-axis-over-custom");
+    expect(padding).toHaveClass("bx--box-px-3");
+    expectInlineStyle(padding, { paddingLeft: "", paddingTop: "1rem" });
+
+    const margin = screen.getByTestId("margin-axis-over-custom");
+    expect(margin).toHaveClass("bx--box-my-3");
+    expectInlineStyle(margin, { marginTop: "", marginLeft: "1rem" });
+  });
+
   it("applies custom padding via inline style", () => {
     render(Box);
 

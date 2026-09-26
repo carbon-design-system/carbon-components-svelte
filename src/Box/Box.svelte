@@ -34,6 +34,17 @@
   }
 
   /**
+   * Resolve one side's inline spacing from the first of `values` that is set.
+   * Only used once an axis or side prop is set, since an inline shorthand
+   * would beat that prop's scale class.
+   * @param {boolean} split @param {Array<SpacingValue | undefined>} values
+   */
+  function sideStyle(split, ...values) {
+    if (!split) return undefined;
+    return spacingStyle(values.find((value) => value != null));
+  }
+
+  /**
    * Resolve `border-{side}-width` for the one side `borderSide` targets;
    * the other three sides are zeroed by the `bx--box-border-side-{side}` class.
    * @param {"top" | "right" | "bottom" | "left"} side
@@ -410,31 +421,29 @@
     borderSide,
     borderWidth,
   );
-  $: resolvedPadding = spacingStyle(padding);
-  $: resolvedPaddingX = spacingStyle(paddingX);
-  $: resolvedPaddingY = spacingStyle(paddingY);
-  // An inline `margin` or `margin-inline` would beat a side's scale class, so
-  // once any side is set, every inline margin resolves per side instead.
+  $: paddingSplit = paddingX != null || paddingY != null;
+  $: resolvedPadding = paddingSplit ? undefined : spacingStyle(padding);
+  $: resolvedPaddingTop = sideStyle(paddingSplit, paddingY, padding);
+  $: resolvedPaddingRight = sideStyle(paddingSplit, paddingX, padding);
+  $: resolvedPaddingBottom = sideStyle(paddingSplit, paddingY, padding);
+  $: resolvedPaddingLeft = sideStyle(paddingSplit, paddingX, padding);
   $: marginSplit =
+    marginX != null ||
+    marginY != null ||
     marginTop != null ||
     marginRight != null ||
     marginBottom != null ||
     marginLeft != null;
   $: resolvedMargin = marginSplit ? undefined : spacingStyle(margin);
-  $: resolvedMarginX = marginSplit ? undefined : spacingStyle(marginX);
-  $: resolvedMarginY = marginSplit ? undefined : spacingStyle(marginY);
-  $: resolvedMarginTop = marginSplit
-    ? spacingStyle(marginTop ?? marginY ?? margin)
-    : undefined;
-  $: resolvedMarginRight = marginSplit
-    ? spacingStyle(marginRight ?? marginX ?? margin)
-    : undefined;
-  $: resolvedMarginBottom = marginSplit
-    ? spacingStyle(marginBottom ?? marginY ?? margin)
-    : undefined;
-  $: resolvedMarginLeft = marginSplit
-    ? spacingStyle(marginLeft ?? marginX ?? margin)
-    : undefined;
+  $: resolvedMarginTop = sideStyle(marginSplit, marginTop, marginY, margin);
+  $: resolvedMarginRight = sideStyle(marginSplit, marginRight, marginX, margin);
+  $: resolvedMarginBottom = sideStyle(
+    marginSplit,
+    marginBottom,
+    marginY,
+    margin,
+  );
+  $: resolvedMarginLeft = sideStyle(marginSplit, marginLeft, marginX, margin);
   $: resolvedHeight = viewportStyle(height);
   $: resolvedMinHeight = viewportStyle(minHeight);
   $: resolvedMaxHeight = spacingStyle(maxHeight);
@@ -459,11 +468,11 @@
   style:border-bottom-width={resolvedBorderBottomWidth}
   style:border-left-width={resolvedBorderLeftWidth}
   style:padding={resolvedPadding}
-  style:padding-inline={resolvedPaddingX}
-  style:padding-block={resolvedPaddingY}
+  style:padding-top={resolvedPaddingTop}
+  style:padding-right={resolvedPaddingRight}
+  style:padding-bottom={resolvedPaddingBottom}
+  style:padding-left={resolvedPaddingLeft}
   style:margin={resolvedMargin}
-  style:margin-inline={resolvedMarginX}
-  style:margin-block={resolvedMarginY}
   style:margin-top={resolvedMarginTop}
   style:margin-right={resolvedMarginRight}
   style:margin-bottom={resolvedMarginBottom}

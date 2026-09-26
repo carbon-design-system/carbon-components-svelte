@@ -43,6 +43,12 @@
 <Box padding={5}>Padding scale</Box>
 <Box padding="1.5rem">Custom padding</Box>
 <Box paddingX={3} paddingY={5}>Axis padding</Box>
+<Box padding="1rem" paddingX={3} data-testid="padding-axis-over-custom"
+  >Padding axis over custom</Box
+>
+<Box margin="1rem" marginY={3} data-testid="margin-axis-over-custom"
+  >Margin axis over custom</Box
+>
 <Box margin={4}>Margin scale</Box>
 <Box marginY={7} marginTop={3} data-testid="margin-top-scale"
   >Margin top scale</Box
