@@ -4,7 +4,7 @@ description: Toggles are a switch-like control for turning options on or off, wi
 ---
 
 <script>
-  import { Toggle, ToggleSkeleton } from "carbon-components-svelte";
+  import { Text, Toggle, ToggleSkeleton } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -40,8 +40,8 @@ Customize toggle labels with `labelA` and `labelB`.
 Use slots to customize the toggle labels with additional styling or content.
 
 <Toggle labelText="Two-factor authentication">
-  <span slot="labelA" style="color: red">No</span>
-  <span slot="labelB" style="color: green">Yes</span>
+  <Text slot="labelA" tag="span" type="inherit" color="error">No</Text>
+  <Text slot="labelB" tag="span" type="inherit" color="success">Yes</Text>
 </Toggle>
 
 ### Custom label

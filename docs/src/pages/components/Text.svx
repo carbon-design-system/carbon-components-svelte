@@ -46,7 +46,7 @@ Set `type="inherit"` to color or weight text without resetting its size, for exa
 
 <Toggle labelText="Automatic backups">
   <Text slot="labelA" tag="span" type="inherit" color="error">Off</Text>
-  <Text slot="labelB" tag="span" type="inherit" weight="semibold">On</Text>
+  <Text slot="labelB" tag="span" type="inherit" color="success">On</Text>
 </Toggle>
 
 ### On-color and inverse surfaces
