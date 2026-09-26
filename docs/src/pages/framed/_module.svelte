@@ -79,6 +79,10 @@
     outline: 0;
   }
 
+  :global(.framed .bx--page-header__body [class^="bx--col"]) {
+    outline: 0;
+  }
+
   :global([data-outline]) {
     outline: 1px solid var(--cds-interactive-01);
   }

@@ -6,7 +6,7 @@ export interface ComponentCategory {
 export const COMPONENT_CATEGORIES: ComponentCategory[] = [
   {
     label: "Navigation",
-    components: ["UIShell", "Breadcrumb", "Link"],
+    components: ["UIShell", "Breadcrumb", "Link", "PageHeader"],
   },
   {
     label: "Data & lists",
