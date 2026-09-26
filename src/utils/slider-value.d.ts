@@ -40,3 +40,42 @@ export function valueFromTrackPosition(options: {
   max: number;
   step: number;
 }): number;
+
+type TrackRect = Pick<DOMRect, "left" | "width" | "bottom" | "height">;
+
+/**
+ * Read the client coordinate along the slider axis from a mouse or touch
+ * event. Returns `null` for a touch event with no active touch point.
+ */
+export function getPointerPosition(
+  event: MouseEvent | TouchEvent,
+  orientation: "horizontal" | "vertical",
+): number | null;
+
+/**
+ * Resolve a track rect into its start and signed length along the slider
+ * axis. Values increase upward when vertical, so the start is the bottom
+ * edge and the length is negative.
+ */
+export function getTrackAxis(
+  rect: TrackRect,
+  orientation: "horizontal" | "vertical",
+): { start: number; length: number };
+
+/**
+ * Compute the slider value for a pointer event on a track, snapped to
+ * `step` and clamped to `[min, max]`. `offset` is subtracted from the
+ * pointer position, for keeping a grabbed handle under the pointer.
+ * Returns `null` for a touch event with no active touch point.
+ */
+export function valueFromPointer(
+  event: MouseEvent | TouchEvent,
+  rect: TrackRect,
+  options: {
+    orientation: "horizontal" | "vertical";
+    min: number;
+    max: number;
+    step: number;
+    offset?: number;
+  },
+): number | null;

@@ -162,10 +162,10 @@
   import { resolveSliderMarks } from "../utils/resolve-slider-marks.js";
   import {
     formatRangeLabel as formatSliderRangeLabel,
-    getClientX,
-    getClientY,
+    getPointerPosition,
     getValueText as getSliderValueText,
-    valueFromTrackPosition,
+    getTrackAxis,
+    valueFromPointer,
   } from "../utils/slider-value.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -207,31 +207,13 @@
     return getSliderValueText(numericValue, formatValue);
   }
 
-  /** @type {(e: PointerLikeEvent) => number | null} */
-  function getPointerPosition(event) {
-    return orientation === "vertical" ? getClientY(event) : getClientX(event);
-  }
-
-  /**
-   * Track start and signed length along the slider axis. Values increase
-   * upward when vertical, so the start is the bottom edge and the length is
-   * negative.
-   * @type {() => { start: number; length: number }}
-   */
-  function getTrackAxis() {
-    const rect = trackRef.getBoundingClientRect();
-    return orientation === "vertical"
-      ? { start: rect.bottom, length: -rect.height }
-      : { start: rect.left, length: rect.width };
-  }
-
   /** @type {(e: PointerLikeEvent) => ActiveHandle} */
   function pickHandle(event) {
     const target = /** @type {Node | null} */ (event.target);
     if (target && lowerThumbRef?.contains(target)) return "lower";
     if (target && upperThumbRef?.contains(target)) return "upper";
     const vertical = orientation === "vertical";
-    const point = getPointerPosition(event);
+    const point = getPointerPosition(event, orientation);
     if (point == null) return activeHandle;
     /** @type {(rect: DOMRect | undefined) => number} */
     const distance = (rect) => {
@@ -277,9 +259,12 @@
 
     grabOffset = 0;
     const target = /** @type {Node | null} */ (event.target);
-    const point = getPointerPosition(event);
+    const point = getPointerPosition(event, orientation);
     if (trackRef && point != null && target && thumbRef?.contains(target)) {
-      const { start, length } = getTrackAxis();
+      const { start, length } = getTrackAxis(
+        trackRef.getBoundingClientRect(),
+        orientation,
+      );
       const percent = activeHandle === "lower" ? left : leftUpper;
       grabOffset = point - (start + (length * percent) / 100);
     }
@@ -312,19 +297,14 @@
   function calcValue(event) {
     if (disabled || readonly || !event || !trackRef) return;
 
-    const point = getPointerPosition(event);
-    if (point == null) return;
-    const { start, length } = getTrackAxis();
-    // valueFromTrackPosition is axis-agnostic: a negative `width` (vertical)
-    // flips the interpolation so the bottom edge is `min`.
-    let nextValue = valueFromTrackPosition({
-      clientX: point - grabOffset,
-      left: start,
-      width: length,
+    let nextValue = valueFromPointer(event, trackRef.getBoundingClientRect(), {
+      orientation,
       min,
       max,
       step,
+      offset: grabOffset,
     });
+    if (nextValue == null) return;
 
     // Apply the gap before the bounds so a large `minGap` cannot push a
     // handle outside `[min, max]` when the other handle sits near an edge.
