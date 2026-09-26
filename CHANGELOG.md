@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. This project follows [Conventional Commits](https://www.conventionalcommits.org/); run `bun scripts/release-changelog` to bump the version and prepend release notes.
 
+### [0.112.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.112.0...v0.112.1) (2026-09-25)
+
+### Bug Fixes
+
+- **package:** stop publishing sveld's parse cache ([4c1e994](https://github.com/carbon-design-system/carbon-components-svelte/commit/4c1e99413c72dd36dd859ab9120cf04901c6ddf9))
+
 ### [0.112.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.111.1...v0.112.0) (2026-09-10)
 
 ### Features
@@ -71,6 +77,12 @@ All notable changes to this project will be documented in this file. This projec
 - **css:** fold twenty override partials into vendored Carbon ([34b4ef8](https://github.com/carbon-design-system/carbon-components-svelte/commit/34b4ef86582daea6c0492da48c02c62332247b8c))
 - **css:** rewrite vendored tabs desktop-only, fold css/_tabs.scss in ([5cbb1a0](https://github.com/carbon-design-system/carbon-components-svelte/commit/5cbb1a02185ef8114380aba422fd5e4c013d3228))
 - **css:** theme vendored UI Shell in place, fold css/_ui-shell.scss in ([17ea554](https://github.com/carbon-design-system/carbon-components-svelte/commit/17ea55411cf66b23d228bcabddad31e487c7fcc0))
+
+### [0.111.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.111.1...v0.111.2) (2026-09-25)
+
+### Bug Fixes
+
+- **package:** stop publishing sveld's parse cache ([3a60c5c](https://github.com/carbon-design-system/carbon-components-svelte/commit/3a60c5ce786a5b30e64d4e8980515dbdd7322b48))
 
 ### [0.111.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.111.0...v0.111.1) (2026-08-23)
 
@@ -341,6 +353,12 @@ directly if you need that signal. ([b1f00c4](https://github.com/carbon-design-sy
 - **utils:** avoid `getComputedStyle` per candidate in `trapFocus` (#3561) ([7d61466](https://github.com/carbon-design-system/carbon-components-svelte/commit/7d614668ebc6af075d6e171ec8b9332b79b96586))
 
 
+
+### [0.110.3](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.110.2...v0.110.3) (2026-09-25)
+
+### Bug Fixes
+
+- **package:** stop publishing sveld's parse cache ([6ce8ca3](https://github.com/carbon-design-system/carbon-components-svelte/commit/6ce8ca312c03ac4da4c35717fcc2beaedf29307d))
 
 ### [0.110.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.110.1...v0.110.2) (2026-07-31)
 
