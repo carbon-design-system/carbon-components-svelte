@@ -293,29 +293,39 @@
     }
   }
 
+  // The gap applies before the bounds, so a `minGap` wider than the range
+  // can't push a handle outside `[min, max]`.
+  /** @type {(next: number) => number} */
+  function clampLower(next) {
+    return Math.max(min, Math.min(next, valueUpper - minGap));
+  }
+
+  /** @type {(next: number) => number} */
+  function clampUpper(next) {
+    return Math.min(max, Math.max(next, value + minGap));
+  }
+
   /** @type {(e: PointerLikeEvent | null) => void} */
   function calcValue(event) {
     if (disabled || readonly || !event || !trackRef) return;
 
-    let nextValue = valueFromPointer(event, trackRef.getBoundingClientRect(), {
-      orientation,
-      min,
-      max,
-      step,
-      offset: grabOffset,
-    });
+    const nextValue = valueFromPointer(
+      event,
+      trackRef.getBoundingClientRect(),
+      {
+        orientation,
+        min,
+        max,
+        step,
+        offset: grabOffset,
+      },
+    );
     if (nextValue == null) return;
 
-    // Apply the gap before the bounds so a large `minGap` cannot push a
-    // handle outside `[min, max]` when the other handle sits near an edge.
     if (activeHandle === "lower") {
-      if (nextValue > valueUpper - minGap) nextValue = valueUpper - minGap;
-      if (nextValue < min) nextValue = min;
-      value = nextValue;
+      value = clampLower(nextValue);
     } else {
-      if (nextValue < value + minGap) nextValue = value + minGap;
-      if (nextValue > max) nextValue = max;
-      valueUpper = nextValue;
+      valueUpper = clampUpper(nextValue);
     }
     dispatch("input", { value, valueUpper });
   }
@@ -327,10 +337,11 @@
     if (event.key === "Home" || event.key === "End") {
       // Prevent the browser from also scrolling to the top/bottom of the page.
       event.preventDefault();
+      const next = event.key === "Home" ? min : max;
       if (activeHandle === "lower") {
-        value = event.key === "Home" ? min : Math.max(min, valueUpper - minGap);
+        value = clampLower(next);
       } else {
-        valueUpper = event.key === "Home" ? Math.min(max, value + minGap) : max;
+        valueUpper = clampUpper(next);
       }
       dispatch("input", { value, valueUpper });
       dispatch("change", { value, valueUpper });
@@ -356,15 +367,9 @@
     const delta =
       step * (isLargeStep ? range / step / stepMultiplier : 1) * dir;
     if (activeHandle === "lower") {
-      let next = Math.round((value + delta) / step) * step;
-      if (next > valueUpper - minGap) next = valueUpper - minGap;
-      if (next < min) next = min;
-      value = next;
+      value = clampLower(Math.round((value + delta) / step) * step);
     } else {
-      let next = Math.round((valueUpper + delta) / step) * step;
-      if (next < value + minGap) next = value + minGap;
-      if (next > max) next = max;
-      valueUpper = next;
+      valueUpper = clampUpper(Math.round((valueUpper + delta) / step) * step);
     }
     dispatch("input", { value, valueUpper });
     dispatch("change", { value, valueUpper });
@@ -385,6 +390,8 @@
   $: left = range === 0 ? 0 : ((value - min) / range) * 100;
   $: leftUpper = range === 0 ? 0 : ((valueUpper - min) / range) * 100;
   // Furthest each handle may travel toward the other, kept within bounds.
+  // Same as clampLower(max)/clampUpper(min), inlined so Svelte tracks
+  // valueUpper, value, and minGap as dependencies.
   $: lowerMax = Math.max(min, valueUpper - minGap);
   $: upperMin = Math.min(max, value + minGap);
   $: resolvedMarks = resolveSliderMarks(marks, min, max, step);
@@ -472,11 +479,9 @@
         on:change={(event) => {
           if (readonly) return;
           const target = /** @type {HTMLInputElement} */ (event.currentTarget);
-          let next = Number(target.value);
+          const next = Number(target.value);
           if (Number.isNaN(next)) return;
-          if (next > valueUpper - minGap) next = valueUpper - minGap;
-          if (next < min) next = min;
-          value = next;
+          value = clampLower(next);
           dispatch("change", { value, valueUpper });
         }}
         data-invalid={showInvalid || null}
@@ -705,11 +710,9 @@
         on:change={(event) => {
           if (readonly) return;
           const target = /** @type {HTMLInputElement} */ (event.currentTarget);
-          let next = Number(target.value);
+          const next = Number(target.value);
           if (Number.isNaN(next)) return;
-          if (next < value + minGap) next = value + minGap;
-          if (next > max) next = max;
-          valueUpper = next;
+          valueUpper = clampUpper(next);
           dispatch("change", { value, valueUpper });
         }}
         data-invalid={showInvalid || null}
