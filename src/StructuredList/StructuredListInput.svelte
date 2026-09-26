@@ -39,7 +39,7 @@
    */
   export let ref = null;
 
-  import { getContext } from "svelte";
+  import { getContext, onMount } from "svelte";
   import { readable, writable } from "svelte/store";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -54,6 +54,24 @@
 
   if (initialChecked && ctx) {
     update(value);
+  }
+
+  /** @type {Value | undefined} */
+  let registeredValue = undefined;
+  let registered = false;
+
+  onMount(() => {
+    if (!ctx?.register) return;
+    ctx.register(value);
+    registeredValue = value;
+    registered = true;
+    return () => ctx.unregister(registeredValue);
+  });
+
+  $: if (registered && value !== registeredValue) {
+    ctx.unregister(registeredValue);
+    ctx.register(value);
+    registeredValue = value;
   }
 
   $: checked = $multiple

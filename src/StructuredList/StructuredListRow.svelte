@@ -38,6 +38,38 @@
   const multiple = ctx?.multiple ?? readable(false);
   // Standalone (no wrapper context) never matches, same as StructuredListInput.
   const selectedValue = ctx?.selectedValue ?? writable(undefined);
+  const rowValues = ctx?.rowValues ?? readable([]);
+
+  /** @type {null | HTMLInputElement} */
+  let selectAllRef = null;
+
+  $: rowValueSet = head ? new Set($rowValues) : new Set();
+  $: selectedCount = head ? countSelected(rowValueSet, $selectedValue) : 0;
+  $: allSelected = rowValueSet.size > 0 && selectedCount === rowValueSet.size;
+  $: someSelected = selectedCount > 0 && !allSelected;
+  // `indeterminate` is a property only; there is no attribute to render.
+  $: if (selectAllRef) selectAllRef.indeterminate = someSelected;
+
+  /**
+   * @param {Set<Value>} values
+   * @param {Value | Value[] | undefined} selected
+   */
+  function countSelected(values, selected) {
+    if (!Array.isArray(selected)) return 0;
+    let count = 0;
+    for (const v of new Set(selected)) {
+      if (values.has(v)) count++;
+    }
+    return count;
+  }
+
+  function toggleAll() {
+    const next = allSelected ? [] : [...rowValueSet];
+    selectedValue.set(next);
+    // The browser already flipped `checked`; resync in case the state
+    // did not change (e.g. no rows to select).
+    selectAllRef.checked = next.length > 0;
+  }
 
   $: isSelected =
     value !== undefined &&
@@ -79,7 +111,17 @@
     <slot />
     {#if $selection && head}
       <StructuredListCell head style="width: 1px;">
-        <span class:bx--visually-hidden={true}>Select row</span>
+        {#if $multiple}
+          <input
+            bind:this={selectAllRef}
+            type="checkbox"
+            aria-label="Select all rows"
+            checked={allSelected}
+            on:change={toggleAll}
+          >
+        {:else}
+          <span class:bx--visually-hidden={true}>Select row</span>
+        {/if}
       </StructuredListCell>
     {/if}
   </div>
