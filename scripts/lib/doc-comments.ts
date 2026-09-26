@@ -12,7 +12,7 @@
  */
 import ts from "typescript";
 
-const SCRIPT_RE = /(<script\b[^>]*>)([\s\S]*?)(<\/script>)/g;
+const SCRIPT_RE = /(<script\b[^>]*>)([\s\S]*?)(<\/script\b[^>]*>)/gi;
 
 export function docCommentRanges(code: string): [number, number][] {
   const source = ts.createSourceFile(
