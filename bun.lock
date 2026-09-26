@@ -24,7 +24,7 @@
         "carbon-icons-svelte": "^13.15.0",
         "jsdom": "^30.0.1",
         "lightningcss": "^1.33.0",
-        "ostia": "^0.2.5",
+        "ostia": "^0.2.7",
         "sass-embedded": "^1.105.0",
         "sveld": "^0.37.8",
         "svelte": "^5.57.1",
@@ -360,7 +360,7 @@
 
     "obug": ["obug@2.1.4", "", {}, "sha512-4a+OsYv9UktOJKE+l1A4OufDgdRF9PifWj+tJnHURo/P+WOxpG4GzUFL9qCalmWauao6ogiG+QvnCovwPoyAWA=="],
 
-    "ostia": ["ostia@0.2.5", "", { "bin": { "ostia": "cli.js" } }, "sha512-M/rr0jQ4JwbWexcUjdZvriEugT8KsiOcMVy9lCleLKWfpFyvS8E8aZdUDozhE0o7RTlIfkozeOgiWRx17MN+kQ=="],
+    "ostia": ["ostia@0.2.7", "", { "bin": { "ostia": "cli.js" } }, "sha512-u/p5MzEP0AWL1dS3hPjHEIpJ9l61DAahxMZNsu1muMROwgudLOz+4j/hBVNLz2i9JN068lBKoCr5H4VFCjPcpw=="],
 
     "parse5": ["parse5@8.0.1", "", { "dependencies": { "entities": "^8.0.0" } }, "sha512-z1e/HMG90obSGeidlli3hj7cbocou0/wa5HacvI3ASx34PecNjNQeaHNo5WIZpWofN9kgkqV1q5YvXe3F0FoPw=="],
 

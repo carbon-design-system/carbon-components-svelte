@@ -83,7 +83,7 @@
     "carbon-icons-svelte": "^13.15.0",
     "jsdom": "^30.0.1",
     "lightningcss": "^1.33.0",
-    "ostia": "^0.2.5",
+    "ostia": "^0.2.7",
     "sass-embedded": "^1.105.0",
     "sveld": "^0.37.8",
     "svelte": "^5.57.1",
