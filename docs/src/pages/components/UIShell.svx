@@ -129,6 +129,8 @@ Set `isSelected` on `SideNavLink` or `SideNavMenuItem` to mark the current page 
 
 Set `large` on `SideNavLink` or `SideNavMenu` to increase the item's height from 32px to 48px — useful for a top-level item that should stand out, or for larger touch targets. Not available on `SideNavMenuItem` (nested items). Composes with `icon` on both components.
 
+Only the row that sets `large` grows. Its children stay 32px unless they set it too.
+
 <FileSource src="/framed/UIShell/HeaderNavLarge" />
 
 ### Responsive
