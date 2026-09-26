@@ -303,3 +303,33 @@
 @include exports("treeview-checkbox") {
   @include treeview-checkbox;
 }
+
+// carbon-components-svelte patch: native drag-and-drop reparenting
+// (TreeView `draggable` prop). `box-shadow: inset` avoids a pseudo-element,
+// so it can't collide with the active-node accent bar's `::before` above.
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// @access private
+/// @group components
+@mixin treeview-drag-drop {
+  .#{$prefix}--tree-node--dragging {
+    opacity: 0.5;
+  }
+
+  .#{$prefix}--tree-node--drag-over-before {
+    box-shadow: inset 0 2px 0 0 $interactive-04;
+  }
+
+  .#{$prefix}--tree-node--drag-over-after {
+    box-shadow: inset 0 -2px 0 0 $interactive-04;
+  }
+
+  .#{$prefix}--tree-node--drag-over-inside {
+    box-shadow: inset 0 0 0 2px $interactive-04;
+  }
+}
+
+@include exports("treeview-drag-drop") {
+  @include treeview-drag-drop;
+}
