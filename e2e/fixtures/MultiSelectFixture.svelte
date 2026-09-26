@@ -43,6 +43,16 @@
 {/if}
 
 <MultiSelect
+  data-testid="multiselect-contact"
+  labelText="Contact"
+  label="Choose contact methods"
+  items={[
+    { id: "email", text: "Email" },
+    { id: "slack", text: "Slack" },
+  ]}
+/>
+
+<MultiSelect
   data-testid="multiselect-roles"
   labelText="Roles"
   label="Choose roles"

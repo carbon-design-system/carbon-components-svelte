@@ -694,7 +694,6 @@
   <ListBox
     {type}
     {size}
-    aria-label={$$props["aria-label"]}
     class={dropdownListBoxClass}
     on:click={(event) => {
       if (disabled || readonly) return;
