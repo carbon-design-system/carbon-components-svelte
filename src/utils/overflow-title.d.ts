@@ -4,6 +4,12 @@ export interface OverflowTitleParams {
   title?: string;
   /** Element to measure. Defaults to `node`. */
   measure?: HTMLElement | null;
+  /**
+   * Measure on `pointerenter` and `focusin` instead of on mount and update,
+   * and again when an ancestor's width transition ends while hovered or
+   * focused.
+   */
+  lazy?: boolean;
 }
 
 /** Set `title` from overflow text. Provided `title` wins. */

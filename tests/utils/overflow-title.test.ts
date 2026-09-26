@@ -151,4 +151,133 @@ describe("overflowTitle action", () => {
     expect(reads).toBe(0);
     expect(node.hasAttribute("title")).toBe(false);
   });
+
+  describe("lazy mode", () => {
+    // jsdom may not implement `PointerEvent`; the listener only reads the
+    // event type, so a plain `Event` is an equivalent stand-in.
+    function firePointerEnter(target: HTMLElement) {
+      target.dispatchEvent(
+        typeof PointerEvent === "function"
+          ? new PointerEvent("pointerenter")
+          : new Event("pointerenter"),
+      );
+    }
+
+    it("does not measure on mount", async () => {
+      mockSize(node, 50, 120);
+      overflowTitle(node, { lazy: true });
+      await settle();
+      expect(node.hasAttribute("title")).toBe(false);
+    });
+
+    it("measures on pointerenter", async () => {
+      mockSize(node, 50, 120);
+      overflowTitle(node, { lazy: true });
+      await settle();
+      firePointerEnter(node);
+      expect(node.getAttribute("title")).toBe("A very long label");
+    });
+
+    it("measures on focusin", () => {
+      mockSize(node, 50, 120);
+      overflowTitle(node, { lazy: true });
+      node.dispatchEvent(new Event("focusin"));
+      expect(node.getAttribute("title")).toBe("A very long label");
+    });
+
+    it("removes a stale title once the node widens and is entered again", () => {
+      mockSize(node, 50, 120);
+      overflowTitle(node, { lazy: true });
+      firePointerEnter(node);
+      expect(node.getAttribute("title")).toBe("A very long label");
+
+      mockSize(node, 120, 120);
+      firePointerEnter(node);
+      expect(node.hasAttribute("title")).toBe(false);
+    });
+
+    it("applies an explicit title immediately, without waiting for an event", () => {
+      mockSize(node, 120, 120);
+      overflowTitle(node, { lazy: true, title: "Custom title" });
+      expect(node.getAttribute("title")).toBe("Custom title");
+    });
+
+    it("stops measuring once destroyed", () => {
+      mockSize(node, 50, 120);
+      const { destroy } = overflowTitle(node, { lazy: true });
+      destroy();
+      firePointerEnter(node);
+      expect(node.hasAttribute("title")).toBe(false);
+    });
+
+    function fireWidthTransitionend(
+      target: EventTarget,
+      propertyName = "width",
+    ) {
+      // jsdom has no `TransitionEvent`; the listener only reads these fields.
+      const event = new Event("transitionend", { bubbles: true });
+      Object.defineProperty(event, "propertyName", { value: propertyName });
+      target.dispatchEvent(event);
+    }
+
+    it.each([
+      ["an ancestor's width transition", "width", true],
+      ["another property's transition", "color", false],
+    ])(
+      "re-measures after %s ends while hovered: %s",
+      (_, property, remeasured) => {
+        const parent = document.createElement("div");
+        document.body.appendChild(parent);
+        parent.appendChild(node);
+        mockSize(node, 120, 120);
+        overflowTitle(node, { lazy: true });
+        firePointerEnter(node);
+        expect(node.hasAttribute("title")).toBe(false);
+
+        mockSize(node, 50, 120);
+        fireWidthTransitionend(parent, property as string);
+        expect(node.hasAttribute("title")).toBe(remeasured);
+        parent.remove();
+      },
+    );
+
+    it("ignores width transitions after the pointer leaves", () => {
+      mockSize(node, 120, 120);
+      overflowTitle(node, { lazy: true });
+      firePointerEnter(node);
+      node.dispatchEvent(new Event("pointerleave"));
+
+      mockSize(node, 50, 120);
+      fireWidthTransitionend(document.body);
+      expect(node.hasAttribute("title")).toBe(false);
+    });
+
+    it("stops measuring on mount/update once switched on via update", async () => {
+      mockSize(node, 50, 120);
+      const { update } = overflowTitle(node);
+      await settle();
+      expect(node.getAttribute("title")).toBe("A very long label");
+
+      // Switching to lazy does not itself measure; the stale title survives
+      // until the next hover or focus.
+      mockSize(node, 120, 120);
+      update({ lazy: true });
+      await settle();
+      expect(node.getAttribute("title")).toBe("A very long label");
+
+      firePointerEnter(node);
+      expect(node.hasAttribute("title")).toBe(false);
+    });
+
+    it("resumes mount/update measurement once switched off via update", async () => {
+      mockSize(node, 50, 120);
+      const { update } = overflowTitle(node, { lazy: true });
+      await settle();
+      expect(node.hasAttribute("title")).toBe(false);
+
+      update({ lazy: false });
+      await settle();
+      expect(node.getAttribute("title")).toBe("A very long label");
+    });
+  });
 });
