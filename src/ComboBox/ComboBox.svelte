@@ -893,7 +893,6 @@
   <ListBox
     class={comboBoxListBoxClass}
     id={comboId}
-    aria-label={ariaLabel}
     {disabled}
     invalid={showInvalid}
     {open}

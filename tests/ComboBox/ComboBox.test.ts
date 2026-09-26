@@ -1269,6 +1269,15 @@ describe("ComboBox", () => {
     expect(listbox).toHaveAttribute("aria-label", "Choose an item");
   });
 
+  it("leaves aria-label off the role-less list box wrapper", () => {
+    const { container } = render(ComboBox, {
+      props: { items: [{ id: "1", text: "Email", price: 200 }] },
+    });
+    const wrapper = container.querySelector(".bx--list-box");
+    expect(wrapper).toBeInTheDocument();
+    expect(wrapper).not.toHaveAttribute("aria-label");
+  });
+
   // Regression: aria-labelledby on the input pointed at the unnamed ListBox
   // wrapper, shadowing the <label for> association so the input's accessible
   // name was the wrapper's aria-label (or empty) instead of labelText.

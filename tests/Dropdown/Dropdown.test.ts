@@ -77,7 +77,7 @@ describe("Dropdown", () => {
   });
 
   // Regression: ?? for aria-label so empty string is used (not fallback)
-  it("should use empty aria-label when passed (nullish coalescing)", () => {
+  it("should use empty aria-label when passed (nullish coalescing)", async () => {
     const { container } = render(Dropdown, {
       props: {
         items: [{ id: "1", text: "Email" }],
@@ -85,9 +85,13 @@ describe("Dropdown", () => {
         "aria-label": "",
       },
     });
+    // The list box wrapper has no role, so `aria-label` is prohibited on it.
     const dropdown = container.querySelector(".bx--dropdown");
     expect(dropdown).toBeInTheDocument();
-    expect(dropdown).toHaveAttribute("aria-label", "");
+    expect(dropdown).not.toHaveAttribute("aria-label");
+
+    await user.click(screen.getByRole("combobox"));
+    expect(screen.getByRole("listbox")).toHaveAttribute("aria-label", "");
   });
 
   it("should handle hidden label", () => {

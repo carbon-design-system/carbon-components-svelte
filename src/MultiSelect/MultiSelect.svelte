@@ -1326,7 +1326,6 @@
   {/if}
   <ListBox
     id={comboId}
-    aria-label={ariaLabel}
     {disabled}
     invalid={showInvalid}
     invalidText={isFluid ? "" : invalidText}

@@ -367,6 +367,15 @@ describe("MultiSelect", () => {
     expect(listbox).toHaveAttribute("aria-label", "");
   });
 
+  it("leaves aria-label off the role-less list box wrapper", () => {
+    const { container } = render(MultiSelect, {
+      props: { items: [{ id: "1", text: "Email" }], labelText: "Contact" },
+    });
+    const wrapper = container.querySelector(".bx--list-box");
+    expect(wrapper).toBeInTheDocument();
+    expect(wrapper).not.toHaveAttribute("aria-label");
+  });
+
   describe("variants and states", () => {
     it("renders in light variant", async () => {
       render(MultiSelect, {

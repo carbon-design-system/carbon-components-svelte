@@ -12,9 +12,8 @@ test.describe("ComboBox", () => {
   test("can be located by getByLabel when labelText is set", async ({
     page,
   }) => {
-    // With labelText="Contact", the combobox is findable via its associated label.
-    // The label's for attribute points to the input; use locator to get the input.
-    const combobox = page.getByLabel("Contact").locator("input");
+    // With labelText="Contact", the label's for attribute names the input.
+    const combobox = page.getByRole("combobox", { name: "Contact" });
     await expect(combobox).toBeVisible();
     await combobox.fill("Email");
     await expect(combobox).toHaveValue("Email");
