@@ -1,0 +1,21 @@
+// Background fill tokens shared by Box and ScrollGradient. Emits no CSS.
+
+@import "carbon-components/scss/globals/scss/vars";
+
+/// Token names follow Carbon v11; values resolve through the v10 theme
+/// variables of the compiled theme.
+/// @access private
+/// @group components
+/// @return {Map} fill token name to theme color
+@function ccs-fill-tokens() {
+  @return (
+    background: $background,
+    layer-01: $ui-01,
+    layer-02: $ui-02,
+    layer-03: $ui-03,
+    layer-accent: $layer-accent,
+    field: $field-01,
+    inverse: $background-inverse,
+    brand: $background-brand,
+  );
+}

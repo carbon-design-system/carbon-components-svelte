@@ -11,10 +11,11 @@ const PARTIALS = readdirSync(CSS_DIR).filter(
 );
 
 // Partials that legitimately emit nothing through `exports()`: the manifest,
-// a Sass map and declaration mixins other partials import, and the `$ccs-theme-switching`-gated
-// theme scopes.
+// Sass maps, functions, and declaration mixins other partials import, and the
+// `$ccs-theme-switching`-gated theme scopes.
 const NO_EXPORTS = new Set([
   "_carbon-styles.scss",
+  "_fill-tokens.scss",
   "_fluid-shared.scss",
   "_spacing-scale.scss",
   "_status-colors.scss",
