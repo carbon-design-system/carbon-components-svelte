@@ -167,7 +167,9 @@
   .#{$prefix}--structured-list-svg {
     display: inline-block;
     fill: transparent;
-    transition: all $duration--fast-02 motion(standard, productive);
+    // ccs: only fill differs (checked); avoid `all` so the browser doesn't
+    // interpolate the rest of the animatable property set.
+    transition: fill $duration--fast-02 motion(standard, productive);
     vertical-align: middle;
   }
 
