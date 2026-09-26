@@ -296,7 +296,7 @@
     transform: rotate(180deg);
   }
 
-  .#{$prefix}--side-nav__item--large .#{$prefix}--side-nav__submenu {
+  .#{$prefix}--side-nav__item--large > .#{$prefix}--side-nav__submenu { // ccs: own row only, was a descendant selector
     height: mini-units(6);
   }
 
@@ -369,7 +369,7 @@
       outline $duration--fast-02 motion(standard, productive);
   }
 
-  .#{$prefix}--side-nav__item--large .#{$prefix}--side-nav__link { // ccs: flatten
+  .#{$prefix}--side-nav__item--large > .#{$prefix}--side-nav__link { // ccs: flatten, own row only (was a descendant selector)
     height: mini-units(6);
   }
 
