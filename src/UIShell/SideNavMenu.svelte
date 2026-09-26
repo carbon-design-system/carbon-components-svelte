@@ -53,7 +53,7 @@
 
 <li
   class:bx--side-nav__item={true}
-  class:bx--side-nav__item--icon={icon}
+  class:bx--side-nav__item--icon={icon || $$slots.icon}
   class:bx--side-nav__item--large={large}
 >
   <button
