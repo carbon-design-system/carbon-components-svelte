@@ -1,25 +1,14 @@
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/layer";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "./fill-tokens";
 @import "./spacing-scale";
 
 /// Box utility classes for fill, inset, and border tokens.
 /// @access private
 /// @group components
 @mixin box {
-  // Token names follow Carbon v11; values resolve through v10 theme variables.
-  $fill-tokens: (
-    background: $background,
-    layer-01: $ui-01,
-    layer-02: $ui-02,
-    layer-03: $ui-03,
-    layer-accent: $layer-accent,
-    field: $field-01,
-    inverse: $background-inverse,
-    brand: $background-brand,
-  );
-
-  @each $name, $value in $fill-tokens {
+  @each $name, $value in ccs-fill-tokens() {
     .#{$prefix}--box-fill-#{$name} {
       background-color: $value;
     }

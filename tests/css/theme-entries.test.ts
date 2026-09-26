@@ -23,6 +23,7 @@ const ALL_ONLY_IMPORTS = [
 
 // Partials imported by other css/_*.scss partials, not by the manifest.
 const UNREGISTERED_PARTIALS = [
+  "_fill-tokens.scss",
   "_fluid-shared.scss",
   "_spacing-scale.scss",
   "_status-colors.scss",
