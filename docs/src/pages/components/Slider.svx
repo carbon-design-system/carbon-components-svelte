@@ -97,7 +97,7 @@ Use `formatValue` to format range labels and `aria-valuetext` (for example curre
 
 ## Marks
 
-Set `marks` to show tick marks along the track. Pass an array of stops with optional labels, or set `marks` to `true` to tick every `step`. Marks are visual only; snapping still follows `step`.
+Set `marks` to show tick marks along the track. Pass an array of stops with optional labels, or set `marks` to `true` to tick every `step`. Marks are visual only; snapping still follows `step` unless [`snapToMarks`](#snap-to-marks) is set.
 
 <Slider
   labelText="Log verbosity"
@@ -119,6 +119,25 @@ Set `marks` to show tick marks along the track. Pass an array of stops with opti
 Set `marks` to `true` to place a tick at every `step`.
 
 <Slider labelText="Instances" hideTextInput min={0} max={10} step={2} value={4} marks />
+
+### Snap to marks
+
+Set `snapToMarks` to `true` to make dragging and clicking land on the nearest mark instead of the nearest `step`. <DocKbd label="ArrowLeft" />/<DocKbd label="ArrowRight" /> (and <DocKbd label="ArrowDown" />/<DocKbd label="ArrowUp" />) move to the adjacent mark; <DocKbd label="Shift" /> + Arrow, <DocKbd label="PageUp" />, and <DocKbd label="PageDown" /> skip `stepMultiplier` marks. <DocKbd label="Home" /> and <DocKbd label="End" /> still jump to `min` and `max`. A `value` set programmatically is not moved onto a mark.
+
+<Slider
+  labelText="Cache size (GB)"
+  min={0}
+  max={64}
+  value={8}
+  snapToMarks
+  marks={[
+    { value: 0, label: "0" },
+    { value: 8, label: "8" },
+    { value: 16, label: "16" },
+    { value: 32, label: "32" },
+    { value: 64, label: "64" },
+  ]}
+/>
 
 ## Light
 
