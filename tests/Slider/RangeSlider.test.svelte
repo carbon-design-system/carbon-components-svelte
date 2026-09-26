@@ -6,6 +6,7 @@
   export let min = 0;
   export let max = 100;
   export let step = 1;
+  export let minGap = 0;
   export let marks:
     | boolean
     | ReadonlyArray<{ value: number; label?: string }>
@@ -47,6 +48,7 @@
   {min}
   {max}
   {step}
+  {minGap}
   {marks}
   {disabled}
   {readonly}

@@ -54,6 +54,9 @@
   /** Set the step multiplier value */
   export let stepMultiplier = 4;
 
+  /** Set the minimum allowed distance between `value` and `valueUpper` */
+  export let minGap = 0;
+
   /** Set to `true` to require a value */
   export let required = false;
 
@@ -282,11 +285,15 @@
       step,
     });
 
+    // Apply the gap before the bounds so a large `minGap` cannot push a
+    // handle outside `[min, max]` when the other handle sits near an edge.
     if (activeHandle === "lower") {
-      if (nextValue > valueUpper) nextValue = valueUpper;
+      if (nextValue > valueUpper - minGap) nextValue = valueUpper - minGap;
+      if (nextValue < min) nextValue = min;
       value = nextValue;
     } else {
-      if (nextValue < value) nextValue = value;
+      if (nextValue < value + minGap) nextValue = value + minGap;
+      if (nextValue > max) nextValue = max;
       valueUpper = nextValue;
     }
     dispatch("input", { value, valueUpper });
@@ -300,9 +307,9 @@
       // Prevent the browser from also scrolling to the top/bottom of the page.
       event.preventDefault();
       if (activeHandle === "lower") {
-        value = event.key === "Home" ? min : valueUpper;
+        value = event.key === "Home" ? min : Math.max(min, valueUpper - minGap);
       } else {
-        valueUpper = event.key === "Home" ? value : max;
+        valueUpper = event.key === "Home" ? Math.min(max, value + minGap) : max;
       }
       dispatch("input", { value, valueUpper });
       dispatch("change", { value, valueUpper });
@@ -329,13 +336,13 @@
       step * (isLargeStep ? range / step / stepMultiplier : 1) * dir;
     if (activeHandle === "lower") {
       let next = Math.round((value + delta) / step) * step;
+      if (next > valueUpper - minGap) next = valueUpper - minGap;
       if (next < min) next = min;
-      if (next > valueUpper) next = valueUpper;
       value = next;
     } else {
       let next = Math.round((valueUpper + delta) / step) * step;
+      if (next < value + minGap) next = value + minGap;
       if (next > max) next = max;
-      if (next < value) next = value;
       valueUpper = next;
     }
     dispatch("input", { value, valueUpper });
@@ -356,6 +363,9 @@
   $: range = max - min;
   $: left = range === 0 ? 0 : ((value - min) / range) * 100;
   $: leftUpper = range === 0 ? 0 : ((valueUpper - min) / range) * 100;
+  // Furthest each handle may travel toward the other, kept within bounds.
+  $: lowerMax = Math.max(min, valueUpper - minGap);
+  $: upperMin = Math.min(max, value + minGap);
   $: resolvedMarks = resolveSliderMarks(marks, min, max, step);
   $: hasMarkLabels = resolvedMarks.some(
     (mark) => mark.label != null && mark.label !== "",
@@ -364,6 +374,11 @@
     value = clamp(value, min, max);
     valueUpper = clamp(valueUpper, min, max);
     if (value > valueUpper) value = valueUpper;
+    if (minGap > 0 && valueUpper - value < minGap) {
+      valueUpper = Math.min(max, value + minGap);
+      if (valueUpper - value < minGap)
+        value = Math.max(min, valueUpper - minGap);
+    }
 
     if (dragging && currentEvent) {
       calcValue(currentEvent);
@@ -431,15 +446,15 @@
         {readonly}
         {required}
         {min}
-        max={valueUpper}
+        max={lowerMax}
         {step}
         on:change={(event) => {
           if (readonly) return;
           const target = /** @type {HTMLInputElement} */ (event.currentTarget);
           let next = Number(target.value);
           if (Number.isNaN(next)) return;
+          if (next > valueUpper - minGap) next = valueUpper - minGap;
           if (next < min) next = min;
-          if (next > valueUpper) next = valueUpper;
           value = next;
           dispatch("change", { value, valueUpper });
         }}
@@ -490,7 +505,7 @@
           tabindex={readonly || disabled ? undefined : 0}
           class:bx--slider__thumb={true}
           class:bx--slider__thumb--lower={true}
-          aria-valuemax={valueUpper}
+          aria-valuemax={lowerMax}
           aria-valuemin={min}
           aria-valuenow={value}
           aria-valuetext={getValueText(value)}
@@ -552,7 +567,7 @@
           class:bx--slider__thumb={true}
           class:bx--slider__thumb--upper={true}
           aria-valuemax={max}
-          aria-valuemin={value}
+          aria-valuemin={upperMin}
           aria-valuenow={valueUpper}
           aria-valuetext={getValueText(valueUpper)}
           aria-label={ariaLabelInputUpper}
@@ -645,7 +660,7 @@
         {disabled}
         {readonly}
         {required}
-        min={value}
+        min={upperMin}
         {max}
         {step}
         on:change={(event) => {
@@ -653,8 +668,8 @@
           const target = /** @type {HTMLInputElement} */ (event.currentTarget);
           let next = Number(target.value);
           if (Number.isNaN(next)) return;
+          if (next < value + minGap) next = value + minGap;
           if (next > max) next = max;
-          if (next < value) next = value;
           valueUpper = next;
           dispatch("change", { value, valueUpper });
         }}
