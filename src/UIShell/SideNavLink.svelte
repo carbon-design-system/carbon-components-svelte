@@ -40,6 +40,10 @@
 
   import { getContext, onMount } from "svelte";
   import { resolveLinkRel } from "../utils/link-rel.js";
+  import { overflowTitle } from "../utils/overflow-title.js";
+
+  /** @type {null | HTMLSpanElement} */
+  let textRef = null;
 
   const menu = getContext("carbon:SideNavMenu");
   const key = {};
@@ -57,6 +61,11 @@
     rel={resolveLinkRel($$restProps.target, $$restProps.rel)}
     class:bx--side-nav__link={true}
     class:bx--side-nav__link--current={isSelected}
+    use:overflowTitle={{
+      measure: textRef,
+      lazy: true,
+      title: $$restProps.title,
+    }}
     {...$$restProps}
     on:click
   >
@@ -68,7 +77,9 @@
         <slot name="icon"><svelte:component this={icon} /></slot>
       </div>
     {/if}
-    <span class:bx--side-nav__link-text={true}> <slot>{text}</slot> </span>
+    <span bind:this={textRef} class:bx--side-nav__link-text={true}>
+      <slot>{text}</slot>
+    </span>
     {#if $$slots.badge}
       <div class:bx--side-nav__link-badge={true}><slot name="badge" /></div>
     {/if}
