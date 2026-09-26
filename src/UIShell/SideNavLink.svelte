@@ -37,7 +37,15 @@
    */
   export let ref = null;
 
+  import { getContext, onMount } from "svelte";
   import { resolveLinkRel } from "../utils/link-rel.js";
+
+  const menu = getContext("carbon:SideNavMenu");
+  const key = {};
+
+  $: menu?.setCurrent(key, isSelected);
+
+  onMount(() => () => menu?.setCurrent(key, false));
 </script>
 
 <li class:bx--side-nav__item={true} class:bx--side-nav__item--large={large}>
