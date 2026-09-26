@@ -15,6 +15,12 @@
    */
 
   /**
+   * Dispatched when the results menu is scrolled near the bottom (load-more
+   * signal). Not the browser's native `scrollend` (scroll stopped).
+   * @event {{ scrollTop: number; scrollHeight: number; clientHeight: number }} scrollend
+   */
+
+  /**
    * Specify the value of the search input.
    * @type {T}
    * @bindable writable
@@ -163,6 +169,7 @@
   import { buildFieldIds, joinDescribedBy } from "../utils/field-status.js";
   import { fuzzyMatch } from "../utils/fuzzy-match.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
+  import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { createOptionListNavigator } from "../utils/option-list-navigator.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -200,6 +207,8 @@
   let filterableIds = new Set();
   let primaryItemIds = new Set();
 
+  const scrollEndTracker = createScrollEndTracker();
+
   $: query.set(String(value ?? ""));
   $: sharedShouldFilter.set(shouldFilter);
   $: sharedMatch.set(match);
@@ -221,6 +230,7 @@
     itemCount === 0 &&
     $$slots.noResults;
   $: open = !disabled && !readonly && focused && !dismissed;
+  $: if (!open) scrollEndTracker.reset();
   $: menuVisible = open && (loading || itemCount > 0 || showNoResults);
   $: menuDomId = `menu-${id}`;
   $: ({ readonlyId } = buildFieldIds(id));
@@ -391,6 +401,20 @@
     dispatchSearch?.cancel();
   }
 
+  /**
+   * @param {Event} event
+   */
+  function handleMenuScroll(event) {
+    const target = /** @type {HTMLElement} */ (event.target);
+    const detail = scrollEndTracker.observe({
+      scrollTop: target.scrollTop,
+      scrollHeight: target.scrollHeight,
+      clientHeight: target.clientHeight,
+      itemCount,
+    });
+    if (detail) dispatch("scrollend", detail);
+  }
+
   function handleOutsideClick(event) {
     if (open && isOutsideClick(event, [anchorRef, portal ? menuRef : null])) {
       close("outside-click");
@@ -475,6 +499,7 @@
         class:bx--search-menu__menu--inline={true}
         class={menuClass}
         on:mousedown={handleMenuPointerDown}
+        on:scroll={handleMenuScroll}
       >
         {#if loading}
           <slot name="loading">
@@ -509,6 +534,7 @@
         aria-busy={loading || undefined}
         class={menuClass}
         on:mousedown={handleMenuPointerDown}
+        on:scroll={handleMenuScroll}
       >
         {#if loading}
           <slot name="loading">
