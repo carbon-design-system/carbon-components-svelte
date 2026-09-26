@@ -29,5 +29,12 @@
         <SideNavMenuItem href="#" text="Schedules" />
       </SideNavMenu>
     </SideNavMenu>
+    <SideNavMenu large text="Compute" expanded>
+      <SideNavMenuItem href="#" text="Instances" />
+      <SideNavMenu text="Images" expanded>
+        <SideNavMenuItem href="#" text="Snapshots" />
+        <SideNavLink large href="#" text="Custom image" />
+      </SideNavMenu>
+    </SideNavMenu>
   </SideNavItems>
 </SideNav>
