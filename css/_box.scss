@@ -88,9 +88,25 @@
     }
   }
 
-  // After the all-sides and axis margin rules so a single side wins at equal
+  // After the all-sides and axis rules so a single side wins at equal
   // specificity, whatever the steps.
   @each $step, $size in $ccs-spacing-scale {
+    .#{$prefix}--box-pt-#{$step} {
+      padding-top: $size;
+    }
+
+    .#{$prefix}--box-pr-#{$step} {
+      padding-right: $size;
+    }
+
+    .#{$prefix}--box-pb-#{$step} {
+      padding-bottom: $size;
+    }
+
+    .#{$prefix}--box-pl-#{$step} {
+      padding-left: $size;
+    }
+
     .#{$prefix}--box-mt-#{$step} {
       margin-top: $size;
     }

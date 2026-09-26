@@ -23,7 +23,7 @@
     return undefined;
   }
 
-  /** @param {"p" | "px" | "py" | "m" | "mx" | "my" | "mt" | "mr" | "mb" | "ml" | "gap" | "height" | "min-height" | "max-height"} kind @param {SpacingValue | undefined} value */
+  /** @param {"p" | "px" | "py" | "pt" | "pr" | "pb" | "pl" | "m" | "mx" | "my" | "mt" | "mr" | "mb" | "ml" | "gap" | "height" | "min-height" | "max-height"} kind @param {SpacingValue | undefined} value */
   function spacingClass(kind, value) {
     return scaleClass(kind, value, 1);
   }
@@ -118,6 +118,30 @@
    * @type {SpacingValue | undefined}
    */
   export let paddingY = undefined;
+
+  /**
+   * Set the top padding, overriding `padding` and `paddingY` on that side. Numbers `1`–`13` use the shared layout scale, `0` clears it; strings accept any CSS length.
+   * @type {SpacingValue | undefined}
+   */
+  export let paddingTop = undefined;
+
+  /**
+   * Set the right padding, overriding `padding` and `paddingX` on that side. Numbers `1`–`13` use the shared layout scale, `0` clears it; strings accept any CSS length.
+   * @type {SpacingValue | undefined}
+   */
+  export let paddingRight = undefined;
+
+  /**
+   * Set the bottom padding, overriding `padding` and `paddingY` on that side. Numbers `1`–`13` use the shared layout scale, `0` clears it; strings accept any CSS length.
+   * @type {SpacingValue | undefined}
+   */
+  export let paddingBottom = undefined;
+
+  /**
+   * Set the left padding, overriding `padding` and `paddingX` on that side. Numbers `1`–`13` use the shared layout scale, `0` clears it; strings accept any CSS length.
+   * @type {SpacingValue | undefined}
+   */
+  export let paddingLeft = undefined;
 
   /**
    * Set margin on all sides. Numbers `1`–`13` use the shared layout scale, `0` clears it; strings accept any CSS length.
@@ -361,6 +385,10 @@
     spacingClass("p", padding),
     spacingClass("px", paddingX),
     spacingClass("py", paddingY),
+    spacingClass("pt", paddingTop),
+    spacingClass("pr", paddingRight),
+    spacingClass("pb", paddingBottom),
+    spacingClass("pl", paddingLeft),
     spacingClass("m", margin),
     spacingClass("mx", marginX),
     spacingClass("my", marginY),
@@ -421,12 +449,38 @@
     borderSide,
     borderWidth,
   );
-  $: paddingSplit = paddingX != null || paddingY != null;
+  $: paddingSplit =
+    paddingX != null ||
+    paddingY != null ||
+    paddingTop != null ||
+    paddingRight != null ||
+    paddingBottom != null ||
+    paddingLeft != null;
   $: resolvedPadding = paddingSplit ? undefined : spacingStyle(padding);
-  $: resolvedPaddingTop = sideStyle(paddingSplit, paddingY, padding);
-  $: resolvedPaddingRight = sideStyle(paddingSplit, paddingX, padding);
-  $: resolvedPaddingBottom = sideStyle(paddingSplit, paddingY, padding);
-  $: resolvedPaddingLeft = sideStyle(paddingSplit, paddingX, padding);
+  $: resolvedPaddingTop = sideStyle(
+    paddingSplit,
+    paddingTop,
+    paddingY,
+    padding,
+  );
+  $: resolvedPaddingRight = sideStyle(
+    paddingSplit,
+    paddingRight,
+    paddingX,
+    padding,
+  );
+  $: resolvedPaddingBottom = sideStyle(
+    paddingSplit,
+    paddingBottom,
+    paddingY,
+    padding,
+  );
+  $: resolvedPaddingLeft = sideStyle(
+    paddingSplit,
+    paddingLeft,
+    paddingX,
+    padding,
+  );
   $: marginSplit =
     marginX != null ||
     marginY != null ||
