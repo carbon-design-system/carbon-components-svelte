@@ -29,12 +29,6 @@ Set `fullWidth` to `true` for the slider to span the full width of its container
 
 <Slider labelText="Instances" fullWidth value={0} />
 
-### Vertical
-
-Set `orientation` to `"vertical"` to lay the track out along the vertical axis, with `min` at the bottom and `max` at the top. <DocKbd label="ArrowUp" /> and <DocKbd label="ArrowRight" /> increase the value; <DocKbd label="ArrowDown" /> and <DocKbd label="ArrowLeft" /> decrease it. The range labels and text input stay in a horizontal row beside the track, and mark labels render to the right of the track.
-
-<Slider labelText="Volume" orientation="vertical" value={40} />
-
 ### Hidden label
 
 Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
@@ -144,6 +138,82 @@ Set `snapToMarks` to `true` to make dragging and clicking land on the nearest ma
     { value: 64, label: "64" },
   ]}
 />
+
+## Vertical
+
+Set `orientation` to `"vertical"` to lay the track out along the vertical axis, with `min` at the bottom and `max` at the top. <DocKbd label="ArrowUp" /> and <DocKbd label="ArrowRight" /> increase the value; <DocKbd label="ArrowDown" /> and <DocKbd label="ArrowLeft" /> decrease it. The range labels and text input stay in a horizontal row beside the track.
+
+<Slider labelText="Volume" orientation="vertical" value={40} />
+
+### Custom range and step
+
+`min`, `max`, `step`, and `stepMultiplier` work the same as on a horizontal slider.
+
+<Slider labelText="Runtime memory (MB)" orientation="vertical" min={10} max={990} maxLabel="990 MB" step={10} value={100} />
+
+### Marks
+
+Mark labels render to the right of the track instead of below it.
+
+<Slider
+  labelText="Log verbosity"
+  orientation="vertical"
+  hideTextInput
+  min={0}
+  max={3}
+  step={1}
+  value={1}
+  marks={[
+    { value: 0, label: "Off" },
+    { value: 1, label: "Low" },
+    { value: 2, label: "Med" },
+    { value: 3, label: "High" },
+  ]}
+/>
+
+### Snap to marks
+
+Combine `orientation="vertical"` with `snapToMarks` to land on a mark when dragging, clicking, or pressing an arrow key.
+
+<Slider
+  labelText="Cache size (GB)"
+  orientation="vertical"
+  min={0}
+  max={64}
+  value={8}
+  snapToMarks
+  marks={[
+    { value: 0, label: "0" },
+    { value: 8, label: "8" },
+    { value: 16, label: "16" },
+    { value: 32, label: "32" },
+    { value: 64, label: "64" },
+  ]}
+/>
+
+### Hidden text input
+
+Set `hideTextInput` to `true` to show only the track and range labels.
+
+<Slider labelText="Volume" orientation="vertical" hideTextInput value={40} />
+
+### Formatted values
+
+`formatValue` formats the range labels and `aria-valuetext`; the bound `value` stays numeric.
+
+<Slider labelText="CPU utilization" orientation="vertical" value={75} formatValue={(v) => `${v}%`} />
+
+### Disabled
+
+Set `disabled` to `true` to prevent interaction.
+
+<Slider labelText="Volume" orientation="vertical" disabled value={40} />
+
+### Read-only
+
+Set `readonly` to `true` to display a value while preventing changes.
+
+<Slider labelText="Volume" orientation="vertical" readonly value={40} />
 
 ## Light
 
