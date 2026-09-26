@@ -125,6 +125,10 @@ Set `border` on the side nav to render a border between it and the content. Usef
 
 Set `isSelected` on `SideNavLink` or `SideNavMenuItem` to mark the current page — see "Dashboard" in the example above. It adds `aria-current="page"` and a persistent highlight style so the current location stays visible even while hovering other items.
 
+A collapsed `SideNavMenu` that contains the current page, at any depth, shows the selected background and accent bar. In the [nested menus](#nested-menus) example, collapse "Kubernetes" to see it.
+
+Set `isActive` on a `SideNavMenu` to mark it for a page the nav doesn't list, such as a detail route under a listed section.
+
 ### Large
 
 Set `large` on `SideNavLink` or `SideNavMenu` to increase the item's height from 32px to 48px — useful for a top-level item that should stand out, or for larger touch targets. Not available on `SideNavMenuItem` (nested items). Composes with `icon` on both components.
