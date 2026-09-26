@@ -337,11 +337,7 @@
     activeItemScrollBlock="center"
     border
   >
-    <ScrollGradient
-      color="var(--cds-background)"
-      hideStartGradient
-      style="height: 100%"
-    >
+    <ScrollGradient color="background" hideStartGradient style="height: 100%">
       <SideNavItems>
         <SideNavLink
           text="Introduction"

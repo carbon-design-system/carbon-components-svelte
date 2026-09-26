@@ -3,7 +3,7 @@ description: ScrollGradient overlays a fading edge on a scrollable container to 
 ---
 
 <script>
-  import { ScrollGradient } from "carbon-components-svelte";
+  import { Box, ScrollGradient } from "carbon-components-svelte";
 
   const auditLogEntries = [
     "Signed in from new device",
@@ -53,9 +53,25 @@ Gradients appear independently for each axis. Set a width to overflow horizontal
   </div>
 </ScrollGradient>
 
-## Custom color
+## Colors
 
-Set `color` to override the gradient color. Defaults to the `layer` theme token.
+Set `color` to retint the gradient and `background` to repaint the content area. Both default to the `layer-01` theme token.
+
+### Theme tokens
+
+Set either to a [Box fill](/components/Box#fill) token name, such as `"background"` or `"layer-02"`, so the fade matches the surface it sits on in every theme.
+
+<Box fill="layer-02" padding={3}>
+  <ScrollGradient color="layer-02" background="layer-02" style="height: 12rem">
+    {#each auditLogEntries as entry}
+      <p>{entry}</p>
+    {/each}
+  </ScrollGradient>
+</Box>
+
+### Custom color
+
+Set `color` to any CSS color.
 
 <ScrollGradient color="cornflowerblue" style="height: 12rem">
   {#each auditLogEntries as entry}
@@ -63,9 +79,9 @@ Set `color` to override the gradient color. Defaults to the `layer` theme token.
   {/each}
 </ScrollGradient>
 
-## Transparent background
+### Transparent background
 
-Set `background` to override the content area's background color, independent of `color` (which only retints the gradient). Defaults to the `layer` theme token. For example, set it to `"transparent"` to let the parent's own background show through instead of repainting it.
+Set `background` to `"transparent"` to let the parent's own background show through instead of repainting it. `color` still sets the fade.
 
 <ScrollGradient background="transparent" style="height: 12rem">
   {#each auditLogEntries as entry}
