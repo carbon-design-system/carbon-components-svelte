@@ -4,6 +4,7 @@
    */
 
   /**
+   * @restProps {div}
    * @typedef {object} DropdownItem<Id=any>
    * @property {Id} id
    * @property {string} text
@@ -304,6 +305,9 @@
     portalMenu === undefined ? !!insideModal : portalMenu;
 
   $: menuAriaLabel = $$props["aria-label"] ?? (labelText || "Choose an item");
+  // `aria-label` names the combobox button. On the role-less wrapper, where
+  // the rest props land, it is prohibited and never reaches assistive tech.
+  $: ({ "aria-label": fieldAriaLabel, ...wrapperProps } = $$restProps);
 
   let highlightedIndex = -1;
   let highlightOrigin = /** @type {"keyboard" | "pointer" | null} */ (null);
@@ -675,7 +679,7 @@
   class:bx--list-box__wrapper--fluid--readonly={isFluid && readonly}
   class:bx--list-box__wrapper--fluid--condensed={isFluid && condensed}
   use:dismiss={{ enabled: open, type: "click", handler: handleOutsideClick }}
-  {...$$restProps}
+  {...wrapperProps}
 >
   {#if labelText || $$slots.labelChildren}
     <label
@@ -725,6 +729,7 @@
         class:bx--list-box__field={true}
         class:bx--list-box__field--clearable={clearable && selectedId !== undefined}
         tabindex="0"
+        aria-label={fieldAriaLabel}
         aria-expanded={open}
         aria-readonly={readonly || undefined}
         aria-haspopup="listbox"

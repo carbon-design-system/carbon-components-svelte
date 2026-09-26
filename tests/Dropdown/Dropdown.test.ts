@@ -94,6 +94,24 @@ describe("Dropdown", () => {
     expect(screen.getByRole("listbox")).toHaveAttribute("aria-label", "");
   });
 
+  it("names the combobox with aria-label instead of the wrapper", () => {
+    const { container } = render(Dropdown, {
+      props: {
+        items: [{ id: "1", text: "Email" }],
+        "aria-label": "Contact method",
+        "data-testid": "contact-dropdown",
+      },
+    });
+
+    expect(
+      screen.getByRole("combobox", { name: "Contact method" }),
+    ).toBeInTheDocument();
+    const wrapper = container.querySelector(".bx--dropdown__wrapper");
+    expect(wrapper).not.toHaveAttribute("aria-label");
+    // Other rest props still land on the wrapper.
+    expect(wrapper).toHaveAttribute("data-testid", "contact-dropdown");
+  });
+
   it("should handle hidden label", () => {
     render(Dropdown, {
       props: {
