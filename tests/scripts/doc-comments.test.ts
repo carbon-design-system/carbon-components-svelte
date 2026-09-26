@@ -48,4 +48,12 @@ describe("stripSvelteDocComments", () => {
       `<script context="module">\n</script>\n\n<script>\n  export let label = "";\n</script>\n\n${markup}`,
     );
   });
+
+  test("matches script tags case-insensitively, including end tags with trailing whitespace", () => {
+    expect(
+      stripSvelteDocComments(
+        '<SCRIPT>\n  /** Label. */\n  export let label = "";\n</Script >\n',
+      ),
+    ).toBe('<SCRIPT>\n  export let label = "";\n</Script >\n');
+  });
 });
