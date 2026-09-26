@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import RangeSliderComponent from "carbon-components-svelte/Slider/RangeSlider.svelte";
 import { tick } from "svelte";
+import { flushDismiss } from "../utils/flush-dismiss";
 import { user } from "../utils/user";
 import RangeSlider from "./RangeSlider.test.svelte";
 
@@ -557,5 +558,162 @@ describe("RangeSlider", () => {
     for (const thumb of screen.getAllByRole("slider")) {
       expect(thumb).toHaveAttribute("aria-describedby", "helper-test-range");
     }
+  });
+
+  describe("minGap", () => {
+    it("should stop the lower handle minGap short of the upper handle", async () => {
+      render(RangeSlider, {
+        props: { value: 40, valueUpper: 50, minGap: 10 },
+      });
+
+      const [lowerThumb] = screen.getAllByRole("slider");
+      lowerThumb.focus();
+      await user.keyboard("{ArrowRight}{ArrowRight}{ArrowRight}");
+
+      expect(lowerThumb).toHaveAttribute("aria-valuenow", "40");
+      expect(lowerThumb).toHaveAttribute("aria-valuemax", "40");
+    });
+
+    it("should stop the upper handle minGap short of the lower handle", async () => {
+      render(RangeSlider, {
+        props: { value: 40, valueUpper: 60, minGap: 10 },
+      });
+
+      const [, upperThumb] = screen.getAllByRole("slider");
+      upperThumb.focus();
+      await user.keyboard("{ArrowLeft>15/}");
+
+      expect(upperThumb).toHaveAttribute("aria-valuenow", "50");
+      expect(upperThumb).toHaveAttribute("aria-valuemin", "50");
+    });
+
+    it("should let handles converge when minGap is the default 0", async () => {
+      render(RangeSlider, { props: { value: 49, valueUpper: 50 } });
+
+      const [lowerThumb] = screen.getAllByRole("slider");
+      lowerThumb.focus();
+      await user.keyboard("{ArrowRight}");
+      await user.keyboard("{ArrowRight}");
+
+      expect(lowerThumb).toHaveAttribute("aria-valuenow", "50");
+    });
+
+    it("should clamp a typed lower value to valueUpper - minGap", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(RangeSlider, {
+        props: { value: 10, valueUpper: 50, minGap: 10 },
+      });
+
+      const [lowerInput] = screen.getAllByRole("spinbutton");
+      expect(lowerInput).toHaveAttribute("max", "40");
+      await user.clear(lowerInput);
+      await user.type(lowerInput, "45");
+      await user.keyboard("{Tab}");
+
+      expect(consoleLog).toHaveBeenCalledWith("change", {
+        value: 40,
+        valueUpper: 50,
+      });
+    });
+
+    it("should clamp a typed upper value to value + minGap", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(RangeSlider, {
+        props: { value: 40, valueUpper: 80, minGap: 10 },
+      });
+
+      const [, upperInput] = screen.getAllByRole("spinbutton");
+      expect(upperInput).toHaveAttribute("min", "50");
+      await user.clear(upperInput);
+      await user.type(upperInput, "45");
+      await user.keyboard("{Tab}");
+
+      expect(consoleLog).toHaveBeenCalledWith("change", {
+        value: 40,
+        valueUpper: 50,
+      });
+    });
+
+    it("should keep both values in bounds when minGap exceeds the range", async () => {
+      render(RangeSlider, {
+        props: { min: 0, max: 100, value: 40, valueUpper: 60, minGap: 200 },
+      });
+
+      const [lowerThumb, upperThumb] = screen.getAllByRole("slider");
+      const lower = Number(lowerThumb.getAttribute("aria-valuenow"));
+      const upper = Number(upperThumb.getAttribute("aria-valuenow"));
+      expect(lower).toBeGreaterThanOrEqual(0);
+      expect(upper).toBeLessThanOrEqual(100);
+      expect(lower).toBeLessThanOrEqual(upper);
+      expect(upper - lower).toBeLessThanOrEqual(100);
+
+      lowerThumb.focus();
+      await user.keyboard("{End}");
+      expect(
+        Number(lowerThumb.getAttribute("aria-valuenow")),
+      ).toBeGreaterThanOrEqual(0);
+      expect(
+        Number(lowerThumb.getAttribute("aria-valuemax")),
+      ).toBeGreaterThanOrEqual(0);
+    });
+
+    it("should respect minGap on Home and End", async () => {
+      render(RangeSlider, {
+        props: { min: 0, max: 100, value: 40, valueUpper: 60, minGap: 10 },
+      });
+
+      const [lowerThumb, upperThumb] = screen.getAllByRole("slider");
+      lowerThumb.focus();
+      await user.keyboard("{End}");
+      expect(lowerThumb).toHaveAttribute("aria-valuenow", "50");
+
+      upperThumb.focus();
+      await user.keyboard("{Home}");
+      expect(upperThumb).toHaveAttribute("aria-valuenow", "60");
+    });
+
+    it("should stop a dragged lower handle minGap short of the upper handle", async () => {
+      const { container } = render(RangeSlider, {
+        props: { value: 10, valueUpper: 50, minGap: 10 },
+      });
+
+      const slider = container.querySelector(".bx--slider");
+      const track = container.querySelector(".bx--slider__track");
+      assert(slider instanceof HTMLElement);
+      assert(track instanceof HTMLElement);
+      vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
+        left: 0,
+        right: 200,
+        width: 200,
+        top: 0,
+        bottom: 0,
+        height: 2,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      });
+
+      // jsdom thumb rects are all zero, so pickHandle ties to the lower handle.
+      const [lowerThumb] = screen.getAllByRole("slider");
+      await fireEvent.mouseDown(lowerThumb, { clientX: 20 });
+      await flushDismiss();
+      await fireEvent.mouseMove(window, { clientX: 98 });
+      await tick();
+      await fireEvent.mouseUp(window);
+
+      expect(lowerThumb).toHaveAttribute("aria-valuenow", "40");
+    });
+
+    it("should correct a programmatic update that violates minGap", async () => {
+      const { rerender } = render(RangeSlider, {
+        props: { value: 20, valueUpper: 80, minGap: 10 },
+      });
+
+      await rerender({ value: 75 });
+
+      const [lowerThumb, upperThumb] = screen.getAllByRole("slider");
+      expect(lowerThumb).toHaveAttribute("aria-valuenow", "75");
+      expect(upperThumb).toHaveAttribute("aria-valuenow", "85");
+    });
   });
 });
