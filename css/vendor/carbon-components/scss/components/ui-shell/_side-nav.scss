@@ -13,6 +13,23 @@
 @import 'functions';
 @import 'theme';
 
+/// ccs: `padding-left` for a link or submenu trigger inside a
+/// `SideNavMenu`. Each nesting level adds a `mini-units(2)` step, and each
+/// menu with an icon on the way down adds the `mini-units(5)` its icon
+/// takes, so a row's text starts past its parent's text and a row's own
+/// icon sits in its siblings' text column, as at the top level. The
+/// component sets both custom properties only below the first level.
+/// @access private
+/// @group ui-shell
+/// @param {Number} $icon-depth - first-level fallback: `1` under a menu with an icon
+/// @return {String} a `calc()` expression
+@function side-nav-menu-indent($icon-depth) {
+  @return calc(
+    #{mini-units(4)} + #{mini-units(2)} * (var(--ccs-side-nav-menu-depth, 1) - 1) +
+      #{mini-units(5)} * var(--ccs-side-nav-menu-icon-depth, #{$icon-depth})
+  );
+}
+
 /// Helper to add in text overflow styles to a particular node. Useful if we
 /// don't want to have display-inline: block from the text helper classes
 /// @access private
@@ -298,13 +315,28 @@
   .#{$prefix}--side-nav__menu .#{$prefix}--side-nav__link { // ccs: flatten
     height: mini-units(4);
     min-height: mini-units(4);
-    padding-left: mini-units(4);
+    padding-left: side-nav-menu-indent(0); // ccs: depth-scaled, was a bare mini-units(4)
     font-weight: 400;
   }
 
   .#{$prefix}--side-nav__item.#{$prefix}--side-nav__item--icon
-    .#{$prefix}--side-nav__link { // ccs: flatten
-    padding-left: mini-units(9);
+    .#{$prefix}--side-nav__link { // ccs: flatten, depth-scaled
+    padding-left: side-nav-menu-indent(1); // ccs: was a bare mini-units(9)
+  }
+
+  // ccs: Carbon has no submenu-in-submenu, so a nested trigger kept the base
+  // `padding: 0 mini-units(2)` at any depth instead of lining up with its
+  // sibling links.
+  .#{$prefix}--side-nav__menu .#{$prefix}--side-nav__submenu {
+    padding-left: side-nav-menu-indent(0);
+  }
+
+  // ccs: needs the `__menu` ancestor, unlike the link rule above: the
+  // outermost trigger is a direct child of the icon'd item.
+  .#{$prefix}--side-nav__item.#{$prefix}--side-nav__item--icon
+    .#{$prefix}--side-nav__menu
+    .#{$prefix}--side-nav__submenu {
+    padding-left: side-nav-menu-indent(1);
   }
   .#{$prefix}--side-nav__menu .#{$prefix}--side-nav__link--current,
   .#{$prefix}--side-nav__menu .#{$prefix}--side-nav__link[aria-current='page'],
