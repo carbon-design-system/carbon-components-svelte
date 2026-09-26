@@ -139,6 +139,30 @@ staggered delay.
 
 <FileSource src="/framed/FileUploader/FileUploaderPerFileStatus" />
 
+### Upload task queue
+
+`createUploadTasks` is an opt-in helper for apps that need per-file
+progress, abort, and retry without writing that state machine themselves.
+It runs a caller-supplied `upload(file, { signal, onProgress })` function
+per file and returns the `fileStatus`/`fileInvalid`/`fileErrorSubject`/`fileErrorBody`
+callbacks shown above. It performs no HTTP itself—`upload` is app code.
+
+Removing a file aborts its `AbortController`. `FileUploader` only
+re-resolves a row's `fileStatus`/`fileInvalid`/etc. when `files` changes
+identity, so reassign it whenever a task updates (destructure `tasks`—the
+underlying store—to watch it, as `queue` itself is a plain object, not a
+store):
+
+```svelte
+const { tasks } = queue;
+
+$: if ($tasks) {
+  files = [...files];
+}
+```
+
+<FileSource src="/framed/FileUploader/FileUploaderUploadTasks" />
+
 ### Per-file status icon labels
 
 Set `iconDescription` to a function for accessible labels that depend on each row. The callback receives `{ file, fileName, status, invalid }`.
