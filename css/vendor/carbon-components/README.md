@@ -30,8 +30,8 @@ these prunings relative to upstream:
   renders the matching markup): legacy tooltip definition/icon mixins; unused
   `tabs--scrollable__nav-link` / `--selected` / `--disabled` / `--light`
   rules; native `dropdown-list` / `dropdown-item` / `dropdown-link` menu
-  styles; `side-nav--fixed`, switcher/select/title, collapse/expand icon, and
-  positive `side-nav__item--active` rules; code-snippet overflow indicators,
+  styles; `side-nav--fixed`, switcher/select/title, and collapse/expand icon
+  rules; code-snippet overflow indicators,
   `snippet-button`, and `btn--copy__feedback`; progress-indicator overflow
   tooltip chrome; DataTable `--xs`/`--sm`/`--xl` size aliases (compact/short/
   tall kept); `overflow-menu--lg`; `skeleton-icon`;
@@ -41,8 +41,7 @@ these prunings relative to upstream:
   `btn--danger--ghost` / `btn--danger--tertiary` aliases (Button renders
   `--field` and the single-dash kinds); `date-picker__input.bx--focused`;
   `overflow-menu-options__content`; `:not()` guards naming the unrendered
-  `side-nav__item--active`, `pagination-nav__page--direction`, and
-  `header__menu-toggle__hidden`
+  `pagination-nav__page--direction` and `header__menu-toggle__hidden`
 
 To use an upstream file that is not vendored, restore it from
 `carbon-components@10.58.15` on npm.
