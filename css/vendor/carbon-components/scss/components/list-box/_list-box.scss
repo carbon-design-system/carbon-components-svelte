@@ -75,7 +75,13 @@ $list-box-menu-width: to-rem(300px);
     background-color: $field-01;
     color: $text-01;
     cursor: pointer;
-    transition: all $duration--fast-01 motion(standard, productive);
+    // ccs: only background-color (hover, expanded, inline) and
+    // border-bottom-color (expanded, disabled) animate. Height/border-width
+    // modifiers are layout and the invalid outline is a ring, so they snap;
+    // avoid `all` so the browser doesn't interpolate the rest of the
+    // animatable property set.
+    transition: background-color $duration--fast-01 motion(standard, productive),
+      border-bottom-color $duration--fast-01 motion(standard, productive);
 
     &:hover {
       background-color: $hover-ui;
