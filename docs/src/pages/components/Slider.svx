@@ -29,6 +29,12 @@ Set `fullWidth` to `true` for the slider to span the full width of its container
 
 <Slider labelText="Instances" fullWidth value={0} />
 
+### Vertical
+
+Set `orientation` to `"vertical"` to lay the track out along the vertical axis, with `min` at the bottom and `max` at the top. <DocKbd label="ArrowUp" /> and <DocKbd label="ArrowRight" /> increase the value; <DocKbd label="ArrowDown" /> and <DocKbd label="ArrowLeft" /> decrease it. The range labels and text input stay in a horizontal row beside the track, and mark labels render to the right of the track.
+
+<Slider labelText="Volume" orientation="vertical" value={40} />
+
 ### Hidden label
 
 Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
