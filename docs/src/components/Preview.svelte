@@ -96,6 +96,14 @@
     }
   }
 
+  /* Skip style, layout and paint for off-screen snippets; the highlighted
+     code is most of a page's rendering cost. Not on `.preview`: containment
+     would clip menus and tooltips that overflow the example. */
+  .code-override {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 250px;
+  }
+
   .framed-header {
     display: flex;
     align-items: center;
