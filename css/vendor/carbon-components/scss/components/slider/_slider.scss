@@ -34,7 +34,8 @@
   }
 
   .#{$prefix}--slider__range-label {
-    @include type-style('code-02');
+    // ccs: match v11 (`body-compact-01`) instead of v10's mono `code-02`.
+    @include type-style('body-short-01');
 
     color: $text-01;
     white-space: nowrap;
