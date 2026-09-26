@@ -37,7 +37,7 @@
     "test": "vitest",
     "test:changed": "bun scripts/test-changed.ts",
     "test:perf": "NODE_ENV=production vitest run --config vite.config.perf.ts --no-file-parallelism",
-    "bench": "ostia bench --bun-flags=\"--conditions=browser\"",
+    "bench": "ostia bench",
     "test:src-types": "tsgo --project tsconfig.types.json",
     "test:src-js": "tsgo --project tsconfig.js-check.json",
     "test:src-svelte": "svelte-check --workspace src --no-tsconfig --diagnostic-sources svelte --fail-on-warnings",
