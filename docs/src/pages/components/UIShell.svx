@@ -91,6 +91,24 @@ Group related links behind a dropdown with `SideNavMenu`, wrapping `SideNavMenuI
 
 In the [rail](#rail) variant, an expanded `SideNavMenu` automatically collapses when the rail returns to its narrow state.
 
+### Nested menus
+
+Nest a `SideNavMenu` inside another for deeper hierarchies. Each level's text starts 16px past its parent's.
+
+A menu that contains the current page opens on mount, at any depth. Here, `isSelected` on "Deployments" opens "Controllers", "Workloads", and "Kubernetes".
+
+<FileSource src="/framed/UIShell/SideNavMenuNested" />
+
+A nested item with an icon places the icon where its siblings' text starts, as at the top level, and its children start past its own text. See "Workloads" and "Rollouts".
+
+<FileSource src="/framed/UIShell/SideNavMenuNestedIcons" />
+
+| Do | Why |
+| --- | --- |
+| Nest at most two levels below the top level | The default side nav is 256px wide. Past the third level, labels have little room before they truncate. For deeper trees, use a [resizable](#resizable) side nav. |
+| Keep icons on top-level items | A nested icon adds its width to that row and to every row below it. |
+| Mark the current page with `isSelected` instead of setting `expanded` | Every menu that contains the current page opens on mount. |
+
 ### Badges
 
 Compose a `badge` named slot into `SideNavLink` or `SideNavMenu` to render a status or count indicator next to the label, such as [BadgeIndicator](/components/BadgeIndicator).
