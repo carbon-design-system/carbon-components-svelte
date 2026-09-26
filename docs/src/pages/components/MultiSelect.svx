@@ -235,6 +235,33 @@ Set `openOnClear` to `true` to open the menu after clearing the selection via th
     {id: "2", text: "Fax"}]}"
   />
 
+## Groups
+
+Set `group` on items to list them under a non-selectable header. Groups appear in the order they first occur in `items`, and sorting and selection feedback apply within each group. Items without a group are listed first, without a header.
+
+Each group is exposed to screen readers as a group named by its label. The selection is still a flat list of ids.
+
+<MultiSelect labelText="Regions" label="Select regions..."
+    items="{[{id: "0", text: "Frankfurt", group: "Europe"},
+    {id: "1", text: "Toronto", group: "Americas"},
+    {id: "2", text: "London", group: "Europe"},
+    {id: "3", text: "São Paulo", group: "Americas"},
+    {id: "4", text: "Mumbai", group: "Asia Pacific"},
+    {id: "5", text: "Tokyo", group: "Asia Pacific"}]}"
+  />
+
+### Custom header
+
+Override the `group` slot to customize a header. Use `let:group` for the label and `let:items` for the group's items, each with a `checked` flag. The slot changes the visible header only; screen readers still announce the plain label.
+
+<FileSource src="/framed/MultiSelect/MultiSelectGroupHeader" />
+
+### Virtualized
+
+Grouped lists virtualize like ungrouped ones, including automatically above 100 items. Headers scroll with the options and stay aligned across group boundaries. This example groups 3,000 nodes by region, and only the rows in view are rendered.
+
+<FileSource src="/framed/MultiSelect/MultiSelectGroupVirtualized" />
+
 ## Filterable
 
 Enable filtering by setting `filterable` to `true`. This example includes a placeholder text for the filter input.
