@@ -1,5 +1,5 @@
 <script>
-  import { Stack, TreeView } from "carbon-components-svelte";
+  import { Stack, Text, TreeView } from "carbon-components-svelte";
 
   let activeId = 0;
   let selectedIds = [0, 7, 9];
@@ -54,13 +54,15 @@
       {nodes}
       let:node
     >
-      <span
-        style:color={node.selected ? "var(--cds-interactive-04)" : "inherit"}
-        style:text-decoration={node.disabled ? "inherit" : "underline"}
+      <Text
+        tag="span"
+        type="inherit"
+        color={node.selected ? "link" : undefined}
+        style="text-decoration: {node.disabled ? 'inherit' : 'underline'}"
       >
         {node.text}
         (id: {node.id})
-      </span>
+      </Text>
     </TreeView>
   </div>
 </Stack>
