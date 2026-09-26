@@ -72,8 +72,9 @@
     height: to-rem(14px);
   }
 
+  // ccs: match v11 (sans) instead of v10's mono.
   input[type='number'] {
-    font-family: carbon--font-family('mono');
+    font-family: carbon--font-family('sans');
   }
 
   input[data-invalid]:not(:focus),

@@ -30,7 +30,8 @@
 
   .#{$prefix}--number input[type='number'],
   .#{$prefix}--number input[type='text'] {
-    @include type-style('code-01', $omit: (font-family, font-weight));
+    // ccs: match v11 (`body-compact-01`, sans, 400) instead of v10's mono 300.
+    @include type-style('body-short-01');
     @include focus-outline('reset');
 
     display: inline-flex;
@@ -49,8 +50,7 @@
     background-color: $field-01;
     border-radius: 0;
     color: $text-01;
-    font-family: carbon--font-family('mono');
-    font-weight: 300;
+    font-family: carbon--font-family('sans');
     transition: background-color $duration--fast-01 motion(standard, productive);
 
     &:focus {
