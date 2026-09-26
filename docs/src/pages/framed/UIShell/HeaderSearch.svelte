@@ -1,5 +1,6 @@
 <script>
   import {
+    Box,
     Button,
     Column,
     Content,
@@ -113,7 +114,7 @@
           Click the button and search for something. Dispatched events are
           logged below:
         </p>
-        <div style:overflow-x="auto">
+        <Box overflowX="auto">
           <Stack gap={2}>
             {#each events as { type, ...rest }}
               <div>
@@ -124,7 +125,7 @@
               </div>
             {/each}
           </Stack>
-        </div>
+        </Box>
       </Column>
     </Row>
   </Grid>

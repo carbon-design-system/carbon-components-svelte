@@ -1,5 +1,5 @@
 <script>
-  import { Box, CodeSnippet, Stack } from "carbon-components-svelte";
+  import { Box, CodeSnippet } from "carbon-components-svelte";
 
   let multiCode =
     "export function isAdmin(role) {\n  return role === 'admin';\n}\n\nexport function isExpired(expiresAt) {\n  return Date.now() > expiresAt;\n}";
@@ -11,23 +11,20 @@
   `false` on any variant to use Carbon's inline feedback caret instead.
 -->
 <Box
+  display="flex"
+  direction="column"
+  gap={4}
   overflow="hidden"
   border="subtle"
   borderStyle="dashed"
   padding={5}
   maxHeight="200px"
 >
-  <Stack gap={4}>
-    <div>
-      <CodeSnippet
-        type="inline"
-        code="rm -rf node_modules/"
-        feedback="Copied!"
-      />
-    </div>
+  <div>
+    <CodeSnippet type="inline" code="rm -rf node_modules/" feedback="Copied!" />
+  </div>
 
-    <CodeSnippet code="npm i carbon-components-svelte" feedback="Copied!" />
+  <CodeSnippet code="npm i carbon-components-svelte" feedback="Copied!" />
 
-    <CodeSnippet type="multi" code={multiCode} feedback="Copied!" />
-  </Stack>
+  <CodeSnippet type="multi" code={multiCode} feedback="Copied!" />
 </Box>

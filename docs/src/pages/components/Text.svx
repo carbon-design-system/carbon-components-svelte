@@ -327,14 +327,12 @@ Combine type, color, and element choice as you would on an IBM product page: exp
     <Text type="body-short-01" color="secondary">3 open · Last updated 2 minutes ago</Text>
     <Text type="caption-01" color="placeholder">Metrics retained for 30 days on the Standard plan.</Text>
   </Stack>
-  <Box fill="layer-01" padding={6} border="subtle" maxWidth="42rem">
-    <Stack gap={6}>
-      <Text tag="h3" type="productive-heading-03" color="primary">Create an ingestion endpoint</Text>
-      <Text type="body-long-01" color="secondary" maxWidth="42ch">API keys authenticate programmatic access to your observability workspace. Store secrets in IBM Cloud Secrets Manager and rotate them on a schedule your security team defines.</Text>
-      <Stack gap={1}>
-        <Text type="label-01" color="primary">Service name</Text>
-        <Text type="helper-text-01" color="helper">Use lowercase letters, numbers, and hyphens.</Text>
-      </Stack>
+  <Box display="flex" direction="column" gap={6} fill="layer-01" padding={6} border="subtle" maxWidth="42rem">
+    <Text tag="h3" type="productive-heading-03" color="primary">Create an ingestion endpoint</Text>
+    <Text type="body-long-01" color="secondary" maxWidth="42ch">API keys authenticate programmatic access to your observability workspace. Store secrets in IBM Cloud Secrets Manager and rotate them on a schedule your security team defines.</Text>
+    <Stack gap={1}>
+      <Text type="label-01" color="primary">Service name</Text>
+      <Text type="helper-text-01" color="helper">Use lowercase letters, numbers, and hyphens.</Text>
     </Stack>
   </Box>
 </Stack>

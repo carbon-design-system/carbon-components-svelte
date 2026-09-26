@@ -122,43 +122,45 @@
     data-toc-collapsed={!$componentTocOpen}
     aside={$componentTocOpen}
   >
-    <Box tag="section" class="hero band hero--component">
-      <Stack gap={3}>
-        {#if category}
-          <Breadcrumb noTrailingSlash size="sm">
-            <BreadcrumbItem href="/component-index">
-              Categories
-            </BreadcrumbItem>
-            <BreadcrumbItem href={categoryHref}>{category}</BreadcrumbItem>
-            <BreadcrumbItem isCurrentPage>{component}</BreadcrumbItem>
-          </Breadcrumb>
+    <Box
+      display="flex"
+      direction="column"
+      gap={3}
+      tag="section"
+      class="hero band hero--component"
+    >
+      {#if category}
+        <Breadcrumb noTrailingSlash size="sm">
+          <BreadcrumbItem href="/component-index"> Categories </BreadcrumbItem>
+          <BreadcrumbItem href={categoryHref}>{category}</BreadcrumbItem>
+          <BreadcrumbItem isCurrentPage>{component}</BreadcrumbItem>
+        </Breadcrumb>
+      {/if}
+      <Stack gap={7}>
+        <Text tag="h1" type="expressive-heading-06" color="primary">
+          {component}
+        </Text>
+        {#if descriptionHtml}
+          <div class="hero__description">
+            <Text
+              type="productive-heading-04"
+              color="secondary"
+              maxWidth="52ch"
+            >
+              {@html descriptionHtml}
+            </Text>
+          </div>
+        {:else if description}
+          <div class="hero__description">
+            <Text
+              type="productive-heading-04"
+              color="secondary"
+              maxWidth="52ch"
+            >
+              {description}
+            </Text>
+          </div>
         {/if}
-        <Stack gap={7}>
-          <Text tag="h1" type="expressive-heading-06" color="primary">
-            {component}
-          </Text>
-          {#if descriptionHtml}
-            <div class="hero__description">
-              <Text
-                type="productive-heading-04"
-                color="secondary"
-                maxWidth="52ch"
-              >
-                {@html descriptionHtml}
-              </Text>
-            </div>
-          {:else if description}
-            <div class="hero__description">
-              <Text
-                type="productive-heading-04"
-                color="secondary"
-                maxWidth="52ch"
-              >
-                {description}
-              </Text>
-            </div>
-          {/if}
-        </Stack>
       </Stack>
     </Box>
 

@@ -3,7 +3,7 @@ description: Expandable tiles show and hide content with a smooth animation, ide
 ---
 
 <script>
-  import { ExpandableTile, Button, Stack, OutboundLink } from "carbon-components-svelte";
+  import { Box, ExpandableTile, Button, Stack, OutboundLink } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -64,12 +64,12 @@ Control how the tile measures and displays its collapsed height.
 
 ### CSS dimensions
 
-Set custom heights for the tile content using CSS to control the exact dimensions
-of the visible and hidden content.
+Wrap the slotted content in a [Box](/components/Box) with a fixed `height` to
+control the exact dimensions of the visible and hidden content.
 
 <ExpandableTile>
-  <div slot="above" style="height: 10rem">Payments API — Operational, 99.98% uptime over the last 30 days</div>
-  <div slot="below" style="height: 10rem">No open incidents. Last deployment: 2 hours ago.</div>
+  <Box slot="above" height="10rem">Payments API — Operational, 99.98% uptime over the last 30 days</Box>
+  <Box slot="below" height="10rem">No open incidents. Last deployment: 2 hours ago.</Box>
 </ExpandableTile>
 
 ### Manual height override

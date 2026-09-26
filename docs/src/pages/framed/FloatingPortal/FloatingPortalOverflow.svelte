@@ -1,11 +1,5 @@
 <script>
-  import {
-    Box,
-    Button,
-    FloatingPortal,
-    Stack,
-    Tile,
-  } from "carbon-components-svelte";
+  import { Box, Button, FloatingPortal, Tile } from "carbon-components-svelte";
 
   let anchor = null;
   let container = null;
@@ -53,33 +47,39 @@
   }
 </script>
 
-<Box overflow="hidden" border="subtle" borderStyle="dashed" padding={5}>
-  <Stack gap={4}>
-    <div>This container has hidden overflow.</div>
+<Box
+  display="flex"
+  direction="column"
+  gap={4}
+  overflow="hidden"
+  border="subtle"
+  borderStyle="dashed"
+  padding={5}
+>
+  <div>This container has hidden overflow.</div>
+  <div
+    bind:this={container}
+    style="position: relative; min-height: 200px; min-width: 300px;"
+  >
     <div
-      bind:this={container}
-      style="position: relative; min-height: 200px; min-width: 300px;"
+      bind:this={anchor}
+      role="button"
+      tabindex="0"
+      draggable="true"
+      style="position: absolute; left: {x}px; top: {y}px; cursor: move; user-select: none;"
+      on:dragstart={handleDragStart}
+      on:drag={handleDrag}
+      on:dragend={handleDragEnd}
+      on:keydown={(e) => {
+        if (e.key === "Enter") open = !open;
+      }}
+      title="Drag to move, click to toggle"
     >
-      <div
-        bind:this={anchor}
-        role="button"
-        tabindex="0"
-        draggable="true"
-        style="position: absolute; left: {x}px; top: {y}px; cursor: move; user-select: none;"
-        on:dragstart={handleDragStart}
-        on:drag={handleDrag}
-        on:dragend={handleDragEnd}
-        on:keydown={(e) => {
-          if (e.key === "Enter") open = !open;
-        }}
-        title="Drag to move, click to toggle"
-      >
-        <Tile>
-          <Button on:click={() => (open = !open)}>View instance details</Button>
-        </Tile>
-      </div>
+      <Tile>
+        <Button on:click={() => (open = !open)}>View instance details</Button>
+      </Tile>
     </div>
-  </Stack>
+  </div>
 </Box>
 
 <FloatingPortal {anchor} {open}>

@@ -320,78 +320,80 @@
             </Stack>
             <Stack gap={3}>
               <Text type="label-01" color="secondary">Demo</Text>
-              <Box fill="layer-01" padding={6}>
-                <Stack gap={6}>
-                  <Slider
-                    labelText="Size ({iconSize}px)"
-                    min={0}
-                    max={3}
-                    step={1}
-                    bind:value={iconSizeIndex}
-                    hideTextInput
-                    fullWidth
-                    marks={[
-                      { value: 0, label: "16" },
-                      { value: 1, label: "20" },
-                      { value: 2, label: "24" },
-                      { value: 3, label: "32" },
-                    ]}
-                  />
-                  <div class="glyph-grid glyph-grid--icons">
-                    <div class="glyph-cell">
-                      <Text type="caption-01" color="secondary">Add</Text>
-                      <div class="glyph-icon">
-                        <Add size={iconSize} />
-                      </div>
-                    </div>
-                    <div class="glyph-cell">
-                      <Text type="caption-01" color="secondary">Edit</Text>
-                      <div class="glyph-icon">
-                        <Edit size={iconSize} />
-                      </div>
-                    </div>
-                    <div class="glyph-cell">
-                      <Text type="caption-01" color="secondary">Search</Text>
-                      <div class="glyph-icon">
-                        <Search size={iconSize} />
-                      </div>
-                    </div>
-                    <div class="glyph-cell">
-                      <Text type="caption-01" color="secondary">Settings</Text>
-                      <div class="glyph-icon">
-                        <Settings size={iconSize} />
-                      </div>
-                    </div>
-                    <div class="glyph-cell">
-                      <Text type="caption-01" color="secondary"
-                        >Notification</Text
-                      >
-                      <div class="glyph-icon">
-                        <Notification size={iconSize} />
-                      </div>
-                    </div>
-                    <div class="glyph-cell">
-                      <Text type="caption-01" color="secondary">Calendar</Text>
-                      <div class="glyph-icon">
-                        <Calendar size={iconSize} />
-                      </div>
-                    </div>
-                    <div class="glyph-cell">
-                      <Text type="caption-01" color="secondary"
-                        >UserAvatar</Text
-                      >
-                      <div class="glyph-icon">
-                        <UserAvatar size={iconSize} />
-                      </div>
-                    </div>
-                    <div class="glyph-cell">
-                      <Text type="caption-01" color="secondary">TrashCan</Text>
-                      <div class="glyph-icon">
-                        <TrashCan size={iconSize} />
-                      </div>
+              <Box
+                display="flex"
+                direction="column"
+                gap={6}
+                fill="layer-01"
+                padding={6}
+              >
+                <Slider
+                  labelText="Size ({iconSize}px)"
+                  min={0}
+                  max={3}
+                  step={1}
+                  bind:value={iconSizeIndex}
+                  hideTextInput
+                  fullWidth
+                  marks={[
+                    { value: 0, label: "16" },
+                    { value: 1, label: "20" },
+                    { value: 2, label: "24" },
+                    { value: 3, label: "32" },
+                  ]}
+                />
+                <div class="glyph-grid glyph-grid--icons">
+                  <div class="glyph-cell">
+                    <Text type="caption-01" color="secondary">Add</Text>
+                    <div class="glyph-icon">
+                      <Add size={iconSize} />
                     </div>
                   </div>
-                </Stack>
+                  <div class="glyph-cell">
+                    <Text type="caption-01" color="secondary">Edit</Text>
+                    <div class="glyph-icon">
+                      <Edit size={iconSize} />
+                    </div>
+                  </div>
+                  <div class="glyph-cell">
+                    <Text type="caption-01" color="secondary">Search</Text>
+                    <div class="glyph-icon">
+                      <Search size={iconSize} />
+                    </div>
+                  </div>
+                  <div class="glyph-cell">
+                    <Text type="caption-01" color="secondary">Settings</Text>
+                    <div class="glyph-icon">
+                      <Settings size={iconSize} />
+                    </div>
+                  </div>
+                  <div class="glyph-cell">
+                    <Text type="caption-01" color="secondary"
+                      >Notification</Text
+                    >
+                    <div class="glyph-icon">
+                      <Notification size={iconSize} />
+                    </div>
+                  </div>
+                  <div class="glyph-cell">
+                    <Text type="caption-01" color="secondary">Calendar</Text>
+                    <div class="glyph-icon">
+                      <Calendar size={iconSize} />
+                    </div>
+                  </div>
+                  <div class="glyph-cell">
+                    <Text type="caption-01" color="secondary">UserAvatar</Text>
+                    <div class="glyph-icon">
+                      <UserAvatar size={iconSize} />
+                    </div>
+                  </div>
+                  <div class="glyph-cell">
+                    <Text type="caption-01" color="secondary">TrashCan</Text>
+                    <div class="glyph-icon">
+                      <TrashCan size={iconSize} />
+                    </div>
+                  </div>
+                </div>
               </Box>
             </Stack>
             <Link
@@ -430,59 +432,58 @@
             </Stack>
             <Stack gap={3}>
               <Text type="label-01" color="secondary">Demo</Text>
-              <Box fill="layer-01" padding={6}>
-                <Stack gap={6}>
-                  <Slider
-                    labelText="Size ({pictogramSize}px)"
-                    min={48}
-                    max={64}
-                    step={4}
-                    bind:value={pictogramSize}
-                    hideTextInput
-                    fullWidth
-                    marks={[
-                      { value: 48, label: "48" },
-                      { value: 52, label: "52" },
-                      { value: 56, label: "56" },
-                      { value: 60, label: "60" },
-                      { value: 64, label: "64" },
-                    ]}
-                  />
-                  <div class="glyph-grid glyph-grid--pictograms">
-                    <div class="glyph-cell">
-                      <Text type="caption-01" color="secondary">Analytics</Text>
-                      <div class="glyph-icon glyph-icon--pictogram">
-                        <Analytics
-                          width={pictogramSize}
-                          height={pictogramSize}
-                        />
-                      </div>
-                    </div>
-                    <div class="glyph-cell">
-                      <Text type="caption-01" color="secondary">Cloud</Text>
-                      <div class="glyph-icon glyph-icon--pictogram">
-                        <Cloud width={pictogramSize} height={pictogramSize} />
-                      </div>
-                    </div>
-                    <div class="glyph-cell">
-                      <Text type="caption-01" color="secondary">Code</Text>
-                      <div class="glyph-icon glyph-icon--pictogram">
-                        <Code width={pictogramSize} height={pictogramSize} />
-                      </div>
-                    </div>
-                    <div class="glyph-cell">
-                      <Text type="caption-01" color="secondary"
-                        >DataStorage</Text
-                      >
-                      <div class="glyph-icon glyph-icon--pictogram">
-                        <DataStorage
-                          width={pictogramSize}
-                          height={pictogramSize}
-                        />
-                      </div>
+              <Box
+                display="flex"
+                direction="column"
+                gap={6}
+                fill="layer-01"
+                padding={6}
+              >
+                <Slider
+                  labelText="Size ({pictogramSize}px)"
+                  min={48}
+                  max={64}
+                  step={4}
+                  bind:value={pictogramSize}
+                  hideTextInput
+                  fullWidth
+                  marks={[
+                    { value: 48, label: "48" },
+                    { value: 52, label: "52" },
+                    { value: 56, label: "56" },
+                    { value: 60, label: "60" },
+                    { value: 64, label: "64" },
+                  ]}
+                />
+                <div class="glyph-grid glyph-grid--pictograms">
+                  <div class="glyph-cell">
+                    <Text type="caption-01" color="secondary">Analytics</Text>
+                    <div class="glyph-icon glyph-icon--pictogram">
+                      <Analytics width={pictogramSize} height={pictogramSize} />
                     </div>
                   </div>
-                </Stack>
+                  <div class="glyph-cell">
+                    <Text type="caption-01" color="secondary">Cloud</Text>
+                    <div class="glyph-icon glyph-icon--pictogram">
+                      <Cloud width={pictogramSize} height={pictogramSize} />
+                    </div>
+                  </div>
+                  <div class="glyph-cell">
+                    <Text type="caption-01" color="secondary">Code</Text>
+                    <div class="glyph-icon glyph-icon--pictogram">
+                      <Code width={pictogramSize} height={pictogramSize} />
+                    </div>
+                  </div>
+                  <div class="glyph-cell">
+                    <Text type="caption-01" color="secondary">DataStorage</Text>
+                    <div class="glyph-icon glyph-icon--pictogram">
+                      <DataStorage
+                        width={pictogramSize}
+                        height={pictogramSize}
+                      />
+                    </div>
+                  </div>
+                </div>
               </Box>
             </Stack>
             <Link

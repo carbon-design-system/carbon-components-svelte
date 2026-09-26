@@ -1,11 +1,11 @@
 <script>
-  import { Button, Popover } from "carbon-components-svelte";
+  import { Box, Button, Popover } from "carbon-components-svelte";
 
   let open = true;
   let ref = null;
 </script>
 
-<div bind:this={ref} style:position="relative">
+<Box bind:ref position="relative">
   <Button on:click={() => (open = !open)}>Quick settings</Button>
   <Popover
     bind:open
@@ -17,4 +17,4 @@
   >
     Adjust table density and default sort order for this workspace.
   </Popover>
-</div>
+</Box>

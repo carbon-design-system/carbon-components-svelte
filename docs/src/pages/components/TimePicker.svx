@@ -4,7 +4,7 @@ description: Time pickers provide a time input field with optional period (AM/PM
 ---
 
 <script>
-  import { TimePicker, TimePickerSelect, SelectItem, TimePickerSkeleton, FluidTimePickerSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import { Box, TimePicker, TimePickerSelect, SelectItem, TimePickerSkeleton, FluidTimePickerSkeleton, TooltipIcon } from "carbon-components-svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
@@ -167,7 +167,7 @@ Fluid time pickers fill their container using percentage-based columns (25% /
 25% / 50% with two selects, 50% / 50% with one). Give the parent a defined
 width so those ratios resolve as intended.
 
-<div style:width="350px">
+<Box width="350px">
   <TimePicker fluid labelText="Time" placeholder="hh:mm">
     <TimePickerSelect labelText="Period" value="am">
       <SelectItem value="am" text="AM" />
@@ -178,25 +178,25 @@ width so those ratios resolve as intended.
       <SelectItem value="pt" text="Pacific Time (PT)" />
     </TimePickerSelect>
   </TimePicker>
-</div>
+</Box>
 
 With a single period selector, the time input and select share equal width.
 
-<div style:width="350px">
+<Box width="350px">
   <TimePicker fluid labelText="Time" placeholder="hh:mm">
     <TimePickerSelect labelText="Period" value="am">
       <SelectItem value="am" text="AM" />
       <SelectItem value="pm" text="PM" />
     </TimePickerSelect>
   </TimePicker>
-</div>
+</Box>
 
 ### Custom label
 
 Use the `labelChildren` slot to render custom label content, such as a
 tooltip icon.
 
-<div style:width="350px">
+<Box width="350px">
   <TimePicker fluid labelText="Time" placeholder="hh:mm">
     <svelte:fragment slot="labelChildren">
       Time
@@ -211,14 +211,14 @@ tooltip icon.
       <SelectItem value="pm" text="PM" />
     </TimePickerSelect>
   </TimePicker>
-</div>
+</Box>
 
 ### Invalid
 
 Fluid time pickers display the error message inside the field boundary. Long
 messages wrap to multiple lines.
 
-<div style:width="350px">
+<Box width="350px">
   <TimePicker fluid invalid invalidText="A valid standup time is required. Enter the hour and minute in hh:mm format using a 12-hour clock, for example 09:30 or 2:15." labelText="Time" placeholder="hh:mm">
     <TimePickerSelect labelText="Period" value="am">
       <SelectItem value="am" text="AM" />
@@ -229,11 +229,11 @@ messages wrap to multiple lines.
       <SelectItem value="pt" text="Pacific Time (PT)" />
     </TimePickerSelect>
   </TimePicker>
-</div>
+</Box>
 
 ### Warning
 
-<div style:width="350px">
+<Box width="350px">
   <TimePicker fluid warn warnText="The selected standup time is outside business hours" labelText="Time" placeholder="hh:mm">
     <TimePickerSelect labelText="Period" value="am">
       <SelectItem value="am" text="AM" />
@@ -244,13 +244,13 @@ messages wrap to multiple lines.
       <SelectItem value="pt" text="Pacific Time (PT)" />
     </TimePickerSelect>
   </TimePicker>
-</div>
+</Box>
 
 ### Disabled
 
 Invalid and warning states are not displayed while the time picker is disabled.
 
-<div style:width="350px">
+<Box width="350px">
   <TimePicker fluid disabled invalid invalidText="A valid standup time is required" labelText="Time" placeholder="hh:mm">
     <TimePickerSelect labelText="Period" value="am">
       <SelectItem value="am" text="AM" />
@@ -261,13 +261,13 @@ Invalid and warning states are not displayed while the time picker is disabled.
       <SelectItem value="pt" text="Pacific Time (PT)" />
     </TimePickerSelect>
   </TimePicker>
-</div>
+</Box>
 
 ### Read-only
 
 Invalid and warning states are not displayed while the time picker is read-only.
 
-<div style:width="350px">
+<Box width="350px">
   <TimePicker fluid readonly warn warnText="The selected standup time is outside business hours" labelText="Time" placeholder="hh:mm" value="10:30">
     <TimePickerSelect labelText="Period" value="am">
       <SelectItem value="am" text="AM" />
@@ -278,7 +278,7 @@ Invalid and warning states are not displayed while the time picker is read-only.
       <SelectItem value="pt" text="Pacific Time (PT)" />
     </TimePickerSelect>
   </TimePicker>
-</div>
+</Box>
 
 ### Skeleton
 

@@ -4,7 +4,7 @@ description: Contained lists display items within a labeled container, with supp
 ---
 
 <script>
-  import { Button, Search, ContainedList, ContainedListItem, Text } from "carbon-components-svelte";
+  import { Box, Button, Search, ContainedList, ContainedListItem, Text } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
   import Close from "carbon-icons-svelte/lib/Close.svelte";
 </script>
@@ -88,7 +88,7 @@ Set `inset` to inset divider lines from the edges for a more refined appearance.
 
 Set `kind` to `"disclosed"` for a compact header that sticks while scrolling. In long lists, the header stays visible at the top of the container.
 
-<div style:height="200px" style:overflow-y="auto">
+<Box height="200px" overflowY="auto">
   <ContainedList labelText="Audit log — Today" kind="disclosed">
     {#each ["User jane.cooper@acme.com signed in", "API key rotated for billing-service", "Role updated: admin granted to devon.lane", "Webhook endpoint added", "Deployment to production completed", "Password reset requested"] as entry}
       <ContainedListItem>{entry}</ContainedListItem>
@@ -99,7 +99,7 @@ Set `kind` to `"disclosed"` for a compact header that sticks while scrolling. In
       <ContainedListItem>{entry}</ContainedListItem>
     {/each}
   </ContainedList>
-</div>
+</Box>
 
 ## Icons
 

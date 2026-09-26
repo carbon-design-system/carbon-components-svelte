@@ -1,5 +1,5 @@
 <script>
-  import { Tag, TagSet } from "carbon-components-svelte";
+  import { Box, Tag, TagSet } from "carbon-components-svelte";
 
   const certifications = [
     { label: "SOC 2", type: "red" },
@@ -11,7 +11,7 @@
   ];
 </script>
 
-<div style="max-width: 12rem;">
+<Box maxWidth="12rem">
   <TagSet>
     {#each certifications as certification}
       <Tag type={certification.type}>{certification.label}</Tag>
@@ -22,4 +22,4 @@
         .join(", ")}
     </svelte:fragment>
   </TagSet>
-</div>
+</Box>
