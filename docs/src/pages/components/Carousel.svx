@@ -23,8 +23,8 @@ description: Carousels show one slide at a time from a set, with previous and ne
 ## Basic
 
 Wrap each slide in a `CarouselItem`. Only the active slide is visible, and the
-previous and next buttons are disabled on the first and last slide; the
-carousel does not wrap around. When focus is inside the carousel, press <DocKbd label="Left" />
+previous and next buttons are disabled on the first and last slide unless
+`wrap` is set (see [Navigation](#navigation)). When focus is inside the carousel, press <DocKbd label="Left" />
 and <DocKbd label="Right" /> to move to the previous and next slide, except
 inside form fields, which keep their own arrow key behavior.
 
@@ -63,6 +63,7 @@ inside form fields, which keep their own arrow key behavior.
 | Keep the set small, typically three to five slides. | There is no slide picker; reaching the last slide takes one press per slide. |
 | Put a call to action on the slide it belongs to. | The prev/next buttons only move between slides; they do not confirm or submit anything. |
 | Set `labelText` to describe the set, for example "What's new in 4.2". | Screen readers announce the region as a carousel with this name. |
+| Turn on `showCounter` whenever you set `wrap`. | With `wrap`, the buttons never disable, so the counter is the only sign of where the set starts and ends. |
 
 ## Content
 
@@ -133,6 +134,93 @@ after its content instead.
     </CarouselItem>
   </Carousel>
 </Tile>
+
+## Navigation
+
+Control what happens at the ends of the set and how the user's position is
+shown.
+
+### Wrap around
+
+Set `wrap` to `true` to go from the last slide back to the first, and from
+the first to the last, with the buttons or <DocKbd label="Left" /> and <DocKbd label="Right" />.
+Use it for sets with no natural order, like rotating tips. Pair it with
+`showCounter`, since the buttons no longer disable at the ends. A bound
+`selectedIndex` is still clamped, not wrapped.
+
+<Tile>
+  <Carousel labelText="Tip of the day" wrap showCounter prevButtonLabelText="Previous tip" nextButtonLabelText="Next tip">
+    <CarouselItem>
+      <Stack gap={3}>
+        <h5>Filter logs by trace</h5>
+        <p>Click any trace ID in a log line to show only the lines from that request.</p>
+      </Stack>
+    </CarouselItem>
+    <CarouselItem>
+      <Stack gap={3}>
+        <h5>Pin a deploy</h5>
+        <p>Pinned deploys are skipped by automatic cleanup, so you can always roll back to them.</p>
+      </Stack>
+    </CarouselItem>
+    <CarouselItem>
+      <Stack gap={3}>
+        <h5>Share a dashboard view</h5>
+        <p>The URL keeps your time range and filters. Paste it into an incident channel to share exactly what you see.</p>
+      </Stack>
+    </CarouselItem>
+    <CarouselItem>
+      <Stack gap={3}>
+        <h5>Mute a noisy alert</h5>
+        <p>Snooze an alert for an hour or a day from the notification itself, without editing the rule.</p>
+      </Stack>
+    </CarouselItem>
+    <CarouselItem>
+      <Stack gap={3}>
+        <h5>Compare two builds</h5>
+        <p>Select two builds in the history to see which dependencies and settings changed between them.</p>
+      </Stack>
+    </CarouselItem>
+  </Carousel>
+</Tile>
+
+### Counter
+
+Set `showCounter` to `true` to show the active slide's position next to the
+buttons. Override the wording with `counterText`, which receives the 1-based
+position and the total.
+
+<Carousel
+  labelText="Database failover runbook"
+  showCounter
+  counterText={(current, total) => `Step ${current} of ${total}`}
+  prevButtonLabelText="Previous step"
+  nextButtonLabelText="Next step"
+>
+  <CarouselItem>
+    <Stack gap={3}>
+      <h5>Confirm the primary is down</h5>
+      <p>Check the health dashboard and verify writes are failing for at least two minutes.</p>
+    </Stack>
+  </CarouselItem>
+  <CarouselItem>
+    <Stack gap={3}>
+      <h5>Freeze deploys</h5>
+      <p>Post in the incident channel and pause the deploy pipeline so no migrations run mid-failover.</p>
+    </Stack>
+  </CarouselItem>
+  <CarouselItem>
+    <Stack gap={3}>
+      <h5>Promote the replica</h5>
+      <p>Run the promote command against the replica with the lowest replication lag.</p>
+    </Stack>
+  </CarouselItem>
+  <CarouselItem>
+    <Stack gap={3}>
+      <h5>Verify and unfreeze</h5>
+      <p>Confirm writes succeed on the new primary, then resume the deploy pipeline.</p>
+    </Stack>
+  </CarouselItem>
+</Carousel>
 
 ## Height
 
