@@ -86,7 +86,8 @@
   /**
    * Set to `true` to render a skeleton menu while results are loading, for
    * example while fetching server-side results. Override the placeholder rows
-   * with the `loading` slot.
+   * with the `loading` slot. When results are already rendered, a single
+   * loading row is appended below them instead.
    */
   export let loading = false;
 
@@ -231,6 +232,7 @@
     $$slots.noResults;
   $: open = !disabled && !readonly && focused && !dismissed;
   $: if (!open) scrollEndTracker.reset();
+  $: loadingMore = loading && itemCount > 0;
   $: menuVisible = open && (loading || itemCount > 0 || showNoResults);
   $: menuDomId = `menu-${id}`;
   $: ({ readonlyId } = buildFieldIds(id));
@@ -501,7 +503,7 @@
         on:mousedown={handleMenuPointerDown}
         on:scroll={handleMenuScroll}
       >
-        {#if loading}
+        {#if loading && itemCount === 0}
           <slot name="loading">
             {#each skeletonWidths as width, i (i)}
               <div
@@ -514,7 +516,14 @@
           </slot>
         {:else}
           <slot />
-          {#if showNoResults}
+          {#if loadingMore}
+            <div
+              class:bx--search-menu-item={true}
+              class:bx--search-menu-item--skeleton={true}
+            >
+              <SkeletonText width={SKELETON_WIDTHS[0]} />
+            </div>
+          {:else if showNoResults}
             <div class:bx--search-menu__no-results={true}>
               <slot name="noResults" />
             </div>
@@ -536,7 +545,7 @@
         on:mousedown={handleMenuPointerDown}
         on:scroll={handleMenuScroll}
       >
-        {#if loading}
+        {#if loading && itemCount === 0}
           <slot name="loading">
             {#each skeletonWidths as width, i (i)}
               <div
@@ -549,7 +558,14 @@
           </slot>
         {:else}
           <slot />
-          {#if showNoResults}
+          {#if loadingMore}
+            <div
+              class:bx--search-menu-item={true}
+              class:bx--search-menu-item--skeleton={true}
+            >
+              <SkeletonText width={SKELETON_WIDTHS[0]} />
+            </div>
+          {:else if showNoResults}
             <div class:bx--search-menu__no-results={true}>
               <slot name="noResults" />
             </div>
