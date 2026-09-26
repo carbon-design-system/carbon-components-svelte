@@ -137,6 +137,18 @@ describe("Box", () => {
     expectInlineStyle(margin, { marginTop: "", marginLeft: "1rem" });
   });
 
+  it("applies single-side padding over axis and all-sides values", () => {
+    render(Box);
+
+    const node = screen.getByTestId("padding-side");
+    expect(node).toHaveClass("bx--box-py-7", "bx--box-pb-3");
+    expectInlineStyle(node, {
+      paddingTop: "",
+      paddingBottom: "",
+      paddingLeft: "1rem",
+    });
+  });
+
   it("applies custom padding via inline style", () => {
     render(Box);
 

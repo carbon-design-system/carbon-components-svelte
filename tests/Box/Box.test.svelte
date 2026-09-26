@@ -51,6 +51,9 @@
 <Box margin="1rem" marginY={3} data-testid="margin-axis-over-custom"
   >Margin axis over custom</Box
 >
+<Box padding="1rem" paddingY={7} paddingBottom={3} data-testid="padding-side"
+  >Padding side</Box
+>
 <Box margin={4}>Margin scale</Box>
 <Box marginY={7} marginTop={3} data-testid="margin-top-scale"
   >Margin top scale</Box
