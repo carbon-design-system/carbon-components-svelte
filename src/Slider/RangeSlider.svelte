@@ -87,6 +87,12 @@
    */
   export let fullWidth = false;
 
+  /**
+   * Set to "vertical" to lay out the slider along the vertical axis
+   * @type {"horizontal" | "vertical"}
+   */
+  export let orientation = "horizontal";
+
   /** Set an id for the slider div element */
   export let id = uniqueId();
 
@@ -157,6 +163,7 @@
   import {
     formatRangeLabel as formatSliderRangeLabel,
     getClientX,
+    getClientY,
     getValueText as getSliderValueText,
     valueFromTrackPosition,
   } from "../utils/slider-value.js";
@@ -197,20 +204,41 @@
     return getSliderValueText(numericValue, formatValue);
   }
 
+  /** @type {(e: PointerLikeEvent) => number | null} */
+  function getPointerPosition(event) {
+    return orientation === "vertical" ? getClientY(event) : getClientX(event);
+  }
+
+  /**
+   * Track start and signed length along the slider axis. Values increase
+   * upward when vertical, so the start is the bottom edge and the length is
+   * negative.
+   * @type {() => { start: number; length: number }}
+   */
+  function getTrackAxis() {
+    const rect = trackRef.getBoundingClientRect();
+    return orientation === "vertical"
+      ? { start: rect.bottom, length: -rect.height }
+      : { start: rect.left, length: rect.width };
+  }
+
   /** @type {(e: PointerLikeEvent) => ActiveHandle} */
   function pickHandle(event) {
     if (event.target === lowerThumbRef) return "lower";
     if (event.target === upperThumbRef) return "upper";
-    const clientX = getClientX(event);
-    if (clientX == null) return activeHandle;
-    const lowerRect = lowerThumbRef?.getBoundingClientRect();
-    const upperRect = upperThumbRef?.getBoundingClientRect();
-    const dLower = lowerRect
-      ? Math.abs(lowerRect.left + lowerRect.width / 2 - clientX)
-      : Number.POSITIVE_INFINITY;
-    const dUpper = upperRect
-      ? Math.abs(upperRect.left + upperRect.width / 2 - clientX)
-      : Number.POSITIVE_INFINITY;
+    const vertical = orientation === "vertical";
+    const point = getPointerPosition(event);
+    if (point == null) return activeHandle;
+    /** @type {(rect: DOMRect | undefined) => number} */
+    const distance = (rect) => {
+      if (!rect) return Number.POSITIVE_INFINITY;
+      const center = vertical
+        ? rect.top + rect.height / 2
+        : rect.left + rect.width / 2;
+      return Math.abs(center - point);
+    };
+    const dLower = distance(lowerThumbRef?.getBoundingClientRect());
+    const dUpper = distance(upperThumbRef?.getBoundingClientRect());
     return dLower <= dUpper ? "lower" : "upper";
   }
 
@@ -240,11 +268,8 @@
   function startInteraction(event) {
     if (disabled || readonly) return;
     activeHandle = pickHandle(event);
-    if (activeHandle === "lower") {
-      lowerThumbRef?.focus({ preventScroll: true });
-    } else {
-      upperThumbRef?.focus({ preventScroll: true });
-    }
+    const thumbRef = activeHandle === "lower" ? lowerThumbRef : upperThumbRef;
+    thumbRef?.focus({ preventScroll: true });
     currentEvent = event;
     holding = true;
     dragging = true;
@@ -273,13 +298,15 @@
   function calcValue(event) {
     if (disabled || readonly || !event || !trackRef) return;
 
-    const clientX = getClientX(event);
-    if (clientX == null) return;
-    const { left, width } = trackRef.getBoundingClientRect();
+    const point = getPointerPosition(event);
+    if (point == null) return;
+    const { start, length } = getTrackAxis();
+    // valueFromTrackPosition is axis-agnostic: a negative `width` (vertical)
+    // flips the interpolation so the bottom edge is `min`.
     let nextValue = valueFromTrackPosition({
-      clientX,
-      left,
-      width,
+      clientX: point,
+      left: start,
+      width: length,
       min,
       max,
       step,
@@ -490,6 +517,7 @@
       class:bx--slider--readonly={readonly}
       class:bx--slider--with-marks={resolvedMarks.length > 0}
       class:bx--slider--with-mark-labels={hasMarkLabels}
+      class:bx--slider--vertical={orientation === "vertical"}
       style:max-width={fullWidth ? "none" : undefined}
       on:mousedown={startInteraction}
       on:touchstart={startInteraction}
@@ -497,7 +525,10 @@
       <div
         class:bx--slider__thumb-wrapper={true}
         class:bx--slider__thumb-wrapper--lower={true}
-        style:inset-inline-start="{left}%"
+        style:inset-inline-start={orientation === "vertical"
+          ? undefined
+          : `${left}%`}
+        style:top={orientation === "vertical" ? `${100 - left}%` : undefined}
       >
         <div
           bind:this={lowerThumbRef}
@@ -510,6 +541,7 @@
           aria-valuenow={value}
           aria-valuetext={getValueText(value)}
           aria-label={ariaLabelInput}
+          aria-orientation={orientation}
           aria-describedby={joinDescribedBy(
             readonly ? readonlyId : null,
             resolveStatusDescribedBy({
@@ -558,7 +590,12 @@
       <div
         class:bx--slider__thumb-wrapper={true}
         class:bx--slider__thumb-wrapper--upper={true}
-        style:inset-inline-start="{leftUpper}%"
+        style:inset-inline-start={orientation === "vertical"
+          ? undefined
+          : `${leftUpper}%`}
+        style:top={orientation === "vertical"
+          ? `${100 - leftUpper}%`
+          : undefined}
       >
         <div
           bind:this={upperThumbRef}
@@ -571,6 +608,7 @@
           aria-valuenow={valueUpper}
           aria-valuetext={getValueText(valueUpper)}
           aria-label={ariaLabelInputUpper}
+          aria-orientation={orientation}
           aria-describedby={joinDescribedBy(
             readonly ? readonlyId : null,
             resolveStatusDescribedBy({
@@ -618,15 +656,22 @@
       <div bind:this={trackRef} class:bx--slider__track={true}></div>
       <div
         class:bx--slider__filled-track={true}
-        style:transform="translate({left}%, -50%) scaleX({(leftUpper - left) /
-          100})"
+        style:transform={orientation === "vertical"
+          ? `translate(-50%, ${-left}%) scaleY(${(leftUpper - left) / 100})`
+          : `translate(${left}%, -50%) scaleX(${(leftUpper - left) / 100})`}
       ></div>
       {#if resolvedMarks.length > 0}
         <div class:bx--slider__marks={true} aria-hidden="true">
           {#each resolvedMarks as mark (mark.value)}
             {@const percent =
               range === 0 ? 0 : ((mark.value - min) / range) * 100}
-            <span class:bx--slider__mark={true} style:left="{percent}%">
+            <span
+              class:bx--slider__mark={true}
+              style:left={orientation === "vertical" ? undefined : `${percent}%`}
+              style:top={orientation === "vertical"
+                ? `${100 - percent}%`
+                : undefined}
+            >
               {#if mark.label != null && mark.label !== ""}
                 <span class:bx--slider__mark-label={true}>{mark.label}</span>
               {/if}

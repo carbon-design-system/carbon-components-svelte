@@ -23,6 +23,12 @@ export function formatRangeLabel(
 export function getClientX(event: MouseEvent | TouchEvent): number | null;
 
 /**
+ * Read the vertical client coordinate from a mouse or touch event.
+ * Returns `null` for a touch event with no active touch point.
+ */
+export function getClientY(event: MouseEvent | TouchEvent): number | null;
+
+/**
  * Compute the slider value for a horizontal client position within a
  * track, snapped to `step` and clamped to `[min, max]`.
  */

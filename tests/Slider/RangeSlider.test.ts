@@ -716,4 +716,119 @@ describe("RangeSlider", () => {
       expect(upperThumb).toHaveAttribute("aria-valuenow", "85");
     });
   });
+
+  describe("orientation", () => {
+    const rect = (overrides: Partial<DOMRect>): DOMRect => ({
+      top: 0,
+      bottom: 0,
+      height: 0,
+      left: 0,
+      right: 0,
+      width: 0,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+      ...overrides,
+    });
+
+    it("should set aria-orientation on both thumbs", () => {
+      const { unmount } = render(RangeSlider);
+      for (const thumb of screen.getAllByRole("slider")) {
+        expect(thumb).toHaveAttribute("aria-orientation", "horizontal");
+      }
+      unmount();
+
+      render(RangeSlider, { props: { orientation: "vertical" } });
+      for (const thumb of screen.getAllByRole("slider")) {
+        expect(thumb).toHaveAttribute("aria-orientation", "vertical");
+      }
+    });
+
+    it("should add the vertical modifier class only when vertical", () => {
+      const { container, unmount } = render(RangeSlider);
+      expect(container.querySelector(".bx--slider")).not.toHaveClass(
+        "bx--slider--vertical",
+      );
+      unmount();
+
+      const vertical = render(RangeSlider, {
+        props: { orientation: "vertical" },
+      });
+      expect(vertical.container.querySelector(".bx--slider")).toHaveClass(
+        "bx--slider--vertical",
+      );
+    });
+
+    it("should position handles, fill, and marks along the vertical axis", () => {
+      const { container } = render(RangeSlider, {
+        props: {
+          orientation: "vertical",
+          value: 20,
+          valueUpper: 70,
+          marks: [{ value: 0 }, { value: 100 }],
+        },
+      });
+
+      const lower = container.querySelector<HTMLElement>(
+        ".bx--slider__thumb-wrapper--lower",
+      );
+      const upper = container.querySelector<HTMLElement>(
+        ".bx--slider__thumb-wrapper--upper",
+      );
+      assert(lower && upper);
+      expect(lower).toHaveStyle({ top: "80%" });
+      expect(upper).toHaveStyle({ top: "30%" });
+      expect(lower.style.insetInlineStart).toBe("");
+      expect(
+        container.querySelector<HTMLElement>(".bx--slider__filled-track")?.style
+          .transform,
+      ).toBe("translate(-50%, -20%) scaleY(0.5)");
+      const marks =
+        container.querySelectorAll<HTMLElement>(".bx--slider__mark");
+      expect(marks[0]).toHaveStyle({ top: "100%" });
+      expect(marks[1]).toHaveStyle({ top: "0%" });
+    });
+
+    it("should pick the handle nearest the pointer by clientY and read the value from it", async () => {
+      const { container } = render(RangeSlider, {
+        props: { orientation: "vertical", value: 20, valueUpper: 70 },
+      });
+
+      const slider = container.querySelector(".bx--slider");
+      const track = container.querySelector(".bx--slider__track");
+      assert(slider instanceof HTMLElement);
+      assert(track instanceof HTMLElement);
+      const [lowerThumb, upperThumb] = screen.getAllByRole("slider");
+      vi.spyOn(track, "getBoundingClientRect").mockReturnValue(
+        rect({ bottom: 200, height: 200, right: 2, width: 2 }),
+      );
+      // Same x for both handles, so only the y distance can tell them apart.
+      vi.spyOn(lowerThumb, "getBoundingClientRect").mockReturnValue(
+        rect({ top: 160, bottom: 176, height: 16, width: 24 }),
+      );
+      vi.spyOn(upperThumb, "getBoundingClientRect").mockReturnValue(
+        rect({ top: 44, bottom: 60, height: 16, width: 24 }),
+      );
+
+      await fireEvent.mouseDown(slider, { clientX: 1, clientY: 20 });
+      await tick();
+      await fireEvent.mouseUp(window);
+
+      expect(lowerThumb).toHaveAttribute("aria-valuenow", "20");
+      expect(upperThumb).toHaveAttribute("aria-valuenow", "90");
+    });
+
+    it("should increase with ArrowUp and decrease with ArrowDown when vertical", async () => {
+      render(RangeSlider, {
+        props: { orientation: "vertical", value: 20, valueUpper: 70 },
+      });
+
+      const [lowerThumb] = screen.getAllByRole("slider");
+      lowerThumb.focus();
+      await user.keyboard("{ArrowUp}");
+      expect(lowerThumb).toHaveAttribute("aria-valuenow", "21");
+      await user.keyboard("{ArrowDown}{ArrowDown}");
+      expect(lowerThumb).toHaveAttribute("aria-valuenow", "19");
+    });
+  });
 });
