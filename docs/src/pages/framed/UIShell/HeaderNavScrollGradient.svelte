@@ -21,7 +21,7 @@
 </Header>
 
 <SideNav fixed isOpen>
-  <ScrollGradient color="var(--cds-background)">
+  <ScrollGradient color="background">
     <SideNavItems>
       <SideNavLink href="/dashboard" text="Dashboard" />
       <SideNavLink href="/resources" text="Resource list" />
