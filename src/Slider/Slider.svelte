@@ -81,6 +81,12 @@
    */
   export let fullWidth = false;
 
+  /**
+   * Set to "vertical" to lay out the slider along the vertical axis
+   * @type {"horizontal" | "vertical"}
+   */
+  export let orientation = "horizontal";
+
   /** Set an id for the slider div element */
   export let id = uniqueId();
 
@@ -200,16 +206,33 @@
   function calcValue(event) {
     if (disabled || readonly || !event) return;
 
-    const clientX = event.touches ? event.touches[0].clientX : event.clientX;
-    const { left, width } = trackRef.getBoundingClientRect();
-    let nextValue = valueFromTrackPosition({
-      clientX,
-      left,
-      width,
-      min,
-      max,
-      step,
-    });
+    let nextValue;
+    if (orientation === "vertical") {
+      const clientY = event.touches ? event.touches[0].clientY : event.clientY;
+      const { bottom, height } = trackRef.getBoundingClientRect();
+      // Values increase upward: the track's bottom edge is `min`, its top edge
+      // is `max`. A negative `width` flips valueFromTrackPosition's
+      // interpolation so `bottom` is the zero point.
+      nextValue = valueFromTrackPosition({
+        clientX: clientY,
+        left: bottom,
+        width: -height,
+        min,
+        max,
+        step,
+      });
+    } else {
+      const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+      const { left, width } = trackRef.getBoundingClientRect();
+      nextValue = valueFromTrackPosition({
+        clientX,
+        left,
+        width,
+        min,
+        max,
+        step,
+      });
+    }
     if (snapToMarks && resolvedMarks.length) {
       nextValue = nearestMark(nextValue, resolvedMarks).value;
     }
@@ -287,6 +310,7 @@
       class:bx--slider--readonly={readonly}
       class:bx--slider--with-marks={resolvedMarks.length > 0}
       class:bx--slider--with-mark-labels={hasMarkLabels}
+      class:bx--slider--vertical={orientation === "vertical"}
       style:max-width={fullWidth ? "none" : undefined}
       on:mousedown={startInteraction}
       on:touchstart={startInteraction}
@@ -295,12 +319,14 @@
         role="slider"
         tabindex={readonly || disabled ? undefined : 0}
         class:bx--slider__thumb={true}
-        style:left="{left}%"
+        style:left={orientation === "vertical" ? undefined : `${left}%`}
+        style:top={orientation === "vertical" ? `${100 - left}%` : undefined}
         aria-valuemax={max}
         aria-valuemin={min}
         aria-valuenow={value}
         aria-valuetext={getValueText(value)}
         aria-labelledby={labelId}
+        aria-orientation={orientation}
         aria-describedby={joinDescribedBy(
           readonly ? readonlyId : null,
           resolveStatusDescribedBy({
@@ -376,14 +402,22 @@
       <div bind:this={trackRef} class:bx--slider__track={true}></div>
       <div
         class:bx--slider__filled-track={true}
-        style:transform="translate(0, -50%) scaleX({left / 100})"
+        style:transform={orientation === "vertical"
+          ? `translate(-50%, 0) scaleY(${left / 100})`
+          : `translate(0, -50%) scaleX(${left / 100})`}
       ></div>
       {#if resolvedMarks.length > 0}
         <div class:bx--slider__marks={true} aria-hidden="true">
           {#each resolvedMarks as mark (mark.value)}
             {@const percent =
               range === 0 ? 0 : ((mark.value - min) / range) * 100}
-            <span class:bx--slider__mark={true} style:left="{percent}%">
+            <span
+              class:bx--slider__mark={true}
+              style:left={orientation === "vertical" ? undefined : `${percent}%`}
+              style:top={orientation === "vertical"
+                ? `${100 - percent}%`
+                : undefined}
+            >
               {#if mark.label != null && mark.label !== ""}
                 <span class:bx--slider__mark-label={true}>{mark.label}</span>
               {/if}

@@ -1246,4 +1246,147 @@ describe("Slider", () => {
       expect(consoleLog).toHaveBeenLastCalledWith("change", 0);
     });
   });
+
+  describe("orientation", () => {
+    const mockTrackRect = (container: HTMLElement, rect: Partial<DOMRect>) => {
+      const track = container.querySelector(".bx--slider__track");
+      assert(track instanceof HTMLElement);
+      vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
+        top: 0,
+        bottom: 0,
+        height: 0,
+        left: 0,
+        right: 0,
+        width: 0,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+        ...rect,
+      });
+    };
+
+    const pressTrack = async (
+      container: HTMLElement,
+      coords: { clientX?: number; clientY?: number },
+    ) => {
+      const slider = container.querySelector(".bx--slider");
+      assert(slider instanceof HTMLElement);
+      await fireEvent.mouseDown(slider, coords);
+      await tick();
+      await fireEvent.mouseUp(window);
+    };
+
+    it("should set aria-orientation on the slider", () => {
+      const { unmount } = render(Slider);
+      expect(screen.getByRole("slider")).toHaveAttribute(
+        "aria-orientation",
+        "horizontal",
+      );
+      unmount();
+
+      render(Slider, { props: { orientation: "vertical" } });
+      expect(screen.getByRole("slider")).toHaveAttribute(
+        "aria-orientation",
+        "vertical",
+      );
+    });
+
+    it("should add the vertical modifier class only when vertical", () => {
+      const { container, unmount } = render(Slider);
+      expect(container.querySelector(".bx--slider")).not.toHaveClass(
+        "bx--slider--vertical",
+      );
+      unmount();
+
+      const vertical = render(Slider, { props: { orientation: "vertical" } });
+      expect(vertical.container.querySelector(".bx--slider")).toHaveClass(
+        "bx--slider--vertical",
+      );
+    });
+
+    it("should read clientY on a vertical track, increasing toward the top", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      const { container } = render(Slider, {
+        props: { orientation: "vertical", value: 0, min: 0, max: 100 },
+      });
+      mockTrackRect(container, {
+        top: 0,
+        bottom: 200,
+        height: 200,
+        right: 2,
+        width: 2,
+      });
+
+      await pressTrack(container, { clientX: 1, clientY: 50 });
+
+      expect(consoleLog).toHaveBeenCalledWith("input", 75);
+      expect(screen.getByRole("spinbutton")).toHaveValue(75);
+    });
+
+    it("should keep reading clientX on a horizontal track", async () => {
+      const { container } = render(Slider, {
+        props: { value: 0, min: 0, max: 100 },
+      });
+      mockTrackRect(container, {
+        right: 200,
+        width: 200,
+        bottom: 2,
+        height: 2,
+      });
+
+      await pressTrack(container, { clientX: 50, clientY: 1 });
+
+      expect(screen.getByRole("spinbutton")).toHaveValue(25);
+    });
+
+    it("should position the thumb, fill, and marks along the vertical axis", () => {
+      const { container } = render(Slider, {
+        props: {
+          orientation: "vertical",
+          value: 25,
+          marks: [{ value: 0 }, { value: 100 }],
+        },
+      });
+
+      const thumb = screen.getByRole("slider");
+      expect(thumb).toHaveStyle({ top: "75%" });
+      expect(thumb.style.left).toBe("");
+      expect(
+        container.querySelector<HTMLElement>(".bx--slider__filled-track")?.style
+          .transform,
+      ).toBe("translate(-50%, 0) scaleY(0.25)");
+      const marks =
+        container.querySelectorAll<HTMLElement>(".bx--slider__mark");
+      expect(marks[0]).toHaveStyle({ top: "100%" });
+      expect(marks[1]).toHaveStyle({ top: "0%" });
+    });
+
+    it("should increase with ArrowUp and decrease with ArrowDown when vertical", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(Slider, { props: { orientation: "vertical", value: 10 } });
+
+      await user.tab();
+      await user.keyboard("{ArrowUp}");
+      expect(consoleLog).toHaveBeenLastCalledWith("change", 11);
+
+      await user.keyboard("{ArrowDown}{ArrowDown}");
+      expect(consoleLog).toHaveBeenLastCalledWith("change", 9);
+    });
+
+    it("should snap to marks on a vertical track", async () => {
+      const { container } = render(Slider, {
+        props: {
+          orientation: "vertical",
+          value: 0,
+          marks: [{ value: 0 }, { value: 25 }, { value: 100 }],
+          snapToMarks: true,
+        },
+      });
+      mockTrackRect(container, { bottom: 200, height: 200, width: 2 });
+
+      await pressTrack(container, { clientY: 145 });
+
+      expect(screen.getByRole("spinbutton")).toHaveValue(25);
+    });
+  });
 });
