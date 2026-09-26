@@ -19,6 +19,15 @@
    * @bindable readonly
    */
   export let ref = null;
+
+  import { getContext, onMount } from "svelte";
+
+  const menu = getContext("carbon:SideNavMenu");
+  const key = {};
+
+  $: menu?.setCurrent(key, isSelected);
+
+  onMount(() => () => menu?.setCurrent(key, false));
 </script>
 
 <li class:bx--side-nav__menu-item={true}>
