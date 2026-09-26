@@ -49,6 +49,12 @@ Set `menuSize` to size the results menu independently of the input. By default t
 
 <FileSource src="/framed/SearchMenu/SizeDecoupled" />
 
+### Max height
+
+Set `menuMaxHeight` to override the results menu's max height (360px by default). Numbers are pixels; strings accept any CSS length such as `"50vh"`.
+
+<FileSource src="/framed/SearchMenu/MenuMaxHeight" />
+
 ## Light
 
 Use the light variant for light backgrounds.
