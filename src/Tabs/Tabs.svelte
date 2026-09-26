@@ -71,6 +71,7 @@
   import {
     afterUpdate,
     createEventDispatcher,
+    getContext,
     onMount,
     setContext,
     tick,
@@ -349,7 +350,7 @@
     scrollTabIntoView(activeTab);
   }
 
-  setContext("carbon:Tabs", {
+  const tabsContext = {
     tabs,
     tabsById,
     contentById,
@@ -368,7 +369,16 @@
     removeContent,
     update,
     dismiss,
-  });
+  };
+
+  setContext("carbon:Tabs", tabsContext);
+
+  // Lets `TabContent` in a `PageHeader` body pair with tabs slotted into
+  // its header; panels then live in the body, not beside these tabs.
+  /** @type {undefined | { getBody: () => HTMLElement | null; setType: (type: string) => void }} */
+  const pageHeader = getContext("carbon:PageHeader")?.registerTabs(tabsContext);
+
+  $: pageHeader?.setType(type);
 
   afterUpdate(() => {
     // Sync DOM order with stores only when tabs are added/removed.
@@ -384,7 +394,17 @@
         }),
       );
 
-      if (refRoot?.parentElement) {
+      const pageHeaderBody = pageHeader?.getBody();
+
+      if (pageHeaderBody) {
+        content.update((currentContent) =>
+          syncDomOrder({
+            root: pageHeaderBody,
+            selector: ":scope > [role='tabpanel']",
+            items: currentContent,
+          }),
+        );
+      } else if (refRoot?.parentElement) {
         content.update((currentContent) =>
           syncDomOrder({
             root: refRoot.parentElement,

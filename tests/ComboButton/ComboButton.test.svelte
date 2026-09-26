@@ -11,6 +11,8 @@
   export let direction: ComponentProps<ComboButton>["direction"] = undefined;
   export let tooltipPosition: ComponentProps<ComboButton>["tooltipPosition"] =
     undefined;
+  export let tooltipAlignment: ComponentProps<ComboButton>["tooltipAlignment"] =
+    undefined;
   export let iconDescription: ComponentProps<ComboButton>["iconDescription"] =
     undefined;
 
@@ -27,6 +29,7 @@
   {size}
   {direction}
   {tooltipPosition}
+  {tooltipAlignment}
   {iconDescription}
   bind:open
   on:click={() => console.log("click")}

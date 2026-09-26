@@ -234,6 +234,21 @@ describe("ComboButton", () => {
     expect(trigger).not.toHaveClass("bx--btn--icon-only--top");
   });
 
+  it("centers the trigger tooltip by default and aligns it on request", () => {
+    const { unmount } = render(ComboButtonFixture);
+    expect(
+      screen.getByRole("button", { name: "Additional actions" }),
+    ).toHaveClass("bx--tooltip--align-center");
+    unmount();
+
+    render(ComboButtonFixture, {
+      props: { tooltipPosition: "bottom", tooltipAlignment: "end" },
+    });
+    const trigger = screen.getByRole("button", { name: "Additional actions" });
+    expect(trigger).toHaveClass("bx--btn--icon-only--bottom");
+    expect(trigger).toHaveClass("bx--tooltip--align-end");
+  });
+
   it("never focuses the trigger via a real mouse click, only via keyboard", async () => {
     render(ComboButtonFixture);
 
