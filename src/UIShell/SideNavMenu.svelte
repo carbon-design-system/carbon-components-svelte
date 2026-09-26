@@ -34,9 +34,21 @@
    */
   export let ref = null;
 
-  import { onMount } from "svelte";
+  import { getContext, onMount, setContext } from "svelte";
+  import { readable, writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import { isSideNavCollapsed, isSideNavRail } from "./nav-store.js";
+
+  const parentMenu = getContext("carbon:SideNavMenu");
+  const depth = (parentMenu?.depth ?? 0) + 1;
+  const parentIconDepth = parentMenu?.iconDepth ?? readable(0);
+
+  /** Menus with an icon from the outermost one through this one. */
+  const iconDepth = writable(0);
+
+  setContext("carbon:SideNavMenu", { depth, iconDepth });
+
+  $: iconDepth.set($parentIconDepth + (icon || $$slots.icon ? 1 : 0));
 
   let menuRef = null;
 
@@ -89,6 +101,8 @@
     inert={expanded ? undefined : "true"}
     class:bx--side-nav__menu={true}
     style:max-height={expanded ? "none" : undefined}
+    style:--ccs-side-nav-menu-depth={depth > 1 ? depth : undefined}
+    style:--ccs-side-nav-menu-icon-depth={depth > 1 ? $iconDepth : undefined}
   >
     <slot />
   </ul>
