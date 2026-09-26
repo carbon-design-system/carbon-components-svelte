@@ -41,6 +41,18 @@ export function getClientX(event) {
 }
 
 /**
+ * Read the vertical client coordinate from a mouse or touch event.
+ * Returns `null` for a touch event with no active touch point.
+ *
+ * @param {MouseEvent | TouchEvent} event
+ * @returns {number | null}
+ */
+export function getClientY(event) {
+  if ("touches" in event) return event.touches[0]?.clientY ?? null;
+  return event.clientY;
+}
+
+/**
  * Compute the slider value for a horizontal client position within a
  * track, snapped to `step` and clamped to `[min, max]`.
  *

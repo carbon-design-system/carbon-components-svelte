@@ -1,5 +1,6 @@
 <script lang="ts">
   import RangeSlider from "carbon-components-svelte/Slider/RangeSlider.svelte";
+  import type { ComponentProps } from "svelte";
 
   export let value = 0;
   export let valueUpper = 100;
@@ -7,6 +8,8 @@
   export let max = 100;
   export let step = 1;
   export let minGap = 0;
+  export let orientation: ComponentProps<RangeSlider>["orientation"] =
+    "horizontal";
   export let marks:
     | boolean
     | ReadonlyArray<{ value: number; label?: string }>
@@ -49,6 +52,7 @@
   {max}
   {step}
   {minGap}
+  {orientation}
   {marks}
   {disabled}
   {readonly}

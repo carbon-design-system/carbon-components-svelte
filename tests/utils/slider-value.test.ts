@@ -1,6 +1,7 @@
 import {
   formatRangeLabel,
   getClientX,
+  getClientY,
   getValueText,
   valueFromTrackPosition,
 } from "../../src/utils/slider-value.js";
@@ -27,6 +28,23 @@ describe("formatRangeLabel", () => {
   it("falls back to the raw numeric value when label and formatValue are both unset", () => {
     expect(formatRangeLabel("", 0, undefined)).toBe(0);
     expect(formatRangeLabel("", 100, undefined)).toBe(100);
+  });
+});
+
+describe("getClientY", () => {
+  it("reads clientY from a mouse event", () => {
+    const event = { clientY: 42 } as MouseEvent;
+    expect(getClientY(event)).toBe(42);
+  });
+
+  it("reads clientY from the first touch point", () => {
+    const event = { touches: [{ clientY: 24 }] } as unknown as TouchEvent;
+    expect(getClientY(event)).toBe(24);
+  });
+
+  it("returns null for a touch event with no active touch point", () => {
+    const event = { touches: [] } as unknown as TouchEvent;
+    expect(getClientY(event)).toBeNull();
   });
 });
 

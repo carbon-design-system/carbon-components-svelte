@@ -595,6 +595,28 @@
   .#{$prefix}--slider--vertical.#{$prefix}--slider--with-mark-labels {
     margin-right: $carbon--spacing-08;
   }
+
+  // RangeSlider: rotate the 16x24 arrow handles a quarter turn so they point
+  // along the track. The inline `top` is the value point; the lower handle
+  // hangs below it and the upper handle sits above it, each with its flat
+  // edge on the value.
+  .#{$prefix}--slider--vertical .#{$prefix}--slider__thumb-wrapper {
+    left: 50%;
+  }
+
+  // Undo the single-thumb `left: 50%` above; range thumbs fill their wrapper.
+  .#{$prefix}--slider--vertical .#{$prefix}--slider__thumb--lower,
+  .#{$prefix}--slider--vertical .#{$prefix}--slider__thumb--upper {
+    left: 0;
+  }
+
+  .#{$prefix}--slider--vertical .#{$prefix}--slider__thumb-wrapper--lower {
+    transform: translate(-50%, -4px) rotate(-90deg);
+  }
+
+  .#{$prefix}--slider--vertical .#{$prefix}--slider__thumb-wrapper--upper {
+    transform: translate(-50%, -20px) rotate(-90deg);
+  }
 }
 
 @include exports("slider-vertical") {
