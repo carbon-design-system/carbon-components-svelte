@@ -1,20 +1,34 @@
+<script context="module">
+  const FILL_TOKENS = new Set([
+    "background",
+    "layer-01",
+    "layer-02",
+    "layer-03",
+    "layer-accent",
+    "field",
+    "inverse",
+    "brand",
+  ]);
+</script>
+
 <script>
   /**
    * @slot {{}}
    */
 
   /**
-   * Specify the gradient color.
-   * Defaults to the `layer` theme token.
-   * @type {string | undefined}
+   * Specify the gradient color: a fill token name, the same set as Box
+   * `fill`, or any CSS color. Defaults to the `layer-01` theme token.
+   * @type {"background" | "layer-01" | "layer-02" | "layer-03" | "layer-accent" | "field" | "inverse" | "brand" | (string & {}) | undefined}
    */
   export let color = undefined;
 
   /**
-   * Specify the background color of the scrollable content area.
-   * Defaults to the `layer` theme token. Does not affect the gradient
-   * color — use `color` for that.
-   * @type {string | undefined}
+   * Specify the background color of the scrollable content area: a fill
+   * token name, the same set as Box `fill`, or any CSS color. Defaults to
+   * the `layer-01` theme token. Does not affect the gradient color — use
+   * `color` for that.
+   * @type {"background" | "layer-01" | "layer-02" | "layer-03" | "layer-accent" | "field" | "inverse" | "brand" | (string & {}) | undefined}
    */
   export let background = undefined;
 
@@ -64,8 +78,22 @@
   $: showLeftGradient = xScrollable && !hideStartGradient && !atLeft;
   $: showRightGradient = xScrollable && !atRight;
 
+  // Fill token names compile to per-theme classes; any other CSS color is
+  // applied inline.
+  $: colorClass = FILL_TOKENS.has(color)
+    ? `bx--scroll-gradient--color-${color}`
+    : undefined;
+  $: backgroundClass = FILL_TOKENS.has(background)
+    ? `bx--scroll-gradient__scroll-element--${background}`
+    : undefined;
+  $: wrapperClass =
+    [colorClass, $$restProps.class].filter(Boolean).join(" ") || undefined;
+  $: scrollElementClass =
+    [backgroundClass, scrollElementClassName].filter(Boolean).join(" ") ||
+    undefined;
+
   $: declarations = [
-    color && `--cds-scroll-gradient-color: ${color};`,
+    color && !colorClass && `--cds-scroll-gradient-color: ${color};`,
     height && `height: ${height};`,
   ]
     .filter(Boolean)
@@ -130,12 +158,13 @@
   class:bx--scroll-gradient={true}
   role="presentation"
   {...$$restProps}
+  class={wrapperClass}
   {style}
 >
   <div
     class:bx--scroll-gradient__scroll-element={true}
-    class={scrollElementClassName}
-    style:background-color={background}
+    class={scrollElementClass}
+    style:background-color={backgroundClass ? undefined : background}
     bind:this={scrollElementRef}
     on:scroll
   >

@@ -3,6 +3,7 @@
 
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "./fill-tokens";
 
 /// ScrollGradient component
 /// @access private
@@ -19,8 +20,20 @@
     overflow: auto;
     // Fixed to the theme background, independent of `--cds-scroll-gradient-color`:
     // a custom `color` should only retint the fade, not repaint the content area.
-    // Override with the `background` prop, applied inline by the component.
+    // Override with the `background` prop.
     background-color: #{$layer};
+  }
+
+  // Token names for `color` and `background` compile to classes rather than
+  // `var(--cds-*)`, which the static theme sheets do not define.
+  @each $name, $value in ccs-fill-tokens() {
+    .#{$prefix}--scroll-gradient--color-#{$name} {
+      --cds-scroll-gradient-color: #{$value};
+    }
+
+    .#{$prefix}--scroll-gradient__scroll-element--#{$name} {
+      background-color: $value;
+    }
   }
 
   .#{$prefix}--scroll-gradient__content {
