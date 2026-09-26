@@ -154,6 +154,13 @@
    */
 
   /**
+   * Dispatched when the virtualized table body is scrolled near the bottom
+   * (load-more signal). Not the browser's native `scrollend` (scroll stopped).
+   * Only fires when `virtualize` is enabled.
+   * @event {{ scrollTop: number; scrollHeight: number; clientHeight: number }} scrollend
+   */
+
+  /**
    * Specify the data table headers.
    * @type {ReadonlyArray<DataTableHeader<Row>>}
    */
@@ -403,6 +410,7 @@
   import ChevronRight from "../icons/ChevronRight.svelte";
   import RadioButton from "../RadioButton/RadioButton.svelte";
   import { toCssLength } from "../utils/css-length.js";
+  import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { rangeSlice } from "../utils/range-slice.js";
   import { uniqueId } from "../utils/unique-id.js";
   import {
@@ -460,6 +468,26 @@
   let tableRef = null;
   let scrollListenerCleanup = null;
 
+  const scrollEndTracker = createScrollEndTracker();
+
+  /**
+   * Shared by the sticky-header `<table>` listener and the non-sticky
+   * container's `on:scroll`, so `scrollend` rides the existing scroll
+   * tracking instead of adding a second listener on the same element.
+   * @param {Event} event
+   */
+  function handleScroll(event) {
+    const target = /** @type {HTMLElement} */ (event.currentTarget);
+    tableBodyScrollTop = target.scrollTop || 0;
+    const detail = scrollEndTracker.observe({
+      scrollTop: tableBodyScrollTop,
+      scrollHeight: target.scrollHeight,
+      clientHeight: target.clientHeight,
+      itemCount: rowsToVirtualize.length,
+    });
+    if (detail) dispatch("scrollend", detail);
+  }
+
   // Clean up scroll listener when virtualization or sticky header is disabled
   $: if ((!virtualConfig || !stickyHeader) && scrollListenerCleanup) {
     scrollListenerCleanup();
@@ -484,9 +512,6 @@
     const container = tableRef.querySelector("table") ?? tableRef;
     container.style.maxHeight = `${calculatedContainerHeight}px`;
     container.style.overflowY = "auto";
-    function handleScroll() {
-      tableBodyScrollTop = container.scrollTop || 0;
-    }
     container.addEventListener("scroll", handleScroll, { passive: true });
     scrollListenerCleanup = () => {
       container.removeEventListener("scroll", handleScroll);
@@ -1038,9 +1063,7 @@
       ? `${calculatedContainerHeight}px`
       : undefined}
     style:overflow-y={virtualScrollContainer ? "auto" : undefined}
-    on:scroll={virtualScrollContainer
-      ? (event) => { tableBodyScrollTop = event.target.scrollTop || 0; }
-      : undefined}
+    on:scroll={virtualScrollContainer ? handleScroll : undefined}
   >
     <Table
       bind:ref={tableRef}
