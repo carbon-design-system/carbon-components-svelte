@@ -151,7 +151,7 @@
   import {
     formatRangeLabel as formatSliderRangeLabel,
     getValueText as getSliderValueText,
-    valueFromTrackPosition,
+    valueFromPointer,
   } from "../utils/slider-value.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -206,33 +206,13 @@
   function calcValue(event) {
     if (disabled || readonly || !event) return;
 
-    let nextValue;
-    if (orientation === "vertical") {
-      const clientY = event.touches ? event.touches[0].clientY : event.clientY;
-      const { bottom, height } = trackRef.getBoundingClientRect();
-      // Values increase upward: the track's bottom edge is `min`, its top edge
-      // is `max`. A negative `width` flips valueFromTrackPosition's
-      // interpolation so `bottom` is the zero point.
-      nextValue = valueFromTrackPosition({
-        clientX: clientY,
-        left: bottom,
-        width: -height,
-        min,
-        max,
-        step,
-      });
-    } else {
-      const clientX = event.touches ? event.touches[0].clientX : event.clientX;
-      const { left, width } = trackRef.getBoundingClientRect();
-      nextValue = valueFromTrackPosition({
-        clientX,
-        left,
-        width,
-        min,
-        max,
-        step,
-      });
-    }
+    let nextValue = valueFromPointer(event, trackRef.getBoundingClientRect(), {
+      orientation,
+      min,
+      max,
+      step,
+    });
+    if (nextValue == null) return;
     if (snapToMarks && resolvedMarks.length) {
       nextValue = nearestMark(nextValue, resolvedMarks).value;
     }

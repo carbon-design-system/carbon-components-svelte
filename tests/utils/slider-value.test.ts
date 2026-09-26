@@ -2,7 +2,10 @@ import {
   formatRangeLabel,
   getClientX,
   getClientY,
+  getPointerPosition,
+  getTrackAxis,
   getValueText,
+  valueFromPointer,
   valueFromTrackPosition,
 } from "../../src/utils/slider-value.js";
 
@@ -116,5 +119,68 @@ describe("valueFromTrackPosition", () => {
         step: 1,
       }),
     ).toBe(100);
+  });
+});
+
+describe("getPointerPosition", () => {
+  it("reads the coordinate along the slider axis", () => {
+    const event = { clientX: 10, clientY: 20 } as MouseEvent;
+    expect(getPointerPosition(event, "horizontal")).toBe(10);
+    expect(getPointerPosition(event, "vertical")).toBe(20);
+  });
+});
+
+describe("getTrackAxis", () => {
+  const rect = { left: 10, width: 200, bottom: 300, height: 100 };
+
+  it("starts at the left edge when horizontal", () => {
+    expect(getTrackAxis(rect, "horizontal")).toEqual({
+      start: 10,
+      length: 200,
+    });
+  });
+
+  it("starts at the bottom edge with a negative length when vertical", () => {
+    expect(getTrackAxis(rect, "vertical")).toEqual({
+      start: 300,
+      length: -100,
+    });
+  });
+});
+
+describe("valueFromPointer", () => {
+  const rect = { left: 0, width: 200, bottom: 200, height: 200 };
+  const options = { min: 0, max: 100, step: 1 };
+
+  it("maps a horizontal pointer left to right", () => {
+    const event = { clientX: 50, clientY: 0 } as MouseEvent;
+    expect(
+      valueFromPointer(event, rect, { ...options, orientation: "horizontal" }),
+    ).toBe(25);
+  });
+
+  it("maps a vertical pointer bottom to top", () => {
+    const event = { clientX: 0, clientY: 50 } as MouseEvent;
+    expect(
+      valueFromPointer(event, rect, { ...options, orientation: "vertical" }),
+    ).toBe(75);
+  });
+
+  it("subtracts the offset from the pointer position", () => {
+    const event = { clientX: 58, clientY: 0 } as MouseEvent;
+    expect(
+      valueFromPointer(event, rect, {
+        ...options,
+        orientation: "horizontal",
+        offset: 8,
+      }),
+    ).toBe(25);
+  });
+
+  it("returns null for a touch event with no active touch point", () => {
+    const event = { touches: [] } as unknown as TouchEvent;
+    expect(
+      valueFromPointer(event, rect, { ...options, orientation: "vertical" }),
+    ).toBeNull();
   });
 });
