@@ -37,10 +37,16 @@
    * Show tick marks along the track.
    * Set to `true` to place a tick at every `step`, or pass an array of
    * `{ value, label? }` for specific stops with optional labels below the track.
-   * Marks are visual only; snapping still follows `step`.
+   * Marks are visual only unless `snapToMarks` is set; snapping otherwise follows `step`.
    * @type {boolean | ReadonlyArray<{ value: number; label?: string }>}
    */
   export let marks = false;
+
+  /**
+   * Set to `true` to snap drag, click, and arrow key navigation to the configured `marks`
+   * instead of `step`. Has no effect when `marks` is not set.
+   */
+  export let snapToMarks = false;
 
   /** Set the step multiplier value */
   export let stepMultiplier = 4;
@@ -132,7 +138,10 @@
   } from "../utils/field-status.js";
   import { clamp } from "../utils/numeric-format.js";
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
-  import { resolveSliderMarks } from "../utils/resolve-slider-marks.js";
+  import {
+    nearestMark,
+    resolveSliderMarks,
+  } from "../utils/resolve-slider-marks.js";
   import {
     formatRangeLabel as formatSliderRangeLabel,
     getValueText as getSliderValueText,
@@ -193,7 +202,18 @@
 
     const clientX = event.touches ? event.touches[0].clientX : event.clientX;
     const { left, width } = trackRef.getBoundingClientRect();
-    value = valueFromTrackPosition({ clientX, left, width, min, max, step });
+    let nextValue = valueFromTrackPosition({
+      clientX,
+      left,
+      width,
+      min,
+      max,
+      step,
+    });
+    if (snapToMarks && resolvedMarks.length) {
+      nextValue = nearestMark(nextValue, resolvedMarks).value;
+    }
+    value = nextValue;
     dispatch("input", value);
   }
 
@@ -322,14 +342,32 @@
               event.shiftKey ||
               event.key === "PageUp" ||
               event.key === "PageDown";
-            const delta =
-              step *
-              (isLargeStep ? range / step / stepMultiplier : 1) *
-              keys[event.key];
-            let next = Math.round((value + delta) / step) * step;
-            if (next < min) next = min;
-            else if (next > max) next = max;
-            value = next;
+
+            if (snapToMarks && resolvedMarks.length) {
+              // Marks may be passed in any order; walk them from lowest to highest.
+              const stops = [...resolvedMarks].sort((a, b) => a.value - b.value);
+              const currentIndex = stops.findIndex(
+                (mark) => mark.value === value,
+              );
+              const fromIndex =
+                currentIndex === -1
+                  ? stops.indexOf(nearestMark(value, stops))
+                  : currentIndex;
+              const jump = isLargeStep ? stepMultiplier : 1;
+              let nextIndex = fromIndex + keys[event.key] * jump;
+              if (nextIndex < 0) nextIndex = 0;
+              else if (nextIndex > stops.length - 1) nextIndex = stops.length - 1;
+              value = stops[nextIndex].value;
+            } else {
+              const delta =
+                step *
+                (isLargeStep ? range / step / stepMultiplier : 1) *
+                keys[event.key];
+              let next = Math.round((value + delta) / step) * step;
+              if (next < min) next = min;
+              else if (next > max) next = max;
+              value = next;
+            }
             dispatch("input", value);
             dispatch("change", value);
           }
