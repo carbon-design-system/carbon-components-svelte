@@ -108,6 +108,7 @@ A nested item with an icon places the icon where its siblings' text starts, as a
 | Nest at most two levels below the top level | The default side nav is 256px wide. Past the third level, labels have little room before they truncate. For deeper trees, use a [resizable](#resizable) side nav. |
 | Keep icons on top-level items | A nested icon adds its width to that row and to every row below it. |
 | Mark the current page with `isSelected` instead of setting `expanded` | Every menu that contains the current page opens on mount. |
+| Keep labels short at deep levels | Truncated labels show their full text on hover, but a scannable nav shouldn't need it. |
 
 ### Badges
 
