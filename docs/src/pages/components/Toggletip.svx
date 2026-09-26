@@ -40,7 +40,7 @@ Render an inline label beside the button using the `labelText` prop.
 Alternatively, use the `"labelText"` slot for custom markup.
 
 <Toggletip>
-  <span slot="labelText"><strong>Density</strong></span>
+  <strong slot="labelText">Density</strong>
   Controls the row height and spacing across tables in this workspace.
 </Toggletip>
 

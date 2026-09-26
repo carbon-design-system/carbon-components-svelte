@@ -34,9 +34,9 @@ Hide the label visually by setting `hideLabel` to `true`. The label remains avai
 Use the `labelChildren` slot to render custom label content.
 
 <PinCodeInput labelText="Verification code">
-  <span slot="labelChildren">
+  <svelte:fragment slot="labelChildren">
     Verification code (<Link href="/">resend</Link>)
-  </span>
+  </svelte:fragment>
 </PinCodeInput>
 
 ## Segment labels

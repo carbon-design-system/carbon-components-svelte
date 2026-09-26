@@ -115,7 +115,7 @@ Use the `labelTitle` and `labelDescription` slots to provide custom label conten
 
 <FileUploader multiple buttonLabel="Add files">
   <strong slot="labelTitle">Upload files</strong>
-  <span slot="labelDescription">Only JPEG files are accepted.</span>
+  <svelte:fragment slot="labelDescription">Only JPEG files are accepted.</svelte:fragment>
 </FileUploader>
 
 ### Per-file status

@@ -42,9 +42,9 @@ Hide the label visually by setting `hideLabel` to `true`. The label remains avai
 Use the `labelChildren` slot to provide custom label content instead of `labelText`.
 
 <Checkbox labelText="Fallback label">
-  <span slot="labelChildren">
+  <svelte:fragment slot="labelChildren">
     I agree to the <strong>terms and conditions</strong>
-  </span>
+  </svelte:fragment>
 </Checkbox>
 
 ## Helper text

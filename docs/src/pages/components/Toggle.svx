@@ -49,9 +49,9 @@ Use slots to customize the toggle labels with additional styling or content.
 Use the `labelChildren` slot to provide custom label content instead of `labelText`.
 
 <Toggle labelText="Fallback label">
-  <span slot="labelChildren">
+  <svelte:fragment slot="labelChildren">
     Automatic security updates <strong>(recommended)</strong>
-  </span>
+  </svelte:fragment>
 </Toggle>
 
 ## States

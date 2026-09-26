@@ -57,9 +57,9 @@ Use the default slot to add extra body content below the description, such as a 
 Use the `labelChildren`, `titleChildren`, and `descriptionChildren` slots to render custom markup instead of plain text.
 
 <FullPageError>
-  <span slot="labelChildren">
+  <svelte:fragment slot="labelChildren">
     Error <code>500</code>
-  </span>
+  </svelte:fragment>
   <svelte:fragment slot="titleChildren">Internal server error</svelte:fragment>
   <svelte:fragment slot="descriptionChildren">
     Try again, or <Link size="lg" href="#">contact support</Link> if the problem persists.
