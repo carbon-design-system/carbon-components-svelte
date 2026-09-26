@@ -174,4 +174,35 @@ describe("Carousel", () => {
       expect(screen.getByTestId("selected-index")).toHaveTextContent("2");
     });
   });
+
+  describe("counter", () => {
+    it("is hidden by default", () => {
+      render(Carousel);
+
+      expect(screen.queryByText("1 of 3")).not.toBeInTheDocument();
+    });
+
+    it("shows the active slide's position and updates on navigation", async () => {
+      render(Carousel, { props: { showCounter: true } });
+
+      expect(screen.getByText("1 of 3")).toBeInTheDocument();
+
+      await user.click(screen.getByRole("button", { name: "Next slide" }));
+
+      expect(screen.getByText("2 of 3")).toBeInTheDocument();
+    });
+
+    it("uses a custom counterText", () => {
+      render(Carousel, {
+        props: {
+          showCounter: true,
+          selectedIndex: 1,
+          counterText: (current: number, total: number) =>
+            `Tip ${current}/${total}`,
+        },
+      });
+
+      expect(screen.getByText("Tip 2/3")).toBeInTheDocument();
+    });
+  });
 });

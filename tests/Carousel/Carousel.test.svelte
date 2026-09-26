@@ -6,6 +6,10 @@
   export let selectedIndex = 0;
   export let showExtra = false;
   export let wrap = false;
+  export let showCounter = false;
+  export let counterText:
+    | ((current: number, total: number) => string)
+    | undefined = undefined;
 
   let currentIndex = -1;
   let previousIndex = -1;
@@ -14,6 +18,8 @@
 <Carousel
   data-testid="carousel"
   {wrap}
+  {showCounter}
+  {...counterText ? { counterText } : {}}
   bind:selectedIndex
   on:change={(e) => {
     currentIndex = e.detail.currentIndex;
