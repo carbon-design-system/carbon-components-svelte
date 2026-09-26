@@ -14,14 +14,21 @@
     display: none;
   }
 
-  .#{$prefix}--user-avatar-group--overlap > * {
+  // Each direct child is an avatar, or its tooltip wrapper when it has
+  // `tooltipText`. Rules name both instead of `> *`: a `*` tail is tested
+  // against every element on the page during a style recalc.
+  .#{$prefix}--user-avatar-group--overlap > .#{$prefix}--user-avatar,
+  .#{$prefix}--user-avatar-group--overlap > .#{$prefix}--user-avatar-tooltip {
     // Stacking context so a hovered avatar can lift above its neighbors.
     position: relative;
   }
 
   // The overlap amount defaults to a spacing token. A negative `gap` overrides
   // it through the custom property.
-  .#{$prefix}--user-avatar-group--overlap > * + * {
+  .#{$prefix}--user-avatar-group--overlap
+    > .#{$prefix}--user-avatar:not(:first-child),
+  .#{$prefix}--user-avatar-group--overlap
+    > .#{$prefix}--user-avatar-tooltip:not(:first-child) {
     margin-left: var(--user-avatar-group-overlap, -#{$carbon--spacing-03});
   }
 
@@ -34,7 +41,9 @@
   // `stackOrder="first"`: reverse the default paint order so earlier avatars
   // sit above later ones. `--user-avatar-index` is set per avatar in JS;
   // `--user-avatar-group-count` on the container keeps every index positive.
-  .#{$prefix}--user-avatar-group--stack-first > * {
+  .#{$prefix}--user-avatar-group--stack-first > .#{$prefix}--user-avatar,
+  .#{$prefix}--user-avatar-group--stack-first
+    > .#{$prefix}--user-avatar-tooltip {
     z-index: calc(
       var(--user-avatar-group-count, 0) - var(--user-avatar-index, 0)
     );
@@ -53,13 +62,17 @@
 
   // Lift the hovered or focused avatar to the front of the stack, above the
   // highest z-index a reversed stack can produce.
-  .#{$prefix}--user-avatar-group--overlap > *:focus-within {
+  .#{$prefix}--user-avatar-group--overlap > .#{$prefix}--user-avatar:focus-within,
+  .#{$prefix}--user-avatar-group--overlap
+    > .#{$prefix}--user-avatar-tooltip:focus-within {
     z-index: calc(var(--user-avatar-group-count, 0) + 1);
   }
 
   // Hover only where a pointer can hover, so a tap does not leave it stuck.
   @media (any-hover: hover) {
-    .#{$prefix}--user-avatar-group--overlap > *:hover {
+    .#{$prefix}--user-avatar-group--overlap > .#{$prefix}--user-avatar:hover,
+    .#{$prefix}--user-avatar-group--overlap
+      > .#{$prefix}--user-avatar-tooltip:hover {
       z-index: calc(var(--user-avatar-group-count, 0) + 1);
     }
   }

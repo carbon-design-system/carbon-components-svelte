@@ -549,17 +549,30 @@ const SHARED_RULES: Record<string, (lines: string[]) => number[]> = {
   // Win on specificity or custom-property inheritance instead; consumers
   // cannot override an `!important` without one of their own.
   "!important": matching(/!important/),
+  // A selector ending in `> *`, `+ *`, `~ *`, ` *` or a bare `> :pseudo`.
+  // The browser files rules under their last compound's class, so a `*`
+  // tail is tried against every element on every full style recalc. Name
+  // the children's class instead. `*` mid-selector is fine.
+  "universal tail": matching(
+    /((^|[\s>+~])\*|[>+~]\s*:)(\([^)]*\)|[^\s,{(])*\s*[,{]\s*$/,
+  ),
 };
 
 // Same contract as KNOWN_PATCH_VIOLATIONS: exact counts that only shrink.
 // The z-index values have no `z()` layer (9000 sits on "modal" by
 // coincidence, 10000 is above the map). The element qualifiers out-rank
-// `legend`/`tr` rules in the vendored base.
+// `legend`/`tr` rules in the vendored base. The universal tails left style
+// slot content or children of mixed types with no class in common.
 const KNOWN_SHARED_VIOLATIONS: Record<string, number> = {
   "literal z-index: _profile-menu.scss": 1,
   "literal z-index: components/ui-shell/_ui-shell.scss": 2,
   "element-qualified class: _fluid-pin-code-input.scss": 3,
   "element-qualified class: components/data-table/_data-table.scss": 4,
+  "universal tail: _aspect-ratio.scss": 1,
+  "universal tail: _contained-list.scss": 2,
+  "universal tail: _tag-set.scss": 1,
+  "universal tail: components/pagination/_pagination.scss": 1,
+  "universal tail: components/ui-shell/_side-nav.scss": 1,
 };
 
 describe("hand-authored conventions (partials and patch blocks)", () => {
@@ -578,6 +591,29 @@ describe("hand-authored conventions (partials and patch blocks)", () => {
     expect(HAND_AUTHORED.length).toBeGreaterThan(PARTIALS.length);
     expect(changed).toEqual([]);
     expect(counts).toEqual(KNOWN_SHARED_VIOLATIONS);
+  });
+
+  it("flags a universal tail but not a mid-selector `*`", () => {
+    const find = SHARED_RULES["universal tail"];
+    expect(find(["  .a > * {", "  .a > * + * {", "  .a > *:hover,"])).toEqual([
+      1, 2, 3,
+    ]);
+    expect(
+      find([
+        "  .a ~ * {",
+        "  .a * {",
+        "  .a > :first-child {",
+        "  .a > *:not(.#{$prefix}--b) {",
+      ]),
+    ).toEqual([1, 2, 3, 4]);
+    expect(
+      find([
+        "  .a > .b {",
+        "    > *:last-child",
+        "    .b::before {",
+        "  width: calc($x * 2);",
+      ]),
+    ).toEqual([]);
   });
 
   it("still flags an !important declaration", () => {
