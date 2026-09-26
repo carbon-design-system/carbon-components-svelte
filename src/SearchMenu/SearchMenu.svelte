@@ -64,6 +64,13 @@
    */
   export let menuSize = undefined;
 
+  /**
+   * Override the results menu's max height. Numbers are pixels; strings
+   * accept any CSS length (for example `"50vh"`). Defaults to 360px.
+   * @type {number | string | undefined}
+   */
+  export let menuMaxHeight = undefined;
+
   /** Set to `true` to enable the light variant */
   export let light = false;
 
@@ -165,6 +172,7 @@
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import Search from "../Search/Search.svelte";
   import SkeletonText from "../SkeletonText/SkeletonText.svelte";
+  import { toCssLength } from "../utils/css-length.js";
   import { debounce as debounceFn } from "../utils/debounce.js";
   import { dismiss } from "../utils/dismiss.js";
   import { buildFieldIds, joinDescribedBy } from "../utils/field-status.js";
@@ -240,6 +248,7 @@
   $: menuLabel = labelText || placeholder;
   $: menuAnchor = $$slots.before ? searchAnchorRef : anchorRef;
   $: resolvedMenuSize = menuSize ?? size;
+  $: resolvedMenuMaxHeight = toCssLength(menuMaxHeight);
   $: menuClass = [
     "bx--search-menu__menu",
     `bx--search-menu__menu--${resolvedMenuSize}`,
@@ -500,6 +509,7 @@
         aria-busy={loading || undefined}
         class:bx--search-menu__menu--inline={true}
         class={menuClass}
+        style:max-height={resolvedMenuMaxHeight}
         on:mousedown={handleMenuPointerDown}
         on:scroll={handleMenuScroll}
       >
@@ -542,6 +552,7 @@
         aria-label={menuLabel}
         aria-busy={loading || undefined}
         class={menuClass}
+        style:max-height={resolvedMenuMaxHeight}
         on:mousedown={handleMenuPointerDown}
         on:scroll={handleMenuScroll}
       >
