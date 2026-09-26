@@ -4,6 +4,7 @@ description: Fluid forms provide a full-width form layout that adapts to their c
 
 <script>
   import {
+    Box,
     ComboBox,
     CopyInput,
     DatePicker,
@@ -181,7 +182,7 @@ Fluid time pickers use percentage-based columns (25% / 25% / 50% with two
 selects, 50% / 50% with one). Set a parent width so those ratios resolve as
 intended.
 
-<div style:width="350px">
+<Box width="350px">
   <TimePicker fluid labelText="Maintenance window" placeholder="hh:mm">
     <TimePickerSelect labelText="Clock" value="am">
       <SelectItem value="am" text="AM" />
@@ -192,7 +193,7 @@ intended.
       <SelectItem value="pt" text="Pacific Time (PT)" />
     </TimePickerSelect>
   </TimePicker>
-</div>
+</Box>
 
 ### Custom fluid-aware inputs
 

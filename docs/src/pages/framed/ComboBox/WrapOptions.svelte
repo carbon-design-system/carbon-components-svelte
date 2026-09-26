@@ -1,5 +1,5 @@
 <script>
-  import { ComboBox, highlightSegments, Stack } from "carbon-components-svelte";
+  import { Box, ComboBox, highlightSegments } from "carbon-components-svelte";
 
   const roles = [
     "Chief Accessibility Officer for Regional Operations and Strategic Partnerships",
@@ -36,7 +36,7 @@
   }
 </script>
 
-<Stack gap={6} style="max-width: 20rem;">
+<Box display="flex" direction="column" gap={6} maxWidth="20rem">
   <ComboBox
     labelText="Truncated (default)"
     placeholder="Try typing 'operations'"
@@ -80,4 +80,4 @@
     {shouldFilterItem}
     items={manyItems}
   />
-</Stack>
+</Box>

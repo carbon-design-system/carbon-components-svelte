@@ -1,5 +1,5 @@
 <script>
-  import { Tag, TagSet } from "carbon-components-svelte";
+  import { Box, Tag, TagSet } from "carbon-components-svelte";
 
   const categories = [
     { label: "Compute", type: "red" },
@@ -15,10 +15,10 @@
   ];
 </script>
 
-<div style="max-width: 20rem;">
+<Box maxWidth="20rem">
   <TagSet>
     {#each categories as category}
       <Tag type={category.type}>{category.label}</Tag>
     {/each}
   </TagSet>
-</div>
+</Box>

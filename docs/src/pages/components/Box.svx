@@ -215,10 +215,8 @@ Set `minHeight="viewport"` to center content in the full height of the
 viewport, such as a sign-in card.
 
 ```svelte
-<Box minHeight="viewport">
-  <Stack align="center" justify="center" style="height: 100%">
-    <SignInCard />
-  </Stack>
+<Box minHeight="viewport" display="flex" align="center" justify="center">
+  <SignInCard />
 </Box>
 ```
 

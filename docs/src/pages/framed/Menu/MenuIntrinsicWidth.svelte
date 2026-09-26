@@ -1,15 +1,15 @@
 <script>
-  import { Button, Menu, MenuItem } from "carbon-components-svelte";
+  import { Box, Button, Menu, MenuItem } from "carbon-components-svelte";
 
   let anchor;
   let open = false;
 </script>
 
-<div style="width: 320px;">
+<Box width="320px">
   <Button bind:ref={anchor} on:click={() => (open = !open)}>
     Actions on this wide button
   </Button>
-</div>
+</Box>
 
 <Menu
   {anchor}

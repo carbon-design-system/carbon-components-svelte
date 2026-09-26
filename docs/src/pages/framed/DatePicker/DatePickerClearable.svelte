@@ -1,8 +1,8 @@
 <script>
-  import { DatePicker, DatePickerInput } from "carbon-components-svelte";
+  import { DatePicker, DatePickerInput, Stack } from "carbon-components-svelte";
 </script>
 
-<div style="display: flex; flex-wrap: wrap; gap: 2rem">
+<Stack orientation="horizontal" wrap="wrap" gap={7}>
   <DatePicker
     datePickerType="single"
     value="01/15/2024"
@@ -20,4 +20,4 @@
     <DatePickerInput labelText="Check-in" placeholder="mm/dd/yyyy" />
     <DatePickerInput labelText="Check-out" placeholder="mm/dd/yyyy" />
   </DatePicker>
-</div>
+</Stack>

@@ -62,7 +62,7 @@ Set `sticky` to `true` to stick the action set to the bottom of its nearest
 scroll container. Use this for a save bar under a long scrolling form so the
 actions stay visible.
 
-<Box height="8rem" border="subtle" style="overflow-y: auto;">
+<Box height="8rem" border="subtle" overflowY="auto">
   <Box height="12rem" padding={5}>Scroll to see the sticky action set below.</Box>
   <ActionSet sticky>
     <Button kind="secondary">Discard</Button>

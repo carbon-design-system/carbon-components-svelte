@@ -3,7 +3,7 @@ description: ScrollGradient overlays a fading edge on a scrollable container to 
 ---
 
 <script>
-  import { Box, ScrollGradient } from "carbon-components-svelte";
+  import { Box, ScrollGradient, Stack } from "carbon-components-svelte";
 
   const auditLogEntries = [
     "Signed in from new device",
@@ -43,14 +43,14 @@ Wrap scrollable content in `ScrollGradient`. Set `height` so the content overflo
 
 Gradients appear independently for each axis. Set a width to overflow horizontally.
 
-<ScrollGradient style="width: 100%; height: 6rem">
-  <div style="display: flex; gap: 1rem; width: max-content">
+<ScrollGradient height="6rem" style="width: 100%">
+  <Stack orientation="horizontal" gap={5} style="width: max-content">
     {#each Array(20) as _, i}
-      <div style="width: 6rem; height: 4rem; background: var(--cds-layer-accent, #e0e0e0); display: flex; align-items: center; justify-content: center">
+      <Box display="flex" align="center" justify="center" width="6rem" height="4rem" fill="layer-accent">
         {i + 1}
-      </div>
+      </Box>
     {/each}
-  </div>
+  </Stack>
 </ScrollGradient>
 
 ## Colors
@@ -73,7 +73,7 @@ Set either to a [Box fill](/components/Box#fill) token name, such as `"backgroun
 
 Set `color` to any CSS color.
 
-<ScrollGradient color="cornflowerblue" style="height: 12rem">
+<ScrollGradient color="cornflowerblue" height="12rem">
   {#each auditLogEntries as entry}
     <p>{entry}</p>
   {/each}
@@ -83,7 +83,7 @@ Set `color` to any CSS color.
 
 Set `background` to `"transparent"` to let the parent's own background show through instead of repainting it. `color` still sets the fade.
 
-<ScrollGradient background="transparent" style="height: 12rem">
+<ScrollGradient background="transparent" height="12rem">
   {#each auditLogEntries as entry}
     <p>{entry}</p>
   {/each}

@@ -1,6 +1,8 @@
 <script>
   import {
+    Box,
     Button,
+    Divider,
     Dropdown,
     ToggleButton,
     ToggleButtonGroup,
@@ -29,18 +31,20 @@
   let formatting = ["bold"];
   let alignment = ["left"];
   let list = [];
-
-  const dividerStyle =
-    "width: 1px; align-self: stretch; background: var(--cds-ui-03, #e0e0e0);";
 </script>
 
-<div
-  style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.25rem; background: var(--cds-layer, #f4f4f4); border: 1px solid var(--cds-border-subtle, #e0e0e0);"
+<Box
+  display="inline-flex"
+  align="center"
+  gap={3}
+  padding={2}
+  fill="layer-01"
+  border="subtle"
 >
   <Button kind="ghost" size="small" icon={Undo} iconDescription="Undo" />
   <Button kind="ghost" size="small" icon={Redo} iconDescription="Redo" />
 
-  <div style={dividerStyle}></div>
+  <Divider orientation="vertical" />
 
   <Dropdown
     type="inline"
@@ -51,7 +55,7 @@
     bind:selectedId={paragraphStyle}
   />
 
-  <div style={dividerStyle}></div>
+  <Divider orientation="vertical" />
 
   <ToggleButtonGroup
     size="sm"
@@ -72,7 +76,7 @@
     />
   </ToggleButtonGroup>
 
-  <div style={dividerStyle}></div>
+  <Divider orientation="vertical" />
 
   <ToggleButtonGroup
     size="sm"
@@ -98,7 +102,7 @@
     />
   </ToggleButtonGroup>
 
-  <div style={dividerStyle}></div>
+  <Divider orientation="vertical" />
 
   <ToggleButtonGroup
     size="sm"
@@ -118,7 +122,7 @@
     />
   </ToggleButtonGroup>
 
-  <div style={dividerStyle}></div>
+  <Divider orientation="vertical" />
 
   <Button kind="ghost" size="small" icon={Link} iconDescription="Insert link" />
-</div>
+</Box>

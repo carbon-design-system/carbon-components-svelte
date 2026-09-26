@@ -71,8 +71,9 @@
         <Stack
           orientation="horizontal"
           gap={2}
+          align="center"
           tag="span"
-          style="align-items: center; outline: none"
+          style="outline: none"
         >
           <span
             use:syncContenteditable={node.text}

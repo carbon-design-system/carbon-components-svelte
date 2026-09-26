@@ -1,5 +1,6 @@
 <script>
   import {
+    Box,
     Button,
     ButtonSet,
     filterTreeByText,
@@ -257,9 +258,9 @@
   </Stack>
 
   {#if !ready}
-    <p style:margin="0">Building demo tree…</p>
+    <p>Building demo tree…</p>
   {:else}
-    <p style:margin="0">
+    <p>
       Total nodes: <strong>{totalNodes.toLocaleString()}</strong>
       {#if searchValue.trim() !== ""}
         &middot; matching filter:
@@ -272,7 +273,7 @@
       {#if dynamicHeight}
         <!-- A constrained parent gives `containerHeight: "100%"` something to
              resolve against. Resize the browser to watch the DOM count change. -->
-        <div style="height: 60vh; min-height: 240px;">
+        <Box height="60vh" minHeight="240px">
           <TreeView
             bind:this={treeview}
             bind:scrollContainerRef
@@ -285,7 +286,7 @@
           >
             {node.text}
           </TreeView>
-        </div>
+        </Box>
       {:else}
         <TreeView
           bind:this={treeview}

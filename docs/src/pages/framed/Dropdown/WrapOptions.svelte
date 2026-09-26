@@ -1,5 +1,5 @@
 <script>
-  import { Dropdown, Stack } from "carbon-components-svelte";
+  import { Box, Dropdown } from "carbon-components-svelte";
 
   const roles = [
     "Chief Accessibility Officer for Regional Operations and Strategic Partnerships",
@@ -21,7 +21,7 @@
   }));
 </script>
 
-<Stack gap={6} style="max-width: 20rem;">
+<Box display="flex" direction="column" gap={6} maxWidth="20rem">
   <Dropdown labelText="Truncated (default)" selectedId="2" {items} />
   <Dropdown wrapOptions labelText="Wrapped" selectedId="2" {items} />
   <Dropdown
@@ -29,4 +29,4 @@
     labelText="Wrapped (windowed, 300 items)"
     items={manyItems}
   />
-</Stack>
+</Box>

@@ -1,5 +1,5 @@
 <script>
-  import { MultiSelect, Stack } from "carbon-components-svelte";
+  import { Box, MultiSelect } from "carbon-components-svelte";
 
   const roles = [
     "Chief Accessibility Officer for Regional Operations and Strategic Partnerships",
@@ -26,7 +26,7 @@
   const sortItem = () => 0;
 </script>
 
-<Stack gap={6} style="max-width: 20rem;">
+<Box display="flex" direction="column" gap={6} maxWidth="20rem">
   <MultiSelect
     labelText="Truncated (default)"
     selectedIds={["2"]}
@@ -48,4 +48,4 @@
     {sortItem}
     items={manyItems}
   />
-</Stack>
+</Box>

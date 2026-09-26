@@ -3,7 +3,7 @@ description: Bleed pulls content past its container's padding with negative marg
 ---
 
 <script>
-  import { Bleed, Box, Stack, Text } from "carbon-components-svelte";
+  import { Bleed, Box, Text } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -22,16 +22,14 @@ Set `horizontal` and `vertical` to the same step as the surrounding `Box` paddin
 
 Set only `horizontal` to span the full width while keeping the vertical inset, for example a banner between padded paragraphs.
 
-<Box fill="layer-01" padding={5} border="subtle">
-  <Stack gap={5}>
-    <Text type="body-long-01">Content above keeps its inset.</Text>
-    <Bleed horizontal={5}>
-      <Box fill="inverse" padding={5}>
-        <Text type="body-short-01" color="inverse">Edge to edge</Text>
-      </Box>
-    </Bleed>
-    <Text type="body-long-01">Content below keeps its inset.</Text>
-  </Stack>
+<Box display="flex" direction="column" gap={5} fill="layer-01" padding={5} border="subtle">
+  <Text type="body-long-01">Content above keeps its inset.</Text>
+  <Bleed horizontal={5}>
+    <Box fill="inverse" padding={5}>
+      <Text type="body-short-01" color="inverse">Edge to edge</Text>
+    </Box>
+  </Bleed>
+  <Text type="body-long-01">Content below keeps its inset.</Text>
 </Box>
 
 ## Per-side override
