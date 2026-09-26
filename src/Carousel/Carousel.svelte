@@ -27,6 +27,13 @@
    */
   export let useMaxHeight = true;
 
+  /**
+   * Set to `true` to wrap around: next on the last slide goes to the first,
+   * and previous on the first slide goes to the last. Applies to the buttons
+   * and arrow keys; a bound `selectedIndex` is still clamped.
+   */
+  export let wrap = false;
+
   import {
     afterUpdate,
     createEventDispatcher,
@@ -137,19 +144,26 @@
     else if (selectedIndex !== currentIndex) goTo(selectedIndex);
   });
 
-  $: atStart = currentIndex <= 0;
-  $: atEnd = currentIndex >= $views.length - 1;
+  $: atStart = !wrap && currentIndex <= 0;
+  $: atEnd = !wrap && currentIndex >= $views.length - 1;
+  $: prevDisabled = $views.length <= 1 || atStart;
+  $: nextDisabled = $views.length <= 1 || atEnd;
 
   /** @param {1 | -1} step */
   async function navigate(step) {
     const focused = document.activeElement;
-    goTo(currentIndex + step);
+    const total = $views.length;
+    const target = currentIndex + step;
+    goTo(wrap && total > 0 ? (target + total) % total : target);
     await tick();
 
     // Clicking a button up to a bound disables it; hand focus to the other
     // button instead of letting it drop to `<body>`.
-    if (focused === prevButton && atStart && !atEnd) nextButton?.focus();
-    else if (focused === nextButton && atEnd && !atStart) prevButton?.focus();
+    if (focused === prevButton && prevDisabled && !nextDisabled) {
+      nextButton?.focus();
+    } else if (focused === nextButton && nextDisabled && !prevDisabled) {
+      prevButton?.focus();
+    }
   }
 
   /** @param {KeyboardEvent} event */
@@ -199,7 +213,7 @@
       class:bx--carousel__button--previous={true}
       aria-label={prevButtonLabelText}
       aria-controls={viewportId}
-      disabled={atStart}
+      disabled={prevDisabled}
       on:click={() => navigate(-1)}
     >
       <ChevronLeft />
@@ -211,7 +225,7 @@
       class:bx--carousel__button--next={true}
       aria-label={nextButtonLabelText}
       aria-controls={viewportId}
-      disabled={atEnd}
+      disabled={nextDisabled}
       on:click={() => navigate(1)}
     >
       <ChevronRight />

@@ -134,4 +134,44 @@ describe("Carousel", () => {
     expect(screen.getByTestId("selected-index")).toHaveTextContent("3");
     expect(screen.getByTestId("current-index")).toHaveTextContent("3");
   });
+
+  describe("wrap", () => {
+    it("keeps both buttons enabled at the bounds", () => {
+      render(Carousel, { props: { wrap: true } });
+
+      expect(
+        screen.getByRole("button", { name: "Previous slide" }),
+      ).not.toBeDisabled();
+      expect(
+        screen.getByRole("button", { name: "Next slide" }),
+      ).not.toBeDisabled();
+    });
+
+    it("goes from the last slide to the first on next", async () => {
+      render(Carousel, { props: { wrap: true, selectedIndex: 2 } });
+
+      await user.click(screen.getByRole("button", { name: "Next slide" }));
+
+      expect(screen.getByText("Slide one")).toBeVisible();
+      expect(screen.getByTestId("current-index")).toHaveTextContent("0");
+      expect(screen.getByTestId("previous-index")).toHaveTextContent("2");
+    });
+
+    it("goes from the first slide to the last on ArrowLeft", async () => {
+      render(Carousel, { props: { wrap: true } });
+
+      await user.tab();
+      await user.keyboard("{ArrowLeft}");
+
+      expect(screen.getByText("Slide three")).toBeVisible();
+      expect(screen.getByTestId("selected-index")).toHaveTextContent("2");
+    });
+
+    it("still clamps an out-of-range selectedIndex", () => {
+      render(Carousel, { props: { wrap: true, selectedIndex: 4 } });
+
+      expect(screen.getByText("Slide three")).toBeVisible();
+      expect(screen.getByTestId("selected-index")).toHaveTextContent("2");
+    });
+  });
 });
