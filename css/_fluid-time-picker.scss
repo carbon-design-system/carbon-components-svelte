@@ -27,11 +27,12 @@
     inline-size: 100%;
   }
 
-  // The wrapper's children are the input cell and each TimePickerSelect's
-  // `form-item`. Rules name them instead of `> *`: a `*` tail is tested
-  // against every element on the page during a style recalc.
+  // The wrapper's children are the input cell and each fluid
+  // TimePickerSelect. Rules name them instead of `> *`: a `*` tail is tested
+  // against every element on the page during a style recalc. `select--fluid`
+  // rather than the shared `form-item` keeps them off unrelated form items.
   .#{$prefix}--time-picker--fluid__wrapper > .#{$prefix}--time-picker__input,
-  .#{$prefix}--time-picker--fluid__wrapper > .#{$prefix}--form-item {
+  .#{$prefix}--time-picker--fluid__wrapper > .#{$prefix}--select--fluid {
     flex: 1 1 auto;
     min-inline-size: 0;
     align-self: stretch;
@@ -39,23 +40,25 @@
 
   .#{$prefix}--time-picker--fluid__wrapper
     > .#{$prefix}--time-picker__input:nth-child(1),
-  .#{$prefix}--time-picker--fluid__wrapper > .#{$prefix}--form-item:nth-child(1),
+  .#{$prefix}--time-picker--fluid__wrapper
+    > .#{$prefix}--select--fluid:nth-child(1),
   .#{$prefix}--time-picker--fluid__wrapper
     > .#{$prefix}--time-picker__input:nth-child(2),
-  .#{$prefix}--time-picker--fluid__wrapper > .#{$prefix}--form-item:nth-child(2) {
+  .#{$prefix}--time-picker--fluid__wrapper
+    > .#{$prefix}--select--fluid:nth-child(2) {
     flex-basis: 25%;
   }
 
   .#{$prefix}--time-picker--fluid__wrapper
     > .#{$prefix}--time-picker__input:last-child:not(:only-child),
   .#{$prefix}--time-picker--fluid__wrapper
-    > .#{$prefix}--form-item:last-child:not(:only-child),
+    > .#{$prefix}--select--fluid:last-child:not(:only-child),
   .#{$prefix}--time-picker--equal-width
     .#{$prefix}--time-picker--fluid__wrapper
     > .#{$prefix}--time-picker__input,
   .#{$prefix}--time-picker--equal-width
     .#{$prefix}--time-picker--fluid__wrapper
-    > .#{$prefix}--form-item {
+    > .#{$prefix}--select--fluid {
     flex-basis: 50%;
   }
 
@@ -379,21 +382,35 @@
     inline-size: 100%;
   }
 
-  // Every skeleton cell (fluid text input and select skeletons) is a
-  // `form-item`.
-  .#{$prefix}--time-picker--fluid--skeleton > .#{$prefix}--form-item {
+  // The skeleton's cells are one fluid text input skeleton and one or two
+  // fluid select skeletons.
+  .#{$prefix}--time-picker--fluid--skeleton
+    > .#{$prefix}--text-input--fluid__skeleton,
+  .#{$prefix}--time-picker--fluid--skeleton
+    > .#{$prefix}--select--fluid__skeleton {
     block-size: 100%;
     inline-size: auto;
   }
 
-  .#{$prefix}--time-picker--fluid--skeleton > .#{$prefix}--form-item:nth-child(1),
-  .#{$prefix}--time-picker--fluid--skeleton > .#{$prefix}--form-item:nth-child(2) {
+  .#{$prefix}--time-picker--fluid--skeleton
+    > .#{$prefix}--text-input--fluid__skeleton:nth-child(1),
+  .#{$prefix}--time-picker--fluid--skeleton
+    > .#{$prefix}--select--fluid__skeleton:nth-child(1),
+  .#{$prefix}--time-picker--fluid--skeleton
+    > .#{$prefix}--text-input--fluid__skeleton:nth-child(2),
+  .#{$prefix}--time-picker--fluid--skeleton
+    > .#{$prefix}--select--fluid__skeleton:nth-child(2) {
     inline-size: 25%;
   }
 
-  .#{$prefix}--time-picker--fluid--skeleton > .#{$prefix}--form-item:last-child,
+  .#{$prefix}--time-picker--fluid--skeleton
+    > .#{$prefix}--text-input--fluid__skeleton:last-child,
+  .#{$prefix}--time-picker--fluid--skeleton
+    > .#{$prefix}--select--fluid__skeleton:last-child,
   .#{$prefix}--time-picker--fluid--skeleton.#{$prefix}--time-picker--equal-width
-    > .#{$prefix}--form-item:first-child {
+    > .#{$prefix}--text-input--fluid__skeleton:first-child,
+  .#{$prefix}--time-picker--fluid--skeleton.#{$prefix}--time-picker--equal-width
+    > .#{$prefix}--select--fluid__skeleton:first-child {
     inline-size: 50%;
   }
 }
