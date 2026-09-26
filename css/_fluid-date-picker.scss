@@ -203,8 +203,17 @@
     border-inline-start: 1px solid $ui-04;
   }
 
+  // Single/simple: the container is the only child of the outer wrapper, so
+  // its box coincides with the wrapper's own — outlining both draws two
+  // near-identical red lines (a visible double border, worst on the bottom
+  // edge, where the invalid `.date-picker` bottom border below adds a 1px
+  // offset between the two boxes). Range needs the container-level outline
+  // to call out which one of its two inputs is invalid, since the wrapper's
+  // outline alone spans both; scope it there so single/simple draws once.
   .#{$prefix}--date-picker--fluid.#{$prefix}--date-picker--fluid--invalid,
-  .#{$prefix}--date-picker-container.#{$prefix}--date-picker--fluid--invalid {
+  .#{$prefix}--date-picker--fluid
+    .#{$prefix}--date-picker--range
+    .#{$prefix}--date-picker-container.#{$prefix}--date-picker--fluid--invalid {
     @include focus-outline("invalid");
   }
 
@@ -240,6 +249,17 @@
     .#{$prefix}--date-picker--range
     .#{$prefix}--date-picker-container {
     border-block-end: 1px solid transparent;
+  }
+
+  // Give invalid single/simple the same divider warn gets above its
+  // validation message.
+  .#{$prefix}--date-picker--fluid
+    .#{$prefix}--date-picker--simple
+    .#{$prefix}--date-picker__input--invalid,
+  .#{$prefix}--date-picker--fluid
+    .#{$prefix}--date-picker--single
+    .#{$prefix}--date-picker__input--invalid {
+    border-block-end: 1px solid $ui-04;
   }
 
   // Status icon aligned with first line of validation message; the base
