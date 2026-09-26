@@ -88,7 +88,11 @@
     .#{$prefix}--tree-parent-node__toggle-icon {
       fill: $icon-02;
       transform: rotate(-90deg);
-      transition: all $duration--fast-02 motion(standard, productive);
+      // ccs: only transform (expanded) and fill (hover, selected, disabled)
+      // differ; avoid `all` so the browser doesn't interpolate the rest of
+      // the animatable property set.
+      transition: transform $duration--fast-02 motion(standard, productive),
+        fill $duration--fast-02 motion(standard, productive);
     }
 
     .#{$prefix}--tree-parent-node__toggle-icon--expanded {
