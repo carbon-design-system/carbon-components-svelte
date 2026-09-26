@@ -525,3 +525,78 @@
   @include slider-two-handle;
   @include slider-marks;
 }
+
+// carbon-components-svelte patch: vertical orientation
+/// Vertical slider track. The thumb and marks are placed with an inline
+/// `top` (measured from the top, so `max` sits at 0%), which keeps the base
+/// `translate(-50%, -50%)` centering, including its hover/focus/active and
+/// disabled variants, correct without overrides.
+/// @access private
+/// @group slider
+@mixin slider-vertical {
+  .#{$prefix}--slider--vertical {
+    width: to-rem(2px);
+    min-width: 0;
+    max-width: none;
+    height: to-rem(200px);
+    padding: 0 $carbon--spacing-05;
+    margin: $carbon--spacing-05 0;
+  }
+
+  .#{$prefix}--slider--vertical .#{$prefix}--slider__track {
+    top: 0;
+    left: 50%;
+    width: to-rem(2px);
+    height: 100%;
+    transform: translate(-50%, 0);
+  }
+
+  .#{$prefix}--slider--vertical .#{$prefix}--slider__track:before {
+    top: 50%;
+    left: to-rem(-5px);
+    width: to-rem(4px);
+    height: to-rem(2px);
+    transform: translate(0, -50%);
+  }
+
+  .#{$prefix}--slider--vertical .#{$prefix}--slider__filled-track {
+    top: 0;
+    left: 50%;
+    width: to-rem(2px);
+    height: 100%;
+    transform-origin: bottom;
+  }
+
+  .#{$prefix}--slider--vertical .#{$prefix}--slider__thumb {
+    left: 50%;
+  }
+
+  .#{$prefix}--slider--vertical .#{$prefix}--slider__marks {
+    top: 0;
+    left: 50%;
+    width: 0;
+    height: 100%;
+  }
+
+  .#{$prefix}--slider--vertical .#{$prefix}--slider__mark {
+    left: 0;
+    width: to-rem(8px);
+    height: to-rem(2px);
+  }
+
+  .#{$prefix}--slider--vertical .#{$prefix}--slider__mark-label {
+    top: 50%;
+    left: to-rem(12px);
+    transform: translateY(-50%);
+  }
+
+  // Labels sit to the right of the track instead of below it; reserve room
+  // with margin (not padding, which would shift the 50% track position).
+  .#{$prefix}--slider--vertical.#{$prefix}--slider--with-mark-labels {
+    margin-right: $carbon--spacing-08;
+  }
+}
+
+@include exports("slider-vertical") {
+  @include slider-vertical;
+}

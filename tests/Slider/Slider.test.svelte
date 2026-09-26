@@ -14,6 +14,7 @@
   export let formatValue: ((value: number) => string) | undefined = undefined;
   export let hideTextInput = false;
   export let fullWidth = false;
+  export let orientation: ComponentProps<Slider>["orientation"] = "horizontal";
   export let min = 0;
   export let max = 100;
   export let step = 1;
@@ -66,6 +67,7 @@
     {formatValue}
     {hideTextInput}
     {fullWidth}
+    {orientation}
     {light}
     {hideLabel}
     {name}
@@ -106,6 +108,7 @@
     {formatValue}
     {hideTextInput}
     {fullWidth}
+    {orientation}
     {light}
     {hideLabel}
     {name}
