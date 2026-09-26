@@ -26,7 +26,9 @@
   .#{$prefix}--accordion__item {
     overflow: visible;
     border-top: 1px solid $ui-03;
-    transition: all $duration--fast-02 motion(standard, productive);
+    // ccs: only border colors differ (disabled, flush); avoid `all` so the
+    // browser doesn't interpolate the rest of the animatable property set.
+    transition: border-color $duration--fast-02 motion(standard, productive);
 
     &:last-child {
       border-bottom: 1px solid $ui-03;
@@ -113,7 +115,11 @@
     margin: $accordion-arrow-margin;
     fill: $ui-05;
     transform: rotate(-270deg) #{'/*rtl:ignore*/'};
-    transition: all $duration--fast-02 motion(standard, productive);
+    // ccs: only transform (active) and fill (disabled) differ; avoid `all`
+    // so the browser doesn't interpolate the rest of the animatable
+    // property set.
+    transition: transform $duration--fast-02 motion(standard, productive),
+      fill $duration--fast-02 motion(standard, productive);
   }
 
   .#{$prefix}--accordion__title {
