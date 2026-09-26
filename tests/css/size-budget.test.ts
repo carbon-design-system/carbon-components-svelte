@@ -11,11 +11,12 @@ import { compileEntry } from "./compile";
 // trips one, raise it to the new size plus 2% and say why in the commit.
 // `bun run check:css` prints the current numbers.
 const BUDGETS: Record<string, { min: number; gzip: number }> = {
-  // measured 640,044 / 74,854 (lowered after dropping unused Plex weights;
-  // gzip as measured in CI, ~1.5 kB above a local run)
-  "all.scss": { min: 652_800, gzip: 76_400 },
-  // measured 549,482 / 65,233
-  "white.scss": { min: 560_500, gzip: 66_600 },
+  // min measured 653,163 after ScrollGradient's fill token classes; gzip
+  // measured 74,854 in CI, ~1.5 kB above a local run
+  "all.scss": { min: 666_300, gzip: 76_400 },
+  // min measured 561,502 after ScrollGradient's fill token classes; gzip
+  // measured 65,233
+  "white.scss": { min: 572_800, gzip: 66_600 },
 };
 
 describe("css size budget", () => {

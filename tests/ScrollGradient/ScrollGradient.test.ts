@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { expectInlineStyle } from "../utils/inline-style";
 import ScrollGradientRef from "./ScrollGradient.ref.test.svelte";
 import ScrollGradient from "./ScrollGradient.test.svelte";
 
@@ -207,6 +208,33 @@ describe("ScrollGradient", () => {
     expect(wrapper.style.getPropertyValue("--cds-scroll-gradient-color")).toBe(
       "red",
     );
+  });
+
+  it("maps fill token names to classes instead of inline styles", () => {
+    const { container } = render(ScrollGradient, {
+      props: {
+        color: "background",
+        background: "layer-accent",
+        className: "x",
+      },
+    });
+
+    const wrapper = container.querySelector<HTMLElement>(
+      ".bx--scroll-gradient",
+    );
+    const scrollElement = container.querySelector<HTMLElement>(
+      ".bx--scroll-gradient__scroll-element",
+    );
+    assert(wrapper);
+    assert(scrollElement);
+    // Static theme sheets define no `--cds-*` properties, so a token name
+    // must not become an inline `var(--cds-*)`.
+    expect(wrapper).toHaveClass("bx--scroll-gradient--color-background", "x");
+    expect(scrollElement).toHaveClass(
+      "bx--scroll-gradient__scroll-element--layer-accent",
+    );
+    expectInlineStyle(wrapper, { "--cds-scroll-gradient-color": "" });
+    expectInlineStyle(scrollElement, { backgroundColor: "" });
   });
 
   it("applies the background prop to the scroll element", () => {
