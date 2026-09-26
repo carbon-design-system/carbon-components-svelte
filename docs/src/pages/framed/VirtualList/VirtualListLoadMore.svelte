@@ -3,6 +3,7 @@
     Box,
     InlineLoading,
     Stack,
+    Text,
     VirtualList,
   } from "carbon-components-svelte";
 
@@ -54,26 +55,29 @@
     on:scrollend={loadMore}
     let:item
   >
-    <Stack as orientation="horizontal" align="center" let:props>
-      <Box
-        {...props}
-        height="40px"
-        paddingX={5}
-        border="subtle"
-        borderSide="bottom"
-      >
-        {item.label}
-      </Box>
-    </Stack>
+    <Box
+      display="flex"
+      align="center"
+      height="40px"
+      paddingX={5}
+      border="subtle"
+      borderSide="bottom"
+    >
+      {item.label}
+    </Box>
   </VirtualList>
-  {#if loading}
-    <InlineLoading description="Loading more…" />
-  {:else if !hasMore}
-    <p>Loaded all {TOTAL} audit events.</p>
-  {:else}
-    <p>
-      {items.length}
-      of {TOTAL} audit events loaded. Scroll to the bottom to fetch more.
-    </p>
-  {/if}
+  <Box display="flex" align="center" minHeight={7}>
+    {#if loading}
+      <InlineLoading description="Loading more…" />
+    {:else if !hasMore}
+      <Text type="body-short-01" color="secondary">
+        Loaded all {TOTAL} audit events.
+      </Text>
+    {:else}
+      <Text type="body-short-01" color="secondary">
+        {items.length}
+        of {TOTAL} audit events loaded. Scroll to the bottom to fetch more.
+      </Text>
+    {/if}
+  </Box>
 </Stack>
