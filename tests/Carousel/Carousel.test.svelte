@@ -5,14 +5,20 @@
 
   export let selectedIndex = 0;
   export let showExtra = false;
+  export let wrap = false;
 
   let currentIndex = -1;
+  let previousIndex = -1;
 </script>
 
 <Carousel
   data-testid="carousel"
+  {wrap}
   bind:selectedIndex
-  on:change={(e) => (currentIndex = e.detail.currentIndex)}
+  on:change={(e) => {
+    currentIndex = e.detail.currentIndex;
+    previousIndex = e.detail.previousIndex;
+  }}
 >
   <CarouselItem>Slide one</CarouselItem>
   <CarouselItem>
@@ -26,6 +32,7 @@
 </Carousel>
 
 <div data-testid="current-index">{currentIndex}</div>
+<div data-testid="previous-index">{previousIndex}</div>
 <div data-testid="selected-index">{selectedIndex}</div>
 <button type="button" on:click={() => (showExtra = true)}>Add slide</button>
 <button
