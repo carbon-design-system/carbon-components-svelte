@@ -208,3 +208,20 @@
 @include exports("menu-selection-icon") {
   @include menu-selection-icon;
 }
+
+// carbon-components-svelte patch
+// A `labelChildren` slot can hold non-text content (e.g. a `TooltipIcon`),
+// which the default text-truncation layout does not vertically center.
+// Lay the row out as flex instead, matching how `BigNumber` centers its
+// slotted label content.
+@mixin menu-option-label-slotted {
+  .#{$prefix}--menu-option__label--slotted {
+    display: inline-flex;
+    align-items: center;
+    gap: $carbon--spacing-02;
+  }
+}
+
+@include exports("menu-option-label-slotted") {
+  @include menu-option-label-slotted;
+}
