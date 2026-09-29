@@ -34,6 +34,16 @@
    */
   export let size = "xl";
 
+  /**
+   * Specify the orientation of the tab list.
+   * By default, the tabs are a vertical column at the `md` breakpoint and up,
+   * and collapse into a horizontal, scrollable row below it.
+   * Set to `"vertical"` to always render the column, or `"horizontal"` to
+   * always render the row.
+   * @type {"horizontal" | "vertical" | undefined}
+   */
+  export let orientation = undefined;
+
   import {
     afterUpdate,
     createEventDispatcher,
@@ -97,7 +107,8 @@
   );
 
   // Below `md` the tabs switch from a vertical column to a horizontal,
-  // scrollable row (Carbon React vertical-tabs responsive design).
+  // scrollable row (Carbon React vertical-tabs responsive design), unless
+  // `orientation` pins one layout.
   const belowMd = breakpointObserver().smallerThan("md");
 
   // Vertical tabs do not support the auto-width, full-width, dismissible, or
@@ -113,12 +124,14 @@
   let refTabList = null;
   let refRoot = null;
 
-  // Below `md` the tab column collapses into a horizontal, scrollable row that
-  // reuses the same overflow scroll buttons as the horizontal `Tabs`. The
-  // buttons only apply there (a `md`+ column has no horizontal overflow).
+  // The row layout reuses the same overflow scroll buttons as the horizontal
+  // `Tabs`. The buttons only apply there (the column has no horizontal
+  // overflow).
   let canScrollBackward = false;
   let canScrollForward = false;
-  $: isOverflow = $belowMd && (canScrollBackward || canScrollForward);
+  $: isRow =
+    orientation === undefined ? $belowMd : orientation === "horizontal";
+  $: isOverflow = isRow && (canScrollBackward || canScrollForward);
 
   function updateOverflow() {
     if (!refTabList) return;
@@ -229,8 +242,8 @@
     const activeTab = /** @type {HTMLElement | undefined} */ (
       refTabList?.querySelectorAll("[role='tab']")[index]
     );
-    activeTab?.focus({ preventScroll: $belowMd });
-    if ($belowMd) scrollTabIntoView(activeTab);
+    activeTab?.focus({ preventScroll: isRow });
+    if (isRow) scrollTabIntoView(activeTab);
   }
 
   /**
@@ -270,11 +283,11 @@
     const activeTab = /** @type {HTMLElement | undefined} */ (
       refTabList?.querySelectorAll("[role='tab']")[index]
     );
-    // Below `md` the row scrolls horizontally; disable the native focus scroll
-    // (a fixed step that lags variable-width tabs) and scroll explicitly. At
-    // `md`+ the column relies on the browser scrolling the page to the tab.
-    activeTab?.focus({ preventScroll: $belowMd });
-    if ($belowMd) scrollTabIntoView(activeTab);
+    // The row scrolls horizontally; disable the native focus scroll (a fixed
+    // step that lags variable-width tabs) and scroll explicitly. The column
+    // relies on the browser scrolling the page to the tab.
+    activeTab?.focus({ preventScroll: isRow });
+    if (isRow) scrollTabIntoView(activeTab);
   }
 
   setContext("carbon:Tabs", {
@@ -371,19 +384,27 @@
     }
   }
   // Roving focus follows the visual orientation: arrow Up/Down in the vertical
-  // column, arrow Left/Right in the horizontal row below `md`.
-  $: orientation = $belowMd ? "horizontal" : "vertical";
-  // Recompute overflow when the tabs change or the layout flips at `md`.
-  $: if ($tabs || $belowMd) {
+  // column, arrow Left/Right in the horizontal row.
+  $: listOrientation = isRow ? "horizontal" : "vertical";
+  // Recompute overflow when the tabs change or the layout flips.
+  $: if ($tabs || isRow) {
     tick().then(updateOverflow);
   }
 </script>
 
-<div bind:this={refRoot} class:bx--tabs--vertical-container={true}>
+<div
+  bind:this={refRoot}
+  class:bx--tabs--vertical-container={true}
+  class:bx--tabs--vertical-container--responsive={orientation === undefined}
+  class:bx--tabs--vertical-container--column={orientation === "vertical"}
+>
   <div
     role="navigation"
     class:bx--tabs={true}
     class:bx--tabs--vertical={true}
+    class:bx--tabs--vertical--responsive={orientation === undefined}
+    class:bx--tabs--vertical--row={orientation === "horizontal"}
+    class:bx--tabs--vertical--column={orientation === "vertical"}
     class:bx--tabs--tall={$hasSecondaryLabel}
     class:bx--tabs--scrollable={isOverflow}
     class:bx--tabs--scrollable--container={isOverflow}
@@ -413,10 +434,10 @@
     <ul
       bind:this={refTabList}
       role="tablist"
-      aria-orientation={orientation}
+      aria-orientation={listOrientation}
       use:rovingFocus={{
         selector: "[role='tab']",
-        orientation,
+        orientation: listOrientation,
         skipDisabled: true,
         getActiveIndex,
         onMove: (index, event) => {
