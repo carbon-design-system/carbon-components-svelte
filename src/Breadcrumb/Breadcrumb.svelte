@@ -21,6 +21,15 @@
   export let size = "md";
 
   /**
+   * Specify the orientation of the breadcrumb.
+   * By default, items stack vertically below the `md` breakpoint
+   * and lay out horizontally above it.
+   * Set to `"vertical"` to always stack items, or `"horizontal"` to never stack them.
+   * @type {"horizontal" | "vertical" | undefined}
+   */
+  export let orientation = undefined;
+
+  /**
    * Specify the separator rendered between breadcrumb items.
    * Accepts a text character, rendered through CSS, or a component
    * reference (for example an icon or pictogram component), rendered as
@@ -48,6 +57,7 @@
   <BreadcrumbSkeleton
     {noTrailingSlash}
     {size}
+    {orientation}
     {separator}
     {...$$restProps}
     on:click
@@ -68,6 +78,8 @@
       class:bx--breadcrumb={true}
       class:bx--breadcrumb--no-trailing-slash={noTrailingSlash}
       class:bx--breadcrumb--sm={size === "sm"}
+      class:bx--breadcrumb--horizontal={orientation === "horizontal"}
+      class:bx--breadcrumb--vertical={orientation === "vertical"}
       class:bx--breadcrumb--separator-icon={typeof separator !== "string"}
       style:--ccs-separator={typeof separator === "string"
         ? `'${separator}'`
