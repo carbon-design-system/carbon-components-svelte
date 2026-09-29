@@ -1,4 +1,8 @@
 <script>
+  /**
+   * @event {{ openCount: number }} toggle:change - Dispatched with the number of open items after it changes.
+   */
+
   /** @extends {"./AccordionSkeleton.svelte"} AccordionSkeletonProps */
 
   /**
@@ -32,10 +36,12 @@
    */
   export let type = "multiple";
 
-  import { setContext } from "svelte";
+  import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { get, writable } from "svelte/store";
   import { rovingFocus } from "../utils/roving-focus.js";
   import AccordionSkeleton from "./AccordionSkeleton.svelte";
+
+  const dispatch = createEventDispatcher();
 
   /** @type {null | HTMLUListElement} */
   let ref = null;
@@ -84,12 +90,60 @@
     return currentId === id;
   }
 
+  /**
+   * Which items currently report themselves open, keyed by each item's
+   * opaque identity token (the same shape as `openId`/`claimSingle`).
+   * Never exposed directly; only its size is dispatched.
+   * @type {import("svelte/store").Writable<Set<object>>}
+   */
+  const openItems = writable(new Set());
+
+  /**
+   * @param {object} id
+   * @param {boolean} isOpen
+   */
+  function reportOpen(id, isOpen) {
+    openItems.update((set) => {
+      if (set.has(id) === isOpen) return set;
+      const next = new Set(set);
+      if (isOpen) {
+        next.add(id);
+      } else {
+        next.delete(id);
+      }
+      return next;
+    });
+  }
+
+  $: openCount = $openItems.size;
+
+  let mounted = false;
+  let prevOpenCount = 0;
+  let pendingDispatch = false;
+
+  $: if (mounted && openCount !== prevOpenCount) {
+    prevOpenCount = openCount;
+    if (!pendingDispatch) {
+      pendingDispatch = true;
+      tick().then(() => {
+        pendingDispatch = false;
+        dispatch("toggle:change", { openCount });
+      });
+    }
+  }
+
+  onMount(() => {
+    prevOpenCount = openCount;
+    mounted = true;
+  });
+
   setContext("carbon:Accordion", {
     disableItems,
     openId,
     typeStore,
     notifyOpen,
     claimSingle,
+    reportOpen,
   });
 </script>
 

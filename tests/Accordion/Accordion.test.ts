@@ -9,6 +9,7 @@ import AccordionProgrammatic from "./Accordion.programmatic.test.svelte";
 import AccordionSingle from "./Accordion.single.test.svelte";
 import AccordionSkeleton from "./Accordion.skeleton.test.svelte";
 import Accordion from "./Accordion.test.svelte";
+import AccordionToggleChange from "./Accordion.toggleChange.test.svelte";
 import AccordionTypeToggle from "./Accordion.type-toggle.test.svelte";
 
 describe("Accordion", () => {
@@ -695,6 +696,62 @@ describe("Accordion", () => {
       expect(
         screen.getByRole("button", { name: /Language Translator/ }),
       ).toHaveFocus();
+    });
+  });
+
+  describe("toggle:change", () => {
+    const logged = (spy: { mock: { calls: unknown[][] } }) =>
+      spy.mock.calls
+        .filter(([name]) => name === "accordion-toggle-change")
+        .map(([, count]) => count);
+
+    it("dispatches the open count as items open and close", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(AccordionToggleChange);
+
+      await user.click(screen.getByRole("button", { name: /First/ }));
+      expect(logged(consoleLog)).toEqual([1]);
+
+      await user.click(screen.getByRole("button", { name: /Second/ }));
+      expect(logged(consoleLog)).toEqual([1, 2]);
+
+      await user.click(screen.getByRole("button", { name: /First/ }));
+      expect(logged(consoleLog)).toEqual([1, 2, 1]);
+    });
+
+    it("does not dispatch for items mounted open", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(AccordionToggleChange, { props: { open: true } });
+      await tick();
+
+      expect(consoleLog).not.toHaveBeenCalledWith(
+        "accordion-toggle-change",
+        expect.anything(),
+      );
+    });
+
+    it("settles at one when type is single", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(AccordionToggleChange, { props: { type: "single" } });
+
+      await user.click(screen.getByRole("button", { name: /First/ }));
+      await user.click(screen.getByRole("button", { name: /Second/ }));
+
+      itemIsCollapsed(/First/);
+      itemIsExpanded(/Second/);
+      expect(logged(consoleLog).at(-1)).toBe(1);
+      expect(logged(consoleLog)).not.toContain(2);
+    });
+
+    it("decrements the count when an open item is removed", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(AccordionToggleChange, { props: { thirdOpen: true } });
+
+      await user.click(screen.getByRole("button", { name: /First/ }));
+      expect(logged(consoleLog)).toEqual([2]);
+
+      await user.click(screen.getByRole("button", { name: "Remove third" }));
+      expect(logged(consoleLog)).toEqual([2, 1]);
     });
   });
 });
