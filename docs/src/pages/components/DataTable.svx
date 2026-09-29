@@ -977,7 +977,7 @@ Filter rows with `shouldFilterRows`.
 
 Set `shouldFilterRows` to `true` to enable client-side filtering. The default filter compares cell values as strings.
 
-For pagination with filtering, bind to `filteredRowIds` and pass its length to the pagination totalItems.
+For pagination with filtering, bind to `filteredRowIds` and pass its length to the pagination totalItems. Set the pagination [`resetKey`](/components/Pagination#reset-on-a-new-query) to the search value so a new query returns to page 1.
 
 <FileSource src="/framed/DataTable/DataTableFilterable" />
 
