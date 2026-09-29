@@ -24,10 +24,13 @@ describe("any-hover media query grouping", () => {
     // components/date-picker/_date-picker.scss).
     // Raised again from 64 to 65 for the Carousel prev/next buttons' one
     // hover block (_carousel.scss).
+    // Raised again from 65 to 67 for TabsVertical's pinned `orientation`
+    // row and column, one top-level hover block each (tabs-vertical in
+    // components/tabs/_tabs.scss).
     // Whitespace-tolerant so the count holds for expanded and compressed
     // output; the lower bound fails the test if the pattern stops matching.
     const blocks = css.match(/@media\s*\(any-hover:\s*hover\)\s*\{/g) ?? [];
     expect(blocks.length).toBeGreaterThan(0);
-    expect(blocks.length).toBeLessThanOrEqual(65);
+    expect(blocks.length).toBeLessThanOrEqual(67);
   }, 30_000);
 });
