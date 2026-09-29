@@ -20,6 +20,7 @@
   export let dynamicPageSizes = false;
   export let pageWindow: ComponentProps<Pagination>["pageWindow"] = undefined;
   export let pagesUnknown = false;
+  export let resetKey: unknown = undefined;
   export let pageText: ComponentProps<Pagination>["pageText"] = undefined;
   export let pageRangeText: ComponentProps<Pagination>["pageRangeText"] =
     undefined;
@@ -53,6 +54,7 @@
   {pageSizes}
   {dynamicPageSizes}
   {pagesUnknown}
+  {resetKey}
   {pageText}
   {pageRangeText}
   {pageSelectLabelText}
