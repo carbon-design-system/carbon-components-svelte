@@ -125,6 +125,32 @@ Use `size="sm"` for a compact breadcrumb. This pairs with an overflow menu when 
   </BreadcrumbItem>
 </Breadcrumb>
 
+## Orientation
+
+By default, items stack vertically below the `md` breakpoint (672px) and lay out in a wrapping row above it. Set `orientation` to pin one layout at every viewport width.
+
+| Value | Layout | Use when |
+| --- | --- | --- |
+| `undefined` (default) | Stacked below `md`, row above | The breadcrumb spans the page width |
+| `"vertical"` | Always stacked | The breadcrumb sits in a narrow column, such as a side panel |
+| `"horizontal"` | Always a wrapping row | Short trails that fit on one line even on small screens |
+
+### Vertical
+
+<Breadcrumb orientation="vertical">
+  <BreadcrumbItem href="/">Dashboard</BreadcrumbItem>
+  <BreadcrumbItem href="/reports">Annual reports</BreadcrumbItem>
+  <BreadcrumbItem href="/reports/2019" isCurrentPage>2019</BreadcrumbItem>
+</Breadcrumb>
+
+### Horizontal
+
+<Breadcrumb orientation="horizontal">
+  <BreadcrumbItem href="/">Dashboard</BreadcrumbItem>
+  <BreadcrumbItem href="/reports">Annual reports</BreadcrumbItem>
+  <BreadcrumbItem href="/reports/2019" isCurrentPage>2019</BreadcrumbItem>
+</Breadcrumb>
+
 ## Breadcrumb trail
 
 Build a full breadcrumb trail with multiple items and a current page indicator.
