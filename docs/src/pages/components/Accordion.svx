@@ -188,6 +188,16 @@ track which item was toggled and to what state without binding to `open`.
 
 <FileSource src="/framed/Accordion/ToggleAccordion" />
 
+### Counting open items
+
+Listen for `toggle:change` on the accordion to react to the aggregate state
+instead of wiring `toggle` to every item. The event's `detail.openCount` is the
+number of items open once a change settles. It does not fire for items that
+start open, and removing an open item counts as a change. In `"single"` mode it
+reports the settled count, never an intermediate one.
+
+<FileSource src="/framed/Accordion/ToggleChangeAccordion" />
+
 ## Nested
 
 Put an `Accordion` inside an `AccordionItem` to compose nested clusters.
