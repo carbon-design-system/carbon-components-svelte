@@ -250,6 +250,12 @@
   let prevPage = page;
   let prevPageSize = pageSize;
   let prevPageSizesKey;
+  // Tracks the highest page reached while `pagesUnknown` is true, since
+  // `totalPages` degenerates to 1 in that mode (totalItems defaults to 0,
+  // and the real total is unknowable). The page-number select uses this
+  // ceiling instead of `totalPages`, so a user who has advanced past page 1
+  // can still see and navigate back through the pages they've visited.
+  let maxPageSeen = page;
   let backBtnRef = null;
   let forwardBtnRef = null;
 
@@ -279,7 +285,11 @@
     prevPage = page;
     prevPageSize = pageSize;
   }
-  $: selectItems = getWindowedPages(page, totalPages, pageWindow);
+  $: if (pagesUnknown && page > maxPageSeen) maxPageSeen = page;
+  $: pageSelectTotalPages = pagesUnknown
+    ? Math.max(maxPageSeen, 1)
+    : totalPages;
+  $: selectItems = getWindowedPages(page, pageSelectTotalPages, pageWindow);
   $: internalBackButtonDisabled =
     backButtonDisabled ?? (disabled || page === 1);
   $: internalForwardButtonDisabled =
@@ -360,9 +370,9 @@
       <slot
         name="pageSelect"
         currentPage={page}
-        {totalPages}
+        totalPages={pageSelectTotalPages}
         currentPageSize={pageSize}
-        selectLabelText={pageSelectLabelText(totalPages)}
+        selectLabelText={pageSelectLabelText(pageSelectTotalPages)}
       >
         <!-- Native <option>s instead of SelectItem: a SelectItem
              registers a store subscriber per page (pageWindow, default
@@ -371,7 +381,7 @@
         <Select
           id="bx--pagination-select-{id}-pages"
           class="bx--select__page-number"
-          labelText={pageSelectLabelText(totalPages)}
+          labelText={pageSelectLabelText(pageSelectTotalPages)}
           inline
           hideLabel
           disabled={pageInputDisabled || disabled}

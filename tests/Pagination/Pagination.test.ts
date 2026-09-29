@@ -319,6 +319,65 @@ describe("Pagination", () => {
     expect(screen.getByText("page 2")).toBeInTheDocument();
   });
 
+  it("keeps the page-number select navigable past page 1 when pagesUnknown is true", async () => {
+    render(Pagination, {
+      props: { pagesUnknown: true, page: 1 },
+    });
+
+    await user.click(screen.getByRole("button", { name: "Next page" }));
+
+    const pageSelect = screen.getByLabelText(/Page number/);
+    expect(pageSelect).toHaveValue("2");
+    expect(within(pageSelect).getAllByRole("option")).toHaveLength(2);
+  });
+
+  it("does not render pages the user has not reached yet when pagesUnknown is true", async () => {
+    render(Pagination, {
+      props: { pagesUnknown: true, page: 1 },
+    });
+
+    const nextButton = screen.getByRole("button", { name: "Next page" });
+    await user.click(nextButton);
+    await user.click(nextButton);
+
+    const pageSelect = screen.getByLabelText(/Page number/);
+    const options = within(pageSelect).getAllByRole("option");
+    expect(options).toHaveLength(3);
+    expect(options.map((option) => option.textContent?.trim())).toEqual([
+      "1",
+      "2",
+      "3",
+    ]);
+  });
+
+  it("navigates back to a previously visited page via the select when pagesUnknown is true", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Pagination, {
+      props: { pagesUnknown: true, page: 1 },
+    });
+
+    const nextButton = screen.getByRole("button", { name: "Next page" });
+    await user.click(nextButton);
+    await user.click(nextButton);
+
+    const pageSelect = screen.getByLabelText(/Page number/);
+    await user.selectOptions(pageSelect, "2");
+
+    expect(screen.getByText("page 2")).toBeInTheDocument();
+    expect(consoleLog).toHaveBeenCalledWith("change", { page: 2 });
+    // Forward navigation must stay available.
+    expect(nextButton).not.toBeDisabled();
+  });
+
+  it("still renders a single page option in pagesUnknown mode before any navigation", () => {
+    render(Pagination, {
+      props: { pagesUnknown: true, page: 1 },
+    });
+
+    const pageSelect = screen.getByLabelText(/Page number/);
+    expect(within(pageSelect).getAllByRole("option")).toHaveLength(1);
+  });
+
   it("should allow overriding forwardButtonDisabled", () => {
     render(Pagination, {
       props: {
