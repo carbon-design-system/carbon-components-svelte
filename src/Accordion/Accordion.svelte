@@ -36,10 +36,44 @@
   import { onMount, setContext } from "svelte";
   import { get, writable } from "svelte/store";
   import { createIdScope } from "../utils/id-scope.js";
+  import { rovingFocus } from "../utils/roving-focus.js";
   import { normalizeFieldSize } from "../utils/size-aliases.js";
   import AccordionSkeleton from "./AccordionSkeleton.svelte";
 
   $: effectiveSize = normalizeFieldSize(size);
+
+  /** @type {null | HTMLUListElement} */
+  let ref = null;
+
+  /**
+   * This accordion's own headers, in order. A header in a nested accordion
+   * belongs to that one, which moves focus through its own headers.
+   * @returns {HTMLElement[]}
+   */
+  function getHeadings() {
+    const list = ref;
+    if (!list) return [];
+    return Array.from(
+      list.querySelectorAll(".bx--accordion__heading"),
+      (heading) => /** @type {HTMLElement} */ (heading),
+    ).filter((heading) => heading.closest(".bx--accordion") === list);
+  }
+
+  function getActiveIndex() {
+    if (!ref) return -1;
+    return getHeadings().indexOf(
+      /** @type {HTMLElement} */ (ref.ownerDocument.activeElement),
+    );
+  }
+
+  /**
+   * @param {number} _index
+   * @param {KeyboardEvent} event
+   */
+  function handleMove(_index, event) {
+    // Arrow keys would otherwise also scroll the page.
+    event.preventDefault();
+  }
 
   /**
    * @type {import("svelte/store").Writable<boolean>}
@@ -117,6 +151,17 @@
   />
 {:else}
   <ul
+    bind:this={ref}
+    use:rovingFocus={{
+      selector: ".bx--accordion__heading",
+      orientation: "vertical",
+      getItems: getHeadings,
+      itemsOnly: true,
+      skipDisabled: true,
+      getActiveIndex,
+      onMove: handleMove,
+      focusOnMove: true,
+    }}
     class:bx--accordion={true}
     class:bx--accordion--start={align === "start"}
     class:bx--accordion--end={align === "end"}
