@@ -1,5 +1,5 @@
 ---
-components: ["Accordion", "AccordionItem", "AccordionSkeleton"]
+components: ["Accordion", "AccordionItem", "AccordionSearch", "AccordionSkeleton"]
 description: Accordions stack expandable sections vertically to show or hide content, with custom titles, multiple sizes, and disabled and skeleton states.
 ---
 
@@ -197,6 +197,26 @@ start open, and removing an open item counts as a change. In `"single"` mode it
 reports the settled count, never an intermediate one.
 
 <FileSource src="/framed/Accordion/ToggleChangeAccordion" />
+
+## Search
+
+Use `AccordionSearch` to filter a long list of sections by title. Pass a data-driven
+`items` array; each item takes an `id`, `title`, and `description`, plus optional
+`open` and `disabled`. Matching is fuzzy, an empty query shows every item, and
+`emptyText` renders when nothing matches. Bind `filterText` to read or set the
+query. `align`, `size`, `flush`, `type`, and `disabled` are forwarded to the
+underlying `Accordion`.
+
+<FileSource src="/framed/Accordion/SearchAccordion" />
+
+Use the default slot to render custom panel content. The slot receives the `item`.
+
+```svelte
+<AccordionSearch {items} let:item>
+  <strong>{item.title}</strong>
+  <p>{item.description}</p>
+</AccordionSearch>
+```
 
 ## Nested
 
