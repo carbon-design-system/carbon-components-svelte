@@ -629,4 +629,72 @@ describe("Accordion", () => {
       expect.anything(),
     );
   });
+
+  describe("arrow-key navigation", () => {
+    it("moves focus to the next enabled header on ArrowDown", async () => {
+      render(Accordion);
+
+      screen
+        .getByRole("button", { name: /Natural Language Classifier/ })
+        .focus();
+      await user.keyboard("{ArrowDown}");
+
+      expect(
+        screen.getByRole("button", { name: /Language Translator/ }),
+      ).toHaveFocus();
+    });
+
+    it("moves focus back to the first header on ArrowUp from the last", async () => {
+      render(Accordion);
+
+      screen.getByRole("button", { name: /Language Translator/ }).focus();
+      await user.keyboard("{ArrowUp}");
+
+      expect(
+        screen.getByRole("button", { name: /Natural Language Classifier/ }),
+      ).toHaveFocus();
+    });
+
+    it("moves focus to the first and last headers on Home and End", async () => {
+      render(Accordion);
+
+      screen.getByRole("button", { name: /Language Translator/ }).focus();
+      await user.keyboard("{Home}");
+      expect(
+        screen.getByRole("button", { name: /Natural Language Classifier/ }),
+      ).toHaveFocus();
+
+      await user.keyboard("{End}");
+      expect(
+        screen.getByRole("button", { name: /Language Translator/ }),
+      ).toHaveFocus();
+    });
+
+    it("does not change the expanded state", async () => {
+      render(Accordion);
+
+      screen
+        .getByRole("button", { name: /Natural Language Classifier/ })
+        .focus();
+      await user.keyboard("{ArrowDown}{ArrowUp}{End}{Home}");
+
+      itemIsCollapsed(/Natural Language Classifier/);
+      itemIsCollapsed(/Natural Language Understanding/);
+      itemIsCollapsed(/Language Translator/);
+    });
+
+    it("keeps native Tab order", async () => {
+      render(Accordion);
+
+      screen
+        .getByRole("button", { name: /Natural Language Classifier/ })
+        .focus();
+      await user.tab();
+
+      // The disabled header is skipped natively; focus follows DOM order.
+      expect(
+        screen.getByRole("button", { name: /Language Translator/ }),
+      ).toHaveFocus();
+    });
+  });
 });

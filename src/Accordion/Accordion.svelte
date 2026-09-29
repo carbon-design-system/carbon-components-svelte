@@ -34,7 +34,19 @@
 
   import { setContext } from "svelte";
   import { get, writable } from "svelte/store";
+  import { rovingFocus } from "../utils/roving-focus.js";
   import AccordionSkeleton from "./AccordionSkeleton.svelte";
+
+  /** @type {null | HTMLUListElement} */
+  let ref = null;
+
+  function getActiveIndex() {
+    if (!ref) return -1;
+    const items = Array.from(ref.querySelectorAll(".bx--accordion__heading"));
+    return items.indexOf(
+      /** @type {Element} */ (ref.ownerDocument.activeElement),
+    );
+  }
 
   /**
    * @type {import("svelte/store").Writable<boolean>}
@@ -94,6 +106,18 @@
   />
 {:else}
   <ul
+    bind:this={ref}
+    use:rovingFocus={{
+      selector: ".bx--accordion__heading",
+      orientation: "vertical",
+      skipDisabled: true,
+      getActiveIndex,
+      onMove: (_index, event) => {
+        // Arrow keys would otherwise also scroll the page.
+        event.preventDefault();
+      },
+      focusOnMove: true,
+    }}
     class:bx--accordion={true}
     class:bx--accordion--start={align === "start"}
     class:bx--accordion--end={align === "end"}
