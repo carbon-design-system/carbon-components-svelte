@@ -4,6 +4,7 @@ import AccordionBatchDisable from "./Accordion.batch-disable.test.svelte";
 import AccordionDisabledOpen from "./Accordion.disabled-open.test.svelte";
 import AccordionDisabled from "./Accordion.disabled.test.svelte";
 import AccordionLazy from "./Accordion.lazy.test.svelte";
+import AccordionNested from "./Accordion.nested.test.svelte";
 import AccordionSingle from "./Accordion.single.test.svelte";
 import AccordionSkeleton from "./Accordion.skeleton.test.svelte";
 import Accordion from "./Accordion.test.svelte";
@@ -603,5 +604,84 @@ describe("Accordion", () => {
     await rerender({ open: false });
 
     expect(onToggle).not.toHaveBeenCalled();
+  });
+
+  describe("arrow-key navigation", () => {
+    it("moves focus to the next enabled header on ArrowDown", async () => {
+      render(Accordion);
+
+      screen
+        .getByRole("button", { name: /Natural Language Classifier/ })
+        .focus();
+      await user.keyboard("{ArrowDown}");
+
+      expect(
+        screen.getByRole("button", { name: /Language Translator/ }),
+      ).toHaveFocus();
+    });
+
+    it("moves focus back to the first header on ArrowUp from the last", async () => {
+      render(Accordion);
+
+      screen.getByRole("button", { name: /Language Translator/ }).focus();
+      await user.keyboard("{ArrowUp}");
+
+      expect(
+        screen.getByRole("button", { name: /Natural Language Classifier/ }),
+      ).toHaveFocus();
+    });
+
+    it("moves focus to the first and last headers on Home and End", async () => {
+      render(Accordion);
+
+      screen.getByRole("button", { name: /Language Translator/ }).focus();
+      await user.keyboard("{Home}");
+      expect(
+        screen.getByRole("button", { name: /Natural Language Classifier/ }),
+      ).toHaveFocus();
+
+      await user.keyboard("{End}");
+      expect(
+        screen.getByRole("button", { name: /Language Translator/ }),
+      ).toHaveFocus();
+    });
+
+    it("does not change the expanded state", async () => {
+      render(Accordion);
+
+      screen
+        .getByRole("button", { name: /Natural Language Classifier/ })
+        .focus();
+      await user.keyboard("{ArrowDown}{ArrowUp}{End}{Home}");
+
+      itemIsCollapsed(/Natural Language Classifier/);
+      itemIsCollapsed(/Natural Language Understanding/);
+      itemIsCollapsed(/Language Translator/);
+    });
+
+    it("moves through each accordion's own headers when they nest", async () => {
+      render(AccordionNested);
+      const header = (name: string) => screen.getByRole("button", { name });
+
+      header("Outer one").focus();
+      await user.keyboard("{ArrowDown}");
+      expect(header("Outer two")).toHaveFocus();
+
+      header("Inner one").focus();
+      await user.keyboard("{ArrowDown}");
+      expect(header("Inner two")).toHaveFocus();
+      await user.keyboard("{ArrowDown}");
+      expect(header("Inner one")).toHaveFocus();
+    });
+
+    it("leaves arrow keys alone inside a panel", async () => {
+      render(AccordionNested);
+      const input = screen.getByRole("textbox", { name: "Notes" });
+
+      input.focus();
+      await user.keyboard("{ArrowDown}{End}");
+
+      expect(input).toHaveFocus();
+    });
   });
 });
