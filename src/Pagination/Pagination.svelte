@@ -189,6 +189,22 @@
   export let pagesUnknown = false;
 
   /**
+   * Bump this to a new value whenever a fresh query changes what `totalItems`
+   * counts — a new search term, a newly applied filter, a different filter
+   * set entirely. Comparison is by strict inequality (`!==`), so any new
+   * value (including toggling back to a previously-seen one) resets `page`
+   * to `1`. Ignored on the initial render.
+   *
+   * Unlike an ordinary `totalItems` shrink (rows removed while browsing,
+   * which clamps `page` down to the new last page so the view stays close
+   * to where the user was — see the reactive block a few lines below this
+   * one), a `resetKey` change always jumps to page 1: a new query's results
+   * have no relationship to the previous page position.
+   * @type {unknown}
+   */
+  export let resetKey = undefined;
+
+  /**
    * Override the disabled state of the forward (next page) button.
    * Intended for use with `pagesUnknown` (controlled), where the consumer
    * knows when there is no more data to load.
@@ -250,6 +266,7 @@
   let prevPage = page;
   let prevPageSize = pageSize;
   let prevPageSizesKey;
+  let prevResetKey = resetKey;
   // Tracks the highest page reached while `pagesUnknown` is true, since
   // `totalPages` degenerates to 1 in that mode (totalItems defaults to 0,
   // and the real total is unknowable). The page-number select uses this
@@ -280,6 +297,10 @@
   }
   $: totalPages = Math.max(Math.ceil(totalItems / pageSize), 1);
   $: if (!pagesUnknown && page > totalPages) page = totalPages;
+  $: if (resetKey !== prevResetKey) {
+    page = 1;
+    prevResetKey = resetKey;
+  }
   $: if (prevPage !== page || prevPageSize !== pageSize) {
     dispatch("update", { pageSize, page });
     prevPage = page;

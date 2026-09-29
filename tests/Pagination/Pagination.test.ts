@@ -430,6 +430,71 @@ describe("Pagination", () => {
     });
   });
 
+  describe("resetKey", () => {
+    it("jumps to page 1 when resetKey changes, instead of clamping to the new last page", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      const { rerender } = render(Pagination, {
+        props: {
+          page: 10,
+          totalItems: 100,
+          pageSize: 10,
+          resetKey: "query-a",
+        },
+      });
+
+      consoleLog.mockClear();
+
+      // A new query shrinks totalItems from 100 to 12 (still 2 pages at
+      // pageSize 10) and bumps resetKey. Without resetKey, the plain shrink
+      // clamp would land on page 2 (the new last page); with it, page 1.
+      await rerender({ totalItems: 12, resetKey: "query-b" });
+
+      expect(screen.getByText("1–10 of 12 items")).toBeInTheDocument();
+      expect(consoleLog).toHaveBeenCalledWith("update", {
+        pageSize: 10,
+        page: 1,
+      });
+    });
+
+    it("keeps the plain shrink-to-last-page clamp when resetKey is left unset", async () => {
+      const { rerender } = render(Pagination, {
+        props: {
+          page: 10,
+          totalItems: 100,
+          pageSize: 10,
+        },
+      });
+
+      await rerender({ totalItems: 12 });
+
+      expect(screen.getByText("11–12 of 12 items")).toBeInTheDocument();
+    });
+
+    it("does not dispatch on initial render even when resetKey starts with a non-undefined value", () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(Pagination, {
+        props: { totalItems: 100, page: 1, pageSize: 10, resetKey: "initial" },
+      });
+
+      expect(consoleLog).not.toHaveBeenCalledWith("update", expect.anything());
+    });
+
+    it("does not reset the page when resetKey is set but unchanged across a rerender", async () => {
+      const { rerender } = render(Pagination, {
+        props: {
+          page: 3,
+          totalItems: 100,
+          pageSize: 10,
+          resetKey: "query-a",
+        },
+      });
+
+      await rerender({ totalItems: 90, resetKey: "query-a" });
+
+      expect(screen.getByText("21–30 of 90 items")).toBeInTheDocument();
+    });
+  });
+
   it("resets pageSize and page when an updated pageSizes array drops the current pageSize", async () => {
     const consoleLog = vi.spyOn(console, "log");
     const { rerender } = render(Pagination, {
