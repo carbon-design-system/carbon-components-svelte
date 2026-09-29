@@ -11,12 +11,13 @@ import { compileEntry } from "./compile";
 // trips one, raise it to the new size plus 2% and say why in the commit.
 // `bun run check:css` prints the current numbers.
 const BUDGETS: Record<string, { min: number; gzip: number }> = {
-  // min measured 653,163 after ScrollGradient's fill token classes; gzip
-  // measured 74,854 in CI, ~1.5 kB above a local run
-  "all.scss": { min: 666_300, gzip: 76_400 },
-  // min measured 561,502 after ScrollGradient's fill token classes; gzip
-  // measured 65,233
-  "white.scss": { min: 572_800, gzip: 66_600 },
+  // min measured 659,760 and gzip 76,238 after TabsVertical's pinned
+  // `orientation` layouts (the row and column rules, emitted once more
+  // outside their breakpoints)
+  "all.scss": { min: 673_000, gzip: 77_800 },
+  // min measured 567,481 and gzip 66,826 after TabsVertical's pinned
+  // `orientation` layouts
+  "white.scss": { min: 578_800, gzip: 68_200 },
 };
 
 describe("css size budget", () => {

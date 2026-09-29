@@ -73,6 +73,57 @@ describe("TabsVertical", () => {
     );
   });
 
+  describe("orientation", () => {
+    it("follows the md breakpoint by default", () => {
+      const { container } = render(TabsVertical);
+
+      const nav = screen.getByRole("navigation");
+      expect(nav).toHaveClass("bx--tabs--vertical--responsive");
+      expect(nav).not.toHaveClass("bx--tabs--vertical--row");
+      expect(nav).not.toHaveClass("bx--tabs--vertical--column");
+      expect(
+        container.querySelector(".bx--tabs--vertical-container"),
+      ).toHaveClass("bx--tabs--vertical-container--responsive");
+    });
+
+    it('pins the column with orientation="vertical"', () => {
+      const { container } = render(TabsVertical, {
+        props: { orientation: "vertical" },
+      });
+
+      const nav = screen.getByRole("navigation");
+      expect(nav).toHaveClass("bx--tabs--vertical--column");
+      expect(nav).not.toHaveClass("bx--tabs--vertical--responsive");
+      expect(
+        container.querySelector(".bx--tabs--vertical-container"),
+      ).toHaveClass("bx--tabs--vertical-container--column");
+      expect(screen.getByRole("tablist")).toHaveAttribute(
+        "aria-orientation",
+        "vertical",
+      );
+    });
+
+    it('pins the row with orientation="horizontal"', async () => {
+      render(TabsVertical, { props: { orientation: "horizontal" } });
+
+      const nav = screen.getByRole("navigation");
+      expect(nav).toHaveClass("bx--tabs--vertical--row");
+      expect(nav).not.toHaveClass("bx--tabs--vertical--responsive");
+      expect(screen.getByRole("tablist")).toHaveAttribute(
+        "aria-orientation",
+        "horizontal",
+      );
+
+      await user.click(screen.getByRole("tab", { name: "Tab 1" }));
+      await user.keyboard("{ArrowRight}");
+      // Tab 2 is disabled, so ArrowRight skips to Tab 3.
+      expect(screen.getByRole("tab", { name: "Tab 3" })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+    });
+  });
+
   it("should select the initial tab from the selected prop", async () => {
     render(TabsVertical, { props: { selected: 2 } });
     await tick();
@@ -269,6 +320,20 @@ describe("TabsVerticalSkeleton", () => {
     expect(skeleton).toBeInTheDocument();
     expect(skeleton).toHaveClass("bx--skeleton");
     expect(container.querySelectorAll(".bx--tabs__nav-item")).toHaveLength(4);
+  });
+
+  it.each([
+    [undefined, "bx--tabs--vertical--responsive"],
+    ["vertical", "bx--tabs--vertical--column"],
+    ["horizontal", "bx--tabs--vertical--row"],
+  ] as const)("renders orientation %s with %s", (orientation, className) => {
+    const { container } = render(TabsVerticalSkeleton, {
+      props: { orientation },
+    });
+
+    expect(container.querySelector(".bx--tabs--vertical")).toHaveClass(
+      className,
+    );
   });
 
   it.each([6, 0])("should render %i nav items for count", (count) => {
