@@ -3,6 +3,8 @@ import BreadcrumbAriaCurrent from "./Breadcrumb.ariaCurrent.test.svelte";
 import BreadcrumbDynamic from "./Breadcrumb.dynamic.test.svelte";
 import BreadcrumbLabelText from "./Breadcrumb.labelText.test.svelte";
 import BreadcrumbNoTrailingSlash from "./Breadcrumb.noTrailingSlash.test.svelte";
+import BreadcrumbOrientationHorizontal from "./Breadcrumb.orientation-horizontal.test.svelte";
+import BreadcrumbOrientationVertical from "./Breadcrumb.orientation-vertical.test.svelte";
 import BreadcrumbSize from "./Breadcrumb.size.test.svelte";
 import BreadcrumbSkeleton from "./Breadcrumb.skeleton.test.svelte";
 import BreadcrumbSkeletonSm from "./Breadcrumb.skeleton-sm.test.svelte";
@@ -159,5 +161,27 @@ describe("Breadcrumb", () => {
     const skeleton = document.querySelector(".bx--skeleton.bx--breadcrumb");
     expect(skeleton).toBeInTheDocument();
     expect(skeleton).toHaveClass("bx--breadcrumb--sm");
+  });
+  it("omits orientation modifiers by default", () => {
+    render(Breadcrumb);
+
+    const list = within(screen.getByRole("navigation")).getByRole("list");
+    expect(list).not.toHaveClass("bx--breadcrumb--horizontal");
+    expect(list).not.toHaveClass("bx--breadcrumb--vertical");
+  });
+
+  it.each([
+    ["horizontal", BreadcrumbOrientationHorizontal, "vertical"],
+    ["vertical", BreadcrumbOrientationVertical, "horizontal"],
+  ] as const)("renders orientation %s", (orientation, Fixture, other) => {
+    render(Fixture);
+
+    const list = within(screen.getByRole("navigation")).getByRole("list");
+    expect(list).toHaveClass(`bx--breadcrumb--${orientation}`);
+    expect(list).not.toHaveClass(`bx--breadcrumb--${other}`);
+
+    const skeleton = document.querySelector(".bx--skeleton.bx--breadcrumb");
+    expect(skeleton).toHaveClass(`bx--breadcrumb--${orientation}`);
+    expect(skeleton).not.toHaveClass(`bx--breadcrumb--${other}`);
   });
 });

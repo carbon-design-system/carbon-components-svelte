@@ -220,6 +220,28 @@
   @include breadcrumb-sm;
 }
 
+/// Pin the breadcrumb to one layout regardless of viewport. The base
+/// `.#{$prefix}--breadcrumb` stacks items below `md` (inline list of flex
+/// items) and switches to a wrapping row at `md`; these modifiers emit after
+/// it at equal specificity, so they win at every breakpoint.
+/// @access private
+/// @group components
+@mixin breadcrumb-orientation {
+  .#{$prefix}--breadcrumb--horizontal {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .#{$prefix}--breadcrumb--vertical {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@include exports('breadcrumb-orientation') {
+  @include breadcrumb-orientation;
+}
+
 /// Render a component-based `separator` (an icon or pictogram) as a real
 /// DOM node. `content: var(--ccs-separator, '/')` above only covers
 /// text-character separators — CSS generated content cannot hold a Svelte
