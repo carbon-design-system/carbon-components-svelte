@@ -1,10 +1,10 @@
 ---
-components: ["Pagination", "PaginationSkeleton"]
+components: ["Pagination", "PaginationStatus", "PaginationSkeleton"]
 description: Pagination provides navigation controls for large data sets, showing the current page and total items, with configurable page sizes.
 ---
 
 <script>
-  import { Pagination, PaginationSkeleton, Toolbar, ToolbarContent } from "carbon-components-svelte";
+  import { Pagination, PaginationSkeleton, PaginationStatus, Toolbar, ToolbarContent } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -199,6 +199,20 @@ Use `on:click:button--previous` and `on:click:button--next` to listen specifical
   on:click:button--previous={(e) => console.log(e.detail)} // { page: number }
   on:click:button--next={(e) => console.log(e.detail)} // { page: number }
 />
+
+## Item count status
+
+`PaginationStatus` renders the same "1–10 of 102 items" text that `Pagination` shows, as a standalone element you can place anywhere. It announces changes to screen readers through a polite live region, which `Pagination` itself does not.
+
+Pass the same `page`, `pageSize`, and `totalItems` you give `Pagination`. Set `pagesUnknown` when the paired control does, and override `itemRangeText` or `itemText` to change the wording.
+
+<PaginationStatus page={1} pageSize={10} totalItems={102} />
+
+### Separate from the controls
+
+Because the readout is decoupled, the count can sit in a card header while a `simple` `Pagination` stays in a footer below scrolling content. Bind `page` on `Pagination` and pass it to `PaginationStatus`.
+
+<FileSource src="/framed/Pagination/PaginationStatusSplit" />
 
 ## Skeleton
 
