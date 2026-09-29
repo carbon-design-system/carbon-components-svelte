@@ -95,6 +95,16 @@ Because the total is unknown, this mode falls back to `itemText` and `pageText` 
   pageText={(page) => `Page ${page}`}
 />
 
+## Reset on a new query
+
+When rows are removed while the user is browsing, a shrinking `totalItems` clamps `page` to the new last page so the view stays close to where they were. A new search or filter is different: its results have no relationship to the previous page position, but `Pagination` cannot tell the two apart.
+
+Set `resetKey` to a value that identifies the current query, such as the search term. Whenever it changes, `page` jumps to `1`, even when `totalItems` also shrinks. Comparison is by strict inequality and the initial value is ignored, so leaving `resetKey` unset keeps the clamp-to-last-page behavior.
+
+In this example, go to the last page, then search for "Balancer 1". The results start on page 1 instead of the last page of matches.
+
+<FileSource src="/framed/Pagination/PaginationResetKey" />
+
 ## Page window
 
 The page-number dropdown uses native `<option>` elements, derived from `totalItems`. For large datasets, use `pageWindow` to cap how many options are rendered (default 1000).
