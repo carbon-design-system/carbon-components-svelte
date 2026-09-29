@@ -8,6 +8,7 @@ import CodeSnippet from "carbon-components-svelte/CodeSnippet/CodeSnippet.svelte
 import ComboButton from "carbon-components-svelte/ComboButton/ComboButton.svelte";
 import ConfirmModal from "carbon-components-svelte/ConfirmModal/ConfirmModal.svelte";
 import CopyButton from "carbon-components-svelte/CopyButton/CopyButton.svelte";
+import CopyText from "carbon-components-svelte/CopyText/CopyText.svelte";
 import Countdown from "carbon-components-svelte/Countdown/Countdown.svelte";
 import Dialog from "carbon-components-svelte/Dialog/Dialog.svelte";
 import Disclosure from "carbon-components-svelte/Disclosure/Disclosure.svelte";
@@ -191,6 +192,11 @@ export const interactive: AriaEntry[] = [
   {
     name: "CopyButton",
     render: (attrs) => render(CopyButton, { props: { text: "abc", ...attrs } }),
+    target: () => screen.getByRole("button"),
+  },
+  {
+    name: "CopyText",
+    render: (attrs) => render(CopyText, { props: { text: "abc", ...attrs } }),
     target: () => screen.getByRole("button"),
   },
   {
