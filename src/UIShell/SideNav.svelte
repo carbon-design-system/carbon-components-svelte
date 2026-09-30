@@ -92,7 +92,8 @@
    */
   export let leaveDelayMs = 0;
 
-  import { createEventDispatcher, onMount, tick } from "svelte";
+  import { createEventDispatcher, onMount, setContext, tick } from "svelte";
+  import { writable } from "svelte/store";
   import {
     acquireBodyScrollLock,
     releaseBodyScrollLock,
@@ -218,6 +219,18 @@
 
   let navRef = undefined;
   let winWidth = undefined;
+
+  const sharedExpansionBreakpoint = writable(expansionBreakpoint);
+  const sharedWinWidth = writable(undefined);
+
+  // `HeaderSideNavItems` reads these to switch at a custom `expansionBreakpoint`.
+  setContext("carbon:SideNav", {
+    expansionBreakpoint: sharedExpansionBreakpoint,
+    winWidth: sharedWinWidth,
+  });
+
+  $: $sharedExpansionBreakpoint = expansionBreakpoint;
+  $: $sharedWinWidth = winWidth;
   let prevIsOpen = isOpen;
   // Double-clicking the handle restores the width the side nav started at.
   const initialWidth = width;
