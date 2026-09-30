@@ -1,0 +1,126 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Two panes divided by a draggable, focusable separator. The component sets
+/// the start pane's `flex-basis`; the end pane takes the rest. Rules reach
+/// panes and separators through `>` so nested splitters keep their own
+/// orientation and resizing state.
+/// @access private
+/// @group components
+@mixin splitter {
+  .#{$prefix}--splitter {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .#{$prefix}--splitter--vertical {
+    flex-direction: column;
+  }
+
+  .#{$prefix}--splitter__pane {
+    overflow: auto;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .#{$prefix}--splitter__pane--start {
+    flex-grow: 0;
+    flex-shrink: 0;
+  }
+
+  .#{$prefix}--splitter__pane--end {
+    flex: 1 1 0;
+  }
+
+  // An 8px hit target centered on the 1px line it draws, with negative
+  // margins so it takes no layout space between the panes.
+  .#{$prefix}--splitter__separator {
+    position: relative;
+    z-index: 1;
+    width: to-rem(8px);
+    flex: none;
+    margin: 0 to-rem(-4px);
+
+    &::after {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 1px;
+      height: 100%;
+      background-color: $ui-03;
+      content: "";
+      transform: translateX(-50%);
+      transition: background-color $duration--fast-02 motion(standard, productive);
+    }
+  }
+
+  .#{$prefix}--splitter__separator:not(.#{$prefix}--splitter__separator--disabled) {
+    cursor: col-resize;
+    // Without this, a touch drag pans or scrolls the page instead of
+    // delivering `pointermove` events to the separator.
+    touch-action: none;
+  }
+
+  .#{$prefix}--splitter--vertical > .#{$prefix}--splitter__separator {
+    width: auto;
+    height: to-rem(8px);
+    margin: to-rem(-4px) 0;
+
+    &::after {
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      transform: translateY(-50%);
+    }
+  }
+
+  .#{$prefix}--splitter--vertical
+    > .#{$prefix}--splitter__separator:not(.#{$prefix}--splitter__separator--disabled) {
+    cursor: row-resize;
+  }
+
+  // Panes stop taking pointer events mid-drag, so an iframe or a link under
+  // the pointer can't steal the cursor or the gesture.
+  .#{$prefix}--splitter--resizing {
+    cursor: col-resize;
+    user-select: none;
+  }
+
+  .#{$prefix}--splitter--resizing.#{$prefix}--splitter--vertical {
+    cursor: row-resize;
+  }
+
+  .#{$prefix}--splitter--resizing > .#{$prefix}--splitter__pane {
+    pointer-events: none;
+  }
+
+  .#{$prefix}--splitter--resizing > .#{$prefix}--splitter__separator::after {
+    background-color: $interactive-04;
+    transition: none;
+  }
+
+  @media (any-hover: hover) {
+    // Delayed on entry only, so a quick pass over the separator doesn't
+    // flash it.
+    .#{$prefix}--splitter__separator:not(.#{$prefix}--splitter__separator--disabled):hover::after {
+      background-color: $interactive-04;
+      transition-delay: $duration--moderate-01;
+    }
+  }
+
+  .#{$prefix}--splitter__separator:focus {
+    @include focus-outline("outline");
+  }
+}
+
+@include exports("splitter") {
+  @include splitter;
+}

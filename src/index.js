@@ -181,6 +181,7 @@ export { default as RangeSlider } from "./Slider/RangeSlider.svelte";
 export { default as RangeSliderSkeleton } from "./Slider/RangeSliderSkeleton.svelte";
 export { default as Slider } from "./Slider/Slider.svelte";
 export { default as SliderSkeleton } from "./Slider/SliderSkeleton.svelte";
+export { default as Splitter } from "./Splitter/Splitter.svelte";
 export { default as Stack } from "./Stack/Stack.svelte";
 export { default as StructuredList } from "./StructuredList/StructuredList.svelte";
 export { default as StructuredListBody } from "./StructuredList/StructuredListBody.svelte";
