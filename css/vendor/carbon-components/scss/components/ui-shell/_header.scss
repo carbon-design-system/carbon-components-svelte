@@ -391,3 +391,25 @@
 @include exports("header-forced-colors") {
   @include header-forced-colors;
 }
+
+// carbon-components-svelte patch (header nav expansion breakpoint)
+/// `HeaderNav` switches at Carbon's `lg` media query by default. When
+/// `expansionBreakpoint` is custom, the component adds a marker class
+/// from its measured window width so the nav follows the same breakpoint
+/// as the hamburger and side nav. Single-class rules emitted after the
+/// vendored rule win on source order.
+/// @access private
+/// @group components
+@mixin header-nav-breakpoint {
+  .#{$prefix}--header__nav--expanded {
+    display: block;
+  }
+
+  .#{$prefix}--header__nav--collapsed {
+    display: none;
+  }
+}
+
+@include exports('header-nav-breakpoint') {
+  @include header-nav-breakpoint;
+}
