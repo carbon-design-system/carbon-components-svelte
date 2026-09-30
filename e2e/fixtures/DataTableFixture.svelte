@@ -1,5 +1,11 @@
 <script>
-  import { DataTable } from "carbon-components-svelte";
+  import {
+    DataTable,
+    Table,
+    TableBody,
+    TableCell,
+    TableRow,
+  } from "carbon-components-svelte";
 
   const basicHeaders = [
     { key: "name", value: "Name" },
@@ -157,4 +163,15 @@
 
 <div data-testid="data-table-narrow-sticky" style:width="300px">
   <DataTable stickyHeader headers={wideHeaders} rows={wideRows} />
+</div>
+
+<div data-testid="table-hand-written-cell">
+  <Table>
+    <TableBody>
+      <TableRow>
+        <TableCell>Table cell</TableCell>
+        <td>Hand-written cell</td>
+      </TableRow>
+    </TableBody>
+  </Table>
 </div>

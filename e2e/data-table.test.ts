@@ -298,4 +298,22 @@ test.describe("DataTable", () => {
         .locator(".bx--data-table_inner-container"),
     ).toHaveAttribute("tabindex", "0");
   });
+
+  test("a hand-written td keeps the cell color and background", async ({
+    page,
+  }) => {
+    const table = page.getByTestId("table-hand-written-cell");
+    const look = (name: string) =>
+      table.getByRole("cell", { name }).evaluate((node) => {
+        const style = getComputedStyle(node);
+        let surface: Element | null = node;
+        let background = "rgba(0, 0, 0, 0)";
+        while (surface && background === "rgba(0, 0, 0, 0)") {
+          background = getComputedStyle(surface).backgroundColor;
+          surface = surface.parentElement;
+        }
+        return { color: style.color, background };
+      });
+    expect(await look("Hand-written cell")).toEqual(await look("Table cell"));
+  });
 });

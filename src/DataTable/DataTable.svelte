@@ -11,6 +11,15 @@
   }
 
   /**
+   * Join class names, skipping empty values.
+   * @param {...(string | undefined)} parts
+   * @returns {string | undefined}
+   */
+  function joinClasses(...parts) {
+    return parts.filter(Boolean).join(" ") || undefined;
+  }
+
+  /**
    * Whether `next` describes the same row values as `prev`. Unlike
    * `rowsEqual` (used by `ToolbarSearch`), a same-reference element does NOT
    * count as equal: `rowsEqual` short-circuits per element on `rowA ===
@@ -234,6 +243,16 @@
    * @typedef {string | ((row: DataTableRowClassArgs<Row>) => string | undefined)} DataTableRowClass
    */
 
+  /**
+   * @template [Row=DataTableRow]
+   * @typedef {{ row: Row, cell: DataTableCell<Row>, rowIndex: number, cellIndex: number, selected: boolean, expanded: boolean }} DataTableCellClassArgs
+   */
+
+  /**
+   * @template [Row=DataTableRow]
+   * @typedef {string | ((args: DataTableCellClassArgs<Row>) => string | undefined)} DataTableCellClass
+   */
+
   /** @restProps {div} */
 
   /**
@@ -292,6 +311,17 @@
    * for example `{id}-title` and `{id}-{header.key}`.
    */
   export let id = uniqueId();
+
+  /**
+   * Provide a class name for every body cell, or a function
+   * that returns one based on the row, cell, and row state.
+   * @example
+   * ```svelte
+   * <DataTable cellClass={({ cell }) => cell.key === "status" && cell.value === "Failed" ? "cell-failed" : undefined} />
+   * ```
+   * @type {DataTableCellClass<Row> | undefined}
+   */
+  export let cellClass = undefined;
 
   /**
    * Specify a name attribute for the input elements
@@ -1291,6 +1321,18 @@
   /** @type {Map<Row["id"], { set: (value: undefined | "active" | "revert") => void }>} */
   const rowAILabelSetters = new Map();
 
+  /**
+   * Resolve `cellClass` for one body cell. Rows come from a lookup by id,
+   * so `row` is typed as possibly missing.
+   * @param {DataTableCellClass<Row> | undefined} cellClass
+   * @param {Omit<DataTableCellClassArgs<Row>, "row"> & { row: Row | undefined }} args
+   * @returns {string | undefined}
+   */
+  function resolveCellClass(cellClass, { row, ...args }) {
+    if (typeof cellClass !== "function") return cellClass;
+    return row ? cellClass({ row, ...args }) : undefined;
+  }
+
   /** @param {Row["id"]} rowId */
   function rowAILabelState(rowId) {
     let setter = rowAILabelSetters.get(rowId);
@@ -1551,7 +1593,7 @@
           <!-- Spacer row for offset -->
           {#if virtualData.startIndex > 0}
             <tr style:height="{virtualData.offsetY}px">
-              <td colspan={totalColumns}></td>
+              <td colspan={totalColumns} class:bx--table-cell={true}></td>
             </tr>
           {/if}
 
@@ -1607,7 +1649,10 @@
               }}
             >
               {#if hasRowDecorator}
-                <td class="bx--table-column-decorator">
+                <td
+                  class="bx--table-column-decorator"
+                  class:bx--table-cell={true}
+                >
                   <Decorator
                     class="bx--table-column-decorator__inner"
                     state={rowAILabelState(row.id)}
@@ -1620,6 +1665,7 @@
               {#if expandable}
                 <td
                   class="bx--table-expand"
+                  class:bx--table-cell={true}
                   headers="{id}-expand"
                   data-previous-value={!nonExpandableRowIdsSet.has(row.id) &&
                   expandedRowIdsSet.has(row.id)
@@ -1662,6 +1708,7 @@
               {/if}
               {#if isSelectionEnabled}
                 <td
+                  class:bx--table-cell={true}
                   class:bx--table-column-checkbox={true}
                   class:bx--table-column-radio={radio}
                   on:click={(event) => handleRadioColumnClick(row, event)}
@@ -1755,8 +1802,21 @@
                 </td>
               {/if}
               {#each tableCellsByRowId[row.id] as cell, j (cell.key)}
+                {@const cellClassValue = resolveCellClass(cellClass, {
+                  row,
+                  cell,
+                  rowIndex: actualIndex,
+                  cellIndex: j,
+                  selected: isSelected,
+                  expanded: isExpanded,
+                })}
+                {@const cellClasses = joinClasses(
+                  formatAlignClass(cell.columnAlign),
+                  cellClassValue,
+                )}
                 <td
-                  class={formatAlignClass(cell.columnAlign)}
+                  class={cellClasses}
+                  class:bx--table-cell={true}
                   class:bx--table-column-menu={cell.empty && cell.columnMenu}
                   class:bx--table-cell--column-ai-label={$aiLabelColumns.has(
                     `${id}-${cell.key}`,
@@ -1802,7 +1862,7 @@
                 }}
               >
                 {#if expandedRowIdsSet.has(row.id) && !nonExpandableRowIdsSet.has(row.id)}
-                  <td colspan={totalColumns}>
+                  <td colspan={totalColumns} class:bx--table-cell={true}>
                     <div class:bx--child-row-inner-container={true}>
                       <slot
                         name="expandedRow"
@@ -1822,7 +1882,7 @@
               virtualData.totalHeight -
               virtualData.endIndex * virtualConfig.itemHeight}
             <tr style:height="{remainingHeight}px">
-              <td colspan={totalColumns}></td>
+              <td colspan={totalColumns} class:bx--table-cell={true}></td>
             </tr>
           {/if}
         {:else}
@@ -1885,7 +1945,10 @@
               }}
             >
               {#if hasRowDecorator}
-                <td class="bx--table-column-decorator">
+                <td
+                  class="bx--table-column-decorator"
+                  class:bx--table-cell={true}
+                >
                   <Decorator
                     class="bx--table-column-decorator__inner"
                     state={rowAILabelState(row.id)}
@@ -1898,6 +1961,7 @@
               {#if expandable}
                 <td
                   class="bx--table-expand"
+                  class:bx--table-cell={true}
                   headers="{id}-expand"
                   data-previous-value={isExpandable && isExpanded
                     ? "collapsed"
@@ -1938,6 +2002,7 @@
               {/if}
               {#if isSelectionEnabled}
                 <td
+                  class:bx--table-cell={true}
                   class:bx--table-column-checkbox={true}
                   class:bx--table-column-radio={radio}
                   on:click={(event) => handleRadioColumnClick(row, event)}
@@ -2031,8 +2096,21 @@
                 </td>
               {/if}
               {#each tableCellsByRowId[row.id] as cell, j (cell.key)}
+                {@const cellClassValue = resolveCellClass(cellClass, {
+                  row,
+                  cell,
+                  rowIndex: index,
+                  cellIndex: j,
+                  selected: isSelected,
+                  expanded: isExpanded,
+                })}
+                {@const cellClasses = joinClasses(
+                  formatAlignClass(cell.columnAlign),
+                  cellClassValue,
+                )}
                 <td
-                  class={formatAlignClass(cell.columnAlign)}
+                  class={cellClasses}
+                  class:bx--table-cell={true}
                   class:bx--table-column-menu={cell.empty && cell.columnMenu}
                   class:bx--table-cell--column-ai-label={$aiLabelColumns.has(
                     `${id}-${cell.key}`,
@@ -2081,7 +2159,7 @@
                 }}
               >
                 {#if isExpanded && isExpandable}
-                  <td colspan={totalColumns}>
+                  <td colspan={totalColumns} class:bx--table-cell={true}>
                     <div class:bx--child-row-inner-container={true}>
                       <slot name="expandedRow" {row} rowSelected={isSelected} />
                     </div>
@@ -2096,21 +2174,32 @@
         <TableFoot>
           <TableRow>
             {#if hasRowDecorator}
-              <td aria-hidden="true" class:bx--table-column-decorator={true}
+              <td
+                aria-hidden="true"
+                class:bx--table-cell={true}
+                class:bx--table-column-decorator={true}
               ></td>
             {/if}
             {#if expandable}
-              <td aria-hidden="true" class:bx--table-expand={true}></td>
+              <td
+                aria-hidden="true"
+                class:bx--table-cell={true}
+                class:bx--table-expand={true}
+              ></td>
             {/if}
             {#if isSelectionEnabled}
               <td
                 aria-hidden="true"
+                class:bx--table-cell={true}
                 class:bx--table-column-checkbox={true}
                 class:bx--table-column-radio={radio}
               ></td>
             {/if}
             {#each visibleHeaders as header, index (header.key)}
-              <td class={formatAlignClass(header.columnAlign)}>
+              <td
+                class={formatAlignClass(header.columnAlign)}
+                class:bx--table-cell={true}
+              >
                 <slot name="footerCell" {header} {index} />
               </td>
             {/each}
