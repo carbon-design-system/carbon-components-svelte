@@ -1,10 +1,12 @@
 import {
+  brushRange,
   formatRangeLabel,
   getClientX,
   getClientY,
   getPointerPosition,
   getTrackAxis,
   getValueText,
+  shiftRange,
   snapToStep,
   valueFromPointer,
   valueFromTrackPosition,
@@ -184,6 +186,58 @@ describe("snapToStep", () => {
   it("only clamps when step is not positive", () => {
     expect(snapToStep(3.3, { min: 0, max: 10, step: 0 })).toBe(3.3);
     expect(snapToStep(-1, { min: 0, max: 10, step: -1 })).toBe(0);
+  });
+});
+
+describe("shiftRange", () => {
+  const bounds = { min: 0, max: 100, step: 1 };
+
+  it("moves both bounds by delta", () => {
+    expect(shiftRange(20, 50, 10, bounds)).toEqual({ lower: 30, upper: 60 });
+  });
+
+  it.each([
+    { delta: 80, expected: { lower: 70, upper: 100 } },
+    { delta: -80, expected: { lower: 0, upper: 30 } },
+  ])("stops against the edge for delta $delta", ({ delta, expected }) => {
+    expect(shiftRange(20, 50, delta, bounds)).toEqual(expected);
+  });
+
+  it("does not leak floating-point noise with a decimal step", () => {
+    expect(shiftRange(0.2, 0.5, 0.1, { min: 0, max: 1, step: 0.1 })).toEqual({
+      lower: 0.3,
+      upper: 0.6,
+    });
+  });
+});
+
+describe("brushRange", () => {
+  const bounds = { min: 0, max: 100, minGap: 0 };
+
+  it.each([
+    { anchor: 20, point: 60, expected: { lower: 20, upper: 60 } },
+    { anchor: 60, point: 20, expected: { lower: 20, upper: 60 } },
+    { anchor: 40, point: 40, expected: { lower: 40, upper: 40 } },
+  ])("paints $anchor → $point", ({ anchor, point, expected }) => {
+    expect(brushRange(anchor, point, bounds)).toEqual(expected);
+  });
+
+  it.each([
+    { anchor: 40, point: 45, expected: { lower: 40, upper: 50 } },
+    { anchor: 40, point: 35, expected: { lower: 30, upper: 40 } },
+    { anchor: 95, point: 97, expected: { lower: 90, upper: 100 } },
+    { anchor: 5, point: 3, expected: { lower: 0, upper: 10 } },
+  ])("grows $anchor → $point to minGap", ({ anchor, point, expected }) => {
+    expect(brushRange(anchor, point, { ...bounds, minGap: 10 })).toEqual(
+      expected,
+    );
+  });
+
+  it("does not leak floating-point noise when growing to minGap", () => {
+    expect(brushRange(0.2, 0.2, { min: 0, max: 1, minGap: 0.1 })).toEqual({
+      lower: 0.2,
+      upper: 0.3,
+    });
   });
 });
 

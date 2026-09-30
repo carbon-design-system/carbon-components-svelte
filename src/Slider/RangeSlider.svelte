@@ -65,6 +65,18 @@
   /** Set the minimum allowed distance between `value` and `valueUpper` */
   export let minGap = 0;
 
+  /**
+   * Set what a drag that starts on the track, not on a handle, does.
+   * `"handle"` moves the nearer handle to the pointer.
+   * `"range"` drags both handles together when the press lands inside the
+   * selected range, keeping its width; elsewhere it behaves like `"handle"`.
+   * `"brush"` also drags the range from inside it, and a drag that starts
+   * outside it paints a new range from the press point.
+   * Moving the whole range follows `step` even when `snapToMarks` is set.
+   * @type {"handle" | "range" | "brush"}
+   */
+  export let trackDrag = "handle";
+
   /** Set to `true` to require a value */
   export let required = false;
 
@@ -174,10 +186,12 @@
     stepMarks,
   } from "../utils/resolve-slider-marks.js";
   import {
+    brushRange,
     formatRangeLabel as formatSliderRangeLabel,
     getPointerPosition,
     getTrackAxis,
     getValueText,
+    shiftRange,
     snapToStep,
     valueFromPointer,
   } from "../utils/slider-value.js";
@@ -205,6 +219,21 @@
   // Pointer distance from the active handle's value point when the press
   // started on the handle itself, so grabbing a handle doesn't jump it.
   let grabOffset = 0;
+  /** @type {"handle" | "range" | "brush"} */
+  let dragMode = "handle";
+  // Unsnapped pointer value at the press, and the range it started from,
+  // for moving the whole range.
+  let rangeAnchor = 0;
+  let rangeStart = { lower: 0, upper: 0 };
+  /** @type {"grab" | "crosshair" | undefined} */
+  let hoverCursor = undefined;
+  // Snapped value and pointer position of a `trackDrag="brush"` press
+  // outside the range. It moves the nearer handle until the pointer travels
+  // `BRUSH_THRESHOLD` pixels, then paints from `brushAnchor` instead.
+  /** @type {number | null} */
+  let brushAnchor = null;
+  let brushStartPoint = 0;
+  const BRUSH_THRESHOLD = 3;
 
   /** @type {(label: string, numericValue: number) => string | number} */
   function formatRangeLabel(label, numericValue) {
@@ -254,16 +283,84 @@
     dispatch("blur", { value, valueUpper, handle: "upper" });
   }
 
+  /** @type {(e: PointerEvent, snap?: number) => number | null} */
+  function getPointerValue(event, snap = step) {
+    if (!trackRef) return null;
+    return valueFromPointer(event, trackRef.getBoundingClientRect(), {
+      orientation,
+      min,
+      max,
+      step: snap,
+    });
+  }
+
+  /** @type {(e: PointerEvent) => boolean} */
+  function isOnThumb(event) {
+    const target = /** @type {Node | null} */ (event.target);
+    return (
+      !!target &&
+      !!(lowerThumbRef?.contains(target) || upperThumbRef?.contains(target))
+    );
+  }
+
+  // Hit-tests the unsnapped pointer value, so a press just outside the
+  // range can't round into it.
+  /** @type {(e: PointerEvent) => number | null} */
+  function getRangePressValue(event) {
+    if (trackDrag === "handle" || isOnThumb(event) || valueUpper <= value) {
+      return null;
+    }
+    const pressed = getPointerValue(event, 0);
+    return pressed != null && pressed >= value && pressed <= valueUpper
+      ? pressed
+      : null;
+  }
+
+  /** @type {(e: PointerEvent) => void} */
+  function handlePointermove(event) {
+    if (disabled || readonly || event.buttons !== 0) return;
+    if (getRangePressValue(event) != null) hoverCursor = "grab";
+    else if (trackDrag === "brush" && !isOnThumb(event))
+      hoverCursor = "crosshair";
+    else hoverCursor = undefined;
+  }
+
+  function handlePointerleave() {
+    hoverCursor = undefined;
+  }
+
+  // Moving or painting the whole range sets both handles at once, so
+  // neither keeps focus; both are highlighted while the gesture lasts.
+  function blurThumbs() {
+    const active = document.activeElement;
+    if (active === lowerThumbRef || active === upperThumbRef) {
+      /** @type {HTMLElement} */ (active).blur();
+    }
+  }
+
   /** @type {(e: PointerEvent) => boolean | undefined} */
   function handleDragStart(event) {
     if (disabled || readonly) return false;
+    const rangePress = getRangePressValue(event);
+    hoverCursor = undefined;
+    // The compat `mousedown` would move focus to the body for a press on
+    // the track, and in Firefox off the thumb for one on its SVG icon too.
+    event.preventDefault();
+    if (rangePress != null) {
+      blurThumbs();
+      dragMode = "range";
+      rangeAnchor = rangePress;
+      rangeStart = { lower: value, upper: valueUpper };
+      return;
+    }
+
     activeHandle = pickHandle(event);
     const thumbRef = activeHandle === "lower" ? lowerThumbRef : upperThumbRef;
-    // The compat `mousedown` would move focus back off the thumb: to the
-    // body for a press on the track, and in Firefox for one on the thumb's
-    // SVG icon too.
-    event.preventDefault();
     thumbRef?.focus({ preventScroll: true });
+    if (trackDrag === "brush" && !isOnThumb(event)) {
+      brushAnchor = getSnappedPointerValue(event);
+      brushStartPoint = getPointerPosition(event, orientation) ?? 0;
+    }
 
     grabOffset = 0;
     const target = /** @type {Node | null} */ (event.target);
@@ -279,9 +376,64 @@
     calcValue(event);
   }
 
+  /** @type {(e: PointerEvent) => void} */
+  function handleDragMove(event) {
+    if (dragMode === "handle" && brushAnchor != null) {
+      const point = getPointerPosition(event, orientation);
+      if (
+        point != null &&
+        Math.abs(point - brushStartPoint) >= BRUSH_THRESHOLD
+      ) {
+        dragMode = "brush";
+        blurThumbs();
+      }
+    }
+    if (dragMode === "range") moveRange(event);
+    else if (dragMode === "brush") paintRange(event);
+    else calcValue(event);
+  }
+
   function handleDragEnd() {
     grabOffset = 0;
+    dragMode = "handle";
+    brushAnchor = null;
     if (!disabled && !readonly) dispatch("change", { value, valueUpper });
+  }
+
+  /** @type {(e: PointerEvent) => number | null} */
+  function getSnappedPointerValue(event) {
+    const pointerValue = getPointerValue(event);
+    if (pointerValue == null || !snapToMarks || !resolvedMarks.length) {
+      return pointerValue;
+    }
+    return nearestMark(pointerValue, resolvedMarks)?.value ?? pointerValue;
+  }
+
+  /** @type {(e: PointerEvent) => void} */
+  function paintRange(event) {
+    if (disabled || readonly || brushAnchor == null) return;
+    const pointerValue = getSnappedPointerValue(event);
+    if (pointerValue == null) return;
+    const next = brushRange(brushAnchor, pointerValue, { min, max, minGap });
+    value = next.lower;
+    valueUpper = next.upper;
+    dispatch("input", { value, valueUpper });
+  }
+
+  /** @type {(e: PointerEvent) => void} */
+  function moveRange(event) {
+    if (disabled || readonly) return;
+    const pointerValue = getPointerValue(event, 0);
+    if (pointerValue == null) return;
+    const delta = Math.round((pointerValue - rangeAnchor) / step) * step;
+    const next = shiftRange(rangeStart.lower, rangeStart.upper, delta, {
+      min,
+      max,
+      step,
+    });
+    value = next.lower;
+    valueUpper = next.upper;
+    dispatch("input", { value, valueUpper });
   }
 
   // The gap applies before the bounds, so a `minGap` wider than the range
@@ -510,12 +662,20 @@
       class:bx--slider--with-marks={resolvedMarks.length > 0}
       class:bx--slider--with-mark-labels={hasMarkLabels}
       class:bx--slider--vertical={orientation === "vertical"}
+      class:bx--slider--moving-range={dragMode !== "handle"}
       style:max-width={fullWidth ? "none" : undefined}
+      style:cursor={dragMode === "range"
+        ? "grabbing"
+        : dragMode === "brush"
+          ? "crosshair"
+          : hoverCursor}
       use:pointerDrag={{
         onStart: handleDragStart,
-        onMove: calcValue,
+        onMove: handleDragMove,
         onEnd: handleDragEnd,
       }}
+      on:pointermove={handlePointermove}
+      on:pointerleave={handlePointerleave}
     >
       <div
         class:bx--slider__thumb-wrapper={true}

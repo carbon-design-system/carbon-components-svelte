@@ -127,6 +127,68 @@ export function snapToStep(value, { min, max, step }) {
 }
 
 /**
+ * Shift `[lower, upper]` by `delta` without changing its width, stopping
+ * against `min` or `max`. Results are rounded to the decimal precision of
+ * `step`, `min`, and the bounds, so the addition leaks no float noise.
+ *
+ * @param {number} lower
+ * @param {number} upper
+ * @param {number} delta
+ * @param {Object} options
+ * @param {number} options.min
+ * @param {number} options.max
+ * @param {number} options.step
+ * @returns {{ lower: number; upper: number }}
+ */
+export function shiftRange(lower, upper, delta, { min, max, step }) {
+  const shift = Math.min(max - upper, Math.max(min - lower, delta));
+  const precision = Math.max(
+    decimalPlaces(step),
+    decimalPlaces(min),
+    decimalPlaces(lower),
+    decimalPlaces(upper),
+  );
+  return {
+    lower: Number((lower + shift).toFixed(precision)),
+    upper: Number((upper + shift).toFixed(precision)),
+  };
+}
+
+/**
+ * Resolve the range painted by dragging from `anchor` to `point`, in either
+ * direction. A range narrower than `minGap` grows in the drag direction,
+ * then back from `max` or `min` when it runs out of room.
+ *
+ * @param {number} anchor
+ * @param {number} point
+ * @param {Object} options
+ * @param {number} options.min
+ * @param {number} options.max
+ * @param {number} options.minGap
+ * @returns {{ lower: number; upper: number }}
+ */
+export function brushRange(anchor, point, { min, max, minGap }) {
+  let lower = Math.min(anchor, point);
+  let upper = Math.max(anchor, point);
+  if (upper - lower >= minGap) return { lower, upper };
+  const precision = Math.max(
+    decimalPlaces(anchor),
+    decimalPlaces(point),
+    decimalPlaces(minGap),
+  );
+  /** @type {(value: number) => number} */
+  const round = (value) => Number(value.toFixed(precision));
+  if (point >= anchor) {
+    upper = Math.min(max, round(lower + minGap));
+    lower = Math.max(min, round(upper - minGap));
+  } else {
+    lower = Math.max(min, round(upper - minGap));
+    upper = Math.min(max, round(lower + minGap));
+  }
+  return { lower, upper };
+}
+
+/**
  * Read the client coordinate along the slider axis from a mouse or touch
  * event. Returns `null` for a touch event with no active touch point.
  *

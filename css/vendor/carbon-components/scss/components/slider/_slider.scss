@@ -448,6 +448,26 @@
     background-color: $interactive-04;
   }
 
+  // While `trackDrag` moves or paints the whole range, both handles change,
+  // so both take the focused look (and the fill its focused color) with
+  // neither holding focus.
+  .#{$prefix}--slider--moving-range .#{$prefix}--slider__filled-track {
+    background-color: $interactive-04;
+  }
+
+  .#{$prefix}--slider--moving-range .#{$prefix}--slider__thumb-icon:not(.#{$prefix}--slider__thumb-icon--focus) {
+    display: none;
+  }
+
+  .#{$prefix}--slider--moving-range .#{$prefix}--slider__thumb-icon--focus {
+    display: block;
+  }
+
+  .#{$prefix}--slider--moving-range .#{$prefix}--slider__thumb--lower::before,
+  .#{$prefix}--slider--moving-range .#{$prefix}--slider__thumb--upper::before {
+    width: 100%;
+  }
+
   .#{$prefix}--slider--disabled .#{$prefix}--slider__thumb--lower,
   .#{$prefix}--slider--disabled .#{$prefix}--slider__thumb--upper {
     background: transparent;

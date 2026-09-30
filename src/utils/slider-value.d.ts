@@ -55,6 +55,29 @@ export function snapToStep(
   options: { min: number; max: number; step: number },
 ): number;
 
+/**
+ * Shift `[lower, upper]` by `delta` without changing its width, stopping
+ * against `min` or `max`. Results are rounded to the decimal precision of
+ * `step`, `min`, and the bounds, so the addition leaks no float noise.
+ */
+export function shiftRange(
+  lower: number,
+  upper: number,
+  delta: number,
+  options: { min: number; max: number; step: number },
+): { lower: number; upper: number };
+
+/**
+ * Resolve the range painted by dragging from `anchor` to `point`, in either
+ * direction. A range narrower than `minGap` grows in the drag direction,
+ * then back from `max` or `min` when it runs out of room.
+ */
+export function brushRange(
+  anchor: number,
+  point: number,
+  options: { min: number; max: number; minGap: number },
+): { lower: number; upper: number };
+
 type TrackRect = Pick<DOMRect, "left" | "width" | "bottom" | "height">;
 
 /**
