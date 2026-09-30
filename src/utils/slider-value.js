@@ -2,14 +2,20 @@
 // Shared value/label logic for Slider and RangeSlider.
 
 /**
- * Resolve the `aria-valuetext` for a numeric slider value.
+ * Resolve the `aria-valuetext` for a numeric slider value. A value sitting
+ * on a labeled mark announces the mark's label, after the formatted value
+ * when `formatValue` is set and yields different text.
  *
  * @param {number} numericValue
  * @param {((value: number) => string) | undefined} formatValue
+ * @param {ReadonlyMap<number, string>} [markLabels] - label by mark value
  * @returns {string | undefined}
  */
-export function getValueText(numericValue, formatValue) {
-  return formatValue ? formatValue(numericValue) : undefined;
+export function getValueText(numericValue, formatValue, markLabels) {
+  const text = formatValue ? formatValue(numericValue) : undefined;
+  const label = markLabels?.get(numericValue);
+  if (!label || label === text) return text;
+  return text ? `${text}, ${label}` : label;
 }
 
 /**

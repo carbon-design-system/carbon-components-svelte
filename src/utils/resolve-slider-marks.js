@@ -46,6 +46,21 @@ export function resolveSliderMarks(marks, min, max, step) {
 }
 
 /**
+ * Map each labeled mark's value to its label, for `aria-valuetext` lookups.
+ *
+ * @param {ReadonlyArray<SliderMark>} marks
+ * @returns {Map<number, string>}
+ */
+export function getMarkLabels(marks) {
+  /** @type {Map<number, string>} */
+  const labels = new Map();
+  for (const mark of marks) {
+    if (mark.label) labels.set(mark.value, mark.label);
+  }
+  return labels;
+}
+
+/**
  * Find the mark whose `value` is closest to `value`. Ties resolve to the
  * earlier (lower-index) mark. Returns `undefined` when `marks` is empty.
  *
