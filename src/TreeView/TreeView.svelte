@@ -647,6 +647,63 @@
     return ids.map((id) => cachedNodeMap?.get(id)).filter((node) => node);
   }
 
+  /**
+   * Look up the parent of the node with `id`.
+   * Returns `null` for top-level nodes and unknown ids.
+   * @type {(id: Node["id"]) => Node | null}
+   * @example
+   * ```svelte
+   * <TreeView bind:this={treeView} {nodes} />
+   * <button on:click={() => console.log(treeView.getParent('node-123'))}>
+   *   Log Parent
+   * </button>
+   * ```
+   */
+  export function getParent(id) {
+    const parentId = cachedParentIdById?.get(id);
+    if (parentId == null || parentId === ROOT_PARENT_ID) return null;
+    return cachedNodeMap?.get(parentId) ?? null;
+  }
+
+  /**
+   * Look up the loaded children of the node with `id`.
+   * Returns an empty array for leaves, unloaded `hasChildren` nodes, and unknown ids.
+   * @type {(id: Node["id"]) => Array<Node>}
+   */
+  export function getChildren(id) {
+    return getNodes(cachedChildIdsByParentId?.get(id) ?? []);
+  }
+
+  /**
+   * Look up the ancestors of the node with `id`, ordered from the top-level
+   * node down to the parent. Returns an empty array for top-level nodes and
+   * unknown ids.
+   * @type {(id: Node["id"]) => Array<Node>}
+   * @example
+   * ```svelte
+   * <TreeView bind:this={treeView} {nodes} bind:activeId />
+   * <Breadcrumb>
+   *   {#each treeView?.getAncestors(activeId) ?? [] as ancestor (ancestor.id)}
+   *     <BreadcrumbItem>{ancestor.text}</BreadcrumbItem>
+   *   {/each}
+   * </Breadcrumb>
+   * ```
+   */
+  export function getAncestors(id) {
+    return getNodes(getAncestorIds(id, cachedParentIdById));
+  }
+
+  /**
+   * Look up the siblings of the node with `id`, in order, excluding the node
+   * itself. Top-level nodes are siblings of each other. Returns an empty
+   * array for unknown ids.
+   * @type {(id: Node["id"]) => Array<Node>}
+   */
+  export function getSiblings(id) {
+    if (!cachedNodeMap?.has(id)) return [];
+    return getNodes(getCachedSiblingIds(id));
+  }
+
   import {
     afterUpdate,
     createEventDispatcher,
