@@ -17,6 +17,7 @@
   export let disabled = false;
   export let hideSteppers = false;
   export let disableWheel = false;
+  export let scrubbable = false;
   export let selectTextOnFocus = false;
   export let stepStartValue: ComponentProps<NumberInput>["stepStartValue"] =
     undefined;
@@ -63,6 +64,7 @@
   {disabled}
   {hideSteppers}
   {disableWheel}
+  {scrubbable}
   {selectTextOnFocus}
   {stepStartValue}
   {validate}
