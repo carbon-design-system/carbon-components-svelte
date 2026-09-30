@@ -40,10 +40,10 @@
     {#if cell.key === "status"}
       <span
         style="color: {rowSelected
-          ? '#0f62fe'
-          : cell.value === 'Active'
-            ? 'green'
-            : 'gray'}"
+          ? "#0f62fe"
+          : cell.value === "Active"
+            ? "green"
+            : "gray"}"
       >
         {cell.value}
         {rowExpanded ? "(expanded)" : ""}

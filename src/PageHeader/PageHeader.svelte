@@ -183,7 +183,10 @@
             <span>{eyebrow}</span>
           </Text>
         {/if}
-        {#if title || $$slots.titleChildren || $$slots.titleStart || $$slots.titleEnd}
+        {#if title ||
+          $$slots.titleChildren ||
+          $$slots.titleStart ||
+          $$slots.titleEnd}
           <div class:bx--page-header__title-line={true}>
             {#if $$slots.titleStart}
               <div class:bx--page-header__title-start={true}>

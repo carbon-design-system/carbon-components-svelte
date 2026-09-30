@@ -68,11 +68,14 @@
       type="inline"
       code="rm -rf node_modules/"
       copy={copyInline}
-      on:mouseenter:copy-button={onMouseenterCopyButton("inline", prefetchInline)}
+      on:mouseenter:copy-button={onMouseenterCopyButton(
+        "inline",
+        prefetchInline,
+      )}
       on:mouseleave:copy-button={logEvent("inline", "mouseleave")}
       on:copy={logEvent("inline", "copy")}
       on:copy:error={(e) => {
-        console.error("copy:error",  e.detail.error);
+        console.error("copy:error", e.detail.error);
       }}
     />
   </div>
@@ -85,7 +88,7 @@
     on:mouseleave:copy-button={logEvent("single", "mouseleave")}
     on:copy={logEvent("single", "copy")}
     on:copy:error={(e) => {
-      console.error("copy:error",  e.detail.error);
+      console.error("copy:error", e.detail.error);
     }}
   />
 
@@ -97,7 +100,7 @@
     on:mouseleave:copy-button={logEvent("multi", "mouseleave")}
     on:copy={logEvent("multi", "copy")}
     on:copy:error={(e) => {
-      console.error("copy:error",  e.detail.error);
+      console.error("copy:error", e.detail.error);
     }}
   />
 </Stack>

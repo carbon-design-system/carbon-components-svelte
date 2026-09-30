@@ -57,7 +57,10 @@
       </div>
     </li>
   {/if}
-  {#each Array.from({ length: open ? count - 1 : count }, (_, i) => i) as item (item)}
+  {#each Array.from(
+    { length: open ? count - 1 : count },
+    (_, i) => i,
+  ) as item (item)}
     <li class:bx--accordion__item={true}>
       <span class:bx--accordion__heading={true}>
         <ChevronRight class="bx--accordion__arrow" />

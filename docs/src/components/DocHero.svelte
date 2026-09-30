@@ -36,7 +36,9 @@
                 type={titleType}
                 color="primary"
                 {balance}
-                maxWidth={titleType === "expressive-heading-04" ? "32ch" : undefined}
+                maxWidth={titleType === "expressive-heading-04"
+                  ? "32ch"
+                  : undefined}
               >
                 {title}
               </Text>

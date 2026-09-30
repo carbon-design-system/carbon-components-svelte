@@ -21,7 +21,8 @@
   secondaryButtonText="Cancel"
   on:click:button--primary={() => (events = [...events, "primary"])}
   on:click:button--secondary={() => (events = [...events, "secondary"])}
-  on:close={(e) => (closeEvents = [...closeEvents, e.detail?.trigger ?? "null"])}
+  on:close={(e) =>
+    (closeEvents = [...closeEvents, e.detail?.trigger ?? "null"])}
 >
   <p data-testid="modal-body">Modal content</p>
   <Select data-testid="modal-select" labelText="Contact method">

@@ -157,7 +157,9 @@
           disabled={effectiveDisabled}
           {value}
           aria-readonly={effectiveReadonly || undefined}
-          aria-describedby={joinDescribedBy(effectiveReadonly ? readonlyId : null)}
+          aria-describedby={joinDescribedBy(
+            effectiveReadonly ? readonlyId : null,
+          )}
           class:bx--select-input={true}
           on:change={handleSelectChange}
           on:change

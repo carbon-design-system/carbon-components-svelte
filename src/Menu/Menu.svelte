@@ -297,7 +297,9 @@
       onMove: (index) => {
         focusIndex = index;
         const items = /** @type {HTMLElement[]} */ (
-          Array.from(ref?.querySelectorAll(NON_DISABLED_MENUITEM_SELECTOR) ?? [])
+          Array.from(
+            ref?.querySelectorAll(NON_DISABLED_MENUITEM_SELECTOR) ?? [],
+          )
         );
         const item = items[index];
         if (item) focusMenuItem(item);
@@ -327,9 +329,7 @@
     aria-label={menuAriaLabel}
     on:keydown
     on:keydown={(event) => {
-      if (
-        ["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)
-      ) {
+      if (["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) {
         event.preventDefault();
       } else if (isTypeaheadKey(event)) {
         event.preventDefault();

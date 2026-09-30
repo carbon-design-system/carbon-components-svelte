@@ -50,7 +50,8 @@
       <Button
         kind="tertiary"
         size="small"
-        on:click={() => pinCodeInput?.focusFirstInput({ selectTextOnFocus: true })}
+        on:click={() =>
+          pinCodeInput?.focusFirstInput({ selectTextOnFocus: true })}
       >
         Focus first (select)
       </Button>

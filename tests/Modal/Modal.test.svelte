@@ -69,7 +69,8 @@
   on:open={(e) => onopen?.(e)}
   on:close={(e) => onclose?.(e)}
   on:submit={onsubmit || (() => console.log("submit"))}
-  on:click:button--primary={onclickbuttonprimary || (() => console.log("click:button--primary"))}
+  on:click:button--primary={onclickbuttonprimary ||
+    (() => console.log("click:button--primary"))}
   on:click:button--secondary={(e) => {
     if (closeOnSecondary) open = false;
     if (onclickbuttonsecondary) {

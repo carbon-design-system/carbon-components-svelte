@@ -340,8 +340,18 @@
     {#each filesWithKeys as { file, key }, index (key)}
       {@const rowStatus = resolveFileOverride(fileStatus, status, file, index)}
       {@const rowInvalid = resolveFileOverride(fileInvalid, false, file, index)}
-      {@const rowErrorSubject = resolveFileOverride(fileErrorSubject, "", file, index)}
-      {@const rowErrorBody = resolveFileOverride(fileErrorBody, "", file, index)}
+      {@const rowErrorSubject = resolveFileOverride(
+        fileErrorSubject,
+        "",
+        file,
+        index,
+      )}
+      {@const rowErrorBody = resolveFileOverride(
+        fileErrorBody,
+        "",
+        file,
+        index,
+      )}
       {@const rowFileSize = resolveFileSize(fileSize, file, index)}
       <span
         class:bx--file__selected-file={true}

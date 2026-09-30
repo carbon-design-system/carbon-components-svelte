@@ -193,7 +193,7 @@
               {#each (prop.type || "").split(" | ") as type, i (type)}
                 <div
                   class="cell"
-                  style="z-index: {(prop.type || '').split(' | ').length - i}"
+                  style="z-index: {(prop.type || "").split(" | ").length - i}"
                 >
                   {#if type.startsWith("HTML")}
                     <OutboundLink

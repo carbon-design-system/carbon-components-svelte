@@ -12,6 +12,6 @@
   <DatePickerInput
     labelText="Start date"
     placeholder="mm/dd/yyyy"
-    helperText="Value: {value || 'none'}"
+    helperText="Value: {value || "none"}"
   />
 </DatePicker>

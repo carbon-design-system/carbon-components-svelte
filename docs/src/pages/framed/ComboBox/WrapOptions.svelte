@@ -45,7 +45,10 @@
     {items}
     let:item
   >
-    {#each highlightSegments(item.text, matchIndices(item.text, truncatedValue)) as segment}
+    {#each highlightSegments(
+      item.text,
+      matchIndices(item.text, truncatedValue),
+    ) as segment}
       {#if segment.match}
         <mark>{segment.text}</mark>
       {:else}
@@ -63,7 +66,10 @@
     {items}
     let:item
   >
-    {#each highlightSegments(item.text, matchIndices(item.text, wrappedValue)) as segment}
+    {#each highlightSegments(
+      item.text,
+      matchIndices(item.text, wrappedValue),
+    ) as segment}
       {#if segment.match}
         <mark>{segment.text}</mark>
       {:else}

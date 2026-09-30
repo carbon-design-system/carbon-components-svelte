@@ -21,7 +21,8 @@
 
 <ComposedModal
   bind:open
-  on:close={(e) => (closeEvents = [...closeEvents, e.detail?.trigger ?? "null"])}
+  on:close={(e) =>
+    (closeEvents = [...closeEvents, e.detail?.trigger ?? "null"])}
 >
   <ModalHeader title="Modal title" />
   <ModalBody>

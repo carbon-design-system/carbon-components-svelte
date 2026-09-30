@@ -21,9 +21,10 @@
   {vertical}
   {spaceEqually}
   {preventChangeOnClick}
-  on:change={onchange || ((e) => {
-    console.log("change", e.detail);
-  })}
+  on:change={onchange ||
+    ((e) => {
+      console.log("change", e.detail);
+    })}
 >
   {#each steps as step}
     <ProgressStep

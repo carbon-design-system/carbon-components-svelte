@@ -58,7 +58,7 @@
         tag="span"
         type="inherit"
         color={node.selected ? "link" : undefined}
-        style="text-decoration: {node.disabled ? 'inherit' : 'underline'}"
+        style="text-decoration: {node.disabled ? "inherit" : "underline"}"
       >
         {node.text}
         (id: {node.id})

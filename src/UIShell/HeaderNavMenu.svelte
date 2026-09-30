@@ -95,7 +95,11 @@
 
 <li
   role="none"
-  use:dismiss={{ enabled: expanded, type: "click", handler: handleOutsideClick }}
+  use:dismiss={{
+    enabled: expanded,
+    type: "click",
+    handler: handleOutsideClick,
+  }}
   class:bx--header__submenu={true}
   class:bx--header__submenu--current={isCurrentSubmenu}
   on:click={(event) => {

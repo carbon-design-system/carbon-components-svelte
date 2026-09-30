@@ -66,7 +66,11 @@
 </Button>
 <Button
   data-testid="reset"
-  on:click={() => { expandedIds = []; selectedIds = []; activeId = undefined; }}
+  on:click={() => {
+    expandedIds = [];
+    selectedIds = [];
+    activeId = undefined;
+  }}
 >
   Reset
 </Button>

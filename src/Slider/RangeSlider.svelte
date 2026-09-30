@@ -666,7 +666,9 @@
               range === 0 ? 0 : ((mark.value - min) / range) * 100}
             <span
               class:bx--slider__mark={true}
-              style:left={orientation === "vertical" ? undefined : `${percent}%`}
+              style:left={orientation === "vertical"
+                ? undefined
+                : `${percent}%`}
               style:top={orientation === "vertical"
                 ? `${100 - percent}%`
                 : undefined}

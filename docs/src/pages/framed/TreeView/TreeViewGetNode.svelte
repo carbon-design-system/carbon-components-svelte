@@ -48,8 +48,7 @@
     <div>Active node: {activeNode ? activeNode.text : "(none)"}</div>
     <div>
       Selected nodes:
-      {selectedNodes.map((node) => node.text).join(", ") ||
-        "(none)"}
+      {selectedNodes.map((node) => node.text).join(", ") || "(none)"}
     </div>
   </Stack>
 </Stack>

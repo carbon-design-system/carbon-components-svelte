@@ -38,16 +38,16 @@
 <div
   class:bx--contained-list="{true}"
   class:bx--contained-list--inset-rulers="{inset}"
-  class:bx--contained-list--sm="{size === 'sm'}"
-  class:bx--contained-list--md="{size === 'md'}"
-  class:bx--contained-list--lg="{size === 'lg'}"
-  class:bx--contained-list--xl="{size === 'xl'}"
-  class:bx--layout--size-sm="{size === 'sm'}"
-  class:bx--layout--size-md="{size === 'md'}"
-  class:bx--layout--size-lg="{size === 'lg'}"
-  class:bx--layout--size-xl="{size === 'xl'}"
-  class:bx--contained-list--on-page="{kind === 'on-page'}"
-  class:bx--contained-list--disclosed="{kind === 'disclosed'}"
+  class:bx--contained-list--sm="{size === "sm"}"
+  class:bx--contained-list--md="{size === "md"}"
+  class:bx--contained-list--lg="{size === "lg"}"
+  class:bx--contained-list--xl="{size === "xl"}"
+  class:bx--layout--size-sm="{size === "sm"}"
+  class:bx--layout--size-md="{size === "md"}"
+  class:bx--layout--size-lg="{size === "lg"}"
+  class:bx--layout--size-xl="{size === "xl"}"
+  class:bx--contained-list--on-page="{kind === "on-page"}"
+  class:bx--contained-list--disclosed="{kind === "disclosed"}"
 >
   {#if hideLabel && !$$slots.action && (labelText || $$slots.labelChildren)}
     <span id="{labelId}" class:bx--visually-hidden="{true}">
@@ -56,10 +56,10 @@
   {:else if labelText || $$slots.labelChildren || $$slots.action}
     <div
       class:bx--contained-list__header="{true}"
-      class:bx--layout--size-sm={kind !== 'disclosed' && size === 'sm'}
-      class:bx--layout--size-md={kind !== 'disclosed' && size === 'md'}
-      class:bx--layout--size-lg={kind !== 'disclosed' && size === 'lg'}
-      class:bx--layout--size-xl={kind !== 'disclosed' && size === 'xl'}
+      class:bx--layout--size-sm={kind !== "disclosed" && size === "sm"}
+      class:bx--layout--size-md={kind !== "disclosed" && size === "md"}
+      class:bx--layout--size-lg={kind !== "disclosed" && size === "lg"}
+      class:bx--layout--size-xl={kind !== "disclosed" && size === "xl"}
     >
       {#if labelText || $$slots.labelChildren}
         <div

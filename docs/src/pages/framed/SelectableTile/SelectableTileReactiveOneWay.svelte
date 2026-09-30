@@ -13,7 +13,8 @@
   legendText="Service pricing tiers"
   name="plan"
   on:select={({ detail }) => (selected = [...selected, detail])}
-  on:deselect={({ detail }) => (selected = selected.filter((v) => v !== detail))}
+  on:deselect={({ detail }) =>
+    (selected = selected.filter((v) => v !== detail))}
 >
   {#each values as value}
     <SelectableTile {value} selected={selected.includes(value)}>

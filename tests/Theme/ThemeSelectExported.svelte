@@ -14,10 +14,10 @@
 <Theme
   render="select"
   select={{
-      themes: lightThemes,
-      labelText: "Light themes",
-    }}
+    themes: lightThemes,
+    labelText: "Light themes",
+  }}
   on:update={({ detail }) => {
-      console.log("update", detail);
-    }}
+    console.log("update", detail);
+  }}
 />

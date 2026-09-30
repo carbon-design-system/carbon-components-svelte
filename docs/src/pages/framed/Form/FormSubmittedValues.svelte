@@ -70,9 +70,9 @@
           labelText="Alert channel"
           selectedId="email"
           items={[
-          { id: "email", text: "Email" },
-          { id: "slack", text: "Slack" },
-        ]}
+            { id: "email", text: "Email" },
+            { id: "slack", text: "Slack" },
+          ]}
         />
         <MultiSelect
           name="teams"

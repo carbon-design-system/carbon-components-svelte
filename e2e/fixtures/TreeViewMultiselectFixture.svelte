@@ -58,21 +58,21 @@
   <button
     type="button"
     data-testid="set-node"
-    onclick={() => multiselectMode = "node"}
+    onclick={() => (multiselectMode = "node")}
   >
     node
   </button>
   <button
     type="button"
     data-testid="set-shallow"
-    onclick={() => multiselectMode = "shallow"}
+    onclick={() => (multiselectMode = "shallow")}
   >
     shallow
   </button>
   <button
     type="button"
     data-testid="set-deep"
-    onclick={() => multiselectMode = "deep"}
+    onclick={() => (multiselectMode = "deep")}
   >
     deep
   </button>

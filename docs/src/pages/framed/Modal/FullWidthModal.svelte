@@ -27,7 +27,8 @@
         id: "1",
         resource: "prod-db-01",
         region: "us-south",
-        status: "Provisioning replicas across three availability zones to meet the 99.99% SLA.",
+        status:
+          "Provisioning replicas across three availability zones to meet the 99.99% SLA.",
       },
       {
         id: "2",

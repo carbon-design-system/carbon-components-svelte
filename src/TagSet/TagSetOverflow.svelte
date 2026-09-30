@@ -49,8 +49,8 @@
   align={overflowAlign}
   direction={overflowDirection}
   class="bx--tag-set-overflow{count === 0
-    ? ' bx--tag-set-overflow--empty'
-    : ''}"
+    ? " bx--tag-set-overflow--empty"
+    : ""}"
   on:click={() => dispatch("trigger")}
 >
   <svelte:fragment slot="tooltip">

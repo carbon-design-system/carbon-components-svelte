@@ -157,7 +157,8 @@
   class:bx--header--ui-shell-classic={theme === "classic"}
 >
   <slot name="skipToContent" />
-  {#if ($shouldRenderHamburgerMenu && winWidth < expansionBreakpoint) || persistentHamburgerMenu}
+  {#if ($shouldRenderHamburgerMenu && winWidth < expansionBreakpoint) ||
+    persistentHamburgerMenu}
     <HamburgerMenu
       bind:isOpen={isSideNavOpen}
       on:click={() => {

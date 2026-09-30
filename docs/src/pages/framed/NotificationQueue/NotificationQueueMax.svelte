@@ -9,12 +9,12 @@
 
 <Button
   on:click={() => {
-      count++;
-      queue.add({
-        kind: "success",
-        title: `Backup job ${count} completed`,
-      });
-    }}
+    count++;
+    queue.add({
+      kind: "success",
+      title: `Backup job ${count} completed`,
+    });
+  }}
 >
   Add notification
 </Button>
