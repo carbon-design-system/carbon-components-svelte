@@ -945,6 +945,20 @@ describe("Slider", () => {
       expect(screen.getByRole("spinbutton")).toHaveValue(10);
     });
 
+    it("focuses the thumb on a press on the track", async () => {
+      const { slider } = setup();
+      const track = slider.querySelector(".bx--slider__track");
+      assert(track instanceof HTMLElement);
+
+      const notCanceled = await fireEvent.pointerDown(track, {
+        clientX: 20,
+        pointerId: 1,
+      });
+
+      expect(notCanceled).toBe(false);
+      expect(screen.getByRole("slider")).toHaveFocus();
+    });
+
     it("adds no window listeners", async () => {
       const add = vi.spyOn(window, "addEventListener");
       const { slider } = setup();
