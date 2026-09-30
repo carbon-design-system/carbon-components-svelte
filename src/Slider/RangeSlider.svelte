@@ -59,6 +59,14 @@
    */
   export let snapToMarks = false;
 
+  /**
+   * Snap drags and clicks to a mark when the pointer comes within this many pixels
+   * of it, so meaningful values are easy to hit while other values stay reachable
+   * by `step`. Keyboard navigation is unaffected. Set to `0` to disable.
+   * Has no effect when `marks` is not set or `snapToMarks` is set.
+   */
+  export let markSnapDistance = 0;
+
   /** Set the step multiplier value */
   export let stepMultiplier = 4;
 
@@ -181,6 +189,7 @@
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
   import {
     getMarkLabels,
+    markNearPointer,
     nearestMark,
     resolveSliderMarks,
     stepMarks,
@@ -403,10 +412,19 @@
   /** @type {(e: PointerEvent) => number | null} */
   function getSnappedPointerValue(event) {
     const pointerValue = getPointerValue(event);
-    if (pointerValue == null || !snapToMarks || !resolvedMarks.length) {
+    if (pointerValue == null || !resolvedMarks.length || !trackRef) {
       return pointerValue;
     }
-    return nearestMark(pointerValue, resolvedMarks)?.value ?? pointerValue;
+    const mark = snapToMarks
+      ? nearestMark(pointerValue, resolvedMarks)
+      : markNearPointer(event, trackRef.getBoundingClientRect(), {
+          orientation,
+          min,
+          max,
+          marks: resolvedMarks,
+          distance: markSnapDistance,
+        });
+    return mark?.value ?? pointerValue;
   }
 
   /** @type {(e: PointerEvent) => void} */
@@ -459,7 +477,8 @@
   function calcValue(event) {
     if (disabled || readonly || !trackRef) return;
 
-    let nextValue = valueFromPointer(event, trackRef.getBoundingClientRect(), {
+    const rect = trackRef.getBoundingClientRect();
+    let nextValue = valueFromPointer(event, rect, {
       orientation,
       min,
       max,
@@ -471,6 +490,16 @@
       const mark = nearestMark(nextValue, getReachableMarks(activeHandle));
       if (!mark) return;
       nextValue = mark.value;
+    } else if (markSnapDistance > 0 && resolvedMarks.length) {
+      nextValue =
+        markNearPointer(event, rect, {
+          orientation,
+          min,
+          max,
+          marks: getReachableMarks(activeHandle),
+          distance: markSnapDistance,
+          offset: grabOffset,
+        })?.value ?? nextValue;
     }
 
     if (activeHandle === "lower") {

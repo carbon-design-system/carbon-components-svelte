@@ -942,6 +942,77 @@ describe("RangeSlider", () => {
     });
   });
 
+  describe("markSnapDistance", () => {
+    const setup = (props: Record<string, unknown>) => {
+      const { container } = render(RangeSlider, { props });
+      const slider = container.querySelector(".bx--slider");
+      const track = container.querySelector(".bx--slider__track");
+      assert(slider instanceof HTMLElement);
+      assert(track instanceof HTMLElement);
+      vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
+        left: 0,
+        right: 200,
+        width: 200,
+        top: 0,
+        bottom: 0,
+        height: 2,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      });
+      return { slider, track };
+    };
+
+    it("should snap a handle drag to a nearby reachable mark", async () => {
+      const { slider } = setup({
+        value: 0,
+        valueUpper: 100,
+        marks: [{ value: 25 }, { value: 50 }],
+        markSnapDistance: 8,
+      });
+      const [lowerThumb] = screen.getAllByRole("slider");
+
+      await fireEvent.pointerDown(slider, { clientX: 56, pointerId: 1 });
+      expect(lowerThumb).toHaveAttribute("aria-valuenow", "25");
+      await fireEvent.pointerMove(slider, { clientX: 70, pointerId: 1 });
+      expect(lowerThumb).toHaveAttribute("aria-valuenow", "35");
+      await fireEvent.pointerUp(slider, { pointerId: 1 });
+    });
+
+    it("should skip marks past the other handle", async () => {
+      const { slider } = setup({
+        value: 0,
+        valueUpper: 48,
+        marks: [{ value: 50 }],
+        markSnapDistance: 8,
+      });
+      const [lowerThumb] = screen.getAllByRole("slider");
+
+      await fireEvent.pointerDown(slider, { clientX: 94, pointerId: 1 });
+      await fireEvent.pointerUp(slider, { pointerId: 1 });
+
+      expect(lowerThumb).toHaveAttribute("aria-valuenow", "47");
+    });
+
+    it('should snap brush endpoints when trackDrag is "brush"', async () => {
+      const { slider, track } = setup({
+        value: 0,
+        valueUpper: 10,
+        marks: [{ value: 50 }, { value: 80 }],
+        markSnapDistance: 8,
+        trackDrag: "brush",
+      });
+      const [lowerThumb, upperThumb] = screen.getAllByRole("slider");
+
+      await fireEvent.pointerDown(track, { clientX: 104, pointerId: 1 });
+      await fireEvent.pointerMove(slider, { clientX: 156, pointerId: 1 });
+      await fireEvent.pointerUp(slider, { pointerId: 1 });
+
+      expect(lowerThumb).toHaveAttribute("aria-valuenow", "50");
+      expect(upperThumb).toHaveAttribute("aria-valuenow", "80");
+    });
+  });
+
   describe("trackDrag", () => {
     const setup = (props: Record<string, unknown>) => {
       const consoleLog = vi.spyOn(console, "log");
