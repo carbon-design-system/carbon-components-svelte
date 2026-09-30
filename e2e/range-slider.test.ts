@@ -115,5 +115,18 @@ test.describe("RangeSlider", () => {
     await expect(page.getByTestId("value-upper-display")).toHaveText("100");
     await expect(page.getByTestId("value-display")).toHaveText("20");
     await expect(page.getByTestId("change-count")).toHaveText("1");
+    await expect(upperThumb).toBeFocused();
+  });
+
+  test("pressing the track focuses the nearer handle", async ({ page }) => {
+    const slider = page.getByTestId("range-slider");
+    const box = await slider.locator(".bx--slider__track").boundingBox();
+    if (!box) throw new Error("missing track box");
+
+    await page.mouse.click(box.x + box.width * 0.3, box.y + box.height / 2);
+
+    await expect(slider.getByRole("slider").first()).toBeFocused();
+    await page.keyboard.press("ArrowRight");
+    await expect(page.getByTestId("value-display")).toHaveText("31");
   });
 });
