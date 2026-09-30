@@ -104,7 +104,6 @@
   import { toAriaChecked } from "../utils/tree-aria-checked.js";
 
   let ref = null;
-  let refLabel = null;
   let prevActiveId = undefined;
 
   const {
@@ -118,11 +117,14 @@
     focusNode,
   } = getContext("carbon:TreeView");
 
-  function offset() {
-    const depth = computeTreeLeafDepth(refLabel) - 1;
-    // Checkbox is the leading element; use one inset per depth. The
-    // leaf/icon offsets below align text with a parent's caret and would
-    // shift the checkboxes instead.
+  /**
+   * Label inset in rem. Checkbox is the leading element; use one inset per
+   * depth. The leaf/icon offsets align text with a parent's caret and would
+   * shift the checkboxes instead.
+   * @type {(level: number, isCheckboxMode: boolean, leaf: boolean, icon: unknown) => number}
+   */
+  function resolveLabelInset(level, isCheckboxMode, leaf, icon) {
+    const depth = level - 1;
     if (isCheckboxMode) return depth + 1;
     return depth + (leaf && icon ? 2 : 2.5);
   }
@@ -160,11 +162,7 @@
 
     prevActiveId = $activeNodeId;
   }
-  $: if (refLabel) {
-    const rem = offset();
-    refLabel.style.marginLeft = `-${rem}rem`;
-    refLabel.style.paddingLeft = `${rem}rem`;
-  }
+  $: labelInset = resolveLabelInset(level, isCheckboxMode, leaf, icon);
 </script>
 
 {#if href}
@@ -227,7 +225,11 @@
         focusNode(node);
       }}
     >
-      <div bind:this={refLabel} class:bx--tree-node__label={true}>
+      <div
+        class:bx--tree-node__label={true}
+        style:margin-left="-{labelInset}rem"
+        style:padding-left="{labelInset}rem"
+      >
         <svelte:component this={icon} class="bx--tree-node__icon" />
         <slot {node}> {text} </slot>
       </div>
@@ -296,7 +298,11 @@
       focusNode(node);
     }}
   >
-    <div bind:this={refLabel} class:bx--tree-node__label={true}>
+    <div
+      class:bx--tree-node__label={true}
+      style:margin-left="-{labelInset}rem"
+      style:padding-left="{labelInset}rem"
+    >
       {#if isCheckboxMode}
         <!-- Decorative input; empty label keeps row textContent stable for type-ahead. -->
         <Checkbox
