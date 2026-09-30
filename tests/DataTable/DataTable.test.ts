@@ -2821,6 +2821,136 @@ describe("DataTable", () => {
         );
       });
     });
+
+    describe("cellClass prop", () => {
+      it("applies a string cellClass to data cells only", () => {
+        const { container } = render(DataTable, {
+          props: {
+            selectable: true,
+            expandable: true,
+            headers,
+            rows,
+            cellClass: "custom-cell-class",
+          },
+        });
+
+        const dataCells = container.querySelectorAll(
+          "tbody td.custom-cell-class",
+        );
+        expect(dataCells).toHaveLength(rows.length * headers.length);
+
+        for (const cell of container.querySelectorAll(
+          "tbody td.bx--table-expand, tbody td.bx--table-column-checkbox",
+        )) {
+          expect(cell).not.toHaveClass("custom-cell-class");
+        }
+        expect(container.querySelector("thead .custom-cell-class")).toBeNull();
+      });
+
+      it("passes row, cell, and state to a function cellClass", () => {
+        const cellClass = vi.fn(
+          ({ row, cell }: { row: { id: string }; cell: { key: string } }) =>
+            row.id === "b" && cell.key === "port" ? "target-cell" : undefined,
+        );
+        const { container } = render(DataTable, {
+          props: { headers, rows, cellClass },
+        });
+
+        expect(cellClass).toHaveBeenCalledWith(
+          expect.objectContaining({
+            row: expect.objectContaining({ id: "a" }),
+            cell: expect.objectContaining({ key: "port" }),
+            rowIndex: 0,
+            cellIndex: 2,
+            selected: false,
+            expanded: false,
+          }),
+        );
+
+        const targets = container.querySelectorAll(".target-cell");
+        expect(targets).toHaveLength(1);
+        expect(targets[0]).toHaveTextContent(String(rows[1].port));
+      });
+
+      it("combines with columnAlign without an undefined token", () => {
+        const { container } = render(DataTable, {
+          props: {
+            headers: [
+              { key: "name", value: "Name" },
+              { key: "port", value: "Port", columnAlign: "end" },
+            ],
+            rows,
+            cellClass: ({ cell }: { cell: { key: string } }) =>
+              cell.key === "port" ? "port-cell" : undefined,
+          },
+        });
+
+        const portCell = container.querySelector("tbody td.port-cell");
+        assert(portCell);
+        expect(portCell).toHaveClass("bx--table-column--align-end");
+
+        for (const td of container.querySelectorAll("tbody td")) {
+          expect(td.className).not.toContain("undefined");
+        }
+        const nameCell = container.querySelector("tbody td:not(.port-cell)");
+        assert(nameCell);
+        expect(nameCell.className).not.toContain("port-cell");
+      });
+
+      it("updates when selectedRowIds changes", async () => {
+        const { container, rerender } = render(DataTable, {
+          props: {
+            selectable: true,
+            headers,
+            rows,
+            selectedRowIds: ["a"],
+            cellClass: ({ selected }: { selected: boolean }) =>
+              selected ? "selected-cell" : undefined,
+          },
+        });
+
+        const cellsOf = (id: string) =>
+          container.querySelectorAll(`tr[data-row='${id}'] td.selected-cell`);
+        expect(cellsOf("a")).toHaveLength(headers.length);
+        expect(cellsOf("b")).toHaveLength(0);
+
+        rerender({ selectedRowIds: ["b"] });
+        await tick();
+
+        expect(cellsOf("a")).toHaveLength(0);
+        expect(cellsOf("b")).toHaveLength(headers.length);
+      });
+
+      it("applies to painted rows when virtualized", () => {
+        const largeRows = Array.from({ length: 500 }, (_, i) => ({
+          id: String(i),
+          name: `Load Balancer ${i + 1}`,
+          protocol: "HTTP",
+          port: 3000 + i,
+          rule: "Round robin",
+        }));
+
+        render(DataTable, {
+          props: {
+            headers,
+            rows: largeRows,
+            virtualize: true,
+            cellClass: "virtual-cell",
+          },
+        });
+
+        const isSpacer = (row: HTMLElement) =>
+          row.getAttribute("style")?.includes("height:") ?? false;
+        const dataRows = getBodyRows().filter((row) => !isSpacer(row));
+
+        expect(dataRows.length).toBeGreaterThan(0);
+        for (const row of dataRows) {
+          for (const cell of within(row).getAllByRole("cell")) {
+            expect(cell).toHaveClass("virtual-cell");
+          }
+        }
+      });
+    });
   });
 
   it("scopes the per-header data-header attribute to the DataTable instance to prevent collisions across multiple tables", () => {
