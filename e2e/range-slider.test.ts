@@ -129,4 +129,50 @@ test.describe("RangeSlider", () => {
     await page.keyboard.press("ArrowRight");
     await expect(page.getByTestId("value-display")).toHaveText("31");
   });
+
+  test("trackDrag drags the whole range from inside it", async ({ page }) => {
+    const slider = page.getByTestId("range-slider-drag");
+    const inner = slider.locator(".bx--slider");
+    const box = await slider.locator(".bx--slider__track").boundingBox();
+    if (!box) throw new Error("missing track box");
+    const y = box.y + box.height / 2;
+
+    await page.mouse.move(box.x + box.width * 0.35, y);
+    await expect(inner).toHaveCSS("cursor", "grab");
+
+    await page.mouse.down();
+    await expect(inner).toHaveCSS("cursor", "grabbing");
+    await page.mouse.move(box.x + box.width * 0.55, y, { steps: 4 });
+    await expect(page.getByTestId("drag-value-display")).toHaveText("40–70");
+
+    await page.mouse.move(box.x + box.width + 100, y, { steps: 4 });
+    await page.mouse.up();
+    await expect(page.getByTestId("drag-value-display")).toHaveText("70–100");
+  });
+
+  test('trackDrag="brush" paints a new range from outside it', async ({
+    page,
+  }) => {
+    const slider = page.getByTestId("range-slider-drag");
+    const box = await slider.locator(".bx--slider__track").boundingBox();
+    if (!box) throw new Error("missing track box");
+    const y = box.y + box.height / 2;
+
+    await page.mouse.move(box.x + box.width * 0.9, y);
+    await expect(slider.locator(".bx--slider")).toHaveCSS(
+      "cursor",
+      "crosshair",
+    );
+    await page.mouse.down();
+    await page.mouse.move(box.x + box.width * 0.7, y, { steps: 6 });
+    // Both handles show the focused arrow while the range is painted.
+    const focusIcons = slider.locator(".bx--slider__thumb-icon--focus");
+    await expect(focusIcons.first()).toBeVisible();
+    await expect(focusIcons.last()).toBeVisible();
+    await page.mouse.up();
+
+    await expect(page.getByTestId("drag-value-display")).toHaveText("70–90");
+    await expect(focusIcons.first()).toBeHidden();
+    await expect(focusIcons.last()).toBeHidden();
+  });
 });

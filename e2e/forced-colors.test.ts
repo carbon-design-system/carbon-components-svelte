@@ -593,6 +593,35 @@ test.describe("forced colors", () => {
       borderColor: system.GrayText,
     });
   });
+
+  test("a range drag shows both handles in their focus color", async ({
+    page,
+  }) => {
+    const slider = page.getByTestId("range-slider-drag");
+    await slider.scrollIntoViewIfNeeded();
+    const box = await slider.locator(".bx--slider__track").boundingBox();
+    if (!box) throw new Error("missing track box");
+    const y = box.y + box.height / 2;
+    const icons = slider.locator(".bx--slider__thumb-icon--focus");
+    const fills = () =>
+      icons.evaluateAll((els) =>
+        els.map((el) => {
+          const s = getComputedStyle(el);
+          return s.display === "none" ? "none" : s.fill;
+        }),
+      );
+
+    await page.mouse.move(box.x + box.width * 0.4, y);
+    await page.mouse.down();
+    await page.mouse.move(box.x + box.width * 0.5, y, { steps: 2 });
+    // Forced colors keep SVG fills, so the icon swap still marks both
+    // handles while neither holds focus.
+    const [lower, upper] = await fills();
+    await page.mouse.up();
+    expect.soft(lower).toBe(upper);
+    expect.soft(lower).not.toBe("none");
+    expect.soft(lower).not.toBe(system.Canvas);
+  });
 });
 
 // The subtle read-only border is a color cue that forced colors erases, so

@@ -956,6 +956,176 @@ describe("RangeSlider", () => {
     });
   });
 
+  describe("trackDrag", () => {
+    const setup = (props: {
+      value: number;
+      valueUpper: number;
+      trackDrag?: "range" | "brush";
+    }) => {
+      const onchange = vi.fn();
+      const { container } = render(RangeSlider, {
+        props: { ...props, onchange },
+      });
+      return {
+        onchange,
+        ...mockTrack(container, props.value, props.valueUpper),
+      };
+    };
+
+    it('should drag the whole range from inside it when "range"', async () => {
+      const { onchange, slider, track, lowerThumb, upperThumb } = setup({
+        value: 20,
+        valueUpper: 50,
+        trackDrag: "range",
+      });
+
+      // Press at 30 (inside), move to 51: +21, keeping the width of 30.
+      await fireEvent.pointerDown(track, { clientX: 60, pointerId: 1 });
+      expect(lowerThumb).toHaveAttribute("aria-valuenow", "20");
+      await fireEvent.pointerMove(slider, { clientX: 102, pointerId: 1 });
+      expect(lowerThumb).toHaveAttribute("aria-valuenow", "41");
+      expect(upperThumb).toHaveAttribute("aria-valuenow", "71");
+
+      // Past the end, the range stops against max.
+      await fireEvent.pointerMove(slider, { clientX: 400, pointerId: 1 });
+      await fireEvent.pointerUp(slider, { pointerId: 1 });
+
+      expect(lowerThumb).toHaveAttribute("aria-valuenow", "70");
+      expect(upperThumb).toHaveAttribute("aria-valuenow", "100");
+      expect(onchange).toHaveBeenCalledExactlyOnceWith(bounds(70, 100));
+    });
+
+    it('should move the nearer handle for a press outside the range when "range"', async () => {
+      const { slider, track, lowerThumb, upperThumb } = setup({
+        value: 20,
+        valueUpper: 50,
+        trackDrag: "range",
+      });
+
+      await fireEvent.pointerDown(track, { clientX: 20, pointerId: 1 });
+      await fireEvent.pointerUp(slider, { pointerId: 1 });
+
+      expect(lowerThumb).toHaveAttribute("aria-valuenow", "10");
+      expect(upperThumb).toHaveAttribute("aria-valuenow", "50");
+    });
+
+    it("should move one handle for a press inside the range by default", async () => {
+      const { slider, track, lowerThumb, upperThumb } = setup({
+        value: 20,
+        valueUpper: 50,
+      });
+
+      await fireEvent.pointerDown(track, { clientX: 60, pointerId: 1 });
+      await fireEvent.pointerMove(slider, { clientX: 70, pointerId: 1 });
+      await fireEvent.pointerUp(slider, { pointerId: 1 });
+
+      expect(lowerThumb).toHaveAttribute("aria-valuenow", "35");
+      expect(upperThumb).toHaveAttribute("aria-valuenow", "50");
+    });
+
+    it.each([
+      { to: 180, expected: ["80", "90"] },
+      { to: 20, expected: ["10", "80"] },
+    ])(
+      'should paint a new range from a press outside it when "brush" (to $to)',
+      async ({ to, expected }) => {
+        const { onchange, slider, track, lowerThumb, upperThumb } = setup({
+          value: 20,
+          valueUpper: 50,
+          trackDrag: "brush",
+        });
+
+        await fireEvent.pointerDown(track, { clientX: 160, pointerId: 1 });
+        // The press focuses the nearer handle; painting releases it.
+        expect(upperThumb).toHaveFocus();
+        await fireEvent.pointerMove(slider, { clientX: to, pointerId: 1 });
+        expect(slider).toHaveClass("bx--slider--moving-range");
+        expect(slider.style.cursor).toBe("crosshair");
+        expect(upperThumb).not.toHaveFocus();
+        await fireEvent.pointerUp(slider, { pointerId: 1 });
+
+        expect(lowerThumb).toHaveAttribute("aria-valuenow", expected[0]);
+        expect(upperThumb).toHaveAttribute("aria-valuenow", expected[1]);
+        expect(slider).not.toHaveClass("bx--slider--moving-range");
+        expect(onchange).toHaveBeenLastCalledWith(
+          bounds(Number(expected[0]), Number(expected[1])),
+        );
+      },
+    );
+
+    it('should treat a press without travel as a handle move when "brush"', async () => {
+      const { slider, track, lowerThumb, upperThumb } = setup({
+        value: 20,
+        valueUpper: 50,
+        trackDrag: "brush",
+      });
+
+      await fireEvent.pointerDown(track, { clientX: 20, pointerId: 1 });
+      await fireEvent.pointerMove(slider, { clientX: 22, pointerId: 1 });
+      await fireEvent.pointerUp(slider, { pointerId: 1 });
+
+      expect(lowerThumb).toHaveAttribute("aria-valuenow", "11");
+      expect(upperThumb).toHaveAttribute("aria-valuenow", "50");
+    });
+
+    it('should still drag the whole range from inside it when "brush"', async () => {
+      const { slider, track, lowerThumb, upperThumb } = setup({
+        value: 20,
+        valueUpper: 50,
+        trackDrag: "brush",
+      });
+
+      await fireEvent.pointerDown(track, { clientX: 60, pointerId: 1 });
+      await fireEvent.pointerMove(slider, { clientX: 80, pointerId: 1 });
+      await fireEvent.pointerUp(slider, { pointerId: 1 });
+
+      expect(lowerThumb).toHaveAttribute("aria-valuenow", "30");
+      expect(upperThumb).toHaveAttribute("aria-valuenow", "60");
+    });
+
+    it.each([
+      { trackDrag: "range", outside: "" },
+      { trackDrag: "brush", outside: "crosshair" },
+    ] as const)(
+      'should show a grab cursor over the range and "$outside" outside it ($trackDrag)',
+      async ({ trackDrag, outside }) => {
+        const { slider, track } = setup({
+          value: 20,
+          valueUpper: 50,
+          trackDrag,
+        });
+
+        await fireEvent.pointerMove(track, { clientX: 60 });
+        expect(slider.style.cursor).toBe("grab");
+
+        await fireEvent.pointerMove(track, { clientX: 150 });
+        expect(slider.style.cursor).toBe(outside);
+
+        await fireEvent.pointerLeave(slider);
+        expect(slider.style.cursor).toBe("");
+      },
+    );
+
+    it("should highlight both handles and focus neither while moving the range", async () => {
+      const { slider, track, lowerThumb, upperThumb } = setup({
+        value: 20,
+        valueUpper: 50,
+        trackDrag: "range",
+      });
+      lowerThumb.focus();
+
+      await fireEvent.pointerDown(track, { clientX: 60, pointerId: 1 });
+      expect(slider.style.cursor).toBe("grabbing");
+      expect(slider).toHaveClass("bx--slider--moving-range");
+      expect(lowerThumb).not.toHaveFocus();
+      expect(upperThumb).not.toHaveFocus();
+
+      await fireEvent.pointerUp(slider, { pointerId: 1 });
+      expect(slider).not.toHaveClass("bx--slider--moving-range");
+      expect(slider.style.cursor).toBe("");
+    });
+  });
+
   describe("pointer drag", () => {
     it("commits a press released before any render", () => {
       const onchange = vi.fn();

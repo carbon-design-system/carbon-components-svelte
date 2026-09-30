@@ -23,6 +23,7 @@
     Popover,
     ProgressBar,
     RadioTile,
+    RangeSlider,
     SearchMenu,
     SearchMenuItem,
     SelectableTag,
@@ -238,4 +239,12 @@
   <UserAvatar name="Away" status="away" />
   <UserAvatar name="Busy" status="busy" />
   <UserAvatar name="Offline" status="offline" />
+
+  <RangeSlider
+    data-testid="range-slider-drag"
+    labelText="Draggable range"
+    trackDrag="range"
+    value={20}
+    valueUpper={60}
+  />
 </main>

@@ -16,6 +16,7 @@
     | ReadonlyArray<{ value: number; label?: string }>
     | undefined = false;
   export let snapToMarks = false;
+  export let trackDrag: ComponentProps<RangeSlider>["trackDrag"] = "handle";
   export let disabled = false;
   export let readonly = false;
   export let hideTextInput = false;
@@ -66,6 +67,7 @@
   {orientation}
   {marks}
   {snapToMarks}
+  {trackDrag}
   {disabled}
   {readonly}
   {hideTextInput}
