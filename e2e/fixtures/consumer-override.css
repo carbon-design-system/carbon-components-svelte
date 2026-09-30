@@ -68,3 +68,8 @@
 .my-input {
   background-color: rgb(255, 230, 230);
 }
+
+/* A single class applied through `cellClass` (no element qualifier). */
+.my-cell {
+  color: rgb(200, 0, 0);
+}
