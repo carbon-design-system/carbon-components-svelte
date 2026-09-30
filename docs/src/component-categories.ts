@@ -35,6 +35,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "Bleed",
       "Divider",
       "Carousel",
+      "Splitter",
     ],
   },
   {
