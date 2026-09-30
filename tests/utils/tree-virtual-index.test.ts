@@ -120,4 +120,62 @@ describe("treeVirtualIndex", () => {
     expect(index.totalCount).toBe(3);
     expect(index.getRowAt(0)?.node.id).toBe(0);
   });
+
+  describe("placeholders", () => {
+    const lazy = [
+      { id: "a", text: "a", hasChildren: true },
+      {
+        id: "b",
+        text: "b",
+        nodes: [
+          { id: "b1", text: "b1", hasChildren: true },
+          { id: "b2", text: "b2" },
+        ],
+      },
+      { id: "c", text: "c", hasChildren: true, nodes: [] },
+    ];
+    const expanded = new Set(["a", "b", "b1", "c"]);
+    const options = { placeholders: true };
+
+    it("adds one row under each expanded node awaiting children", () => {
+      const rows = flattenVisibleRows(lazy, expanded, options);
+      expect(
+        rows.map((row) => `${row.placeholder ? "…" : ""}${row.node.id}`),
+      ).toEqual(["a", "…a", "b", "b1", "…b1", "b2", "c", "…c"]);
+      expect(rows[1]).toMatchObject({
+        depth: 1,
+        parentId: "a",
+        hasChildren: false,
+        placeholder: true,
+      });
+    });
+
+    it("omits placeholders unless requested or expanded", () => {
+      expect(flattenVisibleRows(lazy, expanded)).toHaveLength(5);
+      expect(
+        flattenVisibleRows(lazy, new Set(["b"]), options).some(
+          (row) => row.placeholder,
+        ),
+      ).toBe(false);
+    });
+
+    it("index agrees with flattenVisibleRows for every row and window", () => {
+      const flat = flattenVisibleRows(lazy, expanded, options);
+      const index = createTreeVirtualIndex(lazy, expanded, options);
+      expect(index.totalCount).toBe(flat.length);
+      for (let i = 0; i < flat.length; i++) {
+        expect(index.getRowAt(i)).toEqual(flat[i]);
+        for (let end = i; end <= flat.length; end++) {
+          expect(index.collectRows(i, end)).toEqual(flat.slice(i, end));
+        }
+      }
+    });
+
+    it("findIndexById counts placeholder rows", () => {
+      const index = createTreeVirtualIndex(lazy, expanded, options);
+      expect(index.findIndexById("b")).toBe(2);
+      expect(index.findIndexById("b2")).toBe(5);
+      expect(index.findIndexById("c")).toBe(6);
+    });
+  });
 });

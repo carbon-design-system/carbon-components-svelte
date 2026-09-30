@@ -257,6 +257,24 @@
     return out;
   }
 
+  /**
+   * Whether a virtual row can take focus: an enabled node row, not the
+   * `childNodes` placeholder under an unloaded branch.
+   * @param {{ node: { disabled?: boolean }; placeholder?: true } | null} row
+   */
+  function isFocusableRow(row) {
+    return row != null && !row.placeholder && !row.node.disabled;
+  }
+
+  /**
+   * `{#each}` key for a virtual row. A placeholder row shares its parent's
+   * node, so it needs a key of its own.
+   * @param {{ node: { id: string | number }; placeholder?: true }} row
+   */
+  function virtualRowKey(row) {
+    return row.placeholder ? `\u0000childNodes:${row.node.id}` : row.node.id;
+  }
+
   /** Tabindex anchor: prefer the focused row when it is currently mounted
    * and enabled; otherwise the first enabled row in the window. */
   function resolveVirtualTabAnchorId(
@@ -273,13 +291,13 @@
       virtualFocusedId != null
     ) {
       for (const row of visible) {
-        if (row.node.id === virtualFocusedId && !row.node.disabled) {
+        if (row.node.id === virtualFocusedId && isFocusableRow(row)) {
           return virtualFocusedId;
         }
       }
     }
     for (const row of visible) {
-      if (!row.node.disabled) return row.node.id;
+      if (isFocusableRow(row)) return row.node.id;
     }
     return undefined;
   }
@@ -1627,6 +1645,12 @@
    * Falls back to a derived px value otherwise. */
   let measuredContainerHeight = 0;
 
+  /**
+   * Virtual rows reserve a placeholder row for the `childNodes` slot only
+   * when it is provided, so trees without one keep their row count.
+   */
+  const hasChildNodesSlot = Boolean($$slots.childNodes);
+
   $: virtualConfig = virtualize
     ? {
         maxVisibleRows: 10,
@@ -1674,7 +1698,9 @@
     ) {
       const expandedArg =
         expandedIds === prevExpandedIds ? expandedIdsSet : new Set(expandedIds);
-      virtualIndex = createTreeVirtualIndex(stableNodes, expandedArg);
+      virtualIndex = createTreeVirtualIndex(stableNodes, expandedArg, {
+        placeholders: hasChildNodesSlot,
+      });
       prevVirtualIndexNodes = stableNodes;
       prevVirtualIndexExpandedIds = expandedIds;
     }
@@ -1917,7 +1943,7 @@
     for (let offset = 1; offset <= count; offset++) {
       const candidateIndex = (startIndex + offset) % count;
       const row = virtualIndex.getRowAt(candidateIndex);
-      if (!row || row.node.disabled) continue;
+      if (!isFocusableRow(row)) continue;
       const label = String(row.node.text ?? "")
         .trim()
         .toLowerCase();
@@ -1950,7 +1976,7 @@
       if (activeIdx < 0) {
         for (let i = 0; i < virtualIndex.totalCount; i++) {
           const row = virtualIndex.getRowAt(i);
-          if (row && !row.node.disabled) {
+          if (isFocusableRow(row)) {
             activeIdx = i;
             break;
           }
@@ -1972,7 +1998,7 @@
       let i = from;
       while (i >= 0 && i < virtualIndex.totalCount) {
         const row = virtualIndex.getRowAt(i);
-        if (row && !row.node.disabled) return i;
+        if (isFocusableRow(row)) return i;
         i += dir;
       }
       return -1;
@@ -2002,7 +2028,7 @@
           const to = Math.max(activeIdx, targetIdx);
           for (let i = from; i <= to; i++) {
             const row = virtualIndex.getRowAt(i);
-            if (row && !row.node.disabled) nodeIds.push(row.node.id);
+            if (isFocusableRow(row)) nodeIds.push(row.node.id);
           }
           setSelectedIds([...new Set(selectedIds.concat(nodeIds))]);
         }
@@ -2015,7 +2041,7 @@
         event.stopPropagation();
         for (let i = 0; i < virtualIndex.totalCount; i++) {
           const row = virtualIndex.getRowAt(i);
-          if (row && !row.node.disabled) nodeIds.push(row.node.id);
+          if (isFocusableRow(row)) nodeIds.push(row.node.id);
         }
         setSelectedIds([...new Set(selectedIds.concat(nodeIds))]);
         return;
@@ -2217,7 +2243,7 @@
     {#if virtualData.offsetY > 0}
       <li aria-hidden="true" style:height="{virtualData.offsetY}px"></li>
     {/if}
-    {#each virtualData.visibleItems as row (row.node.id)}
+    {#each virtualData.visibleItems as row (virtualRowKey(row))}
       <TreeViewNodeVirtual
         item={row}
         itemHeight={virtualConfig.itemHeight}
@@ -2225,6 +2251,9 @@
         let:node
       >
         <slot {node}>{node.text}</slot>
+        <svelte:fragment slot="childNodes" let:node>
+          <slot name="childNodes" {node} />
+        </svelte:fragment>
       </TreeViewNodeVirtual>
     {/each}
     {#if virtualData.endIndex < virtualIndex.totalCount}

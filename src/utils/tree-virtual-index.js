@@ -27,16 +27,63 @@ function hasLoadedChildren(node) {
 }
 
 /**
+ * @typedef {object} TreeVirtualIndexOptions
+ * @property {boolean} [placeholders] - Emit one placeholder row under each
+ *   expanded `hasChildren` node whose children have not loaded, for the
+ *   `childNodes` slot. Placeholder rows carry the parent `node` and
+ *   `placeholder: true`.
+ */
+
+/**
+ * Whether `node` gets a placeholder row: expanded, `hasChildren`, and no
+ * loaded children yet (the same condition the recursive tree uses to render
+ * the `childNodes` slot).
+ * @template {{ id: string | number; nodes?: T[]; hasChildren?: boolean }} T
+ * @param {T} node
+ * @param {Set<string | number>} expandedIdsSet
+ * @param {boolean} placeholders
+ * @returns {boolean}
+ */
+function awaitsChildren(node, expandedIdsSet, placeholders) {
+  return (
+    placeholders &&
+    node.hasChildren === true &&
+    !hasLoadedChildren(node) &&
+    expandedIdsSet.has(node.id)
+  );
+}
+
+/**
+ * @template {{ id: string | number }} T
+ * @param {T} node
+ * @param {number} depth
+ * @returns {{ node: T; depth: number; parentId: string | number | null; posInSet: number; setSize: number; hasChildren: boolean; placeholder: true }}
+ */
+function placeholderRow(node, depth) {
+  return {
+    node,
+    depth: depth + 1,
+    parentId: node.id,
+    posInSet: 1,
+    setSize: 1,
+    hasChildren: false,
+    placeholder: true,
+  };
+}
+
+/**
  * Flatten visible (expanded-only) nodes into annotated rows.
  * Iterative walk — one output array, no recursive `push(...spread)`.
  *
  * @template {{ id: string | number; nodes?: T[]; disabled?: boolean; hasChildren?: boolean }} T
  * @param {ReadonlyArray<T>} nodes
  * @param {Set<string | number>} expandedIdsSet
- * @returns {Array<{ node: T; depth: number; parentId: string | number | null; posInSet: number; setSize: number; hasChildren: boolean }>}
+ * @param {TreeVirtualIndexOptions} [options]
+ * @returns {Array<{ node: T; depth: number; parentId: string | number | null; posInSet: number; setSize: number; hasChildren: boolean; placeholder?: true }>}
  */
-export function flattenVisibleRows(nodes, expandedIdsSet) {
-  /** @type {Array<{ node: T; depth: number; parentId: string | number | null; posInSet: number; setSize: number; hasChildren: boolean }>} */
+export function flattenVisibleRows(nodes, expandedIdsSet, options = {}) {
+  const placeholders = options.placeholders === true;
+  /** @type {Array<{ node: T; depth: number; parentId: string | number | null; posInSet: number; setSize: number; hasChildren: boolean; placeholder?: true }>} */
   const out = [];
   /** @type {Array<{ list: ReadonlyArray<T>; depth: number; parentId: string | number | null; index: number }>} */
   const stack = [{ list: nodes, depth: 0, parentId: null, index: 0 }];
@@ -61,6 +108,10 @@ export function flattenVisibleRows(nodes, expandedIdsSet) {
       hasChildren,
     });
 
+    if (awaitsChildren(node, expandedIdsSet, placeholders)) {
+      out.push(placeholderRow(node, frame.depth));
+    }
+
     if (loaded && expandedIdsSet.has(node.id)) {
       stack.push({
         list: node.nodes,
@@ -82,14 +133,17 @@ export function flattenVisibleRows(nodes, expandedIdsSet) {
  * @template {{ id: string | number; nodes?: T[]; disabled?: boolean; hasChildren?: boolean }} T
  * @param {ReadonlyArray<T>} nodes
  * @param {Set<string | number>} expandedIdsSet
+ * @param {TreeVirtualIndexOptions} [options]
  * @returns {{
  *   totalCount: number,
- *   getRowAt: (index: number) => { node: T; depth: number; parentId: string | number | null; posInSet: number; setSize: number; hasChildren: boolean } | null,
- *   collectRows: (startIndex: number, endIndex: number) => Array<{ node: T; depth: number; parentId: string | number | null; posInSet: number; setSize: number; hasChildren: boolean }>,
+ *   getRowAt: (index: number) => { node: T; depth: number; parentId: string | number | null; posInSet: number; setSize: number; hasChildren: boolean; placeholder?: true } | null,
+ *   collectRows: (startIndex: number, endIndex: number) => Array<{ node: T; depth: number; parentId: string | number | null; posInSet: number; setSize: number; hasChildren: boolean; placeholder?: true }>,
  *   findIndexById: (id: string | number) => number,
  * }}
  */
-export function createTreeVirtualIndex(nodes, expandedIdsSet) {
+export function createTreeVirtualIndex(nodes, expandedIdsSet, options = {}) {
+  const placeholders = options.placeholders === true;
+
   /** @type {Map<string | number, number>} */
   const sizeById = new Map();
 
@@ -107,6 +161,8 @@ export function createTreeVirtualIndex(nodes, expandedIdsSet) {
       for (const child of node.nodes) {
         size += visibleSize(child);
       }
+    } else if (awaitsChildren(node, expandedIdsSet, placeholders)) {
+      size = 2;
     }
     sizeById.set(node.id, size);
     return size;
@@ -123,7 +179,7 @@ export function createTreeVirtualIndex(nodes, expandedIdsSet) {
    * @param {string | number | null} parentId
    * @param {number} targetIndex
    * @param {number} indexOffset
-   * @returns {{ node: T; depth: number; parentId: string | number | null; posInSet: number; setSize: number; hasChildren: boolean } | null}
+   * @returns {{ node: T; depth: number; parentId: string | number | null; posInSet: number; setSize: number; hasChildren: boolean; placeholder?: true } | null}
    */
   function rowAtInList(list, depth, parentId, targetIndex, indexOffset) {
     let offset = indexOffset;
@@ -153,6 +209,9 @@ export function createTreeVirtualIndex(nodes, expandedIdsSet) {
             offset + 1,
           );
         }
+        if (size === 2 && targetIndex === offset + 1) {
+          return placeholderRow(node, depth);
+        }
         return null;
       }
       offset += size;
@@ -177,7 +236,7 @@ export function createTreeVirtualIndex(nodes, expandedIdsSet) {
   function collectRows(startIndex, endIndex) {
     const start = Math.max(0, startIndex);
     const end = Math.min(totalCount, endIndex);
-    /** @type {Array<{ node: T; depth: number; parentId: string | number | null; posInSet: number; setSize: number; hasChildren: boolean }>} */
+    /** @type {Array<{ node: T; depth: number; parentId: string | number | null; posInSet: number; setSize: number; hasChildren: boolean; placeholder?: true }>} */
     const rows = [];
     if (start >= end) return rows;
 
@@ -224,6 +283,15 @@ export function createTreeVirtualIndex(nodes, expandedIdsSet) {
 
       frame.index++;
       frame.offset = nodeEnd;
+
+      if (
+        !loaded &&
+        size === 2 &&
+        nodeStart + 1 >= start &&
+        nodeStart + 1 < end
+      ) {
+        rows.push(placeholderRow(node, frame.depth));
+      }
 
       // Descend when the window still needs rows inside this expanded subtree.
       if (

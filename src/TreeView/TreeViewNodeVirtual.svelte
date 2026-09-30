@@ -11,6 +11,7 @@
    * @property {number} posInSet
    * @property {number} setSize
    * @property {boolean} hasChildren
+   * @property {true} [placeholder] - Stand-in row under an expanded node whose children have not loaded; renders the `childNodes` slot for `node`.
    */
 
   /** @type {Row} */
@@ -44,7 +45,7 @@
 
   let prevActiveId = undefined;
 
-  $: ({ node, depth, posInSet, setSize, hasChildren } = item);
+  $: ({ node, depth, posInSet, setSize, hasChildren, placeholder } = item);
   $: id = node.id;
   $: disabled = node.disabled === true;
   $: href = node.href;
@@ -65,12 +66,15 @@
   // (2rem) with an icon. Checkbox mode uses one inset per depth so the
   // leading control lines up across parents and leaves.
   $: leafBase = icon ? 2 : 2.5;
-  $: indentRem = isCheckboxMode || hasChildren ? depth + 1 : depth + leafBase;
+  $: indentRem =
+    isCheckboxMode || hasChildren || placeholder ? depth + 1 : depth + leafBase;
 
+  // A placeholder row stands in for the children of its expanded parent,
+  // so `node` describes the parent, as in the recursive `childNodes` slot.
   $: mergedNode = {
     ...node,
-    expanded: hasChildren ? expanded : false,
-    leaf: !hasChildren,
+    expanded: placeholder ? true : hasChildren ? expanded : false,
+    leaf: placeholder ? false : !hasChildren,
     selected,
     checked,
     indeterminate,
@@ -79,6 +83,7 @@
   // Match TreeViewNode: externally-set activeId auto-selects the row.
   $: {
     if (
+      !placeholder &&
       id === $activeNodeId &&
       prevActiveId !== $activeNodeId &&
       !$selectedIdSet.has(id)
@@ -89,7 +94,17 @@
   }
 </script>
 
-{#if isLinkLeaf}
+{#if placeholder}
+  <!-- `bx--tree-node` for the row background; hover styles target labels. -->
+  <li
+    role="none"
+    class:bx--tree-node={true}
+    style:height="{itemHeight}px"
+    style:padding-left="{indentRem}rem"
+  >
+    <slot name="childNodes" node={mergedNode} />
+  </li>
+{:else if isLinkLeaf}
   <li role="none" style:height="{itemHeight}px">
     <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role a11y-role-has-required-aria-props -->
     <a
