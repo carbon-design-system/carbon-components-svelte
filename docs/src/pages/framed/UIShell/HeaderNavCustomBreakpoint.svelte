@@ -6,6 +6,7 @@
     Header,
     HeaderNav,
     HeaderNavItem,
+    HeaderSideNavItems,
     Row,
     SideNav,
     SideNavDivider,
@@ -27,9 +28,9 @@
 >
   <svelte:fragment slot="skipToContent"> <SkipToContent /> </svelte:fragment>
   <HeaderNav>
-    <HeaderNavItem href="/catalog" text="Catalog" />
-    <HeaderNavItem href="/docs" text="Docs" />
-    <HeaderNavItem href="/support" text="Support" />
+    <HeaderNavItem href="/deployments" text="Deployments" />
+    <HeaderNavItem href="/incidents" text="Incidents" />
+    <HeaderNavItem href="/billing" text="Billing" />
   </HeaderNav>
 </Header>
 
@@ -38,6 +39,11 @@
   expansionBreakpoint={Number.POSITIVE_INFINITY}
 >
   <SideNavItems>
+    <HeaderSideNavItems hasDivider>
+      <HeaderNavItem href="/deployments" text="Deployments" />
+      <HeaderNavItem href="/incidents" text="Incidents" />
+      <HeaderNavItem href="/billing" text="Billing" />
+    </HeaderSideNavItems>
     <SideNavLink href="/dashboard" text="Dashboard" />
     <SideNavLink href="/resources" text="Resource list" />
     <SideNavLink href="/activity" text="Activity tracker" />
@@ -59,8 +65,9 @@
         <p>
           By default the side nav expands and the hamburger hides at 1056px and
           above. Here, the hamburger is always visible and the side nav stays
-          collapsed with overlay at all viewport sizes. When opened, the overlay
-          appears behind the side nav.
+          collapsed with overlay at all viewport sizes. The header links move
+          into the side nav at the same width. When opened, the overlay appears
+          behind the side nav.
         </p>
       </Column>
     </Row>
