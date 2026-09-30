@@ -104,4 +104,16 @@ test.describe("Slider", () => {
     await page.mouse.move(box.x + box.width, y);
     await expect(page.getByTestId("value-display")).toHaveText("0");
   });
+
+  test("pressing the track focuses the thumb", async ({ page }) => {
+    const slider = page.getByTestId("slider");
+    const box = await slider.locator(".bx--slider__track").boundingBox();
+    if (!box) throw new Error("missing track box");
+
+    await page.mouse.click(box.x + box.width * 0.3, box.y + box.height / 2);
+
+    await expect(slider.getByRole("slider")).toBeFocused();
+    await page.keyboard.press("ArrowRight");
+    await expect(page.getByTestId("value-display")).toHaveText("31");
+  });
 });

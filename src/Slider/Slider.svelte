@@ -198,6 +198,7 @@
   $: controlLabelledBy = ariaLabelledBy ?? (ariaLabel ? undefined : labelId);
 
   let trackRef = null;
+  let thumbRef = null;
   let textInputRef = null;
 
   /** @type {(label: string, numericValue: number) => string | number} */
@@ -212,6 +213,10 @@
 
   function handleDragStart(event) {
     if (disabled || readonly) return false;
+    // Focus the thumb so arrow keys work after a press on the track. The
+    // compat `mousedown` would otherwise move focus to the body.
+    event.preventDefault();
+    thumbRef?.focus({ preventScroll: true });
     calcValue(event);
   }
 
@@ -336,6 +341,7 @@
       }}
     >
       <div
+        bind:this={thumbRef}
         role="slider"
         aria-disabled={disabled || undefined}
         tabindex={disabled ? undefined : 0}
