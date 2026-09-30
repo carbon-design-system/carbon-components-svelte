@@ -149,6 +149,8 @@ Below that width the side nav is collapsed and the hamburger is shown; opening i
 
 Set `expansionBreakpoint` on both the header and side nav to change that threshold. For example, set it to `Infinity` to keep the overlay collapsed at every viewport size.
 
+The header nav and `HeaderSideNavItems` switch at the same width, so the header links move into the side nav wherever the hamburger appears.
+
 <FileSource src="/framed/UIShell/HeaderNavCustomBreakpoint" />
 
 ### Fixed
