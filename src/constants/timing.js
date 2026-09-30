@@ -22,5 +22,11 @@ export const TOOLTIP_SKIP_DELAY_MS = 300;
 /** Hover-intent delay to open or close a submenu (Carbon moderate-01). */
 export const SUBMENU_HOVER_DELAY_MS = 150;
 
+/**
+ * Default hover delay before a resize separator (`Splitter`) highlights and
+ * shows the resize cursor (Carbon moderate-01).
+ */
+export const SEPARATOR_HOVER_DELAY_MS = 150;
+
 /** Idle time before a type-ahead search buffer resets. */
 export const TYPEAHEAD_RESET_MS = 500;
