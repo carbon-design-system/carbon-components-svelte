@@ -280,6 +280,14 @@ This example renders the active node's ancestors as a [Breadcrumb](/components/B
 
 <FileSource src="/framed/TreeView/TreeViewStructure" />
 
+### Context menu
+
+Wrap the tree in an element and pass it as the [ContextMenu](/components/ContextMenu) `target`. The `open` event's detail is the right-clicked element; each row carries its node id as its `id` attribute, so find the nearest `[role="treeitem"]` and resolve it with `getNode`. With numeric ids, convert the attribute back to a number first.
+
+The example selects the right-clicked node with `showNode` so the menu's target stays visible, then uses `getParent` and `getSiblings` to drive the options.
+
+<FileSource src="/framed/TreeView/TreeViewContextMenu" />
+
 ## Performance
 
 Scale to large trees by loading, rendering, and measuring only what's needed.
