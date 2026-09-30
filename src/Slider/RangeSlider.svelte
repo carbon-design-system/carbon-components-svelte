@@ -46,7 +46,8 @@
    * Show tick marks along the track.
    * Set to `true` to place a tick at every `step`, or pass an array of
    * `{ value, label? }` for specific stops with optional labels below the track.
-   * Marks are visual only; snapping still follows `step`.
+   * A label is also announced in `aria-valuetext` while a handle sits on its mark.
+   * Snapping follows `step`.
    * @type {boolean | ReadonlyArray<{ value: number; label?: string }>}
    */
   export let marks = false;
@@ -159,12 +160,15 @@
   import { clamp } from "../utils/numeric-format.js";
   import { pointerDrag } from "../utils/pointer-drag.js";
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
-  import { resolveSliderMarks } from "../utils/resolve-slider-marks.js";
+  import {
+    getMarkLabels,
+    resolveSliderMarks,
+  } from "../utils/resolve-slider-marks.js";
   import {
     formatRangeLabel as formatSliderRangeLabel,
     getPointerPosition,
-    getValueText as getSliderValueText,
     getTrackAxis,
+    getValueText,
     snapToStep,
     valueFromPointer,
   } from "../utils/slider-value.js";
@@ -196,11 +200,6 @@
   /** @type {(label: string, numericValue: number) => string | number} */
   function formatRangeLabel(label, numericValue) {
     return formatSliderRangeLabel(label, numericValue, formatValue);
-  }
-
-  /** @type {(numericValue: number) => string | undefined} */
-  function getValueText(numericValue) {
-    return getSliderValueText(numericValue, formatValue);
   }
 
   /** @type {(e: PointerEvent) => ActiveHandle} */
@@ -380,9 +379,8 @@
   $: lowerMax = Math.max(min, valueUpper - minGap);
   $: upperMin = Math.min(max, value + minGap);
   $: resolvedMarks = resolveSliderMarks(marks, min, max, step);
-  $: hasMarkLabels = resolvedMarks.some(
-    (mark) => mark.label != null && mark.label !== "",
-  );
+  $: markLabels = getMarkLabels(resolvedMarks);
+  $: hasMarkLabels = markLabels.size > 0;
   $: {
     value = clamp(value, min, max);
     valueUpper = clamp(valueUpper, min, max);
@@ -511,7 +509,7 @@
           aria-valuemax={lowerMax}
           aria-valuemin={min}
           aria-valuenow={value}
-          aria-valuetext={getValueText(value)}
+          aria-valuetext={getValueText(value, formatValue, markLabels)}
           aria-label={ariaLabelInput}
           aria-orientation={orientation}
           aria-describedby={joinDescribedBy(
@@ -578,7 +576,7 @@
           aria-valuemax={max}
           aria-valuemin={upperMin}
           aria-valuenow={valueUpper}
-          aria-valuetext={getValueText(valueUpper)}
+          aria-valuetext={getValueText(valueUpper, formatValue, markLabels)}
           aria-label={ariaLabelInputUpper}
           aria-orientation={orientation}
           aria-describedby={joinDescribedBy(

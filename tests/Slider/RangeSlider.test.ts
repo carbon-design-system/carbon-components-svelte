@@ -849,6 +849,25 @@ describe("RangeSlider", () => {
     });
   });
 
+  it("should announce a mark label on the handle sitting on its mark", () => {
+    render(RangeSlider, {
+      props: {
+        min: 0,
+        max: 100,
+        value: 0,
+        valueUpper: 60,
+        marks: [
+          { value: 0, label: "Free" },
+          { value: 100, label: "Max" },
+        ],
+      },
+    });
+
+    const [lowerThumb, upperThumb] = screen.getAllByRole("slider");
+    expect(lowerThumb).toHaveAttribute("aria-valuetext", "Free");
+    expect(upperThumb).not.toHaveAttribute("aria-valuetext");
+  });
+
   describe("pointer drag", () => {
     it("commits a press released before any render", () => {
       const consoleLog = vi.spyOn(console, "log");
