@@ -34,6 +34,26 @@ export function stepMarks(
 ): number;
 
 /**
+ * Find the mark within `distance` pixels of the pointer on a track, for
+ * soft snapping. `offset` is subtracted from the pointer position, as in
+ * `valueFromPointer`. Returns `undefined` when no mark is that close.
+ */
+export function markNearPointer(
+  event: MouseEvent | TouchEvent,
+  rect: Pick<DOMRect, "left" | "right" | "width" | "bottom" | "height">,
+  options: {
+    orientation: "horizontal" | "vertical";
+    min: number;
+    max: number;
+    marks: ReadonlyArray<SliderMark>;
+    distance: number;
+    offset?: number;
+    /** Values increase leftward. */
+    rtl?: boolean;
+  },
+): SliderMark | undefined;
+
+/**
  * Find the mark whose `value` is closest to `value`. Ties resolve to the
  * earlier (lower-index) mark. Returns `undefined` when `marks` is empty.
  */
