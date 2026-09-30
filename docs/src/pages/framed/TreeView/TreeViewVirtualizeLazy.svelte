@@ -1,5 +1,5 @@
 <script>
-  import { TreeView } from "carbon-components-svelte";
+  import { InlineLoading, TreeView } from "carbon-components-svelte";
   import Code from "carbon-icons-svelte/lib/Code.svelte";
   import Document from "carbon-icons-svelte/lib/Document.svelte";
   import DocumentBlank from "carbon-icons-svelte/lib/DocumentBlank.svelte";
@@ -143,29 +143,21 @@
     return makeChildren(parentPath, depth);
   }
 
+  // Ids with a request in flight, so repeated expansion doesn't refetch.
+  const loadingIds = new Set();
+
   async function handleToggle(event) {
     const node = event.detail;
 
-    // Only fetch once: expandable and not yet loaded (placeholder or real).
-    if (!node.hasChildren || node.nodes) return;
+    // Only fetch once: a node with `hasChildren` but no `nodes` yet.
+    if (!node.hasChildren || node.nodes || loadingIds.has(node.id)) return;
 
-    // Virtualized trees do not render the `childNodes` slot. Put a temporary
-    // disabled row under the parent so the expand still shows progress.
-    nodes = updateNode(nodes, node.id, (n) => ({
-      ...n,
-      nodes: [
-        {
-          id: `${n.id}__loading`,
-          text: "Loading…",
-          disabled: true,
-        },
-      ],
-    }));
-
+    loadingIds.add(node.id);
     const children = await fetchChildren(
       node.path ?? node.text,
       node.depth ?? 0,
     );
+    loadingIds.delete(node.id);
     nodes = updateNode(nodes, node.id, (n) => ({
       ...n,
       nodes: children,
@@ -181,4 +173,7 @@
   let:node
 >
   {node.text}
+  <svelte:fragment slot="childNodes" let:node>
+    <InlineLoading status="active" description="Loading {node.text}…" />
+  </svelte:fragment>
 </TreeView>

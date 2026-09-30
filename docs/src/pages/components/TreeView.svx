@@ -345,7 +345,9 @@ Row height is fixed and comes from `size` (32px default, 24px compact). Rows do 
 
 #### With lazy loading
 
-Combine `virtualize` with `hasChildren` to fetch children on expand. This example starts with the same project-folder roots as [Virtualization](#virtualization), but each subtree loads on demand (including nested folders). The virtualized path does not render the `childNodes` slot, so the demo inserts a temporary disabled "Loading…" child while the request is in flight, then replaces it with the fetched nodes.
+Combine `virtualize` with `hasChildren` to fetch children on expand. This example starts with the same project-folder roots as [Virtualization](#virtualization), but each subtree loads on demand (including nested folders).
+
+When the `childNodes` slot is provided, the virtualized tree reserves one row for it under each expanded node whose children haven't loaded. The row has the same fixed height as the others, so keep the slot content to a single line. Arrow keys skip it.
 
 <FileSource src="/framed/TreeView/TreeViewVirtualizeLazy" />
 
