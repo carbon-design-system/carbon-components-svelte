@@ -249,6 +249,14 @@ Configure `TreeView.showNode` behavior using optional parameters. By default, al
 
 <FileSource src="/framed/TreeView/TreeViewShowNodeOptions" />
 
+#### Scroll into view
+
+Set `scroll` to `true` with `focus` set to `false` to bring a node into view without moving focus, for example when another control drives navigation and should keep focus. `scroll` defaults to the value of `focus`, since focusing a node already scrolls it into view.
+
+`showNode` returns a promise that resolves once the node is focused or scrolled into view. It resolves to `false` if no node has the id, or if the row can't be reached, such as with `expand: false` while an ancestor is collapsed.
+
+<FileSource src="/framed/TreeView/TreeViewShowNodeScroll" />
+
 ### Node lookup
 
 Use `TreeView.getNode` to resolve a node's text or metadata from its id, useful for a breadcrumb or detail pane driven by `activeId`. Unmatched ids return `null`.
