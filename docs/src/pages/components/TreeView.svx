@@ -257,6 +257,21 @@ Use `TreeView.getNodes` to resolve multiple ids at once, such as `selectedIds`. 
 
 <FileSource src="/framed/TreeView/TreeViewGetNode" />
 
+### Structural queries
+
+Use the structural lookups to build UI around the tree, such as a breadcrumb, a detail pane, or a context menu, without walking `nodes` yourself. Each takes a node id and returns nodes.
+
+| Method | Returns |
+| ------ | ------- |
+| `getParent(id)` | The parent node, or `null` for a top-level node or unknown id. |
+| `getAncestors(id)` | Ancestors ordered from the top-level node down to the parent. |
+| `getChildren(id)` | Loaded children in order. Empty for leaves and for `hasChildren` nodes that have not loaded yet. |
+| `getSiblings(id)` | Other nodes under the same parent, in order. Top-level nodes are siblings of each other. |
+
+This example renders the active node's ancestors as a [Breadcrumb](/components/Breadcrumb). Selecting a breadcrumb item calls `showNode` to move to that ancestor.
+
+<FileSource src="/framed/TreeView/TreeViewStructure" />
+
 ## Performance
 
 Scale to large trees by loading, rendering, and measuring only what's needed.
