@@ -16,6 +16,11 @@ export function resolveSliderMarks(
   step: number,
 ): SliderMark[];
 
+/** Map each labeled mark's value to its label, for `aria-valuetext` lookups. */
+export function getMarkLabels(
+  marks: ReadonlyArray<SliderMark>,
+): Map<number, string>;
+
 /**
  * Find the mark whose `value` is closest to `value`. Ties resolve to the
  * earlier (lower-index) mark. Returns `undefined` when `marks` is empty.

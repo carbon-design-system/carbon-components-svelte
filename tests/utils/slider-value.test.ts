@@ -18,6 +18,27 @@ describe("getValueText", () => {
   it("delegates to formatValue when provided", () => {
     expect(getValueText(50, (value) => `${value}%`)).toBe("50%");
   });
+
+  it.each([
+    { formatValue: undefined, value: 68, expected: "Comfortable" },
+    {
+      formatValue: (v: number) => `${v}°F`,
+      value: 68,
+      expected: "68°F, Comfortable",
+    },
+    { formatValue: (v: number) => `${v}%`, value: 50, expected: "50%" },
+    { formatValue: undefined, value: 70, expected: undefined },
+    { formatValue: (v: number) => `${v}°F`, value: 70, expected: "70°F" },
+  ])(
+    "announces a mark label at $value → $expected",
+    ({ formatValue, value, expected }) => {
+      const markLabels = new Map([
+        [68, "Comfortable"],
+        [50, "50%"],
+      ]);
+      expect(getValueText(value, formatValue, markLabels)).toBe(expected);
+    },
+  );
 });
 
 describe("formatRangeLabel", () => {

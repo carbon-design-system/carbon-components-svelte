@@ -1,9 +1,12 @@
 /**
- * Resolve the `aria-valuetext` for a numeric slider value.
+ * Resolve the `aria-valuetext` for a numeric slider value. A value sitting
+ * on a labeled mark announces the mark's label, after the formatted value
+ * when `formatValue` is set and yields different text.
  */
 export function getValueText(
   numericValue: number,
   formatValue: ((value: number) => string) | undefined,
+  markLabels?: ReadonlyMap<number, string>,
 ): string | undefined;
 
 /**

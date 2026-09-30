@@ -1,5 +1,6 @@
 // @vitest-environment node
 import {
+  getMarkLabels,
   nearestMark,
   resolveSliderMarks,
 } from "../../src/utils/resolve-slider-marks.js";
@@ -47,6 +48,24 @@ describe("resolveSliderMarks", () => {
   it("returns empty array when step is not positive in boolean mode", () => {
     expect(resolveSliderMarks(true, 0, 10, 0)).toEqual([]);
     expect(resolveSliderMarks(true, 0, 10, -1)).toEqual([]);
+  });
+});
+
+describe("getMarkLabels", () => {
+  it("maps labeled marks by value and skips unlabeled ones", () => {
+    expect(
+      getMarkLabels([
+        { value: 0, label: "Off" },
+        { value: 1 },
+        { value: 2, label: "" },
+        { value: 3, label: "High" },
+      ]),
+    ).toEqual(
+      new Map([
+        [0, "Off"],
+        [3, "High"],
+      ]),
+    );
   });
 });
 

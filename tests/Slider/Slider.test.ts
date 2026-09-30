@@ -604,6 +604,31 @@ describe("Slider", () => {
     expect(screen.getByRole("spinbutton")).toHaveValue(50);
   });
 
+  it("should announce a mark label while the value sits on its mark", async () => {
+    render(Slider, {
+      props: {
+        min: 0,
+        max: 2,
+        value: 0,
+        marks: [
+          { value: 0, label: "Low" },
+          { value: 1 },
+          { value: 2, label: "High" },
+        ],
+      },
+    });
+
+    const slider = screen.getByRole("slider");
+    expect(slider).toHaveAttribute("aria-valuetext", "Low");
+
+    slider.focus();
+    await user.keyboard("{ArrowRight}");
+    expect(slider).not.toHaveAttribute("aria-valuetext");
+
+    await user.keyboard("{ArrowRight}");
+    expect(slider).toHaveAttribute("aria-valuetext", "High");
+  });
+
   it("should keep value numeric when formatValue is set", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(Slider, {
