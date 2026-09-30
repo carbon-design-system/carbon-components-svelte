@@ -294,11 +294,31 @@ Scale to large trees by loading, rendering, and measuring only what's needed.
 
 ### Lazy loading
 
-Set `hasChildren` on a node to render it as an expandable branch before its `nodes` are known. Expanding it fires `toggle` as usual; the handler can fetch and assign `nodes` asynchronously.
+Set `hasChildren` on a node to render it as an expandable branch before its `nodes` are known, then fetch and assign `nodes` when the branch expands.
 
-While `hasChildren` is `true` and `nodes` is empty, the `childNodes` slot renders in place of the (empty) subtree, receiving the same `node` as the default slot. TreeView has no built-in concept of "loading" or "error" — the slot is generic, so you decide what to render (a spinner, an error message with retry, or nothing) based on whatever fields you put on the node yourself.
+While `hasChildren` is `true` and `nodes` is empty, the `childNodes` slot renders in place of the (empty) subtree, receiving the same `node` as the default slot. TreeView has no built-in concept of "loading" or "error" — the slot is generic, so you decide what to render (a spinner, an error message, or nothing) based on whatever fields you put on the node yourself. [InlineLoading](/components/InlineLoading) announces both states to screen readers.
+
+| Do | Why |
+| -- | --- |
+| Load from `on:toggle:change`, using its `added` ids | `on:toggle` only fires for user gestures. `toggle:change` also covers `expandAll`, `expandNodes`, `showNode`, and a bound `expandedIds`, which would otherwise leave a branch loading forever. |
+| Track requests in flight by id | A user can collapse and expand a branch before its request settles; skip a second fetch for the same id. |
+| Replace the loaded node with a new object | `nodes = nodes.map(...)` updates the tree without mutating shared node objects. |
 
 <FileSource src="/framed/TreeView/TreeViewLazyLoad" />
+
+#### Errors and retry
+
+Store the error on the node and render it in the `childNodes` slot. This example clears the error when the branch collapses, so expanding it again retries. Avoid putting buttons inside the tree for retry; the tree's keyboard handling owns <DocKbd label="Enter" /> and <DocKbd label="Space" /> on its rows.
+
+<FileSource src="/framed/TreeView/TreeViewLazyLoadError" />
+
+#### Reveal an unloaded node
+
+`showNode` can only reach nodes that are in `nodes`. To reveal a node whose ancestors haven't loaded, load each ancestor in order from the top, then call `showNode`. The tree can't know where an unloaded node lives, so your app supplies the ancestor ids, for example from a search API that returns a path.
+
+Await a `tick` after assigning `nodes` so the tree indexes the new children before the next `getNode` or `showNode` call.
+
+<FileSource src="/framed/TreeView/TreeViewLazyLoadReveal" />
 
 ### Virtualization
 
