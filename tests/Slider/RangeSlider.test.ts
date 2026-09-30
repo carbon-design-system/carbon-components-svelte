@@ -956,6 +956,67 @@ describe("RangeSlider", () => {
     });
   });
 
+  describe("markSnapDistance", () => {
+    const setup = (props: {
+      value: number;
+      valueUpper: number;
+      marks: { value: number }[];
+      markSnapDistance: number;
+      trackDrag?: "brush";
+    }) => {
+      const { container } = render(RangeSlider, { props });
+      return mockTrack(container, props.value, props.valueUpper);
+    };
+
+    it("should snap a handle drag to a nearby reachable mark", async () => {
+      const { slider, lowerThumb } = setup({
+        value: 0,
+        valueUpper: 100,
+        marks: [{ value: 25 }, { value: 50 }],
+        markSnapDistance: 8,
+      });
+
+      await fireEvent.pointerDown(slider, { clientX: 56, pointerId: 1 });
+      expect(lowerThumb).toHaveAttribute("aria-valuenow", "25");
+      await fireEvent.pointerMove(slider, { clientX: 70, pointerId: 1 });
+      expect(lowerThumb).toHaveAttribute("aria-valuenow", "35");
+      await fireEvent.pointerUp(slider, { pointerId: 1 });
+    });
+
+    it("should skip marks past the other handle", async () => {
+      const { slider, lowerThumb } = setup({
+        value: 0,
+        valueUpper: 48,
+        marks: [{ value: 50 }],
+        markSnapDistance: 8,
+      });
+
+      // Grab the lower handle and drag it up against the upper one.
+      await fireEvent.pointerDown(lowerThumb, { clientX: 0, pointerId: 1 });
+      await fireEvent.pointerMove(slider, { clientX: 94, pointerId: 1 });
+      await fireEvent.pointerUp(slider, { pointerId: 1 });
+
+      expect(lowerThumb).toHaveAttribute("aria-valuenow", "47");
+    });
+
+    it('should snap brush endpoints when trackDrag is "brush"', async () => {
+      const { slider, track, lowerThumb, upperThumb } = setup({
+        value: 0,
+        valueUpper: 10,
+        marks: [{ value: 50 }, { value: 80 }],
+        markSnapDistance: 8,
+        trackDrag: "brush",
+      });
+
+      await fireEvent.pointerDown(track, { clientX: 104, pointerId: 1 });
+      await fireEvent.pointerMove(slider, { clientX: 156, pointerId: 1 });
+      await fireEvent.pointerUp(slider, { pointerId: 1 });
+
+      expect(lowerThumb).toHaveAttribute("aria-valuenow", "50");
+      expect(upperThumb).toHaveAttribute("aria-valuenow", "80");
+    });
+  });
+
   describe("trackDrag", () => {
     const setup = (props: {
       value: number;
