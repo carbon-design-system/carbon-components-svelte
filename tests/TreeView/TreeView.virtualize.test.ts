@@ -434,4 +434,21 @@ describe("TreeView (virtualize)", () => {
       expect(findRowById(1201)).toHaveFocus();
     });
   });
+
+  it("keeps arrow-key navigation after virtualize is turned off", async () => {
+    const { component } = render(TreeViewVirtualize, {
+      totalRoots: 3,
+      childrenPerRoot: 0,
+    });
+
+    component.virtualize = undefined;
+    await tick();
+
+    const first = document.getElementById("0");
+    assert(first instanceof HTMLElement);
+    first.focus();
+    await user.keyboard("{ArrowDown}");
+
+    expect(document.getElementById("1")).toHaveFocus();
+  });
 });

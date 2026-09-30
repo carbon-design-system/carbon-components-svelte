@@ -744,7 +744,11 @@
 
   $: setMultiselectKeyListeners(isMultiselect);
 
-  /** @type {TreeWalker | null} */
+  /**
+   * Walker over the non-virtual rows. Follows `ref`, which is only bound
+   * while the non-virtual branch is mounted (`virtualize` can toggle).
+   * @type {TreeWalker | null}
+   */
   let treeWalker = null;
 
   /**
@@ -1382,10 +1386,6 @@
   onMount(() => {
     initialRenderComplete = true;
 
-    if (ref && !treeWalker) {
-      treeWalker = createTreeWalkerInstance(ref);
-    }
-
     return () => {
       setMultiselectKeyListeners(false);
       resetTypeAheadBuffer.cancel();
@@ -1433,6 +1433,8 @@
     cachedFlattenedNodes = null;
     cachedIdByDomId = null;
   }
+
+  $: treeWalker = ref ? createTreeWalkerInstance(ref) : null;
 
   $: sharedMultiselect.set(isMultiselect);
   $: sharedSelectionMode.set(selectionMode);
