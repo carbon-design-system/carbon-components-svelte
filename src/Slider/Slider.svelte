@@ -149,6 +149,7 @@
     getMarkLabels,
     nearestMark,
     resolveSliderMarks,
+    stepMarks,
   } from "../utils/resolve-slider-marks.js";
   import {
     formatRangeLabel as formatSliderRangeLabel,
@@ -321,23 +322,11 @@
               event.key === "PageDown";
 
             if (snapToMarks && resolvedMarks.length) {
-              // Marks may be passed in any order; walk them from lowest to highest.
-              const stops = [...resolvedMarks].sort(
-                (a, b) => a.value - b.value,
+              value = stepMarks(
+                value,
+                resolvedMarks,
+                keys[event.key] * (isLargeStep ? stepMultiplier : 1),
               );
-              const currentIndex = stops.findIndex(
-                (mark) => mark.value === value,
-              );
-              const fromIndex =
-                currentIndex === -1
-                  ? stops.indexOf(nearestMark(value, stops))
-                  : currentIndex;
-              const jump = isLargeStep ? stepMultiplier : 1;
-              let nextIndex = fromIndex + keys[event.key] * jump;
-              if (nextIndex < 0) nextIndex = 0;
-              else if (nextIndex > stops.length - 1)
-                nextIndex = stops.length - 1;
-              value = stops[nextIndex].value;
             } else {
               const delta =
                 step *

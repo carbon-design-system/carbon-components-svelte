@@ -3,6 +3,7 @@ import {
   getMarkLabels,
   nearestMark,
   resolveSliderMarks,
+  stepMarks,
 } from "../../src/utils/resolve-slider-marks.js";
 
 describe("resolveSliderMarks", () => {
@@ -84,5 +85,24 @@ describe("nearestMark", () => {
   it("resolves ties to the earlier mark", () => {
     const marks = [{ value: 0 }, { value: 10 }];
     expect(nearestMark(5, marks)).toBe(marks[0]);
+  });
+});
+
+describe("stepMarks", () => {
+  const marks = [{ value: 50 }, { value: 0 }, { value: 100 }, { value: 25 }];
+
+  it.each([
+    { value: 25, count: 1, expected: 50 },
+    { value: 25, count: -1, expected: 0 },
+    { value: 0, count: 3, expected: 100 },
+    { value: 0, count: -1, expected: 0 },
+    { value: 100, count: 9, expected: 100 },
+    { value: 30, count: 1, expected: 50 },
+  ])("moves $count from $value to $expected", ({ value, count, expected }) => {
+    expect(stepMarks(value, marks, count)).toBe(expected);
+  });
+
+  it("returns the value unchanged without marks", () => {
+    expect(stepMarks(42, [], 1)).toBe(42);
   });
 });

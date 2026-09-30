@@ -61,6 +61,29 @@ export function getMarkLabels(marks) {
 }
 
 /**
+ * Move `count` marks away from `value`, walking marks in value order
+ * regardless of the order they were passed in. An off-mark `value` starts
+ * from its nearest mark. Stops at the first and last mark. Returns `value`
+ * when `marks` is empty.
+ *
+ * @param {number} value
+ * @param {ReadonlyArray<SliderMark>} marks
+ * @param {number} count - negative moves toward lower values
+ * @returns {number}
+ */
+export function stepMarks(value, marks, count) {
+  if (!marks.length) return value;
+  const stops = [...marks].sort((a, b) => a.value - b.value);
+  const currentIndex = stops.findIndex((mark) => mark.value === value);
+  const fromIndex =
+    currentIndex === -1
+      ? stops.indexOf(/** @type {SliderMark} */ (nearestMark(value, stops)))
+      : currentIndex;
+  const nextIndex = Math.min(stops.length - 1, Math.max(0, fromIndex + count));
+  return stops[nextIndex].value;
+}
+
+/**
  * Find the mark whose `value` is closest to `value`. Ties resolve to the
  * earlier (lower-index) mark. Returns `undefined` when `marks` is empty.
  *
