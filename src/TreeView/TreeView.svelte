@@ -39,6 +39,17 @@
   }
 
   /**
+   * Ctrl+A, or Cmd+A on macOS (matching Ctrl/Cmd+click).
+   * @param {KeyboardEvent} event
+   */
+  function isSelectAllKey(event) {
+    return (
+      (event.code === "KeyA" || event.key === "a" || event.key === "A") &&
+      (event.ctrlKey || event.metaKey)
+    );
+  }
+
+  /**
    * Sentinel parent id for top-level roots in
    * `cachedParentIdById` / `cachedChildIdsByParentId`.
    * Symbol so it cannot collide with a real `Node["id"]`.
@@ -1261,10 +1272,7 @@
     }
 
     const isHomeOrEnd = event.key === "Home" || event.key === "End";
-    const isSelectAll =
-      isMultiselect &&
-      (event.code === "KeyA" || event.key === "a" || event.key === "A") &&
-      event.ctrlKey;
+    const isSelectAll = isMultiselect && isSelectAllKey(event);
 
     if (isHomeOrEnd || isSelectAll) {
       /** @type {Array<string | number>} */
@@ -1890,10 +1898,7 @@
     }
 
     const isHomeOrEnd = event.key === "Home" || event.key === "End";
-    const isSelectAll =
-      isMultiselect &&
-      (event.code === "KeyA" || event.key === "a" || event.key === "A") &&
-      event.ctrlKey;
+    const isSelectAll = isMultiselect && isSelectAllKey(event);
 
     if (isHomeOrEnd || isSelectAll) {
       /** @type {Array<string | number>} */

@@ -631,6 +631,24 @@ describe("TreeView Props", () => {
     ).toHaveAttribute("aria-disabled", "true");
   });
 
+  it("Cmd+A selects every non-disabled visible row in multiselect mode", async () => {
+    render(TreeViewMultiselect, {
+      multiselect: true,
+      selectedIds: [],
+    });
+
+    screen.getByRole("treeitem", { name: /AI \/ Machine learning/ }).focus();
+    await user.keyboard("{Meta>}a{/Meta}");
+
+    const selectedItems = screen.getAllByRole("treeitem", { selected: true });
+    expect(selectedItems.map(treeitemPrimaryLabel).sort()).toEqual([
+      "AI / Machine learning",
+      "Analytics",
+      "Blockchain",
+      "Databases",
+    ]);
+  });
+
   it("handles multiple selectedIds with multiselect", () => {
     render(TreeViewMultiselect, {
       multiselect: true,

@@ -205,6 +205,21 @@ describe("TreeView (virtualize)", () => {
     );
   });
 
+  it("Cmd+A selects all currently visible non-disabled rows", async () => {
+    const { component } = render(TreeViewVirtualize, {
+      totalRoots: 5,
+      childrenPerRoot: 0,
+      multiselect: true,
+      selectedIds: [],
+    });
+
+    findRowById(0)?.focus();
+    await user.keyboard("{Meta>}a{/Meta}");
+    await tick();
+
+    expect(component.selectedIds).toEqual([0, 1, 2, 3, 4]);
+  });
+
   it("Ctrl+click deselects a selected row that is not active", async () => {
     const { component } = render(TreeViewVirtualize, {
       totalRoots: 10,
