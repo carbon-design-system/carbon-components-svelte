@@ -120,7 +120,14 @@ Combine `size="compact"` with `selectionMode="checkbox"`.
 
 ### Inline editing
 
-Use a `contenteditable` element in each tree view node to enable inline editing of node names. The editable region is wrapped in a container with `stopPropagation` to prevent tree node selection when editing.
+Compose a [TextInput](/components/TextInput) in the default slot to rename nodes in place. In this example, <DocKbd label="F2" /> on a focused row or a double-click starts editing, <DocKbd label="Enter" /> saves, and <DocKbd label="Escape" /> cancels. Moving focus away saves a valid name and discards an invalid one.
+
+| Do | Why |
+| -- | --- |
+| Listen for <DocKbd label="F2" /> with `on:keydown` on the tree, and track the focused row with `on:focus` | The tree forwards `keydown` and has no rename key of its own. |
+| Wrap the input in an element that stops `click` and `keydown` propagation | Row handlers otherwise treat <DocKbd label="Space" /> as select and arrow keys as navigation. |
+| Validate against `getSiblings(id)` | Catches duplicate names within the same folder. |
+| Call `showNode(id, { expand: false, select: false })` after saving or canceling | Returns focus to the row so keyboard navigation continues from it. |
 
 <FileSource src="/framed/TreeView/TreeViewInlineEditing" />
 
