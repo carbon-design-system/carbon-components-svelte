@@ -41,6 +41,17 @@ export function valueFromTrackPosition(options: {
   step: number;
 }): number;
 
+/**
+ * Snap `value` to the nearest `min + n * step` and clamp it to `[min, max]`.
+ * The result is rounded to the decimal precision of `step` and `min`, so
+ * `step: 0.1` yields `0.3`, not `0.30000000000000004`. A non-positive
+ * `step` only clamps.
+ */
+export function snapToStep(
+  value: number,
+  options: { min: number; max: number; step: number },
+): number;
+
 type TrackRect = Pick<DOMRect, "left" | "width" | "bottom" | "height">;
 
 /**

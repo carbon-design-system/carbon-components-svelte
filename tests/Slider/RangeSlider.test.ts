@@ -163,6 +163,21 @@ describe("RangeSlider", () => {
     });
   });
 
+  it("should step each handle from min when min is not a multiple of step", async () => {
+    render(RangeSlider, {
+      props: { min: 1, max: 11, step: 2, value: 1, valueUpper: 11 },
+    });
+
+    const [lowerThumb, upperThumb] = screen.getAllByRole("slider");
+    lowerThumb.focus();
+    await user.keyboard("{ArrowRight}");
+    expect(lowerThumb).toHaveAttribute("aria-valuenow", "3");
+
+    upperThumb.focus();
+    await user.keyboard("{ArrowLeft}");
+    expect(upperThumb).toHaveAttribute("aria-valuenow", "9");
+  });
+
   it("should not push lower handle past upper bound via arrow keys", async () => {
     render(RangeSlider, { props: { value: 49, valueUpper: 50 } });
 

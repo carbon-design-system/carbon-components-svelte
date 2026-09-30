@@ -981,6 +981,29 @@ describe("Slider", () => {
     expect(slider).toHaveAttribute("aria-valuenow", "0.4");
   });
 
+  it("should step from min when min is not a multiple of step", async () => {
+    render(Slider, { props: { min: 1, max: 11, step: 2, value: 1 } });
+
+    const slider = screen.getByRole("slider");
+    slider.focus();
+    await user.keyboard("{ArrowRight}");
+    expect(slider).toHaveAttribute("aria-valuenow", "3");
+
+    await user.keyboard("{ArrowRight}");
+    expect(slider).toHaveAttribute("aria-valuenow", "5");
+  });
+
+  it("should reach 0.3 with a 0.1 step without floating-point noise", async () => {
+    render(Slider, { props: { min: 0, max: 1, step: 0.1, value: 0.2 } });
+
+    const slider = screen.getByRole("slider");
+    slider.focus();
+    await user.keyboard("{ArrowRight}");
+
+    expect(slider).toHaveAttribute("aria-valuenow", "0.3");
+    expect(screen.getByRole("spinbutton")).toHaveValue(0.3);
+  });
+
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1219
   it("should round shift+arrow values to valid steps", async () => {
     const consoleLog = vi.spyOn(console, "log");
