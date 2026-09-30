@@ -251,6 +251,10 @@
     if (disabled || readonly) return false;
     activeHandle = pickHandle(event);
     const thumbRef = activeHandle === "lower" ? lowerThumbRef : upperThumbRef;
+    // The compat `mousedown` would move focus back off the thumb: to the
+    // body for a press on the track, and in Firefox for one on the thumb's
+    // SVG icon too.
+    event.preventDefault();
     thumbRef?.focus({ preventScroll: true });
 
     grabOffset = 0;

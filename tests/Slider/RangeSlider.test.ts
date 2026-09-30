@@ -880,6 +880,19 @@ describe("RangeSlider", () => {
       });
     });
 
+    it("keeps the picked handle focused through the compat mousedown", async () => {
+      const { container } = render(RangeSlider, {
+        props: { value: 20, valueUpper: 80 },
+      });
+      const track = container.querySelector(".bx--slider__track");
+      assert(track instanceof HTMLElement);
+
+      const notCanceled = await fireEvent.pointerDown(track, { pointerId: 1 });
+
+      expect(notCanceled).toBe(false);
+      expect(screen.getAllByRole("slider")[0]).toHaveFocus();
+    });
+
     it("does not start a drag when disabled", async () => {
       const consoleLog = vi.spyOn(console, "log");
       const { container } = render(RangeSlider, { props: { disabled: true } });
