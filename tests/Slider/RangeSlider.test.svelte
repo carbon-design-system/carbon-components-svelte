@@ -14,6 +14,7 @@
     | boolean
     | ReadonlyArray<{ value: number; label?: string }>
     | undefined = false;
+  export let snapToMarks = false;
   export let disabled = false;
   export let readonly = false;
   export let hideTextInput = false;
@@ -54,6 +55,7 @@
   {minGap}
   {orientation}
   {marks}
+  {snapToMarks}
   {disabled}
   {readonly}
   {hideTextInput}

@@ -868,6 +868,80 @@ describe("RangeSlider", () => {
     expect(upperThumb).not.toHaveAttribute("aria-valuetext");
   });
 
+  describe("snapToMarks", () => {
+    const marks = [{ value: 0 }, { value: 25 }, { value: 50 }, { value: 100 }];
+
+    it("should snap a press to the nearest mark the handle can reach", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      const { container } = render(RangeSlider, {
+        props: {
+          value: 0,
+          valueUpper: 50,
+          marks,
+          snapToMarks: true,
+          minGap: 10,
+        },
+      });
+      const slider = container.querySelector(".bx--slider");
+      const track = container.querySelector(".bx--slider__track");
+      assert(slider instanceof HTMLElement);
+      assert(track instanceof HTMLElement);
+      vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
+        left: 0,
+        right: 200,
+        width: 200,
+        top: 0,
+        bottom: 0,
+        height: 2,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      });
+
+      // jsdom thumb rects are all zero, so the press picks the lower handle.
+      // 48 is nearest 50, but minGap keeps the lower handle at 40 or below.
+      await fireEvent.pointerDown(slider, { clientX: 96, pointerId: 1 });
+      await fireEvent.pointerUp(slider, { pointerId: 1 });
+
+      expect(consoleLog).toHaveBeenLastCalledWith("change", {
+        value: 25,
+        valueUpper: 50,
+      });
+    });
+
+    it("should move each handle to the adjacent reachable mark with arrow keys", async () => {
+      render(RangeSlider, {
+        props: { value: 0, valueUpper: 100, marks, snapToMarks: true },
+      });
+      const [lowerThumb, upperThumb] = screen.getAllByRole("slider");
+
+      lowerThumb.focus();
+      await user.keyboard("{ArrowRight}");
+      expect(lowerThumb).toHaveAttribute("aria-valuenow", "25");
+
+      upperThumb.focus();
+      await user.keyboard("{ArrowLeft}{ArrowLeft}{ArrowLeft}");
+      // 25 is taken by the lower handle; the upper handle stops there.
+      expect(upperThumb).toHaveAttribute("aria-valuenow", "25");
+
+      lowerThumb.focus();
+      await user.keyboard("{ArrowRight}");
+      expect(lowerThumb).toHaveAttribute("aria-valuenow", "25");
+    });
+
+    it("should jump by stepMultiplier marks with Shift+Arrow", async () => {
+      render(RangeSlider, {
+        props: { value: 0, valueUpper: 100, marks, snapToMarks: true },
+      });
+      const [lowerThumb] = screen.getAllByRole("slider");
+
+      lowerThumb.focus();
+      await user.keyboard("{Shift>}{ArrowRight}{/Shift}");
+
+      expect(lowerThumb).toHaveAttribute("aria-valuenow", "100");
+    });
+  });
+
   describe("pointer drag", () => {
     it("commits a press released before any render", () => {
       const consoleLog = vi.spyOn(console, "log");

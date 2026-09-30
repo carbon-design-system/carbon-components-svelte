@@ -47,10 +47,17 @@
    * Set to `true` to place a tick at every `step`, or pass an array of
    * `{ value, label? }` for specific stops with optional labels below the track.
    * A label is also announced in `aria-valuetext` while a handle sits on its mark.
-   * Snapping follows `step`.
+   * Snapping follows `step` unless `snapToMarks` is set.
    * @type {boolean | ReadonlyArray<{ value: number; label?: string }>}
    */
   export let marks = false;
+
+  /**
+   * Set to `true` to snap drag, click, and arrow key navigation to the configured `marks`
+   * instead of `step`. A handle only lands on marks that keep `minGap` from the other.
+   * Has no effect when `marks` is not set.
+   */
+  export let snapToMarks = false;
 
   /** Set the step multiplier value */
   export let stepMultiplier = 4;
@@ -162,7 +169,9 @@
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
   import {
     getMarkLabels,
+    nearestMark,
     resolveSliderMarks,
+    stepMarks,
   } from "../utils/resolve-slider-marks.js";
   import {
     formatRangeLabel as formatSliderRangeLabel,
@@ -287,22 +296,30 @@
     return Math.min(max, Math.max(next, value + minGap));
   }
 
+  /** @type {(handle: ActiveHandle) => import("../utils/resolve-slider-marks.js").SliderMark[]} */
+  function getReachableMarks(handle) {
+    return resolvedMarks.filter((mark) =>
+      handle === "lower" ? mark.value <= lowerMax : mark.value >= upperMin,
+    );
+  }
+
   /** @type {(e: PointerEvent) => void} */
   function calcValue(event) {
     if (disabled || readonly || !trackRef) return;
 
-    const nextValue = valueFromPointer(
-      event,
-      trackRef.getBoundingClientRect(),
-      {
-        orientation,
-        min,
-        max,
-        step,
-        offset: grabOffset,
-      },
-    );
+    let nextValue = valueFromPointer(event, trackRef.getBoundingClientRect(), {
+      orientation,
+      min,
+      max,
+      step,
+      offset: grabOffset,
+    });
     if (nextValue == null) return;
+    if (snapToMarks && resolvedMarks.length) {
+      const mark = nearestMark(nextValue, getReachableMarks(activeHandle));
+      if (!mark) return;
+      nextValue = mark.value;
+    }
 
     if (activeHandle === "lower") {
       value = clampLower(nextValue);
@@ -348,7 +365,15 @@
       event.shiftKey || event.key === "PageUp" || event.key === "PageDown";
     const delta =
       step * (isLargeStep ? range / step / stepMultiplier : 1) * dir;
-    if (activeHandle === "lower") {
+    if (snapToMarks && resolvedMarks.length) {
+      const stops = getReachableMarks(activeHandle);
+      const count = dir * (isLargeStep ? stepMultiplier : 1);
+      if (activeHandle === "lower") {
+        value = stepMarks(value, stops, count);
+      } else {
+        valueUpper = stepMarks(valueUpper, stops, count);
+      }
+    } else if (activeHandle === "lower") {
       value = clampLower(snapToStep(value + delta, { min, max, step }));
     } else {
       valueUpper = clampUpper(
