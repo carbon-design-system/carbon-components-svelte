@@ -301,6 +301,7 @@
    * @property {boolean} [expand] - Whether to expand the node and its ancestors (default: true)
    * @property {boolean} [select] - Whether to select the node (default: true)
    * @property {boolean} [focus] - Whether to focus the node (default: true)
+   * @property {boolean} [scroll] - Whether to scroll the node into view without focusing it (default: the value of `focus`)
    * @typedef {object} TreeViewExpandedChange<Id=(string|number)>
    * @property {ReadonlyArray<Id>} expandedIds - The full set of expanded node ids after the change
    * @property {Array<Id>} added - Node ids expanded since the previous change
@@ -554,8 +555,13 @@
   /**
    * Programmatically show a node by `id`.
    * By default, the matching node will be expanded, selected, and focused.
-   * Use the options parameter to customize this behavior.
-   * @type {(id: Node["id"], options?: ShowNodeOptions) => void}
+   * Use the options parameter to customize this behavior; pass
+   * `{ select: false, focus: false, scroll: true }` to scroll a node into view
+   * without changing selection or focus.
+   * Resolves once the node is focused or scrolled into view: `true` on
+   * success, `false` if no node has `id` or its row cannot be reached (for
+   * example, `expand: false` with a collapsed ancestor).
+   * @type {(id: Node["id"], options?: ShowNodeOptions) => Promise<boolean>}
    * @example
    * ```svelte
    * <TreeView bind:this={treeView} {nodes} />
@@ -567,12 +573,17 @@
    * </button>
    * ```
    */
-  export function showNode(id, options = {}) {
-    const { expand = true, select = true, focus = true } = options;
+  export async function showNode(id, options = {}) {
+    const {
+      expand = true,
+      select = true,
+      focus = true,
+      scroll = focus,
+    } = options;
     // cachedNodeMap rebuilds only when `nodes` identity changes.
     // In-place mutations stay invisible until then.
     const targetNode = cachedNodeMap?.get(id);
-    if (!targetNode) return;
+    if (!targetNode) return false;
 
     const ancestorIds = expand ? getAncestorIds(id, cachedParentIdById) : [];
     if (expand) {
@@ -598,22 +609,29 @@
       }
     }
 
-    if (focus) {
-      tick().then(async () => {
-        if (virtualConfig && scrollContainerRef) {
-          focusVirtualRowById(id);
-          return;
-        }
-        const selector = `[id="${CSS.escape(String(id))}"]`;
-        let target = ref?.querySelector(selector);
-        for (let i = 0; !target && i < ancestorIds.length * 2 + 2; i++) {
-          // biome-ignore lint/performance/noAwaitInLoops: each tick waits for the next reveal flush
-          await tick();
-          target = ref?.querySelector(selector);
-        }
-        target?.focus();
-      });
+    await tick();
+    if (!focus && !scroll) return true;
+
+    if (virtualConfig && scrollContainerRef) {
+      return revealVirtualRow(id, focus);
     }
+
+    const selector = `[id="${CSS.escape(String(id))}"]`;
+    let target = ref?.querySelector(selector);
+    for (let i = 0; !target && i < ancestorIds.length * 2 + 2; i++) {
+      // biome-ignore lint/performance/noAwaitInLoops: each tick waits for the next reveal flush
+      await tick();
+      target = ref?.querySelector(selector);
+    }
+    if (!(target instanceof HTMLElement) || isUnderCollapsedSubtree(target)) {
+      return false;
+    }
+    if (focus) {
+      target.focus();
+    } else {
+      target.scrollIntoView({ block: "nearest" });
+    }
+    return true;
   }
 
   /**
@@ -1812,17 +1830,20 @@
   }
 
   /**
-   * Scroll a virtual row into view and focus it. Callers schedule this on a
-   * `tick`, so the virtual index already reflects the ancestors `showNode` expanded.
+   * Scroll a virtual row into view and optionally focus it. Callers await a
+   * `tick` first, so the virtual index already reflects the ancestors
+   * `showNode` expanded.
    * @param {string | number} targetId
+   * @param {boolean} focus
+   * @returns {Promise<boolean>} Whether the row is in the visible index.
    */
-  function focusVirtualRowById(targetId) {
-    if (!virtualConfig || !virtualIndex || !scrollContainerRef) return;
+  async function revealVirtualRow(targetId, focus) {
+    if (!virtualConfig || !virtualIndex || !scrollContainerRef) return false;
 
     const index = virtualIndex.findIndexById(targetId);
-    if (index < 0) return;
+    if (index < 0) return false;
 
-    virtualFocusedId = targetId;
+    if (focus) virtualFocusedId = targetId;
 
     const nextScrollTop = scrollHighlightedIntoView({
       highlightedIndex: index,
@@ -1835,9 +1856,11 @@
     });
     if (nextScrollTop !== null) virtualSetScrollTop(nextScrollTop);
 
-    tick().then(() => {
+    if (focus) {
+      await tick();
       scrollContainerRef?.querySelector(treeRowIdSelector(targetId))?.focus();
-    });
+    }
+    return true;
   }
 
   /** Cancels stale focus from overlapping async `virtualMoveTo` calls
