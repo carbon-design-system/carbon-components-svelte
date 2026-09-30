@@ -351,7 +351,9 @@
 
             if (snapToMarks && resolvedMarks.length) {
               // Marks may be passed in any order; walk them from lowest to highest.
-              const stops = [...resolvedMarks].sort((a, b) => a.value - b.value);
+              const stops = [...resolvedMarks].sort(
+                (a, b) => a.value - b.value,
+              );
               const currentIndex = stops.findIndex(
                 (mark) => mark.value === value,
               );
@@ -362,7 +364,8 @@
               const jump = isLargeStep ? stepMultiplier : 1;
               let nextIndex = fromIndex + keys[event.key] * jump;
               if (nextIndex < 0) nextIndex = 0;
-              else if (nextIndex > stops.length - 1) nextIndex = stops.length - 1;
+              else if (nextIndex > stops.length - 1)
+                nextIndex = stops.length - 1;
               value = stops[nextIndex].value;
             } else {
               const delta =
@@ -393,7 +396,9 @@
               range === 0 ? 0 : ((mark.value - min) / range) * 100}
             <span
               class:bx--slider__mark={true}
-              style:left={orientation === "vertical" ? undefined : `${percent}%`}
+              style:left={orientation === "vertical"
+                ? undefined
+                : `${percent}%`}
               style:top={orientation === "vertical"
                 ? `${100 - percent}%`
                 : undefined}

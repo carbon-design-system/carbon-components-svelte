@@ -101,7 +101,7 @@
         class:bx--list-box__menu--align-end={align === "end"}
         class:bx--list-box__menu--wrap-options={wrapOptions}
         {...$$restProps}
-        style="position: static; {$$restProps.style || ''}"
+        style="position: static; {$$restProps.style || ""}"
         on:scroll
         on:mouseleave
       >

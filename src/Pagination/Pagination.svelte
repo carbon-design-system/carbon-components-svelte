@@ -408,8 +408,8 @@
         iconDescription={backwardText}
         disabled={internalBackButtonDisabled}
         class="bx--pagination__button bx--pagination__button--backward {internalBackButtonDisabled
-          ? 'bx--pagination__button--no-index'
-          : ''}"
+          ? "bx--pagination__button--no-index"
+          : ""}"
         on:click={() => {
           page--;
           dispatch("click:button--previous", { page });
@@ -427,8 +427,8 @@
         iconDescription={forwardText}
         disabled={internalForwardButtonDisabled}
         class="bx--pagination__button bx--pagination__button--forward {internalForwardButtonDisabled
-          ? 'bx--pagination__button--no-index'
-          : ''}"
+          ? "bx--pagination__button--no-index"
+          : ""}"
         on:click={() => {
           page++;
           dispatch("click:button--next", { page });

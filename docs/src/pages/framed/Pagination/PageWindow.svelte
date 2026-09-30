@@ -13,6 +13,5 @@
   pageSizes={[10, 15, 20]}
   itemRangeText={(min, max, total) =>
     `${formatNumber(min)}–${formatNumber(max)} of ${formatNumber(total)} items`}
-  pageRangeText={(_current, total) =>
-    `of ${formatNumber(total)} pages`}
+  pageRangeText={(_current, total) => `of ${formatNumber(total)} pages`}
 />

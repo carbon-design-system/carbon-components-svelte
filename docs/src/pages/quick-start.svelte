@@ -119,7 +119,7 @@
               <CodeBlock language="svelte" code={usageExample} />
             </DocCodeBox>
             <Text type="caption-01" color="secondary">
-              Explore the full{' '}
+              Explore the full{" "}
               <Link inline size="sm" href="/component-index">
                 component index.
               </Link>

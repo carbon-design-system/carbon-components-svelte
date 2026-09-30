@@ -36,7 +36,10 @@
   {items}
   let:item
 >
-  {#each highlightSegments(item.text, fuzzyMatch(item.text, value).indices) as segment}
+  {#each highlightSegments(
+    item.text,
+    fuzzyMatch(item.text, value).indices,
+  ) as segment}
     {#if segment.match}
       <strong>{segment.text}</strong>
     {:else}

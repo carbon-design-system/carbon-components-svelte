@@ -1032,7 +1032,10 @@
 </script>
 
 <TableContainer {useStaticWidth} {...$$restProps}>
-  {#if title || $$slots.titleChildren || description || $$slots.descriptionChildren}
+  {#if title ||
+    $$slots.titleChildren ||
+    description ||
+    $$slots.descriptionChildren}
     <div class:bx--data-table-header={true}>
       {#if title || $$slots.titleChildren}
         <slot
@@ -1094,9 +1097,7 @@
         </colgroup>
       {/if}
       <TableHead
-        style={virtualScrollContainer
-          ? "position: sticky; top: 0;"
-          : undefined}
+        style={virtualScrollContainer ? "position: sticky; top: 0;" : undefined}
       >
         <TableRow>
           {#if expandable}
@@ -1205,17 +1206,16 @@
                 sortable={isHeaderSortable(header)}
                 sortDirection={sortKey === header.key ? sortDirection : "none"}
                 active={sortKey === header.key}
-                {...(tableHeaderTranslateWithId
+                {...tableHeaderTranslateWithId
                   ? { translateWithId: tableHeaderTranslateWithId }
-                  : {})}
+                  : {}}
                 on:click={(event) => {
                   dispatch("click", { header });
 
                   if (isHeaderSortable(header)) {
                     const currentSortDirection =
                       sortKey === header.key ? sortDirection : "none";
-                    const effectiveSortAlways =
-                      header.sortAlways ?? sortAlways;
+                    const effectiveSortAlways = header.sortAlways ?? sortAlways;
                     const sortDirectionMap = effectiveSortAlways
                       ? {
                           none: "ascending",
@@ -1230,9 +1230,7 @@
                     const nextSortDirection =
                       sortDirectionMap[currentSortDirection];
                     const nextSortKey =
-                      nextSortDirection === "none"
-                        ? null
-                        : header.key;
+                      nextSortDirection === "none" ? null : header.key;
                     const applySort = dispatch(
                       "sort",
                       { key: nextSortKey, direction: nextSortDirection },
@@ -1280,20 +1278,26 @@
             {@const isHighlighted = highlightedRowIdsSet.has(row.id)}
             {@const rowClassValue =
               typeof rowClass === "function"
-                ? rowClass({ row, rowIndex: actualIndex, selected: isSelected, expanded: isExpanded })
+                ? rowClass({
+                    row,
+                    rowIndex: actualIndex,
+                    selected: isSelected,
+                    expanded: isExpanded,
+                  })
                 : rowClass}
             <TableRow
               data-row={row.id}
               data-parent-row={expandable ? true : undefined}
-              class="{isSelected
-                ? 'bx--data-table--selected'
-                : ''} {isExpanded ? 'bx--expandable-row' : ''} {expandable ? 'bx--parent-row' : ''} {expandable &&
+              class="{isSelected ? "bx--data-table--selected" : ""} {isExpanded
+                ? "bx--expandable-row"
+                : ""} {expandable ? "bx--parent-row" : ""} {expandable &&
               parentRowId === row.id
-                ? 'bx--expandable-row--hover'
-                : ''} {isHighlighted ? 'bx--data-table--highlighted-row' : ''} {expandable &&
-              isSelectionEnabled
-                ? 'bx--expandable-row--with-selection'
-                : ''} {rowClassValue ?? ''}"
+                ? "bx--expandable-row--hover"
+                : ""} {isHighlighted
+                ? "bx--data-table--highlighted-row"
+                : ""} {expandable && isSelectionEnabled
+                ? "bx--expandable-row--with-selection"
+                : ""} {rowClassValue ?? ""}"
               on:click={(event) => {
                 // forgo "click", "click:row" events if target
                 // resembles an overflow menu, a checkbox, or radio button
@@ -1406,7 +1410,10 @@
                           }
 
                           rangeAnchorRowId = row.id;
-                          dispatch("click:row--select", { row, selected: checked });
+                          dispatch("click:row--select", {
+                            row,
+                            selected: checked,
+                          });
                         }}
                       />
                     {/if}
@@ -1479,7 +1486,7 @@
                 }}
               >
                 {#if expandedRowIdsSet.has(row.id) &&
-                !nonExpandableRowIdsSet.has(row.id)}
+                  !nonExpandableRowIdsSet.has(row.id)}
                   <TableCell colspan={totalColumns}>
                     <div class:bx--child-row-inner-container={true}>
                       <slot
@@ -1513,7 +1520,12 @@
             {@const isHighlighted = highlightedRowIdsSet.has(row.id)}
             {@const rowClassValue =
               typeof rowClass === "function"
-                ? rowClass({ row, rowIndex: index, selected: isSelected, expanded: isExpanded })
+                ? rowClass({
+                    row,
+                    rowIndex: index,
+                    selected: isSelected,
+                    expanded: isExpanded,
+                  })
                 : rowClass}
             <TableRow
               data-row={row.id}
@@ -1524,16 +1536,16 @@
               data-zebra-even={zebraVisibleEvenIds?.has(row.id)
                 ? ""
                 : undefined}
-              class="{isSelected
-                ? 'bx--data-table--selected'
-                : ''} {isExpanded ? 'bx--expandable-row' : ''} {expandable
-                ? 'bx--parent-row'
-                : ''} {expandable && parentRowId === row.id
-                ? 'bx--expandable-row--hover'
-                : ''} {isHighlighted ? 'bx--data-table--highlighted-row' : ''} {expandable &&
-              isSelectionEnabled
-                ? 'bx--expandable-row--with-selection'
-                : ''} {rowClassValue ?? ''}"
+              class="{isSelected ? "bx--data-table--selected" : ""} {isExpanded
+                ? "bx--expandable-row"
+                : ""} {expandable ? "bx--parent-row" : ""} {expandable &&
+              parentRowId === row.id
+                ? "bx--expandable-row--hover"
+                : ""} {isHighlighted
+                ? "bx--data-table--highlighted-row"
+                : ""} {expandable && isSelectionEnabled
+                ? "bx--expandable-row--with-selection"
+                : ""} {rowClassValue ?? ""}"
               on:click={(event) => {
                 // forgo "click", "click:row" events if target
                 // resembles an overflow menu, a checkbox, or radio button
@@ -1613,7 +1625,10 @@
                         labelText="Select row"
                         on:change={() => {
                           selectedRowIds = [row.id];
-                          dispatch("click:row--select", { row, selected: true });
+                          dispatch("click:row--select", {
+                            row,
+                            selected: true,
+                          });
                         }}
                       />
                     {:else}
@@ -1641,7 +1656,10 @@
                           }
 
                           rangeAnchorRowId = row.id;
-                          dispatch("click:row--select", { row, selected: checked });
+                          dispatch("click:row--select", {
+                            row,
+                            selected: checked,
+                          });
                         }}
                       />
                     {/if}
@@ -1663,7 +1681,9 @@
                       rowSelected={isSelected}
                       rowExpanded={isExpanded}
                     >
-                      {cell.display ? cell.display(cell.value, row) : cell.value}
+                      {cell.display
+                        ? cell.display(cell.value, row)
+                        : cell.value}
                     </slot>
                   </td>
                 {:else}
@@ -1688,7 +1708,9 @@
                       rowSelected={isSelected}
                       rowExpanded={isExpanded}
                     >
-                      {cell.display ? cell.display(cell.value, row) : cell.value}
+                      {cell.display
+                        ? cell.display(cell.value, row)
+                        : cell.value}
                     </slot>
                   </TableCell>
                 {/if}

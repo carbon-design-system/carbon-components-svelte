@@ -165,7 +165,10 @@
 >
   <div style:height="{virtualData.totalHeight}px" style:position="relative">
     <div style:transform="translateY({virtualData.offsetY}px)">
-      {#each virtualData.visibleItems as item, index (getKey(item, virtualData.startIndex + index))}
+      {#each virtualData.visibleItems as item, index (getKey(
+        item,
+        virtualData.startIndex + index,
+      ))}
         <div
           data-virtual-index={measured
             ? virtualData.startIndex + index

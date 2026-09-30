@@ -23,7 +23,8 @@
   Toggle filter
 </Button>
 <Button
-  on:click={() => (rows = rows.map((row) => ({ ...row, name: `${row.name}!` })))}
+  on:click={() =>
+    (rows = rows.map((row) => ({ ...row, name: `${row.name}!` })))}
 >
   Change rows
 </Button>

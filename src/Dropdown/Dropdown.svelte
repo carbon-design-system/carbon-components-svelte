@@ -727,7 +727,8 @@
         type="button"
         role="combobox"
         class:bx--list-box__field={true}
-        class:bx--list-box__field--clearable={clearable && selectedId !== undefined}
+        class:bx--list-box__field--clearable={clearable &&
+          selectedId !== undefined}
         tabindex="0"
         aria-label={fieldAriaLabel}
         aria-expanded={open}
@@ -743,101 +744,101 @@
           if (isFluid) fieldFocused = false;
         }}
         on:keydown={(event) => {
-        if (
-          event.key === " " ||
-          event.key === "Enter" ||
-          event.key === "ArrowDown" ||
-          event.key === "ArrowUp"
-        ) {
-          event.preventDefault();
-        }
+          if (
+            event.key === " " ||
+            event.key === "Enter" ||
+            event.key === "ArrowDown" ||
+            event.key === "ArrowUp"
+          ) {
+            event.preventDefault();
+          }
 
-        if (readonly) return;
+          if (readonly) return;
 
-        if (event.key === "Enter") {
-          selectHighlighted();
-        } else if (event.key === "Tab") {
-          // Tab dismisses without selecting; report it as a keyboard
-          // dismissal, like ComboBox does for a Tab that accepts nothing.
-          close("escape-key");
-        } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
-          const step = event.key === "ArrowDown" ? 1 : -1;
-          if (event.altKey) {
-            // APG combobox pattern: Alt+ArrowDown opens a closed menu without
-            // moving the highlight; Alt+ArrowUp closes an open one.
-            if (event.key === "ArrowDown" && !open) {
+          if (event.key === "Enter") {
+            selectHighlighted();
+          } else if (event.key === "Tab") {
+            // Tab dismisses without selecting; report it as a keyboard
+            // dismissal, like ComboBox does for a Tab that accepts nothing.
+            close("escape-key");
+          } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+            const step = event.key === "ArrowDown" ? 1 : -1;
+            if (event.altKey) {
+              // APG combobox pattern: Alt+ArrowDown opens a closed menu without
+              // moving the highlight; Alt+ArrowUp closes an open one.
+              if (event.key === "ArrowDown" && !open) {
+                open = true;
+              } else if (event.key === "ArrowUp" && open) {
+                // APG combobox: Alt+ArrowUp dismisses an open menu without
+                // selecting, so it shares the keyboard-dismissal trigger.
+                close("escape-key");
+              }
+            } else if (open) {
+              change(step);
+            } else {
               open = true;
-            } else if (event.key === "ArrowUp" && open) {
-              // APG combobox: Alt+ArrowUp dismisses an open menu without
-              // selecting, so it shares the keyboard-dismissal trigger.
-              close("escape-key");
+              // `afterUpdate` highlights any selected item only after the open
+              // state flushes; if nothing is highlighted by then, start at the
+              // first (ArrowDown) or last (ArrowUp) enabled item.
+              tick().then(() => {
+                if (highlightedIndex === -1) change(step);
+              });
             }
-          } else if (open) {
-            change(step);
-          } else {
-            open = true;
-            // `afterUpdate` highlights any selected item only after the open
-            // state flushes; if nothing is highlighted by then, start at the
-            // first (ArrowDown) or last (ArrowUp) enabled item.
-            tick().then(() => {
-              if (highlightedIndex === -1) change(step);
-            });
+          } else if (event.key === "Home" || event.key === "End") {
+            // APG select-only combobox: Home/End open a closed listbox, then
+            // move the highlight to the first/last option, mirroring the
+            // open-and-move convention already used for the plain arrow keys.
+            event.preventDefault();
+            const toFirst = event.key === "Home";
+            const moveToEdge = () => {
+              if (items.length === 0) return;
+              highlightedIndex = toFirst ? 0 : items.length - 1;
+              highlightOrigin = "keyboard";
+            };
+            if (open) {
+              moveToEdge();
+            } else {
+              open = true;
+              // `afterUpdate` highlights the selected item once the open state
+              // flushes; move to the edge after that so Home/End win.
+              tick().then(moveToEdge);
+            }
+          } else if (event.key === "Escape") {
+            close("escape-key");
+          } else if (
+            clearable &&
+            selectedId !== undefined &&
+            (event.key === "Delete" || event.key === "Backspace")
+          ) {
+            // Clear the selection from the keyboard, menu open or closed,
+            // matching the click-to-clear button. Only wired when `clearable`
+            // is set, since that is what makes clearing possible at all.
+            event.preventDefault();
+            clear({ open: openOnClear });
+          } else if (isTypeaheadKey(event)) {
+            // APG select-only combobox: typing on the closed field opens the
+            // listbox and highlights the first match.
+            event.preventDefault();
+            const character = event.key;
+            if (open) {
+              typeaheadSearch(character);
+            } else {
+              open = true;
+              // `afterUpdate` highlights the selected item once the open state
+              // flushes; search after that so the match starts past the
+              // selection, the same way it does in an open menu.
+              tick().then(() => typeaheadSearch(character));
+            }
           }
-        } else if (event.key === "Home" || event.key === "End") {
-          // APG select-only combobox: Home/End open a closed listbox, then
-          // move the highlight to the first/last option, mirroring the
-          // open-and-move convention already used for the plain arrow keys.
-          event.preventDefault();
-          const toFirst = event.key === "Home";
-          const moveToEdge = () => {
-            if (items.length === 0) return;
-            highlightedIndex = toFirst ? 0 : items.length - 1;
-            highlightOrigin = "keyboard";
-          };
-          if (open) {
-            moveToEdge();
-          } else {
-            open = true;
-            // `afterUpdate` highlights the selected item once the open state
-            // flushes; move to the edge after that so Home/End win.
-            tick().then(moveToEdge);
-          }
-        } else if (event.key === "Escape") {
-          close("escape-key");
-        } else if (
-          clearable &&
-          selectedId !== undefined &&
-          (event.key === "Delete" || event.key === "Backspace")
-        ) {
-          // Clear the selection from the keyboard, menu open or closed,
-          // matching the click-to-clear button. Only wired when `clearable`
-          // is set, since that is what makes clearing possible at all.
-          event.preventDefault();
-          clear({ open: openOnClear });
-        } else if (isTypeaheadKey(event)) {
-          // APG select-only combobox: typing on the closed field opens the
-          // listbox and highlights the first match.
-          event.preventDefault();
-          const character = event.key;
-          if (open) {
-            typeaheadSearch(character);
-          } else {
-            open = true;
-            // `afterUpdate` highlights the selected item once the open state
-            // flushes; search after that so the match starts past the
-            // selection, the same way it does in an open menu.
-            tick().then(() => typeaheadSearch(character));
-          }
-        }
-      }}
+        }}
         on:keyup={(event) => {
-        if (event.key === " ") {
-          event.preventDefault();
-        } else {
-          return;
-        }
-        selectHighlighted();
-      }}
+          if (event.key === " ") {
+            event.preventDefault();
+          } else {
+            return;
+          }
+          selectHighlighted();
+        }}
         {disabled}
         {id}
       >
@@ -859,10 +860,10 @@
         {/if}
         <ListBoxMenuIcon
           on:click={(event) => {
-          event.stopPropagation();
-          if (disabled || readonly) return;
-          open = !open;
-        }}
+            event.stopPropagation();
+            if (disabled || readonly) return;
+            open = !open;
+          }}
           {translateWithId}
           {open}
         />

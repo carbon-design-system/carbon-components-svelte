@@ -228,13 +228,14 @@
                       sortAlways
                       active={sortKey === column.key}
                       sortDirection={sortDirection === "asc"
-                      ? "ascending"
-                      : "descending"}
-                      on:sort={(e) => handleSort(column.key, e.detail.direction)}
+                        ? "ascending"
+                        : "descending"}
+                      on:sort={(e) =>
+                        handleSort(column.key, e.detail.direction)}
                     >
                       {column.key === "name"
-                      ? `Component (${visible.length})`
-                      : column.label}
+                        ? `Component (${visible.length})`
+                        : column.label}
                     </StructuredListCell>
                   {/each}
                   <StructuredListCell head class="links-cell" />

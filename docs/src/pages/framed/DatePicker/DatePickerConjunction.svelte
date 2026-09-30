@@ -12,6 +12,6 @@
   <DatePickerInput
     labelText="Blackout dates"
     placeholder="mm/dd/yyyy"
-    helperText="Value: {value || 'none'}"
+    helperText="Value: {value || "none"}"
   />
 </DatePicker>

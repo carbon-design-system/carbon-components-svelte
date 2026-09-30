@@ -58,7 +58,8 @@
   >
   <link
     rel="canonical"
-    href="https://svelte.carbondesignsystem.com{$activeRoute?.leaf?.node?.path ?? ''}"
+    href="https://svelte.carbondesignsystem.com{$activeRoute?.leaf?.node
+      ?.path ?? ""}"
   >
 </svelte:head>
 

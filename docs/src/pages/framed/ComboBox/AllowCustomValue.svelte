@@ -14,13 +14,13 @@
     bind:selectedId
     bind:value
     items={[
-    { id: "0", text: "us-east-1" },
-    { id: "1", text: "us-west-2" },
-    { id: "2", text: "eu-west-1" },
-    { id: "3", text: "ap-southeast-1" },
+      { id: "0", text: "us-east-1" },
+      { id: "1", text: "us-west-2" },
+      { id: "2", text: "eu-west-1" },
+      { id: "3", text: "ap-southeast-1" },
     ]}
     shouldFilterItem={(item, value) => {
-    if (!value) return true;
+      if (!value) return true;
       return item.text.toLowerCase().includes(value.toLowerCase());
     }}
     on:select={(e) => {

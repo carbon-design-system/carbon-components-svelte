@@ -13,6 +13,6 @@
   <DatePickerInput
     labelText="Meeting date"
     placeholder="Select a date"
-    helperText="Submitted value: {value || 'none'}"
+    helperText="Submitted value: {value || "none"}"
   />
 </DatePicker>

@@ -13,11 +13,11 @@
 
 <Button
   on:click={() => {
-      queue.add({
-        kind: "success",
-        title: "Custom offset",
-      });
-    }}
+    queue.add({
+      kind: "success",
+      title: "Custom offset",
+    });
+  }}
 >
   Add notification
 </Button>

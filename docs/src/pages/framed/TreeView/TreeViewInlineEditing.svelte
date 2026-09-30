@@ -78,7 +78,8 @@
           <span
             use:syncContenteditable={node.text}
             contenteditable={!node.disabled}
-            on:input={(e) => updateNodeText(node.id, e.currentTarget.textContent)}
+            on:input={(e) =>
+              updateNodeText(node.id, e.currentTarget.textContent)}
             style:outline="none"
           ></span>
           <Edit aria-hidden="true" />

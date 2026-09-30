@@ -122,7 +122,9 @@
   class:bx--tooltip--definition={true}
   class:bx--tooltip--a11y={true}
   {...$$restProps}
-  on:mouseenter={clickToOpen ? undefined : () => setOpenDelayed(true, enterDelayMs)}
+  on:mouseenter={clickToOpen
+    ? undefined
+    : () => setOpenDelayed(true, enterDelayMs)}
   on:mouseleave={() => setOpenDelayed(false, leaveDelayMs)}
 >
   <button

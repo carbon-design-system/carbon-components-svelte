@@ -345,7 +345,11 @@
 
 <div
   bind:this={refSearch}
-  use:dismiss={{ enabled: active, type: "mouseup", handler: handleOutsideMouseup }}
+  use:dismiss={{
+    enabled: active,
+    type: "mouseup",
+    handler: handleOutsideMouseup,
+  }}
   class:bx--header__search={true}
   role="search"
   class:bx--header__search--active={active}
