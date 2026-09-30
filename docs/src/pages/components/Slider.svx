@@ -97,7 +97,9 @@ Use `formatValue` to format range labels and `aria-valuetext` (for example curre
 
 ## Marks
 
-Set `marks` to show tick marks along the track. Pass an array of stops with optional labels, or set `marks` to `true` to tick every `step`. Marks are visual only; snapping still follows `step` unless [`snapToMarks`](#snap-to-marks) is set.
+Set `marks` to show tick marks along the track. Pass an array of stops with optional labels, or set `marks` to `true` to tick every `step`. Snapping follows `step` unless [`snapToMarks`](#snap-to-marks) or [`markSnapDistance`](#magnetic-marks) is set.
+
+While the value sits on a labeled mark, screen readers announce the label as the value text. With `formatValue`, they announce the formatted value followed by the label, for example "68°F, Comfortable".
 
 <Slider
   labelText="Log verbosity"
@@ -136,6 +138,24 @@ Set `snapToMarks` to `true` to make dragging and clicking land on the nearest ma
     { value: 16, label: "16" },
     { value: 32, label: "32" },
     { value: 64, label: "64" },
+  ]}
+/>
+
+### Magnetic marks
+
+Set `markSnapDistance` to pull drags and clicks onto a mark once the pointer comes within that many pixels of it. Unlike `snapToMarks`, every other `step` stays reachable, so a meaningful value such as a default or a neutral point is easy to hit without restricting the control to its marks. Arrow keys still move by `step`.
+
+<Slider
+  labelText="Thermostat"
+  min={60}
+  max={80}
+  value={65}
+  markSnapDistance={12}
+  formatValue={(v) => `${v}°F`}
+  marks={[
+    { value: 60, label: "Cold" },
+    { value: 68, label: "Comfortable" },
+    { value: 80, label: "Hot" },
   ]}
 />
 
@@ -331,7 +351,7 @@ Set `selectTextOnFocus` to select the full value in either number input when it 
 
 ### Marks
 
-Set `marks` the same way as on `Slider` for tick marks and optional labels.
+Set `marks` the same way as on `Slider` for tick marks and optional labels. `snapToMarks` and `markSnapDistance` work the same way too; a handle only lands on marks that keep [`minGap`](#minimum-gap) from the other handle.
 
 <RangeSlider
   labelText="Log verbosity"
@@ -348,6 +368,18 @@ Set `marks` the same way as on `Slider` for tick marks and optional labels.
     { value: 3, label: "High" },
   ]}
 />
+
+### Drag the range
+
+Set `trackDrag` to `"range"` to move both handles together when a drag starts inside the selected range. The range keeps its width and stops against `min` and `max`, the pointer shows a grab cursor over it, and both handles are highlighted while it moves. A press outside the range still moves the nearer handle. Useful for sliding a fixed-length window, such as a time span, along the track.
+
+<RangeSlider labelText="Maintenance window (hour)" trackDrag="range" min={0} max={24} value={2} valueUpper={6} />
+
+### Brush a new range
+
+Set `trackDrag` to `"brush"` to also paint a new range by dragging across the track outside the current one; the pointer shows a crosshair there. Press on the empty track, hold, and drag: the range runs from the press point to the pointer, in either direction. A click without dragging moves the nearer handle, as it does by default. Both handles stay keyboard-operable, since neither mode adds a keyboard interaction.
+
+<RangeSlider labelText="Price range" trackDrag="brush" value={20} valueUpper={40} formatValue={(v) => `$${v}`} />
 
 ### Handle labels
 
