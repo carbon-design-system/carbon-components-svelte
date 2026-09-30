@@ -154,7 +154,7 @@ With `multiselect`, these keys also change the selection. A row's unit depends o
 | <DocKbd label="Shift" /> + <DocKbd label="Space" /> | Selects the range from the anchor to the focused row, as <DocKbd label="Shift" /> + click does. |
 | <DocKbd label="Shift" /> + <DocKbd label="Up" /> / <DocKbd label="Down" /> | Moves focus to the previous or next row and toggles that row's unit. |
 | <DocKbd label="Ctrl" /> + <DocKbd label="Shift" /> + <DocKbd label="Home" /> / <DocKbd label="End" /> | Adds every row from the focused row to the first or last row. |
-| <DocKbd label="Ctrl" /> + <DocKbd label="A" /> | Adds every visible, non-disabled row. |
+| <DocKbd label="Ctrl" /> or <DocKbd label="CMD" /> + <DocKbd label="A" /> | Adds every visible, non-disabled row. |
 
 ## Multi-select
 
