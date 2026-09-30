@@ -2080,9 +2080,14 @@
         event.preventDefault();
         event.stopPropagation();
         if ($expandedIdSet.has(item.node.id)) {
-          // Already expanded: focus first child (next row).
+          // Already expanded: focus the first child, if any has loaded.
           const next = nextEnabled(activeIdx + 1, 1);
-          if (next >= 0) virtualMoveTo(next);
+          if (
+            next >= 0 &&
+            virtualIndex.getRowAt(next)?.parentId === item.node.id
+          ) {
+            virtualMoveTo(next);
+          }
         } else {
           expandNode(item.node, true);
           toggleNode(item.node);
