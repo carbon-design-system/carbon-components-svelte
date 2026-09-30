@@ -11,6 +11,38 @@
   }
 
   /**
+   * Class names for a sticky column cell.
+   * @param {{ side: "start" | "end"; edge: boolean } | undefined} info
+   * @returns {string | undefined}
+   */
+  function stickyClass(info) {
+    if (!info) return undefined;
+    return joinClasses(
+      `bx--table-column--sticky-${info.side}`,
+      info.edge ? `bx--table-column--sticky-${info.side}-edge` : undefined,
+    );
+  }
+
+  /**
+   * Inline offset for a sticky column cell.
+   * @param {{ side: "start" | "end"; offset: number } | undefined} info
+   * @returns {string | undefined}
+   */
+  function stickyStyle(info) {
+    if (!info) return undefined;
+    return `${info.side === "start" ? "left" : "right"}: ${info.offset}px`;
+  }
+
+  /**
+   * Join inline styles, skipping empty values.
+   * @param {...(string | undefined)} parts
+   * @returns {string | undefined}
+   */
+  function joinStyles(...parts) {
+    return parts.filter(Boolean).join(";") || undefined;
+  }
+
+  /**
    * Join class names, skipping empty values.
    * @param {...(string | undefined)} parts
    * @returns {string | undefined}
@@ -92,6 +124,7 @@
    * @property {boolean} [columnHidden] - Whether the column is skipped in render while remaining in `headers`
    * @property {string} [width]
    * @property {string} [minWidth]
+   * @property {"start" | "end"} [sticky] - Pin the column to the start or end edge while the table scrolls horizontally. Sticky columns must be contiguous from that edge. Ignored with `stickyHeader`.
    * @typedef {object} DataTableNonEmptyHeader<Row=DataTableRow>
    * @property {DataTableKey<Row>} key
    * @property {false} [empty]
@@ -104,6 +137,7 @@
    * @property {string} [width]
    * @property {string} [minWidth]
    * @property {"start" | "end"} [columnAlign] - Horizontal alignment of the column header and cells. Logical, so `end` is the right edge in LTR and the left edge in RTL. Defaults to `"start"`.
+   * @property {"start" | "end"} [sticky] - Pin the column to the start or end edge while the table scrolls horizontally. Sticky columns must be contiguous from that edge. Ignored with `stickyHeader`.
    * @typedef {DataTableNonEmptyHeader<Row> | DataTableEmptyHeader<Row>} DataTableHeader<Row=DataTableRow>
    * @typedef {object} DataTableCell<Row=DataTableRow>
    * @property {DataTableKey<Row> | (string & {})} key
@@ -427,7 +461,13 @@
    */
   export let tableHeaderTranslateWithId = undefined;
 
-  import { createEventDispatcher, onMount, setContext, tick } from "svelte";
+  import {
+    afterUpdate,
+    createEventDispatcher,
+    onMount,
+    setContext,
+    tick,
+  } from "svelte";
   import { writable } from "svelte/store";
   import InlineCheckbox from "../Checkbox/InlineCheckbox.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
@@ -442,9 +482,11 @@
   } from "../utils/virtualize.js";
   import {
     compareValues,
+    computeStickyOffsets,
     formatHeaderWidth,
     getDisplayedRows,
     resolvePath,
+    resolveStickyColumns,
     shouldIgnoreRowClick,
   } from "./data-table-utils.js";
   import Table from "./Table.svelte";
@@ -544,6 +586,7 @@
   onMount(() => {
     return () => {
       if (scrollListenerCleanup) scrollListenerCleanup();
+      stopObservingStickyColumns();
     };
   });
 
@@ -1052,6 +1095,168 @@
   // Calculate total columns for spacer rows and expanded row cells
   $: totalColumns =
     (expandable ? 1 : 0) + (isSelectionEnabled ? 1 : 0) + visibleHeaders.length;
+
+  // Sticky columns. Unsupported with `stickyHeader`, which lays out
+  // `thead` and `tbody` as separate flex scrollers.
+  $: stickyColumns = stickyHeader
+    ? { start: [], end: [] }
+    : resolveStickyColumns(stableHeaders);
+  $: hasStickyColumns =
+    stickyColumns.start.length > 0 || stickyColumns.end.length > 0;
+  $: leadingColumnCount = (expandable ? 1 : 0) + (isSelectionEnabled ? 1 : 0);
+
+  /**
+   * Measured border-box widths of the header row cells, leading columns first.
+   * @type {number[]}
+   */
+  let headerCellWidths = [];
+  /** @type {ResizeObserver | undefined} */
+  let stickyObserver = undefined;
+  /** @type {Element[]} */
+  let observedHeaderCells = [];
+  /** @type {Map<Element, number>} */
+  const measuredWidths = new Map();
+
+  function updateHeaderCellWidths() {
+    const next = observedHeaderCells.map(
+      (cell) => measuredWidths.get(cell) ?? 0,
+    );
+    if (
+      next.length !== headerCellWidths.length ||
+      next.some((width, i) => width !== headerCellWidths[i])
+    ) {
+      headerCellWidths = next;
+    }
+  }
+
+  function stopObservingStickyColumns() {
+    stickyObserver?.disconnect();
+    stickyObserver = undefined;
+    observedHeaderCells = [];
+    measuredWidths.clear();
+  }
+
+  // One shared observer for every measured header cell. Re-sync after each
+  // update because the header row's cells change with `headers`, `expandable`,
+  // `selectable`, and `radio`.
+  function syncStickyObserver() {
+    if (!hasStickyColumns) {
+      if (stickyObserver) {
+        stopObservingStickyColumns();
+        headerCellWidths = [];
+      }
+      return;
+    }
+
+    const cells = Array.from(
+      scrollContainerRef?.querySelectorAll("thead > tr:first-child > th") ?? [],
+    );
+
+    if (
+      stickyObserver &&
+      cells.length === observedHeaderCells.length &&
+      cells.every((cell, i) => cell === observedHeaderCells[i])
+    ) {
+      return;
+    }
+
+    stickyObserver ??= new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        measuredWidths.set(
+          entry.target,
+          entry.borderBoxSize?.[0]?.inlineSize ??
+            entry.target.getBoundingClientRect().width,
+        );
+      }
+      updateHeaderCellWidths();
+    });
+
+    for (const cell of observedHeaderCells) {
+      if (!cells.includes(cell)) {
+        stickyObserver.unobserve(cell);
+        measuredWidths.delete(cell);
+      }
+    }
+    for (const cell of cells) {
+      if (!observedHeaderCells.includes(cell)) stickyObserver.observe(cell);
+    }
+    observedHeaderCells = cells;
+    updateHeaderCellWidths();
+  }
+
+  // The container ref may bind after the first `afterUpdate`, so also sync
+  // when it arrives.
+  $: if (scrollContainerRef && hasStickyColumns) syncStickyObserver();
+  afterUpdate(syncStickyObserver);
+
+  // Per-column sticky info by key, and the offsets of the leading
+  // expand/select cells, from one pass over the measured widths.
+  $: ({ stickyInfoByKey, leadingStickyOffsets } = computeStickyLayout(
+    stickyColumns,
+    visibleHeaders,
+    leadingColumnCount,
+    headerCellWidths,
+  ));
+  $: expandStickyInfo =
+    expandable && stickyColumns.start.length > 0
+      ? { side: "start", offset: leadingStickyOffsets[0] ?? 0, edge: false }
+      : undefined;
+  $: selectStickyInfo =
+    isSelectionEnabled && stickyColumns.start.length > 0
+      ? {
+          side: "start",
+          offset: leadingStickyOffsets[expandable ? 1 : 0] ?? 0,
+          edge: false,
+        }
+      : undefined;
+
+  /**
+   * @param {{ start: string[]; end: string[] }} columns
+   * @param {ReadonlyArray<{ key?: string }>} headersShown
+   * @param {number} leadingCount
+   * @param {ReadonlyArray<number>} widths
+   */
+  function computeStickyLayout(columns, headersShown, leadingCount, widths) {
+    /** @type {Record<string, { side: "start" | "end"; offset: number; edge: boolean }>} */
+    const info = {};
+    if (columns.start.length === 0 && columns.end.length === 0) {
+      return { stickyInfoByKey: info, leadingStickyOffsets: [] };
+    }
+
+    /** @type {Record<string, number>} */
+    const widthByKey = {};
+    headersShown.forEach((header, i) => {
+      widthByKey[header.key] = widths[leadingCount + i] ?? 0;
+    });
+
+    const startOffsets = computeStickyOffsets([
+      ...Array.from({ length: leadingCount }, (_, i) => widths[i] ?? 0),
+      ...columns.start.map((key) => widthByKey[key] ?? 0),
+    ]);
+    columns.start.forEach((key, i) => {
+      info[key] = {
+        side: "start",
+        offset: startOffsets[leadingCount + i],
+        edge: i === columns.start.length - 1,
+      };
+    });
+
+    const endOffsets = computeStickyOffsets(
+      columns.end.map((key) => widthByKey[key] ?? 0).reverse(),
+    );
+    columns.end.forEach((key, i) => {
+      info[key] = {
+        side: "end",
+        offset: endOffsets[columns.end.length - 1 - i],
+        edge: i === 0,
+      };
+    });
+
+    return {
+      stickyInfoByKey: info,
+      leadingStickyOffsets: startOffsets.slice(0, leadingCount),
+    };
+  }
 </script>
 
 <TableContainer {useStaticWidth} {...$$restProps}>
@@ -1127,6 +1332,8 @@
             <th
               scope="col"
               id="{id}-expand"
+              class={stickyClass(expandStickyInfo)}
+              style={stickyStyle(expandStickyInfo)}
               class:bx--table-expand={true}
               data-previous-value={expanded ? "collapsed" : undefined}
             >
@@ -1172,12 +1379,21 @@
             </th>
           {/if}
           {#if isSelectionEnabled && (radio || !batchSelection)}
-            <th scope="col">
+            <th
+              scope="col"
+              class={stickyClass(selectStickyInfo)}
+              style={stickyStyle(selectStickyInfo)}
+            >
               <span class:bx--visually-hidden={true}>Select row</span>
             </th>
           {/if}
           {#if batchSelection && !radio}
-            <th scope="col" class:bx--table-column-checkbox={true}>
+            <th
+              scope="col"
+              class={stickyClass(selectStickyInfo)}
+              style={stickyStyle(selectStickyInfo)}
+              class:bx--table-column-checkbox={true}
+            >
               <InlineCheckbox
                 aria-label="Select all rows"
                 name="{id}-select-all"
@@ -1209,23 +1425,29 @@
             </th>
           {/if}
           {#each visibleHeaders as header (header.key)}
+            {@const stickyInfo = stickyInfoByKey[header.key]}
             {#if header.empty}
               {#if header.columnMenu}
                 <th
                   scope="col"
+                  class={stickyClass(stickyInfo)}
                   class:bx--table-column-menu={true}
-                  style={formatHeaderWidth(header)}
+                  style={joinStyles(formatHeaderWidth(header), stickyStyle(stickyInfo))}
                 ></th>
               {:else}
-                <th scope="col" style={formatHeaderWidth(header)}>
+                <th
+                  scope="col"
+                  class={stickyClass(stickyInfo)}
+                  style={joinStyles(formatHeaderWidth(header), stickyStyle(stickyInfo))}
+                >
                   <div class:bx--table-header-label={true}></div>
                 </th>
               {/if}
             {:else}
               <TableHeader
                 id="{id}-{header.key}"
-                class={formatAlignClass(header.columnAlign)}
-                style={formatHeaderWidth(header)}
+                class={joinClasses(formatAlignClass(header.columnAlign), stickyClass(stickyInfo))}
+                style={joinStyles(formatHeaderWidth(header), stickyStyle(stickyInfo))}
                 sortable={isHeaderSortable(header)}
                 sortDirection={sortKey === header.key ? sortDirection : "none"}
                 active={sortKey === header.key}
@@ -1343,7 +1565,8 @@
             >
               {#if expandable}
                 <TableCell
-                  class="bx--table-expand"
+                  class={joinClasses("bx--table-expand", stickyClass(expandStickyInfo))}
+                  style={stickyStyle(expandStickyInfo)}
                   headers="{id}-expand"
                   data-previous-value={!nonExpandableRowIdsSet.has(row.id) &&
                   expandedRowIdsSet.has(row.id)
@@ -1386,7 +1609,9 @@
               {/if}
               {#if isSelectionEnabled}
                 <td
+                  class={stickyClass(selectStickyInfo)}
                   class:bx--table-cell={true}
+                  style={stickyStyle(selectStickyInfo)}
                   class:bx--table-column-checkbox={true}
                   class:bx--table-column-radio={radio}
                   on:click={(event) => handleRadioColumnClick(row, event)}
@@ -1449,11 +1674,14 @@
                   typeof cellClass === "function"
                     ? cellClass({ row, cell, rowIndex: actualIndex, cellIndex: j, selected: isSelected, expanded: isExpanded })
                     : cellClass}
-                {@const cellClasses = joinClasses(formatAlignClass(cell.columnAlign), cellClassValue)}
+                {@const stickyInfo = stickyInfoByKey[cell.key]}
+                {@const cellClasses = joinClasses(formatAlignClass(cell.columnAlign), stickyClass(stickyInfo), cellClassValue)}
+                {@const cellStyle = stickyStyle(stickyInfo)}
                 {#if cell.empty}
                   <td
                     class={cellClasses}
                     class:bx--table-cell={true}
+                    style={cellStyle}
                     class:bx--table-column-menu={cell.columnMenu}
                   >
                     <slot
@@ -1473,6 +1701,7 @@
                 {:else}
                   <TableCell
                     class={cellClasses}
+                    style={cellStyle}
                     headers="{id}-{cell.key}"
                     on:click={(event) => {
                       dispatch("click", { row, cell });
@@ -1598,7 +1827,8 @@
             >
               {#if expandable}
                 <TableCell
-                  class="bx--table-expand"
+                  class={joinClasses("bx--table-expand", stickyClass(expandStickyInfo))}
+                  style={stickyStyle(expandStickyInfo)}
                   headers="{id}-expand"
                   data-previous-value={isExpandable && isExpanded
                     ? "collapsed"
@@ -1639,7 +1869,9 @@
               {/if}
               {#if isSelectionEnabled}
                 <td
+                  class={stickyClass(selectStickyInfo)}
                   class:bx--table-cell={true}
+                  style={stickyStyle(selectStickyInfo)}
                   class:bx--table-column-checkbox={true}
                   class:bx--table-column-radio={radio}
                   on:click={(event) => handleRadioColumnClick(row, event)}
@@ -1702,11 +1934,14 @@
                   typeof cellClass === "function"
                     ? cellClass({ row, cell, rowIndex: index, cellIndex: j, selected: isSelected, expanded: isExpanded })
                     : cellClass}
-                {@const cellClasses = joinClasses(formatAlignClass(cell.columnAlign), cellClassValue)}
+                {@const stickyInfo = stickyInfoByKey[cell.key]}
+                {@const cellClasses = joinClasses(formatAlignClass(cell.columnAlign), stickyClass(stickyInfo), cellClassValue)}
+                {@const cellStyle = stickyStyle(stickyInfo)}
                 {#if cell.empty}
                   <td
                     class={cellClasses}
                     class:bx--table-cell={true}
+                    style={cellStyle}
                     class:bx--table-column-menu={cell.columnMenu}
                   >
                     <slot
@@ -1726,6 +1961,7 @@
                 {:else}
                   <TableCell
                     class={cellClasses}
+                    style={cellStyle}
                     headers="{id}-{cell.key}"
                     on:click={(event) => {
                       dispatch("click", { row, cell });
