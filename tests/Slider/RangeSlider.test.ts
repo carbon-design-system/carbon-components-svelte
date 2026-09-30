@@ -10,6 +10,31 @@ import RangeSlider from "./RangeSlider.test.svelte";
 const bounds = (value: number, valueUpper: number) =>
   expect.objectContaining({ detail: { value, valueUpper } });
 
+/**
+ * Stubs a 200px track over 0–100 and centers each 16px thumb on its value,
+ * so a press on the track picks the nearer handle as a browser would.
+ */
+const mockTrack = (
+  container: HTMLElement,
+  value: number,
+  valueUpper: number,
+) => {
+  const slider = container.querySelector(".bx--slider");
+  const track = container.querySelector(".bx--slider__track");
+  assert(slider instanceof HTMLElement && track instanceof HTMLElement);
+  vi.spyOn(track, "getBoundingClientRect").mockReturnValue(
+    rect({ right: 200, height: 2 }),
+  );
+  const [lowerThumb, upperThumb] = screen.getAllByRole("slider");
+  vi.spyOn(lowerThumb, "getBoundingClientRect").mockReturnValue(
+    rect({ left: value * 2 - 8, width: 16, height: 16 }),
+  );
+  vi.spyOn(upperThumb, "getBoundingClientRect").mockReturnValue(
+    rect({ left: valueUpper * 2 - 8, width: 16, height: 16 }),
+  );
+  return { slider, track, lowerThumb, upperThumb };
+};
+
 describe("RangeSlider", () => {
   it("names each thumb and text input by the label and its bound", () => {
     render(RangeSlider, { props: { labelText: "Price" } });
@@ -871,6 +896,64 @@ describe("RangeSlider", () => {
     const [lowerThumb, upperThumb] = screen.getAllByRole("slider");
     expect(lowerThumb).toHaveAttribute("aria-valuetext", "Free");
     expect(upperThumb).not.toHaveAttribute("aria-valuetext");
+  });
+
+  describe("snapToMarks", () => {
+    const marks = [{ value: 0 }, { value: 25 }, { value: 50 }, { value: 100 }];
+
+    it("should snap a press to the nearest mark the handle can reach", async () => {
+      const onchange = vi.fn();
+      const { container } = render(RangeSlider, {
+        props: {
+          value: 0,
+          valueUpper: 100,
+          marks: [{ value: 0 }, { value: 25 }, { value: 45 }, { value: 100 }],
+          snapToMarks: true,
+          minGap: 60,
+          onchange,
+        },
+      });
+      const { slider } = mockTrack(container, 0, 100);
+
+      // 44 is nearer the lower handle and nearest 45, but minGap keeps the
+      // lower handle at 40 or below.
+      await fireEvent.pointerDown(slider, { clientX: 88, pointerId: 1 });
+      await fireEvent.pointerUp(slider, { pointerId: 1 });
+
+      expect(onchange).toHaveBeenLastCalledWith(bounds(25, 100));
+    });
+
+    it("should move each handle to the adjacent reachable mark with arrow keys", async () => {
+      render(RangeSlider, {
+        props: { value: 0, valueUpper: 100, marks, snapToMarks: true },
+      });
+      const [lowerThumb, upperThumb] = screen.getAllByRole("slider");
+
+      lowerThumb.focus();
+      await user.keyboard("{ArrowRight}");
+      expect(lowerThumb).toHaveAttribute("aria-valuenow", "25");
+
+      upperThumb.focus();
+      await user.keyboard("{ArrowLeft}{ArrowLeft}{ArrowLeft}");
+      // 25 is taken by the lower handle; the upper handle stops there.
+      expect(upperThumb).toHaveAttribute("aria-valuenow", "25");
+
+      lowerThumb.focus();
+      await user.keyboard("{ArrowRight}");
+      expect(lowerThumb).toHaveAttribute("aria-valuenow", "25");
+    });
+
+    it("should jump by stepMultiplier marks with Shift+Arrow", async () => {
+      render(RangeSlider, {
+        props: { value: 0, valueUpper: 100, marks, snapToMarks: true },
+      });
+      const [lowerThumb] = screen.getAllByRole("slider");
+
+      lowerThumb.focus();
+      await user.keyboard("{Shift>}{ArrowRight}{/Shift}");
+
+      expect(lowerThumb).toHaveAttribute("aria-valuenow", "100");
+    });
   });
 
   describe("pointer drag", () => {
