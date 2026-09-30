@@ -45,7 +45,8 @@
    * Show tick marks along the track.
    * Set to `true` to place a tick at every `step`, or pass an array of
    * `{ value, label? }` for specific stops with optional labels below the track.
-   * Marks are visual only unless `snapToMarks` is set; snapping otherwise follows `step`.
+   * A label is also announced in `aria-valuetext` while the value sits on its mark.
+   * Snapping follows `step` unless `snapToMarks` is set.
    * @type {boolean | ReadonlyArray<{ value: number; label?: string }>}
    */
   export let marks = false;
@@ -171,13 +172,14 @@
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
   import {
+    getMarkLabels,
     nearestMark,
     resolveSliderMarks,
   } from "../utils/resolve-slider-marks.js";
   import {
     formatRangeLabel as formatSliderRangeLabel,
-    getValueText as getSliderValueText,
     getTextInputWidth,
+    getValueText,
     snapToStep,
     valueFromPointer,
   } from "../utils/slider-value.js";
@@ -204,11 +206,6 @@
   /** @type {(label: string, numericValue: number) => string | number} */
   function formatRangeLabel(label, numericValue) {
     return formatSliderRangeLabel(label, numericValue, formatValue);
-  }
-
-  /** @type {(numericValue: number) => string | undefined} */
-  function getValueText(numericValue) {
-    return getSliderValueText(numericValue, formatValue);
   }
 
   function handleDragStart(event) {
@@ -279,9 +276,8 @@
     return `${rtl ? 100 - percent : percent}%`;
   }
   $: resolvedMarks = resolveSliderMarks(marks, min, max, step);
-  $: hasMarkLabels = resolvedMarks.some(
-    (mark) => mark.label != null && mark.label !== "",
-  );
+  $: markLabels = getMarkLabels(resolvedMarks);
+  $: hasMarkLabels = markLabels.size > 0;
   $: value = clamp(value, min, max);
 
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
@@ -353,7 +349,7 @@
         aria-valuemax={max}
         aria-valuemin={min}
         aria-valuenow={value}
-        aria-valuetext={getValueText(value)}
+        aria-valuetext={getValueText(value, formatValue, markLabels)}
         aria-label={ariaLabel}
         aria-labelledby={controlLabelledBy}
         aria-orientation={orientation}
