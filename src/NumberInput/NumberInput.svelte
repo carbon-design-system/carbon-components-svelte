@@ -124,6 +124,15 @@
   /** Set to `true` to prevent the scroll wheel from changing the input value */
   export let disableWheel = false;
 
+  /**
+   * Set to `true` to change the value by dragging the label left or right.
+   * Dragging toward the inline end raises the value: right, or left under
+   * `dir="rtl"`. Every 4 pixels of travel moves one `step`; hold Shift to
+   * move 10 steps.
+   * Typing, arrow keys, and the steppers work as usual.
+   */
+  export let scrubbable = false;
+
   /** Set to `true` to select the input's text when it receives focus */
   export let selectTextOnFocus = false;
 
@@ -217,16 +226,23 @@
   import { formReset } from "../utils/form-reset.js";
   import { getNumberFormatter } from "../utils/intl-formatter-cache.js";
   import {
+    getLayoutDirection,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
+  import {
     clamp,
     getDefaultValue,
     parse,
     parseLocaleValue,
     roundToStep,
   } from "../utils/numeric-format.js";
+  import { pointerDrag } from "../utils/pointer-drag.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
+
+  const SCRUB_STEP_PIXELS = 4;
 
   const defaultTranslations = {
     [translationIds.increment]: "Increment number",
@@ -235,6 +251,7 @@
 
   const dispatch = createEventDispatcher();
   const formContext = getContext(FORM_CONTEXT_KEY);
+  const layoutDirection = getLayoutDirection();
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
   $: effectiveSize = normalizeSize(size ?? $formSize, FIELD_SIZE_ALIASES);
@@ -339,6 +356,7 @@
     readonly,
   }));
   $: isFluid = fluid || !!formContext?.isFluid;
+  $: scrubEnabled = scrubbable && !disabled && !readonly;
   // Neutral = neither invalid nor warn is showing.
   $: neutral = !showInvalid && !showWarn;
   $: hasErrorMessage = showInvalid && !!invalidText;
@@ -484,6 +502,62 @@
     }
   }
 
+  let scrubLastX = 0;
+  // Travel not yet converted into steps, so a slow drag still adds up and
+  // switching Shift mid-drag doesn't jump.
+  let scrubRemainder = 0;
+  /** @type {null | number} */
+  let scrubStartValue = null;
+  // 1 when dragging right raises the value, -1 in a right-to-left layout,
+  // where the inline end is on the left.
+  let scrubSign = 1;
+
+  /**
+   * Start a scrub on the label, unless scrubbing is off.
+   * @param {PointerEvent} event
+   * @returns {false | void} `false` declines the drag.
+   */
+  function handleScrubStart(event) {
+    if (!scrubEnabled) return false;
+    // Keep the press from selecting the label text. A click without
+    // movement still focuses the input through the label.
+    event.preventDefault();
+    scrubLastX = event.clientX;
+    scrubRemainder = 0;
+    scrubStartValue = value;
+    const node =
+      event.currentTarget instanceof Element ? event.currentTarget : null;
+    scrubSign =
+      resolveLayoutDirection($layoutDirection, node) === "rtl" ? -1 : 1;
+  }
+
+  /**
+   * Move the value one `step` per `SCRUB_STEP_PIXELS` of travel toward the
+   * inline end, or 10 steps with Shift held.
+   * @param {PointerEvent} event
+   */
+  function handleScrubMove(event) {
+    scrubRemainder += (event.clientX - scrubLastX) * scrubSign;
+    scrubLastX = event.clientX;
+    const steps = Math.trunc(scrubRemainder / SCRUB_STEP_PIXELS);
+    if (!steps) return;
+    scrubRemainder -= steps * SCRUB_STEP_PIXELS;
+    const current = value ?? getDefaultValue(stepStartValue, min);
+    const next = roundToStep(
+      clamp(current + steps * step * (event.shiftKey ? 10 : 1), min, max),
+      step,
+    );
+    if (next === value) return;
+    userInputActive = false;
+    value = next;
+    dispatch("input", value);
+  }
+
+  /** Dispatch `change` once, if the drag moved the value. */
+  function handleScrubEnd() {
+    if (value !== scrubStartValue) dispatch("change", value);
+  }
+
   function handleInputFocus() {
     if (isFluid) inputFocused = true;
     if (selectTextOnFocus && !disabled) {
@@ -533,6 +607,13 @@
         class:bx--label--disabled={disabled}
         class:bx--visually-hidden={hideLabel}
         class:bx--label--slotted={isFluid && $$slots.labelChildren}
+        class:bx--label--scrubbable={scrubEnabled}
+        use:pointerDrag={{
+          enabled: scrubEnabled,
+          onStart: handleScrubStart,
+          onMove: handleScrubMove,
+          onEnd: handleScrubEnd,
+        }}
       >
         <slot name="labelChildren">{labelText}</slot>
       </label>
