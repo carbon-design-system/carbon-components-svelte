@@ -100,6 +100,7 @@
     | ((e: ComponentEvents<DataTableComponent>["sort"]) => void)
     | undefined = undefined;
   export let rowClass: ComponentProps<DataTable>["rowClass"] = undefined;
+  export let cellClass: ComponentProps<DataTable>["cellClass"] = undefined;
   /** When true, `on:sort` calls preventDefault() so the table does not apply client-side sort. */
   export let preventSortDefault = false;
   /** Receives every forwarded click, hover, and scrollend event in dispatch order. */
@@ -145,6 +146,7 @@
   {pageSize}
   {page}
   {rowClass}
+  {cellClass}
   {sortKey}
   {sortDirection}
   {virtualize}
