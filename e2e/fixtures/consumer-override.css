@@ -40,3 +40,8 @@
 .my-tab a {
   border-bottom-color: rgb(200, 0, 0);
 }
+
+/* A single class applied through `cellClass` (no element qualifier). */
+.my-cell {
+  color: rgb(200, 0, 0);
+}

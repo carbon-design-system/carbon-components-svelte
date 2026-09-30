@@ -11,6 +11,15 @@
   }
 
   /**
+   * Join class names, skipping empty values.
+   * @param {...(string | undefined)} parts
+   * @returns {string | undefined}
+   */
+  function joinClasses(...parts) {
+    return parts.filter(Boolean).join(" ") || undefined;
+  }
+
+  /**
    * Whether `next` describes the same row values as `prev`. Unlike
    * `rowsEqual` (used by `ToolbarSearch`), a same-reference element does NOT
    * count as equal: `rowsEqual` short-circuits per element on `rowA ===
@@ -148,8 +157,11 @@
    * @property {EventTarget} currentTarget
    * @typedef {{ row: Row, rowIndex: number, selected: boolean, expanded: boolean }} DataTableRowClassArgs<Row=DataTableRow>
    * @typedef {string | ((row: DataTableRowClassArgs<Row>) => string | undefined)} DataTableRowClass<Row=DataTableRow>
+   * @typedef {{ row: Row, cell: DataTableCell<Row>, rowIndex: number, cellIndex: number, selected: boolean, expanded: boolean }} DataTableCellClassArgs<Row=DataTableRow>
+   * @typedef {string | ((args: DataTableCellClassArgs<Row>) => string | undefined)} DataTableCellClass<Row=DataTableRow>
    * @type {object}
    * @property {DataTableRowClass<Row>} [rowClass]
+   * @property {DataTableCellClass<Row>} [cellClass]
    * @restProps {div}
    */
 
@@ -199,6 +211,17 @@
    * @type {DataTableRowClass<Row>}
    */
   export let rowClass = undefined;
+
+  /**
+   * Provide a class name for every body cell, or a function
+   * that returns one based on the row, cell, and row state.
+   * @example
+   * ```svelte
+   * <DataTable cellClass={({ cell }) => cell.key === "status" && cell.value === "Failed" ? "cell-failed" : undefined} />
+   * ```
+   * @type {DataTableCellClass<Row>}
+   */
+  export let cellClass = undefined;
 
   /**
    * Specify a name attribute for the input elements
@@ -1266,7 +1289,7 @@
           <!-- Spacer row for offset -->
           {#if virtualData.startIndex > 0}
             <tr style:height="{virtualData.offsetY}px">
-              <td colspan={totalColumns}></td>
+              <td colspan={totalColumns} class:bx--table-cell={true}></td>
             </tr>
           {/if}
 
@@ -1363,6 +1386,7 @@
               {/if}
               {#if isSelectionEnabled}
                 <td
+                  class:bx--table-cell={true}
                   class:bx--table-column-checkbox={true}
                   class:bx--table-column-radio={radio}
                   on:click={(event) => handleRadioColumnClick(row, event)}
@@ -1421,9 +1445,15 @@
                 </td>
               {/if}
               {#each tableCellsByRowId[row.id] as cell, j (cell.key)}
+                {@const cellClassValue =
+                  typeof cellClass === "function"
+                    ? cellClass({ row, cell, rowIndex: actualIndex, cellIndex: j, selected: isSelected, expanded: isExpanded })
+                    : cellClass}
+                {@const cellClasses = joinClasses(formatAlignClass(cell.columnAlign), cellClassValue)}
                 {#if cell.empty}
                   <td
-                    class={formatAlignClass(cell.columnAlign)}
+                    class={cellClasses}
+                    class:bx--table-cell={true}
                     class:bx--table-column-menu={cell.columnMenu}
                   >
                     <slot
@@ -1442,7 +1472,7 @@
                   </td>
                 {:else}
                   <TableCell
-                    class={formatAlignClass(cell.columnAlign)}
+                    class={cellClasses}
                     headers="{id}-{cell.key}"
                     on:click={(event) => {
                       dispatch("click", { row, cell });
@@ -1507,7 +1537,7 @@
               virtualData.totalHeight -
               virtualData.endIndex * virtualConfig.itemHeight}
             <tr style:height="{remainingHeight}px">
-              <td colspan={totalColumns}></td>
+              <td colspan={totalColumns} class:bx--table-cell={true}></td>
             </tr>
           {/if}
         {:else}
@@ -1609,6 +1639,7 @@
               {/if}
               {#if isSelectionEnabled}
                 <td
+                  class:bx--table-cell={true}
                   class:bx--table-column-checkbox={true}
                   class:bx--table-column-radio={radio}
                   on:click={(event) => handleRadioColumnClick(row, event)}
@@ -1667,9 +1698,15 @@
                 </td>
               {/if}
               {#each tableCellsByRowId[row.id] as cell, j (cell.key)}
+                {@const cellClassValue =
+                  typeof cellClass === "function"
+                    ? cellClass({ row, cell, rowIndex: index, cellIndex: j, selected: isSelected, expanded: isExpanded })
+                    : cellClass}
+                {@const cellClasses = joinClasses(formatAlignClass(cell.columnAlign), cellClassValue)}
                 {#if cell.empty}
                   <td
-                    class={formatAlignClass(cell.columnAlign)}
+                    class={cellClasses}
+                    class:bx--table-cell={true}
                     class:bx--table-column-menu={cell.columnMenu}
                   >
                     <slot
@@ -1688,7 +1725,7 @@
                   </td>
                 {:else}
                   <TableCell
-                    class={formatAlignClass(cell.columnAlign)}
+                    class={cellClasses}
                     headers="{id}-{cell.key}"
                     on:click={(event) => {
                       dispatch("click", { row, cell });
@@ -1750,17 +1787,25 @@
         <TableFoot>
           <TableRow>
             {#if expandable}
-              <td aria-hidden="true" class:bx--table-expand={true}></td>
+              <td
+                aria-hidden="true"
+                class:bx--table-cell={true}
+                class:bx--table-expand={true}
+              ></td>
             {/if}
             {#if isSelectionEnabled}
               <td
                 aria-hidden="true"
+                class:bx--table-cell={true}
                 class:bx--table-column-checkbox={true}
                 class:bx--table-column-radio={radio}
               ></td>
             {/if}
             {#each visibleHeaders as header, index (header.key)}
-              <td class={formatAlignClass(header.columnAlign)}>
+              <td
+                class={formatAlignClass(header.columnAlign)}
+                class:bx--table-cell={true}
+              >
                 <slot name="footerCell" {header} {index} />
               </td>
             {/each}
