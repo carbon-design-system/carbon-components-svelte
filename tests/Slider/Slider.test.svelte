@@ -24,6 +24,7 @@
     | ReadonlyArray<{ value: number; label?: string }>
     | undefined = false;
   export let snapToMarks = false;
+  export let markSnapDistance = 0;
   export let light = false;
   export let hideLabel = false;
   export let labelText = "Test Slider";
@@ -53,6 +54,7 @@
     {stepMultiplier}
     {marks}
     {snapToMarks}
+    {markSnapDistance}
     {disabled}
     {readonly}
     {readonlyText}
@@ -94,6 +96,7 @@
     {stepMultiplier}
     {marks}
     {snapToMarks}
+    {markSnapDistance}
     {disabled}
     {readonly}
     {readonlyText}

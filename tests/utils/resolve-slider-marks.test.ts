@@ -1,6 +1,7 @@
 // @vitest-environment node
 import {
   getMarkLabels,
+  markNearPointer,
   nearestMark,
   resolveSliderMarks,
   stepMarks,
@@ -104,5 +105,55 @@ describe("stepMarks", () => {
 
   it("returns the value unchanged without marks", () => {
     expect(stepMarks(42, [], 1)).toBe(42);
+  });
+});
+
+describe("markNearPointer", () => {
+  const rect = { left: 0, width: 200, bottom: 0, height: 2 };
+  const marks = [{ value: 25 }, { value: 50, label: "Neutral" }];
+  const options = {
+    orientation: "horizontal" as const,
+    min: 0,
+    max: 100,
+    marks,
+    distance: 8,
+  };
+
+  it.each([
+    { clientX: 100, expected: 50 },
+    { clientX: 108, expected: 50 },
+    { clientX: 92, expected: 50 },
+    { clientX: 109, expected: undefined },
+    { clientX: 150, expected: undefined },
+  ])("at x=$clientX finds $expected", ({ clientX, expected }) => {
+    const event = { clientX } as MouseEvent;
+    expect(markNearPointer(event, rect, options)?.value).toBe(expected);
+  });
+
+  it("measures after subtracting the grab offset", () => {
+    const event = { clientX: 115 } as MouseEvent;
+    expect(
+      markNearPointer(event, rect, { ...options, offset: 10 })?.value,
+    ).toBe(50);
+  });
+
+  it("measures along a vertical track", () => {
+    const vertical = { left: 0, width: 2, bottom: 200, height: 200 };
+    const event = { clientY: 104 } as MouseEvent;
+    expect(
+      markNearPointer(event, vertical, { ...options, orientation: "vertical" })
+        ?.value,
+    ).toBe(50);
+  });
+
+  it.each([
+    { name: "distance is 0", override: { distance: 0 } },
+    { name: "there are no marks", override: { marks: [] } },
+    { name: "min equals max", override: { min: 50, max: 50 } },
+  ])("returns undefined when $name", ({ override }) => {
+    const event = { clientX: 100 } as MouseEvent;
+    expect(
+      markNearPointer(event, rect, { ...options, ...override }),
+    ).toBeUndefined();
   });
 });

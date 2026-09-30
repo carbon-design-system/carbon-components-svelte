@@ -1382,6 +1382,60 @@ describe("Slider", () => {
     });
   });
 
+  describe("markSnapDistance", () => {
+    it.each([
+      { clientX: 108, expected: 50 },
+      { clientX: 112, expected: 56 },
+      { clientX: 20, expected: 10 },
+    ])(
+      "should snap a press at x=$clientX to $expected",
+      async ({ clientX, expected }) => {
+        const { container } = render(Slider, {
+          props: {
+            value: 0,
+            marks: [{ value: 50, label: "Neutral" }],
+            markSnapDistance: 8,
+          },
+        });
+        const slider = container.querySelector(".bx--slider");
+        const track = container.querySelector(".bx--slider__track");
+        assert(slider instanceof HTMLElement);
+        assert(track instanceof HTMLElement);
+        vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
+          left: 0,
+          right: 200,
+          width: 200,
+          top: 0,
+          bottom: 0,
+          height: 2,
+          x: 0,
+          y: 0,
+          toJSON: () => ({}),
+        });
+
+        await fireEvent.pointerDown(slider, { clientX, pointerId: 1 });
+        await fireEvent.pointerUp(slider, { pointerId: 1 });
+
+        expect(screen.getByRole("slider")).toHaveAttribute(
+          "aria-valuenow",
+          String(expected),
+        );
+      },
+    );
+
+    it("should keep arrow keys on step", async () => {
+      render(Slider, {
+        props: { value: 49, marks: [{ value: 51 }], markSnapDistance: 100 },
+      });
+      const slider = screen.getByRole("slider");
+      slider.focus();
+
+      await user.keyboard("{ArrowRight}");
+
+      expect(slider).toHaveAttribute("aria-valuenow", "50");
+    });
+  });
+
   describe("orientation", () => {
     const mockTrackRect = (container: HTMLElement, rect: Partial<DOMRect>) => {
       const track = container.querySelector(".bx--slider__track");

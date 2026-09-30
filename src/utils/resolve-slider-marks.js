@@ -1,7 +1,7 @@
 // @ts-check
 // Resolve Slider / RangeSlider `marks` into a list of tick positions.
 
-import { snapToStep } from "./slider-value.js";
+import { getTrackAxis, snapToStep, valueFromPointer } from "./slider-value.js";
 
 /**
  * @typedef {{ value: number; label?: string }} SliderMark
@@ -81,6 +81,42 @@ export function stepMarks(value, marks, count) {
       : currentIndex;
   const nextIndex = Math.min(stops.length - 1, Math.max(0, fromIndex + count));
   return stops[nextIndex].value;
+}
+
+/**
+ * Find the mark within `distance` pixels of the pointer on a track, for
+ * soft snapping. `offset` is subtracted from the pointer position, as in
+ * `valueFromPointer`. Returns `undefined` when no mark is that close.
+ *
+ * @param {MouseEvent | TouchEvent} event
+ * @param {Pick<DOMRect, "left" | "width" | "bottom" | "height">} rect
+ * @param {Object} options
+ * @param {"horizontal" | "vertical"} options.orientation
+ * @param {number} options.min
+ * @param {number} options.max
+ * @param {ReadonlyArray<SliderMark>} options.marks
+ * @param {number} options.distance
+ * @param {number} [options.offset]
+ * @returns {SliderMark | undefined}
+ */
+export function markNearPointer(
+  event,
+  rect,
+  { orientation, min, max, marks, distance, offset = 0 },
+) {
+  if (!(distance > 0) || !marks.length || max <= min) return undefined;
+  const pointerValue = valueFromPointer(event, rect, {
+    orientation,
+    min,
+    max,
+    step: 0,
+    offset,
+  });
+  if (pointerValue == null) return undefined;
+  const mark = /** @type {SliderMark} */ (nearestMark(pointerValue, marks));
+  const { length } = getTrackAxis(rect, orientation);
+  const pixels = Math.abs(((pointerValue - mark.value) / (max - min)) * length);
+  return pixels <= distance ? mark : undefined;
 }
 
 /**

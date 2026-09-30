@@ -49,6 +49,14 @@
    */
   export let snapToMarks = false;
 
+  /**
+   * Snap drags and clicks to a mark when the pointer comes within this many pixels
+   * of it, so meaningful values are easy to hit while other values stay reachable
+   * by `step`. Keyboard navigation is unaffected. Set to `0` to disable.
+   * Has no effect when `marks` is not set or `snapToMarks` is set.
+   */
+  export let markSnapDistance = 0;
+
   /** Set the step multiplier value */
   export let stepMultiplier = 4;
 
@@ -147,6 +155,7 @@
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
   import {
     getMarkLabels,
+    markNearPointer,
     nearestMark,
     resolveSliderMarks,
     stepMarks,
@@ -192,7 +201,8 @@
   function calcValue(event) {
     if (disabled || readonly || !event) return;
 
-    let nextValue = valueFromPointer(event, trackRef.getBoundingClientRect(), {
+    const rect = trackRef.getBoundingClientRect();
+    let nextValue = valueFromPointer(event, rect, {
       orientation,
       min,
       max,
@@ -201,6 +211,15 @@
     if (nextValue == null) return;
     if (snapToMarks && resolvedMarks.length) {
       nextValue = nearestMark(nextValue, resolvedMarks).value;
+    } else {
+      nextValue =
+        markNearPointer(event, rect, {
+          orientation,
+          min,
+          max,
+          marks: resolvedMarks,
+          distance: markSnapDistance,
+        })?.value ?? nextValue;
     }
     value = nextValue;
     dispatch("input", value);
