@@ -135,7 +135,6 @@
   import { createEventDispatcher, tick } from "svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
-  import { dismiss } from "../utils/dismiss.js";
   import {
     buildFieldIds,
     joinDescribedBy,
@@ -143,6 +142,7 @@
     resolveValidationVisibility,
   } from "../utils/field-status.js";
   import { clamp } from "../utils/numeric-format.js";
+  import { pointerDrag } from "../utils/pointer-drag.js";
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
   import {
     nearestMark,
@@ -160,9 +160,6 @@
 
   let trackRef = null;
   let textInputRef = null;
-  let dragging = false;
-  let holding = false;
-  let currentEvent = null;
 
   /** @type {(label: string, numericValue: number) => string | number} */
   function formatRangeLabel(label, numericValue) {
@@ -174,28 +171,13 @@
     return getSliderValueText(numericValue, formatValue);
   }
 
-  function startInteraction(event) {
-    if (disabled || readonly) return;
-    currentEvent = event;
-    holding = true;
-    dragging = true;
+  function handleDragStart(event) {
+    if (disabled || readonly) return false;
+    calcValue(event);
   }
 
-  function stopHolding() {
-    const wasHolding = holding;
-    holding = false;
-    dragging = false;
-    currentEvent = null;
-    if (wasHolding && !disabled && !readonly) {
-      dispatch("change", value);
-    }
-  }
-
-  function move(event) {
-    if (holding) {
-      currentEvent = event;
-      dragging = true;
-    }
+  function handleDragEnd() {
+    if (!disabled && !readonly) dispatch("change", value);
   }
 
   function handleTextInputFocus() {
@@ -237,30 +219,13 @@
   $: hasMarkLabels = resolvedMarks.some(
     (mark) => mark.label != null && mark.label !== "",
   );
-  $: {
-    value = clamp(value, min, max);
-
-    if (dragging && currentEvent) {
-      calcValue(currentEvent);
-      dragging = false;
-    }
-  }
+  $: value = clamp(value, min, max);
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
   class:bx--form-item={true}
-  use:dismiss={{
-    enabled: holding,
-    listeners: [
-      { type: "mousemove", handler: move, options: { passive: true } },
-      { type: "touchmove", handler: move, options: { passive: true } },
-      { type: "mouseup", handler: stopHolding },
-      { type: "touchend", handler: stopHolding },
-      { type: "touchcancel", handler: stopHolding },
-    ],
-  }}
   {...$$restProps}
   on:click
   on:mouseover
@@ -293,8 +258,11 @@
       class:bx--slider--with-mark-labels={hasMarkLabels}
       class:bx--slider--vertical={orientation === "vertical"}
       style:max-width={fullWidth ? "none" : undefined}
-      on:mousedown={startInteraction}
-      on:touchstart={startInteraction}
+      use:pointerDrag={{
+        onStart: handleDragStart,
+        onMove: calcValue,
+        onEnd: handleDragEnd,
+      }}
     >
       <div
         role="slider"

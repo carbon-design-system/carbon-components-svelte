@@ -55,4 +55,29 @@ test.describe("Slider", () => {
     await expect(page.getByTestId("value-display")).toHaveText("100");
     await expect(thumb).toHaveAttribute("aria-valuenow", "100");
   });
+
+  test("dragging past the track clamps and commits once on release", async ({
+    page,
+  }) => {
+    const track = page.getByTestId("slider").locator(".bx--slider__track");
+    const box = await track.boundingBox();
+    if (!box) throw new Error("missing track box");
+    const y = box.y + box.height / 2;
+
+    await page.mouse.move(box.x + box.width / 2, y);
+    await page.mouse.down();
+    await page.mouse.move(box.x + box.width * 0.25, y, { steps: 4 });
+    await expect(page.getByTestId("value-display")).toHaveText("25");
+
+    // Released outside the slider: pointer capture still delivers it.
+    await page.mouse.move(1, y + 150, { steps: 4 });
+    await page.mouse.up();
+
+    await expect(page.getByTestId("value-display")).toHaveText("0");
+    await expect(page.getByTestId("change-count")).toHaveText("1");
+
+    // The drag has ended, so hovering no longer moves the thumb.
+    await page.mouse.move(box.x + box.width, y);
+    await expect(page.getByTestId("value-display")).toHaveText("0");
+  });
 });
