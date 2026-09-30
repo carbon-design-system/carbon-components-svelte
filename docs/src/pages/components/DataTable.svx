@@ -398,6 +398,14 @@ When a table's columns need more space than its container, the table becomes hor
   ]}
 />
 
+### Sticky columns
+
+Set `sticky` to `"start"` or `"end"` on a header to pin that column while the table scrolls horizontally. Sticky columns must be contiguous from the edge they pin to. A selection or expansion column pins with the start columns.
+
+Sticky columns are ignored when `stickyHeader` is set.
+
+<FileSource src="/framed/DataTable/DataTableStickyColumns" />
+
 ## Column visibility
 
 Control which columns render without editing the `headers` definition.
