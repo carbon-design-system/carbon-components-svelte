@@ -344,6 +344,8 @@ Filter nodes with the built-in helpers.
 
 Combine a search input with `filterTreeByText` to create an interactive searchable tree. Type to filter nodes by name (case-insensitive substring matching). By default, matching nodes and their ancestors are included to maintain valid tree structure.
 
+The example expands every branch of the filtered tree while a query is active, and saves the bound `expandedIds` when the search starts so clearing it restores the branches the user had open. Filtering returns new node objects with the same ids, so selection and expansion carry over.
+
 <FileSource src="/framed/TreeView/TreeViewFilter" />
 
 #### By ID
@@ -357,3 +359,11 @@ Use `filterTreeById` to filter nodes by their ID. Accepts either a single ID or 
 Use `filterTreeNodes` with a predicate function to implement custom filtering logic. The example demonstrates filtering by file extension, filtering leaf nodes only, and using the `includeChildren` option to include all descendants of matching nodes. By default, matching nodes and their ancestors are included.
 
 <FileSource src="/framed/TreeView/TreeViewFilterNodes" />
+
+### Find and highlight
+
+To search without hiding rows, keep `nodes` unfiltered and highlight matches in the default slot. `fuzzyMatch` returns the `indices` of the matched characters, and `highlightSegments` splits the text into matched and unmatched runs to bold. Both are exported from `carbon-components-svelte`.
+
+To step through matches, collect the matching ids in tree order and pass each to `showNode` with `focus: false` and `scroll: true`. The match is expanded, selected, and scrolled into view, while focus stays in the search input. In the example, press <DocKbd label="Enter" /> or <DocKbd label="Shift" /> + <DocKbd label="Enter" /> in the input to move to the next or previous match.
+
+<FileSource src="/framed/TreeView/TreeViewSearchHighlight" />

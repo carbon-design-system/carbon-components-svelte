@@ -96,25 +96,35 @@
   let searchValue = "";
   let expandedIds = [];
 
-  $: filteredNodes =
-    searchValue.trim() === ""
-      ? allNodes
-      : filterTreeByText(allNodes, searchValue);
+  // Expansion to restore when the search is cleared.
+  let expandedIdsBeforeSearch = null;
 
-  $: if (searchValue.trim() !== "" && filteredNodes.length > 0) {
-    const extractIds = (nodes) => {
-      const ids = [];
-      for (const node of nodes) {
-        ids.push(node.id);
-        if (node.nodes) {
-          ids.push(...extractIds(node.nodes));
-        }
+  $: query = searchValue.trim();
+  $: filteredNodes =
+    query === "" ? allNodes : filterTreeByText(allNodes, query);
+  $: syncExpansion(query, filteredNodes);
+
+  function collectIds(nodes) {
+    const ids = [];
+    for (const node of nodes) {
+      ids.push(node.id);
+      if (node.nodes) ids.push(...collectIds(node.nodes));
+    }
+    return ids;
+  }
+
+  function syncExpansion(query, filteredNodes) {
+    if (query === "") {
+      if (expandedIdsBeforeSearch !== null) {
+        expandedIds = expandedIdsBeforeSearch;
+        expandedIdsBeforeSearch = null;
       }
-      return ids;
-    };
-    expandedIds = extractIds(filteredNodes);
-  } else {
-    expandedIds = [];
+      return;
+    }
+    if (expandedIdsBeforeSearch === null) {
+      expandedIdsBeforeSearch = expandedIds;
+    }
+    expandedIds = collectIds(filteredNodes);
   }
 </script>
 
@@ -126,7 +136,11 @@
   />
   <div>
     {#if filteredNodes.length > 0}
-      <TreeView labelText="Shared Drive" nodes={filteredNodes} {expandedIds} />
+      <TreeView
+        labelText="Shared Drive"
+        nodes={filteredNodes}
+        bind:expandedIds
+      />
     {:else}
       No matching nodes found for "{searchValue}"
     {/if}
