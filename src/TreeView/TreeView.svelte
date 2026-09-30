@@ -439,9 +439,10 @@
    *
    * Row height is derived from `size` (32px default, 24px compact).
    *
-   * Collapsed subtrees mount lazily on first expansion and stay mounted.
-   * Virtualization is per subtree. Enable it when a node may hold a large
-   * child list.
+   * Without virtualization, collapsed subtrees mount on first expansion and
+   * stay mounted, so a single node with thousands of children is slow to
+   * expand even when the tree as a whole is small. Enable it whenever any
+   * node may hold a large child list; the whole visible tree is windowed.
    *
    * @type {undefined | boolean | {
    *   maxVisibleRows?: number,
