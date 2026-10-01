@@ -85,9 +85,17 @@
     }
   }
 
-  .#{$prefix}--tabs--container .#{$prefix}--tabs__nav-item {
+  // The container backgrounds are keyed on markers `Tab` emits, so a single
+  // consumer class on the tab can restyle them.
+  .#{$prefix}--tabs__nav-item--container { // ccs: flatten
     background-color: $ui-03;
+  }
 
+  .#{$prefix}--tabs__nav-item--container-selected { // ccs: flatten
+    background-color: $ui-01;
+  }
+
+  .#{$prefix}--tabs--container .#{$prefix}--tabs__nav-item {
     + .#{$prefix}--tabs__nav-item {
       margin-left: 0;
       // Draws the border without affecting the inner-content
@@ -129,8 +137,6 @@
 
   .#{$prefix}--tabs--container
     .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled) {
-    background-color: $ui-01;
-
     .#{$prefix}--tabs__nav-link {
       padding: $spacing-03 $spacing-05;
       border-bottom: none;

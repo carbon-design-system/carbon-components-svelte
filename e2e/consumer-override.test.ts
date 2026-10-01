@@ -139,16 +139,12 @@ test.describe("consumer override", () => {
 
   test.describe("tabs container", () => {
     test("tab background", async ({ page }) => {
-      // loses to `.bx--tabs--container .bx--tabs__nav-item` (0,2,0)
-      test.fail();
       await expect(
         page.getByTestId("tabs-container").locator(".my-container-tab").nth(1),
       ).toHaveCSS("background-color", PINK);
     });
 
     test("selected tab background", async ({ page }) => {
-      // loses to `.bx--tabs--container .bx--tabs__nav-item--selected:not(.bx--tabs__nav-item--disabled)` (0,3,0)
-      test.fail();
       await expect(
         page.getByTestId("tabs-container").locator(".my-container-tab").first(),
       ).toHaveCSS("background-color", PINK);
