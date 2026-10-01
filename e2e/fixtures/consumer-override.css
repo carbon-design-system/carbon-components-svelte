@@ -40,3 +40,28 @@
 .my-tab a {
   border-bottom-color: rgb(200, 0, 0);
 }
+
+.my-container-tab {
+  background-color: rgb(255, 230, 230);
+}
+
+.my-toast svg {
+  fill: rgb(200, 0, 0);
+}
+.my-toast a {
+  color: rgb(200, 0, 0);
+}
+.my-toast-low {
+  background-color: rgb(255, 230, 230);
+}
+.my-inline svg {
+  fill: rgb(200, 0, 0);
+}
+
+.my-side-link span {
+  color: rgb(200, 0, 0);
+}
+
+.my-input {
+  background-color: rgb(255, 230, 230);
+}

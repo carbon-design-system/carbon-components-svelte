@@ -2,10 +2,12 @@
   import {
     Button,
     DataTable,
+    InlineNotification,
     Link,
     Tab,
     Tabs,
     Tag,
+    ToastNotification,
   } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
 
@@ -57,3 +59,43 @@
     <Tab class="my-tab" label="Two" />
   </Tabs>
 </div>
+
+<div data-testid="tabs-container">
+  <Tabs type="container">
+    <Tab class="my-container-tab" label="One" />
+    <Tab class="my-container-tab" label="Two" />
+  </Tabs>
+</div>
+
+<div data-testid="table-zebra">
+  <DataTable {headers} {rows} zebra rowClass={() => "my-row"} />
+</div>
+
+<ToastNotification
+  class="my-toast"
+  data-testid="toast"
+  kind="success"
+  title="Saved"
+  hideCloseButton
+>
+  <svelte:fragment slot="subtitleChildren">
+    Done. <Link data-testid="toast-link" href="#"> Undo </Link>
+  </svelte:fragment>
+</ToastNotification>
+
+<ToastNotification
+  class="my-toast-low"
+  data-testid="toast-low"
+  kind="info"
+  lowContrast
+  title="Heads up"
+  hideCloseButton
+/>
+
+<InlineNotification
+  class="my-inline"
+  data-testid="inline"
+  kind="error"
+  title="Failed"
+  hideCloseButton
+/>
