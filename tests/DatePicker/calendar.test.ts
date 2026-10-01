@@ -113,9 +113,30 @@ describe("createCalendarEngine", () => {
     expect(count(add, "mousedown")).toBe(1);
 
     instance.close();
-    // `AbortController` removes it without a `removeEventListener` call.
+    expect(count(remove, "mousedown")).toBe(1);
+
     instance.open();
     expect(count(add, "mousedown")).toBe(2);
+    add.mockRestore();
+    remove.mockRestore();
+  });
+
+  it("removes every listener it added, without AbortSignal.any", () => {
+    const anySpy = vi.spyOn(AbortSignal, "any");
+    const add = vi.spyOn(document, "addEventListener");
+    const remove = vi.spyOn(document, "removeEventListener");
+    const { instance } = create();
+
+    instance.open();
+    instance.destroy();
+
+    expect(anySpy).not.toHaveBeenCalled();
+    const net = (type: string) =>
+      add.mock.calls.filter(([t]) => t === type).length -
+      remove.mock.calls.filter(([t]) => t === type).length;
+    expect(net("mousedown")).toBe(0);
+    expect(net("focus")).toBe(0);
+    anySpy.mockRestore();
     add.mockRestore();
     remove.mockRestore();
   });
