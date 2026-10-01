@@ -71,6 +71,26 @@ export interface MatchedRule {
 const shorthandRe = (name: string): RegExp | undefined =>
   SHORTHANDS.find(([short]) => short === name)?.[1];
 
+const VENDOR_PREFIX_RE = /^-(?:webkit|moz|ms)-(.+)$/;
+
+/**
+ * The standard property a vendor-prefixed alias resolves to, when CDP lists
+ * that property as a text-less entry beside it (`-webkit-user-select` sets
+ * `user-select`). Both spellings share one cascade slot.
+ */
+function aliasTarget(
+  name: string,
+  cssProperties: CdpProperty[],
+): string | undefined {
+  const target = VENDOR_PREFIX_RE.exec(name)?.[1];
+  if (!target) return undefined;
+  return cssProperties.some(
+    (p) => p.name === target && !p.text && !p.disabled && p.parsedOk !== false,
+  )
+    ? target
+    : undefined;
+}
+
 /**
  * Builds the authored declarations of a matched rule's style from CDP's
  * `cssProperties` list. Only entries with `text` are authored (implicit
@@ -95,7 +115,9 @@ export function authoredDeclarations(
           )
         : [];
       longhands =
-        siblings.length > 0 ? siblings.map((p) => p.name) : [prop.name];
+        siblings.length > 0
+          ? siblings.map((p) => p.name)
+          : [aliasTarget(prop.name, cssProperties) ?? prop.name];
     }
     out.push({
       property: prop.name,
@@ -168,17 +190,11 @@ export function matchedRuleFromCdp(
   if (rule.origin !== "regular") return undefined;
   if (!rule.styleSheetId || !libSheetIds.has(rule.styleSheetId))
     return undefined;
-  const declarations: Declaration[] = rule.style.cssProperties
-    .filter((p) => !p.disabled && p.parsedOk !== false && p.text)
-    .map((p) => ({
-      property: p.name,
-      value: p.value,
-      important: Boolean(p.important),
-      longhands:
-        p.longhandProperties && p.longhandProperties.length > 0
-          ? p.longhandProperties.map((l) => l.name)
-          : [p.name],
-    }));
+  // CDP gives no longhandProperties for a shorthand with `var()` in it, so
+  // resolve longhands from its text-less siblings: otherwise `padding:
+  // var(--x)` and `padding-left` never conflict and the overridden
+  // declaration counts as a win.
+  const declarations = authoredDeclarations(rule.style.cssProperties);
   if (declarations.length === 0) return undefined;
   // The first matching selector index is representative; multiple matching
   // selectors on one rule (e.g. `:is(.a, .b)` collapsing) are rare and this

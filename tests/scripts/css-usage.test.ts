@@ -119,6 +119,28 @@ describe("authoredDeclarations", () => {
     );
   });
 
+  it("maps a vendor alias to the standard property CDP lists beside it", () => {
+    const out = authoredDeclarations([
+      {
+        name: "-webkit-user-select",
+        value: "none",
+        text: "-webkit-user-select: none",
+      },
+      { name: "user-select", value: "none", text: "user-select: none" },
+      { name: "user-select", value: "none" },
+      {
+        name: "-webkit-text-fill-color",
+        value: "red",
+        text: "-webkit-text-fill-color: red",
+      },
+    ]);
+    expect(out.map((d) => d.longhands)).toEqual([
+      ["user-select"],
+      ["user-select"],
+      ["-webkit-text-fill-color"],
+    ]);
+  });
+
   it("unresolvable shorthand falls back to its own property name", () => {
     expect(
       authoredDeclarations([
@@ -390,6 +412,40 @@ describe("normalizeAtRule / matchedRuleFromCdp", () => {
         { property: "top", value: "0", important: false, longhands: ["top"] },
       ],
     });
+  });
+
+  it("expands a var() shorthand from its text-less longhands", () => {
+    // What CDP returns for `padding: var(--a) 2px`: no longhandProperties.
+    const rule = matchedRuleFromCdp(
+      {
+        matchingSelectors: [0],
+        rule: {
+          origin: "regular",
+          styleSheetId: "lib",
+          selectorList: { text: ".a", selectors: [{ text: ".a" }] },
+          style: {
+            cssProperties: [
+              {
+                name: "padding",
+                value: "var(--a) 2px",
+                text: "padding: var(--a) 2px;",
+              },
+              { name: "padding-top", value: "" },
+              { name: "padding-right", value: "" },
+              { name: "padding-bottom", value: "" },
+              { name: "padding-left", value: "" },
+            ],
+          },
+        },
+      },
+      new Set(["lib"]),
+    );
+    expect(rule?.declarations[0].longhands).toEqual([
+      "padding-top",
+      "padding-right",
+      "padding-bottom",
+      "padding-left",
+    ]);
   });
 
   it("drops rules from other sheets and user-agent rules", () => {
