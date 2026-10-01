@@ -133,12 +133,20 @@
     padding-left: $spacing-05;
     border-top: 1px solid $layer;
     border-bottom: 1px solid $border-subtle;
-    background: $layer;
-    color: $text-secondary;
 
     + td:first-of-type {
       padding-left: $spacing-04;
     }
+  }
+
+  // ccs: flatten. Cells the library renders carry `bx--table-cell`, so a
+  // single consumer class (`cellClass`, a utility like `bx--type-text-error`)
+  // overrides `color` and `background` by source order. Row headers stay on
+  // the element selector; consumers render those.
+  .#{$prefix}--table-cell,
+  .#{$prefix}--data-table tbody > tr > th {
+    background: $layer;
+    color: $text-secondary;
   }
 
   @supports (-moz-appearance: none) {

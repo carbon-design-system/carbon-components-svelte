@@ -98,6 +98,10 @@ test.describe("consumer override", () => {
       await expect(cell(page, 0)).toHaveCSS("background-color", PINK);
     });
 
+    test("cellClass color", async ({ page }) => {
+      await expect(cell(page, 0)).toHaveCSS("color", RED);
+    });
+
     test("selected row background", async ({ page }) => {
       await expect(cell(page, 1)).toHaveCSS("background-color", PINK);
     });

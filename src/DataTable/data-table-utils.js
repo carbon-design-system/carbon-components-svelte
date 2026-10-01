@@ -287,3 +287,57 @@ export function toCsv(headers, rows, options = {}) {
 
   return lines.join(newline);
 }
+
+/**
+ * Resolve which header keys stick to each edge. Sticky columns must be
+ * contiguous from the edge they pin to, so this takes the longest run of
+ * `sticky: "start"` from the first visible column and the longest run of
+ * `sticky: "end"` from the last. Flags outside those runs are ignored, and
+ * hidden columns are skipped.
+ * @param {ReadonlyArray<{ key?: string; sticky?: "start" | "end"; columnHidden?: boolean }>} headers
+ * @returns {{ start: string[]; end: string[] }}
+ */
+export function resolveStickyColumns(headers) {
+  /** @type {{ key: string; sticky?: "start" | "end" }[]} */
+  const visible = [];
+
+  headers.forEach((header, index) => {
+    if (header.columnHidden) return;
+    visible.push({ key: header.key ?? `key-${index}`, sticky: header.sticky });
+  });
+
+  /** @type {string[]} */
+  const start = [];
+  for (const column of visible) {
+    if (column.sticky !== "start") break;
+    start.push(column.key);
+  }
+
+  /** @type {string[]} */
+  const end = [];
+  for (let i = visible.length - 1; i >= start.length; i--) {
+    if (visible[i].sticky !== "end") break;
+    end.unshift(visible[i].key);
+  }
+
+  return { start, end };
+}
+
+/**
+ * Cumulative offsets for a run of sticky columns: the first column sits at
+ * `0` and each next one after the widths of those before it.
+ * @param {ReadonlyArray<number>} widths
+ * @returns {number[]}
+ */
+export function computeStickyOffsets(widths) {
+  /** @type {number[]} */
+  const offsets = [];
+  let total = 0;
+
+  for (const width of widths) {
+    offsets.push(total);
+    total += width;
+  }
+
+  return offsets;
+}

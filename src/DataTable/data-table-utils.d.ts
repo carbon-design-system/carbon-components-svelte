@@ -109,6 +109,24 @@ export function toCsv<Row extends Record<string, unknown>>(
   options?: ToCsvOptions,
 ): string;
 
+/**
+ * Resolves which header keys stick to each edge. Sticky columns must be
+ * contiguous from the edge they pin to; flags outside those runs are ignored
+ * and hidden columns are skipped.
+ */
+export function resolveStickyColumns(
+  headers: ReadonlyArray<{
+    key?: string;
+    sticky?: "start" | "end";
+    columnHidden?: boolean;
+  }>,
+): { start: string[]; end: string[] };
+
+/**
+ * Cumulative offsets for a run of sticky columns, starting at `0`.
+ */
+export function computeStickyOffsets(widths: ReadonlyArray<number>): number[];
+
 type PathDepth = [never, 0, 1, 2, ...0[]];
 
 type Join<K, P> = K extends string | number

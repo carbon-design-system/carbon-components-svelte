@@ -94,6 +94,7 @@
     | ((e: ComponentEvents<DataTableComponent>["sort"]) => void)
     | undefined = undefined;
   export let rowClass: ComponentProps<DataTable>["rowClass"] = undefined;
+  export let cellClass: ComponentProps<DataTable>["cellClass"] = undefined;
 </script>
 
 <DataTable
@@ -123,6 +124,7 @@
   {pageSize}
   {page}
   {rowClass}
+  {cellClass}
   {sortKey}
   {sortDirection}
   {virtualize}

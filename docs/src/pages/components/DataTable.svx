@@ -398,6 +398,14 @@ When a table's columns need more space than its container, the table becomes hor
   ]}
 />
 
+### Sticky columns
+
+Set `sticky` to `"start"` or `"end"` on a header to pin that column while the table scrolls horizontally. Sticky columns must be contiguous from the edge they pin to. A selection or expansion column pins with the start columns.
+
+Sticky columns are ignored when `stickyHeader` is set.
+
+<FileSource src="/framed/DataTable/DataTableStickyColumns" />
+
 ## Column visibility
 
 Control which columns render without editing the `headers` definition.
@@ -1069,6 +1077,12 @@ Set `zebra` to `true` to add alternating row colors.
 Use `rowClass` to apply custom CSS classes to rows. Pass a string for a static class, or a function that receives row, rowIndex, selected, and expanded and returns conditional classes. Try selecting and expanding rows to see the custom styles.
 
 <FileSource src="/framed/DataTable/DataTableRowClass" />
+
+### Custom cell classes
+
+Set `cellClass` to a string or a function that returns a class for each data cell. The function receives the row, cell, rowIndex, cellIndex, selected, and expanded. It does not apply to the select, expand, header, or footer cells.
+
+<FileSource src="/framed/DataTable/DataTableCellClass" />
 
 ## Footer
 

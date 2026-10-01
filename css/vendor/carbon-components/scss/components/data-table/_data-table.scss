@@ -350,3 +350,49 @@
 @include exports("data-table-fixed-layout") {
   @include data-table-fixed-layout;
 }
+
+// carbon-components-svelte patch (sticky columns)
+/// Pin leading or trailing columns while the table scrolls horizontally.
+/// `DataTable` sets the offset inline (`left` for start, `right` for end)
+/// from the measured header cell widths. Cells already paint an opaque
+/// background in every state, so a pinned cell hides what scrolls beneath
+/// it. The edge divider is a pseudo-element rather than a `box-shadow`,
+/// since expandable and selected rows already set `box-shadow` on `td`
+/// with higher specificity.
+/// @access private
+/// @group components
+@mixin data-table-sticky-columns {
+  .#{$prefix}--table-column--sticky-start,
+  .#{$prefix}--table-column--sticky-end {
+    position: sticky;
+    z-index: 1;
+  }
+
+  .#{$prefix}--data-table thead .#{$prefix}--table-column--sticky-start,
+  .#{$prefix}--data-table thead .#{$prefix}--table-column--sticky-end {
+    z-index: 2;
+  }
+
+  .#{$prefix}--table-column--sticky-start-edge::after,
+  .#{$prefix}--table-column--sticky-end-edge::after {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: $border-subtle;
+    content: "";
+    pointer-events: none;
+  }
+
+  .#{$prefix}--table-column--sticky-start-edge::after {
+    right: 0;
+  }
+
+  .#{$prefix}--table-column--sticky-end-edge::after {
+    left: 0;
+  }
+}
+
+@include exports("data-table-sticky-columns") {
+  @include data-table-sticky-columns;
+}

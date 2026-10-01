@@ -1,9 +1,11 @@
 import type { ToCsvHeader } from "../../src/DataTable/data-table-utils.js";
 import {
   compareValues,
+  computeStickyOffsets,
   formatHeaderWidth,
   getDisplayedRows,
   resolvePath,
+  resolveStickyColumns,
   rowsEqual,
   shouldIgnoreRowClick,
   toCsv,
@@ -1367,5 +1369,96 @@ describe("toCsv", () => {
 
   it("emits only the header row when there are no rows", () => {
     expect(toCsv(headers, [])).toBe("Name,Port");
+  });
+});
+
+describe("resolveStickyColumns", () => {
+  it("returns empty runs when no column is sticky", () => {
+    expect(
+      resolveStickyColumns([{ key: "a" }, { key: "b" }, { key: "c" }]),
+    ).toEqual({ start: [], end: [] });
+  });
+
+  it("returns the contiguous run of start columns", () => {
+    expect(
+      resolveStickyColumns([
+        { key: "a", sticky: "start" },
+        { key: "b", sticky: "start" },
+        { key: "c" },
+        { key: "d" },
+      ]),
+    ).toEqual({ start: ["a", "b"], end: [] });
+  });
+
+  it("returns the contiguous run of end columns", () => {
+    expect(
+      resolveStickyColumns([
+        { key: "a" },
+        { key: "b" },
+        { key: "c", sticky: "end" },
+        { key: "d", sticky: "end" },
+      ]),
+    ).toEqual({ start: [], end: ["c", "d"] });
+  });
+
+  it("ignores a flag that is not contiguous from its edge", () => {
+    expect(
+      resolveStickyColumns([
+        { key: "a", sticky: "start" },
+        { key: "b" },
+        { key: "c", sticky: "start" },
+        { key: "d", sticky: "end" },
+        { key: "e" },
+        { key: "f", sticky: "end" },
+      ]),
+    ).toEqual({ start: ["a"], end: ["f"] });
+  });
+
+  it("skips hidden columns when finding the edges", () => {
+    expect(
+      resolveStickyColumns([
+        { key: "hidden", columnHidden: true },
+        { key: "a", sticky: "start" },
+        { key: "b", sticky: "start", columnHidden: true },
+        { key: "c", sticky: "start" },
+        { key: "d" },
+        { key: "e", sticky: "end" },
+        { key: "tail", columnHidden: true },
+      ]),
+    ).toEqual({ start: ["a", "c"], end: ["e"] });
+  });
+
+  it("does not double count when every column is sticky start", () => {
+    expect(
+      resolveStickyColumns([
+        { key: "a", sticky: "start" },
+        { key: "b", sticky: "start" },
+      ]),
+    ).toEqual({ start: ["a", "b"], end: [] });
+  });
+
+  it("falls back to an indexed key for headers without a key", () => {
+    expect(resolveStickyColumns([{ sticky: "start" }, { key: "b" }])).toEqual({
+      start: ["key-0"],
+      end: [],
+    });
+  });
+
+  it("returns empty runs for no headers", () => {
+    expect(resolveStickyColumns([])).toEqual({ start: [], end: [] });
+  });
+});
+
+describe("computeStickyOffsets", () => {
+  it("accumulates widths from zero", () => {
+    expect(computeStickyOffsets([40, 120, 80])).toEqual([0, 40, 160]);
+  });
+
+  it("returns an empty array for empty widths", () => {
+    expect(computeStickyOffsets([])).toEqual([]);
+  });
+
+  it("keeps the offset flat across zero widths", () => {
+    expect(computeStickyOffsets([0, 0, 50, 0])).toEqual([0, 0, 0, 50]);
   });
 });
