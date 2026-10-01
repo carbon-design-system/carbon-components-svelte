@@ -49,12 +49,25 @@ test.describe("consumer override", () => {
     });
 
     test("icon-only icon fill", async ({ page }) => {
-      // loses to `.bx--btn--ghost.bx--btn--icon-only .bx--btn__icon` (0,3,0)
+      // loses to `.bx--btn--icon-only.bx--tooltip__trigger.bx--btn svg` (0,3,1)
       test.fail();
       await expect(page.getByTestId("icon-btn").locator("svg")).toHaveCSS(
         "fill",
         RED,
       );
+    });
+  });
+
+  test.describe("button icon path", () => {
+    test("icon-only icon path fill", async ({ page }) => {
+      // loses to `.bx--btn--ghost.bx--btn--icon-only .bx--btn__icon
+      // path:not([data-icon-path]):not([fill=none])` (0,5,1), which sets
+      // `fill` on the path itself, so a consumer `fill` on the svg never
+      // reaches it
+      test.fail();
+      await expect(
+        page.getByTestId("icon-btn").locator("svg path").first(),
+      ).toHaveCSS("fill", RED);
     });
   });
 
@@ -124,5 +137,96 @@ test.describe("consumer override", () => {
       test.fail();
       await expect(link(page, 0)).toHaveCSS("border-bottom-color", RED);
     });
+  });
+
+  test.describe("tabs container", () => {
+    test("tab background", async ({ page }) => {
+      // loses to `.bx--tabs--container .bx--tabs__nav-item` (0,2,0)
+      test.fail();
+      await expect(
+        page.getByTestId("tabs-container").locator(".my-container-tab").nth(1),
+      ).toHaveCSS("background-color", PINK);
+    });
+
+    test("selected tab background", async ({ page }) => {
+      // loses to `.bx--tabs--container .bx--tabs__nav-item--selected:not(.bx--tabs__nav-item--disabled)` (0,3,0)
+      test.fail();
+      await expect(
+        page.getByTestId("tabs-container").locator(".my-container-tab").first(),
+      ).toHaveCSS("background-color", PINK);
+    });
+  });
+
+  test.describe("data-table zebra", () => {
+    test("rowClass background", async ({ page }) => {
+      // loses to `.bx--data-table--zebra>tbody>tr:not(.bx--parent-row):nth-child(even)>td` (0,3,3)
+      test.fail();
+      const td = page
+        .getByTestId("table-zebra")
+        .locator("tbody tr")
+        .nth(1)
+        .locator("td")
+        .last();
+      await expect(td).toHaveCSS("background-color", PINK);
+    });
+  });
+
+  test.describe("notification", () => {
+    test("toast icon fill", async ({ page }) => {
+      // loses to `.bx--toast-notification--success .bx--toast-notification__icon` (0,2,0)
+      test.fail();
+      await expect(page.getByTestId("toast").locator("svg").first()).toHaveCSS(
+        "fill",
+        RED,
+      );
+    });
+
+    test("toast link color", async ({ page }) => {
+      // loses to `.bx--toast-notification:not(.bx--toast-notification--low-contrast) a` (0,2,1)
+      test.fail();
+      await expect(page.getByTestId("toast-link")).toHaveCSS("color", RED);
+    });
+
+    test("low-contrast toast background", async ({ page }) => {
+      // loses to `.bx--toast-notification--low-contrast.bx--toast-notification--info` (0,2,0)
+      test.fail();
+      await expect(page.getByTestId("toast-low")).toHaveCSS(
+        "background-color",
+        PINK,
+      );
+    });
+
+    test("inline icon fill", async ({ page }) => {
+      // loses to `.bx--inline-notification--error .bx--inline-notification__icon` (0,2,0)
+      test.fail();
+      await expect(page.getByTestId("inline").locator("svg").first()).toHaveCSS(
+        "fill",
+        RED,
+      );
+    });
+  });
+});
+
+test.describe("consumer override in context", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto("/consumer-override-contexts.html");
+  });
+
+  test("side nav link text color", async ({ page }) => {
+    // loses to `.bx--side-nav__link>.bx--side-nav__link-text` (0,2,0)
+    test.fail();
+    await expect(
+      page.getByTestId("side-link").locator("span").first(),
+    ).toHaveCSS("color", RED);
+  });
+
+  test("text input background inside a modal", async ({ page }) => {
+    // loses to `.bx--modal .bx--text-input` (0,2,0); needs `@layer` or a
+    // token-based layer context, not a flatten, so it stays a documented gap
+    test.fail();
+    await expect(page.getByTestId("modal-input")).toHaveCSS(
+      "background-color",
+      PINK,
+    );
   });
 });
