@@ -440,14 +440,13 @@
     color: $text-helper;
   }
 
-  // Week numbers (flatpickr `weekNumbers`): a 40px column beside the grid.
-  // For `weekNumbers` and `showMonths` flatpickr sets inline widths: one
-  // measured month per `showMonths`, plus the week column. It expects that
-  // to be the content width, so the padding must sit outside it, and each
-  // month must hold its measured width or the grids wrap into each other.
+  // Week numbers (`weekNumbers`): a 40px column beside the grid. With week
+  // numbers or `showMonths`, the calendar grows to fit every month grid plus
+  // the week column, with the padding outside that content width.
   .flatpickr-calendar.hasWeeks,
   .flatpickr-calendar.multiMonth {
     box-sizing: content-box;
+    width: max-content;
   }
 
   .flatpickr-calendar.hasWeeks.open,

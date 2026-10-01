@@ -66,8 +66,6 @@ const KNOWN: Array<[file: string, message: RegExp]> = [
     "src/pages/framed/DatePicker/DatePickerErrorHandler.svelte",
     /selectedDates/,
   ],
-  // `locale` takes a full `CustomLocale`; flatpickr merges a partial one.
-  ["src/pages/framed/DatePicker/DatePickerLocale.svelte", /CustomLocale/],
   // RecursiveList infers `Node` from the first node, not the union.
   ["src/pages/framed/RecursiveList/RecursiveList.svelte", /^Type '\(/],
   ["src/pages/framed/RecursiveList/RecursiveListOrdered.svelte", /^Type '\(/],

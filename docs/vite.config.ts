@@ -83,7 +83,7 @@ export default defineConfig({
     ),
   },
   optimizeDeps: {
-    include: ["clipboard-copy", "flatpickr/dist/plugins/rangePlugin"],
+    include: ["clipboard-copy"],
     exclude: [
       "carbon-components-svelte",
       "carbon-icons-svelte",

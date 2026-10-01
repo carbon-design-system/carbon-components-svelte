@@ -1,17 +1,15 @@
 import { render } from "@testing-library/svelte";
-import type { Instance } from "flatpickr/dist/types/instance";
 import { tick } from "svelte";
+import type { CalendarInstance as Instance } from "../../src/DatePicker/calendar";
 import { flushDismiss } from "../utils/flush-dismiss";
 import { netListenerCalls } from "../utils/net-listener-calls";
 import { user } from "../utils/user";
+import { renderCalendar } from "./calendar-instance";
 import DatePicker from "./DatePicker.test.svelte";
 import DatePickerHost from "./DatePickerHost.test.svelte";
-import { renderCalendar } from "./flatpickr-instance";
-import { openCalendar, preloadFlatpickrPlugins } from "./helpers";
+import { openCalendar } from "./helpers";
 
 const mountRange = () => renderCalendar({ datePickerType: "range" });
-
-beforeAll(preloadFlatpickrPlugins, 30_000);
 
 const openCalendarInstance = async (): Promise<Instance> => {
   const { instance } = await renderCalendar({ datePickerType: "single" });
@@ -73,8 +71,7 @@ describe("DatePicker fixed-position reposition listeners", () => {
     remove: vi.spyOn(window, "removeEventListener"),
   });
 
-  // flatpickr registers a `resize` listener of its own, so count what each
-  // step adds or removes rather than the absolute total.
+  // Count what each step adds or removes rather than the absolute total.
   const netCounts = (
     add: ReturnType<typeof vi.spyOn>,
     remove: ReturnType<typeof vi.spyOn>,
@@ -99,7 +96,7 @@ describe("DatePicker fixed-position reposition listeners", () => {
 
     const closed = netCounts(add, remove);
     expect(closed.scroll).toBe(before.scroll);
-    expect(closed.resize).toBe(open.resize - 1);
+    expect(closed.resize).toBe(before.resize);
   });
 
   it("removes the scroll and resize listeners when unmounted while open", async () => {

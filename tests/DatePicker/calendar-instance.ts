@@ -1,23 +1,23 @@
 import { render } from "@testing-library/svelte";
-import type { Instance } from "flatpickr/dist/types/instance";
 import type { ComponentProps } from "svelte";
+import type { CalendarInstance as Instance } from "../../src/DatePicker/calendar";
 import DatePickerCalendar from "./DatePickerCalendar.test.svelte";
 
 /**
- * Returns the flatpickr `Instance` that flatpickr attaches to its `<input>`
+ * Returns the calendar instance attached to its `<input>`
  * element as `_flatpickr`, asserting that it has been initialized.
  */
-export function getFlatpickrInstance(input: Element): Instance {
+export function getCalendarInstance(input: Element): Instance {
   const instance = (input as unknown as { _flatpickr?: Instance })._flatpickr;
   assert(
     instance,
-    "expected the input to have an initialized flatpickr instance",
+    "expected the input to have an initialized calendar instance",
   );
   return instance;
 }
 
 /**
- * Renders the `bind:calendar` fixture and waits for its flatpickr instance,
+ * Renders the `bind:calendar` fixture and waits for its calendar instance,
  * returning it alongside the render result.
  */
 export async function renderCalendar(

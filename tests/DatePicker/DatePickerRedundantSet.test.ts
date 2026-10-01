@@ -6,28 +6,28 @@ const setCalls: string[] = [];
 
 // `calendar.set` rebuilds the whole day grid, so record every call made on
 // an instance, including the ones issued before a test could reach it.
-vi.mock("flatpickr", async (importOriginal) => {
-  const mod = await importOriginal<{
-    default: new (...args: never[]) => unknown;
-  }>();
-  const Flatpickr = mod.default;
-  function Recording(this: unknown, ...args: never[]) {
-    const instance = new Flatpickr(...args) as {
-      set?: (...setArgs: unknown[]) => unknown;
-    };
-    const { set } = instance;
-    if (set) {
-      instance.set = (...setArgs: unknown[]) => {
-        setCalls.push(String(setArgs[0]));
-        return set.apply(instance, setArgs);
-      };
-    }
-    return instance;
-  }
-  return { ...mod, default: Object.assign(Recording, Flatpickr) };
+vi.mock("../../src/DatePicker/calendar.js", async (importOriginal) => {
+  const mod =
+    await importOriginal<typeof import("../../src/DatePicker/calendar.js")>();
+  return {
+    ...mod,
+    createCalendarEngine: (
+      ...args: Parameters<typeof mod.createCalendarEngine>
+    ) => {
+      const instance = mod.createCalendarEngine(...args);
+      if (instance) {
+        const { set } = instance;
+        instance.set = (...setArgs: Parameters<typeof set>) => {
+          setCalls.push(String(setArgs[0]));
+          return set.apply(instance, setArgs);
+        };
+      }
+      return instance;
+    },
+  };
 });
 
-describe("DatePicker redundant flatpickr updates", () => {
+describe("DatePicker redundant calendar updates", () => {
   beforeEach(() => {
     setCalls.length = 0;
   });
