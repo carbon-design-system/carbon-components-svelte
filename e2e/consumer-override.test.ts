@@ -199,8 +199,6 @@ test.describe("consumer override in context", () => {
   });
 
   test("side nav link text color", async ({ page }) => {
-    // loses to `.bx--side-nav__link>.bx--side-nav__link-text` (0,2,0)
-    test.fail();
     await expect(
       page.getByTestId("side-link").locator("span").first(),
     ).toHaveCSS("color", RED);

@@ -373,7 +373,8 @@
     height: mini-units(6);
   }
 
-  .#{$prefix}--side-nav__link > .#{$prefix}--side-nav__link-text { // ccs: flatten
+  // The span SideNavLink and SideNavMenuItem render inside the link.
+  .#{$prefix}--side-nav__link-text { // ccs: flatten
     @include text-overflow();
 
     color: $shell-side-nav-text-01;
