@@ -735,6 +735,7 @@ Check [`tests/utils/`](tests/utils/) before writing a helper:
 | [`openTooltips`](tests/utils/open-tooltips.ts) | Every portalled tooltip in the document |
 | [`setMenuMetrics`](tests/utils/set-menu-metrics.ts) | Stub the scroll metrics jsdom leaves at zero |
 | [`treeItemById`](tests/utils/tree-item-by-id.ts) | A tree node by `id`, narrowed |
+| [`renderSSR`](tests/utils/ssr.ts) | Server-render a component to normalized HTML and a queryable `document` (see [Server rendering tests](#server-rendering-tests)) |
 | [`storage-mocks`](tests/utils/storage-mocks.ts) | `localStorage` and `sessionStorage` mocks |
 
 Component folders keep their own `helpers.ts` for queries such as `getBodyRows` in [`tests/DataTable/helpers.ts`](tests/DataTable/helpers.ts) and `openMenu` in [`tests/MultiSelect/helpers.ts`](tests/MultiSelect/helpers.ts).
@@ -803,11 +804,45 @@ Common `expectTypeOf` matchers: `.toEqualTypeOf`, `.toExtend`, `.parameter(n)`, 
 - In the Svelte 5 suite, `rerender({ x: undefined })` falls back to the fixture's default for `x` instead of clearing it. To toggle an optional prop off, give the fixture a separate boolean and compute the prop from it. See `enabled` in [`DatePickerDisplayFormat.test.svelte`](tests/DatePicker/DatePickerDisplayFormat.test.svelte).
 - jsdom cannot select a flatpickr date by typing plus Enter, in popup or inline mode. Click a `.flatpickr-day` or call `calendar.setDate` in unit tests, and leave typed entry to e2e.
 
+#### Server rendering tests
+
+Components that fill state after mount (`onMount`, `afterUpdate`, a `batchStoreUpdates` flush, a store set from a child) render without that state on the server and for the first client paint. Test what a user sees without JavaScript.
+
+Name the files `Foo.ssr.test.ts` and `Foo.ssr.test.svelte`, put `// @vitest-environment node` on the first line, and render with [`renderSSR`](tests/utils/ssr.ts):
+
+```ts
+// @vitest-environment node
+import { renderSSR } from "../utils/ssr";
+import Select from "./Select.ssr.test.svelte";
+
+it("marks the `selected` option", () => {
+  const { document } = renderSSR(Select, { selected: "md" });
+  const options = [...document.querySelectorAll("option")];
+
+  expect(options.map((option) => option.hasAttribute("selected"))).toEqual([
+    false,
+    true,
+    false,
+  ]);
+});
+```
+
+`renderSSR` wraps `render` from `svelte/server`. It strips Svelte's hydration comments, replaces random `uniqueId()` ids with `id-1`, `id-2` in first-seen order, and parses the result into a JSDOM `document`. Pass a context `Map` as the third argument for a child that reads its parent's context, or render a fixture that composes the parent.
+
+- `onMount`, `afterUpdate`, `bind:this`, and actions do not run on the server, and `window`, `document`, and DOM classes such as `HTMLElement` do not exist. A `$:` block does run, so guard browser APIs in it with `typeof window === "undefined"` or move them into `onMount` or an action such as `dismiss`.
+- A `tick().then()` queued from a `$:` block runs after a server render too. Return early when the element ref is unset; a rejection there is unhandled.
+- When the server output is wrong, resolve the initial state synchronously (a registration index each child claims in script order) and let the store win once it is set. Do not move the work into `onMount`.
+- Only test files in the `node` environment compile components for the server. A jsdom test file compiles every `.svelte` import for the client, so it cannot server-render the same fixture, and there is no hydration check yet.
+- [`ssr-smoke.ssr.test.ts`](tests/ssr-smoke.ssr.test.ts) renders every component in [`src/index.js`](src/index.js) with default props, and again with `open` when it has one, and fails on a throw or on `undefined`, `[object Object]`, or `NaN` in the output. A new child component that needs its parent's context goes in its `NEEDS_PARENT` list.
+- Svelte's server compiler can move a JSDoc `@type` comment onto an unrelated expression and wrap it in parentheses, which produces invalid JavaScript. The sweep fails with a `Parse failure` when that happens. Type a function with `@param` and `@returns`, and move casts out of directive arguments into a helper.
+
 #### Svelte 3 and Svelte 4 compatibility tests
 
 The default `bun run test` harness uses Svelte 5. Separate workspaces under `tests-svelte3/` and `tests-svelte4/` run the same tests against older Svelte versions.
 
 You only need these when fixing a failure reported from `bun run test:svelte3`, `bun run test:svelte4`, or their type-check scripts. Most changes do not require them.
+
+These workspaces run `../tests/**/*.test.ts` except `tests/Snippets/**`, `*.ssr.test.ts`, and `tests/utils/ssr.test.ts`. A test that imports a Svelte 5 only module (`svelte/server`, runes, snippets) must be excluded in both `vite.config.ts` files.
 
 Before running a compatibility script, install that workspace's dependencies. Without a local `node_modules`, the run may fall back to the Svelte 5 harness:
 
@@ -950,7 +985,7 @@ When the claim is "this expensive call should not happen", count the call instea
 
 #### Batching child registration
 
-Each child that calls `store.update()` during mount copies the whole registry. N children means N copies. Every `derived` or `$: ... $store` subscriber re-runs on each one. `Tabs`, `OverflowMenu`, `ContentSwitcher`, and `UserAvatarGroup` all hit this. Wrap the update with [`batchStoreUpdates`](src/utils/batch-store-updates.js) so those N calls flush once.
+Each child that calls `store.update()` during mount copies the whole registry. N children means N copies. Every `derived` or `$: ... $store` subscriber re-runs on each one. `Tabs`, `OverflowMenu`, `ContentSwitcher`, `UserAvatarGroup`, `ProgressIndicator`, `TagSet`, `Select`, `ContextMenuRadioGroup`, and `Menu` all hit this. Wrap the update with [`batchStoreUpdates`](src/utils/batch-store-updates.js) so those N calls flush once.
 
 ```js
 const batchedUpdate = batchStoreUpdates(store);
@@ -963,6 +998,7 @@ function register(item) {
 - Put every mutator for that store on the same queue. A direct `store.update()` in the same mount pass can read an array that is still missing a not-yet-flushed batch.
 - `batchStoreUpdates` flushes on a `Promise.resolve().then()` microtask, not `afterUpdate`. A comment that warns against deferring work because of `afterUpdate` does not apply.
 - `afterUpdate` still runs once right after initial mount, before the batched flush, while the store is empty. A one-shot flag set in `register()` itself gets consumed by that empty call. Set it inside the batched update function, as `Tabs.svelte` does with `needsDomSync`.
+- The flush never runs during server rendering, so anything rendered from the batched store is empty on the server and for the first client paint. See [Server rendering tests](#server-rendering-tests).
 - Inside the batched updater, dedup and patch against the updater's own accumulator, not a `derived` store from outer scope. The derived store is the last flushed value, so a same-batch id looks unregistered. See `add()` in `ProgressIndicator.svelte`.
 - Component-bench a new group or list's mount at a few sizes before shipping. A `performance.now()` loop around `render()` is enough to catch this.
 - Matching `register()` code can still measure differently. If the consumer runs behind `tick()`, a synchronous `render()` never waits for that work. `TagSet` and `UserAvatarGroup` share a `sortByDomOrder` register shape. Only the avatar group's `$:` block runs synchronously, so only that one showed the cost.
