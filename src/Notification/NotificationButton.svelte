@@ -9,6 +9,9 @@
    */
   export let notificationType = "toast";
 
+  /** Set to `true` to use the low contrast icon fill. */
+  export let lowContrast = false;
+
   /**
    * Specify the icon to render.
    * @type {Icon}
@@ -28,7 +31,13 @@
 
   $: iconClass = [
     notificationType === "toast" && "bx--toast-notification__close-icon",
+    notificationType === "toast" &&
+      lowContrast &&
+      "bx--toast-notification__close-icon--low-contrast",
     notificationType === "inline" && "bx--inline-notification__close-icon",
+    notificationType === "inline" &&
+      lowContrast &&
+      "bx--inline-notification__close-icon--low-contrast",
   ]
     .filter(Boolean)
     .join(" ");

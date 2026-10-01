@@ -27,9 +27,47 @@
 @mixin notification--experimental($color, $background-color) {
   border-left: 3px solid $color;
   background: $background-color;
+}
 
-  .#{$prefix}--inline-notification__icon,
-  .#{$prefix}--toast-notification__icon {
-    fill: $color;
+/// Icon fill per kind. NotificationIcon emits exactly one of these markers on
+/// the svg, so every rule is a single class and one consumer class can
+/// override it.
+/// @access private
+/// @group notification
+@mixin notification--icon-fills($type) {
+  .#{$prefix}--#{$type}-notification__icon--error { // ccs: flatten
+    fill: $inverse-support-01;
+  }
+
+  .#{$prefix}--#{$type}-notification__icon--success { // ccs: flatten
+    fill: $inverse-support-02;
+  }
+
+  .#{$prefix}--#{$type}-notification__icon--info, // ccs: flatten
+  .#{$prefix}--#{$type}-notification__icon--info-square { // ccs: flatten
+    fill: $inverse-support-04;
+  }
+
+  .#{$prefix}--#{$type}-notification__icon--warning, // ccs: flatten
+  .#{$prefix}--#{$type}-notification__icon--warning-alt { // ccs: flatten
+    fill: $inverse-support-03;
+  }
+
+  .#{$prefix}--#{$type}-notification__icon--low-contrast-error { // ccs: flatten
+    fill: $support-01;
+  }
+
+  .#{$prefix}--#{$type}-notification__icon--low-contrast-success { // ccs: flatten
+    fill: $support-02;
+  }
+
+  .#{$prefix}--#{$type}-notification__icon--low-contrast-info, // ccs: flatten
+  .#{$prefix}--#{$type}-notification__icon--low-contrast-info-square { // ccs: flatten
+    fill: $support-04;
+  }
+
+  .#{$prefix}--#{$type}-notification__icon--low-contrast-warning, // ccs: flatten
+  .#{$prefix}--#{$type}-notification__icon--low-contrast-warning-alt { // ccs: flatten
+    fill: $support-03;
   }
 }

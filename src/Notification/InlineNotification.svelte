@@ -95,7 +95,7 @@
     on:focusout={handleFocusOut}
   >
     <div class:bx--inline-notification__details={true}>
-      <NotificationIcon notificationType="inline" {kind} />
+      <NotificationIcon notificationType="inline" {kind} {lowContrast} />
       <div class:bx--inline-notification__text-wrapper={true}>
         {#if title || $$slots.titleChildren}
           <p class:bx--inline-notification__title={true}>
@@ -114,6 +114,7 @@
     {#if !hideCloseButton}
       <NotificationButton
         iconDescription={closeButtonDescription}
+        {lowContrast}
         notificationType="inline"
         on:click={close}
       />

@@ -162,6 +162,8 @@
     }
   }
 
+  @include notification--icon-fills('inline');
+
   .#{$prefix}--inline-notification--warning
     .#{$prefix}--inline-notification__icon
     path[opacity='0'] {
@@ -283,10 +285,6 @@
       outline-offset: -2px;
     }
 
-    .#{$prefix}--inline-notification__close-icon {
-      fill: $inverse-01;
-    }
-
     @include carbon--breakpoint(md) {
       position: static;
     }
@@ -297,9 +295,11 @@
     @include focus-outline('outline');
   }
 
-  .#{$prefix}--inline-notification--low-contrast
-    .#{$prefix}--inline-notification__close-button
-    .#{$prefix}--inline-notification__close-icon {
+  .#{$prefix}--inline-notification__close-icon { // ccs: flatten
+    fill: $inverse-01;
+  }
+
+  .#{$prefix}--inline-notification__close-icon--low-contrast { // ccs: flatten
     fill: $icon-01;
   }
 

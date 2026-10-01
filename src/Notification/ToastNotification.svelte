@@ -103,7 +103,7 @@
     on:focusin={handleFocusIn}
     on:focusout={handleFocusOut}
   >
-    <NotificationIcon {kind} />
+    <NotificationIcon {kind} {lowContrast} />
     <div class:bx--toast-notification__details={true}>
       <h3 class:bx--toast-notification__title={true}>
         <slot name="titleChildren">{title}</slot>
@@ -123,6 +123,7 @@
     {#if !hideCloseButton}
       <NotificationButton
         iconDescription={closeButtonDescription}
+        {lowContrast}
         on:click={close}
       />
     {/if}
