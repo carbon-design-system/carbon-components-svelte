@@ -332,6 +332,27 @@
     }
   }
 
+  // carbon-components-svelte patch (button-icon-fill)
+  // An icon-only Button trigger keeps its `currentColor` icon (the button sets
+  // `color`), not the tooltip icon's `$icon-02`. Each position class is
+  // emitted only on a Button trigger, so these match one class plus `svg`,
+  // tying `.bx--tooltip__trigger svg` and winning on source order while still
+  // losing to a consumer's `.my-btn svg`.
+  .#{$prefix}--btn--icon-only--top svg,
+  .#{$prefix}--btn--icon-only--right svg,
+  .#{$prefix}--btn--icon-only--bottom svg,
+  .#{$prefix}--btn--icon-only--left svg,
+  .#{$prefix}--btn--icon-only--top:hover svg,
+  .#{$prefix}--btn--icon-only--right:hover svg,
+  .#{$prefix}--btn--icon-only--bottom:hover svg,
+  .#{$prefix}--btn--icon-only--left:hover svg,
+  .#{$prefix}--btn--icon-only--top:focus svg,
+  .#{$prefix}--btn--icon-only--right:focus svg,
+  .#{$prefix}--btn--icon-only--bottom:focus svg,
+  .#{$prefix}--btn--icon-only--left:focus svg {
+    fill: currentColor;
+  }
+
   // ccs: `--cds-tooltip-*` custom-property redesign (see the
   // `tooltip--geometry-*` mixins in globals/scss/_tooltip.scss for the
   // full rationale). One shared rule per pseudo-element role reads the
