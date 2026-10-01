@@ -11,6 +11,9 @@
    */
   export let notificationType = "toast";
 
+  /** Set to `true` to use the low contrast icon fill. */
+  export let lowContrast = false;
+
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import ErrorFilled from "../icons/ErrorFilled.svelte";
   import InformationFilled from "../icons/InformationFilled.svelte";
@@ -27,12 +30,14 @@
     "warning-alt": WarningAltFilled,
   };
 
-  $: iconClass = [
-    notificationType === "toast" && "bx--toast-notification__icon",
-    notificationType === "inline" && "bx--inline-notification__icon",
-  ]
-    .filter(Boolean)
-    .join(" ");
+  $: marker = `${lowContrast ? "low-contrast-" : ""}${kind}`;
+
+  $: iconClass =
+    notificationType === "toast"
+      ? `bx--toast-notification__icon bx--toast-notification__icon--${marker}`
+      : notificationType === "inline"
+        ? `bx--inline-notification__icon bx--inline-notification__icon--${marker}`
+        : "";
 </script>
 
 <svelte:component this={icons[kind]} size={20} class={iconClass} />

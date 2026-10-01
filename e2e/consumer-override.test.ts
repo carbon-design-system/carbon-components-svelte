@@ -167,8 +167,6 @@ test.describe("consumer override", () => {
 
   test.describe("notification", () => {
     test("toast icon fill", async ({ page }) => {
-      // loses to `.bx--toast-notification--success .bx--toast-notification__icon` (0,2,0)
-      test.fail();
       await expect(page.getByTestId("toast").locator("svg").first()).toHaveCSS(
         "fill",
         RED,
@@ -189,8 +187,6 @@ test.describe("consumer override", () => {
     });
 
     test("inline icon fill", async ({ page }) => {
-      // loses to `.bx--inline-notification--error .bx--inline-notification__icon` (0,2,0)
-      test.fail();
       await expect(page.getByTestId("inline").locator("svg").first()).toHaveCSS(
         "fill",
         RED,

@@ -127,6 +127,8 @@
     );
   }
 
+  @include notification--icon-fills('toast');
+
   .#{$prefix}--toast-notification--warning
     .#{$prefix}--toast-notification__icon
     path[opacity='0'] {
@@ -182,10 +184,10 @@
       outline: 2px solid $inverse-focus-ui;
       outline-offset: -2px;
     }
+  }
 
-    .#{$prefix}--toast-notification__close-icon {
-      fill: $inverse-01;
-    }
+  .#{$prefix}--toast-notification__close-icon { // ccs: flatten
+    fill: $inverse-01;
   }
 
   .#{$prefix}--toast-notification--low-contrast
@@ -193,9 +195,7 @@
     @include focus-outline('outline');
   }
 
-  .#{$prefix}--toast-notification--low-contrast
-    .#{$prefix}--toast-notification__close-button
-    .#{$prefix}--toast-notification__close-icon {
+  .#{$prefix}--toast-notification__close-icon--low-contrast { // ccs: flatten
     fill: $icon-01;
   }
 
