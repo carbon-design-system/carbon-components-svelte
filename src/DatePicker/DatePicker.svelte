@@ -207,7 +207,7 @@
 
   /**
    * Specify the locale.
-   * @type {import("flatpickr/dist/types/locale").CustomLocale | import("flatpickr/dist/types/locale").key}
+   * @type {string | Partial<import("./calendar-dates.js").CalendarLocale>}
    */
   export let locale = "en";
 
@@ -259,20 +259,18 @@
   export let id = uniqueId();
 
   /**
-   * Override the options passed to the Flatpickr instance.
-   * `mode` is set by `datePickerType`, and `wrap` is not supported
-   * because Flatpickr is given the input element itself.
-   * @see https://flatpickr.js.org/options
-   * @type {Omit<import("flatpickr/dist/types/options").Options, "mode" | "wrap">}
+   * Override the options passed to the calendar. `mode` is set by
+   * `datePickerType`. The names and behavior follow flatpickr's options,
+   * for the subset the calendar implements.
+   * @type {Omit<import("./calendar.js").CalendarOptions, "mode" | "secondInput">}
    */
   export let flatpickrProps = { static: true };
 
   /**
-   * Bind to the Flatpickr calendar instance for programmatic control.
+   * Bind to the calendar instance for programmatic control.
    * Available for every `datePickerType` except `"simple"`, where it stays
    * `null`.
-   * @see https://flatpickr.js.org/instance-methods-properties-elements/
-   * @type {import("flatpickr/dist/types/instance").Instance | null}
+   * @type {import("./calendar.js").CalendarInstance | null}
    * @bindable readonly
    */
   export let calendar = null;
@@ -316,10 +314,8 @@
   import { addPooledListener } from "../utils/window-listener-pool.js";
   import {
     createCalendar,
-    resolveLocale,
     resolveOptionValue,
     setErrorHandler,
-    updateMonthNode,
   } from "./create-calendar.js";
   import {
     getTopLayerAncestor,
@@ -1107,8 +1103,7 @@
 
   /**
    * Moves the calendar's visible month to `initialMonth` while there is no
-   * selection. `jumpToDate`'s second argument suppresses flatpickr's own
-   * `onMonthChange` hook, so the Carbon header label is resynced by hand.
+   * selection.
    */
   function applyInitialMonth() {
     if (!calendar || calendar.selectedDates.length > 0) return;
@@ -1116,7 +1111,6 @@
     const target = resolveInitialMonth();
     if (!target) return;
     calendar.jumpToDate(target, false);
-    updateMonthNode(calendar, locale);
   }
 
   async function initCalendar(options) {
@@ -1131,13 +1125,7 @@
         writeSelectionToValue();
         syncSelectedDatesFromCalendar();
       }
-      if (optionChanged(prevAppliedOptions.locale, locale)) {
-        applyOptionIfChanged("locale", locale, resolveLocale(locale));
-        // flatpickr's redraw skips the month label Carbon swaps in.
-        if ($mode !== "month" && $mode !== "year") {
-          updateMonthNode(calendar, locale);
-        }
-      }
+      applyOptionIfChanged("locale", locale);
       applyOptionIfChanged("dateFormat", dateFormat);
       applyDisabledDates();
       applyEnabledDates();
