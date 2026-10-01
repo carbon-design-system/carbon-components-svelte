@@ -178,8 +178,6 @@ test.describe("consumer override", () => {
     });
 
     test("low-contrast toast background", async ({ page }) => {
-      // loses to `.bx--toast-notification--low-contrast.bx--toast-notification--info` (0,2,0)
-      test.fail();
       await expect(page.getByTestId("toast-low")).toHaveCSS(
         "background-color",
         PINK,

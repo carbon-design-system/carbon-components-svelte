@@ -87,11 +87,23 @@
     class:bx--toast-notification--low-contrast={lowContrast}
     class:bx--toast-notification--high-contrast={!lowContrast}
     class:bx--toast-notification--error={kind === "error"}
+    class:bx--toast-notification--low-contrast-error={lowContrast &&
+      kind === "error"}
     class:bx--toast-notification--info={kind === "info"}
+    class:bx--toast-notification--low-contrast-info={lowContrast &&
+      kind === "info"}
     class:bx--toast-notification--info-square={kind === "info-square"}
+    class:bx--toast-notification--low-contrast-info-square={lowContrast &&
+      kind === "info-square"}
     class:bx--toast-notification--success={kind === "success"}
+    class:bx--toast-notification--low-contrast-success={lowContrast &&
+      kind === "success"}
     class:bx--toast-notification--warning={kind === "warning"}
+    class:bx--toast-notification--low-contrast-warning={lowContrast &&
+      kind === "warning"}
     class:bx--toast-notification--warning-alt={kind === "warning-alt"}
+    class:bx--toast-notification--low-contrast-warning-alt={lowContrast &&
+      kind === "warning-alt"}
     style:width={fullWidth ? "100%" : undefined}
     {...$$restProps}
     on:click

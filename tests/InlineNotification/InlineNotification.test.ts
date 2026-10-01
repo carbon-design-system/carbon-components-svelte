@@ -87,6 +87,47 @@ describe("InlineNotification", () => {
     );
   });
 
+  it("should emit one combined low contrast root marker per kind", () => {
+    const kinds = [
+      "error",
+      "info",
+      "info-square",
+      "success",
+      "warning",
+      "warning-alt",
+    ] as const;
+
+    for (const kind of kinds) {
+      const { unmount } = render(InlineNotificationTest, {
+        props: { kind, lowContrast: true },
+      });
+
+      const notification = document.querySelector(".bx--inline-notification");
+      expect(notification).toHaveClass(
+        "bx--inline-notification--low-contrast",
+        `bx--inline-notification--${kind}`,
+        `bx--inline-notification--low-contrast-${kind}`,
+      );
+      expect(
+        [...(notification?.classList ?? [])].filter((name) =>
+          name.startsWith("bx--inline-notification--low-contrast-"),
+        ),
+      ).toEqual([`bx--inline-notification--low-contrast-${kind}`]);
+      unmount();
+    }
+  });
+
+  it("should not emit a combined low contrast root marker by default", () => {
+    render(InlineNotificationTest, { props: { kind: "info" } });
+
+    const notification = document.querySelector(".bx--inline-notification");
+    expect(
+      [...(notification?.classList ?? [])].filter((name) =>
+        name.startsWith("bx--inline-notification--low-contrast-"),
+      ),
+    ).toEqual([]);
+  });
+
   it("should emit one icon fill marker per kind", () => {
     const kinds = [
       "error",
