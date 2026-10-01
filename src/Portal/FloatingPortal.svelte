@@ -150,6 +150,8 @@
   let unlistenWindowResize = null;
 
   function addWindowListeners() {
+    // The `$: if (open)` caller also runs during server rendering.
+    if (typeof window === "undefined") return;
     if (!unlistenWindowScroll) {
       unlistenWindowScroll = addPooledListener("scroll", scheduleUpdate, {
         passive: true,
