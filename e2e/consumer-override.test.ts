@@ -133,8 +133,6 @@ test.describe("consumer override", () => {
     });
 
     test("selected tab underline", async ({ page }) => {
-      // loses to `.bx--tabs__nav-item--selected:not(...) .bx--tabs__nav-link` (0,3,0)
-      test.fail();
       await expect(link(page, 0)).toHaveCSS("border-bottom-color", RED);
     });
   });

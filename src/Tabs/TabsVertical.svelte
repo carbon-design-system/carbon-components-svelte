@@ -105,6 +105,8 @@
   const useAutoWidth = writable(false);
   const useFullWidth = writable(false);
   const useDismissible = writable(false);
+  // Vertical tabs are never container type.
+  const useContainer = writable(false);
   const useIconOnly = writable(false);
   const activeTooltip = writable(null);
 
@@ -287,6 +289,7 @@
     useAutoWidth,
     useFullWidth,
     useDismissible,
+    useContainer,
     hasSecondaryLabel,
     add,
     remove,

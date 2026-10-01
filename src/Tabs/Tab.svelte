@@ -90,6 +90,7 @@
     useFullWidth,
     useDismissible,
     hasSecondaryLabel,
+    useContainer,
     add,
     remove,
     update,
@@ -200,6 +201,10 @@
     {id}
     {href}
     class:bx--tabs__nav-link={true}
+    class:bx--tabs__nav-link--selected={selected && !disabled}
+    class:bx--tabs__nav-link--container-selected={$useContainer &&
+      selected &&
+      !disabled}
     class:bx--tabs__nav-link--icon={Boolean(icon) && !$iconOnly}
     class:bx--tabs__nav-link--icon-only={$iconOnly}
     style:width={$iconOnly
