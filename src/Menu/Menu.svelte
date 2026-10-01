@@ -222,6 +222,13 @@
     scrollIntoViewWithinMenu(item, '[role="menu"]');
   }
 
+  /** @returns {HTMLElement[]} */
+  function getEnabledItems() {
+    return Array.from(
+      ref?.querySelectorAll(NON_DISABLED_MENUITEM_SELECTOR) ?? [],
+    ).filter((item) => item instanceof HTMLElement);
+  }
+
   /**
    * WAI-ARIA APG menu first-character navigation: move focus to the next
    * enabled item (in this menu's own level; a submenu is a separate,
@@ -230,9 +237,7 @@
    * @param {string} character
    */
   function typeaheadSearch(character) {
-    const items = /** @type {HTMLElement[]} */ (
-      Array.from(ref?.querySelectorAll(NON_DISABLED_MENUITEM_SELECTOR) ?? [])
-    );
+    const items = getEnabledItems();
     if (items.length === 0) return;
 
     const query = typeahead.push(character);
@@ -296,12 +301,7 @@
       getActiveIndex: () => focusIndex,
       onMove: (index) => {
         focusIndex = index;
-        const items = /** @type {HTMLElement[]} */ (
-          Array.from(
-            ref?.querySelectorAll(NON_DISABLED_MENUITEM_SELECTOR) ?? [],
-          )
-        );
-        const item = items[index];
+        const item = getEnabledItems()[index];
         if (item) focusMenuItem(item);
       },
     }}
