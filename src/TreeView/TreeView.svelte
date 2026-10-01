@@ -2104,6 +2104,26 @@
     }
 
     switch (event.key) {
+      case "PageDown":
+      case "PageUp": {
+        event.preventDefault();
+        event.stopPropagation();
+        // One viewport of rows, keeping the current row in view.
+        const pageSize = Math.max(
+          1,
+          Math.floor(getVirtualContainerHeight() / virtualConfig.itemHeight) -
+            1,
+        );
+        const direction = event.key === "PageDown" ? 1 : -1;
+        const target = Math.min(
+          Math.max(activeIdx + direction * pageSize, 0),
+          virtualIndex.totalCount - 1,
+        );
+        let next = nextEnabled(target, direction);
+        if (next < 0) next = nextEnabled(target, -direction);
+        if (next >= 0 && next !== activeIdx) virtualMoveTo(next);
+        break;
+      }
       case "ArrowDown": {
         event.preventDefault();
         event.stopPropagation();

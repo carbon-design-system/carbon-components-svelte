@@ -466,4 +466,30 @@ describe("TreeView (virtualize)", () => {
 
     expect(document.getElementById("1")).toHaveFocus();
   });
+
+  it("PageDown and PageUp move focus by one viewport of rows", async () => {
+    render(TreeViewVirtualize, { totalRoots: 50, childrenPerRoot: 0 });
+
+    findRowById(0)?.focus();
+    // maxVisibleRows: 10 -> pages of 9 rows, keeping the current row in view.
+    await user.keyboard("{PageDown}");
+    await waitFor(() => expect(findRowById(9)).toHaveFocus());
+
+    await user.keyboard("{PageDown}");
+    await waitFor(() => expect(findRowById(18)).toHaveFocus());
+
+    await user.keyboard("{PageUp}");
+    await waitFor(() => expect(findRowById(9)).toHaveFocus());
+  });
+
+  it("PageDown and PageUp stop at the last and first rows", async () => {
+    render(TreeViewVirtualize, { totalRoots: 12, childrenPerRoot: 0 });
+
+    findRowById(5)?.focus();
+    await user.keyboard("{PageDown}");
+    await waitFor(() => expect(findRowById(11)).toHaveFocus());
+
+    await user.keyboard("{PageUp}{PageUp}");
+    await waitFor(() => expect(findRowById(0)).toHaveFocus());
+  });
 });
