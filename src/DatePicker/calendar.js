@@ -96,6 +96,31 @@ function eventTarget(event) {
 }
 
 /**
+ * A set of listeners that can be removed together. `AbortSignal` listener
+ * options are newer than Carbon's browser baseline, so remove by hand.
+ */
+function createListenerGroup() {
+  /** @type {Array<() => void>} */
+  let removers = [];
+  return {
+    /**
+     * @param {EventTarget} target
+     * @param {string} type
+     * @param {EventListener} handler
+     * @param {AddEventListenerOptions | boolean} [options]
+     */
+    add(target, type, handler, options) {
+      target.addEventListener(type, handler, options);
+      removers.push(() => target.removeEventListener(type, handler, options));
+    },
+    clear() {
+      for (const remove of removers) remove();
+      removers = [];
+    },
+  };
+}
+
+/**
  * Compact calendar engine that drives Carbon's date picker. Produces the
  * same DOM, hooks, and instance surface that flatpickr did (class names and
  * all), so Carbon's styles and `bind:calendar` consumers keep working, but
@@ -109,10 +134,11 @@ function eventTarget(event) {
 export function createCalendarEngine(element, userConfig = {}) {
   /** @type {any} */
   const self = {};
-  const controller = new AbortController();
-  const { signal } = controller;
+  const listeners = createListenerGroup();
+  /** Opens the calendar from the inputs; rebound when `clickOpens` changes. */
+  const triggerListeners = createListenerGroup();
   /** Listeners that only matter while the calendar is open. */
-  let openController = new AbortController();
+  const openListeners = createListenerGroup();
 
   /** @type {any} */
   const config = {
@@ -1395,22 +1421,15 @@ export function createCalendarEngine(element, userConfig = {}) {
 
   // --- Open and close ---------------------------------------------------
 
-  /** @type {AbortController | undefined} */
-  let triggerController;
   let secondFocused = false;
 
   function bindOpenTriggers() {
-    triggerController?.abort();
-    triggerController = undefined;
+    triggerListeners.clear();
     if (!config.clickOpens) return;
-    triggerController = new AbortController();
-    const opts = {
-      signal: AbortSignal.any([signal, triggerController.signal]),
-    };
     /** @param {HTMLInputElement} input @param {(e: Event) => void} handler */
     const bindInput = (input, handler) => {
-      input.addEventListener("focus", handler, opts);
-      input.addEventListener("click", handler, opts);
+      triggerListeners.add(input, "focus", handler);
+      triggerListeners.add(input, "click", handler);
     };
     if (secondInput) {
       bindInput(self._input, (event) => {
@@ -1451,7 +1470,7 @@ export function createCalendarEngine(element, userConfig = {}) {
     self.isOpen = false;
     if (self.calendarContainer) self.calendarContainer.classList.remove("open");
     if (self._input) self._input.classList.remove("active");
-    openController.abort();
+    openListeners.clear();
     triggerEvent("onClose");
   }
   self.close = close;
@@ -1467,16 +1486,11 @@ export function createCalendarEngine(element, userConfig = {}) {
 
   /** Document listeners that only matter while the calendar is open. */
   function bindOpenListeners() {
-    openController.abort();
-    openController = new AbortController();
-    const opts = { signal: AbortSignal.any([signal, openController.signal]) };
-    document.addEventListener("mousedown", documentClick, opts);
-    document.addEventListener("focus", documentClick, {
-      ...opts,
-      capture: true,
-    });
+    openListeners.clear();
+    openListeners.add(document, "mousedown", documentClick);
+    openListeners.add(document, "focus", documentClick, { capture: true });
     if (!config.inline && !config.static) {
-      window.addEventListener("resize", onResize, opts);
+      openListeners.add(window, "resize", onResize);
     }
   }
 
@@ -1849,40 +1863,37 @@ export function createCalendarEngine(element, userConfig = {}) {
   }
 
   function bindEvents() {
-    const opts = { signal };
-    self._input.addEventListener("keydown", onKeyDown, opts);
-    secondInput?.addEventListener("keydown", onKeyDown, opts);
-    self.calendarContainer.addEventListener("keydown", onKeyDown, opts);
-    if (config.allowInput) self._input.addEventListener("blur", onBlur, opts);
+    /**
+     * @param {EventTarget | undefined} target
+     * @param {string} type
+     * @param {(event: any) => void} handler
+     */
+    const on = (target, type, handler) => {
+      if (target) listeners.add(target, type, handler);
+    };
+    on(self._input, "keydown", onKeyDown);
+    on(secondInput, "keydown", onKeyDown);
+    on(self.calendarContainer, "keydown", onKeyDown);
+    if (config.allowInput) on(self._input, "blur", onBlur);
     bindOpenTriggers();
     if (secondInput) {
-      self._input.addEventListener(
-        "focus",
-        () => {
-          self.latestSelectedDateObj = self.selectedDates[0];
-          secondFocused = false;
-          if (self.selectedDates[0]) jumpToDate(self.selectedDates[0]);
-        },
-        opts,
-      );
+      on(self._input, "focus", () => {
+        self.latestSelectedDateObj = self.selectedDates[0];
+        secondFocused = false;
+        if (self.selectedDates[0]) jumpToDate(self.selectedDates[0]);
+      });
     }
-    self.monthNav.addEventListener("click", onNavClick, opts);
-    self.monthNav.addEventListener("keyup", onYearInput, opts);
-    self.monthNav.addEventListener("input", onYearInput, opts);
-    self.daysContainer.addEventListener(
-      "click",
-      isGridMode ? selectGridCell : selectDate,
-      opts,
-    );
+    on(self.monthNav, "click", onNavClick);
+    on(self.monthNav, "keyup", onYearInput);
+    on(self.monthNav, "input", onYearInput);
+    on(self.daysContainer, "click", isGridMode ? selectGridCell : selectDate);
     if (isRange) {
-      self.daysContainer.addEventListener(
-        "mouseover",
-        (/** @type {Event} */ event) => previewRange(eventTarget(event)),
-        opts,
+      on(self.daysContainer, "mouseover", (event) =>
+        previewRange(eventTarget(event)),
       );
     } else if (pickerMode === "week") {
-      self.daysContainer.addEventListener("mouseover", hoverWeek, opts);
-      self.daysContainer.addEventListener("mouseleave", clearWeekHover, opts);
+      on(self.daysContainer, "mouseover", hoverWeek);
+      on(self.daysContainer, "mouseleave", clearWeekHover);
     }
   }
 
@@ -1890,9 +1901,9 @@ export function createCalendarEngine(element, userConfig = {}) {
 
   function destroy() {
     if (self.config !== undefined) triggerEvent("onDestroy");
-    controller.abort();
-    triggerController?.abort();
-    openController.abort();
+    listeners.clear();
+    triggerListeners.clear();
+    openListeners.clear();
     clearTimeout(resizeTimer);
     const container = self.calendarContainer;
     if (container?.parentNode) {
