@@ -85,6 +85,7 @@
     {role}
     class:bx--toast-notification={true}
     class:bx--toast-notification--low-contrast={lowContrast}
+    class:bx--toast-notification--high-contrast={!lowContrast}
     class:bx--toast-notification--error={kind === "error"}
     class:bx--toast-notification--info={kind === "info"}
     class:bx--toast-notification--info-square={kind === "info-square"}

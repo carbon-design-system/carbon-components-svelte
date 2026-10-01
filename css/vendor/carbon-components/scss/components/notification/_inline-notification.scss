@@ -51,8 +51,15 @@
     }
   }
 
-  .#{$prefix}--inline-notification:not(.#{$prefix}--inline-notification--low-contrast)
-    a {
+  .#{$prefix}--inline-notification--high-contrast a { // ccs: flatten
+    color: $inverse-link;
+  }
+
+  // Hover, active and visited keep the weight the old `:not()` rule had,
+  // so the `.bx--link` state colors still lose to them.
+  .#{$prefix}--inline-notification--high-contrast a:hover, // ccs: specificity
+  .#{$prefix}--inline-notification--high-contrast a:active, // ccs: specificity
+  .#{$prefix}--inline-notification--high-contrast a:visited { // ccs: specificity
     color: $inverse-link;
   }
 

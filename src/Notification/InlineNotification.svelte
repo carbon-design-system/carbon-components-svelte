@@ -76,6 +76,7 @@
     {role}
     class:bx--inline-notification={true}
     class:bx--inline-notification--low-contrast={lowContrast}
+    class:bx--inline-notification--high-contrast={!lowContrast}
     class:bx--inline-notification--hide-close-button={hideCloseButton}
     class:bx--inline-notification--error={kind === "error"}
     class:bx--inline-notification--info={kind === "info"}

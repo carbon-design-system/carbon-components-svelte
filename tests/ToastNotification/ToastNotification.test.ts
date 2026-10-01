@@ -66,6 +66,27 @@ describe("ToastNotification", () => {
     expect(notification).toHaveClass("bx--toast-notification--low-contrast");
   });
 
+  it("should mark the default variant as high contrast", () => {
+    render(ToastNotificationTest);
+
+    const notification = document.querySelector(".bx--toast-notification");
+    expect(notification).toHaveClass("bx--toast-notification--high-contrast");
+    expect(notification).not.toHaveClass(
+      "bx--toast-notification--low-contrast",
+    );
+  });
+
+  it("should not mark the low contrast variant as high contrast", () => {
+    render(ToastNotificationTest, {
+      props: { lowContrast: true },
+    });
+
+    const notification = document.querySelector(".bx--toast-notification");
+    expect(notification).not.toHaveClass(
+      "bx--toast-notification--high-contrast",
+    );
+  });
+
   it("should render title when prop is provided", () => {
     render(ToastNotificationTest, {
       props: { title: "Test Title" },

@@ -176,8 +176,6 @@ test.describe("consumer override", () => {
     });
 
     test("toast link color", async ({ page }) => {
-      // loses to `.bx--toast-notification:not(.bx--toast-notification--low-contrast) a` (0,2,1)
-      test.fail();
       await expect(page.getByTestId("toast-link")).toHaveCSS("color", RED);
     });
 
