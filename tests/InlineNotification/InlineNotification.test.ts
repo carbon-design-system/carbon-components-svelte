@@ -66,6 +66,27 @@ describe("InlineNotification", () => {
     expect(notification).toHaveClass("bx--inline-notification--low-contrast");
   });
 
+  it("should mark the default variant as high contrast", () => {
+    render(InlineNotificationTest);
+
+    const notification = document.querySelector(".bx--inline-notification");
+    expect(notification).toHaveClass("bx--inline-notification--high-contrast");
+    expect(notification).not.toHaveClass(
+      "bx--inline-notification--low-contrast",
+    );
+  });
+
+  it("should not mark the low contrast variant as high contrast", () => {
+    render(InlineNotificationTest, {
+      props: { lowContrast: true },
+    });
+
+    const notification = document.querySelector(".bx--inline-notification");
+    expect(notification).not.toHaveClass(
+      "bx--inline-notification--high-contrast",
+    );
+  });
+
   it("should render title when prop is provided", () => {
     render(InlineNotificationTest, {
       props: { title: "Test Title" },

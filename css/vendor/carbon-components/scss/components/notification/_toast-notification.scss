@@ -46,8 +46,15 @@
     }
   }
 
-  .#{$prefix}--toast-notification:not(.#{$prefix}--toast-notification--low-contrast)
-    a {
+  .#{$prefix}--toast-notification--high-contrast a { // ccs: flatten
+    color: $inverse-link;
+  }
+
+  // Hover, active and visited keep the weight the old `:not()` rule had,
+  // so the `.bx--link` state colors still lose to them.
+  .#{$prefix}--toast-notification--high-contrast a:hover, // ccs: specificity
+  .#{$prefix}--toast-notification--high-contrast a:active, // ccs: specificity
+  .#{$prefix}--toast-notification--high-contrast a:visited { // ccs: specificity
     color: $inverse-link;
   }
 
