@@ -11,10 +11,7 @@ import {
   firstDay,
   getDays,
   openCalendar,
-  preloadFlatpickrPlugins,
 } from "./helpers";
-
-beforeAll(preloadFlatpickrPlugins, 30_000);
 
 const getBoundOpen = () => getBoundText("open");
 /** `close` is dispatched from a microtask. */

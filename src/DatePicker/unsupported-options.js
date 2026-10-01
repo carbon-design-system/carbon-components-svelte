@@ -12,8 +12,28 @@ const PREFIX = "[carbon-components-svelte] DatePicker: ";
  */
 
 /**
- * `flatpickrProps` is typed as flatpickr's options, but Carbon overrides or
- * ignores some of them. Without a message those fail silently.
+ * Options of flatpickr that the calendar does not implement: the time
+ * picker, the native mobile picker, and the month dropdown.
+ */
+const NOT_IMPLEMENTED = [
+  "enableTime",
+  "enableSeconds",
+  "noCalendar",
+  "time_24hr",
+  "hourIncrement",
+  "minuteIncrement",
+  "defaultHour",
+  "defaultMinute",
+  "defaultSeconds",
+  "minTime",
+  "maxTime",
+  "disableMobile",
+  "monthSelectorType",
+];
+
+/**
+ * `flatpickrProps` follows flatpickr's option names, but Carbon overrides,
+ * ignores, or does not implement some of them. Without a message those fail silently.
  *
  * @param {Record<string, unknown> | undefined} flatpickrProps
  * @param {UnsupportedOptionContext} context
@@ -27,7 +47,7 @@ export function getUnsupportedOptionWarnings(flatpickrProps, context) {
     [
       "wrap",
       !!flatpickrProps.wrap,
-      "is not supported. Flatpickr is given the input element itself.",
+      "is not supported. The calendar is given the input element itself.",
     ],
     ["mode", true, "is ignored. Use datePickerType instead."],
     [
@@ -55,6 +75,10 @@ export function getUnsupportedOptionWarnings(flatpickrProps, context) {
       "is ignored. enabledDates is set.",
     ],
   ];
+
+  for (const option of NOT_IMPLEMENTED) {
+    rules.push([option, true, "is not supported."]);
+  }
 
   return rules
     .filter(

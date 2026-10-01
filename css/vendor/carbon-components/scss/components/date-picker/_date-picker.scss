@@ -343,6 +343,8 @@
 @mixin date-picker-month-select {
   .flatpickr-monthSelect-months {
     display: grid;
+    // The grid sits in the flex `.flatpickr-days`; fill it.
+    flex: 1;
     grid-template-columns: repeat(3, 1fr);
     margin: to-rem(10px) to-rem(1px) to-rem(3px);
   }
@@ -437,6 +439,8 @@
 
   .flatpickr-yearSelect-years {
     display: grid;
+    // The grid sits in the flex `.flatpickr-days`; fill it.
+    flex: 1;
     grid-template-columns: repeat(3, 1fr);
     margin: to-rem(10px) to-rem(1px) to-rem(3px);
   }

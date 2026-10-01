@@ -136,7 +136,7 @@ describe("positionFlatpickrCalendarFixed", () => {
       calendarContainer,
       _positionElement: positionElement,
       _input: positionElement,
-    } as unknown as import("flatpickr/dist/types/instance").Instance;
+    } as unknown as import("../../src/DatePicker/calendar").CalendarInstance;
 
     positionFlatpickrCalendarFixed(instance, positionElement);
 
@@ -172,7 +172,7 @@ describe("positionFlatpickrCalendarFixed", () => {
       calendarContainer,
       _positionElement: positionElement,
       _input: positionElement,
-    } as unknown as import("flatpickr/dist/types/instance").Instance;
+    } as unknown as import("../../src/DatePicker/calendar").CalendarInstance;
 
     positionFlatpickrCalendarFixed(instance, positionElement);
 
@@ -207,7 +207,7 @@ describe("positionFlatpickrCalendarFixed", () => {
       calendarContainer,
       _positionElement: positionElement,
       _input: positionElement,
-    } as unknown as import("flatpickr/dist/types/instance").Instance;
+    } as unknown as import("../../src/DatePicker/calendar").CalendarInstance;
 
     positionFlatpickrCalendarFixed(instance, positionElement);
 

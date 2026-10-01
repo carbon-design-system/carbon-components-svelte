@@ -4,9 +4,9 @@ import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
 import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
+import { getCalendarInstance } from "./calendar-instance";
 import DatePickerForm from "./DatePicker.form.test.svelte";
 import DatePickerDisplayFormatForm from "./DatePickerDisplayFormat.test.svelte";
-import { getFlatpickrInstance } from "./flatpickr-instance";
 import { visibleInput } from "./helpers";
 
 const getValueFrom = () => getBoundText("valueFrom");
@@ -76,12 +76,12 @@ describe("DatePicker form reset", () => {
       });
       const start = screen.getByLabelText("Start date");
       await vi.waitFor(() =>
-        expect(getFlatpickrInstance(start).selectedDates).toHaveLength(2),
+        expect(getCalendarInstance(start).selectedDates).toHaveLength(2),
       );
 
       await resetForm();
 
-      expect(getFlatpickrInstance(start).selectedDates).toEqual([]);
+      expect(getCalendarInstance(start).selectedDates).toEqual([]);
     });
 
     it("clears both sides even when only one was edited", async () => {

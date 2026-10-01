@@ -1,12 +1,12 @@
 import { fireEvent, render, screen, within } from "@testing-library/svelte";
 import type DatePickerComponent from "carbon-components-svelte/DatePicker/DatePicker.svelte";
-import { english } from "flatpickr/dist/l10n/default";
-import type { Instance } from "flatpickr/dist/types/instance";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
+import type { CalendarInstance as Instance } from "../../src/DatePicker/calendar";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { getBoundText } from "../utils/get-bound-text";
 import { user } from "../utils/user";
+import { getCalendarInstance, renderCalendar } from "./calendar-instance";
 import DatePickerFluidRange from "./DatePicker.fluidRange.test.svelte";
 import DatePicker from "./DatePicker.test.svelte";
 import DatePickerDisplayFormat from "./DatePickerDisplayFormat.test.svelte";
@@ -15,7 +15,6 @@ import DatePickerIgnoredFocus from "./DatePickerIgnoredFocus.test.svelte";
 import DatePickerInlineOptions from "./DatePickerInlineOptions.test.svelte";
 import DatePickerRange from "./DatePickerRange.test.svelte";
 import DatePickerSelectedDates from "./DatePickerSelectedDates.test.svelte";
-import { getFlatpickrInstance, renderCalendar } from "./flatpickr-instance";
 import {
   clickNextMonth,
   dayByLabel,
@@ -24,11 +23,8 @@ import {
   getDayByNumber,
   getDays,
   openCalendar,
-  preloadFlatpickrPlugins,
   yearFirst,
 } from "./helpers";
-
-beforeAll(preloadFlatpickrPlugins, 30_000);
 
 describe("DatePicker", () => {
   afterEach(() => {
@@ -524,9 +520,9 @@ describe("DatePicker", () => {
     const { rerender } = render(DatePicker, props);
 
     const input = screen.getByLabelText("Date");
-    await vi.waitFor(() => getFlatpickrInstance(input));
+    await vi.waitFor(() => getCalendarInstance(input));
     await tick();
-    const fp = getFlatpickrInstance(input);
+    const fp = getCalendarInstance(input);
     expect(fp.config.allowInput).toBe(false);
     expect(fp.config.clickOpens).toBe(false);
 
@@ -668,7 +664,7 @@ describe("DatePicker", () => {
       await rerender({ datePickerType: "multiple", value: "03/15/2024" });
       const input = screen.getByLabelText("Date");
       await vi.waitFor(() => {
-        const calendar = getFlatpickrInstance(input);
+        const calendar = getCalendarInstance(input);
         expect(calendar.config.mode).toBe("multiple");
         expect(calendar.selectedDates).toHaveLength(1);
       });
@@ -869,7 +865,7 @@ describe("DatePicker", () => {
     const input = screen.getByLabelText("Date");
     await openCalendar();
 
-    const fp = getFlatpickrInstance(input);
+    const fp = getCalendarInstance(input);
     const setDateSpy = vi.spyOn(fp, "setDate");
 
     // Trigger a reactive update that does not change value/min/max/format.
@@ -1052,11 +1048,16 @@ describe("DatePicker", () => {
     ] as const)(
       "is ignored in %s mode",
       async (datePickerType, dateFormat, initialMonth, selector, expected) => {
+        vi.useFakeTimers({ toFake: ["Date"] });
+        vi.setSystemTime(new Date(2020, 0, 10));
+        onTestFinished(() => {
+          vi.useRealTimers();
+        });
         render(DatePicker, {
           datePickerType,
           dateFormat,
           initialMonth,
-          flatpickrProps: { static: true, now: new Date(2020, 0, 10) },
+          flatpickrProps: { static: true },
         });
 
         const calendar = await openCalendar();
@@ -1070,13 +1071,16 @@ describe("DatePicker", () => {
     );
 
     it("shows the initial month when there is no selection", async () => {
+      // The calendar marks today's date. Pin it outside the shown month so
+      // the assertion cannot depend on the real date.
+      vi.useFakeTimers({ toFake: ["Date"] });
+      vi.setSystemTime(new Date(2020, 0, 10));
+      onTestFinished(() => {
+        vi.useRealTimers();
+      });
       render(DatePicker, {
         datePickerType: "single",
         initialMonth: "04/01/2027",
-        // flatpickr marks `now` (the module-load date by default) as today.
-        // Pin it outside the shown month so the assertion cannot depend on
-        // the real date.
-        flatpickrProps: { now: new Date(2020, 0, 10) },
       });
 
       const input = screen.getByLabelText("Date");
@@ -1427,7 +1431,7 @@ describe("DatePicker", () => {
       const { rerender } = render(DatePicker, props());
       const input = screen.getByLabelText("Date");
       await screen.findByLabelText("calendar-container");
-      const calendar = getFlatpickrInstance(input);
+      const calendar = getCalendarInstance(input);
       const set = vi.spyOn(calendar, "set");
 
       await rerender(props());
@@ -1456,7 +1460,7 @@ describe("DatePicker", () => {
       });
       const input = screen.getByLabelText("Date");
       await screen.findByLabelText("calendar-container");
-      const calendar = getFlatpickrInstance(input);
+      const calendar = getCalendarInstance(input);
       const set = vi.spyOn(calendar, "set");
 
       await rerender({ ...props, flatpickrProps: { positionElement: second } });
@@ -1475,7 +1479,7 @@ describe("DatePicker", () => {
       const { rerender } = render(DatePicker, props());
       const input = screen.getByLabelText("Date");
       await screen.findByLabelText("calendar-container");
-      const calendar = getFlatpickrInstance(input);
+      const calendar = getCalendarInstance(input);
       const set = vi.spyOn(calendar, "set");
 
       await rerender(props());
@@ -1629,7 +1633,7 @@ describe("DatePicker", () => {
       let input = screen.getByLabelText("Date");
       await user.click(input);
       await screen.findByLabelText("calendar-container");
-      expect(getFlatpickrInstance(input).config.animate).toBe(false);
+      expect(getCalendarInstance(input).config.animate).toBe(false);
 
       unmount();
 
@@ -1640,7 +1644,7 @@ describe("DatePicker", () => {
       input = screen.getByLabelText("Date");
       await user.click(input);
       await screen.findByLabelText("calendar-container");
-      expect(getFlatpickrInstance(input).config.animate).toBe(true);
+      expect(getCalendarInstance(input).config.animate).toBe(true);
     });
 
     it("marks explicitly disabled dates from flatpickrProps.disable as aria-disabled", async () => {
@@ -1761,7 +1765,7 @@ describe("DatePicker", () => {
       const input = screen.getByLabelText("Date");
       await openCalendar();
 
-      const setSpy = vi.spyOn(getFlatpickrInstance(input), "set");
+      const setSpy = vi.spyOn(getCalendarInstance(input), "set");
 
       // Trigger a reactive update that keeps the same `disabledDates` reference.
       await rerender({ disabledDates, fullWidth: true });
@@ -2083,7 +2087,7 @@ describe("DatePicker", () => {
       const input = screen.getByLabelText("Date");
       await openCalendar();
 
-      const fp = getFlatpickrInstance(input);
+      const fp = getCalendarInstance(input);
       expect(fp.config.static).toBe(false);
 
       // Trigger the `initCalendar` reactive statement to re-run (e.g. a
@@ -2527,7 +2531,7 @@ describe("DatePicker", () => {
     it("follows the locale's first day of the week", async () => {
       render(DatePicker, {
         datePickerType: "week",
-        locale: { ...english, firstDayOfWeek: 1 },
+        locale: { firstDayOfWeek: 1 },
       });
       const calendar = await openCalendar();
       const { cell, date } = dayCell(calendar, 17);

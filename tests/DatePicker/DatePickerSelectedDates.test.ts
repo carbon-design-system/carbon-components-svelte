@@ -3,8 +3,8 @@ import { tick } from "svelte";
 import { getBoundText } from "../utils/get-bound-text";
 import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
+import { getCalendarInstance } from "./calendar-instance";
 import DatePickerSelectedDates from "./DatePickerSelectedDates.test.svelte";
-import { getFlatpickrInstance } from "./flatpickr-instance";
 import { dayByLabel } from "./helpers";
 
 const getDates = () => screen.getByTestId("dates").textContent?.trim();
@@ -136,13 +136,13 @@ describe("DatePicker bind:selectedDates", () => {
     await waitFor(() =>
       expect(getDates()).toBe(new Date(2024, 0, 15).toDateString()),
     );
-    const instance = getFlatpickrInstance(input);
+    const instance = getCalendarInstance(input);
     const cell = calendar.querySelector(".flatpickr-day.selected");
 
     await rerender({ selectedDates: [new Date(2024, 0, 15)] });
     await tick();
 
-    expect(getFlatpickrInstance(input)).toBe(instance);
+    expect(getCalendarInstance(input)).toBe(instance);
     // A redraw would replace every day cell.
     expect(cell?.isConnected).toBe(true);
   });
@@ -157,7 +157,7 @@ describe("DatePicker bind:selectedDates", () => {
 
     bound[0].setDate(20);
 
-    expect(getFlatpickrInstance(input).selectedDates[0].getDate()).toBe(15);
+    expect(getCalendarInstance(input).selectedDates[0].getDate()).toBe(15);
     expect(input).toHaveValue("01/15/2024");
   });
 
