@@ -4,7 +4,7 @@ description: Sliders provide a visual way to select a value from a range, with k
 ---
 
 <script>
-  import { Slider, RangeSlider, SliderSkeleton, RangeSliderSkeleton } from "carbon-components-svelte";
+  import { Box, Slider, RangeSlider, SliderSkeleton, RangeSliderSkeleton } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -141,9 +141,25 @@ Set `snapToMarks` to `true` to make dragging and clicking land on the nearest ma
 
 ## Vertical
 
-Set `orientation` to `"vertical"` to lay the track out along the vertical axis, with `min` at the bottom and `max` at the top. <DocKbd label="ArrowUp" /> and <DocKbd label="ArrowRight" /> increase the value; <DocKbd label="ArrowDown" /> and <DocKbd label="ArrowLeft" /> decrease it. The range labels and text input stay in a horizontal row beside the track.
+Set `orientation` to `"vertical"` to lay the track out along the vertical axis, with `min` at the bottom and `max` at the top. <DocKbd label="ArrowUp" /> and <DocKbd label="ArrowRight" /> increase the value; <DocKbd label="ArrowDown" /> and <DocKbd label="ArrowLeft" /> decrease it. The `max` label sits at the top right of the track, the `min` label at the bottom right, and the text input below the track.
 
 <Slider labelText="Volume" orientation="vertical" value={40} />
+
+### Fluid height
+
+A vertical slider fills the height of its container, minus its label and helper text. Without a container height, the track defaults to about 200px.
+
+<Box display="flex" gap={7}>
+  <Box height="12rem">
+    <Slider labelText="12rem" orientation="vertical" value={40} />
+  </Box>
+  <Box height="18rem">
+    <Slider labelText="18rem" orientation="vertical" value={40} />
+  </Box>
+  <Box height="24rem">
+    <Slider labelText="24rem" orientation="vertical" value={40} />
+  </Box>
+</Box>
 
 ### Custom range and step
 
@@ -220,6 +236,14 @@ Set `readonly` to `true` to display a value while preventing changes.
 `RangeSlider` accepts `orientation` too. The lower handle sits below its value and the upper handle above it, with the filled track between them. Clicking or dragging moves whichever handle is vertically closer to the pointer.
 
 <RangeSlider labelText="Alert threshold (%)" orientation="vertical" value={20} valueUpper={70} />
+
+### Vertical range slider with fluid height
+
+The upper input sits beside the `max` label and the lower input beside the `min` label, so both stay aligned with the track ends as the container grows.
+
+<Box height="24rem">
+  <RangeSlider labelText="Price range ($)" orientation="vertical" min={0} max={500} step={10} value={100} valueUpper={350} />
+</Box>
 
 ### Vertical range slider with marks
 
