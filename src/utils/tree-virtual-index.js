@@ -319,6 +319,16 @@ export function createTreeVirtualIndex(nodes, expandedIdsSet, options = {}) {
    */
   function findIndexById(id) {
     const needle = String(id);
+    const idType = typeof id;
+    /**
+     * Same-type ids compare directly; only a mixed pair (a numeric id looked
+     * up by its DOM string) pays for `String()` on every visited node.
+     * @param {string | number} candidate
+     */
+    function matches(candidate) {
+      if (typeof candidate === idType) return candidate === id;
+      return String(candidate) === needle;
+    }
     /**
      * @param {ReadonlyArray<T>} list
      * @param {number} indexOffset
@@ -328,7 +338,7 @@ export function createTreeVirtualIndex(nodes, expandedIdsSet, options = {}) {
       let offset = indexOffset;
       for (let i = 0; i < list.length; i++) {
         const node = list[i];
-        if (String(node.id) === needle) return offset;
+        if (matches(node.id)) return offset;
         const size = sizeById.get(node.id) ?? 1;
         if (
           hasLoadedChildren(node) &&

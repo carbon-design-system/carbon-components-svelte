@@ -115,6 +115,13 @@ describe("treeVirtualIndex", () => {
     expect(expanded.findIndexById(99)).toBe(-1);
   });
 
+  it("findIndexById matches a numeric id by its string form", () => {
+    const index = createTreeVirtualIndex(nodes, new Set([1, 2]));
+    expect(index.findIndexById("4")).toBe(4);
+    expect(index.findIndexById("6")).toBe(6);
+    expect(index.findIndexById("99")).toBe(-1);
+  });
+
   it("empty expandAll-shaped set still lists roots only until parents expand", () => {
     const index = createTreeVirtualIndex(nodes, new Set());
     expect(index.totalCount).toBe(3);

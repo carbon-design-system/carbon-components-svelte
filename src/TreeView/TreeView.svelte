@@ -892,13 +892,22 @@
    * @returns {Node["id"] | undefined}
    */
   function nodeIdFromTreeItem(element) {
+    return cachedIdByDomIdLookup(element.id);
+  }
+
+  /**
+   * The node id whose `String(id)` is `domId`, or `undefined`.
+   * @param {string} domId
+   * @returns {Node["id"] | undefined}
+   */
+  function cachedIdByDomIdLookup(domId) {
     if (cachedIdByDomId == null) {
       cachedIdByDomId = new Map();
       for (const id of cachedNodeMap?.keys() ?? []) {
         cachedIdByDomId.set(String(id), id);
       }
     }
-    return cachedIdByDomId.get(element.id);
+    return cachedIdByDomId.get(domId);
   }
 
   /**
@@ -1959,8 +1968,13 @@
         : null;
     let activeIdx = -1;
     if (rowTarget) {
-      const id = rowTarget.getAttribute(TREE_ROW_ID_ATTR);
-      activeIdx = virtualIndex.findIndexById(/** @type {string} */ (id));
+      // Recover the typed id so the lookup compares ids without `String()`.
+      const attr = /** @type {string} */ (
+        rowTarget.getAttribute(TREE_ROW_ID_ATTR)
+      );
+      activeIdx = virtualIndex.findIndexById(
+        cachedIdByDomIdLookup(attr) ?? attr,
+      );
     } else if (event.target === scrollContainerRef) {
       if (virtualFocusedId != null && virtualFocusedId !== "") {
         activeIdx = virtualIndex.findIndexById(virtualFocusedId);
