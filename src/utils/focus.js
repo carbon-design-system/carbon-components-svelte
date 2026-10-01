@@ -39,6 +39,8 @@ export function restoreFocus() {
   let prevFocus = null;
   return {
     save() {
+      // Also runs while rendering an open overlay on the server.
+      if (typeof document === "undefined") return;
       prevFocus =
         document.activeElement instanceof HTMLElement
           ? document.activeElement
