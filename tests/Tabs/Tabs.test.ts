@@ -450,6 +450,50 @@ describe("Tabs", () => {
     expect(tab1).not.toHaveClass("bx--tabs__nav-link--container-selected");
   });
 
+  it("marks container tab items with the container classes only for container tabs", async () => {
+    const { unmount } = render(Tabs, { props: { type: "container" } });
+    await tick();
+
+    let items = screen
+      .getAllByRole("tab")
+      .map((tab) => tab.closest(".bx--tabs__nav-item"));
+
+    // Tab 1: selected, Tab 2: disabled, Tab 3: neither.
+    for (const item of items) {
+      expect(item).toHaveClass("bx--tabs__nav-item--container");
+    }
+    expect(items[0]).toHaveClass("bx--tabs__nav-item--container-selected");
+    expect(items[1]).not.toHaveClass("bx--tabs__nav-item--container-selected");
+    expect(items[2]).not.toHaveClass("bx--tabs__nav-item--container-selected");
+
+    unmount();
+    render(Tabs, { props: { type: "default" } });
+    await tick();
+
+    items = screen
+      .getAllByRole("tab")
+      .map((tab) => tab.closest(".bx--tabs__nav-item"));
+    for (const item of items) {
+      expect(item).not.toHaveClass("bx--tabs__nav-item--container");
+      expect(item).not.toHaveClass("bx--tabs__nav-item--container-selected");
+    }
+  });
+
+  it("moves the container-selected item class when the selection changes", async () => {
+    render(Tabs, { props: { type: "container" } });
+    await tick();
+
+    const [tab1, , tab3] = screen.getAllByRole("tab");
+    await user.click(tab3);
+
+    expect(tab1.closest(".bx--tabs__nav-item")).not.toHaveClass(
+      "bx--tabs__nav-item--container-selected",
+    );
+    expect(tab3.closest(".bx--tabs__nav-item")).toHaveClass(
+      "bx--tabs__nav-item--container-selected",
+    );
+  });
+
   it("should not apply a layout size class by default", () => {
     render(Tabs);
 

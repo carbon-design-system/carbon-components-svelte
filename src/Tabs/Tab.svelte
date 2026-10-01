@@ -163,6 +163,10 @@
   class:bx--tabs__nav-item--disabled={disabled}
   class:bx--tabs__nav-item--selected={selected}
   class:bx--tabs__nav-item--default={!disabled && !selected}
+  class:bx--tabs__nav-item--container={$useContainer}
+  class:bx--tabs__nav-item--container-selected={$useContainer &&
+    selected &&
+    !disabled}
   {...$$restProps}
   on:click
   on:click={(event) => {
