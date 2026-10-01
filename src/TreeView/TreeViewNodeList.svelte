@@ -64,15 +64,15 @@
   import Self from "./TreeViewNodeList.svelte";
 
   let ref = null;
-  let prevActiveId = undefined;
+  let wasActive = false;
 
   const {
     treeId,
-    activeNodeId,
-    selectedIdSet,
-    checkedIdSet,
-    expandedIdSet,
-    indeterminateIdSet,
+    activeMembership,
+    selectedMembership,
+    checkedMembership,
+    expandedMembership,
+    indeterminateMembership,
     selectionMode,
     clickNode,
     selectNode,
@@ -82,7 +82,7 @@
     isInitialRender,
   } = getContext("carbon:TreeView");
 
-  let subtreeRendered = isInitialRender() && $expandedIdSet.has(id);
+  let subtreeRendered = isInitialRender() && expandedMembership.has(id);
 
   /**
    * Label inset in rem. Checkbox is the leading element; use one inset per
@@ -98,7 +98,14 @@
   }
 
   $: parent = Array.isArray(nodes);
-  $: expanded = $expandedIdSet.has(id);
+  // Per-id stores: a change elsewhere in the tree does not notify this row.
+  $: activeState = activeMembership.select(id);
+  $: expandedState = expandedMembership.select(id);
+  $: selectedState = selectedMembership.select(id);
+  $: checkedState = checkedMembership.select(id);
+  $: indeterminateState = indeterminateMembership.select(id);
+  $: active = $activeState;
+  $: expanded = $expandedState;
   const SYNC_REVEAL_LEVELS = 16;
   $: if (expanded && !subtreeRendered) {
     if (level % SYNC_REVEAL_LEVELS === 0) {
@@ -109,10 +116,10 @@
       subtreeRendered = true;
     }
   }
-  $: selected = $selectedIdSet.has(id);
-  $: checked = $checkedIdSet.has(id);
+  $: selected = $selectedState;
+  $: checked = $checkedState;
   $: isCheckboxMode = $selectionMode === "checkbox";
-  $: indeterminate = isCheckboxMode && $indeterminateIdSet.has(id);
+  $: indeterminate = isCheckboxMode && $indeterminateState;
   // Merge all props (including custom properties) with computed properties
   // Explicitly reference text and disabled to avoid Svelte warning and ensure they're included
   // `level`/`posinset`/`setsize` are layout-only (drive `aria-*` attributes) and excluded from `node`.
@@ -136,15 +143,9 @@
   $: {
     // The root list is a non-selectable wrapper; its default empty `id` would
     // otherwise match the default empty `activeId` and select a phantom node.
-    if (
-      !root &&
-      id === $activeNodeId &&
-      prevActiveId !== $activeNodeId &&
-      !$selectedIdSet.has(id)
-    )
-      selectNode(node);
+    if (!root && active && !wasActive && !selected) selectNode(node);
 
-    prevActiveId = $activeNodeId;
+    wasActive = active;
   }
   $: labelInset = resolveLabelInset(level, isCheckboxMode, parent, icon);
 </script>
@@ -184,7 +185,7 @@
     role="treeitem"
     {id}
     tabindex={disabled ? undefined : -1}
-    aria-current={id === $activeNodeId || undefined}
+    aria-current={active || undefined}
     aria-selected={isCheckboxMode || disabled ? undefined : selected}
     aria-checked={isCheckboxMode
       ? toAriaChecked(checked, indeterminate)
@@ -192,7 +193,7 @@
     aria-disabled={disabled}
     class:bx--tree-node={true}
     class:bx--tree-parent-node={true}
-    class:bx--tree-node--active={id === $activeNodeId}
+    class:bx--tree-node--active={active}
     class:bx--tree-node--selected={isCheckboxMode ? checked : selected}
     class:bx--tree-node--disabled={disabled}
     class:bx--tree-node--with-icon={icon}

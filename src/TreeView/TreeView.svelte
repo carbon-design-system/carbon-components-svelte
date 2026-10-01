@@ -750,6 +750,7 @@
   import { writable } from "svelte/store";
   import { TYPEAHEAD_RESET_MS } from "../constants/timing.js";
   import { createDelayedSetter } from "../utils/delayed-setter.js";
+  import { createIdMembershipStore } from "../utils/id-membership-store.js";
   import { rangeSlice } from "../utils/range-slice.js";
   import {
     resolveCheckboxState,
@@ -778,20 +779,13 @@
   /** @type {import("svelte/store").Writable<"highlight" | "checkbox">} */
   const sharedSelectionMode = writable(selectionMode);
 
-  /** @type {import("svelte/store").Writable<Node["id"]>} */
-  const activeNodeId = writable(activeId);
-  /** @type {import("svelte/store").Writable<ReadonlyArray<Node["id"]>>} */
-  const selectedNodeIds = writable(selectedIds);
-  /** @type {import("svelte/store").Writable<ReadonlyArray<Node["id"]>>} */
-  const expandedNodeIds = writable(expandedIds);
-  /** @type {import("svelte/store").Writable<Set<Node["id"]>>} */
-  const selectedIdSet = writable(new Set(selectedIds));
-  /** @type {import("svelte/store").Writable<Set<Node["id"]>>} */
-  const checkedIdSet = writable(new Set(checkedIds));
-  /** @type {import("svelte/store").Writable<Set<Node["id"]>>} */
-  const expandedIdSet = writable(new Set(expandedIds));
-  /** @type {import("svelte/store").Writable<Set<Node["id"]>>} */
-  const indeterminateIdSet = writable(new Set(indeterminateIds));
+  // Rows subscribe to their own id, so a change notifies only the rows whose
+  // state changed rather than every mounted row.
+  const activeMembership = createIdMembershipStore([activeId]);
+  const selectedMembership = createIdMembershipStore(selectedIds);
+  const checkedMembership = createIdMembershipStore(checkedIds);
+  const expandedMembership = createIdMembershipStore(expandedIds);
+  const indeterminateMembership = createIdMembershipStore(indeterminateIds);
 
   /** @type {HTMLElement | null} */
   let ref = null;
@@ -987,7 +981,7 @@
 
   /**
    * Reassign `selectedIds` and keep `selectedIdsSet` (used for O(1) lookups
-   * in `withLiveState`) synchronously in sync. `selectedIdSet` is only
+   * in `withLiveState`) synchronously in sync. `selectedMembership` is only
    * refreshed reactively (see below), which lags behind handlers that mutate
    * `selectedIds` and dispatch in the same synchronous call, so it can't be
    * used for `withLiveState`.
@@ -1214,13 +1208,11 @@
 
   setContext("carbon:TreeView", {
     treeId,
-    activeNodeId,
-    selectedNodeIds,
-    expandedNodeIds,
-    selectedIdSet,
-    checkedIdSet,
-    expandedIdSet,
-    indeterminateIdSet,
+    activeMembership,
+    selectedMembership,
+    checkedMembership,
+    expandedMembership,
+    indeterminateMembership,
     multiselect: sharedMultiselect,
     selectionMode: sharedSelectionMode,
     clickNode,
@@ -1608,13 +1600,13 @@
 
     if (!arrayIdsEqual(indeterminateIds, prevIndeterminateIdsPushed)) {
       prevIndeterminateIdsPushed = indeterminateIds;
-      indeterminateIdSet.set(new Set(indeterminateIds));
+      indeterminateMembership.set(indeterminateIds);
     }
 
     if (!arrayIdsEqual(checkedIds, prevCheckedIdsPushed)) {
       const wasCheckedIds = prevCheckedIdsPushed;
       prevCheckedIdsPushed = checkedIds;
-      checkedIdSet.set(new Set(checkedIds));
+      checkedMembership.set(checkedIds);
 
       const nextCheckedIds = checkedIds.slice();
       const nextIndeterminateIds = indeterminateIds.slice();
@@ -1662,7 +1654,7 @@
     : null;
 
   // Derive from `expandedIds` (reassigned synchronously at every mutation
-  // site) rather than `$expandedIdSet`. The store is only `.set()` from
+  // site) rather than `expandedMembership`. The store is only `.set()` from
   // inside a reactive block, which Svelte 3/4 doesn't track as an assignment
   // for reactive ordering — so subscribers re-run a flush late and the
   // rendered window lags one `tick()` behind expand/collapse. Reading
@@ -2079,7 +2071,7 @@
         if (!item.hasChildren) break;
         event.preventDefault();
         event.stopPropagation();
-        if ($expandedIdSet.has(item.node.id)) {
+        if (expandedIdsSet.has(item.node.id)) {
           // Already expanded: focus the first child, if any has loaded.
           const next = nextEnabled(activeIdx + 1, 1);
           if (
@@ -2097,7 +2089,7 @@
       case "ArrowLeft": {
         event.preventDefault();
         event.stopPropagation();
-        if (item.hasChildren && $expandedIdSet.has(item.node.id)) {
+        if (item.hasChildren && expandedIdsSet.has(item.node.id)) {
           expandNode(item.node, false);
           toggleNode(item.node);
         } else if (item.parentId != null) {
@@ -2125,7 +2117,7 @@
         // Match recursive TreeViewNodeList: Space only activates (check /
         // select); Enter also toggles expansion on parents.
         if (event.key === "Enter" && item.hasChildren) {
-          expandNode(item.node, !$expandedIdSet.has(item.node.id));
+          expandNode(item.node, !expandedIdsSet.has(item.node.id));
           toggleNode(item.node);
         }
         clickNode(item.node, event);
@@ -2173,13 +2165,12 @@
     if (activeId !== prevActiveIdPushed) {
       if (activeId !== gestureActiveId) gestureActiveId = undefined;
       prevActiveIdPushed = activeId;
-      activeNodeId.set(activeId);
+      activeMembership.set([activeId]);
     }
     if (!arrayIdsEqual(selectedIds, prevSelectedIdsPushed)) {
       const wasSelectedIds = prevSelectedIdsPushed;
       prevSelectedIdsPushed = selectedIds;
-      selectedIdSet.set(new Set(selectedIds));
-      selectedNodeIds.set(selectedIds);
+      selectedMembership.set(selectedIds);
 
       const nextSelectedIds = selectedIds.slice();
       const prevSet = new Set(wasSelectedIds);
@@ -2197,8 +2188,7 @@
     if (!arrayIdsEqual(expandedIds, prevExpandedIdsPushed)) {
       const wasExpandedIds = prevExpandedIdsPushed;
       prevExpandedIdsPushed = expandedIds;
-      expandedIdSet.set(expandedIdsSet);
-      expandedNodeIds.set(expandedIds);
+      expandedMembership.set(expandedIdsSet);
 
       const nextExpandedIds = expandedIds.slice();
       const prevSet = new Set(wasExpandedIds);

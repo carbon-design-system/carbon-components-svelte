@@ -30,11 +30,11 @@
   import { toAriaChecked } from "../utils/tree-aria-checked.js";
 
   const {
-    activeNodeId,
-    selectedIdSet,
-    checkedIdSet,
-    expandedIdSet,
-    indeterminateIdSet,
+    activeMembership,
+    selectedMembership,
+    checkedMembership,
+    expandedMembership,
+    indeterminateMembership,
     selectionMode,
     clickNode,
     selectNode,
@@ -43,19 +43,26 @@
     toggleNode,
   } = getContext("carbon:TreeView");
 
-  let prevActiveId = undefined;
+  let wasActive = false;
 
   $: ({ node, depth, posInSet, setSize, hasChildren, placeholder } = item);
   $: id = node.id;
   $: disabled = node.disabled === true;
   $: href = node.href;
   $: target = node.target;
-  $: expanded = hasChildren && $expandedIdSet.has(id);
-  $: selected = $selectedIdSet.has(id);
-  $: checked = $checkedIdSet.has(id);
+  // Per-id stores: a change elsewhere in the tree does not notify this row.
+  $: activeState = activeMembership.select(id);
+  $: expandedState = expandedMembership.select(id);
+  $: selectedState = selectedMembership.select(id);
+  $: checkedState = checkedMembership.select(id);
+  $: indeterminateState = indeterminateMembership.select(id);
+  $: active = $activeState;
+  $: expanded = hasChildren && $expandedState;
+  $: selected = $selectedState;
+  $: checked = $checkedState;
   // Link rows navigate; they render no checkbox (same as TreeViewNode).
   $: isCheckboxMode = $selectionMode === "checkbox" && node.href === undefined;
-  $: indeterminate = isCheckboxMode && $indeterminateIdSet.has(id);
+  $: indeterminate = isCheckboxMode && $indeterminateState;
   $: icon = node.icon;
   $: isLinkLeaf = href !== undefined && !hasChildren;
 
@@ -82,15 +89,11 @@
 
   // Match TreeViewNode: externally-set activeId auto-selects the row.
   $: {
-    if (
-      !placeholder &&
-      id === $activeNodeId &&
-      prevActiveId !== $activeNodeId &&
-      !$selectedIdSet.has(id)
-    )
+    if (!placeholder && active && !wasActive && !selected) {
       selectNode(mergedNode);
+    }
 
-    prevActiveId = $activeNodeId;
+    wasActive = active;
   }
 </script>
 
@@ -119,11 +122,11 @@
       aria-level={depth + 1}
       aria-posinset={posInSet}
       aria-setsize={setSize}
-      aria-current={id === $activeNodeId ? "page" : undefined}
+      aria-current={active ? "page" : undefined}
       aria-disabled={disabled}
       class:bx--tree-node={true}
       class:bx--tree-leaf-node={true}
-      class:bx--tree-node--active={id === $activeNodeId}
+      class:bx--tree-node--active={active}
       class:bx--tree-node--selected={selected}
       class:bx--tree-node--disabled={disabled}
       class:bx--tree-node--with-icon={icon}
@@ -157,7 +160,7 @@
     aria-posinset={posInSet}
     aria-setsize={setSize}
     aria-expanded={hasChildren ? expanded : undefined}
-    aria-current={id === $activeNodeId || undefined}
+    aria-current={active || undefined}
     aria-selected={isCheckboxMode || disabled ? undefined : selected}
     aria-checked={isCheckboxMode
       ? toAriaChecked(checked, indeterminate)
@@ -166,7 +169,7 @@
     class:bx--tree-node={true}
     class:bx--tree-parent-node={hasChildren}
     class:bx--tree-leaf-node={!hasChildren}
-    class:bx--tree-node--active={id === $activeNodeId}
+    class:bx--tree-node--active={active}
     class:bx--tree-node--selected={isCheckboxMode ? checked : selected}
     class:bx--tree-node--disabled={disabled}
     class:bx--tree-node--with-icon={icon}
