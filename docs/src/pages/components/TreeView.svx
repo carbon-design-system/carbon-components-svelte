@@ -149,6 +149,8 @@ The tree is one tab stop; arrow keys move focus between visible rows, skipping d
 | <DocKbd label="Right" /> | On a collapsed parent, expands it (fires `on:toggle`). On an expanded parent, moves focus to its first child. |
 | <DocKbd label="Left" /> | On an expanded parent, collapses it. Otherwise moves focus to the parent row. |
 | <DocKbd label="Home" /> / <DocKbd label="End" /> | Moves focus to the first or last row. |
+| <DocKbd label="PageUp" /> / <DocKbd label="PageDown" /> | With [`virtualize`](#virtualization), moves focus up or down by one viewport of rows. |
+| <DocKbd label="*" /> | Expands the focused row and every expandable sibling at the same level (fires `on:toggle` for each). Does nothing with [`autoCollapse`](#auto-collapse-siblings). |
 | <DocKbd label="Enter" /> | Selects the row; on a parent, also expands or collapses it. In `selectionMode="checkbox"`, checks or unchecks the row instead. On a [link node](#links), follows the link. |
 | <DocKbd label="Space" /> | Selects the row without expanding or collapsing it. In checkbox mode, checks or unchecks the row. |
 | Letters | Moves focus to the next row whose text starts with the typed characters. Repeating one letter cycles through rows that start with it. The typed text resets after a short pause. |
@@ -396,6 +398,25 @@ Use `filterTreeById` to filter nodes by their ID. Accepts either a single ID or 
 Use `filterTreeNodes` with a predicate function to implement custom filtering logic. The example demonstrates filtering by file extension, filtering leaf nodes only, and using the `includeChildren` option to include all descendants of matching nodes. By default, matching nodes and their ancestors are included.
 
 <FileSource src="/framed/TreeView/TreeViewFilterNodes" />
+
+### Move nodes
+
+Use `moveTreeNode` to move one or more nodes `"before"`, `"after"`, or `"inside"` a target, for reordering, cut and paste, or drag and drop. It returns a new tree and copies only the arrays on the changed paths, so untouched subtrees keep their references. Ids don't change, so selection and expansion carry over.
+
+An invalid move returns the input array unchanged: an unknown id or target, or a target that is a moved node or inside one. Compare the result with the input to detect it.
+
+```js
+const next = moveTreeNode(nodes, ["readme", "license"], {
+  target: "docs",
+  position: "inside",
+});
+if (next === nodes) console.warn("Can't move a folder into itself");
+nodes = next;
+```
+
+This example moves the active node with buttons, a keyboard-accessible alternative to dragging.
+
+<FileSource src="/framed/TreeView/TreeViewMoveNodes" />
 
 ### Find and highlight
 
