@@ -49,22 +49,22 @@ test.describe("consumer override", () => {
     });
 
     test("icon-only icon fill", async ({ page }) => {
-      // loses to `.bx--btn--icon-only.bx--tooltip__trigger.bx--btn svg` (0,3,1)
-      test.fail();
       await expect(page.getByTestId("icon-btn").locator("svg")).toHaveCSS(
         "fill",
         RED,
       );
     });
+
+    test("text icon follows color", async ({ page }) => {
+      const btn = page.getByTestId("text-icon-btn");
+      await expect(btn).toHaveCSS("color", RED);
+      await expect(btn.locator("svg")).toHaveCSS("fill", RED);
+      await expect(btn.locator("svg path").first()).toHaveCSS("fill", RED);
+    });
   });
 
   test.describe("button icon path", () => {
     test("icon-only icon path fill", async ({ page }) => {
-      // loses to `.bx--btn--ghost.bx--btn--icon-only .bx--btn__icon
-      // path:not([data-icon-path]):not([fill=none])` (0,5,1), which sets
-      // `fill` on the path itself, so a consumer `fill` on the svg never
-      // reaches it
-      test.fail();
       await expect(
         page.getByTestId("icon-btn").locator("svg path").first(),
       ).toHaveCSS("fill", RED);

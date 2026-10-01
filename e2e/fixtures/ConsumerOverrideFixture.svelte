@@ -33,6 +33,9 @@
   icon={Add}
   iconDescription="Add"
 />
+<Button class="my-text-icon-btn" data-testid="text-icon-btn" icon={Add}>
+  Add
+</Button>
 
 <p>
   <Link class="my-link" data-testid="link" href="#">Link</Link>

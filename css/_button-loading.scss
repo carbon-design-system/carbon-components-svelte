@@ -35,10 +35,11 @@
     stroke: currentColor;
   }
 
-  // Ghost icon-only buttons render their icon in $icon-01/$disabled-03, not
-  // currentColor (see the .bx--btn--ghost.bx--btn--icon-only .bx--btn__icon
-  // fill overrides in components/button/_button.scss) — mirror that for the
-  // spinner stroke.
+  // Ghost icon-only buttons render their icon in $icon-01/$disabled-03 (see
+  // the .bx--btn--ghost.bx--btn--icon-only `color` rules in
+  // components/button/_button.scss) — mirror that for the spinner stroke.
+  // The `.bx--btn--disabled` loading state does not get $disabled-03 `color`,
+  // so the stroke rule below is still needed for it.
   .#{$prefix}--btn--ghost.#{$prefix}--btn--icon-only .#{$prefix}--btn__loading .#{$prefix}--loading__stroke {
     stroke: $icon-01;
   }
