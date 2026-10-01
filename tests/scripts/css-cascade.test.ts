@@ -48,6 +48,23 @@ describe("parseRules", () => {
     expect(r.subject.pseudoElement).toBe("after");
   });
 
+  it("reads one-colon :before / :after as pseudo-elements", () => {
+    const [legacy, plain] = rules(".a:after { color: red } .a { color: blue }");
+    expect(legacy.specificity).toEqual([0, 1, 1]);
+    expect(legacy.subject.pseudoElement).toBe("after");
+    expect(coMatchable(legacy, plain)).toBe(false);
+    expect(one(".a:first-line { color: red }").specificity).toEqual([0, 1, 1]);
+  });
+
+  it("adds the heaviest `of S` selector to :nth-child", () => {
+    expect(one(":nth-child(2n+1 of .a.b) { color: red }").specificity).toEqual([
+      0, 3, 0,
+    ]);
+    expect(one(":nth-child(odd) { color: red }").specificity).toEqual([
+      0, 1, 0,
+    ]);
+  });
+
   it("flags a type-qualified class compound anywhere in the selector", () => {
     const r = (sel: string) => one(`${sel} { color: red }`).subject.qualified;
     expect(r("a.x")).toBe(true);
