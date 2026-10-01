@@ -727,6 +727,8 @@
 
   /** @param {boolean} want */
   function setMultiselectKeyListeners(want) {
+    // The `$:` caller also runs during server rendering.
+    if (typeof window === "undefined") return;
     if (want && multiselectWindowUnlisteners.length === 0) {
       multiselectWindowUnlisteners = [
         addPooledListener("keydown", syncModifierFromEvent, true),
