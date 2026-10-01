@@ -39,6 +39,16 @@
   }
 
   /**
+   * `*` expands every sibling of the focused node (WAI-ARIA tree pattern).
+   * @param {KeyboardEvent} event
+   */
+  function isExpandSiblingsKey(event) {
+    return (
+      event.key === "*" && !event.ctrlKey && !event.metaKey && !event.altKey
+    );
+  }
+
+  /**
    * Ctrl+A, or Cmd+A on macOS (matching Ctrl/Cmd+click).
    * @param {KeyboardEvent} event
    */
@@ -1213,6 +1223,31 @@
     dispatch("toggle", withLiveState(node));
   }
 
+  /**
+   * Expand `id` and its siblings, skipping disabled and leaf nodes, and fire
+   * `toggle` for each node this expands. A no-op with `autoCollapse`, which
+   * allows one expanded node per level.
+   * @param {Node["id"]} id
+   */
+  function expandSiblings(id) {
+    if (autoCollapse) return;
+    const parentId = cachedParentIdById?.get(id);
+    const levelIds = cachedChildIdsByParentId?.get(parentId) ?? [];
+    /** @type {Node[]} */
+    const newlyExpanded = [];
+    for (const levelId of levelIds) {
+      const node = cachedNodeMap?.get(levelId);
+      if (!node || node.disabled || !isExpandableNode(node)) continue;
+      if (expandedIdsSet.has(levelId)) continue;
+      expandedIdsSet.add(levelId);
+      newlyExpanded.push(node);
+    }
+    if (newlyExpanded.length === 0) return;
+    expandedIds = Array.from(expandedIdsSet);
+    prevExpandedIds = expandedIds;
+    for (const node of newlyExpanded) toggleNode(node);
+  }
+
   let initialRenderComplete = false;
 
   setContext("carbon:TreeView", {
@@ -1351,6 +1386,13 @@
 
     const treeItem = getTreeItemFromTarget(event.target);
     if (!treeItem) return;
+
+    if (isExpandSiblingsKey(event)) {
+      event.preventDefault();
+      const id = nodeIdFromTreeItem(treeItem);
+      if (id !== undefined) expandSiblings(id);
+      return;
+    }
 
     if (handleTypeAhead(event, treeItem)) return;
 
@@ -1992,6 +2034,13 @@
     if (activeIdx < 0) return;
     const item = virtualIndex.getRowAt(activeIdx);
     if (!item) return;
+
+    if (isExpandSiblingsKey(event)) {
+      event.preventDefault();
+      event.stopPropagation();
+      expandSiblings(item.node.id);
+      return;
+    }
 
     if (handleVirtualTypeAhead(event, activeIdx)) {
       event.preventDefault();
