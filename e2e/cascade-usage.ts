@@ -51,15 +51,13 @@ import { parseRules } from "../scripts/lib/css-cascade";
 import {
   bytesOf,
   createAggregate,
-  type Declaration,
   deadInFixtures,
   foldCandidates,
   type InventoryRule,
   inventoryFromRules,
   type MatchedRule,
+  matchedRuleFromCdp,
   neverMatchedRules,
-  normalizeContext,
-  normalizeSelector,
   recordObservation,
   type Summary,
   summarize,
@@ -103,45 +101,6 @@ const stateSets: Record<string, string[]> = {
 // ---------------------------------------------------------------------------
 // CDP -> MatchedRule[]
 
-function toMatchedRule(
-  ruleMatch: Protocol.CSS.RuleMatch,
-  libSheetIds: Set<string>,
-): MatchedRule | undefined {
-  const { rule } = ruleMatch;
-  if (rule.origin !== "regular") return undefined;
-  if (!rule.styleSheetId || !libSheetIds.has(rule.styleSheetId))
-    return undefined;
-  const declarations: Declaration[] = rule.style.cssProperties
-    .filter((p) => !p.disabled && p.parsedOk !== false && p.text)
-    .map((p) => ({
-      property: p.name,
-      value: p.value,
-      important: Boolean(p.important),
-      longhands:
-        p.longhandProperties && p.longhandProperties.length > 0
-          ? p.longhandProperties.map((l) => l.name)
-          : [p.name],
-    }));
-  if (declarations.length === 0) return undefined;
-  // The first matching selector index is representative; multiple matching
-  // selectors on one rule (e.g. `:is(.a, .b)` collapsing) are rare and this
-  // keeps the identity aligned with parseRules' one-entry-per-selector split.
-  const idx = ruleMatch.matchingSelectors[0] ?? 0;
-  const selector = normalizeSelector(
-    rule.selectorList.selectors[idx]?.text ?? rule.selectorList.text,
-  );
-  const context = normalizeContext(
-    [
-      ...(rule.media ?? []).map((m) => `@media ${m.text}`),
-      ...(rule.supports ?? []).map((s) => `@supports ${s.text}`),
-      ...(rule.containerQueries ?? []).map(
-        (c) => `@container ${c.conditionText}`,
-      ),
-    ].join(" / "),
-  );
-  return { context, selector, declarations };
-}
-
 async function matchedRulesFor(
   cdp: CDPSession,
   nodeId: number,
@@ -149,13 +108,13 @@ async function matchedRulesFor(
 ): Promise<{ self: MatchedRule[]; pseudos: MatchedRule[][] }> {
   const res = await cdp.send("CSS.getMatchedStylesForNode", { nodeId });
   const self = (res.matchedCSSRules ?? [])
-    .map((rm) => toMatchedRule(rm, libSheetIds))
+    .map((rm) => matchedRuleFromCdp(rm, libSheetIds))
     .filter((r): r is MatchedRule => r !== undefined);
   const pseudos: MatchedRule[][] = [];
   for (const pe of res.pseudoElements ?? []) {
     if (pe.pseudoType !== "before" && pe.pseudoType !== "after") continue;
     const list = pe.matches
-      .map((rm) => toMatchedRule(rm, libSheetIds))
+      .map((rm) => matchedRuleFromCdp(rm, libSheetIds))
       .filter((r): r is MatchedRule => r !== undefined);
     if (list.length > 0) pseudos.push(list);
   }

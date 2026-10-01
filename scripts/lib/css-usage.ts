@@ -125,6 +125,78 @@ export function normalizeContext(context: string): string {
   return context.replace(/\s+/g, " ").trim();
 }
 
+/**
+ * `@name prelude` in css-tree's serialization, the form parseRules uses for
+ * contexts. Whitespace alone isn't enough: CDP reports `(width >= 42rem)`
+ * where css-tree prints `(width>=42rem)`, so every rule under such a query
+ * would read as never matched.
+ */
+export function normalizeAtRule(name: string, prelude: string): string {
+  try {
+    const node = parse(prelude, { context: "atrulePrelude", atrule: name });
+    return `@${name} ${generate(node)}`.trim();
+  } catch {
+    return normalizeContext(`@${name} ${prelude}`);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// CDP rule matches (structurally compatible with Protocol.CSS.RuleMatch)
+
+export interface CdpRuleMatch {
+  matchingSelectors: number[];
+  rule: {
+    origin: string;
+    styleSheetId?: string;
+    selectorList: { text: string; selectors: { text: string }[] };
+    style: { cssProperties: CdpProperty[] };
+    media?: { text: string }[];
+    supports?: { text: string }[];
+    containerQueries?: { text: string; name?: string }[];
+  };
+}
+
+/**
+ * One CDP `matchedCSSRules` entry as a MatchedRule, or undefined when it is
+ * not an author rule from the library sheet or sets nothing.
+ */
+export function matchedRuleFromCdp(
+  ruleMatch: CdpRuleMatch,
+  libSheetIds: Set<string>,
+): MatchedRule | undefined {
+  const { rule } = ruleMatch;
+  if (rule.origin !== "regular") return undefined;
+  if (!rule.styleSheetId || !libSheetIds.has(rule.styleSheetId))
+    return undefined;
+  const declarations: Declaration[] = rule.style.cssProperties
+    .filter((p) => !p.disabled && p.parsedOk !== false && p.text)
+    .map((p) => ({
+      property: p.name,
+      value: p.value,
+      important: Boolean(p.important),
+      longhands:
+        p.longhandProperties && p.longhandProperties.length > 0
+          ? p.longhandProperties.map((l) => l.name)
+          : [p.name],
+    }));
+  if (declarations.length === 0) return undefined;
+  // The first matching selector index is representative; multiple matching
+  // selectors on one rule (e.g. `:is(.a, .b)` collapsing) are rare and this
+  // keeps the identity aligned with parseRules' one-entry-per-selector split.
+  const idx = ruleMatch.matchingSelectors[0] ?? 0;
+  const selector = normalizeSelector(
+    rule.selectorList.selectors[idx]?.text ?? rule.selectorList.text,
+  );
+  const context = [
+    ...(rule.media ?? []).map((m) => normalizeAtRule("media", m.text)),
+    ...(rule.supports ?? []).map((s) => normalizeAtRule("supports", s.text)),
+    ...(rule.containerQueries ?? []).map((c) =>
+      normalizeAtRule("container", [c.name, c.text].filter(Boolean).join(" ")),
+    ),
+  ].join(" / ");
+  return { context, selector, declarations };
+}
+
 // ---------------------------------------------------------------------------
 // Cascade replay
 

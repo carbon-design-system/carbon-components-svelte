@@ -1,4 +1,5 @@
 // @vitest-environment node
+import { parseRules } from "../../scripts/lib/css-cascade";
 import {
   authoredDeclarations,
   bytesOf,
@@ -8,7 +9,9 @@ import {
   foldCandidates,
   inventoryFromRules,
   type MatchedRule,
+  matchedRuleFromCdp,
   neverMatchedRules,
+  normalizeAtRule,
   normalizeContext,
   normalizeSelector,
   recordObservation,
@@ -343,5 +346,66 @@ describe("normalizeSelector / normalizeContext", () => {
     expect(normalizeContext("@media  (min-width:   42em)")).toBe(
       "@media (min-width: 42em)",
     );
+  });
+});
+
+describe("normalizeAtRule / matchedRuleFromCdp", () => {
+  it("matches parseRules' context for CDP-formatted at-rule text", () => {
+    const [ctx] = inventoryFromRules(
+      parseRules(
+        "@media (width>=42rem) { @supports (display:grid) { .a { top: 0 } } }",
+      ),
+    ).map((r) => r.context);
+    expect(
+      [
+        normalizeAtRule("media", "(width >= 42rem)"),
+        normalizeAtRule("supports", "(display: grid)"),
+      ].join(" / "),
+    ).toBe(ctx);
+  });
+
+  it("keeps library author rules with canonical context and selector", () => {
+    const rule = matchedRuleFromCdp(
+      {
+        matchingSelectors: [1],
+        rule: {
+          origin: "regular",
+          styleSheetId: "lib",
+          selectorList: {
+            text: ".a, .b  >  .c",
+            selectors: [{ text: ".a" }, { text: ".b  >  .c" }],
+          },
+          style: {
+            cssProperties: [{ name: "top", value: "0", text: "top: 0;" }],
+          },
+          media: [{ text: "(min-width: 42rem)" }],
+        },
+      },
+      new Set(["lib"]),
+    );
+    expect(rule).toEqual({
+      context: "@media (min-width:42rem)",
+      selector: ".b>.c",
+      declarations: [
+        { property: "top", value: "0", important: false, longhands: ["top"] },
+      ],
+    });
+  });
+
+  it("drops rules from other sheets and user-agent rules", () => {
+    const match = (origin: string, styleSheetId?: string) => ({
+      matchingSelectors: [0],
+      rule: {
+        origin,
+        styleSheetId,
+        selectorList: { text: ".a", selectors: [{ text: ".a" }] },
+        style: {
+          cssProperties: [{ name: "top", value: "0", text: "top: 0;" }],
+        },
+      },
+    });
+    const lib = new Set(["lib"]);
+    expect(matchedRuleFromCdp(match("regular", "other"), lib)).toBeUndefined();
+    expect(matchedRuleFromCdp(match("user-agent"), lib)).toBeUndefined();
   });
 });
