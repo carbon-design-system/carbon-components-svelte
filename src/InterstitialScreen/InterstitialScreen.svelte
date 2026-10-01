@@ -28,9 +28,10 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher, onMount, setContext } from "svelte";
+  import { createEventDispatcher, setContext } from "svelte";
   import { writable } from "svelte/store";
   import ComposedModal from "../ComposedModal/ComposedModal.svelte";
+  import { dismiss } from "../utils/dismiss.js";
 
   const dispatch = createEventDispatcher();
 
@@ -119,26 +120,16 @@
       handleClose("close");
     }
   }
-
-  // Same listener reference each time, so add/remove are idempotent.
-  $: {
-    window.removeEventListener("keydown", handleWindowKeydown);
-    if (isFullScreen && open) {
-      window.addEventListener("keydown", handleWindowKeydown);
-    }
-  }
-
-  onMount(() => {
-    return () => {
-      window.removeEventListener("keydown", handleWindowKeydown);
-    };
-  });
 </script>
 
 {#if open}
   {#if isFullScreen}
     <div
       bind:this={ref}
+      use:dismiss={{
+        enabled: true,
+        listeners: [{ type: "keydown", handler: handleWindowKeydown }],
+      }}
       role="main"
       aria-label={ariaLabel}
       class:bx--interstitial-screen={true}
