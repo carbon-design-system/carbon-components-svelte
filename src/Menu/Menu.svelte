@@ -195,13 +195,14 @@
     if (open && !prevOpen) {
       focusIndex = -1;
       tick().then(() => {
-        if (!open) return;
-        const firstItem = ref?.querySelector(NON_DISABLED_MENUITEM_SELECTOR);
+        // `ref` stays unset during server rendering, which has no DOM.
+        if (!open || !ref) return;
+        const firstItem = ref.querySelector(NON_DISABLED_MENUITEM_SELECTOR);
         if (firstItem instanceof HTMLElement) {
           focusIndex = 0;
           focusMenuItem(firstItem);
         } else {
-          ref?.focus({ preventScroll: true });
+          ref.focus({ preventScroll: true });
         }
         dispatch("open", anchor);
       });
