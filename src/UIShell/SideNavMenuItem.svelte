@@ -19,6 +19,10 @@
    * @bindable readonly
    */
   export let ref = null;
+
+  import { overflowTitle } from "../utils/overflow-title.js";
+
+  let textRef = null;
 </script>
 
 <li class:bx--side-nav__menu-item={true}>
@@ -28,9 +32,16 @@
     {href}
     class:bx--side-nav__link={true}
     class:bx--side-nav__link--current={isSelected}
+    use:overflowTitle={{
+      measure: textRef,
+      lazy: true,
+      title: $$restProps.title,
+    }}
     {...$$restProps}
     on:click
   >
-    <span class:bx--side-nav__link-text={true}><slot>{text}</slot></span>
+    <span bind:this={textRef} class:bx--side-nav__link-text={true}
+      ><slot>{text}</slot></span
+    >
   </a>
 </li>

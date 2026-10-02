@@ -27,6 +27,7 @@ export function overflowTitle(node, options = {}) {
   let latest = options;
   let scheduled = false;
   let destroyed = false;
+  let listening = false;
 
   function measure() {
     scheduled = false;
@@ -42,13 +43,66 @@ export function overflowTitle(node, options = {}) {
     }
   }
 
+  // Hovering or focusing can start a width transition on an ancestor (a
+  // rail `SideNav` widens on `:hover`), so the measurement on entry reads
+  // the narrow layout. Measure again once that transition ends.
+  /** @param {TransitionEvent} event */
+  function handleTransitionend(event) {
+    if (
+      event.propertyName === "width" &&
+      event.target instanceof Node &&
+      event.target.contains(node)
+    ) {
+      measure();
+    }
+  }
+
+  function handleEnter() {
+    measure();
+    node.ownerDocument.addEventListener("transitionend", handleTransitionend);
+  }
+
+  function handleLeave() {
+    node.ownerDocument.removeEventListener(
+      "transitionend",
+      handleTransitionend,
+    );
+  }
+
+  function addLazyListeners() {
+    if (listening) return;
+    listening = true;
+    node.addEventListener("pointerenter", handleEnter);
+    node.addEventListener("focusin", handleEnter);
+    node.addEventListener("pointerleave", handleLeave);
+    node.addEventListener("focusout", handleLeave);
+  }
+
+  function removeLazyListeners() {
+    if (!listening) return;
+    listening = false;
+    node.removeEventListener("pointerenter", handleEnter);
+    node.removeEventListener("focusin", handleEnter);
+    node.removeEventListener("pointerleave", handleLeave);
+    node.removeEventListener("focusout", handleLeave);
+    handleLeave();
+  }
+
   /** @param {Params} [next] */
   function update(next = {}) {
     latest = next;
+    if (next.lazy) {
+      addLazyListeners();
+    } else {
+      removeLazyListeners();
+    }
     if (next.title != null) {
       node.setAttribute("title", next.title);
       return;
     }
+    // Lazy mode measures from `pointerenter`/`focusin` instead, since the
+    // side nav's width can still change after mount (resize, rail hover).
+    if (next.lazy) return;
     if (scheduled) return;
     scheduled = true;
     queueMicrotask(measure);
@@ -60,6 +114,7 @@ export function overflowTitle(node, options = {}) {
     update,
     destroy() {
       destroyed = true;
+      removeLazyListeners();
     },
   };
 }
