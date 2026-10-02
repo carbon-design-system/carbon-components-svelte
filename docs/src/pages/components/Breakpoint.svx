@@ -1,5 +1,5 @@
 ---
-description: Breakpoint declaratively reports the current Carbon responsive breakpoint size, or hides an element outside a breakpoint range with the hideAtBreakpoint action.
+description: Breakpoint declaratively reports the current Carbon responsive breakpoint size, hides an element with hideAtBreakpoint, and offers media query stores.
 ---
 
 <script>
@@ -43,9 +43,39 @@ Access the breakpoints dictionary to map from BreakpointSize to BreakpointValue.
 
 <FileSource src="/framed/Breakpoint/BreakpointObserver" />
 
+## Fallback size
+
+Set `fallback` to the size assumed before the first measurement, covering server-side rendering and runtimes without `matchMedia`.
+
+`change` does not fire for the fallback; it only fires once a real measurement occurs.
+
+<Breakpoint fallback="lg" let:size>
+  <p>Current size: {size}</p>
+</Breakpoint>
+
+The same `fallback` option is available on `breakpointObserver`.
+
+## Media queries
+
+### mediaQuery
+
+Use `mediaQuery` to create a readable store for any custom media query.
+
+Unlike `breakpointObserver`, these stores can be created at module scope, since the listener attaches lazily on first subscription rather than during component initialization.
+
+<FileSource src="/framed/Breakpoint/MediaQuery" />
+
+### Preferences
+
+Three stores built on `mediaQuery` cover common user preferences.
+
+<FileSource src="/framed/Breakpoint/MediaPreferences" />
+
 ## use:hideAtBreakpoint
 
 Use the `hideAtBreakpoint` action to hide an element outside a breakpoint range, without wrapping it in `Breakpoint`. Set `above`, `below`, or both. Resize the browser to see the elements toggle.
 
-<div use:hideAtBreakpoint={{ above: "md" }}>Hidden at md and up</div>
+<div use:hideAtBreakpoint={{ above: "md" }}>Hidden above md</div>
 <div use:hideAtBreakpoint={{ below: "lg" }}>Hidden below lg</div>
+
+Both bounds are exclusive; an element is not hidden at the boundary size itself.
