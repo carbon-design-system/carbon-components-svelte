@@ -2,14 +2,20 @@
 // Shared value/label logic for Slider and RangeSlider.
 
 /**
- * Resolve the `aria-valuetext` for a numeric slider value.
+ * Resolve the `aria-valuetext` for a numeric slider value. A value sitting
+ * on a labeled mark announces the mark's label, after the formatted value
+ * when `formatValue` is set and yields different text.
  *
  * @param {number} numericValue
  * @param {((value: number) => string) | undefined} formatValue
+ * @param {ReadonlyMap<number, string>} [markLabels] - label by mark value
  * @returns {string | undefined}
  */
-export function getValueText(numericValue, formatValue) {
-  return formatValue ? formatValue(numericValue) : undefined;
+export function getValueText(numericValue, formatValue, markLabels) {
+  const text = formatValue ? formatValue(numericValue) : undefined;
+  const label = markLabels?.get(numericValue);
+  if (!label || label === text) return text;
+  return text ? `${text}, ${label}` : label;
 }
 
 /**
@@ -73,16 +79,113 @@ export function valueFromTrackPosition({
   max,
   step,
 }) {
-  let nextValue =
-    min + Math.round(((max - min) * ((clientX - left) / width)) / step) * step;
+  return snapToStep(min + (max - min) * ((clientX - left) / width), {
+    min,
+    max,
+    step,
+  });
+}
 
-  if (nextValue <= min) {
-    nextValue = min;
-  } else if (nextValue >= max) {
-    nextValue = max;
+/**
+ * Count the decimal places in a number's shortest string form, including
+ * exponent notation (`1e-7` has 7).
+ *
+ * @param {number} value
+ * @returns {number}
+ */
+function decimalPlaces(value) {
+  if (!Number.isFinite(value)) return 0;
+  const [mantissa, exponent = "0"] = String(value).split("e");
+  const fraction = mantissa.split(".")[1]?.length ?? 0;
+  return Math.max(0, fraction - Number(exponent));
+}
+
+/**
+ * Snap `value` to the nearest `min + n * step` and clamp it to `[min, max]`.
+ * The result is rounded to the decimal precision of `step` and `min`, so
+ * `step: 0.1` yields `0.3`, not `0.30000000000000004`. A non-positive
+ * `step` only clamps.
+ *
+ * @param {number} value
+ * @param {Object} options
+ * @param {number} options.min
+ * @param {number} options.max
+ * @param {number} options.step
+ * @returns {number}
+ */
+export function snapToStep(value, { min, max, step }) {
+  let next = value;
+  if (step > 0) {
+    const precision = Math.max(decimalPlaces(step), decimalPlaces(min));
+    next = Number(
+      (min + Math.round((value - min) / step) * step).toFixed(precision),
+    );
   }
+  if (next <= min) return min;
+  if (next >= max) return max;
+  return next;
+}
 
-  return nextValue;
+/**
+ * Shift `[lower, upper]` by `delta` without changing its width, stopping
+ * against `min` or `max`. Results are rounded to the decimal precision of
+ * `step`, `min`, and the bounds, so the addition leaks no float noise.
+ *
+ * @param {number} lower
+ * @param {number} upper
+ * @param {number} delta
+ * @param {Object} options
+ * @param {number} options.min
+ * @param {number} options.max
+ * @param {number} options.step
+ * @returns {{ lower: number; upper: number }}
+ */
+export function shiftRange(lower, upper, delta, { min, max, step }) {
+  const shift = Math.min(max - upper, Math.max(min - lower, delta));
+  const precision = Math.max(
+    decimalPlaces(step),
+    decimalPlaces(min),
+    decimalPlaces(lower),
+    decimalPlaces(upper),
+  );
+  return {
+    lower: Number((lower + shift).toFixed(precision)),
+    upper: Number((upper + shift).toFixed(precision)),
+  };
+}
+
+/**
+ * Resolve the range painted by dragging from `anchor` to `point`, in either
+ * direction. A range narrower than `minGap` grows in the drag direction,
+ * then back from `max` or `min` when it runs out of room.
+ *
+ * @param {number} anchor
+ * @param {number} point
+ * @param {Object} options
+ * @param {number} options.min
+ * @param {number} options.max
+ * @param {number} options.minGap
+ * @returns {{ lower: number; upper: number }}
+ */
+export function brushRange(anchor, point, { min, max, minGap }) {
+  let lower = Math.min(anchor, point);
+  let upper = Math.max(anchor, point);
+  if (upper - lower >= minGap) return { lower, upper };
+  const precision = Math.max(
+    decimalPlaces(anchor),
+    decimalPlaces(point),
+    decimalPlaces(minGap),
+  );
+  /** @type {(value: number) => number} */
+  const round = (value) => Number(value.toFixed(precision));
+  if (point >= anchor) {
+    upper = Math.min(max, round(lower + minGap));
+    lower = Math.max(min, round(upper - minGap));
+  } else {
+    lower = Math.max(min, round(upper - minGap));
+    upper = Math.min(max, round(lower + minGap));
+  }
+  return { lower, upper };
 }
 
 /**

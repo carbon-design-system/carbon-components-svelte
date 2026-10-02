@@ -46,16 +46,44 @@
    * Show tick marks along the track.
    * Set to `true` to place a tick at every `step`, or pass an array of
    * `{ value, label? }` for specific stops with optional labels below the track.
-   * Marks are visual only; snapping still follows `step`.
+   * A label is also announced in `aria-valuetext` while a handle sits on its mark.
+   * Snapping follows `step` unless `snapToMarks` is set.
    * @type {boolean | ReadonlyArray<{ value: number; label?: string }>}
    */
   export let marks = false;
+
+  /**
+   * Set to `true` to snap drag, click, and arrow key navigation to the configured `marks`
+   * instead of `step`. A handle only lands on marks that keep `minGap` from the other.
+   * Has no effect when `marks` is not set.
+   */
+  export let snapToMarks = false;
+
+  /**
+   * Snap drags and clicks to a mark when the pointer comes within this many pixels
+   * of it, so meaningful values are easy to hit while other values stay reachable
+   * by `step`. Keyboard navigation is unaffected. Set to `0` to disable.
+   * Has no effect when `marks` is not set or `snapToMarks` is set.
+   */
+  export let markSnapDistance = 0;
 
   /** Set the step multiplier value */
   export let stepMultiplier = 4;
 
   /** Set the minimum allowed distance between `value` and `valueUpper` */
   export let minGap = 0;
+
+  /**
+   * Set what a drag that starts on the track, not on a handle, does.
+   * `"handle"` moves the nearer handle to the pointer.
+   * `"range"` drags both handles together when the press lands inside the
+   * selected range, keeping its width; elsewhere it behaves like `"handle"`.
+   * `"brush"` also drags the range from inside it, and a drag that starts
+   * outside it paints a new range from the press point.
+   * Moving the whole range follows `step` even when `snapToMarks` is set.
+   * @type {"handle" | "range" | "brush"}
+   */
+  export let trackDrag = "handle";
 
   /** Set to `true` to require a value */
   export let required = false;
@@ -150,7 +178,6 @@
   import { createEventDispatcher, tick } from "svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
-  import { dismiss } from "../utils/dismiss.js";
   import {
     buildFieldIds,
     joinDescribedBy,
@@ -158,13 +185,23 @@
     resolveValidationVisibility,
   } from "../utils/field-status.js";
   import { clamp } from "../utils/numeric-format.js";
+  import { pointerDrag } from "../utils/pointer-drag.js";
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
-  import { resolveSliderMarks } from "../utils/resolve-slider-marks.js";
   import {
+    getMarkLabels,
+    markNearPointer,
+    nearestMark,
+    resolveSliderMarks,
+    stepMarks,
+  } from "../utils/resolve-slider-marks.js";
+  import {
+    brushRange,
     formatRangeLabel as formatSliderRangeLabel,
     getPointerPosition,
-    getValueText as getSliderValueText,
     getTrackAxis,
+    getValueText,
+    shiftRange,
+    snapToStep,
     valueFromPointer,
   } from "../utils/slider-value.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -172,7 +209,6 @@
   /** @typedef {{ value: number; valueUpper: number }} RangeSliderChangeDetail */
   /** @typedef {"lower" | "upper"} ActiveHandle */
   /** @typedef {RangeSliderChangeDetail & { handle: ActiveHandle }} RangeSliderFocusDetail */
-  /** @typedef {MouseEvent | TouchEvent} PointerLikeEvent */
 
   /** @type {(type: "change" | "input" | "focus" | "blur", detail: RangeSliderChangeDetail | RangeSliderFocusDetail) => void} */
   const dispatch = createEventDispatcher();
@@ -189,25 +225,31 @@
   let upperInputRef = null;
   /** @type {ActiveHandle} */
   let activeHandle = "lower";
-  let dragging = false;
-  let holding = false;
-  /** @type {PointerLikeEvent | null} */
-  let currentEvent = null;
   // Pointer distance from the active handle's value point when the press
   // started on the handle itself, so grabbing a handle doesn't jump it.
   let grabOffset = 0;
+  /** @type {"handle" | "range" | "brush"} */
+  let dragMode = "handle";
+  // Unsnapped pointer value at the press, and the range it started from,
+  // for moving the whole range.
+  let rangeAnchor = 0;
+  let rangeStart = { lower: 0, upper: 0 };
+  /** @type {"grab" | "crosshair" | undefined} */
+  let hoverCursor = undefined;
+  // Snapped value and pointer position of a `trackDrag="brush"` press
+  // outside the range. It moves the nearer handle until the pointer travels
+  // `BRUSH_THRESHOLD` pixels, then paints from `brushAnchor` instead.
+  /** @type {number | null} */
+  let brushAnchor = null;
+  let brushStartPoint = 0;
+  const BRUSH_THRESHOLD = 3;
 
   /** @type {(label: string, numericValue: number) => string | number} */
   function formatRangeLabel(label, numericValue) {
     return formatSliderRangeLabel(label, numericValue, formatValue);
   }
 
-  /** @type {(numericValue: number) => string | undefined} */
-  function getValueText(numericValue) {
-    return getSliderValueText(numericValue, formatValue);
-  }
-
-  /** @type {(e: PointerLikeEvent) => ActiveHandle} */
+  /** @type {(e: PointerEvent) => ActiveHandle} */
   function pickHandle(event) {
     const target = /** @type {Node | null} */ (event.target);
     if (target && lowerThumbRef?.contains(target)) return "lower";
@@ -250,12 +292,84 @@
     dispatch("blur", { value, valueUpper, handle: "upper" });
   }
 
-  /** @type {(e: MouseEvent | TouchEvent) => void} */
-  function startInteraction(event) {
-    if (disabled || readonly) return;
+  /** @type {(e: PointerEvent, snap?: number) => number | null} */
+  function getPointerValue(event, snap = step) {
+    if (!trackRef) return null;
+    return valueFromPointer(event, trackRef.getBoundingClientRect(), {
+      orientation,
+      min,
+      max,
+      step: snap,
+    });
+  }
+
+  /** @type {(e: PointerEvent) => boolean} */
+  function isOnThumb(event) {
+    const target = /** @type {Node | null} */ (event.target);
+    return (
+      !!target &&
+      !!(lowerThumbRef?.contains(target) || upperThumbRef?.contains(target))
+    );
+  }
+
+  // Hit-tests the unsnapped pointer value, so a press just outside the
+  // range can't round into it.
+  /** @type {(e: PointerEvent) => number | null} */
+  function getRangePressValue(event) {
+    if (trackDrag === "handle" || isOnThumb(event) || valueUpper <= value) {
+      return null;
+    }
+    const pressed = getPointerValue(event, 0);
+    return pressed != null && pressed >= value && pressed <= valueUpper
+      ? pressed
+      : null;
+  }
+
+  /** @type {(e: PointerEvent) => void} */
+  function handlePointermove(event) {
+    if (disabled || readonly || event.buttons !== 0) return;
+    if (getRangePressValue(event) != null) hoverCursor = "grab";
+    else if (trackDrag === "brush" && !isOnThumb(event))
+      hoverCursor = "crosshair";
+    else hoverCursor = undefined;
+  }
+
+  function handlePointerleave() {
+    hoverCursor = undefined;
+  }
+
+  // Moving or painting the whole range sets both handles at once, so
+  // neither keeps focus; both are highlighted while the gesture lasts.
+  function blurThumbs() {
+    const active = document.activeElement;
+    if (active === lowerThumbRef || active === upperThumbRef) {
+      /** @type {HTMLElement} */ (active).blur();
+    }
+  }
+
+  /** @type {(e: PointerEvent) => boolean | undefined} */
+  function handleDragStart(event) {
+    if (disabled || readonly) return false;
+    const rangePress = getRangePressValue(event);
+    hoverCursor = undefined;
+    // The compat `mousedown` would move focus to the body for a press on
+    // the track, and in Firefox off the thumb for one on its SVG icon too.
+    event.preventDefault();
+    if (rangePress != null) {
+      blurThumbs();
+      dragMode = "range";
+      rangeAnchor = rangePress;
+      rangeStart = { lower: value, upper: valueUpper };
+      return;
+    }
+
     activeHandle = pickHandle(event);
     const thumbRef = activeHandle === "lower" ? lowerThumbRef : upperThumbRef;
     thumbRef?.focus({ preventScroll: true });
+    if (trackDrag === "brush" && !isOnThumb(event)) {
+      brushAnchor = getSnappedPointerValue(event);
+      brushStartPoint = getPointerPosition(event, orientation) ?? 0;
+    }
 
     grabOffset = 0;
     const target = /** @type {Node | null} */ (event.target);
@@ -268,29 +382,76 @@
       const percent = activeHandle === "lower" ? left : leftUpper;
       grabOffset = point - (start + (length * percent) / 100);
     }
-    currentEvent = event;
-    holding = true;
-    dragging = true;
+    calcValue(event);
   }
 
-  /** @type {() => void} */
-  function stopHolding() {
-    const wasHolding = holding;
-    holding = false;
-    dragging = false;
-    currentEvent = null;
+  /** @type {(e: PointerEvent) => void} */
+  function handleDragMove(event) {
+    if (dragMode === "handle" && brushAnchor != null) {
+      const point = getPointerPosition(event, orientation);
+      if (
+        point != null &&
+        Math.abs(point - brushStartPoint) >= BRUSH_THRESHOLD
+      ) {
+        dragMode = "brush";
+        blurThumbs();
+      }
+    }
+    if (dragMode === "range") moveRange(event);
+    else if (dragMode === "brush") paintRange(event);
+    else calcValue(event);
+  }
+
+  function handleDragEnd() {
     grabOffset = 0;
-    if (wasHolding && !disabled && !readonly) {
-      dispatch("change", { value, valueUpper });
-    }
+    dragMode = "handle";
+    brushAnchor = null;
+    if (!disabled && !readonly) dispatch("change", { value, valueUpper });
   }
 
-  /** @type {(e: PointerLikeEvent) => void} */
-  function move(event) {
-    if (holding) {
-      currentEvent = event;
-      dragging = true;
+  /** @type {(e: PointerEvent) => number | null} */
+  function getSnappedPointerValue(event) {
+    const pointerValue = getPointerValue(event);
+    if (pointerValue == null || !resolvedMarks.length || !trackRef) {
+      return pointerValue;
     }
+    const mark = snapToMarks
+      ? nearestMark(pointerValue, resolvedMarks)
+      : markNearPointer(event, trackRef.getBoundingClientRect(), {
+          orientation,
+          min,
+          max,
+          marks: resolvedMarks,
+          distance: markSnapDistance,
+        });
+    return mark?.value ?? pointerValue;
+  }
+
+  /** @type {(e: PointerEvent) => void} */
+  function paintRange(event) {
+    if (disabled || readonly || brushAnchor == null) return;
+    const pointerValue = getSnappedPointerValue(event);
+    if (pointerValue == null) return;
+    const next = brushRange(brushAnchor, pointerValue, { min, max, minGap });
+    value = next.lower;
+    valueUpper = next.upper;
+    dispatch("input", { value, valueUpper });
+  }
+
+  /** @type {(e: PointerEvent) => void} */
+  function moveRange(event) {
+    if (disabled || readonly) return;
+    const pointerValue = getPointerValue(event, 0);
+    if (pointerValue == null) return;
+    const delta = Math.round((pointerValue - rangeAnchor) / step) * step;
+    const next = shiftRange(rangeStart.lower, rangeStart.upper, delta, {
+      min,
+      max,
+      step,
+    });
+    value = next.lower;
+    valueUpper = next.upper;
+    dispatch("input", { value, valueUpper });
   }
 
   // The gap applies before the bounds, so a `minGap` wider than the range
@@ -305,22 +466,41 @@
     return Math.min(max, Math.max(next, value + minGap));
   }
 
-  /** @type {(e: PointerLikeEvent | null) => void} */
-  function calcValue(event) {
-    if (disabled || readonly || !event || !trackRef) return;
-
-    const nextValue = valueFromPointer(
-      event,
-      trackRef.getBoundingClientRect(),
-      {
-        orientation,
-        min,
-        max,
-        step,
-        offset: grabOffset,
-      },
+  /** @type {(handle: ActiveHandle) => import("../utils/resolve-slider-marks.js").SliderMark[]} */
+  function getReachableMarks(handle) {
+    return resolvedMarks.filter((mark) =>
+      handle === "lower" ? mark.value <= lowerMax : mark.value >= upperMin,
     );
+  }
+
+  /** @type {(e: PointerEvent) => void} */
+  function calcValue(event) {
+    if (disabled || readonly || !trackRef) return;
+
+    const rect = trackRef.getBoundingClientRect();
+    let nextValue = valueFromPointer(event, rect, {
+      orientation,
+      min,
+      max,
+      step,
+      offset: grabOffset,
+    });
     if (nextValue == null) return;
+    if (snapToMarks && resolvedMarks.length) {
+      const mark = nearestMark(nextValue, getReachableMarks(activeHandle));
+      if (!mark) return;
+      nextValue = mark.value;
+    } else if (markSnapDistance > 0 && resolvedMarks.length) {
+      nextValue =
+        markNearPointer(event, rect, {
+          orientation,
+          min,
+          max,
+          marks: getReachableMarks(activeHandle),
+          distance: markSnapDistance,
+          offset: grabOffset,
+        })?.value ?? nextValue;
+    }
 
     if (activeHandle === "lower") {
       value = clampLower(nextValue);
@@ -366,10 +546,20 @@
       event.shiftKey || event.key === "PageUp" || event.key === "PageDown";
     const delta =
       step * (isLargeStep ? range / step / stepMultiplier : 1) * dir;
-    if (activeHandle === "lower") {
-      value = clampLower(Math.round((value + delta) / step) * step);
+    if (snapToMarks && resolvedMarks.length) {
+      const stops = getReachableMarks(activeHandle);
+      const count = dir * (isLargeStep ? stepMultiplier : 1);
+      if (activeHandle === "lower") {
+        value = stepMarks(value, stops, count);
+      } else {
+        valueUpper = stepMarks(valueUpper, stops, count);
+      }
+    } else if (activeHandle === "lower") {
+      value = clampLower(snapToStep(value + delta, { min, max, step }));
     } else {
-      valueUpper = clampUpper(Math.round((valueUpper + delta) / step) * step);
+      valueUpper = clampUpper(
+        snapToStep(valueUpper + delta, { min, max, step }),
+      );
     }
     dispatch("input", { value, valueUpper });
     dispatch("change", { value, valueUpper });
@@ -395,9 +585,8 @@
   $: lowerMax = Math.max(min, valueUpper - minGap);
   $: upperMin = Math.min(max, value + minGap);
   $: resolvedMarks = resolveSliderMarks(marks, min, max, step);
-  $: hasMarkLabels = resolvedMarks.some(
-    (mark) => mark.label != null && mark.label !== "",
-  );
+  $: markLabels = getMarkLabels(resolvedMarks);
+  $: hasMarkLabels = markLabels.size > 0;
   $: {
     value = clamp(value, min, max);
     valueUpper = clamp(valueUpper, min, max);
@@ -407,11 +596,6 @@
       if (valueUpper - value < minGap)
         value = Math.max(min, valueUpper - minGap);
     }
-
-    if (dragging && currentEvent) {
-      calcValue(currentEvent);
-      dragging = false;
-    }
   }
 </script>
 
@@ -419,16 +603,6 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
   class:bx--form-item={true}
-  use:dismiss={{
-    enabled: holding,
-    listeners: [
-      { type: "mousemove", handler: move, options: { passive: true } },
-      { type: "touchmove", handler: move, options: { passive: true } },
-      { type: "mouseup", handler: stopHolding },
-      { type: "touchend", handler: stopHolding },
-      { type: "touchcancel", handler: stopHolding },
-    ],
-  }}
   {...$$restProps}
   on:click
   on:mouseover
@@ -517,9 +691,20 @@
       class:bx--slider--with-marks={resolvedMarks.length > 0}
       class:bx--slider--with-mark-labels={hasMarkLabels}
       class:bx--slider--vertical={orientation === "vertical"}
+      class:bx--slider--moving-range={dragMode !== "handle"}
       style:max-width={fullWidth ? "none" : undefined}
-      on:mousedown={startInteraction}
-      on:touchstart={startInteraction}
+      style:cursor={dragMode === "range"
+        ? "grabbing"
+        : dragMode === "brush"
+          ? "crosshair"
+          : hoverCursor}
+      use:pointerDrag={{
+        onStart: handleDragStart,
+        onMove: handleDragMove,
+        onEnd: handleDragEnd,
+      }}
+      on:pointermove={handlePointermove}
+      on:pointerleave={handlePointerleave}
     >
       <div
         class:bx--slider__thumb-wrapper={true}
@@ -538,7 +723,7 @@
           aria-valuemax={lowerMax}
           aria-valuemin={min}
           aria-valuenow={value}
-          aria-valuetext={getValueText(value)}
+          aria-valuetext={getValueText(value, formatValue, markLabels)}
           aria-label={ariaLabelInput}
           aria-orientation={orientation}
           aria-describedby={joinDescribedBy(
@@ -605,7 +790,7 @@
           aria-valuemax={max}
           aria-valuemin={upperMin}
           aria-valuenow={valueUpper}
-          aria-valuetext={getValueText(valueUpper)}
+          aria-valuetext={getValueText(valueUpper, formatValue, markLabels)}
           aria-label={ariaLabelInputUpper}
           aria-orientation={orientation}
           aria-describedby={joinDescribedBy(

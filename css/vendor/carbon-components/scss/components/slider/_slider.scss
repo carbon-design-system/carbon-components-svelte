@@ -31,6 +31,10 @@
     padding: $spacing-05 0;
     margin: 0 $carbon--spacing-05;
     cursor: pointer;
+    // ccs: keep horizontal drags as pointer events instead of a page pan,
+    // which would fire `pointercancel` mid-drag. Vertical page scroll still
+    // works when a swipe starts on the track.
+    touch-action: pan-y;
   }
 
   .#{$prefix}--slider__range-label {
@@ -444,6 +448,26 @@
     background-color: $interactive-04;
   }
 
+  // While `trackDrag` moves or paints the whole range, both handles change,
+  // so both take the focused look (and the fill its focused color) with
+  // neither holding focus.
+  .#{$prefix}--slider--moving-range .#{$prefix}--slider__filled-track {
+    background-color: $interactive-04;
+  }
+
+  .#{$prefix}--slider--moving-range .#{$prefix}--slider__thumb-icon:not(.#{$prefix}--slider__thumb-icon--focus) {
+    display: none;
+  }
+
+  .#{$prefix}--slider--moving-range .#{$prefix}--slider__thumb-icon--focus {
+    display: block;
+  }
+
+  .#{$prefix}--slider--moving-range .#{$prefix}--slider__thumb--lower::before,
+  .#{$prefix}--slider--moving-range .#{$prefix}--slider__thumb--upper::before {
+    width: 100%;
+  }
+
   .#{$prefix}--slider--disabled .#{$prefix}--slider__thumb--lower,
   .#{$prefix}--slider--disabled .#{$prefix}--slider__thumb--upper {
     background: transparent;
@@ -542,6 +566,7 @@
     height: to-rem(200px);
     padding: 0 $carbon--spacing-05;
     margin: $carbon--spacing-05 0;
+    touch-action: pan-x;
   }
 
   .#{$prefix}--slider--vertical .#{$prefix}--slider__track {

@@ -1,9 +1,12 @@
 /**
- * Resolve the `aria-valuetext` for a numeric slider value.
+ * Resolve the `aria-valuetext` for a numeric slider value. A value sitting
+ * on a labeled mark announces the mark's label, after the formatted value
+ * when `formatValue` is set and yields different text.
  */
 export function getValueText(
   numericValue: number,
   formatValue: ((value: number) => string) | undefined,
+  markLabels?: ReadonlyMap<number, string>,
 ): string | undefined;
 
 /**
@@ -40,6 +43,40 @@ export function valueFromTrackPosition(options: {
   max: number;
   step: number;
 }): number;
+
+/**
+ * Snap `value` to the nearest `min + n * step` and clamp it to `[min, max]`.
+ * The result is rounded to the decimal precision of `step` and `min`, so
+ * `step: 0.1` yields `0.3`, not `0.30000000000000004`. A non-positive
+ * `step` only clamps.
+ */
+export function snapToStep(
+  value: number,
+  options: { min: number; max: number; step: number },
+): number;
+
+/**
+ * Shift `[lower, upper]` by `delta` without changing its width, stopping
+ * against `min` or `max`. Results are rounded to the decimal precision of
+ * `step`, `min`, and the bounds, so the addition leaks no float noise.
+ */
+export function shiftRange(
+  lower: number,
+  upper: number,
+  delta: number,
+  options: { min: number; max: number; step: number },
+): { lower: number; upper: number };
+
+/**
+ * Resolve the range painted by dragging from `anchor` to `point`, in either
+ * direction. A range narrower than `minGap` grows in the drag direction,
+ * then back from `max` or `min` when it runs out of room.
+ */
+export function brushRange(
+  anchor: number,
+  point: number,
+  options: { min: number; max: number; minGap: number },
+): { lower: number; upper: number };
 
 type TrackRect = Pick<DOMRect, "left" | "width" | "bottom" | "height">;
 

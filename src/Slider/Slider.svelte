@@ -37,7 +37,8 @@
    * Show tick marks along the track.
    * Set to `true` to place a tick at every `step`, or pass an array of
    * `{ value, label? }` for specific stops with optional labels below the track.
-   * Marks are visual only unless `snapToMarks` is set; snapping otherwise follows `step`.
+   * A label is also announced in `aria-valuetext` while the value sits on its mark.
+   * Snapping follows `step` unless `snapToMarks` is set.
    * @type {boolean | ReadonlyArray<{ value: number; label?: string }>}
    */
   export let marks = false;
@@ -47,6 +48,14 @@
    * instead of `step`. Has no effect when `marks` is not set.
    */
   export let snapToMarks = false;
+
+  /**
+   * Snap drags and clicks to a mark when the pointer comes within this many pixels
+   * of it, so meaningful values are easy to hit while other values stay reachable
+   * by `step`. Keyboard navigation is unaffected. Set to `0` to disable.
+   * Has no effect when `marks` is not set or `snapToMarks` is set.
+   */
+  export let markSnapDistance = 0;
 
   /** Set the step multiplier value */
   export let stepMultiplier = 4;
@@ -135,7 +144,6 @@
   import { createEventDispatcher, tick } from "svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
-  import { dismiss } from "../utils/dismiss.js";
   import {
     buildFieldIds,
     joinDescribedBy,
@@ -143,14 +151,19 @@
     resolveValidationVisibility,
   } from "../utils/field-status.js";
   import { clamp } from "../utils/numeric-format.js";
+  import { pointerDrag } from "../utils/pointer-drag.js";
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
   import {
+    getMarkLabels,
+    markNearPointer,
     nearestMark,
     resolveSliderMarks,
+    stepMarks,
   } from "../utils/resolve-slider-marks.js";
   import {
     formatRangeLabel as formatSliderRangeLabel,
-    getValueText as getSliderValueText,
+    getValueText,
+    snapToStep,
     valueFromPointer,
   } from "../utils/slider-value.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -158,43 +171,25 @@
   const dispatch = createEventDispatcher();
 
   let trackRef = null;
+  let thumbRef = null;
   let textInputRef = null;
-  let dragging = false;
-  let holding = false;
-  let currentEvent = null;
 
   /** @type {(label: string, numericValue: number) => string | number} */
   function formatRangeLabel(label, numericValue) {
     return formatSliderRangeLabel(label, numericValue, formatValue);
   }
 
-  /** @type {(numericValue: number) => string | undefined} */
-  function getValueText(numericValue) {
-    return getSliderValueText(numericValue, formatValue);
+  function handleDragStart(event) {
+    if (disabled || readonly) return false;
+    // Focus the thumb so arrow keys work after a press on the track. The
+    // compat `mousedown` would otherwise move focus to the body.
+    event.preventDefault();
+    thumbRef?.focus({ preventScroll: true });
+    calcValue(event);
   }
 
-  function startInteraction(event) {
-    if (disabled || readonly) return;
-    currentEvent = event;
-    holding = true;
-    dragging = true;
-  }
-
-  function stopHolding() {
-    const wasHolding = holding;
-    holding = false;
-    dragging = false;
-    currentEvent = null;
-    if (wasHolding && !disabled && !readonly) {
-      dispatch("change", value);
-    }
-  }
-
-  function move(event) {
-    if (holding) {
-      currentEvent = event;
-      dragging = true;
-    }
+  function handleDragEnd() {
+    if (!disabled && !readonly) dispatch("change", value);
   }
 
   function handleTextInputFocus() {
@@ -206,7 +201,8 @@
   function calcValue(event) {
     if (disabled || readonly || !event) return;
 
-    let nextValue = valueFromPointer(event, trackRef.getBoundingClientRect(), {
+    const rect = trackRef.getBoundingClientRect();
+    let nextValue = valueFromPointer(event, rect, {
       orientation,
       min,
       max,
@@ -215,6 +211,15 @@
     if (nextValue == null) return;
     if (snapToMarks && resolvedMarks.length) {
       nextValue = nearestMark(nextValue, resolvedMarks).value;
+    } else {
+      nextValue =
+        markNearPointer(event, rect, {
+          orientation,
+          min,
+          max,
+          marks: resolvedMarks,
+          distance: markSnapDistance,
+        })?.value ?? nextValue;
     }
     value = nextValue;
     dispatch("input", value);
@@ -233,33 +238,15 @@
   $: range = max - min;
   $: left = range === 0 ? 0 : ((value - min) / range) * 100;
   $: resolvedMarks = resolveSliderMarks(marks, min, max, step);
-  $: hasMarkLabels = resolvedMarks.some(
-    (mark) => mark.label != null && mark.label !== "",
-  );
-  $: {
-    value = clamp(value, min, max);
-
-    if (dragging && currentEvent) {
-      calcValue(currentEvent);
-      dragging = false;
-    }
-  }
+  $: markLabels = getMarkLabels(resolvedMarks);
+  $: hasMarkLabels = markLabels.size > 0;
+  $: value = clamp(value, min, max);
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
   class:bx--form-item={true}
-  use:dismiss={{
-    enabled: holding,
-    listeners: [
-      { type: "mousemove", handler: move, options: { passive: true } },
-      { type: "touchmove", handler: move, options: { passive: true } },
-      { type: "mouseup", handler: stopHolding },
-      { type: "touchend", handler: stopHolding },
-      { type: "touchcancel", handler: stopHolding },
-    ],
-  }}
   {...$$restProps}
   on:click
   on:mouseover
@@ -292,10 +279,14 @@
       class:bx--slider--with-mark-labels={hasMarkLabels}
       class:bx--slider--vertical={orientation === "vertical"}
       style:max-width={fullWidth ? "none" : undefined}
-      on:mousedown={startInteraction}
-      on:touchstart={startInteraction}
+      use:pointerDrag={{
+        onStart: handleDragStart,
+        onMove: calcValue,
+        onEnd: handleDragEnd,
+      }}
     >
       <div
+        bind:this={thumbRef}
         role="slider"
         tabindex={readonly || disabled ? undefined : 0}
         class:bx--slider__thumb={true}
@@ -304,7 +295,7 @@
         aria-valuemax={max}
         aria-valuemin={min}
         aria-valuenow={value}
-        aria-valuetext={getValueText(value)}
+        aria-valuetext={getValueText(value, formatValue, markLabels)}
         aria-labelledby={labelId}
         aria-orientation={orientation}
         aria-describedby={joinDescribedBy(
@@ -350,32 +341,17 @@
               event.key === "PageDown";
 
             if (snapToMarks && resolvedMarks.length) {
-              // Marks may be passed in any order; walk them from lowest to highest.
-              const stops = [...resolvedMarks].sort(
-                (a, b) => a.value - b.value,
+              value = stepMarks(
+                value,
+                resolvedMarks,
+                keys[event.key] * (isLargeStep ? stepMultiplier : 1),
               );
-              const currentIndex = stops.findIndex(
-                (mark) => mark.value === value,
-              );
-              const fromIndex =
-                currentIndex === -1
-                  ? stops.indexOf(nearestMark(value, stops))
-                  : currentIndex;
-              const jump = isLargeStep ? stepMultiplier : 1;
-              let nextIndex = fromIndex + keys[event.key] * jump;
-              if (nextIndex < 0) nextIndex = 0;
-              else if (nextIndex > stops.length - 1)
-                nextIndex = stops.length - 1;
-              value = stops[nextIndex].value;
             } else {
               const delta =
                 step *
                 (isLargeStep ? range / step / stepMultiplier : 1) *
                 keys[event.key];
-              let next = Math.round((value + delta) / step) * step;
-              if (next < min) next = min;
-              else if (next > max) next = max;
-              value = next;
+              value = snapToStep(value + delta, { min, max, step });
             }
             dispatch("input", value);
             dispatch("change", value);

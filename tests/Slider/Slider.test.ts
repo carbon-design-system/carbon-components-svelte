@@ -604,6 +604,31 @@ describe("Slider", () => {
     expect(screen.getByRole("spinbutton")).toHaveValue(50);
   });
 
+  it("should announce a mark label while the value sits on its mark", async () => {
+    render(Slider, {
+      props: {
+        min: 0,
+        max: 2,
+        value: 0,
+        marks: [
+          { value: 0, label: "Low" },
+          { value: 1 },
+          { value: 2, label: "High" },
+        ],
+      },
+    });
+
+    const slider = screen.getByRole("slider");
+    expect(slider).toHaveAttribute("aria-valuetext", "Low");
+
+    slider.focus();
+    await user.keyboard("{ArrowRight}");
+    expect(slider).not.toHaveAttribute("aria-valuetext");
+
+    await user.keyboard("{ArrowRight}");
+    expect(slider).toHaveAttribute("aria-valuetext", "High");
+  });
+
   it("should keep value numeric when formatValue is set", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(Slider, {
@@ -876,12 +901,99 @@ describe("Slider", () => {
       toJSON: () => ({}),
     });
 
-    await fireEvent.mouseDown(slider, { clientX: 100 });
+    await fireEvent.pointerDown(slider, { clientX: 100, pointerId: 1 });
     await tick();
-    await fireEvent.mouseUp(window);
+    await fireEvent.pointerUp(slider, { pointerId: 1 });
 
     expect(consoleLog).toHaveBeenCalledWith("input", 50);
     expect(screen.getByRole("spinbutton")).toHaveValue(50);
+  });
+
+  describe("pointer drag", () => {
+    const setup = () => {
+      const consoleLog = vi.spyOn(console, "log");
+      const { container } = render(Slider, {
+        props: { value: 0, min: 0, max: 100 },
+      });
+      const slider = container.querySelector(".bx--slider");
+      const track = container.querySelector(".bx--slider__track");
+      assert(slider instanceof HTMLElement);
+      assert(track instanceof HTMLElement);
+      vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
+        left: 0,
+        right: 200,
+        width: 200,
+        top: 0,
+        bottom: 0,
+        height: 2,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      });
+      return { consoleLog, slider };
+    };
+
+    it("follows the pointer and commits once on release", async () => {
+      const { consoleLog, slider } = setup();
+
+      await fireEvent.pointerDown(slider, { clientX: 20, pointerId: 1 });
+      await fireEvent.pointerMove(slider, { clientX: 100, pointerId: 1 });
+      await fireEvent.pointerMove(slider, { clientX: 150, pointerId: 1 });
+      await fireEvent.pointerUp(slider, { pointerId: 1 });
+
+      expect(consoleLog.mock.calls).toEqual([
+        ["input", 10],
+        ["input", 50],
+        ["input", 75],
+        ["change", 75],
+      ]);
+      expect(screen.getByRole("spinbutton")).toHaveValue(75);
+    });
+
+    it("commits a press released before any render", () => {
+      const { consoleLog, slider } = setup();
+
+      fireEvent.pointerDown(slider, { clientX: 60, pointerId: 1 });
+      fireEvent.pointerUp(slider, { pointerId: 1 });
+
+      expect(consoleLog).toHaveBeenCalledWith("change", 30);
+    });
+
+    it("stops following the pointer after pointercancel", async () => {
+      const { consoleLog, slider } = setup();
+
+      await fireEvent.pointerDown(slider, { clientX: 20, pointerId: 1 });
+      await fireEvent.pointerCancel(slider, { pointerId: 1 });
+      await fireEvent.pointerMove(slider, { clientX: 150, pointerId: 1 });
+
+      expect(consoleLog).toHaveBeenLastCalledWith("change", 10);
+      expect(screen.getByRole("spinbutton")).toHaveValue(10);
+    });
+
+    it("focuses the thumb on a press on the track", async () => {
+      const { slider } = setup();
+      const track = slider.querySelector(".bx--slider__track");
+      assert(track instanceof HTMLElement);
+
+      const notCanceled = await fireEvent.pointerDown(track, {
+        clientX: 20,
+        pointerId: 1,
+      });
+
+      expect(notCanceled).toBe(false);
+      expect(screen.getByRole("slider")).toHaveFocus();
+    });
+
+    it("adds no window listeners", async () => {
+      const add = vi.spyOn(window, "addEventListener");
+      const { slider } = setup();
+
+      await fireEvent.pointerDown(slider, { clientX: 20, pointerId: 1 });
+      await fireEvent.pointerUp(slider, { pointerId: 1 });
+
+      expect(add).not.toHaveBeenCalled();
+      add.mockRestore();
+    });
   });
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1980
@@ -979,6 +1091,29 @@ describe("Slider", () => {
     }
 
     expect(slider).toHaveAttribute("aria-valuenow", "0.4");
+  });
+
+  it("should step from min when min is not a multiple of step", async () => {
+    render(Slider, { props: { min: 1, max: 11, step: 2, value: 1 } });
+
+    const slider = screen.getByRole("slider");
+    slider.focus();
+    await user.keyboard("{ArrowRight}");
+    expect(slider).toHaveAttribute("aria-valuenow", "3");
+
+    await user.keyboard("{ArrowRight}");
+    expect(slider).toHaveAttribute("aria-valuenow", "5");
+  });
+
+  it("should reach 0.3 with a 0.1 step without floating-point noise", async () => {
+    render(Slider, { props: { min: 0, max: 1, step: 0.1, value: 0.2 } });
+
+    const slider = screen.getByRole("slider");
+    slider.focus();
+    await user.keyboard("{ArrowRight}");
+
+    expect(slider).toHaveAttribute("aria-valuenow", "0.3");
+    expect(screen.getByRole("spinbutton")).toHaveValue(0.3);
   });
 
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/1219
@@ -1095,9 +1230,9 @@ describe("Slider", () => {
     const clickTrack = async (container: HTMLElement, clientX: number) => {
       const slider = container.querySelector(".bx--slider");
       assert(slider instanceof HTMLElement);
-      await fireEvent.mouseDown(slider, { clientX });
+      await fireEvent.pointerDown(slider, { clientX, pointerId: 1 });
       await tick();
-      await fireEvent.mouseUp(window);
+      await fireEvent.pointerUp(slider, { pointerId: 1 });
     };
 
     it("should snap a click to the nearest mark", async () => {
@@ -1247,6 +1382,60 @@ describe("Slider", () => {
     });
   });
 
+  describe("markSnapDistance", () => {
+    it.each([
+      { clientX: 108, expected: 50 },
+      { clientX: 112, expected: 56 },
+      { clientX: 20, expected: 10 },
+    ])(
+      "should snap a press at x=$clientX to $expected",
+      async ({ clientX, expected }) => {
+        const { container } = render(Slider, {
+          props: {
+            value: 0,
+            marks: [{ value: 50, label: "Neutral" }],
+            markSnapDistance: 8,
+          },
+        });
+        const slider = container.querySelector(".bx--slider");
+        const track = container.querySelector(".bx--slider__track");
+        assert(slider instanceof HTMLElement);
+        assert(track instanceof HTMLElement);
+        vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
+          left: 0,
+          right: 200,
+          width: 200,
+          top: 0,
+          bottom: 0,
+          height: 2,
+          x: 0,
+          y: 0,
+          toJSON: () => ({}),
+        });
+
+        await fireEvent.pointerDown(slider, { clientX, pointerId: 1 });
+        await fireEvent.pointerUp(slider, { pointerId: 1 });
+
+        expect(screen.getByRole("slider")).toHaveAttribute(
+          "aria-valuenow",
+          String(expected),
+        );
+      },
+    );
+
+    it("should keep arrow keys on step", async () => {
+      render(Slider, {
+        props: { value: 49, marks: [{ value: 51 }], markSnapDistance: 100 },
+      });
+      const slider = screen.getByRole("slider");
+      slider.focus();
+
+      await user.keyboard("{ArrowRight}");
+
+      expect(slider).toHaveAttribute("aria-valuenow", "50");
+    });
+  });
+
   describe("orientation", () => {
     const mockTrackRect = (container: HTMLElement, rect: Partial<DOMRect>) => {
       const track = container.querySelector(".bx--slider__track");
@@ -1271,9 +1460,9 @@ describe("Slider", () => {
     ) => {
       const slider = container.querySelector(".bx--slider");
       assert(slider instanceof HTMLElement);
-      await fireEvent.mouseDown(slider, coords);
+      await fireEvent.pointerDown(slider, { ...coords, pointerId: 1 });
       await tick();
-      await fireEvent.mouseUp(window);
+      await fireEvent.pointerUp(slider, { pointerId: 1 });
     };
 
     it("should set aria-orientation on the slider", () => {
