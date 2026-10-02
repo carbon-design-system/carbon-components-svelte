@@ -143,6 +143,7 @@ export { default as PageHeader } from "./PageHeader/PageHeader.svelte";
 export { default as PageHeaderSkeleton } from "./PageHeader/PageHeaderSkeleton.svelte";
 export { default as Pagination } from "./Pagination/Pagination.svelte";
 export { default as PaginationSkeleton } from "./Pagination/PaginationSkeleton.svelte";
+export { default as PaginationStatus } from "./Pagination/PaginationStatus.svelte";
 export { default as PaginationNav } from "./PaginationNav/PaginationNav.svelte";
 export { default as FluidPinCodeInputSkeleton } from "./PinCodeInput/FluidPinCodeInputSkeleton.svelte";
 export { default as PinCodeInput } from "./PinCodeInput/PinCodeInput.svelte";

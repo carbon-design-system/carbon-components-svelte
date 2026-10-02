@@ -319,6 +319,65 @@ describe("Pagination", () => {
     expect(screen.getByText("page 2")).toBeInTheDocument();
   });
 
+  it("keeps the page-number select navigable past page 1 when pagesUnknown is true", async () => {
+    render(Pagination, {
+      props: { pagesUnknown: true, page: 1 },
+    });
+
+    await user.click(screen.getByRole("button", { name: "Next page" }));
+
+    const pageSelect = screen.getByLabelText(/Page number/);
+    expect(pageSelect).toHaveValue("2");
+    expect(within(pageSelect).getAllByRole("option")).toHaveLength(2);
+  });
+
+  it("does not render pages the user has not reached yet when pagesUnknown is true", async () => {
+    render(Pagination, {
+      props: { pagesUnknown: true, page: 1 },
+    });
+
+    const nextButton = screen.getByRole("button", { name: "Next page" });
+    await user.click(nextButton);
+    await user.click(nextButton);
+
+    const pageSelect = screen.getByLabelText(/Page number/);
+    const options = within(pageSelect).getAllByRole("option");
+    expect(options).toHaveLength(3);
+    expect(options.map((option) => option.textContent?.trim())).toEqual([
+      "1",
+      "2",
+      "3",
+    ]);
+  });
+
+  it("navigates back to a previously visited page via the select when pagesUnknown is true", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(Pagination, {
+      props: { pagesUnknown: true, page: 1 },
+    });
+
+    const nextButton = screen.getByRole("button", { name: "Next page" });
+    await user.click(nextButton);
+    await user.click(nextButton);
+
+    const pageSelect = screen.getByLabelText(/Page number/);
+    await user.selectOptions(pageSelect, "2");
+
+    expect(screen.getByText("page 2")).toBeInTheDocument();
+    expect(consoleLog).toHaveBeenCalledWith("change", { page: 2 });
+    // Forward navigation must stay available.
+    expect(nextButton).not.toBeDisabled();
+  });
+
+  it("still renders a single page option in pagesUnknown mode before any navigation", () => {
+    render(Pagination, {
+      props: { pagesUnknown: true, page: 1 },
+    });
+
+    const pageSelect = screen.getByLabelText(/Page number/);
+    expect(within(pageSelect).getAllByRole("option")).toHaveLength(1);
+  });
+
   it("should allow overriding forwardButtonDisabled", () => {
     render(Pagination, {
       props: {
@@ -368,6 +427,71 @@ describe("Pagination", () => {
     expect(consoleLog).toHaveBeenCalledWith("update", {
       pageSize: 15,
       page: 2,
+    });
+  });
+
+  describe("resetKey", () => {
+    it("jumps to page 1 when resetKey changes, instead of clamping to the new last page", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      const { rerender } = render(Pagination, {
+        props: {
+          page: 10,
+          totalItems: 100,
+          pageSize: 10,
+          resetKey: "query-a",
+        },
+      });
+
+      consoleLog.mockClear();
+
+      // A new query shrinks totalItems from 100 to 12 (still 2 pages at
+      // pageSize 10) and bumps resetKey. Without resetKey, the plain shrink
+      // clamp would land on page 2 (the new last page); with it, page 1.
+      await rerender({ totalItems: 12, resetKey: "query-b" });
+
+      expect(screen.getByText("1–10 of 12 items")).toBeInTheDocument();
+      expect(consoleLog).toHaveBeenCalledWith("update", {
+        pageSize: 10,
+        page: 1,
+      });
+    });
+
+    it("keeps the plain shrink-to-last-page clamp when resetKey is left unset", async () => {
+      const { rerender } = render(Pagination, {
+        props: {
+          page: 10,
+          totalItems: 100,
+          pageSize: 10,
+        },
+      });
+
+      await rerender({ totalItems: 12 });
+
+      expect(screen.getByText("11–12 of 12 items")).toBeInTheDocument();
+    });
+
+    it("does not dispatch on initial render even when resetKey starts with a non-undefined value", () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(Pagination, {
+        props: { totalItems: 100, page: 1, pageSize: 10, resetKey: "initial" },
+      });
+
+      expect(consoleLog).not.toHaveBeenCalledWith("update", expect.anything());
+    });
+
+    it("does not reset the page when resetKey is set but unchanged across a rerender", async () => {
+      const { rerender } = render(Pagination, {
+        props: {
+          page: 3,
+          totalItems: 100,
+          pageSize: 10,
+          resetKey: "query-a",
+        },
+      });
+
+      await rerender({ totalItems: 90, resetKey: "query-a" });
+
+      expect(screen.getByText("21–30 of 90 items")).toBeInTheDocument();
     });
   });
 
