@@ -172,6 +172,76 @@ describe("DatePicker", () => {
     );
   });
 
+  describe("changing locale while open", () => {
+    const de = {
+      months: {
+        longhand:
+          "Januar Februar März April Mai Juni Juli August September Oktober November Dezember".split(
+            " ",
+          ),
+        shorthand: [],
+      },
+      weekdays: {
+        shorthand: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
+        longhand: [],
+      },
+      firstDayOfWeek: 1,
+    };
+
+    async function openThenSetLocale(locale: unknown) {
+      const { rerender } = render(DatePicker, {
+        datePickerType: "single",
+        value: "03/15/2024",
+      });
+      await user.click(screen.getByLabelText("Date"));
+      const calendar = await screen.findByLabelText("calendar-container");
+      await rerender({
+        datePickerType: "single",
+        value: "03/15/2024",
+        locale: locale as never,
+      });
+      await tick();
+      const month = calendar.querySelector(".cur-month");
+      const year = calendar.querySelector(".numInputWrapper");
+      assert(month);
+      assert(year);
+      return { month, year };
+    }
+
+    it("updates the header month", async () => {
+      const { month, year } = await openThenSetLocale(de);
+
+      expect(month).toHaveTextContent("März");
+      expect(month.compareDocumentPosition(year)).toBe(
+        Node.DOCUMENT_POSITION_FOLLOWING,
+      );
+    });
+
+    it("keeps the new locale's header after a month change", async () => {
+      await openThenSetLocale("ja");
+      const calendar = screen.getByLabelText("calendar-container");
+      const next = calendar.querySelector<HTMLElement>(".flatpickr-next-month");
+      assert(next);
+      await user.click(next);
+
+      const month = calendar.querySelector(".cur-month");
+      const year = calendar.querySelector(".numInputWrapper");
+      assert(month);
+      assert(year);
+      expect(year.compareDocumentPosition(month)).toBe(
+        Node.DOCUMENT_POSITION_FOLLOWING,
+      );
+    });
+
+    it("moves the year first for a year-first locale", async () => {
+      const { month, year } = await openThenSetLocale("ja");
+
+      expect(year.compareDocumentPosition(month)).toBe(
+        Node.DOCUMENT_POSITION_FOLLOWING,
+      );
+    });
+  });
+
   it("renders range mode", async () => {
     const { container } = render(DatePickerRange);
 

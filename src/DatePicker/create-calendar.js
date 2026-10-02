@@ -44,7 +44,7 @@ export function resolveLocale(locale) {
  *   weekdayContainer: HTMLElement;
  *   selectedDates: unknown[];
  *   l10n: { months: { longhand: string[]; shorthand: string[] }; weekdays?: { shorthand?: string[] } };
- *   config: { shorthandCurrentMonth?: boolean };
+ *   config: { shorthandCurrentMonth?: boolean; locale?: unknown };
  *   currentMonth: number;
  *   monthNav: HTMLElement;
  *   monthsDropdownContainer: HTMLElement;
@@ -532,7 +532,7 @@ export async function createCalendar({
       isYear: options.mode === "year",
     });
     if (options.mode !== "month" && options.mode !== "year") {
-      updateMonthNode(instance, options.locale);
+      updateMonthNode(instance, instance.config.locale);
     }
     if (options.mode === "month") {
       markTodayMonth(instance);
@@ -571,7 +571,7 @@ export async function createCalendar({
         // The monthSelect / yearSelect plugins remove the month-label node, so
         // there is nothing for updateMonthNode to patch.
         if (options.mode !== "month" && options.mode !== "year") {
-          updateMonthNode(instance, options.locale);
+          updateMonthNode(instance, instance.config.locale);
         }
       },
     ],
