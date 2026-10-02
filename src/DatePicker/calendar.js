@@ -497,6 +497,18 @@ export function createCalendarEngine(element, userConfig = {}) {
   }
   self.isEnabled = isEnabled;
 
+  /**
+   * Whether `date` can be picked or focused. `isDayBlocked` is for limits
+   * that only apply to picking from the grid, such as the length of a range:
+   * a typed or programmatic value is not checked against it, so it cannot be
+   * a disable rule.
+   *
+   * @param {Date} date
+   */
+  function isOpenDay(date) {
+    return isEnabled(date) && !config.isDayBlocked?.(date, self);
+  }
+
   /** @param {Date} date */
   function selectedIndex(date) {
     return self.selectedDates.findIndex(
@@ -723,6 +735,7 @@ export function createCalendarEngine(element, userConfig = {}) {
    */
   function createDay(className, date, index) {
     const enabled = isEnabled(date, true);
+    const blocked = enabled && config.isDayBlocked?.(date, self);
     const day = createElement(
       "span",
       `${className} bx--date-picker__day`,
@@ -760,7 +773,8 @@ export function createCalendarEngine(element, userConfig = {}) {
           if (className === "nextMonthDay") day.classList.add("inRange");
         }
       }
-    } else {
+    }
+    if (!enabled || blocked) {
       // axe only exempts inactive text from the contrast check when it is
       // marked `aria-disabled`, not by a CSS class.
       day.classList.add("flatpickr-disabled");
@@ -1588,6 +1602,20 @@ export function createCalendarEngine(element, userConfig = {}) {
 
   // --- Keyboard and pointer ---------------------------------------------
 
+  /**
+   * Whether focus is on a day of the grid, open or not: a blocked day (the
+   * start of a range under `minRangeDays`, say) still navigates away.
+   *
+   * @param {HTMLElement} node
+   */
+  function isDayFocused(node) {
+    return (
+      self.daysContainer !== undefined &&
+      !node.className.includes("hidden") &&
+      self.daysContainer.contains(node)
+    );
+  }
+
   /** @param {HTMLElement} node */
   function isInView(node) {
     return (
@@ -1614,7 +1642,7 @@ export function createCalendarEngine(element, userConfig = {}) {
       const end = delta > 0 ? month.children.length : -1;
       for (let i = start; i !== end; i += delta) {
         const cell = month.children[i];
-        if (!cell.className.includes("hidden") && isEnabled(cell.dateObj)) {
+        if (!cell.className.includes("hidden") && isOpenDay(cell.dateObj)) {
           return cell;
         }
       }
@@ -1622,41 +1650,79 @@ export function createCalendarEngine(element, userConfig = {}) {
     return undefined;
   }
 
+  /**
+   * The first open day `offset` days from `from`, then on one day at a time
+   * in the same direction. Gives up after a year.
+   *
+   * @param {Date} from
+   * @param {number} offset
+   */
+  function findOpenDay(from, offset) {
+    const step = Math.sign(offset);
+    for (let days = offset; Math.abs(days) <= 366; days += step) {
+      const date = new Date(
+        from.getFullYear(),
+        from.getMonth(),
+        from.getDate() + days,
+      );
+      if (isOpenDay(date)) return date;
+    }
+    return undefined;
+  }
+
+  /**
+   * Focuses the cell for `date`, moving the view a month at a time until it
+   * is on screen.
+   *
+   * @param {Date} date
+   */
+  function focusDate(date) {
+    const find = () =>
+      /** @type {HTMLElement[]} */ ([
+        ...self.daysContainer.querySelectorAll(".flatpickr-day"),
+      ]).find(
+        (cell) =>
+          /** @type {any} */ (cell).dateObj.getTime() === date.getTime() &&
+          !cell.classList.contains("hidden"),
+      );
+    let cell = find();
+    const direction =
+      date.getTime() < self.days.firstElementChild.dateObj.getTime() ? -1 : 1;
+    for (let i = 0; !cell && i < 13; i++) {
+      changeMonth(direction);
+      cell = find();
+    }
+    if (cell) focusDay(cell);
+  }
+
+  /**
+   * Focuses the first open day of the month that holds `month`.
+   *
+   * @param {Date} month
+   */
+  function focusFirstOpenDayOfMonth(month) {
+    const first = new Date(month.getFullYear(), month.getMonth(), 1);
+    const date = new Date(first);
+    while (date.getMonth() === first.getMonth()) {
+      if (isOpenDay(date)) {
+        // Show the month first, as the first panel.
+        jumpToDate(date, true);
+        return focusDate(date);
+      }
+      date.setDate(date.getDate() + 1);
+    }
+  }
+
   /** @param {any} current @param {number} delta */
   function nextAvailableDay(current, delta) {
-    const given = current.className.includes("Month")
-      ? self.currentMonth
-      : current.dateObj.getMonth();
-    const endMonth = delta > 0 ? config.showMonths : -1;
-    const step = delta > 0 ? 1 : -1;
-    for (let m = given - self.currentMonth; m !== endMonth; m += step) {
-      const month = self.daysContainer.children[m];
-      const start =
-        given - self.currentMonth === m
-          ? current.$i + delta
-          : delta < 0
-            ? month.children.length - 1
-            : 0;
-      const count = month.children.length;
-      for (let i = start; i >= 0 && i < count; i += step) {
-        const cell = month.children[i];
-        if (
-          !cell.className.includes("hidden") &&
-          isEnabled(cell.dateObj) &&
-          Math.abs(current.$i - i) >= Math.abs(delta)
-        ) {
-          return focusDay(cell);
-        }
-      }
-    }
-    changeMonth(step);
-    focusOnDay(firstAvailableDay(step), 0);
+    const target = findOpenDay(current.dateObj, delta);
+    if (target) focusDate(target);
   }
 
   /** @param {any} current @param {number} offset */
   function focusOnDay(current, offset) {
     const active = /** @type {HTMLElement} */ (document.activeElement);
-    const dayFocused = isInView(active || document.body);
+    const dayFocused = isDayFocused(active || document.body);
     const start =
       current === undefined
         ? dayFocused
@@ -1712,12 +1778,13 @@ export function createCalendarEngine(element, userConfig = {}) {
           if (!isInput) {
             event.preventDefault();
             const active = /** @type {HTMLElement} */ (document.activeElement);
-            if (allowInput === false || (active && isInView(active))) {
+            if (allowInput === false || (active && isDayFocused(active))) {
               const delta = code === 39 ? 1 : -1;
               if (event.ctrlKey) {
                 event.stopPropagation();
-                changeMonth(delta);
-                focusOnDay(firstAvailableDay(1), 0);
+                focusFirstOpenDayOfMonth(
+                  new Date(self.currentYear, self.currentMonth + delta, 1),
+                );
               } else {
                 focusOnDay(undefined, delta);
               }
@@ -1732,8 +1799,9 @@ export function createCalendarEngine(element, userConfig = {}) {
           if (target.$i !== undefined || isInput) {
             if (event.ctrlKey) {
               event.stopPropagation();
-              changeYear(self.currentYear - delta);
-              focusOnDay(firstAvailableDay(1), 0);
+              focusFirstOpenDayOfMonth(
+                new Date(self.currentYear - delta, self.currentMonth, 1),
+              );
             } else {
               focusOnDay(undefined, delta * 7);
             }
