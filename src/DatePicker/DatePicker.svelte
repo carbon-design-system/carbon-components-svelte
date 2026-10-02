@@ -1118,7 +1118,13 @@
         writeSelectionToValue();
         syncSelectedDatesFromCalendar();
       }
-      applyOptionIfChanged("locale", locale, resolveLocale(locale));
+      if (optionChanged(prevAppliedOptions.locale, locale)) {
+        applyOptionIfChanged("locale", locale, resolveLocale(locale));
+        // flatpickr's redraw skips the month label Carbon swaps in.
+        if ($mode !== "month" && $mode !== "year") {
+          updateMonthNode(calendar, locale);
+        }
+      }
       applyOptionIfChanged("dateFormat", dateFormat);
       applyDisabledDates();
       applyEnabledDates();
