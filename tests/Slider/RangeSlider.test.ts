@@ -1,7 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import RangeSliderComponent from "carbon-components-svelte/Slider/RangeSlider.svelte";
 import { tick } from "svelte";
-import { flushDismiss } from "../utils/flush-dismiss";
 import { user } from "../utils/user";
 import RangeSlider from "./RangeSlider.test.svelte";
 
@@ -161,6 +160,21 @@ describe("RangeSlider", () => {
       value: 40,
       valueUpper: 40,
     });
+  });
+
+  it("should step each handle from min when min is not a multiple of step", async () => {
+    render(RangeSlider, {
+      props: { min: 1, max: 11, step: 2, value: 1, valueUpper: 11 },
+    });
+
+    const [lowerThumb, upperThumb] = screen.getAllByRole("slider");
+    lowerThumb.focus();
+    await user.keyboard("{ArrowRight}");
+    expect(lowerThumb).toHaveAttribute("aria-valuenow", "3");
+
+    upperThumb.focus();
+    await user.keyboard("{ArrowLeft}");
+    expect(upperThumb).toHaveAttribute("aria-valuenow", "9");
   });
 
   it("should not push lower handle past upper bound via arrow keys", async () => {
@@ -695,11 +709,10 @@ describe("RangeSlider", () => {
 
       // jsdom thumb rects are all zero, so pickHandle ties to the lower handle.
       const [lowerThumb] = screen.getAllByRole("slider");
-      await fireEvent.mouseDown(lowerThumb, { clientX: 20 });
-      await flushDismiss();
-      await fireEvent.mouseMove(window, { clientX: 98 });
+      await fireEvent.pointerDown(lowerThumb, { clientX: 20, pointerId: 1 });
+      await fireEvent.pointerMove(slider, { clientX: 98, pointerId: 1 });
       await tick();
-      await fireEvent.mouseUp(window);
+      await fireEvent.pointerUp(slider, { pointerId: 1 });
 
       expect(lowerThumb).toHaveAttribute("aria-valuenow", "40");
     });
@@ -810,9 +823,13 @@ describe("RangeSlider", () => {
         rect({ top: 44, bottom: 60, height: 16, width: 24 }),
       );
 
-      await fireEvent.mouseDown(slider, { clientX: 1, clientY: 20 });
+      await fireEvent.pointerDown(slider, {
+        clientX: 1,
+        clientY: 20,
+        pointerId: 1,
+      });
       await tick();
-      await fireEvent.mouseUp(window);
+      await fireEvent.pointerUp(slider, { pointerId: 1 });
 
       expect(lowerThumb).toHaveAttribute("aria-valuenow", "20");
       expect(upperThumb).toHaveAttribute("aria-valuenow", "90");
@@ -829,6 +846,63 @@ describe("RangeSlider", () => {
       expect(lowerThumb).toHaveAttribute("aria-valuenow", "21");
       await user.keyboard("{ArrowDown}{ArrowDown}");
       expect(lowerThumb).toHaveAttribute("aria-valuenow", "19");
+    });
+  });
+
+  describe("pointer drag", () => {
+    it("commits a press released before any render", () => {
+      const consoleLog = vi.spyOn(console, "log");
+      const { container } = render(RangeSlider, {
+        props: { value: 20, valueUpper: 80 },
+      });
+      const slider = container.querySelector(".bx--slider");
+      const track = container.querySelector(".bx--slider__track");
+      assert(slider instanceof HTMLElement);
+      assert(track instanceof HTMLElement);
+      vi.spyOn(track, "getBoundingClientRect").mockReturnValue({
+        left: 0,
+        right: 200,
+        width: 200,
+        top: 0,
+        bottom: 0,
+        height: 2,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      });
+
+      fireEvent.pointerDown(slider, { clientX: 20, pointerId: 1 });
+      fireEvent.pointerUp(slider, { pointerId: 1 });
+
+      expect(consoleLog).toHaveBeenLastCalledWith("change", {
+        value: 10,
+        valueUpper: 80,
+      });
+    });
+
+    it("keeps the picked handle focused through the compat mousedown", async () => {
+      const { container } = render(RangeSlider, {
+        props: { value: 20, valueUpper: 80 },
+      });
+      const track = container.querySelector(".bx--slider__track");
+      assert(track instanceof HTMLElement);
+
+      const notCanceled = await fireEvent.pointerDown(track, { pointerId: 1 });
+
+      expect(notCanceled).toBe(false);
+      expect(screen.getAllByRole("slider")[0]).toHaveFocus();
+    });
+
+    it("does not start a drag when disabled", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      const { container } = render(RangeSlider, { props: { disabled: true } });
+      const slider = container.querySelector(".bx--slider");
+      assert(slider instanceof HTMLElement);
+
+      await fireEvent.pointerDown(slider, { clientX: 20, pointerId: 1 });
+      await fireEvent.pointerUp(slider, { pointerId: 1 });
+
+      expect(consoleLog).not.toHaveBeenCalled();
     });
   });
 
@@ -873,15 +947,14 @@ describe("RangeSlider", () => {
         vi.spyOn(trackEl, "getBoundingClientRect").mockReturnValue(track);
         const [lowerThumb] = screen.getAllByRole("slider");
 
-        await fireEvent.mouseDown(lowerThumb, press);
+        await fireEvent.pointerDown(lowerThumb, { ...press, pointerId: 1 });
         await tick();
         expect(lowerThumb).toHaveAttribute("aria-valuenow", "20");
 
         // Moving 20px keeps the grab offset: 10 units, not 10 plus the offset.
-        await flushDismiss();
-        await fireEvent.mouseMove(window, move);
+        await fireEvent.pointerMove(lowerThumb, { ...move, pointerId: 1 });
         await tick();
-        await fireEvent.mouseUp(window);
+        await fireEvent.pointerUp(lowerThumb, { pointerId: 1 });
         expect(lowerThumb).toHaveAttribute("aria-valuenow", "30");
       },
     );

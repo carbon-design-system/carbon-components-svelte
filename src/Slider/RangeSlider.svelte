@@ -150,7 +150,6 @@
   import { createEventDispatcher, tick } from "svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
-  import { dismiss } from "../utils/dismiss.js";
   import {
     buildFieldIds,
     joinDescribedBy,
@@ -158,6 +157,7 @@
     resolveValidationVisibility,
   } from "../utils/field-status.js";
   import { clamp } from "../utils/numeric-format.js";
+  import { pointerDrag } from "../utils/pointer-drag.js";
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
   import { resolveSliderMarks } from "../utils/resolve-slider-marks.js";
   import {
@@ -165,6 +165,7 @@
     getPointerPosition,
     getValueText as getSliderValueText,
     getTrackAxis,
+    snapToStep,
     valueFromPointer,
   } from "../utils/slider-value.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -172,7 +173,6 @@
   /** @typedef {{ value: number; valueUpper: number }} RangeSliderChangeDetail */
   /** @typedef {"lower" | "upper"} ActiveHandle */
   /** @typedef {RangeSliderChangeDetail & { handle: ActiveHandle }} RangeSliderFocusDetail */
-  /** @typedef {MouseEvent | TouchEvent} PointerLikeEvent */
 
   /** @type {(type: "change" | "input" | "focus" | "blur", detail: RangeSliderChangeDetail | RangeSliderFocusDetail) => void} */
   const dispatch = createEventDispatcher();
@@ -189,10 +189,6 @@
   let upperInputRef = null;
   /** @type {ActiveHandle} */
   let activeHandle = "lower";
-  let dragging = false;
-  let holding = false;
-  /** @type {PointerLikeEvent | null} */
-  let currentEvent = null;
   // Pointer distance from the active handle's value point when the press
   // started on the handle itself, so grabbing a handle doesn't jump it.
   let grabOffset = 0;
@@ -207,7 +203,7 @@
     return getSliderValueText(numericValue, formatValue);
   }
 
-  /** @type {(e: PointerLikeEvent) => ActiveHandle} */
+  /** @type {(e: PointerEvent) => ActiveHandle} */
   function pickHandle(event) {
     const target = /** @type {Node | null} */ (event.target);
     if (target && lowerThumbRef?.contains(target)) return "lower";
@@ -250,11 +246,15 @@
     dispatch("blur", { value, valueUpper, handle: "upper" });
   }
 
-  /** @type {(e: MouseEvent | TouchEvent) => void} */
-  function startInteraction(event) {
-    if (disabled || readonly) return;
+  /** @type {(e: PointerEvent) => boolean | undefined} */
+  function handleDragStart(event) {
+    if (disabled || readonly) return false;
     activeHandle = pickHandle(event);
     const thumbRef = activeHandle === "lower" ? lowerThumbRef : upperThumbRef;
+    // The compat `mousedown` would move focus back off the thumb: to the
+    // body for a press on the track, and in Firefox for one on the thumb's
+    // SVG icon too.
+    event.preventDefault();
     thumbRef?.focus({ preventScroll: true });
 
     grabOffset = 0;
@@ -268,29 +268,12 @@
       const percent = activeHandle === "lower" ? left : leftUpper;
       grabOffset = point - (start + (length * percent) / 100);
     }
-    currentEvent = event;
-    holding = true;
-    dragging = true;
+    calcValue(event);
   }
 
-  /** @type {() => void} */
-  function stopHolding() {
-    const wasHolding = holding;
-    holding = false;
-    dragging = false;
-    currentEvent = null;
+  function handleDragEnd() {
     grabOffset = 0;
-    if (wasHolding && !disabled && !readonly) {
-      dispatch("change", { value, valueUpper });
-    }
-  }
-
-  /** @type {(e: PointerLikeEvent) => void} */
-  function move(event) {
-    if (holding) {
-      currentEvent = event;
-      dragging = true;
-    }
+    if (!disabled && !readonly) dispatch("change", { value, valueUpper });
   }
 
   // The gap applies before the bounds, so a `minGap` wider than the range
@@ -305,9 +288,9 @@
     return Math.min(max, Math.max(next, value + minGap));
   }
 
-  /** @type {(e: PointerLikeEvent | null) => void} */
+  /** @type {(e: PointerEvent) => void} */
   function calcValue(event) {
-    if (disabled || readonly || !event || !trackRef) return;
+    if (disabled || readonly || !trackRef) return;
 
     const nextValue = valueFromPointer(
       event,
@@ -367,9 +350,11 @@
     const delta =
       step * (isLargeStep ? range / step / stepMultiplier : 1) * dir;
     if (activeHandle === "lower") {
-      value = clampLower(Math.round((value + delta) / step) * step);
+      value = clampLower(snapToStep(value + delta, { min, max, step }));
     } else {
-      valueUpper = clampUpper(Math.round((valueUpper + delta) / step) * step);
+      valueUpper = clampUpper(
+        snapToStep(valueUpper + delta, { min, max, step }),
+      );
     }
     dispatch("input", { value, valueUpper });
     dispatch("change", { value, valueUpper });
@@ -407,11 +392,6 @@
       if (valueUpper - value < minGap)
         value = Math.max(min, valueUpper - minGap);
     }
-
-    if (dragging && currentEvent) {
-      calcValue(currentEvent);
-      dragging = false;
-    }
   }
 </script>
 
@@ -419,16 +399,6 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
   class:bx--form-item={true}
-  use:dismiss={{
-    enabled: holding,
-    listeners: [
-      { type: "mousemove", handler: move, options: { passive: true } },
-      { type: "touchmove", handler: move, options: { passive: true } },
-      { type: "mouseup", handler: stopHolding },
-      { type: "touchend", handler: stopHolding },
-      { type: "touchcancel", handler: stopHolding },
-    ],
-  }}
   {...$$restProps}
   on:click
   on:mouseover
@@ -518,8 +488,11 @@
       class:bx--slider--with-mark-labels={hasMarkLabels}
       class:bx--slider--vertical={orientation === "vertical"}
       style:max-width={fullWidth ? "none" : undefined}
-      on:mousedown={startInteraction}
-      on:touchstart={startInteraction}
+      use:pointerDrag={{
+        onStart: handleDragStart,
+        onMove: calcValue,
+        onEnd: handleDragEnd,
+      }}
     >
       <div
         class:bx--slider__thumb-wrapper={true}

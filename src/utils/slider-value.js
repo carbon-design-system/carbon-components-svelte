@@ -73,16 +73,51 @@ export function valueFromTrackPosition({
   max,
   step,
 }) {
-  let nextValue =
-    min + Math.round(((max - min) * ((clientX - left) / width)) / step) * step;
+  return snapToStep(min + (max - min) * ((clientX - left) / width), {
+    min,
+    max,
+    step,
+  });
+}
 
-  if (nextValue <= min) {
-    nextValue = min;
-  } else if (nextValue >= max) {
-    nextValue = max;
+/**
+ * Count the decimal places in a number's shortest string form, including
+ * exponent notation (`1e-7` has 7).
+ *
+ * @param {number} value
+ * @returns {number}
+ */
+function decimalPlaces(value) {
+  if (!Number.isFinite(value)) return 0;
+  const [mantissa, exponent = "0"] = String(value).split("e");
+  const fraction = mantissa.split(".")[1]?.length ?? 0;
+  return Math.max(0, fraction - Number(exponent));
+}
+
+/**
+ * Snap `value` to the nearest `min + n * step` and clamp it to `[min, max]`.
+ * The result is rounded to the decimal precision of `step` and `min`, so
+ * `step: 0.1` yields `0.3`, not `0.30000000000000004`. A non-positive
+ * `step` only clamps.
+ *
+ * @param {number} value
+ * @param {Object} options
+ * @param {number} options.min
+ * @param {number} options.max
+ * @param {number} options.step
+ * @returns {number}
+ */
+export function snapToStep(value, { min, max, step }) {
+  let next = value;
+  if (step > 0) {
+    const precision = Math.max(decimalPlaces(step), decimalPlaces(min));
+    next = Number(
+      (min + Math.round((value - min) / step) * step).toFixed(precision),
+    );
   }
-
-  return nextValue;
+  if (next <= min) return min;
+  if (next >= max) return max;
+  return next;
 }
 
 /**

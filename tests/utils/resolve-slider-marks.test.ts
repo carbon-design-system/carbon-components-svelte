@@ -38,6 +38,12 @@ describe("resolveSliderMarks", () => {
     ]);
   });
 
+  it("generates decimal ticks without floating-point noise", () => {
+    expect(
+      resolveSliderMarks(true, 0, 0.5, 0.1).map((mark) => mark.value),
+    ).toEqual([0, 0.1, 0.2, 0.3, 0.4, 0.5]);
+  });
+
   it("returns empty array when step is not positive in boolean mode", () => {
     expect(resolveSliderMarks(true, 0, 10, 0)).toEqual([]);
     expect(resolveSliderMarks(true, 0, 10, -1)).toEqual([]);
