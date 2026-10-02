@@ -951,23 +951,292 @@
   @include tabs-dismissible;
 }
 
+/// Vertical tabs collapsed into a horizontal, scrollable row of contained
+/// tabs. `$root` is the orientation marker the rules key off (see
+/// `tabs-vertical`).
+/// @access private
+/// @group components
+@mixin tabs-vertical-row($root) {
+  // The nav is an absolutely-positioned dropdown overlay by default. It is
+  // no longer an overlay here, so unlike the vendor original it stays
+  // transparent (matching contained `Tabs`) rather than painting a solid
+  // block behind any leftover space past the last tab.
+  #{$root} .#{$prefix}--tabs__nav {
+    position: static;
+    z-index: auto;
+    max-height: none;
+    box-shadow: none;
+    flex-direction: row;
+    overflow-x: auto;
+    background: transparent;
+  }
+
+  // The selected item is hidden by default below `md` (legacy dropdown).
+  #{$root} .#{$prefix}--tabs__nav-item,
+  #{$root}
+    .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled) {
+    display: flex;
+    flex: none;
+    block-size: $carbon--spacing-09;
+    inline-size: auto;
+    margin: 0;
+    background-color: $ui-03;
+  }
+
+  #{$root}
+    .#{$prefix}--tabs__nav-item
+    + .#{$prefix}--tabs__nav-item {
+    box-shadow: inset 1px 0 0 0 $ui-04;
+  }
+
+  // Outranks the base hover rule (`item:hover + item { box-shadow: none }`)
+  // so hovering the preceding tab doesn't strip the selected indicator.
+  #{$root}
+    .#{$prefix}--tabs__nav-item--selected.#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled) { // ccs: specificity
+    background-color: $ui-01;
+    box-shadow: inset 0 2px 0 0 $interactive-04;
+  }
+
+  #{$root} .#{$prefix}--tabs__nav-item--disabled {
+    background-color: $disabled-02;
+  }
+
+  // ccs: hover rules for this breakpoint, guarded together, same relative
+  // order they had unguarded.
+  @media (any-hover: hover) {
+    #{$root}
+      .#{$prefix}--tabs__nav-item:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled):hover {
+      background-color: $hover-selected-ui;
+    }
+
+    #{$root} .#{$prefix}--tabs__nav-item--disabled:hover {
+      background-color: $disabled-02;
+    }
+
+    // Remove the base hover-link bottom border, which would shift the label.
+    #{$root}
+      .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--disabled)
+      .#{$prefix}--tabs__nav-link {
+      border: none;
+    }
+  }
+
+  // The base disabled text token equals the disabled background here.
+  #{$root}
+    .#{$prefix}--tabs__nav-item--disabled
+    .#{$prefix}--tabs__nav-link {
+    color: $disabled-03;
+  }
+
+  #{$root} .#{$prefix}--tabs__nav-link,
+  #{$root} .#{$prefix}--tabs__nav-link:focus,
+  #{$root} .#{$prefix}--tabs__nav-link:active {
+    display: flex;
+    align-items: center;
+    inline-size: auto;
+    block-size: 100%;
+    padding: $carbon--spacing-03 $carbon--spacing-05;
+    border: none;
+    margin: 0;
+    line-height: inherit;
+  }
+
+  #{$root}
+    .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled)
+    .#{$prefix}--tabs__nav-link {
+    @include carbon--type-style("productive-heading-01");
+
+    border: none;
+    color: $text-01;
+  }
+
+  // The row scrolls horizontally, so size each item to its label instead
+  // of truncating it.
+  #{$root} .#{$prefix}--tabs__nav-item-label {
+    white-space: nowrap;
+  }
+
+  #{$root} ~ .#{$prefix}--tab-content {
+    background-color: $ui-01;
+  }
+}
+
+/// Vertical tabs as a fixed left column with a per-item left indicator.
+/// `$root` is the orientation marker the rules key off (see
+/// `tabs-vertical`).
+/// @access private
+/// @group components
+@mixin tabs-vertical-column($root) {
+  #{$root} {
+    flex: 0 0 auto;
+    // Fluid width (Carbon React spans a fixed ~25% of its Grid), bounded
+    // so it neither starves narrow layouts nor balloons on ultra-wide ones.
+    inline-size: clamp(#{to-rem(200px)}, 20%, #{to-rem(320px)});
+    min-height: 0;
+    background-color: $ui-01;
+  }
+
+  #{$root} .#{$prefix}--tabs__nav {
+    flex-direction: column;
+    inline-size: 100%;
+    max-width: none;
+    overflow: visible;
+  }
+
+  #{$root} .#{$prefix}--tabs__nav-item {
+    flex: none;
+    block-size: $carbon--spacing-10;
+    inline-size: 100%;
+    margin: 0;
+    background-color: $ui-01;
+    border-block-end: 1px solid $ui-03;
+    border-inline-end: 1px solid $ui-03;
+  }
+
+  #{$root}
+    .#{$prefix}--tabs__nav-item
+    + .#{$prefix}--tabs__nav-item {
+    margin: 0;
+  }
+
+  // Outranks the base hover rule (`item:hover + item { box-shadow: none }`)
+  // so the indicator is not stripped.
+  #{$root}
+    .#{$prefix}--tabs__nav-item:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled) {
+    box-shadow: inset 3px 0 0 0 $ui-03;
+  }
+
+  // Re-assert the bottom separator that the base `--selected { border: none }`
+  // strips. The right divider is transparent so the tab merges into the panel.
+  #{$root}
+    .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled) {
+    border-block-end: 1px solid $ui-03;
+    border-inline-end: 1px solid transparent;
+    box-shadow: inset 3px 0 0 0 $interactive-04;
+  }
+
+  #{$root}
+    .#{$prefix}--tabs__nav-item--disabled {
+    background-color: $ui-01;
+    box-shadow: inset 3px 0 0 0 $ui-03;
+  }
+
+  // ccs: hover rules for this breakpoint, guarded together, same relative
+  // order they had unguarded.
+  @media (any-hover: hover) {
+    #{$root}
+      .#{$prefix}--tabs__nav-item:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled):hover {
+      background-color: $hover-ui;
+      box-shadow: inset 3px 0 0 0 $ui-04;
+    }
+
+    #{$root}
+      .#{$prefix}--tabs__nav-item--disabled:hover {
+      background-color: $ui-01;
+      box-shadow: inset 3px 0 0 0 $ui-03;
+    }
+
+    // Remove the base hover-link bottom border, which would shift the label.
+    #{$root}
+      .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--disabled)
+      .#{$prefix}--tabs__nav-link {
+      border: none;
+    }
+  }
+
+  // The last tab closes against the panel edge; the second selector matches
+  // the selected rule above so it wins on order.
+  #{$root}
+    .#{$prefix}--tabs__nav-item:last-child,
+  #{$root}
+    .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled):last-child {
+    border-block-end: none;
+  }
+
+  #{$root} .#{$prefix}--tabs__nav-link,
+  #{$root} .#{$prefix}--tabs__nav-link:focus,
+  #{$root} .#{$prefix}--tabs__nav-link:active {
+    display: flex;
+    align-items: center;
+    inline-size: 100%;
+    block-size: 100%;
+    padding: $carbon--spacing-04 $carbon--spacing-05;
+    border: none;
+    margin: 0;
+    line-height: inherit;
+  }
+
+  // Top-align so the icon tracks the first line when the label wraps.
+  #{$root}
+    .#{$prefix}--tabs__nav-link--icon {
+    align-items: flex-start;
+  }
+
+  // One line tall so the centered icon lands on the label's first line.
+  #{$root}
+    .#{$prefix}--tabs__nav-link--icon
+    .#{$prefix}--tabs__nav-item--icon {
+    block-size: to-rem(18px);
+  }
+
+  #{$root}
+    .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled)
+    .#{$prefix}--tabs__nav-link {
+    @include carbon--type-style("productive-heading-01");
+
+    border: none;
+    color: $text-01;
+  }
+
+  #{$root} .#{$prefix}--tabs__nav-item-label {
+    display: -webkit-box;
+    overflow: hidden;
+    // `-webkit-line-clamp` mis-measures its own flex-basis (undersizing
+    // short labels); `width: 100%` still routes through that broken
+    // estimate. Pinning the floor with `min-inline-size` bypasses it.
+    inline-size: 0;
+    min-inline-size: 100%;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    text-overflow: ellipsis;
+    white-space: normal;
+  }
+
+  #{$root} ~ .#{$prefix}--tab-content {
+    flex: 1 1 auto;
+    background-color: $ui-01;
+    overflow-y: auto;
+  }
+}
+
 /// Vertical tabs (Carbon v11 `TabsVertical` parity), authored from the v11 token
 /// map since Carbon v10 ships no vertical variant. At `md` and up the tab list
 /// is a fixed left column with a per-item left indicator; below `md` it is a
 /// horizontal, scrollable row of contained tabs. The component drops
-/// `bx--tabs--container`, so these rules refine the default-tab rules and split
-/// by `breakpoint-down(md)` / `breakpoint(md)` so the orientations stay separate.
+/// `bx--tabs--container`, so these rules refine the default-tab rules. Each
+/// layout keys off one marker class the component always renders:
+/// `--responsive` (the default, split by `breakpoint-down(md)` /
+/// `breakpoint(md)`), or `--row` / `--column` when `orientation` pins it.
+/// The markers replace `bx--tabs--vertical` in the selector root, so every
+/// rule keeps the specificity it had before pinning existed.
 /// @access private
 /// @group components
 @mixin tabs-vertical {
   .#{$prefix}--tabs--vertical-container {
     display: flex;
     flex-direction: column;
+  }
 
-    @include carbon--breakpoint(md) {
+  @include carbon--breakpoint(md) {
+    .#{$prefix}--tabs--vertical-container--responsive {
       flex-direction: row;
       align-items: stretch;
     }
+  }
+
+  .#{$prefix}--tabs--vertical-container--column {
+    flex-direction: row;
+    align-items: stretch;
   }
 
   // `Tab` renders the icon after the label; move it before the label.
@@ -984,257 +1253,76 @@
     content: none;
   }
 
+  // Default: the column at `md` and up, the row below it. The marker class
+  // keeps these media-scoped rules off a pinned `orientation`.
   @include carbon--breakpoint-down(md) {
-    // The nav is an absolutely-positioned dropdown overlay by default. It is
-    // no longer an overlay here, so unlike the vendor original it stays
-    // transparent (matching contained `Tabs`) rather than painting a solid
-    // block behind any leftover space past the last tab.
-    .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav {
-      position: static;
-      z-index: auto;
-      max-height: none;
-      box-shadow: none;
-      flex-direction: row;
-      overflow-x: auto;
-      background: transparent;
-    }
-
-    // The selected item is hidden by default below `md` (legacy dropdown).
-    .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav-item,
-    .#{$prefix}--tabs--vertical
-      .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled) {
-      display: flex;
-      flex: none;
-      block-size: $carbon--spacing-09;
-      inline-size: auto;
-      margin: 0;
-      background-color: $ui-03;
-    }
-
-    .#{$prefix}--tabs--vertical
-      .#{$prefix}--tabs__nav-item
-      + .#{$prefix}--tabs__nav-item {
-      box-shadow: inset 1px 0 0 0 $ui-04;
-    }
-
-    // Outranks the base hover rule (`item:hover + item { box-shadow: none }`)
-    // so hovering the preceding tab doesn't strip the selected indicator.
-    .#{$prefix}--tabs--vertical
-      .#{$prefix}--tabs__nav-item--selected.#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled) { // ccs: specificity
-      background-color: $ui-01;
-      box-shadow: inset 0 2px 0 0 $interactive-04;
-    }
-
-    .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav-item--disabled {
-      background-color: $disabled-02;
-    }
-
-    // ccs: hover rules for this breakpoint, guarded together, same relative
-    // order they had unguarded.
-    @media (any-hover: hover) {
-      .#{$prefix}--tabs--vertical
-        .#{$prefix}--tabs__nav-item:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled):hover {
-        background-color: $hover-selected-ui;
-      }
-
-      .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav-item--disabled:hover {
-        background-color: $disabled-02;
-      }
-
-      // Remove the base hover-link bottom border, which would shift the label.
-      .#{$prefix}--tabs--vertical
-        .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--disabled)
-        .#{$prefix}--tabs__nav-link {
-        border: none;
-      }
-    }
-
-    // The base disabled text token equals the disabled background here.
-    .#{$prefix}--tabs--vertical
-      .#{$prefix}--tabs__nav-item--disabled
-      .#{$prefix}--tabs__nav-link {
-      color: $disabled-03;
-    }
-
-    .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav-link,
-    .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav-link:focus,
-    .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav-link:active {
-      display: flex;
-      align-items: center;
-      inline-size: auto;
-      block-size: 100%;
-      padding: $carbon--spacing-03 $carbon--spacing-05;
-      border: none;
-      margin: 0;
-      line-height: inherit;
-    }
-
-    .#{$prefix}--tabs--vertical
-      .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled)
-      .#{$prefix}--tabs__nav-link {
-      @include carbon--type-style("productive-heading-01");
-
-      border: none;
-      color: $text-01;
-    }
-
-    // The row scrolls horizontally, so size each item to its label instead
-    // of truncating it.
-    .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav-item-label {
-      white-space: nowrap;
-    }
-
-    .#{$prefix}--tabs--vertical ~ .#{$prefix}--tab-content {
-      background-color: $ui-01;
-    }
+    @include tabs-vertical-row('.#{$prefix}--tabs--vertical--responsive');
   }
 
   @include carbon--breakpoint(md) {
-    .#{$prefix}--tabs--vertical {
-      flex: 0 0 auto;
-      // Fluid width (Carbon React spans a fixed ~25% of its Grid), bounded
-      // so it neither starves narrow layouts nor balloons on ultra-wide ones.
-      inline-size: clamp(#{to-rem(200px)}, 20%, #{to-rem(320px)});
-      min-height: 0;
-      background-color: $ui-01;
-    }
-
-    .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav {
-      flex-direction: column;
-      inline-size: 100%;
-      max-width: none;
-      overflow: visible;
-    }
-
-    .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav-item {
-      flex: none;
-      block-size: $carbon--spacing-10;
-      inline-size: 100%;
-      margin: 0;
-      background-color: $ui-01;
-      border-block-end: 1px solid $ui-03;
-      border-inline-end: 1px solid $ui-03;
-    }
-
-    .#{$prefix}--tabs--vertical
-      .#{$prefix}--tabs__nav-item
-      + .#{$prefix}--tabs__nav-item {
-      margin: 0;
-    }
-
-    // Outranks the base hover rule (`item:hover + item { box-shadow: none }`)
-    // so the indicator is not stripped.
-    .#{$prefix}--tabs--vertical
-      .#{$prefix}--tabs__nav-item:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled) {
-      box-shadow: inset 3px 0 0 0 $ui-03;
-    }
-
-    // Re-assert the bottom separator that the base `--selected { border: none }`
-    // strips. The right divider is transparent so the tab merges into the panel.
-    .#{$prefix}--tabs--vertical
-      .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled) {
-      border-block-end: 1px solid $ui-03;
-      border-inline-end: 1px solid transparent;
-      box-shadow: inset 3px 0 0 0 $interactive-04;
-    }
-
-    .#{$prefix}--tabs--vertical
-      .#{$prefix}--tabs__nav-item--disabled {
-      background-color: $ui-01;
-      box-shadow: inset 3px 0 0 0 $ui-03;
-    }
-
-    // ccs: hover rules for this breakpoint, guarded together, same relative
-    // order they had unguarded.
-    @media (any-hover: hover) {
-      .#{$prefix}--tabs--vertical
-        .#{$prefix}--tabs__nav-item:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled):hover {
-        background-color: $hover-ui;
-        box-shadow: inset 3px 0 0 0 $ui-04;
-      }
-
-      .#{$prefix}--tabs--vertical
-        .#{$prefix}--tabs__nav-item--disabled:hover {
-        background-color: $ui-01;
-        box-shadow: inset 3px 0 0 0 $ui-03;
-      }
-
-      // Remove the base hover-link bottom border, which would shift the label.
-      .#{$prefix}--tabs--vertical
-        .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--disabled)
-        .#{$prefix}--tabs__nav-link {
-        border: none;
-      }
-    }
-
-    // The last tab closes against the panel edge; the second selector matches
-    // the selected rule above so it wins on order.
-    .#{$prefix}--tabs--vertical
-      .#{$prefix}--tabs__nav-item:last-child,
-    .#{$prefix}--tabs--vertical
-      .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled):last-child {
-      border-block-end: none;
-    }
-
-    .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav-link,
-    .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav-link:focus,
-    .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav-link:active {
-      display: flex;
-      align-items: center;
-      inline-size: 100%;
-      block-size: 100%;
-      padding: $carbon--spacing-04 $carbon--spacing-05;
-      border: none;
-      margin: 0;
-      line-height: inherit;
-    }
-
-    // Top-align so the icon tracks the first line when the label wraps.
-    .#{$prefix}--tabs--vertical
-      .#{$prefix}--tabs__nav-link--icon {
-      align-items: flex-start;
-    }
-
-    // One line tall so the centered icon lands on the label's first line.
-    .#{$prefix}--tabs--vertical
-      .#{$prefix}--tabs__nav-link--icon
-      .#{$prefix}--tabs__nav-item--icon {
-      block-size: to-rem(18px);
-    }
-
-    .#{$prefix}--tabs--vertical
-      .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled)
-      .#{$prefix}--tabs__nav-link {
-      @include carbon--type-style("productive-heading-01");
-
-      border: none;
-      color: $text-01;
-    }
-
-    .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav-item-label {
-      display: -webkit-box;
-      overflow: hidden;
-      // `-webkit-line-clamp` mis-measures its own flex-basis (undersizing
-      // short labels); `width: 100%` still routes through that broken
-      // estimate. Pinning the floor with `min-inline-size` bypasses it.
-      inline-size: 0;
-      min-inline-size: 100%;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
-      text-overflow: ellipsis;
-      white-space: normal;
-    }
-
-    .#{$prefix}--tabs--vertical ~ .#{$prefix}--tab-content {
-      flex: 1 1 auto;
-      background-color: $ui-01;
-      overflow-y: auto;
-    }
+    @include tabs-vertical-column('.#{$prefix}--tabs--vertical--responsive');
   }
+
+  // Pinned `orientation`: one layout at every viewport.
+  @include tabs-vertical-row('.#{$prefix}--tabs--vertical--row');
+  @include tabs-vertical-column('.#{$prefix}--tabs--vertical--column');
 }
 
 @include exports('tabs-vertical') {
   @include tabs-vertical;
+}
+
+/// Vertical tabs column item heights, keyed off `$root` (see `tabs-vertical`).
+/// @access private
+/// @group components
+@mixin tabs-vertical-size-column($root) {
+  #{$root}.#{$prefix}--layout--size-sm
+    .#{$prefix}--tabs__nav-item {
+    block-size: $size-sm;
+  }
+
+  #{$root}.#{$prefix}--layout--size-md
+    .#{$prefix}--tabs__nav-item {
+    block-size: $size-md;
+  }
+
+  #{$root}.#{$prefix}--layout--size-lg
+    .#{$prefix}--tabs__nav-item {
+    block-size: $size-lg;
+  }
+
+  #{$root}.#{$prefix}--layout--size-xl
+    .#{$prefix}--tabs__nav-item {
+    block-size: $size-xl;
+  }
+
+  #{$root}.#{$prefix}--layout--size-sm
+    .#{$prefix}--tabs__nav-item-label {
+    -webkit-line-clamp: 1;
+  }
+}
+
+/// Vertical tabs row item heights, keyed off `$root` (see `tabs-vertical`).
+/// @access private
+/// @group components
+@mixin tabs-vertical-size-row($root) {
+  #{$root}.#{$prefix}--layout--size-sm
+    .#{$prefix}--tabs__nav-item {
+    block-size: $size-sm;
+  }
+
+  #{$root}.#{$prefix}--layout--size-md
+    .#{$prefix}--tabs__nav-item {
+    block-size: $size-md;
+  }
+
+  // `xl` caps at `lg` in the row; both match the default row height.
+  #{$root}.#{$prefix}--layout--size-lg
+    .#{$prefix}--tabs__nav-item,
+  #{$root}.#{$prefix}--layout--size-xl
+    .#{$prefix}--tabs__nav-item {
+    block-size: $size-lg;
+  }
 }
 
 /// Vertical tabs size variants (Carbon v11 `size` on `TabListVertical`). Maps
@@ -1248,51 +1336,15 @@
 /// @group components
 @mixin tabs-vertical-size {
   @include carbon--breakpoint(md) {
-    .#{$prefix}--tabs--vertical.#{$prefix}--layout--size-sm
-      .#{$prefix}--tabs__nav-item {
-      block-size: $size-sm;
-    }
-
-    .#{$prefix}--tabs--vertical.#{$prefix}--layout--size-md
-      .#{$prefix}--tabs__nav-item {
-      block-size: $size-md;
-    }
-
-    .#{$prefix}--tabs--vertical.#{$prefix}--layout--size-lg
-      .#{$prefix}--tabs__nav-item {
-      block-size: $size-lg;
-    }
-
-    .#{$prefix}--tabs--vertical.#{$prefix}--layout--size-xl
-      .#{$prefix}--tabs__nav-item {
-      block-size: $size-xl;
-    }
-
-    .#{$prefix}--tabs--vertical.#{$prefix}--layout--size-sm
-      .#{$prefix}--tabs__nav-item-label {
-      -webkit-line-clamp: 1;
-    }
+    @include tabs-vertical-size-column('.#{$prefix}--tabs--vertical--responsive');
   }
 
   @include carbon--breakpoint-down(md) {
-    .#{$prefix}--tabs--vertical.#{$prefix}--layout--size-sm
-      .#{$prefix}--tabs__nav-item {
-      block-size: $size-sm;
-    }
-
-    .#{$prefix}--tabs--vertical.#{$prefix}--layout--size-md
-      .#{$prefix}--tabs__nav-item {
-      block-size: $size-md;
-    }
-
-    // `xl` caps at `lg` below `md`; both match the default row height.
-    .#{$prefix}--tabs--vertical.#{$prefix}--layout--size-lg
-      .#{$prefix}--tabs__nav-item,
-    .#{$prefix}--tabs--vertical.#{$prefix}--layout--size-xl
-      .#{$prefix}--tabs__nav-item {
-      block-size: $size-lg;
-    }
+    @include tabs-vertical-size-row('.#{$prefix}--tabs--vertical--responsive');
   }
+
+  @include tabs-vertical-size-column('.#{$prefix}--tabs--vertical--column');
+  @include tabs-vertical-size-row('.#{$prefix}--tabs--vertical--row');
 }
 
 @include exports('tabs-vertical-size') {
@@ -1433,9 +1485,13 @@ $tabs-sizes: (
   // floor the items already use in this state. Emits after the loop so it
   // outranks the unconditional `xl` root rule above at equal specificity.
   @include carbon--breakpoint-down(md) {
-    .#{$prefix}--tabs--vertical.#{$prefix}--layout--size-xl {
+    .#{$prefix}--tabs--vertical--responsive.#{$prefix}--layout--size-xl {
       min-block-size: $size-lg;
     }
+  }
+
+  .#{$prefix}--tabs--vertical--row.#{$prefix}--layout--size-xl {
+    min-block-size: $size-lg;
   }
 }
 

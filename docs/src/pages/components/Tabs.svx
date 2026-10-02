@@ -733,6 +733,29 @@ On narrower screens, the list becomes a horizontal row with overflow scrolling.
   </svelte:fragment>
 </TabsVertical>
 
+### Orientation
+
+By default, TabsVertical switches between the column and the row at the medium breakpoint (672px), based on the viewport width. Set `orientation` to keep one layout at every width. `aria-orientation` and the arrow keys follow the layout: Up/Down in the column, Left/Right in the row. TabsVerticalSkeleton accepts the same prop.
+
+| Value | Layout | Use when |
+| --- | --- | --- |
+| `undefined` (default) | Column from `md` up, row below | The tabs span most of the page width |
+| `"vertical"` | Always the column | A narrow viewport should still show the list beside the panel |
+| `"horizontal"` | Always the row | The tabs sit in a narrow container, such as a side panel, on a wide screen |
+
+<TabsVertical orientation="horizontal">
+  <Tab label="Dashboard" />
+  <Tab label="Monitoring" />
+  <Tab label="Activity" />
+  <Tab label="Settings" />
+  <svelte:fragment slot="content">
+    <TabContent>Dashboard content with analytics and overview.</TabContent>
+    <TabContent>Monitoring content for uptime and alerts.</TabContent>
+    <TabContent>Activity content for recent user actions.</TabContent>
+    <TabContent>Settings and configuration options.</TabContent>
+  </svelte:fragment>
+</TabsVertical>
+
 ### Sizes
 
 Size defaults to `"xl"`. Set `size` to change tab height in the vertical column

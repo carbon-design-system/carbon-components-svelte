@@ -9,12 +9,15 @@
     "automatic";
   export let icon: ComponentProps<Tab>["icon"] = undefined;
   export let size: ComponentProps<TabsVertical>["size"] = undefined;
+  export let orientation: ComponentProps<TabsVertical>["orientation"] =
+    undefined;
 </script>
 
 <TabsVertical
   {selected}
   {activation}
   {size}
+  {orientation}
   on:change={({ detail }) => {
     console.log("change event", detail);
   }}
