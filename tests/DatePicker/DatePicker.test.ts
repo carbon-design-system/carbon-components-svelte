@@ -2529,6 +2529,27 @@ describe("DatePicker", () => {
     });
   });
 
+  it("does not mark today with the inert no-border class", async () => {
+    // Carbon's day cells have no border, so the class only existed to
+    // undo flatpickr's own stylesheet, which is not supported.
+    const now = new Date();
+    const other = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() === 1 ? 2 : 1,
+    );
+    const pad = (n: number) => String(n).padStart(2, "0");
+    render(DatePicker, {
+      datePickerType: "single",
+      value: `${pad(other.getMonth() + 1)}/${pad(other.getDate())}/${other.getFullYear()}`,
+    });
+    await user.click(screen.getByLabelText("Date"));
+    const calendar = await screen.findByLabelText("calendar-container");
+
+    expect(calendar.querySelector(".flatpickr-day.today")).not.toBeNull();
+    expect(calendar.querySelector(".no-border")).toBeNull();
+  });
+
   describe("multiple mode", () => {
     it("renders multiple mode", async () => {
       const { container } = render(DatePicker, {

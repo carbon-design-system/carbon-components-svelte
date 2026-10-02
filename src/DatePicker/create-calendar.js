@@ -61,13 +61,7 @@ export function resolveLocale(locale) {
  * @param {{ isMonth?: boolean; isYear?: boolean }} [modifiers]
  */
 function updateClasses(instance, { isMonth = false, isYear = false } = {}) {
-  const {
-    calendarContainer,
-    days,
-    daysContainer,
-    weekdayContainer,
-    selectedDates,
-  } = instance;
+  const { calendarContainer, days, daysContainer, weekdayContainer } = instance;
 
   calendarContainer.classList.add("bx--date-picker__calendar");
   // Marker classes so SCSS can target the shorter month/year grids without `:has()`.
@@ -90,9 +84,6 @@ function updateClasses(instance, { isMonth = false, isYear = false } = {}) {
   }
   for (const node of days.querySelectorAll(".flatpickr-day")) {
     node.classList.add("bx--date-picker__day");
-    if (node.classList.contains("today")) {
-      node.classList.toggle("no-border", selectedDates.length > 0);
-    }
   }
 }
 

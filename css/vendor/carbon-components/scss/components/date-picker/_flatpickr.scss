@@ -530,10 +530,6 @@
     }
   }
 
-  .flatpickr-day.today.no-border {
-    border: none;
-  }
-
   .flatpickr-day.today.selected {
     @include focus-outline('outline');
 
