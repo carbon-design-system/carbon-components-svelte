@@ -535,13 +535,67 @@
 /// @access private
 /// @group slider
 @mixin slider-vertical {
+  // Fill the parent's height. `height: 100%` only resolves against a definite
+  // parent height; otherwise the container's flex-basis sets a default 200px
+  // track, which flex-shrink/grow then fit to a definite parent.
+  .#{$prefix}--slider-form-item--vertical {
+    height: 100%;
+  }
+
+  // Track on the left; `max` label top-right, `min` label bottom-right. The
+  // text input sits in its own row below so it reads as the value rather
+  // than as either end.
+  .#{$prefix}--slider-container--vertical {
+    display: grid;
+    flex: 1 1 to-rem(280px);
+    align-items: start;
+    gap: 0;
+    grid-template-areas:
+      "track max"
+      "track ."
+      "track min"
+      "input input";
+    grid-template-columns: auto auto;
+    grid-template-rows: auto 1fr auto auto;
+  }
+
+  // Half the 40px text input, so the track ends line up with the centers of
+  // the range labels.
   .#{$prefix}--slider--vertical {
     width: to-rem(2px);
     min-width: 0;
     max-width: none;
-    height: to-rem(200px);
+    height: auto;
+    align-self: stretch;
     padding: 0 $carbon--spacing-05;
-    margin: $carbon--spacing-05 0;
+    margin: to-rem(20px) 0;
+    grid-area: track;
+  }
+
+  // Center each range label on its end of the track.
+  .#{$prefix}--slider-container--vertical > .#{$prefix}--slider__range-label {
+    margin: 0;
+  }
+
+  .#{$prefix}--slider-container--vertical
+    > .#{$prefix}--slider__range-label:last-of-type {
+    align-self: start;
+    margin-top: to-rem(20px);
+    grid-area: max;
+    transform: translateY(-50%);
+  }
+
+  .#{$prefix}--slider-container--vertical
+    > .#{$prefix}--slider__range-label:first-of-type {
+    align-self: end;
+    margin-bottom: to-rem(20px);
+    grid-area: min;
+    transform: translateY(50%);
+  }
+
+  .#{$prefix}--slider-container--vertical > .#{$prefix}--slider-text-input-wrapper {
+    justify-self: start;
+    grid-area: input;
   }
 
   .#{$prefix}--slider--vertical .#{$prefix}--slider__track {
