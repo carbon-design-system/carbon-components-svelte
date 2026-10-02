@@ -13,6 +13,9 @@
    */
   export let expanded = false;
 
+  /** Set to `true` to mark the menu as containing the current page. */
+  export let isActive = false;
+
   /** Set to `true` to use the large variant */
   export let large = false;
 
@@ -46,9 +49,25 @@
   /** Menus with an icon from the outermost one through this one. */
   const iconDepth = writable(0);
 
-  setContext("carbon:SideNavMenu", { depth, iconDepth });
+  /** Descendant links and menus that contain the current page. */
+  let currentKeys = new Set();
+
+  function setCurrent(key, selected) {
+    if (selected === currentKeys.has(key)) return;
+    if (selected) currentKeys.add(key);
+    else currentKeys.delete(key);
+    currentKeys = currentKeys;
+  }
+
+  setContext("carbon:SideNavMenu", { depth, iconDepth, setCurrent });
 
   $: iconDepth.set($parentIconDepth + (icon || $$slots.icon ? 1 : 0));
+
+  $: current = currentKeys.size > 0;
+
+  const key = {};
+
+  $: parentMenu?.setCurrent(key, isActive || current);
 
   let menuRef = null;
 
@@ -60,6 +79,8 @@
     if (menuRef?.querySelector('[aria-current="page"]')) {
       expanded = true;
     }
+
+    return () => parentMenu?.setCurrent(key, false);
   });
 </script>
 
@@ -67,6 +88,7 @@
   class:bx--side-nav__item={true}
   class:bx--side-nav__item--icon={icon || $$slots.icon}
   class:bx--side-nav__item--large={large}
+  class:bx--side-nav__item--active={(isActive || current) && !expanded}
 >
   <button
     type="button"
