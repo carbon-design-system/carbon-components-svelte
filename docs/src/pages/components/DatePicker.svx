@@ -293,7 +293,7 @@ Import the corresponding locale module from `flatpickr/dist/l10n/<key>` and pass
 
 ### Locale with year-first order
 
-For locales where `Intl.DateTimeFormat` orders the year before the month (for example Japanese), the calendar header automatically reorders to match—"2000年1月" instead of "January 2000".
+For locales where `Intl.DateTimeFormat` orders the year before the month (for example Japanese), the calendar header reorders to match: "2000年1月" instead of "January 2000". The order is looked up from the locale key, so register the locale module under its key and pass the key (`"ja"`). A locale object carries no key, so the header stays month first.
 
 <FileSource src="/framed/DatePicker/DatePickerYearFirstLocale" />
 
