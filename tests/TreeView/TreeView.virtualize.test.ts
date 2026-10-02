@@ -205,6 +205,21 @@ describe("TreeView (virtualize)", () => {
     );
   });
 
+  it("Cmd+A selects all currently visible non-disabled rows", async () => {
+    const { component } = render(TreeViewVirtualize, {
+      totalRoots: 5,
+      childrenPerRoot: 0,
+      multiselect: true,
+      selectedIds: [],
+    });
+
+    findRowById(0)?.focus();
+    await user.keyboard("{Meta>}a{/Meta}");
+    await tick();
+
+    expect(component.selectedIds).toEqual([0, 1, 2, 3, 4]);
+  });
+
   it("Ctrl+click deselects a selected row that is not active", async () => {
     const { component } = render(TreeViewVirtualize, {
       totalRoots: 10,
@@ -433,5 +448,48 @@ describe("TreeView (virtualize)", () => {
       expect(findRowById(1201)).not.toBeNull();
       expect(findRowById(1201)).toHaveFocus();
     });
+  });
+
+  it("keeps arrow-key navigation after virtualize is turned off", async () => {
+    const { component } = render(TreeViewVirtualize, {
+      totalRoots: 3,
+      childrenPerRoot: 0,
+    });
+
+    component.virtualize = undefined;
+    await tick();
+
+    const first = document.getElementById("0");
+    assert(first instanceof HTMLElement);
+    first.focus();
+    await user.keyboard("{ArrowDown}");
+
+    expect(document.getElementById("1")).toHaveFocus();
+  });
+
+  it("PageDown and PageUp move focus by one viewport of rows", async () => {
+    render(TreeViewVirtualize, { totalRoots: 50, childrenPerRoot: 0 });
+
+    findRowById(0)?.focus();
+    // maxVisibleRows: 10 -> pages of 9 rows, keeping the current row in view.
+    await user.keyboard("{PageDown}");
+    await waitFor(() => expect(findRowById(9)).toHaveFocus());
+
+    await user.keyboard("{PageDown}");
+    await waitFor(() => expect(findRowById(18)).toHaveFocus());
+
+    await user.keyboard("{PageUp}");
+    await waitFor(() => expect(findRowById(9)).toHaveFocus());
+  });
+
+  it("PageDown and PageUp stop at the last and first rows", async () => {
+    render(TreeViewVirtualize, { totalRoots: 12, childrenPerRoot: 0 });
+
+    findRowById(5)?.focus();
+    await user.keyboard("{PageDown}");
+    await waitFor(() => expect(findRowById(11)).toHaveFocus());
+
+    await user.keyboard("{PageUp}{PageUp}");
+    await waitFor(() => expect(findRowById(0)).toHaveFocus());
   });
 });

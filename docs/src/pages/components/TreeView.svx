@@ -120,7 +120,14 @@ Combine `size="compact"` with `selectionMode="checkbox"`.
 
 ### Inline editing
 
-Use a `contenteditable` element in each tree view node to enable inline editing of node names. The editable region is wrapped in a container with `stopPropagation` to prevent tree node selection when editing.
+Compose a [TextInput](/components/TextInput) in the default slot to rename nodes in place. In this example, <DocKbd label="F2" /> on a focused row or a double-click starts editing, <DocKbd label="Enter" /> saves, and <DocKbd label="Escape" /> cancels. Moving focus away saves a valid name and discards an invalid one.
+
+| Do | Why |
+| -- | --- |
+| Listen for <DocKbd label="F2" /> with `on:keydown` on the tree, and track the focused row with `on:focus` | The tree forwards `keydown` and has no rename key of its own. |
+| Wrap the input in an element that stops `click` and `keydown` propagation | Row handlers otherwise treat <DocKbd label="Space" /> as select and arrow keys as navigation. |
+| Validate against `getSiblings(id)` | Catches duplicate names within the same folder. |
+| Call `showNode(id, { expand: false, select: false })` after saving or canceling | Returns focus to the row so keyboard navigation continues from it. |
 
 <FileSource src="/framed/TreeView/TreeViewInlineEditing" />
 
@@ -142,6 +149,8 @@ The tree is one tab stop; arrow keys move focus between visible rows, skipping d
 | <DocKbd label="Right" /> | On a collapsed parent, expands it (fires `on:toggle`). On an expanded parent, moves focus to its first child. |
 | <DocKbd label="Left" /> | On an expanded parent, collapses it. Otherwise moves focus to the parent row. |
 | <DocKbd label="Home" /> / <DocKbd label="End" /> | Moves focus to the first or last row. |
+| <DocKbd label="PageUp" /> / <DocKbd label="PageDown" /> | With [`virtualize`](#virtualization), moves focus up or down by one viewport of rows. |
+| <DocKbd label="*" /> | Expands the focused row and every expandable sibling at the same level (fires `on:toggle` for each). Does nothing with [`autoCollapse`](#auto-collapse-siblings). |
 | <DocKbd label="Enter" /> | Selects the row; on a parent, also expands or collapses it. In `selectionMode="checkbox"`, checks or unchecks the row instead. On a [link node](#links), follows the link. |
 | <DocKbd label="Space" /> | Selects the row without expanding or collapsing it. In checkbox mode, checks or unchecks the row. |
 | Letters | Moves focus to the next row whose text starts with the typed characters. Repeating one letter cycles through rows that start with it. The typed text resets after a short pause. |
@@ -154,7 +163,7 @@ With `multiselect`, these keys also change the selection. A row's unit depends o
 | <DocKbd label="Shift" /> + <DocKbd label="Space" /> | Selects the range from the anchor to the focused row, as <DocKbd label="Shift" /> + click does. |
 | <DocKbd label="Shift" /> + <DocKbd label="Up" /> / <DocKbd label="Down" /> | Moves focus to the previous or next row and toggles that row's unit. |
 | <DocKbd label="Ctrl" /> + <DocKbd label="Shift" /> + <DocKbd label="Home" /> / <DocKbd label="End" /> | Adds every row from the focused row to the first or last row. |
-| <DocKbd label="Ctrl" /> + <DocKbd label="A" /> | Adds every visible, non-disabled row. |
+| <DocKbd label="Ctrl" /> or <DocKbd label="CMD" /> + <DocKbd label="A" /> | Adds every visible, non-disabled row. |
 
 ## Multi-select
 
@@ -249,6 +258,14 @@ Configure `TreeView.showNode` behavior using optional parameters. By default, al
 
 <FileSource src="/framed/TreeView/TreeViewShowNodeOptions" />
 
+#### Scroll into view
+
+Set `scroll` to `true` with `focus` set to `false` to bring a node into view without moving focus, for example when another control drives navigation and should keep focus. `scroll` defaults to the value of `focus`, since focusing a node already scrolls it into view.
+
+`showNode` returns a promise that resolves once the node is focused or scrolled into view. It resolves to `false` if no node has the id, or if the row can't be reached, such as with `expand: false` while an ancestor is collapsed.
+
+<FileSource src="/framed/TreeView/TreeViewShowNodeScroll" />
+
 ### Node lookup
 
 Use `TreeView.getNode` to resolve a node's text or metadata from its id, useful for a breadcrumb or detail pane driven by `activeId`. Unmatched ids return `null`.
@@ -257,17 +274,60 @@ Use `TreeView.getNodes` to resolve multiple ids at once, such as `selectedIds`. 
 
 <FileSource src="/framed/TreeView/TreeViewGetNode" />
 
+### Structural queries
+
+Use the structural lookups to build UI around the tree, such as a breadcrumb, a detail pane, or a context menu, without walking `nodes` yourself. Each takes a node id and returns nodes.
+
+| Method | Returns |
+| ------ | ------- |
+| `getParent(id)` | The parent node, or `null` for a top-level node or unknown id. |
+| `getAncestors(id)` | Ancestors ordered from the top-level node down to the parent. |
+| `getChildren(id)` | Loaded children in order. Empty for leaves and for `hasChildren` nodes that have not loaded yet. |
+| `getSiblings(id)` | Other nodes under the same parent, in order. Top-level nodes are siblings of each other. |
+
+This example renders the active node's ancestors as a [Breadcrumb](/components/Breadcrumb). Selecting a breadcrumb item calls `showNode` to move to that ancestor.
+
+<FileSource src="/framed/TreeView/TreeViewStructure" />
+
+### Context menu
+
+Wrap the tree in an element and pass it as the [ContextMenu](/components/ContextMenu) `target`. The `open` event's detail is the right-clicked element; each row carries its node id as its `id` attribute, so find the nearest `[role="treeitem"]` and resolve it with `getNode`. With numeric ids, convert the attribute back to a number first.
+
+The example selects the right-clicked node with `showNode` so the menu's target stays visible, then uses `getParent` and `getSiblings` to drive the options.
+
+<FileSource src="/framed/TreeView/TreeViewContextMenu" />
+
 ## Performance
 
 Scale to large trees by loading, rendering, and measuring only what's needed.
 
 ### Lazy loading
 
-Set `hasChildren` on a node to render it as an expandable branch before its `nodes` are known. Expanding it fires `toggle` as usual; the handler can fetch and assign `nodes` asynchronously.
+Set `hasChildren` on a node to render it as an expandable branch before its `nodes` are known, then fetch and assign `nodes` when the branch expands.
 
-While `hasChildren` is `true` and `nodes` is empty, the `childNodes` slot renders in place of the (empty) subtree, receiving the same `node` as the default slot. TreeView has no built-in concept of "loading" or "error" — the slot is generic, so you decide what to render (a spinner, an error message with retry, or nothing) based on whatever fields you put on the node yourself.
+While `hasChildren` is `true` and `nodes` is empty, the `childNodes` slot renders in place of the (empty) subtree, receiving the same `node` as the default slot. TreeView has no built-in concept of "loading" or "error" — the slot is generic, so you decide what to render (a spinner, an error message, or nothing) based on whatever fields you put on the node yourself. [InlineLoading](/components/InlineLoading) announces both states to screen readers.
+
+| Do | Why |
+| -- | --- |
+| Load from `on:toggle:change`, using its `added` ids | `on:toggle` only fires for user gestures. `toggle:change` also covers `expandAll`, `expandNodes`, `showNode`, and a bound `expandedIds`, which would otherwise leave a branch loading forever. |
+| Track requests in flight by id | A user can collapse and expand a branch before its request settles; skip a second fetch for the same id. |
+| Replace the loaded node with a new object | `nodes = nodes.map(...)` updates the tree without mutating shared node objects. |
 
 <FileSource src="/framed/TreeView/TreeViewLazyLoad" />
+
+#### Errors and retry
+
+Store the error on the node and render it in the `childNodes` slot. This example clears the error when the branch collapses, so expanding it again retries. Avoid putting buttons inside the tree for retry; the tree's keyboard handling owns <DocKbd label="Enter" /> and <DocKbd label="Space" /> on its rows.
+
+<FileSource src="/framed/TreeView/TreeViewLazyLoadError" />
+
+#### Reveal an unloaded node
+
+`showNode` can only reach nodes that are in `nodes`. To reveal a node whose ancestors haven't loaded, load each ancestor in order from the top, then call `showNode`. The tree can't know where an unloaded node lives, so your app supplies the ancestor ids, for example from a search API that returns a path.
+
+Await a `tick` after assigning `nodes` so the tree indexes the new children before the next `getNode` or `showNode` call.
+
+<FileSource src="/framed/TreeView/TreeViewLazyLoadReveal" />
 
 ### Virtualization
 
@@ -287,7 +347,9 @@ Row height is fixed and comes from `size` (32px default, 24px compact). Rows do 
 
 #### With lazy loading
 
-Combine `virtualize` with `hasChildren` to fetch children on expand. This example starts with the same project-folder roots as [Virtualization](#virtualization), but each subtree loads on demand (including nested folders). The virtualized path does not render the `childNodes` slot, so the demo inserts a temporary disabled "Loading…" child while the request is in flight, then replaces it with the fetched nodes.
+Combine `virtualize` with `hasChildren` to fetch children on expand. This example starts with the same project-folder roots as [Virtualization](#virtualization), but each subtree loads on demand (including nested folders).
+
+When the `childNodes` slot is provided, the virtualized tree reserves one row for it under each expanded node whose children haven't loaded. The row has the same fixed height as the others, so keep the slot content to a single line. Arrow keys skip it.
 
 <FileSource src="/framed/TreeView/TreeViewVirtualizeLazy" />
 
@@ -321,6 +383,8 @@ Filter nodes with the built-in helpers.
 
 Combine a search input with `filterTreeByText` to create an interactive searchable tree. Type to filter nodes by name (case-insensitive substring matching). By default, matching nodes and their ancestors are included to maintain valid tree structure.
 
+The example expands every branch of the filtered tree while a query is active, and saves the bound `expandedIds` when the search starts so clearing it restores the branches the user had open. Filtering returns new node objects with the same ids, so selection and expansion carry over.
+
 <FileSource src="/framed/TreeView/TreeViewFilter" />
 
 #### By ID
@@ -334,3 +398,30 @@ Use `filterTreeById` to filter nodes by their ID. Accepts either a single ID or 
 Use `filterTreeNodes` with a predicate function to implement custom filtering logic. The example demonstrates filtering by file extension, filtering leaf nodes only, and using the `includeChildren` option to include all descendants of matching nodes. By default, matching nodes and their ancestors are included.
 
 <FileSource src="/framed/TreeView/TreeViewFilterNodes" />
+
+### Move nodes
+
+Use `moveTreeNode` to move one or more nodes `"before"`, `"after"`, or `"inside"` a target, for reordering, cut and paste, or drag and drop. It returns a new tree and copies only the arrays on the changed paths, so untouched subtrees keep their references. Ids don't change, so selection and expansion carry over.
+
+An invalid move returns the input array unchanged: an unknown id or target, or a target that is a moved node or inside one. Compare the result with the input to detect it.
+
+```js
+const next = moveTreeNode(nodes, ["readme", "license"], {
+  target: "docs",
+  position: "inside",
+});
+if (next === nodes) console.warn("Can't move a folder into itself");
+nodes = next;
+```
+
+This example moves the active node with buttons, a keyboard-accessible alternative to dragging.
+
+<FileSource src="/framed/TreeView/TreeViewMoveNodes" />
+
+### Find and highlight
+
+To search without hiding rows, keep `nodes` unfiltered and highlight matches in the default slot. `fuzzyMatch` returns the `indices` of the matched characters, and `highlightSegments` splits the text into matched and unmatched runs to bold. Both are exported from `carbon-components-svelte`.
+
+To step through matches, collect the matching ids in tree order and pass each to `showNode` with `focus: false` and `scroll: true`. The match is expanded, selected, and scrolled into view, while focus stays in the search input. In the example, press <DocKbd label="Enter" /> or <DocKbd label="Shift" /> + <DocKbd label="Enter" /> in the input to move to the next or previous match.
+
+<FileSource src="/framed/TreeView/TreeViewSearchHighlight" />

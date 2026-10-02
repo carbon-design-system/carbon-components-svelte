@@ -104,34 +104,42 @@
   import { toAriaChecked } from "../utils/tree-aria-checked.js";
 
   let ref = null;
-  let refLabel = null;
-  let prevActiveId = undefined;
+  let wasActive = false;
 
   const {
-    activeNodeId,
-    selectedIdSet,
-    checkedIdSet,
-    indeterminateIdSet,
+    activeMembership,
+    selectedMembership,
+    checkedMembership,
+    indeterminateMembership,
     selectionMode,
     clickNode,
     selectNode,
     focusNode,
   } = getContext("carbon:TreeView");
 
-  function offset() {
-    const depth = computeTreeLeafDepth(refLabel) - 1;
-    // Checkbox is the leading element; use one inset per depth. The
-    // leaf/icon offsets below align text with a parent's caret and would
-    // shift the checkboxes instead.
+  /**
+   * Label inset in rem. Checkbox is the leading element; use one inset per
+   * depth. The leaf/icon offsets align text with a parent's caret and would
+   * shift the checkboxes instead.
+   * @type {(level: number, isCheckboxMode: boolean, leaf: boolean, icon: unknown) => number}
+   */
+  function resolveLabelInset(level, isCheckboxMode, leaf, icon) {
+    const depth = level - 1;
     if (isCheckboxMode) return depth + 1;
     return depth + (leaf && icon ? 2 : 2.5);
   }
 
-  $: selected = $selectedIdSet.has(id);
-  $: checked = $checkedIdSet.has(id);
+  // Per-id stores: a change elsewhere in the tree does not notify this row.
+  $: activeState = activeMembership.select(id);
+  $: selectedState = selectedMembership.select(id);
+  $: checkedState = checkedMembership.select(id);
+  $: indeterminateState = indeterminateMembership.select(id);
+  $: active = $activeState;
+  $: selected = $selectedState;
+  $: checked = $checkedState;
   // Link rows navigate; they render no checkbox.
   $: isCheckboxMode = $selectionMode === "checkbox" && href === undefined;
-  $: indeterminate = isCheckboxMode && $indeterminateIdSet.has(id);
+  $: indeterminate = isCheckboxMode && $indeterminateState;
   // Merge all props (including custom properties) with computed properties
   // Explicitly include disabled to ensure it's always present (has default value)
   // `level`/`posinset`/`setsize` are layout-only (drive `aria-*` attributes) and excluded from `node`.
@@ -151,20 +159,11 @@
     indeterminate,
   };
   $: {
-    if (
-      id === $activeNodeId &&
-      prevActiveId !== $activeNodeId &&
-      !$selectedIdSet.has(id)
-    )
-      selectNode(node);
+    if (active && !wasActive && !selected) selectNode(node);
 
-    prevActiveId = $activeNodeId;
+    wasActive = active;
   }
-  $: if (refLabel) {
-    const rem = offset();
-    refLabel.style.marginLeft = `-${rem}rem`;
-    refLabel.style.paddingLeft = `${rem}rem`;
-  }
+  $: labelInset = resolveLabelInset(level, isCheckboxMode, leaf, icon);
 </script>
 
 {#if href}
@@ -178,14 +177,14 @@
       target={disabled ? undefined : target}
       rel={resolveLinkRel(target)}
       tabindex={disabled ? undefined : -1}
-      aria-current={id === $activeNodeId ? "page" : undefined}
+      aria-current={active ? "page" : undefined}
       aria-disabled={disabled}
       aria-level={level}
       aria-posinset={posinset}
       aria-setsize={setsize}
       class:bx--tree-node={true}
       class:bx--tree-leaf-node={true}
-      class:bx--tree-node--active={id === $activeNodeId}
+      class:bx--tree-node--active={active}
       class:bx--tree-node--selected={selected}
       class:bx--tree-node--disabled={disabled}
       class:bx--tree-node--with-icon={icon}
@@ -227,7 +226,11 @@
         focusNode(node);
       }}
     >
-      <div bind:this={refLabel} class:bx--tree-node__label={true}>
+      <div
+        class:bx--tree-node__label={true}
+        style:margin-left="-{labelInset}rem"
+        style:padding-left="{labelInset}rem"
+      >
         <svelte:component this={icon} class="bx--tree-node__icon" />
         <slot {node}> {text} </slot>
       </div>
@@ -240,7 +243,7 @@
     role="treeitem"
     {id}
     tabindex={disabled ? undefined : -1}
-    aria-current={id === $activeNodeId || undefined}
+    aria-current={active || undefined}
     aria-selected={isCheckboxMode || disabled ? undefined : selected}
     aria-checked={isCheckboxMode
       ? toAriaChecked(checked, indeterminate)
@@ -251,7 +254,7 @@
     aria-setsize={setsize}
     class:bx--tree-node={true}
     class:bx--tree-leaf-node={true}
-    class:bx--tree-node--active={id === $activeNodeId}
+    class:bx--tree-node--active={active}
     class:bx--tree-node--selected={isCheckboxMode ? checked : selected}
     class:bx--tree-node--disabled={disabled}
     class:bx--tree-node--with-icon={icon}
@@ -296,7 +299,11 @@
       focusNode(node);
     }}
   >
-    <div bind:this={refLabel} class:bx--tree-node__label={true}>
+    <div
+      class:bx--tree-node__label={true}
+      style:margin-left="-{labelInset}rem"
+      style:padding-left="{labelInset}rem"
+    >
       {#if isCheckboxMode}
         <!-- Decorative input; empty label keeps row textContent stable for type-ahead. -->
         <Checkbox
