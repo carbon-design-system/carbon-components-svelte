@@ -25,6 +25,17 @@ describe("vertical slider layout", () => {
       )?.decls.get("grid-area"),
     ).toBe("input");
 
+    // Range slider: each input pairs with the end it bounds.
+    const twoHandlesVertical = find(
+      ".bx--slider-container--vertical.bx--slider-container--two-handles",
+    );
+    expect(twoHandlesVertical?.decls.get("grid-template-areas")).toContain(
+      '"track max upper"',
+    );
+    expect(twoHandlesVertical?.decls.get("grid-template-areas")).toContain(
+      '"track min lower"',
+    );
+
     const track = find(".bx--slider--vertical");
     expect(track?.decls.get("height")).toBe("auto");
     expect(track?.decls.get("grid-area")).toBe("track");
@@ -39,5 +50,11 @@ describe("vertical slider layout", () => {
         ".bx--slider-container--vertical>.bx--slider__range-label:first-of-type",
       )?.decls.get("grid-area"),
     ).toBe("min");
+
+    // Must beat the horizontal two-handle `display: flex; gap` rule.
+    const twoHandles = find(".bx--slider-container--two-handles");
+    expect(container?.order).toBeGreaterThan(
+      twoHandles?.order ?? Number.POSITIVE_INFINITY,
+    );
   }, 30_000);
 });

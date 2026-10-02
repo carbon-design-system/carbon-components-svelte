@@ -559,8 +559,20 @@
     grid-template-rows: auto 1fr auto auto;
   }
 
+  // RangeSlider: each input pairs with the end it bounds, so there is no
+  // input row to budget for in the default height.
+  .#{$prefix}--slider-container--vertical.#{$prefix}--slider-container--two-handles {
+    flex-basis: to-rem(240px);
+    grid-template-areas:
+      "track max upper"
+      "track . ."
+      "track min lower";
+    grid-template-columns: auto auto auto;
+    grid-template-rows: auto 1fr auto;
+  }
+
   // Half the 40px text input, so the track ends line up with the centers of
-  // the range labels.
+  // the range labels and the range slider's inputs.
   .#{$prefix}--slider--vertical {
     width: to-rem(2px);
     min-width: 0;
@@ -596,6 +608,20 @@
   .#{$prefix}--slider-container--vertical > .#{$prefix}--slider-text-input-wrapper {
     justify-self: start;
     grid-area: input;
+  }
+
+  .#{$prefix}--slider-container--vertical
+    > .#{$prefix}--slider-text-input-wrapper--upper {
+    align-self: start;
+    margin-left: $carbon--spacing-05;
+    grid-area: upper;
+  }
+
+  .#{$prefix}--slider-container--vertical
+    > .#{$prefix}--slider-text-input-wrapper--lower {
+    align-self: end;
+    margin-left: $carbon--spacing-05;
+    grid-area: lower;
   }
 
   .#{$prefix}--slider--vertical .#{$prefix}--slider__track {
