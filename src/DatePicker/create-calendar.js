@@ -231,19 +231,6 @@ function buildCalendar({ options, base, input, dispatch, isDayBlocked }) {
     onOpen: [() => dispatch("open")],
     onReady: [prepareOnReady],
     onDestroy: [disconnectAltInputObserver],
-    onDayCreate: [
-      (
-        /** @type {any} */ _dObj,
-        /** @type {any} */ _dStr,
-        /** @type {CalendarInstance} */ instance,
-        /** @type {any} */ dayElem,
-      ) => {
-        if (isDayBlocked?.(dayElem.dateObj, instance)) {
-          dayElem.classList.add("flatpickr-disabled");
-          dayElem.setAttribute("aria-disabled", "true");
-        }
-      },
-    ],
   };
 
   /** @type {Record<string, Function[]>} */
@@ -272,6 +259,7 @@ function buildCalendar({ options, base, input, dispatch, isDayBlocked }) {
       // mutates (and keeps alive) an array shared across pickers.
       ignoredFocusElements: [...(options.ignoredFocusElements ?? [])],
       ...(options.mode === "range" && input && { secondInput: input }),
+      ...(isDayBlocked && { isDayBlocked }),
       // Placed after `...options` so a consumer's own `errorHandler` (from
       // `flatpickrProps`) can never replace this wrapper; it is still
       // called, via `errorHandlerBox`, from inside `handleParseError`.

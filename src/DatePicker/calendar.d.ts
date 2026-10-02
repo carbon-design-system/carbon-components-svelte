@@ -64,6 +64,12 @@ export interface CalendarOptions
   getWeek?: (date: Date) => number;
   ignoredFocusElements?: HTMLElement[];
   inline?: boolean;
+  /**
+   * Blocks a day from being picked or focused with the keyboard without
+   * disabling it as a value, so typed and programmatic dates are not
+   * checked against it.
+   */
+  isDayBlocked?: (date: Date, instance: CalendarInstance) => boolean;
   locale?: string | Partial<CalendarLocale>;
   maxDate?: string | number | Date;
   minDate?: string | number | Date;
