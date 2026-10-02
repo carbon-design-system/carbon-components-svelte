@@ -11,6 +11,8 @@ const PARTIAL_FILE_REGEX = /^_/;
 const CACHE_DIR = ".cache/build-css";
 const WATCH = process.argv.includes("--watch");
 const FULL_THEMES = process.argv.includes("--themes");
+// Built by default alongside `all`: small, and the docs site needs both.
+const DEFAULT_ENTRIES = ["all", "viz"];
 
 function minifyEnabled(): boolean {
   if (process.env.BUILD_CSS_MINIFY === "0") return false;
@@ -55,11 +57,10 @@ function themeEntries() {
 function compileEntries() {
   const entries = themeEntries();
   if (FULL_THEMES) return entries;
-  const all = entries.find((entry) => entry.name === "all");
-  if (!all) {
+  if (!entries.some((entry) => entry.name === "all")) {
     throw new Error("css/all.scss is required for the default CSS build");
   }
-  return [all];
+  return entries.filter((entry) => DEFAULT_ENTRIES.includes(entry.name));
 }
 
 async function hashPathStats(files: string[], cwd: string): Promise<string> {
@@ -93,6 +94,7 @@ async function sharedInputs(): Promise<string> {
 
   return [
     await hashGlob("_*.scss", "css"),
+    await hashGlob("viz/**/*.scss", "css"),
     await hashGlob("vendor/**/*.scss", "css"),
     packageJson.devDependencies?.lightningcss ?? "",
     packageJson.devDependencies?.browserslist ?? "",
@@ -188,7 +190,7 @@ async function build(compiler: Compiler): Promise<void> {
       "[build-css]",
       `${compiled} compiled`,
       `${cached} cached`,
-      FULL_THEMES ? "all themes" : "all.css only",
+      FULL_THEMES ? "all themes" : `${DEFAULT_ENTRIES.join(", ")} only`,
       MINIFY ? "minify on" : "minify off",
       compiled ? `compile ${ms(workStarted)}` : "",
       `total ${ms(started)}`,
