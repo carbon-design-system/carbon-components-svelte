@@ -130,12 +130,16 @@
 
   /**
    * Specify the maximum date.
+   * Changing it drops selected dates that fall outside, updating `value`
+   * (or `valueFrom`/`valueTo`) and `selectedDates` without a `change` event.
    * @type {null | string | Date}
    */
   export let maxDate = null;
 
   /**
    * Specify the minimum date.
+   * Changing it drops selected dates that fall outside, updating `value`
+   * (or `valueFrom`/`valueTo`) and `selectedDates` without a `change` event.
    * @type {null | string | Date}
    */
   export let minDate = null;
@@ -660,13 +664,23 @@
   }
 
   /**
-   * Select `selectedDates` in the calendar and write the matching strings,
-   * recorded as already applied so `afterUpdate` does not parse them back.
+   * Select `selectedDates` in the calendar and write the matching strings.
    * A prop write is not a user change, so nothing is dispatched.
    */
   function applySelectedDates() {
     prevSelectedDates = selectedDates;
     calendar.setDate([...selectedDates], false);
+    writeSelectionToValue();
+  }
+
+  /**
+   * Write the calendar's selection into `value` (or `valueFrom`/`valueTo`),
+   * recorded as already applied so `afterUpdate` does not parse it back.
+   * The props are assigned as well as the stores: Svelte 3/4 drop a store
+   * write made by a `$:` block that runs after `$: value = $inputValue`,
+   * like the one that calls `initCalendar`.
+   */
+  function writeSelectionToValue() {
     if ($range) {
       const [from = "", to = ""] = calendar.selectedDates.map((date) =>
         calendar.formatDate(date, calendar.config.dateFormat),
@@ -675,9 +689,12 @@
       prevValueTo = to;
       inputValueFrom.set(from);
       inputValueTo.set(to);
+      valueFrom = from;
+      valueTo = to;
     } else {
       prevValue = formatSelectedDates();
       inputValue.set(prevValue);
+      value = prevValue;
     }
   }
 
@@ -1091,8 +1108,16 @@
 
   async function initCalendar(options) {
     if (calendar) {
+      const selectionCount = calendar.selectedDates.length;
       applyOptionIfChanged("minDate", minDate);
       applyOptionIfChanged("maxDate", maxDate);
+      // New bounds make flatpickr drop the selected dates they exclude and
+      // rewrite the input, without an event. A prop write is not a user
+      // change, so mirror the result without dispatching `change`.
+      if (calendar.selectedDates.length !== selectionCount) {
+        writeSelectionToValue();
+        syncSelectedDatesFromCalendar();
+      }
       applyOptionIfChanged("locale", locale, resolveLocale(locale));
       applyOptionIfChanged("dateFormat", dateFormat);
       applyDisabledDates();

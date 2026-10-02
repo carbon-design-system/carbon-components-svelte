@@ -327,6 +327,28 @@ function forwardInputEvents(source, target) {
   }
 }
 
+/**
+ * flatpickr's range plugin keeps the end of a range when only the start is
+ * dropped, but throws when both dates go at once without an `onChange` (new
+ * `minDate`/`maxDate` bounds that exclude the whole range). Empty both
+ * inputs instead, which is what it does for an already empty selection.
+ *
+ * @param {(fp: any) => any} plugin
+ * @param {HTMLInputElement} secondInput
+ */
+function guardEmptyRangeUpdate(plugin, secondInput) {
+  return (/** @type {any} */ fp) => {
+    const hooks = plugin(fp);
+    const { onValueUpdate } = hooks;
+    hooks.onValueUpdate = (/** @type {Date[]} */ selectedDates) => {
+      if (selectedDates.length > 0) return onValueUpdate(selectedDates);
+      fp._input.value = "";
+      secondInput.value = "";
+    };
+    return hooks;
+  };
+}
+
 /** @type {WeakMap<object, Record<string, Function[]>>} */
 const hooksByInstance = new WeakMap();
 
@@ -403,7 +425,10 @@ export async function createCalendar({
 
   const plugins = [
     options.mode === "range" && RangePlugin
-      ? new RangePlugin({ position: "left", input })
+      ? guardEmptyRangeUpdate(
+          /** @type {any} */ (new RangePlugin({ position: "left", input })),
+          input,
+        )
       : false,
     options.mode === "month" && monthSelectPlugin
       ? monthSelectPlugin({
