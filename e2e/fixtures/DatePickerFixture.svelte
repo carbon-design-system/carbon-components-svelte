@@ -71,6 +71,25 @@
   </p>
 </div>
 
+<div data-testid="date-picker-range-limited">
+  <DatePicker
+    datePickerType="range"
+    maxRangeDays={3}
+    flatpickrProps={{
+      static: true,
+      minDate: "03/01/2024",
+      maxDate: "03/31/2024",
+    }}
+  >
+    <DatePickerInput
+      data-testid="date-picker-range-limited-start"
+      labelText="Trip start"
+      placeholder="mm/dd/yyyy"
+    />
+    <DatePickerInput labelText="Trip end" placeholder="mm/dd/yyyy" />
+  </DatePicker>
+</div>
+
 <div data-testid="date-picker-month">
   <DatePicker
     datePickerType="month"
