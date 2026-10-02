@@ -626,6 +626,20 @@
   }
 
   /**
+   * Whether a range start is pending with `minRangeDays` or `maxRangeDays`
+   * set, so some days are blocked.
+   *
+   * @param {{ selectedDates: Date[] }} instance
+   */
+  function hasPendingRangeWindow(instance) {
+    return (
+      $range &&
+      instance.selectedDates.length === 1 &&
+      (minRangeDays != null || maxRangeDays != null)
+    );
+  }
+
+  /**
    * While a range start is pending, whether `date` would make the range
    * shorter than `minRangeDays` or longer than `maxRangeDays`. Reads the
    * current props on every call; flatpickr asks as it rebuilds the grid
@@ -635,8 +649,7 @@
    * @param {{ selectedDates: Date[] }} instance
    */
   function isOutsideRangeWindow(date, instance) {
-    if (!$range || instance.selectedDates.length !== 1) return false;
-    if (minRangeDays == null && maxRangeDays == null) return false;
+    if (!hasPendingRangeWindow(instance)) return false;
     const [start] = instance.selectedDates;
     // Both are local midnight; rounding absorbs a daylight-saving hour.
     const span =
@@ -1321,6 +1334,112 @@
   function handleCalendarKeydown(event) {
     if (event.key === "Escape") handleCalendarEscape(event);
     else if (event.key === "Enter") keepFocusAfterEnter(event);
+    else if (event.key in ARROW_DAY_OFFSETS) keepArrowFocusInRangeWindow(event);
+  }
+
+  /** @type {Record<string, number>} */
+  const ARROW_DAY_OFFSETS = {
+    ArrowLeft: -1,
+    ArrowRight: 1,
+    ArrowUp: -7,
+    ArrowDown: 7,
+  };
+
+  /**
+   * flatpickr's arrow keys skip only the days its own rules disable, so they
+   * stop on days `minRangeDays`/`maxRangeDays` block, which cannot be
+   * picked. While a range start is pending, move to the next day open on
+   * both counts instead, or stay put when there is none. This runs in the
+   * capture phase, before flatpickr's handler.
+   *
+   * @param {KeyboardEvent} event
+   */
+  function keepArrowFocusInRangeWindow(event) {
+    if (interactionBlocked || !hasPendingRangeWindow(calendar)) return;
+    const dayElem = /** @type {any} */ (event.target);
+    if (!dayElem?.dateObj || !calendar.daysContainer?.contains(dayElem)) {
+      return;
+    }
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    const target = event.ctrlKey
+      ? findFirstOpenDayOfMonth(event.key)
+      : findNextOpenDay(dayElem.dateObj, ARROW_DAY_OFFSETS[event.key]);
+    if (target) focusDay(target);
+  }
+
+  /** @param {Date} date */
+  function isOpenDay(date) {
+    return calendar.isEnabled(date) && !isOutsideRangeWindow(date, calendar);
+  }
+
+  /**
+   * Like flatpickr: `offset` days away, then on one day at a time in the
+   * same direction. Gives up after a year.
+   *
+   * @param {Date} from
+   * @param {number} offset
+   */
+  function findNextOpenDay(from, offset) {
+    const step = Math.sign(offset);
+    for (let days = offset; Math.abs(days) <= 366; days += step) {
+      const date = new Date(
+        from.getFullYear(),
+        from.getMonth(),
+        from.getDate() + days,
+      );
+      if (isOpenDay(date)) return date;
+    }
+  }
+
+  /**
+   * Like flatpickr's Ctrl+arrow: the next or previous month for left/right,
+   * the next (up) or previous (down) year for up/down.
+   *
+   * @param {string} key
+   */
+  function findFirstOpenDayOfMonth(key) {
+    const months = {
+      ArrowLeft: -1,
+      ArrowRight: 1,
+      ArrowUp: 12,
+      ArrowDown: -12,
+    };
+    const first = new Date(
+      calendar.currentYear,
+      calendar.currentMonth + months[key],
+      1,
+    );
+    const date = new Date(first);
+    while (date.getMonth() === first.getMonth()) {
+      if (isOpenDay(date)) return date;
+      date.setDate(date.getDate() + 1);
+    }
+  }
+
+  /**
+   * Focuses the day cell for `date`, showing its month first if it is not
+   * on screen, and previews the range up to it as flatpickr does.
+   *
+   * @param {Date} date
+   */
+  function focusDay(date) {
+    const find = () =>
+      /** @type {HTMLElement[]} */ ([
+        ...calendar.daysContainer.querySelectorAll(".flatpickr-day"),
+      ]).find(
+        (el) =>
+          /** @type {any} */ (el).dateObj?.getTime() === date.getTime() &&
+          !el.classList.contains("hidden"),
+      );
+    let day = find();
+    if (!day) {
+      calendar.jumpToDate(date, true);
+      day = find();
+    }
+    if (!day) return;
+    day.focus();
+    calendar.onMouseOver(day);
   }
 
   /**

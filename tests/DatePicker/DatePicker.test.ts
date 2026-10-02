@@ -2783,6 +2783,112 @@ describe("DatePicker", () => {
       expect(day(calendar, 13)).toHaveClass("flatpickr-disabled");
     });
 
+    describe("arrow keys while the start is pending", () => {
+      async function press(
+        key: string,
+        { times = 1, ...init }: KeyboardEventInit & { times?: number } = {},
+      ) {
+        const keyCode = {
+          ArrowLeft: 37,
+          ArrowUp: 38,
+          ArrowRight: 39,
+          ArrowDown: 40,
+        }[key];
+        for (let i = 0; i < times; i++) {
+          // biome-ignore lint/performance/noAwaitInLoops: key presses are sequential
+          await fireEvent.keyDown(document.activeElement as HTMLElement, {
+            key,
+            keyCode,
+            ...init,
+          });
+        }
+      }
+
+      it("stays on the last open day at the window's edge", async () => {
+        const { calendar } = await pickStart({ maxRangeDays: 3 });
+        day(calendar, 10).focus();
+
+        await press("ArrowRight", { times: 4 });
+
+        expect(document.activeElement).toBe(day(calendar, 12));
+        await press("ArrowLeft");
+        expect(document.activeElement).toBe(day(calendar, 11));
+      });
+
+      it("skips the days minRangeDays blocks", async () => {
+        const { calendar } = await pickStart({ minRangeDays: 3 });
+        day(calendar, 10).focus();
+
+        await press("ArrowRight");
+        expect(document.activeElement).toBe(day(calendar, 12));
+
+        day(calendar, 10).focus();
+        await press("ArrowLeft");
+        expect(document.activeElement).toBe(day(calendar, 8));
+      });
+
+      it("moves a week, then on, with up and down", async () => {
+        const { calendar } = await pickStart({ maxRangeDays: 9 });
+        day(calendar, 10).focus();
+
+        await press("ArrowDown");
+        expect(document.activeElement).toBe(day(calendar, 17));
+        await press("ArrowDown");
+        expect(document.activeElement).toBe(day(calendar, 17));
+        await press("ArrowUp");
+        expect(document.activeElement).toBe(day(calendar, 10));
+      });
+
+      it("shows the month an open day falls in", async () => {
+        const { calendar } = await pickStart({ minRangeDays: 40 });
+        day(calendar, 10).focus();
+
+        await press("ArrowRight");
+
+        const now = new Date();
+        const expected = new Date(now.getFullYear(), now.getMonth(), 49);
+        const focused = document.activeElement as HTMLElement & {
+          dateObj?: Date;
+        };
+        expect(focused.dateObj?.getTime()).toBe(expected.getTime());
+        expect(calendar.querySelector(".cur-month")).toHaveTextContent(
+          expected.toLocaleDateString("en-US", { month: "long" }),
+        );
+      });
+
+      it("stays put on Ctrl+arrow when the next month has no open day", async () => {
+        const { calendar } = await pickStart({ maxRangeDays: 3 });
+        const month = calendar.querySelector(".cur-month")?.textContent;
+        day(calendar, 10).focus();
+
+        await press("ArrowRight", { ctrlKey: true });
+
+        expect(document.activeElement).toBe(day(calendar, 10));
+        expect(calendar.querySelector(".cur-month")).toHaveTextContent(
+          month ?? "",
+        );
+      });
+
+      it("follows a limit changed while the start is pending", async () => {
+        const { calendar, rerender } = await pickStart({ maxRangeDays: 7 });
+        await rerender({ maxRangeDays: 3 });
+        day(calendar, 10).focus();
+
+        await press("ArrowRight", { times: 4 });
+
+        expect(document.activeElement).toBe(day(calendar, 12));
+      });
+
+      it("leaves flatpickr's navigation alone without limits", async () => {
+        const { calendar } = await pickStart({});
+        day(calendar, 10).focus();
+
+        await press("ArrowRight", { times: 4 });
+
+        expect(document.activeElement).toBe(day(calendar, 14));
+      });
+    });
+
     it("ignores the limits outside range mode", async () => {
       render(DatePickerRange, { datePickerType: "single", maxRangeDays: 2 });
       await user.click(screen.getByLabelText("Start date"));

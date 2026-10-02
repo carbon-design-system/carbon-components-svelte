@@ -371,6 +371,26 @@ test.describe("DatePicker", () => {
     await expect(calendar).not.toHaveClass(/open/);
   });
 
+  test("range: arrow keys stop at the maxRangeDays window", async ({
+    page,
+  }) => {
+    await page.getByTestId("date-picker-range-limited-start").click();
+    const calendar = page
+      .getByTestId("date-picker-range-limited")
+      .getByLabel("calendar-container");
+    await calendar.getByLabel("March 10, 2024").click();
+
+    await calendar.getByLabel("March 10, 2024").focus();
+    for (let i = 0; i < 4; i++) {
+      // biome-ignore lint/performance/noAwaitInLoops: arrow presses are sequential
+      await page.keyboard.press("ArrowRight");
+    }
+
+    const focused = calendar.locator(".flatpickr-day:focus");
+    await expect(focused).toHaveAttribute("aria-label", /March 12, 2024/);
+    await expect(focused).not.toHaveClass(/flatpickr-disabled/);
+  });
+
   test.describe("close event trigger", () => {
     test("single: outside-click when dismissing without changing value", async ({
       page,
