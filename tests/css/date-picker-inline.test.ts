@@ -22,4 +22,14 @@ describe("date picker inline calendar", () => {
     expect(rule).toMatch(/width: to-rem\(288px\);/);
     expect(rule).toMatch(/background-color: \$ui-01;/);
   });
+
+  it("sits flush against the input", () => {
+    // Carbon v10 nudged it down 2px. The popup cancels the same nudge with
+    // a negative margin; the inline calendar never did, leaving a gap.
+    const rule = source.match(
+      /\.flatpickr-calendar\.inline \{\s*position: relative;[^}]*\}/,
+    )?.[0];
+    expect(rule).toBeDefined();
+    expect(rule).not.toMatch(/\btop:/);
+  });
 });
