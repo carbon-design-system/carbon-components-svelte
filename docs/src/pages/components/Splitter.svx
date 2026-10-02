@@ -1,0 +1,74 @@
+---
+components: ["Splitter"]
+description: Splitters divide a view into two resizable panes, such as a list beside its details or an editor above its output.
+---
+
+<script>
+  import { Box, Splitter } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Place content in the `start` and `end` slots. The splitter fills its container, so give the container a height. `size` sets the start pane's share as a percentage and defaults to `50`.
+
+Drag the separator to resize the panes, or focus it and use the arrow keys; <DocKbd label="Shift" /> + arrow key moves 10 times as far. <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the limits, <DocKbd label="Enter" /> collapses the start pane and restores it, and a double click restores the starting size.
+
+<Box height="12rem" border="subtle">
+  <Splitter size={30}>
+    <Box slot="start" padding={5}>Services</Box>
+    <Box slot="end" padding={5}>billing-api · us-south · 3 replicas</Box>
+  </Splitter>
+</Box>
+
+## Minimum and maximum size
+
+Set `min` and `max` to keep the start pane within a percentage range. <DocKbd label="Enter" /> collapses the start pane to `min`.
+
+<Box height="12rem" border="subtle">
+  <Splitter size={30} min={20} max={50}>
+    <Box slot="start" padding={5}>Services</Box>
+    <Box slot="end" padding={5}>billing-api · us-south · 3 replicas</Box>
+  </Splitter>
+</Box>
+
+## Vertical
+
+Set `orientation` to `"vertical"` to stack the panes, with the start pane on top. Use <DocKbd label="ArrowUp" /> and <DocKbd label="ArrowDown" /> to move the separator.
+
+<Box height="16rem" border="subtle">
+  <Splitter orientation="vertical" size={65}>
+    <Box slot="start" padding={5}>deploy.yaml</Box>
+    <Box slot="end" padding={5}>Deploying billing-api to us-south… done in 42s</Box>
+  </Splitter>
+</Box>
+
+## Nested
+
+Nest a splitter in a pane to divide a view into more than two regions. Give each separator a distinct `separatorLabel` so screen reader users can tell them apart.
+
+<Box height="16rem" border="subtle">
+  <Splitter size={25} separatorLabel="Resize file tree">
+    <Box slot="start" padding={5}>Files</Box>
+    <Splitter slot="end" orientation="vertical" size={65} separatorLabel="Resize terminal">
+      <Box slot="start" padding={5}>deploy.yaml</Box>
+      <Box slot="end" padding={5}>Deploying billing-api to us-south… done in 42s</Box>
+    </Splitter>
+  </Splitter>
+</Box>
+
+## Reactive size
+
+Use `bind:size` to read or set the size. It updates on every step of a drag, while `on:resize` fires once when the user finishes resizing, which suits saving the layout.
+
+<FileSource src="/framed/Splitter/SplitterResize" />
+
+## Disabled
+
+Set `disabled` to `true` to prevent resizing. The separator stays visible but is no longer focusable.
+
+<Box height="12rem" border="subtle">
+  <Splitter size={30} disabled>
+    <Box slot="start" padding={5}>Services</Box>
+    <Box slot="end" padding={5}>billing-api · us-south · 3 replicas</Box>
+  </Splitter>
+</Box>

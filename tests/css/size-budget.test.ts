@@ -15,8 +15,8 @@ const BUDGETS: Record<string, { min: number; gzip: number }> = {
   // measured 74,854 in CI, ~1.5 kB above a local run
   "all.scss": { min: 666_300, gzip: 76_400 },
   // min measured 561,502 after ScrollGradient's fill token classes; gzip
-  // measured 65,233
-  "white.scss": { min: 572_800, gzip: 66_600 },
+  // raised from 66,600 after Splitter's partial measured 66,638 locally
+  "white.scss": { min: 572_800, gzip: 68_000 },
 };
 
 describe("css size budget", () => {
