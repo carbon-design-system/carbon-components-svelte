@@ -9,6 +9,8 @@
   export let valueFrom = "";
   export let valueTo = "";
   export let selectedDates: ReadonlyArray<Date> = [];
+  export let minDate: ComponentProps<DatePicker>["minDate"] = null;
+  export let maxDate: ComponentProps<DatePicker>["maxDate"] = null;
   export let onchange: (event: CustomEvent) => void = () => {};
   export let ondates: (dates: ReadonlyArray<Date>) => void = () => {};
 
@@ -18,6 +20,8 @@
 <form data-testid="form">
   <DatePicker
     {datePickerType}
+    {minDate}
+    {maxDate}
     bind:value
     bind:valueFrom
     bind:valueTo

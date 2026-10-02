@@ -18,6 +18,7 @@ import DatePickerInlineOptions from "./DatePickerInlineOptions.test.svelte";
 import DatePickerInModal from "./DatePickerInModal.test.svelte";
 import DatePickerInputSlot from "./DatePickerInput.slot.test.svelte";
 import DatePickerRange from "./DatePickerRange.test.svelte";
+import DatePickerSelectedDates from "./DatePickerSelectedDates.test.svelte";
 import { getFlatpickrInstance } from "./flatpickr-instance";
 import { findDay, getDayByNumber } from "./helpers";
 
@@ -1179,6 +1180,98 @@ describe("DatePicker", () => {
       expect(fp).toBeTruthy();
       expect(fp.config.minDate?.getTime?.()).toBe(minDate.getTime());
       expect(fp.config.maxDate?.getTime?.()).toBe(maxDate.getTime());
+    });
+
+    describe("dropping a selection that falls out of bounds", () => {
+      const getBound = () => screen.getByTestId("bound").textContent;
+      const getDates = () => screen.getByTestId("dates").textContent?.trim();
+
+      it("clears value in single mode", async () => {
+        const onchange = vi.fn();
+        const { rerender } = render(DatePickerSelectedDates, {
+          value: "03/15/2024",
+          onchange,
+        });
+        await screen.findByLabelText("calendar-container");
+
+        await rerender({ minDate: "04/01/2024" });
+        await tick();
+
+        expect(screen.getByLabelText("Date")).toHaveValue("");
+        expect(getBound()).toBe("||");
+        expect(getDates()).toBe("");
+        expect(onchange).not.toHaveBeenCalled();
+      });
+
+      it("keeps value while the selection stays in bounds", async () => {
+        const { rerender } = render(DatePickerSelectedDates, {
+          value: "03/15/2024",
+        });
+        await screen.findByLabelText("calendar-container");
+
+        await rerender({ maxDate: "04/01/2024" });
+        await tick();
+
+        expect(screen.getByLabelText("Date")).toHaveValue("03/15/2024");
+        expect(getBound()).toBe("03/15/2024||");
+        expect(getDates()).toBe(new Date(2024, 2, 15).toDateString());
+      });
+
+      it("drops only the out-of-bounds dates in multiple mode", async () => {
+        const { rerender } = render(DatePickerSelectedDates, {
+          datePickerType: "multiple",
+          value: "03/10/2024, 03/20/2024",
+        });
+        await screen.findByLabelText("calendar-container");
+
+        await rerender({ maxDate: "03/15/2024" });
+        await tick();
+
+        expect(screen.getByLabelText("Date")).toHaveValue("03/10/2024");
+        expect(getBound()).toBe("03/10/2024||");
+        expect(getDates()).toBe(new Date(2024, 2, 10).toDateString());
+      });
+
+      it("clears both ends of a range", async () => {
+        const consoleError = vi.spyOn(console, "error");
+        const onchange = vi.fn();
+        const { rerender } = render(DatePickerSelectedDates, {
+          datePickerType: "range",
+          valueFrom: "03/10/2024",
+          valueTo: "03/20/2024",
+          onchange,
+        });
+        await screen.findByLabelText("calendar-container");
+
+        await rerender({ minDate: "04/01/2024" });
+        await tick();
+
+        expect(screen.getByLabelText("Start date")).toHaveValue("");
+        expect(screen.getByLabelText("End date")).toHaveValue("");
+        expect(getBound()).toBe("||");
+        expect(getDates()).toBe("");
+        expect(onchange).not.toHaveBeenCalled();
+        // flatpickr's range plugin threw here, aborting the option sync.
+        expect(consoleError).not.toHaveBeenCalled();
+        consoleError.mockRestore();
+      });
+
+      it("mirrors a range that loses one end", async () => {
+        const { rerender } = render(DatePickerSelectedDates, {
+          datePickerType: "range",
+          valueFrom: "03/10/2024",
+          valueTo: "03/20/2024",
+        });
+        await screen.findByLabelText("calendar-container");
+
+        await rerender({ maxDate: "03/15/2024" });
+        await tick();
+
+        expect(screen.getByLabelText("Start date")).toHaveValue("03/10/2024");
+        expect(screen.getByLabelText("End date")).toHaveValue("");
+        expect(getBound()).toBe("|03/10/2024|");
+        expect(getDates()).toBe(new Date(2024, 2, 10).toDateString());
+      });
     });
   });
 
