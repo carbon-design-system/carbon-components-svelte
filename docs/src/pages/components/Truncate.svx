@@ -3,7 +3,8 @@ description: Truncate handles single-line and multiline text overflow, as a comp
 ---
 
 <script>
-  import { Truncate, Text, truncate } from "carbon-components-svelte";
+  import { Truncate, Text } from "carbon-components-svelte";
+  import { truncate } from "carbon-components-svelte/src/Truncate/Truncate.svelte";
 </script>
 
 Truncate offers two ways to clip overflowing text: the `Truncate` component, which wraps content in a `<p>`, and the `truncate` action, which applies the same clipping to any element. For truncating text that also needs a specific Carbon type style, see [Text](/components/Text#truncate).

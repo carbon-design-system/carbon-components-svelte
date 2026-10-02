@@ -3,7 +3,8 @@ description: Breakpoint declaratively reports the current Carbon responsive brea
 ---
 
 <script>
-  import { Breakpoint, hideAtBreakpoint } from "carbon-components-svelte";
+  import { Breakpoint } from "carbon-components-svelte";
+  import { hideAtBreakpoint } from "carbon-components-svelte/src/Breakpoint/Breakpoint.svelte";
 </script>
 
 ## Breakpoints
