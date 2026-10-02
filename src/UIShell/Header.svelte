@@ -93,7 +93,8 @@
    */
   export let theme = undefined;
 
-  import { onMount } from "svelte";
+  import { onMount, setContext } from "svelte";
+  import { writable } from "svelte/store";
   import Close from "../icons/Close.svelte";
   import Menu from "../icons/MenuIcon.svelte";
   import { EXPANSION_BREAKPOINT } from "./expansion-breakpoint.js";
@@ -110,6 +111,18 @@
   /** @type {undefined | number} */
   let winWidth = undefined;
   let wasAboveBreakpoint = undefined;
+
+  const sharedExpansionBreakpoint = writable(expansionBreakpoint);
+  const sharedWinWidth = writable(undefined);
+
+  // `HeaderNav` reads these to switch at a custom `expansionBreakpoint`.
+  setContext("carbon:Header", {
+    expansionBreakpoint: sharedExpansionBreakpoint,
+    winWidth: sharedWinWidth,
+  });
+
+  $: $sharedExpansionBreakpoint = expansionBreakpoint;
+  $: $sharedWinWidth = winWidth;
   let userExplicitlySet = false;
 
   $: isAboveBreakpoint =

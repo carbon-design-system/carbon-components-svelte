@@ -712,3 +712,26 @@
 @include exports('side-nav-resize') {
   @include side-nav-resize;
 }
+
+// carbon-components-svelte patch (header side nav items expansion breakpoint)
+/// `HeaderSideNavItems` shows below Carbon's `lg` media query by default.
+/// When `expansionBreakpoint` is custom, the component adds a marker class
+/// from its measured window width. `--collapsed` (below the breakpoint)
+/// shows the items, matching the vendored rule's layout.
+/// @access private
+/// @group components
+@mixin side-nav-header-navigation-breakpoint {
+  .#{$prefix}--side-nav__header-navigation--expanded {
+    display: none;
+  }
+
+  .#{$prefix}--side-nav__header-navigation--collapsed {
+    position: relative;
+    display: block;
+    margin-bottom: to-rem(32px);
+  }
+}
+
+@include exports('side-nav-header-navigation-breakpoint') {
+  @include side-nav-header-navigation-breakpoint;
+}
