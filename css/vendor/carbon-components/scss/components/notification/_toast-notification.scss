@@ -46,8 +46,15 @@
     }
   }
 
-  .#{$prefix}--toast-notification:not(.#{$prefix}--toast-notification--low-contrast)
-    a {
+  .#{$prefix}--toast-notification--high-contrast a { // ccs: flatten
+    color: $inverse-link;
+  }
+
+  // Hover, active and visited keep the weight the old `:not()` rule had,
+  // so the `.bx--link` state colors still lose to them.
+  .#{$prefix}--toast-notification--high-contrast a:hover, // ccs: specificity
+  .#{$prefix}--toast-notification--high-contrast a:active, // ccs: specificity
+  .#{$prefix}--toast-notification--high-contrast a:visited { // ccs: specificity
     color: $inverse-link;
   }
 
@@ -76,7 +83,7 @@
     @include notification--experimental($inverse-support-01, $inverse-02);
   }
 
-  .#{$prefix}--toast-notification--low-contrast.#{$prefix}--toast-notification--error {
+  .#{$prefix}--toast-notification--low-contrast-error { // ccs: flatten
     @include notification--experimental(
       $support-01,
       get-token-value($notification-colors, 'notification-background-error')
@@ -87,7 +94,7 @@
     @include notification--experimental($inverse-support-02, $inverse-02);
   }
 
-  .#{$prefix}--toast-notification--low-contrast.#{$prefix}--toast-notification--success {
+  .#{$prefix}--toast-notification--low-contrast-success { // ccs: flatten
     @include notification--experimental(
       $support-02,
       get-token-value($notification-colors, 'notification-background-success')
@@ -99,8 +106,8 @@
     @include notification--experimental($inverse-support-04, $inverse-02);
   }
 
-  .#{$prefix}--toast-notification--low-contrast.#{$prefix}--toast-notification--info,
-  .#{$prefix}--toast-notification--low-contrast.#{$prefix}--toast-notification--info-square {
+  .#{$prefix}--toast-notification--low-contrast-info, // ccs: flatten
+  .#{$prefix}--toast-notification--low-contrast-info-square { // ccs: flatten
     @include notification--experimental(
       $support-04,
       get-token-value($notification-colors, 'notification-background-info')
@@ -112,13 +119,15 @@
     @include notification--experimental($inverse-support-03, $inverse-02);
   }
 
-  .#{$prefix}--toast-notification--low-contrast.#{$prefix}--toast-notification--warning,
-  .#{$prefix}--toast-notification--low-contrast.#{$prefix}--toast-notification--warning-alt {
+  .#{$prefix}--toast-notification--low-contrast-warning, // ccs: flatten
+  .#{$prefix}--toast-notification--low-contrast-warning-alt { // ccs: flatten
     @include notification--experimental(
       $support-03,
       get-token-value($notification-colors, 'notification-background-warning')
     );
   }
+
+  @include notification--icon-fills('toast');
 
   .#{$prefix}--toast-notification--warning
     .#{$prefix}--toast-notification__icon
@@ -175,10 +184,10 @@
       outline: 2px solid $inverse-focus-ui;
       outline-offset: -2px;
     }
+  }
 
-    .#{$prefix}--toast-notification__close-icon {
-      fill: $inverse-01;
-    }
+  .#{$prefix}--toast-notification__close-icon { // ccs: flatten
+    fill: $inverse-01;
   }
 
   .#{$prefix}--toast-notification--low-contrast
@@ -186,9 +195,7 @@
     @include focus-outline('outline');
   }
 
-  .#{$prefix}--toast-notification--low-contrast
-    .#{$prefix}--toast-notification__close-button
-    .#{$prefix}--toast-notification__close-icon {
+  .#{$prefix}--toast-notification__close-icon--low-contrast { // ccs: flatten
     fill: $icon-01;
   }
 

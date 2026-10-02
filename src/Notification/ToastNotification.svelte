@@ -85,12 +85,25 @@
     {role}
     class:bx--toast-notification={true}
     class:bx--toast-notification--low-contrast={lowContrast}
+    class:bx--toast-notification--high-contrast={!lowContrast}
     class:bx--toast-notification--error={kind === "error"}
+    class:bx--toast-notification--low-contrast-error={lowContrast &&
+      kind === "error"}
     class:bx--toast-notification--info={kind === "info"}
+    class:bx--toast-notification--low-contrast-info={lowContrast &&
+      kind === "info"}
     class:bx--toast-notification--info-square={kind === "info-square"}
+    class:bx--toast-notification--low-contrast-info-square={lowContrast &&
+      kind === "info-square"}
     class:bx--toast-notification--success={kind === "success"}
+    class:bx--toast-notification--low-contrast-success={lowContrast &&
+      kind === "success"}
     class:bx--toast-notification--warning={kind === "warning"}
+    class:bx--toast-notification--low-contrast-warning={lowContrast &&
+      kind === "warning"}
     class:bx--toast-notification--warning-alt={kind === "warning-alt"}
+    class:bx--toast-notification--low-contrast-warning-alt={lowContrast &&
+      kind === "warning-alt"}
     style:width={fullWidth ? "100%" : undefined}
     {...$$restProps}
     on:click
@@ -102,7 +115,7 @@
     on:focusin={handleFocusIn}
     on:focusout={handleFocusOut}
   >
-    <NotificationIcon {kind} />
+    <NotificationIcon {kind} {lowContrast} />
     <div class:bx--toast-notification__details={true}>
       <h3 class:bx--toast-notification__title={true}>
         <slot name="titleChildren">{title}</slot>
@@ -122,6 +135,7 @@
     {#if !hideCloseButton}
       <NotificationButton
         iconDescription={closeButtonDescription}
+        {lowContrast}
         on:click={close}
       />
     {/if}

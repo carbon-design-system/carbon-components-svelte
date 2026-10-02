@@ -66,6 +66,114 @@ describe("InlineNotification", () => {
     expect(notification).toHaveClass("bx--inline-notification--low-contrast");
   });
 
+  it("should mark the default variant as high contrast", () => {
+    render(InlineNotificationTest);
+
+    const notification = document.querySelector(".bx--inline-notification");
+    expect(notification).toHaveClass("bx--inline-notification--high-contrast");
+    expect(notification).not.toHaveClass(
+      "bx--inline-notification--low-contrast",
+    );
+  });
+
+  it("should not mark the low contrast variant as high contrast", () => {
+    render(InlineNotificationTest, {
+      props: { lowContrast: true },
+    });
+
+    const notification = document.querySelector(".bx--inline-notification");
+    expect(notification).not.toHaveClass(
+      "bx--inline-notification--high-contrast",
+    );
+  });
+
+  it("should emit one combined low contrast root marker per kind", () => {
+    const kinds = [
+      "error",
+      "info",
+      "info-square",
+      "success",
+      "warning",
+      "warning-alt",
+    ] as const;
+
+    for (const kind of kinds) {
+      const { unmount } = render(InlineNotificationTest, {
+        props: { kind, lowContrast: true },
+      });
+
+      const notification = document.querySelector(".bx--inline-notification");
+      expect(notification).toHaveClass(
+        "bx--inline-notification--low-contrast",
+        `bx--inline-notification--${kind}`,
+        `bx--inline-notification--low-contrast-${kind}`,
+      );
+      expect(
+        [...(notification?.classList ?? [])].filter((name) =>
+          name.startsWith("bx--inline-notification--low-contrast-"),
+        ),
+      ).toEqual([`bx--inline-notification--low-contrast-${kind}`]);
+      unmount();
+    }
+  });
+
+  it("should not emit a combined low contrast root marker by default", () => {
+    render(InlineNotificationTest, { props: { kind: "info" } });
+
+    const notification = document.querySelector(".bx--inline-notification");
+    expect(
+      [...(notification?.classList ?? [])].filter((name) =>
+        name.startsWith("bx--inline-notification--low-contrast-"),
+      ),
+    ).toEqual([]);
+  });
+
+  it("should emit one icon fill marker per kind", () => {
+    const kinds = [
+      "error",
+      "info",
+      "info-square",
+      "success",
+      "warning",
+      "warning-alt",
+    ] as const;
+
+    for (const lowContrast of [false, true]) {
+      for (const kind of kinds) {
+        const { unmount } = render(InlineNotificationTest, {
+          props: { kind, lowContrast },
+        });
+
+        const icon = document.querySelector(".bx--inline-notification__icon");
+        const marker = `bx--inline-notification__icon--${
+          lowContrast ? "low-contrast-" : ""
+        }${kind}`;
+        expect(icon).toHaveClass(marker);
+        expect(
+          [...(icon?.classList ?? [])].filter((name) =>
+            name.startsWith("bx--inline-notification__icon--"),
+          ),
+        ).toEqual([marker]);
+        unmount();
+      }
+    }
+  });
+
+  it("should mark the close icon only for the low contrast variant", () => {
+    const { unmount } = render(InlineNotificationTest);
+
+    expect(
+      document.querySelector(".bx--inline-notification__close-icon"),
+    ).not.toHaveClass("bx--inline-notification__close-icon--low-contrast");
+    unmount();
+
+    render(InlineNotificationTest, { props: { lowContrast: true } });
+
+    expect(
+      document.querySelector(".bx--inline-notification__close-icon"),
+    ).toHaveClass("bx--inline-notification__close-icon--low-contrast");
+  });
+
   it("should render title when prop is provided", () => {
     render(InlineNotificationTest, {
       props: { title: "Test Title" },

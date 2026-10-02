@@ -66,6 +66,114 @@ describe("ToastNotification", () => {
     expect(notification).toHaveClass("bx--toast-notification--low-contrast");
   });
 
+  it("should mark the default variant as high contrast", () => {
+    render(ToastNotificationTest);
+
+    const notification = document.querySelector(".bx--toast-notification");
+    expect(notification).toHaveClass("bx--toast-notification--high-contrast");
+    expect(notification).not.toHaveClass(
+      "bx--toast-notification--low-contrast",
+    );
+  });
+
+  it("should not mark the low contrast variant as high contrast", () => {
+    render(ToastNotificationTest, {
+      props: { lowContrast: true },
+    });
+
+    const notification = document.querySelector(".bx--toast-notification");
+    expect(notification).not.toHaveClass(
+      "bx--toast-notification--high-contrast",
+    );
+  });
+
+  it("should emit one combined low contrast root marker per kind", () => {
+    const kinds = [
+      "error",
+      "info",
+      "info-square",
+      "success",
+      "warning",
+      "warning-alt",
+    ] as const;
+
+    for (const kind of kinds) {
+      const { unmount } = render(ToastNotificationTest, {
+        props: { kind, lowContrast: true },
+      });
+
+      const notification = document.querySelector(".bx--toast-notification");
+      expect(notification).toHaveClass(
+        "bx--toast-notification--low-contrast",
+        `bx--toast-notification--${kind}`,
+        `bx--toast-notification--low-contrast-${kind}`,
+      );
+      expect(
+        [...(notification?.classList ?? [])].filter((name) =>
+          name.startsWith("bx--toast-notification--low-contrast-"),
+        ),
+      ).toEqual([`bx--toast-notification--low-contrast-${kind}`]);
+      unmount();
+    }
+  });
+
+  it("should not emit a combined low contrast root marker by default", () => {
+    render(ToastNotificationTest, { props: { kind: "info" } });
+
+    const notification = document.querySelector(".bx--toast-notification");
+    expect(
+      [...(notification?.classList ?? [])].filter((name) =>
+        name.startsWith("bx--toast-notification--low-contrast-"),
+      ),
+    ).toEqual([]);
+  });
+
+  it("should emit one icon fill marker per kind", () => {
+    const kinds = [
+      "error",
+      "info",
+      "info-square",
+      "success",
+      "warning",
+      "warning-alt",
+    ] as const;
+
+    for (const lowContrast of [false, true]) {
+      for (const kind of kinds) {
+        const { unmount } = render(ToastNotificationTest, {
+          props: { kind, lowContrast },
+        });
+
+        const icon = document.querySelector(".bx--toast-notification__icon");
+        const marker = `bx--toast-notification__icon--${
+          lowContrast ? "low-contrast-" : ""
+        }${kind}`;
+        expect(icon).toHaveClass(marker);
+        expect(
+          [...(icon?.classList ?? [])].filter((name) =>
+            name.startsWith("bx--toast-notification__icon--"),
+          ),
+        ).toEqual([marker]);
+        unmount();
+      }
+    }
+  });
+
+  it("should mark the close icon only for the low contrast variant", () => {
+    const { unmount } = render(ToastNotificationTest);
+
+    expect(
+      document.querySelector(".bx--toast-notification__close-icon"),
+    ).not.toHaveClass("bx--toast-notification__close-icon--low-contrast");
+    unmount();
+
+    render(ToastNotificationTest, { props: { lowContrast: true } });
+
+    expect(
+      document.querySelector(".bx--toast-notification__close-icon"),
+    ).toHaveClass("bx--toast-notification__close-icon--low-contrast");
+  });
+
   it("should render title when prop is provided", () => {
     render(ToastNotificationTest, {
       props: { title: "Test Title" },

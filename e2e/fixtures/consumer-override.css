@@ -20,6 +20,9 @@
 .my-icon-btn svg {
   fill: rgb(200, 0, 0);
 }
+.my-text-icon-btn {
+  color: rgb(200, 0, 0);
+}
 .my-link {
   color: rgb(200, 0, 0);
   text-decoration: none;

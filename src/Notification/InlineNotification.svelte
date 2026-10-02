@@ -76,13 +76,26 @@
     {role}
     class:bx--inline-notification={true}
     class:bx--inline-notification--low-contrast={lowContrast}
+    class:bx--inline-notification--high-contrast={!lowContrast}
     class:bx--inline-notification--hide-close-button={hideCloseButton}
     class:bx--inline-notification--error={kind === "error"}
+    class:bx--inline-notification--low-contrast-error={lowContrast &&
+      kind === "error"}
     class:bx--inline-notification--info={kind === "info"}
+    class:bx--inline-notification--low-contrast-info={lowContrast &&
+      kind === "info"}
     class:bx--inline-notification--info-square={kind === "info-square"}
+    class:bx--inline-notification--low-contrast-info-square={lowContrast &&
+      kind === "info-square"}
     class:bx--inline-notification--success={kind === "success"}
+    class:bx--inline-notification--low-contrast-success={lowContrast &&
+      kind === "success"}
     class:bx--inline-notification--warning={kind === "warning"}
+    class:bx--inline-notification--low-contrast-warning={lowContrast &&
+      kind === "warning"}
     class:bx--inline-notification--warning-alt={kind === "warning-alt"}
+    class:bx--inline-notification--low-contrast-warning-alt={lowContrast &&
+      kind === "warning-alt"}
     {...$$restProps}
     on:click
     on:mouseover
@@ -94,7 +107,7 @@
     on:focusout={handleFocusOut}
   >
     <div class:bx--inline-notification__details={true}>
-      <NotificationIcon notificationType="inline" {kind} />
+      <NotificationIcon notificationType="inline" {kind} {lowContrast} />
       <div class:bx--inline-notification__text-wrapper={true}>
         {#if title || $$slots.titleChildren}
           <p class:bx--inline-notification__title={true}>
@@ -113,6 +126,7 @@
     {#if !hideCloseButton}
       <NotificationButton
         iconDescription={closeButtonDescription}
+        {lowContrast}
         notificationType="inline"
         on:click={close}
       />

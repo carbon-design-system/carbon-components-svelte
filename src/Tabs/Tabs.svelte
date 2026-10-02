@@ -111,6 +111,10 @@
    */
   const useDismissible = writable(dismissible);
   /**
+   * @type {import("svelte/store").Writable<boolean>}
+   */
+  const useContainer = writable(type === "container");
+  /**
    * @type {import("svelte/store").Writable<string | undefined>}
    */
   const selectedTab = writable(undefined);
@@ -362,6 +366,7 @@
     useAutoWidth,
     useFullWidth,
     useDismissible,
+    useContainer,
     hasSecondaryLabel,
     add,
     remove,
@@ -468,6 +473,7 @@
   $: useAutoWidth.set(autoWidth);
   $: useFullWidth.set(fullWidth);
   $: useDismissible.set(dismissible);
+  $: useContainer.set(type === "container");
   $: useIconOnly.set(iconOnly);
 
   $: maxSizeIndex = type === "container" ? 3 : 2;

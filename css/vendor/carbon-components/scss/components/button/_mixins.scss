@@ -62,7 +62,6 @@
   $border-color,
   $font-color,
   $hover-bg-color,
-  $icon-color,
   $active-color
 ) {
   border-width: $button-outline-width;
@@ -83,11 +82,6 @@
 
   &:active {
     background-color: $active-color;
-  }
-
-  .#{$prefix}--btn__icon,
-  .#{$prefix}--btn__icon path:not([data-icon-path]):not([fill='none']) {
-    fill: $icon-color;
   }
 }
 

@@ -51,8 +51,15 @@
     }
   }
 
-  .#{$prefix}--inline-notification:not(.#{$prefix}--inline-notification--low-contrast)
-    a {
+  .#{$prefix}--inline-notification--high-contrast a { // ccs: flatten
+    color: $inverse-link;
+  }
+
+  // Hover, active and visited keep the weight the old `:not()` rule had,
+  // so the `.bx--link` state colors still lose to them.
+  .#{$prefix}--inline-notification--high-contrast a:hover, // ccs: specificity
+  .#{$prefix}--inline-notification--high-contrast a:active, // ccs: specificity
+  .#{$prefix}--inline-notification--high-contrast a:visited { // ccs: specificity
     color: $inverse-link;
   }
 
@@ -95,7 +102,7 @@
     @include notification--experimental($inverse-support-01, $inverse-02);
   }
 
-  .#{$prefix}--inline-notification--low-contrast.#{$prefix}--inline-notification--error {
+  .#{$prefix}--inline-notification--low-contrast-error { // ccs: flatten
     @include notification--experimental(
       $support-01,
       get-token-value($notification-colors, 'notification-background-error')
@@ -110,7 +117,7 @@
     @include notification--experimental($inverse-support-02, $inverse-02);
   }
 
-  .#{$prefix}--inline-notification--low-contrast.#{$prefix}--inline-notification--success {
+  .#{$prefix}--inline-notification--low-contrast-success { // ccs: flatten
     @include notification--experimental(
       $support-02,
       get-token-value($notification-colors, 'notification-background-success')
@@ -126,8 +133,8 @@
     @include notification--experimental($inverse-support-04, $inverse-02);
   }
 
-  .#{$prefix}--inline-notification--low-contrast.#{$prefix}--inline-notification--info,
-  .#{$prefix}--inline-notification--low-contrast.#{$prefix}--inline-notification--info-square {
+  .#{$prefix}--inline-notification--low-contrast-info, // ccs: flatten
+  .#{$prefix}--inline-notification--low-contrast-info-square { // ccs: flatten
     @include notification--experimental(
       $support-04,
       get-token-value($notification-colors, 'notification-background-info')
@@ -143,8 +150,8 @@
     @include notification--experimental($inverse-support-03, $inverse-02);
   }
 
-  .#{$prefix}--inline-notification--low-contrast.#{$prefix}--inline-notification--warning,
-  .#{$prefix}--inline-notification--low-contrast.#{$prefix}--inline-notification--warning-alt {
+  .#{$prefix}--inline-notification--low-contrast-warning, // ccs: flatten
+  .#{$prefix}--inline-notification--low-contrast-warning-alt { // ccs: flatten
     @include notification--experimental(
       $support-03,
       get-token-value($notification-colors, 'notification-background-warning')
@@ -154,6 +161,8 @@
       border-color: $support-03;
     }
   }
+
+  @include notification--icon-fills('inline');
 
   .#{$prefix}--inline-notification--warning
     .#{$prefix}--inline-notification__icon
@@ -276,10 +285,6 @@
       outline-offset: -2px;
     }
 
-    .#{$prefix}--inline-notification__close-icon {
-      fill: $inverse-01;
-    }
-
     @include carbon--breakpoint(md) {
       position: static;
     }
@@ -290,9 +295,11 @@
     @include focus-outline('outline');
   }
 
-  .#{$prefix}--inline-notification--low-contrast
-    .#{$prefix}--inline-notification__close-button
-    .#{$prefix}--inline-notification__close-icon {
+  .#{$prefix}--inline-notification__close-icon { // ccs: flatten
+    fill: $inverse-01;
+  }
+
+  .#{$prefix}--inline-notification__close-icon--low-contrast { // ccs: flatten
     fill: $icon-01;
   }
 

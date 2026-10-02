@@ -49,22 +49,22 @@ test.describe("consumer override", () => {
     });
 
     test("icon-only icon fill", async ({ page }) => {
-      // loses to `.bx--btn--icon-only.bx--tooltip__trigger.bx--btn svg` (0,3,1)
-      test.fail();
       await expect(page.getByTestId("icon-btn").locator("svg")).toHaveCSS(
         "fill",
         RED,
       );
     });
+
+    test("text icon follows color", async ({ page }) => {
+      const btn = page.getByTestId("text-icon-btn");
+      await expect(btn).toHaveCSS("color", RED);
+      await expect(btn.locator("svg")).toHaveCSS("fill", RED);
+      await expect(btn.locator("svg path").first()).toHaveCSS("fill", RED);
+    });
   });
 
   test.describe("button icon path", () => {
     test("icon-only icon path fill", async ({ page }) => {
-      // loses to `.bx--btn--ghost.bx--btn--icon-only .bx--btn__icon
-      // path:not([data-icon-path]):not([fill=none])` (0,5,1), which sets
-      // `fill` on the path itself, so a consumer `fill` on the svg never
-      // reaches it
-      test.fail();
       await expect(
         page.getByTestId("icon-btn").locator("svg path").first(),
       ).toHaveCSS("fill", RED);
@@ -133,24 +133,18 @@ test.describe("consumer override", () => {
     });
 
     test("selected tab underline", async ({ page }) => {
-      // loses to `.bx--tabs__nav-item--selected:not(...) .bx--tabs__nav-link` (0,3,0)
-      test.fail();
       await expect(link(page, 0)).toHaveCSS("border-bottom-color", RED);
     });
   });
 
   test.describe("tabs container", () => {
     test("tab background", async ({ page }) => {
-      // loses to `.bx--tabs--container .bx--tabs__nav-item` (0,2,0)
-      test.fail();
       await expect(
         page.getByTestId("tabs-container").locator(".my-container-tab").nth(1),
       ).toHaveCSS("background-color", PINK);
     });
 
     test("selected tab background", async ({ page }) => {
-      // loses to `.bx--tabs--container .bx--tabs__nav-item--selected:not(.bx--tabs__nav-item--disabled)` (0,3,0)
-      test.fail();
       await expect(
         page.getByTestId("tabs-container").locator(".my-container-tab").first(),
       ).toHaveCSS("background-color", PINK);
@@ -173,8 +167,6 @@ test.describe("consumer override", () => {
 
   test.describe("notification", () => {
     test("toast icon fill", async ({ page }) => {
-      // loses to `.bx--toast-notification--success .bx--toast-notification__icon` (0,2,0)
-      test.fail();
       await expect(page.getByTestId("toast").locator("svg").first()).toHaveCSS(
         "fill",
         RED,
@@ -182,14 +174,10 @@ test.describe("consumer override", () => {
     });
 
     test("toast link color", async ({ page }) => {
-      // loses to `.bx--toast-notification:not(.bx--toast-notification--low-contrast) a` (0,2,1)
-      test.fail();
       await expect(page.getByTestId("toast-link")).toHaveCSS("color", RED);
     });
 
     test("low-contrast toast background", async ({ page }) => {
-      // loses to `.bx--toast-notification--low-contrast.bx--toast-notification--info` (0,2,0)
-      test.fail();
       await expect(page.getByTestId("toast-low")).toHaveCSS(
         "background-color",
         PINK,
@@ -197,8 +185,6 @@ test.describe("consumer override", () => {
     });
 
     test("inline icon fill", async ({ page }) => {
-      // loses to `.bx--inline-notification--error .bx--inline-notification__icon` (0,2,0)
-      test.fail();
       await expect(page.getByTestId("inline").locator("svg").first()).toHaveCSS(
         "fill",
         RED,
@@ -213,8 +199,6 @@ test.describe("consumer override in context", () => {
   });
 
   test("side nav link text color", async ({ page }) => {
-    // loses to `.bx--side-nav__link>.bx--side-nav__link-text` (0,2,0)
-    test.fail();
     await expect(
       page.getByTestId("side-link").locator("span").first(),
     ).toHaveCSS("color", RED);

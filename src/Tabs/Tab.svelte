@@ -90,6 +90,7 @@
     useFullWidth,
     useDismissible,
     hasSecondaryLabel,
+    useContainer,
     add,
     remove,
     update,
@@ -162,6 +163,10 @@
   class:bx--tabs__nav-item--disabled={disabled}
   class:bx--tabs__nav-item--selected={selected}
   class:bx--tabs__nav-item--default={!disabled && !selected}
+  class:bx--tabs__nav-item--container={$useContainer}
+  class:bx--tabs__nav-item--container-selected={$useContainer &&
+    selected &&
+    !disabled}
   {...$$restProps}
   on:click
   on:click={(event) => {
@@ -200,6 +205,10 @@
     {id}
     {href}
     class:bx--tabs__nav-link={true}
+    class:bx--tabs__nav-link--selected={selected && !disabled}
+    class:bx--tabs__nav-link--container-selected={$useContainer &&
+      selected &&
+      !disabled}
     class:bx--tabs__nav-link--icon={Boolean(icon) && !$iconOnly}
     class:bx--tabs__nav-link--icon-only={$iconOnly}
     style:width={$iconOnly

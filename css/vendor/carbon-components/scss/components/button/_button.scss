@@ -22,6 +22,14 @@
     @include button-base;
   }
 
+  // One low-weight fill for every kind. Each kind sets `color` (and the ghost
+  // icon-only rule below sets `$icon-01`), so `currentColor` carries it and a
+  // consumer's `.my-btn svg { fill }` (0,1,1) wins. Paths carry no fill of
+  // their own and inherit this. // ccs: flatten
+  .#{$prefix}--btn__icon {
+    fill: currentColor;
+  }
+
   // Reset intrinsic padding in Firefox (see #731)
   .#{$prefix}--btn::-moz-focus-inner {
     padding: 0;
@@ -34,7 +42,6 @@
       transparent,
       $text-04,
       $hover-primary,
-      currentColor,
       $active-primary
     );
 
@@ -49,7 +56,6 @@
       transparent,
       $text-04,
       $hover-secondary,
-      currentColor,
       $active-secondary
     );
 
@@ -65,7 +71,6 @@
       $interactive-03,
       $interactive-03,
       $hover-tertiary,
-      currentColor,
       $active-tertiary
     );
 
@@ -101,7 +106,6 @@
       transparent,
       $link-01,
       $hover-ui,
-      currentColor,
       $active-ui
     );
 
@@ -145,12 +149,9 @@
   // icon-only trigger this library renders carries one of those, so the
   // position-agnostic include upstream had here was a duplicate. // ccs: dedupe
   .#{$prefix}--btn--icon-only.#{$prefix}--tooltip__trigger { // ccs: flatten
-    // Outranks the ghost icon-only fill below
-    // (`.bx--btn--ghost.bx--btn--icon-only .bx--btn__icon`, (0,3,0)) and the
-    // tooltip partial's `.bx--tooltip__trigger:hover svg`.
-    &.#{$prefix}--btn svg { // ccs: specificity
-      fill: currentColor;
-    }
+    // (The trigger's `svg` fill lives in the tooltip partial's
+    // carbon-components-svelte patch: it has to emit after that partial's
+    // `.bx--tooltip__trigger svg`.)
 
     // Outranks the `:hover` / `:focus` reveal of every position block, both
     // the `bx--btn--icon-only--*` ones below and the tooltip partial's
@@ -222,24 +223,19 @@
     fill: none;
   }
 
-  .#{$prefix}--btn--ghost.#{$prefix}--btn--icon-only
-    .#{$prefix}--btn__icon
-    path:not([data-icon-path]):not([fill='none']),
-  .#{$prefix}--btn--ghost.#{$prefix}--btn--icon-only .#{$prefix}--btn__icon {
-    fill: $icon-01;
-  }
-
-  .#{$prefix}--btn--ghost.#{$prefix}--btn--icon-only[disabled]
-    .#{$prefix}--btn__icon
-    path:not([data-icon-path]):not([fill='none']),
-  .#{$prefix}--btn--ghost.#{$prefix}--btn--icon-only[disabled]
-    .#{$prefix}--btn__icon {
-    fill: $disabled-03;
+  // A ghost icon-only button paints its icon in `$icon-01`, not the link color
+  // of its text sibling. The icon fills with `currentColor`, so the button's
+  // `color` carries it. Emitted after the ghost kind's own `color` (including
+  // its hover/active), so it wins at the same weight.
+  .#{$prefix}--btn--ghost.#{$prefix}--btn--icon-only {
+    color: $icon-01;
   }
 
   // Outranks the position blocks' `cursor: pointer` (0,2,0) for a disabled
   // ghost trigger at rest; `.bx--btn:disabled` (0,2,0) emits before them.
+  // Also restores the disabled color the rule above would otherwise replace.
   .#{$prefix}--btn--ghost.#{$prefix}--btn--icon-only[disabled] { // ccs: specificity
+    color: $disabled-03;
     cursor: not-allowed;
   }
 
@@ -260,7 +256,6 @@
       transparent,
       $text-04,
       $hover-danger,
-      currentColor,
       $active-danger
     );
 
@@ -275,7 +270,6 @@
         $danger-02,
         $danger-02,
         $hover-danger,
-        currentColor,
         $active-danger
       );
 
@@ -313,7 +307,6 @@
         transparent,
         $danger-02,
         $hover-danger,
-        currentColor,
         $active-danger
       );
 
@@ -462,9 +455,6 @@
 
   // Windows HCM fix
   // stylelint-disable-next-line no-duplicate-selectors
-  .#{$prefix}--btn--ghost.#{$prefix}--btn--icon-only
-    .#{$prefix}--btn__icon
-    path:not([data-icon-path]):not([fill='none']),
   .#{$prefix}--btn--ghost.#{$prefix}--btn--icon-only .#{$prefix}--btn__icon {
     @include high-contrast-mode('icon-fill');
   }
