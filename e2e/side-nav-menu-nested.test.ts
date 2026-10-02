@@ -7,6 +7,8 @@ const menus = new Set([
   "Controllers",
   "Storage",
   "Backups",
+  "Compute",
+  "Images",
 ]);
 
 function row(page: Page, name: string) {
@@ -40,6 +42,12 @@ function iconLeft(page: Page, name: string) {
       ".bx--side-nav__icon:not(.bx--side-nav__submenu-chevron)",
     ),
   );
+}
+
+async function rowHeight(page: Page, name: string) {
+  const box = await row(page, name).boundingBox();
+  if (!box) throw new Error("element is not rendered");
+  return box.height;
 }
 
 test.describe("SideNavMenu nested indentation", () => {
@@ -86,4 +94,26 @@ test.describe("SideNavMenu nested indentation", () => {
       );
     });
   }
+});
+
+test.describe("SideNavMenu large scoped to its own row", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto("/side-nav-menu-nested.html");
+  });
+
+  test("a large top-level menu trigger is 48px", async ({ page }) => {
+    expect(await rowHeight(page, "Compute")).toBeCloseTo(48, 0);
+  });
+
+  for (const name of ["Instances", "Images", "Snapshots"]) {
+    test(`${name} does not inherit large from its ancestor menu`, async ({
+      page,
+    }) => {
+      expect(await rowHeight(page, name)).toBeCloseTo(32, 0);
+    });
+  }
+
+  test("a nested SideNavLink can set large itself", async ({ page }) => {
+    expect(await rowHeight(page, "Custom image")).toBeCloseTo(48, 0);
+  });
 });
