@@ -250,6 +250,7 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
   class:bx--form-item={true}
+  class:bx--slider-form-item--vertical={orientation === "vertical"}
   use:dismiss={{
     enabled: holding,
     listeners: [
@@ -278,6 +279,7 @@
   <div
     class:bx--slider-container={true}
     class:bx--slider-container--readonly={readonly}
+    class:bx--slider-container--vertical={orientation === "vertical"}
     style:width={fullWidth && "100%"}
   >
     <span class:bx--slider__range-label={true}
