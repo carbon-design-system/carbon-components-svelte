@@ -759,6 +759,27 @@ describe("RangeSlider", () => {
       );
     });
 
+    it("should add the vertical layout classes to the form item and container", () => {
+      const { container, unmount } = render(RangeSlider);
+      expect(container.querySelector(".bx--form-item")).not.toHaveClass(
+        "bx--slider-form-item--vertical",
+      );
+      expect(container.querySelector(".bx--slider-container")).not.toHaveClass(
+        "bx--slider-container--vertical",
+      );
+      unmount();
+
+      const vertical = render(RangeSlider, {
+        props: { orientation: "vertical" },
+      });
+      expect(vertical.container.querySelector(".bx--form-item")).toHaveClass(
+        "bx--slider-form-item--vertical",
+      );
+      expect(
+        vertical.container.querySelector(".bx--slider-container"),
+      ).toHaveClass("bx--slider-container--vertical");
+    });
+
     it("should position handles, fill, and marks along the vertical axis", () => {
       const { container } = render(RangeSlider, {
         props: {
