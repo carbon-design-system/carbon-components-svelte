@@ -193,4 +193,24 @@ test.describe("NumberInput", () => {
       await expect(input).toHaveValue("5");
     });
   });
+
+  test("scrubbable label changes the value by dragging", async ({ page }) => {
+    const label = page.getByText("Opacity (%)", { exact: true });
+    await expect(label).toHaveCSS("cursor", "ew-resize");
+    const box = await label.boundingBox();
+    if (!box) throw new Error("missing label box");
+    const y = box.y + box.height / 2;
+
+    await page.mouse.move(box.x + 10, y);
+    await page.mouse.down();
+    // 40px right is 10 steps, even past the label's own bounds.
+    await page.mouse.move(box.x + 50, y + 60, { steps: 5 });
+    await page.mouse.up();
+    await expect(page.getByTestId("number-input-scrub-value")).toHaveText("50");
+
+    // A click without travel still focuses the input through the label.
+    await label.click();
+    await expect(page.getByLabel("Opacity (%)")).toBeFocused();
+    await expect(page.getByTestId("number-input-scrub-value")).toHaveText("50");
+  });
 });

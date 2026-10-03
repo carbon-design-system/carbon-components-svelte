@@ -72,6 +72,12 @@ With the input focused, <DocKbd label="ArrowUp" /> and <DocKbd label="ArrowDown"
 
 <NumberInput value="{50}" step={1} min={0} max={100} helperText="Press PageUp or PageDown to step by 10" labelText="Clusters" />
 
+### Scrub by dragging the label
+
+Set `scrubbable` to `true` to change the value by dragging the label left or right: every 4 pixels of travel moves one `step`, and holding <DocKbd label="Shift" /> moves 10 steps. The pointer shows a horizontal resize cursor over the label. `on:input` fires while dragging and `on:change` once on release. Clicking the label still focuses the input, and typing, arrow keys, and the steppers work as usual, so scrubbing is a pointer shortcut rather than the only way to set a value. It suits dense settings panels where many numeric fields sit together.
+
+<NumberInput scrubbable value={40} min={0} max={100} labelText="Opacity (%)" />
+
 ### Step start
 
 Configure a starting point for stepping when the input is empty or zero with

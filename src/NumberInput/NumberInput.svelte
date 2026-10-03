@@ -124,6 +124,13 @@
   /** Set to `true` to prevent the scroll wheel from changing the input value */
   export let disableWheel = false;
 
+  /**
+   * Set to `true` to change the value by dragging the label left or right.
+   * Every 4 pixels of travel moves one `step`; hold Shift to move 10 steps.
+   * Typing, arrow keys, and the steppers work as usual.
+   */
+  export let scrubbable = false;
+
   /** Set to `true` to select the input's text when it receives focus */
   export let selectTextOnFocus = false;
 
@@ -216,8 +223,11 @@
     parseLocaleValue,
     roundToStep,
   } from "../utils/numeric-format.js";
+  import { pointerDrag } from "../utils/pointer-drag.js";
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
   import { uniqueId } from "../utils/unique-id.js";
+
+  const SCRUB_STEP_PIXELS = 4;
 
   const defaultTranslations = {
     [translationIds.increment]: "Increment number",
@@ -319,6 +329,7 @@
     readonly,
   }));
   $: isFluid = fluid || !!formContext?.isFluid;
+  $: scrubEnabled = scrubbable && !disabled && !readonly;
   // Neutral = neither invalid nor warn is showing.
   $: neutral = !showInvalid && !showWarn;
   $: hasErrorMessage = showInvalid && !!invalidText;
@@ -454,6 +465,43 @@
     }
   }
 
+  let scrubLastX = 0;
+  // Travel not yet converted into steps, so a slow drag still adds up and
+  // switching Shift mid-drag doesn't jump.
+  let scrubRemainder = 0;
+  let scrubStartValue = null;
+
+  function handleScrubStart(event) {
+    if (!scrubEnabled) return false;
+    // Keep the press from selecting the label text. A click without
+    // movement still focuses the input through the label.
+    event.preventDefault();
+    scrubLastX = event.clientX;
+    scrubRemainder = 0;
+    scrubStartValue = value;
+  }
+
+  function handleScrubMove(event) {
+    scrubRemainder += event.clientX - scrubLastX;
+    scrubLastX = event.clientX;
+    const steps = Math.trunc(scrubRemainder / SCRUB_STEP_PIXELS);
+    if (!steps) return;
+    scrubRemainder -= steps * SCRUB_STEP_PIXELS;
+    const current = value ?? getDefaultValue(stepStartValue, min);
+    const next = roundToStep(
+      clamp(current + steps * step * (event.shiftKey ? 10 : 1), min, max),
+      step,
+    );
+    if (next === value) return;
+    userInputActive = false;
+    value = next;
+    dispatch("input", value);
+  }
+
+  function handleScrubEnd() {
+    if (value !== scrubStartValue) dispatch("change", value);
+  }
+
   function handleInputFocus() {
     if (isFluid) inputFocused = true;
     if (selectTextOnFocus && !disabled) {
@@ -502,6 +550,13 @@
         class:bx--label--disabled={disabled}
         class:bx--visually-hidden={hideLabel}
         class:bx--label--slotted={isFluid && $$slots.labelChildren}
+        class:bx--label--scrubbable={scrubEnabled}
+        use:pointerDrag={{
+          enabled: scrubEnabled,
+          onStart: handleScrubStart,
+          onMove: handleScrubMove,
+          onEnd: handleScrubEnd,
+        }}
       >
         <slot name="labelChildren">{labelText}</slot>
       </label>

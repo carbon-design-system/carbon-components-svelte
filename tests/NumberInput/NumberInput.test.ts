@@ -2091,4 +2091,89 @@ describe("NumberInput", () => {
     expect(skeleton.children[0]).toHaveClass("bx--label", "bx--skeleton");
     expect(skeleton.children[1]).toHaveClass("bx--skeleton", "bx--text-input");
   });
+
+  describe("scrubbable", () => {
+    const scrub = async (label: HTMLElement, moves: PointerEventInit[]) => {
+      await fireEvent.pointerDown(label, { clientX: 100, pointerId: 1 });
+      for (const move of moves) {
+        // biome-ignore lint/performance/noAwaitInLoops: sequential drag steps
+        await fireEvent.pointerMove(label, { pointerId: 1, ...move });
+      }
+      await fireEvent.pointerUp(label, { pointerId: 1 });
+    };
+
+    it("steps the value by dragging the label and commits once", async () => {
+      const onchange = vi.fn();
+      const oninput = vi.fn();
+      render(NumberInput, {
+        props: { value: 10, scrubbable: true, onchange, oninput },
+      });
+      const label = screen.getByText("Clusters");
+      expect(label).toHaveClass("bx--label--scrubbable");
+
+      // 2px is no step yet; at 9px, 2 steps with 1px carried; 4px more is
+      // the third.
+      await scrub(label, [
+        { clientX: 102 },
+        { clientX: 109 },
+        { clientX: 113 },
+      ]);
+
+      expect(screen.getByRole("spinbutton")).toHaveValue(13);
+      expect(oninput.mock.calls.map(([e]) => e.detail)).toEqual([12, 13]);
+      expect(onchange).toHaveBeenCalledTimes(1);
+      expect(onchange.mock.calls[0][0].detail).toBe(13);
+    });
+
+    it("moves 10 steps per 4px with Shift and clamps to min and max", async () => {
+      render(NumberInput, {
+        props: { value: 10, min: 0, max: 30, scrubbable: true },
+      });
+      const label = screen.getByText("Clusters");
+
+      await scrub(label, [{ clientX: 104, shiftKey: true }]);
+      expect(screen.getByRole("spinbutton")).toHaveValue(20);
+
+      await scrub(label, [{ clientX: 112, shiftKey: true }]);
+      expect(screen.getByRole("spinbutton")).toHaveValue(30);
+
+      await scrub(label, [{ clientX: 0 }]);
+      expect(screen.getByRole("spinbutton")).toHaveValue(5);
+    });
+
+    it("rounds decimal steps in text mode", async () => {
+      render(NumberInput, {
+        props: { value: 0.2, step: 0.1, allowDecimal: true, scrubbable: true },
+      });
+      const label = screen.getByText("Clusters");
+
+      await scrub(label, [{ clientX: 104 }]);
+
+      expect(screen.getByRole("textbox")).toHaveValue("0.3");
+    });
+
+    it("does not dispatch change for a press without enough travel", async () => {
+      const onchange = vi.fn();
+      render(NumberInput, { props: { value: 10, scrubbable: true, onchange } });
+
+      await scrub(screen.getByText("Clusters"), [{ clientX: 103 }]);
+
+      expect(onchange).not.toHaveBeenCalled();
+      expect(screen.getByRole("spinbutton")).toHaveValue(10);
+    });
+
+    it.each([
+      { name: "off by default", props: {} },
+      { name: "disabled", props: { scrubbable: true, disabled: true } },
+      { name: "read-only", props: { scrubbable: true, readonly: true } },
+    ])("does not scrub when $name", async ({ props }) => {
+      render(NumberInput, { props: { value: 10, ...props } });
+      const label = screen.getByText("Clusters");
+
+      await scrub(label, [{ clientX: 140 }]);
+
+      expect(label).not.toHaveClass("bx--label--scrubbable");
+      expect(screen.getByRole("spinbutton")).toHaveValue(10);
+    });
+  });
 });

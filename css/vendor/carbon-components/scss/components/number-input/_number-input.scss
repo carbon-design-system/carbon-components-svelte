@@ -501,3 +501,21 @@
 @include exports('number-input') {
   @include number-input;
 }
+
+// carbon-components-svelte patch: scrubbable label
+/// A `scrubbable` NumberInput's label changes the value when dragged left or
+/// right, so it reads as a horizontal drag handle instead of text.
+/// @access private
+/// @group number-input
+@mixin number-input-scrubbable {
+  .#{$prefix}--label--scrubbable {
+    cursor: ew-resize;
+    // Horizontal drags scrub; vertical swipes still scroll the page.
+    touch-action: pan-y;
+    user-select: none;
+  }
+}
+
+@include exports("number-input-scrubbable") {
+  @include number-input-scrubbable;
+}
