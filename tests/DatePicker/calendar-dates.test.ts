@@ -111,6 +111,7 @@ describe("helpers", () => {
 
   it("detects locales that put the year first", () => {
     expect(isMonthFirst("en")).toBe(true);
+    expect(isMonthFirst("en-GB")).toBe(true);
     expect(isMonthFirst("ja")).toBe(false);
   });
 });
