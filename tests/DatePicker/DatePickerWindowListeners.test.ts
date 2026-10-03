@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
-import type { Instance } from "flatpickr/dist/types/instance";
 import { tick } from "svelte";
+import type { CalendarInstance as Instance } from "../../src/DatePicker/calendar";
 import { flushDismiss } from "../utils/flush-dismiss";
 import { netListenerCalls } from "../utils/net-listener-calls";
 import { user } from "../utils/user";

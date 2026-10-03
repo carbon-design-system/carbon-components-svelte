@@ -1,239 +1,16 @@
 // @ts-check
-/// <reference path="./flatpickr-esm-plugins.d.ts" />
-import flatpickr from "flatpickr";
-import { getDateTimeFormatter } from "../utils/intl-formatter-cache.js";
+import { createCalendarEngine } from "./calendar.js";
 
 /**
- * Carbon-styled English locale: single-letter weekday abbreviations
- * with "Th" disambiguating Thursday from Tuesday.
- * Longhand is included so flatpickr's shallow locale merge does not
- * drop the weekday longhand (used by ARIA labels on day cells).
+ * Minimal calendar instance shape used by the Carbon hooks.
+ * @typedef {import("./calendar.js").CalendarInstance} CalendarInstance
  */
-const ENGLISH_LOCALE = {
-  weekdays: {
-    shorthand: ["S", "M", "T", "W", "Th", "F", "S"],
-    longhand: [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-    ],
-  },
-};
-
-/**
- * @param {unknown} locale
- * @returns {unknown}
- */
-export function resolveLocale(locale) {
-  return locale === "en" ? ENGLISH_LOCALE : locale;
-}
-
-/**
- * Minimal flatpickr instance shape used by updateClasses and updateMonthNode.
- * Matches flatpickr's Instance where some elements may be optional.
- * @typedef {{
- *   calendarContainer: HTMLElement;
- *   input: HTMLInputElement;
- *   altInput?: HTMLInputElement;
- *   days: HTMLElement;
- *   daysContainer?: HTMLElement;
- *   weekdayContainer: HTMLElement;
- *   selectedDates: unknown[];
- *   l10n: { months: { longhand: string[]; shorthand: string[] }; weekdays?: { shorthand?: string[] } };
- *   config: { shorthandCurrentMonth?: boolean; locale?: unknown };
- *   currentMonth: number;
- *   monthNav: HTMLElement;
- *   monthsDropdownContainer: HTMLElement;
- *   rContainer?: HTMLElement | null;
- * }} FlatpickrInstance
- */
-
-/**
- * @typedef {HTMLElement & { dateObj: Date }} MonthSelectMonthElement
- */
-
-/**
- * @param {FlatpickrInstance} instance
- * @param {{ isMonth?: boolean; isYear?: boolean }} [modifiers]
- */
-function updateClasses(instance, { isMonth = false, isYear = false } = {}) {
-  const { calendarContainer, days, daysContainer, weekdayContainer } = instance;
-
-  calendarContainer.classList.add("bx--date-picker__calendar");
-  // Marker classes so SCSS can target the shorter month/year grids without `:has()`.
-  calendarContainer.classList.toggle(
-    "bx--date-picker__calendar--month",
-    isMonth,
-  );
-  calendarContainer.classList.toggle("bx--date-picker__calendar--year", isYear);
-  calendarContainer
-    .querySelector(".flatpickr-month")
-    ?.classList.add("bx--date-picker__month");
-
-  weekdayContainer.classList.add("bx--date-picker__weekdays");
-  for (const node of weekdayContainer.querySelectorAll(".flatpickr-weekday")) {
-    node.classList.add("bx--date-picker__weekday");
-  }
-
-  if (daysContainer) {
-    daysContainer.classList.add("bx--date-picker__days");
-  }
-  for (const node of days.querySelectorAll(".flatpickr-day")) {
-    node.classList.add("bx--date-picker__day");
-  }
-}
-
-/**
- * Marks flatpickr's own disabled day elements (out-of-range days, and
- * previous/next-month days that fall outside minDate/maxDate) as
- * aria-disabled. Without this, axe-core's color-contrast check flags
- * these days: WCAG 1.4.3 exempts inactive UI component text from the
- * contrast requirement, but axe only recognizes that exemption via
- * aria-disabled="true", not the flatpickr-disabled CSS class.
- *
- * @param {any} _dObj
- * @param {any} _dStr
- * @param {any} _fp
- * @param {HTMLElement} dayElem
- */
-function markDisabledDayAriaState(_dObj, _dStr, _fp, dayElem) {
-  if (dayElem.classList.contains("flatpickr-disabled")) {
-    dayElem.setAttribute("aria-disabled", "true");
-  }
-}
-
-/**
- * flatpickr's bundled monthSelect plugin has no concept of "today"; mark
- * the current year's current month the same way flatpickr core marks the
- * current day, since the month cells persist (and their `dateObj` year is
- * mutated in place) across `onYearChange` instead of being rebuilt.
- *
- * @param {FlatpickrInstance} instance
- */
-function markTodayMonth(instance) {
-  const now = new Date();
-  const monthNodes =
-    /** @type {NodeListOf<MonthSelectMonthElement> | undefined} */ (
-      instance.rContainer?.querySelectorAll(".flatpickr-monthSelect-month")
-    ) ?? [];
-  for (const node of monthNodes) {
-    const isToday =
-      node.dateObj.getFullYear() === now.getFullYear() &&
-      node.dateObj.getMonth() === now.getMonth();
-    node.classList.toggle("today", isToday);
-    if (isToday) {
-      node.setAttribute("aria-current", "date");
-    } else {
-      node.removeAttribute("aria-current");
-    }
-  }
-}
-
-/**
- * flatpickr's week plugin highlights the whole week but keeps the clicked
- * day selected. Move the selection to the week's first day (per locale) so
- * every day of a week gives the same value. `setDate` without a change
- * event, since the caller is already inside `onChange`.
- *
- * @param {any} instance
- */
-function snapToWeekStart(instance) {
-  const [date] = instance.selectedDates;
-  if (!date) return;
-  const offset = (date.getDay() - instance.l10n.firstDayOfWeek + 7) % 7;
-  if (offset === 0) return;
-  instance.setDate(
-    new Date(date.getFullYear(), date.getMonth(), date.getDate() - offset),
-    false,
-  );
-}
-
-/**
- * ISO 8601 week number, as flatpickr's default `getWeek` computes it.
- *
- * @param {Date} givenDate
- */
-function isoWeek(givenDate) {
-  const date = new Date(givenDate.getTime());
-  date.setHours(0, 0, 0, 0);
-  date.setDate(date.getDate() + 3 - ((date.getDay() + 6) % 7));
-  const week1 = new Date(date.getFullYear(), 0, 4);
-  return (
-    1 +
-    Math.round(
-      ((date.getTime() - week1.getTime()) / 86400000 -
-        3 +
-        ((week1.getDay() + 6) % 7)) /
-        7,
-    )
-  );
-}
-
-/**
- * Whether `locale` orders the month before the year (e.g. "January 2000"),
- * as opposed to year before month (e.g. "2000年1月" in Japanese).
- *
- * @param {unknown} locale
- * @returns {boolean}
- */
-function isMonthFirst(locale) {
-  if (typeof locale !== "string") return true;
-  try {
-    const parts = getDateTimeFormatter(locale, {
-      year: "numeric",
-      month: "long",
-    }).formatToParts(new Date(2000, 0, 1));
-    const monthIndex = parts.findIndex((part) => part.type === "month");
-    const yearIndex = parts.findIndex((part) => part.type === "year");
-    return monthIndex < yearIndex;
-  } catch {
-    return true;
-  }
-}
-
-/**
- * @param {FlatpickrInstance} instance
- * @param {unknown} locale
- */
-export function updateMonthNode(instance, locale) {
-  const { longhand, shorthand } = instance.l10n.months;
-  const monthText = (
-    instance.config.shorthandCurrentMonth ? shorthand : longhand
-  )[instance.currentMonth];
-  let monthNode = instance.monthNav.querySelector(".cur-month");
-
-  if (monthNode) {
-    monthNode.textContent = monthText;
-  } else {
-    const monthSelectNode = instance.monthsDropdownContainer;
-    const span = document.createElement("span");
-    span.setAttribute("class", "cur-month");
-    span.textContent = monthText;
-    monthSelectNode.parentNode?.replaceChild(span, monthSelectNode);
-    monthNode = span;
-  }
-
-  // Depending on the locale, toggle the order of the month and year.
-  const yearWrapper = monthNode.parentNode?.querySelector(".numInputWrapper");
-  if (!yearWrapper) return;
-  if (isMonthFirst(locale)) {
-    if (monthNode.nextSibling !== yearWrapper) {
-      yearWrapper.parentNode?.insertBefore(monthNode, yearWrapper);
-    }
-  } else if (yearWrapper.nextSibling !== monthNode) {
-    yearWrapper.insertAdjacentElement("afterend", monthNode);
-  }
-}
 
 /**
  * @typedef {{
  *   options: {
  *     locale?: string;
- *     mode?: string;
+ *     mode?: import("./calendar.js").CalendarMode;
  *     dateFormat?: string;
  *     altFormat?: string;
  *     errorHandler?: (error: Error) => void;
@@ -242,7 +19,7 @@ export function updateMonthNode(instance, locale) {
  *   base: HTMLInputElement;
  *   input: HTMLInputElement;
  *   dispatch: (event: string, detail?: unknown) => void;
- *   isDayBlocked?: (date: Date, instance: FlatpickrInstance) => boolean;
+ *   isDayBlocked?: (date: Date, instance: CalendarInstance) => boolean;
  * }} CreateCalendarArgs
  */
 
@@ -318,28 +95,6 @@ function forwardInputEvents(source, target) {
   }
 }
 
-/**
- * flatpickr's range plugin keeps the end of a range when only the start is
- * dropped, but throws when both dates go at once without an `onChange` (new
- * `minDate`/`maxDate` bounds that exclude the whole range). Empty both
- * inputs instead, which is what it does for an already empty selection.
- *
- * @param {(fp: any) => any} plugin
- * @param {HTMLInputElement} secondInput
- */
-function guardEmptyRangeUpdate(plugin, secondInput) {
-  return (/** @type {any} */ fp) => {
-    const hooks = plugin(fp);
-    const { onValueUpdate } = hooks;
-    hooks.onValueUpdate = (/** @type {Date[]} */ selectedDates) => {
-      if (selectedDates.length > 0) return onValueUpdate(selectedDates);
-      fp._input.value = "";
-      secondInput.value = "";
-    };
-    return hooks;
-  };
-}
-
 /** @type {WeakMap<object, Record<string, Function[]>>} */
 const hooksByInstance = new WeakMap();
 
@@ -359,12 +114,12 @@ function toHookArray(hook) {
  * `calendar.set("errorHandler", fn)` replaces `config.errorHandler` outright,
  * which would drop Carbon's wrapper (and the `error` event it dispatches), so
  * reactive updates go through `setErrorHandler` and this map instead.
- * @type {WeakMap<FlatpickrInstance, { current: ((error: Error) => void) | undefined }>}
+ * @type {WeakMap<CalendarInstance, { current: ((error: Error) => void) | undefined }>}
  */
 const errorHandlerBoxes = new WeakMap();
 
 /**
- * @param {FlatpickrInstance} instance
+ * @param {CalendarInstance} instance
  * @param {((error: Error) => void) | undefined} handler
  */
 export function setErrorHandler(instance, handler) {
@@ -373,83 +128,33 @@ export function setErrorHandler(instance, handler) {
 }
 
 /**
+ * Builds the calendar synchronously, as soon as the input is mounted: moving
+ * the input into the calendar's wrapper would otherwise blur it if the user,
+ * or a test, focused it in the meantime.
+ *
  * @param {CreateCalendarArgs} args
- * @returns {Promise<FlatpickrInstance | null>}
+ * @returns {Promise<CalendarInstance | null>}
  */
-export async function createCalendar({
-  options,
-  base,
-  input,
-  dispatch,
-  isDayBlocked,
-}) {
-  /** @type {((new (config: { position: string; input: HTMLInputElement }) => unknown) | undefined)} */
-  let RangePlugin;
-  /** @type {((config?: { shorthand?: boolean; dateFormat?: string; altFormat?: string }) => unknown) | undefined} */
-  let monthSelectPlugin;
-  /** @type {((config?: { dateFormat?: string; altFormat?: string }) => unknown) | undefined} */
-  let yearSelectPlugin;
-  /** @type {(() => unknown) | undefined} */
-  let weekSelectPlugin;
+export function createCalendar(args) {
+  return Promise.resolve(buildCalendar(args));
+}
 
-  if (options.mode === "range") {
-    const importee = await import("flatpickr/dist/esm/plugins/rangePlugin");
-    RangePlugin = importee.default;
-  }
-
-  if (options.mode === "month") {
-    const importee = await import("flatpickr/dist/esm/plugins/monthSelect");
-    monthSelectPlugin = importee.default;
-  }
-
-  if (options.mode === "year") {
-    const importee = await import("./year-select-plugin.js");
-    yearSelectPlugin = importee.yearSelectPlugin;
-  }
-
-  if (options.mode === "week") {
-    const importee = await import(
-      "flatpickr/dist/esm/plugins/weekSelect/weekSelect"
-    );
-    weekSelectPlugin = importee.default;
-  }
-
-  const plugins = [
-    options.mode === "range" && RangePlugin
-      ? guardEmptyRangeUpdate(
-          /** @type {any} */ (new RangePlugin({ position: "left", input })),
-          input,
-        )
-      : false,
-    options.mode === "month" && monthSelectPlugin
-      ? monthSelectPlugin({
-          shorthand: true,
-          dateFormat: options.dateFormat,
-          altFormat: options.altFormat ?? options.dateFormat,
-        })
-      : false,
-    options.mode === "year" && yearSelectPlugin
-      ? yearSelectPlugin({
-          dateFormat: options.dateFormat,
-          altFormat: options.altFormat ?? options.dateFormat,
-        })
-      : false,
-    options.mode === "week" && weekSelectPlugin ? weekSelectPlugin() : false,
-  ].filter(Boolean);
-
+/**
+ * @param {CreateCalendarArgs} args
+ * @returns {CalendarInstance | null}
+ */
+function buildCalendar({ options, base, input, dispatch, isDayBlocked }) {
   /** @type {MutationObserver | undefined} */
   let altInputObserver;
-  /** Set once flatpickr returns; read lazily by the week-mode `getWeek`. */
-  /** @type {any} */
-  let createdInstance;
 
   /**
-   * Runs before flatpickr removes the `altInput`, so hand the id back or the
-   * label would point at nothing once the calendar is rebuilt without one.
+   * Runs before the engine removes the `altInput`, so hand the id back or
+   * the label would point at nothing once the calendar is rebuilt without
+   * one.
    *
    * @param {any} _s
    * @param {any} _d
-   * @param {FlatpickrInstance} instance
+   * @param {CalendarInstance} instance
    */
   function disconnectAltInputObserver(_s, _d, instance) {
     altInputObserver?.disconnect();
@@ -458,10 +163,9 @@ export async function createCalendar({
       instance.input.id = instance.altInput.id;
       instance.altInput.removeAttribute("id");
     }
-    // `prepareOnReady` moved an inline calendar out of flatpickr's wrapper.
-    // flatpickr's teardown unwraps `calendarContainer.parentNode` and drops
-    // its last child, so put the calendar back or it dismantles Carbon's
-    // own container instead.
+    // `prepareOnReady` moved an inline calendar out of the engine's mount
+    // point. Teardown unwraps `calendarContainer.parentNode`, so put the
+    // calendar back or it dismantles Carbon's own container instead.
     if (options.inline && instance?.calendarContainer) {
       instance.input.parentNode?.appendChild(instance.calendarContainer);
     }
@@ -470,10 +174,10 @@ export async function createCalendar({
   const errorHandlerBox = { current: options.errorHandler };
 
   /**
-   * flatpickr's `errorHandler` is a single function, not a hook array, and
-   * it never says which input produced the bad text. The focused range
-   * input (if any) is assumed to be the source, since that is the field
-   * flatpickr just tried to parse; `base` is the only candidate otherwise.
+   * `errorHandler` is a single function, not a hook array, and it never says
+   * which input produced the bad text. The focused range input (if any) is
+   * assumed to be the source, since that is the field the engine just tried
+   * to parse; `base` is the only candidate otherwise.
    * @param {Error} error
    */
   function handleParseError(error) {
@@ -484,8 +188,6 @@ export async function createCalendar({
     if (userErrorHandler) {
       userErrorHandler(error);
     } else {
-      // Matches flatpickr's own default `errorHandler` so nobody loses the
-      // log they get today when they have not opted into anything else.
       console.warn(error);
     }
   }
@@ -493,7 +195,7 @@ export async function createCalendar({
   /**
    * @param {any} _s
    * @param {any} _d
-   * @param {FlatpickrInstance} instance
+   * @param {CalendarInstance} instance
    */
   function prepareOnReady(_s, _d, instance) {
     // `altInput` hides the original input and shows a generated one.
@@ -508,113 +210,26 @@ export async function createCalendar({
     }
     // An `inline` calendar is always visible and never fires `onOpen`.
     if (!options.inline) return;
-    applyCarbonMarkup(instance);
-    // flatpickr mounts it next to the input, inside the wrapper whose
+    // The engine mounts it next to the input, inside the wrapper whose
     // height vertically centers the calendar icon. Move it just below.
     instance.input
       .closest(".bx--date-picker-input__wrapper")
       ?.after(instance.calendarContainer);
   }
 
-  /** @param {FlatpickrInstance} instance */
-  function applyCarbonMarkup(instance) {
-    updateClasses(instance, {
-      isMonth: options.mode === "month",
-      isYear: options.mode === "year",
-    });
-    if (options.mode !== "month" && options.mode !== "year") {
-      updateMonthNode(instance, instance.config.locale);
-    }
-    if (options.mode === "month") {
-      markTodayMonth(instance);
-    }
-  }
-
   /**
-   * Carbon's own flatpickr hooks. They are merged with the consumer's rather
-   * than spread under `...options`, where a `flatpickrProps.onOpen` or an
-   * inline `onDayCreate` would silently replace them.
+   * Carbon's own hooks. They are merged with the consumer's rather than
+   * spread under `...options`, where a `flatpickrProps.onOpen` or an inline
+   * `onDayCreate` would silently replace them.
    *
    * @type {Record<string, Function[]>}
    */
   const carbonHooks = {
-    onChange: [
-      (
-        /** @type {any} */ _s,
-        /** @type {any} */ _d,
-        /** @type {FlatpickrInstance} */ instance,
-      ) => {
-        if (options.mode === "week") snapToWeekStart(instance);
-        dispatch("change");
-      },
-    ],
-    onClose: [
-      () => {
-        dispatch("close");
-      },
-    ],
-    onMonthChange: [
-      (
-        /** @type {any} */ _s,
-        /** @type {any} */ _d,
-        /** @type {FlatpickrInstance} */ instance,
-      ) => {
-        // The monthSelect / yearSelect plugins remove the month-label node, so
-        // there is nothing for updateMonthNode to patch.
-        if (options.mode !== "month" && options.mode !== "year") {
-          updateMonthNode(instance, instance.config.locale);
-        }
-      },
-    ],
-    onYearChange: [
-      (
-        /** @type {any} */ _s,
-        /** @type {any} */ _d,
-        /** @type {FlatpickrInstance} */ instance,
-      ) => {
-        // The monthSelect plugin mutates its month cells' `dateObj` in place
-        // on year change rather than rebuilding them, so re-mark "today" here.
-        if (options.mode === "month") {
-          markTodayMonth(instance);
-        }
-      },
-    ],
-    onOpen: [
-      (
-        /** @type {any} */ _s,
-        /** @type {any} */ _d,
-        /** @type {FlatpickrInstance} */ instance,
-      ) => {
-        dispatch("open");
-        applyCarbonMarkup(instance);
-      },
-    ],
+    onChange: [() => dispatch("change")],
+    onClose: [() => dispatch("close")],
+    onOpen: [() => dispatch("open")],
     onReady: [prepareOnReady],
     onDestroy: [disconnectAltInputObserver],
-    onDayCreate: [
-      // Runs first so `markDisabledDayAriaState` also labels these days.
-      (
-        /** @type {any} */ _dObj,
-        /** @type {any} */ _dStr,
-        /** @type {FlatpickrInstance} */ instance,
-        /** @type {any} */ dayElem,
-      ) => {
-        if (isDayBlocked?.(dayElem.dateObj, instance)) {
-          dayElem.classList.add("flatpickr-disabled");
-        }
-      },
-      markDisabledDayAriaState,
-      // Days are rebuilt on every redraw (month change, `set`), not only on
-      // open, so class them as they are created.
-      (
-        /** @type {any} */ _dObj,
-        /** @type {any} */ _dStr,
-        /** @type {any} */ _fp,
-        /** @type {HTMLElement} */ dayElem,
-      ) => {
-        dayElem.classList.add("bx--date-picker__day");
-      },
-    ],
   };
 
   /** @type {Record<string, Function[]>} */
@@ -622,61 +237,36 @@ export async function createCalendar({
   for (const [name, hooks] of Object.entries(carbonHooks)) {
     mergedHooks[name] = [...hooks, ...toHookArray(options[name])];
   }
+  for (const name of Object.keys(options)) {
+    if (name.startsWith("on") && !(name in mergedHooks)) {
+      mergedHooks[name] = toHookArray(options[name]);
+    }
+  }
 
-  const config = {
-    allowInput: true,
-    disableMobile: true,
-    clickOpens: true,
-    animate: false,
-    ariaDateFormat: "l, F j, Y",
-    plugins,
-    nextArrow:
-      '<svg width="16px" height="16px" viewBox="0 0 16 16"><polygon points="11,8 6,13 5.3,12.3 9.6,8 5.3,3.7 6,3 "/><rect width="16" height="16" style="fill: none" /></svg>',
-    prevArrow:
-      '<svg width="16px" height="16px" viewBox="0 0 16 16"><polygon points="5,8 10,3 10.7,3.7 6.4,8 10.7,12.3 10,13 "/><rect width="16" height="16" style="fill: none" /></svg>',
-    ...options,
-    // `options.mode` also carries Carbon's "month"/"year" datePickerType,
-    // used above to pick a plugin. flatpickr's own `mode` only understands
-    // "single" | "multiple" | "range": pass "range"/"multiple" through as-is,
-    // else fall back to "single" so the bundled monthSelect plugin's
-    // setMonth() (which switches on fp.config.mode) still updates the value.
-    mode:
-      options.mode === "range" || options.mode === "multiple"
-        ? options.mode
-        : "single",
-    locale: resolveLocale(options.locale),
-    // `wrap` expects `base` to be a wrapper holding a `[data-input]` child.
-    // Carbon always passes the input itself, so flatpickr would throw.
-    wrap: false,
-    ...mergedHooks,
-    // Placed after `...options` so a consumer's own `errorHandler` (from
-    // `flatpickrProps`) can never replace this wrapper; it is still called,
-    // via `errorHandlerBox`, from inside `handleParseError`.
-    errorHandler: handleParseError,
-    // A week's value is its first day, which for a Sunday-first locale sits
-    // in the previous ISO week. Number the week the row shows instead: the
-    // ISO week of its middle day. flatpickr's week column passes a row's
-    // last day, which lands on the same middle day.
-    ...(options.mode === "week" &&
-      !options.getWeek && {
-        getWeek: (/** @type {Date} */ date) => {
-          const firstDayOfWeek = createdInstance?.l10n.firstDayOfWeek ?? 0;
-          const offset = (date.getDay() - firstDayOfWeek + 7) % 7;
-          return isoWeek(
-            new Date(
-              date.getFullYear(),
-              date.getMonth(),
-              date.getDate() - offset + 3,
-            ),
-          );
-        },
-      }),
-  };
-  const instance = new /** @type {any} */ (flatpickr)(base, config);
-  createdInstance = instance;
-  // flatpickr catches its own init errors, logs them, and returns an empty
-  // array. Report that as "no calendar" so callers never treat it as one.
-  if (Array.isArray(instance)) return null;
+  /** @type {CalendarInstance | null} */
+  let instance = null;
+  try {
+    instance = createCalendarEngine(base, {
+      allowInput: true,
+      animate: false,
+      clickOpens: true,
+      ariaDateFormat: "l, F j, Y",
+      ...options,
+      ...mergedHooks,
+      ...(options.mode === "range" && input && { secondInput: input }),
+      ...(isDayBlocked && { isDayBlocked }),
+      // Placed after `...options` so a consumer's own `errorHandler` (from
+      // `flatpickrProps`) can never replace this wrapper; it is still
+      // called, via `errorHandlerBox`, from inside `handleParseError`.
+      errorHandler: handleParseError,
+    });
+  } catch (error) {
+    // Report an init failure like flatpickr did: log it and return no
+    // calendar, so callers never treat it as one.
+    console.error(error);
+    return null;
+  }
+  if (!instance) return null;
   hooksByInstance.set(instance, carbonHooks);
   errorHandlerBoxes.set(instance, errorHandlerBox);
   return instance;

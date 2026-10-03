@@ -74,7 +74,7 @@ Set `inline` to `true` to render the calendar permanently below the input instea
 
 ## Programmatic control
 
-Drive the calendar from outside the component—set values, select many dates at once, or read the underlying Flatpickr instance.
+Drive the calendar from outside the component—set values, select many dates at once, or read the underlying calendar instance.
 
 ### Open and close
 
@@ -84,7 +84,7 @@ Use `bind:open` to open or close the calendar from outside the component. It als
 
 ### Programmatic access
 
-For everything else, use `bind:calendar` to access the underlying [Flatpickr instance](https://flatpickr.js.org/instance-methods-properties-elements/) for programmatic control, such as opening the calendar from an external trigger or updating options at runtime via `set`.
+For everything else, use `bind:calendar` to access the underlying calendar instance for programmatic control, such as opening the calendar from an external trigger or updating options at runtime via `set`.
 
 <FileSource src="/framed/DatePicker/DatePickerCalendarInstance" />
 
@@ -163,9 +163,9 @@ By default, an initial `value` outside of `minDate` and `maxDate` (or matching `
 
 <FileSource src="/framed/DatePicker/DatePickerAllowInvalidPreload" />
 
-## Flatpickr options
+## Calendar options
 
-Use `flatpickrProps` to pass additional [Flatpickr options](https://flatpickr.js.org/options/). These merge with the options Carbon sets internally (for example static positioning, clickOpens, and top-layer appendTo when using `portalMenu`). Override props such as static only when you understand how they interact with portalling and modals. Flatpickr hooks such as `onOpen`, `onReady`, and `onDayCreate` run after Carbon's own handlers instead of replacing them. Carbon sets `mode` from `datePickerType` and does not support `wrap`. `positionElement` and `appendTo` only apply with `portalMenu`, and `altInput`, `disable`, and `enable` give way to `displayFormat`, `disabledDates`, and `enabledDates` when those are set. The console warns once when an option is passed that will not take effect.
+Use `flatpickrProps` to pass additional calendar options. The names and behavior follow [flatpickr's options](https://flatpickr.js.org/options/), for the subset the calendar implements: the time picker (`enableTime`, `noCalendar`, `minTime`, and related), the native mobile picker (`disableMobile`), `wrap`, and `monthSelectorType` are not supported, and the console warns once when one is passed. These merge with the options Carbon sets internally (for example static positioning, clickOpens, and top-layer appendTo when using `portalMenu`). Override props such as static only when you understand how they interact with portalling and modals. Hooks such as `onOpen`, `onReady`, and `onDayCreate` run after Carbon's own handlers instead of replacing them. Carbon sets `mode` from `datePickerType` and does not support `wrap`. `positionElement` and `appendTo` only apply with `portalMenu`, and `altInput`, `disable`, and `enable` give way to `displayFormat`, `disabledDates`, and `enabledDates` when those are set. The console warns once when an option is passed that will not take effect.
 
 ### Multiple months
 
@@ -175,13 +175,13 @@ The example below sets `showMonths` so two months appear side by side in the cal
 
 ### Day content
 
-Pass an `onDayCreate` callback via `flatpickrProps` to customize individual day cells, such as marking dates that have events. The callback receives `(dObj, dStr, fp, dayElem)`, matching [Flatpickr's onDayCreate hook](https://flatpickr.js.org/events/#hooks); `dayElem` is the day's DOM element, styled here by appending a plain DOM node with inline styles, since Flatpickr renders it outside Svelte's scoped-style boundary.
+Pass an `onDayCreate` callback via `flatpickrProps` to customize individual day cells, such as marking dates that have events. The callback receives `(dObj, dStr, fp, dayElem)`, matching [flatpickr's onDayCreate hook](https://flatpickr.js.org/events/#hooks); `dayElem` is the day's DOM element, styled here by appending a plain DOM node with inline styles, since the calendar renders it outside Svelte's scoped-style boundary.
 
 <FileSource src="/framed/DatePicker/DatePickerDayContent" />
 
 ### Week numbers
 
-Pass `weekNumbers: true` via `flatpickrProps` to show a week number column beside the day grid. Weeks are numbered per ISO 8601 by default; pass `getWeek` alongside it to compute them differently, such as for fiscal weeks. Flatpickr only fills the column when a single month is shown, so avoid combining it with `showMonths`.
+Pass `weekNumbers: true` via `flatpickrProps` to show a week number column beside the day grid. Weeks are numbered per ISO 8601 by default; pass `getWeek` alongside it to compute them differently, such as for fiscal weeks. The column is only filled when a single month is shown, so avoid combining it with `showMonths`.
 
 <FileSource src="/framed/DatePicker/DatePickerWeekNumbers" />
 
@@ -193,7 +193,7 @@ Pass `shorthandCurrentMonth: true` via `flatpickrProps` to show the abbreviated 
 
 ### Enable open animation
 
-By default, the calendar appears instantly with no animation. Pass `flatpickrProps={{ animate: true }}` to enable the [Flatpickr animate option](https://flatpickr.js.org/options/) and animate the calendar as it opens and closes.
+By default, the calendar appears instantly with no animation. Pass `flatpickrProps={{ animate: true }}` to animate the calendar as it opens and closes.
 
 <FileSource src="/framed/DatePicker/DatePickerEnableAnimation" />
 
@@ -203,7 +203,7 @@ Control how users interact with the open calendar.
 
 ### Calendar-only selection
 
-By default, Carbon enables Flatpickr allowInput so typed dates work like an editable field.
+By default, Carbon enables `allowInput` so typed dates work like an editable field.
 
 Pass `flatpickrProps={{ allowInput: false }}` when you want calendar-only selection: the field still receives the chosen date and remains focusable for accessibility, but users cannot free-type into the input—they must pick a date from the calendar. That reduces invalid or ambiguous typed values when you need strict control.
 
@@ -211,7 +211,7 @@ Pass `flatpickrProps={{ allowInput: false }}` when you want calendar-only select
 
 ### Handle invalid dates
 
-By default, Flatpickr logs a warning and clears the field when it cannot parse a typed date. Listen for `on:error` to surface it in the UI instead. Flatpickr fires `error` before the following `change`, and that `change` has an empty `selectedDates`, so only clear the error once a `change` reports a real selection.
+By default, the calendar logs a warning and clears the field when it cannot parse a typed date. Listen for `on:error` to surface it in the UI instead. The `error` event fires before the following `change`, and that `change` has an empty `selectedDates`, so only clear the error once a `change` reports a real selection.
 
 <FileSource src="/framed/DatePicker/DatePickerErrorHandler" />
 
@@ -267,7 +267,7 @@ Set `displayFormat` to show a friendly date in the input while `value` and the s
 
 ### Custom parsing and formatting
 
-Use `formatDate` and `parseDate` via `flatpickrProps` when `dateFormat` tokens are not expressive enough, for example to format with `Intl.DateTimeFormat`. Always provide both: Flatpickr re-parses the input text it just formatted, so `parseDate` must understand the output of `formatDate`.
+Use `formatDate` and `parseDate` via `flatpickrProps` when `dateFormat` tokens are not expressive enough, for example to format with `Intl.DateTimeFormat`. Always provide both: the calendar re-parses the input text it just formatted, so `parseDate` must understand the output of `formatDate`.
 
 <FileSource src="/framed/DatePicker/DatePickerParseFormat" />
 
@@ -279,15 +279,15 @@ With `datePickerType="multiple"`, dates in `value` are joined with `", "` by def
 
 ### Locale
 
-The `locale` prop accepts either a [flatpickr locale key](https://github.com/flatpickr/flatpickr/tree/master/src/l10n) or a [CustomLocale](https://github.com/flatpickr/flatpickr/blob/master/src/types/locale.ts) object. It defaults to `"en"`, which renders Carbon-spec single-letter weekday abbreviations (S, M, T, W, Th, F, S).
+The `locale` prop accepts either a [BCP 47 language tag](https://en.wikipedia.org/wiki/IETF_language_tag) (for example `"de"` or `"ar-EG"`), or a partial locale object merged over the English defaults. A tag drives month and weekday names through `Intl`, and the first day of the week from the same [CLDR](https://cldr.unicode.org/) data. It defaults to `"en"`, which renders Carbon-spec single-letter weekday abbreviations (S, M, T, W, Th, F, S).
 
-To customize the weekday labels (for example, to restore flatpickr's default English `Sun, Mon, Tue, ...` shorthands), pass a `CustomLocale` object.
+To customize the weekday labels (for example, to use `Sun, Mon, Tue, ...` shorthands), pass a locale object. It may set `weekdays`, `months`, `firstDayOfWeek`, and `rangeSeparator`.
 
 <FileSource src="/framed/DatePicker/DatePickerLocale" />
 
 ### Non-English locale
 
-Import the corresponding locale module from `flatpickr/dist/l10n/<key>` and pass it to the `locale` prop. The example below uses German (`de`).
+Pass any language tag; no locale module needs to be imported. The example below uses German (`de`).
 
 <FileSource src="/framed/DatePicker/DatePickerNonEnglishLocale" />
 
@@ -337,7 +337,7 @@ Listen for `on:close` to know when the calendar closes and why. This event is on
 
 ### Error
 
-Listen for `on:error` to catch a date Flatpickr could not parse. `event.detail.error` is an `Error` and `event.detail.value` is the raw text that failed to parse.
+Listen for `on:error` to catch a date the calendar could not parse. `event.detail.error` is an `Error` and `event.detail.value` is the raw text that failed to parse.
 
 <DatePicker datePickerType="single" on:error={(e) => console.log(e.detail.error.message)}>
   <DatePickerInput labelText="Renewal date" placeholder="mm/dd/yyyy" />

@@ -1,39 +1,30 @@
-export interface FlatpickrInstance {
-  calendarContainer: HTMLElement;
-  days: HTMLElement;
-  daysContainer?: HTMLElement;
-  weekdayContainer: HTMLElement;
-  selectedDates: unknown[];
-  l10n: {
-    months: { longhand: string[] };
-    weekdays?: { shorthand?: string[] };
-  };
-  currentMonth: number;
-  monthNav: HTMLElement;
-  monthsDropdownContainer: HTMLElement;
-}
+import type { CalendarInstance, CalendarMode } from "./calendar.js";
 
 export interface CreateCalendarArgs {
-  options: { locale?: string; mode?: string; dateFormat?: string };
-  base: HTMLElement;
+  options: {
+    locale?: string;
+    mode?: CalendarMode;
+    dateFormat?: string;
+    altFormat?: string;
+    errorHandler?: (error: Error) => void;
+    [option: string]: unknown;
+  };
+  base: HTMLInputElement;
   input: HTMLInputElement;
-  dispatch: (event: string) => void;
+  dispatch: (event: string, detail?: unknown) => void;
+  isDayBlocked?: (date: Date, instance: CalendarInstance) => boolean;
 }
 
 /**
- * Creates a flatpickr calendar instance with Carbon styling and optional range plugin.
+ * Creates a calendar instance with Carbon's hooks (events, alt input
+ * mirroring, error reporting) layered on the calendar engine.
  * @param args - Destructured options, base element, input, and dispatch callback
- * @returns Promise resolving to the flatpickr instance
+ * @returns Promise resolving to the calendar instance, or `null` when it
+ * could not be created
  */
 export function createCalendar(
   args: CreateCalendarArgs,
-): Promise<FlatpickrInstance | null>;
-
-/**
- * Maps the `"en"` locale key to Carbon's English locale, and passes any
- * other locale through.
- */
-export function resolveLocale(locale: unknown): unknown;
+): Promise<CalendarInstance | null>;
 
 /**
  * Value to pass to `calendar.set(name, ...)` for a consumer option, keeping
@@ -46,10 +37,10 @@ export function resolveOptionValue(
 ): unknown;
 
 /**
- * Resyncs Carbon's `.cur-month` header label after a programmatic
- * navigation that suppressed flatpickr's own `onMonthChange` hook.
+ * Updates the handler Carbon's `errorHandler` wrapper calls, without
+ * replacing the wrapper (and the `error` event it dispatches).
  */
-export function updateMonthNode(
-  instance: FlatpickrInstance,
-  locale: unknown,
+export function setErrorHandler(
+  instance: CalendarInstance,
+  handler: ((error: Error) => void) | undefined,
 ): void;
