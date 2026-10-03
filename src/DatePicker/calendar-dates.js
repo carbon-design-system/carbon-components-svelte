@@ -227,6 +227,7 @@ export function formatDate(date, format, l10n, context = {}) {
   return out;
 }
 
+const ENGLISH = /^en(-|$)/i;
 const ZONED = /Z$|GMT$/;
 const NUMBER = "(\\d\\d|\\d)";
 
@@ -409,7 +410,9 @@ export { DAY_MS };
  * @param {unknown} locale
  */
 export function isMonthFirst(locale) {
-  if (typeof locale !== "string") return true;
+  // Every English locale puts the month first. Skipping `Intl` here keeps
+  // its cold-start cost (a few ms) out of the first mount.
+  if (typeof locale !== "string" || ENGLISH.test(locale)) return true;
   try {
     const parts = getDateTimeFormatter(locale, {
       year: "numeric",
