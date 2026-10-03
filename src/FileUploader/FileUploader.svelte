@@ -197,6 +197,39 @@
   const dispatch = createEventDispatcher();
 
   let prevFiles = [];
+  let triggerRef = null;
+
+  /** @param {HTMLElement} button */
+  function scheduleFocusAfterRemove(button) {
+    const row = button?.closest(".bx--file__selected-file") ?? null;
+    const nextRow = row?.nextElementSibling ?? null;
+    const prevRow = row?.previousElementSibling ?? null;
+
+    return () => {
+      const targetRow = nextRow?.isConnected
+        ? nextRow
+        : prevRow?.isConnected
+          ? prevRow
+          : null;
+      const targetButton = targetRow?.querySelector(".bx--file-close");
+
+      if (targetButton) {
+        targetButton.focus();
+      } else {
+        triggerRef?.focus();
+      }
+    };
+  }
+
+  /**
+   * @param {File} file
+   * @param {Event} event
+   */
+  function removeFile(file, event) {
+    const focusNext = scheduleFocusAfterRemove(event.currentTarget);
+    files = files.filter((f) => f !== file);
+    tick().then(focusNext);
+  }
 
   // Per-file stable id: assigned once on first sight and carried with the
   // File reference, so reorders and removals don't shift other files' ids.
@@ -302,6 +335,7 @@
     {kind}
     {size}
     bind:ref
+    bind:triggerRef
     bind:files
     on:change={(event) => {
       // In multiple mode, newFiles includes re-sent existing files
@@ -373,12 +407,12 @@
             on:keydown
             on:keydown={(event) => {
               if (event.key === " " || event.key === "Enter") {
-                files = files.filter((f) => f !== file);
+                removeFile(file, event);
               }
             }}
             on:click
-            on:click={() => {
-              files = files.filter((f) => f !== file);
+            on:click={(event) => {
+              removeFile(file, event);
             }}
           />
         </span>
