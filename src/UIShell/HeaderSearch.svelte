@@ -342,6 +342,10 @@
     }
     prevActive = active;
   }
+  // A shorter `results` array can leave the index past its end.
+  $: if (selectedResultIndex >= results.length && selectedResultIndex !== 0) {
+    selectedResultIndex = 0;
+  }
   $: selectedResult = results[selectedResultIndex];
   $: selectedId = selectedResult
     ? `${id}-menuitem-${selectedResult.id ?? selectedResultIndex}`
