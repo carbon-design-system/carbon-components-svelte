@@ -337,3 +337,80 @@ describe("dismiss listener pooling", () => {
     addSpy.mockRestore();
   });
 });
+
+describe("dismiss keyboard listeners", () => {
+  let node: HTMLElement;
+
+  beforeEach(() => {
+    node = document.createElement("div");
+    document.body.appendChild(node);
+  });
+
+  afterEach(() => {
+    node.remove();
+  });
+
+  it("register immediately, before the deferred pointer listeners", async () => {
+    const onKeydown = vi.fn();
+    const onClick = vi.fn();
+    const action = dismiss(node, {
+      enabled: true,
+      listeners: [
+        { type: "click", handler: onClick },
+        { type: "keydown", handler: onKeydown },
+      ],
+    });
+
+    window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+    window.dispatchEvent(new MouseEvent("click"));
+    expect(onKeydown).toHaveBeenCalledTimes(1);
+    expect(onClick).not.toHaveBeenCalled();
+
+    await flush();
+    window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+    window.dispatchEvent(new MouseEvent("click"));
+    expect(onKeydown).toHaveBeenCalledTimes(2);
+    expect(onClick).toHaveBeenCalledTimes(1);
+
+    action.destroy();
+  });
+
+  it("register immediately when enabled by an update", () => {
+    const handler = vi.fn();
+    const action = dismiss(node, { enabled: false, type: "keydown", handler });
+
+    action.update({ enabled: true, type: "keydown", handler });
+    window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+    expect(handler).toHaveBeenCalledTimes(1);
+
+    action.update({ enabled: false, type: "keydown", handler });
+    window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+    expect(handler).toHaveBeenCalledTimes(1);
+
+    action.destroy();
+  });
+
+  it("keeps one registration per listener across updates while deferred", async () => {
+    const handler = vi.fn();
+    const params = {
+      enabled: true,
+      listeners: [
+        { type: "click", handler },
+        { type: "keydown", handler },
+      ],
+    };
+    const action = dismiss(node, params);
+    action.update({ ...params });
+    action.update({ ...params });
+    await flush();
+
+    window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+    window.dispatchEvent(new MouseEvent("click"));
+    expect(handler).toHaveBeenCalledTimes(2);
+
+    action.destroy();
+    window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+    window.dispatchEvent(new MouseEvent("click"));
+    expect(handler).toHaveBeenCalledTimes(2);
+  });
+});
