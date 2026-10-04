@@ -2,7 +2,9 @@ import { render, screen } from "@testing-library/svelte";
 import type RadioTileComponent from "carbon-components-svelte/Tile/RadioTile.svelte";
 import type { ComponentProps } from "svelte";
 import RadioTileStandalone from "../Tile/RadioTileStandalone.test.svelte";
+import { flushFormReset } from "../utils/flush-form-reset";
 import { flushMacrotask } from "../utils/flush-macrotask";
+import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import RadioTileChecked from "./RadioTile.checked.test.svelte";
 import RadioTileGroup from "./RadioTile.group.test.svelte";
@@ -10,6 +12,8 @@ import RadioTileGroupEach from "./RadioTile.group-each.test.svelte";
 import RadioTileKeyboard from "./RadioTile.keyboard.test.svelte";
 import RadioTileRef from "./RadioTile.ref.test.svelte";
 import RadioTileSingle from "./RadioTile.single.test.svelte";
+import RadioTileStandaloneGroup from "./RadioTile.standalone.test.svelte";
+import RadioTileStandaloneEach from "./RadioTile.standalone-each.test.svelte";
 import RadioTile from "./RadioTile.test.svelte";
 import RadioTileAria from "./RadioTileAria.test.svelte";
 import RadioTileCustom from "./RadioTileCustom.test.svelte";
@@ -240,6 +244,79 @@ describe("RadioTile", () => {
     expect(inputs[1]).not.toHaveFocus();
     expect(inputs[1]).toBeChecked();
     expect(screen.getByText(/Selected: Standard plan/)).toBeInTheDocument();
+  });
+
+  describe("standalone", () => {
+    const isSelected = (radio: HTMLElement) =>
+      radio.nextElementSibling?.classList.contains("bx--tile--is-selected");
+
+    it("checks and styles a tile when clicked", async () => {
+      const { component } = render(RadioTileStandaloneGroup);
+      const solo = screen.getByRole("radio", { name: "Solo" });
+
+      await user.click(solo);
+
+      expect(solo).toBeChecked();
+      expect(component.checkedSolo).toBe(true);
+      expect(isSelected(solo)).toBe(true);
+    });
+
+    it("unchecks a tile when a sibling with the same name is clicked", async () => {
+      const { component } = render(RadioTileStandaloneGroup);
+      const radioA = screen.getByRole("radio", { name: "A" });
+      const radioB = screen.getByRole("radio", { name: "B" });
+
+      await user.click(radioA);
+      await user.click(radioB);
+
+      expect(component.checkedA).toBe(false);
+      expect(isSelected(radioA)).toBe(false);
+      expect(component.checkedB).toBe(true);
+      expect(isSelected(radioB)).toBe(true);
+    });
+
+    it("unchecks a sibling when checked is set", async () => {
+      const { component } = render(RadioTileStandaloneGroup, {
+        props: { checkedA: true },
+      });
+      const radioA = screen.getByRole("radio", { name: "A" });
+      const radioB = screen.getByRole("radio", { name: "B" });
+
+      component.checkedB = true;
+      await flushMacrotask();
+
+      expect(component.checkedA).toBe(false);
+      expect(isSelected(radioA)).toBe(false);
+      expect(radioB).toBeChecked();
+      expect(isSelected(radioB)).toBe(true);
+    });
+
+    it("keeps checked in sync when bound to array items", async () => {
+      render(RadioTileStandaloneEach);
+      const bound = screen.getByTestId("bound");
+
+      await user.click(screen.getByRole("radio", { name: "annual" }));
+      expect(bound).toHaveTextContent("[false,true]");
+
+      await user.click(screen.getByRole("button", { name: "Pick monthly" }));
+      expect(bound).toHaveTextContent("[true,false]");
+      expect(screen.getByRole("radio", { name: "monthly" })).toBeChecked();
+    });
+
+    it("follows the form reset", async () => {
+      const { component } = render(RadioTileStandaloneGroup, {
+        props: { checkedA: true },
+      });
+      const radioA = screen.getByRole("radio", { name: "A" });
+      expect(radioA).toBeChecked();
+
+      getForm().reset();
+      await flushFormReset();
+
+      expect(radioA).not.toBeChecked();
+      expect(component.checkedA).toBe(false);
+      expect(isSelected(radioA)).toBe(false);
+    });
   });
 
   describe("checked inside TileGroup", () => {
