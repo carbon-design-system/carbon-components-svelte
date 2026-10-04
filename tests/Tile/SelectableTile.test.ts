@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import SelectableTileTest from "./SelectableTile.test.svelte";
 import SelectableTileAria from "./SelectableTileAria.test.svelte";
@@ -157,6 +157,21 @@ describe("SelectableTile", () => {
 
       await user.keyboard("{Tab}");
       await user.keyboard("{Enter}");
+      expect(consoleLog).toHaveBeenCalledWith("select", expect.any(String));
+    });
+
+    it("toggles once when Enter is held down", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(SelectableTileTest);
+      const checkbox = screen.getByRole("checkbox");
+      checkbox.focus();
+
+      await fireEvent.keyDown(checkbox, { key: "Enter" });
+      await fireEvent.keyDown(checkbox, { key: "Enter", repeat: true });
+      await fireEvent.keyDown(checkbox, { key: "Enter", repeat: true });
+
+      expect(checkbox).toBeChecked();
+      expect(consoleLog).toHaveBeenCalledTimes(1);
       expect(consoleLog).toHaveBeenCalledWith("select", expect.any(String));
     });
 

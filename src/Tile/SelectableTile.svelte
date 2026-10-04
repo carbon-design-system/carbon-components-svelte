@@ -150,6 +150,9 @@
     if (disabled) return;
     if (event.key === "Enter") {
       event.preventDefault();
+      // Toggle once per press, like Space; a held key would otherwise
+      // toggle on every auto-repeat.
+      if (event.repeat) return;
       // Dispatching (rather than `ref.click()`) lets Shift be forwarded onto
       // the resulting click, which still runs the checkbox's native
       // pre-click activation (toggle + a follow-up "change").
