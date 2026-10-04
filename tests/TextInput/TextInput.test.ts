@@ -277,6 +277,9 @@ describe("TextInput", () => {
     expect(screen.getByText("Helper text")).toHaveClass(
       "bx--form__helper-text--inline",
     );
+    expect(screen.getByLabelText("User name")).toHaveAccessibleDescription(
+      "Helper text",
+    );
   });
 
   it("should dispatch keydown event", async () => {
