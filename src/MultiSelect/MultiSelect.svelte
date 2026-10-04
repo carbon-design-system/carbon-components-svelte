@@ -1390,7 +1390,9 @@
               open = true;
             }}
             on:keydown
-            on:keydown|stopPropagation={(event) => {
+            on:keydown={(event) => {
+              // ListBox decides whether Escape propagates.
+              if (event.key !== "Escape") event.stopPropagation();
               // Read-only opens and navigates the menu to review values, but the
               // keys that clear the selection are blocked; selectItem guards the
               // rest (Enter/option toggle).

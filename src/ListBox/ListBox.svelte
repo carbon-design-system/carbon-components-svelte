@@ -43,6 +43,9 @@
    * @type {string}
    */
   export let warnId = undefined;
+
+  // Read in the capture phase, before the field's own handler closes the menu.
+  let escapeClosesMenu = false;
 </script>
 
 <div
@@ -60,8 +63,13 @@
   class:bx--list-box--warning={!invalid && warn}
   {...$$restProps}
   on:keydown
+  on:keydown|capture={(event) => {
+    escapeClosesMenu = event.key === "Escape" && open;
+  }}
   on:keydown={(event) => {
-    if (event.key === "Escape") {
+    // An Escape that closes the menu stops here so an ancestor (Modal) stays
+    // open. A closed list box has nothing to dismiss, so Escape bubbles on.
+    if (event.key === "Escape" && escapeClosesMenu) {
       event.stopPropagation();
     }
   }}

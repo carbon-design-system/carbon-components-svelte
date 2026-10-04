@@ -951,7 +951,10 @@
             }
           }}
           on:keydown
-          on:keydown|stopPropagation={(event) => {
+          on:keydown={(event) => {
+            // ListBox decides whether Escape propagates, unless Escape clears
+            // a value below.
+            if (event.key !== "Escape") event.stopPropagation();
             if (readonly) return;
             if (
               event.key === "Enter" ||
@@ -1065,6 +1068,9 @@
             } else if (event.key === "Escape") {
               // Dispatch before `clear()` flips `open`, so the guard still sees it open.
               const hadSelection = selectedId !== undefined;
+              // Clearing a closed field consumes Escape; with nothing to close
+              // or clear, it bubbles to an ancestor such as a Modal.
+              if (hadSelection || value !== "") event.stopPropagation();
               close("escape-key");
               resetSelection({}, hadSelection);
             }

@@ -6,6 +6,7 @@
   export let modalOpen = true;
   export let multiSelectOpen = true;
   export let portalMenu: ComponentProps<MultiSelect>["portalMenu"] = undefined;
+  export let filterable = false;
 
   const items = [
     { id: "0", text: "Slack" },
@@ -25,6 +26,7 @@
     labelText="Contact"
     placeholder="Select"
     open={multiSelectOpen}
+    {filterable}
     {portalMenu}
   />
 </Modal>

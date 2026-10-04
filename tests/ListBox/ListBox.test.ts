@@ -170,8 +170,8 @@ describe("ListBox", () => {
     expect(keydownHandler).toHaveBeenCalled();
   });
 
-  it("should stop propagation of Escape key", async () => {
-    const { container } = render(ListBox);
+  it("should stop propagation of Escape key when open", async () => {
+    const { container } = render(ListBox, { props: { open: true } });
     const escapeHandler = vi.fn();
 
     container.addEventListener("keydown", escapeHandler);
@@ -180,6 +180,18 @@ describe("ListBox", () => {
     await user.keyboard("{Escape}");
 
     expect(escapeHandler).not.toHaveBeenCalled();
+  });
+
+  it("should let Escape key propagate when closed", async () => {
+    const { container } = render(ListBox);
+    const escapeHandler = vi.fn();
+
+    container.addEventListener("keydown", escapeHandler);
+
+    await user.click(getRoot(container));
+    await user.keyboard("{Escape}");
+
+    expect(escapeHandler).toHaveBeenCalled();
   });
 
   it("should render slot content", () => {

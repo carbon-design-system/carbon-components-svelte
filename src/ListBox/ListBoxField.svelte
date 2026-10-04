@@ -52,7 +52,11 @@
   on:mouseover
   on:mouseenter
   on:mouseleave
-  on:keydown|stopPropagation
+  on:keydown
+  on:keydown={(event) => {
+    // ListBox decides whether Escape propagates, based on the open state.
+    if (event.key !== "Escape") event.stopPropagation();
+  }}
   on:focus
   on:blur
 >
