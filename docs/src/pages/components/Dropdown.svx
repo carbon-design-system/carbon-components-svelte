@@ -17,7 +17,7 @@ description: Dropdowns provide a select input with a dropdown menu, with multipl
 
 Use the dropdown to create a select input with a dropdown menu. Each item needs a unique id.
 
-With the field focused, <DocKbd label="Enter" /> or <DocKbd label="Space" /> opens the menu. <DocKbd label="ArrowDown" /> and <DocKbd label="ArrowUp" /> open it on the selected item, or on the first or last item when nothing is selected. <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the first and last item, and the arrow keys wrap at either end. Type a character, with the menu open or closed, to highlight the next enabled item whose label starts with it; type quickly to match a longer prefix.
+With the field focused, <DocKbd label="Enter" /> or <DocKbd label="Space" /> opens the menu. <DocKbd label="ArrowDown" /> and <DocKbd label="ArrowUp" /> open it on the selected item, or on the first or last item when nothing is selected. <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the first and last item, and the arrow keys wrap at either end. In an open menu, <DocKbd label="PageUp" /> and <DocKbd label="PageDown" /> move the highlight 10 items and stop at either end. Type a character, with the menu open or closed, to highlight the next enabled item whose label starts with it; type quickly to match a longer prefix.
 
 <Dropdown labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
