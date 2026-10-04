@@ -36,6 +36,7 @@
   import { createEventDispatcher, onMount, setContext } from "svelte";
   import { readonly, writable } from "svelte/store";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
+  import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -72,6 +73,31 @@
     } else {
       selectedValue.set(value);
     }
+  }
+
+  /** @type {HTMLDivElement | null} */
+  let listRef = null;
+
+  // A form reset unchecks the row inputs without a change event. Read the
+  // inputs still checked (none, unless the markup was server-rendered with
+  // `checked`) back into the selection. Inputs of a nested structured list
+  // are skipped. A reset fires no `change`, so mark the write like a prop
+  // update.
+  function handleFormReset() {
+    if (!selection || !listRef) return;
+    const values = Array.from(
+      listRef.querySelectorAll("input.bx--structured-list-input"),
+      (input) => /** @type {HTMLInputElement} */ (input),
+    )
+      .filter(
+        (input) =>
+          input.checked && input.closest(".bx--structured-list") === listRef,
+      )
+      .map((input) => /** @type {Value} */ (input.value));
+    const next = multiple ? values : values[0];
+    if (next === $selectedValue) return;
+    fromProp = true;
+    selectedValue.set(next);
   }
 
   setContext("carbon:StructuredListWrapper", {
@@ -131,6 +157,8 @@
 </script>
 
 <div
+  bind:this={listRef}
+  use:formReset={handleFormReset}
   role={selection ? undefined : "table"}
   class:bx--structured-list={true}
   class:bx--structured-list--selection={selection}
