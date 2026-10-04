@@ -165,6 +165,7 @@
     }
     pendingShiftKey = false;
   }}
+  on:change
   on:keydown
   on:keydown={(event) => {
     if (disabled) return;
