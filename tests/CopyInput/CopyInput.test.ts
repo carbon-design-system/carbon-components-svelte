@@ -10,6 +10,12 @@ import CopyInputAsyncDoubleClick from "./CopyInputAsyncDoubleClick.test.svelte";
 import CopyInputMouseEnter from "./CopyInputMouseEnter.test.svelte";
 import CopyInputMultiple from "./CopyInputMultiple.test.svelte";
 
+const getFieldWrapper = (input: HTMLElement) => {
+  const fieldWrapper = input.closest(".bx--copy-input__field-wrapper");
+  assert(fieldWrapper);
+  return fieldWrapper;
+};
+
 describe("CopyInput", () => {
   beforeEach(() => {
     Object.defineProperty(navigator, "clipboard", {
@@ -109,7 +115,7 @@ describe("CopyInput", () => {
 
     const input = screen.getByLabelText("API token");
 
-    await fireEvent.mouseEnter(input);
+    await fireEvent.mouseEnter(getFieldWrapper(input));
     expect(input).toHaveAttribute("type", "password");
   });
 
@@ -121,10 +127,10 @@ describe("CopyInput", () => {
     const input = screen.getByLabelText("API token");
     expect(input).toHaveAttribute("type", "password");
 
-    await fireEvent.mouseEnter(input);
+    await fireEvent.mouseEnter(getFieldWrapper(input));
     expect(input).toHaveAttribute("type", "text");
 
-    await fireEvent.mouseLeave(input);
+    await fireEvent.mouseLeave(getFieldWrapper(input));
     expect(input).toHaveAttribute("type", "password");
 
     await fireEvent.focus(input);
@@ -140,7 +146,24 @@ describe("CopyInput", () => {
     });
 
     const input = screen.getByLabelText("API token");
-    await fireEvent.mouseEnter(input);
+    await fireEvent.mouseEnter(getFieldWrapper(input));
+    expect(input).toHaveAttribute("type", "password");
+  });
+
+  it("keeps a hover-revealed value visible over the copy button", async () => {
+    render(CopyInput, {
+      props: { type: "password", revealMode: "hover-focus" },
+    });
+
+    const input = screen.getByLabelText("API token");
+    await user.hover(input);
+    expect(input).toHaveAttribute("type", "text");
+
+    const button = screen.getByRole("button", { name: "Copy to clipboard" });
+    await user.hover(button);
+    expect(input).toHaveAttribute("type", "text");
+
+    await user.unhover(button);
     expect(input).toHaveAttribute("type", "password");
   });
 
@@ -148,12 +171,8 @@ describe("CopyInput", () => {
     render(CopyInput, { props: { type: "password" } });
 
     const input = screen.getByLabelText("API token");
-    const fieldWrapper = input.closest(".bx--copy-input__field-wrapper");
-    assert(fieldWrapper);
-    expect(fieldWrapper).toBeInTheDocument();
 
-    await fireEvent.mouseEnter(input);
-    await fireEvent.mouseEnter(fieldWrapper);
+    await fireEvent.mouseEnter(getFieldWrapper(input));
     expect(input).toHaveAttribute("type", "password");
   });
 
