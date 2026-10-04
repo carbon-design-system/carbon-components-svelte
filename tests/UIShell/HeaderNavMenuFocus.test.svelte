@@ -16,4 +16,4 @@
     <HeaderNavItem href="#pricing" text="Pricing" />
   </HeaderNav>
 </Header>
-<input aria-label="Search docs" />
+<input aria-label="Search docs">
