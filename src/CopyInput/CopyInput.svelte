@@ -231,9 +231,14 @@
     class:bx--text-input__field-outer-wrapper={true}
     class:bx--text-input__field-outer-wrapper--inline={inline}
   >
+    <!-- Hover spans the copy button, which overlaps the input's right edge,
+         so reaching for it does not re-obscure the value. -->
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div
       class:bx--text-input__field-wrapper={true}
       class:bx--copy-input__field-wrapper={true}
+      on:mouseenter={() => (hovered = true)}
+      on:mouseleave={() => (hovered = false)}
     >
       <input
         bind:this={ref}
@@ -254,8 +259,6 @@
         on:focus={handleFocus}
         on:blur
         on:blur={handleBlur}
-        on:mouseenter={() => (hovered = true)}
-        on:mouseleave={() => (hovered = false)}
       >
       {#if isFluid}
         <hr class:bx--text-input__divider={true}>
