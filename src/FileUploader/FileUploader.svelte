@@ -386,6 +386,8 @@
         index,
       )}
       {@const rowFileSize = resolveFileSize(fileSize, file, index)}
+      {@const rowErrorId =
+        rowInvalid && rowErrorSubject ? `${id}-error-${index}` : undefined}
       <span
         class:bx--file__selected-file={true}
         class:bx--file__selected-file--invalid={rowInvalid}
@@ -403,13 +405,14 @@
             {iconDescription}
             status={rowStatus}
             invalid={rowInvalid}
+            aria-describedby={rowErrorId}
             on:keydown
             on:click
             on:click={() => removeFile(file)}
           />
         </span>
-        {#if rowInvalid && rowErrorSubject}
-          <div class:bx--form-requirement={true}>
+        {#if rowErrorId}
+          <div id={rowErrorId} class:bx--form-requirement={true}>
             <div class:bx--form-requirement__title={true}>
               {rowErrorSubject}
             </div>

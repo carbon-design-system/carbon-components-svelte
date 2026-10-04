@@ -24,4 +24,26 @@ describe("FileUploader server render", () => {
       "docs-input",
     );
   });
+
+  it("derives invalid rows' error ids from the id", () => {
+    const invalidProps = {
+      ...props,
+      status: "edit" as const,
+      files: [new File(["x"], "bad.txt")],
+      fileInvalid: () => true,
+      fileErrorSubject: () => "File too large",
+    };
+    const renderRaw = () => render(FileUploader, { props: invalidProps }).body;
+
+    expect(renderRaw()).toBe(renderRaw());
+
+    const { document } = renderSSR(FileUploader, invalidProps);
+    expect(document.querySelector(".bx--file-close")).toHaveAttribute(
+      "aria-describedby",
+      "docs-error-0",
+    );
+    expect(document.getElementById("docs-error-0")).toHaveTextContent(
+      "File too large",
+    );
+  });
 });

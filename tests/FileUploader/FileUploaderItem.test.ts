@@ -169,6 +169,32 @@ describe("FileUploaderItem", () => {
     expect(event.detail).toBe("file-1");
   });
 
+  it("should describe the remove button with the error message when invalid", () => {
+    render(FileUploaderItem, {
+      props: {
+        name: "test.txt",
+        status: "edit",
+        invalid: true,
+        errorSubject: "File too large",
+        errorBody: "Select a smaller file.",
+      },
+    });
+
+    expect(
+      screen.getByRole("button", { name: "Remove file test.txt" }),
+    ).toHaveAccessibleDescription("File too large Select a smaller file.");
+  });
+
+  it("should not describe the remove button when valid", () => {
+    render(FileUploaderItem, {
+      props: { name: "test.txt", status: "edit", errorSubject: "Unused" },
+    });
+
+    expect(
+      screen.getByRole("button", { name: "Remove file test.txt" }),
+    ).not.toHaveAttribute("aria-describedby");
+  });
+
   it.each([
     ["Enter", "{Enter}"],
     ["Space", " "],

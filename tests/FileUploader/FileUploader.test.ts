@@ -1294,6 +1294,31 @@ describe("FileUploader", () => {
     ).toBeInTheDocument();
   });
 
+  it("should describe an invalid row's remove button with its error message", async () => {
+    const { component } = render(FileUploader, {
+      props: {
+        fileInvalid: (file: File) => file.name === "bad.txt",
+        fileErrorSubject: (file: File) => `${file.name} is too large`,
+        fileErrorBody: () => "Select a smaller file.",
+      },
+    });
+    assert(component.ref instanceof HTMLInputElement);
+    simulateFileSelection(component.ref, [
+      new File(["a"], "good.txt"),
+      new File(["b"], "bad.txt"),
+    ]);
+
+    const bad = await screen.findByRole("button", {
+      name: "Remove file bad.txt",
+    });
+    expect(bad).toHaveAccessibleDescription(
+      "bad.txt is too large Select a smaller file.",
+    );
+    expect(
+      screen.getByRole("button", { name: "Remove file good.txt" }),
+    ).not.toHaveAttribute("aria-describedby");
+  });
+
   describe("focus after removing a file", () => {
     async function renderWithFiles(names: string[]) {
       const { component } = render(FileUploader);
