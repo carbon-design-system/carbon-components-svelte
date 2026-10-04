@@ -145,12 +145,14 @@
   let focused = false;
   let hovered = false;
 
+  // Browsers still fire mouseenter on disabled inputs; never reveal those.
   $: revealed =
-    revealMode === "hover-focus"
+    !disabled &&
+    (revealMode === "hover-focus"
       ? focused || hovered
       : revealMode === "focus"
         ? focused
-        : false;
+        : false);
   $: inputType = type === "password" && !revealed ? "password" : "text";
   $: isFluid = !inline && (fluid || !!ctx?.isFluid);
   $: ({ helperId } = buildFieldIds(id));

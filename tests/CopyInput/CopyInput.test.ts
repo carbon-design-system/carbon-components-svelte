@@ -133,6 +133,16 @@ describe("CopyInput", () => {
     expect(input).toHaveAttribute("type", "password");
   });
 
+  it("does not reveal a disabled value on hover", async () => {
+    render(CopyInput, {
+      props: { type: "password", revealMode: "hover-focus", disabled: true },
+    });
+
+    const input = screen.getByLabelText("API token");
+    await fireEvent.mouseEnter(input);
+    expect(input).toHaveAttribute("type", "password");
+  });
+
   it("does not reveal the obscured value on hover when revealMode is unset", async () => {
     render(CopyInput, { props: { type: "password" } });
 
