@@ -275,6 +275,8 @@
     return () => {
       shouldRenderHamburgerMenu.set(false);
       isSideNavMobile.set(false);
+      isSideNavCollapsed.set(false);
+      isSideNavRail.set(false);
       if (holdsBodyLock) {
         holdsBodyLock = false;
         releaseBodyScrollLock();

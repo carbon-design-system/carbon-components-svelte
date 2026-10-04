@@ -16,3 +16,9 @@ export declare const isHeaderRendered: Writable<boolean>;
 
 /** The most recently mounted `HamburgerMenu` trigger button. */
 export declare const hamburgerMenuRef: Writable<HTMLButtonElement | null>;
+
+/**
+ * Count a mounted `Header` so `isHeaderRendered` stays `true` until the
+ * last one unmounts. Returns the callback to run on unmount.
+ */
+export declare function trackHeaderRendered(): () => void;
