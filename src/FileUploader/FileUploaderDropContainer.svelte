@@ -100,6 +100,7 @@
 
   import { createEventDispatcher } from "svelte";
   import { filterIncomingFiles } from "../utils/filter-incoming-files.js";
+  import { formReset } from "../utils/form-reset.js";
   import { syncInputFiles } from "../utils/sync-input-files.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -137,6 +138,12 @@
   // exactly the accepted files, whichever way they arrived (drop, browse, or
   // a programmatic `files` update).
   $: if (ref && files !== undefined) syncInputFiles(ref, files);
+
+  // A form reset always empties a file input, and fires no change event.
+  // Clear `files` to match; this also restores the initial label.
+  function handleFormReset() {
+    files = [];
+  }
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -198,6 +205,7 @@
   </label>
   <input
     bind:this={ref}
+    use:formReset={handleFormReset}
     type="file"
     tabindex="-1"
     {id}
