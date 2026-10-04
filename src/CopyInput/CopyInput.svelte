@@ -142,6 +142,7 @@
   } from "../constants/context-keys.js";
   import { buildFieldIds } from "../utils/field-status.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
+  import { reflectDefaultValue } from "../utils/reflect-default-value.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -251,6 +252,7 @@
       <input
         bind:this={ref}
         use:preserveFocusSelection={selectTextOnFocus && !disabled}
+        use:reflectDefaultValue={value}
         readonly
         type={inputType}
         {value}
