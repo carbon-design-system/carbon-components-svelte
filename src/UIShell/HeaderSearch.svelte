@@ -447,7 +447,12 @@
         }
         switch (event.key) {
           case "Enter":
-            selectResult();
+            if (selectedResult) {
+              selectResult();
+            } else {
+              dispatchSearch?.cancel();
+              dispatch("submit", { value });
+            }
             break;
           case "ArrowDown":
             event.preventDefault();
