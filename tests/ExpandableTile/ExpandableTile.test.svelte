@@ -17,6 +17,8 @@
   export let tabindex: ComponentProps<ExpandableTile>["tabindex"] = "0";
   export let id: ComponentProps<ExpandableTile>["id"] = "ccs-test";
   export let ref: ComponentProps<ExpandableTile>["ref"] = null;
+  export let onToggle: (e: CustomEvent<{ expanded: boolean }>) => void =
+    () => {};
 </script>
 
 <ExpandableTile
@@ -31,6 +33,7 @@
   {tabindex}
   {id}
   bind:ref
+  on:toggle={onToggle}
   on:click
   on:keypress
   on:mouseover
