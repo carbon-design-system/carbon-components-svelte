@@ -1,5 +1,5 @@
 ---
-description: Expandable tiles show and hide content with a smooth animation, ideal for progressive disclosure.
+description: Expandable tiles show a summary and reveal more content on demand, ideal for progressive disclosure.
 ---
 
 <script>
@@ -39,6 +39,15 @@ Grow the above-the-fold content while collapsed to see the resize observer remea
 and update the tile height.
 
 <FileSource src="/framed/ExpandableTile/ExpandableTileReactive" />
+
+### Reacting to toggles
+
+Listen for `toggle` to react when a user expands or collapses the tile. The
+event's `detail.expanded` is the next state, and setting `expanded` from code
+does not dispatch it. Call `preventDefault()` to keep the current state, for
+example to gate the details behind an acknowledgment.
+
+<FileSource src="/framed/ExpandableTile/ExpandableTileToggle" />
 
 ### Expanded by default
 
@@ -99,10 +108,12 @@ Customize expand/collapse button labels with `tileExpandedLabel` and `tileCollap
 
 ### Accessible text
 
-Customize the accessible name announced for the expand/collapse control with
-`tileCollapsedIconText` and `tileExpandedIconText`. These render as the
-`title` attribute on the tile, or as the `aria-label`/`title` on the chevron
-button when `hasInteractiveContent` is set.
+Customize the text that describes the expand/collapse control with
+`tileCollapsedIconText` and `tileExpandedIconText`. By default it renders as
+the tile's `title`: a tooltip and accessible description, while the tile's
+content is its accessible name. With `hasInteractiveContent`, it names the
+chevron button when no chevron label is set; otherwise the visible label names
+the button and this text describes it.
 
 <ExpandableTile
   tileCollapsedIconText="Show more details"
@@ -118,7 +129,15 @@ By default, the tile uses a button element to toggle expand/collapse.
 
 If you need interactive content inside the tile, set `hasInteractiveContent` to render a div instead and avoid invalid HTML nesting.
 
-Only the expand/collapse toggle affects the tile state.
+Only the chevron button toggles the tile. Press <DocKbd label="Tab" /> to move
+through the tile's links and buttons to the chevron, then press
+<DocKbd label="Enter" /> or <DocKbd label="Space" /> to expand or collapse it.
+
+| Do | Why |
+| --- | --- |
+| Set `hasInteractiveContent` whenever a slot holds links, buttons, or inputs | A `button` cannot contain interactive elements; nested controls break clicks and screen readers. |
+| Give the chevron a visible label with `tileCollapsedLabel` and `tileExpandedLabel` | The chevron is the only toggle. A label makes it an obvious target and names it for voice control. |
+| Keep `hasInteractiveContent` fixed for the tile's lifetime | Changing it swaps the root element, which recreates the slotted content and resets any state inside it. |
 
 <ExpandableTile hasInteractiveContent tileExpandedLabel="View less" tileCollapsedLabel="View more">
   <Stack slot="above" gap={4} inline>
