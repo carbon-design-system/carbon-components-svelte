@@ -17,7 +17,7 @@ description: Combo boxes combine a text input with a dropdown menu to select fro
 
 Create a combobox with a title and placeholder text. Each item needs a unique id and display text. Combo boxes key items by id for performance.
 
-<DocKbd label="ArrowDown" /> or <DocKbd label="ArrowUp" /> opens the menu and highlights the selected item, or the first or last option. Once open, they move the highlight, and <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the first or last option. <DocKbd label="Alt" /> + <DocKbd label="ArrowDown" /> opens the menu without moving the highlight, and <DocKbd label="Alt" /> + <DocKbd label="ArrowUp" /> closes it. <DocKbd label="Enter" /> or <DocKbd label="Tab" /> selects the keyboard-highlighted option. With no keyboard highlight, <DocKbd label="Enter" /> selects the option whose label matches the typed text, ignoring case.
+<DocKbd label="ArrowDown" /> or <DocKbd label="ArrowUp" /> opens the menu and highlights the selected item, or the first or last option. Once open, they move the highlight, and <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the first or last option. <DocKbd label="PageUp" /> and <DocKbd label="PageDown" /> move the highlight 10 options and stop at either end. <DocKbd label="Alt" /> + <DocKbd label="ArrowDown" /> opens the menu without moving the highlight, and <DocKbd label="Alt" /> + <DocKbd label="ArrowUp" /> closes it. <DocKbd label="Enter" /> or <DocKbd label="Tab" /> selects the keyboard-highlighted option. With no keyboard highlight, <DocKbd label="Enter" /> selects the option whose label matches the typed text, ignoring case.
 
 <ComboBox labelText="Alert channel" placeholder="Select alert channel"
 items={[
