@@ -7,7 +7,7 @@
   /**
    * @event close
    * @type {object}
-   * @property {"escape-key" | "outside-click" | "select"} trigger
+   * @property {"escape-key" | "outside-click" | "select" | "blur"} trigger
    */
 
   /**
@@ -360,6 +360,26 @@
     }
   }
 
+  // Set by a Tab keydown inside the search, so the `focusout` it causes can
+  // tell tabbing out apart from a click elsewhere (left to the mouseup check).
+  let tabbing = false;
+
+  function trackTab(event) {
+    tabbing = event.key === "Tab";
+  }
+
+  function handleFocusout(event) {
+    const next = event.relatedTarget;
+    const leaving = !(next instanceof Node && refSearch?.contains(next));
+    if (active && tabbing && leaving) {
+      active = false;
+      highlightedId.set(null);
+      menuDismissed = false;
+      dispatch("close", { trigger: "blur" });
+    }
+    tabbing = false;
+  }
+
   let skipSelectOnFocus = false;
 
   // Clicks on group headers or padding blur the input; refocus so only item
@@ -381,6 +401,7 @@
   class:bx--header__search={true}
   role="search"
   class:bx--header__search--active={active}
+  on:focusout={handleFocusout}
 >
   <label class:bx--header__search-label={true} for={inputId} id={labelId}
     >{labelText}</label
@@ -445,6 +466,7 @@
       on:blur
       on:keydown
       on:keydown={(event) => {
+        trackTab(event);
         if (richMenu) {
           handleRichKeydown(event);
           return;
@@ -499,6 +521,7 @@
         tabindex="0"
         class:bx--header__action={true}
         class:bx--header-search-button={true}
+        on:keydown={trackTab}
         on:click={() => {
           reset();
           dispatch("clear");
