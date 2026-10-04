@@ -380,11 +380,6 @@
             status={rowStatus}
             invalid={rowInvalid}
             on:keydown
-            on:keydown={(event) => {
-              if (event.key === " " || event.key === "Enter") {
-                files = files.filter((f) => f !== file);
-              }
-            }}
             on:click
             on:click={() => {
               files = files.filter((f) => f !== file);

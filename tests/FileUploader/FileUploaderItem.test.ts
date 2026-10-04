@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { user } from "../utils/user";
 import FileUploaderItem from "./FileUploaderItem.test.svelte";
 
@@ -166,6 +167,27 @@ describe("FileUploaderItem", () => {
 
     const event = deleteHandler.mock.calls[0][0];
     expect(event.detail).toBe("file-1");
+  });
+
+  it.each([
+    ["Enter", "{Enter}"],
+    ["Space", " "],
+  ])("should dispatch delete once per %s press", async (_, key) => {
+    const deleteHandler = vi.fn();
+    render(FileUploaderItem, {
+      props: {
+        name: "test.txt",
+        status: "edit",
+        id: "file-1",
+        ondelete: deleteHandler,
+      },
+    });
+
+    screen.getByRole("button", { name: "Remove file" }).focus();
+    await user.keyboard(key);
+    await tick();
+
+    expect(deleteHandler).toHaveBeenCalledTimes(1);
   });
 
   it("should handle iconDescription prop", () => {
