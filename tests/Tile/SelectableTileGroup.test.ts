@@ -6,6 +6,7 @@ import { user } from "../utils/user";
 import SelectableTileGroupSlot from "./SelectableTileGroup.slot.test.svelte";
 import SelectableTileGroup from "./SelectableTileGroup.test.svelte";
 import SelectableTileGroupDuplicate from "./SelectableTileGroupDuplicate.test.svelte";
+import SelectableTileGroupNested from "./SelectableTileGroupNested.test.svelte";
 import SelectableTileGroupNotify from "./SelectableTileGroupNotify.test.svelte";
 import SelectableTileGroupRange from "./SelectableTileGroupRange.test.svelte";
 import SelectableTileGroupReactive from "./SelectableTileGroupReactive.test.svelte";
@@ -410,6 +411,20 @@ describe("SelectableTileGroup", () => {
         ["deselect", "option3"],
         ["change", []],
       ]);
+    });
+
+    it("leaves tiles of a nested group out of the range", async () => {
+      const { component } = render(SelectableTileGroupNested);
+      const checkboxes = screen.getAllByRole("checkbox");
+
+      await user.click(checkboxes[0]);
+      await user.keyboard("{Shift>}");
+      await user.click(checkboxes[2]);
+      await user.keyboard("{/Shift}");
+
+      expect(component.outer).toEqual(["outer-1", "outer-2"]);
+      expect(component.inner).toEqual([]);
+      expect(checkboxes[1]).not.toBeChecked();
     });
 
     it("falls back to a single toggle when there is no prior anchor", async () => {
