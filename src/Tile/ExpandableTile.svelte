@@ -13,14 +13,14 @@
   export let light = false;
 
   /**
-   * Specify the max height of the tile  (number of pixels).
-   * @bindable writable
+   * Specify the collapsed height of the above-the-fold content (number of
+   * pixels). Overrides the measured height when greater than 0.
    */
   export let tileMaxHeight = 0;
 
   /**
-   * Specify the padding of the tile (number of pixels).
-   * @bindable writable
+   * Specify the vertical padding of the tile (number of pixels).
+   * Overrides the measured padding when greater than 0.
    */
   export let tilePadding = 0;
 
@@ -43,7 +43,7 @@
    */
   export let tabindex = "0";
 
-  /** Set an id for the top-level div element */
+  /** Set an id for the top-level element */
   export let id = uniqueId();
 
   /**
