@@ -4,12 +4,16 @@
 
   export let buttonClicked = false;
   export let linkClicked = false;
+  export let onFocus: (e: FocusEvent) => void = () => {};
+  export let onBlur: (e: FocusEvent) => void = () => {};
 </script>
 
 <ExpandableTile
   hasInteractiveContent
   tileExpandedLabel="View less"
   tileCollapsedLabel="View more"
+  on:focus={onFocus}
+  on:blur={onBlur}
 >
   <div slot="above">
     <a
