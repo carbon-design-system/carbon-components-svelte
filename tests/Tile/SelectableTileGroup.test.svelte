@@ -26,6 +26,9 @@
   on:deselect={(e) => {
     console.log("deselect", e.detail);
   }}
+  on:change={(e) => {
+    console.log("change", e.detail);
+  }}
 >
   <SelectableTile value="option1">Option 1</SelectableTile>
   <SelectableTile value="option2">Option 2</SelectableTile>

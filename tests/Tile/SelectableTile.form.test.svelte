@@ -14,6 +14,7 @@
     legendText="Regions"
     on:select={onEvent}
     on:deselect={onEvent}
+    on:change={onEvent}
   >
     <SelectableTile value="a" data-testid="tile-a">A</SelectableTile>
     <SelectableTile value="b" data-testid="tile-b">B</SelectableTile>

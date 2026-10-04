@@ -3,6 +3,7 @@
    * @template {string} [T=string]
    * @event {T} select
    * @event {T} deselect
+   * @event {T[]} change - Fires once per user toggle or range, after `select` and `deselect`, with every selected value.
    */
 
   /**
@@ -37,7 +38,7 @@
   export let hideLegend = false;
 
   import { createEventDispatcher, setContext } from "svelte";
-  import { readonly, writable } from "svelte/store";
+  import { get, readonly, writable } from "svelte/store";
   import { rangeSlice } from "../utils/range-slice.js";
 
   const dispatch = createEventDispatcher();
@@ -149,23 +150,30 @@
         ? selectRange(value, isSelected)
         : null;
 
+    let changed = false;
+
     if (rangeChanged) {
       // One event per tile the range changed, so `select`/`deselect`
       // listeners see every value, not just the clicked tile's.
       for (const changedValue of rangeChanged) {
         dispatch(isSelected ? "select" : "deselect", changedValue);
       }
+      changed = rangeChanged.length > 0;
     } else if (isSelected) {
       if (!$selectedValues.includes(value)) {
         selectedValues.update((values) => [...values, value]);
         dispatch("select", value);
+        changed = true;
       }
     } else if ($selectedValues.includes(value)) {
       selectedValues.update((values) => values.filter((v) => v !== value));
       dispatch("deselect", value);
+      changed = true;
     }
 
     rangeAnchorValue = value;
+
+    if (changed) dispatch("change", get(selectedValues));
   }
 
   /** True while Shift is held during a mousedown gesture inside the group; suppresses the browser's native Shift+click text-selection highlight spanning multiple tiles. */
