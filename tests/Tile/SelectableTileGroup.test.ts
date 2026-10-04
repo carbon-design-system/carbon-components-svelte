@@ -259,6 +259,37 @@ describe("SelectableTileGroup", () => {
       expect(checkboxes[2]).not.toBeChecked();
     });
 
+    it("dispatches select and deselect for every tile the range changes", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(SelectableTileGroup);
+      const checkboxes = screen.getAllByRole("checkbox");
+
+      await user.click(checkboxes[0]);
+      consoleLog.mockClear();
+
+      await user.keyboard("{Shift>}");
+      await user.click(checkboxes[2]);
+      await user.keyboard("{/Shift}");
+
+      // option1 was already selected, so only the newly selected tiles fire.
+      expect(consoleLog.mock.calls).toEqual([
+        ["select", "option2"],
+        ["select", "option3"],
+      ]);
+      consoleLog.mockClear();
+
+      await user.click(checkboxes[0]);
+      consoleLog.mockClear();
+      await user.keyboard("{Shift>}");
+      await user.click(checkboxes[2]);
+      await user.keyboard("{/Shift}");
+
+      expect(consoleLog.mock.calls).toEqual([
+        ["deselect", "option2"],
+        ["deselect", "option3"],
+      ]);
+    });
+
     it("falls back to a single toggle when there is no prior anchor", async () => {
       render(SelectableTileGroup);
       const checkboxes = screen.getAllByRole("checkbox");

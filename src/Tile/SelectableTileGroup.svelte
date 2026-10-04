@@ -79,10 +79,11 @@
 
   /**
    * Apply `isSelected` to every enabled tile between the anchor tile and
-   * `value` (inclusive, DOM order). Returns `false` if the anchor tile is no
-   * longer present (for example, unmounted or filtered out elsewhere), so the
-   * caller can fall back to a single toggle.
-   * @type {(value: T, isSelected: boolean) => boolean}
+   * `value` (inclusive, DOM order). Returns the values whose membership
+   * changed, in DOM order, or `null` if the anchor tile is no longer present
+   * (for example, unmounted or filtered out elsewhere), so the caller can
+   * fall back to a single toggle.
+   * @type {(value: T, isSelected: boolean) => T[] | null}
    */
   function selectRange(value, isSelected) {
     const inputs = getOrderedInputs();
@@ -92,27 +93,29 @@
     const targetIndex = inputs.findIndex((input) => input.value === value);
     const range =
       targetIndex === -1 ? null : rangeSlice(inputs, anchorIndex, targetIndex);
-    if (range === null) return false;
+    if (range === null) return null;
 
     const next = new Set($selectedValues);
-    let changed = false;
+    /** @type {T[]} */
+    const changed = [];
     for (const input of range) {
       if (input.disabled) continue;
-      if (isSelected && !next.has(input.value)) {
-        next.add(input.value);
-        changed = true;
-      } else if (!isSelected && next.has(input.value)) {
-        next.delete(input.value);
-        changed = true;
+      const inputValue = /** @type {T} */ (input.value);
+      if (isSelected && !next.has(inputValue)) {
+        next.add(inputValue);
+        changed.push(inputValue);
+      } else if (!isSelected && next.has(inputValue)) {
+        next.delete(inputValue);
+        changed.push(inputValue);
       }
     }
 
     // Batch: one store update for the whole range instead of one per tile.
-    if (changed) {
+    if (changed.length > 0) {
       selectedValues.set([...next]);
     }
 
-    return true;
+    return changed;
   }
 
   /**
@@ -137,11 +140,17 @@
    * @type {(data: { value: T; selected: boolean; shiftKey?: boolean }) => void}
    */
   function update({ value, selected: isSelected, shiftKey }) {
-    const usedRange =
-      shiftKey && rangeAnchorValue !== null && selectRange(value, isSelected);
+    const rangeChanged =
+      shiftKey && rangeAnchorValue !== null
+        ? selectRange(value, isSelected)
+        : null;
 
-    if (usedRange) {
-      dispatch(isSelected ? "select" : "deselect", value);
+    if (rangeChanged) {
+      // One event per tile the range changed, so `select`/`deselect`
+      // listeners see every value, not just the clicked tile's.
+      for (const changedValue of rangeChanged) {
+        dispatch(isSelected ? "select" : "deselect", changedValue);
+      }
     } else if (isSelected) {
       if (!$selectedValues.includes(value)) {
         selectedValues.update((values) => [...values, value]);
