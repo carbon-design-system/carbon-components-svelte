@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import SelectableTileTest from "./SelectableTile.test.svelte";
 import SelectableTileAria from "./SelectableTileAria.test.svelte";
+import SelectableTileChange from "./SelectableTileChange.test.svelte";
 import SelectableTileStandalone from "./SelectableTileStandalone.test.svelte";
 
 describe("SelectableTile", () => {
@@ -158,6 +159,17 @@ describe("SelectableTile", () => {
       await user.keyboard("{Tab}");
       await user.keyboard("{Enter}");
       expect(consoleLog).toHaveBeenCalledWith("select", expect.any(String));
+    });
+
+    it("forwards the input's change event after updating selected", async () => {
+      const onChange = vi.fn();
+      render(SelectableTileChange, { onChange });
+
+      await user.click(screen.getByRole("checkbox"));
+      expect(onChange).toHaveBeenCalledWith(true, true);
+
+      await user.click(screen.getByRole("checkbox"));
+      expect(onChange).toHaveBeenLastCalledWith(false, false);
     });
 
     it("toggles once when Enter is held down", async () => {
