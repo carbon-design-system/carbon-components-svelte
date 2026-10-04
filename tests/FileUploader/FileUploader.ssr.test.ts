@@ -10,4 +10,19 @@ describe("FileUploader server render", () => {
 
     expect(renderRaw()).toBe(renderRaw());
   });
+
+  it("derives invalid rows' error ids from the id", () => {
+    const invalidProps = {
+      ...props,
+      status: "edit" as const,
+      files: [new File(["x"], "bad.txt")],
+      fileInvalid: () => true,
+      fileErrorSubject: () => "File too large",
+    };
+    const renderRaw = () => render(FileUploader, { props: invalidProps }).body;
+
+    expect(renderRaw()).toBe(renderRaw());
+    expect(renderRaw()).toContain('aria-describedby="docs-error-0"');
+    expect(renderRaw()).toContain('id="docs-error-0"');
+  });
 });

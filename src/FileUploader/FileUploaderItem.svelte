@@ -71,6 +71,7 @@
 
   const dispatch = createEventDispatcher();
 
+  $: errorId = invalid && errorSubject ? `${id}-error` : undefined;
   $: fileSizeText =
     typeof fileSize === "number" ? formatFileSize(fileSize) : (fileSize ?? "");
 </script>
@@ -106,10 +107,11 @@
       {status}
       {invalid}
       {disabled}
+      aria-describedby={errorId}
     />
   </span>
-  {#if invalid && errorSubject}
-    <div class:bx--form-requirement={true}>
+  {#if errorId}
+    <div id={errorId} class:bx--form-requirement={true}>
       <div class:bx--form-requirement__title={true}>{errorSubject}</div>
       {#if errorBody}
         <p class:bx--form-requirement__supplement={true}>{errorBody}</p>
