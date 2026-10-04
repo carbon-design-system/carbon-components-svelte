@@ -12,10 +12,18 @@ describe("ProfileMenu", () => {
     expect(screen.queryByText("Settings")).not.toBeInTheDocument();
   });
 
-  it("promises a generic popup, not a menu", () => {
+  it("is a disclosure that controls its panel, not a menu button", async () => {
     render(ProfileMenu);
 
-    expect(getTrigger()).toHaveAttribute("aria-haspopup", "true");
+    // aria-haspopup="true" means "menu", which the panel is not.
+    expect(getTrigger()).not.toHaveAttribute("aria-haspopup");
+    expect(getTrigger()).not.toHaveAttribute("aria-controls");
+
+    await user.click(getTrigger());
+    const panel = document.getElementById(
+      getTrigger().getAttribute("aria-controls") ?? "",
+    );
+    expect(panel).toHaveClass("bx--profile-menu");
   });
 
   it("names the panel from the trigger's iconDescription", async () => {
