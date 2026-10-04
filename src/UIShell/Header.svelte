@@ -143,9 +143,11 @@
     wasAboveBreakpoint = isAboveBreakpoint;
   }
 
-  $: ariaLabel = companyName
-    ? companyName
-    : `${uiShellAriaLabel ?? $$props["aria-label"] ?? platformName}`;
+  // An explicit label wins over the visible names; omit an empty one.
+  $: ariaLabel =
+    uiShellAriaLabel ??
+    $$props["aria-label"] ??
+    (companyName || platformName || undefined);
   $: hamburgerAriaLabel =
     ariaLabelMenu ?? (isSideNavOpen ? "Close menu" : "Open menu");
 </script>
