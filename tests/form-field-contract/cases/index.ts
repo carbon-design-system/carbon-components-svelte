@@ -344,6 +344,7 @@ export const exempt: Exemptions = {
     RadioButton: NOT_A_TEXT_FIELD,
     RadioButtonGroup: NOT_A_TEXT_FIELD,
     RadioTile: NOT_A_TEXT_FIELD,
+    SelectableTile: NOT_A_TEXT_FIELD,
     StructuredList: NOT_A_TEXT_FIELD,
     TagInput: NOT_A_TEXT_FIELD,
     TileGroup: NOT_A_TEXT_FIELD,

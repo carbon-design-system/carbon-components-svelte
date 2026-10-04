@@ -72,6 +72,7 @@
   import { readable } from "svelte/store";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
+  import { formReset } from "../utils/form-reset.js";
   import { noop } from "../utils/noop.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -105,6 +106,20 @@
     selected = $selectedValues.includes(value);
   }
 
+  // A form reset restores the checkbox without a change event. Sync the
+  // state to it and fire no `select`/`deselect`, like the other form
+  // controls. In a group, `add`/`remove` update membership silently.
+  function handleFormReset() {
+    if (!ref) return;
+    const nextSelected = ref.checked;
+    if (hasGroup) {
+      if (nextSelected) add({ value, selected: true });
+      else remove(value);
+    } else {
+      selected = nextSelected;
+    }
+  }
+
   // Naming and description belong on the input, not the label.
   $: ({
     ariaLabel,
@@ -116,6 +131,7 @@
 
 <input
   bind:this={ref}
+  use:formReset={handleFormReset}
   type="checkbox"
   tabindex={disabled ? undefined : tabindex}
   class:bx--tile-input={true}
