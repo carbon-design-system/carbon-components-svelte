@@ -116,6 +116,7 @@
   import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
   import { filterIncomingFiles } from "../utils/filter-incoming-files.js";
   import { formButtonSize } from "../utils/form-button-size.js";
+  import { formReset } from "../utils/form-reset.js";
   import { syncInputFiles } from "../utils/sync-input-files.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -157,6 +158,12 @@
     }
 
     dispatch("change", files);
+  }
+
+  // A form reset always empties a file input, and fires no change event.
+  // Clear `files` to match; this also restores the initial label.
+  function handleFormReset() {
+    files = [];
   }
 </script>
 
@@ -219,6 +226,7 @@
 </button>
 <input
   bind:this={ref}
+  use:formReset={handleFormReset}
   type="file"
   tabindex="-1"
   accept={typeof accept === "string" ? accept : accept.join(",")}
