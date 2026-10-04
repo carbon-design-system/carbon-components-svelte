@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import type { MultiSelectItem } from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
+import { flushFormReset } from "../utils/flush-form-reset";
 import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import { openMenu } from "./helpers";
@@ -285,5 +286,25 @@ describe("MultiSelect native form serialization", () => {
     const formData = new FormData(getForm());
     expect(formData.has("0")).toBe(true);
     expect(formData.has("149")).toBe(true);
+  });
+});
+
+describe("MultiSelect form reset", () => {
+  it("filterable: clears the filter value and restores the full list", async () => {
+    const { component } = render(MultiSelectForm, {
+      props: { items, filterable: true },
+    });
+    const input = screen.getByRole("combobox");
+
+    await user.type(input, "Fa");
+    expect(component.value).toBe("Fa");
+    expect(screen.getAllByRole("option")).toHaveLength(1);
+
+    getForm().reset();
+    await flushFormReset();
+
+    expect(input).toHaveValue("");
+    expect(component.value).toBe("");
+    expect(screen.getAllByRole("option")).toHaveLength(3);
   });
 });
