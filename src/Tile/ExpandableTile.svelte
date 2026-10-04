@@ -85,6 +85,9 @@
   }
 
   onMount(() => {
+    measurePadding();
+    if (typeof ResizeObserver === "undefined") return;
+
     resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
         if (entry.target === refAbove) {
@@ -94,7 +97,6 @@
         }
       }
     });
-    measurePadding();
 
     return () => {
       resizeObserver.disconnect();

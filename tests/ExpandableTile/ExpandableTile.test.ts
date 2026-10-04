@@ -328,6 +328,20 @@ describe("ExpandableTile", () => {
     expect(component.tileMaxHeight).toBe(300);
   });
 
+  it("should render and toggle without ResizeObserver", async () => {
+    vi.stubGlobal("ResizeObserver", undefined);
+
+    try {
+      render(ExpandableTile);
+
+      const tile = screen.getByRole("button");
+      await user.click(tile);
+      expect(tile).toHaveAttribute("aria-expanded", "true");
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+
   it("should re-observe the above-the-fold element when hasInteractiveContent toggles", async () => {
     // Toggling `hasInteractiveContent` swaps the root tag via <svelte:element>,
     // which destroys and re-creates the subtree — including the element bound
