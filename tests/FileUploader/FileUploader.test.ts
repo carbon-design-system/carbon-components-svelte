@@ -978,6 +978,29 @@ describe("FileUploader", () => {
     ).toBeInTheDocument();
   });
 
+  it("should describe an invalid row's remove button with its error message", async () => {
+    const { component } = render(FileUploader, {
+      props: {
+        multiple: true,
+        status: "edit",
+        fileInvalid: (file: File) => file.name === "bad.txt",
+        fileErrorSubject: (file: File) => `${file.name} is too large`,
+        fileErrorBody: () => "Select a smaller file.",
+      },
+    });
+
+    await selectFiles(component, [makeFile("good.txt"), makeFile("bad.txt")]);
+
+    expect(
+      screen.getByRole("button", { name: "Remove file bad.txt" }),
+    ).toHaveAccessibleDescription(
+      "bad.txt is too large Select a smaller file.",
+    );
+    expect(
+      screen.getByRole("button", { name: "Remove file good.txt" }),
+    ).not.toHaveAttribute("aria-describedby");
+  });
+
   describe("long file names", () => {
     afterEach(() => {
       vi.restoreAllMocks();
