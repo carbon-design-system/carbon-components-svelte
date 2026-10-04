@@ -93,6 +93,7 @@
         dispatch("open");
       }
       await tick();
+      menuItemRegistry.flush();
       pickEdgeMenuItem(event.key, get(menuItems))?.focus();
     }
   }
@@ -130,6 +131,7 @@
     dispatch(isOpen ? "open" : "close");
     if (!wasOpen && isOpen && event.detail === 0) {
       await tick();
+      menuItemRegistry.flush();
       get(menuItems)[0]?.focus();
     }
   }}
