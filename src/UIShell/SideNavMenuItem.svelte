@@ -19,6 +19,8 @@
    * @bindable readonly
    */
   export let ref = null;
+
+  import { resolveLinkRel } from "../utils/link-rel.js";
 </script>
 
 <li class:bx--side-nav__menu-item={true}>
@@ -26,6 +28,7 @@
     bind:this={ref}
     aria-current={isSelected ? "page" : undefined}
     {href}
+    rel={resolveLinkRel($$restProps.target, $$restProps.rel)}
     class:bx--side-nav__link={true}
     class:bx--side-nav__link--current={isSelected}
     {...$$restProps}
