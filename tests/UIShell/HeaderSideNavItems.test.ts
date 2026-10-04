@@ -45,3 +45,13 @@ describe("HeaderSideNavItems roles", () => {
     }
   });
 });
+
+describe("HeaderSideNavItems list semantics", () => {
+  it("sits in a list item of SideNavItems", () => {
+    render(HeaderSideNavItemsTest);
+
+    const wrapper = screen.getByTestId("header-side-nav-items").parentElement;
+    expect(wrapper?.tagName).toBe("LI");
+    expect(wrapper?.parentElement).toHaveClass("bx--side-nav__items");
+  });
+});
