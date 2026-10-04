@@ -1,9 +1,11 @@
 import { render, screen, within } from "@testing-library/svelte";
+import { user } from "../utils/user";
 import BreadcrumbAriaCurrent from "./Breadcrumb.ariaCurrent.test.svelte";
 import BreadcrumbDynamic from "./Breadcrumb.dynamic.test.svelte";
 import BreadcrumbLabelText from "./Breadcrumb.labelText.test.svelte";
 import BreadcrumbNoTrailingSlash from "./Breadcrumb.noTrailingSlash.test.svelte";
 import BreadcrumbOrientationHorizontal from "./Breadcrumb.orientation-horizontal.test.svelte";
+import BreadcrumbOrientationToggle from "./Breadcrumb.orientation-toggle.test.svelte";
 import BreadcrumbOrientationVertical from "./Breadcrumb.orientation-vertical.test.svelte";
 import BreadcrumbSize from "./Breadcrumb.size.test.svelte";
 import BreadcrumbSkeleton from "./Breadcrumb.skeleton.test.svelte";
@@ -183,5 +185,22 @@ describe("Breadcrumb", () => {
     const skeleton = document.querySelector(".bx--skeleton.bx--breadcrumb");
     expect(skeleton).toHaveClass(`bx--breadcrumb--${orientation}`);
     expect(skeleton).not.toHaveClass(`bx--breadcrumb--${other}`);
+  });
+
+  it("updates the orientation class when orientation changes", async () => {
+    render(BreadcrumbOrientationToggle);
+    const list = within(screen.getByRole("navigation")).getByRole("list");
+    const next = screen.getByRole("button", { name: "Next orientation" });
+
+    expect(list).not.toHaveClass("bx--breadcrumb--horizontal");
+    expect(list).not.toHaveClass("bx--breadcrumb--vertical");
+
+    await user.click(next);
+    expect(list).toHaveClass("bx--breadcrumb--horizontal");
+    expect(list).not.toHaveClass("bx--breadcrumb--vertical");
+
+    await user.click(next);
+    expect(list).toHaveClass("bx--breadcrumb--vertical");
+    expect(list).not.toHaveClass("bx--breadcrumb--horizontal");
   });
 });

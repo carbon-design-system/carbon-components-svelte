@@ -3,6 +3,7 @@ import { tick } from "svelte";
 import Calendar from "../../src/icons/Calendar.svelte";
 import { user } from "../utils/user";
 import TabsVertical from "./TabsVertical.test.svelte";
+import TabsVerticalOrientationToggle from "./TabsVerticalOrientationToggle.test.svelte";
 import TabsVerticalRegistration from "./TabsVerticalRegistration.test.svelte";
 import TabsVerticalSelectedId from "./TabsVerticalSelectedId.test.svelte";
 import TabsVerticalSkeleton from "./TabsVerticalSkeleton.test.svelte";
@@ -144,6 +145,40 @@ describe("TabsVertical", () => {
       expect(
         container.querySelector(".bx--tabs--vertical-container"),
       ).toHaveClass("bx--tabs--vertical-container--responsive");
+    });
+
+    it("updates the layout and keyboard when orientation changes", async () => {
+      render(TabsVerticalOrientationToggle);
+      const nav = screen.getByRole("navigation");
+      const tablist = screen.getByRole("tablist");
+      const next = screen.getByRole("button", { name: "Next orientation" });
+
+      expect(nav).toHaveClass("bx--tabs--vertical--responsive");
+      expect(tablist).toHaveAttribute("aria-orientation", "vertical");
+
+      await user.click(next);
+      expect(nav).toHaveClass("bx--tabs--vertical--row");
+      expect(nav).not.toHaveClass("bx--tabs--vertical--responsive");
+      expect(tablist).toHaveAttribute("aria-orientation", "horizontal");
+
+      await user.click(screen.getByRole("tab", { name: "Tab 1" }));
+      await user.keyboard("{ArrowRight}");
+      expect(screen.getByRole("tab", { name: "Tab 2" })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+
+      await user.click(next);
+      expect(nav).toHaveClass("bx--tabs--vertical--column");
+      expect(nav).not.toHaveClass("bx--tabs--vertical--row");
+      expect(tablist).toHaveAttribute("aria-orientation", "vertical");
+
+      await user.click(screen.getByRole("tab", { name: "Tab 2" }));
+      await user.keyboard("{ArrowDown}");
+      expect(screen.getByRole("tab", { name: "Tab 3" })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
     });
 
     it('pins the column with orientation="vertical"', () => {
