@@ -96,6 +96,7 @@
   import { onMount } from "svelte";
   import Close from "../icons/Close.svelte";
   import Menu from "../icons/MenuIcon.svelte";
+  import { resolveLinkRel } from "../utils/link-rel.js";
   import { EXPANSION_BREAKPOINT } from "./expansion-breakpoint.js";
   import HamburgerMenu from "./HamburgerMenu.svelte";
   import { isHeaderRendered, shouldRenderHamburgerMenu } from "./nav-store.js";
@@ -172,6 +173,7 @@
   {#if companyName || platformName || $$slots.company || $$slots.platform}
     <a
       {href}
+      rel={resolveLinkRel($$restProps.target, $$restProps.rel)}
       class:bx--header__name={true}
       bind:this={ref}
       {...$$restProps}
