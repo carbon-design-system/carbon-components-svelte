@@ -963,6 +963,21 @@ describe("FileUploader", () => {
     expect(screen.getByText("2048 octets (#0)")).toBeInTheDocument();
   });
 
+  it("should give each remove button a distinct name by default", async () => {
+    const { component } = render(FileUploader, {
+      props: { multiple: true, status: "edit" },
+    });
+
+    await selectFiles(component, [makeFile("a.txt"), makeFile("b.txt")]);
+
+    expect(
+      screen.getByRole("button", { name: "Remove file a.txt" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Remove file b.txt" }),
+    ).toBeInTheDocument();
+  });
+
   describe("long file names", () => {
     afterEach(() => {
       vi.restoreAllMocks();
