@@ -250,7 +250,9 @@
   });
 
   $: selected = $selectedValues;
-  $: selectedValues.set(selected);
+  // Skip echoing the store's own array back into it: an object `set` always
+  // notifies, which would re-run every tile's subscription per toggle.
+  $: if (selected !== $selectedValues) selectedValues.set(selected);
   $: groupName.set(name);
   $: groupForm.set(form);
   $: groupDisabled.set(disabled);
