@@ -4,6 +4,7 @@ import type { ComponentProps } from "svelte";
 import RadioTileStandalone from "../Tile/RadioTileStandalone.test.svelte";
 import { user } from "../utils/user";
 import RadioTileGroup from "./RadioTile.group.test.svelte";
+import RadioTileKeyboard from "./RadioTile.keyboard.test.svelte";
 import RadioTileSingle from "./RadioTile.single.test.svelte";
 import RadioTile from "./RadioTile.test.svelte";
 import RadioTileAria from "./RadioTileAria.test.svelte";
@@ -146,6 +147,56 @@ describe("RadioTile", () => {
     await user.keyboard("{ArrowDown}");
     expect(inputs[0]).toHaveFocus();
     expect(inputs[0]).toBeChecked();
+  });
+
+  describe("keyboard selection", () => {
+    it("selects with Space through the native change", async () => {
+      const onSelect = vi.fn();
+      const onChange = vi.fn();
+      render(RadioTileKeyboard, { props: { onSelect, onChange } });
+
+      const [, radioB] = screen.getAllByRole("radio");
+      radioB.focus();
+      await user.keyboard(" ");
+
+      expect(radioB).toBeChecked();
+      expect(onChange).toHaveBeenCalledTimes(1);
+      expect(onSelect).toHaveBeenCalledTimes(1);
+      expect(onSelect.mock.calls[0][0].detail).toBe("b");
+      expect(screen.getByTestId("bound")).toHaveTextContent("b");
+    });
+
+    it("selects with Enter without submitting the form", async () => {
+      const onSelect = vi.fn();
+      const onChange = vi.fn();
+      const onSubmit = vi.fn();
+      render(RadioTileKeyboard, { props: { onSelect, onChange, onSubmit } });
+
+      const [, radioB] = screen.getAllByRole("radio");
+      radioB.focus();
+      await user.keyboard("{Enter}");
+
+      expect(radioB).toBeChecked();
+      expect(onChange).toHaveBeenCalledTimes(1);
+      expect(onSelect).toHaveBeenCalledTimes(1);
+      expect(onSubmit).not.toHaveBeenCalled();
+    });
+
+    it("does not dispatch select for the already selected tile", async () => {
+      const onSelect = vi.fn();
+      const onChange = vi.fn();
+      render(RadioTileKeyboard, { props: { onSelect, onChange } });
+
+      const [radioA] = screen.getAllByRole("radio");
+      radioA.focus();
+      await user.keyboard(" ");
+      await user.keyboard("{Enter}");
+      await user.click(radioA);
+
+      expect(radioA).toBeChecked();
+      expect(onSelect).not.toHaveBeenCalled();
+      expect(onChange).not.toHaveBeenCalled();
+    });
   });
 
   it("supports programmatic selection", async () => {
