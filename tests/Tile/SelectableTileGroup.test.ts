@@ -5,6 +5,7 @@ import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import SelectableTileGroupSlot from "./SelectableTileGroup.slot.test.svelte";
 import SelectableTileGroup from "./SelectableTileGroup.test.svelte";
+import SelectableTileGroupDuplicate from "./SelectableTileGroupDuplicate.test.svelte";
 import SelectableTileGroupRange from "./SelectableTileGroupRange.test.svelte";
 import SelectableTileGroupReactive from "./SelectableTileGroupReactive.test.svelte";
 
@@ -278,6 +279,47 @@ describe("SelectableTileGroup", () => {
     await tick();
 
     expect(component.groupSelected).toEqual(["b"]);
+  });
+
+  describe("duplicate values", () => {
+    it("warns once when two tiles share a value", async () => {
+      const consoleWarn = vi
+        .spyOn(console, "warn")
+        .mockImplementation(() => {});
+      render(SelectableTileGroupDuplicate, {
+        props: { values: ["a", "a", "a"] },
+      });
+      await tick();
+
+      expect(consoleWarn).toHaveBeenCalledTimes(1);
+      expect(consoleWarn.mock.calls[0][0]).toContain('share the value "a"');
+    });
+
+    it("does not warn for unique values, including while tiles swap values", async () => {
+      const consoleWarn = vi.spyOn(console, "warn");
+      const { component } = render(SelectableTileGroupDuplicate);
+      await tick();
+
+      // Non-keyed `{#each}`: the first tile takes "b" before the second
+      // gives it up.
+      component.values = ["b", "c"];
+      await tick();
+
+      expect(consoleWarn).not.toHaveBeenCalled();
+    });
+
+    it("releases a value when its tile unmounts", async () => {
+      const consoleWarn = vi.spyOn(console, "warn");
+      const { component } = render(SelectableTileGroupDuplicate);
+      await tick();
+
+      component.values = ["a"];
+      await tick();
+      component.values = ["a", "b"];
+      await tick();
+
+      expect(consoleWarn).not.toHaveBeenCalled();
+    });
   });
 
   describe("shift+click range selection", () => {
