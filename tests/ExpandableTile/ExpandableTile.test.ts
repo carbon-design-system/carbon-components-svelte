@@ -121,6 +121,55 @@ describe("ExpandableTile", () => {
     expect(tile).toHaveAttribute("aria-expanded", "false");
   });
 
+  describe("toggle event", () => {
+    it("dispatches the next expanded state on click", async () => {
+      const onToggle = vi.fn();
+      render(ExpandableTile, { props: { onToggle } });
+
+      const tile = screen.getByRole("button");
+      await user.click(tile);
+      await user.click(tile);
+
+      expect(onToggle).toHaveBeenCalledTimes(2);
+      expect(onToggle.mock.calls[0][0].detail).toEqual({ expanded: true });
+      expect(onToggle.mock.calls[1][0].detail).toEqual({ expanded: false });
+    });
+
+    it("keeps the current state when the event is prevented", async () => {
+      render(ExpandableTile, {
+        props: { onToggle: (e: CustomEvent) => e.preventDefault() },
+      });
+
+      const tile = screen.getByRole("button");
+      await user.click(tile);
+
+      expect(tile).toHaveAttribute("aria-expanded", "false");
+    });
+
+    it("does not dispatch when `expanded` is set programmatically", async () => {
+      const onToggle = vi.fn();
+      const { rerender } = render(ExpandableTile, { props: { onToggle } });
+
+      await rerender({ expanded: true });
+
+      expect(screen.getByRole("button")).toHaveAttribute(
+        "aria-expanded",
+        "true",
+      );
+      expect(onToggle).not.toHaveBeenCalled();
+    });
+
+    it("dispatches from the chevron button with interactive content", async () => {
+      const onToggle = vi.fn();
+      render(ExpandableTileCustom, { props: { onToggle } });
+
+      await user.click(screen.getByRole("button", { name: "View more" }));
+
+      expect(onToggle).toHaveBeenCalledTimes(1);
+      expect(onToggle.mock.calls[0][0].detail).toEqual({ expanded: true });
+    });
+  });
+
   describe("with interactive content", () => {
     it("should not toggle expanded state when clicking an interactive child element", async () => {
       render(ExpandableTileVariants);

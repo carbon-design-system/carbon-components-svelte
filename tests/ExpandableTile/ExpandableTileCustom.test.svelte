@@ -8,6 +8,8 @@
   export let tabindex: ComponentProps<ExpandableTile>["tabindex"] = "0";
   export let onFocus: (e: FocusEvent) => void = () => {};
   export let onBlur: (e: FocusEvent) => void = () => {};
+  export let onToggle: (e: CustomEvent<{ expanded: boolean }>) => void =
+    () => {};
 </script>
 
 <ExpandableTile
@@ -17,6 +19,7 @@
   tileCollapsedLabel="View more"
   on:focus={onFocus}
   on:blur={onBlur}
+  on:toggle={onToggle}
 >
   <div slot="above">
     <a

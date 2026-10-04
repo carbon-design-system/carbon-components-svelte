@@ -1,5 +1,9 @@
 <script>
   /**
+   * @event {{ expanded: boolean }} toggle - Dispatched with the next expanded state when the user toggles the tile. Call `preventDefault()` to keep the current state.
+   */
+
+  /**
    * Set to `true` to expand the tile.
    * @bindable writable
    */
@@ -56,9 +60,11 @@
    */
   export let ref = null;
 
-  import { onMount } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import { uniqueId } from "../utils/unique-id.js";
+
+  const dispatch = createEventDispatcher();
 
   let refAbove = null;
   let resizeObserver;
@@ -112,6 +118,13 @@
     if (ref) resizeObserver.observe(ref);
   }
 
+  function toggle() {
+    const next = !expanded;
+    if (dispatch("toggle", { expanded: next }, { cancelable: true })) {
+      expanded = next;
+    }
+  }
+
   $: iconText = expanded ? tileExpandedIconText : tileCollapsedIconText;
   $: label = expanded ? tileExpandedLabel : tileCollapsedLabel;
   $: effectiveMaxHeight = tileMaxHeight > 0 ? tileMaxHeight : measuredMaxHeight;
@@ -139,7 +152,7 @@
   {...$$restProps}
   on:click
   on:click={() => {
-    if (!hasInteractiveContent) expanded = !expanded;
+    if (!hasInteractiveContent) toggle();
   }}
   on:keypress
   on:mouseover
@@ -164,7 +177,7 @@
       aria-controls={hasInteractiveContent ? `${id}-content` : undefined}
       title={hasInteractiveContent ? iconText : undefined}
       on:click={() => {
-        if (hasInteractiveContent) expanded = !expanded;
+        if (hasInteractiveContent) toggle();
       }}
       on:focus
       on:blur
