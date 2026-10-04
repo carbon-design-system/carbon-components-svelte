@@ -33,7 +33,8 @@
   export let tileCollapsedLabel = "";
 
   /**
-   * Specify the tabindex
+   * Specify the tabindex of the toggle: the tile itself, or the
+   * chevron button when `hasInteractiveContent` is `true`.
    * @type {number | string | undefined}
    */
   export let tabindex = "0";
@@ -156,6 +157,7 @@
     <svelte:element
       this={hasInteractiveContent ? "button" : "div"}
       type={hasInteractiveContent ? "button" : undefined}
+      tabindex={hasInteractiveContent ? tabindex : undefined}
       class:bx--tile__chevron={true}
       aria-expanded={hasInteractiveContent ? expanded : undefined}
       aria-label={hasInteractiveContent && !label ? iconText : undefined}
