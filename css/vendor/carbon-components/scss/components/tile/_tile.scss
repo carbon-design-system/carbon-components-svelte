@@ -37,11 +37,20 @@
     background-color: $ui-02;
   }
 
+  // ccs: the expandable tile's `transition` here never won (the later
+  // `.#{$prefix}--tile--expandable` rule sets its own), so it is split out
+  // rather than raised to the `:not()` weight below.
+  .#{$prefix}--tile--clickable,
+  .#{$prefix}--tile--selectable {
+    transition: $duration--moderate-01 motion(standard, productive);
+  }
+
   .#{$prefix}--tile--clickable,
   .#{$prefix}--tile--selectable,
-  .#{$prefix}--tile--expandable {
+  // ccs: an interactive expandable tile toggles only from its chevron, so
+  // the tile itself keeps the default cursor and resting background
+  .#{$prefix}--tile--expandable:not(.#{$prefix}--tile--expandable--interactive) {
     cursor: pointer;
-    transition: $duration--moderate-01 motion(standard, productive);
 
     &:hover {
       background: $hover-ui;

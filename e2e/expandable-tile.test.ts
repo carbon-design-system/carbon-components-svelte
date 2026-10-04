@@ -51,5 +51,22 @@ test.describe("ExpandableTile", () => {
       await expect(chevron).toHaveCSS("outline-style", "solid");
       await expect(chevron).toHaveCSS("outline-width", "2px");
     });
+
+    test("does not show a click affordance on the tile itself", async ({
+      page,
+    }) => {
+      const tile = page.getByTestId("interactive-tile");
+      const resting = await tile.evaluate(
+        (el) => getComputedStyle(el).backgroundColor,
+      );
+      await tile.hover({ position: { x: 4, y: 4 } });
+
+      await expect(tile).toHaveCSS("cursor", "auto");
+      await expect(tile).toHaveCSS("background-color", resting);
+      await expect(page.getByTestId("expandable-tile")).toHaveCSS(
+        "cursor",
+        "pointer",
+      );
+    });
   });
 });
