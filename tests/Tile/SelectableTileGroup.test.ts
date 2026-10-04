@@ -57,6 +57,23 @@ describe("SelectableTileGroup", () => {
       expect(checkbox).toBeDisabled();
       expect(checkbox).not.toHaveAttribute("disabled");
     }
+
+    for (const tile of container.querySelectorAll(".bx--tile")) {
+      expect(tile).toHaveClass("bx--tile--disabled");
+    }
+  });
+
+  it("restores tile styling when the group is re-enabled", async () => {
+    const { component, container } = render(SelectableTileGroup, {
+      props: { disabled: true },
+    });
+
+    component.disabled = false;
+    await tick();
+
+    for (const tile of container.querySelectorAll(".bx--tile")) {
+      expect(tile).not.toHaveClass("bx--tile--disabled");
+    }
   });
 
   it("should handle custom name", () => {

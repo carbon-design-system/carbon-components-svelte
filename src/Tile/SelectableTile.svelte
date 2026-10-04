@@ -86,6 +86,7 @@
   const selectedValues = ctx?.selectedValues ?? readable([]);
   const groupName = ctx?.groupName ?? readable(undefined);
   const groupForm = ctx?.groupForm ?? readable(undefined);
+  const groupDisabled = ctx?.groupDisabled ?? readable(false);
   const groupSize = ctx?.groupSize ?? readable(undefined);
   $: effectiveSize = size ?? $groupSize;
 
@@ -192,7 +193,7 @@
   class:bx--tile--is-selected={selected}
   class:bx--tile--light={light}
   class:bx--tile--sm={effectiveSize === "sm"}
-  class:bx--tile--disabled={disabled}
+  class:bx--tile--disabled={disabled || $groupDisabled}
   class:bx--tile--full-height={fullHeight}
   {...labelProps}
   on:click

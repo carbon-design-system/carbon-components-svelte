@@ -71,6 +71,10 @@
    * @type {import("svelte/store").Readable<string | undefined>}
    */
   const groupNameReadonly = readonly(groupName);
+  /**
+   * @type {import("svelte/store").Writable<boolean>}
+   */
+  const groupDisabled = writable(disabled);
 
   /** @type {HTMLFieldSetElement | null} */
   let fieldsetRef = null;
@@ -193,6 +197,7 @@
     selectedValues,
     groupName: groupNameReadonly,
     groupForm: readonly(groupForm),
+    groupDisabled: readonly(groupDisabled),
     add,
     remove,
     update,
@@ -202,6 +207,7 @@
   $: selectedValues.set(selected);
   $: groupName.set(name);
   $: groupForm.set(form);
+  $: groupDisabled.set(disabled);
 </script>
 
 <fieldset
