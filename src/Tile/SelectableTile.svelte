@@ -1,5 +1,6 @@
 <script>
   /**
+   * @restProps {label}
    * @event {string} "select"
    * @event {string} "deselect"
    */
@@ -61,6 +62,16 @@
 
   const dispatch = createEventDispatcher();
 
+  // aria attributes should go to the input element, not the label.
+  $: ariaDescribedBy = $$restProps["aria-describedby"];
+  $: ariaLabelledBy = $$restProps["aria-labelledby"];
+  $: labelRestProps = Object.fromEntries(
+    Object.entries($$restProps).filter(
+      ([propKey]) =>
+        propKey !== "aria-describedby" && propKey !== "aria-labelledby",
+    ),
+  );
+
   const ctx = getContext("carbon:SelectableTileGroup");
   const hasGroup = ctx !== undefined;
   const add = ctx?.add ?? noop;
@@ -113,6 +124,8 @@
   name={$groupName ?? name}
   {title}
   {disabled}
+  aria-describedby={ariaDescribedBy}
+  aria-labelledby={ariaLabelledBy}
   on:click={(event) => {
     pendingShiftKey = event.shiftKey;
   }}
@@ -158,7 +171,7 @@
   class:bx--tile--light={light}
   class:bx--tile--disabled={disabled}
   class:bx--tile--full-height={fullHeight}
-  {...$$restProps}
+  {...labelRestProps}
   on:click
   on:mouseover
   on:mouseenter

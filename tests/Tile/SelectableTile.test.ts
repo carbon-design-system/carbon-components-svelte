@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import SelectableTileTest from "./SelectableTile.test.svelte";
+import SelectableTileAria from "./SelectableTileAria.test.svelte";
 import SelectableTileStandalone from "./SelectableTileStandalone.test.svelte";
 
 describe("SelectableTile", () => {
@@ -100,6 +101,17 @@ describe("SelectableTile", () => {
     const input = container.querySelector('input[type="checkbox"]');
     expect(input).toBeChecked();
     expect(input).toBeDisabled();
+  });
+
+  it("applies aria-describedby and aria-labelledby to the checkbox, not the label", () => {
+    render(SelectableTileAria);
+    const checkbox = screen.getByRole("checkbox");
+    expect(checkbox).toHaveAccessibleDescription("Billed monthly");
+    expect(checkbox).toHaveAccessibleName("Standard plan");
+
+    const tile = screen.getByTestId("tile");
+    expect(tile).not.toHaveAttribute("aria-describedby");
+    expect(tile).not.toHaveAttribute("aria-labelledby");
   });
 
   it("hides the checkmark icon from assistive technology", () => {
