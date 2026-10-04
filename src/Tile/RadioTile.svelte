@@ -89,16 +89,16 @@
   aria-labelledby={ariaLabelledBy}
   class:bx--tile-input={true}
   on:change
-  on:change={() => {
-    if (disabled) return;
-    update(value);
-  }}
+  on:change={() => update(value)}
   on:keydown
   on:keydown={(event) => {
-    if (disabled) return;
-    if (event.key === " " || event.key === "Enter") {
+    // Space is left to the native radio, which checks it and fires
+    // `change`. Enter has no native radio behavior beyond implicit form
+    // submission, so cancel that and click instead; an already-checked
+    // radio fires no `change`, matching a pointer click.
+    if (event.key === "Enter") {
       event.preventDefault();
-      update(value);
+      if (!event.currentTarget.checked) event.currentTarget.click();
     }
   }}
 >
