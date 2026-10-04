@@ -53,6 +53,7 @@
     }
     return () => {
       if (unsubMenuItems) unsubMenuItems();
+      ctx?.updateSelectedItems({ id, isSelected: false });
       if (ctx && ref) {
         ctx.unregisterMenuItem(ref);
       }

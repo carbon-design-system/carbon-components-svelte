@@ -28,7 +28,7 @@
   export let ref = null;
 
   import { createEventDispatcher, setContext, tick } from "svelte";
-  import { writable } from "svelte/store";
+  import { get, writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import { dismiss } from "../utils/dismiss.js";
   import { createDomNodeRegistry } from "../utils/dom-node-registry.js";
@@ -39,9 +39,10 @@
   const dispatch = createEventDispatcher();
 
   /**
-   * @type {import("svelte/store").Writable<Record<string, boolean>>}
+   * Ids of the selected items in the menu.
+   * @type {import("svelte/store").Writable<ReadonlySet<string>>}
    */
-  const selectedItems = writable({});
+  const selectedItems = writable(new Set());
   const menuItemRegistry = createDomNodeRegistry();
   /** @type {import("svelte/store").Writable<ReadonlyArray<HTMLElement>>} */
   const menuItems = menuItemRegistry.items;
@@ -56,10 +57,12 @@
    * @type {(item: { id: string; isSelected: boolean }) => void}
    */
   function updateSelectedItems(item) {
-    selectedItems.update((_items) => ({
-      ..._items,
-      [item.id]: item.isSelected,
-    }));
+    const ids = get(selectedItems);
+    if (ids.has(item.id) === item.isSelected) return;
+    const next = new Set(ids);
+    if (item.isSelected) next.add(item.id);
+    else next.delete(item.id);
+    selectedItems.set(next);
   }
 
   /**
@@ -86,8 +89,7 @@
     closeMenu,
   });
 
-  $: isCurrentSubmenu =
-    Object.values($selectedItems).filter(Boolean).length > 0;
+  $: isCurrentSubmenu = $selectedItems.size > 0;
 
   function handleOutsideClick(event) {
     if (expanded && isOutsideClick(event, ref)) {
