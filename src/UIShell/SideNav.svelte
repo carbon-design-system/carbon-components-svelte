@@ -313,7 +313,7 @@
       trapFocus({ container: navRef, event });
     }
   }}
-  aria-hidden={!isOpen}
+  aria-hidden={!isOpen && !rail}
   aria-label={ariaLabel}
   class:bx--side-nav__navigation={true}
   class:bx--side-nav={true}
