@@ -6,6 +6,7 @@ import { user } from "../utils/user";
 import SelectableTileGroupSlot from "./SelectableTileGroup.slot.test.svelte";
 import SelectableTileGroup from "./SelectableTileGroup.test.svelte";
 import SelectableTileGroupDuplicate from "./SelectableTileGroupDuplicate.test.svelte";
+import SelectableTileGroupNotify from "./SelectableTileGroupNotify.test.svelte";
 import SelectableTileGroupRange from "./SelectableTileGroupRange.test.svelte";
 import SelectableTileGroupReactive from "./SelectableTileGroupReactive.test.svelte";
 
@@ -279,6 +280,35 @@ describe("SelectableTileGroup", () => {
     await tick();
 
     expect(component.groupSelected).toEqual(["b"]);
+  });
+
+  describe("store notifications", () => {
+    it("notifies tiles once per toggle", async () => {
+      const onNotify = vi.fn();
+      render(SelectableTileGroupNotify, { props: { onNotify } });
+      await tick();
+      onNotify.mockClear();
+
+      await user.click(screen.getAllByRole("checkbox")[0]);
+      await tick();
+
+      expect(onNotify).toHaveBeenCalledTimes(1);
+    });
+
+    it("notifies tiles once when selected is set programmatically", async () => {
+      const onNotify = vi.fn();
+      const { component } = render(SelectableTileGroupNotify, {
+        props: { onNotify },
+      });
+      await tick();
+      onNotify.mockClear();
+
+      component.selected = ["b"];
+      await tick();
+
+      expect(onNotify).toHaveBeenCalledTimes(1);
+      expect(screen.getAllByRole("checkbox")[1]).toBeChecked();
+    });
   });
 
   describe("duplicate values", () => {
