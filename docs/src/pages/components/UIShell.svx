@@ -260,7 +260,7 @@ The panel does not animate by default. Enable a slide transition by passing [tra
 
 ### Multiple switchers
 
-You can mount multiple switchers and customize each button. For example, add a tooltip with `iconDescription`.
+You can mount multiple switchers and customize each button. For example, add a tooltip with `iconDescription`. Only one panel stays open at a time: opening a panel closes any other open `HeaderAction`, `ProfileMenu`, or `HeaderSwitcher`.
 
 Control tooltip alignment with `tooltipAlignment`. Providing button text overrides the tooltip.
 
