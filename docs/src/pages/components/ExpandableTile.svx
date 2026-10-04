@@ -148,5 +148,5 @@ through the tile's links and buttons to the chevron, then press
       Acknowledge alert
     </Button>
   </Stack>
-  <svelte:fragment slot="below">Escalated to the on-call engineer at 2:14 AM UTC.</svelte:fragment>
+  <Box slot="below" paddingTop={4}>Escalated to the on-call engineer at 2:14 AM UTC.</Box>
 </ExpandableTile>
