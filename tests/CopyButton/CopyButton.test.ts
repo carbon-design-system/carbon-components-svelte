@@ -31,7 +31,6 @@ describe("CopyButton", () => {
     render(CopyButton);
 
     const button = getCopyButton("Basic");
-    expect(button).toHaveAttribute("aria-live", "polite");
 
     await user.click(button);
     expect(consoleLog).toHaveBeenCalledWith("copied");
@@ -154,6 +153,39 @@ describe("CopyButton", () => {
     // Error feedback holds the button until timeout/dismiss.
     await user.click(button);
     expect(copy).toHaveBeenCalledTimes(1);
+  });
+
+  describe("status announcement", () => {
+    it("announces the feedback text in a status region", async () => {
+      render(CopyButtonPortalTooltipTimeout);
+
+      const status = screen.getByRole("status");
+      expect(status).toHaveAttribute("aria-live", "polite");
+      expect(status).toHaveTextContent("");
+
+      await user.click(getCopyButton("Copy"));
+      expect(status).toHaveTextContent("Copied!");
+
+      // Cleared on close so the next copy is announced again.
+      await waitFor(() => expect(status).toHaveTextContent(""));
+    });
+
+    it("announces the feedback text with the inline caret", async () => {
+      render(CopyButtonPortalTooltipTimeout, {
+        props: { portalTooltip: false },
+      });
+
+      await user.click(getCopyButton("Copy"));
+      expect(screen.getByRole("status")).toHaveTextContent("Copied!");
+    });
+
+    it("announces errorFeedback when copying fails", async () => {
+      const copy = vi.fn().mockRejectedValue(new Error("copy failed"));
+      render(CopyButtonAsync, { props: { copy } });
+
+      await user.click(getCopyButton("Async copy"));
+      expect(screen.getByRole("status")).toHaveTextContent("Failed to copy");
+    });
   });
 
   it("dispatches copy event after async copy resolves", async () => {

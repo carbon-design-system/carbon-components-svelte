@@ -116,6 +116,9 @@
   }
 
   $: feedbackText = copyFailed ? errorFeedback : feedback;
+  // Both feedback surfaces are visual-only (the portal has no role, the inline
+  // caret is aria-hidden), so mirror the text into a status region.
+  $: statusText = feedbackOpen ? feedbackText : "";
 
   // Proactive hover/focus tooltip. Reuses the floating-portal `PortalTooltip`
   // and the shared `activeButtonTooltip` store, so a CopyButton coordinates
@@ -210,7 +213,6 @@
 <button
   bind:this={ref}
   type="button"
-  aria-live="polite"
   aria-busy={copyPending || undefined}
   class:bx--copy-btn={true}
   class:bx--copy={true}
@@ -269,6 +271,11 @@
     </span>
   {/if}
 </button>
+<!-- Always rendered (even while empty) so assistive tech registers the region
+     before its text changes. -->
+<span role="status" aria-live="polite" class:bx--visually-hidden={true}
+  >{statusText}</span
+>
 
 {#if ref}
   <PortalTooltip

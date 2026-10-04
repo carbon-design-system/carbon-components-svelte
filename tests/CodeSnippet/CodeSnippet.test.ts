@@ -465,7 +465,7 @@ yarn -v`,
     expect(mockClipboard.writeText).toHaveBeenCalledWith(
       "npm install --save @carbon/icons",
     );
-    expect(screen.getByText("Copied!")).toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveTextContent("Copied!");
 
     Object.defineProperty(navigator, "clipboard", {
       value: originalClipboard,
@@ -586,7 +586,12 @@ yarn -v`,
       await user.click(screen.getByLabelText(label));
 
       expect(onCopyError).toHaveBeenCalledWith({ error });
-      expect(screen.getByText("Failed to copy")).toBeInTheDocument();
+      // Single/multi also mirror the text into CopyButton's status region.
+      expect(
+        screen.getByText("Failed to copy", {
+          ignore: "script, style, [role=status]",
+        }),
+      ).toBeInTheDocument();
       expect(screen.queryByText("Copied!")).toBeNull();
     },
   );
@@ -618,7 +623,12 @@ yarn -v`,
         error: expect.any(Error),
       });
       expect(onCopyError.mock.calls[0][0].error.message).toBe("Failed to copy");
-      expect(screen.getByText("Failed to copy")).toBeInTheDocument();
+      // Single/multi also mirror the text into CopyButton's status region.
+      expect(
+        screen.getByText("Failed to copy", {
+          ignore: "script, style, [role=status]",
+        }),
+      ).toBeInTheDocument();
       expect(screen.queryByText("Copied!")).toBeNull();
 
       Object.defineProperty(navigator, "clipboard", {
@@ -718,7 +728,7 @@ yarn -v`,
 
     const copyButton = screen.getByLabelText("Copy to clipboard");
     await user.click(copyButton);
-    expect(screen.getByText("Custom copied text!")).toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveTextContent("Custom copied text!");
   });
 
   describe("copying without code", () => {

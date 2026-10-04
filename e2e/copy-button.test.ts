@@ -19,7 +19,10 @@ test.describe("CopyButton", () => {
 
   test("shows feedback on click", async ({ page }) => {
     await page.getByRole("button", { name: "Copy to clipboard" }).click();
-    await expect(page.getByText("Copied!")).toBeVisible();
+    await expect(
+      page.locator("[data-floating-portal]").getByText("Copied!"),
+    ).toBeVisible();
+    await expect(page.getByRole("status").first()).toHaveText("Copied!");
   });
 
   test("copies text when clicked", async ({ page }) => {
