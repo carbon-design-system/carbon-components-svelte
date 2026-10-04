@@ -188,6 +188,22 @@ describe("ExpandableTile", () => {
       );
     });
 
+    it("should name the chevron button by its visible label when one is provided", async () => {
+      render(ExpandableTileCustom);
+
+      const chevronButton = screen.getByRole("button", { name: "View more" });
+      expect(chevronButton).not.toHaveAttribute("aria-label");
+      expect(chevronButton).toHaveAccessibleDescription(
+        "Interact to expand Tile",
+      );
+
+      await user.click(chevronButton);
+      expect(chevronButton).toHaveAccessibleName("View less");
+      expect(chevronButton).toHaveAccessibleDescription(
+        "Interact to collapse Tile",
+      );
+    });
+
     it("should not toggle when clicking interactive button or link", async () => {
       render(ExpandableTileCustom);
 

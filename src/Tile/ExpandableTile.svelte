@@ -113,6 +113,7 @@
   });
 
   $: iconText = expanded ? tileExpandedIconText : tileCollapsedIconText;
+  $: label = expanded ? tileExpandedLabel : tileCollapsedLabel;
   $: effectiveMaxHeight = tileMaxHeight > 0 ? tileMaxHeight : measuredMaxHeight;
   $: effectivePadding = tilePadding > 0 ? tilePadding : measuredPadding;
 </script>
@@ -157,7 +158,7 @@
       type={hasInteractiveContent ? "button" : undefined}
       class:bx--tile__chevron={true}
       aria-expanded={hasInteractiveContent ? expanded : undefined}
-      aria-label={hasInteractiveContent ? iconText : undefined}
+      aria-label={hasInteractiveContent && !label ? iconText : undefined}
       aria-controls={hasInteractiveContent ? `${id}-content` : undefined}
       title={hasInteractiveContent ? iconText : undefined}
       on:click={() => {
@@ -166,7 +167,7 @@
       on:focus
       on:blur
     >
-      <span>{expanded ? tileExpandedLabel : tileCollapsedLabel}</span>
+      <span>{label}</span>
       <ChevronDown />
     </svelte:element>
     <div class:bx--tile-content={true}>
