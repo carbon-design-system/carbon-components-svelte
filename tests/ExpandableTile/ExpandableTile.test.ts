@@ -121,6 +121,17 @@ describe("ExpandableTile", () => {
     expect(tile).toHaveAttribute("aria-expanded", "false");
   });
 
+  it("should forward keydown", async () => {
+    const onKeydown = vi.fn();
+    render(ExpandableTile, { props: { onKeydown } });
+
+    await user.tab();
+    await user.keyboard("{ArrowDown}");
+
+    expect(onKeydown).toHaveBeenCalledTimes(1);
+    expect(onKeydown.mock.calls[0][0].key).toBe("ArrowDown");
+  });
+
   describe("toggle event", () => {
     it("dispatches the next expanded state on click", async () => {
       const onToggle = vi.fn();
