@@ -5,6 +5,6 @@
 <CopyInput
   data-testid="copy-input-select"
   labelText="API endpoint"
-  selectOnFocus
+  selectTextOnFocus
   value="https://api.acme.io/v1"
 />

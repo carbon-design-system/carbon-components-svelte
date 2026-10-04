@@ -6,7 +6,7 @@ test.describe("CopyInput", () => {
   });
 
   // WebKit collapses a focus-time `select()` on mouseup; jsdom can't show it.
-  test("selectOnFocus keeps the full value selected after a click", async ({
+  test("selectTextOnFocus keeps the full value selected after a click", async ({
     page,
   }) => {
     const input = page.getByTestId("copy-input-select");

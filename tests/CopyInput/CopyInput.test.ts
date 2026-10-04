@@ -76,8 +76,8 @@ describe("CopyInput", () => {
     expect(select).not.toHaveBeenCalled();
   });
 
-  it("selects the full value on focus when selectOnFocus is true", async () => {
-    render(CopyInput, { props: { selectOnFocus: true } });
+  it("selects the full value on focus when selectTextOnFocus is true", async () => {
+    render(CopyInput, { props: { selectTextOnFocus: true } });
 
     const input = screen.getByLabelText("API token");
     assert(input instanceof HTMLInputElement);
