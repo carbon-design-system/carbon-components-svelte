@@ -221,6 +221,16 @@ describe("ExpandableTile", () => {
       expect(chevronButton).toHaveAttribute("aria-expanded", "false");
     });
 
+    it("should apply tabindex to the chevron button", () => {
+      render(ExpandableTileCustom, { props: { tabindex: "-1" } });
+
+      const chevronButton = screen.getByRole("button", { name: "View more" });
+      expect(chevronButton).toHaveAttribute("tabindex", "-1");
+      expect(
+        document.querySelector(".bx--tile--expandable"),
+      ).not.toHaveAttribute("tabindex");
+    });
+
     it("should forward focus and blur from the chevron button", () => {
       const onFocus = vi.fn();
       const onBlur = vi.fn();
