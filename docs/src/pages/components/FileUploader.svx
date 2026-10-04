@@ -264,7 +264,8 @@ Disable the file uploader by setting `disabled` to `true`.
 
 Respond to file list changes. `add` and `remove` fire whenever `files` gains or
 loses entries (including via two-way binding), `change` fires with the full
-list, `clear` fires when the list becomes empty (see [Clear
+list when the user adds files or removes one with its remove button, `clear`
+fires when the list becomes empty (see [Clear
 files](#clear-files)), and `rejected` fires per file that fails validation
 (see [Maximum file size](#maximum-file-size) and [Duplicate
 detection](#duplicate-detection)).
