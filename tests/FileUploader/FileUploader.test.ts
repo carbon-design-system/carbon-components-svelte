@@ -1319,6 +1319,69 @@ describe("FileUploader", () => {
     ).not.toHaveAttribute("aria-describedby");
   });
 
+  describe("change on removing a file", () => {
+    async function renderWithFiles(names: string[]) {
+      const events: string[] = [];
+      const onChange = vi.fn((e: CustomEvent<ReadonlyArray<File>>) => {
+        events.push(`change:${e.detail.map((f) => f.name).join(",")}`);
+      });
+      const { component } = render(FileUploader, {
+        props: {
+          onChange,
+          onRemove: () => events.push("remove"),
+          onClear: () => events.push("clear"),
+        },
+      });
+      assert(component.ref instanceof HTMLInputElement);
+      simulateFileSelection(
+        component.ref,
+        names.map((name) => new File([name], name)),
+      );
+      await screen.findByText(names[0]);
+      await tick();
+      events.length = 0;
+      onChange.mockClear();
+      return { component, events, onChange };
+    }
+
+    it("should dispatch change with the remaining files after remove", async () => {
+      const { events } = await renderWithFiles(["a.txt", "b.txt"]);
+
+      await user.click(
+        screen.getByRole("button", { name: "Remove file a.txt" }),
+      );
+
+      await vi.waitFor(() => {
+        expect(events).toEqual(["remove", "change:b.txt"]);
+      });
+    });
+
+    it("should dispatch change once when removing the last file", async () => {
+      const { events } = await renderWithFiles(["a.txt"]);
+
+      await user.click(
+        screen.getByRole("button", { name: "Remove file a.txt" }),
+      );
+
+      await vi.waitFor(() => {
+        expect(events).toEqual(["remove", "change:", "clear"]);
+      });
+    });
+
+    it("should not dispatch change when a file is removed programmatically", async () => {
+      const { component, events } = await renderWithFiles(["a.txt", "b.txt"]);
+
+      assert(component.files);
+      component.files = component.files.slice(1);
+
+      await vi.waitFor(() => {
+        expect(events).toEqual(["remove"]);
+      });
+      await tick();
+      expect(events).toEqual(["remove"]);
+    });
+  });
+
   describe("focus after removing a file", () => {
     async function renderWithFiles(names: string[]) {
       const { component } = render(FileUploader);
