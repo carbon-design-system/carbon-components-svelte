@@ -6,6 +6,7 @@
   export let modalOpen = true;
   export let comboBoxOpen = true;
   export let portalMenu: ComponentProps<ComboBox>["portalMenu"] = undefined;
+  export let selectedId: ComponentProps<ComboBox>["selectedId"] = undefined;
 
   const items = [
     { id: "0", text: "Slack" },
@@ -25,6 +26,7 @@
     labelText="Contact"
     placeholder="Select"
     open={comboBoxOpen}
+    {selectedId}
     {portalMenu}
   />
 </Modal>
