@@ -148,7 +148,7 @@
     class:bx--header-switcher__trigger={true}
     {...$$restProps}
     on:click
-    on:click|stopPropagation={async (event) => {
+    on:click={async (event) => {
       const wasOpen = isOpen;
       isOpen = !isOpen;
       dispatch(isOpen ? "open" : "close", { trigger: "toggle" });
