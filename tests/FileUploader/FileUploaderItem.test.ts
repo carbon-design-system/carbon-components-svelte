@@ -183,7 +183,7 @@ describe("FileUploaderItem", () => {
       },
     });
 
-    screen.getByRole("button", { name: "Remove file" }).focus();
+    screen.getByRole("button", { name: "Remove file test.txt" }).focus();
     await user.keyboard(key);
     await tick();
 

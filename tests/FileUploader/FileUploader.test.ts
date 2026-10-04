@@ -1278,6 +1278,22 @@ describe("FileUploader", () => {
     expect(screen.getByText("2048 octets (#0)")).toBeInTheDocument();
   });
 
+  it("should give each remove button a distinct name by default", async () => {
+    const { component } = render(FileUploader);
+    assert(component.ref instanceof HTMLInputElement);
+    simulateFileSelection(component.ref, [
+      new File(["a"], "a.txt"),
+      new File(["b"], "b.txt"),
+    ]);
+
+    expect(
+      await screen.findByRole("button", { name: "Remove file a.txt" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Remove file b.txt" }),
+    ).toBeInTheDocument();
+  });
+
   describe("focus after removing a file", () => {
     async function renderWithFiles(names: string[]) {
       const { component } = render(FileUploader);
