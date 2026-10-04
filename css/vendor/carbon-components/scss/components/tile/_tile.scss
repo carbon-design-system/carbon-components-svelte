@@ -282,3 +282,24 @@
 @include exports('tile-full-height') {
   @include tile-full-height;
 }
+
+// carbon-components-svelte patch (tile-expandable-interactive)
+
+/// Expandable tile with interactive content, where the chevron is the
+/// toggle button
+/// @access private
+/// @group components
+@mixin tile-expandable-interactive {
+  // The chevron is a `<button>` here, so it needs the ring the base
+  // `.#{$prefix}--tile__chevron:focus` rule removes. The button is only
+  // as tall as its label, so the ring sits outside it rather than inset.
+  .#{$prefix}--tile--expandable--interactive .#{$prefix}--tile__chevron:focus {
+    @include focus-outline("outline", $omit: (outline-offset));
+
+    outline-offset: 2px;
+  }
+}
+
+@include exports("tile-expandable-interactive") {
+  @include tile-expandable-interactive;
+}

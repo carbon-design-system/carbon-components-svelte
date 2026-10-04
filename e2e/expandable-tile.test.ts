@@ -38,4 +38,18 @@ test.describe("ExpandableTile", () => {
     await tile.click();
     await expect(tile).toHaveAttribute("aria-expanded", "false");
   });
+
+  test.describe("with interactive content", () => {
+    test("shows a focus ring on the chevron button", async ({ page }) => {
+      const chevron = page
+        .getByTestId("interactive-tile")
+        .getByRole("button", { name: "View more" });
+      await page.getByRole("link", { name: "View details" }).focus();
+      await page.keyboard.press("Tab");
+
+      await expect(chevron).toBeFocused();
+      await expect(chevron).toHaveCSS("outline-style", "solid");
+      await expect(chevron).toHaveCSS("outline-width", "2px");
+    });
+  });
 });

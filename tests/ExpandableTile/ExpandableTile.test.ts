@@ -173,6 +173,10 @@ describe("ExpandableTile", () => {
 
       const tile = screen.getByTestId("interactive");
       expect(tile.tagName).not.toBe("BUTTON");
+      expect(tile).toHaveClass("bx--tile--expandable--interactive");
+      expect(screen.getByTestId("basic")).not.toHaveClass(
+        "bx--tile--expandable--interactive",
+      );
     });
 
     it("should give the chevron button an accessible name when no labels are provided", () => {
