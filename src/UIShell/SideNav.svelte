@@ -309,6 +309,9 @@
   <div
     on:click={() => {
       dispatch("click:overlay");
+      // Only the mobile overlay hides the nav, taking focus with it; hand
+      // it back to the hamburger, as Escape does.
+      if (isOpen && $isSideNavMobile) $hamburgerMenuRef?.focus();
       isOpen = false;
     }}
     class:bx--side-nav__overlay={true}
