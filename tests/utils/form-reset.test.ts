@@ -7,7 +7,7 @@ describe("formReset action", () => {
 
   beforeEach(() => {
     document.body.innerHTML = `
-      <form id="f"><input id="i" value="default"><fieldset id="fs"></fieldset></form>
+      <form id="f"><input id="i" value="default"><fieldset id="fs"></fieldset><div id="box"><input id="inner" form="g"></div></form>
       <form id="g"></form>
       <input id="outside" form="f" value="outside-default">
       <input id="orphan">
@@ -94,6 +94,40 @@ describe("formReset action", () => {
     const action = formReset(fieldset, onReset);
 
     form.reset();
+    await flushFormReset();
+    expect(onReset).toHaveBeenCalledTimes(1);
+
+    action.destroy();
+  });
+
+  it("works on a container through its closest form", async () => {
+    const onReset = vi.fn();
+    const box = document.querySelector<HTMLDivElement>("#box");
+    assert(box);
+    const action = formReset(box, onReset);
+
+    form.reset();
+    await flushFormReset();
+    expect(onReset).toHaveBeenCalledTimes(1);
+
+    document.querySelector<HTMLFormElement>("#g")?.reset();
+    await flushFormReset();
+    expect(onReset).toHaveBeenCalledTimes(1);
+
+    action.destroy();
+  });
+
+  it("keeps a control's own form over its ancestor form", async () => {
+    const onReset = vi.fn();
+    const inner = document.querySelector<HTMLInputElement>("#inner");
+    assert(inner);
+    const action = formReset(inner, onReset);
+
+    form.reset();
+    await flushFormReset();
+    expect(onReset).not.toHaveBeenCalled();
+
+    document.querySelector<HTMLFormElement>("#g")?.reset();
     await flushFormReset();
     expect(onReset).toHaveBeenCalledTimes(1);
 
