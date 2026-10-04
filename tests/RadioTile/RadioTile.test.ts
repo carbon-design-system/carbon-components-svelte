@@ -2,8 +2,11 @@ import { render, screen } from "@testing-library/svelte";
 import type RadioTileComponent from "carbon-components-svelte/Tile/RadioTile.svelte";
 import type { ComponentProps } from "svelte";
 import RadioTileStandalone from "../Tile/RadioTileStandalone.test.svelte";
+import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
+import RadioTileChecked from "./RadioTile.checked.test.svelte";
 import RadioTileGroup from "./RadioTile.group.test.svelte";
+import RadioTileGroupEach from "./RadioTile.group-each.test.svelte";
 import RadioTileKeyboard from "./RadioTile.keyboard.test.svelte";
 import RadioTileSingle from "./RadioTile.single.test.svelte";
 import RadioTile from "./RadioTile.test.svelte";
@@ -229,6 +232,72 @@ describe("RadioTile", () => {
     expect(inputs[1]).not.toHaveFocus();
     expect(inputs[1]).toBeChecked();
     expect(screen.getByText(/Selected: Standard plan/)).toBeInTheDocument();
+  });
+
+  describe("checked inside TileGroup", () => {
+    const isSelected = (radio: HTMLElement) =>
+      radio.nextElementSibling?.classList.contains("bx--tile--is-selected");
+
+    it("selects the tile in the group when checked is set", async () => {
+      const onSelect = vi.fn();
+      const { component } = render(RadioTileChecked, { props: { onSelect } });
+      const [radioA, radioB] = screen.getAllByRole("radio");
+
+      component.checkedB = true;
+      await flushMacrotask();
+
+      expect(component.selected).toBe("b");
+      expect(radioB).toBeChecked();
+      expect(isSelected(radioB)).toBe(true);
+      expect(radioA).not.toBeChecked();
+      expect(isSelected(radioA)).toBe(false);
+      expect(onSelect).not.toHaveBeenCalled();
+    });
+
+    it("clears the group selection when the selected tile is unchecked", async () => {
+      const { component } = render(RadioTileChecked, {
+        props: { selected: "b" },
+      });
+      const [radioA, radioB] = screen.getAllByRole("radio");
+      expect(component.checkedB).toBe(true);
+
+      component.checkedB = false;
+      await flushMacrotask();
+
+      expect(component.selected).toBeUndefined();
+      expect(radioA).not.toBeChecked();
+      expect(radioB).not.toBeChecked();
+      expect(isSelected(radioB)).toBe(false);
+    });
+
+    it("keeps checked in sync when bound to array items", async () => {
+      render(RadioTileGroupEach);
+      const bound = screen.getByTestId("bound");
+      expect(bound).toHaveTextContent("[true,false] monthly");
+
+      await user.click(screen.getByRole("radio", { name: "monthly" }));
+      await user.click(screen.getByRole("radio", { name: "annual" }));
+      expect(bound).toHaveTextContent("[false,true] annual");
+
+      await user.click(screen.getByRole("radio", { name: "monthly" }));
+      await user.click(screen.getByRole("button", { name: "Pick annual" }));
+      expect(bound).toHaveTextContent("[false,true] annual");
+      expect(screen.getByRole("radio", { name: "annual" })).toBeChecked();
+    });
+
+    it("leaves another tile's selection alone when an unchecked tile stays unchecked", async () => {
+      const { component } = render(RadioTileChecked);
+      const [radioA] = screen.getAllByRole("radio");
+
+      component.selected = "b";
+      await flushMacrotask();
+      component.selected = "a";
+      await flushMacrotask();
+
+      expect(component.checkedB).toBe(false);
+      expect(component.selected).toBe("a");
+      expect(radioA).toBeChecked();
+    });
   });
 
   it("should handle disabled state with events", async () => {

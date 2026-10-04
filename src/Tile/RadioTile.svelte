@@ -77,7 +77,23 @@
 
   add({ value, checked });
 
-  $: checked = value === $selectedValue;
+  // The `checked` this tile last derived from the group. A different
+  // `checked` on the next run was written from outside, so push it into the
+  // group instead of overwriting it. One block, so the comparison always
+  // sees the write before the re-derive.
+  let syncedChecked = checked;
+
+  $: if (ctx) {
+    if (checked !== syncedChecked) {
+      if (checked) selectedValue.set(value);
+      else if ($selectedValue === value) selectedValue.set(undefined);
+    }
+    const derived = value === $selectedValue;
+    // Write only on change: under Svelte 5, every write to a prop bound to
+    // an array item (`bind:checked={a[i]}`) re-runs this block in every tile.
+    if (checked !== derived) checked = derived;
+    syncedChecked = derived;
+  }
 </script>
 
 <input
