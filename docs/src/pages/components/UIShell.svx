@@ -335,9 +335,9 @@ Selecting a result or submitting with <DocKbd label="Enter" /> cancels a pending
 
 ### Events
 
-`HeaderSearch` dispatches `active` and `inactive` as the search bar opens and closes, `clear` when the clear ("x") button is clicked, `select` when a result is chosen (from `results` or the `menu` slot), `submit` when <DocKbd label="Enter" /> is pressed with no result selected (`menu` slot only), and `search` after the `debounce` pause (see [Debounce](#debounce)).
+`HeaderSearch` dispatches `active` and `inactive` as the search bar opens and closes, `clear` when the clear ("x") button is clicked, `select` when a result is chosen (from `results` or the `menu` slot), `submit` with the value when <DocKbd label="Enter" /> is pressed with no result selected, and `search` after the `debounce` pause (see [Debounce](#debounce)).
 
-It also dispatches `close` — with `event.detail.trigger` set to `"escape-key"`, `"outside-click"`, or `"select"` — whenever the search bar deactivates, whether the user dismissed it or selected a result:
+It also dispatches `close` — with `event.detail.trigger` set to `"escape-key"`, `"outside-click"`, `"blur"` (<DocKbd label="Tab" /> moved focus out of it), or `"select"` — whenever the search bar deactivates, whether the user dismissed it or selected a result:
 
 ```svelte
 <HeaderSearch
