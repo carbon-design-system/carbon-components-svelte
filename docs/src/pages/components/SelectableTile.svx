@@ -23,6 +23,13 @@ Group multiple selectable tiles together for multi-selection scenarios.
   </SelectableTile>
 </SelectableTileGroup>
 
+## Values
+
+| Do | Why |
+| --- | --- |
+| Give every tile a unique `value` | Tiles that share a value, including tiles that leave out `value`, select together. The group logs a warning when it finds a shared value. |
+| Remove a value from `selected` yourself when its tile goes away | Unmounting a tile, for example while filtering a list, keeps its value in `selected`, so the choice survives the filter. |
+
 ## Selection
 
 Hold <DocKbd label="Shift" /> while clicking a tile, or while pressing <DocKbd label="Enter" /> or <DocKbd label="Space" /> on a focused tile, to apply its new checked state to every tile between it and the last tile toggled. Disabled tiles are skipped.
