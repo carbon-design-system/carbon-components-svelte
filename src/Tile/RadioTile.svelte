@@ -34,7 +34,11 @@
    */
   export let tabindex = "0";
 
-  /** Specify the ARIA label for the radio tile checkmark icon */
+  /**
+   * Specify the title for the radio tile checkmark icon.
+   * The icon is hidden from assistive technology, so this only sets the
+   * tooltip shown on hover.
+   */
   export let iconDescription = "Tile checkmark";
 
   /** Set an id for the input element */
@@ -116,7 +120,7 @@
   on:mouseenter
   on:mouseleave
 >
-  <span class:bx--tile__checkmark={true}>
+  <span aria-hidden="true" class:bx--tile__checkmark={true}>
     <CheckmarkFilled aria-label={iconDescription} title={iconDescription} />
   </span>
   <span class:bx--tile-content={true}> <slot /> </span>

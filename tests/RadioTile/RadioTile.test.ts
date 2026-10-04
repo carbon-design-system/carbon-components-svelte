@@ -94,6 +94,19 @@ describe("RadioTile", () => {
     expect(screen.getByTitle("Custom checkmark")).toBeInTheDocument();
   });
 
+  it("hides the checkmark icon from assistive technology", () => {
+    render(RadioTile);
+
+    const checkmark = screen
+      .getByText("Test content")
+      .closest(".bx--tile")
+      ?.querySelector(".bx--tile__checkmark");
+    expect(checkmark).toHaveAttribute("aria-hidden", "true");
+    expect(
+      screen.getByRole("radio", { name: "Test content" }),
+    ).toBeInTheDocument();
+  });
+
   it("should handle custom id", () => {
     render(RadioTile, { props: { id: "custom-id" } });
 
