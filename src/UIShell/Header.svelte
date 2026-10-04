@@ -99,14 +99,12 @@
   import { resolveLinkRel } from "../utils/link-rel.js";
   import { EXPANSION_BREAKPOINT } from "./expansion-breakpoint.js";
   import HamburgerMenu from "./HamburgerMenu.svelte";
-  import { isHeaderRendered, shouldRenderHamburgerMenu } from "./nav-store.js";
+  import {
+    shouldRenderHamburgerMenu,
+    trackHeaderRendered,
+  } from "./nav-store.js";
 
-  onMount(() => {
-    isHeaderRendered.set(true);
-    return () => {
-      isHeaderRendered.set(false);
-    };
-  });
+  onMount(() => trackHeaderRendered());
 
   /** @type {undefined | number} */
   let winWidth = undefined;
