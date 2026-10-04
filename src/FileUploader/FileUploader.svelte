@@ -250,6 +250,30 @@
     });
   }
 
+  /** @type {null | HTMLDivElement} */
+  let fileContainer = null;
+
+  /**
+   * Remove a row's file. If the row held focus, move focus to the next row's
+   * remove button, else the previous row's, else the add button, so keyboard
+   * users don't lose their place.
+   * @param {File} file
+   */
+  async function removeFile(file) {
+    const index = files.indexOf(file);
+    const hadFocus =
+      fileContainer?.children[index]?.contains(document.activeElement) ?? false;
+    files = files.filter((f) => f !== file);
+    if (!hadFocus) return;
+    await tick();
+    const rows = fileContainer?.children;
+    const row = rows?.[index] ?? rows?.[index - 1];
+    const target =
+      row?.querySelector(".bx--file-close") ??
+      fileContainer?.parentElement?.querySelector(":scope > .bx--btn");
+    if (target instanceof HTMLElement) target.focus();
+  }
+
   $: {
     const prevSet = new Set(prevFiles);
     const currentSet = new Set(files);
@@ -345,7 +369,7 @@
       dispatch("change", files);
     }}
   />
-  <div class:bx--file-container={true}>
+  <div bind:this={fileContainer} class:bx--file-container={true}>
     {#each filesWithKeys as { file, key }, index (key)}
       {@const rowStatus = resolveFileOverride(fileStatus, status, file, index)}
       {@const rowInvalid = resolveFileOverride(fileInvalid, false, file, index)}
@@ -381,9 +405,7 @@
             invalid={rowInvalid}
             on:keydown
             on:click
-            on:click={() => {
-              files = files.filter((f) => f !== file);
-            }}
+            on:click={() => removeFile(file)}
           />
         </span>
         {#if rowInvalid && rowErrorSubject}

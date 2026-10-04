@@ -1277,4 +1277,71 @@ describe("FileUploader", () => {
 
     expect(screen.getByText("2048 octets (#0)")).toBeInTheDocument();
   });
+
+  describe("focus after removing a file", () => {
+    async function renderWithFiles(names: string[]) {
+      const { component } = render(FileUploader);
+      assert(component.ref instanceof HTMLInputElement);
+      simulateFileSelection(
+        component.ref,
+        names.map((name) => new File([name], name)),
+      );
+      await vi.waitFor(() => {
+        expect(rows()).toHaveLength(names.length);
+      });
+      return component;
+    }
+
+    function rows() {
+      return [...document.querySelectorAll(".bx--file__selected-file")];
+    }
+
+    function removeButton(name: string) {
+      const row = rows().find((r) => r.textContent?.includes(name));
+      const button = row?.querySelector(".bx--file-close");
+      assert(button instanceof HTMLButtonElement);
+      return button;
+    }
+
+    async function removeWithKeyboard(name: string) {
+      removeButton(name).focus();
+      await user.keyboard("{Enter}");
+      await vi.waitFor(() => {
+        expect(screen.queryByText(name)).not.toBeInTheDocument();
+      });
+    }
+
+    it("should focus the next row's remove button", async () => {
+      await renderWithFiles(["a.txt", "b.txt", "c.txt"]);
+      await removeWithKeyboard("b.txt");
+      expect(removeButton("c.txt")).toHaveFocus();
+    });
+
+    it("should focus the previous row's remove button when the last row is removed", async () => {
+      await renderWithFiles(["a.txt", "b.txt"]);
+      await removeWithKeyboard("b.txt");
+      expect(removeButton("a.txt")).toHaveFocus();
+    });
+
+    it("should focus the add button when the only row is removed", async () => {
+      await renderWithFiles(["a.txt"]);
+      await removeWithKeyboard("a.txt");
+      expect(screen.getByRole("button", { name: "Add files" })).toHaveFocus();
+    });
+
+    it("should not move focus when a file is removed programmatically", async () => {
+      const component = await renderWithFiles(["a.txt", "b.txt"]);
+      const outside = document.createElement("button");
+      document.body.append(outside);
+      outside.focus();
+
+      assert(component.files);
+      component.files = component.files.slice(1);
+      await tick();
+      await tick();
+
+      expect(outside).toHaveFocus();
+      outside.remove();
+    });
+  });
 });
