@@ -1,3 +1,6 @@
+/** Options that PageUp/PageDown move the highlight by in an open menu */
+export declare const MENU_PAGE_STEP: number;
+
 /** Max height values for listbox/dropdown menus by size */
 export declare const MENU_MAX_HEIGHT: Readonly<{
   xs: string;

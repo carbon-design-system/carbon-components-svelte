@@ -2,6 +2,12 @@
 import { DEFAULT_VIRTUAL_LIST_CONFIG } from "../utils/virtualize.js";
 
 /**
+ * Options that PageUp/PageDown move the highlight by in an open menu
+ * (APG combobox/listbox: "about 10 options").
+ */
+export const MENU_PAGE_STEP = 10;
+
+/**
  * Max height values for listbox/dropdown menus by size.
  * @type {Readonly<{ xs: string; sm: string; md: string; lg: string; xl: string }>}
  */

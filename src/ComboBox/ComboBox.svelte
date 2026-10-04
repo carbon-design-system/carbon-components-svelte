@@ -317,7 +317,10 @@
   import ListBoxMenuIcon from "../ListBox/ListBoxMenuIcon.svelte";
   import ListBoxMenuItem from "../ListBox/ListBoxMenuItem.svelte";
   import ListBoxSelection from "../ListBox/ListBoxSelection.svelte";
-  import { shouldVirtualizeMenu } from "../ListBox/list-box-utils.js";
+  import {
+    MENU_PAGE_STEP,
+    shouldVirtualizeMenu,
+  } from "../ListBox/list-box-utils.js";
   import {
     applyPostClearOptions,
     createMenuCloseHandler,
@@ -327,6 +330,7 @@
     createMenuWindow,
     scheduleHighlightScroll,
   } from "../ListBox/menu-window.js";
+  import { clampIndex } from "../utils/clamp-index.js";
   import { debounce } from "../utils/debounce.js";
   import { dismiss } from "../utils/dismiss.js";
   import {
@@ -428,6 +432,21 @@
     // the actual selection.
     const navigableItems = filteredItems?.length ? filteredItems : items;
     highlightedIndex = moveIndex(highlightedIndex, step, navigableItems.length);
+    highlightOrigin = "keyboard";
+  }
+
+  /**
+   * Move the highlight a page of options (PageUp/PageDown), stopping at the
+   * ends instead of wrapping.
+   * @param {1 | -1} direction
+   */
+  function changePage(direction) {
+    const navigableItems = filteredItems?.length ? filteredItems : items;
+    highlightedIndex = clampIndex(
+      highlightedIndex,
+      direction * MENU_PAGE_STEP,
+      navigableItems.length,
+    );
     highlightOrigin = "keyboard";
   }
 
@@ -1065,6 +1084,13 @@
                   if (highlightedIndex === -1) change(step);
                 });
               }
+            } else if (
+              open &&
+              (event.key === "PageUp" || event.key === "PageDown")
+            ) {
+              // APG listbox: jump a page of options; a closed menu keeps the default.
+              event.preventDefault();
+              changePage(event.key === "PageDown" ? 1 : -1);
             } else if (event.key === "Escape") {
               // Dispatch before `clear()` flips `open`, so the guard still sees it open.
               const hadSelection = selectedId !== undefined;

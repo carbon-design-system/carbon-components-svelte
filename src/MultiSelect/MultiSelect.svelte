@@ -413,7 +413,10 @@
     ListBoxSelection,
   } from "../ListBox/index.js";
   import ListBoxMenuGroup from "../ListBox/ListBoxMenuGroup.svelte";
-  import { shouldVirtualizeMenu } from "../ListBox/list-box-utils.js";
+  import {
+    MENU_PAGE_STEP,
+    shouldVirtualizeMenu,
+  } from "../ListBox/list-box-utils.js";
   import {
     createGroupRows,
     hoistWithinGroups,
@@ -429,6 +432,7 @@
     createMenuWindow,
     scheduleHighlightScroll,
   } from "../ListBox/menu-window.js";
+  import { clampIndex } from "../utils/clamp-index.js";
   import { debounce } from "../utils/debounce.js";
   import { deepEqual } from "../utils/deep-equal.js";
   import { dismiss } from "../utils/dismiss.js";
@@ -602,6 +606,21 @@
     // ComboBox's `filteredItems?.length ? filteredItems : items` guard.
     const navigableItems = filteredItems.length ? filteredItems : sortedItems;
     highlightedIndex = moveIndex(highlightedIndex, step, navigableItems.length);
+    highlightOrigin = "keyboard";
+  }
+
+  /**
+   * Move the highlight a page of options (PageUp/PageDown), stopping at the
+   * ends instead of wrapping.
+   * @param {1 | -1} direction
+   */
+  function changePage(direction) {
+    const navigableItems = filteredItems.length ? filteredItems : sortedItems;
+    highlightedIndex = clampIndex(
+      highlightedIndex,
+      direction * MENU_PAGE_STEP,
+      navigableItems.length,
+    );
     highlightOrigin = "keyboard";
   }
 
@@ -1423,6 +1442,13 @@
                   if (!open) open = true;
                   change(step);
                 }
+              } else if (
+                open &&
+                (event.key === "PageUp" || event.key === "PageDown")
+              ) {
+                // APG listbox: jump a page of options; a closed menu keeps the default.
+                event.preventDefault();
+                changePage(event.key === "PageDown" ? 1 : -1);
               } else if (event.key === "Escape") {
                 close("escape-key");
               } else if (event.key === " ") {
@@ -1561,6 +1587,13 @@
               } else {
                 open = true;
               }
+            } else if (
+              open &&
+              (event.key === "PageUp" || event.key === "PageDown")
+            ) {
+              // APG listbox: jump a page of options; a closed menu keeps the default.
+              event.preventDefault();
+              changePage(event.key === "PageDown" ? 1 : -1);
             } else if (event.key === "Escape") {
               close("escape-key");
             } else if (event.key === "Home" || event.key === "End") {

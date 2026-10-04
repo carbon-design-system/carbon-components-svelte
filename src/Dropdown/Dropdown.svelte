@@ -268,7 +268,10 @@
     ListBoxMenuItem,
     ListBoxSelection,
   } from "../ListBox/index.js";
-  import { shouldVirtualizeMenu } from "../ListBox/list-box-utils.js";
+  import {
+    MENU_PAGE_STEP,
+    shouldVirtualizeMenu,
+  } from "../ListBox/list-box-utils.js";
   import {
     applyPostClearOptions,
     createMenuCloseHandler,
@@ -278,6 +281,7 @@
     createMenuWindow,
     scheduleHighlightScroll,
   } from "../ListBox/menu-window.js";
+  import { clampIndex } from "../utils/clamp-index.js";
   import { dismiss } from "../utils/dismiss.js";
   import {
     buildFieldIds,
@@ -543,6 +547,20 @@
     highlightOrigin = "keyboard";
   }
 
+  /**
+   * Move the highlight a page of options (PageUp/PageDown), stopping at the
+   * ends instead of wrapping.
+   * @param {1 | -1} direction
+   */
+  function changePage(direction) {
+    highlightedIndex = clampIndex(
+      highlightedIndex,
+      direction * MENU_PAGE_STEP,
+      items.length,
+    );
+    highlightOrigin = "keyboard";
+  }
+
   function typeaheadSearch(character) {
     if (items.length === 0) return;
 
@@ -803,6 +821,13 @@
               // flushes; move to the edge after that so Home/End win.
               tick().then(moveToEdge);
             }
+          } else if (
+            open &&
+            (event.key === "PageUp" || event.key === "PageDown")
+          ) {
+            // APG listbox: jump a page of options; a closed menu keeps the default.
+            event.preventDefault();
+            changePage(event.key === "PageDown" ? 1 : -1);
           } else if (event.key === "Escape") {
             close("escape-key");
           } else if (
