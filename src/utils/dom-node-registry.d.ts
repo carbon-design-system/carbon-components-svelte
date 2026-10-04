@@ -4,6 +4,8 @@ export interface DomNodeRegistry {
   items: Writable<ReadonlyArray<HTMLElement>>;
   register: (node: HTMLElement) => void;
   unregister: (node: HTMLElement) => void;
+  /** Apply pending registrations now instead of on the next microtask. */
+  flush: () => void;
 }
 
 /**
