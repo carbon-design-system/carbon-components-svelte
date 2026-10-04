@@ -46,7 +46,9 @@ Hold <DocKbd label="Shift" /> while clicking a tile, or while pressing <DocKbd l
 
 ### One-way binding
 
-Update selected values using the `select` and `deselect` events.
+Pass `selected` to `SelectableTileGroup` and update it from the `change` event, which fires once per toggle or range with every selected value. For per-tile reactions, `select` and `deselect` fire once for each tile that changes, including every tile in a range.
+
+Inside a group, the group's `selected` is the source of truth. A tile's own `selected` prop only sets its initial state, so update the group's array rather than each tile.
 
 <FileSource src="/framed/SelectableTile/SelectableTileReactiveOneWay" />
 
