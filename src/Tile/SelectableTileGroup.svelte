@@ -71,7 +71,7 @@
   let rangeAnchorValue = null;
 
   /**
-   * The group's tile `<input>` elements in DOM order. Queried live from the
+   * The group's own tile `<input>` elements in DOM order. Queried live from the
    * DOM (rather than tracked via registration order) because tiles can be
    * added, removed, or reordered dynamically, and registration order isn't
    * guaranteed to match DOM order afterward.
@@ -79,7 +79,12 @@
    */
   function getOrderedInputs() {
     if (!fieldsetRef) return [];
-    return Array.from(fieldsetRef.querySelectorAll(".bx--tile-input"));
+    // Skip tiles that belong to a nested tile group (or radio tiles), whose
+    // values aren't this group's to select.
+    return Array.from(
+      fieldsetRef.querySelectorAll('input[type="checkbox"].bx--tile-input'),
+      (input) => /** @type {HTMLInputElement} */ (input),
+    ).filter((input) => input.closest(".bx--tile-group") === fieldsetRef);
   }
 
   /**
