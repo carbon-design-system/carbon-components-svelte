@@ -8,6 +8,7 @@ import RadioTileChecked from "./RadioTile.checked.test.svelte";
 import RadioTileGroup from "./RadioTile.group.test.svelte";
 import RadioTileGroupEach from "./RadioTile.group-each.test.svelte";
 import RadioTileKeyboard from "./RadioTile.keyboard.test.svelte";
+import RadioTileRef from "./RadioTile.ref.test.svelte";
 import RadioTileSingle from "./RadioTile.single.test.svelte";
 import RadioTile from "./RadioTile.test.svelte";
 import RadioTileAria from "./RadioTileAria.test.svelte";
@@ -118,6 +119,13 @@ describe("RadioTile", () => {
     const radioTileLabel = screen.getByText("Test content").closest("label");
     assert(radioTileLabel);
     expect(radioTileLabel).toHaveAttribute("for", "custom-id");
+  });
+
+  it("exposes a reference to the input element", () => {
+    const { component } = render(RadioTileRef);
+
+    expect(component.ref).toBeInstanceOf(HTMLInputElement);
+    expect(component.ref).toBe(screen.getByRole("radio"));
   });
 
   it("should handle custom name", () => {

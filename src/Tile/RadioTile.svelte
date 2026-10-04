@@ -50,6 +50,12 @@
    */
   export let name = undefined;
 
+  /**
+   * Obtain a reference to the input HTML element.
+   * @bindable readonly
+   */
+  export let ref = null;
+
   import { getContext } from "svelte";
   import { readable } from "svelte/store";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
@@ -97,6 +103,7 @@
 </script>
 
 <input
+  bind:this={ref}
   type="radio"
   {id}
   name={$groupName ?? (name || fallbackName)}
