@@ -299,6 +299,21 @@
 /// @access private
 /// @group components
 @mixin tile-expandable-interactive {
+  // A native `<button>` brings its own padding, font and color, and the base
+  // fixed `height` let the label overflow it upward, so the focus ring sat
+  // tight above the text and loose below it. Size the button to its label
+  // plus even padding, and pull its offsets in by that padding so the label
+  // stays on the tile's padding edge.
+  .#{$prefix}--tile--expandable--interactive .#{$prefix}--tile__chevron {
+    right: $carbon--spacing-04;
+    bottom: to-rem(14px);
+    height: auto;
+    align-items: center;
+    padding: $carbon--spacing-01 $carbon--spacing-02;
+    color: inherit;
+    font: inherit;
+  }
+
   // The chevron is a `<button>` here, so it needs the ring the base
   // `.#{$prefix}--tile__chevron:focus` rule removes. The button is only
   // as tall as its label, so the ring sits outside it rather than inset.

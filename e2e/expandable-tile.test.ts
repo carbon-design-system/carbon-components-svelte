@@ -52,6 +52,26 @@ test.describe("ExpandableTile", () => {
       await expect(chevron).toHaveCSS("outline-width", "2px");
     });
 
+    test("centers the chevron label and matches the tile's text", async ({
+      page,
+    }) => {
+      const tile = page.getByTestId("interactive-tile");
+      const chevron = tile.getByRole("button", { name: "View more" });
+      const label = chevron.locator("span");
+      const tileFont = await tile.evaluate((el) => getComputedStyle(el).font);
+      const tileColor = await tile.evaluate((el) => getComputedStyle(el).color);
+      const button = await chevron.boundingBox();
+      const text = await label.boundingBox();
+      if (!button || !text) throw new Error("chevron is not rendered");
+
+      const above = text.y - button.y;
+      const below = button.y + button.height - (text.y + text.height);
+      expect(above).toBeGreaterThan(0);
+      expect(above).toBeCloseTo(below, 0);
+      await expect(label).toHaveCSS("font", tileFont);
+      await expect(label).toHaveCSS("color", tileColor);
+    });
+
     test("does not show a click affordance on the tile itself", async ({
       page,
     }) => {
