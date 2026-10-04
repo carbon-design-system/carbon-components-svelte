@@ -21,6 +21,22 @@ export const sideNavWidth = writable(undefined);
  */
 export const isHeaderRendered = writable(false);
 
+let mountedHeaders = 0;
+
+/**
+ * Count a mounted `Header` so `isHeaderRendered` stays `true` until the
+ * last one unmounts. Returns the callback to run on unmount.
+ * @returns {() => void}
+ */
+export function trackHeaderRendered() {
+  mountedHeaders += 1;
+  isHeaderRendered.set(true);
+  return () => {
+    mountedHeaders -= 1;
+    isHeaderRendered.set(mountedHeaders > 0);
+  };
+}
+
 /**
  * The most recently mounted `HamburgerMenu` trigger button, so `SideNav` can
  * return focus to it when the overlay closes via Escape.
