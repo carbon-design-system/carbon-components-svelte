@@ -137,6 +137,7 @@
   import CopyButton from "../CopyButton/CopyButton.svelte";
   import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
   import { buildFieldIds } from "../utils/field-status.js";
+  import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -232,6 +233,7 @@
     >
       <input
         bind:this={ref}
+        use:preserveFocusSelection={selectOnFocus && !disabled}
         readonly
         type={inputType}
         {value}
