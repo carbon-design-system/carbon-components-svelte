@@ -73,6 +73,66 @@ describe("TabsVertical", () => {
     );
   });
 
+  describe("breakpoint", () => {
+    const BELOW_MD = "(max-width: 41.98rem)";
+    let listeners: ((event: { matches: boolean }) => void)[];
+
+    beforeEach(() => {
+      listeners = [];
+      vi.stubGlobal("matchMedia", (query: string) => ({
+        matches: query === BELOW_MD,
+        media: query,
+        addEventListener: (
+          _type: string,
+          listener: (event: { matches: boolean }) => void,
+        ) => listeners.push(listener),
+        removeEventListener: vi.fn(),
+      }));
+    });
+
+    afterEach(() => {
+      vi.unstubAllGlobals();
+    });
+
+    it("renders the row orientation from the first render below md", () => {
+      const mutations = new MutationObserver(() => {});
+      mutations.observe(document.body, {
+        attributes: true,
+        attributeFilter: ["aria-orientation"],
+        subtree: true,
+      });
+
+      render(TabsVertical);
+
+      expect(screen.getByRole("tablist")).toHaveAttribute(
+        "aria-orientation",
+        "horizontal",
+      );
+      // No vertical-then-horizontal flip after mount.
+      expect(mutations.takeRecords()).toEqual([]);
+      mutations.disconnect();
+    });
+
+    it("follows the media query when the viewport crosses md", async () => {
+      render(TabsVertical);
+      const tablist = screen.getByRole("tablist");
+      expect(tablist).toHaveAttribute("aria-orientation", "horizontal");
+
+      for (const listener of listeners) listener({ matches: false });
+      await tick();
+      expect(tablist).toHaveAttribute("aria-orientation", "vertical");
+    });
+
+    it("ignores the breakpoint when orientation is pinned", () => {
+      render(TabsVertical, { props: { orientation: "vertical" } });
+
+      expect(screen.getByRole("tablist")).toHaveAttribute(
+        "aria-orientation",
+        "vertical",
+      );
+    });
+  });
+
   describe("orientation", () => {
     it("follows the md breakpoint by default", () => {
       const { container } = render(TabsVertical);
