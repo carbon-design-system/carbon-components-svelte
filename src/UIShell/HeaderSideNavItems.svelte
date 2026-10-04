@@ -6,7 +6,10 @@
   export let hasDivider = false;
 </script>
 
+<!-- Holds the same items as `HeaderNav`'s menubar, so it shares its role. -->
 <ul
+  role="menubar"
+  aria-orientation="vertical"
   class:bx--side-nav__header-navigation={true}
   class:bx--side-nav__header-divider={hasDivider}
   {...$$restProps}
