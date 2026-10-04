@@ -19,6 +19,7 @@
   export let ref: ComponentProps<ExpandableTile>["ref"] = null;
   export let onToggle: (e: CustomEvent<{ expanded: boolean }>) => void =
     () => {};
+  export let onKeydown: (e: KeyboardEvent) => void = () => {};
 </script>
 
 <ExpandableTile
@@ -34,6 +35,7 @@
   {id}
   bind:ref
   on:toggle={onToggle}
+  on:keydown={onKeydown}
   on:click
   on:keypress
   on:mouseover

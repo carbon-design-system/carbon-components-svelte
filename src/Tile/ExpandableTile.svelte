@@ -154,6 +154,7 @@
   on:click={() => {
     if (!hasInteractiveContent) toggle();
   }}
+  on:keydown
   on:keypress
   on:mouseover
   on:mouseenter
