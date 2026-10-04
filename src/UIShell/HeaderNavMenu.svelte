@@ -63,15 +63,15 @@
   }
 
   /**
-   * @type {(trigger?: "escape-key" | "blur") => Promise<void>}
+   * @type {(trigger: "escape-key" | "blur") => Promise<void>}
    */
   async function closeMenu(trigger) {
-    if (expanded) {
-      expanded = false;
-      if (trigger) dispatch("close", { trigger });
-      // A blur close means focus is already moving elsewhere (Tab out of the
-      // last item, or a click on another control), so don't pull it back.
-      if (trigger === "blur") return;
+    if (!expanded) return;
+    expanded = false;
+    dispatch("close", { trigger });
+    // Escape hands focus back to the trigger; a blur has already moved it
+    // somewhere the user chose.
+    if (trigger === "escape-key") {
       await tick();
       ref?.focus();
     }
