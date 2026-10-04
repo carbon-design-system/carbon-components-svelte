@@ -42,7 +42,10 @@
    */
   export let tabindex = "0";
 
-  /** Specify the ARIA label for the selectable tile checkmark icon */
+  /**
+   * Specify the title of the checkmark icon, shown as a tooltip on hover.
+   * The icon is hidden from assistive technology.
+   */
   export let iconDescription = "Tile checkmark";
 
   /** Set an id for the input element */

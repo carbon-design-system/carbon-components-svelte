@@ -147,7 +147,7 @@ Disable every tile at once by setting `disabled` on `SelectableTileGroup`. This 
 
 ## Checkmark label
 
-Customize the ARIA label announced for a tile's checkmark icon with `iconDescription`. Defaults to `"Tile checkmark"`.
+Set `iconDescription` to change the checkmark icon's tooltip, shown on hover. Defaults to `"Tile checkmark"`. Screen readers skip the icon and announce the checked state from the tile's checkbox.
 
 <SelectableTileGroup legendText="Deployment regions" name="options-checkmark-label" selected={["us-east-1"]}>
   <SelectableTile iconDescription="US East (N. Virginia) selected" value="us-east-1">
