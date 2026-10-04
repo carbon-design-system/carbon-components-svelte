@@ -168,6 +168,8 @@
     on:keydown
     on:keydown={(event) => {
       if (event.key === " " || event.key === "Enter") {
+        // Keep Space from scrolling the page.
+        event.preventDefault();
         ref.click();
       }
     }}

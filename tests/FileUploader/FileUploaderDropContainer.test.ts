@@ -718,6 +718,26 @@ describe("FileUploaderDropContainer", () => {
     expect(clickSpy).toHaveBeenCalled();
   });
 
+  it("should open the file picker once on Space without scrolling the page", () => {
+    const { container } = render(FileUploaderDropContainer);
+
+    const input = container.querySelector('input[type="file"]');
+    assert(input instanceof HTMLInputElement);
+    const clickSpy = vi.spyOn(input, "click");
+    const label = container.querySelector("label");
+    assert(label instanceof HTMLElement);
+
+    const keydown = new KeyboardEvent("keydown", {
+      key: " ",
+      bubbles: true,
+      cancelable: true,
+    });
+    label.dispatchEvent(keydown);
+
+    expect(keydown.defaultPrevented).toBe(true);
+    expect(clickSpy).toHaveBeenCalledTimes(1);
+  });
+
   it("should place focusable role on a single element (no duplicated button semantics)", () => {
     const { container } = render(FileUploaderDropContainer);
 
