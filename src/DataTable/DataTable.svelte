@@ -410,6 +410,7 @@
   import ChevronRight from "../icons/ChevronRight.svelte";
   import RadioButton from "../RadioButton/RadioButton.svelte";
   import { toCssLength } from "../utils/css-length.js";
+  import { formReset } from "../utils/form-reset.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { rangeSlice } from "../utils/range-slice.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -664,6 +665,36 @@
    */
   function resetSelectedRowIds() {
     selectedRowIds = [];
+    rangeAnchorRowId = null;
+  }
+
+  /**
+   * A form reset unchecks the row inputs without a change event. Read the
+   * rows still checked (none, unless the markup was server-rendered with
+   * `checked`) back into `selectedRowIds`, mapping each input's string value
+   * to its row id. Inputs of a nested data table are skipped. Fires no
+   * events.
+   * @type {() => void}
+   */
+  function handleFormReset() {
+    if (!isSelectionEnabled || !scrollContainerRef) return;
+    const table = scrollContainerRef.querySelector("table");
+    const rowIdByValue = new Map(
+      $tableRows.map((row) => [String(row.id), row.id]),
+    );
+    const next = [];
+    for (const input of scrollContainerRef.querySelectorAll("input")) {
+      if (
+        input.name !== inputName ||
+        !input.checked ||
+        input.closest("table") !== table ||
+        !rowIdByValue.has(input.value)
+      ) {
+        continue;
+      }
+      next.push(rowIdByValue.get(input.value));
+    }
+    selectedRowIds = next;
     rangeAnchorRowId = null;
   }
 
@@ -1062,6 +1093,7 @@
   <slot />
   <div
     bind:this={scrollContainerRef}
+    use:formReset={handleFormReset}
     style:max-height={virtualScrollContainer
       ? `${calculatedContainerHeight}px`
       : undefined}
