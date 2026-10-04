@@ -75,6 +75,14 @@
    * @type {import("svelte/store").Readable<boolean | undefined>}
    */
   const groupRequiredReadonly = readonly(groupRequired);
+  /**
+   * @type {import("svelte/store").Writable<boolean>}
+   */
+  const groupDisabled = writable(disabled);
+  /**
+   * @type {import("svelte/store").Readable<boolean>}
+   */
+  const groupDisabledReadonly = readonly(groupDisabled);
 
   /**
    * @type {(data: { checked: boolean; value: T }) => void}
@@ -112,6 +120,7 @@
     groupName: groupNameReadonly,
     fallbackName,
     groupRequired: groupRequiredReadonly,
+    groupDisabled: groupDisabledReadonly,
     add,
     update,
   });
@@ -120,6 +129,7 @@
   $: selectedValue.set(selected);
   $: groupName.set(name || undefined);
   $: groupRequired.set(required);
+  $: groupDisabled.set(disabled);
 </script>
 
 <fieldset

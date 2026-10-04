@@ -84,6 +84,12 @@
   const groupName = ctx?.groupName ?? readable(undefined);
   const fallbackName = ctx?.fallbackName;
   const groupRequired = ctx?.groupRequired ?? readable(undefined);
+  const groupDisabled = ctx?.groupDisabled ?? readable(false);
+
+  // A disabled TileGroup disables the input natively through its fieldset;
+  // mirror that in the tile's styling and tab order. The `disabled`
+  // attribute stays the tile's own.
+  $: effectiveDisabled = disabled || $groupDisabled;
 
   add({ value, checked });
 
@@ -160,7 +166,7 @@
   name={$groupName ?? (name || fallbackName)}
   {value}
   {checked}
-  tabindex={disabled ? undefined : tabindex}
+  tabindex={effectiveDisabled ? undefined : tabindex}
   {disabled}
   required={$groupRequired ?? required}
   aria-describedby={ariaDescribedBy}
@@ -189,7 +195,7 @@
   class:bx--tile--selectable={true}
   class:bx--tile--is-selected={checked}
   class:bx--tile--light={light}
-  class:bx--tile--disabled={disabled}
+  class:bx--tile--disabled={effectiveDisabled}
   class:bx--tile--full-height={fullHeight}
   {...labelRestProps}
   on:click
