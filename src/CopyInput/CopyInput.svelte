@@ -157,6 +157,8 @@
   $: inputType = type === "password" && !revealed ? "password" : "text";
   $: isFluid = !inline && (fluid || !!ctx?.isFluid);
   $: ({ helperId } = buildFieldIds(id));
+  $: hasLabel = !!(labelText || $$slots.labelChildren);
+  $: labelId = id ? `${id}-label` : undefined;
 
   function handleFocus() {
     focused = true;
@@ -186,8 +188,9 @@
 >
   {#if inline}
     <div class:bx--text-input__label-helper-wrapper={true}>
-      {#if labelText || $$slots.labelChildren}
+      {#if hasLabel}
         <label
+          id={labelId}
           for={id}
           class:bx--label={true}
           class:bx--visually-hidden={hideLabel}
@@ -212,8 +215,9 @@
       {/if}
     </div>
   {/if}
-  {#if !inline && (labelText || $$slots.labelChildren)}
+  {#if !inline && hasLabel}
     <label
+      id={labelId}
       for={id}
       class:bx--label={true}
       class:bx--visually-hidden={hideLabel}
@@ -268,6 +272,7 @@
         {tooltipAlignment}
         {disabled}
         {copy}
+        aria-describedby={hasLabel ? labelId : undefined}
         on:copy
         on:copy:error
         on:mouseenter={(event) => dispatch("mouseenter:copy-button", event)}
