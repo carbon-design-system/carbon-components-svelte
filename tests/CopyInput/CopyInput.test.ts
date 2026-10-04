@@ -31,6 +31,22 @@ describe("CopyInput", () => {
     expect(input).toHaveValue("secret-token-123");
   });
 
+  it("describes the input with the helper text", () => {
+    render(CopyInput, { props: { helperText: "Helper text" } });
+
+    expect(screen.getByLabelText("API token")).toHaveAccessibleDescription(
+      "Helper text",
+    );
+  });
+
+  it("describes the input with the inline helper text", () => {
+    render(CopyInput, { props: { inline: true, helperText: "Helper text" } });
+
+    expect(screen.getByLabelText("API token")).toHaveAccessibleDescription(
+      "Helper text",
+    );
+  });
+
   it("copies the value and dispatches copy", async () => {
     const consoleLog = vi.spyOn(console, "log");
     const clipboard = vi.spyOn(navigator.clipboard, "writeText");

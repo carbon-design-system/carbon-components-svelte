@@ -199,6 +199,7 @@
       {/if}
       {#if !isFluid && helperText}
         <div
+          id={helperId}
           class:bx--form__helper-text={true}
           class:bx--form__helper-text--disabled={disabled}
           class:bx--form__helper-text--inline={inline}
