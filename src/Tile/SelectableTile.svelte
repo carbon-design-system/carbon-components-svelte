@@ -79,6 +79,7 @@
   const update = ctx?.update ?? noop;
   const selectedValues = ctx?.selectedValues ?? readable([]);
   const groupName = ctx?.groupName ?? readable(undefined);
+  const groupDisabled = ctx?.groupDisabled ?? readable(false);
 
   add({ value, selected });
 
@@ -172,7 +173,7 @@
   class:bx--tile--selectable={true}
   class:bx--tile--is-selected={selected}
   class:bx--tile--light={light}
-  class:bx--tile--disabled={disabled}
+  class:bx--tile--disabled={disabled || $groupDisabled}
   class:bx--tile--full-height={fullHeight}
   {...labelRestProps}
   on:click

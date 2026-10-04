@@ -53,6 +53,10 @@
    * @type {import("svelte/store").Readable<string | undefined>}
    */
   const groupNameReadonly = readonly(groupName);
+  /**
+   * @type {import("svelte/store").Writable<boolean>}
+   */
+  const groupDisabled = writable(disabled);
 
   /** @type {HTMLFieldSetElement | null} */
   let fieldsetRef = null;
@@ -170,6 +174,7 @@
   setContext("carbon:SelectableTileGroup", {
     selectedValues,
     groupName: groupNameReadonly,
+    groupDisabled: readonly(groupDisabled),
     add,
     remove,
     update,
@@ -178,6 +183,7 @@
   $: selected = $selectedValues;
   $: selectedValues.set(selected);
   $: groupName.set(name);
+  $: groupDisabled.set(disabled);
 </script>
 
 <fieldset
