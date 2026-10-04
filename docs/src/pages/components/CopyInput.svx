@@ -29,9 +29,9 @@ tooltip icon.
 
 ## Select on focus
 
-Set `selectOnFocus` to select the full value when the field receives focus.
+Set `selectTextOnFocus` to select the full value when the field receives focus.
 
-<CopyInput selectOnFocus labelText="API endpoint" value="https://api.acme.io/v1" />
+<CopyInput selectTextOnFocus labelText="API endpoint" value="https://api.acme.io/v1" />
 
 ## Async copy
 
@@ -59,7 +59,7 @@ Use `"focus"` to reveal while the input is focused.
 
 ### Reveal on hover or focus
 
-Use `"hover-focus"` to reveal while the input is hovered or focused.
+Use `"hover-focus"` to reveal while the field is hovered or focused. The value stays revealed while the pointer is over the copy button. A disabled field never reveals its value.
 
 <CopyInput labelText="API token" type="password" revealMode="hover-focus" value="sk-1234567890abcdef" />
 
@@ -173,7 +173,7 @@ Set `tooltipPosition` to place the tooltip relative to the copy button. Accepts 
 
 ### Alignment
 
-Set `tooltipAlignment` to align the tooltip relative to the copy button. Accepts `"start"`, `"center"` (default), and `"end"`.
+Set `tooltipAlignment` to align the tooltip relative to the copy button. Accepts `"start"`, `"center"`, and `"end"` (default).
 
 <CopyInput labelText="Start" value="https://api.acme.io/v1" iconDescription="Start" tooltipAlignment="start" />
 <CopyInput labelText="Center" value="https://api.acme.io/v1" iconDescription="Center" tooltipAlignment="center" />
