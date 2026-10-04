@@ -56,7 +56,7 @@
    */
   export let ref = null;
 
-  import { afterUpdate, onMount } from "svelte";
+  import { onMount } from "svelte";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -85,6 +85,9 @@
   }
 
   onMount(() => {
+    // Measure synchronously so the first frame has a height, rather than
+    // waiting for the observer's first report.
+    if (refAbove) measuredMaxHeight = refAbove.getBoundingClientRect().height;
     measurePadding();
     if (typeof ResizeObserver === "undefined") return;
 
@@ -108,12 +111,6 @@
     if (refAbove) resizeObserver.observe(refAbove);
     if (ref) resizeObserver.observe(ref);
   }
-
-  afterUpdate(() => {
-    if (measuredMaxHeight === 0 && refAbove) {
-      measuredMaxHeight = refAbove.getBoundingClientRect().height;
-    }
-  });
 
   $: iconText = expanded ? tileExpandedIconText : tileCollapsedIconText;
   $: label = expanded ? tileExpandedLabel : tileCollapsedLabel;

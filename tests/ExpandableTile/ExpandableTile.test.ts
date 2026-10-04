@@ -280,6 +280,48 @@ describe("ExpandableTile", () => {
     getComputedStyle.mockRestore();
   });
 
+  it("measures the above-the-fold height once while it reads as zero", async () => {
+    // A tile in a hidden parent measures 0 until the observer reports a
+    // height, so stub an observer that never reports.
+    vi.stubGlobal(
+      "ResizeObserver",
+      class {
+        observe() {}
+        unobserve() {}
+        disconnect() {}
+      },
+    );
+    const getBoundingClientRect = vi.spyOn(
+      Element.prototype,
+      "getBoundingClientRect",
+    );
+
+    try {
+      render(ExpandableTile);
+      const tile = screen.getByRole("button");
+      const aboveReads = () =>
+        getBoundingClientRect.mock.contexts.filter(
+          (el) => el instanceof Element && el.matches(".bx--tile-content"),
+        ).length;
+      await tick();
+      expect(aboveReads()).toBe(1);
+
+      tile.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+      await tick();
+      tile.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      await tick();
+      tile.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      await tick();
+      tile.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      await tick();
+      expect(tile).toHaveAttribute("aria-expanded", "true");
+      expect(aboveReads()).toBe(1);
+    } finally {
+      getBoundingClientRect.mockRestore();
+      vi.unstubAllGlobals();
+    }
+  });
+
   it("should handle max height and padding", async () => {
     render(ExpandableTile, {
       props: {
