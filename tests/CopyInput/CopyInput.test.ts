@@ -8,6 +8,7 @@ import CopyInput from "./CopyInput.test.svelte";
 import CopyInputAsync from "./CopyInputAsync.test.svelte";
 import CopyInputAsyncDoubleClick from "./CopyInputAsyncDoubleClick.test.svelte";
 import CopyInputMouseEnter from "./CopyInputMouseEnter.test.svelte";
+import CopyInputMultiple from "./CopyInputMultiple.test.svelte";
 
 describe("CopyInput", () => {
   beforeEach(() => {
@@ -211,6 +212,17 @@ describe("CopyInput", () => {
 
     await user.click(button);
     expect(copy).toHaveBeenCalledTimes(1);
+  });
+
+  it("describes each copy button with its field label", () => {
+    render(CopyInputMultiple);
+
+    const [token, endpoint, unlabeled] = screen.getAllByRole("button", {
+      name: "Copy to clipboard",
+    });
+    expect(token).toHaveAccessibleDescription("API token");
+    expect(endpoint).toHaveAccessibleDescription("Endpoint");
+    expect(unlabeled).not.toHaveAttribute("aria-describedby");
   });
 
   it("dispatches mouseenter:copy-button from the copy button", () => {
