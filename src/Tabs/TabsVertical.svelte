@@ -52,7 +52,7 @@
     tick,
   } from "svelte";
   import { derived, writable } from "svelte/store";
-  import { breakpointObserver } from "../Breakpoint/breakpoint-observer.js";
+  import { breakpoints } from "../Breakpoint/breakpoints.js";
   import ChevronLeft from "../icons/ChevronLeft.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
   import {
@@ -108,8 +108,15 @@
 
   // Below `md` the tabs switch from a vertical column to a horizontal,
   // scrollable row (Carbon React vertical-tabs responsive design), unless
-  // `orientation` pins one layout.
-  const belowMd = breakpointObserver().smallerThan("md");
+  // `orientation` pins one layout. The query is the one the CSS compiles
+  // `breakpoint-down(md)` to, so the keyboard orientation flips at the same
+  // width as the layout (672px is already the column). Reading it during
+  // init, not on mount, keeps the first render in step with the CSS.
+  const belowMdQuery =
+    typeof window === "undefined"
+      ? undefined
+      : window.matchMedia?.(`(max-width: ${breakpoints.md / 16 - 0.02}rem)`);
+  let belowMd = belowMdQuery?.matches ?? false;
 
   // Vertical tabs do not support the auto-width, full-width, dismissible, or
   // icon-only variants. These stores satisfy the shared `Tab` context contract.
@@ -129,8 +136,7 @@
   // overflow).
   let canScrollBackward = false;
   let canScrollForward = false;
-  $: isRow =
-    orientation === undefined ? $belowMd : orientation === "horizontal";
+  $: isRow = orientation === undefined ? belowMd : orientation === "horizontal";
   $: isOverflow = isRow && (canScrollBackward || canScrollForward);
 
   function updateOverflow() {
@@ -357,7 +363,17 @@
     updateOverflow();
     const observer = new ResizeObserver(updateOverflow);
     if (refTabList) observer.observe(refTabList);
-    return () => observer.disconnect();
+
+    /** @type {(event: MediaQueryListEvent) => void} */
+    const onBreakpointChange = (event) => {
+      belowMd = event.matches;
+    };
+    belowMdQuery?.addEventListener("change", onBreakpointChange);
+
+    return () => {
+      observer.disconnect();
+      belowMdQuery?.removeEventListener("change", onBreakpointChange);
+    };
   });
 
   let selectedIndex = selected;
