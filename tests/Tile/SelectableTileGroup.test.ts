@@ -118,6 +118,37 @@ describe("SelectableTileGroup", () => {
     expect(consoleLog).toHaveBeenCalledWith("deselect", "option2");
   });
 
+  describe("change event", () => {
+    it("fires after select and deselect with every selected value", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(SelectableTileGroup, { props: { selected: ["option1"] } });
+      const checkboxes = screen.getAllByRole("checkbox");
+
+      await user.click(checkboxes[2]);
+      expect(consoleLog.mock.calls).toEqual([
+        ["select", "option3"],
+        ["change", ["option1", "option3"]],
+      ]);
+      consoleLog.mockClear();
+
+      await user.click(checkboxes[0]);
+      expect(consoleLog.mock.calls).toEqual([
+        ["deselect", "option1"],
+        ["change", ["option3"]],
+      ]);
+    });
+
+    it("does not fire when selected is set programmatically", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      const { component } = render(SelectableTileGroup);
+
+      component.selected = ["option2"];
+      await flushMacrotask();
+
+      expect(consoleLog).not.toHaveBeenCalled();
+    });
+  });
+
   it("should update selected values on checkbox change", async () => {
     const { component } = render(SelectableTileGroup);
 
@@ -292,6 +323,7 @@ describe("SelectableTileGroup", () => {
       expect(consoleLog.mock.calls).toEqual([
         ["select", "option2"],
         ["select", "option3"],
+        ["change", ["option1", "option2", "option3"]],
       ]);
       consoleLog.mockClear();
 
@@ -304,6 +336,7 @@ describe("SelectableTileGroup", () => {
       expect(consoleLog.mock.calls).toEqual([
         ["deselect", "option2"],
         ["deselect", "option3"],
+        ["change", []],
       ]);
     });
 
@@ -384,6 +417,11 @@ describe("SelectableTileGroup", () => {
       type DeselectEventDetail =
         DeselectEvent extends CustomEvent<infer T> ? T : never;
       expectTypeOf<DeselectEventDetail>().toEqualTypeOf<CustomValue>();
+
+      type ChangeEvent = Events["change"];
+      type ChangeEventDetail =
+        ChangeEvent extends CustomEvent<infer T> ? T : never;
+      expectTypeOf<ChangeEventDetail>().toEqualTypeOf<CustomValue[]>();
     });
 
     it("should default to string type when generic is not specified", () => {
