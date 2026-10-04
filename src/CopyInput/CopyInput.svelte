@@ -37,7 +37,7 @@
    * Set to `true` to select the full value when the input receives focus.
    * @type {boolean}
    */
-  export let selectOnFocus = false;
+  export let selectTextOnFocus = false;
 
   /**
    * Set the size of the input.
@@ -162,7 +162,7 @@
 
   function handleFocus() {
     focused = true;
-    if (selectOnFocus && !disabled) {
+    if (selectTextOnFocus && !disabled) {
       ref?.select();
     }
   }
@@ -242,7 +242,7 @@
     >
       <input
         bind:this={ref}
-        use:preserveFocusSelection={selectOnFocus && !disabled}
+        use:preserveFocusSelection={selectTextOnFocus && !disabled}
         readonly
         type={inputType}
         {value}
