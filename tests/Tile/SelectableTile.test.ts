@@ -1,4 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import type SelectableTileComponent from "carbon-components-svelte/Tile/SelectableTile.svelte";
+import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
 import SelectableTileTest from "./SelectableTile.test.svelte";
 import SelectableTileAria from "./SelectableTileAria.test.svelte";
@@ -194,6 +196,21 @@ describe("SelectableTile", () => {
       await user.keyboard("{Tab}");
       await user.keyboard("{Enter}");
       expect(consoleLog).toHaveBeenCalledWith("deselect", expect.any(String));
+    });
+  });
+
+  describe("Generics", () => {
+    it("narrows value to a custom string literal type", () => {
+      type Region = "us-east-1" | "us-west-2";
+      type Props = ComponentProps<SelectableTileComponent<Region>>;
+
+      expectTypeOf<Props["value"]>().toEqualTypeOf<Region | undefined>();
+    });
+
+    it("defaults value to string when the generic is not specified", () => {
+      type Props = ComponentProps<SelectableTileComponent>;
+
+      expectTypeOf<Props["value"]>().toEqualTypeOf<string | undefined>();
     });
   });
 });

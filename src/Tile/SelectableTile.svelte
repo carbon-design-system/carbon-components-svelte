@@ -6,6 +6,10 @@
    */
 
   /**
+   * @template {string} [Value=string]
+   */
+
+  /**
    * Set to `true` to select the tile.
    * @bindable writable
    */
@@ -26,7 +30,10 @@
    */
   export let title = undefined;
 
-  /** Specify the value of the selectable tile */
+  /**
+   * Specify the value of the selectable tile.
+   * @type {Value}
+   */
   export let value = "value";
 
   /**
