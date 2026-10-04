@@ -187,10 +187,12 @@
 
   // A form reset restores the box without a change event. Sync the state to
   // it, like the other form controls, and fire no `check`. A read-only
-  // checkbox keeps its state, so put the box back instead.
+  // checkbox keeps its state, so put the box back instead. So does a
+  // decorative one: its owner (a tree node, a listbox option) holds the
+  // state and never learns about the reset.
   function handleFormReset() {
     if (!ref) return;
-    if (effectiveReadonly) {
+    if (effectiveReadonly || decorative) {
       ref.checked = checked;
       return;
     }
