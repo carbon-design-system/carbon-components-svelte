@@ -49,6 +49,24 @@ describe("TileGroup", () => {
     }
   });
 
+  it("styles every tile as disabled when the group is disabled", async () => {
+    const { component } = render(TileGroup, { props: { disabled: true } });
+
+    const radios = screen.getAllByRole("radio");
+    for (const radio of radios) {
+      expect(radio.nextElementSibling).toHaveClass("bx--tile--disabled");
+      expect(radio).not.toHaveAttribute("tabindex");
+    }
+
+    component.disabled = false;
+    await flushMacrotask();
+
+    for (const radio of radios) {
+      expect(radio.nextElementSibling).not.toHaveClass("bx--tile--disabled");
+      expect(radio).toHaveAttribute("tabindex", "0");
+    }
+  });
+
   it("should handle required state", () => {
     render(TileGroup, { props: { required: true } });
 
