@@ -10,16 +10,19 @@ describe("Header panels", () => {
     ["Help", "Acme Corp"],
     ["Acme Corp", "Profile"],
     ["Profile", "Notifications"],
-  ])("opening %s then %s leaves only the second open", async (first, second) => {
-    render(HeaderPanelExclusive);
+  ])(
+    "opening %s then %s leaves only the second open",
+    async (first, second) => {
+      render(HeaderPanelExclusive);
 
-    await user.click(trigger(first));
-    expect(trigger(first)).toHaveAttribute("aria-expanded", "true");
+      await user.click(trigger(first));
+      expect(trigger(first)).toHaveAttribute("aria-expanded", "true");
 
-    await user.click(trigger(second));
-    expect(trigger(second)).toHaveAttribute("aria-expanded", "true");
-    expect(trigger(first)).toHaveAttribute("aria-expanded", "false");
-  });
+      await user.click(trigger(second));
+      expect(trigger(second)).toHaveAttribute("aria-expanded", "true");
+      expect(trigger(first)).toHaveAttribute("aria-expanded", "false");
+    },
+  );
 
   it("toggling a trigger closes its own panel", async () => {
     render(HeaderPanelExclusive);
