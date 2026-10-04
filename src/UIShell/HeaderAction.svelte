@@ -185,7 +185,7 @@
   {...$$restProps}
   class={buttonClass}
   on:click
-  on:click|stopPropagation={() => {
+  on:click={() => {
     isOpen = !isOpen;
     dispatch(isOpen ? "open" : "close", { trigger: "toggle" });
   }}
