@@ -28,6 +28,13 @@ describe("TileGroup", () => {
     expect(screen.getByText("Select an option")).toHaveClass("bx--label");
   });
 
+  it("hides the legend visually", () => {
+    render(TileGroup, { props: { legendText: "Legend", hideLegend: true } });
+
+    expect(screen.getByText("Legend")).toHaveClass("bx--visually-hidden");
+    expect(screen.getByRole("group", { name: "Legend" })).toBeInTheDocument();
+  });
+
   it("should render legendChildren slot", () => {
     render(TileGroupSlot);
 

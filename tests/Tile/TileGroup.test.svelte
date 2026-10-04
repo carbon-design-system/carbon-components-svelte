@@ -10,6 +10,7 @@
   export let required: ComponentProps<TileGroup>["required"] = undefined;
   export let name: ComponentProps<TileGroup>["name"] = undefined;
   export let legendText: ComponentProps<TileGroup>["legendText"] = "";
+  export let hideLegend: ComponentProps<TileGroup>["hideLegend"] = false;
   export let customClass = "";
 </script>
 
@@ -19,6 +20,7 @@
   {required}
   {name}
   {legendText}
+  {hideLegend}
   class={customClass}
   on:select={(e) => {
     console.log("select", e.detail);
