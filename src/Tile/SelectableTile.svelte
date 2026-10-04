@@ -53,7 +53,7 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher, getContext } from "svelte";
+  import { createEventDispatcher, getContext, onMount } from "svelte";
   import { readable } from "svelte/store";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import { formReset } from "../utils/form-reset.js";
@@ -77,11 +77,15 @@
   const add = ctx?.add ?? noop;
   const remove = ctx?.remove ?? noop;
   const update = ctx?.update ?? noop;
+  const register = ctx?.register ?? (() => noop);
   const selectedValues = ctx?.selectedValues ?? readable([]);
   const groupName = ctx?.groupName ?? readable(undefined);
   const groupDisabled = ctx?.groupDisabled ?? readable(false);
 
   add({ value, selected });
+
+  let unregister = register(value);
+  onMount(() => () => unregister());
 
   let prevValue = value;
 
@@ -92,6 +96,8 @@
   $: if (hasGroup) {
     if (value !== prevValue) {
       remove(prevValue);
+      unregister();
+      unregister = register(value);
       add({ value, selected });
       prevValue = value;
     }

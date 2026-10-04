@@ -176,6 +176,43 @@
     if (changed) dispatch("change", get(selectedValues));
   }
 
+  /**
+   * How many mounted tiles use each value. Tiles that share a value share
+   * one selection state, so selecting one selects them all.
+   * @type {Map<T, number>}
+   */
+  const registeredValues = new Map();
+
+  /** @type {Set<T>} */
+  const warnedValues = new Set();
+
+  /**
+   * Count a tile's value and warn once if two tiles share it. The check
+   * waits for the current update to finish: tiles in a non-keyed `{#each}`
+   * swap values one at a time, so a duplicate can exist only mid-update.
+   * Returns a function that releases the value.
+   * @type {(value: T) => () => void}
+   */
+  function register(value) {
+    const count = (registeredValues.get(value) ?? 0) + 1;
+    registeredValues.set(value, count);
+    if (count === 2 && !warnedValues.has(value)) {
+      queueMicrotask(() => {
+        if ((registeredValues.get(value) ?? 0) < 2 || warnedValues.has(value))
+          return;
+        warnedValues.add(value);
+        console.warn(
+          `[SelectableTileGroup.svelte] multiple tiles share the value "${value}", so they select together. Give each SelectableTile a unique \`value\`.`,
+        );
+      });
+    }
+    return () => {
+      const remaining = (registeredValues.get(value) ?? 1) - 1;
+      if (remaining > 0) registeredValues.set(value, remaining);
+      else registeredValues.delete(value);
+    };
+  }
+
   /** True while Shift is held during a mousedown gesture inside the group; suppresses the browser's native Shift+click text-selection highlight spanning multiple tiles. */
   let shiftMouseActive = false;
 
@@ -186,6 +223,7 @@
     add,
     remove,
     update,
+    register,
   });
 
   $: selected = $selectedValues;
