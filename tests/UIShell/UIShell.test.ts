@@ -355,7 +355,7 @@ describe("UIShell", () => {
       const { container } = render(HeaderSwitcher);
 
       const trigger = container.querySelector(
-        'button.bx--header__action[aria-haspopup="true"]',
+        "button.bx--header__action:not(.bx--header__menu-toggle)",
       );
       assert(trigger);
       await user.click(trigger);
@@ -369,7 +369,7 @@ describe("UIShell", () => {
       const { container } = render(HeaderSwitcher);
 
       const trigger = container.querySelector(
-        'button.bx--header__action[aria-haspopup="true"]',
+        "button.bx--header__action:not(.bx--header__menu-toggle)",
       );
       assert(trigger);
       await user.click(trigger);

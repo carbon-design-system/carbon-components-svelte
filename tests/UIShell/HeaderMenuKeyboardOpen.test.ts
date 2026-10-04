@@ -34,3 +34,17 @@ describe.each([
     expect(item(last)).toHaveFocus();
   });
 });
+
+describe("HeaderSwitcher trigger", () => {
+  it("controls its panel without promising a menu", async () => {
+    render(HeaderMenuKeyboardOpen);
+    const button = screen.getByRole("button", { name: "Acme Corp" });
+    expect(button).not.toHaveAttribute("aria-haspopup");
+
+    await user.click(button);
+    const panel = document.getElementById(
+      button.getAttribute("aria-controls") ?? "",
+    );
+    expect(panel).toHaveClass("bx--header-switcher__menu");
+  });
+});

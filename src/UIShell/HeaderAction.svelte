@@ -136,8 +136,8 @@
     ],
   }}
   type="button"
-  aria-haspopup="true"
   aria-expanded={isOpen}
+  aria-controls={isOpen ? `${id}-panel` : undefined}
   {id}
   class:bx--header__action={true}
   class:bx--header__action--active={isOpen}
@@ -169,6 +169,7 @@
 {#if isOpen}
   <div
     bind:this={refPanel}
+    id="{id}-panel"
     role="region"
     aria-labelledby={id}
     class:bx--header-panel={true}
