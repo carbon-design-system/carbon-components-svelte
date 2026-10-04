@@ -56,9 +56,14 @@
    */
   export let ref = null;
 
-  import { getContext } from "svelte";
+  import { getContext, onMount } from "svelte";
   import { readable } from "svelte/store";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
+  import {
+    registerRadioButton,
+    updateGroupSelection,
+  } from "../RadioButton/radio-button-registry.js";
+  import { formReset } from "../utils/form-reset.js";
   import { noop } from "../utils/noop.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -75,8 +80,7 @@
   const ctx = getContext("carbon:TileGroup");
   const add = ctx?.add ?? noop;
   const update = ctx?.update ?? noop;
-  const selectedValue =
-    ctx?.selectedValue ?? readable(checked ? value : undefined);
+  const selectedValue = ctx?.selectedValue ?? readable(undefined);
   const groupName = ctx?.groupName ?? readable(undefined);
   const fallbackName = ctx?.fallbackName;
   const groupRequired = ctx?.groupRequired ?? readable(undefined);
@@ -100,10 +104,57 @@
     if (checked !== derived) checked = derived;
     syncedChecked = derived;
   }
+
+  // Standalone tiles that share a `name` form a native radio group, which
+  // unchecks the others without an event. Share the RadioButton registry so
+  // a checked tile (by click or by prop) unchecks its siblings' `checked`.
+  const instanceKey = {};
+  /** @type {null | ReturnType<typeof registerRadioButton>} */
+  let registration = null;
+  let unsubscribeRegistry = noop;
+
+  /** @type {(radioName: string | undefined) => void} */
+  function register(radioName) {
+    unregister();
+    if (!radioName) return;
+    registration = registerRadioButton(radioName, instanceKey, checked);
+    unsubscribeRegistry = registration.selectedKey.subscribe((key) => {
+      if (checked && key !== undefined && key !== instanceKey) checked = false;
+    });
+  }
+
+  function unregister() {
+    unsubscribeRegistry();
+    unsubscribeRegistry = noop;
+    registration?.unregister();
+    registration = null;
+  }
+
+  $: if (!ctx) register(name);
+
+  // Push only a false → true change: Svelte 5 re-runs this block for every
+  // tile when a parent mutates an array bound with `bind:checked={a[i]}`,
+  // and a tile that was already checked must not reclaim the selection.
+  let registeredChecked = checked;
+
+  $: if (registration) {
+    if (checked && !registeredChecked) updateGroupSelection(name, instanceKey);
+    registeredChecked = checked;
+  }
+
+  onMount(() => unregister);
+
+  // A form reset restores the radio without a change event. Inside
+  // `TileGroup`, the group reads the result back; standalone, sync here.
+  function handleFormReset() {
+    if (ctx || !ref) return;
+    checked = ref.checked;
+  }
 </script>
 
 <input
   bind:this={ref}
+  use:formReset={handleFormReset}
   type="radio"
   {id}
   name={$groupName ?? (name || fallbackName)}
@@ -116,7 +167,10 @@
   aria-labelledby={ariaLabelledBy}
   class:bx--tile-input={true}
   on:change
-  on:change={() => update(value)}
+  on:change={(event) => {
+    if (ctx) update(value);
+    else checked = event.currentTarget.checked;
+  }}
   on:keydown
   on:keydown={(event) => {
     // Space is left to the native radio, which checks it and fires
