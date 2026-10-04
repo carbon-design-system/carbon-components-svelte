@@ -9,7 +9,7 @@ description: Radio tiles provide a tile-based interface for choosing a single op
 
 ## Basic
 
-Create a group of radio tiles with a shared name and legend.
+Create a group of radio tiles with a shared name and legend. Tab moves focus to the selected tile; <DocKbd label="Up" /> and <DocKbd label="Down" /> (or <DocKbd label="Left" /> and <DocKbd label="Right" />) move the selection between tiles, and <DocKbd label="Space" /> or <DocKbd label="Enter" /> selects the focused tile. <DocKbd label="Enter" /> does not submit the surrounding form.
 
 <TileGroup legendText="Service pricing tiers" name="plan" selected="standard">
   <RadioTile value="lite">
@@ -22,6 +22,12 @@ Create a group of radio tiles with a shared name and legend.
     Plus plan
   </RadioTile>
 </TileGroup>
+
+## Standalone
+
+Use `RadioTile` without `TileGroup` and bind each tile's `checked`. Tiles that share a `name` form one radio group, so checking one unchecks the others, including after a form reset.
+
+<FileSource src="/framed/RadioTile/RadioTileStandalone" />
 
 ## Reactive
 
@@ -39,10 +45,28 @@ Bind to `selected` for simpler state management.
 
 ## Legend
 
+### Custom content
+
 Use the `legendChildren` slot on `TileGroup` to provide custom legend content instead of `legendText`.
 
 <TileGroup name="plan-legend-slot" selected="standard">
   <strong slot="legendChildren">Service pricing tiers</strong>
+  <RadioTile value="lite">
+    Lite plan
+  </RadioTile>
+  <RadioTile value="standard">
+    Standard plan
+  </RadioTile>
+  <RadioTile value="plus">
+    Plus plan
+  </RadioTile>
+</TileGroup>
+
+### Hidden
+
+Hide the legend visually by setting `hideLegend` to `true`. The legend remains available to screen readers.
+
+<TileGroup hideLegend legendText="Service pricing tiers" name="plan-hidden-legend" selected="standard">
   <RadioTile value="lite">
     Lite plan
   </RadioTile>
@@ -92,7 +116,7 @@ Disable specific tiles to prevent selection.
 
 ### Entire group
 
-Disable every tile at once by setting `disabled` on `TileGroup`. This prevents selection natively through the underlying `fieldset`, but doesn't apply the muted disabled tile styling shown above—set `disabled` on each `RadioTile` too for the visual state.
+Disable every tile at once by setting `disabled` on `TileGroup`. The tiles take on the disabled styling without setting `disabled` on each `RadioTile`.
 
 <TileGroup legendText="Service pricing tiers" name="plan-disabled-group" selected="standard" disabled>
   <RadioTile value="lite">
@@ -106,18 +130,28 @@ Disable every tile at once by setting `disabled` on `TileGroup`. This prevents s
   </RadioTile>
 </TileGroup>
 
-## Checkmark label
+## Checkmark title
 
-Customize the ARIA label announced for a tile's checkmark icon with `iconDescription`. Defaults to `"Tile checkmark"`.
+The checkmark icon is hidden from screen readers; a tile's content is its accessible name. Set `iconDescription` to change the title shown when hovering the checkmark. Defaults to `"Tile checkmark"`.
 
-<TileGroup legendText="Service pricing tiers" name="plan-checkmark-label" selected="standard">
+<TileGroup legendText="Service pricing tiers" name="plan-checkmark-title" selected="standard">
   <RadioTile value="lite">
     Lite plan
   </RadioTile>
-  <RadioTile value="standard" iconDescription="Standard plan selected">
+  <RadioTile value="standard" iconDescription="Current plan">
     Standard plan
   </RadioTile>
   <RadioTile value="plus">
     Plus plan
   </RadioTile>
 </TileGroup>
+
+## Form submission
+
+A checked tile submits its `value` under the radio's `name`.
+
+| Do | Why |
+| --- | --- |
+| Set `name` on `TileGroup` when the form is submitted | Without one, the tiles share a generated name, which is not a stable key for the server to read. |
+| Give every tile a unique `value` | The group tracks the selection by `value`, so tiles with equal values show as selected together. |
+| Use `TileGroup` when you need the selected value | `bind:selected` gives one value, instead of a `checked` per standalone tile. |
