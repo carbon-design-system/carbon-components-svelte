@@ -130,6 +130,7 @@
   title={hasInteractiveContent ? undefined : iconText}
   class:bx--tile={true}
   class:bx--tile--expandable={true}
+  class:bx--tile--expandable--interactive={hasInteractiveContent}
   class:bx--tile--is-expanded={expanded}
   class:bx--tile--light={light}
   style:max-height={expanded || effectiveMaxHeight <= 0
