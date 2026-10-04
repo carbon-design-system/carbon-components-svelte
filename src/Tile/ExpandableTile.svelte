@@ -163,6 +163,8 @@
       on:click={() => {
         if (hasInteractiveContent) expanded = !expanded;
       }}
+      on:focus
+      on:blur
     >
       <span>{expanded ? tileExpandedLabel : tileCollapsedLabel}</span>
       <ChevronDown />

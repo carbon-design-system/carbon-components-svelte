@@ -204,6 +204,22 @@ describe("ExpandableTile", () => {
       await user.click(button);
       expect(chevronButton).toHaveAttribute("aria-expanded", "false");
     });
+
+    it("should forward focus and blur from the chevron button", () => {
+      const onFocus = vi.fn();
+      const onBlur = vi.fn();
+      render(ExpandableTileCustom, { props: { onFocus, onBlur } });
+
+      const chevronButton = document.querySelector("button.bx--tile__chevron");
+      assert(chevronButton instanceof HTMLButtonElement);
+
+      chevronButton.focus();
+      expect(onFocus).toHaveBeenCalledTimes(1);
+      expect(onFocus.mock.calls[0][0].target).toBe(chevronButton);
+
+      chevronButton.blur();
+      expect(onBlur).toHaveBeenCalledTimes(1);
+    });
   });
 
   it("should handle mouse events", async () => {
