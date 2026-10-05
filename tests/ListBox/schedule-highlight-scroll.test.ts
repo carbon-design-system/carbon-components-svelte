@@ -19,7 +19,6 @@ const baseOptions = {
   highlightedIndex: 2,
   prevHighlightedIndex: 1,
   listRef: document.createElement("ul"),
-  isMeasured: false,
   highlightOrigin: "keyboard" as const,
 };
 
@@ -41,11 +40,10 @@ describe("scheduleHighlightScroll", () => {
     expect(menuWindow.cancelRequest).not.toHaveBeenCalled();
   });
 
-  it("cancels an outstanding measured request instead of scrolling when the pointer took the highlight", async () => {
+  it("cancels an outstanding request instead of scrolling when the pointer took the highlight", async () => {
     const menuWindow = buildMenuWindow();
     scheduleHighlightScroll({
       ...baseOptions,
-      isMeasured: true,
       highlightOrigin: "pointer",
       menuWindow,
     });

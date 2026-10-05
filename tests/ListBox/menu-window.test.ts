@@ -793,7 +793,8 @@ describe("createMenuWindow: bringing an option into view", () => {
     });
     menu.scrollIntoView(80, "nearest");
 
-    expect(container.scrollTop).toBe(80 * ITEM_HEIGHT);
+    // Below the viewport, so it lands on the bottom edge.
+    expect(container.scrollTop).toBe(81 * ITEM_HEIGHT - CONTAINER_HEIGHT);
   });
 
   it("places a top-aligned option against the heights measured so far", async () => {
@@ -866,19 +867,21 @@ describe("createMenuWindow: bringing an option into view", () => {
 
     await measure(harness, observer, items);
 
-    // Option 1 is inside the window the measured offsets put on screen, so a
+    // Option 0 fills the viewport the measured offsets put on screen, so a
     // nearest request has nothing to do: the reader is already looking at it.
-    harness.menu.scrollIntoView(1, "nearest");
+    harness.menu.scrollIntoView(0, "nearest");
     expect(harness.container.scrollTop).toBe(0);
 
-    // Option 50 is far below it, so this one has to move, and it lands on the
-    // offset the measured heights give it rather than the one the seed would.
+    // Option 50 is far below it, so this one has to move. It lands on the
+    // bottom edge, at the offset the measured heights give it rather than the
+    // one the seed would.
     harness.menu.scrollIntoView(50, "nearest");
 
     const measuredRun = TALL_HEIGHT + 10 * SHORT_HEIGHT;
-    const unmeasured = 39 * (measuredRun / 11);
+    const estimate = measuredRun / 11;
+    const unmeasured = 39 * estimate;
     expect(harness.container.scrollTop).toBeCloseTo(
-      measuredRun + unmeasured,
+      measuredRun + unmeasured + estimate - CONTAINER_HEIGHT,
       6,
     );
     expect(harness.container.scrollTop).not.toBe(50 * ITEM_HEIGHT);

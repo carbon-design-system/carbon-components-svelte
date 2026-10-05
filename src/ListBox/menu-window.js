@@ -573,8 +573,7 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
 
 /**
  * Call from `afterUpdate`. Schedules (via `tick`) a scroll of the newly
- * highlighted option into view, unless an in-flight pointer-driven
- * `menuWindow` measurement should win instead.
+ * highlighted option into view, unless the pointer moved the highlight.
  *
  * @param {Object} options
  * @param {boolean} options.open
@@ -582,7 +581,6 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
  * @param {number} options.highlightedIndex
  * @param {number} options.prevHighlightedIndex
  * @param {HTMLElement | null | undefined} options.listRef
- * @param {boolean} options.isMeasured
  * @param {"keyboard" | "pointer" | null} options.highlightOrigin
  * @param {ReturnType<typeof createMenuWindow>} options.menuWindow
  * @returns {number} The value to store as `prevHighlightedIndex`.
@@ -593,7 +591,6 @@ export function scheduleHighlightScroll({
   highlightedIndex,
   prevHighlightedIndex,
   listRef,
-  isMeasured,
   highlightOrigin,
   menuWindow,
 }) {
@@ -611,11 +608,11 @@ export function scheduleHighlightScroll({
 
   tick().then(() => {
     if (!listRef || highlightedIndex < 0) return;
-    // Measured placement scrolls an option that is rendered but clipped
-    // fully into view, which would pull the list out from under the
-    // pointer. Cancel as well as return: the pointer has taken the
-    // highlight from the option an outstanding request was placing.
-    if (isMeasured && highlightOrigin === "pointer") {
+    // The pointer can only reach an option it can see. Bringing a clipped
+    // one fully into view would pull the list out from under it. Cancel as
+    // well as return: the pointer has taken the highlight from the option an
+    // outstanding measured request was placing.
+    if (highlightOrigin === "pointer") {
       menuWindow.cancelRequest();
       return;
     }

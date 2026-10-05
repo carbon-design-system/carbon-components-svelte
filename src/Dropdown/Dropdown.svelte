@@ -463,7 +463,6 @@
       highlightedIndex,
       prevHighlightedIndex,
       listRef,
-      isMeasured,
       highlightOrigin,
       menuWindow,
     });

@@ -589,14 +589,15 @@ describe("scrollHighlightedIntoView", () => {
     ).toBeNull();
   });
 
-  it("returns a bounded scrollTop when the item is below the viewport", () => {
+  it("brings an item below the viewport to the bottom edge", () => {
+    // Item 100 ends at 4040px; the 300px viewport ends there at 3740px.
     expect(
       scrollHighlightedIntoView({
         ...base,
         highlightedIndex: 100,
         currentScrollTop: 0,
       }),
-    ).toBe(4000);
+    ).toBe(3740);
   });
 
   it("returns a bounded scrollTop when the item is above the viewport", () => {
@@ -610,21 +611,53 @@ describe("scrollHighlightedIntoView", () => {
     ).toBe(400);
   });
 
-  it("respects overscan when deciding visibility", () => {
-    // scrollTop 4000 => floor(100) - 3 = 97 start. Item 96 is just outside.
-    expect(
-      scrollHighlightedIntoView({
-        ...base,
-        highlightedIndex: 96,
-        currentScrollTop: 4000,
-      }),
-    ).toBe(3840);
-    // Item 97 is within overscan, so no scroll.
+  it("treats rendered overscan rows as out of view", () => {
+    // At scrollTop 4000, items 97-99 are rendered as overscan above the
+    // viewport, and items 108-110 below it. None of them can be seen.
     expect(
       scrollHighlightedIntoView({
         ...base,
         highlightedIndex: 97,
         currentScrollTop: 4000,
+      }),
+    ).toBe(3880);
+    expect(
+      scrollHighlightedIntoView({
+        ...base,
+        highlightedIndex: 108,
+        currentScrollTop: 4000,
+      }),
+    ).toBe(4060);
+  });
+
+  it("brings a partly visible item fully into view", () => {
+    // Item 7 spans 280-320px, cut off by the 300px viewport.
+    expect(
+      scrollHighlightedIntoView({
+        ...base,
+        highlightedIndex: 7,
+        currentScrollTop: 0,
+      }),
+    ).toBe(20);
+  });
+
+  it("stops at the end of the list", () => {
+    expect(
+      scrollHighlightedIntoView({
+        ...base,
+        highlightedIndex: 499,
+        currentScrollTop: 0,
+      }),
+    ).toBe(500 * 40 - 300);
+  });
+
+  it("returns null for an empty list", () => {
+    expect(
+      scrollHighlightedIntoView({
+        ...base,
+        itemCount: 0,
+        highlightedIndex: 0,
+        currentScrollTop: 0,
       }),
     ).toBeNull();
   });
@@ -640,14 +673,26 @@ describe("scrollHighlightedIntoView", () => {
         maxItems: 5,
       }),
     ).toBe(280);
-    // Without the cap the same item is treated as already visible.
+    // Without the cap, the nearest edge is enough.
     expect(
       scrollHighlightedIntoView({
         ...base,
         highlightedIndex: 7,
         currentScrollTop: 0,
       }),
-    ).toBeNull();
+    ).toBe(20);
+  });
+
+  it("goes to the top when the nearest edge leaves the item past maxItems", () => {
+    // Item 6 spans 240-280px, fully in view, but a cap of 5 renders [0, 5).
+    expect(
+      scrollHighlightedIntoView({
+        ...base,
+        highlightedIndex: 6,
+        currentScrollTop: 0,
+        maxItems: 5,
+      }),
+    ).toBe(240);
   });
 });
 
@@ -889,14 +934,15 @@ describe("scroll positions with measured heights", () => {
       ).toBeNull();
     });
 
-    it("returns a bounded position when the option is below the viewport", () => {
+    it("brings an option below the viewport to the bottom edge", () => {
+      // Option 100 spans 5000-5030px.
       expect(
         scrollHighlightedIntoView({
           ...base,
           highlightedIndex: 100,
           currentScrollTop: 0,
         }),
-      ).toBe(5000);
+      ).toBe(4730);
     });
 
     it("returns a bounded position when the option is above the viewport", () => {
@@ -909,8 +955,8 @@ describe("scroll positions with measured heights", () => {
       ).toBe(500);
     });
 
-    it("respects overscan when deciding visibility", () => {
-      // At scrollTop 5000 the range starts at option 100 less 3 overscan.
+    it("treats rendered overscan options as out of view", () => {
+      // At scrollTop 5000, options 97-99 are rendered above the viewport.
       expect(
         scrollHighlightedIntoView({
           ...base,
@@ -924,7 +970,7 @@ describe("scroll positions with measured heights", () => {
           highlightedIndex: 97,
           currentScrollTop: 5000,
         }),
-      ).toBeNull();
+      ).toBe(4830);
     });
   });
 });
