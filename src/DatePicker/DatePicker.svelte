@@ -207,7 +207,7 @@
 
   /**
    * Specify the locale.
-   * @type {import("flatpickr/dist/types/locale").CustomLocale | import("flatpickr/dist/types/locale").key}
+   * @type {string | Partial<import("./calendar-dates.js").CalendarLocale>}
    */
   export let locale = "en";
 
@@ -259,20 +259,18 @@
   export let id = uniqueId();
 
   /**
-   * Override the options passed to the Flatpickr instance.
-   * `mode` is set by `datePickerType`, and `wrap` is not supported
-   * because Flatpickr is given the input element itself.
-   * @see https://flatpickr.js.org/options
-   * @type {Omit<import("flatpickr/dist/types/options").Options, "mode" | "wrap">}
+   * Override the options passed to the calendar. `mode` is set by
+   * `datePickerType`. The names and behavior follow flatpickr's options,
+   * for the subset the calendar implements.
+   * @type {Omit<import("./calendar.js").CalendarOptions, "mode" | "secondInput">}
    */
   export let flatpickrProps = { static: true };
 
   /**
-   * Bind to the Flatpickr calendar instance for programmatic control.
+   * Bind to the calendar instance for programmatic control.
    * Available for every `datePickerType` except `"simple"`, where it stays
    * `null`.
-   * @see https://flatpickr.js.org/instance-methods-properties-elements/
-   * @type {import("flatpickr/dist/types/instance").Instance | null}
+   * @type {import("./calendar.js").CalendarInstance | null}
    * @bindable readonly
    */
   export let calendar = null;
@@ -316,10 +314,8 @@
   import { addPooledListener } from "../utils/window-listener-pool.js";
   import {
     createCalendar,
-    resolveLocale,
     resolveOptionValue,
     setErrorHandler,
-    updateMonthNode,
   } from "./create-calendar.js";
   import {
     getTopLayerAncestor,
@@ -1107,8 +1103,7 @@
 
   /**
    * Moves the calendar's visible month to `initialMonth` while there is no
-   * selection. `jumpToDate`'s second argument suppresses flatpickr's own
-   * `onMonthChange` hook, so the Carbon header label is resynced by hand.
+   * selection.
    */
   function applyInitialMonth() {
     if (!calendar || calendar.selectedDates.length > 0) return;
@@ -1116,7 +1111,6 @@
     const target = resolveInitialMonth();
     if (!target) return;
     calendar.jumpToDate(target, false);
-    updateMonthNode(calendar, locale);
   }
 
   async function initCalendar(options) {
@@ -1131,13 +1125,7 @@
         writeSelectionToValue();
         syncSelectedDatesFromCalendar();
       }
-      if (optionChanged(prevAppliedOptions.locale, locale)) {
-        applyOptionIfChanged("locale", locale, resolveLocale(locale));
-        // flatpickr's redraw skips the month label Carbon swaps in.
-        if ($mode !== "month" && $mode !== "year") {
-          updateMonthNode(calendar, locale);
-        }
-      }
+      applyOptionIfChanged("locale", locale);
       applyOptionIfChanged("dateFormat", dateFormat);
       applyDisabledDates();
       applyEnabledDates();
@@ -1365,112 +1353,6 @@
   function handleCalendarKeydown(event) {
     if (event.key === "Escape") handleCalendarEscape(event);
     else if (event.key === "Enter") keepFocusAfterEnter(event);
-    else if (event.key in ARROW_DAY_OFFSETS) keepArrowFocusInRangeWindow(event);
-  }
-
-  /** @type {Record<string, number>} */
-  const ARROW_DAY_OFFSETS = {
-    ArrowLeft: -1,
-    ArrowRight: 1,
-    ArrowUp: -7,
-    ArrowDown: 7,
-  };
-
-  /**
-   * flatpickr's arrow keys skip only the days its own rules disable, so they
-   * stop on days `minRangeDays`/`maxRangeDays` block, which cannot be
-   * picked. While a range start is pending, move to the next day open on
-   * both counts instead, or stay put when there is none. This runs in the
-   * capture phase, before flatpickr's handler.
-   *
-   * @param {KeyboardEvent} event
-   */
-  function keepArrowFocusInRangeWindow(event) {
-    if (interactionBlocked || !hasPendingRangeWindow(calendar)) return;
-    const dayElem = /** @type {any} */ (event.target);
-    if (!dayElem?.dateObj || !calendar.daysContainer?.contains(dayElem)) {
-      return;
-    }
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    const target = event.ctrlKey
-      ? findFirstOpenDayOfMonth(event.key)
-      : findNextOpenDay(dayElem.dateObj, ARROW_DAY_OFFSETS[event.key]);
-    if (target) focusDay(target);
-  }
-
-  /** @param {Date} date */
-  function isOpenDay(date) {
-    return calendar.isEnabled(date) && !isOutsideRangeWindow(date, calendar);
-  }
-
-  /**
-   * Like flatpickr: `offset` days away, then on one day at a time in the
-   * same direction. Gives up after a year.
-   *
-   * @param {Date} from
-   * @param {number} offset
-   */
-  function findNextOpenDay(from, offset) {
-    const step = Math.sign(offset);
-    for (let days = offset; Math.abs(days) <= 366; days += step) {
-      const date = new Date(
-        from.getFullYear(),
-        from.getMonth(),
-        from.getDate() + days,
-      );
-      if (isOpenDay(date)) return date;
-    }
-  }
-
-  /**
-   * Like flatpickr's Ctrl+arrow: the next or previous month for left/right,
-   * the next (up) or previous (down) year for up/down.
-   *
-   * @param {string} key
-   */
-  function findFirstOpenDayOfMonth(key) {
-    const months = {
-      ArrowLeft: -1,
-      ArrowRight: 1,
-      ArrowUp: 12,
-      ArrowDown: -12,
-    };
-    const first = new Date(
-      calendar.currentYear,
-      calendar.currentMonth + months[key],
-      1,
-    );
-    const date = new Date(first);
-    while (date.getMonth() === first.getMonth()) {
-      if (isOpenDay(date)) return date;
-      date.setDate(date.getDate() + 1);
-    }
-  }
-
-  /**
-   * Focuses the day cell for `date`, showing its month first if it is not
-   * on screen, and previews the range up to it as flatpickr does.
-   *
-   * @param {Date} date
-   */
-  function focusDay(date) {
-    const find = () =>
-      /** @type {HTMLElement[]} */ ([
-        ...calendar.daysContainer.querySelectorAll(".flatpickr-day"),
-      ]).find(
-        (el) =>
-          /** @type {any} */ (el).dateObj?.getTime() === date.getTime() &&
-          !el.classList.contains("hidden"),
-      );
-    let day = find();
-    if (!day) {
-      calendar.jumpToDate(date, true);
-      day = find();
-    }
-    if (!day) return;
-    day.focus();
-    calendar.onMouseOver(day);
   }
 
   /**

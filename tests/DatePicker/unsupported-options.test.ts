@@ -31,6 +31,15 @@ describe("getUnsupportedOptionWarnings", () => {
     }
   });
 
+  it.each(["enableTime", "noCalendar", "time_24hr", "disableMobile"])(
+    "flags %s, which the calendar does not implement",
+    (option) => {
+      expect(getUnsupportedOptionWarnings({ [option]: true }, base)).toEqual([
+        expect.stringContaining(`flatpickrProps.${option} is not supported`),
+      ]);
+    },
+  );
+
   it("flags positioning options only where they have no effect", () => {
     const element = document.createElement("div");
     const props = { positionElement: element, appendTo: element };
