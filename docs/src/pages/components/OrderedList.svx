@@ -90,3 +90,9 @@ Use Carbon's expressive typesetting with `expressive`.
   <ListItem>Set up multi-factor authentication</ListItem>
   <ListItem>Request access to the production VPN</ListItem>
 </OrderedList>
+
+## Virtualization
+
+Render thousands of items with [VirtualList](/components/VirtualList). Set `spacerTag` to `"li"` so it renders only the items in view, straight into the list. Only those items are in the DOM, so set `native` and pass `value={index + 1}` to each `ListItem` to keep the numbering. Wrap the list in a [ScrollGradient](/components/ScrollGradient) and pass its `scrollElementRef` as `scrollElement`. Set `measured` if items can wrap.
+
+<FileSource src="/framed/VirtualList/VirtualListOrderedList" />
