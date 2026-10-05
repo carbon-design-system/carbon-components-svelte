@@ -544,8 +544,17 @@ export function getBoundedScrollTop({
 }
 
 /**
- * `scrollTop` to bring a keyboard-highlighted item into view, or `null` if it
- * is already within the visible range (including overscan).
+ * `scrollTop` to bring a keyboard-highlighted item fully into view at the
+ * nearest edge, or `null` if it is already fully in view and rendered.
+ *
+ * Overscan rows are rendered but not visible, so they count as out of view.
+ * Treating them as visible left an option the highlight cursor could not reach
+ * stranded below the edge: one not rendered yet when the highlight moved,
+ * because keys arrived faster than the window re-rendered.
+ *
+ * Under `maxItems`, an item can be in the viewport yet outside the capped
+ * window. When scrolling to the nearest edge would leave it unrendered, the
+ * item goes to the top instead, where the window starts.
  *
  * @param {Object} options
  * @param {number} options.highlightedIndex
@@ -569,31 +578,58 @@ export function scrollHighlightedIntoView({
   maxItems = undefined,
   heights = undefined,
 }) {
-  const { startIndex: visibleStartIndex, endIndex: visibleEndIndex } =
-    getVisibleRange({
-      scrollTop: currentScrollTop,
-      itemHeight,
-      containerHeight,
-      itemCount,
-      overscan,
-      maxItems,
-      heights,
-    });
+  if (itemCount <= 0) return null;
 
-  if (
-    highlightedIndex < visibleStartIndex ||
-    highlightedIndex >= visibleEndIndex
-  ) {
-    return getBoundedScrollTop({
-      index: highlightedIndex,
-      itemHeight,
-      containerHeight,
-      itemCount,
-      heights,
-    });
+  const index = Math.max(0, Math.min(highlightedIndex, itemCount - 1));
+  const accumulated = heights
+    ? accumulateOffsets({ itemCount, heights, itemHeight })
+    : null;
+  const top = accumulated ? accumulated.offsets[index] : index * itemHeight;
+  const bottom = accumulated
+    ? accumulated.offsets[index + 1]
+    : top + itemHeight;
+  const totalHeight = accumulated
+    ? accumulated.totalHeight
+    : itemCount * itemHeight;
+  const maxScroll = Math.max(0, totalHeight - containerHeight);
+
+  /** @param {number} scrollTop */
+  const isRendered = (scrollTop) => {
+    const { startIndex, endIndex } = accumulated
+      ? measuredVisibleRange({
+          accumulated,
+          scrollTop,
+          containerHeight,
+          itemCount,
+          overscan,
+          maxItems,
+        })
+      : getVisibleRange({
+          scrollTop,
+          itemHeight,
+          containerHeight,
+          itemCount,
+          overscan,
+          maxItems,
+        });
+    return index >= startIndex && index < endIndex;
+  };
+
+  /** @param {number} scrollTop */
+  const bound = (scrollTop) => Math.max(0, Math.min(scrollTop, maxScroll));
+
+  let next = currentScrollTop;
+  if (top < currentScrollTop) {
+    next = top;
+  } else if (bottom > currentScrollTop + containerHeight) {
+    next = bottom - containerHeight;
   }
+  next = bound(next);
 
-  return null;
+  // Past `maxItems`, put the item at the top, where the window starts.
+  if (!isRendered(next)) next = bound(top);
+
+  return next === currentScrollTop ? null : next;
 }
 
 /**

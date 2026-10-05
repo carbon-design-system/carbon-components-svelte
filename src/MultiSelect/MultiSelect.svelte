@@ -889,7 +889,6 @@
       highlightedIndex: toRowIndex(highlightedIndex),
       prevHighlightedIndex,
       listRef,
-      isMeasured,
       highlightOrigin,
       menuWindow,
     });

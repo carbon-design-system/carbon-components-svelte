@@ -159,8 +159,9 @@ export type ScrollHighlightedIntoViewOptions = {
 };
 
 /**
- * `scrollTop` to bring a keyboard-highlighted item into view, or `null` if
- * already visible.
+ * `scrollTop` to bring a keyboard-highlighted item fully into view at the
+ * nearest edge, or `null` if it is already fully in view and rendered.
+ * Overscan rows count as out of view.
  */
 export function scrollHighlightedIntoView(
   options: ScrollHighlightedIntoViewOptions,
