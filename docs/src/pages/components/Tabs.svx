@@ -4,7 +4,7 @@ description: Tabs organize content into separate views that can be switched betw
 ---
 
 <script>
-  import { CodeSnippet, Tabs, Tab, TabContent, TabsVertical, TabsSkeleton, TabsVerticalSkeleton, DataTable } from "carbon-components-svelte";
+  import { Box, CodeSnippet, Stack, Tabs, Tab, TabContent, TabsVertical, TabsSkeleton, TabsVerticalSkeleton, Text, DataTable } from "carbon-components-svelte";
   import Calendar from "carbon-icons-svelte/lib/Calendar.svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
   import Settings from "carbon-icons-svelte/lib/Settings.svelte";
@@ -743,18 +743,40 @@ By default, TabsVertical switches between the column and the row at the medium b
 | `"vertical"` | Always the column | A narrow viewport should still show the list beside the panel |
 | `"horizontal"` | Always the row | The tabs sit in a narrow container, such as a side panel, on a wide screen |
 
-<TabsVertical orientation="horizontal">
-  <Tab label="Dashboard" />
-  <Tab label="Monitoring" />
-  <Tab label="Activity" />
-  <Tab label="Settings" />
-  <svelte:fragment slot="content">
-    <TabContent>Dashboard content with analytics and overview.</TabContent>
-    <TabContent>Monitoring content for uptime and alerts.</TabContent>
-    <TabContent>Activity content for recent user actions.</TabContent>
-    <TabContent>Settings and configuration options.</TabContent>
-  </svelte:fragment>
-</TabsVertical>
+The breakpoint follows the viewport, not the container. In a 320px side panel on a wide screen, the default keeps the column and squeezes the panel; `orientation="horizontal"` switches to the row.
+
+<Box display="flex" gap={5} wrap="wrap" align="start">
+  <Stack gap={3}>
+    <Text type="label-01" color="secondary">Default</Text>
+    <Box width={320} border="subtle">
+      <TabsVertical>
+        <Tab label="Dashboard" />
+        <Tab label="Monitoring" />
+        <Tab label="Activity" />
+        <svelte:fragment slot="content">
+          <TabContent>Dashboard content</TabContent>
+          <TabContent>Monitoring content</TabContent>
+          <TabContent>Activity content</TabContent>
+        </svelte:fragment>
+      </TabsVertical>
+    </Box>
+  </Stack>
+  <Stack gap={3}>
+    <Text type="label-01" color="secondary">orientation="horizontal"</Text>
+    <Box width={320} border="subtle">
+      <TabsVertical orientation="horizontal">
+        <Tab label="Dashboard" />
+        <Tab label="Monitoring" />
+        <Tab label="Activity" />
+        <svelte:fragment slot="content">
+          <TabContent>Dashboard content</TabContent>
+          <TabContent>Monitoring content</TabContent>
+          <TabContent>Activity content</TabContent>
+        </svelte:fragment>
+      </TabsVertical>
+    </Box>
+  </Stack>
+</Box>
 
 ### Sizes
 

@@ -5,11 +5,14 @@ description: Breadcrumbs display a hierarchical navigation trail showing the use
 
 <script>
   import {
+    Box,
     Breadcrumb,
     BreadcrumbItem,
     BreadcrumbSkeleton,
     OverflowMenu,
-    OverflowMenuItem
+    OverflowMenuItem,
+    Stack,
+    Text
   } from "carbon-components-svelte";
   import Calendar from "carbon-icons-svelte/lib/Calendar.svelte";
   import Document from "carbon-icons-svelte/lib/Document.svelte";
@@ -135,21 +138,32 @@ By default, items stack vertically below the `md` breakpoint (672px) and lay out
 | `"vertical"` | Always stacked | The breadcrumb sits in a narrow column, such as a side panel |
 | `"horizontal"` | Always a wrapping row | Short trails that fit on one line even on small screens |
 
-### Vertical
+The breakpoint follows the viewport, not the container. In a narrow column on a wide screen, the default wraps the trail wherever it runs out of room; `orientation="vertical"` puts each level on its own line.
 
-<Breadcrumb orientation="vertical">
-  <BreadcrumbItem href="/">Dashboard</BreadcrumbItem>
-  <BreadcrumbItem href="/reports">Annual reports</BreadcrumbItem>
-  <BreadcrumbItem href="/reports/2019" isCurrentPage>2019</BreadcrumbItem>
-</Breadcrumb>
-
-### Horizontal
-
-<Breadcrumb orientation="horizontal">
-  <BreadcrumbItem href="/">Dashboard</BreadcrumbItem>
-  <BreadcrumbItem href="/reports">Annual reports</BreadcrumbItem>
-  <BreadcrumbItem href="/reports/2019" isCurrentPage>2019</BreadcrumbItem>
-</Breadcrumb>
+<Box display="flex" gap={5} wrap="wrap" align="start">
+  <Stack gap={3}>
+    <Text type="label-01" color="secondary">Default</Text>
+    <Box width={240} padding={4} border="subtle">
+      <Breadcrumb>
+        <BreadcrumbItem href="/">Dashboard</BreadcrumbItem>
+        <BreadcrumbItem href="/reports">Annual reports</BreadcrumbItem>
+        <BreadcrumbItem href="/reports/2019">2019</BreadcrumbItem>
+        <BreadcrumbItem href="/reports/2019/q4" isCurrentPage>Fourth quarter</BreadcrumbItem>
+      </Breadcrumb>
+    </Box>
+  </Stack>
+  <Stack gap={3}>
+    <Text type="label-01" color="secondary">orientation="vertical"</Text>
+    <Box width={240} padding={4} border="subtle">
+      <Breadcrumb orientation="vertical">
+        <BreadcrumbItem href="/">Dashboard</BreadcrumbItem>
+        <BreadcrumbItem href="/reports">Annual reports</BreadcrumbItem>
+        <BreadcrumbItem href="/reports/2019">2019</BreadcrumbItem>
+        <BreadcrumbItem href="/reports/2019/q4" isCurrentPage>Fourth quarter</BreadcrumbItem>
+      </Breadcrumb>
+    </Box>
+  </Stack>
+</Box>
 
 ## Breadcrumb trail
 
