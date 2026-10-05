@@ -137,6 +137,7 @@
   import CopyButton from "../CopyButton/CopyButton.svelte";
   import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
   import { buildFieldIds } from "../utils/field-status.js";
+  import { reflectDefaultValue } from "../utils/reflect-default-value.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -229,6 +230,7 @@
     >
       <input
         bind:this={ref}
+        use:reflectDefaultValue={value}
         readonly
         type={inputType}
         {value}

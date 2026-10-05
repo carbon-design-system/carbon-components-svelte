@@ -13,10 +13,11 @@ import { addPooledListener } from "./window-listener-pool.js";
  * Every consumer shares one capturing `window` listener (reset bubbles), so
  * many controls on a page do not add a listener each. Each consumer
  * matches `node.form` per event, so a control associated through the `form`
- * attribute, or moved between forms, still resyncs. SSR-safe: actions only
- * run in the browser.
+ * attribute, or moved between forms, still resyncs. Any other element (a
+ * container such as a table wrapper) matches its closest ancestor form.
+ * SSR-safe: actions only run in the browser.
  *
- * @param {HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | HTMLFieldSetElement} node
+ * @param {HTMLElement} node
  * @param {() => void} onReset
  * @returns {{ update: (onReset: () => void) => void, destroy: () => void }}
  */
@@ -27,7 +28,11 @@ export function formReset(node, onReset) {
 
   /** @param {Event} event */
   function handleReset(event) {
-    if (!node.form || event.target !== node.form) return;
+    const form =
+      "form" in node
+        ? /** @type {HTMLFormElement | null} */ (node.form)
+        : node.closest("form");
+    if (!form || event.target !== form) return;
     clearTimeout(timeout);
     timeout = setTimeout(() => {
       if (!event.defaultPrevented) callback();

@@ -442,6 +442,7 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
+  import { formReset } from "../utils/form-reset.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { moveIndex } from "../utils/move-index.js";
@@ -1299,6 +1300,13 @@
       close("outside-click");
     }
   }
+
+  // A form reset clears the filter field without an input event. Svelte 5
+  // syncs `bind:value` back on its own; Svelte 3 and 4 do not, so read the
+  // field.
+  function handleFilterFormReset() {
+    if (inputRef) value = inputRef.value;
+  }
 </script>
 
 <div
@@ -1388,6 +1396,7 @@
           {/if}
           <input
             bind:this={inputRef}
+            use:formReset={handleFilterFormReset}
             bind:value
             {...$$restProps}
             role="combobox"
