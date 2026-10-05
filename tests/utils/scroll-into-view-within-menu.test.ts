@@ -1,4 +1,5 @@
 import { scrollIntoViewWithinMenu } from "../../src/utils/scroll-into-view-within-menu.js";
+import { virtualWindow } from "../../src/utils/virtual-window.js";
 import { rect } from "./rect";
 
 /**
@@ -162,5 +163,24 @@ describe("scrollIntoViewWithinMenu", () => {
 
       expect(container.scrollTop).toBe(50);
     });
+  });
+
+  it("moves a pinned window with the scroll it writes", () => {
+    const { container, item } = buildMenu({
+      scrollable: true,
+      containerTop: 0,
+      containerBottom: 100,
+      itemTop: 120,
+      itemBottom: 140,
+    });
+    const layer = document.createElement("div");
+    container.appendChild(layer);
+    virtualWindow(layer, { offsetY: 40, scrollTop: 50, pinned: true });
+
+    scrollIntoViewWithinMenu(item);
+
+    // Scrolled 40px further, to 90; the rows move with it before a render.
+    expect(container.scrollTop).toBe(90);
+    expect(layer.style.transform).toBe("translateY(-50px)");
   });
 });

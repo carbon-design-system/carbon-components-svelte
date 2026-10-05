@@ -24,6 +24,12 @@ export type VirtualizeConfig<
    */
   measured?: boolean;
   heights?: ItemHeights;
+  /**
+   * Signed distance the last scroll moved. The window extends that far past
+   * the viewport in the direction of travel, up to one `containerHeight`.
+   * @default 0
+   */
+  scrollDelta?: number;
 };
 
 export type VirtualizeResult<
@@ -84,6 +90,11 @@ export type VirtualListConfig = {
   threshold: number;
   maxItems: number | undefined;
   measured: boolean;
+  /**
+   * Keep the rendered items in view during very fast scrolling. Read by the
+   * listbox menus.
+   */
+  optimizeFastScroll: boolean;
 };
 
 /** Default virtualization config for listbox-like components. */
@@ -104,6 +115,8 @@ export type VirtualListStateOptions<
    * config's `itemHeight`. The returned config carries the seed actually used.
    */
   estimate?: number;
+  /** Signed distance the last scroll moved. See `VirtualizeConfig`. */
+  scrollDelta?: number;
 };
 
 export type VirtualListStateResult<

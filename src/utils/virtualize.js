@@ -199,6 +199,61 @@ function measuredVisibleRange({
 }
 
 /**
+ * How far past the viewport to render in the direction of travel. The browser
+ * scrolls on the compositor and can paint a new position before the window
+ * moves to it, so a fast scroll outruns `overscan` and shows blank space. The
+ * next scroll is likely to move about as far as the last one did, so render
+ * that far ahead, up to one viewport.
+ *
+ * @param {number} scrollDelta Signed distance the last scroll moved.
+ * @param {number} containerHeight
+ * @returns {number} Signed: negative extends the window upward.
+ */
+function getScrollLead(scrollDelta, containerHeight) {
+  if (!Number.isFinite(scrollDelta) || !(containerHeight > 0)) return 0;
+  return Math.max(-containerHeight, Math.min(scrollDelta, containerHeight));
+}
+
+/**
+ * `getVisibleRange` with the viewport extended by `lead` in the direction of
+ * travel. `maxItems` trims the lead before the viewport, so a capped list
+ * renders what is on screen first.
+ *
+ * @param {Object} options
+ * @param {(scrollTop: number, containerHeight: number) => { startIndex: number, endIndex: number }} options.range
+ * Resolves the uncapped range for a viewport.
+ * @param {number} options.scrollTop
+ * @param {number} options.containerHeight
+ * @param {number} options.lead From `getScrollLead`.
+ * @param {number} [options.maxItems]
+ * @returns {{ startIndex: number, endIndex: number }}
+ */
+function leadingRange({ range, scrollTop, containerHeight, lead, maxItems }) {
+  const extended = range(
+    scrollTop + Math.min(0, lead),
+    containerHeight + Math.abs(lead),
+  );
+
+  if (lead >= 0) {
+    return {
+      startIndex: extended.startIndex,
+      endIndex: capToMaxItems(extended.startIndex, extended.endIndex, maxItems),
+    };
+  }
+
+  if (!maxItems) return extended;
+
+  // Cap the viewport as if there were no lead, then spend what is left of
+  // `maxItems` on the lead above it.
+  const base = range(scrollTop, containerHeight);
+  const endIndex = capToMaxItems(base.startIndex, base.endIndex, maxItems);
+  return {
+    startIndex: Math.max(extended.startIndex, endIndex - maxItems),
+    endIndex,
+  };
+}
+
+/**
  * Compute the `[startIndex, endIndex)` slice of items to render for a given
  * scroll position, including `overscan` padding and an optional `maxItems` cap.
  *
@@ -275,6 +330,9 @@ export function getVisibleRange({
  * that opts in must pass `heights` to all of them.
  * @param {ItemHeights} [options.heights] Per-option heights,
  * indexed by item. Options with no entry take an estimated height.
+ * @param {number} [options.scrollDelta=0] Signed distance the last scroll
+ * moved. The window extends that far past the viewport in the direction of
+ * travel, up to one `containerHeight`, so a fast scroll does not outrun it.
  * @returns {{
  *   visibleItems: Item[],
  *   startIndex: number,
@@ -295,6 +353,7 @@ export function virtualize({
   threshold = 100,
   measured = false,
   heights = undefined,
+  scrollDelta = 0,
 }) {
   // A non-positive itemHeight can't be virtualized (the math divides by it and
   // yields NaN indices), so render the full list unvirtualized. This holds
@@ -328,23 +387,34 @@ export function virtualize({
   const maxScroll = Math.max(0, totalHeight - containerHeight);
   const clampedScrollTop = Math.min(Math.max(0, scrollTop), maxScroll);
 
-  const { startIndex, endIndex } = accumulated
-    ? measuredVisibleRange({
-        accumulated,
-        scrollTop: clampedScrollTop,
-        containerHeight,
-        itemCount: items.length,
-        overscan,
-        maxItems,
-      })
-    : getVisibleRange({
-        scrollTop: clampedScrollTop,
-        itemHeight,
-        containerHeight,
-        itemCount: items.length,
-        overscan,
-        maxItems,
-      });
+  /**
+   * @param {number} top
+   * @param {number} height
+   */
+  const range = (top, height) =>
+    accumulated
+      ? measuredVisibleRange({
+          accumulated,
+          scrollTop: top,
+          containerHeight: height,
+          itemCount: items.length,
+          overscan,
+        })
+      : getVisibleRange({
+          scrollTop: top,
+          itemHeight,
+          containerHeight: height,
+          itemCount: items.length,
+          overscan,
+        });
+
+  const { startIndex, endIndex } = leadingRange({
+    range,
+    scrollTop: clampedScrollTop,
+    containerHeight,
+    lead: getScrollLead(scrollDelta, containerHeight),
+    maxItems,
+  });
 
   const offsetY = accumulated
     ? accumulated.offsets[startIndex]
@@ -372,6 +442,7 @@ export const DEFAULT_VIRTUAL_LIST_CONFIG = {
   threshold: 100,
   maxItems: undefined,
   measured: false,
+  optimizeFastScroll: false,
 };
 
 /**
@@ -393,6 +464,8 @@ export const DEFAULT_VIRTUAL_LIST_CONFIG = {
  * config opts into measuring, where `itemHeight` is only the seed. On the fixed
  * path `itemHeight` is the height of every option and nothing may displace it.
  * Supply the average of heights measured earlier.
+ * @param {number} [options.scrollDelta] Signed distance the last scroll moved.
+ * See `virtualize`.
  * @returns {{
  *   config: (typeof DEFAULT_VIRTUAL_LIST_CONFIG & Record<string, unknown>) | null,
  *   data: ReturnType<typeof virtualize<Item>> | null,
@@ -407,6 +480,7 @@ export function virtualListState({
   defaults = {},
   heights = undefined,
   estimate = undefined,
+  scrollDelta = 0,
 }) {
   const resolved = shouldVirtualize
     ? {
@@ -425,7 +499,7 @@ export function virtualListState({
       : resolved;
 
   const data = config
-    ? virtualize({ items, scrollTop, heights, ...config })
+    ? virtualize({ items, scrollTop, scrollDelta, heights, ...config })
     : null;
 
   const itemsToRender = data?.isVirtualized ? data.visibleItems : items;
