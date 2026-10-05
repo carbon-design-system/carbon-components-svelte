@@ -11,15 +11,24 @@ export type HeightMeasurerOptions = {
    * differs from the heights already held.
    */
   onMeasure: (heights: number[], prevHeights: number[]) => void;
+  /**
+   * Add each element's vertical margins to its height. Adjacent margins that
+   * collapse are counted in full, so this suits elements with a margin on one
+   * side only.
+   * @default false
+   */
+  includeMargins?: boolean;
 };
 
 export type HeightMeasurer = {
   /**
    * Reconcile what is observed against what `container` currently renders.
    * Call after the DOM has been committed; pass a falsy container when the
-   * window is gone.
+   * window is gone. A window with no container of its own passes its elements.
    */
-  sync: (container: Element | null | undefined) => void;
+  sync: (
+    container: Element | ReadonlyArray<Element> | null | undefined,
+  ) => void;
   /**
    * Forget every measurement, as when a menu closes or its item collection is
    * replaced. Observation stops too, so the next `sync` measures the rendered

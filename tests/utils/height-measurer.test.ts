@@ -419,4 +419,38 @@ describe("createHeightMeasurer", () => {
     expect(heights[0]).toBe(40);
     expect(heights[1]).toBe(88);
   });
+
+  it("adds vertical margins to each height with includeMargins", async () => {
+    const resize = installResizeObserver();
+    const onMeasure = vi.fn();
+    const measurer = createHeightMeasurer({ onMeasure, includeMargins: true });
+    const container = buildWindow([0, 1]);
+    // A ContainedList item: 48px tall, overlapping the one above by 1px.
+    optionAt(container, 1).style.marginTop = "-1px";
+    optionAt(container, 1).style.marginBottom = "4px";
+
+    measurer.sync(container);
+    await resize.deliver([
+      { target: optionAt(container, 0), height: 48 },
+      { target: optionAt(container, 1), height: 48 },
+    ]);
+
+    const [heights] = onMeasure.mock.calls[0];
+    expect(heights[0]).toBe(48);
+    expect(heights[1]).toBe(51);
+  });
+
+  it("measures an array of elements without a container", async () => {
+    const resize = installResizeObserver();
+    const onMeasure = vi.fn();
+    const measurer = createHeightMeasurer({ onMeasure });
+    const container = buildWindow([3, 4]);
+    const elements = [optionAt(container, 3), optionAt(container, 4)];
+
+    measurer.sync(elements);
+    expect(resize.observed).toEqual(new Set(elements));
+
+    await resize.deliver([{ target: elements[1], height: 30 }]);
+    expect(onMeasure.mock.calls[0][0][4]).toBe(30);
+  });
 });

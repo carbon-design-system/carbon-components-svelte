@@ -22,6 +22,22 @@ function readEntryHeight(entry) {
 }
 
 /**
+ * The vertical margins of an element, which its border box leaves out. Rows
+ * that sit straight in a list, such as ContainedList items overlapping by 1px,
+ * advance by their height plus these.
+ *
+ * @param {Element} element
+ * @returns {number}
+ */
+function readVerticalMargins(element) {
+  const style = getComputedStyle(element);
+  return (
+    (Number.parseFloat(style.marginTop) || 0) +
+    (Number.parseFloat(style.marginBottom) || 0)
+  );
+}
+
+/**
  * @param {Element} node
  * @returns {number} The item index the element renders, or `-1` when it
  * carries no usable one.
@@ -64,13 +80,16 @@ function readIndex(node) {
  * @param {(heights: number[], prevHeights: number[]) => void} options.onMeasure
  * Called on the animation frame after a report that differs from the heights
  * already held.
+ * @param {boolean} [options.includeMargins=false] Add each element's vertical
+ * margins to its height. Adjacent margins that collapse are counted in full,
+ * so this suits elements with a margin on one side only.
  * @returns {{
  *   sync: (container: Element | null | undefined) => void,
  *   clear: () => void,
  *   disconnect: () => void
  * }}
  */
-export function createHeightMeasurer({ onMeasure }) {
+export function createHeightMeasurer({ onMeasure, includeMargins = false }) {
   /** @type {number[]} Indexed by item, sparse where unmeasured. */
   let heights = [];
   /** @type {Set<Element>} */
@@ -130,7 +149,8 @@ export function createHeightMeasurer({ onMeasure }) {
       const index = readIndex(entry.target);
       if (index < 0) continue;
       batched ??= new Map();
-      batched.set(index, readEntryHeight(entry));
+      const margins = includeMargins ? readVerticalMargins(entry.target) : 0;
+      batched.set(index, readEntryHeight(entry) + margins);
     }
 
     if (batched === null || frame !== 0) return;
@@ -160,7 +180,10 @@ export function createHeightMeasurer({ onMeasure }) {
    * Call it after the DOM has been committed, since the elements have to exist
    * to have a height. Pass a falsy container when the window is gone.
    *
-   * @param {Element | null | undefined} container
+   * A caller that renders its window without a container of its own passes
+   * the window's elements instead, each already carrying the index attribute.
+   *
+   * @param {Element | ReadonlyArray<Element> | null | undefined} container
    */
   function sync(container) {
     if (!container) {
@@ -168,7 +191,11 @@ export function createHeightMeasurer({ onMeasure }) {
       return;
     }
 
-    const elements = container.querySelectorAll(`[${VIRTUAL_INDEX_ATTRIBUTE}]`);
+    const elements = Array.isArray(container)
+      ? container
+      : /** @type {Element} */ (container).querySelectorAll(
+          `[${VIRTUAL_INDEX_ATTRIBUTE}]`,
+        );
 
     // No ResizeObserver (the unit test environment; same gap TreeView guards
     // for): read each height once and accept that later changes go unnoticed.
@@ -176,7 +203,8 @@ export function createHeightMeasurer({ onMeasure }) {
       record(
         Array.from(elements, (element) => [
           readIndex(element),
-          element.getBoundingClientRect().height,
+          element.getBoundingClientRect().height +
+            (includeMargins ? readVerticalMargins(element) : 0),
         ]),
       );
       return;

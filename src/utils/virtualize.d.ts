@@ -32,7 +32,10 @@ export type VirtualizeResult<
   visibleItems: Item[];
   startIndex: number;
   endIndex: number;
+  /** Distance from the top of the list to the top of `startIndex`. */
   offsetY: number;
+  /** Distance from the top of the list to the bottom of the rendered window. */
+  endOffsetY: number;
   totalHeight: number;
   isVirtualized: boolean;
 };
