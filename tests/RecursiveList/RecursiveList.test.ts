@@ -103,6 +103,20 @@ describe("RecursiveList props", () => {
     expect(lists).toHaveLength(2);
     expect(lists[1]).toHaveClass("bx--list--nested");
   });
+
+  it("renders the top-level list as nested when `nested` is set", () => {
+    render(RecursiveList, { nodes, nested: true });
+
+    const [topLevel] = screen.getAllByRole("list");
+    expect(topLevel).toHaveClass("bx--list--nested");
+  });
+
+  it("does not render the top-level list as nested by default", () => {
+    render(RecursiveList, { nodes });
+
+    const [topLevel] = screen.getAllByRole("list");
+    expect(topLevel).not.toHaveClass("bx--list--nested");
+  });
 });
 
 describe("RecursiveList Generics", () => {
