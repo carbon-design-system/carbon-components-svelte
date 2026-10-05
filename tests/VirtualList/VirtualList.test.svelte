@@ -1,4 +1,6 @@
 <script lang="ts">
+  import ContainedList from "carbon-components-svelte/ContainedList/ContainedList.svelte";
+  import ContainedListItem from "carbon-components-svelte/ContainedList/ContainedListItem.svelte";
   import VirtualList from "carbon-components-svelte/VirtualList/VirtualList.svelte";
 
   const items = Array.from({ length: 500 }, (_, i) => ({
@@ -10,6 +12,7 @@
   let scrollendCount = 0;
   let scrollendDetail = "";
   let scroller: HTMLDivElement | null = null;
+  let listScroller: HTMLDivElement | null = null;
 </script>
 
 <VirtualList
@@ -61,6 +64,25 @@
   >
     <div data-testid="external-row-{index}">{item.label}</div>
   </VirtualList>
+</div>
+
+<div data-testid="list-scroller" bind:this={listScroller} style:height="200px">
+  <ContainedList labelText="Items">
+    <VirtualList
+      {items}
+      itemHeight={40}
+      containerHeight={200}
+      scrollElement={listScroller}
+      spacerTag="li"
+      getKey={(item) => item.id}
+      let:item
+      let:index
+    >
+      <ContainedListItem data-testid="list-row-{index}">
+        {item.label}
+      </ContainedListItem>
+    </VirtualList>
+  </ContainedList>
 </div>
 
 <div data-testid="scrollend-count">{scrollendCount}</div>

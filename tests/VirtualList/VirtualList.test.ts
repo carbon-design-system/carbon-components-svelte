@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen, within } from "@testing-library/svelte";
+import { tick } from "svelte";
 import VirtualList from "./VirtualList.test.svelte";
 
 describe("VirtualList", () => {
@@ -60,5 +61,105 @@ describe("VirtualList", () => {
 
     expect(screen.getByTestId("external-row-100")).toBeInTheDocument();
     expect(screen.queryByTestId("external-row-0")).not.toBeInTheDocument();
+  });
+
+  describe("spacerTag", () => {
+    const getList = () => screen.getByRole("list", { name: "Items" });
+
+    it("renders items as direct children of the parent list", () => {
+      render(VirtualList);
+
+      const list = getList();
+      for (const child of list.children) {
+        expect(child.tagName).toBe("LI");
+      }
+
+      // A spacer above, a spacer below, and only the window between them.
+      const [start, ...rest] = Array.from(list.children);
+      const end = rest.pop();
+      expect(start).toHaveAttribute("aria-hidden", "true");
+      expect(start).toHaveStyle({ height: "0px" });
+      expect(end).toHaveAttribute("aria-hidden", "true");
+      expect(rest.length).toBeLessThan(50);
+      expect(end).toHaveStyle({ height: `${(500 - rest.length) * 40}px` });
+    });
+
+    it("drops the end spacer once the last item renders", async () => {
+      render(VirtualList);
+
+      const list = getList();
+      const start = list.firstElementChild as HTMLElement;
+      start.getBoundingClientRect = () => ({ top: -20_000 }) as DOMRect;
+      const scroller = screen.getByTestId("list-scroller");
+      scroller.scrollTop = 20_000;
+      await fireEvent.scroll(scroller);
+      await tick();
+
+      // The true last item stays last, so `:last-of-type` styles still apply.
+      const last = list.lastElementChild;
+      expect(last).not.toHaveAttribute("aria-hidden");
+      expect(last).toHaveAttribute("aria-posinset", "500");
+    });
+
+    it("skips attribute writes that would not change anything", async () => {
+      render(VirtualList);
+
+      const list = getList();
+      const start = list.firstElementChild as HTMLElement;
+      const scroller = screen.getByTestId("list-scroller");
+      async function scrollTo(top: number) {
+        start.getBoundingClientRect = () => ({ top: -top }) as DOMRect;
+        scroller.scrollTop = top;
+        await fireEvent.scroll(scroller);
+        await tick();
+      }
+
+      await scrollTo(1);
+      const records: MutationRecord[] = [];
+      const observer = new MutationObserver((batch) => records.push(...batch));
+      observer.observe(list, { subtree: true, attributes: true });
+
+      // Moving 1px within the first row updates the list but not the window.
+      await scrollTo(2);
+      await tick();
+
+      observer.disconnect();
+      const ariaWrites = records.filter((record) =>
+        record.attributeName?.startsWith("aria-"),
+      );
+      expect(ariaWrites).toHaveLength(0);
+    });
+
+    it("gives each item its position in the full list", async () => {
+      render(VirtualList);
+      await tick();
+
+      const rows = within(getList()).getAllByRole("listitem");
+      expect(rows[0]).toHaveAttribute("aria-posinset", "1");
+      expect(rows[0]).toHaveAttribute("aria-setsize", "500");
+      expect(rows[2]).toHaveAttribute("aria-posinset", "3");
+    });
+
+    it("windows against scrollElement", async () => {
+      render(VirtualList);
+
+      const list = getList();
+      const start = list.firstElementChild as HTMLElement;
+      // jsdom has no layout: place the list 4000px above the scroller's top.
+      start.getBoundingClientRect = () => ({ top: -4000 }) as DOMRect;
+      const scroller = screen.getByTestId("list-scroller");
+      scroller.scrollTop = 4000;
+      await fireEvent.scroll(scroller);
+      await tick();
+
+      expect(start).toHaveStyle({ height: `${97 * 40}px` });
+      const firstRow = start.nextElementSibling;
+      expect(firstRow).toHaveAttribute("aria-posinset", "98");
+      expect(within(list).getByText("Item 100").closest("li")).toHaveAttribute(
+        "aria-posinset",
+        "101",
+      );
+      expect(within(list).queryByText("Item 0")).not.toBeInTheDocument();
+    });
   });
 });

@@ -28,6 +28,7 @@ describe("virtualize", () => {
     expect(result.startIndex).toBe(0);
     expect(result.endIndex).toBe(50);
     expect(result.offsetY).toBe(0);
+    expect(result.endOffsetY).toBe(2000);
     expect(result.totalHeight).toBe(2000);
     expect(result.isVirtualized).toBe(false);
   });
@@ -746,6 +747,8 @@ describe("virtualize with measured heights", () => {
     expect(result.startIndex).toBe(17);
     expect(result.endIndex).toBe(29);
     expect(result.offsetY).toBe(830);
+    // Option 29 starts at 1430, where the rendered window ends.
+    expect(result.endOffsetY).toBe(1430);
   });
 
   it("resolves the visible range at the end of the list", () => {
@@ -774,6 +777,7 @@ describe("virtualize with measured heights", () => {
     expect(result.startIndex).toBe(22);
     expect(result.endIndex).toBe(36);
     expect(result.offsetY).toBe(880);
+    expect(result.endOffsetY).toBe(1440);
   });
 
   it("estimates unmeasured options from the measured ones", () => {

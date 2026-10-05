@@ -280,6 +280,7 @@ export function getVisibleRange({
  *   startIndex: number,
  *   endIndex: number,
  *   offsetY: number,
+ *   endOffsetY: number,
  *   totalHeight: number,
  *   isVirtualized: boolean
  * }}
@@ -301,12 +302,14 @@ export function virtualize({
   // usable estimate and nothing measured yet there is no position to place an
   // option at.
   if (items.length < threshold || itemHeight <= 0) {
+    const totalHeight = itemHeight > 0 ? items.length * itemHeight : 0;
     return {
       visibleItems: items,
       startIndex: 0,
       endIndex: items.length,
       offsetY: 0,
-      totalHeight: itemHeight > 0 ? items.length * itemHeight : 0,
+      endOffsetY: totalHeight,
+      totalHeight,
       isVirtualized: false,
     };
   }
@@ -346,12 +349,16 @@ export function virtualize({
   const offsetY = accumulated
     ? accumulated.offsets[startIndex]
     : startIndex * itemHeight;
+  const endOffsetY = accumulated
+    ? accumulated.offsets[endIndex]
+    : endIndex * itemHeight;
 
   return {
     visibleItems: items.slice(startIndex, endIndex),
     startIndex,
     endIndex,
     offsetY,
+    endOffsetY,
     totalHeight,
     isVirtualized: true,
   };
