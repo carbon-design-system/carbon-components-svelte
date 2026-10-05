@@ -148,7 +148,9 @@ The checkmark icon is hidden from screen readers; a tile's content is its access
 
 ## Form submission
 
-A checked tile submits its `value` under the radio's `name`.
+A checked tile submits its `value` under the radio's `name`. See
+[Form](/components/Form#tiles) for a form that submits radio and selectable
+tiles together.
 
 | Do | Why |
 | --- | --- |
