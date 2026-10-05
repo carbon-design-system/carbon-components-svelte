@@ -244,8 +244,14 @@
     @include hidden;
   }
 
+  // Tiles in a group sit edge to edge, so an inset ring left a neighbor's
+  // selected border touching the blue. Reach 1px out over that shared edge
+  // and paint above the neighbor.
   .#{$prefix}--tile-input:focus + .#{$prefix}--tile {
-    @include focus-outline('outline');
+    @include focus-outline('outline', $omit: (outline-offset));
+
+    z-index: 1;
+    outline-offset: -1px;
   }
 
   .#{$prefix}--tile--disabled.#{$prefix}--tile--selectable {
