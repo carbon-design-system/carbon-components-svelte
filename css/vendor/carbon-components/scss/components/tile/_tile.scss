@@ -259,7 +259,7 @@
   }
 
   .#{$prefix}--tile--disabled.#{$prefix}--tile--is-selected {
-    outline-color: $disabled-02;
+    border-color: $disabled-02;
   }
 
   .#{$prefix}--tile--disabled.#{$prefix}--tile--is-selected
