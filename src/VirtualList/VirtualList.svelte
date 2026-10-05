@@ -59,6 +59,16 @@
   export let getKey = defaultGetKey;
 
   /**
+   * Set to `true` to keep the rendered items in view during very fast
+   * scrolling, such as a scrollbar drag, instead of showing blank space until
+   * new items render.
+   * The items then follow the scroll a frame behind, and pause while the main
+   * thread is busy.
+   * Ignored when `scrollElement` is set.
+   */
+  export let optimizeFastScroll = false;
+
+  /**
    * Specify an ancestor element that scrolls the list, such as the
    * `scrollElementRef` of a `ScrollGradient`.
    * When set, the list does not scroll itself.
@@ -93,11 +103,14 @@
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { noop } from "../utils/noop.js";
   import { virtualize } from "../utils/virtualize.js";
+  import VirtualWindow from "./VirtualWindow.svelte";
 
   const dispatch = createEventDispatcher();
   const scrollEndTracker = createScrollEndTracker();
 
   let scrollTop = 0;
+  /** How far, and which way, the last scroll moved. */
+  let scrollDelta = 0;
   /** @type {number[]} */
   let heights = [];
   let detachScrollElement = noop;
@@ -135,7 +148,10 @@
     threshold,
     measured,
     heights: measured ? heights : undefined,
+    scrollDelta,
   });
+
+  $: pinned = optimizeFastScroll && !scrollElement && virtualData.isVirtualized;
 
   /** @param {Event} event */
   function handleScroll(event) {
@@ -144,12 +160,14 @@
     // An outer scroller can hold content above the list, so measure how far
     // the list's top has scrolled past the scroller's inner top edge.
     const listTop = spacerTag ? startSpacer : ref;
-    scrollTop =
+    const nextScrollTop =
       target === listTop || !listTop
         ? target.scrollTop
         : target.getBoundingClientRect().top +
           target.clientTop -
           listTop.getBoundingClientRect().top;
+    scrollDelta = nextScrollTop - scrollTop;
+    scrollTop = nextScrollTop;
 
     const detail = scrollEndTracker.observe({
       scrollTop: target.scrollTop,
@@ -292,21 +310,25 @@
     style:height={scrollElement ? undefined : `${containerHeight}px`}
     on:scroll={handleScroll}
   >
-    <div style:height="{virtualData.totalHeight}px" style:position="relative">
-      <div style:transform="translateY({virtualData.offsetY}px)">
-        {#each virtualData.visibleItems as item, index (getKey(
-          item,
-          virtualData.startIndex + index,
-        ))}
-          <div
-            data-virtual-index={measured
-              ? virtualData.startIndex + index
-              : undefined}
-          >
-            <slot {item} index={virtualData.startIndex + index} />
-          </div>
-        {/each}
-      </div>
-    </div>
+    <VirtualWindow
+      totalHeight={virtualData.totalHeight}
+      offsetY={virtualData.offsetY}
+      {scrollTop}
+      {pinned}
+      {measured}
+    >
+      {#each virtualData.visibleItems as item, index (getKey(
+        item,
+        virtualData.startIndex + index,
+      ))}
+        <div
+          data-virtual-index={measured
+            ? virtualData.startIndex + index
+            : undefined}
+        >
+          <slot {item} index={virtualData.startIndex + index} />
+        </div>
+      {/each}
+    </VirtualWindow>
   </div>
 {/if}

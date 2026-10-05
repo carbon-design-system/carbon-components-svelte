@@ -1,5 +1,7 @@
 import { fireEvent, render, screen, within } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { rect } from "../utils/rect";
+import { virtualWindowLayer } from "../utils/virtual-window-layer";
 import VirtualList from "./VirtualList.test.svelte";
 
 describe("VirtualList", () => {
@@ -45,6 +47,22 @@ describe("VirtualList", () => {
       JSON.parse(screen.getByTestId("scrollend-detail").textContent ?? ""),
     ).toEqual({ scrollTop: 19800, scrollHeight: 20000, clientHeight: 200 });
     expect(screen.getByTestId("row-499")).toBeInTheDocument();
+  });
+
+  it("renders ahead in the direction of the last scroll", async () => {
+    render(VirtualList);
+
+    const container = screen.getByTestId("large");
+    container.scrollTop = 4000;
+    await fireEvent.scroll(container);
+    // 4000 + 200 viewport + 200 lead reaches row 109; overscan adds three.
+    expect(screen.getByTestId("row-112")).toBeInTheDocument();
+
+    container.scrollTop = 3800;
+    await fireEvent.scroll(container);
+    // 3800 - 200 lead starts at row 90; overscan adds three above.
+    expect(screen.getByTestId("row-87")).toBeInTheDocument();
+    expect(screen.queryByTestId("row-112")).not.toBeInTheDocument();
   });
 
   it("windows against scrollElement instead of its own container", async () => {
@@ -161,5 +179,42 @@ describe("VirtualList", () => {
       );
       expect(within(list).queryByText("Item 0")).not.toBeInTheDocument();
     });
+  });
+
+  it("pins the window to the viewport with optimizeFastScroll", async () => {
+    render(VirtualList);
+
+    const list = screen.getByTestId("pinned");
+    const layer = virtualWindowLayer(list);
+    expect(layer.style.position).toBe("sticky");
+
+    list.scrollTop = 4000;
+    await fireEvent.scroll(list);
+
+    // Row 100 is in view; the window starts at row 97, 120px above the layer.
+    expect(screen.getByTestId("pinned-row-100")).toBeInTheDocument();
+    expect(layer.style.transform).toBe("translateY(-120px)");
+  });
+
+  it("leaves the window unpinned without optimizeFastScroll", () => {
+    render(VirtualList);
+
+    const layer = virtualWindowLayer(screen.getByTestId("large"));
+    expect(layer.style.position).toBe("");
+    expect(layer.style.transform).toBe("translateY(0px)");
+  });
+
+  it("ignores optimizeFastScroll with scrollElement", async () => {
+    render(VirtualList);
+
+    const list = screen.getByTestId("pinned-external");
+    list.getBoundingClientRect = () => rect({ top: -4000 });
+    const scroller = screen.getByTestId("pinned-scroller");
+    scroller.scrollTop = 4000;
+    await fireEvent.scroll(scroller);
+
+    const layer = virtualWindowLayer(list);
+    expect(layer.style.position).toBe("");
+    expect(layer.style.transform).toBe("translateY(3880px)");
   });
 });

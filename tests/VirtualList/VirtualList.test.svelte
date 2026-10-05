@@ -13,6 +13,7 @@
   let scrollendDetail = "";
   let scroller: HTMLDivElement | null = null;
   let listScroller: HTMLDivElement | null = null;
+  let pinnedScroller: HTMLDivElement | null = null;
 </script>
 
 <VirtualList
@@ -83,6 +84,37 @@
       </ContainedListItem>
     </VirtualList>
   </ContainedList>
+</div>
+
+<VirtualList
+  data-testid="pinned"
+  {items}
+  itemHeight={40}
+  containerHeight={200}
+  optimizeFastScroll
+  let:item
+  let:index
+>
+  <div data-testid="pinned-row-{index}">{item.label}</div>
+</VirtualList>
+
+<div
+  data-testid="pinned-scroller"
+  bind:this={pinnedScroller}
+  style:height="200px"
+>
+  <VirtualList
+    data-testid="pinned-external"
+    {items}
+    itemHeight={40}
+    containerHeight={200}
+    scrollElement={pinnedScroller}
+    optimizeFastScroll
+    let:item
+    let:index
+  >
+    <div data-testid="pinned-external-row-{index}">{item.label}</div>
+  </VirtualList>
 </div>
 
 <div data-testid="scrollend-count">{scrollendCount}</div>
