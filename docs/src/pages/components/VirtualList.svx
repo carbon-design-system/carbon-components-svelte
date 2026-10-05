@@ -46,6 +46,19 @@ Set `containerHeight` for the viewport and `itemHeight` for each row, both in pi
   </Box>
 </VirtualList>
 
+## Fast scrolling
+
+During a scroll faster than the list can render, such as a quick drag of the scrollbar, the rows can briefly disappear. Set `optimizeFastScroll` to keep the rows already rendered in view until the new ones arrive.
+
+The rows then follow the scroll a frame behind, and pause while the page is busy running scripts. Leave it off when the list sits on a page that often does heavy work. `optimizeFastScroll` has no effect with [`scrollElement`](#scroll-container).
+
+<VirtualList optimizeFastScroll items={instances} itemHeight={40} containerHeight={240} let:item let:index>
+  <Box display="flex" align="center" justify="space-between" height="40px" paddingX={5} border="subtle" borderSide="bottom">
+    <span>{index + 1}. {item.name}</span>
+    <span>{item.region}</span>
+  </Box>
+</VirtualList>
+
 ## Item height
 
 ### Measured
