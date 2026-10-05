@@ -27,6 +27,9 @@
   /** Set to `true` to use Carbon's expressive typesetting */
   export let expressive = false;
 
+  /** Set to `true` to use the nested variant, as for a list inside a list item */
+  export let nested = false;
+
   import OrderedList from "../OrderedList/OrderedList.svelte";
   import UnorderedList from "../UnorderedList/UnorderedList.svelte";
   import RecursiveListItem from "./RecursiveListItem.svelte";
@@ -36,6 +39,7 @@
   this={type === "unordered" ? UnorderedList : OrderedList}
   native={type === "ordered-native"}
   {expressive}
+  {nested}
   {...$$restProps}
 >
   {#each nodes as child, index (child.id ?? index)}
