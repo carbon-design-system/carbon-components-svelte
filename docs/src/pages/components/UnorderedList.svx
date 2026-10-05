@@ -64,3 +64,9 @@ Use Carbon's expressive typesetting with `expressive`.
   <ListItem>Request access to the staging environment</ListItem>
   <ListItem>Schedule a walkthrough with your team lead</ListItem>
 </UnorderedList>
+
+## Virtualization
+
+Render thousands of items with [VirtualList](/components/VirtualList). Set `spacerTag` to `"li"` so it renders only the items in view, straight into the list. Wrap the list in a [ScrollGradient](/components/ScrollGradient), pass its `scrollElementRef` as `scrollElement`, and pad the list on the left so the bullets are not clipped. Set `measured` if items can wrap.
+
+<FileSource src="/framed/VirtualList/VirtualListUnorderedList" />

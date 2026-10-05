@@ -47,3 +47,9 @@ Convert flat data to hierarchical arrays with the `toHierarchy` utility.
 Each node accepts an optional id (string or number) used as the each-block key. Supply an id when text or href values can repeat, so reordering or filtering preserves DOM identity.
 
 <FileSource src="/framed/RecursiveList/RecursiveListStableKeys" />
+
+## Virtualization
+
+A recursive list renders every node. For thousands of top-level nodes, window the top level with [VirtualList](/components/VirtualList): render each node as a `ListItem` with a `nested` `RecursiveList` of its children. Set `spacerTag` to `"li"` and `measured`, since each item is as tall as its subtree. Wrap the list in a [ScrollGradient](/components/ScrollGradient) and pass its `scrollElementRef` as `scrollElement`.
+
+<FileSource src="/framed/VirtualList/VirtualListRecursiveList" />

@@ -185,3 +185,9 @@ Set `href` to render a list item as an anchor with clickable styles. Prefer this
     carbon-components-svelte
   </ContainedListItem>
 </ContainedList>
+
+## Virtualization
+
+Render thousands of items with [VirtualList](/components/VirtualList). Set `spacerTag` to `"li"` so it renders only the items in view, straight into the list. Each item overlaps the one above by 1px, so set `itemHeight` to the item height less 1px. Set `measured` if items can wrap. Wrap the `ContainedList` in a [ScrollGradient](/components/ScrollGradient) and pass its `scrollElementRef` as `scrollElement`.
+
+<FileSource src="/framed/VirtualList/VirtualListContainedList" />
