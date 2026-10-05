@@ -88,3 +88,33 @@ Every list is windowed by default. Set `threshold` to render lists shorter than 
 Set `scrollElement` to scroll the list from an ancestor instead of its own container. Bind a [ScrollGradient](/components/ScrollGradient)'s `scrollElementRef` and pass it in so the gradients track the list. Keep `containerHeight` equal to the `ScrollGradient` height.
 
 <FileSource src="/framed/VirtualList/VirtualListScrollGradient" />
+
+## In a list
+
+Set `spacerTag` to `"li"` to render items straight into a list. The list keeps only `li` children: an empty `li` above and below the items holds the scroll height. Each item must render exactly one element, and each `li` gets `aria-posinset` and `aria-setsize` so screen readers announce its place in the full list.
+
+The list has no scroll container of its own. Wrap the list in a [ScrollGradient](/components/ScrollGradient), pass its `scrollElementRef` as `scrollElement`, and set `containerHeight` to its height. The gradients show that more items lie past each edge.
+
+### With ContainedList
+
+Render each item as a `ContainedListItem` inside a [ContainedList](/components/ContainedList). Each item overlaps the one above by 1px, so set `itemHeight` to the item height less 1px: 47 for the default size. Set `measured` too, since items wrap onto more lines on narrow screens. Measured heights include the overlap. The list header stays pinned to the top, so set `hideStartGradient` to keep the top gradient off it. Set `background` and `color` to `"background"` to match the header.
+
+<FileSource src="/framed/VirtualList/VirtualListContainedList" />
+
+### With UnorderedList
+
+Render each item as a `ListItem` inside an [UnorderedList](/components/UnorderedList). Pad the list on the left so the scroll container does not clip the bullets. Set `measured`, since items wrap onto more lines on narrow screens.
+
+<FileSource src="/framed/VirtualList/VirtualListUnorderedList" />
+
+### With OrderedList
+
+Only the rendered items are in the DOM, so an [OrderedList](/components/OrderedList) would number them from 1. Set `native` on the `OrderedList` and pass `value={index + 1}` to each `ListItem`. Set `measured`, since items wrap onto more lines on narrow screens.
+
+<FileSource src="/framed/VirtualList/VirtualListOrderedList" />
+
+### With RecursiveList
+
+A [RecursiveList](/components/RecursiveList) renders every node, so window its top level instead. Render each top-level node as a `ListItem` with a `nested` `RecursiveList` of its children. Set `measured`, since each item is as tall as its subtree.
+
+<FileSource src="/framed/VirtualList/VirtualListRecursiveList" />
