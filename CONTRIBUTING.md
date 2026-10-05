@@ -89,6 +89,10 @@ Patterns:
   - The browser's scroll anchoring reacts when row heights disagree with the offsets, so scrolling stalls or jumps back. Rows that can wrap need measured heights. A window moved by `transform` does not hit this.
   - A border box leaves out margins. A row advances by its height plus its margins: ContainedList items are 48px tall but advance 47px.
   - Spacers count for `:first-of-type` and `:last-of-type`. Render the end spacer only while rows follow the window, so the true last row keeps its styles.
+- Keep a virtualized window ahead of the browser. The browser scrolls on the compositor and paints the new position before the `scroll` event reaches the component, which happens once per frame. A window that covers only the current viewport flashes blank space whenever one frame moves farther than `overscan`. Render ahead in the direction of travel (`scrollDelta` in [`virtualize.js`](src/utils/virtualize.js)). For jumps no lead can cover, such as a scrollbar drag, pin the window with [`virtual-window.js`](src/utils/virtual-window.js) (`optimizeFastScroll`).
+- Overscan rows are rendered, not visible. Decide whether a row is in view from the viewport, never from the rendered range. Counting overscan as visible left the keyboard highlight below the menu's edge when keys arrived faster than frames. See `scrollHighlightedIntoView` in [`virtualize.js`](src/utils/virtualize.js). Bring a clipped option fully into view only for the keyboard. The pointer can only reach an option it can see, so scrolling for a hover moves the list out from under it. See `scheduleHighlightScroll` in [`menu-window.js`](src/ListBox/menu-window.js).
+- A pinned window moves only when the component renders. Code that writes `scrollTop` and then reads row positions must call `syncPinnedWindow` in between, as `scrollTo` in [`menu-window.js`](src/ListBox/menu-window.js) and [`scrollIntoViewWithinMenu`](src/utils/scroll-into-view-within-menu.js) do.
+- Do not clip a sticky layer with `overflow: hidden`. That makes the layer a scroll container, so `scrollIntoView`, focus, and find-in-page scroll the layer instead of the list. Let the scroll container clip. In Chromium, content that overflows a sticky element does not extend the scroll range either, so [`VirtualWindow.svelte`](src/VirtualList/VirtualWindow.svelte) stretches the spacer to rendered measured rows. It skips rows of known height, since reading their geometry forces a layout on every scroll.
 - Gate expensive lookups by state. When an O(n) array computation is only needed in a certain state (on open, on hover), compute it imperatively in that state rather than in an always-on reactive statement or derivation. ComboBox still empties `filteredItems` while closed. While open, `filterMode` chooses hide (keep option nodes, `hidden` the misses) vs remove. Same tradeoff as DataTable. Do not invent a third filter model.
 - Guard imperative work by value, not identity. Svelte treats objects, arrays, `Date`s, and functions as always changed, so a `$:` that reacts to an object prop re-runs whenever the consumer hands over a new but equal value. Declarative markup absorbs that for free, since Svelte only writes an attribute whose value differs. A side effect does not: calling into a third-party instance, recreating an observer, re-sorting a list, or rebuilding an index pays the full cost every time. Compare against a `prev<Name>` with [`deepEqual`](src/utils/deep-equal.js) before doing the work. For large collections use a cheaper purpose-built check instead (`rowsEqual` in [`data-table-utils.js`](src/DataTable/data-table-utils.js), `isSameCollection` in [`menu-window.js`](src/ListBox/menu-window.js)), since a deep walk of 10,000 rows can cost more than it saves. See `optionChanged` in [`DatePicker.svelte`](src/DatePicker/DatePicker.svelte): flatpickr's `set()` rebuilds the whole day grid, and 200 equal `minDate` updates went from 400 `set` calls to 0.
   - A new-but-equal value does not come from every parent render. Svelte re-evaluates a markup expression only when one of its dependencies is invalidated, and skips equal primitives. Measured over 50 parent updates:
@@ -262,6 +266,8 @@ Routify picks up new `.svx` files automatically. [`docs/scripts/index-docs.ts`](
 Prose conventions: see [Prose and inline code](#prose-and-inline-code) and [SVX gotchas](#svx-gotchas).
 
 Preview locally with `cd docs && bun dev`.
+
+If every page shows a 404 after you add or remove files, Routify rebuilt an empty route map. Add and remove any page under `docs/src/pages`, or restart the server.
 
 #### Example conventions
 
@@ -660,6 +666,8 @@ bun run test DataTable
 
 The full suite (`bun run test`) is slow and can hit unrelated flaky UIShell focus failures. Scope to the component you touched.
 
+A full run can be killed for lack of memory, with exit code 137. Pass `--maxWorkers=4` to limit the workers.
+
 `bun run test:changed` runs every unit test your branch can affect, including uncommitted edits. CI uses the same selection on pull requests for unit and E2E tests. It follows imports, so a `Button` change also runs the `Modal` tests that render a `Button`. Pass `--print` to see the plan without running it.
 
 Types and E2E:
@@ -744,6 +752,7 @@ Check [`tests/utils/`](tests/utils/) before writing a helper:
 | [`openTooltips`](tests/utils/open-tooltips.ts) | Every portalled tooltip in the document |
 | [`setMenuMetrics`](tests/utils/set-menu-metrics.ts) | Stub the scroll metrics jsdom leaves at zero |
 | [`treeItemById`](tests/utils/tree-item-by-id.ts) | A tree node by `id`, narrowed |
+| [`virtualWindowLayer`](tests/utils/virtual-window-layer.ts) | The element that holds a virtualized list's rendered rows, narrowed |
 | [`renderSSR`](tests/utils/ssr.ts) | Server-render a component to normalized HTML and a queryable `document` (see [Server rendering tests](#server-rendering-tests)) |
 | [`storage-mocks`](tests/utils/storage-mocks.ts) | `localStorage` and `sessionStorage` mocks |
 
@@ -933,6 +942,14 @@ For components that hide content with CSS (for example ComposedModal), `toBeVisi
 Locally, Playwright reuses any server already on port 4173, including one started from another worktree. That server serves the other worktree's fixtures, so a new fixture loads the index page instead. Check with `lsof -i :4173` before trusting a failure.
 
 Scroll anchoring corrections can land more than two animation frames after a scroll. To catch them, wait with a timeout between scroll steps (80ms is enough), not `requestAnimationFrame`. Check that the test fails with the fix reverted. See [`virtual-list-spacer.test.ts`](e2e/virtual-list-spacer.test.ts).
+
+To measure blank frames in a virtualized list, listen for `scroll` on `document` in the capture phase. That listener runs before the component's own handler, while the DOM still holds the previous window, so the part of the viewport no row covers is what the browser painted. See `recordGaps` in [`virtual-list-fast-scroll.test.ts`](e2e/virtual-list-fast-scroll.test.ts).
+
+Headless Chromium has no scrollbar to drag. Send large `page.mouse.wheel` deltas, one per frame, to stand in for a fast drag.
+
+`page.keyboard.press` calls in a loop without waits land inside one frame, faster than anyone types. Use that to reproduce timing races, and wait between presses only when the test judges a settled position. A race can fail in only some runs: one round of 12 presses failed 4 runs in 10. Repeat the sequence inside the test, and check with `--repeat-each=10` that it fails with the fix reverted. See [`listbox-virtualized.test.ts`](e2e/listbox-virtualized.test.ts).
+
+To cover an opt-in mode with existing assertions, have the fixture read a query flag and run the suite once for each value. The measured-menu suites run a second time with `?optimizeFastScroll`.
 
 Add a link to `e2e/fixtures/index.html` so the fixture is reachable from the index page.
 
