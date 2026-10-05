@@ -1,7 +1,14 @@
-import { render, screen, waitFor, within } from "@testing-library/svelte";
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/svelte";
 import { tick } from "svelte";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
+import { virtualWindowLayer } from "../utils/virtual-window-layer";
 import { createItems, openMenu } from "./helpers";
 import MultiSelect from "./MultiSelect.test.svelte";
 import MultiSelectInModal from "./MultiSelectInModal.test.svelte";
@@ -44,6 +51,41 @@ describe("MultiSelect", () => {
       // 500 items at 32px (sm), spacer height 16000px
       const spacer = menu.querySelector<HTMLElement>(":scope > div");
       expect(spacer?.style.height).toBe("16000px");
+    });
+
+    it("should pin the window when virtualize sets optimizeFastScroll", async () => {
+      render(MultiSelect, {
+        props: {
+          items: createItems(500),
+          virtualize: { optimizeFastScroll: true },
+        },
+      });
+
+      await openMenu();
+
+      const menu = screen.getByRole("listbox");
+      const layer = virtualWindowLayer(menu);
+      expect(layer.style.position).toBe("sticky");
+      expect(layer.style.height).toBe("0px");
+
+      menu.scrollTop = 2000;
+      await fireEvent.scroll(menu);
+
+      // 2000px down, the window starts 3 rows of overscan above row 50, at
+      // 1880px. The sticky layer sits at 2000px, so the rows move back 120px.
+      expect(layer.style.transform).toBe("translateY(-120px)");
+    });
+
+    it("should not pin the window by default", async () => {
+      render(MultiSelect, {
+        props: { items: createItems(500), virtualize: true },
+      });
+
+      await openMenu();
+
+      const layer = virtualWindowLayer(screen.getByRole("listbox"));
+      expect(layer.style.position).toBe("");
+      expect(layer.style.transform).toBe("translateY(0px)");
     });
 
     it.each([

@@ -22,6 +22,11 @@
   }));
 
   let selectedId = null;
+
+  // `?optimizeFastScroll` runs the same suite with the option on.
+  const optimizeFastScroll = new URLSearchParams(location.search).has(
+    "optimizeFastScroll",
+  );
 </script>
 
 <!-- `wrapOptions` is the whole of the opt-in: wrapping is what leaves the
@@ -35,7 +40,7 @@
     bind:selectedId
     portalMenu={false}
     wrapOptions
-    virtualize={{ containerHeight: 300 }}
+    virtualize={{ containerHeight: 300, optimizeFastScroll }}
   />
 </div>
 

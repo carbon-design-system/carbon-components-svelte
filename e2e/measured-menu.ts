@@ -17,6 +17,10 @@ export const SLACK = 1;
  * Drive the menu to the true end of the list. One jump is not enough on its
  * own: options measured on the way down change the total height, so the end
  * moves while you are travelling towards it.
+ *
+ * Every jump, the last one included, waits before it is judged. A jump fires
+ * its scroll event a frame later, and a pinned window only follows the scroll
+ * once the menu hears it.
  */
 export async function scrollToEnd(page: Page) {
   let previous = -1;
@@ -28,9 +32,9 @@ export async function scrollToEnd(page: Page) {
       menu.scrollTop = menu.scrollHeight;
       return menu.scrollTop;
     });
+    await page.waitForTimeout(50);
     if (scrollTop === previous) return scrollTop;
     previous = scrollTop;
-    await page.waitForTimeout(50);
   }
   return previous;
 }

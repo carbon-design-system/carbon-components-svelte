@@ -39,6 +39,11 @@ export type MenuWindowState<
    */
   isWindowed: boolean;
   isMeasured: boolean;
+  /**
+   * Whether the windowed options are pinned to the viewport, as
+   * `optimizeFastScroll` asks.
+   */
+  isPinned: boolean;
 };
 
 export type MenuWindow<

@@ -5,6 +5,7 @@ import {
   VIRTUAL_INDEX_ATTRIBUTE,
 } from "../utils/height-measurer.js";
 import { scrollIntoViewWithinMenu } from "../utils/scroll-into-view-within-menu.js";
+import { syncPinnedWindow } from "../utils/virtual-window.js";
 import {
   getBoundedScrollTop,
   getMeasuredAverage,
@@ -112,6 +113,15 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
    * this left where it was. Anything else is the reader's.
    */
   let prevWrittenScrollTop = -1;
+  /**
+   * The scroll position the last `resolve` was given or `scrollTo` wrote, or
+   * `null` after a reset, so the next one records a position without reading
+   * a move into it.
+   * @type {number | null}
+   */
+  let prevScrollTop = null;
+  /** How far, and which way, the menu last scrolled. */
+  let scrollDelta = 0;
 
   const measurer = createHeightMeasurer({ onMeasure: handleMeasured });
 
@@ -130,6 +140,9 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
     if (!container) return;
     container.scrollTop = next;
     prevWrittenScrollTop = container.scrollTop;
+    syncPinnedWindow(container, prevWrittenScrollTop);
+    // A position written here is not the reader moving, so it sets no lead.
+    prevScrollTop = prevWrittenScrollTop;
     onScrollTop(prevWrittenScrollTop);
   }
 
@@ -382,6 +395,11 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
     try {
       if (shouldVirtualize && wrapOptions) noteCollection(items, getKey);
 
+      if (prevScrollTop !== null && scrollTop !== prevScrollTop) {
+        scrollDelta = scrollTop - prevScrollTop;
+      }
+      prevScrollTop = scrollTop;
+
       const state = virtualListState({
         items,
         scrollTop,
@@ -393,6 +411,7 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
         },
         heights,
         estimate,
+        scrollDelta,
       });
 
       config = state.config;
@@ -411,6 +430,9 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
           : getMenuMaxHeight(size),
         isWindowed: Boolean(config),
         isMeasured: measured,
+        isPinned:
+          Boolean(config?.optimizeFastScroll) &&
+          Boolean(state.data?.isVirtualized),
       };
     } finally {
       updating = false;
@@ -520,6 +542,8 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
    */
   function reset() {
     pending = null;
+    prevScrollTop = null;
+    scrollDelta = 0;
 
     const average = getMeasuredAverage(heights);
     if (average !== null && average !== estimate) {
