@@ -333,6 +333,14 @@ During very fast scrolling, higher overscan values may cause more flickering due
 
 <FileSource src="/framed/ComboBox/VirtualizeOverscan" />
 
+### Fast scrolling
+
+During a scroll faster than the menu can render, such as a quick drag of the scrollbar, the options can briefly disappear. Set `optimizeFastScroll: true` to keep the options already rendered in view until the new ones arrive.
+
+The options then follow the scroll a frame behind, and pause while the page is busy running scripts. Leave it off when the menu sits on a page that often does heavy work.
+
+<FileSource src="/framed/ComboBox/VirtualizeFastScroll" />
+
 ### Custom threshold
 
 The threshold is the minimum number of items required before virtualization activates. The default threshold value is 100, meaning lists with fewer than 100 items will not be virtualized and all items will be rendered normally.
