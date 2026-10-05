@@ -142,6 +142,7 @@ What each control submits under its `name`:
 | `NumberInput` | The number as a string (`1234.5`), or `""` when empty, even when `locale` formats the display. |
 | `Checkbox`, `Toggle` | `value` (`"on"` by default) while checked; nothing while unchecked. |
 | `RadioButtonGroup`, `TileGroup` | The selected option's `value`; nothing when none is selected. |
+| `SelectableTileGroup` | One entry per selected tile `value`; read them with `getAll`. |
 | `Select` | The selected `SelectItem` value, as a string. |
 | `Dropdown` | `selectedId`, as a string; `""` when nothing is selected. |
 | `ComboBox` | The displayed text, not `selectedId`. |
@@ -154,6 +155,25 @@ What each control submits under its `name`:
 
 Disabled controls submit nothing, like native disabled inputs. Read-only
 controls still submit their value.
+
+### Tiles
+
+Tile groups submit like the controls they wrap. A `TileGroup` is a radio
+group: set `name` on the group and the checked tile's `value` is sent under
+it. A `SelectableTileGroup` is a set of checkboxes that share the group's
+`name`, so each selected tile sends its own entry. Give every tile a `value`
+(a `SelectableTile` sends `"value"` when it has none).
+
+<FileSource src="/framed/Form/FormTiles" />
+
+On the server, read the radio group with `get` and the selectable group with
+`getAll`:
+
+```js
+const data = await request.formData();
+const plan = data.get("plan"); // "team"
+const addons = data.getAll("addons"); // ["backups", "audit"]
+```
 
 ### Reset
 
