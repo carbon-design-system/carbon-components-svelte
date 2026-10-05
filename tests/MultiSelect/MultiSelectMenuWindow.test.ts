@@ -1,4 +1,5 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
+import { flushMacrotask } from "../utils/flush-macrotask";
 import { stubPerOptionResizeObserver } from "../utils/stub-per-option-resize-observer";
 import { user } from "../utils/user";
 import { createItems } from "./helpers";
@@ -77,18 +78,37 @@ function menuScrollHeight() {
 }
 
 /**
- * Wait until the menu's length stops moving. Measurement arrives in batches
- * and each batch can sharpen the offsets, so a reading taken on the first one
- * is not yet the settled one.
+ * Animation frames this suite runs itself. The height measurer reports each
+ * batch on a frame, and each batch can render options the last one did not
+ * cover, so offsets settle over a chain of frames. Driving them by hand makes
+ * "settled" mean no frame is pending, however slow the machine.
  */
-async function waitForSettledOffsets() {
-  let previous: string | undefined;
-  await waitFor(() => {
-    const current = menuScrollHeight();
-    const settled = current !== undefined && current === previous;
-    previous = current;
-    expect(settled).toBe(true);
+const frames = new Map<number, FrameRequestCallback>();
+let nextFrame = 1;
+
+function stubAnimationFrames() {
+  frames.clear();
+  vi.stubGlobal("requestAnimationFrame", (callback: FrameRequestCallback) => {
+    const id = nextFrame++;
+    frames.set(id, callback);
+    return id;
   });
+  vi.stubGlobal("cancelAnimationFrame", (id: number) => {
+    frames.delete(id);
+  });
+}
+
+/** Run frames until measurement stops asking for one. */
+async function settleMeasurement() {
+  for (let pass = 0; pass < 50; pass++) {
+    // biome-ignore lint/performance/noAwaitInLoops: each frame's render must land before the next is judged
+    await flushMacrotask();
+    if (frames.size === 0) return;
+    const pending = [...frames.values()];
+    frames.clear();
+    for (const callback of pending) callback(performance.now());
+  }
+  throw new Error("Measurement kept asking for frames");
 }
 
 /** Option text in rendered order, trimmed of any surrounding whitespace. */
@@ -221,6 +241,7 @@ describe("MultiSelect menu window wiring", () => {
   describe("the collection the menu window measures", () => {
     beforeEach(() => {
       stubPerOptionResizeObserver();
+      stubAnimationFrames();
     });
 
     afterEach(() => {
@@ -245,7 +266,7 @@ describe("MultiSelect menu window wiring", () => {
       // reported on the frame after the observer sees it. Scrolling against
       // the seed instead would land somewhere else and be held there, the
       // correction's job being to keep whatever is on screen on screen.
-      await waitForSettledOffsets();
+      await settleMeasurement();
 
       // Just past the tall select-all row, which is an option of this
       // collection like any other and was measured as one: a list that had
@@ -256,7 +277,7 @@ describe("MultiSelect menu window wiring", () => {
       await waitFor(() => {
         expect(optionTexts()[1]).toBe("Item 1");
       });
-      await waitForSettledOffsets();
+      await settleMeasurement();
       const settled = {
         scrollHeight: menuScrollHeight(),
         scrollTop: scroller.scrollTop,
@@ -275,7 +296,7 @@ describe("MultiSelect menu window wiring", () => {
       await waitFor(() => {
         expect(screen.getByLabelText("Item 1")).toBeChecked();
       });
-      await waitForSettledOffsets();
+      await settleMeasurement();
       expect(optionTexts()).toEqual(settled.texts);
       expect(menuScrollHeight()).toBe(settled.scrollHeight);
       expect(scroller.scrollTop).toBe(settled.scrollTop);

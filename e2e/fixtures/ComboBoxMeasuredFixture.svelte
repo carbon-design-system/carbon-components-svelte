@@ -25,6 +25,11 @@
 
   let selectedId = null;
   let value = "";
+
+  // `?optimizeFastScroll` runs the same suite with the option on.
+  const optimizeFastScroll = new URLSearchParams(location.search).has(
+    "optimizeFastScroll",
+  );
 </script>
 
 <!-- `wrapOptions` is the whole of the opt-in: wrapping is what leaves the
@@ -42,7 +47,7 @@
     shouldFilterItem={(item, value) =>
       item.text.toLowerCase().includes(value.toLowerCase())}
     wrapOptions
-    virtualize={{ containerHeight: 300 }}
+    virtualize={{ containerHeight: 300, optimizeFastScroll }}
   />
 </div>
 

@@ -1,6 +1,7 @@
 import { tick } from "svelte";
 import { createMenuWindow } from "../../src/ListBox/menu-window.js";
 import { VIRTUAL_INDEX_ATTRIBUTE } from "../../src/utils/height-measurer.js";
+import { virtualWindow } from "../../src/utils/virtual-window.js";
 import { rect } from "../utils/rect";
 
 type Item = { id: number; text: string };
@@ -293,6 +294,117 @@ describe("createMenuWindow: the visible slice", () => {
       scrollTop: 0,
     });
     expect(fluid.totalHeight).toBe(300 * 64);
+  });
+});
+
+describe("createMenuWindow: leading the scroll", () => {
+  const options = {
+    items: buildItems(300),
+    shouldVirtualize: true,
+    virtualize: true,
+  };
+
+  it("renders ahead of the viewport in the direction the menu scrolled", () => {
+    const { menu } = setup();
+
+    menu.update({ ...options, scrollTop: 4000 });
+    const down = menu.update({ ...options, scrollTop: 4200 });
+    // 4200 + 300 viewport + 200 lead, plus three of overscan.
+    expect(down.startIndex + down.itemsToRender.length).toBe(
+      Math.ceil(4700 / ITEM_HEIGHT) + 3,
+    );
+
+    const up = menu.update({ ...options, scrollTop: 4000 });
+    expect(up.startIndex).toBe(Math.floor(3800 / ITEM_HEIGHT) - 3);
+  });
+
+  it("keeps the lead when the same position resolves again", () => {
+    const { menu } = setup();
+
+    menu.update({ ...options, scrollTop: 4000 });
+    const first = menu.update({ ...options, scrollTop: 4200 });
+    const again = menu.update({ ...options, scrollTop: 4200 });
+
+    expect(again.itemsToRender).toHaveLength(first.itemsToRender.length);
+  });
+
+  it("takes no lead from a position it wrote itself", () => {
+    const { menu } = setup();
+
+    menu.update({ ...options, scrollTop: 0 });
+    menu.scrollIntoView(100, "top");
+    const state = menu.update({ ...options, scrollTop: 100 * ITEM_HEIGHT });
+
+    expect(state.startIndex).toBe(100 - 3);
+    expect(state.itemsToRender).toHaveLength(
+      Math.ceil(CONTAINER_HEIGHT / ITEM_HEIGHT) + 6,
+    );
+  });
+
+  it("forgets the lead on reset", () => {
+    const { menu } = setup();
+
+    menu.update({ ...options, scrollTop: 4000 });
+    menu.update({ ...options, scrollTop: 4200 });
+    menu.reset();
+    const state = menu.update({ ...options, scrollTop: 0 });
+
+    expect(state.itemsToRender).toHaveLength(
+      Math.ceil(CONTAINER_HEIGHT / ITEM_HEIGHT) + 3,
+    );
+  });
+});
+
+describe("createMenuWindow: pinning", () => {
+  const options = {
+    items: buildItems(300),
+    shouldVirtualize: true,
+    scrollTop: 0,
+  };
+
+  it("pins the window when the config asks for it", () => {
+    const { menu } = setup();
+
+    expect(menu.update({ ...options, virtualize: true }).isPinned).toBe(false);
+    expect(
+      menu.update({ ...options, virtualize: { optimizeFastScroll: true } })
+        .isPinned,
+    ).toBe(true);
+  });
+
+  it("does not pin a list too short to be windowed", () => {
+    const { menu } = setup();
+
+    const state = menu.update({
+      ...options,
+      items: buildItems(10),
+      virtualize: { optimizeFastScroll: true },
+    });
+
+    expect(state.isVirtualized).toBe(false);
+    expect(state.isPinned).toBe(false);
+  });
+
+  it("moves a pinned window with the scroll it writes", () => {
+    const { container, menu } = setup();
+    const layer = document.createElement("div");
+    container.appendChild(layer);
+
+    const state = menu.update({
+      ...options,
+      virtualize: { optimizeFastScroll: true },
+    });
+    virtualWindow(layer, {
+      offsetY: state.offsetY,
+      scrollTop: 0,
+      pinned: state.isPinned,
+    });
+    menu.scrollIntoView(50, "top");
+
+    // The rows move before the component renders the new position, so code
+    // that reads them next finds them where the scroll put them.
+    expect(container.scrollTop).toBe(50 * ITEM_HEIGHT);
+    expect(layer.style.transform).toBe(`translateY(${-50 * ITEM_HEIGHT}px)`);
   });
 });
 

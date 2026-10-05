@@ -1,7 +1,8 @@
-import { render, screen, waitFor } from "@testing-library/svelte";
+import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
+import { virtualWindowLayer } from "../utils/virtual-window-layer";
 import ComboBox from "./ComboBox.test.svelte";
 import { getInput } from "./helpers";
 
@@ -242,6 +243,41 @@ describe("ComboBox", () => {
       // 500 items at 32px (sm), spacer height 16000px
       const spacer = menu.querySelector<HTMLElement>(":scope > div");
       expect(spacer?.style.height).toBe("16000px");
+    });
+
+    it("should pin the window when virtualize sets optimizeFastScroll", async () => {
+      render(ComboBox, {
+        props: {
+          items: createLargeItemList(500),
+          virtualize: { optimizeFastScroll: true },
+        },
+      });
+
+      await user.click(getInput());
+
+      const menu = screen.getByRole("listbox");
+      const layer = virtualWindowLayer(menu);
+      expect(layer.style.position).toBe("sticky");
+      expect(layer.style.height).toBe("0px");
+
+      menu.scrollTop = 2000;
+      await fireEvent.scroll(menu);
+
+      // 2000px down, the window starts 3 rows of overscan above row 50, at
+      // 1880px. The sticky layer sits at 2000px, so the rows move back 120px.
+      expect(layer.style.transform).toBe("translateY(-120px)");
+    });
+
+    it("should not pin the window by default", async () => {
+      render(ComboBox, {
+        props: { items: createLargeItemList(500), virtualize: true },
+      });
+
+      await user.click(getInput());
+
+      const layer = virtualWindowLayer(screen.getByRole("listbox"));
+      expect(layer.style.position).toBe("");
+      expect(layer.style.transform).toBe("translateY(0px)");
     });
 
     it("should use explicit itemHeight instead of the size default", async () => {

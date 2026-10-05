@@ -278,7 +278,8 @@
    * - `overscan` (default: 3): The number of extra items to render above and below the viewport for smoother scrolling. Higher values may cause more flickering during very fast scrolling.
    * - `threshold` (default: 100): The minimum number of items required before virtualization activates. Lists with fewer items will render all items normally without virtualization.
    * - `maxItems` (default: undefined): The maximum number of items to render. When undefined, all visible items are rendered.
-   * @type {undefined | boolean | { itemHeight?: number, containerHeight?: number, overscan?: number, threshold?: number, maxItems?: number }}
+   * - `optimizeFastScroll` (default: false): Keep the rendered options in view during very fast scrolling, such as a scrollbar drag, instead of showing blank space until new options render. The options then follow the scroll a frame behind, and pause while the main thread is busy.
+   * @type {undefined | boolean | { itemHeight?: number, containerHeight?: number, overscan?: number, threshold?: number, maxItems?: number, optimizeFastScroll?: boolean }}
    */
   export let virtualize = undefined;
 
@@ -345,6 +346,7 @@
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { resetVirtualScrollOnClose } from "../utils/virtualize.js";
+  import VirtualWindow from "../VirtualList/VirtualWindow.svelte";
 
   const dispatch = createEventDispatcher();
   const scrollEndTracker = createScrollEndTracker();
@@ -720,6 +722,7 @@
     menuMaxHeight,
     isWindowed,
     isMeasured,
+    isPinned,
   } = menuState);
 
   $: if (typeahead) {
@@ -1181,91 +1184,90 @@
             : undefined}
       >
         {#if isVirtualized}
-          <div style:height="{totalHeight}px" style:position="relative">
-            <div style:transform="translateY({offsetY}px)">
-              {#each itemsToRender as item, index (item.id)}
-                {@const actualIndex = startIndex + index}
-                {@const selected = selectedItem?.id === item.id}
-                {@const optionId = `${id}-${item.id}`}
-                <ListBoxMenuItem
-                  id={optionId}
-                  active={selectedId === item.id}
-                  disabled={item.disabled}
-                  hasLeftIcon={Boolean($$slots.icon || item.icon)}
-                  aria-setsize={filteredItems.length}
-                  aria-posinset={actualIndex + 1}
-                  data-virtual-index={isMeasured ? actualIndex : undefined}
-                  on:click={(event) => {
-                    if (item.disabled) {
-                      event.stopPropagation();
-                      return;
-                    }
-                    selectItem(item);
-                  }}
-                  on:mousedown={(event) => {
-                    // Keep focus on the field so screen readers don't
-                    // re-announce it on every option click.
-                    event.preventDefault();
-                  }}
-                  on:mouseenter={() => highlightItem(item)}
-                >
-                  {#if $$slots.icon}
-                    <span
-                      class:bx--list-box__menu-item__icon={true}
-                      class:bx--list-box__menu-item__icon--left={true}
-                    >
-                      <HighlightSlot {optionId} let:highlighted>
-                        <slot
-                          name="icon"
-                          {item}
-                          index={actualIndex}
-                          {selected}
-                          {highlighted}
-                        />
-                      </HighlightSlot>
-                    </span>
-                  {:else if item.icon}
-                    <span
-                      class:bx--list-box__menu-item__icon={true}
-                      class:bx--list-box__menu-item__icon--left={true}
-                    >
-                      <svelte:component this={item.icon} />
-                    </span>
-                  {/if}
-                  {#if $$slots.default}
+          <VirtualWindow
+            {totalHeight}
+            {offsetY}
+            scrollTop={listScrollTop}
+            pinned={isPinned}
+            measured={isMeasured}
+          >
+            {#each itemsToRender as item, index (item.id)}
+              {@const actualIndex = startIndex + index}
+              {@const selected = selectedItem?.id === item.id}
+              {@const optionId = `${id}-${item.id}`}
+              <ListBoxMenuItem
+                id={optionId}
+                active={selectedId === item.id}
+                disabled={item.disabled}
+                hasLeftIcon={Boolean($$slots.icon || item.icon)}
+                aria-setsize={filteredItems.length}
+                aria-posinset={actualIndex + 1}
+                data-virtual-index={isMeasured ? actualIndex : undefined}
+                on:click={(event) => {
+                  if (item.disabled) {
+                    event.stopPropagation();
+                    return;
+                  }
+                  selectItem(item);
+                }}
+                on:mousedown={(event) => {
+                  // Keep focus on the field so screen readers don't
+                  // re-announce it on every option click.
+                  event.preventDefault();
+                }}
+                on:mouseenter={() => highlightItem(item)}
+              >
+                {#if $$slots.icon}
+                  <span
+                    class:bx--list-box__menu-item__icon={true}
+                    class:bx--list-box__menu-item__icon--left={true}
+                  >
                     <HighlightSlot {optionId} let:highlighted>
                       <slot
+                        name="icon"
                         {item}
                         index={actualIndex}
                         {selected}
                         {highlighted}
                       />
                     </HighlightSlot>
-                  {:else}
-                    {itemToString(item)}
-                  {/if}
-                  {#if $$slots.iconRight}
-                    <span
-                      class:bx--list-box__menu-item__icon={true}
-                      class:bx--list-box__menu-item__icon--right={true}
-                    >
-                      <HighlightSlot {optionId} let:highlighted>
-                        <slot
-                          name="iconRight"
-                          {item}
-                          index={actualIndex}
-                          {selected}
-                          {highlighted}
-                        />
-                      </HighlightSlot>
-                    </span>
-                  {:else if selected}
-                    <Checkmark class="bx--list-box__menu-item__selected-icon" />
-                  {/if}
-                </ListBoxMenuItem>
-              {/each}
-            </div>
-          </div>
+                  </span>
+                {:else if item.icon}
+                  <span
+                    class:bx--list-box__menu-item__icon={true}
+                    class:bx--list-box__menu-item__icon--left={true}
+                  >
+                    <svelte:component this={item.icon} />
+                  </span>
+                {/if}
+                {#if $$slots.default}
+                  <HighlightSlot {optionId} let:highlighted>
+                    <slot {item} index={actualIndex} {selected} {highlighted} />
+                  </HighlightSlot>
+                {:else}
+                  {itemToString(item)}
+                {/if}
+                {#if $$slots.iconRight}
+                  <span
+                    class:bx--list-box__menu-item__icon={true}
+                    class:bx--list-box__menu-item__icon--right={true}
+                  >
+                    <HighlightSlot {optionId} let:highlighted>
+                      <slot
+                        name="iconRight"
+                        {item}
+                        index={actualIndex}
+                        {selected}
+                        {highlighted}
+                      />
+                    </HighlightSlot>
+                  </span>
+                {:else if selected}
+                  <Checkmark class="bx--list-box__menu-item__selected-icon" />
+                {/if}
+              </ListBoxMenuItem>
+            {/each}
+          </VirtualWindow>
         {:else}
           {#each itemsToRender as item, index (item.id)}
             {@const selected = selectedItem?.id === item.id}
