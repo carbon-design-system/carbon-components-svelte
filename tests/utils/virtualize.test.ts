@@ -1454,3 +1454,136 @@ describe("virtualListState estimate", () => {
     }
   });
 });
+
+describe("virtualize with a scroll lead", () => {
+  const items = Array.from({ length: 500 }, (_, i) => ({ id: i }));
+  const base = {
+    items,
+    itemHeight: 40,
+    containerHeight: 300,
+    scrollTop: 4000,
+    overscan: 3,
+  };
+
+  it("renders no lead without a scroll delta", () => {
+    const result = virtualize(base);
+
+    expect(result.startIndex).toBe(97);
+    expect(result.endIndex).toBe(111);
+  });
+
+  it("extends the window below the viewport when scrolling down", () => {
+    const result = virtualize({ ...base, scrollDelta: 120 });
+
+    expect(result.startIndex).toBe(97);
+    expect(result.endIndex).toBe(114);
+  });
+
+  it("extends the window above the viewport when scrolling up", () => {
+    const result = virtualize({ ...base, scrollDelta: -120 });
+
+    expect(result.startIndex).toBe(94);
+    expect(result.endIndex).toBe(111);
+    expect(result.offsetY).toBe(94 * 40);
+  });
+
+  it("leads by at most one viewport", () => {
+    const down = virtualize({ ...base, scrollDelta: 5000 });
+    const up = virtualize({ ...base, scrollDelta: -5000 });
+
+    expect(down.endIndex).toBe(118);
+    expect(up.startIndex).toBe(89);
+  });
+
+  it("ignores a non-finite scroll delta", () => {
+    const result = virtualize({ ...base, scrollDelta: Number.NaN });
+
+    expect(result.startIndex).toBe(97);
+    expect(result.endIndex).toBe(111);
+  });
+
+  it("trims the lead before the viewport under maxItems", () => {
+    const down = virtualize({ ...base, maxItems: 15, scrollDelta: 120 });
+    const up = virtualize({ ...base, maxItems: 15, scrollDelta: -120 });
+
+    expect(down.startIndex).toBe(97);
+    expect(down.endIndex).toBe(112);
+    expect(up.startIndex).toBe(96);
+    expect(up.endIndex).toBe(111);
+  });
+
+  it("keeps the old cap when maxItems cannot fit the viewport", () => {
+    const capped = virtualize({ ...base, maxItems: 5 });
+    const up = virtualize({ ...base, maxItems: 5, scrollDelta: -120 });
+
+    expect(up.startIndex).toBe(capped.startIndex);
+    expect(up.endIndex).toBe(capped.endIndex);
+  });
+
+  it("leads by measured offsets", () => {
+    const heights = Array.from({ length: 500 }, () => 40);
+    const result = virtualize({
+      ...base,
+      measured: true,
+      heights,
+      scrollDelta: 120,
+    });
+
+    expect(result.startIndex).toBe(97);
+    expect(result.endIndex).toBe(114);
+  });
+
+  it.each([
+    ["fixed", undefined],
+    ["measured", Array.from({ length: 500 }, (_, i) => 30 + (i % 3) * 10)],
+  ])("covers the next viewport at a steady speed (%s)", (_label, heights) => {
+    // The browser can paint a scroll before the window moves to it. Each
+    // window must cover the viewport one scroll later, or that frame shows
+    // blank space.
+    const speed = 250;
+    let scrollTop = 0;
+    let previous = virtualize({
+      ...base,
+      scrollTop,
+      measured: Boolean(heights),
+      heights,
+    });
+
+    for (let step = 0; step < 20; step++) {
+      const next = scrollTop + speed;
+      const top = previous.offsetY;
+      const bottom = heights
+        ? top +
+          heights
+            .slice(previous.startIndex, previous.endIndex)
+            .reduce((sum, height) => sum + height, 0)
+        : previous.endIndex * 40;
+
+      if (step > 0) {
+        expect(top).toBeLessThanOrEqual(next);
+        expect(bottom).toBeGreaterThanOrEqual(next + 300);
+      }
+
+      previous = virtualize({
+        ...base,
+        scrollTop: next,
+        scrollDelta: speed,
+        measured: Boolean(heights),
+        heights,
+      });
+      scrollTop = next;
+    }
+  });
+
+  it("passes through virtualListState", () => {
+    const { data } = virtualListState({
+      items,
+      scrollTop: 4000,
+      scrollDelta: 120,
+      shouldVirtualize: true,
+      virtualize: { containerHeight: 300 },
+    });
+
+    expect(data?.endIndex).toBe(114);
+  });
+});

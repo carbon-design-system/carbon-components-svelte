@@ -8,6 +8,8 @@
 // adjustment to the menu's own scroll container and is a no-op when the menu is
 // not scrollable.
 
+import { syncPinnedWindow } from "./virtual-window.js";
+
 /**
  * Scroll `node` into view within its nearest scroll container matching
  * `containerSelector` using `block: "nearest"` semantics. Never scrolls the
@@ -32,5 +34,9 @@ export function scrollIntoViewWithinMenu(
     container.scrollTop -= containerRect.top - itemRect.top;
   } else if (itemRect.bottom > containerRect.bottom) {
     container.scrollTop += itemRect.bottom - containerRect.bottom;
+  } else {
+    return;
   }
+
+  syncPinnedWindow(container, container.scrollTop);
 }
