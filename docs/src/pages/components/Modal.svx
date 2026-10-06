@@ -33,6 +33,14 @@ Use `selectorPrimaryFocus` to override the default and target a specific element
 
 <FileSource src="/framed/Modal/ModalCustomFocus" />
 
+### Custom overlays
+
+`Modal` and `ComposedModal` already keep focus inside the dialog. For an overlay that does not build on them, call the `trapFocus` helper from a `keydown` handler. It is a helper, not an action: pass the `container` element and the keyboard `event`, and focus loops through the tabbable elements inside.
+
+The helper always calls `event.preventDefault()`, so call it only when `event.key` is `"Tab"`. Calling it for other keys blocks their default behavior. Press <DocKbd label="Tab" /> or <DocKbd label="Shift+Tab" /> in the dialog to see focus loop.
+
+<FileSource src="/framed/Modal/TrapFocusBasic" />
+
 ## Alert mode
 
 Set `alert` to `true` to mark the modal as time-sensitive or requiring immediate attention. This changes the ARIA `role` from `"dialog"` to `"alertdialog"` (or `"alert"` when combined with `passiveModal`), which prompts assistive technology to announce the modal as soon as it opens. When not `passiveModal`, the body content is also linked with `aria-describedby` so screen readers include it in the announcement.

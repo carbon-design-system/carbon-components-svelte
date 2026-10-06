@@ -71,6 +71,16 @@ Set `selectTextOnFocus` to select the full value when the field receives focus.
 
 <TextInput selectTextOnFocus labelText="Workspace name" value="acme-production" />
 
+### Native text fields
+
+`TextInput`, `TextArea`, `NumberInput`, `Search`, and the other text fields keep the selection after a click in Safari, where the `mouseup` that ends a click would collapse it. For a native field you build yourself, use the `preserveFocusSelection` action. It does not select anything itself: select the text in your own `focus` handler and pass `true` to turn the action on.
+
+<FileSource src="/framed/TextInput/PreserveFocusSelectionBasic" />
+
+The action takes a boolean, so pass an expression to turn it on and off. Pass `false` when the field is disabled or when selecting on focus is switched off, which mirrors how [TimePicker](/components/TimePicker) applies it.
+
+<FileSource src="/framed/TextInput/PreserveFocusSelectionToggling" />
+
 ## Light
 
 Use the light variant for light backgrounds.
