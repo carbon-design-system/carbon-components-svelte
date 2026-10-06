@@ -855,9 +855,51 @@ it("marks the `selected` option", () => {
 - `onMount`, `afterUpdate`, `bind:this`, and actions do not run on the server, and `window`, `document`, and DOM classes such as `HTMLElement` do not exist. A `$:` block does run, so guard browser APIs in it with `typeof window === "undefined"` or move them into `onMount` or an action such as `dismiss`.
 - A `tick().then()` queued from a `$:` block runs after a server render too. Return early when the element ref is unset; a rejection there is unhandled.
 - When the server output is wrong, resolve the initial state synchronously (a registration index each child claims in script order) and let the store win once it is set. Do not move the work into `onMount`.
-- Only test files in the `node` environment compile components for the server. A jsdom test file compiles every `.svelte` import for the client, so it cannot server-render the same fixture, and there is no hydration check yet.
+- Only test files in the `node` environment compile components for the server. A jsdom test file compiles every `.svelte` import for the client, so it cannot server-render the same fixture. To check hydration, see [Hydration tests](#hydration-tests).
 - [`ssr-smoke.ssr.test.ts`](tests/ssr-smoke.ssr.test.ts) renders every component in [`src/index.js`](src/index.js) with default props, and again with `open` when it has one, and fails on a throw or on `undefined`, `[object Object]`, or `NaN` in the output. A new child component that needs its parent's context goes in its `NEEDS_PARENT` list.
 - Svelte's server compiler can move a JSDoc `@type` comment onto an unrelated expression and wrap it in parentheses, which produces invalid JavaScript. The sweep fails with a `Parse failure` when that happens. Type a function with `@param` and `@returns`, and move casts out of directive arguments into a helper.
+
+#### Hydration tests
+
+A `*.ssr.test.ts` checks the HTML the server sends. A `*.hydrate.test.ts` checks what happens when the client takes that HTML over. Prefer `renderSSR` whenever the defect shows in the server HTML (a missing selection, a wrong attribute). Add a hydration test only when the problem appears during or after hydration: Svelte rebuilds server nodes, text typed before hydration is lost, or the client's first render differs from the server's.
+
+[`hydrateFixtures`](tests/utils/hydrate.ts) builds every fixture it is given twice with Vite (a server bundle and a Svelte dev-mode client bundle), renders each on the server with no DOM, then hydrates that HTML in jsdom and reports what changed. Each call is one build of a few seconds, so call it once per file in `beforeAll` with a longer timeout:
+
+```ts
+// @vitest-environment node
+import { fileURLToPath } from "node:url";
+import { type HydrateResult, hydrateFixtures } from "../utils/hydrate";
+
+const fixture = fileURLToPath(
+  new URL("./Select.hydrate.test.svelte", import.meta.url),
+);
+let result: HydrateResult;
+
+beforeAll(async () => {
+  [result] = await hydrateFixtures([{ fixture, props: { selected: "md" } }]);
+}, 120_000);
+
+it("keeps the server nodes", () => {
+  expect(result.identity.pct).toBe(100);
+  expect(result.diffIgnoringIds).toEqual([]);
+  expect(result.brokenRefs.settled).toEqual([]);
+});
+```
+
+Svelte 5 repairs most mismatches without a warning: it rebuilds a swapped `{#if}` branch, lets the client's text and attributes win, and rewrites regenerated `uniqueId()` ids. A quiet console proves nothing, so assert on the diff and node identity rather than on `warnings`:
+
+| Field | Meaning |
+| --- | --- |
+| `diffIgnoringIds` | Server DOM vs the DOM right after `hydrate()`, with random ids normalized. `[]` means the client kept what the server sent. |
+| `identity.pct` | Share of server elements still in the document. Below 100 means Svelte discarded and rebuilt nodes; `identity.replaced` lists them. An element a portal moves to `body` still counts. |
+| `settledDiff` | Changes made after mount (`onMount`, a registration flush). Assert `[]` when the server should already render the final state. |
+| `brokenRefs.settled` | `aria-*`, `for`, and `headers` ids that match no element in the document. |
+| `serverRenderError`, `hydrateError`, `errors` | Errors thrown on each side. |
+
+- Svelte 5 always rebuilds `<option>` elements, so a native `<select>` lowers `identity.pct`. Check that `identity.replaced` lists only `option`s.
+- jsdom has no layout. `matchMedia` evaluates `min-width` and `max-width` against the `viewport` option (1280 by 800 by default), and `ResizeObserver` never fires.
+- [`hydrate-smoke.hydrate.test.ts`](tests/hydrate-smoke.hydrate.test.ts) has negative controls that show what each field catches.
+- Run them with `bunx vitest run hydrate`. They run in the `ssr` project (node environment) on Svelte 5 only. Build output goes to `node_modules/.cache/ccs-hydrate/` and is deleted after each call.
 
 #### Svelte 3 and Svelte 4 compatibility tests
 
@@ -865,7 +907,7 @@ The default `bun run test` harness uses Svelte 5. Separate workspaces under `tes
 
 You only need these when fixing a failure reported from `bun run test:svelte3`, `bun run test:svelte4`, or their type-check scripts. Most changes do not require them.
 
-These workspaces run `../tests/**/*.test.ts` except `tests/Snippets/**`, `*.ssr.test.ts`, and `tests/utils/ssr.test.ts`. A test that imports a Svelte 5 only module (`svelte/server`, runes, snippets) must be excluded in both `vite.config.ts` files.
+These workspaces run `../tests/**/*.test.ts` except `tests/Snippets/**`, `*.ssr.test.ts`, `*.hydrate.test.ts`, and `tests/utils/ssr.test.ts`. A test that imports a Svelte 5 only module (`svelte/server`, runes, snippets) must be excluded in both `vite.config.ts` files.
 
 Before running a compatibility script, install that workspace's dependencies. Without a local `node_modules`, the run may fall back to the Svelte 5 harness:
 
