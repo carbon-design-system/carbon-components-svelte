@@ -154,6 +154,7 @@
   let refSearch = null;
   /** @type {null | HTMLElement} */
   let menuRef = null;
+  let searchButtonRef = null;
   let prevActive;
   // Escape closes the menu but leaves the search bar open.
   let menuDismissed = false;
@@ -224,6 +225,7 @@
       dispatch("select", detail);
       reset();
       dispatch("close", { trigger: "select" });
+      focusSearchButton();
     },
     hasPrimaryItems,
     registerItem(itemId, filterable, inDividerGroup = false) {
@@ -297,12 +299,31 @@
         } else if (value === "") {
           active = false;
           dispatch("close", { trigger: "escape-key" });
+          focusSearchButton();
         } else {
           dispatchSearch?.cancel();
           value = "";
         }
         break;
     }
+  }
+
+  // Closing from the keyboard (Escape, clear, select) unmounts or disables the
+  // focused control, so return focus to the search button instead of <body>.
+  // Outside clicks and external `active` changes leave focus alone, and so does
+  // a consumer that moved focus elsewhere (e.g. an `on:select` handler opening
+  // a modal): only take focus if it was dropped or is still inside the search.
+  function focusSearchButton() {
+    tick().then(() => {
+      const activeElement = document.activeElement;
+      if (
+        !activeElement ||
+        activeElement === document.body ||
+        refSearch?.contains(activeElement)
+      ) {
+        searchButtonRef?.focus();
+      }
+    });
   }
 
   function reset() {
@@ -318,6 +339,7 @@
     dispatch("select", { value, selectedResultIndex, selectedResult });
     reset();
     dispatch("close", { trigger: "select" });
+    focusSearchButton();
   }
 
   $: if (active && ref) ref.focus();
@@ -373,6 +395,7 @@
     aria-haspopup="menu"
   >
     <button
+      bind:this={searchButtonRef}
       type="button"
       aria-label="Search"
       aria-expanded={active}
@@ -455,6 +478,7 @@
               // If the search bar is empty, deactivate the input.
               active = false;
               dispatch("close", { trigger: "escape-key" });
+              focusSearchButton();
             }
 
             // Reset the search query but keep the search bar active.
@@ -477,6 +501,7 @@
         on:click={() => {
           reset();
           dispatch("clear");
+          focusSearchButton();
         }}
       >
         <Close size={20} title={closeButtonLabelText} />

@@ -8,6 +8,7 @@
   export let value = "";
   export let results: ComponentProps<HeaderSearch>["results"] = [];
   export let onClose: (e: CustomEvent<{ trigger: string }>) => void = () => {};
+  export let onSelect: () => void = () => {};
 </script>
 
 <HeaderSearch
@@ -15,6 +16,7 @@
   bind:value
   {results}
   on:close={onClose}
+  on:select={onSelect}
   let:result
   let:index
 >
