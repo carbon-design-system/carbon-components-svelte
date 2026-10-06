@@ -1,0 +1,14 @@
+{
+  "name": "dom-env",
+  "version": "0.0.0",
+  "private": true,
+  "description": "A fast, zero-dependency DOM for component tests. Runs inside vitest's vmThreads pool.",
+  "type": "module",
+  "exports": {
+    "./vitest": "./vitest.js"
+  },
+  "scripts": {
+    "build": "bun build src/index.js --format=iife --target=browser --outfile=dist/dom-env.js",
+    "test": "node --test test/smoke.test.js"
+  }
+}
