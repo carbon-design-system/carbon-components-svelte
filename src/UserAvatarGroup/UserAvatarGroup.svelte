@@ -80,16 +80,16 @@
   import Stack from "../Stack/Stack.svelte";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { sortByDomOrder } from "../utils/sort-by-dom-order.js";
+  import { provideTooltipGroup } from "../utils/tooltip-group.js";
   import UserAvatarGroupOverflow from "./UserAvatarGroupOverflow.svelte";
 
   /** @type {import("svelte/store").Writable<Array<{ id: string; name: string; node?: HTMLElement }>>} */
   const items = writable([]);
   const sharedMax = writable(0);
   const sharedSize = writable(size);
-  // Tracks which avatar's tooltip is open so only one shows at a time. Scoped
-  // per group instance.
-  /** @type {import("svelte/store").Writable<string | null>} */
-  const activeTooltip = writable(null);
+  // Avatar tooltips hand off to each other, and to the rest of an enclosing
+  // `TooltipGroup`.
+  provideTooltipGroup();
 
   // `max` of 0 (or non-positive) means "no limit"; mirror that as 0 in the
   // store so registered avatars never mark themselves as overflow.
@@ -112,7 +112,6 @@
     items,
     max: sharedMax,
     size: sharedSize,
-    activeTooltip,
     register: ({ id, name, node }) => {
       batchedItemsUpdate((current) =>
         current.some((item) => item.id === id)
