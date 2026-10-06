@@ -126,7 +126,7 @@
   export let ref = null;
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
-  import { get, readable } from "svelte/store";
+  import { readable } from "svelte/store";
   import User from "../icons/User.svelte";
   import TooltipDefinition from "../TooltipDefinition/TooltipDefinition.svelte";
   import { getAvatarBackgroundColor } from "../utils/avatar-color.js";
@@ -143,47 +143,6 @@
   const groupItems = userAvatarGroup?.items ?? readable([]);
   const groupMax = userAvatarGroup?.max ?? readable(0);
   const groupSize = userAvatarGroup?.size ?? readable(undefined);
-  const groupActiveTooltip = userAvatarGroup?.activeTooltip ?? readable(null);
-
-  // In a group, only one avatar tooltip shows at a time. Hovering an avatar
-  // claims a shared store on pointer enter (before the tooltip's open delay);
-  // any other open tooltip closes immediately when a neighbor claims it (same
-  // approach as ContentSwitcher's icon-only tooltips).
-  let tooltipOpen = false;
-  let releaseTimeout;
-  $: if (
-    userAvatarGroup &&
-    tooltipOpen &&
-    $groupActiveTooltip !== null &&
-    $groupActiveTooltip !== groupItemId
-  ) {
-    tooltipOpen = false;
-  }
-
-  function claimTooltip() {
-    if (!userAvatarGroup) return;
-    clearTimeout(releaseTimeout);
-    const previous = get(groupActiveTooltip);
-    userAvatarGroup.activeTooltip.set(groupItemId);
-    // Warm handoff: if another avatar already has its tooltip open, skip the
-    // enter delay (same pattern as ContentSwitcher's icon-only tooltips).
-    if (previous !== null && previous !== groupItemId) {
-      tooltipOpen = true;
-    }
-  }
-
-  function releaseTooltip() {
-    if (userAvatarGroup && get(groupActiveTooltip) === groupItemId) {
-      userAvatarGroup.activeTooltip.set(null);
-    }
-  }
-
-  // Defer release so moving between neighbors within 300ms skips the next
-  // enter delay.
-  function scheduleRelease() {
-    clearTimeout(releaseTimeout);
-    releaseTimeout = setTimeout(releaseTooltip, 300);
-  }
 
   if (userAvatarGroup) {
     // Register once mounted so the group can sort registrations into DOM order
@@ -192,7 +151,6 @@
     onMount(() => {
       userAvatarGroup.register({ id: groupItemId, name, node: ref });
       return () => {
-        clearTimeout(releaseTimeout);
         userAvatarGroup.unregister(groupItemId);
       };
     });
@@ -259,8 +217,6 @@
     {direction}
     {portalTooltip}
     id={id === undefined ? undefined : `${id}-tooltip`}
-    bind:open={tooltipOpen}
-    on:close={releaseTooltip}
     data-overflow={groupOverflow ? "true" : undefined}
     data-avatar-group-overflow={$$restProps["data-avatar-group-overflow"]}
   >
@@ -272,9 +228,7 @@
       on:click
       on:mouseover
       on:mouseenter
-      on:mouseenter={claimTooltip}
       on:mouseleave
-      on:mouseleave={scheduleRelease}
       on:focus
       on:blur
       on:keydown

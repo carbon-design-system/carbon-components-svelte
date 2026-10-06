@@ -1,7 +1,8 @@
-import { render, screen, waitFor } from "@testing-library/svelte";
+import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import UserAvatarGroup from "./UserAvatarGroup.test.svelte";
+import UserAvatarGroupTooltips from "./UserAvatarGroupTooltips.test.svelte";
 
 function groupRoot(testId: string): HTMLElement {
   const root = screen
@@ -21,6 +22,31 @@ function visibleAvatar(root: HTMLElement): HTMLElement {
 }
 
 describe("UserAvatarGroup", () => {
+  it("opens a neighbor's tooltip instantly and closes the previous one", async () => {
+    vi.useFakeTimers();
+    try {
+      const { container } = render(UserAvatarGroupTooltips);
+      await tick();
+
+      const [monica, richard] = Array.from(
+        container.querySelectorAll<HTMLElement>(".bx--user-avatar-tooltip"),
+      );
+      const tooltips = () =>
+        screen.queryAllByRole("tooltip").map((el) => el.textContent?.trim());
+
+      await fireEvent.mouseEnter(monica);
+      await vi.advanceTimersByTimeAsync(100);
+      expect(tooltips()).toEqual(["Monica Hall"]);
+
+      await fireEvent.mouseLeave(monica);
+      await fireEvent.mouseEnter(richard);
+      await tick();
+      expect(tooltips()).toEqual(["Richard Hendricks"]);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it("renders every avatar and no overflow when under max", async () => {
     render(UserAvatarGroup);
     await tick();

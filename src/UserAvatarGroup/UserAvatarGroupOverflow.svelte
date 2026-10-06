@@ -19,12 +19,12 @@
 
   // Opt out of registration and overflow (empty items/max, no-op register) so
   // the chip is never counted or hidden, but keep sharing the parent's
-  // `activeTooltip` and `size` so the chip coordinates with the avatars.
+  // `size`. The chip's tooltip joins the group's tooltip handoff through
+  // the `TooltipGroup` context, which this does not shadow.
   setContext("carbon:UserAvatarGroup", {
     items: readable([]),
     max: readable(0),
     size: parent?.size ?? readable(undefined),
-    activeTooltip: parent?.activeTooltip ?? readable(null),
     register: noop,
     unregister: noop,
     updateName: noop,
