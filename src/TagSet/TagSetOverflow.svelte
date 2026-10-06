@@ -20,6 +20,9 @@
    */
   export let triggerRef = null;
 
+  /** @type {string | undefined} */
+  export let id = undefined;
+
   /** @type {number} */
   export let count = 0;
 
@@ -46,6 +49,7 @@
 </script>
 
 <TooltipDefinition
+  {id}
   align={overflowAlign}
   direction={overflowDirection}
   class="bx--tag-set-overflow{count === 0
