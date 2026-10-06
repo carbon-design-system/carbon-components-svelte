@@ -22,4 +22,19 @@ describe("focus ring transitions", () => {
       "color",
     ]);
   }, 30_000);
+
+  it.each([
+    ".bx--side-nav__submenu",
+    ".bx--side-nav__link",
+    ".bx--side-nav .bx--header__menu-item",
+  ])(
+    "side nav %s leaves outline out",
+    async (selector) => {
+      expect(await transitionProperties(selector)).toEqual([
+        "color",
+        "background-color",
+      ]);
+    },
+    30_000,
+  );
 });

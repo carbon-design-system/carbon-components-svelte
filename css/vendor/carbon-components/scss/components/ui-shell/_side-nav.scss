@@ -254,10 +254,10 @@
 
     padding: 0 mini-units(2);
     color: $shell-side-nav-text-01;
-    // ccs: productive easing, matching the links below
+    // ccs: productive easing, matching the links below; no `outline`, so
+    // the focus ring snaps
     transition: color $duration--fast-02 motion(standard, productive),
-      background-color $duration--fast-02 motion(standard, productive),
-      outline $duration--fast-02 motion(standard, productive);
+      background-color $duration--fast-02 motion(standard, productive);
     user-select: none;
   }
 
@@ -363,10 +363,9 @@
     align-items: center;
     padding: 0 mini-units(2);
     text-decoration: none;
-    // ccs: productive easing
+    // ccs: productive easing; no `outline`, so the focus ring snaps
     transition: color $duration--fast-02 motion(standard, productive),
-      background-color $duration--fast-02 motion(standard, productive),
-      outline $duration--fast-02 motion(standard, productive);
+      background-color $duration--fast-02 motion(standard, productive);
   }
 
   .#{$prefix}--side-nav__item--large .#{$prefix}--side-nav__link { // ccs: flatten
