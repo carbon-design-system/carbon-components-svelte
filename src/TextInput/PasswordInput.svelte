@@ -317,7 +317,9 @@
         class:bx--tooltip--align-start={tooltipAlignment === "start"}
         class:bx--tooltip--align-center={tooltipAlignment === "center"}
         class:bx--tooltip--align-end={tooltipAlignment === "end"}
-        aria-label={effectivePortalTooltip ? tooltipLabel : undefined}
+        aria-label={effectivePortalTooltip || disabled
+          ? tooltipLabel
+          : undefined}
         on:click={() => {
           type = type === "password" ? "text" : "password";
         }}
@@ -351,6 +353,7 @@
     {/if}
     {#if !showInvalid && !showWarn && !isFluid && !inline && helperText}
       <div
+        id={helperId}
         class:bx--form__helper-text={true}
         class:bx--form__helper-text--disabled={disabled}
         class:bx--form__helper-text--inline={inline}
