@@ -176,3 +176,25 @@
 @include exports('progress-bar-value-text') {
   @include progress-bar-value-text;
 }
+
+// carbon-components-svelte patch
+// A `labelChildren` slot can hold non-text content (e.g. a `TooltipIcon`).
+// The label's truncating `overflow: hidden` would clip its popup, and the
+// inline text layout leaves it sitting low against the text. Lift the clip
+// and center the row; keep slotted elements from shrinking.
+@mixin progress-bar-label-text-slotted {
+  .#{$prefix}--progress-bar__label-text--slotted {
+    display: inline-flex;
+    overflow: visible;
+    align-items: center;
+    gap: $carbon--spacing-02;
+
+    > * {
+      flex-shrink: 0;
+    }
+  }
+}
+
+@include exports('progress-bar-label-text-slotted') {
+  @include progress-bar-label-text-slotted;
+}
