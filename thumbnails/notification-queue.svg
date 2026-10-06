@@ -5,7 +5,7 @@
         <rect id="back-card-2" fill="var(--cds-button-secondary, #393939)" opacity="0.35" x="90" y="46" width="180" height="56"></rect>
         <rect id="back-card-1" fill="var(--cds-button-secondary, #393939)" opacity="0.6" x="82" y="52" width="180" height="56"></rect>
         <rect id="front-card" fill="var(--cds-button-secondary, #393939)" x="74" y="58" width="180" height="56"></rect>
-        <rect id="accent-bar" fill="var(--cds-support-success, #24a148)" x="74" y="58" width="3" height="56"></rect>
+        <rect id="accent-bar" fill="var(--cds-support-success, #198038)" x="74" y="58" width="3" height="56"></rect>
         <circle id="icon-circle" cx="92" cy="83" r="5" stroke="var(--cds-text-placeholder, #a8a8a8)" stroke-width="1.25" fill="none"></circle>
         <path id="icon-check" d="M89.5 83L91.5 85L95 80.5" stroke="var(--cds-text-placeholder, #a8a8a8)" stroke-width="1.25" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
         <rect id="text-1" fill="var(--cds-field-01, #f4f4f4)" x="108" y="78" width="90" height="6"></rect>

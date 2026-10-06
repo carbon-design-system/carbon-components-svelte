@@ -9,6 +9,6 @@
         <path id="tray" d="M154 93L154 96L166 96L166 93" stroke="var(--cds-text-secondary, #525252)" stroke-width="1.25" fill="none" stroke-linecap="square" stroke-linejoin="miter"></path>
         <rect id="file-row" fill="var(--cds-field-01, #f4f4f4)" x="76" y="124" width="168" height="28"></rect>
         <rect id="file-name" fill="var(--cds-text-placeholder, #a8a8a8)" x="88" y="134" width="80" height="8"></rect>
-        <path id="success-check" d="M227 138L230 141L236 134" stroke="var(--cds-support-success, #24a148)" stroke-width="1.5" fill="none" stroke-linecap="square" stroke-linejoin="miter"></path>
+        <path id="success-check" d="M227 138L230 141L236 134" stroke="var(--cds-support-success, #198038)" stroke-width="1.5" fill="none" stroke-linecap="square" stroke-linejoin="miter"></path>
     </g>
 </svg>

@@ -5,7 +5,7 @@
         <rect id="connector-1" fill="var(--cds-interactive-01, #0f62fe)" x="110" y="89" width="40" height="2"></rect>
         <rect id="connector-2" fill="var(--cds-border-subtle, #e0e0e0)" x="170" y="89" width="40" height="2"></rect>
         <circle id="step-1" fill="var(--cds-interactive-01, #0f62fe)" cx="100" cy="90" r="10"></circle>
-        <path id="step-1-check" d="M95 90L99 94L106 86" stroke="var(--cds-ui-02, #ffffff)" stroke-width="1.5" fill="none" stroke-linecap="square" stroke-linejoin="miter"></path>
+        <path id="step-1-check" d="M95 90L99 94L106 86" stroke="var(--cds-text-04, #ffffff)" stroke-width="1.5" fill="none" stroke-linecap="square" stroke-linejoin="miter"></path>
         <circle id="step-2-outer" fill="var(--cds-ui-02, #ffffff)" stroke="var(--cds-interactive-01, #0f62fe)" stroke-width="2" cx="160" cy="90" r="10"></circle>
         <circle id="step-2-inner" fill="var(--cds-interactive-01, #0f62fe)" cx="160" cy="90" r="4"></circle>
         <circle id="step-3-outer" fill="var(--cds-ui-02, #ffffff)" stroke="var(--cds-border-strong, #8d8d8d)" stroke-width="1.5" cx="220" cy="90" r="10"></circle>

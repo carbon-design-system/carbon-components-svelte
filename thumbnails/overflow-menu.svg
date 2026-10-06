@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
     <title>overflow-menu</title>
     <defs>
-        <rect id="panel-shape" x="80" y="68" width="160" height="76"></rect>
-        <filter x="-10.0%" y="-7.9%" width="120.0%" height="126.3%" filterUnits="objectBoundingBox" id="panel-shadow">
-            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
-            <feGaussianBlur stdDeviation="3" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
-            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.3 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        <filter id="overflow-menu-shadow" filterUnits="userSpaceOnUse" x="0" y="0" width="320" height="180">
+            <feOffset dy="2" in="SourceAlpha" result="offset"></feOffset>
+            <feGaussianBlur stdDeviation="3" in="offset" result="blur"></feGaussianBlur>
+            <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.3 0"></feColorMatrix>
         </filter>
     </defs>
     <g id="overflow-menu" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -16,8 +15,8 @@
             <circle cx="16" cy="16" r="2"></circle>
             <circle cx="16" cy="24" r="2"></circle>
         </g>
-        <use xlink:href="#panel-shape" fill="black" fill-opacity="1" filter="url(#panel-shadow)"></use>
-        <use xlink:href="#panel-shape" fill="var(--cds-ui-02, #ffffff)"></use>
+        <rect x="80" y="68" width="160" height="76" fill="black" filter="url(#overflow-menu-shadow)"></rect>
+        <rect x="80" y="68" width="160" height="76" fill="var(--cds-ui-02, #ffffff)"></rect>
         <rect id="item-1" fill="var(--cds-text-secondary, #525252)" x="92" y="78" width="70" height="8"></rect>
         <rect id="item-2" fill="var(--cds-text-placeholder, #a8a8a8)" x="92" y="100" width="90" height="8"></rect>
         <rect id="divider" fill="var(--cds-border-subtle, #e0e0e0)" x="80" y="118" width="160" height="1"></rect>

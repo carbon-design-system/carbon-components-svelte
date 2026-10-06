@@ -1,33 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
     <title>composed-modal</title>
     <defs>
-        <rect id="path-1" x="60" y="44" width="200" height="90"></rect>
-        <filter x="-5.0%" y="-8.9%" width="110.0%" height="122.2%" filterUnits="objectBoundingBox" id="filter-2">
-            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
-            <feGaussianBlur stdDeviation="3" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
-            <feColorMatrix values="0 0 0 0 0.862745106   0 0 0 0 0.862745106   0 0 0 0 0.862745106  0 0 0 1 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        <filter id="composed-modal-shadow" filterUnits="userSpaceOnUse" x="0" y="0" width="320" height="180">
+            <feOffset dy="2" in="SourceAlpha" result="offset"></feOffset>
+            <feGaussianBlur stdDeviation="3" in="offset" result="blur"></feGaussianBlur>
+            <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.3 0"></feColorMatrix>
         </filter>
-        <polygon id="path-3" points="6.53025 6 9 3.53025 8.46975 3 6 5.46975 3.53025 3 3 3.53025 5.46975 6 3 8.46975 3.53025 9 6 6.53025 8.46975 9 9 8.46975"></polygon>
     </defs>
     <g id="composed-modal" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Rectangle-Copy" fill="black" fill-opacity="1">
-            <use filter="url(#filter-2)" xlink:href="#path-1"></use>
-        </g>
-        <g id="color/gray/10-copy-11" transform="translate(60.000000, 44.000000)" fill="var(--cds-field-01, #f4f4f4)">
-            <rect id="Rectangle" x="0" y="0" width="200" height="90"></rect>
-        </g>
-        <g id="checkbox" transform="translate(69.000000, 76.000000)" fill="var(--cds-icon-primary, #161616)">
-            <path d="M9.75,1.5 L2.25,1.5 C1.83578644,1.5 1.5,1.83578644 1.5,2.25 L1.5,9.75 C1.5,10.1642136 1.83578644,10.5 2.25,10.5 L9.75,10.5 C10.1642136,10.5 10.5,10.1642136 10.5,9.75 L10.5,2.25 C10.5,1.83578644 10.1642136,1.5 9.75,1.5 Z M2.25,9.75 L2.25,2.25 L9.75,2.25 L9.75,9.75 L2.25,9.75 Z" id="Fill"></path>
-        </g>
-        <g id="icon/navigation/close/16-copy-3" transform="translate(239.000000, 53.000000)">
-            <mask id="mask-4" fill="white">
-                <use xlink:href="#path-3"></use>
-            </mask>
-            <use id="icon-color" fill="#000000" xlink:href="#path-3"></use>
-        </g>
-        <rect id="Rectangle-Copy-5" fill="var(--cds-border-strong, #8d8d8d)" x="70" y="57" width="58" height="7"></rect>
-        <rect id="Rectangle-Copy-20" fill="var(--cds-text-disabled, #c6c6c6)" x="160" y="108" width="101" height="26"></rect>
-        <rect id="Rectangle-Copy-21" fill="var(--cds-text-placeholder, #a8a8a8)" x="88" y="79" width="96" height="5"></rect>
+        <rect id="box-shadow" fill="black" filter="url(#composed-modal-shadow)" x="60" y="40" width="200" height="100"></rect>
+        <rect id="box" fill="var(--cds-ui-02, #ffffff)" x="60" y="40" width="200" height="100"></rect>
+        <rect id="title" fill="var(--cds-text-secondary, #525252)" x="70" y="52" width="70" height="8"></rect>
+        <path id="close" fill="var(--cds-icon-primary, #161616)" transform="translate(238, 48) scale(0.375)" d="M17.4141 16 24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"></path>
+        <rect id="body-1" fill="var(--cds-border-subtle, #e0e0e0)" x="70" y="76" width="160" height="6"></rect>
+        <rect id="body-2" fill="var(--cds-border-subtle, #e0e0e0)" x="70" y="88" width="120" height="6"></rect>
+        <rect id="secondary-button" fill="var(--cds-button-secondary, #393939)" x="60" y="114" width="100" height="26"></rect>
+        <rect id="primary-button" fill="var(--cds-interactive-01, #0f62fe)" x="160" y="114" width="100" height="26"></rect>
+        <rect id="header-part" fill="none" stroke="var(--cds-interactive-01, #0f62fe)" stroke-width="1" stroke-dasharray="3 2" x="60.5" y="40.5" width="199" height="27"></rect>
+        <rect id="body-part" fill="none" stroke="var(--cds-interactive-01, #0f62fe)" stroke-width="1" stroke-dasharray="3 2" x="60.5" y="68.5" width="199" height="45"></rect>
+        <rect id="footer-part" fill="none" stroke="var(--cds-interactive-01, #0f62fe)" stroke-width="1" stroke-dasharray="3 2" x="60.5" y="114.5" width="199" height="25"></rect>
     </g>
 </svg>

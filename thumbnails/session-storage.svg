@@ -2,14 +2,13 @@
 <svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
     <title>session-storage</title>
     <g id="session-storage" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect id="tab-bar" fill="var(--cds-border-subtle, #e0e0e0)" x="86" y="36" width="148" height="16"></rect>
-        <rect id="tab-active" fill="var(--cds-field-01, #f4f4f4)" x="86" y="36" width="48" height="16"></rect>
-        <rect id="tab-label" fill="var(--cds-text-placeholder, #a8a8a8)" x="96" y="42" width="28" height="4"></rect>
-        <rect id="label" fill="var(--cds-text-disabled, #c6c6c6)" x="86" y="64" width="70" height="6"></rect>
-        <rect id="track" fill="var(--cds-border-strong, #8d8d8d)" x="86" y="78" width="32" height="16" rx="8"></rect>
-        <circle id="knob" fill="var(--cds-ui-02, #ffffff)" cx="94" cy="86" r="5"></circle>
-        <rect id="toggle-text" fill="var(--cds-text-placeholder, #a8a8a8)" x="126" y="82" width="40" height="6"></rect>
-        <rect id="button" fill="var(--cds-interactive-01, #0f62fe)" x="86" y="110" width="148" height="32"></rect>
-        <rect id="button-label" fill="var(--cds-ui-02, #ffffff)" x="120" y="122" width="80" height="8"></rect>
+        <rect id="tab" fill="var(--cds-field-01, #f4f4f4)" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="1" x="76.5" y="32.5" width="47" height="12"></rect>
+        <rect id="window" fill="none" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="1" x="76.5" y="44.5" width="167" height="91"></rect>
+        <path id="open-brace" fill="var(--cds-text-secondary, #525252)" d="M107.16 108.97Q105.72 108.97 105 108.12Q104.28 107.28 104.28 106.02V97.38Q104.28 95.83 103.29 95.02Q102.3 94.21 100.79 94.21V91.4Q102.3 91.4 103.29 90.59Q104.28 89.78 104.28 88.23V79.59Q104.28 78.33 105 77.49Q105.72 76.64 107.16 76.64H110.19V78.91H106.77V87.91Q106.77 89.6 105.81 90.91Q104.86 92.23 103.35 92.52V93.09Q104.86 93.38 105.81 94.69Q106.77 96.01 106.77 97.7V106.7H110.19V108.97Z"></path>
+        <path id="close-brace" fill="var(--cds-text-secondary, #525252)" d="M212.84 76.64Q214.28 76.64 215 77.49Q215.72 78.33 215.72 79.59V88.23Q215.72 89.78 216.71 90.59Q217.7 91.4 219.21 91.4V94.21Q217.7 94.21 216.71 95.02Q215.72 95.83 215.72 97.38V106.02Q215.72 107.28 215 108.12Q214.28 108.97 212.84 108.97H209.81V106.7H213.23V97.7Q213.23 96.01 214.19 94.69Q215.14 93.38 216.65 93.09V92.52Q215.14 92.23 214.19 90.91Q213.23 89.6 213.23 87.91V78.91H209.81V76.64Z"></path>
+        <rect id="key-1" fill="var(--cds-text-secondary, #525252)" x="122" y="78" width="28" height="8"></rect>
+        <rect id="value-1" fill="var(--cds-text-placeholder, #a8a8a8)" x="158" y="78" width="40" height="8"></rect>
+        <rect id="key-2" fill="var(--cds-text-secondary, #525252)" x="122" y="94" width="28" height="8"></rect>
+        <rect id="value-2" fill="var(--cds-text-placeholder, #a8a8a8)" x="158" y="94" width="32" height="8"></rect>
     </g>
 </svg>

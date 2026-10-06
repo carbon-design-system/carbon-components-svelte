@@ -5,7 +5,7 @@
         <rect id="surface" fill="var(--cds-field-01, #f4f4f4)" x="64" y="40" width="192" height="100"></rect>
         <rect id="label" fill="var(--cds-text-placeholder, #a8a8a8)" x="88" y="66" width="56" height="8"></rect>
         <rect id="value" fill="var(--cds-text-placeholder, #a8a8a8)" x="88" y="86" width="72" height="36"></rect>
-        <g id="trend-icon" transform="translate(176, 91) scale(0.8)" fill="var(--cds-support-success, #24a148)">
+        <g id="trend-icon" transform="translate(176, 91) scale(0.8)" fill="var(--cds-support-success, #198038)">
             <path d="M16 4L6 14 7.41 15.41 15 7.83 15 28 17 28 17 7.83 24.59 15.41 26 14 16 4z"></path>
         </g>
     </g>

@@ -1,47 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
     <title>selectable-tile</title>
-    <defs>
-        <circle id="path-1" cx="6.5" cy="6.5" r="5.6875"></circle>
-        <polygon id="path-3" points="5.6875 8.734375 3.65625 6.703125 4.3021875 6.09375 5.6875 7.4546875 8.6978125 4.46875 9.34375 5.110625"></polygon>
-        <circle id="path-5" cx="6.5" cy="6.5" r="5.6875"></circle>
-        <polygon id="path-7" points="5.6875 8.734375 3.65625 6.703125 4.3021875 6.09375 5.6875 7.4546875 8.6978125 4.46875 9.34375 5.110625"></polygon>
-    </defs>
     <g id="selectable-tile" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Group-Copy-2" transform="translate(56.000000, 109.000000)" fill="var(--cds-field-01, #f4f4f4)">
-            <rect id="Rectangle" x="0" y="0" width="141" height="38"></rect>
-            <rect id="Rectangle" x="0" y="0" width="208" height="38"></rect>
-        </g>
-        <g id="Group" transform="translate(56.000000, 33.000000)" fill="var(--cds-field-01, #f4f4f4)">
-            <rect id="Rectangle" x="0" y="0" width="141" height="38"></rect>
-            <rect id="Rectangle" stroke="var(--cds-icon-primary, #161616)" stroke-width="0.8" x="0" y="0" width="208" height="38"></rect>
-        </g>
-        <g id="Group-Copy" transform="translate(56.000000, 71.000000)" fill="var(--cds-field-01, #f4f4f4)">
-            <rect id="Rectangle" x="0" y="0" width="141" height="38"></rect>
-            <rect id="Rectangle" stroke="var(--cds-icon-primary, #161616)" stroke-width="0.8" x="0" y="0" width="208" height="38"></rect>
-        </g>
-        <rect id="Rectangle-Copy-4" fill="var(--cds-text-disabled, #c6c6c6)" x="67" y="44" width="72" height="6"></rect>
-        <rect id="Rectangle-Copy-5" fill="var(--cds-text-disabled, #c6c6c6)" x="67" y="82" width="72" height="6"></rect>
-        <g id="icon/status/checkmark-filled/16" transform="translate(243.000000, 41.000000)">
-            <mask id="mask-2" fill="white">
-                <use xlink:href="#path-1"></use>
-            </mask>
-            <use id="icon-color" fill="#000000" xlink:href="#path-1"></use>
-            <mask id="mask-4" fill="white">
-                <use xlink:href="#path-3"></use>
-            </mask>
-            <use id="icon-color" fill="var(--cds-ui-02, #ffffff)" xlink:href="#path-3"></use>
-        </g>
-        <g id="icon/status/checkmark-filled/16" transform="translate(243.000000, 79.000000)">
-            <mask id="mask-6" fill="white">
-                <use xlink:href="#path-5"></use>
-            </mask>
-            <use id="icon-color" fill="#000000" xlink:href="#path-5"></use>
-            <mask id="mask-8" fill="white">
-                <use xlink:href="#path-7"></use>
-            </mask>
-            <use id="icon-color" fill="var(--cds-ui-02, #ffffff)" xlink:href="#path-7"></use>
-        </g>
-        <rect id="Rectangle-Copy-6" fill="var(--cds-text-disabled, #c6c6c6)" x="67" y="120" width="72" height="6"></rect>
+        <rect id="tile-1" fill="var(--cds-field-01, #f4f4f4)" x="68" y="54" width="52" height="72"></rect>
+        <rect id="tile-1-selected" fill="none" stroke="var(--cds-icon-primary, #161616)" stroke-width="1" x="68.5" y="54.5" width="51" height="71"></rect>
+        <rect id="label-1" fill="var(--cds-text-secondary, #525252)" x="76" y="66" width="28" height="8"></rect>
+        <rect id="checkbox-1" fill="var(--cds-icon-primary, #161616)" x="76" y="108" width="12" height="12"></rect>
+        <path id="check-1" fill="var(--cds-icon-inverse, #ffffff)" transform="translate(76, 108) scale(0.375)" d="M13 24 4 15 5.414 13.586 13 21.171 26.586 7.586 28 9 13 24z"></path>
+        <rect id="tile-2" fill="var(--cds-field-01, #f4f4f4)" x="128" y="54" width="52" height="72"></rect>
+        <rect id="label-2" fill="var(--cds-text-placeholder, #a8a8a8)" x="136" y="66" width="28" height="8"></rect>
+        <rect id="checkbox-2" fill="none" stroke="var(--cds-icon-primary, #161616)" stroke-width="1" x="136.5" y="108.5" width="11" height="11"></rect>
+        <rect id="tile-3" fill="var(--cds-field-01, #f4f4f4)" x="188" y="54" width="52" height="72"></rect>
+        <rect id="tile-3-selected" fill="none" stroke="var(--cds-icon-primary, #161616)" stroke-width="1" x="188.5" y="54.5" width="51" height="71"></rect>
+        <rect id="label-3" fill="var(--cds-text-secondary, #525252)" x="196" y="66" width="28" height="8"></rect>
+        <rect id="checkbox-3" fill="var(--cds-icon-primary, #161616)" x="196" y="108" width="12" height="12"></rect>
+        <path id="check-3" fill="var(--cds-icon-inverse, #ffffff)" transform="translate(196, 108) scale(0.375)" d="M13 24 4 15 5.414 13.586 13 21.171 26.586 7.586 28 9 13 24z"></path>
     </g>
 </svg>
