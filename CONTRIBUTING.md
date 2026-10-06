@@ -660,6 +660,8 @@ bun run test DataTable
 
 The full suite (`bun run test`) is slow and can hit unrelated flaky UIShell focus failures. Scope to the component you touched.
 
+`bun run test:changed` runs every unit test your branch can affect, including uncommitted edits. CI uses the same selection on pull requests for unit and E2E tests. It follows imports, so a `Button` change also runs the `Modal` tests that render a `Button`. Pass `--print` to see the plan without running it.
+
 Types and E2E:
 
 - `bun test:src-types` type-checks `src/` (uses `tsconfig.types.json`)
@@ -720,6 +722,8 @@ Import shared utilities (for example exported helpers) from the component file o
 
 - Write cases with `it(...)`, not `test(...)`. `describe`, `it`, `expect`, `vi`, `assert`, and `expectTypeOf` are globals; do not import them from `vitest`.
 - Start a test file that never touches the DOM (pure utils, CSS compile checks, scripts) with `// @vitest-environment node`. Creating a jsdom environment is the largest fixed cost per file, and setup skips the DOM stubs when there is no `document`. Leave the pragma off if the file needs `Element`, `KeyboardEvent`, `localStorage`, or a rendered component, even indirectly.
+- Keep imports, `vi.mock` paths, and `page.goto` URLs as string literals. CI picks tests by reading them ([`test-graph.ts`](scripts/lib/test-graph.ts)), and a computed path makes the test run on every pull request.
+- A test that reads files from disk (`node:fs`) must list them in a `// @depends-on <glob> [glob…]` comment, for example `// @depends-on css/**`. Without it the test runs on every pull request, and `tests/scripts/test-changed.test.ts` fails.
 - Narrow types with an assertion, not a cast. Write `assert(input instanceof HTMLInputElement)` instead of `as HTMLInputElement`. The global `assert` fails the test with a clear message when the element is wrong, and TypeScript narrows the variable after it. Use `assert(el)` for a nullable lookup. Do not use `expect.assert` or non-null `!`.
 - Skip the narrowing when a jest-dom matcher does the job. `expect(input).toHaveValue("a")`, `toBeChecked()`, and `toHaveFocus()` accept any element, so reading `.value` or `.checked` through a cast is rarely needed.
 - Type `querySelector` through its generic: `container.querySelector<HTMLInputElement>("input")`, then `assert(input)`.
