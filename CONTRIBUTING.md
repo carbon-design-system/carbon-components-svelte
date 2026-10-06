@@ -471,6 +471,7 @@ The menu closes from the trigger, <DocKbd label="Escape" />, or an outside click
 3. Create `docs/src/pages/components/{Component}.svx` modeled on a similar existing component: a frontmatter `description:`, then `## Basic` first (see [Example conventions](#example-conventions) for structure and grouping). Follow the prose conventions in [Prose and inline code](#prose-and-inline-code).
 4. Add framed examples only where interactivity requires them
 5. Preview with `cd docs && bun dev`
+6. Add a catalog thumbnail at `thumbnails/{component-name}.svg`. See [`thumbnails/README.md`](thumbnails/README.md) for the design principles and recipe
 
 ### Custom styles (patching Carbon v10)
 
@@ -1113,6 +1114,10 @@ This library publishes to NPM with [provenance](https://docs.npmjs.com/generatin
 Pushing a tag that starts with `v` (for example `v0.81.1`) triggers the workflow. It runs `bun ci`, `bun build:docs`, and `bunx culls --preserve=svelte` before publishing to NPM.
 
 Maintainers still do a few things locally before tagging.
+
+Check that every component added since the last release has a
+thumbnail: `bun run thumbnails missing`. See
+[`thumbnails/README.md`](thumbnails/README.md) for drawing them.
 
 On a clean `master` branch, run `bun run release`. That will:
 
