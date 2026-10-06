@@ -975,7 +975,7 @@ Filter rows with `shouldFilterRows`.
 
 ### Client-side
 
-Set `shouldFilterRows` to `true` to enable client-side filtering. The default filter compares cell values as strings.
+Set `shouldFilterRows` to `true` to enable client-side filtering. The default filter compares cell values as strings. When a search matches nothing, show a message with the [empty state](#empty-state).
 
 For pagination with filtering, bind to `filteredRowIds` and pass its length to the pagination totalItems.
 
@@ -1002,6 +1002,38 @@ Set `filterMode` to `"hide"` to keep every row mounted and hide non-matching row
 Setting `filterMode` to `"hide"` has no effect when pageSize is set or virtualization is enabled. Selection, select all, and filteredRowIds still reflect matching rows only.
 
 <FileSource src="/framed/DataTable/DataTableFilterMode" />
+
+## Empty state
+
+Show a message in place of the rows when the table has nothing to display.
+
+### Basic
+
+Set `emptyText` to show a message when there are no rows. The headers stay visible so the table keeps its shape.
+
+<DataTable
+  headers="{[
+    { key: "name", value: "Name" },
+    { key: "region", value: "Region" },
+    { key: "status", value: "Status" }
+  ]}"
+  rows="{[]}"
+  emptyText="No deployments in this region yet"
+/>
+
+### Custom content
+
+Use the `empty` slot to render richer content, such as an action. The slot receives `filtered`, which is `true` when the table has rows but filtering left none to display and `false` when there is no data. Use it to tell no data apart from no results.
+
+Type a search that matches nothing, then use the action in each state.
+
+<FileSource src="/framed/DataTable/DataTableEmptySlot" />
+
+| Do | Why |
+| --- | --- |
+| Lead with a positive title ("Start by adding a deployment") | Carbon's empty-state pattern asks for the next step, not a dead end |
+| Say why it is empty when filtering ("No results for ...") | Distinguishes no data from no match |
+| Offer one action | More than one competes for attention |
 
 ## Row styling
 
