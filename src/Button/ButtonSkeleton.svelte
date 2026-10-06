@@ -19,6 +19,8 @@
     {href}
     rel={resolveLinkRel($$restProps.target)}
     role="button"
+    tabindex="-1"
+    aria-hidden="true"
     class:bx--skeleton={true}
     class:bx--btn={true}
     class:bx--btn--field={size === "field"}
