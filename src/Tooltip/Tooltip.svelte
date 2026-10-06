@@ -66,15 +66,17 @@
 
   /**
    * Specify the duration in milliseconds to delay before displaying the tooltip.
-   * @type {number}
+   * Defaults to the enclosing `TooltipGroup`'s delay, or `100`.
+   * @type {number | undefined}
    */
-  export let enterDelayMs = TOOLTIP_ENTER_DELAY_MS;
+  export let enterDelayMs = undefined;
 
   /**
    * Specify the duration in milliseconds to delay before hiding the tooltip.
-   * @type {number}
+   * Defaults to the enclosing `TooltipGroup`'s delay, or `300`.
+   * @type {number | undefined}
    */
-  export let leaveDelayMs = TOOLTIP_LEAVE_DELAY_MS;
+  export let leaveDelayMs = undefined;
 
   /**
    * Obtain a reference to the trigger text HTML element.
@@ -109,16 +111,13 @@
     setContext,
     tick,
   } from "svelte";
-  import { writable } from "svelte/store";
+  import { get, writable } from "svelte/store";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
-  import {
-    TOOLTIP_ENTER_DELAY_MS,
-    TOOLTIP_LEAVE_DELAY_MS,
-  } from "../constants/timing.js";
   import Information from "../icons/Information.svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
-  import { createDelayedSetter } from "../utils/delayed-setter.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
+  import { getTooltipGroup } from "../utils/tooltip-group.js";
+  import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const insideModal = getContext(MODAL_CONTEXT_KEY);
@@ -144,17 +143,24 @@
 
   setContext("carbon:Tooltip", { tooltipOpen, openedByHover });
 
-  const scheduleOpen = createDelayedSetter();
+  // Hover scheduling shared with the tooltip group: moving here from another
+  // group tooltip skips the enter delay.
+  const tooltipHandoff = createTooltipHandoff({
+    group: getTooltipGroup(),
+    enterDelayMs: () => enterDelayMs,
+    leaveDelayMs: () => leaveDelayMs,
+    hoverable: true,
+  });
 
   function handleMouseenter() {
     openedByHover.set(true);
-    scheduleOpen(enterDelayMs, () => {
+    tooltipHandoff.scheduleEnter(() => {
       open = true;
     });
   }
 
   function handleMouseleave() {
-    scheduleOpen(leaveDelayMs, () => {
+    tooltipHandoff.scheduleLeave(() => {
       open = false;
     });
   }
@@ -195,8 +201,20 @@
   }
 
   onMount(() => {
+    // A hover-opened tooltip closes when another tooltip takes the active
+    // slot. One opened by keyboard stays open so focus inside it isn't
+    // lost. Subscribed rather than `$:` so the close can't race this
+    // tooltip's own claim when it opens.
+    const unsubscribeOthersActive = tooltipHandoff.hidden.subscribe(
+      (othersActive) => {
+        if (othersActive && open && get(openedByHover)) open = false;
+      },
+    );
+
     return () => {
-      scheduleOpen.cancel();
+      unsubscribeOthersActive();
+      tooltipHandoff.cancel();
+      tooltipHandoff.release();
     };
   });
 
@@ -270,6 +288,8 @@
   }
 
   $: tooltipOpen.set(open);
+  $: if (open) tooltipHandoff.claim();
+  else tooltipHandoff.release();
   $: if (!open) openedByHover.set(false);
   $: notifyOpenChange(open);
   $: buttonProps = {
