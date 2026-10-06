@@ -154,11 +154,6 @@ if (
   };
 }
 
-// jsdom's selector engine adds its own capture listeners to `window` (click,
-// keydown, focus, ...) the first time it matches a selector. Match once here
-// so that happens before a test spies on `window.addEventListener`.
-document.documentElement.matches(":focus-visible");
-
 // Tooltips outside any `TooltipGroup` share one page-wide group, so a
 // tooltip closed in one test would otherwise make the next test's first
 // tooltip skip its enter delay.
