@@ -3231,7 +3231,8 @@ describe("DataTable", () => {
 
       await user.clear(searchInput);
       await user.type(searchInput, "dns");
-      expect(getBodyRows()).toHaveLength(0);
+      expect(getBodyRows()).toHaveLength(1);
+      expect(getBodyRows()[0]).toHaveTextContent("No results");
     });
 
     it("sorts by a hidden column key", () => {

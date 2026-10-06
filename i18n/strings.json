@@ -486,6 +486,20 @@
     },
     {
       "component": "DataTable",
+      "prop": "emptyText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "DataTable",
+      "prop": "noResultsText",
+      "type": "string",
+      "default": "No results",
+      "defaultKind": "text"
+    },
+    {
+      "component": "DataTable",
       "prop": "rowDecoratorDescription",
       "type": "string",
       "default": "AI label",
