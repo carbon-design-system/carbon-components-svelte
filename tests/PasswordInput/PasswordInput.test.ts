@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { clickToFocus } from "../utils/click-to-focus";
 import { user } from "../utils/user";
 import PasswordInputFluidForm from "./PasswordInput.fluidForm.test.svelte";
 import PasswordInputFluidSlot from "./PasswordInput.fluidSlot.test.svelte";
@@ -36,6 +37,17 @@ describe("PasswordInput", () => {
 
       expect(input.selectionStart).toBe(0);
       expect(input.selectionEnd).toBe("secret123".length);
+    });
+
+    it("keeps the selected value through the click's mouseup", async () => {
+      render(PasswordInput, {
+        labelText: "Password",
+        value: "secret123",
+        selectTextOnFocus: true,
+      });
+
+      const mouseup = await clickToFocus(screen.getByLabelText("Password"));
+      expect(mouseup.defaultPrevented).toBe(true);
     });
 
     it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {

@@ -125,6 +125,7 @@
     resolveValidationVisibility,
   } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
+  import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const ctx = getContext(FORM_CONTEXT_KEY);
@@ -243,6 +244,7 @@
       {/if}
       <input
         bind:this={ref}
+        use:preserveFocusSelection={selectTextOnFocus && !disabled}
         use:formReset={handleFormReset}
         data-invalid={showInvalid || undefined}
         aria-invalid={showInvalid || undefined}
