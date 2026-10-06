@@ -65,6 +65,18 @@ maxWarnings = 0
 files = ["e2e/**", "docs/e2e/**"]
 rules = { "no-await-in-loop" = "off" }
 
+# dom-env reassigns parameters and builds regexes per call on purpose, and
+# imports its own modules by namespace.
+[[lint.overrides]]
+files = ["dom-env/**"]
+rules = { "no-param-reassign" = "off", "no-restricted-syntax" = [
+  "error",
+  { selector = "UnaryExpression[operator='delete'] > MemberExpression[computed=false]", message = "Avoid the delete operator; assign undefined or rebuild the object." },
+  { selector = "CallExpression[callee.property.name='forEach'][arguments.0.params.length<2]", message = "Use a for...of loop instead of forEach." },
+  { selector = "ExportAllDeclaration", message = "Export names explicitly instead of re-exporting everything." },
+  { selector = "ForInStatement", message = "Use for...of over Object.keys or Object.entries instead of for...in." },
+] }
+
 [[lint.overrides]]
 files = ["**/*.test.ts", "**/*.test.svelte", "docs/**"]
 rules = { "no-restricted-syntax" = [
