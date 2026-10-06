@@ -1,5 +1,5 @@
 <script>
-  /** @restProps {a | p} */
+  /** @restProps {a} */
 
   /**
    * Whether the tile has been clicked.
