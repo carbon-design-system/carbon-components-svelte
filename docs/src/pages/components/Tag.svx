@@ -127,7 +127,7 @@ Set `maxWidth` to a CSS length to ellipsis long labels. A tooltip with the full 
 
 ### Close button label
 
-Set `title` to customize the accessible name and hover tooltip of the close button. Defaults to `"Clear filter"`.
+Set `title` to customize the hover tooltip and the leading words of the close button's accessible name. Defaults to `"Clear filter"`. The tag text is appended to the name, so each button reads as "Clear filter carbon-components".
 
 <Tag filter title="Remove filter" on:close>carbon-components</Tag>
 
