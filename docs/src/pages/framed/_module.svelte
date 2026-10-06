@@ -84,6 +84,11 @@
     outline: 0;
   }
 
+  /* Table of contents examples show a page layout, not the grid itself. */
+  :global(.framed .bx--row:has(.bx--toc) > [class^="bx--col"]) {
+    outline: 0;
+  }
+
   :global([data-outline]) {
     outline: 1px solid var(--cds-interactive-01);
   }

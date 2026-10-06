@@ -1,0 +1,355 @@
+---
+description: A table of contents lists the sections of a page as links and highlights the section the reader is on.
+---
+
+<script>
+  import {
+    Column,
+    Grid,
+    RadioButton,
+    RadioButtonGroup,
+    Row,
+    Stack,
+    TableOfContents,
+    TableOfContentsItem,
+    Text,
+  } from "carbon-components-svelte";
+
+  let container = null;
+  let selectedId;
+
+  const staticItems = [
+    { id: "toc-static-overview", text: "Overview" },
+    { id: "toc-static-measures-of-success", text: "Measures of success" },
+    { id: "toc-static-key-moments", text: "Key moments" },
+    { id: "toc-static-tutorials", text: "Tutorials" },
+    { id: "toc-static-articles", text: "Articles" },
+  ];
+  let staticSelectedId = "toc-static-key-moments";
+
+  let lineContainer = null;
+  let activationLine = "1";
+
+  let nestedContainer = null;
+
+  let article = null;
+  let headings = [];
+
+  $: if (article) {
+    headings = Array.from(article.querySelectorAll("h4[id], h5[id]"), (heading) => ({
+      id: heading.id,
+      text: heading.textContent.trim(),
+      level: heading.tagName === "H5" ? 2 : 1,
+    }));
+  }
+</script>
+
+## Scroll spy
+
+Add a `TableOfContentsItem` for each section, with `href` set to the section's id, such as `"#overview"`. As the page scrolls, the bar moves to the last section whose top has passed the top of the window. At the end of the page, the last section is selected, even if it is too short to reach the top.
+
+Clicking an item selects it right away and keeps it selected while the page scrolls to the section. On a top-level page, the click is a native hash jump, so the URL hash updates and client-side routers handle it as usual. Inside an iframe, as in this example, the table of contents scrolls only the frame, not the page around it. The active link has `aria-current="location"`. Each item is a regular link, so Tab moves through them.
+
+<FileSource src="/framed/TableOfContents/TableOfContentsScrollSpy" />
+
+## Right column
+
+Many documentation pages put the table of contents in the rightmost column, after the content. Here it spans 4 of 16 columns on large screens and 2 of 8 on medium ones, and hides on small screens with `sm={0}`, where a sidebar would leave the content too narrow. Content first in the DOM also means Tab reaches the article before the table of contents. Set `labelText` to the heading the column shows, such as "On this page".
+
+<FileSource src="/framed/TableOfContents/TableOfContentsRightColumn" />
+
+## Activation line
+
+By default a section becomes active when its top reaches the top of the scroller, so the next heading can sit in view while the previous section stays highlighted. Set `activationLine` to move that line down the visible height: `0.5` activates a section at the middle, and `1` as soon as it scrolls into view. The dashed line marks where sections activate. Clicked sections still land at the top.
+
+<Grid>
+  <Row>
+    <Column sm={4} md={3} lg={4}>
+      <Stack gap={6}>
+        <RadioButtonGroup legendText="Activation line" orientation="vertical" bind:selected={activationLine}>
+          <RadioButton labelText="0 (top)" value="0" />
+          <RadioButton labelText="0.5 (middle)" value="0.5" />
+          <RadioButton labelText="1 (in view)" value="1" />
+        </RadioButtonGroup>
+        <TableOfContents scrollContainer={lineContainer} activationLine={Number(activationLine)}>
+          <TableOfContentsItem href="#toc-line-overview" text="Overview" />
+          <TableOfContentsItem href="#toc-line-setup" text="Setup" />
+          <TableOfContentsItem href="#toc-line-usage" text="Usage" />
+          <TableOfContentsItem href="#toc-line-faq" text="FAQ" />
+        </TableOfContents>
+      </Stack>
+    </Column>
+    <Column sm={4} md={5} lg={12}>
+      <div style="position: relative">
+        <div bind:this={lineContainer} style="height: 16rem; overflow-y: auto">
+          <Stack gap={9}>
+            <Stack tag="section" id="toc-line-overview" gap={3}>
+              <Text tag="h4" type="productive-heading-03">Overview</Text>
+              <Stack gap={5}>
+                <Text>The reporting API returns usage and billing data for every project in your organization, so finance and engineering read the same numbers.</Text>
+                <Text>It's read-only. To change limits or plans, use the console.</Text>
+              </Stack>
+            </Stack>
+            <Stack tag="section" id="toc-line-setup" gap={3}>
+              <Text tag="h4" type="productive-heading-03">Setup</Text>
+              <Stack gap={5}>
+                <Text>Create a project in the console, then generate an API key under Settings. Keys are scoped to one project and can be revoked at any time.</Text>
+                <Text>Choose the region your data is stored in when you create the project. It can't be changed later.</Text>
+              </Stack>
+            </Stack>
+            <Stack tag="section" id="toc-line-usage" gap={3}>
+              <Text tag="h4" type="productive-heading-03">Usage</Text>
+              <Stack gap={5}>
+                <Text>Send a GET request with the key in the Authorization header. Responses are JSON, paginated at 100 records, with a cursor for the next page.</Text>
+                <Text>Errors return a status code and a message that names the field at fault.</Text>
+              </Stack>
+            </Stack>
+            <Stack tag="section" id="toc-line-faq" gap={3}>
+              <Text tag="h4" type="productive-heading-03">FAQ</Text>
+              <Stack gap={5}>
+                <Text>Requests are limited to 600 per minute per key. Data is kept for 13 months, and support answers within one business day.</Text>
+                <Text>When you hit the limit, requests return status 429 with a header that says how many seconds to wait before retrying.</Text>
+                <Text>Export data you need for longer than 13 months to your own storage. The export endpoint writes one file per day.</Text>
+              </Stack>
+            </Stack>
+          </Stack>
+        </div>
+        <div
+          aria-hidden="true"
+          style="position: absolute; left: 0; right: 0; top: min({Number(activationLine) * 100}%, calc(100% - 1px)); border-top: 1px dashed var(--cds-border-strong); pointer-events: none"
+        ></div>
+      </div>
+    </Column>
+  </Row>
+</Grid>
+
+## Scroll container
+
+When the sections scroll inside an element rather than the window, pass that element as `scrollContainer`. Clicking an item scrolls only that element, where a native hash jump would also scroll the page around it, and moves focus to the section so the next Tab continues from there. Bind `selectedId` to read or set the active section. The `change` event fires with the new id when a click or scroll changes it, but not when the first section is selected on load.
+
+<Grid>
+  <Row>
+    <Column sm={4} md={3} lg={4}>
+      <TableOfContents bind:selectedId scrollContainer={container}>
+        <TableOfContentsItem href="#toc-container-profile" text="Profile" />
+        <TableOfContentsItem href="#toc-container-security" text="Security" />
+        <TableOfContentsItem href="#toc-container-billing" text="Billing" />
+        <TableOfContentsItem href="#toc-container-notifications" text="Notifications" />
+      </TableOfContents>
+    </Column>
+    <Column sm={4} md={5} lg={12}>
+      <Stack gap={5}>
+        <div bind:this={container} style="height: 16rem; overflow-y: auto">
+          <Stack gap={9}>
+            <Stack tag="section" id="toc-container-profile" gap={3}>
+              <Text tag="h4" type="productive-heading-03">Profile</Text>
+              <Stack gap={5}>
+                <Text>Your name, photo, and email address appear wherever teammates mention or assign you.</Text>
+                <Text>Changes take effect right away, including in comments you've already left.</Text>
+              </Stack>
+            </Stack>
+            <Stack tag="section" id="toc-container-security" gap={3}>
+              <Text tag="h4" type="productive-heading-03">Security</Text>
+              <Stack gap={5}>
+                <Text>Change your password, turn on two-factor authentication, and review the devices signed in to your account.</Text>
+                <Text>Signing out a device ends its session within a minute.</Text>
+              </Stack>
+            </Stack>
+            <Stack tag="section" id="toc-container-billing" gap={3}>
+              <Text tag="h4" type="productive-heading-03">Billing</Text>
+              <Stack gap={5}>
+                <Text>Update the payment method, download past invoices, and choose who receives billing email.</Text>
+                <Text>Invoices are issued on the first of each month in your account's currency.</Text>
+              </Stack>
+            </Stack>
+            <Stack tag="section" id="toc-container-notifications" gap={3}>
+              <Text tag="h4" type="productive-heading-03">Notifications</Text>
+              <Stack gap={5}>
+                <Text>Choose which events send email, and whether to get them as they happen or in a daily digest.</Text>
+                <Text>Mentions and assignments always notify you, even with digests on, so nothing waiting on you gets buried.</Text>
+                <Text>Mobile push notifications follow the same settings. Mute a project to silence it everywhere for a set time.</Text>
+              </Stack>
+            </Stack>
+          </Stack>
+        </div>
+        <Text>Selected: <strong>{selectedId}</strong></Text>
+      </Stack>
+    </Column>
+  </Row>
+</Grid>
+
+## Without scroll spy
+
+Set `noScrollSpy` to control `selectedId` yourself, for example when the sections are tabs or steps rather than one scrolling page. Clicking an item still selects it. With no sections on the page to jump to, cancel each item's click so the browser or router doesn't follow the hash.
+
+<Grid>
+  <Row>
+    <Column sm={4} md={3} lg={4}>
+      <TableOfContents bind:selectedId={staticSelectedId} noScrollSpy>
+        {#each staticItems as item (item.id)}
+          <TableOfContentsItem
+            href="#{item.id}"
+            text={item.text}
+            on:click={(e) => e.preventDefault()}
+          />
+        {/each}
+      </TableOfContents>
+    </Column>
+    <Column sm={4} md={5} lg={12}>
+      <Text>Selected: <strong>{staticSelectedId}</strong></Text>
+    </Column>
+  </Row>
+</Grid>
+
+## Nested headings
+
+Set `level` to list a subsection under its section, such as an `h3` under an `h2`. Each level below the first indents by one more step, and its rows sit closer together so the group reads as part of the section above. `level` goes from 1 to 3, enough for `h2` through `h4`; deeper headings rarely belong in a table of contents, and their indent leaves a sidebar label little room.
+
+<Grid>
+  <Row>
+    <Column sm={4} md={3} lg={4}>
+      <TableOfContents scrollContainer={nestedContainer}>
+        <TableOfContentsItem href="#toc-nested-overview" text="Overview" />
+        <TableOfContentsItem href="#toc-nested-tokens" text="Design tokens" />
+        <TableOfContentsItem href="#toc-nested-colors" text="Colors" level={2} />
+        <TableOfContentsItem href="#toc-nested-contrast" text="Contrast" level={3} />
+        <TableOfContentsItem href="#toc-nested-spacing" text="Spacing" level={2} />
+        <TableOfContentsItem href="#toc-nested-type" text="Type" level={2} />
+        <TableOfContentsItem href="#toc-nested-components" text="Components" />
+      </TableOfContents>
+    </Column>
+    <Column sm={4} md={5} lg={12}>
+      <div bind:this={nestedContainer} style="height: 16rem; overflow-y: auto">
+        <Stack gap={9}>
+          <Stack tag="section" id="toc-nested-overview" gap={3}>
+            <Text tag="h4" type="productive-heading-03">Overview</Text>
+            <Stack gap={5}>
+              <Text>The design system is the shared set of tokens, components, and guidance behind every product we ship.</Text>
+              <Text>A core team maintains it. Anyone can propose a change by opening an issue with the problem it solves.</Text>
+            </Stack>
+          </Stack>
+          <Stack gap={7}>
+            <Stack tag="section" id="toc-nested-tokens" gap={3}>
+              <Text tag="h4" type="productive-heading-03">Design tokens</Text>
+              <Stack gap={5}>
+                <Text>Tokens are named values for color, spacing, and type. Design files and code read the same names, so a change in one place reaches every product.</Text>
+              </Stack>
+            </Stack>
+            <Stack tag="section" id="toc-nested-colors" gap={3}>
+              <Text tag="h5" type="productive-heading-02">Colors</Text>
+              <Stack gap={5}>
+                <Text>Color tokens name a role, such as background or text on color, not a hue. Each theme maps the roles to its own palette.</Text>
+                <Text>Use the role that describes the job, and the contrast holds in every theme.</Text>
+              </Stack>
+            </Stack>
+            <Stack tag="section" id="toc-nested-contrast" gap={3}>
+              <Text tag="h6" type="productive-heading-01">Contrast</Text>
+              <Stack gap={5}>
+                <Text>Text roles meet a 4.5:1 contrast ratio against the background roles they're paired with, and large text meets 3:1.</Text>
+                <Text>Check custom pairings with a contrast checker before shipping them.</Text>
+              </Stack>
+            </Stack>
+            <Stack tag="section" id="toc-nested-spacing" gap={3}>
+              <Text tag="h5" type="productive-heading-02">Spacing</Text>
+              <Stack gap={5}>
+                <Text>Spacing comes from one scale that starts at 2px and roughly doubles at each step.</Text>
+                <Text>Use small steps inside a component and large ones between sections of a page.</Text>
+              </Stack>
+            </Stack>
+            <Stack tag="section" id="toc-nested-type" gap={3}>
+              <Text tag="h5" type="productive-heading-02">Type</Text>
+              <Stack gap={5}>
+                <Text>Each type style sets size, weight, and line height together, so text stays readable at every size.</Text>
+                <Text>Pick the style by role, such as a heading or body copy, not by the size you want.</Text>
+                <Text>Long-form text uses the body-long styles, which add line height for comfortable reading.</Text>
+              </Stack>
+            </Stack>
+          </Stack>
+          <Stack tag="section" id="toc-nested-components" gap={3}>
+            <Text tag="h4" type="productive-heading-03">Components</Text>
+            <Stack gap={5}>
+              <Text>Components are built from the tokens, so they follow the theme without extra work.</Text>
+              <Text>Each one documents when to use it, what it looks like in every state, and how it behaves with a keyboard.</Text>
+              <Text>Start from the component closest to what you need. If none fits, ask in the design system channel before building a new one; someone may already be working on it.</Text>
+              <Text>New components go through a short review for accessibility, theming, and naming before they're published.</Text>
+            </Stack>
+          </Stack>
+        </Stack>
+      </div>
+    </Column>
+  </Row>
+</Grid>
+
+## Generated from headings
+
+For rendered Markdown or other content you don't write item by item, read the headings after they render and map each one to an item. Here the `h4`s become top-level items and the `h5`s nest under them.
+
+<Grid>
+  <Row>
+    <Column sm={4} md={3} lg={4}>
+      <TableOfContents scrollContainer={article}>
+        {#each headings as heading (heading.id)}
+          <TableOfContentsItem href="#{heading.id}" text={heading.text} level={heading.level} />
+        {/each}
+      </TableOfContents>
+    </Column>
+    <Column sm={4} md={5} lg={12}>
+      <div bind:this={article} style="height: 16rem; overflow-y: auto">
+        <Stack gap={9}>
+          <Stack gap={3}>
+            <Text tag="h4" type="productive-heading-03" id="toc-generated-install">Install</Text>
+            <Stack gap={5}>
+              <Text>Add the package with your package manager, then import the styles once in your app's entry point.</Text>
+              <Text>The styles include every theme, so you don't need a separate import to switch.</Text>
+            </Stack>
+          </Stack>
+          <Stack gap={7}>
+            <Stack gap={3}>
+              <Text tag="h4" type="productive-heading-03" id="toc-generated-configure">Configure</Text>
+              <Stack gap={5}>
+                <Text>Two settings cover most apps: the theme and the base path.</Text>
+              </Stack>
+            </Stack>
+            <Stack gap={3}>
+              <Text tag="h5" type="productive-heading-02" id="toc-generated-theme">Theme</Text>
+              <Stack gap={5}>
+                <Text>Pick one of the four themes, or follow the system preference so the app matches the operating system.</Text>
+                <Text>The theme can change at runtime without a reload.</Text>
+              </Stack>
+            </Stack>
+            <Stack gap={3}>
+              <Text tag="h5" type="productive-heading-02" id="toc-generated-base-path">Base path</Text>
+              <Stack gap={5}>
+                <Text>If the app isn't served from the root of its domain, set the base path so links and assets resolve.</Text>
+                <Text>Prefix in-page links with the same path.</Text>
+                <Text>Server-rendered apps read it from the request, so it can differ between environments.</Text>
+              </Stack>
+            </Stack>
+          </Stack>
+          <Stack gap={3}>
+            <Text tag="h4" type="productive-heading-03" id="toc-generated-deploy">Deploy</Text>
+            <Stack gap={5}>
+              <Text>Build once and serve the output from any static host. Nothing runs on the server.</Text>
+              <Text>Cache the hashed assets for a year and the HTML for a few minutes.</Text>
+              <Text>Preview deployments work the same way. Each branch gets its own URL, which you can share for review before merging.</Text>
+              <Text>To roll back, point the host at the previous build. There's no database migration to undo.</Text>
+            </Stack>
+          </Stack>
+        </Stack>
+      </div>
+    </Column>
+  </Row>
+</Grid>
+
+## Usage
+
+| Do | Why |
+| --- | --- |
+| Give the scroller a `scroll-padding-top` equal to the height of a sticky header, or set `scrollOffset` and a matching `scroll-margin-top` on the sections. | `scrollOffset` defaults to the scroller's `scroll-padding-top`, so one CSS value moves both the line a section must cross to become active and where a clicked section lands. |
+| Lay the page out with `Grid`, `Row`, and `Column`, giving the table of contents 4 of 16 columns on large screens and hiding it on small ones with `sm={0}`. | It lines up with the rest of the page's grid, and a sidebar on a small screen leaves the content too narrow. |
+| Raise `activationLine` when sections are short or headings sit low on the page. | A section otherwise only activates once its top reaches the top, so its heading can be in view while the previous section stays highlighted. |
+| Give a long table of contents a sticky sidebar with `overflow-y: auto`. | The active item scrolls into view within the sidebar as the reader moves through the page, without moving the page. |
+| Sync the URL from the `change` event if you need the hash when using `scrollContainer` or inside an iframe. | In those cases the click scrolls the container itself instead of following the link, so the URL hash doesn't change. |
+| Give each section a unique `id` that matches its item's `href`. | The scroll spy finds sections with `document.getElementById`, and skips items whose section is missing. |
+| Keep item text short and matching the section heading. | Long labels wrap onto several lines and push later sections out of view in a sticky sidebar. |
+| Set `labelText` when a page has more than one navigation landmark. | It names the `nav`, which defaults to "Table of contents". |
