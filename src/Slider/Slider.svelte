@@ -143,6 +143,7 @@
     resolveValidationVisibility,
   } from "../utils/field-status.js";
   import { clamp } from "../utils/numeric-format.js";
+  import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
   import {
     nearestMark,
@@ -426,6 +427,7 @@
       {/if}
       <input
         bind:this={textInputRef}
+        use:preserveFocusSelection={selectTextOnFocus && !disabled}
         use:reflectDefaultValue={value}
         type={hideTextInput ? "hidden" : inputType}
         id={inputId}

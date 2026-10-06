@@ -7,6 +7,7 @@
     PasswordInput,
     Search,
     SearchMenu,
+    Slider,
     TextArea,
     TextInput,
     TimePicker,
@@ -85,4 +86,11 @@
       />
     </ToolbarContent>
   </Toolbar>
+  <Slider
+    data-testid="slider"
+    labelText="Slider"
+    selectTextOnFocus
+    max={999999}
+    value={123456}
+  />
 </div>
