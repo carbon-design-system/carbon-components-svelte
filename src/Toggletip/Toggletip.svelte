@@ -105,6 +105,12 @@
    */
   export let portalTooltip = undefined;
 
+  /**
+   * Set an id for the toggletip element.
+   * The content id derives from it as `{id}-content`.
+   */
+  export let id = uniqueId();
+
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import Information from "../icons/Information.svelte";
@@ -119,13 +125,13 @@
 
   const dispatch = createEventDispatcher();
   const notifyOpenChange = createOpenCloseDispatcher(dispatch);
-  const contentId = uniqueId();
   const insideModal = getContext(MODAL_CONTEXT_KEY);
 
   let toggletipRef = null;
   let portalRef = null;
   let disconnectModalObserver = noop;
 
+  $: contentId = `${id}-content`;
   $: effectivePortalTooltip =
     portalTooltip === undefined ? !!insideModal : portalTooltip;
 
@@ -215,6 +221,7 @@ whitespace gap; the label's `margin-right` is then the only spacing. -->
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <span
     bind:this={toggletipRef}
+    {id}
     class:bx--toggletip={true}
     class:bx--toggletip--open={open}
     use:dismiss={{
