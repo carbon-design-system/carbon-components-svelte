@@ -155,7 +155,8 @@ describe("DataTableSearch", () => {
     await user.type(searchInput, "rr");
 
     tableRows = getTableRows();
-    expect(tableRows).toHaveLength(0);
+    expect(tableRows).toHaveLength(1);
+    expect(tableRows[0]).toHaveTextContent("No results");
 
     expect(screen.getByText("0 items")).toBeInTheDocument();
     expect(screen.getByText("of 1 page")).toBeInTheDocument();

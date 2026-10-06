@@ -71,6 +71,25 @@ describe("DataTable server render", () => {
       document.querySelector('label[for="people-select-all"]'),
     ).toHaveAttribute("data-contained-checkbox-state", "mixed");
   });
+
+  it("renders no row for empty rows by default", () => {
+    const { document } = renderSSR(DataTable, { ...props, rows: [] });
+
+    expect(document.querySelector("tbody")?.children).toHaveLength(0);
+  });
+
+  it("renders the emptyText row, and an empty status region", () => {
+    const { document } = renderSSR(DataTable, {
+      ...props,
+      rows: [],
+      emptyText: "No data",
+    });
+    const cell = document.querySelector("tbody td");
+
+    expect(cell).toHaveTextContent("No data");
+    expect(cell).toHaveAttribute("colspan", "4");
+    expect(document.querySelector('[role="status"]')?.textContent).toBe("");
+  });
 });
 
 describe("DataTable virtualize server render", () => {

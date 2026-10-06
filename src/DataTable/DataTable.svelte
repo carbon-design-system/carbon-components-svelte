@@ -26,6 +26,27 @@
   }
 
   /**
+   * The text in `node`, with a space where one element's text ends and
+   * another's starts, so a title and a subtitle don't run together.
+   * `textContent` joins them with none, and `innerText` needs layout.
+   * @param {HTMLElement} node
+   * @returns {string}
+   */
+  function readableText(node) {
+    let text = "";
+    /** @type {Node | null} */
+    let prevParent = null;
+    const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT);
+    while (walker.nextNode()) {
+      const current = walker.currentNode;
+      if (current.parentNode !== prevParent) text += " ";
+      text += current.nodeValue ?? "";
+      prevParent = current.parentNode;
+    }
+    return text.replace(/\s+/g, " ").trim();
+  }
+
+  /**
    * Whether `next` describes the same row values as `prev`. Unlike
    * `rowsEqual` (used by `ToolbarSearch`), a same-reference element does NOT
    * count as equal: `rowsEqual` short-circuits per element on `rowA ===
@@ -187,6 +208,8 @@
    * @slot {{ header: DataTableHeader<Row>; index: number; }} footerCell
    * @slot {{ header: DataTableNonEmptyHeader<Row> | DataTableComputedHeader<Row>; }} headerDecorator
    * @slot {{ row: Row; }} rowDecorator
+   * @slot {{}} empty - Replaces `emptyText` in the row shown when `rows` is empty.
+   * @slot {{}} noResults - Replaces `noResultsText` in the row shown when a filter matches no rows.
    */
 
   /**
@@ -301,6 +324,21 @@
    * @type {ReadonlyArray<Row>}
    */
   export let rows = [];
+
+  /**
+   * Specify the text in the row that spans every column when `rows` is
+   * empty. The `empty` slot replaces it. The default is an empty string, which
+   * renders no row, so a table that loads its rows later doesn't flash a
+   * message. Set it to say the table has no data.
+   */
+  export let emptyText = "";
+
+  /**
+   * Specify the text in the row that spans every column when a filter
+   * matches no rows. The `noResults` slot replaces it. An empty string
+   * renders no row.
+   */
+  export let noResultsText = "No results";
 
   /**
    * Set the size of the data table.
@@ -1202,10 +1240,9 @@
     return next;
   }
 
-  let sortStatus = "";
-  const announceSortStatus = createStatusAnnouncer(
-    (text) => (sortStatus = text),
-  );
+  // One status region announces sorts and the empty row.
+  let statusText = "";
+  const announceStatus = createStatusAnnouncer((text) => (statusText = text));
   let prevSortKey = sortKey;
   let prevSortDirection = sortDirection;
 
@@ -1215,7 +1252,7 @@
     const statusKey = sortDirection === "none" ? prevSortKey : sortKey;
     prevSortKey = sortKey;
     prevSortDirection = sortDirection;
-    announceSortStatus(
+    announceStatus(
       sortStatusText(
         headers.find((header) => header.key === statusKey),
         sortDirection,
@@ -1469,6 +1506,49 @@
     (expandable ? 1 : 0) +
     (isSelectionEnabled ? 1 : 0) +
     visibleHeaders.length;
+
+  // No rows are displayed: `rows` is empty, or a filter left nothing. Which
+  // of the two picks the slot and text.
+  $: noRowsShown =
+    rowsToVirtualize.length === 0 || (hideMode && matchedRowIdsSet.size === 0);
+  /** @type {null | "empty" | "noResults"} */
+  $: emptyKind = noRowsShown
+    ? rows.length === 0
+      ? "empty"
+      : "noResults"
+    : null;
+  // An empty text with no slot renders no row.
+  $: emptyRowShown =
+    emptyKind === "empty"
+      ? Boolean($$slots.empty) || emptyText !== ""
+      : emptyKind === "noResults" &&
+        (Boolean($$slots.noResults) || noResultsText !== "");
+
+  /** @type {null | HTMLElement} */
+  let emptyRef = null;
+  /** The text of the empty row last copied into the status region. */
+  let emptyStatus = "";
+  $: syncEmptyStatus(emptyRowShown, emptyKind, emptyText, noResultsText);
+
+  /**
+   * Copy the empty row's text into the status region a tick after the row
+   * renders. The region is mounted with the table, since screen readers
+   * often skip a region that appears together with its text. Leaving the
+   * empty state clears the text only if a sort has not replaced it.
+   * @param {boolean} shown
+   * @param {...unknown} _inputs - Other inputs that change the text.
+   */
+  async function syncEmptyStatus(shown, ..._inputs) {
+    await tick();
+    const text = shown && emptyRef ? readableText(emptyRef) : "";
+    if (text) {
+      emptyStatus = text;
+      announceStatus(text);
+    } else if (emptyStatus) {
+      if (statusText === emptyStatus) statusText = "";
+      emptyStatus = "";
+    }
+  }
 
   // Rest props go on the container, but naming and description belong on
   // the `table`. `Table` joins them with the title and description ids.
@@ -1833,6 +1913,19 @@
         </TableRow>
       </TableHead>
       <tbody use:keepRowFocus={{ enabled: !virtualData?.isVirtualized }}>
+        {#if emptyRowShown}
+          <tr class:bx--data-table--empty-row={true}>
+            <td colspan={totalColumns} class:bx--table-cell={true}>
+              <div bind:this={emptyRef} class:bx--data-table--empty={true}>
+                {#if emptyKind === "noResults"}
+                  <slot name="noResults">{noResultsText}</slot>
+                {:else}
+                  <slot name="empty">{emptyText}</slot>
+                {/if}
+              </div>
+            </td>
+          </tr>
+        {/if}
         {#if virtualData?.isVirtualized}
           <!-- Spacer row for offset -->
           {#if virtualData.startIndex > 0}
@@ -2455,6 +2548,6 @@
     </Table>
   </div>
   <span role="status" aria-live="polite" class:bx--visually-hidden={true}
-    >{sortStatus}</span
+    >{statusText}</span
   >
 </TableContainer>
