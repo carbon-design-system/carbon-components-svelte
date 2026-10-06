@@ -23,10 +23,12 @@ export default defineConfig({
   test: {
     ...testConfig,
     include: ["../tests/**/*.test.ts"],
-    // `svelte/server` only exists in Svelte 5.
+    // `svelte/server` only exists in Svelte 5, and the hydration harness
+    // builds with the root (Svelte 5) install.
     exclude: [
       "../tests/Snippets/**",
       "../tests/**/*.ssr.test.ts",
+      "../tests/**/*.hydrate.test.ts",
       "../tests/utils/ssr.test.ts",
     ],
     setupFiles: ["./setup-tests.ts"],
