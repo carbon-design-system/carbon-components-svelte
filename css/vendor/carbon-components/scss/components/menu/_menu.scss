@@ -231,3 +231,21 @@
 @include exports("menu-option-label-slotted") {
   @include menu-option-label-slotted;
 }
+
+// carbon-components-svelte patch (menu-forced-colors)
+// The Menu surface is separated from the page only by a box-shadow, which
+// forced-colors mode drops. A transparent outline is repainted as a visible
+// system colour there.
+
+/// Menu surface edge in forced-colors mode.
+/// @access private
+/// @group menu
+@mixin menu-forced-colors {
+  .#{$prefix}--menu {
+    @include high-contrast-mode("outline");
+  }
+}
+
+@include exports("menu-forced-colors") {
+  @include menu-forced-colors;
+}
