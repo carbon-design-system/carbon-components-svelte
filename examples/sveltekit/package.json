@@ -7,17 +7,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "carbon-components-svelte": "^0.112.0",
-    "carbon-pictograms-svelte": "^13.20.0"
-  },
-  "overrides": {
-    "cookie": "0.7.2"
+    "carbon-components-svelte": "^0.113.0",
+    "carbon-pictograms-svelte": "^13.21.0"
   },
   "devDependencies": {
-    "@sveltejs/kit": "^2.70.3",
+    "@sveltejs/kit": "^3.0.1",
     "@sveltejs/vite-plugin-svelte": "^7.3.1",
-    "carbon-preprocess-svelte": "^0.11.46",
-    "svelte": "^5.57.1",
-    "vite": "^8.3.1"
+    "carbon-preprocess-svelte": "^0.11.49",
+    "svelte": "^5.57.2",
+    "vite": "^8.3.3"
   }
 }
