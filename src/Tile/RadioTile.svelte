@@ -79,6 +79,7 @@
 
   const ctx = getContext("carbon:TileGroup");
   const add = ctx?.add ?? noop;
+  const remove = ctx?.remove ?? noop;
   const update = ctx?.update ?? noop;
   const selectedValue = ctx?.selectedValue ?? readable(undefined);
   const groupName = ctx?.groupName ?? readable(undefined);
@@ -110,6 +111,8 @@
         selectedValue.set(value);
         current = value;
       }
+      remove(prevValue);
+      add({ value, checked: false });
       prevValue = value;
     }
     if (checked !== syncedChecked) {
@@ -161,7 +164,10 @@
     registeredChecked = checked;
   }
 
-  onMount(() => unregister);
+  onMount(() => () => {
+    unregister();
+    remove(value);
+  });
 
   // A form reset restores the radio without a change event. Inside
   // `TileGroup`, the group reads the result back; standalone, sync here.

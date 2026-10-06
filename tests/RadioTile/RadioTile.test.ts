@@ -9,6 +9,7 @@ import { user } from "../utils/user";
 import RadioTileChecked from "./RadioTile.checked.test.svelte";
 import RadioTileGroup from "./RadioTile.group.test.svelte";
 import RadioTileGroupEach from "./RadioTile.group-each.test.svelte";
+import RadioTileGroupUnmount from "./RadioTile.group-unmount.test.svelte";
 import RadioTileGroupValue from "./RadioTile.group-value.test.svelte";
 import RadioTileKeyboard from "./RadioTile.keyboard.test.svelte";
 import RadioTileRef from "./RadioTile.ref.test.svelte";
@@ -19,7 +20,49 @@ import RadioTile from "./RadioTile.test.svelte";
 import RadioTileAria from "./RadioTileAria.test.svelte";
 import RadioTileCustom from "./RadioTileCustom.test.svelte";
 
+const flushMicrotasks = () => new Promise<void>(queueMicrotask);
+
 describe("RadioTile", () => {
+  describe("unmounting in a TileGroup", () => {
+    it("clears the selection when the checked tile unmounts", async () => {
+      const { component } = render(RadioTileGroupUnmount);
+      await user.click(screen.getByText("Standard, billed monthly"));
+      expect(component.selected).toBe("standard");
+
+      component.showStandard = false;
+      await tick();
+      await flushMicrotasks();
+
+      expect(component.selected).toBeUndefined();
+      expect(screen.getByRole("radio", { name: "Lite" })).not.toBeChecked();
+    });
+
+    it("keeps the selection when a tile with the same value replaces it", async () => {
+      const { component } = render(RadioTileGroupUnmount);
+      await user.click(screen.getByText("Standard, billed monthly"));
+
+      component.annual = true;
+      await tick();
+      await flushMicrotasks();
+
+      expect(component.selected).toBe("standard");
+      expect(
+        screen.getByRole("radio", { name: "Standard, billed annually" }),
+      ).toBeChecked();
+    });
+
+    it("keeps the selection when an unchecked tile unmounts", async () => {
+      const { component } = render(RadioTileGroupUnmount);
+      await user.click(screen.getByText("Lite"));
+
+      component.showStandard = false;
+      await tick();
+      await flushMicrotasks();
+
+      expect(component.selected).toBe("lite");
+    });
+  });
+
   describe("value changes in a TileGroup", () => {
     it("carries the selection to the checked tile's new value", async () => {
       const onSelect = vi.fn();
