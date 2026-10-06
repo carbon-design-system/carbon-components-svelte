@@ -176,8 +176,8 @@
         box-shadow: 0 0 0 1px transparent, 0 0 0 3px transparent;
         content: '';
         cursor: pointer;
-        transition: box-shadow $duration--fast-01 motion(exit, productive),
-          background-color $duration--fast-01 motion(exit, productive);
+        // ccs: no `box-shadow`, which draws the focus ring, so the ring snaps
+        transition: background-color $duration--fast-01 motion(exit, productive);
 
         @media screen and (prefers-reduced-motion: reduce) {
           transition: none;
@@ -276,7 +276,9 @@
       &::before,
       &::after {
         cursor: not-allowed;
-        transition: $duration--fast-01 motion(exit, productive);
+        // ccs: the track's background and the handle's transform, not `all`
+        transition: background-color $duration--fast-01 motion(exit, productive),
+          transform $duration--fast-01 motion(exit, productive);
 
         @media screen and (prefers-reduced-motion: reduce) {
           transition: none;
@@ -376,8 +378,8 @@
         // Corresponds to the double-border for focused state (`0 0 0 1px $ui-02, 0 0 0 3px $focus`)
         box-shadow: 0 0 0 1px transparent, 0 0 0 3px transparent;
         content: '';
-        transition: box-shadow $duration--fast-01 motion(exit, productive),
-          background-color $duration--fast-01 motion(exit, productive);
+        // ccs: no `box-shadow`, which draws the focus ring, so the ring snaps
+        transition: background-color $duration--fast-01 motion(exit, productive);
 
         @media screen and (prefers-reduced-motion: reduce) {
           transition: none;
@@ -470,7 +472,9 @@
       &::before,
       &::after {
         cursor: not-allowed;
-        transition: $duration--fast-01 motion(exit, productive);
+        // ccs: the track's background and the handle's transform, not `all`
+        transition: background-color $duration--fast-01 motion(exit, productive),
+          transform $duration--fast-01 motion(exit, productive);
 
         @media screen and (prefers-reduced-motion: reduce) {
           transition: none;

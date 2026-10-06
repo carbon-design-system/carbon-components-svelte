@@ -37,4 +37,28 @@ describe("focus ring transitions", () => {
     },
     30_000,
   );
+
+  it.each([".bx--toggle__switch::before", ".bx--toggle__appearance::before"])(
+    "toggle %s leaves out the box-shadow ring",
+    async (selector) => {
+      expect(await transitionProperties(selector)).toEqual([
+        "background-color",
+      ]);
+    },
+    30_000,
+  );
+
+  it.each([
+    ".bx--toggle-input:disabled+.bx--toggle-input__label>.bx--toggle__switch::before",
+    ".bx--toggle:disabled+.bx--toggle__label .bx--toggle__appearance::after",
+  ])(
+    "disabled toggle %s names its properties",
+    async (selector) => {
+      expect(await transitionProperties(selector)).toEqual([
+        "background-color",
+        "transform",
+      ]);
+    },
+    30_000,
+  );
 });
