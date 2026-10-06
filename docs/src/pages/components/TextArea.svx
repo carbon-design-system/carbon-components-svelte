@@ -40,7 +40,7 @@ the field scrolls instead of growing further.
 
 ## Maximum character count
 
-Specify the max character count with `maxCount`. A character counter appears to the right of the label. Use the native maxlength attribute instead if you prefer not to show a counter.
+Specify the max count with `maxCount`. It counts characters by default. A counter appears to the right of the label. Use the native maxlength attribute instead if you prefer not to show a counter.
 
 Screen readers hear the count read as words (for example, "2 of 100 characters"), and hear "Character limit reached" once the limit is hit. Override either message with the `counterText` and `limitReachedText` props.
 
@@ -57,6 +57,14 @@ The counter still shows when the label is hidden, and stays aligned to the trail
 `maxCount` only stops typing past the limit; it does not truncate a value that is set from script and already exceeds it. In that case the field is marked `aria-invalid` and the counter turns red, without rewriting the bound value.
 
 <TextArea labelText="Incident summary" maxCount={100} value="A previously saved draft that happens to be well over the current one hundred character limit for this field." />
+
+### Word counter
+
+Set `counterMode` to `"word"` to limit words instead of characters. The counter, the screen-reader text, and the limit announcement switch to words.
+
+<TextArea labelText="Executive summary" placeholder="Summarise the incident for leadership" maxCount={50} counterMode="word" />
+
+Words are counted with `Intl.Segmenter` where the browser supports it; older browsers split on whitespace, so a hyphenated term may count differently.
 
 ## Helper text
 
