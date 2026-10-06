@@ -48,6 +48,19 @@
   export let persistKey = "theme";
 
   /**
+   * Set to `true` to follow the operating system color scheme.
+   * `theme` is set from `systemThemes` on mount and on every change;
+   * set `theme` yourself to override until the next system change.
+   */
+  export let system = false;
+
+  /**
+   * Specify the themes to apply for the light and dark system color schemes.
+   * @type {[light: CarbonTheme, dark: CarbonTheme]}
+   */
+  export let systemThemes = ["white", "g100"];
+
+  /**
    * Render a toggle, select, or dropdown to control the theme.
    * @type {"toggle" | "select" | "dropdown"}
    */
@@ -88,7 +101,7 @@
     hideLabel: false,
   };
 
-  import { createEventDispatcher, onMount } from "svelte";
+  import { createEventDispatcher, onMount, tick } from "svelte";
   import Dropdown from "../Dropdown/Dropdown.svelte";
   import LocalStorage from "../LocalStorage/LocalStorage.svelte";
   import Select from "../Select/Select.svelte";
@@ -100,10 +113,64 @@
   let prevTheme = theme;
   let mounted = false;
 
-  onMount(() => {
+  /** @type {MediaQueryList | undefined} */
+  let mql;
+
+  /** @param {{ matches: boolean }} event */
+  function onSystemChange(event) {
+    theme = event.matches ? systemThemes[1] : systemThemes[0];
+  }
+
+  function watchSystem() {
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    if (!mql) {
+      mql = window.matchMedia("(prefers-color-scheme: dark)");
+      mql.addEventListener("change", onSystemChange);
+    }
+    onSystemChange(mql);
+  }
+
+  function unwatchSystem() {
+    mql?.removeEventListener("change", onSystemChange);
+    mql = undefined;
+  }
+
+  function finishMount() {
+    // Resolve the system theme before snapshotting so mount does not dispatch `update`.
+    if (system) watchSystem();
     prevTheme = theme;
     mounted = true;
+  }
+
+  onMount(() => {
+    let destroyed = false;
+
+    // With `system` and `persist`, wait for the mount flush to end so the
+    // stored value is restored first. On Svelte 3/4 a second write to the
+    // bound value in the same flush never reaches LocalStorage.
+    if (system && persist) {
+      tick().then(() => {
+        if (!destroyed) finishMount();
+      });
+    } else {
+      finishMount();
+    }
+
+    return () => {
+      destroyed = true;
+      unwatchSystem();
+    };
   });
+
+  // Runs before the apply block so the resolved theme is applied in the same flush.
+  $: if (mounted) {
+    if (system) {
+      systemThemes;
+      watchSystem();
+    } else {
+      unwatchSystem();
+    }
+  }
 
   // Apply theme before dispatching update. Reactive blocks run in source order,
   // and a throwing on:update handler aborts the rest of the flush.
