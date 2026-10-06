@@ -3,11 +3,17 @@ import type {
   DataTable as BarrelDataTable,
   breakpointObserver,
   breakpoints,
+  dismiss,
+  floatingPosition,
   formatFileSize,
+  formReset,
   fuzzyMatch,
   getAvatarBackgroundColor,
   getInitials,
+  preserveFocusSelection,
   queryParam,
+  rovingFocus,
+  trapFocus,
 } from "carbon-components-svelte";
 import type { BreakpointSize } from "carbon-components-svelte/src/Breakpoint/breakpoints.js";
 import type Button from "carbon-components-svelte/src/Button/Button.svelte";
@@ -22,6 +28,12 @@ import type {
 } from "carbon-components-svelte/src/Theme/Theme.svelte";
 import type TimePickerSkeleton from "carbon-components-svelte/src/TimePicker/TimePickerSkeleton.svelte";
 import type { HeaderSearchResult } from "carbon-components-svelte/src/UIShell/HeaderSearch.svelte";
+import type { DismissParams } from "carbon-components-svelte/src/utils/dismiss.js";
+import type {
+  FloatingPositionOptions,
+  FloatingPositionResult,
+} from "carbon-components-svelte/src/utils/floating-position.js";
+import type { RovingFocusOptions } from "carbon-components-svelte/src/utils/roving-focus.js";
 
 import "carbon-components-svelte/css/all.css";
 import "carbon-components-svelte/css/g100.css";
@@ -50,3 +62,14 @@ type _HeaderSearchResult = HeaderSearchResult;
 type _ThemeProps = ThemeProps;
 type _Themes = typeof themes;
 type _TimePickerSkeleton = TimePickerSkeleton;
+type _Dismiss = ReturnType<typeof dismiss>;
+type _DismissParams = Parameters<typeof dismiss>[1];
+type _DismissParamsType = DismissParams;
+type _FloatingPosition = ReturnType<typeof floatingPosition>;
+type _FloatingPositionOptions = FloatingPositionOptions;
+type _FloatingPositionResult = FloatingPositionResult;
+type _FormReset = ReturnType<typeof formReset>;
+type _PreserveFocusSelection = ReturnType<typeof preserveFocusSelection>;
+type _RovingFocus = ReturnType<typeof rovingFocus>;
+type _RovingFocusOptions = RovingFocusOptions;
+type _TrapFocus = ReturnType<typeof trapFocus>;
