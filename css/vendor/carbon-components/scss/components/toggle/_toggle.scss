@@ -718,3 +718,29 @@
 @include exports("toggle-validation") {
   @include toggle-validation;
 }
+
+// carbon-components-svelte patch (toggle-forced-colors)
+// The switch focus ring is a box-shadow, which forced-colors mode drops. The
+// shipped switch only has the 1px transparent outline from the HCM fix above,
+// which forced colors paint the same focused or not, so focus barely
+// registered. (The `.bx--toggle__button` focus outline lives in the
+// `enable-v11-release` branch, which is never compiled.) A focused switch gets
+// a 2px ring with an offset so it reads apart from the unfocused 1px edge.
+
+/// Toggle focus ring in forced-colors mode.
+/// @access private
+/// @group toggle
+@mixin toggle-forced-colors {
+  .#{$prefix}--toggle-input:focus
+    + .#{$prefix}--toggle-input__label
+    > .#{$prefix}--toggle__switch::before {
+    @include high-contrast-mode {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+    }
+  }
+}
+
+@include exports("toggle-forced-colors") {
+  @include toggle-forced-colors;
+}
