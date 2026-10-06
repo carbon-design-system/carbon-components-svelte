@@ -16,6 +16,7 @@ const cases: { testId: string; check?: "replace" }[] = [
   { testId: "search" },
   { testId: "search-menu" },
   { testId: "toolbar-search" },
+  { testId: "slider", check: "replace" },
 ];
 
 async function expectFullSelection(input: Locator) {
@@ -38,7 +39,13 @@ test.describe("selectTextOnFocus", () => {
     test(`${testId} keeps the full value selected after a click`, async ({
       page,
     }) => {
-      const input = page.getByTestId(testId);
+      // `data-testid` lands on the wrapper for some components.
+      const target = page.getByTestId(testId);
+      const input = (await target.evaluate((el) =>
+        el.matches("input, textarea"),
+      ))
+        ? target
+        : target.locator("input:not([type=hidden]), textarea").first();
       await input.click();
 
       if (check === "replace") {

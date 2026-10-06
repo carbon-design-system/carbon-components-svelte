@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { clickToFocus } from "../utils/click-to-focus";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import Slider from "./Slider.test.svelte";
@@ -176,6 +177,13 @@ describe("Slider", () => {
     await tick();
 
     expect(select).toHaveBeenCalled();
+  });
+
+  it("keeps the selected value through the click's mouseup", async () => {
+    render(Slider, { props: { selectTextOnFocus: true, value: 42 } });
+
+    const mouseup = await clickToFocus(screen.getByRole("spinbutton"));
+    expect(mouseup.defaultPrevented).toBe(true);
   });
 
   it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {
