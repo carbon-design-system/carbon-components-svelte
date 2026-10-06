@@ -28,6 +28,16 @@ When persistence is enabled, theme changes sync across browser tabs that share t
 
 <FileSource src="/framed/Theme/ThemePersist" />
 
+## Follow the system
+
+Set `system` to `true` to follow the operating system color scheme. The theme updates when the user changes the setting.
+
+Set `systemThemes` to choose which theme represents light and dark; the default pairs `white` with `g100`.
+
+With `persist` also set, the system preference wins when the page loads and the stored value is updated to match. Choosing a theme from a control keeps that theme until the system preference changes again.
+
+<FileSource src="/framed/Theme/ThemeSystem" />
+
 ## Custom theme
 
 Override default Carbon theme tokens using the `tokens` prop.
