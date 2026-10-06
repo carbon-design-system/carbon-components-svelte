@@ -55,7 +55,7 @@
   export let ref = null;
 
   import { getContext, onMount } from "svelte";
-  import { readable, writable } from "svelte/store";
+  import { get, readable, writable } from "svelte/store";
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { noop } from "../utils/noop.js";
@@ -72,6 +72,7 @@
     tabStopElement: readable(/** @type {HTMLButtonElement | null} */ (null)),
     activeTooltip: writable(/** @type {string | number | null} */ (null)),
     toggle: noop,
+    claimInitialTabStop: () => false,
     notifyUnmount: noop,
   };
   const {
@@ -81,8 +82,16 @@
     tabStopElement,
     activeTooltip,
     toggle,
+    claimInitialTabStop,
     notifyUnmount,
   } = ctx;
+
+  // Decided while initializing so the server HTML has a tab stop before the
+  // group can measure its DOM; `$tabStopElement` takes over once it exists.
+  const initialTabStop = claimInitialTabStop(
+    value,
+    disabled || get(groupDisabled),
+  );
 
   $: hasIconOnly = (icon || $$slots.icon) && !$$slots.default;
   $: hasTooltipContent = hasIconOnly && Boolean(iconDescription);
@@ -90,7 +99,10 @@
     tooltipPosition ?? ($groupOrientation === "vertical" ? "right" : "bottom");
   $: pressed = $selectedValues.has(value);
   $: isDisabled = disabled || $groupDisabled;
-  $: isTabStop = $tabStopElement !== null && $tabStopElement === ref;
+  $: isTabStop =
+    $tabStopElement === null
+      ? initialTabStop && !isDisabled
+      : $tabStopElement === ref;
   // Only the anchor-to-tooltip gap fields are used below, not the
   // left/right alignment-offset fields this same utility also returns:
   // those exist to nudge the caret onto Button/CopyButton/CodeSnippet's
