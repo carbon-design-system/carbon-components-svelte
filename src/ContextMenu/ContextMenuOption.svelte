@@ -232,8 +232,7 @@
   class:bx--menu-option--danger={!subOptions && kind === "danger"}
   indented={isIndented}
   aria-checked={isSelectable || isRadio ? selected : undefined}
-  data-nested={ref &&
-    ref.closest(".bx--menu").getAttribute("data-level") === "2"}
+  data-nested={ctx.level === 2}
   data-sub={subOptions}
   data-id={id}
   {...$$restProps}

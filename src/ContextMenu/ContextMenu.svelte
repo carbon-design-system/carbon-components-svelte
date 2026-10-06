@@ -78,6 +78,7 @@
   const focusedIndex = writable(-1);
   const hasPopup = writable(false);
   const ctx = getContext("carbon:ContextMenu");
+  const level = ctx ? 2 : 1;
 
   const FOCUSABLE =
     'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -197,6 +198,7 @@
     position,
     close,
     setPopup,
+    level,
   });
 
   afterUpdate(() => {
@@ -227,7 +229,6 @@
     if (!$hasPopup && options[focusIndex]) options[focusIndex].focus();
   });
 
-  $: level = ctx ? 2 : 1;
   $: focusedIndex.set(focusIndex);
   $: menuAriaLabel = ($$props["aria-label"] ?? labelText) || undefined;
 
