@@ -92,6 +92,7 @@
     hoverable: true,
   });
   const tooltipOthersActive = tooltipHandoff.hidden;
+  const tooltipInstant = tooltipHandoff.instant;
 
   function hide() {
     open = false;
@@ -103,6 +104,12 @@
 
   function toggle() {
     open = !open;
+  }
+
+  // Focus shows the tooltip at once, without the fade-in.
+  function showOnFocus() {
+    tooltipHandoff.claim({ instant: true });
+    show();
   }
 
   function scheduleShow() {
@@ -158,6 +165,7 @@
     class:bx--tooltip__trigger--definition={true}
     class:bx--tooltip--hidden={!effectivePortalTooltip && !shown}
     class:bx--tooltip--visible={!effectivePortalTooltip && shown}
+    class:bx--tooltip--instant={!effectivePortalTooltip && $tooltipInstant}
     class:bx--tooltip--top={!effectivePortalTooltip && direction === "top"}
     class:bx--tooltip--bottom={!effectivePortalTooltip &&
       direction === "bottom"}
@@ -172,7 +180,7 @@
     on:mouseenter
     on:mouseleave
     on:focus
-    on:focus={clickToOpen ? undefined : show}
+    on:focus={clickToOpen ? undefined : showOnFocus}
     on:blur={hide}
   >
     <slot />

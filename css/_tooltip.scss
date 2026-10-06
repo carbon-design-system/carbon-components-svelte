@@ -176,3 +176,25 @@
 @include exports("tooltip-portal") {
   @include tooltip-portal;
 }
+
+/// Warm handoff within a tooltip group: the tooltip replaces one that was
+/// just showing, so it appears without the fade-in. Mirrors the selectors
+/// of the `:hover`, `:focus` and `--visible` fade rules (including their
+/// caret selector's repeated `--a11y`), so it ties them on specificity and
+/// wins on order, since this partial is imported after the tooltip
+/// component.
+/// @access private
+/// @group components
+@mixin tooltip-instant {
+  .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip--a11y.#{$prefix}--tooltip--instant {
+    .#{$prefix}--assistive-text,
+    + .#{$prefix}--assistive-text,
+    &.#{$prefix}--tooltip--a11y::before {
+      animation: none;
+    }
+  }
+}
+
+@include exports("tooltip-instant") {
+  @include tooltip-instant;
+}

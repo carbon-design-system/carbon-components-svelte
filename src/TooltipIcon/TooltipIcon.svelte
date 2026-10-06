@@ -98,6 +98,7 @@
     leaveDelayMs: () => leaveDelayMs,
   });
   const tooltipOthersActive = tooltipHandoff.hidden;
+  const tooltipInstant = tooltipHandoff.instant;
 
   const insideModal = getContext(MODAL_CONTEXT_KEY);
 
@@ -207,6 +208,7 @@
     !tooltipHidden}
   class:bx--tooltip--hidden={!effectivePortalTooltip &&
     (!open || disabled || tooltipHidden)}
+  class:bx--tooltip--instant={!effectivePortalTooltip && $tooltipInstant}
   class:bx--tooltip--top={!effectivePortalTooltip && direction === "top"}
   class:bx--tooltip--right={!effectivePortalTooltip && direction === "right"}
   class:bx--tooltip--bottom={!effectivePortalTooltip && direction === "bottom"}
@@ -255,9 +257,10 @@
   on:focus={() => {
     if (disabled) return;
     hidden = false;
+    // Focus shows the tooltip at once, without the fade-in.
+    tooltipHandoff.claim({ instant: true });
     if (effectivePortalTooltip) {
       focused = true;
-      tooltipHandoff.claim();
     } else {
       show();
     }

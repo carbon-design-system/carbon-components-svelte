@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { openTooltips } from "../utils/open-tooltips";
 import TooltipGroup from "./TooltipGroup.test.svelte";
+import TooltipGroupInline from "./TooltipGroupInline.test.svelte";
 
 const texts = () =>
   openTooltips().map((tooltip) => tooltip.textContent?.trim());
@@ -134,5 +135,75 @@ describe("TooltipGroup", () => {
     expect(texts()).toEqual([]);
     await vi.advanceTimersByTimeAsync(1);
     expect(texts()).toEqual(["List view"]);
+  });
+
+  it("marks inline tooltips opened by handoff so they skip the fade-in", async () => {
+    render(TooltipGroupInline);
+    await tick();
+
+    const edit = screen.getByRole("button", { name: "Edit" });
+    const del = screen.getByRole("button", { name: "Delete" });
+    const icon = screen.getByRole("button", { name: "Synced" });
+
+    // The first tooltip fades in as usual.
+    await fireEvent.mouseEnter(edit);
+    expect(edit).not.toHaveClass("bx--tooltip--instant");
+
+    await fireEvent.mouseLeave(edit);
+    await fireEvent.mouseEnter(del);
+    expect(del).toHaveClass("bx--tooltip--instant");
+    expect(edit).not.toHaveClass("bx--tooltip--instant");
+
+    await fireEvent.mouseLeave(del);
+    await fireEvent.mouseEnter(icon);
+    expect(icon).toHaveClass("bx--tooltip--instant");
+    expect(del).not.toHaveClass("bx--tooltip--instant");
+
+    // Past the skip window, the next tooltip fades in again.
+    await fireEvent.mouseLeave(icon);
+    await vi.advanceTimersByTimeAsync(600);
+    await fireEvent.mouseEnter(edit);
+    expect(edit).not.toHaveClass("bx--tooltip--instant");
+  });
+
+  it("focus shows an inline tooltip without the fade and hides a hovered one", async () => {
+    render(TooltipGroupInline);
+    await tick();
+
+    const edit = screen.getByRole("button", { name: "Edit" });
+    const del = screen.getByRole("button", { name: "Delete" });
+    const icon = screen.getByRole("button", { name: "Synced" });
+
+    // First focus, nothing open before it: still no fade.
+    await fireEvent.focus(edit);
+    expect(edit).toHaveClass("bx--tooltip--instant");
+
+    // Tabbing on hands the slot over.
+    await fireEvent.blur(edit);
+    await fireEvent.focus(icon);
+    expect(icon).toHaveClass("bx--tooltip--instant");
+    expect(icon).toHaveClass("bx--tooltip--visible");
+    expect(edit).not.toHaveClass("bx--tooltip--instant");
+
+    // Hovering another button hides the focused one's tooltip.
+    await fireEvent.mouseEnter(del);
+    expect(icon).toHaveClass("bx--tooltip--hidden");
+    expect(del).not.toHaveClass("bx--tooltip--hidden");
+  });
+
+  it("keeps a focused inline Button holding the slot after the pointer leaves", async () => {
+    render(TooltipGroupInline);
+    await tick();
+
+    const edit = screen.getByRole("button", { name: "Edit" });
+
+    await fireEvent.focus(edit);
+    await fireEvent.mouseEnter(edit);
+    await fireEvent.mouseLeave(edit);
+    // `instant` only holds while the Button has the slot.
+    expect(edit).toHaveClass("bx--tooltip--instant");
+
+    await fireEvent.blur(edit);
+    expect(edit).not.toHaveClass("bx--tooltip--instant");
   });
 });

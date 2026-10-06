@@ -10,6 +10,15 @@ describe("TooltipDefinition", () => {
       vi.useRealTimers();
     });
 
+    it("shows at once without the fade-in on focus", async () => {
+      render(TooltipDefinitionGroup);
+      const trigger = screen.getByRole("button", { name: "APR" });
+
+      await fireEvent.focus(trigger);
+      expect(trigger).toHaveClass("bx--tooltip--visible");
+      expect(trigger).toHaveClass("bx--tooltip--instant");
+    });
+
     it("opens instantly after a group Button and hides while the Button's tooltip shows", async () => {
       vi.useFakeTimers();
       render(TooltipDefinitionGroup);
