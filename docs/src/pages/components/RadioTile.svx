@@ -39,7 +39,9 @@ Update the selected value using the `select` event.
 
 ### Two-way binding
 
-Bind to `selected` for simpler state management.
+Bind to `selected` for simpler state management. `selected` follows the
+tiles: it becomes `undefined` when the checked tile is removed, and follows a
+checked tile whose `value` changes.
 
 <FileSource src="/framed/RadioTile/RadioTileReactive" />
 
@@ -157,3 +159,4 @@ tiles together.
 | Set `name` on `TileGroup` when the form is submitted | Without one, the tiles share a generated name, which is not a stable key for the server to read. |
 | Give every tile a unique `value` | The group tracks the selection by `value`, so tiles with equal values show as selected together. |
 | Use `TileGroup` when you need the selected value | `bind:selected` gives one value, instead of a `checked` per standalone tile. |
+| Set the initial choice with `selected` on `TileGroup`, not `checked` on a tile | When both are set, the tile's `checked` wins over `selected`. |
