@@ -70,6 +70,12 @@
    */
   export let gap = 3;
 
+  /**
+   * Set an id for the top-level element.
+   * The overflow tooltip id derives from it as `{id}-overflow`.
+   */
+  export let id = uniqueId();
+
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
   import Stack from "../Stack/Stack.svelte";
@@ -77,6 +83,7 @@
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { sortByDomOrder } from "../utils/sort-by-dom-order.js";
   import { getVisibleTagCount } from "../utils/tag-overflow.js";
+  import { uniqueId } from "../utils/unique-id.js";
   import TagSetOverflow from "./TagSetOverflow.svelte";
 
   const dispatch = createEventDispatcher();
@@ -197,7 +204,7 @@
   }
 </script>
 
-<div bind:this={wrapperRef} class:bx--tag-set={true} {...$$restProps}>
+<div bind:this={wrapperRef} {id} class:bx--tag-set={true} {...$$restProps}>
   <Stack
     orientation="horizontal"
     align="center"
@@ -213,6 +220,7 @@
     <slot />
     <TagSetOverflow
       bind:triggerRef={overflowTriggerRef}
+      id="{id}-overflow"
       count={overflowCount}
       tags={overflowTags}
       {overflowAlign}
