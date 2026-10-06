@@ -3,6 +3,7 @@ import type HeaderSearchComponent from "carbon-components-svelte/UIShell/HeaderS
 import type { HeaderSearchResult } from "carbon-components-svelte/UIShell/HeaderSearch.svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
+import { clickToFocus } from "../utils/click-to-focus";
 import { flushDismiss } from "../utils/flush-dismiss";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
@@ -65,6 +66,19 @@ describe("HeaderSearch", () => {
       assert(input instanceof HTMLInputElement);
       expect(input.selectionStart).toBe(0);
       expect(input.selectionEnd).toBe("clusters".length);
+    });
+
+    it("keeps the selected value through the click's mouseup", async () => {
+      render(HeaderSearchTest, {
+        props: { selectTextOnFocus: true, value: "clusters" },
+      });
+
+      await user.click(screen.getByRole("button", { name: "Search" }));
+      const input = screen.getByRole("textbox");
+      input.blur();
+
+      const mouseup = await clickToFocus(input);
+      expect(mouseup.defaultPrevented).toBe(true);
     });
 
     it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {
