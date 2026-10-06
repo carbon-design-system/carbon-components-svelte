@@ -126,3 +126,17 @@
     {/if}
   </AspectRatio>
 {/if}
+
+<!--
+  Server-rendered `<img>` for preload scanners and crawlers that read the raw
+  HTML. It stays `display: none` (it never shows, even without JS); the
+  visible `<img>` above takes over once the image has loaded. It is also in the
+  first client render so hydration matches.
+
+  It only carries `src` and `alt`: forwarding `$$restProps` would duplicate
+  attributes like `id` and `data-testid` with the visible `<img>`, and
+  `srcset`/`crossorigin` could trigger a second request.
+-->
+{#if loading && src}
+  <img style:display="none" aria-hidden="true" {src} {alt}>
+{/if}
