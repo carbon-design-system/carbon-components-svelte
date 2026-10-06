@@ -163,10 +163,9 @@
     disabled,
     readonly,
   }));
-  $: overCount =
-    typeof maxCount === "number" && count > maxCount && !disabled && !readonly;
+  $: overCount = hasMaxCount && count > maxCount && !disabled && !readonly;
   $: isFluid = fluid || !!formContext?.isFluid;
-  $: hasMaxCount = typeof maxCount === "number";
+  $: hasMaxCount = maxCount != null;
   $: errorMessageId = showInvalid && invalidText ? errorId : undefined;
   $: describedBy =
     [
@@ -419,7 +418,7 @@
       {/if}
     </div>
   {/if}
-  {#if typeof maxCount === "number"}
+  {#if hasMaxCount}
     <div class:bx--visually-hidden={true} aria-live="polite" aria-atomic="true">
       {limitAnnouncement}
     </div>

@@ -141,7 +141,7 @@
     return getNumberFormatter(locale, options).format(num);
   }
 
-  $: hasTotal = typeof total === "number";
+  $: hasTotal = total != null;
   $: formattedValue = formatNumber(value, fractionDigits, !fullNumber);
   $: fullValue = formatNumber(value, fractionDigits, false);
   $: formattedTotal = hasTotal
@@ -217,7 +217,7 @@
         </span>
       {/if}
     </div>
-    {#if typeof delta === "number"}
+    {#if delta != null}
       <div class:bx--big-number__delta={true}>
         <span
           class:bx--big-number__delta-value={true}
