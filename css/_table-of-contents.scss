@@ -1,0 +1,108 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// TableOfContents draws a track along the list's inline-start edge and an
+/// absolutely positioned bar that `TableOfContents.svelte` measures onto the
+/// active row. Until that first measurement (SSR, or before mount), the
+/// active row paints its own indicator instead.
+/// @access private
+/// @group components
+@mixin table-of-contents {
+  .#{$prefix}--toc {
+    position: relative;
+  }
+
+  .#{$prefix}--toc__list {
+    padding: 0;
+    border-inline-start: $carbon--spacing-02 solid $ui-03;
+    margin: 0;
+    list-style: none;
+  }
+
+  // The bar and the fallback indicator leave their horizontal inset unset so
+  // they keep their static position at the inline-start edge in either
+  // direction; `inset-inline-start` would downlevel into `:lang()` RTL rules.
+  .#{$prefix}--toc__bar {
+    position: absolute;
+    top: 0;
+    width: $carbon--spacing-02;
+    background-color: $interactive-04;
+    pointer-events: none;
+
+    &--animated {
+      transition:
+        transform $duration--moderate-01 motion(standard, productive),
+        height $duration--moderate-01 motion(standard, productive);
+
+      @media screen and (prefers-reduced-motion: reduce) {
+        transition: none;
+      }
+    }
+  }
+
+  .#{$prefix}--toc__item {
+    position: relative;
+  }
+
+  .#{$prefix}--toc:not(.#{$prefix}--toc--measured)
+    .#{$prefix}--toc__item--active::before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: $carbon--spacing-02;
+    margin-inline-start: -$carbon--spacing-02;
+    background-color: $interactive-04;
+    content: "";
+  }
+
+  .#{$prefix}--toc__link {
+    @include type-style("body-short-01");
+
+    display: flex;
+    min-height: $carbon--spacing-07;
+    align-items: center;
+    padding-block: $carbon--spacing-02;
+    // Each level below the first indents by one more step.
+    padding-inline: calc(#{$carbon--spacing-05} * var(--ccs-toc-level, 1))
+      $carbon--spacing-05;
+    color: $text-02;
+    text-decoration: none;
+    transition: color $duration--fast-01 motion(standard, productive);
+
+    // Keyboard focus only: a click moves the reader to the section, and
+    // focus often follows it there, so a ring on the clicked link would
+    // only flash.
+    &:focus-visible {
+      @include focus-outline("outline");
+    }
+  }
+
+  // Nested rows sit closer together than top-level rows, and a gap closes
+  // each nested group, so subsections read as part of the section above.
+  .#{$prefix}--toc__item--nested .#{$prefix}--toc__link {
+    min-height: $carbon--spacing-06;
+    padding-block: $carbon--spacing-01;
+  }
+
+  .#{$prefix}--toc__item--nested
+    + .#{$prefix}--toc__item:not(.#{$prefix}--toc__item--nested) {
+    margin-block-start: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--toc__item--active .#{$prefix}--toc__link {
+    color: $text-01;
+    font-weight: 600;
+  }
+
+  @media (any-hover: hover) {
+    .#{$prefix}--toc__link:hover {
+      color: $text-01;
+    }
+  }
+}
+
+@include exports("table-of-contents") {
+  @include table-of-contents;
+}
