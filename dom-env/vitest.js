@@ -13,28 +13,30 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const bundle = path.join(here, "dist/dom-env.js");
 const srcDir = path.join(here, "src");
 
-/** Rebuilds the bundle when any source file is newer (dev convenience). */
+/**
+ * Rebuilds the bundle when any source file is newer (dev convenience).
+ * Workers start in parallel, so each builds to its own temp file and
+ * renames it into place; readers never see a half-written bundle.
+ */
 function ensureBundle() {
   const built = fs.existsSync(bundle) ? fs.statSync(bundle).mtimeMs : 0;
   const stale = fs
     .readdirSync(srcDir)
     .some((f) => fs.statSync(path.join(srcDir, f)).mtimeMs > built);
-  if (stale) {
-    execFileSync(
-      "bun",
-      [
-        "build",
-        "src/index.js",
-        "--format=iife",
-        "--target=browser",
-        "--outfile=dist/dom-env.js",
-      ],
-      {
-        cwd: here,
-        stdio: "ignore",
-      },
-    );
-  }
+  if (!stale) return;
+  const tmp = `${bundle}.${process.pid}.${Date.now()}.tmp`;
+  execFileSync(
+    "bun",
+    [
+      "build",
+      "src/index.js",
+      "--format=iife",
+      "--target=browser",
+      `--outfile=${tmp}`,
+    ],
+    { cwd: here, stdio: "ignore" },
+  );
+  fs.renameSync(tmp, bundle);
 }
 
 let script = null;
