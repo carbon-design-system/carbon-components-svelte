@@ -3,7 +3,6 @@
   import { noop } from "../utils/noop.js";
   import { overflowTitle } from "../utils/overflow-title.js";
   import { scrollIntoViewWithinMenu } from "../utils/scroll-into-view-within-menu.js";
-  import { HIGHLIGHT_CURSOR_KEY } from "./highlight-cursor.js";
 
   /** Set to `true` to enable the active state */
   export let active = false;
@@ -31,7 +30,7 @@
   export let hidden = false;
 
   const HIGHLIGHT_CLASS = "bx--list-box__menu-item--highlighted";
-  const highlightCursor = getContext(HIGHLIGHT_CURSOR_KEY);
+  const highlightCursor = getContext("carbon:ListBoxHighlight");
 
   let optionRef = null;
   let ref = null;

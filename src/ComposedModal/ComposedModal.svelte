@@ -58,7 +58,6 @@
 
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { derived, writable } from "svelte/store";
-  import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import { trackModal } from "../Modal/modal-store.js";
   import { createDialogLifecycle } from "../utils/dialog-lifecycle.js";
   import { initialFocus, restoreFocus } from "../utils/focus.js";
@@ -134,7 +133,7 @@
     bodyId.set(value);
   }
 
-  setContext(MODAL_CONTEXT_KEY, {});
+  setContext("carbon:Modal", {});
   setContext("carbon:ComposedModal", {
     closeModal,
     submit,

@@ -6,7 +6,6 @@
    */
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
-  import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
@@ -100,7 +99,7 @@
   const tooltipOthersActive = tooltipHandoff.hidden;
   const tooltipInstant = tooltipHandoff.instant;
 
-  const insideModal = getContext(MODAL_CONTEXT_KEY);
+  const insideModal = getContext("carbon:Modal");
 
   $: effectivePortalTooltip =
     portalTooltip === undefined ? !!insideModal : portalTooltip;

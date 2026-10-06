@@ -99,7 +99,6 @@
     setContext,
   } from "svelte";
   import { derived, writable } from "svelte/store";
-  import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import OverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
   import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
@@ -119,7 +118,7 @@
   import { uniqueId } from "../utils/unique-id.js";
 
   const ctxBreadcrumbItem = getContext("carbon:BreadcrumbItem");
-  const insideModal = getContext(MODAL_CONTEXT_KEY);
+  const insideModal = getContext("carbon:Modal");
 
   // Arrow keys the menu owns while open, so the page doesn't also scroll.
   const ARROW_KEYS = ["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"];

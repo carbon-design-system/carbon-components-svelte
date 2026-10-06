@@ -305,10 +305,6 @@
     onMount,
     tick,
   } from "svelte";
-  import {
-    FORM_CONTEXT_KEY,
-    MODAL_CONTEXT_KEY,
-  } from "../constants/context-keys.js";
   import Checkmark from "../icons/Checkmark.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
@@ -350,8 +346,8 @@
 
   const dispatch = createEventDispatcher();
   const scrollEndTracker = createScrollEndTracker();
-  const insideModal = getContext(MODAL_CONTEXT_KEY);
-  const formContext = getContext(FORM_CONTEXT_KEY);
+  const insideModal = getContext("carbon:Modal");
+  const formContext = getContext("carbon:Form");
 
   $: effectivePortalMenu =
     portalMenu === undefined ? !!insideModal : portalMenu;

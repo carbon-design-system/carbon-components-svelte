@@ -156,7 +156,6 @@
   import { createEventDispatcher, onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
   import Button from "../Button/Button.svelte";
-  import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import InlineLoading from "../InlineLoading/InlineLoading.svelte";
   import Close from "../icons/Close.svelte";
   import { createDialogLifecycle } from "../utils/dialog-lifecycle.js";
@@ -205,7 +204,7 @@
   $: $sharedOpen = open;
   trackModal(sharedOpen);
 
-  setContext(MODAL_CONTEXT_KEY, {});
+  setContext("carbon:Modal", {});
 
   // Initial mount already runs the reactive block below, which handles
   // dispatching "open" and the `prevOpen`/`focusReturn.save()` bookkeeping.

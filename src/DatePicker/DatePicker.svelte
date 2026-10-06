@@ -306,10 +306,6 @@
     setContext,
   } from "svelte";
   import { derived, writable } from "svelte/store";
-  import {
-    FORM_CONTEXT_KEY,
-    MODAL_CONTEXT_KEY,
-  } from "../constants/context-keys.js";
   import { dismiss } from "../utils/dismiss.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -329,8 +325,8 @@
   import { getUnsupportedOptionWarnings } from "./unsupported-options.js";
 
   const dispatch = createEventDispatcher();
-  const insideModal = getContext(MODAL_CONTEXT_KEY);
-  const formContext = getContext(FORM_CONTEXT_KEY);
+  const insideModal = getContext("carbon:Modal");
+  const formContext = getContext("carbon:Form");
 
   $: usesInline = inline || !!flatpickrProps.inline;
   // An inline calendar lives in the layout, so there is nothing to portal.
