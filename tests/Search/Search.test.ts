@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import type SearchComponent from "carbon-components-svelte/Search/Search.svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
+import { clickToFocus } from "../utils/click-to-focus";
 import { user } from "../utils/user";
 import SearchFluidForm from "./Search.fluidForm.test.svelte";
 import SearchFluidSkeleton from "./Search.fluidSkeleton.test.svelte";
@@ -48,6 +49,15 @@ describe("Search", () => {
 
     expect(search.selectionStart).toBe(0);
     expect(search.selectionEnd).toBe("Cloud functions".length);
+  });
+
+  it("keeps the selected value through the click's mouseup", async () => {
+    render(Search, {
+      props: { selectTextOnFocus: true, value: "Cloud functions" },
+    });
+
+    const mouseup = await clickToFocus(getSearchInput("Default search"));
+    expect(mouseup.defaultPrevented).toBe(true);
   });
 
   it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {
