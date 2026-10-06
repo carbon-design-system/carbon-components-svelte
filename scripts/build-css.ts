@@ -1,3 +1,4 @@
+// @depends-on css/**
 import { createHash } from "node:crypto";
 import { watch } from "node:fs";
 import { access, mkdir, readFile, stat, writeFile } from "node:fs/promises";

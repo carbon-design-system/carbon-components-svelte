@@ -1,3 +1,4 @@
+// @depends-on css/**
 import { createHash } from "node:crypto";
 import {
   existsSync,

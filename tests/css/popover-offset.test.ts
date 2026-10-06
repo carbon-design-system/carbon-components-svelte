@@ -1,4 +1,5 @@
 // @vitest-environment node
+// @depends-on css/_popover.scss
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 

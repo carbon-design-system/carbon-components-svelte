@@ -1,4 +1,5 @@
 // @vitest-environment node
+// @depends-on css/vendor/carbon-components/scss/components/ui-shell/_ui-shell.scss
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
