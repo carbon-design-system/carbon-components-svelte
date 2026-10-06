@@ -117,6 +117,7 @@
   } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
   import { graphemeCount, truncateGraphemes } from "../utils/grapheme-count.js";
+  import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -356,6 +357,7 @@
     {/if}
     <textarea
       bind:this={ref}
+      use:preserveFocusSelection={selectTextOnFocus && !disabled}
       use:formReset={handleFormReset}
       bind:value
       aria-invalid={showInvalid || overCount || undefined}

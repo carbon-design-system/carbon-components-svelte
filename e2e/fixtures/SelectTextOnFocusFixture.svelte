@@ -2,6 +2,7 @@
   import {
     CopyInput,
     PasswordInput,
+    TextArea,
     TextInput,
   } from "carbon-components-svelte";
 </script>
@@ -22,6 +23,12 @@
   <PasswordInput
     data-testid="password-input"
     labelText="Password input"
+    selectTextOnFocus
+    value="abcdef"
+  />
+  <TextArea
+    data-testid="text-area"
+    labelText="Text area"
     selectTextOnFocus
     value="abcdef"
   />
