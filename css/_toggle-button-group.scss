@@ -137,6 +137,49 @@
     box-shadow: inset to-rem(-2px) 0 0 0 $disabled-02;
   }
 
+  // Forced-colors mode repaints the pressed background and drops the inset
+  // box-shadow, which left pressed and unpressed buttons identical. Only system
+  // colors are used, so `forced-color-adjust` stays `auto`: unforcing would
+  // bring back the inset bar and the real `$focus` ring on top of `Highlight`.
+  // The doubled `.bx--toggle-button` outranks the hover/active fills (a
+  // non-system fill would be forced to `Canvas` under `HighlightText`).
+  @media (forced-colors: active) {
+    .#{$prefix}--toggle-button.#{$prefix}--toggle-button--pressed:not(:disabled) {
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    .#{$prefix}--toggle-button.#{$prefix}--toggle-button--pressed:not(:disabled)
+      svg {
+      fill: HighlightText;
+    }
+
+    // The ring sits inside the segment (negative offset), so it needs a
+    // system color that contrasts with the fill behind it.
+    .#{$prefix}--toggle-button:focus {
+      outline-color: CanvasText;
+    }
+
+    .#{$prefix}--toggle-button.#{$prefix}--toggle-button--pressed:not(:disabled):focus {
+      outline-color: HighlightText;
+    }
+
+    // Pressed and disabled keeps a cue (the bar is dropped): an inset border,
+    // still muted so it doesn't read as an enabled segment.
+    .#{$prefix}--toggle-button:disabled {
+      color: GrayText;
+    }
+
+    .#{$prefix}--toggle-button:disabled svg {
+      fill: GrayText;
+    }
+
+    .#{$prefix}--toggle-button--pressed:disabled {
+      outline: to-rem(1px) solid GrayText;
+      outline-offset: to-rem(-1px);
+    }
+  }
+
   .#{$prefix}--toggle-button--icon-only {
     width: to-rem(40px);
     padding: 0;
