@@ -1,5 +1,9 @@
 /// <reference types="vitest/globals" />
 
+import {
+  activeTooltip,
+  rootTooltipGroup,
+} from "../../src/utils/tooltip-group.js";
 import { rect } from "./rect";
 
 Element.prototype.scrollIntoView = vi.fn();
@@ -154,3 +158,11 @@ if (
 // keydown, focus, ...) the first time it matches a selector. Match once here
 // so that happens before a test spies on `window.addEventListener`.
 document.documentElement.matches(":focus-visible");
+
+// Tooltips outside any `TooltipGroup` share one page-wide group, so a
+// tooltip closed in one test would otherwise make the next test's first
+// tooltip skip its enter delay.
+beforeEach(() => {
+  activeTooltip.set(null);
+  rootTooltipGroup.scope.releasedAt = Number.NEGATIVE_INFINITY;
+});
