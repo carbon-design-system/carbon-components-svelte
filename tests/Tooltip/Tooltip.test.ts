@@ -11,6 +11,7 @@ import TooltipDirections from "./TooltipDirections.test.svelte";
 import TooltipEvents from "./TooltipEvents.test.svelte";
 import TooltipFooterFocus from "./TooltipFooterFocus.test.svelte";
 import TooltipFooterStandalone from "./TooltipFooterStandalone.test.svelte";
+import TooltipGroup from "./TooltipGroup.test.svelte";
 import TooltipHideIcon from "./TooltipHideIcon.test.svelte";
 import TooltipHideIconFooter from "./TooltipHideIconFooter.test.svelte";
 import TooltipNoLabel from "./TooltipNoLabel.test.svelte";
@@ -19,6 +20,45 @@ import TooltipPortalDirections from "./TooltipPortalDirections.test.svelte";
 import TooltipTwoInstancesFocus from "./TooltipTwoInstancesFocus.test.svelte";
 
 describe("Tooltip", () => {
+  describe("in a TooltipGroup", () => {
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it("opens instantly after a group Button and closes when the Button's tooltip opens", async () => {
+      vi.useFakeTimers();
+      render(TooltipGroup);
+
+      const edit = screen.getByRole("button", { name: "Edit" });
+      const trigger = screen.getByRole("button", { name: "Information" });
+
+      await fireEvent.mouseEnter(edit);
+      await vi.advanceTimersByTimeAsync(100);
+      await fireEvent.mouseLeave(edit);
+      await fireEvent.mouseEnter(trigger);
+      expect(screen.getByRole("dialog")).toHaveTextContent("Details");
+
+      await fireEvent.mouseEnter(edit);
+      await vi.advanceTimersByTimeAsync(0);
+      expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    });
+
+    it("stays open when opened by keyboard and another tooltip opens", async () => {
+      vi.useFakeTimers();
+      render(TooltipGroup);
+
+      const edit = screen.getByRole("button", { name: "Edit" });
+      const trigger = screen.getByRole("button", { name: "Information" });
+
+      await fireEvent.focus(trigger);
+      expect(screen.getByRole("dialog")).toBeInTheDocument();
+
+      await fireEvent.mouseEnter(edit);
+      await vi.advanceTimersByTimeAsync(100);
+      expect(screen.getByRole("dialog")).toBeInTheDocument();
+    });
+  });
+
   beforeEach(() => {
     vi.useFakeTimers();
   });
