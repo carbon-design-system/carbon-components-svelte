@@ -383,7 +383,7 @@
   aria-haspopup="menu"
   aria-expanded={open}
   aria-label={ariaLabel}
-  aria-controls={menuId}
+  aria-controls={open ? menuId : undefined}
   {id}
   class:bx--overflow-menu={true}
   class:bx--overflow-menu--open={open}

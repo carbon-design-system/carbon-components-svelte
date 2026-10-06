@@ -32,19 +32,20 @@ describe("OverflowMenu", () => {
     expect(menuButton).toHaveAttribute("aria-label", "");
   });
 
-  it("keeps aria-controls stable regardless of open state", async () => {
+  it("references the menu with aria-controls only while it is rendered", async () => {
     render(OverflowMenu, { props: { id: "test-id" } });
 
     const menuButton = screen.getByRole("button");
-    expect(menuButton).toHaveAttribute("aria-controls", "menu-test-id");
+    expect(menuButton).not.toHaveAttribute("aria-controls");
 
     await user.click(menuButton);
     expect(menuButton).toHaveAttribute("aria-expanded", "true");
     expect(menuButton).toHaveAttribute("aria-controls", "menu-test-id");
+    expect(screen.getByRole("menu")).toHaveAttribute("id", "menu-test-id");
 
     await user.keyboard("{Escape}");
     expect(menuButton).toHaveAttribute("aria-expanded", "false");
-    expect(menuButton).toHaveAttribute("aria-controls", "menu-test-id");
+    expect(menuButton).not.toHaveAttribute("aria-controls");
   });
 
   it("renders and functions correctly", async () => {
