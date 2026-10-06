@@ -170,6 +170,133 @@ const UNIT_RE = /(\d)([a-zA-Z%]+)(?![\w(])/g;
 const ZERO_RE = /(^|[\s(,])0(?=$|[\s),])/g;
 const KEYWORD_RE = /^-?[a-zA-Z][a-zA-Z0-9-]*$/;
 
+// --- calc() simplification, matching what tests observe in jsdom ---------------
+
+const NUM_RE = /^([+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?)(%|[a-z]+)?$/i;
+
+function formatCalcNumber(n) {
+  return String(Math.round(n * 1e6) / 1e6);
+}
+
+/** Evaluates a product of factors to a single { value, unit }, or null. */
+function evalProduct(text) {
+  const parts = [];
+  let depth = 0;
+  let cur = "";
+  for (const ch of text) {
+    if (ch === "(") depth++;
+    else if (ch === ")") depth--;
+    if (depth === 0 && (ch === "*" || ch === "/")) {
+      parts.push(cur.trim(), ch);
+      cur = "";
+    } else cur += ch;
+  }
+  parts.push(cur.trim());
+  let value = 1;
+  let unit = "";
+  for (let i = 0; i < parts.length; i += 2) {
+    const op = i === 0 ? "*" : parts[i - 1];
+    const factor = parts[i];
+    let term;
+    if (factor.startsWith("(") && factor.endsWith(")")) {
+      const sum = evalSum(factor.slice(1, -1));
+      if (!sum || sum.length !== 1) return null;
+      term = sum[0];
+    } else {
+      const m = NUM_RE.exec(factor);
+      if (!m) return null;
+      term = { value: Number(m[1]), unit: (m[2] ?? "").toLowerCase() };
+    }
+    if (op === "*") {
+      if (unit && term.unit) return null;
+      value *= term.value;
+      unit ||= term.unit;
+    } else {
+      if (term.unit || term.value === 0) return null;
+      value /= term.value;
+    }
+  }
+  return { value, unit };
+}
+
+/** Splits a calc() body into signed terms; null if it can't be evaluated. */
+function evalSum(text) {
+  if (
+    /[a-z-]+\(/i.test(text.replace(/^\(|\)$/g, "")) &&
+    /(var|env|min|max|clamp|attr)\(/i.test(text)
+  ) {
+    return null;
+  }
+  const terms = [];
+  let depth = 0;
+  let start = 0;
+  let sign = 1;
+  for (let i = 0; i <= text.length; i++) {
+    const ch = text[i];
+    if (ch === "(") depth++;
+    else if (ch === ")") depth--;
+    const atOp =
+      depth === 0 &&
+      (ch === "+" || ch === "-") &&
+      i > 0 &&
+      /\s/.test(text[i - 1]) &&
+      /\s/.test(text[i + 1] ?? "");
+    if (i === text.length || atOp) {
+      const product = evalProduct(text.slice(start, i));
+      if (!product) return null;
+      product.value *= sign;
+      terms.push(product);
+      sign = ch === "-" ? -1 : 1;
+      start = i + 1;
+    }
+  }
+  return terms;
+}
+
+function simplifyCalcBody(body) {
+  const terms = evalSum(body.trim());
+  if (!terms) return null;
+  let out = terms;
+  if (terms.every((t) => t.unit === terms[0].unit)) {
+    out = [
+      { value: terms.reduce((a, t) => a + t.value, 0), unit: terms[0].unit },
+    ];
+  } else if (terms.length === 2 && terms[1].unit === "%") {
+    out = [terms[1], terms[0]];
+  }
+  let str = "";
+  out.forEach((t, i) => {
+    const text = formatCalcNumber(Math.abs(t.value)) + t.unit;
+    if (i === 0) str = (t.value < 0 ? "-" : "") + text;
+    else str += (t.value < 0 ? " - " : " + ") + text;
+  });
+  return `calc(${str})`;
+}
+
+function simplifyCalc(v) {
+  let out = "";
+  let i = 0;
+  while (i < v.length) {
+    const at = v.toLowerCase().indexOf("calc(", i);
+    if (at === -1) {
+      out += v.slice(i);
+      break;
+    }
+    out += v.slice(i, at);
+    let depth = 0;
+    let j = at + 4;
+    for (; j < v.length; j++) {
+      if (v[j] === "(") depth++;
+      else if (v[j] === ")" && --depth === 0) break;
+    }
+    const body = v.slice(at + 5, j);
+    out +=
+      simplifyCalcBody(body) ?? `calc(${body.trim().replace(/\s+/g, " ")})`;
+    i = j + 1;
+  }
+  return out;
+}
+
 /** Normalizes a specified value; returns null when it would be rejected. */
 export function normalizeValue(prop, value) {
   let v = value.trim();
@@ -183,6 +310,7 @@ export function normalizeValue(prop, value) {
   }
   if (v.includes("#"))
     v = mapOutsideStrings(v, HEX_RE, (_, hex) => hexToRgb(hex));
+  if (v.includes("calc(")) v = simplifyCalc(v);
   if (LENGTH_PROPS.has(prop)) {
     v = v.replace(ZERO_RE, "$10px");
     // A bare non-zero number is not a length.
@@ -207,13 +335,29 @@ function computeValue(prop, v) {
       return hex && isColorish(prop) ? hexToRgb(hex) : word;
     });
   }
-  out = mapOutsideStrings(
-    out,
-    /(-?\d*\.?\d+)rem\b/g,
-    (_, n) => `${trimNumber(Number.parseFloat(n) * 16)}px`,
-  );
+  // jsdom resolves rem only on these lengths (not logical/2-axis shorthands).
+  if (LENGTH_PROPS.has(prop) && !UNRESOLVED_LENGTHS.has(prop)) {
+    out = mapOutsideStrings(
+      out,
+      /(-?\d*\.?\d+)rem\b/g,
+      (_, n) => `${trimNumber(Number.parseFloat(n) * 16)}px`,
+    );
+  }
   return out;
 }
+
+const UNRESOLVED_LENGTHS = new Set([
+  "margin-block",
+  "margin-inline",
+  "padding-block",
+  "padding-inline",
+  "gap",
+  "grid-gap",
+  "border-radius",
+  "inset",
+  "inset-block",
+  "inset-inline",
+]);
 
 function trimNumber(n) {
   return String(Math.round(n * 1000) / 1000);
@@ -543,6 +687,7 @@ DISPLAY.set("ruby", "ruby");
 DISPLAY.set("rt", "ruby-text");
 DISPLAY.set("slot", "contents");
 
+// Computed defaults as jsdom reports them (not always the CSS initial value).
 const INITIAL = {
   width: "auto",
   height: "auto",
@@ -554,7 +699,6 @@ const INITIAL = {
   position: "static",
   float: "none",
   clear: "none",
-  overflow: "visible",
   "overflow-x": "visible",
   "overflow-y": "visible",
   opacity: "1",
@@ -565,21 +709,22 @@ const INITIAL = {
   "background-color": "rgba(0, 0, 0, 0)",
   "font-size": "16px",
   "font-style": "normal",
-  "font-weight": "400",
+  "font-weight": "normal",
   "line-height": "normal",
+  "letter-spacing": "normal",
   cursor: "auto",
-  "white-space": "normal",
-  "text-align": "start",
   "box-sizing": "content-box",
   content: "normal",
-  "margin-top": "0px",
-  "margin-right": "0px",
-  "margin-bottom": "0px",
-  "margin-left": "0px",
-  "padding-top": "0px",
-  "padding-right": "0px",
-  "padding-bottom": "0px",
-  "padding-left": "0px",
+  margin: "0",
+  "margin-top": "0",
+  "margin-right": "0",
+  "margin-bottom": "0",
+  "margin-left": "0",
+  padding: "0",
+  "padding-top": "0",
+  "padding-right": "0",
+  "padding-bottom": "0",
+  "padding-left": "0",
   "min-width": "auto",
   "min-height": "auto",
   "max-width": "none",
@@ -595,13 +740,16 @@ const INITIAL = {
   direction: "ltr",
   "user-select": "auto",
   "text-transform": "none",
-  "text-decoration": "none",
   "outline-style": "none",
   "border-top-style": "none",
   "border-right-style": "none",
   "border-bottom-style": "none",
   "border-left-style": "none",
   "list-style-type": "disc",
+  resize: "none",
+  "animation-name": "none",
+  "object-fit": "fill",
+  order: "0",
 };
 
 function defaultDisplay(el) {
