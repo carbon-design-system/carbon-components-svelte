@@ -87,6 +87,27 @@
   .#{$prefix}--meter--error .#{$prefix}--meter__helper-text {
     color: $text-error;
   }
+
+  // Forced-colors mode repaints backgrounds as Canvas, which hides the bar
+  // and threshold markers. Paint them with system colours and outline the
+  // track so the fill stays visible. Only system colours are used (they
+  // survive forcing), so `forced-color-adjust` stays `auto`. The extra track
+  // class outranks the status (`--success`, `--warning`, `--error`) bar fills
+  // and the warning/error threshold fills, which would otherwise be forced
+  // to Canvas.
+  @media (forced-colors: active) {
+    .#{$prefix}--meter__track {
+      outline: 1px solid CanvasText;
+    }
+
+    .#{$prefix}--meter .#{$prefix}--meter__track .#{$prefix}--meter__bar {
+      background-color: Highlight;
+    }
+
+    .#{$prefix}--meter__track .#{$prefix}--meter__threshold {
+      background-color: CanvasText;
+    }
+  }
 }
 
 @include exports("meter") {

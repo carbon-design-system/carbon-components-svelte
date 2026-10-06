@@ -198,3 +198,56 @@
 @include exports('progress-bar-label-text-slotted') {
   @include progress-bar-label-text-slotted;
 }
+
+// carbon-components-svelte patch (progress-bar-forced-colors)
+// Forced-colors mode repaints backgrounds as Canvas, so the bar disappeared
+// into its track. Paint the bar with a system colour and outline the track.
+// Only system colours are used (they survive forcing), so
+// `forced-color-adjust` stays `auto`.
+
+/// Progress bar in forced-colors mode.
+/// @access private
+/// @group progress-bar
+@mixin progress-bar-forced-colors {
+  @media (forced-colors: active) {
+    .#{$prefix}--progress-bar__track {
+      outline: 1px solid CanvasText;
+    }
+
+    .#{$prefix}--progress-bar .#{$prefix}--progress-bar__bar {
+      background-color: Highlight;
+    }
+
+    // The indeterminate segment is a gradient `background-image`, which
+    // forced colors strips. Draw it as a solid box and slide it with a
+    // transform instead (same 25% width and travel as the gradient).
+    .#{$prefix}--progress-bar.#{$prefix}--progress-bar--indeterminate
+      .#{$prefix}--progress-bar__track {
+      overflow: hidden;
+    }
+
+    .#{$prefix}--progress-bar.#{$prefix}--progress-bar--indeterminate
+      .#{$prefix}--progress-bar__track::after {
+      right: auto;
+      width: 25%;
+      animation-name: progress-bar-indeterminate-forced-colors;
+      background-color: Highlight;
+      background-image: none;
+    }
+
+    @keyframes progress-bar-indeterminate-forced-colors {
+      0% {
+        transform: translateX(-100%);
+      }
+
+      80%,
+      100% {
+        transform: translateX(420%);
+      }
+    }
+  }
+}
+
+@include exports("progress-bar-forced-colors") {
+  @include progress-bar-forced-colors;
+}
