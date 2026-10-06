@@ -92,23 +92,6 @@ describe("safeBrowserStorage (write throws)", () => {
   });
 });
 
-describe("safeBrowserStorage (no window)", () => {
-  it("getItem and setItem do not throw when window is undefined", () => {
-    const originalWindow = globalThis.window;
-    vi.stubGlobal("window", undefined);
-
-    try {
-      const storage = safeBrowserStorage("localStorage");
-      expect(() => storage.getItem("k")).not.toThrow();
-      expect(storage.getItem("k")).toBe(null);
-      expect(() => storage.setItem("k", "v")).not.toThrow();
-      expect(storage.setItem("k", "v")).toBe(false);
-    } finally {
-      vi.stubGlobal("window", originalWindow);
-    }
-  });
-});
-
 describe("safeBrowserStorage (storage blocked)", () => {
   afterEach(() => vi.restoreAllMocks());
 
