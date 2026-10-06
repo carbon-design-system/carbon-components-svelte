@@ -43,7 +43,7 @@
   data-invalid={invalid || undefined}
   class:bx--fieldset={true}
   class:bx--fieldset--no-margin={noMargin}
-  aria-labelledby={$$restProps["aria-labelledby"] ?? legendId}
+  aria-labelledby={$$restProps["aria-labelledby"] ?? (legendId || undefined)}
   aria-describedby={message ? messageId : undefined}
   {...$$restProps}
   on:click
