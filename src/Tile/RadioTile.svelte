@@ -196,6 +196,8 @@
     if (ctx) update(value);
     else checked = event.currentTarget.checked;
   }}
+  on:focus
+  on:blur
   on:keydown
   on:keydown={(event) => {
     // Space is left to the native radio, which checks it and fires

@@ -7,6 +7,7 @@ import { flushMacrotask } from "../utils/flush-macrotask";
 import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import RadioTileChecked from "./RadioTile.checked.test.svelte";
+import RadioTileFocus from "./RadioTile.focus.test.svelte";
 import RadioTileGroup from "./RadioTile.group.test.svelte";
 import RadioTileGroupEach from "./RadioTile.group-each.test.svelte";
 import RadioTileGroupUnmount from "./RadioTile.group-unmount.test.svelte";
@@ -23,6 +24,21 @@ import RadioTileCustom from "./RadioTileCustom.test.svelte";
 const flushMicrotasks = () => new Promise<void>(queueMicrotask);
 
 describe("RadioTile", () => {
+  it("forwards focus and blur from the radio", async () => {
+    const onFocus = vi.fn();
+    const onBlur = vi.fn();
+    render(RadioTileFocus, { props: { onFocus, onBlur } });
+
+    const radio = screen.getByRole("radio", { name: "Standard" });
+    await user.tab();
+    expect(radio).toHaveFocus();
+    expect(onFocus).toHaveBeenCalledTimes(1);
+    expect(onFocus.mock.calls[0][0].target).toBe(radio);
+
+    await user.tab();
+    expect(onBlur).toHaveBeenCalledTimes(1);
+  });
+
   describe("unmounting in a TileGroup", () => {
     it("clears the selection when the checked tile unmounts", async () => {
       const { component } = render(RadioTileGroupUnmount);
