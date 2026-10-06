@@ -593,6 +593,9 @@ describe("ComboBox", () => {
       "true",
     );
     expect(screen.getByText("Invalid selection")).toBeInTheDocument();
+    const input = screen.getByRole("combobox");
+    expect(input).toHaveAttribute("aria-invalid", "true");
+    expect(input).toHaveAccessibleErrorMessage("Invalid selection");
   });
 
   it("should handle warning state", () => {
@@ -622,6 +625,7 @@ describe("ComboBox", () => {
       expect(container.querySelector(".bx--combo-box")).not.toHaveAttribute(
         "data-invalid",
       );
+      expect(screen.getByRole("combobox")).not.toHaveAttribute("aria-invalid");
       expect(container.querySelector(".bx--list-box__invalid-icon")).toBeNull();
       expect(screen.queryByText("Invalid selection")).not.toBeInTheDocument();
       expect(screen.queryByText("Warning message")).not.toBeInTheDocument();

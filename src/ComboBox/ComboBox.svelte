@@ -942,6 +942,7 @@
           aria-disabled={disabled || undefined}
           aria-readonly={readonly || undefined}
           aria-controls={open ? menuId : undefined}
+          aria-invalid={showInvalid || undefined}
           aria-errormessage={showInvalid && invalidText ? errorId : undefined}
           aria-describedby={statusDescribedById}
           {disabled}

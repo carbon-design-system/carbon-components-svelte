@@ -433,6 +433,25 @@ describe("MultiSelect", () => {
       expect(wrapper).toHaveClass("bx--multi-select--invalid");
     });
 
+    it.each([false, true])(
+      "sets aria-invalid on the trigger when filterable is %s",
+      (filterable) => {
+        render(MultiSelect, {
+          props: {
+            items,
+            filterable,
+            invalid: true,
+            invalidText: "Invalid selection",
+          },
+        });
+
+        expect(screen.getByRole("combobox")).toHaveAttribute(
+          "aria-invalid",
+          "true",
+        );
+      },
+    );
+
     // Regression: filterable + invalid rendered two WarningFilled icons
     it("renders only one invalid icon when filterable", () => {
       const { container } = render(MultiSelect, {
