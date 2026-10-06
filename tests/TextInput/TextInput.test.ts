@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { clickToFocus } from "../utils/click-to-focus";
 import { isSvelte5 } from "../utils/svelte-version";
 import { user } from "../utils/user";
 import TextInputFluidForm from "./TextInput.fluidForm.test.svelte";
@@ -66,6 +67,15 @@ describe("TextInput", () => {
 
     expect(input.selectionStart).toBe(0);
     expect(input.selectionEnd).toBe("hello world".length);
+  });
+
+  it("keeps the selected value through the click's mouseup", async () => {
+    render(TextInput, {
+      props: { selectTextOnFocus: true, value: "hello world" },
+    });
+
+    const mouseup = await clickToFocus(screen.getByLabelText("User name"));
+    expect(mouseup.defaultPrevented).toBe(true);
   });
 
   it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {
