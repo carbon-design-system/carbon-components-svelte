@@ -55,6 +55,7 @@
   import { afterUpdate, createEventDispatcher, setContext } from "svelte";
   import { get, readonly, writable } from "svelte/store";
   import { rovingFocus } from "../utils/roving-focus.js";
+  import { provideTooltipGroup } from "../utils/tooltip-group.js";
 
   const dispatch = createEventDispatcher();
 
@@ -70,14 +71,9 @@
    * @type {import("svelte/store").Writable<HTMLButtonElement | null>}
    */
   const tabStopElement = writable(null);
-  // Tracks which icon-only button's CSS tooltip is shown, so moving the
-  // pointer between adjacent segments shows one at a time instead of both
-  // briefly overlapping mid-transition. Scoped per group, like
-  // ContentSwitcher's own `activeTooltip`.
-  /**
-   * @type {import("svelte/store").Writable<string | number | null>}
-   */
-  const activeTooltip = writable(null);
+  // Icon-only buttons hand their tooltips off to each other, and to the
+  // rest of an enclosing `TooltipGroup`.
+  provideTooltipGroup();
 
   // `single` mode only ever treats the first entry as pressed; the rest of
   // a multi-entry `selected` passed in from a consumer is left untouched
@@ -164,7 +160,6 @@
     disabled: readonly(groupDisabled),
     orientation: readonly(groupOrientation),
     tabStopElement: readonly(tabStopElement),
-    activeTooltip,
     toggle,
     claimInitialTabStop,
     // A slotted `ToggleButton` unmounting doesn't re-run this component's

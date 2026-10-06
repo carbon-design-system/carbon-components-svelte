@@ -54,11 +54,11 @@
   import { getContext, onMount } from "svelte";
   import { get } from "svelte/store";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
+  import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const ctx = getContext("carbon:ContentSwitcher");
-  const activeTooltip = ctx.activeTooltip;
   const tabStopId = ctx.tabStopId;
   const pairs = ctx.pairs;
 
@@ -96,15 +96,13 @@
 
   let hovered = false;
   let focused = false;
-  const tooltipHandoff = createTooltipHandoff({
-    activeTooltip,
-    getId: () => id,
-  });
+  const tooltipHandoff = createTooltipHandoff({ group: getTooltipGroup() });
+  const tooltipActive = tooltipHandoff.active;
 
-  // Gate on `activeTooltip` so only one switch tooltip shows at a time. When a
-  // neighbor claims the active slot, this one closes even while still hovered.
+  // Gate on the active slot so only one tooltip shows at a time. When a
+  // neighbor claims it, this one closes even while still hovered.
   $: tooltipOpen =
-    hasIcon && !disabled && (hovered || focused) && $activeTooltip === id;
+    hasIcon && !disabled && (hovered || focused) && $tooltipActive;
 
   function showTooltip() {
     tooltipHandoff.scheduleEnter(() => {
