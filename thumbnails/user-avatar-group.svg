@@ -3,21 +3,21 @@
     <title>user-avatar-group</title>
     <g id="user-avatar-group" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <circle id="avatar-1" fill="var(--cds-interactive-01, #0f62fe)" stroke="var(--cds-ui-02, #ffffff)" stroke-width="2" cx="118" cy="90" r="20"></circle>
-        <g id="user-1" transform="translate(110, 82) scale(0.5)" fill="var(--cds-ui-02, #ffffff)">
+        <g id="user-1" transform="translate(110, 82) scale(0.5)" fill="var(--cds-text-04, #ffffff)">
             <path d="M16,4a5,5,0,1,1-5,5,5,5,0,0,1,5-5m0-2a7,7,0,1,0,7,7A7,7,0,0,0,16,2Z"></path>
             <path d="M26,30H24V25a5,5,0,0,0-5-5H13a5,5,0,0,0-5,5v5H6V25a7,7,0,0,1,7-7h6a7,7,0,0,1,7,7Z"></path>
         </g>
         <circle id="avatar-2" fill="#007D79" stroke="var(--cds-ui-02, #ffffff)" stroke-width="2" cx="148" cy="90" r="20"></circle>
-        <g id="user-2" transform="translate(140, 82) scale(0.5)" fill="var(--cds-ui-02, #ffffff)">
+        <g id="user-2" transform="translate(140, 82) scale(0.5)" fill="var(--cds-text-04, #ffffff)">
             <path d="M16,4a5,5,0,1,1-5,5,5,5,0,0,1,5-5m0-2a7,7,0,1,0,7,7A7,7,0,0,0,16,2Z"></path>
             <path d="M26,30H24V25a5,5,0,0,0-5-5H13a5,5,0,0,0-5,5v5H6V25a7,7,0,0,1,7-7h6a7,7,0,0,1,7,7Z"></path>
         </g>
         <circle id="avatar-3" fill="#8A3FFC" stroke="var(--cds-ui-02, #ffffff)" stroke-width="2" cx="178" cy="90" r="20"></circle>
-        <g id="user-3" transform="translate(170, 82) scale(0.5)" fill="var(--cds-ui-02, #ffffff)">
+        <g id="user-3" transform="translate(170, 82) scale(0.5)" fill="var(--cds-text-04, #ffffff)">
             <path d="M16,4a5,5,0,1,1-5,5,5,5,0,0,1,5-5m0-2a7,7,0,1,0,7,7A7,7,0,0,0,16,2Z"></path>
             <path d="M26,30H24V25a5,5,0,0,0-5-5H13a5,5,0,0,0-5,5v5H6V25a7,7,0,0,1,7-7h6a7,7,0,0,1,7,7Z"></path>
         </g>
-        <circle id="overflow" fill="#6F6F6F" stroke="var(--cds-ui-02, #ffffff)" stroke-width="2" cx="208" cy="90" r="20"></circle>
-        <text id="overflow-label" fill="var(--cds-ui-02, #ffffff)" font-family="IBM Plex Sans, Helvetica Neue, Arial, sans-serif" font-size="11" font-weight="400" text-anchor="middle" dominant-baseline="central" x="208" y="90">+5</text>
+        <circle id="overflow" fill="var(--cds-text-secondary, #525252)" stroke="var(--cds-ui-02, #ffffff)" stroke-width="2" cx="208" cy="90" r="20"></circle>
+        <path id="overflow-label" fill="var(--cds-ui-02, #ffffff)" d="M204.28 93.12V90.82H202.14V90.07H204.28V87.77H205.12V90.07H207.26V90.82H205.12V93.12Z M213.48 86.94H210.11L209.89 89.86H209.97Q210.24 89.48 210.59 89.25Q210.94 89.02 211.54 89.02Q212.04 89.02 212.45 89.18Q212.87 89.34 213.18 89.65Q213.49 89.95 213.66 90.39Q213.83 90.83 213.83 91.39Q213.83 91.95 213.65 92.42Q213.48 92.89 213.14 93.22Q212.81 93.56 212.33 93.75Q211.85 93.93 211.25 93.93Q210.76 93.93 210.39 93.82Q210.02 93.71 209.74 93.53Q209.45 93.34 209.24 93.11Q209.02 92.88 208.85 92.62L209.54 92.09Q209.68 92.33 209.84 92.51Q210 92.7 210.19 92.83Q210.39 92.96 210.64 93.04Q210.89 93.11 211.25 93.11Q212.04 93.11 212.44 92.69Q212.85 92.27 212.85 91.51V91.4Q212.85 90.64 212.44 90.22Q212.04 89.81 211.25 89.81Q210.72 89.81 210.41 90Q210.11 90.19 209.87 90.46L209.09 90.35L209.36 86.12H213.48Z"></path>
     </g>
 </svg>

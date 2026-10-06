@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
     <title>date-picker</title>
     <defs>
-        <rect id="panel-shape" x="88" y="72" width="144" height="92"></rect>
-        <filter x="-10.4%" y="-6.5%" width="120.8%" height="123.9%" filterUnits="objectBoundingBox" id="panel-shadow">
-            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
-            <feGaussianBlur stdDeviation="3" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
-            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.3 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        <filter id="date-picker-shadow" filterUnits="userSpaceOnUse" x="0" y="0" width="320" height="180">
+            <feOffset dy="2" in="SourceAlpha" result="offset"></feOffset>
+            <feGaussianBlur stdDeviation="3" in="offset" result="blur"></feGaussianBlur>
+            <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.3 0"></feColorMatrix>
         </filter>
     </defs>
     <g id="date-picker" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -17,8 +16,8 @@
         <g id="calendar-icon" transform="translate(206, 49) scale(0.4375)" fill="var(--cds-border-strong, #8d8d8d)">
             <path d="M26,4h-4V2h-2v2h-8V2h-2v2H6C4.9,4,4,4.9,4,6v20c0,1.1,0.9,2,2,2h20c1.1,0,2-0.9,2-2V6C28,4.9,27.1,4,26,4z M26,26H6V12h20 V26z M26,10H6V6h4v2h2V6h8v2h2V6h4V10z"></path>
         </g>
-        <use xlink:href="#panel-shape" fill="black" fill-opacity="1" filter="url(#panel-shadow)"></use>
-        <use xlink:href="#panel-shape" fill="var(--cds-ui-02, #ffffff)"></use>
+        <rect x="88" y="72" width="144" height="92" fill="black" filter="url(#date-picker-shadow)"></rect>
+        <rect x="88" y="72" width="144" height="92" fill="var(--cds-ui-02, #ffffff)"></rect>
         <g id="prev-month" transform="translate(98, 78) scale(0.5)" fill="var(--cds-border-strong, #8d8d8d)">
             <path d="M20 24L10 16 20 8z"></path>
         </g>

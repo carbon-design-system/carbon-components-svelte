@@ -6,6 +6,6 @@
         <rect id="body-1" fill="var(--cds-border-subtle, #e0e0e0)" x="86" y="64" width="140" height="6"></rect>
         <rect id="body-2" fill="var(--cds-border-subtle, #e0e0e0)" x="86" y="78" width="100" height="6"></rect>
         <rect id="action" fill="var(--cds-interactive-01, #0f62fe)" x="86" y="100" width="64" height="20"></rect>
-        <rect id="action-label" fill="var(--cds-ui-02, #ffffff)" x="100" y="107" width="36" height="6"></rect>
+        <rect id="action-label" fill="var(--cds-text-04, #ffffff)" x="100" y="107" width="36" height="6"></rect>
     </g>
 </svg>

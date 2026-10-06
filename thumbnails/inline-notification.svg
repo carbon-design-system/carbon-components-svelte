@@ -1,23 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
     <title>inline-notification</title>
-    <defs>
-        <circle id="path-1" cx="5" cy="5" r="4.375"></circle>
-        <polygon id="path-3" points="4.375 6.71875 2.8125 5.15625 3.309375 4.6875 4.375 5.734375 6.690625 3.4375 7.1875 3.93125"></polygon>
-    </defs>
     <g id="inline-notification" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect id="Rectangle-2-Copy-27" fill="var(--cds-button-secondary, #393939)" x="60" y="77" width="200" height="26"></rect>
-        <g id="icon/status/checkmark-filled/16" transform="translate(69.000000, 85.000000)">
-            <mask id="mask-2" fill="white">
-                <use xlink:href="#path-1"></use>
-            </mask>
-            <use id="icon-color" fill="var(--cds-support-success, #24a148)" xlink:href="#path-1"></use>
-            <mask id="mask-4" fill="white">
-                <use xlink:href="#path-3"></use>
-            </mask>
-            <use id="icon-color" fill="var(--cds-ui-02, #ffffff)" xlink:href="#path-3"></use>
-        </g>
-        <rect id="Path-Copy-2" fill="var(--cds-support-success, #24a148)" x="60" y="77" width="2" height="26"></rect>
-        <rect id="Rectangle-Copy-14" fill="var(--cds-field-01, #f4f4f4)" x="85" y="88" width="100.088235" height="4"></rect>
+        <rect id="surface" fill="var(--cds-background-inverse, #393939)" x="56" y="66" width="208" height="48"></rect>
+        <rect id="status-border" fill="var(--cds-support-success, #198038)" x="56" y="66" width="3" height="48"></rect>
+        <path id="status-icon" fill="var(--cds-support-success, #198038)" transform="translate(72, 82) scale(0.5)" d="M16,2A14,14,0,1,0,30,16,14,14,0,0,0,16,2ZM14,21.5908l-5-5L10.5906,15,14,18.4092,21.41,11l1.5957,1.5859Z"></path>
+        <rect id="title" fill="var(--cds-icon-inverse, #ffffff)" x="98" y="86" width="48" height="8"></rect>
+        <rect id="subtitle" fill="var(--cds-text-inverse, #ffffff)" x="154" y="87" width="64" height="6"></rect>
+        <path id="close" fill="var(--cds-icon-inverse, #ffffff)" transform="translate(236, 82) scale(0.5)" d="M17.4141 16 24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"></path>
     </g>
 </svg>

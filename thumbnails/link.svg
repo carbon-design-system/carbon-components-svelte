@@ -2,6 +2,7 @@
 <svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
     <title>link</title>
     <g id="link" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <text id="label" fill="var(--cds-interactive-01, #0f62fe)" font-family="IBM Plex Sans, Helvetica Neue, Arial, sans-serif" font-size="14" font-weight="400" text-anchor="middle" text-decoration="underline" dominant-baseline="central" x="160" y="90">Link</text>
+        <path id="label" fill="var(--cds-interactive-01, #0f62fe)" d="M148.38 95V85.23H149.56V93.96H153.71V95Z M155.84 86.08Q155.48 86.08 155.32 85.91Q155.16 85.73 155.16 85.45V85.27Q155.16 84.99 155.32 84.81Q155.48 84.64 155.84 84.64Q156.21 84.64 156.37 84.81Q156.53 84.99 156.53 85.27V85.45Q156.53 85.73 156.37 85.91Q156.21 86.08 155.84 86.08ZM155.28 87.78H156.4V95H155.28Z M158.78 95V87.78H159.9V88.95H159.96Q160.22 88.34 160.71 87.97Q161.19 87.61 162 87.61Q163.12 87.61 163.77 88.33Q164.42 89.05 164.42 90.37V95H163.3V90.56Q163.3 88.62 161.67 88.62Q161.33 88.62 161.02 88.7Q160.7 88.78 160.45 88.95Q160.2 89.12 160.05 89.38Q159.9 89.64 159.9 89.99V95Z M166.73 84.64H167.85V91.21H167.91L169.02 89.97L171.06 87.78H172.42L169.74 90.63L172.68 95H171.33L168.93 91.32L167.85 92.42V95H166.73Z"></path>
+        <rect id="underline" fill="var(--cds-interactive-01, #0f62fe)" x="147.08" y="97" width="25.84" height="1"></rect>
     </g>
 </svg>

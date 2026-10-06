@@ -7,11 +7,11 @@
         </g>
         <g id="secondary">
             <rect id="secondary-button" fill="var(--cds-button-secondary, #393939)" x="124" y="74" width="71" height="32"></rect>
-            <rect id="secondary-label" fill="var(--cds-field-01, #f4f4f4)" x="140" y="86" width="28" height="8"></rect>
+            <rect id="secondary-label" fill="var(--cds-text-04, #ffffff)" x="140" y="86" width="28" height="8"></rect>
         </g>
         <g id="primary">
             <rect id="primary-button" fill="var(--cds-interactive-01, #0f62fe)" x="196" y="74" width="71" height="32"></rect>
-            <rect id="primary-label" fill="var(--cds-ui-02, #ffffff)" x="212" y="86" width="28" height="8"></rect>
+            <rect id="primary-label" fill="var(--cds-text-04, #ffffff)" x="212" y="86" width="28" height="8"></rect>
         </g>
     </g>
 </svg>
