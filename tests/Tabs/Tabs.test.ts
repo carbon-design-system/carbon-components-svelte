@@ -19,6 +19,7 @@ import TabsLazy from "./TabsLazy.test.svelte";
 import TabsRegistration from "./TabsRegistration.test.svelte";
 import TabsSelectedId from "./TabsSelectedId.test.svelte";
 import TabsSkeleton from "./TabsSkeleton.test.svelte";
+import TabsOwnPanelId from "./TabsSsrOwnPanelId.test.svelte";
 
 describe("Tabs", () => {
   let consoleLog: Console["log"];
@@ -62,6 +63,19 @@ describe("Tabs", () => {
       expect(panelId).toBe(panels[index].id);
       // The pairing holds in both directions.
       expect(panels[index]).toHaveAttribute("aria-labelledby", tab.id);
+    });
+  });
+
+  it("should point aria-controls at a panel's own id after mount", async () => {
+    render(TabsOwnPanelId);
+    await tick();
+
+    const tabs = screen.getAllByRole("tab");
+    const panels = screen.getAllByRole("tabpanel", { hidden: true });
+
+    expect(panels[1]).toHaveAttribute("id", "own-panel");
+    tabs.forEach((tab, index) => {
+      expect(tab).toHaveAttribute("aria-controls", panels[index].id);
     });
   });
 

@@ -93,11 +93,16 @@
     useContainer,
     add,
     remove,
+    claimTab,
     update,
     dismiss,
     tabsById,
     contentByIndex,
   } = getContext("carbon:Tabs");
+
+  // Claim this tab's position before it renders; see `claimTab` in `Tabs`.
+  // `undefined` for a tab added after mount (or under `TabsVertical`).
+  const initialTab = claimTab?.(id);
 
   // Icon-only tabs show `label` as a portalled tooltip on hover/focus.
   // The portal keeps the tooltip from being clipped by the tab nav's overflow.
@@ -145,16 +150,23 @@
   });
 
   $: selected = $selectedTab === id;
-  // Only the selected tab is a Tab-key stop. Until a selection resolves
-  // (first render, SSR), keep every enabled tab reachable.
-  $: hasSelection = $selectedTab !== undefined;
+  $: registered = $tabsById[id] !== undefined;
+  // Only the selected tab is a Tab-key stop. A tab that claimed its position
+  // expects a selection, so it gives up the stop even when it renders before
+  // the selected tab (first render, SSR). Otherwise, until a selection
+  // resolves, keep every enabled tab reachable.
+  $: hasSelection =
+    $selectedTab !== undefined || (initialTab !== undefined && !registered);
   // Default href is the "#" placeholder, so tabs behave as selection controls.
   // Any other href is user-provided and should navigate like a link.
   $: isLink = !!href && href !== "#";
   // Panels learn their tab's id by index (`TabContent`); mirror that pairing
   // in the other direction so the tab can point `aria-controls` at its panel.
-  // `undefined` when no panel is rendered for this tab's position.
-  $: panelId = $contentByIndex[$tabsById[id]?.index];
+  // `undefined` when no panel is rendered for this tab's position. Before
+  // registration flushes, use the panel id reserved when the tab claimed.
+  $: panelId = registered
+    ? $contentByIndex[$tabsById[id].index]
+    : initialTab?.panelId;
 </script>
 
 <li
