@@ -12,4 +12,8 @@ export const testConfig = {
   // Gives each file a fresh global context without a new process per file.
   // dom-env only runs in this pool.
   pool: "vmThreads" as const,
+  // Pre-bundle node_modules, so each test file evaluates a few bundled
+  // modules instead of hundreds of separate ones from Svelte, testing-library,
+  // and the icon set.
+  deps: { optimizer: { client: { enabled: true } } },
 };
