@@ -3,6 +3,7 @@
 // `node` environment does, then evaluates the DOM bundle inside it.
 
 import { execFileSync } from "node:child_process";
+import { randomUUID } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -24,7 +25,8 @@ function ensureBundle() {
     .readdirSync(srcDir)
     .some((f) => fs.statSync(path.join(srcDir, f)).mtimeMs > built);
   if (!stale) return;
-  const tmp = `${bundle}.${process.pid}.${Date.now()}.tmp`;
+  // Workers are threads of one process, so the pid alone isn't unique.
+  const tmp = `${bundle}.${randomUUID()}.tmp`;
   execFileSync(
     "bun",
     [
