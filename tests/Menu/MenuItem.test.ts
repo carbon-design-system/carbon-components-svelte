@@ -327,6 +327,23 @@ describe("MenuItem", () => {
       expect(parent).toHaveAttribute("title", "Export as");
     });
 
+    it("keeps the base label class and adds the slotted modifier for labelChildren", async () => {
+      render(MenuItemSlot);
+
+      await user.click(screen.getByRole("button", { name: "Trigger" }));
+
+      expect(
+        screen.getByText("Custom label content").parentElement,
+      ).toHaveClass(
+        "bx--menu-option__label",
+        "bx--menu-option__label--slotted",
+      );
+      const plain = screen
+        .getByRole("menuitem", { name: "Save ⌘S" })
+        .querySelector(".bx--menu-option__label");
+      expect(plain).not.toHaveClass("bx--menu-option__label--slotted");
+    });
+
     it("sets the title on a non-submenu item that uses labelText, since its label can also truncate", async () => {
       render(MenuItemFixture);
 
