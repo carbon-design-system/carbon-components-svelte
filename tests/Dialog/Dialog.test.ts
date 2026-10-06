@@ -47,6 +47,29 @@ describe("Dialog", () => {
     expect(onopen).toHaveBeenCalledTimes(1);
   });
 
+  it("shows the dialog once and dispatches open once when mounted open", () => {
+    const showSpy = vi.spyOn(HTMLDialogElement.prototype, "show");
+    const onopen = vi.fn();
+
+    render(Dialog, { props: { open: true, onopen } });
+
+    expect(showSpy).toHaveBeenCalledTimes(1);
+    expect(onopen).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole("dialog")).toHaveAttribute("open");
+  });
+
+  it("closes a dialog that was mounted open and dispatches close", async () => {
+    const onclose = vi.fn();
+    const { rerender } = render(Dialog, { props: { open: true, onclose } });
+    rerender({ open: false, onclose });
+    await tick();
+
+    expect(screen.getByRole("dialog", { hidden: true })).not.toHaveAttribute(
+      "open",
+    );
+    expect(onclose).toHaveBeenCalledTimes(1);
+  });
+
   it("calls close() on the dialog element when open is set back to false", async () => {
     const closeSpy = vi.spyOn(HTMLDialogElement.prototype, "close");
 
