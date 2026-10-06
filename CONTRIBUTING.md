@@ -76,7 +76,7 @@ Patterns:
 - Forward DOM events with bare `on:click` / `on:focus` (no handler) on the underlying element ([`Button.svelte`](src/Button/Button.svelte)).
 - Interpolate attribute values with Svelte's attribute syntax, not template literals: `id="{treeId}-{id}-subtree"`, not ``id={`${treeId}-${id}-subtree`}``. Keep template literals only when a value needs nested quotes or logic the shorthand can't express (see `aria-label` in [`PinCodeInput.svelte`](src/PinCodeInput/PinCodeInput.svelte)).
 - Compound components use `setContext` / `getContext` with `carbon:` keys ([`CheckboxGroup.svelte`](src/Checkbox/CheckboxGroup.svelte)). For a group whose children register themselves, expose `{ items, register(item), unregister(id), update(id, patch) }` on the context, where `items` is a `writable` store of registered entries. Order entries by DOM position at registration time, not mount order, since children can mount out of DOM order when conditionally rendered. Use [`insertByDomOrder`](src/utils/sort-by-dom-order.js), which appends after one `compareDocumentPosition` check and only re-sorts when a child arrives out of order; re-sorting the whole list on every registration is quadratic (1,770 comparisons for 60 tags). See `UserAvatarGroup` / `UserAvatar` and `TagSet` / `Tag`. When a child needs to trigger a group-level action, such as a close button the group must react to, add a `notify*` method to the context and call it in addition to the child's own local dispatch, so the component still works standalone outside the group. Route every mutator (`register`, `unregister`, `update`) through [`batchStoreUpdates`](src/utils/batch-store-updates.js). Mixing a direct `items.update(...)` with a batched call can read a stale array. See [Batching child registration](#batching-child-registration).
-- Take first-paint state from props, `$$slots`, or the markup of the element that needs it, not from children that register. The server writes a parent's markup before its children render and never runs their registration, so registration only corrects the page after hydration, and the layout jumps. Each `Tab` marks itself `bx--tabs__nav-link--single-line` ([`Tab.svelte`](src/Tabs/Tab.svelte)). ContentSwitcher reads its `iconOnly` prop until its switches register ([`ContentSwitcher.svelte`](src/ContentSwitcher/ContentSwitcher.svelte)). The fluid DatePicker cell marks itself `--fluid--neutral` ([`DatePickerInput.svelte`](src/DatePicker/DatePickerInput.svelte)). A host with a filled `decorator` slot starts with its AI surface class ([`Card.svelte`](src/Card/Card.svelte)). For the one case markup can't carry, see the gated `:has()` exception in [Conventions](#conventions).
+- Take first-paint state from props, `$$slots`, or the markup of the element that needs it, not from children that register. The server writes a parent's markup before its children render and never runs their registration, so registration only corrects the page after hydration, and the layout jumps. A [hydration test](#hydration-tests) shows the jump in `settledDiff`. Each `Tab` marks itself `bx--tabs__nav-link--single-line` ([`Tab.svelte`](src/Tabs/Tab.svelte)). ContentSwitcher reads its `iconOnly` prop until its switches register ([`ContentSwitcher.svelte`](src/ContentSwitcher/ContentSwitcher.svelte)). The fluid DatePicker cell marks itself `--fluid--neutral` ([`DatePickerInput.svelte`](src/DatePicker/DatePickerInput.svelte)). A host with a filled `decorator` slot starts with its AI surface class ([`Card.svelte`](src/Card/Card.svelte)). For the one case markup can't carry, see the gated `:has()` exception in [Conventions](#conventions).
 - Prefer a data-array prop (`items`, `tags`) plus a per-item slot when the collection needs bulk operations that only make sense on structured data: search, filtering, virtualization, reordering (`ComboBox`, `MultiSelect`, `TreeView`). Prefer child composition, real component instances as `<slot />` children, when items are simple, independently-styled elements a consumer would reach for standalone (`Tag`, `UserAvatar`); `UserAvatarGroup` / `TagSet` register those children via context instead of taking a data array.
 - Default element IDs come from `uniqueId()` in [`unique-id.js`](src/utils/unique-id.js).
 - Key `{#each}` blocks, for example `(item.id ?? index)` (see [`RecursiveList.svelte`](src/RecursiveList/RecursiveList.svelte)).
@@ -1018,9 +1018,54 @@ it("marks the `selected` option", () => {
 - `onMount`, `afterUpdate`, `bind:this`, and actions do not run on the server, and `window`, `document`, and DOM classes such as `HTMLElement` do not exist. A `$:` block does run, so guard browser APIs in it with `typeof window === "undefined"` or move them into `onMount` or an action such as `dismiss`.
 - A `tick().then()` queued from a `$:` block runs after a server render too. Return early when the element ref is unset; a rejection there is unhandled.
 - When the server output is wrong, resolve the initial state synchronously (a registration index each child claims in script order) and let the store win once it is set. Do not move the work into `onMount`.
-- Only test files in the `node` environment compile components for the server. A jsdom test file compiles every `.svelte` import for the client, so it cannot server-render the same fixture, and there is no hydration check yet.
+- Only test files in the `node` environment compile components for the server. A jsdom test file compiles every `.svelte` import for the client, so it cannot server-render the same fixture. To check hydration, see [Hydration tests](#hydration-tests).
 - [`ssr-smoke.ssr.test.ts`](tests/ssr-smoke.ssr.test.ts) renders every component in [`src/index.js`](src/index.js) with default props, and again with `open` when it has one, and fails on a throw or on `undefined`, `[object Object]`, or `NaN` in the output. A new child component that needs its parent's context goes in its `NEEDS_PARENT` list.
 - Svelte's server compiler can move a JSDoc `@type` comment onto an unrelated expression and wrap it in parentheses, which produces invalid JavaScript. The sweep fails with a `Parse failure` when that happens. Type a function with `@param` and `@returns`, and move casts out of directive arguments into a helper.
+
+#### Hydration tests
+
+A `*.ssr.test.ts` checks the HTML the server sends. A `*.hydrate.test.ts` checks what happens when the client takes that HTML over. Prefer `renderSSR` whenever the defect shows in the server HTML (a missing selection, a wrong attribute). Add a hydration test only when the problem appears during or after hydration: Svelte rebuilds server nodes, text typed before hydration is lost, the client's first render differs from the server's, or registration changes the page after mount (the first-paint jump in [Conventions](#conventions)).
+
+[`hydrateFixtures`](tests/utils/hydrate.ts) builds every fixture it is given twice with Vite (a server bundle and a Svelte dev-mode client bundle), renders each on the server with no DOM, then hydrates that HTML in jsdom and reports what changed. One call builds all its fixtures together, so call it once per file in `beforeAll` with a longer timeout. List every fixture in a `// @depends-on` comment:
+
+```ts
+// @vitest-environment node
+// @depends-on tests/Select/Select.hydrate.test.svelte
+import { fileURLToPath } from "node:url";
+import { type HydrateResult, hydrateFixtures } from "../utils/hydrate";
+
+const fixture = fileURLToPath(
+  new URL("./Select.hydrate.test.svelte", import.meta.url),
+);
+let result: HydrateResult;
+
+beforeAll(async () => {
+  [result] = await hydrateFixtures([{ fixture, props: { selected: "md" } }]);
+}, 120_000);
+
+it("keeps the server nodes and paints the final state", () => {
+  expect(result.identity.pct).toBe(100);
+  expect(result.diffIgnoringIds).toEqual([]);
+  expect(result.settledDiff).toEqual([]);
+  expect(result.brokenRefs.settled).toEqual([]);
+});
+```
+
+Svelte 5 repairs most mismatches without a warning: it rebuilds a swapped `{#if}` branch, lets the client's text and attributes win, and rewrites regenerated `uniqueId()` ids. A quiet console proves nothing, so assert on the diff and node identity rather than on `warnings`:
+
+| Field | Meaning |
+| --- | --- |
+| `diffIgnoringIds` | Server DOM vs the DOM right after `hydrate()`, with random ids normalized. `[]` means the client kept what the server sent. |
+| `identity.pct` | Share of server elements still in the document. Below 100 means Svelte discarded and rebuilt nodes; `identity.replaced` lists them. An element a portal moves to `body` still counts. |
+| `settledDiff` | Changes made after mount (`onMount`, a registration flush). Assert `[]` when the server should already render the final state. |
+| `brokenRefs.settled` | `aria-*`, `for`, and `headers` ids that match no element in the document. |
+| `serverRenderError`, `hydrateError`, `errors` | Errors thrown on each side. |
+
+- Svelte 5 always rebuilds `<option>` elements, so a native `<select>` lowers `identity.pct`. Check that `identity.replaced` lists only `option`s.
+- jsdom has no layout. `matchMedia` evaluates `min-width` and `max-width` against the `viewport` option (1280 by 800 by default), and `ResizeObserver` never fires.
+- bivium can't follow the paths a test passes to `hydrateFixtures`, so it selects the test through `@depends-on`: CI runs it when a listed fixture, or a component or util the fixture imports, changes. `hydrateFixtures` fails when the running file leaves a fixture out. The harness files are `hermetic` in [`bivium.config.ts`](bivium.config.ts), so they add no unknown.
+- [`hydrate-smoke.hydrate.test.ts`](tests/hydrate-smoke.hydrate.test.ts) has negative controls that show what each field catches.
+- Run them with `bunx vitest run hydrate`. They run in the `ssr` project (node environment) on Svelte 5 only. Build output goes to `node_modules/.cache/ccs-hydrate/` and is deleted after each call.
 
 #### Svelte 3 and Svelte 4 compatibility tests
 
@@ -1028,7 +1073,7 @@ The default `bun run test` harness uses Svelte 5. Separate workspaces under `tes
 
 You only need these when fixing a failure reported from `bun run test:svelte3`, `bun run test:svelte4`, or their type-check scripts. Most changes do not require them.
 
-These workspaces run `../tests/**/*.test.ts` except `tests/Snippets/**`, `*.ssr.test.ts`, `tests/utils/ssr.test.ts`, and `tests/css/**` (compiled SCSS does not depend on the Svelte version). A test that imports a Svelte 5 only module (`svelte/server`, runes, snippets) must be excluded in both `vite.config.ts` files.
+These workspaces run `../tests/**/*.test.ts` except `tests/Snippets/**`, `*.ssr.test.ts`, `*.hydrate.test.ts`, `tests/utils/ssr.test.ts`, and `tests/css/**` (compiled SCSS does not depend on the Svelte version). A test that imports a Svelte 5 only module (`svelte/server`, runes, snippets) must be excluded in both `vite.config.ts` files, and in [`tsconfig.compat-check.json`](tests/tsconfig.compat-check.json) together with every helper that reaches the module. One included file that imports `tests/utils/ssr.ts` loads Svelte 5's types into the Svelte 3 and 4 type checks and breaks unrelated icon props.
 
 Before running a compatibility script, install that workspace's dependencies. Without a local `node_modules`, the run may fall back to the Svelte 5 harness:
 
