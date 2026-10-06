@@ -98,13 +98,26 @@
   // group instead of overwriting it. One block, so the comparison always
   // sees the write before the re-derive.
   let syncedChecked = checked;
+  // A checked tile whose `value` changes carries the selection to the new
+  // value, as SelectableTile does, rather than leaving the group's
+  // `selected` naming a value no radio has.
+  let prevValue = value;
 
   $: if (ctx) {
-    if (checked !== syncedChecked) {
-      if (checked) selectedValue.set(value);
-      else if ($selectedValue === value) selectedValue.set(undefined);
+    let current = $selectedValue;
+    if (value !== prevValue) {
+      if (current === prevValue && syncedChecked) {
+        selectedValue.set(value);
+        current = value;
+      }
+      prevValue = value;
     }
-    const derived = value === $selectedValue;
+    if (checked !== syncedChecked) {
+      if (checked) current = value;
+      else if (current === value) current = undefined;
+      selectedValue.set(current);
+    }
+    const derived = value === current;
     // Write only on change: under Svelte 5, every write to a prop bound to
     // an array item (`bind:checked={a[i]}`) re-runs this block in every tile.
     if (checked !== derived) checked = derived;
