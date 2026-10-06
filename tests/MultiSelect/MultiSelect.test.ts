@@ -4,6 +4,7 @@ import type { MultiSelectItem } from "carbon-components-svelte/MultiSelect/Multi
 import MultiSelectReal from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
+import { clickToFocus } from "../utils/click-to-focus";
 import { user } from "../utils/user";
 import { closeMenu, openMenu, toggleOption } from "./helpers";
 import MultiSelectFluidForm from "./MultiSelect.fluidForm.test.svelte";
@@ -59,6 +60,20 @@ describe("MultiSelect", () => {
 
     expect(input.selectionStart).toBe(0);
     expect(input.selectionEnd).toBe("Slack".length);
+  });
+
+  it("keeps the selected value through the click's mouseup", async () => {
+    render(MultiSelectReal, {
+      props: {
+        items: [],
+        filterable: true,
+        selectTextOnFocus: true,
+        value: "Slack",
+      },
+    });
+
+    const mouseup = await clickToFocus(screen.getByRole("combobox"));
+    expect(mouseup.defaultPrevented).toBe(true);
   });
 
   it("does not select all filter text on focus when selectTextOnFocus is false (default)", async () => {

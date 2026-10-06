@@ -19,6 +19,7 @@ const cases: { testId: string; check?: "replace" }[] = [
   { testId: "slider", check: "replace" },
   { testId: "range-slider", check: "replace" },
   { testId: "combo-box" },
+  { testId: "multi-select" },
 ];
 
 async function expectFullSelection(input: Locator) {

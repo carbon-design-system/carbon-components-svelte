@@ -4,6 +4,7 @@
     CopyInput,
     DatePicker,
     DatePickerInput,
+    MultiSelect,
     NumberInput,
     PasswordInput,
     RangeSlider,
@@ -112,5 +113,16 @@
       { id: "1", text: "Email" },
     ]}
     selectedId="0"
+  />
+  <MultiSelect
+    data-testid="multi-select"
+    titleText="Multi select"
+    filterable
+    selectTextOnFocus
+    items={[
+      { id: "0", text: "Slack" },
+      { id: "1", text: "Email" },
+    ]}
+    value="abcdef"
   />
 </div>
