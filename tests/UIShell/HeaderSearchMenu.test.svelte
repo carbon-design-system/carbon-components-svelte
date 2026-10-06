@@ -15,6 +15,7 @@
     submitted: false,
   };
   export let closeTrigger = "";
+  export let onSelect: () => void = () => {};
 
   const items = [
     "Databases for TestSQL",
@@ -28,7 +29,10 @@
   bind:active
   bind:value
   {size}
-  on:select={(e) => (selected = { value: e.detail.value, submitted: false })}
+  on:select={(e) => {
+    selected = { value: e.detail.value, submitted: false };
+    onSelect();
+  }}
   on:submit={(e) => (selected = { value: e.detail.value, submitted: true })}
   on:close={(e) => (closeTrigger = e.detail.trigger)}
 >
