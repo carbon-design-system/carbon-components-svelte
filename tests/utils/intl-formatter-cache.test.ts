@@ -90,6 +90,20 @@ describe("getDateTimeFormatter", () => {
     expect(a).not.toBe(b);
   });
 
+  it("returns different instances for different time zones", () => {
+    const a = getDateTimeFormatter("en", {
+      timeStyle: "short",
+      timeZone: "UTC",
+    });
+    const b = getDateTimeFormatter("en", {
+      timeStyle: "short",
+      timeZone: "Asia/Tokyo",
+    });
+
+    expect(a).not.toBe(b);
+    expect(a.format(0)).not.toBe(b.format(0));
+  });
+
   it("returns different instances for different locales", () => {
     const options = { dateStyle: "medium", timeStyle: "short" } as const;
     const a = getDateTimeFormatter("en", options);

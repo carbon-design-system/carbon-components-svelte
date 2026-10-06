@@ -23,6 +23,15 @@
   export let locale = undefined;
 
   /**
+   * IANA time zone for the absolute time in `title`. Runtime time zone when
+   * unset. Set a fixed value so the server and the client print the same
+   * `title`. Equivalent to `titleFormatOptions={{ timeZone }}`, and overrides
+   * `titleFormatOptions.timeZone` when both are set.
+   * @type {string}
+   */
+  export let timeZone = undefined;
+
+  /**
    * @type {"always" | "auto"}
    */
   export let numeric = "auto";
@@ -74,7 +83,10 @@
     : "";
   $: isoString = valid ? new Date(timestamp).toISOString() : undefined;
   $: absoluteTitle = valid
-    ? getDateTimeFormatter(locale, titleFormatOptions).format(timestamp)
+    ? getDateTimeFormatter(
+        locale,
+        timeZone ? { ...titleFormatOptions, timeZone } : titleFormatOptions,
+      ).format(timestamp)
     : undefined;
   $: ticking = live && now == null && valid && typeof window !== "undefined";
   $: refreshMs = ticking ? getRelativeTimeRefreshMs(timestamp - tickNow) : 0;
