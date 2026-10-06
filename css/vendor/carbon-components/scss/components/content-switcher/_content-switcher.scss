@@ -397,3 +397,54 @@
 @include exports("content-switcher-low-contrast") {
   @include content-switcher-low-contrast;
 }
+
+// carbon-components-svelte patch (content-switcher-forced-colors)
+// The selected switch is a background fill (on the button and its `::after`
+// overlay), which forced-colors mode repaints as Canvas, so selected and
+// unselected switches looked identical.
+//
+// `forced-color-adjust: none` brings the real focus styling back (the blue
+// `box-shadow`, `border-color: $focus`, and on the low-contrast `::after` an
+// inset ring), and the high-contrast `Highlight` outline would sit on the
+// `Highlight` fill. A focused selected switch therefore drops the real
+// shadows and shows an inset `HighlightText` ring, which contrasts with the
+// fill. The switcher ancestor makes these outrank the low-contrast focus rules
+// regardless of emit order.
+
+/// Selected content switcher in forced-colors mode.
+/// @access private
+/// @group content-switcher
+@mixin content-switcher-forced-colors {
+  @media (forced-colors: active) {
+    .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher--selected:not(:disabled) {
+      forced-color-adjust: none;
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher--selected:not(:disabled)::after {
+      background-color: Highlight;
+    }
+
+    .#{$prefix}--content-switcher--icon-only
+      .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher--selected:not(:disabled)
+      svg {
+      fill: HighlightText;
+    }
+
+    .#{$prefix}--content-switcher .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher--selected:not(:disabled):focus {
+      border-color: Highlight;
+      box-shadow: none;
+      outline: 2px solid HighlightText;
+      outline-offset: -4px;
+    }
+
+    .#{$prefix}--content-switcher .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher--selected:not(:disabled):focus::after {
+      box-shadow: none;
+    }
+  }
+}
+
+@include exports("content-switcher-forced-colors") {
+  @include content-switcher-forced-colors;
+}
