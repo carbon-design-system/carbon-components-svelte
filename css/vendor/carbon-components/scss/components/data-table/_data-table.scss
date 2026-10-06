@@ -350,3 +350,26 @@
 @include exports("data-table-fixed-layout") {
   @include data-table-fixed-layout;
 }
+
+// carbon-components-svelte patch (DataTable empty row)
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// The row DataTable renders when no rows are displayed (`emptyText` or the
+/// `empty` slot). Each table size pads its cells on its own, and `tall`
+/// also aligns them to the top, so that padding stacked on top of
+/// `EmptyState`'s own. The cell drops it and centers its content, so the
+/// content's padding is the only space above and below it.
+/// @access private
+/// @group components
+@mixin data-table-empty {
+  .#{$prefix}--data-table--empty-row > .#{$prefix}--table-cell {
+    padding-top: 0;
+    padding-bottom: 0;
+    vertical-align: middle;
+  }
+}
+
+@include exports("data-table-empty") {
+  @include data-table-empty;
+}

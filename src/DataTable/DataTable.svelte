@@ -20,6 +20,27 @@
   }
 
   /**
+   * The text in `node`, with a space where one element's text ends and
+   * another's starts, so a title and a subtitle don't run together.
+   * `textContent` joins them with none, and `innerText` needs layout.
+   * @param {HTMLElement} node
+   * @returns {string}
+   */
+  function readableText(node) {
+    let text = "";
+    /** @type {Node | null} */
+    let prevParent = null;
+    const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT);
+    while (walker.nextNode()) {
+      const current = walker.currentNode;
+      if (current.parentNode !== prevParent) text += " ";
+      text += current.nodeValue ?? "";
+      prevParent = current.parentNode;
+    }
+    return text.replace(/\s+/g, " ").trim();
+  }
+
+  /**
    * Whether `next` describes the same row values as `prev`. Unlike
    * `rowsEqual` (used by `ToolbarSearch`), a same-reference element does NOT
    * count as equal: `rowsEqual` short-circuits per element on `rowA ===
@@ -162,6 +183,7 @@
    * @slot {{ header: DataTableNonEmptyHeader<Row>; index: number; }} footerCell
    * @slot {{ header: DataTableNonEmptyHeader<Row>; }} headerDecorator
    * @slot {{ row: Row; }} rowDecorator
+   * @slot {{ filtered: boolean; }} empty
    */
 
   /**
@@ -276,6 +298,13 @@
    * @type {ReadonlyArray<Row>}
    */
   export let rows = [];
+
+  /**
+   * Specify the text to render in a single row spanning all columns
+   * when no rows are displayed and the `empty` slot is not provided.
+   * An empty string renders nothing.
+   */
+  export let emptyText = "";
 
   /**
    * Set the size of the data table.
@@ -1283,6 +1312,30 @@
     (isSelectionEnabled ? 1 : 0) +
     visibleHeaders.length;
 
+  // No rows are displayed: `rows` is empty, or filtering/hiding left nothing.
+  $: isEmpty =
+    rowsToVirtualize.length === 0 || (hideMode && matchedRowIdsSet.size === 0);
+  // Distinguishes "no data" from "no search results" for the `empty` slot.
+  $: emptyFiltered = isEmpty && rows.length > 0;
+  $: showEmpty = isEmpty && ($$slots.empty || emptyText !== "");
+
+  /** @type {null | HTMLElement} */
+  let emptyRef = null;
+  let emptyStatus = "";
+  $: syncEmptyStatus(showEmpty, emptyFiltered, emptyText);
+
+  /**
+   * Copy the empty row's text into the live region a tick after the row
+   * renders. Screen readers often skip a region that appears together with
+   * its text, so the region stays mounted and only its text changes.
+   * @param {boolean} shown
+   * @param {...unknown} _inputs - Other inputs that change the message.
+   */
+  async function syncEmptyStatus(shown, ..._inputs) {
+    await tick();
+    emptyStatus = shown && emptyRef ? readableText(emptyRef) : "";
+  }
+
   // Rest props go on the container, but naming and description belong on
   // the `table`. `Table` joins them with the title and description ids.
   $: ({
@@ -1627,6 +1680,15 @@
         </TableRow>
       </TableHead>
       <TableBody>
+        {#if showEmpty}
+          <tr class:bx--data-table--empty-row={true}>
+            <td colspan={totalColumns} class:bx--table-cell={true}>
+              <div bind:this={emptyRef} class:bx--data-table--empty={true}>
+                <slot name="empty" filtered={emptyFiltered}>{emptyText}</slot>
+              </div>
+            </td>
+          </tr>
+        {/if}
         {#if virtualData?.isVirtualized}
           <!-- Spacer row for offset -->
           {#if virtualData.startIndex > 0}
@@ -2248,4 +2310,9 @@
       {/if}
     </Table>
   </div>
+  {#if $$slots.empty || emptyText !== ""}
+    <span role="status" aria-live="polite" class:bx--visually-hidden={true}
+      >{emptyStatus}</span
+    >
+  {/if}
 </TableContainer>
