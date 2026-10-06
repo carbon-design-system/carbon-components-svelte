@@ -8,6 +8,7 @@ import { expect, type Locator, test } from "@playwright/test";
 const cases: { testId: string; check?: "replace" }[] = [
   { testId: "copy-input" },
   { testId: "text-input" },
+  { testId: "password-input" },
 ];
 
 async function expectFullSelection(input: Locator) {
