@@ -44,11 +44,23 @@
 >
   {#each nodes as child, index (child.id ?? index)}
     {#if Array.isArray(child.nodes)}
-      <RecursiveListItem {...child}>
+      <RecursiveListItem
+        text={child.text}
+        href={child.href}
+        html={child.html}
+        target={child.target}
+        rel={child.rel}
+      >
         <svelte:self {...child} {type} {expressive} nested />
       </RecursiveListItem>
     {:else}
-      <RecursiveListItem {...child} />
+      <RecursiveListItem
+        text={child.text}
+        href={child.href}
+        html={child.html}
+        target={child.target}
+        rel={child.rel}
+      />
     {/if}
   {/each}
 </svelte:component>
