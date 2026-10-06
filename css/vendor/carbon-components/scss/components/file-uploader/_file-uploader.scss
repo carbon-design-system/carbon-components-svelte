@@ -46,7 +46,8 @@
     cursor: pointer;
     outline: 2px solid transparent;
     outline-offset: -2px;
-    transition: $duration--fast-02 motion(standard, productive);
+    // ccs: only the color fades; `all` also faded the focus outline in
+    transition: color $duration--fast-02 motion(standard, productive);
 
     &:focus {
       outline: 2px solid $interactive-03;
