@@ -53,6 +53,25 @@ describe("Tag", () => {
     expect(consoleLog).toHaveBeenCalledWith("close");
   });
 
+  it("names each filter close button with its title and tag text", () => {
+    render(Tag);
+
+    expect(
+      screen.getByRole("button", { name: "Clear filter Filterable" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Custom title Disabled filterable" }),
+    ).toBeInTheDocument();
+  });
+
+  it("does not put aria-label on the role-less filter tag wrapper", () => {
+    render(Tag);
+
+    expect(
+      screen.getByText("Filterable").closest(".bx--tag"),
+    ).not.toHaveAttribute("aria-label");
+  });
+
   it("fires click event when clicking filterable tag body", async () => {
     const consoleLog = vi.spyOn(console, "log");
     render(Tag);
