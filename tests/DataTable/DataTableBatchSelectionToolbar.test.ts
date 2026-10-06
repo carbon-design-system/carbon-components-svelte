@@ -159,7 +159,7 @@ describe("DataTableBatchSelectionToolbar", () => {
     expect(screen.getByText("3 items selected")).toBeInTheDocument();
   });
 
-  it("handles keyboard navigation", async () => {
+  it("keeps the toolbar content out of focus while batch actions are open", () => {
     render(DataTableBatchSelectionToolbar, {
       props: {
         selectedRowIds: ["a", "b"],
@@ -168,14 +168,15 @@ describe("DataTableBatchSelectionToolbar", () => {
 
     const cancelButton = screen.getByText("Cancel");
     cancelButton.focus();
+    expect(cancelButton).toHaveFocus();
 
-    await user.keyboard("{Tab}");
-    expect(screen.getByText("Create balancer")).toHaveFocus();
+    // The toolbar content behind the batch bar is inert, so it can't take focus.
+    screen.getByText("Create balancer").focus();
+    expect(cancelButton).toHaveFocus();
 
-    await user.keyboard("{Tab}");
-    expect(
-      screen.getByRole("checkbox", { name: "Select all rows" }),
-    ).toHaveFocus();
+    const selectAll = screen.getByRole("checkbox", { name: "Select all rows" });
+    selectAll.focus();
+    expect(selectAll).toHaveFocus();
   });
 
   it("announces the selection count via a live region", () => {

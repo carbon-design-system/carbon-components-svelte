@@ -256,7 +256,10 @@ describe("Search", () => {
     expect(searchWrapper).not.toHaveClass("bx--search--expanded");
     expect(consoleLog).toHaveBeenCalledWith("collapsed");
 
-    await user.click(magnifier);
+    // Collapsing re-renders the magnifier, so query the live one.
+    const nextMagnifier = searchWrapper.querySelector(".bx--search-magnifier");
+    assert(nextMagnifier);
+    await user.click(nextMagnifier);
     await user.type(search, "test");
     await user.click(document.body);
     expect(searchWrapper).toHaveClass("bx--search--expanded");

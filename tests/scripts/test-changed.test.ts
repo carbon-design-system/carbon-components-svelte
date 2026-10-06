@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { classifyChanges } from "../../scripts/test-changed";
 
 describe("classifyChanges", () => {

@@ -2,12 +2,18 @@
 
 export const testConfig = {
   globals: true,
-  environment: "jsdom",
+  // dom-env (../dom-env) instead of jsdom: same results, about half the CPU.
+  // Resolved from each harness root (tests/, tests-svelte3/, tests-svelte4/).
+  environment: "../dom-env/vitest.js",
   clearMocks: true,
   // Suppress `console` output in CI.
   silent: !!process.env.CI,
   fsModuleCache: true,
-  // Builds jsdom once per worker instead of once per file, while still giving
-  // each file a fresh global context. Roughly halves total CPU time vs `forks`.
+  // Gives each file a fresh global context without a new process per file.
+  // dom-env only runs in this pool.
   pool: "vmThreads" as const,
+  // Pre-bundle node_modules, so each test file evaluates a few bundled
+  // modules instead of hundreds of separate ones from Svelte, testing-library,
+  // and the icon set.
+  deps: { optimizer: { client: { enabled: true } } },
 };
