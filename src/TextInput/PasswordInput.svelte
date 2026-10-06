@@ -108,7 +108,7 @@
   /** Set to `true` to select the input's text when it receives focus */
   export let selectTextOnFocus = false;
 
-  import { getContext, tick } from "svelte";
+  import { getContext, onMount, tick } from "svelte";
   import {
     FORM_CONTEXT_KEY,
     MODAL_CONTEXT_KEY,
@@ -126,6 +126,8 @@
   } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
+  import { getTooltipGroup } from "../utils/tooltip-group.js";
+  import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const ctx = getContext(FORM_CONTEXT_KEY);
@@ -144,6 +146,31 @@
   /** @type {null | HTMLButtonElement} */
   let toggleButtonRef = null;
   let tooltipOpen = false;
+
+  // The toggle's tooltip opens without a delay, but still takes the tooltip
+  // group's active slot so it never overlaps another tooltip, and skips the
+  // fade-in when it takes over from a tooltip in the same group.
+  const tooltipHandoff = createTooltipHandoff({ group: getTooltipGroup() });
+  const tooltipOthersActive = tooltipHandoff.hidden;
+  const tooltipInstant = tooltipHandoff.instant;
+
+  function showTooltip() {
+    tooltipOpen = true;
+    tooltipHandoff.claim();
+  }
+
+  function hideTooltip() {
+    tooltipOpen = false;
+    tooltipHandoff.release();
+  }
+
+  // Focus shows the tooltip at once, without the fade-in.
+  function showTooltipOnFocus() {
+    tooltipOpen = true;
+    tooltipHandoff.claim({ instant: true });
+  }
+
+  onMount(() => tooltipHandoff.release);
 
   $: ({ helperId, errorId, warnId } = buildFieldIds(id));
   $: tooltipLabel = type === "text" ? hidePasswordLabel : showPasswordLabel;
@@ -317,24 +344,19 @@
         class:bx--tooltip--align-start={tooltipAlignment === "start"}
         class:bx--tooltip--align-center={tooltipAlignment === "center"}
         class:bx--tooltip--align-end={tooltipAlignment === "end"}
+        class:bx--tooltip--hidden={!effectivePortalTooltip &&
+          $tooltipOthersActive}
+        class:bx--tooltip--instant={!effectivePortalTooltip && $tooltipInstant}
         aria-label={effectivePortalTooltip || disabled
           ? tooltipLabel
           : undefined}
         on:click={() => {
           type = type === "password" ? "text" : "password";
         }}
-        on:mouseenter={() => {
-          tooltipOpen = true;
-        }}
-        on:mouseleave={() => {
-          tooltipOpen = false;
-        }}
-        on:focus={() => {
-          tooltipOpen = true;
-        }}
-        on:blur={() => {
-          tooltipOpen = false;
-        }}
+        on:mouseenter={showTooltip}
+        on:mouseleave={hideTooltip}
+        on:focus={showTooltipOnFocus}
+        on:blur={hideTooltip}
       >
         {#if !disabled && !effectivePortalTooltip}
           <span class:bx--assistive-text={true}> {tooltipLabel} </span>
@@ -371,7 +393,7 @@
   <PortalTooltip
     anchor={toggleButtonRef}
     direction={tooltipPosition === "top" ? "top" : "bottom"}
-    open={tooltipOpen}
+    open={tooltipOpen && !$tooltipOthersActive}
     text={tooltipLabel}
   />
 {/if}

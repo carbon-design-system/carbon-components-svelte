@@ -8,8 +8,38 @@ import PasswordInputSkeleton from "./PasswordInput.skeleton.test.svelte";
 import PasswordInputSlot from "./PasswordInput.slot.test.svelte";
 import PasswordInput from "./PasswordInput.test.svelte";
 import PasswordInputInModal from "./PasswordInputInModal.test.svelte";
+import PasswordInputTooltipGroup from "./PasswordInputTooltipGroup.test.svelte";
 
 describe("PasswordInput", () => {
+  it("shows the toggle tooltip without the fade-in on focus", async () => {
+    render(PasswordInputTooltipGroup);
+    const toggle = screen.getByRole("button", { name: "Show password" });
+
+    await fireEvent.focus(toggle);
+    expect(toggle).toHaveClass("bx--tooltip--instant");
+
+    await fireEvent.blur(toggle);
+    expect(toggle).not.toHaveClass("bx--tooltip--instant");
+  });
+
+  it("shares the tooltip group's active slot with neighboring tooltips", async () => {
+    render(PasswordInputTooltipGroup);
+
+    const edit = screen.getByRole("button", { name: "Edit" });
+    const toggle = screen.getByRole("button", { name: "Show password" });
+
+    await fireEvent.mouseEnter(edit);
+    await fireEvent.focus(toggle);
+    expect(edit).toHaveClass("bx--tooltip--hidden");
+    expect(toggle).not.toHaveClass("bx--tooltip--hidden");
+    expect(toggle).toHaveClass("bx--tooltip--instant");
+
+    await fireEvent.blur(toggle);
+    await fireEvent.mouseLeave(edit);
+    await fireEvent.mouseEnter(edit);
+    expect(toggle).toHaveClass("bx--tooltip--hidden");
+  });
+
   describe("Default", () => {
     it("should render with a label", () => {
       render(PasswordInput, {
