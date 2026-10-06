@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>description-list</title>
+    <g id="description-list" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect fill="var(--cds-text-secondary, #525252)" x="76" y="43" width="40" height="6"></rect>
+        <rect fill="var(--cds-text-placeholder, #a8a8a8)" x="144" y="42" width="72" height="8"></rect>
+        <rect fill="var(--cds-border-subtle, #e0e0e0)" x="76" y="62" width="168" height="1"></rect>
+        <rect fill="var(--cds-text-secondary, #525252)" x="76" y="75" width="48" height="6"></rect>
+        <rect fill="var(--cds-text-placeholder, #a8a8a8)" x="144" y="74" width="96" height="8"></rect>
+        <rect fill="var(--cds-border-subtle, #e0e0e0)" x="76" y="94" width="168" height="1"></rect>
+        <rect fill="var(--cds-text-secondary, #525252)" x="76" y="107" width="32" height="6"></rect>
+        <rect fill="var(--cds-text-placeholder, #a8a8a8)" x="144" y="106" width="60" height="8"></rect>
+        <rect fill="var(--cds-border-subtle, #e0e0e0)" x="76" y="126" width="168" height="1"></rect>
+        <rect fill="var(--cds-text-secondary, #525252)" x="76" y="139" width="44" height="6"></rect>
+        <rect fill="var(--cds-text-placeholder, #a8a8a8)" x="144" y="138" width="84" height="8"></rect>
+    </g>
+</svg>

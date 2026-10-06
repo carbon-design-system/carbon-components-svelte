@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>carousel</title>
+    <g id="carousel" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="slide">
+            <rect id="surface" fill="var(--cds-field-01, #f4f4f4)" x="76" y="28" width="168" height="92"></rect>
+            <rect id="media" fill="var(--cds-text-disabled, #c6c6c6)" x="88" y="40" width="56" height="68"></rect>
+            <rect id="heading" fill="var(--cds-text-placeholder, #a8a8a8)" x="156" y="44" width="64" height="8"></rect>
+            <rect id="text-1" fill="var(--cds-text-disabled, #c6c6c6)" x="156" y="60" width="76" height="6"></rect>
+            <rect id="text-2" fill="var(--cds-text-disabled, #c6c6c6)" x="156" y="72" width="60" height="6"></rect>
+        </g>
+        <g id="controls">
+            <rect id="counter" fill="var(--cds-text-secondary, #525252)" x="146" y="142" width="24" height="8"></rect>
+            <rect id="previous" fill="var(--cds-ui-02, #ffffff)" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="1" x="180.5" y="132.5" width="31" height="27"></rect>
+            <path transform="translate(188, 138) scale(0.5)" fill="var(--cds-text-disabled, #c6c6c6)" d="M10 16 20 6 21.4 7.4 12.8 16 21.4 24.6 20 26z"></path>
+            <rect id="next" fill="var(--cds-ui-02, #ffffff)" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="1" x="213.5" y="132.5" width="31" height="27"></rect>
+            <path transform="translate(221, 138) scale(0.5)" fill="var(--cds-icon-primary, #161616)" d="M22 16 12 26 10.6 24.6 19.2 16 10.6 7.4 12 6z"></path>
+        </g>
+    </g>
+</svg>

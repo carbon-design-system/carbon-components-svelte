@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>toggle-button-group</title>
+    <g id="toggle-button-group" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="label" fill="var(--cds-text-disabled, #c6c6c6)" x="100" y="62" width="72" height="8"></rect>
+        <g id="bold">
+            <rect fill="var(--cds-border-subtle, #e0e0e0)" x="100" y="80" width="40" height="40"></rect>
+            <rect id="pressed" fill="var(--cds-interactive-01, #0f62fe)" x="100" y="118" width="40" height="2"></rect>
+            <path transform="translate(112, 92) scale(0.5)" fill="var(--cds-icon-primary, #161616)" d="M18.25,25H9V7h8.5a5.25,5.25,0,0,1,4,8.65A5.25,5.25,0,0,1,18.25,25ZM12,22h6.23a2.25,2.25,0,1,0,0-4.5H12Zm0-7.5h5.5a2.25,2.25,0,1,0,0-4.5H12Z"></path>
+        </g>
+        <g id="italic">
+            <rect fill="var(--cds-field-01, #f4f4f4)" x="140" y="80" width="40" height="40"></rect>
+            <path transform="translate(152, 92) scale(0.5)" fill="var(--cds-text-secondary, #525252)" d="M25 9 25 7 12 7 12 9 17.14 9 12.77 23 7 23 7 25 20 25 20 23 14.86 23 19.23 9 25 9z"></path>
+        </g>
+        <g id="underline">
+            <rect fill="var(--cds-border-subtle, #e0e0e0)" x="180" y="80" width="40" height="40"></rect>
+            <rect id="pressed" fill="var(--cds-interactive-01, #0f62fe)" x="180" y="118" width="40" height="2"></rect>
+            <path transform="translate(192, 92) scale(0.5)" fill="var(--cds-icon-primary, #161616)" d="M4 26H28V28H4z M16,23a7,7,0,0,1-7-7V5h2V16a5,5,0,0,0,10,0V5h2V16A7,7,0,0,1,16,23Z"></path>
+        </g>
+    </g>
+</svg>
