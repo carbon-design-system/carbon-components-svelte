@@ -198,6 +198,20 @@ Close the popover when pressing <DocKbd label="Escape" /> with `closeOnEscape`. 
     </Popover>
 </div>
 
+### Custom panels
+
+Use the `dismiss` action on a panel you build yourself to close it when the user clicks outside. Set `enabled` to the open state so the action adds the `window` listener only while the panel is open, and a closed panel costs nothing. Pass `type: "click"` with a `handler` that closes the panel when the click lands outside it.
+
+The panel's own trigger is also outside the panel, so the handler ignores clicks on the trigger and lets the trigger toggle the state.
+
+<FileSource src="/framed/Popover/DismissBasic" />
+
+Pass `listeners` to attach more than one listener, each with its own `type` and `handler`. Combine a `keydown` listener with a `click` listener to close the panel on <DocKbd label="Escape" /> and on an outside click. Listeners with the same `type` and options share one `window` listener across every control on the page.
+
+The action registers its listeners after a macrotask, not synchronously. Enabling it inside a click, such as a button that sets `open` to `true`, therefore never dismisses the panel with the same click that opened it.
+
+<FileSource src="/framed/Popover/DismissMultiple" />
+
 ## External element
 
 Manage open state with an external element, like a button, using `open`.
