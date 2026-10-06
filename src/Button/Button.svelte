@@ -177,6 +177,7 @@
   const tooltipHandoff = createTooltipHandoff({ group: getTooltipGroup() });
   const tooltipActive = tooltipHandoff.active;
   const tooltipOthersActive = tooltipHandoff.hidden;
+  const tooltipInstant = tooltipHandoff.instant;
 
   let hovered = false;
   let focused = false;
@@ -205,15 +206,18 @@
 
   $: tooltipHidden = hasTooltipContent && !hideTooltip && $tooltipOthersActive;
 
+  // The inline tooltip is shown by CSS `:hover`/`:focus`; these only hold
+  // the active slot so the group can hide other tooltips and skip the fade.
   function handleMouseenter() {
-    if (hasTooltip) {
-      tooltipHandoff.claim();
-    }
+    if (!hasTooltip) return;
+    hovered = true;
+    tooltipHandoff.claim();
   }
 
   function handleMouseleave() {
-    if (usePortal) return;
-    tooltipHandoff.release();
+    if (!hasTooltip) return;
+    hovered = false;
+    if (!focused) tooltipHandoff.release();
   }
 
   function handlePortalMouseEnter() {
@@ -231,14 +235,15 @@
     });
   }
 
-  function handlePortalFocus() {
-    if (!usePortal || disabled) return;
+  // Focus shows the tooltip at once, without the fade-in.
+  function handleFocus() {
+    if (!(hasTooltip || usePortal) || disabled) return;
     focused = true;
-    tooltipHandoff.claim();
+    tooltipHandoff.claim({ instant: true });
   }
 
-  function handlePortalBlur() {
-    if (!usePortal) return;
+  function handleBlur() {
+    if (!(hasTooltip || usePortal)) return;
     focused = false;
     if (!hovered) tooltipHandoff.release();
   }
@@ -306,6 +311,7 @@
         tooltipAlignment &&
         `bx--tooltip--align-${tooltipAlignment}`,
       hasTooltip && tooltipHidden && "bx--tooltip--hidden",
+      hasTooltip && $tooltipInstant && "bx--tooltip--instant",
       hasIconOnly && isSelected && kind === "ghost" && "bx--btn--selected",
       $$restProps.class,
     ]
@@ -339,9 +345,9 @@
         on:click
         on:mousedown
         on:focus
-        on:focus={handlePortalFocus}
+        on:focus={handleFocus}
         on:blur
-        on:blur={handlePortalBlur}
+        on:blur={handleBlur}
         on:mouseover
         on:mouseenter
         on:mouseenter={handleMouseenter}
@@ -388,9 +394,9 @@
       on:click
       on:mousedown
       on:focus
-      on:focus={handlePortalFocus}
+      on:focus={handleFocus}
       on:blur
-      on:blur={handlePortalBlur}
+      on:blur={handleBlur}
       on:mouseover
       on:mouseenter
       on:mouseenter={handleMouseenter}
@@ -438,9 +444,9 @@
       on:click
       on:mousedown
       on:focus
-      on:focus={handlePortalFocus}
+      on:focus={handleFocus}
       on:blur
-      on:blur={handlePortalBlur}
+      on:blur={handleBlur}
       on:mouseover
       on:mouseenter
       on:mouseenter={handleMouseenter}
@@ -488,9 +494,9 @@
     on:click
     on:mousedown
     on:focus
-    on:focus={handlePortalFocus}
+    on:focus={handleFocus}
     on:blur
-    on:blur={handlePortalBlur}
+    on:blur={handleBlur}
     on:mouseover
     on:mouseenter
     on:mouseenter={handleMouseenter}
