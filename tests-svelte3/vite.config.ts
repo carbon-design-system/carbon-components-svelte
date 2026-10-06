@@ -42,5 +42,9 @@ export default defineConfig({
     // (`@testing-library/dom` ships ESM in a CommonJS package), so let Vite
     // transform them. Inline all of them so jest-dom extends the same `expect`.
     server: { deps: { inline: [/@testing-library\//] } },
+    // Pre-bundling fails at startup in CI here ("Missing
+    // ./internal/disclose-version specifier in svelte"), likely Svelte 3's
+    // package lacking an export a newer tool expects. Svelte 4/5 keep it.
+    deps: { optimizer: { client: { enabled: false } } },
   },
 });

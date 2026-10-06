@@ -22,7 +22,9 @@ const SSR_TESTS = ["**/*.ssr.test.ts", "utils/ssr.test.ts"];
  */
 export function createConfig({
   dev = process.env.NODE_ENV === "production" ? false : undefined,
-}: { dev?: boolean } = {}) {
+}: {
+  dev?: boolean;
+} = {}) {
   return defineConfig({
     root: "./tests",
     plugins: [
