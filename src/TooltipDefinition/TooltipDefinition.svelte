@@ -37,15 +37,17 @@
 
   /**
    * Specify the duration in milliseconds to delay before displaying the tooltip.
-   * @type {number}
+   * Defaults to the enclosing `TooltipGroup`'s delay, or `100`.
+   * @type {number | undefined}
    */
-  export let enterDelayMs = TOOLTIP_ENTER_DELAY_MS;
+  export let enterDelayMs = undefined;
 
   /**
    * Specify the duration in milliseconds to delay before hiding the tooltip.
-   * @type {number}
+   * Defaults to the enclosing `TooltipGroup`'s delay, or `300`.
+   * @type {number | undefined}
    */
-  export let leaveDelayMs = TOOLTIP_LEAVE_DELAY_MS;
+  export let leaveDelayMs = undefined;
 
   /**
    * Obtain a reference to the button HTML element.
@@ -63,14 +65,11 @@
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
-  import {
-    TOOLTIP_ENTER_DELAY_MS,
-    TOOLTIP_LEAVE_DELAY_MS,
-  } from "../constants/timing.js";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
-  import { createDelayedSetter } from "../utils/delayed-setter.js";
   import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
+  import { getTooltipGroup } from "../utils/tooltip-group.js";
+  import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const insideModal = getContext(MODAL_CONTEXT_KEY);
@@ -84,13 +83,15 @@
   const dispatch = createEventDispatcher();
   const notifyOpenChange = createOpenCloseDispatcher(dispatch);
 
-  const scheduleOpen = createDelayedSetter();
-
-  function setOpenDelayed(value, delay = 0) {
-    scheduleOpen(delay, () => {
-      open = value;
-    });
-  }
+  // Hover/focus scheduling shared with the tooltip group: only one tooltip
+  // shows at a time, and moving between group members skips the delay.
+  const tooltipHandoff = createTooltipHandoff({
+    group: getTooltipGroup(),
+    enterDelayMs: () => enterDelayMs,
+    leaveDelayMs: () => leaveDelayMs,
+    hoverable: true,
+  });
+  const tooltipOthersActive = tooltipHandoff.hidden;
 
   function hide() {
     open = false;
@@ -104,11 +105,33 @@
     open = !open;
   }
 
+  function scheduleShow() {
+    tooltipHandoff.scheduleEnter(show);
+  }
+
+  function scheduleHide() {
+    tooltipHandoff.scheduleLeave(hide);
+  }
+
+  // Pointer moved onto the portalled tooltip: keep it open.
+  function keepOpen() {
+    tooltipHandoff.cancel();
+    show();
+  }
+
+  // Hold the active slot while open by any means, including `bind:open`.
+  $: if (open) tooltipHandoff.claim();
+  else tooltipHandoff.release();
+
+  // Another tooltip took the slot; hide this one until it is released.
+  $: shown = open && !$tooltipOthersActive;
+
   $: notifyOpenChange(open);
 
   onMount(() => {
     return () => {
-      scheduleOpen.cancel();
+      tooltipHandoff.cancel();
+      tooltipHandoff.release();
     };
   });
   function handleKeydown(event) {
@@ -122,10 +145,8 @@
   class:bx--tooltip--definition={true}
   class:bx--tooltip--a11y={true}
   {...$$restProps}
-  on:mouseenter={clickToOpen
-    ? undefined
-    : () => setOpenDelayed(true, enterDelayMs)}
-  on:mouseleave={() => setOpenDelayed(false, leaveDelayMs)}
+  on:mouseenter={clickToOpen ? undefined : scheduleShow}
+  on:mouseleave={scheduleHide}
 >
   <button
     bind:this={ref}
@@ -135,8 +156,8 @@
     class:bx--tooltip--a11y={!effectivePortalTooltip}
     class:bx--tooltip__trigger={true}
     class:bx--tooltip__trigger--definition={true}
-    class:bx--tooltip--hidden={!effectivePortalTooltip && !open}
-    class:bx--tooltip--visible={!effectivePortalTooltip && open}
+    class:bx--tooltip--hidden={!effectivePortalTooltip && !shown}
+    class:bx--tooltip--visible={!effectivePortalTooltip && shown}
     class:bx--tooltip--top={!effectivePortalTooltip && direction === "top"}
     class:bx--tooltip--bottom={!effectivePortalTooltip &&
       direction === "bottom"}
@@ -167,7 +188,7 @@
   <FloatingPortal
     anchor={ref}
     {direction}
-    {open}
+    open={shown}
     gapTop={direction === "top" ? PORTAL_VERTICAL_GAP_TOP_PX : 0}
     gapBottom={direction === "bottom" ? PORTAL_VERTICAL_GAP_BOTTOM_PX : 0}
     intrinsicAlign={align}
@@ -179,10 +200,8 @@
       class:bx--tooltip-portal={true}
       data-direction={actualDirection ?? direction}
       data-tooltip-type="definition"
-      on:mouseenter={clickToOpen ? undefined : () => setOpenDelayed(true, 0)}
-      on:mouseleave={clickToOpen
-        ? undefined
-        : () => setOpenDelayed(false, leaveDelayMs)}
+      on:mouseenter={clickToOpen ? undefined : keepOpen}
+      on:mouseleave={clickToOpen ? undefined : scheduleHide}
     >
       <span class:bx--tooltip-portal__caret={true}></span>
       <span
