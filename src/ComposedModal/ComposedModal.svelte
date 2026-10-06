@@ -71,6 +71,7 @@
   const titleId = `${modalId}-title`;
 
   let innerModalRef = null;
+  let mounted = false;
 
   const lifecycle = createDialogLifecycle({
     dispatch,
@@ -154,7 +155,28 @@
   $: $sharedOpen = open;
   trackModal(sharedOpen);
 
+  // Name the dialog from ModalHeader's label/title. The header registers
+  // them after this element is serialized, so on the server (and the first
+  // client render) point at its heading ids instead. An id with no element
+  // is ignored; once mounted with no heading, there is nothing to point at.
+  // The server cannot tell which headings the header renders, so it names the
+  // dialog from both ("Label Title"); after mount the name is `$label || $title`
+  // (the label alone when both are set). The name is a superset until then.
+  $: consumerLabel = $$props["aria-label"];
+  $: consumerLabelledby = $$props["aria-labelledby"];
+  $: ariaLabel =
+    consumerLabel ??
+    (consumerLabelledby === undefined
+      ? $label || $title || undefined
+      : undefined);
+  $: ariaLabelledby =
+    consumerLabelledby ??
+    (consumerLabel === undefined && !mounted && !$label && !$title
+      ? `${labelId} ${titleId}`
+      : undefined);
+
   onMount(() => {
+    mounted = true;
     lifecycle.setMounted();
     if (open) {
       tick().then(() => {
@@ -176,6 +198,7 @@
   inert={open ? undefined : true}
   {...$$restProps}
   aria-label={undefined}
+  aria-labelledby={undefined}
   on:keydown
   on:keydown={(event) => {
     if (open) {
@@ -213,7 +236,8 @@
     role={alert ? "alertdialog" : "dialog"}
     aria-describedby={alert ? $bodyId : undefined}
     aria-modal="true"
-    aria-label={$$props["aria-label"] ?? ($label || $title || undefined)}
+    aria-label={ariaLabel}
+    aria-labelledby={ariaLabelledby}
     class:bx--modal-container={true}
     class:bx--modal-container--xs={size === "xs"}
     class:bx--modal-container--sm={size === "sm"}
