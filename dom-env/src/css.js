@@ -200,7 +200,7 @@ function evalProduct(text) {
     let term;
     if (factor.startsWith("(") && factor.endsWith(")")) {
       const sum = evalSum(factor.slice(1, -1));
-      if (!sum || sum.length !== 1) return null;
+      if (sum?.length !== 1) return null;
       term = sum[0];
     } else {
       const m = NUM_RE.exec(factor);
