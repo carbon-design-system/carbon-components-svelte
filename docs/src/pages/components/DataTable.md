@@ -1010,7 +1010,7 @@ Filter rows with `shouldFilterRows`.
 
 ### Client-side
 
-Set `shouldFilterRows` to `true` to enable client-side filtering. The default filter compares cell values as strings.
+Set `shouldFilterRows` to `true` to enable client-side filtering. The default filter compares cell values as strings. When a search matches nothing, show a message with the [empty state](#empty-state).
 
 For pagination with filtering, bind to `filteredRowIds` and pass its length to the pagination totalItems.
 
@@ -1045,6 +1045,38 @@ Set `filterMode` to `"hide"` to keep every row mounted and hide non-matching row
 Setting `filterMode` to `"hide"` has no effect when pageSize is set or virtualization is enabled. Selection, select all, and filteredRowIds still reflect matching rows only.
 
 <FileSource src="/framed/DataTable/DataTableFilterMode" />
+
+## Empty state
+
+When no rows are displayed, the table renders one row that spans every column. It shows `noResultsText` ("No results") when a filter matches none, and `emptyText` when `rows` is empty. `emptyText` is empty by default, so a table that loads its rows later doesn't flash a message before they arrive. Set it once the table has loaded with no rows. The headers stay visible, so the table keeps its shape. An empty string renders no row.
+
+### Text
+
+Set `emptyText` and `noResultsText` to say what the table holds.
+
+<DataTable
+  headers="{[
+    { key: "name", value: "Name" },
+    { key: "region", value: "Region" },
+    { key: "status", value: "Status" }
+  ]}"
+  rows="{[]}"
+  emptyText="No deployments in this region yet"
+/>
+
+### Slots
+
+Use the `empty` and `noResults` slots for richer content, such as an [EmptyState](/components/EmptyState) with an action. Screen readers hear the row's text when it appears, from a status region the table keeps mounted, so don't set `role="status"` on the content.
+
+Type a search that matches nothing, then use the action in each state.
+
+<FileSource src="/framed/DataTable/DataTableEmptySlot" />
+
+| Do | Why |
+| --- | --- |
+| Lead with a positive title ("Start by adding a deployment") | Carbon's empty-state pattern asks for the next step, not a dead end |
+| Say why the search found nothing ("No results for ...") | Tells no data apart from no match |
+| Offer one action | More than one competes for attention |
 
 ## Row styling
 
