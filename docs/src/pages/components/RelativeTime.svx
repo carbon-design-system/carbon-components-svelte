@@ -83,6 +83,15 @@ Hover over the rendered text to see the absolute time, sourced from the `title` 
   titleFormatOptions={{ dateStyle: "full", timeStyle: "long" }}
 />
 
+Set `timeZone` to an IANA time zone to format the `title` in that zone instead of the runtime default. A server often runs in UTC while the browser runs in the viewer's zone, so without a fixed value the prerendered `title` differs from the one the client prints. Pass the same `timeZone` on both sides to keep them identical.
+
+<RelativeTime
+  date={now - 5 * 60 * 1000}
+  {now}
+  locale="en-US"
+  timeZone="Asia/Tokyo"
+/>
+
 ## Live
 
 Leave `live` at its default of `true` to keep the output refreshing on an adaptive timer as time passes.
