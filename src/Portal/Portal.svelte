@@ -21,6 +21,9 @@
 
   import { onMount } from "svelte";
 
+  // Render nothing on the server and on the first client render, so the
+  // hydrated markup matches the server's. The content mounts after that,
+  // and the block below moves it into the target.
   let mounted = false;
 
   onMount(() => {
@@ -53,6 +56,8 @@
   }
 </script>
 
-<svelte:element this={tag} bind:this={ref} data-portal {...$$restProps}>
-  <slot />
-</svelte:element>
+{#if mounted}
+  <svelte:element this={tag} bind:this={ref} data-portal {...$$restProps}>
+    <slot />
+  </svelte:element>
+{/if}

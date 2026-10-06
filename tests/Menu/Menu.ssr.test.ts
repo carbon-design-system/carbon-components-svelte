@@ -8,19 +8,16 @@ describe("Menu server render", () => {
     expect(renderSSR(Menu).html).toBe("");
   });
 
-  it("renders its items while open without a rejected focus task", async () => {
+  // The menu is portalled, so its items mount on the client only.
+  it("renders nothing while open without a rejected focus task", async () => {
     const onRejection = vi.fn();
     process.on("unhandledRejection", onRejection);
 
-    const { document } = renderSSR(Menu, { open: true });
+    const { html } = renderSSR(Menu, { open: true });
     await flushRejectionQueue();
     process.off("unhandledRejection", onRejection);
 
-    expect(
-      [...document.querySelectorAll('[role="menuitem"]')].map(
-        (item) => item.textContent,
-      ),
-    ).toEqual(["Copy", "Paste"]);
+    expect(html).toBe("");
     expect(onRejection).not.toHaveBeenCalled();
   });
 });
