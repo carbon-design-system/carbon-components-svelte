@@ -1,0 +1,122 @@
+---
+description: TooltipGroup groups tooltip triggers so that once one tooltip is open, moving to another opens it instantly, with no enter delay or fade-in.
+---
+
+<script>
+  import {
+    Button,
+    ContentSwitcher,
+    CopyButton,
+    Stack,
+    Switch,
+    TooltipDefinition,
+    TooltipGroup,
+    TooltipIcon,
+  } from "carbon-components-svelte";
+  import Copy from "carbon-icons-svelte/lib/Copy.svelte";
+  import Edit from "carbon-icons-svelte/lib/Edit.svelte";
+  import Grid from "carbon-icons-svelte/lib/Grid.svelte";
+  import Information from "carbon-icons-svelte/lib/Information.svelte";
+  import List from "carbon-icons-svelte/lib/List.svelte";
+  import Share from "carbon-icons-svelte/lib/Share.svelte";
+  import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
+</script>
+
+## Basic
+
+Wrap related tooltip triggers in a `TooltipGroup`. The first tooltip opens after the enter delay. While it is open, or shortly after it closes, hovering or focusing another trigger in the group opens that one right away, without the fade-in, so it looks like one tooltip moving along the row. Moving the pointer off the row hides the tooltip at once. Tabbing through the row with the keyboard shows each tooltip immediately, also without the fade-in.
+
+`TooltipGroup` renders no element of its own, so it doesn't affect layout. Use it inside or around whatever arranges the triggers.
+
+<TooltipGroup>
+  <Stack orientation="horizontal" gap={1}>
+    <Button kind="ghost" icon={Edit} iconDescription="Edit" />
+    <Button kind="ghost" icon={Copy} iconDescription="Duplicate" />
+    <Button kind="ghost" icon={Share} iconDescription="Share" />
+    <Button kind="ghost" icon={TrashCan} iconDescription="Delete" />
+  </Stack>
+</TooltipGroup>
+
+## Members
+
+Any component with a hover or focus tooltip joins the nearest group. Members of different kinds hand off to each other.
+
+<TooltipGroup>
+  <Stack orientation="horizontal" gap={4} align="center">
+    <Button kind="ghost" icon={Edit} iconDescription="Edit" />
+    <CopyButton text="https://example.com" iconDescription="Copy link" />
+    <TooltipIcon tooltipText="Synced 2 minutes ago" icon={Information} />
+    <TooltipDefinition tooltipText="Annual percentage rate">APR</TooltipDefinition>
+  </Stack>
+</TooltipGroup>
+
+| Component | Joins the group |
+| --- | --- |
+| `Button` | When icon-only with an `iconDescription` |
+| `CopyButton` | Always |
+| `TooltipIcon` | Always |
+| `TooltipDefinition` | When it opens on hover (not `clickToOpen`) |
+| `Tooltip` | Always. A hover-opened `Tooltip` closes when another tooltip opens; one opened by keyboard stays open |
+| `PasswordInput` | Its visibility toggle, which opens without a delay but still hands off |
+| `Switch`, `Tab`, `ToggleButton` | When icon-only |
+| `UserAvatar` | When it has `tooltipText` |
+
+## Built-in groups
+
+`ContentSwitcher`, `Tabs`, `TabsVertical`, `ToggleButtonGroup`, and `UserAvatarGroup` are tooltip groups already, so their own tooltips hand off to each other without a wrapper. Put one inside a `TooltipGroup` to join the group around it: here the view switcher hands off to the buttons next to it.
+
+<TooltipGroup>
+  <Stack orientation="horizontal" gap={4} align="center">
+    <ContentSwitcher size="sm">
+      <Switch icon={List} text="List view" />
+      <Switch icon={Grid} text="Grid view" />
+    </ContentSwitcher>
+    <Stack orientation="horizontal" gap={1}>
+      <Button kind="ghost" size="small" icon={Edit} iconDescription="Edit" />
+      <Button kind="ghost" size="small" icon={TrashCan} iconDescription="Delete" />
+    </Stack>
+  </Stack>
+</TooltipGroup>
+
+Nested groups always join the enclosing group. A nested `TooltipGroup` is still useful for setting different delays on part of a group.
+
+## Group boundaries
+
+Only one tooltip is open at a time on the page. Moving from a tooltip in one group to a trigger in another waits for the full enter delay. Hover across from the left group to the right one to compare.
+
+<Stack orientation="horizontal" gap={7}>
+  <TooltipGroup>
+    <Stack orientation="horizontal" gap={1}>
+      <Button kind="ghost" icon={Edit} iconDescription="Edit" />
+      <Button kind="ghost" icon={Copy} iconDescription="Duplicate" />
+    </Stack>
+  </TooltipGroup>
+  <TooltipGroup>
+    <Stack orientation="horizontal" gap={1}>
+      <Button kind="ghost" icon={Share} iconDescription="Share" />
+      <Button kind="ghost" icon={TrashCan} iconDescription="Delete" />
+    </Stack>
+  </TooltipGroup>
+</Stack>
+
+Tooltips outside any `TooltipGroup` share one page-wide group, so neighboring standalone tooltips still hand off to each other. Add a `TooltipGroup` to mark which triggers belong together, or to set the timing for them.
+
+## Timing
+
+Set `enterDelayMs`, `leaveDelayMs`, and `skipDelayMs` to change the timing for every member. A member's own `enterDelayMs` or `leaveDelayMs` prop, where it has one, takes precedence.
+
+| Prop | Default | Effect |
+| --- | --- | --- |
+| `enterDelayMs` | `100` | Delay before the first tooltip in the group opens |
+| `leaveDelayMs` | `0` for icon tooltips, `300` for `Tooltip` and `TooltipDefinition` | Delay before an open tooltip closes. `Tooltip` and `TooltipDefinition` wait so the pointer can move onto them |
+| `skipDelayMs` | `300` | How long after a tooltip closes that the next one in the group still opens instantly |
+
+In this group the first tooltip takes half a second to appear, and handoff keeps working for a full second after the last one closes.
+
+<TooltipGroup enterDelayMs={500} skipDelayMs={1000}>
+  <Stack orientation="horizontal" gap={1}>
+    <Button kind="ghost" icon={Edit} iconDescription="Edit" />
+    <Button kind="ghost" icon={Copy} iconDescription="Duplicate" />
+    <Button kind="ghost" icon={Share} iconDescription="Share" />
+  </Stack>
+</TooltipGroup>

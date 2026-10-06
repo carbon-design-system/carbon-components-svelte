@@ -96,6 +96,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   Toolbar: "0.2.0",
   Tooltip: "0.2.0",
   TooltipDefinition: "0.2.0",
+  TooltipGroup: "0.114.0",
   TooltipIcon: "0.2.0",
   TreeView: "0.39.0",
   Truncate: "0.29.0",

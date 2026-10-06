@@ -106,6 +106,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "Toggletip",
       "Tooltip",
       "TooltipDefinition",
+      "TooltipGroup",
       "TooltipIcon",
     ],
   },
