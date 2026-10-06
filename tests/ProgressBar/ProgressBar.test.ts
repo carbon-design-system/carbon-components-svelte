@@ -175,6 +175,10 @@ describe("ProgressBar", () => {
 
     const customLabel = screen.getByText("Custom label content");
     expect(customLabel).toBeInTheDocument();
+    expect(customLabel.parentElement).toHaveClass(
+      "bx--progress-bar__label-text",
+      "bx--progress-bar__label-text--slotted",
+    );
   });
 
   it("uses valueText for aria-valuetext and shows it in the label row", () => {
