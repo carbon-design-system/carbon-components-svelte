@@ -517,3 +517,21 @@
 @include exports('overflow-menu-breadcrumb-caret') {
   @include overflow-menu-breadcrumb-caret;
 }
+
+// carbon-components-svelte patch (overflow-menu-forced-colors)
+// The OverflowMenu surface is separated from the page only by a box-shadow, which
+// forced-colors mode drops. A transparent outline is repainted as a visible
+// system colour there.
+
+/// OverflowMenu surface edge in forced-colors mode.
+/// @access private
+/// @group overflow-menu
+@mixin overflow-menu-forced-colors {
+  .#{$prefix}--overflow-menu-options {
+    @include high-contrast-mode("outline");
+  }
+}
+
+@include exports("overflow-menu-forced-colors") {
+  @include overflow-menu-forced-colors;
+}

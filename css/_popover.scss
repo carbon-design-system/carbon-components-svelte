@@ -39,6 +39,8 @@
 
   .#{$prefix}--popover-contents {
     @include box-shadow;
+    // The box-shadow is the only edge; forced colors drop it.
+    @include high-contrast-mode("outline");
 
     position: relative;
     width: max-content;
@@ -268,6 +270,40 @@
     bottom: 0;
     width: var(--cds-popover-offset);
     transform: translateX(100%);
+  }
+
+  // The caret is the rotated 8px box layered over the surface. Forced colors
+  // paint it Canvas, so it would read as a gap in the surface outline. Edge the
+  // two sides that face away from the surface (the apex) with CanvasText. The
+  // box stays 8px (border-box), so nothing shifts. The `::before` box only
+  // carries the dropped box-shadow and sits behind the surface.
+  $caret-edges: (
+    "bottom": (top, left),
+    "bottom-left": (top, left),
+    "bottom-right": (top, left),
+    "top": (bottom, right),
+    "top-left": (bottom, right),
+    "top-right": (bottom, right),
+    "right": (bottom, left),
+    "right-top": (bottom, left),
+    "right-bottom": (bottom, left),
+    "left": (top, right),
+    "left-top": (top, right),
+    "left-bottom": (top, right),
+  );
+
+  @include high-contrast-mode {
+    @each $direction, $edges in $caret-edges {
+      .#{$prefix}--popover--caret.#{$prefix}--popover--#{$direction}
+        .#{$prefix}--popover-contents::after {
+        box-sizing: border-box;
+        border: 0 solid CanvasText;
+
+        @each $edge in $edges {
+          border-#{$edge}-width: 1px;
+        }
+      }
+    }
   }
 }
 
