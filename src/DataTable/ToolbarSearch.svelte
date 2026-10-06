@@ -84,7 +84,8 @@
     unsubscribe?.();
     unsubscribe = null;
     if (shouldFilterRows) {
-      unsubscribe = ctx?.tableRows.subscribe((tableRows) => {
+      // Outside a `DataTable` there is no context, so there are no rows to filter.
+      unsubscribe = ctx.tableRows?.subscribe((tableRows) => {
         // Only update if the rows have actually changed.
         // This approach works in both Svelte 4 and Svelte 5.
         if (!rowsEqual(tableRows, rows)) {
