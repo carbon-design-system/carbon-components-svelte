@@ -12,13 +12,17 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SSR_TESTS = ["**/*.ssr.test.ts", "utils/ssr.test.ts"];
 
 /**
- * `dev` left `undefined` (the default) omits `compilerOptions` entirely, so
- * `bun run test` keeps vite-plugin-svelte's own default. `vite.config.perf.ts`
- * passes `dev: false` to disable Svelte 5's dev-mode instrumentation (stack
- * capture on every state write), which otherwise dominates jsdom timings —
- * see "Counting redundant work" in CONTRIBUTING.md.
+ * `dev` left `undefined` omits `compilerOptions` entirely, so `bun run test`
+ * keeps vite-plugin-svelte's own default. `dev: false` disables Svelte 5's
+ * dev-mode instrumentation (stack capture on every state write) — see
+ * "Counting redundant work" in CONTRIBUTING.md. It defaults to `false` when
+ * `NODE_ENV=production`, which also switches the Svelte runtime's own `DEV`
+ * flag (read from `esm-env`), so one variable turns both off; CI sets it on
+ * pull requests.
  */
-export function createConfig({ dev }: { dev?: boolean } = {}) {
+export function createConfig({
+  dev = process.env.NODE_ENV === "production" ? false : undefined,
+}: { dev?: boolean } = {}) {
   return defineConfig({
     root: "./tests",
     plugins: [

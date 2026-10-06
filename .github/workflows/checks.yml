@@ -145,8 +145,15 @@ jobs:
       # directory name — `vitest --changed` doesn't reliably resolve .svelte
       # SFCs and falls back to running everything). Push/dispatch/css-touching
       # PRs run the full suite.
+      # Pull requests test against Svelte's production build, which skips the
+      # dev-mode instrumentation (a stack capture on every state write) and
+      # runs about 1.35x faster. Pushes to master keep dev mode, so Svelte's
+      # dev-only checks still run on everything that merges.
       - name: Test (Svelte 5)
         run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            export NODE_ENV=production
+          fi
           if [ "${{ github.event_name }}" = "pull_request" ] && [ "${{ needs.changes.outputs.css }}" != "true" ]; then
             bun scripts/test-changed.ts "origin/${{ github.base_ref }}"
           else
