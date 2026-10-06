@@ -6,6 +6,7 @@ import TooltipIconSize from "./TooltipIcon.size.test.svelte";
 import TooltipIcon from "./TooltipIcon.test.svelte";
 import TooltipIconMultiple from "./TooltipIconMultiple.test.svelte";
 import TooltipIconPortal from "./TooltipIconPortal.test.svelte";
+import TooltipIconPortalEscape from "./TooltipIconPortalEscape.test.svelte";
 import TooltipIconReactive from "./TooltipIconReactive.test.svelte";
 
 type Props = ComponentProps<TooltipIconComponent>;
@@ -404,6 +405,79 @@ describe("TooltipIcon", () => {
       const button = screen.getByRole("button");
       expect(button).not.toHaveClass("bx--tooltip--a11y");
       expect(button).not.toHaveClass("bx--tooltip--top");
+    });
+
+    it("names the trigger with tooltipText when using portal", () => {
+      render(TooltipIconPortalEscape);
+
+      expect(
+        screen.getByRole("button", { name: "Portal tooltip" }),
+      ).toBeInTheDocument();
+    });
+
+    it("hides a focused portal tooltip on Escape without bubbling", async () => {
+      const onParentKeydown = vi.fn();
+      render(TooltipIconPortalEscape, { props: { onParentKeydown } });
+
+      await user.tab();
+      expect(screen.getByRole("tooltip")).toBeInTheDocument();
+
+      await user.keyboard("{Escape}");
+      expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+      expect(screen.getByRole("button")).toHaveFocus();
+      expect(onParentKeydown).not.toHaveBeenCalled();
+
+      // With nothing left to dismiss, Escape reaches ancestors (a Modal).
+      await user.keyboard("{Escape}");
+      expect(onParentKeydown).toHaveBeenCalledTimes(1);
+    });
+
+    it("reopens a portal tooltip on keyboard activation after Escape", async () => {
+      render(TooltipIconPortalEscape);
+
+      await user.tab();
+      expect(screen.getByRole("tooltip")).toBeInTheDocument();
+
+      await user.keyboard("{Escape}");
+      expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+
+      await user.keyboard("{Enter}");
+      expect(screen.getByRole("tooltip")).toBeInTheDocument();
+    });
+
+    it("hides a hovered portal tooltip on Escape without reaching ancestors when focus is elsewhere", async () => {
+      const onParentKeydown = vi.fn();
+      render(TooltipIconPortalEscape, { props: { onParentKeydown } });
+
+      await user.hover(screen.getByRole("button"));
+      expect(screen.getByRole("tooltip")).toBeInTheDocument();
+
+      screen.getByLabelText("Other control").focus();
+      await user.keyboard("{Escape}");
+
+      expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+      expect(onParentKeydown).not.toHaveBeenCalled();
+    });
+
+    it("keeps aria-describedby on the tooltip when a consumer supplies aria-label", async () => {
+      render(TooltipIconPortalEscape, { props: { ariaLabel: "Custom name" } });
+
+      const trigger = screen.getByRole("button", { name: "Custom name" });
+      expect(trigger).not.toHaveAttribute("aria-describedby");
+
+      await user.tab();
+      const tooltip = screen.getByRole("tooltip");
+      expect(trigger).toHaveAttribute("aria-describedby", tooltip.id);
+    });
+
+    it("hides a hovered portal tooltip on Escape", async () => {
+      render(TooltipIconPortalEscape);
+
+      await user.hover(screen.getByRole("button"));
+      expect(screen.getByRole("tooltip")).toBeInTheDocument();
+
+      await user.keyboard("{Escape}");
+      expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
     });
 
     it("should add portal-active class on trigger when using portal", () => {
