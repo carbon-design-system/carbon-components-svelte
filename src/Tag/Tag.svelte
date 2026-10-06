@@ -172,7 +172,6 @@
 {:else if filter}
   <div
     bind:this={ref}
-    aria-label={title}
     {id}
     data-overflow={groupOverflow ? "true" : undefined}
     class:bx--tag={true}
@@ -207,14 +206,14 @@
         tooltipText={truncationLabel}
         portalTooltip
       >
-        <span bind:this={labelRef} class:bx--tag__label={true}>
+        <span bind:this={labelRef} id="{id}-label" class:bx--tag__label={true}>
           <slot props={{ class: "bx--tag__label" }}>
             {type}
           </slot>
         </span>
       </TooltipDefinition>
     {:else}
-      <span bind:this={labelRef} class:bx--tag__label={true}>
+      <span bind:this={labelRef} id="{id}-label" class:bx--tag__label={true}>
         <slot props={{ class: "bx--tag__label" }}>
           {type}
         </slot>
@@ -222,7 +221,9 @@
     {/if}
     <button
       type="button"
-      aria-labelledby={id}
+      id="{id}-close"
+      aria-label={title}
+      aria-labelledby="{id}-close {id}-label"
       class:bx--tag__close-icon={true}
       {disabled}
       {title}
