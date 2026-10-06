@@ -30,5 +30,10 @@ export default defineConfig({
       "../tests/utils/ssr.test.ts",
     ],
     setupFiles: ["./setup-tests.ts"],
+    // `@testing-library/*` resolve from the root `node_modules`, outside this
+    // harness. On Node 22 the `vmThreads` loader can't load those externally
+    // (`@testing-library/dom` ships ESM in a CommonJS package), so let Vite
+    // transform them. Inline all of them so jest-dom extends the same `expect`.
+    server: { deps: { inline: [/@testing-library\//] } },
   },
 });
