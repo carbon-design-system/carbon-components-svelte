@@ -5,6 +5,7 @@
     DatePickerInput,
     NumberInput,
     PasswordInput,
+    RangeSlider,
     Search,
     SearchMenu,
     Slider,
@@ -92,5 +93,13 @@
     selectTextOnFocus
     max={999999}
     value={123456}
+  />
+  <RangeSlider
+    data-testid="range-slider"
+    labelText="Range slider"
+    selectTextOnFocus
+    max={999999}
+    value={123456}
+    valueUpper={234567}
   />
 </div>
