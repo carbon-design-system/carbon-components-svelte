@@ -17,8 +17,6 @@ Create a big number with `labelText` and `value`.
 
 Set `size` to control the visual weight of the value.
 
-### Default
-
 <BigNumber labelText="Deployments" value={1240} />
 
 ### Large
@@ -57,9 +55,9 @@ Set `percentage` to `true` to append a percent sign after `value` instead of ren
 
 Set `trend` to `"up"`, `"down"`, or `"flat"` to render a trend indicator next to the value. Screen readers announce the trend direction. Set `trendDescription` to replace the default announcement.
 
-### Default color
+### Trend colors
 
-By default, an upward trend is green and a downward trend is red.
+An upward trend is green and a downward trend is red by default.
 
 <Stack gap={5}>
   <BigNumber labelText="Revenue" value={128000} trend="up" />

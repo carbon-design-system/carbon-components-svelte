@@ -37,7 +37,7 @@ Use the `valueChildren` slot to render custom value content instead of `valueTex
   <strong slot="valueChildren">812 GB / 1 TB</strong>
 </Meter>
 
-When `valueText` is unset, `aria-valuetext` is generated automatically if the value is over capacity or the status is `"warning"` or `"error"`; otherwise it's omitted. Override the generated range (e.g., "420 of 1,000") with `valueRangeText`, and the status word with `warningText` or `errorText`.
+When `valueText` is unset, `aria-valuetext` is generated automatically if the value is over capacity or the status is `"warning"` or `"error"`; otherwise it's omitted. Override the generated range, for example "420 of 1,000", with `valueRangeText`, and the status word with `warningText` or `errorText`.
 
 Set `locale` to format the numbers in the generated `aria-valuetext` and threshold description for a specific language instead of the runtime default. A server often runs in a different locale than the browser, so without a fixed value the prerendered text differs from the one the client prints. Pass the same `locale` on both sides to keep them identical.
 

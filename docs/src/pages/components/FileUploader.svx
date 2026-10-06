@@ -226,8 +226,8 @@ default.
 
 Pass a function to write the text yourself. It receives `(file, index)` and
 returns a string. The exported `formatFileSize(bytes, { units, locale })`
-helper does the unit math; `locale` formats the number (e.g., `1,5 kB` in
-German).
+helper does the unit math; `locale` formats the number, for example `1,5 kB` in
+German.
 
 ```svelte
 <script>
