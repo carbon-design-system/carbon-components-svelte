@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
-import type UserAvatarComponent from "carbon-components-svelte/UserAvatar/UserAvatar.svelte";
+import UserAvatarComponent from "carbon-components-svelte/UserAvatar/UserAvatar.svelte";
 import type { ComponentProps } from "svelte";
 import { getAvatarBackgroundColor } from "../../src/utils/avatar-color.js";
 import { user } from "../utils/user";
@@ -268,6 +268,16 @@ describe("UserAvatar", () => {
     expect(avatar.tagName).toBe("A");
     expect(avatar).toHaveAttribute("href", "/profile");
     expect(avatar).toHaveClass("bx--user-avatar--interactive");
+  });
+
+  it("renders a span when href is null", () => {
+    render(UserAvatarComponent, {
+      props: { name: "John Doe", href: null as unknown as string },
+    });
+
+    const avatar = document.querySelector(".bx--user-avatar");
+    expect(avatar?.tagName).toBe("SPAN");
+    expect(avatar).not.toHaveAttribute("href");
   });
 
   it("prefers href over interactive", () => {

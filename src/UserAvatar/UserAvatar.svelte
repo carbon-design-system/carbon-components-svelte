@@ -173,7 +173,7 @@
 
   // `href` wins over `interactive`. When either is set, the avatar itself is the
   // focus target — do not nest it inside TooltipDefinition's button.
-  $: isLink = typeof href === "string";
+  $: isLink = href != null;
   $: isButton = !isLink && interactive;
   $: isInteractive = isLink || isButton;
   $: avatarTag = isLink ? "a" : isButton ? "button" : "span";
