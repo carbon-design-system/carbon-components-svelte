@@ -47,6 +47,13 @@
    */
   export let lazy = false;
 
+  /**
+   * Set an id for the top-level element.
+   * The heading button and panel ids derive from it as `{id}-button` and
+   * `{id}-content`.
+   */
+  export let id = uniqueId();
+
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import { get } from "svelte/store";
   import ChevronRight from "../icons/ChevronRight.svelte";
@@ -62,12 +69,10 @@
     disabled = value;
   });
 
-  const id = {};
-  const contentId = uniqueId();
-  const buttonId = uniqueId();
+  const itemKey = {};
 
   const unsubscribeOpenId = ctx.openId.subscribe((openItemId) => {
-    if (openItemId !== null && openItemId !== id) {
+    if (openItemId !== null && openItemId !== itemKey) {
       open = false;
     }
   });
@@ -75,7 +80,7 @@
   $: if (disabled && open) open = false;
 
   $: if (open) {
-    ctx.notifyOpen(id);
+    ctx.notifyOpen(itemKey);
   }
 
   let previousType = get(ctx.typeStore);
@@ -85,7 +90,7 @@
       value === "single" &&
       previousType !== "single" &&
       open &&
-      !ctx.claimSingle(id)
+      !ctx.claimSingle(itemKey)
     ) {
       open = false;
     }
@@ -107,6 +112,7 @@
 </script>
 
 <li
+  {id}
   class:bx--accordion__item={true}
   class:bx--accordion__item--active={open}
   class:bx--accordion__item--disabled={disabled}
@@ -120,12 +126,12 @@
 >
   <button
     bind:this={ref}
-    id={buttonId}
+    id="{id}-button"
     type="button"
     class:bx--accordion__heading={true}
     aria-label={ariaLabel}
     aria-expanded={open}
-    aria-controls={contentId}
+    aria-controls="{id}-content"
     {disabled}
     on:click
     on:click={() => {
@@ -146,10 +152,10 @@
     </div>
   </button>
   <div
-    id={contentId}
+    id="{id}-content"
     class:bx--accordion__content={true}
     role={open ? "region" : undefined}
-    aria-labelledby={open ? buttonId : undefined}
+    aria-labelledby={open ? `${id}-button` : undefined}
   >
     {#if !lazy || openedOnce}
       <slot />
