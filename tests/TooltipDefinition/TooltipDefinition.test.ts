@@ -1,9 +1,36 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import TooltipDefinition from "./TooltipDefinition.test.svelte";
+import TooltipDefinitionGroup from "./TooltipDefinitionGroup.test.svelte";
 import TooltipDefinitionPortal from "./TooltipDefinitionPortal.test.svelte";
 
 describe("TooltipDefinition", () => {
+  describe("in a TooltipGroup", () => {
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it("opens instantly after a group Button and hides while the Button's tooltip shows", async () => {
+      vi.useFakeTimers();
+      render(TooltipDefinitionGroup);
+
+      const edit = screen.getByRole("button", { name: "Edit" });
+      const trigger = screen.getByRole("button", { name: "APR" });
+      const wrapper = trigger.parentElement;
+      assert(wrapper);
+
+      await fireEvent.mouseEnter(edit);
+      await vi.advanceTimersByTimeAsync(100);
+      await fireEvent.mouseLeave(edit);
+      await fireEvent.mouseEnter(wrapper);
+      expect(trigger).toHaveClass("bx--tooltip--visible");
+
+      await fireEvent.mouseEnter(edit);
+      expect(trigger).toHaveClass("bx--tooltip--hidden");
+      expect(trigger).not.toHaveClass("bx--tooltip--visible");
+    });
+  });
+
   let consoleLog: Console["log"];
 
   beforeEach(() => {
