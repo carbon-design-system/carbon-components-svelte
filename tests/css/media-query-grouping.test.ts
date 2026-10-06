@@ -27,10 +27,12 @@ describe("any-hover media query grouping", () => {
     // Raised again from 65 to 67 for TabsVertical's pinned `orientation`
     // row and column, one top-level hover block each (tabs-vertical in
     // components/tabs/_tabs.scss).
+    // Raised again from 67 to 68 for the TableOfContents link's one hover
+    // block (_table-of-contents.scss).
     // Whitespace-tolerant so the count holds for expanded and compressed
     // output; the lower bound fails the test if the pattern stops matching.
     const blocks = css.match(/@media\s*\(any-hover:\s*hover\)\s*\{/g) ?? [];
     expect(blocks.length).toBeGreaterThan(0);
-    expect(blocks.length).toBeLessThanOrEqual(67);
+    expect(blocks.length).toBeLessThanOrEqual(68);
   }, 30_000);
 });

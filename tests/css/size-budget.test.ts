@@ -11,14 +11,11 @@ import { compileEntry } from "./compile";
 // trips one, raise it to the new size plus 2% and say why in the commit.
 // `bun run check:css` prints the current numbers.
 const BUDGETS: Record<string, { min: number; gzip: number }> = {
-  // min measured 656,281 and gzip 76,246 locally after TabsVertical's
-  // pinned `orientation` layouts (the row and column rules, emitted once
-  // more outside their breakpoints); CI gzip runs ~1.5 kB above local
-  "all.scss": { min: 669_400, gzip: 77_800 },
-  // gzip measured 68,001 locally after the field skeleton sizes (min
-  // 564,002 after the vertical slider grid layout and TabsVertical's
-  // pinned `orientation` layouts)
-  "white.scss": { min: 575_300, gzip: 69_400 },
+  // min 667,390 and gzip 77,643 measured locally after TableOfContents
+  "all.scss": { min: 680_800, gzip: 79_200 },
+  // min 574,769 and gzip 68,194 measured locally after the field skeleton
+  // sizes and TableOfContents
+  "white.scss": { min: 586_300, gzip: 69_600 },
 };
 
 describe("css size budget", () => {

@@ -43,6 +43,7 @@ const NEEDS_PARENT = new Set([
   "Switch", // ContentSwitcher
   "SwitchPanel", // ContentSwitcher
   "Tab", // Tabs or TabsVertical
+  "TableOfContentsItem", // TableOfContents
   "TabContent", // Tabs or TabsVertical
   "ToolbarMenuItem", // ToolbarMenu
 ]);
