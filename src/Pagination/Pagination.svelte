@@ -222,10 +222,11 @@
 
   /**
    * Override the accessible label for the page number select.
+   * The default reads "Page number, of 1 page" or "Page number, of N pages".
    * @type {(total: number) => string}
    */
   export let pageSelectLabelText = function pageSelectLabelText(total) {
-    return `Page number, of ${total} pages`;
+    return `Page number, of ${total} page${total === 1 ? "" : "s"}`;
   };
 
   /** Set an id for the top-level element */
