@@ -4,6 +4,7 @@
     PasswordInput,
     TextArea,
     TextInput,
+    TimePicker,
   } from "carbon-components-svelte";
 </script>
 
@@ -31,5 +32,11 @@
     labelText="Text area"
     selectTextOnFocus
     value="abcdef"
+  />
+  <TimePicker
+    data-testid="time-picker"
+    labelText="Time picker"
+    selectTextOnFocus
+    value="12:34"
   />
 </div>
