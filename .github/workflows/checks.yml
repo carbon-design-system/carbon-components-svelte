@@ -51,6 +51,9 @@ jobs:
       e2e: ${{ steps.filter.outputs.e2e }}
       docs-deploy: ${{ steps.filter.outputs.docs-deploy }}
       css: ${{ steps.filter.outputs.css }}
+      # `all`, `none`, or space-separated test files; empty (= all) off PRs.
+      unit-tests: ${{ steps.select.outputs.unit-tests }}
+      e2e-tests: ${{ steps.select.outputs.e2e-tests }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -93,6 +96,16 @@ jobs:
               - 'bun.lock'
               - '.github/**'
 
+      # PRs run only the unit and e2e tests the diff can reach in the static
+      # dependency graph (scripts/lib/test-graph.ts). Zero-dependency, so no
+      # install. Pushes to master run everything, which catches any miss.
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        if: github.event_name == 'pull_request'
+      - name: Select affected tests
+        id: select
+        if: github.event_name == 'pull_request'
+        run: bun scripts/test-changed.ts "origin/${{ github.base_ref }}" --github-output
+
   # Informational: prints the compiled-rule delta, specificity histogram and
   # size movement against the base branch in the job summary. The script exits
   # non-zero on a cascade flip candidate, which over-reports by design, so the
@@ -127,9 +140,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          # test-changed.ts needs base-branch history to diff against.
-          fetch-depth: 0
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
       - run: bun ci
 
@@ -139,19 +149,15 @@ jobs:
       - name: Test types (Svelte 5)
         run: bun run test:types
 
-      # On PRs that don't touch css/** (not part of the JS module graph
-      # `--changed` walks), scope the run to tests affected by the diff
-      # against the PR's base branch (mapped by src/<X> <-> tests/<X>
-      # directory name — `vitest --changed` doesn't reliably resolve .svelte
-      # SFCs and falls back to running everything). Push/dispatch/css-touching
-      # PRs run the full suite.
       - name: Test (Svelte 5)
+        env:
+          TESTS: ${{ needs.changes.outputs.unit-tests }}
         run: |
-          if [ "${{ github.event_name }}" = "pull_request" ] && [ "${{ needs.changes.outputs.css }}" != "true" ]; then
-            bun scripts/test-changed.ts "origin/${{ github.base_ref }}"
-          else
-            bun run test
-          fi
+          case "$TESTS" in
+            "" | all) bun run test ;;
+            none) echo "No unit tests affected." ;;
+            *) read -ra files <<< "$TESTS" && bunx vitest run "${files[@]}" ;;
+          esac
 
   test-e2e:
     needs: [static-checks, changes, test]
@@ -161,7 +167,8 @@ jobs:
       needs.static-checks.result == 'success' &&
       needs.changes.result == 'success' &&
       (needs.test.result == 'success' || needs.test.result == 'skipped') &&
-      (github.event_name == 'workflow_dispatch' || needs.changes.outputs.e2e == 'true')
+      (github.event_name == 'workflow_dispatch' || needs.changes.outputs.e2e == 'true') &&
+      needs.changes.outputs.e2e-tests != 'none'
     runs-on: ubuntu-latest
     # Official image includes Chromium/Firefox/WebKit + system deps
     # Bump tag with @playwright/test in bun.lock.
@@ -196,7 +203,13 @@ jobs:
         run: bun run build:css
 
       - name: E2E tests
-        run: bunx playwright test --project=chromium
+        env:
+          TESTS: ${{ needs.changes.outputs.e2e-tests }}
+        run: |
+          case "$TESTS" in
+            "" | all) bunx playwright test --project=chromium ;;
+            *) read -ra files <<< "$TESTS" && bunx playwright test --project=chromium "${files[@]}" ;;
+          esac
 
   test-svelte-compat:
     needs: [changes]
@@ -228,10 +241,18 @@ jobs:
           cd ${{ matrix.dir }}
           bun run test:types
 
+      # Selected files outside this harness's `include` (Svelte 5-only
+      # tests) are dropped, so an empty match passes.
       - name: Test (${{ matrix.label }})
+        env:
+          TESTS: ${{ needs.changes.outputs.unit-tests }}
         run: |
           cd ${{ matrix.dir }}
-          bun run test
+          case "$TESTS" in
+            "" | all) bun run test ;;
+            none) echo "No unit tests affected." ;;
+            *) read -ra files <<< "$TESTS" && bunx vitest run --passWithNoTests "${files[@]/#/../}" ;;
+          esac
 
   deploy-docs:
     needs: [static-checks, changes, test]
