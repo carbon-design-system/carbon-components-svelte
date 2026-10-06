@@ -79,6 +79,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   Slider: "0.2.0",
   Stack: "0.93.0",
   StructuredList: "0.2.0",
+  TableOfContents: "0.114.0",
   Tabs: "0.2.0",
   TabsVertical: "0.110.0",
   Tag: "0.2.0",
