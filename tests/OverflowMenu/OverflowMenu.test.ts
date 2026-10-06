@@ -48,6 +48,29 @@ describe("OverflowMenu", () => {
     expect(menuButton).not.toHaveAttribute("aria-controls");
   });
 
+  it("returns focus to the trigger after selecting an item with the keyboard", async () => {
+    render(OverflowMenu);
+
+    const menuButton = screen.getByRole("button");
+    await user.click(menuButton);
+    expect(screen.getAllByRole("menuitem")[0]).toHaveFocus();
+
+    await user.keyboard("{Enter}");
+    expect(menuButton).toHaveAttribute("aria-expanded", "false");
+    expect(menuButton).toHaveFocus();
+  });
+
+  it("returns focus to the trigger after selecting a portalled item in a Modal", async () => {
+    render(OverflowMenuInModal, { props: { modalOpen: true } });
+
+    const menuButton = screen.getByRole("button", { name: "menu" });
+    await user.click(menuButton);
+    await user.click(screen.getByRole("menuitem", { name: "Option 2" }));
+
+    expect(menuButton).toHaveAttribute("aria-expanded", "false");
+    expect(menuButton).toHaveFocus();
+  });
+
   it("renders and functions correctly", async () => {
     render(OverflowMenu);
 
