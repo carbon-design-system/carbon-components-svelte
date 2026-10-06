@@ -88,3 +88,27 @@ test("moves focus and skips inert subtrees", () => {
     "a",
   );
 });
+
+test("live collections index before length is read", () => {
+  const run = window();
+  assert.equal(
+    run(`const d = document.createElement("div");
+      d.innerHTML = "<input><input>";
+      const inputs = d.getElementsByTagName("input");
+      const first = inputs[0];
+      d.append(document.createElement("input"));
+      [first.localName, inputs[2]?.localName, d.children[1].localName].join(",")`),
+    "input,input,input",
+  );
+});
+
+test("simplifies calc() and resolves rem like jsdom", () => {
+  const run = window();
+  assert.equal(
+    run(`const d = document.createElement("div");
+      d.style.marginLeft = "calc(-1 * (2rem))"; d.style.gap = "2rem"; d.style.width = "1.5rem";
+      const cs = getComputedStyle(d);
+      [d.style.marginLeft, cs.gap, cs.width, cs.marginTop].join(",")`),
+    "calc(-2rem),2rem,24px,0",
+  );
+});

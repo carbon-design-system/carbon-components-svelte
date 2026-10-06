@@ -8,6 +8,60 @@
 
 import { INTERNAL, illegalConstructor, tag } from "./shared.js";
 
+const INDEX_RE = /^(?:0|[1-9]\d*)$/;
+
+/**
+ * Live collections are Proxies so `list[0]` always reflects the current
+ * tree, even when read before `length`/`item()` or after a mutation.
+ */
+function liveProxy(collection) {
+  return new Proxy(collection, {
+    get(target, prop, receiver) {
+      if (typeof prop === "string" && INDEX_RE.test(prop))
+        return target._refresh()[prop];
+      if (typeof prop === "string" && target._wantsNames && !(prop in target)) {
+        return target.namedItem(prop) ?? undefined;
+      }
+      const value = Reflect.get(target, prop, target);
+      return typeof value === "function" && prop !== "constructor"
+        ? value.bind(receiver === undefined ? target : target)
+        : value;
+    },
+    has(target, prop) {
+      if (typeof prop === "string" && INDEX_RE.test(prop))
+        return Number(prop) < target._refresh().length;
+      return prop in target;
+    },
+    ownKeys(target) {
+      const keys = target._refresh().map((_, i) => String(i));
+      return [
+        ...keys,
+        ...Reflect.ownKeys(target).filter(
+          (k) => typeof k !== "string" || !INDEX_RE.test(k),
+        ),
+      ];
+    },
+    getOwnPropertyDescriptor(target, prop) {
+      if (typeof prop === "string" && INDEX_RE.test(prop)) {
+        const item = target._refresh()[prop];
+        return item === undefined
+          ? undefined
+          : {
+              value: item,
+              writable: false,
+              enumerable: true,
+              configurable: true,
+            };
+      }
+      return Reflect.getOwnPropertyDescriptor(target, prop);
+    },
+    set(target, prop, value) {
+      if (typeof prop === "string" && INDEX_RE.test(prop)) return true;
+      return Reflect.set(target, prop, value, target);
+    },
+  });
+}
+
 function syncIndices(list, items, oldLength) {
   const n = items.length;
   for (let i = 0; i < n; i++) {
@@ -33,10 +87,8 @@ export class NodeList {
   _refresh() {
     const src = this._source;
     if (src && src.version() !== this._version) {
-      const old = this._items.length;
       this._items = src.items();
       this._version = src.version();
-      syncIndices(this, this._items, old);
     }
     return this._items;
   }
@@ -78,7 +130,7 @@ export function staticNodeList(items) {
 export function liveNodeList(source) {
   const list = new NodeList(INTERNAL);
   list._source = source;
-  return list;
+  return liveProxy(list);
 }
 
 export class HTMLCollection {
@@ -93,29 +145,10 @@ export class HTMLCollection {
   _refresh() {
     const src = this._source;
     if (src.version() !== this._version) {
-      const old = this._items.length;
       this._items = src.items();
       this._version = src.version();
-      syncIndices(this, this._items, old);
-      // Named properties (`form.elements.email`) only where callers use them.
-      if (this._wantsNames) this._syncNamed();
     }
     return this._items;
-  }
-  _syncNamed() {
-    if (this._named) for (const k of this._named) delete this[k];
-    this._named = null;
-    for (const el of this._items) {
-      for (const key of [el.getAttribute("id"), el.getAttribute("name")]) {
-        if (!key || key in this || /^\d+$/.test(key)) continue;
-        Object.defineProperty(this, key, {
-          value: el,
-          configurable: true,
-          enumerable: false,
-        });
-        (this._named ??= []).push(key);
-      }
-    }
   }
   get length() {
     return this._refresh().length;
@@ -145,7 +178,7 @@ export function liveHTMLCollection(
   const c = new Ctor(INTERNAL);
   c._source = source;
   c._wantsNames = wantsNames;
-  return c;
+  return liveProxy(c);
 }
 
 export class HTMLFormControlsCollection extends HTMLCollection {
