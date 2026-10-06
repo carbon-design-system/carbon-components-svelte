@@ -1,127 +1,165 @@
 import { render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
 import ImageLoader from "./ImageLoader.test.svelte";
+
+const validImageSrc =
+  "https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg";
+
+/** Stand-in for `new Image()`: jsdom never loads images, so tests settle them by hand. */
+class FakeImage {
+  static instances: FakeImage[] = [];
+  src = "";
+  onload: (() => void) | null = null;
+  onerror: (() => void) | null = null;
+
+  constructor() {
+    FakeImage.instances.push(this);
+  }
+}
+
+/** Settle every preload started for `src`. */
+const settle = async (src: string, outcome: "onload" | "onerror") => {
+  for (const image of FakeImage.instances) {
+    if (image.src === src) image[outcome]?.();
+  }
+  await tick();
+};
+
+/** The `<img>` the user sees: the hidden server-render `<img>` is excluded. */
+const visibleImg = (wrapper: HTMLElement) =>
+  Array.from(wrapper.querySelectorAll("img")).find(
+    (img) => img.style.display !== "none",
+  );
 
 describe("ImageLoader", () => {
   beforeEach(() => {
-    vi.useFakeTimers();
+    FakeImage.instances = [];
+    vi.stubGlobal("Image", FakeImage);
+
+    // Svelte 5 runs `transition:fade` through the Web Animations API, which jsdom lacks.
+    if (!Element.prototype.animate) {
+      Element.prototype.animate = function animate() {
+        const animation = {
+          currentTime: 0,
+          onfinish: null as (() => void) | null,
+          cancel() {},
+          finish() {},
+          pause() {},
+          play() {},
+        };
+        queueMicrotask(() => animation.onfinish?.());
+        return animation as unknown as Animation;
+      };
+    }
   });
 
   afterEach(() => {
-    vi.useRealTimers();
+    (Element.prototype as { animate?: unknown }).animate = undefined;
+    vi.unstubAllGlobals();
     vi.restoreAllMocks();
   });
 
-  it("renders with default props", () => {
+  it("renders only a hidden <img> while loading", () => {
     render(ImageLoader);
+
     const wrapper = screen.getByTestId("default-loader");
-    const img = wrapper.querySelector("img");
-    expect(img).toBeDefined();
+    const imgs = wrapper.querySelectorAll("img");
+
+    expect(imgs).toHaveLength(1);
+    expect(imgs[0]).toHaveAttribute("src", validImageSrc);
+    expect(imgs[0]).toHaveStyle({ display: "none" });
   });
 
-  it("shows loading state and transitions to loaded state", () => {
+  it("shows the loading slot, then the image once loaded", async () => {
     render(ImageLoader);
-
-    const loadingIndicator = screen.getByTestId("loading-state");
-    expect(loadingIndicator).toBeInTheDocument();
 
     const wrapper = screen.getByTestId("loader-with-slots");
-    const img = wrapper.querySelector("img");
-    expect(img).toBeDefined();
-    if (img) {
-      const loadEvent = new Event("load");
-      img.dispatchEvent(loadEvent);
+    expect(screen.getByTestId("loading-state")).toBeInTheDocument();
+    expect(visibleImg(wrapper)).toBeUndefined();
 
-      expect(screen.queryByTestId("loading-state")).not.toBeInTheDocument();
-      expect(img).toBeVisible();
-    }
+    await settle(validImageSrc, "onload");
+
+    expect(screen.queryByTestId("loading-state")).not.toBeInTheDocument();
+    const img = visibleImg(wrapper);
+    expect(img).toBeVisible();
+    expect(img).toHaveAttribute("src", validImageSrc);
+    expect(img).toHaveAttribute("alt", "IBM Logo with slots");
+    expect(wrapper.querySelectorAll("img")).toHaveLength(1);
   });
 
-  it("handles error state correctly", () => {
+  it("shows the error slot and no image on error", async () => {
     render(ImageLoader);
 
     const wrapper = screen.getByTestId("error-loader");
-    const img = wrapper.querySelector("img");
-    expect(img).toBeDefined();
+    await settle("https://invalid-url/nonexistent.png", "onerror");
 
-    if (img) {
-      const errorEvent = new Event("error");
-      img.dispatchEvent(errorEvent);
-
-      const errorMessage = screen.getByTestId("error-message");
-      expect(errorMessage).toBeInTheDocument();
-      expect(errorMessage).toHaveTextContent("Failed to load image");
-    }
+    expect(screen.getByTestId("error-message")).toHaveTextContent(
+      "Failed to load image",
+    );
+    expect(wrapper.querySelector("img")).toBeNull();
   });
 
-  it("supports aspect ratio", () => {
+  it("supports aspect ratio", async () => {
     render(ImageLoader);
 
     const wrapper = screen.getByTestId("loader-with-ratio");
-    const aspectRatioWrapper = wrapper.querySelector(
-      "[class*='bx--aspect-ratio']",
+    expect(wrapper.querySelector("[class*='bx--aspect-ratio']")).toHaveClass(
+      "bx--aspect-ratio--16x9",
     );
 
-    expect(aspectRatioWrapper).toHaveClass("bx--aspect-ratio--16x9");
+    await settle(validImageSrc, "onload");
+
+    const aspectRatio = wrapper.querySelector("[class*='bx--aspect-ratio']");
+    expect(aspectRatio?.querySelector("img")).toHaveAttribute(
+      "src",
+      validImageSrc,
+    );
   });
 
-  it("supports fade in animation", () => {
+  it("supports fade in", async () => {
     render(ImageLoader);
 
     const wrapper = screen.getByTestId("loader-with-fade");
-    const img = wrapper.querySelector("img");
-    expect(img).toBeDefined();
+    await settle(validImageSrc, "onload");
 
-    if (img) {
-      const loadEvent = new Event("load");
-      img.dispatchEvent(loadEvent);
-
-      expect(img).toHaveStyle({
-        transition: expect.stringContaining("opacity"),
-      });
-    }
+    expect(visibleImg(wrapper)).toHaveAttribute("src", validImageSrc);
   });
 
   it("supports programmatic image loading", async () => {
     const { component } = render(ImageLoader);
-
-    const wrapper = screen.getByTestId("programmatic-loader");
-    const img = wrapper.querySelector("img");
-    expect(img).toBeDefined();
-
-    // Wait for the component to be ready
-    await vi.runOnlyPendingTimersAsync();
+    await tick();
     assert(component.imageLoader);
 
-    const newSrc = "https://example.com/new-image.jpg";
+    const wrapper = screen.getByTestId("programmatic-loader");
+    expect(wrapper.querySelector("img")).toBeNull();
 
+    const newSrc = "https://example.com/new-image.jpg";
     component.imageLoader.loadImage(newSrc);
-    if (img) {
-      expect(img.getAttribute("src")).toBe(newSrc);
-    }
+
+    expect(FakeImage.instances.some((image) => image.src === newSrc)).toBe(
+      true,
+    );
   });
 
-  it("dispatches load and error events", () => {
+  it("dispatches load when the image loads", async () => {
     const load = vi.fn();
     const error = vi.fn();
 
     render(ImageLoader, { props: { onload: load, onerror: error } });
+    await settle(validImageSrc, "onload");
 
-    const defaultWrapper = screen.getByTestId("default-loader");
-    const defaultImg = defaultWrapper.querySelector("img");
-    expect(defaultImg).toBeDefined();
+    expect(load).toHaveBeenCalledTimes(1);
+    expect(error).not.toHaveBeenCalled();
+  });
 
-    if (defaultImg) {
-      defaultImg.dispatchEvent(new Event("load"));
-      expect(load).toHaveBeenCalled();
-    }
+  it("dispatches error when the image fails to load", async () => {
+    const load = vi.fn();
+    const error = vi.fn();
 
-    const errorWrapper = screen.getByTestId("error-loader");
-    const errorImg = errorWrapper.querySelector("img");
-    expect(errorImg).toBeDefined();
+    render(ImageLoader, { props: { onload: load, onerror: error } });
+    await settle(validImageSrc, "onerror");
 
-    if (errorImg) {
-      errorImg.dispatchEvent(new Event("error"));
-      expect(error).toHaveBeenCalled();
-    }
+    expect(error).toHaveBeenCalledTimes(1);
+    expect(load).not.toHaveBeenCalled();
   });
 });
