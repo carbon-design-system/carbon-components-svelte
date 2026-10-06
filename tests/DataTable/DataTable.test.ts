@@ -1,10 +1,10 @@
 import { render, screen, within } from "@testing-library/svelte";
-import type DataTableComponent from "carbon-components-svelte/DataTable/DataTable.svelte";
 import type {
   DataTableKey,
   DataTableRow,
   DataTableValue,
 } from "carbon-components-svelte/DataTable/DataTable.svelte";
+import DataTableComponent from "carbon-components-svelte/DataTable/DataTable.svelte";
 import type {
   DataTableSortValue,
   DataTableValueAtPath,
@@ -1588,6 +1588,26 @@ describe("DataTable", () => {
 
     const table = screen.getByRole("table");
     expect(table).toHaveClass("bx--data-table--static");
+  });
+
+  it("spreads rest props onto the container element", () => {
+    const { container } = render(DataTableComponent, {
+      props: {
+        headers,
+        rows,
+        class: "custom-class",
+        id: "custom-id",
+        style: "margin: 1px",
+        "data-testid": "data-table",
+      },
+    });
+
+    const tableContainer = container.querySelector(".bx--data-table-container");
+    expect(tableContainer).toBe(screen.getByTestId("data-table"));
+    expect(tableContainer).toHaveClass("custom-class");
+    expect(tableContainer).not.toHaveClass("bx--data-table-container--static");
+    expect(tableContainer).toHaveAttribute("id", "custom-id");
+    expect(tableContainer).toHaveStyle({ margin: "1px" });
   });
 
   it("handles custom cell display", () => {
