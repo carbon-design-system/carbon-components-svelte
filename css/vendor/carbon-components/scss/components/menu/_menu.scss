@@ -208,3 +208,17 @@
 @include exports("menu-selection-icon") {
   @include menu-selection-icon;
 }
+
+// carbon-components-svelte patch
+// A `labelChildren` slot can hold non-text content (e.g. a `TooltipIcon`)
+// whose popup the label's truncating `overflow: hidden` would clip. Keep
+// the base label class for its layout and type style; only lift the clip.
+@mixin menu-option-label-slotted {
+  .#{$prefix}--menu-option__label--slotted {
+    overflow: visible;
+  }
+}
+
+@include exports("menu-option-label-slotted") {
+  @include menu-option-label-slotted;
+}

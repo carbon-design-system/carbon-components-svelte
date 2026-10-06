@@ -7,4 +7,5 @@
   <ContextMenuOption labelText="Default label">
     <span slot="labelChildren">Custom label content</span>
   </ContextMenuOption>
+  <ContextMenuOption labelText="View details" />
 </ContextMenu>
