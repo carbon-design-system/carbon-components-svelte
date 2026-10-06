@@ -179,6 +179,19 @@ describe("Pagination", () => {
     expect(select).toBeDisabled();
   });
 
+  it("uses the singular label when there is one page", () => {
+    render(Pagination, { props: { totalItems: 10, pageSize: 10 } });
+    expect(screen.getByLabelText("Page number, of 1 page")).toBeInTheDocument();
+    expect(screen.queryByLabelText(/of 1 pages/)).not.toBeInTheDocument();
+  });
+
+  it("uses the plural label when there are several pages", () => {
+    render(Pagination, { props: { totalItems: 25, pageSize: 10 } });
+    expect(
+      screen.getByLabelText("Page number, of 3 pages"),
+    ).toBeInTheDocument();
+  });
+
   it("moves focus to the forward button when the backward button becomes disabled", async () => {
     render(Pagination, {
       props: { page: 2, totalItems: 20, pageSize: 10 },
