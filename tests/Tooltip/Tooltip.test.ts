@@ -60,6 +60,32 @@ describe("Tooltip", () => {
     ).toBeInTheDocument();
   });
 
+  it.each([
+    ["with an icon", TooltipDefault, "Information"],
+    ["without an icon", TooltipHideIcon, "Tooltip trigger"],
+  ])(
+    "should reference the tooltip with aria-describedby only while open %s",
+    async (_, Component, name) => {
+      render(Component);
+
+      const trigger = screen.getByRole("button", { name });
+      expect(trigger).not.toHaveAttribute("aria-describedby");
+
+      await fireEvent.mouseEnter(trigger);
+      await vi.advanceTimersByTimeAsync(100);
+
+      const describedBy = trigger.getAttribute("aria-describedby");
+      expect(describedBy).toBeTruthy();
+      expect(document.getElementById(describedBy as string)).toBe(
+        screen.getByRole("dialog").closest(".bx--tooltip"),
+      );
+
+      await fireEvent.keyDown(trigger, { key: "Escape" });
+
+      expect(trigger).not.toHaveAttribute("aria-describedby");
+    },
+  );
+
   it("should open tooltip on focus", async () => {
     render(TooltipDefault);
 

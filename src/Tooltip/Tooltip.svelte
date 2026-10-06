@@ -299,7 +299,6 @@
       <div
         bind:this={refIcon}
         {...buttonProps}
-        aria-describedby={tooltipId}
         on:mouseenter={handleMouseenter}
         on:mousedown={handleMousedown}
         on:focus={handleFocus}
@@ -316,7 +315,6 @@
     <div
       bind:this={ref}
       {...buttonProps}
-      aria-describedby={tooltipId}
       on:mouseenter={handleMouseenter}
       on:mousedown={handleMousedown}
       on:focus={handleFocus}
