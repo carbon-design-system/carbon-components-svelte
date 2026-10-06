@@ -122,6 +122,23 @@ describe("Meter", () => {
     expect(meter).toHaveAttribute("aria-valuetext", "812 of 1,000, Warning");
   });
 
+  it("describes the status when valueText is set", () => {
+    render(Meter);
+
+    const meter = within(screen.getByTestId("value-text-error")).getByRole(
+      "meter",
+    );
+    expect(meter).toHaveAttribute("aria-valuetext", "960 GB of 1 TB");
+    expect(meter).toHaveAccessibleDescription("Error");
+  });
+
+  it("does not describe the status twice when valueText is unset", () => {
+    render(Meter);
+
+    const meter = within(screen.getByTestId("warning")).getByRole("meter");
+    expect(meter).toHaveAccessibleDescription("");
+  });
+
   it("uses a custom errorText in aria-valuetext", () => {
     render(Meter);
 

@@ -120,6 +120,15 @@
 
 <Meter
   labelText="Storage"
+  value={960}
+  max={1000}
+  valueText="960 GB of 1 TB"
+  thresholds={{ warning: 800, error: 950 }}
+  data-testid="value-text-error"
+/>
+
+<Meter
+  labelText="Storage"
   value={812}
   max={1000}
   thresholds={{ warning: 700 }}
