@@ -36,4 +36,10 @@ describe("tile transition", () => {
     },
     30_000,
   );
+
+  it(".bx--tile__chevron svg lists transform", async () => {
+    expect(properties(await transitionOf(".bx--tile__chevron svg"))).toEqual([
+      "transform",
+    ]);
+  }, 30_000);
 });

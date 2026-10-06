@@ -21,4 +21,13 @@ describe("code-snippet transition", () => {
       transition?.split(/,(?![^(]*\))/).map((t) => t.trim().split(" ")[0]),
     ).toEqual(["fill"]);
   }, 30_000);
+
+  it(".bx--snippet-btn--expand .bx--icon-chevron--down lists transform and fill instead of `all`", async () => {
+    const transition = await transitionOf(
+      ".bx--snippet-btn--expand .bx--icon-chevron--down",
+    );
+    expect(
+      transition?.split(/,(?![^(]*\))/).map((t) => t.trim().split(" ")[0]),
+    ).toEqual(["transform", "fill"]);
+  }, 30_000);
 });
