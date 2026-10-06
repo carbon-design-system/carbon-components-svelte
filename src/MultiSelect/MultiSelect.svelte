@@ -445,6 +445,7 @@
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { moveIndex } from "../utils/move-index.js";
+  import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { rangeSlice } from "../utils/range-slice.js";
   import {
     createTypeaheadBuffer,
@@ -1388,6 +1389,7 @@
           {/if}
           <input
             bind:this={inputRef}
+            use:preserveFocusSelection={selectTextOnFocus && !disabled}
             bind:value
             {...$$restProps}
             role="combobox"
