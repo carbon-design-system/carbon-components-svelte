@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>virtual-list</title>
+    <g id="virtual-list" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="unrendered-above" fill="none" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1" stroke-dasharray="3 2" x="76.5" y="14.5" width="167" height="26"></rect>
+        <rect id="unrendered-below" fill="none" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1" stroke-dasharray="3 2" x="76.5" y="139.5" width="167" height="26"></rect>
+        <rect id="container" fill="var(--cds-ui-02, #ffffff)" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="1" x="76.5" y="46.5" width="167" height="87"></rect>
+        <rect id="row-divider-1" fill="var(--cds-border-subtle, #e0e0e0)" x="77" y="68" width="166" height="1"></rect>
+        <rect id="row-divider-2" fill="var(--cds-border-subtle, #e0e0e0)" x="77" y="90" width="166" height="1"></rect>
+        <rect id="row-divider-3" fill="var(--cds-border-subtle, #e0e0e0)" x="77" y="112" width="166" height="1"></rect>
+        <rect id="row-1" fill="var(--cds-text-placeholder, #a8a8a8)" x="88" y="54" width="96" height="6"></rect>
+        <rect id="row-2" fill="var(--cds-text-placeholder, #a8a8a8)" x="88" y="76" width="120" height="6"></rect>
+        <rect id="row-3" fill="var(--cds-text-placeholder, #a8a8a8)" x="88" y="98" width="80" height="6"></rect>
+        <rect id="row-4" fill="var(--cds-text-placeholder, #a8a8a8)" x="88" y="120" width="108" height="6"></rect>
+    </g>
+</svg>
