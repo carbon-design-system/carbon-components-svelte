@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import type RadioTileComponent from "carbon-components-svelte/Tile/RadioTile.svelte";
-import type { ComponentProps } from "svelte";
+import { type ComponentProps, tick } from "svelte";
 import RadioTileStandalone from "../Tile/RadioTileStandalone.test.svelte";
 import { flushFormReset } from "../utils/flush-form-reset";
 import { flushMacrotask } from "../utils/flush-macrotask";
@@ -9,6 +9,7 @@ import { user } from "../utils/user";
 import RadioTileChecked from "./RadioTile.checked.test.svelte";
 import RadioTileGroup from "./RadioTile.group.test.svelte";
 import RadioTileGroupEach from "./RadioTile.group-each.test.svelte";
+import RadioTileGroupValue from "./RadioTile.group-value.test.svelte";
 import RadioTileKeyboard from "./RadioTile.keyboard.test.svelte";
 import RadioTileRef from "./RadioTile.ref.test.svelte";
 import RadioTileSingle from "./RadioTile.single.test.svelte";
@@ -19,6 +20,35 @@ import RadioTileAria from "./RadioTileAria.test.svelte";
 import RadioTileCustom from "./RadioTileCustom.test.svelte";
 
 describe("RadioTile", () => {
+  describe("value changes in a TileGroup", () => {
+    it("carries the selection to the checked tile's new value", async () => {
+      const onSelect = vi.fn();
+      const { component } = render(RadioTileGroupValue, {
+        props: { onSelect },
+      });
+      await user.click(screen.getByText("Standard"));
+      onSelect.mockClear();
+
+      component.standardValue = "standard-v2";
+      await tick();
+
+      expect(component.selected).toBe("standard-v2");
+      expect(screen.getByRole("radio", { name: "Standard" })).toBeChecked();
+      expect(onSelect).not.toHaveBeenCalled();
+    });
+
+    it("leaves the selection alone when an unchecked tile's value changes", async () => {
+      const { component } = render(RadioTileGroupValue);
+      await user.click(screen.getByText("Lite"));
+
+      component.standardValue = "standard-v2";
+      await tick();
+
+      expect(component.selected).toBe("lite");
+      expect(screen.getByRole("radio", { name: "Lite" })).toBeChecked();
+    });
+  });
+
   it("does not throw when rendered outside a TileGroup", () => {
     expect(() => render(RadioTileStandalone)).not.toThrow();
   });
