@@ -1,4 +1,5 @@
 // @vitest-environment node
+// @depends-on css/vendor/carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/type/font-face/**
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { compileEntry } from "./compile";

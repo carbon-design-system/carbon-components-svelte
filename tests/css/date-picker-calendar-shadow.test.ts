@@ -1,4 +1,5 @@
 // @vitest-environment node
+// @depends-on css/_fluid-date-picker.scss css/vendor/carbon-components/scss/components/date-picker/_flatpickr.scss
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 

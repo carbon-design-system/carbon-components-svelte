@@ -1,47 +1,39 @@
-import { classifyChanges } from "../../scripts/test-changed";
+import { affectedBy, planTests } from "../../scripts/lib/test-graph";
+import { loadGraph } from "../../scripts/test-changed";
 
-describe("classifyChanges", () => {
-  it("skips when nothing changed", () => {
-    expect(classifyChanges([])).toEqual({ mode: "skip" });
+const graph = loadGraph();
+const isTest = (file: string) => /^(?:tests|e2e)\/.+\.test\.ts$/.test(file);
+
+describe("repo test graph", () => {
+  // An unreadable dependency makes a test run on every change. That's safe
+  // but slow, so keep the graph fully readable from every test file except
+  // the selector's own tests: one reads the whole repo, the other holds
+  // import-like fixture strings.
+  it("reads every test's dependencies", () => {
+    const alwaysRun = [
+      "scripts/test-changed.ts",
+      "tests/scripts/test-graph.test.ts",
+    ];
+    const unreadable = [...graph]
+      .filter(
+        ([file, deps]) => deps.unknown.length > 0 && !alwaysRun.includes(file),
+      )
+      .filter(([file]) =>
+        [...affectedBy(graph, [file], { includeUnknown: false })].some(isTest),
+      )
+      .map(([file, deps]) => `${file}: ${deps.unknown.join(", ")}`);
+    expect(unreadable).toEqual([]);
   });
 
-  it("scopes to the changed component's directory", () => {
-    expect(
-      classifyChanges([
-        "src/UIShell/SideNav.svelte",
-        "tests/UIShell/HeaderNav.test.ts",
-      ]),
-    ).toEqual({ mode: "scoped", dirs: ["UIShell"] });
-  });
-
-  it("scopes to multiple changed component directories", () => {
-    const result = classifyChanges([
-      "src/Accordion/Accordion.svelte",
-      "src/BigNumber/BigNumber.svelte",
-    ]);
-    expect(result.mode).toBe("scoped");
-    expect((result as { dirs: string[] }).dirs.sort()).toEqual([
-      "Accordion",
-      "BigNumber",
-    ]);
-  });
-
-  it("falls back to a full run for a top-level src file (barrel)", () => {
-    expect(classifyChanges(["src/index.js"])).toEqual({ mode: "full" });
-  });
-
-  it("falls back to a full run for shared src/utils changes", () => {
-    expect(classifyChanges(["src/utils/deep-equal.js"])).toEqual({
-      mode: "full",
-    });
-  });
-
-  it("falls back to a full run for top-level tests files", () => {
-    expect(classifyChanges(["tests/setup-tests.ts"])).toEqual({ mode: "full" });
-  });
-
-  it("falls back to a full run for files outside src/ and tests/", () => {
-    expect(classifyChanges(["package.json"])).toEqual({ mode: "full" });
-    expect(classifyChanges(["css/_button.scss"])).toEqual({ mode: "full" });
+  it("runs the tests of components that compose a changed one", () => {
+    const { unit, e2e } = planTests(graph, ["src/Button/Button.svelte"]);
+    expect(unit.mode).toBe("some");
+    expect(e2e.mode).toBe("some");
+    if (unit.mode !== "some" || e2e.mode !== "some") return;
+    expect(unit.files).toContain("tests/Button/Button.test.ts");
+    expect(unit.files).toContain("tests/Modal/Modal.test.ts");
+    expect(unit.files).not.toContain("tests/AspectRatio/AspectRatio.test.ts");
+    expect(e2e.files).toContain("e2e/a11y-button.test.ts");
+    expect(e2e.files).not.toContain("e2e/accordion.test.ts");
   });
 });

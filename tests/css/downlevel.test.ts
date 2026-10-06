@@ -1,4 +1,5 @@
 // @vitest-environment node
+// @depends-on css/**
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { scssFiles } from "./scss-files";

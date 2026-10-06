@@ -1,4 +1,5 @@
 // @vitest-environment node
+// @depends-on src/**
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { compileEntry } from "./compile";
