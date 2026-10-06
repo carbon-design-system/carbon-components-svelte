@@ -57,6 +57,7 @@
     "check:css:overrides": "bun scripts/check-css-overrides.ts",
     "check:css:usage": "bun e2e/cascade-usage.ts",
     "check:package": "bun scripts/check-package-contents.ts",
+    "thumbnails": "bun scripts/thumbnails.ts",
     "build:docs": "bun scripts/build-docs",
     "release:build": "bun scripts/release-build",
     "postinstall": "ibmtelemetry --config=telemetry.yml",
