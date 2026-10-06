@@ -158,6 +158,7 @@
     resolveValidationVisibility,
   } from "../utils/field-status.js";
   import { clamp } from "../utils/numeric-format.js";
+  import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
   import { resolveSliderMarks } from "../utils/resolve-slider-marks.js";
   import {
@@ -460,6 +461,7 @@
     >
       <input
         bind:this={lowerInputRef}
+        use:preserveFocusSelection={selectTextOnFocus && !disabled}
         use:reflectDefaultValue={value}
         type={hideTextInput ? "hidden" : inputType}
         id={lowerInputId}
@@ -693,6 +695,7 @@
     >
       <input
         bind:this={upperInputRef}
+        use:preserveFocusSelection={selectTextOnFocus && !disabled}
         use:reflectDefaultValue={valueUpper}
         type={hideTextInput ? "hidden" : inputType}
         id={upperInputId}

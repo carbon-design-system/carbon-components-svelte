@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import RangeSliderComponent from "carbon-components-svelte/Slider/RangeSlider.svelte";
 import { tick } from "svelte";
+import { clickToFocus } from "../utils/click-to-focus";
 import { flushDismiss } from "../utils/flush-dismiss";
 import { user } from "../utils/user";
 import RangeSlider from "./RangeSlider.test.svelte";
@@ -78,6 +79,16 @@ describe("RangeSlider", () => {
     await user.click(upper);
     await tick();
     expect(selectUpper).toHaveBeenCalled();
+  });
+
+  it("keeps each selected value through the click's mouseup", async () => {
+    render(RangeSlider, {
+      props: { selectTextOnFocus: true, value: 10, valueUpper: 90 },
+    });
+
+    const [lower, upper] = screen.getAllByRole("spinbutton");
+    expect((await clickToFocus(lower)).defaultPrevented).toBe(true);
+    expect((await clickToFocus(upper)).defaultPrevented).toBe(true);
   });
 
   it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {
