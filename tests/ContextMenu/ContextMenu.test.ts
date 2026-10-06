@@ -589,6 +589,20 @@ describe("ContextMenu", () => {
 
     const customLabel = screen.getByText("Custom label content");
     expect(customLabel).toBeInTheDocument();
+    // Keeps the base label class (layout, typeahead) and adds the modifier
+    // that lifts the truncating overflow clip.
+    expect(customLabel.parentElement).toHaveClass(
+      "bx--menu-option__label",
+      "bx--menu-option__label--slotted",
+    );
+  });
+
+  it("does not add the slotted modifier to a plain labelText option", () => {
+    render(ContextMenuOptionSlot);
+
+    const label = screen.getByText("View details");
+    expect(label).toHaveClass("bx--menu-option__label");
+    expect(label).not.toHaveClass("bx--menu-option__label--slotted");
   });
 
   it("supports preventDefault on click to prevent menu from closing", async () => {

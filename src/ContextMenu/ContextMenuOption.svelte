@@ -325,7 +325,11 @@
           <slot name="icon"> <svelte:component this={resolvedIcon} /> </slot>
         </div>
       {/if}
-      <span class:bx--menu-option__label={true} title={labelText}>
+      <span
+        class:bx--menu-option__label={true}
+        class:bx--menu-option__label--slotted={!!$$slots.labelChildren}
+        title={labelText}
+      >
         <slot name="labelChildren">{labelText}</slot>
       </span>
       <div class:bx--menu-option__info={true}><CaretRight /></div>
@@ -349,7 +353,11 @@
           <slot name="icon"> <svelte:component this={resolvedIcon} /> </slot>
         </div>
       {/if}
-      <span class:bx--menu-option__label={true} title={labelText}>
+      <span
+        class:bx--menu-option__label={true}
+        class:bx--menu-option__label--slotted={!!$$slots.labelChildren}
+        title={labelText}
+      >
         <slot name="labelChildren">{labelText}</slot>
       </span>
       <div class:bx--menu-option__info={true}>
