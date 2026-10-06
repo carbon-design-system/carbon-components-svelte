@@ -1,4 +1,5 @@
 import { render } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { treeItemById } from "../utils/tree-item-by-id";
 import { user } from "../utils/user";
 import TreeViewCheckbox from "./TreeView.checkbox.test.svelte";
@@ -116,5 +117,22 @@ describe("TreeView selectionMode=checkbox", () => {
       removed: [],
       indeterminateIds: [],
     });
+  });
+
+  it("re-indents rows when selectionMode changes after mount", async () => {
+    const { component } = render(TreeViewCheckbox, {
+      selectionMode: "highlight",
+    });
+    const sparkLabel = treeItemById("spark").querySelector(
+      ".bx--tree-node__label",
+    );
+    assert(sparkLabel instanceof HTMLElement);
+    expect(sparkLabel.style.paddingLeft).toBe("3.5rem");
+
+    component.selectionMode = "checkbox";
+    await tick();
+
+    expect(sparkLabel.style.paddingLeft).toBe("2rem");
+    expect(sparkLabel.style.marginLeft).toBe("-2rem");
   });
 });

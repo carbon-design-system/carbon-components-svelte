@@ -278,6 +278,7 @@ export {
 export { formatFileSize } from "./utils/format-file-size.js";
 export { fuzzyMatch, highlightSegments } from "./utils/fuzzy-match.js";
 export { getInitials } from "./utils/initials.js";
+export { moveTreeNode } from "./utils/move-tree-node.js";
 export { queryParam } from "./utils/query-param.js";
 export { toHierarchy } from "./utils/to-hierarchy.js";
 export {

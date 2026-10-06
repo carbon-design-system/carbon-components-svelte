@@ -11,6 +11,7 @@
    * @property {number} posInSet
    * @property {number} setSize
    * @property {boolean} hasChildren
+   * @property {true} [placeholder] - Stand-in row under an expanded node whose children have not loaded; renders the `childNodes` slot for `node`.
    */
 
   /** @type {Row} */
@@ -29,11 +30,11 @@
   import { toAriaChecked } from "../utils/tree-aria-checked.js";
 
   const {
-    activeNodeId,
-    selectedIdSet,
-    checkedIdSet,
-    expandedIdSet,
-    indeterminateIdSet,
+    activeMembership,
+    selectedMembership,
+    checkedMembership,
+    expandedMembership,
+    indeterminateMembership,
     selectionMode,
     clickNode,
     selectNode,
@@ -42,19 +43,26 @@
     toggleNode,
   } = getContext("carbon:TreeView");
 
-  let prevActiveId = undefined;
+  let wasActive = false;
 
-  $: ({ node, depth, posInSet, setSize, hasChildren } = item);
+  $: ({ node, depth, posInSet, setSize, hasChildren, placeholder } = item);
   $: id = node.id;
   $: disabled = node.disabled === true;
   $: href = node.href;
   $: target = node.target;
-  $: expanded = hasChildren && $expandedIdSet.has(id);
-  $: selected = $selectedIdSet.has(id);
-  $: checked = $checkedIdSet.has(id);
+  // Per-id stores: a change elsewhere in the tree does not notify this row.
+  $: activeState = activeMembership.select(id);
+  $: expandedState = expandedMembership.select(id);
+  $: selectedState = selectedMembership.select(id);
+  $: checkedState = checkedMembership.select(id);
+  $: indeterminateState = indeterminateMembership.select(id);
+  $: active = $activeState;
+  $: expanded = hasChildren && $expandedState;
+  $: selected = $selectedState;
+  $: checked = $checkedState;
   // Link rows navigate; they render no checkbox (same as TreeViewNode).
   $: isCheckboxMode = $selectionMode === "checkbox" && node.href === undefined;
-  $: indeterminate = isCheckboxMode && $indeterminateIdSet.has(id);
+  $: indeterminate = isCheckboxMode && $indeterminateState;
   $: icon = node.icon;
   $: isLinkLeaf = href !== undefined && !hasChildren;
 
@@ -65,12 +73,15 @@
   // (2rem) with an icon. Checkbox mode uses one inset per depth so the
   // leading control lines up across parents and leaves.
   $: leafBase = icon ? 2 : 2.5;
-  $: indentRem = isCheckboxMode || hasChildren ? depth + 1 : depth + leafBase;
+  $: indentRem =
+    isCheckboxMode || hasChildren || placeholder ? depth + 1 : depth + leafBase;
 
+  // A placeholder row stands in for the children of its expanded parent,
+  // so `node` describes the parent, as in the recursive `childNodes` slot.
   $: mergedNode = {
     ...node,
-    expanded: hasChildren ? expanded : false,
-    leaf: !hasChildren,
+    expanded: placeholder ? true : hasChildren ? expanded : false,
+    leaf: placeholder ? false : !hasChildren,
     selected,
     checked,
     indeterminate,
@@ -78,18 +89,25 @@
 
   // Match TreeViewNode: externally-set activeId auto-selects the row.
   $: {
-    if (
-      id === $activeNodeId &&
-      prevActiveId !== $activeNodeId &&
-      !$selectedIdSet.has(id)
-    )
+    if (!placeholder && active && !wasActive && !selected) {
       selectNode(mergedNode);
+    }
 
-    prevActiveId = $activeNodeId;
+    wasActive = active;
   }
 </script>
 
-{#if isLinkLeaf}
+{#if placeholder}
+  <!-- `bx--tree-node` for the row background; hover styles target labels. -->
+  <li
+    role="none"
+    class:bx--tree-node={true}
+    style:height="{itemHeight}px"
+    style:padding-left="{indentRem}rem"
+  >
+    <slot name="childNodes" node={mergedNode} />
+  </li>
+{:else if isLinkLeaf}
   <li role="none" style:height="{itemHeight}px">
     <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role a11y-role-has-required-aria-props -->
     <a
@@ -104,11 +122,11 @@
       aria-level={depth + 1}
       aria-posinset={posInSet}
       aria-setsize={setSize}
-      aria-current={id === $activeNodeId ? "page" : undefined}
+      aria-current={active ? "page" : undefined}
       aria-disabled={disabled}
       class:bx--tree-node={true}
       class:bx--tree-leaf-node={true}
-      class:bx--tree-node--active={id === $activeNodeId}
+      class:bx--tree-node--active={active}
       class:bx--tree-node--selected={selected}
       class:bx--tree-node--disabled={disabled}
       class:bx--tree-node--with-icon={icon}
@@ -142,7 +160,7 @@
     aria-posinset={posInSet}
     aria-setsize={setSize}
     aria-expanded={hasChildren ? expanded : undefined}
-    aria-current={id === $activeNodeId || undefined}
+    aria-current={active || undefined}
     aria-selected={isCheckboxMode || disabled ? undefined : selected}
     aria-checked={isCheckboxMode
       ? toAriaChecked(checked, indeterminate)
@@ -151,7 +169,7 @@
     class:bx--tree-node={true}
     class:bx--tree-parent-node={hasChildren}
     class:bx--tree-leaf-node={!hasChildren}
-    class:bx--tree-node--active={id === $activeNodeId}
+    class:bx--tree-node--active={active}
     class:bx--tree-node--selected={isCheckboxMode ? checked : selected}
     class:bx--tree-node--disabled={disabled}
     class:bx--tree-node--with-icon={icon}

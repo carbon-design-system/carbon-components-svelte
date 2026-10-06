@@ -39,6 +39,27 @@
   }
 
   /**
+   * `*` expands every sibling of the focused node (WAI-ARIA tree pattern).
+   * @param {KeyboardEvent} event
+   */
+  function isExpandSiblingsKey(event) {
+    return (
+      event.key === "*" && !event.ctrlKey && !event.metaKey && !event.altKey
+    );
+  }
+
+  /**
+   * Ctrl+A, or Cmd+A on macOS (matching Ctrl/Cmd+click).
+   * @param {KeyboardEvent} event
+   */
+  function isSelectAllKey(event) {
+    return (
+      (event.code === "KeyA" || event.key === "a" || event.key === "A") &&
+      (event.ctrlKey || event.metaKey)
+    );
+  }
+
+  /**
    * Sentinel parent id for top-level roots in
    * `cachedParentIdById` / `cachedChildIdsByParentId`.
    * Symbol so it cannot collide with a real `Node["id"]`.
@@ -246,6 +267,24 @@
     return out;
   }
 
+  /**
+   * Whether a virtual row can take focus: an enabled node row, not the
+   * `childNodes` placeholder under an unloaded branch.
+   * @param {{ node: { disabled?: boolean }; placeholder?: true } | null} row
+   */
+  function isFocusableRow(row) {
+    return row != null && !row.placeholder && !row.node.disabled;
+  }
+
+  /**
+   * `{#each}` key for a virtual row. A placeholder row shares its parent's
+   * node, so it needs a key of its own.
+   * @param {{ node: { id: string | number }; placeholder?: true }} row
+   */
+  function virtualRowKey(row) {
+    return row.placeholder ? `\u0000childNodes:${row.node.id}` : row.node.id;
+  }
+
   /** Tabindex anchor: prefer the focused row when it is currently mounted
    * and enabled; otherwise the first enabled row in the window. */
   function resolveVirtualTabAnchorId(
@@ -262,13 +301,13 @@
       virtualFocusedId != null
     ) {
       for (const row of visible) {
-        if (row.node.id === virtualFocusedId && !row.node.disabled) {
+        if (row.node.id === virtualFocusedId && isFocusableRow(row)) {
           return virtualFocusedId;
         }
       }
     }
     for (const row of visible) {
-      if (!row.node.disabled) return row.node.id;
+      if (isFocusableRow(row)) return row.node.id;
     }
     return undefined;
   }
@@ -290,6 +329,7 @@
    * @property {boolean} [expand] - Whether to expand the node and its ancestors (default: true)
    * @property {boolean} [select] - Whether to select the node (default: true)
    * @property {boolean} [focus] - Whether to focus the node (default: true)
+   * @property {boolean} [scroll] - Whether to scroll the node into view without focusing it (default: the value of `focus`)
    * @typedef {object} TreeViewExpandedChange<Id=(string|number)>
    * @property {ReadonlyArray<Id>} expandedIds - The full set of expanded node ids after the change
    * @property {Array<Id>} added - Node ids expanded since the previous change
@@ -428,9 +468,10 @@
    *
    * Row height is derived from `size` (32px default, 24px compact).
    *
-   * Collapsed subtrees mount lazily on first expansion and stay mounted.
-   * Virtualization is per subtree. Enable it when a node may hold a large
-   * child list.
+   * Without virtualization, collapsed subtrees mount on first expansion and
+   * stay mounted, so a single node with thousands of children is slow to
+   * expand even when the tree as a whole is small. Enable it whenever any
+   * node may hold a large child list; the whole visible tree is windowed.
    *
    * @type {undefined | boolean | {
    *   maxVisibleRows?: number,
@@ -542,8 +583,13 @@
   /**
    * Programmatically show a node by `id`.
    * By default, the matching node will be expanded, selected, and focused.
-   * Use the options parameter to customize this behavior.
-   * @type {(id: Node["id"], options?: ShowNodeOptions) => void}
+   * Use the options parameter to customize this behavior; pass
+   * `{ select: false, focus: false, scroll: true }` to scroll a node into view
+   * without changing selection or focus.
+   * Resolves once the node is focused or scrolled into view: `true` on
+   * success, `false` if no node has `id` or its row cannot be reached (for
+   * example, `expand: false` with a collapsed ancestor).
+   * @type {(id: Node["id"], options?: ShowNodeOptions) => Promise<boolean>}
    * @example
    * ```svelte
    * <TreeView bind:this={treeView} {nodes} />
@@ -555,12 +601,17 @@
    * </button>
    * ```
    */
-  export function showNode(id, options = {}) {
-    const { expand = true, select = true, focus = true } = options;
+  export async function showNode(id, options = {}) {
+    const {
+      expand = true,
+      select = true,
+      focus = true,
+      scroll = focus,
+    } = options;
     // cachedNodeMap rebuilds only when `nodes` identity changes.
     // In-place mutations stay invisible until then.
     const targetNode = cachedNodeMap?.get(id);
-    if (!targetNode) return;
+    if (!targetNode) return false;
 
     const ancestorIds = expand ? getAncestorIds(id, cachedParentIdById) : [];
     if (expand) {
@@ -586,22 +637,29 @@
       }
     }
 
-    if (focus) {
-      tick().then(async () => {
-        if (virtualConfig && scrollContainerRef) {
-          focusVirtualRowById(id);
-          return;
-        }
-        const selector = `[id="${CSS.escape(String(id))}"]`;
-        let target = ref?.querySelector(selector);
-        for (let i = 0; !target && i < ancestorIds.length * 2 + 2; i++) {
-          // biome-ignore lint/performance/noAwaitInLoops: each tick waits for the next reveal flush
-          await tick();
-          target = ref?.querySelector(selector);
-        }
-        target?.focus();
-      });
+    await tick();
+    if (!focus && !scroll) return true;
+
+    if (virtualConfig && scrollContainerRef) {
+      return revealVirtualRow(id, focus);
     }
+
+    const selector = `[id="${CSS.escape(String(id))}"]`;
+    let target = ref?.querySelector(selector);
+    for (let i = 0; !target && i < ancestorIds.length * 2 + 2; i++) {
+      // biome-ignore lint/performance/noAwaitInLoops: each tick waits for the next reveal flush
+      await tick();
+      target = ref?.querySelector(selector);
+    }
+    if (!(target instanceof HTMLElement) || isUnderCollapsedSubtree(target)) {
+      return false;
+    }
+    if (focus) {
+      target.focus();
+    } else {
+      target.scrollIntoView({ block: "nearest" });
+    }
+    return true;
   }
 
   /**
@@ -635,6 +693,63 @@
     return ids.map((id) => cachedNodeMap?.get(id)).filter((node) => node);
   }
 
+  /**
+   * Look up the parent of the node with `id`.
+   * Returns `null` for top-level nodes and unknown ids.
+   * @type {(id: Node["id"]) => Node | null}
+   * @example
+   * ```svelte
+   * <TreeView bind:this={treeView} {nodes} />
+   * <button on:click={() => console.log(treeView.getParent('node-123'))}>
+   *   Log Parent
+   * </button>
+   * ```
+   */
+  export function getParent(id) {
+    const parentId = cachedParentIdById?.get(id);
+    if (parentId == null || parentId === ROOT_PARENT_ID) return null;
+    return cachedNodeMap?.get(parentId) ?? null;
+  }
+
+  /**
+   * Look up the loaded children of the node with `id`.
+   * Returns an empty array for leaves, unloaded `hasChildren` nodes, and unknown ids.
+   * @type {(id: Node["id"]) => Array<Node>}
+   */
+  export function getChildren(id) {
+    return getNodes(cachedChildIdsByParentId?.get(id) ?? []);
+  }
+
+  /**
+   * Look up the ancestors of the node with `id`, ordered from the top-level
+   * node down to the parent. Returns an empty array for top-level nodes and
+   * unknown ids.
+   * @type {(id: Node["id"]) => Array<Node>}
+   * @example
+   * ```svelte
+   * <TreeView bind:this={treeView} {nodes} bind:activeId />
+   * <Breadcrumb>
+   *   {#each treeView?.getAncestors(activeId) ?? [] as ancestor (ancestor.id)}
+   *     <BreadcrumbItem>{ancestor.text}</BreadcrumbItem>
+   *   {/each}
+   * </Breadcrumb>
+   * ```
+   */
+  export function getAncestors(id) {
+    return getNodes(getAncestorIds(id, cachedParentIdById));
+  }
+
+  /**
+   * Look up the siblings of the node with `id`, in order, excluding the node
+   * itself. Top-level nodes are siblings of each other. Returns an empty
+   * array for unknown ids.
+   * @type {(id: Node["id"]) => Array<Node>}
+   */
+  export function getSiblings(id) {
+    if (!cachedNodeMap?.has(id)) return [];
+    return getNodes(getCachedSiblingIds(id));
+  }
+
   import {
     afterUpdate,
     createEventDispatcher,
@@ -645,6 +760,7 @@
   import { writable } from "svelte/store";
   import { TYPEAHEAD_RESET_MS } from "../constants/timing.js";
   import { createDelayedSetter } from "../utils/delayed-setter.js";
+  import { createIdMembershipStore } from "../utils/id-membership-store.js";
   import { rangeSlice } from "../utils/range-slice.js";
   import {
     resolveCheckboxState,
@@ -673,20 +789,13 @@
   /** @type {import("svelte/store").Writable<"highlight" | "checkbox">} */
   const sharedSelectionMode = writable(selectionMode);
 
-  /** @type {import("svelte/store").Writable<Node["id"]>} */
-  const activeNodeId = writable(activeId);
-  /** @type {import("svelte/store").Writable<ReadonlyArray<Node["id"]>>} */
-  const selectedNodeIds = writable(selectedIds);
-  /** @type {import("svelte/store").Writable<ReadonlyArray<Node["id"]>>} */
-  const expandedNodeIds = writable(expandedIds);
-  /** @type {import("svelte/store").Writable<Set<Node["id"]>>} */
-  const selectedIdSet = writable(new Set(selectedIds));
-  /** @type {import("svelte/store").Writable<Set<Node["id"]>>} */
-  const checkedIdSet = writable(new Set(checkedIds));
-  /** @type {import("svelte/store").Writable<Set<Node["id"]>>} */
-  const expandedIdSet = writable(new Set(expandedIds));
-  /** @type {import("svelte/store").Writable<Set<Node["id"]>>} */
-  const indeterminateIdSet = writable(new Set(indeterminateIds));
+  // Rows subscribe to their own id, so a change notifies only the rows whose
+  // state changed rather than every mounted row.
+  const activeMembership = createIdMembershipStore([activeId]);
+  const selectedMembership = createIdMembershipStore(selectedIds);
+  const checkedMembership = createIdMembershipStore(checkedIds);
+  const expandedMembership = createIdMembershipStore(expandedIds);
+  const indeterminateMembership = createIdMembershipStore(indeterminateIds);
 
   /** @type {HTMLElement | null} */
   let ref = null;
@@ -746,7 +855,11 @@
 
   $: setMultiselectKeyListeners(isMultiselect);
 
-  /** @type {TreeWalker | null} */
+  /**
+   * Walker over the non-virtual rows. Follows `ref`, which is only bound
+   * while the non-virtual branch is mounted (`virtualize` can toggle).
+   * @type {TreeWalker | null}
+   */
   let treeWalker = null;
 
   /**
@@ -791,13 +904,22 @@
    * @returns {Node["id"] | undefined}
    */
   function nodeIdFromTreeItem(element) {
+    return cachedIdByDomIdLookup(element.id);
+  }
+
+  /**
+   * The node id whose `String(id)` is `domId`, or `undefined`.
+   * @param {string} domId
+   * @returns {Node["id"] | undefined}
+   */
+  function cachedIdByDomIdLookup(domId) {
     if (cachedIdByDomId == null) {
       cachedIdByDomId = new Map();
       for (const id of cachedNodeMap?.keys() ?? []) {
         cachedIdByDomId.set(String(id), id);
       }
     }
-    return cachedIdByDomId.get(element.id);
+    return cachedIdByDomId.get(domId);
   }
 
   /**
@@ -880,7 +1002,7 @@
 
   /**
    * Reassign `selectedIds` and keep `selectedIdsSet` (used for O(1) lookups
-   * in `withLiveState`) synchronously in sync. `selectedIdSet` is only
+   * in `withLiveState`) synchronously in sync. `selectedMembership` is only
    * refreshed reactively (see below), which lags behind handlers that mutate
    * `selectedIds` and dispatch in the same synchronous call, so it can't be
    * used for `withLiveState`.
@@ -1103,17 +1225,40 @@
     dispatch("toggle", withLiveState(node));
   }
 
+  /**
+   * Expand `id` and its siblings, skipping disabled and leaf nodes, and fire
+   * `toggle` for each node this expands. A no-op with `autoCollapse`, which
+   * allows one expanded node per level.
+   * @param {Node["id"]} id
+   */
+  function expandSiblings(id) {
+    if (autoCollapse) return;
+    const parentId = cachedParentIdById?.get(id);
+    const levelIds = cachedChildIdsByParentId?.get(parentId) ?? [];
+    /** @type {Node[]} */
+    const newlyExpanded = [];
+    for (const levelId of levelIds) {
+      const node = cachedNodeMap?.get(levelId);
+      if (!node || node.disabled || !isExpandableNode(node)) continue;
+      if (expandedIdsSet.has(levelId)) continue;
+      expandedIdsSet.add(levelId);
+      newlyExpanded.push(node);
+    }
+    if (newlyExpanded.length === 0) return;
+    expandedIds = Array.from(expandedIdsSet);
+    prevExpandedIds = expandedIds;
+    for (const node of newlyExpanded) toggleNode(node);
+  }
+
   let initialRenderComplete = false;
 
   setContext("carbon:TreeView", {
     treeId,
-    activeNodeId,
-    selectedNodeIds,
-    expandedNodeIds,
-    selectedIdSet,
-    checkedIdSet,
-    expandedIdSet,
-    indeterminateIdSet,
+    activeMembership,
+    selectedMembership,
+    checkedMembership,
+    expandedMembership,
+    indeterminateMembership,
     multiselect: sharedMultiselect,
     selectionMode: sharedSelectionMode,
     clickNode,
@@ -1244,6 +1389,13 @@
     const treeItem = getTreeItemFromTarget(event.target);
     if (!treeItem) return;
 
+    if (isExpandSiblingsKey(event)) {
+      event.preventDefault();
+      const id = nodeIdFromTreeItem(treeItem);
+      if (id !== undefined) expandSiblings(id);
+      return;
+    }
+
     if (handleTypeAhead(event, treeItem)) return;
 
     treeWalker.currentNode = treeItem;
@@ -1259,10 +1411,7 @@
     }
 
     const isHomeOrEnd = event.key === "Home" || event.key === "End";
-    const isSelectAll =
-      isMultiselect &&
-      (event.code === "KeyA" || event.key === "a" || event.key === "A") &&
-      event.ctrlKey;
+    const isSelectAll = isMultiselect && isSelectAllKey(event);
 
     if (isHomeOrEnd || isSelectAll) {
       /** @type {Array<string | number>} */
@@ -1384,10 +1533,6 @@
   onMount(() => {
     initialRenderComplete = true;
 
-    if (ref && !treeWalker) {
-      treeWalker = createTreeWalkerInstance(ref);
-    }
-
     return () => {
       setMultiselectKeyListeners(false);
       resetTypeAheadBuffer.cancel();
@@ -1435,6 +1580,8 @@
     cachedFlattenedNodes = null;
     cachedIdByDomId = null;
   }
+
+  $: treeWalker = ref ? createTreeWalkerInstance(ref) : null;
 
   $: sharedMultiselect.set(isMultiselect);
   $: sharedSelectionMode.set(selectionMode);
@@ -1506,13 +1653,13 @@
 
     if (!arrayIdsEqual(indeterminateIds, prevIndeterminateIdsPushed)) {
       prevIndeterminateIdsPushed = indeterminateIds;
-      indeterminateIdSet.set(new Set(indeterminateIds));
+      indeterminateMembership.set(indeterminateIds);
     }
 
     if (!arrayIdsEqual(checkedIds, prevCheckedIdsPushed)) {
       const wasCheckedIds = prevCheckedIdsPushed;
       prevCheckedIdsPushed = checkedIds;
-      checkedIdSet.set(new Set(checkedIds));
+      checkedMembership.set(checkedIds);
 
       const nextCheckedIds = checkedIds.slice();
       const nextIndeterminateIds = indeterminateIds.slice();
@@ -1543,6 +1690,12 @@
    * Falls back to a derived px value otherwise. */
   let measuredContainerHeight = 0;
 
+  /**
+   * Virtual rows reserve a placeholder row for the `childNodes` slot only
+   * when it is provided, so trees without one keep their row count.
+   */
+  const hasChildNodesSlot = Boolean($$slots.childNodes);
+
   $: virtualConfig = virtualize
     ? {
         maxVisibleRows: 10,
@@ -1554,7 +1707,7 @@
     : null;
 
   // Derive from `expandedIds` (reassigned synchronously at every mutation
-  // site) rather than `$expandedIdSet`. The store is only `.set()` from
+  // site) rather than `expandedMembership`. The store is only `.set()` from
   // inside a reactive block, which Svelte 3/4 doesn't track as an assignment
   // for reactive ordering — so subscribers re-run a flush late and the
   // rendered window lags one `tick()` behind expand/collapse. Reading
@@ -1590,7 +1743,9 @@
     ) {
       const expandedArg =
         expandedIds === prevExpandedIds ? expandedIdsSet : new Set(expandedIds);
-      virtualIndex = createTreeVirtualIndex(stableNodes, expandedArg);
+      virtualIndex = createTreeVirtualIndex(stableNodes, expandedArg, {
+        placeholders: hasChildNodesSlot,
+      });
       prevVirtualIndexNodes = stableNodes;
       prevVirtualIndexExpandedIds = expandedIds;
     }
@@ -1746,17 +1901,20 @@
   }
 
   /**
-   * Scroll a virtual row into view and focus it. Callers schedule this on a
-   * `tick`, so the virtual index already reflects the ancestors `showNode` expanded.
+   * Scroll a virtual row into view and optionally focus it. Callers await a
+   * `tick` first, so the virtual index already reflects the ancestors
+   * `showNode` expanded.
    * @param {string | number} targetId
+   * @param {boolean} focus
+   * @returns {Promise<boolean>} Whether the row is in the visible index.
    */
-  function focusVirtualRowById(targetId) {
-    if (!virtualConfig || !virtualIndex || !scrollContainerRef) return;
+  async function revealVirtualRow(targetId, focus) {
+    if (!virtualConfig || !virtualIndex || !scrollContainerRef) return false;
 
     const index = virtualIndex.findIndexById(targetId);
-    if (index < 0) return;
+    if (index < 0) return false;
 
-    virtualFocusedId = targetId;
+    if (focus) virtualFocusedId = targetId;
 
     const nextScrollTop = scrollHighlightedIntoView({
       highlightedIndex: index,
@@ -1769,9 +1927,11 @@
     });
     if (nextScrollTop !== null) virtualSetScrollTop(nextScrollTop);
 
-    tick().then(() => {
+    if (focus) {
+      await tick();
       scrollContainerRef?.querySelector(treeRowIdSelector(targetId))?.focus();
-    });
+    }
+    return true;
   }
 
   /** Cancels stale focus from overlapping async `virtualMoveTo` calls
@@ -1828,7 +1988,7 @@
     for (let offset = 1; offset <= count; offset++) {
       const candidateIndex = (startIndex + offset) % count;
       const row = virtualIndex.getRowAt(candidateIndex);
-      if (!row || row.node.disabled) continue;
+      if (!isFocusableRow(row)) continue;
       const label = String(row.node.text ?? "")
         .trim()
         .toLowerCase();
@@ -1852,8 +2012,13 @@
         : null;
     let activeIdx = -1;
     if (rowTarget) {
-      const id = rowTarget.getAttribute(TREE_ROW_ID_ATTR);
-      activeIdx = virtualIndex.findIndexById(/** @type {string} */ (id));
+      // Recover the typed id so the lookup compares ids without `String()`.
+      const attr = /** @type {string} */ (
+        rowTarget.getAttribute(TREE_ROW_ID_ATTR)
+      );
+      activeIdx = virtualIndex.findIndexById(
+        cachedIdByDomIdLookup(attr) ?? attr,
+      );
     } else if (event.target === scrollContainerRef) {
       if (virtualFocusedId != null && virtualFocusedId !== "") {
         activeIdx = virtualIndex.findIndexById(virtualFocusedId);
@@ -1861,7 +2026,7 @@
       if (activeIdx < 0) {
         for (let i = 0; i < virtualIndex.totalCount; i++) {
           const row = virtualIndex.getRowAt(i);
-          if (row && !row.node.disabled) {
+          if (isFocusableRow(row)) {
             activeIdx = i;
             break;
           }
@@ -1871,6 +2036,13 @@
     if (activeIdx < 0) return;
     const item = virtualIndex.getRowAt(activeIdx);
     if (!item) return;
+
+    if (isExpandSiblingsKey(event)) {
+      event.preventDefault();
+      event.stopPropagation();
+      expandSiblings(item.node.id);
+      return;
+    }
 
     if (handleVirtualTypeAhead(event, activeIdx)) {
       event.preventDefault();
@@ -1883,17 +2055,14 @@
       let i = from;
       while (i >= 0 && i < virtualIndex.totalCount) {
         const row = virtualIndex.getRowAt(i);
-        if (row && !row.node.disabled) return i;
+        if (isFocusableRow(row)) return i;
         i += dir;
       }
       return -1;
     }
 
     const isHomeOrEnd = event.key === "Home" || event.key === "End";
-    const isSelectAll =
-      isMultiselect &&
-      (event.code === "KeyA" || event.key === "a" || event.key === "A") &&
-      event.ctrlKey;
+    const isSelectAll = isMultiselect && isSelectAllKey(event);
 
     if (isHomeOrEnd || isSelectAll) {
       /** @type {Array<string | number>} */
@@ -1916,7 +2085,7 @@
           const to = Math.max(activeIdx, targetIdx);
           for (let i = from; i <= to; i++) {
             const row = virtualIndex.getRowAt(i);
-            if (row && !row.node.disabled) nodeIds.push(row.node.id);
+            if (isFocusableRow(row)) nodeIds.push(row.node.id);
           }
           setSelectedIds([...new Set(selectedIds.concat(nodeIds))]);
         }
@@ -1929,7 +2098,7 @@
         event.stopPropagation();
         for (let i = 0; i < virtualIndex.totalCount; i++) {
           const row = virtualIndex.getRowAt(i);
-          if (row && !row.node.disabled) nodeIds.push(row.node.id);
+          if (isFocusableRow(row)) nodeIds.push(row.node.id);
         }
         setSelectedIds([...new Set(selectedIds.concat(nodeIds))]);
         return;
@@ -1937,6 +2106,26 @@
     }
 
     switch (event.key) {
+      case "PageDown":
+      case "PageUp": {
+        event.preventDefault();
+        event.stopPropagation();
+        // One viewport of rows, keeping the current row in view.
+        const pageSize = Math.max(
+          1,
+          Math.floor(getVirtualContainerHeight() / virtualConfig.itemHeight) -
+            1,
+        );
+        const direction = event.key === "PageDown" ? 1 : -1;
+        const target = Math.min(
+          Math.max(activeIdx + direction * pageSize, 0),
+          virtualIndex.totalCount - 1,
+        );
+        let next = nextEnabled(target, direction);
+        if (next < 0) next = nextEnabled(target, -direction);
+        if (next >= 0 && next !== activeIdx) virtualMoveTo(next);
+        break;
+      }
       case "ArrowDown": {
         event.preventDefault();
         event.stopPropagation();
@@ -1967,10 +2156,15 @@
         if (!item.hasChildren) break;
         event.preventDefault();
         event.stopPropagation();
-        if ($expandedIdSet.has(item.node.id)) {
-          // Already expanded: focus first child (next row).
+        if (expandedIdsSet.has(item.node.id)) {
+          // Already expanded: focus the first child, if any has loaded.
           const next = nextEnabled(activeIdx + 1, 1);
-          if (next >= 0) virtualMoveTo(next);
+          if (
+            next >= 0 &&
+            virtualIndex.getRowAt(next)?.parentId === item.node.id
+          ) {
+            virtualMoveTo(next);
+          }
         } else {
           expandNode(item.node, true);
           toggleNode(item.node);
@@ -1980,7 +2174,7 @@
       case "ArrowLeft": {
         event.preventDefault();
         event.stopPropagation();
-        if (item.hasChildren && $expandedIdSet.has(item.node.id)) {
+        if (item.hasChildren && expandedIdsSet.has(item.node.id)) {
           expandNode(item.node, false);
           toggleNode(item.node);
         } else if (item.parentId != null) {
@@ -2008,7 +2202,7 @@
         // Match recursive TreeViewNodeList: Space only activates (check /
         // select); Enter also toggles expansion on parents.
         if (event.key === "Enter" && item.hasChildren) {
-          expandNode(item.node, !$expandedIdSet.has(item.node.id));
+          expandNode(item.node, !expandedIdsSet.has(item.node.id));
           toggleNode(item.node);
         }
         clickNode(item.node, event);
@@ -2056,13 +2250,12 @@
     if (activeId !== prevActiveIdPushed) {
       if (activeId !== gestureActiveId) gestureActiveId = undefined;
       prevActiveIdPushed = activeId;
-      activeNodeId.set(activeId);
+      activeMembership.set([activeId]);
     }
     if (!arrayIdsEqual(selectedIds, prevSelectedIdsPushed)) {
       const wasSelectedIds = prevSelectedIdsPushed;
       prevSelectedIdsPushed = selectedIds;
-      selectedIdSet.set(new Set(selectedIds));
-      selectedNodeIds.set(selectedIds);
+      selectedMembership.set(selectedIds);
 
       const nextSelectedIds = selectedIds.slice();
       const prevSet = new Set(wasSelectedIds);
@@ -2080,8 +2273,7 @@
     if (!arrayIdsEqual(expandedIds, prevExpandedIdsPushed)) {
       const wasExpandedIds = prevExpandedIdsPushed;
       prevExpandedIdsPushed = expandedIds;
-      expandedIdSet.set(expandedIdsSet);
-      expandedNodeIds.set(expandedIds);
+      expandedMembership.set(expandedIdsSet);
 
       const nextExpandedIds = expandedIds.slice();
       const prevSet = new Set(wasExpandedIds);
@@ -2131,7 +2323,7 @@
     {#if virtualData.offsetY > 0}
       <li aria-hidden="true" style:height="{virtualData.offsetY}px"></li>
     {/if}
-    {#each virtualData.visibleItems as row (row.node.id)}
+    {#each virtualData.visibleItems as row (virtualRowKey(row))}
       <TreeViewNodeVirtual
         item={row}
         itemHeight={virtualConfig.itemHeight}
@@ -2139,6 +2331,9 @@
         let:node
       >
         <slot {node}>{node.text}</slot>
+        <svelte:fragment slot="childNodes" let:node>
+          <slot name="childNodes" {node} />
+        </svelte:fragment>
       </TreeViewNodeVirtual>
     {/each}
     {#if virtualData.endIndex < virtualIndex.totalCount}

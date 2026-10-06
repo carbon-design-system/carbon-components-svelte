@@ -15,6 +15,16 @@ export type VisibleTreeRow<T extends TreeNodeLike = TreeNodeLike> = {
   posInSet: number;
   setSize: number;
   hasChildren: boolean;
+  /**
+   * Set on the stand-in row under an expanded `hasChildren` node whose
+   * children have not loaded. `node` is the parent.
+   */
+  placeholder?: true;
+};
+
+export type TreeVirtualIndexOptions = {
+  /** Emit placeholder rows for the `childNodes` slot. */
+  placeholders?: boolean;
 };
 
 export type TreeVirtualIndex<T extends TreeNodeLike = TreeNodeLike> = {
@@ -33,6 +43,7 @@ export { isExpandableNode };
 export function flattenVisibleRows<T extends TreeNodeLike>(
   nodes: readonly T[],
   expandedIdsSet: Set<string | number>,
+  options?: TreeVirtualIndexOptions,
 ): VisibleTreeRow<T>[];
 
 /**
@@ -44,4 +55,5 @@ export function flattenVisibleRows<T extends TreeNodeLike>(
 export function createTreeVirtualIndex<T extends TreeNodeLike>(
   nodes: readonly T[],
   expandedIdsSet: Set<string | number>,
+  options?: TreeVirtualIndexOptions,
 ): TreeVirtualIndex<T>;

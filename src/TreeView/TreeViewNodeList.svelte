@@ -57,26 +57,22 @@
   import Checkbox from "../Checkbox/Checkbox.svelte";
   import CaretDown from "../icons/CaretDown.svelte";
   import { toAriaChecked } from "../utils/tree-aria-checked.js";
-  import TreeViewNode, {
-    computeTreeLeafDepth,
-    findParentTreeNode,
-  } from "./TreeViewNode.svelte";
+  import TreeViewNode, { findParentTreeNode } from "./TreeViewNode.svelte";
   // `<svelte:fragment>` (used to forward the `childNodes` slot without adding
   // a DOM wrapper) can only target a `Component`, not `<svelte:self>` — so
   // this recurses via a self-import instead.
   import Self from "./TreeViewNodeList.svelte";
 
   let ref = null;
-  let refLabel = null;
-  let prevActiveId = undefined;
+  let wasActive = false;
 
   const {
     treeId,
-    activeNodeId,
-    selectedIdSet,
-    checkedIdSet,
-    expandedIdSet,
-    indeterminateIdSet,
+    activeMembership,
+    selectedMembership,
+    checkedMembership,
+    expandedMembership,
+    indeterminateMembership,
     selectionMode,
     clickNode,
     selectNode,
@@ -86,22 +82,30 @@
     isInitialRender,
   } = getContext("carbon:TreeView");
 
-  let subtreeRendered = isInitialRender() && $expandedIdSet.has(id);
+  let subtreeRendered = isInitialRender() && expandedMembership.has(id);
 
-  function offset() {
-    const depth = computeTreeLeafDepth(refLabel) - 1;
-
-    // Checkbox is the leading element; use one inset per depth. The
-    // leaf/icon offsets below align text with a parent's caret and would
-    // shift the checkboxes instead.
-    if (isCheckboxMode) return depth + 1;
-    if (parent) return depth + 1;
+  /**
+   * Label inset in rem. Checkbox is the leading element; use one inset per
+   * depth. The leaf/icon offsets align text with a parent's caret and would
+   * shift the checkboxes instead.
+   * @type {(level: number, isCheckboxMode: boolean, parent: boolean, icon: unknown) => number}
+   */
+  function resolveLabelInset(level, isCheckboxMode, parent, icon) {
+    const depth = level - 1;
+    if (isCheckboxMode || parent) return depth + 1;
     if (icon) return depth + 2;
     return depth + 2.5;
   }
 
   $: parent = Array.isArray(nodes);
-  $: expanded = $expandedIdSet.has(id);
+  // Per-id stores: a change elsewhere in the tree does not notify this row.
+  $: activeState = activeMembership.select(id);
+  $: expandedState = expandedMembership.select(id);
+  $: selectedState = selectedMembership.select(id);
+  $: checkedState = checkedMembership.select(id);
+  $: indeterminateState = indeterminateMembership.select(id);
+  $: active = $activeState;
+  $: expanded = $expandedState;
   const SYNC_REVEAL_LEVELS = 16;
   $: if (expanded && !subtreeRendered) {
     if (level % SYNC_REVEAL_LEVELS === 0) {
@@ -112,10 +116,10 @@
       subtreeRendered = true;
     }
   }
-  $: selected = $selectedIdSet.has(id);
-  $: checked = $checkedIdSet.has(id);
+  $: selected = $selectedState;
+  $: checked = $checkedState;
   $: isCheckboxMode = $selectionMode === "checkbox";
-  $: indeterminate = isCheckboxMode && $indeterminateIdSet.has(id);
+  $: indeterminate = isCheckboxMode && $indeterminateState;
   // Merge all props (including custom properties) with computed properties
   // Explicitly reference text and disabled to avoid Svelte warning and ensure they're included
   // `level`/`posinset`/`setsize` are layout-only (drive `aria-*` attributes) and excluded from `node`.
@@ -139,21 +143,11 @@
   $: {
     // The root list is a non-selectable wrapper; its default empty `id` would
     // otherwise match the default empty `activeId` and select a phantom node.
-    if (
-      !root &&
-      id === $activeNodeId &&
-      prevActiveId !== $activeNodeId &&
-      !$selectedIdSet.has(id)
-    )
-      selectNode(node);
+    if (!root && active && !wasActive && !selected) selectNode(node);
 
-    prevActiveId = $activeNodeId;
+    wasActive = active;
   }
-  $: if (refLabel) {
-    const rem = offset();
-    refLabel.style.marginLeft = `-${rem}rem`;
-    refLabel.style.paddingLeft = `${rem}rem`;
-  }
+  $: labelInset = resolveLabelInset(level, isCheckboxMode, parent, icon);
 </script>
 
 {#if root}
@@ -191,7 +185,7 @@
     role="treeitem"
     {id}
     tabindex={disabled ? undefined : -1}
-    aria-current={id === $activeNodeId || undefined}
+    aria-current={active || undefined}
     aria-selected={isCheckboxMode || disabled ? undefined : selected}
     aria-checked={isCheckboxMode
       ? toAriaChecked(checked, indeterminate)
@@ -199,7 +193,7 @@
     aria-disabled={disabled}
     class:bx--tree-node={true}
     class:bx--tree-parent-node={true}
-    class:bx--tree-node--active={id === $activeNodeId}
+    class:bx--tree-node--active={active}
     class:bx--tree-node--selected={isCheckboxMode ? checked : selected}
     class:bx--tree-node--disabled={disabled}
     class:bx--tree-node--with-icon={icon}
@@ -273,7 +267,11 @@
       focusNode(node);
     }}
   >
-    <div class:bx--tree-node__label={true} bind:this={refLabel}>
+    <div
+      class:bx--tree-node__label={true}
+      style:margin-left="-{labelInset}rem"
+      style:padding-left="{labelInset}rem"
+    >
       {#if isCheckboxMode}
         <!-- Decorative input; empty label keeps row textContent stable for type-ahead. -->
         <Checkbox
