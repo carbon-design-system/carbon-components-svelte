@@ -193,6 +193,7 @@ describe("Dropdown", () => {
       "true",
     );
     expect(screen.getByText("Invalid selection")).toBeInTheDocument();
+    expect(button).toHaveAttribute("aria-invalid", "true");
   });
 
   it("should handle warning state", () => {
@@ -245,6 +246,7 @@ describe("Dropdown", () => {
 
       const listbox = container.querySelector(".bx--dropdown");
       expect(listbox).not.toHaveAttribute("data-invalid");
+      expect(screen.getByRole("combobox")).not.toHaveAttribute("aria-invalid");
       expect(listbox).not.toHaveClass("bx--dropdown--invalid");
       expect(listbox).not.toHaveClass("bx--dropdown--warning");
       expect(container.querySelector(".bx--list-box__invalid-icon")).toBeNull();
