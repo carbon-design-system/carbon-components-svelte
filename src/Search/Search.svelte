@@ -140,6 +140,7 @@
     resolveValidationVisibility,
   } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
+  import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { uniqueId } from "../utils/unique-id.js";
   import SearchSkeleton from "./SearchSkeleton.svelte";
 
@@ -289,6 +290,7 @@
     <!-- svelte-ignore a11y-autofocus -->
     <input
       bind:this={ref}
+      use:preserveFocusSelection={selectTextOnFocus && !disabled}
       use:formReset={handleFormReset}
       bind:value
       type="search"

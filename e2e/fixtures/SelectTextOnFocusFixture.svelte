@@ -5,9 +5,14 @@
     DatePickerInput,
     NumberInput,
     PasswordInput,
+    Search,
+    SearchMenu,
     TextArea,
     TextInput,
     TimePicker,
+    Toolbar,
+    ToolbarContent,
+    ToolbarSearch,
   } from "carbon-components-svelte";
 </script>
 
@@ -56,4 +61,28 @@
       selectTextOnFocus
     />
   </DatePicker>
+
+  <Search
+    data-testid="search"
+    labelText="Search"
+    selectTextOnFocus
+    value="abcdef"
+  />
+  <SearchMenu
+    data-testid="search-menu"
+    labelText="Search menu"
+    selectTextOnFocus
+    value="abcdef"
+    items={["abcdef"]}
+  />
+  <Toolbar>
+    <ToolbarContent>
+      <ToolbarSearch
+        data-testid="toolbar-search"
+        persistent
+        selectTextOnFocus
+        value="abcdef"
+      />
+    </ToolbarContent>
+  </Toolbar>
 </div>

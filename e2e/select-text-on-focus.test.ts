@@ -13,6 +13,9 @@ const cases: { testId: string; check?: "replace" }[] = [
   { testId: "time-picker" },
   { testId: "number-input", check: "replace" },
   { testId: "date-picker-input" },
+  { testId: "search" },
+  { testId: "search-menu" },
+  { testId: "toolbar-search" },
 ];
 
 async function expectFullSelection(input: Locator) {
