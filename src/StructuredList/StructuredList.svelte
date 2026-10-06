@@ -26,6 +26,16 @@
   export let multiple = false;
 
   /**
+   * Specify the name of the radio group for selectable rows.
+   * Only used when `selection` is `true` and `multiple` is `false`;
+   * in `multiple` mode the checkboxes are not named.
+   * When unset, the radios share a generated id so they form one group;
+   * set a name explicitly for stable server-rendered markup.
+   * @type {string}
+   */
+  export let name = undefined;
+
+  /**
    * Specify the icon rendered in the selection column of selectable rows.
    * Only used when `selection` is `true`.
    * The icon is decorative; selection state is conveyed by each row's `aria-checked`.
@@ -47,8 +57,10 @@
   );
 
   // Radios need a shared name to move on the arrow keys.
-  const groupName = uniqueId("structured-list");
-  const inputName = writable(selection && !multiple ? groupName : "");
+  const fallbackName = uniqueId("structured-list");
+  const inputName = writable(
+    selection && !multiple ? name || fallbackName : "",
+  );
   const multipleValue = writable(multiple);
   const selectionValue = writable(selection);
   const iconValue = writable(icon);
@@ -87,7 +99,7 @@
     initialRender = false;
   });
 
-  $: inputName.set(selection && !multiple ? groupName : "");
+  $: inputName.set(selection && !multiple ? name || fallbackName : "");
   $: selected = $selectedValue;
   $: $multipleValue = multiple;
   $: $selectionValue = selection;
