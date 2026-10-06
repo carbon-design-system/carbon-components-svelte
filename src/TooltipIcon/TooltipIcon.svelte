@@ -110,6 +110,8 @@
   let focused = false;
 
   function show() {
+    // Re-enable the portalled tooltip after an Escape dismissal.
+    hidden = false;
     open = true;
     tooltipHandoff.claim();
   }
@@ -186,19 +188,48 @@
     };
   });
 
+  // Runs in the capture phase so a visible tooltip is dismissed before any
+  // ancestor (e.g. a Modal) sees Escape, whether focus is on the trigger or
+  // elsewhere. A second Escape, with nothing left to dismiss, still bubbles.
   function handleKeydown(event) {
-    if (event.key === "Escape") {
-      hide();
-    }
+    if (event.key !== "Escape") return;
+    const visible = effectivePortalTooltip
+      ? portalOpen
+      : open && !disabled && !tooltipHidden;
+    hidden = true;
+    hide();
+    if (visible) event.stopPropagation();
   }
+
+  // In portal mode the assistive-text span is not rendered, so name the
+  // trigger directly. A consumer-supplied label takes precedence; the tooltip
+  // text is then exposed as the description instead.
+  $: hasConsumerLabel =
+    $$restProps["aria-label"] != null || $$restProps["aria-labelledby"] != null;
+  $: portalLabel =
+    effectivePortalTooltip && tooltipText && !hasConsumerLabel
+      ? tooltipText
+      : undefined;
+  $: describedBy = portalLabel
+    ? undefined
+    : effectivePortalTooltip
+      ? portalOpen
+        ? id
+        : undefined
+      : id;
 </script>
 
 <button
   bind:this={ref}
-  use:dismiss={{ enabled: open, type: "keydown", handler: handleKeydown }}
+  use:dismiss={{
+    enabled: open || portalOpen,
+    type: "keydown",
+    handler: handleKeydown,
+    options: { capture: true },
+  }}
   {disabled}
   type="button"
-  aria-describedby={id}
+  aria-describedby={describedBy}
   class:bx--tooltip__trigger={true}
   class:bx--tooltip--portal-active={effectivePortalTooltip}
   class:bx--tooltip--a11y={!effectivePortalTooltip}
@@ -219,6 +250,7 @@
   class:bx--tooltip--align-end={!effectivePortalTooltip && align === "end"}
   style:cursor={disabled ? "not-allowed" : "default"}
   {...$$restProps}
+  aria-label={portalLabel ?? $$restProps["aria-label"]}
   on:click
   on:click={() => {
     if (disabled) return;
