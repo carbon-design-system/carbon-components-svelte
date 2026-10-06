@@ -210,6 +210,25 @@ describe("PasswordInput", () => {
         screen.getByText("Your password should be hard to guess"),
       ).toBeInTheDocument();
     });
+
+    it("describes the input with its helper text", () => {
+      render(PasswordInput, {
+        labelText: "Password",
+        helperText: "Your password should be hard to guess",
+      });
+
+      expect(screen.getByLabelText("Password")).toHaveAccessibleDescription(
+        "Your password should be hard to guess",
+      );
+    });
+
+    it("names the visibility toggle when disabled", () => {
+      render(PasswordInput, { labelText: "Password", disabled: true });
+
+      expect(
+        screen.getByRole("button", { name: "Show password" }),
+      ).toBeDisabled();
+    });
   });
 
   describe("Variants", () => {
