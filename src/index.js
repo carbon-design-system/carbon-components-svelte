@@ -269,17 +269,23 @@ export {
   applyColumnSettings,
   toColumnSettings,
 } from "./utils/column-settings.js";
+export { dismiss } from "./utils/dismiss.js";
 export { downloadFile } from "./utils/download-file.js";
 export {
   filterTreeById,
   filterTreeByText,
   filterTreeNodes,
 } from "./utils/filter-tree-nodes.js";
+export { floatingPosition } from "./utils/floating-position.js";
+export { formReset } from "./utils/form-reset.js";
 export { formatFileSize } from "./utils/format-file-size.js";
 export { fuzzyMatch, highlightSegments } from "./utils/fuzzy-match.js";
 export { getInitials } from "./utils/initials.js";
+export { preserveFocusSelection } from "./utils/preserve-focus-selection.js";
 export { queryParam } from "./utils/query-param.js";
+export { rovingFocus } from "./utils/roving-focus.js";
 export { toHierarchy } from "./utils/to-hierarchy.js";
+export { trapFocus } from "./utils/trap-focus.js";
 export {
   resolveCheckboxState,
   toggleCheckboxNode,
