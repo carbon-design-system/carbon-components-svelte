@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { clickToFocus } from "../utils/click-to-focus";
 import { user } from "../utils/user";
 import { getPinCodeInputs as getInputs } from "./helpers";
 import PinCodeInputFluidForm from "./PinCodeInput.fluidForm.test.svelte";
@@ -644,6 +645,15 @@ describe("PinCodeInput", () => {
 
     expect(select).toHaveBeenCalled();
     select.mockRestore();
+  });
+
+  it("keeps the selected value through the click's mouseup", async () => {
+    render(PinCodeInput, {
+      props: { selectTextOnFocus: true, value: "0182" },
+    });
+
+    const mouseup = await clickToFocus(getInputs()[2]);
+    expect(mouseup.defaultPrevented).toBe(true);
   });
 
   it("should set aria-errormessage (not aria-describedby) to the error id on each segment when invalid", () => {

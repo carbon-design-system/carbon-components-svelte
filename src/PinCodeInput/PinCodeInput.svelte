@@ -192,6 +192,7 @@
     resolveValidationVisibility,
   } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
+  import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -553,6 +554,7 @@
         {#each code as char, index (index)}
           <input
             bind:this={inputs[index]}
+            use:preserveFocusSelection={selectTextOnFocus}
             type="text"
             inputmode={type === "numeric" ? "numeric" : "text"}
             autocomplete={index === 0 ? "one-time-code" : "off"}

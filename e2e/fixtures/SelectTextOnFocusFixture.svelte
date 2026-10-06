@@ -7,6 +7,7 @@
     MultiSelect,
     NumberInput,
     PasswordInput,
+    PinCodeInput,
     RangeSlider,
     Search,
     SearchMenu,
@@ -124,5 +125,11 @@
       { id: "1", text: "Email" },
     ]}
     value="abcdef"
+  />
+  <PinCodeInput
+    data-testid="pin-code-input"
+    labelText="Pin code"
+    selectTextOnFocus
+    value="1234"
   />
 </div>
