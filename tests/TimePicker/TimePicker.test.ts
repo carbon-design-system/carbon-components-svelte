@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { clickToFocus } from "../utils/click-to-focus";
 import { user } from "../utils/user";
 import TimePickerFluidForm from "./TimePicker.fluidForm.test.svelte";
 import TimePickerFluidSkeleton from "./TimePicker.fluidSkeleton.test.svelte";
@@ -39,6 +40,22 @@ describe("TimePicker", () => {
 
     expect(input.selectionStart).toBe(0);
     expect(input.selectionEnd).toBe("12:00".length);
+  });
+
+  it("keeps the selected value through the click's mouseup", async () => {
+    render(TimePicker, { props: { selectTextOnFocus: true, value: "12:00" } });
+
+    const mouseup = await clickToFocus(screen.getByRole("textbox"));
+    expect(mouseup.defaultPrevented).toBe(true);
+  });
+
+  it("keeps the selected value through the click's mouseup when fluid", async () => {
+    render(TimePicker, {
+      props: { selectTextOnFocus: true, value: "12:00", fluid: true },
+    });
+
+    const mouseup = await clickToFocus(screen.getByRole("textbox"));
+    expect(mouseup.defaultPrevented).toBe(true);
   });
 
   it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {
