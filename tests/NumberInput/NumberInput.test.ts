@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
+import { clickToFocus } from "../utils/click-to-focus";
 import { isSvelte5 } from "../utils/svelte-version";
 import { user } from "../utils/user";
 import NumberInputFluidForm from "./NumberInput.fluidForm.test.svelte";
@@ -27,6 +28,22 @@ describe("NumberInput", () => {
     await tick();
 
     expect(select).toHaveBeenCalled();
+  });
+
+  it("keeps the selected value through the click's mouseup", async () => {
+    render(NumberInput, { props: { selectTextOnFocus: true, value: 42 } });
+
+    const mouseup = await clickToFocus(screen.getByRole("spinbutton"));
+    expect(mouseup.defaultPrevented).toBe(true);
+  });
+
+  it("keeps the selected value through the click's mouseup in text mode", async () => {
+    render(NumberInput, {
+      props: { selectTextOnFocus: true, value: 4.2, allowDecimal: true },
+    });
+
+    const mouseup = await clickToFocus(screen.getByRole("textbox"));
+    expect(mouseup.defaultPrevented).toBe(true);
   });
 
   it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {

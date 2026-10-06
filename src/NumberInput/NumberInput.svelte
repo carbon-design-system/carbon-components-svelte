@@ -216,6 +216,7 @@
     parseLocaleValue,
     roundToStep,
   } from "../utils/numeric-format.js";
+  import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -524,6 +525,7 @@
         {/if}
         <input
           bind:this={ref}
+          use:preserveFocusSelection={selectTextOnFocus && !disabled}
           use:formReset={handleFormReset}
           use:reflectDefaultValue={allowEmpty ? undefined : inputValue}
           value={inputValue}
@@ -567,6 +569,7 @@
       {:else}
         <input
           bind:this={ref}
+          use:preserveFocusSelection={selectTextOnFocus && !disabled}
           use:formReset={handleFormReset}
           use:reflectDefaultValue={allowEmpty ? undefined : value}
           type="number"

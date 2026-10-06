@@ -1,6 +1,7 @@
 <script>
   import {
     CopyInput,
+    NumberInput,
     PasswordInput,
     TextArea,
     TextInput,
@@ -38,5 +39,11 @@
     labelText="Time picker"
     selectTextOnFocus
     value="12:34"
+  />
+  <NumberInput
+    data-testid="number-input"
+    label="Number input"
+    selectTextOnFocus
+    value={123456}
   />
 </div>
