@@ -80,3 +80,36 @@
     @include carbon-switcher;
   }
 }
+
+// carbon-components-svelte patch (switcher-forced-colors)
+// The selected HeaderPanelLink is a background fill, which forced-colors
+// mode repaints as Canvas, so it looked like every other link.
+//
+// The link's own `:active` rule (0,2,0) outranks a lone selected class, so the
+// selected rule doubles the class and repeats for `:active`, otherwise a pressed
+// selected link shows its real colours. `forced-color-adjust: none` also keeps
+// the real `$shell-panel-focus` outline, which would not contrast with the
+// Highlight fill, so the focus ring is forced to a system colour.
+
+/// Selected header panel link in forced-colors mode.
+/// @access private
+/// @group ui-shell
+@mixin switcher-forced-colors {
+  @media (forced-colors: active) {
+    .#{$prefix}--switcher__item-link.#{$prefix}--switcher__item-link--selected,
+    .#{$prefix}--switcher__item-link.#{$prefix}--switcher__item-link--selected:active {
+      forced-color-adjust: none;
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    .#{$prefix}--switcher__item-link.#{$prefix}--switcher__item-link--selected:focus {
+      outline: 2px solid HighlightText;
+      outline-offset: -2px;
+    }
+  }
+}
+
+@include exports("switcher-forced-colors") {
+  @include switcher-forced-colors;
+}
