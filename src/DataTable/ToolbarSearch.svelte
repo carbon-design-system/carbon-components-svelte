@@ -22,6 +22,12 @@
   /** Set to `true` to keep the search bar expanded */
   export let persistent = false;
 
+  /**
+   * Specify the label text. It is visually hidden and names the search
+   * field for assistive technology.
+   */
+  export let labelText = "Search";
+
   /** Set to `true` to disable the search bar */
   export let disabled = false;
 
@@ -160,6 +166,7 @@
 </script>
 
 <Search
+  {labelText}
   {tabindex}
   {disabled}
   {selectTextOnFocus}
