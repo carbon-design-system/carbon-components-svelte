@@ -7,9 +7,16 @@
 
   /** Set to `true` to remove the tile's padding */
   export let noPadding = false;
+
+  /**
+   * Obtain a reference to the top-level HTML element.
+   * @bindable readonly
+   */
+  export let ref = null;
 </script>
 
 <div
+  bind:this={ref}
   class:bx--tile={true}
   class:bx--tile--light={light}
   class:bx--tile--full-height={fullHeight}
