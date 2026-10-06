@@ -136,6 +136,29 @@
     );
   }
 
+  let initialTabStopClaimed = false;
+
+  /**
+   * Buttons call this once while initializing, in DOM order, so the first
+   * render (server or client) already has one `tabindex="0"` without
+   * reading the DOM: the first enabled button when nothing is pressed,
+   * otherwise the first enabled pressed button.
+   * @type {(value: string | number, isDisabled: boolean) => boolean}
+   */
+  function claimInitialTabStop(value, isDisabled) {
+    if (initialTabStopClaimed || isDisabled) return false;
+
+    const effectiveSelected =
+      selectionMode === "single" ? selected.slice(0, 1) : selected;
+
+    if (effectiveSelected.length > 0 && !effectiveSelected.includes(value)) {
+      return false;
+    }
+
+    initialTabStopClaimed = true;
+    return true;
+  }
+
   setContext("carbon:ToggleButtonGroup", {
     selectedValues: readonly(selectedValues),
     disabled: readonly(groupDisabled),
@@ -143,6 +166,7 @@
     tabStopElement: readonly(tabStopElement),
     activeTooltip,
     toggle,
+    claimInitialTabStop,
     // A slotted `ToggleButton` unmounting doesn't re-run this component's
     // own `afterUpdate` (slot content changes belong to the parent's update
     // cycle, not this one's), so the tab stop would otherwise keep pointing
