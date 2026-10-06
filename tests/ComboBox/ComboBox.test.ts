@@ -5,6 +5,7 @@ import ComboBoxReal from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import { fuzzyMatch } from "carbon-components-svelte/utils/fuzzy-match";
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
+import { clickToFocus } from "../utils/click-to-focus";
 import { user } from "../utils/user";
 import ComboBoxFluidForm from "./ComboBox.fluidForm.test.svelte";
 import ComboBoxFluidSkeleton from "./ComboBox.fluidSkeleton.test.svelte";
@@ -1460,6 +1461,15 @@ describe("ComboBox", () => {
 
     expect(input.selectionStart).toBe(0);
     expect(input.selectionEnd).toBe(5);
+  });
+
+  it("keeps the selected value through the click's mouseup", async () => {
+    render(ComboBox, {
+      props: { selectedId: "1", value: "Email", selectTextOnFocus: true },
+    });
+
+    const mouseup = await clickToFocus(getInput());
+    expect(mouseup.defaultPrevented).toBe(true);
   });
 
   it("should not select all text on focus when selectTextOnFocus is false (default)", async () => {

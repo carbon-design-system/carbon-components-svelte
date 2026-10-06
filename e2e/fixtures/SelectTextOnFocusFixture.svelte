@@ -1,5 +1,6 @@
 <script>
   import {
+    ComboBox,
     CopyInput,
     DatePicker,
     DatePickerInput,
@@ -101,5 +102,15 @@
     max={999999}
     value={123456}
     valueUpper={234567}
+  />
+  <ComboBox
+    data-testid="combo-box"
+    titleText="Combo box"
+    selectTextOnFocus
+    items={[
+      { id: "0", text: "Slack" },
+      { id: "1", text: "Email" },
+    ]}
+    selectedId="0"
   />
 </div>
