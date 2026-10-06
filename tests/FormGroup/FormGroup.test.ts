@@ -145,6 +145,15 @@ describe("FormGroup", () => {
     expect(screen.queryByText("This is a message")).not.toBeInTheDocument();
   });
 
+  it("omits aria-labelledby without legendId and is named by its legend", () => {
+    render(FormGroupTest, {
+      props: { legendText: "Contact", slotContent: "Content" },
+    });
+
+    const fieldset = screen.getByRole("group", { name: "Contact" });
+    expect(fieldset).not.toHaveAttribute("aria-labelledby");
+  });
+
   it("should handle legendId", () => {
     render(FormGroupTest, {
       props: {
