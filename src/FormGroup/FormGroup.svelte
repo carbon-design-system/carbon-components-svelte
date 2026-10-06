@@ -32,19 +32,24 @@
   /** Specify an id for the legend element */
   export let legendId = "";
 
+  /**
+   * Set an id for the fieldset element.
+   * The message id derives from it as `{id}-message`.
+   */
+  export let id = uniqueId();
+
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { uniqueId } from "../utils/unique-id.js";
-
-  const messageId = `form-group-message-${uniqueId()}`;
 </script>
 
 <fieldset
+  {id}
   {disabled}
   data-invalid={invalid || undefined}
   class:bx--fieldset={true}
   class:bx--fieldset--no-margin={noMargin}
   aria-labelledby={$$restProps["aria-labelledby"] ?? (legendId || undefined)}
-  aria-describedby={message ? messageId : undefined}
+  aria-describedby={message ? `${id}-message` : undefined}
   {...$$restProps}
   on:click
   on:mouseover
@@ -62,7 +67,7 @@
   <slot />
   {#if message}
     <div
-      id={messageId}
+      id="{id}-message"
       class:bx--form__requirement={true}
       class:bx--form__requirement--invalid={invalid}
     >
