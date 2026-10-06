@@ -49,7 +49,9 @@
   ];
 </script>
 
-<div style="display: grid; gap: 12px; width: 420px; padding: 12px">
+<div
+  style="display: grid; gap: 12px; width: 420px; padding: 12px; margin-left: 272px"
+>
   <Button>Button</Button>
   <Link href="#x">Link</Link>
   <Checkbox labelText="Checkbox" />
