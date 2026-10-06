@@ -41,6 +41,12 @@
   export let showCounter = false;
 
   /**
+   * Set an id for the top-level element.
+   * The viewport id derives from it as `{id}-viewport`.
+   */
+  export let id = uniqueId();
+
+  /**
    * Override the counter text.
    * @type {(current: number, total: number) => string}
    */
@@ -60,7 +66,6 @@
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
-  const viewportId = uniqueId();
 
   /** @type {import("svelte/store").Writable<Element[]>} */
   const views = writable([]);
@@ -203,6 +208,7 @@
 
 <div
   {...$$restProps}
+  {id}
   class:bx--carousel={true}
   role="region"
   aria-roledescription="carousel"
@@ -211,7 +217,7 @@
 >
   <div
     bind:this={viewportRef}
-    id={viewportId}
+    id="{id}-viewport"
     class:bx--carousel__viewport={true}
     aria-live="polite"
   >
@@ -229,7 +235,7 @@
       class:bx--carousel__button={true}
       class:bx--carousel__button--previous={true}
       aria-label={prevButtonLabelText}
-      aria-controls={viewportId}
+      aria-controls="{id}-viewport"
       disabled={prevDisabled}
       on:click={() => navigate(-1)}
     >
@@ -241,7 +247,7 @@
       class:bx--carousel__button={true}
       class:bx--carousel__button--next={true}
       aria-label={nextButtonLabelText}
-      aria-controls={viewportId}
+      aria-controls="{id}-viewport"
       disabled={nextDisabled}
       on:click={() => navigate(1)}
     >
