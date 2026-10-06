@@ -47,7 +47,7 @@
   export let hideLegend = false;
 
   import { createEventDispatcher, setContext } from "svelte";
-  import { readonly, writable } from "svelte/store";
+  import { get, readonly, writable } from "svelte/store";
   import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -88,12 +88,36 @@
   const groupDisabledReadonly = readonly(groupDisabled);
 
   /**
+   * How many mounted tiles carry each value.
+   * @type {Map<T, number>}
+   */
+  const mountedValues = new Map();
+
+  /**
    * @type {(data: { checked: boolean; value: T }) => void}
    */
   function add({ checked, value }) {
+    mountedValues.set(value, (mountedValues.get(value) ?? 0) + 1);
     if (checked) {
       selectedValue.set(value);
     }
+  }
+
+  /**
+   * @type {(value: T) => void}
+   */
+  function remove(value) {
+    const count = (mountedValues.get(value) ?? 0) - 1;
+    if (count > 0) mountedValues.set(value, count);
+    else mountedValues.delete(value);
+    // An `{#if}` swap or re-render destroys a tile before mounting its
+    // replacement, so wait for the flush before deciding the value is gone.
+    // Then drop a selection no radio carries anymore, as the browser does.
+    queueMicrotask(() => {
+      if (!mountedValues.has(value) && get(selectedValue) === value) {
+        selectedValue.set(undefined);
+      }
+    });
   }
 
   /**
@@ -125,6 +149,7 @@
     groupRequired: groupRequiredReadonly,
     groupDisabled: groupDisabledReadonly,
     add,
+    remove,
     update,
   });
 
