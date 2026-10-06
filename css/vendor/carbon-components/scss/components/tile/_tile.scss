@@ -42,7 +42,11 @@
   // rather than raised to the `:not()` weight below.
   .#{$prefix}--tile--clickable,
   .#{$prefix}--tile--selectable {
-    transition: $duration--moderate-01 motion(standard, productive);
+    // ccs: list the hover background and the selected border instead of
+    // `all`, which also faded the focus outline in
+    transition:
+      background-color $duration--moderate-01 motion(standard, productive),
+      border-color $duration--moderate-01 motion(standard, productive);
   }
 
   .#{$prefix}--tile--clickable,
@@ -116,7 +120,9 @@
     position: absolute;
     border: none;
     background: transparent;
-    transition: $duration--fast-02 motion(standard, productive);
+    // ccs: only the opacity changes; `all` also faded the interactive
+    // chevron's focus outline in
+    transition: opacity $duration--fast-02 motion(standard, productive);
   }
 
   .#{$prefix}--tile__checkmark {
