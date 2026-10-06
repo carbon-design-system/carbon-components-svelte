@@ -4,6 +4,7 @@ import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
 import TooltipIconSize from "./TooltipIcon.size.test.svelte";
 import TooltipIcon from "./TooltipIcon.test.svelte";
+import TooltipIconGroup from "./TooltipIconGroup.test.svelte";
 import TooltipIconMultiple from "./TooltipIconMultiple.test.svelte";
 import TooltipIconPortal from "./TooltipIconPortal.test.svelte";
 import TooltipIconReactive from "./TooltipIconReactive.test.svelte";
@@ -372,6 +373,54 @@ describe("TooltipIcon", () => {
       expect(btnB).not.toHaveClass("bx--tooltip--hidden");
 
       vi.useRealTimers();
+    });
+  });
+
+  describe("in a TooltipGroup", () => {
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it("uses the group's enter delay and opens instantly after a group Button", async () => {
+      vi.useFakeTimers();
+      render(TooltipIconGroup);
+
+      const edit = screen.getByRole("button", { name: "Edit" });
+      const icon = screen.getByTestId("tooltip-icon");
+
+      await fireEvent.mouseEnter(icon);
+      await vi.advanceTimersByTimeAsync(199);
+      expect(icon).toHaveClass("bx--tooltip--hidden");
+      await vi.advanceTimersByTimeAsync(1);
+      expect(icon).not.toHaveClass("bx--tooltip--hidden");
+
+      await fireEvent.mouseLeave(icon);
+      await vi.advanceTimersByTimeAsync(300);
+      expect(icon).toHaveClass("bx--tooltip--hidden");
+
+      await fireEvent.mouseEnter(edit);
+      await vi.advanceTimersByTimeAsync(200);
+      await fireEvent.mouseLeave(edit);
+      await fireEvent.mouseEnter(icon);
+      expect(icon).not.toHaveClass("bx--tooltip--hidden");
+    });
+
+    it("hides a portalled tooltip icon when a Button tooltip opens", async () => {
+      vi.useFakeTimers();
+      render(TooltipIconGroup, { props: { portalTooltip: true } });
+
+      const edit = screen.getByRole("button", { name: "Edit" });
+      const icon = screen.getByTestId("tooltip-icon");
+
+      await fireEvent.focus(icon);
+      expect(screen.getByText("Synced")).toBeInTheDocument();
+
+      await fireEvent.mouseEnter(edit);
+      await vi.advanceTimersByTimeAsync(0);
+      expect(screen.queryByText("Synced")).not.toBeInTheDocument();
+      expect(
+        screen.getByText("Edit", { selector: ".bx--tooltip-portal__content" }),
+      ).toBeInTheDocument();
     });
   });
 

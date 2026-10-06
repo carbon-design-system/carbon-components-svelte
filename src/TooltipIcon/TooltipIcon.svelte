@@ -6,18 +6,13 @@
    */
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
-  import { get } from "svelte/store";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
-  import {
-    TOOLTIP_ENTER_DELAY_MS,
-    TOOLTIP_LEAVE_DELAY_MS,
-  } from "../constants/timing.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
-  import { createDelayedSetter } from "../utils/delayed-setter.js";
   import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
+  import { getTooltipGroup } from "../utils/tooltip-group.js";
+  import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import { uniqueId } from "../utils/unique-id.js";
-  import { activeTooltipIcon } from "./tooltip-icon-store.js";
 
   /**
    * Specify the tooltip text.
@@ -64,15 +59,17 @@
 
   /**
    * Specify the duration in milliseconds to delay before displaying the tooltip.
-   * @type {number}
+   * Defaults to the enclosing `TooltipGroup`'s delay, or `100`.
+   * @type {number | undefined}
    */
-  export let enterDelayMs = TOOLTIP_ENTER_DELAY_MS;
+  export let enterDelayMs = undefined;
 
   /**
    * Specify the duration in milliseconds to delay before hiding the tooltip.
-   * @type {number}
+   * Defaults to the enclosing `TooltipGroup`'s delay, or `0`.
+   * @type {number | undefined}
    */
-  export let leaveDelayMs = TOOLTIP_LEAVE_DELAY_MS;
+  export let leaveDelayMs = undefined;
 
   /**
    * Obtain a reference to the button HTML element.
@@ -90,18 +87,17 @@
 
   const dispatch = createEventDispatcher();
   const notifyOpenChange = createOpenCloseDispatcher(dispatch);
-  const tooltipId = {};
 
   let clicked = false;
 
-  const scheduleOpen = createDelayedSetter();
-
-  function setOpenDelayed(value, delay = 0) {
-    scheduleOpen(delay, () => {
-      if (value) show();
-      else hide();
-    });
-  }
+  // Hover/focus scheduling shared with the tooltip group: only one tooltip
+  // shows at a time, and moving between group members skips the delay.
+  const tooltipHandoff = createTooltipHandoff({
+    group: getTooltipGroup(),
+    enterDelayMs: () => enterDelayMs,
+    leaveDelayMs: () => leaveDelayMs,
+  });
+  const tooltipOthersActive = tooltipHandoff.hidden;
 
   const insideModal = getContext(MODAL_CONTEXT_KEY);
 
@@ -114,7 +110,7 @@
 
   function show() {
     open = true;
-    activeTooltipIcon.set(tooltipId);
+    tooltipHandoff.claim();
   }
 
   function hide() {
@@ -122,22 +118,20 @@
     open = false;
     hovered = false;
     focused = false;
-    if (get(activeTooltipIcon) === tooltipId) {
-      activeTooltipIcon.set(null);
-    }
+    tooltipHandoff.release();
   }
 
-  $: tooltipHidden =
-    $activeTooltipIcon !== null && $activeTooltipIcon !== tooltipId;
+  $: tooltipHidden = $tooltipOthersActive;
 
-  // Sync the store when open is set externally (e.g., bind:open).
-  // Skipped on the server: the store is module state shared by every
-  // request, and nothing unmounts there to release it.
+  // Hold the active slot while shown by any means, including an external
+  // `bind:open`; release it once nothing keeps the tooltip up. Skipped on
+  // the server: the slot is module state shared by every request, and
+  // nothing unmounts there to release it.
   $: if (typeof window !== "undefined") {
     if (open) {
-      activeTooltipIcon.set(tooltipId);
-    } else if (get(activeTooltipIcon) === tooltipId) {
-      activeTooltipIcon.set(null);
+      tooltipHandoff.claim();
+    } else if (!hovered && !focused) {
+      tooltipHandoff.release();
     }
   }
 
@@ -147,6 +141,7 @@
     effectivePortalTooltip &&
     !hidden &&
     !disabled &&
+    !tooltipHidden &&
     (hovered || focused || open);
 
   const PORTAL_HORIZONTAL_GAP_LEFT_PX = 2;
@@ -185,10 +180,8 @@
 
   onMount(() => {
     return () => {
-      scheduleOpen.cancel();
-      if (get(activeTooltipIcon) === tooltipId) {
-        activeTooltipIcon.set(null);
-      }
+      tooltipHandoff.cancel();
+      tooltipHandoff.release();
     };
   });
 
@@ -239,26 +232,23 @@
   on:mouseenter={() => {
     if (disabled) return;
     hidden = false;
-    // If immediately hovering over another tooltip icon, skip the delay.
-    const warmHandoff = $activeTooltipIcon !== null;
-    const delay = warmHandoff ? 0 : enterDelayMs;
     if (effectivePortalTooltip) {
-      scheduleOpen(delay, () => {
+      tooltipHandoff.scheduleEnter(() => {
         hovered = true;
       });
     } else {
-      setOpenDelayed(true, delay);
+      tooltipHandoff.scheduleEnter(show);
     }
   }}
   on:mouseleave
   on:mouseleave={() => {
     if (clicked) return;
     if (effectivePortalTooltip) {
-      scheduleOpen(leaveDelayMs, () => {
+      tooltipHandoff.scheduleLeave(() => {
         hovered = false;
       });
     } else {
-      setOpenDelayed(false, leaveDelayMs);
+      tooltipHandoff.scheduleLeave(hide);
     }
   }}
   on:focus
@@ -267,6 +257,7 @@
     hidden = false;
     if (effectivePortalTooltip) {
       focused = true;
+      tooltipHandoff.claim();
     } else {
       show();
     }
