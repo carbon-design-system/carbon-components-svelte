@@ -210,12 +210,21 @@
 }
 
 // carbon-components-svelte patch
-// A `labelChildren` slot can hold non-text content (e.g. a `TooltipIcon`)
-// whose popup the label's truncating `overflow: hidden` would clip. Keep
-// the base label class for its layout and type style; only lift the clip.
+// A `labelChildren` slot can hold non-text content (e.g. a `TooltipIcon`).
+// The label's truncating `overflow: hidden` would clip its popup, and the
+// inline text layout leaves it sitting low against the text. Keep the base
+// label class for its layout and type style; lift the clip, center the row
+// and keep slotted elements from shrinking.
 @mixin menu-option-label-slotted {
   .#{$prefix}--menu-option__label--slotted {
+    display: inline-flex;
     overflow: visible;
+    align-items: center;
+    gap: $carbon--spacing-02;
+
+    > * {
+      flex-shrink: 0;
+    }
   }
 }
 
