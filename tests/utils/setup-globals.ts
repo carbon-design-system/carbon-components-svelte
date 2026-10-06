@@ -149,3 +149,8 @@ if (
     }
   };
 }
+
+// jsdom's selector engine adds its own capture listeners to `window` (click,
+// keydown, focus, ...) the first time it matches a selector. Match once here
+// so that happens before a test spies on `window.addEventListener`.
+document.documentElement.matches(":focus-visible");
