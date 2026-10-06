@@ -164,6 +164,18 @@ describe("Portal", () => {
     unmount2();
   });
 
+  // The content renders after mount, so the server markup and the first
+  // client render are both empty. It must still land in the target by the
+  // next tick, which consumers such as `Menu` wait on before focusing.
+  it("mounts the content into the target by the first tick", async () => {
+    const { component } = render(PortalTest);
+    await tick();
+
+    expect(component.ref).toBeInstanceOf(HTMLElement);
+    expect(component.ref?.parentElement).toBe(document.body);
+    expect(component.ref).toHaveTextContent("Portal content");
+  });
+
   it("binds ref to the portal element", async () => {
     const { component } = render(PortalTest);
 
