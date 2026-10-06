@@ -132,6 +132,7 @@
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { moveIndex } from "../utils/move-index.js";
   import { createOptionListNavigator } from "../utils/option-list-navigator.js";
+  import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -378,6 +379,7 @@
     </button>
     <input
       bind:this={ref}
+      use:preserveFocusSelection={selectTextOnFocus}
       type="text"
       autocomplete="off"
       {placeholder}

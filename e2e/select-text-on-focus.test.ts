@@ -1,11 +1,15 @@
-import { expect, type Locator, test } from "@playwright/test";
+import { expect, type Locator, type Page, test } from "@playwright/test";
 
 // WebKit collapses a focus-time `select()` on the click's mouseup, so each
 // case clicks into the field and checks the whole value is still selected.
 // jsdom can't show this, and CI runs Chromium only: run WebKit locally.
 // `number` inputs expose no selection API, so those cases type a digit and
 // expect it to replace the value.
-const cases: { testId: string; check?: "replace" }[] = [
+const cases: {
+  testId: string;
+  check?: "replace";
+  setup?: (page: Page) => Promise<void>;
+}[] = [
   { testId: "copy-input" },
   { testId: "text-input" },
   { testId: "password-input" },
@@ -21,6 +25,17 @@ const cases: { testId: string; check?: "replace" }[] = [
   { testId: "combo-box" },
   { testId: "multi-select" },
   { testId: "pin-code-input" },
+  {
+    testId: "header-search",
+    // Open the search, then tab away so the click below focuses it again.
+    setup: async (page) => {
+      await page
+        .locator("header")
+        .getByRole("button", { name: "Search" })
+        .click();
+      await page.keyboard.press("Tab");
+    },
+  },
 ];
 
 async function expectFullSelection(input: Locator) {
@@ -39,10 +54,11 @@ test.describe("selectTextOnFocus", () => {
     await page.goto("/select-text-on-focus.html");
   });
 
-  for (const { testId, check } of cases) {
+  for (const { testId, check, setup } of cases) {
     test(`${testId} keeps the full value selected after a click`, async ({
       page,
     }) => {
+      await setup?.(page);
       // `data-testid` lands on the wrapper for some components.
       const target = page.getByTestId(testId);
       const input = (await target.evaluate((el) =>

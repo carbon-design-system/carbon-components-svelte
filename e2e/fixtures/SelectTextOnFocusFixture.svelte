@@ -4,6 +4,9 @@
     CopyInput,
     DatePicker,
     DatePickerInput,
+    Header,
+    HeaderSearch,
+    HeaderUtilities,
     MultiSelect,
     NumberInput,
     PasswordInput,
@@ -21,7 +24,19 @@
   } from "carbon-components-svelte";
 </script>
 
-<div style="display: grid; gap: 1rem; max-width: 24rem; padding: 1rem">
+<Header company="IBM" platformName="Carbon">
+  <HeaderUtilities>
+    <HeaderSearch
+      data-testid="header-search"
+      selectTextOnFocus
+      value="abcdef"
+    />
+  </HeaderUtilities>
+</Header>
+
+<div
+  style="display: grid; gap: 1rem; max-width: 24rem; padding: 4rem 1rem 1rem"
+>
   <CopyInput
     data-testid="copy-input"
     labelText="Copy input"
