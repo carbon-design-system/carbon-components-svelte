@@ -59,10 +59,12 @@
   /**
    * Override the value text generated for `aria-valuetext` when `valueText` is not set.
    * Used only when the value is over capacity or the status is `"warning"` or `"error"`.
-   * @type {(value: number, max: number) => string}
+   * Receives `locale` as the third argument.
+   * @type {(value: number, max: number, locale?: string) => string}
    */
-  export let valueRangeText = function valueRangeText(value, max) {
-    return `${value.toLocaleString()} of ${max.toLocaleString()}`;
+  export let valueRangeText = function valueRangeText(value, max, locale) {
+    const format = getNumberFormatter(locale);
+    return `${format.format(value)} of ${format.format(max)}`;
   };
 
   /**
@@ -82,17 +84,28 @@
 
   /**
    * Override the visually hidden threshold description, used when `showThresholds` is `true`.
-   * Return an empty string to omit it.
-   * @type {(thresholds: MeterThresholds) => string}
+   * Return an empty string to omit it. Receives `locale` as the second argument.
+   * @type {(thresholds: MeterThresholds, locale?: string) => string}
    */
-  export let thresholdsText = function thresholdsText({ warning, error }) {
+  export let thresholdsText = function thresholdsText(
+    { warning, error },
+    locale,
+  ) {
+    const format = getNumberFormatter(locale);
     if (warning !== undefined && error !== undefined) {
-      return `Warning at ${warning.toLocaleString()}, error at ${error.toLocaleString()}`;
+      return `Warning at ${format.format(warning)}, error at ${format.format(error)}`;
     }
-    if (warning !== undefined) return `Warning at ${warning.toLocaleString()}`;
-    if (error !== undefined) return `Error at ${error.toLocaleString()}`;
+    if (warning !== undefined) return `Warning at ${format.format(warning)}`;
+    if (error !== undefined) return `Error at ${format.format(error)}`;
     return "";
   };
+
+  /**
+   * Specify the locale used to format the numbers in the generated `aria-valuetext`
+   * and threshold description. Defaults to the runtime locale.
+   * @type {string}
+   */
+  export let locale = undefined;
 
   /**
    * Specify the size of the meter.
@@ -103,6 +116,7 @@
   /** Set an id for the meter element. */
   export let id = uniqueId();
 
+  import { getNumberFormatter } from "../utils/intl-formatter-cache.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   let helperId = uniqueId();
@@ -119,7 +133,7 @@
     max > 0 && Number.isFinite(value) ? Math.min(Math.max(value, 0), max) : 0;
   $: ratio = max > 0 ? cappedValue / max : 0;
   $: resolvedThresholdsText =
-    showThresholds && thresholds ? thresholdsText(thresholds) : "";
+    showThresholds && thresholds ? thresholdsText(thresholds, locale) : "";
   $: statusText =
     resolvedStatus === "warning"
       ? warningText
@@ -140,7 +154,7 @@
   $: resolvedValueText = valueText?.trim()
     ? valueText
     : overCapacity || statusText
-      ? valueRangeText(overCapacity ? value : cappedValue, max) +
+      ? valueRangeText(overCapacity ? value : cappedValue, max, locale) +
         (statusText ? `, ${statusText}` : "")
       : undefined;
   $: {
