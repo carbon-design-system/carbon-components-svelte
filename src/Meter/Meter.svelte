@@ -107,6 +107,7 @@
 
   let helperId = uniqueId();
   let thresholdsId = uniqueId();
+  let statusId = uniqueId();
 
   let prevStatus = undefined;
   let statusAnnouncement = "";
@@ -119,19 +120,23 @@
   $: ratio = max > 0 ? cappedValue / max : 0;
   $: resolvedThresholdsText =
     showThresholds && thresholds ? thresholdsText(thresholds) : "";
-  $: describedBy =
-    [
-      helperText ? helperId : undefined,
-      resolvedThresholdsText ? thresholdsId : undefined,
-    ]
-      .filter(Boolean)
-      .join(" ") || undefined;
   $: statusText =
     resolvedStatus === "warning"
       ? warningText
       : resolvedStatus === "error"
         ? errorText
         : undefined;
+  // A custom valueText replaces the generated one, which is where the status
+  // is otherwise appended, so describe the status separately.
+  $: describedStatus = valueText?.trim() && statusText ? statusText : undefined;
+  $: describedBy =
+    [
+      describedStatus ? statusId : undefined,
+      helperText ? helperId : undefined,
+      resolvedThresholdsText ? thresholdsId : undefined,
+    ]
+      .filter(Boolean)
+      .join(" ") || undefined;
   $: resolvedValueText = valueText?.trim()
     ? valueText
     : overCapacity || statusText
@@ -197,6 +202,9 @@
       ></span>
     {/each}
   </div>
+  {#if describedStatus}
+    <div id={statusId} class:bx--visually-hidden={true}>{describedStatus}</div>
+  {/if}
   {#if helperText}
     <div id={helperId} class:bx--meter__helper-text={true}>{helperText}</div>
   {/if}
