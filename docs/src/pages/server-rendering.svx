@@ -1,0 +1,204 @@
+---
+title: Server-side rendering
+layout: guide
+description: Render Carbon Components Svelte on the server with SvelteKit, avoid theme and layout flashes, and keep generated ids stable.
+---
+
+## Basic
+
+Carbon Components Svelte renders on the server without extra setup. Import one stylesheet in your root layout and keep the `optimizeImports` preprocessor from the [quick start](/quick-start).
+
+```svelte
+<!-- src/routes/+layout.svelte -->
+<script>
+  import "carbon-components-svelte/css/white.css";
+</script>
+
+<slot />
+```
+
+SvelteKit emits the stylesheet as a `<link>` in the document `<head>`, so the first paint is styled. Use `carbon-components-svelte/css/all.css` instead when you need dynamic themes with `Theme`; `white.css`, `g10.css`, `g80.css`, `g90.css`, and `g100.css` each contain a single fixed theme.
+
+| Do | Why |
+| --- | --- |
+| Add `optimizeCss()` from `carbon-preprocess-svelte` to `vite.config.js`. | It prunes the stylesheet to the components you use. A sample app went from 653,132 to 378,489 bytes with `all.css`, and the `[theme]` rules still applied. |
+
+Nothing in the library needs `{#if browser}` to avoid a server error. Every exported component renders on the server without throwing.
+
+## Hydration
+
+Components hydrate in place, and Svelte reports no warnings for them. Most keep every DOM node; generated ids change (see [Stable ids](#stable-ids)) and Svelte 5 rebuilds `<option>` elements, neither of which you can see.
+
+These hydrate with no visible change: Accordion, Breadcrumb, Button, Checkbox, ComboBox without `selectedId`, CopyButton, DataTable without `virtualize` and `stickyHeader`, Dropdown, FileUploader, Form, Link, Menu and Modal when closed, MultiSelect, Notification, NumberInput, PageHeader, RadioButton, Search, Select, Slider, StructuredList, TextArea, TextInput, Tile, TimePicker, Toggle, and every skeleton.
+
+The rest change between the first server paint and the end of hydration.
+
+| Component | Server output | After hydration |
+| --- | --- | --- |
+| Tabs, TabsVertical | No selected tab, no `aria-controls` or `aria-labelledby`. Panels are hidden on Svelte 5 and all visible on Svelte 3 and 4. | Selected tab and panel appear. Layout shift 0.007 to 0.011. <!-- FIX: SSR-02 #4211 --> |
+| ContentSwitcher, ProgressIndicator | Selection and current step missing | Selection and current step appear <!-- FIX: SSR-03 --> |
+| Carousel | "Slide 0 of 0", buttons disabled | Real count, active slide <!-- FIX: SSR-04 --> |
+| InterstitialScreen with `open` | No progress indicator or footer buttons | Progress and footer appear <!-- FIX: SSR-04 --> |
+| ComposedModal | No accessible name on the dialog | `aria-label` set <!-- FIX: SSR-06 #4212 --> |
+| Dialog with `open` | Closed | Open <!-- FIX: SSR-08 #4213 --> |
+| ComboBox with `selectedId` | Empty input | Item text shown. Pass `value` as well to render it on the server. <!-- FIX: SSR-07 --> |
+| Pagination | Page select shows page 1 | Page select shows `page` <!-- FIX: SSR-09 --> |
+| TreeView | Nested nodes not indented | Indented <!-- FIX: SSR-10 --> |
+| DataTable with `virtualize` and `stickyHeader` | No scroll container height | Scroll container sized <!-- FIX: SSR-11 #4214 --> |
+| SideNav and Content | See [Side navigation](#side-navigation) | Content moves, hamburger appears <!-- FIX: SSR-12 --> |
+| UserAvatarGroup, TagSet | All items, `+0` | Overflow collapses after measuring <!-- FIX: SSR-05 --> |
+| Open `Menu`, tooltips with `portalTooltip`, Portal | Content renders inline at the top left | Moved to the body and positioned <!-- FIX: SSR-14 #4219 --> |
+| Breakpoint | The slot sees `size` as `undefined` | The slot sees the real size |
+| LocalStorage, SessionStorage | The default value | The stored value |
+| CodeSnippet, ScrollGradient, ExpandableTile, open OverflowMenu and Tooltip | Unmeasured state | Measured state |
+| ImageLoader | No `<img>` | Image appears after load <!-- FIX: SSR-24 #4216 --> |
+| NotificationQueue | Empty by design | Notifications added in `onMount` appear |
+| Modal, ComposedModal with `open` | Visible, body scroll not locked | Body gets `bx--body--with-modal-open` |
+| ToolbarSearch, DatePicker | Plain input | Text typed before hydration is cleared in ToolbarSearch; DatePicker input loses focus <!-- FIX: SSR-18 SSR-19 --> |
+
+On Svelte 3 and 4 the server writes boolean ARIA attributes without a value (`aria-hidden` instead of `aria-hidden="true"`), so icons are not hidden from assistive technology until hydration. <!-- FIX: SSR-15 -->
+
+Svelte repairs mismatched attributes and text without a warning, so a quiet console does not prove the server and client agree.
+
+| Do | Why |
+| --- | --- |
+| Gate client-only content with a flag set in `onMount`. | The server and the first client render match, so Svelte keeps the nodes. |
+| Avoid `{#if browser}` around markup. | `browser` is already `true` during hydration, so the branches differ and Svelte rebuilds the nodes without a warning. |
+| Prefer CSS media queries over `Breakpoint` for layout. | The server has no viewport, so `Breakpoint` renders its fallback until mount. |
+
+```svelte
+<script>
+  import { onMount } from "svelte";
+  import { LocalStorage } from "carbon-components-svelte";
+
+  let mounted = false;
+  let value = "default";
+
+  onMount(() => (mounted = true));
+</script>
+
+<LocalStorage key="draft" bind:value />
+<p>{mounted ? value : "Loading"}</p>
+```
+
+## Theme without a flash
+
+<!-- FIX: #4183 adds Theme system; the inline script then needs a prefers-color-scheme branch -->
+
+`Theme` writes the `theme` attribute and `color-scheme` on `<html>` only in the browser, when the component initializes, so the server HTML has no `theme` attribute and the first paint uses the default theme. `persist` reads `localStorage` in `onMount`, later still. A saved dark theme therefore paints white first. Set the same attribute from an inline script in `src/app.html` so the first paint already uses it. Replace `"theme"` if you set `persistKey`.
+
+```html
+<!-- src/app.html -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script nonce="%sveltekit.nonce%">
+      try {
+        var raw = localStorage.getItem("theme");
+        var theme = raw;
+        try {
+          theme = JSON.parse(raw);
+        } catch (e) {}
+        if (/^(white|g10|g80|g90|g100)$/.test(theme)) {
+          var root = document.documentElement;
+          root.setAttribute("theme", theme);
+          root.style.colorScheme =
+            theme === "white" || theme === "g10" ? "light" : "dark";
+        }
+      } catch (e) {}
+    </script>
+    %sveltekit.head%
+  </head>
+  <body>
+    <div>%sveltekit.body%</div>
+  </body>
+</html>
+```
+
+```svelte
+<!-- src/routes/+layout.svelte -->
+<script>
+  import "carbon-components-svelte/css/all.css";
+  import { Theme } from "carbon-components-svelte";
+
+  let theme = "white";
+</script>
+
+<Theme bind:theme persist />
+
+<slot />
+```
+
+| Do | Why |
+| --- | --- |
+| Import `all.css`, not `white.css`. | Only `all.css` contains the `[theme="g100"]` rules that the attribute selects. |
+| Put the script in `<head>`. | It must run before the first paint. |
+| Parse the stored value and fall back to the raw string. | `Theme` stores the bare name (`g100`), so `JSON.parse` alone throws on it. |
+| Keep `nonce="%sveltekit.nonce%"` when you set a CSP. | Strict policies block inline scripts without a nonce. |
+| For a fixed dark app, set `theme="g100"` on `<html>` in `app.html` and pass the same value to `Theme`. | The attribute is the whole mechanism, so no script is needed. |
+
+Custom `tokens` are applied after hydration, so a theme that relies on them still changes once. <!-- FIX: SSR-21 -->
+
+## Side navigation
+
+On a wide screen the server paints `SideNav` through a CSS media query but without the `bx--side-nav--expanded` class, so `Content` starts under the nav and jumps 208px after hydration. Add these rules to your global CSS. They give the server frame the same margin the hydrated page uses.
+
+```css
+/* src/routes/layout.css, imported from +layout.svelte */
+@media (min-width: 66rem) {
+  .bx--side-nav.bx--side-nav--ux:not(.bx--side-nav--collapsed):not(.bx--side-nav--rail) ~ .bx--content {
+    margin-left: 16rem;
+  }
+}
+
+@media (max-width: 65.99rem) {
+  .bx--side-nav.bx--side-nav--ux:not(.bx--side-nav--rail) ~ .bx--content {
+    margin-left: 0;
+  }
+}
+```
+
+With these rules the `Content` left edge is 256px on a 1280px screen and 0 on a 400px screen both before and after hydration. <!-- FIX: SSR-12 -->
+
+On a small screen the hamburger button is missing until hydration, so the navigation cannot be opened without JavaScript. <!-- FIX: SSR-12 -->
+
+`SideNav` writes its `resizable` width and `rail` state to module-level stores while rendering, and a later request can read them. Give every route the same `SideNav` props until this is fixed. <!-- FIX: SSR-01 -->
+
+## Stable ids
+
+Most components generate an id with a random value, such as `ccs-8t2995v243o`, for `id`, `for`, `aria-controls`, `aria-labelledby`, and form `name` attributes. The server and the browser draw different values. Svelte rewrites the attributes during hydration and keeps every reference matched, so nothing breaks, but three things follow.
+
+| Effect | Why it matters |
+| --- | --- |
+| Prerendered HTML differs on every build. | Snapshot tests and cache diffs show noise. |
+| A CSS selector, anchor, or script that uses a generated id sees a different value after hydration. | The rewrite is silent. |
+| A form submitted without JavaScript posts a random field name. | Applies to `RadioButtonGroup`, `TileGroup`, `StructuredList`, and the `DataTable` selection input when you pass no `name`. |
+
+Pass your own `id`, `name`, or `inputName` to make the markup identical on every render. Ids must be unique on the page, so derive them from the item key inside `{#each}` blocks. In a Svelte 5 component, `$props.id()` gives you a value that matches on the server and the client.
+
+```svelte
+<TextInput id="email" labelText="Email" name="email" />
+<RadioButtonGroup legendText="Plan" name="plan" id="plan">
+  <RadioButton id="plan-free" value="free" labelText="Free" />
+  <RadioButton id="plan-pro" value="pro" labelText="Pro" />
+</RadioButtonGroup>
+<DataTable selectable inputName="orders" {headers} {rows} />
+```
+
+| Component | Props that fix its ids |
+| --- | --- |
+| TextInput, PasswordInput, TextArea, NumberInput, Search, Slider, Toggle, Select, Dropdown, ComboBox, MultiSelect, Modal, OverflowMenu, Pagination, CodeSnippet, CopyInput, Tag, TooltipIcon, TooltipDefinition | `id` |
+| Tooltip | `tooltipId` and `triggerId` |
+| Tabs | `id` on each `Tab` and `TabContent` |
+| ContentSwitcher, ProgressIndicator | `id` on each `Switch` or `ProgressStep` |
+| CheckboxGroup, RadioButtonGroup | `id` on the group (helper, error, and warning ids derive from it) |
+| RadioButtonGroup, TileGroup | `name` on the group |
+| DatePicker | `id` on `DatePicker` and on each `DatePickerInput` |
+
+These components have no prop that fixes every generated id today: Accordion, TreeView, DataTable (table, header, and cell ids), TableContainer, Disclosure, Carousel, ComposedModal, Toggletip, FormGroup (message id), HeaderSearch, ProgressBar and Meter (helper text id), the `Tag` children of TagSet, and StructuredList. <!-- FIX: SSR-20 #4220 #4221 #4222: add `id` to Accordion, Disclosure, Carousel, Toggletip, HeaderSearch, FormGroup, ProgressBar, Meter, TagSet, DataTable, and TableContainer and `name` to StructuredList -->
+
+## Locale and time
+
+`Pagination` and `Meter` format numbers with the runtime locale, so a server in one locale and a browser in another print `12,345` and `12.345`. Svelte replaces the text on hydration. `BigNumber` and `RelativeTime` accept `locale`, and `RelativeTime` accepts `now`; pass fixed values from the request to keep prerendered HTML correct. <!-- FIX: SSR-16 #4224 (Meter locale) SSR-17 #4223 (RelativeTime timeZone) -->
