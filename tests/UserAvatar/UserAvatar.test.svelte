@@ -33,6 +33,24 @@
   }}
 />
 
+<UserAvatar
+  data-testid="image-name-alt"
+  name="Ann One"
+  image="https://example.com/photo.jpg"
+/>
+
+<UserAvatar
+  data-testid="image-attributes-alt"
+  name="Ann One"
+  image="https://example.com/photo.jpg"
+  imageAttributes={{ alt: "Ann at the summit" }}
+/>
+
+<UserAvatar
+  data-testid="image-decorative"
+  image="https://example.com/photo.jpg"
+/>
+
 <UserAvatar data-testid="icon" name="Should Not Show" icon={Add} />
 
 <UserAvatar data-testid="size-lg" size="lg" name="John Doe" />

@@ -55,6 +55,27 @@ describe("UserAvatar", () => {
     expect(avatar).not.toHaveTextContent("SS");
   });
 
+  it("falls back to the name for the image alt text", () => {
+    render(UserAvatar);
+
+    const img = screen.getByTestId("image-name-alt").querySelector("img");
+    expect(img).toHaveAttribute("alt", "Ann One");
+  });
+
+  it("keeps an alt passed through imageAttributes", () => {
+    render(UserAvatar);
+
+    const img = screen.getByTestId("image-attributes-alt").querySelector("img");
+    expect(img).toHaveAttribute("alt", "Ann at the summit");
+  });
+
+  it("marks an image with no description or name as decorative", () => {
+    render(UserAvatar);
+
+    const img = screen.getByTestId("image-decorative").querySelector("img");
+    expect(img).toHaveAttribute("alt", "");
+  });
+
   it("spreads imageAttributes onto the img and keeps rest props on the host", () => {
     render(UserAvatar);
 
