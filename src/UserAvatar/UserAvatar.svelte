@@ -23,6 +23,8 @@
 
   /**
    * Specify the user's full name. Initials are derived from the name when `initials` is not set.
+   * Also the default alt text for `image`. Set `imageDescription=""` to mark the
+   * image decorative when the name is already visible next to the avatar.
    * @type {string}
    */
   export let name = undefined;
@@ -44,6 +46,10 @@
 
   /**
    * Specify alternative text for the image.
+   * Falls back to `imageAttributes.alt`, then `name`. Without either, the
+   * image is marked decorative (`alt=""`).
+   * Set to `""` to mark the image decorative when the name is already visible
+   * next to the avatar, which avoids announcing it twice.
    * @type {string}
    */
   export let imageDescription = undefined;
@@ -198,6 +204,7 @@
     groupIndex >= $groupMax;
   // Fall back to the group's size, then to "md".
   $: resolvedSize = size ?? $groupSize ?? "md";
+  $: imageAlt = imageDescription ?? imageAttributes?.alt ?? name ?? "";
 
   // `href` wins over `interactive`. When either is set, the avatar itself is the
   // focus target — do not nest it inside TooltipDefinition's button.
@@ -269,7 +276,7 @@
         <img
           {...imageAttributes}
           src={image}
-          alt={imageDescription}
+          alt={imageAlt}
           on:error={handleImageError}
         >
       {:else if icon}
@@ -306,7 +313,7 @@
       <img
         {...imageAttributes}
         src={image}
-        alt={imageDescription}
+        alt={imageAlt}
         on:error={handleImageError}
       >
     {:else if icon}
