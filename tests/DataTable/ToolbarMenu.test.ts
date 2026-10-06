@@ -32,6 +32,22 @@ describe("DataTable Toolbar Menu", () => {
       expect(menuOptions).toHaveClass("bx--overflow-menu--flip");
     });
 
+    it("should reference the menu with aria-controls only while open", async () => {
+      const { container } = render(ToolbarMenuTest, {
+        props: { testComponent: "ToolbarMenu", slotContent: "Menu content" },
+      });
+
+      const trigger = container.querySelector(".bx--toolbar-action");
+      expect(trigger).not.toHaveAttribute("aria-controls");
+
+      await user.click(trigger as Element);
+      const controls = trigger?.getAttribute("aria-controls");
+      expect(controls).toBeTruthy();
+      expect(document.getElementById(controls as string)).toBe(
+        screen.getByRole("menu"),
+      );
+    });
+
     it("should apply custom class", () => {
       const { container } = render(ToolbarMenuTest, {
         props: {
