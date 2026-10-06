@@ -510,8 +510,6 @@
     // actually scrolls, so the listener must target that, not the section,
     // or it never fires and the virtual window freezes on the initial rows.
     const container = tableRef.querySelector("table") ?? tableRef;
-    container.style.maxHeight = `${calculatedContainerHeight}px`;
-    container.style.overflowY = "auto";
     container.addEventListener("scroll", handleScroll, { passive: true });
     scrollListenerCleanup = () => {
       container.removeEventListener("scroll", handleScroll);
@@ -944,6 +942,17 @@
 
   $: virtualScrollContainer = virtualConfig && !stickyHeader;
 
+  // With `stickyHeader`, the `<table>` itself scrolls. Render its bounds from
+  // props so the server output is already height-bounded.
+  $: tableStyle = [
+    fixedLayout ? "table-layout: fixed" : undefined,
+    virtualConfig && stickyHeader && calculatedContainerHeight
+      ? `max-height: ${calculatedContainerHeight}px; overflow-y: auto`
+      : undefined,
+  ]
+    .filter(Boolean)
+    .join("; ");
+
   // Ignore pagination when virtualization is enabled.
   $: displayedRows = virtualConfig
     ? $tableRows
@@ -1078,7 +1087,7 @@
       {fixedLayout}
       labelledBy={hasTitle ? titleId : undefined}
       describedBy={hasDescription ? descriptionId : undefined}
-      tableStyle={fixedLayout ? "table-layout: fixed" : undefined}
+      tableStyle={tableStyle || undefined}
       containerStyle={stickyHeader && stickyHeaderMaxHeight != null
         ? `max-height: ${toCssLength(stickyHeaderMaxHeight)}`
         : undefined}
