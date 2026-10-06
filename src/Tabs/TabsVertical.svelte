@@ -65,6 +65,7 @@
   import { rovingFocus } from "../utils/roving-focus.js";
   import { syncDomOrder } from "../utils/sync-dom-order.js";
   import { createTabsRegistration } from "../utils/tabs-registration.js";
+  import { provideTooltipGroup } from "../utils/tooltip-group.js";
 
   const dispatch = createEventDispatcher();
 
@@ -126,7 +127,9 @@
   // Vertical tabs are never container type.
   const useContainer = writable(false);
   const useIconOnly = writable(false);
-  const activeTooltip = writable(null);
+  // Icon-only tabs hand their tooltips off to each other, and to the rest
+  // of an enclosing `TooltipGroup`.
+  provideTooltipGroup();
 
   let refTabList = null;
   let refRoot = null;
@@ -303,7 +306,6 @@
     contentByIndex,
     selectedTab,
     selectedContent,
-    activeTooltip,
     iconOnly: useIconOnly,
     useAutoWidth,
     useFullWidth,

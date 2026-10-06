@@ -51,6 +51,7 @@
   import { resolveIdSelection } from "../utils/resolve-id-selection.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { syncDomOrder } from "../utils/sync-dom-order.js";
+  import { provideTooltipGroup } from "../utils/tooltip-group.js";
 
   const dispatch = createEventDispatcher();
   /**
@@ -58,9 +59,9 @@
    */
   const currentId = writable(null);
 
-  // Tracks which switch's tooltip is open so only one shows at a time.
-  // Scoped per content switcher instance.
-  const activeTooltip = writable(null);
+  // Icon-only switches hand their tooltips off to each other, and to the
+  // rest of an enclosing `TooltipGroup`.
+  provideTooltipGroup();
 
   let prevIndex = -1;
 
@@ -277,7 +278,6 @@
 
   setContext("carbon:ContentSwitcher", {
     currentId,
-    activeTooltip,
     add,
     remove,
     update,

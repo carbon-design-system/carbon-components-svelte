@@ -91,6 +91,7 @@
   import { rovingFocus } from "../utils/roving-focus.js";
   import { syncDomOrder } from "../utils/sync-dom-order.js";
   import { createTabsRegistration } from "../utils/tabs-registration.js";
+  import { provideTooltipGroup } from "../utils/tooltip-group.js";
 
   const dispatch = createEventDispatcher();
 
@@ -141,12 +142,9 @@
    * @type {import("svelte/store").Writable<string | undefined>}
    */
   const selectedContent = writable(undefined);
-  /**
-   * Tracks which icon-only tab's tooltip is open so only one shows at a time.
-   * Scoped per `Tabs` instance.
-   * @type {import("svelte/store").Writable<string | null>}
-   */
-  const activeTooltip = writable(null);
+  // Icon-only tabs hand their tooltips off to each other, and to the rest
+  // of an enclosing `TooltipGroup`.
+  provideTooltipGroup();
 
   let refTabList = null;
   let refRoot = null;
@@ -416,7 +414,6 @@
     contentByIndex,
     selectedTab,
     selectedContent,
-    activeTooltip,
     iconOnly: useIconOnly,
     useAutoWidth,
     useFullWidth,

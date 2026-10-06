@@ -229,6 +229,7 @@ export { default as ToggletipFooter } from "./Toggletip/ToggletipFooter.svelte";
 export { default as Tooltip } from "./Tooltip/Tooltip.svelte";
 export { default as TooltipFooter } from "./Tooltip/TooltipFooter.svelte";
 export { default as TooltipDefinition } from "./TooltipDefinition/TooltipDefinition.svelte";
+export { default as TooltipGroup } from "./TooltipGroup/TooltipGroup.svelte";
 export { default as TooltipIcon } from "./TooltipIcon/TooltipIcon.svelte";
 export { default as TreeView } from "./TreeView/TreeView.svelte";
 export { default as Truncate } from "./Truncate/Truncate.svelte";

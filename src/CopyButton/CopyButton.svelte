@@ -81,7 +81,6 @@
   export let ref = null;
 
   import { createEventDispatcher, onMount } from "svelte";
-  import { activeButtonTooltip } from "../Button/button-tooltip-store.js";
   import Copy from "../icons/Copy.svelte";
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
@@ -91,6 +90,7 @@
     createCopyFeedbackState,
   } from "../utils/copy-feedback.js";
   import { noop } from "../utils/noop.js";
+  import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
 
   const dispatch = createEventDispatcher();
@@ -121,14 +121,11 @@
   $: statusText = feedbackOpen ? feedbackText : "";
 
   // Proactive hover/focus tooltip. Reuses the floating-portal `PortalTooltip`
-  // and the shared `activeButtonTooltip` store, so a CopyButton coordinates
-  // with adjacent icon-only Buttons (warm handoff, no overlapping tooltips).
+  // and the tooltip group's handoff, so a CopyButton coordinates with
+  // adjacent icon-only Buttons (warm handoff, no overlapping tooltips).
   // Mirrors Button's portal-tooltip timing.
-  const tooltipId = {};
-  const tooltipHandoff = createTooltipHandoff({
-    activeTooltip: activeButtonTooltip,
-    getId: () => tooltipId,
-  });
+  const tooltipHandoff = createTooltipHandoff({ group: getTooltipGroup() });
+  const tooltipActive = tooltipHandoff.active;
   let hovered = false;
   let focused = false;
 
@@ -144,9 +141,7 @@
   $: showingInlineFeedback =
     !feedbackPortalled && (feedbackOpen || copyPending);
   $: tooltipHoverActive =
-    !showingInlineFeedback &&
-    (hovered || focused) &&
-    $activeButtonTooltip === tooltipId;
+    !showingInlineFeedback && (hovered || focused) && $tooltipActive;
   $: feedbackInPortal = feedbackPortalled && feedbackOpen;
   $: tooltipOpen = tooltipHoverActive || feedbackInPortal;
   $: tooltipText = feedbackOpen ? feedbackText : iconDescription;

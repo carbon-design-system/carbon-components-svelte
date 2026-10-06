@@ -150,9 +150,9 @@
   import { observeModalClose } from "../Portal/portal-utils.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
   import { noop } from "../utils/noop.js";
+  import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import ButtonSkeleton from "./ButtonSkeleton.svelte";
-  import { activeButtonTooltip } from "./button-tooltip-store.js";
 
   const insideModal = getContext(MODAL_CONTEXT_KEY);
   const actionSetSize = getContext("carbon:ActionSet")?.size;
@@ -170,25 +170,19 @@
   $: usePortal = hasTooltipContent && !hideTooltip && effectivePortalTooltip;
   $: hasTooltip = hasTooltipContent && !hideTooltip && !usePortal;
 
-  const tooltipId = {};
-
-  // Warm-handoff hover/focus scheduling: gate on the shared store so only
-  // one icon-only tooltip can be open at a time. When another button claims
-  // the store, this one closes immediately — preventing overlapping
-  // tooltips (e.g. Pagination's adjacent buttons).
-  const tooltipHandoff = createTooltipHandoff({
-    activeTooltip: activeButtonTooltip,
-    getId: () => tooltipId,
-  });
+  // Warm-handoff hover/focus scheduling: only one tooltip can be open at a
+  // time. When another tooltip claims the active slot, this one closes
+  // immediately — preventing overlapping tooltips (e.g. Pagination's
+  // adjacent buttons).
+  const tooltipHandoff = createTooltipHandoff({ group: getTooltipGroup() });
+  const tooltipActive = tooltipHandoff.active;
+  const tooltipOthersActive = tooltipHandoff.hidden;
 
   let hovered = false;
   let focused = false;
 
   $: portalOpen =
-    usePortal &&
-    !disabled &&
-    (hovered || focused) &&
-    $activeButtonTooltip === tooltipId;
+    usePortal && !disabled && (hovered || focused) && $tooltipActive;
 
   function dismissPortalTooltip() {
     tooltipHandoff.cancel();
@@ -209,11 +203,7 @@
         : () => {};
   }
 
-  $: tooltipHidden =
-    hasTooltipContent &&
-    !hideTooltip &&
-    $activeButtonTooltip !== null &&
-    $activeButtonTooltip !== tooltipId;
+  $: tooltipHidden = hasTooltipContent && !hideTooltip && $tooltipOthersActive;
 
   function handleMouseenter() {
     if (hasTooltip) {

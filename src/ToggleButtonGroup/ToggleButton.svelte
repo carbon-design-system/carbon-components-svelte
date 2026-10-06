@@ -55,10 +55,11 @@
   export let ref = null;
 
   import { getContext, onMount } from "svelte";
-  import { get, readable, writable } from "svelte/store";
+  import { get, readable } from "svelte/store";
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { noop } from "../utils/noop.js";
+  import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
 
   // Standalone use (no ancestor `ToggleButtonGroup`) is undocumented but
@@ -70,7 +71,6 @@
       /** @type {"horizontal" | "vertical"} */ ("horizontal"),
     ),
     tabStopElement: readable(/** @type {HTMLButtonElement | null} */ (null)),
-    activeTooltip: writable(/** @type {string | number | null} */ (null)),
     toggle: noop,
     claimInitialTabStop: () => false,
     notifyUnmount: noop,
@@ -80,7 +80,6 @@
     disabled: groupDisabled,
     orientation: groupOrientation,
     tabStopElement,
-    activeTooltip,
     toggle,
     claimInitialTabStop,
     notifyUnmount,
@@ -118,21 +117,16 @@
   // Portalled (not CSS `:hover`/`:focus`) so it can't be clipped by an
   // overflow ancestor and never shares the flush-adjacent trigger's local
   // stacking context - same technique ContentSwitcher's icon-only Switch
-  // uses, including the shared `activeTooltip` claim (only one segment's
+  // uses, including the tooltip group's active-slot claim (only one
   // tooltip shows at a time) and the warm-handoff delay skip.
 
   let hovered = false;
   let focused = false;
-  const tooltipHandoff = createTooltipHandoff({
-    activeTooltip,
-    getId: () => value,
-  });
+  const tooltipHandoff = createTooltipHandoff({ group: getTooltipGroup() });
+  const tooltipActive = tooltipHandoff.active;
 
   $: tooltipOpen =
-    hasTooltipContent &&
-    !isDisabled &&
-    (hovered || focused) &&
-    $activeTooltip === value;
+    hasTooltipContent && !isDisabled && (hovered || focused) && $tooltipActive;
 
   function showTooltip() {
     tooltipHandoff.scheduleEnter(() => {
