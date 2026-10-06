@@ -9,6 +9,7 @@ const cases: { testId: string; check?: "replace" }[] = [
   { testId: "copy-input" },
   { testId: "text-input" },
   { testId: "password-input" },
+  { testId: "text-area" },
 ];
 
 async function expectFullSelection(input: Locator) {

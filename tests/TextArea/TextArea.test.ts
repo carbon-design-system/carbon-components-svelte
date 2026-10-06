@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { clickToFocus } from "../utils/click-to-focus";
 import { user } from "../utils/user";
 import TextAreaFluidForm from "./TextArea.fluidForm.test.svelte";
 import TextAreaFluidSkeleton from "./TextArea.fluidSkeleton.test.svelte";
@@ -28,6 +29,15 @@ describe("TextArea", () => {
 
     expect(textarea.selectionStart).toBe(0);
     expect(textarea.selectionEnd).toBe("hello world".length);
+  });
+
+  it("keeps the selected value through the click's mouseup", async () => {
+    render(TextArea, {
+      props: { selectTextOnFocus: true, value: "hello world" },
+    });
+
+    const mouseup = await clickToFocus(screen.getByRole("textbox"));
+    expect(mouseup.defaultPrevented).toBe(true);
   });
 
   it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {
