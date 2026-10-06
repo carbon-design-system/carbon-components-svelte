@@ -458,7 +458,6 @@
       bind:this={copyRef}
       type="button"
       {disabled}
-      aria-live="polite"
       aria-busy={copyPending || undefined}
       class:bx--copy={true}
       class:bx--btn--copy={true}
@@ -509,6 +508,11 @@
         </span>
       {/if}
     </button>
+    <!-- Always rendered (even while empty) so assistive tech registers the
+         region before its text changes. -->
+    <span role="status" aria-live="polite" class:bx--visually-hidden={true}
+      >{feedbackOpen ? feedbackText : ""}</span
+    >
 
     {#if effectivePortalTooltip}
       <PortalTooltip

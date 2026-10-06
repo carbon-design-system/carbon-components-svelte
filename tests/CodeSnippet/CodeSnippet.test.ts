@@ -73,6 +73,29 @@ describe("CodeSnippet", () => {
     expect(screen.getByLabelText("Copy code")).toBeInTheDocument();
   });
 
+  it("announces copy feedback for the inline variant", async () => {
+    const originalClipboard = navigator.clipboard;
+    Object.defineProperty(navigator, "clipboard", {
+      value: { writeText: vi.fn().mockResolvedValue(undefined) },
+      writable: true,
+    });
+
+    render(CodeSnippetInline);
+    const status = screen.getByRole("status");
+    expect(status).toHaveTextContent("");
+
+    await user.click(screen.getByRole("button", { name: "Copy code" }));
+    expect(status).toHaveTextContent("Copied!");
+    expect(
+      screen.getByRole("button", { name: "Copy code" }),
+    ).not.toHaveAttribute("aria-live");
+
+    Object.defineProperty(navigator, "clipboard", {
+      value: originalClipboard,
+      writable: true,
+    });
+  });
+
   it("describes the inline copy button with its code text", () => {
     const { container } = render(CodeSnippetInline);
     const button = screen.getByRole("button", { name: "Copy code" });
