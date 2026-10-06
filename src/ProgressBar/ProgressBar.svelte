@@ -47,7 +47,11 @@
   /** Specify the text announced and described when the status is `"finished"`. */
   export let finishedText = "Complete";
 
-  /** Set an id for the progress bar element */
+  /**
+   * Set an id for the progress bar element.
+   * The helper text and status ids derive from it as `{id}-helper` and
+   * `{id}-status`.
+   */
   export let id = uniqueId();
 
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
@@ -59,8 +63,8 @@
     finished: CheckmarkFilled,
   };
 
-  let helperId = uniqueId();
-  let statusDescriptionId = uniqueId();
+  $: helperId = `${id}-helper`;
+  $: statusDescriptionId = `${id}-status`;
 
   $: indeterminate = value === undefined && status === "active";
   let capped;
