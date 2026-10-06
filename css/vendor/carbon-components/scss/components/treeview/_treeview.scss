@@ -306,3 +306,106 @@
 @include exports("treeview-checkbox") {
   @include treeview-checkbox;
 }
+
+// carbon-components-svelte patch (treeview-forced-colors)
+// The selected node is a background tint (and a bar in multiselect) and the
+// disabled node a lighter text colour. Forced-colors mode repaints both, so
+// selected, disabled and plain nodes looked identical.
+//
+// Author-specified system colors survive forcing, so these rules only use
+// system colors and leave `forced-color-adjust` alone: unforcing would bring
+// back the base hover tint and the real `$focus` ring on top of `Highlight`.
+// Every state is re-asserted because the base hover rules (up to 0,5,0)
+// outrank the plain state rules, and a non-system hover value would be forced
+// to `Canvas` under `HighlightText`. Disabled wins over selected, so the
+// selected rules exclude disabled nodes, and the disabled rules carry the
+// node's own class to outrank the base disabled hover rules.
+
+/// Tree view selection and disabled state in forced-colors mode.
+/// @access private
+/// @group treeview
+@mixin treeview-forced-colors {
+  @media (forced-colors: active) {
+    .#{$prefix}--tree {
+      .#{$prefix}--tree-node--selected:not(.#{$prefix}--tree-node--disabled)
+        > .#{$prefix}--tree-node__label,
+      .#{$prefix}--tree-node--selected:not(.#{$prefix}--tree-node--disabled)
+        > .#{$prefix}--tree-node__label:hover {
+        background-color: Highlight;
+        color: HighlightText;
+      }
+
+      .#{$prefix}--tree-node--selected:not(.#{$prefix}--tree-node--disabled)
+        > .#{$prefix}--tree-node__label
+        .#{$prefix}--tree-node__label__details {
+        color: HighlightText;
+      }
+
+      .#{$prefix}--tree-node--selected:not(.#{$prefix}--tree-node--disabled)
+        > .#{$prefix}--tree-node__label
+        .#{$prefix}--tree-parent-node__toggle-icon,
+      .#{$prefix}--tree-node--selected:not(.#{$prefix}--tree-node--disabled)
+        > .#{$prefix}--tree-node__label
+        .#{$prefix}--tree-node__icon {
+        fill: HighlightText;
+      }
+
+      // The focus ring is a real `$focus` colour; `Highlight` fill needs a
+      // contrasting system colour instead.
+      .#{$prefix}--tree-node--selected:not(.#{$prefix}--tree-node--disabled):focus
+        > .#{$prefix}--tree-node__label {
+        outline-color: HighlightText;
+      }
+
+      // The active (and multiselect selected) bar is a `$interactive-04`
+      // background, which forcing turns into `Canvas`: invisible.
+      .#{$prefix}--tree-node--active:not(.#{$prefix}--tree-node--selected):not(
+          .#{$prefix}--tree-node--disabled
+        )
+        > .#{$prefix}--tree-node__label::before {
+        background-color: CanvasText;
+      }
+
+      // A selected row's bar contrasts with its `Highlight` fill instead.
+      .#{$prefix}--tree-node--selected:not(.#{$prefix}--tree-node--disabled)
+        > .#{$prefix}--tree-node__label::before {
+        background-color: HighlightText;
+      }
+
+      // Disabled nodes (and their hover states) read as GrayText, with no
+      // selection fill.
+      .#{$prefix}--tree-node.#{$prefix}--tree-node--disabled,
+      .#{$prefix}--tree-node.#{$prefix}--tree-node--disabled
+        .#{$prefix}--tree-node__label,
+      .#{$prefix}--tree-node.#{$prefix}--tree-node--disabled
+        .#{$prefix}--tree-node__label:hover,
+      .#{$prefix}--tree-node.#{$prefix}--tree-node--disabled
+        .#{$prefix}--tree-node__label
+        .#{$prefix}--tree-node__label__details,
+      .#{$prefix}--tree-node.#{$prefix}--tree-node--disabled
+        .#{$prefix}--tree-node__label:hover
+        .#{$prefix}--tree-node__label__details {
+        color: GrayText;
+      }
+
+      .#{$prefix}--tree-node.#{$prefix}--tree-node--disabled
+        .#{$prefix}--tree-node__label
+        .#{$prefix}--tree-parent-node__toggle-icon,
+      .#{$prefix}--tree-node.#{$prefix}--tree-node--disabled
+        .#{$prefix}--tree-node__label
+        .#{$prefix}--tree-node__icon,
+      .#{$prefix}--tree-node.#{$prefix}--tree-node--disabled
+        .#{$prefix}--tree-node__label:hover
+        .#{$prefix}--tree-parent-node__toggle-icon,
+      .#{$prefix}--tree-node.#{$prefix}--tree-node--disabled
+        .#{$prefix}--tree-node__label:hover
+        .#{$prefix}--tree-node__icon {
+        fill: GrayText;
+      }
+    }
+  }
+}
+
+@include exports("treeview-forced-colors") {
+  @include treeview-forced-colors;
+}
