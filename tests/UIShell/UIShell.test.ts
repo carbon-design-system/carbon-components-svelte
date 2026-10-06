@@ -612,6 +612,9 @@ describe("UIShell", () => {
 
       const nav = container.querySelector(".bx--side-nav");
       expect(nav).toHaveClass("bx--side-nav--rail");
+      // A collapsed rail is still visible and focusable, so it must stay in
+      // the accessibility tree.
+      expect(nav).not.toHaveAttribute("aria-hidden");
     });
 
     it("should handle isOpen state", () => {
