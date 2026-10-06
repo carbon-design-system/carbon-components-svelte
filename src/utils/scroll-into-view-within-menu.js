@@ -10,16 +10,18 @@
 
 /**
  * Scroll `node` into view within its nearest scroll container matching
- * `containerSelector` using `block: "nearest"` semantics. Never scrolls the
- * document.
+ * `containerSelector`, aligned like `Element.scrollIntoView`'s `block` option
+ * (default `"nearest"`). Never scrolls the document.
  *
  * @param {HTMLElement} node
  * @param {string} [containerSelector] defaults to `[role="listbox"]`
+ * @param {"start" | "center" | "end" | "nearest"} [block] defaults to `"nearest"`
  * @returns {void}
  */
 export function scrollIntoViewWithinMenu(
   node,
   containerSelector = '[role="listbox"]',
+  block = "nearest",
 ) {
   const container = node.closest(containerSelector);
   if (!(container instanceof HTMLElement)) return;
@@ -28,7 +30,16 @@ export function scrollIntoViewWithinMenu(
   const itemRect = node.getBoundingClientRect();
   const containerRect = container.getBoundingClientRect();
 
-  if (itemRect.top < containerRect.top) {
+  if (block === "start") {
+    container.scrollTop += itemRect.top - containerRect.top;
+  } else if (block === "end") {
+    container.scrollTop += itemRect.bottom - containerRect.bottom;
+  } else if (block === "center") {
+    container.scrollTop +=
+      itemRect.top +
+      itemRect.height / 2 -
+      (containerRect.top + containerRect.height / 2);
+  } else if (itemRect.top < containerRect.top) {
     container.scrollTop -= containerRect.top - itemRect.top;
   } else if (itemRect.bottom > containerRect.bottom) {
     container.scrollTop += itemRect.bottom - containerRect.bottom;

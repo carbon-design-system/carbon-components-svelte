@@ -10,10 +10,11 @@
  */
 /**
  * Scroll `node` into view within its nearest scroll container matching
- * `containerSelector` using `block: "nearest"` semantics. Never scrolls the
- * document.
+ * `containerSelector`, aligned like `Element.scrollIntoView`'s `block` option
+ * (default `"nearest"`). Never scrolls the document.
  */
 export function scrollIntoViewWithinMenu(
   node: HTMLElement,
   containerSelector?: string,
+  block?: "start" | "center" | "end" | "nearest",
 ): void;

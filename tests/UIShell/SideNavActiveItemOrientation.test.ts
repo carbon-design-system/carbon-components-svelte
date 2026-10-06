@@ -51,22 +51,10 @@ describe("SideNav active item orientation", () => {
     );
   });
 
-  it("scrolls the active item into view on mount", async () => {
-    render(SideNavActiveItemOrientationTest, {
-      props: { activeItem: "nested" },
-    });
-    await tick();
-    await tick();
-
-    const activeItem = screen.getByTestId("nested-item");
-    const scrollIntoView = Element.prototype
-      .scrollIntoView as unknown as ReturnType<typeof vi.fn>;
-    expect(scrollIntoView).toHaveBeenCalledTimes(1);
-    expect(scrollIntoView.mock.instances[0]).toBe(activeItem);
-    expect(scrollIntoView).toHaveBeenCalledWith({ block: "nearest" });
-  });
-
-  it("honors a custom activeItemScrollBlock", async () => {
+  // Element.scrollIntoView moves Chromium's sequential focus starting point,
+  // so the first Tab would skip the skip link. The nav scrolls its own list
+  // instead (alignment is covered by e2e/side-nav-active-item-scroll.test.ts).
+  it("does not call Element.scrollIntoView on mount", async () => {
     render(SideNavActiveItemOrientationTest, {
       props: { activeItem: "nested", activeItemScrollBlock: "center" },
     });
@@ -75,6 +63,6 @@ describe("SideNav active item orientation", () => {
 
     const scrollIntoView = Element.prototype
       .scrollIntoView as unknown as ReturnType<typeof vi.fn>;
-    expect(scrollIntoView).toHaveBeenCalledWith({ block: "center" });
+    expect(scrollIntoView).not.toHaveBeenCalled();
   });
 });
