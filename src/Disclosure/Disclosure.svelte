@@ -30,13 +30,17 @@
    */
   export let open = false;
 
+  /**
+   * Set an id for the top-level element.
+   * The content id derives from it as `{id}-content`.
+   */
+  export let id = uniqueId();
+
   import { createEventDispatcher } from "svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
-
-  const contentId = uniqueId();
 
   let animation = undefined;
 
@@ -48,6 +52,7 @@
 </script>
 
 <div
+  {id}
   class:bx--disclosure={true}
   class:bx--disclosure--start={align === "start"}
   class:bx--disclosure--end={align === "end"}
@@ -64,7 +69,7 @@
     type="button"
     class:bx--disclosure__control={true}
     aria-expanded={open}
-    aria-controls={contentId}
+    aria-controls="{id}-content"
     on:click
     on:click={toggle}
     on:mouseover
@@ -79,7 +84,7 @@
       <slot name="summary">{summary}</slot>
     </span>
   </button>
-  <div id={contentId} class:bx--disclosure__content={true}>
+  <div id="{id}-content" class:bx--disclosure__content={true}>
     <slot />
   </div>
 </div>
