@@ -203,6 +203,8 @@ jobs:
         run: bun run build:css
 
       - name: E2E tests
+        # The container's default shell is `sh`, which has no `read -a`/`<<<`.
+        shell: bash
         env:
           TESTS: ${{ needs.changes.outputs.e2e-tests }}
         run: |
