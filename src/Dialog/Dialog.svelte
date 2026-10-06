@@ -36,13 +36,27 @@
   let pendingTrigger = null;
 
   /**
+   * Initial `open` state rendered as the `open` attribute so a non-modal
+   * dialog is visible in server HTML. Modal dialogs need `showModal()` (top
+   * layer), which only runs on the client, and `showModal()` throws on a
+   * dialog that already carries `open`. Evaluated once, so Svelte never
+   * rewrites the attribute afterward; later changes go through `dialogAction`.
+   */
+  const initialOpen = open && !modal;
+
+  /**
    * Calls `showModal()`/`show()`/`close()` on the native `<dialog>` element
    * so its open state tracks `open`/`modal`. Svelte re-invokes this on every
    * reassignment of `open`/`modal`, not just real transitions, so the guard
    * on the element's own `open` state stops `dispatch("open")` from firing
    * again on a redundant re-run while the dialog is already open.
+   * A dialog that arrives with the `open` attribute (server-rendered, or
+   * `initialOpen` on the client) has not been shown yet, so the first sync
+   * drops the attribute and calls `show()` to run the usual open path.
    */
   function dialogAction(node, options) {
+    let hasInitialAttribute = node.hasAttribute("open");
+
     sync(options);
 
     return {
@@ -51,8 +65,12 @@
     };
 
     function sync({ open: shouldOpen, modal: isModal }) {
+      const fromAttribute = hasInitialAttribute;
+      hasInitialAttribute = false;
+
       if (shouldOpen) {
-        if (!node.open) {
+        if (!node.open || fromAttribute) {
+          if (fromAttribute) node.removeAttribute("open");
           focusReturn.save();
           if (isModal) {
             node.showModal();
@@ -99,6 +117,7 @@
 <dialog
   class:bx--dialog={true}
   class:bx--dialog--modal={modal}
+  open={initialOpen ? true : undefined}
   use:dialogAction={{ open, modal }}
   {...$$restProps}
   on:cancel={handleCancel}
