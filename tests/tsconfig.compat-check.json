@@ -5,6 +5,11 @@
     "./Snippets/**",
     "./**/*.svelte5.test.*",
     "./**/*.ssr.test.ts",
+    "./**/*.hydrate.test.ts",
+    "./fixtures/hydrate/**",
+    "./utils/dom-diff.ts",
+    "./utils/hydrate.ts",
+    "./utils/hydrate-build.ts",
     "./utils/ssr.ts",
     "./utils/ssr.test.ts"
   ]
