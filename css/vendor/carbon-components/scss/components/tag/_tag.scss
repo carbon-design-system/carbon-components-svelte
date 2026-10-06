@@ -490,6 +490,34 @@
     outline: 2px solid $focus;
     outline-offset: 1px;
   }
+
+  // Forced-colors mode repaints the selected background, which left
+  // selected and unselected tags identical. Only system colors are used, so
+  // `forced-color-adjust` stays `auto`: unforcing would bring back the real
+  // `$focus` ring and hover fill.
+  @media (forced-colors: active) {
+    .#{$prefix}--tag--selectable.#{$prefix}--tag--selectable-selected:not(.#{$prefix}--tag--disabled) {
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    // The ring sits outside the tag, on the page background.
+    .#{$prefix}--tag--selectable:focus {
+      outline-color: CanvasText;
+    }
+
+    // Disabled wins over selected: muted text and border, with an outer
+    // outline keeping a selected disabled tag distinct from an unselected one.
+    .#{$prefix}--tag--selectable.#{$prefix}--tag--disabled {
+      border-color: GrayText;
+      color: GrayText;
+    }
+
+    .#{$prefix}--tag--selectable.#{$prefix}--tag--disabled.#{$prefix}--tag--selectable-selected {
+      outline: to-rem(1px) solid GrayText;
+      outline-offset: to-rem(1px);
+    }
+  }
 }
 
 @include exports('selectable-tag') {
