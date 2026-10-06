@@ -4,6 +4,7 @@ import { english } from "flatpickr/dist/l10n/default";
 import type { Instance } from "flatpickr/dist/types/instance";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
+import { clickToFocus } from "../utils/click-to-focus";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import DatePickerFluidForm from "./DatePicker.fluidForm.test.svelte";
@@ -45,6 +46,13 @@ describe("DatePicker", () => {
 
     expect(input.selectionStart).toBe(0);
     expect(input.selectionEnd).toBe("01/01/2023".length);
+  });
+
+  it("keeps the selected value through the click's mouseup", async () => {
+    render(DatePicker, { selectTextOnFocus: true, value: "01/01/2023" });
+
+    const mouseup = await clickToFocus(screen.getByLabelText("Date"));
+    expect(mouseup.defaultPrevented).toBe(true);
   });
 
   it("does not select all text on focus when selectTextOnFocus is false (default)", async () => {

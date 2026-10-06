@@ -1,6 +1,8 @@
 <script>
   import {
     CopyInput,
+    DatePicker,
+    DatePickerInput,
     NumberInput,
     PasswordInput,
     TextArea,
@@ -46,4 +48,12 @@
     selectTextOnFocus
     value={123456}
   />
+  <DatePicker datePickerType="single" value="01/02/2026">
+    <DatePickerInput
+      data-testid="date-picker-input"
+      labelText="Date picker"
+      placeholder="mm/dd/yyyy"
+      selectTextOnFocus
+    />
+  </DatePicker>
 </div>
