@@ -99,6 +99,42 @@ describe("ComposedModal", () => {
     expect(screen.getByTestId("modal-root")).not.toHaveAttribute("aria-label");
   });
 
+  it("drops the heading id reference once the header has registered", () => {
+    render(ComposedModalTest, {
+      props: { open: true, headerTitle: "Title only" },
+    });
+
+    expect(screen.getByRole("dialog")).not.toHaveAttribute("aria-labelledby");
+  });
+
+  it("does not reference heading ids when there is no header", () => {
+    render(ComposedModalTest, { props: { open: true } });
+
+    const dialog = screen.getByRole("dialog");
+    expect(dialog).not.toHaveAttribute("aria-labelledby");
+    expect(dialog).not.toHaveAttribute("aria-label");
+  });
+
+  it("keeps a consumer aria-labelledby on the dialog, not the root", () => {
+    render(ComposedModalTest, {
+      props: {
+        open: true,
+        headerTitle: "Title only",
+        "aria-labelledby": "custom-heading",
+        "data-testid": "modal-root",
+      },
+    });
+
+    expect(screen.getByRole("dialog")).toHaveAttribute(
+      "aria-labelledby",
+      "custom-heading",
+    );
+    expect(screen.getByRole("dialog")).not.toHaveAttribute("aria-label");
+    expect(screen.getByTestId("modal-root")).not.toHaveAttribute(
+      "aria-labelledby",
+    );
+  });
+
   it("should not have visible class when closed", () => {
     const { container } = render(ComposedModalTest, {
       props: {
