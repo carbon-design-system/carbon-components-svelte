@@ -121,6 +121,15 @@
    */
   export let debounce = 0;
 
+  /**
+   * Set an id for the top-level element.
+   * The input, label, menu, and result ids derive from it as `{id}-input`,
+   * `{id}-label`, `{id}-menu`, and `{id}-menuitem-{result id or index}`.
+   * Previously a passed `id` was discarded; it now sets the top-level element
+   * id and the input id becomes `{id}-input`.
+   */
+  export let id = uniqueId();
+
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
   import Close from "../icons/Close.svelte";
@@ -137,10 +146,9 @@
 
   const dispatch = createEventDispatcher();
 
-  const id = uniqueId();
-  const inputId = `${id}-input`;
-  const labelId = `${id}-label`;
-  const menuId = `${id}-menu`;
+  $: inputId = `${id}-input`;
+  $: labelId = `${id}-label`;
+  $: menuId = `${id}-menu`;
 
   /** @type {null | HTMLDivElement} */
   let refSearch = null;
@@ -346,6 +354,7 @@
 
 <div
   bind:this={refSearch}
+  {id}
   use:dismiss={{
     enabled: active,
     type: "mouseup",
