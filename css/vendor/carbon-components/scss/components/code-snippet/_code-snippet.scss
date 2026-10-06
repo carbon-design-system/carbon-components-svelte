@@ -262,7 +262,9 @@
     margin-left: $spacing-03;
     fill: $icon-primary;
     transform: rotate(0deg);
-    transition: $duration--moderate-01 motion(standard, productive);
+    // ccs: the rotation and the disabled fill, not `all`
+    transition: transform $duration--moderate-01 motion(standard, productive),
+      fill $duration--moderate-01 motion(standard, productive);
   }
 
   .#{$prefix}--snippet-btn--expand:hover {

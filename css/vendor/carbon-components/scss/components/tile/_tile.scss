@@ -157,7 +157,7 @@
       margin-left: $carbon--spacing-03;
       fill: $ui-05;
       transform-origin: center;
-      transition: $duration--fast-02 motion(standard, productive);
+      transition: transform $duration--fast-02 motion(standard, productive); // ccs
 
       @media screen and (prefers-reduced-motion: reduce) {
         transition: none;
