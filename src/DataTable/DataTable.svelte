@@ -201,12 +201,21 @@
   export let rowClass = undefined;
 
   /**
+   * Set an id for the table container.
+   * The title, description, header, cell and selection ids derive from it,
+   * for example `{id}-title` and `{id}-{header.key}`.
+   */
+  export let id = uniqueId();
+
+  /**
    * Specify a name attribute for the input elements
    * in a selectable data table (radio or checkbox).
    * When the table is inside a form, this name will
    * be included in the form data on submit.
+   * Defaults to the table `id`.
+   * @type {string}
    */
-  export let inputName = uniqueId();
+  export let inputName = undefined;
 
   /** Set to `true` to use zebra styles */
   export let zebra = false;
@@ -522,15 +531,15 @@
     };
   });
 
-  // Internal ID prefix for radio buttons, checkboxes, etc.
+  // `id` prefixes the ids of radio buttons, checkboxes, etc.
   // since there may be multiple `DataTable` instances that have overlapping row ids.
-  const id = uniqueId();
+  $: selectionName = inputName ?? id;
 
   // Label the table with its title/description. Only when the default
   // heading markup renders (not overridden via the titleChildren /
   // descriptionChildren slots, whose custom markup we don't control ids for).
-  const titleId = `${id}-title`;
-  const descriptionId = `${id}-description`;
+  $: titleId = `${id}-title`;
+  $: descriptionId = `${id}-description`;
   $: hasTitle = !!title && !$$slots.titleChildren;
   $: hasDescription = !!description && !$$slots.descriptionChildren;
 
@@ -1040,7 +1049,7 @@
     (expandable ? 1 : 0) + (isSelectionEnabled ? 1 : 0) + visibleHeaders.length;
 </script>
 
-<TableContainer {useStaticWidth} {...$$restProps}>
+<TableContainer {id} {useStaticWidth} {...$$restProps}>
   {#if title ||
     $$slots.titleChildren ||
     description ||
@@ -1165,6 +1174,7 @@
           {#if batchSelection && !radio}
             <th scope="col" class:bx--table-column-checkbox={true}>
               <InlineCheckbox
+                id="{id}-select-all"
                 aria-label="Select all rows"
                 name="{id}-select-all"
                 value="all"
@@ -1381,7 +1391,7 @@
                     {#if radio}
                       <RadioButton
                         id={inputId}
-                        name={inputName}
+                        name={selectionName}
                         checked={selectedRowIdsSet.has(row.id)}
                         value={row.id}
                         hideLabel
@@ -1397,7 +1407,7 @@
                     {:else}
                       <InlineCheckbox
                         id={inputId}
-                        name={inputName}
+                        name={selectionName}
                         aria-label="Select row"
                         checked={selectedRowIdsSet.has(row.id)}
                         value={row.id}
@@ -1627,7 +1637,7 @@
                     {#if radio}
                       <RadioButton
                         id={inputId}
-                        name={inputName}
+                        name={selectionName}
                         checked={isSelected}
                         value={row.id}
                         hideLabel
@@ -1643,7 +1653,7 @@
                     {:else}
                       <InlineCheckbox
                         id={inputId}
-                        name={inputName}
+                        name={selectionName}
                         aria-label="Select row"
                         checked={isSelected}
                         value={row.id}
