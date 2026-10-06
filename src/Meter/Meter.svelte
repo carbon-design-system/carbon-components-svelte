@@ -113,15 +113,19 @@
    */
   export let size = "md";
 
-  /** Set an id for the meter element. */
+  /**
+   * Set an id for the meter element.
+   * The helper text, thresholds, and status ids derive from it as
+   * `{id}-helper`, `{id}-thresholds`, and `{id}-status`.
+   */
   export let id = uniqueId();
 
   import { getNumberFormatter } from "../utils/intl-formatter-cache.js";
   import { uniqueId } from "../utils/unique-id.js";
 
-  let helperId = uniqueId();
-  let thresholdsId = uniqueId();
-  let statusId = uniqueId();
+  $: helperId = `${id}-helper`;
+  $: thresholdsId = `${id}-thresholds`;
+  $: statusId = `${id}-status`;
 
   let prevStatus = undefined;
   let statusAnnouncement = "";
