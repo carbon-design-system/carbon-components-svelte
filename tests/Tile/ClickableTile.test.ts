@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import ClickableTile from "./ClickableTile.test.svelte";
+import ClickableTileButton from "./ClickableTileButton.test.svelte";
 
 describe("ClickableTile", () => {
   it("should render with href", () => {
@@ -95,5 +96,56 @@ describe("ClickableTile", () => {
 
     expect(component.ref).toBeInstanceOf(HTMLAnchorElement);
     expect(component.ref).toHaveClass("bx--tile--clickable");
+  });
+
+  describe("without href", () => {
+    it("is a focusable button", async () => {
+      render(ClickableTileButton);
+
+      const tile = screen.getByRole("button", { name: "Acknowledge incident" });
+      expect(tile).toHaveClass("bx--tile--clickable");
+
+      await user.tab();
+      expect(tile).toHaveFocus();
+    });
+
+    it("activates on Enter and Space", async () => {
+      const onClick = vi.fn();
+      render(ClickableTileButton, { props: { onClick } });
+
+      const tile = screen.getByRole("button", { name: "Acknowledge incident" });
+      tile.focus();
+      await user.keyboard("{Enter}");
+      await user.keyboard(" ");
+
+      expect(onClick).toHaveBeenCalledTimes(2);
+      expect(tile).not.toHaveClass("bx--tile--is-clicked");
+    });
+
+    it("keeps a consumer's tabindex", () => {
+      render(ClickableTileButton);
+
+      expect(screen.getByTestId("custom-tabindex")).toHaveAttribute(
+        "tabindex",
+        "-1",
+      );
+    });
+
+    it("stays a disabled link when disabled", () => {
+      render(ClickableTileButton);
+
+      const tile = screen.getByTestId("disabled");
+      expect(tile).toHaveAttribute("role", "link");
+      expect(tile).toHaveAttribute("aria-disabled", "true");
+      expect(tile).not.toHaveAttribute("tabindex");
+    });
+  });
+
+  it("does not add button semantics when href is set", () => {
+    render(ClickableTile);
+
+    const tile = screen.getByText("Link only");
+    expect(tile).not.toHaveAttribute("role");
+    expect(tile).not.toHaveAttribute("tabindex");
   });
 });

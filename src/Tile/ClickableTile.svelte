@@ -34,6 +34,12 @@
 
   import Link from "../Link/Link.svelte";
 
+  // Without `href`, the anchor is neither focusable nor a link, so give it
+  // button semantics for the Enter/Space handling below. Spread before
+  // `$$restProps` so a consumer's own `role` or `tabindex` wins; omitted
+  // entirely when disabled, where Link renders its own `role="link"`.
+  $: buttonProps = href || disabled ? {} : { role: "button", tabindex: "0" };
+
   $: linkClass = [
     "bx--tile",
     "bx--tile--clickable",
@@ -49,6 +55,7 @@
 
 <Link
   bind:ref
+  {...buttonProps}
   {...$$restProps}
   {disabled}
   class={linkClass}
