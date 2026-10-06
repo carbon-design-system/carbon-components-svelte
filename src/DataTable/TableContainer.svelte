@@ -11,12 +11,19 @@
   /** Set to `true` to use static width */
   export let useStaticWidth = false;
 
+  /**
+   * Set an id for the container element.
+   * The title and description ids derive from it as `{id}-title` and
+   * `{id}-description`. They are read once when the component is created.
+   */
+  export let id = uniqueId();
+
   import { setContext } from "svelte";
   import { writable } from "svelte/store";
   import { uniqueId } from "../utils/unique-id.js";
 
-  const titleId = uniqueId();
-  const descriptionId = uniqueId();
+  const titleId = `${id}-title`;
+  const descriptionId = `${id}-description`;
   const hasTitle = writable(!!title);
   const hasDescription = writable(!!description);
 
@@ -32,6 +39,7 @@
 </script>
 
 <div
+  {id}
   class:bx--data-table-container={true}
   class:bx--data-table-container--static={useStaticWidth}
   class:bx--data-table--max-width={stickyHeader}
