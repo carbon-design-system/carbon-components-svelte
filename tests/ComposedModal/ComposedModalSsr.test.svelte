@@ -8,9 +8,15 @@
   export let showHeader = true;
   export let ariaLabel: string | undefined = undefined;
   export let ariaLabelledby: string | undefined = undefined;
+  export let id: string | undefined = undefined;
 </script>
 
-<ComposedModal open aria-label={ariaLabel} aria-labelledby={ariaLabelledby}>
+<ComposedModal
+  open
+  {id}
+  aria-label={ariaLabel}
+  aria-labelledby={ariaLabelledby}
+>
   {#if showHeader}
     <ModalHeader {label} {title} />
   {/if}
