@@ -2,8 +2,9 @@
 /// <reference types="vite/client" />
 import { JSDOM } from "jsdom";
 import type { ComponentType, SvelteComponent } from "svelte";
+import { render } from "svelte/server";
 import barrel from "../src/index.js?raw";
-import { renderSSR } from "./utils/ssr";
+import { RANDOM_ID, renderSSR } from "./utils/ssr";
 
 const BARREL_EXPORT = /default as (\w+) } from "\.\/(.+\.svelte)"/g;
 const OPEN_PROP = /export let open\b/;
@@ -45,6 +46,14 @@ const NEEDS_PARENT = new Set([
   "TabContent", // Tabs or TabsVertical
   "ToolbarMenuItem", // ToolbarMenu
 ]);
+
+/**
+ * Props that pin a component's generated ids, beyond the `id` every
+ * component gets. Each id a component renders must come from a prop.
+ */
+const ID_PROPS: Record<string, Record<string, string>> = {
+  Tooltip: { tooltipId: "fixed-tooltip", triggerId: "fixed-trigger" },
+};
 
 const components = [...barrel.matchAll(BARREL_EXPORT)].map(([, name, file]) => {
   const path = `../src/${file}`;
@@ -112,4 +121,21 @@ describe.each(components)("$name", ({ name, path, open }) => {
       expect(findBadValues(document)).toEqual([]);
     });
   }
+
+  // Raw output, so a random id is not normalized away.
+  it.each(open ? [false, true] : [false])(
+    "renders no random ids for an explicit id (open: %s)",
+    async (isOpen) => {
+      const component = await load();
+      const props = {
+        id: "fixed",
+        ...ID_PROPS[name],
+        open: isOpen || undefined,
+      };
+      const html = render(component, { props }).body;
+
+      expect(html.match(RANDOM_ID)).toBeNull();
+      expect(render(component, { props }).body).toBe(html);
+    },
+  );
 });

@@ -17,7 +17,7 @@ const WHITESPACE_BETWEEN_TAGS = />\s+</g;
  * The lookbehind skips custom properties (`--ccs-separator`) and classes
  * (`bx--tree-node`, `__label-wrapper`).
  */
-const RANDOM_ID =
+export const RANDOM_ID =
   /(?<!\w|--)(?:ccs|cua|ctag|label|tree|structured-list)-[a-z0-9]{8,}/g;
 
 /**
