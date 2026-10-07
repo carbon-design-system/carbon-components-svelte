@@ -154,6 +154,39 @@ describe("InterstitialScreen", () => {
     expect(launcher).toHaveFocus();
   });
 
+  it("returns focus to the opener when launcherButtonRef is unset", async () => {
+    render(InterstitialScreenTest, {
+      props: { open: false, stepCount: 1, bindLauncher: false },
+    });
+
+    const launcher = screen.getByRole("button", { name: "Open launcher" });
+    await user.click(launcher);
+    await tick();
+
+    await user.click(screen.getByRole("button", { name: "Get Started" }));
+    await flushMacrotask();
+    await tick();
+
+    expect(launcher).toHaveFocus();
+  });
+
+  it("leaves focus where a close handler moved it", async () => {
+    const elsewhere = document.createElement("input");
+    document.body.append(elsewhere);
+    render(InterstitialScreenTest, {
+      props: { open: false, stepCount: 1, onclose: () => elsewhere.focus() },
+    });
+
+    await user.click(screen.getByRole("button", { name: "Open launcher" }));
+    await tick();
+    await user.click(screen.getByRole("button", { name: "Get Started" }));
+    await flushMacrotask();
+    await tick();
+
+    expect(elsewhere).toHaveFocus();
+    elsewhere.remove();
+  });
+
   it("focuses the primary action button on mount and after each step change", async () => {
     render(InterstitialScreenTest, { props: { open: true, stepCount: 2 } });
 

@@ -10,6 +10,10 @@
   export let isFullScreen: ComponentProps<InterstitialScreen>["isFullScreen"] = false;
   export let launcherButtonRef: ComponentProps<InterstitialScreen>["launcherButtonRef"] =
     undefined;
+  export let bindLauncher = true;
+
+  let launcher: HTMLButtonElement;
+  $: launcherButtonRef = bindLauncher ? launcher : undefined;
 
   export let title = "";
   export let subTitle = "";
@@ -23,11 +27,7 @@
   export let onaction: ((event: CustomEvent) => void) | undefined = undefined;
 </script>
 
-<button
-  type="button"
-  bind:this={launcherButtonRef}
-  on:click={() => (open = true)}
->
+<button type="button" bind:this={launcher} on:click={() => (open = true)}>
   Open launcher
 </button>
 
