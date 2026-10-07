@@ -13,6 +13,7 @@
   export let fluid = false;
   export let inline = false;
   export let id = "ccs-test";
+  export let size: ComponentProps<CopyInput>["size"] = undefined;
 </script>
 
 <CopyInput
@@ -26,6 +27,7 @@
   {fluid}
   {inline}
   {id}
+  {size}
   on:copy={() => {
     console.log("copied");
   }}

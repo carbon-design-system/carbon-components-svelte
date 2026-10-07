@@ -43,7 +43,7 @@
 <script>
   /**
    * Set the size of the input.
-   * @type {"sm" | "xl"}
+   * @type {"xs" | "sm" | "xl"}
    */
   export let size = undefined;
 
@@ -271,6 +271,7 @@
       class:bx--date-picker__input--invalid={showInvalid}
       class:bx--date-picker__input--with-icon={hasIcon}
       class:bx--date-picker__input--with-clear={showClear}
+      class:bx--date-picker__input--xs={size === "xs"}
       class:bx--date-picker__input--sm={size === "sm"}
       class:bx--date-picker__input--xl={size === "xl"}
       class:bx--date-picker__input--ghost-text={$multiple}
@@ -307,6 +308,7 @@
         class:bx--date-picker__input-overlay={true}
         class:bx--date-picker__input--with-icon={hasIcon}
         class:bx--date-picker__input--with-clear={showClear}
+        class:bx--date-picker__input--xs={size === "xs"}
         class:bx--date-picker__input--sm={size === "sm"}
         class:bx--date-picker__input--xl={size === "xl"}
         aria-hidden="true"

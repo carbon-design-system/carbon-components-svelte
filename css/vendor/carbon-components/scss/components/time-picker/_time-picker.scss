@@ -150,3 +150,18 @@
 @include exports('time-picker-readonly') {
   @include time-picker-readonly;
 }
+
+// carbon-components-svelte patch
+// Extra-small (`xs`, 24px) input and selects, matching the other field
+// components' `size="xs"`. v10 only ships sm/md/xl.
+@mixin time-picker-xs {
+  .#{$prefix}--time-picker--xs .#{$prefix}--select-input,
+  .#{$prefix}--time-picker--xs .#{$prefix}--time-picker__input-field {
+    height: to-rem(24px);
+    max-height: to-rem(24px);
+  }
+}
+
+@include exports('time-picker-xs') {
+  @include time-picker-xs;
+}
