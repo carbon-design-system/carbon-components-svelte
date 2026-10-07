@@ -18,9 +18,11 @@
 
   /**
    * Specify the size of the search input.
+   * Inherits the parent `Form` size when unset, otherwise `"xl"`.
    * @type {"xs" | "sm" | "lg" | "xl"}
+   * @default "xl"
    */
-  export let size = "xl";
+  export let size = undefined;
 
   /** Specify the class name passed to the outer div element */
   export let searchClass = "";
@@ -127,7 +129,10 @@
   export let debounce = 0;
 
   import { createEventDispatcher, getContext, onMount, tick } from "svelte";
-  import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
+  import {
+    FORM_CONTEXT_KEY,
+    FORM_SIZE_CONTEXT_KEY,
+  } from "../constants/context-keys.js";
   import Close from "../icons/Close.svelte";
   import IconSearch from "../icons/IconSearch.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
@@ -155,6 +160,9 @@
     ref?.focus();
   }
   const formContext = getContext(FORM_CONTEXT_KEY);
+  /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
+  const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+  $: effectiveSize = size ?? $formSize ?? "xl";
 
   let searchRef = null;
   let prevExpanded = expanded;
@@ -214,7 +222,7 @@
 <!-- svelte-ignore a11y-autofocus -->
 {#if skeleton}
   <SearchSkeleton
-    {size}
+    size={effectiveSize}
     {...$$restProps}
     on:click
     on:mouseover
@@ -230,10 +238,10 @@
     class:bx--search={true}
     class:bx--search--light={light}
     class:bx--search--disabled={disabled}
-    class:bx--search--xs={size === "xs"}
-    class:bx--search--sm={size === "sm"}
-    class:bx--search--lg={size === "lg"}
-    class:bx--search--xl={size === "xl"}
+    class:bx--search--xs={effectiveSize === "xs"}
+    class:bx--search--sm={effectiveSize === "sm"}
+    class:bx--search--lg={effectiveSize === "lg"}
+    class:bx--search--xl={effectiveSize === "xl"}
     class:bx--search--expandable={expandable}
     class:bx--search--expanded={expanded}
     class:bx--search--fluid={isFluid}
@@ -378,7 +386,7 @@
         dispatch("clear");
       }}
     >
-      <svelte:component this={Close} size={size === "xl" ? 20 : 16} />
+      <svelte:component this={Close} size={effectiveSize === "xl" ? 20 : 16} />
     </button>
   </div>
   {#if !showInvalid && !showWarn && helperText}

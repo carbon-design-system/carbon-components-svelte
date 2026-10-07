@@ -1,6 +1,7 @@
 <script>
   /**
    * Set the size of the input.
+   * Inherits the parent `Form` size when unset.
    * @type {"xs" | "sm" | "xl"}
    */
   export let size = undefined;
@@ -111,6 +112,7 @@
   import { getContext, onMount, tick } from "svelte";
   import {
     FORM_CONTEXT_KEY,
+    FORM_SIZE_CONTEXT_KEY,
     MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
   import EditOff from "../icons/EditOff.svelte";
@@ -131,6 +133,9 @@
   import { uniqueId } from "../utils/unique-id.js";
 
   const ctx = getContext(FORM_CONTEXT_KEY);
+  /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
+  const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+  $: effectiveSize = size ?? $formSize;
   const insideModal = getContext(MODAL_CONTEXT_KEY);
 
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
@@ -213,9 +218,9 @@
       class:bx--visually-hidden={hideLabel}
       class:bx--label--disabled={disabled}
       class:bx--label--inline={inline}
-      class:bx--label--inline--xs={inline && size === "xs"}
-      class:bx--label--inline--sm={inline && size === "sm"}
-      class:bx--label--inline--xl={inline && size === "xl"}
+      class:bx--label--inline--xs={inline && effectiveSize === "xs"}
+      class:bx--label--inline--sm={inline && effectiveSize === "sm"}
+      class:bx--label--inline--xl={inline && effectiveSize === "xl"}
       class:bx--label--slotted={isFluid && $$slots.labelChildren}
     >
       <slot name="labelChildren"> {labelText} </slot>
@@ -238,9 +243,9 @@
       class:bx--visually-hidden={hideLabel}
       class:bx--label--disabled={disabled}
       class:bx--label--inline={inline}
-      class:bx--label--inline--xs={inline && size === "xs"}
-      class:bx--label--inline--sm={inline && size === "sm"}
-      class:bx--label--inline--xl={inline && size === "xl"}
+      class:bx--label--inline--xs={inline && effectiveSize === "xs"}
+      class:bx--label--inline--sm={inline && effectiveSize === "sm"}
+      class:bx--label--inline--xl={inline && effectiveSize === "xl"}
       class:bx--label--slotted={isFluid && $$slots.labelChildren}
     >
       <slot name="labelChildren"> {labelText} </slot>
@@ -299,9 +304,9 @@
         class:bx--text-input--light={light}
         class:bx--text-input--invalid={showInvalid}
         class:bx--text-input--warning={showWarn}
-        class:bx--text-input--xs={size === "xs"}
-        class:bx--text-input--sm={size === "sm"}
-        class:bx--text-input--xl={size === "xl"}
+        class:bx--text-input--xs={effectiveSize === "xs"}
+        class:bx--text-input--sm={effectiveSize === "sm"}
+        class:bx--text-input--xl={effectiveSize === "xl"}
         {...$$restProps}
         on:change
         on:input

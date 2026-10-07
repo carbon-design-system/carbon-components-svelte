@@ -98,6 +98,7 @@
 
   /**
    * Set the size of the combobox.
+   * Inherits the parent `Form` size when unset.
    * @type {"xs" | "sm" | "lg" | "xl"}
    */
   export let size = undefined;
@@ -313,6 +314,7 @@
   } from "svelte";
   import {
     FORM_CONTEXT_KEY,
+    FORM_SIZE_CONTEXT_KEY,
     MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
   import Checkmark from "../icons/Checkmark.svelte";
@@ -359,6 +361,9 @@
   const scrollEndTracker = createScrollEndTracker();
   const insideModal = getContext(MODAL_CONTEXT_KEY);
   const formContext = getContext(FORM_CONTEXT_KEY);
+  /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
+  const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+  $: effectiveSize = size ?? $formSize;
 
   $: effectivePortalMenu =
     portalMenu === undefined ? !!insideModal : portalMenu;
@@ -724,7 +729,7 @@
     shouldVirtualize,
     virtualize,
     wrapOptions,
-    size,
+    size: effectiveSize,
     fluid: hasFluidMenuItems,
     scrollTop: listScrollTop,
   });
@@ -935,7 +940,7 @@
     invalid={showInvalid}
     {open}
     {light}
-    {size}
+    size={effectiveSize}
     warn={showWarn}
   >
     <div

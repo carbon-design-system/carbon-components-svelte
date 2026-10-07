@@ -1,6 +1,7 @@
 <script>
   /**
    * Specify the size of the input.
+   * Inherits the parent `Form` size when unset.
    * @type {"xs" | "sm" | "xl"}
    */
   export let size = undefined;
@@ -79,7 +80,10 @@
 
   import { getContext, setContext, tick } from "svelte";
   import { readonly as readOnly, writable } from "svelte/store";
-  import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
+  import {
+    FORM_CONTEXT_KEY,
+    FORM_SIZE_CONTEXT_KEY,
+  } from "../constants/context-keys.js";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import Stack from "../Stack/Stack.svelte";
@@ -93,6 +97,9 @@
   import { uniqueId } from "../utils/unique-id.js";
 
   const formContext = getContext(FORM_CONTEXT_KEY);
+  /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
+  const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+  $: effectiveSize = size ?? $formSize;
   const selectCount = writable(0);
 
   /** @type {() => () => void} */
@@ -251,9 +258,9 @@
       class:bx--time-picker--invalid={showInvalid}
       class:bx--time-picker--warn={showWarn}
       class:bx--time-picker--readonly={readonly}
-      class:bx--time-picker--xs={size === "xs"}
-      class:bx--time-picker--sm={size === "sm"}
-      class:bx--time-picker--xl={size === "xl"}
+      class:bx--time-picker--xs={effectiveSize === "xs"}
+      class:bx--time-picker--sm={effectiveSize === "sm"}
+      class:bx--time-picker--xl={effectiveSize === "xl"}
       class:bx--select--light={light}
     >
       <div class:bx--time-picker__input={true}>

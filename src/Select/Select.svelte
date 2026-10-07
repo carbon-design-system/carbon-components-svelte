@@ -13,6 +13,7 @@
 
   /**
    * Set the size of the select input.
+   * Inherits the parent `Form` size when unset.
    * @type {"xs" | "sm" | "xl"}
    */
   export let size = undefined;
@@ -93,7 +94,10 @@
     tick,
   } from "svelte";
   import { writable } from "svelte/store";
-  import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
+  import {
+    FORM_CONTEXT_KEY,
+    FORM_SIZE_CONTEXT_KEY,
+  } from "../constants/context-keys.js";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
@@ -108,6 +112,9 @@
 
   const dispatch = createEventDispatcher();
   const formContext = getContext(FORM_CONTEXT_KEY);
+  /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
+  const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+  $: effectiveSize = size ?? $formSize;
   /**
    * @type {import("svelte/store").Writable<string | number | undefined>}
    */
@@ -273,9 +280,9 @@
             {id}
             {name}
             class:bx--select-input={true}
-            class:bx--select-input--xs={size === "xs"}
-            class:bx--select-input--sm={size === "sm"}
-            class:bx--select-input--xl={size === "xl"}
+            class:bx--select-input--xs={effectiveSize === "xs"}
+            class:bx--select-input--sm={effectiveSize === "sm"}
+            class:bx--select-input--xl={effectiveSize === "xl"}
             {...$$restProps}
             on:change={handleChange}
             on:change
@@ -338,9 +345,9 @@
           aria-invalid={showInvalid || undefined}
           aria-readonly={readonly || undefined}
           class:bx--select-input={true}
-          class:bx--select-input--xs={size === "xs"}
-          class:bx--select-input--sm={size === "sm"}
-          class:bx--select-input--xl={size === "xl"}
+          class:bx--select-input--xs={effectiveSize === "xs"}
+          class:bx--select-input--sm={effectiveSize === "sm"}
+          class:bx--select-input--xl={effectiveSize === "xl"}
           {...$$restProps}
           on:change={handleChange}
           on:change

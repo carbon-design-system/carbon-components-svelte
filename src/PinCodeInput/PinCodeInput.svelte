@@ -87,9 +87,11 @@
 
   /**
    * Set the size of the input.
+   * Inherits the parent `Form` size when unset, otherwise `"default"`.
    * @type {"default" | "xs" | "sm" | "xl"}
+   * @default "default"
    */
-  export let size = "default";
+  export let size = undefined;
 
   /** Set to `true` to enable the light variant */
   export let light = false;
@@ -183,7 +185,10 @@
   export let ref = null;
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
-  import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
+  import {
+    FORM_CONTEXT_KEY,
+    FORM_SIZE_CONTEXT_KEY,
+  } from "../constants/context-keys.js";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import {
@@ -197,6 +202,9 @@
 
   const dispatch = createEventDispatcher();
   const formContext = getContext(FORM_CONTEXT_KEY);
+  /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "xl">} */
+  const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+  $: effectiveSize = size ?? $formSize ?? "default";
 
   /** @type {HTMLInputElement[]} */
   let inputs = [];
@@ -516,7 +524,7 @@
   class:bx--pin-code-input--light={light}
   class:bx--pin-code-input--readonly={readonly}
   class:bx--pin-code-input--fluid={isFluid}
-  class:bx--pin-code-input--xs={size === "xs"}
+  class:bx--pin-code-input--xs={effectiveSize === "xs"}
   {...$$restProps}
 >
   <fieldset
@@ -581,9 +589,9 @@
             class:bx--text-input--light={light}
             class:bx--text-input--invalid={hasError}
             class:bx--text-input--warning={hasWarn}
-            class:bx--text-input--xs={size === "xs"}
-            class:bx--text-input--sm={size === "sm"}
-            class:bx--text-input--xl={size === "xl"}
+            class:bx--text-input--xs={effectiveSize === "xs"}
+            class:bx--text-input--sm={effectiveSize === "sm"}
+            class:bx--text-input--xl={effectiveSize === "xl"}
             on:input={(event) => handleInput(index, event)}
             on:keydown={(event) => handleKeydown(index, event)}
             on:paste={(event) => handlePaste(index, event)}
