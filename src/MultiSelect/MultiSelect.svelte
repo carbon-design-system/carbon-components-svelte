@@ -1393,6 +1393,7 @@
             bind:this={inputRef}
             use:preserveFocusSelection={selectTextOnFocus && !disabled}
             bind:value
+            aria-invalid={showInvalid || undefined}
             {...$$restProps}
             role="combobox"
             tabindex="0"
@@ -1532,6 +1533,7 @@
           : showFieldFocus}
       >
         <ListBoxField
+          aria-invalid={showInvalid || undefined}
           {...$$restProps}
           role="combobox"
           tabindex="0"

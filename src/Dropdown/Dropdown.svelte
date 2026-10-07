@@ -756,6 +756,7 @@
         aria-haspopup="listbox"
         aria-activedescendant={highlightedId ?? ""}
         aria-controls={open ? menuId : undefined}
+        aria-invalid={showInvalid || undefined}
         aria-describedby={fieldDescribedById}
         on:focus={() => {
           if (isFluid) fieldFocused = true;
