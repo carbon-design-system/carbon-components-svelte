@@ -5,6 +5,7 @@
     OverflowMenu,
     OverflowMenuItem,
     Stack,
+    TooltipGroup,
   } from "carbon-components-svelte";
   import { createCopyFeedbackState } from "carbon-components-svelte/src/utils/copy-feedback.js";
   import ArrowUpRight from "carbon-icons-svelte/lib/ArrowUpRight.svelte";
@@ -58,22 +59,24 @@
       Markdown
     </Link>
     <div class="bar-actions__group">
-      <CopyMarkdownButton
-        name={component}
-        href={markdownUrl}
-        bytes={markdownBytes}
-        size="sm"
-        tooltipPosition="bottom"
-      />
-      <Button
-        class="toc-toggle-btn"
-        kind="ghost"
-        size="small"
-        icon={tocToggleIcon}
-        iconDescription={tocToggleDescription}
-        tooltipPosition="bottom"
-        on:click={() => dispatch("tocToggle")}
-      />
+      <TooltipGroup>
+        <CopyMarkdownButton
+          name={component}
+          href={markdownUrl}
+          bytes={markdownBytes}
+          size="sm"
+          tooltipPosition="bottom"
+        />
+        <Button
+          class="toc-toggle-btn"
+          kind="ghost"
+          size="small"
+          icon={tocToggleIcon}
+          iconDescription={tocToggleDescription}
+          tooltipPosition="bottom"
+          on:click={() => dispatch("tocToggle")}
+        />
+      </TooltipGroup>
     </div>
   </Stack>
 </div>
