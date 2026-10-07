@@ -183,6 +183,12 @@
   export let name = "";
 
   /**
+   * Set an id for the top-level element.
+   * The file input id derives from it as `{id}-input`.
+   */
+  export let id = uniqueId();
+
+  /**
    * Obtain a reference to the input HTML element.
    * @type {null | HTMLInputElement}
    */
@@ -191,6 +197,7 @@
   import { createEventDispatcher, tick } from "svelte";
   import { filterIncomingFiles } from "../utils/filter-incoming-files.js";
   import { formatFileSize } from "../utils/format-file-size.js";
+  import { uniqueId } from "../utils/unique-id.js";
   import Filename from "./Filename.svelte";
   import FileUploaderButton from "./FileUploaderButton.svelte";
 
@@ -269,6 +276,7 @@
 </script>
 
 <div
+  {id}
   class:bx--form-item={true}
   {...$$restProps}
   on:click
@@ -293,6 +301,7 @@
     </p>
   {/if}
   <FileUploaderButton
+    id="{id}-input"
     {disabled}
     disableLabelChanges
     labelText={buttonLabel}
