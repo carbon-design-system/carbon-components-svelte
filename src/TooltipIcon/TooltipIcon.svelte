@@ -131,7 +131,9 @@
     $activeTooltipIcon !== null && $activeTooltipIcon !== tooltipId;
 
   // Sync the store when open is set externally (e.g., bind:open).
-  $: {
+  // Skipped on the server: the store is module state shared by every
+  // request, and nothing unmounts there to release it.
+  $: if (typeof window !== "undefined") {
     if (open) {
       activeTooltipIcon.set(tooltipId);
     } else if (get(activeTooltipIcon) === tooltipId) {
