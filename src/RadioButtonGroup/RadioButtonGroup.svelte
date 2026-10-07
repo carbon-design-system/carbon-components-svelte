@@ -99,6 +99,7 @@
 
   import { createEventDispatcher, onMount, setContext } from "svelte";
   import { readonly as readOnly, writable } from "svelte/store";
+  import Decorator from "../AILabel/Decorator.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import {
@@ -253,6 +254,9 @@
     warnId,
     helperId: rawHelperId,
   });
+
+  /** @type {import("svelte/store").Writable<undefined | "active" | "revert">} */
+  const aiLabelState = writable(undefined);
 </script>
 
 <div
@@ -278,6 +282,7 @@
     class:bx--radio-button-group--readonly={readonly}
     class:bx--radio-button-group--invalid={showInvalid}
     class:bx--radio-button-group--warning={showWarn}
+    class:bx--radio-button-group--decorator={$$slots.decorator}
     {disabled}
     data-invalid={showInvalid || undefined}
     aria-invalid={showInvalid || undefined}
@@ -286,6 +291,16 @@
       <legend class:bx--label={true} class:bx--visually-hidden={hideLegend}>
         <slot name="legendChildren">{legendText}</slot>
       </legend>
+    {/if}
+    {#if $$slots.decorator}
+      <Decorator
+        class="bx--radio-button-group-inner--decorator"
+        state={aiLabelState}
+        labelKind="default"
+        labelAlign="start"
+      >
+        <slot name="decorator" />
+      </Decorator>
     {/if}
     <slot />
     <div class:bx--radio-button-group__validation-msg={true}>

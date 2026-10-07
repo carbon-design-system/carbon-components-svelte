@@ -8,7 +8,8 @@
 
   /**
    * Set the size of the button.
-   * Inside a field's `decorator` slot, the size is always `"mini"`.
+   * Inside a component's `decorator` slot, the component sets the size:
+   * `"mini"` in fields, checkboxes, and radio buttons, and `"xs"` in tiles.
    * @type {"mini" | "2xs" | "xs" | "sm" | "md" | "lg" | "xl"}
    */
   export let size = "xs";
@@ -16,6 +17,7 @@
   /**
    * Set the kind of AI label.
    * The inline kind renders as text and can show `textLabel` next to it.
+   * Inside a `Tag`, the kind is always `"inline"`.
    * @type {"default" | "inline"}
    */
   export let kind = "default";
@@ -57,7 +59,8 @@
 
   /**
    * Set the alignment of the explanation relative to the button.
-   * Defaults to `"end"` inside a field's `decorator` slot, otherwise `"start"`.
+   * Defaults to `"end"` inside a field or tile `decorator` slot,
+   * otherwise `"start"`.
    * @type {"start" | "center" | "end"}
    */
   export let align = undefined;

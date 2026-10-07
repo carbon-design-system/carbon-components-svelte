@@ -62,7 +62,8 @@
   export let ref = null;
 
   import { getContext, onMount } from "svelte";
-  import { readable } from "svelte/store";
+  import { readable, writable } from "svelte/store";
+  import Decorator from "../AILabel/Decorator.svelte";
   import { buildFieldIds, joinDescribedBy } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -190,12 +191,21 @@
       cleanupRegistry();
     };
   });
+
+  /** @type {import("svelte/store").Writable<undefined | "active" | "revert">} */
+  const aiLabelState = writable(undefined);
+
+  /** @param {"default" | "inline"} kind */
+  function labelSizeForKind(kind) {
+    return kind === "inline" ? "md" : "mini";
+  }
 </script>
 
 <div
   class:bx--radio-button-wrapper={true}
   class:bx--radio-button-wrapper--label-left={labelPosition === "left"}
   class:bx--radio-button-wrapper--readonly={effectiveReadonly}
+  class:bx--radio-button-wrapper--decorator={$$slots.decorator}
   {...$$restProps}
   aria-label={undefined}
 >
@@ -262,6 +272,16 @@
       </span>
     {/if}
   </label>
+  {#if $$slots.decorator}
+    <Decorator
+      class="bx--radio-button-wrapper-inner--decorator"
+      state={aiLabelState}
+      labelSize={labelSizeForKind}
+      labelAlign="start"
+    >
+      <slot name="decorator" />
+    </Decorator>
+  {/if}
   {#if describeReadonly}
     <span id={readonlyId} class:bx--visually-hidden={true}>{readonlyText}</span>
   {/if}

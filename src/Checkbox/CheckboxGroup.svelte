@@ -74,6 +74,7 @@
 
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { readonly as readOnly, writable } from "svelte/store";
+  import Decorator from "../AILabel/Decorator.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import {
@@ -158,6 +159,9 @@
     warnId: fallbackWarnId,
     readonlyId: fallbackReadonlyId,
   }));
+
+  /** @type {import("svelte/store").Writable<undefined | "active" | "revert">} */
+  const aiLabelState = writable(undefined);
 </script>
 
 <div
@@ -174,6 +178,7 @@
     class:bx--checkbox-group--readonly={readonly}
     class:bx--checkbox-group--invalid={showInvalid}
     class:bx--checkbox-group--warning={showWarn}
+    class:bx--checkbox-group--decorator={$$slots.decorator}
     {disabled}
     data-invalid={showInvalid || undefined}
     aria-describedby={joinDescribedBy(
@@ -192,6 +197,16 @@
       <legend class:bx--label={true} class:bx--visually-hidden={hideLegend}>
         <slot name="legendChildren">{legendText}</slot>
       </legend>
+    {/if}
+    {#if $$slots.decorator}
+      <Decorator
+        class="bx--checkbox-group-inner--decorator"
+        state={aiLabelState}
+        labelKind="default"
+        labelAlign="start"
+      >
+        <slot name="decorator" />
+      </Decorator>
     {/if}
     <slot />
     <div class:bx--checkbox-group__validation-msg={true}>

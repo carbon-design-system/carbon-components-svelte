@@ -66,7 +66,8 @@
   export let ref = null;
 
   import { createEventDispatcher, getContext, onMount, tick } from "svelte";
-  import { readable } from "svelte/store";
+  import { readable, writable } from "svelte/store";
+  import Decorator from "../AILabel/Decorator.svelte";
   import Close from "../icons/Close.svelte";
   import TooltipDefinition from "../TooltipDefinition/TooltipDefinition.svelte";
   import { resolveLinkRel } from "../utils/link-rel.js";
@@ -158,6 +159,9 @@
     dispatch("close");
     if (tagSet) tagSet.notifyClose(groupItemId);
   }
+
+  /** @type {import("svelte/store").Writable<undefined | "active" | "revert">} */
+  const aiLabelState = writable(undefined);
 </script>
 
 {#if skeleton}
@@ -218,6 +222,17 @@
           {type}
         </slot>
       </span>
+    {/if}
+    {#if $$slots.decorator}
+      <Decorator
+        class="bx--tag__decorator"
+        state={aiLabelState}
+        labelSize="sm"
+        labelKind="inline"
+        labelAlign="start"
+      >
+        <slot name="decorator" />
+      </Decorator>
     {/if}
     <button
       type="button"
@@ -362,6 +377,17 @@
       </TooltipDefinition>
     {:else}
       <span bind:this={labelRef} class:bx--tag__label={true}> <slot /> </span>
+    {/if}
+    {#if $$slots.decorator}
+      <Decorator
+        class="bx--tag__decorator"
+        state={aiLabelState}
+        labelSize="sm"
+        labelKind="inline"
+        labelAlign="start"
+      >
+        <slot name="decorator" />
+      </Decorator>
     {/if}
   </div>
 {/if}
