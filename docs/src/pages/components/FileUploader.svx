@@ -118,6 +118,20 @@ Use the `labelTitle` and `labelDescription` slots to provide custom label conten
   <svelte:fragment slot="labelDescription">Only JPEG files are accepted.</svelte:fragment>
 </FileUploader>
 
+### Extra-small
+
+Set `size` to `"xs"` for a 24px button and 24px file rows.
+
+<FileUploader
+  size="xs"
+  labelTitle="Upload files"
+  labelDescription="Max file size is 500kb. Supported file types are .jpg and .png."
+  buttonLabel="Add file"
+  accept={[".jpg", ".png"]}
+  status="edit"
+  multiple
+/>
+
 ### Per-file status
 
 Use `fileStatus` when files upload independently and should not share one
