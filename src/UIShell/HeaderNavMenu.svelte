@@ -68,6 +68,9 @@
     if (expanded) {
       expanded = false;
       if (trigger) dispatch("close", { trigger });
+      // A blur close means focus is already moving elsewhere (Tab out of the
+      // last item, or a click on another control), so don't pull it back.
+      if (trigger === "blur") return;
       await tick();
       ref?.focus();
     }
