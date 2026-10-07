@@ -49,8 +49,15 @@
    */
   export let ref = null;
 
+  /**
+   * Set an id for the top-level element.
+   * The header label, header title, and body ids derive from it as
+   * `{id}-label`, `{id}-title`, and `{id}-body`.
+   */
+  export let id = uniqueId();
+
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
-  import { writable } from "svelte/store";
+  import { derived, writable } from "svelte/store";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import { trackModal } from "../Modal/modal-store.js";
   import { createDialogLifecycle } from "../utils/dialog-lifecycle.js";
@@ -66,9 +73,13 @@
 
   // Ids for ModalHeader's label/title headings, so ModalBody (when
   // `hasScrollingContent`) can name its region via `aria-labelledby`.
-  const modalId = uniqueId();
-  const labelId = `${modalId}-label`;
-  const titleId = `${modalId}-title`;
+  const modalId = writable(id);
+  $: modalId.set(id);
+  const ids = derived(modalId, (value) => ({
+    label: `${value}-label`,
+    title: `${value}-title`,
+    body: `${value}-body`,
+  }));
 
   let innerModalRef = null;
   let mounted = false;
@@ -127,13 +138,11 @@
     submit,
     updateLabel,
     updateTitle,
-    labelId,
-    titleId,
+    ids,
     label,
     title,
     bodyId,
     setBodyId,
-    defaultBodyId: `${modalId}-body`,
   });
 
   function focus(node) {
@@ -172,7 +181,7 @@
   $: ariaLabelledby =
     consumerLabelledby ??
     (consumerLabel === undefined && !mounted && !$label && !$title
-      ? `${labelId} ${titleId}`
+      ? `${$ids.label} ${$ids.title}`
       : undefined);
 
   onMount(() => {
@@ -196,6 +205,7 @@
   class:is-visible={open}
   class:bx--modal--danger={danger}
   inert={open ? undefined : true}
+  {id}
   {...$$restProps}
   aria-label={undefined}
   aria-labelledby={undefined}

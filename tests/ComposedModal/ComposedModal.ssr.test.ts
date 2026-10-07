@@ -1,4 +1,5 @@
 // @vitest-environment node
+import { render } from "svelte/server";
 import { renderSSR } from "../utils/ssr";
 import ComposedModalSsr from "./ComposedModalSsr.test.svelte";
 
@@ -42,5 +43,28 @@ describe("ComposedModal server render", () => {
     expect(document.querySelector(".bx--modal")).not.toHaveAttribute(
       "aria-labelledby",
     );
+  });
+
+  it("renders identical markup for an explicit id", () => {
+    const renderRaw = () =>
+      render(ComposedModalSsr, { props: { id: "confirm" } }).body;
+
+    expect(renderRaw()).toBe(renderRaw());
+  });
+
+  it("derives the header and body ids from the id", () => {
+    const { document } = renderSSR(ComposedModalSsr, { id: "confirm" });
+
+    expect(document.querySelector(".bx--modal")).toHaveAttribute(
+      "id",
+      "confirm",
+    );
+    expect(document.querySelector('[role="dialog"]')).toHaveAttribute(
+      "aria-labelledby",
+      "confirm-label confirm-title",
+    );
+    expect(document.getElementById("confirm-label")).toHaveTextContent("Label");
+    expect(document.getElementById("confirm-title")).toHaveTextContent("Title");
+    expect(document.getElementById("confirm-body")).toHaveTextContent("Body");
   });
 });

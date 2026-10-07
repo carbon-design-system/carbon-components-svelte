@@ -18,10 +18,11 @@
   const composedModalCtx = getContext("carbon:ComposedModal");
   const modalLabel = composedModalCtx?.label ?? writable(undefined);
   const modalTitle = composedModalCtx?.title ?? writable(undefined);
+  const modalIds = composedModalCtx?.ids ?? writable({});
 
   // Give the body an id ComposedModal can reference from `aria-describedby`
   // in alert mode. A consumer `id` wins and is reported instead.
-  $: resolvedId = $$restProps.id ?? composedModalCtx?.defaultBodyId;
+  $: resolvedId = $$restProps.id ?? $modalIds.body;
   $: composedModalCtx?.setBodyId?.(resolvedId);
   onMount(() => () => composedModalCtx?.setBodyId?.(undefined));
 
@@ -30,9 +31,9 @@
   $: regionLabelledby =
     !$$restProps["aria-label"] && !$$restProps["aria-labelledby"]
       ? $modalLabel
-        ? composedModalCtx.labelId
+        ? $modalIds.label
         : $modalTitle
-          ? composedModalCtx.titleId
+          ? $modalIds.title
           : undefined
       : undefined;
 </script>
