@@ -79,6 +79,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "Text",
       "Tag",
       "TagSet",
+      "AILabel",
       "CodeSnippet",
       "RelativeTime",
     ],
