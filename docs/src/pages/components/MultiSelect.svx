@@ -4,7 +4,7 @@ description: Multi-selects provide a dropdown for selecting multiple options wit
 ---
 
 <script>
-  import { MultiSelect, MultiSelectSkeleton, FluidMultiSelectSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import { AILabel, MultiSelect, MultiSelectSkeleton, FluidMultiSelectSkeleton, TooltipIcon } from "carbon-components-svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
@@ -411,6 +411,16 @@ Set `wrapOptions` to let a label take as many lines as it needs. Lines break bet
 It defaults to `false` because wrapping changes option heights.
 
 <FileSource src="/framed/MultiSelect/WrapOptions" />
+
+## AI label
+
+Put an `AILabel` in the `decorator` slot to mark the value as AI-generated. The field shows the AI gradient. See [AI label](/components/AILabel#fields) for the revert flow.
+
+<MultiSelect labelText="Regions" selectedIds={["us-east-1"]} items={[{ id: "us-east-1", text: "US East (N. Virginia)" }, { id: "eu-west-1", text: "EU West (Ireland)" }]}>
+  <AILabel slot="decorator">
+    <p>Picked as the regions closest to most of your users.</p>
+  </AILabel>
+</MultiSelect>
 
 ## Sizes
 

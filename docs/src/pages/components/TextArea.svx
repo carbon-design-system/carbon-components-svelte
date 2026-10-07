@@ -4,7 +4,7 @@ description: Text areas provide a multi-line field for longer text like descript
 ---
 
 <script>
-  import { TextArea, TextAreaSkeleton, FluidTextAreaSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import { AILabel, TextArea, TextAreaSkeleton, FluidTextAreaSkeleton, TooltipIcon } from "carbon-components-svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
@@ -82,6 +82,16 @@ Use the `labelChildren` slot to provide custom label content.
 
 <TextArea labelText="" placeholder="Describe what happened, the impact, and any mitigation steps taken so far...">
   <strong slot="labelChildren">Incident summary</strong>
+</TextArea>
+
+## AI label
+
+Put an `AILabel` in the `decorator` slot to mark the value as AI-generated. The field shows the AI gradient. See [AI label](/components/AILabel#fields) for the revert flow.
+
+<TextArea labelText="Release notes" value="Adds regional failover and faster cold starts.">
+  <AILabel slot="decorator">
+    <p>Drafted from the merged pull requests in this release.</p>
+  </AILabel>
 </TextArea>
 
 ## Light

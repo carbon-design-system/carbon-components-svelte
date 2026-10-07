@@ -4,7 +4,7 @@ description: Dropdowns provide a select input with a dropdown menu, with multipl
 ---
 
 <script>
-  import { Box, Dropdown, DropdownSkeleton, FluidDropdownSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import { AILabel, Box, Dropdown, DropdownSkeleton, FluidDropdownSkeleton, TooltipIcon } from "carbon-components-svelte";
   import Chat from "carbon-icons-svelte/lib/Chat.svelte";
   import Email from "carbon-icons-svelte/lib/Email.svelte";
   import Document from "carbon-icons-svelte/lib/Document.svelte";
@@ -348,6 +348,16 @@ Use `on:close` to know when the menu closes and why. `event.detail.trigger` is `
   ]}
   on:close={(e) => console.log(e.detail.trigger)}
 />
+
+## AI label
+
+Put an `AILabel` in the `decorator` slot to mark the value as AI-generated. The field shows the AI gradient. See [AI label](/components/AILabel#fields) for the revert flow.
+
+<Dropdown labelText="Region" selectedId="us-east-1" items={[{ id: "us-east-1", text: "US East (N. Virginia)" }, { id: "eu-west-1", text: "EU West (Ireland)" }]}>
+  <AILabel slot="decorator">
+    <p>Picked as the region closest to most of your users.</p>
+  </AILabel>
+</Dropdown>
 
 ## Sizes
 
