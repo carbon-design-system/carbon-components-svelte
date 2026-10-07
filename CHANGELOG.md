@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. This project follows [Conventional Commits](https://www.conventionalcommits.org/); run `bun scripts/release-changelog` to bump the version and prepend release notes.
 
+### [0.113.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.113.0...v0.113.1) (2026-10-07)
+
+### Bug Fixes
+
+- **tooltip-definition:** anchor the inline tooltip to its term ([e2d8c3a](https://github.com/carbon-design-system/carbon-components-svelte/commit/e2d8c3a8f1dda3ee25bfb1269ab1b93096df123c))
+- **tooltip-definition:** keep the caret visible while the tooltip shows ([b3445a8](https://github.com/carbon-design-system/carbon-components-svelte/commit/b3445a8b2e6641d7e864d9618c48efc79ad5fe17))
+
 ### [0.113.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.112.0...v0.113.0) (2026-10-01)
 
 ### ⚠ BREAKING CHANGES
@@ -506,6 +513,12 @@ leaving room to add fields later without another breaking change. ([27952fc](htt
 - **utils:** defer overflowTitle measurement to a microtask ([3a34cd5](https://github.com/carbon-design-system/carbon-components-svelte/commit/3a34cd51f8073708cbdbb3f1c1ba0c4eb34b3721))
 - **utils:** use checkVisibility in trapFocus before computed styles ([58251e7](https://github.com/carbon-design-system/carbon-components-svelte/commit/58251e7656357f92d52db37cf7312842128cee08))
 
+### [0.112.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.112.1...v0.112.2) (2026-10-07)
+
+### Bug Fixes
+
+- **tooltip-definition:** anchor the inline tooltip to its term ([41a54b7](https://github.com/carbon-design-system/carbon-components-svelte/commit/41a54b7b83e09ca0072dced5e39c657eea7124de))
+
 ### [0.112.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.112.0...v0.112.1) (2026-09-25)
 
 ### Bug Fixes
@@ -581,6 +594,12 @@ leaving room to add fields later without another breaking change. ([27952fc](htt
 - **css:** fold twenty override partials into vendored Carbon ([34b4ef8](https://github.com/carbon-design-system/carbon-components-svelte/commit/34b4ef86582daea6c0492da48c02c62332247b8c))
 - **css:** rewrite vendored tabs desktop-only, fold css/_tabs.scss in ([5cbb1a0](https://github.com/carbon-design-system/carbon-components-svelte/commit/5cbb1a02185ef8114380aba422fd5e4c013d3228))
 - **css:** theme vendored UI Shell in place, fold css/_ui-shell.scss in ([17ea554](https://github.com/carbon-design-system/carbon-components-svelte/commit/17ea55411cf66b23d228bcabddad31e487c7fcc0))
+
+### [0.111.3](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.111.2...v0.111.3) (2026-10-07)
+
+### Bug Fixes
+
+- **tooltip-definition:** anchor the inline tooltip to its term ([13f493a](https://github.com/carbon-design-system/carbon-components-svelte/commit/13f493a57d7d7ea403cb1f412b61321a633308ab))
 
 ### [0.111.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.111.1...v0.111.2) (2026-09-25)
 
