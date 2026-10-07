@@ -3,8 +3,10 @@ description: Copy buttons copy text to the clipboard as a standalone control, fo
 ---
 
 <script>
-  import { CopyButton } from "carbon-components-svelte";
+  import { Button, CopyButton, Stack, TooltipGroup } from "carbon-components-svelte";
   import Checkmark from "carbon-icons-svelte/lib/Checkmark.svelte";
+  import Edit from "carbon-icons-svelte/lib/Edit.svelte";
+  import Share from "carbon-icons-svelte/lib/Share.svelte";
 </script>
 
 ## Basic
@@ -111,6 +113,18 @@ Set `tooltipAlignment` to align the tooltip relative to the button.
 <CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" iconDescription="Start" tooltipAlignment="start" />
 <CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" iconDescription="Center" tooltipAlignment="center" />
 <CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" iconDescription="End" tooltipAlignment="end" />
+
+### Tooltip group
+
+Place the button in a [TooltipGroup](/components/TooltipGroup) with the icon-only buttons beside it. Once one tooltip is open, moving between the buttons shows each tooltip right away, with no enter delay.
+
+<TooltipGroup>
+  <Stack orientation="horizontal" gap={1}>
+    <Button kind="ghost" iconDescription="Edit webhook" icon={Edit} />
+    <CopyButton kind="ghost" text="https://api.acme.io/webhooks/incoming/f8a2c91d" iconDescription="Copy webhook URL" />
+    <Button kind="ghost" iconDescription="Share webhook" icon={Share} />
+  </Stack>
+</TooltipGroup>
 
 ## Portal tooltip
 
